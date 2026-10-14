@@ -1,31 +1,3 @@
--- Выбранные описания составных достижений: отдельная фраза для каждого порога.
--- В языках без этих ключей сохраняется исходный шаблон more-achievements.
-local function localise_description(prototype_type, name)
-  local achievement = data.raw[prototype_type] and data.raw[prototype_type][name]
-  if achievement and achievement.localised_description then
-    achievement.localised_description = {
-      "?",
-      {"paranoidal-achievement-description." .. name},
-      achievement.localised_description,
-    }
-  end
-end
-
-for _, prefix in ipairs({"circuit-veteran-", "computer-age-"}) do
-  for tier = 3, 9 do
-    localise_description("produce-per-hour-achievement", prefix .. tier)
-  end
-end
-for tier = 4, 9 do
-  localise_description("produce-per-hour-achievement", "iron-throne-" .. tier)
-  localise_description("produce-achievement", "mass-production-" .. tier)
-end
-for _, prefix in ipairs({"crafting-with-efficiency-", "crafting-with-productivity-", "crafting-with-speed-"}) do
-  for tier = 2, 3 do
-    localise_description("produce-achievement", prefix .. tier)
-  end
-end
-
 -- Строковые аргументы сторонних шаблонов локализуются в слое сборки.
 -- RU-only ключи сохраняют исходный текст для остальных языков.
 for _, technology in pairs(data.raw.technology or {}) do
@@ -41,19 +13,6 @@ for _, technology in pairs(data.raw.technology or {}) do
       local count, suffix = description[2]:match("^(%d+) (%a+)$")
       if count and (suffix == "slot" or suffix == "slots" or suffix == "tile" or suffix == "tiles") then
         description[2] = {"?", {"paranoidal-locale-units." .. unit, count}, description[2]}
-      end
-    end
-  end
-end
-
--- Названия модулей в достижениях соответствуют названиям базовой игры.
-for _, module in ipairs({"efficiency", "productivity", "speed"}) do
-  for tier = 2, 3 do
-    local achievement = data.raw["produce-achievement"]["crafting-with-" .. module .. "-" .. tier]
-    if achievement and type(achievement.localised_name) == "table" then
-      local title = achievement.localised_name[2]
-      if type(title) == "table" and title[1] == "more-achievements.crafting-with" then
-        achievement.localised_name[2] = {"achievement-name.crafting-with-" .. module}
       end
     end
   end

@@ -1,0 +1,20 @@
+{
+  "name": "MxlChievements-Reforged",
+  "version": "1.0.0",
+  "title": "MxlChievements (Reforged)",
+  "author": "FactorioParanoidal; based on MxlChievements by Mxlppxl and More Achievements by LuziferSenpai",
+  "contact": "",
+  "homepage": "",
+  "description": "Paranoidal merge of MxlChievements 3.0.1 and More Achievements 0.0.2: production achievements for many items, extra tiers of the base game production achievements and quality variants. Achievements whose item, fluid or quality is missing from the active mod set are skipped.",
+  "factorio_version": "2.0",
+  "dependencies": [
+    "base >= 2.0",
+    "? quality",
+    "? space-age",
+    "? zzzparanoidal",
+    "? ic-more-qualities",
+    "! MxlChievements",
+    "! MxlChievements2",
+    "! more-achievements"
+  ]
+}

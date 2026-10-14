@@ -1,0 +1,5 @@
+{
+  "mod": "MxlChievements-Reforged",
+  "source": "local",
+  "changeReason": "Локальный мод Paranoidal: объединение MxlChievements2 3.0.1 (форк MxlChievements от Mxlppxl, GPL-3.0) и More Achievements 0.0.2 (LuziferSenpai, автор разрешил) с исправлением их ошибок и без дублирующих серий. Заменяет MxlChievements2 и more-achievements."
+}
