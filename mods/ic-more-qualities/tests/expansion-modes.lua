@@ -389,8 +389,37 @@ modes.draw_power(furnace, rules.modes.precise, true, 560)
 near(burner.remaining_burning_fuel, 1e7 - 19000 * 10 / 0.5, 1e-3)
 modes.draw_power(furnace, nil, false, 570)
 assert(storage.ic_modes.records[31] == nil)
+
+-- Machines without item results (copper lamp, fluid-only, voiding) and construction sites have no modes
+-- (mod-data no_mode). A mode saved before the update is dropped by rescan, the running craft too.
+local kept = {valid = true, power_usage = 0, electric_buffer_size = 1, energy = 1e9}
+kept.destroy = function() kept.valid = false end
+local function placed(name, id)
+    return {valid = true, type = "assembling-machine", name = name, unit_number = id, position = {x = 0, y = 0},
+        direction = 0, quality = {name = "normal"}, consumption_bonus = 0, force = {index = 1},
+        is_crafting = function() return true end,
+        surface = {index = 1, create_entity = function() return kept end},
+        prototype = moded.prototype}
+end
+local lamp, old = placed("deadlock-copper-lamp", 51), placed("angels-separator", 52)
+assert(modes.eligible(old), "no mod-data yet: eligible")
+assert(modes.set(old, "precise") and storage.ic_modes.records[52])
+modes.draw_power(old, rules.modes.precise, true, 600)
+assert(kept.valid and kept.power_usage > 0)
+storage.ic_defects = {records = {[52] = {id = 52, craft = {key = "x", mode = rules.modes.precise}}}}
+prototypes = {entity = prototypes.entity, mod_data = {["ic-quality-expansion"] = {data = {no_mode = {
+    ["deadlock-copper-lamp"] = true, ["angels-separator"] = true}}}}}
+modes.reset_cache()
+assert(not modes.eligible(lamp) and not modes.set(lamp, "careful") and not storage.ic_modes.records[51], "lamp: no mode")
+assert(modes.eligible(moded), "an assembler keeps its modes")
+modes.rescan()
+assert(storage.ic_modes.records[52] == nil and not kept.valid, "saved mode and extra power dropped")
+assert(storage.ic_defects.records[52].craft.mode == nil, "running craft continues without the mode")
+assert(modes.definition(old) == nil)
+storage.ic_defects = nil
 print("PASS: careful x5 / precise x20 time through the real crafter, loss /10 and none, defects")
 print("+4 levels and none, boosted module roll equals n independent rolls, extra power +1x/+4x;")
 print("normal during a moded craft keeps its time and extra power until it ends, then drops the record;")
-print("burner extra energy from burning fuel and whole fuel items with change, effectivity, low fuel.")
+print("burner extra energy from burning fuel and whole fuel items with change, effectivity, low fuel;")
+print("machines in mod-data no_mode get no mode, a saved one is dropped with its extra power and craft mode.")
 print("Mocks only: no engine timing, power network or GUI verification.")

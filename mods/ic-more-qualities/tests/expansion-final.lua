@@ -46,6 +46,12 @@ local raw = {
         white = {allow_quality = false, results = {{type = "item", name = "iron-gear-wheel", amount = 1}}},
         ["ic-refine-workshop"] = {enabled = false, ingredients = {}, results = {}},
         ["ic-control-post"] = {enabled = false, ingredients = {}, results = {}},
+        ["lamp-burning"] = {category = "lamp-burning", hidden = true, ingredients = {}, results = {}},
+        separation = {category = "separation", results = {{type = "fluid", name = "gas", amount = 10}}},
+        ["void-gas"] = {category = "void", results = {{type = "item", name = "void", amount = 1, probability = 0}}},
+        barrel = {category = "pump", additional_categories = {"mixed"},
+            results = {{type = "fluid", name = "water", amount = 50}, {type = "item", name = "barrel", amount_min = 0, amount_max = 1}}},
+        stage = {category = "stage", results = {{type = "item", name = "sand", amount = 100}}},
     },
     item = {
         ["assembling-machine-1"] = {place_result = "assembling-machine-1", subgroup = "production-machine", order = "a"},
@@ -65,11 +71,19 @@ local raw = {
     ammo = {},
     ["assembling-machine"] = {
         ["assembling-machine-1"] = {max_health = 300, energy_usage = "90kW", resistances = {{type = "fire", percent = 70}},
-            collision_box = {{-1.2, -1.2}, {1.2, 1.2}}, energy_source = (electric("90kW")), open_sound = {filename = "x"}},
+            collision_box = {{-1.2, -1.2}, {1.2, 1.2}}, energy_source = (electric("90kW")), open_sound = {filename = "x"},
+            crafting_categories = {"crafting"}},
         wide = {max_health = 500, collision_box = {{-2.2, -1.2}, {2.2, 1.2}}, energy_source = (electric())},
-        burner = {collision_box = {{-0.9, -0.9}, {0.9, 0.9}}, energy_source = {type = "burner"}},
+        burner = {collision_box = {{-0.9, -0.9}, {0.9, 0.9}}, energy_source = {type = "burner"}, crafting_categories = {"mixed"}},
+        lamp = {fixed_recipe = "lamp-burning", crafting_categories = {"lamp-burning"}},
+        separator = {crafting_categories = {"separation"}},
+        empty = {crafting_categories = {"nothing"}},
+        ["rsc-silo-stage1"] = {fixed_recipe = "stage", crafting_categories = {"stage"}},
+        ["CW-air-filter-machine-1"] = {fixed_recipe = "stage", crafting_categories = {"stage"}},
+        ["ground-telescope"] = {fixed_recipe = "stage", crafting_categories = {"stage"}},
+        pump = {crafting_categories = {"pump"}},
     },
-    furnace = {["ic-refine-workshop"] = {crafting_speed = 1, energy_usage = "75kW", collision_box = {{-1.2, -1.2}, {1.2, 1.2}},
+    furnace = {flare = {crafting_categories = {"void"}}, ["ic-refine-workshop"] = {crafting_speed = 1, energy_usage = "75kW", collision_box = {{-1.2, -1.2}, {1.2, 1.2}},
         energy_source = {type = "burner", emissions_per_minute = {pollution = 1}}}},
     container = {["ic-control-post"] = {max_health = 10}},
     reactor = {["nuclear-reactor"] = {max_health = 500}},
@@ -131,6 +145,13 @@ assert(costs["iron-gear-wheel"].kinds == 0 and costs["iron-gear-wheel"].cost == 
 assert(costs["automation-science-pack"].kinds == nil and costs["automation-science-pack"].cost == 750)
 -- Runtime data: reasons and recipes without quality.
 assert(data.reasons["iron-gear-wheel"] == "ingredient" and data.no_quality.white and data.finished_count == 1)
+-- Machines without production modes: never an item result, or a construction site.
+local expected = {lamp = true, separator = true, empty = true, flare = true, wide = true, ["rsc-silo-stage1"] = true,
+    ["CW-air-filter-machine-1"] = true, ["ground-telescope"] = true}
+for name in pairs(expected) do assert(data.no_mode[name], "no mode: " .. name) end
+for name in pairs(data.no_mode) do assert(expected[name], "unexpected no mode: " .. name) end
+assert(not data.no_mode["ic-refine-workshop"], "the workshop is handled by itself")
+assert(report[2]:find("production modes", 1, true) and report[2]:find(": 8: ", 1, true), report[2])
 
 -- Production-mode power: one interface per electric footprint (and rotated), not for burners/workshop.
 assert(interfaces["ic-mode-power-3x3"] and interfaces["ic-mode-power-5x3"] and interfaces["ic-mode-power-3x5"])

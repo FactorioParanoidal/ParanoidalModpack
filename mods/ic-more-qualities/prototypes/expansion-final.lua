@@ -229,6 +229,66 @@ local function mode_power(raw)
     return list
 end
 
+-- Machines without production modes (no mode panel, no saved mode). A mode changes only item
+-- results (defects, quality-module boost) and the loss chance, so it is withheld from machines that can
+-- never produce an item: no recipe at all (copper lamp of LargerLamps: fixed recipe without results),
+-- fluid-only recipes, voiding (Angels flare stack/clarifier: void item with probability 0). Plus, by name
+-- (user decisions 2026-10-15): construction sites driven by another mod's script (Rocket Silo
+-- Construction stages), carbon-capture air filters (one way of working only) and the telescopes of
+-- Expanded Rocket Payloads (reached long after quality control 10: no defects left to handle).
+M.no_mode_patterns = {
+    "^rsc%-silo%-stage%d+$",
+    "^CW%-air%-filter%-machine%-%d+$",
+    "^ground%-telescope$",
+    "^space%-telescope%-uplink%-station$",
+}
+
+local function yields_item(recipe)
+    for _, result in ipairs(recipe.results or {}) do
+        if (result.type or "item") == "item" and (result.amount or result.amount_max or 0) > 0
+            and (result.probability == nil or result.probability > 0) then
+            return true
+        end
+    end
+    return false
+end
+
+function M.no_mode_machines(raw)
+    local categories = {}
+    for name, recipe in pairs(raw.recipe or {}) do
+        if yields_item(recipe) then
+            categories[recipe.category or "crafting"] = true
+            for _, category in ipairs(recipe.additional_categories or {}) do categories[category] = true end
+        end
+    end
+    local result, list = {}, {}
+    for _, kind in ipairs({"assembling-machine", "furnace"}) do
+        for name, machine in pairs(raw[kind] or {}) do
+            local excluded = false
+            for _, pattern in ipairs(M.no_mode_patterns) do
+                if name:find(pattern) then excluded = true end
+            end
+            if not excluded then
+                local fixed = machine.fixed_recipe and raw.recipe[machine.fixed_recipe]
+                if machine.fixed_recipe then
+                    excluded = not (fixed and yields_item(fixed))
+                else
+                    excluded = true
+                    for _, category in ipairs(machine.crafting_categories or {}) do
+                        if categories[category] then excluded = false end
+                    end
+                end
+            end
+            if excluded and name ~= names.workshop then
+                result[name] = true
+                list[#list + 1] = name
+            end
+        end
+    end
+    table.sort(list)
+    return result, list
+end
+
 function M.apply(raw, finished, reasons)
     RAW = raw
     entity_cache = {}
@@ -243,13 +303,17 @@ function M.apply(raw, finished, reasons)
     end
     local finished_count = 0
     for _ in pairs(finished or {}) do finished_count = finished_count + 1 end
+    local no_mode, no_mode_list = M.no_mode_machines(raw)
     prototypes[#prototypes + 1] = {
         type = "mod-data",
         name = names.mod_data,
         data_type = "ic-more-qualities.expansion",
-        data = {costs = costs, reasons = reasons or {}, no_quality = no_quality, finished_count = finished_count},
+        data = {costs = costs, reasons = reasons or {}, no_quality = no_quality, finished_count = finished_count,
+            no_mode = no_mode},
     }
-    return prototypes, {"IC expansion: refinement recipes " .. count .. ", repair resource and production modes ready"}
+    return prototypes, {"IC expansion: refinement recipes " .. count .. ", repair resource and production modes ready",
+        "IC expansion: machines without production modes (no item results / by name): " .. #no_mode_list
+            .. (#no_mode_list > 0 and (": " .. table.concat(no_mode_list, ", ")) or "")}
 end
 
 return M

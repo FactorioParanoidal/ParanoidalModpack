@@ -23,10 +23,20 @@ function M.state()
     return s
 end
 
-local eligible_names = {}
-function M.reset_cache() eligible_names = {} end
+local eligible_names, no_mode = {}, nil
+function M.reset_cache() eligible_names, no_mode = {}, nil end
 
--- Player-placeable assembling machines and furnaces, except the workshop and Creative Mod.
+-- Machines that can never produce an item and construction sites (prototypes/expansion-final.lua).
+local function excluded(name)
+    if not no_mode then
+        local mod_data = prototypes.mod_data and prototypes.mod_data[names.mod_data]
+        no_mode = mod_data and mod_data.data.no_mode or {}
+    end
+    return no_mode[name] == true
+end
+
+-- Player-placeable assembling machines and furnaces that can produce items, except the workshop and
+-- Creative Mod.
 function M.eligible(entity)
     if not (entity and entity.valid and M.types[entity.type] and entity.unit_number) then return false end
     local name = entity.name
@@ -34,6 +44,7 @@ function M.eligible(entity)
     if result == nil then
         local items = entity.prototype.items_to_place_this
         result = name ~= names.workshop and items ~= nil and #items > 0 and not name:find("^creative%-mod")
+            and not excluded(name)
         eligible_names[name] = result
     end
     return result
@@ -126,6 +137,14 @@ function M.rescan()
     for id, record in pairs(s.records) do
         if not record.entity.valid then
             M.forget(id)
+        elseif not M.eligible(record.entity) then
+            -- A machine that no longer has modes (e.g. after this update): drop the mode, its indicator
+            -- and its extra power; its running craft continues at normal speed (defect scheduler record,
+            -- same unit number).
+            M.forget(id)
+            local defects = storage.ic_defects
+            local tracked = defects and defects.records[id]
+            if tracked and tracked.craft then tracked.craft.mode = nil end
         elseif record.mode == "normal" then
             if not record.entity.is_crafting() then M.forget(id) end
         elseif not (record.render and rendering.get_object_by_id(record.render)) then
