@@ -356,8 +356,9 @@ if mods["angelspetrochem"] then
     data.raw.item["angels-pellet-coke"].fuel_top_speed_multiplier = 1.2
 
     data.raw.recipe["angels-pellet-coke"].category = "biofarm-mod-smelting"
-    thxbob.lib.tech.remove_recipe_unlock("angels-coal-processing-2", "pellet-coke")
-    thxbob.lib.tech.add_recipe_unlock("angels-coal-cracking", "pellet-coke")
+    -- Angels 2.0: the recipe is angels-pellet-coke and is unlocked by angels-coal-processing-3.
+    thxbob.lib.tech.remove_recipe_unlock("angels-coal-processing-3", "angels-pellet-coke")
+    thxbob.lib.tech.add_recipe_unlock("angels-coal-cracking", "angels-pellet-coke")
 end
 
 
