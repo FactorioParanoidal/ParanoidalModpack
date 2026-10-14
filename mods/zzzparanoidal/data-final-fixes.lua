@@ -351,6 +351,7 @@ require("tweaks.entity.character-light-beta8") -- Фонарь персонаж�
 require("tweaks.entity.beta8-visual-models") -- Модели сундука и малых автоматов IV-V, после Reskins/Miles.
 require("tweaks.item.ammo-stats-1_1") -- Боеприпасы 1.1; скриптовые интеграции 2.0 сохраняются.
 require("tweaks.entity.turret-stats-1_1")() -- Финальные характеристики оснований 1.1; без правок Hero.
+require("tweaks.entity.w93-modular-turrets") -- W93: улучшение MK1 -> MK2, без огня по своим у луча MK2 и осколков.
 require("tweaks.technology.ironworks-icons") -- Согласованные шестерни I–V, до наложения маркеров.
 require("tweaks.technology.approved-icons") -- Согласованные иконки исследований без номеров, до icon-markers.
 require("tweaks.recipe.pumpjacks-1_1")

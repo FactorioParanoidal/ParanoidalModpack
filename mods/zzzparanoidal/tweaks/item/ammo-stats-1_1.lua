@@ -199,6 +199,8 @@ end
 for _, name in ipairs({ "cannon-shell", "uranium-cannon-shell", "explosive-cannon-shell", "explosive-uranium-cannon-shell" }) do
 	local ammo = data.raw.ammo[name]
 	if ammo then
+		-- Стрельба по точке, как в 1.1; раньше держалось только на data-updates scattergun_turret.
+		ammo.ammo_type.target_type = "position"
 		ammo.ammo_type.range_modifier = nil
 		visit_attack(ammo.ammo_type, function(node)
 			if node.type == "projectile" then
@@ -1080,16 +1082,22 @@ for _, name in ipairs({
 	"bob-shotgun-uranium-projectile",
 	"cannon-H1-projectile",
 	"cannon-H2-projectile",
+	"cannon-projectile",
 	"cannon-projectile-pellet",
 	"explosive-autocannon-projectile",
 	"explosive-cannon-H1-projectile",
 	"explosive-cannon-H2-projectile",
+	"explosive-cannon-projectile",
 	"explosive-uranium-autocannon-projectile",
 	"explosive-uranium-cannon-H1-projectile",
 	"explosive-uranium-cannon-H2-projectile",
+	"explosive-uranium-cannon-projectile",
 	"high-explosive-cannon-projectile",
+	"piercing-shotgun-pellet",
+	"shotgun-pellet",
 	"uranium-cannon-H1-projectile",
 	"uranium-cannon-H2-projectile",
+	"uranium-cannon-projectile",
 }) do
 	local projectile = data.raw.projectile[name]
 	if projectile then

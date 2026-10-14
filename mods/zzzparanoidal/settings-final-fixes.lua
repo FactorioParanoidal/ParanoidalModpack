@@ -431,6 +431,14 @@ if mods["UnrealisticReactors"] then
         set_settings_default_value("bool-setting", "realistic-reactors-disable-vanilla-reactor", false)
     end
 end
+if mods["scattergun_turret"] then
+    -- prepare_range всех турелей W93 задаёт zzz (turret-stats-1_1), переключатель ни на что не влиял.
+    local pretargeting = data.raw["bool-setting"]["enable-pretargeting"]
+    if pretargeting then
+        pretargeting.hidden = true
+        pretargeting.forced_value = true
+    end
+end
 if mods["Wind-Turbines-relaunched"] then
     set_settings_default_value("string-setting", "texugo-wind-mode", "CLASSICAL") -- режим ветра как в 1.1: синусный CLASSICAL вместо нормированного SURFACE
 end
