@@ -51,6 +51,14 @@ data:extend({
    --Рассказываем как показать тонкие настройки
  {type = "bool-setting", name = "zzz-settings", setting_type = "startup", default_value = true, order = "f"}
  })
+
+ -- Prismatic Belts: базовая лента Bob — 16 кадров (как у жёлтой) или турбо-лист 64 кадра.
+ if mods["prismatic-belts"] then
+   data:extend({
+     {type = "bool-setting", name = "paranoidal-bob-basic-belt-64-frames", setting_type = "startup",
+       default_value = false, order = "loader-c"},
+   })
+ end
  
  if mods.research_evolution_factor then
    data:extend
