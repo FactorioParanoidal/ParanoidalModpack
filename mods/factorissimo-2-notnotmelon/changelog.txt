@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 3.11.19
 Date: 2026-03-15
+  Bugfixes:
+    - Players without a character (god controller, e.g. Blueprint Sandboxes) can now walk out of a factory, not only into it.
   Compatibility:
     - Fix compatibility with warptorio.
 ---------------------------------------------------------------------------------------------------

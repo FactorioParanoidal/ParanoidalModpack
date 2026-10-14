@@ -97,7 +97,8 @@ local god_controllers = {
 }
 
 local function check_position_and_leave_factory(player, is_airborne)
-    if god_controllers[player.controller_type] then return end
+    -- Match entering: god-controller players (e.g. Blueprint Sandboxes) could walk in but never out.
+    if player.controller_type == defines.controllers.remote then return end
 
     local walking_state = player.walking_state
     local position = player.physical_position
