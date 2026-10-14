@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 3.0.4
 Date: 2026-06-26
+  Bugfixes:
+    - Restored the Factorio 2.0 belt entity sprites; a manual sync had replaced them with half-size 1.1 sprites that do not fit the 128x128 frame layout.
   Features:
     - Added support for Omnienergy
 ---------------------------------------------------------------------------------------------------
