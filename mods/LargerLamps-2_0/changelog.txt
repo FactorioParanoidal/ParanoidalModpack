@@ -2,6 +2,7 @@
 Version: 0.2.3
 Date: 31-12-2025
   Bugfixes:
+    - Copper Lamp upgraded into itself; its upgrade is now the Large Lamp, as in the 1.1 Larger Lamps (Paranoidal local fix).
     - Reduced mining time for Large Lamps to better match vanilla buildings.
     - Fixed Floor Lamps stacking on the same tile by correcting build collision behavior.
   Changes:
