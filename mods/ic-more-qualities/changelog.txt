@@ -2,6 +2,7 @@
 Version: 1.1.5
 Date: 2026. 10. 14
   Changes:
+    - The "evolution +X%" effect of quality control 1-10 uses research_evolution_factor's evolution-label.lua (same rounding and settings as other technologies) instead of its own copy of the formula.
     - After quality control 10 texts about defects and losses are hidden: no chat messages about skipped results and machines (the log keeps them); the production tab of the quality-control panel shows only the control level and mode counters; item lookup and production-mode tooltips do not mention defects and losses; the mode window drops the worst-grade row. Workshop and post windows are unchanged.
     - The drill and pumpjack description line about defect mining speed is replaced by a short "Defective items are less effective." (engine limit: prototype descriptions cannot change after research).
     - Defective drills and pumpjacks deplete resources faster: -1 200%, -2 300%, -3 400%, -4 500%, -5 600% of the drill's standard drain, at every quality-control level (also 10). The engine caps the quality drain multiplier at 1, so the part above standard is removed by script when a cycle is decided (or found completed unobserved); a failed cycle drains with the same factor. A fraction (drills with drain below 100%) is removed by chance; the last unit of a finite resource is left to the engine; infinite resources lose their depletion amount per unit, not below the minimum.

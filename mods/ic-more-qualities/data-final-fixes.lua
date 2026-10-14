@@ -13,27 +13,17 @@ if settings.startup["ic-more-qualities-defects-preview"].value then
     -- mod creates the quality-control researches: add the same "evolution +X%" effect here.
     -- zzzparanoidal also runs earlier, so its evolution icon must be assigned here.
     if mods["research_evolution_factor"] then
-        local ok, params = pcall(require, "__research_evolution_factor__.parameters")
-        if not ok then params = {science_packet_cost = {}, constant_factor = 0.15, linear_factor = 0.35} end
-        for level = 1, 10 do
-            local tech = data.raw.technology["ic-defect-control-" .. level]
-            if tech and tech.unit and tech.unit.count and not tech.hidden then
-                local sum = 0
-                for _, ingredient in pairs(tech.unit.ingredients or {}) do
-                    local name = ingredient.name or ingredient[1]
-                    local amount = ingredient.amount or ingredient[2] or 0
-                    sum = sum + amount * (params.science_packet_cost[name] or 1)
+        local ok, labels = pcall(require, "__research_evolution_factor__/evolution-label")
+        if ok then
+            for level = 1, 10 do
+                local tech = data.raw.technology["ic-defect-control-" .. level]
+                if tech then
+                    labels.relabel(tech, {
+                        icon = mods["zzzparanoidal"] and "__zzzparanoidal__/graphics/research-evolution-icon.png" or nil,
+                        icon_size = 64,
+                        use_icon_overlay_constant = false,
+                    })
                 end
-                local inc = tech.unit.count * sum * 0.00001 * params.linear_factor + params.constant_factor * 0.01
-                tech.effects = tech.effects or {}
-                table.insert(tech.effects, {
-                    type = "nothing",
-                    icon = mods["zzzparanoidal"] and "__zzzparanoidal__/graphics/research-evolution-icon.png" or nil,
-                    icon_size = 64,
-                    use_icon_overlay_constant = false,
-                    effect_description = {"research-evolution-factor-effect",
-                        tostring(math.floor((1 - math.exp(-inc)) * 100000 + 0.5) * 0.001)},
-                })
             end
         end
     end
