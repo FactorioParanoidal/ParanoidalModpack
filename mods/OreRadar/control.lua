@@ -1,6 +1,12 @@
--- OreRadar 0.0.3 (Factorio 1.1): one random resource chunk per completed scan.
+-- Ore Radar: every completed scan reveals a generated chunk with resources or, through the ruin
+-- journal of AbandonedRuins-paranoidal, marks an undiscovered ruin as an unusual signal.
 local WORK_PER_TICK = 8
 local SCANS_PER_TICK = 4
+-- Random picks per ore scan: depleted chunks are dropped, chunks unknown to the force are preferred.
+local PICKS_PER_SCAN = 8
+-- Share of scans that look for a ruin first; the other kind is the fallback.
+local RUIN_SHARE = 0.5
+local RUINS = "AbandonedRuins-paranoidal"
 local on_tick
 
 local function queue()
@@ -98,27 +104,63 @@ local function work_step()
   end
 end
 
+local function chart_chunk(force, surface, position)
+  -- chart's upper bound is inclusive; stop inside this chunk.
+  local bounds = area(position)
+  bounds[2][1], bounds[2][2] = bounds[2][1] - 1, bounds[2][2] - 1
+  force.chart(surface, bounds)
+end
+
+local function reveal_ore(surface, force, index)
+  local fallback
+  for _ = 1, PICKS_PER_SCAN do
+    local count = #index.chunks
+    if count == 0 then break end
+    local position = index.chunks[math.random(count)]
+    if surface.count_entities_filtered{area = area(position), type = "resource", limit = 1} == 0 then
+      -- Swap with the last entry instead of shifting a potentially large ore index.
+      remove_chunk(index, position)
+    elseif not force.is_chunk_charted(surface, position) then
+      chart_chunk(force, surface, position)
+      return true
+    else
+      fallback = fallback or position
+    end
+  end
+  -- Every pick was already known: refresh one of them, as the 1.1 radar did.
+  if fallback then chart_chunk(force, surface, fallback) end
+  return fallback ~= nil
+end
+
+local function reveal_ruin(surface, force)
+  local interface = remote.interfaces[RUINS]
+  if not (interface and interface.signal_ruin) then return false end
+  local position = remote.call(RUINS, "signal_ruin", surface.index, force.index)
+  if not position then return false end
+  chart_chunk(force, surface, {x = math.floor(position.x / 32), y = math.floor(position.y / 32)})
+  force.print({"ore-radar.unusual-signal",
+    string.format("[gps=%d,%d,%s]", math.floor(position.x), math.floor(position.y), surface.name)})
+  return true
+end
+
 local function scan_step()
-  local radar = pop(storage.scans)
+  -- A table entry is a scan kept while its ore index was being built; older saves store the radar.
+  local entry = pop(storage.scans)
+  local radar, kept = entry, false
+  if type(entry) == "table" then radar, kept = entry.radar, true end
   if not radar.valid then return end
-  local surface = radar.surface
+  local surface, force = radar.surface, radar.force
   local index = storage.surfaces[surface.index]
   if index and (not index.ready or (#index.chunks == 0 and index.pending > 0)) then
-    -- Retain paid scans during indexing and let ready surfaces take their turn.
-    push(storage.scans, radar)
+    -- Roll for a ruin once, then retain the paid scan and let ready surfaces take their turn.
+    if not kept and math.random() < RUIN_SHARE and reveal_ruin(surface, force) then return end
+    push(storage.scans, kept and entry or {radar = radar})
     return
   end
-  if not index or #index.chunks == 0 then return end
-  local position = index.chunks[math.random(#index.chunks)]
-  local bounds = area(position)
-  if surface.count_entities_filtered{area = bounds, type = "resource", limit = 1} == 0 then
-    -- Swap with the last entry instead of shifting a potentially large ore index.
-    remove_chunk(index, position)
-    return
-  end
-  -- chart's upper bound is inclusive; stop inside this chunk.
-  bounds[2][1], bounds[2][2] = bounds[2][1] - 1, bounds[2][2] - 1
-  radar.force.chart(surface, bounds)
+  local ruin_first = math.random() < RUIN_SHARE
+  if ruin_first and reveal_ruin(surface, force) then return end
+  if index and reveal_ore(surface, force, index) then return end
+  if not ruin_first then reveal_ruin(surface, force) end
 end
 
 on_tick = function()
@@ -148,7 +190,10 @@ local function rebuild()
 end
 
 script.on_init(rebuild)
-script.on_configuration_changed(rebuild)
+script.on_configuration_changed(function(event)
+  -- Depleted and deleted chunks are dropped lazily, so only a new radar version needs a full rescan.
+  if not storage.surfaces or event.mod_changes[script.mod_name] then rebuild() end
+end)
 script.on_load(function()
   if pending() then wake() end
 end)

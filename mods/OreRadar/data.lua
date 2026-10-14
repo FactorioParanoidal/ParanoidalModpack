@@ -40,7 +40,7 @@ end
 
 data:extend({radar, {
   type = "item", name = "ore-radar", icons = icons,
-  subgroup = "defensive-structure", order = "d[radar]-a[radar]",
+  subgroup = "defensive-structure", order = "d[radar]-b[ore-radar]",
   place_result = "ore-radar", stack_size = 10
 }, {
   type = "recipe", name = "ore-radar",

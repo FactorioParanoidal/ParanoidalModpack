@@ -1,4 +1,18 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.0.1
+Date: 2026-10-14
+  Features:
+    - Every scan reveals either an ore chunk or an unusual signal: an undiscovered ruin of the
+      Paranoidal ruin journal marked with "?" on the map and announced in chat. Each kind is tried
+      first in half of the scans; the other one is the fallback.
+  Changes:
+    - A scan tries up to eight random ore chunks and prefers chunks the force has not charted yet.
+    - The ore index is rebuilt only when Ore Radar itself changes, not on every configuration change.
+    - The item is sorted after the standard radars.
+  Bugfixes:
+    - A scan is no longer wasted when the randomly chosen ore chunk is depleted.
+    - Declares the optional dependency on Bob's Electronics used by the recipe.
+---------------------------------------------------------------------------------------------------
 Version: 2.0.0
 Date: 2026-10-10
   Features:
