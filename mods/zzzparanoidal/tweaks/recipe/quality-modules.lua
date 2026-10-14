@@ -88,6 +88,13 @@ for recipe_name, target in pairs(processor_unlock) do
 	end
 end
 
+-- Схемы во вкладке «Модули» — одним рядом (Bob раскладывает их по трём подгруппам-строкам).
+for _, name in ipairs({ "bob-quality-processor", "bob-quality-processor-2", "bob-quality-processor-3" }) do
+	if data.raw.item[name] and data.raw["item-subgroup"]["bob-module-intermediates-2"] then
+		data.raw.item[name].subgroup = "bob-module-intermediates-2"
+	end
+end
+
 -- Гармонические кристаллы в схемах: 1 — без кристалла, 2 — малый, 3 — средний.
 local crystal = {
 	["bob-quality-processor"] = false,
