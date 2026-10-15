@@ -67,6 +67,40 @@ function M.refine_distribution(grade)
     return result
 end
 
+-- Refinement workshop modes (user decision 2026-10-15): the same packs per attempt, a longer attempt
+-- (time: duration multiplier at the same power) and a guaranteed result. steps: grades gained per
+-- attempt (nil: the 90% roll of the normal mode). Ids match the production modes.
+M.workshop_modes = {
+    normal = {name = "normal", time = 1},
+    careful = {name = "careful", time = 5, steps = 2},
+    precise = {name = "precise", time = 20, steps = 5},
+}
+
+function M.workshop_mode(name)
+    return M.workshop_modes[name] or M.workshop_modes.normal
+end
+
+-- One attempt in a workshop mode (mode nil or normal: refine_outcome).
+function M.mode_outcome(grade, mode, random)
+    check_grade(grade)
+    if mode and mode.steps then return math.min(0, grade + mode.steps) end
+    return M.refine_outcome(grade, random)
+end
+
+-- Distribution of one attempt in a workshop mode.
+function M.mode_distribution(grade, mode)
+    check_grade(grade)
+    if mode and mode.steps then return {[math.min(0, grade + mode.steps)] = 1} end
+    return M.refine_distribution(grade)
+end
+
+-- Attempts to reach standard quality in a workshop mode.
+function M.mode_attempts(grade, mode)
+    if grade >= 0 then return 0 end
+    if mode and mode.steps then return math.ceil(-grade / mode.steps) end
+    return M.expected_attempts(grade)
+end
+
 -- Expected number of attempts to reach standard quality from a grade (0 for standard).
 function M.expected_attempts(grade)
     if grade >= 0 then return 0 end

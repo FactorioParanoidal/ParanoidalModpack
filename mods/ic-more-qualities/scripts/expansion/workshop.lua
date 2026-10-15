@@ -7,6 +7,9 @@
 --   * decides the single attempt shortly before completion: 10% unchanged, 90% one grade up, then
 --     10% per extra grade, never above standard; the item always leaves after one attempt,
 --   * resets positive quality (optional, 1/5 time, no packs) and passes standard items through.
+-- Modes (rules.workshop_modes): an attempt in the precise/flawless mode takes 5/20 times longer at
+-- the same power and the same packs and gains 2 grades / reaches standard for sure. The mode is
+-- taken when the attempt starts; a switch applies from the next attempt.
 local names = require("scripts.expansion.names")
 local rules = require("scripts.expansion.rules")
 local model = require("scripts.defects.model")
@@ -146,11 +149,23 @@ end
 function M.apply_settings(record, settings)
     if type(settings) ~= "table" then return end
     record.settings.reset_positive = settings.reset_positive == true
+    M.set_mode(record, settings.mode)
     M.set_circuit(record, settings.circuit == true)
 end
 
 function M.export_settings(record)
-    return {reset_positive = record.settings.reset_positive, circuit = record.settings.circuit}
+    return {reset_positive = record.settings.reset_positive, circuit = record.settings.circuit,
+        mode = M.mode_name(record)}
+end
+
+-- Workshops from older versions have no mode: normal.
+function M.mode_name(record)
+    local mode = record.settings.mode
+    return rules.workshop_modes[mode] and mode or "normal"
+end
+
+function M.set_mode(record, name)
+    record.settings.mode = rules.workshop_modes[name] and name or "normal"
 end
 
 function M.set_circuit(record, enabled)
@@ -171,7 +186,7 @@ function M.track(entity, settings)
     if record and record.entity.valid then return record end
     record = {
         id = entity.unit_number, entity = entity, next_tick = 0, status = nil,
-        settings = {reset_positive = false, circuit = false},
+        settings = {reset_positive = false, circuit = false, mode = "normal"},
         surface_index = entity.surface.index, position = {x = entity.position.x, y = entity.position.y},
     }
     s.records[record.id] = record
@@ -289,6 +304,7 @@ local function begin_craft(record, entity, recipe, quality, key, progress)
         craft.kind = "refine"
         craft.cost, craft.seconds = M.cost_of(craft.item)
         craft.start_grade = craft.grade
+        craft.mode = M.mode_name(record)
     elseif quality.name ~= "normal" and record.settings.reset_positive then
         craft.kind = "reset"
         entity.result_quality = "normal"
@@ -313,15 +329,20 @@ end
 local function attempt(record, entity, craft, ctx)
     local force_index = entity.force.index
     local before = craft.grade
-    local after = rules.refine_outcome(before, ctx.random)
+    local mode = rules.workshop_mode(craft.mode)
+    local after = rules.mode_outcome(before, mode, ctx.random)
     craft.attempts = craft.attempts + 1
-    stats.add(force_index, "refine.attempts")
-    if after == before then
-        stats.add(force_index, "refine.fail")
+    if mode.steps then
+        -- Guaranteed results are counted apart: the attempt statistics compare with the 90% roll.
+        stats.add(force_index, "refine.mode." .. mode.name)
     else
-        stats.add(force_index, "refine.success")
-        local jump = after - before
-        stats.add(force_index, "refine.jump" .. math.min(3, jump))
+        stats.add(force_index, "refine.attempts")
+        if after == before then
+            stats.add(force_index, "refine.fail")
+        else
+            stats.add(force_index, "refine.success")
+            stats.add(force_index, "refine.jump" .. math.min(3, after - before))
+        end
     end
     -- One attempt per item: the same item leaves with the reached (or unchanged) grade.
     craft.final = true
@@ -337,7 +358,11 @@ local function refine_step(record, entity, craft, progress, ctx)
     local supply = power.satisfaction(record.interface)
     power.set(record.interface, machine_power(entity))
     local previous = craft.progress or 0
-    if progress > previous and supply < 1 then progress = previous + (progress - previous) * supply end
+    -- Mode: the engine progress since the last look counts 1/time (power and packs per attempt stay).
+    local slow = rules.workshop_mode(craft.mode).time
+    if progress > previous and (supply < 1 or slow > 1) then
+        progress = previous + (progress - previous) * supply / slow
+    end
     -- Pay ahead of the progress; without resource the attempt waits (nothing is lost).
     local need = rules.prepay(craft.cost, craft.paid, progress, (look + 1) * rate)
     local starved = false
@@ -473,8 +498,10 @@ function M.describe(record)
         info.progress, info.paid = craft.progress or entity.crafting_progress, craft.paid
         info.cost, info.seconds = craft.cost, craft.seconds
         if craft.kind == "refine" and craft.grade < 0 then
-            info.distribution = rules.refine_distribution(craft.grade)
-            info.expected = rules.expected_attempts(craft.grade)
+            local mode = rules.workshop_mode(craft.mode)
+            info.mode = mode.name
+            info.distribution = rules.mode_distribution(craft.grade, mode)
+            info.expected = rules.mode_attempts(craft.grade, mode)
         end
     end
     return info

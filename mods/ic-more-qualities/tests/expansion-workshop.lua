@@ -195,6 +195,61 @@ assert(record.look == 2, "short attempt: look every 2 ticks, got " .. tostring(r
 assert(machine.outputs[1] == "ic-defect-1", tostring(machine.outputs[1]))
 assert(writes <= 3, "status writes: " .. writes)
 
+-- 8. Modes (user decision 2026-10-15): precise 5x / flawless 20x the time, the same packs,
+-- +2 grades / standard for sure; a switch applies from the next attempt; settings copy the mode.
+machine = make_machine()
+machine.entity.unit_number = 9
+machine.fuel[1] = pack_stack(100, 300)
+record = workshop.track(machine.entity)
+assert(workshop.mode_name(record) == "normal")
+local function attempt_ticks(item_quality, budget)
+    machine.start("gear", item_quality, 10)
+    local outputs, start = #machine.outputs, tick
+    local packs_before = workshop.available(machine.entity)
+    for _ = 1, budget do
+        tick = tick + 1
+        machine.interface.energy = machine.interface.electric_buffer_size
+        if record.next_tick <= tick then workshop.step(record, {tick = tick, random = mock.sequence({.99})}) end
+        machine.update()
+        if #machine.outputs > outputs then break end
+    end
+    assert(#machine.outputs == outputs + 1, "attempt did not finish")
+    return tick - start, packs_before - workshop.available(machine.entity), machine.outputs[#machine.outputs]
+end
+local stats_before = storage.ic_stats[1]["refine.attempts"]
+local t1, p1, r1 = attempt_ticks("ic-defect-5", 2000)
+assert(r1 == "ic-defect-5", "normal mode: the .99 roll fails")
+workshop.set_mode(record, "careful")
+local t2, p2, r2 = attempt_ticks("ic-defect-5", 6000)
+assert(r2 == "ic-defect-3", r2)
+workshop.set_mode(record, "precise")
+local t3, p3, r3 = attempt_ticks("ic-defect-5", 20000)
+assert(r3 == "normal", r3)
+near(p1, 1500, 1e-6); near(p2, 1500, 1e-6); near(p3, 1500, 1e-6)
+assert(math.abs(t2 / t1 - 5) < 0.1 and math.abs(t3 / t1 - 20) < 0.3, t1 .. " " .. t2 .. " " .. t3)
+workshop.set_mode(record, "careful")
+local _, _, r4 = attempt_ticks("ic-defect-1", 6000)
+assert(r4 == "normal", "never above standard")
+local s = storage.ic_stats[1]
+assert(s["refine.attempts"] == stats_before + 1 and s["refine.mode.careful"] == 2 and s["refine.mode.precise"] == 1)
+-- A switch during an attempt applies from the next one.
+machine.start("gear", "ic-defect-5", 10)
+tick = run(machine, record, 100, mock.sequence({.99}), tick)
+assert(record.craft.mode == "careful")
+workshop.set_mode(record, "precise")
+local outputs = #machine.outputs
+tick = run(machine, record, 3200, mock.sequence({.99}), tick)
+assert(#machine.outputs == outputs + 1 and machine.outputs[#machine.outputs] == "ic-defect-3")
+-- Settings: exported and applied with the mode; an unknown or missing mode is normal.
+assert(workshop.export_settings(record).mode == "precise")
+workshop.apply_settings(record, {mode = "bogus"})
+assert(workshop.mode_name(record) == "normal")
+workshop.apply_settings(record, {mode = "careful", reset_positive = false})
+assert(workshop.mode_name(record) == "careful")
+record.settings.mode = nil -- a workshop from an older version
+assert(workshop.mode_name(record) == "normal" and workshop.export_settings(record).mode == "normal")
+
 print("PASS: workshop streams pack durability (partial packs), waits without packs or power,")
 print("makes one attempt per item (90% + 10% chain, capped at standard) and always releases it, passes standard,")
-print("resets positive quality on request, returns the reached grade when mined. Mocks only.")
+print("resets positive quality on request, returns the reached grade when mined; modes take 5x/20x the")
+print("time for the same packs and give +2 grades / standard. Mocks only.")

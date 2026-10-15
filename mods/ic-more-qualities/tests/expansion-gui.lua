@@ -25,16 +25,25 @@ local variants = {
 local styles = {}
 for _, name in ipairs({"frame", "inside_shallow_frame_with_padding", "inside_deep_frame", "frame_title",
     "draggable_space_header", "close_button", "caption_label", "bold_label", "naked_scroll_pane", "bordered_table",
-    "tool_button", "green_button", "red_button"}) do styles[name] = true end
+    "tool_button", "green_button", "red_button",
+    -- tool_button_blue: data/core/prototypes/style.lua of 2.0.77 (also used by Even Distribution).
+    "tool_button_blue"}) do styles[name] = true end
 local sprites = {}
 for _, name in ipairs({"utility/close", "utility/status_working", "utility/status_not_working", "utility/status_yellow",
     "utility/gps_map_icon", "utility/left_arrow", "utility/right_arrow", "ic-post-arrow-good", "ic-post-arrow-refine",
-    "ic-post-arrow-other"}) do sprites[name] = true end
+    "ic-post-arrow-other",
+    -- Sprite prototype "info" in data/core/prototypes/utility-sprites.lua of 2.0.77 (the blue tooltip icon).
+    "info",
+    -- Quality icon path (SpritePath type "quality") and the mod's own mode sprites (expansion-data.lua).
+    "quality/normal", "ic-mode-careful", "ic-mode-precise"}) do sprites[name] = true end
 
 local function load_locale(language)
     local keys, section = {}, nil
     for line in io.lines(root .. "locale/" .. language .. "/expansion.cfg") do
         local header = line:match("^%[(.+)%]$")
+        -- Factorio rejects a line without "=" ("missing value"): a real newline inside a value.
+        assert(header or line:find("=", 1, true) or line:match("^%s*$") or line:match("^[#;]"),
+            language .. " locale line without a value: " .. line)
         if header then section = header
         else
             local key = line:match("^([^=]+)=")
@@ -121,6 +130,7 @@ local gui = require("scripts.expansion.gui")
 local workshop = require("scripts.expansion.workshop")
 local post = require("scripts.expansion.post")
 local modes = require("scripts.expansion.modes")
+local model = require("scripts.defects.model")
 
 local force = {index = 1, technologies = {}, players = {}}
 for level = 1, 3 do force.technologies["ic-defect-control-" .. level] = {researched = true} end
@@ -188,6 +198,32 @@ player.opened = ws
 gui.open_entity(player, ws)
 assert(player.gui.relative.ic_quality_relative)
 gui.refresh_entity(player)
+-- Workshop modes: radiobuttons I-III, a table, the two checkboxes; selecting a mode stores it.
+do
+    local inside = player.gui.relative.ic_quality_relative.ic_inside
+    local radios = 0
+    for _, child in ipairs(rawget(inside, "children")) do if child.type == "radiobutton" then radios = radios + 1 end end
+    assert(radios == 3 and inside.ic_mode_table)
+    gui.on_checked({player_index = 1, element = {valid = true, state = true, tags = {ic = "ws-mode", mode = "precise"}}}, {})
+    assert(workshop.mode_name(record) == "precise")
+    local cells = rawget(player.gui.relative.ic_quality_relative.ic_inside.ic_mode_table, "children")
+    assert(cells[4].style.font_color and not cells[2].style.font_color, "flawless column highlighted")
+    storage.ic_stats[1]["refine.mode.careful"] = 2
+end
+-- Collapse and expand: per player and per panel kind; the collapsed button shows the selected mode.
+gui.on_click({player_index = 1, element = {valid = true, tags = {ic = "rel-collapse", kind = "workshop"}}}, {})
+do
+    local button = player.gui.relative.ic_quality_relative
+    assert(button.type == "sprite-button" and button.sprite == "ic-mode-precise" and button.tags.ic == "rel-expand")
+    assert(button.tooltip[1] == "ic-quality.workshop-collapsed")
+    gui.refresh_entity(player) -- a collapsed panel has nothing to refresh
+end
+gui.close_entity(player)
+gui.open_entity(player, ws)
+assert(player.gui.relative.ic_quality_relative.type == "sprite-button", "stays collapsed when reopened")
+gui.on_click({player_index = 1, element = {valid = true, tags = {ic = "rel-expand", kind = "workshop"}}}, {})
+assert(player.gui.relative.ic_quality_relative.type == "frame" and player.gui.relative.ic_quality_relative.ic_inside)
+workshop.set_mode(record, "normal")
 for _, tab in ipairs({"production", "refinement", "orders"}) do
     gui.player_settings(1).tab = tab
     gui.open_panel(player)
@@ -220,6 +256,53 @@ local tracked
 gui.on_checked({player_index = 1, element = {valid = true, state = true, tags = {ic = "mode", mode = "careful"}}},
     {track_machine = function(e) tracked = e end})
 assert(modes.mode_name(am) == "careful" and tracked == am)
+-- Roman numbers on the radiobuttons and in the header; the selected column is bold; no note label.
+do
+    local frame = player.gui.relative.ic_quality_relative
+    local inside = frame.ic_inside
+    local buttons = {}
+    for _, child in ipairs(rawget(inside, "children")) do
+        if child.type == "radiobutton" then buttons[#buttons + 1] = child end
+        assert(child.type ~= "label", "mode panel has a note label")
+    end
+    assert(#buttons == 3 and buttons[3].caption[2] == "III" and buttons[3].caption[3] == ". "
+        and buttons[3].caption[4][1] == "ic-quality.mode-precise" and buttons[2].state)
+    local cells = rawget(inside.ic_mode_table, "children")
+    assert(cells[2].caption == "I" and cells[3].caption == "II" and cells[4].caption == "III")
+    assert(cells[3].style.font_color and not cells[2].style.font_color and not cells[4].style.font_color)
+    assert(rawget(frame, "caption") == nil)
+    -- Live refresh: the quality chance follows the machine effects without reopening.
+    local tbl = inside.ic_mode_table
+    assert(tbl.quality_1.caption == "2.00%" and tbl.quality_3.caption == "18.29%", tbl.quality_3.caption)
+    am.effects = {quality = 0.5}
+    gui.refresh_entity(player)
+    assert(player.gui.relative.ic_quality_relative == frame and frame.valid)
+    assert(tbl.quality_1.caption == "5.00%" and tbl.quality_2.caption == "14.26%" and tbl.quality_3.caption == "40.13%")
+    am.effects = {quality = 0}
+    gui.refresh_entity(player)
+    assert(tbl.quality_3.caption == "0.00%")
+    -- A changed control level rebuilds the panel.
+    force.technologies["ic-defect-control-4"] = {researched = true}
+    gui.refresh_entity(player)
+    assert(not frame.valid and player.gui.relative.ic_quality_relative.ic_inside.ic_mode_table.tags.level == 4)
+    force.technologies["ic-defect-control-4"] = nil
+    am.effects = {quality = 0.2}
+    -- Collapsed mode panel: square button with the mode icon; the workshop state is separate.
+    gui.on_click({player_index = 1, element = {valid = true, tags = {ic = "rel-collapse", kind = "mode"}}}, {})
+    local button = player.gui.relative.ic_quality_relative
+    assert(button.type == "sprite-button" and button.sprite == "ic-mode-careful")
+    gui.refresh_entity(player)
+    modes.set(am, "normal")
+    gui.open_entity(player, am)
+    assert(player.gui.relative.ic_quality_relative.sprite == "quality/normal")
+    player.opened = ws
+    gui.open_entity(player, ws)
+    assert(player.gui.relative.ic_quality_relative.type == "frame", "workshop panel is not collapsed by the mode panel")
+    player.opened = am
+    gui.on_click({player_index = 1, element = {valid = true, tags = {ic = "rel-expand", kind = "mode"}}}, {})
+    assert(player.gui.relative.ic_quality_relative.type == "frame")
+    modes.set(am, "careful")
+end
 gui.close_entity(player)
 assert(not player.gui.relative.ic_quality_relative)
 
@@ -235,8 +318,49 @@ local function keys_in(element, found)
 end
 player.opened = am
 gui.open_entity(player, am)
-assert(keys_in(player.gui.relative.ic_quality_relative)["ic-quality.row-worst"])
+do
+    local found = keys_in(player.gui.relative.ic_quality_relative)
+    assert(found["ic-quality.row-worst"] and found["ic-quality.row-defect"] and found["ic-quality.mode-help"])
+    assert(not found["ic-quality.mode-help-clean"] and not found["ic-quality.mode-note"])
+    -- Level 3: defect chance 1 - standard share; precise mode none.
+    local tbl = player.gui.relative.ic_quality_relative.ic_inside.ic_mode_table
+    local cells = rawget(tbl, "children")
+    local captions = {}
+    for _, cell in ipairs(cells) do captions[#captions + 1] = cell.caption end
+    local d3, d7 = 1 - model.distribution(3)[0], 1 - model.distribution(7)[0]
+    local row_found = false
+    for index, caption in ipairs(captions) do
+        if type(caption) == "table" and caption[1] == "ic-quality.row-defect" then
+            row_found = true
+            assert(captions[index + 1] == string.format("%.2f%%", d3 * 100))
+            assert(captions[index + 2] == string.format("%.2f%%", d7 * 100))
+            assert(captions[index + 3] == "0.00%")
+        end
+    end
+    assert(row_found)
+end
 gui.close_entity(player)
+-- Losses off (map setting 0%, the default): the production tab says nothing about them.
+settings.global["ic-more-qualities-initial-loss-percent"].value = 0
+gui.player_settings(1).tab = "production"
+gui.open_panel(player)
+gui.refresh_panel(player)
+do
+    local found = keys_in(player.gui.screen.ic_quality_panel)
+    for _, key in ipairs({"loss-now", "loss-next", "loss-careful", "loss-precise", "col-losses"}) do
+        assert(not found["ic-quality." .. key], key)
+    end
+    assert(found["ic-quality.col-operations"] and found["ic-quality.distribution"])
+end
+gui.toggle_panel(player)
+settings.global["ic-more-qualities-initial-loss-percent"].value = 33
+gui.open_panel(player)
+gui.refresh_panel(player)
+do
+    local found = keys_in(player.gui.screen.ic_quality_panel)
+    assert(found["ic-quality.loss-now"] and found["ic-quality.loss-precise"] and found["ic-quality.col-losses"])
+end
+gui.toggle_panel(player)
 for level = 4, 10 do force.technologies["ic-defect-control-" .. level] = {researched = true} end
 for item, expected in pairs({["assembling-machine-1"] = "lookup-finished-clean", belt = "lookup-finished-clean",
     gear = "lookup-material-clean"}) do
@@ -257,6 +381,7 @@ player.opened = am
 gui.open_entity(player, am)
 local mode_keys = keys_in(player.gui.relative.ic_quality_relative)
 assert(not mode_keys["ic-quality.row-worst"] and not mode_keys["ic-quality.mode-normal-tooltip"])
+assert(not mode_keys["ic-quality.row-defect"] and not mode_keys["ic-quality.mode-help"] and mode_keys["ic-quality.mode-help-clean"])
 assert(mode_keys["ic-quality.mode-normal-tooltip-clean"] and mode_keys["ic-quality.mode-precise-tooltip-clean"])
 gui.close_entity(player)
 for level = 4, 10 do force.technologies["ic-defect-control-" .. level] = nil end
@@ -278,7 +403,9 @@ for _, key in ipairs({"workshop-state-working", "workshop-state-no-resource", "w
     "post-facing-3", "alert-no-resource", "order-done", "status-no-resource", "repair-slot",
     "repair-slot-description", "workshop-cant-refine", "workshop-cant-refine_until", "workshop-input-slot",
     "lookup-no-defect", "lookup-finished", "lookup-material", "lookup-empty-clean", "lookup-finished-clean",
-    "lookup-material-clean", "mode-normal-tooltip-clean", "mode-careful-tooltip-clean", "mode-precise-tooltip-clean"}) do
+    "lookup-material-clean", "mode-normal-tooltip-clean", "mode-careful-tooltip-clean", "mode-precise-tooltip-clean", "mode-help",
+    "mode-help-clean", "ws-mode-normal-tooltip", "ws-mode-careful-tooltip", "ws-mode-precise-tooltip", "collapse",
+    "mode-collapsed", "workshop-collapsed", "ws-mode-attempts"}) do
     dynamic["ic-quality." .. key] = true
 end
 for key in pairs(dynamic) do used_keys[key] = true end

@@ -218,25 +218,31 @@ local function production_dynamic(parent, player)
         return
     end
 
-    local tbl = key_value_table(parent)
-    row(tbl, {"ic-quality.loss-now"}, percent(model.loss_probability(level, percent_setting)))
-    row(tbl, {"ic-quality.loss-next"}, level < 10 and percent(model.loss_probability(level + 1, percent_setting)) or "—")
-    row(tbl, {"ic-quality.loss-careful"}, percent(model.loss_probability(level, percent_setting) * rules.modes.careful.loss))
-    row(tbl, {"ic-quality.loss-precise"}, percent(0))
+    -- Losses are off by default (map setting 0%): then nothing about them is shown.
+    local losses_on = percent_setting > 0
+    if losses_on then
+        local tbl = key_value_table(parent)
+        row(tbl, {"ic-quality.loss-now"}, percent(model.loss_probability(level, percent_setting)))
+        row(tbl, {"ic-quality.loss-next"}, level < 10 and percent(model.loss_probability(level + 1, percent_setting)) or "—")
+        row(tbl, {"ic-quality.loss-careful"}, percent(model.loss_probability(level, percent_setting) * rules.modes.careful.loss))
+        row(tbl, {"ic-quality.loss-precise"}, percent(0))
+    end
 
     heading(parent, {"ic-quality.distribution"})
     distribution_rows(parent, level)
 
     heading(parent, {"ic-quality.counted"})
-    local ctbl = parent.add({type = "table", column_count = 3, style = "bordered_table"})
-    for _, caption in ipairs({{"ic-quality.col-source"}, {"ic-quality.col-operations"}, {"ic-quality.col-losses"}}) do
-        label(ctbl, caption, "bold_label")
-    end
+    local ctbl = parent.add({type = "table", column_count = losses_on and 3 or 2, style = "bordered_table"})
+    label(ctbl, {"ic-quality.col-source"}, "bold_label")
+    label(ctbl, {"ic-quality.col-operations"}, "bold_label")
+    if losses_on then label(ctbl, {"ic-quality.col-losses"}, "bold_label") end
     for _, source in ipairs({"hand", "machine", "drill", "mining"}) do
         local ops, losses = counters[source .. ".ops"] or 0, counters[source .. ".loss"] or 0
         label(ctbl, {"ic-quality.source-" .. source})
         label(ctbl, tostring(ops))
-        label(ctbl, ops > 0 and {"", tostring(losses), " (", percent(losses / ops), ")"} or tostring(losses))
+        if losses_on then
+            label(ctbl, ops > 0 and {"", tostring(losses), " (", percent(losses / ops), ")"} or tostring(losses))
+        end
     end
     local grades = parent.add({type = "flow", direction = "horizontal"})
     label(grades, {"ic-quality.assigned"})
@@ -355,12 +361,19 @@ local function refinement_dynamic(parent, player)
         or {"ic-quality.success-expected", percent(rules.SUCCESS, 0)})
     row(tbl, {"ic-quality.jumps"}, {"ic-quality.jumps-value", counters["refine.jump1"] or 0,
         counters["refine.jump2"] or 0, counters["refine.jump3"] or 0})
+    local by_mode = 0
+    for _, name in ipairs({"careful", "precise"}) do
+        local count = counters["refine.mode." .. name] or 0
+        by_mode = by_mode + count
+        row(tbl, {"ic-quality.ws-mode-attempts", {"ic-quality.mode-" .. name}}, tostring(count))
+    end
     row(tbl, {"ic-quality.normalized"}, tostring(counters["refine.normalized"] or 0))
     row(tbl, {"ic-quality.resets"}, tostring(counters["refine.resets"] or 0))
     row(tbl, {"ic-quality.passed"}, tostring(counters["refine.passed"] or 0))
     local resource = counters["refine.resource"] or 0
     row(tbl, {"ic-quality.resource-spent"}, {"ic-quality.packs", packs(resource)})
-    row(tbl, {"ic-quality.resource-per-success"}, success > 0 and {"ic-quality.packs", packs(resource / success)} or "—")
+    local improved = success + by_mode
+    row(tbl, {"ic-quality.resource-per-success"}, improved > 0 and {"ic-quality.packs", packs(resource / improved)} or "—")
 end
 
 local function refinement_tab(content, player)
@@ -487,69 +500,202 @@ end
 ---------------------------------------------------------------------------------------------------
 -- Relative panels
 ---------------------------------------------------------------------------------------------------
-local function relative_frame(player, entity, gui_type, caption)
+-- Collapsible panels (user request 2026-10-15): the state is per player and per panel kind
+-- ("mode", "workshop"), expanded by default; collapsed, the panel is a square button next to the window.
+local function collapsed(player, kind)
+    local settings = M.player_settings(player.index)
+    return settings.collapsed ~= nil and settings.collapsed[kind] == true
+end
+
+local function set_collapsed(player, kind, value)
+    local settings = M.player_settings(player.index)
+    settings.collapsed = settings.collapsed or {}
+    settings.collapsed[kind] = value or nil
+end
+
+local function anchor_of(entity, gui_type)
+    return {gui = gui_type, position = defines.relative_gui_position.right, names = {entity.name}}
+end
+
+-- help: tooltip of a native info icon next to the title; kind: the panel can be collapsed with a
+-- close button (the title is then drawn by the panel itself).
+local function relative_frame(player, entity, gui_type, caption, help, kind)
     local old = player.gui.relative[RELATIVE]
     if old then old.destroy() end
     local frame = player.gui.relative.add({
-        type = "frame", name = RELATIVE, direction = "vertical", caption = caption,
-        anchor = {gui = gui_type, position = defines.relative_gui_position.right, names = {entity.name}},
-        tags = {unit = entity.unit_number},
+        type = "frame", name = RELATIVE, direction = "vertical", caption = not (help or kind) and caption or nil,
+        anchor = anchor_of(entity, gui_type), tags = {unit = entity.unit_number},
     })
     frame.style.maximal_width = 420
-    local inside = frame.add({type = "frame", style = "inside_shallow_frame_with_padding", direction = "vertical"})
+    if help or kind then
+        local bar = frame.add({type = "flow", direction = "horizontal"})
+        bar.style.vertical_align = "center"
+        bar.style.horizontal_spacing = 6
+        label(bar, caption, "frame_title")
+        if help then bar.add({type = "sprite", sprite = "info", tooltip = help}) end
+        if kind then
+            local filler = bar.add({type = "empty-widget"})
+            filler.style.horizontally_stretchable = true
+            bar.add({type = "sprite-button", style = "close_button", sprite = "utility/close",
+                tooltip = {"ic-quality.collapse"}, tags = {ic = "rel-collapse", kind = kind}})
+        end
+    end
+    local inside = frame.add({type = "frame", name = "ic_inside", style = "inside_shallow_frame_with_padding",
+        direction = "vertical"})
     return inside
+end
+
+-- The collapsed panel: a square button with the icon of the selected mode.
+local function collapsed_button(player, entity, gui_type, kind, mode, tooltip)
+    local old = player.gui.relative[RELATIVE]
+    if old then old.destroy() end
+    local button = player.gui.relative.add({
+        type = "sprite-button", name = RELATIVE, style = "tool_button_blue",
+        sprite = mode == "normal" and "quality/normal" or ("ic-mode-" .. mode), tooltip = tooltip,
+        anchor = anchor_of(entity, gui_type), tags = {unit = entity.unit_number, ic = "rel-expand", kind = kind},
+    })
+    button.style.width = 40
+    button.style.height = 40
+    button.style.padding = 5
+    return button
+end
+
+local ROMAN = {"I", "II", "III"}
+local SELECTED_COLOR = {0.98, 0.66, 0.22}
+
+local function mode_caption(index, name)
+    return {"", ROMAN[index], ". ", {"ic-quality.mode-" .. name}}
+end
+
+local function mode_index(name)
+    for index, mode in ipairs(rules.mode_order) do if mode == name then return index end end
+    return 1
+end
+
+-- Radiobuttons I-III and a table with a column per mode; the column of the selected mode is bold,
+-- its header coloured. rows: {caption, values, prefix (names cells prefix..index), tooltips}.
+local function mode_selector(inside, current, action, tooltip_suffix, rows, tags)
+    for index, name in ipairs(rules.mode_order) do
+        inside.add({type = "radiobutton", caption = mode_caption(index, name),
+            tooltip = {"ic-quality." .. action .. "-" .. name .. "-tooltip" .. (tooltip_suffix or "")},
+            state = current == name, tags = {ic = action, mode = name}})
+    end
+    local tbl = inside.add({type = "table", name = "ic_mode_table", column_count = 4, style = "bordered_table",
+        tags = tags})
+    tbl.style.top_margin = 6
+    local function cell(index, caption, name, tooltip)
+        return tbl.add({type = "label", name = name, caption = caption, tooltip = tooltip,
+            style = rules.mode_order[index] == current and "bold_label" or nil})
+    end
+    label(tbl, "")
+    for index in ipairs(rules.mode_order) do
+        local header = cell(index, ROMAN[index])
+        if rules.mode_order[index] == current then header.style.font_color = SELECTED_COLOR end
+    end
+    for _, line in ipairs(rows) do
+        label(tbl, line[1])
+        for index, value in ipairs(line[2]) do
+            cell(index, value, line[3] and (line[3] .. index), line[4] and line[4][index])
+        end
+    end
+    return tbl
 end
 
 local function workshop_panel(player, entity)
     local record = workshop.track(entity)
     if not record then return end
-    -- Only the two settings: state, cost and outcomes are left to the native furnace window.
-    local inside = relative_frame(player, entity, defines.relative_gui_type.furnace_gui, {"ic-quality.workshop-title"})
-    inside.add({type = "checkbox", caption = {"ic-quality.reset-positive"}, tooltip = {"ic-quality.reset-positive-tooltip"},
+    local gui_type = defines.relative_gui_type.furnace_gui
+    local current = workshop.mode_name(record)
+    if collapsed(player, "workshop") then
+        collapsed_button(player, entity, gui_type, "workshop", current,
+            {"ic-quality.workshop-collapsed", mode_caption(mode_index(current), current)})
+        return
+    end
+    -- Mode and two settings: state, cost and outcomes are left to the native furnace window.
+    local inside = relative_frame(player, entity, gui_type, {"ic-quality.workshop-title"},
+        {"ic-quality.ws-mode-help"}, "workshop")
+    local times = {}
+    for index, name in ipairs(rules.mode_order) do times[index] = "×" .. rules.workshop_mode(name).time end
+    mode_selector(inside, current, "ws-mode", nil, {
+        {{"ic-quality.ws-row-result"}, {{"ic-quality.ws-result-normal"}, {"ic-quality.ws-result-careful"},
+            {"ic-quality.ws-result-precise"}}, nil, {{"ic-quality.ws-result-normal-tooltip"}}},
+        {{"ic-quality.ws-row-time"}, times},
+        {{"ic-quality.ws-row-packs"}, {"×1", "×1", "×1"}},
+    })
+    local checks = inside.add({type = "flow", direction = "vertical"})
+    checks.style.top_margin = 6
+    checks.add({type = "checkbox", caption = {"ic-quality.reset-positive"}, tooltip = {"ic-quality.reset-positive-tooltip"},
         state = record.settings.reset_positive, tags = {ic = "ws-reset"}})
-    inside.add({type = "checkbox", caption = {"ic-quality.circuit-control"}, tooltip = {"ic-quality.workshop-circuit-tooltip"},
+    checks.add({type = "checkbox", caption = {"ic-quality.circuit-control"}, tooltip = {"ic-quality.workshop-circuit-tooltip"},
         state = record.settings.circuit, tags = {ic = "ws-circuit"}})
 end
 
+-- Quality-module chance of the machine in every mode, as text (standard ingredients).
+local function mode_quality_values(entity)
+    local effects = entity.effects
+    local quality_effect = effects and effects.quality or 0
+    local chance = math.max(0, math.min(1, quality_effect * (prototypes.quality.normal.next_probability or 0.1)))
+    local values = {}
+    for index, name in ipairs(rules.mode_order) do
+        values[index] = percent(rules.boosted_chance(chance, rules.modes[name].boost), 2)
+    end
+    return values
+end
+
 local function mode_panel(player, entity, gui_type)
-    local inside = relative_frame(player, entity, gui_type, {"ic-quality.mode-title"})
     local current = modes.mode_name(entity)
+    if collapsed(player, "mode") then
+        collapsed_button(player, entity, gui_type, "mode", current,
+            {"ic-quality.mode-collapsed", mode_caption(mode_index(current), current)})
+        return
+    end
     local force = entity.force
     local level = model.completed_level(force.technologies)
     local over = level >= 10
-    local loss = model.loss_probability(level, settings.global["ic-more-qualities-initial-loss-percent"].value)
-    local effects = entity.effects
-    local quality_effect = effects and effects.quality or 0
-    local chance = math.min(1, quality_effect * (prototypes.quality.normal.next_probability or 0.1))
+    local suffix = over and "-clean" or ""
+    local inside = relative_frame(player, entity, gui_type, {"ic-quality.mode-title"}, {"ic-quality.mode-help" .. suffix}, "mode")
 
-    for _, name in ipairs(rules.mode_order) do
-        inside.add({type = "radiobutton", caption = {"ic-quality.mode-" .. name}, tooltip = {"ic-quality.mode-" .. name .. "-tooltip" .. (over and "-clean" or "")},
-            state = current == name, tags = {ic = "mode", mode = name}})
-    end
-    local tbl = inside.add({type = "table", column_count = 4, style = "bordered_table"})
-    tbl.style.top_margin = 6
-    label(tbl, "")
-    for index in ipairs(rules.mode_order) do label(tbl, tostring(index), "bold_label") end
-    local function line(caption, values)
-        label(tbl, caption)
-        for _, value in ipairs(values) do label(tbl, value) end
-    end
     -- Worst grade as a number: 0 standard, −1…−5 defects.
     local function worst(mode)
         if mode.no_defect then return "0" end
         local grade = -5 + math.floor(rules.effective_level(level, mode) / 2)
         return grade == 0 and "0" or ("−" .. -grade)
     end
+    -- Chance that a new finished product gets any defect.
+    local function defect(mode)
+        if mode.no_defect then return percent(0, 2) end
+        return percent(1 - model.distribution(rules.effective_level(level, mode))[0], 2)
+    end
     local m = rules.modes
-    local function times(key) return {"×" .. m.normal[key], "×" .. m.careful[key], "×" .. m.precise[key]} end
-    line({"ic-quality.row-time"}, times("time"))
-    line({"ic-quality.row-power"}, {"×1", "×" .. (m.careful.energy / m.careful.time), "×" .. (m.precise.energy / m.precise.time)})
-    if not over then line({"ic-quality.row-worst"}, {worst(m.normal), worst(m.careful), worst(m.precise)}) end
-    line({"ic-quality.row-quality"}, {percent(chance, 2), percent(rules.boosted_chance(chance, m.careful.boost), 2),
-        percent(rules.boosted_chance(chance, m.precise.boost), 2)})
-    local note = label(inside, {"ic-quality.mode-note"})
-    note.style.single_line = false
-    note.style.font_color = {0.75, 0.75, 0.75}
+    local rows = {
+        {{"ic-quality.row-time"}, {"×" .. m.normal.time, "×" .. m.careful.time, "×" .. m.precise.time}},
+        {{"ic-quality.row-power"}, {"×1", "×" .. (m.careful.energy / m.careful.time), "×" .. (m.precise.energy / m.precise.time)}},
+    }
+    if not over then
+        rows[#rows + 1] = {{"ic-quality.row-worst"}, {worst(m.normal), worst(m.careful), worst(m.precise)}}
+        rows[#rows + 1] = {{"ic-quality.row-defect"}, {defect(m.normal), defect(m.careful), defect(m.precise)}}
+    end
+    rows[#rows + 1] = {{"ic-quality.row-quality"}, mode_quality_values(entity), "quality_"}
+    -- tags.level: the live refresh rebuilds the panel when the control level changes.
+    mode_selector(inside, current, "mode", suffix, rows, {level = level})
+end
+
+-- Live part of the mode panel: the quality-module chance follows modules and beacons; a changed
+-- control level rebuilds the panel. Only the opened machine is read; captions change only on a change.
+local function mode_refresh(player, frame, entity)
+    local inside = frame.ic_inside
+    local tbl = inside and inside.ic_mode_table
+    local tags = tbl and tbl.tags
+    if not (tags and tags.level) then return end -- the workshop table has nothing live
+    local level = model.completed_level(entity.force.technologies)
+    if level ~= tags.level then
+        M.open_entity(player, entity)
+        return
+    end
+    for index, value in ipairs(mode_quality_values(entity)) do
+        local element = tbl["quality_" .. index]
+        if element and element.caption ~= value then element.caption = value end
+    end
 end
 
 local function post_dynamic(parent, record)
@@ -660,6 +806,11 @@ function M.refresh_entity(player)
     local frame = player.gui.relative[RELATIVE]
     local entity = opened_entity(player)
     if not (frame and entity) then return end
+    if frame.tags.unit ~= entity.unit_number then return end
+    if frame.ic_inside and frame.ic_inside.ic_mode_table then
+        mode_refresh(player, frame, entity)
+        return
+    end
     local dynamic = frame.children[1] and frame.children[1].dyn
     if not dynamic then return end
     if entity.name == names.post then
@@ -690,6 +841,9 @@ function M.on_click(event, hooks)
     if not player then return end
     if action == "panel-close" then
         M.close_panel(player)
+    elseif action == "rel-collapse" or action == "rel-expand" then
+        set_collapsed(player, tags.kind, action == "rel-collapse")
+        reopen(player)
     elseif action == "show" then
         local entity = find_entity_by_unit(tags.unit)
         if entity then player.centered_on = entity end
@@ -732,6 +886,12 @@ function M.on_checked(event, hooks)
     elseif action == "mode" then
         if entity and element.state then
             modes.set(entity, tags.mode, hooks and hooks.track_machine)
+            reopen(player)
+        end
+    elseif action == "ws-mode" then
+        local record = entity and workshop.get(entity)
+        if record and element.state then
+            workshop.set_mode(record, tags.mode)
             reopen(player)
         end
     elseif action == "post-repeat" or action == "post-circuit" then

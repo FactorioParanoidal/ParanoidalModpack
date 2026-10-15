@@ -96,6 +96,16 @@ assert(rules.route(nil, "gear", q.normal, 1) == "other")
 assert(rules.output_direction(0, "good") == 0 and rules.output_direction(0, "refine") == 3 and rules.output_direction(0, "other") == 1)
 assert(rules.output_direction(1, "good") == 1 and rules.output_direction(1, "refine") == 0 and rules.output_direction(3, "other") == 0)
 
+-- Workshop modes: guaranteed +2 / standard, never above standard, attempts to standard.
+local wm = rules.workshop_modes
+assert(rules.mode_outcome(-5, wm.careful) == -3 and rules.mode_outcome(-1, wm.careful) == 0)
+assert(rules.mode_outcome(-5, wm.precise) == 0 and rules.mode_outcome(-1, wm.precise) == 0)
+assert(rules.mode_distribution(-4, wm.careful)[-2] == 1 and rules.mode_distribution(-4, wm.precise)[0] == 1)
+assert(rules.mode_attempts(-5, wm.careful) == 3 and rules.mode_attempts(-2, wm.careful) == 1)
+assert(rules.mode_attempts(-5, wm.precise) == 1 and rules.mode_attempts(0, wm.precise) == 0)
+assert(math.abs(rules.mode_attempts(-1, wm.normal) - rules.expected_attempts(-1)) < 1e-12)
+assert(rules.workshop_mode("bogus") == wm.normal and wm.careful.time == 5 and wm.precise.time == 20)
+
 print("PASS: refinement cost (science x sqrt health, agreed examples), 90%+10% chain distribution,")
 print("expected attempts, prepayment, mode costs/extra power/levels, boost identity, post routing.")
 print("Pure Lua rules only; not a Factorio test.")

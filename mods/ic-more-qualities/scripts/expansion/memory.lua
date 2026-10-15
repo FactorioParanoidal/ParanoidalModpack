@@ -17,7 +17,7 @@ end
 local function export_record(kind, record)
     if kind == "workshop" then
         local settings = workshop.export_settings(record)
-        if settings.reset_positive or settings.circuit then return {workshop = settings} end
+        if settings.reset_positive or settings.circuit or settings.mode ~= "normal" then return {workshop = settings} end
     elseif kind == "post" then
         return {post = post.export_settings(record)}
     elseif kind == "mode" and record.mode and record.mode ~= "normal" then
