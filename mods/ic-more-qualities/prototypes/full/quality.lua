@@ -70,6 +70,26 @@ data:extend({
   ic.create_quality("extreme", nil, 133, "q-ja", nil, 0.0005, 0.0005, 0.35, { 255, 251, 21 })
 })
 
+-- Paranoidal: equipment grids (armor, vehicles, wagons) grow gently instead of +level cells per side.
+-- The engine has one bonus per quality for every grid, so it is fitted to the 5x5 modular armor: the area
+-- grows by +100% every 5 tiers (tier 5 x2, tier 10 x3, last tier x9); bonus = round(5 * sqrt(1 + tier / 5)) - 5.
+-- Bigger grids grow less (power armor MK5 x1.4 at tier 5), the smallest vehicle grids more (8x2 x2.5).
+do
+  local positive = {}
+  for _, quality in pairs(data.raw.quality) do
+    if (quality.level or 0) > 0 then positive[#positive + 1] = quality end
+  end
+  table.sort(positive, function(a, b)
+    if a.level ~= b.level then return a.level < b.level end
+    return a.name < b.name
+  end)
+  for tier, quality in ipairs(positive) do
+    local bonus = math.floor(5 * math.sqrt(1 + tier / 5) + 0.5) - 5
+    quality.equipment_grid_width_bonus = bonus
+    quality.equipment_grid_height_bonus = bonus
+  end
+end
+
 -- upravi technologie
 
 -- module 1
