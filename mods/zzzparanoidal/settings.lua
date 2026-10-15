@@ -39,15 +39,6 @@ data:extend({
      setting_type = "startup",
      default_value = "FF9F1C"
    },
-   {
-     type = "double-setting",
-     name = "paranoidal-flowfix-min-time",
-     setting_type = "startup",
-     default_value = 0.5,
-     minimum_value = 0.5,
-     maximum_value = 100,
-     order = "e"
-   },
    --Рассказываем как показать тонкие настройки
  {type = "bool-setting", name = "zzz-settings", setting_type = "startup", default_value = true, order = "f"}
  })
