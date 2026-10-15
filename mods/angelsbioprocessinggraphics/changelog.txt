@@ -1,0 +1,5 @@
+---------------------------------------------------------------------------------------------------
+Version: 2.0.0
+Date: 2026.10.15
+  Changes:
+    - Removed the unused image graphics/entity/bio-processing-plant/bio-processing-plant.png: no prototype or script refers to it (Paranoidal local cleanup)
