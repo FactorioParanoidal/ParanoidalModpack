@@ -94,3 +94,34 @@ for i, name in ipairs(defs.names) do
     machine.corpse = nil
     machine.dying_explosion = nil
 end
+
+-- Factorissimo makes its wall-crossing linked belts in data-updates from the loaders that
+-- existed then: the Bob tiers had none, the others kept the replaced loaders' fields.
+-- Rebuild them from the final native loaders, exactly as Factorissimo derives them.
+local linked_template = mods["factorissimo-2-notnotmelon"]
+    and data.raw["linked-belt"]["factory-linked-transport-belt"]
+if linked_template then
+    for _, name in ipairs(defs.names) do
+        local linked = table.deepcopy(data.raw.loader[name])
+        linked.type = "linked-belt"
+        linked.name = "factory-linked-" .. name
+        linked.allow_side_loading = false
+        linked.next_upgrade = nil
+        linked.localised_name = linked.localised_name or { "entity-name." .. name }
+        linked.structure = table.deepcopy(linked_template.structure)
+        linked.heating_energy = nil
+        linked.selection_box = nil
+        linked.minable = nil
+        linked.hidden = true
+        linked.belt_length = nil
+        linked.collision_mask = { layers = { transport_belt = true } }
+        linked.collision_box = { { -0.4, -0.4 }, { 0.4, 0.4 } }
+        linked.filter_count = nil
+        linked.structure_render_layer = nil
+        linked.container_distance = nil
+        -- Loader-only fields: a linked belt has no energy source.
+        linked.energy_source = nil
+        linked.energy_per_item = nil
+        data:extend({ linked })
+    end
+end
