@@ -1,0 +1,5 @@
+---------------------------------------------------------------------------------------------------
+Version: 2.0.0
+Date: 2026.10.15
+  Changes:
+    - Removed 5 unused images (graphics/barrel/barrel-*.png, graphics/icons/angels-generic/generic-base-mid/top.png): no prototype or script refers to them (Paranoidal local cleanup)
