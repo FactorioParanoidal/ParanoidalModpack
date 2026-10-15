@@ -3,6 +3,8 @@ Version: 2.3.5
 Date: 2026-06-01
   Bugfixes:
     - Fixed that nuclear fuel, fuel cells and isotopes were not reskinned
+  Changes:
+    - Removed 57 unused images (ingot icon variations of 8 metals, 4 wire coil icons): not referenced by the modset under any visible startup setting (12 data dumps with alternative setting values) and not named in any Lua file (Paranoidal local cleanup)
 ---------------------------------------------------------------------------------------------------
 Version: 2.3.4
 Date: 2026-05-31
