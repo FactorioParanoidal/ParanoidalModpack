@@ -5,6 +5,7 @@ Date: 2026-06-01
     - Restored the Factorio 2.0 beacon script and beacon entity sprites; a manual sync had replaced them with 1.1 versions (crash: attempt to call field 'setting').
   Changes:
     - Revised how heat pipe sprites are handled to avoid issues related to modified base-mod global functions
+    - Removed 25 unused images: alternative inserter sheets (filter/express/bulk variants), mine sheets *-mine-set.png and shot icons bob-shot-1..4.png; no prototype or script refers to them (Paranoidal local cleanup)
 ---------------------------------------------------------------------------------------------------
 Version: 2.3.7
 Date: 2026-05-31
