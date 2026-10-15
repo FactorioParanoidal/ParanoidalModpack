@@ -12,6 +12,8 @@ Date: 01. 06. 2026
     - Renamed Laser robot to Devestator robot #578
     - Adjust ingredients for some T4 and T5 recipes #583
     - Reworked recipe ingredients #585
+  Graphics:
+    - Atomic artillery shell: the rocket picture uses the 2.0 HR frame size of base rocket.png (20x60, scale 0.5); the 1.1 size cut a piece of it (Paranoidal local fix)
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.5
 Date: 15. 01. 2026

@@ -1441,8 +1441,9 @@ data:extend({
     picture = {
       filename = "__base__/graphics/entity/rocket/rocket.png",
       draw_as_glow = true,
-      width = 9,
-      height = 35,
+      width = 20,
+      height = 60,
+      scale = 0.5,
       shift = { 0, 0 },
       priority = "high",
     },
