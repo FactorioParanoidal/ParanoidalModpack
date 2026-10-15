@@ -5,6 +5,10 @@ Date: 2026.10.13
     - Names for the four alert virtual signals (underground passage, dig-out attempt, squad detected, attacking Demolisher); they showed Unknown key in the signal list
   Balancing:
     - Pollution wakes nests again, as in Beta 8 (RampantFixed 1.8.3): a nest that detects the player base at all becomes an ordinary active nest while pollution in its chunk or a neighbouring chunk is above 3, and calms down after the cloud is gone
+  Graphics:
+    - Factorio 2.0 ignores hr_version: drones (wasp, egg), electric/energy-thief beams and acid projectiles now use the HR sheets directly. Base 2.0 renamed its HR files without the hr- prefix, and the 1.1 low-res frame sizes cut a quarter of the drone frame (Paranoidal local fix)
+    - Enrage and regeneration crystal stickers use the base 2.0 fire-flame-01 layout (84x130, 10 per line, 90 frames); the 1.1 layout showed a piece of the new sheet (Paranoidal local fix)
+    - Removed the unused corpse acid-splash-purple: no prototype or script referenced it (Paranoidal local fix)
 ---------------------------------------------------------------------------------------------------
 Version: 2.02.13
 Date: 2026.10.13

@@ -33,10 +33,10 @@ function bitersEnrage.createStickers()
 		animation =
 		{
 		  filename = "__base__/graphics/entity/fire-flame/fire-flame-01.png",
-		  line_length = 8,
-		  width = 60,
-		  height = 118,
-		  frame_count = 25,
+		  line_length = 10, -- base 2.0 fire-flame-01: 84x130, 90 frames (1.1 layout cut a piece)
+		  width = 84,
+		  height = 130,
+		  frame_count = 90,
 		  blend_mode = "normal",
 		  animation_speed = 0.5,
 		  scale = 0.3,

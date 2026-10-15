@@ -102,19 +102,7 @@ local function makeClusterSpawnProjectile(entityName)
                     },
 				animation =
                     {
-                        filename = "__base__/graphics/entity/acid-projectile/acid-projectile-head.png",
-                        line_length = 5,
-                        width = 22,
-                        height = 84,
-                        frame_count = 15,
-                        shift = util.mul_shift(util.by_pixel(-2, 30), 0.1),
-                        tint = {r = 0, g = 0, b = 0},
-                        priority = "high",
-                        scale = 0.1,
-                        animation_speed = 1,
-                        hr_version =
-                            {
-                                filename = "__base__/graphics/entity/acid-projectile/hr-acid-projectile-head.png",
+                                filename = "__base__/graphics/entity/acid-projectile/acid-projectile-head.png",
                                 line_length = 5,
                                 width = 42,
                                 height = 164,
@@ -124,23 +112,10 @@ local function makeClusterSpawnProjectile(entityName)
                                 priority = "high",
                                 scale = 0.5 * 0.1 ,
                                 animation_speed = 1,
-                            }
-                    },
+                            },
                 shadow =
                     {
-                        filename = "__base__/graphics/entity/acid-projectile/acid-projectile-shadow.png",
-                        line_length = 15,
-                        width = 22,
-                        height = 84,
-                        frame_count = 15,
-                        priority = "high",
-                        shift = util.mul_shift(util.by_pixel(-2, 30), 0.1),
-                        draw_as_shadow = true,
-                        scale = 0.1,
-                        animation_speed = 1,
-                        hr_version =
-                            {
-                                filename = "__base__/graphics/entity/acid-projectile/hr-acid-projectile-shadow.png",
+                                filename = "__base__/graphics/entity/acid-projectile/acid-projectile-shadow.png",
                                 line_length = 15,
                                 width = 42,
                                 height = 164,
@@ -150,8 +125,7 @@ local function makeClusterSpawnProjectile(entityName)
                                 priority = "high",
                                 scale = 0.5 * 0.1,
                                 animation_speed = 1,
-                            }
-                    },
+                            },
     }})
     return name
 end
