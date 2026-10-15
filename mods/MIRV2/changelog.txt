@@ -3,3 +3,5 @@ Version: 1.0.0
 Date: 15. 10. 2026
   Locale:
     - Ammo categories created by tf_util use ammo-category-name.<name>; mirv-launcher has a name in en/ru instead of Unknown key.
+  Graphics:
+    - Removed the unused 1.1 hr-bigass-explosion-36f.png filename next to the stripes of the nuke explosion (the file does not exist in 2.0)
