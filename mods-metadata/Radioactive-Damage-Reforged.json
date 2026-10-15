@@ -1,0 +1,13 @@
+{
+  "mod": "Radioactive-Damage-Reforged",
+  "source": "local",
+  "original": {
+    "name": "Radioactive Damage",
+    "authors": ["DellAquila"],
+    "portal": {
+      "name": "RadioactiveDamage",
+      "url": "https://mods.factorio.com/mod/RadioactiveDamage"
+    }
+  },
+  "changeReason": "Собственный мод проекта: порт Radioactive Damage 0.0.4 из Paranoidal Beta 8 на Factorio 2.0 (урон от урана в инвентаре и противорадиационный костюм). Портальная версия существует только для Factorio 1.1."
+}
