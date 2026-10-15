@@ -1,5 +1,5 @@
 -- Curated Beta 8 interface icons, after Reskins/OV and the pack's local overrides.
--- Never create prototypes or guess renamed IDs. Ground pictures and gameplay stay intact.
+-- Never create prototypes or guess renamed IDs. Gameplay stays intact; ore ground pictures follow Beta 8.
 local entries = require("tweaks.custom.bobicons-beta8-data")
 
 local function current_icon(prototype)
@@ -48,3 +48,14 @@ for _, entry in ipairs(entries) do
     end
 end
 log(string.format("[bobicons-beta8] applied=%d missing=%d changed=%d", applied, missing, changed))
+
+-- Beta 8 bobicons also replaced the ground/belt pictures of ores; match them to the restored icons.
+local pictures = 0
+for name, list in pairs(require("tweaks.custom.bobicons-beta8-ore-pictures-data")) do
+    local item = data.raw.item[name]
+    if item then
+        item.pictures = table.deepcopy(list)
+        pictures = pictures + 1
+    end
+end
+log("[bobicons-beta8] ore pictures=" .. pictures)
