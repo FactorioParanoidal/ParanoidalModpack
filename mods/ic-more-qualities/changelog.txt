@@ -3,6 +3,7 @@ Version: 1.1.5
 Date: 2026. 10. 14
   Changes:
     - Equipment grids (armor, vehicles, wagons) grow gently with quality: +100% of the area every 5 tiers for the 5x5 modular armor (tier 5 x2, tier 10 x3, last tier x9) instead of +level cells per side. One bonus per quality is shared by every grid: +0 at tier 1, +2 at tier 5, +4 at tier 10, +10 at the last tier. Bigger grids grow less, the smallest vehicle grids more.
+    - The defect energy factor of a crafting machine is kept when the machine already declares it (Bio gardens: a defective garden absorbs less pollution, not more).
     - The "evolution +X%" effect of quality control 1-10 uses research_evolution_factor's evolution-label.lua (same rounding and settings as other technologies) instead of its own copy of the formula.
     - After quality control 10 texts about defects and losses are hidden: no chat messages about skipped results and machines (the log keeps them); the production tab of the quality-control panel shows only the control level and mode counters; item lookup and production-mode tooltips do not mention defects and losses; the mode window drops the worst-grade row. Workshop and post windows are unchanged.
     - The drill and pumpjack description line about defect mining speed is replaced by a short "Defective items are less effective." (engine limit: prototype descriptions cannot change after research).

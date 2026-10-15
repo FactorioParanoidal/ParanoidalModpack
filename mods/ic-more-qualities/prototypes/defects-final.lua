@@ -86,7 +86,11 @@ function M.machine_energy(raw)
                 end
             end
             if dictionary then
-                for tier = 1, 5 do dictionary["ic-defect-" .. tier] = 1 / model.multiplier(-tier) end
+                -- A defect factor declared by the owner is kept (Bio gardens: a defect absorbs less, not more).
+                for tier = 1, 5 do
+                    local key = "ic-defect-" .. tier
+                    if dictionary[key] == nil then dictionary[key] = 1 / model.multiplier(-tier) end
+                end
                 machine.energy_usage_quality_multiplier = dictionary
             end
             changed = changed + 1

@@ -449,6 +449,39 @@ if BI.Settings.Bio_Cannon then
 end
 
 ------------------------------------------------------------------------------------
+-- Bio gardens and quality (Paranoidal): every quality cleans at the standard crafting speed, so water and
+-- fertilizer per minute stay the same; absorbed pollution and power grow with the quality's default
+-- multiplier (energy-source emissions follow energy usage). The old table covered only the four vanilla
+-- qualities (slowdown); the other qualities fell back to the general speed bonus and ate fertilizer.
+if mods["quality"] then
+    local speed, energy = {}, {}
+    for name, quality in pairs(data.raw.quality) do
+        local level = quality.level or 0
+        if level > 0 then
+            speed[name] = 1
+            energy[name] = quality.default_multiplier or (1 + 0.3 * level)
+        end
+    end
+    -- Defect qualities of ic-more-qualities are registered later (its data-final-fixes keeps these
+    -- entries): the same fertilizer, absorption and power x the defect multiplier (as its scripts/defects/model.lua).
+    local defects = mods["ic-more-qualities"] and settings.startup["ic-more-qualities-defects-preview"]
+    if defects and defects.value then
+        for tier = 1, 5 do
+            speed["ic-defect-" .. tier] = 1
+            energy["ic-defect-" .. tier] = 1 / 3 + (5 - tier) * (2 / 15)
+        end
+    end
+    for _, name in ipairs({ "bi-bio-garden", "bi-bio-garden-large", "bi-bio-garden-huge" }) do
+        local garden = data.raw["assembling-machine"][name]
+        if garden then
+            garden.crafting_speed_quality_multiplier = table.deepcopy(speed)
+            garden.quality_affects_energy_usage = true
+            garden.energy_usage_quality_multiplier = table.deepcopy(energy)
+        end
+    end
+end
+
+------------------------------------------------------------------------------------
 -- Add icons to our prototypes
 BioInd.BI_add_icons()
 
