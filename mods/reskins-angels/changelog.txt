@@ -3,6 +3,7 @@ Version: 2.3.5
 Date: 2026-06-01
   Bugfixes:
     - Fixed that nuclear fuel, fuel cells and isotopes were not reskinned
+    - Fixed that ingot item variations (pictures) were not applied: the items are named angels-ingot-* since Angel's 2.0; restored the 53 variation images removed by the local cleanup below (Paranoidal local fix)
   Changes:
     - Removed 57 unused images (ingot icon variations of 8 metals, 4 wire coil icons): not referenced by the modset under any visible startup setting (12 data dumps with alternative setting values) and not named in any Lua file (Paranoidal local cleanup)
 ---------------------------------------------------------------------------------------------------

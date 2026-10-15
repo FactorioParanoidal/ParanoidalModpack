@@ -600,7 +600,7 @@ if reskins.lib.settings.get_value("reskins-angels-use-item-variations") then
 	}
 
 	for _, ingot in pairs(ingot_variations) do
-		local item = data.raw.item["ingot-" .. ingot]
+		local item = data.raw.item["angels-ingot-" .. ingot]
 		if not item then
 			goto continue
 		end
