@@ -6,6 +6,7 @@ Date: 2026-06-01
   Changes:
     - Revised how heat pipe sprites are handled to avoid issues related to modified base-mod global functions
     - Removed 25 unused images: alternative inserter sheets (filter/express/bulk variants), mine sheets *-mine-set.png and shot icons bob-shot-1..4.png; no prototype or script refers to them (Paranoidal local cleanup)
+    - Removed support for Bob's Greenhouse, which is not part of the Paranoidal modset: entity, item and technology reskins, startup setting, optional dependency and 11 images (Paranoidal local cleanup)
     - Removed 121 more unused images (silver-aluminum heat pipes, nuclear power technology colour variants, part icons and others): not referenced by the modset under any visible startup setting (12 data dumps with alternative setting values) and not named in any Lua file (Paranoidal local cleanup)
 ---------------------------------------------------------------------------------------------------
 Version: 2.3.7

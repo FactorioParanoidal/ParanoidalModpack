@@ -14,7 +14,6 @@ reskins.lib.setting_override("bool-setting", "reskins-angels-do-angelsexploratio
 -- Addons
 reskins.lib.setting_override("bool-setting", "reskins-angels-do-angelsaddons-cab")
 reskins.lib.setting_override("bool-setting", "reskins-angels-do-angelsaddons-mobility")
--- reskins.lib.setting_override("bool-setting", "reskins-angels-do-angelsaddons-storage")
 
 -- Override Bob's "Deuterium is Blue!" setting based on presence of Angel's Industries
 if mods["angelsindustries"] then

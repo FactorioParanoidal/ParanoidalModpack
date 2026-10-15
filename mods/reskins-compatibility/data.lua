@@ -8,12 +8,7 @@ require("prototypes.functions.functions")
 
 -- Mods
 require("prototypes.mods.aai-loaders")
-require("prototypes.mods.classic-beacon")
-require("prototypes.mods.classic-mining-drill")
 -- require("prototypes.mods.electricboiler")
-require("prototypes.mods.loaderredux")
-require("prototypes.mods.semi-classic-mining-drill")
-require("prototypes.mods.vanilla-loaders-hd")
 require("prototypes.mods.deadlockblackrubberbelts")
 
 -- Extended Angels
@@ -30,4 +25,3 @@ require("prototypes.mods.extendedangels.refugium-fish")
 require("prototypes.mods.extendedangels.refugium-puffer")
 require("prototypes.mods.extendedangels.seed-extractor")
 require("prototypes.mods.extendedangels.tree-generator")
-require("prototypes.mods.extendedangels.warehouse")

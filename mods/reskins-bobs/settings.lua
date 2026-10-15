@@ -106,17 +106,6 @@ if mods["bobequipment"] then
 	})
 end
 
-if mods["bobgreenhouse"] then
-	data:extend({
-		{
-			type = "bool-setting",
-			name = "reskins-bobs-do-bobgreenhouse",
-			setting_type = "startup",
-			default_value = true,
-		},
-	})
-end
-
 if mods["boblogistics"] or mods["bobpower"] then
 	data:extend({
 		{

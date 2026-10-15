@@ -63,14 +63,6 @@ triggers.mobility = {
 	pipes_material_colors = false,
 }
 
--- Angel's Addons - Storage
-triggers.storage = {
-	entities = reskins.lib.settings.is_feature_set_enabled("entities", "reskins-angels", "angelsaddons-storage"),
-	equipment = reskins.lib.settings.is_feature_set_enabled("equipment", "reskins-angels", "angelsaddons-storage"),
-	items = reskins.lib.settings.is_feature_set_enabled("items-and-fluids", "reskins-angels", "angelsaddons-storage"),
-	technologies = reskins.lib.settings.is_feature_set_enabled("technologies", "reskins-angels", "angelsaddons-storage"),
-}
-
 -- Mad Clown's Compatibility
 triggers.mad_clowns = {
 	is_active = mods["Clowns-AngelBob-Nuclear"] and true or mods["Clowns-Extended-Minerals"] and true or mods["Clowns-Nuclear"] and true or mods["Clowns-Processing"] and true or mods["Clowns-Science"] and true or false,

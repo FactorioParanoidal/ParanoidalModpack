@@ -6,6 +6,7 @@ Date: 2026-06-01
     - Fixed that ingot item variations (pictures) were not applied: the items are named angels-ingot-* since Angel's 2.0; restored the 53 variation images removed by the local cleanup below (Paranoidal local fix)
   Changes:
     - Removed 57 unused images (ingot icon variations of 8 metals, 4 wire coil icons): not referenced by the modset under any visible startup setting (12 data dumps with alternative setting values) and not named in any Lua file (Paranoidal local cleanup)
+    - Removed support for Angel's Addons - Storage, which is not part of the Paranoidal modset: chest, warehouse and technology reskins, startup setting, optional dependency and 32 images (Paranoidal local cleanup)
 ---------------------------------------------------------------------------------------------------
 Version: 2.3.4
 Date: 2026-05-31
