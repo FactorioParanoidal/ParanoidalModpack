@@ -10,6 +10,8 @@ Date: 31-12-2025
   Notes:
     - Due to engine limitations, Floor Lamps may visually overlap with vehicles in some cases.
       If anyone knows a clean way to resolve this, feel free to contact me on GitHub or here.
+  Graphics:
+    - Copper lamp layers use the HR sheets directly (2.0 ignores hr_version; the lr- sheets were shown) (Paranoidal local fix)
 ---------------------------------------------------------------------------------------------------
 Version: 0.2.2
 Date: 11-08-2025

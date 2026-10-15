@@ -41,9 +41,8 @@ end
 
 function DLLFUNC.get_layer(filename, frame_count, line_length, shadow, repeat_count, animation_speed, width, height, x, y, tw, th, shift, blend_mode, flags, tint, direction_count, apply_runtime_tint, run_mode)
 	local shift = DLLFUNC.offset(shift, DLLFUNC.shift_calc(x,y,tw,th,width,height))
-	local layer = DLLFUNC.get_sprite_def("lr-"..filename, frame_count, line_length, shadow, repeat_count, animation_speed, width/2, height/2, x, y, 1, shift, blend_mode, flags, tint, direction_count, apply_runtime_tint, run_mode)
-	layer.hr_version = DLLFUNC.get_sprite_def("hr-"..filename, frame_count, line_length, shadow, repeat_count, animation_speed, width, height, x, y, 0.5, shift, blend_mode, flags, tint, direction_count, apply_runtime_tint, run_mode)
-	return layer
+	-- Factorio 2.0 ignores hr_version: the HR sheet is the layer itself (lr- sheets are not used).
+	return DLLFUNC.get_sprite_def("hr-"..filename, frame_count, line_length, shadow, repeat_count, animation_speed, width, height, x, y, 0.5, shift, blend_mode, flags, tint, direction_count, apply_runtime_tint, run_mode)
 end
 
 return DLLFUNC
