@@ -3,6 +3,7 @@ Version: 2.3.10
 Date: 2026-01-31
   Changes:
     - Improved the color matching of AAI Loaders to the configured belt entity colors.
+    - Removed 2 unused Mad Clowns liquid icons (liquid-molten-depleted-uranium, liquid-molten-osmium): no prototype or script refers to them (Paranoidal local cleanup)
   Bugfixes:
     - Fixed that AAI Loader entities did not receive updated tints when used with custom colors.
   Locale:
