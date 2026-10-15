@@ -10,6 +10,7 @@ Date: 24.02.2026
   Graphics:
     - Item pictures from graphics/icons/mips no longer declare mipmap_count: the files have no mip chain (25 load warnings); the engine generates icon mipmaps itself (Paranoidal local fix)
     - Big wooden poles: removed the 1.1 copper/green/red/shadow wire pictures (2.0 has no per-pole wire sprites; the files did not exist) and fixed double slashes in base paths (Paranoidal local fix)
+    - Removed 58 leftover images of the 1.1 wooden rails (graphics/entities/wood_products/rails): the 2.0 mod has no rail prototypes (Paranoidal local cleanup)
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.33
 Date: 24.02.2026
