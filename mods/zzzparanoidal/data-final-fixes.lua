@@ -61,6 +61,7 @@ require("tweaks.technology.oberhaul-inserter-cost") -- 1.1 Oberhaul: дорож�
 require("tweaks.technology.factorissimo-recursion-clean") -- убираем пустой "+" эффект у factory-recursion-t1/t2
 
 require("tweaks.custom.main-menu-background")
+require("tweaks.custom.terrain-graphics") -- белый бетон/дорожка, кирпичное покрытие дорожки, облака
 require("tweaks.custom.map-gen-presets")
 require("tweaks.custom.icons")
 require("tweaks.custom.shortcut-icons")
@@ -93,6 +94,7 @@ require("tweaks.recipe.holographic-signs-port") -- gate hs_holo_sign behind circ
 -- любого мода, который их регистрирует в data-updates/data-final-fixes
 -- (не только в data-stage).
 require("prototypes.map-gen-presets")
+require("removals.decoratives") -- «Без декораций»: после пресетов, чтобы вычистить и их ссылки
 
 require("tweaks.custom.uniform-recipies")
 require("prototypes.entity.storage-migration")

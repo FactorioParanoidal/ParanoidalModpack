@@ -10,6 +10,11 @@ data:extend({
  -------------------------------------------------------------------------------------------------
  --рескин покрытия кирпичем
  {type = "bool-setting", name = "stone-path-concrete", setting_type = "startup", default_value = true, order = "2"},
+ --белая каменная дорожка и белый бетон, облака, декорации (Beta 8: SingleColorTerrain)
+ {type = "bool-setting", name = "white-stone", setting_type = "startup", default_value = true, order = "2-a"},
+ {type = "bool-setting", name = "white-concrete", setting_type = "startup", default_value = true, order = "2-b"},
+ {type = "bool-setting", name = "no-clouds", setting_type = "startup", default_value = true, order = "2-c"},
+ {type = "bool-setting", name = "no-decor", setting_type = "startup", default_value = false, order = "2-d"},
  -------------------------------------------------------------------------------------------------
  --фитолампы в биофермах
  {type = "bool-setting", name = "fitolamps", setting_type = "startup", default_value = true, order = "1"},
