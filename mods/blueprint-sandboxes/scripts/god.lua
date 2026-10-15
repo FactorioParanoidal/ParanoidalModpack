@@ -15,6 +15,17 @@ for type, _ in pairs(God.preventEntitiesByType) do
     table.insert(God.onBuiltEntityFilters, { filter = "type", type = type })
 end
 
+-- Paranoidal: a teleporter in a Sandbox links the Sandbox with the real surfaces (free items).
+God.preventEntitiesByName = {
+    ["teleporter"] = true,
+}
+
+for name, _ in pairs(God.preventEntitiesByName) do
+    if prototypes.entity[name] then
+        table.insert(God.onBuiltEntityFilters, { filter = "name", name = name })
+    end
+end
+
 -- TODO: Perhaps this can be determined by flags?
 God.skipHandlingEntities = {
     ["logistic-train-stop-input"] = true,
@@ -234,7 +245,8 @@ function God.ShouldHandleEntity(entity)
     end
 
     local isEntityGhost = entity.type == "entity-ghost"
-    if God.preventEntitiesByType[entity.type] or (isEntityGhost and God.preventEntitiesByType[entity.ghost_type]) then
+    if God.preventEntitiesByType[entity.type] or (isEntityGhost and God.preventEntitiesByType[entity.ghost_type])
+            or God.preventEntitiesByName[entity.name] or (isEntityGhost and God.preventEntitiesByName[entity.ghost_name]) then
         local player = entity.last_user --[[@as LuaPlayer | nil]]
         if player then
             player.create_local_flying_text({

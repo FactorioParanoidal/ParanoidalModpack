@@ -364,7 +364,7 @@ data:extend({
       {
         {
           type = "laboratory-productivity",
-          modifier = 0.5
+          modifier = 0.05 -- Paranoidal: бесконечный уровень +5%, а не +50%
         }
       },
       unit =

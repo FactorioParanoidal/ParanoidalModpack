@@ -52,13 +52,12 @@ end)
 function changeEntity(entity1, newSufix)
     local splitName = util.split(entity1.name,connector)
     local newEnt
-	game.players[1].print(newSufix)
     if newSufix == "NO" then
         if not splitName[2] then
         else
             update_resources(entity1, splitName[2], "")
             local tmpHealth = entity1.health
-            newEnt = entity1.surface.create_entity({name=splitName[1], position=entity1.position, force=entity1.force, direction=entity1.direction, fast_replace=true, spill=false, create_build_effect_smoke=false })
+            newEnt = entity1.surface.create_entity({name=splitName[1], position=entity1.position, force=entity1.force, quality=entity1.quality, direction=entity1.direction, fast_replace=true, spill=false, create_build_effect_smoke=false })
             newEnt.health = tmpHealth
         end
     else
@@ -72,7 +71,7 @@ function changeEntity(entity1, newSufix)
                     update_resources(entity1, "", newSufix)
                 end
                 local tmpHealth = entity1.health
-                newEnt = entity1.surface.create_entity({name=splitName[1]..connector..newSufix, position=entity1.position, force=entity1.force, direction=entity1.direction, fast_replace=true, spill=false, create_build_effect_smoke=false })
+                newEnt = entity1.surface.create_entity({name=splitName[1]..connector..newSufix, position=entity1.position, force=entity1.force, quality=entity1.quality, direction=entity1.direction, fast_replace=true, spill=false, create_build_effect_smoke=false })
                 local resProto = prototypes.get_entity_filtered({ {filter = "name", name = newSufix} })[newSufix]
                 rendering.draw_sprite{ sprite = "utility/entity_info_dark_background", target = newEnt, surface = newEnt.surface, only_in_alt_mode = true}
                 rendering.draw_sprite{ sprite = "entity."..newSufix, target = newEnt, surface = newEnt.surface, only_in_alt_mode = true}

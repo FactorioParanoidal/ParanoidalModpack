@@ -614,6 +614,13 @@ script.on_event(defines.events.on_rocket_launched, function(event)
 	if storage.finished then
 		return
 	end
+	-- Paranoidal: launches from Blueprint Sandboxes (free building) do not count.
+	local rocket = event.rocket
+	local silo = event.rocket_silo
+	if (rocket and rocket.valid and rocket.surface.name:sub(1, 9) == "bpsb-lab-")
+		or (silo and silo.valid and silo.surface.name:sub(1, 9) == "bpsb-lab-") then
+		return
+	end
 	game.set_game_state({ game_finished = false, player_won = false, can_continue = true })
 
 	local current_stage = storage.stages[storage.current_stage]

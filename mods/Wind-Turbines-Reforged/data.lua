@@ -1,5 +1,6 @@
 -- Recipes, research, health, resistances, mining time and stack size as in Paranoidal Beta 8;
--- graphics, collision boxes and power at full wind as in Wind Turbines (relaunched) 2.2.5.
+-- graphics and power at full wind as in Wind Turbines (relaunched) 2.2.5; collision boxes as in Beta 8
+-- (large spacing between turbines).
 local tiers = require("tiers")
 
 local function sprite(name)
@@ -47,7 +48,7 @@ local definitions = {
         resistances = resistances(20, 20, 30),
         corpse = "medium-small-remnants",
         dying_explosion = "explosion",
-        collision_box = { { -1.4, -0.9 }, { 1.4, 0.9 } },
+        collision_box = { { -2.1, -2.1 }, { 2.1, 2.1 } },
         selection_box = { { -1.5, -1 }, { 1.5, 1 } },
         base_box = { { -1, -0.7 }, { 1, 0.9 } },
         animation = {
@@ -73,7 +74,7 @@ local definitions = {
         resistances = resistances(70, 50, 50),
         corpse = "medium-remnants",
         dying_explosion = "medium-explosion",
-        collision_box = { { -1.9, -0.9 }, { 1.9, 0.9 } },
+        collision_box = { { -4, -4 }, { 4, 4 } },
         selection_box = { { -2, -1 }, { 2, 1 } },
         base_box = { { -1, -1.4 }, { 1.8, 0.9 } },
         animation = {
@@ -105,7 +106,7 @@ local definitions = {
         resistances = resistances(70, 50, 50),
         corpse = "big-remnants",
         dying_explosion = "big-explosion",
-        collision_box = { { -2.9, -1.4 }, { 2.9, 1.4 } },
+        collision_box = { { -7, -7 }, { 7, 7 } },
         selection_box = { { -3, -1.5 }, { 3, 1.5 } },
         base_box = { { -1.9, -1.2 }, { 1.9, 1.4 } },
         animation = {

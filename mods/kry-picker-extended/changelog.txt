@@ -8,6 +8,9 @@ Date: May 26, 2026
     - Extended entity family functionality from just rail variants to the following:
       rails/signals, belts/splitters/underground, pipes/underground, and all inserters.
       This allows holding any member of the family in the cursor to revive any other member, if the matching item(s) are in theh player inventory, and should respect quality.
+  Bugfixes:
+    - Paranoidal: chest contents mover (Shift+C / Shift+V) works only when both chests are within the character's reach (not from remote view or across the map), except in cheat mode.
+    - Paranoidal: ghost revival with "ignore quality" spends only items of the ghost's quality or better (defects count below normal); a worse item no longer builds a better entity.
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.19
 Date: January 4, 2026

@@ -386,6 +386,8 @@ require("tweaks.custom.locale-overrides")
 require("prototypes.fire-safety-turret")
 -- Ветка качества: ранний модуль качества и тиры из двух предыдущих (до пересборки переработки).
 require("tweaks.recipe.quality-modules")
+-- Закрытие схем бесплатных ресурсов и энергии: после всех правок рецептов и машин, до пересборки переработки.
+require("tweaks.custom.anti-exploit")
 -- После всех правок рецептов: полная пересборка переработки Quality (один рецепт на предмет, без мусора).
 require("tweaks.custom.quality-recycling-refresh")
 -- Генерация рыбы: только Луч Санты, в 5 раз реже.

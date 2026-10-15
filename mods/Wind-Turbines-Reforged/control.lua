@@ -133,8 +133,36 @@ local function update()
     for player_index in pairs(storage.guis) do refresh(player_index) end
 end
 
+-- Inside Factorissimo buildings there is no wind: the turbine goes back to whoever built it.
+local function inside_factory(entity)
+    local api = remote.interfaces["factorissimo"]
+    return api and api.is_factorissimo_surface and remote.call("factorissimo", "is_factorissimo_surface", entity.surface) or false
+end
+
+local function refuse(event, turbine)
+    local stack = { name = turbine.name, count = 1, quality = turbine.quality.name, health = turbine.health / turbine.max_health }
+    local surface, position, force = turbine.surface, turbine.position, turbine.force
+    turbine.destroy()
+    local inserted = 0
+    local player = event.player_index and game.get_player(event.player_index)
+    local robot = event.robot
+    if player then
+        local inventory = player.get_main_inventory()
+        if inventory then inserted = inventory.insert(stack) end
+        player.create_local_flying_text({ text = { "twr.no-wind-indoors" }, position = position })
+    elseif robot and robot.valid then
+        local cargo = robot.get_inventory(defines.inventory.robot_cargo)
+        if cargo then inserted = cargo.insert(stack) end
+    end
+    if inserted < 1 then
+        surface.spill_item_stack({ position = position, stack = stack, enable_looted = true, force = force, allow_belts = false })
+    end
+end
+
 local function on_built(event)
-    attach(event.entity)
+    local turbine = event.entity
+    if inside_factory(turbine) then return refuse(event, turbine) end
+    attach(turbine)
 end
 
 local function on_destroyed(event)

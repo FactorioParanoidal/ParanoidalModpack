@@ -40,6 +40,9 @@ local always_self = {
 	["bob-copper-tungsten-alloy"] = true, ["bob-gunmetal-alloy"] = true, ["bob-invar-alloy"] = true,
 	["bob-nitinol-alloy"] = true, ["bob-solder"] = true, ["ingot-sodium-lead-alloy"] = true,
 	["wood"] = true, ["coal"] = true, ["stone"] = true,
+	-- Литьё дешевле ручного рецепта: разбор по ручному давал пластик x10 и древесную массу x17
+	-- (аудит эксплойтов 2026-10-15, решение пользователя).
+	["bob-plastic-pipe"] = true, ["bob-plastic-pipe-to-ground"] = true, ["bob-wooden-board"] = true,
 }
 -- Без переработки: предметы с сохранённым содержимым (фабрики Factorissimo).
 local excluded = {

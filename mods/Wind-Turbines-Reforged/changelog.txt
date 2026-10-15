@@ -9,6 +9,8 @@ Date: 2026-10-14
     - Power follows quality: defects lower it, positive qualities raise it without a cap.
     - Recipes, research, health, resistances, mining time and stack size as in Beta 8.
     - Removed the giant turbine, wind modes, settings, Krastorio 2 and Space Age integrations.
+    - Collision boxes as in Beta 8 (4.2, 8 and 14 tiles): turbines need free space around them.
+    - Turbines cannot be built inside Factorissimo buildings (no wind indoors); the item goes back to the builder.
   Bugfixes:
     - Turbines placed by scripts (ruins) and turbines from older saves now follow the wind and get their base.
     - Removed the damage handler that ran for every simple-entity-with-owner in the game; the base is indestructible, vehicles cannot destroy turbines (as in Beta 8).

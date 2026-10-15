@@ -4,6 +4,8 @@ Date: 2025-11-25
   Bugfixes:
     - Fixed surface exclusions for mods that are added after generating Sandboxes
     - Fixed leveling issues with synchronizing research
+  Changes:
+    - Paranoidal: teleporters (Teleporters mod) cannot be built in Sandboxes, like research labs.
 ---------------------------------------------------------------------------------------------------
 Version: 3.2.1
 Date: 2025-10-24

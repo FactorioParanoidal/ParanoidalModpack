@@ -8,7 +8,8 @@ data:extend({
     enabled = false,
     ingredients = {{ type = "item", name = "stone-brick", amount = 5}},
     results = {
-        {type = "item", name = "stone", amount =  7}
+        -- 2, а не 7: кирпич делается с продуктивностью, цикл камень-кирпич не должен множить камень
+        {type = "item", name = "stone", amount = 2}
     }
 }
 })
