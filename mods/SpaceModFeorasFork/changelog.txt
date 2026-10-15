@@ -4,6 +4,8 @@ Date: 10.11.2025
   Bugfixes:
     - Fixed a typo in bobsmods for logistic robots (by progger)
     - Bob's 2.0: space AI robots require Battery MK5 (bob-battery-equipment-5, the top tier; MK6 no longer exists); the Drydock assembly prerequisite is skipped when that technology does not exist (Paranoidal local fix)
+  Graphics:
+    - SpaceX combinator, its shadow and activity LEDs use the HR sprites directly (2.0 ignores hr_version) (Paranoidal local fix)
 ---------------------------------------------------------------------------------------------------
 Version: 1.3.2
 Date: 13.06.2025
