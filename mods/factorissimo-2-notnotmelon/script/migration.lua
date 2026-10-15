@@ -7,13 +7,9 @@ factorissimo.on_event(factorissimo.events.on_init(), function()
             factory.force = game.forces.player
         end
 
-        -- Fix issues when quality prototypes are removed.
+        -- Fix issues when quality prototypes are removed. Factories are immune to quality (Paranoidal).
         if not factory.quality or not factory.quality.valid then
-            if factory.building and factory.building.valid then
-                factory.quality = factory.building.quality
-            else
-                factory.quality = prototypes.quality.normal
-            end
+            factory.quality = prototypes.quality.normal
         end
 
         -- Clean deprecated data.

@@ -1,8 +1,50 @@
 ---------------------------------------------------------------------------------------------------
-Version: 3.11.19
-Date: 2026-03-15
+Version: 9.11.19
+Date: 2026-10-16
+  Changes:
+    - Paranoidal: artillery turrets, artillery wagons, rocket silos (also Rocket Silo Construction sites) and cargo landing pads cannot be built inside factory buildings, also without Space Age. Ghosts of them are removed. Buildings already standing inside are kept.
+    - Paranoidal: factory connections are only created after their connection research (fluid, chest, heat, circuit). Connections that already exist are kept.
+    - Paranoidal: deconstruction by script removes a factory building like a pickup: an empty factory is deleted, otherwise the packed factory is dropped. Inside a Blueprint Sandboxes lab (god mode) the factory is deleted completely, with the factories built inside it and packed factories lying inside. Other script destruction still rebuilds the building.
+    - Paranoidal: clearing or deleting a sandbox lab also deletes packed factories lying on its ground or in its chests.
+    - Paranoidal: factories are immune to quality and defects. Factory recipes are standard quality only (quality modules have no effect); factory items never get defects (ic-more-qualities). The quality of a building no longer changes its ports, fluid port speed or internal entities; factories placed before keep their ports and internal entities until they are moved.
+    - Paranoidal: factory ids are never reused.
+    - Paranoidal: fluid port speed (100 per tick) and the fluid flow limit (250 per tick) are fixed values instead of depending on load order. The factory tooltip shows the real values without per-quality values.
   Bugfixes:
     - Players without a character (god controller, e.g. Blueprint Sandboxes) can now walk out of a factory, not only into it.
+    - Paranoidal: pollution of some or all factories was never released outside (the factory list has holes, the loop stopped at the first one).
+    - Paranoidal: crash of the construction roboport upgrade on item request proxies already removed by the game; delivered proxies were never forgotten.
+    - Paranoidal: /give-lost-factory-buildings gave duplicates of packed factories already in the inventory; the given item keeps quality and description.
+    - Paranoidal: the door cooldown in multiplayer was counted for the wrong player.
+    - Paranoidal: connections next to rotated entities larger than one tile were searched in an unrotated box.
+    - Paranoidal: possible crashes on a missing factory when hovering or cloning a building, on invalid surfaces, forces and proxies.
+    - Paranoidal: a factory with player-placed tiles inside was treated as empty and its tiles were lost on pickup.
+    - Paranoidal: a mined building that another mod destroyed by script was rebuilt without its quality.
+    - Paranoidal: the permission group of a player hovering a power pole was rewritten (and created anew for players without a group); script wires cannot be removed by players anyway. The migration gives the remove-cables permission back to groups with players.
+    - Paranoidal: clearing or deleting a surface (sandbox labs) deleted whole factory floors with all factories on them. Now only the factories built on that surface and their interiors are removed; floors left empty are deleted.
+    - Paranoidal: factory buildings that vanished without an event are kept as packed factories (recoverable with /give-lost-factory-buildings) instead of being lost.
+    - Paranoidal: a robot placing a packed factory from a ghost without tags unpacks that factory instead of creating a new one.
+    - Paranoidal: heat connections keep the heat energy when the two heat pipes have different specific heat.
+    - Paranoidal: delayed calls no longer need the surface "nauvis".
+    - Paranoidal: remote get_global/set_global used the removed 1.1 table `global`.
+    - Paranoidal: misspelled RSO call ignoreSuface, factoriomaps event registration after the dispatcher was finalized, undefined names in error paths.
+  Optimizations:
+    - Paranoidal: building or removing a belt, inserter, pipe, chest or heat pipe no longer walks over all factories; nearby factory buildings are found by area.
+    - Paranoidal: entity events are registered with filters (also ghosts by ghost type), unused GUI events and on_biter_base_built are not registered. On events that stay unfiltered (robot builds) filtered handlers are skipped in Lua for other entities.
+    - Paranoidal: overlay icons are redrawn only when the display controller settings change, not for all factories on every surface change.
+    - Paranoidal: research and setting changes rebuild only what they affect.
+    - Paranoidal: delayed calls use a tick schedule instead of a hidden render object per call; build animations are scheduled per group of tiles.
+    - Paranoidal: chest connections skip empty chests and no longer sort the chests; heat prototypes are cached; idle connection slots allocate nothing.
+    - Paranoidal: a new factory sets hidden tiles only under its own tiles; picking up a factory uncharts only its chunks.
+    - Paranoidal: the power pole search uses the reach of buildable poles first.
+    - Paranoidal: preview settings and layout lookups are cached; the preview GUI is not touched while hidden.
+    - Paranoidal: factory buildings are unbound when destroyed (storage no longer grows).
+  Modding:
+    - Paranoidal: remote get_surrounding_factory_exit(surface, position) returns only where the surrounding factory stands outside.
+  Locale:
+    - Paranoidal: fluid transfer speed in descriptions corrected from 12000/s to 6000/s; the note that it grows with quality is removed.
+---------------------------------------------------------------------------------------------------
+Version: 3.11.19
+Date: 2026-03-15
   Compatibility:
     - Fix compatibility with warptorio.
 ---------------------------------------------------------------------------------------------------

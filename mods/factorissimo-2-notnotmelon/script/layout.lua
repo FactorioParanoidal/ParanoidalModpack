@@ -373,6 +373,7 @@ local function add_space_factories()
         layout.connection_tile = tile_name_mapping[layout.connection_tile] or layout.connection_tile
         layout.surface_override = "space-factory-floor"
         storage.layout_generators[layout.name] = layout
+        factorissimo.clear_layout_cache()
     end
     make_space_layout("factory-1")
     make_space_layout("factory-2")
@@ -388,6 +389,7 @@ _G.reload_layouts = function()
     for name, layout in pairs(layout_generators) do
         storage.layout_generators[name] = layout
     end
+    factorissimo.clear_layout_cache()
     add_space_factories()
 end
 

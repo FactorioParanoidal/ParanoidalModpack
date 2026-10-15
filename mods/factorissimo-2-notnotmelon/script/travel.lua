@@ -87,23 +87,14 @@ local function is_airborne(jetpacks, player)
     return data.status == "flying"
 end
 
--- floating controllers that don't have a well-defined concept of "position"
--- we ignore these and its instead handled by shift clicking the factory/power monitor
-local god_controllers = {
-    [defines.controllers.god] = true,
-    [defines.controllers.editor] = true,
-    [defines.controllers.spectator] = true,
-    [defines.controllers.remote] = true,
-}
-
-local function check_position_and_leave_factory(player, is_airborne)
-    -- Match entering: god-controller players (e.g. Blueprint Sandboxes) could walk in but never out.
+-- The remote view has no well-defined position; it is handled by shift clicking the factory/power monitor.
+-- God, editor and spectator controllers walk in and out like characters (e.g. Blueprint Sandboxes).
+local function check_position_and_leave_factory(player, walking_state, is_airborne)
     if player.controller_type == defines.controllers.remote then return end
 
-    local walking_state = player.walking_state
     local position = player.physical_position
 
-    local walking_direction = player.walking_state.direction
+    local walking_direction = walking_state.direction
     local is_moving_downwards =
         walking_direction == defines.direction.south or
         walking_direction == defines.direction.southeast or
@@ -118,6 +109,7 @@ local function check_position_and_leave_factory(player, is_airborne)
     if y <= factory.inside_door_y then return end
 
     if math.abs(position.x - factory.inside_door_x) >= 4 then return end
+    if not (factory.outside_surface and factory.outside_surface.valid) then return end
 
     leave_factory(player, factory, player)
     factorissimo.update_factory_preview(player)
@@ -125,12 +117,12 @@ local function check_position_and_leave_factory(player, is_airborne)
     return true
 end
 
-local function check_position_and_enter_factory(player, is_airborne)
+local function check_position_and_enter_factory(player, walking_state, is_airborne)
     if player.controller_type == defines.controllers.remote then return end
 
     local physical_position = player.physical_position
 
-    local walking_direction = player.walking_state.direction
+    local walking_direction = walking_state.direction
     local is_moving_upwards = is_airborne
         or walking_direction == defines.direction.north
         or walking_direction == defines.direction.northeast
@@ -147,7 +139,7 @@ local function check_position_and_enter_factory(player, is_airborne)
         position = is_airborne and player.physical_position or nil
     }
 
-    if not factory or factory.inactive then return end
+    if not factory or factory.inactive or not (factory.inside_surface and factory.inside_surface.valid) then return end
 
     local door_width = is_airborne and 4 or 0.9
     local is_standing_in_doorway = physical_position.y > factory.outside_y + 1 and math.abs(physical_position.x - factory.outside_x) < door_width
@@ -158,19 +150,21 @@ local function check_position_and_enter_factory(player, is_airborne)
 end
 
 -- teleport players between factory buildings
-factorissimo.on_nth_tick(6, function()
-    local tick = game.tick
-    local jetpacks = get_jetpacks()
-    for player_index, player in pairs(game.connected_players) do
-        if player.driving then goto continue end
-        if tick - (storage.last_player_teleport[player_index] or 0) < 35 then goto continue end
-        if not player.walking_state.walking then goto continue end
-
-        local is_airborne = is_airborne(jetpacks, player)
-        if not check_position_and_enter_factory(player, is_airborne) then
-            check_position_and_leave_factory(player, is_airborne)
+factorissimo.on_nth_tick(6, function(event)
+    local tick = event.tick
+    local last_teleport = storage.last_player_teleport
+    if not last_teleport then return end
+    local jetpacks -- fetched once, only when somebody is walking
+    for _, player in pairs(game.connected_players) do
+        if not player.driving and tick - (last_teleport[player.index] or 0) >= 35 then
+            local walking_state = player.walking_state
+            if walking_state.walking then
+                if jetpacks == nil then jetpacks = get_jetpacks() or false end
+                local airborne = is_airborne(jetpacks or nil, player)
+                if not check_position_and_enter_factory(player, walking_state, airborne) then
+                    check_position_and_leave_factory(player, walking_state, airborne)
+                end
+            end
         end
-
-        ::continue::
     end
 end)

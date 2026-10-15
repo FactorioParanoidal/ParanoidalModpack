@@ -15,6 +15,7 @@ require "script.greenhouse"
 require "script.lights"
 require "script.port-markers"
 require "script.borehole-pump"
+require "script.indoor-restrictions"
 require "script.migration"
 
 require "compat.factorio-maps"

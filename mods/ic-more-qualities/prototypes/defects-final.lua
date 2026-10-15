@@ -20,6 +20,14 @@ for tier = 1, 3 do
     M.exempt_items[#M.exempt_items + 1] = "bet-charger-" .. tier
     M.exempt_items[#M.exempt_items + 1] = "bet-charger-tertiary-" .. tier
 end
+-- Factorissimo factory buildings are immune to defects and quality (user decision 2026-10-15); the factory
+-- recipes forbid quality themselves (allow_quality = false in Factorissimo).
+for tier = 1, 3 do
+    for _, prefix in ipairs({"factory-", "space-factory-"}) do
+        M.exempt_items[#M.exempt_items + 1] = prefix .. tier
+        M.exempt_items[#M.exempt_items + 1] = prefix .. tier .. "-instantiated"
+    end
+end
 
 local function defect_tier(name)
     local tier = type(name) == "string" and name:match("^ic%-defect%-([1-5])$")
@@ -238,7 +246,7 @@ function M.apply(raw, options)
             chain_items = chain_items + 1
         end
     end
-    report[#report + 1] = "IC defects: Paranoidal upgrade chains without defects (tanks, fuel cells, chargers, memory units, hazmat suit): "
+    report[#report + 1] = "IC defects: Paranoidal upgrade chains without defects (tanks, fuel cells, chargers, memory units, hazmat suit, factory buildings): "
         .. chain_items
     local prototypes = {{
         type = "mod-data",

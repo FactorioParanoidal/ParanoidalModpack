@@ -124,7 +124,7 @@ for _, name in ipairs({"Schall-tank-L-mk2", "bet-charger-1", "memory-unit"}) do
     assert(finished[name] and no_defect[name], name)
 end
 assert(not no_defect["assembling-machine-1"] and not no_defect["small-electric-pole"])
-assert(#final.exempt_items == 29)
+assert(#final.exempt_items == 41) -- 29 + 12 Factorissimo factory items (2026-10-15)
 assert(raw.recipe.gear.allow_quality == false and raw.recipe.mixed.allow_quality == false)
 assert(raw.recipe.sorting.allow_quality == false)
 assert(raw.recipe.assembler.allow_quality == nil and raw.recipe.science.allow_quality == true)
@@ -164,7 +164,7 @@ end
 near(poles.small.supply_area_distance + q.normal.electric_pole_supply_area_distance_bonus, 2.5)
 near(poles.small.supply_area_distance + q["ic-defect-5"].electric_pole_supply_area_distance_bonus, 2)
 local joined = table.concat(report, "\n")
-assert(joined:find("upgrade chains without defects (tanks, fuel cells, chargers, memory units, hazmat suit): 3", 1, true))
+assert(joined:find("upgrade chains without defects (tanks, fuel cells, chargers, memory units, hazmat suit, factory buildings): 3", 1, true))
 -- "hidden" (wire 1, reduction 1) ends exactly at 0: reduced, not clamped.
 assert(joined:find("clamped poles: connector", 1, true) and not joined:find("hidden (", 1, true))
 assert(joined:find("material%-pipe %(1%): pipe"))

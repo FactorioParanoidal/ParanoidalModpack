@@ -35,6 +35,11 @@ end
 ---@param surface LuaSurface
 ---@param position MapPosition
 function Factorissimo.GetFactory(surface, position)
+    -- The light call returns only where the factory stands; the full factory table is large to copy.
+    local interface = remote.interfaces[Factorissimo.name]
+    if interface and interface.get_surrounding_factory_exit then
+        return remote.call(Factorissimo.name, "get_surrounding_factory_exit", surface, position)
+    end
     return remote.call(Factorissimo.name, "find_surrounding_factory", surface, position)
 end
 

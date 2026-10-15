@@ -3,6 +3,6 @@ factorissimo.on_event(factorissimo.events.on_init(), function()
 
     for surface_index, _ in pairs(storage.surface_factories or {}) do
         local surface = game.get_surface(surface_index)
-        if surface then pcall(remote.call, "RSO", "ignoreSuface", surface.name) end
+        if surface then pcall(remote.call, "RSO", "ignoreSurface", surface.name) end
     end
 end)
