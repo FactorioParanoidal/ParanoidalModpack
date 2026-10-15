@@ -39,6 +39,8 @@ return {
     ["bob-steam-turbine-2"] = {["ingredients"] = {{["name"] = "bob-titanium-bearing", ["amount"] = 15, ["type"] = "item"}, {["name"] = "bob-titanium-gear-wheel", ["amount"] = 25, ["type"] = "item"}, {["name"] = "bob-titanium-plate", ["amount"] = 25, ["type"] = "item"}, {["name"] = "bob-titanium-pipe", ["amount"] = 5, ["type"] = "item"}, {["name"] = "processing-unit", ["amount"] = 5, ["type"] = "item"}, {["name"] = "advanced-structure-components", ["amount"] = 5, ["type"] = "item"}, {["name"] = "steam-turbine", ["amount"] = 2, ["type"] = "item"}}, ["energy_required"] = 90},
     ["bob-steam-turbine-3"] = {["ingredients"] = {{["name"] = "bob-nitinol-bearing", ["amount"] = 15, ["type"] = "item"}, {["name"] = "bob-nitinol-gear-wheel", ["amount"] = 25, ["type"] = "item"}, {["name"] = "bob-nitinol-alloy", ["amount"] = 25, ["type"] = "item"}, {["name"] = "bob-copper-tungsten-pipe", ["amount"] = 5, ["type"] = "item"}, {["name"] = "bob-advanced-processing-unit", ["amount"] = 5, ["type"] = "item"}, {["name"] = "anotherworld-structure-components", ["amount"] = 1, ["type"] = "item"}, {["name"] = "bob-steam-turbine-2", ["amount"] = 2, ["type"] = "item"}}, ["energy_required"] = 60},
     ["burner-turbine"] = {["ingredients"] = {{["type"] = "item", ["name"] = "electric-motor", ["amount"] = 8}, {["type"] = "item", ["name"] = "iron-gear-wheel", ["amount"] = 10}, {["type"] = "item", ["name"] = "stone-furnace", ["amount"] = 2}}, ["energy_required"] = 5},
+    -- Beta 8 diesel recipe (KS_Power fork of that build), IDs adapted (2026-10-15 user decision).
+    ["diesel-fuel"] = {["ingredients"] = {{["type"] = "fluid", ["name"] = "angels-gas-methane", ["amount"] = 20}, {["type"] = "fluid", ["name"] = "bob-liquid-fuel", ["amount"] = 20}, {["type"] = "item", ["name"] = "angels-catalysator-brown", ["amount"] = 1}}, ["results"] = {{["type"] = "fluid", ["name"] = "diesel-fuel", ["amount"] = 25, ["temperature"] = 25}}, ["energy_required"] = 5},
   },
   entities = {
     {["type"] = "boiler", ["name"] = "bi-bio-boiler", ["fields"] = {["energy_consumption"] = "3.6MW", ["target_temperature"] = 165}},
@@ -58,15 +60,18 @@ return {
     ["nco-express-crane"] = {["stack_size_bonus"] = 197, ["rotation_speed"] = 0.096, ["extension_speed"] = 0.096, ["energy_per_movement"] = "729170J", ["energy_per_rotation"] = "729170J", ["bulk"] = false, ["drain"] = "1.6kW"},
   },
   fluids = {
+    -- 2026-10-15 user decision: diesel 700 kJ (Beta 8 recipe below, gain x1.65); aromatics = mean of
+    -- "Beta 8 gains" (x0.8) and "like diesel" (x0.3) variants. Barrel = fluid x100, emissions unchanged.
+    ["diesel-fuel"] = {["fuel_value"] = "700000J"},
     ["bob-nitroglycerin"] = {["fuel_value"] = "365000J", ["emissions_multiplier"] = 10},
     ["angels-gas-deuterium"] = {["fuel_value"] = "75000J", ["emissions_multiplier"] = 10},
-    ["angels-gas-benzene"] = {["fuel_value"] = "1.21e+06J", ["emissions_multiplier"] = 10},
+    ["angels-gas-benzene"] = {["fuel_value"] = "670000J", ["emissions_multiplier"] = 10},
     ["angels-gas-synthesis"] = {["fuel_value"] = "120000J", ["emissions_multiplier"] = 10},
-    ["angels-liquid-toluene"] = {["fuel_value"] = "1.308e+06J", ["emissions_multiplier"] = 10},
-    ["angels-gas-butadiene"] = {["fuel_value"] = "948000J", ["emissions_multiplier"] = 10},
-    ["angels-liquid-phenol"] = {["fuel_value"] = "858000J", ["emissions_multiplier"] = 10},
-    ["angels-liquid-ethylbenzene"] = {["fuel_value"] = "1.308e+06J", ["emissions_multiplier"] = 10},
-    ["angels-liquid-styrene"] = {["fuel_value"] = "1.3e+06J", ["emissions_multiplier"] = 10},
+    ["angels-liquid-toluene"] = {["fuel_value"] = "720000J", ["emissions_multiplier"] = 10},
+    ["angels-gas-butadiene"] = {["fuel_value"] = "505000J", ["emissions_multiplier"] = 10},
+    ["angels-liquid-phenol"] = {["fuel_value"] = "470000J", ["emissions_multiplier"] = 10},
+    ["angels-liquid-ethylbenzene"] = {["fuel_value"] = "720000J", ["emissions_multiplier"] = 10},
+    ["angels-liquid-styrene"] = {["fuel_value"] = "715000J", ["emissions_multiplier"] = 10},
     ["angels-gas-formaldehyde"] = {["fuel_value"] = "140000J", ["emissions_multiplier"] = 10},
     ["angels-liquid-polyethylene"] = {["fuel_value"] = "898000J", ["emissions_multiplier"] = 10},
     ["angels-liquid-glycerol"] = {["fuel_value"] = "155000J", ["emissions_multiplier"] = 10},
@@ -110,6 +115,7 @@ return {
     ["liquid-rubber-masterbatch"] = {["fuel_value"] = "925000J", ["emissions_multiplier"] = 10},
   },
   barrels = {
+    ["diesel-fuel"] = {"diesel-fuel-barrel"},
     ["bob-nitroglycerin"] = {"bob-nitroglycerin-barrel"},
     ["angels-gas-deuterium"] = {"angels-gas-deuterium-barrel", "bob-deuterium-barrel"},
     ["angels-gas-benzene"] = {"angels-gas-benzene-barrel"},
