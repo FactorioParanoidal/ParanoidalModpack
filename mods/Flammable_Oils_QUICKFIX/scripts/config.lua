@@ -7,6 +7,16 @@ C.CHANCES = { fire = 0.95, explosion = 0.75, acid = 0.5, electric = 0.5, laser =
 C.HEAT_DAMAGE = { fire = true, explosion = true }
 
 C.MIN_ENERGY = 10                 -- smallest fluid charge that explodes (upstream)
+
+-- Volatile gases: their energy counts this many times for every hazard, and an entity holding them
+-- explodes on any death (any damage type, no chance roll, no MIN_ENERGY) if filled above the fraction.
+C.VOLATILE = {
+  ["angels-gas-hydrogen"] = 4,
+  ["bob-hydrogen"] = 4,
+  ["angels-gas-deuterium"] = 4,
+  ["bob-deuterium"] = 4,
+}
+C.VOLATILE_MIN_FRACTION = 0.025   -- emptier fluid boxes do not explode (Beta 8 threshold)
 C.MAX_EXPLOSIONS_PER_TICK = 20
 C.MAX_TASKS_PER_TICK = 80
 

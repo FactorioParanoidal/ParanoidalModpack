@@ -232,21 +232,27 @@ function M.on_entity_died(event)
     return
   end
 
+  -- Upstream chance by damage type; volatile gases (C.VOLATILE) explode on any death without it.
   local damage_type = event.damage_type
-  if not damage_type then return end
-  local chance = C.CHANCES[damage_type.name]
-  if not chance or chance < math.random() then return end
+  local chance = damage_type and C.CHANCES[damage_type.name]
+  local ignited = chance ~= nil and chance >= math.random()
 
   if C.CONTAINER_INVENTORIES[entity_type] then
-    FO.cook.on_died(entity, event)
+    if ignited then FO.cook.on_died(entity, event) end
     return
   end
   if entity_type == "pump" then return end
+
+  local content
+  if not ignited then
+    content = FO.fluids.measure(entity)
+    if not (content and content.volatile) then return end
+  end
   if FO.protection.entity(entity) then return end -- fire safety turret nearby
 
-  local content = FO.fluids.measure(entity)
+  content = content or FO.fluids.measure(entity)
   local exploded = false
-  if content and content.energy > C.MIN_ENERGY then
+  if content and (content.volatile or content.energy > C.MIN_ENERGY) then
     local catastrophe = entity_type == "storage-tank" and content.energy >= C.CATASTROPHE_ENERGY
         and FO.tanks.is_tank(entity)
     local rec = M.record(entity, content, catastrophe)
@@ -254,7 +260,7 @@ function M.on_entity_died(event)
     M.dispatch(rec, entity)
     exploded = true
   end
-  if entity_type == "assembling-machine" or entity_type == "furnace" then
+  if ignited and (entity_type == "assembling-machine" or entity_type == "furnace") then
     accident(entity, content, exploded, event)
   end
 end

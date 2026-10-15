@@ -1,6 +1,7 @@
 -- Fluid classification (flammable / gas / toxic) and measuring of entity contents.
 -- Tables are derived from prototypes (identical on every peer) plus saved remote overrides.
 local FO = require("scripts.registry")
+local C = require("scripts.config")
 
 local M = {}
 FO.fluids = M
@@ -110,7 +111,9 @@ function M.set_override(name, value)
 end
 
 ---Flammable and toxic contents of an entity, or nil when there is nothing dangerous inside.
----@return {energy: number, amount: number, toxic: number, fluid: string?, fraction: number, damage_type: string}?
+---Energy of volatile gases is multiplied by C.VOLATILE; volatile = such a gas fills a box above
+---C.VOLATILE_MIN_FRACTION.
+---@return {energy: number, amount: number, toxic: number, fluid: string?, fraction: number, damage_type: string, volatile: boolean}?
 function M.measure(entity)
   local boxes = entity.fluidbox
   local n = #boxes
@@ -119,17 +122,23 @@ function M.measure(entity)
 
   local fluids = prototypes.fluid
   local energy, amount, toxic_amount = 0, 0, 0
+  local volatile = false
   local best, best_energy, best_index, best_amount = nil, 0, 1, 0
   for k = 1, n do
     local pot = boxes[k]
     if pot then
       local name, a = pot.name, pot.amount
       if flammable[name] then
-        local e = fluids[name].fuel_value * a / 1000000.0
+        local mult = C.VOLATILE[name]
+        local e = fluids[name].fuel_value * a / 1000000.0 * (mult or 1)
         if e > 0 then
           energy = energy + e
           amount = amount + a
           if e > best_energy then best, best_energy, best_index, best_amount = name, e, k, a end
+          if mult and not volatile then
+            local capacity = boxes.get_capacity(k)
+            volatile = capacity > 0 and a / capacity > C.VOLATILE_MIN_FRACTION
+          end
         end
       end
       if toxic[name] then toxic_amount = toxic_amount + a end
@@ -149,6 +158,7 @@ function M.measure(entity)
     fluid = best,
     fraction = fraction,
     damage_type = best and gas[best] and "explosion" or "fire",
+    volatile = volatile,
   }
 end
 
