@@ -13,24 +13,27 @@ artillery_turret_prototype.manual_range_modifier = 1
 artillery_turret_prototype.cannon_parking_speed = 0.125
 artillery_turret_prototype.base_picture.layers = {
 	{
-		filename = "__zzzparanoidal__/graphics/entity/artillery-turret-base.png",
+		filename = "__zzzparanoidal__/graphics/entity/hr-artillery-turret-base.png",
 		priority = "high",
-		width = 104,
-		height = 100,
+		width = 207,
+		height = 199,
 		direction_count = 1,
 		frame_count = 1,
 		shift = util.by_pixel(-0, 22),
+		scale = 0.5,
 	},
 	{
+		-- в 2.0 этот файл base уже HR (277x149): кадр 1.1 138x75 вырезал из него четверть тени
 		filename = "__base__/graphics/entity/artillery-turret/artillery-turret-base-shadow.png",
 		priority = "high",
 		line_length = 1,
-		width = 138,
-		height = 75,
+		width = 277,
+		height = 149,
 		frame_count = 1,
 		direction_count = 1,
 		shift = util.by_pixel(18, 38),
 		draw_as_shadow = true,
+		scale = 0.5,
 	},
 }
 

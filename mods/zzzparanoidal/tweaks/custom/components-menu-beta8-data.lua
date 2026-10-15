@@ -6,7 +6,7 @@ return {
             {["name"] = "motor", ["order"] = "02", ["icon"] = {["icon"] = "__zzzparanoidal__/graphics/components-menu-beta8/00ec0cffebec2ffa866e.png", ["icon_size"] = 64}},
             {["name"] = "electric-motor", ["order"] = "03", ["icon"] = {["icon"] = "__zzzparanoidal__/graphics/components-menu-beta8/184f829f74ef5c5d13ce.png", ["icon_size"] = 64}},
             {["name"] = "engine-unit", ["order"] = "04"},
-            {["name"] = "electric-engine-unit", ["order"] = "05", ["icon"] = {["icon"] = "__zzzparanoidal__/graphics/components-menu-beta8/6a8b0a6f881b156d672a.png", ["icon_size"] = 256}},
+            {["name"] = "electric-engine-unit", ["order"] = "05", ["icon"] = {["icon"] = "__zzzparanoidal__/graphics/atlas-icons/zzzparanoidal/components-menu-beta8/6a8b0a6f881b156d672a-128.png", ["icon_size"] = 128}},
         }},
         {subgroup = "paranoidal-components-gears", order = "a-02", recipes = {
             {["name"] = "bob-steel-gear-wheel", ["order"] = "01"},

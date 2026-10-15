@@ -395,6 +395,8 @@ require("tweaks.custom.fish-santa-only")
 require("tweaks.custom.fuel-emissions-beta8")
 -- Очистка Факториопедии: после всех правок, создающих и копирующих прототипы.
 require("removals.factoriopedia-cleanup")
+-- Оптимизация атласов графики: после всех правок, создающих и копирующих прототипы и иконки.
+require("tweaks.custom.graphics-atlas")
 -- Этот require ВСЕГДА ПОСЛЕДНИЙ: не переносить и не добавлять код ниже.
 -- Все новые правки размещать выше: здесь фиксируются иконка и последнее место эффекта эволюции.
 require("tweaks.technology.research-evolution-icon")

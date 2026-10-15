@@ -118,8 +118,8 @@ end
 do
     local board = data.raw.item["bob-wooden-board"]
     if board then
-        board.icon = "__zzzparanoidal__/graphics/recipe-presentation/wooden-board.png"
-        board.icon_size = 256
+        board.icon = "__zzzparanoidal__/graphics/atlas-icons/zzzparanoidal/recipe-presentation/wooden-board-128.png"
+        board.icon_size = 128
         board.icons, board.icon_mipmaps = nil, nil
         match_product("wooden-board-paper", "bob-wooden-board")
         for recipe_name, source_name in pairs({

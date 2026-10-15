@@ -198,7 +198,6 @@ local hide = {
 		"acid-spitter-v1-t7-corpse-rampant",
 		"acid-spitter-v1-t8-corpse-rampant",
 		"acid-spitter-v1-t9-corpse-rampant",
-		"acid-splash-purple",
 		"acid-worm-v1-t1-corpse-rampant",
 		"acid-worm-v1-t10-corpse-rampant",
 		"acid-worm-v1-t2-corpse-rampant",
