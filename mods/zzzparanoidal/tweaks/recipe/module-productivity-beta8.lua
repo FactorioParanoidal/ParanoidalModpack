@@ -6,6 +6,7 @@ for _, name in ipairs({
     "bob-silicon-wafer",
     "clowns-thorium-mixed-oxide",
     "angels-liquid-plastic-bio",
+    "angels-liquid-plastic-bio-1",
     "angels-liquid-resin-bio",
     "angels-liquid-rubber-bio",
     "barrel",

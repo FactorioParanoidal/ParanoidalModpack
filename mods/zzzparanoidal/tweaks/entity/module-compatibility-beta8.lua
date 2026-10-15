@@ -13,30 +13,38 @@ local stale_categories = {
 }
 local restored_categories = { "effectivity", "raw-speed", "green" }
 
+-- With the Quality DLC the snapshot also contains "quality"; it is not part
+-- of the stale set but must not hide it either.
+local function is_stale(categories)
+    local seen, count = {}, 0
+    for _, category in ipairs(categories) do
+        if seen[category] then return false end
+        seen[category] = true
+        if stale_categories[category] then
+            count = count + 1
+        elseif category ~= "quality" then
+            return false
+        end
+    end
+    return count == 6
+end
+
 for _, entity_type in ipairs({ "assembling-machine", "furnace", "mining-drill", "lab", "rocket-silo" }) do
     for _, entity in pairs(data.raw[entity_type] or {}) do
         local categories = entity.allowed_module_categories
-        if categories and #categories == 6 then
-            local seen = {}
-            local stale = true
-            for _, category in ipairs(categories) do
-                if not stale_categories[category] or seen[category] then stale = false end
-                seen[category] = true
-            end
-            if stale then
-                local updated = table.deepcopy(categories)
-                for _, category in ipairs(restored_categories) do
-                    if data.raw["module-category"][category] then
-                        updated[#updated + 1] = category
-                    end
+        if categories and is_stale(categories) then
+            local updated = table.deepcopy(categories)
+            for _, category in ipairs(restored_categories) do
+                if data.raw["module-category"][category] then
+                    updated[#updated + 1] = category
                 end
-                if raw_productivity_machines[entity_type]
-                    and raw_productivity_machines[entity_type][entity.name]
-                    and data.raw["module-category"]["raw-productivity"] then
-                    updated[#updated + 1] = "raw-productivity"
-                end
-                entity.allowed_module_categories = updated
             end
+            if raw_productivity_machines[entity_type]
+                and raw_productivity_machines[entity_type][entity.name]
+                and data.raw["module-category"]["raw-productivity"] then
+                updated[#updated + 1] = "raw-productivity"
+            end
+            entity.allowed_module_categories = updated
         end
     end
 end
