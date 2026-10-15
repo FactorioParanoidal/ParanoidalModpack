@@ -3,6 +3,8 @@ Version: 0.16.5
 Date: 2025-11-05
   Bugfixes:
     - Fixed that `flib_table.binary_search` would fail to find the last element in the list. (#81)
+  Changes:
+    - Removed the documentation images docs/assets/*.png (not used by the game) (Paranoidal local cleanup)
 ---------------------------------------------------------------------------------------------------
 Version: 0.16.4
 Date: 2025-10-31
