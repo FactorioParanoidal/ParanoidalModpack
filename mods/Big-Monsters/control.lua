@@ -22,6 +22,25 @@ local function bm_peaceful_skip(surface)
     return false
 end
 
+-- Silo events respect the same surface / player force lists as the regular events.
+local function bm_target_allowed(surface, force)
+    if not (surface and surface.valid and force and force.valid) then return false end
+    return in_list(storage.surfaces, surface.name) ~= nil and in_list(storage.player_forces, force.name) ~= nil
+end
+
+-- Removes invalid entities from an array in place, keeping the order.
+local function compact_valid_entities(list)
+    local n = 0
+    for i = 1, #list do
+        local e = list[i]
+        list[i] = nil
+        if e and e.valid then
+            n = n + 1
+            list[n] = e
+        end
+    end
+end
+
 
 function ReadRunTimeSettings(event)
 storage.chances = storage.chances or {}  -- in priority order of danger
@@ -59,12 +78,14 @@ storage.tree_events_chance  = settings.global["bm-tree-events-chance"].value/100
 storage.spawn_near_nests    = settings.global["bm-spawn_near_nests"].value 
 
 
-if event and event.setting_type=='runtime-per-user' then
-	local player = game.players[event.player_index]
-	if event.setting=='bm_draggable_camera' then
-		storage.enable_drag_camera[player.name] = settings.get_player_settings(player)["ic_draggable_camera"].value
-	elseif event.setting=='bm_camera_size' then
-		storage.camera_size[player.name] = settings.get_player_settings(player)["ic_camera_size"].value	
+if event and event.setting_type=='runtime-per-user' and event.player_index then
+	local player = game.get_player(event.player_index)
+	if player and player.valid then
+		if event.setting=='bm_draggable_camera' then
+			storage.enable_drag_camera[player.name] = settings.get_player_settings(player)["bm_draggable_camera"].value
+		elseif event.setting=='bm_camera_size' then
+			storage.camera_size[player.name] = settings.get_player_settings(player)["bm_camera_size"].value
+			end
 		end
 	end
 	
@@ -126,9 +147,10 @@ end
 
 ------------------------------------------------------------------------------------------
 
+-- the evolution bonus is meant for the extra planets only (Nauvis is a planet too in 2.0)
 function get_planet_evo(surface, adjust) 
 local evo = get_evo_here(surface)
-if surface and surface.valid and adjust and game.planets[surface.name] then 
+if surface and surface.valid and adjust and game.planets[surface.name] and in_list(storage.allowed_planets, surface.name) then
 	evo = evo + adjust
 	end
 return evo
@@ -294,7 +316,7 @@ for p=1,#storage.player_forces do
 					if spawn then
 						if storage.spawn_near_nests then spawn = get_pos_near_enemy_nest(surface,spawn,pforce) end 
 						local spider = create_spidertron(surface,spawn,pcount,evo)
-						alert_force(pforce,{"bm-txt-biterzilla"})
+						alert_force(pforce,{"bm-txt-spidertron"})
 						Play_sound_alert(pforce,3)	
 						if storage.show_cameras then CreateCameraForForce(pforce,spider,surface,nil,nil,120,0.15) end
 						end
@@ -305,7 +327,7 @@ for p=1,#storage.player_forces do
 						if storage.spawn_near_nests then spawn = get_pos_near_enemy_nest(surface,spawn,pforce) end 
 						local worm = create_demolisher(surface,spawn,evo)
 						if worm then
-							alert_force(pforce,{"bm-txt-biterzilla"})
+							alert_force(pforce,{"bm-txt-demolisher"})
 							Play_sound_alert(pforce,3)	
 							if storage.show_cameras then CreateCameraForForce(pforce,worm,surface,nil,nil,120,0.15) end
 							end
@@ -328,7 +350,7 @@ for p=1,#storage.player_forces do
 					if spawn then
 						if storage.spawn_near_nests then spawn = get_pos_near_enemy_nest(surface,spawn,pforce) end 
 						local group, zilla = create_biterzilla(surface,spawn,pcount,attack1, nil, player_spawn,'bm_fake_human_ultimate_boss_cannon_20',evo)
-						alert_force(pforce,{"bm-txt-biterzilla"})
+						alert_force(pforce,{"bm-txt-ultimate_boss"})
 						Play_sound_alert(pforce,3)	
 						if storage.show_cameras then CreateCameraForForce(pforce,zilla,surface,nil,nil,120,0.15) end
 						end
@@ -450,7 +472,7 @@ local evo = get_evo_here(surface)
 						if storage.spawn_near_nests then spawn = get_pos_near_enemy_nest(surface,spawn,pforce) end 
 						local worm = create_demolisher(surface,spawn,evo)
 						if worm then
-							alert_force(pforce,{"bm-txt-biterzilla"})
+							alert_force(pforce,{"bm-txt-demolisher"})
 							Play_sound_alert(pforce,3)	
 							if storage.show_cameras then CreateCameraForForce(pforce,worm,surface,nil,nil,120,0.15) end
 							end
@@ -473,7 +495,7 @@ for s=#storage.rocket_silos,1,-1 do
 		local pforce = silo.force
 		local surface = silo.surface
 		local pcount = count_players_on_surface(surface, pforce)		
-		if pcount>0 and #pforce.connected_players>0 then Create_Position_Event(the_event, surface, silo.position, pforce) end
+		if pcount>0 and #pforce.connected_players>0 and bm_target_allowed(surface, pforce) then Create_Position_Event(the_event, surface, silo.position, pforce) end
 		end
 	end
 end
@@ -482,6 +504,8 @@ end
 
 
 script.on_nth_tick(60*60, function (event)
+compact_valid_entities(storage.other_enemies)
+
 if storage.days>0 then
 
 	if storage.next_event<game.tick then 
@@ -507,8 +531,9 @@ if not chunk_distance then chunk_distance=4 end
 local enemy_spawn
 local nothing = 0
 local chunkPos = Chunk.from_position(initial_position)  --{x=0,y=0}  initial_position
-local player_chunks = {chunkPos}
-local last_building = chunkPos
+-- copies: chunkPos is moved along the search vector below
+local player_chunks = {table.deepcopy(chunkPos)}
+local last_building = table.deepcopy(chunkPos)
     -- Keep checking chunks in the direction of the vector
     while(not enemy_spawn) do
 		chunkPos.x = chunkPos.x + directionVec.x
@@ -522,6 +547,7 @@ local last_building = chunkPos
 			if #builds>0 then 
 				last_building = table.deepcopy(chunkPos)
 				table.insert (player_chunks,table.deepcopy(chunkPos))
+				nothing = 0 -- only consecutive empty chunks count
 				else
 				nothing = nothing + 1 
 				if nothing >= chunk_distance then enemy_spawn = chunkPos end 
@@ -565,15 +591,17 @@ for x=1, qt do
 if evo>0.91 and math.random(2)==1 then 
 	local humie = get_random_boss_human_soldier(0) 
 	local position = surface.find_non_colliding_position(humie, spawn, 100, 1)
-	if not group then group = surface.create_unit_group{position = position, force = game.forces.enemy} end
-	one_humie = surface.create_entity{name=humie, position=position, force = game.forces.enemy}
-	if one_humie and one_humie.valid then 
-		one_humie.ai_settings.allow_destroy_when_commands_fail=false
-		group.add_member(one_humie) table.insert(storage.other_enemies,one_humie) 
+	if position then
+		if not group then group = surface.create_unit_group{position = position, force = game.forces.enemy} end
+		one_humie = surface.create_entity{name=humie, position=position, force = game.forces.enemy}
+		if one_humie and one_humie.valid then
+			one_humie.ai_settings.allow_destroy_when_commands_fail=false
+			group.add_member(one_humie) table.insert(storage.other_enemies,one_humie)
+			end
 		end
 	end
 	
-group_set_command(group,attack1,attack2,attack3)
+if group then group_set_command(group,attack1,attack2,attack3) end
 return group, one_humie
 end
 
@@ -595,7 +623,7 @@ if pos then
 	alert_force(pforce,{"bm-txt-gleba-invasion"})
 	Play_sound_alert(pforce,2)
 	if storage.show_cameras then CreateCameraForForce(pforce,{object=pod,final_position=pos},surface,nil,nil,120,0.25) end
-	table.insert (storage.gleba_invasions, {surface=surface, position=pos, spawner_name="mf-gleba-spawner",pforce=pforce,attacks=attacks}) --still to locate a spawner, on nth60
+	-- spawner tracking for gleba invasions is disabled upstream, so nothing is queued in storage.gleba_invasions
 	end
 end
 
@@ -627,7 +655,7 @@ if not evolution then evolution = get_evo_here(surface) end
 local list = { 'bm_fake_human_boss_machine_gunner',
 'bm_fake_human_boss_laser',
 'bm_fake_human_boss_electric',
-'bm_fake_human_flamethrower'
+'bm_fake_human_boss_flamethrower'
 }
 if evolution>0.94 then table.insert(list,'bm_fake_human_boss_sniper') end
 if evolution>0.96 then 
@@ -665,7 +693,7 @@ end
 function create_biterzilla(surface,spawn,pcount, attack1, attack2, attack3,specific_zilla,evo)
 if not (surface and surface.valid) then return end
 local zilla, name, group
-if evo<0.9 and (not specific_event) then 
+if evo<0.9 and (not specific_zilla) then
 	name = get_random_lesser_boss(evo,surface)
 	else
 
@@ -691,6 +719,10 @@ local position = surface.find_non_colliding_position(name, spawn, 0, 1)
 		group = surface.create_unit_group{position = position, force = game.forces.enemy}
 		create_remnants_particles (surface, math.random(60,100) , position) 
 		zilla = surface.create_entity{name=name, position=position, force = game.forces.enemy}
+		if not (zilla and zilla.valid) then
+			group.destroy()
+			return nil, nil
+			end
 		zilla.ai_settings.allow_destroy_when_commands_fail=false 
 		surface.create_entity{name="bm-large-tunnel", position=position, force = game.forces.neutral}
 		group.add_member(zilla)
@@ -716,7 +748,7 @@ local position = surface.find_non_colliding_position(name, spawn, 0, 1)
 			end   
 		end
 
-group_set_command(group,attack1,attack2, attack3)
+if group then group_set_command(group,attack1,attack2, attack3) end
 return group, zilla
 end
 
@@ -832,6 +864,23 @@ end
 
 
 
+-- The boss kind is resolved once per tracked entity instead of string searches every second.
+-- Mother biterzillas are checked first: their names also contain "biterzilla1" / "biterzilla2".
+function classify_zilla(ZI, zilla)
+local name = zilla.name
+local kind = false
+if string.find(name, "motherbiterzilla", 1, true) then kind = 'mother'
+	elseif string.find(name, "biterzilla1", 1, true) then kind = 'fire'
+	elseif string.find(name, "biterzilla2", 1, true) then kind = 'electric'
+	elseif string.find(name, "human", 1, true) then kind = 'human'
+	end
+ZI.kind     = kind
+ZI.ultimate = string.find(name, "bm_fake_human_ultimate_boss", 1, true) ~= nil
+ZI.saucer   = string.find(name, "flying_saucer", 1, true) ~= nil
+ZI.spider   = zilla.type == 'spider-vehicle'
+end
+
+
 local tick_zillas = 60
 script.on_nth_tick(tick_zillas, function (event)
 cam_on_tick(event)
@@ -839,7 +888,7 @@ cam_on_tick(event)
 for i=#storage.invasions,1,-1 do
 	local inv =storage.invasions[i] 
 	local surface = inv.surface
-	if inv.quant>0 and surface.valid then 
+	if inv.quant>0 and surface.valid and not bm_peaceful_skip(surface) then
 		local position = inv.surface.find_non_colliding_position(inv.name, inv.position, 200, 4)
 		if position ~= nil then
 			create_remnants_particles (surface, math.random(20,40) , position)
@@ -852,22 +901,8 @@ for i=#storage.invasions,1,-1 do
 	if inv.quant<1 then table.remove(storage.invasions,i) end
 	end
 	
-for i=#storage.gleba_invasions,1,-1 do
-	local inv =storage.gleba_invasions[i] 
-	local surface  = inv.surface
-	local position = inv.position
-	local spawner  = inv.spawner
-	local pforce   = inv.pforce
-	local attacks  = inv.attacks  -- may have or not ...
-	if not spawner then 
-		--spawner = surface.find_entities_filtered{name=inv.spawner_name, position=position}
-		--if #spawner>0 then
-			--table.insert(storage.other_enemies, spawner[1])
-			--table.remove(storage.gleba_invasions,i)
-			--create_gleba_invasor_units(spawner[1],pforce,attacks)
-			--end
-		end
-	end
+-- gleba invasion spawner tracking is disabled upstream: drop entries left by older versions
+if storage.gleba_invasions[1] then storage.gleba_invasions = {} end
 
 
 
@@ -881,23 +916,25 @@ for z=#storage.biterzillas,1,-1 do
 	local effect = ZI.effect
 	if not (zilla and zilla.valid) then table.remove(storage.biterzillas,z) 
 	else
+	if ZI.kind == nil then classify_zilla(ZI, zilla) end
+	local kind = ZI.kind
 	
-	if string.find(zilla.name, "biterzilla1") then 
+	if kind == 'fire' then
 		if math.random(1,4)==1 then
 			local xx = zilla.position.x + math.random(-5,5) 		
 			local yy = zilla.position.y + math.random(-5,5) 		
 			zilla.surface.create_entity{name ="mf-cluster-fire-projectile-big", target_position={x=xx,y=yy}, position={x=xx,y=yy}, source=zilla, force=zilla.force, speed=1}
 			end	
-		elseif string.find(zilla.name, "biterzilla2") then 
+		elseif kind == 'electric' then
 				if math.random(3)==1 then  zilla.surface.create_entity{name="electric-shock2", position=zilla.position, force=zilla.force}  end
-		elseif string.find(zilla.name, "motherbiterzilla") then if math.random(1,4)==1 then Brood(zilla) end
-		elseif string.find(zilla.name, "human") and math.random(1,40)==1 then BroodHumans(zilla) 
+		elseif kind == 'mother' then if math.random(1,4)==1 then Brood(zilla) end
+		elseif kind == 'human' and math.random(1,40)==1 then BroodHumans(zilla)
 		end
 
-	if string.find(zilla.name, "flying_saucer") then zilla.color={r=math.random(),g=math.random(),b=math.random()} end
+	if ZI.saucer then zilla.color={r=math.random(),g=math.random(),b=math.random()} end
 
 
-		if string.find(zilla.name, "bm_fake_human_ultimate_boss") then 
+		if ZI.ultimate then
 		   if math.random(1,10)==1 then BroodHumans(zilla, 2) end end
 		
 		if effect and (effect=='defender_capsules' or effect=='all_buff') then 
@@ -910,12 +947,12 @@ for z=#storage.biterzillas,1,-1 do
 			local enemy = zilla.surface.find_nearest_enemy{position=zilla.position, max_distance=d, force=zilla.force} --zilla.force
 			if enemy and enemy.valid and enemy.name~='entity-ghost' and enemy.type~='entity-ghost' and enemy.destructible and enemy.health then
 				local weap = {'explosive-rocket','grenade'}
-				if string.find(zilla.name, "ultimate") then table.insert(weap,'mf-small-atomic-rocket') table.insert(weap,'cluster-grenade') end
+				if ZI.ultimate then table.insert(weap,'mf-small-atomic-rocket') table.insert(weap,'cluster-grenade') end
 				zilla.surface.create_entity{name=weap[math.random(#weap)], target=enemy, position=zilla.position, force=zilla.force, speed=0.4}
 				end
 		end	
 		
-	if zilla.valid and zilla.type == 'spider-vehicle' and game.tick % (tick_zillas*18) ==0 then Spidertron_Moves(zilla) end 
+	if ZI.spider and zilla.valid and game.tick % (tick_zillas*18) ==0 then Spidertron_Moves(zilla) end
 		
 	end
 end
@@ -1014,8 +1051,7 @@ function Brood(mother)
 local x = mother.position.x
 local y = mother.position.y 
 local r = 10
-local Units = mother.surface.find_entities_filtered({force=mother.force, area={{x-r,y-r},{x+r,y+r}}})
-if #Units>50 then return end
+if mother.surface.count_entities_filtered({force=mother.force, area={{x-r,y-r},{x+r,y+r}}, limit=51}) > 50 then return end
 local Min = 2
 local Max = 6
 local num = math.random(Min,Max) + storage.difficulty_level - 1
@@ -1029,7 +1065,7 @@ for k=1,num do
 		if pos then 
 			mother.surface.create_entity{name="bm-acid-splash-fire", position=pos, force = mother.force}
 			local child = mother.surface.create_entity{name=name, position=pos, force = mother.force}
-			if group then group.add_member(child) end
+			if group and child and child.valid then group.add_member(child) end
 			end
 	end
 end
@@ -1040,8 +1076,8 @@ extra=extra or 0
 local x = mother.position.x
 local y = mother.position.y 
 local r = 10
-local Units = mother.surface.find_entities_filtered({type="unit", force= mother.force, area={{x-r,y-r},{x+r,y+r}}})
-if #Units>5 + storage.difficulty_level + extra*3 then return end
+local max_units = 5 + storage.difficulty_level + extra*3
+if mother.surface.count_entities_filtered({type="unit", force= mother.force, area={{x-r,y-r},{x+r,y+r}}, limit=max_units+1}) > max_units then return end
 local num = math.random(3+ extra)  + storage.difficulty_level - 1
 
 local group
@@ -1051,7 +1087,7 @@ for k=1,num do
 	local pos = mother.surface.find_non_colliding_position(name, mother.position, 15, 1)
 		if pos then 
 			local child = mother.surface.create_entity{name=name, position=pos, force = mother.force}
-			if group then group.add_member(child) end
+			if group and child and child.valid then group.add_member(child) end
 			end
 	end
 end
@@ -1089,7 +1125,7 @@ if entity and entity.valid and entity.type~='entity-ghost' then
 	local surface = entity.surface
 --	local name=entity.name 
 	table.insert (storage.rocket_silos,entity)
-	if storage.enable_silo_attack and not bm_peaceful_skip(surface) then CallFrenzyAttack(surface,entity,nil,1.5) end
+	if storage.enable_silo_attack and not bm_peaceful_skip(surface) and bm_target_allowed(surface, entity.force) then CallFrenzyAttack(surface,entity,nil,1.5) end
 	end
 end		
 local filters = {{filter = "name", name = "rsc-silo-stage1"}, {filter = "name", name = "rsc-silo-stage1-serlp"}, {filter = "name", name = "rocket-silo"}}
@@ -1169,7 +1205,9 @@ if corpse and corpse.valid and attack and attack.valid then
 			end
 		local boss_name=get_random_boss_human_soldier() 
 		local position = surface.find_non_colliding_position(boss_name, corpse.position, 30, 1)
+		if not position then return end
 		local boss = surface.create_entity{name=boss_name, position=position, force = game.forces.enemy}
+		if not (boss and boss.valid) then return end
 		boss.ai_settings.allow_destroy_when_commands_fail=false 
 		table.insert (storage.biterzillas, {entity=boss})
 		if pforce then 
@@ -1179,7 +1217,7 @@ if corpse and corpse.valid and attack and attack.valid then
 		else
 		local humie = get_random_human_soldier(evo,surface)
 		local position = surface.find_non_colliding_position(humie, corpse.position, 30, 1)
-		surface.create_entity{name=humie, position= position, force= game.forces.enemy}		
+		if position then surface.create_entity{name=humie, position= position, force= game.forces.enemy} end
 		end
 end
 end
