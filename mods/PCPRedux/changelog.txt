@@ -4,6 +4,8 @@ Version: 1.1.0
     - Updated to 2.0 [mostly processed by AdamCirillo]
   Graphics:
     - Plastic wall uses its HR sprites and the base 2.0 wall shadows directly (2.0 ignores hr_version; it showed the low-res sprites) (Paranoidal local fix)
+  Bugfixes:
+    - Bacterial growth seed cultivation 1 and 2 take 100 s and 20 s as intended: the time was misspelled as "emergy_required", so both crafted in the default 0.5 s (Paranoidal local fix)
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.4
   Changes:

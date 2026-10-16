@@ -71,7 +71,7 @@ if data.raw.item["angels-temperate-garden"] then
         category = "chemistry",
         subgroup = "angels-bio-processor-fermentation",
         enabled = false,
-        emergy_required = 100,
+        energy_required = 100,
         ingredients = {
           { type = "fluid", name = "angels-liquid-fermentation-raw", amount = 5000 },
           { type = "item", name = "angels-solid-compost",        amount = 5 },
@@ -95,7 +95,7 @@ if data.raw.item["angels-temperate-garden"] then
         category = "chemistry",
         subgroup = "angels-bio-processor-fermentation",
         enabled = false,
-        emergy_required = 20,
+        energy_required = 20,
         ingredients = {
           { type = "fluid", name = "angels-liquid-fermentation-raw", amount = 100 },
           --added in 0.0.29 at 200 to offset dropping lactic acid requirement drop
