@@ -1,4 +1,12 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.8.1
+Date: 16. 10. 2026
+  Info:
+    - Maintenance tools and source data are kept inside the mod in tools/ (see tools/README.md): matrix builder, variant selection, checks, isolated test launches.
+    - New tools/reforge.py: refreshes the code from a new Alien Biomes release and re-applies the Reforged patches (tools/patches.py) without touching optimised graphics; compares a new graphics release with the recorded upstream manifest; regenerates prototypes/tint-matrices.lua.
+    - Upstream manifests (versions and SHA-1 of the files the mod is built on) are recorded in tools/data.
+
+---------------------------------------------------------------------------------------------------
 Version: 0.8.0
 Date: 16. 10. 2026
   Info:
