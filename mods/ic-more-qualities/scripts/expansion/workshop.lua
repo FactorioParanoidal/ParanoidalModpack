@@ -2,7 +2,9 @@
 -- The furnace recognises the inserted item and runs one hidden 1 -> 1 recipe per item; its burner
 -- keeps an internal drive, so the two burner slots only store repair packs. This module:
 --   * drains the durability of the stored packs while an attempt progresses (paid ahead by two
---     ticks; without resource the progress is held, nothing is lost),
+--     ticks; without resource the attempt is held: the furnace is disabled by script at the paid
+--     share and draws idle power until packs arrive, nothing is lost); an idle workshop without
+--     packs stays stopped, so a defective item waits in the input slot instead of being taken in,
 --   * scales progress by the supply of the hidden electric consumer,
 --   * decides the single attempt shortly before completion: 10% unchanged, 90% one grade up, then
 --     10% per extra grade, never above standard; the item always leaves after one attempt,
@@ -175,7 +177,9 @@ function M.set_circuit(record, enabled)
     else
         emitter.destroy(record.emitter)
         record.emitter, record.emitted = nil, nil
-        if record.entity.valid and record.entity.disabled_by_script then record.entity.disabled_by_script = false end
+        -- A workshop held without packs stays stopped; the next look releases it when packs arrive.
+        local hold = record.held == true
+        if record.entity.valid and record.entity.disabled_by_script ~= hold then record.entity.disabled_by_script = hold end
     end
 end
 
@@ -356,7 +360,6 @@ local function refine_step(record, entity, craft, progress, ctx)
     local look = math.max(1, math.min(M.LOOK, math.floor(1 / rate / 6)))
     record.look = look
     local supply = power.satisfaction(record.interface)
-    power.set(record.interface, machine_power(entity))
     local previous = craft.progress or 0
     -- Mode: the engine progress since the last look counts 1/time (power and packs per attempt stay).
     local slow = rules.workshop_mode(craft.mode).time
@@ -385,6 +388,12 @@ local function refine_step(record, entity, craft, progress, ctx)
         attempt(record, entity, craft, ctx)
     end
 
+    -- Without packs the furnace is stopped (M.step disables it) instead of running ahead between
+    -- looks and being rewound on every look: the progress bar jittered and full power was drawn.
+    -- The paid share stays credited; a look with packs drains them and releases the furnace.
+    record.held = starved or nil
+    power.set(record.interface, starved and machine_power(entity) / 30 or machine_power(entity))
+
     if starved then
         set_status(record, "no-resource", "red")
         record.starved_since = record.starved_since or ctx.tick
@@ -399,6 +408,17 @@ local function refine_step(record, entity, craft, progress, ctx)
     alert(record, record.starved_since ~= nil and ctx.tick - record.starved_since >= NO_RESOURCE_ALERT_TICKS)
 end
 
+-- An idle workshop without packs stays stopped while its input slot is empty or holds a defective
+-- item: the furnace takes an inserted item into an attempt at once, so without packs the item left
+-- the slot and seemed to vanish (held inside at 0%). Standard and positive items pass without packs:
+-- they release the workshop on the next idle look.
+local function hold_input(entity, source)
+    if M.available(entity) > 1e-9 then return false end
+    local stack = source and source[1]
+    if not (stack and stack.valid_for_read) then return true end
+    return model.grade_of(stack.quality.name) < 0
+end
+
 function M.step(record, ctx)
     local entity = record.entity
     local tick = ctx.tick
@@ -409,13 +429,13 @@ function M.step(record, ctx)
     local crafting = entity.is_crafting()
 
     -- Circuit control: pause holds the current attempt; "stop" lets it finish first.
+    -- The flag is written after the look: an attempt without packs also disables the furnace.
     local disable = false
     if record.settings.circuit then
         local paused = emitter.read(entity, S.cmd_pause) > 0
         local stop = emitter.read(entity, S.cmd_stop) > 0
         disable = paused or (stop and not crafting)
     end
-    if entity.disabled_by_script ~= disable then entity.disabled_by_script = disable end
 
     -- The resource total is needed only for the circuit signal; the GUI counts it itself.
     local emitting = record.emitter and record.emitter.valid
@@ -423,12 +443,23 @@ function M.step(record, ctx)
     local recipe, quality = entity.get_recipe()
     if not crafting or not recipe or not quality then
         record.craft = nil
-        record.starved_since = nil
-        alert(record, false)
-        power.set(record.interface, machine_power(entity) / 30)
         local source = entity.get_inventory(defines.inventory.furnace_source)
+        local hold = hold_input(entity, source)
+        record.held = hold or nil
+        local stopped = disable or hold
+        if entity.disabled_by_script ~= stopped then entity.disabled_by_script = stopped end
+        local item_waits = hold and source ~= nil and not source.is_empty()
+        if item_waits and not disable then
+            record.starved_since = record.starved_since or tick
+        else
+            record.starved_since = nil
+        end
+        alert(record, record.starved_since ~= nil and tick - record.starved_since >= NO_RESOURCE_ALERT_TICKS)
+        power.set(record.interface, machine_power(entity) / 30)
         if disable then
             set_status(record, "paused", "yellow")
+        elseif item_waits then
+            set_status(record, "no-resource", "red")
         elseif entity.status == defines.entity_status.full_output then
             set_status(record, "output-full", "yellow")
         elseif source and source.is_empty() then
@@ -456,9 +487,12 @@ function M.step(record, ctx)
         refine_step(record, entity, craft, progress, ctx)
         look = record.look
     else
+        record.held = nil
         power.set(record.interface, machine_power(entity))
         set_status(record, craft.kind == "reset" and "reset" or "passing", "green")
     end
+    local stopped = disable or record.held == true
+    if entity.disabled_by_script ~= stopped then entity.disabled_by_script = stopped end
     publish(record, true)
     record.next_tick = tick + look
 end

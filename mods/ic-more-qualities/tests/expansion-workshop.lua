@@ -36,7 +36,9 @@ local function make_machine()
         prototype = {get_max_energy_usage = function() return 1250 end},
     }
     entity.get_fuel_inventory = function() return machine.fuel end
-    entity.get_inventory = function() return {is_empty = function() return not machine.crafting end} end
+    entity.get_inventory = function()
+        return {machine.source or {valid_for_read = false}, is_empty = function() return machine.source == nil end}
+    end
     entity.is_crafting = function() return machine.crafting end
     entity.get_recipe = function()
         if not machine.crafting then return nil end
@@ -50,9 +52,19 @@ local function make_machine()
         entity.crafting_progress = 0
         entity.result_quality = {name = quality}
     end
-    -- Native update after on_tick: progress, completion.
+    -- Put an item into the input slot: the furnace takes it on its next update unless disabled.
+    function machine.insert(item, quality, seconds)
+        machine.source = {valid_for_read = true, name = item, quality = {name = quality}, count = 1, seconds = seconds}
+    end
+    -- Native update after on_tick: start from the input slot, progress, completion.
     function machine.update()
-        if not machine.crafting or entity.disabled_by_script then return end
+        if entity.disabled_by_script then return end
+        if not machine.crafting and machine.source then
+            local source = machine.source
+            machine.source = nil
+            machine.start(source.name, source.quality.name, source.seconds)
+        end
+        if not machine.crafting then return end
         entity.crafting_progress = math.min(1, entity.crafting_progress + machine.rate)
         if entity.crafting_progress >= 1 then
             local result = entity.result_quality
@@ -84,11 +96,22 @@ machine.start("gear", "ic-defect-3", 10)
 local tick = run(machine, record, 900, mock.sequence({.95}))
 assert(machine.crafting and #machine.outputs == 0)
 near(record.craft.paid, 600 / 1500)
--- Held at the paid share; the machine may run up to one look ahead before the next look rewinds it.
-assert(machine.entity.crafting_progress <= 0.4 + workshop.LOOK * machine.rate + 1e-9 and machine.entity.crafting_progress > 0.35)
+-- Held at the paid share: the furnace is disabled by script, so it no longer runs ahead between
+-- looks and gets rewound (the progress bar jittered); idle power while waiting.
+assert(machine.entity.crafting_progress <= 0.4 + 1e-9 and machine.entity.crafting_progress > 0.35)
 assert(not machine.fuel[1].valid_for_read, "both packs fully used")
 assert(record.status_key == "no-resource" and machine.entity.custom_status.diode == "red")
 assert(workshop.available(machine.entity) == 0)
+assert(record.held and machine.entity.disabled_by_script, "held without packs")
+near(machine.interface.power_usage, 1250 / 30)
+local held_at = machine.entity.crafting_progress
+for _ = 1, 60 do
+    tick = run(machine, record, 1, mock.sequence({.95}), tick)
+    assert(machine.entity.crafting_progress == held_at, "progress must not move while held")
+end
+-- Turning circuit control off keeps a held workshop stopped.
+workshop.set_circuit(record, false)
+assert(machine.entity.disabled_by_script)
 
 -- 2. Packs arrive: the attempt finishes. One attempt per item, the item always leaves.
 -- Failed attempt: the same item leaves unchanged; nothing is held inside or lost.
@@ -96,6 +119,7 @@ machine.fuel[1] = pack_stack(100, 150) -- a partially used pack on top
 local before = workshop.available(machine.entity)
 near(before, 99 * 300 + 150)
 tick = run(machine, record, 1000, mock.sequence({.95}), tick)
+assert(not record.held and not machine.entity.disabled_by_script, "released when packs arrive")
 assert(#machine.outputs == 1 and machine.outputs[1] == "ic-defect-3", tostring(machine.outputs[1]))
 assert(not machine.crafting, "no further attempt inside the machine")
 -- Fed again: success, one grade up, no jump -> -2.
@@ -248,6 +272,29 @@ workshop.apply_settings(record, {mode = "careful", reset_positive = false})
 assert(workshop.mode_name(record) == "careful")
 record.settings.mode = nil -- a workshop from an older version
 assert(workshop.mode_name(record) == "normal" and workshop.export_settings(record).mode == "normal")
+
+-- 9. Without packs an inserted defective item stays in the input slot (it used to be taken into an
+-- attempt at once and seemed to vanish); standard items still pass; packs release the workshop.
+machine = make_machine()
+machine.entity.unit_number = 10
+machine.fuel = {{valid_for_read = false}, {valid_for_read = false}}
+record = workshop.track(machine.entity)
+tick = run(machine, record, 10, mock.sequence({.5}), tick)
+assert(record.held and machine.entity.disabled_by_script, "idle without packs: stopped in advance")
+assert(record.status_key == "waiting")
+machine.insert("gear", "normal", 10)
+tick = run(machine, record, 30, mock.sequence({.5}), tick)
+assert(machine.outputs[1] == "normal" and not machine.source, "standard item passes without packs")
+assert(record.held and machine.entity.disabled_by_script, "stopped again after the pass")
+machine.insert("gear", "ic-defect-3", 10)
+tick = run(machine, record, 400, mock.sequence({.5}), tick)
+assert(machine.source and not machine.crafting and #machine.outputs == 1, "defective item stays in the slot")
+assert(record.status_key == "no-resource" and machine.entity.custom_status.diode == "red")
+assert(record.starved_since, "alert timer runs while the item waits")
+machine.fuel[1] = pack_stack(10, 300)
+tick = run(machine, record, 1000, mock.sequence({.5, .5}), tick)
+assert(not machine.source and machine.outputs[2] == "ic-defect-2", tostring(machine.outputs[2]))
+assert(not record.starved_since)
 
 print("PASS: workshop streams pack durability (partial packs), waits without packs or power,")
 print("makes one attempt per item (90% + 10% chain, capped at standard) and always releases it, passes standard,")
