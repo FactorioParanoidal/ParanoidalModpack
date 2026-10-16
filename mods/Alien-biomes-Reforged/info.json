@@ -1,0 +1,14 @@
+{
+  "name": "Alien-biomes-Reforged",
+  "version": "0.8.0",
+  "title": "Alien Biomes Reforged",
+  "author": "Earendel (Alien Biomes), Paranoidal (Reforged)",
+  "dependencies": [
+    "base >= 2.0.0",
+    "(?) space-age >= 2.0.0",
+    "! alien-biomes",
+    "! alien-biomes-graphics"
+  ],
+  "description": "Alien Biomes and Alien Biomes Graphics merged into one mod. Colour variants of dirt, sand, grass, volcanic terrain, sand dunes and lava decals are drawn from shared tint matrices instead of one texture per colour, which greatly reduces the sprite atlas.",
+  "factorio_version": "2.0"
+}
