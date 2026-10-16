@@ -21,6 +21,14 @@ local DEFAULT_AMOUNTS = {1e6, 1e9, 1e12}
 
 local skipped = {}
 
+-- Optional flavor line under the generated condition: "mxlr-flavor.<achievement name>". The locale
+-- value starts with "\n"; a language without the key shows the condition only.
+local function add_flavor(achievement)
+  if not achievement.localised_description then return end
+  achievement.localised_description = {"", achievement.localised_description,
+    {"?", {"mxlr-flavor." .. achievement.name}, ""}}
+end
+
 local function skip(name, reason)
   table.insert(skipped, name .. " (" .. tostring(reason) .. ")")
 end
@@ -44,6 +52,7 @@ local function finish(achievement, product, quality, badge_shift)
   local key = achievement.type == "produce-per-hour-achievement" and "mxlr.produce-per-hour" or "mxlr.produce"
   achievement.localised_description = {key, util.number_text(achievement.amount),
     util.text_of(product, family, quality)}
+  add_flavor(achievement)
   if achievement.type == "produce-achievement" and achievement.limited_to_one_game == nil then
     achievement.limited_to_one_game = false
   end
@@ -127,6 +136,7 @@ local function build_catalog_entry(entry, index, context, output)
         icons = catalog_icons(entry, tier),
         localised_description = {"mxlr.train-path", util.number_text(distance)},
       })
+      add_flavor(output[#output])
     end
     return
   end
@@ -196,6 +206,7 @@ local function build_content_entry(entry, order, output)
     local amount_text = kind.amount_text and kind.amount_text(amount) or util.number_text(amount)
     achievement.localised_description = kind.describe and not entry.description and kind.describe(entry, target, amount)
       or {description_key, amount_text, target.label or ""}
+    add_flavor(achievement)
 
     if kind.fight or entry.fight then achievement.allowed_without_fight = false end
     table.insert(output, achievement)

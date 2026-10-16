@@ -18,6 +18,12 @@ Date: 2026-10-14
     - Every scripted tracker runs protected; a failing tracker is switched off until the next
       configuration change and the game continues.
     - Icons of items with explicitly scaled layers keep their proportions inside the tier frame.
+    - Optional flavor line under generated descriptions (locale section mxlr-flavor, keyed by the
+      achievement name); a language without the key shows the condition only.
+  Locale:
+    - Russian: new names for repetitive and plain achievements (numbered tiers, "!!!" series, module
+      tiers), duplicate names removed, jokes added to hand-written descriptions, 137 flavor lines.
+    - Russian production descriptions no longer end with a double period ("10 тыс..").
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.0
 Date: 2026-10-14
