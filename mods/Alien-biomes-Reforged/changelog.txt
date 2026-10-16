@@ -1,4 +1,13 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.8.5
+Date: 16. 10. 2026
+  Optimizations:
+    - Tree shadows and normal maps are stored at half resolution (tools/trees.py) and drawn at double scale; unused frames of their sheets are dropped. Trunks and leaves keep full resolution. Estimated atlas of the mod: normal 710 -> 579 MiB, economy 188 -> 162 MiB.
+  Info:
+    - Graphical test launch with base, Quality and Elevated Rails: all sprites load, video memory 2023 MB in total (atlases 2012 MB).
+    - tools/data/derived-graphics.json records the regenerated files and their upstream sources.
+
+---------------------------------------------------------------------------------------------------
 Version: 0.8.4
 Date: 16. 10. 2026
   Features:

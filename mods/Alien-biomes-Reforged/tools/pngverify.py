@@ -1,14 +1,23 @@
 """Verify optimised PNGs of the mod against their pre-optimisation sources.
-pngverify.py MOD_DIR MATRICES_DIR GRAPHICS_MOD_DIR
-Matrices (graphics/**/matrices/*.png) are compared with MATRICES_DIR, everything else
-with the same relative path under GRAPHICS_MOD_DIR (or the code mod for thumbnail).
+pngverify.py MOD_DIR MATRICES_DIR GRAPHICS_MOD_DIR [--derived-ref DIR]
+Matrices (graphics/**/matrices/*.png) are compared with MATRICES_DIR, derived files
+(tools/data/derived-graphics.json) with the same path under --derived-ref (the generator
+output kept before pingo; skipped without it), everything else with the same relative path
+under GRAPHICS_MOD_DIR.
 Reports: unreadable files, size changes, alpha changes, worst PSNR (premultiplied RGB).
 """
 import sys, os, math
 import numpy as np
 from PIL import Image
 
-mod, mats, gmod = sys.argv[1:4]
+import json
+argv = sys.argv[1:]
+dref = None
+if "--derived-ref" in argv:
+    i = argv.index("--derived-ref"); dref = argv[i + 1]; del argv[i:i + 2]
+mod, mats, gmod = argv[0:3]
+dfile = os.path.join(mod, "tools", "data", "derived-graphics.json")
+derived = set(json.load(open(dfile))) if os.path.exists(dfile) else set()
 rows, bad = [], []
 for root, _, files in os.walk(mod):
     for f in files:
@@ -16,7 +25,12 @@ for root, _, files in os.walk(mod):
             continue
         p = os.path.join(root, f)
         rel = os.path.relpath(p, mod).replace(os.sep, "/")
-        src = os.path.join(mats, f) if "/matrices/" in rel else os.path.join(gmod, rel)
+        if rel in derived:
+            if not dref:
+                continue
+            src = os.path.join(dref, rel)
+        else:
+            src = os.path.join(mats, f) if "/matrices/" in rel else os.path.join(gmod, rel)
         if not os.path.exists(src):
             continue
         try:
