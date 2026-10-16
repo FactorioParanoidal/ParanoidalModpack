@@ -32,6 +32,7 @@ require("tweaks.item.personal-roboport")
 require("tweaks.item.roboport")
 require("tweaks.item.fuel")
 require("tweaks.item.grouping")
+require("tweaks.item.night-vision-descriptions") -- свои описания ПНВ MK2/MK3
 
 require("tweaks.recipe.insert-mining-drill-bit")
 require("tweaks.recipe.insert-structured-components")
