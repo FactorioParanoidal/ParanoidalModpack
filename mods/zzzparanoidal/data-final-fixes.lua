@@ -350,6 +350,7 @@ require("removals.steam-inserter-recipe")
 require("tweaks.technology.redundant-recipe-unlocks") -- Только избыточные открытия, после восстановления дерева.
 require("tweaks.entity.character-light-beta8") -- Фонарь персонажа из Beta 8, после AAI.
 require("tweaks.entity.beta8-visual-models") -- Модели сундука и малых автоматов IV-V, после Reskins/Miles.
+require("tweaks.entity.comb-beta8") -- Графика комбинаторов BiusArt (comb) из Beta 8, до icon-markers.
 require("tweaks.item.ammo-stats-1_1") -- Боеприпасы 1.1; скриптовые интеграции 2.0 сохраняются.
 require("tweaks.entity.turret-stats-1_1")() -- Финальные характеристики оснований 1.1; без правок Hero.
 require("tweaks.entity.w93-modular-turrets") -- W93: улучшение MK1 -> MK2, без огня по своим у луча MK2 и осколков.

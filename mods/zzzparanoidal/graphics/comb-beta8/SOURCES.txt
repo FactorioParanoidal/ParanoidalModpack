@@ -1,0 +1,7 @@
+Original bitmap assets copied without modification from the user's Paranoidal Beta 8 installation.
+
+entity/*.png, icons/*.png
+  Source: comb 0.1.2 "BiusArt Combinator graphics" by BiusArt (Beta 8: mods/comb/graphics/)
+  Prototype: comb/data-updates.lua
+
+Original authors retain their rights. These are existing modpack assets, not newly authored images.
