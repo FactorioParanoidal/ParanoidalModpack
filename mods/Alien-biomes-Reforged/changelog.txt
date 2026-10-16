@@ -1,4 +1,10 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.8.3
+Date: 16. 10. 2026
+  Info:
+    - Map colours and biome particle colours were checked against the rendered textures (tools/colors.py, report in tools/data/colors-report.md): hues match the ground (median deviation 1 for the map, 2-5 for particles), so nothing is changed. The only outliers are the volcanic tiles, deliberately bright on the map (heat-4 is the slowest terrain) with rock-grey particles.
+
+---------------------------------------------------------------------------------------------------
 Version: 0.8.2
 Date: 16. 10. 2026
   Features:
