@@ -81,7 +81,7 @@ for _, tile in ipairs { "grass-1", "grass-2", "grass-3", "grass-4" } do
     BI_Functions.lib.remove_from_blueprint(tile)
 end
 
-if mods["alien-biomes"] then
+if mods["Alien-biomes-Reforged"] then
     BioInd.writeDebug("Removing AB tiles from blueprints")
     local patterns = {
         "frozen%-snow%-%d",
