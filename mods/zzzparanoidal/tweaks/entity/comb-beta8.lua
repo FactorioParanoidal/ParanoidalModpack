@@ -1,7 +1,16 @@
 -- Beta 8 port of comb 0.1.2 (BiusArt Combinator graphics): sprites, displays, wire points
 -- of the vanilla arithmetic/decider/constant combinators and the circuit-network research icon.
--- Graphics only. Item icons: comb when the startup setting is on (default), otherwise bobicons-beta8.
+-- Graphics only. Startup setting "paranoidal-comb-graphics":
+--   all      - icons and placed buildings (default);
+--   icons    - item/entity/research icons only;
+--   entities - sprites, displays and wire points of placed buildings only;
+--   none     - nothing is changed, prototypes stay as without comb (item icons from bobicons-beta8).
 local util = require("util")
+
+local mode = settings.startup["paranoidal-comb-graphics"].value
+local use_icons = mode == "all" or mode == "icons"
+local use_entities = mode == "all" or mode == "entities"
+if not (use_icons or use_entities) then return end
 
 local root = "__zzzparanoidal__/graphics/comb-beta8/"
 local directions = { "north", "east", "south", "west" }
@@ -61,64 +70,65 @@ local output_points = {
     point({ -26, 9.5 }, { -20, -18 }, { -45, -12 }, { -45, -35 }),
 }
 
+local function set_icon(prototype, file, size)
+    prototype.icons = nil
+    prototype.icon = root .. "icons/" .. file
+    prototype.icon_size = size
+end
+
 local arithmetic = data.raw["arithmetic-combinator"]["arithmetic-combinator"]
 if arithmetic then
-    arithmetic.icon = root .. "icons/arithmetic_combinator_icon_64.png"
-    arithmetic.icon_size = 64
-    arithmetic.sprites = body("arithmetic_combinator")
-    arithmetic.input_connection_points = table.deepcopy(input_points)
-    arithmetic.output_connection_points = table.deepcopy(output_points)
-    for key, cell in pairs({
-        plus = { 40, 0 }, minus = { 80, 0 }, multiply = { 120, 0 }, divide = { 160, 0 }, modulo = { 200, 0 },
-        power = { 0, 30 }, left_shift = { 40, 30 }, right_shift = { 80, 30 },
-        ["and"] = { 120, 30 }, ["or"] = { 160, 30 }, xor = { 200, 30 },
-    }) do
-        arithmetic[key .. "_symbol_sprites"] = display(cell[1], cell[2])
+    if use_icons then set_icon(arithmetic, "arithmetic_combinator_icon_64.png", 64) end
+    if use_entities then
+        arithmetic.sprites = body("arithmetic_combinator")
+        arithmetic.input_connection_points = table.deepcopy(input_points)
+        arithmetic.output_connection_points = table.deepcopy(output_points)
+        for key, cell in pairs({
+            plus = { 40, 0 }, minus = { 80, 0 }, multiply = { 120, 0 }, divide = { 160, 0 }, modulo = { 200, 0 },
+            power = { 0, 30 }, left_shift = { 40, 30 }, right_shift = { 80, 30 },
+            ["and"] = { 120, 30 }, ["or"] = { 160, 30 }, xor = { 200, 30 },
+        }) do
+            arithmetic[key .. "_symbol_sprites"] = display(cell[1], cell[2])
+        end
     end
 end
 
 local decider = data.raw["decider-combinator"]["decider-combinator"]
 if decider then
-    decider.icon = root .. "icons/decider_combinator_icon_64.png"
-    decider.icon_size = 64
-    decider.sprites = body("decider_combinator")
-    decider.input_connection_points = table.deepcopy(input_points)
-    decider.output_connection_points = table.deepcopy(output_points)
-    for key, cell in pairs({
-        greater = { 0, 58 }, less = { 40, 58 }, equal = { 80, 58 },
-        not_equal = { 120, 58 }, less_or_equal = { 160, 58 }, greater_or_equal = { 200, 58 },
-    }) do
-        decider[key .. "_symbol_sprites"] = display(cell[1], cell[2])
+    if use_icons then set_icon(decider, "decider_combinator_icon_64.png", 64) end
+    if use_entities then
+        decider.sprites = body("decider_combinator")
+        decider.input_connection_points = table.deepcopy(input_points)
+        decider.output_connection_points = table.deepcopy(output_points)
+        for key, cell in pairs({
+            greater = { 0, 58 }, less = { 40, 58 }, equal = { 80, 58 },
+            not_equal = { 120, 58 }, less_or_equal = { 160, 58 }, greater_or_equal = { 200, 58 },
+        }) do
+            decider[key .. "_symbol_sprites"] = display(cell[1], cell[2])
+        end
     end
 end
 
 local constant = data.raw["constant-combinator"]["constant-combinator"]
 if constant then
-    constant.icon = root .. "icons/constant_combinator_icon_64.png"
-    constant.icon_size = 64
-    constant.sprites = body("constant_combinator")
-    constant.circuit_wire_connection_points = {
-        point({ 36, -4 }, { 68, -4 }, { -16, -39 }, { 15, -39 }),
-        point({ 68, -1 }, { 68, 21 }, { 22, -36 }, { 22, -12 }),
-        point({ 68, 23 }, { 35, 23 }, { 15, -8 }, { -16, -8 }),
-        point({ 49, 19 }, { 49, -2 }, { -22, -13 }, { -22, -36 }),
-    }
-end
-
-if settings.startup["paranoidal-comb-item-icons"].value then
-    for _, name in ipairs({ "arithmetic-combinator", "decider-combinator", "constant-combinator" }) do
-        local item = data.raw.item[name]
-        if item then
-            item.icons = nil
-            item.icon = root .. "icons/" .. name:gsub("-", "_") .. "_icon_64.png"
-            item.icon_size = 64
-        end
+    if use_icons then set_icon(constant, "constant_combinator_icon_64.png", 64) end
+    if use_entities then
+        constant.sprites = body("constant_combinator")
+        constant.circuit_wire_connection_points = {
+            point({ 36, -4 }, { 68, -4 }, { -16, -39 }, { 15, -39 }),
+            point({ 68, -1 }, { 68, 21 }, { 22, -36 }, { 22, -12 }),
+            point({ 68, 23 }, { 35, 23 }, { 15, -8 }, { -16, -8 }),
+            point({ 49, 19 }, { 49, -2 }, { -22, -13 }, { -22, -36 }),
+        }
     end
 end
 
-local technology = data.raw.technology["circuit-network"]
-if technology then
-    technology.icons = nil
-    technology.icon = root .. "icons/thumbnail_issled_256.png"
-    technology.icon_size = 256
+if use_icons then
+    for _, name in ipairs({ "arithmetic-combinator", "decider-combinator", "constant-combinator" }) do
+        local item = data.raw.item[name]
+        if item then set_icon(item, (name:gsub("-", "_")) .. "_icon_64.png", 64) end
+    end
+
+    local technology = data.raw.technology["circuit-network"]
+    if technology then set_icon(technology, "thumbnail_issled_256.png", 256) end
 end

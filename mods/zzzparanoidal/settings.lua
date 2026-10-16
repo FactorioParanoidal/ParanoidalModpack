@@ -28,8 +28,9 @@ data:extend({
  --рескин проводов
  {type = "bool-setting", name = "wire", setting_type = "startup", default_value = true, order = "7"},
  {type = "bool-setting", name = "copper_wire", setting_type = "startup", default_value = true, order = "8"},
- --иконки предметов комбинаторов из comb (BiusArt) вместо bobicons
- {type = "bool-setting", name = "paranoidal-comb-item-icons", setting_type = "startup", default_value = true, order = "8-a"},
+ --графика комбинаторов comb (BiusArt): иконки и/или постройки на земле
+ {type = "string-setting", name = "paranoidal-comb-graphics", setting_type = "startup", default_value = "all",
+  allowed_values = {"all", "icons", "entities", "none"}, order = "8-a"},
  -------------------------------------------------------------------------------------------------
  --стрелки атаки
    {
