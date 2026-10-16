@@ -40,3 +40,4 @@ table.insert(data.raw.item.landfill.place_as_tile.tile_condition, "water-mud")
 -- for _, cliff in pairs(data.raw.cliff) do
 --   util.replace_filenames_recursive(cliff.orientations, "__base__", "__Alien-biomes-Reforged__")
 -- end
+require("prototypes/reforged/data")

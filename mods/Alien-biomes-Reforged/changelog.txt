@@ -1,4 +1,14 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.8.2
+Date: 16. 10. 2026
+  Features:
+    - New startup setting "Terrain graphics memory" (alien-biomes-reforged-atlas): Normal (default) or Economy for graphics cards with little memory.
+    - Economy uses only the graphics already in the mod: one tint matrix per terrain family (tints refitted, tools/economy.py), 1x1 and half of the 2x2 tile variants, every third picture of decoratives with many shapes, similar tree species share graphics (willow to mangrove, greypine to conifer, specter and scarecrow to oaktapus, pear to ash), half of the tree variations, no tree normal maps.
+    - Tree variation counts and all prototype names are unchanged, so the setting can be switched on an existing map; only the look changes.
+  Info:
+    - Estimated atlas of the mod by loaded regions (tools/atlas_regions.py): normal 710 MiB, economy 188 MiB (original Alien Biomes 1374 MiB).
+
+---------------------------------------------------------------------------------------------------
 Version: 0.8.1
 Date: 16. 10. 2026
   Info:

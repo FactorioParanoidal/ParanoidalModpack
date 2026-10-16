@@ -61,4 +61,6 @@ PATCHES = [
      '      data_util.replace_filenames_recursive(pic, "|color|", variant)\n'
      '    end\n'
      '  end\n'),
+    # --- Reforged data-stage additions (economy atlas, ...) --------------------------
+    ("append", "data.lua", 'require("prototypes/reforged/data")\n'),
 ]
