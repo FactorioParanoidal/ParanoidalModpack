@@ -9,11 +9,14 @@ data.raw["technology"]["angels-fluid-control"].icon_size = 64
 data.raw["technology"]["angels-fluid-control"].icon_mipmaps = 4
 -------------------------------------------------------------------------------------------------
 -- замена иконки свалки
-data.raw["technology"]["zcs-trash-landfill-tech"].icon = "__zzzparanoidal__/graphics/stockpile-icon.png"
-
-data.raw["container"]["zcs-trash-landfill"].icon = "__zzzparanoidal__/graphics/stockpile-icon.png"
-
-data.raw["item"]["zcs-trash-landfill"].icon = "__zzzparanoidal__/graphics/stockpile-icon.png"
+-- ZCS-Trash-Landfill-Continued-Update is not a dependency of zzzparanoidal.
+-- The technology icon is set later by tweaks/technology/approved-icons.lua.
+for _, type_name in pairs({"container", "item"}) do
+	local prototype = data.raw[type_name]["zcs-trash-landfill"]
+	if prototype then
+		prototype.icon = "__zzzparanoidal__/graphics/stockpile-icon.png"
+	end
+end
 
 --графические фиксы
 data.raw.technology["bob-plutonium-fuel-cell"].icons =
