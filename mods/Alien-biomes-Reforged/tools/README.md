@@ -75,6 +75,7 @@ Reforged объединяет Alien Biomes 0.7.4 и Alien Biomes Graphics 0.7.1 
 | `atlas_regions.py` | оценка атласа по загружаемым областям кадров + проверка, что области не выходят за картинку |
 | `economy.py` | `tint` экономного режима: одна матрица на семейство |
 | `colors.py` | цвета карты и частиц против текстур, отчёт `data/colors-report.md` |
+| `test_geology.lua` | модульный тест геологии и взвешенного броска RSO |
 | `luacheck52.py` | синтаксис Lua 5.2 через luac 5.1 |
 | `data/matrices-report.json` | для каждого семейства: исходные файлы, группы, матрицы, `tint` и метрики каждого цвета — источник `tint-matrices.lua` |
 | `data/upstream-code-manifest.json` | версия и SHA-1 файлов кода upstream, поверх которых собран мод |
@@ -124,6 +125,19 @@ Startup-настройка `alien-biomes-reforged-atlas`: `normal` (по умо�
 медленная местность, а частицы — серые обломки породы, а не свечение трещин.
 Тайловые `particle_tints` движок использует только для брызг воды, на суше они не нужны.
 Перепроверять после замены текстур: `colors.py report DUMP tools/data/colors-report.md`.
+
+## Геология по цвету почвы (ПР-062)
+
+Startup-настройка `alien-biomes-reforged-geology` (по умолчанию включена). Соответствие
+«цвет почвы → ресурс» живёт в `scripts/reforged-geology.lua` и отдаётся через
+`remote.call("alien-biomes-reforged", "geology_bias", surface_name, tile_names)` — таблица
+множителей весов для доминирующей почвы или `nil`. Само размещение руд делает RSO
+(`rso-mod/control.lua`, функции `geology_bias` и `weighted_allotments` перед `roll_region`):
+при первом броске нового региона он берёт 9 тайлов чанка, открывшего регион, и умножает вес
+подходящих ресурсов на 2. Без Reforged или с выключенной настройкой RSO работает как раньше,
+вплоть до последовательности случайных чисел. Стартовая зона RSO не затрагивается.
+
+Проверка логики без игры: `lua tools/test_geology.lua . ../rso-mod/control.lua`.
 
 ## Процедуры
 

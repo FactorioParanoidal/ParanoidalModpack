@@ -63,4 +63,6 @@ PATCHES = [
      '  end\n'),
     # --- Reforged data-stage additions (economy atlas, ...) --------------------------
     ("append", "data.lua", 'require("prototypes/reforged/data")\n'),
+    # --- Reforged control stage: geology remote interface for the resource generator ---
+    ("append", "control.lua", 'require("scripts/reforged-geology")\n'),
 ]

@@ -1,4 +1,13 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.8.4
+Date: 16. 10. 2026
+  Features:
+    - Geology by soil colour (startup setting, on by default): with Resource Spawner Overhaul, new regions favour (weight x2) the ore matching the soil colour: sapphirite on blue/purple/aubergine/violet/mauve, jivolite on cream/yellow/tan, stiratite on green/olive/turquoise, crotinnium on grey/white, rubyte on red/dustyrose/orange, bobmonium on brown/beige, coal on black, oil, gas and fissures on volcanic ground. Infinite ores follow their ore. No resource disappears; the starting area is unchanged.
+    - Remote interface alien-biomes-reforged / geology_bias(surface_name, tile_names) for resource generators.
+  Info:
+    - Unit test tools/test_geology.lua.
+
+---------------------------------------------------------------------------------------------------
 Version: 0.8.3
 Date: 16. 10. 2026
   Info:

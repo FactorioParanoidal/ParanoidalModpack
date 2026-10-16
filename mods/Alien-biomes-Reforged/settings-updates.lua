@@ -8,4 +8,11 @@ data:extend({
     allowed_values = {"normal", "economy"},
     order = "zz-a",
   },
+  {
+    type = "bool-setting",
+    name = "alien-biomes-reforged-geology",
+    setting_type = "startup",
+    default_value = true,
+    order = "zz-b",
+  },
 })
