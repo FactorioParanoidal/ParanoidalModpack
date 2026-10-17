@@ -27,6 +27,7 @@ hide("bool-setting", "WideChests_mirror-whitelists")
 hide("double-setting", "WideChests_inventory-size-multiplier")
 hide("int-setting", "WideChests_inventory-size-limit")
 hide("string-setting", "WideChests_inventory-type")
+hide("bool-setting", "WideChests_enable-chest-upgrade")
 -- extendedangels
 hide("bool-setting", "extangels-legacy-inventory-sizes")
 hide("bool-setting", "extangels-warehouses-require-previous")
@@ -243,6 +244,14 @@ hide("bool-setting", "ERPCTbaAB2-refurbish-not-guaranteed")
 hide("bool-setting", "ERPCTbaAB2-use-heat-shield-tile")
 hide("bool-setting", "ERPCTbaAB2-use-petrochem-buildings")
 hide("bool-setting", "ERPCTbaAB2-use-titanium-concrete")
+-- ic-more-qualities
+hide("string-setting", "ic-more-qualities-mode")
+hide("double-setting", "ic-more-qualities-multiplier")
+hide("double-setting", "ic-more-qualities-chance-to-upgrade")
+hide("double-setting", "ic-more-qualities-chance-dynamic-bonus")
+hide("string-setting", "ic-more-qualities-defects-ingredient-mode")
+hide("double-setting", "ic-more-qualities-defects-pole-supply-reduction")
+hide("double-setting", "ic-more-qualities-defects-pole-wire-reduction")
 -- nco-InserterCranes
 hide("string-setting", "nco-inserter-cranes-max-stack-size-bonus")
 -- Lighted-Poles-Plus
@@ -263,6 +272,7 @@ hide("bool-setting", "minime_scale-reach_resource_distance")
 hide("bool-setting", "minime_scale-tool-attack-distance")
 hide("bool-setting", "minime_small-character-collision-box")
 hide("bool-setting", "minime_character-selector")
+hide("bool-setting", "minime_debug_to_log")
 -- MultipleUnitTrainControl
 hide("bool-setting", "multiple-unit-train-control-allow_yuoki_steam")
 hide("string-setting", "multiple-unit-train-control-blacklist")
@@ -406,3 +416,6 @@ hide("string-setting", "sqt-remove-collision-names")
 -- toxicPollution2
 hide("int-setting", "armor-absorb-multiplier")
 hide("double-setting", "min-pollution-to-damage")
+-- valves-lib
+hide("int-setting", "valves-default-threshold-overflow")
+hide("int-setting", "valves-default-threshold-top_up")
