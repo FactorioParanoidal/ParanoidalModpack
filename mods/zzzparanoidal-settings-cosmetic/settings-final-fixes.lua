@@ -36,6 +36,7 @@ hide("string-setting", "font-picker")
 -- WideChests
 hide("int-setting", "WideChests_sprite-decal-chance")
 hide("int-setting", "WideChests_warehouse-threshold")
+hide("string-setting", "WideChests_circuit-connector-position")
 -- blueprint-sandboxes
 hide("bool-setting", "bpsb-labs-absorb-pollution")
 hide("bool-setting", "bpsb-custom-lab-tiles")
@@ -162,6 +163,10 @@ hide("double-setting", "laserfix-b")
 hide("double-setting", "laserfix-glow-r")
 hide("double-setting", "laserfix-glow-g")
 hide("double-setting", "laserfix-glow-b")
+-- ic-more-qualities
+hide("string-setting", "ic-more-qualities-localization-full")
+hide("string-setting", "ic-more-qualities-localization-only-expand")
+hide("string-setting", "ic-more-qualities-localization-rework")
 -- Lighted-Poles-Plus
 hide("double-setting", "lepp_light_size_factor")
 hide("int-setting", "lepp_light_max_size")
