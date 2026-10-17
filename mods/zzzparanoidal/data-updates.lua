@@ -2,6 +2,8 @@
 require("tweaks.custom.bobtech-prerequisite-guards").restore(paralib.bobtech_original_remove_prerequisite)
 paralib.bobtech_original_remove_prerequisite = nil
 
+require("tweaks.recipe.clowns-thermonuclear-bomb")
+
 require("tweaks.recipe.angels-components") -- Сюда складывать все рецепты из группы (item-group) = angels-components
 require("tweaks.recipe.angels-power") -- Сюда складывать все рецепты из группы (item-group) = angels-power
 require("tweaks.recipe.production") -- Сюда складывать все рецепты из группы (item-group) = production

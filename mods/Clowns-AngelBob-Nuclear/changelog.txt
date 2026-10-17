@@ -3,7 +3,6 @@ Version: 2.0.13
 Date: 2026-02-04
   Bugfixes:
     - Recipe & Tech Tree fixes/updates
-    - Thermonuclear bomb no longer gets the modules and the reactor a second time (duplicate ingredients and an invalid ingredient type "name") (Paranoidal local fix)
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.12
 Date: 2026-01-18

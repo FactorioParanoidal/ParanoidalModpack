@@ -1,6 +1,0 @@
-{
-  "mod": "Clowns-AngelBob-Nuclear",
-  "source": "portal",
-  "upstreamVersion": "2.0.13",
-  "changeReason": "Локальный portal-патч Paranoidal на upstream 2.0.13, версия не менялась. prototypes/more-overrides.lua: убрано повторное добавление модулей и реактора в рецепт термоядерной бомбы (их уже добавляет Clowns-Nuclear; реактор шёл с неверным типом ингредиента \"name\", boblibrary писал ошибки в журнал). Итоговый рецепт задаёт zzzparanoidal. При обновлении сверить с upstream."
-}
