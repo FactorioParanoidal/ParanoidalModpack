@@ -205,7 +205,6 @@ end
 --Ремонт дерева исследований
 paralib.bobmods.lib.tech.add_prerequisite("nuclear-power", "bob-boiler-4") --Ставим ядерку под Бойлер МК4
 paralib.bobmods.lib.tech.add_prerequisite("gun-turret", "electricity") -- Beta 8: действующая технология AAI
-paralib.bobmods.lib.tech.add_prerequisite("logistics", "bob-electricity") --логистика1
 paralib.bobmods.lib.tech.add_prerequisite("angels-basic-chemistry-2", "angels-metallurgy-1") --базовая химия 2
 paralib.bobmods.lib.tech.add_prerequisite("angels-bio-processing-green", "angels-metallurgy-1") --водоросли 2
 paralib.bobmods.lib.tech.add_prerequisite("angels-bio-processing-green", "electronics") --водоросли 2
@@ -436,9 +435,6 @@ paralib.bobmods.lib.tech.add_prerequisite("bob-productivity-module-5", "bob-adva
 paralib.bobmods.lib.tech.add_prerequisite("bob-pollution-clean-module-5", "bob-advanced-processing-unit")
 paralib.bobmods.lib.tech.add_prerequisite("bob-pollution-create-module-5", "bob-advanced-processing-unit")
 
--- Hide starting bob-burner-lab tech
-paralib.bobmods.lib.tech.hide("bob-burner-lab")
-paralib.bobmods.lib.tech.remove_prerequisite("automation-science-pack", "bob-burner-lab")
 -- fix research trigger from bob-burner-lab -> burner-lab
 data.raw.technology["automation-science-pack"].research_trigger.item = "burner-lab"
 -- bobtech (recipe-updates.lua:98) добавляет bob-burner-lab в ингредиенты рецепта lab,
@@ -475,7 +471,5 @@ paralib.bobmods.lib.tech.add_recipe_unlock("steam-power", "steam-engine")
 paralib.bobmods.lib.tech.remove_science_pack("steam-power", "logistic-science-pack")
 paralib.bobmods.lib.tech.remove_prerequisite("steam-power", "logistic-science-pack")
 
-paralib.bobmods.lib.tech.remove_prerequisite("bob-steam-engine-2", "bob-steam-engine-1")
 paralib.bobmods.lib.tech.add_prerequisite("bob-steam-engine-2", "steam-power")
-paralib.bobmods.lib.tech.hide("bob-steam-engine-1")
 

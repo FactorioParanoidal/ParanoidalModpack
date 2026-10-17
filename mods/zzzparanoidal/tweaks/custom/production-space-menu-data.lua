@@ -82,7 +82,6 @@ return { rows = {
         {["name"] = "bob-centrifuge-3", ["order"] = "03"},
     }},
     {group = "production", subgroup = "paranoidal-organized-production-labs", order = "a-12", recipes = {
-        {["name"] = "bob-burner-lab", ["order"] = "01"},
         {["name"] = "burner-lab", ["order"] = "02"},
         {["name"] = "lab", ["order"] = "03"},
         {["name"] = "bob-lab-2", ["order"] = "04"},
@@ -98,7 +97,6 @@ return { rows = {
         {["name"] = "burner-turbine", ["order"] = "01"},
         {["name"] = "petroleum-generator", ["order"] = "02"},
         {["name"] = "big-burner-generator", ["order"] = "03"},
-        {["name"] = "bob-burner-generator", ["order"] = "04"},
     }},
     {group = "production", subgroup = "paranoidal-organized-production-boilers", order = "a-15", recipes = {
         {["name"] = "boiler", ["order"] = "01"},

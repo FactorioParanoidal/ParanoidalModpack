@@ -44,9 +44,11 @@ local always_self = {
 	-- (аудит эксплойтов 2026-10-15, решение пользователя).
 	["bob-plastic-pipe"] = true, ["bob-plastic-pipe-to-ground"] = true, ["bob-wooden-board"] = true,
 }
--- Без переработки: предметы с сохранённым содержимым (фабрики Factorissimo).
+-- Без переработки: предметы с сохранённым содержимым (фабрики Factorissimo)
+-- и планировщики (решение пользователя 2026-10-17: их переработка не нужна).
 local excluded = {
 	["factory-1-instantiated"] = true, ["factory-2-instantiated"] = true, ["factory-3-instantiated"] = true,
+	["blueprint"] = true, ["blueprint-book"] = true, ["deconstruction-planner"] = true, ["upgrade-planner"] = true,
 }
 -- Как в Quality: эти рецепты не разбираются никогда.
 local quality_excluded = {["tungsten-carbide"] = true, ["superconductor"] = true, ["biolab"] = true}

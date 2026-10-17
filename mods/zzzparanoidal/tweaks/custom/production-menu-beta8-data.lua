@@ -21,7 +21,6 @@ return {
             {["name"] = "wind-turbine-2", ["order"] = "07"},
             {["name"] = "petroleum-generator", ["order"] = "08", ["icon"] = {["icon"] = "__zzzparanoidal__/graphics/production-menu-beta8/65551a7b6ed522cdb93a.png", ["icon_size"] = 64}},
             {["name"] = "big-burner-generator", ["order"] = "09"},
-            {["name"] = "bob-burner-generator", ["order"] = "10"},
             {["name"] = "torch", ["order"] = "11"},
             {["name"] = "fe-c-accumulator", ["order"] = "12"},
             {["name"] = "RITEG-1", ["order"] = "13", ["icon"] = {["icons"] = {{["icon"] = "__zzzparanoidal__/graphics/production-menu-beta8/6373b73ab04df274dcea.png", ["icon_size"] = 32}}}},
@@ -134,7 +133,6 @@ return {
             {["name"] = "CW-air-filter-machine-6", ["order"] = "09"},
         }},
         {subgroup = "paranoidal-production-labs", order = "a-12", recipes = {
-            {["name"] = "bob-burner-lab", ["order"] = "01"},
             {["name"] = "burner-lab", ["order"] = "02", ["icon"] = {["icon"] = "__zzzparanoidal__/graphics/production-menu-beta8/04720c5b64708a6a9e07.png", ["icon_size"] = 64}},
             {["name"] = "lab", ["order"] = "03"},
             {["name"] = "bob-lab-2", ["order"] = "04"},

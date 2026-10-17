@@ -601,6 +601,24 @@ local function mode_selector(inside, current, action, tooltip_suffix, rows, tags
     return tbl
 end
 
+-- Live part of the workshop panel: the script progress of a pack or ammo being refined.
+local function workshop_refresh(frame, entity)
+    local inside = frame.ic_inside
+    local box = inside and inside.ic_ws_script
+    if not box then return end
+    local record = workshop.get(entity)
+    local sc = record and record.sc
+    local show = sc ~= nil
+    if box.visible ~= show then box.visible = show end
+    if not show then return end
+    local value = math.max(0, math.min(1, sc.progress or 0))
+    local bar = box.ic_ws_bar
+    if bar.value ~= value then bar.value = value end
+    local text = math.floor(value * 100) .. "%"
+    local pct = box.ic_ws_pct
+    if pct.caption ~= text then pct.caption = text end
+end
+
 local function workshop_panel(player, entity)
     local record = workshop.track(entity)
     if not record then return end
@@ -628,6 +646,20 @@ local function workshop_panel(player, entity)
         state = record.settings.reset_positive, tags = {ic = "ws-reset"}})
     checks.add({type = "checkbox", caption = {"ic-quality.circuit-control"}, tooltip = {"ic-quality.workshop-circuit-tooltip"},
         state = record.settings.circuit, tags = {ic = "ws-circuit"}})
+    -- Science packs and ammo are refined by script while the furnace stands, so the native progress
+    -- bar stays at 0%: this bar is shown only for them (other items keep the native bar alone).
+    local box = inside.add({type = "flow", name = "ic_ws_script", direction = "horizontal"})
+    box.style.top_margin = 6
+    box.style.vertical_align = "center"
+    label(box, {"ic-quality.col-progress"})
+    -- The percentage is a separate label: a caption inside the thin bar is drawn off-centre.
+    local bar = box.add({type = "progressbar", name = "ic_ws_bar", value = 0})
+    bar.style.width = 220
+    local pct = box.add({type = "label", name = "ic_ws_pct", caption = "0%", style = "bold_label"})
+    pct.style.minimal_width = 40
+    pct.style.horizontal_align = "right"
+    box.visible = false
+    workshop_refresh(inside.parent, entity)
 end
 
 -- Quality-module chance of the machine in every mode, as text (standard ingredients).
@@ -807,6 +839,10 @@ function M.refresh_entity(player)
     local entity = opened_entity(player)
     if not (frame and entity) then return end
     if frame.tags.unit ~= entity.unit_number then return end
+    if entity.name == names.workshop then
+        workshop_refresh(frame, entity)
+        return
+    end
     if frame.ic_inside and frame.ic_inside.ic_mode_table then
         mode_refresh(player, frame, entity)
         return
