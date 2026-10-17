@@ -67,3 +67,16 @@ Maintenance удаляет metadata-файлы и expected entries для мод
 Локальные моды записываются в `!expected.json` с версией и `metadataHash`, но с `contentHash: null`. Содержимое их папок не хешируется, поэтому обычные изменения файлов не требуют обновления expected-файла и не создают CI-коммиты. Metadata при этом остаётся обязательной и проверяется при каждом запуске.
 
 Для локального форка это же поле объясняет причину порта или изменения. Проверка не обращается к Git remote и не сравнивает ветки. Для PR из этого репозитория CI может запускать maintenance-режим и обновлять expected-файл для portal-модов; для forks остаётся read-only проверка.
+
+Если локальный мод основан на стороннем моде, секция `original` должна содержать название, авторов и адрес исходного мода на Mod Portal:
+
+```json
+"original": {
+  "name": "Original Mod",
+  "authors": ["Author"],
+  "portal": {
+    "name": "original-mod",
+    "url": "https://mods.factorio.com/mod/original-mod"
+  }
+}
+```
