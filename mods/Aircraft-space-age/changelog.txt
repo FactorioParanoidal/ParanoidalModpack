@@ -2,7 +2,6 @@
 Version: 2.3.4
 Date: 2025-10-22
   Changes:
-    - Napalm burnt-patch water check follows the merged Alien-biomes-Reforged mod instead of alien-biomes (Paranoidal local fix)
     - Added option to disable Aircraft's changes to the Space Age tech tree. https://mods.factorio.com/mod/Aircraft-space-age/discussion/67ef131ed2abb65391774eff
 ---------------------------------------------------------------------------------------------------
 Version: 2.3.3

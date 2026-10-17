@@ -1,6 +1,0 @@
-{
-  "mod": "Aircraft-space-age",
-  "source": "portal",
-  "upstreamVersion": "2.3.4",
-  "changeReason": "Локальный portal-патч Paranoidal на upstream 2.3.4, версия не менялась. prototypes/entity/particles.lua: проверка напалма на воде смотрит на объединённый мод Alien-biomes-Reforged вместо alien-biomes (в сборке он заменяет alien-biomes и alien-biomes-graphics); запись в changelog.txt. При обновлении сверить с upstream."
-}
