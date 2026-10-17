@@ -346,8 +346,16 @@ public sealed class ModProvenanceChecker(AbsolutePath rootDirectory, JsonSeriali
         foreach (var path in Directory.EnumerateFiles(metadataDirectory, "*.json", SearchOption.TopDirectoryOnly)
                       .Where(x => !Path.GetFileName(x).StartsWith('!')))
         {
-            var metadata = JsonSerializer.Deserialize<ModMetadata>(File.ReadAllText(path), serializerOptions)
-                           ?? throw new JsonException($"Could not deserialize {path}.");
+            ModMetadata metadata;
+            try
+            {
+                metadata = JsonSerializer.Deserialize<ModMetadata>(File.ReadAllText(path), serializerOptions)
+                           ?? throw new JsonException("Metadata must be a JSON object.");
+            }
+            catch (JsonException exception)
+            {
+                throw new Exception($"Could not deserialize metadata file '{path}': {exception}", exception);
+            }
             ValidateMetadata(metadata, path);
             if (!string.Equals(Path.GetFileNameWithoutExtension(path), metadata.Mod, StringComparison.Ordinal))
                 throw new InvalidOperationException(
