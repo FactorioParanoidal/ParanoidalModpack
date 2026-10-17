@@ -7,13 +7,21 @@ return
   {
     north = { layers = {
         {
+          filename = "__BigLight__/graphics/entity/train-stop/jaune/train-stop-north-light-1.png",
+          width = 9,
+          height = 5,
+          frame_count = 1,
+          shift = util.by_pixel(-70.5, -44.5),
+          --[[ hr_version =
+          {
             filename = "__BigLight__/graphics/entity/train-stop/jaune/hr-train-stop-north-light-1.png",
             width = 17,
             height = 9,
             frame_count = 1,
             shift = util.by_pixel(-70.75, -44.25),
             scale = 0.5
-            },
+            } ]]
+        },
         {
           filename = "__BigLight__/graphics/entity/train-stop/hr-N-light.png",
           width = 20,
@@ -36,13 +44,21 @@ return
     }},
     west = { layers = {
       {
+        filename = "__BigLight__/graphics/entity/train-stop/jaune/train-stop-east-light-1.png",
+        width = 3,
+        height = 9,
+        frame_count = 1,
+        shift = util.by_pixel(34.5, 19.5),
+        --[[ hr_version =
+        {
           filename = "__BigLight__/graphics/entity/train-stop/jaune/hr-train-stop-east-light-1.png",
           width = 6,
           height = 16,
           frame_count = 1,
           shift = util.by_pixel(34.5, 19.5),
           scale = 0.5
-          },
+          } ]]
+      },
       {
         filename = "__BigLight__/graphics/entity/train-stop/hr-E-light.png",
         width = 20,
@@ -65,13 +81,21 @@ return
     }},
     south = { layers = {
       {
+        filename = "__BigLight__/graphics/entity/train-stop/jaune/train-stop-south-light-1.png",
+        width = 8,
+        height = 2,
+        frame_count = 1,
+        shift = util.by_pixel(70, -95),
+        --[[ hr_version =
+        {
           filename = "__BigLight__/graphics/entity/train-stop/jaune/hr-train-stop-south-light-1.png",
           width = 16,
           height = 4,
           frame_count = 1,
           shift = util.by_pixel(70, -95),
           scale = 0.5
-          },
+          } ]]
+      },
       {
         filename = "__BigLight__/graphics/entity/train-stop/hr-S-light.png",
         width = 20,
@@ -94,13 +118,21 @@ return
     }},
     east = { layers = {
       {
+        filename = "__BigLight__/graphics/entity/train-stop/jaune/train-stop-west-light-1.png",
+        width = 3,
+        height = 8,
+        frame_count = 1,
+        shift = util.by_pixel(-30.5, -112),
+        --[[ hr_version =
+        {
           filename = "__BigLight__/graphics/entity/train-stop/jaune/hr-train-stop-west-light-1.png",
           width = 6,
           height = 16,
           frame_count = 1,
           shift = util.by_pixel(-30.5, -112),
           scale = 0.5
-          },
+          } ]]
+      },
       {
         filename = "__BigLight__/graphics/entity/train-stop/hr-W-light.png",
         width = 20,
@@ -126,13 +158,21 @@ return
   {
     north = { layers = {
       {
-          filename = "__base__/graphics/entity/train-stop/train-stop-north-red-light-1.png",
+        filename = "__base__/graphics/entity/train-stop/train-stop-north-red-light-1.png",
+        width = 9,
+        height = 5,
+        frame_count = 1,
+        shift = util.by_pixel(-70.5, -44.5),
+        --[[ hr_version =
+        {
+          filename = "__base__/graphics/entity/train-stop/hr-train-stop-north-red-light-1.png",
           width = 17,
           height = 9,
           frame_count = 1,
           shift = util.by_pixel(-70.75, -44.25),
           scale = 0.5
-          },
+          } ]]
+      },
       {
         filename = "__BigLight__/graphics/entity/train-stop/hr-N-light.png",
         width = 20,
@@ -155,13 +195,21 @@ return
     }},
     west = { layers = {
       {
-          filename = "__base__/graphics/entity/train-stop/train-stop-east-red-light-1.png",
+        filename = "__base__/graphics/entity/train-stop/train-stop-east-red-light-1.png",
+        width = 3,
+        height = 9,
+        frame_count = 1,
+        shift = util.by_pixel(34.5, 19.5),
+        --[[ hr_version =
+        {
+          filename = "__base__/graphics/entity/train-stop/hr-train-stop-east-red-light-1.png",
           width = 6,
           height = 16,
           frame_count = 1,
           shift = util.by_pixel(34.5, 19.5),
           scale = 0.5
-          },
+          } ]]
+      },
       {
         filename = "__BigLight__/graphics/entity/train-stop/hr-E-light.png",
         width = 20,
@@ -184,13 +232,21 @@ return
     }},
     south = { layers = {
       {
-          filename = "__base__/graphics/entity/train-stop/train-stop-south-red-light-1.png",
+        filename = "__base__/graphics/entity/train-stop/train-stop-south-red-light-1.png",
+        width = 8,
+        height = 2,
+        frame_count = 1,
+        shift = util.by_pixel(70, -95),
+        --[[ hr_version =
+        {
+          filename = "__base__/graphics/entity/train-stop/hr-train-stop-south-red-light-1.png",
           width = 16,
           height = 4,
           frame_count = 1,
           shift = util.by_pixel(70, -95),
           scale = 0.5
-          },
+          } ]]
+      },
       {
         filename = "__BigLight__/graphics/entity/train-stop/hr-S-light.png",
         width = 20,
@@ -213,13 +269,21 @@ return
     }},
     east = { layers = {
       {
-          filename = "__base__/graphics/entity/train-stop/train-stop-west-red-light-1.png",
+        filename = "__base__/graphics/entity/train-stop/train-stop-west-red-light-1.png",
+        width = 3,
+        height = 8,
+        frame_count = 1,
+        shift = util.by_pixel(-30.5, -112),
+        --[[ hr_version =
+        {
+          filename = "__base__/graphics/entity/train-stop/hr-train-stop-west-red-light-1.png",
           width = 6,
           height = 16,
           frame_count = 1,
           shift = util.by_pixel(-30.5, -112),
           scale = 0.5
-          },
+          } ]]
+      },
       {
         filename = "__BigLight__/graphics/entity/train-stop/hr-W-light.png",
         width = 20,

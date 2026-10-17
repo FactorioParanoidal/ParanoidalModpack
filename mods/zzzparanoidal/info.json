@@ -57,6 +57,11 @@
     "? reskins-compatibility",
     "? prismatic-belts",
     "? Subterranean >= 2.0.0",
-    "? nco-InserterCranes"
+    "? nco-InserterCranes",
+    "? All-infinit-tech",
+    "? BigLight",
+    "? LargerLamps-2_0",
+    "? mferrari_lib",
+    "? Shortcuts-ick"
   ]
 }

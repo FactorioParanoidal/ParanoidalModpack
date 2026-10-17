@@ -1,6 +1,0 @@
-{
-  "mod": "bobpower",
-  "source": "portal",
-  "upstreamVersion": "2.1.0",
-  "changeReason": "Локальный portal-патч Paranoidal на upstream 2.1.0, версия не менялась. prototypes/heat-pipes.lua: next_upgrade обычной тепловой трубы задаётся после копирования тиров, иначе труба 4 наследовала улучшение в трубу 2 (кольцо 2 → 3 → 4 → 2). В upstream (dev) не исправлено. При обновлении сверить с upstream и снять патч, если исправлено."
-}

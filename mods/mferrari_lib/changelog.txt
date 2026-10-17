@@ -1,11 +1,4 @@
 ---------------------------------------------------------------------------------------------------
-Version: 0.6.6
-Date: 15. 10. 2026
-  Bugfixes:
-    - Fake human corpses have a localised name ("<unit> corpse"); they and the FactorySearch corpse signals showed Unknown key. Names for the flying-saucer-laser and humanoid ammo categories (Paranoidal local fix)
-  Changes:
-    - Removed 2 unused images graphics/entity/rocket_flame/10-jet-flame.png and rocket-jet.png: no prototype or script refers to them (Paranoidal local cleanup)
----------------------------------------------------------------------------------------------------
 Version: 0.6.4
   Changes:
     - Added wriggler bosses 

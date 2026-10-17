@@ -2,14 +2,6 @@
 Version: 0.1.8
 Date: 2026-07-16
   Changes:
-    - Paranoidal: trainMining2 keeps 7 working electric mining drills (of 33) and 2 laser turrets
-      (of 6); the others are remnants.
-    - Paranoidal: overly profitable ruins are cut down, the removed entities become remnants and
-      the kept ones always spawn alive: solarField 7 accumulators and 5 solar panels; trainMining
-      3 mining drills, 1 laser turret, 20 fast belts; eFurnaceRail 2 electric furnaces, 28 express
-      belts, 15 fast inserters; large nuclearPower 3 steam turbines, 3 heat exchangers,
-      2 substations; medium eFurnace 3 electric furnaces; destroyedEnemyFort and carAssembly
-      3 assembling machines each and 25 inserters in total (13 + 12).
     - excluded more ruins from being spawned at Fulgora and Vulcanus as these watered tiles would
       beat the challange of having no water provided on those planets
     - moons are probably to small, so no need to exclude them. Just keep the value for minimum

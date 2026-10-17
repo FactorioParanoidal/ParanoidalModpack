@@ -1,6 +1,0 @@
-{
-  "mod": "Shortcuts-ick",
-  "source": "portal",
-  "upstreamVersion": "2.0.7",
-  "changeReason": "Возвращает для инструментов Paranoidal автогенерацию кнопок панели быстрого доступа, которую Shortcuts-ick 1.1 делал для всех инструментов выделения, а 2.0 убрал. Сейчас список из одного инструмента: разжалование турелей HeroTurretRedux (hero_downgrade из zzzparanoidal), как в Beta 8. Остальные кнопки и настройки мода не меняются."
-}

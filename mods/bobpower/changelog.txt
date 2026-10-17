@@ -3,7 +3,6 @@ Version: 2.1.0
 Date: 01. 06. 2026
   Bugfixes:
     - Fixed solar panel recipes missing Silicon wafers (with Bob's MCI mod) #591
-    - Fixed Heat pipe 4 upgrading to Heat pipe 2: it inherited next_upgrade from the base heat pipe (Paranoidal local fix)
   Changes:
     - Reduced the time that heat sources take to get up to temperature #529
     - Disallowed certain entities in space #551

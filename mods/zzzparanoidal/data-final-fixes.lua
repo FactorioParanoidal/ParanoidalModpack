@@ -398,6 +398,10 @@ require("tweaks.custom.quality-recycling-refresh")
 require("tweaks.custom.fish-santa-only")
 -- Множители загрязнения топлива Beta 8 (уголь, кокс, твёрдое/ракетное топливо и др.).
 require("tweaks.custom.fuel-emissions-beta8")
+-- Compatibility fixes kept outside the original Bob/utility mod packages.
+require("tweaks.custom.upstream-prototype-fixes")
+require("tweaks.custom.upstream-light-fixes")
+require("tweaks.custom.hero-shortcut")
 -- Очистка Факториопедии: после всех правок, создающих и копирующих прототипы.
 require("removals.factoriopedia-cleanup")
 -- Локальные иконки Reskins Library, включая слои рецептов и копии прототипов.

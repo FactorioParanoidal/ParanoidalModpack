@@ -1,6 +1,0 @@
-{
-  "mod": "LargerLamps-2_0",
-  "source": "portal",
-  "upstreamVersion": "0.2.3",
-  "changeReason": "Локальный portal-патч Paranoidal на upstream 0.2.3, версия не менялась. prototypes/entity.lua: медная лампа улучшалась сама в себя; теперь в большую лампу, как в Larger Lamps 1.1 (Beta 8). При обновлении сверить с upstream."
-}

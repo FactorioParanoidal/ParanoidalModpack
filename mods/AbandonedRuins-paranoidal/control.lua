@@ -5,6 +5,7 @@
 
 local SET_NAME = "paranoidal"
 local CORE = "AbandonedRuins"
+local balance_base = require("ruins.base-balance")
 
 local own = {
   small = require("ruins.small"),
@@ -57,6 +58,7 @@ local function build_set()
     for size, ruins in pairs(base or {}) do
       set[size] = set[size] or {}
       for _, ruin in pairs(ruins) do
+        balance_base(size, ruin)
         port_rails(ruin)
         set[size][#set[size] + 1] = ruin
       end

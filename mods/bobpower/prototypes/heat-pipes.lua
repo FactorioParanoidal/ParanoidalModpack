@@ -8,6 +8,7 @@ then
   data.raw["heat-pipe"]["heat-pipe"].heat_buffer.minimum_glow_temperature = 300
   data.raw["heat-pipe"]["heat-pipe"].heat_buffer.max_transfer = "2GW"
   data.raw["heat-pipe"]["heat-pipe"].heat_buffer.max_temperature = 750
+  data.raw["heat-pipe"]["heat-pipe"].next_upgrade = "bob-heat-pipe-2"
   data.raw["heat-pipe"]["heat-pipe"].localised_description = { "entity-description.bob-heat-pipe", "750" }
   bobmods.lib.recipe.set_ingredients(
     "heat-pipe",
@@ -329,6 +330,4 @@ then
       order = "[heat-pipe]-3",
     },
   })
-  -- Set after the tiers are copied from heat-pipe: otherwise heat pipe 4 inherits this upgrade.
-  data.raw["heat-pipe"]["heat-pipe"].next_upgrade = "bob-heat-pipe-2"
 end

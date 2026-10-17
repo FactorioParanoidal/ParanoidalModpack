@@ -685,7 +685,6 @@ local lname = {"",{"entity-name."..name},' '..tostring(level)}
 
   local corpse = table.deepcopy(human_corpse)
   corpse.name = fake_human.name.."-corpse"
-  corpse.localised_name = {"entity-name.mf-fake-human-corpse", fake_human.localised_name or {"entity-name."..fake_human.name}} -- Paranoidal: was Unknown key
   corpse.order = "zzz-"..name
   if mechanicus_skin then --Mechanicus
 	corpse.icons = {

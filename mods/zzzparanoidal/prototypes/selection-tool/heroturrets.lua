@@ -1,5 +1,5 @@
--- Разжалование турелей HeroTurretRedux (Beta 8). Кнопку на панели быстрого доступа, как в Beta 8,
--- создаёт Shortcuts-ick (data-final-fixes, патч Paranoidal).
+-- Разжалование турелей HeroTurretRedux (Beta 8).
+-- Кнопку панели создаёт tweaks/custom/hero-shortcut.lua в слое сборки.
 local turret_types = { "ammo-turret", "electric-turret", "fluid-turret", "artillery-turret" }
 
 data:extend({

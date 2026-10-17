@@ -9,7 +9,6 @@ Date: 12-02-2026
   Balancing:
     - For Krastorio2 - make infinite science more expensive (using KR2 technologies).
     - For krastorio2 - balance bot battery to follow kr2 tech
-    - Paranoidal: infinite laboratory productivity (level 8+) gives +5% per level instead of +50%.
 ---------------------------------------------------------------------------------------------------
 Version: 0.3.4
 Date: 11-02-2026

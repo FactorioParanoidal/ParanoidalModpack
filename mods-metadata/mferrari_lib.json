@@ -1,6 +1,0 @@
-{
-  "mod": "mferrari_lib",
-  "source": "portal",
-  "upstreamVersion": "0.6.6",
-  "changeReason": "Локальный portal-патч Paranoidal на upstream 0.6.6, версия не менялась. prototypes/fake_humans.lua и locale/en: у трупов фейковых людей есть название «<юнит> corpse» (ключ entity-name.mf-fake-human-corpse), раньше они и сигналы трупов FactorySearch показывали Unknown key; названия категорий боеприпасов flying-saucer-laser и humanoid_ammo_category. Русский текст — в ParanoidalLocale. При обновлении сверить с upstream."
-}

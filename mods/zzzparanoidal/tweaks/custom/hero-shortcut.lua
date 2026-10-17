@@ -1,4 +1,4 @@
--- Paranoidal portal patch for Shortcuts-ick 2.0.7 (mods-metadata/Shortcuts-ick.json).
+-- Pack-owned shortcut for the pack-owned demotion tool.
 -- Shortcuts-ick 1.1 generated a shortcut for every selection tool of other mods; 2.0 removed it.
 -- Paranoidal Beta 8 relied on it for its own tools, so it is restored for those tools only.
 local paranoidal_tools = {
