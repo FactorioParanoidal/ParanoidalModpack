@@ -464,8 +464,10 @@ if mods["quality"] then
     end
     -- Defect qualities of ic-more-qualities are registered later (its data-final-fixes keeps these
     -- entries): the same fertilizer, absorption and power x the defect multiplier (as its scripts/defects/model.lua).
+    -- Defects exist only with the "Paranoidal: quality" switch of ic-more-qualities on.
     local defects = mods["ic-more-qualities"] and settings.startup["ic-more-qualities-defects-preview"]
-    if defects and defects.value then
+    local quality = settings.startup["ic-more-qualities-quality"]
+    if defects and defects.value and (quality == nil or quality.value ~= false) then
         for tier = 1, 5 do
             speed["ic-defect-" .. tier] = 1
             energy["ic-defect-" .. tier] = 1 / 3 + (5 - tier) * (2 / 15)

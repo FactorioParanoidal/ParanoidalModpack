@@ -5,6 +5,7 @@ Date: 24.02.2026
     - Add glass to the bio nursery if it exists
     - Alien Biomes integration (optional dependency, removing AB tiles from blueprints) follows the merged Alien-biomes-Reforged mod instead of alien-biomes (Paranoidal local fix)
   Bug Fixes:
+    - Bio gardens: the defect qualities of ic-more-qualities are added to the garden quality tables only when its "Paranoidal: quality" switch is on too; with it off the defect qualities do not exist (Paranoidal local fix)
     - Bio gardens and quality: every quality keeps the standard crafting speed (the same water and fertilizer per minute) and absorbs pollution and uses power x the quality's default multiplier; defects of ic-more-qualities absorb less with the same fertilizer. The old slowdown table covered only the four vanilla qualities, so higher qualities used the general speed bonus and ate several times more fertilizer for the same absorption (Paranoidal local fix)
     - Angels Merge moves Pellet coke to Coal cracking again: it used the 1.1 names pellet-coke and angels-coal-processing-2, now angels-pellet-coke and angels-coal-processing-3 (Paranoidal local fix)
     - Slag slurry is unlocked by angels-slag-processing-1 (was the 1.1 name slag-processing-1); the move of Solid fuel to the "solid-fuel" technology is skipped when that technology does not exist. Both only logged errors before (Paranoidal local fix)

@@ -1,3 +1,7 @@
+local switches = require("scripts.switches")
+-- Quality switched off: the mod does nothing at runtime, as if it were disabled.
+if not switches.quality() then return end
+
 local model = require("scripts.defects.model")
 local handcraft = require("scripts.defects.handcraft")
 local production_loss = require("scripts.defects.production-loss")
@@ -20,7 +24,7 @@ local enabled_cache, exclude_cache, loss_cache
 
 local function enabled()
     -- Keep the original setting ID so existing saved startup choices are respected.
-    if enabled_cache == nil then enabled_cache = settings.startup["ic-more-qualities-defects-preview"].value end
+    if enabled_cache == nil then enabled_cache = switches.defects() end
     return enabled_cache
 end
 
@@ -318,15 +322,18 @@ local function rotate(event, step)
         player.create_local_flying_text({text = {"ic-quality.post-facing-" .. settings.post_facing}, create_at_cursor = true})
     end
 end
-events.on(names.rotate, function(event) rotate(event, 1) end)
-events.on(names.reverse_rotate, function(event) rotate(event, 3) end)
+-- The hotkeys exist only with defects (data.lua): without them the engine rejects their names.
+if enabled() then
+    events.on(names.rotate, function(event) rotate(event, 1) end)
+    events.on(names.reverse_rotate, function(event) rotate(event, 3) end)
+end
 
 local function toggle_panel(event)
     if not enabled() then return end
     local player = game.get_player(event.player_index)
     if player then gui.toggle_panel(player) end
 end
-events.on(names.panel_hotkey, toggle_panel)
+if enabled() then events.on(names.panel_hotkey, toggle_panel) end
 events.on(defines.events.on_lua_shortcut, function(event)
     if event.prototype_name == names.panel_shortcut then toggle_panel(event) end
 end)

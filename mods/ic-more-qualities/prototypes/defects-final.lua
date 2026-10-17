@@ -136,6 +136,51 @@ function M.poles(raw, supply, wire)
     return clamped
 end
 
+-- Positive-quality rules shared by the game with and without defects. everywhere off: recipes of
+-- intermediates, raw materials and mixed outputs get no positive quality, drills take no quality
+-- modules; on: quality modules fit every crafting machine and drill with slots.
+-- Returns the counts of white recipes, changed drills and opened machines.
+function M.positive_quality(raw, finished, everywhere)
+    local white = 0
+    for _, recipe in pairs(raw.recipe or {}) do
+        local has_item = false
+        for _, product in ipairs(classify.products(recipe)) do
+            if product.type == "item" then has_item = true break end
+        end
+        -- Recycling keeps native quality: results at least the input quality, modules may raise it.
+        if has_item and not everywhere and not classify.recycling[recipe.category or "crafting"]
+            and not classify.quality_allowed(recipe, finished) and recipe.allow_quality ~= false then
+            recipe.allow_quality = false
+            white = white + 1
+        end
+    end
+    local drills = 0
+    for _, drill in pairs(raw["mining-drill"] or {}) do
+        if everywhere then
+            if M.with_quality(drill, true) then drills = drills + 1 end
+        else
+            drill.allowed_effects = M.without_quality(drill.allowed_effects)
+            drills = drills + 1
+        end
+    end
+    local opened = 0
+    if everywhere then
+        for _, kind in ipairs({"assembling-machine", "furnace"}) do
+            for _, machine in pairs(raw[kind] or {}) do
+                if M.with_quality(machine, false) then opened = opened + 1 end
+            end
+        end
+    end
+    return white, drills, opened
+end
+
+-- Quality without defects: only the positive-quality rules. Returns log lines.
+function M.quality_rules(raw, finished, everywhere)
+    local white, drills, opened = M.positive_quality(raw, finished, everywhere)
+    return {"IC quality without defects: recipes forced white " .. white .. ", quality everywhere "
+        .. tostring(everywhere == true) .. ", machines opened for quality " .. opened .. "; drills changed: " .. drills}
+end
+
 function M.apply(raw, options)
     options = options or {}
     local mode = options.mode or "materials"
@@ -145,37 +190,7 @@ function M.apply(raw, options)
     for tier = 1, 5 do assert(raw.quality["ic-defect-" .. tier], "Defect qualities must be registered first") end
 
     local finished, reasons = classify.classify(raw, mode)
-    local white = 0
-    for _, recipe in pairs(raw.recipe or {}) do
-        local has_item = false
-        for _, product in ipairs(classify.products(recipe)) do
-            if product.type == "item" then has_item = true break end
-        end
-        -- Intermediates, raw materials and mixed outputs: no positive quality.
-        -- Recycling keeps native quality: results at least the input quality, modules may raise it.
-        if has_item and not options.everywhere and not classify.recycling[recipe.category or "crafting"]
-            and not classify.quality_allowed(recipe, finished) and recipe.allow_quality ~= false then
-            recipe.allow_quality = false
-            white = white + 1
-        end
-    end
-    local drills = 0
-    for _, drill in pairs(raw["mining-drill"] or {}) do
-        if options.everywhere then
-            if M.with_quality(drill, true) then drills = drills + 1 end
-        else
-            drill.allowed_effects = M.without_quality(drill.allowed_effects)
-            drills = drills + 1
-        end
-    end
-    local opened = 0
-    if options.everywhere then
-        for _, kind in ipairs({"assembling-machine", "furnace"}) do
-            for _, machine in pairs(raw[kind] or {}) do
-                if M.with_quality(machine, false) then opened = opened + 1 end
-            end
-        end
-    end
+    local white, drills, opened = M.positive_quality(raw, finished, options.everywhere)
     local machines = M.machine_energy(raw)
     local clamped = M.poles(raw, supply, wire)
 

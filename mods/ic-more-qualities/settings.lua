@@ -2,6 +2,13 @@ data:extend(
 	{
 		{
 			type = "bool-setting",
+			name = "ic-more-qualities-quality",
+			order = "e",
+			setting_type = "startup",
+			default_value = true
+		},
+		{
+			type = "bool-setting",
 			name = "ic-more-qualities-defects-preview",
 			order = "f",
 			setting_type = "startup",

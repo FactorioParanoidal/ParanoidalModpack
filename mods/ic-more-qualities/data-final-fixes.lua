@@ -1,3 +1,7 @@
+local switches = require("scripts.switches")
+-- Quality switched off: the mod adds nothing; zzzparanoidal hides quality modules and their research.
+if not switches.quality() then return end
+
 require("prototypes.utils")
 require("prototypes.remove-tech-final")
 
@@ -7,7 +11,24 @@ if conf_early_quality then
     require("prototypes.early-quality-final")
 end
 
-if settings.startup["ic-more-qualities-defects-preview"].value then
+-- zzzparanoidal hides modules outside its Beta 8 set: quality modules stay visible with quality,
+-- with or without defects.
+if mods["zzzparanoidal"] then
+    require("prototypes.defects-quality-modules")(data.raw)
+end
+
+if not switches.defects() then
+    -- Quality without defects: the same positive-quality rules as with defects ("quality for all
+    -- production" off: raw resources and intermediates stay standard, drills without quality).
+    local startup = settings.startup
+    local classify = require("scripts.defects.classify")
+    local finished = classify.classify(data.raw, startup["ic-more-qualities-defects-ingredient-mode"].value)
+    local report = require("prototypes.defects-final").quality_rules(data.raw, finished,
+        startup["ic-more-qualities-quality-everywhere"].value)
+    for _, line in ipairs(report) do log(line) end
+end
+
+if switches.defects() then
     data:extend(require("prototypes.defects-preview").prepare(data.raw))
     -- research_evolution_factor labels technologies in its data-final-fixes, which runs before this
     -- mod creates the quality-control researches: add the same "evolution +X%" effect here.
@@ -26,9 +47,6 @@ if settings.startup["ic-more-qualities-defects-preview"].value then
                 end
             end
         end
-    end
-    if mods["zzzparanoidal"] then
-        require("prototypes.defects-quality-modules")(data.raw)
     end
     local startup = settings.startup
     local prototypes, report, finished, reasons = require("prototypes.defects-final").apply(data.raw, {

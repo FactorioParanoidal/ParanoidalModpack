@@ -28,8 +28,11 @@ local tiers = { "quality-module", "quality-module-2", "quality-module-3", "bob-q
 -- zzz прячет модули вне набора Beta 8, а ic-more-qualities открывает этот ряд позже, в своём
 -- data-final-fixes. Открываем его здесь при том же условии, чтобы пересборка переработки
 -- (quality-recycling-refresh) видела модули видимыми и разбирала их и их потребителей.
-local defects_preview = settings.startup["ic-more-qualities-defects-preview"]
-if mods["ic-more-qualities"] and defects_preview and defects_preview.value then
+-- Качество включено, если есть ic-more-qualities и его галочка «Paranoidal: качество» не снята
+-- (с браком и без брака одинаково). Иначе — игра без качества, см. конец файла.
+local quality_setting = settings.startup["ic-more-qualities-quality"]
+local quality_on = mods["ic-more-qualities"] ~= nil and (quality_setting == nil or quality_setting.value ~= false)
+if quality_on then
 	for _, name in ipairs(tiers) do
 		if data.raw.module[name] then data.raw.module[name].hidden = false end
 		if recipes[name] then recipes[name].hidden = false end
@@ -113,6 +116,56 @@ for recipe_name, replacement in pairs(crystal) do
 					table.remove(recipe.ingredients, index)
 				end
 			end
+		end
+	end
+end
+
+-- Игра без качества (галочка «Paranoidal: качество» снята или ic-more-qualities отключён):
+-- модули качества, их схемы и исследования качества скрыты; рецепты Bob, где был модуль
+-- качества (плазменная турель 4, оборудование BET), обходятся без него, как Bob без модулей
+-- качества; зависимые исследования получают предков скрытого исследования.
+if not quality_on then
+	local items = { ["bob-quality-processor"] = true, ["bob-quality-processor-2"] = true, ["bob-quality-processor-3"] = true }
+	for _, name in ipairs(tiers) do items[name] = true end
+	for name, recipe in pairs(recipes) do
+		if not items[name] then
+			for index = #(recipe.ingredients or {}), 1, -1 do
+				local ingredient = recipe.ingredients[index]
+				if items[ingredient.name or ingredient[1]] then table.remove(recipe.ingredients, index) end
+			end
+		end
+	end
+	for name in pairs(items) do
+		local prototype = data.raw.module[name] or data.raw.item[name]
+		if prototype then prototype.hidden = true end
+		if recipes[name] then recipes[name].hidden = true; recipes[name].enabled = false end
+	end
+	local hidden = {}
+	for _, name in ipairs({ "quality-module", "quality-module-2", "quality-module-3", "bob-quality-module-4",
+		"bob-quality-module-5", "epic-quality", "legendary-quality" }) do
+		local technology = technologies[name]
+		if technology then
+			hidden[name] = true
+			technology.hidden = true
+			technology.enabled = false
+			technology.hidden_in_factoriopedia = true
+		end
+	end
+	for name, technology in pairs(technologies) do
+		if not hidden[name] and technology.prerequisites then
+			local prerequisites, seen, changed = {}, {}, false
+			local function add(prerequisite)
+				if seen[prerequisite] then return end
+				seen[prerequisite] = true
+				if hidden[prerequisite] then
+					changed = true
+					for _, parent in ipairs(technologies[prerequisite].prerequisites or {}) do add(parent) end
+				else
+					prerequisites[#prerequisites + 1] = prerequisite
+				end
+			end
+			for _, prerequisite in ipairs(technology.prerequisites) do add(prerequisite) end
+			if changed then technology.prerequisites = prerequisites end
 		end
 	end
 end
