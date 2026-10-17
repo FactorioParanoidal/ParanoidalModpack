@@ -34,6 +34,12 @@ for _, i in pairs(sprites) do
 	data:extend({p})
 end
 
+-- Paranoidal: the WideChests button uses the build's 128 px steel chest icon at full resolution
+-- (same 32 px on screen as the 64 px icons at scale 0.5).
+data.raw["sprite"]["widechests_button"].width = 128
+data.raw["sprite"]["widechests_button"].height = 128
+data.raw["sprite"]["widechests_button"].scale = 0.25
+
 --Autotrash
 if data.raw["sprite"]["autotrash_trash"] and data.raw["sprite"]["autotrash_trash_paused"] and data.raw["sprite"]["autotrash_requests_paused"] and data.raw["sprite"]["autotrash_both_paused"] then
   data.raw["sprite"]["autotrash_trash"].filename = ICONPATH .. "autotrash_button.png"
