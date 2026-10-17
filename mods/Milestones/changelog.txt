@@ -2,6 +2,7 @@
 Version: 1.4.8
 Date: 2026-10-13
   Changes:
+    - Paranoidal: removed the chat messages about the auto-detected preset and loaded preset addons at game start. Error messages are kept.
     - Paranoidal fork of 1.4.7 (local version number, not an official release). Mod ID, settings and save data are kept.
     - Existing saves whose milestone set was never edited switch to a newly added preset that auto-detection prefers (e.g. Paranoidal over Vanilla). Completed milestones keep their times; new ones are backfilled.
     - Players inside a Blueprint Sandboxes force see, and are notified about, the milestones of their real force.

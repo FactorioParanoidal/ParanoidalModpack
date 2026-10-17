@@ -117,7 +117,8 @@ function load_presets()
     if storage.current_preset_name == nil then
         storage.current_preset_name = get_auto_detected_preset_name()
         log("Auto-detected preset used: " .. storage.current_preset_name)
-        table.insert(storage.delayed_chat_messages, {"milestones.message_loaded_presets", storage.current_preset_name})
+        -- Paranoidal: no chat message about the auto-detected preset.
+        -- table.insert(storage.delayed_chat_messages, {"milestones.message_loaded_presets", storage.current_preset_name})
         storage.loaded_milestones = table.deep_copy(presets[storage.current_preset_name].milestones)
     end
 end
@@ -134,11 +135,12 @@ function load_preset_addons()
     end
     log("Preset addons loaded: " .. serpent.line(preset_addons_loaded))
 
-    if #preset_addons_loaded == 1 then
-        table.insert(storage.delayed_chat_messages, {"milestones.message_loaded_preset_addons_singular", preset_addons_loaded[1]})
-    elseif #preset_addons_loaded > 1 then
-        table.insert(storage.delayed_chat_messages, {"milestones.message_loaded_preset_addons_plural", table.concat(preset_addons_loaded, ", ")})
-    end
+    -- Paranoidal: no chat message about loaded preset addons.
+    -- if #preset_addons_loaded == 1 then
+    --     table.insert(storage.delayed_chat_messages, {"milestones.message_loaded_preset_addons_singular", preset_addons_loaded[1]})
+    -- elseif #preset_addons_loaded > 1 then
+    --     table.insert(storage.delayed_chat_messages, {"milestones.message_loaded_preset_addons_plural", table.concat(preset_addons_loaded, ", ")})
+    -- end
 end
 
 function reload_presets()
