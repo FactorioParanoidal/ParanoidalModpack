@@ -1,10 +1,10 @@
 {
   "name": "zzzparanoidal-settings",
-  "version": "0.3.0",
-  "title": "Advanced PARANOIDAL Settings",
+  "version": "0.4.0",
+  "title": "PARANOIDAL: hide balance settings",
   "author": "SEO-master",
   "factorio_version": "2.0",
-  "description": "Settings visibility companion for PARANOIDAL. Hides the HeroTurretRedux settings as Beta 8 did; other mods are not adapted yet.",
+  "description": "Hides other mods' startup settings that change balance and progression. Disable this mod to see them. Values in mod-settings.dat are not changed.",
   "dependencies": [
     "base >= 2.0.77",
     "? zzzparanoidal"
