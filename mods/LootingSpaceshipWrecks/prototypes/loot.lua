@@ -65,21 +65,6 @@ set_loot(ship, 5, {
   {type = "item", name = "salvaged-generator", amount = 1}
 })
 
--- Paranoidal quality branch: basic circuit boards from every ship wreck, more from bigger ones.
-local boards = {{"simple-entity-with-owner", "crash-site-spaceship-wreck-small-", 6, 1, 2},
-  {"container", "crash-site-spaceship-wreck-medium-", 3, 2, 4},
-  {"container", "crash-site-spaceship-wreck-big-", 2, 4, 8}}
-local function add_boards(entity, amount_min, amount_max)
-  if entity and entity.minable and data.raw.item["bob-basic-circuit-board"] then
-    entity.minable.results[#entity.minable.results + 1] =
-      {type = "item", name = "bob-basic-circuit-board", amount_min = amount_min, amount_max = amount_max}
-  end
-end
-for _, group in ipairs(boards) do
-  for index = 1, group[3] do add_boards(data.raw[group[1]][group[2] .. index], group[4], group[5]) end
-end
-add_boards(ship, 8, 8)
-
 -- Beta 8 zzzparanoidal added the working pump to hull mining loot, not its inventory.
 if mods.zzzparanoidal and data.raw.item["offshore-mk0-pump"] then
   ship.minable.results[#ship.minable.results + 1] = {type = "item", name = "offshore-mk0-pump", amount = 1}

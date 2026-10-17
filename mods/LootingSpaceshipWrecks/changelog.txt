@@ -1,20 +1,4 @@
 ---------------------------------------------------------------------------------------------------
-Version: 2.0.4
-Date: 2026-10-13
-  Changes:
-    - Small crash-site wrecks are swapped for simple-entity twins when selected, so mining them plays the pickaxe animation and sound
----------------------------------------------------------------------------------------------------
-Version: 2.0.3
-Date: 2026-10-13
-  Bugfixes:
-    - Loot mined from the damaged crash-site wrecks gets full health, so it stacks with ordinary items
----------------------------------------------------------------------------------------------------
-Version: 2.0.2
-Date: 2026-10-12
-  Changes:
-    - Starting ship supplies also contain 100-200 repair packs and 20-40 basic circuit boards.
-    - Ship wrecks drop basic circuit boards: small 1-2, medium 2-4, big 4-8, the ship hull 8.
----------------------------------------------------------------------------------------------------
 Version: 2.0.1
 Date: 2026-09-12
   Changes:

@@ -26,6 +26,7 @@ require("tweaks.entity.gas-void")
 require("tweaks.entity.wires")
 require("tweaks.entity.nuke-cliffs")
 require("tweaks.entity.tree-chopping-speed") -- рубка деревьев x3 быстрее
+require("tweaks.entity.shipwreck-salvage") -- все стартовые обломки: кирка и время добычи 1,5 с
 require("tweaks.entity.rocket-silo-construction-beta8") -- выбросы первой стадии шахты как в Beta 8
 
 require("tweaks.item.personal-roboport")
