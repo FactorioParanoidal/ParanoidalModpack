@@ -1,5 +1,0 @@
----------------------------------------------------------------------------------------------------
-Version: 1.0.0
-Date: 2026.10.15
-  Changes:
-    - Removed 5 unused crash-site chest images (graphics/entity/crash-site-chests): not referenced by the modset under any visible startup setting (12 data dumps with alternative setting values) and not named in any Lua file (Paranoidal local cleanup)

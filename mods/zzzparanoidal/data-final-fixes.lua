@@ -400,6 +400,8 @@ require("tweaks.custom.fish-santa-only")
 require("tweaks.custom.fuel-emissions-beta8")
 -- Очистка Факториопедии: после всех правок, создающих и копирующих прототипы.
 require("removals.factoriopedia-cleanup")
+-- Локальные иконки Reskins Library, включая слои рецептов и копии прототипов.
+require("tweaks.custom.reskins-library-icons")
 -- Оптимизация атласов графики: после всех правок, создающих и копирующих прототипы и иконки.
 require("tweaks.custom.graphics-atlas")
 -- Этот require ВСЕГДА ПОСЛЕДНИЙ: не переносить и не добавлять код ниже.

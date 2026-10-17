@@ -6,8 +6,6 @@ Date: 2026-06-19
   Bugfixes:
     - Fixed rocket recipe that added twice time the rocket parts
     - Fixed module limitation in Recipe Edition
-  Changes:
-    - Removed the documentation image math/solver_matrix.png (not used by the game) (Paranoidal local cleanup)
 ---------------------------------------------------------------------------------------------------
 Version: 2.2.13
 Date: 2026-03-20

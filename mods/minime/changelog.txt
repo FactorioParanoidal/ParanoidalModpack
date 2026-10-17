@@ -11,7 +11,6 @@ Date: 2026-03-03
     - Added optional dependency on new character mods:
       - "Chef Kawasaki Character" (https://mods.factorio.com/mod/Chef_Kawasaki_Character)
       - "Emberthal Character Reskin" ( Emberthal Character Reskin )
-    - Removed the backup folder graphics/bak (3 unused images) (Paranoidal local cleanup)
 
   TODO:
     - Figure out why animations of jetpack-characters are not scaled!

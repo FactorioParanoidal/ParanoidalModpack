@@ -4,8 +4,6 @@ Date: 2024-10-28
 	Changes:
 		-fixed an issue that made the mod unable to run without Space Age enabled
 		-painted the Capture Robot PROJECTILE, previously only the capture animation was painted
-  Changes:
-    - Removed the unused thumbnail.old.png (Paranoidal local cleanup)
 ---------------------------------------------------------------------------------------------------
 Version: 1.1.2
 Date: 2024-10-28
