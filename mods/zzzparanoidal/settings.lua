@@ -28,6 +28,13 @@ data:extend({
  --рескин проводов
  {type = "bool-setting", name = "wire", setting_type = "startup", default_value = true, order = "7"},
  {type = "bool-setting", name = "copper_wire", setting_type = "startup", default_value = true, order = "8"},
+ --прозрачность проводов (Beta 8: PickerTweaks), видимость в процентах
+ {type = "string-setting", name = "paranoidal-wire-visibility-copper", setting_type = "startup", default_value = "100",
+  allowed_values = {"100", "80", "50", "30", "0"}, order = "8-0a"},
+ {type = "string-setting", name = "paranoidal-wire-visibility-red", setting_type = "startup", default_value = "100",
+  allowed_values = {"100", "80", "50", "30", "0"}, order = "8-0b"},
+ {type = "string-setting", name = "paranoidal-wire-visibility-green", setting_type = "startup", default_value = "100",
+  allowed_values = {"100", "80", "50", "30", "0"}, order = "8-0c"},
  --графика комбинаторов comb (BiusArt): иконки и/или постройки на земле
  {type = "string-setting", name = "paranoidal-comb-graphics", setting_type = "startup", default_value = "all",
   allowed_values = {"all", "icons", "entities", "none"}, order = "8-a"},
