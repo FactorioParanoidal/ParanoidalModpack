@@ -25,6 +25,13 @@ local function setPlanetAISettings(root)
 		planetAISetting.peacePeriod = NewPeacePeriod
 		planetAISetting.minEvo = NewMinEvo
 		
+		-- Paranoidal: mirror the Nauvis threshold into the map setting "rampantFixed--nauvisMinEvo"
+		if (planetName == "nauvis") and (type(NewMinEvo) == "number") then
+			local value = math.max(0, math.min(100, math.floor(NewMinEvo)))
+			if settings.global["rampantFixed--nauvisMinEvo"].value ~= value then
+				settings.global["rampantFixed--nauvisMinEvo"] = {value = value}
+			end
+		end
 	end
 end
 

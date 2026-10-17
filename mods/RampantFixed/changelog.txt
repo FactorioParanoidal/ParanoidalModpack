@@ -1,6 +1,10 @@
 ---------------------------------------------------------------------------------------------------
 Version: 2.02.14
 Date: 2026.10.13
+  Changes:
+    - New map setting "rampantFixed--nauvisMinEvo" (default 2): minimum evolution for the Nauvis truce to end. It is synced both ways with the planet AI window (RFx): new game takes the setting, an existing save keeps its RFx value and writes it into the setting.
+    - Remote "getTruceInfo" ({surfaceIndex}) returns {minEvo, peaceful} for EvoUI; read-only.
+    - Removed the two chat messages "Peaceful mode. Attacks will start..." (EvoUI shows the truce next to the evolution line). The "Peaceful mode expired" message is kept.
   Locale:
     - Names for the four alert virtual signals (underground passage, dig-out attempt, squad detected, attacking Demolisher); they showed Unknown key in the signal list
   Balancing:

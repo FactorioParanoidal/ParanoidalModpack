@@ -1657,9 +1657,40 @@ local function on_gui_click(event)
 	return
 end
 
+-- Paranoidal: the Nauvis truce evolution threshold lives in two places: the map setting
+-- "rampantFixed--nauvisMinEvo" and the planet AI window (RFx). Keep them equal.
+local NAUVIS_MIN_EVO_SETTING = "rampantFixed--nauvisMinEvo"
+
+local function getNauvisAISetting()
+    local u = storage.universe
+    return u and u.planetAISettings and u.planetAISettings.nauvis
+end
+
+local function applyNauvisMinEvoSetting()
+    local nauvis = getNauvisAISetting()
+    if nauvis then
+        nauvis.minEvo = settings.global[NAUVIS_MIN_EVO_SETTING].value
+    end
+end
+
+local function syncNauvisMinEvoToSetting()
+    local nauvis = getNauvisAISetting()
+    if nauvis and (type(nauvis.minEvo) == "number") then
+        local value = math.max(0, math.min(100, math.floor(nauvis.minEvo)))
+        if settings.global[NAUVIS_MIN_EVO_SETTING].value ~= value then
+            settings.global[NAUVIS_MIN_EVO_SETTING] = {value = value}
+        end
+    end
+end
+
 local function onModSettingsChange(event)
 
     if not isRampantSetting(event.setting) then
+        return
+    end
+
+    if event.setting == NAUVIS_MIN_EVO_SETTING then
+        applyNauvisMinEvoSetting()
         return
     end
 
@@ -1868,6 +1899,7 @@ local function onInit()
     hookEvents()
     onConfigChanged()
 	setNewEnemySide()
+	applyNauvisMinEvoSetting()
 	
 end
 
@@ -1878,7 +1910,10 @@ script.on_event(defines.events.on_surface_created, onSurfaceCreated)
 script.on_init(onInit)
 script.on_load(onLoad)
 script.on_event(defines.events.on_runtime_mod_setting_changed, onModSettingsChange)
-script.on_configuration_changed(onConfigChanged)
+script.on_configuration_changed(function(data)
+    onConfigChanged(data)
+    syncNauvisMinEvoToSetting()
+end)
 
 script.on_event(defines.events.on_resource_depleted, onResourceDepleted)
 script.on_event({defines.events.on_player_built_tile,

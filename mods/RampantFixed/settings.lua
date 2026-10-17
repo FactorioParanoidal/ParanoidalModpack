@@ -38,6 +38,18 @@ data:extend({
             order = "b[modifier]-f[wave]",
             per_user = false
         },
+
+        {
+            -- Paranoidal: Nauvis truce evolution threshold, synced with the planet AI window (RFx)
+            type = "int-setting",
+            name = "rampantFixed--nauvisMinEvo",
+            setting_type = "runtime-global",
+            minimum_value = 0,
+            maximum_value = 100,
+            default_value = 2,
+            order = "a[ai]-a[nauvisMinEvo]",
+            per_user = false
+        },
 		
         {
             type = "bool-setting",
