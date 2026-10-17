@@ -70,3 +70,6 @@ require("tweaks.custom.angelsmods")
 
 -- Normalize retired fluid IDs before Quality generates recycling recipes.
 require("tweaks.recipe.sulfuric-acid-early")
+
+-- Keep the original in shared state: require caches are reset between data rounds.
+paralib.bobtech_original_remove_prerequisite = require("tweaks.custom.bobtech-prerequisite-guards").install()

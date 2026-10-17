@@ -289,7 +289,7 @@ if settings.startup["bobmods-burnerphase"].value == true then
       count = 40,
     }
     bobmods.lib.tech.remove_prerequisite("automation-2", "electronics")
-    if data.raw.technology["bob-fluid-generator-1"] then
+    if mods["bobpower"] then
       bobmods.lib.tech.remove_prerequisite("bob-fluid-generator-1", "electronics")
     end
     if data.raw.technology["bob-water-miner-2"] then
@@ -369,9 +369,7 @@ if settings.startup["bobmods-burnerphase"].value == true then
     bobmods.lib.tech.remove_prerequisite("bob-chemical-plant", "logistic-science-pack")
   end
   if mods["bobassembly"] then
-    if data.raw.technology["bob-electrolyser-2"] then
-      bobmods.lib.tech.remove_prerequisite("bob-electrolyser-2", "logistic-science-pack")
-    end
+    bobmods.lib.tech.remove_prerequisite("bob-electrolyser-2", "logistic-science-pack")
     if data.raw.technology["bob-distillery-2"] then
       bobmods.lib.tech.remove_prerequisite("bob-distillery-2", "logistic-science-pack")
       bobmods.lib.tech.remove_prerequisite("bob-distillery-2", "bob-alloy-processing")
@@ -398,9 +396,7 @@ if settings.startup["bobmods-burnerphase"].value == true then
     end
     bobmods.lib.tech.remove_prerequisite("bob-steam-engine-2", "logistic-science-pack")
     bobmods.lib.tech.remove_prerequisite("bob-boiler-2", "logistic-science-pack")
-    if data.raw.technology["bob-fluid-generator-1"] then
-      bobmods.lib.tech.remove_prerequisite("bob-fluid-generator-1", "logistic-science-pack")
-    end
+    bobmods.lib.tech.remove_prerequisite("bob-fluid-generator-1", "logistic-science-pack")
     bobmods.lib.tech.remove_prerequisite("bob-heat-pipe-1", "logistic-science-pack")
   end
 
