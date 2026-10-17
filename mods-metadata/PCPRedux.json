@@ -1,0 +1,14 @@
+{
+  "mod": "PCPRedux",
+  "source": "portal",
+  "upstreamVersion": "1.1.0",
+  "changeReason": "Удалена случайно вложенная копия дерева PCPRedux. Пластиковая стена использует HR-спрайты и тени стены из Factorio 2.0 напрямую вместо игнорируемого hr_version; исправлена опечатка emergy_required в рецептах выращивания бактериальных семян, чтобы время изготовления составляло 100 и 20 секунд вместо стандартных 0,5 секунды.",
+  "original": {
+    "name": "PetrochemPlus",
+    "authors": ["Pezzawinkle"],
+    "portal": {
+      "name": "PCPRedux",
+      "url": "https://mods.factorio.com/mod/PCPRedux"
+    }
+  }
+}

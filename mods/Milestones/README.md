@@ -1,9 +1,11 @@
 ## Milestones — Paranoidal fork
 
 Maintained in the [Paranoidal](https://github.com/FactorioParanoidal/ParanoidalModpack) modpack, based on
-Wiwiweb's Milestones 1.4.7 (GPL-3.0, unchanged). Local version 1.4.8 is not an official release. The mod
+Wiwiweb's Milestones 1.4.7 (GPL-3.0, unchanged). The published version number is retained with local Paranoidal patches. The mod
 ID, settings, locale and storage layout are kept, so saves move between this fork and upstream.
-What changed is listed in `changelog.txt` (1.4.8). The original README follows below.
+What changed is listed in `changelog.txt` under 1.4.7. The original README follows below.
+Replacing files at the same version does not itself trigger `on_configuration_changed`;
+preset upgrades and sandbox-force cleanup run when a configuration change occurs.
 
 Paranoidal-specific content does not live here: the "Paranoidal" preset comes from `zzzparanoidal`
 through the standard `milestones_presets` remote interface. The pack also changes the default of

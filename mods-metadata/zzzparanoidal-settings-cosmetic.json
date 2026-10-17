@@ -1,0 +1,5 @@
+{
+  "mod": "zzzparanoidal-settings-cosmetic",
+  "source": "local",
+  "changeReason": "Собственный мод Paranoidal: скрывает косметические стартовые настройки других модов (цвета, звуки, значки, освещение и внешний вид), сохраняя их значения в mod-settings.dat."
+}
