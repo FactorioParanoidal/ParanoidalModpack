@@ -20,19 +20,23 @@ end
 
 function Batch_job:get_next_target()
 
-  for k, entity in pairs (self.entities) do
-    if not (entity.valid) then
-      self.entities[k] = nil
-    elseif entity == self.target then
-      self.entities[k] = nil
+  -- Rebuild a compact list without the finished target and invalid entities.
+  local target = self.target
+  local remaining = {}
+  local count = 0
+  for _, entity in pairs (self.entities) do
+    if entity.valid and entity ~= target then
+      count = count + 1
+      remaining[count] = entity
     end
   end
+  self.entities = remaining
 
-  if not next(self.entities) then
+  if count == 0 then
     return
   end
 
-  return self.character.entity.surface.get_closest(self.character:get_position(), self.entities)
+  return self.character.entity.surface.get_closest(self.character:get_position(), remaining)
 end
 
 function Batch_job:update()
