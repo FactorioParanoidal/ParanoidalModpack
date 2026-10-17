@@ -1,6 +1,0 @@
-{
-  "mod": "bobtech",
-  "source": "portal",
-  "upstreamVersion": "2.1.0",
-  "changeReason": "Локальный portal-патч Paranoidal на upstream 2.1.0, версия не менялась. prototypes/technology/technology-updates.lua: удаление предпосылок у bob-fluid-generator-1 и bob-electrolyser-2 выполняется только при наличии этих технологий; раньше в журнал писались ошибки со стеком. Поведение не меняется. При обновлении сверить с upstream."
-}
