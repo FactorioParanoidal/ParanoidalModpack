@@ -14,6 +14,14 @@ triggers.assembly = {
 	technologies = reskins.lib.settings.is_feature_set_enabled("technologies", "reskins-bobs", "bobassembly"),
 }
 
+-- Bob's Greenhouse
+triggers.greenhouse = {
+	entities = reskins.lib.settings.is_feature_set_enabled("entities", "reskins-bobs", "bobgreenhouse"),
+	equipment = reskins.lib.settings.is_feature_set_enabled("equipment", "reskins-bobs", "bobgreenhouse"),
+	items = reskins.lib.settings.is_feature_set_enabled("items-and-fluids", "reskins-bobs", "bobgreenhouse"),
+	technologies = reskins.lib.settings.is_feature_set_enabled("technologies", "reskins-bobs", "bobgreenhouse"),
+}
+
 -- Bob's Electronics
 triggers.electronics = {
 	entities = reskins.lib.settings.is_feature_set_enabled("entities", "reskins-bobs", "bobelectronics"),

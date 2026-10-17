@@ -16,6 +16,10 @@ end
 ---@type CreateIconsFromListTable
 local intermediates = {}
 
+if reskins.bobs and reskins.bobs.triggers.greenhouse.items then
+	intermediates["seedling"] = { mod = "bobs", group = "greenhouse", subgroup = "items" }
+end
+
 if reskins.bobs and reskins.bobs.triggers.electronics.items then
 	intermediates["bob-resin-wood"] = { mod = "bobs", type = "recipe", group = "plates", subgroup = "recipes" }
 end

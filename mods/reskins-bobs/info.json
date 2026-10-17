@@ -10,6 +10,7 @@
         "reskins-library >= 2.3.0",
         "? bobassembly",
         "? bobelectronics",
+        "? bobgreenhouse",
         "? bobinserters",
         "? boblibrary",
         "? boblogistics",

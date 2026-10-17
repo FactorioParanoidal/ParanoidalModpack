@@ -404,6 +404,8 @@ require("removals.factoriopedia-cleanup")
 require("tweaks.custom.reskins-library-icons")
 -- Оптимизация атласов графики: после всех правок, создающих и копирующих прототипы и иконки.
 require("tweaks.custom.graphics-atlas")
+-- Собственные изображения поверх оригинальных пакетов Reskins; после сравнения путей атласа.
+require("tweaks.custom.reskins-overrides")
 -- Этот require ВСЕГДА ПОСЛЕДНИЙ: не переносить и не добавлять код ниже.
 -- Все новые правки размещать выше: здесь фиксируются иконка и последнее место эффекта эволюции.
 require("tweaks.technology.research-evolution-icon")

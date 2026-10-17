@@ -147,3 +147,14 @@ if mods["angelsaddons-mobility"] then
 		},
 	})
 end
+
+if mods["angelsaddons-storage"] then
+	data:extend({
+		{
+			type = "bool-setting",
+			name = "reskins-angels-do-angelsaddons-storage",
+			setting_type = "startup",
+			default_value = true,
+		},
+	})
+end

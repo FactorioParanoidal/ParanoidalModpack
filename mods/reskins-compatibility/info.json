@@ -19,6 +19,8 @@
         "? angelssmeltinggraphics",
         "? Bio_Industries",
         "? CircuitProcessing",
+        "? classic-beacon",
+        "? classic-mining-drill",
         "? Clowns-Processing",
         "? deadlock-beltboxes-loaders",
         "? DeadlockBlackRubberBelts",
@@ -28,8 +30,16 @@
         "? DeadlockStackingForVanilla",
         "? extendedangels",
         "(?) electricboiler",
+        "? LoaderRedux",
+        "? mini-machines",
+        "? miniloader",
+        "? NauvisDay",
+        "? P-U-M-P-S",
+        "? RealisticReactorGlow",
         "(?) ScienceCostTweakerM",
-        "? spaceblock"
+        "? semi-classic-mining-drill",
+        "? spaceblock",
+        "? vanilla-loaders-hd"
     ],
     "package": {
         "git_publish_branch": "master"

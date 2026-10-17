@@ -90,6 +90,10 @@ require("prototypes.entity.smelting.powder-mixer")
 require("prototypes.entity.smelting.sintering-oven")
 require("prototypes.entity.smelting.strand-casting-machine")
 
+-- Angel's Addons - Storage Options
+require("prototypes.entity.addons-storage.chests")
+require("prototypes.entity.addons-storage.logistics-chests")
+
 ----------------------------------------------------------------------------------------------------
 -- EQUIPMENT
 ----------------------------------------------------------------------------------------------------
@@ -110,3 +114,4 @@ require("prototypes.technology.industries")
 require("prototypes.technology.petrochem")
 require("prototypes.technology.refining")
 require("prototypes.technology.smelting")
+require("prototypes.technology.addons-storage")
