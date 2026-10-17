@@ -1,0 +1,34 @@
+---------------------------------------------------------------------------------------------------
+Version: 0.1.0
+Date: 2026-10-17
+  Changes:
+    - Fork of More Fonts 0.0.4 by asher_sky (CC BY-NC-SA 4.0) under the name more-fonts-ru.
+    - Every font family has a fallback chain to the game fonts: missing characters (Cyrillic, CJK and others) are drawn by Noto Sans instead of being lost.
+    - Arial semibold falls back to Arial bold for Cyrillic.
+    - Font families are defined for the English and Russian locales.
+    - The replacement moved to data-final-fixes, so fonts of other mods are replaced too.
+    - Missing semibold/bold variants are mapped to the nearest file in the locale font table instead of in Lua.
+    - The family list is in families.lua; settings and preview fonts are generated from it.
+    - Added Russian locale; fonts without Cyrillic are marked in the setting.
+    - Removed the unused wingdings/1_wingdings.ttf and the commented-out jurassic-park entry.
+    - Incompatible with the original more-fonts.
+---------------------------------------------------------------------------------------------------
+Version: 0.0.4
+Date: 2024-10-23
+  Changes:
+    - Original more-fonts: added support for Factorio 2.0.
+---------------------------------------------------------------------------------------------------
+Version: 0.0.3
+Date: 2023-06-09
+  Changes:
+    - Original more-fonts: added new font "atkinson hyperlegible".
+---------------------------------------------------------------------------------------------------
+Version: 0.0.2
+Date: 2022-03-13
+  Changes:
+    - Original more-fonts: fixed error when using wingdings font, removed an unused font file.
+---------------------------------------------------------------------------------------------------
+Version: 0.0.1
+Date: 2022-03-13
+  Changes:
+    - Original more-fonts: initial release on the mod portal.
