@@ -5,8 +5,45 @@
 Для клонирования проекта нужно иметь в системе установленный GIT и использовать команду
 
 ```shell
-git clone https://github.com/FactorioParanoidal/ParanoidalModpack
+git clone https://github.com/FactorioParanoidal/ParanoidalModpack --depth 1
 ```
+
+> **Note**  
+> `--depth 1` нужен для того, что-бы не скачивать всю историю коммитов, которая, вероятно, вам не нужна.
+
+> **Note**  
+> `-b the-branch-i-ve-been-looking-for` если вам нужно склонировать определенную ветку
+
+### Смена ветки
+
+В случае, если вы клонировали репозиторий с `--depth 1`:
+
+```shell
+git remote set-branches origin '*'
+git fetch -v --depth=1
+```
+
+И переключение ветки:
+```shell
+git checkout the-branch-i-ve-been-looking-for
+```
+
+### Обновление
+
+В общем случае, когда вы не изменяли файлы локально:
+```
+git pull
+```
+
+Если изменяли и `git pull` выдает ошибку, откатитесь к состоянию ветки:
+```shell
+git reset --hard origin/master
+```
+
+> **Note**  
+> `origin/master` вместо `master` должна быть другая ветка, если вы ее меняли
+
+## Технические детали
 
 ### Окончания строк
 

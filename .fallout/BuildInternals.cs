@@ -9,6 +9,8 @@ partial class Build
         {
             WriteIndented = true,
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+            RespectRequiredConstructorParameters = true,
+            RespectNullableAnnotations = true,
             Converters =
             {
                 new FactorioPropertyTreeJsonConverter(),
