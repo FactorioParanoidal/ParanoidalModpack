@@ -2,18 +2,72 @@ local this = {}
 local util = scripts.util
 local visuals = scripts.visuals
 local metatables = scripts.metatables
+local protocache = require("scripts.protocache")
 local config = require("config")
 
 local helpers = scripts.helpers
 local _ = helpers.on
 
-function this.on_tick(event) -- handles distribution events
-	local distrEvents = storage.distrEvents
+-- Paranoidal: on_tick and the entity-removal events are registered only while a distribution is
+-- pending (about distributionDelay seconds after a CTRL+click drag). Upstream kept on_tick running
+-- forever and handled every on_entity_died (every killed biter) by probing all players' caches.
+local REMOVAL_EVENTS = {
+	defines.events.on_pre_player_mined_item,
+	defines.events.on_robot_pre_mined,
+	defines.events.on_entity_died,
+	defines.events.script_raised_destroy,
+}
+local registered = nil
 
-	if distrEvents[event.tick] then
-		for player_index, cache in pairs(distrEvents[event.tick]) do
-			local player = _(game.players[player_index])
-	
+local function unwrap(cache) -- pending events of old saves hold helper wrappers
+	return type(cache) == "table" and rawget(cache, "__on") or cache
+end
+
+local function hasPendingEvents()
+	return storage.distrEvents ~= nil and next(storage.distrEvents) ~= nil
+end
+
+function this.updateRegistration()
+	local active = hasPendingEvents()
+	if active == registered then return end
+	registered = active
+
+	if active then
+		script.on_event(defines.events.on_tick, this.handleTick)
+		for __,event in ipairs(REMOVAL_EVENTS) do
+			script.on_event(event, this.handleEntityRemoved)
+		end
+	else
+		script.on_event(defines.events.on_tick, nil)
+		for __,event in ipairs(REMOVAL_EVENTS) do
+			script.on_event(event, nil)
+		end
+	end
+end
+
+function this.on_load()
+	registered = nil
+	this.updateRegistration()
+end
+
+function this.on_init()
+	registered = nil
+	this.updateRegistration()
+end
+
+this.on_configuration_changed = this.on_init
+
+function this.handleTick(event) -- handles distribution events
+	local distrEvents = storage.distrEvents
+	local tick = event.tick
+
+	local due = distrEvents[tick]
+	if due then
+		distrEvents[tick] = nil
+		for player_index, cache in pairs(due) do
+			cache = unwrap(cache)
+			local player = _(game.get_player(player_index))
+
 			if player:is("valid player") then
 				if player:setting("distributionMode") == "distribute" then
 					this.distributeItems(player, cache)
@@ -24,9 +78,17 @@ function this.on_tick(event) -- handles distribution events
 
 			this.resetCache(cache)
 		end
-
-		distrEvents[event.tick] = nil
 	end
+
+	-- drop stale/empty buckets (e.g. left by player death or old saves) so the handler can stop
+	for eventTick, bucket in pairs(distrEvents) do
+		if eventTick < tick or next(bucket) == nil then
+			for __,cache in pairs(bucket) do this.resetCache(unwrap(cache)) end
+			distrEvents[eventTick] = nil
+		end
+	end
+
+	this.updateRegistration()
 end
 
 function this.distributeItems(player, cache)
@@ -156,63 +218,57 @@ function this.balanceItems(player, cache)
 	end
 end
 
-function this.on_fast_entity_transfer_hook(event)
-	local index        = event.player_index
-	local player       = _(game.players[index]); if player:isnot("valid player") then return end
-	local cache        = _(storage.cache[index])
-	cache.half = false
+function this.on_fast_entity_transfer_hook(event) -- fires on every CTRL+click: keep it trivial
+	local cache = storage.cache[event.player_index]
+	if cache then cache.half = false end
 end
 
 function this.on_fast_entity_split_hook(event)
-	local index        = event.player_index
-	local player       = _(game.players[index]); if player:isnot("valid player") then return end
-	local cache        = _(storage.cache[index])
-	cache.half = true
+	local cache = storage.cache[event.player_index]
+	if cache then cache.half = true end
 end
 
+-- Fires for every hovered entity of every player: cheapest checks first, no wrappers until the
+-- hover can actually start a drag transfer (item in cursor over an eligible entity).
 function this.on_selected_entity_changed(event)
-	local index        = event.player_index
-	local player       = _(game.players[index]); if player:isnot("valid player") or not player:setting("enableDragDistribute") then return end
-	local cursor_stack = _(player.cursor_stack); if cursor_stack:isnot("valid stack") then return end
-	local cache        = _(storage.cache[index])
-	local selected     = _(player.selected)    ; if selected:isnot("valid") or selected:isIgnored(player) then return end
-
-
+	local index    = event.player_index
+	local player   = game.get_player(index); if not player then return end
+	local selected = player.selected        ; if not selected then return end
+	local cursor_stack = player.cursor_stack
+	if not (cursor_stack and cursor_stack.valid_for_read) then return end
 	if cursor_stack.quality.name ~= "normal" then return end -- TODO: Add support for quality
+	if not protocache.isAllowedEntity(selected.name) then return end
 
-	-- if not selected.can_insert{ name = cursor_stack.name, count = 1 } then return end
+	local cache = storage.cache[index]; if not cache then return end
+	player = _(player)
+	if not util.isValidPlayer(player:toPlain()) or not player:setting("enableDragDistribute") then return end
+	if _(selected):isIgnored(player) then return end
+
+	local item = cursor_stack.name
 	cache.selectedEvent = {
 		tick             = event.tick,
-		item             = cursor_stack.name,
-		itemCount        = selected:itemcount(cursor_stack.name),
+		item             = item,
+		itemCount        = selected.get_item_count(item),
 		cursorStackCount = cursor_stack.count,
 	}
 end
 
 function this.on_player_fast_transferred(event)
-	local index    = event.player_index
-	local player   = _(game.players[index]); if player:isnot("valid player") or not player:setting("enableDragDistribute") then return end
-	local cache    = _(storage.cache[index])
-	local selected = _(player.selected)    ; if selected:isnot("valid") or selected:isIgnored(player) then return end
+	if not event.from_player then return end -- only player -> entity transfers are distributed
+	local index = event.player_index
+	local cache = storage.cache[index]
+	local selectedEvent = cache and cache.selectedEvent
+	if not (selectedEvent and selectedEvent.tick == event.tick and selectedEvent.item) then return end
 
-	if cache.selectedEvent and cache.selectedEvent.tick == event.tick and event.entity == selected:toPlain() then
+	local player   = _(game.get_player(index)); if player:isnot("valid player") or not player:setting("enableDragDistribute") then return end
+	local selected = _(player.selected)       ; if selected:isnot("valid") or selected:isIgnored(player) then return end
+	if event.entity ~= selected:toPlain() then return end
 
-		if event.from_player then
-			-- distribute...
+	cache.item             = selectedEvent.item
+	cache.itemCount        = selected.get_item_count(selectedEvent.item) - selectedEvent.itemCount
+	cache.cursorStackCount = selectedEvent.cursorStackCount
 
-			if cache.selectedEvent.item	 then
-				cache:set{
-					item             = cache.selectedEvent.item,
-					itemCount        = selected:itemcount(cache.selectedEvent.item) - cache.selectedEvent.itemCount,
-					cursorStackCount = cache.selectedEvent.cursorStackCount,
-				}
-
-				this.onStackTransferred(selected, player, cache) -- handle stack transfer
-			end
-		else
-			-- take...
-		end
-	end
+	this.onStackTransferred(selected, player, cache) -- handle stack transfer
 end
 
 function this.onStackTransferred(entity, player, cache) -- handle vanilla drag stack transfer
@@ -227,17 +283,22 @@ function this.onStackTransferred(entity, player, cache) -- handle vanilla drag s
 	   				 		    or ((first.type ~= "car" and first.type ~= "spider-vehicle") and (entity.type ~= "car" and entity.type ~= "spider-vehicle"))) then
 	
 		local distrEvents = storage.distrEvents -- register new distribution event
-		if cache.applyTick and distrEvents[cache.applyTick] then distrEvents[cache.applyTick][player.index] = nil end
+		local oldBucket = cache.applyTick and distrEvents[cache.applyTick]
+		if oldBucket then
+			oldBucket[player.index] = nil
+			if next(oldBucket) == nil then distrEvents[cache.applyTick] = nil end
+		end
 		
 		-- wait before applying distribution (seconds defined in mod config)
 		cache.applyTick = game.tick + math.max(math.ceil(60 * _(player):setting("distributionDelay")), 1)
 		
 		distrEvents[cache.applyTick] = distrEvents[cache.applyTick] or {}
-		distrEvents[cache.applyTick][player.index] = cache
+		distrEvents[cache.applyTick][player.index] = unwrap(cache)
+		this.updateRegistration()
 
 		if not cache.entities[entity] then
 			cache.markers[entity] = entity:mark(player, item)
-			cache.entities[entity] = entity
+			cache.entities[entity] = entity -- helper wrapper: distribution callbacks use its methods
 		end
 
 		if cache.itemCount == 0 then
@@ -316,7 +377,7 @@ function this.isEntityEligible(entity, item)
 		return true
 	elseif entity:is("crafting machine") and entity:recipe():hasIngredient(item) then
 		return true
-	elseif entity.type == "furnace" and not entity.get_recipe() and entity:canSmelt(item) then
+	elseif entity.type == "furnace" and not entity.get_recipe() and entity:canSmelt(item) then -- cached per furnace type + item
 		return true
 	elseif entity.type == "rocket-silo" then
 		return true
@@ -342,26 +403,22 @@ function this.resetCache(cache)
 	visuals.unmark(cache)
 end
 
-function this.on_pre_player_mined_item(event) -- remove mined/dead entities from cache
+-- Registered only while distributions are pending (see updateRegistration).
+-- Only caches with a pending event can hold entities, so other players are not probed.
+function this.handleEntityRemoved(event)
 	local entity = event.entity
-	
-	for __,cache in pairs(storage.cache) do
-		if cache.entities[entity] then
-			_(cache.markers[entity]):unmark() -- remove markers
-			cache.markers[entity] = nil
-			cache.entities[entity] = nil
+	if not (entity and entity.valid) then return end
+
+	for __,bucket in pairs(storage.distrEvents) do
+		for __,cache in pairs(bucket) do
+			cache = unwrap(cache)
+			if cache.entities and cache.entities[entity] then
+				_(cache.markers[entity]):unmark() -- remove markers
+				cache.markers[entity] = nil
+				cache.entities[entity] = nil
+			end
 		end
 	end
-end
-
-this.on_robot_pre_mined = this.on_pre_player_mined_item
-this.on_entity_died = this.on_pre_player_mined_item
-
-function this.script_raised_destroy(event)
-	event = event or {}
-	event.entity = event.entity or event.destroyed_entity or event.destroyedEntity or event.target or nil
-	
-	if _(event.entity):is("valid") then this.on_pre_player_mined_item(event) end
 end
 
 function this.on_player_died(event) -- resets distribution cache and events for that player
@@ -371,10 +428,13 @@ function this.on_player_died(event) -- resets distribution cache and events for 
 		this.resetCache(cache)
 		
 		local distrEvents = storage.distrEvents -- remove distribution event
-		if cache.applyTick and distrEvents[cache.applyTick] then
-			distrEvents[cache.applyTick][event.player_index] = nil
-			cache.applyTick = nil
+		local bucket = cache.applyTick and distrEvents[cache.applyTick]
+		if bucket then
+			bucket[event.player_index] = nil
+			if next(bucket) == nil then distrEvents[cache.applyTick] = nil end
 		end
+		cache.applyTick = nil
+		this.updateRegistration()
 	end
 end
 

@@ -30,35 +30,15 @@ local biofarmpipepictures = {
 	},
 }
 
-local assembler2pipepicturesBioreactor = {
-	north = {
-		filename = "__Bio_Industries_2__/graphics/icons/empty.png",
-		priority = "extra-high",
-		width = 1,
-		height = 1,
-		shift = util.by_pixel(2.5, 14),
-	},
-	east = {
-		filename = "__base__/graphics/entity/assembling-machine-2/assembling-machine-2-pipe-E.png",
-		priority = "extra-high",
-		width = 20,
-		height = 38,
-		shift = util.by_pixel(-25, 1),
-	},
-	south = {
-		filename = "__base__/graphics/entity/assembling-machine-2/assembling-machine-2-pipe-S.png",
-		priority = "extra-high",
-		width = 44,
-		height = 31,
-		shift = util.by_pixel(0, -31.5),
-	},
-	west = {
-		filename = "__base__/graphics/entity/assembling-machine-2/assembling-machine-2-pipe-W.png",
-		priority = "extra-high",
-		width = 19,
-		height = 37,
-		shift = util.by_pixel(25.5, 1.5),
-	},
+-- Трубы сборщика 2 из base 2.0 (HR); север пустой, как раньше. Раньше здесь были размеры кадра 1.1,
+-- а файлы base 2.0 уже HR: рисовалась четверть картинки трубы.
+local assembler2pipepicturesBioreactor = assembler2pipepictures()
+assembler2pipepicturesBioreactor.north = {
+	filename = "__Bio_Industries_2__/graphics/icons/empty.png",
+	priority = "extra-high",
+	width = 1,
+	height = 1,
+	shift = util.by_pixel(2.5, 14),
 }
 
 data:extend({ -- ###############################################################################################
@@ -98,36 +78,8 @@ data:extend({ -- ###############################################################
 			{
 				volume = 1000,
 				production_type = "input",
-				pipe_picture = {
-					north = {
-						filename = "__zzzparanoidal__/graphics/Bio_Industries_graphics/graphics/entities/bio_greenhouse/pipe/assembling-machine-3-pipe-N.png",
-						priority = "extra-high",
-						width = 35,
-						height = 18,
-						shift = util.by_pixel(2.5, 14),
-					},
-					east = {
-						filename = "__zzzparanoidal__/graphics/Bio_Industries_graphics/graphics/entities/bio_greenhouse/pipe/assembling-machine-3-pipe-E.png",
-						priority = "extra-high",
-						width = 20,
-						height = 38,
-						shift = util.by_pixel(-25, 1),
-					},
-					south = {
-						filename = "__zzzparanoidal__/graphics/Bio_Industries_graphics/graphics/entities/bio_greenhouse/pipe/assembling-machine-3-pipe-S.png",
-						priority = "extra-high",
-						width = 44,
-						height = 31,
-						shift = util.by_pixel(0, -31.5),
-					},
-					west = {
-						filename = "__zzzparanoidal__/graphics/Bio_Industries_graphics/graphics/entities/bio_greenhouse/pipe/assembling-machine-3-pipe-W.png",
-						priority = "extra-high",
-						width = 19,
-						height = 37,
-						shift = util.by_pixel(25.5, 1.5),
-					},
-				},
+				-- HR-трубы теплицы BI 2.0 (Bio_Industries_2: biogreenhousepipepictures)
+				pipe_picture = biogreenhousepipepictures(),
 				pipe_covers = pipecoverspictures(),
 				base_area = 10,
 				base_level = -1,
@@ -261,36 +213,8 @@ data:extend({ -- ###############################################################
 			{
 				volume = 1000,
 				production_type = "input",
-				pipe_picture = {
-					north = {
-						filename = "__zzzparanoidal__/graphics/Bio_Industries_graphics/graphics/entities/bio_greenhouse/pipe/assembling-machine-3-pipe-N.png",
-						priority = "extra-high",
-						width = 35,
-						height = 18,
-						shift = util.by_pixel(2.5, 14),
-					},
-					east = {
-						filename = "__zzzparanoidal__/graphics/Bio_Industries_graphics/graphics/entities/bio_greenhouse/pipe/assembling-machine-3-pipe-E.png",
-						priority = "extra-high",
-						width = 20,
-						height = 38,
-						shift = util.by_pixel(-25, 1),
-					},
-					south = {
-						filename = "__zzzparanoidal__/graphics/Bio_Industries_graphics/graphics/entities/bio_greenhouse/pipe/assembling-machine-3-pipe-S.png",
-						priority = "extra-high",
-						width = 44,
-						height = 31,
-						shift = util.by_pixel(0, -31.5),
-					},
-					west = {
-						filename = "__zzzparanoidal__/graphics/Bio_Industries_graphics/graphics/entities/bio_greenhouse/pipe/assembling-machine-3-pipe-W.png",
-						priority = "extra-high",
-						width = 19,
-						height = 37,
-						shift = util.by_pixel(25.5, 1.5),
-					},
-				},
+				-- HR-трубы теплицы BI 2.0 (Bio_Industries_2: biogreenhousepipepictures)
+				pipe_picture = biogreenhousepipepictures(),
 				pipe_covers = pipecoverspictures(),
 				base_area = 10,
 				base_level = -1,

@@ -167,6 +167,9 @@ script.on_event({defines.events.on_entity_died,defines.events.on_player_mined_en
 	end
 end)
 
+-- The removal handler only handles cars ("player" is a legacy, non-existent entity type).
+script.set_event_filter(defines.events.on_entity_died, {{filter = "type", type = "car"}})
+
 --storage.shields[entity.unit_number]
 -- 1	car / player entity
 -- 2	shield

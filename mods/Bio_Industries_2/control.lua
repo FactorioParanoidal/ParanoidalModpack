@@ -107,6 +107,36 @@ local function get_arboretum_recipes()
 end
 
 
+-- stdlib filters run in Lua. Filter at the engine boundary too, using the same
+-- saved registries as On_Death/On_Damage; on_load reads them without changing storage.
+local function refresh_combat_filters()
+    local compounds = storage.compound_entities
+    local arboretum = compounds and compounds["bi-arboretum"]
+    local radar_name = arboretum and arboretum.hidden and arboretum.hidden.radar and arboretum.hidden.radar.name
+    if not (compounds and storage.bi and storage.bi.trees and radar_name) then
+        -- Incomplete/old registries: retain the original dispatch until configuration rebuilds them.
+        script.set_event_filter(defines.events.on_entity_died, nil)
+        script.set_event_filter(defines.events.on_entity_damaged, nil)
+        return
+    end
+    local names = {seedling = true}
+    for name in pairs(compounds) do names[name] = true end
+    for name in pairs(storage.bi.trees) do names[name] = true end
+    names[radar_name] = true
+    local sorted_names = {}
+    for name in pairs(names) do sorted_names[#sorted_names + 1] = name end
+    table.sort(sorted_names)
+    local death_filters = {}
+    for _, name in ipairs(sorted_names) do
+        death_filters[#death_filters + 1] = {filter = "name", name = name}
+    end
+    script.set_event_filter(defines.events.on_entity_died, death_filters)
+    script.set_event_filter(defines.events.on_entity_damaged, {
+        {filter = "name", name = "bi-arboretum"},
+        {filter = "name", name = radar_name},
+    })
+end
+
 --------------------------------------------------------------------
 local function init()
     BioInd.writeDebug("Entered init!")
@@ -241,12 +271,14 @@ local function init()
     if BioInd.UseMuskForce and not game.forces[BioInd.MuskForceName] then
         Create_dummy_force()
     end
+    refresh_combat_filters()
 end
 
 
 --------------------------------------------------------------------
 local function On_Load()
     log("Entered On_Load!")
+    refresh_combat_filters()
 end
 
 

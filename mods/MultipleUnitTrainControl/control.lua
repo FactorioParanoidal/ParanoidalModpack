@@ -84,8 +84,11 @@ local function InitEntityMaps()
   for _,effect in pairs(prototypes.technology["multiple-unit-train-control-locomotives"].effects) do
     if effect.type == "unlock-recipe" then
       local recipe = prototypes.recipe[effect.recipe]
-      local std = recipe.products[1].name
-      local mu = recipe.ingredients[1].name
+      -- Paranoidal: map entity names through the items' place_result (item and entity names may differ).
+      local std_item = prototypes.item[recipe.products[1].name]
+      local mu_item = prototypes.item[recipe.ingredients[1].name]
+      local std = std_item and std_item.place_result and std_item.place_result.name or recipe.products[1].name
+      local mu = mu_item and mu_item.place_result and mu_item.place_result.name or recipe.ingredients[1].name
       storage.upgrade_pairs[std] = mu
       storage.downgrade_pairs[mu] = std
       

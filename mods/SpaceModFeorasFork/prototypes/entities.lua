@@ -34,12 +34,6 @@ local combinator = {
 	sprites = make_4way_animation_from_spritesheet({
 		layers = {
 			{
-				filename = "__SpaceModFeorasFork__/graphics/entity/spacex-combinator.png",
-				width = 58,
-				height = 52,
-				frame_count = 1,
-				shift = util.by_pixel(0, 5),
-				hr_version = {
 					scale = 0.5,
 					filename = "__SpaceModFeorasFork__/graphics/entity/hr-spacex-combinator.png",
 					width = 114,
@@ -47,15 +41,7 @@ local combinator = {
 					frame_count = 1,
 					shift = util.by_pixel(0, 5),
 				},
-			},
 			{
-				filename = "__SpaceModFeorasFork__/graphics/entity/constant-combinator-shadow.png",
-				width = 50,
-				height = 34,
-				frame_count = 1,
-				shift = util.by_pixel(9, 6),
-				draw_as_shadow = true,
-				hr_version = {
 					scale = 0.5,
 					filename = "__SpaceModFeorasFork__/graphics/entity/hr-constant-combinator-shadow.png",
 					width = 98,
@@ -64,17 +50,10 @@ local combinator = {
 					shift = util.by_pixel(8.5, 5.5),
 					draw_as_shadow = true,
 				},
-			},
 		},
 	}),
 	activity_led_sprites = {
 		north = {
-			filename = "__SpaceModFeorasFork__/graphics/entity/activity-leds/constant-combinator-LED-N.png",
-			width = 8,
-			height = 6,
-			frame_count = 1,
-			shift = util.by_pixel(9, -12),
-			hr_version = {
 				scale = 0.5,
 				filename = "__SpaceModFeorasFork__/graphics/entity/activity-leds/hr-constant-combinator-LED-N.png",
 				width = 14,
@@ -82,14 +61,7 @@ local combinator = {
 				frame_count = 1,
 				shift = util.by_pixel(9, -11.5),
 			},
-		},
 		east = {
-			filename = "__SpaceModFeorasFork__/graphics/entity/activity-leds/constant-combinator-LED-E.png",
-			width = 8,
-			height = 8,
-			frame_count = 1,
-			shift = util.by_pixel(8, 0),
-			hr_version = {
 				scale = 0.5,
 				filename = "__SpaceModFeorasFork__/graphics/entity/activity-leds/hr-constant-combinator-LED-E.png",
 				width = 14,
@@ -97,14 +69,7 @@ local combinator = {
 				frame_count = 1,
 				shift = util.by_pixel(7.5, -0.5),
 			},
-		},
 		south = {
-			filename = "__SpaceModFeorasFork__/graphics/entity/activity-leds/constant-combinator-LED-S.png",
-			width = 8,
-			height = 8,
-			frame_count = 1,
-			shift = util.by_pixel(-9, 2),
-			hr_version = {
 				scale = 0.5,
 				filename = "__SpaceModFeorasFork__/graphics/entity/activity-leds/hr-constant-combinator-LED-S.png",
 				width = 14,
@@ -112,14 +77,7 @@ local combinator = {
 				frame_count = 1,
 				shift = util.by_pixel(-9, 2.5),
 			},
-		},
 		west = {
-			filename = "__SpaceModFeorasFork__/graphics/entity/activity-leds/constant-combinator-LED-W.png",
-			width = 8,
-			height = 8,
-			frame_count = 1,
-			shift = util.by_pixel(-7, -15),
-			hr_version = {
 				scale = 0.5,
 				filename = "__SpaceModFeorasFork__/graphics/entity/activity-leds/hr-constant-combinator-LED-W.png",
 				width = 14,
@@ -127,7 +85,6 @@ local combinator = {
 				frame_count = 1,
 				shift = util.by_pixel(-7, -15),
 			},
-		},
 	},
 	circuit_wire_connection_points = {
 		{
@@ -180,12 +137,6 @@ combinator_stage.icon = "__SpaceModFeorasFork__/graphics/icons/spacex-combinator
 combinator_stage.sprites = make_4way_animation_from_spritesheet({
 	layers = {
 		{
-			filename = "__SpaceModFeorasFork__/graphics/entity/spacex-combinator-stage.png",
-			width = 58,
-			height = 52,
-			frame_count = 1,
-			shift = util.by_pixel(0, 5),
-			hr_version = {
 				scale = 0.5,
 				filename = "__SpaceModFeorasFork__/graphics/entity/hr-spacex-combinator-stage.png",
 				width = 114,
@@ -193,15 +144,7 @@ combinator_stage.sprites = make_4way_animation_from_spritesheet({
 				frame_count = 1,
 				shift = util.by_pixel(0, 5),
 			},
-		},
 		{
-			filename = "__SpaceModFeorasFork__/graphics/entity/constant-combinator-shadow.png",
-			width = 50,
-			height = 34,
-			frame_count = 1,
-			shift = util.by_pixel(9, 6),
-			draw_as_shadow = true,
-			hr_version = {
 				scale = 0.5,
 				filename = "__SpaceModFeorasFork__/graphics/entity/hr-constant-combinator-shadow.png",
 				width = 98,
@@ -210,7 +153,6 @@ combinator_stage.sprites = make_4way_animation_from_spritesheet({
 				shift = util.by_pixel(8.5, 5.5),
 				draw_as_shadow = true,
 			},
-		},
 	},
 })
 

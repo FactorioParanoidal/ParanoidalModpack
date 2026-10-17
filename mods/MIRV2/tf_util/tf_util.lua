@@ -20,7 +20,7 @@ end
 
 util.ammo_category = function(name)
   if not data.raw["ammo-category"][name] then
-    data:extend{{type = "ammo-category", name = name, localised_name = {name}}}
+    data:extend{{type = "ammo-category", name = name, localised_name = {"ammo-category-name." .. name}}}
   end
   return name
 end

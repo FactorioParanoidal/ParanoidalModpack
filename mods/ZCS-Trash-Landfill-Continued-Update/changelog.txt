@@ -1,7 +1,17 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.2.7
 Date: 26.08.2025
-  Big re-update (hola otra vez, 4 meses después 👋):
+  Bugfixes:
+    - Paranoidal local fork: each cycle destroys the next non-empty slot instead of losing the cycle on an empty slot.
+    - Paranoidal local fork: pollution is attributed to the landfill in the production statistics (it was not counted there).
+    - Paranoidal local fork: removed landfills are tracked through on_object_destroyed, including removal without events; dropped the position-based recovery that could bind two records to one landfill.
+    - Paranoidal local fork: a configuration change no longer resets the slot pointer and timer of registered landfills.
+    - Paranoidal local fork: build events are filtered by name; script_raised_revive is handled.
+    - Paranoidal local fork: only a period change re-anchors the timers.
+  Changes:
+    - Paranoidal local fork: container open/close sounds and stone impact category; recipe takes 10 s.
+    - Paranoidal local fork: setting descriptions state the actual pollution formula.
+    - Paranoidal local fork: removed unused pollution overrides, commented-out code and the .vscode folder.
   Features:
     - Factorio 2.0: migrado de `global` a `storage` y saneado de ciclo completo.
     - Consumo: 1 slot por ciclo (por defecto 60 s) y configurable vía ajustes.
@@ -12,12 +22,10 @@ Date: 26.08.2025
         • zcs_trash_pollution_exponent — exponente (>1 = crece más con stacks grandes)
         • zcs_trash_pollution_cap — límite máximo de polución por slot (0 = sin límite)
     - Receta/tecnología:
-        • Receta: 120 stone-brick, 30 stone-wall, 8 steel-plate, 12 copper-plate (sin concrete).
-        • Startup setting opcional: zcs_trash_recipe_cost_mult (0.25x–4x) para escalar costos.
+        • Receta: 60 stone-brick, 20 stone-wall, 8 steel-plate, 12 copper-plate, 12 iron-plate (sin concrete).
         • Tecnología: requiere "stone-wall" + "steel-processing".
     - Localización: nombres/desc. de entidad, ítem, receta, tecnología y ajustes (es/en).
     - Arte: sprite entity 637×637 (picture.size=637); iconos 32×32.
-
   Fixes:
     - Registro a prueba de todo: on_built (jugador/robot), script_raised_built, on_entity_cloned;
       desregistro en mined/died/script_raised_destroy.
@@ -27,17 +35,14 @@ Date: 26.08.2025
     - Normalización de slot_index si cambia el tamaño del inventario (compat con otros mods).
     - Arreglado: prerequisite interno correcto "stone-wall" (antes se usó mal el plural).
     - Arreglado: inicialización de `GFX` y paths para evitar errores de concatenación nil.
-
   Balance:
     - Polución más visible por stack alto (exponente 1.35 por defecto) con cap 100 para evitar
       picos absurdos con mega-stacks de otros mods.
     - Coste de receta más razonable para mid-game; sin concrete.
-
   Compatibility:
     - Sin dependencias duras: funciona en vanilla, con Quality, con Space Age, o con ambos.
     - Entidad `container` estándar; `surface.pollute` y eventos 2.0.
 ---------------------------------------------------------------------------------------------------
-
 Version: 1.2.6
 Date: 04.04.2025
   Features:

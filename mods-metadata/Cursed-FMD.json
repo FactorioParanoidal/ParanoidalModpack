@@ -1,0 +1,10 @@
+{
+  "mod": "Cursed-FMD",
+  "source": "local",
+  "original": {
+    "name": "Cursed Filter Mining Drill",
+    "authors": ["L0771"],
+    "portal": {"name": "Cursed-FMD", "url": "https://mods.factorio.com/mod/Cursed-FMD"}
+  },
+  "changeReason": "Поддерживаемый локальный форк Reforged Paranoidal от 0.2.0, по решению пользователя. Ранний выход без util.split для имён без подчёркивания; сохранена исходная семантика util.split (набор символов, а не строка-разделитель), все имена с одним или несколькими подчёркиваниями и remote-вызовы."
+}

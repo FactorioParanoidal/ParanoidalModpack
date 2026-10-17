@@ -266,7 +266,6 @@ end
 
 -- 1b. Pipe casting спец-кейсы из 1.1 ASE — не на molten-<metal>:
 --   plastic — fluid liquid-plastic
---   stone   — item stone (sintering, vanilla)
 -- Tungsten + copper-tungsten в 1.1 paranoidal modpack были скрыты и unlock'и
 -- удалены (см. 1.1 zzzparanoidal/prototypes/micro-final-fix.lua) — здесь
 -- их не портируем, повторяя поведение 1.1 modpack.
@@ -291,24 +290,6 @@ local special_pipe_recipes = {
 		results_amount = 2,
 		energy_required = 2,
 		tint_fluid = "angels-liquid-plastic",
-	},
-	-- stone (sintering): 20 stone → 4 pipe, 75 stone → 2 pipe-to-ground.
-	-- Faithful 1.1: amounts = base×5 / ug_multi×5 (ug_multi=15, см. 1.1
-	-- ironworks.lua:55).
-	{
-		name = "angels-stone-pipe-casting",
-		pipe_item = "pipe",
-		category = "angels-sintering",
-		ingredients = { { type = "item", name = "stone", amount = 20 } },
-		results_amount = 4,
-	},
-	{
-		name = "angels-stone-pipe-to-ground-casting",
-		pipe_item = "pipe-to-ground",
-		category = "angels-sintering",
-		ingredients = { { type = "item", name = "stone", amount = 75 } },
-		results_amount = 2,
-		energy_required = 2,
 	},
 }
 
@@ -548,8 +529,6 @@ paralib.bobmods.lib.tech.add_recipe_unlock("angels-ironworks-1", "angels-iron-pi
 -- Спец-кейсы pipe-casting (см. секцию 1b). Каждый на своей T1-техе по 1.1 ASE.
 paralib.bobmods.lib.tech.add_recipe_unlock("angels-plastic-1", "angels-plastic-pipe-casting")
 paralib.bobmods.lib.tech.add_recipe_unlock("angels-plastic-1", "angels-plastic-pipe-to-ground-casting")
-paralib.bobmods.lib.tech.add_recipe_unlock("angels-powder-metallurgy-1", "angels-stone-pipe-casting")
-paralib.bobmods.lib.tech.add_recipe_unlock("angels-powder-metallurgy-1", "angels-stone-pipe-to-ground-casting")
 
 -- 3b. Roll'ы brass/bronze/tungsten: на existing angels-<metal>-smelting-2/3.
 for _, metal in ipairs({ "brass", "bronze", "tungsten" }) do

@@ -25,6 +25,7 @@ local PROCESS_QUEUE_SIZE = constants.PROCESS_QUEUE_SIZE
 local RESOURCE_QUEUE_SIZE = constants.RESOURCE_QUEUE_SIZE
 local ENEMY_QUEUE_SIZE = constants.ENEMY_QUEUE_SIZE
 local PLAYER_QUEUE_SIZE = constants.PLAYER_QUEUE_SIZE
+local PLAYER_BACKGROUND_QUEUE_SIZE = constants.PLAYER_BACKGROUND_QUEUE_SIZE
 
 local CLEANUP_QUEUE_SIZE = constants.CLEANUP_QUEUE_SIZE
 
@@ -201,12 +202,15 @@ end
 
 
 local xyVector = {{-1, -1}, {-1, 1}, {1, -1}, {1, 1}}
+-- processPlayers runs every 16 ticks (was 8): chances are 1-(1-p)^2 of the old per-8-tick values,
+-- so the hunting probability per unit of time is unchanged.
 local huntingChance = {}
 huntingChance[0] = 1
-huntingChance[32] = 0.5
-huntingChance[64] = 0.1
-huntingChance[96] = 0.02
-huntingChance[128] = 0.004
+huntingChance[32] = 0.75
+huntingChance[64] = 0.19
+huntingChance[96] = 0.0396
+huntingChance[128] = 0.007984
+local HUNTING_CHANCE_DEFAULT = 0.003996
 --[[
     Localized player radius were processing takes place in realtime, doesn't store state
     between calls.
@@ -252,7 +256,7 @@ function mapProcessor.processPlayers(players, universe, tick)
 
 						for dx= 0, PROCESS_PLAYER_BOUND, 32 do
 							for dy= 0, PROCESS_PLAYER_BOUND, 32 do
-								local vengence = allowingVengence and (forceVengence or (roll < (huntingChance[mMax(dx, dy)] or 0.002)))
+								local vengence = allowingVengence and (forceVengence or (roll < (huntingChance[mMax(dx, dy)] or HUNTING_CHANCE_DEFAULT)))
 								for _, vector in pairs(xyVector) do									
 									local x = playerChunk.x + dx*vector[1]
 									local y = playerChunk.y - dy*vector[2]
@@ -355,7 +359,30 @@ function mapProcessor.scanPlayerMap(map, tick)
     local processQueue = map.processQueue
     local processQueueLength = #processQueue
 
-    local endIndex = mMin(index + PLAYER_QUEUE_SIZE, processQueueLength)
+    -- Player buildings are accounted incrementally by build/mine/death events, which also mark
+    -- the touched chunks dirty. Rescan dirty chunks first, then a slow background pass as a safety net.
+    local dirtyChunks = map.playerDirtyChunks
+    if dirtyChunks then
+        local scanned = 0
+        local visited = 0
+        local chunk = next(dirtyChunks)
+        while chunk and (scanned <= PLAYER_QUEUE_SIZE) and (visited < 64) do
+            visited = visited + 1
+            dirtyChunks[chunk] = nil
+            local xChunks = map[chunk.x]
+            if xChunks and (xChunks[chunk.y] == chunk) then
+                chunkBox[1] = chunk.x
+                chunkBox[2] = chunk.y
+                offset[1] = chunk.x + CHUNK_SIZE
+                offset[2] = chunk.y + CHUNK_SIZE
+                mapScanPlayerChunk(chunk, map)
+                scanned = scanned + 1
+            end
+            chunk = next(dirtyChunks)
+        end
+    end
+
+    local endIndex = mMin(index + PLAYER_BACKGROUND_QUEUE_SIZE, processQueueLength)
 
     if (processQueueLength == 0) then
         return

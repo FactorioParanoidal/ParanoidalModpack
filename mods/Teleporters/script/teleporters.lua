@@ -764,12 +764,19 @@ teleporters.events =
 
 }
 
+-- core/event_handler registers its dispatcher before these lifecycle callbacks.
+local function filter_deaths()
+  script.set_event_filter(defines.events.on_entity_died, {{filter = "name", name = teleporter_name}})
+end
+
 teleporters.on_init = function()
   storage.teleporters = storage.teleporters or script_data
+  filter_deaths()
 end
 
 teleporters.on_load = function()
   script_data = storage.teleporters
+  filter_deaths()
 end
 
 teleporters.on_configuration_changed = function()

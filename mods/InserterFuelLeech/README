@@ -1,0 +1,20 @@
+InserterFuelLeech is a mod for Factorio.
+
+Makes all inserters take ("leech") fuel from the fuel inventories of entities at their pickup position. They do that whenever their hand is hovering over the pickup location and they or their drop target need refuelling.
+
+This mod is a fork of Klonan's BurnerLeech (<https://mods.factorio.com/mod/BurnerLeech>).
+
+Deviations from BurnerLeech
+- All inserters with type = "inserter" exhibit the fuel leech behaviour.
+- Only fuel accepted by the target fuel inventory is leeched.
+- Leeches from the first suitable stack of fuel first regardless of burner inventory size.
+- Inserters transfer as much fuel as they can in one go. They honor (stack) inserter capacity bonuses and
+ user-set limits on stack size.
+- Inserters leech from other fuel inventories if their fuel inventory is empty or the fuel inventory of the drop target
+ contains less than 5 items (5 also is the vanilla count of fuel items, that are put in burners by default when
+ fuelling from a belt).
+- Inserters only leech fuel into their hand while it hovers over the pickup location.
+- Electric inserters don't leech while completely out of energy.
+- If the "cheat" is enabled (the default), Burner inserters which ran out of fuel get a minuscule amount of energy out of thin air once in a while to allow them to slowly grab themselves some fuel.
+- Inserters honor filters (you can limit the types of fuel that may be leeched by using an inserter, that supports
+ filters - even a modded burner-tech one).

@@ -1,0 +1,17 @@
+{
+  "mod": "factorissimo-2-notnotmelon",
+  "source": "portal",
+  "upstreamVersion": "3.11.19",
+  "changeReason": "Локальный патч Factorissimo 3 на базе опубликованной версии 3.11.19 для Paranoidal: запрещает артиллерию, ракетные шахты и грузовые площадки внутри фабрик, открывает соединения исследованиями, отключает влияние качества и брака на фабрики; исправляет сохранность упакованных фабрик, очистку Blueprint Sandboxes и выброс загрязнения, оптимизирует обработчики событий и соединения.",
+  "original": {
+    "name": "Factorissimo 3",
+    "authors": [
+      "MagmaMcFry",
+      "notnotmelon"
+    ],
+    "portal": {
+      "name": "factorissimo-2-notnotmelon",
+      "url": "https://mods.factorio.com/mod/factorissimo-2-notnotmelon"
+    }
+  }
+}

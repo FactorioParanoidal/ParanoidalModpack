@@ -7,8 +7,10 @@ local spawning  = require("spawning")
 local surfaces  = require("surfaces")
 local utils     = require("utilities")
 
----@type number
+---@type number Interval of the spawn handler in ticks (the setting key says "seconds" for historical reasons)
 local spawn_tick = settings.global[constants.SPAWN_TICK_SECONDS_KEY].value
+---@type function Spawn handler, defined below
+local on_spawn_tick
 ---@type boolean
 local debug_log = settings.global[constants.ENABLE_DEBUG_LOG_KEY].value
 ---@type boolean
@@ -16,6 +18,11 @@ local debug_on_tick = settings.global[constants.ENABLE_DEBUG_ON_TICK_KEY].value
 
 ---@type LuaEvent
 on_entity_force_changed_event = script.generate_event_name()
+
+-- Paranoidal: raised after a randomly chosen ruin was spawned.
+-- Data: surface, center, half_size, size, ruin_set, ruin_name.
+---@type LuaEvent
+on_ruin_spawned_event = script.generate_event_name()
 
 local function update_debug_log(announce)
   debug_log = settings.global[constants.ENABLE_DEBUG_LOG_KEY].value
@@ -57,6 +64,16 @@ local function on_runtime_mod_setting_changed(event)
   if is_ruins_setting then
     init(event)
   end
+  -- Paranoidal: apply a new spawn interval at once. Before, it was read only when the save was
+  -- loaded, so a host and a player joining later used different intervals (desync).
+  if event.setting == constants.SPAWN_TICK_SECONDS_KEY then
+    local new_tick = settings.global[constants.SPAWN_TICK_SECONDS_KEY].value
+    if new_tick ~= spawn_tick then
+      script.on_nth_tick(spawn_tick, nil)
+      spawn_tick = new_tick
+      script.on_nth_tick(spawn_tick, on_spawn_tick)
+    end
+  end
 end
 
 script.on_init(init)
@@ -72,7 +89,7 @@ script.on_event(defines.events.on_force_created, function()
   utils.set_enemy_force_diplomacy(utils.get_enemy_force(), not settings.global[constants.ENABLE_ENEMY_NOT_CEASE_FIRE_KEY].value)
 end)
 
-script.on_nth_tick(spawn_tick, function(event)
+on_spawn_tick = function(event)
   if debug_on_tick then log(string.format("[on_tick]: event.tick=%d - CALLED!", event.tick)) end
 
   ---@type RuinQueueItem[] All currently queued ruin-queue items
@@ -86,8 +103,10 @@ script.on_nth_tick(spawn_tick, function(event)
   if table_size(queue_items) == 0 then
     if debug_on_tick then log(string.format("[on_tick]: event.tick=%d has no ruins to spawn - EXIT!", event.tick)) end
     return
-  elseif ruinset_name == nil or ruinset_name == "" then
-    if debug_on_tick then log("[on_tick]: No current ruin-set configured - EXIT!") end
+  elseif ruinset_name == nil or ruinset_name == "" or ruinset_name == constants.NONE or not ruinsets.isset(ruinset_name) then
+    -- Paranoidal: drop the queue, it is stored in storage now and must not grow forever.
+    if debug_on_tick then log("[on_tick]: No usable ruin-set configured - EXIT!") end
+    queue.reset_ruins()
     return
   end
 
@@ -95,6 +114,7 @@ script.on_nth_tick(spawn_tick, function(event)
   if debug_on_tick then log(string.format("[on_tick]: runinset_name='%s' has %d ruin(s) registered.", ruinset_name, table_size(_ruinsets))) end
   if table_size(_ruinsets) == 0 then
     log(string.format("[on_tick]: ruinset_name='%s' has no ruins registed but is configured as ruin-set. - EXIT!", ruinset_name))
+    queue.reset_ruins()
     return
   end
 
@@ -107,7 +127,9 @@ script.on_nth_tick(spawn_tick, function(event)
       error(string.format("queue_item.size='%s' is not registered in ruin_half_sizes table. Have you forgotten to invoke `utils.register_ruin_set()`?", queue_item.size))
     end
 
-    if not spawning.allow_spawning_on(queue_item.surface, ruinset_name) then
+    if not queue_item.surface.valid then
+      if debug_on_tick then log("[on_tick]: Queued surface was deleted - SKIPPED!") end
+    elseif not spawning.allow_spawning_on(queue_item.surface, ruinset_name) then
       if debug_on_tick then log(string.format("[on_tick]: ruinset_name='%s' is not allowed to spawn on surface='%s' - SKIPPED!", ruinset_name, queue_item.surface.name)) end
     elseif spawning.exclusive_ruinset[queue_item.surface.name] == nil or ruinset_name == spawning.exclusive_ruinset[queue_item.surface.name] then
       -- Get ruins
@@ -118,7 +140,7 @@ script.on_nth_tick(spawn_tick, function(event)
       if type(ruins) == "table" and table_size(ruins) > 0 then
         -- The ruin-set is either marked as non-exclusive or it surface and ruin-set name are matching
         if debug_on_tick then log(string.format("[on_tick]: Invoking spawning.spawn_random_ruin() with ruins()=%d,ruinset_name='%s',queue_item.size='%s' ...", #ruins, ruinset_name, queue_item.size)) end
-        spawning.spawn_random_ruin(ruins, spawning.ruin_half_sizes[queue_item.size], queue_item.center, queue_item.surface)
+        spawning.spawn_random_ruin(ruins, spawning.ruin_half_sizes[queue_item.size], queue_item.center, queue_item.surface, queue_item.size, ruinset_name)
       end
     end
   end
@@ -127,7 +149,8 @@ script.on_nth_tick(spawn_tick, function(event)
   queue.reset_ruins()
 
   if debug_on_tick then log("[on_tick]: EXIT!") end
-end)
+end
+script.on_nth_tick(spawn_tick, on_spawn_tick)
 
 script.on_event(defines.events.on_chunk_generated, function (event)
   if debug_log then log(string.format("[on_chunk_generated]: event.surface.name='%s' - CALLED!", event.surface.name)) end

@@ -1,0 +1,8 @@
+require("prototypes.categories")
+require("prototypes.guns")
+require("prototypes.projectiles")
+require("prototypes.ammo")
+require("prototypes.equipment")
+require("prototypes.tanks")
+require("prototypes.recipes")
+require("prototypes.technologies")

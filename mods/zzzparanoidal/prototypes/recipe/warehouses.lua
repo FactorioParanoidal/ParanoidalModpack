@@ -1,3 +1,5 @@
+-- Removed Angels chests must not enter Quality's early recycling recipes.
+-- Preserve the installed pack's costs after RITEG's missing-ingredient cleanup.
 data:extend({
 	{ -- Basic Warehouse
 		type = "recipe",
@@ -31,7 +33,6 @@ data:extend({
 		enabled = false,
 		ingredients = {
 			{ type = "item", name = "storehouse-basic", amount = 1 },
-			{ type = "item", name = "angels-logistic-chest-passive-provider", amount = 1 },
 			{ type = "item", name = "iron-stick", amount = 16 }, --drd
 		},
 		energy_required = 5,
@@ -43,7 +44,6 @@ data:extend({
 		enabled = false,
 		ingredients = {
 			{ type = "item", name = "storehouse-basic", amount = 1 },
-			{ type = "item", name = "angels-logistic-chest-storage", amount = 1 },
 			{ type = "item", name = "iron-stick", amount = 16 }, --drd
 		},
 		energy_required = 5,
@@ -55,7 +55,6 @@ data:extend({
 		enabled = false,
 		ingredients = {
 			{ type = "item", name = "storehouse-basic", amount = 1 },
-			{ type = "item", name = "angels-logistic-chest-active-provider", amount = 1 },
 			{ type = "item", name = "iron-stick", amount = 16 }, --drd
 		},
 		energy_required = 5,
@@ -67,7 +66,6 @@ data:extend({
 		enabled = false,
 		ingredients = {
 			{ type = "item", name = "storehouse-basic", amount = 1 },
-			{ type = "item", name = "angels-logistic-chest-requester", amount = 1 },
 			{ type = "item", name = "iron-stick", amount = 16 }, --drd
 		},
 		energy_required = 5,
@@ -79,7 +77,6 @@ data:extend({
 		enabled = false,
 		ingredients = {
 			{ type = "item", name = "storehouse-basic", amount = 1 },
-			{ type = "item", name = "angels-logistic-chest-buffer", amount = 1 },
 			{ type = "item", name = "iron-stick", amount = 16 }, --drd
 		},
 		energy_required = 5,

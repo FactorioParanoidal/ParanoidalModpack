@@ -1,9 +1,11 @@
 local reload_tech_unlock = require("script.reload-tech-unlock")
 -------------------------------------------------------------------------------
-local function blacklist_inserters()
+-- Cranes use the Bob's position grid (size-aware mapping in bobinserters);
+-- remove them from the blacklist left by older versions of this mod.
+local function unblacklist_inserters()
 	remote.call(
 		"bobinserters",
-		"blacklist_inserters",
+		"unblacklist_inserters",
 		{
 			"nco-wide-crane",
 			"nco-crane"
@@ -12,7 +14,7 @@ local function blacklist_inserters()
 	if script.active_mods["boblogistics"] then
 		remote.call(
 			"bobinserters",
-			"blacklist_inserters",
+			"unblacklist_inserters",
 			{
 				"nco-red-wide-crane",
 				"nco-red-crane",
@@ -26,7 +28,7 @@ local function blacklist_inserters()
 	if script.active_mods["Krastorio2"] then
 		remote.call(
 			"bobinserters",
-			"blacklist_inserters",
+			"unblacklist_inserters",
 			{
 				"nco-superior-wide-crane",
 				"nco-superior-crane"
@@ -39,7 +41,9 @@ script.on_configuration_changed(
 	function()
 		reload_tech_unlock.reload_tech_unlock()
 		if script.active_mods["bobinserters"] then
-			blacklist_inserters()
+			if remote.interfaces["bobinserters"] and remote.interfaces["bobinserters"]["unblacklist_inserters"] then
+				unblacklist_inserters()
+			end
 		end
 	end
 )

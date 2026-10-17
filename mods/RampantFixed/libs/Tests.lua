@@ -170,7 +170,7 @@ local function createSquadMenu(player, universe)
 		for groupNumber, squad in pairs(universe.groupNumberToSquad) do
 			if squad.map and squad.group.valid then
 				local group = squad.group
-				squadFrame = createSquadFrame(root, group)
+				local squadFrame = createSquadFrame(root, group)
 				squadFrame.rampantFixed_Debug_squadButton.caption = "x, y ="..math.floor(group.position.x)..", "..math.floor(group.position.y).. ", "..#group.members.." biters"
 				if squad.settlers then
 					squadFrame.rampantFixed_Debug_squadButton.caption = squadFrame.rampantFixed_Debug_squadButton.caption..", settler"

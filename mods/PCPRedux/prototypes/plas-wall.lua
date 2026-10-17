@@ -5,15 +5,6 @@ function plas_wall_images()
       layers =
       {
         {
-          filename = "__PCPRedux__/graphics/plastic-wall/wall-single.png",
-          priority = "extra-high",
-          width = 32,
-          height = 46,
-          variation_count = 2,
-          line_length = 2,
-          shift = util.by_pixel(0, -6),
-          hr_version =
-          {
             filename = "__PCPRedux__/graphics/plastic-wall/hr-wall-single.png",
             priority = "extra-high",
             width = 64,
@@ -22,19 +13,9 @@ function plas_wall_images()
             line_length = 2,
             shift = util.by_pixel(0, -5),
             scale = 0.5
-          }
-        },
+          },
         {
-          filename = "__base__/graphics/entity/wall/wall-single-shadow.png",
-          priority = "extra-high",
-          width = 50,
-          height = 32,
-          repeat_count = 2,
-          shift = util.by_pixel(10, 16),
-          draw_as_shadow = true,
-          hr_version =
-          {
-            filename = "__base__/graphics/entity/wall/hr-wall-single-shadow.png",
+            filename = "__base__/graphics/entity/wall/wall-single-shadow.png",
             priority = "extra-high",
             width = 98,
             height = 60,
@@ -43,7 +24,6 @@ function plas_wall_images()
             draw_as_shadow = true,
             scale = 0.5
           }
-        }
       }
     },
     straight_vertical =
@@ -51,15 +31,6 @@ function plas_wall_images()
       layers =
       {
         {
-          filename = "__PCPRedux__/graphics/plastic-wall/wall-vertical.png",
-          priority = "extra-high",
-          width = 32,
-          height = 68,
-          variation_count = 5,
-          line_length = 5,
-          shift = util.by_pixel(0, 8),
-          hr_version =
-          {
             filename = "__PCPRedux__/graphics/plastic-wall/hr-wall-vertical.png",
             priority = "extra-high",
             width = 64,
@@ -68,19 +39,9 @@ function plas_wall_images()
             line_length = 5,
             shift = util.by_pixel(0, 8),
             scale = 0.5
-          }
-        },
+          },
         {
-          filename = "__base__/graphics/entity/wall/wall-vertical-shadow.png",
-          priority = "extra-high",
-          width = 50,
-          height = 58,
-          repeat_count = 5,
-          shift = util.by_pixel(10, 28),
-          draw_as_shadow = true,
-          hr_version =
-          {
-            filename = "__base__/graphics/entity/wall/hr-wall-vertical-shadow.png",
+            filename = "__base__/graphics/entity/wall/wall-vertical-shadow.png",
             priority = "extra-high",
             width = 98,
             height = 110,
@@ -89,7 +50,6 @@ function plas_wall_images()
             draw_as_shadow = true,
             scale = 0.5
           }
-        }
       }
     },
     straight_horizontal =
@@ -97,15 +57,6 @@ function plas_wall_images()
       layers =
       {
         {
-          filename = "__PCPRedux__/graphics/plastic-wall/wall-horizontal.png",
-          priority = "extra-high",
-          width = 32,
-          height = 50,
-          variation_count = 6,
-          line_length = 6,
-          shift = util.by_pixel(0, -4),
-          hr_version =
-          {
             filename = "__PCPRedux__/graphics/plastic-wall/hr-wall-horizontal.png",
             priority = "extra-high",
             width = 64,
@@ -114,19 +65,9 @@ function plas_wall_images()
             line_length = 6,
             shift = util.by_pixel(0, -2),
             scale = 0.5
-          }
-        },
+          },
         {
-          filename = "__base__/graphics/entity/wall/wall-horizontal-shadow.png",
-          priority = "extra-high",
-          width = 62,
-          height = 36,
-          repeat_count = 6,
-          shift = util.by_pixel(14, 14),
-          draw_as_shadow = true,
-          hr_version =
-          {
-            filename = "__base__/graphics/entity/wall/hr-wall-horizontal-shadow.png",
+            filename = "__base__/graphics/entity/wall/wall-horizontal-shadow.png",
             priority = "extra-high",
             width = 124,
             height = 68,
@@ -135,7 +76,6 @@ function plas_wall_images()
             draw_as_shadow = true,
             scale = 0.5
           }
-        }
       }
     },
     corner_right_down =
@@ -143,15 +83,6 @@ function plas_wall_images()
       layers =
       {
         {
-          filename = "__PCPRedux__/graphics/plastic-wall/wall-corner-right.png",
-          priority = "extra-high",
-          width = 32,
-          height = 64,
-          variation_count = 2,
-          line_length = 2,
-          shift = util.by_pixel(0, 6),
-          hr_version =
-          {
             filename = "__PCPRedux__/graphics/plastic-wall/hr-wall-corner-right.png",
             priority = "extra-high",
             width = 64,
@@ -160,19 +91,9 @@ function plas_wall_images()
             line_length = 2,
             shift = util.by_pixel(0, 7),
             scale = 0.5
-          }
-        },
+          },
         {
-          filename = "__base__/graphics/entity/wall/wall-corner-right-shadow.png",
-          priority = "extra-high",
-          width = 62,
-          height = 60,
-          repeat_count = 2,
-          shift = util.by_pixel(14, 28),
-          draw_as_shadow = true,
-          hr_version =
-          {
-            filename = "__base__/graphics/entity/wall/hr-wall-corner-right-shadow.png",
+            filename = "__base__/graphics/entity/wall/wall-corner-right-shadow.png",
             priority = "extra-high",
             width = 124,
             height = 120,
@@ -181,7 +102,6 @@ function plas_wall_images()
             draw_as_shadow = true,
             scale = 0.5
           }
-        }
       }
     },
     corner_left_down =
@@ -189,15 +109,6 @@ function plas_wall_images()
       layers =
       {
         {
-          filename = "__PCPRedux__/graphics/plastic-wall/wall-corner-left.png",
-          priority = "extra-high",
-          width = 32,
-          height = 68,
-          variation_count = 2,
-          line_length = 2,
-          shift = util.by_pixel(0, 6),
-          hr_version =
-          {
             filename = "__PCPRedux__/graphics/plastic-wall/hr-wall-corner-left.png",
             priority = "extra-high",
             width = 64,
@@ -206,19 +117,9 @@ function plas_wall_images()
             line_length = 2,
             shift = util.by_pixel(0, 7),
             scale = 0.5
-          }
-        },
+          },
         {
-          filename = "__base__/graphics/entity/wall/wall-corner-left-shadow.png",
-          priority = "extra-high",
-          width = 54,
-          height = 60,
-          repeat_count = 2,
-          shift = util.by_pixel(8, 28),
-          draw_as_shadow = true,
-          hr_version =
-          {
-            filename = "__base__/graphics/entity/wall/hr-wall-corner-left-shadow.png",
+            filename = "__base__/graphics/entity/wall/wall-corner-left-shadow.png",
             priority = "extra-high",
             width = 102,
             height = 120,
@@ -227,7 +128,6 @@ function plas_wall_images()
             draw_as_shadow = true,
             scale = 0.5
           }
-        }
       }
     },
     t_up =
@@ -235,15 +135,6 @@ function plas_wall_images()
       layers =
       {
         {
-          filename = "__PCPRedux__/graphics/plastic-wall/wall-t.png",
-          priority = "extra-high",
-          width = 32,
-          height = 68,
-          variation_count = 4,
-          line_length = 4,
-          shift = util.by_pixel(0, 6),
-          hr_version =
-          {
             filename = "__PCPRedux__/graphics/plastic-wall/hr-wall-t.png",
             priority = "extra-high",
             width = 64,
@@ -252,19 +143,9 @@ function plas_wall_images()
             line_length = 4,
             shift = util.by_pixel(0, 7),
             scale = 0.5
-          }
-        },
+          },
         {
-          filename = "__base__/graphics/entity/wall/wall-t-shadow.png",
-          priority = "extra-high",
-          width = 62,
-          height = 60,
-          repeat_count = 4,
-          shift = util.by_pixel(14, 28),
-          draw_as_shadow = true,
-          hr_version =
-          {
-            filename = "__base__/graphics/entity/wall/hr-wall-t-shadow.png",
+            filename = "__base__/graphics/entity/wall/wall-t-shadow.png",
             priority = "extra-high",
             width = 124,
             height = 120,
@@ -273,7 +154,6 @@ function plas_wall_images()
             draw_as_shadow = true,
             scale = 0.5
           }
-        }
       }
     },
     ending_right =
@@ -281,15 +161,6 @@ function plas_wall_images()
       layers =
       {
         {
-          filename = "__PCPRedux__/graphics/plastic-wall/wall-ending-right.png",
-          priority = "extra-high",
-          width = 32,
-          height = 48,
-          variation_count = 2,
-          line_length = 2,
-          shift = util.by_pixel(0, -4),
-          hr_version =
-          {
             filename = "__PCPRedux__/graphics/plastic-wall/hr-wall-ending-right.png",
             priority = "extra-high",
             width = 64,
@@ -298,19 +169,9 @@ function plas_wall_images()
             line_length = 2,
             shift = util.by_pixel(0, -3),
             scale = 0.5
-          }
-        },
+          },
         {
-          filename = "__base__/graphics/entity/wall/wall-ending-right-shadow.png",
-          priority = "extra-high",
-          width = 62,
-          height = 36,
-          repeat_count = 2,
-          shift = util.by_pixel(14, 14),
-          draw_as_shadow = true,
-          hr_version =
-          {
-            filename = "__base__/graphics/entity/wall/hr-wall-ending-right-shadow.png",
+            filename = "__base__/graphics/entity/wall/wall-ending-right-shadow.png",
             priority = "extra-high",
             width = 124,
             height = 68,
@@ -319,7 +180,6 @@ function plas_wall_images()
             draw_as_shadow = true,
             scale = 0.5
           }
-        }
       }
     },
     ending_left =
@@ -327,15 +187,6 @@ function plas_wall_images()
       layers =
       {
         {
-          filename = "__PCPRedux__/graphics/plastic-wall/wall-ending-left.png",
-          priority = "extra-high",
-          width = 32,
-          height = 48,
-          variation_count = 2,
-          line_length = 2,
-          shift = util.by_pixel(0, -4),
-          hr_version =
-          {
             filename = "__PCPRedux__/graphics/plastic-wall/hr-wall-ending-left.png",
             priority = "extra-high",
             width = 64,
@@ -344,19 +195,9 @@ function plas_wall_images()
             line_length = 2,
             shift = util.by_pixel(0, -3),
             scale = 0.5
-          }
-        },
+          },
         {
-          filename = "__base__/graphics/entity/wall/wall-ending-left-shadow.png",
-          priority = "extra-high",
-          width = 54,
-          height = 36,
-          repeat_count = 2,
-          shift = util.by_pixel(8, 14),
-          draw_as_shadow = true,
-          hr_version =
-          {
-            filename = "__base__/graphics/entity/wall/hr-wall-ending-left-shadow.png",
+            filename = "__base__/graphics/entity/wall/wall-ending-left-shadow.png",
             priority = "extra-high",
             width = 102,
             height = 68,
@@ -365,20 +206,10 @@ function plas_wall_images()
             draw_as_shadow = true,
             scale = 0.5
           }
-        }
       }
     },
     filling =
     {
-      filename = "__PCPRedux__/graphics/plastic-wall/wall-filling.png",
-        priority = "extra-high",
-        width = 24,
-        height = 30,
-        variation_count = 8,
-        line_length = 8,
-        shift = util.by_pixel(0, -2),
-        hr_version =
-        {
           filename = "__PCPRedux__/graphics/plastic-wall/hr-wall-filling.png",
           priority = "extra-high",
           width = 48,
@@ -387,38 +218,21 @@ function plas_wall_images()
           line_length = 8,
           shift = util.by_pixel(0, -1),
           scale = 0.5
-        }
-    },
+        },
     water_connection_patch =
     {
       sheets =
       {
         {
-          filename = "__PCPRedux__/graphics/plastic-wall/wall-patch.png",
-          priority = "extra-high",
-          width = 58,
-          height = 64,
-          shift = util.by_pixel(0, -2),
-          hr_version =
-          {
             filename = "__PCPRedux__/graphics/plastic-wall/hr-wall-patch.png",
             priority = "extra-high",
             width = 116,
             height = 128,
             shift = util.by_pixel(0, -2),
             scale = 0.5
-          }
-        },
+          },
         {
-          filename = "__base__/graphics/entity/wall/wall-patch-shadow.png",
-          priority = "extra-high",
-          width = 74,
-          height = 52,
-          shift = util.by_pixel(8, 14),
-          draw_as_shadow = true,
-          hr_version =
-          {
-            filename = "__base__/graphics/entity/wall/hr-wall-patch-shadow.png",
+            filename = "__base__/graphics/entity/wall/wall-patch-shadow.png",
             priority = "extra-high",
             width = 144,
             height = 100,
@@ -426,7 +240,6 @@ function plas_wall_images()
             draw_as_shadow = true,
             scale = 0.5
           }
-        }
       }
     },
     gate_connection_patch =
@@ -434,31 +247,15 @@ function plas_wall_images()
       sheets =
       {
         {
-          filename = "__PCPRedux__/graphics/plastic-wall/wall-gate.png",
-          priority = "extra-high",
-          width = 42,
-          height = 56,
-          shift = util.by_pixel(0, -8),
-          hr_version =
-          {
             filename = "__PCPRedux__/graphics/plastic-wall/hr-wall-gate.png",
             priority = "extra-high",
             width = 82,
             height = 108,
             shift = util.by_pixel(0, -7),
             scale = 0.5
-          }
-        },
+          },
         {
-          filename = "__base__/graphics/entity/wall/wall-gate-shadow.png",
-          priority = "extra-high",
-          width = 66,
-          height = 40,
-          shift = util.by_pixel(14, 18),
-          draw_as_shadow = true,
-          hr_version =
-          {
-            filename = "__base__/graphics/entity/wall/hr-wall-gate-shadow.png",
+            filename = "__base__/graphics/entity/wall/wall-gate-shadow.png",
             priority = "extra-high",
             width = 130,
             height = 78,
@@ -466,7 +263,6 @@ function plas_wall_images()
             draw_as_shadow = true,
             scale = 0.5
           }
-        }
       }
     }
   }

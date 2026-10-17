@@ -2,6 +2,7 @@
 Version: 1.0.5
 Date: 2026-04-04
   Changes:
+    - Locomotives whose item has another name (Junk Train: item JunkTrain places yir_usl) get an MU version: the item is found by place_result, and the runtime mapping uses the items' place_result (Paranoidal local fix).
     - Added dependency on Krastorio2-spaced-out to ensure compatibility with K2SO.
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.4

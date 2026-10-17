@@ -20,7 +20,7 @@ table.insert(recipes, {
 	name = "ASE-sand-die",
 	category = "angels-sintering",
 	subgroup = "angels-mold-casting",
-	energy_required = 8,
+	energy_required = 2,
 	enabled = false,
 	auto_recycle = false,
 	icons = {
@@ -63,7 +63,7 @@ table.insert(recipes, {
 	name = "ASE-metal-die-wash",
 	category = "crafting-with-fluid",
 	subgroup = "angels-mold-casting",
-	energy_required = 8,
+	energy_required = 2,
 	enabled = false,
 	auto_recycle = false,
 	icons = {
@@ -157,7 +157,7 @@ for _, m in ipairs(gear_alloys) do
 	local metal, gear = m.metal, m.gear
 	local subgroup = "angels-" .. metal .. "-casting"
 	-- Tungsten: 12 casting-powder-tungsten + angels-sintering.
-	-- Остальные: molten metal (40 для regular, 80 для expendable/advanced) + angels-casting.
+	-- Остальные: 40 molten metal для всех вариантов + angels-casting.
 	local regular_input, ext_input, category, tint
 	if m.sinter then
 		regular_input = { type = "item", name = "angels-casting-powder-tungsten", amount = 12 }
@@ -166,7 +166,7 @@ for _, m in ipairs(gear_alloys) do
 		tint = nil
 	else
 		regular_input = { type = "fluid", name = "angels-liquid-molten-" .. metal, amount = 40 }
-		ext_input = { type = "fluid", name = "angels-liquid-molten-" .. metal, amount = 80 }
+		ext_input = { type = "fluid", name = "angels-liquid-molten-" .. metal, amount = 40 }
 		category = "angels-casting"
 		tint = angelsmods.functions.get_fluid_recipe_tint("angels-liquid-molten-" .. metal)
 	end

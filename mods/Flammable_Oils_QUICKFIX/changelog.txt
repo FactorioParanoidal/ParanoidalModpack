@@ -5,6 +5,8 @@ Date: 2025-04-26
     - Updated by Fr_Dae
   Changes:
     - water-turret2 by water-turret-revive in info.json
+    - Paranoidal: Russian achievement descriptions got a humorous second sentence
+    - Paranoidal: hydrogen and deuterium (Angels gas and Bob) are volatile: their energy counts x4 for explosions, fire through pipes and tanks, and any entity holding them filled above 2.5% explodes on any death, whatever the damage type, without the 10 MJ minimum (a single pipe too)
 ---------------------------------------------------------------------------------------------------
 Version: 0.2.21
 Date: 2025-04-23

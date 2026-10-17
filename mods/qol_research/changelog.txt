@@ -2,6 +2,7 @@
 Version: 3.4.2
 Date: 4. 5. 2025
   Changes:
+    - Paranoidal: removed the "[qol] Quality of Life Research v3 is installed" and configurator link messages at player creation.
     - Update integration with newest version of Krastorio2. Thanks to HerptyDerpoty for the contribution.
 ---------------------------------------------------------------------------------------------------
 Version: 3.4.1

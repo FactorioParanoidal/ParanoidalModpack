@@ -13,7 +13,9 @@ local turret_exclude_start = {
 	["vehicle-gun-turret"] = true,
 	["vehicle-rocket-turret"] = true,
 	["man-big-artillery-turret"] = true,
-	["big-artillery-turret"] = true
+	["big-artillery-turret"] = true,
+	-- Paranoidal: fire safety turrets put out fires and never kill.
+	["pd-fire-safety-turret"] = true,
 --	["obelisk-"] = true, --[[ Obelisk-of-light turrets ]]
 }
 

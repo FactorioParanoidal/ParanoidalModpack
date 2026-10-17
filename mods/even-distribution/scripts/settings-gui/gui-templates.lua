@@ -4,6 +4,7 @@ local this = {templates = {}}
 local util = scripts.util
 local config = require("config")
 local gui = scripts["gui-tools"]
+local protocache = require("scripts.protocache")
 local controller
 
 local helpers = scripts.helpers
@@ -99,6 +100,7 @@ end
 
 local function updateIgnoredEntities(self)
 	local player = _(self.gui.player)
+	for __,child in pairs(self.children) do gui.forgetElement(child) end
 	self.clear()
 		
 	for name in pairs(player:setting("ignoredEntities")) do
@@ -1001,7 +1003,7 @@ this.templates.ignoredEntityChooser = {
 	elem_type = "entity",
 	onCreated = function(self, data)
 		self.elem_value = data.name
-		self.elem_filters = {{ filter = "name", name = _(storage.allowedEntities):keys():toPlain() }}
+		self.elem_filters = {{ filter = "name", name = protocache.allowedEntityNames() }}
 	end,
 	onChanged = function(self, event)
 		local parent = self.parent

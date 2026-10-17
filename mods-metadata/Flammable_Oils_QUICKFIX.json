@@ -1,0 +1,10 @@
+{
+  "mod": "Flammable_Oils_QUICKFIX",
+  "source": "local",
+  "original": {
+    "name": "Flammable_Oils_QUICKFIX",
+    "authors": ["Fr_Dae", "Pi-c", "Kannagimoe", "Klogan", "lily"],
+    "portal": {"name": "Flammable_Oils_QUICKFIX", "url": "https://mods.factorio.com/mod/Flammable_Oils_QUICKFIX"}
+  },
+  "changeReason": "Поддерживаемый локальный форк Reforged Paranoidal от 0.2.22, по решению пользователя. Быстродействие: фильтры on_entity_died/on_entity_damaged по типам, очередь цепных реакций в storage с лимитом взрывов за тик, on_tick только во время пожара, поиск целей без сущностей без здоровья, пламя без raise_built, переопределения remote в storage. Новые функции: загрязнение по объёму взорвавшейся жидкости, перегрев резервуаров с чёрным дымом и катастрофой, огонь по трубам, ступени зрелищности (тряска камеры, дальний звук, ударная волна, следы гари), отключаемые оповещения, детонация боеприпасов, аварии на химических установках, ловушки в руинах AbandonedRuins-paranoidal, достижения. Вероятности и формулы взрыва исходного мода сохранены. Подробности — PARANOIDAL-CHANGES.md в папке мода."
+}

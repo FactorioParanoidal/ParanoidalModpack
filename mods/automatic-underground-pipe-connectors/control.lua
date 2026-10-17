@@ -93,7 +93,16 @@ local function on_built_entity(event)
 
     local existing_tile = underground_surface.get_tile( pipe_position[ 1 ], pipe_position[ 2 ] );
     local existing_tile_state = tiles.save_tile_state( existing_tile )
-    local cover_tile_proto = tiles.cover_tile_for( underground_surface, entity.force, existing_tile.prototype )
+    -- Only ground the pipe cannot sit on needs covering. A tile that merely names a
+    -- default cover tile is not asking to be paved over: that field is the player's
+    -- choice of paving material, and modded planets set it on ordinary buildable
+    -- ground. Covering those is both wrong and usually impossible, and the failed
+    -- check used to take the whole connector down with it.
+    ---@type LuaTilePrototype?
+    local cover_tile_proto
+    if tiles.tile_blocks_entity( existing_tile.prototype, prototypes.entity[pipe_entity_name] ) then
+        cover_tile_proto = tiles.cover_tile_for( underground_surface, entity.force, existing_tile.prototype )
+    end
     ---@type EntityEtc?
     local tile_ghost_definition
     -- tile ghosts stack, eg a concrete ghost over an ice platform ghost over ammoniacal ocean,

@@ -409,6 +409,28 @@ remote.add_interface("rampantFixed", {
 	
 	,
 	--------------------
+	-- Paranoidal: read-only truce data for EvoUI.
+	-- parameters: {surfaceIndex = number}
+	-- return: nil (Rampant AI is off on the surface) or {minEvo = number (percent), peaceful = boolean}
+	getTruceInfo = function(parameters)
+		if (not parameters) or (not parameters.surfaceIndex) then
+			return nil
+		end
+		local universe = storage.universe
+		local map = universe and universe.maps and universe.maps[parameters.surfaceIndex]
+		if not (map and map.surface and map.surface.valid) then
+			return nil
+		end
+		local planetAISettings = universe.planetAISettings
+		local planetAISetting = planetAISettings and (planetAISettings[map.surface.name] or planetAISettings["others"])
+		if not (planetAISetting and (type(planetAISetting.minEvo) == "number")) then
+			return nil
+		end
+		return {minEvo = planetAISetting.minEvo, peaceful = (map.state == constants.AI_STATE_PEACEFUL)}
+	end
+
+	,
+	--------------------
 	-- Returns a pheromones in specificed chunk
 	-- parameters: {surfaceIndex = number, position = {x = number , y = number}}
 	-- return: table {BASE_PHEROMONE = number, BASE_DETECTION_PHEROMONE = number, PLAYER_PHEROMONE = number, RESOURCE_PHEROMONE = number} (or nil if surface ignored or	chunk isn't generated or not processed yet)	

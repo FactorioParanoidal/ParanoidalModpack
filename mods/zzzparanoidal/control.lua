@@ -1,6 +1,26 @@
 require("controls.heroturrets_script") -- скрипт разжалования турелей
 require("controls.spilled_items") -- высыпание содержимого сущности при разрушении (настройка item-drop)
-require("controls.gui-unifyer-inserter-throughput") -- синхронизация индикатора пропускной способности манипуляторов
+local sync_air_filter_beta8 = require("controls.air-filter-beta8")
+local burner_pump_status = require("controls.burner-pump-status")
+local loader_shells = require("controls.loader-shells")
+require("controls.energy-recipe-migration").install() -- Старые чертежи ячеек после JSON/Lua-миграции.
+local rail_support_power = require("controls.rail-support-power")
+rail_support_power.install() -- Кабель в опорах эстакадных рельсов (только с elevated-rails).
+require("controls.battery-locomotive-return").install() -- Аккумулятор BET при разборке MU-и hiend-локомотивов.
+require("controls.torch-no-loot") -- Разобранный факел пропадает целиком.
+require("controls.spacex-button-force") -- Кнопка SpaceX не остаётся после выхода из Песочницы.
+local fire_safety = require("controls.fire-safety")
+fire_safety.install() -- Пожарная турель: вода, гасит огонь, защита от Flammable Oils в радиусе.
+local shipwreck_salvage = require("controls.shipwreck-salvage")
+-- Install after loader-shells chains the SpilledItems handler; neither consumer
+-- handles these inventory/grid-less types. Keep every other type, including modded containers.
+if script.get_event_handler(defines.events.on_entity_died) then
+	local death_filters = {}
+	for _, entity_type in ipairs({"unit", "unit-spawner", "turret", "tree", "fish", "cliff", "simple-entity"}) do
+		death_filters[#death_filters + 1] = {filter = "type", type = entity_type, invert = true, mode = "and"}
+	end
+	script.set_event_filter(defines.events.on_entity_died, death_filters)
+end
 -- ###############################################################################################
 -- from some corpse marker
 script.on_event(defines.events.on_pre_player_died, function(event)
@@ -77,22 +97,14 @@ local function evo_and_dolly() --выключаем эволюцию
 end
 
 
-local DARK_NIGHTS_MIN_BRIGHTNESS = 0.1 -- тьма ночи как в 1.1 (NightBrightness опускал min_brightness, ~5–15%); крутить тут
-local function apply_dark_nights() -- Clockwork-2 min_brightness не трогает, делаем сами
-	for _, surface in pairs(game.surfaces) do
-		if not surface.freeze_daytime then
-			surface.min_brightness = DARK_NIGHTS_MIN_BRIGHTNESS
-		end
-	end
-end
-
 local function disable_obsolete_basic_logistics()
 	if not (script.active_mods["aai-industry"] and script.active_mods["boblogistics"]) then
 		return
 	end
 	for _, force in pairs(game.forces) do
 		local basic_logistics = force.technologies["basic-logistics"]
-		if basic_logistics and force.technologies["logistics-0"] then
+		-- Не отключать восстановленную видимую basic-logistics Beta 8.
+		if basic_logistics and basic_logistics.prototype.hidden and force.technologies["logistics-0"] then
 			basic_logistics.enabled = false
 		end
 	end
@@ -100,34 +112,42 @@ end
 
 script.on_init(function() --наш любимый init, запрещаем двигать наши насосы
 	evo_and_dolly()
-	apply_dark_nights()
 	disable_obsolete_basic_logistics()
+	sync_air_filter_beta8()
+	burner_pump_status.init()
+	loader_shells.init()
+	rail_support_power.sync()
+	fire_safety.sync()
+	shipwreck_salvage.init() -- Стартовые припасы; при загрузке и смене конфигурации повторно не выдаются.
 end)
 
 script.on_load(function() --без дропа эволюции потому что game недоступен
 	-- configure_picker_dollies()
 end)
 
-script.on_configuration_changed(function(data) --фикс эволюции при загрузке игры, если галочка была убрана и поставлена вновь
+script.on_configuration_changed(function() --фикс эволюции при загрузке игры, если галочка была убрана и поставлена вновь
 	evo_and_dolly()
-	
-	-- Примусове розблокування рецептів свинцю/олова на існуючих збереженнях
-	for _, force in pairs(game.forces) do
-		local recipes_to_unlock = {
-			"bob-lead-plate",
-			"bob-lead-plate-2",
-			"bob-tin-plate",
-			"bob-tin-plate-2",
-		}
-		for _, recipe_name in pairs(recipes_to_unlock) do
-			if force.recipes[recipe_name] then
-				force.recipes[recipe_name].enabled = true
-			end
-		end
-	end
-	apply_dark_nights()
 	disable_obsolete_basic_logistics()
+	sync_air_filter_beta8()
+	burner_pump_status.init()
+	loader_shells.init()
+	rail_support_power.sync()
+	fire_safety.sync()
 end)
 
-script.on_event(defines.events.on_surface_created, apply_dark_nights)
 script.on_event(defines.events.on_player_joined_game, disable_obsolete_basic_logistics)
+
+-- Стартовое сообщение бортового компьютера (было в Beta 8 через aai-industry). Только в начале новой игры.
+script.on_event(defines.events.on_player_created, function(event)
+	if game.tick > 1 then return end
+	local player = game.get_player(event.player_index)
+	if not player then return end
+	local name = player.name
+	if not name or name == "" then
+		name = {"paranoidal.fallback-player-name"}
+	end
+	player.print({"paranoidal.player-crash-landed", name})
+end)
+
+-- Пресет вех Paranoidal для Milestones (remote-интерфейс paranoidal_milestones).
+require("controls.milestones-preset").install()

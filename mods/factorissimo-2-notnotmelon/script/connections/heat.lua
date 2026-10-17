@@ -83,30 +83,49 @@ Heat.adjust = function(conn, positive)
     end
 end
 
+-- Heat buffer data per prototype name: {max_temperature, specific_heat}.
+local heat_buffers = {}
+local function heat_buffer_of(entity)
+    local name = entity.name
+    local data = heat_buffers[name]
+    if not data then
+        local buffer = entity.prototype.heat_buffer_prototype
+        local specific_heat = buffer.specific_heat
+        if not specific_heat or specific_heat <= 0 then specific_heat = 1 end
+        data = {buffer.max_temperature, specific_heat}
+        heat_buffers[name] = data
+    end
+    return data[1], data[2]
+end
+
+-- Moves both ends to a common temperature while conserving heat energy: heat pipes of different
+-- prototypes can store different energy per degree.
 Heat.tick = function(conn)
     local outside = conn.outside
     local inside = conn.inside
     if not outside.valid or not inside.valid then return false end
 
+    local delay = conn._settings.delay or DEFAULT_DELAY
     local temp_1, temp_2 = outside.temperature, inside.temperature
-    if temp_1 == temp_2 then return conn._settings.delay or DEFAULT_DELAY end
+    if temp_1 == temp_2 then return delay end
 
-    local average_temp = (temp_1 + temp_2) / 2
-    local max_temp_1 = outside.prototype.heat_buffer_prototype.max_temperature
-    local max_temp_2 = inside.prototype.heat_buffer_prototype.max_temperature
+    local max_temp_1, heat_1 = heat_buffer_of(outside)
+    local max_temp_2, heat_2 = heat_buffer_of(inside)
+    local energy = heat_1 * temp_1 + heat_2 * temp_2
+    local average_temp = energy / (heat_1 + heat_2)
 
     if max_temp_1 < average_temp then
         outside.temperature = max_temp_1
-        inside.temperature = temp_2 - (max_temp_1 - temp_1)
+        inside.temperature = math.min(max_temp_2, (energy - heat_1 * max_temp_1) / heat_2)
     elseif max_temp_2 < average_temp then
         inside.temperature = max_temp_2
-        outside.temperature = temp_1 - (max_temp_2 - temp_2)
+        outside.temperature = math.min(max_temp_1, (energy - heat_2 * max_temp_2) / heat_1)
     else
         outside.temperature = average_temp
         inside.temperature = average_temp
     end
 
-    return conn._settings.delay or DEFAULT_DELAY
+    return delay
 end
 
 Heat.destroy = function(conn)

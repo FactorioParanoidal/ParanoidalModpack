@@ -1,651 +1,462 @@
-﻿log("turrets.lua")
---[[check and import utils]]
-if not heroturrets.defines then require ("prototypes.scripts.defines") end
+-- Runtime of the turret ranks. Paranoidal fork of HeroTurretRedux 1.0.38: rank rules of
+-- heroturrets 9.1.11 (Beta 8) plus the 2.0 features of Redux (wires, circuit behaviour, priority
+-- targets, quality, base-turret ghosts and blueprints).
+--
+-- Load: a turret's rank is checked only when that turret is the cause of a death. Every event is
+-- registered once, with native filters, so trees, rocks, buildings and other deaths never reach
+-- Lua. Ranked prototypes and startup settings are read once when the script loads.
+local util = heroturrets.util
+local D = heroturrets.defines
 
---[[defines]]
+local M = {}
 
---[[create local references]]
---[[util]]
-local is_valid = heroturrets.util.is_valid
-local starts_with = heroturrets.util.starts_with
-local ends_with = heroturrets.util.ends_with
-local table_contains = heroturrets.util.table.contains
-local is_valid_and_persistant = heroturrets.util.entity.is_valid_and_persistant
-local distance = heroturrets.util.distance
-local get_entities_around  = heroturrets.util.entity.get_entities_around
-local parseCustomRankTable = heroturrets.util.parseCustomRankTable
-local local_split = heroturrets.util.local_split
-local local_trim = heroturrets.util.local_trim
-local find_recipes_for = function(name, force)
-	local p = prototypes.entity[name]
-	local ret = {}
-	if p~=nil then 
-	table.insert(ret,p)
-	end
-	return ret
-end
+local TURRET_TYPES = {"ammo-turret", "electric-turret", "fluid-turret", "artillery-turret"}
+local MAX_COUNTER = 4294967295
 
---heroturrets.util.recipe.find_recipes_for
+local startup = settings.startup
+local kill_multiplier = {
+	["ammo-turret"] = startup["heroturrets-setting-ammo-turret-kill-multiplier"].value,
+	["fluid-turret"] = startup["heroturrets-setting-fluid-turret-kill-multiplier"].value,
+	["electric-turret"] = startup["heroturrets-setting-electric-turret-kill-multiplier"].value,
+	["artillery-turret"] = startup["heroturrets-setting-artillery-turret-kill-multiplier"].value,
+}
+-- Types whose kills raise the rank.
+local ranks_up = {
+	["ammo-turret"] = true,
+	["fluid-turret"] = true,
+	["electric-turret"] = true,
+	["artillery-turret"] = startup["heroturrets-allow-artillery-turrets"].value,
+}
+local exact_counter = startup["heroturrets-kill-counter"].value == "Exact"
+local damage_counter = startup["heroturrets-damage-counter"].value == "On"
+local rank_by_damage = startup["heroturrets-allow-damage"].value == "Enabled"
+local max_health_on_rank = startup["heroturrets-max-health-on-rank"].value
 
---[[unitialized globals]]
+---------------------------------------------------------------------------------------------------
+-- Rank tables
+---------------------------------------------------------------------------------------------------
+local rank_count = #util.get_rank_names()
 
---[[ensure globals]]
-local multipliers = {}
-multipliers["ammo-turret"] = settings.startup["heroturrets-setting-ammo-turret-kill-multiplier"].value
-multipliers["fluid-turret"] = settings.startup["heroturrets-setting-fluid-turret-kill-multiplier"].value
-multipliers["electric-turret"] = settings.startup["heroturrets-setting-electric-turret-kill-multiplier"].value
-multipliers["artillery-turret"] = settings.startup["heroturrets-setting-artillery-turret-kill-multiplier"].value
-
-local useCustomKillsTable = settings.startup["heroturrets-use-csv-kills"].value
-local useCustomDamageTable = settings.startup["heroturrets-use-csv-damage"].value
-
-local customKillsTable = settings.startup["heroturrets-csv-kill"].value
-local customDamageTable = settings.startup["heroturrets-csv-damage"].value
-
-local maxHealthOnRankUp = settings.startup["heroturrets-max-health-on-rank"].value
-
---- Build out priority target list for turrets that support it
----@param entity LuaEntity
-local build_priority_targets = function(entity)
-	local targets_Table = {}
-	local index = 1
-
-	while true do
-		--check for a valid entity (was a issue that was brought up in the mod portal )
-  		if not entity.valid then break end
-
-		--only way to recursively call the priority list.
-		---As soon as it is "Not Successful" (Out of Bounds error), then break the loop
-  		local success, target = pcall(entity.get_priority_target, index)
-  		if not success then break end
- 		table.insert(targets_Table, target)
-		index = index + 1
-	end
-
-	return targets_Table
-end
-
-local get_circuit_connections = function(entity)
-	if not entity.valid then return {} end
-
-	local current_wire_connections = entity.get_wire_connectors()
-	local source_connections = {}
-
-	for k,v in pairs(current_wire_connections) do
-		if not v.valid then break end
-		
-		if v.connection_count > 0 and v.connections ~= nil then
-			if v.wire_connector_id == defines.wire_connector_id.circuit_red then 
-				source_connections.red = {}
-				for _, connection in ipairs(v.connections) do
-					table.insert(source_connections.red,connection)
-				end
-				elseif v.wire_connector_id == defines.wire_connector_id.circuit_green then
-					source_connections.green = {}
-					for _, connection in ipairs(v.connections) do
-						table.insert(source_connections.green,connection)
-					end
-			end
-
-		end
-	  end
-	  return source_connections
-end
-
-local build_circuit_connections = function(new_entity,source_connections)
-	if next(source_connections) ~= nil  then
-		local dest_connections = new_entity.get_wire_connectors(true) --sending true to initialize connecters
-		for k,v in pairs(dest_connections) do
-			if not v.valid then break end
-
-			if v.wire_connector_id == defines.wire_connector_id.circuit_red then 
-				if source_connections.red ~= nil then
-					for _, connection in ipairs(source_connections.red) do
-						if connection ~= nil then
-							v.connect_to(connection.target)
-						end
-					end
-				end
-			elseif v.wire_connector_id == defines.wire_connector_id.circuit_green then
-				if source_connections.green ~= nil then
-					for _, connection in ipairs(source_connections.green) do
-						if connection ~= nil then
-							v.connect_to(connection.target)
-						end
-					end
-				end
-			end
-		end
-	end
-end
-
-
-local local_replace_turret = function(entity,recipe)	
-	local s = entity.surface
-	local p = entity.position
-	local f = entity.force
-	local h = entity.health
-	local mh = entity.max_health
-	local k = entity.kills
-	local dd = entity.damage_dealt
-	local d = entity.direction
-	local o = entity.orientation
-	local q = entity.quality
-
-	--- Get priority targeting information
-	
-	local ignore_Unprioritised_targets = nil
-	if(entity.type ~= "artillery-turret") then
-		if entity.ignore_unprioritised_targets ~= nil then
-			ignore_Unprioritised_targets =  entity.ignore_unprioritised_targets 
-		end
-	end
-
-
-	---get control behavior for circuit control
-	local control_behavior = entity.get_control_behavior()
-    local controlBehaviorData = nil
-	if control_behavior ~=  nil then
-		if(entity.type == "artillery-turret") then
-			 controlBehaviorData = {
-				--inherited behaviors
-				circuit_enable_disable = control_behavior.circuit_enable_disable,
-				circuit_condition = control_behavior.circuit_condition,
-				connect_to_logistic_network = control_behavior.connect_to_logistic_network,
-				logistic_condition = control_behavior.logistic_condition,
-
-				--Artillery specific
-				read_ammo = control_behavior.read_ammo
-			}
-		else
-			controlBehaviorData = {
-				--inherited behaviors
-				circuit_enable_disable = control_behavior.circuit_enable_disable,
-				circuit_condition = control_behavior.circuit_condition,
-				connect_to_logistic_network = control_behavior.connect_to_logistic_network,
-				logistic_condition = control_behavior.logistic_condition,
-
-				--turret specific
-				set_priority_list = control_behavior.set_priority_list,
-				set_ignore_unlisted_targets = control_behavior.set_ignore_unlisted_targets,
-				ignore_unlisted_targets_condition = control_behavior.ignore_unlisted_targets_condition,
-				read_ammo = control_behavior.read_ammo
-			}
-		end
-	end
-
-	--- build out target list
-	local targets_Table = build_priority_targets(entity)
-	
-	--Build out connections 
-	--TODO : Check for no connections...
-	local source_connections = get_circuit_connections(entity)
-
-	local fluid = {}
-	if entity.fluidbox ~= nil then 
-	  for k = 1, #entity.fluidbox do local fb = entity.fluidbox[k]
-		if fb ~=nil and fb.name ~= nil then
-			table.insert(fluid,fb)
-		end
-	  end
-	end
-	local i = entity.get_inventory(defines.inventory.turret_ammo)
-	local c = nil
-	if i ~= nil then 
-		c = i.get_contents()		
-	end
-	if  entity.can_be_destroyed() ~= true or 
-		entity.destroy({raise_destroy = true}) ~= true then return end
-	
-	local new_entity = s.create_entity{name=recipe.name, position=p, force = f, direction = d, orientation = o, raise_built = true,quality = q,ignore_unprioritised_targets = ignore_Unprioritised_targets}
-	if new_entity == nil then return end -- error shouldn't happen
-
-	if not maxHealthOnRankUp then 
-		if h ~= mh then new_entity.health = h end
-	end
-
-	new_entity.kills = k
-	new_entity.damage_dealt = dd
-
-	local inv = new_entity.get_inventory(defines.inventory.turret_ammo)
-	if inv ~= nil and c ~= nil then
-		for index, inv_typetable in pairs(c) do
-			inv.insert{name=inv_typetable.name,count=inv_typetable.count,quality = inv_typetable.quality}
-		end
-	end
-
-	if fluid ~=nil then
-		for k = 1, #fluid do local fb = fluid[k]
-			--Commenting out for now until I can get a fix for the whole fluid network being drained
-			--new_entity.fluidbox[k] = fb
-		end
-	end
-	--build out the target priority list in the new turret entity
-	if targets_Table ~= nil then
-		for index, priority_target in pairs(targets_Table) do
-			if priority_target ~= nil and priority_target.valid then
-				new_entity.set_priority_target(index,priority_target)
-			end
-		end
-	end
-	
-	if ignore_Unprioritised_targets ~= nil then
-		new_entity.ignore_unprioritised_targets =  ignore_Unprioritised_targets 
-	end
-	--rebuild circuit network connections
-	build_circuit_connections(new_entity,source_connections)
-	
-	-- build out circuit behavior if present
-	if(controlBehaviorData ~= nil) then
-		local new_control_behavior = new_entity.get_or_create_control_behavior()
-
-		--inherited behaviors
-		new_control_behavior.circuit_enable_disable = controlBehaviorData.circuit_enable_disable
-		new_control_behavior.circuit_condition = controlBehaviorData.circuit_condition
-		new_control_behavior.connect_to_logistic_network = controlBehaviorData.connect_to_logistic_network
-		new_control_behavior.logistic_condition = controlBehaviorData.logistic_condition
-		new_control_behavior.read_ammo = controlBehaviorData.read_ammo
-
-		if(new_entity.type ~= "artillery-turret") then
-			--turret specific behaviors
-			new_control_behavior.set_priority_list = controlBehaviorData.set_priority_list
-			new_control_behavior.set_ignore_unlisted_targets = controlBehaviorData.set_ignore_unlisted_targets
-			new_control_behavior.ignore_unlisted_targets_condition = controlBehaviorData.ignore_unlisted_targets_condition
-		end
-
-	end
-
-end
-
-local turret_types = {"ammo-turret", "fluid-turret","electric-turret","artillery-turret"}
-
-
-local local_get_names = function()
-    local names = {"Private 1st Class","Corporal","Sergeant","General","Field Marshal","Supreme Commander"}
-    if  settings.startup["heroturrets-use-csv"].value ~= true then return names end
-    local custom_string = settings.startup["heroturrets-csv-names"].value 
-    if custom_string == nil then return names end
-    custom_string = local_trim(custom_string)
-    if #custom_string == 0 then return names end
-    local custom = local_split(custom_string,",")
-    if #custom < 6 then return names end
-    return custom
-end
-
-
-local get_Custom_Damage_Table = function()
-	if useCustomDamageTable then
-		local customString = local_trim(customDamageTable) 
-
-		if customString == "" then return nil end
-		return parseCustomRankTable(customString)		
-    
-	end 
-end
-
-local get_Custom_Kill_Table = function()
-	if useCustomKillsTable then
-		local customString = local_trim(customKillsTable) 
-
-		if customString == "" then return nil end
-
-    	return parseCustomRankTable(customString)		
-	end 
-end
-
-
-local damage_table = nil
-
---- Calculates Damage / Kills table based on the highest and lowest rank values, then distrbutes the integral across the number of ranks
----@param rankTable any
----@param lowValue uint32
----@param highValue uint32
-local calculate_Rank_Table = function(rankTable,lowValue,highValue)
-	local diff = (highValue-lowValue)/#local_get_names()
-
-	--return an empty table to go to the next. The high rank "value" was lower than the low rank "value". Use the default in this case
-	if diff <= 0 then
-		return
-	end
-
-	local current = lowValue
-	for k=1, #local_get_names()-1 do
-		table.insert(rankTable,current)
+-- Beta 8: linear table from the first to the last reference value over all ranks.
+local function spread(first, last)
+	local diff = (last - first) / rank_count
+	if diff <= 0 then return nil end
+	local result, current = {}, first
+	for k = 1, rank_count - 1 do
+		result[k] = current
 		current = math.floor(current + diff)
 	end
-	table.insert(rankTable,highValue)
+	result[rank_count] = last
+	return result
 end
 
-local local_get_damage_table = function()
-	--if already initialized, use what is currently there
-	if damage_table ~= nil then
-		 return damage_table 
-     end
-	 --build out a damage table link this first, in case the customDamageTable fails to parse or doesn't have enough values
-	 damage_table = {}
-	 calculate_Rank_Table(damage_table,heroturrets.defines.turret_levelup_damage_one,heroturrets.defines.turret_levelup_damage_six)
+local function custom_table(enabled, csv)
+	if not enabled then return nil end
+	csv = util.local_trim(csv or "")
+	if csv == "" then return nil end
+	local parsed = util.parseCustomRankTable(csv)
+	if not parsed or #parsed == 0 then
+		log("HeroTurretRedux: custom rank table is invalid, using the default one: " .. csv)
+		return nil
+	end
+	if #parsed == rank_count then return parsed end
+	return spread(parsed[1], parsed[#parsed])
+end
 
-	local ranks = #local_get_names()
-	if useCustomDamageTable then
-		local customDamageTable = get_Custom_Damage_Table()
+local function rank_table(reference, use_custom, csv)
+	local result = rank_count == #reference and reference or spread(reference[1], reference[#reference])
+	return custom_table(use_custom, csv) or result
+end
 
-		--if it IS nil, use the previously calculated rank table 
-		if customDamageTable ~= nil then
-			if #customDamageTable == ranks then
-				damage_table = customDamageTable
-				--if they aren't equal, try to build out the rank table with the given values
-			else
-				--last "Rank" Value (should be the high one)
-				local customHighValue = customDamageTable[#customDamageTable]
-				--first "Rank" Value (should be the high one)
-				local customLowValue = customDamageTable[1]
-				local tempRankTable = {}
-				calculate_Rank_Table(tempRankTable,customLowValue,customHighValue)
-				--if tempRankTable is empty, just use the original table
-				if next(tempRankTable) ~= nil then
-					log("Not enough custom damage values, caculating damage table based on the first and last custom values present.")
-					damage_table = tempRankTable
-				else
-					log("Could not use Custom Damage ranking values, as the lowest rank value is greater than the highest")
-				end
-				
-			end	
-		else
-			log("Could not use Custom Damage ranking values as some appear to be invalid.")
+local kill_table = rank_table(D.turret_levelup_kills,
+	startup["heroturrets-use-csv-kills"].value, startup["heroturrets-csv-kill"].value)
+local damage_table = rank_table(D.turret_levelup_damage,
+	startup["heroturrets-use-csv-damage"].value, startup["heroturrets-csv-damage"].value)
+local top_rank = math.min(#kill_table, #damage_table)
+
+---------------------------------------------------------------------------------------------------
+-- Ranked prototypes: name -> {rank, base}; base -> {[rank] = ranked name}
+---------------------------------------------------------------------------------------------------
+local ranked, ladders = {}, {}
+for name in pairs(prototypes.get_entity_filtered({{filter = "type", type = TURRET_TYPES}})) do
+	local rank, base = string.match(name, "^hero%-turret%-(%d+)%-for%-(.+)$")
+	if rank then
+		rank = tonumber(rank)
+		ranked[name] = {rank = rank, base = base}
+		local ladder = ladders[base]
+		if not ladder then
+			ladder = {}
+			ladders[base] = ladder
 		end
-	-- the "default" Rankings
-    elseif ranks == 6 then
-		damage_table = {
-			heroturrets.defines.turret_levelup_damage_one,
-			heroturrets.defines.turret_levelup_damage_two,
-			heroturrets.defines.turret_levelup_damage_three,
-			heroturrets.defines.turret_levelup_damage_four,
-			heroturrets.defines.turret_levelup_damage_five,
-			heroturrets.defines.turret_levelup_damage_six
-		}		
+		ladder[rank] = name
 	end
-	return damage_table 
+end
+M.ranked = ranked
+
+-- Runtime-global settings, read lazily and refreshed on change (same on every peer).
+local allow_ghost_rank, allow_blueprint_rank
+local function runtime_settings()
+	if allow_ghost_rank == nil then
+		allow_ghost_rank = settings.global["heroturrets-allow-ghost-rank"].value
+		allow_blueprint_rank = settings.global["heroturrets-allow-blueprint-rank"].value
+	end
 end
 
-local kill_table = nil
-local local_get_kill_table = function()
-	--if already initialized, use what is currently there
-	if kill_table ~= nil then 
-		return kill_table 
+local function state()
+	local s = storage.heroturrets
+	if not s then
+		s = {}
+		storage.heroturrets = s
 	end
-    --build out a kills table link this first, in case the customkillTable fails to parse or doesn't have enough values
-	kill_table = {}
-	log("Building kill table")
-	calculate_Rank_Table(kill_table,heroturrets.defines.turret_levelup_kills_one,heroturrets.defines.turret_levelup_kills_six)
+	s.dying_targets = s.dying_targets or {}
+	return s
+end
 
-	local ranks = #local_get_names()
-	if useCustomKillsTable then
-		local customKillsTable = get_Custom_Kill_Table()
+---------------------------------------------------------------------------------------------------
+-- Turret replacement
+---------------------------------------------------------------------------------------------------
+-- Priority targets of a turret or a turret ghost, by index.
+local function priority_targets(entity)
+	local targets = {}
+	for index = 1, 1000 do
+		local ok, target = pcall(entity.get_priority_target, index)
+		if not ok or not target then break end
+		targets[index] = target
+	end
+	return targets
+end
 
-            --if it IS nil, use the previously calculated rank table 
-            if customKillsTable ~= nil then
-                if #customKillsTable == ranks then
-                    kill_table = customKillsTable
-                    --if they aren't equal, try to build out the rank table with the given values
-                else
-                    --last "Rank" Value (should be the high one)
-                    local customHighValue = customKillsTable[#customKillsTable]
-                    --first "Rank" Value (should be the high one)
-                    local customLowValue = customKillsTable[1]
-                    local tempRankTable = {}
-                    calculate_Rank_Table(tempRankTable,customLowValue,customHighValue)
-                    --if tempRankTable is empty, just use the original table
-                    if next(tempRankTable) ~= nil then
-                        log("Not enough custom Kill values, caculating Kill table based on the first and last custom values present.")
-                        kill_table = tempRankTable
-                    else
-                        log("Could not use Custom Kill ranking values, as the lowest rank value is greater than the highest")
-                    end
-                    
-                end	
-            else
-                log("Could not use Custom Kill ranking values as some appear to be invalid.")
-            end
-    elseif ranks == 6 then
-		kill_table = {
-			heroturrets.defines.turret_levelup_kills_one,
-			heroturrets.defines.turret_levelup_kills_two,
-			heroturrets.defines.turret_levelup_kills_three,
-			heroturrets.defines.turret_levelup_kills_four,
-			heroturrets.defines.turret_levelup_kills_five,
-			heroturrets.defines.turret_levelup_kills_six,
+local function restore_targets(entity, targets)
+	for index, target in pairs(targets) do
+		if target.valid then pcall(entity.set_priority_target, index, target) end
+	end
+end
+
+-- Wires: {connector id -> {{target, origin}}}. Ghosts are read the same way.
+local function wire_connections(entity)
+	local result = {}
+	local ok, connectors = pcall(entity.get_wire_connectors, false)
+	if not ok or not connectors then return result end
+	for id, connector in pairs(connectors) do
+		if connector.connection_count > 0 then
+			local list = {}
+			for _, connection in pairs(connector.connections) do
+				list[#list + 1] = {target = connection.target, origin = connection.origin}
+			end
+			result[id] = list
+		end
+	end
+	return result
+end
+
+local function restore_wires(entity, wires)
+	if not next(wires) then return end
+	local ok, connectors = pcall(entity.get_wire_connectors, true)
+	if not ok or not connectors then return end
+	for id, list in pairs(wires) do
+		local connector = connectors[id]
+		if connector then
+			for _, connection in pairs(list) do
+				if connection.target.valid then connector.connect_to(connection.target, false, connection.origin) end
+			end
+		end
+	end
+end
+
+local function control_settings(entity)
+	local behaviour = entity.get_control_behavior()
+	if not behaviour then return nil end
+	local data = {
+		circuit_enable_disable = behaviour.circuit_enable_disable,
+		circuit_condition = behaviour.circuit_condition,
+		connect_to_logistic_network = behaviour.connect_to_logistic_network,
+		logistic_condition = behaviour.logistic_condition,
+		read_ammo = behaviour.read_ammo,
+	}
+	if entity.type ~= "artillery-turret" then
+		data.set_priority_list = behaviour.set_priority_list
+		data.set_ignore_unlisted_targets = behaviour.set_ignore_unlisted_targets
+		data.ignore_unlisted_targets_condition = behaviour.ignore_unlisted_targets_condition
+	end
+	return data
+end
+
+local function restore_control(entity, data)
+	if not data then return end
+	local behaviour = entity.get_or_create_control_behavior()
+	if not behaviour then return end
+	for key, value in pairs(data) do behaviour[key] = value end
+end
+
+-- Replaces a turret by another prototype at the same place. Ammo stacks (with partial magazines and
+-- quality), health, wires, circuit settings and priority targets are kept. keep_counters = false
+-- resets kills and damage (demotion).
+local function replace_turret(entity, new_name, keep_counters)
+	local surface, position, force = entity.surface, entity.position, entity.force
+	local direction, orientation, quality = entity.direction, entity.orientation, entity.quality
+	local health, max_health = entity.health, entity.max_health
+	local kills, damage = entity.kills, entity.damage_dealt
+	local last_user = entity.last_user
+	local ignore_unprioritised = nil
+	if entity.type ~= "artillery-turret" then ignore_unprioritised = entity.ignore_unprioritised_targets end
+	local targets = priority_targets(entity)
+	local wires = wire_connections(entity)
+	local control = control_settings(entity)
+
+	local ammo, buffer = entity.get_inventory(defines.inventory.turret_ammo), nil
+	if ammo and not ammo.is_empty() then
+		buffer = game.create_inventory(#ammo)
+		for i = 1, #ammo do
+			if ammo[i].valid_for_read then buffer[i].transfer_stack(ammo[i]) end
+		end
+	end
+
+	if not (entity.can_be_destroyed() and entity.destroy({raise_destroy = true})) then
+		if buffer then
+			for i = 1, #buffer do
+				if buffer[i].valid_for_read then ammo[i].transfer_stack(buffer[i]) end
+			end
+			buffer.destroy()
+		end
+		return nil
+	end
+
+	local new_entity = surface.create_entity({
+		name = new_name, position = position, force = force, direction = direction,
+		orientation = orientation, quality = quality, raise_built = true,
+	})
+	if new_entity and new_entity.valid then
+		if not max_health_on_rank and health ~= max_health then new_entity.health = health end
+		new_entity.kills = keep_counters and kills or 0
+		new_entity.damage_dealt = keep_counters and damage or 0
+		if last_user then new_entity.last_user = last_user end
+		local inventory = buffer and new_entity.get_inventory(defines.inventory.turret_ammo)
+		if inventory then
+			for i = 1, math.min(#buffer, #inventory) do
+				if buffer[i].valid_for_read then inventory[i].transfer_stack(buffer[i]) end
+			end
+		end
+		restore_targets(new_entity, targets)
+		if ignore_unprioritised ~= nil then new_entity.ignore_unprioritised_targets = ignore_unprioritised end
+		restore_wires(new_entity, wires)
+		restore_control(new_entity, control)
+	end
+	if buffer then
+		-- Anything that did not fit goes on the ground instead of disappearing.
+		for i = 1, #buffer do
+			if buffer[i].valid_for_read then surface.spill_item_stack({position = position, stack = buffer[i], force = force}) end
+		end
+		buffer.destroy()
+	end
+	return new_entity
+end
+M.replace_turret = replace_turret
+
+---------------------------------------------------------------------------------------------------
+-- Events
+---------------------------------------------------------------------------------------------------
+-- Beta 8: the highest rank whose threshold (x type multiplier, minus the kill being counted) is met.
+local function check_rank(turret, multiplier)
+	local name = turret.name
+	local info = ranked[name]
+	local current = info and info.rank or 0
+	if current >= top_rank then return end
+	local ladder = ladders[info and info.base or name]
+	if not ladder then return end
+	local kills = turret.kills
+	if not rank_by_damage and kills < kill_table[current + 1] * multiplier - 1 then return end
+	local damage = rank_by_damage and turret.damage_dealt or 0
+	for rank = top_rank, current + 1, -1 do
+		if kills >= kill_table[rank] * multiplier - 1 or (rank_by_damage and damage >= damage_table[rank] * multiplier) then
+			local target = ladder[rank]
+			if target then
+				replace_turret(turret, target, true)
+				return
+			end
+		end
+	end
+end
+
+local function on_entity_died(event)
+	local cause = event.cause
+	if cause and cause.valid then
+		local turret_type = cause.type
+		if ranks_up[turret_type] then check_rank(cause, kill_multiplier[turret_type]) end
+	end
+	-- A dying ranked turret: keep its priority targets for the base-turret ghost.
+	runtime_settings()
+	if allow_ghost_rank then return end
+	local entity = event.entity
+	if entity.valid and ranked[entity.name] and entity.unit_number then
+		local ignore_unprioritised = nil
+		if entity.type ~= "artillery-turret" then ignore_unprioritised = entity.ignore_unprioritised_targets end
+		state().dying_targets[entity.unit_number] = {
+			targets = priority_targets(entity), ignore_unprioritised = ignore_unprioritised,
 		}
-	else
-
 	end
-	log(serpent.block(kill_table))
-	return kill_table 
 end
 
-local rank_count = nil
-local local_turret_added = function(entity,event)	
-	if is_valid(event.entity) ~= true then return end	
-	if table_contains(turret_types,event.entity.type)  ~= true then return end    
-	
-	local multiplier = multipliers[event.entity.type]
-	if multiplier == nil then multiplier = 1 end	
-
-	
-	--[[
-		local levelup_four = heroturrets.defines.turret_levelup_kills_four * multiplier
-		local levelup_three = heroturrets.defines.turret_levelup_kills_three * multiplier
-		local levelup_two = heroturrets.defines.turret_levelup_kills_two * multiplier
-		local levelup_one = heroturrets.defines.turret_levelup_kills_one * multiplier
-		local levelup_damage_four = heroturrets.defines.turret_levelup_damage_four * multiplier
-		local levelup_damage_three = heroturrets.defines.turret_levelup_damage_three * multiplier
-		local levelup_damage_two = heroturrets.defines.turret_levelup_damage_two * multiplier
-		local levelup_damage_one = heroturrets.defines.turret_levelup_damage_one * multiplier
-	]]
-	if settings.startup["heroturrets-kill-counter"].value == "Exact" and is_valid(event.tags)and event.tags.kills ~= nil then
-		event.entity.kills = event.tags.kills
-		if settings.startup["heroturrets-damage-counter"].value == "On" and event.tags.damage_dealt ~= nil  then
-			event.entity.damage_dealt = event.tags.damage_dealt
-		end		
-	else
-		if rank_count == nil then rank_count = #local_get_names() end
-		for k = 1, rank_count do
-			if starts_with(event.entity.name,"hero-turret-"..k) then
-				local dmg = event.entity.damage_dealt
-				if dmg == nil then dmg = 0 end
-				local kills = event.entity.kills
-				if kills == nil then kills = 0 end
-				event.entity.kills = math.min(4294967295,math.max(local_get_kill_table()[k]*multiplier, kills))
-				event.entity.damage_dealt = math.max(local_get_damage_table()[k]*multiplier, dmg)
-			end
-		end
-	end 
-	--[[
-		elseif starts_with(entity.name,"hero-turret-4") == true then
-			local dmg = entity.damage_dealt
-			if dgm == nil then dgm = 0 end
-			local kills = entity.kills
-			if kills == nil then kills = 0 end
-
-			entity.kills = math.max(levelup_four, kills)
-			entity.damage_dealt = math.max(levelup_damage_four, dmg)
-		elseif starts_with(entity.name,"hero-turret-3") == true then
-			local dmg = entity.damage_dealt
-			if dgm == nil then dgm = 0 end
-			local kills = entity.kills
-			if kills == nil then kills = 0 end
-
-			entity.kills = math.max(levelup_three, kills)
-			entity.damage_dealt = math.max(levelup_damage_three, dgm)
-		elseif starts_with(entity.name,"hero-turret-2") == true then		
-			local dmg = entity.damage_dealt
-			if dgm == nil then dgm = 0 end
-			local kills = entity.kills
-			if kills == nil then kills = 0 end
-			entity.kills = math.max(levelup_two, kills)
-			entity.damage_dealt = math.max(levelup_damage_two, dgm)
-		elseif starts_with(entity.name,"hero-turret-1") == true then
-			local dmg = entity.damage_dealt
-			if dgm == nil then dgm = 0 end
-			local kills = entity.kills
-			if kills == nil then kills = 0 end
-
-			entity.kills = math.max(levelup_one, kills)
-			entity.damage_dealt = math.max(levelup_damage_one, dgm)
-		end
-	]]
+-- A ranked turret's ghost becomes the base turret's ghost (unless ranked ghosts are allowed).
+local function on_post_entity_died(event)
+	local s = storage.heroturrets
+	local saved = nil
+	if s and s.dying_targets and event.unit_number then
+		saved = s.dying_targets[event.unit_number]
+		s.dying_targets[event.unit_number] = nil
 	end
+	runtime_settings()
+	if allow_ghost_rank then return end
+	local ghost = event.ghost
+	if not (ghost and ghost.valid) then return end
+	local info = ranked[ghost.ghost_name]
+	if not info then return end
 
-local local_turret_removed = function(entity,event)	
+	local surface, position, force = ghost.surface, ghost.position, ghost.force
+	local direction, quality = ghost.direction, ghost.quality
+	local targets = saved and saved.targets or priority_targets(ghost)
+	local ignore_unprioritised = saved and saved.ignore_unprioritised
+	if ignore_unprioritised == nil then
+		local ok, value = pcall(function() return ghost.ignore_unprioritised_targets end)
+		if ok then ignore_unprioritised = value end
+	end
+	local wires = wire_connections(ghost)
+	ghost.destroy()
+	local new_ghost = surface.create_entity({
+		name = "entity-ghost", inner_name = info.base, position = position, force = force,
+		direction = direction, quality = quality,
+	})
+	if not (new_ghost and new_ghost.valid) then return end
+	restore_targets(new_ghost, targets)
+	if ignore_unprioritised ~= nil then pcall(function() new_ghost.ignore_unprioritised_targets = ignore_unprioritised end) end
+	restore_wires(new_ghost, wires)
+end
 
-	-- Capture priority targets from dying ranked turrets while the entity is still valid.
-	-- on_post_entity_died fires after the entity is gone, so we store them here by unit_number
-	-- for retrieval during ghost replacement.
-	if event ~= nil and event.name == defines.events.on_entity_died then
-		if is_valid(entity) and starts_with(entity.name, "hero-turret-") and entity.unit_number ~= nil then
-			if storage.heroturrets.dying_turret_targets == nil then
-				storage.heroturrets.dying_turret_targets = {}
-			end
-			local ignore_unprioritised = nil
-			if entity.type ~= "artillery-turret" then
-				ignore_unprioritised = entity.ignore_unprioritised_targets
-			end
-			storage.heroturrets.dying_turret_targets[entity.unit_number] = {
-				targets = build_priority_targets(entity),
-				ignore_unprioritised = ignore_unprioritised
-			}
+-- A ranked turret that is built keeps at least the kills of its rank (Beta 8).
+local function exact_tags(event)
+	if event.tags then return event.tags end
+	local items = event.consumed_items
+	if items and items.valid then
+		for i = 1, #items do
+			local stack = items[i]
+			if stack.valid_for_read and stack.type == "item-with-tags" then return stack.tags end
 		end
 	end
+	return nil
+end
 
-	if event ~= nil and event.cause ~= nil and table_contains(turret_types,event.cause.type) and event.cause.kills ~=nil then						
-		if settings.startup["heroturrets-allow-artillery-turrets"].value == false and event.cause.type == "artillery-turret" then return end
-		
-		local multiplier = multipliers[event.cause.type]
-		if multiplier == nil then return end
-
-		--[[
-			local levelup_four = heroturrets.defines.turret_levelup_kills_four * multiplier
-			local levelup_three = heroturrets.defines.turret_levelup_kills_three * multiplier
-			local levelup_two = heroturrets.defines.turret_levelup_kills_two * multiplier
-			local levelup_one = heroturrets.defines.turret_levelup_kills_one * multiplier
-			local levelup_damage_four = heroturrets.defines.turret_levelup_damage_four * multiplier
-			local levelup_damage_three = heroturrets.defines.turret_levelup_damage_three * multiplier
-			local levelup_damage_two = heroturrets.defines.turret_levelup_damage_two * multiplier
-			local levelup_damage_one = heroturrets.defines.turret_levelup_damage_one * multiplier
-		]]
-			
-			if rank_count == nil then rank_count = #local_get_names() end			
-			for k = rank_count, 1, -1 do
-				if event.cause.kills >= ((local_get_kill_table()[k]*multiplier) - 1) or (settings.startup["heroturrets-allow-damage"].value == "Enabled" and event.cause.damage_dealt >= local_get_damage_table()[k]*multiplier) then		
-					
-					if starts_with(event.cause.name,"hero-turret") == true then
-						--is a hero turret
-						if starts_with(event.cause.name,"hero-turret-"..k) then
-							--nothing to do
-						else
-							local new_name = event.cause.name:gsub("hero%-turret%-"..k.."%-for%-", "")
-							for j = k-1, 1, -1 do
-								new_name = new_name:gsub("hero%-turret%-"..j.."%-for%-", "")
-							end
-							local ug = find_recipes_for("hero-turret-"..k.."-for-"..new_name,event.cause.force)					
-							if #ug ~= 0 then
-								local_replace_turret(event.cause,ug[1])
-								return
-							end
-						end
-					else
-						
-						--find upgrade
-						local ug = find_recipes_for("hero-turret-"..k.."-for-"..event.cause.name,event.cause.force)
-						if #ug ~= 0 then
-							local_replace_turret(event.cause,ug[1])
-							return
-						end
-					end
-				end
-			end
-	elseif settings.startup["heroturrets-kill-counter"].value == "Disable" then
-		--do nothing		
-	else if settings.startup["heroturrets-kill-counter"].value == "Exact" and event ~= nil and is_valid(event.entity) and is_valid(event.buffer) and table_contains(turret_types,event.entity.type) and event.entity.kills ~= nil and event.entity.kills > 0 then	
-			if #event.buffer == 1 and event.entity.kills==0 then
-				local item = event.buffer[1]
-				local standard_item = item.name:sub(1,#item.name-#"-with-tags")
-				local stack = {
-					name = standard_item,
-					count = item.count,
-					health = item.health,
-					ammo = item.ammo
-				}
-				if event.buffer.can_set_stack(stack) then
-					event.buffer.set_stack(stack)
-				elseif item.type == "item-with-tags" then 			
-					item.set_tag("kills", event.entity.kills)
-					item.custom_description = event.entity.kills .. " Kills"
-					if settings.startup["heroturrets-damage-counter"].value == "On" and event.entity.damage_dealt ~=nil then
-						item.set_tag("damage_dealt", event.entity.damage_dealt)
-					end					
-				end
-			else
-				for k=#event.buffer, 1, -1 do item = event.buffer[k]
-					if item.type == "item-with-tags" then 			
-						item.set_tag("kills", event.entity.kills)
-						item.custom_description = event.entity.kills .. " Kills"
-						if settings.startup["heroturrets-damage-counter"].value == "On" and event.entity.damage_dealt ~=nil then
-							item.set_tag("damage_dealt", event.entity.damage_dealt)
-						end		
-					end
-				end
-			end		
+local function on_built(event)
+	local entity = event.entity
+	if not (entity and entity.valid) then return end
+	if exact_counter then
+		local tags = exact_tags(event)
+		if tags and tags.kills then
+			entity.kills = tags.kills
+			if damage_counter and tags.damage_dealt then entity.damage_dealt = tags.damage_dealt end
+			return
 		end
 	end
-	end
+	local info = ranked[entity.name]
+	if not info or not kill_table[info.rank] then return end
+	local multiplier = kill_multiplier[entity.type] or 1
+	entity.kills = math.min(MAX_COUNTER, math.max(kill_table[info.rank] * multiplier, entity.kills or 0))
+	entity.damage_dealt = math.max(damage_table[info.rank] * multiplier, entity.damage_dealt or 0)
+end
 
-local local_on_post_entity_died = function(event)
-	if settings.global["heroturrets-allow-ghost-rank"].value then return end
-	if event.ghost ~= nil then	
-		local fstr = event.ghost.ghost_name:match("^hero%-turret%-%d+%-for%-")
-		if fstr ~=nil then
-			local base_entity = event.ghost.ghost_name:sub(#fstr+1)
-			local force = event.ghost.force
-			local direction = event.ghost.direction
-			local position = event.ghost.position
-			local surface = event.ghost.surface
-
-			-- Prefer targets captured from the live entity; fall back to reading from the ghost.
-			local targets_table = {}
-			local ignore_unprioritised = nil
-			local stored_data = storage.heroturrets.dying_turret_targets ~= nil
-				and event.unit_number ~= nil
-				and storage.heroturrets.dying_turret_targets[event.unit_number]
-			if stored_data then
-				targets_table = stored_data.targets
-				ignore_unprioritised = stored_data.ignore_unprioritised
-				storage.heroturrets.dying_turret_targets[event.unit_number] = nil
-			else
-				targets_table = build_priority_targets(event.ghost)
-				ignore_unprioritised = event.ghost.ignore_unprioritised_targets
-			end
-
-			event.ghost.destroy()
-			local new_ghost = surface.create_entity{name = "entity-ghost", inner_name = base_entity, force = force, position = position, direction = direction}
-			if new_ghost ~= nil then
-				for index, priority_target in pairs(targets_table) do
-					if priority_target ~= nil and priority_target.valid then
-						pcall(new_ghost.set_priority_target, index, priority_target)
-					end
-				end
-				if ignore_unprioritised ~= nil then
-					new_ghost.ignore_unprioritised_targets = ignore_unprioritised
-				end
-			end
+-- Exact counter: the mined turret's kills travel in the item tags.
+local function on_mined(event)
+	local entity, buffer = event.entity, event.buffer
+	if not (entity and entity.valid and buffer and buffer.valid) then return end
+	local kills = entity.kills
+	if not kills or kills <= 0 then return end
+	for i = 1, #buffer do
+		local stack = buffer[i]
+		if stack.valid_for_read and stack.type == "item-with-tags" then
+			stack.set_tag("kills", kills)
+			stack.custom_description = kills .. " Kills"
+			if damage_counter and entity.damage_dealt then stack.set_tag("damage_dealt", entity.damage_dealt) end
 		end
 	end
+end
+
+-- Blueprints place base turrets instead of ranked ones (unless ranked blueprints are allowed).
+local function blueprint_of(event)
+	local stack = event.stack
+	if stack and stack.valid_for_read and stack.is_blueprint then return stack end
+	local record = event.record
+	if record and record.valid and record.type == "blueprint" then return record end
+	local player = game.get_player(event.player_index)
+	if not player then return nil end
+	for _, candidate in pairs({player.blueprint_to_setup, player.cursor_stack}) do
+		if candidate and candidate.valid_for_read and candidate.is_blueprint then return candidate end
 	end
+	return nil
+end
 
+local function on_player_setup_blueprint(event)
+	runtime_settings()
+	if allow_blueprint_rank then return end
+	local blueprint = blueprint_of(event)
+	if not blueprint then return end
+	local entities = blueprint.get_blueprint_entities()
+	if not entities then return end
+	local changed = false
+	for _, entity in pairs(entities) do
+		local info = ranked[entity.name]
+		if info then
+			entity.name = info.base
+			changed = true
+		end
+	end
+	if changed then blueprint.set_blueprint_entities(entities) end
+end
 
-local control = {
-	on_removed = local_turret_removed,
-	on_added = local_turret_added,
-	on_post_entity_died = local_on_post_entity_died
-}
+---------------------------------------------------------------------------------------------------
+-- Registration
+---------------------------------------------------------------------------------------------------
+-- Deaths that can raise a rank (enemies, worms, nests, turrets) or leave a ranked ghost (turrets).
+local DIED_TYPES = {"unit", "unit-spawner", "turret", "character", "car", "spider-vehicle",
+	"ammo-turret", "electric-turret", "fluid-turret", "artillery-turret"}
 
-heroturrets.register_script(control)
+local function type_filters(types)
+	local filters = {}
+	for _, name in ipairs(types) do filters[#filters + 1] = {filter = "type", type = name} end
+	return filters
+end
+
+function M.register()
+	script.on_init(state)
+	script.on_configuration_changed(function()
+		local s = state()
+		s.dying_turret_targets = nil -- 1.0.38 kept them forever when no ghost was created
+		s.allow_pickup_rotations, s.initialized = nil, nil
+	end)
+	script.on_event(defines.events.on_runtime_mod_setting_changed, function(event)
+		if string.find(event.setting, "heroturrets-", 1, true) == 1 then allow_ghost_rank = nil end
+	end)
+
+	if next(ladders) == nil then return end -- no ranked turrets were generated
+
+	local turret_filters = type_filters(TURRET_TYPES)
+	script.on_event(defines.events.on_entity_died, on_entity_died, type_filters(DIED_TYPES))
+	script.on_event(defines.events.on_post_entity_died, on_post_entity_died, turret_filters)
+	for _, id in ipairs({defines.events.on_built_entity, defines.events.on_robot_built_entity,
+		defines.events.script_raised_built, defines.events.script_raised_revive}) do
+		script.on_event(id, on_built, turret_filters)
+	end
+	if exact_counter then
+		script.on_event(defines.events.on_player_mined_entity, on_mined, turret_filters)
+		script.on_event(defines.events.on_robot_mined_entity, on_mined, turret_filters)
+	end
+	script.on_event(defines.events.on_player_setup_blueprint, on_player_setup_blueprint)
+end
+
+-- Interface for zzzparanoidal's demotion tool: a ranked turret becomes its base turret, kills and
+-- damage start from zero (Beta 8). Returns the new turret or nil.
+function M.demote(entity)
+	if not (entity and entity.valid) then return nil end
+	local info = ranked[entity.name]
+	if not info then return nil end
+	return replace_turret(entity, info.base, false)
+end
+
+return M

@@ -1,0 +1,16 @@
+{
+  "mod": "ic-more-qualities",
+  "source": "portal",
+  "upstreamVersion": "1.0.5",
+  "changeReason": "Локальный патч опубликованной версии 1.0.5 с расширением Paranoidal: добавляет пять ступеней брака, потери производства, десять исследований контроля качества, мастерскую доводки, режимы производства, контрольный пост, сигналы и панель контроля качества; положительные качества доступны с начала игры.",
+  "original": {
+    "name": "IndustrialCraft - More Qualities",
+    "authors": [
+      "mimic"
+    ],
+    "portal": {
+      "name": "ic-more-qualities",
+      "url": "https://mods.factorio.com/mod/ic-more-qualities"
+    }
+  }
+}

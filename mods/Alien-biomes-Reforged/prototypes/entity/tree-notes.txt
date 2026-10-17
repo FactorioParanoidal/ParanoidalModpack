@@ -1,0 +1,121 @@
+--[[
+Vanilla Tree Notes:
+01: Hydra: red tint, curly roots, branches early, spikey branches, sparese thick leaves, desert / dirt
+02: Ash: grey trunk, thin leaves, tall tree, light connifer look, good for cold climate
+03: Oak: desaturated yellow trunk, slightly twisted, normal looking, stubby roots, good for normal climate
+04: Antler: red tinge, thick conical trunk, horizontal branching, good for drier climates.
+05: Zigzag: grey zigzaging twisted trunk. horizontal scragely branches. thick leaves. good for blue areas
+06: Willow: orange weeping tree, thick trunk but narrow overall. sparse leaves make it best for dirt / desert but would be good for wetland if thicker leaves
+07: Weeper: grey thin conical trunk. weeping branches, lower branches root down. Good for mangrove style (turqoise) or pink flowers elsewhere
+08: Crowsnest: red-grey thick conical trunk. branches all clustered at the top and then feather. good for hot dry climates
+09: Baobob: yellow-grey very thick conical trunk. branches near the top are thick and spikey
+dead-dry-hairy-tree: red tint, twisted trunk, horizontal, feahtery limbs
+dead-grey-trunk: desaturated yellow, slightly twisted trunk, stubby limbs, horizontal and vertical
+dead-tree-desert: red tinge, angular reachign branches, slender trunk, vertical
+dry-hairy-tree: brown, weeping feathery limbs, slightly twisted trunk, branches early, vertical
+dry-tree: a brown stump, few stubby branches, vertical
+green-coral: stubby green coral.
+
+Tree implementation:
+each tree needs a "-stump" of type corpse
+typrically the first tree is called "tree-##"
+  but the subsequent trees are given an identifier "tree-##-red"
+The vanilla trees are:
+( temp_opt, temp_range, water_optimal, water_range, static_influence, tree_noise_influence )
+  tree_autoplace(30, 5, 0.75, 0.25),
+tree-01, 25~35, 0.5~1, olive green, yellow - desert edges
+tree-02, 10~24, 0.55~0.75, lightish green - near desert edges
+tree-02-red, 10~24, 0.4~0.5, -0.25 rare, yellow, red, green, multicolored pastel trees, small clumps in the desert
+tree-03, 20~30, 0.7~0.9, light green, brown, yellow, red
+tree-04, 5~19, 0.4~0.8, -0.5 rare, dark bluish green, likes mud and grass
+tree-05, 5~19, 0.6~1, bright green, likes moisture
+tree-06, 9~35, 0.05~0.15, brown/green, sparse
+tree-06-brown, 9~35, 0.05~0.15, brownish-orange-light, sparse
+tree-07, 15~35, 0.15~0.25, yellow/brownish-almost-green, sparse
+tree-08, 15~25, 0.0~0.2, -1 rare, green-yellow, orange-brown, reddish, - for desert
+tree-08-brown, 15~25, 0.0~0.2, -0.99 rare, - orange / brownish-light - for desert
+tree-08-red, -10~0, 0.0~0.1, -5 rare, - reddish - for desert
+tree-09-brown, 15~35, 0.15~0.25, -0.5 rare, greenish / brownish/ reddish -light- for desert
+tree-09, 25~35, 0.4~0.5, -0.21 rare, dark green
+tree-09-red, 5~25, 0.15~0.25, -0.5 rare, red - for green-grass
+
+Wet Trees (01, 06, 07)
+Temperate Trees (02, 03, 04, 05)
+Dirt Trees (02, 03, 04, 05)
+Desert trees (0.8 and 0.9, maybe 04)
+
+Tree plans:
+Temperature and aux control color. Extreme aux values can also push trees to only certain areas
+Moisture controls type
+Elevation could also be used in some cases (palm trees)
+Moisture blocks:
+Desert 0~0.4, Dirt 0.4~0.6, Dirt/Grass border 0.6~0.8, Deep grass, 0.8~1
+above values may need to change so use table for M1, M2, M3, M4
+
+By Biome (there will be some overlap)
+
+Green:
+  Light desaturated green
+  bright green (low aux)
+  Dark green
+
+Olive:
+  Dark green
+  Orange and brown
+
+Yellow:
+  Orange
+  Bright Green (low aux)
+  Greeny Brown
+
+Orange:
+  Bright yellow (low aux)
+  Red
+  Brown
+
+Red:
+  Orange, Red, Yellow
+
+Purple:
+  Deep purple
+  Pastel Purple (high aux)
+
+Violet:
+  Magenta (high aux)
+  Burgundy (high aux)
+  Pastel pink
+
+Blue:
+  Pastel Blue
+  Deep Blue (high aux)
+  Cyan (high aux)
+
+Turqoise:
+  Turqoise connifer
+  Teal (high aux)
+  Weeping dark green
+
+Desert trees
+Pink desert trees
+Red desert trees
+orange desert trees
+Yellow desert trees
+brown desert trees
+green desert trees
+dark green desert trees
+Dark red desert trees
+dark purple desert trees
+
+dark green near-snow snow trees
+dark turqoise near-snow snow trees
+white snow trees
+
+palm trees (use base 7 or 8 for now)
+
+Color options:
+Pick 2-X color options
+take the first (primary) option and make a slightly darker duplicate
+for each color, step 2/3 to each other color
+exclude duplicates
+repeat until 32 colors are there
+]]--

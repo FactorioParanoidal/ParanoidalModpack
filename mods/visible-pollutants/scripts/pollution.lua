@@ -1,7 +1,7 @@
 local Pollution = {}
 
-Pollution.MinPollutionShown = 2
-Pollution.MaxPollutionShown = 900
+Pollution.MinPollutionShown = 60
+Pollution.MaxPollutionShown = 1000
 Pollution.Exponent = 0.4
 
 ---@type Color

@@ -1,4 +1,8 @@
 data:extend({
+  {type = "double-setting", name = "paranoidal-miniloader-energy-multiplier", setting_type = "startup",
+    default_value = 4, minimum_value = 0.01, maximum_value = 100, order = "loader-a"},
+  {type = "bool-setting", name = "paranoidal-loader-auto-connect", setting_type = "runtime-global",
+    default_value = true, order = "loader-b"},
   --Разброс вещей из сундуков
   {type = "bool-setting", name = "item-drop", setting_type = "startup", default_value = true, order = "b"},
   --Ресурсы на дефолте х5 богатство
@@ -6,6 +10,11 @@ data:extend({
  -------------------------------------------------------------------------------------------------
  --рескин покрытия кирпичем
  {type = "bool-setting", name = "stone-path-concrete", setting_type = "startup", default_value = true, order = "2"},
+ --белая каменная дорожка и белый бетон, облака, декорации (Beta 8: SingleColorTerrain)
+ {type = "bool-setting", name = "white-stone", setting_type = "startup", default_value = true, order = "2-a"},
+ {type = "bool-setting", name = "white-concrete", setting_type = "startup", default_value = true, order = "2-b"},
+ {type = "bool-setting", name = "no-clouds", setting_type = "startup", default_value = true, order = "2-c"},
+ {type = "bool-setting", name = "no-decor", setting_type = "startup", default_value = false, order = "2-d"},
  -------------------------------------------------------------------------------------------------
  --фитолампы в биофермах
  {type = "bool-setting", name = "fitolamps", setting_type = "startup", default_value = true, order = "1"},
@@ -19,6 +28,16 @@ data:extend({
  --рескин проводов
  {type = "bool-setting", name = "wire", setting_type = "startup", default_value = true, order = "7"},
  {type = "bool-setting", name = "copper_wire", setting_type = "startup", default_value = true, order = "8"},
+ --прозрачность проводов (Beta 8: PickerTweaks), видимость в процентах
+ {type = "string-setting", name = "paranoidal-wire-visibility-copper", setting_type = "startup", default_value = "100",
+  allowed_values = {"100", "80", "50", "30", "0"}, order = "8-0a"},
+ {type = "string-setting", name = "paranoidal-wire-visibility-red", setting_type = "startup", default_value = "100",
+  allowed_values = {"100", "80", "50", "30", "0"}, order = "8-0b"},
+ {type = "string-setting", name = "paranoidal-wire-visibility-green", setting_type = "startup", default_value = "100",
+  allowed_values = {"100", "80", "50", "30", "0"}, order = "8-0c"},
+ --графика комбинаторов comb (BiusArt): иконки и/или постройки на земле
+ {type = "string-setting", name = "paranoidal-comb-graphics", setting_type = "startup", default_value = "all",
+  allowed_values = {"all", "icons", "entities", "none"}, order = "8-a"},
  -------------------------------------------------------------------------------------------------
  --стрелки атаки
    {
@@ -35,18 +54,17 @@ data:extend({
      setting_type = "startup",
      default_value = "FF9F1C"
    },
-   {
-     type = "double-setting",
-     name = "paranoidal-flowfix-min-time",
-     setting_type = "startup",
-     default_value = 0.5,
-     minimum_value = 0.5,
-     maximum_value = 100,
-     order = "e"
-   },
    --Рассказываем как показать тонкие настройки
  {type = "bool-setting", name = "zzz-settings", setting_type = "startup", default_value = true, order = "f"}
  })
+
+ -- Prismatic Belts: базовая лента Bob — 16 кадров (как у жёлтой) или турбо-лист 64 кадра.
+ if mods["prismatic-belts"] then
+   data:extend({
+     {type = "bool-setting", name = "paranoidal-bob-basic-belt-64-frames", setting_type = "startup",
+       default_value = false, order = "loader-c"},
+   })
+ end
  
  if mods.research_evolution_factor then
    data:extend

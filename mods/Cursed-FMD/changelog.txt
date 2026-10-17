@@ -3,6 +3,7 @@ Version: 0.2.0
 Date: 2020-12-6
   Fix:
     - Updated to Factorio 2.0
+    - Paranoidal: changing a drill filter keeps the drill quality (a defective drill was rebuilt as normal); removed the debug chat message.
 ---------------------------------------------------------------------------------------------------
 Version: 0.1.8
 Date: 2020-12-6

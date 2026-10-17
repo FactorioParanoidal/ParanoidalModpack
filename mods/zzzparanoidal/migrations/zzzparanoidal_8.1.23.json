@@ -1,0 +1,12 @@
+{
+  "item": [
+    ["wood-bricks", "angels-wood-bricks"],
+    ["pellet-coke", "angels-pellet-coke"],
+    ["wood-charcoal", "angels-wood-charcoal"],
+    ["angels-uranium-fuel-cell", "uranium-fuel-cell"]
+  ],
+  "recipe": [
+    ["angels-uranium-fuel-cell", "paranoidal-energy-migration-angels-uranium-fuel-cell"],
+    ["uranium-fuel-cell", "paranoidal-energy-migration-uranium-fuel-cell"]
+  ]
+}

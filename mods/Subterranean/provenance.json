@@ -1,0 +1,28 @@
+{
+  "source": "User-supplied Paranoidal Beta 8, Subterranean 0.5.3",
+  "source_commit_for_robot_change": "c324cca5525ae06284f91d4e0080cad26cd813e1",
+  "maintained_by": "Paranoidal maintainers",
+  "port_version": "2.0.0",
+  "source_sha256": {
+    "control.lua": "ca5b4195a3290b49db6253fe13bdf21a1daaf3b433cf3cea021b8b54025680ef",
+    "data-updates.lua": "2f4201dab5d2d9bec02dee9833f03703cea857ab479b28aecd2cb9f8c14a1bd2",
+    "data.lua": "a2936152d145310f9f96613ece0399d0ae557d6586b97fb2686bc81e433eaba0",
+    "info.json": "7749d8adda4e66eb7a6a40fefe2a752021c16c5d236c3f82cd901460e394bd10",
+    "README.md": "d5fe9eab5f102c064c0c090bb69e3ef47466ee52e5def203e0384b29506e97b2",
+    "settings.lua": "a98c67bb05aa6293e6fb233552ea18733aa747b90a909b3bd5e3db44c32e56fc",
+    "thumbnail.png": "cf6fd0c0e638302b709c41f5fbca2ce5fa437844c3290dbc588c203e9ad811b1",
+    "prototypes/entity.lua": "aede5dbb4ea04638c4af6167b605816e22bb79d1b31a05d757f142b3a7e6996a",
+    "prototypes/item.lua": "9570d949f34e49d749c060a7c8148de6edb33d0cb550e077d62a4875025cd928",
+    "prototypes/recipe.lua": "3f636ec9154d5a06f77f7824125f66b64b3959cde5aab623667d250e68694bc8",
+    "prototypes/technology.lua": "a770606ea9416d0c1eda8898a843bffc0cad039bb25443b6d1e1b7b12ff2607a",
+    "locale/en/locale.cfg": "7150fc46b47e4e0a93af9fecaaad8684267f2a9ab73c321d72795f679fbab612",
+    "locale/ru/locale.cfg": "f27d72f2e84728ccd20d3ae80cfa1d49407ef47928cf85269be331580028c1c9",
+    "graphics/icons/express-underground-belt.png": "e11a3a75c72c388f846ff8fd2adc6f8bc9c2e579b18bd0a637c04ece96a27bf7",
+    "graphics/icons/fast-underground-belt.png": "be8b52e00c849c0a3bbbe8079c53db8a6785d838a37c3d85c8b9ac402d60afdc",
+    "graphics/icons/pipe-to-ground.png": "37ca40682fe8b6160114a695d0746ca2c022763b4048052de0d48b1c5cf7901d",
+    "graphics/icons/underground-belt.png": "35a478538c5067ada0160e1fa038358a039af87a154a5e4bb93937b09efe5728",
+    "graphics/technology/liquid-logistics.png": "fa38d8dbc89bc2a204332d26261ca3259872febb36599cfe7ca115e44b5edf40",
+    "graphics/technology/logistics.png": "cf6fd0c0e638302b709c41f5fbca2ce5fa437844c3290dbc588c203e9ad811b1"
+  },
+  "license_note": "No separate license file in the supplied mod. Original attribution retained; publication rights require confirmation before external distribution."
+}

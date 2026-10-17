@@ -2,6 +2,7 @@ local const = require("scripts/constants")
 local utils = require("scripts/utils")
 local draw = require("scripts/rendering")
 local get_belt_type = utils.get_belt_type
+local get_item_name = utils.get_item_name
 local empty_check = utils.empty_check
 local check_entity = utils.check_entity
 local lane_cycle = const.lane_cycle
@@ -30,11 +31,11 @@ end
 
 local function get_filter_side(data, entity)
     if not data.filter then return end
-    local splitter_filter = entity.splitter_filter
+    local splitter_filter = get_item_name(entity.splitter_filter)
     if not splitter_filter then return end
     local output_priority = entity.splitter_output_priority
     if output_priority == "none" then return end
-    return (output_priority == "left") == (data.filter == splitter_filter.name) and "left" or "right"
+    return (output_priority == "left") == (data.filter == splitter_filter) and "left" or "right"
 end
 
 local function get_input_paths(check, lanes)
@@ -138,8 +139,13 @@ local function add_to_queue(data, entity, lanes, path, old_entity)
         local check
         if checked[unit_number] then
             if is_splitter then
+                -- the lane is done only when every requested side is already checked
+                check = true
                 for side in pairs(sides) do
-                    check = checked[unit_number][side][lane][path]
+                    if not checked[unit_number][side][lane][path] then
+                        check = false
+                        break
+                    end
                 end
             else
                 check = checked[unit_number][lane][path]
@@ -213,14 +219,11 @@ highlight_entity["underground-belt"] = function(data, entity, lanes, path)
     end
     local neighbour = entity.neighbours
     if forward == is_input and neighbour then
-        local check = data.checked[entity.unit_number]
-        local neighbour_check = data.checked[neighbour.unit_number]
+        local input_end = is_input and entity or neighbour
+        local output_end = is_input and neighbour or entity
         for lane in pairs(lanes) do
-            if not (neighbour_check and neighbour_check[lane].dash) then
-                local offsets = dash[lane][direction]
-                draw.dash(data, is_input and entity or neighbour, offsets.input, offsets.output)
-            end
-            check[lane].dash = true
+            local offsets = dash[lane][direction]
+            draw.dash(data, input_end, output_end, offsets.input, offsets.output)
         end
         add_to_queue(data, neighbour, lanes, path, entity)
     end
@@ -341,7 +344,17 @@ local function highlight_loader(loader_const)
         if entity.type == "entity-ghost" then return end -- TODO: ACTUALLY FIX
         if data.container_passthrough and forward == (loader_type == "input") then
             local container = entity.loader_container
-            if container and (container.type == "container" or container.type == "logistic-container" or container.type == "infinity-container") then
+            local container_type = container and container.type
+            if container_type == "container" or container_type == "logistic-container" or container_type == "infinity-container" then
+                -- the search result depends only on the container and path, do it once per traversal
+                local passthrough = data.passthrough
+                if not passthrough then
+                    passthrough = {{}, {}}
+                    data.passthrough = passthrough
+                end
+                local container_number = container.unit_number --[[@as number]]
+                if passthrough[path][container_number] then return end
+                passthrough[path][container_number] = true
                 local box = container.prototype.collision_box
                 local lt, rb = box.left_top, box.right_bottom
                 local pos = container.position

@@ -85,10 +85,21 @@ local function unpause_construction_animation(top_animation, bottom_animation)
     bottom_animation.animation_offset = offset
 end
 
+-- Single-pair keys stay registered for calls scheduled by older versions of the mod.
 factorissimo.register_delayed_function("start_construction_animation", start_construction_animation)
 factorissimo.register_delayed_function("pause_construction_animation", pause_construction_animation)
 factorissimo.register_delayed_function("unpause_construction_animation", unpause_construction_animation)
-factorissimo.register_delayed_function("destroy_entity", function(entity) entity.destroy() end)
+factorissimo.register_delayed_function("destroy_entity", function(entity) if entity.valid then entity.destroy() end end)
+
+-- One call per group of tiles with the same timing: `animations` is a flat list top1, bottom1, top2, bottom2, ...
+local function for_each_pair(f)
+    return function(animations)
+        for i = 1, #animations, 2 do f(animations[i], animations[i + 1]) end
+    end
+end
+factorissimo.register_delayed_function("start_construction_animations", for_each_pair(start_construction_animation))
+factorissimo.register_delayed_function("pause_construction_animations", for_each_pair(pause_construction_animation))
+factorissimo.register_delayed_function("unpause_construction_animations", for_each_pair(unpause_construction_animation))
 
 local TICKS_PER_FRAME = 2
 local FRAMES_BETWEEN_BUILDING = 8 * 2
@@ -116,13 +127,13 @@ local function request_platform_animation_for(entity)
     end
 
     local remove_scaffold_delay = (largest_manhattan_distance + 4) * FRAMES_BETWEEN_BUILDING
+    local top_render_layer = entity.type == "cargo-landing-pad" and "above-inserters" or "higher-object-above"
 
+    local groups = {} -- manhattan distance -> flat list of animations
     for _, position in ipairs(tilebox) do
         local piece = get_piece(position.center, entity.position)
-
-        local up_base = 1 + position.manhattan_distance * FRAMES_BETWEEN_BUILDING
-        local down_base = 1 + position.manhattan_distance * FRAMES_BETWEEN_REMOVING + remove_scaffold_delay
-
+        local distance = position.manhattan_distance
+        local down_base = 1 + distance * FRAMES_BETWEEN_REMOVING + remove_scaffold_delay
         local time_to_live = down_base + 16 * TICKS_PER_FRAME
 
         local top_animation = rendering.draw_animation {
@@ -132,7 +143,7 @@ local function request_platform_animation_for(entity)
             time_to_live = time_to_live,
             animation_offset = 0,
             animation_speed = 0,
-            render_layer = entity.type == "cargo-landing-pad" and "above-inserters" or "higher-object-above",
+            render_layer = top_render_layer,
             visible = false,
         }
 
@@ -147,9 +158,21 @@ local function request_platform_animation_for(entity)
             visible = false,
         }
 
-        factorissimo.execute_later("start_construction_animation", up_base, top_animation, bottom_animation)
-        factorissimo.execute_later("pause_construction_animation", up_base + 15 * TICKS_PER_FRAME, top_animation, bottom_animation)
-        factorissimo.execute_later("unpause_construction_animation", down_base, top_animation, bottom_animation)
+        local group = groups[distance]
+        if not group then
+            group = {}
+            groups[distance] = group
+        end
+        group[#group + 1] = top_animation
+        group[#group + 1] = bottom_animation
+    end
+
+    for distance, animations in pairs(groups) do
+        local up_base = 1 + distance * FRAMES_BETWEEN_BUILDING
+        local down_base = 1 + distance * FRAMES_BETWEEN_REMOVING + remove_scaffold_delay
+        factorissimo.execute_later("start_construction_animations", up_base, animations)
+        factorissimo.execute_later("pause_construction_animations", up_base + 15 * TICKS_PER_FRAME, animations)
+        factorissimo.execute_later("unpause_construction_animations", down_base, animations)
     end
 end
 
@@ -204,7 +227,7 @@ end
 factorissimo.on_event(defines.events.on_script_trigger_effect, function(event)
     if event.effect_id ~= "factory-hidden-construction-robot-created" then return end
     local construction_robot = event.target_entity
-    assert(construction_robot and construction_robot.name == FACTORY_HIDDEN_CONSTRUCTION_ROBOT)
+    if not (construction_robot and construction_robot.valid and construction_robot.name == FACTORY_HIDDEN_CONSTRUCTION_ROBOT) then return end
     if not storage.surface_factories[construction_robot.surface_index] then
         factorissimo.execute_later("destroy_entity", 1, construction_robot)
     end
@@ -234,8 +257,10 @@ local function ensure_target_number_of_robots(factory)
     local hidden_roboport = roboport_upgrade.hidden_roboport
     if not hidden_roboport or not hidden_roboport.valid then return end
     local robot_inventory = hidden_roboport.get_inventory(defines.inventory.roboport_robot)
+    local network = hidden_roboport.logistic_network
+    if not (robot_inventory and network) then return end
 
-    local all_construction_robots = hidden_roboport.logistic_network.all_construction_robots
+    local all_construction_robots = network.all_construction_robots
     local missing = TARGET_NUMBER_OF_ROBOTS_IN_NETWORK - all_construction_robots
     if missing == 0 then return end
 
@@ -384,11 +409,11 @@ local function get_construction_requests_by_factory()
             local no_material_for_construction = alerts[defines.alert_type.no_material_for_construction] or {}
             for _, ghost in pairs(no_material_for_construction) do
                 ghost = ghost.target
-                if not ghost then goto continue end -- this can happen if the alerts are not updated yet but the entity is invalid
+                if not (ghost and ghost.valid) then goto continue end -- this can happen if the alerts are not updated yet but the entity is invalid
                 --if ghost.is_registered_for_construction() then goto continue end -- we only care about ghosts that are not already being constructed
                 local factory = remote_api.find_surrounding_factory_by_surface_index(surface_index, ghost.position)
                 if not factory or not factory.roboport_upgrade then goto continue end
-                if factory.inactive or not factory.built or not factory.building.valid then goto continue end
+                if factory.inactive or not factory.built or not (factory.building and factory.building.valid) then goto continue end
                 if not factory.inside_surface.valid or not factory.outside_surface.valid then goto continue end
 
                 local missing_ghosts = missing_ghosts_per_factory[factory]
@@ -408,9 +433,9 @@ local function get_construction_requests_by_factory()
 
             local not_enough_repair_packs = alerts[defines.alert_type.not_enough_repair_packs] or {}
             for _, alert in pairs(not_enough_repair_packs) do
-                local factory = remote_api.find_surrounding_factory_by_surface_index(surface_index, alert.position)
+                local factory = alert.position and remote_api.find_surrounding_factory_by_surface_index(surface_index, alert.position)
                 if not factory or not factory.roboport_upgrade then goto continue end
-                if factory.inactive or not factory.built or not factory.building.valid then goto continue end
+                if factory.inactive or not factory.built or not (factory.building and factory.building.valid) then goto continue end
                 if not factory.inside_surface.valid or not factory.outside_surface.valid then goto continue end
                 factories_that_need_repair_packs[factory] = true
                 ::continue::
@@ -472,6 +497,21 @@ end
 
 local create_or_remove_item_request_proxies -- function stub
 
+-- item_request_proxies: item name -> quality name -> item-request-proxy entity.
+-- The engine removes a proxy by itself once everything was delivered, so entries may be invalid.
+local function destroy_all_item_request_proxies(roboport_upgrade)
+    for _, by_quality in pairs(roboport_upgrade.item_request_proxies) do
+        if type(by_quality) == "table" then
+            for _, proxy in pairs(by_quality) do
+                if proxy.valid then proxy.destroy() end
+            end
+        elseif by_quality.valid then -- a proxy stored by a very old version
+            by_quality.destroy()
+        end
+    end
+    roboport_upgrade.item_request_proxies = {}
+end
+
 factorissimo.on_nth_tick(257, function()
     local construction_requests_by_factory = get_construction_requests_by_factory()
 
@@ -482,13 +522,8 @@ factorissimo.on_nth_tick(257, function()
             eject_unneeded_items(factory, requests_by_itemname or {})
             if requests_by_itemname then
                 create_or_remove_item_request_proxies(factory, requests_by_itemname)
-            elseif factory.roboport_upgrade and next(factory.roboport_upgrade.item_request_proxies) then
-                for _, by_quality in pairs(factory.roboport_upgrade.item_request_proxies) do
-                    for _, proxy in pairs(by_quality) do
-                        proxy.destroy()
-                    end
-                end
-                factory.roboport_upgrade.item_request_proxies = {}
+            elseif factory.roboport_upgrade and next(factory.roboport_upgrade.item_request_proxies or {}) then
+                destroy_all_item_request_proxies(factory.roboport_upgrade)
             end
         end
     end
@@ -496,13 +531,15 @@ end)
 
 create_or_remove_item_request_proxies = function(factory, requests_by_itemname)
     local roboport_upgrade = factory.roboport_upgrade
+    if not roboport_upgrade then return end
+    roboport_upgrade.item_request_proxies = roboport_upgrade.item_request_proxies or {}
     local item_request_proxies = roboport_upgrade.item_request_proxies
 
     local requester = roboport_upgrade.requester
-    if not requester.valid then return end
+    if not (requester and requester.valid) then return end
     local requester_inventory = requester.get_inventory(defines.inventory.chest)
     local storage = roboport_upgrade.storage
-    if not storage.valid then return end
+    if not (storage and storage.valid) then return end
 
     -- subtract off all the items we already have in storage
     for _, chest in pairs {requester, storage} do
@@ -519,33 +556,41 @@ create_or_remove_item_request_proxies = function(factory, requests_by_itemname)
         end
     end
 
+    -- forget delivered proxies, destroy the ones that are no longer needed, remember the slots of the rest
     local already_occupied_inventory_indexes = {}
-    for _, proxy in pairs(item_request_proxies) do
-        if not proxy.valid then goto we_are_no_longer_requesting_this_item end
-
-        for _, request in pairs(proxy.item_requests) do
-            local name, quality = request.name, request.quality -- destroy any proxies that have their requests fulfilled already
-            if not requests_by_itemname[name] or not requests_by_itemname[name][quality] then
-                proxy.destroy()
-                goto we_are_no_longer_requesting_this_item
+    local proxy_slots = {} -- "item/quality" -> requester slot already used by the existing proxy
+    for item_name, by_quality in pairs(item_request_proxies) do
+        if type(by_quality) ~= "table" then
+            if by_quality.valid then by_quality.destroy() end -- a proxy stored by a very old version
+            item_request_proxies[item_name] = nil
+        else
+            for quality, proxy in pairs(by_quality) do
+                if not proxy.valid then
+                    by_quality[quality] = nil
+                elseif not (requests_by_itemname[item_name] and requests_by_itemname[item_name][quality]) then
+                    proxy.destroy()
+                    by_quality[quality] = nil
+                else
+                    for _, insert_plan in pairs(proxy.insert_plan) do
+                        for _, inventory_locator in pairs(insert_plan.items.in_inventory or {}) do
+                            -- inventory_locator.stack is 0-indexed. adjust.
+                            local slot = inventory_locator.stack + 1
+                            already_occupied_inventory_indexes[slot] = true
+                            proxy_slots[item_name .. "/" .. quality] = slot
+                        end
+                    end
+                end
             end
+            if not next(by_quality) then item_request_proxies[item_name] = nil end
         end
-
-        for _, insert_plan in pairs(proxy.insert_plan) do
-            for _, inventory_locator in pairs(insert_plan.items.in_inventory) do
-                -- inventory_locator.stack is 0-indexed for some reason. adjust.
-                already_occupied_inventory_indexes[inventory_locator.stack + 1] = true
-            end
-        end
-
-        ::we_are_no_longer_requesting_this_item::
     end
 
     for item_name, requests_by_quality in pairs(requests_by_itemname) do
         item_request_proxies[item_name] = item_request_proxies[item_name] or {}
         for quality, count in pairs(requests_by_quality) do
-            local next_available_inventory_slot
-            for i = 1, #requester_inventory do
+            local proxy = item_request_proxies[item_name][quality]
+            local next_available_inventory_slot = proxy and proxy.valid and proxy_slots[item_name .. "/" .. quality]
+            for i = 1, next_available_inventory_slot and 0 or #requester_inventory do
                 if not already_occupied_inventory_indexes[i] and not requester_inventory[i].valid_for_read then
                     next_available_inventory_slot = i
                     already_occupied_inventory_indexes[i] = true
@@ -565,7 +610,6 @@ create_or_remove_item_request_proxies = function(factory, requests_by_itemname)
                 }
             }}
 
-            local proxy = item_request_proxies[item_name][quality]
             if proxy and proxy.valid then
                 proxy.insert_plan = insert_plan
             else
@@ -590,7 +634,7 @@ factorissimo.on_nth_tick(43, function()
         if not requester or not requester.valid then goto continue end
         local storage = roboport_upgrade.storage
         local roboport = roboport_upgrade.roboport
-        if not storage.valid or not roboport.valid then goto continue end
+        if not (storage and storage.valid and roboport and roboport.valid) then goto continue end
 
         local requester_inventory = requester.get_inventory(defines.inventory.chest)
         if requester_inventory.is_empty() then goto continue end

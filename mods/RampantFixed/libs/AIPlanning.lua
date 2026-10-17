@@ -158,7 +158,7 @@ function aiPlanning.updateBasesToGrow(map, tick, ingnoreGrowingState)
 		basesToGrowSize = basesToGrowSize + 1
 	end
 	if (basesToGrowSize > 0) and ((map.state == AI_STATE_GROWING) or ingnoreGrowingState) then
-		growCnt = mRandom(mMin(basesToGrowSize, 2), mMin(basesToGrowSize, 4))
+		local growCnt = mRandom(mMin(basesToGrowSize, 2), mMin(basesToGrowSize, 4))
 		local growIndexes = mathUtils.getRandomElementIndexes(map.basesToGrow, growCnt)
 		for i = 1, #growIndexes do
 			local baseId = growIndexes[i]
@@ -265,12 +265,13 @@ local function planningMap(map, tick)
 				mapStateChanged = true
 				resetNextStateTick = false
 				map.points = 400
-				local truceLeft = mMax(math.floor((truceEndTick+5 - tick) / 3600), 0)
-				if truceLeft > 0 then
-					game.print({"description.rampantFixed--peacefullModeNotification", map.surface.name, truceLeft, planetAISetting.minEvo})
-				else
-					game.print({"description.rampantFixed--peacefullMode_LowEvoNotification", map.surface.name, planetAISetting.minEvo})
-				end
+				-- Paranoidal: the truce start is shown by EvoUI next to the evolution line, no chat message.
+				-- local truceLeft = mMax(math.floor((truceEndTick+5 - tick) / 3600), 0)
+				-- if truceLeft > 0 then
+					-- game.print({"description.rampantFixed--peacefullModeNotification", map.surface.name, truceLeft, planetAISetting.minEvo})
+				-- else
+					-- game.print({"description.rampantFixed--peacefullMode_LowEvoNotification", map.surface.name, planetAISetting.minEvo})
+				-- end
 			elseif (map.stateTick <= tick) then
 				map.stateTick = mMax(truceEndTick, tick + 3600)
 			end	

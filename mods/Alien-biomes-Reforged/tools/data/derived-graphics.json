@@ -1,0 +1,2144 @@
+{
+ "graphics/entity/tree/ash/tree-ash-a-normal.png": {
+  "frame": [
+   237,
+   195
+  ],
+  "frames": 3,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   119,
+   98
+  ],
+  "source_sha1": "ed46a09082d08ede4ffa7786924a5f7eed6810c9",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/ash/tree-ash-a-shadow.png": {
+  "frame": [
+   487,
+   312
+  ],
+  "frames": 4,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   244,
+   156
+  ],
+  "source_sha1": "8b4d0697e60a548ace31e3fc2af31903094cb876",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/ash/tree-ash-b-normal.png": {
+  "frame": [
+   157,
+   144
+  ],
+  "frames": 3,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   79,
+   72
+  ],
+  "source_sha1": "70637f44c125ed544565fc5ff2219c90a9417ad8",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/ash/tree-ash-b-shadow.png": {
+  "frame": [
+   324,
+   246
+  ],
+  "frames": 4,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   162,
+   123
+  ],
+  "source_sha1": "58936cb2c40da4b4f5a656ee1dd318800266f43a",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/ash/tree-ash-c-normal.png": {
+  "frame": [
+   187,
+   178
+  ],
+  "frames": 3,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   94,
+   89
+  ],
+  "source_sha1": "993c88aebbc4eee972fa04d9c98393c3f874b335",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/ash/tree-ash-c-shadow.png": {
+  "frame": [
+   387,
+   337
+  ],
+  "frames": 4,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   194,
+   169
+  ],
+  "source_sha1": "ae61478bccc5ebd74968fa397d3c0f444d869280",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/ash/tree-ash-d-normal.png": {
+  "frame": [
+   204,
+   167
+  ],
+  "frames": 3,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   102,
+   84
+  ],
+  "source_sha1": "007fe7e74aeeeb613fac4ac52b839288cf2b75d3",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/ash/tree-ash-d-shadow.png": {
+  "frame": [
+   473,
+   337
+  ],
+  "frames": 4,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   237,
+   169
+  ],
+  "source_sha1": "9b6c230f6c2597d82f1886b0a480a8b16dea0647",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/ash/tree-ash-e-normal.png": {
+  "frame": [
+   235,
+   167
+  ],
+  "frames": 3,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   118,
+   84
+  ],
+  "source_sha1": "431a43f5178816d195f1f9040cc51a2bd2955ac8",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/ash/tree-ash-e-shadow.png": {
+  "frame": [
+   516,
+   285
+  ],
+  "frames": 4,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   258,
+   143
+  ],
+  "source_sha1": "ef5216285339865b2ec0feb3cdbf35a45e6b226d",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/ash/tree-ash-f-normal.png": {
+  "frame": [
+   186,
+   201
+  ],
+  "frames": 3,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   93,
+   101
+  ],
+  "source_sha1": "11792e472b91e3df2377c853c318bab481d8f37a",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/ash/tree-ash-f-shadow.png": {
+  "frame": [
+   427,
+   315
+  ],
+  "frames": 4,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   214,
+   158
+  ],
+  "source_sha1": "8d6bd345235bcb245cb99f2c971267e7f7114a46",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/ash/tree-ash-g-normal.png": {
+  "frame": [
+   155,
+   212
+  ],
+  "frames": 3,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   78,
+   106
+  ],
+  "source_sha1": "c255aba8290c9137fa4160937c73bbe9d969cb61",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/ash/tree-ash-g-shadow.png": {
+  "frame": [
+   352,
+   299
+  ],
+  "frames": 4,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   176,
+   150
+  ],
+  "source_sha1": "a46b53309e04aebcc6816b53787feb4a5acfe142",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/baobab/tree-baobab-a-normal.png": {
+  "frame": [
+   244,
+   204
+  ],
+  "frames": 3,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   122,
+   102
+  ],
+  "source_sha1": "d8f1aeb175bda8fceed31367647fd001b1837304",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/baobab/tree-baobab-a-shadow.png": {
+  "frame": [
+   487,
+   340
+  ],
+  "frames": 4,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   244,
+   170
+  ],
+  "source_sha1": "b62f09f1e00fd171f2dd6be3f33bb2e337b9b32e",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/baobab/tree-baobab-b-normal.png": {
+  "frame": [
+   197,
+   172
+  ],
+  "frames": 3,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   99,
+   86
+  ],
+  "source_sha1": "e981592e3edf5f48bd07f5e7369a24f61e12e05e",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/baobab/tree-baobab-b-shadow.png": {
+  "frame": [
+   415,
+   300
+  ],
+  "frames": 4,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   208,
+   150
+  ],
+  "source_sha1": "d2fb16cfc8226d7176d436bdda7d34e860714793",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/baobab/tree-baobab-c-normal.png": {
+  "frame": [
+   225,
+   189
+  ],
+  "frames": 3,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   113,
+   95
+  ],
+  "source_sha1": "4826af82739a5a419a407460b873806497c1f9ef",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/baobab/tree-baobab-c-shadow.png": {
+  "frame": [
+   476,
+   333
+  ],
+  "frames": 4,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   238,
+   167
+  ],
+  "source_sha1": "5e78c2d369389f6fbe66dad64402943bced01881",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/baobab/tree-baobab-d-normal.png": {
+  "frame": [
+   179,
+   126
+  ],
+  "frames": 3,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   90,
+   63
+  ],
+  "source_sha1": "f4dc700a2d65ef45a1b700771c555bcd23642a38",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/baobab/tree-baobab-d-shadow.png": {
+  "frame": [
+   338,
+   233
+  ],
+  "frames": 4,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   169,
+   117
+  ],
+  "source_sha1": "cca76071ce1696bec80d71929689e30be3767868",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/baobab/tree-baobab-e-normal.png": {
+  "frame": [
+   205,
+   206
+  ],
+  "frames": 3,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   103,
+   103
+  ],
+  "source_sha1": "d4054c8473c7ac9cce58a51465f4c52b2704a621",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/baobab/tree-baobab-e-shadow.png": {
+  "frame": [
+   403,
+   315
+  ],
+  "frames": 4,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   202,
+   158
+  ],
+  "source_sha1": "f281a217396a5f0f73ac068bf281f65919f4f22f",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/conifer-01/tree-conifer-01-a-normal.png": {
+  "frame": [
+   226,
+   328
+  ],
+  "frames": 3,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   113,
+   164
+  ],
+  "source_sha1": "b2d2c163fdfbf58262bbba626154a58368d9dfe1",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/conifer-01/tree-conifer-01-a-shadow.png": {
+  "frame": [
+   599,
+   452
+  ],
+  "frames": 4,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   300,
+   226
+  ],
+  "source_sha1": "a05fe340e480b9cd658be8614074d398dd104118",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/conifer-01/tree-conifer-01-b-normal.png": {
+  "frame": [
+   186,
+   268
+  ],
+  "frames": 3,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   93,
+   134
+  ],
+  "source_sha1": "9a9ffd5c6996153cea0aa557beb3b2a754fbbdd4",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/conifer-01/tree-conifer-01-b-shadow.png": {
+  "frame": [
+   270,
+   304
+  ],
+  "frames": 4,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   135,
+   152
+  ],
+  "source_sha1": "816df111eb6bf85680be827baf96028a78319d48",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/conifer-01/tree-conifer-01-c-normal.png": {
+  "frame": [
+   356,
+   516
+  ],
+  "frames": 3,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   178,
+   258
+  ],
+  "source_sha1": "e568e4a09986061714df458aa550d63e9349cb03",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/conifer-01/tree-conifer-01-c-shadow.png": {
+  "frame": [
+   700,
+   642
+  ],
+  "frames": 4,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   350,
+   321
+  ],
+  "source_sha1": "0e5525b8c7178c4bf80ca3fe1b1617596024a626",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/greypine/tree-greypine-a-normal.png": {
+  "frame": [
+   190,
+   261
+  ],
+  "frames": 3,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   95,
+   131
+  ],
+  "source_sha1": "0eaefd64e6e3e2fcb8ca732e44a9dbfdc29572ef",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/greypine/tree-greypine-a-shadow.png": {
+  "frame": [
+   448,
+   340
+  ],
+  "frames": 4,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   224,
+   170
+  ],
+  "source_sha1": "a5fe5ffaaf62150b0974313fd4297ad6593acf26",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/greypine/tree-greypine-b-normal.png": {
+  "frame": [
+   194,
+   285
+  ],
+  "frames": 3,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   97,
+   143
+  ],
+  "source_sha1": "f2cef5d76ae71c74fae2306968740161b24e8da1",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/greypine/tree-greypine-b-shadow.png": {
+  "frame": [
+   558,
+   385
+  ],
+  "frames": 4,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   279,
+   193
+  ],
+  "source_sha1": "70f237c1ddfb294653744b35219b717fa97e77b6",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/greypine/tree-greypine-c-normal.png": {
+  "frame": [
+   213,
+   309
+  ],
+  "frames": 3,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   107,
+   155
+  ],
+  "source_sha1": "3544f3ff0c51e2c5b5287d6f19e66bd2e2dde7aa",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/greypine/tree-greypine-c-shadow.png": {
+  "frame": [
+   499,
+   377
+  ],
+  "frames": 4,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   250,
+   189
+  ],
+  "source_sha1": "2c6610bf4e7053adf624a424e30a084e9fd3e8bc",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/greypine/tree-greypine-d-normal.png": {
+  "frame": [
+   238,
+   309
+  ],
+  "frames": 3,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   119,
+   155
+  ],
+  "source_sha1": "3848e4ef4c2250f74a4655cbf179758f196ba849",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/greypine/tree-greypine-d-shadow.png": {
+  "frame": [
+   541,
+   374
+  ],
+  "frames": 4,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   271,
+   187
+  ],
+  "source_sha1": "ded6c7ddee2d6b42e577035e41419f3499e9f594",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/greypine/tree-greypine-e-normal.png": {
+  "frame": [
+   207,
+   286
+  ],
+  "frames": 3,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   104,
+   143
+  ],
+  "source_sha1": "6b1b1e010456a714a94383ed3649aabfc53a826d",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/greypine/tree-greypine-e-shadow.png": {
+  "frame": [
+   512,
+   381
+  ],
+  "frames": 4,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   256,
+   191
+  ],
+  "source_sha1": "2503a6f7e833d1b28d4a9f37504b3a0ff83132c4",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/mangrove/tree-mangrove-a-normal.png": {
+  "frame": [
+   134,
+   166
+  ],
+  "frames": 3,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   67,
+   83
+  ],
+  "source_sha1": "9dc54fdf96de3d295545c0b457dc00555f6c323f",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/mangrove/tree-mangrove-a-shadow.png": {
+  "frame": [
+   362,
+   244
+  ],
+  "frames": 4,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   181,
+   122
+  ],
+  "source_sha1": "0c9d3435544c0c41acf71582be9894e620343d73",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/mangrove/tree-mangrove-b-normal.png": {
+  "frame": [
+   146,
+   192
+  ],
+  "frames": 3,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   73,
+   96
+  ],
+  "source_sha1": "c679b65e2bb0d959aa02682d10a3130cad2fb82a",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/mangrove/tree-mangrove-b-shadow.png": {
+  "frame": [
+   335,
+   239
+  ],
+  "frames": 4,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   168,
+   120
+  ],
+  "source_sha1": "5c4603297eeff1a1482a8c1139daa1dc9c04cda2",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/mangrove/tree-mangrove-c-normal.png": {
+  "frame": [
+   160,
+   220
+  ],
+  "frames": 3,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   80,
+   110
+  ],
+  "source_sha1": "3e20cf18a7e3c74cb7a3de4a6cff4b98a7983f5f",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/mangrove/tree-mangrove-c-shadow.png": {
+  "frame": [
+   334,
+   256
+  ],
+  "frames": 4,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   167,
+   128
+  ],
+  "source_sha1": "2444eff7d1221482ffda86bb1f7efb567aa4a7f9",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/mangrove/tree-mangrove-d-normal.png": {
+  "frame": [
+   180,
+   254
+  ],
+  "frames": 3,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   90,
+   127
+  ],
+  "source_sha1": "b5f5cd3e52953a96e427e1c1decedcbf1e1b8c5f",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/mangrove/tree-mangrove-d-shadow.png": {
+  "frame": [
+   368,
+   314
+  ],
+  "frames": 4,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   184,
+   157
+  ],
+  "source_sha1": "2f6131f8578742d175eca8bf1039df0ff9eac369",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/mangrove/tree-mangrove-e-normal.png": {
+  "frame": [
+   150,
+   268
+  ],
+  "frames": 3,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   75,
+   134
+  ],
+  "source_sha1": "803534572e05d41aeb79861863d7bbfd7d044e90",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/mangrove/tree-mangrove-e-shadow.png": {
+  "frame": [
+   405,
+   286
+  ],
+  "frames": 4,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   203,
+   143
+  ],
+  "source_sha1": "6e897c5299bc7f9d63f4be240b1ea685333a5bd5",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/mangrove/tree-mangrove-f-normal.png": {
+  "frame": [
+   168,
+   240
+  ],
+  "frames": 3,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   84,
+   120
+  ],
+  "source_sha1": "bfa9cc7644f9639e59825186b238dca808a8aa2f",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/mangrove/tree-mangrove-f-shadow.png": {
+  "frame": [
+   435,
+   270
+  ],
+  "frames": 4,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   218,
+   135
+  ],
+  "source_sha1": "b3600414c54010b0ee136436274c9e03d38d79bc",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/mangrove/tree-mangrove-g-normal.png": {
+  "frame": [
+   160,
+   200
+  ],
+  "frames": 3,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   80,
+   100
+  ],
+  "source_sha1": "fd8ab50e7a655c5e220c39cde64e80c6c0c27fdd",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/mangrove/tree-mangrove-g-shadow.png": {
+  "frame": [
+   426,
+   240
+  ],
+  "frames": 4,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   213,
+   120
+  ],
+  "source_sha1": "a69f3014fddd1ced28b82a2295c61572bc02f4f6",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/mangrove/tree-mangrove-h-normal.png": {
+  "frame": [
+   148,
+   174
+  ],
+  "frames": 3,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   74,
+   87
+  ],
+  "source_sha1": "84cf1c9dc8aec6db72a82d9fa9b78ebd864f2132",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/mangrove/tree-mangrove-h-shadow.png": {
+  "frame": [
+   397,
+   243
+  ],
+  "frames": 4,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   199,
+   122
+  ],
+  "source_sha1": "9850bfda5a9bc01e27fd4f2fc23c95756f47504e",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/medusa-01/tree-medusa-01-a-shadow.png": {
+  "frame": [
+   254,
+   200
+  ],
+  "frames": 2,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   127,
+   100
+  ],
+  "source_sha1": "9e4ea02a7ac8fed08cf195835a1c5bc8b0d71af6",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/medusa-01/tree-medusa-01-b-shadow.png": {
+  "frame": [
+   302,
+   220
+  ],
+  "frames": 2,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   151,
+   110
+  ],
+  "source_sha1": "ad930b2bc880999e9aa460e52d8da9c1389b500f",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/medusa-01/tree-medusa-01-c-shadow.png": {
+  "frame": [
+   232,
+   220
+  ],
+  "frames": 2,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   116,
+   110
+  ],
+  "source_sha1": "45ff7fe545857990287493357a43726451719c80",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/medusa-01/tree-medusa-01-d-shadow.png": {
+  "frame": [
+   236,
+   220
+  ],
+  "frames": 2,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   118,
+   110
+  ],
+  "source_sha1": "bec1699a73f82fa86aad4a01ad6285318a44f6cd",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/medusa-01/tree-medusa-01-e-shadow.png": {
+  "frame": [
+   200,
+   220
+  ],
+  "frames": 2,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   100,
+   110
+  ],
+  "source_sha1": "a3059e4817b18d623cfe0ae6f63158ca9ca276cb",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/oaktapus/tree-oaktapus-a-normal.png": {
+  "frame": [
+   204,
+   231
+  ],
+  "frames": 3,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   102,
+   116
+  ],
+  "source_sha1": "23212c0d158e7658aeb3d1fae48e547b82b696f2",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/oaktapus/tree-oaktapus-a-shadow.png": {
+  "frame": [
+   354,
+   298
+  ],
+  "frames": 4,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   177,
+   149
+  ],
+  "source_sha1": "5ae983f86eb35bb294021d45fbb1ab0a09d5e170",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/oaktapus/tree-oaktapus-b-normal.png": {
+  "frame": [
+   178,
+   215
+  ],
+  "frames": 3,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   89,
+   108
+  ],
+  "source_sha1": "e476508b943abe4235374cd19f84c5a59267d0cf",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/oaktapus/tree-oaktapus-b-shadow.png": {
+  "frame": [
+   358,
+   298
+  ],
+  "frames": 4,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   179,
+   149
+  ],
+  "source_sha1": "e7f30674995d4b2a270e100443d8b6f56780cb81",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/oaktapus/tree-oaktapus-c-normal.png": {
+  "frame": [
+   190,
+   210
+  ],
+  "frames": 3,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   95,
+   105
+  ],
+  "source_sha1": "747b2d7370096ee6268506b7d8bb7e216bb350a3",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/oaktapus/tree-oaktapus-c-shadow.png": {
+  "frame": [
+   313,
+   291
+  ],
+  "frames": 4,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   157,
+   146
+  ],
+  "source_sha1": "c1d263deed57e8fb8150b3027ebb98d7f65a09cb",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/oaktapus/tree-oaktapus-d-normal.png": {
+  "frame": [
+   205,
+   212
+  ],
+  "frames": 3,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   103,
+   106
+  ],
+  "source_sha1": "57a2d8100e364612a46fc6c2138d0bb7efa59e8b",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/oaktapus/tree-oaktapus-d-shadow.png": {
+  "frame": [
+   351,
+   302
+  ],
+  "frames": 4,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   176,
+   151
+  ],
+  "source_sha1": "5780cb42314862969d956eeb9a8072becd3a1469",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/oaktapus/tree-oaktapus-e-normal.png": {
+  "frame": [
+   212,
+   221
+  ],
+  "frames": 3,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   106,
+   111
+  ],
+  "source_sha1": "b757f40e81def79d0a6155be9c73a5f9cf9369d8",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/oaktapus/tree-oaktapus-e-shadow.png": {
+  "frame": [
+   346,
+   281
+  ],
+  "frames": 4,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   173,
+   141
+  ],
+  "source_sha1": "7def4bc3ef4d758d9bda885c558d46ce475238fa",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/oaktapus/tree-oaktapus-f-normal.png": {
+  "frame": [
+   191,
+   203
+  ],
+  "frames": 3,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   96,
+   102
+  ],
+  "source_sha1": "b56f4993648ac7c00c4f7baf561c98f2cf135106",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/oaktapus/tree-oaktapus-f-shadow.png": {
+  "frame": [
+   350,
+   280
+  ],
+  "frames": 4,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   175,
+   140
+  ],
+  "source_sha1": "a10feac085202f60b083b4dc9ec7ab7764533e0f",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/oaktapus/tree-oaktapus-g-normal.png": {
+  "frame": [
+   193,
+   239
+  ],
+  "frames": 3,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   97,
+   120
+  ],
+  "source_sha1": "3295ac94b1afdf9dec0033d966ab44e0d2faea36",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/oaktapus/tree-oaktapus-g-shadow.png": {
+  "frame": [
+   328,
+   301
+  ],
+  "frames": 4,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   164,
+   151
+  ],
+  "source_sha1": "4e722e3e372301be4c52054dbbb2dacd6b5e7536",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/oaktapus/tree-oaktapus-h-normal.png": {
+  "frame": [
+   216,
+   216
+  ],
+  "frames": 3,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   108,
+   108
+  ],
+  "source_sha1": "09b87d6c5efb133836ee473344d961ebd215136b",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/oaktapus/tree-oaktapus-h-shadow.png": {
+  "frame": [
+   360,
+   288
+  ],
+  "frames": 4,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   180,
+   144
+  ],
+  "source_sha1": "3ff8aa97b8d32c4b23db062db48bc81d46b4d8cb",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/oaktapus/tree-oaktapus-i-normal.png": {
+  "frame": [
+   177,
+   244
+  ],
+  "frames": 3,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   89,
+   122
+  ],
+  "source_sha1": "075ab0fbdee21bf1b6dc8e335d1a78e1f0f0bb23",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/oaktapus/tree-oaktapus-i-shadow.png": {
+  "frame": [
+   329,
+   323
+  ],
+  "frames": 4,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   165,
+   162
+  ],
+  "source_sha1": "f2a23645851d81faa59d10d2cff48541d6ce37e5",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/oaktapus/tree-oaktapus-j-normal.png": {
+  "frame": [
+   180,
+   179
+  ],
+  "frames": 3,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   90,
+   90
+  ],
+  "source_sha1": "32ca2a8cc81c8fe8d42c790c110388f087a1ade6",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/oaktapus/tree-oaktapus-j-shadow.png": {
+  "frame": [
+   264,
+   229
+  ],
+  "frames": 4,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   132,
+   115
+  ],
+  "source_sha1": "c9c1d0b63a5eb45f1e71fa672fa9993b6ae5671a",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/palm/tree-palm-a-normal.png": {
+  "frame": [
+   144,
+   114
+  ],
+  "frames": 3,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   72,
+   57
+  ],
+  "source_sha1": "ffc2d88eaccf974dd1a1a0c49a4c03b013da6812",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/palm/tree-palm-a-shadow.png": {
+  "frame": [
+   244,
+   114
+  ],
+  "frames": 4,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   122,
+   57
+  ],
+  "source_sha1": "69afa9fa6c15dbb9d91672def8ed160a19e56fe3",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/palm/tree-palm-b-normal.png": {
+  "frame": [
+   182,
+   118
+  ],
+  "frames": 3,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   91,
+   59
+  ],
+  "source_sha1": "030475bf2c6729e77dc286d046bc8a84e1d01de8",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/palm/tree-palm-b-shadow.png": {
+  "frame": [
+   250,
+   118
+  ],
+  "frames": 4,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   125,
+   59
+  ],
+  "source_sha1": "9ee1066ebc161b18c1891624144451150159f5db",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/palm/tree-palm-c-normal.png": {
+  "frame": [
+   162,
+   124
+  ],
+  "frames": 3,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   81,
+   62
+  ],
+  "source_sha1": "4a3ce3dc9868ee5d7a1fbd34fb63946babdf1f75",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/palm/tree-palm-c-shadow.png": {
+  "frame": [
+   252,
+   124
+  ],
+  "frames": 4,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   126,
+   62
+  ],
+  "source_sha1": "a832cbcf927893db91de39eff8a4bb3d4515b4bf",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/palm/tree-palm-d-normal.png": {
+  "frame": [
+   162,
+   126
+  ],
+  "frames": 3,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   81,
+   63
+  ],
+  "source_sha1": "a9f6e93ec9f639a756c6ac26f26fd5ecbdeed842",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/palm/tree-palm-d-shadow.png": {
+  "frame": [
+   224,
+   126
+  ],
+  "frames": 4,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   112,
+   63
+  ],
+  "source_sha1": "c652d076ba242d17113844f94c3ae4ebed244d9b",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/pear/tree-pear-a-normal.png": {
+  "frame": [
+   188,
+   141
+  ],
+  "frames": 3,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   94,
+   71
+  ],
+  "source_sha1": "bbc293d7f5b1cb850145e5b813c5634844d6260c",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/pear/tree-pear-a-shadow.png": {
+  "frame": [
+   399,
+   279
+  ],
+  "frames": 4,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   200,
+   140
+  ],
+  "source_sha1": "c0eb2b6de875f70eef26aebf8c76815eb8e3fb70",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/pear/tree-pear-b-normal.png": {
+  "frame": [
+   205,
+   142
+  ],
+  "frames": 3,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   103,
+   71
+  ],
+  "source_sha1": "a3d7555e430e893f970c1adee7f38bf1db0229e0",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/pear/tree-pear-b-shadow.png": {
+  "frame": [
+   426,
+   277
+  ],
+  "frames": 4,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   213,
+   139
+  ],
+  "source_sha1": "7e8edaec55a50020ffb4a4aa0c507510888128cc",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/pear/tree-pear-c-normal.png": {
+  "frame": [
+   152,
+   152
+  ],
+  "frames": 3,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   76,
+   76
+  ],
+  "source_sha1": "134709ae0b1227a65889d9c5637e219c3f18c513",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/pear/tree-pear-c-shadow.png": {
+  "frame": [
+   377,
+   271
+  ],
+  "frames": 4,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   189,
+   136
+  ],
+  "source_sha1": "c2637514c80a5fdf9f3cbe2b15d047c056dd3c46",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/pear/tree-pear-d-normal.png": {
+  "frame": [
+   187,
+   162
+  ],
+  "frames": 3,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   94,
+   81
+  ],
+  "source_sha1": "3bdbb7f5157d3f718dcd59b2fc4a6e33c43aaab5",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/pear/tree-pear-d-shadow.png": {
+  "frame": [
+   424,
+   267
+  ],
+  "frames": 4,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   212,
+   134
+  ],
+  "source_sha1": "65e32b8e55ffcaaae2f498983724e570f099c7d7",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/pear/tree-pear-e-normal.png": {
+  "frame": [
+   189,
+   166
+  ],
+  "frames": 3,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   95,
+   83
+  ],
+  "source_sha1": "eb6824e283c040253b76c778aa9e04bcc09da608",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/pear/tree-pear-e-shadow.png": {
+  "frame": [
+   416,
+   295
+  ],
+  "frames": 4,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   208,
+   148
+  ],
+  "source_sha1": "08a16792973d27f10544c780cf74533ef99f35d6",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/scarecrow/tree-scarecrow-a-normal.png": {
+  "frame": [
+   197,
+   254
+  ],
+  "frames": 3,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   99,
+   127
+  ],
+  "source_sha1": "bb993333b82abee6e343991a68830f59d85782e4",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/scarecrow/tree-scarecrow-a-shadow.png": {
+  "frame": [
+   509,
+   340
+  ],
+  "frames": 4,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   255,
+   170
+  ],
+  "source_sha1": "1177f410d9b008e6c5b18ff1fc8d9cb311cacb7f",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/scarecrow/tree-scarecrow-b-normal.png": {
+  "frame": [
+   212,
+   280
+  ],
+  "frames": 3,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   106,
+   140
+  ],
+  "source_sha1": "e0729a19fb00e2f4714360d703c7827158ef3854",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/scarecrow/tree-scarecrow-b-shadow.png": {
+  "frame": [
+   463,
+   336
+  ],
+  "frames": 4,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   232,
+   168
+  ],
+  "source_sha1": "c6e432f35431c380ed9eda6aa04f5a0c3d9a44d4",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/scarecrow/tree-scarecrow-c-normal.png": {
+  "frame": [
+   197,
+   250
+  ],
+  "frames": 3,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   99,
+   125
+  ],
+  "source_sha1": "8b7bcc75ce2d80f21a454443808baa380a8945eb",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/scarecrow/tree-scarecrow-c-shadow.png": {
+  "frame": [
+   530,
+   353
+  ],
+  "frames": 4,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   265,
+   177
+  ],
+  "source_sha1": "cefca24aa9d858bf73dafc528b23552eaa43ecd6",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/scarecrow/tree-scarecrow-d-normal.png": {
+  "frame": [
+   198,
+   248
+  ],
+  "frames": 3,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   99,
+   124
+  ],
+  "source_sha1": "0ffdb51aa45e089f496c186f6b52ece92b0f91a7",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/scarecrow/tree-scarecrow-d-shadow.png": {
+  "frame": [
+   545,
+   348
+  ],
+  "frames": 4,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   273,
+   174
+  ],
+  "source_sha1": "683d5345f4c26e0a39466b366d731e926021dbec",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/scarecrow/tree-scarecrow-e-normal.png": {
+  "frame": [
+   217,
+   273
+  ],
+  "frames": 3,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   109,
+   137
+  ],
+  "source_sha1": "9d7162d9d28fae0ee278e8253fe220b83c60450c",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/scarecrow/tree-scarecrow-e-shadow.png": {
+  "frame": [
+   492,
+   365
+  ],
+  "frames": 4,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   246,
+   183
+  ],
+  "source_sha1": "2751357c13bfd3575aff38e35b0c3dbd5d3cbb3f",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/scarecrow/tree-scarecrow-f-normal.png": {
+  "frame": [
+   200,
+   246
+  ],
+  "frames": 3,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   100,
+   123
+  ],
+  "source_sha1": "f9322b53c8f59af63fa0ddada272028ad6a3f1b5",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/scarecrow/tree-scarecrow-f-shadow.png": {
+  "frame": [
+   520,
+   380
+  ],
+  "frames": 4,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   260,
+   190
+  ],
+  "source_sha1": "4cdcacc49e35ba48845368e3b727813a8f26b3c8",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/scarecrow/tree-scarecrow-g-normal.png": {
+  "frame": [
+   199,
+   231
+  ],
+  "frames": 3,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   100,
+   116
+  ],
+  "source_sha1": "eba1d0a65f6ca97c57565dddf155350b74222f85",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/scarecrow/tree-scarecrow-g-shadow.png": {
+  "frame": [
+   522,
+   352
+  ],
+  "frames": 4,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   261,
+   176
+  ],
+  "source_sha1": "5df785fca90caffb878028f7b9ee289f45ae8eb4",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/scarecrow/tree-scarecrow-h-normal.png": {
+  "frame": [
+   206,
+   245
+  ],
+  "frames": 3,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   103,
+   123
+  ],
+  "source_sha1": "9592988faac7a0e9ca8ace899476da8aa7fd6899",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/scarecrow/tree-scarecrow-h-shadow.png": {
+  "frame": [
+   505,
+   340
+  ],
+  "frames": 4,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   253,
+   170
+  ],
+  "source_sha1": "0557b678d0b1bdc2aa5817170d6b3a5ffebc5152",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/specter/tree-specter-a-normal.png": {
+  "frame": [
+   233,
+   236
+  ],
+  "frames": 3,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   117,
+   118
+  ],
+  "source_sha1": "74dc264966dfca4121a3b98587374b0d59e6c355",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/specter/tree-specter-a-shadow.png": {
+  "frame": [
+   419,
+   284
+  ],
+  "frames": 4,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   210,
+   142
+  ],
+  "source_sha1": "50f913fea516d74fcddeeb47b04d738f2d55c66b",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/specter/tree-specter-b-normal.png": {
+  "frame": [
+   210,
+   230
+  ],
+  "frames": 3,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   105,
+   115
+  ],
+  "source_sha1": "ac73dd328d5156967b86b0265e24054b56604467",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/specter/tree-specter-b-shadow.png": {
+  "frame": [
+   394,
+   259
+  ],
+  "frames": 4,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   197,
+   130
+  ],
+  "source_sha1": "ffd7522f07ef5c374606db918fad5737aeb02a48",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/specter/tree-specter-c-normal.png": {
+  "frame": [
+   232,
+   270
+  ],
+  "frames": 3,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   116,
+   135
+  ],
+  "source_sha1": "74ffcdbe939636cc05b46bdcb3e0fcc3d647290a",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/specter/tree-specter-c-shadow.png": {
+  "frame": [
+   375,
+   276
+  ],
+  "frames": 4,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   188,
+   138
+  ],
+  "source_sha1": "cc8e3dc93479bb1fe38fb9469a40ad3125751ee7",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/specter/tree-specter-d-normal.png": {
+  "frame": [
+   264,
+   260
+  ],
+  "frames": 3,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   132,
+   130
+  ],
+  "source_sha1": "2ce9160205274904bf74199d183579c879493eb6",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/specter/tree-specter-d-shadow.png": {
+  "frame": [
+   412,
+   275
+  ],
+  "frames": 4,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   206,
+   138
+  ],
+  "source_sha1": "bea87cd67d9c9ac15d4a722f4c39797b57216c0b",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/specter/tree-specter-e-normal.png": {
+  "frame": [
+   240,
+   216
+  ],
+  "frames": 3,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   120,
+   108
+  ],
+  "source_sha1": "3cabe07ec214d18bbe9433f4cfef5bca37a614dd",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/specter/tree-specter-e-shadow.png": {
+  "frame": [
+   369,
+   258
+  ],
+  "frames": 4,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   185,
+   129
+  ],
+  "source_sha1": "5d89747b3a73e70f93d037088b58c464762eb196",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/specter/tree-specter-f-normal.png": {
+  "frame": [
+   250,
+   281
+  ],
+  "frames": 3,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   125,
+   141
+  ],
+  "source_sha1": "951ff06923f48678a9b9dcd25c5cb1f60c10e15e",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/specter/tree-specter-f-shadow.png": {
+  "frame": [
+   375,
+   291
+  ],
+  "frames": 4,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   188,
+   146
+  ],
+  "source_sha1": "d12738e58722e286edf8ca751624d08a5fe154db",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/specter/tree-specter-g-normal.png": {
+  "frame": [
+   232,
+   201
+  ],
+  "frames": 3,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   116,
+   101
+  ],
+  "source_sha1": "82fda795cb3a7d6f2c268de5cccc04a7c75f61dd",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/specter/tree-specter-g-shadow.png": {
+  "frame": [
+   362,
+   216
+  ],
+  "frames": 4,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   181,
+   108
+  ],
+  "source_sha1": "eafed6512a06d74cfe326f1b98aca82a264536cf",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/specter/tree-specter-h-normal.png": {
+  "frame": [
+   221,
+   224
+  ],
+  "frames": 3,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   111,
+   112
+  ],
+  "source_sha1": "876025816df645f7a6e9f0718c9c01c6bc16bde4",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/specter/tree-specter-h-shadow.png": {
+  "frame": [
+   330,
+   240
+  ],
+  "frames": 4,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   165,
+   120
+  ],
+  "source_sha1": "0c2c97ce22e404762f9300ff94923c8e3667b95d",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/specter/tree-specter-i-normal.png": {
+  "frame": [
+   238,
+   220
+  ],
+  "frames": 3,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   119,
+   110
+  ],
+  "source_sha1": "a74cd995bf693459abf8d2943e78d3a718b9da4a",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/specter/tree-specter-i-shadow.png": {
+  "frame": [
+   352,
+   221
+  ],
+  "frames": 4,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   176,
+   111
+  ],
+  "source_sha1": "50d107a3bf34512bee0755f2daadae7bc9cb5bc3",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/willow/tree-willow-a-normal.png": {
+  "frame": [
+   133,
+   195
+  ],
+  "frames": 3,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   67,
+   98
+  ],
+  "source_sha1": "5c3fbb681fe0adfc457f498cb6b90fa40040445e",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/willow/tree-willow-a-shadow.png": {
+  "frame": [
+   356,
+   289
+  ],
+  "frames": 4,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   178,
+   145
+  ],
+  "source_sha1": "0101e8f219920453750f4ecfdb08349c6eadf355",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/willow/tree-willow-b-normal.png": {
+  "frame": [
+   170,
+   186
+  ],
+  "frames": 3,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   85,
+   93
+  ],
+  "source_sha1": "a9e4650a74bb495fa84cb3123c79bf5ac5653acf",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/willow/tree-willow-b-shadow.png": {
+  "frame": [
+   375,
+   258
+  ],
+  "frames": 4,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   188,
+   129
+  ],
+  "source_sha1": "bdeafd268d6e3ea5aea970efb7befaba583f8a7a",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/willow/tree-willow-c-normal.png": {
+  "frame": [
+   178,
+   158
+  ],
+  "frames": 3,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   89,
+   79
+  ],
+  "source_sha1": "bf350e6909e55bab49fa59bdf496136508654f4d",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/willow/tree-willow-c-shadow.png": {
+  "frame": [
+   403,
+   214
+  ],
+  "frames": 4,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   202,
+   107
+  ],
+  "source_sha1": "5936a3d920ad4348bb1453277bca8f2a64bb3b8e",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/willow/tree-willow-d-normal.png": {
+  "frame": [
+   150,
+   178
+  ],
+  "frames": 3,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   75,
+   89
+  ],
+  "source_sha1": "f0889c14eea13448a484af7ad6679e6281bab6c3",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/willow/tree-willow-d-shadow.png": {
+  "frame": [
+   343,
+   259
+  ],
+  "frames": 4,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   172,
+   130
+  ],
+  "source_sha1": "f46235fead67661065054143c72d59b0162c85ff",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/willow/tree-willow-e-normal.png": {
+  "frame": [
+   137,
+   224
+  ],
+  "frames": 3,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   69,
+   112
+  ],
+  "source_sha1": "8ed25d6f8ce45dc8d1144654650bbb70b87b1a0a",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/willow/tree-willow-e-shadow.png": {
+  "frame": [
+   280,
+   287
+  ],
+  "frames": 4,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   140,
+   144
+  ],
+  "source_sha1": "a613ef202a9f4fbcd4deab099bdb9c5209cc3795",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/willow/tree-willow-f-normal.png": {
+  "frame": [
+   177,
+   228
+  ],
+  "frames": 3,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   89,
+   114
+  ],
+  "source_sha1": "23136877ab7c011c6a3bb40f00ce38ac666c9627",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/willow/tree-willow-f-shadow.png": {
+  "frame": [
+   371,
+   272
+  ],
+  "frames": 4,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   186,
+   136
+  ],
+  "source_sha1": "389bfc6cfc09da8694328e9e68b9447dc76223cc",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/willow/tree-willow-g-normal.png": {
+  "frame": [
+   177,
+   228
+  ],
+  "frames": 3,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   89,
+   114
+  ],
+  "source_sha1": "58618966f8159ff0f5c5994ff86cdff35b9b66c7",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/willow/tree-willow-g-shadow.png": {
+  "frame": [
+   402,
+   268
+  ],
+  "frames": 4,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   201,
+   134
+  ],
+  "source_sha1": "528b412c86adf9124a678d71f5775907576f9713",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/willow/tree-willow-h-normal.png": {
+  "frame": [
+   143,
+   190
+  ],
+  "frames": 3,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   72,
+   95
+  ],
+  "source_sha1": "50e6c13915969c85d31f7c52434440656e6ac89b",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/willow/tree-willow-h-shadow.png": {
+  "frame": [
+   347,
+   258
+  ],
+  "frames": 4,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   174,
+   129
+  ],
+  "source_sha1": "a7ba10b9632acdfd01afa7e8f2dcc11db1c84cb0",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/willow/tree-willow-i-normal.png": {
+  "frame": [
+   129,
+   185
+  ],
+  "frames": 3,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   65,
+   93
+  ],
+  "source_sha1": "6a62259b8f2c628f1afd817c3f80a41342445814",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/willow/tree-willow-i-shadow.png": {
+  "frame": [
+   253,
+   259
+  ],
+  "frames": 4,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   127,
+   130
+  ],
+  "source_sha1": "55965cbc7220be9a20e1bc601293c9d896a44d51",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/willow/tree-willow-j-normal.png": {
+  "frame": [
+   133,
+   182
+  ],
+  "frames": 3,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   67,
+   91
+  ],
+  "source_sha1": "795cc5a1507f16f679d8d5d42d96cd1249c8fbf8",
+  "tool": "trees.py"
+ },
+ "graphics/entity/tree/willow/tree-willow-j-shadow.png": {
+  "frame": [
+   272,
+   253
+  ],
+  "frames": 4,
+  "method": "half-resolution, used frames only",
+  "new_frame": [
+   136,
+   127
+  ],
+  "source_sha1": "5774238177ae53ca994eb800d32e07deb7b3f011",
+  "tool": "trees.py"
+ }
+}

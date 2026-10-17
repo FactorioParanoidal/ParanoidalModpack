@@ -35,7 +35,7 @@ local function repair_recipe(set, original_item, crashed_item, repair_pack_name)
 end
 
 function Repair.make_repair_recipe_and_item(robot_prototype)
-  if not robot_prototype.minable and robot_prototype.minable.result then return end
+  if not (robot_prototype.minable and robot_prototype.minable.result) then return end
 
   local o_item_name = robot_prototype.minable.result
   local o_item = data.raw.item[o_item_name]

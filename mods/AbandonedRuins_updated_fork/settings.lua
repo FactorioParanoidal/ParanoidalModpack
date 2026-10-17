@@ -39,6 +39,12 @@ data:extend({
     default_value = false,
     order = "bb"
   }, {
+    type = "bool-setting",
+    name = constants.AVOID_REPEATS_KEY,
+    setting_type = "runtime-global",
+    default_value = true,
+    order = "bc"
+  }, {
     type = "string-setting",
     name = constants.CURRENT_RUIN_SET_KEY,
     setting_type = "runtime-global",
@@ -53,6 +59,12 @@ data:extend({
     minimum_value = 50,
     maximum_value = 1000000,
     order = "ca"
+  }, {
+    type = "bool-setting",
+    name = constants.IGNORE_DISTANCE_KEY,
+    setting_type = "runtime-global",
+    default_value = true,
+    order = "caa"
   }, {
     type = "int-setting",
     name = constants.SPAWN_TICK_SECONDS_KEY,

@@ -1,0 +1,10 @@
+{
+  "mod": "NightBrightness",
+  "source": "local",
+  "original": {
+    "name": "Night Brightness",
+    "authors": ["darkfrei"],
+    "portal": {"name": "NightBrightness", "url": "https://mods.factorio.com/mod/NightBrightness"}
+  },
+  "changeReason": "Поддерживаемый локальный порт NightBrightness 1.1.8 из пользовательской Paranoidal Beta 8: исходные LUT, сезонные формулы и настройки сохранены; runtime переработан для Factorio 2.0, добавлены локализация и совместное применение сезонного множителя и загрязнения Visible Pollutants."
+}

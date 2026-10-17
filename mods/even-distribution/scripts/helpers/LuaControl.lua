@@ -1,4 +1,5 @@
 local config = require("config")
+local protocache = require("scripts.protocache")
 local control = scripts.helpers
 local _ = scripts.helpers.on
 
@@ -138,25 +139,55 @@ local function insert(self, name, item, amount)
     return 0
 end
 
+-- Paranoidal: replace inferior fuel/ammo. One get_contents() call tells which inferior items
+-- are present; the original probed every inferior item with find_item_stack (dozens of
+-- fuel types in Paranoidal) for every target entity.
+local function replaceInferior(inv, list, item, limit, player, takenFromCar, takenFromTrash)
+    if not list or limit <= 0 then return 0 end
+
+    local present = {}
+    for __,content in pairs(inv.get_contents()) do
+        if content.quality == nil or content.quality == "normal" then present[content.name] = true end
+    end
+
+    local insertedHere = 0
+    for __,inferior in ipairs(list) do
+        if inferior == item or limit <= 0 then break end
+
+        if present[inferior] then
+            local returnToPlayer = 0
+            while limit > 0 do
+                local stack = inv.find_item_stack(inferior)
+                local returnCount = stack and stack.count or 0
+                if stack and stack.set_stack{ name = item, count = limit } then
+                    limit = limit - stack.count
+                    insertedHere = insertedHere + stack.count
+                    returnToPlayer = returnToPlayer + returnCount
+                else
+                    break
+                end
+            end
+
+            if returnToPlayer > 0 then
+                player:returnItems(inferior, returnToPlayer, takenFromCar, takenFromTrash)
+            end
+        end
+    end
+
+    return insertedHere
+end
+
 -- priority insert with fuel and ammo limits
+-- allowed: optional table with true/false per target (fuel, ammo, input, output, modules, roboport, main); missing = allowed
 function control:customInsert(player, item, amount, takenFromCar, takenFromTrash, replaceItems, useFuelLimit, useAmmoLimit, useRequestLimit, allowed)
     if amount <= 0 then return 0 end
+    allowed = allowed or {}
 
     local inserted = 0
-    local prototype = _(prototypes.item[item])
+    local prototype = prototypes.item[item]
+    local allowMain = allowed.main ~= false
 
-    -- allow/disallow insertion into specific inventories by passing table with true/false values (default is allow)
-    allowed = _({
-        fuel     = true, -- set default values
-        ammo     = true,
-        input    = true,
-        output   = true,
-        modules  = true,
-        roboport = true,
-        main     = true,
-    }):set(allowed or {}):toPlain()
-    
-    if allowed.fuel and prototype:is("fuel") then
+    if allowed.fuel ~= false and prototype.fuel_category ~= nil then
         local inv = self:inventory("fuel")
         if inv then
             local limit = useFuelLimit and math.min(amount, math.max(0, player:itemLimit(prototype, config.fuelLimitProfiles) - inv.get_item_count(item))) or amount
@@ -166,26 +197,7 @@ function control:customInsert(player, item, amount, takenFromCar, takenFromTrash
 
             -- no space left --> replace inferior items
             if replaceItems and limit > 0 then
-                for __,inferiorFuel in pairs(storage.fuelList[prototype.fuel_category]) do
-                    if inferiorFuel.name == prototype.name or limit <= 0 then break end
-
-                    local returnToPlayer = 0
-                    while limit > 0 do
-                        local stack = inv.find_item_stack(inferiorFuel.name)
-                        local returnCount = stack and stack.count or 0
-                        if stack and stack.set_stack{ name = item, count = limit } then
-                            limit = limit - stack.count
-                            insertedHere = insertedHere + stack.count
-                            returnToPlayer = returnToPlayer + returnCount
-                        else
-                            break
-                        end
-                    end
-
-                    if returnToPlayer > 0 then
-                        player:returnItems(inferiorFuel.name, returnToPlayer, takenFromCar, takenFromTrash)
-                    end
-                end
+                insertedHere = insertedHere + replaceInferior(inv, protocache.fuelList(prototype.fuel_category), item, limit, player, takenFromCar, takenFromTrash)
             end
 
             inserted = inserted + insertedHere
@@ -194,7 +206,7 @@ function control:customInsert(player, item, amount, takenFromCar, takenFromTrash
     end
 
     if amount <= 0 then return inserted end
-	if allowed.ammo and prototype:is("ammo") then
+    if allowed.ammo ~= false and prototype.type == "ammo" then
         local inv = self:inventory("ammo")
         if inv then
             local limit = useAmmoLimit and math.min(amount, math.max(0, player:itemLimit(prototype, config.ammoLimitProfiles) - inv.get_item_count(item))) or amount
@@ -203,27 +215,8 @@ function control:customInsert(player, item, amount, takenFromCar, takenFromTrash
             limit = limit - insertedHere
 
             -- no space left --> replace inferior items
-            if replaceItems and limit > 0 then
-                for __,inferiorAmmo in pairs(storage.ammoList[prototype.ammo_category.name]) do
-                    if inferiorAmmo.name == prototype.name or limit <= 0 then break end
-
-                    local returnToPlayer = 0
-                    while limit > 0 do
-                        local stack = inv.find_item_stack(inferiorAmmo.name)
-                        local returnCount = stack and stack.count or 0
-                        if stack and stack.set_stack{ name = item, count = limit } then
-                            limit = limit - stack.count
-                            insertedHere = insertedHere + stack.count
-                            returnToPlayer = returnToPlayer + returnCount
-                        else
-                            break
-                        end
-                    end
-                    
-                    if returnToPlayer > 0 then
-                        player:returnItems(inferiorAmmo.name, returnToPlayer, takenFromCar, takenFromTrash)
-                    end
-                end
+            if replaceItems and limit > 0 and prototype.ammo_category then
+                insertedHere = insertedHere + replaceInferior(inv, protocache.ammoList(prototype.ammo_category.name), item, limit, player, takenFromCar, takenFromTrash)
             end
 
             inserted = inserted + insertedHere
@@ -232,29 +225,29 @@ function control:customInsert(player, item, amount, takenFromCar, takenFromTrash
     end
     
     if amount <= 0 then return inserted end
-    if allowed.input then
+    if allowed.input ~= false then
         local insertedHere = insert(self, "input", item, amount)
         inserted = inserted + insertedHere
         amount = amount - insertedHere
-        if insertedHere > 0 then allowed.main = false end
+        if insertedHere > 0 then allowMain = false end
 	end
     
     if amount <= 0 then return inserted end
-    if allowed.output and self:recipe():hasProduct(item) then
+    if allowed.output ~= false and self:recipe():hasProduct(item) then
         local insertedHere = insert(self, "output", item, amount)
         inserted = inserted + insertedHere
         amount = amount - insertedHere
 	end
 
     if amount <= 0 then return inserted end
-    if allowed.modules then
+    if allowed.modules ~= false then
         local insertedHere = insert(self, "modules", item, amount)
         inserted = inserted + insertedHere
         amount = amount - insertedHere
-        if insertedHere > 0 then allowed.main = false end
+        if insertedHere > 0 then allowMain = false end
     end
 
-    if allowed.roboport and self.type == "roboport" then
+    if allowed.roboport ~= false and self.type == "roboport" then
         if amount <= 0 then return inserted end
         local insertedHere = insert(self, "roboport_robot", item, amount)
         inserted = inserted + insertedHere
@@ -267,7 +260,7 @@ function control:customInsert(player, item, amount, takenFromCar, takenFromTrash
     end
     
     if amount <= 0 then return inserted end
-    if allowed.main then
+    if allowMain then
         local limit = useRequestLimit and math.min(amount, math.max(0, self:remainingRequest(item))) or amount
         local insertedHere = insert(self, "main", item, limit)
         
