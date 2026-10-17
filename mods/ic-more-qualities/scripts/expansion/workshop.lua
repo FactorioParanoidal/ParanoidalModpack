@@ -12,6 +12,10 @@
 -- Modes (rules.workshop_modes): an attempt in the precise/flawless mode takes 5/20 times longer at
 -- the same power and the same packs and gains 2 grades / reaches standard for sure. The mode is
 -- taken when the attempt starts; a switch applies from the next attempt.
+-- Science packs and other tools (durability) and ammo (rounds) are never crafted by the furnace: its
+-- recipe output is a fresh full item, so a used pack came back full (endless science). The script
+-- refines them in place from the input slot with the same cost, time, modes and outcome and writes the
+-- result with the same share of durability (rounds unchanged); the furnace stays stopped meanwhile.
 local names = require("scripts.expansion.names")
 local rules = require("scripts.expansion.rules")
 local model = require("scripts.defects.model")
@@ -177,9 +181,9 @@ function M.set_circuit(record, enabled)
     else
         emitter.destroy(record.emitter)
         record.emitter, record.emitted = nil, nil
-        -- A workshop held without packs stays stopped; the next look releases it when packs arrive.
-        local hold = record.held == true
-        if record.entity.valid and record.entity.disabled_by_script ~= hold then record.entity.disabled_by_script = hold end
+        -- The building keeps its state; the next tick's look decides whether it may run (a workshop held
+        -- without packs, idle with an empty slot or refining a pack by script stays stopped).
+        record.next_tick = 0
     end
 end
 
@@ -284,7 +288,7 @@ end
 
 local function publish(record, crafting)
     if not (record.emitter and record.emitter.valid) then return end
-    local craft = record.craft
+    local craft = record.sc or record.craft
     local refining = crafting and craft and craft.kind == "refine"
     local need = refining and math.ceil((1 - craft.paid) * craft.cost) or 0
     emitter.set(record, {
@@ -330,8 +334,8 @@ local function begin_craft(record, entity, recipe, quality, key, progress)
     return craft
 end
 
-local function attempt(record, entity, craft, ctx)
-    local force_index = entity.force.index
+-- Rolls one attempt of a refinement (engine or script) and counts it. Returns the reached grade.
+local function roll(force_index, craft, ctx)
     local before = craft.grade
     local mode = rules.workshop_mode(craft.mode)
     local after = rules.mode_outcome(before, mode, ctx.random)
@@ -351,8 +355,12 @@ local function attempt(record, entity, craft, ctx)
     -- One attempt per item: the same item leaves with the reached (or unchanged) grade.
     craft.final = true
     craft.grade = after
-    entity.result_quality = model.quality_name(after)
     if after == 0 then stats.add(force_index, "refine.normalized") end
+    return after
+end
+
+local function attempt(record, entity, craft, ctx)
+    entity.result_quality = model.quality_name(roll(entity.force.index, craft, ctx))
 end
 
 local function refine_step(record, entity, craft, progress, ctx)
@@ -419,6 +427,181 @@ local function hold_input(entity, source)
     return model.grade_of(stack.quality.name) < 0
 end
 
+---------------------------------------------------------------------------------------------------
+-- Items with a per-item state (science packs and other tools: durability; ammo: rounds)
+---------------------------------------------------------------------------------------------------
+local STATEFUL = {tool = true, ammo = true}
+
+local function stateful(stack)
+    return stack ~= nil and stack.valid_for_read and STATEFUL[stack.type] == true
+end
+
+-- The leaving item: the top item of the input stack (the partly used one) at the reached quality,
+-- with the same share of durability (as in handcraft) or the same rounds.
+local function output_of(stack, quality)
+    local item = {name = stack.name, quality = quality, count = 1}
+    if stack.type == "tool" then
+        local prototype = stack.prototype
+        local old_max = prototype.get_durability(stack.quality)
+        local new_max = prototype.get_durability(quality)
+        if old_max and old_max > 0 and new_max then
+            item.durability = math.min(1, stack.durability / old_max) * new_max
+        else
+            item.durability = stack.durability
+        end
+    elseif stack.type == "ammo" then
+        item.ammo = stack.ammo
+    end
+    return item
+end
+
+-- Removes the top item; the items left in the stack are whole ones.
+local function take_top(stack)
+    if stack.count <= 1 then
+        stack.clear()
+        return
+    end
+    local is_tool = stack.type == "tool"
+    local maximum = is_tool and stack.prototype.get_durability(stack.quality) or stack.prototype.magazine_size
+    stack.count = stack.count - 1
+    if maximum and maximum > 0 then
+        if is_tool then stack.durability = maximum else stack.ammo = maximum end
+    end
+end
+
+-- Writes the result into the output slot and removes the item from the input slot. False: no room.
+local function deliver(entity, stack, quality)
+    local result = entity.get_inventory(defines.inventory.furnace_result)
+    if not result then return false end
+    local item = output_of(stack, quality)
+    if not result.can_insert(item) then return false end
+    if result.insert(item) < 1 then return false end
+    take_top(stack)
+    return true
+end
+
+local function start_item(record, entity, stack, tick)
+    local from = stack.quality.name
+    local sc = {item = stack.name, from = from, grade = model.grade_of(from), paid = 0, progress = 0,
+        attempts = 0, last_tick = tick}
+    local force_index = entity.force.index
+    if sc.grade < 0 then
+        sc.kind = "refine"
+        sc.cost, sc.seconds = M.cost_of(sc.item)
+        sc.start_grade = sc.grade
+        sc.mode = M.mode_name(record)
+    elseif from ~= "normal" and record.settings.reset_positive then
+        sc.kind = "reset"
+        local _, seconds = M.cost_of(sc.item)
+        sc.seconds = seconds
+        stats.add(force_index, "refine.resets")
+    else
+        sc.kind = "pass"
+        sc.progress = 1
+        stats.add(force_index, "refine.passed")
+    end
+    record.sc = sc
+    return sc
+end
+
+-- One look of a script attempt. The item stays in the input slot until it leaves (mining or taking
+-- it back returns it as it was; the packs already paid for the attempt are spent).
+local function script_step(record, entity, ctx, stack, paused, stop)
+    local tick = ctx.tick
+    local sc = record.sc
+    if sc and not (stack and stack.valid_for_read and stack.name == sc.item and stack.quality.name == sc.from) then
+        record.sc, sc = nil, nil
+    end
+    if not sc and not stateful(stack) then
+        record.next_tick = tick + 1 -- back to the furnace on the next look
+        return
+    end
+    -- The furnace never takes these items; an attempt of the furnace itself waits meanwhile.
+    if not entity.disabled_by_script then entity.disabled_by_script = true end
+    local idle_power = machine_power(entity) / 30
+    if not sc and (paused or stop) then
+        set_status(record, "paused", "yellow")
+        power.set(record.interface, idle_power)
+        publish(record, false)
+        record.next_tick = tick + M.LOOK
+        return
+    end
+    sc = sc or start_item(record, entity, stack, tick)
+    local dt = math.max(0, tick - sc.last_tick)
+    sc.last_tick = tick
+    if paused then
+        set_status(record, "paused", "yellow")
+        power.set(record.interface, idle_power)
+        publish(record, true)
+        record.next_tick = tick + M.LOOK
+        return
+    end
+
+    local speed = math.max(entity.crafting_speed, 0.01)
+    local starved, supply = false, 1
+    if sc.progress < 1 then
+        supply = power.satisfaction(record.interface)
+        if sc.kind == "refine" then
+            local rate = speed / (sc.seconds * 60)
+            local slow = rules.workshop_mode(sc.mode).time
+            local target = math.min(1, sc.progress + dt * rate * supply / slow)
+            -- Paid ahead like a furnace attempt; without packs the attempt waits, nothing is lost.
+            local need = rules.prepay(sc.cost, sc.paid, target, (M.LOOK + 1) * rate)
+            if need > 0 then
+                local drained = M.drain(entity, need)
+                if drained > 0 then
+                    sc.paid = math.min(1, sc.paid + drained / sc.cost)
+                    stats.add(entity.force.index, "refine.resource", drained)
+                end
+                starved = drained + 1e-9 < need and sc.paid < 1 - 1e-9
+            end
+            sc.progress = math.min(target, sc.paid)
+            if sc.paid >= 1 - 1e-9 and target >= 1 - 1e-9 then sc.progress = 1 end
+        else
+            -- Reset: 1/5 of the attempt, at most RESET_MAX_SECONDS (as in the furnace).
+            local ticks = math.min(rules.RESET_SHARE * sc.seconds * 60 / speed, rules.RESET_MAX_SECONDS * 60)
+            sc.progress = math.min(1, sc.progress + dt * supply / math.max(ticks, 1))
+        end
+    end
+
+    if sc.progress >= 1 then
+        if sc.kind == "refine" and not sc.final then roll(entity.force.index, sc, ctx) end
+        local quality = sc.kind == "refine" and model.quality_name(sc.grade)
+            or sc.kind == "reset" and "normal" or sc.from
+        if deliver(entity, stack, quality) then
+            record.sc = nil
+            record.starved_since = nil
+            alert(record, false)
+            publish(record, false)
+            record.next_tick = tick + 1
+            return
+        end
+        set_status(record, "output-full", "yellow")
+        power.set(record.interface, idle_power)
+        publish(record, true)
+        record.next_tick = tick + M.LOOK
+        return
+    end
+
+    power.set(record.interface, starved and idle_power or machine_power(entity))
+    if starved then
+        set_status(record, "no-resource", "red")
+        record.starved_since = record.starved_since or tick
+    else
+        record.starved_since = nil
+        if supply < 0.999 then
+            set_status(record, "low-power", "yellow")
+        elseif sc.kind == "refine" then
+            set_status(record, "working", "green", sc.grade)
+        else
+            set_status(record, sc.kind == "reset" and "reset" or "passing", "green")
+        end
+    end
+    alert(record, record.starved_since ~= nil and tick - record.starved_since >= NO_RESOURCE_ALERT_TICKS)
+    publish(record, true)
+    record.next_tick = tick + M.LOOK
+end
+
 function M.step(record, ctx)
     local entity = record.entity
     local tick = ctx.tick
@@ -430,23 +613,34 @@ function M.step(record, ctx)
 
     -- Circuit control: pause holds the current attempt; "stop" lets it finish first.
     -- The flag is written after the look: an attempt without packs also disables the furnace.
-    local disable = false
+    local disable, paused, stop = false, false, false
     if record.settings.circuit then
-        local paused = emitter.read(entity, S.cmd_pause) > 0
-        local stop = emitter.read(entity, S.cmd_stop) > 0
+        paused = emitter.read(entity, S.cmd_pause) > 0
+        stop = emitter.read(entity, S.cmd_stop) > 0
         disable = paused or (stop and not crafting)
     end
 
     -- The resource total is needed only for the circuit signal; the GUI counts it itself.
     local emitting = record.emitter and record.emitter.valid
     record.available = emitting and M.available(entity) or nil
+    local source = entity.get_inventory(defines.inventory.furnace_source)
+    local input = source and source[1]
+    if record.sc or stateful(input) then
+        script_step(record, entity, ctx, input, paused, stop)
+        if record.sc or record.next_tick > tick + 1 then return end
+        -- Nothing left for the script: the furnace takes over on this look.
+        input = source[1]
+        if stateful(input) then return end
+    end
     local recipe, quality = entity.get_recipe()
     if not crafting or not recipe or not quality then
         record.craft = nil
-        local source = entity.get_inventory(defines.inventory.furnace_source)
         local hold = hold_input(entity, source)
         record.held = hold or nil
-        local stopped = disable or hold
+        -- An idle furnace stays stopped with an empty input slot: an item put in between two looks
+        -- must not be taken before the script has seen it (a used pack would come back full).
+        local empty = source == nil or source.is_empty()
+        local stopped = disable or hold or empty
         if entity.disabled_by_script ~= stopped then entity.disabled_by_script = stopped end
         local item_waits = hold and source ~= nil and not source.is_empty()
         if item_waits and not disable then
@@ -468,8 +662,9 @@ function M.step(record, ctx)
             set_status(record, "idle", "yellow")
         end
         publish(record, false)
-        -- Short polling: a new attempt must be seen early (see idle_look).
-        record.next_tick = tick + idle_look(record, entity)
+        -- Short polling: a new attempt must be seen early (see idle_look); a released furnace is seen
+        -- on the next tick.
+        record.next_tick = tick + (stopped and idle_look(record, entity) or 1)
         return
     end
 
@@ -491,6 +686,9 @@ function M.step(record, ctx)
         power.set(record.interface, machine_power(entity))
         set_status(record, craft.kind == "reset" and "reset" or "passing", "green")
     end
+    -- Close to completion the furnace takes the next item from the input slot by itself: look every
+    -- tick so that a pack put there is seen (and handled by script) before that.
+    if craft.kind ~= "refine" or craft.final then look = 1 end
     local stopped = disable or record.held == true
     if entity.disabled_by_script ~= stopped then entity.disabled_by_script = stopped end
     publish(record, true)
@@ -524,7 +722,7 @@ end
 -- Summary for the GUI: current craft, probabilities and resource.
 function M.describe(record)
     local entity = record.entity
-    local craft = record.craft
+    local craft = record.sc or record.craft
     local info = {status = record.status_key or "idle", available = M.available(entity),
         settings = record.settings}
     if craft then
