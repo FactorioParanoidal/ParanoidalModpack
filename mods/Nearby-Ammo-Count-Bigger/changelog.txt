@@ -1,0 +1,18 @@
+---------------------------------------------------------------------------------------------------
+Version: 2.0.1
+Date: 2026-10-18
+  Features:
+    - Added per-user settings "Show only turrets short of ammo" (on by default) and "Shortage threshold, %" (default 100). A counter is shown only while the turret holds fewer magazines than the given share of its inserter fill limit (automated_ammo_count).
+    - Empty turrets are now always shown (critical colour / full-urgency icon) instead of being skipped.
+  Optimizations:
+    - Rewrote the runtime: one persistent render object per visible turret, updated in place only when its value, colour or viewers change, instead of recreating every object on every update.
+    - Turret refresh is spread over ticks (round-robin) instead of processing all nearby turrets in a single tick.
+    - The turret search around a player runs only after moving 16 tiles, changing surface or force, a force friendship change, or every 5 seconds; nearby turrets built by players, robots or scripts are added immediately.
+    - The search is limited to turrets of forces that can see them; full turrets and colours with zero alpha no longer create render objects at all.
+    - Turrets near several players are tracked once by unit_number instead of being drawn once per player.
+  Bugfixes:
+    - Ammo icons were visible to all forces; counters and icons are now shown only to friendly players near the turret.
+    - Counters of forces created after loading were visible to every force.
+    - The icon render layer used a Factorio 1.1 number that maps under elevated rails in 2.0; icons now use "entity-info-icon-above".
+    - Changing any mod's runtime setting re-registered the update handler; only this mod's settings are handled now.
+    - Removed the leaked global variable, the unused "target_offset" draw parameter (not supported in 2.0) and other dead code.
