@@ -19,6 +19,7 @@ local aiPlanning = require("libs/AIPlanning")
 local aiBrain = require("libs/AIBrain")
 local flyerAI = require("libs/FlyerAI")
 local heavyTactics = require("libs/HeavyTactics")
+local engineGroupHelpers = require("libs/EngineGroupHelpers")
 local baseUtils = require("libs/BaseUtils")
 local bitersEnrage = require("libs/BitersEnrage")
 local biterSupressors = require("libs/BiterSupressors")
@@ -970,6 +971,7 @@ local function onGroupFinishedGathering(event)
 	if (not group.is_script_driven) or (squad and not squad.vengence) then
 		if (not group.is_script_driven) and (not settings.global["rampantFixed--allowDaytimeNonRampantActions"].value) then
 			if (map.state == constants.AI_STATE_PEACEFUL) or (universe.aiNocturnalMode and (group.surface.darkness <= 0.65)) then
+				engineGroupHelpers.release(universe, map, group)	-- the helper would stay behind as a lone biter
 				group.destroy()
 				return		
 			end	
@@ -995,6 +997,9 @@ local function onGroupFinishedGathering(event)
 		if nonRampantSquad then
 			return
 		end	
+		-- the helper vanilla biter (see on_unit_group_created) is not needed any more; removed before compression,
+		-- which could make it the carrier of a pack
+		engineGroupHelpers.release(universe, map, group)
 		local nonRampantSquad = createSquad(group.position, map, group, false)
 		nonRampantSquad.nonRampantSquad = true
 		if (#group.members > 70) then
@@ -1004,16 +1009,6 @@ local function onGroupFinishedGathering(event)
 			universe.nonRampantCompressedSquads[group.unique_id] = nonRampantSquad
 		else
 			universe.nonRampantSquads[group.unique_id] = nonRampantSquad				
-		end
-		-- 2025/07. AI bug. if no default units then group can't build new base 
-		-- so, lets create 1 unit when group created + destroy it when group finish gathering
-		if map.hasNonmoddedBiters then
-			local members = group.members
-			for _, entity in pairs(members) do
-				entity.destroy()
-				break
-			end	
-			
 		end
 	end
 	-- group can be destroyed after createUndergroudAttack()
@@ -1025,24 +1020,23 @@ end
 -- debug
 		-- 2025/07. AI bug. if no default units then group can't build new base 
 		-- so, lets create 1 unit when group created + destroy it when group finish gathering
+-- Paranoidal: not in the player base and not during the truce; the helper is tracked and removed reliably
+-- (libs/EngineGroupHelpers.lua)
 local function on_unit_group_created(event)
     local group = event.group
-    if not group.valid or (group.force.name ~= "enemy") or group.is_script_driven then
+    if not group.valid then
+		return
+	end
+	engineGroupHelpers.noteGroupId(universe, group.unique_id)
+    if (group.force.name ~= "enemy") or group.is_script_driven then
 		return
 	end
 	local map = universe.maps[group.surface.index]
 	if not map then 
 		return		
 	end
-	
-	if map.hasNonmoddedBiters then
-		local newEntity = group.surface.create_entity({
-			name = "small-biter",
-			position = group.position, 
-			force = group.force,
-			})
-		group.add_member(newEntity)
-	end
+	engineGroupHelpers.onGroupCreated(universe, map, group, event.tick,
+		settings.global["rampantFixed--allowDaytimeNonRampantActions"].value)
 end
 ------
 
@@ -1625,6 +1619,7 @@ script.on_nth_tick(5000,
 script.on_nth_tick(300, 
 	function()
 		if universe then
+			engineGroupHelpers.sweep(universe, game.tick)	-- helpers of vanished or overlong engine groups
 			processPlanetAISettings()
 			processNewSurfaceStasus(universe)			
 			-----------

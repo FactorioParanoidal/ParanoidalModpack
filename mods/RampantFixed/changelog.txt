@@ -19,6 +19,7 @@ Date: 2026.10.13
     - Underground dig-out: one routine for the three tile loops, collection stops at the 40 positions that can be used
     - Runtime settings read every few ticks (settlement probability, daytime hunting, vengeance probability, spending print) are cached; the player chunk table is reused instead of created every 16 ticks
   Bugfixes:
+    - Lone vanilla small biters no longer appear inside the player base. The helper biter RampantFixed adds to engine-made groups (so that engine expansion works with modded nests) is no longer placed in a chunk with player buildings or next to player turrets, nor during the truce (such groups are destroyed anyway); the helper itself is now removed instead of the first group member, also when the group is destroyed in peaceful/nocturnal mode, vanishes before it finishes gathering, loses the helper or gathers longer than the engine allows (libs/EngineGroupHelpers.lua). A helper that became the carrier of a compressed pack gives up one unit only
     - Enrage: the enrage level of one unit no longer carries over to the units after it
     - Underground dig-out without a target added every ray tile 5 times (the y offset used dx)
     - Missing comma in the table of the unused collision-mask-util-extended file
