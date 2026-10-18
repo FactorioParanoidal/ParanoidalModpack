@@ -6,7 +6,7 @@
 -- Правило: у каждого предмета ровно один рецепт «<предмет>-recycling».
 --   * Разбор на ингредиенты — только из доступного игроку сборочного рецепта этого предмета.
 --   * Сырьё, плавка, литьё, сплавы, химия, переработка руды, фермы, побочные продукты, скрытые
---     предметы — самопереработка Quality: 25% того же предмета.
+--     предметы, предметы из рецептов с продуктивностью — самопереработка Quality: 25% того же предмета.
 -- Все прежние рецепты переработки удаляются; старые исключения не сохраняются.
 if not mods["quality"] then return end
 
@@ -91,6 +91,21 @@ local unlocked = {}
 for _, technology in pairs(raw.technology or {}) do
 	for _, effect in pairs(technology.effects or {}) do
 		if effect.type == "unlock-recipe" and effect.recipe then unlocked[effect.recipe] = true end
+	end
+end
+
+-- Предметы из доступного рецепта с продуктивностью: только самопереработка (решение пользователя
+-- 2026-10-18). Иначе «сборка с продуктивностью -> разбор» — петля, в которой модули качества
+-- поднимают предмет почти даром.
+local productive = {}
+for name, recipe in pairs(recipes) do
+	if recipe.allow_productivity and not recipe.hidden and (recipe.enabled ~= false or unlocked[name])
+		and recipe.category ~= "recycling" then
+		for _, product in pairs(type(recipe.results) == "table" and recipe.results or {}) do
+			if type(product) == "table" and (product.type or "item") == "item" then
+				productive[product.name or product[1]] = true
+			end
+		end
 	end
 end
 
@@ -242,7 +257,7 @@ for _, name in ipairs(sorted_keys(items)) do
 		skipped = skipped + 1
 	else
 		local source
-		if not (item.hidden or natural[name] or always_self[name]) then source = source_of(name) end
+		if not (item.hidden or natural[name] or always_self[name] or productive[name]) then source = source_of(name) end
 		if source and generate_from(source, name) then
 			decomposed = decomposed + 1
 		elseif string.find(name, "-barrel", 1, true) then
