@@ -1,6 +1,6 @@
--- Ore Radar: each radar has a mode chosen in a panel next to its window. In the resource mode
--- (default) a completed scan reveals a generated chunk with resources; in the signal mode it marks
--- an undiscovered ruin of AbandonedRuins-paranoidal and falls back to ore when no ruin is left.
+-- Ore Radar: each radar has a mode chosen in a window opened by clicking the radar. In the resource
+-- mode (default) a completed scan reveals a generated chunk with resources; in the signal mode it
+-- marks an undiscovered ruin of AbandonedRuins-paranoidal and falls back to ore when none is left.
 local WORK_PER_TICK = 8
 local SCANS_PER_TICK = 4
 -- Random picks per ore scan: depleted chunks are dropped, chunks unknown to the force are preferred.
@@ -9,9 +9,6 @@ local RUINS = "AbandonedRuins-paranoidal"
 local NAME = "ore-radar"
 local FRAME = "ore-radar-mode"
 -- storage.modes[unit number] = true for radars in the signal mode; absent means resources.
--- The radar window type is not documented for 2.0, so the panel is anchored to both candidates;
--- the engine shows only the one matching the opened window.
-local ANCHORS = {"entity_with_energy_source_gui", "generic_on_off_entity_gui"}
 local on_tick
 
 local function queue()
@@ -226,51 +223,55 @@ script.on_event(defines.events.on_sector_scanned, function(event)
   wake()
 end, {{filter = "name", name = NAME}})
 
--- Mode panel ----------------------------------------------------------------------------------
+-- Mode window --------------------------------------------------------------------------------
+-- Radars have no openable window in 2.0, so a click on the radar (linked to the "open-gui"
+-- control) opens a standalone window. storage.open[player index] is the radar shown to the player.
 
 local function ruins_available()
   local interface = remote.interfaces[RUINS]
   return interface ~= nil and interface.signal_ruin ~= nil
 end
 
-local function destroy_panels(player)
-  for _, anchor in ipairs(ANCHORS) do
-    local frame = player.gui.relative[FRAME .. "-" .. anchor]
-    if frame then frame.destroy() end
-  end
+local function close_window(player)
+  local frame = player.gui.screen[FRAME]
+  if frame then frame.destroy() end
+  if storage.open then storage.open[player.index] = nil end
 end
 
-local function update_panels(player, entity)
+local function update_window(player, entity)
+  local frame = player.gui.screen[FRAME]
+  if not frame then return end
   local signal = is_signal(entity)
-  for _, anchor in ipairs(ANCHORS) do
-    local frame = player.gui.relative[FRAME .. "-" .. anchor]
-    if frame then
-      local inner = frame.inner
-      inner.resources.state = not signal
-      inner.signals.state = signal
-    end
-  end
+  frame.inner.resources.state = not signal
+  frame.inner.signals.state = signal
 end
 
-local function create_panels(player, entity)
-  destroy_panels(player)
+local function open_window(player, entity)
+  close_window(player)
   local available = ruins_available()
-  for _, anchor in ipairs(ANCHORS) do
-    local frame = player.gui.relative.add{
-      type = "frame", name = FRAME .. "-" .. anchor, caption = {"ore-radar.mode-caption"},
-      direction = "vertical",
-      anchor = {gui = defines.relative_gui_type[anchor], position = defines.relative_gui_position.right,
-        name = NAME}
-    }
-    local inner = frame.add{type = "frame", name = "inner", style = "inside_shallow_frame_with_padding",
-      direction = "vertical"}
-    inner.add{type = "radiobutton", name = "resources", state = true, caption = {"ore-radar.mode-resources"},
-      tooltip = {"ore-radar.mode-resources-tooltip"}, tags = {ore_radar_mode = false}}
-    inner.add{type = "radiobutton", name = "signals", state = false, caption = {"ore-radar.mode-signals"},
-      tooltip = available and {"ore-radar.mode-signals-tooltip"} or {"ore-radar.mode-signals-unavailable"},
-      enabled = available, tags = {ore_radar_mode = true}}
-  end
-  update_panels(player, entity)
+  local frame = player.gui.screen.add{type = "frame", name = FRAME, direction = "vertical"}
+  local bar = frame.add{type = "flow", direction = "horizontal"}
+  bar.drag_target = frame
+  bar.style.horizontal_spacing = 8
+  bar.add{type = "label", style = "frame_title", caption = {"ore-radar.mode-caption"}, ignored_by_interaction = true}
+  local filler = bar.add{type = "empty-widget", style = "draggable_space_header", ignored_by_interaction = true}
+  filler.style.horizontally_stretchable = true
+  filler.style.height = 24
+  filler.style.minimal_width = 24
+  bar.add{type = "sprite-button", style = "frame_action_button", sprite = "utility/close",
+    tags = {ore_radar_close = true}}
+  local inner = frame.add{type = "frame", name = "inner", style = "inside_shallow_frame_with_padding",
+    direction = "vertical"}
+  inner.add{type = "radiobutton", name = "resources", state = true, caption = {"ore-radar.mode-resources"},
+    tooltip = {"ore-radar.mode-resources-tooltip"}, tags = {ore_radar_mode = false}}
+  inner.add{type = "radiobutton", name = "signals", state = false, caption = {"ore-radar.mode-signals"},
+    tooltip = available and {"ore-radar.mode-signals-tooltip"} or {"ore-radar.mode-signals-unavailable"},
+    enabled = available, tags = {ore_radar_mode = true}}
+  frame.force_auto_center()
+  storage.open = storage.open or {}
+  storage.open[player.index] = entity
+  update_window(player, entity)
+  player.opened = frame
 end
 
 local function set_mode(entity, signal)
@@ -280,31 +281,39 @@ local function set_mode(entity, signal)
   elseif storage.modes then
     storage.modes[entity.unit_number] = nil
   end
-  for _, player in pairs(game.connected_players) do
-    if player.opened == entity then update_panels(player, entity) end
+  for player_index, opened in pairs(storage.open or {}) do
+    if opened.valid and opened == entity then update_window(game.get_player(player_index), entity) end
   end
 end
 
-script.on_event(defines.events.on_gui_opened, function(event)
-  local entity = event.entity
-  if entity and entity.valid and entity.name == NAME then
-    create_panels(game.get_player(event.player_index), entity)
-  end
+script.on_event("ore-radar-open", function(event)
+  local player = game.get_player(event.player_index)
+  local entity = player and player.selected
+  if not (entity and entity.valid and entity.name == NAME) then return end
+  -- Holding an item or a ghost in the cursor means the click builds, not opens.
+  if (player.cursor_stack and player.cursor_stack.valid_for_read) or player.cursor_ghost then return end
+  if not (entity.force == player.force or player.force.get_friend(entity.force)) then return end
+  open_window(player, entity)
 end)
 
 script.on_event(defines.events.on_gui_closed, function(event)
-  local entity = event.entity
-  if entity and entity.valid and entity.name == NAME then destroy_panels(game.get_player(event.player_index)) end
+  local element = event.element
+  if element and element.valid and element.name == FRAME then close_window(game.get_player(event.player_index)) end
+end)
+
+script.on_event(defines.events.on_gui_click, function(event)
+  if event.element.valid and event.element.tags.ore_radar_close then
+    close_window(game.get_player(event.player_index))
+  end
 end)
 
 script.on_event(defines.events.on_gui_checked_state_changed, function(event)
-  local element = event.element
-  local mode = element.tags.ore_radar_mode
+  local mode = event.element.tags.ore_radar_mode
   if mode == nil then return end
   local player = game.get_player(event.player_index)
-  local entity = player.opened
-  if not (entity and entity.object_name == "LuaEntity" and entity.valid and entity.name == NAME) then
-    destroy_panels(player)
+  local entity = storage.open and storage.open[player.index]
+  if not (entity and entity.valid) then
+    close_window(player)
     return
   end
   set_mode(entity, mode)

@@ -53,3 +53,9 @@ data:extend({radar, {
   },
   results = {{type = "item", name = "ore-radar", amount = 1}}
 }})
+
+-- Radars have no window of their own; a click on the ore radar opens its mode window.
+data:extend({{
+  type = "custom-input", name = "ore-radar-open", key_sequence = "",
+  linked_game_control = "open-gui", consuming = "none"
+}})
