@@ -29,7 +29,17 @@ local raw = {
         pipe = {name = "pipe", place_result = "pipe"},
         ["bet-charger-1"] = {name = "bet-charger-1", place_result = "bet-charger-1"},
         ["memory-unit"] = {name = "memory-unit", place_result = "memory-unit"},
+        ["some-valve"] = {name = "some-valve", place_result = "some-valve"},
+        ["bob-small-storage-tank"] = {name = "bob-small-storage-tank", place_result = "bob-small-storage-tank"},
+        ["storage-tank"] = {name = "storage-tank", place_result = "storage-tank"},
+        ["some-roboport"] = {name = "some-roboport", place_result = "some-roboport"},
+        ["some-equipment"] = {name = "some-equipment", place_as_equipment_result = "some-equipment"},
     },
+    module = {["some-module"] = {name = "some-module"}},
+    valve = {["some-valve"] = {name = "some-valve"}},
+    ["storage-tank"] = {["bob-small-storage-tank"] = {name = "bob-small-storage-tank"},
+        ["storage-tank"] = {name = "storage-tank"}},
+    roboport = {["some-roboport"] = {name = "some-roboport"}},
     ["item-with-entity-data"] = {
         ["Schall-tank-L-mk2"] = {name = "Schall-tank-L-mk2", place_result = "Schall-tank-L-mk2"},
     },
@@ -124,6 +134,12 @@ for _, name in ipairs({"Schall-tank-L-mk2", "bet-charger-1", "memory-unit"}) do
     assert(finished[name] and no_defect[name], name)
 end
 assert(not no_defect["assembling-machine-1"] and not no_defect["small-electric-pole"])
+-- User decisions 2026-10-18: groups without defects by entity type, item type, equipment and name;
+-- the large storage tank keeps defects although its entity type is shared with the small tank.
+for _, name in ipairs({"some-valve", "bob-small-storage-tank", "some-roboport", "some-equipment", "some-module"}) do
+    assert(finished[name] and no_defect[name], name)
+end
+assert(finished["storage-tank"] and not no_defect["storage-tank"])
 assert(#final.exempt_items == 44) -- 29 + 12 Factorissimo factory items (2026-10-15) + 3 Flow Control pipes (2026-10-18)
 assert(raw.recipe.gear.allow_quality == false and raw.recipe.mixed.allow_quality == false)
 assert(raw.recipe.sorting.allow_quality == false)
@@ -164,7 +180,9 @@ end
 near(poles.small.supply_area_distance + q.normal.electric_pole_supply_area_distance_bonus, 2.5)
 near(poles.small.supply_area_distance + q["ic-defect-5"].electric_pole_supply_area_distance_bonus, 2)
 local joined = table.concat(report, "\n")
-assert(joined:find("upgrade chains without defects (tanks, fuel cells, chargers, memory units, hazmat suit, factory buildings): 3", 1, true))
+assert(joined:find("upgrade chains without defects (tanks, fuel cells, chargers, memory units, hazmat suit, factory buildings, Flow Control pipes): 3", 1, true))
+assert(joined:find("groups without defects (5): valves and small fluid tanks 2,", 1, true))
+assert(joined:find("modules 1, equipment 1,", 1, true) and joined:find("roboports 1", 1, true))
 -- "hidden" (wire 1, reduction 1) ends exactly at 0: reduced, not clamped.
 assert(joined:find("clamped poles: connector", 1, true) and not joined:find("hidden (", 1, true))
 assert(joined:find("material%-pipe %(1%): pipe"))

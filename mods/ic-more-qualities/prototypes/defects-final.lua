@@ -31,6 +31,50 @@ for tier = 1, 3 do
     end
 end
 
+-- Groups where defects have no effect or make no sense (user decisions 2026-10-18), always standard.
+-- A finished item is exempt when its place_result has one of `entity_types`, its item type is one of
+-- `item_types`, it places equipment (`equipment`), or it is listed in `items`. Large storage tanks, lamps,
+-- pumps, radars, boilers, generators, solar panels, burner generators and walls keep defects.
+M.exempt_groups = {
+    {name = "valves and small fluid tanks", entity_types = {"valve"},
+        items = {"angels-valve-inspector", "bob-small-inline-storage-tank", "bob-small-storage-tank"}},
+    {name = "fluid level indicators", items = {"fluid-level-indicator", "fluid-level-indicator-straight"}},
+    {name = "circuit logic", entity_types = {"constant-combinator", "arithmetic-combinator", "decider-combinator",
+        "selector-combinator", "power-switch", "programmable-speaker", "display-panel"}},
+    {name = "rail signals, stops, supports", entity_types = {"rail-signal", "rail-chain-signal", "train-stop",
+        "rail-support"}},
+    {name = "heat pipes", entity_types = {"heat-pipe"}},
+    {name = "beacons", entity_types = {"beacon"}},
+    {name = "mines", entity_types = {"land-mine"}},
+    {name = "cliff explosives, artillery remote", items = {"cliff-explosives", "artillery-targeting-remote"}},
+    {name = "debug", entity_types = {"infinity-container", "infinity-pipe", "infinity-cargo-wagon", "heat-interface"},
+        items = {"electric-energy-interface"}},
+    {name = "modules", item_types = {"module"}},
+    {name = "equipment", equipment = true},
+    {name = "reactors", entity_types = {"reactor"}},
+    {name = "wind turbines", items = {"texugo-wind-turbine", "texugo-wind-turbine2", "texugo-wind-turbine3",
+        "wind-turbine-2"}},
+    {name = "vehicles", entity_types = {"car", "locomotive", "spider-vehicle"}},
+    {name = "roboports", entity_types = {"roboport"}},
+}
+
+local function group_matches(raw, group, kind, name, item)
+    for _, listed in ipairs(group.items or {}) do
+        if listed == name then return true end
+    end
+    for _, item_type in ipairs(group.item_types or {}) do
+        if item_type == kind then return true end
+    end
+    if group.equipment and item.place_as_equipment_result then return true end
+    local result = item.place_result
+    if result then
+        for _, entity_type in ipairs(group.entity_types or {}) do
+            if raw[entity_type] and raw[entity_type][result] then return true end
+        end
+    end
+    return false
+end
+
 local function defect_tier(name)
     local tier = type(name) == "string" and name:match("^ic%-defect%-([1-5])$")
     return tier and tonumber(tier)
@@ -265,6 +309,26 @@ function M.apply(raw, options)
     end
     report[#report + 1] = "IC defects: Paranoidal upgrade chains without defects (tanks, fuel cells, chargers, memory units, hazmat suit, factory buildings, Flow Control pipes): "
         .. chain_items
+    local group_counts = {}
+    for _, kind in ipairs(classify.item_types) do
+        for name, item in pairs(raw[kind] or {}) do
+            if finished[name] and not no_defect[name] then
+                for index, group in ipairs(M.exempt_groups) do
+                    if group_matches(raw, group, kind, name, item) then
+                        no_defect[name] = true
+                        group_counts[index] = (group_counts[index] or 0) + 1
+                        break
+                    end
+                end
+            end
+        end
+    end
+    local group_total, group_parts = 0, {}
+    for index, group in ipairs(M.exempt_groups) do
+        group_total = group_total + (group_counts[index] or 0)
+        group_parts[#group_parts + 1] = group.name .. " " .. (group_counts[index] or 0)
+    end
+    report[#report + 1] = "IC defects: groups without defects (" .. group_total .. "): " .. table.concat(group_parts, ", ")
     local prototypes = {{
         type = "mod-data",
         name = M.mod_data_name,
