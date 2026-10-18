@@ -32,3 +32,17 @@ data.raw["recipe"]["bi-biomass-3"].category = "biofarm-mod-bioreactor-3" -- Пр
 paralib.bobmods.lib.recipe.remove_ingredient("bi-bio-greenhouse", "glass")
 data.raw.item["bi-bio-greenhouse"].subgroup = "bio-bio-farm-fluid-entity"
 data.raw.item["bi-bio-farm"].subgroup = "bio-bio-farm-fluid-entity"
+
+-- Тиры ферм, теплиц и биореакторов ставятся друг на друга и улучшаются планировщиком:
+-- размеры и трубы у тиров одинаковые, MK2/MK3 сделаны в prototypes/entity/bio-content.lua.
+for _, base in pairs({ "bi-bio-farm", "bi-bio-greenhouse", "bi-bio-reactor" }) do
+	local chain = { base, base .. "-2", base .. "-3" }
+	for i, name in ipairs(chain) do
+		local machine = data.raw["assembling-machine"][name]
+		if machine then
+			machine.fast_replaceable_group = base
+			local next_tier = chain[i + 1]
+			machine.next_upgrade = next_tier and data.raw["assembling-machine"][next_tier] and next_tier or nil
+		end
+	end
+end

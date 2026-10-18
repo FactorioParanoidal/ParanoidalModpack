@@ -10,6 +10,7 @@ Date: 24.02.2026
     - Angels Merge moves Pellet coke to Coal cracking again: it used the 1.1 names pellet-coke and angels-coal-processing-2, now angels-pellet-coke and angels-coal-processing-3 (Paranoidal local fix)
     - Slag slurry is unlocked by angels-slag-processing-1 (was the 1.1 name slag-processing-1); the move of Solid fuel to the "solid-fuel" technology is skipped when that technology does not exist. Both only logged errors before (Paranoidal local fix)
     - Add migration for 2.0.33
+    - Bio farm: the hidden connector pole has a wire reach of 10 again (was 5, barely past the 9x9 farm's own edge), so farms join neighbouring farms and the power poles around them instead of running on their built-in solar panel only; a migration recreates the connectors of existing farms so that they connect (Paranoidal local fix)
   Graphics:
     - Item pictures from graphics/icons/mips no longer declare mipmap_count: the files have no mip chain (25 load warnings); the engine generates icon mipmaps itself (Paranoidal local fix)
     - Big wooden poles: removed the 1.1 copper/green/red/shadow wire pictures (2.0 has no per-pole wire sprites; the files did not exist) and fixed double slashes in base paths (Paranoidal local fix)
