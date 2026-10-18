@@ -112,14 +112,20 @@ function M.prepare(raw)
     end
     -- Quality modules follow defect control, not the other way around. Preserve
     -- the upstream module prerequisites and all existing researched states.
+    -- Paranoidal (user decision 2026-10-18): the logistic science pack also follows quality control 10,
+    -- so defects end before green science.
     local final_control = model.research_prefix .. model.maximum_research
-    local prerequisites, present = {}, false
-    for _, name in ipairs(quality_module.prerequisites or {}) do
-        prerequisites[#prerequisites + 1] = name
-        if name == final_control then present = true end
+    local function require_final_control(technology)
+        local prerequisites, present = {}, false
+        for _, name in ipairs(technology.prerequisites or {}) do
+            prerequisites[#prerequisites + 1] = name
+            if name == final_control then present = true end
+        end
+        if not present then prerequisites[#prerequisites + 1] = final_control end
+        technology.prerequisites = prerequisites
     end
-    if not present then prerequisites[#prerequisites + 1] = final_control end
-    quality_module.prerequisites = prerequisites
+    require_final_control(quality_module)
+    if raw.technology["logistic-science-pack"] then require_final_control(raw.technology["logistic-science-pack"]) end
     return prototypes
 end
 

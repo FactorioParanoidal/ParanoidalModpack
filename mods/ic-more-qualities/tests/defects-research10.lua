@@ -64,9 +64,10 @@ local function drill_entity(quality)
     }
 end
 record = {entity = drill_entity("normal")}
-assert(drill.step(record, 10, {}) == drill.RELAXED and record.multiplier == 1, "standard drill at research 10")
+-- 2026-10-18: a standard/positive drill at research 10 is dropped from the scheduler (false).
+assert(drill.step(record, 10, {}) == false and record.multiplier == 1, "standard drill at research 10")
 record = {entity = drill_entity("uncommon")}
-assert(drill.step(record, 10, {}) == drill.RELAXED, "positive drill at research 10")
+assert(drill.step(record, 10, {}) == false, "positive drill at research 10")
 record = {entity = drill_entity("ic-defect-1")}
 assert(drill.step(record, 10, {}) < drill.RELAXED, "defective drill is still slowed")
 assert(record.multiplier < 1)
@@ -81,6 +82,22 @@ game.forces = {[1] = force}
 assert(automation.level(force) == 10 and storage.ic_defects.levels[1] == 10)
 technologies["ic-defect-control-10"].researched = false
 assert(automation.level(force) == 10, "cached until refreshed")
+
+-- A standard drill built at research 10 is not tracked; it is found again when research 10 is lost.
+local standard_drill = {valid = true, unit_number = 8, type = "mining-drill", name = "d", quality = {name = "normal"},
+    force = force, prototype = {items_to_place_this = {{name = "d"}}}}
+game.surfaces = {{find_entities_filtered = function(filter)
+    assert(filter.type == "mining-drill")
+    return {standard_drill}
+end}}
+automation.track(standard_drill)
+assert(storage.ic_defects.records[8] == nil, "standard drill at research 10 is not tracked")
+local defective_drill = {valid = true, unit_number = 9, type = "mining-drill", name = "d",
+    quality = {name = "ic-defect-2"}, force = force, prototype = {items_to_place_this = {{name = "d"}}}}
+automation.track(defective_drill)
+assert(storage.ic_defects.records[9], "defective drill is tracked at research 10")
+storage.ic_defects.records[9] = nil
+storage.ic_defects.buckets = {}
 
 -- A rarely watched machine is brought back within one second when research 10 is lost.
 local entity = {valid = true, unit_number = 7, type = "assembling-machine", name = "m",
@@ -100,11 +117,22 @@ s.buckets = {[700] = {7}}
 automation.refresh_levels()
 assert(s.levels[1] == 9, "level recounted")
 assert(s.records[7].due > 100 and s.records[7].due <= 160, "woken: " .. s.records[7].due)
+assert(s.records[8] and s.records[8].due <= 160, "untracked standard drill found again")
+s.records[8] = nil
 -- No wake when the level does not drop from 10.
 s.records[7].due = 700
 s.buckets = {[700] = {7}}
 automation.refresh_levels()
 assert(s.records[7].due == 700)
+-- A tracked standard drill is dropped at its next look once research 10 is complete.
+technologies["ic-defect-control-10"].researched = true
+s.levels = nil
+s.records[8] = {id = 8, entity = standard_drill, kind = "drill", due = 800}
+s.buckets = {[800] = {8}}
+automation.on_tick(800, function() return {} end)
+assert(s.records[8] == nil, "standard drill dropped at research 10")
+technologies["ic-defect-control-10"].researched = false
+s.levels = nil
 
 -- Looks per operation (any level) --------------------------------------------------------------
 for _, left in ipairs({3.5, 10, 100, 1000.25}) do
@@ -139,7 +167,7 @@ while tick < 60 do
 end
 assert(craft_record.craft.decided and looks == 2, "looks: " .. looks)
 
-print("PASS: research 10 - standard/positive machines and drills looked at every " .. crafter.RELAXED .. " ticks;")
+print("PASS: research 10 - standard/positive machines looked at every " .. crafter.RELAXED .. " ticks, such drills not tracked;")
 print("modes, debts, earlier defects, defective recipes and defective drills keep normal looks; level cached")
 print("in storage, re-counted, and a lost research 10 wakes every machine; one look lands in the decision")
 print("window, idle machines wait by their own recipe. Mocks only, not Factorio.")

@@ -16,7 +16,9 @@ M.STEP = .75
 M.MIN_TICKS = 2
 M.NO_TARGET = 15
 M.DEPLETED = 300 -- no resource left under the drill: nothing will start soon
-M.RELAXED = 600 -- research 10: a drill that is not defective has nothing to handle
+-- Research 10: a drill that is not defective has nothing to handle; step returns false and the
+-- scheduler stops tracking it (scripts/defects/automation.lua). Kept for older callers.
+M.RELAXED = 600
 
 -- Prototype-derived caches by name (identical on every peer, rebuilt after load).
 local mining_speeds, mining_times, energy_usages, drain_percents = {}, {}, {}, {}
@@ -149,10 +151,11 @@ function M.step(record, level, ctx)
         drain = model.quality_drain_multiplier(entity.quality.name)
         record.drain = drain
     end
-    -- Research 10: no loss any more; only a defective drill is still slowed down.
+    -- Research 10: no loss any more; only a defective drill is still slowed down. A standard or
+    -- positive drill is dropped from the scheduler (false); it is found again if research 10 is lost.
     if level == 10 and multiplier >= 1 then
         record.cycle = nil
-        return M.RELAXED
+        return false
     end
     local target = entity.mining_target
     if not target or not target.valid then

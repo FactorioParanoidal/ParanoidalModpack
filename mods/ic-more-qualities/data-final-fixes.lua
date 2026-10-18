@@ -49,7 +49,7 @@ if switches.defects() then
         end
     end
     local startup = settings.startup
-    local prototypes, report, finished, reasons = require("prototypes.defects-final").apply(data.raw, {
+    local prototypes, report, finished, reasons, no_defect = require("prototypes.defects-final").apply(data.raw, {
         mode = startup["ic-more-qualities-defects-ingredient-mode"].value,
         supply_reduction = startup["ic-more-qualities-defects-pole-supply-reduction"].value,
         wire_reduction = startup["ic-more-qualities-defects-pole-wire-reduction"].value,
@@ -69,7 +69,10 @@ if switches.defects() then
     local drill_items = {}
     for _, kind in ipairs({"item", "item-with-entity-data"}) do
         for _, item in pairs(data.raw[kind] or {}) do
-            if item.place_result and data.raw["mining-drill"][item.place_result] then drill_items[#drill_items + 1] = item end
+            -- Drills that never get defects (made only after green science) need no defect line or field.
+            if item.place_result and data.raw["mining-drill"][item.place_result] and not no_defect[item.name] then
+                drill_items[#drill_items + 1] = item
+            end
         end
     end
     -- Resource drain with defects (x2...x6, drained by scripts/defects/drill.lua): the engine line shows

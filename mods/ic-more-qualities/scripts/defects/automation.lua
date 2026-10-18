@@ -76,7 +76,11 @@ function M.track(entity, source, delay)
         if not existing.due or existing.due > due then schedule(s, existing, due) end
         return
     end
-    local record = {id = id, entity = entity, kind = M.kinds[entity.type]}
+    local kind = M.kinds[entity.type]
+    -- Research 10: a drill that is not defective has nothing to handle (no loss, no slowdown, no extra
+    -- drain) and is not tracked at all; M.wake finds it again if the force loses research 10.
+    if kind == "drill" and not model.is_defect(entity.quality.name) and M.level(entity.force) == 10 then return end
+    local record = {id = id, entity = entity, kind = kind}
     -- A clone copies the machine state: keep the decision for its running craft.
     local previous = source and source.valid and source.unit_number and s.records[source.unit_number]
     if previous then
@@ -93,6 +97,8 @@ end
 -- Existing records (pending decisions) are kept. visit(entity) also sees every found entity.
 function M.rescan(visit)
     local s = state()
+    -- Prototypes and technologies may have changed: count the levels again (M.track reads them).
+    s.levels = nil
     for id, record in pairs(s.records) do
         if not record.entity.valid then s.records[id] = nil end
     end
@@ -102,16 +108,19 @@ function M.rescan(visit)
             if visit then visit(entity) end
         end
     end
-    -- Prototypes and technologies may have changed: count the levels again.
-    s.levels = nil
     spread(s)
 end
 
 -- Every machine is looked at again within one second (research 10 was lost: rarely watched
--- machines need their normal looks back).
+-- machines need their normal looks back). Drills untracked at research 10 are found again; rare
+-- (research reversed or reset), so a surface search is acceptable.
 function M.wake()
     local s = storage.ic_defects
-    if s then spread(s) end
+    if not s then return end
+    for _, surface in pairs(game.surfaces) do
+        for _, entity in pairs(surface.find_entities_filtered{type = "mining-drill"}) do M.track(entity) end
+    end
+    spread(s)
 end
 
 -- Completed quality-control level of a force. Kept in storage, so every peer reads the same value;
@@ -192,7 +201,10 @@ function M.on_tick(tick, context)
                 local step = record.kind == "drill" and drill.step or crafter.step
                 local delay, warning = step(record, level, ctx)
                 if warning then warn(s, force, warning, entity) end
-                if entity.valid then
+                if delay == false then
+                    -- Nothing left to handle for this entity (standard drill at research 10).
+                    s.records[record.id] = nil
+                elseif entity.valid then
                     schedule(s, record, tick + math.max(1, math.floor(delay or 30)))
                 else
                     s.records[record.id] = nil

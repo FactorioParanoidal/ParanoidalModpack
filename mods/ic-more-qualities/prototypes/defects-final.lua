@@ -80,6 +80,76 @@ local function group_matches(raw, group, kind, name, item)
     return false
 end
 
+-- Paranoidal (user decision 2026-10-18): the logistic science pack technology requires quality control 10,
+-- so nothing that can only be made after green science gets defects (a craft from defective older
+-- ingredients comes out standard). An item is "after the gate" when it has at least one recipe that is
+-- unlocked only by the gate technology or its descendants and no recipe available earlier (enabled from
+-- the start or unlocked by any other technology). Recycling recipes do not count; technologies that are
+-- hidden or disabled unlock nothing.
+M.gate_technology = "logistic-science-pack"
+
+function M.after_gate_items(raw, gate)
+    local technologies = raw.technology or {}
+    local result = {}
+    if not technologies[gate] then return result end
+    local behind = {}
+    local function is_behind(name)
+        local known = behind[name]
+        if known ~= nil then return known end
+        behind[name] = false -- the graph is acyclic; this only guards against a broken one
+        local found = name == gate
+        if not found then
+            for _, prerequisite in pairs(technologies[name].prerequisites or {}) do
+                if technologies[prerequisite] and is_behind(prerequisite) then
+                    found = true
+                    break
+                end
+            end
+        end
+        behind[name] = found
+        return found
+    end
+    local unlocks = {}
+    for name, technology in pairs(technologies) do
+        if technology.hidden ~= true and technology.enabled ~= false then
+            for _, effect in pairs(technology.effects or {}) do
+                if effect.type == "unlock-recipe" and effect.recipe then
+                    local list = unlocks[effect.recipe] or {}
+                    list[#list + 1] = name
+                    unlocks[effect.recipe] = list
+                end
+            end
+        end
+    end
+    local early, late = {}, {}
+    for name, recipe in pairs(raw.recipe or {}) do
+        local category = recipe.category or "crafting"
+        if not classify.recycling[category] and not category:find("recycling", 1, true) then
+            local era
+            if recipe.enabled ~= false then
+                era = early
+            elseif unlocks[name] then
+                era = late
+                for _, technology in ipairs(unlocks[name]) do
+                    if not is_behind(technology) then
+                        era = early
+                        break
+                    end
+                end
+            end
+            if era then
+                for _, product in ipairs(classify.products(recipe)) do
+                    if product.type == "item" then era[product.name] = true end
+                end
+            end
+        end
+    end
+    for name in pairs(late) do
+        if not early[name] then result[name] = true end
+    end
+    return result
+end
+
 local function defect_tier(name)
     local tier = type(name) == "string" and name:match("^ic%-defect%-([1-5])$")
     return tier and tonumber(tier)
@@ -334,13 +404,26 @@ function M.apply(raw, options)
         group_parts[#group_parts + 1] = group.name .. " " .. (group_counts[index] or 0)
     end
     report[#report + 1] = "IC defects: groups without defects (" .. group_total .. "): " .. table.concat(group_parts, ", ")
+    local gate_items = 0
+    for name in pairs(M.after_gate_items(raw, M.gate_technology)) do
+        if finished[name] and not no_defect[name] then
+            no_defect[name] = true
+            gate_items = gate_items + 1
+        end
+    end
+    local defective = 0
+    for name in pairs(finished) do
+        if not no_defect[name] then defective = defective + 1 end
+    end
+    report[#report + 1] = "IC defects: made only after " .. M.gate_technology .. " without defects: " .. gate_items
+        .. "; finished products that can still get defects: " .. defective
     local prototypes = {{
         type = "mod-data",
         name = M.mod_data_name,
         data_type = "ic-more-qualities.defects",
         data = {mode = mode, finished = finished, no_defect = no_defect},
     }}
-    return prototypes, report, finished, reasons
+    return prototypes, report, finished, reasons, no_defect
 end
 
 return M

@@ -21,7 +21,12 @@ local raw = {
         legendary = {name = "legendary", level = 6, default_multiplier = 2, electric_pole_wire_reach_bonus = 3},
         ["quality-unknown"] = {name = "quality-unknown", level = 0},
     },
-    technology = {["quality-module"] = {name = "quality-module", prerequisites = {"modules"}}},
+    technology = {["quality-module"] = {name = "quality-module", prerequisites = {"modules"}},
+        ["logistic-science-pack"] = {name = "logistic-science-pack", prerequisites = {"electronics"}},
+        ["green-tech"] = {name = "green-tech", prerequisites = {"logistic-science-pack"},
+            effects = {{type = "unlock-recipe", recipe = "green-building"}, {type = "unlock-recipe", recipe = "both-building"}}},
+        ["hidden-tech"] = {name = "hidden-tech", hidden = true,
+            effects = {{type = "unlock-recipe", recipe = "green-building-old"}}}},
     item = {
         ["iron-plate"] = {name = "iron-plate"}, ["iron-gear-wheel"] = {name = "iron-gear-wheel"},
         ["assembling-machine-1"] = {name = "assembling-machine-1", place_result = "assembling-machine-1"},
@@ -34,6 +39,8 @@ local raw = {
         ["storage-tank"] = {name = "storage-tank", place_result = "storage-tank"},
         ["some-roboport"] = {name = "some-roboport", place_result = "some-roboport"},
         ["some-equipment"] = {name = "some-equipment", place_as_equipment_result = "some-equipment"},
+        ["green-building"] = {name = "green-building", place_result = "green-building"},
+        ["both-building"] = {name = "both-building", place_result = "both-building"},
     },
     module = {["some-module"] = {name = "some-module"}},
     valve = {["some-valve"] = {name = "some-valve"}},
@@ -58,6 +65,13 @@ local raw = {
         fluid = {results = {{type = "fluid", name = "water", amount = 10}}},
         ["gear-recycling"] = {category = "recycling", results = {{type = "item", name = "iron-plate", amount = 1}}},
         science = {results = {{type = "item", name = "automation-science-pack", amount = 1}}, allow_quality = true},
+        -- Green-science gate (2026-10-18): unlocked only behind logistic-science-pack -> no defects; an item
+        -- with a recipe available from the start keeps them; a hidden technology unlocks nothing.
+        ["green-building"] = {enabled = false, results = {{type = "item", name = "green-building", amount = 1}}},
+        ["green-building-old"] = {enabled = false, results = {{type = "item", name = "green-building", amount = 1}}},
+        ["both-building"] = {enabled = false, results = {{type = "item", name = "both-building", amount = 1}}},
+        ["both-building-early"] = {results = {{type = "item", name = "both-building", amount = 1}}},
+        ["green-building-recycling"] = {category = "recycling", results = {{type = "item", name = "both-building", amount = 1}}},
     },
     ["mining-drill"] = {
         default = {}, listed = {allowed_effects = {"speed", "quality", "productivity"}},
@@ -114,6 +128,9 @@ end
 assert(research_total == 550)
 local parents = raw.technology["quality-module"].prerequisites
 assert(#parents == 2 and parents[1] == "modules" and parents[2] == "ic-defect-control-10")
+-- User decision 2026-10-18: green science also requires quality control 10.
+local green = raw.technology["logistic-science-pack"].prerequisites
+assert(#green == 2 and green[1] == "electronics" and green[2] == "ic-defect-control-10")
 assert(not pcall(builder.prepare, raw), "Duplicate registration must fail")
 local without_module = {quality = {normal = {level = 0}}, technology = {}}
 assert(not pcall(builder.prepare, without_module), "Missing mandatory quality-module must not silently lose the dependency")
@@ -121,9 +138,10 @@ local existing_parent = {quality = {normal = {level = 0}}, technology = {
     ["quality-module"] = {prerequisites = {"modules", "ic-defect-control-10"}}}}
 builder.prepare(existing_parent)
 assert(#existing_parent.technology["quality-module"].prerequisites == 2, "Do not duplicate prerequisites")
+assert(existing_parent.technology["logistic-science-pack"] == nil, "An absent green science technology is skipped")
 
 -- Late layer.
-local extra, report, finished = final.apply(raw, {mode = "materials", supply_reduction = .5, wire_reduction = 1})
+local extra, report, finished, _, returned_no_defect = final.apply(raw, {mode = "materials", supply_reduction = .5, wire_reduction = 1})
 assert(extra[1].type == "mod-data" and extra[1].name == "ic-defects-classification")
 assert(extra[1].data.finished == finished and extra[1].data.mode == "materials")
 assert(finished["assembling-machine-1"] and finished["small-electric-pole"] and finished["automation-science-pack"])
@@ -140,6 +158,9 @@ for _, name in ipairs({"some-valve", "bob-small-storage-tank", "some-roboport", 
     assert(finished[name] and no_defect[name], name)
 end
 assert(finished["storage-tank"] and not no_defect["storage-tank"])
+assert(finished["green-building"] and no_defect["green-building"], "made only after green science")
+assert(finished["both-building"] and not no_defect["both-building"], "also available before green science")
+assert(returned_no_defect == no_defect, "apply returns the no-defect set (drill tooltips)")
 assert(#final.exempt_items == 44) -- 29 + 12 Factorissimo factory items (2026-10-15) + 3 Flow Control pipes (2026-10-18)
 assert(raw.recipe.gear.allow_quality == false and raw.recipe.mixed.allow_quality == false)
 assert(raw.recipe.sorting.allow_quality == false)
@@ -182,6 +203,7 @@ near(poles.small.supply_area_distance + q["ic-defect-5"].electric_pole_supply_ar
 local joined = table.concat(report, "\n")
 assert(joined:find("upgrade chains without defects (tanks, fuel cells, chargers, memory units, hazmat suit, factory buildings, Flow Control pipes): 3", 1, true))
 assert(joined:find("groups without defects (5): valves and small fluid tanks 2,", 1, true))
+assert(joined:find("made only after logistic-science-pack without defects: 1; finished products that can still get defects:", 1, true))
 assert(joined:find("modules 1, module parts 0, equipment 1,", 1, true) and joined:find("roboports 1", 1, true))
 -- "hidden" (wire 1, reduction 1) ends exactly at 0: reduced, not clamped.
 assert(joined:find("clamped poles: connector", 1, true) and not joined:find("hidden (", 1, true))
@@ -237,6 +259,6 @@ require("prototypes.defects-quality-modules")(modules)
 assert(modules.module["quality-module"].hidden == false and modules.recipe["quality-module"].hidden == false)
 assert(modules.module["bob-god-module"].hidden and modules.recipe["quality-module"].enabled == false)
 print("PASS: 5 defect qualities on level 0 without shifting standard/positive qualities, multipliers,")
-print("1/m energy, 10 red-science technologies (quality-module REQUIRES level 10), classification mod-data,")
+print("1/m energy, 10 red-science technologies (quality-module and logistic-science-pack REQUIRE level 10), classification mod-data,")
 print("white intermediate recipes, drills without quality effect, machine energy dictionaries,")
 print("uniform pole reduction with clamping report, control lifecycle. Mocks only, not Factorio.")

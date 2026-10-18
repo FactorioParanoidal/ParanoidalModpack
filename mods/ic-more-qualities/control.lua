@@ -190,6 +190,16 @@ events.on(defines.events.on_player_crafted_item, function(event)
     local player = game.get_player(event.player_index)
     local stack = event.item_stack
     if not player or not player.valid or not stack or not stack.valid_for_read then return end
+    -- Research 10 (required for green science): no loss and no new roll. Only a defective result (from
+    -- defective ingredients) or, with "quality everywhere" off, a positive material needs handling; skip
+    -- the queue scan and the handlers for everything else.
+    if model.completed_level(player.force.technologies) == 10 then
+        local quality = stack.quality.name
+        if not model.is_defect(quality)
+            and (quality == "normal" or quality_everywhere or eligibility.finished()[stack.name]) then
+            return
+        end
+    end
     local recipe_name = event.recipe and event.recipe.name
     local queue = player.character and player.crafting_queue
     if production_loss.queued_prerequisite(queue, recipe_name, stack.name, prototypes.recipe) then return end
