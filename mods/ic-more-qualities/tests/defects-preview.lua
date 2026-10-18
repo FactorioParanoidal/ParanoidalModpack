@@ -124,7 +124,7 @@ for _, name in ipairs({"Schall-tank-L-mk2", "bet-charger-1", "memory-unit"}) do
     assert(finished[name] and no_defect[name], name)
 end
 assert(not no_defect["assembling-machine-1"] and not no_defect["small-electric-pole"])
-assert(#final.exempt_items == 41) -- 29 + 12 Factorissimo factory items (2026-10-15)
+assert(#final.exempt_items == 44) -- 29 + 12 Factorissimo factory items (2026-10-15) + 3 Flow Control pipes (2026-10-18)
 assert(raw.recipe.gear.allow_quality == false and raw.recipe.mixed.allow_quality == false)
 assert(raw.recipe.sorting.allow_quality == false)
 assert(raw.recipe.assembler.allow_quality == nil and raw.recipe.science.allow_quality == true)

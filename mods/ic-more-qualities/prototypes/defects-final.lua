@@ -10,7 +10,9 @@ M.crafting_machine_types = {"assembling-machine", "furnace", "rocket-silo"}
 -- Paranoidal (user decision 2026-10-14): upgrade chains whose recipes take only finished products
 -- never get defects; the hazmat suit (user decision 2026-10-15) neither. Absent names are skipped.
 M.exempt_items = {"memory-unit", "fluid-memory-unit", "memory-unit-with-tags", "fluid-memory-unit-with-tags",
-    "vehicle-fuel-cell-2-equipment", "vehicle-fuel-cell-3-equipment", "vehicle-fuel-cell-4-equipment", "hazmat-suit"}
+    "vehicle-fuel-cell-2-equipment", "vehicle-fuel-cell-3-equipment", "vehicle-fuel-cell-4-equipment", "hazmat-suit",
+    -- Flow Control restricted pipes (user decision 2026-10-18): made 1:1 from a plain pipe, always standard.
+    "pipe-straight", "pipe-elbow", "pipe-junction"}
 for _, tank in ipairs({"L", "M", "H", "SH", "F"}) do
     for _, suffix in ipairs({"", "-mk1", "-mk2"}) do
         M.exempt_items[#M.exempt_items + 1] = "Schall-tank-" .. tank .. suffix
@@ -261,7 +263,7 @@ function M.apply(raw, options)
             chain_items = chain_items + 1
         end
     end
-    report[#report + 1] = "IC defects: Paranoidal upgrade chains without defects (tanks, fuel cells, chargers, memory units, hazmat suit, factory buildings): "
+    report[#report + 1] = "IC defects: Paranoidal upgrade chains without defects (tanks, fuel cells, chargers, memory units, hazmat suit, factory buildings, Flow Control pipes): "
         .. chain_items
     local prototypes = {{
         type = "mod-data",
