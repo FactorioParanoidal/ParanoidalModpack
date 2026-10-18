@@ -302,6 +302,25 @@ function M.quality_rules(raw, finished, everywhere)
         .. tostring(everywhere == true) .. ", machines opened for quality " .. opened .. "; drills changed: " .. drills}
 end
 
+-- Recycling of an item that can be defective takes at least this many seconds (Paranoidal, 2026-10-19).
+-- A defective input must give standard results, so the scheduler has to see every such craft while it
+-- runs; an idle recycler is looked at within half of the shortest of these recipes at its actual speed
+-- (scripts/defects/crafter.lua). Without the floor the 0.00625 s torch recycling would need a look on
+-- every tick. Other recycling recipes (ammo, materials, exempt items) keep their time.
+M.recycling_minimum = 0.0625
+
+function M.slow_recycling(raw, finished, no_defect, minimum)
+    local slowed = 0
+    for _, name in ipairs(sorted_keys(raw.recipe or {})) do
+        local recipe = raw.recipe[name]
+        if classify.watched_recycling(recipe, finished, no_defect) and (recipe.energy_required or 0.5) < minimum then
+            recipe.energy_required = minimum
+            slowed = slowed + 1
+        end
+    end
+    return slowed
+end
+
 function M.apply(raw, options)
     options = options or {}
     local mode = options.mode or "materials"
@@ -417,6 +436,8 @@ function M.apply(raw, options)
     end
     report[#report + 1] = "IC defects: made only after " .. M.gate_technology .. " without defects: " .. gate_items
         .. "; finished products that can still get defects: " .. defective
+    report[#report + 1] = "IC defects: recycling of items that can be defective takes at least " .. M.recycling_minimum
+        .. " s: recipes slowed " .. M.slow_recycling(raw, finished, no_defect, M.recycling_minimum)
     local prototypes = {{
         type = "mod-data",
         name = M.mod_data_name,

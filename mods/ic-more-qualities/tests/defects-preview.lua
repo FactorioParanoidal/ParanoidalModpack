@@ -72,6 +72,16 @@ local raw = {
         ["both-building"] = {enabled = false, results = {{type = "item", name = "both-building", amount = 1}}},
         ["both-building-early"] = {results = {{type = "item", name = "both-building", amount = 1}}},
         ["green-building-recycling"] = {category = "recycling", results = {{type = "item", name = "both-building", amount = 1}}},
+        -- Recycling floor (2026-10-19): only recycling of an item that can be defective is slowed.
+        ["assembler-recycling"] = {category = "recycling", energy_required = 0.03125,
+            ingredients = {{type = "item", name = "assembling-machine-1", amount = 1}},
+            results = {{type = "item", name = "iron-gear-wheel", amount = 1}}},
+        ["pole-recycling"] = {category = "recycling", energy_required = 0.5,
+            ingredients = {{type = "item", name = "small-electric-pole", amount = 1}}, results = {}},
+        ["green-recycling"] = {category = "recycling", energy_required = 0.00625,
+            ingredients = {{type = "item", name = "green-building", amount = 1}}, results = {}},
+        ["plate-recycling"] = {category = "recycling",
+            ingredients = {{type = "item", name = "iron-plate", amount = 1}}, results = {}},
     },
     ["mining-drill"] = {
         default = {}, listed = {allowed_effects = {"speed", "quality", "productivity"}},
@@ -161,6 +171,15 @@ assert(finished["storage-tank"] and not no_defect["storage-tank"])
 assert(finished["green-building"] and no_defect["green-building"], "made only after green science")
 assert(finished["both-building"] and not no_defect["both-building"], "also available before green science")
 assert(returned_no_defect == no_defect, "apply returns the no-defect set (drill tooltips)")
+assert(raw.recipe["assembler-recycling"].energy_required == final.recycling_minimum, "defect-capable recycling slowed")
+assert(raw.recipe["pole-recycling"].energy_required == 0.5, "longer recycling kept")
+assert(raw.recipe["green-recycling"].energy_required == 0.00625, "recycling of an exempt item kept")
+assert(raw.recipe["plate-recycling"].energy_required == nil, "recycling of a material kept")
+local floor_line = false
+for _, line in ipairs(report) do
+    if line:find("recycling of items that can be defective takes at least 0.0625 s: recipes slowed 1", 1, true) then floor_line = true end
+end
+assert(floor_line, "recycling floor logged")
 assert(#final.exempt_items == 44) -- 29 + 12 Factorissimo factory items (2026-10-15) + 3 Flow Control pipes (2026-10-18)
 assert(raw.recipe.gear.allow_quality == false and raw.recipe.mixed.allow_quality == false)
 assert(raw.recipe.sorting.allow_quality == false)

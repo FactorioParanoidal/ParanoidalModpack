@@ -16,6 +16,7 @@ local post = require("scripts.expansion.post")
 local modes = require("scripts.expansion.modes")
 local memory = require("scripts.expansion.memory")
 local gui = require("scripts.expansion.gui")
+local classify = require("scripts.defects.classify")
 
 -- Setting caches (read on every tick otherwise). Startup settings change only together with a
 -- configuration change, map settings raise on_runtime_mod_setting_changed. Not kept in storage:
@@ -44,28 +45,54 @@ end
 
 -- Deterministic caches derived from prototypes only (identical on all peers).
 local category_min, min_energy_cache, emissions_cache, no_quality_cache = nil, {}, {}, nil
+-- Recycling only: fastest recipe per category whose item can be defective, and the per-machine caches.
+local watched_min, watched_cache, recycler_cache = nil, {}, {}
 
-local function min_energy(entity)
+local function lower(map, category, energy)
+    if not map[category] or energy < map[category] then map[category] = energy end
+end
+
+-- watched: only recycling recipes of items that can be defective (classify.watched_recycling).
+local function min_energy(entity, watched)
     local name = entity.name
-    local cached = min_energy_cache[name]
+    local cache = watched and watched_cache or min_energy_cache
+    local cached = cache[name]
     if cached == nil then
         if not category_min then
-            category_min = {}
+            category_min, watched_min = {}, {}
+            local finished, no_defect = eligibility.finished(), eligibility.no_defect()
             for _, recipe in pairs(prototypes.recipe) do
                 local energy, category = recipe.energy, recipe.category
-                if energy > 0 and (not category_min[category] or energy < category_min[category]) then
-                    category_min[category] = energy
+                if energy > 0 then
+                    lower(category_min, category, energy)
+                    if classify.watched_recycling(recipe, finished, no_defect) then
+                        lower(watched_min, category, energy)
+                    end
                 end
             end
         end
+        local by_category = watched and watched_min or category_min
         cached = false
         for category in pairs(entity.prototype.crafting_categories or {}) do
-            local energy = category_min[category]
+            local energy = by_category[category]
             if energy and (not cached or energy < cached) then cached = energy end
         end
-        min_energy_cache[name] = cached
+        cache[name] = cached
     end
     return cached or nil
+end
+
+local function is_recycler(entity)
+    local name = entity.name
+    local cached = recycler_cache[name]
+    if cached == nil then
+        cached = false
+        for category in pairs(entity.prototype.crafting_categories or {}) do
+            if classify.recycling[category] then cached = true end
+        end
+        recycler_cache[name] = cached
+    end
+    return cached
 end
 
 local function emissions(entity)
@@ -95,6 +122,7 @@ end
 -- refreshed on every tick that has work (the getters only return caches).
 local context = {
     min_energy = min_energy,
+    is_recycler = is_recycler,
     emissions = emissions,
     stat = stats.add,
     quality_everywhere = quality_everywhere,
@@ -145,6 +173,7 @@ local function configure_all()
     reset_settings()
     eligibility.reset()
     category_min, min_energy_cache, emissions_cache, no_quality_cache = nil, {}, {}, nil
+    watched_min, watched_cache, recycler_cache = nil, {}, {}
     workshop.reset_cache()
     modes.reset_cache()
     -- Registry of the abandoned per-tick machine prototype of this branch.

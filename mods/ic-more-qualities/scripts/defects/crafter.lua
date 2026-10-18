@@ -71,9 +71,20 @@ end
 -- Not crafting: look again within half of the next craft. A set recipe (assembler waiting for
 -- ingredients or with a full output) gives its own duration; otherwise the fastest recipe of the
 -- machine's categories is assumed.
-local function idle_delay(entity, ctx, recipe)
-    local energy = recipe and recipe.energy
-    if not energy or energy <= 0 then energy = ctx.min_energy(entity) end
+-- A recycler takes any item put in, so its last recipe says nothing about the next one. Without losses
+-- and without a production mode only a craft of an item that can be defective needs a look (its
+-- result must become standard): the fastest of those recipes is used (data stage: at least
+-- defects-final.recycling_minimum), not the fastest recycling of all (ammo: every tick).
+local function idle_delay(entity, ctx, recipe, level)
+    local energy
+    if ctx.is_recycler and ctx.is_recycler(entity) then
+        local watched = level == 10 or not (ctx.initial_loss_percent and ctx.initial_loss_percent > 0)
+        if watched and ctx.mode_definition and ctx.mode_definition(entity) then watched = false end
+        energy = ctx.min_energy(entity, watched)
+    else
+        energy = recipe and recipe.energy
+        if not energy or energy <= 0 then energy = ctx.min_energy(entity) end
+    end
     local speed = entity.crafting_speed
     if not energy or speed <= 0 then return 30 end
     return math.min(M.MAX_IDLE, math.max(1, math.floor(energy * 60 / speed / 2)))
@@ -183,6 +194,19 @@ local function relaxed(record, entity, recipe_quality, ctx)
     return not (ctx.mode_definition and ctx.mode_definition(entity))
 end
 
+-- Research 10, a recycler with nothing pending. Bug fixed 2026-10-19: it got the rare look of other
+-- machines, so a defective item put into an idle recycler was recycled unobserved and its components
+-- kept the defect. The result quality is fixed when a craft starts and a craft of a defective item
+-- (recipe quality) is handled by the normal path, so one look per craft is enough: idle -> within half
+-- of the shortest recycling of an item that can be defective; a standard or better craft (its result
+-- cannot be a defect) -> right after it ends, when a fed recycler has just started the next one.
+local function recycler_look(entity, recipe, ctx)
+    if not recipe or not entity.is_crafting() then return idle_delay(entity, ctx, nil, 10) end
+    local speed = entity.crafting_speed
+    if recipe.energy <= 0 or speed <= 0 then return 30 end
+    return math.ceil((1 - entity.crafting_progress) * recipe.energy * 60 / speed) + 1
+end
+
 -- Returns the delay in ticks until the next look, and an optional warning code.
 function M.step(record, level, ctx)
     local entity = record.entity
@@ -191,12 +215,13 @@ function M.step(record, level, ctx)
         record.craft = nil
         -- Releases the extra power of a moded craft that has just ended.
         if ctx.mode_power then ctx.mode_power(entity, nil, false) end
+        if ctx.is_recycler and ctx.is_recycler(entity) then return recycler_look(entity, recipe, ctx) end
         return M.RELAXED
     end
     if not recipe or not entity.is_crafting() then
         record.craft, record.debt = nil, nil
         if ctx.mode_power then ctx.mode_power(entity, nil, false) end
-        return idle_delay(entity, ctx, recipe)
+        return idle_delay(entity, ctx, recipe, level)
     end
     local quality = recipe_quality and recipe_quality.name or "normal"
     local energy = recipe.energy

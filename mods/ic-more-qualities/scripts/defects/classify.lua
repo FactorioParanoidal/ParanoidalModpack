@@ -10,6 +10,19 @@ M.item_types = {
 }
 M.modes = {materials = true, ["intermediate-ingredients"] = true, ["all-ingredients"] = true}
 M.recycling = {recycling = true, ["recycling-or-hand-crafting"] = true}
+
+-- True for a recycling recipe with an item ingredient that can be defective (finished, not exempt).
+-- Data stage (prototype table) and runtime (LuaRecipePrototype) alike.
+function M.watched_recycling(recipe, finished, no_defect)
+    if not M.recycling[recipe.category or "crafting"] then return false end
+    for _, ingredient in pairs(recipe.ingredients or {}) do
+        local name = type(ingredient) == "table" and (ingredient.name or ingredient[1])
+        if name and (ingredient.type or "item") == "item" and finished[name] and not no_defect[name] then
+            return true
+        end
+    end
+    return false
+end
 local usable = {ammo = true, armor = true, gun = true, capsule = true, module = true, ["repair-tool"] = true}
 local pipe_entities = {pipe = true, ["pipe-to-ground"] = true}
 
