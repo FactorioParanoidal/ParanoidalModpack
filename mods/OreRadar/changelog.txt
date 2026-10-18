@@ -3,8 +3,10 @@ Version: 2.0.1
 Date: 2026-10-14
   Features:
     - Every scan reveals either an ore chunk or an unusual signal: an undiscovered ruin of the
-      Paranoidal ruin journal marked with "?" on the map and announced in chat. Each kind is tried
-      first in half of the scans; the other one is the fallback.
+      Paranoidal ruin journal marked with "?" on the map and announced in chat.
+    - A panel next to the radar window selects the mode of each radar: "Resources" (default) reveals
+      only ore chunks, "Unusual signals" marks ruins and reveals ore when no ruin is left. The mode is
+      kept by copy-paste, cloning and blueprints.
   Changes:
     - A scan tries up to eight random ore chunks and prefers chunks the force has not charted yet.
     - The ore index is rebuilt only when Ore Radar itself changes, not on every configuration change.
