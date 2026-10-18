@@ -16,6 +16,9 @@
 local aiAttackWave = require("libs/AIAttackWave")
 local aiPredicates = require("libs/AIPredicates")
 local aiPlanning = require("libs/AIPlanning")
+local aiBrain = require("libs/AIBrain")
+local flyerAI = require("libs/FlyerAI")
+local heavyTactics = require("libs/HeavyTactics")
 local baseUtils = require("libs/BaseUtils")
 local bitersEnrage = require("libs/BitersEnrage")
 local biterSupressors = require("libs/BiterSupressors")
@@ -528,6 +531,9 @@ local function onDeath(event)
 			
             if artilleryBlast then
                 map.artilleryBlasts = map.artilleryBlasts + 1
+				if aiBrain.active(universe) then
+					aiBrain.recordArtillery(map, cause, tick)	-- counter-battery targets
+				end
 				map.vengenceLimiter = 0
 				map.retribution = map.retribution + 0.002
 				if map.supressionData then
@@ -559,8 +565,25 @@ local function onDeath(event)
 						if (chunk.nextSquadTick and (chunk.nextSquadTick < tick)) and (not surface.peaceful_mode) and (mRandom() < (map.rallyThreshold * vengenceOffset)) then
 							rallyUnits(chunk, map, tick)
 						end
+						if aiBrain.active(universe) then
+							-- learning: what kills the units, which squad lost it
+							local damageType = event.damage_type
+							if damageType then
+								aiBrain.recordUnitDamage(map, damageType.name)
+							end
+							local commandable = entity.commandable
+							local group = commandable and commandable.parent_group
+							local squad = group and universe.groupNumberToSquad[group.unique_id]
+							if squad then
+								if squad.flight then
+									flyerAI.onLoss(map, squad, entity, tick)
+								elseif aiBrain.onSquadUnitLost(map, squad, entity) then
+									squadAttack.retreatSquad(map, squad)
+								end
+							end
+						end
 					end
-					if artilleryBlast and universe.undergroundAttack then
+					if artilleryBlast and universe.undergroundAttack and aiBrain.heavyScriptsAllowed(universe) then
 						undergroundAttack.onUnitKilled_DigIn(map, entity, cause)
 					else	
 						squadCompression.onUnitKilled(universe, surface, entity, event.force, cause)
@@ -610,13 +633,19 @@ local function onDeath(event)
 						-- end	
 					-- end
 				-- end
+                if aiBrain.active(universe) and event.damage_type then
+                    local base = map.chunkToBase[chunk]
+                    if base then
+                        aiBrain.recordStructureDamage(base, event.damage_type.name)	-- mutations adapt to it
+                    end
+                end
                 unregisterEnemyBaseStructure(map, entity, event.damage_type)
 
                 if (chunk ~= -1) then
 					if (chunk.nextSquadTick and (chunk.nextSquadTick < tick)) then
 						rallyUnits(chunk, map, tick)
 					end	
-					if cause and cause.valid and (cause.type == "character") then
+					if cause and cause.valid and (cause.type == "character") and aiBrain.heavyScriptsAllowed(universe) then
 						enrageBitersInRange(map, cause.position, getChunkByPosition(map, cause.position), tick)
 					end
                     -- if artilleryBlast and cause and cause.valid then
@@ -705,6 +734,9 @@ local function onDeath(event)
 					local squad = universe.groupNumberToSquad[causeGroup.unique_id]
 					if squad then
 						squad.kills = (squad.kills or 0) + 1
+						if aiBrain.active(universe) then
+							aiBrain.onSquadKill(squad, entity)
+						end
 					end
 				end
            else
@@ -948,7 +980,12 @@ local function onGroupFinishedGathering(event)
 		if squad.onTheWay then
 			return
 		end	
-		if (not squad.undergoundAttack) or squad.hasSpiders then
+		if squad.learn and (not squad.settlers) and (not squad.undergoundAttack) and aiBrain.active(universe) then
+			flyerAI.splitFlight(map, squad)	-- flyers leave the ground squad and act as a flight of their own
+		end
+		if squad.flight then
+			-- flights are dispatched at once and never compressed
+		elseif (not squad.undergoundAttack) or squad.hasSpiders then
 			processCompression(map, squad, getChunkByPosition(map, group.position), true)
 		else
 			createUndergroudAttack(map, squad)
@@ -1464,6 +1501,10 @@ script.on_event(defines.events.on_tick,
 					if tick == 1 then
 						showNewgameMessages()
 					end	
+					-- behaviour settings cache (also for saves loaded without a configuration change)
+					if universe.aiBehaviorVersion ~= aiBrain.BEHAVIOR_VERSION then
+						aiBrain.refreshSettings(universe)
+					end
 					---------
 					removeOneTickImmunity(universe)
 					processProtectedUnits()
@@ -1527,6 +1568,15 @@ script.on_event(defines.events.on_tick,
 					
 					if pick60 == 0 then	
 						processMapAIs(universe, tick)
+					end
+					if pick60 == 30 then
+						aiBrain.seedTargets(universe)		-- once per map: targets from the known player chunks
+					end
+					local pick600 = tick % 600
+					if (pick600 == 151) or (pick600 == 451) then
+						flyerAI.plan(universe, tick)			-- independent flights
+					elseif pick600 == 307 then
+						heavyTactics.periodic(universe, tick)	-- trains, heat map, pincer waves
 					end
 
 					if pick~=5 then
@@ -1695,6 +1745,7 @@ local function onModSettingsChange(event)
     end
 
     chainVengenceCoefficient = nil
+    aiBrain.refreshSettings(universe)
 
     -- game.print("onModSettingsChange() processing for Rampant")
 
@@ -2042,6 +2093,26 @@ local function rampantSetAIState(event)
 end
 
 commands.add_command('rampantSetAIState', "", rampantSetAIState)
+
+-- what the AI has learned on the player's surface (tactic values, streaks, targets)
+local function rampantAIReport(event)
+	local player = game.players[event.player_index]
+	local map = universe.maps[player.surface.index]
+	if not map then
+		player.print(player.surface.name .. " is excluded from processing")
+		return
+	end
+	if universe.classicAI then
+		player.print("Rampant: classic behaviour is on, the AI does not learn")
+	end
+	player.print("Rampant AI on " .. map.surface.name .. ", state " .. tostring(constants.stateEnglish[map.state])
+		.. ", heavy models " .. tostring(universe.heavyAI ~= false))
+	for _, line in pairs(aiBrain.report(map)) do
+		player.print(line)
+	end
+end
+
+commands.add_command('rampantAIReport', {"description.rampantFixed--aiReportCommand"}, rampantAIReport)
 
 local function rampantForceMutations(event)
     local i = 0

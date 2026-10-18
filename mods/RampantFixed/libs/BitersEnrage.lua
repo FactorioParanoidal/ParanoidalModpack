@@ -121,9 +121,10 @@ function bitersEnrage.enrageBitersInRange(map, position, chunk, tick)
 				end	
 			end	
 		end
-		local enrageStickerName
 		for i, entity in pairs(entities) do
 			if entity.valid and (not entity.has_flag("not-in-kill-statistics")) then
+				-- per unit: the next level after its own enrage sticker (was shared, so one unit's level leaked to the rest)
+				local enrageStickerName
 				if entity.stickers then
 					for ii, sticker in pairs(entity.stickers) do
 						if enrageSequence[sticker.name] then

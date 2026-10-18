@@ -15,6 +15,7 @@ local chunkUtils = require("ChunkUtils")
 local chunkPropertyUtils = require("ChunkPropertyUtils")
 local baseUtils = require("BaseUtils")
 local squadCompression = require("SquadCompression")
+local aiBrain = require("AIBrain")
 
 -- constants
 
@@ -222,7 +223,17 @@ function mapProcessor.processPlayers(players, universe, tick)
     -- randomize player order to ensure a single player isn't singled out
     -- not looping everyone because the cost is high enough already in multiplayer
 	local enemyForce = game.forces["enemy"]
-	universe.chunkToPlayerCount = {}
+	-- reused table (holds at most one entry per player)
+	local chunkToPlayerCount = universe.chunkToPlayerCount
+	if chunkToPlayerCount then
+		for chunk in pairs(chunkToPlayerCount) do
+			chunkToPlayerCount[chunk] = nil
+		end
+	else
+		chunkToPlayerCount = {}
+		universe.chunkToPlayerCount = chunkToPlayerCount
+	end
+	local heavy = aiBrain.heavy and aiBrain.heavyActive(universe) and aiBrain.heavy
     for i=1,#players do
         local player = players[i]
         if validPlayer(player) and enemyForce.is_enemy(player.force) then
@@ -232,7 +243,10 @@ function mapProcessor.processPlayers(players, universe, tick)
 				if map then
 					local chunk = getChunkByPosition(map, playerCharacter.position)
 					if (chunk ~= -1) then
-						universe.chunkToPlayerCount[chunk] = (universe.chunkToPlayerCount[chunk] or 0) + 1
+						chunkToPlayerCount[chunk] = (chunkToPlayerCount[chunk] or 0) + 1
+						if heavy then
+							heavy.recordPresence(map, chunk, tick, 1)
+						end
 					end
 				end
 			end	
@@ -250,7 +264,11 @@ function mapProcessor.processPlayers(players, universe, tick)
 					if (playerChunk ~= -1) then
 						local roll = mRandom() 
 						local allowingAttacks = canAttack(map, tick)
-						local allowingVengence = (allowingAttacks or settings.global["rampantFixed--allowDaytimePlayerHunting"].value) and (map.points >= (AI_VENGENCE_SQUAD_COST*0))
+						local allowDaytimePlayerHunting = universe.allowDaytimePlayerHunting
+						if allowDaytimePlayerHunting == nil then
+							allowDaytimePlayerHunting = settings.global["rampantFixed--allowDaytimePlayerHunting"].value
+						end
+						local allowingVengence = (allowingAttacks or allowDaytimePlayerHunting) and (map.points >= (AI_VENGENCE_SQUAD_COST*0))
 
 						local forceVengence = (getEnemyStructureCount(map, playerChunk) > 0)
 
@@ -556,8 +574,7 @@ end
 
 
 local function chooseSquad(map, migrate, attack, tick)
-	local settlementsProbability = settings.global["rampantFixed--settlementsProbability"].value
-	local survivalMode = settings.global["rampantFixed--enableMigration"].value
+	local settlementsProbability = map.universe.settlementsProbability or settings.global["rampantFixed--settlementsProbability"].value
 	if map.canMigrateTick > tick then
  		return "attack"
 	end	
@@ -616,7 +633,7 @@ local function processSpawners(map, tick, iterator, chunks, remoteInterfaceParam
 	end
 	if squadCreated then
 		if remoteInterfaceParameters then
-			if settings.global["rampantFixed--aiPointsPrintSpendingToChat"].value then		
+			if map.universe.aiPointsPrintSpendingToChat then
 				game.print(currentSquad.." squad created by remote interface")
 			end	
 		else
@@ -647,7 +664,7 @@ local function processSpawners(map, tick, iterator, chunks, remoteInterfaceParam
 			end
 			map.nextSquad = chooseSquad(map, migrate, attack, tick)
 			chunk.nextSquadTick = tick + squadCooldown
-			if settings.global["rampantFixed--aiPointsPrintSpendingToChat"].value then		
+			if map.universe.aiPointsPrintSpendingToChat then
 				game.print(currentSquad.." squad created. Next is "..map.nextSquad.." squad")
 			end	
 		end
@@ -661,8 +678,23 @@ local function processSpawners(map, tick, iterator, chunks, remoteInterfaceParam
 	end	
 end
 
+-- delayed main strike of a probe or feint tactic (new behaviour)
+local function processFollowUp(map, tick)
+	if not canAttack(map, tick) then
+		return
+	end
+	local plan = aiBrain.popDueFollowUp(map, tick)
+	if plan then
+		formSquads(map, plan.chunk, tick, nil, plan)
+	end
+end
+
 function mapProcessor.processSpawners(map, tick, remoteInterfaceParameters)
     if (map.state ~= AI_STATE_PEACEFUL) then
+		local ai = map.ai
+		if ai and (not remoteInterfaceParameters) and (ai.followUps[1] ~= nil) and aiBrain.active(map.universe) then
+			processFollowUp(map, tick)
+		end
         if (map.state == AI_STATE_MIGRATING) then
 			if remoteInterfaceParameters or (map.nextSquad and (map.nextSquad == "attack")) then
 				processSpawners(map,

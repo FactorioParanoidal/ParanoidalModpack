@@ -9,6 +9,7 @@ local mathUtils = require("MathUtils")
 local constants = require("Constants")
 local chunkPropertyUtils = require("ChunkPropertyUtils")
 local mapUtils = require("MapUtils")
+local aiBrain = require("AIBrain")
 
 -- constants
 
@@ -841,7 +842,8 @@ local function upgradeBase(map, base, upgradeType)
 			end				 
 		end
 	elseif upgradeType == 2 then
-		local newFaction = findBaseMutation(map, nil, baseTier, base.geneRandomizer)
+		-- new behaviour: often a faction that resists the damage killing these nests
+		local newFaction = aiBrain.mutationBias(map, base, baseTier) or findBaseMutation(map, nil, baseTier, base.geneRandomizer)
 		if not oldAlignment[newFaction] then
 			local oldFaction
 			local newAlignmentAndSteps = {10, {}}
@@ -870,7 +872,22 @@ local function upgradeBase(map, base, upgradeType)
 			factionTotal = factionTotal + 1
 			factionRates[factionTotal] = rate
 		end
-		base.newAlignmentAndSteps = {30, findBaseMutations(map, nil, baseTier, factionTotal, factionRates, base.geneRandomizer)}
+		local mutations = findBaseMutations(map, nil, baseTier, factionTotal, factionRates, base.geneRandomizer)
+		-- new behaviour: the adapted faction takes the weakest slot
+		local adapted = aiBrain.mutationBias(map, base, baseTier)
+		if adapted and not mutations[adapted] then
+			local weakest
+			for faction, rate in pairs(mutations) do
+				if (not weakest) or (rate < mutations[weakest]) then
+					weakest = faction
+				end
+			end
+			if weakest then
+				mutations[adapted] = mutations[weakest]
+				mutations[weakest] = nil
+			end
+		end
+		base.newAlignmentAndSteps = {30, mutations}
 		result = true
 	elseif upgradeType == 4 then
 		local newAlignmentAndSteps = {30, {}}

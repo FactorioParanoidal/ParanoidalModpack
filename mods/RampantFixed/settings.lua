@@ -497,6 +497,25 @@ data:extend({
         --     per_user = false
         -- },
 
+        -- Reforged Paranoidal: learning AI (libs/AIBrain.lua, FlyerAI.lua, HeavyTactics.lua)
+        {
+            type = "bool-setting",
+            name = "rampantFixed--classicBehavior",
+            setting_type = "runtime-global",
+            default_value = false,
+            order = "m[total]-0a[ai]",
+            per_user = false
+        },
+
+        {
+            type = "bool-setting",
+            name = "rampantFixed--heavyBehavior",
+            setting_type = "runtime-global",
+            default_value = true,
+            order = "m[total]-0b[ai]",
+            per_user = false
+        },
+
         {
             type = "bool-setting",
             name = "rampantFixed--enableMigration",

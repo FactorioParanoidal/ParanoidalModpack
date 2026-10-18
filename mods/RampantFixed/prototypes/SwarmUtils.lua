@@ -451,22 +451,53 @@ local propTables10 = {
 	}	
 
 
+-- Flyers never spawn below this evolution, whatever their unit level (Paranoidal).
+local FLYER_MIN_EVOLUTION = 0.1
+
+-- spawn points {evolution, weight} with zero weight below minEvolution (weights interpolate linearly between points,
+-- the first point's weight holds below it)
+local function gateSpawnPoints(points, minEvolution)
+    local weightAtGate = points[#points][2]
+    for i=1,#points do
+        local evo, weight = points[i][1], points[i][2]
+        if evo >= minEvolution then
+            if i == 1 then
+                weightAtGate = weight
+            else
+                local prevEvo, prevWeight = points[i-1][1], points[i-1][2]
+                weightAtGate = prevWeight + (weight - prevWeight) * (minEvolution - prevEvo) / (evo - prevEvo)
+            end
+            break
+        end
+    end
+    local gated = {{minEvolution, 0}, {minEvolution + 0.0001, weightAtGate}}
+    for i=1,#points do
+        if points[i][1] > minEvolution + 0.0001 then
+            gated[#gated+1] = {points[i][1], points[i][2]}
+        end
+    end
+    return gated
+end
+
 local function fillUnitTable(result, unitSet, tier, probability, unitWeights)
     local tierWeights = unitWeights and unitWeights[tier]
     for x=1,#unitSet[tier] do
         local name = unitSet[tier][x]
         local weight = tierWeights and tierWeights[name]
+        local points = probability
         if weight then
-            local weighted = {}
+            points = {}
             for i=1,#probability do
-                weighted[i] = {probability[i][1], probability[i][2] * weight}
+                points[i] = {probability[i][1], probability[i][2] * weight}
             end
-            result[#result+1] = {name, weighted}
-        else
-            result[#result+1] = {name, probability}
         end
+        if string.find(name, "-flyer-v", 1, true) then
+            points = gateSpawnPoints(points, FLYER_MIN_EVOLUTION)
+        end
+        result[#result+1] = {name, points}
     end
 end
+swarmUtils.gateSpawnPoints = gateSpawnPoints
 
 local function unitSetToProbabilityTable(unitSet, unitWeights)	-- biters per evo
     local result = {}

@@ -9,6 +9,7 @@ local baseUtils = require("BaseUtils")
 local constants = require("Constants")
 local mapUtils = require("MapUtils")
 local chunkPropertyUtils = require("ChunkPropertyUtils")
+local aiBrain = require("AIBrain")
 
 -- constants
 
@@ -253,6 +254,8 @@ local function scorePlayerBuildings(map, chunk)
 	setPlayerBaseGenerator(map, chunk, pheromones[BASE_PHEROMONE], BASE_PHEROMONE)
 	setPlayerBaseGenerator(map, chunk, pheromones[BASE_DETECTION_PHEROMONE], BASE_DETECTION_PHEROMONE)
 	setPlayerTurretCount(map, chunk, turretsCount)
+	-- weak spots, strongpoints and infrastructure for the AI tactics (universe.area still holds this chunk)
+	aiBrain.onPlayerChunkScored(map, chunk, pheromones[BASE_PHEROMONE], turretsCount)
 
 	return pheromones[BASE_PHEROMONE]
 end

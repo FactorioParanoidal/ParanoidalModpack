@@ -21,6 +21,7 @@ local chunkPropertyUtils = require("libs/ChunkPropertyUtils")
 local constants = require("libs/Constants")
 local mapProcessor = require("libs/MapProcessor")
 local mapUtils = require("libs/MapUtils")
+local aiBrain = require("libs/AIBrain")
 local config = require("__RampantFixed__/config")
 
 local function getBaseStats(base)
@@ -427,6 +428,25 @@ remote.add_interface("rampantFixed", {
 			return nil
 		end
 		return {minEvo = planetAISetting.minEvo, peaceful = (map.state == constants.AI_STATE_PEACEFUL)}
+	end
+
+	,
+	--------------------
+	-- Paranoidal: read-only snapshot of what the AI has learned on a surface.
+	-- parameters: {surfaceIndex = number}
+	-- return: nil (no Rampant AI or no data yet) or {tactics = {[name] = {value, samples}}, states = {[AI state] = {value, samples}},
+	--         flights = {[kind] = {value, samples}}, outcomes, failStreak, winStreak, rethinking, pressing,
+	--         weakTargets, strongTargets, dominantDamage}
+	getAILearning = function(parameters)
+		if (not parameters) or (not parameters.surfaceIndex) then
+			return nil
+		end
+		local universe = storage.universe
+		local map = universe and universe.maps and universe.maps[parameters.surfaceIndex]
+		if not map then
+			return nil
+		end
+		return aiBrain.learningData(map)
 	end
 
 	,

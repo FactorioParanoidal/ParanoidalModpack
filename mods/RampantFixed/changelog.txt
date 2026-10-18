@@ -1,6 +1,27 @@
 ---------------------------------------------------------------------------------------------------
 Version: 9.02.14
 Date: 2026.10.13
+  Features:
+    - Learning AI (Paranoidal, libs/AIBrain.lua): every attack squad gets a tactic. Assault; flank (first to a waypoint in front of the least lethal or least defended side, then along the scent); probe (two small squads test two sides, the main strike follows 1-2 minutes later on the better one); feint (a small squad hits the strongest side, the main strike comes 30-60 seconds later from the opposite one); raider (weak spots: valuable chunks with few turrets around); sapper (turret clusters, for bases with suicide, nuclear, physical, troll or juggernaut factions); counter-battery (towards the artillery that shells the nests)
+    - The AI rates tactics and AI states by the outcome of their squads (kills against losses) and picks tactics by these ratings, faction leanings and some exploration: a tactic the player has learned to beat is dropped after a few failed squads and others are tried. Old verdicts fade, so a dropped tactic comes back when the defence changes. A losing streak makes the AI rethink (earlier state change, more experiments), a winning streak makes it press harder; a state whose squads keep failing is often replaced by a better one
+    - Approach memory per 8x8 chunk region of nests: losses and kills by approach direction, used by flanks, probes, feints and regroups
+    - Retreat: after heavy losses a squad (not kamikaze or rabid) pulls back two chunks, then joins a nearby squad or comes again from another side
+    - Less predictable movement: squads with a tactic sometimes take a near-best step instead of the best one
+    - Mutations adapt: when one damage type dominates the kills of the units and nests, mutations often pick a faction resistant to it
+    - Flights (libs/FlyerAI.lua): flyers leave the ground squads (3 or more) and act on their own; maps also launch flights from free flyers around active nests every 40-90 seconds, more often during ground strikes and then elsewhere. Flights strike weak spots (shore spots approached over water, outposts, valuable spots), hit and run to the next weak spot nearby (at most 2) or fly home, break off after heavy losses, and learn which kind of target works. No flights below 10% evolution
+    - Heavy models (libs/HeavyTactics.lua): pincer (two squads wait at staging points on both sides of a weak spot and strike together), ambush (a squad waits outside turret cover where players or trains pass often), sabotage (a small squad attacks poles, pipes and belts outside turret cover)
+    - Map setting "rampantFixed--classicBehavior" (off): the behaviour of 2.02.14 without all of the above. Optimizations and bug fixes stay
+    - Map setting "rampantFixed--heavyBehavior" (on): off keeps only the cheap models and also turns off the older heavy scripts - underground attacks (still also controlled by their own setting), enrage and bridgeheads
+    - Command /rampantAIReport and remote "getAILearning" ({surfaceIndex}): what the AI has learned on a surface; read-only
+  Optimizations:
+    - AI state planner: a rule table instead of seven copied if/else branches; same probabilities (compared with the old code on 20000 random cases)
+    - The four squad forming functions share placement, gathering and spending; the five neighbour scorers share one selection routine; same results
+    - Underground dig-out: one routine for the three tile loops, collection stops at the 40 positions that can be used
+    - Runtime settings read every few ticks (settlement probability, daytime hunting, vengeance probability, spending print) are cached; the player chunk table is reused instead of created every 16 ticks
+  Bugfixes:
+    - Enrage: the enrage level of one unit no longer carries over to the units after it
+    - Underground dig-out without a target added every ray tile 5 times (the y offset used dx)
+    - Missing comma in the table of the unused collision-mask-util-extended file
   Changes:
     - Version number starts with 9 (Paranoidal fork): the Mod Portal never offers an "update" over local changes.
     - New map setting "rampantFixed--nauvisMinEvo" (default 2): minimum evolution for the Nauvis truce to end. It is synced both ways with the planet AI window (RFx): new game takes the setting, an existing save keeps its RFx value and writes it into the setting.
@@ -8,7 +29,9 @@ Date: 2026.10.13
     - Removed the two chat messages "Peaceful mode. Attacks will start..." (EvoUI shows the truce next to the evolution line). The "Peaceful mode expired" message is kept.
   Locale:
     - Names for the four alert virtual signals (underground passage, dig-out attempt, squad detected, attacking Demolisher); they showed Unknown key in the signal list
+    - Names and descriptions of the two behaviour settings and the report command; the flyer setting descriptions mention the 10% evolution limit and the flights
   Balancing:
+    - Flyers never spawn below 10% evolution, at any unit level: their weight in the nest and hive spawn tables is zero below 0.1
     - Pollution wakes nests again, as in Beta 8 (RampantFixed 1.8.3): a nest that detects the player base at all becomes an ordinary active nest while pollution in its chunk or a neighbouring chunk is above 3, and calms down after the cloud is gone
   Graphics:
     - Factorio 2.0 ignores hr_version: drones (wasp, egg), electric/energy-thief beams and acid projectiles now use the HR sheets directly. Base 2.0 renamed its HR files without the hr- prefix, and the 1.1 low-res frame sizes cut a quarter of the drone frame (Paranoidal local fix)
