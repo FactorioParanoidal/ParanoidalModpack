@@ -892,12 +892,16 @@ local local_create_turret = function(turret,rank,rank_string,mod,custom_buff_mod
 				table.insert(base_picture[direction].layers, badge)
 			end
         elseif is_unkown_nesw(entity) and left ~=nil and top ~= nil then
-            ---Leaving for historical reason. Can probably be removed
-            entity.base_picture = {
-                layers = {
-                    get_badge(rank,top,left,1)
-				}
-			}
+            -- Paranoidal: 2.0 turrets have no base_picture (it is silently ignored), the base is
+            -- graphics_set.base_visualisation (e.g. the BI dart turret with graphics_set = {}).
+            entity.graphics_set = entity.graphics_set or {}
+            entity.graphics_set.base_visualisation = {
+                animation = {
+                    layers = {
+                        get_badge(rank,top,left,1)
+                    }
+                }
+            }
         else
 			local layer_one = entity.base_picture.layers[1]
             if left == nil then left = layer_one.width/2 end
@@ -908,6 +912,14 @@ local local_create_turret = function(turret,rank,rank_string,mod,custom_buff_mod
 			--entity.base_picture.layers[badge_i] = get_badge(rank,top,left,entity.base_picture.layers[1].repeat_count or 1)
 			entity.base_picture.layers[badge_i] = badge
 			badge.repeat_count = (layer_one.repeat_count or 1) * (layer_one.frame_count or 1)
+			-- Paranoidal: the artillery badge sits just under the bottom edge of the base sprite,
+			-- level with the laser turret badge, instead of high on the side of the base.
+			if entity.type == "artillery-turret" and layer_one.height then
+				local shift = layer_one.shift or {0, 0}
+				local shift_y = shift[2] or shift.y or 0
+				local bottom = shift_y + layer_one.height * (layer_one.scale or 1) / 64
+				badge.shift = {badge.shift[1], bottom + 5/32}
+			end
         end
 
 		if entity_name == item.place_result then
