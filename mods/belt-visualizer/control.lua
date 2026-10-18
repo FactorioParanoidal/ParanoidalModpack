@@ -204,6 +204,7 @@ local function refresh(data)
     local belt_type = get_belt_type(entity)
     if not connectables[belt_type] then return end
     if belt_type ~= entity.type and not data.ghost then return end
+    if not lane_cycle[data.cycle] then return end -- the highlight was switched off by the cycle
     start(data, entity, belt_type)
 end
 
@@ -241,17 +242,14 @@ script.on_event(e.on_player_left_game, function(event)
 end)
 script.on_event(e.on_player_removed, remove_player)
 
-local function highlight(event)
+-- cycle_lanes: a key press on the same belt steps through both lanes -> left -> right -> off;
+-- hovering (cycle_lanes = nil) always starts from both lanes.
+local function highlight(event, cycle_lanes)
     local index = event.player_index
     clear(index)
     local player = game.get_player(index) --[[@as LuaPlayer]]
     local selected = player.selected
-    if not selected then
-        if storage.hover[index] == "disabled" then
-            storage.hover[index] = "on"
-        end
-        return
-    end
+    if not selected then return end
     local ghost = event.input_name ~= "bv-highlight-belt" or selected.type == "entity-ghost"
     local type = selected.type
     if type == "entity-ghost" then
@@ -265,8 +263,9 @@ local function highlight(event)
     local unit_number = selected.unit_number --[[@as number]]
     local filter = utils.get_cursor_name(player)
     local repeat_origin = data.origin and data.origin.valid and data.origin.unit_number == unit_number
-    if data.filter == filter and repeat_origin then
-        data.cycle = data.cycle % 3 + 1
+    if cycle_lanes and data.filter == filter and repeat_origin and data.cycle then
+        -- one step past the lane modes is "off"
+        data.cycle = data.cycle % (#lane_cycle + 1) + 1
     else
         data.cycle = 1
     end
@@ -274,16 +273,18 @@ local function highlight(event)
     data.ghost = ghost
     data.filter = filter
     data.origin = selected
+    if not lane_cycle[data.cycle] then return end -- off: the highlight is already cleared
     start(data, selected, type)
 end
 
+-- Paranoidal: the key cycles the lanes in hover mode too instead of freezing the highlight.
+-- "disabled" (the old frozen hover state kept in storage) goes back to hover mode.
 local function keybind(event)
     local index = event.player_index
-    if storage.hover[index] == "on" then
-        storage.hover[index] = "disabled"
-    else
-        highlight(event)
+    if storage.hover[index] == "disabled" then
+        storage.hover[index] = "on"
     end
+    highlight(event, true)
 end
 
 script.on_event("bv-highlight-belt", keybind)
@@ -311,6 +312,8 @@ local function toggle_hover(event)
     local toggle = not player.is_shortcut_toggled("bv-toggle-hover")
     storage.hover[index] = toggle and "on" or "off"
     player.set_shortcut_toggled("bv-toggle-hover", toggle)
+    -- switching hover mode off removes the highlight it left behind
+    if not toggle then clear(index) end
 end
 
 script.on_event("bv-toggle-hover", toggle_hover)

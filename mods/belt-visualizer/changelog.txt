@@ -20,6 +20,11 @@ Date: 2026-10-14
     - Fixed refreshes being lost when the scheduled tick was missed
     - Refresh after rotating or flipping a belt away from the highlight, after pasting splitter settings and after placing or removing belt ghosts
     - Hover mode state is kept when a player leaves the game, matching the shortcut toggle
+  Changes:
+    - Pressing the highlight key again on the same belt cycles both lanes -> left -> right -> off (the off step is new)
+    - In hover mode the highlight key cycles the lanes the same way instead of freezing the highlight
+    - Hovering a belt always starts from both lanes; re-hovering the same belt no longer cycles the lanes
+    - Switching hover mode off removes the current highlight
   Locale:
     - Added Russian translation for container passthrough and clarified ghost keybind names
 ---------------------------------------------------------------------------------------------------
