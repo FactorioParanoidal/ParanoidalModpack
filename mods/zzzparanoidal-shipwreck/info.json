@@ -1,0 +1,16 @@
+{
+  "name": "zzzparanoidal-shipwreck",
+  "version": "1.0.0",
+  "title": "PARANOIDAL: start shipwreck",
+  "author": "FactorioParanoidal; machines and graphics: darkfrei, sbelyakov (Looting Spaceship Wrecks); AAI wreck graphics: Earendel",
+  "homepage": "https://github.com/FactorioParanoidal/ParanoidalModpack",
+  "factorio_version": "2.0",
+  "description": "The start crash of Paranoidal in one place: the crashed ship, its debris and the AAI wrecks with their contents and mining loot, the salvaged assembling machine, lab and ship generator. Start level setting: minimum (half of the supplies, defects), medium, rich (default: random better quality of finished items). The player starts empty; ruins keep the standard wreck loot.",
+  "dependencies": [
+    "base >= 2.0.77",
+    "? aai-industry",
+    "? angelsrefining",
+    "? zzzparanoidal",
+    "? ic-more-qualities"
+  ]
+}

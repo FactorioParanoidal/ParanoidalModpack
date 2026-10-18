@@ -11,7 +11,6 @@ require("controls.torch-no-loot") -- Разобранный факел проп�
 require("controls.spacex-button-force") -- Кнопка SpaceX не остаётся после выхода из Песочницы.
 local fire_safety = require("controls.fire-safety")
 fire_safety.install() -- Пожарная турель: вода, гасит огонь, защита от Flammable Oils в радиусе.
-local shipwreck_salvage = require("controls.shipwreck-salvage")
 -- Install after loader-shells chains the SpilledItems handler; neither consumer
 -- handles these inventory/grid-less types. Keep every other type, including modded containers.
 if script.get_event_handler(defines.events.on_entity_died) then
@@ -118,7 +117,6 @@ script.on_init(function() --наш любимый init, запрещаем дв�
 	loader_shells.init()
 	rail_support_power.sync()
 	fire_safety.sync()
-	shipwreck_salvage.init() -- Стартовые припасы; при загрузке и смене конфигурации повторно не выдаются.
 end)
 
 script.on_load(function() --без дропа эволюции потому что game недоступен
