@@ -1,8 +1,8 @@
 ## Pollution: Impactful Smog / Spore Cloud — Paranoidal fork
 
 Maintained in Paranoidal, based on somethingtohide's version 1.4.4 (MIT).
-The mod ID, upstream version 1.4.4 and settings are retained for existing saves.
-The Paranoidal patches rebuild derived caches through the existing configuration-change handler.
+The mod ID and settings are retained for existing saves. Version 1.4.5 rebuilds
+its derived caches through the existing configuration-change handler.
 
 The fork caches see-through regions per surface, avoids unrelated player scans,
 reuses chunk layouts and solar queues, and incrementally cleans expired render

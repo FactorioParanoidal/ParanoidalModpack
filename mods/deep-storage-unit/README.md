@@ -58,7 +58,7 @@
 
 Блок, который в старом сохранении уже привязан к такому предмету, ничего не теряет из накопленного: он переходит в режим «Только выдача» — отдаёт предмет, но больше не принимает его в счётчик, и сам отвязывается, когда опустеет.
 
-## Локальные изменения на базе 1.6.8
+## Изменения 9.7.0
 
 Полный список — `changelog.txt`.
 
@@ -107,4 +107,4 @@
 
 ## Short English summary
 
-Paranoidal fork of Memory Storage 1.6.8 by notnotmelon; the upstream version is retained. Local changes: items carrying data (armor, vehicles, blueprints, items with tags) are refused like spoilables; the chest is always 300 slots and the unit quality lowers power usage instead (0.2 + 0.8 × (1 − i/N)²); renamed or removed items and qualities no longer destroy units or crash unpowered ones, and renames are followed for packed units; the GUI closes out of reach, shows quality and exact amounts, and has a reset button; no more leaked script inventory per GUI opening; clone fixes; name-filtered events.
+Paranoidal fork of Memory Storage 1.6.8 by notnotmelon. 9.7.0: items carrying data (armor, vehicles, blueprints, items with tags) are refused like spoilables; the chest is always 300 slots and the unit quality lowers power usage instead (0.2 + 0.8 × (1 − i/N)²); renamed or removed items and qualities no longer destroy units or crash unpowered ones, and renames are followed for packed units; the GUI closes out of reach, shows quality and exact amounts, and has a reset button; no more leaked script inventory per GUI opening; clone fixes; name-filtered events.

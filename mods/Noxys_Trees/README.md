@@ -2,7 +2,7 @@
 
 A Factorio modification that makes the trees spread slowly but also die off with certain condition.
 
-## Paranoidal maintenance (0.5.2)
+## Paranoidal local maintenance (9.5.3)
 
 Based on Noxy's 0.5.2; the Paranoidal fork retains the missing-uranium compatibility fix.
 Runtime maintenance runs every 30 ticks (and is unregistered while disabled). Operation

@@ -441,7 +441,7 @@ Beta 8 они делались только в машинах (`crafting-machine
   (`pellet-coke`, `angels-coal-processing-2`) и не срабатывал. Теперь `angels-pellet-coke` открывается
   в `angels-coal-cracking` (синяя наука), как в Beta 8, а не в `angels-coal-processing-3`. Следствие:
   переработка пеллет в Quality (`ic-refine-item-angels-pellet-coke`) — 30 с / 2250 вместо 10 с / 750.
-- Локальный патч `GUI_Unifyer` 2.0.1 и `ModuleInserterEx` 7.4.1: интеграция была на `ModuleInserter` (1.1). У
+- `GUI_Unifyer` 9.0.5 (локальный форк 2.0.1) и `ModuleInserterEx` 7.4.1: интеграция была на `ModuleInserter` (1.1). У
   ModuleInserterEx нет кнопки на верхней панели, поэтому GUI Unifyer сам создаёт кнопку
   `module_inserter_config_button`, а нажатие вызывает новую remote-функцию ModuleInserterEx
   `toggle_gui(player_index)`. Кнопка подсвечивается, пока открыто окно `miex_main_window`.

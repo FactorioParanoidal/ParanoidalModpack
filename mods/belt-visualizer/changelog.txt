@@ -1,4 +1,28 @@
 ---------------------------------------------------------------------------------------------------
+Version: 9.0.3
+Date: 2026-10-14
+  Optimizations:
+    - Version number starts with 9 (Paranoidal fork): the Mod Portal never offers an "update" over local changes.
+    - on_tick is registered only while highlights are being drawn, cleared or refreshed
+    - The highlight maximum setting is cached instead of being read every tick
+    - Refreshes after nearby building are debounced (60 ticks of quiet, at most 300 ticks of delay)
+    - Old renders are destroyed from an array instead of rescanning a hash table every tick
+    - Belt line caching stops on closed loops and reads belt neighbours once per belt
+    - Container passthrough searches each container once per traversal
+    - Traversal-only tables are freed from storage when the highlight is finished
+    - Renders use surface index and a shared player list
+  Bugfixes:
+    - Fixed splitter filter matching against the cursor ghost in 2.0
+    - Fixed splitters being skipped or queued twice when only one side was already checked
+    - Fixed duplicate circles, rectangles and underground dashes
+    - Fixed refresh of a ghost splitter origin and refresh not marking the origin as checked
+    - Fixed a belt being skipped by belt line caching every tick
+    - Fixed refreshes being lost when the scheduled tick was missed
+    - Refresh after rotating or flipping a belt away from the highlight, after pasting splitter settings and after placing or removing belt ghosts
+    - Hover mode state is kept when a player leaves the game, matching the shortcut toggle
+  Locale:
+    - Added Russian translation for container passthrough and clarified ghost keybind names
+---------------------------------------------------------------------------------------------------
 Version: 2.0.2
 Date: 2024-10-22
   Changes:

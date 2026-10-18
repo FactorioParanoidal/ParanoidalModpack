@@ -1,7 +1,8 @@
 ---------------------------------------------------------------------------------------------------
-Version: 1.1.5
+Version: 9.1.5
 Date: 2026. 10. 14
   Changes:
+    - Version number starts with 9 (Paranoidal fork): the Mod Portal never offers an "update" over local changes.
     - Equipment grids (armor, vehicles, wagons) grow gently with quality: +100% of the area every 5 tiers for the 5x5 modular armor (tier 5 x2, tier 10 x3, last tier x9) instead of +level cells per side. One bonus per quality is shared by every grid: +0 at tier 1, +2 at tier 5, +4 at tier 10, +10 at the last tier. Bigger grids grow less, the smallest vehicle grids more.
     - The defect energy factor of a crafting machine is kept when the machine already declares it (Bio gardens: a defective garden absorbs less pollution, not more).
     - The "evolution +X%" effect of quality control 1-10 uses research_evolution_factor's evolution-label.lua (same rounding and settings as other technologies) instead of its own copy of the formula.

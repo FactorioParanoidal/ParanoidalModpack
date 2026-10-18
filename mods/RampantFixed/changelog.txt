@@ -1,4 +1,73 @@
 ---------------------------------------------------------------------------------------------------
+Version: 9.02.14
+Date: 2026.10.13
+  Changes:
+    - Version number starts with 9 (Paranoidal fork): the Mod Portal never offers an "update" over local changes.
+    - New map setting "rampantFixed--nauvisMinEvo" (default 2): minimum evolution for the Nauvis truce to end. It is synced both ways with the planet AI window (RFx): new game takes the setting, an existing save keeps its RFx value and writes it into the setting.
+    - Remote "getTruceInfo" ({surfaceIndex}) returns {minEvo, peaceful} for EvoUI; read-only.
+    - Removed the two chat messages "Peaceful mode. Attacks will start..." (EvoUI shows the truce next to the evolution line). The "Peaceful mode expired" message is kept.
+  Locale:
+    - Names for the four alert virtual signals (underground passage, dig-out attempt, squad detected, attacking Demolisher); they showed Unknown key in the signal list
+  Balancing:
+    - Pollution wakes nests again, as in Beta 8 (RampantFixed 1.8.3): a nest that detects the player base at all becomes an ordinary active nest while pollution in its chunk or a neighbouring chunk is above 3, and calms down after the cloud is gone
+  Graphics:
+    - Factorio 2.0 ignores hr_version: drones (wasp, egg), electric/energy-thief beams and acid projectiles now use the HR sheets directly. Base 2.0 renamed its HR files without the hr- prefix, and the 1.1 low-res frame sizes cut a quarter of the drone frame (Paranoidal local fix)
+    - Enrage and regeneration crystal stickers use the base 2.0 fire-flame-01 layout (84x130, 10 per line, 90 frames); the 1.1 layout showed a piece of the new sheet (Paranoidal local fix)
+    - Removed the unused corpse acid-splash-purple: no prototype or script referenced it (Paranoidal local fix)
+---------------------------------------------------------------------------------------------------
+Version: 2.02.13
+Date: 2026.10.13
+  Balancing:
+    - Player base detection and base scent decay as in Beta 8 (RampantFixed 1.8.3): -10% per chunk without the long tail below 500. Raid zone stays ~27 chunks from turrets/radars and grows to at most ~36 with retribution (was up to ~280)
+    - Rocket launches raise retribution (+10) and give the AI 5000 points again, as in Beta 8 (+0.1 and 500 with Space Exploration)
+    - Nauvis truce is 60 minutes and attacks also need 2% evolution (was 20 minutes, 0%). Existing saves are migrated if they still have the old defaults; values set in the planet AI window are kept
+---------------------------------------------------------------------------------------------------
+Version: 2.02.12
+Date: 2026.10.13
+  Optimizations:
+    - Player building scan: chunks changed by build/mine/death events are rescanned first; the background safety pass checks 1 chunk per cycle instead of 8
+    - Factorissimo check searches only factory buildings by name instead of every storage tank in the chunk
+    - on_sector_scanned is filtered to Rampant's own radar-type entities; the player's radars no longer call Lua
+    - Player-area processing runs every 16 ticks instead of 8; hunting chances are rescaled so the chance per unit of time is unchanged
+  Balancing:
+    - Long-range squads are fully compressed from ~9 chunks from turrets/radars (was ~12) and switch to partial compression at ~8 chunks; decompression near the base and the player is unchanged
+---------------------------------------------------------------------------------------------------
+Version: 2.02.11
+Date: 2026.10.11
+  Features:
+    - Flyers: a new unit of biter nests and hives in every faction with biters except kamikaze and nuclear (startup setting, on by default)
+    - Startup settings for the first unit level with flyers (default 1, from the start) and their share of nest and hive output (default 0.12)
+    - Compared to the faction biter of the same level: health x1.5, damage x1.3, speed x1.15, 3 times more pollution to join an attack, 2 times longer spawning
+    - Flyers keep the faction resistances, loot and health/speed/regeneration traits, but not the special attacks, death effects, size and reach. They bite with the faction damage type (fire faction: physical)
+    - Flyers fly over walls, water and cliffs, land before biting and take off before moving. Every turret can hit them
+  Graphics:
+    - Flyer graphics from New Enemies (Vanilla+) 0.0.10 by Wolfenstain; landing and ground attack frames are packed into one attack sheet
+---------------------------------------------------------------------------------------------------
+Version: 2.02.10
+Date: 2026.10.08
+  Optimizations:
+    - Filter neutral deaths (except cliffs) and irrelevant build events before Lua dispatch
+    - Reuse squad member snapshots until the group changes
+    - Check alert visibility once per force and reuse static pheromone scratch data
+  Other:
+    - Reforged Paranoidal local fork; no changes to AI timings, spawning limits or difficulty
+---------------------------------------------------------------------------------------------------
+Version: 2.02.09
+Date: 2026.10.08
+  Info:
+    - Reforged Paranoidal fork of RampantFixed 2.02.08
+  Changes:
+    - Compressed squads decompress gradually: each squad over 2 seconds, at most 200 units per second on all surfaces together
+    - Nests no longer drop the combat power-up stone and the regeneration crystal. Existing items and crystals keep working
+    - Dying biters no longer landfill water
+  Optimizations:
+    - on_entity_damaged is registered only while damage protections are enabled or a oneshot power-up is active
+    - Cached prototype data and runtime settings in death, build and mine handlers
+    - Faster nearby base search
+    - Removed accidental global variables
+  Bugfixes:
+    - Damage protection startup settings are read by value
+---------------------------------------------------------------------------------------------------
 Version: 2.02.08
 Date: 2026.07.04
   Other:
