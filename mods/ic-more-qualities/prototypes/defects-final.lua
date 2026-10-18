@@ -50,6 +50,11 @@ M.exempt_groups = {
     {name = "debug", entity_types = {"infinity-container", "infinity-pipe", "infinity-cargo-wagon", "heat-interface"},
         items = {"electric-energy-interface"}},
     {name = "modules", item_types = {"module"}},
+    -- Bob module parts that are also lab-module science packs (tool): with defects they could not enter the
+    -- always-standard module recipes.
+    {name = "module parts", items = {"bob-speed-processor", "bob-efficiency-processor", "bob-productivity-processor",
+        "bob-pollution-clean-processor", "bob-pollution-create-processor", "module-combining-case", "bob-module-case",
+        "bob-module-circuit-board"}},
     {name = "equipment", equipment = true},
     {name = "reactors", entity_types = {"reactor"}},
     {name = "wind turbines", items = {"texugo-wind-turbine", "texugo-wind-turbine2", "texugo-wind-turbine3",

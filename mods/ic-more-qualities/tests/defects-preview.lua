@@ -182,7 +182,7 @@ near(poles.small.supply_area_distance + q["ic-defect-5"].electric_pole_supply_ar
 local joined = table.concat(report, "\n")
 assert(joined:find("upgrade chains without defects (tanks, fuel cells, chargers, memory units, hazmat suit, factory buildings, Flow Control pipes): 3", 1, true))
 assert(joined:find("groups without defects (5): valves and small fluid tanks 2,", 1, true))
-assert(joined:find("modules 1, equipment 1,", 1, true) and joined:find("roboports 1", 1, true))
+assert(joined:find("modules 1, module parts 0, equipment 1,", 1, true) and joined:find("roboports 1", 1, true))
 -- "hidden" (wire 1, reduction 1) ends exactly at 0: reduced, not clamped.
 assert(joined:find("clamped poles: connector", 1, true) and not joined:find("hidden (", 1, true))
 assert(joined:find("material%-pipe %(1%): pipe"))
