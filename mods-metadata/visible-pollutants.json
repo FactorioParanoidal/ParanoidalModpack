@@ -1,6 +1,7 @@
 {
   "mod": "visible-pollutants",
-  "source": "local",
+  "source": "portal",
+  "upstreamVersion": "1.4.4",
   "original": {
     "name": "Pollution: Impactful Smog / Spore Cloud",
     "authors": ["somethingtohide", "Cameron Leger"],

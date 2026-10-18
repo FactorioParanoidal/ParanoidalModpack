@@ -10,7 +10,7 @@ Many thanks to _CodeGreen for Belt Visualizer and for allowing us to fork it. It
 most useful tools in a modpack this belt-heavy, and the changes below are offered back to the
 original mod: take whatever is useful.
 
-## Changes in 2.0.3
+## Local Paranoidal changes on upstream 2.0.2
 
 Full list: `changelog.txt`.
 
@@ -67,7 +67,7 @@ multiplayer.
 ## Кратко по-русски
 
 Форк Belt Visualizer 2.0.2 (_CodeGreen) для сборки Paranoidal, сделан с разрешения автора, за
-что ему большое спасибо. В версии 2.0.3 мод не работает в простое (`on_tick` включается только
+что ему большое спасибо. Локальные патчи сохраняют версию 2.0.2: мод не работает в простое (`on_tick` включается только
 при работе), реже перестраивает подсветку при стройке рядом, исправлены фильтр сортировщика по
 «призраку» в руке, проверка сторон сортировщика, двойная отрисовка и пропуски обновлений;
 дополнен русский перевод. В игре изменения пока не проверены.

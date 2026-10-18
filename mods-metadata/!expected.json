@@ -8,16 +8,28 @@
       "metadataHash": null
     },
     {
+      "name": "AbandonedRuins-paranoidal",
+      "version": "1.0.1",
+      "contentHash": null,
+      "metadataHash": "e0afe47527a9eefb3d041c1caa2485fad2c327d125e2fd61ce0434f6a4f6c153"
+    },
+    {
       "name": "AbandonedRuins_updated_fork",
       "version": "1.5.7",
-      "contentHash": "ba872edefa8876f6888abdefbd8b2870",
-      "metadataHash": "6101ef0cb332d5428699df46ca5f3f92c14cf0f908e380662a0fc12bacb83b58"
+      "contentHash": "c2fee7f19bfe30a3561659468a7d5246",
+      "metadataHash": "b52e1b21ccc7df9cd130d01139b13334dad30605539cfa3b73999587660862a9"
     },
     {
       "name": "Aircraft-space-age",
       "version": "2.3.4",
       "contentHash": "6e38cec190b290f14babdabed21566e3",
       "metadataHash": null
+    },
+    {
+      "name": "Alien-biomes-Reforged",
+      "version": "0.8.5",
+      "contentHash": null,
+      "metadataHash": "3f3aa61b3fef27d4dbe1846c1bf291435c2d37d286983c9d17aadfeeddc3a4ee"
     },
     {
       "name": "All-infinit-tech",
@@ -46,8 +58,8 @@
     {
       "name": "Big-Monsters",
       "version": "2.1.2",
-      "contentHash": "76e449eb792e2a2861127120109e8283",
-      "metadataHash": "658f8376e46cdb3d9defb2a7b0137c251716424ec1cb6b82a06ae7b02095a15e"
+      "contentHash": null,
+      "metadataHash": "67bd4c028e670c2dd022ea4b164596f9dbd86da6b69bf92670ca94882da0b594"
     },
     {
       "name": "BigLabFork",
@@ -64,8 +76,8 @@
     {
       "name": "Bio_Industries_2",
       "version": "2.0.34",
-      "contentHash": "5cf89f5d9c186a9595b49d496d33ef60",
-      "metadataHash": null
+      "contentHash": null,
+      "metadataHash": "cc68d8979261973cadda7389240e556c4cde5627acae719c9c0a16af3eb113ab"
     },
     {
       "name": "BottleneckLite",
@@ -77,12 +89,6 @@
       "name": "CleanFloor",
       "version": "2.0.0",
       "contentHash": "7654fc3de48ab0239fa4cb1e453ac480",
-      "metadataHash": null
-    },
-    {
-      "name": "Clockwork-2",
-      "version": "1.1.3",
-      "contentHash": "6bb1998e0629f2477c8ee8185351b5a8",
       "metadataHash": null
     },
     {
@@ -106,19 +112,13 @@
     {
       "name": "Cursed-FMD",
       "version": "0.2.0",
-      "contentHash": "4980bd5dd0a51c0de49fa2285cc38d4b",
-      "metadataHash": null
+      "contentHash": null,
+      "metadataHash": "c8c9e5f454c36b0afddbd18a311f08ea9c411c485aee2a48942bb1d7c84f4c8e"
     },
     {
       "name": "CursorEnhancements",
       "version": "2.2.2",
       "contentHash": "8cb0421ff867c6ebdea21371dc75fc12",
-      "metadataHash": null
-    },
-    {
-      "name": "DarkNight",
-      "version": "2.0.0",
-      "contentHash": "efa8bcb9fe022d385d08816eba55c023",
       "metadataHash": null
     },
     {
@@ -147,9 +147,9 @@
     },
     {
       "name": "EvoUi",
-      "version": "0.5.0",
-      "contentHash": "f007b4bfcf1df0442d62e2890df743e7",
-      "metadataHash": null
+      "version": "0.5.1",
+      "contentHash": "249f922d4e6e2172b025a23a79c45d29",
+      "metadataHash": "075373f5c7ac0b685fc633214f66070d7efca246070fd32e7230e5e8826f6b60"
     },
     {
       "name": "FNEI",
@@ -178,8 +178,8 @@
     {
       "name": "Flammable_Oils_QUICKFIX",
       "version": "0.2.22",
-      "contentHash": "ebca385c508b3c6105aa921b174f5bc2",
-      "metadataHash": null
+      "contentHash": null,
+      "metadataHash": "8536fa98d9037ae5d244e69850799652ca6d975c300d6d0a5a45009de845d5b1"
     },
     {
       "name": "Flow Control",
@@ -190,14 +190,14 @@
     {
       "name": "Fluid-level-indicator",
       "version": "0.9.9",
-      "contentHash": "ce3d06287b54ee231046618a62bbba94",
-      "metadataHash": null
+      "contentHash": null,
+      "metadataHash": "f154f5e2ac932ba3e8f5653fa3880d7b53834a67f714268286a1464d45eb972b"
     },
     {
       "name": "GUI_Unifyer",
       "version": "2.0.1",
-      "contentHash": "5e58650b959e9dcf44970fb0b5af264e",
-      "metadataHash": "2f8cdb8f625687d0677e88ef537dd1cd58ee8bcaa9203db1d7e0bfb3bffc4f74"
+      "contentHash": "6a1b6028d41318fd5de35e9514c06e0b",
+      "metadataHash": "1e064cd33f1e518445fb6e1654f8af6ceb08cfd9822b196b4dcf979796cd9141"
     },
     {
       "name": "GlowingLaserBeams",
@@ -208,8 +208,8 @@
     {
       "name": "HeroTurretRedux",
       "version": "1.0.38",
-      "contentHash": "d2bbb1c8a193bff514ce756976ab267f",
-      "metadataHash": null
+      "contentHash": null,
+      "metadataHash": "1af366ed825b52ac4c1e548d97c26b78a774b21c26ebcc827e86da7fda3c1d6c"
     },
     {
       "name": "InlaidLampsExtended",
@@ -218,10 +218,16 @@
       "metadataHash": null
     },
     {
+      "name": "InserterFuelLeech",
+      "version": "1.0.4",
+      "contentHash": "4f0838653b2f48f6da8eee6541c74e72",
+      "metadataHash": null
+    },
+    {
       "name": "JunkTrain3",
       "version": "2.0.0",
       "contentHash": null,
-      "metadataHash": "5ce0da35bae31f2d604e5f990a6d1afc82f49f531698f6204734c835fe0d8f00"
+      "metadataHash": "42d5703a0afd2da54f681de5a910e69874ecd0556fdf24509d95bf65b0560642"
     },
     {
       "name": "KS_Power",
@@ -233,24 +239,6 @@
       "name": "Kruise_Kontrol_Updated",
       "version": "0.3.0",
       "contentHash": "861010e246f5185153d5ec34bd5813a9",
-      "metadataHash": null
-    },
-    {
-      "name": "Kux-BlueprintExtensions",
-      "version": "3.3.16",
-      "contentHash": "0bf6585c26ab54ce53b3d4d3fce4d2a6",
-      "metadataHash": null
-    },
-    {
-      "name": "Kux-CoreLib",
-      "version": "3.17.8",
-      "contentHash": "27e1d390770b41b3b44974ee1fad9bb7",
-      "metadataHash": null
-    },
-    {
-      "name": "Kux-GuiLib",
-      "version": "3.0.10",
-      "contentHash": "26d5dbcc7257917334e553ebb8a1d287",
       "metadataHash": null
     },
     {
@@ -275,7 +263,7 @@
       "name": "MIRV2",
       "version": "1.0.0",
       "contentHash": null,
-      "metadataHash": "577aeb7ebe782a22a7b6e6ea17173ab5cc42ef422068b35c3d750c9fcde645ce"
+      "metadataHash": "d419ecb8d16ebe2eccecf6581dbbe93532b2c72087cd3da0aef69a2dfdb526ec"
     },
     {
       "name": "MilesBobsExpansion2",
@@ -286,26 +274,26 @@
     {
       "name": "Milestones",
       "version": "1.4.7",
-      "contentHash": "6ead29a37634123e995f685cf6b59e53",
-      "metadataHash": null
+      "contentHash": "a5c0be95f60923acd0c905720aa64e1a",
+      "metadataHash": "acf56af7c75e677632ef2120bf42d49f9a12615b17930b833cac9f70292f7042"
     },
     {
       "name": "ModuleInserterEx",
       "version": "7.4.1",
-      "contentHash": "a44e34b3de7a24ddf0de8ea498381d9b",
-      "metadataHash": null
+      "contentHash": "98430aefe07b74d306711e4f0f46df74",
+      "metadataHash": "fbcc79367de460795c8d5ba5d3f86b7b5ee4a06d4187f5cca3b45dffd96e5b62"
     },
     {
       "name": "MultipleUnitTrainControl",
       "version": "1.0.5",
-      "contentHash": "f24853962e06d39262f988213e3ec391",
-      "metadataHash": null
+      "contentHash": "234f26f7fc3853bca178fbe53c44fe2b",
+      "metadataHash": "7af97e92a2d50c62f68ec8b3e8d9a92ef55ebcbefdb227b56a8539e0dd9e7e0d"
     },
     {
-      "name": "MxlChievements2",
-      "version": "3.0.1",
+      "name": "MxlChievements-Reforged",
+      "version": "1.1.0",
       "contentHash": null,
-      "metadataHash": "ff43a956c73182caea64f3464f102bf9267937b3f4bd73f9df8e153d5eefd664"
+      "metadataHash": "d1827dd09e41595a9d26ba20d951906c575b2f054519dfb3aed73fcc46569343"
     },
     {
       "name": "Namelists",
@@ -320,10 +308,22 @@
       "metadataHash": "1fd7cc42ed22a2788222f767811dfa21b00cf3c7ee0b3e62e4ce42a48593f410"
     },
     {
+      "name": "NightBrightness",
+      "version": "2.0.0",
+      "contentHash": null,
+      "metadataHash": "4d63994b2bfdef7c88cc0413cecf5c667f3a152f652f171a47e662e78af0ce2e"
+    },
+    {
       "name": "Noxys_Trees",
       "version": "0.5.2",
-      "contentHash": "f761398b0516eb4f198d70a2fc198579",
-      "metadataHash": "3cf6e1f344846bf2d9bac862ca9cf0a0732c1513c3b25dab6d9af6d824a27cd1"
+      "contentHash": "f68ad86efb0923cce17fa35868b9307c",
+      "metadataHash": "d65c8662f85b05bdb49e0ba5cacd534330b25ec8c19782c4c4e9266536a0dd40"
+    },
+    {
+      "name": "OreRadar",
+      "version": "2.0.1",
+      "contentHash": null,
+      "metadataHash": "0bd4b357a6deec600aa8fe092798858c11670fe979bc04280867cab60e27049d"
     },
     {
       "name": "Orphan Finder",
@@ -340,14 +340,14 @@
     {
       "name": "PCPRedux",
       "version": "1.1.0",
-      "contentHash": "44274ab9d3bdea349a31b3342ada2753",
-      "metadataHash": null
+      "contentHash": "bffe753f7c64f703ae86f62aedd64ce5",
+      "metadataHash": "f81e6b3539c58c5642bffc0f8bf12cf783266a58df26e3cb435e2fb459fa7f28"
     },
     {
       "name": "PMRPGsystem",
-      "version": "9.0.3",
+      "version": "9.0.4",
       "contentHash": null,
-      "metadataHash": "1a2185934688b6c657bd41110e9eb982f4fc825736782c14f5ab14800ccaa77a"
+      "metadataHash": "f0050984a4db999c83eaebc22a8b907fabdf31cfc00c8ff6e8dd6447cc34bd74"
     },
     {
       "name": "ParanoidalLocale",
@@ -392,10 +392,16 @@
       "metadataHash": "4b9a44a9936df1669f4a59bbbd45c31b58c4e5778e8b1062f81174b8733c1aa3"
     },
     {
+      "name": "Radioactive-Damage-Reforged",
+      "version": "1.0.0",
+      "contentHash": null,
+      "metadataHash": "102e13d7910450417a3a5dba5838d7199278cf55cf2544a23a3a523449488ea9"
+    },
+    {
       "name": "RampantFixed",
       "version": "2.02.08",
-      "contentHash": null,
-      "metadataHash": "face3bb0acf40d05f17c683e308b5a2256737e884cd137ed8c592ff092124b06"
+      "contentHash": "e22e4c06ded8201138d507116202e5eb",
+      "metadataHash": "c2a1ca2b37f288e2c25eb8be5044cd5da39fa47bd900b7abaf50b5afc31ae616"
     },
     {
       "name": "RateCalculator",
@@ -434,16 +440,22 @@
       "metadataHash": "dcd42fe8836818fe1fdf70b1cd494393fc3055a8134a30210fceeb9bb10adc5d"
     },
     {
+      "name": "RussianStations2",
+      "version": "9.2.0",
+      "contentHash": null,
+      "metadataHash": "890bd696b96ee665cc2228de3a36c80f6b0d61160e859ec83211266cec1cc68d"
+    },
+    {
       "name": "SchallPickupTower",
       "version": "2.0.1",
-      "contentHash": "f828b3a5fb726815651c2e9fea1c4b2c",
-      "metadataHash": null
+      "contentHash": null,
+      "metadataHash": "c35287f5ad3a21194087e88e65ee631d560c80b5cb820da6578fae688cc7809f"
     },
     {
       "name": "Shield-FX",
       "version": "2.0.1",
-      "contentHash": "bcba8909fa959abd06b27bc92377131f",
-      "metadataHash": null
+      "contentHash": null,
+      "metadataHash": "80ab074a42b63103bc0700491c9d0685ebcb5e67c20aa6f1f9d4083e117b7457"
     },
     {
       "name": "Shortcuts-ick",
@@ -454,8 +466,8 @@
     {
       "name": "SpaceModFeorasFork",
       "version": "1.3.3",
-      "contentHash": "04c6ed6b2a0ced36174d3716c9ee6922",
-      "metadataHash": null
+      "contentHash": "c8c30e4c4c5847887306ebccddb3b062",
+      "metadataHash": "0f99db0da3676fb2e4e3da5b74087b7fb054b584c5013f21d1efa381aa7f398d"
     },
     {
       "name": "SpaceXGAR2",
@@ -464,16 +476,16 @@
       "metadataHash": "ea442b073c45f5f18cbfb503dc2a9a427276ad404ae7ae19bd2d3d6ee0308f6b"
     },
     {
-      "name": "Stuckez12_Radiation",
-      "version": "1.1.2",
-      "contentHash": "67bb0face31011bc246e3871797c8edf",
-      "metadataHash": "fa7d67458b2c95debfbe55dc31b888916fad239b755faea6e10e9b5b348c75ce"
+      "name": "Subterranean",
+      "version": "2.0.0",
+      "contentHash": null,
+      "metadataHash": "8708418e04c7092817c68ea68bf51555794e9dd36992866209b50d4d25fc7e3c"
     },
     {
       "name": "Teleporters",
       "version": "2.0.0",
-      "contentHash": "e1b005dab47491b817a68870b2c6f258",
-      "metadataHash": null
+      "contentHash": null,
+      "metadataHash": "4d4b6256c6b96ab674791b63d21f93cbcb9a3c2db906ebcc79335c2330e69953"
     },
     {
       "name": "TimedSpawnControl",
@@ -496,8 +508,8 @@
     {
       "name": "UnPollock",
       "version": "2.0.1",
-      "contentHash": "11a87470b6f9d6129428d0adc5b26724",
-      "metadataHash": null
+      "contentHash": "d055784db26b922acbd71b3481a35cea",
+      "metadataHash": "16eb1a13cf56096c02324d979244242ae2ad38a295961dcff9dd26d3312e5817"
     },
     {
       "name": "VehicleSnap",
@@ -520,14 +532,14 @@
     {
       "name": "WideChests",
       "version": "6.2.4",
-      "contentHash": "20c813f0dbc74aa719801397ba80f075",
-      "metadataHash": null
+      "contentHash": "f9363e066a44ba56b7cf0fd78c93c9e5",
+      "metadataHash": "c10a305979d3519d7dcc77ed397d55156875f0b7b02d0fca6e3d2df9104c3a20"
     },
     {
-      "name": "Wind-Turbines-relaunched",
-      "version": "2.2.5",
-      "contentHash": "35b363235444a9772032cf90897d324d",
-      "metadataHash": null
+      "name": "Wind-Turbines-Reforged",
+      "version": "1.0.0",
+      "contentHash": null,
+      "metadataHash": "ba6e098a05e172d40544eed3ea8f93b3c94f6077087c4fb22eb3ea3b3af05588"
     },
     {
       "name": "Wr_Enhanced_Map_Colors",
@@ -538,8 +550,8 @@
     {
       "name": "ZCS-Trash-Landfill-Continued-Update",
       "version": "1.2.7",
-      "contentHash": "32ac47ade7116bd5fbd1599076fe58dc",
-      "metadataHash": null
+      "contentHash": null,
+      "metadataHash": "b973d10897d9fc4e38ae879f6978224d7e440a2d377aaf347c63e2aed678d0c5"
     },
     {
       "name": "aai-industry",
@@ -551,24 +563,6 @@
       "name": "aai-loaders",
       "version": "0.2.11",
       "contentHash": "98b17ce390105721aced1a078b0e6d0d",
-      "metadataHash": null
-    },
-    {
-      "name": "angelsaddons-mobility-graphics-crawler",
-      "version": "2.0.0",
-      "contentHash": "ac12315625f4e62b8d8dfe986ccc128b",
-      "metadataHash": null
-    },
-    {
-      "name": "angelsaddons-mobility-graphics-petro",
-      "version": "2.0.0",
-      "contentHash": "f925e98761352a48a440c9a2a9bc8e3b",
-      "metadataHash": null
-    },
-    {
-      "name": "angelsaddons-mobility-graphics-smelting",
-      "version": "2.0.0",
-      "contentHash": "c23c2479743609bccd725862cd31b3c0",
       "metadataHash": null
     },
     {
@@ -593,7 +587,7 @@
       "name": "angelsindustries",
       "version": "2.0.0",
       "contentHash": null,
-      "metadataHash": "aa464fde770324541ed19c011aa795702b620cb031bfe27c1ba19bb65dfa6d5f"
+      "metadataHash": "8dbd7295aa73962302c294cf39c25809afde57c79fefb6d285e8a27462a4d7a1"
     },
     {
       "name": "angelsindustriesgraphics",
@@ -622,8 +616,8 @@
     {
       "name": "angelsrefining",
       "version": "2.0.4",
-      "contentHash": "343d0ebbc028634ebfb8171bfaca3335",
-      "metadataHash": null
+      "contentHash": null,
+      "metadataHash": "a9088bfe547f0511a4bd0977006fc8e50ad48771435afed77fd81fdf8fd8260f"
     },
     {
       "name": "angelsrefininggraphics",
@@ -651,8 +645,8 @@
     },
     {
       "name": "automatic-underground-pipe-connectors",
-      "version": "2.0.14",
-      "contentHash": "095b203cd23c8f101e7db0b6538bdf26",
+      "version": "2.0.15",
+      "contentHash": "38a345f3473ae6df0c728999bb235bc7",
       "metadataHash": null
     },
     {
@@ -664,14 +658,20 @@
     {
       "name": "belt-visualizer",
       "version": "2.0.2",
-      "contentHash": "47a54bbeada686bb834bac5046f6b9d4",
-      "metadataHash": null
+      "contentHash": "8ad836523937bd3b49274535f483190a",
+      "metadataHash": "c06ee0b0ce7ae4c371afd25de362976ef3c9148d60748279ada7df9f5c09e36f"
     },
     {
       "name": "beltbrush2",
       "version": "0.2.1",
       "contentHash": "b7883410e50e4493d0bee63db47e63ec",
       "metadataHash": null
+    },
+    {
+      "name": "blueprint-sandboxes",
+      "version": "3.2.2",
+      "contentHash": "4e4d9dc105285a5db99e26f9cb47f731",
+      "metadataHash": "ebe842adbefdd67869fe76a7843da8eee7b012615211fb7a0141ada9ce21fe25"
     },
     {
       "name": "bobassembly",
@@ -700,8 +700,8 @@
     {
       "name": "bobinserters",
       "version": "2.0.3",
-      "contentHash": "42ef09a2208cbfb8da8111c98f9abcfb",
-      "metadataHash": null
+      "contentHash": "f728b97090e9b56257e215584a364d94",
+      "metadataHash": "0dc13b8c8e927ca0f835b25b7dc1e68de007dd643d319883047e713d32099046"
     },
     {
       "name": "boblibrary",
@@ -790,14 +790,14 @@
     {
       "name": "deep-storage-unit",
       "version": "1.6.8",
-      "contentHash": "31c013072026844bf8d7d5b76da1c97b",
-      "metadataHash": null
+      "contentHash": "2773b0f4b25c214e4e1e97c909edb6df",
+      "metadataHash": "a967c797a846009ca276e61eebcd484ce744a540de583ac4f06ef0f3cd7cdc75"
     },
     {
       "name": "even-distribution",
       "version": "2.0.2",
-      "contentHash": "dd05c956f6265f0962d322e7dcf9b5fd",
-      "metadataHash": null
+      "contentHash": "32620eeceecfc9281a3799a1602c4300",
+      "metadataHash": "519efc79df336553a9705133191623228db7062ea90c827e93cdbe5154421fcc"
     },
     {
       "name": "even-pickier-dollies",
@@ -820,7 +820,13 @@
     {
       "name": "factorissimo-2-notnotmelon",
       "version": "3.11.19",
-      "contentHash": "3aee535257646fcde9944874225c6cab",
+      "contentHash": "101c8d740359afdd0266d00cdb530e48",
+      "metadataHash": "0c11c1c6c275e91c29a00a6c003718bc888bf93c04881d9fc1d5252034bbe6eb"
+    },
+    {
+      "name": "factoryplanner",
+      "version": "2.0.50",
+      "contentHash": "966031184c5edb4db17b3163f4179e18",
       "metadataHash": null
     },
     {
@@ -832,8 +838,8 @@
     {
       "name": "fluid-memory-storage",
       "version": "1.7.9",
-      "contentHash": "a930330b422ffa2b62502c0241756e55",
-      "metadataHash": null
+      "contentHash": "02d7886ef9cda34cea52f334edb783e9",
+      "metadataHash": "57f5d628c4d400bf7404893b02bdcccb40587479209d4b8393160dee05dea715"
     },
     {
       "name": "ghost-counter",
@@ -852,6 +858,12 @@
       "version": "2.0.9",
       "contentHash": "0566bd90663be30dd190896da6119898",
       "metadataHash": null
+    },
+    {
+      "name": "ic-more-qualities",
+      "version": "1.0.5",
+      "contentHash": "1a9fe692184409d5a36ae0e998ce56ad",
+      "metadataHash": "92264cc039fafd623bd0f7540ad282b3b29ed56461cdfba69dd9371f60af4305"
     },
     {
       "name": "immersive-sounds2",
@@ -874,8 +886,8 @@
     {
       "name": "kry-picker-extended",
       "version": "1.1.0",
-      "contentHash": "a0d33cf545e3ba45ef90aa4c2085ef53",
-      "metadataHash": null
+      "contentHash": "2e8af54b2a022582319f0708886bac9a",
+      "metadataHash": "2feb27a8d73b02b8ea484d6103171298b78737a92d19dfcdc8407ddbfc9f0b7a"
     },
     {
       "name": "kry_stdlib",
@@ -902,10 +914,10 @@
       "metadataHash": null
     },
     {
-      "name": "more-achievements",
-      "version": "0.0.2",
-      "contentHash": "c3674c88eae3719ca1241371b898a221",
-      "metadataHash": null
+      "name": "more-fonts-ru",
+      "version": "0.1.0",
+      "contentHash": null,
+      "metadataHash": "b2454bcfab5a0c1fa34cff1fcbaff0c80fbdd11cf10fa09424493be8e792df9f"
     },
     {
       "name": "more-minimap-autohide-017",
@@ -922,8 +934,8 @@
     {
       "name": "nanobots-refined",
       "version": "4.0.7",
-      "contentHash": "e4fe29d18d9d6a96ee48f7663ebb8fc9",
-      "metadataHash": null
+      "contentHash": null,
+      "metadataHash": "98e1a0a372cebbdc85943cb5c48b3f11265342144a4fc5566916ad8803d22c99"
     },
     {
       "name": "nco-InserterCranes",
@@ -944,6 +956,18 @@
       "metadataHash": null
     },
     {
+      "name": "paranoidal-tank-platoon",
+      "version": "1.0.0",
+      "contentHash": null,
+      "metadataHash": "aae2ad100cca70ed53e62862927006ceaaa5a3b353b689f08e6f3f549dbb0279"
+    },
+    {
+      "name": "paranoidal-tech-tree",
+      "version": "0.2.2",
+      "contentHash": null,
+      "metadataHash": "c792f1ace6856b311194b729decc132dd78f6aa665f042f7670b5c07ae2d3149"
+    },
+    {
       "name": "power-grid-comb",
       "version": "2.0.0",
       "contentHash": "e6210fdc7eee4a94de2dae3a0589a746",
@@ -952,14 +976,20 @@
     {
       "name": "prismatic-belts",
       "version": "3.0.4",
-      "contentHash": "ec3035cf3cd47e7a9b9f469ec4715303",
-      "metadataHash": null
+      "contentHash": "4fb35f15420f9a735ecbc170cd355d72",
+      "metadataHash": "f6ea5153fe6520ed76ee25c64479d7dd1eafb1b10a55990856db09a3e44de363"
     },
     {
       "name": "qol_research",
       "version": "3.4.2",
-      "contentHash": "3c35357c6d788538da28644a5fbf7351",
-      "metadataHash": null
+      "contentHash": "bdccb2a2138418b2038885380f2d8fc0",
+      "metadataHash": "0d5a9a14ba0e190c244d04705d7fcce3b49fe45a0234deda445209efa4c162cf"
+    },
+    {
+      "name": "recycler-progression",
+      "version": "1.1.1",
+      "contentHash": "aa1178ccd31cace8e0725b4c5819c40a",
+      "metadataHash": "c5bc6457ab52dbe9a5b9ed0217a72697744034e49003b0dc73bfcc51d0f2064b"
     },
     {
       "name": "research_evolution_factor",
@@ -1000,14 +1030,14 @@
     {
       "name": "robot_attrition",
       "version": "0.6.6",
-      "contentHash": "138b915028bd8a5d6db94913d460cc04",
-      "metadataHash": null
+      "contentHash": "f37a8dbdac835d497cda9a9570a82583",
+      "metadataHash": "97c1f39df42abb6856804f838634147de8c50610907bc079fcaaa3de6abfa762"
     },
     {
       "name": "rso-mod",
       "version": "7.0.26",
-      "contentHash": "7c3b397b4d741ac0e964ff1290f0392b",
-      "metadataHash": null
+      "contentHash": "6a6feda77bb26a6184de414c3876851d",
+      "metadataHash": "fe3d6ae4db6de9ed1da5dbd9546730143d2de1c14c6c01be9388b748a020caf8"
     },
     {
       "name": "scattergun_turret",
@@ -1040,6 +1070,12 @@
       "metadataHash": "1f77eba183e592bd49ea6034cb71ec0abaac5e7d6fbfbdf3cb4391ad1fe881d4"
     },
     {
+      "name": "underground-energy-distribution",
+      "version": "1.11.0",
+      "contentHash": null,
+      "metadataHash": "783ef1d2e7b3d0fb759da6ac82888450eae8c1946836f1654aae40531b85e44a"
+    },
+    {
       "name": "valves",
       "version": "2.2.0",
       "contentHash": "5ad41426f9f77c850afc906b3c805748",
@@ -1060,8 +1096,8 @@
     {
       "name": "visible-pollutants",
       "version": "1.4.4",
-      "contentHash": "5f76935e2e971b5d4e29d6866bfb65e2",
-      "metadataHash": null
+      "contentHash": "000d54de8c48ca8b246e21c0b319e929",
+      "metadataHash": "53ef5f511a21a2db81164138efc2d84d821e203f07b57c86a0debcfd12df695a"
     },
     {
       "name": "yemtositemcount",
@@ -1077,15 +1113,21 @@
     },
     {
       "name": "zzzparanoidal",
-      "version": "8.1.13",
+      "version": "8.1.28",
       "contentHash": null,
-      "metadataHash": "409c51bffa2477d958e3c1c9b2e40f2fda623117556f51424cfa53d5f546bbef"
+      "metadataHash": "323d96de37959881632fd57ae1d591fad4aded3074422a317e8760ea8b668953"
     },
     {
       "name": "zzzparanoidal-settings",
-      "version": "0.2.0",
+      "version": "0.4.0",
       "contentHash": null,
-      "metadataHash": "72eed93bfb52b3af1a223d124a934b3824deda8a3d873fe8e4c5e3c74ccbc70a"
+      "metadataHash": "d711e659706190ceb4bb7d6e12ab02afdd41e26e16ac7a3164ffffa7b672786d"
+    },
+    {
+      "name": "zzzparanoidal-settings-cosmetic",
+      "version": "0.1.0",
+      "contentHash": null,
+      "metadataHash": "8f781de0793c6e92faf9abbebc6073c8adbb059759f134ea1559e99604417165"
     }
   ]
 }

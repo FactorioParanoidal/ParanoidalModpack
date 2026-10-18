@@ -28,7 +28,7 @@
 
 Раньше мод каждую секунду ещё раз подмешивал весь резервуар к счётчику, и температура уходила к температуре потока: горячий пар «нагревал» миллион хранимого за минуты, тонкая струйка холодной воды остужала его.
 
-## Изменения 1.8.0
+## Локальные изменения на базе 1.7.9
 
 Полный список — `changelog.txt`.
 
@@ -62,4 +62,4 @@
 
 ## Short English summary
 
-Paranoidal fork of Fluid Memory Storage 1.7.9 by notnotmelon. 1.8.0: mixing temperatures keeps the lower one (fixes the drift where the whole tank was re-mixed into the store every update); the fluid can be chosen in the GUI in advance; reset button; quality lowers power usage; packed units with a removed fluid no longer crash and renamed fluids are followed; GUI closes out of reach; clone fixes; name-filtered events.
+Paranoidal fork of Fluid Memory Storage 1.7.9 by notnotmelon; the upstream version is retained. Local changes: mixing temperatures keeps the lower one (fixes the drift where the whole tank was re-mixed into the store every update); the fluid can be chosen in the GUI in advance; reset button; quality lowers power usage; packed units with a removed fluid no longer crash and renamed fluids are followed; GUI closes out of reach; clone fixes; name-filtered events.

@@ -1,0 +1,15 @@
+{
+  "mod": "more-fonts-ru",
+  "source": "local",
+  "changeReason": "Локальный форк More Fonts 0.0.4: добавляет русскую локализацию и цепочки резервных игровых шрифтов для кириллицы и других отсутствующих символов; переносит замену шрифтов в data-final-fixes, чтобы она применялась и к шрифтам других модов.",
+  "original": {
+    "name": "More Fonts",
+    "authors": [
+      "asher_sky"
+    ],
+    "portal": {
+      "name": "more-fonts",
+      "url": "https://mods.factorio.com/mod/more-fonts"
+    }
+  }
+}

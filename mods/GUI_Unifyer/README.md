@@ -1,14 +1,15 @@
 # GUI Unifier
 
-## Local Paranoidal patch (2.0.2)
+## Local Paranoidal patch
 
 This is a local patch of portal version **2.0.1**, not an upstream release.
 It coalesces pending GUI updates, avoids redundant button property writes,
 filters construction events and honors the logging level. Button, sprite,
 style and setting identifiers are unchanged.
 
-The version bump invokes `on_configuration_changed` on existing saves.
-The patch retains existing GUI elements and settings, initializes missing
+The mod retains the published version number; replacing files at the same version
+does not itself invoke `on_configuration_changed` on existing saves.
+On initialization or configuration changes, the patch retains existing GUI elements and settings, initializes missing
 bookkeeping in Factorio 2.0 `storage`, and refreshes connected players through
 the queue. Disconnected players are refreshed when they join. Old 2.0.1 data
 held only in an ordinary Lua `global` variable cannot be recovered after reload;
