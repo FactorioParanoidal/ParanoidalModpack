@@ -7,11 +7,11 @@
 --    faction has). Non-Rampant nests (vanilla, Bob) give their next stronger unit of the same kind;
 --  * health: x10 (champion) / x50 (hour boss) of the ordinary unit of that kind, kept as a script pool on top of
 --    the engine health; the health bar shows the pool share. A champion moves at half the speed of those units;
---  * looks: a random colour (one of the six Bob artifact colours) as a glow (+ light at night), a ring for the hour
---    boss, a silver / bigger gold star above it. The body colour cannot be changed at runtime;
+--  * looks: a random colour (one of the six Bob artifact colours) as a glow (+ light at night), a silver / bigger
+--    gold star above it. The body colour cannot be changed at runtime;
 --  * below 15% of the pool it walks back to a nest, regenerates there, gets one of 200 names (shown under the star)
 --    and attacks again;
---  * death: the loot is one big artifact of its colour; the corpse stays 3-5 minutes and keeps the glow/ring;
+--  * death: the loot is one big artifact of its colour; the corpse stays 1 minute and keeps the glow;
 --  * only the hour boss is announced ("You hear a strange sound in the distance...");
 --  * Rampant never packs champions (SquadCompression), they live in their own script-driven group.
 -- Map setting rampantFixed--champions switches new spawns. Data: universe.champions, created on first use.
@@ -50,8 +50,7 @@ local ATTACK_RADIUS = 24
 local NEST_RANGE = 12 * CHUNK_SIZE  -- nests within this distance from the target
 local FALLBACK_NESTS = 6            -- otherwise the nearest ones
 local SPAWN_TRIES = 12
-local CORPSE_MIN = 3 * 3600
-local CORPSE_MAX = 5 * 3600
+local CORPSE_TICKS = 60 * 60
 local NAME_COUNT = 200
 local NAME_LIFT = 0.35              -- name centre above the selection box top
 
@@ -60,10 +59,10 @@ local GLOW_SPRITE = "rampantFixed-champion-glow"
 local KINDS = {
     champion = {healthK = 10, speedK = 0.5, intervalMin = 7 * 3600, intervalMax = 11 * 3600, maxAlive = 3,
                 star = "rampantFixed-champion-star-silver", starScale = 0.35, starLift = 1.0,
-                glowScale = 0.9, lightScale = 1.5, ring = false, warning = false},
+                glowScale = 0.9, lightScale = 1.5, warning = false},
     hourBoss = {healthK = 50, intervalMin = 50 * 3600, intervalMax = 70 * 3600, maxAlive = 1,
                 star = "rampantFixed-champion-star-gold", starScale = 0.5, starLift = 1.2,
-                glowScale = 1.3, lightScale = 2.5, ring = true, warning = true},
+                glowScale = 1.3, lightScale = 2.5, warning = true},
 }
 local KIND_ORDER = {"champion", "hourBoss"}
 champions.KINDS = KINDS
@@ -363,7 +362,7 @@ local function drawName(record)
     })
 end
 
--- glow (visible by day), light (by night) and, for the hour boss, a ring; attached to a unit or a corpse
+-- glow (visible by day) and light (by night); attached to a unit or a corpse
 local function drawAura(spec, color, target, size)
     local surface = target.surface
     rendering.draw_sprite({
@@ -383,17 +382,6 @@ local function drawAura(spec, color, target, size)
         scale = size * spec.lightScale,
         intensity = 0.75,
     })
-    if spec.ring then
-        rendering.draw_circle({
-            color = premultiplied(color, 0.85),
-            radius = size * 1.1 + 0.6,
-            width = 3,
-            filled = false,
-            surface = surface,
-            target = target,
-            draw_on_ground = true,
-        })
-    end
 end
 
 local function drawMarks(record)
@@ -797,7 +785,7 @@ function champions.onDied(universe, event)
     end
 end
 
--- on_post_entity_died (registered only while champions are tracked): the corpse stays 3-5 minutes with the aura
+-- on_post_entity_died (registered only while champions are tracked): the corpse stays 1 minute with the glow
 function champions.onPostDied(universe, event)
     local data = universe.champions
     local unitNumber = event.unit_number
@@ -816,7 +804,7 @@ function champions.onPostDied(universe, event)
                 marked = true
                 drawAura(spec, color, corpse, record.size or 1)
             end
-            data.corpses[#data.corpses + 1] = {entity = corpse, expire = event.tick + mRandom(CORPSE_MIN, CORPSE_MAX)}
+            data.corpses[#data.corpses + 1] = {entity = corpse, expire = event.tick + CORPSE_TICKS}
         end
     end
     notifyChanged()
