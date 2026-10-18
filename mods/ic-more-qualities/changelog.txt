@@ -1,0 +1,142 @@
+---------------------------------------------------------------------------------------------------
+Version: 1.1.5
+Date: 2026. 10. 14
+  Changes:
+    - Equipment grids (armor, vehicles, wagons) grow gently with quality: +100% of the area every 5 tiers for the 5x5 modular armor (tier 5 x2, tier 10 x3, last tier x9) instead of +level cells per side. One bonus per quality is shared by every grid: +0 at tier 1, +2 at tier 5, +4 at tier 10, +10 at the last tier. Bigger grids grow less, the smallest vehicle grids more.
+    - The defect energy factor of a crafting machine is kept when the machine already declares it (Bio gardens: a defective garden absorbs less pollution, not more).
+    - The "evolution +X%" effect of quality control 1-10 uses research_evolution_factor's evolution-label.lua (same rounding and settings as other technologies) instead of its own copy of the formula.
+    - After quality control 10 texts about defects and losses are hidden: no chat messages about skipped results and machines (the log keeps them); the production tab of the quality-control panel shows only the control level and mode counters; item lookup and production-mode tooltips do not mention defects and losses; the mode window drops the worst-grade row. Workshop and post windows are unchanged.
+    - The drill and pumpjack description line about defect mining speed is replaced by a short "Defective items are less effective." (engine limit: prototype descriptions cannot change after research).
+    - Defective drills and pumpjacks deplete resources faster: -1 200%, -2 300%, -3 400%, -4 500%, -5 600% of the drill's standard drain, at every quality-control level (also 10). The engine caps the quality drain multiplier at 1, so the part above standard is removed by script when a cycle is decided (or found completed unobserved); a failed cycle drains with the same factor. A fraction (drills with drain below 100%) is removed by chance; the last unit of a finite resource is left to the engine; infinite resources lose their depletion amount per unit, not below the minimum.
+    - Production modes and their panel are no longer offered for machines that can never produce an item (copper lamp, fluid-only machines, fluid voiding, air-cleaning gardens, machines without recipes), for Rocket Silo Construction stages, carbon-capture air filters (one way of working only) and the ground and space telescopes (reached long after quality control 10). The list is built at load from the recipes and logged. A mode already set on such a machine is removed on update together with its extra power; the running operation finishes at normal speed.
+    - The Hazmat suit (Radioactive-Damage-Reforged) never gets defects, like the Paranoidal upgrade chains.
+    - The Flow Control straight, elbow and junction pipes never get defects: they are always crafted at standard quality or better.
+    - Valves never get defects (every item placing a valve: Flow Control, Angels, Bob, base), nor the Angels valve inspector and the Bob small inline and small storage tanks.
+    - Groups where defects have no effect never get defects: fluid level indicators, combinators, power switch, programmable speaker, display panel, rail signals, train stops, rail supports, heat pipes, beacons, land mines, cliff explosives, artillery remote, infinity/debug items, all modules and the Bob module parts that are also module-lab science packs (tier 1 processors, module case, module circuit board, module combining case), all equipment, reactors, wind turbines, cars, tanks, planes, locomotives, spidertrons and roboports (incl. Bob charge ports and logistic zone expanders). The load log lists the count per group. Large storage tanks, lamps, pumps, radars, boilers, generators, solar panels and walls keep defects.
+    - The Logistic science pack technology requires Quality control 10 (like the first quality module): green science cannot be researched while new products can still be defective. The research descriptions say so.
+    - Nothing that can only be made after green science gets defects: an item is exempt when all its recipes are unlocked by the Logistic science pack technology or its descendants and none is available earlier (found at load from the technology tree; logged). A craft of such an item from defective older ingredients comes out standard. Drills that cannot be defective no longer show the defect line and the deposit drain field.
+    - Factorissimo factory buildings (factory 1-3, space factory 1-3, packed and unpacked) never get defects; their recipes are standard-quality only (set in Factorissimo).
+    - Drills, pumpjacks and their items show "Deposit drain (by quality)" with the actual percent per quality (tooltip; Factoriopedia on the item), since the engine line shows only the standard part.
+  Optimizations:
+    - After quality control 10 standard and positive drills are not tracked at all (they were looked at every 10 seconds); a lost research 10 finds them again on every surface. Handcrafted standard or positive items are not processed after quality control 10 (no crafting queue scan).
+    - After quality control 10 the defect scheduler almost stops: standard and positive drills, and machines without a production mode and without a defective recipe are looked at every 10 seconds instead of several times per operation. Defective drills, moded machines and crafts from defective ingredients (capped result, recycling to standard) are handled as before. A defective craft that starts and ends between two rare looks is not handled. A lost research 10 brings every machine back to normal looks within a second.
+    - The quality-control level of a force is kept and refreshed on research events and every 10 seconds instead of being counted on every scheduler tick.
+    - Settings are cached (startup: until a configuration change; map: until a setting change) and the scheduler context is built once instead of on every tick.
+    - A machine is decided with one look 2-3 ticks before the operation ends instead of approaching it in several looks (drills too). A sudden speed-up between looks (modules, beacons) can let an operation complete unobserved.
+    - A machine waiting with a set recipe is looked at after half of that recipe, not of the fastest recipe of its category.
+    - Drills: mining speed, mining time and energy per prototype are cached; the target resource is compared directly, without a string key; a depleted drill is looked at every 5 seconds.
+    - Refinement workshop: looked at every 3 ticks while working (more often for very short attempts) and every 6 ticks while idle instead of every 1-2 ticks; the pack resource is counted only for the circuit signal and the panel.
+    - Control post: the building in front of each output is remembered (re-checked every 5 seconds, a missing one searched again after half a second); an active post without items looks every 5 ticks instead of every tick.
+    - Production mode window: the modes are numbered I. Normal, II. Precise, III. Flawless (Russian: Обычный, Точный, Эталонный; mode 3 was "Maximum"), the table header is I / II / III and the column of the selected mode is highlighted. Short new mode tooltips without losses and "independent rolls"; the grey note under the table is replaced by a native info icon next to the title with a short explanation. Before quality control 10 a "Defect chance" row is added. The quality-module chance follows modules and beacons while the window is open (every 10 ticks, only the opened machine); a changed control level rebuilds the window.
+    - Quality-control panel: mode names follow the mode window (precise / flawless); loss rows and the losses column are shown only when losses are enabled in the map settings (off by default).
+    - Refinement workshop modes: I. Normal (as before), II. Precise (5 times the attempt time, the same repair packs and power, +2 grades for sure), III. Flawless (20 times the time, the same packs, standard quality for sure); never above standard. Selected in the "Refinement" panel with a table like the production mode window; applies from the next attempt; copied with the other workshop settings (copy-paste, blueprints, replacement, rebuilt ghosts). Older workshops get mode I. Mode attempts are counted separately in the refinement statistics and do not enter the 90% success check.
+    - The production mode and refinement panels can be collapsed with a close button in their title into a blue square button with the icon of the selected mode (standard quality icon, hourglass, crosshair); clicking it expands the panel. Expanded by default; the state is kept per player, separately for machines and for the workshop.
+  Bugfixes:
+    - Switches of the Paranoidal build split: new startup setting "Paranoidal: quality" (on by default). Off: the mod adds nothing at the data and control stage (no new qualities, no defects), as if it were disabled; zzzparanoidal then hides quality modules, their processors and quality research and removes quality modules from Bob recipes. "Paranoidal: production defects and losses" off with quality on: no defect qualities, quality-control research, workshop, post, modes or losses; quality modules stay visible (quality module 1 needs logistic science only) and "quality for all production" keeps its rules.
+    - The game with defects off no longer fails to load: the post rotation and panel hotkeys were registered although their custom inputs exist only with defects ("Unknown event name: ic-control-post-rotate").
+    - Refinement workshop restored used science packs and ammo: the furnace recipe made a fresh full item, so a pack moved lab -> workshop -> lab never ran out. Science packs and other tools (durability) and ammo (rounds) are no longer taken by the furnace: the script refines them from the input slot with the same repair packs, time, modes, chances and power, and the item leaves with the same share of durability (rounds unchanged); used standard packs pass unchanged. A furnace attempt of another item waits meanwhile. An idle workshop with an empty input slot now stays stopped until a look sees the next item (up to 6 ticks); near completion the workshop looks every tick. Remaining limit: a used pack put in exactly on the tick another item completes can still be taken by the furnace.
+    - Refinement workshop: the "Refinement" panel shows a progress bar with the percentage next to it while a science pack or ammo is refined by script (the native furnace bar stays at 0% then). Other items keep only the native bar.
+    - Refinement workshop: the "Refining" status was rewritten on every look (its key contained a new table each time); now only when it changes.
+    - Refinement workshop without repair packs: the attempt is now stopped (the building is disabled by script at the paid share) instead of running between looks and being rewound on every look; the progress bar no longer jitters, and the waiting workshop draws idle power instead of full power. Inserters still put packs into the stopped workshop; the next look takes them and resumes the attempt. Circuit pause and turning circuit control off keep working with a held workshop.
+    - Refinement workshop without repair packs no longer takes a defective item in: it used to start an attempt at once, so the item left the input slot and seemed to vanish (held inside at 0%). The idle workshop without packs now stays stopped, the defective item waits in the input slot (it can be taken back) with the "no repair packs" status and alert; standard and positive items still pass without packs; packs start the attempt.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.4
+Date: 2026. 10. 14
+  Changes:
+    - A product is never better than its ingredients: recipes made only of finished products (lighted poles, equipment and vehicle upgrades) could be crafted from defective ingredients and got a fresh defect roll, standard at quality control 10 or in maximum mode. Now the result keeps at most the grade of the ingredients (a worse roll still applies); maximum mode, quality modules and research 10 do not repair it. Handcraft and machines. Defects are repaired only in the refinement workshop.
+    - Paranoidal upgrade chains never get defects: Schall tanks (base, mk1, mk2), vehicle fuel cells 2-4, BET chargers (1-3, tertiary 1-3), memory units (item and fluid).
+    - The panel's item check tells finished products without defects (weapons, belts, the chains above) apart from those with defects.
+    - Production modes: the extra quality-module rolls are made shortly before the operation completes (with the modules installed then), not at its start. An operation that completes unobserved after a sharp speed-up gets none.
+  Bugfixes:
+    - Handcraft: a manually queued batch no longer skips defects and losses because a recipe using the item is queued after it (e.g. 50 inserters + 1 fast inserter). Only the prerequisites the game queued itself are protected; at most the last item of a manual batch can still be.
+    - Production modes: a machine stopped during a moded operation (circuit, no power) no longer pays the extra power; it is looked at every 15 ticks, and the progress made before the first look after it resumes is not counted (it was not paid for).
+    - Production modes: switching a machine to normal (also by Shift+click or a blueprint) during a precise/maximum operation no longer stops its extra power. The operation still finishes in its mode, so it now keeps paying for it; the mode record is dropped when that operation ends.
+    - Production modes, burner machines: the extra energy is burnt from the fuel slot as well, not only from the item that is burning (long checks between looks undercharged it, mostly in maximum mode). Burner effectivity is applied; missing fuel slows the operation like missing electricity.
+    - Production modes: the extra power is released when a machine runs a normal operation, a recipe too fast to be handled, or waits for owed ingredients.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.3
+Date: 2026. 10. 13
+  Changes:
+    - Production mode table: the "Energy per operation" row is removed (time and power rows stay).
+  Bugfixes:
+    - Refinement workshop: an item inserted without repair packs is held at the start instead of vanishing.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.2
+Date: 2026. 10. 13
+  Changes:
+    - Mining drills and pumpjacks show the defect mining speed multipliers in their description (the slowdown itself already worked at runtime)
+    - Belts, underground belts, splitters and loaders never get defects: crafted at standard quality or better (positive quality from modules is kept). Inserters keep defects.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.1
+Date: 2026. 10. 12
+  Changes:
+    - New startup setting "defects for weapons and ammo" (off by default): when off, guns, ammo and turrets never get defects.
+    - Refinement workshop makes one attempt per item: the same item always leaves, improved (90% +1 grade, 10% for every further grade, never above standard) or unchanged (10%). No repeated attempts inside the machine.
+    - Armor, vehicles (item-with-entity-data) and items with inventory or tags are not accepted by the workshop: a recipe would recreate them without their contents.
+    - The side panel of the workshop window shows only the two settings (reset positive quality, circuit signals); progress bars, outcome table and notes are removed. Shorter workshop and input slot descriptions.
+    - Workshop and control post are built from the burner assembling machine and unlocked by burner mechanics (fallback: assembling machine 1 and quality control 1).
+    - Recycling keeps native quality again: results are at least the quality of the recycled item and quality modules can raise it (all recycler tiers). Recycling recipes are no longer forced white and get no defect draw; defective results become standard.
+    - Epic and legendary quality researches without quality unlocks are hidden (they only carried a note effect).
+    - Paranoidal defaults: initial loss chance 0% (losses disabled), finished products protected from losses, "quality for all production" on.
+    - Production modes renamed to normal / precise / maximum; power x5 and x20 (energy per operation x25 and x400), speed unchanged. Mode table: numbered columns, numeric worst grade, no loss row.
+    - New startup setting "quality for all production" (on by default): quality modules fit every assembler, furnace and drill with module slots; raw resources and intermediates can get positive quality; defects stay on finished products.
+    - All qualities are unlocked from the start of the game (also in existing saves); researches no longer list quality unlocks.
+    - Workshop attempts cost half as many repair packs (2.5 basic packs x S x H); attempt time unchanged.
+    - Workshop: repair packs are no longer burnt as fuel by the building (the internal drive now always has full fuel); resetting positive quality takes at most one second.
+    - Hidden production-mode power consumers have a name (was an unknown locale key in the electric network window).
+---------------------------------------------------------------------------------------------------
+Version: 1.1.0
+Date: 2026. 10. 10
+  Features:
+    - Paranoidal refinement workshop: repairs defective items one grade at a time with any repair packs (durability is drained gradually; partially used packs count). 90% success, 10% chance for every further grade; cost depends only on the item (science kinds x square root of health).
+    - The workshop can reset positive quality to standard (optional, guaranteed, no packs, 1/5 time); standard items pass for free.
+    - Production modes for assembling machines and furnaces: careful (x5 time, x10 energy, losses /10, defects as +4 control levels, quality modules as 3 rolls) and precise (x20 time, x100 energy, no losses, no defects, quality modules as 10 rolls).
+    - Control post: production orders (item, strictly standard / at least a quality, quantity, repeat) with three rotatable outputs: accepted, to refinement, other.
+    - Circuit signals and commands for workshop and post; quality-control panel (Ctrl+Shift+Q) with production, refinement and batch tabs.
+    - Settings of workshops, posts and modes follow copy-paste, blueprints, fast replace and rebuilt ghosts.
+  Changes:
+    - Mod folder renamed to ic-more-qualities (no version in the name).
+    - Workshop and post are unlocked by quality control 1.
+    - Event handlers use one shared dispatcher; outdated defect tests updated (33% default loss, current interfaces).
+---------------------------------------------------------------------------------------------------
+Version: 1.0.5
+Date: 2024. 12. 20
+  Changes:
+	- Added RU translation
+---------------------------------------------------------------------------------------------------
+Version: 1.0.4
+Date: 2024. 12. 05
+  Changes:
+    - Added optional mod for Tweaks (contains additional module quality options)
+	- New configuration where it is possible to unlock the first qualities earlier than in the oil phase
+---------------------------------------------------------------------------------------------------
+Version: 1.0.3
+Date: 2024. 11. 30
+  Changes:
+    - Fixes in localization
+---------------------------------------------------------------------------------------------------
+Version: 1.0.2
+Date: 2024. 11. 30
+  Changes:
+    - Added the option to change the names of all qualities (again)
+    - Fixed rework quality order
+    - Fixed dynamic bonus on chance (should be negative, otherwise it can skip quality tiers)
+    - Adjusted default chance to higher quality
+    - Fixes in localization
+---------------------------------------------------------------------------------------------------
+Version: 1.0.1
+Date: 2024. 11. 29
+  Changes:
+    - Removed quality name change from configuration
+    - New icons for Astral quality
+    - Added 7 new qualities (total 40)
+    - Added a new mod that only contains 10 qualities
+    - Fix and rename some labels
+    - New configuration that dynamically increases the chance of better quality by tier
+    - All qualities are now unlocked by quality modules
+    - Removed technology for Ultimate qualities
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 2024. 11. 16
+  Changes:
+    - Initial commit
