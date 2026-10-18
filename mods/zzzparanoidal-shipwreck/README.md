@@ -6,7 +6,7 @@ levels, the AAI crash scene and the salvaged generator values.
 
 - Data stage: AAI wreck prototypes and the salvaged assembling machine, lab and generator
   (`data.lua`, lab inputs copied from the vanilla lab); in `data-final-fixes.lua` (after
-  ic-more-qualities) every wreck and the ship get mining time 1.5 s, the medium loot of the config
+  ic-more-qualities) every wreck and the ship get mining time 1.5 s (the ship 6 s, big wrecks 3 s), the medium loot of the config
   and an invisible pickaxe target, the ship 80 slots, the generator its values and quality tooltip.
 - Control: on a new map the freeplay item lists are emptied (the player starts empty, respawn items
   stay), the AAI scene is created and, when freeplay has created the crash site, the ship and its

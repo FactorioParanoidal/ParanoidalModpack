@@ -38,7 +38,7 @@ local function results(owner, loot)
     return list
 end
 
-local function mining_target(wreck)
+local function mining_target(wreck, time)
     data:extend({{
         type = "simple-entity",
         name = config.target_prefix .. wreck.name,
@@ -54,7 +54,7 @@ local function mining_target(wreck)
         collision_mask = {layers = {}},
         selection_box = table.deepcopy(wreck.selection_box),
         selection_priority = 255,
-        minable = {mining_time = config.mining_time},
+        minable = {mining_time = time},
         picture = {filename = "__core__/graphics/empty.png", width = 1, height = 1},
     }})
 end
@@ -65,8 +65,9 @@ local function standardize(name, loot)
         log("zzzparanoidal-shipwreck: wreck prototype unavailable: " .. name)
         return
     end
-    wreck.minable = {mining_time = config.mining_time, results = results(name, loot)}
-    if wreck.type ~= "simple-entity" then mining_target(wreck) end
+    local time = config.mining_times[name] or config.mining_time
+    wreck.minable = {mining_time = time, results = results(name, loot)}
+    if wreck.type ~= "simple-entity" then mining_target(wreck, time) end
 end
 
 local names = {}

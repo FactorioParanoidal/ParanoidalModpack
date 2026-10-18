@@ -12,6 +12,6 @@ Date: 2026-10-18
   Changes:
     - The player starts with an empty inventory; the former starting items are in the ship and its debris. Respawn items are unchanged.
     - Supplies of the ship, the debris and the AAI wrecks are placed as whole stacks by this mod instead of the freeplay item lists.
-    - All wrecks and the ship use one balance table (shipwreck-config.lua), mining time 1.5 s and the pickaxe animation.
+    - All wrecks and the ship use one balance table (shipwreck-config.lua), mining time 1.5 s and the pickaxe animation; the ship is mined in 6 s, big wrecks in 3 s.
     - The starting offshore pump is no longer part of the ship mining loot.
     - Ruins use the wreck prototypes with the medium loot and normal quality; the start level does not affect them.

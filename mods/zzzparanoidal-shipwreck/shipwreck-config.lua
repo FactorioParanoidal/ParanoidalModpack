@@ -36,7 +36,16 @@ config.never_quality_place_types = {
     ["linked-belt"] = true, ["loader"] = true, ["loader-1x1"] = true,
 }
 
-config.mining_time = 1.5 -- every wreck and the ship
+config.mining_time = 1.5 -- every wreck without its own time below
+-- Own mining time (user decision 2026-10-18): the ship 6 s, big wrecks 3 s.
+config.mining_times = {
+    ["crash-site-spaceship"] = 6,
+    ["crash-site-spaceship-wreck-big-1"] = 3,
+    ["crash-site-spaceship-wreck-big-2"] = 3,
+    ["aai-big-ship-wreck-1"] = 3,
+    ["aai-big-ship-wreck-2"] = 3,
+    ["aai-big-ship-wreck-3"] = 3,
+}
 config.target_prefix = "paranoidal-shipwreck-mining-" -- invisible pickaxe targets
 config.ship = "crash-site-spaceship"
 config.ship_inventory_size = 80
