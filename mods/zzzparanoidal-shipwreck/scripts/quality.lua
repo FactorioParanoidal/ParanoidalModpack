@@ -43,18 +43,40 @@ local function step_up(steps)
     return quality and quality.name or "normal"
 end
 
-local function always_defect(name)
+local function place_type(name)
     local item = prototypes.item[name]
     local entity = item and item.place_result
-    return entity and config.always_defect_place_types[entity.type] == true
+    return entity and entity.type
+end
+
+local function always_defect(name)
+    return config.always_defect_place_types[place_type(name) or ""] == true
+end
+
+local function never_quality(name)
+    return config.never_quality_place_types[place_type(name) or ""] == true
+end
+
+-- Weighted number of steps 0..quality_steps from level.weights (index 1 = 0 steps).
+local function roll_steps(weights)
+    local total = 0
+    for i = 1, config.quality_steps + 1 do total = total + math.max(0, weights[i] or 0) end
+    if total <= 0 then return 0 end
+    local pick = math.random() * total
+    for i = 1, config.quality_steps + 1 do
+        pick = pick - math.max(0, weights[i] or 0)
+        if pick < 0 then return i - 1 end
+    end
+    return config.quality_steps
 end
 
 local function roll_quality(name)
     local level = M.level()
     local class = classification()
     local finished = class and class.finished and class.finished[name]
-    if not finished then return "normal" end
-    local steps = math.random(1, config.quality_steps)
+    if not finished or not level.weights or never_quality(name) then return "normal" end
+    local steps = roll_steps(level.weights)
+    if steps == 0 then return "normal" end
     if level.defects then
         if class.no_defect and class.no_defect[name] and not always_defect(name) then return "normal" end
         local defect = config.defect_prefix .. steps

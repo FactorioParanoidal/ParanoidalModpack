@@ -13,8 +13,8 @@ levels, the AAI crash scene and the salvaged generator values.
   debris are filled. Start wrecks get their mining loot from the config with the start level and
   quality; other wrecks (ruins) keep the prototype loot.
 - Quality: one roll per item type per map from the `ic-defects-classification` mod-data of
-  ic-more-qualities. Minimum: defect-capable finished items and all electric poles get `ic-defect-1…5`; rich: every
-  finished item gets 1…5 steps along `normal.next`; materials are always normal. Without
+  ic-more-qualities. Minimum: defect-capable finished items and all electric poles get `ic-defect-1…5` by the level weights (5/15/25/25/20/10%, 0 = normal); rich: every
+  finished item gets 0…5 steps along `normal.next` by the level weights (25/30/20/13/8/4%); materials and belts/undergrounds/splitters/loaders are always normal. Without
   ic-more-qualities everything is normal.
 - Salvaged generator: production × `default_multiplier`, buffer × `accumulator_capacity_multiplier`
   of the entity quality, set when built and on configuration change.

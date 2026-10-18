@@ -13,20 +13,28 @@ config.default_level = "rich"
 -- amount: multiplier for every count of the start crash (both range ends, rounded up, at least 1).
 -- defects: finished items that the defect system can make defective get a random defect.
 -- bonus: every finished item (also defect-exempt ones) gets a random positive quality.
+-- weights: relative chance of 0, 1, 2, 3, 4, 5 quality steps (defect ic-defect-N or N steps
+-- along normal.next); 0 = normal. Any non-negative numbers, they need not sum to 100.
 -- Materials and intermediate products are always normal. One roll per item type per map,
 -- so all stacks of one item from the ship, debris and mining loot have the same quality.
 config.levels = {
-    minimum = {amount = 0.5, defects = true},
+    minimum = {amount = 0.5, defects = true, weights = {5, 15, 25, 25, 20, 10}},
     medium = {amount = 1},
-    rich = {amount = 1, bonus = true},
+    rich = {amount = 1, bonus = true, weights = {25, 30, 20, 13, 8, 4}},
 }
 config.level_order = {"minimum", "medium", "rich"}
-config.quality_steps = 5 -- random 1..5 steps: defects ic-defect-1..5, bonus along normal.next
+config.quality_steps = 5 -- at most 5 steps: defects ic-defect-1..5, bonus up to normal + 5
 config.defect_prefix = "ic-defect-"
 config.classification = "ic-defects-classification" -- mod-data of ic-more-qualities
 -- Items placing these entity types get defects on the minimum level even when the defect system
 -- exempts them (user decision 2026-10-18: all electric poles).
 config.always_defect_place_types = {["electric-pole"] = true}
+-- Items placing these entity types are always normal on every level (user decision 2026-10-18:
+-- all belts, undergrounds, splitters and loaders).
+config.never_quality_place_types = {
+    ["transport-belt"] = true, ["underground-belt"] = true, ["splitter"] = true, ["lane-splitter"] = true,
+    ["linked-belt"] = true, ["loader"] = true, ["loader-1x1"] = true,
+}
 
 config.mining_time = 1.5 -- every wreck and the ship
 config.target_prefix = "paranoidal-shipwreck-mining-" -- invisible pickaxe targets
