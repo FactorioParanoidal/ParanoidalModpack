@@ -20,6 +20,7 @@ local aiBrain = require("libs/AIBrain")
 local flyerAI = require("libs/FlyerAI")
 local heavyTactics = require("libs/HeavyTactics")
 local engineGroupHelpers = require("libs/EngineGroupHelpers")
+local champions = require("libs/Champions")
 local baseUtils = require("libs/BaseUtils")
 local bitersEnrage = require("libs/BitersEnrage")
 local biterSupressors = require("libs/BiterSupressors")
@@ -491,6 +492,7 @@ local chainVengenceCoefficient
 local function onDeath(event)
     local entity = event.entity
     if entity.valid then
+        champions.onDied(universe, event)	-- champions drop one big artifact instead of their loot
         local surface = entity.surface
         local map = universe.maps[surface.index]
 		if not map then
@@ -1353,15 +1355,74 @@ local function anyOneshotPowerupActive()
 end
 
 -- onEntityDamaged only acts for damage protections (startup settings) or an active oneshot power-up.
+-- Paranoidal: while champions (libs/Champions.lua) are alive the handler also gets damage of their prototypes.
+-- Rampant's own filter is then checked in Lua ("and" binds stronger than "or": a unit hit by neither fire nor acid,
+-- any hit above 200, spider and segmented units) so ordinary units of the same prototype are not affected.
+local rampantDamageActive = false
+
+local function passesRampantDamageFilter(event)
+	local entityType = event.entity.type
+	if (entityType == "spider-unit") or (entityType == "segmented-unit") then
+		return true
+	end
+	if event.original_damage_amount > 200 then
+		return true
+	end
+	if entityType == "unit" then
+		local damageName = event.damage_type.name
+		return (damageName ~= "fire") and (damageName ~= "acid")
+	end
+	return false
+end
+
+local function onEntityDamagedWithChampions(event)
+	local entity = event.entity
+	if not (entity and entity.valid) then
+		return
+	end
+	local record = champions.recordOf(universe, entity)
+	if record then
+		if not record.died then
+			champions.onDamaged(universe, event, record)
+		end
+		return
+	end
+	if rampantDamageActive and passesRampantDamageFilter(event) then
+		onEntityDamaged(event)
+	end
+end
+
+local function onPostEntityDied(event)
+	champions.onPostDied(universe, event)
+end
+
 -- The state is derived from settings and storage, so on_load restores the same registration on every peer.
 updateEntityDamagedHandler = function()
-	if allowOneshotProtection or allowLongRangeImmunity or anyOneshotPowerupActive() then
+	rampantDamageActive = allowOneshotProtection or allowLongRangeImmunity or anyOneshotPowerupActive()
+	local championNames = champions.trackedNames(universe)
+	if championNames then
+		local filters = {}
+		if rampantDamageActive then
+			for i = 1, #entityDamagedFilters do
+				filters[i] = entityDamagedFilters[i]
+			end
+		end
+		for _, name in ipairs(championNames) do
+			filters[#filters + 1] = {mode = "or", filter = "name", name = name}
+		end
+		script.on_event(defines.events.on_entity_damaged, onEntityDamagedWithChampions, filters)
+		script.on_event(defines.events.on_post_entity_died, onPostEntityDied, {{filter = "type", type = "unit"}})
+		return
+	end
+	script.on_event(defines.events.on_post_entity_died, nil)
+	if rampantDamageActive then
 		script.on_event(defines.events.on_entity_damaged, onEntityDamaged, entityDamagedFilters)
 	else
 		script.on_event(defines.events.on_entity_damaged, nil)
 	end
 end
 powerup.onOneshotStateChanged = updateEntityDamagedHandler
+champions.onTrackedChanged = updateEntityDamagedHandler
 
 local function onSegmentedEntityDamaged(event)
 	demolisherUtils.onSegmentedEntityDamaged(event)
@@ -1655,6 +1716,7 @@ script.on_nth_tick(60,
 			if universe.nonRampantCompressedSquads then
 				nonRampantCompressedSquads(universe)
 			end
+			champions.update(universe, game.tick)	-- champions and hour bosses: spawn timers, retreat, regeneration
 		end
 	end
 )

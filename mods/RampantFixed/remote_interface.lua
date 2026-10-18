@@ -22,6 +22,7 @@ local constants = require("libs/Constants")
 local mapProcessor = require("libs/MapProcessor")
 local mapUtils = require("libs/MapUtils")
 local aiBrain = require("libs/AIBrain")
+local champions = require("libs/Champions")
 local config = require("__RampantFixed__/config")
 
 local function getBaseStats(base)
@@ -447,6 +448,33 @@ remote.add_interface("rampantFixed", {
 			return nil
 		end
 		return aiBrain.learningData(map)
+	end
+
+	,
+	--------------------
+	-- Paranoidal: spawns a champion or an hour boss now (no timer, no limit), as the timer would: from a nest within
+	-- reach of the base towards its most defended spot.
+	-- parameters: {surfaceIndex = number, kind = "champion" | "hourBoss", unitType = nil | "biter" | "spitter" | "flyer"}
+	-- return: the LuaEntity or nil
+	spawnChampion_ExtCtrl = function(parameters)
+		local universe = storage.universe
+		if (not universe) or (not universe.allowExternalControl) or (not parameters) or (not parameters.surfaceIndex) then
+			return nil
+		end
+		return champions.spawnNow(universe, parameters.surfaceIndex, parameters.kind or "champion", parameters.unitType)
+	end
+
+	,
+	--------------------
+	-- Paranoidal: read-only list of living champions and hour bosses
+	-- return: {units = {{unitNumber, kind, name, state, pool, poolMax, nameIndex, color, health, maxHealth, speed,
+	--         position, home, target}}, corpses = number, nextTick = {[kind] = tick}}
+	getChampions = function()
+		local universe = storage.universe
+		if not universe then
+			return nil
+		end
+		return champions.report(universe)
 	end
 
 	,

@@ -387,6 +387,12 @@ function squadCompression.processDecompressQueue(universe)
 	end
 end
 
+-- Paranoidal: champions and hour bosses (libs/Champions.lua) are never packed or used as pack carriers
+local function isChampion(universe, entity)
+	local data = universe.champions
+	return data and data.units[entity.unit_number]
+end
+
 local function squadCompress(map, squad)
 	if not squad then
 		return
@@ -425,9 +431,10 @@ local function squadCompress(map, squad)
 	local unitsCounter = 0
 	
 	local members = group.members
+	local universe = map.universe
 	if #members > 35 then
 		for _, entity in pairs(members) do
-			if entity.valid and (entity.type == "unit") then
+			if entity.valid and (entity.type == "unit") and not isChampion(universe, entity) then
 				local compressIndex = entity.name
 				if not compressedMembers[entity.name] then
 					compressedMembers[entity.name] = {count = 0}
@@ -447,7 +454,7 @@ local function squadCompress(map, squad)
 			end	
 		end
 		for _, entity in pairs(group.members) do
-			if entity.valid and (entity.type == "unit") then
+			if entity.valid and (entity.type == "unit") and not isChampion(universe, entity) then
 				local stackSize = compressedMembers[entity.name].count
 				if stackSize > 1 then	
 					compressedUnits[entity.unit_number] = {count = stackSize, entity = entity}
@@ -517,7 +524,7 @@ local function squadSmoothCompress(map, squad, compressedSize)
 	local unitsCounter = 0	-- debug
 	
 	for _, entity in pairs(members) do
-		if entity.valid and (entity.type == "unit") then
+		if entity.valid and (entity.type == "unit") and not isChampion(map.universe, entity) then
 			if not compressDatas[entity.name] then
 				compressDatas[entity.name] = {count = 0, entities = {}, unitSample = entity}
 			end

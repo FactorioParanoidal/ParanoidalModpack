@@ -518,6 +518,15 @@ data:extend({
 
         {
             type = "bool-setting",
+            name = "rampantFixed--champions",
+            setting_type = "runtime-global",
+            default_value = true,
+            order = "m[total]-0c[ai]",
+            per_user = false
+        },
+
+        {
+            type = "bool-setting",
             name = "rampantFixed--enableMigration",
             description = "rampantFixed--enableMigration",
             setting_type = 'runtime-global',

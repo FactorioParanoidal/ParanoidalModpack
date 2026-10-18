@@ -22,6 +22,7 @@ makeSmokeAddingFuel({name="the"})
 
 require("prototypes/buildings/ChunkScanner")
 require("prototypes/Gui_style")	
+require("prototypes/Champions")
 
 -- + !КДА 2021.11
 data:extend(
