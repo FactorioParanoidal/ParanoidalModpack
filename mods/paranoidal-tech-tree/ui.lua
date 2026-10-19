@@ -294,9 +294,11 @@ function M.tree(p, focus)
   local size=SIZES[s.size]
   local cols = columns(s)
   local shown = {}
+  local unlocks = s.unlock_texts or {}
   local function keep(n)
     if searching then
       return G.lower(n):find(query,1,true) or G.lower(s.translations[n] or ""):find(query,1,true)
+        or (unlocks[n] or ""):find(query,1,true)
     end
     return not subset or subset[n]
   end
@@ -899,6 +901,45 @@ function M.refresh(p)
   M.goal_line(p, ctx); M.queue_bar(p, ctx); M.help(p, ctx)
 end
 
+-- Search text of what a technology unlocks: names of the unlocked recipes, their products and given items.
+-- One translation request per technology. Every name is wrapped in {"?", name, ""}: a name without a locale
+-- entry becomes empty instead of failing the whole string. A LocalisedString has at most 20 parameters, so
+-- the names are grouped by 20 (two levels: up to 400 names). nil when the technology unlocks nothing.
+local function add_name(list, seen, key, localised_name)
+  if seen[key] then return end
+  seen[key]=true
+  list[#list+1]={"", {"?", localised_name, ""}, " "}
+end
+local function unlock_string(t)
+  local list, seen = {}, {}
+  for _,effect in ipairs(t.prototype.effects or {}) do
+    if effect.type=="unlock-recipe" then
+      local recipe=prototypes.recipe[effect.recipe]
+      if recipe then
+        add_name(list, seen, "recipe/"..recipe.name, recipe.localised_name)
+        for _,product in ipairs(recipe.products or {}) do
+          local proto
+          if product.type=="fluid" then proto=prototypes.fluid[product.name] else proto=prototypes.item[product.name] end
+          if proto then add_name(list, seen, product.type.."/"..product.name, proto.localised_name) end
+        end
+      end
+    elseif effect.type=="give-item" then
+      local item=prototypes.item[effect.item]
+      if item then add_name(list, seen, "item/"..effect.item, item.localised_name) end
+    end
+  end
+  if #list==0 then return nil end
+  local groups={""}
+  for i=1,#list,20 do
+    if #groups>20 then break end
+    local group={""}
+    for j=i,math.min(#list,i+19) do group[#group+1]=list[j] end
+    groups[#groups+1]=group
+  end
+  return groups
+end
+M.unlock_string=unlock_string
+
 function M.tick()
   for _,p in pairs(game.connected_players) do
     local s=storage.native_players and storage.native_players[p.index]
@@ -909,12 +950,25 @@ function M.tick()
         s.progress.number = math.floor(p.force.research_progress * 100)
       end
       local names=graph(p).names
-      for _=1,32 do
+      local budget=32
+      for _=1,budget do
         local n=names[s.request_index]
         if not n then break end
-        s.request_index=s.request_index+1
+        s.request_index=s.request_index+1; budget=budget-1
         local id=p.request_translation(p.force.technologies[n].localised_name)
         if id then s.pending[id]=n end
+      end
+      -- Then one string per technology with what it unlocks (fields created lazily for older saves).
+      s.unlock_index=s.unlock_index or 1; s.unlock_pending=s.unlock_pending or {}; s.unlock_texts=s.unlock_texts or {}
+      for _=1,budget do
+        local n=names[s.unlock_index]
+        if not n then break end
+        s.unlock_index=s.unlock_index+1
+        local ls=unlock_string(p.force.technologies[n])
+        if ls then
+          local id=p.request_translation(ls)
+          if id then s.unlock_pending[id]=n end
+        end
       end
     end
   end
@@ -926,6 +980,14 @@ function M.translated(e)
   if name then
     s.pending[e.id]=nil
     if e.translated then s.translations[name]=e.result end
+    if s.query~="" then s.search_due=game.tick+30 end
+    return
+  end
+  name=s.unlock_pending and s.unlock_pending[e.id]
+  if name then
+    s.unlock_pending[e.id]=nil
+    -- Stored lower-cased: the search compares it on every tree rebuild.
+    if e.translated then s.unlock_texts[name]=G.lower(e.result) end
     if s.query~="" then s.search_due=game.tick+30 end
   end
 end
