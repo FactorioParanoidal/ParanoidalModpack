@@ -75,6 +75,7 @@ settings = {startup = {["ic-more-qualities-defects-preview"] = {value = true}},
 prototypes = {entity = {}, mod_data = {["ic-defects-classification"] = {data = {finished = catalog}}}}
 local active_player = player(0)
 game = {get_player = function() return active_player end}
+storage = {}
 dofile(root .. "control.lua")
 local original_random = math.random
 local draws = 0

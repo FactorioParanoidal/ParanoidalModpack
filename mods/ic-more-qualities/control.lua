@@ -5,6 +5,7 @@ if not switches.quality() then return end
 local model = require("scripts.defects.model")
 local handcraft = require("scripts.defects.handcraft")
 local production_loss = require("scripts.defects.production-loss")
+local cancel = require("scripts.defects.cancel")
 local eligibility = require("scripts.defects.eligibility")
 local mining = require("scripts.defects.mining")
 local automation = require("scripts.defects.automation")
@@ -231,7 +232,14 @@ events.on(defines.events.on_player_crafted_item, function(event)
     end
     local recipe_name = event.recipe and event.recipe.name
     local queue = player.character and player.crafting_queue
-    if production_loss.queued_prerequisite(queue, recipe_name, stack.name, prototypes.recipe) then return end
+    if production_loss.queued_prerequisite(queue, recipe_name, stack.name, prototypes.recipe) then
+        -- A cancelled consumer returns it: it gets its roll then (scripts/defects/cancel.lua).
+        if stack.quality.name == "normal" then
+            cancel.remember(player.index, stack.name, eligibility.finished(), eligibility.no_defect())
+        end
+        return
+    end
+    cancel.forget_if_idle(player)
     local finished = eligibility.finished()
     local loss = production_loss.handle(event, player, math.random, finished, exclude_finished(), initial_loss_percent())
     if loss ~= "ignored" then
@@ -244,6 +252,15 @@ events.on(defines.events.on_player_crafted_item, function(event)
         stats.add(player.force.index, "grade." .. model.grade_of(detail))
     end
     if reported[status] then warn_player(player, status, detail) end
+end)
+
+events.on(defines.events.on_pre_player_crafted_item, function(event)
+    if not enabled() then return end
+    local player = game.get_player(event.player_index)
+    if player and player.valid then cancel.forget_if_idle(player) end
+end)
+events.on(defines.events.on_player_cancelled_crafting, function(event)
+    if enabled() then cancel.on_cancelled(event, eligibility.finished(), eligibility.no_defect()) end
 end)
 
 -- Mining: natural objects (loss) and the workshop (an interrupted series returns its grade).
@@ -397,6 +414,7 @@ events.on(defines.events.on_gui_confirmed, gui.on_text)
 events.on(defines.events.on_gui_selected_tab_changed, gui.on_tab)
 events.on(defines.events.on_player_removed, function(event)
     if storage.ic_players then storage.ic_players[event.player_index] = nil end
+    cancel.remove_player(event.player_index)
 end)
 
 events.on(defines.events.on_runtime_mod_setting_changed, function() reset_settings() end)
@@ -408,6 +426,9 @@ events.on(defines.events.on_tick, function(event)
     workshop_context.tick, workshop_context.random = tick, math.random
     workshop.on_tick(workshop_context)
     post.on_tick(tick)
+    if cancel.has_pending() then
+        cancel.process(tick, game.get_player, math.random, eligibility.finished(), eligibility.no_defect())
+    end
     if tick % 10 == 0 then gui.on_refresh(tick) end
     if tick % 60 == 0 then memory.cleanup() end
 end)

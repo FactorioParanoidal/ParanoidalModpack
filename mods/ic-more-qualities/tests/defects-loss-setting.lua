@@ -71,6 +71,7 @@ settings = {startup = {["ic-more-qualities-defects-preview"] = {value = true}}, 
     ["ic-more-qualities-initial-loss-percent"] = {value = 33}}}
 prototypes = {recipe = {}, mod_data = {["ic-defects-classification"] = {data = {finished = {}}}}}
 game = {get_player = function() return player end}
+storage = {}
 dofile(root .. "control.lua")
 for _, percent in ipairs({33, 0, 100, 25.5}) do
     settings.global["ic-more-qualities-initial-loss-percent"].value = percent
