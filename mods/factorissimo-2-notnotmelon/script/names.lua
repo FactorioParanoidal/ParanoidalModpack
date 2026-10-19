@@ -1,13 +1,14 @@
 -- Paranoidal: factory names. A name is kept in the factory (also while it is packed) and shown:
 --   * on the building under the overlay icons, in alt mode;
---   * on the map under the building;
 --   * inside the factory above the door, in alt mode.
+-- Not on the map (9.12.0): the map and the minimap cannot be told apart by a render object.
 -- Render objects are attached to entities (the building, the inside power pole), so they disappear together
--- with them; they are redrawn only when the name or the building changes.
+-- with them; they are redrawn only when the name or the building changes, or once when LABELS_REV changes.
 
 local MAX_NAME_LENGTH = 40 -- characters
 local NAME_COLOR = {r = 1, g = 0.9, b = 0.6}
 local SHADOW_COLOR = {r = 0, g = 0, b = 0, a = 0.85}
+local LABELS_REV = 2 -- 2: no map label
 
 --- Trims the name, replaces control characters and limits it to MAX_NAME_LENGTH UTF-8 characters.
 --- Returns nil for an empty name.
@@ -85,18 +86,6 @@ function factorissimo.update_name_labels(factory)
             only_in_alt_mode = true,
             use_rich_text = rich,
         }.id
-        ids[#ids + 1] = rendering.draw_text {
-            text = name,
-            surface = surface,
-            target = {entity = building, offset = {0, layout.outside_size / 2}},
-            color = NAME_COLOR,
-            scale = 1.2,
-            scale_with_zoom = true,
-            alignment = "center",
-            vertical_alignment = "top",
-            render_mode = "chart",
-            use_rich_text = rich,
-        }.id
     end
 
     local inside_surface = factory.inside_surface
@@ -117,6 +106,12 @@ function factorissimo.update_name_labels(factory)
     end
 
     factory.name_labels = ids
+    factory.labels_rev = LABELS_REV
+end
+
+--- Redraws the labels drawn by an older version (called once a second per factory from stats.lua).
+function factorissimo.check_name_labels(factory)
+    if factory.name_labels and factory.labels_rev ~= LABELS_REV then factorissimo.update_name_labels(factory) end
 end
 
 --- Sets (or clears with nil/"") the name of the factory. Returns the stored name.

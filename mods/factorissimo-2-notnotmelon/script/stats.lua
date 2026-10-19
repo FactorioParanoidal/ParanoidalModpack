@@ -1,7 +1,8 @@
 -- Paranoidal: state of every factory, sampled once per second from the pollution loop (script/pollution.lua).
 --   power_ratio      power satisfaction of the network the factory is wired to, from its power sensor
 --                    (factory-power-input-*: charges at 1 kW, the buffer is read and emptied here);
---   active           a machine inside works (checked once a minute);
+--   active           a machine inside works or a generator produces (checked once a minute, see scan_factory);
+--   power_use/power_gen  estimated consumption and production inside, J per tick (same scan);
 --   pollution_rate   pollution released outside during the last second;
 --   uptime_since     start of the current streak of work without power shortage;
 --   clean_since      start of the current streak of work without releasing pollution;
@@ -13,6 +14,7 @@
 -- Factories in Blueprint Sandboxes take no part in records, milestones and experience.
 
 local SENSOR_ENERGY_PER_TICK = 1000 / 60 -- J, the input flow limit of the power sensor (1 kW)
+local SENSOR_BUFFER = 10000 -- J, buffer_capacity of factory-power-input-* (prototypes/component.lua)
 local ACTIVITY_INTERVAL = 3600
 local HOUR = 216000
 local CLEAN_MILESTONE_TICKS = HOUR
@@ -24,11 +26,11 @@ local LAUNCH_XP_SHARE = {0.10, 0.20, 0.35, 0.50} -- share of the current level b
 local MILESTONE_NESTED = "factory-milestone-nested"
 local MILESTONE_CLEAN = "factory-milestone-clean"
 
-local ACTIVE_TYPES = {"assembling-machine", "furnace", "mining-drill", "lab"}
 local WORKING = {
     [defines.entity_status.working] = true,
     [defines.entity_status.low_power] = true,
 }
+local MIN_CONSUMPTION = 0.2 -- modules cannot lower the consumption below 20 %
 
 local function interior_area(factory)
     local D = factory.layout.inside_size / 2 + 1
@@ -36,25 +38,142 @@ local function interior_area(factory)
 end
 factorissimo.factory_interior_area = interior_area
 
---- Machines (crafting machines, drills, labs) inside the factory: total and working.
-function factorissimo.count_factory_machines(factory)
-    local surface = factory.inside_surface
-    if not (surface and surface.valid and factory.layout) then return 0, 0 end
-    local total, working = 0, 0
-    for _, entity in pairs(surface.find_entities_filtered {area = interior_area(factory), type = ACTIVE_TYPES}) do
-        total = total + 1
-        if WORKING[entity.status] then working = working + 1 end
-    end
-    return total, working
+-- INTERIOR SCAN: activity, machines, nested factories, electric power --
+-- The engine has no power statistics per entity (only per network, and the interior shares the network of the
+-- outside), so the power is estimated: working consumers at their full usage (modules and beacons included)
+-- plus drain, idle ones at their drain; steam engines and turbines exactly (last tick), burner generators at full
+-- power while working, solar panels by the solar power of the floor, electric energy interfaces by their settings.
+-- Factory floors have the surface property "solar-power" = 0: solar panels there (also the hidden panels of
+-- Bio Industries buildings) give nothing and are not counted as generators at all.
+-- Factories built inside add their last values. One pass once a minute per factory (sample_factory) and every
+-- 2 seconds for the factory selected in an open dispatcher.
+
+local MACHINE_TYPES = {["assembling-machine"] = true, furnace = true, ["mining-drill"] = true, lab = true}
+local BONUS_TYPES = {["assembling-machine"] = true, furnace = true, ["mining-drill"] = true, lab = true, ["rocket-silo"] = true}
+local SCAN_TYPES = {
+    "assembling-machine", "furnace", "mining-drill", "lab", "rocket-silo", "inserter", "beacon", "lamp", "radar",
+    "roboport", "pump", "offshore-pump", "electric-turret", "boiler", "loader", "loader-1x1", "arithmetic-combinator",
+    "decider-combinator", "selector-combinator", "programmable-speaker", "generator", "burner-generator", "solar-panel",
+    "electric-energy-interface", BUILDING_TYPE,
+}
+
+--- Share of the full output of solar panels on the surface, or false when the surface gives no solar power
+--- (factory floors: surface property "solar-power" = 0).
+local function solar_share(surface)
+    local power = surface.get_property("solar-power") / 100 * surface.solar_power_multiplier
+    if power <= 0 then return false end
+    return power * math.max(0, 1 - surface.darkness / 0.85)
 end
 
-local function check_activity(factory)
-    local surface = factory.inside_surface
-    if not (surface and surface.valid) then return false end
-    for _, entity in pairs(surface.find_entities_filtered {area = interior_area(factory), type = ACTIVE_TYPES}) do
-        if WORKING[entity.status] then return true end
+local kinds = {} -- entity name -> what the scan reads from it, or false; derived from prototypes only
+local function kind_of(name)
+    local info = kinds[name]
+    if info ~= nil then return info end
+    info = false
+    local prototype = prototypes.entity[name]
+    if has_layout(name) then
+        info = {kind = "factory"}
+    elseif prototype and not name:find("^factory%-power%-input%-") then
+        local t = prototype.type
+        local source = prototype.electric_energy_source_prototype
+        if t == "generator" then
+            info = {kind = "generator"}
+        elseif t == "burner-generator" then
+            info = {kind = "burner", output = prototype.get_max_power_output() or 0}
+        elseif t == "solar-panel" then
+            info = {kind = "solar", output = prototype.get_max_energy_production() or 0}
+        elseif t == "electric-energy-interface" then
+            info = {kind = "interface"}
+        elseif source then
+            -- roboports: idle usage only, the charging of robots is not estimated
+            local usage = t == "roboport" and (prototype.energy_usage or 0) or prototype.get_max_energy_usage()
+            info = {kind = "consumer", usage = usage, drain = source.drain or 0, bonus = BONUS_TYPES[t], machine = MACHINE_TYPES[t]}
+        elseif MACHINE_TYPES[t] then
+            info = {kind = "machine", machine = true}
+        end
     end
-    return false
+    kinds[name] = info
+    return info
+end
+
+--- Scans the interior: factory.active, machines, machines_working, children, power_use, power_gen (J per tick),
+--- generators, generators_working; active_tick = tick.
+function factorissimo.scan_factory(factory, tick)
+    factory.active_tick = tick
+    local surface = factory.inside_surface
+    if not (surface and surface.valid and factory.layout) then
+        factory.active = false
+        factory.power_use, factory.power_gen = nil, nil
+        return
+    end
+    local use, gen, generators, generators_working = 0, 0, 0, 0
+    local machines, machines_working, children = 0, 0, 0
+    local solar -- nil: not read yet; false: the floor gives no solar power; else the share of full output
+    local by_entity = storage.factories_by_entity
+    for _, entity in pairs(surface.find_entities_filtered {area = interior_area(factory), type = SCAN_TYPES}) do
+        local info = kind_of(entity.name)
+        if info then
+            local kind = info.kind
+            if kind == "consumer" or kind == "machine" then
+                local working = WORKING[entity.status]
+                if info.machine then
+                    machines = machines + 1
+                    if working then machines_working = machines_working + 1 end
+                end
+                if kind == "consumer" then
+                    if working then
+                        local multiplier = 1
+                        if info.bonus then
+                            multiplier = 1 + entity.consumption_bonus
+                            if multiplier < MIN_CONSUMPTION then multiplier = MIN_CONSUMPTION end
+                        end
+                        use = use + info.usage * multiplier + info.drain
+                    else
+                        use = use + info.drain
+                    end
+                end
+            elseif kind == "generator" then
+                generators = generators + 1
+                local produced = entity.energy_generated_last_tick
+                if produced > 0 then
+                    gen = gen + produced
+                    generators_working = generators_working + 1
+                end
+            elseif kind == "burner" then
+                generators = generators + 1
+                if entity.status == defines.entity_status.working then
+                    gen = gen + info.output
+                    generators_working = generators_working + 1
+                end
+            elseif kind == "solar" then
+                if solar == nil then solar = solar_share(surface) end
+                if solar then generators = generators + 1 end
+                if solar and solar > 0 then
+                    gen = gen + info.output * solar
+                    generators_working = generators_working + 1
+                end
+            elseif kind == "interface" then
+                local produced = entity.power_production
+                use = use + entity.power_usage
+                if produced > 0 then
+                    generators = generators + 1
+                    generators_working = generators_working + 1
+                    gen = gen + produced
+                end
+            else -- a factory building inside
+                local child = by_entity[entity.unit_number]
+                if child and child ~= factory then
+                    children = children + 1
+                    use = use + (child.power_use or 0)
+                    gen = gen + (child.power_gen or 0)
+                end
+            end
+        end
+    end
+    factory.machines, factory.machines_working, factory.children = machines, machines_working, children
+    factory.power_use, factory.power_gen = use, gen
+    factory.generators, factory.generators_working = generators, generators_working
+    factory.active = machines_working > 0 or gen > 0
 end
 
 --- Whether the factory has a copper wire to a power network.
@@ -66,8 +185,27 @@ function factorissimo.is_factory_wired(factory)
     return connector ~= nil and connector.connection_count > 0
 end
 
+-- The buffer size and flow limits of an electric energy interface are saved per entity: sensors of buildings
+-- placed before 9.12.0 keep the empty buffer of the old prototype and never charge. Such a sensor is replaced
+-- once by a new one from the current prototype (the power of the factory does not go through it).
+local function renew_sensor(factory, sensor)
+    factory.sensor_checked = true
+    if (sensor.electric_buffer_size or 0) >= SENSOR_BUFFER then return sensor end
+    local surface, name, position, force = sensor.surface, sensor.name, sensor.position, sensor.force
+    sensor.destroy()
+    local new = surface.create_entity {name = name, position = position, force = force}
+    factory.outside_energy_receiver = new
+    factory.power_ratio, factory.power_tick = nil, nil
+    if not new then return nil end
+    new.destructible = false
+    new.operable = false
+    new.rotatable = false
+    return new
+end
+
 local function sample_power(factory, tick)
     local sensor = factory.outside_energy_receiver
+    if sensor and sensor.valid and not factory.sensor_checked then sensor = renew_sensor(factory, sensor) end
     if not (sensor and sensor.valid) then
         factory.power_ratio, factory.power_tick = nil, nil
         return
@@ -85,6 +223,9 @@ end
 function factorissimo.reset_factory_stats(factory)
     factory.power_ratio, factory.power_tick = nil, nil
     factory.active, factory.active_tick = nil, nil
+    factory.power_use, factory.power_gen, factory.generators, factory.generators_working = nil, nil, nil, nil
+    factory.machines, factory.machines_working, factory.children = nil, nil, nil
+    factory.sensor_checked = nil
     factory.uptime_since, factory.clean_since = nil, nil
     factory.pollution_rate = nil
     factory.in_sandbox = nil
@@ -167,12 +308,10 @@ function factorissimo.sample_factory(factory, released, tick)
         return
     end
 
+    factorissimo.check_name_labels(factory)
     sample_power(factory, tick)
     local active_tick = factory.active_tick
-    if not active_tick or active_tick + ACTIVITY_INTERVAL <= tick then
-        factory.active = check_activity(factory)
-        factory.active_tick = tick
-    end
+    if not active_tick or active_tick + ACTIVITY_INTERVAL <= tick then factorissimo.scan_factory(factory, tick) end
     released = released or 0
     factory.pollution_rate = released
 

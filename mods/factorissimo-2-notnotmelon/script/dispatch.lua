@@ -4,7 +4,7 @@
 -- panel with a live view of the interior, renaming and remote view of the building or its interior.
 -- Nothing is computed while the window is closed. The list is built when the window opens or the factories
 -- change (built, removed, renamed, new overlay icons); the states of the shown page and the details panel
--- are refreshed every 2 seconds while the window is open.
+-- are refreshed every 2 seconds while the window is open (the selected factory is rescanned then, see stats.lua).
 
 local mod_gui = require("mod-gui")
 
@@ -17,7 +17,7 @@ local MAX_ICONS = 8
 local CAMERA_SIZE = 280
 local LIGHT_REFRESH = 120
 local UNLOCK_TECHNOLOGY = "factory-architecture-t1"
-local SORTS = {"id", "name", "tier", "place"}
+local SORTS = {"id", "name", "tier", "place", "power"}
 
 local floor = math.floor
 
@@ -120,8 +120,14 @@ local function status_of(factory)
     if factory.inactive then
         return "utility/status_not_working", {"factorissimo-dispatch.status-inactive"}, true
     end
+    if not factorissimo.is_factory_wired(factory) then
+        return "utility/status_not_working", {"factorissimo-dispatch.status-no-network"}, true
+    end
+    if (factory.power_gen or 0) > (factory.power_use or 0) then
+        return "utility/status_working", {"factorissimo-dispatch.status-producing"}, false
+    end
     local ratio = factory.power_ratio
-    if not factorissimo.is_factory_wired(factory) or ratio == 0 then
+    if ratio == 0 then
         return "utility/status_not_working", {"factorissimo-dispatch.status-no-power"}, true
     end
     if ratio and ratio < 0.99 then
@@ -154,6 +160,41 @@ local function overlay_icons(factory)
         end
     end
     return icons
+end
+
+local POWER_PREFIXES = {{1e9, "si-prefix-symbol-giga"}, {1e6, "si-prefix-symbol-mega"}, {1e3, "si-prefix-symbol-kilo"}}
+
+--- "1.2 MW" from J per tick (sign dropped).
+local function format_power(per_tick)
+    local watts = math.abs(per_tick) * 60
+    for _, prefix in ipairs(POWER_PREFIXES) do
+        if watts >= prefix[1] then
+            local value = watts / prefix[1]
+            return {"", string.format(value < 99.95 and "%.1f" or "%.0f", value), " ", {prefix[2]}, {"si-unit-symbol-watt"}}
+        end
+    end
+    return {"", string.format("%.0f", watts), " ", {"si-unit-symbol-watt"}}
+end
+
+local EXPORT_COLOR = {r = 0.5, g = 0.9, b = 0.5}
+local IMPORT_COLOR = {r = 0.85, g = 0.85, b = 0.85}
+
+--- Short power figure of a list row: "+5.1 MW" (green) when the factory gives power, else what it takes.
+local function power_of_row(factory)
+    local use, gen = factory.power_use, factory.power_gen or 0
+    if not use or (use == 0 and gen == 0) then return "", "", IMPORT_COLOR end
+    local tooltip = gen > 0 and {"factorissimo-dispatch.power-tooltip", format_power(use), format_power(gen)}
+        or {"factorissimo-dispatch.power-tooltip-use", format_power(use)}
+    if gen > use then return {"", "+", format_power(gen - use)}, tooltip, EXPORT_COLOR end
+    return format_power(use - gen), tooltip, IMPORT_COLOR
+end
+
+local function update_power_label(label, factory)
+    if not (label and label.valid) then return end
+    local caption, tooltip, color = power_of_row(factory)
+    label.caption = caption
+    label.tooltip = tooltip
+    label.style.font_color = color
 end
 
 local function format_duration(ticks)
@@ -224,6 +265,22 @@ local function collect(player, state)
             local ka, kb = keys[a], keys[b]
             if ka[1] ~= kb[1] then return ka[1] < kb[1] end
             if ka[2] ~= kb[2] then return ka[2] < kb[2] end
+            return a.id < b.id
+        end)
+    elseif sort == "power" then
+        -- From the largest surplus ("+", gives power) down to the largest consumer; not measured yet at the end.
+        local keys = {}
+        for _, factory in pairs(list) do
+            local use = factory.power_use
+            keys[factory] = use and (factory.power_gen or 0) - use or nil
+        end
+        table.sort(list, function(a, b)
+            local ka, kb = keys[a], keys[b]
+            if ka and kb then
+                if ka ~= kb then return ka > kb end
+                return a.id < b.id
+            end
+            if ka or kb then return ka ~= nil end
             return a.id < b.id
         end)
     else
@@ -311,6 +368,11 @@ local function add_row(list_flow, factory, selected)
 
     local filler = row.add {type = "empty-widget"}
     filler.style.horizontally_stretchable = true
+
+    local power = row.add {type = "label", name = "power_label", style = "bold_label"}
+    power.style.width = 80
+    power.style.horizontal_align = "right"
+    update_power_label(power, factory)
 
     local buttons = row.add {type = "flow", direction = "horizontal"}
     buttons.style.horizontal_spacing = 2
@@ -424,6 +486,17 @@ local function fill_info(info, factory)
     end
     add_info(info, "info-power", power)
 
+    local use, gen = factory.power_use, factory.power_gen or 0
+    add_info(info, "info-consumption", use and {"factorissimo-dispatch.approx", format_power(use)} or {"factorissimo-dispatch.measuring"})
+    local generators = factory.generators or 0
+    if use and generators > 0 then
+        add_info(info, "info-production", format_power(gen),
+            {"factorissimo-dispatch.generators", tostring(factory.generators_working or 0), tostring(generators)})
+        local net = gen - use
+        add_info(info, "info-balance", net >= 0 and {"", "[color=#80e080]+", format_power(net), "[/color]"}
+            or {"", "[color=#ff8080]−", format_power(net), "[/color]"}, {"factorissimo-dispatch.balance-tooltip"})
+    end
+
     local used, by_type = 0, {}
     for _, conn in pairs(factory.connections or {}) do
         used = used + 1
@@ -438,17 +511,9 @@ local function fill_info(info, factory)
     add_info(info, "info-connections", {"factorissimo-dispatch.of", tostring(used), tostring(table_size(layout.connections))},
         #tooltip > 2 and tooltip or nil)
 
-    local machines, working = factorissimo.count_factory_machines(factory)
-    add_info(info, "info-machines", {"factorissimo-dispatch.machines", tostring(working), tostring(machines)})
+    add_info(info, "info-machines", {"factorissimo-dispatch.machines", tostring(factory.machines_working or 0), tostring(factory.machines or 0)})
 
-    local children = 0
-    local surface = factory.inside_surface
-    if surface and surface.valid then
-        local by_entity = storage.factories_by_entity
-        for _, building in pairs(surface.find_entities_filtered {area = factorissimo.factory_interior_area(factory), type = BUILDING_TYPE}) do
-            if by_entity[building.unit_number] then children = children + 1 end
-        end
-    end
+    local children = factory.children or 0
     if children > 0 then add_info(info, "info-children", tostring(children)) end
     add_info(info, "info-depth", tostring(depth_of(factory)))
 
@@ -481,6 +546,10 @@ local function build_details(frame, player, state)
         label.style.font_color = {r = 0.7, g = 0.7, b = 0.7}
         return
     end
+
+    -- The interior of the selected factory is scanned at most every LIGHT_REFRESH ticks (machines, power).
+    local tick = game.tick
+    if not factory.active_tick or tick - factory.active_tick >= LIGHT_REFRESH then factorissimo.scan_factory(factory, tick) end
 
     if details.tags.id == factory.id and details.info then
         fill_info(details.info, factory)
@@ -557,6 +626,7 @@ local function refresh(player, light)
                 if factory and factory.layout then
                     local info = row.children[2]
                     if info then update_status(info.status, factory) end
+                    update_power_label(row.power_label, factory)
                 end
             end
         end
