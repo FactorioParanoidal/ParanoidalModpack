@@ -28,6 +28,8 @@ Date: 2026-10-14
     - Russian: new names for repetitive and plain achievements (numbered tiers, "!!!" series, module
       tiers), duplicate names removed, jokes added to hand-written descriptions, 137 flavor lines.
     - Russian production descriptions no longer end with a double period ("10 тыс..").
+    - Russian: Factorissimo buildings are called "фабрика" in the descriptions of five achievements, as in
+      Factorissimo itself.
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.0
 Date: 2026-10-14

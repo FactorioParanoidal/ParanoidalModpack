@@ -18,6 +18,8 @@ Date: 2026-10-19
     - Paranoidal: the dispatcher scroll panes are created without the unused "direction" parameter.
     - Paranoidal: "No power" for every factory built before 9.11.19: the buffer size of an electric energy interface is saved in the entity, so old power sensors kept the empty buffer of the old prototype and never charged (the changelog of 9.11.19 wrongly said that no migration is needed). Such a sensor is replaced once by a new one from the current prototype during the sampling; the power of the factory does not go through it.
     - Paranoidal: reinforced hull technologies showed "Unknown key" as their name: the engine drops a trailing "-<number>" of a technology name for its locale key, so the name is technology-name.factory-hull ("Reinforced hull 2"); the numbered keys are removed.
+  Locale:
+    - Paranoidal: Russian names of factory buildings: "Фабрика 1-4" instead of "Заводское строение 1-4", and "фабрика" / "фабричное здание" instead of "заводское строение" / "завод" in every Russian text of the mod (entities, tiles, technologies, descriptions, settings, messages, dispatcher, tips and tricks). The same texts in ParanoidalLocale are changed too, because it overrides this locale.
 ---------------------------------------------------------------------------------------------------
 Version: 9.11.19
 Date: 2026-10-16
