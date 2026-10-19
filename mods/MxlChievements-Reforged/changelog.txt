@@ -20,6 +20,10 @@ Date: 2026-10-14
     - Icons of items with explicitly scaled layers keep their proportions inside the tier frame.
     - Optional flavor line under generated descriptions (locale section mxlr-flavor, keyed by the
       achievement name); a language without the key shows the condition only.
+    - Two Factorissimo achievements read the streaks Factorissimo measures for every factory building
+      (remote get_force_records, polled once a minute): "Not a Gram Outside" (10 hours of work without
+      releasing pollution) and "Workshop 24/7" (10 hours of work without power shortage). Without that
+      remote interface the tracker does nothing.
   Locale:
     - Russian: new names for repetitive and plain achievements (numbered tiers, "!!!" series, module
       tiers), duplicate names removed, jokes added to hand-written descriptions, 137 flavor lines.

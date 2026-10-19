@@ -8,6 +8,7 @@ for _, name in pairs {"factory-1", "factory-2", "factory-3", "space-factory-1", 
     if recipe then recipe.allow_quality = false end
 end
 require "compat.gregtorio"
+require "prototypes.hull-icons"
 
 data.raw.item["factory-hidden-construction-robot"].stack_size = 1000
 

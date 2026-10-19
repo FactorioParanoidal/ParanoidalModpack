@@ -377,122 +377,68 @@ factorissimo.cleanup_factory_roboport_exterior_chest = function(factory)
     end
 end
 
-local GHOST_PROTOTYPE_NAME = "entity-ghost"
-local TILE_GHOST_PROTOTYPE_NAME = "tile-ghost"
+-- Paranoidal: construction requests are found on the factory floor itself. Upstream read them from the
+-- alerts of the first connected player of the force, so the upgrade only worked while someone was online
+-- and in multiplayer depended on the alerts of an arbitrary player.
+-- Counted: ghosts, tile ghosts and item request proxies still waiting for a robot (registered for
+-- construction, no robot dispatched yet) and entities marked for upgrade still waiting for a robot.
+-- Damaged entities cannot be found without walking every entity, so instead of answering a "not enough
+-- repair packs" alert the construction chest keeps a small stock of repair packs.
+local CONSTRUCTION_TARGET_TYPES = {"entity-ghost", "tile-ghost", "item-request-proxy"}
+local REPAIR_PACK = "repair-pack"
+local REPAIR_PACK_STOCK = 5
 
-local function get_construction_requests_by_factory()
-    local missing_ghosts_per_factory = {}
-    local factories_that_need_repair_packs = {}
-
-    for surface_index, factories in pairs(storage.surface_factories) do
-        if not game.get_surface(surface_index) then goto invalid_surface end
-
-        local forces_to_check = {}
-        for _, factory in pairs(factories) do
-            local force = factory.force
-            if force.valid and not forces_to_check[force.index] and force.technologies["factory-interior-upgrade-roboport"].researched then
-                -- theres no API function to get the current construction requests
-                -- so instead we are reading it from the player's alerts! (this is a bad idea)
-                -- find a valid online player to check the alerts for
-                -- yes this means the roboport construction feature only works if you are logged in! too bad
-                local _, player = next(force.connected_players)
-                if player then forces_to_check[force.index] = player end
+local function add_items(requests_by_itemname, items, default_quality)
+    for _, item_to_place in pairs(items) do
+        local item_name = item_to_place.name
+        -- Packed factories are not requested: their ghosts already request the plain factory item.
+        if not (item_name:find("%-instantiated$") and has_layout(item_name)) then
+            local requests_by_quality = requests_by_itemname[item_name]
+            if not requests_by_quality then
+                requests_by_quality = {}
+                requests_by_itemname[item_name] = requests_by_quality
             end
+            local quality = item_to_place.quality or default_quality
+            if type(quality) ~= "string" then quality = quality.name end
+            requests_by_quality[quality] = (requests_by_quality[quality] or 0) + (item_to_place.count or 1)
         end
-
-        for _, player in pairs(forces_to_check) do
-            local alerts = player.get_alerts {
-                type = defines.alert_type.no_material_for_construction,
-                surface = surface_index,
-            }[surface_index] or {}
-
-            local no_material_for_construction = alerts[defines.alert_type.no_material_for_construction] or {}
-            for _, ghost in pairs(no_material_for_construction) do
-                ghost = ghost.target
-                if not (ghost and ghost.valid) then goto continue end -- this can happen if the alerts are not updated yet but the entity is invalid
-                --if ghost.is_registered_for_construction() then goto continue end -- we only care about ghosts that are not already being constructed
-                local factory = remote_api.find_surrounding_factory_by_surface_index(surface_index, ghost.position)
-                if not factory or not factory.roboport_upgrade then goto continue end
-                if factory.inactive or not factory.built or not (factory.building and factory.building.valid) then goto continue end
-                if not factory.inside_surface.valid or not factory.outside_surface.valid then goto continue end
-
-                local missing_ghosts = missing_ghosts_per_factory[factory]
-                if missing_ghosts then
-                    missing_ghosts[#missing_ghosts + 1] = ghost
-                else
-                    missing_ghosts_per_factory[factory] = {ghost}
-                end
-
-                ::continue::
-            end
-
-            local alerts = player.get_alerts {
-                type = defines.alert_type.not_enough_repair_packs,
-                surface = surface_index,
-            }[surface_index] or {}
-
-            local not_enough_repair_packs = alerts[defines.alert_type.not_enough_repair_packs] or {}
-            for _, alert in pairs(not_enough_repair_packs) do
-                local factory = alert.position and remote_api.find_surrounding_factory_by_surface_index(surface_index, alert.position)
-                if not factory or not factory.roboport_upgrade then goto continue end
-                if factory.inactive or not factory.built or not (factory.building and factory.building.valid) then goto continue end
-                if not factory.inside_surface.valid or not factory.outside_surface.valid then goto continue end
-                factories_that_need_repair_packs[factory] = true
-                ::continue::
-            end
-        end
-
-        ::invalid_surface::
     end
+end
 
-    local construction_requests_by_factory = {}
-    for factory, missing_ghosts in pairs(missing_ghosts_per_factory) do
-        local requests_by_itemname = {}
-        for _, ghost in pairs(missing_ghosts) do
-            local items_to_place
-            if ghost.name == GHOST_PROTOTYPE_NAME or ghost.name == TILE_GHOST_PROTOTYPE_NAME then
-                items_to_place = ghost.ghost_prototype.items_to_place_this -- collect all items_to_place_this for construction ghosts
-            elseif ghost.type == "item-request-proxy" then
-                items_to_place = ghost.item_requests                       -- items can also be delived to the `item-request-proxy` prototype
-            elseif ghost.to_be_upgraded() then
-                local upgrade_target, quality = ghost.get_upgrade_target()
-                items_to_place = upgrade_target.items_to_place_this -- collect all items_to_place_this for upgrade planner ghosts
-                for _, item in pairs(items_to_place) do item.quality = quality.name end
+--- item name -> quality name -> count the construction chest of the factory needs.
+local function get_construction_requests(factory)
+    local surface = factory.inside_surface
+    local area = factorissimo.factory_interior_area(factory)
+    local force = factory.force
+    local requests_by_itemname = {}
+
+    for _, target in pairs(surface.find_entities_filtered {area = area, type = CONSTRUCTION_TARGET_TYPES, force = force}) do
+        if target.is_registered_for_construction() then
+            if target.type == "item-request-proxy" then
+                add_items(requests_by_itemname, target.item_requests, "normal") -- items delivered to a proxy (modules etc.)
             else
-                goto continue
+                local quality = target.type == "entity-ghost" and target.quality
+                add_items(requests_by_itemname, target.ghost_prototype.items_to_place_this or {}, quality and quality.name or "normal")
             end
-
-            for _, item_to_place in pairs(items_to_place) do
-                local item_name = item_to_place.name
-                requests_by_itemname[item_name] = requests_by_itemname[item_name] or {}
-                local requests_by_quality = requests_by_itemname[item_name]
-                local quality = item_to_place.quality or ghost.quality.name
-                requests_by_quality[quality] = requests_by_quality[quality] or 0
-                requests_by_quality[quality] = requests_by_quality[quality] + item_to_place.count
-            end
-
-            ::continue::
         end
-
-        -- dont request instantiated factories. it already requests the raw factory item
-        requests_by_itemname["factory-1-instantiated"] = nil -- hardcoding these is not ideal
-        requests_by_itemname["factory-2-instantiated"] = nil
-        requests_by_itemname["factory-3-instantiated"] = nil
-
-        construction_requests_by_factory[factory] = requests_by_itemname
     end
 
-    local quality = "normal"
-    local item_name = "repair-pack"
-
-    for factory in pairs(factories_that_need_repair_packs) do
-        construction_requests_by_factory[factory] = construction_requests_by_factory[factory] or {}
-        local requests_by_itemname = construction_requests_by_factory[factory]
-        requests_by_itemname[item_name] = requests_by_itemname[item_name] or {}
-        requests_by_itemname[item_name][quality] = requests_by_itemname[item_name][quality] or 5
+    for _, entity in pairs(surface.find_entities_filtered {area = area, to_be_upgraded = true, force = force}) do
+        if entity.is_registered_for_upgrade() then
+            local upgrade_target, quality = entity.get_upgrade_target()
+            if upgrade_target then
+                add_items(requests_by_itemname, upgrade_target.items_to_place_this or {}, quality and quality.name or "normal")
+            end
+        end
     end
 
-    return construction_requests_by_factory
+    if prototypes.item[REPAIR_PACK] then
+        local by_quality = requests_by_itemname[REPAIR_PACK] or {}
+        requests_by_itemname[REPAIR_PACK] = by_quality
+        by_quality.normal = math.max(by_quality.normal or 0, REPAIR_PACK_STOCK)
+    end
+
+    return requests_by_itemname
 end
 
 local create_or_remove_item_request_proxies -- function stub
@@ -512,20 +458,30 @@ local function destroy_all_item_request_proxies(roboport_upgrade)
     roboport_upgrade.item_request_proxies = {}
 end
 
-factorissimo.on_nth_tick(257, function()
-    local construction_requests_by_factory = get_construction_requests_by_factory()
+local function update_construction_requests(factory)
+    local roboport_upgrade = factory.roboport_upgrade
+    if factory.inactive or not factory.built or not factory.layout then return end
+    if not (factory.building and factory.building.valid) then return end
+    local inside_surface, outside_surface = factory.inside_surface, factory.outside_surface
+    if not (inside_surface and inside_surface.valid and outside_surface and outside_surface.valid) then return end
+    if not roboport_upgrade then return end
+    local force = factory.force
+    if not (force and force.valid and force.technologies["factory-interior-upgrade-roboport"].researched) then return end
 
-    -- update each factory and create item-request-proxy for unfulfilled construction requests
-    for _, factory in pairs(storage.factories) do
-        if not factory.inactive and factory.built then
-            local requests_by_itemname = construction_requests_by_factory[factory]
-            eject_unneeded_items(factory, requests_by_itemname or {})
-            if requests_by_itemname then
-                create_or_remove_item_request_proxies(factory, requests_by_itemname)
-            elseif factory.roboport_upgrade and next(factory.roboport_upgrade.item_request_proxies or {}) then
-                destroy_all_item_request_proxies(factory.roboport_upgrade)
-            end
-        end
+    local requests_by_itemname = get_construction_requests(factory)
+    eject_unneeded_items(factory, requests_by_itemname)
+    if next(requests_by_itemname) then
+        create_or_remove_item_request_proxies(factory, requests_by_itemname)
+    elseif next(roboport_upgrade.item_request_proxies or {}) then
+        destroy_all_item_request_proxies(roboport_upgrade)
+    end
+end
+
+-- Every factory is handled once per 256 ticks: a quarter of them every 64 ticks, split by id.
+factorissimo.on_nth_tick(64, function(event)
+    local group = (event.tick / 64) % 4
+    for id, factory in pairs(storage.factories) do
+        if id % 4 == group then update_construction_requests(factory) end
     end
 end)
 

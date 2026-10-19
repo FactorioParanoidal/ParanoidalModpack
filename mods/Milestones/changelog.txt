@@ -7,6 +7,7 @@ Date: 2026-10-13
     - Paranoidal fork of 1.4.7 (local version number, not an official release). Mod ID, settings and save data are kept.
     - Existing saves whose milestone set was never edited switch to a newly added preset that auto-detection prefers (e.g. Paranoidal over Vanilla). Completed milestones keep their times; new ones are backfilled.
     - Players inside a Blueprint Sandboxes force see, and are notified about, the milestones of their real force.
+    - Paranoidal: hidden technologies (researched by script to mark events of other mods, e.g. Factorissimo) are announced as "Reached" instead of "Researched" and shown as "Event" in the milestone tooltip.
   Optimizations:
     - Production, consumption and kill milestones are checked from per-cycle totals: one counts dictionary read (already summed over all qualities) per statistics object and surface, spread over the last 60 ticks of the cycle, instead of one API call per milestone, surface and quality prototype.
     - Without additional qualities, names are looked up directly and the hidden quality-unknown is no longer queried.

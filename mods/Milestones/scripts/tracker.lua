@@ -61,11 +61,14 @@ local function print_milestone_reached(force, milestone)
     local milestone_localised_name
     local message
     if milestone.type == "technology" then
-        milestone_localised_name = prototypes.technology[milestone.name].localised_name
+        local technology = prototypes.technology[milestone.name]
+        milestone_localised_name = technology.localised_name
         local level_string = (milestone.quantity == 1 and "" or " Level "..milestone.quantity)
         local image_tag = string.format("[img=%s]", sprite_name)
         milestone_localised_name = {"", image_tag, milestone_localised_name}
-        message = {"milestones.message_milestone_reached_technology", milestone_localised_name, level_string, human_timestamp}
+        -- Paranoidal: hidden technologies researched by script mark events of other mods (e.g. Factorissimo).
+        local key = technology.hidden and "milestones.message_milestone_reached_event" or "milestones.message_milestone_reached_technology"
+        message = {key, milestone_localised_name, level_string, human_timestamp}
     else
         if milestone.type == "item" or milestone.type == "item_consumption" then
             if milestone.name == "se-rocket-launch-pad-silo-dummy-result-item" then

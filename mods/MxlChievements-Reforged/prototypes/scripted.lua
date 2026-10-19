@@ -64,6 +64,11 @@ return {
     icon = {entity = "factory-1"}},
   {id = "factory-in-factory", kind = "script", theme = "logistics", tracker = "factory-nest",
     mods = {"factorissimo-2-notnotmelon"}, needs = {any_entity = {patterns = {"^factory%-%d$"}}}, icon = {entity = "factory-2"}},
+  -- Streaks measured by Factorissimo (remote get_force_records), in hours of work.
+  {id = "no-emissions", kind = "script", theme = "logistics", tracker = "factory-clean", amount = 10,
+    mods = {"factorissimo-2-notnotmelon"}, needs = {entities = {"factory-1"}}, icon = {entity = "factory-2"}},
+  {id = "factory-24-7", kind = "script", theme = "logistics", tracker = "factory-uptime", amount = 10,
+    mods = {"factorissimo-2-notnotmelon"}, needs = {entities = {"factory-1"}}, icon = {entity = "factory-3"}},
   {id = "jumper", kind = "script", theme = "logistics", tracker = "teleport", amounts = {100, 1000},
     mods = {"Teleporters"}, needs = {entities = {"teleporter"}}, icon = {entity = "teleporter"}},
   count("hoarder", "logistics", {100}, {patterns = {"^warehouse%-", "^storehouse%-"}, types = {"container", "logistic-container"}},

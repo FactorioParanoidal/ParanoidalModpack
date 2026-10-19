@@ -172,6 +172,7 @@ local function update_overlay(factory, draw_onto)
     clear_overlay(factory)
     if icons and icons[1] then draw_overlay_icons(factory, icons, building, factory.outside_overlay_displays) end
     factory.overlay_signature = signature
+    factorissimo.dispatch_changed() -- the factory list shows these icons
 end
 factorissimo.update_overlay = update_overlay
 

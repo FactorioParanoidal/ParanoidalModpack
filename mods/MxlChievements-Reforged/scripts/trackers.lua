@@ -379,6 +379,26 @@ trackers["factory-nest"] = {
   },
 }
 
+-- Longest streaks of factories of the force, measured by Factorissimo itself (once per second for every
+-- factory): "clean" without releasing pollution, "uptime" without power shortage, both while machines work.
+local HOUR = 216000
+
+local function factory_records_poll(key)
+  return {every = MINUTE, run = function(entries, core)
+    if not has_remote("factorissimo", "get_force_records") then return end
+    for _, force in ipairs(core.player_forces()) do
+      local ok, records = pcall(remote.call, "factorissimo", "get_force_records", force.index)
+      if ok and type(records) == "table" and type(records[key]) == "number" then
+        local hours = records[key] / HOUR
+        each(entries, function(entry) core.progress(force, entry, hours) end)
+      end
+    end
+  end}
+end
+
+trackers["factory-clean"] = {poll = factory_records_poll("clean")}
+trackers["factory-uptime"] = {poll = factory_records_poll("uptime")}
+
 ---------------------------------------------------------------------------------------------------
 -- Movement: the step since the last position is computed once per event for all movement trackers.
 

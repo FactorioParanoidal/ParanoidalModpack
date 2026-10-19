@@ -82,6 +82,7 @@ local function add_milestone_item(gui_table, milestone, print_milliseconds, comp
     end
     if milestone.type == "technology" then
         local postfix = milestone.quantity == 1 and {"milestones.type_technology"} or "Level "..milestone.quantity
+        if prototype.hidden then postfix = {"milestones.type_event"} end -- Paranoidal: events marked by other mods
         tooltip = tooltip or {"", prototype.localised_name, " (", postfix, ")"}
     elseif milestone.type == "kill" then
         local prefix = milestone.quantity == 1 and "" or milestone.quantity .."x "

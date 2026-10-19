@@ -21,20 +21,24 @@ local function create_energy_interfaces(size, icon)
         max_health = 1,
         hidden = true,
         selectable_in_game = false,
+        -- Paranoidal: power sensor of the factory. It charges at 1 kW like an ordinary machine
+        -- (secondary-input); script/stats.lua reads and empties the buffer once per second, so the
+        -- charged energy is the power satisfaction of the network the factory is wired to.
         energy_source = {
             type = "electric",
-            usage_priority = "tertiary",
-            input_flow_limit = "0W",
+            usage_priority = "secondary-input",
+            input_flow_limit = "1kW",
             output_flow_limit = "0W",
-            buffer_capacity = "0J",
+            buffer_capacity = "10kJ",
             render_no_power_icon = false,
+            render_no_network_icon = false,
         },
         energy_usage = "0MW",
         energy_production = "0MW",
         selection_box = {{-j, -j}, {j, j}},
         collision_box = {{-j, -j}, {j, j}},
         collision_mask = {layers = {}},
-        localised_name = "",
+        localised_name = {"entity-name.factory-power-sensor"},
     }}
 end
 

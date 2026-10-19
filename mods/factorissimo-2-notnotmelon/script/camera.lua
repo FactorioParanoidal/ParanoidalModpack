@@ -305,6 +305,7 @@ local function camera_teleport(player, surface, position)
     player.zoom = 0.6
     player.opened = nil
 end
+factorissimo.camera_teleport = camera_teleport
 
 local function open_outside_in_remote_view(player, pole)
     local factory = find_surrounding_factory(pole.surface, pole.position)

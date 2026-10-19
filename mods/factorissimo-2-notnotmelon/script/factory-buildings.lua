@@ -578,6 +578,9 @@ local function create_factory_exterior(factory, building)
     factorissimo.update_power_connection(factory)
     factorissimo.update_overlay(factory)
     build_factory_upgrades(factory)
+    factorissimo.reset_factory_stats(factory)
+    factorissimo.update_name_labels(factory)
+    factorissimo.dispatch_changed()
     return factory
 end
 
@@ -602,6 +605,7 @@ local function cleanup_factory_exterior(factory)
     factory.outside_port_markers = {}
     factory.building = nil
     factory.built = false
+    factorissimo.dispatch_changed()
 end
 
 local sprite_path_translation = {
@@ -623,6 +627,8 @@ local function generate_factory_item_description(factory)
         end
     end
     local params = table.concat(params, "\n")
+    -- Paranoidal: the name of the factory (script/names.lua) heads the description.
+    if factory.name then bound_to = {"", "[font=default-bold]" .. factory.name .. "[/font]\n", bound_to} end
     if params == "" then
         return bound_to
     else
@@ -829,6 +835,7 @@ local function prevent_factory_mining(entity)
     factory.building = replacement
     factory.overlay_signature = nil
     factorissimo.update_overlay(factory)
+    factorissimo.update_name_labels(factory)
     if #factory.outside_port_markers ~= 0 then
         factory.outside_port_markers = {}
         factorissimo.toggle_port_markers(factory)
@@ -937,6 +944,7 @@ function is_inside_sandbox(surface, position)
     end
     return false
 end
+factorissimo.is_inside_sandbox = is_inside_sandbox
 
 local CONTAINER_TYPES = {"container", "logistic-container", "infinity-container", "linked-container", "item-entity"}
 

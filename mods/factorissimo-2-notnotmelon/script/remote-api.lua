@@ -215,4 +215,53 @@ remote_api.is_factorissimo_surface = function(surface)
     return storage.surface_factories[surface_index] ~= nil
 end
 
+-- Paranoidal: names, records and Milestones integration.
+
+local function force_index_of(force)
+    if type(force) == "number" then return force end
+    if type(force) == "string" then
+        local found = game.forces[force]
+        return found and found.index
+    end
+    return force and force.valid and force.index
+end
+
+---Name of the factory with this id (nil without a name).
+remote_api.get_factory_name = function(factory_id)
+    local factory = storage.factories[factory_id] or storage.saved_factories[factory_id]
+    return factory and factory.name
+end
+
+---Sets the name of the factory with this id; nil or "" clears it. Returns the stored name.
+remote_api.set_factory_name = function(factory_id, name)
+    local factory = storage.factories[factory_id]
+    if not (factory and factory.layout) then return nil end
+    return factorissimo.set_factory_name(factory, name)
+end
+
+---Longest streaks of factories of the force, in ticks: {clean = without released pollution, uptime = without
+---power shortage}. Both count only time while machines inside work. Used by MxlChievements.
+remote_api.get_force_records = function(force)
+    local index = force_index_of(force)
+    if not index then return {clean = 0, uptime = 0} end
+    return factorissimo.get_force_records(index)
+end
+
+---Milestones preset addon (read by Milestones in on_init of a new game).
+remote_api.milestones_preset_addons = function()
+    return {
+        ["Factorissimo"] = {
+            required_mods = {"factorissimo-2-notnotmelon"},
+            milestones = {
+                {type = "group", name = "Factorissimo"},
+                {type = "item", name = "factory-1", quantity = 1},
+                {type = "item", name = "factory-2", quantity = 1},
+                {type = "item", name = "factory-3", quantity = 1},
+                {type = "technology", name = "factory-milestone-nested", quantity = 1},
+                {type = "technology", name = "factory-milestone-clean", quantity = 1},
+            },
+        },
+    }
+end
+
 remote.add_interface("factorissimo", remote_api)
