@@ -3,6 +3,12 @@ local pole_filter = { { filter = "type", type = "electric-pole" } }
 
 local function add_resistor(pole)
   if not (pole and pole.valid) then return end
+  storage.poles = storage.poles or {}
+  -- Скрытые столбы могут удаляться скриптом без события script_raised_destroy.
+  storage.poles[script.register_on_object_destroyed(pole)] = {
+    surface = pole.surface,
+    position = pole.position,
+  }
   -- защита от дубля (fast-replace / повторные события)
   if pole.surface.find_entity(RESISTOR, pole.position) then return end
   local r = pole.surface.create_entity {
@@ -33,11 +39,25 @@ script.on_event(defines.events.on_robot_mined_entity, on_removed, pole_filter)
 script.on_event(defines.events.on_entity_died, on_removed, pole_filter)
 script.on_event(defines.events.script_raised_destroy, on_removed, pole_filter)
 
+script.on_event(defines.events.on_object_destroyed, function(event)
+  local pole = storage.poles[event.registration_number]
+  if not pole then return end
+  storage.poles[event.registration_number] = nil
+  if not pole.surface.valid then return end
+  -- Событие приходит с задержкой: на этом месте уже может стоять замена столба.
+  if pole.surface.count_entities_filtered { type = "electric-pole", position = pole.position, limit = 1 } > 0 then
+    return
+  end
+  local r = pole.surface.find_entity(RESISTOR, pole.position)
+  if r then r.destroy() end
+end)
+
 -- Полная пересборка: сносим все резисторы и создаём заново актуальным прототипом.
 -- energy_source (буфер/потребление) фиксируется у сущности при создании — при смене
 -- настройки consumption старые резисторы иначе остались бы на прежнем значении.
 -- Срабатывает на on_init и on_configuration_changed (в т.ч. при смене startup-настроек).
 local function resync()
+  storage.poles = {}
   for _, surface in pairs(game.surfaces) do
     for _, r in pairs(surface.find_entities_filtered { name = RESISTOR }) do
       r.destroy()
