@@ -59,6 +59,24 @@ end
 local function title(parent, caption)
   return parent.add{type="label", caption=caption, style="heading_2_label"}
 end
+-- Evolution after researching the path, by the rule of research_evolution_factor (its remote
+-- interface; nil when absent). Returns the increase and the result, both as fractions.
+local EVOLUTION_SPRITE = "ptt-evolution"
+local function path_evolution(p, plan)
+  local api = remote.interfaces.research_evolution_factor
+  if not (api and api.path_increment) then return nil end
+  local names = {}
+  for n in pairs(plan.set) do names[#names + 1] = n end
+  local ok, sum = pcall(remote.call, "research_evolution_factor", "path_increment", p.force.name, names)
+  if not ok or type(sum) ~= "number" or sum <= 0 then return nil end
+  local enemy = game.forces.enemy
+  local now = enemy and enemy.get_evolution_factor() or 0
+  local after = 1 - (1 - now) * math.exp(-sum)
+  return after - now, after, now
+end
+local function percent(v)
+  return string.format("%.2f", v * 100)
+end
 local function sorted_keys(t)
   local a={}; for n in pairs(t) do a[#a+1]=n end; table.sort(a); return a
 end
@@ -510,12 +528,27 @@ function M.panel(p, queue_only)
   if plan then
     title(body, {"ptt.path"})
     text(body, {"ptt.path-count", plan.count}, width)
+    local costs
     if #plan.cost > 0 then
-      local costs = body.add{type="table", column_count=5}
+      costs = body.add{type="table", column_count=5}
       for _, c in ipairs(plan.cost) do
         costs.add{type="sprite-button", sprite="item/"..c.name, number=c.amount,
           elem_tooltip={type="item", name=c.name}, style="slot_button"}
       end
+    end
+    local gain, after, now = path_evolution(p, plan)
+    if gain then
+      costs = costs or body.add{type="table", column_count=5}
+      local tip = {"ptt.path-evolution-tip", percent(gain), percent(now), percent(after)}
+      local cell = costs.add{type="flow", direction="horizontal"}
+      cell.style.vertical_align = "center"; cell.style.height = 40; cell.style.horizontal_spacing = 2
+      cell.add{type="label", caption="+", style="heading_2_label", tooltip=tip}
+      if helpers.is_valid_sprite_path(EVOLUTION_SPRITE) then
+        local icon = cell.add{type="sprite", sprite=EVOLUTION_SPRITE, tooltip=tip}
+        icon.style.size = 28; icon.style.stretch_image_to_widget_size = true
+      end
+      local l = cell.add{type="label", caption={"ptt.path-evolution", percent(gain)}, tooltip=tip}
+      l.style.font = "default-bold"; l.style.font_color = COLORS.warn
     end
     if #plan.ready > 0 then
       local r = title(body, {"ptt.path-ready", #plan.ready}); r.style.font_color = COLORS.available
