@@ -1,6 +1,7 @@
 local params = require("parameters")
 storage.infinite_research_units = {}
-local function tech_cost(tech)
+-- peek: estimate only (no storage changes); formula technologies use their current unit count.
+local function tech_cost(tech, peek)
 	local sum = 0
 	if tech.research_unit_ingredients then
 		for _, item in pairs(tech.research_unit_ingredients) do
@@ -20,7 +21,7 @@ local function tech_cost(tech)
 		end
 	end
 	local unit_count = tech.research_unit_count
-	if tech.research_unit_count_formula then
+	if tech.research_unit_count_formula and not peek then
 		if tech.name then
 			-- no record (research started before the mod was added): count of the current level
 			unit_count = storage.infinite_research_units[tech.name] or tech.research_unit_count
@@ -50,6 +51,26 @@ local function ignored_tech(tech)
 		or (ignore_qol and string.sub(tech.name, 1, 4) == "qol-")
 		or (ignore_infinite and infinite_tech(tech))
 end
+
+-- Paranoidal: estimate for other mods (paranoidal-tech-tree path panel). Returns the summed
+-- exponent of the not yet researched, not ignored technologies; evolution after them is
+-- 1 - (1 - current) * exp(-sum). Read-only.
+remote.add_interface("research_evolution_factor", {
+	path_increment = function(force_name, names)
+		local force = game.forces[force_name]
+		local sum = 0
+		if not force or type(names) ~= "table" then
+			return sum
+		end
+		for _, name in pairs(names) do
+			local tech = force.technologies[name]
+			if tech and not tech.researched and not ignored_tech(tech) then
+				sum = sum + tech_cost(tech, true)
+			end
+		end
+		return sum
+	end,
+})
 
 script.on_event(defines.events.on_research_finished, function(event, by_script)
 	local tech = event.research
