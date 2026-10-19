@@ -9,6 +9,10 @@ Date: 2026-10-19
     - Paranoidal: pollution is collected from every chunk the interior covers (16 for building 4, 4 as before for buildings 1-3).
     - Paranoidal: the construction roboport upgrade reaches 96 tiles instead of 64, enough for the far wall of building 4 (applies to all factories, no other effect).
     - Paranoidal: building 4 uses a hidden radar revealing two chunks around its centre instead of one.
+  Bugfixes:
+    - Paranoidal: crash when opening the factory dispatcher with factories in the list ("Invalid name \"name\": LuaGuiElement contains a property or method with the same name"). GUI elements named "name" and "text" are renamed (factory_name, status_text, status_icon).
+    - Paranoidal: the dispatcher no longer depends on the copper wire connector of the factory power pole existing: a pole without one counts as not connected instead of raising an error.
+    - Paranoidal: the dispatcher scroll panes are created without the unused "direction" parameter.
 ---------------------------------------------------------------------------------------------------
 Version: 9.11.19
 Date: 2026-10-16

@@ -61,7 +61,9 @@ end
 function factorissimo.is_factory_wired(factory)
     local pole = factory._inside_power_pole
     if not (pole and pole.valid) then return false end
-    return pole.get_wire_connector(defines.wire_connector_id.pole_copper).connection_count > 0
+    -- The connector is allocated lazily: without wires it may not exist (nil), which means "not wired".
+    local connector = pole.get_wire_connector(defines.wire_connector_id.pole_copper, false)
+    return connector ~= nil and connector.connection_count > 0
 end
 
 local function sample_power(factory, tick)

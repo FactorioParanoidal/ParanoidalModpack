@@ -240,23 +240,25 @@ local function get_frame(player)
     return nil
 end
 
+-- Child element names must not repeat a LuaGuiElement attribute or method (name, text, caption, ...):
+-- the engine refuses such names.
 local function add_status(parent, factory)
     local sprite, caption = status_of(factory)
     local flow = parent.add {type = "flow", name = "status", direction = "horizontal"}
     flow.style.vertical_align = "center"
     flow.style.horizontal_spacing = 4
-    local icon = flow.add {type = "sprite", name = "icon", sprite = sprite}
+    local icon = flow.add {type = "sprite", name = "status_icon", sprite = sprite}
     icon.style.size = 14
     icon.style.stretch_image_to_widget_size = true
-    flow.add {type = "label", name = "text", caption = caption}
+    flow.add {type = "label", name = "status_text", caption = caption}
     return flow
 end
 
 local function update_status(flow, factory)
     if not (flow and flow.valid) then return end
     local sprite, caption = status_of(factory)
-    flow.icon.sprite = sprite
-    flow.text.caption = caption
+    flow.status_icon.sprite = sprite
+    flow.status_text.caption = caption
 end
 
 local function tool_button(parent, action, sprite, tooltip, id)
@@ -288,7 +290,7 @@ local function add_row(list_flow, factory, selected)
     local info = row.add {type = "flow", direction = "vertical"}
     info.style.width = 250
     info.style.vertical_spacing = 0
-    local name = info.add {type = "label", name = "name", caption = factorissimo.factory_caption(factory), style = "caption_label"}
+    local name = info.add {type = "label", name = "factory_name", caption = factorissimo.factory_caption(factory), style = "caption_label"}
     name.style.maximal_width = 250
     if not factory.name then name.style.font_color = {r = 0.7, g = 0.7, b = 0.7} end
     local place = info.add {type = "label", caption = location_caption(factory)}
@@ -602,7 +604,7 @@ local function open(player)
     bar.style.vertical_align = "center"
     bar.style.horizontal_spacing = 8
     bar.style.horizontally_stretchable = true
-    local scroll = left.add {type = "scroll-pane", name = "scroll", direction = "vertical", style = "naked_scroll_pane"}
+    local scroll = left.add {type = "scroll-pane", name = "scroll", style = "naked_scroll_pane"}
     scroll.horizontal_scroll_policy = "never"
     scroll.style.width = 640
     scroll.style.height = 500
@@ -622,7 +624,7 @@ local function open(player)
     local details = body.add {type = "frame", name = "details", direction = "vertical", style = "inside_shallow_frame_with_padding"}
     details.style.width = 340
     details.style.vertically_stretchable = true
-    local details_scroll = details.add {type = "scroll-pane", name = "scroll", direction = "vertical", style = "naked_scroll_pane"}
+    local details_scroll = details.add {type = "scroll-pane", name = "scroll", style = "naked_scroll_pane"}
     details_scroll.horizontal_scroll_policy = "never"
     details_scroll.style.height = 560
     details_scroll.style.horizontally_stretchable = true
