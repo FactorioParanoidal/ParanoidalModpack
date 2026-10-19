@@ -2,8 +2,9 @@ local has_layout = has_layout
 
 local function setup_blueprint_tags(blueprint, mapping)
     for i, entity in pairs(mapping) do
-        local factory = storage.factories_by_entity[entity.unit_number]
-        if factory and has_layout(entity.name) then
+        if not entity.valid then goto continue end
+        local factory = entity.unit_number and storage.factories_by_entity[entity.unit_number]
+        if factory and factory.id and has_layout(entity.name) then
             blueprint.set_blueprint_entity_tag(i, "id", factory.id)
         elseif factorissimo.connection_indicator_names[entity.name] then
             local factory = remote_api.find_surrounding_factory(entity.surface, entity.position)
@@ -19,12 +20,13 @@ local function setup_blueprint_tags(blueprint, mapping)
                 end
             end
         end
+        ::continue::
     end
 end
 
 local function paste_blueprint(inventory, destination)
     if not inventory.valid then return end
-    if destination.inside_surface and destination.inside_surface.valid and destination.force.valid then
+    if destination.inside_surface and destination.inside_surface.valid and destination.force and destination.force.valid then
         local stack = inventory[1]
         stack.build_blueprint {
             surface = destination.inside_surface,
@@ -46,6 +48,11 @@ function factorissimo.copy_entity_ghosts(source, destination)
     local j = 60
     local first_anchor = source.inside_surface.create_entity {name = "factory-blueprint-anchor", position = {source.inside_x - j, source.inside_y - j}, force = source.force}
     local second_anchor = source.inside_surface.create_entity {name = "factory-blueprint-anchor", position = {source.inside_x + j, source.inside_y + j}, force = source.force}
+    if not (first_anchor and second_anchor) then
+        if first_anchor then first_anchor.destroy() end
+        if second_anchor then second_anchor.destroy() end
+        return
+    end
 
     local inventory = game.create_inventory(1)
     inventory.insert {name = "blueprint", count = 1}
@@ -84,8 +91,9 @@ end
 -- setup ghost tags for factory components
 factorissimo.on_event(defines.events.on_player_setup_blueprint, function(event)
     local player = game.get_player(event.player_index)
+    if not player then return end
     local blueprint = player.blueprint_to_setup
-    if not blueprint.valid_for_read then blueprint = player.cursor_stack end
+    if not (blueprint and blueprint.valid_for_read) then blueprint = player.cursor_stack end
     if not blueprint or not blueprint.valid_for_read then return end
 
     local entities = blueprint.get_blueprint_entities()
@@ -116,6 +124,7 @@ local function unpack_connection_settings_from_blueprint(entity)
     if not factory then return end
 
     local ctype = factorissimo.connection_indicator_names[entity.ghost_name]
+    if not factory.layout then return end
     local cpos = get_cpos(factory, position)
     if cpos then
         local cid = cpos.id
@@ -139,10 +148,13 @@ local BLUEPRINTABLE_FACTORY_PERIPHERALS = {
     ["factory-blueprint-anchor"] = true,
 }
 
+local peripheral_names = {}
+for name in pairs(BLUEPRINTABLE_FACTORY_PERIPHERALS) do peripheral_names[#peripheral_names + 1] = name end
+
 factorissimo.on_event(factorissimo.events.on_built(), function(event)
     local entity = event.entity
     if not entity.valid then return end
-    local entity_name, entity_type = entity.name, entity.type
+    local entity_name = entity.name
 
     local is_ghost = entity_name == "entity-ghost"
     if is_ghost then entity_name = entity.ghost_name end
@@ -156,4 +168,5 @@ factorissimo.on_event(factorissimo.events.on_built(), function(event)
     if BLUEPRINTABLE_FACTORY_PERIPHERALS[entity_name] then
         entity.destroy()
     end
-end)
+-- Connection indicators are storage tanks; their ghosts come from blueprints.
+end, factorissimo.join_filters(factorissimo.entity_filters({}, peripheral_names), factorissimo.ghost_filters({BUILDING_TYPE}, peripheral_names)))

@@ -394,24 +394,19 @@ function chunkPropertyUtils.processNestActiveness(map, chunk)
 		elseif (chunk[BASE_DETECTION_PHEROMONE] > map.no_pollution_attack_threshold) then 
             chunkPropertyUtils.setNestActiveness(map, chunk, mMin(activeness + 5, 20))	
        elseif (chunk[BASE_DETECTION_PHEROMONE] > 0) then
-			-- local pollutionThreshold = 3
-			-- local pollutionActiveness = false
-			-- if (surface.get_pollution({chunk.x, chunk.y}) > pollutionThreshold) then
-				-- pollutionActiveness = true
-			-- elseif (surface.get_pollution({chunk.x+32, chunk.y}) > pollutionThreshold) then	
-				-- pollutionActiveness = true
-			-- elseif (surface.get_pollution({chunk.x-32, chunk.y}) > pollutionThreshold) then	
-				-- pollutionActiveness = true
-			-- elseif (surface.get_pollution({chunk.x, chunk.y+32}) > pollutionThreshold) then	
-				-- pollutionActiveness = true
-			-- elseif (surface.get_pollution({chunk.x, chunk.y-32}) > pollutionThreshold) then	
-				-- pollutionActiveness = true
-			-- end
-			-- if pollutionActiveness then
-				-- chunkPropertyUtils.setNestActiveness(map, chunk, mMin(activeness + 5, 20))
-			-- else
+			-- Restored from Beta 8 (RampantFixed 1.8.3): pollution reaching the nest or a neighbouring
+			-- chunk wakes it as an ordinary active nest while the base is detected at all.
+			local pollutionThreshold = 3
+			if (surface.get_pollution({chunk.x, chunk.y}) > pollutionThreshold)
+				or (surface.get_pollution({chunk.x+32, chunk.y}) > pollutionThreshold)
+				or (surface.get_pollution({chunk.x-32, chunk.y}) > pollutionThreshold)
+				or (surface.get_pollution({chunk.x, chunk.y+32}) > pollutionThreshold)
+				or (surface.get_pollution({chunk.x, chunk.y-32}) > pollutionThreshold)
+			then
+				chunkPropertyUtils.setNestActiveness(map, chunk, mMin(activeness + 5, 20))
+			else
 				chunkPropertyUtils.setNestActiveness(map, chunk, activeness - 2)
-			-- end
+			end
         else
             chunkPropertyUtils.setNestActiveness(map, chunk, activeness - 5)
             chunkPropertyUtils.setRaidNestActiveness(map, chunk, raidActiveness - 5)

@@ -2,6 +2,7 @@
 Version: 7.0.26
 Date: 2026.08.25
   Changes:
+    - Geology by soil colour: with Alien-biomes-Reforged (setting on) a new region favours (allotment x2) the resources that suit its soil, answered by the remote interface alien-biomes-reforged/geology_bias; without it the rolls and the RNG sequence are unchanged (Paranoidal local fix)
     - updated Nullius support (by Ignalion)
 ---------------------------------------------------------------------------------------------------
 Version: 7.0.25

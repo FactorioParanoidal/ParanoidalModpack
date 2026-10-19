@@ -13,6 +13,7 @@ local mathUtils = require("MathUtils")
 local chunkPropertyUtils = require("ChunkPropertyUtils")
 local scoreChunks = require("ScoreChunks")
 local squadCompression = require("SquadCompression")
+local aiBrain = require("AIBrain")
 
 
 -- constants
@@ -75,6 +76,9 @@ local getResourceGenerator = chunkPropertyUtils.getResourceGenerator
 
 local scoreNeighborsForAttack = movementUtils.scoreNeighborsForAttack
 local scoreNeighborsForSettling = movementUtils.scoreNeighborsForSettling
+local scoreNeighborsForRetreat = movementUtils.scoreNeighborsForRetreat
+local getSquadsOnChunk = chunkPropertyUtils.getSquadsOnChunk
+local getPlayerTurretCount = chunkPropertyUtils.getPlayerTurretCount
 
 local scoreResourceLocationKamikaze = scoreChunks.scoreResourceLocationKamikaze
 local scoreSiegeLocation = scoreChunks.scoreSiegeLocation
@@ -90,6 +94,8 @@ local processCompression = squadCompression.processCompression
 local clearComresseData = squadCompression.clearComresseData
 
 local mCeil = math.ceil
+local mSqrt = math.sqrt
+local mRandom = math.random
 
 ------------------squadCompression---------------------------------------
 
@@ -113,7 +119,7 @@ local function settleHere(map, group, squad, dontDistract)
     group.surface.create_entity(universe.createBuildCloudQuery)	
 	---------
 
-	cmd = {type = defines.command.stop, ticks_to_wait = 3600*10}
+	local cmd = {type = defines.command.stop, ticks_to_wait = 3600*10}
 	if squad.kamikaze or dontDistract then
 		cmd.distraction = DEFINES_DISTRACTION_NONE
 	else
@@ -147,7 +153,7 @@ local function settleHere(map, group, squad, dontDistract)
 end
 
 local function goToLastvalidSettlerLocation(universe, group, squad)
-	cmd = universe.compoundMoveCommand
+	local cmd = universe.compoundMoveCommand
 	cmd.commands[2].destination.x = squad.lastValidChunk.x
 	cmd.commands[2].destination.y = squad.lastValidChunk.y
 	group.set_command(cmd)
@@ -366,14 +372,16 @@ local function partiallySettleHere(map, group, squad, numSettlers)
 	targetPosition.x = group.position.x
 	targetPosition.y = group.position.y
 	local members = group.members
-	if numSettlers >= #members then
-		numSettlers = #members - 1
+	-- decompression is gradual: units still held in packs count as members, and settlers are taken from packs first
+	local membersTotal = #members + squadCompression.countPackedUnits(universe, members)
+	if numSettlers >= membersTotal then
+		numSettlers = membersTotal - 1
 	end
 	for _, entity in pairs(members) do
 		if numSettlers <= 0 then
 			break
 		end
-		if entity.valid and (entity.type == "unit") then
+		while (numSettlers > 0) and entity.valid and (entity.type == "unit") do
 			 local newEntity = surface.create_entity({
 				name = newEntityName,
 				quality = entity.quality,
@@ -381,20 +389,240 @@ local function partiallySettleHere(map, group, squad, numSettlers)
 				position = entity.position, 
 				force = entity.force,
 				})
-			if newEntity and newEntity.valid then
-				newGroup.add_member(newEntity)
-				surface.create_trivial_smoke({name = "digIn-dust-nonTriggerCloud-rampant", position = entity.position})
+			if not (newEntity and newEntity.valid) then
+				break
+			end
+			newGroup.add_member(newEntity)
+			surface.create_trivial_smoke({name = "digIn-dust-nonTriggerCloud-rampant", position = entity.position})
+			numSettlers = numSettlers - 1
+			if not squadCompression.takeUnitFromPack(universe, entity) then
 				entity.destroy()
-				numSettlers = numSettlers - 1
-			end	
+			end
 		end
 	end
 	
 	if #newGroup.members > 0 then
 		universe.settleCommand.distraction = DEFINES_DISTRACTION_BY_ENEMY
-		cmd = universe.compoundSettleCommand
+		local cmd = universe.compoundSettleCommand
 		newGroup.set_command(cmd)	
 	end
+end
+
+----------------------------------------------------------------------------------------------------------------------
+-- Reforged Paranoidal: squads with a goal (AIBrain doctrines) and retreats
+
+-- goal of the squad being moved; scoreGoalLocation reads it (set right before scoring, no closures)
+local goalX = 0
+local goalY = 0
+local goalAvoidDanger = false
+
+-- closer to the goal is better; unless the squad dashes, it skirts player turrets on the way
+local function scoreGoalLocation(map, neighborChunk)
+	local dx = neighborChunk.x + 16 - goalX
+	local dy = neighborChunk.y + 16 - goalY
+	local score = -mSqrt(dx * dx + dy * dy)
+	if goalAvoidDanger then
+		score = score - getPlayerTurretCount(map, neighborChunk) * 40
+		if neighborChunk[BASE_DETECTION_PHEROMONE] >= MAX_BASE_DETECTION_PHEROMONES_IN_CHUNK then
+			score = score - 64
+		end
+	end
+	return score
+end
+
+local function setMoveCommand(universe, group, squad, quiet)
+	local cmd = universe.compoundMoveCommand
+	if quiet or squad.rabid or squad.kamikaze then
+		cmd.commands[2].distraction = DEFINES_DISTRACTION_NONE
+	else
+		cmd.commands[2].distraction = DEFINES_DISTRACTION_BY_DAMAGE
+	end
+	group.set_command(cmd)
+	group.start_moving()
+end
+
+local function commandIssued(squad, tick)
+	squad.nextCommandTick = tick + 60
+	squad.checkTick = tick + 18000	-- some groups get stuck
+	squad.onTheWay = true
+end
+
+-- Moves a squad towards squad.goal. Returns false when the goal is reached or dropped
+-- (the caller then continues with the ordinary scent-following attack).
+local function goalMove(map, squad, group, chunk, groupPosition)
+	local goal = squad.goal
+	local universe = map.universe
+	local tick = game.tick
+	if goal.untilTick < tick then
+		squad.goal = nil
+		return false
+	end
+	local dx = goal.x - groupPosition.x
+	local dy = goal.y - groupPosition.y
+	local distance = mSqrt(dx * dx + dy * dy)
+	local kind = goal.kind
+	if distance <= goal.reach then
+		if kind == "strike" then
+			-- hit the target area itself
+			squad.goal = nil
+			local targetPosition = universe.position
+			targetPosition.x = goal.x
+			targetPosition.y = goal.y
+			if not squad.rabid then
+				squad.frenzy = true
+				squad.frenzyPosition.x = groupPosition.x
+				squad.frenzyPosition.y = groupPosition.y
+			end
+			group.set_command(universe.compoundAttackCommand)
+			group.start_moving()
+			commandIssued(squad, tick)
+			return true
+		elseif kind == "ambush" then
+			-- wait for the player or a train to come by
+			squad.goal = nil
+			local wait = goal.wait or 10800
+			group.set_command({type = defines.command.stop, ticks_to_wait = wait, distraction = DEFINES_DISTRACTION_BY_ENEMY})
+			commandIssued(squad, tick)
+			squad.checkTick = tick + wait + 18000
+			-- after the wait: a weak spot nearby (ambush sites are often too far from the base for its scent)
+			local entry = aiBrain.pickWeakTarget(map, goal.x, goal.y, 16 * 32)
+			if entry then
+				squad.pendingGoal = {x = entry.chunk.x + 16, y = entry.chunk.y + 16, kind = "strike", reach = 40,
+									 untilTick = tick + wait + 5 * 3600}
+			end
+			return true
+		elseif kind == "stage" then
+			if aiBrain.heavy and aiBrain.heavy.onStageReached(map, squad, group, tick) then
+				return true	-- holding until the other arm arrives
+			end
+			if squad.goal ~= goal then
+				return goalMove(map, squad, group, chunk, groupPosition)	-- the wave was released: strike now
+			end
+		end
+		-- approach waypoint reached (or a stage of a wave that is gone): attack from here
+		squad.goal = nil
+		return false
+	end
+
+	goalX = goal.x
+	goalY = goal.y
+	goalAvoidDanger = not goal.dash
+	local x, y = positionToChunkXY(groupPosition)
+	local stepChunk, stepDirection, nextStepChunk, nextStepDirection = scoreNeighborsForRetreat(chunk,
+		getNeighborChunks(map, x, y), scoreGoalLocation, map)
+	local targetPosition = universe.position
+	local position
+	if (distance < 72) or (stepChunk == -1) then
+		-- close, or no registered chunk around (water, unscanned land): straight there
+		targetPosition.x = goal.x
+		targetPosition.y = goal.y
+		position = findMovementPosition(map.surface, targetPosition)
+	elseif (nextStepChunk ~= -1) then
+		positionFromDirectionAndFlat(stepDirection, groupPosition, targetPosition)
+		positionFromDirectionAndFlat(nextStepDirection, targetPosition, universe.position2)
+		position = findMovementPosition(map.surface, universe.position2)
+	else
+		positionFromDirectionAndFlat(stepDirection, groupPosition, targetPosition)
+		position = findMovementPosition(map.surface, targetPosition)
+	end
+	if not position then
+		squad.goal = nil
+		return false
+	end
+	targetPosition.x = position.x
+	targetPosition.y = position.y
+	if (chunk ~= -1) and (chunk[BASE_DETECTION_PHEROMONE] < (MAX_BASE_DETECTION_PHEROMONES_IN_CHUNK*0.1))
+		and (chunk[PLAYER_PHEROMONE] < (PLAYER_PHEROMONE_GENERATOR_AMOUNT*0.02)) then
+		applySpeedBuffToGroup(group)
+	end
+	setMoveCommand(universe, group, squad, goal.dash)
+	commandIssued(squad, tick)
+	return true
+end
+
+local function scoreRetreatLocation(map, neighborChunk)
+	return -neighborChunk[BASE_DETECTION_PHEROMONE]
+		- getDeathGenerator(map, neighborChunk)
+		- (neighborChunk[PLAYER_PHEROMONE] * PLAYER_PHEROMONE_MULTIPLER)
+		- (getPlayerBaseGenerator(map, neighborChunk, BASE_PHEROMONE) * 1000)
+end
+
+-- Pulls a beaten squad two chunks back from the fight; after a short pause it regroups (squadDispatch).
+function squadAttack.retreatSquad(map, squad)
+	local group = squad.group
+	if not (group and group.valid) then
+		return false
+	end
+	local universe = map.universe
+	local groupPosition = group.position
+	local x, y = positionToChunkXY(groupPosition)
+	local chunk = getChunkByXY(map, x, y)
+	local exitChunk, exitDirection, nextExitChunk, nextExitDirection = scoreNeighborsForRetreat(chunk,
+		getNeighborChunks(map, x, y), scoreRetreatLocation, map)
+	if exitChunk == -1 then
+		return false
+	end
+	local targetPosition = universe.position
+	local position
+	if (nextExitChunk ~= -1) then
+		positionFromDirectionAndFlat(exitDirection, groupPosition, targetPosition)
+		positionFromDirectionAndFlat(nextExitDirection, targetPosition, universe.position2)
+		position = findMovementPosition(map.surface, universe.position2)
+	else
+		positionFromDirectionAndFlat(exitDirection, groupPosition, targetPosition)
+		position = findMovementPosition(map.surface, targetPosition)
+	end
+	if not position then
+		return false
+	end
+	squad.retreated = (squad.retreated or 0) + 1
+	squad.status = SQUAD_RETREATING
+	squad.regroup = true
+	squad.frenzy = false
+	squad.goal = nil
+	group.set_command({
+		type = defines.command.compound,
+		structure_type = defines.compound_command.return_last,
+		commands = {
+			{type = defines.command.go_to_location, destination = {x = position.x, y = position.y}, radius = 6,
+			 distraction = DEFINES_DISTRACTION_NONE},
+			{type = defines.command.stop, ticks_to_wait = 900 + mRandom(900), distraction = DEFINES_DISTRACTION_BY_ENEMY}
+		}
+	})
+	commandIssued(squad, game.tick)
+	aiBrain.debugPrint(map, tostring(squad.tactic) .. " squad retreats after losing " .. tostring(squad.losses) .. "/"
+		.. tostring(squad.startSize) .. " [gps=" .. math.floor(groupPosition.x) .. "," .. math.floor(groupPosition.y) .. "," .. map.surface.name .. "]")
+	return true
+end
+
+-- another attack squad on the same or a neighbouring chunk
+local function findRegroupPartner(map, squad)
+	local chunk = squad.chunk
+	if (not chunk) or (chunk == -1) then
+		return nil
+	end
+	local function suitable(other)
+		return (other ~= squad) and other.group and other.group.valid and (not other.settlers) and (not other.flight)
+			and (not other.excluded) and (not other.merged) and (other.status ~= SQUAD_RETREATING)
+			and (other.status ~= SQUAD_BUILDING) and (other.map == map)
+	end
+	for _, other in pairs(getSquadsOnChunk(map, chunk)) do
+		if suitable(other) then
+			return other
+		end
+	end
+	local neighbors = getNeighborChunks(map, chunk.x, chunk.y)
+	for i = 1, 8 do
+		local neighbor = neighbors[i]
+		if neighbor ~= -1 then
+			for _, other in pairs(getSquadsOnChunk(map, neighbor)) do
+				if suitable(other) then
+					return other
+				end
+			end
+		end
+	end
+	return nil
 end
 
 local function attackMove(map, squad)
@@ -417,6 +645,20 @@ local function attackMove(map, squad)
     if squad.kamikaze then
         attackScorer = scoreAttackKamikazeLocation
     end
+	local brainOn = aiBrain.active(universe)
+
+	-- doctrine goal first: approach waypoint, target, ambush site or pincer stage
+	if brainOn and (squad.goal or squad.pendingGoal) then
+		if not squad.goal then
+			squad.goal = squad.pendingGoal
+			squad.pendingGoal = nil
+		end
+		processCompression(map, squad, chunk, true)
+		addSquadToChunk(map, chunk, squad)
+		if goalMove(map, squad, group, chunk, groupPosition) then
+			return
+		end
+	end
 		
 	if (chunk ~= -1) and (chunk[PLAYER_PHEROMONE] == 0) and (chunk[BASE_DETECTION_PHEROMONE] == 0) then
 		if not squad.checkTick or ((game.tick + 600) < squad.checkTick) then
@@ -425,7 +667,8 @@ local function attackMove(map, squad)
 		return
 	end
 		
-	if not squad.hasSpiders and squad.kills and (squad.kills>5) then
+	-- bridgehead: a squad that destroyed enough turns part of itself into a nest (heavy script)
+	if not squad.hasSpiders and squad.kills and (squad.kills>5) and aiBrain.heavyScriptsAllowed(universe) then
 	
 		if surface.count_entities_filtered({
 			position={groupPosition.x, groupPosition.y},
@@ -453,7 +696,12 @@ local function attackMove(map, squad)
         nextAttackChunk, nextAttackDirection = scoreNeighborsForAttack(map,
                                                                        chunk,
                                                                        getNeighborChunks(map, x, y),
-                                                                       attackScorer)
+                                                                       attackScorer,
+                                                                       brainOn and squad.noise,
+                                                                       squad.prevAttackChunk)
+	if brainOn then
+		squad.prevAttackChunk = chunk
+	end
 																	   
 	if (attackChunk ~= -1) and (attackChunk[BASE_DETECTION_PHEROMONE] == 0) then
 		if (nextAttackChunk == -1) or (nextAttackChunk[BASE_DETECTION_PHEROMONE] == 0) then
@@ -605,6 +853,9 @@ end
 
 local function disbandSquad(universe, squads, groupId)
 	local squad = squads[groupId]
+	if squad.map and (squad.learn or squad.flight) then
+		aiBrain.onSquadEnd(squad.map, squad, game.tick)	-- what the AI learns from this squad
+	end
 	if not squad.excluded then
 		if squad.settlers then
 			universe.builderCount = universe.builderCount - 1
@@ -622,6 +873,53 @@ local function disbandSquad(universe, squads, groupId)
 		clearComresseData(universe, squad)
 	end	
 	squads[groupId] = nil
+end
+
+-- A squad back from a retreat joins a nearby attack squad, or comes again from another side.
+local function regroupSquad(map, squad)
+	local universe = map.universe
+	local group = squad.group
+	local partner = findRegroupPartner(map, squad)
+	if partner then
+		local members = group.members
+		local partnerGroup = partner.group
+		local moved = 0
+		for i = 1, #members do
+			local member = members[i]
+			if member.valid then
+				partnerGroup.add_member(member)
+				moved = moved + 1
+			end
+		end
+		if partner.startSize then
+			partner.startSize = partner.startSize + moved
+		end
+		squad.merged = true
+		aiBrain.debugPrint(map, tostring(squad.tactic) .. " squad joins a " .. tostring(partner.tactic) .. " squad (" .. moved .. " units)")
+		disbandSquad(universe, universe.groupNumberToSquad, squad.groupNumber)
+		return true
+	end
+	if squad.originX then
+		local originChunk = getChunkByXY(map, math.floor(squad.originX / 32) * 32, math.floor(squad.originY / 32) * 32)
+		if originChunk ~= -1 then
+			local excludeSector
+			if squad.engageX then
+				excludeSector = aiBrain.sectorOf(squad.engageX - squad.originX, squad.engageY - squad.originY)
+			end
+			local goal, sector = aiBrain.pickApproach(map, originChunk, "best", nil, excludeSector)
+			if goal then
+				goal.kind = "approach"
+				goal.reach = 48
+				goal.untilTick = game.tick + 3 * 3600
+				squad.goal = goal
+				squad.goalSector = sector
+				aiBrain.debugPrint(map, tostring(squad.tactic) .. " squad tries another side [gps=" .. math.floor(goal.x) .. "," .. math.floor(goal.y) .. "," .. map.surface.name .. "]")
+			end
+		end
+	end
+	squad.status = SQUAD_RAIDING
+	attackMove(map, squad)
+	return true
 end
 
 function squadAttack.processSquads(universe)
@@ -653,6 +951,13 @@ function squadAttack.processSquads(universe)
 			disbandSquad(universe, squads, groupId)
         elseif (group.state == defines.group_state.finished) then
             squadAttack.squadDispatch(map, squad)
+		elseif squad.flight and squad.strikeUntil and (squad.strikeUntil < game.tick) then
+			-- hit and run: flights do not stay long on a target
+			if aiBrain.flyers then
+				aiBrain.flyers.onStrikeTimeout(map, squad)
+			else
+				squad.strikeUntil = nil
+			end
 		elseif not squad.checkTick then
 			squad.checkTick = game.tick + 18000	
 		elseif squad.checkTick < game.tick then	-- some groups get stuck. stuck + ignoring new commands!
@@ -671,8 +976,17 @@ function squadAttack.squadDispatch(map, squad)
 	end
     local group = squad.group
     if group and group.valid then
-		if (not squad.detected) and (#group.members > 0) then
-			 squad.detected = showAlert(group.surface, group.members[1], "squadDetected-warning-rampant", {"", {"description.rampantFixed--squadDetectedWarning", #group.members}})
+		if not squad.detected then
+			local members = group.members
+			if #members > 0 then
+				squad.detected = showAlert(group.surface, members[1], "squadDetected-warning-rampant", {"", {"description.rampantFixed--squadDetectedWarning", #members}})
+			end
+		end
+		if squad.flight then
+			if aiBrain.flyers then
+				aiBrain.flyers.dispatch(map, squad)
+			end
+			return
 		end
         local status = squad.status
         if (status == SQUAD_RAIDING) then
@@ -681,6 +995,11 @@ function squadAttack.squadDispatch(map, squad)
             settleMove(map, squad)
         elseif (status == SQUAD_RETREATING) then
 			squad.compressed = true		-- some compressed units can join while retreating
+			if squad.regroup and (not squad.settlers) and aiBrain.active(map.universe) then
+				squad.regroup = nil
+				regroupSquad(map, squad)
+				return
+			end
             if squad.settlers then
                 squad.status = SQUAD_SETTLING
                 settleMove(map, squad)

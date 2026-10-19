@@ -1,0 +1,10 @@
+{
+  "mod": "nanobots-refined",
+  "source": "local",
+  "original": {
+    "name": "Nanobots: Early Bots Refined",
+    "authors": ["foxoftheasterisk"],
+    "portal": {"name": "nanobots-refined", "url": "https://mods.factorio.com/mod/nanobots-refined"}
+  },
+  "changeReason": "Поддерживаемый локальный форк Reforged Paranoidal от 4.0.7, по решению пользователя. Нативный фильтр смерти roboport-interface-main применяется после подключения всех модулей stdlib. Удаление частей интерфейса, строительство и наноботы не меняются."
+}

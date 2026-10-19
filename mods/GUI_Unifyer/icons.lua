@@ -18,18 +18,16 @@ local icons = {
         {"screen", "HMProductionPanel"}),
     create_icon_entry("factoryplanner", "factoryplanner_button", "fp_button_toggle_interface", {'guiu.factoryplanner_button'}, nil, nil, 
         {"screen", "factoryplanner_mainframe"}),
-    create_icon_entry("ModuleInserter", "moduleinserter_button", "module_inserter_config_button", {'guiu.moduleinserter_button'}, nil, nil,
-        {"screen", "moduleinserter_mainframe"}),
+    -- Paranoidal: the button is created in control.lua (newbuttonlist); ModuleInserterEx names its own window.
+    create_icon_entry("ModuleInserterEx", "moduleinserter_button", "module_inserter_config_button", {'guiu.moduleinserter_button'}, nil, nil,
+        {"screen", "miex_main_window"}),
     create_icon_entry("Placeables", "placeables_button", "buttonPlaceablesVisible", nil, nil, nil,
         {"screen", "framePlaceablesOuter"}),
     create_icon_entry("BeastFinder", "beastfinder_button", "beastfinder-menu-button", {'guiu.beastfinder_button'}, nil, nil,
         {"screen", "frame_BeastFinder_main"}),
     create_icon_entry("bobclasses", "bobclasses_button", "bob_avatar_toggle_gui", nil, nil, nil,
         {"left", "bob_avatar_gui"}),
-    create_icon_entry("bobinserters", "bobinserters_button", "bob_logistics_inserter_button", nil, nil, nil,
-        {"left", "bob_logistics_inserter_gui"}),
-    create_icon_entry("boblogistics", "bobinserters_button", "bob_logistics_inserter_button", nil, nil, nil,
-        {"left", "bob_logistics_inserter_gui"}),
+    -- Paranoidal: bob_logistics_inserter_button is removed from the panel in control.lua.
     create_icon_entry("CleanMap", "cleanmap_button", "CleanMap", nil, nil, nil, nil),
     create_icon_entry("DeleteEmptyChunks", "cleanmap_button", "DeleteEmptyChunks", nil, nil, nil, nil),
     create_icon_entry("Death_Counter", "deathcounter_button", "DeathCounterMainButton", {'guiu.deathcounter_button'}, nil, nil,
@@ -174,9 +172,20 @@ local icons = {
         {"center", "usage_detector_center"}),
     create_icon_entry("RPG", "rpg_button", "104", {'guiu.rpg_button'}, nil, nil,
         {"screen", "105"}),
+    -- Paranoidal: PMRPGsystem adds btcharxp with mod_gui_button; its own tooltip with the player name is kept.
+    create_icon_entry("PMRPGsystem", "rpg_button", "btcharxp", nil, nil, nil,
+        {"screen", "char-panel"}),
     create_icon_entry("SpawnControl", "spawncontrol_button", "spawn", {'guiu.spawncontrol_button'}, nil, nil, nil),
     create_icon_entry("TimedSpawnControl", "spawncontrol_button", "spawn", {'guiu.spawncontrol_button'}, nil, nil, nil),
     create_icon_entry("TimedSpawnControl", "spawncontrol_random_button", "unstuck", {'guiu.spawncontrol_unstuck'}, nil, nil, nil),
+    -- Paranoidal: нажатие обрабатывает сам Blueprint Sandboxes по имени кнопки; выделена, пока игрок в песочнице.
+    create_icon_entry("blueprint-sandboxes", "blueprintsandboxes_button", "bpsb-toggle-gui-sb-toggle-shortcut", {'guiu.blueprintsandboxes_button'}, nil, nil,
+        {"left", "bpsb-toggle-gui"}),
+    -- Paranoidal: нажатие обрабатывает сам WideChests по имени кнопки (объединитель в руку или из руки).
+    create_icon_entry("WideChests", "widechests_button", "WideChests_merge-chest-button", {'guiu.widechests_button'}, nil, nil, nil),
+    -- Paranoidal: Factorissimo creates its dispatcher button itself and handles the click; highlighted while the window is open.
+    create_icon_entry("factorissimo-2-notnotmelon", "factorissimo2_button", "factorissimo_dispatch_button", nil, nil, nil,
+        {"screen", "factorissimo_dispatch_frame"}),
     create_icon_entry("what-is-missing", "whatsmissing_button", "what_is_missing", {'guiu.whatismissing_button'}, nil, nil,
         {"left", "what_is_missing"}),
     create_icon_entry("some-zoom", "somezoom_out_button", "but_zoom_zout", {'guiu.somezoom_out_button'}, nil, nil, nil),

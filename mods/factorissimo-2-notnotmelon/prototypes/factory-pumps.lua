@@ -7,12 +7,13 @@ local pump_pictures = {
     west = data.raw.pipe.pipe.pictures.ending_left,
 }
 
-local highest_quality_level = 0
-for _, quality in pairs(data.raw.quality) do
-    if quality.level > highest_quality_level then highest_quality_level = quality.level end
-end
-local pumping_speed = data.raw.pump.pump.pumping_speed * 10
-local pumping_speed_with_quality = pumping_speed * (1 + highest_quality_level * 0.3)
+-- Fixed values instead of numbers derived from whatever pump and qualities exist at this point of loading:
+-- they used to depend on load order (the Bob pump at data-updates time and only the vanilla qualities).
+-- These are the values the modpack had: 100 units per tick for a normal factory port, and fluid flow
+-- raised from 100 to 250 units per tick (a legendary port). Higher qualities are capped by max_fluid_flow.
+local fluid_port = require("prototypes.fluid-port")
+local pumping_speed = fluid_port.pumping_speed
+local pumping_speed_with_quality = fluid_port.max_fluid_flow
 
 -- Multiply the max fluid flow to allow factorissimo pumps to transfer at high speed.
 data.raw["utility-constants"]["default"].max_fluid_flow = math.max(data.raw["utility-constants"]["default"].max_fluid_flow or 0, pumping_speed_with_quality)

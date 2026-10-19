@@ -252,6 +252,90 @@ data:extend {
     }
 }
 
+-- Paranoidal: factory building 4 (20x20 outside, 90x90 inside). The picture is the MK3 canvas scaled by 1.25
+-- (same pixel density, same relative offset), so the MK3 picture settings are scaled by 1.25 too; the
+-- vertical shift keeps the front wall on the same line relative to the collision box.
+data:extend {
+    {
+        type = "storage-tank",
+        name = "factory-4",
+        icon = F .. "/graphics/icon/factory-4.png",
+        icon_size = 64,
+        flags = {"player-creation", "placeable-player"},
+        minable = {mining_time = 0.5, result = "factory-4-instantiated", count = 1},
+        max_health = 7000,
+        collision_box = {{-9.8, -9.8}, {9.8, 9.8}},
+        selection_box = {{-9.8, -9.8}, {9.8, 9.8}},
+        pictures = {
+            picture = {
+                layers = {
+                    {
+                        filename = F .. "/graphics/factory/factory-4-shadow.png",
+                        width = 880 * 2,
+                        height = 760 * 2,
+                        scale = 0.5,
+                        shift = {2.5, 0.01171875},
+                        draw_as_shadow = true
+                    },
+                    {
+                        filename = F .. "/graphics/factory/factory-4.png",
+                        width = 880 * 2,
+                        height = 760 * 2,
+                        scale = 0.5,
+                        shift = {2.5, 0.01171875},
+                    }
+                }
+            },
+        },
+        window_bounding_box = {{0, 0}, {0, 0}},
+        fluid_box = {
+            volume = 1,
+            pipe_covers = pipecoverspictures(),
+            pipe_connections = {},
+        },
+        flow_length_in_ticks = 1,
+        circuit_wire_max_distance = 0,
+        map_color = {r = 0.8, g = 0.7, b = 0.55},
+        is_military_target = true,
+        moc_ignore = true,
+    },
+    {
+        type = "item-with-tags",
+        name = "factory-4-instantiated",
+        localised_name = {"item-name.factory-packed", {"entity-name.factory-4"}},
+        icons = {
+            {
+                icon = F .. "/graphics/icon/factory-4.png",
+                icon_size = 64,
+            },
+            {
+                icon = F .. "/graphics/icon/packing-tape.png",
+                icon_size = 64,
+            }
+        },
+        subgroup = "factorissimo2",
+        order = "b-d",
+        weight = 100000000,
+        place_result = "factory-4",
+        stack_size = 1,
+        flags = {"not-stackable"},
+        hidden_in_factoriopedia = true,
+        factoriopedia_alternative = "factory-4"
+    },
+    {
+        type = "item",
+        name = "factory-4",
+        icon = F .. "/graphics/icon/factory-4.png",
+        icon_size = 64,
+        subgroup = "factorissimo2",
+        order = "b-d",
+        weight = 100000000,
+        place_result = "factory-4",
+        stack_size = 1,
+        flags = {"primary-place-result", "not-stackable"}
+    }
+}
+
 if not settings.startup["Factorissimo2-space-architecture"].value then return end
 
 data:extend {

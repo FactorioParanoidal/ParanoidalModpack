@@ -1,0 +1,10 @@
+{
+  "mod": "ZCS-Trash-Landfill-Continued-Update",
+  "source": "local",
+  "original": {
+    "name": "ZCS Trash Landfill Continued Update",
+    "authors": ["zackman0010", "Kadaban", "prokaryotic24", "DedlySpyder", "adegaxta"],
+    "portal": {"name": "ZCS-Trash-Landfill-Continued-Update", "url": "https://mods.factorio.com/mod/ZCS-Trash-Landfill-Continued-Update"}
+  },
+  "changeReason": "Поддерживаемый локальный форк Reforged Paranoidal от 1.2.7, по решению пользователя. Исправлены цикл уничтожения (пропуск пустых ячеек), учёт загрязнения в статистике, отслеживание удаления свалок и фильтры событий; см. changelog.txt."
+}

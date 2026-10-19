@@ -124,7 +124,7 @@ roboport.recharging_light.size = roboport.recharging_light.size / 2
 roboport.charging_station_count_affected_by_quality = true
 roboport.logistics_connection_distance = 64
 roboport.logistics_radius = 2
-roboport.construction_radius = 64
+roboport.construction_radius = 96 -- Paranoidal: reaches the far wall of factory building 4 (90x90) from the gate
 roboport.robot_slots_count = 0
 roboport.material_slots_count = 1
 roboport.icon = "__factorissimo-2-notnotmelon__/graphics/icon/construction-chest.png"
@@ -156,7 +156,7 @@ storage_chest.flags = {"player-creation", "placeable-player", "no-automated-item
 storage_chest.animation.layers[1].filename = "__factorissimo-2-notnotmelon__/graphics/entity/construction-chest.png"
 entities_to_extend[#entities_to_extend + 1] = storage_chest
 
-for _, factory_name in pairs {"factory-1", "factory-2", "factory-3"} do
+for _, factory_name in pairs {"factory-1", "factory-2", "factory-3", "factory-4"} do
     -- all materials are delivered via the construction network. there is no need for this to be a requester.
     local requester_chest = table.deepcopy(data.raw.container["steel-chest"])
     requester_chest.name = "factory-requester-chest-" .. factory_name

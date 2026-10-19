@@ -16,8 +16,8 @@ commands.add_command("milestones-debug-print-loaded-milestones",
 
 function debug_set_milestones_time(command_data)
   if not command_data.parameter then return end
-  local force = game.get_player(command_data.player_index).force
-  local storage_force = storage.forces[force.name]
+  local storage_force, force = get_display_storage_force(game.get_player(command_data.player_index).force)
+  if not storage_force then return end
   local parameters = {}
   for word in string.gmatch(command_data.parameter, "([^,]+)") do -- Split comma-seperated string
     table.insert(parameters, word)
@@ -44,8 +44,8 @@ commands.add_command("milestones-set-milestone-time",
 
 function debug_reset_milestones(command_data)
   if not command_data.parameter then return end
-  local force = game.get_player(command_data.player_index).force
-  local storage_force = storage.forces[force.name]
+  local storage_force, force = get_display_storage_force(game.get_player(command_data.player_index).force)
+  if not storage_force then return end
   local name = command_data.parameter
   local i = 1
   while i <= #storage_force.complete_milestones do

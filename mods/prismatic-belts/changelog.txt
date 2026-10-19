@@ -1,8 +1,12 @@
 ---------------------------------------------------------------------------------------------------
 Version: 3.0.4
 Date: 2026-06-26
+  Bugfixes:
+    - Restored the Factorio 2.0 belt entity sprites; a manual sync had replaced them with half-size 1.1 sprites that do not fit the 128x128 frame layout.
   Features:
     - Added support for Omnienergy
+  Changes:
+    - Removed 6 unused hr-* images in graphics/entity/reskins: not referenced by the modset under any visible startup setting (12 data dumps with alternative setting values) and not named in any Lua file (Paranoidal local cleanup)
 ---------------------------------------------------------------------------------------------------
 Version: 3.0.3
 Date: 2026-06-01

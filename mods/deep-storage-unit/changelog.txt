@@ -1,4 +1,36 @@
 ---------------------------------------------------------------------------------------------------
+Version: 9.7.0
+Date: 2026-10-14
+  Features:
+    - Version number starts with 9 (Paranoidal fork): the Mod Portal never offers an "update" over local changes.
+    - Quality of the unit lowers its power usage along a parabola, down to 20% for the highest quality, instead of enlarging the chest
+    - Reset button for an empty unit
+    - Alt-mode icon of the stored item and its quality
+    - Exact amount in the tooltip, quality icon of the stored item in the GUI
+    - Packed units keep the health of the mined unit
+  Changes:
+    - The chest always has 300 slots and keeps 150 stacks for inserters, whatever the unit quality
+    - Items carrying data (armor, vehicles, blueprints, packed items, Factorissimo buildings) are refused like spoilable items
+    - Units locked to such an item in older saves only give it out and are released when empty
+    - The GUI closes when the player walks out of reach; remote view is read-only
+    - Everything stored is lost when the unit is destroyed (now stated in the description)
+  Bugfixes:
+    - Fixed equipment, inventories and tags being wiped from items moved into the counter
+    - Fixed units being destroyed when their item was renamed or removed in a mod update; renamed items and qualities are followed, also for packed units
+    - Fixed a crash after an update when an unpowered unit held a removed item
+    - Fixed a leaked script inventory every time the GUI was opened
+    - Fixed lost hidden parts deleting the whole unit; they are recreated
+    - Fixed cloning losing the item quality, creating hidden parts for the wrong force and duplicating them with clone_area
+    - Fixed mining an output-only unit clearing the chest contents from the mining buffer
+    - Fixed the power usage setting applying only after the next content change
+    - Fixed two players locking the same unit at once
+    - Fixed a stale GUI frame breaking the next opening after loading a save
+    - Fixed the defect qualities being shown as normal in the GUI
+    - Fixed the high resolution sprite being ignored in 2.0
+  Optimizations:
+    - Build, mine and clone events are filtered by name
+    - Units removed without an event (chunk or surface deletion) are cleaned up silently
+---------------------------------------------------------------------------------------------------
 Version: 1.6.8
 Date: 2024-12-25
   Bugfixes:

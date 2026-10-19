@@ -31,6 +31,12 @@ local constants = {
   -- spawns) untils ruins start spawning
   MIN_DISTANCE_FROM_SPAWN_KEY = "ruins-min-distance-from-spawn",
 
+  -- Paranoidal: key for avoiding repeated ruins until every ruin of a size was spawned once
+  AVOID_REPEATS_KEY = "ruins-avoid-repeats",
+
+  -- Paranoidal: key for ignoring all distance limits (size multipliers and per-ruin min_distance)
+  IGNORE_DISTANCE_KEY = "ruins-ignore-distance",
+
   -- Key part for allowed planets (to spawn ruins)
   ALLOWED_PLANET_KEY_PART = "ruins-allowed-planet-",
 

@@ -3,6 +3,8 @@ Version: 2.0.3
 Date: 15. 01. 2026
   Changes:
     - Updated Korean locale #506
+    - Paranoidal: position grid supports inserters larger than 1x1 (nco-InserterCranes 2x2 and 6x2)
+    - Paranoidal: added remote function unblacklist_inserters
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.2
 Date: 02. 01. 2026

@@ -1,0 +1,12 @@
+{
+  "name": "InserterFuelLeech",
+  "title": "Inserter Fuel Leech",
+  "author": "Klonan (BurnerLeech), Allan Wegan alias Oktokolo",
+  "contact": "allanwegan@allanwegan.de",
+  "homepage": "https://github.com/AllanWegan/InserterFuelLeech",
+  "description": "In addition to normal behaviour, all Inserters take fuel from entities containing a burner when they or their drop target have no fuel left. They also take fuel from their drop target to fuel themselves.",
+  "factorio_version": "2.0",
+  "dependencies": ["base >= 2.0"],
+  "license": "GNU GPL-3.0",
+  "version": "1.0.4"
+}

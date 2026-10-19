@@ -64,6 +64,7 @@ script.on_event(defines.events.on_surface_created, function(event)
             table.insert(storage_force.kill_stats, force.get_kill_count_statistics(event.surface_index))
         end
     end
+    reset_milestones_tracker()
 end)
 
 local function delete_invalid_flow_statistics(flow_statistics_table)
@@ -83,6 +84,7 @@ script.on_event(defines.events.on_surface_deleted, function(event)
         delete_invalid_flow_statistics(storage_force.fluid_stats)
         delete_invalid_flow_statistics(storage_force.kill_stats)
     end
+    reset_milestones_tracker()
 end)
 
 script.on_load(function()
@@ -137,12 +139,17 @@ script.on_configuration_changed(function(event)
     -- Run migrations for version changes
     migration.on_config_changed(event, migrations)
 
+    -- Paranoidal: drop Blueprint Sandboxes forces tracked by older versions (idempotent).
+    remove_ignored_forces()
+
     if next(event.mod_changes) ~= nil then
         fetch_remote_presets()
         -- on_load is called before on_configuration_changed so we have to redo add_remote_presets_to_preset_tables here
         add_remote_presets_to_preset_tables()
-        reload_presets()
+        local added_presets = reload_presets()
+        upgrade_unmodified_preset(added_presets)
     end
     remove_invalid_milestones_all_forces()
     remove_invalid_aliases()
+    reset_milestones_tracker()
 end)

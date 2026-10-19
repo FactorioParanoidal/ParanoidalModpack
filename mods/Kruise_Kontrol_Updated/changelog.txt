@@ -4,6 +4,13 @@ Date: 2026-07-23
   Changes:
     - Added the ability to change cancel command keybind.
     - Added a setting to apply a short brake input when canceling autopathing while in a vehicle 
+  Optimizations:
+    - Batch jobs (tree/rock/resource mining, building, repair, fuel) search nearby first (8, 16, 32 tiles) and widen up to the full radius only when nothing new is found.
+    - Entities without a unit number are no longer registered with register_on_object_destroyed; the tried-entities cache uses name and position instead.
+    - Batch job target selection rebuilds a compact list instead of clearing holes in a large table.
+    - Mining caches the prototype minability check and writes the entity selection view setting only when it changes.
+  Bugfixes:
+    - Fixed on_object_destroyed using the removed unit_number field, so destroyed characters were never dropped from storage.
 ---------------------------------------------------------------------------------------------------
 Version: 0.2.6
 Date: 2024-11-10

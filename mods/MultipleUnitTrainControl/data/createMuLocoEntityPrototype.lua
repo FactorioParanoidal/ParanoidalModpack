@@ -7,7 +7,7 @@
 --]]
 
 
-function createMuLocoEntityPrototype(name, newName, power_multiplier)
+function createMuLocoEntityPrototype(name, newName, power_multiplier, item_name)
   -- Copy source locomotive prototype
   local oldLoco = data.raw["locomotive"][name]
   local loco = table.deepcopy(oldLoco)
@@ -20,7 +20,7 @@ function createMuLocoEntityPrototype(name, newName, power_multiplier)
   loco.factoriopedia_alternative = name
   
   -- Make it so bots can revive ghosts with the normal item and pipette works like magic
-  loco.placeable_by = loco.placeable_by or {item=name, count=1}
+  loco.placeable_by = loco.placeable_by or {item=item_name or name, count=1}
   
   -- Change the power level (string contains suffix "kW"). This also increases fuel consumption.
   loco.max_power = multiply_energy_value(loco.max_power, power_multiplier)

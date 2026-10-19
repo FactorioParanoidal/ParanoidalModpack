@@ -1,9 +1,6 @@
 require("paralib")
 local function replaceMachine()
-	paralib.bobmods.lib.recipe.add_ingredient(
-		"warehouse-basic",
-		{ type = "item", name = "basic-structure-components", amount = 5 }
-	)
+	-- Beta 8: поздний recipes/warehousing.lua оставлял warehouse-basic без этих компонентов.
 
 	paralib.bobmods.lib.recipe.add_ingredient(
 		"factory-2",
@@ -15,6 +12,12 @@ local function replaceMachine()
 		{ type = "item", name = "intermediate-structure-components", amount = 50 }
 	)
 	paralib.bobmods.lib.recipe.add_ingredient("factory-3", { type = "item", name = "factory-2", amount = 2 })
+	-- Factorissimo 4 (не было в Beta 8): та же лестница — продвинутые компоненты и два строения 3.
+	paralib.bobmods.lib.recipe.add_ingredient(
+		"factory-4",
+		{ type = "item", name = "advanced-structure-components", amount = 50 }
+	)
+	paralib.bobmods.lib.recipe.add_ingredient("factory-4", { type = "item", name = "factory-3", amount = 2 })
 
 	paralib.bobmods.lib.recipe.add_ingredient(
 		"angels-salination-plant",
@@ -306,7 +309,7 @@ local function replaceAngelRefi()
 	)
 	paralib.bobmods.lib.recipe.add_ingredient(
 		"angels-ore-crusher-3",
-		{ type = "item", name = "advanced-structure-components", amount = 2 }
+		{ type = "item", name = "intermediate-structure-components", amount = 2 }
 	)
 	paralib.bobmods.lib.recipe.add_ingredient(
 		"angels-ore-crusher-3",
@@ -315,7 +318,7 @@ local function replaceAngelRefi()
 
 	paralib.bobmods.lib.recipe.add_ingredient(
 		"angels-ore-sorting-facility-2",
-		{ type = "item", name = "basic-structure-components", amount = 2 }
+		{ type = "item", name = "intermediate-structure-components", amount = 2 }
 	)
 	paralib.bobmods.lib.recipe.add_ingredient(
 		"angels-ore-sorting-facility-3",

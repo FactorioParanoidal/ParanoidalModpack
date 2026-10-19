@@ -1,0 +1,6 @@
+{
+  "mod": "ModuleInserterEx",
+  "source": "portal",
+  "upstreamVersion": "7.4.1",
+  "changeReason": "Локальный portal-патч Paranoidal на upstream 7.4.1, версия не менялась. control.lua: remote-функция toggle_gui(player_index) открывает и закрывает окно настройки, как ярлык; её вызывает кнопка GUI Unifyer. При обновлении перенести функцию или заменить штатным API."
+}

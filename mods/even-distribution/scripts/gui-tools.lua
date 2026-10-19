@@ -91,6 +91,43 @@ function gui.registerTemplates(obj) -- called when lua script is loaded initiall
 	end
 end
 
+local function getGuiEvents() -- Paranoidal: tolerate any on_init order between scripts
+	local guiEvents = storage.guiEvents
+	if not guiEvents then
+		guiEvents = {}
+		storage.guiEvents = guiEvents
+	end
+	for __,name in pairs(events) do
+		guiEvents[name] = guiEvents[name] or {}
+	end
+	return guiEvents
+end
+
+-- Paranoidal: drop handler entries of an element and all its children. Without this every
+-- (re)built settings window left its element indices in storage forever.
+local function forgetElement(element, guiEvents)
+	if not (element and element.valid) then return end
+	guiEvents = guiEvents or storage.guiEvents
+	if not guiEvents then return end
+	local playerIndex, elementIndex = element.player_index, element.index
+	for __,list in pairs(guiEvents) do
+		local handlers = list[playerIndex]
+		if handlers then handlers[elementIndex] = nil end
+	end
+	for __,child in pairs(element.children) do
+		forgetElement(child, guiEvents)
+	end
+end
+gui.forgetElement = forgetElement
+
+function gui.forgetPlayer(playerIndex) -- drop all handler entries of a player
+	local guiEvents = storage.guiEvents
+	if not guiEvents then return end
+	for __,list in pairs(guiEvents) do
+		list[playerIndex] = nil
+	end
+end
+
 local function getParameters(template, name)
 	local parameters = { name = name }
 	for param,value in pairs(template) do
@@ -150,7 +187,8 @@ function gui.create(player, template, data, parent, ID) -- recursively builds a 
 	end
 	
 	local index = created.player_index
-	for event,list in pairs(storage.guiEvents) do -- register events
+	local guiEvents = getGuiEvents()
+	for event,list in pairs(guiEvents) do -- register events
 		if template[event] then
 			list[index] = list[index] or {}
 			list[index][created.index] = ID..";"..elemName
@@ -158,7 +196,7 @@ function gui.create(player, template, data, parent, ID) -- recursively builds a 
 	end
 	
 	if template.onChanged and onChangedEvents[template.type] then -- register unified onChanged event
-		local list = storage.guiEvents[onChangedEvents[template.type]]
+		local list = guiEvents[onChangedEvents[template.type]]
 		list[index] = list[index] or {}
 		list[index][created.index] = ID..";"..elemName
 	end
@@ -203,16 +241,18 @@ end
 
 function gui.destroy(player, template, parent) -- destroy all gui elements matching the given template
 	for _,child in ipairs(gui.getAll(player, template, parent)) do
+		forgetElement(child)
 		util.destroyIfValid(child)
 	end
 end
 
 local function handleGuiEvent(event, name)
-	if event.element.get_mod() == script.mod_name then
-		local handlers = storage.guiEvents[name][event.player_index]
+	local element = event.element
+	if element and element.valid and element.get_mod() == script.mod_name and storage.guiEvents then
+		local handlers = storage.guiEvents[name] and storage.guiEvents[name][event.player_index]
 		if handlers then
-			local handler = handlers[event.element.index]
-			if handler and eventHandlers[handler] then eventHandlers[handler](event.element, event) end
+			local handler = handlers[element.index]
+			if handler and eventHandlers[handler] then eventHandlers[handler](element, event) end
 		end
 	end
 end

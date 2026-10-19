@@ -1,0 +1,11 @@
+---------------------------------------------------------------------------------------------------
+Version: 1.1.5
+Date: 2026. 10. 15
+  Changes:
+    - The "ignore infinite technologies" setting ignores only technologies with a cost formula and more than 10 levels (infinite or not); count_formula technologies with up to 10 levels (e.g. research-speed-7, worker-robots-battery-1) now raise evolution and show their value.
+    - The tooltip is built by evolution-label.lua; mods that change technology costs after this mod's data-final-fixes call relabel_all again so the tooltip matches the final cost.
+    - The tooltip "ignore infinite" check now reads unit.count_formula (it never matched before, so ignored technologies showed "some value").
+    - Values are rounded to 3 significant digits; technologies whose level costs differ show a per-level range; research_trigger technologies show the constant part.
+    - The tooltip says the percent applies to the remaining evolution up to 100%.
+    - A formula technology finished without a recorded start uses its current unit count instead of 0.
+    - Paranoidal: the ten "Quality control" technologies of ic-more-qualities (ic-defect-control-1...10) together add the constant part of one technology (0.015% each instead of 0.15%); the science pack part is unchanged. The whole chain raises evolution by about 0.34% instead of 1.68%. Set by name prefix in parameters.lua (constant_scale); the tooltip shows the same value. Evolution already gained in a save is not changed.

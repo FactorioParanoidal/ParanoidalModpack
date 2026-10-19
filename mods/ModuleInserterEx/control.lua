@@ -503,6 +503,13 @@ end)
 
 remote.add_interface("ModuleInserterEx", {
 
+    --- Opens or closes the configuration window, as the shortcut does (used by GUI Unifyer).
+    --- @param player_index int
+    toggle_gui = function(player_index)
+        if not (game.get_player(player_index) and storage._pdata[player_index]) then return end
+        mi_gui.toggle(make_event_info({ player_index = player_index }))
+    end,
+
     --- @param player int|LuaPlayer player index or LuaPlayer to source the config from
     --- @param entity string|LuaEntity Entity name or LuaEntity to get the config for
     --- @return (false|ItemIDAndQualityIDPair)[]? modules nil if no config for the given entity, or an array the same length as modules slots in the config,

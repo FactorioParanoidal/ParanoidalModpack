@@ -142,6 +142,46 @@ local function cursor_matches_ghost_family(stack, selected)
 	return false
 end
 
+-- Paranoidal: "ignore quality" may only spend an item of the same or better quality (quality chain
+-- order: defects < normal < positive tiers; prototype level does not separate defects from normal).
+local quality_ranks
+local function quality_rank(quality)
+	local name = type(quality) == "table" and quality.name or quality or "normal"
+	if not quality_ranks then
+		quality_ranks = {}
+		local is_next = {}
+		for _, proto in pairs(prototypes.quality) do
+			if proto.next then is_next[proto.next.name] = true end
+		end
+		for root_name, proto in pairs(prototypes.quality) do
+			if not is_next[root_name] then
+				local index, current, seen = 0, proto, {}
+				while current and not seen[current.name] do
+					seen[current.name] = true
+					quality_ranks[current.name] = math.max(quality_ranks[current.name] or 0, index)
+					index = index + 1
+					current = current.next
+				end
+			end
+		end
+	end
+	return quality_ranks[name] or 0
+end
+
+local function quality_at_least(quality, minimum)
+	return quality_rank(quality) >= quality_rank(minimum)
+end
+
+-- Acceptable qualities for a ghost of `minimum` quality, worst first.
+local function qualities_at_least(minimum)
+	local list = {}
+	for name in pairs(prototypes.quality) do
+		if quality_at_least(name, minimum) then list[#list + 1] = name end
+	end
+	table.sort(list, function(a, b) return quality_rank(a) < quality_rank(b) end)
+	return list
+end
+
 -- revives the selected ghost by consuming its required item from inventory
 local function revive_from_inventory_item(player, selected, item_to_place, ignore_quality)
 	local pinv = player.get_main_inventory()
@@ -154,10 +194,11 @@ local function revive_from_inventory_item(player, selected, item_to_place, ignor
 	if not revived_entity then return false end
 
 	if ignore_quality then
-		pinv.remove{
-			name = item_to_place.name,
-			count = cost,
-		}
+		local left = cost
+		for _, name in ipairs(qualities_at_least(quality)) do
+			if left <= 0 then break end
+			left = left - pinv.remove{name = item_to_place.name, count = left, quality = name}
+		end
 	else
 		pinv.remove{
 			name = item_to_place.name,
@@ -191,7 +232,10 @@ local function get_inventory_item_to_place_ghost(player, selected, ignore_qualit
 
 		local available
 		if ignore_quality then
-			available = pinv.get_item_count(item.name)
+			available = 0
+			for _, name in ipairs(qualities_at_least(quality)) do
+				available = available + pinv.get_item_count{name = item.name, quality = name}
+			end
 		else
 			available = pinv.get_item_count{
 				name = item.name,
@@ -207,9 +251,9 @@ local function get_inventory_item_to_place_ghost(player, selected, ignore_qualit
 	return nil
 end
 
--- returns true if quality does not matter, or if both qualities match
+-- returns true if both qualities match, or (ignoring quality) the item is not worse than the ghost
 local function quality_matches(stack, selected, ignore_quality)
-	return ignore_quality or stack.quality == selected.quality
+	return stack.quality == selected.quality or (ignore_quality and quality_at_least(stack.quality, selected.quality))
 end
 
 -- returns true when item in cursor can directly place the ghost entity
@@ -401,7 +445,7 @@ local function picker_revive_selected_ghosts(event)
 		if selected.to_be_upgraded() and revive_ghost_upgrade and pdata.next_revive_tick ~= event.tick then
 			local target_prototype, target_quality = selected.get_upgrade_target()
 			if target_prototype and cursor_can_upgrade_to_target(stack, target_prototype) then
-				if ignore_quality or stack.quality.name == target_quality.name then
+				if stack.quality.name == target_quality.name or (ignore_quality and quality_at_least(stack.quality, target_quality)) then
 					if upgrade_from_cursor_or_placeable_by(player, stack, selected, target_prototype, target_quality) then
 						goto continue
 					end
@@ -412,7 +456,7 @@ local function picker_revive_selected_ghosts(event)
 		if selected.type == 'tile-ghost' and revive_ghost_tile then
 			local tile = stack.prototype.place_as_tile_result
 			if tile and tile.result == prototypes.tile[selected.ghost_name] and pdata.next_revive_tick ~= event.tick then
-				if ignore_quality or stack.quality == selected.quality then
+				if quality_matches(stack, selected, ignore_quality) then
 					player.build_from_cursor {position = selected.position, direction = selected.direction, terrain_building_size = 1}
 					goto continue
 				end

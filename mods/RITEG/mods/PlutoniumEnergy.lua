@@ -48,7 +48,6 @@ data:extend({
     icon_size = 32,
     max_health = power,
     minable = {
-      hardness = 0.2,
       mining_time = 5,
       results = { { type = "item", name = used_up_RTG, amount = 10 }, { type = "item", name = "depleted-MOX-fuel-cell", amount = 10 } }
     },
@@ -64,10 +63,7 @@ data:extend({
     collision_box = { { -size / 2 + 0.23, -size / 2 + 0.23 }, { size / 2 - 0.23, size / 2 - 0.23 } },
     selection_box = { { -size / 2, -size / 2 }, { size / 2, size / 2 } },
     type = "electric-energy-interface",
-    vehicle_impact_sound = {
-      filename = "__base__/sound/car-metal-impact.ogg",
-      volume = 0.65
-    }
+    impact_category = "metal-large" -- 2.0 replaced vehicle_impact_sound
   },
 
   -- recipes --

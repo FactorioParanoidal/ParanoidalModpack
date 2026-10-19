@@ -42,7 +42,7 @@ data:extend({
     name = Settings.MinConsideredPollution,
     setting_type = "runtime-global",
     order = "d",
-    default_value = 2,
+    default_value = 60,
     minimum_value = 1,
     maximum_value = 1000,
   },
@@ -51,7 +51,7 @@ data:extend({
     name = Settings.MaxConsideredPollution,
     setting_type = "runtime-global",
     order = "e",
-    default_value = 900,
+    default_value = 1000,
     minimum_value = 20,
   },
   {

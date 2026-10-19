@@ -111,16 +111,15 @@ Chest.adjust = function(conn, positive)
 end
 
 local function get_contents_by_quality(inventory)
-    local contents = inventory.get_contents()
     local count_by_quality = {}
-    for _, item_data in pairs(contents) do
+    for _, item_data in pairs(inventory.get_contents()) do
         local item = item_data.name
-        local count = item_data.count
-        local quality = item_data.quality
-
-        count_by_quality = count_by_quality or {}
-        count_by_quality[item] = count_by_quality[item] or {}
-        count_by_quality[item][quality] = count
+        local by_quality = count_by_quality[item]
+        if not by_quality then
+            by_quality = {}
+            count_by_quality[item] = by_quality
+        end
+        by_quality[item_data.quality] = item_data.count
     end
     return count_by_quality
 end
@@ -170,17 +169,19 @@ local function balance_items(item, quality, count, input_inv, output_inv)
             count = count - amount_moved
         end
     end
-    output_inv.sort_and_merge()
 end
 
 local floor = math.floor
 local function balance_chests(outside_inv, inside_inv)
-    local outside_contents = get_contents_by_quality(outside_inv)
-    local inside_contents = get_contents_by_quality(inside_inv)
+    local outside_empty, inside_empty = outside_inv.is_empty(), inside_inv.is_empty()
+    if outside_empty and inside_empty then return end
+    local outside_contents = outside_empty and {} or get_contents_by_quality(outside_inv)
+    local inside_contents = inside_empty and {} or get_contents_by_quality(inside_inv)
 
     for item, by_quality in pairs(outside_contents) do
+        local inside_by_quality = inside_contents[item]
         for quality, count in pairs(by_quality) do
-            local count2 = (inside_contents[item] and inside_contents[item][quality]) or 0
+            local count2 = (inside_by_quality and inside_by_quality[quality]) or 0
             local diff = count - count2
             if diff > 1 then
                 balance_items(item, quality, floor(diff / 2), outside_inv, inside_inv)
@@ -190,8 +191,9 @@ local function balance_chests(outside_inv, inside_inv)
         end
     end
     for item, by_quality in pairs(inside_contents) do
+        local outside_by_quality = outside_contents[item]
         for quality, count in pairs(by_quality) do
-            local count2 = (outside_contents[item] and outside_contents[item][quality]) or 0
+            local count2 = (outside_by_quality and outside_by_quality[quality]) or 0
             if count2 == 0 then
                 balance_items(item, quality, floor(count / 2), inside_inv, outside_inv)
             end
@@ -199,32 +201,18 @@ local function balance_chests(outside_inv, inside_inv)
     end
 end
 
-local function move_items_inwards(outside_inv, inside_inv)
-    if inside_inv.is_full() then return end
-    for i = 1, #outside_inv do
-        local stack = outside_inv[i]
+local function move_items(from_inv, to_inv)
+    if from_inv.is_empty() or to_inv.is_full() then return end
+    for i = 1, #from_inv do
+        local stack = from_inv[i]
         if stack.valid_for_read then
-            local amount_moved = inside_inv.insert(stack)
+            local amount_moved = to_inv.insert(stack)
             if amount_moved > 0 then
                 stack.count = stack.count - amount_moved
             end
         end
     end
 end
-
-local function move_items_outwards(outside_inv, inside_inv)
-    if outside_inv.is_full() then return end
-    for i = 1, #inside_inv do
-        local stack = inside_inv[i]
-        if stack.valid_for_read then
-            local amount_moved = outside_inv.insert(stack)
-            if amount_moved > 0 then
-                stack.count = stack.count - amount_moved
-            end
-        end
-    end
-end
-
 
 Chest.tick = function(conn)
     local outside = conn.outside
@@ -236,9 +224,9 @@ Chest.tick = function(conn)
         if mode == 0 then
             balance_chests(outside_inv, inside_inv)
         elseif mode == 1 then
-            move_items_inwards(outside_inv, inside_inv)
+            move_items(outside_inv, inside_inv)
         else
-            move_items_outwards(outside_inv, inside_inv)
+            move_items(inside_inv, outside_inv)
         end
         return conn._settings.delay or DEFAULT_DELAY
     else

@@ -43,6 +43,9 @@ MergingChests.merge_selection_tool_name = MergingChests.prefix_with_modname('mer
 
 MergingChests.merge_shortcut_name = MergingChests.prefix_with_modname('merge-chest-selector')
 
+-- Paranoidal: кнопка на верхней панели, создаётся GUI_Unifyer под этим именем.
+MergingChests.top_button_name = MergingChests.prefix_with_modname('merge-chest-button')
+
 MergingChests.setting_names = {
 	mergeable_chest = MergingChests.prefix_with_modname('mergeable-chest'),
 	max_width = MergingChests.prefix_with_modname('max-chest-width'),
@@ -284,10 +287,19 @@ end
 --- @param tiles integer
 --- @param chest_name string | nil
 --- @return integer
+-- Paranoidal: после 16 клеток каждая следующая даёт 5/12 обычного прироста, чтобы крупные сундуки
+-- различались по вместимости, а не упирались в общий лимит (стальной 6x6 при 0.3 — 350).
+local paranoidal_knee_tiles = 16
+local paranoidal_tail_rate = 5 / 12
+
 function MergingChests.get_inventory_size(default_inventory_size, tiles, chest_name)
     local mod_settings = MergingChests.get_mod_settings(chest_name)
+	local effective_tiles = tiles
+	if tiles > paranoidal_knee_tiles then
+		effective_tiles = paranoidal_knee_tiles + (tiles - paranoidal_knee_tiles) * paranoidal_tail_rate
+	end
 	return util.clamp(
-		math.floor(default_inventory_size * tiles * mod_settings.inventory_size_multiplier),
+		math.floor(default_inventory_size * effective_tiles * mod_settings.inventory_size_multiplier + 1e-9),
 		1,
 		math.min(mod_settings.inventory_size_limit, 65536)
 	)

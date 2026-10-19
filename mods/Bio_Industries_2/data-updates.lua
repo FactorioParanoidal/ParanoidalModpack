@@ -81,7 +81,7 @@ for _, tile in ipairs { "grass-1", "grass-2", "grass-3", "grass-4" } do
     BI_Functions.lib.remove_from_blueprint(tile)
 end
 
-if mods["alien-biomes"] then
+if mods["Alien-biomes-Reforged"] then
     BioInd.writeDebug("Removing AB tiles from blueprints")
     local patterns = {
         "frozen%-snow%-%d",
@@ -356,8 +356,9 @@ if mods["angelspetrochem"] then
     data.raw.item["angels-pellet-coke"].fuel_top_speed_multiplier = 1.2
 
     data.raw.recipe["angels-pellet-coke"].category = "biofarm-mod-smelting"
-    thxbob.lib.tech.remove_recipe_unlock("angels-coal-processing-2", "pellet-coke")
-    thxbob.lib.tech.add_recipe_unlock("angels-coal-cracking", "pellet-coke")
+    -- Angels 2.0: the recipe is angels-pellet-coke and is unlocked by angels-coal-processing-3.
+    thxbob.lib.tech.remove_recipe_unlock("angels-coal-processing-3", "angels-pellet-coke")
+    thxbob.lib.tech.add_recipe_unlock("angels-coal-cracking", "angels-pellet-coke")
 end
 
 
@@ -409,7 +410,8 @@ if data.raw.item["ash"] and mods["pycoalprocessing"] then
 end
 
 ----- If Bob's bobrevamp, then ----
-if mods["bobrevamp"] then
+-- Bob 2.0 has no "solid-fuel" technology: keep the Bio Industries unlock then.
+if mods["bobrevamp"] and data.raw.technology["solid-fuel"] then
     thxbob.lib.tech.remove_recipe_unlock("bi-tech-coal-processing-1", "bi-solid-fuel")
     thxbob.lib.tech.add_recipe_unlock("solid-fuel", "bi-solid-fuel")
 end

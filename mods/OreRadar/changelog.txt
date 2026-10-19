@@ -1,0 +1,29 @@
+---------------------------------------------------------------------------------------------------
+Version: 2.0.1
+Date: 2026-10-14
+  Features:
+    - Every scan reveals either an ore chunk or an unusual signal: an undiscovered ruin of the
+      Paranoidal ruin journal marked with "?" on the map and announced in chat.
+    - Clicking the radar opens a window that selects the mode of each radar: "Resources" (default) reveals
+      only ore chunks, "Unusual signals" marks ruins and reveals ore when no ruin is left. The mode is
+      kept by copy-paste, cloning and blueprints.
+  Changes:
+    - A scan tries up to eight random ore chunks and prefers chunks the force has not charted yet.
+    - The ore index is rebuilt only when Ore Radar itself changes, not on every configuration change.
+    - The item is sorted after the standard radars.
+  Bugfixes:
+    - A scan is no longer wasted when the randomly chosen ore chunk is depleted.
+    - Declares the optional dependency on Bob's Electronics used by the recipe.
+---------------------------------------------------------------------------------------------------
+Version: 2.0.0
+Date: 2026-10-10
+  Features:
+    - Ports the geological radar from Paranoidal 1.1 to Factorio 2.0, retaining its graphics, recipe and research.
+  Changes:
+    - Indexes existing and newly generated chunks in a bounded background queue.
+    - Shares a budget of eight work items and at most four resource charts per tick across all radars.
+    - Disables the tick handler while idle and reduces nearby map refresh to the vanilla cadence.
+  Bugfixes:
+    - Removes depleted ore chunks from the correct surface index in constant time.
+    - Handles surface renames, clearing, deletion and save/load.
+    - Preserves completed scans while indexes are rebuilt and across configuration changes.

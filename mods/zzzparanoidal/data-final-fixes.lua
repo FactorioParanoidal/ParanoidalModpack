@@ -1,6 +1,7 @@
 require("tweaks.entity.roboport")
 require("tweaks.entity.add-liquid-to-mine-ores")
 require("tweaks.entity.construction-robots")
+require("tweaks.entity.unminable-robots") -- роботов нельзя снять рукой (Beta 8 UnminableBots)
 require("tweaks.entity.alien-loot")
 require("tweaks.entity.increase-stack-size")
 require("tweaks.entity.warfare")
@@ -24,11 +25,14 @@ require("tweaks.entity.fluid-void")
 require("tweaks.entity.gas-void")
 require("tweaks.entity.wires")
 require("tweaks.entity.nuke-cliffs")
+require("tweaks.entity.tree-chopping-speed") -- рубка деревьев x3 быстрее
+require("tweaks.entity.rocket-silo-construction-beta8") -- выбросы первой стадии шахты как в Beta 8
 
 require("tweaks.item.personal-roboport")
 require("tweaks.item.roboport")
 require("tweaks.item.fuel")
 require("tweaks.item.grouping")
+require("tweaks.item.night-vision-descriptions") -- свои описания ПНВ MK2/MK3
 
 require("tweaks.recipe.insert-mining-drill-bit")
 require("tweaks.recipe.insert-structured-components")
@@ -39,7 +43,6 @@ require("tweaks.recipe.module")
 require("tweaks.recipe.poles") -- Изменение рецептов ЛЭП
 require("tweaks.recipe.yuoki")
 require("tweaks.recipe.concrete")
-require("tweaks.recipe.groups")
 require("tweaks.recipe.optera-warehouse-sort") -- Optera warehouse (6×6) и storehouse (3×3) — каждый одним рядом
 require("tweaks.recipe.fuel")
 require("tweaks.recipe.science-packs")
@@ -56,12 +59,13 @@ require("tweaks.technology.yuoki")
 require("tweaks.technology.concrete")
 require("tweaks.technology.fuel")
 require("tweaks.technology.oberhaul-inserter-cost") -- 1.1 Oberhaul: дороже near/long/more-инсертер техи
-require("tweaks.technology.research-evolution-icon") -- иконка-график вместо красного "+" у эффекта research_evolution_factor
 require("tweaks.technology.factorissimo-recursion-clean") -- убираем пустой "+" эффект у factory-recursion-t1/t2
 
 require("tweaks.custom.main-menu-background")
+require("tweaks.custom.terrain-graphics") -- белый бетон/дорожка, кирпичное покрытие дорожки, облака
 require("tweaks.custom.map-gen-presets")
 require("tweaks.custom.icons")
+require("tweaks.custom.shortcut-icons")
 require("tweaks.custom.selections")
 
 
@@ -73,6 +77,7 @@ require("removals.clowns-steel-c2")
 require("removals.angels-valves") -- прячем Angels-flow-клапаны: заменены модом valves (inspector остаётся)
 
 require("graphics.train.train_reskin") -- рескин поездов
+require("tweaks.entity.multiple-unit-sync") -- копии «-mu» из итоговых локомотивов (после баланса и рескина)
 -------------------------------------------------------------------------------------------------
 require("final-fixes.technologies") -- Пожалуйста не добавляйте сюда новых записей. Поищите раздел в tweaks/technology или создайте там новый
 require("final-fixes.recipies")-- Пожалуйста не добавляйте сюда новых записей. Поищите раздел в tweaks/recipe или создайте там новый
@@ -84,12 +89,14 @@ require("tweaks.recipe.angels-smelting-extended-gears-port") -- gear-wheel casti
 require("tweaks.recipe.bi2-fixes") -- Bio_Industries_2 регрессии (stone-crushed/solid-sand renamings)
 require("tweaks.recipe.marathon-port") -- 1.1 marathon-баланс (порт из 1.1 in-game)
 require("tweaks.recipe.teleporters-port") -- port 1.1 paranoidal teleporter cost
+require("tweaks.custom.teleporters-hotkey") -- горячая клавиша поиска телепорта: CONTROL + F
 require("tweaks.recipe.holographic-signs-port") -- gate hs_holo_sign behind circuit-network tech (1.1)
 
 -- map-gen presets: на data-final-fixes, чтобы захватить autoplace-control'ы
 -- любого мода, который их регистрирует в data-updates/data-final-fixes
 -- (не только в data-stage).
 require("prototypes.map-gen-presets")
+require("removals.decoratives") -- «Без декораций»: после пресетов, чтобы вычистить и их ссылки
 
 require("tweaks.custom.uniform-recipies")
 require("prototypes.entity.storage-migration")
@@ -160,6 +167,65 @@ require("tweaks.recipe.oberhaul-solar-port")
 -- Oberhaul module-port (эффекты + слоты модулей, 1.1; цена — отдельно)
 require("tweaks.recipe.oberhaul-module-port")
 require("tweaks.technology.spacemod-port")
+require("tweaks.technology.spacemod-components-beta8")
+require("tweaks.recipe.spacemod-god-module-beta8")
+require("tweaks.recipe.spacemod-components-beta8")
+require("removals.spacemod-beta8")
+require("tweaks.technology.science-foundation-beta8")
+require("tweaks.recipe.science-foundation-beta8")
+require("tweaks.technology.electronics-science-beta8")
+require("tweaks.recipe.bi-science-beta8")
+require("tweaks.technology.early-electronics-beta8")
+require("tweaks.recipe.early-electronics-beta8")
+require("tweaks.recipe.early-supply-beta8")
+require("tweaks.technology.red-green-infrastructure-beta8")
+require("tweaks.recipe.red-green-infrastructure-beta8")
+require("tweaks.technology.angels-early-beta8")
+require("tweaks.recipe.angels-early-beta8")
+require("tweaks.technology.gems-beta8")
+require("tweaks.recipe.gems-beta8")
+require("tweaks.entity.early-fluid-compatibility-beta8")
+require("tweaks.technology.bio-growing-beta8")
+require("tweaks.recipe.bio-growing-beta8")
+require("tweaks.technology.bio-processing-beta8")
+require("tweaks.recipe.bio-processing-beta8")
+require("tweaks.technology.cracking-beta8")
+require("tweaks.recipe.cracking-beta8")
+require("removals.bio-extras-beta8")
+require("tweaks.technology.military-beta8")
+require("tweaks.recipe.military-beta8")
+require("tweaks.recipe.warehouse-beta8")
+require("tweaks.technology.chemistry-remainder-beta8")
+require("tweaks.recipe.chemistry-remainder-beta8")
+require("tweaks.recipe.fish-keeping-beta8")
+require("tweaks.recipe.pure-ore-smelting-beta8")
+require("tweaks.recipe.pure-tin-lead-beta8")
+require("tweaks.recipe.fish-buildings-beta8")
+require("tweaks.technology.fish-buildings-beta8")
+require("tweaks.recipe.advanced-electronics-beta8")
+require("tweaks.technology.advanced-electronics-beta8")
+require("tweaks.technology.air-filter-beta8")
+require("tweaks.item.gems-menu-beta8")
+require("tweaks.recipe.nitrogen-remainder-beta8")
+require("tweaks.technology.nitrogen-remainder-beta8")
+require("tweaks.recipe.ammo-finite-beta8")
+require("tweaks.technology.ammo-finite-beta8")
+require("tweaks.recipe.inserter-merge-beta8")
+require("tweaks.technology.inserter-merge-beta8")
+require("tweaks.recipe.cobalt-components-beta8")
+require("tweaks.recipe.platforms-logistics-beta8")
+require("tweaks.technology.platforms-logistics-beta8")
+require("tweaks.recipe.sodium-beta8")
+require("tweaks.technology.sodium-beta8")
+require("tweaks.recipe.equipment-erp-beta8")
+require("tweaks.technology.equipment-erp-beta8")
+require("prototypes.heavy-armor-beta8")
+require("tweaks.item.w93-thermal-link-beta8")
+require("prototypes.rcu-beta8")
+require("tweaks.recipe.rcu-consumers-beta8")
+require("tweaks.technology.rcu-consumers-beta8")
+require("tweaks.recipe.late-biology-beta8")
+require("tweaks.technology.late-biology-beta8")
 
 -- angelspetrochem 2.0.2 ретайрнул angels-liquid-sulfuric-acid → базовый sulfuric-acid.
 -- Перенаправляем рецепты, ещё ссылающиеся на мёртвый флюид.
@@ -176,6 +242,175 @@ end
 -- PCPRedux: дубль sodium nitrate (старое ангеловское имя) → angels-solid-sodium-nitrate
 require("removals.pcp-sodium-nitrate-duplicate")
 
+-- Beta 8 start, after late overrides; preserve current machinery and agreed exceptions.
+require("prototypes.torch-beta8")
+require("tweaks.recipe.start-menu-beta8")
+require("tweaks.custom.crafting-menu-beta8")
+require("tweaks.item.angels-components-group") -- целые строки Angel's во вкладку «Компоненты»
+require("tweaks.recipe.lamp-components")
+require("tweaks.technology.lamp-unlocks")
+require("tweaks.entity.assembler-ingredient-descriptions")
+require("tweaks.entity.ore-sorting-bootstrap")
+require("tweaks.recipe.frame-metallurgy-beta8")
+require("tweaks.technology.frame-metallurgy-beta8")
+
 require("tweaks.custom.restack-port") -- ReStack (Optera, 1.1) порт: размеры пачек по категориям
---должно быть последним. После всех рецептов.
-require("tweaks.custom.flowfix")
+-- Модульный порт ниже уже содержит итоговые партии Beta 8.
+require("prototypes.modules-beta8")
+-- После восстановления модульных рецептов, масштабирования партий и OV.execute.
+require("tweaks.recipe.platinum-wire")
+require("tweaks.technology.platinum-wire")
+require("tweaks.custom.super-labs-beta8") -- Отдельные Гиг-лаба и Гипер-лаба; параметры Beta 8.
+require("tweaks.entity.space-data-labs") -- Космические данные принимает только центр обработки данных.
+require("tweaks.item.titanium-icon") -- После reskins и поздних копирований иконок.
+-- После финальных скоростей лент, стоимости AAI, restack, flowfix и OV.execute.
+require("prototypes.electric-loaders")
+require("prototypes.loader-shells")
+-- После финальных скоростей лент и всех копий графики лент (погрузчики, Factorissimo, Subterranean).
+require("tweaks.entity.prismatic-belts-sync")
+-- После всех правок технологий: возврат триггерных исследований на цену банок Beta 8.
+require("tweaks.technology.action-research-beta8")
+-- После всех восстановлений дерева: согласованные зависимости материалов и компонентов.
+require("tweaks.technology.material-component-gates")
+require("tweaks.technology.disabled-zinc-prerequisites")
+require("tweaks.technology.bronze-axe-beta8")
+require("tweaks.technology.electricity-poles-beta8")
+require("tweaks.technology.wood-phosphorus-beta8")
+require("tweaks.technology.boiler-2-beta8")
+require("tweaks.technology.fluid-barrels-beta8")
+require("tweaks.technology.steam-engine-2-beta8")
+require("tweaks.technology.heat-pipe-1-beta8")
+require("tweaks.technology.scattergun-prerequisite-beta8")
+require("tweaks.technology.boiler-inserter-prerequisites-beta8")
+require("prototypes.seafloor-pumps.integration")
+require("removals.angels-sea-pump")
+-- После всех копий насосов и скрытия морского насоса Angels.
+require("tweaks.entity.landfill-pumps")
+require("tweaks.recipe.nickel-ammo-beta8-port")
+-- После OV и всех производителей/потребителей: Bob-смола → BI-смола в банке.
+require("tweaks.item.unify-resin")
+-- Только согласованные иконки: после Reskins и намеренных замен титана/смолы.
+require("tweaks.custom.bobicons-beta8")
+-- Согласованная первая вкладка Beta 8; неразобранные рецепты пока отдельно.
+require("tweaks.custom.logistics-menu-beta8")
+-- Вторая вкладка: согласованные ряды Bob, без отдельных filter-дублей.
+require("tweaks.custom.bob-logistics-menu-beta8")
+-- Названия и иконки вкладок «Хранение и электросеть» / «Логистика».
+require("tweaks.custom.logistics-tab-names")
+-- Третья вкладка: логика Beta 8 с согласованными устройствами 2.0.
+require("tweaks.custom.circuit-menu-beta8")
+-- Четвёртая вкладка: возвращённый «Транспорт» Beta 8.
+require("tweaks.custom.transport-menu-beta8")
+-- Полный возврат пяти жидкотопливных котлов Beta 8; после OV/баланса, до меню.
+require("prototypes.fluid-boilers-beta8")
+require("removals.fluid-boilers-2")
+-- Пятая вкладка: производство Beta 8 с сохранением новых устройств 2.0.
+require("tweaks.custom.production-menu-beta8")
+-- Шестая вкладка: модули сразу после производства, как в Beta 8.
+require("tweaks.custom.modules-menu-beta8")
+-- Седьмая вкладка: тематические блоки компонентов, иконки соответствий Beta 8.
+require("tweaks.custom.components-menu-beta8")
+-- После компонентов: отдельный Bob, оружие/оборона и оборудование по назначению.
+require("tweaks.custom.bob-combat-menu-beta8")
+-- Самоцветы и личное снаряжение; транспортные робопорты остаются в технике Angels.
+require("tweaks.custom.gems-equipment-menu-beta8")
+-- Переработка ресурсов и металлургия: только ряды рецептов и согласованные иконки.
+require("tweaks.custom.refining-smelting-menu-beta8")
+-- Отливка и водоочистка: компактные семейства, без изменения рецептур и механики.
+require("tweaks.custom.casting-water-menu-beta8")
+-- Нефтехимия и разливка: смысловые ряды и пары наполнения/опорожнения, только меню.
+require("tweaks.custom.petrochem-fluid-menu-beta8")
+-- Производство, транспортное оборудование и общий космос: только размещение рецептов.
+require("tweaks.custom.production-space-menu")
+-- Единый размер и верхний правый угол метки освещения, после замен иконок меню.
+require("tweaks.custom.lighted-pole-icons")
+-- Точечные исключения по скриншотам: согласованные основы иконок, метки способов сохраняются.
+require("tweaks.custom.recipe-presentation")
+-- После всех правок меню: иконка рецепта — эталон для однозначного предмета.
+require("tweaks.custom.recipe-item-icon-sync").apply(data.raw, defines.prototypes.item, log)
+-- Та же группировка для предметов, жидкостей и Factoriopedia; раскладка рецептов сохраняется.
+require("tweaks.custom.recipe-product-menu-sync").apply(data.raw, defines.prototypes, log)
+-- Согласованные иконки предметов по рецептам; после общих синхронизаторов, чтобы их не перезаписали.
+require("tweaks.custom.recipe-presentation-items")
+-- Цвета исследований жидкостей согласованы с восстановленными иконками резервуаров.
+require("tweaks.technology.fluid-handling-colors")
+-- Только обычная деревянная труба: без стрелок и прохода сквозь сплошной ряд.
+require("tweaks.entity.wood-pipe")
+-- После восстановления дерева: материалы у предков и единый паровой крекинг I.
+require("tweaks.technology.early-material-prerequisites")
+require("tweaks.technology.machine-recipe-unlocks")
+require("tweaks.technology.steam-cracking-merge")
+require("tweaks.technology.approved-beta8-icons") -- Согласованные изображения исследований; без модулей.
+require("tweaks.technology.module-research-cleanup") -- Остаточная цепочка Bob 2.0 и оформление компонентов Beta 8.
+-- Новая платиновая цепочка и согласованные производственные связи, после поздних замен дерева.
+require("prototypes.platinum-components")
+require("tweaks.technology.platinum-magnesium-integration")
+-- Согласованная пачка fix_tree4: поздние альтернативы следуют за оборудованием и сырьём.
+require("tweaks.technology.production-chain-unlocks")
+require("tweaks.technology.chemistry-chain-unlocks")
+require("removals.steam-inserter-recipe")
+require("tweaks.technology.redundant-recipe-unlocks") -- Только избыточные открытия, после восстановления дерева.
+require("tweaks.entity.character-light-beta8") -- Фонарь персонажа из Beta 8, после AAI.
+require("tweaks.entity.beta8-visual-models") -- Модели сундука и малых автоматов IV-V, после Reskins/Miles.
+require("tweaks.entity.comb-beta8") -- Графика комбинаторов BiusArt (comb) из Beta 8, до icon-markers.
+require("tweaks.item.ammo-stats-1_1") -- Боеприпасы 1.1; скриптовые интеграции 2.0 сохраняются.
+require("tweaks.entity.turret-stats-1_1")() -- Финальные характеристики оснований 1.1; без правок Hero.
+require("tweaks.entity.w93-modular-turrets") -- W93: улучшение MK1 -> MK2, без огня по своим у луча MK2 и осколков.
+require("tweaks.technology.ironworks-icons") -- Согласованные шестерни I–V, до наложения маркеров.
+require("tweaks.technology.approved-icons") -- Согласованные иконки исследований без номеров, до icon-markers.
+require("tweaks.recipe.pumpjacks-1_1")
+require("tweaks.entity.mining-stats-1_1")
+require("tweaks.entity.pumps-stats-1_1")
+require("tweaks.entity.machinery-stats-1_1")
+require("tweaks.entity.pumpjack-colors-1_1")
+require("removals.area-mining-drill")
+require("tweaks.technology.icon-markers") -- Уровни и значки веток на иконках технологий, после всех правок иконок.
+-- Цена исследований Beta 8 (циклы, наука, время) после всех правок дерева; эффект эволюции считается ниже.
+require("tweaks.technology.research-beta8")
+-- Согласованная энергетика: после OV, restack, flowfix, меню и всех поздних замен.
+require("tweaks.custom.energy-port")
+-- Отдельный MK3 с собственным предметом и открытием на существующей технологии IV.
+require("prototypes.electrowinning-cell-3-beta8")
+-- Согласованный аудит зданий: итоговые скорости и слоты, после всех правок сборки.
+require("tweaks.entity.building-speed-slots-1_1")
+require("tweaks.entity.building-module-compatibility-1_1")
+require("tweaks.entity.big-lab")
+-- После синхронизаторов меню: иначе предметы лоадеров уйдут за копиями песочницы.
+require("tweaks.custom.blueprint-sandboxes")
+require("removals.pcp-flask")
+-- Эстакадные рельсы (только при включённом elevated-rails): тиры опор и кабель в опорах.
+require("tweaks.custom.elevated-rail-supports")
+-- Пачка 01 «До синей науки» (решение пользователя): после flowfix, меню и правок дерева.
+require("tweaks.recipe.batch01-blue-beta8")
+require("tweaks.recipe.batch02-blue-beta8")
+require("tweaks.recipe.batch03-rest-beta8")
+-- После синхронизаторов меню: иконка конвертации не заменяет иконку средней опоры.
+require("tweaks.recipe.iron-pole-upgrade")
+require("tweaks.custom.locale-overrides")
+-- Пожарная турель (вода, защита от Flammable Oils): до пересборки переработки.
+require("prototypes.fire-safety-turret")
+-- Ветка качества: ранний модуль качества и тиры из двух предыдущих (до пересборки переработки).
+require("tweaks.recipe.quality-modules")
+-- Закрытие схем бесплатных ресурсов и энергии: после всех правок рецептов и машин, до пересборки переработки.
+require("tweaks.custom.anti-exploit")
+-- После всех правок рецептов: полная пересборка переработки Quality (один рецепт на предмет, без мусора).
+require("tweaks.custom.quality-recycling-refresh")
+-- Генерация рыбы: только Луч Санты, в 5 раз реже.
+require("tweaks.custom.fish-santa-only")
+-- Множители загрязнения топлива Beta 8 (уголь, кокс, твёрдое/ракетное топливо и др.).
+require("tweaks.custom.fuel-emissions-beta8")
+-- Compatibility fixes kept outside the original Bob/utility mod packages.
+require("tweaks.custom.upstream-prototype-fixes")
+require("tweaks.custom.upstream-light-fixes")
+require("tweaks.custom.hero-shortcut")
+-- Очистка Факториопедии: после всех правок, создающих и копирующих прототипы.
+require("removals.factoriopedia-cleanup")
+-- Локальные иконки Reskins Library, включая слои рецептов и копии прототипов.
+require("tweaks.custom.reskins-library-icons")
+-- Оптимизация атласов графики: после всех правок, создающих и копирующих прототипы и иконки.
+require("tweaks.custom.graphics-atlas")
+-- Собственные изображения поверх оригинальных пакетов Reskins; после сравнения путей атласа.
+require("tweaks.custom.reskins-overrides")
+-- Этот require ВСЕГДА ПОСЛЕДНИЙ: не переносить и не добавлять код ниже.
+-- Все новые правки размещать выше: здесь фиксируются иконка и последнее место эффекта эволюции.
+require("tweaks.technology.research-evolution-icon")

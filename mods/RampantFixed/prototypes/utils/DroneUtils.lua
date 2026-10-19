@@ -44,18 +44,7 @@ function droneUtils.makeDrone(attributes)
                 layers =
                     {
                         {
-                            filename = "__base__/graphics/entity/defender-robot/defender-robot.png",
-                            priority = "high",
-                            line_length = 16,
-                            width = 32,
-                            tint = attributes.tint2,
-                            height = 33,
-                            frame_count = 1,
-                            direction_count = 16,
-                            shift = {0, 0.015625},
-                            scale = scale,
-                            hr_version = {
-                                filename = "__base__/graphics/entity/defender-robot/hr-defender-robot.png",
+                                filename = "__base__/graphics/entity/defender-robot/defender-robot.png",
                                 priority = "high",
                                 line_length = 16,
                                 width = 56,
@@ -65,22 +54,9 @@ function droneUtils.makeDrone(attributes)
                                 direction_count = 16,
                                 shift = util.by_pixel(0, 0.25),
                                 scale = scale * 0.5
-                            }
-                        },
+                            },
                         {
-                            filename = "__base__/graphics/entity/defender-robot/defender-robot-mask.png",
-                            priority = "high",
-                            line_length = 16,
-                            width = 18,
-                            height = 16,
-                            tint = attributes.tint2,
-                            frame_count = 1,
-                            direction_count = 16,
-                            shift = {0, -0.125},
-                            -- apply_runtime_tint = true,
-                            scale = scale,
-                            hr_version = {
-                                filename = "__base__/graphics/entity/defender-robot/hr-defender-robot-mask.png",
+                                filename = "__base__/graphics/entity/defender-robot/defender-robot-mask.png",
                                 priority = "high",
                                 line_length = 16,
                                 width = 28,
@@ -91,23 +67,12 @@ function droneUtils.makeDrone(attributes)
                                 shift = util.by_pixel(0, -4.75),
                                 -- apply_runtime_tint = true,
                                 scale = scale * 0.5
-                            }
-                        },
+                            },
                     }
             },
         shadow_idle =
             {
-                filename = "__base__/graphics/entity/defender-robot/defender-robot-shadow.png",
-                priority = "high",
-                line_length = 16,
-                width = 43,
-                height = 23,
-                frame_count = 1,
-                direction_count = 16,
-                shift = {0.859375, 0.609375},
-                scale = scale,
-                hr_version = {
-                    filename = "__base__/graphics/entity/defender-robot/hr-defender-robot-shadow.png",
+                    filename = "__base__/graphics/entity/defender-robot/defender-robot-shadow.png",
                     priority = "high",
                     line_length = 16,
                     width = 88,
@@ -116,26 +81,13 @@ function droneUtils.makeDrone(attributes)
                     direction_count = 16,
                     shift = util.by_pixel(25.5, 19),
                     scale = scale * 0.5
-                }
-            },
+                },
         in_motion =
             {
                 layers =
                     {
                         {
-                            filename = "__base__/graphics/entity/defender-robot/defender-robot.png",
-                            priority = "high",
-                            line_length = 16,
-                            width = 32,
-                            tint = attributes.tint,
-                            height = 33,
-                            frame_count = 1,
-                            direction_count = 16,
-                            shift = {0, 0.015625},
-                            y = 33,
-                            scale = scale,
-                            hr_version = {
-                                filename = "__base__/graphics/entity/defender-robot/hr-defender-robot.png",
+                                filename = "__base__/graphics/entity/defender-robot/defender-robot.png",
                                 priority = "high",
                                 line_length = 16,
                                 width = 56,
@@ -146,22 +98,9 @@ function droneUtils.makeDrone(attributes)
                                 shift = util.by_pixel(0, 0.25),
                                 y = 59,
                                 scale = scale * 0.5
-                            }
-                        },
+                            },
                         {
-                            filename = "__base__/graphics/entity/defender-robot/defender-robot-mask.png",
-                            priority = "high",
-                            line_length = 16,
-                            width = 18,
-                            height = 16,
-                            frame_count = 1,
-                            direction_count = 16,
-                            tint = attributes.tint2,
-                            shift = {0, -0.125},
-                            y = 16,
-                            scale = scale,
-                            hr_version = {
-                                filename = "__base__/graphics/entity/defender-robot/hr-defender-robot-mask.png",
+                                filename = "__base__/graphics/entity/defender-robot/defender-robot-mask.png",
                                 priority = "high",
                                 line_length = 16,
                                 width = 28,
@@ -172,23 +111,12 @@ function droneUtils.makeDrone(attributes)
                                 shift = util.by_pixel(0, -4.75),
                                 y = 21,
                                 scale = scale * 0.5
-                            }
-                        },
+                            },
                     }
             },
         shadow_in_motion =
             {
-                filename = "__base__/graphics/entity/defender-robot/defender-robot-shadow.png",
-                priority = "high",
-                line_length = 16,
-                width = 43,
-                height = 23,
-                frame_count = 1,
-                direction_count = 16,
-                shift = {0.859375, 0.609375},
-                scale = scale,
-                hr_version = {
-                    filename = "__base__/graphics/entity/defender-robot/hr-defender-robot-shadow.png",
+                    filename = "__base__/graphics/entity/defender-robot/defender-robot-shadow.png",
                     priority = "high",
                     line_length = 16,
                     width = 88,
@@ -198,7 +126,6 @@ function droneUtils.makeDrone(attributes)
                     shift = util.by_pixel(25.5, 19),
                     scale = scale * 0.5
                 }
-            }
     }
 	
 	if attributes.additionalFlags then

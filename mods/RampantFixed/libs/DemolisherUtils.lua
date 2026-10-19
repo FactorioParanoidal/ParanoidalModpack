@@ -98,7 +98,7 @@ function demolisherUtils.fearDemolishers(surface_index)
 		end
 	end
 		
-	messageSource = surface
+	local messageSource = surface
 
 	local demolisherAttackInterval = 3600*60*8
 	biterSupressors.setNextDemolisherAttackTick(map, demolisherAttackInterval)
@@ -338,7 +338,7 @@ function demolisherUtils.vulcanusEvolution()
 	local universe = storage.universe
 	for _, map in pairs(universe.maps) do
 		local surface = map.surface
-		planetAISetting = (universe.planetAISettings[surface.name] or universe.planetAISettings["others"])
+		local planetAISetting = (universe.planetAISettings[surface.name] or universe.planetAISettings["others"])
 		if (planetAISetting.AI == 3) then
 			local demolishersCount = surface.count_entities_filtered({force = "enemy", type = "segmented-unit"})
 			if demolishersCount > 0 then

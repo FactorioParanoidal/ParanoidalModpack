@@ -1,0 +1,17 @@
+{
+  "name": "Radioactive-Damage-Reforged",
+  "version": "1.0.0",
+  "title": "Radioactive Damage Reforged",
+  "author": "Paranoidal",
+  "contact": "https://discord.gg/MnXGAmC",
+  "homepage": "https://github.com/FactorioParanoidal/ParanoidalModpack",
+  "description": "Carrying uranium ore, uranium-235, uranium-238 or uranium fuel cells damages the character with radioactive damage. The Hazmat suit almost fully protects against it. Port of Radioactive Damage by DellAquila (Paranoidal Beta 8) for Factorio 2.0.",
+  "factorio_version": "2.0",
+  "dependencies": [
+    "base >= 2.0.0",
+    "bobplates >= 2.1.0",
+    "! RadioactiveDamage",
+    "? angelspetrochem",
+    "? zzzparanoidal"
+  ]
+}

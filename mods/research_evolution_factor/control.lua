@@ -22,22 +22,33 @@ local function tech_cost(tech)
 	local unit_count = tech.research_unit_count
 	if tech.research_unit_count_formula then
 		if tech.name then
-			unit_count = storage.infinite_research_units[tech.name]
+			-- no record (research started before the mod was added): count of the current level
+			unit_count = storage.infinite_research_units[tech.name] or tech.research_unit_count
 			storage.infinite_research_units[tech.name] = nil --erasing unusial record
 		end
 	end
 	sum = sum * (unit_count or 0)
-	return sum * 0.00001 * params.linear_factor + params.constant_factor * 0.01
+	return sum * 0.00001 * params.linear_factor + params.constant_factor * 0.01 * params.constant_share(tech.name)
 end
 
 local ignore_qol = settings.startup["research-evolution-factor-ignore-qol"].value
 local ignore_infinite = settings.startup["research-evolution-factor-ignore-inf"].value
 
+-- A count_formula technology with more than params.max_finite_levels levels is treated as infinite
+-- (same rule as evolution-label.lua); an infinite max_level is 4294967295 at runtime.
+local function infinite_tech(tech)
+	if not tech.research_unit_count_formula then
+		return false
+	end
+	local proto = tech.prototype
+	return proto.max_level - proto.level + 1 > params.max_finite_levels
+end
+
 local function ignored_tech(tech)
 	return tech.force.name ~= "player"
 		or tech.prototype.hidden
 		or (ignore_qol and string.sub(tech.name, 1, 4) == "qol-")
-		or (ignore_infinite and tech.research_unit_count_formula)
+		or (ignore_infinite and infinite_tech(tech))
 end
 
 script.on_event(defines.events.on_research_finished, function(event, by_script)

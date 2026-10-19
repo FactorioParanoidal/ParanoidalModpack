@@ -1,4 +1,10 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.5.1
+Date: 2026-10-12
+  Changes:
+    - Paranoidal: while evolution is below the RampantFixed truce threshold, the evolution line adds "Peaceful mode. Attacks start at N% evolution." N is read from RampantFixed (remote getTruceInfo); nothing is added without RampantFixed or when its AI is off on the surface.
+    - Paranoidal: chunk pollution level is shown by default for new players.
+---------------------------------------------------------------------------------------------------
 Version: 0.5.0
 Date: 2025.09.05
   Changes:

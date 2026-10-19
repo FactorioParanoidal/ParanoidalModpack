@@ -21,6 +21,8 @@ local chunkPropertyUtils = require("libs/ChunkPropertyUtils")
 local constants = require("libs/Constants")
 local mapProcessor = require("libs/MapProcessor")
 local mapUtils = require("libs/MapUtils")
+local aiBrain = require("libs/AIBrain")
+local champions = require("libs/Champions")
 local config = require("__RampantFixed__/config")
 
 local function getBaseStats(base)
@@ -407,6 +409,74 @@ remote.add_interface("rampantFixed", {
 		return validAI_StateList
 	end
 	
+	,
+	--------------------
+	-- Paranoidal: read-only truce data for EvoUI.
+	-- parameters: {surfaceIndex = number}
+	-- return: nil (Rampant AI is off on the surface) or {minEvo = number (percent), peaceful = boolean}
+	getTruceInfo = function(parameters)
+		if (not parameters) or (not parameters.surfaceIndex) then
+			return nil
+		end
+		local universe = storage.universe
+		local map = universe and universe.maps and universe.maps[parameters.surfaceIndex]
+		if not (map and map.surface and map.surface.valid) then
+			return nil
+		end
+		local planetAISettings = universe.planetAISettings
+		local planetAISetting = planetAISettings and (planetAISettings[map.surface.name] or planetAISettings["others"])
+		if not (planetAISetting and (type(planetAISetting.minEvo) == "number")) then
+			return nil
+		end
+		return {minEvo = planetAISetting.minEvo, peaceful = (map.state == constants.AI_STATE_PEACEFUL)}
+	end
+
+	,
+	--------------------
+	-- Paranoidal: read-only snapshot of what the AI has learned on a surface.
+	-- parameters: {surfaceIndex = number}
+	-- return: nil (no Rampant AI or no data yet) or {tactics = {[name] = {value, samples}}, states = {[AI state] = {value, samples}},
+	--         flights = {[kind] = {value, samples}}, outcomes, failStreak, winStreak, rethinking, pressing,
+	--         weakTargets, strongTargets, dominantDamage}
+	getAILearning = function(parameters)
+		if (not parameters) or (not parameters.surfaceIndex) then
+			return nil
+		end
+		local universe = storage.universe
+		local map = universe and universe.maps and universe.maps[parameters.surfaceIndex]
+		if not map then
+			return nil
+		end
+		return aiBrain.learningData(map)
+	end
+
+	,
+	--------------------
+	-- Paranoidal: spawns a champion or an hour boss now (no timer, no limit), as the timer would: from a nest within
+	-- reach of the base towards its most defended spot.
+	-- parameters: {surfaceIndex = number, kind = "champion" | "hourBoss", unitType = nil | "biter" | "spitter" | "flyer"}
+	-- return: the LuaEntity or nil
+	spawnChampion_ExtCtrl = function(parameters)
+		local universe = storage.universe
+		if (not universe) or (not universe.allowExternalControl) or (not parameters) or (not parameters.surfaceIndex) then
+			return nil
+		end
+		return champions.spawnNow(universe, parameters.surfaceIndex, parameters.kind or "champion", parameters.unitType)
+	end
+
+	,
+	--------------------
+	-- Paranoidal: read-only list of living champions and hour bosses
+	-- return: {units = {{unitNumber, kind, name, state, pool, poolMax, nameIndex, color, health, maxHealth, speed,
+	--         position, home, target}}, corpses = number, nextTick = {[kind] = tick}}
+	getChampions = function()
+		local universe = storage.universe
+		if not universe then
+			return nil
+		end
+		return champions.report(universe)
+	end
+
 	,
 	--------------------
 	-- Returns a pheromones in specificed chunk

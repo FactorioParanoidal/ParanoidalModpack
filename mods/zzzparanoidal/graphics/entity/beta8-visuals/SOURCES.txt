@@ -1,0 +1,14 @@
+Original bitmap assets copied without modification from the user's Paranoidal Beta 8 installation.
+
+hr-titanium-chest.png
+hr-titanium-chest-shadow.png
+  Source: KaoExtended/graphics/chest/ (Beta 8)
+  Prototype: KaoExtended/prototypes/chest-gfx.lua
+
+hr-assembling-machine-2.png
+hr-assembling-machine-2-shadow.png
+assembling-machine-mask.png
+  Source: bobassembly/graphics/entity/assembling-machine/ (Beta 8)
+  Animation/scale/tints: MilesBobsExpansion/prototypes/assembly-electronics.lua
+
+Original authors retain their rights. These are existing modpack assets, not newly authored images.

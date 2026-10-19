@@ -1,4 +1,44 @@
 ---------------------------------------------------------------------------------------------------
+Version: 9.0.5
+Date: 2026-10-14
+  Changes:
+    - Version number starts with 9 (Paranoidal fork): the Mod Portal never offers an "update" over local changes.
+    - Local Paranoidal patch: adds a Merging Chests (WideChests) button that puts the chest merger in the cursor; the click is handled by WideChests. Icon: the build's steel chest (128 px, full resolution, scale 0.25) on a transparent background, without a frame, like the other buttons.
+    - Local Paranoidal patch: Module Inserter integration targets ModuleInserterEx instead of ModuleInserter. The panel button opens the ModuleInserterEx window through its remote interface toggle_gui and is highlighted while the window is open.
+    - Local Paranoidal patch: the EvoGUI integration targets EvoUi (root element EvoUi_root), which replaces EvoGUI in 2.0.
+    - Local Paranoidal patch: Factorissimo factory dispatcher button (created and handled by Factorissimo) gets the unified style and the Factorissimo icon, and is highlighted while the dispatcher window is open. Its own tooltip is kept; it can be hidden with the per-player button setting.
+---------------------------------------------------------------------------------------------------
+Version: 2.0.4
+Date: 2026-10-10
+  Changes:
+    - Local Paranoidal patch: removes the Bob's inserter options button from the unified panel.
+  Bugfixes:
+    - Inserter throughput and PM RPG System buttons use the unified dark button style instead of the grey mod_gui_button.
+    - Inserter throughput button no longer flickers on click: no auto toggle, same icon in every mouse state, updated in the setting event.
+---------------------------------------------------------------------------------------------------
+Version: 2.0.3
+Date: 2026-10-10
+  Changes:
+    - Local Paranoidal patch: adds a Blueprint Sandboxes toggle button with a monochrome sand-and-scoop icon (SVG source included).
+---------------------------------------------------------------------------------------------------
+Version: 2.0.2
+Date: 2026-10-05
+  Changes:
+    - Local Paranoidal patch based on portal version 2.0.1; not an upstream release.
+    - Coalesces GUI updates per connected player instead of scanning all players while idle.
+    - Avoids redundant button property writes and repeated allocation of button definitions.
+    - Filters construction events to the objects used by installed integrations.
+    - Honors the configured logging level and caches logging settings.
+  Bugfixes:
+    - Stores runtime state in Factorio 2.0 storage and restores its reference on load.
+    - Rebuilds missing GUI bookkeeping on upgrade without deleting existing player GUI or settings.
+    - Prevents multiple events from permanently blocking the update counter.
+    - Corrects selected-window state comparison and duplicate event registrations.
+    - Uses Factorio 2.0 construction and cloning event fields.
+    - Prevents failed panel updates from being retried continuously every six ticks.
+  Info:
+    - Runtime, save/reload compatibility and performance are not yet verified in game.
+---------------------------------------------------------------------------------------------------
 Version: 2.0.1
 Date: 2025-02-07
   Changes:

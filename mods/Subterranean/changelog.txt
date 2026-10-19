@@ -1,0 +1,4 @@
+---------------------------------------------------------------------------------------------------
+Version: 2.0.0
+  Bugfixes:
+    - Subterranean belts no longer inherit next_upgrade from regular underground belts, so the upgrade planner no longer downgrades regular underground belts into 250-tile ones or upgrades 250-tile belts into regular ones.

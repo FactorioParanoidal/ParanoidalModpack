@@ -729,20 +729,73 @@ function slimPickupOffset(entity)
   return _slimOffset(entity, 0)
 end
 
+-- Paranoidal: inserters larger than 1x1 (e.g. nco-InserterCranes 2x2 and 6x2) are mapped to the
+-- 1x1 normal form by removing the extra body size on each axis. Coordinates inside the body span
+-- map to 0; when mapping back, 0 keeps the current in-span coordinate (the chosen column).
+local function _bigShift(entity)
+  local proto = entity.type == "entity-ghost" and entity.ghost_prototype or entity.prototype
+  local w, h = proto.tile_width, proto.tile_height
+  if not w or not h or (w <= 1 and h <= 1) then
+    return nil
+  end
+  local d = entity.direction
+  if d == defines.direction.east or d == defines.direction.west then
+    w, h = h, w
+  end
+  return { x = (w - 1) / 2, y = (h - 1) / 2 }
+end
+
+local function _bigToNormal(c, s)
+  if c > s + 0.01 then
+    return c - s
+  elseif c < -s - 0.01 then
+    return c + s
+  end
+  return 0
+end
+
+local function _bigFromNormal(n, s, prev)
+  if n > 0.01 then
+    return n + s
+  elseif n < -0.01 then
+    return n - s
+  end
+  if math.abs(prev) <= s + 0.01 then
+    return prev
+  end
+  local base = (s % 1 == 0) and 0 or 0.5
+  return prev < 0 and -base or base
+end
+
+local function _relToNormal(entity, abs, o, snap)
+  local rel = { x = abs.x - entity.position.x, y = abs.y - entity.position.y }
+  local s = _bigShift(entity)
+  if s then
+    rel = { x = _bigToNormal(rel.x, s.x), y = _bigToNormal(rel.y, s.y) }
+    if snap then
+      -- pickup has no near/far offset in the grid (crane default pickup is 1.7 = tile + 0.2)
+      rel = { x = bobmods.math.round(rel.x), y = bobmods.math.round(rel.y) }
+    end
+  end
+  return { x = rel.x + o.x, y = rel.y + o.y }
+end
+
+local function _normalToAbs(entity, newpos, o, current_abs)
+  local rel = { x = newpos.x - o.x, y = newpos.y - o.y }
+  local s = _bigShift(entity)
+  if s then
+    local prev = { x = current_abs.x - entity.position.x, y = current_abs.y - entity.position.y }
+    rel = { x = _bigFromNormal(rel.x, s.x, prev.x), y = _bigFromNormal(rel.y, s.y, prev.y) }
+  end
+  return { x = entity.position.x + rel.x, y = entity.position.y + rel.y }
+end
+
 function get_pickup_position(entity)
-  local o = slimPickupOffset(entity)
-  return {
-    x = entity.pickup_position.x - entity.position.x + o.x,
-    y = entity.pickup_position.y - entity.position.y + o.y,
-  }
+  return _relToNormal(entity, entity.pickup_position, slimPickupOffset(entity), true)
 end
 
 function get_drop_position(entity)
-  local o = slimDropOffset(entity)
-  return {
-    x = entity.drop_position.x - entity.position.x + o.x,
-    y = entity.drop_position.y - entity.position.y + o.y,
-  }
+  return _relToNormal(entity, entity.drop_position, slimDropOffset(entity))
 end
 
 function split_drop_position(full_drop_position)
@@ -777,10 +830,7 @@ function set_pickup_position(entity, newpos)
   local original_positions = { drop_position = entity.drop_position, pickup_position = entity.pickup_position }
   local new_positions = {
     drop_position = entity.drop_position,
-    pickup_position = {
-      x = entity.position.x + newpos.x - o.x,
-      y = entity.position.y + newpos.y - o.y,
-    },
+    pickup_position = _normalToAbs(entity, newpos, o, entity.pickup_position),
   }
   entity.pickup_position = new_positions.pickup_position
   entity.direction = entity.direction -- set direction to force update
@@ -798,10 +848,7 @@ function set_drop_position(entity, newpos)
   local o = slimDropOffset(entity)
   local original_positions = { drop_position = entity.drop_position, pickup_position = entity.pickup_position }
   local new_positions = {
-    drop_position = {
-      x = entity.position.x + newpos.x - o.x,
-      y = entity.position.y + newpos.y - o.y,
-    },
+    drop_position = _normalToAbs(entity, newpos, o, entity.drop_position),
     pickup_position = entity.pickup_position,
   }
   entity.drop_position = new_positions.drop_position
@@ -825,14 +872,8 @@ function set_both_positions(entity, newpickup, newdrop)
   local op = slimPickupOffset(entity)
   local original_positions = { drop_position = entity.drop_position, pickup_position = entity.pickup_position }
   local new_positions = {
-    drop_position = {
-      x = entity.position.x + newdrop.x - od.x,
-      y = entity.position.y + newdrop.y - od.y,
-    },
-    pickup_position = {
-      x = entity.position.x + newpickup.x - op.x,
-      y = entity.position.y + newpickup.y - op.y,
-    },
+    drop_position = _normalToAbs(entity, newdrop, od, entity.drop_position),
+    pickup_position = _normalToAbs(entity, newpickup, op, entity.pickup_position),
   }
   entity.drop_position = new_positions.drop_position
   entity.pickup_position = new_positions.pickup_position
@@ -2058,6 +2099,16 @@ EG: remote.call("bobinserters", "blacklist_inserters", {"burner-inserter"}) will
     bobmods.inserters.create_global_table_basic()
     for i, inserter in pairs(data) do
       storage.bobmods.inserters.blacklist[inserter] = true
+    end
+  end,
+  --[[
+Pass this function a table of names of inserters to remove them from the blacklist.
+]]
+  --
+  unblacklist_inserters = function(data)
+    bobmods.inserters.create_global_table_basic()
+    for i, inserter in pairs(data) do
+      storage.bobmods.inserters.blacklist[inserter] = nil
     end
   end,
   --[[

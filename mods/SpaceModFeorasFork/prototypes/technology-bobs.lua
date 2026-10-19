@@ -155,7 +155,9 @@ else
 	bobmods.lib.tech.add_prerequisite("spaceship-command", "bob-productivity-module-5")
 end
 
-bobmods.lib.tech.add_prerequisite("drydock-assembly", "bob-advanced-processing-unit")
+if data.raw.technology["drydock-assembly"] then
+	bobmods.lib.tech.add_prerequisite("drydock-assembly", "bob-advanced-processing-unit")
+end
 bobmods.lib.tech.add_prerequisite("astrometrics", "bob-advanced-research")
 bobmods.lib.tech.add_prerequisite("space-construction", "bob-robo-modular-4")
 bobmods.lib.tech.replace_prerequisite("space-construction", "solar-energy", "bob-solar-energy-3")
@@ -169,7 +171,7 @@ if not classicMode then
 
 	bobmods.lib.tech.add_prerequisite("space-ai-robots", "bob-robots-4")
 	bobmods.lib.tech.replace_prerequisite("space-ai-robots", "exoskeleton-equipment", "bob-exoskeleton-equipment-3")
-	bobmods.lib.tech.replace_prerequisite("space-ai-robots", "battery-mk2-equipment", "bob-battery-equipment-6")
+	bobmods.lib.tech.replace_prerequisite("space-ai-robots", "battery-mk2-equipment", "bob-battery-equipment-5")
 end
 
 -- alternate protection field recipe enabler

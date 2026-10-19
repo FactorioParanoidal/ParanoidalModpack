@@ -1,8 +1,8 @@
 {
     "name": "Milestones",
-    "version": "1.4.7",
-    "title": "Milestones",
-    "author": "Wiwiweb",
+    "version": "9.4.8",
+    "title": "Milestones (Paranoidal fork)",
+    "author": "Wiwiweb; Paranoidal fork: FactorioParanoidal",
     "dependencies": ["base >= 2.0.0", "flib >= 0.16.0"],
     "factorio_version": "2.0",
     "package": {

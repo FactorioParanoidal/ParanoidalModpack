@@ -9,7 +9,7 @@ if not data.raw.recipe["teleporter"] then return end
 paralib.bobmods.lib.recipe.set_ingredients("teleporter", {
 	{ type = "item",  name = "speed-module-3",            amount = 8   },
 	{ type = "item",  name = "space-science-pack",        amount = 50  },
-	{ type = "item",  name = "advanced-processing-unit",  amount = 50  },
+	{ type = "item",  name = "bob-advanced-processing-unit", amount = 50  },
 	{ type = "item",  name = "low-density-structure",     amount = 150 },
 	{ type = "item",  name = "bob-battery-3",   amount = 100 },
 	{ type = "item",  name = "bob-nitinol-alloy",         amount = 150 },

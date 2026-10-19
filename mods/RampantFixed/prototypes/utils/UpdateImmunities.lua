@@ -52,7 +52,7 @@ end
 
 
 function immunityUpdates.setPlasmaImmunities()
-	local names = {{"biter", "unit"}, {"spitter", "unit"}, {"spitter-spawner", "unit-spawner"}, {"biter-spawner", "unit-spawner"}, {"worm", "turret"}, {"hive", "unit-spawner"}}
+	local names = {{"biter", "unit"}, {"flyer", "unit"}, {"spitter", "unit"}, {"spitter-spawner", "unit-spawner"}, {"biter-spawner", "unit-spawner"}, {"worm", "turret"}, {"hive", "unit-spawner"}}
 	local immuneFactions = {"laser", "electric", "troll", "suicide", "nuclear", "energy-thief"}
 
 	local bobPlasmaFound = data.raw["electric-turret"]["bob-plasma-turret-1"]
@@ -105,7 +105,7 @@ function immunityUpdates.setPlasmaImmunities()
 end
 
 function immunityUpdates.setPierceImmunities()
-	local names = {{"biter", "unit"}, {"spitter", "unit"}, {"spitter-spawner", "unit-spawner"}, {"biter-spawner", "unit-spawner"}, {"worm", "turret"}, {"hive", "unit-spawner"}}
+	local names = {{"biter", "unit"}, {"flyer", "unit"}, {"spitter", "unit"}, {"spitter-spawner", "unit-spawner"}, {"biter-spawner", "unit-spawner"}, {"worm", "turret"}, {"hive", "unit-spawner"}}
 	--local immuneFactions = {"laser", "electric", "troll", "suicide", "nuclear", "energy-thief"}
 
 	for i=1,#FACTION_SET do
@@ -208,7 +208,7 @@ function immunityUpdates.setResistanceToUnknownDamageTypes()
 	knownDamageTypes["rampant-overdamageProtection"] = true
 	knownDamageTypes["healing"] = true
 	
-	local names = {{"biter", "unit"}, {"spitter", "unit"}, {"spitter-spawner", "unit-spawner"}, {"biter-spawner", "unit-spawner"}, {"worm", "turret"}, {"hive", "unit-spawner"}}
+	local names = {{"biter", "unit"}, {"flyer", "unit"}, {"spitter", "unit"}, {"spitter-spawner", "unit-spawner"}, {"biter-spawner", "unit-spawner"}, {"worm", "turret"}, {"hive", "unit-spawner"}}
 	
     for damageType, _ in pairs(data.raw["damage-type"]) do
 		if not knownDamageTypes[damageType] then

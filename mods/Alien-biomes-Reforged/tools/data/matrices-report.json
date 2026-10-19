@@ -1,0 +1,10498 @@
+{
+ "dune-00": {
+  "variant": {
+   "model": "rgb",
+   "weighting": "minimax"
+  },
+  "sources": {
+   "aubergine": "decorative/dune/aubergine/sand-dune-decal/sand-dune-decal-00.png",
+   "beige": "decorative/dune/beige/sand-dune-decal/sand-dune-decal-00.png",
+   "black": "decorative/dune/black/sand-dune-decal/sand-dune-decal-00.png",
+   "brown": "decorative/dune/brown/sand-dune-decal/sand-dune-decal-00.png",
+   "cream": "decorative/dune/cream/sand-dune-decal/sand-dune-decal-00.png",
+   "dustyrose": "decorative/dune/dustyrose/sand-dune-decal/sand-dune-decal-00.png",
+   "grey": "decorative/dune/grey/sand-dune-decal/sand-dune-decal-00.png",
+   "purple": "decorative/dune/purple/sand-dune-decal/sand-dune-decal-00.png",
+   "red": "decorative/dune/red/sand-dune-decal/sand-dune-decal-00.png",
+   "tan": "decorative/dune/tan/sand-dune-decal/sand-dune-decal-00.png",
+   "violet": "decorative/dune/violet/sand-dune-decal/sand-dune-decal-00.png",
+   "white": "decorative/dune/white/sand-dune-decal/sand-dune-decal-00.png"
+  },
+  "size": [
+   212,
+   168
+  ],
+  "groups": [
+   {
+    "scale": 1.08,
+    "layers": [
+     {
+      "file": "dune-00.png",
+      "blend": "normal"
+     }
+    ],
+    "colors": {
+     "aubergine": {
+      "rmse": 1.59,
+      "psnr": 44.1,
+      "ssim": 0.9883,
+      "contrast": 0.998,
+      "dE_mean": 0.06,
+      "tints": [
+       [
+        0.2997,
+        0.2661,
+        0.4424
+       ]
+      ]
+     },
+     "beige": {
+      "rmse": 1.865,
+      "psnr": 42.72,
+      "ssim": 0.9901,
+      "contrast": 0.999,
+      "dE_mean": 0.06,
+      "tints": [
+       [
+        0.7382,
+        0.6546,
+        0.5403
+       ]
+      ]
+     },
+     "black": {
+      "rmse": 1.614,
+      "psnr": 43.97,
+      "ssim": 0.9873,
+      "contrast": 0.996,
+      "dE_mean": 0.02,
+      "tints": [
+       [
+        0.2884,
+        0.285,
+        0.2932
+       ]
+      ]
+     },
+     "brown": {
+      "rmse": 2.169,
+      "psnr": 41.41,
+      "ssim": 0.9878,
+      "contrast": 1.0,
+      "dE_mean": 0.09,
+      "tints": [
+       [
+        0.6668,
+        0.4798,
+        0.3679
+       ]
+      ]
+     },
+     "cream": {
+      "rmse": 2.358,
+      "psnr": 40.68,
+      "ssim": 0.9931,
+      "contrast": 1.001,
+      "dE_mean": 0.1,
+      "tints": [
+       [
+        0.8943,
+        0.8396,
+        0.575
+       ]
+      ]
+     },
+     "dustyrose": {
+      "rmse": 2.157,
+      "psnr": 41.45,
+      "ssim": 0.9853,
+      "contrast": 0.999,
+      "dE_mean": 0.04,
+      "tints": [
+       [
+        0.5555,
+        0.416,
+        0.3999
+       ]
+      ]
+     },
+     "grey": {
+      "rmse": 1.737,
+      "psnr": 43.34,
+      "ssim": 0.9893,
+      "contrast": 0.999,
+      "dE_mean": 0.04,
+      "tints": [
+       [
+        0.5628,
+        0.589,
+        0.5851
+       ]
+      ]
+     },
+     "purple": {
+      "rmse": 2.343,
+      "psnr": 40.73,
+      "ssim": 0.9826,
+      "contrast": 0.996,
+      "dE_mean": 0.13,
+      "tints": [
+       [
+        0.3337,
+        0.3221,
+        0.6674
+       ]
+      ]
+     },
+     "red": {
+      "rmse": 2.563,
+      "psnr": 39.96,
+      "ssim": 0.9814,
+      "contrast": 0.996,
+      "dE_mean": 0.06,
+      "tints": [
+       [
+        0.6305,
+        0.2891,
+        0.2459
+       ]
+      ]
+     },
+     "tan": {
+      "rmse": 2.057,
+      "psnr": 41.87,
+      "ssim": 0.9935,
+      "contrast": 1.001,
+      "dE_mean": 0.13,
+      "tints": [
+       [
+        0.824,
+        0.665,
+        0.4541
+       ]
+      ]
+     },
+     "violet": {
+      "rmse": 2.109,
+      "psnr": 41.65,
+      "ssim": 0.9858,
+      "contrast": 0.997,
+      "dE_mean": 0.06,
+      "tints": [
+       [
+        0.5628,
+        0.3194,
+        0.586
+       ]
+      ]
+     },
+     "white": {
+      "rmse": 2.378,
+      "psnr": 40.61,
+      "ssim": 0.9936,
+      "contrast": 0.999,
+      "dE_mean": 0.05,
+      "tints": [
+       [
+        0.9259,
+        0.9259,
+        0.9259
+       ]
+      ]
+     }
+    }
+   }
+  ],
+  "picked": "minimax"
+ },
+ "dune-01": {
+  "variant": {
+   "model": "rgb",
+   "weighting": "minimax"
+  },
+  "sources": {
+   "aubergine": "decorative/dune/aubergine/sand-dune-decal/sand-dune-decal-01.png",
+   "beige": "decorative/dune/beige/sand-dune-decal/sand-dune-decal-01.png",
+   "black": "decorative/dune/black/sand-dune-decal/sand-dune-decal-01.png",
+   "brown": "decorative/dune/brown/sand-dune-decal/sand-dune-decal-01.png",
+   "cream": "decorative/dune/cream/sand-dune-decal/sand-dune-decal-01.png",
+   "dustyrose": "decorative/dune/dustyrose/sand-dune-decal/sand-dune-decal-01.png",
+   "grey": "decorative/dune/grey/sand-dune-decal/sand-dune-decal-01.png",
+   "purple": "decorative/dune/purple/sand-dune-decal/sand-dune-decal-01.png",
+   "red": "decorative/dune/red/sand-dune-decal/sand-dune-decal-01.png",
+   "tan": "decorative/dune/tan/sand-dune-decal/sand-dune-decal-01.png",
+   "violet": "decorative/dune/violet/sand-dune-decal/sand-dune-decal-01.png",
+   "white": "decorative/dune/white/sand-dune-decal/sand-dune-decal-01.png"
+  },
+  "size": [
+   211,
+   148
+  ],
+  "groups": [
+   {
+    "scale": 1.04,
+    "layers": [
+     {
+      "file": "dune-01.png",
+      "blend": "normal"
+     }
+    ],
+    "colors": {
+     "aubergine": {
+      "rmse": 1.223,
+      "psnr": 46.38,
+      "ssim": 0.9924,
+      "contrast": 1.005,
+      "dE_mean": 0.08,
+      "tints": [
+       [
+        0.3038,
+        0.2682,
+        0.4489
+       ]
+      ]
+     },
+     "beige": {
+      "rmse": 1.411,
+      "psnr": 45.14,
+      "ssim": 0.9939,
+      "contrast": 1.002,
+      "dE_mean": 0.08,
+      "tints": [
+       [
+        0.7562,
+        0.6707,
+        0.5499
+       ]
+      ]
+     },
+     "black": {
+      "rmse": 1.18,
+      "psnr": 46.7,
+      "ssim": 0.9918,
+      "contrast": 1.003,
+      "dE_mean": 0.05,
+      "tints": [
+       [
+        0.2907,
+        0.287,
+        0.2958
+       ]
+      ]
+     },
+     "brown": {
+      "rmse": 1.696,
+      "psnr": 43.54,
+      "ssim": 0.9913,
+      "contrast": 1.004,
+      "dE_mean": 0.12,
+      "tints": [
+       [
+        0.6808,
+        0.4892,
+        0.3709
+       ]
+      ]
+     },
+     "cream": {
+      "rmse": 1.814,
+      "psnr": 42.96,
+      "ssim": 0.9955,
+      "contrast": 0.999,
+      "dE_mean": 0.1,
+      "tints": [
+       [
+        0.9293,
+        0.8723,
+        0.5861
+       ]
+      ]
+     },
+     "dustyrose": {
+      "rmse": 1.632,
+      "psnr": 43.88,
+      "ssim": 0.9904,
+      "contrast": 1.004,
+      "dE_mean": 0.1,
+      "tints": [
+       [
+        0.565,
+        0.4225,
+        0.4044
+       ]
+      ]
+     },
+     "grey": {
+      "rmse": 1.354,
+      "psnr": 45.5,
+      "ssim": 0.993,
+      "contrast": 1.002,
+      "dE_mean": 0.04,
+      "tints": [
+       [
+        0.5734,
+        0.6016,
+        0.5975
+       ]
+      ]
+     },
+     "purple": {
+      "rmse": 1.761,
+      "psnr": 43.22,
+      "ssim": 0.9881,
+      "contrast": 1.004,
+      "dE_mean": 0.11,
+      "tints": [
+       [
+        0.338,
+        0.3245,
+        0.6804
+       ]
+      ]
+     },
+     "red": {
+      "rmse": 1.973,
+      "psnr": 42.23,
+      "ssim": 0.9861,
+      "contrast": 1.005,
+      "dE_mean": 0.14,
+      "tints": [
+       [
+        0.6399,
+        0.2902,
+        0.2463
+       ]
+      ]
+     },
+     "tan": {
+      "rmse": 1.598,
+      "psnr": 44.06,
+      "ssim": 0.9956,
+      "contrast": 1.002,
+      "dE_mean": 0.12,
+      "tints": [
+       [
+        0.8512,
+        0.686,
+        0.4594
+       ]
+      ]
+     },
+     "violet": {
+      "rmse": 1.635,
+      "psnr": 43.86,
+      "ssim": 0.9901,
+      "contrast": 1.004,
+      "dE_mean": 0.1,
+      "tints": [
+       [
+        0.5708,
+        0.3216,
+        0.5924
+       ]
+      ]
+     },
+     "white": {
+      "rmse": 1.838,
+      "psnr": 42.84,
+      "ssim": 0.9954,
+      "contrast": 0.997,
+      "dE_mean": 0.09,
+      "tints": [
+       [
+        0.9616,
+        0.9616,
+        0.9616
+       ]
+      ]
+     }
+    }
+   }
+  ],
+  "picked": "minimax"
+ },
+ "dune-02": {
+  "variant": {
+   "model": "rgb",
+   "weighting": "minimax"
+  },
+  "sources": {
+   "aubergine": "decorative/dune/aubergine/sand-dune-decal/sand-dune-decal-02.png",
+   "beige": "decorative/dune/beige/sand-dune-decal/sand-dune-decal-02.png",
+   "black": "decorative/dune/black/sand-dune-decal/sand-dune-decal-02.png",
+   "brown": "decorative/dune/brown/sand-dune-decal/sand-dune-decal-02.png",
+   "cream": "decorative/dune/cream/sand-dune-decal/sand-dune-decal-02.png",
+   "dustyrose": "decorative/dune/dustyrose/sand-dune-decal/sand-dune-decal-02.png",
+   "grey": "decorative/dune/grey/sand-dune-decal/sand-dune-decal-02.png",
+   "purple": "decorative/dune/purple/sand-dune-decal/sand-dune-decal-02.png",
+   "red": "decorative/dune/red/sand-dune-decal/sand-dune-decal-02.png",
+   "tan": "decorative/dune/tan/sand-dune-decal/sand-dune-decal-02.png",
+   "violet": "decorative/dune/violet/sand-dune-decal/sand-dune-decal-02.png",
+   "white": "decorative/dune/white/sand-dune-decal/sand-dune-decal-02.png"
+  },
+  "size": [
+   260,
+   184
+  ],
+  "groups": [
+   {
+    "scale": 1.12,
+    "layers": [
+     {
+      "file": "dune-02.png",
+      "blend": "normal"
+     }
+    ],
+    "colors": {
+     "aubergine": {
+      "rmse": 1.771,
+      "psnr": 43.17,
+      "ssim": 0.9871,
+      "contrast": 0.997,
+      "dE_mean": 0.05,
+      "tints": [
+       [
+        0.2896,
+        0.2569,
+        0.4288
+       ]
+      ]
+     },
+     "beige": {
+      "rmse": 2.002,
+      "psnr": 42.1,
+      "ssim": 0.9896,
+      "contrast": 0.999,
+      "dE_mean": 0.06,
+      "tints": [
+       [
+        0.713,
+        0.6323,
+        0.5216
+       ]
+      ]
+     },
+     "black": {
+      "rmse": 1.757,
+      "psnr": 43.24,
+      "ssim": 0.986,
+      "contrast": 0.994,
+      "dE_mean": 0.03,
+      "tints": [
+       [
+        0.279,
+        0.2755,
+        0.2835
+       ]
+      ]
+     },
+     "brown": {
+      "rmse": 2.289,
+      "psnr": 40.94,
+      "ssim": 0.9873,
+      "contrast": 0.999,
+      "dE_mean": 0.09,
+      "tints": [
+       [
+        0.6451,
+        0.4635,
+        0.3549
+       ]
+      ]
+     },
+     "cream": {
+      "rmse": 2.474,
+      "psnr": 40.26,
+      "ssim": 0.9932,
+      "contrast": 1.001,
+      "dE_mean": 0.1,
+      "tints": [
+       [
+        0.8636,
+        0.8107,
+        0.5546
+       ]
+      ]
+     },
+     "dustyrose": {
+      "rmse": 2.285,
+      "psnr": 40.95,
+      "ssim": 0.9847,
+      "contrast": 0.998,
+      "dE_mean": 0.03,
+      "tints": [
+       [
+        0.5373,
+        0.4026,
+        0.3865
+       ]
+      ]
+     },
+     "grey": {
+      "rmse": 1.849,
+      "psnr": 42.79,
+      "ssim": 0.9893,
+      "contrast": 0.999,
+      "dE_mean": 0.04,
+      "tints": [
+       [
+        0.5435,
+        0.5687,
+        0.5652
+       ]
+      ]
+     },
+     "purple": {
+      "rmse": 2.451,
+      "psnr": 40.34,
+      "ssim": 0.9811,
+      "contrast": 0.994,
+      "dE_mean": 0.13,
+      "tints": [
+       [
+        0.322,
+        0.311,
+        0.6473
+       ]
+      ]
+     },
+     "red": {
+      "rmse": 2.706,
+      "psnr": 39.49,
+      "ssim": 0.9803,
+      "contrast": 0.995,
+      "dE_mean": 0.07,
+      "tints": [
+       [
+        0.6113,
+        0.2794,
+        0.2379
+       ]
+      ]
+     },
+     "tan": {
+      "rmse": 2.139,
+      "psnr": 41.53,
+      "ssim": 0.9933,
+      "contrast": 1.001,
+      "dE_mean": 0.13,
+      "tints": [
+       [
+        0.7963,
+        0.6425,
+        0.4379
+       ]
+      ]
+     },
+     "violet": {
+      "rmse": 2.344,
+      "psnr": 40.73,
+      "ssim": 0.9846,
+      "contrast": 0.995,
+      "dE_mean": 0.07,
+      "tints": [
+       [
+        0.5452,
+        0.3085,
+        0.5677
+       ]
+      ]
+     },
+     "white": {
+      "rmse": 2.513,
+      "psnr": 40.13,
+      "ssim": 0.9939,
+      "contrast": 0.999,
+      "dE_mean": 0.07,
+      "tints": [
+       [
+        0.8929,
+        0.8928,
+        0.8928
+       ]
+      ]
+     }
+    }
+   }
+  ],
+  "picked": "minimax"
+ },
+ "dune-03": {
+  "variant": {
+   "model": "rgb",
+   "weighting": "minimax"
+  },
+  "sources": {
+   "aubergine": "decorative/dune/aubergine/sand-dune-decal/sand-dune-decal-03.png",
+   "beige": "decorative/dune/beige/sand-dune-decal/sand-dune-decal-03.png",
+   "black": "decorative/dune/black/sand-dune-decal/sand-dune-decal-03.png",
+   "brown": "decorative/dune/brown/sand-dune-decal/sand-dune-decal-03.png",
+   "cream": "decorative/dune/cream/sand-dune-decal/sand-dune-decal-03.png",
+   "dustyrose": "decorative/dune/dustyrose/sand-dune-decal/sand-dune-decal-03.png",
+   "grey": "decorative/dune/grey/sand-dune-decal/sand-dune-decal-03.png",
+   "purple": "decorative/dune/purple/sand-dune-decal/sand-dune-decal-03.png",
+   "red": "decorative/dune/red/sand-dune-decal/sand-dune-decal-03.png",
+   "tan": "decorative/dune/tan/sand-dune-decal/sand-dune-decal-03.png",
+   "violet": "decorative/dune/violet/sand-dune-decal/sand-dune-decal-03.png",
+   "white": "decorative/dune/white/sand-dune-decal/sand-dune-decal-03.png"
+  },
+  "size": [
+   129,
+   181
+  ],
+  "groups": [
+   {
+    "scale": 1.04,
+    "layers": [
+     {
+      "file": "dune-03.png",
+      "blend": "normal"
+     }
+    ],
+    "colors": {
+     "aubergine": {
+      "rmse": 1.277,
+      "psnr": 46.01,
+      "ssim": 0.9922,
+      "contrast": 1.001,
+      "dE_mean": 0.08,
+      "tints": [
+       [
+        0.3089,
+        0.2736,
+        0.455
+       ]
+      ]
+     },
+     "beige": {
+      "rmse": 1.581,
+      "psnr": 44.15,
+      "ssim": 0.9941,
+      "contrast": 1.001,
+      "dE_mean": 0.08,
+      "tints": [
+       [
+        0.7629,
+        0.6768,
+        0.5579
+       ]
+      ]
+     },
+     "black": {
+      "rmse": 1.317,
+      "psnr": 45.74,
+      "ssim": 0.9916,
+      "contrast": 0.998,
+      "dE_mean": 0.01,
+      "tints": [
+       [
+        0.296,
+        0.2924,
+        0.301
+       ]
+      ]
+     },
+     "brown": {
+      "rmse": 1.879,
+      "psnr": 42.65,
+      "ssim": 0.9924,
+      "contrast": 1.001,
+      "dE_mean": 0.11,
+      "tints": [
+       [
+        0.688,
+        0.4956,
+        0.3785
+       ]
+      ]
+     },
+     "cream": {
+      "rmse": 2.009,
+      "psnr": 42.07,
+      "ssim": 0.9963,
+      "contrast": 1.0,
+      "dE_mean": 0.07,
+      "tints": [
+       [
+        0.9291,
+        0.8718,
+        0.5934
+       ]
+      ]
+     },
+     "dustyrose": {
+      "rmse": 1.796,
+      "psnr": 43.04,
+      "ssim": 0.9911,
+      "contrast": 1.001,
+      "dE_mean": 0.07,
+      "tints": [
+       [
+        0.5723,
+        0.4288,
+        0.4113
+       ]
+      ]
+     },
+     "grey": {
+      "rmse": 1.477,
+      "psnr": 44.75,
+      "ssim": 0.9937,
+      "contrast": 1.0,
+      "dE_mean": 0.03,
+      "tints": [
+       [
+        0.5809,
+        0.6083,
+        0.6044
+       ]
+      ]
+     },
+     "purple": {
+      "rmse": 1.996,
+      "psnr": 42.13,
+      "ssim": 0.988,
+      "contrast": 0.999,
+      "dE_mean": 0.13,
+      "tints": [
+       [
+        0.3437,
+        0.3303,
+        0.6871
+       ]
+      ]
+     },
+     "red": {
+      "rmse": 2.177,
+      "psnr": 41.37,
+      "ssim": 0.9875,
+      "contrast": 1.0,
+      "dE_mean": 0.09,
+      "tints": [
+       [
+        0.6484,
+        0.2974,
+        0.2521
+       ]
+      ]
+     },
+     "tan": {
+      "rmse": 1.775,
+      "psnr": 43.15,
+      "ssim": 0.9962,
+      "contrast": 1.002,
+      "dE_mean": 0.13,
+      "tints": [
+       [
+        0.8538,
+        0.689,
+        0.468
+       ]
+      ]
+     },
+     "violet": {
+      "rmse": 1.672,
+      "psnr": 43.66,
+      "ssim": 0.9913,
+      "contrast": 0.999,
+      "dE_mean": 0.08,
+      "tints": [
+       [
+        0.5798,
+        0.3286,
+        0.6024
+       ]
+      ]
+     },
+     "white": {
+      "rmse": 2.015,
+      "psnr": 42.04,
+      "ssim": 0.9963,
+      "contrast": 0.998,
+      "dE_mean": 0.07,
+      "tints": [
+       [
+        0.9615,
+        0.9615,
+        0.9615
+       ]
+      ]
+     }
+    }
+   }
+  ],
+  "picked": "minimax"
+ },
+ "dune-04": {
+  "variant": {
+   "model": "rgb",
+   "weighting": "minimax"
+  },
+  "sources": {
+   "aubergine": "decorative/dune/aubergine/sand-dune-decal/sand-dune-decal-04.png",
+   "beige": "decorative/dune/beige/sand-dune-decal/sand-dune-decal-04.png",
+   "black": "decorative/dune/black/sand-dune-decal/sand-dune-decal-04.png",
+   "brown": "decorative/dune/brown/sand-dune-decal/sand-dune-decal-04.png",
+   "cream": "decorative/dune/cream/sand-dune-decal/sand-dune-decal-04.png",
+   "dustyrose": "decorative/dune/dustyrose/sand-dune-decal/sand-dune-decal-04.png",
+   "grey": "decorative/dune/grey/sand-dune-decal/sand-dune-decal-04.png",
+   "purple": "decorative/dune/purple/sand-dune-decal/sand-dune-decal-04.png",
+   "red": "decorative/dune/red/sand-dune-decal/sand-dune-decal-04.png",
+   "tan": "decorative/dune/tan/sand-dune-decal/sand-dune-decal-04.png",
+   "violet": "decorative/dune/violet/sand-dune-decal/sand-dune-decal-04.png",
+   "white": "decorative/dune/white/sand-dune-decal/sand-dune-decal-04.png"
+  },
+  "size": [
+   196,
+   184
+  ],
+  "groups": [
+   {
+    "scale": 1.12,
+    "layers": [
+     {
+      "file": "dune-04.png",
+      "blend": "normal"
+     }
+    ],
+    "colors": {
+     "aubergine": {
+      "rmse": 1.882,
+      "psnr": 42.64,
+      "ssim": 0.9857,
+      "contrast": 0.994,
+      "dE_mean": 0.08,
+      "tints": [
+       [
+        0.2875,
+        0.2559,
+        0.425
+       ]
+      ]
+     },
+     "beige": {
+      "rmse": 2.186,
+      "psnr": 41.34,
+      "ssim": 0.9892,
+      "contrast": 0.998,
+      "dE_mean": 0.08,
+      "tints": [
+       [
+        0.7099,
+        0.6291,
+        0.5193
+       ]
+      ]
+     },
+     "black": {
+      "rmse": 1.899,
+      "psnr": 42.56,
+      "ssim": 0.9842,
+      "contrast": 0.991,
+      "dE_mean": 0.05,
+      "tints": [
+       [
+        0.2769,
+        0.2736,
+        0.2819
+       ]
+      ]
+     },
+     "brown": {
+      "rmse": 2.702,
+      "psnr": 39.5,
+      "ssim": 0.9855,
+      "contrast": 0.997,
+      "dE_mean": 0.11,
+      "tints": [
+       [
+        0.6409,
+        0.4599,
+        0.3529
+       ]
+      ]
+     },
+     "cream": {
+      "rmse": 2.955,
+      "psnr": 38.72,
+      "ssim": 0.992,
+      "contrast": 1.002,
+      "dE_mean": 0.19,
+      "tints": [
+       [
+        0.8626,
+        0.8089,
+        0.5519
+       ]
+      ]
+     },
+     "dustyrose": {
+      "rmse": 2.666,
+      "psnr": 39.61,
+      "ssim": 0.9821,
+      "contrast": 0.995,
+      "dE_mean": 0.05,
+      "tints": [
+       [
+        0.5335,
+        0.3992,
+        0.3839
+       ]
+      ]
+     },
+     "grey": {
+      "rmse": 2.053,
+      "psnr": 41.88,
+      "ssim": 0.9879,
+      "contrast": 0.997,
+      "dE_mean": 0.06,
+      "tints": [
+       [
+        0.5405,
+        0.566,
+        0.5625
+       ]
+      ]
+     },
+     "purple": {
+      "rmse": 2.938,
+      "psnr": 38.77,
+      "ssim": 0.9771,
+      "contrast": 0.989,
+      "dE_mean": 0.18,
+      "tints": [
+       [
+        0.3194,
+        0.3089,
+        0.641
+       ]
+      ]
+     },
+     "red": {
+      "rmse": 3.205,
+      "psnr": 38.02,
+      "ssim": 0.9761,
+      "contrast": 0.99,
+      "dE_mean": 0.08,
+      "tints": [
+       [
+        0.6053,
+        0.2766,
+        0.2358
+       ]
+      ]
+     },
+     "tan": {
+      "rmse": 2.551,
+      "psnr": 40.0,
+      "ssim": 0.9933,
+      "contrast": 1.001,
+      "dE_mean": 0.18,
+      "tints": [
+       [
+        0.7941,
+        0.6392,
+        0.4356
+       ]
+      ]
+     },
+     "violet": {
+      "rmse": 2.488,
+      "psnr": 40.21,
+      "ssim": 0.9816,
+      "contrast": 0.994,
+      "dE_mean": 0.06,
+      "tints": [
+       [
+        0.5402,
+        0.3072,
+        0.564
+       ]
+      ]
+     },
+     "white": {
+      "rmse": 2.984,
+      "psnr": 38.64,
+      "ssim": 0.9917,
+      "contrast": 1.0,
+      "dE_mean": 0.09,
+      "tints": [
+       [
+        0.8929,
+        0.8929,
+        0.8928
+       ]
+      ]
+     }
+    }
+   }
+  ],
+  "picked": "minimax"
+ },
+ "dune-05": {
+  "variant": {
+   "model": "rgb",
+   "weighting": "minimax"
+  },
+  "sources": {
+   "aubergine": "decorative/dune/aubergine/sand-dune-decal/sand-dune-decal-05.png",
+   "beige": "decorative/dune/beige/sand-dune-decal/sand-dune-decal-05.png",
+   "black": "decorative/dune/black/sand-dune-decal/sand-dune-decal-05.png",
+   "brown": "decorative/dune/brown/sand-dune-decal/sand-dune-decal-05.png",
+   "cream": "decorative/dune/cream/sand-dune-decal/sand-dune-decal-05.png",
+   "dustyrose": "decorative/dune/dustyrose/sand-dune-decal/sand-dune-decal-05.png",
+   "grey": "decorative/dune/grey/sand-dune-decal/sand-dune-decal-05.png",
+   "purple": "decorative/dune/purple/sand-dune-decal/sand-dune-decal-05.png",
+   "red": "decorative/dune/red/sand-dune-decal/sand-dune-decal-05.png",
+   "tan": "decorative/dune/tan/sand-dune-decal/sand-dune-decal-05.png",
+   "violet": "decorative/dune/violet/sand-dune-decal/sand-dune-decal-05.png",
+   "white": "decorative/dune/white/sand-dune-decal/sand-dune-decal-05.png"
+  },
+  "size": [
+   215,
+   184
+  ],
+  "groups": [
+   {
+    "scale": 1.12,
+    "layers": [
+     {
+      "file": "dune-05.png",
+      "blend": "normal"
+     }
+    ],
+    "colors": {
+     "aubergine": {
+      "rmse": 1.662,
+      "psnr": 43.72,
+      "ssim": 0.9881,
+      "contrast": 0.997,
+      "dE_mean": 0.08,
+      "tints": [
+       [
+        0.2897,
+        0.2576,
+        0.4268
+       ]
+      ]
+     },
+     "beige": {
+      "rmse": 1.907,
+      "psnr": 42.53,
+      "ssim": 0.9903,
+      "contrast": 0.999,
+      "dE_mean": 0.08,
+      "tints": [
+       [
+        0.7119,
+        0.6319,
+        0.5231
+       ]
+      ]
+     },
+     "black": {
+      "rmse": 1.667,
+      "psnr": 43.69,
+      "ssim": 0.987,
+      "contrast": 0.994,
+      "dE_mean": 0.03,
+      "tints": [
+       [
+        0.2783,
+        0.2751,
+        0.283
+       ]
+      ]
+     },
+     "brown": {
+      "rmse": 2.208,
+      "psnr": 41.25,
+      "ssim": 0.9881,
+      "contrast": 1.0,
+      "dE_mean": 0.11,
+      "tints": [
+       [
+        0.6429,
+        0.4634,
+        0.3568
+       ]
+      ]
+     },
+     "cream": {
+      "rmse": 2.384,
+      "psnr": 40.58,
+      "ssim": 0.993,
+      "contrast": 1.001,
+      "dE_mean": 0.13,
+      "tints": [
+       [
+        0.8617,
+        0.8091,
+        0.5565
+       ]
+      ]
+     },
+     "dustyrose": {
+      "rmse": 2.205,
+      "psnr": 41.26,
+      "ssim": 0.9859,
+      "contrast": 0.998,
+      "dE_mean": 0.05,
+      "tints": [
+       [
+        0.536,
+        0.4026,
+        0.3869
+       ]
+      ]
+     },
+     "grey": {
+      "rmse": 1.801,
+      "psnr": 43.02,
+      "ssim": 0.9895,
+      "contrast": 0.999,
+      "dE_mean": 0.04,
+      "tints": [
+       [
+        0.5434,
+        0.5685,
+        0.5648
+       ]
+      ]
+     },
+     "purple": {
+      "rmse": 2.359,
+      "psnr": 40.67,
+      "ssim": 0.9827,
+      "contrast": 0.994,
+      "dE_mean": 0.17,
+      "tints": [
+       [
+        0.3232,
+        0.3121,
+        0.6436
+       ]
+      ]
+     },
+     "red": {
+      "rmse": 2.602,
+      "psnr": 39.82,
+      "ssim": 0.982,
+      "contrast": 0.995,
+      "dE_mean": 0.07,
+      "tints": [
+       [
+        0.6082,
+        0.2802,
+        0.2384
+       ]
+      ]
+     },
+     "tan": {
+      "rmse": 2.082,
+      "psnr": 41.76,
+      "ssim": 0.9933,
+      "contrast": 1.002,
+      "dE_mean": 0.16,
+      "tints": [
+       [
+        0.7937,
+        0.6416,
+        0.4398
+       ]
+      ]
+     },
+     "violet": {
+      "rmse": 2.193,
+      "psnr": 41.31,
+      "ssim": 0.9854,
+      "contrast": 0.996,
+      "dE_mean": 0.07,
+      "tints": [
+       [
+        0.5428,
+        0.3093,
+        0.5648
+       ]
+      ]
+     },
+     "white": {
+      "rmse": 2.411,
+      "psnr": 40.49,
+      "ssim": 0.9941,
+      "contrast": 0.999,
+      "dE_mean": 0.07,
+      "tints": [
+       [
+        0.8928,
+        0.8928,
+        0.8929
+       ]
+      ]
+     }
+    }
+   }
+  ],
+  "picked": "minimax"
+ },
+ "dune-06": {
+  "variant": {
+   "model": "rgb",
+   "weighting": "minimax"
+  },
+  "sources": {
+   "aubergine": "decorative/dune/aubergine/sand-dune-decal/sand-dune-decal-06.png",
+   "beige": "decorative/dune/beige/sand-dune-decal/sand-dune-decal-06.png",
+   "black": "decorative/dune/black/sand-dune-decal/sand-dune-decal-06.png",
+   "brown": "decorative/dune/brown/sand-dune-decal/sand-dune-decal-06.png",
+   "cream": "decorative/dune/cream/sand-dune-decal/sand-dune-decal-06.png",
+   "dustyrose": "decorative/dune/dustyrose/sand-dune-decal/sand-dune-decal-06.png",
+   "grey": "decorative/dune/grey/sand-dune-decal/sand-dune-decal-06.png",
+   "purple": "decorative/dune/purple/sand-dune-decal/sand-dune-decal-06.png",
+   "red": "decorative/dune/red/sand-dune-decal/sand-dune-decal-06.png",
+   "tan": "decorative/dune/tan/sand-dune-decal/sand-dune-decal-06.png",
+   "violet": "decorative/dune/violet/sand-dune-decal/sand-dune-decal-06.png",
+   "white": "decorative/dune/white/sand-dune-decal/sand-dune-decal-06.png"
+  },
+  "size": [
+   218,
+   179
+  ],
+  "groups": [
+   {
+    "scale": 1.04,
+    "layers": [
+     {
+      "file": "dune-06.png",
+      "blend": "normal"
+     }
+    ],
+    "colors": {
+     "aubergine": {
+      "rmse": 1.236,
+      "psnr": 46.29,
+      "ssim": 0.9934,
+      "contrast": 1.002,
+      "dE_mean": 0.07,
+      "tints": [
+       [
+        0.3088,
+        0.2733,
+        0.4557
+       ]
+      ]
+     },
+     "beige": {
+      "rmse": 1.353,
+      "psnr": 45.51,
+      "ssim": 0.9955,
+      "contrast": 1.001,
+      "dE_mean": 0.07,
+      "tints": [
+       [
+        0.7631,
+        0.6774,
+        0.5571
+       ]
+      ]
+     },
+     "black": {
+      "rmse": 1.231,
+      "psnr": 46.33,
+      "ssim": 0.9926,
+      "contrast": 0.999,
+      "dE_mean": 0.02,
+      "tints": [
+       [
+        0.296,
+        0.2926,
+        0.3013
+       ]
+      ]
+     },
+     "brown": {
+      "rmse": 1.566,
+      "psnr": 44.23,
+      "ssim": 0.9938,
+      "contrast": 1.002,
+      "dE_mean": 0.12,
+      "tints": [
+       [
+        0.6886,
+        0.4951,
+        0.3775
+       ]
+      ]
+     },
+     "cream": {
+      "rmse": 1.737,
+      "psnr": 43.34,
+      "ssim": 0.9966,
+      "contrast": 1.0,
+      "dE_mean": 0.06,
+      "tints": [
+       [
+        0.9295,
+        0.8731,
+        0.5925
+       ]
+      ]
+     },
+     "dustyrose": {
+      "rmse": 1.567,
+      "psnr": 44.23,
+      "ssim": 0.993,
+      "contrast": 1.002,
+      "dE_mean": 0.08,
+      "tints": [
+       [
+        0.5729,
+        0.4291,
+        0.4114
+       ]
+      ]
+     },
+     "grey": {
+      "rmse": 1.296,
+      "psnr": 45.88,
+      "ssim": 0.995,
+      "contrast": 1.0,
+      "dE_mean": 0.04,
+      "tints": [
+       [
+        0.5802,
+        0.6077,
+        0.6039
+       ]
+      ]
+     },
+     "purple": {
+      "rmse": 1.666,
+      "psnr": 43.7,
+      "ssim": 0.9912,
+      "contrast": 1.001,
+      "dE_mean": 0.11,
+      "tints": [
+       [
+        0.3437,
+        0.3304,
+        0.6902
+       ]
+      ]
+     },
+     "red": {
+      "rmse": 1.893,
+      "psnr": 42.59,
+      "ssim": 0.9898,
+      "contrast": 1.001,
+      "dE_mean": 0.1,
+      "tints": [
+       [
+        0.6503,
+        0.2968,
+        0.2516
+       ]
+      ]
+     },
+     "tan": {
+      "rmse": 1.5,
+      "psnr": 44.61,
+      "ssim": 0.9967,
+      "contrast": 1.002,
+      "dE_mean": 0.11,
+      "tints": [
+       [
+        0.8545,
+        0.6898,
+        0.4665
+       ]
+      ]
+     },
+     "violet": {
+      "rmse": 1.624,
+      "psnr": 43.92,
+      "ssim": 0.9926,
+      "contrast": 1.0,
+      "dE_mean": 0.09,
+      "tints": [
+       [
+        0.5799,
+        0.3282,
+        0.6024
+       ]
+      ]
+     },
+     "white": {
+      "rmse": 1.765,
+      "psnr": 43.2,
+      "ssim": 0.997,
+      "contrast": 0.998,
+      "dE_mean": 0.07,
+      "tints": [
+       [
+        0.9615,
+        0.9616,
+        0.9616
+       ]
+      ]
+     }
+    }
+   }
+  ],
+  "picked": "minimax"
+ },
+ "dune-07": {
+  "variant": {
+   "model": "rgb",
+   "weighting": "minimax"
+  },
+  "sources": {
+   "aubergine": "decorative/dune/aubergine/sand-dune-decal/sand-dune-decal-07.png",
+   "beige": "decorative/dune/beige/sand-dune-decal/sand-dune-decal-07.png",
+   "black": "decorative/dune/black/sand-dune-decal/sand-dune-decal-07.png",
+   "brown": "decorative/dune/brown/sand-dune-decal/sand-dune-decal-07.png",
+   "cream": "decorative/dune/cream/sand-dune-decal/sand-dune-decal-07.png",
+   "dustyrose": "decorative/dune/dustyrose/sand-dune-decal/sand-dune-decal-07.png",
+   "grey": "decorative/dune/grey/sand-dune-decal/sand-dune-decal-07.png",
+   "purple": "decorative/dune/purple/sand-dune-decal/sand-dune-decal-07.png",
+   "red": "decorative/dune/red/sand-dune-decal/sand-dune-decal-07.png",
+   "tan": "decorative/dune/tan/sand-dune-decal/sand-dune-decal-07.png",
+   "violet": "decorative/dune/violet/sand-dune-decal/sand-dune-decal-07.png",
+   "white": "decorative/dune/white/sand-dune-decal/sand-dune-decal-07.png"
+  },
+  "size": [
+   250,
+   183
+  ],
+  "groups": [
+   {
+    "scale": 1.18,
+    "layers": [
+     {
+      "file": "dune-07.png",
+      "blend": "normal"
+     }
+    ],
+    "colors": {
+     "aubergine": {
+      "rmse": 1.07,
+      "psnr": 47.54,
+      "ssim": 0.9934,
+      "contrast": 1.007,
+      "dE_mean": 0.1,
+      "tints": [
+       [
+        0.2658,
+        0.2335,
+        0.3911
+       ]
+      ]
+     },
+     "beige": {
+      "rmse": 1.328,
+      "psnr": 45.67,
+      "ssim": 0.9943,
+      "contrast": 1.003,
+      "dE_mean": 0.1,
+      "tints": [
+       [
+        0.6629,
+        0.5875,
+        0.4804
+       ]
+      ]
+     },
+     "black": {
+      "rmse": 1.087,
+      "psnr": 47.41,
+      "ssim": 0.9925,
+      "contrast": 1.005,
+      "dE_mean": 0.05,
+      "tints": [
+       [
+        0.2529,
+        0.2497,
+        0.2576
+       ]
+      ]
+     },
+     "brown": {
+      "rmse": 1.656,
+      "psnr": 43.75,
+      "ssim": 0.9922,
+      "contrast": 1.005,
+      "dE_mean": 0.15,
+      "tints": [
+       [
+        0.595,
+        0.4275,
+        0.3225
+       ]
+      ]
+     },
+     "cream": {
+      "rmse": 1.762,
+      "psnr": 43.21,
+      "ssim": 0.9962,
+      "contrast": 0.999,
+      "dE_mean": 0.12,
+      "tints": [
+       [
+        0.8189,
+        0.7686,
+        0.5109
+       ]
+      ]
+     },
+     "dustyrose": {
+      "rmse": 1.574,
+      "psnr": 44.19,
+      "ssim": 0.991,
+      "contrast": 1.006,
+      "dE_mean": 0.13,
+      "tints": [
+       [
+        0.4931,
+        0.3682,
+        0.3521
+       ]
+      ]
+     },
+     "grey": {
+      "rmse": 1.265,
+      "psnr": 46.09,
+      "ssim": 0.9939,
+      "contrast": 1.003,
+      "dE_mean": 0.06,
+      "tints": [
+       [
+        0.5015,
+        0.5263,
+        0.5233
+       ]
+      ]
+     },
+     "purple": {
+      "rmse": 1.758,
+      "psnr": 43.23,
+      "ssim": 0.9894,
+      "contrast": 1.005,
+      "dE_mean": 0.13,
+      "tints": [
+       [
+        0.2947,
+        0.2814,
+        0.5922
+       ]
+      ]
+     },
+     "red": {
+      "rmse": 1.923,
+      "psnr": 42.45,
+      "ssim": 0.9881,
+      "contrast": 1.006,
+      "dE_mean": 0.18,
+      "tints": [
+       [
+        0.557,
+        0.252,
+        0.2134
+       ]
+      ]
+     },
+     "tan": {
+      "rmse": 1.597,
+      "psnr": 44.07,
+      "ssim": 0.9959,
+      "contrast": 1.002,
+      "dE_mean": 0.13,
+      "tints": [
+       [
+        0.7484,
+        0.6024,
+        0.3993
+       ]
+      ]
+     },
+     "violet": {
+      "rmse": 1.416,
+      "psnr": 45.11,
+      "ssim": 0.9913,
+      "contrast": 1.005,
+      "dE_mean": 0.12,
+      "tints": [
+       [
+        0.4981,
+        0.2804,
+        0.5162
+       ]
+      ]
+     },
+     "white": {
+      "rmse": 1.79,
+      "psnr": 43.08,
+      "ssim": 0.9966,
+      "contrast": 0.996,
+      "dE_mean": 0.11,
+      "tints": [
+       [
+        0.8475,
+        0.8475,
+        0.8474
+       ]
+      ]
+     }
+    }
+   }
+  ],
+  "picked": "minimax"
+ },
+ "dune-08": {
+  "variant": {
+   "model": "rgb",
+   "weighting": "minimax"
+  },
+  "sources": {
+   "aubergine": "decorative/dune/aubergine/sand-dune-decal/sand-dune-decal-08.png",
+   "beige": "decorative/dune/beige/sand-dune-decal/sand-dune-decal-08.png",
+   "black": "decorative/dune/black/sand-dune-decal/sand-dune-decal-08.png",
+   "brown": "decorative/dune/brown/sand-dune-decal/sand-dune-decal-08.png",
+   "cream": "decorative/dune/cream/sand-dune-decal/sand-dune-decal-08.png",
+   "dustyrose": "decorative/dune/dustyrose/sand-dune-decal/sand-dune-decal-08.png",
+   "grey": "decorative/dune/grey/sand-dune-decal/sand-dune-decal-08.png",
+   "purple": "decorative/dune/purple/sand-dune-decal/sand-dune-decal-08.png",
+   "red": "decorative/dune/red/sand-dune-decal/sand-dune-decal-08.png",
+   "tan": "decorative/dune/tan/sand-dune-decal/sand-dune-decal-08.png",
+   "violet": "decorative/dune/violet/sand-dune-decal/sand-dune-decal-08.png",
+   "white": "decorative/dune/white/sand-dune-decal/sand-dune-decal-08.png"
+  },
+  "size": [
+   260,
+   176
+  ],
+  "groups": [
+   {
+    "scale": 1.12,
+    "layers": [
+     {
+      "file": "dune-08.png",
+      "blend": "normal"
+     }
+    ],
+    "colors": {
+     "aubergine": {
+      "rmse": 1.338,
+      "psnr": 45.6,
+      "ssim": 0.9916,
+      "contrast": 1.001,
+      "dE_mean": 0.08,
+      "tints": [
+       [
+        0.2844,
+        0.2517,
+        0.419
+       ]
+      ]
+     },
+     "beige": {
+      "rmse": 1.608,
+      "psnr": 44.0,
+      "ssim": 0.9938,
+      "contrast": 1.001,
+      "dE_mean": 0.08,
+      "tints": [
+       [
+        0.7054,
+        0.6251,
+        0.5141
+       ]
+      ]
+     },
+     "black": {
+      "rmse": 1.353,
+      "psnr": 45.5,
+      "ssim": 0.9909,
+      "contrast": 0.999,
+      "dE_mean": 0.01,
+      "tints": [
+       [
+        0.2722,
+        0.2688,
+        0.277
+       ]
+      ]
+     },
+     "brown": {
+      "rmse": 1.974,
+      "psnr": 42.23,
+      "ssim": 0.991,
+      "contrast": 1.001,
+      "dE_mean": 0.11,
+      "tints": [
+       [
+        0.6347,
+        0.4564,
+        0.3478
+       ]
+      ]
+     },
+     "cream": {
+      "rmse": 2.097,
+      "psnr": 41.7,
+      "ssim": 0.9955,
+      "contrast": 1.0,
+      "dE_mean": 0.06,
+      "tints": [
+       [
+        0.8628,
+        0.8093,
+        0.5471
+       ]
+      ]
+     },
+     "dustyrose": {
+      "rmse": 1.89,
+      "psnr": 42.6,
+      "ssim": 0.9897,
+      "contrast": 1.001,
+      "dE_mean": 0.07,
+      "tints": [
+       [
+        0.5274,
+        0.3946,
+        0.3787
+       ]
+      ]
+     },
+     "grey": {
+      "rmse": 1.518,
+      "psnr": 44.51,
+      "ssim": 0.9928,
+      "contrast": 1.0,
+      "dE_mean": 0.03,
+      "tints": [
+       [
+        0.5351,
+        0.5609,
+        0.5574
+       ]
+      ]
+     },
+     "purple": {
+      "rmse": 2.1,
+      "psnr": 41.69,
+      "ssim": 0.9864,
+      "contrast": 0.998,
+      "dE_mean": 0.11,
+      "tints": [
+       [
+        0.3166,
+        0.3037,
+        0.6333
+       ]
+      ]
+     },
+     "red": {
+      "rmse": 2.275,
+      "psnr": 40.99,
+      "ssim": 0.9852,
+      "contrast": 1.0,
+      "dE_mean": 0.09,
+      "tints": [
+       [
+        0.5971,
+        0.2723,
+        0.2312
+       ]
+      ]
+     },
+     "tan": {
+      "rmse": 1.841,
+      "psnr": 42.83,
+      "ssim": 0.9961,
+      "contrast": 1.001,
+      "dE_mean": 0.12,
+      "tints": [
+       [
+        0.7913,
+        0.6377,
+        0.4298
+       ]
+      ]
+     },
+     "violet": {
+      "rmse": 1.756,
+      "psnr": 43.24,
+      "ssim": 0.9897,
+      "contrast": 1.0,
+      "dE_mean": 0.07,
+      "tints": [
+       [
+        0.5334,
+        0.3019,
+        0.5544
+       ]
+      ]
+     },
+     "white": {
+      "rmse": 2.116,
+      "psnr": 41.62,
+      "ssim": 0.9956,
+      "contrast": 0.998,
+      "dE_mean": 0.06,
+      "tints": [
+       [
+        0.8929,
+        0.8928,
+        0.8928
+       ]
+      ]
+     }
+    }
+   }
+  ],
+  "picked": "minimax"
+ },
+ "dune-09": {
+  "variant": {
+   "model": "rgb",
+   "weighting": "minimax"
+  },
+  "sources": {
+   "aubergine": "decorative/dune/aubergine/sand-dune-decal/sand-dune-decal-09.png",
+   "beige": "decorative/dune/beige/sand-dune-decal/sand-dune-decal-09.png",
+   "black": "decorative/dune/black/sand-dune-decal/sand-dune-decal-09.png",
+   "brown": "decorative/dune/brown/sand-dune-decal/sand-dune-decal-09.png",
+   "cream": "decorative/dune/cream/sand-dune-decal/sand-dune-decal-09.png",
+   "dustyrose": "decorative/dune/dustyrose/sand-dune-decal/sand-dune-decal-09.png",
+   "grey": "decorative/dune/grey/sand-dune-decal/sand-dune-decal-09.png",
+   "purple": "decorative/dune/purple/sand-dune-decal/sand-dune-decal-09.png",
+   "red": "decorative/dune/red/sand-dune-decal/sand-dune-decal-09.png",
+   "tan": "decorative/dune/tan/sand-dune-decal/sand-dune-decal-09.png",
+   "violet": "decorative/dune/violet/sand-dune-decal/sand-dune-decal-09.png",
+   "white": "decorative/dune/white/sand-dune-decal/sand-dune-decal-09.png"
+  },
+  "size": [
+   260,
+   184
+  ],
+  "groups": [
+   {
+    "scale": 1.12,
+    "layers": [
+     {
+      "file": "dune-09.png",
+      "blend": "normal"
+     }
+    ],
+    "colors": {
+     "aubergine": {
+      "rmse": 1.433,
+      "psnr": 45.01,
+      "ssim": 0.9894,
+      "contrast": 1.004,
+      "dE_mean": 0.08,
+      "tints": [
+       [
+        0.2832,
+        0.2506,
+        0.4179
+       ]
+      ]
+     },
+     "beige": {
+      "rmse": 1.776,
+      "psnr": 43.14,
+      "ssim": 0.99,
+      "contrast": 1.001,
+      "dE_mean": 0.09,
+      "tints": [
+       [
+        0.7033,
+        0.6234,
+        0.5124
+       ]
+      ]
+     },
+     "black": {
+      "rmse": 1.467,
+      "psnr": 44.8,
+      "ssim": 0.9881,
+      "contrast": 1.0,
+      "dE_mean": 0.03,
+      "tints": [
+       [
+        0.2715,
+        0.2679,
+        0.2764
+       ]
+      ]
+     },
+     "brown": {
+      "rmse": 2.111,
+      "psnr": 41.64,
+      "ssim": 0.9876,
+      "contrast": 1.004,
+      "dE_mean": 0.14,
+      "tints": [
+       [
+        0.6332,
+        0.455,
+        0.3465
+       ]
+      ]
+     },
+     "cream": {
+      "rmse": 2.26,
+      "psnr": 41.05,
+      "ssim": 0.9934,
+      "contrast": 1.0,
+      "dE_mean": 0.07,
+      "tints": [
+       [
+        0.8625,
+        0.8091,
+        0.5457
+       ]
+      ]
+     },
+     "dustyrose": {
+      "rmse": 2.046,
+      "psnr": 41.91,
+      "ssim": 0.9857,
+      "contrast": 1.004,
+      "dE_mean": 0.09,
+      "tints": [
+       [
+        0.5258,
+        0.3933,
+        0.3774
+       ]
+      ]
+     },
+     "grey": {
+      "rmse": 1.671,
+      "psnr": 43.67,
+      "ssim": 0.9896,
+      "contrast": 1.001,
+      "dE_mean": 0.04,
+      "tints": [
+       [
+        0.5343,
+        0.5601,
+        0.5566
+       ]
+      ]
+     },
+     "purple": {
+      "rmse": 2.262,
+      "psnr": 41.04,
+      "ssim": 0.9831,
+      "contrast": 1.0,
+      "dE_mean": 0.14,
+      "tints": [
+       [
+        0.3151,
+        0.3027,
+        0.6323
+       ]
+      ]
+     },
+     "red": {
+      "rmse": 2.452,
+      "psnr": 40.34,
+      "ssim": 0.9811,
+      "contrast": 1.002,
+      "dE_mean": 0.11,
+      "tints": [
+       [
+        0.5956,
+        0.271,
+        0.2301
+       ]
+      ]
+     },
+     "tan": {
+      "rmse": 2.0,
+      "psnr": 42.11,
+      "ssim": 0.9933,
+      "contrast": 1.002,
+      "dE_mean": 0.13,
+      "tints": [
+       [
+        0.7905,
+        0.6369,
+        0.4283
+       ]
+      ]
+     },
+     "violet": {
+      "rmse": 1.957,
+      "psnr": 42.3,
+      "ssim": 0.9856,
+      "contrast": 1.001,
+      "dE_mean": 0.08,
+      "tints": [
+       [
+        0.5318,
+        0.3008,
+        0.5524
+       ]
+      ]
+     },
+     "white": {
+      "rmse": 2.272,
+      "psnr": 41.0,
+      "ssim": 0.9939,
+      "contrast": 0.996,
+      "dE_mean": 0.08,
+      "tints": [
+       [
+        0.8929,
+        0.8929,
+        0.8929
+       ]
+      ]
+     }
+    }
+   }
+  ],
+  "picked": "minimax"
+ },
+ "dune-10": {
+  "variant": {
+   "model": "rgb",
+   "weighting": "minimax"
+  },
+  "sources": {
+   "aubergine": "decorative/dune/aubergine/sand-dune-decal/sand-dune-decal-10.png",
+   "beige": "decorative/dune/beige/sand-dune-decal/sand-dune-decal-10.png",
+   "black": "decorative/dune/black/sand-dune-decal/sand-dune-decal-10.png",
+   "brown": "decorative/dune/brown/sand-dune-decal/sand-dune-decal-10.png",
+   "cream": "decorative/dune/cream/sand-dune-decal/sand-dune-decal-10.png",
+   "dustyrose": "decorative/dune/dustyrose/sand-dune-decal/sand-dune-decal-10.png",
+   "grey": "decorative/dune/grey/sand-dune-decal/sand-dune-decal-10.png",
+   "purple": "decorative/dune/purple/sand-dune-decal/sand-dune-decal-10.png",
+   "red": "decorative/dune/red/sand-dune-decal/sand-dune-decal-10.png",
+   "tan": "decorative/dune/tan/sand-dune-decal/sand-dune-decal-10.png",
+   "violet": "decorative/dune/violet/sand-dune-decal/sand-dune-decal-10.png",
+   "white": "decorative/dune/white/sand-dune-decal/sand-dune-decal-10.png"
+  },
+  "size": [
+   233,
+   183
+  ],
+  "groups": [
+   {
+    "scale": 1.08,
+    "layers": [
+     {
+      "file": "dune-10.png",
+      "blend": "normal"
+     }
+    ],
+    "colors": {
+     "aubergine": {
+      "rmse": 1.433,
+      "psnr": 45.0,
+      "ssim": 0.9918,
+      "contrast": 1.0,
+      "dE_mean": 0.06,
+      "tints": [
+       [
+        0.2985,
+        0.2644,
+        0.441
+       ]
+      ]
+     },
+     "beige": {
+      "rmse": 1.686,
+      "psnr": 43.59,
+      "ssim": 0.9939,
+      "contrast": 1.0,
+      "dE_mean": 0.06,
+      "tints": [
+       [
+        0.7364,
+        0.6525,
+        0.5374
+       ]
+      ]
+     },
+     "black": {
+      "rmse": 1.469,
+      "psnr": 44.79,
+      "ssim": 0.9903,
+      "contrast": 0.998,
+      "dE_mean": 0.01,
+      "tints": [
+       [
+        0.2866,
+        0.2828,
+        0.2913
+       ]
+      ]
+     },
+     "brown": {
+      "rmse": 1.982,
+      "psnr": 42.19,
+      "ssim": 0.9917,
+      "contrast": 1.001,
+      "dE_mean": 0.09,
+      "tints": [
+       [
+        0.6654,
+        0.4779,
+        0.3646
+       ]
+      ]
+     },
+     "cream": {
+      "rmse": 2.146,
+      "psnr": 41.5,
+      "ssim": 0.9957,
+      "contrast": 1.0,
+      "dE_mean": 0.06,
+      "tints": [
+       [
+        0.8953,
+        0.84,
+        0.5717
+       ]
+      ]
+     },
+     "dustyrose": {
+      "rmse": 1.937,
+      "psnr": 42.39,
+      "ssim": 0.9902,
+      "contrast": 1.0,
+      "dE_mean": 0.06,
+      "tints": [
+       [
+        0.5536,
+        0.414,
+        0.3973
+       ]
+      ]
+     },
+     "grey": {
+      "rmse": 1.597,
+      "psnr": 44.06,
+      "ssim": 0.9933,
+      "contrast": 1.0,
+      "dE_mean": 0.03,
+      "tints": [
+       [
+        0.5607,
+        0.5869,
+        0.5832
+       ]
+      ]
+     },
+     "purple": {
+      "rmse": 2.089,
+      "psnr": 41.73,
+      "ssim": 0.9875,
+      "contrast": 0.998,
+      "dE_mean": 0.1,
+      "tints": [
+       [
+        0.3317,
+        0.319,
+        0.6667
+       ]
+      ]
+     },
+     "red": {
+      "rmse": 2.329,
+      "psnr": 40.79,
+      "ssim": 0.9866,
+      "contrast": 0.999,
+      "dE_mean": 0.07,
+      "tints": [
+       [
+        0.6282,
+        0.2868,
+        0.2436
+       ]
+      ]
+     },
+     "tan": {
+      "rmse": 1.878,
+      "psnr": 42.66,
+      "ssim": 0.9959,
+      "contrast": 1.001,
+      "dE_mean": 0.11,
+      "tints": [
+       [
+        0.8242,
+        0.6643,
+        0.4505
+       ]
+      ]
+     },
+     "violet": {
+      "rmse": 1.894,
+      "psnr": 42.58,
+      "ssim": 0.9899,
+      "contrast": 0.999,
+      "dE_mean": 0.08,
+      "tints": [
+       [
+        0.5613,
+        0.3172,
+        0.5837
+       ]
+      ]
+     },
+     "white": {
+      "rmse": 2.153,
+      "psnr": 41.47,
+      "ssim": 0.996,
+      "contrast": 0.998,
+      "dE_mean": 0.06,
+      "tints": [
+       [
+        0.926,
+        0.9259,
+        0.9259
+       ]
+      ]
+     }
+    }
+   }
+  ],
+  "picked": "minimax"
+ },
+ "dune-11": {
+  "variant": {
+   "model": "rgb",
+   "weighting": "minimax"
+  },
+  "sources": {
+   "aubergine": "decorative/dune/aubergine/sand-dune-decal/sand-dune-decal-11.png",
+   "beige": "decorative/dune/beige/sand-dune-decal/sand-dune-decal-11.png",
+   "black": "decorative/dune/black/sand-dune-decal/sand-dune-decal-11.png",
+   "brown": "decorative/dune/brown/sand-dune-decal/sand-dune-decal-11.png",
+   "cream": "decorative/dune/cream/sand-dune-decal/sand-dune-decal-11.png",
+   "dustyrose": "decorative/dune/dustyrose/sand-dune-decal/sand-dune-decal-11.png",
+   "grey": "decorative/dune/grey/sand-dune-decal/sand-dune-decal-11.png",
+   "purple": "decorative/dune/purple/sand-dune-decal/sand-dune-decal-11.png",
+   "red": "decorative/dune/red/sand-dune-decal/sand-dune-decal-11.png",
+   "tan": "decorative/dune/tan/sand-dune-decal/sand-dune-decal-11.png",
+   "violet": "decorative/dune/violet/sand-dune-decal/sand-dune-decal-11.png",
+   "white": "decorative/dune/white/sand-dune-decal/sand-dune-decal-11.png"
+  },
+  "size": [
+   172,
+   184
+  ],
+  "groups": [
+   {
+    "scale": 1.18,
+    "layers": [
+     {
+      "file": "dune-11.png",
+      "blend": "normal"
+     }
+    ],
+    "colors": {
+     "aubergine": {
+      "rmse": 1.706,
+      "psnr": 43.49,
+      "ssim": 0.9866,
+      "contrast": 0.998,
+      "dE_mean": 0.07,
+      "tints": [
+       [
+        0.2696,
+        0.2389,
+        0.3983
+       ]
+      ]
+     },
+     "beige": {
+      "rmse": 2.083,
+      "psnr": 41.76,
+      "ssim": 0.9895,
+      "contrast": 0.999,
+      "dE_mean": 0.08,
+      "tints": [
+       [
+        0.6693,
+        0.5922,
+        0.4872
+       ]
+      ]
+     },
+     "black": {
+      "rmse": 1.728,
+      "psnr": 43.38,
+      "ssim": 0.9857,
+      "contrast": 0.995,
+      "dE_mean": 0.02,
+      "tints": [
+       [
+        0.2581,
+        0.2553,
+        0.2632
+       ]
+      ]
+     },
+     "brown": {
+      "rmse": 2.588,
+      "psnr": 39.87,
+      "ssim": 0.9854,
+      "contrast": 0.999,
+      "dE_mean": 0.1,
+      "tints": [
+       [
+        0.6028,
+        0.4319,
+        0.3294
+       ]
+      ]
+     },
+     "cream": {
+      "rmse": 2.778,
+      "psnr": 39.26,
+      "ssim": 0.9929,
+      "contrast": 1.001,
+      "dE_mean": 0.14,
+      "tints": [
+       [
+        0.8193,
+        0.7673,
+        0.5179
+       ]
+      ]
+     },
+     "dustyrose": {
+      "rmse": 2.483,
+      "psnr": 40.23,
+      "ssim": 0.9831,
+      "contrast": 0.997,
+      "dE_mean": 0.03,
+      "tints": [
+       [
+        0.5007,
+        0.3736,
+        0.3587
+       ]
+      ]
+     },
+     "grey": {
+      "rmse": 1.97,
+      "psnr": 42.24,
+      "ssim": 0.9883,
+      "contrast": 0.999,
+      "dE_mean": 0.04,
+      "tints": [
+       [
+        0.5078,
+        0.5323,
+        0.5291
+       ]
+      ]
+     },
+     "purple": {
+      "rmse": 2.798,
+      "psnr": 39.19,
+      "ssim": 0.9789,
+      "contrast": 0.992,
+      "dE_mean": 0.15,
+      "tints": [
+       [
+        0.2984,
+        0.2875,
+        0.6015
+       ]
+      ]
+     },
+     "red": {
+      "rmse": 3.015,
+      "psnr": 38.55,
+      "ssim": 0.9764,
+      "contrast": 0.993,
+      "dE_mean": 0.07,
+      "tints": [
+       [
+        0.5669,
+        0.2574,
+        0.2187
+       ]
+      ]
+     },
+     "tan": {
+      "rmse": 2.453,
+      "psnr": 40.34,
+      "ssim": 0.9934,
+      "contrast": 1.001,
+      "dE_mean": 0.15,
+      "tints": [
+       [
+        0.7517,
+        0.604,
+        0.407
+       ]
+      ]
+     },
+     "violet": {
+      "rmse": 2.242,
+      "psnr": 41.12,
+      "ssim": 0.9833,
+      "contrast": 0.997,
+      "dE_mean": 0.05,
+      "tints": [
+       [
+        0.5065,
+        0.2864,
+        0.5277
+       ]
+      ]
+     },
+     "white": {
+      "rmse": 2.813,
+      "psnr": 39.15,
+      "ssim": 0.9924,
+      "contrast": 0.999,
+      "dE_mean": 0.07,
+      "tints": [
+       [
+        0.8475,
+        0.8475,
+        0.8475
+       ]
+      ]
+     }
+    }
+   }
+  ],
+  "picked": "minimax"
+ },
+ "dune-12": {
+  "variant": {
+   "model": "rgb",
+   "weighting": "minimax"
+  },
+  "sources": {
+   "aubergine": "decorative/dune/aubergine/sand-dune-decal/sand-dune-decal-12.png",
+   "beige": "decorative/dune/beige/sand-dune-decal/sand-dune-decal-12.png",
+   "black": "decorative/dune/black/sand-dune-decal/sand-dune-decal-12.png",
+   "brown": "decorative/dune/brown/sand-dune-decal/sand-dune-decal-12.png",
+   "cream": "decorative/dune/cream/sand-dune-decal/sand-dune-decal-12.png",
+   "dustyrose": "decorative/dune/dustyrose/sand-dune-decal/sand-dune-decal-12.png",
+   "grey": "decorative/dune/grey/sand-dune-decal/sand-dune-decal-12.png",
+   "purple": "decorative/dune/purple/sand-dune-decal/sand-dune-decal-12.png",
+   "red": "decorative/dune/red/sand-dune-decal/sand-dune-decal-12.png",
+   "tan": "decorative/dune/tan/sand-dune-decal/sand-dune-decal-12.png",
+   "violet": "decorative/dune/violet/sand-dune-decal/sand-dune-decal-12.png",
+   "white": "decorative/dune/white/sand-dune-decal/sand-dune-decal-12.png"
+  },
+  "size": [
+   260,
+   166
+  ],
+  "groups": [
+   {
+    "scale": 1.18,
+    "layers": [
+     {
+      "file": "dune-12.png",
+      "blend": "normal"
+     }
+    ],
+    "colors": {
+     "aubergine": {
+      "rmse": 1.203,
+      "psnr": 46.53,
+      "ssim": 0.9922,
+      "contrast": 1.003,
+      "dE_mean": 0.09,
+      "tints": [
+       [
+        0.2722,
+        0.2405,
+        0.4
+       ]
+      ]
+     },
+     "beige": {
+      "rmse": 1.38,
+      "psnr": 45.33,
+      "ssim": 0.9938,
+      "contrast": 1.002,
+      "dE_mean": 0.08,
+      "tints": [
+       [
+        0.6717,
+        0.5967,
+        0.4913
+       ]
+      ]
+     },
+     "black": {
+      "rmse": 1.169,
+      "psnr": 46.77,
+      "ssim": 0.9916,
+      "contrast": 1.001,
+      "dE_mean": 0.02,
+      "tints": [
+       [
+        0.2606,
+        0.2572,
+        0.2648
+       ]
+      ]
+     },
+     "brown": {
+      "rmse": 1.578,
+      "psnr": 44.17,
+      "ssim": 0.9924,
+      "contrast": 1.003,
+      "dE_mean": 0.12,
+      "tints": [
+       [
+        0.6058,
+        0.4377,
+        0.3334
+       ]
+      ]
+     },
+     "cream": {
+      "rmse": 1.677,
+      "psnr": 43.64,
+      "ssim": 0.9958,
+      "contrast": 0.999,
+      "dE_mean": 0.06,
+      "tints": [
+       [
+        0.8183,
+        0.7694,
+        0.5235
+       ]
+      ]
+     },
+     "dustyrose": {
+      "rmse": 1.541,
+      "psnr": 44.38,
+      "ssim": 0.9912,
+      "contrast": 1.003,
+      "dE_mean": 0.08,
+      "tints": [
+       [
+        0.5038,
+        0.3782,
+        0.3623
+       ]
+      ]
+     },
+     "grey": {
+      "rmse": 1.349,
+      "psnr": 45.53,
+      "ssim": 0.993,
+      "contrast": 1.001,
+      "dE_mean": 0.03,
+      "tints": [
+       [
+        0.5115,
+        0.5356,
+        0.532
+       ]
+      ]
+     },
+     "purple": {
+      "rmse": 1.645,
+      "psnr": 43.8,
+      "ssim": 0.9896,
+      "contrast": 1.002,
+      "dE_mean": 0.13,
+      "tints": [
+       [
+        0.3039,
+        0.2915,
+        0.6055
+       ]
+      ]
+     },
+     "red": {
+      "rmse": 1.816,
+      "psnr": 42.95,
+      "ssim": 0.9885,
+      "contrast": 1.003,
+      "dE_mean": 0.11,
+      "tints": [
+       [
+        0.5713,
+        0.2626,
+        0.2222
+       ]
+      ]
+     },
+     "tan": {
+      "rmse": 1.487,
+      "psnr": 44.69,
+      "ssim": 0.9956,
+      "contrast": 1.002,
+      "dE_mean": 0.12,
+      "tints": [
+       [
+        0.7518,
+        0.6086,
+        0.4122
+       ]
+      ]
+     },
+     "violet": {
+      "rmse": 1.583,
+      "psnr": 44.14,
+      "ssim": 0.9903,
+      "contrast": 1.001,
+      "dE_mean": 0.08,
+      "tints": [
+       [
+        0.5096,
+        0.2891,
+        0.5276
+       ]
+      ]
+     },
+     "white": {
+      "rmse": 1.674,
+      "psnr": 43.65,
+      "ssim": 0.9968,
+      "contrast": 0.997,
+      "dE_mean": 0.07,
+      "tints": [
+       [
+        0.8474,
+        0.8475,
+        0.8474
+       ]
+      ]
+     }
+    }
+   }
+  ],
+  "picked": "minimax"
+ },
+ "dune-13": {
+  "variant": {
+   "model": "rgb",
+   "weighting": "minimax"
+  },
+  "sources": {
+   "aubergine": "decorative/dune/aubergine/sand-dune-decal/sand-dune-decal-13.png",
+   "beige": "decorative/dune/beige/sand-dune-decal/sand-dune-decal-13.png",
+   "black": "decorative/dune/black/sand-dune-decal/sand-dune-decal-13.png",
+   "brown": "decorative/dune/brown/sand-dune-decal/sand-dune-decal-13.png",
+   "cream": "decorative/dune/cream/sand-dune-decal/sand-dune-decal-13.png",
+   "dustyrose": "decorative/dune/dustyrose/sand-dune-decal/sand-dune-decal-13.png",
+   "grey": "decorative/dune/grey/sand-dune-decal/sand-dune-decal-13.png",
+   "purple": "decorative/dune/purple/sand-dune-decal/sand-dune-decal-13.png",
+   "red": "decorative/dune/red/sand-dune-decal/sand-dune-decal-13.png",
+   "tan": "decorative/dune/tan/sand-dune-decal/sand-dune-decal-13.png",
+   "violet": "decorative/dune/violet/sand-dune-decal/sand-dune-decal-13.png",
+   "white": "decorative/dune/white/sand-dune-decal/sand-dune-decal-13.png"
+  },
+  "size": [
+   259,
+   172
+  ],
+  "groups": [
+   {
+    "scale": 1.12,
+    "layers": [
+     {
+      "file": "dune-13.png",
+      "blend": "normal"
+     }
+    ],
+    "colors": {
+     "aubergine": {
+      "rmse": 0.975,
+      "psnr": 48.35,
+      "ssim": 0.9945,
+      "contrast": 1.005,
+      "dE_mean": 0.08,
+      "tints": [
+       [
+        0.2839,
+        0.2504,
+        0.4179
+       ]
+      ]
+     },
+     "beige": {
+      "rmse": 1.097,
+      "psnr": 47.32,
+      "ssim": 0.9953,
+      "contrast": 1.002,
+      "dE_mean": 0.08,
+      "tints": [
+       [
+        0.7045,
+        0.6258,
+        0.5132
+       ]
+      ]
+     },
+     "black": {
+      "rmse": 0.922,
+      "psnr": 48.84,
+      "ssim": 0.9941,
+      "contrast": 1.003,
+      "dE_mean": 0.03,
+      "tints": [
+       [
+        0.2717,
+        0.2679,
+        0.2761
+       ]
+      ]
+     },
+     "brown": {
+      "rmse": 1.261,
+      "psnr": 46.12,
+      "ssim": 0.9944,
+      "contrast": 1.004,
+      "dE_mean": 0.12,
+      "tints": [
+       [
+        0.6343,
+        0.4578,
+        0.347
+       ]
+      ]
+     },
+     "cream": {
+      "rmse": 1.336,
+      "psnr": 45.62,
+      "ssim": 0.9965,
+      "contrast": 0.999,
+      "dE_mean": 0.1,
+      "tints": [
+       [
+        0.8626,
+        0.811,
+        0.5467
+       ]
+      ]
+     },
+     "dustyrose": {
+      "rmse": 1.234,
+      "psnr": 46.31,
+      "ssim": 0.9936,
+      "contrast": 1.004,
+      "dE_mean": 0.1,
+      "tints": [
+       [
+        0.5269,
+        0.395,
+        0.3777
+       ]
+      ]
+     },
+     "grey": {
+      "rmse": 1.077,
+      "psnr": 47.49,
+      "ssim": 0.995,
+      "contrast": 1.002,
+      "dE_mean": 0.04,
+      "tints": [
+       [
+        0.5349,
+        0.5606,
+        0.5567
+       ]
+      ]
+     },
+     "purple": {
+      "rmse": 1.312,
+      "psnr": 45.77,
+      "ssim": 0.9929,
+      "contrast": 1.004,
+      "dE_mean": 0.14,
+      "tints": [
+       [
+        0.3167,
+        0.3034,
+        0.6337
+       ]
+      ]
+     },
+     "red": {
+      "rmse": 1.455,
+      "psnr": 44.87,
+      "ssim": 0.9914,
+      "contrast": 1.005,
+      "dE_mean": 0.13,
+      "tints": [
+       [
+        0.5967,
+        0.273,
+        0.2303
+       ]
+      ]
+     },
+     "tan": {
+      "rmse": 1.183,
+      "psnr": 46.67,
+      "ssim": 0.9966,
+      "contrast": 1.002,
+      "dE_mean": 0.12,
+      "tints": [
+       [
+        0.7906,
+        0.6397,
+        0.429
+       ]
+      ]
+     },
+     "violet": {
+      "rmse": 1.302,
+      "psnr": 45.84,
+      "ssim": 0.9931,
+      "contrast": 1.003,
+      "dE_mean": 0.09,
+      "tints": [
+       [
+        0.5325,
+        0.3009,
+        0.5509
+       ]
+      ]
+     },
+     "white": {
+      "rmse": 1.351,
+      "psnr": 45.52,
+      "ssim": 0.9974,
+      "contrast": 0.997,
+      "dE_mean": 0.08,
+      "tints": [
+       [
+        0.8929,
+        0.8928,
+        0.8929
+       ]
+      ]
+     }
+    }
+   }
+  ],
+  "picked": "minimax"
+ },
+ "dune-14": {
+  "variant": {
+   "model": "rgb",
+   "weighting": "minimax"
+  },
+  "sources": {
+   "aubergine": "decorative/dune/aubergine/sand-dune-decal/sand-dune-decal-14.png",
+   "beige": "decorative/dune/beige/sand-dune-decal/sand-dune-decal-14.png",
+   "black": "decorative/dune/black/sand-dune-decal/sand-dune-decal-14.png",
+   "brown": "decorative/dune/brown/sand-dune-decal/sand-dune-decal-14.png",
+   "cream": "decorative/dune/cream/sand-dune-decal/sand-dune-decal-14.png",
+   "dustyrose": "decorative/dune/dustyrose/sand-dune-decal/sand-dune-decal-14.png",
+   "grey": "decorative/dune/grey/sand-dune-decal/sand-dune-decal-14.png",
+   "purple": "decorative/dune/purple/sand-dune-decal/sand-dune-decal-14.png",
+   "red": "decorative/dune/red/sand-dune-decal/sand-dune-decal-14.png",
+   "tan": "decorative/dune/tan/sand-dune-decal/sand-dune-decal-14.png",
+   "violet": "decorative/dune/violet/sand-dune-decal/sand-dune-decal-14.png",
+   "white": "decorative/dune/white/sand-dune-decal/sand-dune-decal-14.png"
+  },
+  "size": [
+   199,
+   184
+  ],
+  "groups": [
+   {
+    "scale": 1.12,
+    "layers": [
+     {
+      "file": "dune-14.png",
+      "blend": "normal"
+     }
+    ],
+    "colors": {
+     "aubergine": {
+      "rmse": 1.354,
+      "psnr": 45.5,
+      "ssim": 0.989,
+      "contrast": 1.002,
+      "dE_mean": 0.06,
+      "tints": [
+       [
+        0.2844,
+        0.2517,
+        0.4201
+       ]
+      ]
+     },
+     "beige": {
+      "rmse": 1.591,
+      "psnr": 44.1,
+      "ssim": 0.9901,
+      "contrast": 1.001,
+      "dE_mean": 0.06,
+      "tints": [
+       [
+        0.7061,
+        0.6258,
+        0.5148
+       ]
+      ]
+     },
+     "black": {
+      "rmse": 1.328,
+      "psnr": 45.67,
+      "ssim": 0.9884,
+      "contrast": 1.0,
+      "dE_mean": 0.02,
+      "tints": [
+       [
+        0.2732,
+        0.2698,
+        0.2779
+       ]
+      ]
+     },
+     "brown": {
+      "rmse": 1.823,
+      "psnr": 42.92,
+      "ssim": 0.988,
+      "contrast": 1.003,
+      "dE_mean": 0.1,
+      "tints": [
+       [
+        0.6364,
+        0.457,
+        0.3492
+       ]
+      ]
+     },
+     "cream": {
+      "rmse": 1.93,
+      "psnr": 42.42,
+      "ssim": 0.9934,
+      "contrast": 1.0,
+      "dE_mean": 0.04,
+      "tints": [
+       [
+        0.8625,
+        0.8091,
+        0.5489
+       ]
+      ]
+     },
+     "dustyrose": {
+      "rmse": 1.779,
+      "psnr": 43.13,
+      "ssim": 0.9865,
+      "contrast": 1.002,
+      "dE_mean": 0.06,
+      "tints": [
+       [
+        0.5291,
+        0.3957,
+        0.3796
+       ]
+      ]
+     },
+     "grey": {
+      "rmse": 1.522,
+      "psnr": 44.48,
+      "ssim": 0.9896,
+      "contrast": 1.0,
+      "dE_mean": 0.03,
+      "tints": [
+       [
+        0.5371,
+        0.5627,
+        0.5587
+       ]
+      ]
+     },
+     "purple": {
+      "rmse": 1.91,
+      "psnr": 42.51,
+      "ssim": 0.9844,
+      "contrast": 1.001,
+      "dE_mean": 0.11,
+      "tints": [
+       [
+        0.3165,
+        0.3054,
+        0.6362
+       ]
+      ]
+     },
+     "red": {
+      "rmse": 2.088,
+      "psnr": 41.74,
+      "ssim": 0.9822,
+      "contrast": 1.001,
+      "dE_mean": 0.08,
+      "tints": [
+       [
+        0.6002,
+        0.2732,
+        0.2327
+       ]
+      ]
+     },
+     "tan": {
+      "rmse": 1.729,
+      "psnr": 43.37,
+      "ssim": 0.9936,
+      "contrast": 1.002,
+      "dE_mean": 0.1,
+      "tints": [
+       [
+        0.7921,
+        0.6378,
+        0.4317
+       ]
+      ]
+     },
+     "violet": {
+      "rmse": 1.83,
+      "psnr": 42.88,
+      "ssim": 0.9857,
+      "contrast": 1.001,
+      "dE_mean": 0.06,
+      "tints": [
+       [
+        0.5347,
+        0.3029,
+        0.5562
+       ]
+      ]
+     },
+     "white": {
+      "rmse": 1.931,
+      "psnr": 42.42,
+      "ssim": 0.9937,
+      "contrast": 0.998,
+      "dE_mean": 0.06,
+      "tints": [
+       [
+        0.8929,
+        0.8929,
+        0.8929
+       ]
+      ]
+     }
+    }
+   }
+  ],
+  "picked": "minimax"
+ },
+ "dune-15": {
+  "variant": {
+   "model": "rgb",
+   "weighting": "minimax"
+  },
+  "sources": {
+   "aubergine": "decorative/dune/aubergine/sand-dune-decal/sand-dune-decal-15.png",
+   "beige": "decorative/dune/beige/sand-dune-decal/sand-dune-decal-15.png",
+   "black": "decorative/dune/black/sand-dune-decal/sand-dune-decal-15.png",
+   "brown": "decorative/dune/brown/sand-dune-decal/sand-dune-decal-15.png",
+   "cream": "decorative/dune/cream/sand-dune-decal/sand-dune-decal-15.png",
+   "dustyrose": "decorative/dune/dustyrose/sand-dune-decal/sand-dune-decal-15.png",
+   "grey": "decorative/dune/grey/sand-dune-decal/sand-dune-decal-15.png",
+   "purple": "decorative/dune/purple/sand-dune-decal/sand-dune-decal-15.png",
+   "red": "decorative/dune/red/sand-dune-decal/sand-dune-decal-15.png",
+   "tan": "decorative/dune/tan/sand-dune-decal/sand-dune-decal-15.png",
+   "violet": "decorative/dune/violet/sand-dune-decal/sand-dune-decal-15.png",
+   "white": "decorative/dune/white/sand-dune-decal/sand-dune-decal-15.png"
+  },
+  "size": [
+   214,
+   184
+  ],
+  "groups": [
+   {
+    "scale": 1.18,
+    "layers": [
+     {
+      "file": "dune-15.png",
+      "blend": "normal"
+     }
+    ],
+    "colors": {
+     "aubergine": {
+      "rmse": 1.071,
+      "psnr": 47.54,
+      "ssim": 0.9934,
+      "contrast": 1.001,
+      "dE_mean": 0.07,
+      "tints": [
+       [
+        0.2735,
+        0.2425,
+        0.4029
+       ]
+      ]
+     },
+     "beige": {
+      "rmse": 1.279,
+      "psnr": 45.99,
+      "ssim": 0.9949,
+      "contrast": 1.001,
+      "dE_mean": 0.07,
+      "tints": [
+       [
+        0.6738,
+        0.598,
+        0.494
+       ]
+      ]
+     },
+     "black": {
+      "rmse": 1.049,
+      "psnr": 47.72,
+      "ssim": 0.9931,
+      "contrast": 1.0,
+      "dE_mean": 0.01,
+      "tints": [
+       [
+        0.2622,
+        0.2592,
+        0.2666
+       ]
+      ]
+     },
+     "brown": {
+      "rmse": 1.48,
+      "psnr": 44.73,
+      "ssim": 0.9935,
+      "contrast": 1.002,
+      "dE_mean": 0.1,
+      "tints": [
+       [
+        0.6083,
+        0.4389,
+        0.3361
+       ]
+      ]
+     },
+     "cream": {
+      "rmse": 1.521,
+      "psnr": 44.49,
+      "ssim": 0.9965,
+      "contrast": 1.0,
+      "dE_mean": 0.06,
+      "tints": [
+       [
+        0.8182,
+        0.7686,
+        0.5266
+       ]
+      ]
+     },
+     "dustyrose": {
+      "rmse": 1.433,
+      "psnr": 45.0,
+      "ssim": 0.9925,
+      "contrast": 1.002,
+      "dE_mean": 0.06,
+      "tints": [
+       [
+        0.5065,
+        0.3804,
+        0.365
+       ]
+      ]
+     },
+     "grey": {
+      "rmse": 1.211,
+      "psnr": 46.47,
+      "ssim": 0.9946,
+      "contrast": 1.0,
+      "dE_mean": 0.03,
+      "tints": [
+       [
+        0.5137,
+        0.5378,
+        0.5337
+       ]
+      ]
+     },
+     "purple": {
+      "rmse": 1.574,
+      "psnr": 44.19,
+      "ssim": 0.9912,
+      "contrast": 1.0,
+      "dE_mean": 0.11,
+      "tints": [
+       [
+        0.3052,
+        0.2939,
+        0.6085
+       ]
+      ]
+     },
+     "red": {
+      "rmse": 1.648,
+      "psnr": 43.79,
+      "ssim": 0.9903,
+      "contrast": 1.001,
+      "dE_mean": 0.09,
+      "tints": [
+       [
+        0.5748,
+        0.2646,
+        0.2242
+       ]
+      ]
+     },
+     "tan": {
+      "rmse": 1.367,
+      "psnr": 45.41,
+      "ssim": 0.9967,
+      "contrast": 1.001,
+      "dE_mean": 0.11,
+      "tints": [
+       [
+        0.7528,
+        0.6089,
+        0.4153
+       ]
+      ]
+     },
+     "violet": {
+      "rmse": 1.438,
+      "psnr": 44.97,
+      "ssim": 0.9918,
+      "contrast": 1.0,
+      "dE_mean": 0.08,
+      "tints": [
+       [
+        0.5128,
+        0.2914,
+        0.5324
+       ]
+      ]
+     },
+     "white": {
+      "rmse": 1.541,
+      "psnr": 44.38,
+      "ssim": 0.9971,
+      "contrast": 0.998,
+      "dE_mean": 0.05,
+      "tints": [
+       [
+        0.8474,
+        0.8475,
+        0.8474
+       ]
+      ]
+     }
+    }
+   }
+  ],
+  "picked": "minimax"
+ },
+ "dune-16": {
+  "variant": {
+   "model": "rgb",
+   "weighting": "minimax"
+  },
+  "sources": {
+   "aubergine": "decorative/dune/aubergine/sand-dune-decal/sand-dune-decal-16.png",
+   "beige": "decorative/dune/beige/sand-dune-decal/sand-dune-decal-16.png",
+   "black": "decorative/dune/black/sand-dune-decal/sand-dune-decal-16.png",
+   "brown": "decorative/dune/brown/sand-dune-decal/sand-dune-decal-16.png",
+   "cream": "decorative/dune/cream/sand-dune-decal/sand-dune-decal-16.png",
+   "dustyrose": "decorative/dune/dustyrose/sand-dune-decal/sand-dune-decal-16.png",
+   "grey": "decorative/dune/grey/sand-dune-decal/sand-dune-decal-16.png",
+   "purple": "decorative/dune/purple/sand-dune-decal/sand-dune-decal-16.png",
+   "red": "decorative/dune/red/sand-dune-decal/sand-dune-decal-16.png",
+   "tan": "decorative/dune/tan/sand-dune-decal/sand-dune-decal-16.png",
+   "violet": "decorative/dune/violet/sand-dune-decal/sand-dune-decal-16.png",
+   "white": "decorative/dune/white/sand-dune-decal/sand-dune-decal-16.png"
+  },
+  "size": [
+   162,
+   182
+  ],
+  "groups": [
+   {
+    "scale": 1.18,
+    "layers": [
+     {
+      "file": "dune-16.png",
+      "blend": "normal"
+     }
+    ],
+    "colors": {
+     "aubergine": {
+      "rmse": 1.053,
+      "psnr": 47.68,
+      "ssim": 0.9927,
+      "contrast": 1.007,
+      "dE_mean": 0.08,
+      "tints": [
+       [
+        0.2673,
+        0.2358,
+        0.3942
+       ]
+      ]
+     },
+     "beige": {
+      "rmse": 1.264,
+      "psnr": 46.1,
+      "ssim": 0.9925,
+      "contrast": 1.003,
+      "dE_mean": 0.08,
+      "tints": [
+       [
+        0.6658,
+        0.591,
+        0.4844
+       ]
+      ]
+     },
+     "black": {
+      "rmse": 1.013,
+      "psnr": 48.02,
+      "ssim": 0.9919,
+      "contrast": 1.004,
+      "dE_mean": 0.05,
+      "tints": [
+       [
+        0.256,
+        0.2526,
+        0.2601
+       ]
+      ]
+     },
+     "brown": {
+      "rmse": 1.468,
+      "psnr": 44.79,
+      "ssim": 0.9913,
+      "contrast": 1.005,
+      "dE_mean": 0.12,
+      "tints": [
+       [
+        0.5993,
+        0.4314,
+        0.3271
+       ]
+      ]
+     },
+     "cream": {
+      "rmse": 1.564,
+      "psnr": 44.25,
+      "ssim": 0.995,
+      "contrast": 0.999,
+      "dE_mean": 0.09,
+      "tints": [
+       [
+        0.8185,
+        0.7688,
+        0.5162
+       ]
+      ]
+     },
+     "dustyrose": {
+      "rmse": 1.392,
+      "psnr": 45.26,
+      "ssim": 0.9903,
+      "contrast": 1.006,
+      "dE_mean": 0.1,
+      "tints": [
+       [
+        0.4975,
+        0.3722,
+        0.356
+       ]
+      ]
+     },
+     "grey": {
+      "rmse": 1.208,
+      "psnr": 46.49,
+      "ssim": 0.9924,
+      "contrast": 1.003,
+      "dE_mean": 0.05,
+      "tints": [
+       [
+        0.5054,
+        0.5301,
+        0.5262
+       ]
+      ]
+     },
+     "purple": {
+      "rmse": 1.54,
+      "psnr": 44.38,
+      "ssim": 0.9887,
+      "contrast": 1.005,
+      "dE_mean": 0.11,
+      "tints": [
+       [
+        0.298,
+        0.2861,
+        0.5985
+       ]
+      ]
+     },
+     "red": {
+      "rmse": 1.702,
+      "psnr": 43.51,
+      "ssim": 0.9868,
+      "contrast": 1.006,
+      "dE_mean": 0.13,
+      "tints": [
+       [
+        0.5633,
+        0.2562,
+        0.2174
+       ]
+      ]
+     },
+     "tan": {
+      "rmse": 1.403,
+      "psnr": 45.19,
+      "ssim": 0.9951,
+      "contrast": 1.002,
+      "dE_mean": 0.11,
+      "tints": [
+       [
+        0.7491,
+        0.6048,
+        0.4048
+       ]
+      ]
+     },
+     "violet": {
+      "rmse": 1.395,
+      "psnr": 45.24,
+      "ssim": 0.9896,
+      "contrast": 1.004,
+      "dE_mean": 0.09,
+      "tints": [
+       [
+        0.5022,
+        0.2837,
+        0.5203
+       ]
+      ]
+     },
+     "white": {
+      "rmse": 1.568,
+      "psnr": 44.22,
+      "ssim": 0.9952,
+      "contrast": 0.996,
+      "dE_mean": 0.08,
+      "tints": [
+       [
+        0.8474,
+        0.8475,
+        0.8475
+       ]
+      ]
+     }
+    }
+   }
+  ],
+  "picked": "minimax"
+ },
+ "dune-17": {
+  "variant": {
+   "model": "rgb",
+   "weighting": "minimax"
+  },
+  "sources": {
+   "aubergine": "decorative/dune/aubergine/sand-dune-decal/sand-dune-decal-17.png",
+   "beige": "decorative/dune/beige/sand-dune-decal/sand-dune-decal-17.png",
+   "black": "decorative/dune/black/sand-dune-decal/sand-dune-decal-17.png",
+   "brown": "decorative/dune/brown/sand-dune-decal/sand-dune-decal-17.png",
+   "cream": "decorative/dune/cream/sand-dune-decal/sand-dune-decal-17.png",
+   "dustyrose": "decorative/dune/dustyrose/sand-dune-decal/sand-dune-decal-17.png",
+   "grey": "decorative/dune/grey/sand-dune-decal/sand-dune-decal-17.png",
+   "purple": "decorative/dune/purple/sand-dune-decal/sand-dune-decal-17.png",
+   "red": "decorative/dune/red/sand-dune-decal/sand-dune-decal-17.png",
+   "tan": "decorative/dune/tan/sand-dune-decal/sand-dune-decal-17.png",
+   "violet": "decorative/dune/violet/sand-dune-decal/sand-dune-decal-17.png",
+   "white": "decorative/dune/white/sand-dune-decal/sand-dune-decal-17.png"
+  },
+  "size": [
+   222,
+   153
+  ],
+  "groups": [
+   {
+    "scale": 1.08,
+    "layers": [
+     {
+      "file": "dune-17.png",
+      "blend": "normal"
+     }
+    ],
+    "colors": {
+     "aubergine": {
+      "rmse": 1.533,
+      "psnr": 44.42,
+      "ssim": 0.9908,
+      "contrast": 0.998,
+      "dE_mean": 0.08,
+      "tints": [
+       [
+        0.2984,
+        0.265,
+        0.4397
+       ]
+      ]
+     },
+     "beige": {
+      "rmse": 1.825,
+      "psnr": 42.91,
+      "ssim": 0.9932,
+      "contrast": 1.0,
+      "dE_mean": 0.08,
+      "tints": [
+       [
+        0.7361,
+        0.6521,
+        0.5379
+       ]
+      ]
+     },
+     "black": {
+      "rmse": 1.583,
+      "psnr": 44.14,
+      "ssim": 0.9897,
+      "contrast": 0.996,
+      "dE_mean": 0.02,
+      "tints": [
+       [
+        0.2864,
+        0.2828,
+        0.2914
+       ]
+      ]
+     },
+     "brown": {
+      "rmse": 2.216,
+      "psnr": 41.22,
+      "ssim": 0.9908,
+      "contrast": 1.0,
+      "dE_mean": 0.11,
+      "tints": [
+       [
+        0.6636,
+        0.4772,
+        0.3657
+       ]
+      ]
+     },
+     "cream": {
+      "rmse": 2.445,
+      "psnr": 40.37,
+      "ssim": 0.9952,
+      "contrast": 1.0,
+      "dE_mean": 0.1,
+      "tints": [
+       [
+        0.8945,
+        0.8393,
+        0.5721
+       ]
+      ]
+     },
+     "dustyrose": {
+      "rmse": 2.187,
+      "psnr": 41.34,
+      "ssim": 0.9886,
+      "contrast": 0.999,
+      "dE_mean": 0.06,
+      "tints": [
+       [
+        0.5523,
+        0.4136,
+        0.3979
+       ]
+      ]
+     },
+     "grey": {
+      "rmse": 1.73,
+      "psnr": 43.37,
+      "ssim": 0.9923,
+      "contrast": 0.999,
+      "dE_mean": 0.03,
+      "tints": [
+       [
+        0.5604,
+        0.5864,
+        0.5834
+       ]
+      ]
+     },
+     "purple": {
+      "rmse": 2.381,
+      "psnr": 40.59,
+      "ssim": 0.9855,
+      "contrast": 0.995,
+      "dE_mean": 0.16,
+      "tints": [
+       [
+        0.3316,
+        0.3195,
+        0.6632
+       ]
+      ]
+     },
+     "red": {
+      "rmse": 2.646,
+      "psnr": 39.68,
+      "ssim": 0.9848,
+      "contrast": 0.996,
+      "dE_mean": 0.08,
+      "tints": [
+       [
+        0.6259,
+        0.2866,
+        0.2439
+       ]
+      ]
+     },
+     "tan": {
+      "rmse": 2.135,
+      "psnr": 41.54,
+      "ssim": 0.9951,
+      "contrast": 1.002,
+      "dE_mean": 0.15,
+      "tints": [
+       [
+        0.823,
+        0.6633,
+        0.4513
+       ]
+      ]
+     },
+     "violet": {
+      "rmse": 2.017,
+      "psnr": 42.04,
+      "ssim": 0.989,
+      "contrast": 0.998,
+      "dE_mean": 0.07,
+      "tints": [
+       [
+        0.5598,
+        0.318,
+        0.5827
+       ]
+      ]
+     },
+     "white": {
+      "rmse": 2.454,
+      "psnr": 40.33,
+      "ssim": 0.9954,
+      "contrast": 0.998,
+      "dE_mean": 0.07,
+      "tints": [
+       [
+        0.9259,
+        0.9259,
+        0.9259
+       ]
+      ]
+     }
+    }
+   }
+  ],
+  "picked": "minimax"
+ },
+ "dune-18": {
+  "variant": {
+   "model": "rgb",
+   "weighting": "minimax"
+  },
+  "sources": {
+   "aubergine": "decorative/dune/aubergine/sand-dune-decal/sand-dune-decal-18.png",
+   "beige": "decorative/dune/beige/sand-dune-decal/sand-dune-decal-18.png",
+   "black": "decorative/dune/black/sand-dune-decal/sand-dune-decal-18.png",
+   "brown": "decorative/dune/brown/sand-dune-decal/sand-dune-decal-18.png",
+   "cream": "decorative/dune/cream/sand-dune-decal/sand-dune-decal-18.png",
+   "dustyrose": "decorative/dune/dustyrose/sand-dune-decal/sand-dune-decal-18.png",
+   "grey": "decorative/dune/grey/sand-dune-decal/sand-dune-decal-18.png",
+   "purple": "decorative/dune/purple/sand-dune-decal/sand-dune-decal-18.png",
+   "red": "decorative/dune/red/sand-dune-decal/sand-dune-decal-18.png",
+   "tan": "decorative/dune/tan/sand-dune-decal/sand-dune-decal-18.png",
+   "violet": "decorative/dune/violet/sand-dune-decal/sand-dune-decal-18.png",
+   "white": "decorative/dune/white/sand-dune-decal/sand-dune-decal-18.png"
+  },
+  "size": [
+   247,
+   184
+  ],
+  "groups": [
+   {
+    "scale": 1.18,
+    "layers": [
+     {
+      "file": "dune-18.png",
+      "blend": "normal"
+     }
+    ],
+    "colors": {
+     "aubergine": {
+      "rmse": 1.419,
+      "psnr": 45.09,
+      "ssim": 0.9894,
+      "contrast": 1.002,
+      "dE_mean": 0.07,
+      "tints": [
+       [
+        0.2717,
+        0.2404,
+        0.4
+       ]
+      ]
+     },
+     "beige": {
+      "rmse": 1.646,
+      "psnr": 43.8,
+      "ssim": 0.9906,
+      "contrast": 1.001,
+      "dE_mean": 0.08,
+      "tints": [
+       [
+        0.6714,
+        0.5956,
+        0.4912
+       ]
+      ]
+     },
+     "black": {
+      "rmse": 1.377,
+      "psnr": 45.35,
+      "ssim": 0.9892,
+      "contrast": 0.999,
+      "dE_mean": 0.01,
+      "tints": [
+       [
+        0.2607,
+        0.2573,
+        0.265
+       ]
+      ]
+     },
+     "brown": {
+      "rmse": 1.898,
+      "psnr": 42.57,
+      "ssim": 0.9894,
+      "contrast": 1.003,
+      "dE_mean": 0.12,
+      "tints": [
+       [
+        0.6053,
+        0.4362,
+        0.3336
+       ]
+      ]
+     },
+     "cream": {
+      "rmse": 2.016,
+      "psnr": 42.04,
+      "ssim": 0.9939,
+      "contrast": 1.0,
+      "dE_mean": 0.07,
+      "tints": [
+       [
+        0.8188,
+        0.7683,
+        0.5234
+       ]
+      ]
+     },
+     "dustyrose": {
+      "rmse": 1.868,
+      "psnr": 42.7,
+      "ssim": 0.9876,
+      "contrast": 1.002,
+      "dE_mean": 0.07,
+      "tints": [
+       [
+        0.5034,
+        0.3774,
+        0.3624
+       ]
+      ]
+     },
+     "grey": {
+      "rmse": 1.581,
+      "psnr": 44.15,
+      "ssim": 0.9901,
+      "contrast": 1.0,
+      "dE_mean": 0.02,
+      "tints": [
+       [
+        0.5115,
+        0.5353,
+        0.5321
+       ]
+      ]
+     },
+     "purple": {
+      "rmse": 2.019,
+      "psnr": 42.03,
+      "ssim": 0.9857,
+      "contrast": 0.999,
+      "dE_mean": 0.14,
+      "tints": [
+       [
+        0.3026,
+        0.2915,
+        0.6048
+       ]
+      ]
+     },
+     "red": {
+      "rmse": 2.197,
+      "psnr": 41.3,
+      "ssim": 0.9847,
+      "contrast": 1.001,
+      "dE_mean": 0.1,
+      "tints": [
+       [
+        0.571,
+        0.2616,
+        0.2226
+       ]
+      ]
+     },
+     "tan": {
+      "rmse": 1.818,
+      "psnr": 42.94,
+      "ssim": 0.9932,
+      "contrast": 1.002,
+      "dE_mean": 0.14,
+      "tints": [
+       [
+        0.752,
+        0.607,
+        0.4123
+       ]
+      ]
+     },
+     "violet": {
+      "rmse": 1.873,
+      "psnr": 42.68,
+      "ssim": 0.9867,
+      "contrast": 1.0,
+      "dE_mean": 0.08,
+      "tints": [
+       [
+        0.5092,
+        0.2891,
+        0.5289
+       ]
+      ]
+     },
+     "white": {
+      "rmse": 2.028,
+      "psnr": 41.99,
+      "ssim": 0.9951,
+      "contrast": 0.997,
+      "dE_mean": 0.07,
+      "tints": [
+       [
+        0.8475,
+        0.8474,
+        0.8474
+       ]
+      ]
+     }
+    }
+   }
+  ],
+  "picked": "minimax"
+ },
+ "dune-19": {
+  "variant": {
+   "model": "rgb",
+   "weighting": "minimax"
+  },
+  "sources": {
+   "aubergine": "decorative/dune/aubergine/sand-dune-decal/sand-dune-decal-19.png",
+   "beige": "decorative/dune/beige/sand-dune-decal/sand-dune-decal-19.png",
+   "black": "decorative/dune/black/sand-dune-decal/sand-dune-decal-19.png",
+   "brown": "decorative/dune/brown/sand-dune-decal/sand-dune-decal-19.png",
+   "cream": "decorative/dune/cream/sand-dune-decal/sand-dune-decal-19.png",
+   "dustyrose": "decorative/dune/dustyrose/sand-dune-decal/sand-dune-decal-19.png",
+   "grey": "decorative/dune/grey/sand-dune-decal/sand-dune-decal-19.png",
+   "purple": "decorative/dune/purple/sand-dune-decal/sand-dune-decal-19.png",
+   "red": "decorative/dune/red/sand-dune-decal/sand-dune-decal-19.png",
+   "tan": "decorative/dune/tan/sand-dune-decal/sand-dune-decal-19.png",
+   "violet": "decorative/dune/violet/sand-dune-decal/sand-dune-decal-19.png",
+   "white": "decorative/dune/white/sand-dune-decal/sand-dune-decal-19.png"
+  },
+  "size": [
+   211,
+   184
+  ],
+  "groups": [
+   {
+    "scale": 1.04,
+    "layers": [
+     {
+      "file": "dune-19.png",
+      "blend": "normal"
+     }
+    ],
+    "colors": {
+     "aubergine": {
+      "rmse": 1.755,
+      "psnr": 43.24,
+      "ssim": 0.9878,
+      "contrast": 0.997,
+      "dE_mean": 0.07,
+      "tints": [
+       [
+        0.311,
+        0.276,
+        0.4597
+       ]
+      ]
+     },
+     "beige": {
+      "rmse": 2.053,
+      "psnr": 41.88,
+      "ssim": 0.9898,
+      "contrast": 0.999,
+      "dE_mean": 0.07,
+      "tints": [
+       [
+        0.7666,
+        0.679,
+        0.5607
+       ]
+      ]
+     },
+     "black": {
+      "rmse": 1.793,
+      "psnr": 43.06,
+      "ssim": 0.9861,
+      "contrast": 0.994,
+      "dE_mean": 0.03,
+      "tints": [
+       [
+        0.2992,
+        0.2954,
+        0.3039
+       ]
+      ]
+     },
+     "brown": {
+      "rmse": 2.457,
+      "psnr": 40.32,
+      "ssim": 0.9876,
+      "contrast": 0.999,
+      "dE_mean": 0.1,
+      "tints": [
+       [
+        0.6928,
+        0.4972,
+        0.381
+       ]
+      ]
+     },
+     "cream": {
+      "rmse": 2.636,
+      "psnr": 39.71,
+      "ssim": 0.993,
+      "contrast": 1.001,
+      "dE_mean": 0.13,
+      "tints": [
+       [
+        0.9299,
+        0.872,
+        0.5956
+       ]
+      ]
+     },
+     "dustyrose": {
+      "rmse": 2.423,
+      "psnr": 40.44,
+      "ssim": 0.9849,
+      "contrast": 0.998,
+      "dE_mean": 0.05,
+      "tints": [
+       [
+        0.5769,
+        0.4315,
+        0.4149
+       ]
+      ]
+     },
+     "grey": {
+      "rmse": 1.952,
+      "psnr": 42.32,
+      "ssim": 0.989,
+      "contrast": 0.998,
+      "dE_mean": 0.04,
+      "tints": [
+       [
+        0.5839,
+        0.6109,
+        0.6073
+       ]
+      ]
+     },
+     "purple": {
+      "rmse": 2.635,
+      "psnr": 39.72,
+      "ssim": 0.9817,
+      "contrast": 0.993,
+      "dE_mean": 0.13,
+      "tints": [
+       [
+        0.3451,
+        0.3334,
+        0.6938
+       ]
+      ]
+     },
+     "red": {
+      "rmse": 2.872,
+      "psnr": 38.97,
+      "ssim": 0.9812,
+      "contrast": 0.994,
+      "dE_mean": 0.07,
+      "tints": [
+       [
+        0.655,
+        0.2992,
+        0.2546
+       ]
+      ]
+     },
+     "tan": {
+      "rmse": 2.302,
+      "psnr": 40.89,
+      "ssim": 0.9931,
+      "contrast": 1.001,
+      "dE_mean": 0.14,
+      "tints": [
+       [
+        0.8566,
+        0.6902,
+        0.4701
+       ]
+      ]
+     },
+     "violet": {
+      "rmse": 2.378,
+      "psnr": 40.61,
+      "ssim": 0.9848,
+      "contrast": 0.996,
+      "dE_mean": 0.07,
+      "tints": [
+       [
+        0.5847,
+        0.3315,
+        0.6092
+       ]
+      ]
+     },
+     "white": {
+      "rmse": 2.671,
+      "psnr": 39.6,
+      "ssim": 0.9936,
+      "contrast": 0.999,
+      "dE_mean": 0.07,
+      "tints": [
+       [
+        0.9616,
+        0.9615,
+        0.9615
+       ]
+      ]
+     }
+    }
+   }
+  ],
+  "picked": "minimax"
+ },
+ "dune-20": {
+  "variant": {
+   "model": "rgb",
+   "weighting": "minimax"
+  },
+  "sources": {
+   "aubergine": "decorative/dune/aubergine/sand-dune-decal/sand-dune-decal-20.png",
+   "beige": "decorative/dune/beige/sand-dune-decal/sand-dune-decal-20.png",
+   "black": "decorative/dune/black/sand-dune-decal/sand-dune-decal-20.png",
+   "brown": "decorative/dune/brown/sand-dune-decal/sand-dune-decal-20.png",
+   "cream": "decorative/dune/cream/sand-dune-decal/sand-dune-decal-20.png",
+   "dustyrose": "decorative/dune/dustyrose/sand-dune-decal/sand-dune-decal-20.png",
+   "grey": "decorative/dune/grey/sand-dune-decal/sand-dune-decal-20.png",
+   "purple": "decorative/dune/purple/sand-dune-decal/sand-dune-decal-20.png",
+   "red": "decorative/dune/red/sand-dune-decal/sand-dune-decal-20.png",
+   "tan": "decorative/dune/tan/sand-dune-decal/sand-dune-decal-20.png",
+   "violet": "decorative/dune/violet/sand-dune-decal/sand-dune-decal-20.png",
+   "white": "decorative/dune/white/sand-dune-decal/sand-dune-decal-20.png"
+  },
+  "size": [
+   248,
+   183
+  ],
+  "groups": [
+   {
+    "scale": 1.25,
+    "layers": [
+     {
+      "file": "dune-20.png",
+      "blend": "normal"
+     }
+    ],
+    "colors": {
+     "aubergine": {
+      "rmse": 1.304,
+      "psnr": 45.82,
+      "ssim": 0.9894,
+      "contrast": 1.005,
+      "dE_mean": 0.07,
+      "tints": [
+       [
+        0.2513,
+        0.2219,
+        0.3708
+       ]
+      ]
+     },
+     "beige": {
+      "rmse": 1.634,
+      "psnr": 43.87,
+      "ssim": 0.9894,
+      "contrast": 1.002,
+      "dE_mean": 0.07,
+      "tints": [
+       [
+        0.6273,
+        0.5559,
+        0.4558
+       ]
+      ]
+     },
+     "black": {
+      "rmse": 1.267,
+      "psnr": 46.07,
+      "ssim": 0.9887,
+      "contrast": 1.002,
+      "dE_mean": 0.03,
+      "tints": [
+       [
+        0.2406,
+        0.2378,
+        0.2449
+       ]
+      ]
+     },
+     "brown": {
+      "rmse": 1.912,
+      "psnr": 42.5,
+      "ssim": 0.9867,
+      "contrast": 1.004,
+      "dE_mean": 0.1,
+      "tints": [
+       [
+        0.5641,
+        0.4052,
+        0.3074
+       ]
+      ]
+     },
+     "cream": {
+      "rmse": 2.05,
+      "psnr": 41.9,
+      "ssim": 0.993,
+      "contrast": 0.999,
+      "dE_mean": 0.05,
+      "tints": [
+       [
+        0.7723,
+        0.7249,
+        0.4857
+       ]
+      ]
+     },
+     "dustyrose": {
+      "rmse": 1.811,
+      "psnr": 42.97,
+      "ssim": 0.9855,
+      "contrast": 1.004,
+      "dE_mean": 0.07,
+      "tints": [
+       [
+        0.4681,
+        0.3497,
+        0.3349
+       ]
+      ]
+     },
+     "grey": {
+      "rmse": 1.554,
+      "psnr": 44.3,
+      "ssim": 0.9889,
+      "contrast": 1.002,
+      "dE_mean": 0.03,
+      "tints": [
+       [
+        0.4759,
+        0.4994,
+        0.496
+       ]
+      ]
+     },
+     "purple": {
+      "rmse": 2.009,
+      "psnr": 42.07,
+      "ssim": 0.9827,
+      "contrast": 1.002,
+      "dE_mean": 0.11,
+      "tints": [
+       [
+        0.2796,
+        0.2688,
+        0.5626
+       ]
+      ]
+     },
+     "red": {
+      "rmse": 2.223,
+      "psnr": 41.19,
+      "ssim": 0.9797,
+      "contrast": 1.004,
+      "dE_mean": 0.1,
+      "tints": [
+       [
+        0.5295,
+        0.2402,
+        0.2036
+       ]
+      ]
+     },
+     "tan": {
+      "rmse": 1.837,
+      "psnr": 42.85,
+      "ssim": 0.9932,
+      "contrast": 1.002,
+      "dE_mean": 0.09,
+      "tints": [
+       [
+        0.7067,
+        0.5693,
+        0.3805
+       ]
+      ]
+     },
+     "violet": {
+      "rmse": 1.763,
+      "psnr": 43.21,
+      "ssim": 0.9846,
+      "contrast": 1.003,
+      "dE_mean": 0.06,
+      "tints": [
+       [
+        0.4725,
+        0.2666,
+        0.4902
+       ]
+      ]
+     },
+     "white": {
+      "rmse": 2.045,
+      "psnr": 41.92,
+      "ssim": 0.9929,
+      "contrast": 0.996,
+      "dE_mean": 0.07,
+      "tints": [
+       [
+        0.8,
+        0.8,
+        0.8
+       ]
+      ]
+     }
+    }
+   }
+  ],
+  "picked": "minimax"
+ },
+ "dune-21": {
+  "variant": {
+   "model": "rgb",
+   "weighting": "minimax"
+  },
+  "sources": {
+   "aubergine": "decorative/dune/aubergine/sand-dune-decal/sand-dune-decal-21.png",
+   "beige": "decorative/dune/beige/sand-dune-decal/sand-dune-decal-21.png",
+   "black": "decorative/dune/black/sand-dune-decal/sand-dune-decal-21.png",
+   "brown": "decorative/dune/brown/sand-dune-decal/sand-dune-decal-21.png",
+   "cream": "decorative/dune/cream/sand-dune-decal/sand-dune-decal-21.png",
+   "dustyrose": "decorative/dune/dustyrose/sand-dune-decal/sand-dune-decal-21.png",
+   "grey": "decorative/dune/grey/sand-dune-decal/sand-dune-decal-21.png",
+   "purple": "decorative/dune/purple/sand-dune-decal/sand-dune-decal-21.png",
+   "red": "decorative/dune/red/sand-dune-decal/sand-dune-decal-21.png",
+   "tan": "decorative/dune/tan/sand-dune-decal/sand-dune-decal-21.png",
+   "violet": "decorative/dune/violet/sand-dune-decal/sand-dune-decal-21.png",
+   "white": "decorative/dune/white/sand-dune-decal/sand-dune-decal-21.png"
+  },
+  "size": [
+   176,
+   184
+  ],
+  "groups": [
+   {
+    "scale": 1.08,
+    "layers": [
+     {
+      "file": "dune-21.png",
+      "blend": "normal"
+     }
+    ],
+    "colors": {
+     "aubergine": {
+      "rmse": 1.88,
+      "psnr": 42.65,
+      "ssim": 0.9888,
+      "contrast": 0.995,
+      "dE_mean": 0.08,
+      "tints": [
+       [
+        0.2981,
+        0.265,
+        0.4414
+       ]
+      ]
+     },
+     "beige": {
+      "rmse": 2.265,
+      "psnr": 41.03,
+      "ssim": 0.9905,
+      "contrast": 0.998,
+      "dE_mean": 0.09,
+      "tints": [
+       [
+        0.7363,
+        0.6514,
+        0.5371
+       ]
+      ]
+     },
+     "black": {
+      "rmse": 2.001,
+      "psnr": 42.11,
+      "ssim": 0.9862,
+      "contrast": 0.991,
+      "dE_mean": 0.06,
+      "tints": [
+       [
+        0.2866,
+        0.2832,
+        0.292
+       ]
+      ]
+     },
+     "brown": {
+      "rmse": 2.828,
+      "psnr": 39.1,
+      "ssim": 0.9869,
+      "contrast": 0.997,
+      "dE_mean": 0.13,
+      "tints": [
+       [
+        0.6645,
+        0.4752,
+        0.3648
+       ]
+      ]
+     },
+     "cream": {
+      "rmse": 3.088,
+      "psnr": 38.34,
+      "ssim": 0.9938,
+      "contrast": 1.001,
+      "dE_mean": 0.23,
+      "tints": [
+       [
+        0.8957,
+        0.8388,
+        0.5707
+       ]
+      ]
+     },
+     "dustyrose": {
+      "rmse": 2.761,
+      "psnr": 39.31,
+      "ssim": 0.9843,
+      "contrast": 0.995,
+      "dE_mean": 0.05,
+      "tints": [
+       [
+        0.5527,
+        0.4128,
+        0.3976
+       ]
+      ]
+     },
+     "grey": {
+      "rmse": 2.107,
+      "psnr": 41.66,
+      "ssim": 0.9898,
+      "contrast": 0.997,
+      "dE_mean": 0.07,
+      "tints": [
+       [
+        0.5599,
+        0.5863,
+        0.5833
+       ]
+      ]
+     },
+     "purple": {
+      "rmse": 3.122,
+      "psnr": 38.24,
+      "ssim": 0.9791,
+      "contrast": 0.988,
+      "dE_mean": 0.19,
+      "tints": [
+       [
+        0.33,
+        0.3187,
+        0.6635
+       ]
+      ]
+     },
+     "red": {
+      "rmse": 3.355,
+      "psnr": 37.62,
+      "ssim": 0.9792,
+      "contrast": 0.99,
+      "dE_mean": 0.09,
+      "tints": [
+       [
+        0.6275,
+        0.2851,
+        0.244
+       ]
+      ]
+     },
+     "tan": {
+      "rmse": 2.684,
+      "psnr": 39.56,
+      "ssim": 0.9938,
+      "contrast": 1.001,
+      "dE_mean": 0.21,
+      "tints": [
+       [
+        0.8243,
+        0.662,
+        0.4496
+       ]
+      ]
+     },
+     "violet": {
+      "rmse": 2.5,
+      "psnr": 40.17,
+      "ssim": 0.9858,
+      "contrast": 0.994,
+      "dE_mean": 0.07,
+      "tints": [
+       [
+        0.5606,
+        0.3178,
+        0.5857
+       ]
+      ]
+     },
+     "white": {
+      "rmse": 3.156,
+      "psnr": 38.15,
+      "ssim": 0.9931,
+      "contrast": 1.0,
+      "dE_mean": 0.1,
+      "tints": [
+       [
+        0.9259,
+        0.926,
+        0.9259
+       ]
+      ]
+     }
+    }
+   }
+  ],
+  "picked": "minimax"
+ },
+ "dune-22": {
+  "variant": {
+   "model": "rgb",
+   "weighting": "minimax"
+  },
+  "sources": {
+   "aubergine": "decorative/dune/aubergine/sand-dune-decal/sand-dune-decal-22.png",
+   "beige": "decorative/dune/beige/sand-dune-decal/sand-dune-decal-22.png",
+   "black": "decorative/dune/black/sand-dune-decal/sand-dune-decal-22.png",
+   "brown": "decorative/dune/brown/sand-dune-decal/sand-dune-decal-22.png",
+   "cream": "decorative/dune/cream/sand-dune-decal/sand-dune-decal-22.png",
+   "dustyrose": "decorative/dune/dustyrose/sand-dune-decal/sand-dune-decal-22.png",
+   "grey": "decorative/dune/grey/sand-dune-decal/sand-dune-decal-22.png",
+   "purple": "decorative/dune/purple/sand-dune-decal/sand-dune-decal-22.png",
+   "red": "decorative/dune/red/sand-dune-decal/sand-dune-decal-22.png",
+   "tan": "decorative/dune/tan/sand-dune-decal/sand-dune-decal-22.png",
+   "violet": "decorative/dune/violet/sand-dune-decal/sand-dune-decal-22.png",
+   "white": "decorative/dune/white/sand-dune-decal/sand-dune-decal-22.png"
+  },
+  "size": [
+   208,
+   185
+  ],
+  "groups": [
+   {
+    "scale": 1.04,
+    "layers": [
+     {
+      "file": "dune-22.png",
+      "blend": "normal"
+     }
+    ],
+    "colors": {
+     "aubergine": {
+      "rmse": 1.759,
+      "psnr": 43.23,
+      "ssim": 0.9888,
+      "contrast": 0.997,
+      "dE_mean": 0.06,
+      "tints": [
+       [
+        0.3088,
+        0.2738,
+        0.4568
+       ]
+      ]
+     },
+     "beige": {
+      "rmse": 1.946,
+      "psnr": 42.35,
+      "ssim": 0.9907,
+      "contrast": 0.999,
+      "dE_mean": 0.05,
+      "tints": [
+       [
+        0.7628,
+        0.6767,
+        0.5569
+       ]
+      ]
+     },
+     "black": {
+      "rmse": 1.798,
+      "psnr": 43.03,
+      "ssim": 0.9874,
+      "contrast": 0.993,
+      "dE_mean": 0.03,
+      "tints": [
+       [
+        0.2969,
+        0.2932,
+        0.3021
+       ]
+      ]
+     },
+     "brown": {
+      "rmse": 2.314,
+      "psnr": 40.84,
+      "ssim": 0.9884,
+      "contrast": 1.0,
+      "dE_mean": 0.1,
+      "tints": [
+       [
+        0.6891,
+        0.4951,
+        0.3781
+       ]
+      ]
+     },
+     "cream": {
+      "rmse": 2.611,
+      "psnr": 39.8,
+      "ssim": 0.9931,
+      "contrast": 1.001,
+      "dE_mean": 0.09,
+      "tints": [
+       [
+        0.929,
+        0.8722,
+        0.5921
+       ]
+      ]
+     },
+     "dustyrose": {
+      "rmse": 2.331,
+      "psnr": 40.78,
+      "ssim": 0.9865,
+      "contrast": 0.998,
+      "dE_mean": 0.05,
+      "tints": [
+       [
+        0.573,
+        0.4289,
+        0.4119
+       ]
+      ]
+     },
+     "grey": {
+      "rmse": 1.91,
+      "psnr": 42.51,
+      "ssim": 0.9895,
+      "contrast": 0.999,
+      "dE_mean": 0.04,
+      "tints": [
+       [
+        0.5804,
+        0.608,
+        0.6047
+       ]
+      ]
+     },
+     "purple": {
+      "rmse": 2.481,
+      "psnr": 40.24,
+      "ssim": 0.9835,
+      "contrast": 0.994,
+      "dE_mean": 0.13,
+      "tints": [
+       [
+        0.3435,
+        0.3307,
+        0.6906
+       ]
+      ]
+     },
+     "red": {
+      "rmse": 2.837,
+      "psnr": 39.08,
+      "ssim": 0.9822,
+      "contrast": 0.995,
+      "dE_mean": 0.09,
+      "tints": [
+       [
+        0.6505,
+        0.2963,
+        0.2521
+       ]
+      ]
+     },
+     "tan": {
+      "rmse": 2.221,
+      "psnr": 41.2,
+      "ssim": 0.9934,
+      "contrast": 1.002,
+      "dE_mean": 0.13,
+      "tints": [
+       [
+        0.8548,
+        0.6893,
+        0.4668
+       ]
+      ]
+     },
+     "violet": {
+      "rmse": 2.318,
+      "psnr": 40.83,
+      "ssim": 0.9863,
+      "contrast": 0.995,
+      "dE_mean": 0.08,
+      "tints": [
+       [
+        0.5805,
+        0.3288,
+        0.6045
+       ]
+      ]
+     },
+     "white": {
+      "rmse": 2.635,
+      "psnr": 39.72,
+      "ssim": 0.9941,
+      "contrast": 0.998,
+      "dE_mean": 0.08,
+      "tints": [
+       [
+        0.9615,
+        0.9615,
+        0.9616
+       ]
+      ]
+     }
+    }
+   }
+  ],
+  "picked": "minimax"
+ },
+ "dune-23": {
+  "variant": {
+   "model": "rgb",
+   "weighting": "minimax"
+  },
+  "sources": {
+   "aubergine": "decorative/dune/aubergine/sand-dune-decal/sand-dune-decal-23.png",
+   "beige": "decorative/dune/beige/sand-dune-decal/sand-dune-decal-23.png",
+   "black": "decorative/dune/black/sand-dune-decal/sand-dune-decal-23.png",
+   "brown": "decorative/dune/brown/sand-dune-decal/sand-dune-decal-23.png",
+   "cream": "decorative/dune/cream/sand-dune-decal/sand-dune-decal-23.png",
+   "dustyrose": "decorative/dune/dustyrose/sand-dune-decal/sand-dune-decal-23.png",
+   "grey": "decorative/dune/grey/sand-dune-decal/sand-dune-decal-23.png",
+   "purple": "decorative/dune/purple/sand-dune-decal/sand-dune-decal-23.png",
+   "red": "decorative/dune/red/sand-dune-decal/sand-dune-decal-23.png",
+   "tan": "decorative/dune/tan/sand-dune-decal/sand-dune-decal-23.png",
+   "violet": "decorative/dune/violet/sand-dune-decal/sand-dune-decal-23.png",
+   "white": "decorative/dune/white/sand-dune-decal/sand-dune-decal-23.png"
+  },
+  "size": [
+   227,
+   184
+  ],
+  "groups": [
+   {
+    "scale": 1.04,
+    "layers": [
+     {
+      "file": "dune-23.png",
+      "blend": "normal"
+     }
+    ],
+    "colors": {
+     "aubergine": {
+      "rmse": 1.888,
+      "psnr": 42.61,
+      "ssim": 0.9865,
+      "contrast": 0.995,
+      "dE_mean": 0.06,
+      "tints": [
+       [
+        0.3104,
+        0.2752,
+        0.4594
+       ]
+      ]
+     },
+     "beige": {
+      "rmse": 2.304,
+      "psnr": 40.88,
+      "ssim": 0.9893,
+      "contrast": 0.998,
+      "dE_mean": 0.08,
+      "tints": [
+       [
+        0.7648,
+        0.6779,
+        0.5586
+       ]
+      ]
+     },
+     "black": {
+      "rmse": 2.006,
+      "psnr": 42.08,
+      "ssim": 0.9842,
+      "contrast": 0.991,
+      "dE_mean": 0.05,
+      "tints": [
+       [
+        0.2981,
+        0.2947,
+        0.3035
+       ]
+      ]
+     },
+     "brown": {
+      "rmse": 2.8,
+      "psnr": 39.19,
+      "ssim": 0.985,
+      "contrast": 0.997,
+      "dE_mean": 0.11,
+      "tints": [
+       [
+        0.6909,
+        0.4955,
+        0.3793
+       ]
+      ]
+     },
+     "cream": {
+      "rmse": 2.99,
+      "psnr": 38.62,
+      "ssim": 0.9926,
+      "contrast": 1.001,
+      "dE_mean": 0.19,
+      "tints": [
+       [
+        0.9298,
+        0.8716,
+        0.5935
+       ]
+      ]
+     },
+     "dustyrose": {
+      "rmse": 2.737,
+      "psnr": 39.39,
+      "ssim": 0.9825,
+      "contrast": 0.995,
+      "dE_mean": 0.05,
+      "tints": [
+       [
+        0.5751,
+        0.4298,
+        0.4137
+       ]
+      ]
+     },
+     "grey": {
+      "rmse": 2.085,
+      "psnr": 41.75,
+      "ssim": 0.9887,
+      "contrast": 0.997,
+      "dE_mean": 0.06,
+      "tints": [
+       [
+        0.5821,
+        0.6096,
+        0.606
+       ]
+      ]
+     },
+     "purple": {
+      "rmse": 3.054,
+      "psnr": 38.43,
+      "ssim": 0.9783,
+      "contrast": 0.989,
+      "dE_mean": 0.16,
+      "tints": [
+       [
+        0.3437,
+        0.3317,
+        0.6901
+       ]
+      ]
+     },
+     "red": {
+      "rmse": 3.275,
+      "psnr": 37.83,
+      "ssim": 0.9773,
+      "contrast": 0.99,
+      "dE_mean": 0.08,
+      "tints": [
+       [
+        0.6533,
+        0.2977,
+        0.2541
+       ]
+      ]
+     },
+     "tan": {
+      "rmse": 2.615,
+      "psnr": 39.78,
+      "ssim": 0.9927,
+      "contrast": 1.001,
+      "dE_mean": 0.18,
+      "tints": [
+       [
+        0.8557,
+        0.6889,
+        0.4677
+       ]
+      ]
+     },
+     "violet": {
+      "rmse": 2.56,
+      "psnr": 39.97,
+      "ssim": 0.9842,
+      "contrast": 0.994,
+      "dE_mean": 0.07,
+      "tints": [
+       [
+        0.5831,
+        0.3304,
+        0.608
+       ]
+      ]
+     },
+     "white": {
+      "rmse": 3.082,
+      "psnr": 38.35,
+      "ssim": 0.9928,
+      "contrast": 1.0,
+      "dE_mean": 0.09,
+      "tints": [
+       [
+        0.9615,
+        0.9615,
+        0.9615
+       ]
+      ]
+     }
+    }
+   }
+  ],
+  "picked": "minimax"
+ },
+ "dune-24": {
+  "variant": {
+   "model": "rgb",
+   "weighting": "minimax"
+  },
+  "sources": {
+   "aubergine": "decorative/dune/aubergine/sand-dune-decal/sand-dune-decal-24.png",
+   "beige": "decorative/dune/beige/sand-dune-decal/sand-dune-decal-24.png",
+   "black": "decorative/dune/black/sand-dune-decal/sand-dune-decal-24.png",
+   "brown": "decorative/dune/brown/sand-dune-decal/sand-dune-decal-24.png",
+   "cream": "decorative/dune/cream/sand-dune-decal/sand-dune-decal-24.png",
+   "dustyrose": "decorative/dune/dustyrose/sand-dune-decal/sand-dune-decal-24.png",
+   "grey": "decorative/dune/grey/sand-dune-decal/sand-dune-decal-24.png",
+   "purple": "decorative/dune/purple/sand-dune-decal/sand-dune-decal-24.png",
+   "red": "decorative/dune/red/sand-dune-decal/sand-dune-decal-24.png",
+   "tan": "decorative/dune/tan/sand-dune-decal/sand-dune-decal-24.png",
+   "violet": "decorative/dune/violet/sand-dune-decal/sand-dune-decal-24.png",
+   "white": "decorative/dune/white/sand-dune-decal/sand-dune-decal-24.png"
+  },
+  "size": [
+   158,
+   186
+  ],
+  "groups": [
+   {
+    "scale": 1.12,
+    "layers": [
+     {
+      "file": "dune-24.png",
+      "blend": "normal"
+     }
+    ],
+    "colors": {
+     "aubergine": {
+      "rmse": 1.306,
+      "psnr": 45.81,
+      "ssim": 0.9897,
+      "contrast": 1.004,
+      "dE_mean": 0.06,
+      "tints": [
+       [
+        0.2829,
+        0.2496,
+        0.4171
+       ]
+      ]
+     },
+     "beige": {
+      "rmse": 1.61,
+      "psnr": 44.0,
+      "ssim": 0.9904,
+      "contrast": 1.002,
+      "dE_mean": 0.07,
+      "tints": [
+       [
+        0.7035,
+        0.6237,
+        0.5116
+       ]
+      ]
+     },
+     "black": {
+      "rmse": 1.279,
+      "psnr": 46.0,
+      "ssim": 0.9889,
+      "contrast": 1.002,
+      "dE_mean": 0.03,
+      "tints": [
+       [
+        0.2704,
+        0.2671,
+        0.2752
+       ]
+      ]
+     },
+     "brown": {
+      "rmse": 1.84,
+      "psnr": 42.84,
+      "ssim": 0.9881,
+      "contrast": 1.004,
+      "dE_mean": 0.11,
+      "tints": [
+       [
+        0.6334,
+        0.4553,
+        0.3459
+       ]
+      ]
+     },
+     "cream": {
+      "rmse": 1.971,
+      "psnr": 42.24,
+      "ssim": 0.9934,
+      "contrast": 0.999,
+      "dE_mean": 0.05,
+      "tints": [
+       [
+        0.8627,
+        0.8101,
+        0.5453
+       ]
+      ]
+     },
+     "dustyrose": {
+      "rmse": 1.78,
+      "psnr": 43.12,
+      "ssim": 0.9869,
+      "contrast": 1.004,
+      "dE_mean": 0.08,
+      "tints": [
+       [
+        0.5256,
+        0.3933,
+        0.3766
+       ]
+      ]
+     },
+     "grey": {
+      "rmse": 1.52,
+      "psnr": 44.49,
+      "ssim": 0.99,
+      "contrast": 1.001,
+      "dE_mean": 0.03,
+      "tints": [
+       [
+        0.5339,
+        0.5599,
+        0.5561
+       ]
+      ]
+     },
+     "purple": {
+      "rmse": 1.931,
+      "psnr": 42.41,
+      "ssim": 0.9841,
+      "contrast": 1.002,
+      "dE_mean": 0.11,
+      "tints": [
+       [
+        0.3148,
+        0.3022,
+        0.6325
+       ]
+      ]
+     },
+     "red": {
+      "rmse": 2.133,
+      "psnr": 41.55,
+      "ssim": 0.9816,
+      "contrast": 1.003,
+      "dE_mean": 0.1,
+      "tints": [
+       [
+        0.5956,
+        0.2709,
+        0.23
+       ]
+      ]
+     },
+     "tan": {
+      "rmse": 1.745,
+      "psnr": 43.29,
+      "ssim": 0.9937,
+      "contrast": 1.002,
+      "dE_mean": 0.1,
+      "tints": [
+       [
+        0.7907,
+        0.6377,
+        0.4278
+       ]
+      ]
+     },
+     "violet": {
+      "rmse": 1.769,
+      "psnr": 43.18,
+      "ssim": 0.9861,
+      "contrast": 1.003,
+      "dE_mean": 0.08,
+      "tints": [
+       [
+        0.5311,
+        0.2998,
+        0.5513
+       ]
+      ]
+     },
+     "white": {
+      "rmse": 1.968,
+      "psnr": 42.25,
+      "ssim": 0.9938,
+      "contrast": 0.997,
+      "dE_mean": 0.07,
+      "tints": [
+       [
+        0.8928,
+        0.8928,
+        0.8929
+       ]
+      ]
+     }
+    }
+   }
+  ],
+  "picked": "minimax"
+ },
+ "dune-25": {
+  "variant": {
+   "model": "rgb",
+   "weighting": "minimax"
+  },
+  "sources": {
+   "aubergine": "decorative/dune/aubergine/sand-dune-decal/sand-dune-decal-25.png",
+   "beige": "decorative/dune/beige/sand-dune-decal/sand-dune-decal-25.png",
+   "black": "decorative/dune/black/sand-dune-decal/sand-dune-decal-25.png",
+   "brown": "decorative/dune/brown/sand-dune-decal/sand-dune-decal-25.png",
+   "cream": "decorative/dune/cream/sand-dune-decal/sand-dune-decal-25.png",
+   "dustyrose": "decorative/dune/dustyrose/sand-dune-decal/sand-dune-decal-25.png",
+   "grey": "decorative/dune/grey/sand-dune-decal/sand-dune-decal-25.png",
+   "purple": "decorative/dune/purple/sand-dune-decal/sand-dune-decal-25.png",
+   "red": "decorative/dune/red/sand-dune-decal/sand-dune-decal-25.png",
+   "tan": "decorative/dune/tan/sand-dune-decal/sand-dune-decal-25.png",
+   "violet": "decorative/dune/violet/sand-dune-decal/sand-dune-decal-25.png",
+   "white": "decorative/dune/white/sand-dune-decal/sand-dune-decal-25.png"
+  },
+  "size": [
+   260,
+   184
+  ],
+  "groups": [
+   {
+    "scale": 1.12,
+    "layers": [
+     {
+      "file": "dune-25.png",
+      "blend": "normal"
+     }
+    ],
+    "colors": {
+     "aubergine": {
+      "rmse": 1.917,
+      "psnr": 42.48,
+      "ssim": 0.985,
+      "contrast": 0.994,
+      "dE_mean": 0.07,
+      "tints": [
+       [
+        0.2857,
+        0.2536,
+        0.4222
+       ]
+      ]
+     },
+     "beige": {
+      "rmse": 2.228,
+      "psnr": 41.17,
+      "ssim": 0.9878,
+      "contrast": 0.998,
+      "dE_mean": 0.08,
+      "tints": [
+       [
+        0.7077,
+        0.6265,
+        0.5162
+       ]
+      ]
+     },
+     "black": {
+      "rmse": 1.974,
+      "psnr": 42.23,
+      "ssim": 0.983,
+      "contrast": 0.991,
+      "dE_mean": 0.04,
+      "tints": [
+       [
+        0.2747,
+        0.2713,
+        0.2797
+       ]
+      ]
+     },
+     "brown": {
+      "rmse": 2.723,
+      "psnr": 39.43,
+      "ssim": 0.9836,
+      "contrast": 0.997,
+      "dE_mean": 0.1,
+      "tints": [
+       [
+        0.6383,
+        0.4571,
+        0.35
+       ]
+      ]
+     },
+     "cream": {
+      "rmse": 2.986,
+      "psnr": 38.63,
+      "ssim": 0.9908,
+      "contrast": 1.002,
+      "dE_mean": 0.19,
+      "tints": [
+       [
+        0.8631,
+        0.8088,
+        0.5491
+       ]
+      ]
+     },
+     "dustyrose": {
+      "rmse": 2.678,
+      "psnr": 39.58,
+      "ssim": 0.9811,
+      "contrast": 0.994,
+      "dE_mean": 0.04,
+      "tints": [
+       [
+        0.5306,
+        0.3966,
+        0.3812
+       ]
+      ]
+     },
+     "grey": {
+      "rmse": 2.118,
+      "psnr": 41.61,
+      "ssim": 0.9866,
+      "contrast": 0.997,
+      "dE_mean": 0.06,
+      "tints": [
+       [
+        0.5377,
+        0.5633,
+        0.5602
+       ]
+      ]
+     },
+     "purple": {
+      "rmse": 2.943,
+      "psnr": 38.76,
+      "ssim": 0.9759,
+      "contrast": 0.988,
+      "dE_mean": 0.17,
+      "tints": [
+       [
+        0.3172,
+        0.306,
+        0.638
+       ]
+      ]
+     },
+     "red": {
+      "rmse": 3.244,
+      "psnr": 37.91,
+      "ssim": 0.9745,
+      "contrast": 0.989,
+      "dE_mean": 0.08,
+      "tints": [
+       [
+        0.6016,
+        0.2737,
+        0.2332
+       ]
+      ]
+     },
+     "tan": {
+      "rmse": 2.583,
+      "psnr": 39.89,
+      "ssim": 0.9919,
+      "contrast": 1.001,
+      "dE_mean": 0.18,
+      "tints": [
+       [
+        0.7929,
+        0.6375,
+        0.4322
+       ]
+      ]
+     },
+     "violet": {
+      "rmse": 2.524,
+      "psnr": 40.09,
+      "ssim": 0.9812,
+      "contrast": 0.993,
+      "dE_mean": 0.06,
+      "tints": [
+       [
+        0.5369,
+        0.3045,
+        0.5603
+       ]
+      ]
+     },
+     "white": {
+      "rmse": 3.007,
+      "psnr": 38.57,
+      "ssim": 0.9909,
+      "contrast": 1.0,
+      "dE_mean": 0.09,
+      "tints": [
+       [
+        0.8929,
+        0.8929,
+        0.8929
+       ]
+      ]
+     }
+    }
+   }
+  ],
+  "picked": "minimax"
+ },
+ "dune-26": {
+  "variant": {
+   "model": "rgb",
+   "weighting": "minimax"
+  },
+  "sources": {
+   "aubergine": "decorative/dune/aubergine/sand-dune-decal/sand-dune-decal-26.png",
+   "beige": "decorative/dune/beige/sand-dune-decal/sand-dune-decal-26.png",
+   "black": "decorative/dune/black/sand-dune-decal/sand-dune-decal-26.png",
+   "brown": "decorative/dune/brown/sand-dune-decal/sand-dune-decal-26.png",
+   "cream": "decorative/dune/cream/sand-dune-decal/sand-dune-decal-26.png",
+   "dustyrose": "decorative/dune/dustyrose/sand-dune-decal/sand-dune-decal-26.png",
+   "grey": "decorative/dune/grey/sand-dune-decal/sand-dune-decal-26.png",
+   "purple": "decorative/dune/purple/sand-dune-decal/sand-dune-decal-26.png",
+   "red": "decorative/dune/red/sand-dune-decal/sand-dune-decal-26.png",
+   "tan": "decorative/dune/tan/sand-dune-decal/sand-dune-decal-26.png",
+   "violet": "decorative/dune/violet/sand-dune-decal/sand-dune-decal-26.png",
+   "white": "decorative/dune/white/sand-dune-decal/sand-dune-decal-26.png"
+  },
+  "size": [
+   134,
+   184
+  ],
+  "groups": [
+   {
+    "scale": 1.12,
+    "layers": [
+     {
+      "file": "dune-26.png",
+      "blend": "normal"
+     }
+    ],
+    "colors": {
+     "aubergine": {
+      "rmse": 1.56,
+      "psnr": 44.27,
+      "ssim": 0.9907,
+      "contrast": 0.997,
+      "dE_mean": 0.07,
+      "tints": [
+       [
+        0.2873,
+        0.2548,
+        0.4237
+       ]
+      ]
+     },
+     "beige": {
+      "rmse": 1.916,
+      "psnr": 42.48,
+      "ssim": 0.9931,
+      "contrast": 0.999,
+      "dE_mean": 0.08,
+      "tints": [
+       [
+        0.7082,
+        0.6277,
+        0.5176
+       ]
+      ]
+     },
+     "black": {
+      "rmse": 1.647,
+      "psnr": 43.79,
+      "ssim": 0.9894,
+      "contrast": 0.994,
+      "dE_mean": 0.03,
+      "tints": [
+       [
+        0.2752,
+        0.2718,
+        0.28
+       ]
+      ]
+     },
+     "brown": {
+      "rmse": 2.386,
+      "psnr": 40.58,
+      "ssim": 0.99,
+      "contrast": 0.999,
+      "dE_mean": 0.12,
+      "tints": [
+       [
+        0.6385,
+        0.4589,
+        0.3512
+       ]
+      ]
+     },
+     "cream": {
+      "rmse": 2.568,
+      "psnr": 39.94,
+      "ssim": 0.9952,
+      "contrast": 1.001,
+      "dE_mean": 0.14,
+      "tints": [
+       [
+        0.8627,
+        0.8086,
+        0.5503
+       ]
+      ]
+     },
+     "dustyrose": {
+      "rmse": 2.333,
+      "psnr": 40.77,
+      "ssim": 0.9877,
+      "contrast": 0.997,
+      "dE_mean": 0.05,
+      "tints": [
+       [
+        0.5312,
+        0.3976,
+        0.3825
+       ]
+      ]
+     },
+     "grey": {
+      "rmse": 1.783,
+      "psnr": 43.11,
+      "ssim": 0.9921,
+      "contrast": 0.998,
+      "dE_mean": 0.05,
+      "tints": [
+       [
+        0.5389,
+        0.5646,
+        0.5613
+       ]
+      ]
+     },
+     "purple": {
+      "rmse": 2.594,
+      "psnr": 39.85,
+      "ssim": 0.9834,
+      "contrast": 0.993,
+      "dE_mean": 0.16,
+      "tints": [
+       [
+        0.3186,
+        0.3066,
+        0.637
+       ]
+      ]
+     },
+     "red": {
+      "rmse": 2.795,
+      "psnr": 39.2,
+      "ssim": 0.9827,
+      "contrast": 0.994,
+      "dE_mean": 0.07,
+      "tints": [
+       [
+        0.602,
+        0.2751,
+        0.2341
+       ]
+      ]
+     },
+     "tan": {
+      "rmse": 2.247,
+      "psnr": 41.1,
+      "ssim": 0.9955,
+      "contrast": 1.001,
+      "dE_mean": 0.16,
+      "tints": [
+       [
+        0.7931,
+        0.6389,
+        0.4335
+       ]
+      ]
+     },
+     "violet": {
+      "rmse": 2.107,
+      "psnr": 41.66,
+      "ssim": 0.9885,
+      "contrast": 0.996,
+      "dE_mean": 0.06,
+      "tints": [
+       [
+        0.538,
+        0.3058,
+        0.5607
+       ]
+      ]
+     },
+     "white": {
+      "rmse": 2.622,
+      "psnr": 39.76,
+      "ssim": 0.9951,
+      "contrast": 0.999,
+      "dE_mean": 0.07,
+      "tints": [
+       [
+        0.8928,
+        0.8929,
+        0.8928
+       ]
+      ]
+     }
+    }
+   }
+  ],
+  "picked": "minimax"
+ },
+ "dune-27": {
+  "variant": {
+   "model": "rgb",
+   "weighting": "minimax"
+  },
+  "sources": {
+   "aubergine": "decorative/dune/aubergine/sand-dune-decal/sand-dune-decal-27.png",
+   "beige": "decorative/dune/beige/sand-dune-decal/sand-dune-decal-27.png",
+   "black": "decorative/dune/black/sand-dune-decal/sand-dune-decal-27.png",
+   "brown": "decorative/dune/brown/sand-dune-decal/sand-dune-decal-27.png",
+   "cream": "decorative/dune/cream/sand-dune-decal/sand-dune-decal-27.png",
+   "dustyrose": "decorative/dune/dustyrose/sand-dune-decal/sand-dune-decal-27.png",
+   "grey": "decorative/dune/grey/sand-dune-decal/sand-dune-decal-27.png",
+   "purple": "decorative/dune/purple/sand-dune-decal/sand-dune-decal-27.png",
+   "red": "decorative/dune/red/sand-dune-decal/sand-dune-decal-27.png",
+   "tan": "decorative/dune/tan/sand-dune-decal/sand-dune-decal-27.png",
+   "violet": "decorative/dune/violet/sand-dune-decal/sand-dune-decal-27.png",
+   "white": "decorative/dune/white/sand-dune-decal/sand-dune-decal-27.png"
+  },
+  "size": [
+   127,
+   165
+  ],
+  "groups": [
+   {
+    "scale": 1.25,
+    "layers": [
+     {
+      "file": "dune-27.png",
+      "blend": "normal"
+     }
+    ],
+    "colors": {
+     "aubergine": {
+      "rmse": 1.003,
+      "psnr": 48.1,
+      "ssim": 0.9939,
+      "contrast": 1.012,
+      "dE_mean": 0.11,
+      "tints": [
+       [
+        0.2506,
+        0.2204,
+        0.3689
+       ]
+      ]
+     },
+     "beige": {
+      "rmse": 1.139,
+      "psnr": 47.0,
+      "ssim": 0.9937,
+      "contrast": 1.004,
+      "dE_mean": 0.11,
+      "tints": [
+       [
+        0.6257,
+        0.5553,
+        0.4543
+       ]
+      ]
+     },
+     "black": {
+      "rmse": 0.929,
+      "psnr": 48.77,
+      "ssim": 0.9935,
+      "contrast": 1.009,
+      "dE_mean": 0.08,
+      "tints": [
+       [
+        0.2393,
+        0.2363,
+        0.2434
+       ]
+      ]
+     },
+     "brown": {
+      "rmse": 1.362,
+      "psnr": 45.45,
+      "ssim": 0.9924,
+      "contrast": 1.009,
+      "dE_mean": 0.16,
+      "tints": [
+       [
+        0.5618,
+        0.405,
+        0.3057
+       ]
+      ]
+     },
+     "cream": {
+      "rmse": 1.457,
+      "psnr": 44.86,
+      "ssim": 0.9953,
+      "contrast": 0.997,
+      "dE_mean": 0.18,
+      "tints": [
+       [
+        0.7721,
+        0.7254,
+        0.4846
+       ]
+      ]
+     },
+     "dustyrose": {
+      "rmse": 1.283,
+      "psnr": 45.97,
+      "ssim": 0.9921,
+      "contrast": 1.01,
+      "dE_mean": 0.15,
+      "tints": [
+       [
+        0.466,
+        0.3485,
+        0.333
+       ]
+      ]
+     },
+     "grey": {
+      "rmse": 1.135,
+      "psnr": 47.03,
+      "ssim": 0.9933,
+      "contrast": 1.005,
+      "dE_mean": 0.07,
+      "tints": [
+       [
+        0.4739,
+        0.4974,
+        0.4939
+       ]
+      ]
+     },
+     "purple": {
+      "rmse": 1.383,
+      "psnr": 45.31,
+      "ssim": 0.9915,
+      "contrast": 1.011,
+      "dE_mean": 0.14,
+      "tints": [
+       [
+        0.2795,
+        0.2674,
+        0.56
+       ]
+      ]
+     },
+     "red": {
+      "rmse": 1.592,
+      "psnr": 44.09,
+      "ssim": 0.9894,
+      "contrast": 1.013,
+      "dE_mean": 0.18,
+      "tints": [
+       [
+        0.5268,
+        0.2393,
+        0.2019
+       ]
+      ]
+     },
+     "tan": {
+      "rmse": 1.279,
+      "psnr": 45.99,
+      "ssim": 0.9954,
+      "contrast": 1.003,
+      "dE_mean": 0.17,
+      "tints": [
+       [
+        0.7054,
+        0.5694,
+        0.379
+       ]
+      ]
+     },
+     "violet": {
+      "rmse": 1.31,
+      "psnr": 45.78,
+      "ssim": 0.9913,
+      "contrast": 1.009,
+      "dE_mean": 0.12,
+      "tints": [
+       [
+        0.47,
+        0.265,
+        0.4865
+       ]
+      ]
+     },
+     "white": {
+      "rmse": 1.487,
+      "psnr": 44.69,
+      "ssim": 0.9962,
+      "contrast": 0.994,
+      "dE_mean": 0.13,
+      "tints": [
+       [
+        0.8,
+        0.8,
+        0.8
+       ]
+      ]
+     }
+    }
+   }
+  ],
+  "picked": "minimax"
+ },
+ "dune-28": {
+  "variant": {
+   "model": "rgb",
+   "weighting": "minimax"
+  },
+  "sources": {
+   "aubergine": "decorative/dune/aubergine/sand-dune-decal/sand-dune-decal-28.png",
+   "beige": "decorative/dune/beige/sand-dune-decal/sand-dune-decal-28.png",
+   "black": "decorative/dune/black/sand-dune-decal/sand-dune-decal-28.png",
+   "brown": "decorative/dune/brown/sand-dune-decal/sand-dune-decal-28.png",
+   "cream": "decorative/dune/cream/sand-dune-decal/sand-dune-decal-28.png",
+   "dustyrose": "decorative/dune/dustyrose/sand-dune-decal/sand-dune-decal-28.png",
+   "grey": "decorative/dune/grey/sand-dune-decal/sand-dune-decal-28.png",
+   "purple": "decorative/dune/purple/sand-dune-decal/sand-dune-decal-28.png",
+   "red": "decorative/dune/red/sand-dune-decal/sand-dune-decal-28.png",
+   "tan": "decorative/dune/tan/sand-dune-decal/sand-dune-decal-28.png",
+   "violet": "decorative/dune/violet/sand-dune-decal/sand-dune-decal-28.png",
+   "white": "decorative/dune/white/sand-dune-decal/sand-dune-decal-28.png"
+  },
+  "size": [
+   258,
+   158
+  ],
+  "groups": [
+   {
+    "scale": 1.12,
+    "layers": [
+     {
+      "file": "dune-28.png",
+      "blend": "normal"
+     }
+    ],
+    "colors": {
+     "aubergine": {
+      "rmse": 1.611,
+      "psnr": 43.99,
+      "ssim": 0.9877,
+      "contrast": 1.0,
+      "dE_mean": 0.07,
+      "tints": [
+       [
+        0.2843,
+        0.2519,
+        0.4202
+       ]
+      ]
+     },
+     "beige": {
+      "rmse": 1.854,
+      "psnr": 42.77,
+      "ssim": 0.9887,
+      "contrast": 1.001,
+      "dE_mean": 0.07,
+      "tints": [
+       [
+        0.7056,
+        0.6254,
+        0.5142
+       ]
+      ]
+     },
+     "black": {
+      "rmse": 1.595,
+      "psnr": 44.08,
+      "ssim": 0.9865,
+      "contrast": 0.998,
+      "dE_mean": 0.01,
+      "tints": [
+       [
+        0.2733,
+        0.2695,
+        0.2778
+       ]
+      ]
+     },
+     "brown": {
+      "rmse": 2.214,
+      "psnr": 41.23,
+      "ssim": 0.9861,
+      "contrast": 1.002,
+      "dE_mean": 0.1,
+      "tints": [
+       [
+        0.6363,
+        0.4568,
+        0.348
+       ]
+      ]
+     },
+     "cream": {
+      "rmse": 2.418,
+      "psnr": 40.46,
+      "ssim": 0.992,
+      "contrast": 1.0,
+      "dE_mean": 0.07,
+      "tints": [
+       [
+        0.8632,
+        0.8094,
+        0.5472
+       ]
+      ]
+     },
+     "dustyrose": {
+      "rmse": 2.151,
+      "psnr": 41.48,
+      "ssim": 0.9845,
+      "contrast": 1.001,
+      "dE_mean": 0.07,
+      "tints": [
+       [
+        0.5288,
+        0.3952,
+        0.3791
+       ]
+      ]
+     },
+     "grey": {
+      "rmse": 1.79,
+      "psnr": 43.07,
+      "ssim": 0.9877,
+      "contrast": 1.0,
+      "dE_mean": 0.03,
+      "tints": [
+       [
+        0.5365,
+        0.562,
+        0.5588
+       ]
+      ]
+     },
+     "purple": {
+      "rmse": 2.352,
+      "psnr": 40.7,
+      "ssim": 0.9814,
+      "contrast": 0.997,
+      "dE_mean": 0.13,
+      "tints": [
+       [
+        0.3163,
+        0.3042,
+        0.6361
+       ]
+      ]
+     },
+     "red": {
+      "rmse": 2.623,
+      "psnr": 39.75,
+      "ssim": 0.9795,
+      "contrast": 0.999,
+      "dE_mean": 0.08,
+      "tints": [
+       [
+        0.5994,
+        0.2724,
+        0.2313
+       ]
+      ]
+     },
+     "tan": {
+      "rmse": 2.099,
+      "psnr": 41.69,
+      "ssim": 0.992,
+      "contrast": 1.002,
+      "dE_mean": 0.12,
+      "tints": [
+       [
+        0.7923,
+        0.6381,
+        0.4301
+       ]
+      ]
+     },
+     "violet": {
+      "rmse": 2.12,
+      "psnr": 41.61,
+      "ssim": 0.9841,
+      "contrast": 0.999,
+      "dE_mean": 0.07,
+      "tints": [
+       [
+        0.535,
+        0.3025,
+        0.5563
+       ]
+      ]
+     },
+     "white": {
+      "rmse": 2.429,
+      "psnr": 40.42,
+      "ssim": 0.9929,
+      "contrast": 0.997,
+      "dE_mean": 0.07,
+      "tints": [
+       [
+        0.8929,
+        0.8929,
+        0.8929
+       ]
+      ]
+     }
+    }
+   }
+  ],
+  "picked": "minimax"
+ },
+ "dune-29": {
+  "variant": {
+   "model": "rgb",
+   "weighting": "minimax"
+  },
+  "sources": {
+   "aubergine": "decorative/dune/aubergine/sand-dune-decal/sand-dune-decal-29.png",
+   "beige": "decorative/dune/beige/sand-dune-decal/sand-dune-decal-29.png",
+   "black": "decorative/dune/black/sand-dune-decal/sand-dune-decal-29.png",
+   "brown": "decorative/dune/brown/sand-dune-decal/sand-dune-decal-29.png",
+   "cream": "decorative/dune/cream/sand-dune-decal/sand-dune-decal-29.png",
+   "dustyrose": "decorative/dune/dustyrose/sand-dune-decal/sand-dune-decal-29.png",
+   "grey": "decorative/dune/grey/sand-dune-decal/sand-dune-decal-29.png",
+   "purple": "decorative/dune/purple/sand-dune-decal/sand-dune-decal-29.png",
+   "red": "decorative/dune/red/sand-dune-decal/sand-dune-decal-29.png",
+   "tan": "decorative/dune/tan/sand-dune-decal/sand-dune-decal-29.png",
+   "violet": "decorative/dune/violet/sand-dune-decal/sand-dune-decal-29.png",
+   "white": "decorative/dune/white/sand-dune-decal/sand-dune-decal-29.png"
+  },
+  "size": [
+   180,
+   184
+  ],
+  "groups": [
+   {
+    "scale": 1.12,
+    "layers": [
+     {
+      "file": "dune-29.png",
+      "blend": "normal"
+     }
+    ],
+    "colors": {
+     "aubergine": {
+      "rmse": 1.423,
+      "psnr": 45.06,
+      "ssim": 0.9889,
+      "contrast": 1.0,
+      "dE_mean": 0.08,
+      "tints": [
+       [
+        0.2823,
+        0.2501,
+        0.4163
+       ]
+      ]
+     },
+     "beige": {
+      "rmse": 1.936,
+      "psnr": 42.39,
+      "ssim": 0.9894,
+      "contrast": 1.0,
+      "dE_mean": 0.09,
+      "tints": [
+       [
+        0.703,
+        0.622,
+        0.5121
+       ]
+      ]
+     },
+     "black": {
+      "rmse": 1.517,
+      "psnr": 44.51,
+      "ssim": 0.9875,
+      "contrast": 0.996,
+      "dE_mean": 0.02,
+      "tints": [
+       [
+        0.2708,
+        0.2674,
+        0.2757
+       ]
+      ]
+     },
+     "brown": {
+      "rmse": 2.39,
+      "psnr": 40.56,
+      "ssim": 0.9862,
+      "contrast": 1.0,
+      "dE_mean": 0.12,
+      "tints": [
+       [
+        0.6317,
+        0.4532,
+        0.3462
+       ]
+      ]
+     },
+     "cream": {
+      "rmse": 2.558,
+      "psnr": 39.97,
+      "ssim": 0.9925,
+      "contrast": 1.001,
+      "dE_mean": 0.15,
+      "tints": [
+       [
+        0.8616,
+        0.8074,
+        0.5451
+       ]
+      ]
+     },
+     "dustyrose": {
+      "rmse": 2.292,
+      "psnr": 40.93,
+      "ssim": 0.9843,
+      "contrast": 0.998,
+      "dE_mean": 0.05,
+      "tints": [
+       [
+        0.5246,
+        0.3921,
+        0.3766
+       ]
+      ]
+     },
+     "grey": {
+      "rmse": 1.807,
+      "psnr": 42.99,
+      "ssim": 0.9886,
+      "contrast": 0.999,
+      "dE_mean": 0.04,
+      "tints": [
+       [
+        0.5334,
+        0.5592,
+        0.5557
+       ]
+      ]
+     },
+     "purple": {
+      "rmse": 2.664,
+      "psnr": 39.62,
+      "ssim": 0.9813,
+      "contrast": 0.992,
+      "dE_mean": 0.16,
+      "tints": [
+       [
+        0.3137,
+        0.302,
+        0.6284
+       ]
+      ]
+     },
+     "red": {
+      "rmse": 2.771,
+      "psnr": 39.28,
+      "ssim": 0.9787,
+      "contrast": 0.995,
+      "dE_mean": 0.08,
+      "tints": [
+       [
+        0.5937,
+        0.2701,
+        0.2303
+       ]
+      ]
+     },
+     "tan": {
+      "rmse": 2.303,
+      "psnr": 40.88,
+      "ssim": 0.9931,
+      "contrast": 1.002,
+      "dE_mean": 0.16,
+      "tints": [
+       [
+        0.7896,
+        0.6349,
+        0.4281
+       ]
+      ]
+     },
+     "violet": {
+      "rmse": 1.995,
+      "psnr": 42.13,
+      "ssim": 0.9839,
+      "contrast": 0.998,
+      "dE_mean": 0.05,
+      "tints": [
+       [
+        0.5301,
+        0.3007,
+        0.5519
+       ]
+      ]
+     },
+     "white": {
+      "rmse": 2.612,
+      "psnr": 39.79,
+      "ssim": 0.9927,
+      "contrast": 0.999,
+      "dE_mean": 0.06,
+      "tints": [
+       [
+        0.8928,
+        0.8928,
+        0.8929
+       ]
+      ]
+     }
+    }
+   }
+  ],
+  "picked": "minimax"
+ },
+ "lava-07": {
+  "variant": {
+   "model": "additive"
+  },
+  "sources": {
+   "blue": "decorative/lava/blue/lava-decal-07.png",
+   "green": "decorative/lava/green/lava-decal-07.png",
+   "orange": "decorative/lava/orange/lava-decal-07.png",
+   "purple": "decorative/lava/purple/lava-decal-07.png"
+  },
+  "size": [
+   282,
+   266
+  ],
+  "groups": [
+   {
+    "scale": 1.0,
+    "layers": [
+     {
+      "file": "lava-07.png",
+      "blend": "normal"
+     },
+     {
+      "file": "lava-07-glow.png",
+      "blend": "additive"
+     }
+    ],
+    "colors": {
+     "blue": {
+      "rmse": 5.709,
+      "psnr": 33.0,
+      "ssim": 0.9888,
+      "contrast": 0.99,
+      "dE_mean": 0.69,
+      "tints": [
+       [
+        1.0,
+        1.0,
+        1.0
+       ],
+       [
+        0.0,
+        0.6371,
+        1.0
+       ]
+      ]
+     },
+     "green": {
+      "rmse": 6.311,
+      "psnr": 32.13,
+      "ssim": 0.994,
+      "contrast": 1.003,
+      "dE_mean": 0.68,
+      "tints": [
+       [
+        1.0,
+        1.0,
+        1.0
+       ],
+       [
+        0.6299,
+        1.0,
+        0.0012
+       ]
+      ]
+     },
+     "orange": {
+      "rmse": 7.268,
+      "psnr": 30.9,
+      "ssim": 0.9934,
+      "contrast": 0.992,
+      "dE_mean": 0.86,
+      "tints": [
+       [
+        1.0,
+        1.0,
+        1.0
+       ],
+       [
+        1.0,
+        0.2563,
+        0.0018
+       ]
+      ]
+     },
+     "purple": {
+      "rmse": 6.681,
+      "psnr": 31.63,
+      "ssim": 0.9867,
+      "contrast": 1.009,
+      "dE_mean": 0.6,
+      "tints": [
+       [
+        1.0,
+        1.0,
+        1.0
+       ],
+       [
+        0.6992,
+        0.0001,
+        0.9991
+       ]
+      ]
+     }
+    }
+   }
+  ],
+  "picked": "add2L"
+ },
+ "lava-14": {
+  "variant": {
+   "model": "additive"
+  },
+  "sources": {
+   "blue": "decorative/lava/blue/lava-decal-14.png",
+   "green": "decorative/lava/green/lava-decal-14.png",
+   "orange": "decorative/lava/orange/lava-decal-14.png",
+   "purple": "decorative/lava/purple/lava-decal-14.png"
+  },
+  "size": [
+   312,
+   225
+  ],
+  "groups": [
+   {
+    "scale": 1.0,
+    "layers": [
+     {
+      "file": "lava-14.png",
+      "blend": "normal"
+     },
+     {
+      "file": "lava-14-glow.png",
+      "blend": "additive"
+     }
+    ],
+    "colors": {
+     "blue": {
+      "rmse": 5.113,
+      "psnr": 33.96,
+      "ssim": 0.9945,
+      "contrast": 0.99,
+      "dE_mean": 0.2,
+      "tints": [
+       [
+        1.0,
+        1.0,
+        1.0
+       ],
+       [
+        0.0,
+        0.5686,
+        0.9993
+       ]
+      ]
+     },
+     "green": {
+      "rmse": 5.11,
+      "psnr": 33.96,
+      "ssim": 0.9974,
+      "contrast": 1.003,
+      "dE_mean": 0.21,
+      "tints": [
+       [
+        1.0,
+        1.0,
+        1.0
+       ],
+       [
+        0.5592,
+        1.0,
+        0.0037
+       ]
+      ]
+     },
+     "orange": {
+      "rmse": 5.685,
+      "psnr": 33.04,
+      "ssim": 0.9961,
+      "contrast": 0.992,
+      "dE_mean": 0.31,
+      "tints": [
+       [
+        1.0,
+        1.0,
+        1.0
+       ],
+       [
+        1.0,
+        0.1832,
+        0.0
+       ]
+      ]
+     },
+     "purple": {
+      "rmse": 5.977,
+      "psnr": 32.6,
+      "ssim": 0.9915,
+      "contrast": 1.013,
+      "dE_mean": 0.26,
+      "tints": [
+       [
+        1.0,
+        1.0,
+        1.0
+       ],
+       [
+        0.6268,
+        0.0001,
+        0.9977
+       ]
+      ]
+     }
+    }
+   }
+  ],
+  "picked": "add2L"
+ },
+ "lava-15": {
+  "variant": {
+   "model": "additive"
+  },
+  "sources": {
+   "blue": "decorative/lava/blue/lava-decal-15.png",
+   "green": "decorative/lava/green/lava-decal-15.png",
+   "orange": "decorative/lava/orange/lava-decal-15.png",
+   "purple": "decorative/lava/purple/lava-decal-15.png"
+  },
+  "size": [
+   359,
+   186
+  ],
+  "groups": [
+   {
+    "scale": 1.0,
+    "layers": [
+     {
+      "file": "lava-15.png",
+      "blend": "normal"
+     },
+     {
+      "file": "lava-15-glow.png",
+      "blend": "additive"
+     }
+    ],
+    "colors": {
+     "blue": {
+      "rmse": 5.31,
+      "psnr": 33.63,
+      "ssim": 0.9938,
+      "contrast": 0.971,
+      "dE_mean": 0.68,
+      "tints": [
+       [
+        1.0,
+        1.0,
+        1.0
+       ],
+       [
+        0.0,
+        0.5409,
+        1.0
+       ]
+      ]
+     },
+     "green": {
+      "rmse": 4.988,
+      "psnr": 34.17,
+      "ssim": 0.9972,
+      "contrast": 1.006,
+      "dE_mean": 0.54,
+      "tints": [
+       [
+        1.0,
+        1.0,
+        1.0
+       ],
+       [
+        0.5373,
+        0.9999,
+        0.0025
+       ]
+      ]
+     },
+     "orange": {
+      "rmse": 5.62,
+      "psnr": 33.14,
+      "ssim": 0.9953,
+      "contrast": 0.979,
+      "dE_mean": 0.72,
+      "tints": [
+       [
+        1.0,
+        1.0,
+        1.0
+       ],
+       [
+        0.9999,
+        0.1548,
+        0.0011
+       ]
+      ]
+     },
+     "purple": {
+      "rmse": 6.017,
+      "psnr": 32.54,
+      "ssim": 0.9919,
+      "contrast": 1.044,
+      "dE_mean": 0.4,
+      "tints": [
+       [
+        1.0,
+        1.0,
+        1.0
+       ],
+       [
+        0.6061,
+        0.0,
+        0.9989
+       ]
+      ]
+     }
+    }
+   }
+  ],
+  "picked": "add2L"
+ },
+ "lava-16": {
+  "variant": {
+   "model": "additive"
+  },
+  "sources": {
+   "blue": "decorative/lava/blue/lava-decal-16.png",
+   "green": "decorative/lava/green/lava-decal-16.png",
+   "orange": "decorative/lava/orange/lava-decal-16.png",
+   "purple": "decorative/lava/purple/lava-decal-16.png"
+  },
+  "size": [
+   287,
+   266
+  ],
+  "groups": [
+   {
+    "scale": 1.0,
+    "layers": [
+     {
+      "file": "lava-16.png",
+      "blend": "normal"
+     },
+     {
+      "file": "lava-16-glow.png",
+      "blend": "additive"
+     }
+    ],
+    "colors": {
+     "blue": {
+      "rmse": 5.442,
+      "psnr": 33.42,
+      "ssim": 0.9906,
+      "contrast": 0.986,
+      "dE_mean": 1.35,
+      "tints": [
+       [
+        1.0,
+        1.0,
+        1.0
+       ],
+       [
+        0.0001,
+        0.6879,
+        1.0
+       ]
+      ]
+     },
+     "green": {
+      "rmse": 6.6,
+      "psnr": 31.74,
+      "ssim": 0.9951,
+      "contrast": 1.005,
+      "dE_mean": 1.44,
+      "tints": [
+       [
+        1.0,
+        1.0,
+        1.0
+       ],
+       [
+        0.6813,
+        1.0,
+        0.0024
+       ]
+      ]
+     },
+     "orange": {
+      "rmse": 7.447,
+      "psnr": 30.69,
+      "ssim": 0.9928,
+      "contrast": 0.988,
+      "dE_mean": 1.8,
+      "tints": [
+       [
+        1.0,
+        1.0,
+        1.0
+       ],
+       [
+        1.0,
+        0.3018,
+        0.0003
+       ]
+      ]
+     },
+     "purple": {
+      "rmse": 6.38,
+      "psnr": 32.03,
+      "ssim": 0.989,
+      "contrast": 1.014,
+      "dE_mean": 0.97,
+      "tints": [
+       [
+        1.0,
+        1.0,
+        1.0
+       ],
+       [
+        0.7505,
+        0.0,
+        0.9992
+       ]
+      ]
+     }
+    }
+   }
+  ],
+  "picked": "add2L"
+ },
+ "lava-17": {
+  "variant": {
+   "model": "additive"
+  },
+  "sources": {
+   "blue": "decorative/lava/blue/lava-decal-17.png",
+   "green": "decorative/lava/green/lava-decal-17.png",
+   "orange": "decorative/lava/orange/lava-decal-17.png",
+   "purple": "decorative/lava/purple/lava-decal-17.png"
+  },
+  "size": [
+   377,
+   267
+  ],
+  "groups": [
+   {
+    "scale": 1.0,
+    "layers": [
+     {
+      "file": "lava-17.png",
+      "blend": "normal"
+     },
+     {
+      "file": "lava-17-glow.png",
+      "blend": "additive"
+     }
+    ],
+    "colors": {
+     "blue": {
+      "rmse": 5.329,
+      "psnr": 33.6,
+      "ssim": 0.9915,
+      "contrast": 0.989,
+      "dE_mean": 0.81,
+      "tints": [
+       [
+        1.0,
+        1.0,
+        1.0
+       ],
+       [
+        0.0,
+        0.6424,
+        0.9999
+       ]
+      ]
+     },
+     "green": {
+      "rmse": 5.993,
+      "psnr": 32.58,
+      "ssim": 0.9963,
+      "contrast": 1.004,
+      "dE_mean": 0.88,
+      "tints": [
+       [
+        1.0,
+        1.0,
+        1.0
+       ],
+       [
+        0.6366,
+        1.0,
+        0.0033
+       ]
+      ]
+     },
+     "orange": {
+      "rmse": 6.716,
+      "psnr": 31.59,
+      "ssim": 0.993,
+      "contrast": 0.987,
+      "dE_mean": 1.15,
+      "tints": [
+       [
+        1.0,
+        1.0,
+        1.0
+       ],
+       [
+        1.0,
+        0.2541,
+        0.0
+       ]
+      ]
+     },
+     "purple": {
+      "rmse": 6.163,
+      "psnr": 32.34,
+      "ssim": 0.9873,
+      "contrast": 1.015,
+      "dE_mean": 0.61,
+      "tints": [
+       [
+        1.0,
+        1.0,
+        1.0
+       ],
+       [
+        0.704,
+        0.0,
+        0.997
+       ]
+      ]
+     }
+    }
+   }
+  ],
+  "picked": "add2L"
+ },
+ "lava-18": {
+  "variant": {
+   "model": "additive"
+  },
+  "sources": {
+   "blue": "decorative/lava/blue/lava-decal-18.png",
+   "green": "decorative/lava/green/lava-decal-18.png",
+   "orange": "decorative/lava/orange/lava-decal-18.png",
+   "purple": "decorative/lava/purple/lava-decal-18.png"
+  },
+  "size": [
+   375,
+   269
+  ],
+  "groups": [
+   {
+    "scale": 1.0,
+    "layers": [
+     {
+      "file": "lava-18.png",
+      "blend": "normal"
+     },
+     {
+      "file": "lava-18-glow.png",
+      "blend": "additive"
+     }
+    ],
+    "colors": {
+     "blue": {
+      "rmse": 6.42,
+      "psnr": 31.98,
+      "ssim": 0.9928,
+      "contrast": 0.97,
+      "dE_mean": 0.14,
+      "tints": [
+       [
+        1.0,
+        1.0,
+        1.0
+       ],
+       [
+        0.0,
+        0.5396,
+        1.0
+       ]
+      ]
+     },
+     "green": {
+      "rmse": 6.13,
+      "psnr": 32.38,
+      "ssim": 0.9967,
+      "contrast": 1.006,
+      "dE_mean": 0.2,
+      "tints": [
+       [
+        1.0,
+        1.0,
+        1.0
+       ],
+       [
+        0.5392,
+        1.0,
+        0.0025
+       ]
+      ]
+     },
+     "orange": {
+      "rmse": 7.052,
+      "psnr": 31.16,
+      "ssim": 0.9942,
+      "contrast": 0.973,
+      "dE_mean": 0.28,
+      "tints": [
+       [
+        1.0,
+        1.0,
+        1.0
+       ],
+       [
+        0.9998,
+        0.1527,
+        0.0005
+       ]
+      ]
+     },
+     "purple": {
+      "rmse": 7.428,
+      "psnr": 30.71,
+      "ssim": 0.9906,
+      "contrast": 1.056,
+      "dE_mean": 0.36,
+      "tints": [
+       [
+        1.0,
+        1.0,
+        1.0
+       ],
+       [
+        0.6062,
+        0.0,
+        0.9985
+       ]
+      ]
+     }
+    }
+   }
+  ],
+  "picked": "add2L"
+ },
+ "lava-19": {
+  "variant": {
+   "model": "additive"
+  },
+  "sources": {
+   "blue": "decorative/lava/blue/lava-decal-19.png",
+   "green": "decorative/lava/green/lava-decal-19.png",
+   "orange": "decorative/lava/orange/lava-decal-19.png",
+   "purple": "decorative/lava/purple/lava-decal-19.png"
+  },
+  "size": [
+   346,
+   270
+  ],
+  "groups": [
+   {
+    "scale": 1.0,
+    "layers": [
+     {
+      "file": "lava-19.png",
+      "blend": "normal"
+     },
+     {
+      "file": "lava-19-glow.png",
+      "blend": "additive"
+     }
+    ],
+    "colors": {
+     "blue": {
+      "rmse": 5.116,
+      "psnr": 33.95,
+      "ssim": 0.9915,
+      "contrast": 0.992,
+      "dE_mean": 0.85,
+      "tints": [
+       [
+        1.0,
+        1.0,
+        1.0
+       ],
+       [
+        0.0,
+        0.5956,
+        1.0
+       ]
+      ]
+     },
+     "green": {
+      "rmse": 5.164,
+      "psnr": 33.87,
+      "ssim": 0.9963,
+      "contrast": 1.003,
+      "dE_mean": 0.75,
+      "tints": [
+       [
+        1.0,
+        1.0,
+        1.0
+       ],
+       [
+        0.5842,
+        0.9999,
+        0.0027
+       ]
+      ]
+     },
+     "orange": {
+      "rmse": 5.865,
+      "psnr": 32.77,
+      "ssim": 0.9934,
+      "contrast": 0.993,
+      "dE_mean": 0.92,
+      "tints": [
+       [
+        1.0,
+        1.0,
+        1.0
+       ],
+       [
+        1.0,
+        0.2097,
+        0.0003
+       ]
+      ]
+     },
+     "purple": {
+      "rmse": 5.855,
+      "psnr": 32.78,
+      "ssim": 0.9878,
+      "contrast": 1.008,
+      "dE_mean": 0.67,
+      "tints": [
+       [
+        1.0,
+        1.0,
+        1.0
+       ],
+       [
+        0.6548,
+        0.0,
+        0.9999
+       ]
+      ]
+     }
+    }
+   }
+  ],
+  "picked": "add2L"
+ },
+ "lava-20": {
+  "variant": {
+   "model": "additive"
+  },
+  "sources": {
+   "blue": "decorative/lava/blue/lava-decal-20.png",
+   "green": "decorative/lava/green/lava-decal-20.png",
+   "orange": "decorative/lava/orange/lava-decal-20.png",
+   "purple": "decorative/lava/purple/lava-decal-20.png"
+  },
+  "size": [
+   261,
+   198
+  ],
+  "groups": [
+   {
+    "scale": 1.0,
+    "layers": [
+     {
+      "file": "lava-20.png",
+      "blend": "normal"
+     },
+     {
+      "file": "lava-20-glow.png",
+      "blend": "additive"
+     }
+    ],
+    "colors": {
+     "blue": {
+      "rmse": 3.807,
+      "psnr": 36.52,
+      "ssim": 0.9956,
+      "contrast": 0.99,
+      "dE_mean": 0.25,
+      "tints": [
+       [
+        1.0,
+        1.0,
+        1.0
+       ],
+       [
+        0.0001,
+        0.5661,
+        1.0
+       ]
+      ]
+     },
+     "green": {
+      "rmse": 3.671,
+      "psnr": 36.83,
+      "ssim": 0.998,
+      "contrast": 1.002,
+      "dE_mean": 0.16,
+      "tints": [
+       [
+        1.0,
+        1.0,
+        1.0
+       ],
+       [
+        0.5532,
+        1.0,
+        0.0036
+       ]
+      ]
+     },
+     "orange": {
+      "rmse": 4.048,
+      "psnr": 35.99,
+      "ssim": 0.9965,
+      "contrast": 0.993,
+      "dE_mean": 0.27,
+      "tints": [
+       [
+        1.0,
+        1.0,
+        1.0
+       ],
+       [
+        1.0,
+        0.1789,
+        0.0
+       ]
+      ]
+     },
+     "purple": {
+      "rmse": 4.384,
+      "psnr": 35.29,
+      "ssim": 0.9934,
+      "contrast": 1.012,
+      "dE_mean": 0.24,
+      "tints": [
+       [
+        1.0,
+        1.0,
+        1.0
+       ],
+       [
+        0.6238,
+        0.0,
+        0.9999
+       ]
+      ]
+     }
+    }
+   }
+  ],
+  "picked": "add2L"
+ },
+ "lava-21": {
+  "variant": {
+   "model": "additive"
+  },
+  "sources": {
+   "blue": "decorative/lava/blue/lava-decal-21.png",
+   "green": "decorative/lava/green/lava-decal-21.png",
+   "orange": "decorative/lava/orange/lava-decal-21.png",
+   "purple": "decorative/lava/purple/lava-decal-21.png"
+  },
+  "size": [
+   270,
+   205
+  ],
+  "groups": [
+   {
+    "scale": 1.0,
+    "layers": [
+     {
+      "file": "lava-21.png",
+      "blend": "normal"
+     },
+     {
+      "file": "lava-21-glow.png",
+      "blend": "additive"
+     }
+    ],
+    "colors": {
+     "blue": {
+      "rmse": 4.004,
+      "psnr": 36.08,
+      "ssim": 0.9944,
+      "contrast": 0.994,
+      "dE_mean": 0.62,
+      "tints": [
+       [
+        1.0,
+        1.0,
+        1.0
+       ],
+       [
+        0.0,
+        0.6238,
+        1.0
+       ]
+      ]
+     },
+     "green": {
+      "rmse": 4.287,
+      "psnr": 35.49,
+      "ssim": 0.9967,
+      "contrast": 1.002,
+      "dE_mean": 0.51,
+      "tints": [
+       [
+        1.0,
+        1.0,
+        1.0
+       ],
+       [
+        0.614,
+        1.0,
+        0.0033
+       ]
+      ]
+     },
+     "orange": {
+      "rmse": 4.823,
+      "psnr": 34.46,
+      "ssim": 0.9949,
+      "contrast": 0.994,
+      "dE_mean": 0.7,
+      "tints": [
+       [
+        1.0,
+        1.0,
+        1.0
+       ],
+       [
+        1.0,
+        0.2368,
+        0.0001
+       ]
+      ]
+     },
+     "purple": {
+      "rmse": 4.633,
+      "psnr": 34.81,
+      "ssim": 0.9923,
+      "contrast": 1.004,
+      "dE_mean": 0.61,
+      "tints": [
+       [
+        1.0,
+        1.0,
+        1.0
+       ],
+       [
+        0.6843,
+        0.0,
+        0.9999
+       ]
+      ]
+     }
+    }
+   }
+  ],
+  "picked": "add2L"
+ },
+ "lava-25": {
+  "variant": {
+   "model": "additive"
+  },
+  "sources": {
+   "blue": "decorative/lava/blue/lava-decal-25.png",
+   "green": "decorative/lava/green/lava-decal-25.png",
+   "orange": "decorative/lava/orange/lava-decal-25.png",
+   "purple": "decorative/lava/purple/lava-decal-25.png"
+  },
+  "size": [
+   376,
+   204
+  ],
+  "groups": [
+   {
+    "scale": 1.0,
+    "layers": [
+     {
+      "file": "lava-25.png",
+      "blend": "normal"
+     },
+     {
+      "file": "lava-25-glow.png",
+      "blend": "additive"
+     }
+    ],
+    "colors": {
+     "blue": {
+      "rmse": 7.095,
+      "psnr": 31.11,
+      "ssim": 0.9794,
+      "contrast": 0.983,
+      "dE_mean": 1.35,
+      "tints": [
+       [
+        1.0,
+        1.0,
+        1.0
+       ],
+       [
+        0.0,
+        0.726,
+        1.0
+       ]
+      ]
+     },
+     "green": {
+      "rmse": 10.531,
+      "psnr": 27.68,
+      "ssim": 0.9903,
+      "contrast": 1.006,
+      "dE_mean": 1.67,
+      "tints": [
+       [
+        1.0,
+        1.0,
+        1.0
+       ],
+       [
+        0.7325,
+        1.0,
+        0.0012
+       ]
+      ]
+     },
+     "orange": {
+      "rmse": 10.426,
+      "psnr": 27.77,
+      "ssim": 0.9797,
+      "contrast": 0.968,
+      "dE_mean": 2.61,
+      "tints": [
+       [
+        1.0,
+        1.0,
+        1.0
+       ],
+       [
+        1.0,
+        0.3349,
+        0.0009
+       ]
+      ]
+     },
+     "purple": {
+      "rmse": 8.738,
+      "psnr": 29.3,
+      "ssim": 0.9837,
+      "contrast": 1.038,
+      "dE_mean": 0.64,
+      "tints": [
+       [
+        1.0,
+        1.0,
+        1.0
+       ],
+       [
+        0.7987,
+        0.0,
+        0.9954
+       ]
+      ]
+     }
+    }
+   }
+  ],
+  "picked": "add2L"
+ },
+ "lava-26": {
+  "variant": {
+   "model": "additive"
+  },
+  "sources": {
+   "blue": "decorative/lava/blue/lava-decal-26.png",
+   "green": "decorative/lava/green/lava-decal-26.png",
+   "orange": "decorative/lava/orange/lava-decal-26.png",
+   "purple": "decorative/lava/purple/lava-decal-26.png"
+  },
+  "size": [
+   376,
+   214
+  ],
+  "groups": [
+   {
+    "scale": 1.0,
+    "layers": [
+     {
+      "file": "lava-26.png",
+      "blend": "normal"
+     },
+     {
+      "file": "lava-26-glow.png",
+      "blend": "additive"
+     }
+    ],
+    "colors": {
+     "blue": {
+      "rmse": 6.715,
+      "psnr": 31.59,
+      "ssim": 0.9923,
+      "contrast": 0.983,
+      "dE_mean": 0.19,
+      "tints": [
+       [
+        1.0,
+        1.0,
+        1.0
+       ],
+       [
+        0.0,
+        0.6023,
+        1.0
+       ]
+      ]
+     },
+     "green": {
+      "rmse": 7.093,
+      "psnr": 31.11,
+      "ssim": 0.9958,
+      "contrast": 1.005,
+      "dE_mean": 0.2,
+      "tints": [
+       [
+        1.0,
+        1.0,
+        1.0
+       ],
+       [
+        0.5961,
+        1.0,
+        0.0025
+       ]
+      ]
+     },
+     "orange": {
+      "rmse": 8.031,
+      "psnr": 30.03,
+      "ssim": 0.9944,
+      "contrast": 0.986,
+      "dE_mean": 0.23,
+      "tints": [
+       [
+        1.0,
+        1.0,
+        1.0
+       ],
+       [
+        0.9999,
+        0.2218,
+        0.0008
+       ]
+      ]
+     },
+     "purple": {
+      "rmse": 7.841,
+      "psnr": 30.24,
+      "ssim": 0.9909,
+      "contrast": 1.025,
+      "dE_mean": 0.22,
+      "tints": [
+       [
+        1.0,
+        1.0,
+        1.0
+       ],
+       [
+        0.6621,
+        0.0001,
+        0.9983
+       ]
+      ]
+     }
+    }
+   }
+  ],
+  "picked": "add2L"
+ },
+ "lava-27": {
+  "variant": {
+   "model": "additive"
+  },
+  "sources": {
+   "blue": "decorative/lava/blue/lava-decal-27.png",
+   "green": "decorative/lava/green/lava-decal-27.png",
+   "orange": "decorative/lava/orange/lava-decal-27.png",
+   "purple": "decorative/lava/purple/lava-decal-27.png"
+  },
+  "size": [
+   378,
+   209
+  ],
+  "groups": [
+   {
+    "scale": 1.0,
+    "layers": [
+     {
+      "file": "lava-27.png",
+      "blend": "normal"
+     },
+     {
+      "file": "lava-27-glow.png",
+      "blend": "additive"
+     }
+    ],
+    "colors": {
+     "blue": {
+      "rmse": 4.768,
+      "psnr": 34.56,
+      "ssim": 0.9912,
+      "contrast": 0.988,
+      "dE_mean": 0.49,
+      "tints": [
+       [
+        1.0,
+        1.0,
+        1.0
+       ],
+       [
+        0.0,
+        0.6335,
+        1.0
+       ]
+      ]
+     },
+     "green": {
+      "rmse": 5.142,
+      "psnr": 33.91,
+      "ssim": 0.9956,
+      "contrast": 1.004,
+      "dE_mean": 0.48,
+      "tints": [
+       [
+        1.0,
+        1.0,
+        1.0
+       ],
+       [
+        0.6217,
+        0.9999,
+        0.0031
+       ]
+      ]
+     },
+     "orange": {
+      "rmse": 5.887,
+      "psnr": 32.73,
+      "ssim": 0.9932,
+      "contrast": 0.99,
+      "dE_mean": 0.65,
+      "tints": [
+       [
+        1.0,
+        1.0,
+        1.0
+       ],
+       [
+        0.9999,
+        0.2457,
+        0.0
+       ]
+      ]
+     },
+     "purple": {
+      "rmse": 5.494,
+      "psnr": 33.33,
+      "ssim": 0.9885,
+      "contrast": 1.015,
+      "dE_mean": 0.36,
+      "tints": [
+       [
+        1.0,
+        1.0,
+        1.0
+       ],
+       [
+        0.6912,
+        0.0,
+        0.9998
+       ]
+      ]
+     }
+    }
+   }
+  ],
+  "picked": "add2L"
+ },
+ "lava-28": {
+  "variant": {
+   "model": "additive"
+  },
+  "sources": {
+   "blue": "decorative/lava/blue/lava-decal-28.png",
+   "green": "decorative/lava/green/lava-decal-28.png",
+   "orange": "decorative/lava/orange/lava-decal-28.png",
+   "purple": "decorative/lava/purple/lava-decal-28.png"
+  },
+  "size": [
+   378,
+   198
+  ],
+  "groups": [
+   {
+    "scale": 1.0,
+    "layers": [
+     {
+      "file": "lava-28.png",
+      "blend": "normal"
+     },
+     {
+      "file": "lava-28-glow.png",
+      "blend": "additive"
+     }
+    ],
+    "colors": {
+     "blue": {
+      "rmse": 5.205,
+      "psnr": 33.8,
+      "ssim": 0.9921,
+      "contrast": 0.982,
+      "dE_mean": 0.33,
+      "tints": [
+       [
+        1.0,
+        1.0,
+        1.0
+       ],
+       [
+        0.0,
+        0.5688,
+        0.9991
+       ]
+      ]
+     },
+     "green": {
+      "rmse": 5.122,
+      "psnr": 33.94,
+      "ssim": 0.9962,
+      "contrast": 1.004,
+      "dE_mean": 0.31,
+      "tints": [
+       [
+        1.0,
+        1.0,
+        1.0
+       ],
+       [
+        0.5586,
+        1.0,
+        0.0044
+       ]
+      ]
+     },
+     "orange": {
+      "rmse": 5.69,
+      "psnr": 33.03,
+      "ssim": 0.994,
+      "contrast": 0.986,
+      "dE_mean": 0.44,
+      "tints": [
+       [
+        1.0,
+        1.0,
+        1.0
+       ],
+       [
+        1.0,
+        0.1822,
+        0.0
+       ]
+      ]
+     },
+     "purple": {
+      "rmse": 6.102,
+      "psnr": 32.42,
+      "ssim": 0.9895,
+      "contrast": 1.026,
+      "dE_mean": 0.31,
+      "tints": [
+       [
+        1.0,
+        1.0,
+        1.0
+       ],
+       [
+        0.6269,
+        0.0,
+        0.9973
+       ]
+      ]
+     }
+    }
+   }
+  ],
+  "picked": "add2L"
+ },
+ "mineral-dirt-1": {
+  "variant": {
+   "model": "rgb",
+   "weighting": "minimax",
+   "groups": [
+    [
+     "aubergine",
+     "purple",
+     "violet"
+    ],
+    [
+     "beige",
+     "black",
+     "brown",
+     "cream",
+     "dustyrose",
+     "grey",
+     "red",
+     "tan",
+     "white"
+    ]
+   ]
+  },
+  "sources": {
+   "aubergine": "terrain/mineral-aubergine-dirt-1.png",
+   "beige": "terrain/mineral-beige-dirt-1.png",
+   "black": "terrain/mineral-black-dirt-1.png",
+   "brown": "terrain/mineral-brown-dirt-1.png",
+   "cream": "terrain/mineral-cream-dirt-1.png",
+   "dustyrose": "terrain/mineral-dustyrose-dirt-1.png",
+   "grey": "terrain/mineral-grey-dirt-1.png",
+   "purple": "terrain/mineral-purple-dirt-1.png",
+   "red": "terrain/mineral-red-dirt-1.png",
+   "tan": "terrain/mineral-tan-dirt-1.png",
+   "violet": "terrain/mineral-violet-dirt-1.png",
+   "white": "terrain/mineral-white-dirt-1.png"
+  },
+  "size": [
+   4096,
+   576
+  ],
+  "groups": [
+   {
+    "scale": 1.25,
+    "layers": [
+     {
+      "file": "mineral-dirt-1-g1.png",
+      "blend": "normal"
+     }
+    ],
+    "colors": {
+     "aubergine": {
+      "rmse": 2.063,
+      "psnr": 41.84,
+      "ssim": 0.9828,
+      "contrast": 1.005,
+      "dE_mean": 0.31,
+      "tints": [
+       [
+        0.4232,
+        0.5724,
+        0.4695
+       ]
+      ]
+     },
+     "purple": {
+      "rmse": 2.391,
+      "psnr": 40.56,
+      "ssim": 0.9913,
+      "contrast": 0.981,
+      "dE_mean": 0.17,
+      "tints": [
+       [
+        0.5161,
+        0.7993,
+        0.7999
+       ]
+      ]
+     },
+     "violet": {
+      "rmse": 2.208,
+      "psnr": 41.25,
+      "ssim": 0.9919,
+      "contrast": 1.002,
+      "dE_mean": 0.2,
+      "tints": [
+       [
+        0.7996,
+        0.7197,
+        0.6709
+       ]
+      ]
+     }
+    }
+   },
+   {
+    "scale": 1.0,
+    "layers": [
+     {
+      "file": "mineral-dirt-1-g2.png",
+      "blend": "normal"
+     }
+    ],
+    "colors": {
+     "beige": {
+      "rmse": 2.057,
+      "psnr": 41.87,
+      "ssim": 0.987,
+      "contrast": 0.987,
+      "dE_mean": 0.11,
+      "tints": [
+       [
+        0.7245,
+        0.6891,
+        0.5501
+       ]
+      ]
+     },
+     "black": {
+      "rmse": 2.617,
+      "psnr": 39.78,
+      "ssim": 0.9619,
+      "contrast": 0.908,
+      "dE_mean": 0.19,
+      "tints": [
+       [
+        0.2857,
+        0.3144,
+        0.3035
+       ]
+      ]
+     },
+     "brown": {
+      "rmse": 3.148,
+      "psnr": 38.17,
+      "ssim": 0.9707,
+      "contrast": 0.927,
+      "dE_mean": 0.22,
+      "tints": [
+       [
+        0.6132,
+        0.4533,
+        0.3402
+       ]
+      ]
+     },
+     "cream": {
+      "rmse": 3.02,
+      "psnr": 38.53,
+      "ssim": 0.9872,
+      "contrast": 1.02,
+      "dE_mean": 0.41,
+      "tints": [
+       [
+        1.0,
+        0.9926,
+        0.6556
+       ]
+      ]
+     },
+     "dustyrose": {
+      "rmse": 2.734,
+      "psnr": 39.4,
+      "ssim": 0.9748,
+      "contrast": 0.946,
+      "dE_mean": 0.14,
+      "tints": [
+       [
+        0.5309,
+        0.4528,
+        0.4226
+       ]
+      ]
+     },
+     "grey": {
+      "rmse": 2.216,
+      "psnr": 41.22,
+      "ssim": 0.9866,
+      "contrast": 1.005,
+      "dE_mean": 0.13,
+      "tints": [
+       [
+        0.6455,
+        0.7062,
+        0.6947
+       ]
+      ]
+     },
+     "red": {
+      "rmse": 2.989,
+      "psnr": 38.62,
+      "ssim": 0.9712,
+      "contrast": 0.924,
+      "dE_mean": 0.27,
+      "tints": [
+       [
+        0.6711,
+        0.3483,
+        0.2763
+       ]
+      ]
+     },
+     "tan": {
+      "rmse": 3.1,
+      "psnr": 38.3,
+      "ssim": 0.9828,
+      "contrast": 0.958,
+      "dE_mean": 0.3,
+      "tints": [
+       [
+        0.7666,
+        0.6052,
+        0.3681
+       ]
+      ]
+     },
+     "white": {
+      "rmse": 3.074,
+      "psnr": 38.38,
+      "ssim": 0.9889,
+      "contrast": 1.024,
+      "dE_mean": 0.39,
+      "tints": [
+       [
+        0.9214,
+        0.9996,
+        1.0
+       ]
+      ]
+     }
+    }
+   }
+  ],
+  "picked": "k2mm"
+ },
+ "mineral-dirt-2": {
+  "variant": {
+   "model": "rgb",
+   "weighting": "minimax",
+   "groups": [
+    [
+     "aubergine",
+     "black",
+     "brown",
+     "purple",
+     "tan",
+     "violet"
+    ],
+    [
+     "beige",
+     "cream",
+     "dustyrose",
+     "grey",
+     "red",
+     "white"
+    ]
+   ]
+  },
+  "sources": {
+   "aubergine": "terrain/mineral-aubergine-dirt-2.png",
+   "beige": "terrain/mineral-beige-dirt-2.png",
+   "black": "terrain/mineral-black-dirt-2.png",
+   "brown": "terrain/mineral-brown-dirt-2.png",
+   "cream": "terrain/mineral-cream-dirt-2.png",
+   "dustyrose": "terrain/mineral-dustyrose-dirt-2.png",
+   "grey": "terrain/mineral-grey-dirt-2.png",
+   "purple": "terrain/mineral-purple-dirt-2.png",
+   "red": "terrain/mineral-red-dirt-2.png",
+   "tan": "terrain/mineral-tan-dirt-2.png",
+   "violet": "terrain/mineral-violet-dirt-2.png",
+   "white": "terrain/mineral-white-dirt-2.png"
+  },
+  "size": [
+   4096,
+   576
+  ],
+  "groups": [
+   {
+    "scale": 1.12,
+    "layers": [
+     {
+      "file": "mineral-dirt-2-g1.png",
+      "blend": "normal"
+     }
+    ],
+    "colors": {
+     "aubergine": {
+      "rmse": 2.7,
+      "psnr": 39.5,
+      "ssim": 0.9788,
+      "contrast": 0.963,
+      "dE_mean": 0.36,
+      "tints": [
+       [
+        0.43,
+        0.5277,
+        0.5711
+       ]
+      ]
+     },
+     "black": {
+      "rmse": 2.875,
+      "psnr": 38.96,
+      "ssim": 0.9811,
+      "contrast": 1.029,
+      "dE_mean": 0.49,
+      "tints": [
+       [
+        0.4084,
+        0.5658,
+        0.4547
+       ]
+      ]
+     },
+     "brown": {
+      "rmse": 3.169,
+      "psnr": 38.11,
+      "ssim": 0.9768,
+      "contrast": 1.032,
+      "dE_mean": 0.21,
+      "tints": [
+       [
+        0.7346,
+        0.7008,
+        0.433
+       ]
+      ]
+     },
+     "purple": {
+      "rmse": 3.88,
+      "psnr": 36.35,
+      "ssim": 0.9755,
+      "contrast": 0.931,
+      "dE_mean": 0.51,
+      "tints": [
+       [
+        0.5203,
+        0.6937,
+        0.8927
+       ]
+      ]
+     },
+     "tan": {
+      "rmse": 3.899,
+      "psnr": 36.31,
+      "ssim": 0.9792,
+      "contrast": 1.045,
+      "dE_mean": 0.34,
+      "tints": [
+       [
+        0.893,
+        0.8927,
+        0.4489
+       ]
+      ]
+     },
+     "violet": {
+      "rmse": 3.526,
+      "psnr": 37.18,
+      "ssim": 0.9756,
+      "contrast": 0.96,
+      "dE_mean": 0.17,
+      "tints": [
+       [
+        0.7519,
+        0.6453,
+        0.7679
+       ]
+      ]
+     }
+    }
+   },
+   {
+    "scale": 1.0,
+    "layers": [
+     {
+      "file": "mineral-dirt-2-g2.png",
+      "blend": "normal"
+     }
+    ],
+    "colors": {
+     "beige": {
+      "rmse": 3.23,
+      "psnr": 37.95,
+      "ssim": 0.9755,
+      "contrast": 0.949,
+      "dE_mean": 0.24,
+      "tints": [
+       [
+        0.7184,
+        0.6424,
+        0.5293
+       ]
+      ]
+     },
+     "cream": {
+      "rmse": 3.347,
+      "psnr": 37.64,
+      "ssim": 0.9837,
+      "contrast": 0.978,
+      "dE_mean": 0.21,
+      "tints": [
+       [
+        0.9962,
+        0.9135,
+        0.6319
+       ]
+      ]
+     },
+     "dustyrose": {
+      "rmse": 3.472,
+      "psnr": 37.32,
+      "ssim": 0.9696,
+      "contrast": 0.927,
+      "dE_mean": 0.2,
+      "tints": [
+       [
+        0.5569,
+        0.4588,
+        0.4383
+       ]
+      ]
+     },
+     "grey": {
+      "rmse": 2.463,
+      "psnr": 40.3,
+      "ssim": 0.981,
+      "contrast": 1.003,
+      "dE_mean": 0.12,
+      "tints": [
+       [
+        0.6984,
+        0.709,
+        0.7081
+       ]
+      ]
+     },
+     "red": {
+      "rmse": 3.183,
+      "psnr": 38.07,
+      "ssim": 0.9706,
+      "contrast": 0.923,
+      "dE_mean": 0.27,
+      "tints": [
+       [
+        0.6634,
+        0.3557,
+        0.2946
+       ]
+      ]
+     },
+     "white": {
+      "rmse": 3.386,
+      "psnr": 37.54,
+      "ssim": 0.9873,
+      "contrast": 1.039,
+      "dE_mean": 0.48,
+      "tints": [
+       [
+        1.0,
+        0.9999,
+        1.0
+       ]
+      ]
+     }
+    }
+   }
+  ],
+  "picked": "k2mm"
+ },
+ "mineral-dirt-3": {
+  "variant": {
+   "model": "rgb",
+   "weighting": "minimax",
+   "groups": [
+    [
+     "aubergine",
+     "black",
+     "brown",
+     "purple",
+     "tan",
+     "violet"
+    ],
+    [
+     "beige",
+     "cream",
+     "dustyrose",
+     "grey",
+     "red",
+     "white"
+    ]
+   ]
+  },
+  "sources": {
+   "aubergine": "terrain/mineral-aubergine-dirt-3.png",
+   "beige": "terrain/mineral-beige-dirt-3.png",
+   "black": "terrain/mineral-black-dirt-3.png",
+   "brown": "terrain/mineral-brown-dirt-3.png",
+   "cream": "terrain/mineral-cream-dirt-3.png",
+   "dustyrose": "terrain/mineral-dustyrose-dirt-3.png",
+   "grey": "terrain/mineral-grey-dirt-3.png",
+   "purple": "terrain/mineral-purple-dirt-3.png",
+   "red": "terrain/mineral-red-dirt-3.png",
+   "tan": "terrain/mineral-tan-dirt-3.png",
+   "violet": "terrain/mineral-violet-dirt-3.png",
+   "white": "terrain/mineral-white-dirt-3.png"
+  },
+  "size": [
+   4096,
+   576
+  ],
+  "groups": [
+   {
+    "scale": 1.25,
+    "layers": [
+     {
+      "file": "mineral-dirt-3-g1.png",
+      "blend": "normal"
+     }
+    ],
+    "colors": {
+     "aubergine": {
+      "rmse": 2.072,
+      "psnr": 41.8,
+      "ssim": 0.9849,
+      "contrast": 0.973,
+      "dE_mean": 0.14,
+      "tints": [
+       [
+        0.4395,
+        0.5185,
+        0.4691
+       ]
+      ]
+     },
+     "black": {
+      "rmse": 2.7,
+      "psnr": 39.5,
+      "ssim": 0.98,
+      "contrast": 0.926,
+      "dE_mean": 0.14,
+      "tints": [
+       [
+        0.3585,
+        0.4831,
+        0.3218
+       ]
+      ]
+     },
+     "brown": {
+      "rmse": 2.623,
+      "psnr": 39.76,
+      "ssim": 0.9868,
+      "contrast": 0.983,
+      "dE_mean": 0.27,
+      "tints": [
+       [
+        0.6517,
+        0.6023,
+        0.3186
+       ]
+      ]
+     },
+     "purple": {
+      "rmse": 2.952,
+      "psnr": 38.73,
+      "ssim": 0.9873,
+      "contrast": 0.984,
+      "dE_mean": 0.6,
+      "tints": [
+       [
+        0.6264,
+        0.8001,
+        0.7999
+       ]
+      ]
+     },
+     "tan": {
+      "rmse": 3.023,
+      "psnr": 38.52,
+      "ssim": 0.9881,
+      "contrast": 0.978,
+      "dE_mean": 0.34,
+      "tints": [
+       [
+        0.7739,
+        0.7418,
+        0.3127
+       ]
+      ]
+     },
+     "violet": {
+      "rmse": 2.9,
+      "psnr": 38.88,
+      "ssim": 0.9829,
+      "contrast": 1.037,
+      "dE_mean": 0.37,
+      "tints": [
+       [
+        0.8001,
+        0.7055,
+        0.6761
+       ]
+      ]
+     }
+    }
+   },
+   {
+    "scale": 1.25,
+    "layers": [
+     {
+      "file": "mineral-dirt-3-g2.png",
+      "blend": "normal"
+     }
+    ],
+    "colors": {
+     "beige": {
+      "rmse": 2.306,
+      "psnr": 40.87,
+      "ssim": 0.9848,
+      "contrast": 0.971,
+      "dE_mean": 0.23,
+      "tints": [
+       [
+        0.5607,
+        0.4999,
+        0.4139
+       ]
+      ]
+     },
+     "cream": {
+      "rmse": 2.451,
+      "psnr": 40.35,
+      "ssim": 0.9899,
+      "contrast": 0.994,
+      "dE_mean": 0.49,
+      "tints": [
+       [
+        0.7506,
+        0.6861,
+        0.4819
+       ]
+      ]
+     },
+     "dustyrose": {
+      "rmse": 2.548,
+      "psnr": 40.01,
+      "ssim": 0.9803,
+      "contrast": 0.943,
+      "dE_mean": 0.15,
+      "tints": [
+       [
+        0.4379,
+        0.3643,
+        0.3465
+       ]
+      ]
+     },
+     "grey": {
+      "rmse": 2.09,
+      "psnr": 41.73,
+      "ssim": 0.9862,
+      "contrast": 0.996,
+      "dE_mean": 0.11,
+      "tints": [
+       [
+        0.5542,
+        0.5619,
+        0.5574
+       ]
+      ]
+     },
+     "red": {
+      "rmse": 1.95,
+      "psnr": 42.33,
+      "ssim": 0.9857,
+      "contrast": 0.983,
+      "dE_mean": 0.11,
+      "tints": [
+       [
+        0.5427,
+        0.2969,
+        0.2507
+       ]
+      ]
+     },
+     "white": {
+      "rmse": 2.492,
+      "psnr": 40.2,
+      "ssim": 0.9913,
+      "contrast": 1.023,
+      "dE_mean": 0.52,
+      "tints": [
+       [
+        0.7999,
+        0.8002,
+        0.7999
+       ]
+      ]
+     }
+    }
+   }
+  ],
+  "picked": "k2mm"
+ },
+ "mineral-dirt-4": {
+  "variant": {
+   "model": "rgb",
+   "weighting": "minimax",
+   "groups": [
+    [
+     "aubergine",
+     "purple",
+     "violet"
+    ],
+    [
+     "beige",
+     "black",
+     "brown",
+     "cream",
+     "dustyrose",
+     "grey",
+     "red",
+     "tan",
+     "white"
+    ]
+   ]
+  },
+  "sources": {
+   "aubergine": "terrain/mineral-aubergine-dirt-4.png",
+   "beige": "terrain/mineral-beige-dirt-4.png",
+   "black": "terrain/mineral-black-dirt-4.png",
+   "brown": "terrain/mineral-brown-dirt-4.png",
+   "cream": "terrain/mineral-cream-dirt-4.png",
+   "dustyrose": "terrain/mineral-dustyrose-dirt-4.png",
+   "grey": "terrain/mineral-grey-dirt-4.png",
+   "purple": "terrain/mineral-purple-dirt-4.png",
+   "red": "terrain/mineral-red-dirt-4.png",
+   "tan": "terrain/mineral-tan-dirt-4.png",
+   "violet": "terrain/mineral-violet-dirt-4.png",
+   "white": "terrain/mineral-white-dirt-4.png"
+  },
+  "size": [
+   4096,
+   576
+  ],
+  "groups": [
+   {
+    "scale": 1.25,
+    "layers": [
+     {
+      "file": "mineral-dirt-4-g1.png",
+      "blend": "normal"
+     }
+    ],
+    "colors": {
+     "aubergine": {
+      "rmse": 1.687,
+      "psnr": 43.59,
+      "ssim": 0.9859,
+      "contrast": 1.008,
+      "dE_mean": 0.06,
+      "tints": [
+       [
+        0.4566,
+        0.5454,
+        0.4666
+       ]
+      ]
+     },
+     "purple": {
+      "rmse": 2.064,
+      "psnr": 41.84,
+      "ssim": 0.9921,
+      "contrast": 0.988,
+      "dE_mean": 0.18,
+      "tints": [
+       [
+        0.6149,
+        0.8006,
+        0.8002
+       ]
+      ]
+     },
+     "violet": {
+      "rmse": 1.899,
+      "psnr": 42.56,
+      "ssim": 0.9922,
+      "contrast": 1.0,
+      "dE_mean": 0.41,
+      "tints": [
+       [
+        0.7996,
+        0.6828,
+        0.6507
+       ]
+      ]
+     }
+    }
+   },
+   {
+    "scale": 1.25,
+    "layers": [
+     {
+      "file": "mineral-dirt-4-g2.png",
+      "blend": "normal"
+     }
+    ],
+    "colors": {
+     "beige": {
+      "rmse": 1.774,
+      "psnr": 43.15,
+      "ssim": 0.9881,
+      "contrast": 0.983,
+      "dE_mean": 0.09,
+      "tints": [
+       [
+        0.5402,
+        0.4801,
+        0.3923
+       ]
+      ]
+     },
+     "black": {
+      "rmse": 1.823,
+      "psnr": 42.91,
+      "ssim": 0.9775,
+      "contrast": 0.933,
+      "dE_mean": 0.17,
+      "tints": [
+       [
+        0.2344,
+        0.2404,
+        0.2334
+       ]
+      ]
+     },
+     "brown": {
+      "rmse": 2.234,
+      "psnr": 41.15,
+      "ssim": 0.9761,
+      "contrast": 0.924,
+      "dE_mean": 0.17,
+      "tints": [
+       [
+        0.3862,
+        0.2624,
+        0.193
+       ]
+      ]
+     },
+     "cream": {
+      "rmse": 2.168,
+      "psnr": 41.41,
+      "ssim": 0.9882,
+      "contrast": 0.99,
+      "dE_mean": 0.06,
+      "tints": [
+       [
+        0.7699,
+        0.6967,
+        0.4726
+       ]
+      ]
+     },
+     "dustyrose": {
+      "rmse": 1.766,
+      "psnr": 43.19,
+      "ssim": 0.9844,
+      "contrast": 0.964,
+      "dE_mean": 0.08,
+      "tints": [
+       [
+        0.399,
+        0.3308,
+        0.3139
+       ]
+      ]
+     },
+     "grey": {
+      "rmse": 1.844,
+      "psnr": 42.81,
+      "ssim": 0.9873,
+      "contrast": 1.012,
+      "dE_mean": 0.14,
+      "tints": [
+       [
+        0.553,
+        0.5601,
+        0.5535
+       ]
+      ]
+     },
+     "red": {
+      "rmse": 2.086,
+      "psnr": 41.74,
+      "ssim": 0.977,
+      "contrast": 0.928,
+      "dE_mean": 0.19,
+      "tints": [
+       [
+        0.4326,
+        0.1982,
+        0.156
+       ]
+      ]
+     },
+     "tan": {
+      "rmse": 2.34,
+      "psnr": 40.75,
+      "ssim": 0.9811,
+      "contrast": 0.944,
+      "dE_mean": 0.12,
+      "tints": [
+       [
+        0.5056,
+        0.3615,
+        0.2135
+       ]
+      ]
+     },
+     "white": {
+      "rmse": 2.257,
+      "psnr": 41.06,
+      "ssim": 0.9914,
+      "contrast": 1.025,
+      "dE_mean": 0.22,
+      "tints": [
+       [
+        0.7999,
+        0.7999,
+        0.7999
+       ]
+      ]
+     }
+    }
+   }
+  ],
+  "picked": "k2mm"
+ },
+ "mineral-dirt-5": {
+  "variant": {
+   "model": "rgb",
+   "weighting": "minimax",
+   "groups": [
+    [
+     "aubergine",
+     "black",
+     "purple",
+     "violet"
+    ],
+    [
+     "beige",
+     "brown",
+     "cream",
+     "dustyrose",
+     "grey",
+     "red",
+     "tan",
+     "white"
+    ]
+   ]
+  },
+  "sources": {
+   "aubergine": "terrain/mineral-aubergine-dirt-5.png",
+   "beige": "terrain/mineral-beige-dirt-5.png",
+   "black": "terrain/mineral-black-dirt-5.png",
+   "brown": "terrain/mineral-brown-dirt-5.png",
+   "cream": "terrain/mineral-cream-dirt-5.png",
+   "dustyrose": "terrain/mineral-dustyrose-dirt-5.png",
+   "grey": "terrain/mineral-grey-dirt-5.png",
+   "purple": "terrain/mineral-purple-dirt-5.png",
+   "red": "terrain/mineral-red-dirt-5.png",
+   "tan": "terrain/mineral-tan-dirt-5.png",
+   "violet": "terrain/mineral-violet-dirt-5.png",
+   "white": "terrain/mineral-white-dirt-5.png"
+  },
+  "size": [
+   4096,
+   576
+  ],
+  "groups": [
+   {
+    "scale": 1.25,
+    "layers": [
+     {
+      "file": "mineral-dirt-5-g1.png",
+      "blend": "normal"
+     }
+    ],
+    "colors": {
+     "aubergine": {
+      "rmse": 1.946,
+      "psnr": 42.35,
+      "ssim": 0.983,
+      "contrast": 0.967,
+      "dE_mean": 0.21,
+      "tints": [
+       [
+        0.4195,
+        0.5246,
+        0.4787
+       ]
+      ]
+     },
+     "black": {
+      "rmse": 2.478,
+      "psnr": 40.25,
+      "ssim": 0.9829,
+      "contrast": 0.962,
+      "dE_mean": 0.07,
+      "tints": [
+       [
+        0.3651,
+        0.5079,
+        0.3423
+       ]
+      ]
+     },
+     "purple": {
+      "rmse": 2.476,
+      "psnr": 40.26,
+      "ssim": 0.9819,
+      "contrast": 0.974,
+      "dE_mean": 0.1,
+      "tints": [
+       [
+        0.5713,
+        0.7997,
+        0.7999
+       ]
+      ]
+     },
+     "violet": {
+      "rmse": 2.449,
+      "psnr": 40.35,
+      "ssim": 0.9811,
+      "contrast": 1.016,
+      "dE_mean": 0.26,
+      "tints": [
+       [
+        0.8,
+        0.7303,
+        0.7065
+       ]
+      ]
+     }
+    }
+   },
+   {
+    "scale": 1.25,
+    "layers": [
+     {
+      "file": "mineral-dirt-5-g2.png",
+      "blend": "normal"
+     }
+    ],
+    "colors": {
+     "beige": {
+      "rmse": 1.972,
+      "psnr": 42.23,
+      "ssim": 0.987,
+      "contrast": 0.987,
+      "dE_mean": 0.09,
+      "tints": [
+       [
+        0.5793,
+        0.5527,
+        0.4597
+       ]
+      ]
+     },
+     "brown": {
+      "rmse": 2.248,
+      "psnr": 41.09,
+      "ssim": 0.9809,
+      "contrast": 0.959,
+      "dE_mean": 0.14,
+      "tints": [
+       [
+        0.4973,
+        0.3853,
+        0.3052
+       ]
+      ]
+     },
+     "cream": {
+      "rmse": 2.266,
+      "psnr": 41.03,
+      "ssim": 0.9901,
+      "contrast": 1.005,
+      "dE_mean": 0.06,
+      "tints": [
+       [
+        0.8001,
+        0.7809,
+        0.5352
+       ]
+      ]
+     },
+     "dustyrose": {
+      "rmse": 2.188,
+      "psnr": 41.33,
+      "ssim": 0.9824,
+      "contrast": 0.961,
+      "dE_mean": 0.22,
+      "tints": [
+       [
+        0.436,
+        0.3839,
+        0.3667
+       ]
+      ]
+     },
+     "grey": {
+      "rmse": 1.868,
+      "psnr": 42.7,
+      "ssim": 0.9882,
+      "contrast": 0.998,
+      "dE_mean": 0.04,
+      "tints": [
+       [
+        0.5161,
+        0.5614,
+        0.5602
+       ]
+      ]
+     },
+     "red": {
+      "rmse": 1.819,
+      "psnr": 42.93,
+      "ssim": 0.9874,
+      "contrast": 1.007,
+      "dE_mean": 0.1,
+      "tints": [
+       [
+        0.5862,
+        0.3605,
+        0.3086
+       ]
+      ]
+     },
+     "tan": {
+      "rmse": 2.36,
+      "psnr": 40.67,
+      "ssim": 0.9845,
+      "contrast": 0.963,
+      "dE_mean": 0.08,
+      "tints": [
+       [
+        0.5897,
+        0.4762,
+        0.3124
+       ]
+      ]
+     },
+     "white": {
+      "rmse": 2.299,
+      "psnr": 40.9,
+      "ssim": 0.9903,
+      "contrast": 1.02,
+      "dE_mean": 0.34,
+      "tints": [
+       [
+        0.7455,
+        0.8001,
+        0.8
+       ]
+      ]
+     }
+    }
+   }
+  ],
+  "picked": "k2mm"
+ },
+ "mineral-dirt-6": {
+  "variant": {
+   "model": "rgb",
+   "weighting": "minimax",
+   "groups": [
+    [
+     "aubergine",
+     "purple",
+     "violet"
+    ],
+    [
+     "beige",
+     "black",
+     "brown",
+     "cream",
+     "dustyrose",
+     "grey",
+     "red",
+     "tan",
+     "white"
+    ]
+   ]
+  },
+  "sources": {
+   "aubergine": "terrain/mineral-aubergine-dirt-6.png",
+   "beige": "terrain/mineral-beige-dirt-6.png",
+   "black": "terrain/mineral-black-dirt-6.png",
+   "brown": "terrain/mineral-brown-dirt-6.png",
+   "cream": "terrain/mineral-cream-dirt-6.png",
+   "dustyrose": "terrain/mineral-dustyrose-dirt-6.png",
+   "grey": "terrain/mineral-grey-dirt-6.png",
+   "purple": "terrain/mineral-purple-dirt-6.png",
+   "red": "terrain/mineral-red-dirt-6.png",
+   "tan": "terrain/mineral-tan-dirt-6.png",
+   "violet": "terrain/mineral-violet-dirt-6.png",
+   "white": "terrain/mineral-white-dirt-6.png"
+  },
+  "size": [
+   4096,
+   576
+  ],
+  "groups": [
+   {
+    "scale": 1.04,
+    "layers": [
+     {
+      "file": "mineral-dirt-6-g1.png",
+      "blend": "normal"
+     }
+    ],
+    "colors": {
+     "aubergine": {
+      "rmse": 2.042,
+      "psnr": 41.93,
+      "ssim": 0.9843,
+      "contrast": 1.017,
+      "dE_mean": 0.21,
+      "tints": [
+       [
+        0.5359,
+        0.7188,
+        0.5925
+       ]
+      ]
+     },
+     "purple": {
+      "rmse": 2.415,
+      "psnr": 40.47,
+      "ssim": 0.9913,
+      "contrast": 0.973,
+      "dE_mean": 0.23,
+      "tints": [
+       [
+        0.6501,
+        0.961,
+        0.9616
+       ]
+      ]
+     },
+     "violet": {
+      "rmse": 2.27,
+      "psnr": 41.01,
+      "ssim": 0.9918,
+      "contrast": 1.012,
+      "dE_mean": 0.28,
+      "tints": [
+       [
+        0.9613,
+        0.8907,
+        0.8174
+       ]
+      ]
+     }
+    }
+   },
+   {
+    "scale": 1.25,
+    "layers": [
+     {
+      "file": "mineral-dirt-6-g2.png",
+      "blend": "normal"
+     }
+    ],
+    "colors": {
+     "beige": {
+      "rmse": 2.026,
+      "psnr": 42.0,
+      "ssim": 0.9864,
+      "contrast": 0.991,
+      "dE_mean": 0.1,
+      "tints": [
+       [
+        0.6244,
+        0.555,
+        0.4563
+       ]
+      ]
+     },
+     "black": {
+      "rmse": 2.815,
+      "psnr": 39.14,
+      "ssim": 0.9595,
+      "contrast": 0.908,
+      "dE_mean": 0.23,
+      "tints": [
+       [
+        0.2599,
+        0.2645,
+        0.2577
+       ]
+      ]
+     },
+     "brown": {
+      "rmse": 2.847,
+      "psnr": 39.04,
+      "ssim": 0.9747,
+      "contrast": 0.944,
+      "dE_mean": 0.17,
+      "tints": [
+       [
+        0.5289,
+        0.3744,
+        0.2898
+       ]
+      ]
+     },
+     "cream": {
+      "rmse": 2.641,
+      "psnr": 39.69,
+      "ssim": 0.9858,
+      "contrast": 1.011,
+      "dE_mean": 0.03,
+      "tints": [
+       [
+        0.8,
+        0.7386,
+        0.5144
+       ]
+      ]
+     },
+     "dustyrose": {
+      "rmse": 2.605,
+      "psnr": 39.81,
+      "ssim": 0.9776,
+      "contrast": 0.953,
+      "dE_mean": 0.13,
+      "tints": [
+       [
+        0.4681,
+        0.3739,
+        0.3518
+       ]
+      ]
+     },
+     "grey": {
+      "rmse": 2.001,
+      "psnr": 42.11,
+      "ssim": 0.9866,
+      "contrast": 1.006,
+      "dE_mean": 0.03,
+      "tints": [
+       [
+        0.563,
+        0.5692,
+        0.5628
+       ]
+      ]
+     },
+     "red": {
+      "rmse": 2.359,
+      "psnr": 40.68,
+      "ssim": 0.9797,
+      "contrast": 0.954,
+      "dE_mean": 0.19,
+      "tints": [
+       [
+        0.5755,
+        0.2949,
+        0.2397
+       ]
+      ]
+     },
+     "tan": {
+      "rmse": 2.536,
+      "psnr": 40.05,
+      "ssim": 0.9826,
+      "contrast": 0.974,
+      "dE_mean": 0.22,
+      "tints": [
+       [
+        0.6518,
+        0.4929,
+        0.3196
+       ]
+      ]
+     },
+     "white": {
+      "rmse": 2.785,
+      "psnr": 39.24,
+      "ssim": 0.9885,
+      "contrast": 1.025,
+      "dE_mean": 0.13,
+      "tints": [
+       [
+        0.7975,
+        0.8,
+        0.7999
+       ]
+      ]
+     }
+    }
+   }
+  ],
+  "picked": "k2mm"
+ },
+ "mineral-sand-1": {
+  "variant": {
+   "model": "rgb",
+   "weighting": "minimax"
+  },
+  "sources": {
+   "aubergine": "terrain/mineral-aubergine-sand-1.png",
+   "beige": "terrain/mineral-beige-sand-1.png",
+   "black": "terrain/mineral-black-sand-1.png",
+   "brown": "terrain/mineral-brown-sand-1.png",
+   "cream": "terrain/mineral-cream-sand-1.png",
+   "dustyrose": "terrain/mineral-dustyrose-sand-1.png",
+   "grey": "terrain/mineral-grey-sand-1.png",
+   "purple": "terrain/mineral-purple-sand-1.png",
+   "red": "terrain/mineral-red-sand-1.png",
+   "tan": "terrain/mineral-tan-sand-1.png",
+   "violet": "terrain/mineral-violet-sand-1.png",
+   "white": "terrain/mineral-white-sand-1.png"
+  },
+  "size": [
+   4096,
+   576
+  ],
+  "groups": [
+   {
+    "scale": 1.18,
+    "layers": [
+     {
+      "file": "mineral-sand-1.png",
+      "blend": "normal"
+     }
+    ],
+    "colors": {
+     "aubergine": {
+      "rmse": 2.263,
+      "psnr": 41.04,
+      "ssim": 0.972,
+      "contrast": 0.958,
+      "dE_mean": 0.08,
+      "tints": [
+       [
+        0.2659,
+        0.2494,
+        0.3862
+       ]
+      ]
+     },
+     "beige": {
+      "rmse": 1.289,
+      "psnr": 45.93,
+      "ssim": 0.99,
+      "contrast": 0.998,
+      "dE_mean": 0.06,
+      "tints": [
+       [
+        0.6411,
+        0.5874,
+        0.4773
+       ]
+      ]
+     },
+     "black": {
+      "rmse": 1.991,
+      "psnr": 42.15,
+      "ssim": 0.9718,
+      "contrast": 0.959,
+      "dE_mean": 0.12,
+      "tints": [
+       [
+        0.253,
+        0.2723,
+        0.2709
+       ]
+      ]
+     },
+     "brown": {
+      "rmse": 1.623,
+      "psnr": 43.92,
+      "ssim": 0.9832,
+      "contrast": 0.985,
+      "dE_mean": 0.11,
+      "tints": [
+       [
+        0.5755,
+        0.4048,
+        0.3089
+       ]
+      ]
+     },
+     "cream": {
+      "rmse": 2.291,
+      "psnr": 40.93,
+      "ssim": 0.9806,
+      "contrast": 1.007,
+      "dE_mean": 0.32,
+      "tints": [
+       [
+        0.8472,
+        0.8275,
+        0.5609
+       ]
+      ]
+     },
+     "dustyrose": {
+      "rmse": 1.894,
+      "psnr": 42.58,
+      "ssim": 0.9806,
+      "contrast": 0.98,
+      "dE_mean": 0.06,
+      "tints": [
+       [
+        0.4692,
+        0.3618,
+        0.3537
+       ]
+      ]
+     },
+     "grey": {
+      "rmse": 1.551,
+      "psnr": 44.32,
+      "ssim": 0.9885,
+      "contrast": 0.996,
+      "dE_mean": 0.1,
+      "tints": [
+       [
+        0.5348,
+        0.5661,
+        0.5714
+       ]
+      ]
+     },
+     "purple": {
+      "rmse": 2.319,
+      "psnr": 40.82,
+      "ssim": 0.9701,
+      "contrast": 0.968,
+      "dE_mean": 0.14,
+      "tints": [
+       [
+        0.2934,
+        0.3212,
+        0.6316
+       ]
+      ]
+     },
+     "red": {
+      "rmse": 1.522,
+      "psnr": 44.48,
+      "ssim": 0.9823,
+      "contrast": 0.982,
+      "dE_mean": 0.12,
+      "tints": [
+       [
+        0.583,
+        0.2802,
+        0.2447
+       ]
+      ]
+     },
+     "tan": {
+      "rmse": 2.048,
+      "psnr": 41.9,
+      "ssim": 0.9902,
+      "contrast": 0.999,
+      "dE_mean": 0.18,
+      "tints": [
+       [
+        0.7588,
+        0.6266,
+        0.3941
+       ]
+      ]
+     },
+     "violet": {
+      "rmse": 2.392,
+      "psnr": 40.56,
+      "ssim": 0.9716,
+      "contrast": 0.971,
+      "dE_mean": 0.16,
+      "tints": [
+       [
+        0.5055,
+        0.2886,
+        0.5272
+       ]
+      ]
+     },
+     "white": {
+      "rmse": 2.334,
+      "psnr": 40.77,
+      "ssim": 0.9884,
+      "contrast": 1.006,
+      "dE_mean": 0.12,
+      "tints": [
+       [
+        0.8213,
+        0.8473,
+        0.8477
+       ]
+      ]
+     }
+    }
+   }
+  ],
+  "picked": "minimax"
+ },
+ "mineral-sand-2": {
+  "variant": {
+   "model": "rgb",
+   "weighting": "minimax",
+   "groups": [
+    [
+     "aubergine",
+     "black",
+     "brown",
+     "dustyrose",
+     "purple",
+     "red",
+     "violet"
+    ],
+    [
+     "beige",
+     "cream",
+     "grey",
+     "tan",
+     "white"
+    ]
+   ]
+  },
+  "sources": {
+   "aubergine": "terrain/mineral-aubergine-sand-2.png",
+   "beige": "terrain/mineral-beige-sand-2.png",
+   "black": "terrain/mineral-black-sand-2.png",
+   "brown": "terrain/mineral-brown-sand-2.png",
+   "cream": "terrain/mineral-cream-sand-2.png",
+   "dustyrose": "terrain/mineral-dustyrose-sand-2.png",
+   "grey": "terrain/mineral-grey-sand-2.png",
+   "purple": "terrain/mineral-purple-sand-2.png",
+   "red": "terrain/mineral-red-sand-2.png",
+   "tan": "terrain/mineral-tan-sand-2.png",
+   "violet": "terrain/mineral-violet-sand-2.png",
+   "white": "terrain/mineral-white-sand-2.png"
+  },
+  "size": [
+   4096,
+   576
+  ],
+  "groups": [
+   {
+    "scale": 1.25,
+    "layers": [
+     {
+      "file": "mineral-sand-2-g1.png",
+      "blend": "normal"
+     }
+    ],
+    "colors": {
+     "aubergine": {
+      "rmse": 2.589,
+      "psnr": 39.87,
+      "ssim": 0.9833,
+      "contrast": 0.948,
+      "dE_mean": 0.14,
+      "tints": [
+       [
+        0.3672,
+        0.4646,
+        0.4908
+       ]
+      ]
+     },
+     "black": {
+      "rmse": 1.92,
+      "psnr": 42.46,
+      "ssim": 0.987,
+      "contrast": 0.991,
+      "dE_mean": 0.09,
+      "tints": [
+       [
+        0.3349,
+        0.5056,
+        0.3357
+       ]
+      ]
+     },
+     "brown": {
+      "rmse": 2.933,
+      "psnr": 38.78,
+      "ssim": 0.9822,
+      "contrast": 1.048,
+      "dE_mean": 0.54,
+      "tints": [
+       [
+        0.7859,
+        0.7997,
+        0.4045
+       ]
+      ]
+     },
+     "dustyrose": {
+      "rmse": 2.493,
+      "psnr": 40.2,
+      "ssim": 0.9846,
+      "contrast": 1.028,
+      "dE_mean": 0.22,
+      "tints": [
+       [
+        0.6253,
+        0.6847,
+        0.4348
+       ]
+      ]
+     },
+     "purple": {
+      "rmse": 2.925,
+      "psnr": 38.81,
+      "ssim": 0.9822,
+      "contrast": 0.934,
+      "dE_mean": 0.48,
+      "tints": [
+       [
+        0.3937,
+        0.5692,
+        0.7999
+       ]
+      ]
+     },
+     "red": {
+      "rmse": 2.729,
+      "psnr": 39.41,
+      "ssim": 0.989,
+      "contrast": 0.991,
+      "dE_mean": 0.3,
+      "tints": [
+       [
+        0.8002,
+        0.5095,
+        0.2721
+       ]
+      ]
+     },
+     "violet": {
+      "rmse": 2.609,
+      "psnr": 39.8,
+      "ssim": 0.9837,
+      "contrast": 0.955,
+      "dE_mean": 0.22,
+      "tints": [
+       [
+        0.7001,
+        0.5525,
+        0.6675
+       ]
+      ]
+     }
+    }
+   },
+   {
+    "scale": 1.04,
+    "layers": [
+     {
+      "file": "mineral-sand-2-g2.png",
+      "blend": "normal"
+     }
+    ],
+    "colors": {
+     "beige": {
+      "rmse": 2.854,
+      "psnr": 39.02,
+      "ssim": 0.9772,
+      "contrast": 0.977,
+      "dE_mean": 0.11,
+      "tints": [
+       [
+        0.7427,
+        0.6622,
+        0.5401
+       ]
+      ]
+     },
+     "cream": {
+      "rmse": 3.537,
+      "psnr": 37.16,
+      "ssim": 0.9922,
+      "contrast": 0.999,
+      "dE_mean": 0.5,
+      "tints": [
+       [
+        0.9493,
+        0.8974,
+        0.5799
+       ]
+      ]
+     },
+     "grey": {
+      "rmse": 3.258,
+      "psnr": 37.87,
+      "ssim": 0.9727,
+      "contrast": 0.973,
+      "dE_mean": 0.12,
+      "tints": [
+       [
+        0.6026,
+        0.6158,
+        0.6212
+       ]
+      ]
+     },
+     "tan": {
+      "rmse": 3.491,
+      "psnr": 37.27,
+      "ssim": 0.9848,
+      "contrast": 0.985,
+      "dE_mean": 0.42,
+      "tints": [
+       [
+        0.8693,
+        0.7032,
+        0.4527
+       ]
+      ]
+     },
+     "white": {
+      "rmse": 3.551,
+      "psnr": 37.12,
+      "ssim": 0.9919,
+      "contrast": 1.005,
+      "dE_mean": 0.33,
+      "tints": [
+       [
+        0.9613,
+        0.9615,
+        0.9617
+       ]
+      ]
+     }
+    }
+   }
+  ],
+  "picked": "k2mm"
+ },
+ "mineral-sand-3": {
+  "variant": {
+   "model": "rgb",
+   "weighting": "minimax",
+   "groups": [
+    [
+     "aubergine",
+     "black",
+     "brown",
+     "dustyrose",
+     "purple",
+     "red",
+     "violet"
+    ],
+    [
+     "beige",
+     "cream",
+     "grey",
+     "tan",
+     "white"
+    ]
+   ]
+  },
+  "sources": {
+   "aubergine": "terrain/mineral-aubergine-sand-3.png",
+   "beige": "terrain/mineral-beige-sand-3.png",
+   "black": "terrain/mineral-black-sand-3.png",
+   "brown": "terrain/mineral-brown-sand-3.png",
+   "cream": "terrain/mineral-cream-sand-3.png",
+   "dustyrose": "terrain/mineral-dustyrose-sand-3.png",
+   "grey": "terrain/mineral-grey-sand-3.png",
+   "purple": "terrain/mineral-purple-sand-3.png",
+   "red": "terrain/mineral-red-sand-3.png",
+   "tan": "terrain/mineral-tan-sand-3.png",
+   "violet": "terrain/mineral-violet-sand-3.png",
+   "white": "terrain/mineral-white-sand-3.png"
+  },
+  "size": [
+   4096,
+   576
+  ],
+  "groups": [
+   {
+    "scale": 1.18,
+    "layers": [
+     {
+      "file": "mineral-sand-3-g1.png",
+      "blend": "normal"
+     }
+    ],
+    "colors": {
+     "aubergine": {
+      "rmse": 2.145,
+      "psnr": 41.5,
+      "ssim": 0.9853,
+      "contrast": 0.956,
+      "dE_mean": 0.16,
+      "tints": [
+       [
+        0.3889,
+        0.4846,
+        0.5254
+       ]
+      ]
+     },
+     "black": {
+      "rmse": 1.834,
+      "psnr": 42.86,
+      "ssim": 0.9857,
+      "contrast": 0.967,
+      "dE_mean": 0.11,
+      "tints": [
+       [
+        0.3658,
+        0.5319,
+        0.3774
+       ]
+      ]
+     },
+     "brown": {
+      "rmse": 2.126,
+      "psnr": 41.58,
+      "ssim": 0.9898,
+      "contrast": 1.024,
+      "dE_mean": 0.11,
+      "tints": [
+       [
+        0.8474,
+        0.8475,
+        0.4756
+       ]
+      ]
+     },
+     "dustyrose": {
+      "rmse": 1.945,
+      "psnr": 42.35,
+      "ssim": 0.9895,
+      "contrast": 1.01,
+      "dE_mean": 0.18,
+      "tints": [
+       [
+        0.6581,
+        0.7154,
+        0.4938
+       ]
+      ]
+     },
+     "purple": {
+      "rmse": 2.133,
+      "psnr": 41.55,
+      "ssim": 0.9902,
+      "contrast": 0.971,
+      "dE_mean": 0.12,
+      "tints": [
+       [
+        0.4229,
+        0.587,
+        0.8474
+       ]
+      ]
+     },
+     "red": {
+      "rmse": 2.05,
+      "psnr": 41.89,
+      "ssim": 0.9919,
+      "contrast": 1.002,
+      "dE_mean": 0.3,
+      "tints": [
+       [
+        0.8156,
+        0.5277,
+        0.315
+       ]
+      ]
+     },
+     "violet": {
+      "rmse": 1.997,
+      "psnr": 42.13,
+      "ssim": 0.9883,
+      "contrast": 0.975,
+      "dE_mean": 0.14,
+      "tints": [
+       [
+        0.7139,
+        0.5676,
+        0.7127
+       ]
+      ]
+     }
+    }
+   },
+   {
+    "scale": 1.25,
+    "layers": [
+     {
+      "file": "mineral-sand-3-g2.png",
+      "blend": "normal"
+     }
+    ],
+    "colors": {
+     "beige": {
+      "rmse": 2.774,
+      "psnr": 39.27,
+      "ssim": 0.9777,
+      "contrast": 0.974,
+      "dE_mean": 0.14,
+      "tints": [
+       [
+        0.6375,
+        0.5886,
+        0.4766
+       ]
+      ]
+     },
+     "cream": {
+      "rmse": 2.756,
+      "psnr": 39.33,
+      "ssim": 0.9895,
+      "contrast": 1.0,
+      "dE_mean": 0.32,
+      "tints": [
+       [
+        0.8,
+        0.7795,
+        0.5096
+       ]
+      ]
+     },
+     "grey": {
+      "rmse": 2.407,
+      "psnr": 40.5,
+      "ssim": 0.9827,
+      "contrast": 0.982,
+      "dE_mean": 0.08,
+      "tints": [
+       [
+        0.5244,
+        0.5534,
+        0.5482
+       ]
+      ]
+     },
+     "tan": {
+      "rmse": 2.865,
+      "psnr": 38.99,
+      "ssim": 0.9855,
+      "contrast": 0.982,
+      "dE_mean": 0.26,
+      "tints": [
+       [
+        0.7482,
+        0.6264,
+        0.4044
+       ]
+      ]
+     },
+     "white": {
+      "rmse": 2.84,
+      "psnr": 39.07,
+      "ssim": 0.987,
+      "contrast": 1.014,
+      "dE_mean": 0.35,
+      "tints": [
+       [
+        0.7696,
+        0.8,
+        0.8
+       ]
+      ]
+     }
+    }
+   }
+  ],
+  "picked": "k2mm"
+ },
+ "vegetation-grass-1": {
+  "variant": {
+   "model": "rgb",
+   "weighting": "minimax",
+   "groups": [
+    [
+     "blue",
+     "green",
+     "mauve",
+     "purple",
+     "turquoise",
+     "violet"
+    ],
+    [
+     "olive",
+     "orange",
+     "red",
+     "yellow"
+    ]
+   ]
+  },
+  "sources": {
+   "blue": "terrain/vegetation-blue-grass-1.png",
+   "green": "terrain/vegetation-green-grass-1.png",
+   "mauve": "terrain/vegetation-mauve-grass-1.png",
+   "olive": "terrain/vegetation-olive-grass-1.png",
+   "orange": "terrain/vegetation-orange-grass-1.png",
+   "purple": "terrain/vegetation-purple-grass-1.png",
+   "red": "terrain/vegetation-red-grass-1.png",
+   "turquoise": "terrain/vegetation-turquoise-grass-1.png",
+   "violet": "terrain/vegetation-violet-grass-1.png",
+   "yellow": "terrain/vegetation-yellow-grass-1.png"
+  },
+  "size": [
+   4096,
+   576
+  ],
+  "groups": [
+   {
+    "scale": 1.18,
+    "layers": [
+     {
+      "file": "vegetation-grass-1-g1.png",
+      "blend": "normal"
+     }
+    ],
+    "colors": {
+     "blue": {
+      "rmse": 6.105,
+      "psnr": 32.42,
+      "ssim": 0.9405,
+      "contrast": 0.874,
+      "dE_mean": 0.63,
+      "tints": [
+       [
+        0.505,
+        0.7505,
+        0.7728
+       ]
+      ]
+     },
+     "green": {
+      "rmse": 5.872,
+      "psnr": 32.75,
+      "ssim": 0.9389,
+      "contrast": 1.084,
+      "dE_mean": 1.11,
+      "tints": [
+       [
+        0.7522,
+        0.8472,
+        0.2307
+       ]
+      ]
+     },
+     "mauve": {
+      "rmse": 4.913,
+      "psnr": 34.3,
+      "ssim": 0.944,
+      "contrast": 0.902,
+      "dE_mean": 0.58,
+      "tints": [
+       [
+        0.5918,
+        0.6604,
+        0.8047
+       ]
+      ]
+     },
+     "purple": {
+      "rmse": 5.553,
+      "psnr": 33.24,
+      "ssim": 0.9514,
+      "contrast": 0.916,
+      "dE_mean": 0.94,
+      "tints": [
+       [
+        0.7195,
+        0.5239,
+        0.8476
+       ]
+      ]
+     },
+     "turquoise": {
+      "rmse": 4.519,
+      "psnr": 35.03,
+      "ssim": 0.977,
+      "contrast": 0.998,
+      "dE_mean": 0.76,
+      "tints": [
+       [
+        0.6267,
+        0.8002,
+        0.5038
+       ]
+      ]
+     },
+     "violet": {
+      "rmse": 5.912,
+      "psnr": 32.7,
+      "ssim": 0.9579,
+      "contrast": 0.901,
+      "dE_mean": 1.29,
+      "tints": [
+       [
+        0.8473,
+        0.4631,
+        0.5214
+       ]
+      ]
+     }
+    }
+   },
+   {
+    "scale": 1.08,
+    "layers": [
+     {
+      "file": "vegetation-grass-1-g2.png",
+      "blend": "normal"
+     }
+    ],
+    "colors": {
+     "olive": {
+      "rmse": 5.295,
+      "psnr": 33.65,
+      "ssim": 0.9463,
+      "contrast": 1.057,
+      "dE_mean": 0.74,
+      "tints": [
+       [
+        0.7412,
+        0.7798,
+        0.8529
+       ]
+      ]
+     },
+     "orange": {
+      "rmse": 3.353,
+      "psnr": 37.62,
+      "ssim": 0.9724,
+      "contrast": 0.994,
+      "dE_mean": 0.21,
+      "tints": [
+       [
+        0.8296,
+        0.6046,
+        0.8375
+       ]
+      ]
+     },
+     "red": {
+      "rmse": 6.529,
+      "psnr": 31.83,
+      "ssim": 0.8773,
+      "contrast": 0.76,
+      "dE_mean": 0.74,
+      "tints": [
+       [
+        0.7372,
+        0.2921,
+        0.9257
+       ]
+      ]
+     },
+     "yellow": {
+      "rmse": 6.704,
+      "psnr": 31.6,
+      "ssim": 0.9372,
+      "contrast": 1.078,
+      "dE_mean": 0.48,
+      "tints": [
+       [
+        0.9261,
+        0.9262,
+        0.7346
+       ]
+      ]
+     }
+    }
+   }
+  ],
+  "picked": "k2mm"
+ },
+ "vegetation-grass-2": {
+  "variant": {
+   "model": "rgb",
+   "weighting": "minimax",
+   "groups": [
+    [
+     "blue",
+     "mauve",
+     "purple",
+     "turquoise",
+     "violet"
+    ],
+    [
+     "green",
+     "olive",
+     "orange",
+     "red",
+     "yellow"
+    ]
+   ]
+  },
+  "sources": {
+   "blue": "terrain/vegetation-blue-grass-2.png",
+   "green": "terrain/vegetation-green-grass-2.png",
+   "mauve": "terrain/vegetation-mauve-grass-2.png",
+   "olive": "terrain/vegetation-olive-grass-2.png",
+   "orange": "terrain/vegetation-orange-grass-2.png",
+   "purple": "terrain/vegetation-purple-grass-2.png",
+   "red": "terrain/vegetation-red-grass-2.png",
+   "turquoise": "terrain/vegetation-turquoise-grass-2.png",
+   "violet": "terrain/vegetation-violet-grass-2.png",
+   "yellow": "terrain/vegetation-yellow-grass-2.png"
+  },
+  "size": [
+   4096,
+   576
+  ],
+  "groups": [
+   {
+    "scale": 1.12,
+    "layers": [
+     {
+      "file": "vegetation-grass-2-g1.png",
+      "blend": "normal"
+     }
+    ],
+    "colors": {
+     "blue": {
+      "rmse": 5.285,
+      "psnr": 33.67,
+      "ssim": 0.971,
+      "contrast": 0.919,
+      "dE_mean": 0.77,
+      "tints": [
+       [
+        0.5768,
+        0.7788,
+        0.7415
+       ]
+      ]
+     },
+     "mauve": {
+      "rmse": 4.731,
+      "psnr": 34.63,
+      "ssim": 0.9624,
+      "contrast": 0.921,
+      "dE_mean": 0.65,
+      "tints": [
+       [
+        0.6284,
+        0.6546,
+        0.8057
+       ]
+      ]
+     },
+     "purple": {
+      "rmse": 5.181,
+      "psnr": 33.84,
+      "ssim": 0.9485,
+      "contrast": 0.866,
+      "dE_mean": 1.33,
+      "tints": [
+       [
+        0.7034,
+        0.4614,
+        0.8924
+       ]
+      ]
+     },
+     "turquoise": {
+      "rmse": 5.137,
+      "psnr": 33.92,
+      "ssim": 0.9624,
+      "contrast": 1.107,
+      "dE_mean": 1.85,
+      "tints": [
+       [
+        0.795,
+        0.8929,
+        0.492
+       ]
+      ]
+     },
+     "violet": {
+      "rmse": 5.195,
+      "psnr": 33.82,
+      "ssim": 0.9742,
+      "contrast": 0.902,
+      "dE_mean": 1.26,
+      "tints": [
+       [
+        0.8929,
+        0.4452,
+        0.5736
+       ]
+      ]
+     }
+    }
+   },
+   {
+    "scale": 1.0,
+    "layers": [
+     {
+      "file": "vegetation-grass-2-g2.png",
+      "blend": "normal"
+     }
+    ],
+    "colors": {
+     "green": {
+      "rmse": 6.939,
+      "psnr": 31.3,
+      "ssim": 0.9475,
+      "contrast": 0.956,
+      "dE_mean": 0.81,
+      "tints": [
+       [
+        0.7137,
+        0.7967,
+        0.9998
+       ]
+      ]
+     },
+     "olive": {
+      "rmse": 4.987,
+      "psnr": 34.17,
+      "ssim": 0.9552,
+      "contrast": 1.074,
+      "dE_mean": 0.36,
+      "tints": [
+       [
+        0.862,
+        0.9012,
+        0.9276
+       ]
+      ]
+     },
+     "orange": {
+      "rmse": 4.836,
+      "psnr": 34.44,
+      "ssim": 0.963,
+      "contrast": 1.042,
+      "dE_mean": 0.32,
+      "tints": [
+       [
+        0.92,
+        0.6619,
+        0.8811
+       ]
+      ]
+     },
+     "red": {
+      "rmse": 7.369,
+      "psnr": 30.78,
+      "ssim": 0.8425,
+      "contrast": 0.777,
+      "dE_mean": 0.29,
+      "tints": [
+       [
+        0.8308,
+        0.3297,
+        0.8941
+       ]
+      ]
+     },
+     "yellow": {
+      "rmse": 7.236,
+      "psnr": 30.94,
+      "ssim": 0.9341,
+      "contrast": 1.005,
+      "dE_mean": 0.24,
+      "tints": [
+       [
+        1.0,
+        1.0,
+        0.8469
+       ]
+      ]
+     }
+    }
+   }
+  ],
+  "picked": "k2mm"
+ },
+ "volcanic-heat-1": {
+  "variant": {
+   "model": "rgb",
+   "weighting": "minimax"
+  },
+  "sources": {
+   "blue": "terrain/volcanic-blue-heat-1.png",
+   "green": "terrain/volcanic-green-heat-1.png",
+   "orange": "terrain/volcanic-orange-heat-1.png",
+   "purple": "terrain/volcanic-purple-heat-1.png"
+  },
+  "size": [
+   4096,
+   576
+  ],
+  "groups": [
+   {
+    "scale": 1.18,
+    "layers": [
+     {
+      "file": "volcanic-heat-1.png",
+      "blend": "normal"
+     }
+    ],
+    "colors": {
+     "blue": {
+      "rmse": 1.229,
+      "psnr": 46.34,
+      "ssim": 0.9965,
+      "contrast": 0.995,
+      "dE_mean": 0.18,
+      "tints": [
+       [
+        0.7096,
+        0.8229,
+        0.8457
+       ]
+      ]
+     },
+     "green": {
+      "rmse": 1.217,
+      "psnr": 46.43,
+      "ssim": 0.9974,
+      "contrast": 1.003,
+      "dE_mean": 0.14,
+      "tints": [
+       [
+        0.7698,
+        0.8471,
+        0.709
+       ]
+      ]
+     },
+     "orange": {
+      "rmse": 1.221,
+      "psnr": 46.4,
+      "ssim": 0.9976,
+      "contrast": 0.99,
+      "dE_mean": 0.2,
+      "tints": [
+       [
+        0.8466,
+        0.7689,
+        0.7071
+       ]
+      ]
+     },
+     "purple": {
+      "rmse": 1.2,
+      "psnr": 46.55,
+      "ssim": 0.9958,
+      "contrast": 0.994,
+      "dE_mean": 0.21,
+      "tints": [
+       [
+        0.815,
+        0.7073,
+        0.8426
+       ]
+      ]
+     }
+    }
+   }
+  ],
+  "picked": "minimax"
+ },
+ "volcanic-heat-2": {
+  "variant": {
+   "model": "rgb",
+   "weighting": "minimax",
+   "groups": [
+    [
+     "blue",
+     "purple"
+    ],
+    [
+     "green",
+     "orange"
+    ]
+   ]
+  },
+  "sources": {
+   "blue": "terrain/volcanic-blue-heat-2.png",
+   "green": "terrain/volcanic-green-heat-2.png",
+   "orange": "terrain/volcanic-orange-heat-2.png",
+   "purple": "terrain/volcanic-purple-heat-2.png"
+  },
+  "size": [
+   4096,
+   576
+  ],
+  "groups": [
+   {
+    "scale": 1.25,
+    "layers": [
+     {
+      "file": "volcanic-heat-2-g1.png",
+      "blend": "normal"
+     }
+    ],
+    "colors": {
+     "blue": {
+      "rmse": 2.987,
+      "psnr": 38.63,
+      "ssim": 0.9951,
+      "contrast": 0.996,
+      "dE_mean": 0.16,
+      "tints": [
+       [
+        0.6664,
+        0.8003,
+        0.8
+       ]
+      ]
+     },
+     "purple": {
+      "rmse": 3.047,
+      "psnr": 38.45,
+      "ssim": 0.989,
+      "contrast": 0.989,
+      "dE_mean": 0.14,
+      "tints": [
+       [
+        0.8004,
+        0.6557,
+        0.8009
+       ]
+      ]
+     }
+    }
+   },
+   {
+    "scale": 1.18,
+    "layers": [
+     {
+      "file": "volcanic-heat-2-g2.png",
+      "blend": "normal"
+     }
+    ],
+    "colors": {
+     "green": {
+      "rmse": 3.62,
+      "psnr": 36.96,
+      "ssim": 0.9951,
+      "contrast": 0.992,
+      "dE_mean": 0.18,
+      "tints": [
+       [
+        0.708,
+        0.846,
+        0.8457
+       ]
+      ]
+     },
+     "orange": {
+      "rmse": 3.616,
+      "psnr": 36.97,
+      "ssim": 0.9892,
+      "contrast": 0.998,
+      "dE_mean": 0.2,
+      "tints": [
+       [
+        0.8476,
+        0.7049,
+        0.8474
+       ]
+      ]
+     }
+    }
+   }
+  ],
+  "picked": "k2mm"
+ },
+ "volcanic-heat-3": {
+  "variant": {
+   "model": "rgb",
+   "weighting": "minimax",
+   "groups": [
+    [
+     "blue",
+     "purple"
+    ],
+    [
+     "green",
+     "orange"
+    ]
+   ]
+  },
+  "sources": {
+   "blue": "terrain/volcanic-blue-heat-3.png",
+   "green": "terrain/volcanic-green-heat-3.png",
+   "orange": "terrain/volcanic-orange-heat-3.png",
+   "purple": "terrain/volcanic-purple-heat-3.png"
+  },
+  "size": [
+   4096,
+   576
+  ],
+  "groups": [
+   {
+    "scale": 1.25,
+    "layers": [
+     {
+      "file": "volcanic-heat-3-g1.png",
+      "blend": "normal"
+     }
+    ],
+    "colors": {
+     "blue": {
+      "rmse": 4.118,
+      "psnr": 35.84,
+      "ssim": 0.9918,
+      "contrast": 0.994,
+      "dE_mean": 0.17,
+      "tints": [
+       [
+        0.5892,
+        0.7997,
+        0.7987
+       ]
+      ]
+     },
+     "purple": {
+      "rmse": 4.226,
+      "psnr": 35.61,
+      "ssim": 0.9679,
+      "contrast": 0.977,
+      "dE_mean": 0.22,
+      "tints": [
+       [
+        0.7998,
+        0.5682,
+        0.7994
+       ]
+      ]
+     }
+    }
+   },
+   {
+    "scale": 1.18,
+    "layers": [
+     {
+      "file": "volcanic-heat-3-g2.png",
+      "blend": "normal"
+     }
+    ],
+    "colors": {
+     "green": {
+      "rmse": 5.365,
+      "psnr": 33.54,
+      "ssim": 0.9942,
+      "contrast": 0.986,
+      "dE_mean": 0.77,
+      "tints": [
+       [
+        0.5418,
+        0.8474,
+        0.8453
+       ]
+      ]
+     },
+     "orange": {
+      "rmse": 5.36,
+      "psnr": 33.55,
+      "ssim": 0.9563,
+      "contrast": 1.002,
+      "dE_mean": 0.83,
+      "tints": [
+       [
+        0.8473,
+        0.541,
+        0.8479
+       ]
+      ]
+     }
+    }
+   }
+  ],
+  "picked": "k2mm"
+ },
+ "volcanic-heat-4": {
+  "variant": {
+   "model": "rgb",
+   "weighting": "minimax",
+   "groups": [
+    [
+     "blue",
+     "purple"
+    ],
+    [
+     "green",
+     "orange"
+    ]
+   ]
+  },
+  "sources": {
+   "blue": "terrain/volcanic-blue-heat-4.png",
+   "green": "terrain/volcanic-green-heat-4.png",
+   "orange": "terrain/volcanic-orange-heat-4.png",
+   "purple": "terrain/volcanic-purple-heat-4.png"
+  },
+  "size": [
+   4096,
+   576
+  ],
+  "groups": [
+   {
+    "scale": 1.18,
+    "layers": [
+     {
+      "file": "volcanic-heat-4-g1.png",
+      "blend": "normal"
+     }
+    ],
+    "colors": {
+     "blue": {
+      "rmse": 6.072,
+      "psnr": 32.46,
+      "ssim": 0.9948,
+      "contrast": 0.986,
+      "dE_mean": 0.7,
+      "tints": [
+       [
+        0.4709,
+        0.848,
+        0.8475
+       ]
+      ]
+     },
+     "purple": {
+      "rmse": 6.127,
+      "psnr": 32.39,
+      "ssim": 0.9216,
+      "contrast": 1.102,
+      "dE_mean": 0.95,
+      "tints": [
+       [
+        0.847,
+        0.4379,
+        0.8472
+       ]
+      ]
+     }
+    }
+   },
+   {
+    "scale": 1.25,
+    "layers": [
+     {
+      "file": "volcanic-heat-4-g2.png",
+      "blend": "normal"
+     }
+    ],
+    "colors": {
+     "green": {
+      "rmse": 6.977,
+      "psnr": 31.26,
+      "ssim": 0.9967,
+      "contrast": 1.016,
+      "dE_mean": 1.84,
+      "tints": [
+       [
+        0.3233,
+        0.7999,
+        0.8006
+       ]
+      ]
+     },
+     "orange": {
+      "rmse": 7.005,
+      "psnr": 31.22,
+      "ssim": 0.9175,
+      "contrast": 1.139,
+      "dE_mean": 2.86,
+      "tints": [
+       [
+        0.7994,
+        0.3237,
+        0.7977
+       ]
+      ]
+     }
+    }
+   }
+  ],
+  "picked": "k2mm"
+ }
+}

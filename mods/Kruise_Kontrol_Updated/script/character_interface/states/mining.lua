@@ -54,11 +54,18 @@ function Mining:get_selection_position()
 end
 
 function Mining:update_player_entity_setting(bool)
-  if self.character.entity.player then
-    if self.character.entity.player.valid then
-      self.character.entity.player.game_view_settings.update_entity_selection = bool
-    end
+  -- Write the view setting only when it changes, not every tick.
+  if self.entity_selection_setting == bool then return end
+  self.entity_selection_setting = bool
+  local player = self.character.entity.player
+  if player and player.valid then
+    player.game_view_settings.update_entity_selection = bool
   end
+end
+
+local prototype_minable = function(prototype)
+  local properties = prototype.mineable_properties
+  return properties.minable and not properties.required_fluid
 end
 
 function Mining:update()
@@ -68,7 +75,11 @@ function Mining:update()
     return
   end
 
-  if not (self.target.minable and self.target.prototype.mineable_properties.minable and not self.target.prototype.mineable_properties.required_fluid) then
+  if self.prototype_minable == nil then
+    self.prototype_minable = prototype_minable(self.target.prototype) and true or false
+  end
+
+  if not (self.prototype_minable and self.target.minable) then
     --We cannot mine it
     self:finish()
     return

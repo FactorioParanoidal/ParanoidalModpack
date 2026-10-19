@@ -19,19 +19,21 @@ local api = {
 ---@param tint data.Color
 ---@return data.Color
 local function normalize_tint(tint)
-	local r = tint.r or tint[1]
-	local g = tint.g or tint[2]
-	local b = tint.b or tint[3]
-	local a
+	local r = tint.r or tint[1] or 0
+	local g = tint.g or tint[2] or 0
+	local b = tint.b or tint[3] or 0
+	local a = tint.a or tint[4]
 
-	if r > 255 or g > 255 or b > 255 then
+	-- Paranoidal: Factorio treats a color as 0-255 when any component is above 1, not 255;
+	-- a missing alpha must not be divided (it crashed with a nil arithmetic error).
+	if r > 1 or g > 1 or b > 1 or (a and a > 1) then
 		r = r / 255
 		g = g / 255
 		b = b / 255
-		a = tint.a / 255 or tint[4] / 255 or 1
+		a = a and a / 255
 	end
 
-	return { r = r, g = g, b = b, a = a }
+	return { r = r, g = g, b = b, a = a or 1 }
 end
 
 --- Adjust the alpha value of a given tint
@@ -516,10 +518,10 @@ local function create_or_update_remnants_core(transport_belt_name, animation)
 		remnants = {
 			type = "corpse",
 			name = "prismatic-belts-" .. transport_belt_name .. "-remnants",
+			-- Paranoidal: localised suffix instead of the hard-coded English " (remnant)".
 			localised_name = {
-				"",
+				"prismatic-belts.remnants-name",
 				(data.raw["transport-belt"][transport_belt_name].localised_name or { "entity-name." .. transport_belt_name }),
-				" (remnant)",
 			},
 			icons = data.raw["transport-belt"][transport_belt_name].icons,
 			icon = data.raw["transport-belt"][transport_belt_name].icon,
@@ -626,17 +628,6 @@ function api.create_or_update_remnants(transport_belt_name, inputs)
 	create_or_update_remnants_core(transport_belt_name, animation)
 end
 
--- Computes an integer hash code using a djb2-style algorithm for the provided string.
----@param s string
----@return integer
-local function hash_string(s)
-	local h = 5381
-	for i = 1, #s do
-		h = (h * 33 + string.byte(s, i)) % 2147483647
-	end
-	return h
-end
-
 ---Converts the provided tint to a string.
 ---@param t data.Color
 ---@return string
@@ -647,13 +638,15 @@ local function format_tint(t)
 	return string.format("_t%.3f_%.3f_%.3f_%.3f", t.r or t[1] or 0, t.g or t[2] or 0, t.b or t[3] or 0, t.a or t[4] or 0)
 end
 
----Computes a hash code that uniquely identifies an animation set in use by the provided `entity` by
+---Returns a key that uniquely identifies an animation set in use by the provided `entity` by
 ---filename(s), tint(s), and speed.
 ---
 ---Tint and speed are required to differentiate belt animation sets that are reused either as
 ---colored sprite sets or for multiple belt speeds.
+---
+---Paranoidal: the key itself is compared instead of its djb2 hash, so distinct sets cannot collide.
 ---@param entity data.TransportBeltConnectablePrototype
----@return integer? # The hash code, if an animation set exists; otherwise, `nil`.
+---@return string? # The key, if an animation set exists; otherwise, `nil`.
 local function get_animation_set_identity(entity)
 	if not entity.belt_animation_set or not entity.belt_animation_set.animation_set then
 		return
@@ -663,15 +656,15 @@ local function get_animation_set_identity(entity)
 	local speed = tostring(entity.speed)
 
 	if animation_set.filename then
-		return hash_string(animation_set.filename .. format_tint(animation_set.tint) .. speed)
+		return animation_set.filename .. format_tint(animation_set.tint) .. speed
 	elseif animation_set.layers then
 		local parts = {}
-		for i, layer in ipairs(animation_set.layers) do
+		for _, layer in ipairs(animation_set.layers) do
 			if layer.filename then
-				parts[i] = layer.filename .. format_tint(layer.tint) .. speed
+				parts[#parts + 1] = layer.filename .. format_tint(layer.tint) .. speed -- no holes for table.concat
 			end
 		end
-		return hash_string(table.concat(parts, "|"))
+		return table.concat(parts, "|")
 	end
 end
 
@@ -694,7 +687,7 @@ local supported_types = {
 ---@param animation_set data.TransportBeltAnimationSetWithCorners
 ---@param icon_inputs PrismaticBelts.TransportBeltIconInputs?
 function api.apply_belt_animation_set_and_update_related_connectables(transport_belt, animation_set, icon_inputs)
-	-- The hashed identifier of the belt animation set to be replaced
+	-- The identifier of the belt animation set to be replaced
 	local set_id_to_replace = get_animation_set_identity(transport_belt)
 	if not set_id_to_replace then
 		error("Unable to resolve transport belt animation set identity for belt '" .. transport_belt.name .. "'.")
