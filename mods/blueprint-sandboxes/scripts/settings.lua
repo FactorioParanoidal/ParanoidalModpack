@@ -23,8 +23,14 @@ end
 function Settings.OnRuntimeSettingChanged(event)
     if event.setting == Settings.isolationLevel then
         Isolation.OnLevelChanged(event)
+        for _, player in pairs(game.players) do
+            ToggleGUI.Update(player)
+        end
     elseif event.setting == Settings.allowAllTech then
         Research.SyncAllForces()
+        for _, player in pairs(game.players) do
+            ToggleGUI.Update(player)
+        end
     elseif event.setting == Settings.onlyAdminsForceReset then
         for _, player in pairs(game.players) do
             ToggleGUI.Update(player)

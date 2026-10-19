@@ -217,6 +217,7 @@ script.on_event(defines.events.on_gui_selection_state_changed, function (event)
     local _ = ToggleGUI.OnGuiDropdown(event) or SurfacePropsGUI.OnGuiDropdown(event)
 end)
 script.on_event(defines.events.on_gui_elem_changed, SelectionPlanner.OnPrototypeSelected)
+script.on_event(defines.events.on_gui_checked_state_changed, ToggleGUI.OnGuiChecked)
 
 -- Periodic
 script.on_nth_tick(RemoteView.chartAllSandboxesTick, RemoteView.ChartAndGenerateOccupiedSandboxes)

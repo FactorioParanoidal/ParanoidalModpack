@@ -9,6 +9,7 @@ ToggleGUI.resetButton = ToggleGUI.pfx .. "reset-button"
 ToggleGUI.entitySelectionPlannerGenerator = ToggleGUI.pfx .. "entity-selection-planner-generator"
 ToggleGUI.tileSelectionPlannerGenerator = ToggleGUI.pfx .. "tile-selection-planner-generator"
 ToggleGUI.entranceButton = ToggleGUI.pfx .. "enter"
+ToggleGUI.allowAllTechCheckbox = ToggleGUI.pfx .. "allow-all-technology"
 
 ---@param player LuaPlayer
 function ToggleGUI.Init(player)
@@ -124,6 +125,21 @@ function ToggleGUI.Init(player)
         elem_type = "tile",
     }
 
+    -- Paranoidal: quick toggle for the runtime-global "Unlock all Technology" map setting
+    local optionsFrame = frame.add {
+        type = "frame",
+        style = BPSB.pfx .. "shallow-semi-padded-frame",
+        direction = "horizontal",
+    }
+
+    optionsFrame.add {
+        type = "checkbox",
+        name = ToggleGUI.allowAllTechCheckbox,
+        caption = { "mod-setting-name." .. Settings.allowAllTech },
+        tooltip = { "gui-description." .. ToggleGUI.allowAllTechCheckbox },
+        state = settings.global[Settings.allowAllTech].value --[[@as boolean]],
+    }
+
     ToggleGUI.Update(player)
 end
 
@@ -159,6 +175,26 @@ end
 function ToggleGUI.Update(player)
     if not player.gui.left[ToggleGUI.name] then
         return
+    end
+
+    -- Paranoidal: GUIs from older saves lack the checkbox; rebuild them once
+    local allTechCheckbox = ToggleGUI.FindByName(player, ToggleGUI.allowAllTechCheckbox)
+    if not allTechCheckbox then
+        ToggleGUI.Destroy(player)
+        ToggleGUI.Init(player)
+        return
+    end
+
+    allTechCheckbox.state = settings.global[Settings.allowAllTech].value --[[@as boolean]]
+    if not Isolation.IsFull() then
+        allTechCheckbox.enabled = false
+        allTechCheckbox.tooltip = { "gui-description." .. ToggleGUI.allowAllTechCheckbox .. "-no-isolation" }
+    elseif game.is_multiplayer and not player.admin then
+        allTechCheckbox.enabled = false
+        allTechCheckbox.tooltip = { "gui-description." .. ToggleGUI.allowAllTechCheckbox .. "-only-admins" }
+    else
+        allTechCheckbox.enabled = true
+        allTechCheckbox.tooltip = { "gui-description." .. ToggleGUI.allowAllTechCheckbox }
     end
 
     ToggleGUI.FindByName(player, ToggleGUI.selectedSandboxDropdown).selected_index = Sandbox.GetSandboxChoiceFor(player, player.surface) or storage.players[player.index].selectedSandbox
@@ -207,6 +243,29 @@ function ToggleGUI.OnGuiDropdown(event)
         return true
     end
     return false
+end
+
+---@param event EventData.on_gui_checked_state_changed
+function ToggleGUI.OnGuiChecked(event)
+    local element = event.element
+    if not (element and element.valid and element.name == ToggleGUI.allowAllTechCheckbox) then
+        return false
+    end
+    local player = game.players[event.player_index]
+    local newValue = element.state
+    if not Isolation.IsFull() or (game.is_multiplayer and not player.admin) then
+        element.state = not newValue
+        return true
+    end
+    if settings.global[Settings.allowAllTech].value ~= newValue then
+        settings.global[Settings.allowAllTech] = { value = newValue }
+        -- Same reaction as changing it in Map Settings (idempotent if the event fires too)
+        Research.SyncAllForces()
+        for _, p in pairs(game.players) do
+            ToggleGUI.Update(p)
+        end
+    end
+    return true
 end
 
 ---@param event EventData.on_gui_click
