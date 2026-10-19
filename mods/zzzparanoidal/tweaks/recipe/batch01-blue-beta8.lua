@@ -143,6 +143,41 @@ end
 paralib.bobmods.lib.tech.remove_recipe_unlock("angels-slag-processing-1", "angels-slag-processing-2")
 paralib.bobmods.lib.tech.add_recipe_unlock("angels-slag-processing-2", "angels-slag-processing-2")
 
+-- Шлам → руды 4–6 (кротиниум, рубит, бобмониум), как в Beta 8: Angels 2.0 сделал их скрытыми заглушками,
+-- руды 4–6 шли парами в рецептах 1–3, которые выше уже стали одиночными. Кристаллизатор II, 50 → 3×90 %, 2 с;
+-- 5 и 6 открывает шлак I, 4 — шлак II. Названия и иконки 1–6 — по одной руде.
+local slag_base = data.raw.recipe["angels-slag-processing-1"]
+if slag_base then
+	local tints = slag_base.icons and slag_base.icons[4] and {
+		top = slag_base.icons[2].tint, mid = slag_base.icons[3].tint, bot = slag_base.icons[4].tint }
+	local unlocks = { [4] = "angels-slag-processing-2", [5] = "angels-slag-processing-1", [6] = "angels-slag-processing-1" }
+	for index = 1, 6 do
+		local name = "angels-slag-processing-" .. index
+		local ore = "angels-ore" .. index
+		local recipe = data.raw.recipe[name]
+		if recipe and data.raw.item[ore] then
+			if index >= 4 then
+				recipe.category = "angels-crystallizing-2"
+				recipe.energy_required = 2
+				recipe.ingredients = { fluid("angels-mineral-sludge", 50) }
+				recipe.results = { { type = "item", name = ore, amount = 3, probability = 0.9 } }
+				recipe.main_product = nil
+				recipe.hidden = false
+				recipe.enabled = false
+				recipe.subgroup = slag_base.subgroup
+				recipe.order = "0" .. index
+				recipe.crafting_machine_tint = slag_base.crafting_machine_tint
+				paralib.bobmods.lib.tech.add_recipe_unlock(unlocks[index], name)
+			end
+			recipe.localised_name = { "recipe-name.angels-slag_processing_1", { "item-name." .. ore } }
+			recipe.icons = angelsmods.functions.create_liquid_recipe_icon({ ore }, tints and table.deepcopy(tints))
+			recipe.icon = nil
+		else
+			log("zzzparanoidal batch01: slag recipe or ore not found: " .. name)
+		end
+	end
+end
+
 -- Плазменные турели I–II снова на зелёной науке: предки Beta 8 вместо материалов рецептов 2.0.
 -- Лазерные турели II у плазмы II оставлены (ПР-040, зелёная ступень).
 if data.raw.technology["bob-plasma-turrets-1"] then
