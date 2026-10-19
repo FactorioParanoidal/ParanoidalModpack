@@ -96,6 +96,14 @@ function M.of(state, name)
     return quality
 end
 
+-- How many of `count` items stay normal regardless of the rolled quality (config.normal_share).
+function M.normal_count(name, count)
+    local rule = config.normal_share and config.normal_share[name]
+    if not rule or count <= 0 then return 0 end
+    local wanted = math.max(math.ceil(count * (rule.share or 0)), rule.min or 0)
+    return math.min(count, wanted)
+end
+
 function M.available(name)
     if prototypes.item[name] then return true end
     log("zzzparanoidal-shipwreck: optional start item unavailable: " .. name)

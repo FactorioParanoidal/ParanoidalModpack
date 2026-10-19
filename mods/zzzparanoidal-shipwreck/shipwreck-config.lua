@@ -23,6 +23,13 @@ config.levels = {
     rich = {amount = 1, bonus = true, weights = {25, 30, 20, 13, 8, 4}},
 }
 config.level_order = {"minimum", "medium", "rich"}
+-- Share of every start crash count of these items that is always normal quality, at least `min`
+-- (never more than the count); the rest gets the rolled quality. User decision 2026-10-19: half of
+-- all repair packs, at least 10, so the first refine workshop (10 normal repair packs) can be made
+-- on the rich and minimum levels.
+config.normal_share = {
+    ["repair-pack"] = {share = 0.5, min = 10},
+}
 config.quality_steps = 5 -- at most 5 steps: defects ic-defect-1..5, bonus up to normal + 5
 config.defect_prefix = "ic-defect-"
 config.classification = "ic-defects-classification" -- mod-data of ic-more-qualities

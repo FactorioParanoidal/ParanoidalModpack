@@ -14,7 +14,9 @@ levels, the AAI crash scene and the salvaged generator values.
   quality; other wrecks (ruins) keep the prototype loot.
 - Quality: one roll per item type per map from the `ic-defects-classification` mod-data of
   ic-more-qualities. Minimum: defect-capable finished items and all electric poles get `ic-defect-1…5` by the level weights (5/15/25/25/20/10%, 0 = normal); rich: every
-  finished item gets 0…5 steps along `normal.next` by the level weights (25/30/20/13/8/4%); materials and belts/undergrounds/splitters/loaders are always normal. Without
+  finished item gets 0…5 steps along `normal.next` by the level weights (25/30/20/13/8/4%); materials and belts/undergrounds/splitters/loaders are always normal. `config.normal_share`:
+  half of all start repair packs (rounded up, at least 10) is always normal, the rest gets the
+  rolled quality, so the first refine workshop can be crafted on every level. Without
   ic-more-qualities everything is normal.
 - Salvaged generator: production × `default_multiplier`, buffer × `accumulator_capacity_multiplier`
   of the entity quality, set when built and on configuration change.

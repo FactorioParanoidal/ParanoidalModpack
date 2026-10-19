@@ -59,12 +59,18 @@ local function stacks(state, entry)
     local count = quality.roll(entry)
     if count <= 0 or not quality.available(name) then return {} end
     local size = prototypes.item[name].stack_size
+    local rolled = quality.of(state, name)
+    local normal = rolled == "normal" and count or quality.normal_count(name, count)
     local list = {}
-    while count > 0 do
-        local amount = math.min(count, size)
-        list[#list + 1] = {name = name, count = amount, quality = quality.of(state, name)}
-        count = count - amount
+    local function add(total, quality_name)
+        while total > 0 do
+            local amount = math.min(total, size)
+            list[#list + 1] = {name = name, count = amount, quality = quality_name}
+            total = total - amount
+        end
     end
+    add(normal, "normal")
+    add(count - normal, rolled)
     return list
 end
 

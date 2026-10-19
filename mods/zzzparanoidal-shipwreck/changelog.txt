@@ -8,6 +8,7 @@ Date: 2026-10-18
     - All electric poles get defects on the minimum level, also the ones exempt from the defect system.
     - Quality steps are weighted per level in shipwreck-config.lua; rich: normal 25%, +1 30%, +2 20%, +3 13%, +4 8%, +5 4%; minimum: normal 5%, −1 15%, −2 25%, −3 25%, −4 20%, −5 10%.
     - Belts, undergrounds, splitters and loaders are always normal quality.
+    - Half of all start repair packs (rounded up, at least 10) are always normal quality without defects on every level, so the first refine workshop can be crafted; the rest gets the rolled quality.
     - Quality of the salvaged generator scales its power production and energy capacity.
   Changes:
     - The power production and energy capacity lines of the salvaged generator are shown once in the item tooltip (they were listed twice).
