@@ -30,6 +30,9 @@ for tier = 1, 3 do
         M.exempt_items[#M.exempt_items + 1] = prefix .. tier .. "-instantiated"
     end
 end
+-- Factory building 4 is a Paranoidal addition to Factorissimo (no space variant).
+M.exempt_items[#M.exempt_items + 1] = "factory-4"
+M.exempt_items[#M.exempt_items + 1] = "factory-4-instantiated"
 
 -- Groups where defects have no effect or make no sense (user decisions 2026-10-18), always standard.
 -- A finished item is exempt when its place_result has one of `entity_types`, its item type is one of

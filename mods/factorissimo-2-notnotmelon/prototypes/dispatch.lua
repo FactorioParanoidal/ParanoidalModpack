@@ -21,7 +21,7 @@ data:extend {
 }
 
 -- Pictures of the buildings for the factory list: the technology pictures show the building with its tier number.
-for tier = 1, 3 do
+for tier = 1, 4 do
     data:extend {{
         type = "sprite",
         name = "factorissimo-picture-factory-" .. tier,

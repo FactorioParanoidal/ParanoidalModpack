@@ -69,7 +69,8 @@ return {
             {["name"] = "factory-1", ["order"] = "01", ["icon"] = {["icon"] = "__zzzparanoidal__/graphics/logistics-menu-beta8/cbbf0774bf5b3bb3d917.png", ["icon_size"] = 64}},
             {["name"] = "factory-2", ["order"] = "02", ["icon"] = {["icon"] = "__zzzparanoidal__/graphics/logistics-menu-beta8/4e3cd5f5bc49ec9ca3e8.png", ["icon_size"] = 64}},
             {["name"] = "factory-3", ["order"] = "03", ["icon"] = {["icon"] = "__zzzparanoidal__/graphics/logistics-menu-beta8/4a1bf714ff6798b7afb4.png", ["icon_size"] = 64}},
-            {["name"] = "factory-circuit-connector", ["order"] = "04", ["icon"] = {["icon"] = "__zzzparanoidal__/graphics/logistics-menu-beta8/58c05ffec7ab6518ebf4.png", ["icon_size"] = 64}},
+            {["name"] = "factory-4", ["order"] = "04"}, -- 2.0: Factorissimo 4, its own icon (not in Beta 8)
+            {["name"] = "factory-circuit-connector", ["order"] = "05", ["icon"] = {["icon"] = "__zzzparanoidal__/graphics/logistics-menu-beta8/58c05ffec7ab6518ebf4.png", ["icon_size"] = 64}},
         }},
         {subgroup = "paranoidal-logistics-logistic-chests-1", order = "a-08", recipes = {
             {["name"] = "steel-chest", ["order"] = "01"},

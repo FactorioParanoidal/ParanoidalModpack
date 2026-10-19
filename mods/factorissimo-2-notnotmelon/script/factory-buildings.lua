@@ -524,7 +524,7 @@ local function create_factory_interior(layout, building)
     factorissimo.spawn_cerys_entities(factory)
 
     local radar = factory.inside_surface.create_entity {
-        name = "factory-hidden-radar",
+        name = layout.hidden_radar or "factory-hidden-radar", -- Paranoidal: building 4 needs a larger one
         position = {factory.inside_x, factory.inside_y},
         force = force,
     }
@@ -1269,6 +1269,7 @@ local clone_forbidden_prefixes = {
     "factory-1-",
     "factory-2-",
     "factory-3-",
+    "factory-4-",
     "space-factory-1-",
     "space-factory-2-",
     "space-factory-3-",

@@ -1,4 +1,15 @@
 ---------------------------------------------------------------------------------------------------
+Version: 9.12.0
+Date: 2026-10-19
+  Features:
+    - Paranoidal: factory building 4. 20x20 outside, 90x90 inside, 40 ports (10 per side, no quality ports), 7000 health. Picture: the user's art scaled uniformly to the MK3 pixel density (factor 1.71), white fringe removed, "04" painted on the green stripe like "03" on building 3; shadow: building 4 silhouette plus the MK3 cast shadow scaled by 1.25. Item icon and technology picture made from the facade. Green interior walls (factory-wall-3 picture with the hue turned to green) and a floor mosaic "04".
+    - Paranoidal: technology Architecture 4 (6000 x red, green, blue, purple, yellow science, 90 s) after Architecture 3 and Utility science pack, plus the technologies that unlock its ingredients when they exist (angels-metallurgy-3, angels-titanium-smelting-1, bob-electric-substation-2). Recipe (90 s): refined concrete 5000, titanium plate 2000, substation 2 x100 (steel 4000 and substation x200 without Bob's items); zzzparanoidal adds advanced structure components 50 and 2 factory buildings 3.
+    - Paranoidal: factory building 4 in the dispatcher (picture, building filter), in the Milestones preset addon, PM RPG experience 50 % of the level bar when launched, standard quality only like buildings 1-3.
+  Changes:
+    - Paranoidal: pollution is collected from every chunk the interior covers (16 for building 4, 4 as before for buildings 1-3).
+    - Paranoidal: the construction roboport upgrade reaches 96 tiles instead of 64, enough for the far wall of building 4 (applies to all factories, no other effect).
+    - Paranoidal: building 4 uses a hidden radar revealing two chunks around its centre instead of one.
+---------------------------------------------------------------------------------------------------
 Version: 9.11.19
 Date: 2026-10-16
   Features:

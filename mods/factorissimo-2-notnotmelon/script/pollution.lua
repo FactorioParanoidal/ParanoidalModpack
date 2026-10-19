@@ -3,7 +3,23 @@ local pollution_multipliers = {
     pollution = 1,
 }
 
-local CHUNK_OFFSETS = {{-16, -16}, {16, -16}, {-16, 16}, {16, 16}}
+-- Factory centres lie on chunk corners. The chunks covered by the interior (walls included) are collected:
+-- 4 for buildings 1-3, 16 for building 4 (Paranoidal, 90x90 inside). Cached by interior size.
+local chunk_offsets_cache = {}
+local function chunk_offsets(inside_size)
+    local offsets = chunk_offsets_cache[inside_size]
+    if offsets then return offsets end
+    local half = inside_size / 2 + 1
+    local first, last = math.floor(-half / 32), math.floor((half - 1) / 32)
+    offsets = {}
+    for cx = first, last do
+        for cy = first, last do
+            offsets[#offsets + 1] = {cx * 32 + 16, cy * 32 + 16}
+        end
+    end
+    chunk_offsets_cache[inside_size] = offsets
+    return offsets
+end
 
 --- Moves the pollution of the interior outside. Returns the pollution taken from the interior (nil when unknown).
 local function update_pollution(factory)
@@ -13,7 +29,7 @@ local function update_pollution(factory)
     local pollution = 0
     local inside_x, inside_y = factory.inside_x, factory.inside_y
     local chunk = {0, 0}
-    for _, offset in ipairs(CHUNK_OFFSETS) do
+    for _, offset in ipairs(chunk_offsets(factory.layout and factory.layout.inside_size or 30)) do
         chunk[1], chunk[2] = inside_x + offset[1], inside_y + offset[2]
         local cp = inside_surface.get_pollution(chunk)
         if cp ~= 0 then

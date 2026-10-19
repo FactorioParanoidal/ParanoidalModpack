@@ -48,6 +48,7 @@ local always_self = {
 -- и планировщики (решение пользователя 2026-10-17: их переработка не нужна).
 local excluded = {
 	["factory-1-instantiated"] = true, ["factory-2-instantiated"] = true, ["factory-3-instantiated"] = true,
+	["factory-4-instantiated"] = true,
 	["blueprint"] = true, ["blueprint-book"] = true, ["deconstruction-planner"] = true, ["upgrade-planner"] = true,
 }
 -- Как в Quality: эти рецепты не разбираются никогда.

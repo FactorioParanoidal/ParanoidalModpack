@@ -24,6 +24,7 @@ local factories = {
     ["factory-1"] = {"30×30", 16},
     ["factory-2"] = {"46×46", 24},
     ["factory-3"] = {"60×60", 32},
+    ["factory-4"] = {"90×90", 40}, -- Paranoidal
 }
 for name, info in pairs(factories) do
     add_factory_info(tanks[name], info[1], info[2])

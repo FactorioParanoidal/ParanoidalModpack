@@ -12,6 +12,12 @@ local function replaceMachine()
 		{ type = "item", name = "intermediate-structure-components", amount = 50 }
 	)
 	paralib.bobmods.lib.recipe.add_ingredient("factory-3", { type = "item", name = "factory-2", amount = 2 })
+	-- Factorissimo 4 (не было в Beta 8): та же лестница — продвинутые компоненты и два строения 3.
+	paralib.bobmods.lib.recipe.add_ingredient(
+		"factory-4",
+		{ type = "item", name = "advanced-structure-components", amount = 50 }
+	)
+	paralib.bobmods.lib.recipe.add_ingredient("factory-4", { type = "item", name = "factory-3", amount = 2 })
 
 	paralib.bobmods.lib.recipe.add_ingredient(
 		"angels-salination-plant",

@@ -2,6 +2,7 @@
 Version: 9.1.5
 Date: 2026. 10. 14
   Changes:
+    - Factorissimo factory building 4 (packed and unpacked) is exempt from defects like factory buildings 1-3.
     - Quality control 1-10 technologies have their own icons instead of the quality module: a titanium gear under a magnifier, cracked at levels 1-6 (fewer cracks with each stage), clean at 7-8 and golden with a quality mark at 9-10. The level marker layer is unchanged.
     - Version number starts with 9 (Paranoidal fork): the Mod Portal never offers an "update" over local changes.
     - Equipment grids (armor, vehicles, wagons) grow gently with quality: +100% of the area every 5 tiers for the 5x5 modular armor (tier 5 x2, tier 10 x3, last tier x9) instead of +level cells per side. One bonus per quality is shared by every grid: +0 at tier 1, +2 at tier 5, +4 at tier 10, +10 at the last tier. Bigger grids grow less, the smallest vehicle grids more.

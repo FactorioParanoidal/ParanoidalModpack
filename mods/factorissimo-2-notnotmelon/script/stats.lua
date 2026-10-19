@@ -19,7 +19,7 @@ local CLEAN_MILESTONE_TICKS = HOUR
 local POWER_OK = 0.99
 local CLEAN_EPSILON = 0.01 -- released pollution per second treated as none
 local LAUNCH_POWER = 0.5
-local LAUNCH_XP_SHARE = {0.10, 0.20, 0.35} -- share of the current level bar of PM RPG System, by tier
+local LAUNCH_XP_SHARE = {0.10, 0.20, 0.35, 0.50} -- share of the current level bar of PM RPG System, by tier
 
 local MILESTONE_NESTED = "factory-milestone-nested"
 local MILESTONE_CLEAN = "factory-milestone-clean"

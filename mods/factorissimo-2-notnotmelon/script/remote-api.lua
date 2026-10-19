@@ -257,6 +257,7 @@ remote_api.milestones_preset_addons = function()
                 {type = "item", name = "factory-1", quantity = 1},
                 {type = "item", name = "factory-2", quantity = 1},
                 {type = "item", name = "factory-3", quantity = 1},
+                {type = "item", name = "factory-4", quantity = 1},
                 {type = "technology", name = "factory-milestone-nested", quantity = 1},
                 {type = "technology", name = "factory-milestone-clean", quantity = 1},
             },

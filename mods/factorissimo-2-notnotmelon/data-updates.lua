@@ -114,3 +114,4 @@ end
 data.raw.recipe["factory-1-instantiated-recycling"] = nil
 data.raw.recipe["factory-2-instantiated-recycling"] = nil
 data.raw.recipe["factory-3-instantiated-recycling"] = nil
+data.raw.recipe["factory-4-instantiated-recycling"] = nil

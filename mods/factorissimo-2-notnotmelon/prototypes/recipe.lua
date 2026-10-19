@@ -59,6 +59,31 @@ data:extend {
     }
 }
 
+-- Paranoidal: factory building 4, the next step after building 3 (concrete -> refined concrete,
+-- steel -> titanium, substation -> substation 2). Without Bob's/Angel's items steel and substations are used.
+-- zzzparanoidal adds advanced structure components and two factory buildings 3, like it does for buildings 2 and 3.
+local function first_item(candidates)
+    for _, candidate in ipairs(candidates) do
+        if data.raw.item[candidate[1]] then return {type = "item", name = candidate[1], amount = candidate[2]} end
+    end
+end
+
+data:extend {{
+    type = "recipe",
+    name = "factory-4",
+    enabled = false,
+    energy_required = 90,
+    ingredients = {
+        {type = "item", name = "refined-concrete", amount = 5000},
+        first_item {{"bob-titanium-plate", 2000}, {"steel-plate", 4000}},
+        first_item {{"bob-substation-2", 100}, {"substation", 200}},
+    },
+    results = {{type = "item", name = "factory-4", amount = 1}},
+    main_product = "factory-4",
+    localised_name = {"entity-name.factory-4"},
+    category = data.raw["recipe-category"]["metallurgy-or-assembling"] and "metallurgy-or-assembling" or nil
+}}
+
 -- small vanilla change to allow factories to be crafted at the start of the game
 if data.raw["recipe-category"]["metallurgy-or-assembling"] then
     table.insert(data.raw["assembling-machine"]["assembling-machine-1"].crafting_categories or {}, "metallurgy-or-assembling")
