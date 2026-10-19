@@ -4,16 +4,20 @@
 -- player base and attacks its most defended spot (the player chunk with most turrets in the 3x3 around).
 --  * unit: same faction as the nest, one tier above the units the nest spawns now; ground biters below 10%
 --    evolution, biters/spitters 50/50 from 10%, biters/spitters/flyers by a third from 30% (fallback to what the
---    faction has). Non-Rampant nests (vanilla, Bob) give their next stronger unit of the same kind;
+--    faction has). Non-Rampant nests (vanilla, Bob) give their next stronger unit of the same kind. Units whose
+--    attack damages themselves (suicide and nuclear biters) are never chosen: they would blow their pool up;
 --  * health: x10 (champion) / x50 (hour boss) of the ordinary unit of that kind, kept as a script pool on top of
 --    the engine health; the health bar shows the pool share. A champion moves at half the speed of those units;
 --  * looks: a random colour (one of the six Bob artifact colours) as a glow (+ light at night), a silver / bigger
 --    gold star above it. The body colour cannot be changed at runtime;
---  * below 15% of the pool it walks back to a nest, regenerates there, gets one of 200 names (shown under the star)
---    and attacks again;
---  * death: the loot is one big artifact of its colour; the corpse stays 1 minute and keeps the glow;
+--  * below 35% of the pool it walks back to a nest ignoring enemies (an own command of the unit: a new command of
+--    its group does not stop the fight the unit is in) and takes 4 times less damage on the way (a blocked way ends
+--    within 32 tiles of the nest or is retried around it), regenerates there, gets one of 200 names (shown under
+--    the star) and attacks again;
+--  * death: the loot is one big artifact of its colour; the corpse stays 3 minutes and keeps the glow;
 --  * only the hour boss is announced ("You hear a strange sound in the distance...");
---  * Rampant never packs champions (SquadCompression), they live in their own script-driven group.
+--  * Rampant never packs champions (SquadCompression), they live in their own script-driven group (no group while
+--    retreating).
 -- Map setting rampantFixed--champions switches new spawns. Data: universe.champions, created on first use.
 
 if championsG then
@@ -42,15 +46,18 @@ champions.SETTING = "rampantFixed--champions"
 
 local UPDATE_TICKS = 60             -- champions.update runs every 60 ticks (control.lua)
 local RETRY_TICKS = 3600            -- nothing could be spawned: try again in a minute
-local RETREAT_SHARE = 0.15          -- of the health pool
+local RETREAT_SHARE = 0.35          -- of the health pool
+local RETREAT_DAMAGE_K = 0.25       -- damage taken while retreating
 local REGEN_TICKS = 90 * 60         -- full pool regenerated at a nest in 90 seconds
 local RETREAT_TIMEOUT = 5 * 3600    -- regenerates where it is if it cannot reach a nest
 local HOME_RADIUS = 12
+local HOME_NEAR = 32                -- near enough to the nest once the way there ends or is blocked
+local RETREAT_DETOUR = 12           -- a stuck champion tries a free point this far around the nest
 local ATTACK_RADIUS = 24
 local NEST_RANGE = 12 * CHUNK_SIZE  -- nests within this distance from the target
 local FALLBACK_NESTS = 6            -- otherwise the nearest ones
 local SPAWN_TRIES = 12
-local CORPSE_TICKS = 60 * 60
+local CORPSE_TICKS = 3 * 3600
 local NAME_COUNT = 200
 local NAME_LIFT = 0.35              -- name centre above the selection box top
 
@@ -175,6 +182,38 @@ local function excludedSpawner(name)
     return sFind(name, "^maf") or sFind(name, "^bm%-")    -- Big Monsters spawners
 end
 
+-- an attack that damages the attacker itself (suicide and nuclear biters); cached per prototype name
+local selfDestructCache = {}
+
+local function deliveryHurtsSource(deliveries)
+    for _, delivery in pairs(deliveries or {}) do
+        for _, effect in pairs(delivery.source_effects or {}) do
+            if effect.type == "damage" then
+                return true
+            end
+        end
+    end
+    return false
+end
+
+local function selfDestructs(name)
+    local cached = selfDestructCache[name]
+    if cached == nil then
+        cached = false
+        local prototype = prototypes.entity[name]
+        local attack = prototype and prototype.attack_parameters
+        local ammoType = attack and attack.ammo_type
+        for _, trigger in pairs((ammoType and ammoType.action) or {}) do
+            if deliveryHurtsSource(trigger.action_delivery) then
+                cached = true
+                break
+            end
+        end
+        selfDestructCache[name] = cached
+    end
+    return cached
+end
+
 -- boss unit and the ordinary unit it is compared with, or nil if the nest has no unit of that kind
 local function resolveBoss(spawnerPrototype, desiredType, evo)
     local units = spawnerPrototype.result_units
@@ -202,7 +241,7 @@ local function resolveBoss(spawnerPrototype, desiredType, evo)
         local prefix = faction .. "-" .. desiredType .. "-v" .. variation .. "-t"
         local bossName = prefix .. mMin(tier + 1, MAX_TIER) .. "-rampant"
         local localName = prefix .. tier .. "-rampant"
-        if entityPrototypes[bossName] and entityPrototypes[localName] then
+        if entityPrototypes[bossName] and entityPrototypes[localName] and not selfDestructs(bossName) then
             return bossName, localName
         end
         return nil
@@ -224,7 +263,11 @@ local function resolveBoss(spawnerPrototype, desiredType, evo)
             end
         end
     end
-    return stronger or best, best
+    local bossName = stronger or best
+    if selfDestructs(bossName) then
+        return nil
+    end
+    return bossName, best
 end
 
 local function typesToTry(evo, forced)
@@ -469,15 +512,27 @@ local function orderAttack(record)
     group.start_moving()
 end
 
-local function orderRetreat(record)
-    local group = ensureGroup(record)
-    group.set_command({
+-- an own command of the unit: a new command of its group leaves a member that is fighting where it is. The group
+-- is dropped (the unit leaves it with the command anyway); the rest at the nest makes a new one
+local function orderRetreat(record, detour)
+    local group = record.group
+    record.group = nil
+    if group and group.valid then
+        group.destroy()
+    end
+    local entity = record.entity
+    local destination = record.home
+    if detour then
+        local point = {x = destination.x + (mRandom() * 2 - 1) * RETREAT_DETOUR,
+                       y = destination.y + (mRandom() * 2 - 1) * RETREAT_DETOUR}
+        destination = entity.surface.find_non_colliding_position(entity.name, point, 8, 1) or point
+    end
+    entity.commandable.set_command({
         type = defines.command.go_to_location,
-        destination = record.home,
+        destination = destination,
         radius = 6,
         distraction = defines.distraction.none,
     })
-    group.start_moving()
 end
 
 local function orderRest(record)
@@ -678,15 +733,19 @@ local function stepRecord(universe, data, record, tick)
         local position = entity.position
         local dx = position.x - record.home.x
         local dy = position.y - record.home.y
-        if ((dx * dx + dy * dy) <= HOME_RADIUS * HOME_RADIUS) or ((tick - record.stateTick) > RETREAT_TIMEOUT) then
+        local d2 = dx * dx + dy * dy
+        -- its own walk home; a failed or blocked path ends it, the engine or another mod may replace it
+        local commandable = entity.commandable
+        local command = commandable.command
+        local walking = (not commandable.parent_group) and command and (command.type == defines.command.go_to_location)
+        local stuck = walking and (commandable.moving_state == defines.moving_state.stuck)
+        if (d2 <= HOME_RADIUS * HOME_RADIUS) or ((d2 <= HOME_NEAR * HOME_NEAR) and ((not walking) or stuck))
+            or ((tick - record.stateTick) > RETREAT_TIMEOUT) then
             record.state = "regen"
             record.stateTick = tick
             orderRest(record)
-        else
-            local group, regrouped = ensureGroup(record)
-            if regrouped or not group.has_command then
-                orderRetreat(record)
-            end
+        elseif stuck or not walking then
+            orderRetreat(record, stuck)     -- stuck: around the nest from another side
         end
     elseif state == "regen" then
         record.pool = mMin(record.poolMax, record.pool + record.poolMax * UPDATE_TICKS / REGEN_TICKS)
@@ -745,7 +804,11 @@ end
 -- on_entity_damaged for a tracked champion (control.lua dispatches)
 function champions.onDamaged(universe, event, record)
     local entity = event.entity
-    record.pool = record.pool - event.final_damage_amount
+    local damage = event.final_damage_amount
+    if record.state == "retreat" then
+        damage = damage * RETREAT_DAMAGE_K
+    end
+    record.pool = record.pool - damage
     if record.pool <= 0 then
         record.pool = 0
         if entity.health > 0 then
