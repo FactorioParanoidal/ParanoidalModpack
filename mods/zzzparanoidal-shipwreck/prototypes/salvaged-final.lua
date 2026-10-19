@@ -54,7 +54,6 @@ local function add_fields(prototype, factoriopedia)
         field("generator-buffer", spec.buffer_mj, "accumulator_capacity_multiplier", energy, factoriopedia))
 end
 
--- One Factoriopedia block: the item shows it, the entity only in its tooltip.
-add_fields(generator, false)
-local item = data.raw.item[spec.name]
-if item then add_fields(item, true) end
+-- Fields only on the entity: the item tooltip already shows the fields of its place_result,
+-- so fields on the item too would print every line twice.
+add_fields(generator, true)

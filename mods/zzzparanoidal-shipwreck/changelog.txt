@@ -10,6 +10,7 @@ Date: 2026-10-18
     - Belts, undergrounds, splitters and loaders are always normal quality.
     - Quality of the salvaged generator scales its power production and energy capacity.
   Changes:
+    - The power production and energy capacity lines of the salvaged generator are shown once in the item tooltip (they were listed twice).
     - The player starts with an empty inventory; the former starting items are in the ship and its debris. Respawn items are unchanged.
     - Supplies of the ship, the debris and the AAI wrecks are placed as whole stacks by this mod instead of the freeplay item lists.
     - All wrecks and the ship use one balance table (shipwreck-config.lua), mining time 1.5 s and the pickaxe animation; the ship is mined in 6 s, big wrecks in 3 s.
