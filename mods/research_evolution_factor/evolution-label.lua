@@ -67,8 +67,9 @@ local function pack_cost(ingredients)
 end
 
 -- Percent for an evolution of 0, same formula as control.lua.
-local function percent(count, cost)
-	local inc = count * cost * 0.00001 * params.linear_factor + params.constant_factor * 0.01
+-- share: params.constant_share of the technology name.
+local function percent(count, cost, share)
+	local inc = count * cost * 0.00001 * params.linear_factor + params.constant_factor * 0.01 * share
 	return (1 - math.exp(-inc)) * 100
 end
 
@@ -81,10 +82,11 @@ function M.description(tech)
 	if M.ignored(tech) then
 		return nil
 	end
+	local share = params.constant_share(tech.name)
 	local unit = tech.unit
 	if not unit then
 		-- research_trigger: no science packs, only the constant part.
-		return { "research-evolution-factor-effect", format(percent(0, 0)) }
+		return { "research-evolution-factor-effect", format(percent(0, 0, share)) }
 	end
 	local cost = pack_cost(unit.ingredients)
 	if unit.count_formula then
@@ -98,7 +100,7 @@ function M.description(tech)
 			if not ok then
 				return { "research-evolution-factor-effect-unknown" }
 			end
-			local value = percent(math.floor(count), cost)
+			local value = percent(math.floor(count), cost, share)
 			low = math.min(low or value, value)
 			high = math.max(high or value, value)
 		end
@@ -110,7 +112,7 @@ function M.description(tech)
 	if not unit.count then
 		return { "research-evolution-factor-effect-unknown" }
 	end
-	return { "research-evolution-factor-effect", format(percent(unit.count, cost)) }
+	return { "research-evolution-factor-effect", format(percent(unit.count, cost, share)) }
 end
 
 -- Removes old evolution labels and appends a fresh one as the last effect.

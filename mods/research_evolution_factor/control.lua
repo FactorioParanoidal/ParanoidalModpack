@@ -28,7 +28,7 @@ local function tech_cost(tech)
 		end
 	end
 	sum = sum * (unit_count or 0)
-	return sum * 0.00001 * params.linear_factor + params.constant_factor * 0.01
+	return sum * 0.00001 * params.linear_factor + params.constant_factor * 0.01 * params.constant_share(tech.name)
 end
 
 local ignore_qol = settings.startup["research-evolution-factor-ignore-qol"].value
