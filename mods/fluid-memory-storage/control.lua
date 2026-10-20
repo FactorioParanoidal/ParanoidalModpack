@@ -14,10 +14,24 @@ local function setup()
 	end
 end
 
+-- Units grouped by update slot (unit numbers), rebuilt from storage only when the set of units
+-- changes: the update no longer walks every unit to find the few due this tick.
+local buckets
+local function invalidate_buckets() buckets = nil end
+local function rebuild_buckets()
+	buckets = {}
+	for slot = 0, update_slots - 1 do buckets[slot] = {} end
+	for unit_number, unit_data in pairs(storage.units) do
+		local bucket = buckets[unit_data.lag_id]
+		if bucket then bucket[#bucket + 1] = unit_number end
+	end
+end
+
 script.on_init(setup)
 
 script.on_configuration_changed(function(changes)
 	setup()
+	invalidate_buckets()
 	shared.record_migrations(changes)
 
 	-- Render objects are rebuilt from scratch: older versions did not keep the animation ids.
@@ -28,11 +42,16 @@ script.on_configuration_changed(function(changes)
 end)
 
 script.on_nth_tick(shared.update_rate, function(event)
-	local smooth_ups = event.tick % update_slots
-
-	for unit_number, unit_data in pairs(storage.units) do
-		if unit_data.lag_id == smooth_ups then
+	if not buckets then rebuild_buckets() end
+	local bucket = buckets[event.tick % update_slots]
+	local units = storage.units
+	for i = 1, #bucket do
+		local unit_number = bucket[i]
+		local unit_data = units[unit_number]
+		if unit_data then
 			unit.update(unit_data, unit_number)
+		else
+			invalidate_buckets()
 		end
 	end
 end)
@@ -50,6 +69,7 @@ local function on_created(event)
 	local stack = event.stack or (inventory and inventory.valid and not inventory.is_empty() and inventory[1]) or nil
 	if not tags and stack and stack.valid_for_read and stack.is_item_with_tags then tags = stack.tags end
 	unit.register(entity, tags)
+	invalidate_buckets()
 end
 
 script.on_event(defines.events.on_built_entity, on_created, unit_filter)
@@ -60,6 +80,7 @@ script.on_event(defines.events.on_space_platform_built_entity, on_created, unit_
 
 script.on_event(defines.events.on_entity_cloned, function(event)
 	unit.on_cloned(event.source, event.destination)
+	invalidate_buckets()
 end, {
 	{filter = "name", name = "fluid-memory-unit"},
 	{filter = "name", name = "fluid-memory-unit-powersource"},
@@ -74,6 +95,7 @@ local function on_removed(event)
 	local unit_data = storage.units[unit_number]
 	if not unit_data then return end
 	unit.forget(unit_number, unit_data)
+	invalidate_buckets()
 
 	local item = unit_data.item
 	local count = unit_data.count or 0
@@ -110,7 +132,10 @@ script.on_event(defines.events.script_raised_destroy, on_removed, unit_filter)
 script.on_event(defines.events.on_object_destroyed, function(event)
 	if event.type ~= defines.target_type.entity then return end
 	local unit_data = storage.units[event.useful_id]
-	if unit_data then unit.forget(event.useful_id, unit_data, true) end
+	if unit_data then
+		unit.forget(event.useful_id, unit_data, true)
+		invalidate_buckets()
+	end
 end)
 
 -- Before mining or deconstruction the tank is emptied into the counter.
