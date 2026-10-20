@@ -9,14 +9,41 @@ function Research.Sync(originalForce, sandboxForce)
         sandboxForce.research_all_technologies()
         log("Researching everything for: " .. sandboxForce.name)
     else
-        for tech, _ in pairs(prototypes.technology) do
-            local originalTech = originalForce.technologies[tech]
-            local sandboxTech = sandboxForce.technologies[tech]
-            if sandboxTech.researched ~= originalTech.researched then
-                sandboxTech.researched = originalTech.researched
+        -- Paranoidal: the old single pass wrote `level` unconditionally (writing it re-researches
+        -- a level-based technology only up to the previous level, i.e. it can unresearch it) and
+        -- copied `researched` in arbitrary order, so after "Unlock all" -> off the Sandbox could
+        -- lose almost the whole tree. Now: unresearch first, then levels (only multi-level and only
+        -- if different), then research; repeat while anything still differs (cascades).
+        local techs = sandboxForce.technologies
+        local original = originalForce.technologies
+        for pass = 1, 5 do
+            local changed = false
+            for name, sandboxTech in pairs(techs) do
+                local originalTech = original[name]
+                if originalTech and sandboxTech.researched and not originalTech.researched then
+                    sandboxTech.researched = false
+                    changed = true
+                end
             end
-            sandboxTech.level = originalTech.level
-            -- TODO: Consider file:///home/cameron/src/factorio/factorio_expansion/doc-html/classes/LuaTechnology.html#saved_progress
+            for name, sandboxTech in pairs(techs) do
+                local originalTech = original[name]
+                local proto = sandboxTech.prototype
+                if originalTech and proto.max_level > proto.level and sandboxTech.level ~= originalTech.level then
+                    sandboxTech.level = originalTech.level
+                    changed = true
+                end
+            end
+            for name, sandboxTech in pairs(techs) do
+                local originalTech = original[name]
+                if originalTech and originalTech.researched and not sandboxTech.researched then
+                    sandboxTech.researched = true
+                    changed = true
+                end
+            end
+            if not changed then break end
+            if pass == 5 then
+                log("Research.Sync did not converge for: " .. sandboxForce.name)
+            end
         end
         log("Copied all Research from: " .. originalForce.name .. " -> " .. sandboxForce.name)
     end
@@ -104,12 +131,17 @@ end
 -- For all Forces with Sandboxes, Sync their Research
 function Research.SyncAllForces()
     for _, force in pairs(game.forces) do
-        if Sandbox.IsSandboxForce(force) then return end
-        local sandboxForce = Force.GetSandboxForce(force)
-        if not sandboxForce then return end
-        Research.Sync(force, sandboxForce)
-        Research.SyncQueue(force, sandboxForce)
+        -- Paranoidal: skip instead of `return`, which stopped at the first force without a Sandbox
+        if not Sandbox.IsSandboxForce(force) then
+            local sandboxForce = Force.GetSandboxForce(force)
+            if sandboxForce then
+                Research.Sync(force, sandboxForce)
+                Research.SyncQueue(force, sandboxForce)
+            end
+        end
     end
+    -- Paranoidal: re-copy the force bonuses (they are left unsynced while everything is unlocked)
+    Force.SyncAllForces()
 end
 
 -- As a Force's Research Queue changes, keep the Force's Sandboxes in-sync

@@ -8,6 +8,8 @@ Date: 2025-11-25
     - Paranoidal: teleporters (Teleporters mod) cannot be built in Sandboxes, like research labs.
     - Paranoidal: the Sandbox window has an "Unlock all Technology inside Sandboxes" checkbox that toggles the same Map Setting (Full Isolation only; admins only in multiplayer).
     - Paranoidal: the Factorissimo check of every entity built inside a factory floor uses the light remote call get_surrounding_factory_exit instead of copying the whole factory table.
+    - Paranoidal: turning "Unlock all Technology inside Sandboxes" off no longer wipes the Sandbox research tree: the research sync unresearches first, writes levels only for multi-level technologies that differ, then researches, repeating until the trees match; force bonuses are re-copied afterwards.
+    - Paranoidal: research sync of all forces skips forces without a Sandbox instead of stopping at the first one.
 ---------------------------------------------------------------------------------------------------
 Version: 3.2.1
 Date: 2025-10-24
