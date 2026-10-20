@@ -1,6 +1,14 @@
 local TRAINS_PER_TICK = 6
 local LOAD_REFRESH_INTERVAL = 60
 
+-- Runtime settings are read once per load / change, not three times per train per tick.
+local slots_for_minimum, fluid_for_minimum, minimum_acceleration
+local function read_settings()
+  slots_for_minimum = settings.global["ots-slots-for-minimum-acceleration"].value
+  fluid_for_minimum = settings.global["ots-fluid-for-minimum-acceleration"].value
+  minimum_acceleration = settings.global["ots-minimum-acceleration"].value
+end
+
 local function ensure_state()
   storage.overloaded_trains_simple = storage.overloaded_trains_simple or {
     trains = {},
@@ -124,9 +132,6 @@ local function slow_acceleration(entry)
     and current_absolute > previous_absolute
     and (entry.occupied_slots > 0 or entry.fluid_amount > 0)
   then
-    local slots_for_minimum = settings.global["ots-slots-for-minimum-acceleration"].value
-    local fluid_for_minimum = settings.global["ots-fluid-for-minimum-acceleration"].value
-    local minimum_acceleration = settings.global["ots-minimum-acceleration"].value
     local load_fraction = entry.occupied_slots / slots_for_minimum + entry.fluid_amount / fluid_for_minimum
     local acceleration_factor = 1 - math.min(load_fraction, 1) * (1 - minimum_acceleration)
     local adjusted_absolute = previous_absolute + (current_absolute - previous_absolute) * acceleration_factor
@@ -139,6 +144,7 @@ local function slow_acceleration(entry)
 end
 
 local function on_tick()
+  if not slots_for_minimum then read_settings() end
   local state = ensure_state()
   local visited = {}
 
@@ -155,8 +161,18 @@ local function on_tick()
   end
 end
 
-script.on_init(rebuild_trains)
-script.on_configuration_changed(rebuild_trains)
+script.on_init(function()
+  read_settings()
+  rebuild_trains()
+end)
+script.on_load(read_settings)
+script.on_configuration_changed(function()
+  read_settings()
+  rebuild_trains()
+end)
+script.on_event(defines.events.on_runtime_mod_setting_changed, function(event)
+  if event.setting and event.setting:sub(1, 4) == "ots-" then read_settings() end
+end)
 script.on_event(defines.events.on_train_created, on_train_created)
 script.on_event(defines.events.on_train_changed_state, on_train_changed_state)
 script.on_event(defines.events.on_tick, on_tick)
