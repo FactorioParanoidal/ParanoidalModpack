@@ -386,7 +386,10 @@ end)
 
 --------------------------------------------------------------------
 local function On_Built(event)
-    BioInd.writeDebug("Entered function On_Built with these data: " .. serpent.block(event))
+    -- Serialise the event only in debug mode: the concatenation runs before writeDebug checks is_debug.
+    if BioInd.is_debug then
+        BioInd.writeDebug("Entered function On_Built with these data: " .. serpent.block(event))
+    end
     local entity = event.created_entity or event.entity
     if not (entity and entity.valid) then
         BioInd.arg_err(entity or "nil", "entity")
