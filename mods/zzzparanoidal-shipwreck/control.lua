@@ -25,7 +25,8 @@ script.on_event(defines.events.on_player_created, function(event)
     start.on_player_created(state(), event)
 end)
 
-script.on_event(defines.events.on_tick, function(event)
+-- Every 5 ticks: the start fill tolerates the delay and the wreck selection lag (83 ms) is invisible.
+script.on_nth_tick(5, function(event)
     local s = storage.shipwreck
     if not s then return end
     start.on_tick(s, event.tick)
