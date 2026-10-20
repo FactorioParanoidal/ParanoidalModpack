@@ -465,12 +465,11 @@
 	-- remove all mark
 		local function PI_remove_all_inserter_mark()
 			--if PI_debug then print_debug("function started: PI_remove_all_inserter_mark") end
-			--get all marks
-			local pi_db_mark = game.surfaces[1].find_entities_filtered{name = "PI_mark"}
-			--if PI_debug then print_debug("PI_remove_all_inserter_mark: fount marks: "..tostring(#pi_db_mark)) end
-			--delete marks
-			for _, myMark in pairs(pi_db_mark) do
-				myMark.destroy()
+			--get all marks (every surface: factory floors and other planets too)
+			for _, surface in pairs(game.surfaces) do
+				for _, myMark in pairs(surface.find_entities_filtered{name = "PI_mark"}) do
+					myMark.destroy()
+				end
 			end
 		end
 	
