@@ -662,7 +662,8 @@ script.on_event(defines.events.on_gui_click, function(event)
 end)
 
 script.on_event(defines.events.on_tick, function(event)
-    for _, player in pairs(game.players) do
+    -- Only connected players can have an open filter GUI.
+    for _, player in pairs(game.connected_players) do
         local player_global = get_player_global(player.index)
         if player_global then
             update_ui(player_global, event.tick % 60 == 0)
