@@ -70,13 +70,15 @@ local function register_events()
   -- register creation events
   script.on_event( defines.events.on_built_entity, Pole_Created, Filter_Poles )
   script.on_event( defines.events.on_robot_built_entity, Pole_Created, Filter_Poles )
-  script.on_event( {defines.events.script_raised_built, defines.events.script_raised_revive}, Pole_Created )
+  -- Filtered events must be registered one at a time (2.0 API).
+  script.on_event( defines.events.script_raised_built, Pole_Created, Filter_Poles )
+  script.on_event( defines.events.script_raised_revive, Pole_Created, Filter_Poles )
 
   -- register removal events
   script.on_event( defines.events.on_pre_player_mined_item, Pole_Removed, Filter_Poles )
   script.on_event( defines.events.on_entity_died, Pole_Removed, Filter_Poles )
   script.on_event( defines.events.on_robot_pre_mined, Pole_Removed, Filter_Poles )
-  script.on_event( defines.events.script_raised_destroy, Pole_Removed )
+  script.on_event( defines.events.script_raised_destroy, Pole_Removed, Filter_Poles )
 
   --register to PickerExtended
   if remote.interfaces["picker"] and remote.interfaces["picker"]["dolly_moved_entity_id"] then
