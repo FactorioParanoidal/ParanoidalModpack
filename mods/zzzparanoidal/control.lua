@@ -55,20 +55,15 @@ local resourceNames = {
 	"crude-oil",
 }
 
--- Функция для проверки, является ли имя сущности ресурсом
----@param name string
----@param array table (of strings)
----@return boolean
-local isInArray = function(name, array)
-	for _, item in ipairs(array) do
-		if name == item then
-			return true
-		end
+-- Только существующие прототипы: фильтр движка вместо перебора всех сущностей чанка (деревья, декор).
+local resourceFilter = {}
+for _, name in ipairs(resourceNames) do
+	if prototypes.entity[name] then
+		resourceFilter[#resourceFilter + 1] = name
 	end
-	return false
 end
 
-if settings.startup["newbie_resourse"].value == true then
+if settings.startup["newbie_resourse"].value == true and resourceFilter[1] then
 	-- Обработчик события on_chunk_generated
 	script.on_event(defines.events.on_chunk_generated, function(event)
 		-- Проверяем, что это именно генерация ресурсов
@@ -77,12 +72,11 @@ if settings.startup["newbie_resourse"].value == true then
 			for _, entity in
 				pairs(event.surface.find_entities_filtered({
 					area = event.area,
+					type = "resource",
+					name = resourceFilter,
 				}))
 			do
-				-- Проверяем, является ли сущность ресурсом
-				if isInArray(entity.name, resourceNames) then
-					entity.amount = math.min(entity.amount * 5, 4294967294)
-				end
+				entity.amount = math.min(entity.amount * 5, 4294967294)
 			end
 		end
 	end)
