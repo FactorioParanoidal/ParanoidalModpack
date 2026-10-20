@@ -29,11 +29,6 @@ script.on_event(defines.events.on_string_translated,UI.translated)
 script.on_event(defines.events.on_gui_closed,function(e)
   if e.element and e.element.valid and e.element.name=="ptt_native" then UI.close(game.get_player(e.player_index)) end
 end)
-script.on_event(defines.events.on_gui_opened,function(e)
-  if e.gui_type~=defines.gui_type.research then return end
-  local p=game.get_player(e.player_index)
-  if p.mod_settings["ptt-replace-native"].value then p.opened=nil; UI.open(p) end
-end)
 script.on_event({defines.events.on_player_display_resolution_changed,defines.events.on_player_display_scale_changed},function(e)
   local p=game.get_player(e.player_index)
   if UI.root(p) then UI.close(p); UI.open(p) end
