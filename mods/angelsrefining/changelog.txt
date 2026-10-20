@@ -2,6 +2,8 @@
 Version: 2.0.4
 Date: 04.06.2026
   Bugfixes:
+    - Paranoidal: sea pumps built by robots are converted again (handler read event.created_entity, which is nil in 2.0).
+    - Paranoidal: angelspump migration branch uses storage instead of the removed global table.
     - Removed references to Bob's Sulfur resource (1304)
     - Fixed migration function to check if a logistics slot is manual before attempting to migrate it (1306)
   Changes:
