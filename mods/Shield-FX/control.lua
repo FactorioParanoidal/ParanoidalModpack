@@ -7,6 +7,11 @@ script.on_init(function()
 	storage.shields = {}
 end)
 
+-- Mod added to an existing save: the per-tick loop needs the table.
+script.on_configuration_changed(function()
+	storage.shields = storage.shields or {}
+end)
+
 
 --script.on_configuration_changed(function()
 --	
@@ -160,10 +165,10 @@ end)
 
 
 script.on_event({defines.events.on_entity_died,defines.events.on_player_mined_entity,defines.events.on_robot_mined_entity},function(event)
-		if (event.entity.type == "player"
-		or event.entity.type == "car")
-		and storage.shields[event.entity] then
-			storage.shields[event.entity] = nil
+	-- Records are keyed by unit_number (the previous entity key never matched).
+	local unit_number = event.entity.unit_number
+	if unit_number and storage.shields[unit_number] then
+		storage.shields[unit_number] = nil
 	end
 end)
 

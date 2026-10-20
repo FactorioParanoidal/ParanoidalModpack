@@ -3,6 +3,7 @@
 - API update
 - Moved the effect up a bit for the character
 - Added support for spidertron
+- Paranoidal: death/mined handler removes the record by unit_number (it was keyed by the entity object and never matched); storage table is created when the mod is added to an existing save
 
 ----------------------------
 0.18.4
