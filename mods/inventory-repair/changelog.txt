@@ -3,6 +3,8 @@ Version: 20.0.3
 Date: 2025-05-02
   Bugfixes:
     - Fixed an error when a player was deleted from the game.
+  Optimizations:
+    - Paranoidal: the repair interval setting is cached instead of being read from settings.global every tick.
 ---------------------------------------------------------------------------------------------------
 Version: 20.0.2
 Date: 2024-10-28

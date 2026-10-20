@@ -161,8 +161,15 @@ local function deregister_player(pid)
 	storage.players[pid] = nil
 end
 
+-- Cached: the handler runs every tick, the setting changes rarely.
+local repair_interval
+local function read_interval()
+	repair_interval = settings.global["inventory-repair-interval"].value
+end
+
 local function check_all_players(event)
-	local interval = settings.global["inventory-repair-interval"].value
+	if not repair_interval then read_interval() end
+	local interval = repair_interval
 	if event.tick % interval == 0 then
 		for pid,player in pairs(storage.players) do
 			if not player.valid then
@@ -197,6 +204,9 @@ end)
 script.on_nth_tick(1, check_all_players)
 
 script.on_event(defines.events.on_runtime_mod_setting_changed, function(event)
+	if event.setting == "inventory-repair-interval" then
+		read_interval()
+	end
 	if event.setting == "inventory-repair-order" then
 		index_tools()
 	end
