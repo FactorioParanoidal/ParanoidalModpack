@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 9.7.0
 Date: 2026-10-14
+  Optimizations:
+    - The periodic update visits only the units of the current slot (unit numbers bucketed by lag_id, rebuilt when units are added or removed) instead of walking every unit.
   Features:
     - Version number starts with 9 (Paranoidal fork): the Mod Portal never offers an "update" over local changes.
     - Quality of the unit lowers its power usage along a parabola, down to 20% for the highest quality, instead of enlarging the chest
