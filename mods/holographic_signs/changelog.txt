@@ -4,6 +4,8 @@ Date: 2025-08-26
   Bugfixes:
     - Fixed input config being lost when server updated
     - Fixed blueprint with signal was not rotatable
+  Optimizations:
+    - Paranoidal: the "accumulator charge" input no longer searches the whole surface for accumulators for every sign every 2 seconds. The accumulators of each surface and force are cached in storage (added by the build, script-raised build and clone events, dropped when found removed, searched again once a minute), and one update pass sums them once for all signs of the same surface and force.
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.8
 Date: 2025-06-17

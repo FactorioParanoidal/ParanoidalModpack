@@ -604,7 +604,69 @@ script.on_event(defines.events.on_gui_closed, on_gui_closed)
   
   
 
-function apply_holo_sign(Sign_Data)
+-- Paranoidal: charge of the accumulators of a force on a surface ("hs_charge" input).
+-- Each sign used to search the whole surface for accumulators every 2 seconds. Now the list is cached in storage
+-- per surface and force: built accumulators are added by the build events, removed ones are dropped when found
+-- invalid, and the list is searched again once a minute (accumulators created by scripts without events, force
+-- changes). The sum is computed once per update for all signs of the same surface and force.
+local ACCUMULATOR_RESCAN_TICKS = 60 * 60
+
+local accumulator_names = {}
+for name in pairs(prototypes.get_entity_filtered{{filter = "type", type = "accumulator"}}) do
+	accumulator_names[name] = true
+end
+
+local function accumulator_cache(surface, force)
+	storage.hs_accumulators = storage.hs_accumulators or {}
+	local by_surface = storage.hs_accumulators[surface.index]
+	if not by_surface then
+		by_surface = {}
+		storage.hs_accumulators[surface.index] = by_surface
+	end
+	local cache = by_surface[force.index]
+	if not cache or game.tick - cache.tick >= ACCUMULATOR_RESCAN_TICKS then
+		local units = {}
+		for _, a in pairs(surface.find_entities_filtered{type = 'accumulator', force = force}) do
+			if a.unit_number then units[a.unit_number] = {entity = a, buffer = a.electric_buffer_size} end
+		end
+		cache = {tick = game.tick, units = units}
+		by_surface[force.index] = cache
+	end
+	return cache
+end
+
+-- Adds a new accumulator to the cached list of its surface and force (only when such a list exists).
+local function track_accumulator(entity)
+	if not (entity and entity.valid) then return end
+	local by_surface = storage.hs_accumulators and storage.hs_accumulators[entity.surface_index]
+	local cache = by_surface and by_surface[entity.force_index]
+	local unit_number = entity.unit_number
+	if cache and unit_number then
+		cache.units[unit_number] = {entity = entity, buffer = entity.electric_buffer_size}
+	end
+end
+
+-- memo (optional): a table local to one update pass, shared by its signs.
+local function accumulator_charge(surface, force, memo)
+	local key = surface.index .. ':' .. force.index
+	local known = memo and memo[key]
+	if known then return known[1], known[2] end
+	local ch, t = 0, 0
+	local units = accumulator_cache(surface, force).units
+	for unit_number, record in pairs(units) do
+		local a = record.entity
+		if a.valid then
+			ch = ch + a.energy
+			t = t + record.buffer
+		else
+			units[unit_number] = nil
+		end
+	end
+	if memo then memo[key] = {ch, t} end
+	return ch, t
+end
+
+function apply_holo_sign(Sign_Data, charge_memo)
 	local function get_precision_index(opt)
 	local def = {
 			defines.flow_precision_index.five_seconds,
@@ -754,12 +816,7 @@ if is_it_on  then
 
 
 			elseif  input=='hs_charge' then 
-				local ch,t =0,0
-				local acc = entity.surface.find_entities_filtered{type='accumulator', force=force}
-					for _,a in pairs(acc) do
-						ch = ch + a.energy
-						t = t + a.electric_buffer_size
-						end						
+				local ch,t = accumulator_charge(entity.surface, force, charge_memo)
 				ipt = d_format_number(ch/1000000, "%.1f") .. " / " .. d_format_number(t/1000000, "%.1f") .. " MJ"
 
 
@@ -1006,6 +1063,7 @@ end
 function on_entity_cloned(event)
 local new = event.destination
 local old = event.source
+if event.name == defines.events.on_entity_cloned and accumulator_names[new.name] then track_accumulator(new) return end
 if new.name=='hs_holo_sign' and old.name=='hs_holo_sign' then
 local UN = old.unit_number
 if storage.signs[UN] then 
@@ -1014,7 +1072,7 @@ if storage.signs[UN] then
 	end
 	end
 end
-script.on_event(defines.events.on_entity_cloned, on_entity_cloned, {{filter = "name", name = 'hs_holo_sign'}})
+script.on_event(defines.events.on_entity_cloned, on_entity_cloned, {{filter = "name", name = 'hs_holo_sign'}, {filter = "type", type = 'accumulator'}})
 script.on_event(defines.events.on_entity_settings_pasted, on_entity_cloned)
 
 
@@ -1055,7 +1113,9 @@ end
 local ghost_revived_event = function(event)
   local entity = event.entity
   if not (entity and entity.valid) then return end
-  if entity.name ~= "hs_holo_sign" then return end
+  local name = entity.name
+  if accumulator_names[name] then track_accumulator(entity) return end
+  if name ~= "hs_holo_sign" then return end
 
   local tags = event.tags
   if not tags then return end
@@ -1066,6 +1126,11 @@ script.on_event(defines.events.on_built_entity , ghost_revived_event)
 script.on_event(defines.events.on_robot_built_entity, ghost_revived_event)
 script.on_event(defines.events.script_raised_revive, ghost_revived_event)
 script.on_event(defines.events.on_space_platform_built_entity, ghost_revived_event)
+script.on_event(defines.events.script_raised_built, function(event) track_accumulator(event.entity) end, {{filter = "type", type = 'accumulator'}})
+script.on_event(defines.events.on_surface_deleted, function(event)
+  if storage.hs_accumulators then storage.hs_accumulators[event.surface_index] = nil end
+end)
+script.on_event(defines.events.on_forces_merged, function() storage.hs_accumulators = nil end)
  
 
 function on_post_entity_died(event)
@@ -1139,15 +1204,17 @@ end)
 
  
 function UpdateAll()
+local charge_memo = {}
 for UN, Sign_Data in pairs (storage.signs) do
 	local entity = Sign_Data.entity
-	if entity and entity.valid then apply_holo_sign(Sign_Data)
+	if entity and entity.valid then apply_holo_sign(Sign_Data, charge_memo)
 	else storage.signs[UN]=nil end
 	end
 end
 
 
 script.on_nth_tick(60*2, function (event)
+local charge_memo = {}
 for UN, Sign_Data in pairs (storage.signs) do
 	local entity = Sign_Data.entity
 	if entity and entity.valid then
@@ -1157,7 +1224,7 @@ for UN, Sign_Data in pairs (storage.signs) do
 		 				or entity.get_signal({type="virtual",name='signal-red'}, defines.wire_connector_id.circuit_green)==1
 		if green then Sign_Data.state='right' end		
 		if red then Sign_Data.state='left' end
-		if Sign_Data.input or green or red then apply_holo_sign(Sign_Data) end
+		if Sign_Data.input or green or red then apply_holo_sign(Sign_Data, charge_memo) end
 		else
 		if Sign_Data.maptag and Sign_Data.maptag.valid then Sign_Data.maptag.destroy() end
 		storage.signs[UN]=nil
