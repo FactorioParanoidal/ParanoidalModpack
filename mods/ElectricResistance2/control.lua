@@ -1,8 +1,23 @@
 local RESISTOR = "hidden-electric-resistance"
 local pole_filter = { { filter = "type", type = "electric-pole" } }
 
+-- Скрытые столбы-спутники других модов (hidden / not-on-map: опоры эстакад, Bio Industries, Factorissimo,
+-- ветряки) не часть видимой сети: резистор на них только умножал число потребителей в сети.
+local skip_cache = {}
+local function skipped(pole)
+  local name = pole.name
+  local skip = skip_cache[name]
+  if skip == nil then
+    local proto = pole.prototype
+    skip = proto.hidden or proto.has_flag("not-on-map") or false
+    skip_cache[name] = skip
+  end
+  return skip
+end
+
 local function add_resistor(pole)
   if not (pole and pole.valid) then return end
+  if skipped(pole) then return end
   storage.poles = storage.poles or {}
   -- Скрытые столбы могут удаляться скриптом без события script_raised_destroy.
   storage.poles[script.register_on_object_destroyed(pole)] = {
