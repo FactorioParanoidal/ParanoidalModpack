@@ -418,8 +418,6 @@ D.stubs = {
 	{ "assembling-machine", "bob-water-pump-3" },
 	{ "assembling-machine", "bob-water-pump-4" },
 	{ "fluid", "angels-liquid-ethylene-carbonate" },
-	{ "fluid", "angels-liquid-molten-chrome" },
-	{ "fluid", "angels-liquid-molten-manganese" },
 	{ "fluid", "bob-carbon-dioxide" },
 	{ "fluid", "bob-chlorine" },
 	{ "fluid", "bob-dinitrogen-tetroxide" },

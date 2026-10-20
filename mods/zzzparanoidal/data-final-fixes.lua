@@ -318,6 +318,8 @@ require("tweaks.custom.gems-equipment-menu-beta8")
 require("tweaks.custom.refining-smelting-menu-beta8")
 -- Отливка и водоочистка: компактные семейства, без изменения рецептур и механики.
 require("tweaks.custom.casting-water-menu-beta8")
+-- После меню литья: расплав хрома и марганца из черновых слитков (issue #401).
+require("tweaks.recipe.chrome-manganese-molten")
 -- Нефтехимия и разливка: смысловые ряды и пары наполнения/опорожнения, только меню.
 require("tweaks.custom.petrochem-fluid-menu-beta8")
 -- Производство, транспортное оборудование и общий космос: только размещение рецептов.
@@ -350,6 +352,8 @@ require("tweaks.technology.production-chain-unlocks")
 require("tweaks.technology.chemistry-chain-unlocks")
 require("removals.steam-inserter-recipe")
 require("tweaks.technology.redundant-recipe-unlocks") -- Только избыточные открытия, после восстановления дерева.
+-- Смешивание расплавов: новые двойники, тиры и открытия в технологиях смесителя (issue #401).
+require("tweaks.recipe.alloy-mixing-molten")
 require("tweaks.entity.character-light-beta8") -- Фонарь персонажа из Beta 8, после AAI.
 require("tweaks.entity.beta8-visual-models") -- Модели сундука и малых автоматов IV-V, после Reskins/Miles.
 require("tweaks.entity.comb-beta8") -- Графика комбинаторов BiusArt (comb) из Beta 8, до icon-markers.

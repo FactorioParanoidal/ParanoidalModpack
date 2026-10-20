@@ -15,7 +15,7 @@ return {
             {["name"] = "angels-plate-aluminium-2", ["order"] = "10", ["icon"] = {["icons"] = {{["icon"] = "__zzzparanoidal__/graphics/casting-water-menu-beta8/182bb00999e01cb8b6e7.png", ["icon_size"] = 64, ["scale"] = 0.5, ["shift"] = {0, 0}}, {["icon"] = "__zzzparanoidal__/graphics/casting-water-menu-beta8/f799b36fc8a2f4bf667f.png", ["icon_size"] = 64, ["scale"] = 0.21875, ["shift"] = {-10, -10}}}}},
         }},
         {group = "angels-casting", subgroup = "paranoidal-casting-chrome", order = "a-02", recipes = {
-            {["name"] = "molten-chrome-remelting", ["order"] = "01", ["icon"] = {["icons"] = {{["icon"] = "__zzzparanoidal__/graphics/casting-water-menu-beta8/57639bc626b0709c6bfa.png", ["icon_size"] = 64}, {["icon"] = "__angelsextended-remelting-fixed__/graphics/icons/remelting.png", ["tint"] = {["r"] = 0.8, ["g"] = 0.8, ["b"] = 0.8, ["a"] = 0.5}, ["scale"] = 0.32, ["shift"] = {-12, -12}, ["icon_size"] = 64}}}},
+            {["name"] = "molten-chrome-remelting", ["order"] = "01", ["icon"] = {["icon"] = "__zzzparanoidal__/graphics/casting-water-menu-beta8/57639bc626b0709c6bfa.png", ["icon_size"] = 64}},
         }},
         {group = "angels-casting", subgroup = "paranoidal-casting-cobalt", order = "a-03", recipes = {
             {["name"] = "molten-cobalt-remelting", ["order"] = "01", ["icon"] = {["icons"] = {{["icon"] = "__zzzparanoidal__/graphics/casting-water-menu-beta8/dcd862503ebfcc497994.png", ["icon_size"] = 64}, {["icon"] = "__angelsextended-remelting-fixed__/graphics/icons/remelting.png", ["tint"] = {["r"] = 0.8, ["g"] = 0.8, ["b"] = 0.8, ["a"] = 0.5}, ["scale"] = 0.32, ["shift"] = {-12, -12}, ["icon_size"] = 64}}}},
@@ -112,7 +112,7 @@ return {
             {["name"] = "angels-plate-lead-2", ["order"] = "08", ["icon"] = {["icons"] = {{["icon"] = "__zzzparanoidal__/graphics/casting-water-menu-beta8/0f2b6cb0da0ff5eb5d04.png", ["icon_size"] = 64, ["scale"] = 0.5, ["shift"] = {0, 0}}, {["icon"] = "__zzzparanoidal__/graphics/casting-water-menu-beta8/6979419c1a58c8617a56.png", ["icon_size"] = 64, ["scale"] = 0.21875, ["shift"] = {-10, -10}}}}},
         }},
         {group = "angels-casting", subgroup = "paranoidal-casting-manganese", order = "a-13", recipes = {
-            {["name"] = "molten-manganese-remelting", ["order"] = "01", ["icon"] = {["icons"] = {{["icon"] = "__zzzparanoidal__/graphics/casting-water-menu-beta8/c0272b3cd757fc2869d0.png", ["icon_size"] = 64}, {["icon"] = "__angelsextended-remelting-fixed__/graphics/icons/remelting.png", ["tint"] = {["r"] = 0.8, ["g"] = 0.8, ["b"] = 0.8, ["a"] = 0.5}, ["scale"] = 0.32, ["shift"] = {-12, -12}, ["icon_size"] = 64}}}},
+            {["name"] = "molten-manganese-remelting", ["order"] = "01", ["icon"] = {["icon"] = "__zzzparanoidal__/graphics/casting-water-menu-beta8/c0272b3cd757fc2869d0.png", ["icon_size"] = 64}},
         }},
         {group = "angels-casting", subgroup = "paranoidal-casting-nickel", order = "a-14", recipes = {
             {["name"] = "molten-nickel-remelting", ["order"] = "01", ["icon"] = {["icons"] = {{["icon"] = "__zzzparanoidal__/graphics/casting-water-menu-beta8/9dcd79bc7b53df3d031e.png", ["icon_size"] = 64}, {["icon"] = "__angelsextended-remelting-fixed__/graphics/icons/remelting.png", ["tint"] = {["r"] = 0.8, ["g"] = 0.8, ["b"] = 0.8, ["a"] = 0.5}, ["scale"] = 0.32, ["shift"] = {-12, -12}, ["icon_size"] = 64}}}},
