@@ -3,6 +3,7 @@ Version: 0.7.2
 Date: 23.03.2026
   Bugfixes:
     - Fixed a crash when blueprints are uploaded to the server via the blueprint library
+    - Paranoidal: the queue of blueprint previews that are still loading is kept in storage instead of a module-local table (a joining client had an empty queue while the host created the counter GUI from it: a multiplayer desync risk). on_tick is registered only while the queue is not empty, also after loading a save.
 ---------------------------------------------------------------------------------------------------
 Version: 0.7.1
 Date: 22.12.2025
