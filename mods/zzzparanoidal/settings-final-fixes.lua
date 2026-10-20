@@ -63,6 +63,8 @@ end
 -- Наноботы работают автоматически по умолчанию.
 if mods["nanobots-refined"] then
     set_settings_default_value("bool-setting", "nanobots-auto", true)
+    -- Звуки «Всё готово» и «Закончились материалы» нано-пушки выключены по умолчанию.
+    set_settings_default_value("bool-setting", "nanobots-mute-launcher", true)
 end
 --ритег
 if mods["RITEG"] then
