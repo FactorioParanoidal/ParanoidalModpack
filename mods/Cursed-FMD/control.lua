@@ -6,12 +6,14 @@ local connector = "___"
 script.on_init(function() init_table() end)
 script.on_configuration_changed(function() init_table() end)
 
-script.on_event(defines.events.on_built_entity, function(event) des_building(event.entity, false) end)
-script.on_event(defines.events.on_robot_built_entity, function(event) des_building(event.entity, false) end)
+-- Filtered drills are mining-drill prototypes: let the engine skip every other entity.
+local drill_filter = {{filter = "type", type = "mining-drill"}}
+script.on_event(defines.events.on_built_entity, function(event) des_building(event.entity, false) end, drill_filter)
+script.on_event(defines.events.on_robot_built_entity, function(event) des_building(event.entity, false) end, drill_filter)
 
-script.on_event(defines.events.on_player_mined_entity, function(event) des_building(event.entity, true) end)
-script.on_event(defines.events.on_robot_mined_entity, function(event) des_building(event.entity, true) end)
-script.on_event(defines.events.on_entity_died, function(event) des_building(event.entity, true) end)
+script.on_event(defines.events.on_player_mined_entity, function(event) des_building(event.entity, true) end, drill_filter)
+script.on_event(defines.events.on_robot_mined_entity, function(event) des_building(event.entity, true) end, drill_filter)
+script.on_event(defines.events.on_entity_died, function(event) des_building(event.entity, true) end, drill_filter)
 
 
 script.on_event(defines.events.on_player_selected_area, function(event)
