@@ -1,4 +1,14 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 2026-10-20
+  Bugfixes:
+    - Pollution detector combinators are registered again when built: the build events were
+      registered under names that do not exist in the 2.0 API (and read event.created_entity).
+    - Removed combinators no longer stay in the detector list; a deleted surface no longer crashes it.
+  Optimizations:
+    - Detector tick: slot computed directly instead of a 60-step countdown each tick; skipped while
+      no combinator is registered. Build/mine handlers filtered to constant combinators.
+---------------------------------------------------------------------------------------------------
 Version: 0.3.6
 Date: 2019-06-2
   Features:

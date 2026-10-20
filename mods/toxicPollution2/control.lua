@@ -42,13 +42,25 @@ script.on_event(defines.events.on_entity_settings_pasted, function(event)
     detector:OnSettingPasted(event)
 end)
 
-script.on_event({defines.events.on_robot_build_entity, defines.events.on_build_entity}, function(event)
-    detector:OnBuild(event)
-end)
+-- Only constant combinators matter; filtered events are registered one at a time (2.0 API).
+-- The former names on_build_entity/on_robot_build_entity do not exist: nothing was registered.
+local combinator_filter = {{filter = "type", type = "constant-combinator"}}
+for _, event_id in ipairs({
+    defines.events.on_built_entity,
+    defines.events.on_robot_built_entity,
+    defines.events.script_raised_built,
+    defines.events.script_raised_revive,
+}) do
+    script.on_event(event_id, function(event)
+        detector:OnBuild(event)
+    end, combinator_filter)
+end
 
-script.on_event({defines.events.on_robot_mined_entity, defines.events.on_player_mined_entity}, function(event)
-    detector:DeleteEntity(event.entity)
-end)
+for _, event_id in ipairs({defines.events.on_robot_mined_entity, defines.events.on_player_mined_entity}) do
+    script.on_event(event_id, function(event)
+        detector:DeleteEntity(event.entity)
+    end, combinator_filter)
+end
 
 script.on_event(defines.events.on_research_finished, function(event)
     local tech = event.research
