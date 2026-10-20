@@ -4,6 +4,7 @@ Date: 2026-06-19
   Features:
     - Added pipette tool to create combinator from input or ouput items
   Bugfixes:
+    - Paranoidal: the per-tick queue (deferred GUI events, tips) is processed for every connected player with queued work, read from storage. It used to depend on a module-local "current player" set by the last GUI event handled on each peer (multiplayer desync risk); peers that never opened Helmod did nothing.
     - Fixed rocket recipe that added twice time the rocket parts
     - Fixed module limitation in Recipe Edition
     - Fixed case-insensitive selector filter for non-ASCII letters (Cyrillic, Latin-1/Extended-A, Greek)
