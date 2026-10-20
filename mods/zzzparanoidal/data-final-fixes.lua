@@ -69,7 +69,6 @@ require("tweaks.custom.shortcut-icons")
 require("tweaks.custom.selections")
 
 
-require("removals.bio-modules")
 require("removals.fishes")
 require("removals.aai-medium-electric-pole")
 require("removals.aai-basic-logistics")
@@ -104,8 +103,8 @@ require("prototypes.entity.storage-migration")
 -- final aplying of override functions
 angelsmods.functions.OV.execute()
 
-require("tweaks.technology.clowns-processing") -- Clowns-Processing: актуальный prerequisite Bob's tungsten
 require("tweaks.technology.energy-balance") -- ранняя энергетика без обработанного топлива и отдельной электрификации
+require("tweaks.recipe.orphan-recipes") -- рецепты без открывающей технологии: unlock или hidden
 
 -- molten-*-alloy-mixing/remelting не имеют recipe-name локали → "Unknown key" в 2.0
 -- (icons-оверлей ломает авто-вывод). Берём имя из fluid-результата.

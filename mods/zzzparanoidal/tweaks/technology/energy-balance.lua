@@ -25,15 +25,6 @@ local function remove_prerequisite(prerequisite_name)
     end
 end
 
--- Убираем отдельную ступень электрификации Bob's, не заменяя её другой зависимостью.
-local electricity = data.raw.technology["bob-electricity"]
-if electricity then
-    remove_prerequisite("bob-electricity")
-    electricity.enabled = false
-    electricity.hidden = true
-    electricity.effects = {}
-end
-
 -- Железоугольный аккумулятор идёт после основ электрификации AAI.
 if data.raw.technology["fe-c-accumulator"] and data.raw.technology["electricity"] then
     paralib.bobmods.lib.tech.add_prerequisite("fe-c-accumulator", "electricity")

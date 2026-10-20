@@ -68,15 +68,6 @@ data.raw.technology["angels-advanced-gas-processing"].icons = {
 	},
 }
 
-if data.raw.technology["angels-advanced-gas-processing-2"] then
-	data.raw.technology["angels-advanced-gas-processing-2"].icons = {
-		{
-			icon = "__reskins-angels__/graphics/technology/petrochem/advanced-gas-processing/advanced-gas-processing-technology-base.png",
-			icon_size = 256,
-			icon_mipmaps = 2,
-		},
-	}
-end
 
 data.raw.technology["angels-advanced-ore-refining-5"].icon_size = 256
 data.raw.technology["angels-advanced-ore-refining-5"].icon_mipmaps = 4
