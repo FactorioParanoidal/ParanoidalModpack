@@ -98,10 +98,6 @@ end
 if mods["even-distribution"] then
     set_settings_default_value("int-setting", "global-max-inventory-cleanup-range", 100)
 end
--- Без бесплатного топлива: пустой манипулятор на топливе не получает 1 единицу «из воздуха».
-if mods["InserterFuelLeech"] then
-    set_settings_default_value("bool-setting", "inserter-fuel-leech-self-refuel-cheat-enabled", false)
-end
 if mods["deep-storage-unit"] or mods["fluid-memory-storage"] then
     set_settings_default_value("string-setting", "memory-unit-power-usage", "480kW")
 end
