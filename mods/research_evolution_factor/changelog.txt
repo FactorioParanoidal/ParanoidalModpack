@@ -1,6 +1,10 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.1.5
 Date: 2026. 10. 15
+  Bugfixes:
+    - Science packs again raise evolution: research ingredients are read in the 2.0 form {name, amount}; before, only the constant 0.15% per technology was added, so the whole tree gave about 85% instead of nearly 100%.
+    - Research by script or command counts like ordinary research (the by_script check never worked; now it is removed on purpose).
+    - Removed the top-level reset of storage and the record of started infinite research; the cost of every finished level is computed from the technology itself.
   Changes:
     - The "ignore infinite technologies" setting ignores only technologies with a cost formula and more than 10 levels (infinite or not); count_formula technologies with up to 10 levels (e.g. research-speed-7, worker-robots-battery-1) now raise evolution and show their value.
     - The tooltip is built by evolution-label.lua; mods that change technology costs after this mod's data-final-fixes call relabel_all again so the tooltip matches the final cost.
@@ -10,3 +14,8 @@ Date: 2026. 10. 15
     - A formula technology finished without a recorded start uses its current unit count instead of 0.
     - Paranoidal: remote interface research_evolution_factor.path_increment(force_name, technology_names) returns the evolution exponent of the listed unresearched technologies by the same rule (read-only); used by paranoidal-tech-tree.
     - Paranoidal: the ten "Quality control" technologies of ic-more-qualities (ic-defect-control-1...10) together add the constant part of one technology (0.015% each instead of 0.15%); the science pack part is unchanged. The whole chain raises evolution by about 0.34% instead of 1.68%. Set by name prefix in parameters.lua (constant_scale); the tooltip shows the same value. Evolution already gained in a save is not changed.
+    - Control script rewritten for the 2.0 API. Science packs are counted as the game charges them, with the map technology price multiplier (the tooltip shows the value for multiplier 1).
+    - Every finished level counts once per save; levels researched several at once, by migrations or by a script without the event, are found on configuration change.
+    - Evolution is raised on every surface for every AI controllable force; a new surface starts with the evolution gained from research.
+    - Old saves: on the first load the evolution of enemy forces on every surface is recalculated once from the researched technologies only (time, pollution and other sources are dropped).
+    - paranoidal-tech-tree estimate (path_increment) uses the same per-level rule, all remaining levels of finite multi-level technologies.
