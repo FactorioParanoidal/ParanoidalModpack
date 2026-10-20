@@ -46,17 +46,6 @@ local function get_digit(num, digit)
 end
 
 
-local function set_color(unit, fluid_count)
-
-  rendering.set_color(unit, 
-  {
-    r=0.8*math.max(0, fluid_count < 50 and 1 or (100 - fluid_count) / 50),  
-    g=0.8*math.max(0, tonumber((fluid_count >= 50 and fluid_count <= 100) and 1 or ((fluid_count >= 0 and fluid_count < 50) and fluid_count / 50 or 0))),
-    b=0
-  })
-end
-
-
 local function calc_color(fluid_count, fli_type)
 
   b = 0

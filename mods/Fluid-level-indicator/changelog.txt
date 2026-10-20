@@ -11,6 +11,7 @@ Date: 09 May 2025
   Bugfixes:
     - Paranoidal: an indicator removed without an event or mid-iteration no longer breaks the update cursor;
       missing render objects are recreated instead of erroring.
+    - Paranoidal: removed the unused set_color helper that called the removed rendering.set_color API.
 ---------------------------------------------------------------------------------------------------
 Version: 0.9.8
 Date: 03 April 2025
