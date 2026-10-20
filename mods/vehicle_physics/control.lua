@@ -142,8 +142,6 @@ script.on_event(defines.events.on_tick, function(event)
 				tbl.idle_ticks = 0
 			end
 			if tbl.idle_ticks < 50 then
-				local surroundings = #tbl.entity.surface.find_entities_filtered {area = {{pos.x-1,pos.y-1},{pos.x+1,pos.y+1}}}
-			--if speed ~=0 or surroundings == 1 then
 				local movement_x = pos.x-tbl.position.x
 				local movement_y = pos.y-tbl.position.y
 				local drift_x = pos.x-tbl.position.x

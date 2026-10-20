@@ -3,6 +3,8 @@ Version: 2.0.4
 Date: 2025-06-30
   Bugfixes:
     -  Drifting sound not playing globally anymore (in multiplayer)
+  Optimizations:
+    - Paranoidal: removed an unused find_entities_filtered call made every tick for every moving car.
 
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.3
