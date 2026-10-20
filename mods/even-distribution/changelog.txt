@@ -1,4 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 9.0.2
+Date: 2026-10-21
+  Changes:
+    - Paranoidal fork of 2.0.2 (version 9.x marks the local fork).
+  Bugfixes:
+    - Inventory cleanup (Shift+C) again treats ores, crushed ores, slag, stone, coal, crushed coal, coke, Angels bio-processing and water treatment items as trash by default, as in Factorio 1.1: added the 2.0 Angels item group names (angels-resource-refining, angels-petrochem-refining, angels-water-treatment, angels-bio-processing-nauvis/-vegetables/-alien) and item names (angels-coal-crushed, angels-wood-pellets, angels-wood-bricks) to the default trash list.
+---------------------------------------------------------------------------------------------------
 Version: 2.0.2
 Date: 2024-10-22
   Changes:
