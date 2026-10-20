@@ -1,10 +1,12 @@
 require("classes.toxic")
 require("classes.detector")
 
-local interval = 1
+-- Detector combinators are refreshed in 12 slots, one slot every 5 ticks (each combinator once
+-- per 60 ticks as before); player damage runs once per TickInterval. No per-tick handler.
+local DETECTOR_TICKS = 5
 
 local toxic = Toxic()
-local detector = Detector(interval)
+local detector = Detector(DETECTOR_TICKS)
 
 script.on_init(function()
     toxic:init()
@@ -27,10 +29,11 @@ script.on_event(defines.events.on_player_joined_game, function(event)
     detector:init()
 end)
 
-script.on_nth_tick(interval, function(event)
-    if event.tick % conf:TickInterval() == 0 then
-        toxic:OnTick()
-    end
+script.on_nth_tick(conf:TickInterval(), function()
+    toxic:OnTick()
+end)
+
+script.on_nth_tick(DETECTOR_TICKS, function(event)
     detector:OnTick(event)
 end)
 

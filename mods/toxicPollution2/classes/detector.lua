@@ -2,7 +2,8 @@ Detector = class(function(self, interval)
     self.name = "Pollution Detector"
     self.signal = {type = "virtual", name = "signal-yellow-more-toxin"}
     self.interval = interval
-    self.step = 60
+    -- Called every `interval` ticks; `step` slots make one full refresh per 60 ticks.
+    self.step = math.max(1, math.floor(60 / interval))
     self.maxTime = interval * self.step
 end)
 
@@ -129,7 +130,7 @@ function Detector:OnTick(event)
     -- Each combinator is refreshed once per self.step ticks; the slot is derived directly
     -- instead of counting down from self.step every tick. Dead entries are dropped.
     local period = self.step
-    local slot = event.tick % period
+    local slot = math.floor(event.tick / self.interval) % period
     local count = 1
     for key, el in pairs(combinators) do
         if not el.behavior.valid then

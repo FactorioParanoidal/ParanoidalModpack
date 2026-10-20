@@ -8,6 +8,8 @@ Date: 2026-10-20
   Optimizations:
     - Detector tick: slot computed directly instead of a 60-step countdown each tick; skipped while
       no combinator is registered. Build/mine handlers filtered to constant combinators.
+    - No per-tick handler any more: player damage runs on_nth_tick(60), detector combinators are
+      refreshed in 12 slots every 5 ticks (each combinator still once per second).
 ---------------------------------------------------------------------------------------------------
 Version: 0.3.6
 Date: 2019-06-2
