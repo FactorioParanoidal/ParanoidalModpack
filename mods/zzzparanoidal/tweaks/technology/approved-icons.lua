@@ -63,28 +63,3 @@ for _, entry in ipairs(list) do
         technology.icons = layers
     end
 end
-
--- Цвета исследований плавки и литья совпадают с восстановленными слитками Beta 8.
--- Меняем только известные картинки Reskins; размеры и дополнительные слои сохраняются.
-local smelting_root = "__reskins-angels__/graphics/technology/smelting/"
-local materials = { chrome = "tin", tin = "chrome" }
-
-for material, color in pairs(materials) do
-    local replacements = {}
-    for _, kind in ipairs({ "smelting", "casting" }) do
-        local prefix = smelting_root .. kind .. "/" .. kind .. "-"
-        replacements[prefix .. material .. "-technology-icon.png"] = prefix .. color .. "-technology-icon.png"
-    end
-
-    for _, branch in ipairs({ "smelting", "casting" }) do
-        for level = 1, 3 do
-            local technology = data.raw.technology["angels-" .. material .. "-" .. branch .. "-" .. level]
-            if technology then
-                technology.icon = replacements[technology.icon] or technology.icon
-                for _, layer in ipairs(technology.icons or {}) do
-                    layer.icon = replacements[layer.icon] or layer.icon
-                end
-            end
-        end
-    end
-end
