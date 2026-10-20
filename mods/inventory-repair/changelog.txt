@@ -5,6 +5,7 @@ Date: 2025-05-02
     - Fixed an error when a player was deleted from the game.
   Optimizations:
     - Paranoidal: the repair interval setting is cached instead of being read from settings.global every tick.
+    - Paranoidal: the check is registered with on_nth_tick(interval) (re-registered on load and when the setting changes) instead of running every tick behind a modulo gate.
 ---------------------------------------------------------------------------------------------------
 Version: 20.0.2
 Date: 2024-10-28
