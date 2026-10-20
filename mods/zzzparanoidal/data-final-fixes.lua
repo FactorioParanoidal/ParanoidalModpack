@@ -320,6 +320,8 @@ require("tweaks.custom.refining-smelting-menu-beta8")
 require("tweaks.custom.casting-water-menu-beta8")
 -- После меню литья: расплав хрома и марганца из черновых слитков (issue #401).
 require("tweaks.recipe.chrome-manganese-molten")
+-- Здания смесителя: загрязнение, улучшения, буфер, графика и звук 2.0.0 (issue #401).
+require("tweaks.entity.alloy-mixer-2-0")
 -- Нефтехимия и разливка: смысловые ряды и пары наполнения/опорожнения, только меню.
 require("tweaks.custom.petrochem-fluid-menu-beta8")
 -- Производство, транспортное оборудование и общий космос: только размещение рецептов.
