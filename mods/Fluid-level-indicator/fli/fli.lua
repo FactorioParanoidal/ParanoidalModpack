@@ -10,6 +10,19 @@ flientities =
 
 require("fli/fli_gui")
 
+-- Runtime settings are cached per load; control.lua calls fli_refresh_settings on change.
+local update_interval, units_per_update
+function fli_refresh_settings()
+  update_interval = math.max(1, settings.global["update_every_x_tick"].value)
+  units_per_update = settings.global["number_of_units_to_check_per_update"].value
+end
+
+local font_setting = settings.startup["font-picker"].value
+local sprite_font = font_setting == "sprite"
+
+-- Fluidbox volume per prototype name: constant for the session, read once instead of per update.
+local capacity_by_name = {}
+
 local function players_present()
 
     local players_present = false
@@ -69,7 +82,7 @@ end
 
 
 local function destroyit(globalcontainer)
-  if globalcontainer ~= nil then
+  if globalcontainer ~= nil and globalcontainer.valid then
     globalcontainer.destroy()
   end
 end
@@ -81,193 +94,188 @@ function removedfli(removed_entity)
   end
   for _, entityname in ipairs(flientities) do
     if removed_entity.name == entityname then
-      storage.flis[removed_entity.unit_number] = nil
-      storage.flitype[removed_entity.unit_number] = nil
-      if settings.startup["font-picker"].value=="sprite" then
-        destroyit(storage.flidig1[removed_entity.unit_number])
-        destroyit(storage.flidig10[removed_entity.unit_number])
-        destroyit(storage.flidig100[removed_entity.unit_number])
-        destroyit(storage.flidigpc[removed_entity.unit_number])
-        
-        storage.flidig1[removed_entity.unit_number] = nil
-        storage.flidig10[removed_entity.unit_number] = nil
-        storage.flidig100[removed_entity.unit_number] = nil
-        storage.flidigpc[removed_entity.unit_number] = nil
+      local unit_number = removed_entity.unit_number
+      storage.flis[unit_number] = nil
+      storage.flitype[unit_number] = nil
+      -- A cleared key must not stay the `next` cursor of the update loop.
+      if storage.fliindex == unit_number then
+        storage.fliindex = nil
+      end
+      if sprite_font then
+        destroyit(storage.flidig1[unit_number])
+        destroyit(storage.flidig10[unit_number])
+        destroyit(storage.flidig100[unit_number])
+        destroyit(storage.flidigpc[unit_number])
+
+        storage.flidig1[unit_number] = nil
+        storage.flidig10[unit_number] = nil
+        storage.flidig100[unit_number] = nil
+        storage.flidigpc[unit_number] = nil
       else
-        destroyit(storage.flitexts[removed_entity.unit_number])
-        storage.flitexts[removed_entity.unit_number] = nil
+        destroyit(storage.flitexts[unit_number])
+        storage.flitexts[unit_number] = nil
       end
     end
   end
 end
 
 
-local function move_textbox(fli)
-  if settings.startup['font-picker'].value == 'sprite' then
-      if storage.flidig100[fli.unit_number] then
-          storage.flidig100[fli.unit_number].target = { fli.position.x - 0.29, fli.position.y - 0.06 }
-      end
-      if storage.flidig10[fli.unit_number] then
-          storage.flidig10[fli.unit_number].target = { fli.position.x - 0.12, fli.position.y - 0.06 }
-      end
-      if storage.flidig1[fli.unit_number] then
-          storage.flidig1[fli.unit_number].target = { fli.position.x + 0.1, fli.position.y - 0.06 }
-      end
-      if storage.flidigpc[fli.unit_number] then
-          storage.flidigpc[fli.unit_number].target = { fli.position.x + 0.28, fli.position.y - 0.06 }
-      end
-  elseif settings.startup['font-picker'].value == 'default' then
-      if storage.flitexts[fli.unit_number] then
-          storage.flitexts[fli.unit_number].target = { fli.position.x, fli.position.y - 0.34 }
-      end
+-- Render objects are attached to the indicator entity (target with offset): they follow it
+-- without per-update moves and the engine removes them together with the entity.
+local function create_textbox(fli, surface)
+
+  local unit_number = fli.unit_number
+  if sprite_font then
+    storage.flidig100[unit_number] = rendering.draw_sprite(
+    {
+      sprite = "flinumber ",
+      target = {entity = fli, offset = {-0.29, -0.06}},
+      surface = surface,
+      tint = {r=1.0,  g=0.0,  b=0.0, a=0.9},
+      x_scale = 0.05,
+      y_scale = 0.05,
+    })
+    storage.flidig10[unit_number] = rendering.draw_sprite(
+    {
+      sprite = "flinumber ",
+      target = {entity = fli, offset = {-0.12, -0.06}},
+      surface = surface,
+      tint = {r=1.0,  g=0.0,  b=0.0, a=0.9},
+      x_scale = 0.05,
+      y_scale = 0.05,
+    })
+    storage.flidig1[unit_number] = rendering.draw_sprite(
+    {
+      sprite = "flinumber0",
+      target = {entity = fli, offset = {0.1, -0.06}},
+      surface = surface,
+      tint = {r=1.0,  g=0.0,  b=0.0, a=0.9},
+      x_scale = 0.05,
+      y_scale = 0.05,
+    })
+    storage.flidigpc[unit_number] = rendering.draw_sprite(
+    {
+      sprite = "flinumberpc",
+      target = {entity = fli, offset = {0.28, -0.06}},
+      surface = surface,
+      tint = {r=1.0,  g=0.0,  b=0.0, a=0.9},
+      x_scale = 0.05,
+      y_scale = 0.05,
+    })
+  elseif font_setting == "default" then
+    storage.flitexts[unit_number] = rendering.draw_text(
+    {
+      text = "0%",
+      surface = surface,
+      target = {entity = fli, offset = {0, -0.34}},
+      color = {r=1,g=0,b=0,a=0.9},
+      scale = 0.90,
+      font = font_setting,
+      alignment = "center",
+      vertical_alignment = "top",
+      time_to_live = 0
+    })
   else
-      if storage.flitexts[fli.unit_number] then
-          storage.flitexts[fli.unit_number].target = { fli.position.x + 0.03, fli.position.y - 0.32 }
-      end
+    storage.flitexts[unit_number] = rendering.draw_text(
+    {
+      text = "0%",
+      surface = surface,
+      target = {entity = fli, offset = {0.03, -0.32}},
+      color = {r=1,g=0,b=0,a=0.9},
+      scale = 1,
+      font = font_setting,
+      alignment = "center",
+      vertical_alignment = "top",
+      time_to_live = 0
+    })
   end
 end
 
 
 local function fli_update()
 
-  if not next(storage.flis) then return end
+  local flis = storage.flis
+  if not next(flis) then return end
+  local flitype = storage.flitype
 
-  for _ = 0, settings.global["number_of_units_to_check_per_update"].value do
-    storage.fliindex, fli = next(storage.flis, storage.fliindex)
+  for _ = 0, units_per_update do
+    local index, fli = next(flis, storage.fliindex)
+    storage.fliindex = index
     if not fli then return end
 
     if fli.valid then
-      local surface = fli.surface
-      local unit_number = fli.unit_number
-      storage.flitype[unit_number] = storage.flitype[unit_number] or 1
+      local fli_type = flitype[index] or 1
+      flitype[index] = fli_type
       local fluid_count = 0
       local fluidbox = fli.fluidbox[1]
 
       if fluidbox~=nil and fluidbox.amount > 0 then
-        local fluid_count_actual = fli.get_fluid_count(fluidbox)
-        local capacity = fli.fluidbox.get_prototype(1).volume
-        fluid_count = (fluid_count_actual / capacity) * 100
+        local capacity = capacity_by_name[fli.name]
+        if not capacity then
+          capacity = fli.fluidbox.get_prototype(1).volume
+          capacity_by_name[fli.name] = capacity
+        end
+        fluid_count = (fluidbox.amount / capacity) * 100
       end
 
-      local color = {1, 1, 1, 1}
-      color = calc_color(fluid_count, storage.flitype[fli.unit_number])
-      if settings.startup["font-picker"].value=="sprite" then
-        if storage.flidig100[fli.unit_number] ~= nil then
-          if storage.flidig100[fli.unit_number].target ~= { fli.position.x - 0.29, fli.position.y - 0.06 } then 
-            move_textbox(fli)
-          end
+      local color = calc_color(fluid_count, fli_type)
+      local digits = string.format("%.f", fluid_count)
+      if sprite_font then
+        local dig1 = storage.flidig1[index]
+        if not (dig1 and dig1.valid) then
+          create_textbox(fli, fli.surface)
+          dig1 = storage.flidig1[index]
         end
-        storage.flidig1[storage.fliindex].sprite = get_digit(tostring(string.format("%.f",fluid_count)),1)
-        storage.flidig10[storage.fliindex].sprite = get_digit(tostring(string.format("%.f",fluid_count)),2)
-        storage.flidig100[storage.fliindex].sprite = get_digit(tostring(string.format("%.f",fluid_count)),3)
-        storage.flidigpc[storage.fliindex].sprite = "flinumberpc"
-        storage.flidig1[fli.unit_number].color = color
-        storage.flidig10[fli.unit_number].color = color
-        storage.flidig100[fli.unit_number].color = color
-        storage.flidigpc[fli.unit_number].color = color
+        local dig10, dig100, digpc = storage.flidig10[index], storage.flidig100[index], storage.flidigpc[index]
+        dig1.sprite = get_digit(digits, 1)
+        dig10.sprite = get_digit(digits, 2)
+        dig100.sprite = get_digit(digits, 3)
+        dig1.color = color
+        dig10.color = color
+        dig100.color = color
+        digpc.color = color
       else
-        if storage.flitexts[fli.unit_number].target ~= { fli.position.x, fli.position.y - 0.34 } then
-          move_textbox(fli)
+        local text = storage.flitexts[index]
+        if not (text and text.valid) then
+          create_textbox(fli, fli.surface)
+          text = storage.flitexts[index]
         end
-        storage.flitexts[fli.unit_number].text = tostring(string.format("%.f",fluid_count)).."%"
-        storage.flitexts[fli.unit_number].color = color
+        text.text = digits.."%"
+        text.color = color
       end
     else
-      if settings.startup["font-picker"].value=="sprite" then
-        destroyit(storage.flidig1[storage.fliindex])
-        destroyit(storage.flidig10[storage.fliindex])
-        destroyit(storage.flidig100[storage.fliindex])
-        destroyit(storage.flidigpc[storage.fliindex])
-        storage.flidig1[storage.fliindex] = nil
-        storage.flidig10[storage.fliindex] = nil
-        storage.flidig100[storage.fliindex] = nil
-        storage.flidigpc[storage.fliindex] = nil
-        storage.flis[storage.fliindex] = nil
+      -- Entity gone without an event: drop the record and restart the cursor safely.
+      if sprite_font then
+        destroyit(storage.flidig1[index])
+        destroyit(storage.flidig10[index])
+        destroyit(storage.flidig100[index])
+        destroyit(storage.flidigpc[index])
+        storage.flidig1[index] = nil
+        storage.flidig10[index] = nil
+        storage.flidig100[index] = nil
+        storage.flidigpc[index] = nil
       else
-        destroyit(storage.flitexts[storage.fliindex])
-        storage.flitexts[storage.fliindex] = nil
-        storage.flis[storage.fliindex] = nil
+        destroyit(storage.flitexts[index])
+        storage.flitexts[index] = nil
       end
+      flitype[index] = nil
+      flis[index] = nil
+      storage.fliindex = nil
     end
-  end
-end
-
-
-local function create_textbox(fli, surface)
-
-  if settings.startup["font-picker"].value=="sprite" then
-    storage.flidig100[fli.unit_number] = rendering.draw_sprite(
-    {
-      sprite = "flinumber ",
-      target = {fli.position.x-0.29,fli.position.y-0.06},
-      surface = surface,
-      tint = {r=1.0,  g=0.0,  b=0.0, a=0.9},
-      x_scale = 0.05,
-      y_scale = 0.05,
-    })
-    storage.flidig10[fli.unit_number] = rendering.draw_sprite(
-    {
-      sprite = "flinumber ",
-      target = {fli.position.x-0.12,fli.position.y-0.06},
-      surface = surface,
-      tint = {r=1.0,  g=0.0,  b=0.0, a=0.9},
-      x_scale = 0.05,
-      y_scale = 0.05,
-    })
-    storage.flidig1[fli.unit_number] = rendering.draw_sprite(
-    {
-      sprite = "flinumber0",
-      target = {fli.position.x+0.1,fli.position.y-0.06},
-      surface = surface,
-      tint = {r=1.0,  g=0.0,  b=0.0, a=0.9},
-      x_scale = 0.05,
-      y_scale = 0.05,
-    })
-    storage.flidigpc[fli.unit_number] = rendering.draw_sprite(
-    {
-      sprite = "flinumberpc",
-      target = {fli.position.x+0.28,fli.position.y-0.06},
-      surface = surface,
-      tint = {r=1.0,  g=0.0,  b=0.0, a=0.9},
-      x_scale = 0.05,
-      y_scale = 0.05,
-    })
-  elseif settings.startup["font-picker"].value=="default" then
-    storage.flitexts[fli.unit_number] = rendering.draw_text(
-    {
-      text = "0%",
-      surface = surface,
-      target = {fli.position.x,fli.position.y-0.34},
-      color = {r=1,g=0,b=0,a=0.9},
-      scale = 0.90,
-      font = settings.startup["font-picker"].value,
-      alignment = "center",
-      vertical_alignment = "top",
-      time_to_live = 0
-    })
-  else
-    storage.flitexts[fli.unit_number] = rendering.draw_text(
-    {
-      text = "0%",
-      surface = surface,
-      target = {fli.position.x+0.03,fli.position.y-0.32},
-      color = {r=1,g=0,b=0,a=0.9},
-      scale = 1,
-      font = settings.startup["font-picker"].value,
-      alignment = "center",
-      vertical_alignment = "top",
-      time_to_live = 0
-    })
   end
 end
 
 
 function flion_tick(event)
 
-  if players_present then
-    if game.tick % settings.global["update_every_x_tick"].value == 0 then
-      fli_update()
-    end
+  if not update_interval then fli_refresh_settings() end
+  if event.tick % update_interval ~= 0 then return end
+  if not storage.fli_attached_targets then
+    -- Older saves: render objects were placed by position and moved on every update.
+    register_flis()
+  end
+  if players_present() then
+    fli_update()
   end
 end
 
@@ -290,19 +298,18 @@ function register_flis()
   rendering.clear("Fluid-level-indicator")
   for _,surface in pairs(game.surfaces) do
     for _, name in pairs(flientities) do
-      for _,fli in pairs(surface.find_entities_filtered{name = name}) do
-        if fli.unit_number~=nil then
-          storage.flis[fli.unit_number] = fli
-          if storage.flitype[fli.unit_number] == nil then
-            storage.flitype[fli.unit_number] = 1
+      for _,found in pairs(surface.find_entities_filtered{name = name}) do
+        if found.unit_number~=nil then
+          storage.flis[found.unit_number] = found
+          if storage.flitype[found.unit_number] == nil then
+            storage.flitype[found.unit_number] = 1
           end
-          create_textbox(fli, surface)
-          storage.fliindex = fli.unit_number
+          create_textbox(found, surface)
+          storage.fliindex = found.unit_number
         end
       end
     end
   end
-  if next(storage.flis)~= nil then
-    storage.fliindex, fli = next(storage.flis, nil)
-  end
+  storage.fliindex = nil
+  storage.fli_attached_targets = true
 end

@@ -78,6 +78,12 @@ script.on_init(function()
 
 script.on_event(defines.events.on_tick, flion_tick)
 
+script.on_event(defines.events.on_runtime_mod_setting_changed, function(event)
+    if event.setting == "update_every_x_tick" or event.setting == "number_of_units_to_check_per_update" then
+        fli_refresh_settings()
+    end
+end)
+
 script.on_event(defines.events.on_gui_selection_state_changed, function(event)
     local player = game.players[event.player_index]
     if (event.element.name == "fli_dropdown") then
