@@ -17,8 +17,19 @@ local R_LAYER = {
 local MIXER = "remelting-alloy-mixer-"
 local CATEGORY = { "molten-alloy-mixing", "molten-alloy-mixing-2", "molten-alloy-mixing-3", "molten-alloy-mixing-4" }
 
-local function molten(name, amount)
-	return { type = "fluid", name = "angels-liquid-molten-" .. name, amount = amount or 120 }
+-- Вход: "metal" (120 расплава), { "metal", N } (N расплава) или { item = name, amount = N }.
+local function ingredient(spec)
+	if type(spec) == "string" then
+		return { type = "fluid", name = "angels-liquid-molten-" .. spec, amount = 120 }
+	elseif spec.item then
+		return { type = "item", name = spec.item, amount = spec.amount }
+	end
+	return { type = "fluid", name = "angels-liquid-molten-" .. spec[1], amount = spec[2] }
+end
+
+local function ingredient_exists(spec)
+	if type(spec) == "table" and spec.item then return data.raw.item[spec.item] ~= nil end
+	return data.raw.fluid["angels-liquid-molten-" .. (type(spec) == "string" and spec or spec[1])] ~= nil
 end
 
 -- name, тир, пара из слитков, входы, выход
@@ -30,6 +41,11 @@ local new_recipes = {
 	{ "molten-manganese-aluminium-alloy-mixing", 2, "angels-liquid-molten-aluminium-2", { "aluminium", "manganese" }, "aluminium", 240 },
 	{ "molten-manganese-titanium-alloy-mixing", 3, "angels-liquid-molten-titanium-2", { "titanium", "manganese" }, "titanium", 240 },
 	{ "molten-cocr-titanium-alloy-mixing", 4, "angels-liquid-molten-titanium-5", { "titanium", "cobalt", "chrome" }, "titanium", 360 },
+	{ "molten-sicu-aluminium-alloy-mixing", 3, "angels-liquid-molten-aluminium-3", { "aluminium", "silicon", "copper" }, "aluminium", 360 },
+	{ "molten-nickel-titanium-alloy-mixing", 3, "angels-liquid-molten-titanium-3", { "titanium", "nickel" }, "titanium", 240 },
+	{ "molten-alsn-titanium-alloy-mixing", 4, "angels-liquid-molten-titanium-4", { "titanium", "aluminium", "tin" }, "titanium", 360 },
+	{ "molten-brass-alloy-mixing-4", 3, "angels-brass-smelting-4",
+		{ { "copper", 180 }, { "zinc", 120 }, { item = "clowns-solid-white-phosphorus", amount = 6 } }, "brass", 360 },
 }
 
 -- Прежние рецепты: перенос в смеситель тира (nil — открытие не трогаем) и пара для иконки.
@@ -102,12 +118,12 @@ for index, spec in ipairs(new_recipes) do
 	local name, tier, twin_name, inputs, output, amount = table.unpack(spec)
 	local twin = data.raw.recipe[twin_name]
 	local ok = twin and not twin.hidden and not data.raw.recipe[name]
-	for _, metal in ipairs(inputs) do
-		ok = ok and data.raw.fluid["angels-liquid-molten-" .. metal] ~= nil
+	for _, input in ipairs(inputs) do
+		ok = ok and ingredient_exists(input)
 	end
 	if ok then
 		local ingredients = {}
-		for _, metal in ipairs(inputs) do table.insert(ingredients, molten(metal)) end
+		for _, input in ipairs(inputs) do table.insert(ingredients, ingredient(input)) end
 		local result = "angels-liquid-molten-" .. output
 		local subgroup = twin.subgroup
 		table.insert(added, {
@@ -116,7 +132,7 @@ for index, spec in ipairs(new_recipes) do
 			localised_name = { "fluid-name." .. result },
 			category = CATEGORY[tier],
 			subgroup = subgroup,
-			order = last_order(subgroup) .. "-" .. index,
+			order = last_order(subgroup) .. "-" .. string.format("%02d", index),
 			enabled = false,
 			energy_required = 4,
 			ingredients = ingredients,
