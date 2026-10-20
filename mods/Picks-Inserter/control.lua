@@ -17,7 +17,6 @@
 			name = "Picklocks Inserter block detacher",
 			version = "2.1.4",
 			selector = "PI_inserter_selector",
-			isControlSet = false,
 			isAdmin = true,
 			tick = 1
 		}
@@ -112,7 +111,13 @@
 			--if PI_debug then print_debug("function started: PI_set_controls") end
 			myPlayer.set_shortcut_available("PI_inserter_selector_ui_sc",PI_target_selection)
 			--if PI_debug then print_debug("PI_set_controls: set PI_inserter_selector_ui_sc to " ..tostring(myPlayer.is_shortcut_available("PI_inserter_selector_ui_sc")).. " for player " ..myPlayer.name ) end
-			PI_general.isControlSet = true
+		end
+
+	--set Controls for every player (init, configuration change, change of the selector setting)
+		local function PI_set_controls_all()
+			for _, myPlayer in pairs(game.players) do
+				if myPlayer.valid then PI_set_controls(myPlayer) end
+			end
 		end
 
 	--rounding
@@ -166,7 +171,10 @@
 			if PI_db_inserters ~= nil then
 				for i = #PI_db_inserters, 1, -1 do
 					if PI_set_mark then
-						PI_db_inserters[i].mark = PI_set_inserter_mark (PI_db_inserters[i].inserter)
+						--Paranoidal: a removed inserter may still be in the list until the next parse
+						if PI_db_inserters[i].inserter and PI_db_inserters[i].inserter.valid then
+							PI_db_inserters[i].mark = PI_set_inserter_mark (PI_db_inserters[i].inserter)
+						end
 					else
 						PI_remove_inserter_mark (PI_db_inserters[i].mark)
 						PI_db_inserters[i].mark = nil					
@@ -320,6 +328,7 @@
 			--if PI_debug then print_debug("function started: PI_remInserterFromDB") end
 			--load DB from storage
 			PI_db_inserters = storage.PI_db_inserters
+			if not PI_db_inserters then return end
 			if intIndex then
 				--if PI_debug then print_debug("PI_remInserterFromDB: Index given") end
 				--remove mark
@@ -480,6 +489,7 @@
 		script.on_init(function ()
 			PI_load ("on_init")
 			PI_remove_all_inserter_mark()
+			PI_set_controls_all()
 		end)
 
 		script.on_load(function ()
@@ -511,12 +521,16 @@
 				PI_lines_to_check = settings.global[PI_set.width].value
 				PI_extend_length = settings.global[PI_set.length].value
 			end
+			--Paranoidal: shortcuts and marks are synced here and on setting changes. They were synced on the first
+			--tick of every session from a module-local flag, so a joining client made game changes the host did not.
+			PI_set_controls_all()
+			PI_modify_all_marks (false)
 		end)
 
 	--mod setting
 		script.on_event(defines.events.on_runtime_mod_setting_changed, function(event)
 			--if PI_debug then print_debug("raised event: on_runtime_mod_setting_changed") end
-			if not event or not event.player_index then return end 
+			if not event then return end
 			--PI_temp_unlock
 			if event.setting == PI_set.unlock then PI_temp_unlock = settings.global[PI_set.unlock].value end
 			--PI_clear_inserter
@@ -539,7 +553,7 @@
 			--PI_extend_length
 			if event.setting == PI_set.length then PI_extend_length = settings.global[PI_set.length].value end
 			--Set controls
-			PI_set_controls(game.players[event.player_index])
+			if event.setting == PI_set.sel then PI_set_controls_all() end
 
 		end)
 		
@@ -627,13 +641,6 @@
 
 	--tick
 		script.on_event(defines.events.on_tick, function(event)
-			--Set controls
-			if not PI_general.isControlSet then 
-				--if PI_debug then print_debug("raised event: on_tick: not PI_general.isControlSet") end
-				PI_general.isAdmin = true
-				if game.players[1] and game.players[1].valid then PI_set_controls(game.players[1]) end
-				PI_modify_all_marks (false)
-			end
 			--Work on Inserter List
 			--if PI_debug then print_debug("raised event: on_tick") end
 			PI_parseInserterList(event.tick)			
