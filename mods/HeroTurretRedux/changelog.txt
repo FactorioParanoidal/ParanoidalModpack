@@ -3,6 +3,7 @@ Version: 1.0.38
 Date: 03/11/2026
   Fixes:
     - Fixed bug with prio targets 
+    - Paranoidal: removed the UTF-8 byte-order mark from the Lua files (data*.lua, settings.lua, migrations/heroturrets_0.1.21.lua); external Lua tools refused to parse them.
     - Paranoidal: rank insignia of turrets without base_visualisation (BI dart turret) is drawn via graphics_set.base_visualisation; 2.0 ignored the old base_picture and the badge was invisible.
     - Paranoidal: artillery rank insignia moved down under the bottom edge of the base, level with the laser turret badge.
 ---------------------------------------------------------------------------------------------------
