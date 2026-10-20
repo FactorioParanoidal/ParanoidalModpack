@@ -373,3 +373,16 @@ for _, move in ipairs(moves) do
 		end
 	end
 end
+
+-- Компостер и почва перенесены в bio-farm, песок — в water-washing-1 (Clowns): angels-composting
+-- осталась пустым тупиком без потомков, которого в Beta 8 не было.
+local composting = data.raw.technology["angels-composting"]
+if composting then
+	for _, technology in pairs(data.raw.technology) do
+		for index = #(technology.prerequisites or {}), 1, -1 do
+			if technology.prerequisites[index] == "angels-composting" then table.remove(technology.prerequisites, index) end
+		end
+	end
+	composting.hidden = true
+	composting.enabled = false
+end
