@@ -1,20 +1,25 @@
 -- Reforged Paranoidal: unit prototypes of the champions and hour bosses (libs/Champions.lua).
 --
--- A champion is a copy of an ordinary unit named <unit> .. constants.CHAMPION_SUFFIX. on_entity_damaged can only be
--- filtered by prototype, not by unit: with the ordinary prototype every hit on every unit of that kind went to the
--- script while a champion lived. The copies are made for every unit libs/Champions.lua can pick:
---  * Rampant biters, spitters and flyers of tier 2 and above (a champion is one tier above the nest's units);
---  * units of the other nests (vanilla, Bob), except Big Monsters and mferrari nests;
+-- A champion is a copy of a unit named constants.championUnitName(kind, unit, nest unit): one copy per kind and per
+-- unit the nest spawns now, as libs/Champions.lua (resolveBoss) picks them. The copy has the real health of the
+-- champion: max(own health, healthK x health of the nest unit), so the health bar and the tooltip show it as it is, and
+-- no natural regeneration (it regenerates at a nest by script). on_entity_damaged can only be filtered by prototype,
+-- not by unit: with own prototypes the filter reaches the champions only. Copies are made for:
+--  * Rampant biters, spitters and flyers: the unit tierUp tiers above every unit of the line (capped at tier 10);
+--  * units of the other nests (vanilla, Bob), except Big Monsters and mferrari nests: the next stronger unit of the
+--    same kind among the nest's units (hour boss: the one after it);
 -- and never for units whose attack damages themselves (suicide and nuclear biters).
 -- Copies are not spawned by nests, have no loot (the champion drops one artifact) and are hidden in Factoriopedia.
 -- Runs at the end of data-final-fixes, after the resistance updates of this mod. If a copy is missing, the runtime
--- spawns the ordinary unit as before.
+-- spawns the ordinary unit with a script health pool as before.
 
 local constants = require("__RampantFixed__/libs/Constants")
 
-local SUFFIX = constants.CHAMPION_SUFFIX
+local KINDS = constants.CHAMPION_KINDS
+local championUnitName = constants.championUnitName
 local RAMPANT_UNIT = "^(.+)%-(%a+)%-v(%d+)%-t(%d+)%-rampant$"
 local RAMPANT_TYPES = {biter = true, spitter = true, flyer = true}
+local MAX_TIER = 10
 
 -- a single prototype entry or an array of them
 local function asList(value)
@@ -43,44 +48,102 @@ local function hurtsItself(unit)
     return false
 end
 
+-- same as unitKind in libs/Champions.lua
+local function unitKind(name)
+    if string.find(name, "flyer", 1, true) then
+        return "flyer"
+    elseif string.find(name, "spitter", 1, true) then
+        return "spitter"
+    end
+    return "biter"
+end
+
 -- Big Monsters / mferrari spawners (libs/ForeignEnemies.lua, no requires: usable at the data stage)
 local excludedSpawner = require("__RampantFixed__/libs/ForeignEnemies").isForeign
 
 local units = data.raw["unit"]
-local selected = {}
+
+local function healthOf(unit)
+    return unit.max_health or 10
+end
+
+-- copy name -> {kind, boss, nest unit}
+local pairsByName = {}
+
+local function addPair(kind, bossName, localName)
+    pairsByName[championUnitName(kind, bossName, localName)] = {kind = kind, boss = bossName, nest = localName}
+end
 
 for name in pairs(units) do
-    local _, unitType, _, tier = string.match(name, RAMPANT_UNIT)
-    if unitType and RAMPANT_TYPES[unitType] and (tonumber(tier) >= 2) then
-        selected[name] = true
+    local faction, unitType, variation, tier = string.match(name, RAMPANT_UNIT)
+    if unitType and RAMPANT_TYPES[unitType] then
+        tier = tonumber(tier)
+        for kind, spec in pairs(KINDS) do
+            local bossName = faction .. "-" .. unitType .. "-v" .. variation .. "-t" ..
+                math.min(tier + spec.tierUp, MAX_TIER) .. "-rampant"
+            if units[bossName] then
+                addPair(kind, bossName, name)
+            end
+        end
     end
 end
 
+-- vanilla / Bob nests: the next stronger unit of the same kind among the nest's units (tierUp steps)
 for spawnerName, spawner in pairs(data.raw["unit-spawner"]) do
     if not excludedSpawner(spawnerName) then
+        local nestUnits = {}
         for _, definition in pairs(spawner.result_units or {}) do
             local name = definition.unit or definition[1]
-            if name and units[name] and not string.find(name, "rampant", 1, true) then
-                selected[name] = true
+            if name and units[name] then
+                nestUnits[#nestUnits + 1] = name
+            end
+        end
+        for _, localName in ipairs(nestUnits) do
+            if not string.find(localName, "rampant", 1, true) then
+                local desiredType = unitKind(localName)
+                for kind, spec in pairs(KINDS) do
+                    local bossName = localName
+                    local bossHealth = healthOf(units[localName])
+                    for _ = 1, spec.tierUp do
+                        local stronger, strongerHealth
+                        for _, name in ipairs(nestUnits) do
+                            if unitKind(name) == desiredType then
+                                local health = healthOf(units[name])
+                                if (health > bossHealth) and ((not strongerHealth) or (health < strongerHealth)) then
+                                    stronger = name
+                                    strongerHealth = health
+                                end
+                            end
+                        end
+                        if not stronger then
+                            break
+                        end
+                        bossName = stronger
+                        bossHealth = strongerHealth
+                    end
+                    addPair(kind, bossName, localName)
+                end
             end
         end
     end
 end
 
 local names = {}
-for name in pairs(selected) do
+for name in pairs(pairsByName) do
     names[#names + 1] = name
 end
 table.sort(names)
 
 local copies = {}
-for _, name in ipairs(names) do
-    local unit = units[name]
-    local copyName = name .. SUFFIX
+for _, copyName in ipairs(names) do
+    local pair = pairsByName[copyName]
+    local unit = units[pair.boss]
     if (not units[copyName]) and (not hurtsItself(unit)) then
         local copy = table.deepcopy(unit)
         copy.name = copyName
-        copy.localised_name = unit.localised_name or {"entity-name." .. name}
+        copy.localised_name = unit.localised_name or {"entity-name." .. pair.boss}
+        copy.max_health = math.max(healthOf(unit), healthOf(units[pair.nest]) * KINDS[pair.kind].healthK)
+        copy.healing_per_tick = 0
         copy.loot = nil
         copy.hidden_in_factoriopedia = true
         copies[#copies + 1] = copy
