@@ -1,0 +1,14 @@
+{
+  "name": "Repair_Turret",
+  "version": "9.0.6",
+  "title": "Repair Turret",
+  "author": "Klonan, Paranoidal",
+  "contact": "",
+  "homepage": "https://mods.factorio.com/mod/Repair_Turret",
+  "description": "Paranoidal fork: a repair-only turret. Heals damaged friendly buildings, vehicles and characters nearby using repair packs from its own slot.",
+  "factorio_version": "2.0",
+  "dependencies": [
+    "base >= 2.0",
+    "? even-pickier-dollies"
+  ]
+}
