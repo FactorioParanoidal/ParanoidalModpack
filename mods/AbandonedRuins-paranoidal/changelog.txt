@@ -6,6 +6,9 @@ Date: 2026-10-14
       tag for the force. The tag disappears when a player discovers the ruin.
   Bugfixes:
     - Clearing a surface drops its undiscovered ruins from the journal.
+  Changes:
+    - Stonehenge: the inner ring is made of huge rocks (stone and coal) instead of RampantFixed loot stones;
+      the combat power-up capsule they held was removed from RampantFixed.
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.0
 Date: 2026-10-11

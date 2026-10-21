@@ -230,7 +230,7 @@ def("pd-stonehenge", function(b)
   end
   for i = 0, 5 do
     local a = i * math.pi / 3 + 0.5
-    b:try_put("lootStone_Combat5-rampantFixed", math.floor(5 * math.cos(a)) - 1, math.floor(5 * math.sin(a)) - 1)
+    b:try_put("huge-rock", math.floor(5 * math.cos(a)) - 1, math.floor(5 * math.sin(a)) - 1)
   end
   b:put("steel-chest", -1, -1, { items = {
     ["bob-alien-artifact"] = R(3, 10), ["bob-alien-artifact-purple"] = R(1, 3), ["bob-alien-artifact-orange"] = R(1, 3),
