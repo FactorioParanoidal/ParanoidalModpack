@@ -12,6 +12,7 @@ shield.set_hooks({
 	force_changed = repair.shield_force_changed,
 	turret_off = repair.turret_unshielded,
 	turret_on = repair.turret_shielded,
+	hot = repair.mark_hot,
 })
 
 -- The only place that registers handlers (a bench build may swap this line for a profiler).

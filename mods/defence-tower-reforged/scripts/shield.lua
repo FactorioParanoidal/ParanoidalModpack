@@ -18,11 +18,17 @@
 -- per payment (looks of one tick share one read/write per tower). An emptied tower stops for
 -- BROKEN_TICKS; a payment it cannot make goes on to the next one.
 --
+-- Area work (covering a tower square, the ring after a range research, switching towers to a new
+-- shield level) is queued and spread: at most WORK_STEPS searches or switches per tick. A smaller
+-- square only unlinks in Lua. An undamaged turret is looked at every IDLE ticks only: a hit that would
+-- kill it is intercepted anyway, the looks only repair chip damage and give the eps back.
+--
 -- Engine costs measured on 2.0.77 (bench 2026-10-21): an event to a handler that reads it ~7 us,
 -- an entity property read/write 0.15-0.3 us, a health write that makes an entity fully healthy
 -- ~5.7 us (hence turrets under fire are repaired to t.top, just below their maximum, and get the
 -- rest SUSTAIN ticks after the last damage).
 local shared = require("kts_shared")
+local A = require("scripts.area")
 
 local S = {}
 
@@ -40,7 +46,7 @@ local HIT_TICKS = math.floor(HIT_FRAMES / HIT_SPEED + 0.5) -- 30; 9 / 0.3 is 30.
 local UNPLUGGED = "utility/electricity_icon_unplugged"
 
 local HOT = 3 -- ticks between looks at a turret damaged at its last look or just intercepted
-local IDLE = 300 -- longest gap between two looks at an undamaged turret
+local IDLE = 1800 -- longest gap between two looks at an undamaged turret
 local UNPAID = 60 -- longest gap between two looks at a damaged turret no tower can repair now
 local SUSTAIN = 60 -- ticks after the last seen damage a turret is kept eps below its maximum
 local TOWER_LOOK = 30 -- ticks between two shield looks at a tower (cached charge, bar, power icon)
@@ -50,6 +56,7 @@ local EMPTY = 1 -- J; a buffer below this counts as empty
 local SPREAD = 30 -- first looks at new records are spread over this many ticks
 local FX_INTERVAL = 5 -- a turret gets at most one bubble update per this many ticks
 local EXTEND_BEFORE = 10 -- a bubble is extended when fewer ticks than this are left
+local WORK_STEPS = 8 -- area searches (or tower level switches) per tick
 
 local EAST, WEST, SOUTH = defines.direction.east, defines.direction.west, defines.direction.south
 local KIND_PLAIN, KIND_FLUID, KIND_LASER = 1, 2, 3
@@ -57,6 +64,7 @@ local BAR_OFFSET = {0, 0.75}
 local PLUG_OFFSET = {0.6, 0.25}
 
 local ceil, min, max, abs = math.ceil, math.min, math.max, math.abs
+local ring = A.ring
 
 local TURRET_TYPE = {}
 for _, t in ipairs(TURRET_TYPES) do
@@ -70,6 +78,7 @@ local hooks = {
 	force_changed = function() end, -- (force_index, on) the shield of a force was switched on/off
 	turret_off = function() end, -- (turret) taken out of the shield by the toggle
 	turret_on = function() end, -- (turret) given back to the shield by the toggle
+	hot = function() end, -- (surface_index, x, y, tick) damage seen at a turret
 }
 
 function S.set_hooks(h)
@@ -429,12 +438,9 @@ local function cover_turret(turret, tick)
 	return t
 end
 
--- Called only for towers whose shield is on.
-local function cover_gen(g, tick)
-	local r = hooks.range_of(g.force)
-	local found = g.entity.surface.find_entities_filtered({
-		area = {{g.x - r, g.y - r}, {g.x + r, g.y + r}}, type = TURRET_TYPES, force = g.force,
-	})
+-- Links the turrets of one rectangle of the tower square +-r (called only for shielding towers).
+local function cover_rect(g, rect, r, tick)
+	local found = g.entity.surface.find_entities_filtered({area = rect, type = TURRET_TYPES, force = g.force})
 	for i = 1, #found do
 		local turret = found[i]
 		local unit = turret.unit_number
@@ -492,6 +498,127 @@ local function set_level(g, lv, energy)
 	g.buf, g.name, g.on, g.cap, g.est = new, lv.name, true, st.buffer, energy
 end
 
+-- The whole square of a shielding tower: one search.
+local function cover_gen(g, tick)
+	local r = hooks.range_of(g.force)
+	cover_rect(g, ring(g.x, g.y, -1, r)[1], r, tick)
+end
+
+-- A tower follows the shield level of its force: new buffer, coverage when the shield comes on, its
+-- turrets released when it goes off.
+local function sync(g, tick)
+	local was = g.on
+	set_level(g, level(g.force), nil)
+	if g.on and not was then
+		g.last, g.paid = -1, 0
+		cover_gen(g, tick)
+		g.due = tick + 1
+		schedule(-g.unit, g.due)
+	elseif was and not g.on then
+		for tu in pairs(g.members) do
+			local t = turrets[tu]
+			if t then
+				unlink(t, g.unit)
+				if #t.gens == 0 then
+					drop(t)
+				end
+			end
+		end
+		g.members, g.count = {}, 0
+		destroy_render(g.bar)
+		destroy_render(g.plug)
+		g.bar, g.plug, g.step = nil, nil, -1
+	end
+end
+
+-- Queued work, one step per search or switch:
+--   {op = "cover", unit}: the whole square of a tower whose shield is on
+--   {op = "ring", unit, from, k}: the ring between +-from and the current range, rectangle k of 4
+--   {op = "sync", unit}: the tower follows the shield level of its force
+-- Steps done in the current tick: reset at the first use in a new tick, so no state between ticks.
+local steps_tick, steps_used = -1, 0
+local function spend(tick)
+	if steps_tick ~= tick then
+		steps_tick, steps_used = tick, 0
+	end
+	if steps_used >= WORK_STEPS then
+		return false
+	end
+	steps_used = steps_used + 1
+	return true
+end
+
+-- One step of a job; true when the job is finished.
+local function step(job, tick)
+	local g = gens[job.unit]
+	if not (g and g.entity.valid) then
+		return true
+	end
+	local op = job.op
+	if op == "sync" then
+		sync(g, tick)
+		return true
+	end
+	if not g.on then
+		return true -- switched off meanwhile; a sync covers it again when it comes back
+	end
+	if op == "cover" then
+		cover_gen(g, tick)
+		return true
+	end
+	local r = hooks.range_of(g.force)
+	if r <= job.from then
+		return true -- shrunk again meanwhile
+	end
+	local rects = ring(g.x, g.y, job.from, r)
+	cover_rect(g, rects[job.k], r, tick)
+	job.k = job.k + 1
+	return job.k > #rects
+end
+
+-- The queue (saves of 9.112.0 have none until the configuration change; other mods may raise research
+-- events before it).
+local function queue()
+	local s = storage.shield
+	local q = s.queue
+	if not q then
+		q = {head = 1, tail = 0}
+		s.queue = q
+	end
+	return q
+end
+
+local function run_queue(tick)
+	local q = queue()
+	while q.head <= q.tail and spend(tick) do
+		local h = q.head
+		if step(q[h], tick) then
+			q[h] = nil
+			q.head = h + 1
+		end
+	end
+	if q.head > q.tail then
+		q.head, q.tail = 1, 0
+	end
+end
+
+-- Work asked for by an event: done at once while this tick's budget lasts and nothing waits, the rest
+-- is queued.
+local function work(job)
+	local q = queue()
+	if q.head > q.tail then
+		local tick = game.tick
+		while spend(tick) do
+			if step(job, tick) then
+				return
+			end
+		end
+	end
+	local t = q.tail + 1
+	q.tail = t
+	q[t] = job
+end
+
 local function add_gen(entity, energy, tick)
 	local unit = entity.unit_number
 	local g = gens[unit]
@@ -507,7 +634,7 @@ local function add_gen(entity, energy, tick)
 	script.register_on_object_destroyed(entity)
 	set_level(g, level(g.force), energy or 0)
 	if g.on then
-		cover_gen(g, tick)
+		work({op = "cover", unit = unit})
 		g.due = tick + 1
 		schedule(-unit, g.due)
 	end
@@ -616,6 +743,7 @@ local function look_turret(t, tick)
 			stats.repairs = stats.repairs + 1
 			stats.repaired_hp = stats.repaired_hp + paid
 			t.period = HOT
+			hooks.hot(t.surface, t.x, t.y, tick)
 		else
 			-- Empty, broken or switched off towers: look less often until one can pay.
 			t.period = min(UNPAID, t.period * 2)
@@ -635,6 +763,10 @@ end
 
 function S.on_tick(event)
 	local tick = event.tick
+	local q = storage.shield.queue
+	if q and q.head <= q.tail then
+		run_queue(tick)
+	end
 	local list = buckets[tick]
 	if not list then
 		return
@@ -737,6 +869,7 @@ function S.on_lethal(event)
 	end
 	t.seen = tick
 	hot(t, tick)
+	hooks.hot(t.surface, t.x, t.y, tick)
 	if tick >= t.vis then
 		hit_effect(t, turret, tick)
 	end
@@ -975,28 +1108,10 @@ local function relevel(force)
 	if old and old.on == lv.on and old.name == lv.name then
 		return
 	end
-	local tick = game.tick
-	if not lv.on then
-		for _, t in pairs(turrets) do
-			if t.force == fi then
-				drop(t)
-			end
-		end
-	end
+	-- Every tower of the force follows, a few per tick (new buffer, coverage on, turrets released off).
 	for _, g in pairs(gens) do
 		if g.force == fi then
-			local was = g.on
-			set_level(g, lv, nil)
-			if g.on and not was then
-				g.last, g.paid = -1, 0
-				cover_gen(g, tick)
-				g.due = tick + 1
-				schedule(-g.unit, g.due)
-			elseif not g.on then
-				destroy_render(g.bar)
-				destroy_render(g.plug)
-				g.bar, g.plug, g.step = nil, nil, -1
-			end
+			work({op = "sync", unit = g.unit})
 		end
 	end
 	if (old and old.on or false) ~= lv.on then
@@ -1020,17 +1135,34 @@ function S.on_force_created(event)
 	levels[event.force.index] = compute_level(event.force)
 end
 
--- The range research changed the square of every tower of the force: coverage is built again.
-function S.range_changed(force_index)
-	local tick = game.tick
+-- The range research changed the square of every tower of the force from +-old to +-new. Larger: only
+-- the ring is searched (queued); smaller: links outside the new square are dropped in Lua. Records
+-- inside keep their schedule.
+function S.range_changed(force_index, old, new)
+	if new > old then
+		for _, g in pairs(gens) do
+			if g.force == force_index and g.on then
+				work({op = "ring", unit = g.unit, from = old, k = 1})
+			end
+		end
+		return
+	end
 	for _, t in pairs(turrets) do
 		if t.force == force_index then
-			drop(t)
-		end
-	end
-	for _, g in pairs(gens) do
-		if g.force == force_index and g.on then
-			cover_gen(g, tick)
+			local list = t.gens
+			for i = #list, 1, -1 do
+				local g = gens[list[i]]
+				if not (g and inside(g, t.x, t.y, new)) then
+					if g and g.members[t.unit] then
+						g.members[t.unit] = nil
+						g.count = g.count - 1
+					end
+					table.remove(list, i)
+				end
+			end
+			if #list == 0 then
+				drop(t)
+			end
 		end
 	end
 end
@@ -1056,6 +1188,7 @@ function S.init_storage()
 	s.levels = s.levels or {}
 	s.buckets = s.buckets or {}
 	s.carry = s.carry or {tick = -1}
+	s.queue = s.queue or {head = 1, tail = 0}
 	s.stats = s.stats or {}
 	for _, k in ipairs(STAT_KEYS) do
 		s.stats[k] = s.stats[k] or 0
@@ -1092,7 +1225,7 @@ function S.full_rescan()
 		destroy_render(g.plug)
 	end
 	local s = storage.shield
-	s.gens, s.turrets, s.buckets = {}, {}, {}
+	s.gens, s.turrets, s.buckets, s.queue = {}, {}, {}, {head = 1, tail = 0}
 	bind()
 	S.compute_levels()
 	local names = buffer_names()

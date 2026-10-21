@@ -1,4 +1,18 @@
 ---------------------------------------------------------------------------------------------------
+Version: 9.113.0
+Date: 2026-10-21
+  Optimizations:
+    - Reading tower squares (towers built or moved, range research, the shield switched off) is split into strips of 16 tiles and queued: at most 8 strips per tick for the repair side and 8 searches per tick for the shield. Many towers built at once or a research with hundreds of towers no longer stop the game for one long tick.
+    - A range research reads only the ring between the old and the new square. When the square shrinks, the shield drops the links outside it without any search; turrets inside keep their shield records and their look schedule.
+    - "Shield generation" and its capacity/regeneration levels switch the towers of the force a few per tick.
+    - Damaged vehicles and characters are searched once per covered chunk (the union of the tower squares in it) instead of once per tower; a chunk where nothing moves is searched less and less often (every 2 s up to every 16 s), a chunk with vehicles every 2 s.
+    - Buildings in tower squares are polled in two tiers: all of them about every 3 s (was every 1 s), the buildings of chunks with recent damage (found by the polls, the vehicle search or a shield intercept/repair) every 15 ticks for 10 s after the last damage. Small lists are no longer polled 8 entities per tick.
+    - Only buildings whose centre is inside a tower square are watched.
+    - A tower re-reads its square for buildings created without events every 30 s (was every 5 s), in strips.
+    - An undamaged turret under a shield is looked at every 30 s (was every 5 s). A hit that would kill it is still intercepted at once; only chip damage outside fights is repaired later.
+  Changes:
+    - First damage of a building outside a fight is noticed after up to about 3 s (was 1 s); inside hot chunks after up to 15 ticks.
+---------------------------------------------------------------------------------------------------
 Version: 9.112.0
 Date: 2026-10-21
   Major Features:

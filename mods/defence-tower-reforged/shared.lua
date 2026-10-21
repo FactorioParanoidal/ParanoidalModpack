@@ -14,13 +14,24 @@ local C = {
 
   eei_offset = 0.0625,      -- the energy entity sits slightly lower so its head animation is drawn over the base
 
-  -- Damage detection without on_entity_damaged: buildings in turret areas are kept in one list
-  -- and their health is polled in small portions every tick.
-  scan_period = 60,         -- ticks for a full pass over the list (if the per-tick cap allows)
-  scan_min = 8,             -- entities checked per tick, at least
-  scan_max = 150,           -- entities checked per tick, at most (bigger lists take longer per pass)
-  moving_period = 120,      -- ticks between searches for damaged vehicles/characters in one turret's area
-  rescan_interval = 300,    -- every N ticks one turret re-reads its area (entities created without events)
+  -- Damage detection without on_entity_damaged: buildings in tower squares are kept in one list
+  -- and their health is polled in small portions every tick (slow tier); the buildings of chunks
+  -- where damage was seen recently are polled often (hot tier).
+  scan_period = 180,        -- ticks for a full slow pass over the list (if the per-tick cap allows)
+  scan_max = 150,           -- entities checked per tick by the slow pass, at most
+  hot_period = 15,          -- ticks between two polls of a hot chunk (if the per-tick cap allows)
+  hot_ttl = 600,            -- a chunk stays hot this many ticks after the last damage seen in it
+  hot_chunks = 8,           -- hot chunks polled per tick, at most
+  -- Damaged vehicles/characters: one search per covered chunk (the union of the tower squares in it),
+  -- every moving_period ticks while something moves there, the gap doubling up to moving_max when not.
+  moving_period = 120,
+  moving_max = 960,
+  moving_sweep = 30,        -- ticks between two looks at the same chunk entry
+  rescan_interval = 1800,   -- every N ticks one tower re-reads its square (entities created without events)
+  -- Area work (tower squares on build, research, moves) is split into strips and spread over ticks.
+  strip = 16,               -- tiles per strip
+  work_steps = 8,           -- strips (or batches) per tick
+  purge_batch = 300,        -- watch list entries checked per step when a shield is switched on
 }
 
 -- Research branches, all after the repair-turret technology.

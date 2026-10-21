@@ -4,11 +4,18 @@
 -- Range, speed and beams come from the force's researched upgrade levels. The same square is the shield
 -- zone of the tower (scripts/shield.lua); turrets the shield repairs (shielded()) are left to it.
 --
--- Damage is NOT tracked through on_entity_damaged (its cost grows with every hit on the map).
--- Instead every repairable building inside any tower area is kept once in a list, and a fixed small
--- portion of that list is polled each tick. Vehicles and characters are searched per tower area
--- every `moving_period` ticks. Without towers the module does nothing per tick.
+-- Damage is NOT tracked through on_entity_damaged (its cost grows with every hit on the map):
+--   * every repairable building whose centre lies in a tower square is kept once in a watch list;
+--     a small portion of it is polled each tick (slow tier, a full pass in about scan_period ticks);
+--   * the buildings of chunks where damage was seen recently (by the polls, the vehicle search or the
+--     shield) are polled every hot_period ticks (hot tier);
+--   * damaged vehicles/characters: one search per covered chunk (clipped to the tower squares in it),
+--     every moving_period ticks while something moves there, less and less often while nothing does.
+-- Reading tower squares (build, move, range research, shield switched off, rescans) is queued work
+-- split into strips, at most work_steps strips per tick; a range change reads only the ring between
+-- the old and the new square. Without towers the module does nothing per tick.
 local C = require("shared")
+local A = require("scripts.area")
 
 local R = {}
 
@@ -16,14 +23,17 @@ local TURRET, ENERGY, BEAM = C.turret, C.energy, C.beam
 local INTERVAL = C.interval
 local ENERGY_PER_HP = C.energy_per_hp
 local EEI_OFFSET = C.eei_offset
-local SCAN_PERIOD, SCAN_MIN, SCAN_MAX = C.scan_period, C.scan_min, C.scan_max
-local MOVING_PERIOD = C.moving_period
+local SCAN_PERIOD, SCAN_MAX = C.scan_period, C.scan_max
+local HOT_PERIOD, HOT_TTL, HOT_CHUNKS = C.hot_period, C.hot_ttl, C.hot_chunks
+local MOVING_PERIOD, MOVING_MAX, MOVING_SWEEP = C.moving_period, C.moving_max, C.moving_sweep
 local RESCAN_INTERVAL = C.rescan_interval
-local CHUNK = 32
+local STRIP, WORK_STEPS, PURGE_BATCH = C.strip, C.work_steps, C.purge_batch
+local CHUNK = A.CHUNK
 local BEAM_DURATION = 20
-local DATA_VERSION = 3
+local DATA_VERSION = 4
 
-local floor, abs, max, ceil = math.floor, math.abs, math.max, math.ceil
+local floor, abs, max, min, ceil = math.floor, math.abs, math.max, math.min, math.ceil
+local chunk_key, key_of, ring = A.chunk_key, A.key, A.ring
 local chest_inventory = defines.inventory.chest
 
 local moving_type_list =
@@ -39,7 +49,7 @@ local area_fill = {r = 0.04, g = 0.16, b = 0.04, a = 0.16}
 local area_border = {r = 0.3, g = 0.9, b = 0.3, a = 0.9}
 
 -- Links to the shield (set by control.lua): shielded(entity, name) is true for turrets the shield of
--- the towers repairs; range_changed(force_index) is called after the range of a force's towers changed.
+-- the towers repairs; range_changed(force_index, old, new) after the range of a force's towers changed.
 local shielded = function() return false end
 local range_changed = function() end
 
@@ -73,13 +83,16 @@ end
 --[[ storage.rt
   v = DATA_VERSION
   turrets[uid] = T = {entity, eei, inventory, uid, surface, force, x, y, range, beam_pos, targets = {[uid] = entity}, active, warn}
-  map[surface][chunk_x][chunk_y] = {[uid] = T}
+  map[surface][chunk_x][chunk_y] = {[uid] = T}  -- towers whose square reaches the chunk
   buckets[uid % INTERVAL] = {[uid] = T}        -- active towers only
-  mbuckets[uid % MOVING_PERIOD] = {[uid] = T}  -- all towers, for the vehicle/character search
   forces[force_index] = number of towers
   stats[force_index] = {range, shot, beams, buffer}
   hover[player_index] = {fill, border}
-  watch = {n, cursor, list = {uid}, pos = {[uid] = index}, ent = {[uid] = entity}}  -- buildings in tower areas
+  watch = {n, cursor, list = {uid}, pos = {[uid] = index}, ent = {[uid] = entity}, key = {[uid] = chunk key},
+           members = {[chunk key] = {[uid] = true}}}  -- buildings in tower squares
+  hot = {list = {chunk key}, pos = {[key] = index}, ttl = {[key] = tick}, due = {[key] = tick}, cursor}
+  chunks = {list = {chunk key}, pos = {[key] = index}, info = {[key] = {s, cx, cy, next, period}}, cursor}
+  queue = {head, tail, [i] = job}  -- area work, see step()
   rescan = uid of the tower last re-read
 ]]
 local data
@@ -87,8 +100,11 @@ local data
 local function new_data()
   return
   {
-    v = DATA_VERSION, turrets = {}, map = {}, buckets = {}, mbuckets = {}, forces = {}, stats = {}, hover = {},
-    watch = {n = 0, cursor = 1, list = {}, pos = {}, ent = {}},
+    v = DATA_VERSION, turrets = {}, map = {}, buckets = {}, forces = {}, stats = {}, hover = {},
+    watch = {n = 0, cursor = 1, list = {}, pos = {}, ent = {}, key = {}, members = {}},
+    hot = {list = {}, pos = {}, ttl = {}, due = {}, cursor = 1},
+    chunks = {list = {}, pos = {}, info = {}, cursor = 1},
+    queue = {head = 1, tail = 0},
   }
 end
 
@@ -147,12 +163,36 @@ function R.range_of(force_index)
 end
 
 ---------------------------------------------------------------------------
--- Spatial map of towers by covered chunks
+-- Covered chunks: the map of towers by chunk and the list of chunks for the vehicle search.
 
 local function chunk_bounds(T)
   local r = T.range
   return floor((T.x - r) / CHUNK), floor((T.x + r) / CHUNK),
          floor((T.y - r) / CHUNK), floor((T.y + r) / CHUNK)
+end
+
+local function chunk_add(s, cx, cy)
+  local K = data.chunks
+  local key = key_of(s, cx, cy)
+  if K.pos[key] then return end
+  local n = #K.list + 1
+  K.list[n] = key
+  K.pos[key] = n
+  K.info[key] = {s = s, cx = cx, cy = cy, next = 0, period = MOVING_PERIOD}
+end
+
+local function chunk_remove(s, cx, cy)
+  local K = data.chunks
+  local key = key_of(s, cx, cy)
+  local i = K.pos[key]
+  if not i then return end
+  local n = #K.list
+  local last = K.list[n]
+  K.list[i] = last
+  K.pos[last] = i
+  K.list[n] = nil
+  K.pos[key] = nil
+  K.info[key] = nil
 end
 
 local function map_add(T)
@@ -164,7 +204,11 @@ local function map_add(T)
     if not mx then mx = {}; sm[cx] = mx end
     for cy = y1, y2 do
       local list = mx[cy]
-      if not list then list = {}; mx[cy] = list end
+      if not list then
+        list = {}
+        mx[cy] = list
+        chunk_add(T.surface, cx, cy)
+      end
       list[T.uid] = T
     end
   end
@@ -181,7 +225,10 @@ local function map_remove(T)
         local list = mx[cy]
         if list then
           list[T.uid] = nil
-          if not next(list) then mx[cy] = nil end
+          if not next(list) then
+            mx[cy] = nil
+            chunk_remove(T.surface, cx, cy)
+          end
         end
       end
       if not next(mx) then sm[cx] = nil end
@@ -198,7 +245,7 @@ local function turrets_at(surface_index, x, y)
   return mx[floor(y / CHUNK)]
 end
 
--- Towers whose area may reach the point: {[uid] = T} (T.x, T.y, T.range, T.force); nil if none.
+-- Towers whose square may reach the point: {[uid] = T} (T.x, T.y, T.range, T.force); nil if none.
 function R.towers_at(surface_index, x, y)
   if stale() then return nil end
   return turrets_at(surface_index, x, y)
@@ -218,9 +265,9 @@ local function covered(uid, x, y, surface_index, force_index)
 end
 
 ---------------------------------------------------------------------------
--- Watch list (dense array + index, swap-remove)
+-- Watch list (dense array + index, swap-remove) with the members of every chunk
 
-local function watch_add(entity, uid)
+local function watch_add(entity, uid, key)
   local W = data.watch
   if W.pos[uid] then return end
   local n = W.n + 1
@@ -228,6 +275,10 @@ local function watch_add(entity, uid)
   W.list[n] = uid
   W.pos[uid] = n
   W.ent[uid] = entity
+  W.key[uid] = key
+  local m = W.members[key]
+  if not m then m = {}; W.members[key] = m end
+  m[uid] = true
 end
 
 local function watch_remove(uid)
@@ -241,7 +292,47 @@ local function watch_remove(uid)
   W.list[n] = nil
   W.pos[uid] = nil
   W.ent[uid] = nil
+  local key = W.key[uid]
+  W.key[uid] = nil
+  local m = W.members[key]
+  if m then
+    m[uid] = nil
+    if not next(m) then W.members[key] = nil end
+  end
   W.n = n - 1
+end
+
+---------------------------------------------------------------------------
+-- Hot chunks: damage seen there recently
+
+local function mark_hot(key, tick)
+  local H = data.hot
+  if not H.pos[key] then
+    local n = #H.list + 1
+    H.list[n] = key
+    H.pos[key] = n
+    H.due[key] = tick + 1
+  end
+  H.ttl[key] = tick + HOT_TTL
+end
+
+local function hot_remove_at(i)
+  local H = data.hot
+  local n = #H.list
+  local key, last = H.list[i], H.list[n]
+  H.list[i] = last
+  H.pos[last] = i
+  H.list[n] = nil
+  H.pos[key] = nil
+  H.ttl[key] = nil
+  H.due[key] = nil
+end
+
+-- The shield saw damage at a turret: the buildings around are polled often for a while.
+function R.mark_hot(surface_index, x, y, tick)
+  if stale() then return end
+  local key = chunk_key(surface_index, x, y)
+  if data.watch.members[key] then mark_hot(key, tick) end
 end
 
 ---------------------------------------------------------------------------
@@ -297,66 +388,144 @@ local function offer(entity, uid, x, y, surface_index, force_index)
   end
 end
 
----------------------------------------------------------------------------
--- Area reads (only on build/research/rescan, never per hit)
-
-local function check_moving(T)
-  local x, y, r = T.x, T.y, T.range
-  local found = T.entity.surface.find_entities_filtered
-  {
-    area = {{x - r, y - r}, {x + r, y + r}},
-    force = T.force,
-    type = moving_type_list,
-  }
-  local targets = T.targets
-  local any = false
-  for _, e in pairs(found) do
-    local ratio = e.get_health_ratio()
-    if ratio and ratio > 0 and ratio < 1 and is_repairable(e) then
-      targets[e.unit_number] = e
-      any = true
-    end
+-- A watched entity found damaged: offered to the towers covering it and its chunk becomes hot.
+-- A turret the shield handles now (its shield was switched on after it was watched) leaves the list.
+-- Returns false if the entity left the watch list.
+local function found_damaged(e, uid, tick)
+  if shielded(e, e.name) then
+    watch_remove(uid)
+    return false
   end
-  if any and not T.active then activate(T) end
+  local p = e.position
+  offer(e, uid, p.x, p.y, e.surface_index, e.force_index)
+  mark_hot(data.watch.key[uid], tick)
+  return true
 end
 
--- Put every repairable building of the tower's area into the watch list; damaged ones become targets.
-local function add_area(T)
-  local x, y, r = T.x, T.y, T.range
-  local found = T.entity.surface.find_entities_filtered
-  {
-    area = {{x - r, y - r}, {x + r, y + r}},
-    force = T.force,
-  }
+---------------------------------------------------------------------------
+-- Area work, queued and spread: one step reads one strip of a rectangle (or one batch of the purge).
+--   {op = "add", uid, x1, y1, x2, y2, y}: watch the buildings of the tower square in the rectangle
+--   {op = "prune", s, f, x1, y1, x2, y2, y}: unwatch the buildings no tower covers any more
+--   {op = "purge", f, i}: drop the turrets of a force whose shield was switched on from the watch list
+
+-- Steps done in the current tick. Only meaningful within one tick: reset at the first use in a new
+-- tick, so it carries no state between ticks (safe outside storage).
+local steps_tick, steps_used = -1, 0
+local function spend(tick)
+  if steps_tick ~= tick then steps_tick, steps_used = tick, 0 end
+  if steps_used >= WORK_STEPS then return false end
+  steps_used = steps_used + 1
+  return true
+end
+
+local function read_strip(T, x1, y1, x2, y2)
+  local found = T.entity.surface.find_entities_filtered{area = {{x1, y1}, {x2, y2}}, force = T.force}
   local targets = T.targets
+  local tx, ty, r, s = T.x, T.y, T.range, T.surface
   for _, e in pairs(found) do
     local uid = e.unit_number
     if uid and uid ~= T.uid then
       local name = e.name
       if not ignored_names[name] and not moving_types[e.type] and not shielded(e, name) then
-        local ratio = e.get_health_ratio()
-        if ratio and is_repairable(e) then
-          watch_add(e, uid)
-          if ratio > 0 and ratio < 1 then targets[uid] = e end
+        local p = e.position
+        if abs(p.x - tx) <= r and abs(p.y - ty) <= r then
+          local ratio = e.get_health_ratio()
+          if ratio and is_repairable(e) then
+            watch_add(e, uid, chunk_key(s, p.x, p.y))
+            if ratio > 0 and ratio < 1 then targets[uid] = e end
+          end
         end
       end
     end
   end
-  check_moving(T)
-  if next(targets) and not T.active then activate(T) end
 end
 
--- Drop watched entities of an old area that no tower covers any more.
-local function prune_area(surface_index, force_index, x, y, r)
-  local surface = game.surfaces[surface_index]
-  if not surface then return end -- entities are invalid then and leave the list on their own
+local function prune_strip(job, surface, y2)
   local pos = data.watch.pos
-  for _, e in pairs(surface.find_entities_filtered{area = {{x - r, y - r}, {x + r, y + r}}, force = force_index}) do
+  for _, e in pairs(surface.find_entities_filtered{area = {{job.x1, job.y}, {job.x2, y2}}, force = job.f}) do
     local uid = e.unit_number
     if uid and pos[uid] then
       local p = e.position
-      if not covered(uid, p.x, p.y, surface_index, force_index) then watch_remove(uid) end
+      if not covered(uid, p.x, p.y, job.s, job.f) then watch_remove(uid) end
     end
+  end
+end
+
+-- One step of a job; true when the job is finished.
+local function step(job)
+  local op = job.op
+  if op == "add" then
+    local T = data.turrets[job.uid]
+    if not (T and T.entity.valid) or job.y >= job.y2 then return true end
+    local y2 = min(job.y + STRIP, job.y2)
+    read_strip(T, job.x1, job.y, job.x2, y2)
+    job.y = y2
+    if next(T.targets) and not T.active then activate(T) end
+    return y2 >= job.y2
+  elseif op == "prune" then
+    local surface = game.surfaces[job.s]
+    if not surface or job.y >= job.y2 then return true end
+    local y2 = min(job.y + STRIP, job.y2)
+    prune_strip(job, surface, y2)
+    job.y = y2
+    return y2 >= job.y2
+  else -- purge
+    local W = data.watch
+    local i, f = job.i, job.f
+    for _ = 1, PURGE_BATCH do
+      if i > W.n then return true end
+      local uid = W.list[i]
+      local e = W.ent[uid]
+      if not e.valid or (e.force_index == f and shielded(e, e.name)) then
+        watch_remove(uid) -- the last entry moved to i
+      else
+        i = i + 1
+      end
+    end
+    job.i = i
+    return i > W.n
+  end
+end
+
+local function run_queue(tick)
+  local q = data.queue
+  while q.head <= q.tail and spend(tick) do
+    local h = q.head
+    if step(q[h]) then
+      q[h] = nil
+      q.head = h + 1
+    end
+  end
+  if q.head > q.tail then q.head, q.tail = 1, 0 end
+end
+
+-- Work asked for by an event: done at once while this tick's budget lasts and nothing waits, the rest
+-- is queued.
+local function work(job)
+  local q = data.queue
+  if q.head > q.tail then
+    local tick = game.tick
+    while spend(tick) do
+      if step(job) then return end
+    end
+  end
+  local t = q.tail + 1
+  q.tail = t
+  q[t] = job
+end
+
+-- The tower square (r_in < 0) or the ring between +-r_in and the current range.
+local function queue_area(T, r_in)
+  for _, rect in ipairs(ring(T.x, T.y, r_in, T.range)) do
+    local a, b = rect[1], rect[2]
+    work({op = "add", uid = T.uid, x1 = a[1], y1 = a[2], x2 = b[1], y2 = b[2], y = a[2]})
+  end
+end
+
+local function queue_prune(s, f, x, y, r_in, r_out)
+  for _, rect in ipairs(ring(x, y, r_in, r_out)) do
+    local a, b = rect[1], rect[2]
+    work({op = "prune", s = s, f = f, x1 = a[1], y1 = a[2], x2 = b[1], y2 = b[2], y = a[2]})
   end
 end
 
@@ -402,14 +571,10 @@ local function add_turret(entity)
   T.range = stats_of(T.force).range
   data.turrets[uid] = T
   data.forces[T.force] = (data.forces[T.force] or 0) + 1
-  local mi = uid % MOVING_PERIOD
-  local mb = data.mbuckets[mi]
-  if not mb then mb = {}; data.mbuckets[mi] = mb end
-  mb[uid] = T
   create_energy(T)
   map_add(T)
   script.register_on_object_destroyed(entity)
-  add_area(T)
+  queue_area(T, -1)
   return T
 end
 
@@ -419,17 +584,11 @@ local function remove_turret(uid)
   data.turrets[uid] = nil
   map_remove(T)
   if T.active then deactivate(T) end
-  local mi = uid % MOVING_PERIOD
-  local mb = data.mbuckets[mi]
-  if mb then
-    mb[uid] = nil
-    if not next(mb) then data.mbuckets[mi] = nil end
-  end
   if T.eei and T.eei.valid then T.eei.destroy() end
   set_warning(T, false)
   local n = (data.forces[T.force] or 1) - 1
   data.forces[T.force] = n > 0 and n or nil
-  prune_area(T.surface, T.force, T.x, T.y, T.range)
+  queue_prune(T.surface, T.force, T.x, T.y, -1, T.range)
 end
 
 -- One volley: heal up to `beams` valid targets in range.
@@ -520,41 +679,36 @@ local function relocate(T)
   end
   T.targets = {}
   map_add(T)
-  prune_area(T.surface, T.force, ox, oy, T.range)
-  add_area(T)
+  queue_prune(T.surface, T.force, ox, oy, -1, T.range)
+  queue_area(T, -1)
 end
 
--- Research changed: apply range and buffer to every tower of the force.
+-- Research changed: apply range and buffer to every tower of the force. A range change reads only the
+-- ring between the old and the new square.
 local function refresh_force(force)
   local index = force.index
   local S = compute_stats(force)
   data.stats[index] = S
   if not data.forces[index] then return end
-  local shrunk = {}
-  local moved = false
+  local old
   for _, T in pairs(data.turrets) do
     if T.force == index and T.entity.valid then
       if T.eei and T.eei.valid then T.eei.electric_buffer_size = S.buffer end
-      local old = T.range
-      if old ~= S.range then
-        moved = true
+      local r = T.range
+      if r ~= S.range then
+        old = r
         map_remove(T)
         T.range = S.range
         map_add(T)
-        if S.range > old then
-          add_area(T)
+        if S.range > r then
+          queue_area(T, r)
         else
-          shrunk[#shrunk + 1] = {T, old}
+          queue_prune(T.surface, index, T.x, T.y, S.range, r)
         end
       end
     end
   end
-  -- after all towers have their new range
-  for _, v in pairs(shrunk) do
-    local T = v[1]
-    prune_area(T.surface, index, T.x, T.y, v[2])
-  end
-  if moved then range_changed(index) end
+  if old then range_changed(index, old, S.range) end
 end
 
 local function clear_hover(player_index)
@@ -604,16 +758,10 @@ end
 -- Links from the shield
 
 -- The shield of a force was switched on (research) or off: turrets leave the watch list and the
--- tower targets, or come back to them.
+-- tower targets (in batches), or are read again from the tower squares (queued).
 function R.shield_force_changed(force_index, on)
   if stale() then return end
   if on then
-    local W = data.watch
-    local leave = {}
-    for uid, e in pairs(W.ent) do
-      if e.valid and e.force_index == force_index and shielded(e, e.name) then leave[#leave + 1] = uid end
-    end
-    for i = 1, #leave do watch_remove(leave[i]) end
     for _, T in pairs(data.turrets) do
       if T.force == force_index then
         local targets = T.targets
@@ -622,9 +770,10 @@ function R.shield_force_changed(force_index, on)
         end
       end
     end
+    work({op = "purge", f = force_index, i = 1})
   else
     for _, T in pairs(data.turrets) do
-      if T.force == force_index and T.entity.valid then add_area(T) end
+      if T.force == force_index and T.entity.valid then queue_area(T, -1) end
     end
   end
 end
@@ -638,7 +787,7 @@ function R.turret_unshielded(entity)
   local p = entity.position
   local surface_index, force_index = entity.surface_index, entity.force_index
   if not covered(uid, p.x, p.y, surface_index, force_index) then return end
-  watch_add(entity, uid)
+  watch_add(entity, uid, chunk_key(surface_index, p.x, p.y))
   local ratio = entity.get_health_ratio()
   if ratio and ratio > 0 and ratio < 1 then offer(entity, uid, p.x, p.y, surface_index, force_index) end
 end
@@ -667,33 +816,145 @@ end
 ---------------------------------------------------------------------------
 -- Per tick
 
--- Poll a portion of the watch list; damaged entities are offered to the towers covering them.
-local function scan_watch()
+-- Slow tier: a portion of the whole watch list, a full pass in about SCAN_PERIOD ticks.
+local function scan_slow(tick)
   local W = data.watch
-  local n = W.n
-  local budget = ceil(n / SCAN_PERIOD)
-  if budget < SCAN_MIN then budget = SCAN_MIN elseif budget > SCAN_MAX then budget = SCAN_MAX end
-  if budget > n then budget = n end
+  local budget = ceil(W.n / SCAN_PERIOD)
+  if budget > SCAN_MAX then budget = SCAN_MAX end
   local list, ent = W.list, W.ent
   local i = W.cursor
   for _ = 1, budget do
+    local n = W.n
+    if n == 0 then break end
     if i > n then i = 1 end
     local uid = list[i]
     local e = ent[uid]
     if e.valid then
       local ratio = e.get_health_ratio()
-      if ratio and ratio < 1 and ratio > 0 then
-        local p = e.position
-        offer(e, uid, p.x, p.y, e.surface_index, e.force_index)
+      if not (ratio and ratio < 1 and ratio > 0) or found_damaged(e, uid, tick) then
+        i = i + 1
       end
-      i = i + 1
     else
-      watch_remove(uid) -- the last entry moves to i and is checked next
-      n = n - 1
-      if n == 0 then break end
+      watch_remove(uid) -- the last entry moved to i and is checked next
     end
   end
   W.cursor = i
+end
+
+-- Hot tier: the members of every hot chunk at most every HOT_PERIOD ticks, at most HOT_CHUNKS chunks
+-- per tick; the list is walked so that every entry is looked at about every HOT_PERIOD ticks.
+local function scan_hot(tick)
+  local H = data.hot
+  local visits = ceil(#H.list / HOT_PERIOD)
+  local polls = 0
+  local W = data.watch
+  local i = H.cursor
+  for _ = 1, visits do
+    local count = #H.list
+    if count == 0 or polls >= HOT_CHUNKS then break end
+    if i > count then i = 1 end
+    local key = H.list[i]
+    if tick > H.ttl[key] then
+      hot_remove_at(i) -- the last entry moved to i
+    elseif tick < H.due[key] then
+      i = i + 1
+    else
+      polls = polls + 1
+      H.due[key] = tick + HOT_PERIOD
+      local m = W.members[key]
+      if m then
+        local gone, damaged
+        for uid in pairs(m) do
+          local e = W.ent[uid]
+          if e.valid then
+            local ratio = e.get_health_ratio()
+            if ratio and ratio < 1 and ratio > 0 then
+              damaged = damaged or {}
+              damaged[#damaged + 1] = uid
+            end
+          else
+            gone = gone or {}
+            gone[#gone + 1] = uid
+          end
+        end
+        if gone then
+          for k = 1, #gone do watch_remove(gone[k]) end
+        end
+        if damaged then
+          for k = 1, #damaged do
+            local uid = damaged[k]
+            local e = W.ent[uid]
+            if e then found_damaged(e, uid, tick) end
+          end
+        end
+      end
+      i = i + 1
+    end
+  end
+  H.cursor = i
+end
+
+-- One search for vehicles/characters of the tower forces in a covered chunk, clipped to the union of
+-- the tower squares in it. Returns true if anything that moves was found (damaged or not).
+local function search_moving(c, tick)
+  local sm = data.map[c.s]
+  local mx = sm and sm[c.cx]
+  local list = mx and mx[c.cy]
+  if not list then return false end
+  local x1, y1, x2, y2
+  local forces, seen = {}, {}
+  for _, T in pairs(list) do
+    local r = T.range
+    if not x1 then
+      x1, y1, x2, y2 = T.x - r, T.y - r, T.x + r, T.y + r
+    else
+      x1, y1 = min(x1, T.x - r), min(y1, T.y - r)
+      x2, y2 = max(x2, T.x + r), max(y2, T.y + r)
+    end
+    if not seen[T.force] then
+      seen[T.force] = true
+      forces[#forces + 1] = T.force
+    end
+  end
+  local cx0, cy0 = c.cx * CHUNK, c.cy * CHUNK
+  x1, y1 = max(x1, cx0), max(y1, cy0)
+  x2, y2 = min(x2, cx0 + CHUNK), min(y2, cy0 + CHUNK)
+  if x1 >= x2 or y1 >= y2 then return false end
+  local surface = game.surfaces[c.s]
+  if not surface then return false end
+  local found = surface.find_entities_filtered{area = {{x1, y1}, {x2, y2}}, force = forces, type = moving_type_list}
+  for _, e in pairs(found) do
+    local ratio = e.get_health_ratio()
+    if ratio and ratio > 0 and ratio < 1 and is_repairable(e) then
+      local p = e.position
+      offer(e, e.unit_number, p.x, p.y, c.s, e.force_index)
+      local key = chunk_key(c.s, p.x, p.y)
+      if data.watch.members[key] then mark_hot(key, tick) end
+    end
+  end
+  return found[1] ~= nil
+end
+
+-- Every chunk entry is looked at about every MOVING_SWEEP ticks and searched when it is due.
+local function sweep_moving(tick)
+  local K = data.chunks
+  local count = #K.list
+  local budget = ceil(count / MOVING_SWEEP)
+  local i = K.cursor
+  for _ = 1, budget do
+    if i > count then i = 1 end
+    local c = K.info[K.list[i]]
+    if tick >= c.next then
+      if search_moving(c, tick) then
+        c.period = MOVING_PERIOD
+      else
+        c.period = min(MOVING_MAX, c.period * 2)
+      end
+      c.next = tick + c.period
+    end
+    i = i + 1
+  end
+  K.cursor = i
 end
 
 local function rescan_step()
@@ -703,7 +964,7 @@ local function rescan_step()
   local uid, T = next(turrets, cursor)
   if not uid then uid, T = next(turrets) end
   data.rescan = uid
-  if T and T.entity.valid then add_area(T) end
+  if T and T.entity.valid then queue_area(T, -1) end
 end
 
 ---------------------------------------------------------------------------
@@ -725,7 +986,7 @@ function R.on_built(event)
   local ratio = entity.get_health_ratio()
   if not ratio or not is_repairable(entity) then return end
   if covered(uid, p.x, p.y, surface_index, force_index) then
-    watch_add(entity, uid)
+    watch_add(entity, uid, chunk_key(surface_index, p.x, p.y))
     if ratio > 0 and ratio < 1 then offer(entity, uid, p.x, p.y, surface_index, force_index) end
   end
 end
@@ -751,13 +1012,11 @@ end
 function R.on_tick(event)
   if stale() then return end
   local tick = event.tick
-  if data.watch.n > 0 then scan_watch() end
-  local mb = data.mbuckets[tick % MOVING_PERIOD]
-  if mb then
-    for _, T in pairs(mb) do
-      if T.entity.valid then check_moving(T) end
-    end
-  end
+  local q = data.queue
+  if q.head <= q.tail then run_queue(tick) end
+  if data.watch.n > 0 then scan_slow(tick) end
+  if data.hot.list[1] then scan_hot(tick) end
+  if data.chunks.list[1] then sweep_moving(tick) end
   if tick % RESCAN_INTERVAL == 0 and next(data.turrets) then rescan_step() end
   local bucket = data.buckets[tick % INTERVAL]
   if not bucket then return end
@@ -813,10 +1072,11 @@ end
 
 function R.on_surface_deleted(event)
   if stale() then return end
-  data.map[event.surface_index] = nil
+  local s = event.surface_index
   for uid, T in pairs(data.turrets) do
-    if T.surface == event.surface_index then remove_turret(uid) end
+    if T.surface == s then remove_turret(uid) end
   end
+  data.map[s] = nil
 end
 
 -- A tower moved by a script (Even Pickier Dollies, script_raised_teleported).
