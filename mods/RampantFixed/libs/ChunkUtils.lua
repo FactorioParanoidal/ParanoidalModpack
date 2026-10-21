@@ -10,6 +10,8 @@ local constants = require("Constants")
 local mapUtils = require("MapUtils")
 local chunkPropertyUtils = require("ChunkPropertyUtils")
 local aiBrain = require("AIBrain")
+local unitUtils = require("UnitUtils")
+local foreignEnemies = require("ForeignEnemies")
 
 -- constants
 
@@ -260,8 +262,13 @@ local function scorePlayerBuildings(map, chunk)
 	return pheromones[BASE_PHEROMONE]
 end
 
+-- Big Monsters / mferrari structures are never replaced (libs/ForeignEnemies.lua)
+local isForeign = foreignEnemies.isForeign
 function chunkUtils.needReplacement(map, entity)
 	local needReplacement = false
+	if isForeign(entity.name) then
+		return false
+	end
 	if not VANILLA_ENTITIES[entity.name] then
 		if not map.replaceModedNests then
 			needReplacement = false
@@ -320,9 +327,10 @@ function chunkUtils.initialScan(chunk, map, tick)
 				if map.hasNonmoddedBiters and thisIsRampantEnemy then
 					local alignment = base.alignment
 						local unitList = surface.find_entities_filtered(universe.filteredEntitiesUnitQuery)
+						local champions = unitUtils.championUnits(universe)
 						for i=1,#unitList do
 							local unit = unitList[i]
-							if (unit.valid) then
+							if unit.valid and not (champions and champions[unit.unit_number]) and not isForeign(unit.name) then
 								unit.destroy()
 							end
 						end
@@ -337,8 +345,12 @@ function chunkUtils.initialScan(chunk, map, tick)
 								if newEntity then
 									local hiveType = buildingHiveTypeLookup[newEntity.name]
 									counts[hiveType] = counts[hiveType] + 1
-								elseif (enemyBuilding and enemyBuilding.type == "unit-spawner") then
-									unknownNests = unknownNests + 1
+								elseif enemyBuilding.valid then
+									if enemyBuilding.type == "turret" then
+										counts["turret"] = counts["turret"] + 1	-- kept foreign worms are turrets of the chunk
+									elseif not isForeign(enemyBuilding.name) then
+										unknownNests = unknownNests + 1
+									end
 								end
 							end
 						end
@@ -355,7 +367,7 @@ function chunkUtils.initialScan(chunk, map, tick)
                             ((building.type == "turret") and "turret")
 							if hiveType then	
 								counts[hiveType] = counts[hiveType] + 1
-							elseif building.type == "unit-spawner" then
+							elseif (building.type == "unit-spawner") and not isForeign(building.name) then
 								unknownNests = unknownNests + 1
 							end
                     end
@@ -464,15 +476,17 @@ function chunkUtils.mapScanEnemyChunk(chunk, map)
 	local pendingEntitiesCnt = 0
 	local chunkIndex = "x"..chunk.x.."y"..chunk.y.."m"..map.surface.index
 	
-	local buildingsCnt = #buildings
+	local buildingsCnt = 0	-- own structures and foreign worms; foreign spawners are left out
 	
     for i=1,#buildings do
         local building = buildings[i]
         local newBuilding
+		local foreignSpawner = (building.type == "unit-spawner") and isForeign(building.name)
 		-- mutation and upgrade--
-		if thisIsRampantEnemy and (not pendingChunks[chunkIndex]) and building.valid then
+		if thisIsRampantEnemy and (not pendingChunks[chunkIndex]) and building.valid and not foreignSpawner then
 			if changingEntities then
-				if ((chunk.nextMutationTick  or 0) < tick) and (buildingHiveTypeLookup[building.name] or (building.type == "turret")) then
+				-- only structures a mutation can change (changeEntityAndUpdateDynamicRates): a faction of this mod
+				if ((chunk.nextMutationTick  or 0) < tick) and buildingHiveTypeLookup[building.name] and enemyAlignmentLookup[building.name] then
 					-- if mutatesCnt>maxMutations then
 						pendingEntitiesCnt = pendingEntitiesCnt + 1
 						local entityData = {
@@ -504,7 +518,8 @@ function chunkUtils.mapScanEnemyChunk(chunk, map)
 		end			
 		
 		-----
-		if building.valid then	
+		if building.valid and not foreignSpawner then
+			buildingsCnt = buildingsCnt + 1
 			local hiveType = buildingHiveTypeLookup[building.name] or
 				(((building.type == "turret") and "turret") 
 					or ((building.type =="unit-spawner") and "biter-spawner")
@@ -643,7 +658,8 @@ end
 
 function chunkUtils.registerEnemyBaseStructure(map, entity, base)
     local entityType = entity.type
-    if ((entityType == "unit-spawner") or (entityType == "turret")) and (entity.force.name == "enemy") then
+    if ((entityType == "unit-spawner") or (entityType == "turret")) and (entity.force.name == "enemy")
+        and not ((entityType == "unit-spawner") and isForeign(entity.name)) then
         local overlapArray = getEntityOverlapChunks(map, entity)
 
         local getFunc
@@ -699,7 +715,8 @@ end
 
 function chunkUtils.unregisterEnemyBaseStructure(map, entity, damageType)
     local entityType = entity.type
-    if ((entityType == "unit-spawner") or (entityType == "turret")) and (entity.force.name == "enemy") then
+    if ((entityType == "unit-spawner") or (entityType == "turret")) and (entity.force.name == "enemy")
+        and not ((entityType == "unit-spawner") and isForeign(entity.name)) then
         local overlapArray = getEntityOverlapChunks(map, entity)
         local getFunc
         local setFunc
@@ -805,7 +822,11 @@ function chunkUtils.accountPlayerEntity(entity, map, addObject, creditNatives)
 					if entity.type ~= "wall" then	-- + !КДА 2021.11
 						map.destroyPlayerBuildings = map.destroyPlayerBuildings + 1
 						if universe.aiDifficulty == "Hard" then
-							if not (map.supressionData or (map.supressionData.supressionType < 1) or (map.supressionData.supressionEndTick < game.tick)) then	--- prevent mass attack if destroing base
+							-- no points while a biter suppressor works (prevents a mass attack on the base it protects).
+							-- The old test was always false (supressionData exists on every map): no points at all
+							local supression = map.supressionData
+							if not (supression and ((supression.supressionType or 0) >= 1)
+								and ((supression.supressionEndTick or 0) >= game.tick)) then
 								if (map.state == AI_STATE_ONSLAUGHT) then
 									map.points = map.points + entityValue
 									if universe.aiPointsPrintGainsToChat then

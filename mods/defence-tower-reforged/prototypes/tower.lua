@@ -1,10 +1,11 @@
--- Repair Turret, Paranoidal fork 9.x.
--- One visible container (1 slot for repair packs) + one hidden electric-energy-interface created by control.lua.
--- No roboport, no logistic network, no construction: repair only.
+-- Defence tower: the building, its repair side and the repair upgrade branches (from Repair Turret by
+-- Klonan, Paranoidal fork 9.0.6; IDs kept so towers and researched levels of saves stay).
+-- One visible container (1 slot for repair packs) + one hidden electric-energy-interface created by control.lua
+-- for the repair energy and the head animation. The shield buffer is a second hidden entity (prototypes/shield.lua).
 local util = require("util")
 local C = require("shared")
 
-local path = "__Repair_Turret__/graphics/"
+local path = "__defence-tower-reforged__/graphics/"
 local watts = function(w) return string.format("%dkW", math.floor(w / 1000)) end
 local joules = function(j) return string.format("%dkJ", math.floor(j / 1000)) end
 

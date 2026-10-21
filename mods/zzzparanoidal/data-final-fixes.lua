@@ -47,7 +47,7 @@ require("tweaks.recipe.optera-warehouse-sort") -- Optera warehouse (6×6) и sto
 require("tweaks.recipe.fuel")
 require("tweaks.recipe.science-packs")
 require("tweaks.recipe.warfare") -- рецепт artillery-turret: добавление artillery-turret-prototype (файл не был подключён при порте)
-require("tweaks.recipe.repair-turret") -- Repair Turret: дорогой рецепт
+require("tweaks.recipe.repair-turret") -- Защитная башня (defence-tower-reforged): дорогой рецепт
 require("tweaks.recipe.osha-containers") -- osha mini passive/storage: синхрон с большими (убрать лишний advanced-circuit)
 require("tweaks.recipe.miles-bobs-expansion-port") -- MilesBobsExpansion2: восстановление богатых рецептов тиров 7-9/electronics 4-5 (1.1)
 require("tweaks.recipe.inserter-cranes-port") -- Beta 8: цены кранов после перехода stack → bulk

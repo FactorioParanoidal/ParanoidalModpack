@@ -37,7 +37,7 @@ local SIZES = {
   ["angels-liquifier"] = { 3, 3 }, ["clowns-sluicer"] = { 3, 3 }, ["angels-hydro-plant"] = { 5, 5 },
   ["radar"] = { 3, 3 }, ["ore-radar"] = { 3, 3 }, ["storage-tank"] = { 3, 3 }, ["bob-small-storage-tank"] = { 1, 1 },
   ["angels-storage-tank-3"] = { 2, 2 }, ["big-rock"] = { 2, 2 }, ["huge-rock"] = { 3, 3 }, ["big-sand-rock"] = { 2, 2 },
-  ["lootStone_Combat5-rampantFixed"] = { 2, 2 }, ["angels-crystal-rock"] = { 3, 3 }, ["bob-hardened-bile"] = { 2, 2 },
+  ["angels-crystal-rock"] = { 3, 3 }, ["bob-hardened-bile"] = { 2, 2 },
   ["crash-site-spaceship-wreck-big-1"] = { 3, 3 }, ["crash-site-spaceship-wreck-big-2"] = { 3, 3 },
   ["crash-site-spaceship-wreck-medium-1"] = { 2, 2 }, ["crash-site-spaceship-wreck-medium-2"] = { 2, 2 },
   ["crash-site-spaceship-wreck-medium-3"] = { 2, 2 },

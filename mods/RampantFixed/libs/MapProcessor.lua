@@ -16,6 +16,7 @@ local chunkPropertyUtils = require("ChunkPropertyUtils")
 local baseUtils = require("BaseUtils")
 local squadCompression = require("SquadCompression")
 local aiBrain = require("AIBrain")
+local foreignEnemies = require("ForeignEnemies")
 
 -- constants
 
@@ -202,7 +203,10 @@ local function queueNestSpawners(map, chunk, tick)
 end
 
 
-local xyVector = {{-1, -1}, {-1, 1}, {1, -1}, {1, 1}}
+-- signs of the offsets around the player chunk; a zero offset has one side only (each chunk is visited once:
+-- the four sign pairs repeated the row and column through the player chunk)
+local SIGNS_BOTH = {-1, 1}
+local SIGNS_ZERO = {1}
 -- processPlayers runs every 16 ticks (was 8): chances are 1-(1-p)^2 of the old per-8-tick values,
 -- so the hunting probability per unit of time is unchanged.
 local huntingChance = {}
@@ -273,42 +277,43 @@ function mapProcessor.processPlayers(players, universe, tick)
 						local forceVengence = (getEnemyStructureCount(map, playerChunk) > 0)
 
 						for dx= 0, PROCESS_PLAYER_BOUND, 32 do
+							local xSigns = (dx == 0) and SIGNS_ZERO or SIGNS_BOTH
 							for dy= 0, PROCESS_PLAYER_BOUND, 32 do
+								local ySigns = (dy == 0) and SIGNS_ZERO or SIGNS_BOTH
 								local vengence = allowingVengence and (forceVengence or (roll < (huntingChance[mMax(dx, dy)] or HUNTING_CHANCE_DEFAULT)))
-								for _, vector in pairs(xyVector) do									
-									local x = playerChunk.x + dx*vector[1]
-									local y = playerChunk.y - dy*vector[2]
-									local chunk = getChunkByXY(map, x, y)
-									if (chunk ~= -1) and (chunk[CHUNK_TICK] ~= tick) then
-										chunk[CHUNK_TICK] = tick
-										processPheromone(map, chunk, true)
-										if (not chunk.nextHuntTick) or (chunk.nextHuntTick <= tick) then 
-											if (getNestCount(map, chunk) > 0) then
-												 processNestActiveness(map, chunk)
-												 --queueNestSpawners(map, chunk, tick)		-- + !КДА too high cost. Lets just set "active"
-												 
-												if vengence then
-													local count = map.vengenceQueue[chunk]
-													if not count then
-														count = 0
-														map.vengenceQueue[chunk] = count
+								for xi = 1, #xSigns do
+									local x = playerChunk.x + dx*xSigns[xi]
+									for yi = 1, #ySigns do
+										local y = playerChunk.y - dy*ySigns[yi]
+										local chunk = getChunkByXY(map, x, y)
+										if (chunk ~= -1) then
+											if (chunk[CHUNK_TICK] ~= tick) then
+												chunk[CHUNK_TICK] = tick
+												processPheromone(map, chunk, true)
+												if (not chunk.nextHuntTick) or (chunk.nextHuntTick <= tick) then
+													if (getNestCount(map, chunk) > 0) then
+														processNestActiveness(map, chunk)
+														if vengence then
+															local count = map.vengenceQueue[chunk]
+															if not count then
+																count = 0
+																map.vengenceQueue[chunk] = count
+															end
+															map.vengenceQueue[chunk] = count + 1
+															chunk.nextHuntTick = tick + COOLDOWN_HUNT
+														end
 													end
-													map.vengenceQueue[chunk] = count + 1
-													chunk.nextHuntTick = tick + COOLDOWN_HUNT
 												end
 											end
-										end	
-									end
-										--- compressed squads
-									if (chunk ~= -1) then
-										for _,squad in pairs(getSquadsOnChunk(map, chunk)) do
-											local unitGroup = squad.group
-											if squad.compressed and unitGroup and unitGroup.valid then
-												squadDecompress(universe, map.surface, squad, nil, playerCharacter, true)
+											--- compressed squads
+											for _,squad in pairs(getSquadsOnChunk(map, chunk)) do
+												local unitGroup = squad.group
+												if squad.compressed and unitGroup and unitGroup.valid then
+													squadDecompress(universe, map.surface, squad, nil, playerCharacter, true)
+												end
 											end
 										end
 									end
-										--- compressed squads
 								end
 							end
 						end
@@ -771,14 +776,27 @@ function mapProcessor.processSpawners(map, tick, remoteInterfaceParameters)
     end
 end
 
-local querySpawners = {area={}, force="enemy", type={"unit-spawner"}}	-- "turret", 
+local querySpawners = {area={{0, 0}, {0, 0}}, force="enemy", type={"unit-spawner"}}	-- "turret",
+local isForeign = foreignEnemies.isForeign
+local sFind = string.find
 -- growType = 0 - center
 local function growChunk(map, base, chunk, growType)
 	local growCenter
 	if growType == 0 then
 		local universe = map.universe
-		querySpawners.area = {{chunk.x, chunk.y}, {chunk.x + 32, chunk.y + 32}}
-		local entities = map.surface.find_entities_filtered(querySpawners)
+		local area = querySpawners.area
+		area[1][1] = chunk.x
+		area[1][2] = chunk.y
+		area[2][1] = chunk.x + 32
+		area[2][2] = chunk.y + 32
+		-- Big Monsters spawners (volcano, invasion spawner) are not copied: their scripts do not know the copies
+		local found = map.surface.find_entities_filtered(querySpawners)
+		local entities = {}
+		for i = 1, #found do
+			if not isForeign(found[i].name) then
+				entities[#entities + 1] = found[i]
+			end
+		end
 		if #entities == 0 then
 			return false
 		end
@@ -786,8 +804,9 @@ local function growChunk(map, base, chunk, growType)
 		for i = 1, 2 do
 			local entity = entities[mRandom(#entities)]
 			if entity and entity.valid then
-				if string.find(entity.name, "rampant") then
-					newEntity = baseUtils.upgradeEntity(entities[mRandom(#entities)], base.alignment, map, nil, true, true)
+				if sFind(entity.name, "rampant", 1, true) then
+					-- the checked spawner itself (was a second random pick, possibly of another kind)
+					newEntity = baseUtils.upgradeEntity(entity, base.alignment, map, nil, true, true)
 				else
 					local newPosition = map.surface.find_non_colliding_position(
 						entity.name,

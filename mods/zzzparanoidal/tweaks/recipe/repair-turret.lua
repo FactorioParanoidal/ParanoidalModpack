@@ -1,5 +1,5 @@
--- Repair Turret (локальный форк Paranoidal): рецепт сборки.
-if not mods["Repair_Turret"] then return end
+-- Защитная башня (defence-tower-reforged, бывшая ремонтная турель Repair Turret): рецепт сборки.
+if not mods["defence-tower-reforged"] then return end
 
 local recipe = data.raw.recipe["repair-turret"]
 if recipe then

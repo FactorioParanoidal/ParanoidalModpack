@@ -344,9 +344,9 @@ for enitityType, pheromoneLvl in pairs(BUILDING_PHEROMONES) do
 	end	
 end
 -------------------------
-constants.IGNORED_BUILDINGS = {} 
+-- [entity name] = pheromone level: player buildings of a scored type that do not attract biters (none now)
+constants.IGNORED_BUILDINGS = {}
 local IGNORED_BUILDINGS = constants.IGNORED_BUILDINGS
-IGNORED_BUILDINGS["regenerationCrystal-rampantFixed"] = "radar"
 
 
 function constants.GET_ENTITY_PHEROMONES(entity, pheromoneType)	
@@ -644,6 +644,10 @@ constants.TIER_UPGRADE_SET_10_AS_IS = tiers10AsIs	-- + !КДА 2021.11
 
 local variations = (settings.startup["rampantFixed--newEnemyVariations"].value or 1)	-- + !КДА 2021.11
 
+-- Paranoidal: champions and hour bosses (libs/Champions.lua) are copies of ordinary units with this suffix
+-- (prototypes/ChampionUnits.lua): the damage event filter then matches the champions only
+constants.CHAMPION_SUFFIX = "-champion"
+
 constants.ENERGY_THIEF_LOOKUP = {}
 
 for tier=1, 10 do
@@ -655,6 +659,7 @@ end
 for tier=1, 10 do
     for i=1,variations do
         constants.ENERGY_THIEF_LOOKUP["energy-thief-biter-v" .. i .. "-t" .. tier .. "-rampant"] = true
+        constants.ENERGY_THIEF_LOOKUP["energy-thief-biter-v" .. i .. "-t" .. tier .. "-rampant" .. constants.CHAMPION_SUFFIX] = true
     end
 end
 

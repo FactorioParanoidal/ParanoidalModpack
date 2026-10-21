@@ -1,0 +1,5 @@
+require("prototypes.tower")
+require("prototypes.shield")
+require("prototypes.graphics")
+require("prototypes.technology")
+require("prototypes.tool")

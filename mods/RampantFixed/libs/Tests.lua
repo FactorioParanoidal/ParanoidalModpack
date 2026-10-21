@@ -3,8 +3,6 @@ if (testsG) then
 end
 local tests = {}
 
-local powerup = require("libs/Powerup")
-
 
 local debug_players_list = {}
 debug_players_list["Dimm2101"] = true
@@ -22,15 +20,8 @@ function tests.addDebugButton(player, root)
 	end
 end
 
-local function createDebugMenu(player, universeDebugSettings, universePowerupSettings)
-	if not universePowerupSettings[player.name] then
-		universePowerupSettings[player.name] = {}
-	end
-	local powerupSettings = universePowerupSettings[player.name]
-	local endlessAmmo = powerupSettings and powerupSettings.endlessAmmo
-	local oneshotBiters = powerupSettings and powerupSettings.oneshotBiters
-	local bonusHP = powerupSettings and powerupSettings.bonusHP
-	
+-- Diagnostics only: squads, pheromones, nest activeness, resource generators
+local function createDebugMenu(player, universeDebugSettings)
 	local gui = player.gui.screen
 
 	for i, children in pairs(gui.children) do
@@ -70,42 +61,6 @@ local function createDebugMenu(player, universeDebugSettings, universePowerupSet
 		sprite = "utility/close",
 		style = "close_button"
 	}
-	local buttonCaption = "oneshot biters:"
-	if oneshotBiters then
-		buttonCaption = buttonCaption .. " ON"
-	else
-		buttonCaption = buttonCaption .. " OFF"
-	end
-	root.add{type = "button", name = "rampantFixed_Debug_OneshotBitersSwitch", caption = buttonCaption, style = "rampantFixed_menu_button"}
-
-	buttonCaption = "endless ammo:"
-	if endlessAmmo then
-		buttonCaption = buttonCaption .. " ON"
-	else
-		buttonCaption = buttonCaption .. " OFF"
-	end
-	root.add{type = "button", name = "rampantFixed_Debug_endlessAmmoSwitch", caption = buttonCaption, style = "rampantFixed_menu_button"}
-
-	buttonCaption = "add 750hp:"
-	if bonusHP then
-		buttonCaption = buttonCaption .. " ON"
-	else
-		buttonCaption = buttonCaption .. " OFF"
-	end
-	root.add{type = "button", name = "rampantFixed_Debug_addHPSwitch", caption = buttonCaption, style = "rampantFixed_menu_button"}
-
-    local pointButtons = root.add {
-        type = "flow",
-        name = "rampantFixed_pointButtons",
-		alignment = "right",
-        direction = "horizontal"
-    }
-	pointButtons.add({type = "label", caption = "AI Points:"})
-	pointButtons.add{type = "button", name = "rampantFixed_Debug_SetPointsTo0", caption = "-> 0"}
-	pointButtons.add{type = "button", name = "rampantFixed_Debug_Add100Points", caption = "+100"}
-	pointButtons.add{type = "button", name = "rampantFixed_Debug_Add1000Points", caption = "+1000"}
-	
-	root.add{type = "button", name = "rampantFixed_Debug_BasesManagment", caption = "Bases managment (not yet)", style = "rampantFixed_menu_button"}
 	root.add{type = "button", name = "rampantFixed_Debug_SquadsManagment", caption = "Squads managment (pre-alpha)", style = "rampantFixed_menu_button"}
 	
 	
@@ -183,57 +138,9 @@ end
 function tests.onDebugElementClick(event, universe)
 	local guiElement = event.element	
 	if guiElement.name == "rampantFixed_DebugMenu" then 
-		createDebugMenu(game.players[event.player_index], universe.debugSettings, universe.powerupSettings)
+		createDebugMenu(game.players[event.player_index], universe.debugSettings)
 	elseif guiElement.name == "rampantFixed_DebugMenuClose" then
 		guiElement.parent.parent.destroy()						
-	elseif guiElement.name == "rampantFixed_Debug_OneshotBitersSwitch" then
-		local player = game.players[event.player_index]
-		if not universe.powerupSettings[player.name] then
-			universe.powerupSettings[player.name] = {}
-		end
-		local powerupSettings = universe.powerupSettings[player.name]
-		powerup.setOneshotBiters(player, universe.powerupSettings, not powerupSettings.oneshotBiters)
-		local buttonCaption = "oneshot biters:"
-		if powerupSettings.oneshotBiters then
-			buttonCaption = buttonCaption .. " ON"
-		else
-			buttonCaption = buttonCaption .. " OFF"
-		end
-		guiElement.caption = buttonCaption
-	elseif guiElement.name == "rampantFixed_Debug_endlessAmmoSwitch" then
-		local player = game.players[event.player_index]
-		if not universe.powerupSettings[player.name] then
-			universe.powerupSettings[player.name] = {}
-		end
-		local powerupSettings = universe.powerupSettings[player.name]
-		powerup.setEndlessAmmo(player, powerupSettings, not powerupSettings.endlessAmmo)
-		
-		local buttonCaption = "endless ammo:"
-		if powerupSettings.endlessAmmo then
-			buttonCaption = buttonCaption .. " ON"
-			powerup.savePlayerAmmo(player, universe.powerupSettings)
-		else
-			buttonCaption = buttonCaption .. " OFF"
-		end
-		guiElement.caption = buttonCaption
-	elseif guiElement.name == "rampantFixed_Debug_addHPSwitch" then
-		local player = game.players[event.player_index]
-		if not universe.powerupSettings[player.name] then
-			universe.powerupSettings[player.name] = {}
-		end
-		local powerupSettings = universe.powerupSettings[player.name]
-		local bonusHP_value = 750
-		local bonusHP_toSet = (bonusHP_value - ((powerupSettings.bonusHP and bonusHP_value) or 0))
-		
-		powerup.setBonusHP(player, powerupSettings, bonusHP_toSet)
-		
-		local buttonCaption = "add ".. bonusHP_value.."hp:"
-		if bonusHP_toSet == 0 then
-			buttonCaption = buttonCaption .. " OFF"
-		else
-			buttonCaption = buttonCaption .. " ON"
-		end
-		guiElement.caption = buttonCaption
 	elseif guiElement.name == "rampantFixed_Debug_SquadsManagment" then
 		createSquadMenu(game.players[event.player_index], universe)	-- altha
 	elseif guiElement.name == "rampantFixed_Debug_SquadMenuClose" then
@@ -425,7 +332,7 @@ function tests.showNestsActiveness(map, showText)
 			if showText then					
 				renderingObject.color = {0.7, 0.0, 0.0, 0.6}
 			else
-				rendering.destroy(chunk.rectangleId)
+				renderingObject.destroy()
 				chunk.rectangleId = nil
 			end	
 		else	
