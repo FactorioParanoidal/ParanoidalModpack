@@ -8,6 +8,7 @@ Date: 2026-06-05
   Bugfixes:
     - Removed extraneous zipped version of Russian localization.
     - Fixed bug preventing Bob's mods recipe replacements from working.
+    - Fixed error "attempt to call global 'set_stack'" when fillers handle an insert request in cheat mode; a missing request count no longer errors either (Paranoidal local fix).
   Graphics:
     - Roboport interface uses its HR sprites directly (2.0 ignores hr_version) (Paranoidal local fix)
 ---------------------------------------------------------------------------------------------------
