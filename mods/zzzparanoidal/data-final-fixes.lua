@@ -391,6 +391,8 @@ require("tweaks.recipe.batch02-blue-beta8")
 require("tweaks.recipe.batch03-rest-beta8")
 -- Балансовые правки Clowns после OV.execute и итоговых рецептов пака.
 require("tweaks.recipe.clowns-extended-minerals")
+-- Допуск модулей — после итоговых рецептов Beta 8 и интеграций модов.
+require("tweaks.recipe.module-productivity-beta8")
 -- После синхронизаторов меню: иконка конвертации не заменяет иконку средней опоры.
 require("tweaks.recipe.iron-pole-upgrade")
 require("tweaks.custom.locale-overrides")

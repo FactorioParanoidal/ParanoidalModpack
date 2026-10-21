@@ -45,7 +45,7 @@ rebal_full("clowns-crushed-mix5-processing",
   },
   { { type = "item", name = "angels-manganese-ore", amount = 12 } })
 
--- После modules-beta8: те же машины и разрешения модулей, что у базового Mn-рецепта.
+-- Категория машин и время — по итоговому базовому Mn-рецепту.
 local manganese_reference = data.raw.recipe["angelsore-crushed-manganese-processing"]
 if manganese_reference then
   for _, name in ipairs({ "angels-manganese-pure-processing", "clowns-crushed-mix5-processing" }) do
@@ -53,9 +53,6 @@ if manganese_reference then
     if recipe then
       recipe.energy_required = 3
       recipe.category = manganese_reference.category
-      recipe.allow_productivity = manganese_reference.allow_productivity
-      recipe.allowed_module_categories = manganese_reference.allowed_module_categories
-        and table.deepcopy(manganese_reference.allowed_module_categories) or nil
     end
   end
 end
@@ -92,6 +89,20 @@ rebal_full("clowns-crystal-mix4-processing",
 
 -- Фторит — канон Angel chunk-mix6.
 rebal_output("clowns-chunk-mix1-processing", "angels-fluorite-ore", 4)
+
+-- Торий: смешанная сортировка с увеличенной долей очищенного Elionagate.
+rebal_full("clowns-pure-mix2-processing",
+  {
+    { type = "item", name = "angels-ore8-crystal",       amount = 2 },
+    { type = "item", name = "angels-ore9-crystal",       amount = 2 },
+    { type = "item", name = "clowns-ore3-pure",          amount = 1 },
+    { type = "item", name = "clowns-ore5-pure",          amount = 1 },
+    { type = "item", name = "clowns-ore7-pure",          amount = 6 },
+    { type = "item", name = "angels-catalysator-orange", amount = 4 },
+  },
+  { { type = "item", name = "bob-thorium-ore", amount = 12 } })
+local thorium_mix = data.raw.recipe["clowns-pure-mix2-processing"]
+if thorium_mix then thorium_mix.energy_required = 6 end
 
 -------------------------------------------------------------------------------
 -- (2) Добыча руд (жидкость) — выровнено под Angel-руды (см. tweaks/entity/add-liquid-to-mine-ores)
