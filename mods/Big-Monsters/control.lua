@@ -13,12 +13,22 @@ require "__mferrari_lib__/stdlib/area/area"
 -- Skip event spawning on peaceful surfaces or on maps generated with
 -- enemy-base size = 0 (i.e. no enemies expected). Can be overridden via
 -- runtime setting "bm-events-when-peaceful" (default off).
+-- Paranoidal: also during the truce of RampantFixed on the surface (remote getTruceInfo: the evolution or the
+-- peace period of its planet setting is not reached yet).
+local function rampant_truce(surface)
+    local rampant = remote.interfaces["rampantFixed"]
+    if not (rampant and rampant["getTruceInfo"]) then return false end
+    local info = remote.call("rampantFixed", "getTruceInfo", {surfaceIndex = surface.index})
+    return (info ~= nil) and (info.truce == true)
+end
+
 local function bm_peaceful_skip(surface)
     if not surface or not surface.valid then return true end
     if settings.global["bm-events-when-peaceful"] and settings.global["bm-events-when-peaceful"].value then return false end
     if surface.peaceful_mode then return true end
     local ac = surface.map_gen_settings and surface.map_gen_settings.autoplace_controls
     if ac and ac["enemy-base"] and ac["enemy-base"].size == 0 then return true end
+    if rampant_truce(surface) then return true end
     return false
 end
 
@@ -158,13 +168,19 @@ end
 
 
 
+-- Events are tried from the most dangerous one (each rolls its own chance). Was pairs() over storage.chances:
+-- the order of the string keys, not the danger, decided which chances came first.
+local EVENT_ORDER = {"volcano", "spidertron", "demolisher", "flying_saucer", "biterzilla", "worms", "soldiers",
+                     "gleba_invaders", "invasion", "swarm"}
+
 function pick_event(excludes,surface)
 local the_event
 local evo
 if not excludes then excludes={} end
-for event, chances in pairs (storage.chances) do
+for _, event in ipairs(EVENT_ORDER) do
+	local chances = storage.chances[event]
+	if chances and not in_list(excludes,event) then
 	evo = get_planet_evo(surface, chances.evo_adjust_in_planet)
-	if not in_list(excludes,event) then 
 	if chances.chance>0 and evo >= chances.min_evo and math.random(100) <= chances.chance then 
 		if (not chances.max_evo) or (chances.max_evo>=evo) then 
 			the_event = event
@@ -531,6 +547,7 @@ if not chunk_distance then chunk_distance=4 end
 local enemy_spawn
 local nothing = 0
 local chunkPos = Chunk.from_position(initial_position)  --{x=0,y=0}  initial_position
+local steps = 0
 -- copies: chunkPos is moved along the search vector below
 local player_chunks = {table.deepcopy(chunkPos)}
 local last_building = table.deepcopy(chunkPos)
@@ -538,8 +555,9 @@ local last_building = table.deepcopy(chunkPos)
     while(not enemy_spawn) do
 		chunkPos.x = chunkPos.x + directionVec.x
         chunkPos.y = chunkPos.y + directionVec.y
-        -- Set some absolute limits.
-        if ((math.abs(chunkPos.x) > 2000) or (math.abs(chunkPos.y) > 2000)) then break
+        steps = steps + 1
+        -- Set some absolute limits (Paranoidal: also at most 600 chunks walked, one area search each)
+        if ((math.abs(chunkPos.x) > 2000) or (math.abs(chunkPos.y) > 2000)) or (steps > 600) then break
         
         elseif (surface.is_chunk_generated(chunkPos)) then
 			local area = Chunk.to_area(chunkPos) 
@@ -732,12 +750,8 @@ local position = surface.find_non_colliding_position(name, spawn, 0, 1)
 			elseif (string.find(name, "human") and evo>0.6 and math.random (3)==1) then effect='defender_capsules' 
 			elseif (string.find(name, "human") and evo>0.85 and math.random (3)==1) then effect='grenade_launcher' end
 		table.insert (storage.biterzillas, {entity=zilla, effect = effect})
-
-		if evo>=0.9 then 
-			local hpe = (pcount*zilla.health/10) * evo
-			if evo>0.95 then hpe = hpe*1.5 end
-			zilla.health  = (zilla.health/5) + hpe
-			end
+		-- Paranoidal: full health. From 0.9 evolution the health was cut to a fifth plus a share per player (a third
+		-- for one player), while the weaker bosses below 0.9 kept all of it
 
 		if pcount>1 and evo>0.95 then
 		   if math.random(1,2)==1 then
@@ -774,11 +788,7 @@ local position = surface.find_non_colliding_position(name, spawn, 0, 1)
 		if evo>0.6 and math.random (3)==1 then effect='defender_capsules' end 
 		if evo>0.85 and math.random (3)==1 then effect='grenade_launcher' end
 		table.insert (storage.biterzillas, {entity=spider, effect = effect})
-		if evo>=0.9 then 
-			local hpe = (pcount*spider.health/10) * evo
-			if evo>0.95 then hpe = hpe*1.5 end
-			spider.health  = ((spider.health/5) + hpe) * storage.difficulty_level
-			end
+		-- Paranoidal: full health, as the other bosses (was cut like them, then multiplied by the difficulty)
 		end
 
 return spider
@@ -829,11 +839,7 @@ local position = surface.find_non_colliding_position(name, spawn, 0, 1)
 		local effect 
 		if evo>0.8 and math.random (3)==1 then effect='defender_capsules' end 
 		table.insert (storage.biterzillas, {entity=spider, effect = effect})
-		if evo>=0.9 then 
-			local hpe = (pcount*spider.health/10) * evo
-			if evo>0.95 then hpe = hpe*1.5 end
-			spider.health  = ((spider.health/5) + hpe) * storage.difficulty_level
-			end
+		-- Paranoidal: full health, as the other bosses
 		end
 return spider
 end
@@ -841,7 +847,8 @@ end
 
 
 
-function Spidertron_Moves(spider)
+-- ZI: the record in storage.biterzillas; the target is kept until it is gone (was a 1500 tile search every 18 s)
+function Spidertron_Moves(spider, ZI)
 if storage.spidertron_nuke then 	
 	spider.insert{name='maf-small-atomic-rocket',count=5}
 	end
@@ -853,7 +860,11 @@ if FI then
 
 if get_evo_here(spider.surface)>0.95 then spider.insert{name='explosive-rocket',count=400} else spider.insert{name='rocket',count=400} end
 
-local enemy = spider.surface.find_nearest_enemy{position=spider.position, max_distance=1500, force=spider.force} --zilla.force
+local enemy = ZI and ZI.target
+if not (enemy and enemy.valid) then
+	enemy = spider.surface.find_nearest_enemy{position=spider.position, max_distance=1500, force=spider.force} --zilla.force
+	if ZI then ZI.target = enemy end
+	end
 	if enemy and enemy.valid then
 		local go_to = get_pos_near_from_aproach(enemy.position, spider.position, 30, 2 )
 		spider.autopilot_destination = go_to
@@ -952,7 +963,7 @@ for z=#storage.biterzillas,1,-1 do
 				end
 		end	
 		
-	if ZI.spider and zilla.valid and game.tick % (tick_zillas*18) ==0 then Spidertron_Moves(zilla) end
+	if ZI.spider and zilla.valid and game.tick % (tick_zillas*18) ==0 then Spidertron_Moves(zilla, ZI) end
 		
 	end
 end
@@ -1047,6 +1058,29 @@ return the_worm
 end
 
 
+-- Paranoidal: the children are units of a nest near the mother (Rampant factions, Bob, vanilla), vanilla biters if
+-- there is none. Unit lists are prototype data: cached per nest and evolution step (same on every peer).
+local brood_nest_query = {type = "unit-spawner", force = nil, position = nil, radius = 160, limit = 1}
+local brood_units = {}
+local function brood_children(mother, evo)
+	brood_nest_query.force = mother.force
+	brood_nest_query.position = mother.position
+	local nests = mother.surface.find_entities_filtered(brood_nest_query)
+	local nest = nests[1] and nests[1].name or ""
+	local step = math.floor(evo * 20)
+	local key = nest .. ":" .. step
+	local list = brood_units[key]
+	if not list then
+		-- from the step, not the exact evolution: a peer that fills its cache later gets the same list
+		local stepEvo = step / 20
+		list = {}
+		if nest ~= "" then list = get_units_for_evolution(stepEvo, nil, {nest}) end
+		if #list == 0 then list = get_units_for_evolution(stepEvo, nil, storage.vanilla_biter_spawners) end
+		brood_units[key] = list
+		end
+	return list
+end
+
 function Brood(mother)
 local x = mother.position.x
 local y = mother.position.y 
@@ -1058,7 +1092,8 @@ local num = math.random(Min,Max) + storage.difficulty_level - 1
 
 local group
 if mother.commandable and mother.commandable.parent_group then group=mother.commandable.parent_group end
-local children = get_units_for_evolution( get_evo_here(mother.surface), nil, storage.vanilla_biter_spawners)
+local children = brood_children(mother, get_evo_here(mother.surface))
+if #children == 0 then return end
 for k=1,num do
 	local name= children[math.random(#children)]
 	local pos = mother.surface.find_non_colliding_position(name, mother.position, 10, 1)
