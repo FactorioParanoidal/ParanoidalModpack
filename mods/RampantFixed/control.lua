@@ -1963,6 +1963,9 @@ local function onConfigChanged()
         end
     end
 
+    -- Paranoidal: bases above the tier by evolution (and distance) are brought down to it (rampantFixed--tierByEvolutionOnly)
+    baseUtils.lowerTiersToEvolution(universe)
+
     updateEntityDamagedHandler()
 end
 
