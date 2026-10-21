@@ -9,7 +9,7 @@ local Recipe = require('__stdlib2__/stdlib/data/recipe')
 Data {
     type = 'technology',
     name = 'roboport-interface',
-    icon = '__nanobots-refined__/graphics/technology/roboport-interface.png',
+    icon = '__nanobots-refined-reforged__/graphics/technology/roboport-interface.png',
     icon_size = 256,
     effects = {},
     prerequisites = {'construction-robotics', 'circuit-network'},
@@ -48,7 +48,7 @@ Recipe {
 Data {
     type = 'item',
     name = 'roboport-interface',
-    icon = '__nanobots-refined__/graphics/icons/roboport-interface.png',
+    icon = '__nanobots-refined-reforged__/graphics/icons/roboport-interface.png',
     icon_size = 64,
     icon_mipmaps = 1,
     subgroup = 'logistic-network',
@@ -60,7 +60,7 @@ Data {
 Data {
     type = 'item',
     name = 'roboport-interface-cc',
-    icon = '__nanobots-refined__/graphics/icons/roboport-interface-cc.png',
+    icon = '__nanobots-refined-reforged__/graphics/icons/roboport-interface-cc.png',
     icon_size = 64,
     icon_mipmaps = 1,
     hidden = true,
@@ -77,7 +77,7 @@ Hidden radar entity, Fires the on sector scanned scripts
 Constant-Combinator interface for setting the signals.
 --]]
 local ri_cc = Data('constant-combinator', 'constant-combinator'):copy('roboport-interface-cc')
-ri_cc.icon = '__nanobots-refined__/graphics/icons/roboport-interface-cc.png'
+ri_cc.icon = '__nanobots-refined-reforged__/graphics/icons/roboport-interface-cc.png'
 ri_cc.icon_mipmaps = 1
 ri_cc.icon_size = 64
 ri_cc.item_slot_count = 5
@@ -89,7 +89,7 @@ ri_cc.collision_box = {{-0.9, -0.9}, {0.9, 0.9}}
 for index, direction in pairs({'north', 'east', 'south', 'west'}) do
     ri_cc.sprites[direction] = Data.Sprites.empty_sprite()
     ri_cc.activity_led_sprites[direction] = {
-        filename = '__nanobots-refined__/graphics/entity/roboport-interface/combinator-led-constant-south.png',
+        filename = '__nanobots-refined-reforged__/graphics/entity/roboport-interface/combinator-led-constant-south.png',
         width = 11,
         height = 11,
         frame_count = 1,
@@ -118,7 +118,7 @@ ri_cc.activity_led_light = {
 
 local ri_radar = Data('radar', 'radar'):copy('roboport-interface-scanner')
 ri_radar.flags = {'not-deconstructable', 'player-creation', 'placeable-off-grid'}
-ri_radar.icon = '__nanobots-refined__/graphics/icons/roboport-interface.png'
+ri_radar.icon = '__nanobots-refined-reforged__/graphics/icons/roboport-interface.png'
 ri_radar.icon_size = 64
 ri_radar.icon_mipmaps = 1
 ri_radar.minable = nil
@@ -136,7 +136,7 @@ ri_radar.energy_usage = '300kW'
 Data {
     type = 'roboport',
     name = 'roboport-interface-main',
-    icon = '__nanobots-refined__/graphics/icons/roboport-interface.png',
+    icon = '__nanobots-refined-reforged__/graphics/icons/roboport-interface.png',
     icon_size = 64,
     icon_mipmaps = 1,
     flags = {'placeable-player', 'player-creation'},
@@ -167,7 +167,7 @@ Data {
     base_animation = {
         layers = {
             {
-                    filename = '__nanobots-refined__/graphics/entity/roboport-interface/hr-roboport-interface-base.png',
+                    filename = '__nanobots-refined-reforged__/graphics/entity/roboport-interface/hr-roboport-interface-base.png',
                     scale = 0.5,
                     priority = 'medium',
                     width = 256,
@@ -177,7 +177,7 @@ Data {
                     shift = {0.5, -2.0},
                 },
             {
-                    filename = '__nanobots-refined__/graphics/entity/roboport-interface/hr-roboport-interface.png',
+                    filename = '__nanobots-refined-reforged__/graphics/entity/roboport-interface/hr-roboport-interface.png',
                     scale = 0.5,
                     priority = 'medium',
                     width = 256,
@@ -188,7 +188,7 @@ Data {
                     shift = {0.5, -2.0},
                 },
             {
-                    filename = '__nanobots-refined__/graphics/entity/roboport-interface/hr-roboport-interface-base-shadow.png',
+                    filename = '__nanobots-refined-reforged__/graphics/entity/roboport-interface/hr-roboport-interface-base-shadow.png',
                     scale = 0.5,
                     priority = 'medium',
                     width = 422,
@@ -199,7 +199,7 @@ Data {
                     draw_as_shadow = true,
                 },
             {
-                    filename = '__nanobots-refined__/graphics/entity/roboport-interface/hr-roboport-interface-shadow.png',
+                    filename = '__nanobots-refined-reforged__/graphics/entity/roboport-interface/hr-roboport-interface-shadow.png',
                     scale = 0.5,
                     priority = 'medium',
                     width = 256,
@@ -211,7 +211,7 @@ Data {
                     draw_as_shadow = true,
                 },
             {
-                    filename = '__nanobots-refined__/graphics/entity/roboport-interface/hr-roboport-interface-glow.png',
+                    filename = '__nanobots-refined-reforged__/graphics/entity/roboport-interface/hr-roboport-interface-glow.png',
                     scale = 0.5,
                     priority = 'medium',
                     width = 256,

@@ -33,20 +33,36 @@ function Queue.set_hash(t, data)
     return index
 end
 
-function Queue.count(t)
-    local count
-    if not active then
-        count = 0
-    else
-        count = last - next + 1
+--- Number of queued tasks, O(1). Used on every queued target, so it must not walk the queue.
+--- (Queue.count used the globals `active`/`last`/`next`, always reported 0, and the queue was never capped.)
+function Queue.length(t)
+    if not t.active then
+        return 0
     end
+    return t.last - t.next + 1
+end
 
-    return count, table.size(t._hash)
+function Queue.count(t)
+    return Queue.length(t), table.size(t._hash)
 end
 
 function Queue.get_hash(t, entity)
-    local index = cantorPair_v7(entity.position)
-    return t._hash[index]
+    return Queue.get_hash_at(t, entity.position)
+end
+
+function Queue.get_hash_at(t, position)
+    return t._hash[cantorPair_v7(position)]
+end
+
+--- Drop every queued task at once
+function Queue.clear(t)
+    if t.active then
+        for i = t.next, t.last do
+            t[i] = nil
+        end
+    end
+    t._hash = {}
+    t.active = false
 end
 
 function Queue.insert(t, data)
@@ -72,23 +88,20 @@ function Queue.execute(t)
         game.print("Nanobots error! Queue task missing?")
         return false
     end
-    
-    local success = false
-    if Queue[data.action] then
-        success = Queue[data.action](data)
-    end
-    
-    local index = data.hash
-    t._hash[index] = nil
-    
+
+    -- Take the task out before running it: an action may queue its target again, and clearing
+    -- the hash afterwards used to wipe the hash of that new entry.
+    t._hash[data.hash] = nil
     t[t.next] = nil
     t.next = t.next + 1
     if t.next > t.last then
         t.active = false
     end
-    
-        
-    return success
+
+    if Queue[data.action] then
+        return Queue[data.action](data)
+    end
+    return false
 end
 
 Queue.mt = {__index = Queue, __call = nil}

@@ -1,7 +1,7 @@
 local tech1 = {
     type = 'technology',
     name = 'nanobots',
-    icon = '__nanobots-refined__/graphics/technology/tech-nanobots.png',
+    icon = '__nanobots-refined-reforged__/graphics/technology/tech-nanobots.png',
     icon_size = 254,
     effects = {
         {
@@ -24,7 +24,7 @@ data:extend {tech1}
 local tech2 = {
     type = 'technology',
     name = 'nanobots-cliff',
-    icon = '__nanobots-refined__/graphics/technology/tech-nanobots-cliff.png',
+    icon = '__nanobots-refined-reforged__/graphics/technology/tech-nanobots-cliff.png',
     icon_size = 256,
     effects = {
         {
@@ -34,7 +34,7 @@ local tech2 = {
         {
             type = "nothing",
             effect_description = {"modifier-description.nano-explosives"},
-            icon = "__nanobots-refined__/graphics/technology/cliff_grenade.png"
+            icon = "__nanobots-refined-reforged__/graphics/technology/cliff_grenade.png"
         }
     },
     prerequisites = {'nanobots', 'military-2'},

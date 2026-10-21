@@ -22,7 +22,7 @@ end
 local constructors = {
     type = 'ammo',
     name = 'ammo-nano-constructors',
-    icon = '__nanobots-refined__/graphics/icons/nano-ammo-constructors.png',
+    icon = '__nanobots-refined-reforged__/graphics/icons/nano-ammo-constructors.png',
     icon_size = 64,
     magazine_size = 10,
     subgroup = 'tool',

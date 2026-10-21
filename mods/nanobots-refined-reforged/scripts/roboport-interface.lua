@@ -13,7 +13,7 @@ local params_to_check = {
     ['nano-signal-chop-trees'] = {
         action = 'mark_items_or_trees',
         find_type = 'tree',
-        item_name = 'raw-wood'
+        item_name = 'wood'
     },
     ['nano-signal-item-on-ground'] = {
         action = 'mark_items_or_trees',
@@ -35,7 +35,7 @@ local params_to_check = {
     ['nano-signal-catch-fish'] = {
         action = 'mark_items_or_trees',
         find_type = 'fish',
-        item_name = 'fish'
+        item_name = 'raw-fish'
     }
 }
 
@@ -77,6 +77,19 @@ local function get_entity_info(entity)
     return entity.surface, entity.force, entity.position
 end
 
+--- Items of this name in the network. In 2.0 get_contents() is an array, so indexing it by name
+--- always gave nil. The name is checked first: tasks queued before the 2.0 names (raw-wood,
+--- fish) may still be in a save.
+--- @param network LuaLogisticNetwork
+--- @param item_name string
+--- @return uint
+local function network_item_count(network, item_name)
+    if prototypes.item[item_name] then
+        return network.get_item_count(item_name)
+    end
+    return 0
+end
+
 Queue.mark_items_or_trees =
     function(data)
     if data.logistic_cell.valid and data.logistic_cell.construction_radius > 0 and data.logistic_cell.logistic_network then
@@ -95,7 +108,7 @@ Queue.mark_items_or_trees =
             local available_bots = floor(data.logistic_cell.logistic_network.available_construction_robots - (data.logistic_cell.logistic_network.all_construction_robots * (config['nanobots-free-bots-per'].value / 100)))
             local limit = -99999999999
             if data.value < 0 and data.item_name then
-                limit = (data.logistic_cell.logistic_network.get_contents()[data.item_name] or 0) + data.value
+                limit = network_item_count(data.logistic_cell.logistic_network, data.item_name) + data.value
             end
 
             for _, item in pairs(surface.find_entities_filtered(filter)) do

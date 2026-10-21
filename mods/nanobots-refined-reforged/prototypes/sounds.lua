@@ -18,7 +18,7 @@ Data{
     aggregation = {max_count = 1, remove = true, count_already_playing = true, priority = "oldest"},
     priority = 50,
     audible_distance_modifier = 0.1,
-    filename = '__nanobots-refined__/sounds/din-ding.ogg'
+    filename = '__nanobots-refined-reforged__/sounds/din-ding.ogg'
 }
 
 Data{
@@ -27,5 +27,5 @@ Data{
     aggregation = {max_count = 1, remove = true, count_already_playing = true, priority = "oldest"},
     priority = 50,
     audible_distance_modifier = 0.1,
-    filename = '__nanobots-refined__/sounds/error-buzz.ogg'
+    filename = '__nanobots-refined-reforged__/sounds/error-buzz.ogg'
 }

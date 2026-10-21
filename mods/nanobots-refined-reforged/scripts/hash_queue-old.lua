@@ -29,15 +29,24 @@ function Queue.set_hash(t, data)
     return index
 end
 
-function Queue.count(t)
-    local count = 0
-    for index in pairs(t) do
-        if type(index) == 'number' then
-            count = count + 1
+--- Number of queued ticks, kept in `_n`. Counting walked the whole queue, and the roboport
+--- interface asks once per cell and signal, which grew quadratically with a large network.
+local function length(t)
+    local n = t._n
+    if n == nil then
+        n = 0
+        for index in pairs(t) do
+            if type(index) == 'number' then
+                n = n + 1
+            end
         end
+        t._n = n
     end
+    return n
+end
 
-    return count, table.size(t._hash)
+function Queue.count(t)
+    return length(t), table.size(t._hash)
 end
 
 function Queue.get_hash(t, entity)
@@ -48,7 +57,11 @@ end
 function Queue.insert(t, data, tick, count)
     data.hash = Queue.set_hash(t, data)
 
-    t[tick] = t[tick] or {}
+    if not t[tick] then
+        local n = length(t)
+        t[tick] = {}
+        t._n = n + 1
+    end
     t[tick][#t[tick] + 1] = data
 
     return t, count
@@ -86,7 +99,9 @@ function Queue.execute(t, event)
                 t._hash[index] = nil
             end
         end
+        local n = length(t)
         t[event.tick] = nil
+        t._n = n - 1
     end
     return t
 end

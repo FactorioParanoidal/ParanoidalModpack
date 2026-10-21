@@ -14,6 +14,36 @@ local healer_capsules = config.FOOD
 local Position = require('__stdlib2__/stdlib/area/position')
 local max, abs, ceil, floor = math.max, math.abs, math.ceil, math.floor
 
+local HEAL_TEXT_COLOR = {r = 0, g = 1, b = 0}
+
+--- Equipment this module acts on; a grid without any of it is skipped with one call
+local CHIPS = {
+    ['equipment-bot-chip-launcher'] = true,
+    ['equipment-bot-chip-items'] = true,
+    ['equipment-bot-chip-trees'] = true,
+    ['equipment-bot-chip-feeder'] = true,
+}
+
+--- @param grid LuaEquipmentGrid
+--- @return boolean
+local function has_chips(grid)
+    for _, equipment in pairs(grid.get_contents()) do
+        if CHIPS[equipment.name] then
+            return true
+        end
+    end
+    return false
+end
+
+--- Heal/shield text above the character. The 'flying-text' entity no longer exists in 2.0, so
+--- every heal ended in an error.
+--- @param player LuaPlayer
+--- @param text LocalisedString
+--- @param position MapPosition
+local function heal_text(player, text, position)
+    player.create_local_flying_text {text = text, color = HEAL_TEXT_COLOR, position = position, surface = player.character.surface}
+end
+
 --(( Helper functions ))-------------------------------------------------------
 
 -- Loop through equipment grid and return a table of valid equipment tables indexed by equipment name
@@ -124,7 +154,7 @@ end
 local function get_chip_results(player, equipment, eq_name, search_type, bot_counter)
     local radius = get_chip_radius(player, eq_name)
     local area = Position.expand_to_area(player.character.position, radius)
-    local item_entities = equipment and bot_counter(0) > 0 and player.surface.find_entities_filtered {area = area, type = search_type, limit = 200}
+    local item_entities = equipment and bot_counter(0) > 0 and player.character.surface.find_entities_filtered {area = area, type = search_type, limit = 200}
     local num_items = item_entities and #item_entities or 0
     local num_chips = item_entities and #equipment or 0
     return equipment, item_entities, num_items, num_chips, bot_counter
@@ -149,7 +179,7 @@ end
 --Mark items for deconstruction if player has roboport
 local function process_ready_chips(player, equipment)
     local rad = player.character.logistic_cell.construction_radius
-    local enemy = player.surface.find_nearest_enemy {position = player.character.position, max_distance = rad + 10, force = player.force}
+    local enemy = player.character.surface.find_nearest_enemy {position = player.character.position, max_distance = rad + 10, force = player.force}
     if not enemy and (equipment['equipment-bot-chip-items'] or equipment['equipment-bot-chip-trees']) then
         local bots_available = get_bot_counts(player.character)
         if bots_available > 0 then
@@ -178,7 +208,7 @@ local function process_ready_chips(player, equipment)
                 local launcher = launchers[num_launchers]
                 while capsule and existing < (max_bots - capsule.qty) and launcher and launcher.energy >= 500 do
                     if player.remove_item({name = capsule.capsule, count = 1}) == 1 then
-                        player.surface.create_entity {name = capsule.unit, position = player.character.position, force = player.force, target = player.character}
+                        player.character.surface.create_entity {name = capsule.unit, position = player.character.position, force = player.force, target = player.character}
                         launcher.energy = launcher.energy - 500
                         capsule.count = capsule.count - 1
                         existing = existing + capsule.qty
@@ -207,7 +237,7 @@ local function emergency_heal_shield(player, feeders, energy_shields)
                     local heal, locale = get_health_capsules(player)
                     shield.shield = shield.shield + (heal * 1.5)
                     local health_line = {'nanobots.health_line', ceil(abs(shield.shield - last_health)), locale}
-                    player.surface.create_entity {name = 'flying-text', text = health_line, color = defines.color.green, position = pos()}
+                    heal_text(player, health_line, pos())
                     feeder.energy = feeder.energy - 120
                 else
                     break
@@ -235,7 +265,7 @@ local function emergency_heal_player(player, feeders)
                 player.character.health = last_health + heal
                 local health_line = {'nanobots.health_line', ceil(abs(player.character.health - last_health)), locale}
                 feeder.energy = feeder.energy - 120
-                player.surface.create_entity {name = 'flying-text', text = health_line, color = defines.color.green, position = pos()}
+                heal_text(player, health_line, pos())
             else
                 return
             end
@@ -246,7 +276,7 @@ end
 
 --(( BOT CHIPS  ))-------------------------------------------------------------
 function ArmorMods.prepare_chips(player)
-    if is_personal_roboport_ready(player.character) then
+    if is_personal_roboport_ready(player.character) and has_chips(player.character.grid) then
         local _, _, charged, energy_shields = get_valid_equipment(player.character.grid)
         if charged['equipment-bot-chip-launcher'] or charged['equipment-bot-chip-items'] or charged['equipment-bot-chip-trees'] then
             process_ready_chips(player, charged)

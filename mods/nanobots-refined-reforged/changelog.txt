@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
-Version: 4.0.7
-Date: 2026-06-05
+Version: 9.0.7
+Date: 2026-10-21
+  Changes:
+    - Renamed to nanobots-refined-reforged, the Paranoidal fork of nanobots-refined (title "Nanobots: Early Bots Refined (Reforged)"); version 9 against portal auto-updates. Prototype, setting and key names are unchanged. An existing save keeps the entities and items but starts with fresh mod storage (custom ranges, queues).
   Features:
     - Firing speeds (for both manual and auto modes) are now configurable.
   Changes:
@@ -12,6 +14,20 @@ Date: 2026-06-05
     - Fixed error "attempt to call global 'set_stack'" when fillers handle an insert request in cheat mode; a missing request count no longer errors either (Paranoidal local fix).
   Graphics:
     - Roboport interface uses its HR sprites directly (2.0 ignores hr_version) (Paranoidal local fix)
+  Optimizations:
+    - Auto mode asks the engine for the targets instead of fetching every entity in reach (trees, ore, belts) each second: marked for deconstruction, the force's upgrades, ghosts and item requests, then its damaged entities. Every target is still classified as before; only the queueing order follows these groups (Paranoidal local fix)
+    - The queue limit of 100 tasks works again: Queue.count read undefined globals and always reported 0, so the queue grew without bound and every refill re-checked all queued targets. Refills skip already queued targets first and don't scan at all while the queue is full (Paranoidal local fix)
+    - The player checks (character, emitter and ammo, construction network, radius) are made once per player and tick instead of for every task and target; the per-target network check repeated the same search at the character's position (Paranoidal local fix)
+    - Bounded work per tick: at most 10 failing tasks are skipped per tick, at most 250 search results are classified per refill (the next refill goes on from there), a queue that drains on failures waits one launcher cooldown before the next scan instead of rescanning every tick, and a queue that cannot run at all (no ammo, inside a construction network) is dropped at once (Paranoidal local fix)
+    - Supply checks are shared by ghosts of the same item within a refill; health is checked first for repairs; game.connected_players is read once per tick; armor chips skip grids without chips with one call (Paranoidal local fix)
+    - The roboport interface queue keeps a count instead of walking the whole queue for every cell and signal (Paranoidal local fix)
+  Bugfixes:
+    - Nanobots work in remote view: targets were searched on the camera's surface and measured from the camera's position. Combat robots, item and tree marking of the armor chips, building and tile deconstruction also use the character's or the target's surface (Paranoidal local fix)
+    - The feeder chip heals without an error: 2.0 has no 'flying-text' entity, it shows local flying text now (Paranoidal local fix)
+    - A re-queued emptying/filling task keeps its queue hash (it was cleared right after re-queueing) (Paranoidal local fix)
+    - Clearing items under a ghost is validated again (the check was spelled 'clear-ground' and never ran), so all-pending items no longer print "No clearable stacks found" (Paranoidal local fix)
+    - Levelers search trees and cliffs only within their 120-target limit, so an ore patch in reach no longer hides the trees (Paranoidal local fix)
+    - The roboport interface wood and fish limits work: get_contents() is an array in 2.0, and the items are now wood and raw-fish (Paranoidal local fix)
 ---------------------------------------------------------------------------------------------------
 Version: 4.0.6
 Date: 2025-08-21

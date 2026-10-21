@@ -20,7 +20,7 @@ end
 local levelers = {
     type = 'ammo',
     name = 'ammo-nano-levelers',
-    icon = '__nanobots-refined__/graphics/icons/nano-ammo-levelers.png',
+    icon = '__nanobots-refined-reforged__/graphics/icons/nano-ammo-levelers.png',
     icon_size = 64,
     magazine_size = 10, --20
     subgroup = 'tool',
@@ -63,7 +63,7 @@ local cloud_big_levelers = {
                 {
                     type = 'play-sound',
                     sound = {
-                        filename = '__nanobots-refined__/sounds/robostep.ogg',
+                        filename = '__nanobots-refined-reforged__/sounds/robostep.ogg',
                         volume = 0.75
                     }
                 }
@@ -110,7 +110,7 @@ local cloud_small_termites = {
                                 {   type = 'play-sound',
                                     play_on_target_position = true,
                                     sound = {
-                                        filename = '__nanobots-refined__/sounds/sawing-wood.ogg',
+                                        filename = '__nanobots-refined-reforged__/sounds/sawing-wood.ogg',
                                         volume = 0.30,
                                         aggregation = {max_count = 1, remove = true, count_already_playing = true}
                                     }

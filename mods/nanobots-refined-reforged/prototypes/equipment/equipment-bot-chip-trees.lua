@@ -17,7 +17,7 @@ Data {
 Data {
     type = 'item',
     name = 'equipment-bot-chip-trees',
-    icon = '__nanobots-refined__/graphics/icons/equipment-bot-chip-trees.png',
+    icon = '__nanobots-refined-reforged__/graphics/icons/equipment-bot-chip-trees.png',
     icon_size = 64,
     place_as_equipment_result = 'equipment-bot-chip-trees',
     subgroup = 'equipment',
@@ -31,7 +31,7 @@ local equipment_chip =
     name = 'equipment-bot-chip-trees',
     take_result = 'equipment-bot-chip-trees',
     sprite = {
-        filename = '__nanobots-refined__/graphics/equipment/equipment-bot-chip-trees.png',
+        filename = '__nanobots-refined-reforged__/graphics/equipment/equipment-bot-chip-trees.png',
         width = 64,
         height = 64,
         priority = 'medium',

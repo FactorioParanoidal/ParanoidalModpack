@@ -1,8 +1,8 @@
-local function technology_icon_constant_range()
+local function technology_icon_constant_movement_speed()
     local icons = {
-        {icon = '__nanobots-refined__/graphics/technology/tech-nano-range.png', icon_size = 256, icon_mipmaps = 1},
+        {icon = '__nanobots-refined-reforged__/graphics/technology/tech-nano-speed.png', icon_size = 256, icon_mipmaps = 1},
         {
-            icon = '__core__/graphics/icons/technology/constants/constant-range.png',
+            icon = '__core__/graphics/icons/technology/constants/constant-movement-speed.png',
             icon_size = 128,
             icon_mipmaps = 3,
             shift = {100, 100}
@@ -13,9 +13,9 @@ end
 
 local tech1 = {
     type = 'technology',
-    name = 'nano-range-1',
-    icons = technology_icon_constant_range(),
-    effects = {{type = 'ammo-damage', ammo_category = 'nano-ammo', modifier = 1}},
+    name = 'nano-speed-1',
+    icons = technology_icon_constant_movement_speed(),
+    effects = {{type = 'gun-speed', ammo_category = 'nano-ammo', modifier = 0.25}},
     prerequisites = {'engine', 'nanobots'},
     unit = {
         count = 100, 
@@ -28,10 +28,10 @@ local tech1 = {
 
 local tech2 = {
     type = 'technology',
-    name = 'nano-range-2',
-    icons = technology_icon_constant_range(),
-    effects = {{type = 'ammo-damage', ammo_category = 'nano-ammo', modifier = 1}},
-    prerequisites = {'plastics', 'nano-range-1'},
+    name = 'nano-speed-2',
+    icons = technology_icon_constant_movement_speed(),
+    effects = {{type = 'gun-speed', ammo_category = 'nano-ammo', modifier = 0.25}},
+    prerequisites = {'plastics', 'nano-speed-1'},
     unit = {
         count = 200, 
         ingredients = {{'automation-science-pack', 1}, {'logistic-science-pack', 1}}, 
@@ -43,10 +43,10 @@ local tech2 = {
 
 local tech3 = {
     type = 'technology',
-    name = 'nano-range-3',
-    icons = technology_icon_constant_range(),
-    effects = {{type = 'ammo-damage', ammo_category = 'nano-ammo', modifier = 1}},
-    prerequisites = {'chemical-science-pack', 'nano-range-2'},
+    name = 'nano-speed-3',
+    icons = technology_icon_constant_movement_speed(),
+    effects = {{type = 'gun-speed', ammo_category = 'nano-ammo', modifier = 0.25}},
+    prerequisites = {'chemical-science-pack', 'nano-speed-2'},
     unit = {
         count = 300, 
         ingredients = {{'automation-science-pack', 1}, 
@@ -60,10 +60,10 @@ local tech3 = {
 
 local tech4 = {
     type = 'technology',
-    name = 'nano-range-4',
-    icons = technology_icon_constant_range(),
-    effects = {{type = 'ammo-damage', ammo_category = 'nano-ammo', modifier = 1}},
-    prerequisites = {'lubricant', 'nano-range-3'},
+    name = 'nano-speed-4',
+    icons = technology_icon_constant_movement_speed(),
+    effects = {{type = 'gun-speed', ammo_category = 'nano-ammo', modifier = 0.25}},
+    prerequisites = {'lubricant', 'nano-speed-3'},
     unit = {
         count = 400, 
         ingredients = {{'automation-science-pack', 1}, 

@@ -2,7 +2,7 @@ local constants = {}
 constants.projectile_animation = {
     layers = {
         {
-            filename = '__nanobots-refined__/graphics/entity/nano-projectile.png',
+            filename = '__nanobots-refined-reforged__/graphics/entity/nano-projectile.png',
             priority = 'high',
             line_length = 4,
             width = 70,
@@ -12,7 +12,7 @@ constants.projectile_animation = {
             scale = 0.25
         },
         {
-            filename = '__nanobots-refined__/graphics/entity/nano-projectile-shadow.png',
+            filename = '__nanobots-refined-reforged__/graphics/entity/nano-projectile-shadow.png',
             priority = 'high',
             line_length = 4,
             width = 70,
@@ -29,7 +29,7 @@ constants.projectile_animation = {
 function constants.cloud_animation(scale)
     scale = scale or .4
     return {
-        filename = '__nanobots-refined__/graphics/entity/cloud/cloud-45-frames.png',
+        filename = '__nanobots-refined-reforged__/graphics/entity/cloud/cloud-45-frames.png',
         --flags = {'compressed'},
         priority = 'low',
         width = 256,
@@ -49,10 +49,10 @@ constants.impact_splat = {
     sound = {
         priority = 100,
         audible_distance_modifier = 0.5,
-        variations = { { filename = '__nanobots-refined__/sounds/splat1.ogg', volume = 0.2 },
-                       { filename = '__nanobots-refined__/sounds/splat2.ogg', volume = 0.3 },
-                       { filename = '__nanobots-refined__/sounds/splat3.ogg', volume = 0.5 },
-                       { filename = '__nanobots-refined__/sounds/splat4.ogg', volume = 0.4 }},
+        variations = { { filename = '__nanobots-refined-reforged__/sounds/splat1.ogg', volume = 0.2 },
+                       { filename = '__nanobots-refined-reforged__/sounds/splat2.ogg', volume = 0.3 },
+                       { filename = '__nanobots-refined-reforged__/sounds/splat3.ogg', volume = 0.5 },
+                       { filename = '__nanobots-refined-reforged__/sounds/splat4.ogg', volume = 0.4 }},
         allow_random_repeat = true,
         aggregation = {max_count = 5, remove = true, count_already_playing = true, priority = "newest"}
     }

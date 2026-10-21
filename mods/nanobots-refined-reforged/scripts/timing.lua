@@ -11,15 +11,18 @@ local is_connected_player_ready
 --- @param event on_tick
 local function poll_players(event)
     local tick = event.tick
-    
+    -- every read of game.connected_players builds a new array: read it once per tick
+    local players = game.connected_players
+    if not players[1] then return end
+
     --queue tasks must process every tick
     if nanobots_auto_mode then
-        NanobotsAuto.process_queue_tasks(tick)
+        NanobotsAuto.process_queue_tasks(tick, players)
     end
 
     --By using modulus on poll_rate/#players, we can poll each player once per poll_rate ticks, evenly distributed.
-    if tick % math.max(1, math.floor(config.POLL_RATE / #game.connected_players)) == 0 then
-        local last_player, player = next(game.connected_players, storage._last_player)
+    if tick % math.max(1, math.floor(config.POLL_RATE / #players)) == 0 then
+        local last_player, player = next(players, storage._last_player)
         
         -- Establish player has character (i.e. has spawned)
         if is_connected_player_ready(player) then

@@ -148,7 +148,7 @@ function NanobotsCommon.get_constructor_target_type(entity, player)
         end
     end
     
-    if entity.force ~= player.force then
+    if entity.force_index ~= player.force_index then
         return nil 
     end
     
@@ -294,7 +294,7 @@ function is_valid_nanobot_target(entity, action, player)
         end
     end
     
-    if action == "clear-ground" then
+    if action == "clear_ground" then
         return are_non_pending_items_under_ghost(entity)
     end
     
@@ -460,14 +460,15 @@ end
 --- @param entity LuaEntity
 --- @return boolean
 nano_repairable_entity = function(entity)
+    -- health first: it rules out almost every entity with one call
+    if (entity.get_health_ratio() or 1) >= 1 then
+        return false
+    end
     if entity.has_flag('not-repairable') or entity.type:find('robot') then
         return false
     end
     if blockable_types[entity.type] and entity.minable == false then
         --TODO: spade, does this REALLY block repairs??
-        return false
-    end
-    if (entity.get_health_ratio() or 1) >= 1 then
         return false
     end
     if moveable_types[entity.type] and entity.speed > 0 then
@@ -677,7 +678,7 @@ function NanobotActions.build(ghost, player)
         return false
     end
     
-    if not player.surface.can_place_entity { name = ghost.ghost_name, position = ghost.position, direction = ghost.direction, force = ghost.force } then
+    if not ghost.surface.can_place_entity { name = ghost.ghost_name, position = ghost.position, direction = ghost.direction, force = ghost.force } then
         return false
     end
     
@@ -1215,7 +1216,7 @@ complete_deconstruct_action = function(player, target)
     end
     
     if entity.name == 'deconstructible-tile-proxy' then
-        local tile = player.surface.get_tile(target)
+        local tile = entity.surface.get_tile(target)
         if tile then
             player.mine_tile(tile)
             entity.destroy()
