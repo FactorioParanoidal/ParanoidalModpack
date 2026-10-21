@@ -27,25 +27,38 @@ local function rebal_full(recipe_name, ingredients, results)
   r.results = results
 end
 
--- Марганец — канон zzz angelsore-crushed-manganese (через ferrous-mixture = angels-ore8).
--- angels-manganese-pure брал сырьё в обход ferrous → переводим на ferrous.
+-- Марганец: канон batch01-blue-beta8; состав сырья и требование ферросмеси сохранены.
 rebal_full("angels-manganese-pure-processing",
   {
-    { type = "item", name = "clowns-ore6-crushed",      amount = 2 }, -- Sanguinate
-    { type = "item", name = "angels-ore8-crushed",      amount = 4 }, -- ferrous mixture
-    { type = "item", name = "angels-catalysator-brown", amount = 1 },
+    { type = "item", name = "clowns-ore6-crushed",      amount = 4 }, -- Sanguinate
+    { type = "item", name = "angels-ore8-crushed",      amount = 8 }, -- ferrous mixture
+    { type = "item", name = "angels-catalysator-brown", amount = 3 },
   },
-  { { type = "item", name = "angels-manganese-ore", amount = 1 } })
+  { { type = "item", name = "angels-manganese-ore", amount = 12 } })
 
--- crushed-mix5 уже идёт через ferrous-mixture → правим только масштаб (вход/выход).
 rebal_full("clowns-crushed-mix5-processing",
   {
     { type = "item", name = "angels-ore8-crushed",      amount = 5 }, -- ferrous mixture
     { type = "item", name = "clowns-ore8-crushed",      amount = 4 }, -- Meta-Garnierite
     { type = "item", name = "angels-ore6-crushed",      amount = 3 }, -- Bobmonium
-    { type = "item", name = "angels-catalysator-brown", amount = 1 },
+    { type = "item", name = "angels-catalysator-brown", amount = 3 },
   },
-  { { type = "item", name = "angels-manganese-ore", amount = 2 } })
+  { { type = "item", name = "angels-manganese-ore", amount = 12 } })
+
+-- После modules-beta8: те же машины и разрешения модулей, что у базового Mn-рецепта.
+local manganese_reference = data.raw.recipe["angelsore-crushed-manganese-processing"]
+if manganese_reference then
+  for _, name in ipairs({ "angels-manganese-pure-processing", "clowns-crushed-mix5-processing" }) do
+    local recipe = data.raw.recipe[name]
+    if recipe then
+      recipe.energy_required = 3
+      recipe.category = manganese_reference.category
+      recipe.allow_productivity = manganese_reference.allow_productivity
+      recipe.allowed_module_categories = manganese_reference.allowed_module_categories
+        and table.deepcopy(manganese_reference.allowed_module_categories) or nil
+    end
+  end
+end
 
 -- Хром — канон zzz angelsore-pure-chrome (crystal). pure-mix3 на pure-тире → выше.
 rebal_output("angels-chrome-pure-processing", "angels-chrome-ore", 2)
