@@ -3,10 +3,20 @@ flib_data_util=require("__flib__.data-util")
 local ICONPATH = "__Aircraft-space-age__/graphics/icons/"
 local ENTITYPATH = "__Aircraft-space-age__/graphics/entity/"
 
+-- Flying Fortress light and shadow sheets were pixel-identical copies of the Jet ones: load one file.
+local SHARED_SHEETS = { flying_fortress = "jet" }
+local function sheetpath(name, suffix)
+  if suffix ~= "" then name = SHARED_SHEETS[name] or name end
+  return ENTITYPATH .. name .. "/hr-" .. name .. "_spritesheet" .. suffix .. ".png"
+end
+-- Shadow sheets are stored at half resolution (224 px frames drawn at scale 1 = same on-screen size).
+local SHADOW_FRAME = 224
+
 local function addcommonanimlines(anim)
   for _,layer in pairs(anim.layers) do
-    layer.width, layer.height = 448, 448
-    layer.scale = 0.5
+    layer.width = layer.width or 448
+    layer.height = layer.height or 448
+    layer.scale = layer.scale or 0.5
     layer.frame_count = 1, 1
     layer.direction_count = 36, 36
     layer.line_length = 6, 6
@@ -19,11 +29,14 @@ local function airplaneAnimation(name)
   local anim = {}
   anim.layers = {
     {
-      filename = ENTITYPATH .. name .. "/hr-" .. name .. "_spritesheet.png",
+      filename = sheetpath(name, ""),
       shift = util.by_pixel(9, -10),
     },
     {
-      filename = ENTITYPATH .. name .. "/hr-" .. name .. "_spritesheet-shadow.png",
+      filename = sheetpath(name, "-shadow"),
+      width = SHADOW_FRAME,
+      height = SHADOW_FRAME,
+      scale = 1,
       shift = util.by_pixel(54, 35),
       draw_as_shadow = true,
     }
@@ -39,7 +52,7 @@ local function airplaneLightAnimation(name)
   local anim = {}
   anim.layers = {
     {
-      filename = ENTITYPATH .. name .. "/hr-" .. name .. "_spritesheet-light.png",
+      filename = sheetpath(name, "-light"),
       shift = util.by_pixel(9, -10),
       draw_as_light = true,
     }
@@ -440,13 +453,13 @@ local arapi=require("__AircraftRealism__.api")
         local sprite = {
             type = "sprite",
             name = underscored_name.."-shadow-" .. tostring(i),
-            filename = "__Aircraft-space-age__/graphics/entity/"..underscored_name.."/hr-"..underscored_name.."_spritesheet-shadow.png",
-            width = 448,
-            height = 448,
-            x = xPos * 448,
-            y = yPos * 448,
+            filename = sheetpath(underscored_name, "-shadow"),
+            width = SHADOW_FRAME,
+            height = SHADOW_FRAME,
+            x = xPos * SHADOW_FRAME,
+            y = yPos * SHADOW_FRAME,
             shift = util.by_pixel(0, 0),
-            scale = 0.5,
+            scale = 1,
         }
         data:extend{sprite}
     end
