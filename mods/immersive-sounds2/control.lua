@@ -1,3 +1,10 @@
+-- Paranoidal: item count of an inventory of the entity, 0 if it has none (a player in the remote view keeps the
+-- character but has no inventory of it; vehicle ammo belongs to the vehicle, not to the player)
+local function countIn(entity, index)
+  local inventory = entity and entity.valid and entity.get_inventory(index)
+  return inventory and inventory.get_item_count() or 0
+end
+
 function playSoundAtEntity(sound, entity)
   entity.surface.play_sound
   {
@@ -12,7 +19,7 @@ end
 script.on_event("switch-gun-key", function(event)
 	local player = game.players[event.player_index]
 	if player.character and player.driving == false then
-		if player.get_inventory(defines.inventory.character_ammo).get_item_count() >= 1 and player.get_inventory(defines.inventory.character_guns).get_item_count() >= 1 then
+		if countIn(player.character, defines.inventory.character_ammo) >= 1 and countIn(player.character, defines.inventory.character_guns) >= 1 then
 		playSoundAtEntity("select-smg", player.character)
 		end
 	end	
@@ -21,7 +28,7 @@ end)
 script.on_event("switch-gun-key-tank", function(event)
 	local player = game.players[event.player_index]
 	if player.vehicle then
-		if player.vehicle.name == "tank" and player.get_inventory(defines.inventory.car_ammo).get_item_count() >= 1 then
+		if player.vehicle.name == "tank" and countIn(player.vehicle, defines.inventory.car_ammo) >= 1 then
 		playSoundAtEntity("select-cannon", player.vehicle)
 		end
 	end
@@ -30,7 +37,7 @@ end)
 script.on_event("switch-gun-key-car", function(event)
 	local player = game.players[event.player_index]
 	if player.vehicle then
-		if player.vehicle.name == "car" and player.get_inventory(defines.inventory.car_ammo).get_item_count() >= 1 then
+		if player.vehicle.name == "car" and countIn(player.vehicle, defines.inventory.car_ammo) >= 1 then
 		playSoundAtEntity("select-machine-gun", player.vehicle)
 		end
 	end
@@ -39,7 +46,7 @@ end)
 script.on_event("switch-gun-key-spider", function(event)
 	local player = game.players[event.player_index]
 	if player.vehicle then
-		if player.vehicle.name == "spidertron" and player.get_inventory(defines.inventory.spider_ammo).get_item_count() >= 1 then
+		if player.vehicle.name == "spidertron" and countIn(player.vehicle, defines.inventory.spider_ammo) >= 1 then
 		playSoundAtEntity("select-machine-gun", player.vehicle)
 		end
 	end

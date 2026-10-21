@@ -3,5 +3,7 @@ Version: 0.1.1
 Date: 04. 08. 2022
   Changes:
     - Fixed "dummy not found" 
+  Bugfixes:
+    - Weapon switch sounds: no crash when the player has no inventory of the character (remote view, e.g. placing turrets from the map); the tank, car and spidertron sounds check the ammo of the vehicle instead of the player (Paranoidal local fix)
 
 ---------------------------------------------------------------------------------------------------
