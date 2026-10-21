@@ -6,6 +6,7 @@ Date: 2026-06-05
   Changes:
     - Updated mod description.
   Bugfixes:
+    - Auto mode no longer spams "attempt to index local 'character' (a nil value)" (nanobots-auto.lua:194) every tick after the player dies; players without a character are skipped until respawn.
     - Removed extraneous zipped version of Russian localization.
     - Fixed bug preventing Bob's mods recipe replacements from working.
     - Fixed error "attempt to call global 'set_stack'" when fillers handle an insert request in cheat mode; a missing request count no longer errors either (Paranoidal local fix).
