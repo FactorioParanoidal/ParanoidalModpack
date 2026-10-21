@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.2
 Date: 2026-01-16
+  Changes:
+    - Paranoidal: the four build handlers share one function; invalid entities are skipped and the selection box is read once.
 
   Changed:
     - No functional changes. (I am still alive and I have not abandoned this mod :)

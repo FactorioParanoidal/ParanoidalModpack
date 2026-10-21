@@ -9,6 +9,7 @@ function Find_and_batch.new(Character, job_type, param)
         character = Character,
         job_type = job_type,
         param = param,
+        max_radius = param.radius or 64,
         fail_cache = {}
     }
     return setmetatable(state, Find_and_batch.metatable)
@@ -18,48 +19,73 @@ function Find_and_batch:finish()
     self.character:pop_state()
 end
 
-local index = function(entity)
-    return entity.unit_number or script.register_on_object_destroyed(entity)
+-- Key for the "already tried" cache. Entities without a unit number (trees, rocks, resources)
+-- do not move, so name + position identifies them without registering every one of them
+-- with script.register_on_object_destroyed.
+local entity_key = function(entity)
+    local unit_number = entity.unit_number
+    if unit_number then return unit_number end
+    local position = entity.position
+    return entity.name .. "@" .. position.x .. "," .. position.y
+end
+
+local job_filters =
+{
+    repair = function(entity)
+        local ratio = entity.get_health_ratio()
+        return ratio and ratio < 1
+    end,
+    fuel = function(entity)
+        return entity.burner ~= nil
+    end,
+    mine = function(entity)
+        return entity.type ~= "deconstructible-tile-proxy"
+    end,
+}
+
+-- Search near the character first and widen only when nothing new is found nearby.
+-- Jobs are processed nearest-first anyway, so this keeps batches small instead of
+-- collecting thousands of entities in a radius of 64 at once.
+local search_radii = { 8, 16, 32 }
+
+function Find_and_batch:find_in_radius(radius)
+    local entities = self.character:find_nearby_entities(radius, self.param)
+    local filter = job_filters[self.job_type]
+    local fail_cache = self.fail_cache
+    local result = {}
+    local count = 0
+    for _, entity in pairs(entities) do
+        if (not filter or filter(entity)) and not fail_cache[entity_key(entity)] then
+            count = count + 1
+            result[count] = entity
+        end
+    end
+    return result, count
 end
 
 function Find_and_batch:find()
-    local entities = self.character:find_nearby_entities(self.param.radius or 64, self.param)
-
-    if self.job_type == "repair" then
-        for k, entity in pairs(entities) do
-            if not (entity.get_health_ratio() and entity.get_health_ratio() < 1) then
-                entities[k] = nil
-            end
-        end
+    if not self.max_radius then
+        -- States from older saves.
+        self.max_radius = self.param.radius or 64
     end
+    local max_radius = self.max_radius
 
-    if self.job_type == "fuel" then
-        for k, entity in pairs(entities) do
-            if not entity.burner then
-                entities[k] = nil
-            end
-        end
+    local result, count
+    for _, radius in ipairs(search_radii) do
+        if radius >= max_radius then break end
+        result, count = self:find_in_radius(radius)
+        if count > 0 then break end
     end
-
-    if self.job_type == "mine" then
-        for k, entity in pairs(entities) do
-            if entity.type == "deconstructible-tile-proxy" then
-                entities[k] = nil
-            end
-        end
+    if not count or count == 0 then
+        result, count = self:find_in_radius(max_radius)
     end
 
     local fail_cache = self.fail_cache
-    for k, entity in pairs(entities) do
-        local key = index(entity)
-        if fail_cache[key] then
-            entities[k] = nil
-        else
-            fail_cache[key] = true
-        end
+    for k = 1, count do
+        fail_cache[entity_key(result[k])] = true
     end
 
-    return entities
+    return result
 end
 
 function Find_and_batch:update()

@@ -1,0 +1,12 @@
+{
+  "name": "Wind-Turbines-Reforged",
+  "version": "1.0.0",
+  "title": "Wind Turbines (Reforged)",
+  "author": "FactorioParanoidal; based on Wind Turbines (relaunched) by xyzzycgn, wavetrex, SF, WipMod, Texugo and Texugo_windgenerator by Texugo Maldito & Yur_Ra",
+  "description": "Paranoidal fork of Wind Turbines (relaunched) 2.2.5: three tiers of wind turbines with the random wind of Paranoidal Beta 8, hidden poles that connect turbines to the network, power that follows quality and defects, and a window with the current wind speed.",
+  "factorio_version": "2.0",
+  "dependencies": [
+    "base >= 2.0",
+    "? bobpower"
+  ]
+}

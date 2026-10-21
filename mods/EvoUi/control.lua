@@ -50,11 +50,24 @@ script.on_event(defines.events.on_player_created, function(event)
     if err then EvoUi.log({"err_generic", "on_player_created", err}) end
 end)
 
+-- A persistent error is reported once, not every update (it used to be printed to every player each tick).
+local last_error
+local function report(context, err)
+    local text = tostring(err)
+    if last_error == text then return end
+    last_error = text
+    EvoUi.log({"err_generic", context, err})
+end
+
 script.on_event(defines.events.on_tick, function(event)
+    -- update_gui is gated by update_delay anyway; skip the two pcalls on the other ticks.
+    local settings_table = storage.settings
+    local delay = settings_table and settings_table.update_delay or 60
+    if delay < 1 or (event.tick % delay) ~= 0 then return end
     local status, err = pcall(RemoteSensor.initialize)
-    if err then EvoUi.log({"err_generic", "on_tick:remote_initialize", err}) end
-    local status, err = pcall(EvoUi.update_gui, event)
-    if err then EvoUi.log({"err_generic", "on_tick:update_gui", err}) end
+    if not status then report("on_tick:remote_initialize", err) end
+    status, err = pcall(EvoUi.update_gui, event)
+    if not status then report("on_tick:update_gui", err) end
 end)
 
 local last_clicked = nil

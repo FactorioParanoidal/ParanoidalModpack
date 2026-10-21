@@ -12,6 +12,7 @@ function this.on_init()
 	for __,player in pairs(game.players) do
 		player = _(player)
 		if player:is("valid") then 
+			gui.forgetPlayer(player.index) -- all ED GUIs of this player are rebuilt below
 			this.destroyGUI(player)
 			this.buildButton(player)
 		end

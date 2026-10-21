@@ -1,0 +1,12 @@
+{
+  "name": "zzzparanoidal-settings",
+  "version": "0.4.0",
+  "title": "PARANOIDAL: hide balance settings",
+  "author": "SEO-master",
+  "factorio_version": "2.0",
+  "description": "Hides other mods' startup settings that change balance and progression. Disable this mod to see them. Values in mod-settings.dat are not changed.",
+  "dependencies": [
+    "base >= 2.0.77",
+    "? zzzparanoidal"
+  ]
+}

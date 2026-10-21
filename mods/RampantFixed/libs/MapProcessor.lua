@@ -15,6 +15,7 @@ local chunkUtils = require("ChunkUtils")
 local chunkPropertyUtils = require("ChunkPropertyUtils")
 local baseUtils = require("BaseUtils")
 local squadCompression = require("SquadCompression")
+local aiBrain = require("AIBrain")
 
 -- constants
 
@@ -25,6 +26,7 @@ local PROCESS_QUEUE_SIZE = constants.PROCESS_QUEUE_SIZE
 local RESOURCE_QUEUE_SIZE = constants.RESOURCE_QUEUE_SIZE
 local ENEMY_QUEUE_SIZE = constants.ENEMY_QUEUE_SIZE
 local PLAYER_QUEUE_SIZE = constants.PLAYER_QUEUE_SIZE
+local PLAYER_BACKGROUND_QUEUE_SIZE = constants.PLAYER_BACKGROUND_QUEUE_SIZE
 
 local CLEANUP_QUEUE_SIZE = constants.CLEANUP_QUEUE_SIZE
 
@@ -201,12 +203,15 @@ end
 
 
 local xyVector = {{-1, -1}, {-1, 1}, {1, -1}, {1, 1}}
+-- processPlayers runs every 16 ticks (was 8): chances are 1-(1-p)^2 of the old per-8-tick values,
+-- so the hunting probability per unit of time is unchanged.
 local huntingChance = {}
 huntingChance[0] = 1
-huntingChance[32] = 0.5
-huntingChance[64] = 0.1
-huntingChance[96] = 0.02
-huntingChance[128] = 0.004
+huntingChance[32] = 0.75
+huntingChance[64] = 0.19
+huntingChance[96] = 0.0396
+huntingChance[128] = 0.007984
+local HUNTING_CHANCE_DEFAULT = 0.003996
 --[[
     Localized player radius were processing takes place in realtime, doesn't store state
     between calls.
@@ -218,7 +223,17 @@ function mapProcessor.processPlayers(players, universe, tick)
     -- randomize player order to ensure a single player isn't singled out
     -- not looping everyone because the cost is high enough already in multiplayer
 	local enemyForce = game.forces["enemy"]
-	universe.chunkToPlayerCount = {}
+	-- reused table (holds at most one entry per player)
+	local chunkToPlayerCount = universe.chunkToPlayerCount
+	if chunkToPlayerCount then
+		for chunk in pairs(chunkToPlayerCount) do
+			chunkToPlayerCount[chunk] = nil
+		end
+	else
+		chunkToPlayerCount = {}
+		universe.chunkToPlayerCount = chunkToPlayerCount
+	end
+	local heavy = aiBrain.heavy and aiBrain.heavyActive(universe) and aiBrain.heavy
     for i=1,#players do
         local player = players[i]
         if validPlayer(player) and enemyForce.is_enemy(player.force) then
@@ -228,7 +243,10 @@ function mapProcessor.processPlayers(players, universe, tick)
 				if map then
 					local chunk = getChunkByPosition(map, playerCharacter.position)
 					if (chunk ~= -1) then
-						universe.chunkToPlayerCount[chunk] = (universe.chunkToPlayerCount[chunk] or 0) + 1
+						chunkToPlayerCount[chunk] = (chunkToPlayerCount[chunk] or 0) + 1
+						if heavy then
+							heavy.recordPresence(map, chunk, tick, 1)
+						end
 					end
 				end
 			end	
@@ -246,13 +264,17 @@ function mapProcessor.processPlayers(players, universe, tick)
 					if (playerChunk ~= -1) then
 						local roll = mRandom() 
 						local allowingAttacks = canAttack(map, tick)
-						local allowingVengence = (allowingAttacks or settings.global["rampantFixed--allowDaytimePlayerHunting"].value) and (map.points >= (AI_VENGENCE_SQUAD_COST*0))
+						local allowDaytimePlayerHunting = universe.allowDaytimePlayerHunting
+						if allowDaytimePlayerHunting == nil then
+							allowDaytimePlayerHunting = settings.global["rampantFixed--allowDaytimePlayerHunting"].value
+						end
+						local allowingVengence = (allowingAttacks or allowDaytimePlayerHunting) and (map.points >= (AI_VENGENCE_SQUAD_COST*0))
 
 						local forceVengence = (getEnemyStructureCount(map, playerChunk) > 0)
 
 						for dx= 0, PROCESS_PLAYER_BOUND, 32 do
 							for dy= 0, PROCESS_PLAYER_BOUND, 32 do
-								local vengence = allowingVengence and (forceVengence or (roll < (huntingChance[mMax(dx, dy)] or 0.002)))
+								local vengence = allowingVengence and (forceVengence or (roll < (huntingChance[mMax(dx, dy)] or HUNTING_CHANCE_DEFAULT)))
 								for _, vector in pairs(xyVector) do									
 									local x = playerChunk.x + dx*vector[1]
 									local y = playerChunk.y - dy*vector[2]
@@ -355,7 +377,30 @@ function mapProcessor.scanPlayerMap(map, tick)
     local processQueue = map.processQueue
     local processQueueLength = #processQueue
 
-    local endIndex = mMin(index + PLAYER_QUEUE_SIZE, processQueueLength)
+    -- Player buildings are accounted incrementally by build/mine/death events, which also mark
+    -- the touched chunks dirty. Rescan dirty chunks first, then a slow background pass as a safety net.
+    local dirtyChunks = map.playerDirtyChunks
+    if dirtyChunks then
+        local scanned = 0
+        local visited = 0
+        local chunk = next(dirtyChunks)
+        while chunk and (scanned <= PLAYER_QUEUE_SIZE) and (visited < 64) do
+            visited = visited + 1
+            dirtyChunks[chunk] = nil
+            local xChunks = map[chunk.x]
+            if xChunks and (xChunks[chunk.y] == chunk) then
+                chunkBox[1] = chunk.x
+                chunkBox[2] = chunk.y
+                offset[1] = chunk.x + CHUNK_SIZE
+                offset[2] = chunk.y + CHUNK_SIZE
+                mapScanPlayerChunk(chunk, map)
+                scanned = scanned + 1
+            end
+            chunk = next(dirtyChunks)
+        end
+    end
+
+    local endIndex = mMin(index + PLAYER_BACKGROUND_QUEUE_SIZE, processQueueLength)
 
     if (processQueueLength == 0) then
         return
@@ -529,8 +574,7 @@ end
 
 
 local function chooseSquad(map, migrate, attack, tick)
-	local settlementsProbability = settings.global["rampantFixed--settlementsProbability"].value
-	local survivalMode = settings.global["rampantFixed--enableMigration"].value
+	local settlementsProbability = map.universe.settlementsProbability or settings.global["rampantFixed--settlementsProbability"].value
 	if map.canMigrateTick > tick then
  		return "attack"
 	end	
@@ -589,7 +633,7 @@ local function processSpawners(map, tick, iterator, chunks, remoteInterfaceParam
 	end
 	if squadCreated then
 		if remoteInterfaceParameters then
-			if settings.global["rampantFixed--aiPointsPrintSpendingToChat"].value then		
+			if map.universe.aiPointsPrintSpendingToChat then
 				game.print(currentSquad.." squad created by remote interface")
 			end	
 		else
@@ -620,7 +664,7 @@ local function processSpawners(map, tick, iterator, chunks, remoteInterfaceParam
 			end
 			map.nextSquad = chooseSquad(map, migrate, attack, tick)
 			chunk.nextSquadTick = tick + squadCooldown
-			if settings.global["rampantFixed--aiPointsPrintSpendingToChat"].value then		
+			if map.universe.aiPointsPrintSpendingToChat then
 				game.print(currentSquad.." squad created. Next is "..map.nextSquad.." squad")
 			end	
 		end
@@ -634,8 +678,23 @@ local function processSpawners(map, tick, iterator, chunks, remoteInterfaceParam
 	end	
 end
 
+-- delayed main strike of a probe or feint tactic (new behaviour)
+local function processFollowUp(map, tick)
+	if not canAttack(map, tick) then
+		return
+	end
+	local plan = aiBrain.popDueFollowUp(map, tick)
+	if plan then
+		formSquads(map, plan.chunk, tick, nil, plan)
+	end
+end
+
 function mapProcessor.processSpawners(map, tick, remoteInterfaceParameters)
     if (map.state ~= AI_STATE_PEACEFUL) then
+		local ai = map.ai
+		if ai and (not remoteInterfaceParameters) and (ai.followUps[1] ~= nil) and aiBrain.active(map.universe) then
+			processFollowUp(map, tick)
+		end
         if (map.state == AI_STATE_MIGRATING) then
 			if remoteInterfaceParameters or (map.nextSquad and (map.nextSquad == "attack")) then
 				processSpawners(map,

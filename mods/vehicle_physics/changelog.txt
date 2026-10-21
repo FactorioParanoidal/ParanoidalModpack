@@ -3,6 +3,9 @@ Version: 2.0.4
 Date: 2025-06-30
   Bugfixes:
     -  Drifting sound not playing globally anymore (in multiplayer)
+  Optimizations:
+    - Paranoidal: removed an unused find_entities_filtered call made every tick for every moving car.
+    - Paranoidal: tile friction is cached per tile name (no prototype lookup per tile per tick); a standing car skips the 1.5-tile scan.
 
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.3

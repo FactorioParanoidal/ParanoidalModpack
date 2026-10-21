@@ -1,0 +1,13 @@
+{
+  "mod": "angelsextended-remelting-fixed",
+  "source": "local",
+  "original": {
+    "name": "Angel's Extended - Remelting - Fixed",
+    "authors": ["Daktush", "Aragas"],
+    "portal": {
+      "name": "angelsextended-remelting-fixed",
+      "url": "https://mods.factorio.com/mod/angelsextended-remelting-fixed"
+    }
+  },
+  "changeReason": "Локальный порт Angel's Extended - Remelting - Fixed с Factorio 1.1 на Factorio 2.0, заведённый в PR #267."
+}

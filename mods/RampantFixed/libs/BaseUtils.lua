@@ -9,6 +9,7 @@ local mathUtils = require("MathUtils")
 local constants = require("Constants")
 local chunkPropertyUtils = require("ChunkPropertyUtils")
 local mapUtils = require("MapUtils")
+local aiBrain = require("AIBrain")
 
 -- constants
 
@@ -133,8 +134,9 @@ function baseUtils.findNearbyBase(map, chunk, maxDistance, baseChangingChance)
 		else
 			local bases = map.universe.bases
 			local basesScanned = 0
+			local mapIndex = map.surface.index
 			for i, base in pairs(bases) do
-				if base.mapIndex == map.surface.index then
+				if base.mapIndex == mapIndex then
 					basesScanned = basesScanned + 1
 					local distance = euclideanDistancePoints(base.x, base.y, x, y)
 					if (distance <= base.distanceThreshold) and (distance < closest) then
@@ -498,7 +500,7 @@ function baseUtils.recycleBases(universe)
     local bases = universe.bases
 	local id = universe.recycleBaseIterator
     if not id then
-        id, base = next(bases, nil)
+        id = next(bases, nil)
     end
     if not id then
         universe.recycleBaseIterator = nil
@@ -516,7 +518,7 @@ function baseUtils.recycleBases(universe)
 				return
 			end	
 			for chunk, _ in pairs(base.chunks) do
-				chunkBase = getChunkBase(map, chunk)
+				local chunkBase = getChunkBase(map, chunk)
 				if (not chunkBase) then
 					setChunkBase(map, chunk, base)
 					--game.print("restore lost chunk [gps=" .. chunk.x .. "," .. chunk.y .."] to base [gps=" .. base.x .. "," .. base.y .."]")	-- debug
@@ -825,7 +827,7 @@ local function upgradeBase(map, base, upgradeType)
 			
 			if (oldAlignment[factions[roll]] - RateStep) < 0.005 then	-- if rate too low, then do nothing or change faction
 				if upgradeType == 1 then
-					newFaction = findBaseMutation(map, nil, baseTier, base.geneRandomizer)
+					local newFaction = findBaseMutation(map, nil, baseTier, base.geneRandomizer)
 					if not oldAlignment[newFaction] then
 						oldAlignment[newFaction] = oldAlignment[factions[roll]]
 						oldAlignment[factions[roll]] = nil
@@ -840,7 +842,8 @@ local function upgradeBase(map, base, upgradeType)
 			end				 
 		end
 	elseif upgradeType == 2 then
-		local newFaction = findBaseMutation(map, nil, baseTier, base.geneRandomizer)
+		-- new behaviour: often a faction that resists the damage killing these nests
+		local newFaction = aiBrain.mutationBias(map, base, baseTier) or findBaseMutation(map, nil, baseTier, base.geneRandomizer)
 		if not oldAlignment[newFaction] then
 			local oldFaction
 			local newAlignmentAndSteps = {10, {}}
@@ -869,7 +872,22 @@ local function upgradeBase(map, base, upgradeType)
 			factionTotal = factionTotal + 1
 			factionRates[factionTotal] = rate
 		end
-		base.newAlignmentAndSteps = {30, findBaseMutations(map, nil, baseTier, factionTotal, factionRates, base.geneRandomizer)}
+		local mutations = findBaseMutations(map, nil, baseTier, factionTotal, factionRates, base.geneRandomizer)
+		-- new behaviour: the adapted faction takes the weakest slot
+		local adapted = aiBrain.mutationBias(map, base, baseTier)
+		if adapted and not mutations[adapted] then
+			local weakest
+			for faction, rate in pairs(mutations) do
+				if (not weakest) or (rate < mutations[weakest]) then
+					weakest = faction
+				end
+			end
+			if weakest then
+				mutations[adapted] = mutations[weakest]
+				mutations[weakest] = nil
+			end
+		end
+		base.newAlignmentAndSteps = {30, mutations}
 		result = true
 	elseif upgradeType == 4 then
 		local newAlignmentAndSteps = {30, {}}
@@ -1078,7 +1096,7 @@ local function updateBaseStats(base)
 	-- base.factionsTotal = {totalCount, factionsTotal}
 	
 	updateBaseFactionsTotal(base)
-	dynamicRates = baseUtils.getDynamicRates(base)	-- => {totalRate=N, totalDynamicRate=N, changesCnt=N, obsoleteCnt=N, dynamicRatesTable=Table)
+	local dynamicRates = baseUtils.getDynamicRates(base)	-- => {totalRate=N, totalDynamicRate=N, changesCnt=N, obsoleteCnt=N, dynamicRatesTable=Table)
 			
 	base.changingEntities = false
 	-- if dynamicRates.obsoleteCnt > 0 then

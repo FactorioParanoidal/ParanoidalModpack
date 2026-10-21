@@ -296,6 +296,19 @@ local local_parseCustomRankTable = function(csvString)
 end
 
 
+-- Rank names: one definition for the data stage (prototypes) and the runtime (kill tables).
+-- Names of 26+ bytes are dropped by local_split, as in heroturrets 9.1.11 (Beta 8).
+local local_get_rank_names = function()
+    local names = {"Private 1st Class","Corporal","Sergeant","General","Field Marshal","Supreme Commander"}
+    if settings.startup["heroturrets-use-csv"].value ~= true then return names end
+    local custom_string = local_trim(settings.startup["heroturrets-csv-names"].value or "")
+    if #custom_string == 0 then return names end
+    local custom = local_split(custom_string, ",")
+    if #custom == 0 then return names end
+    for i = #custom, 13, -1 do table.remove(custom, i) end
+    return custom
+end
+
 function get_utils()
     return {
         starts_with = local_starts_with,
@@ -319,6 +332,7 @@ function get_utils()
         },
         parseCustomRankTable =local_parseCustomRankTable,
         local_split = local_split,
-        local_trim = local_trim
+        local_trim = local_trim,
+        get_rank_names = local_get_rank_names
     }
 end

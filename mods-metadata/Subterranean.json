@@ -1,0 +1,17 @@
+{
+  "mod": "Subterranean",
+  "source": "local",
+  "changeReason": "Локальный порт варианта Subterranean 0.5.3 из Paranoidal Beta 8 на Factorio 2.0: сохраняет подземные ленты и трубу дальностью 250 клеток, рецепты Bob/Angels и оплату расстояния в рецептах; устраняет ошибочные улучшения между обычными и сверхдлинными подземными лентами.",
+  "original": {
+    "name": "Subterranean",
+    "authors": [
+      "Gangsir",
+      "Bilka",
+      "RealVictorPRM"
+    ],
+    "portal": {
+      "name": "Subterranean",
+      "url": "https://mods.factorio.com/mod/Subterranean"
+    }
+  }
+}

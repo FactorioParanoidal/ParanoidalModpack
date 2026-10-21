@@ -53,8 +53,11 @@ function spawning.init()
     spawning.spawn_chances[size] = 0.0
   end
 
-  ---@type boolean
-  storage.spawn_ruins = storage.spawn_ruins or true
+  -- Paranoidal: `storage.spawn_ruins or true` never kept `false` and wrote storage during on_load.
+  if game and storage.spawn_ruins == nil then
+    ---@type boolean
+    storage.spawn_ruins = true
+  end
 
   -- Init local tables, variables
   ---@type table<string, number>
@@ -117,7 +120,7 @@ end
 ---@return boolean
 function spawning.is_spawning_ruins_enabled()
   if debug_log then log(string.format("[is_spawning_ruins_enabled]: storage.spawn_ruins='%s' - EXIT!", storage.spawn_ruins)) end
-  return storage.spawn_ruins
+  return storage.spawn_ruins ~= false
 end
 
 ---@param half_size number
@@ -182,7 +185,9 @@ local function spawn_entity(expression, relative_position, center, surface, extr
 
   local force = extra_options.force or "neutral"
   if debug_log then log(string.format("[spawn_entity]: force='%s' - BEFORE!", force)) end
-  if settings.global[constants.ENABLE_ENEMY_NOT_CEASE_FIRE_KEY].value == true and force ~= "neutral" then
+  -- Paranoidal: hostile ruin entities always belong to the ruins force; the cease-fire setting
+  -- controls that force. Previously "false" put them into the biters' `enemy` force instead.
+  if force ~= "neutral" then
     force = utils.get_enemy_force()
   end
   if debug_log then log(string.format("[spawn_entity]: force='%s' - AFTER!", force)) end
@@ -207,7 +212,8 @@ local function spawn_entity(expression, relative_position, center, surface, extr
     force       = force,
     raise_built = true,
     create_build_effect_smoke = false,
-    recipe      = recipe_name
+    recipe      = recipe_name,
+    quality     = (type(extra_options.quality) == "string" and prototypes.quality[extra_options.quality]) and extra_options.quality or nil
   }
 
   if debug_log then log(string.format("[spawn_entity]: e[]='%s',extra_options.dmg[]='%s'", type(e), type(extra_options.dmg))) end
@@ -253,9 +259,20 @@ local function spawn_entity(expression, relative_position, center, surface, extr
     local items = {}
 
     for name, count_expression in pairs(extra_options.items) do
-      if debug_log then log(string.format("[spawn_entity]: name='%s',count_expression='%s'", name, count_expression)) end
+      if debug_log then log(string.format("[spawn_entity]: name='%s',count_expression[]='%s'", name, type(count_expression))) end
       if not _G["prototypes"].item[name] then
         log(string.format("[spawn_entity]: item '%s' does not exist - SKIPPED!", name))
+      elseif type(count_expression) == "table" and count_expression.count ~= nil then
+        -- Paranoidal: {count = <number-expression>, quality = "<quality>"}; unknown quality falls back to normal.
+        local count = expressions.number(count_expression.count, vars)
+        local quality = count_expression.quality
+        if quality ~= nil and not prototypes.quality[quality] then
+          log(string.format("[spawn_entity]: quality '%s' does not exist, using normal", tostring(quality)))
+          quality = nil
+        end
+        if count > 0 and e and e.valid then
+          e.insert({name = name, count = count, quality = quality})
+        end
       else
         local count = expressions.number(count_expression, vars)
         if debug_log then log(string.format("[spawn_entity]: count=%d", count)) end
@@ -266,7 +283,7 @@ local function spawn_entity(expression, relative_position, center, surface, extr
       end
     end
 
-    if debug_log then log(string.format("[spawn_entity]: Found %d items.", #items)) end
+    if debug_log then log(string.format("[spawn_entity]: Found %d items.", table_size(items))) end
     if table_size(items) > 0 then
       if debug_log then log(string.format("[spawn_entity]: Safely inserting %d items ...", table_size(items))) end
       utils.safe_insert(e, items)
@@ -436,8 +453,10 @@ spawning.spawn_ruin = function(ruin, half_size, center, surface)
     error(string.format("surface.name='%s' is not allowed to spawn this ruin", surface.name))
   end
 
-  if clear_area(half_size, center, surface) then
+  if debug_log then log(string.format("[spawn_ruin]: surface.name='%s',DEBUG_SURFACE_NAME='%s'", surface.name, constants.DEBUG_SURFACE_NAME)) end
+  if surface.name == constants.DEBUG_SURFACE_NAME or clear_area(half_size, center, surface) then
     local variables = {}
+
     if debug_log then log(string.format("[spawn_ruin]: ruin.variables[]='%s'", type(ruin.variables))) end
     if ruin.variables ~= nil and table_size(ruin.variables) > 0 then
       if debug_log then log(string.format("[spawn_ruin]: Ruin '%s' has %d variables to parse.", utils.get_ruin_name(ruin), table_size(ruin.variables))) end
@@ -457,16 +476,114 @@ spawning.spawn_ruin = function(ruin, half_size, center, surface)
     end
 
     no_corpse_fade(half_size, center, surface)
+
+    if debug_log then log("[spawn_ruin]: EXIT!") end
+    return true
   end
 
   if debug_log then log("[spawn_ruin]: EXIT!") end
+  return false
+end
+
+-- Paranoidal: ruin selection without early repeats.
+-- Every ruin-set/size keeps a "used in this cycle" list in storage. A ruin is chosen only
+-- from unused candidates (weighted by `ruin.weight`, default 1). When all candidates are
+-- used, a new cycle starts. Ruins may also require `ruin.min_distance` (tiles from 0,0).
+---@param ruin Ruin
+---@param surface LuaSurface
+---@param center MapPosition
+---@return boolean
+-- Paranoidal: distance limits (size multipliers and per-ruin `min_distance`) apply only when
+-- the map setting "ruins-ignore-distance" is off. By default every ruin may appear anywhere
+-- outside the minimum distance from the map center.
+---@return boolean
+function spawning.distance_matters()
+  local setting = settings.global[constants.IGNORE_DISTANCE_KEY]
+  return setting ~= nil and setting.value == false
+end
+
+local function is_candidate(ruin, surface, center, check_distance)
+  if ruin.spawn_on_surfaces ~= nil and not ruin.spawn_on_surfaces[surface.name] then
+    return false
+  elseif ruin.no_spawning ~= nil and ruin.no_spawning[surface.name] then
+    return false
+  elseif check_distance and type(ruin.min_distance) == "number" and center ~= nil then
+    local distance = math.sqrt(center.x * center.x + center.y * center.y)
+    if distance < ruin.min_distance then
+      return false
+    end
+  end
+  return true
+end
+
+---@param candidates Ruin[]
+---@return Ruin
+local function pick_weighted(candidates)
+  local total = 0
+  for _, ruin in pairs(candidates) do
+    total = total + (type(ruin.weight) == "number" and ruin.weight > 0 and ruin.weight or 1)
+  end
+  local roll = math.random() * total
+  for _, ruin in pairs(candidates) do
+    roll = roll - (type(ruin.weight) == "number" and ruin.weight > 0 and ruin.weight or 1)
+    if roll <= 0 then
+      return ruin
+    end
+  end
+  return candidates[#candidates]
+end
+
+---@param ruins Ruin[]
+---@param surface LuaSurface
+---@param center MapPosition
+---@param bag_key string|nil Key of the anti-repeat bag, nil disables anti-repeat
+---@return Ruin|nil
+function spawning.choose_ruin(ruins, surface, center, bag_key)
+  local allowed = {}
+  local check_distance = spawning.distance_matters()
+  for _, ruin in pairs(ruins) do
+    if type(ruin) == "table" and is_candidate(ruin, surface, center, check_distance) then
+      allowed[#allowed + 1] = ruin
+    end
+  end
+  if #allowed == 0 then
+    return nil
+  elseif bag_key == nil then
+    return pick_weighted(allowed)
+  end
+
+  storage.ruin_bags = storage.ruin_bags or {}
+  local bag = storage.ruin_bags[bag_key]
+  if bag == nil then
+    bag = {used = {}, cycle = 1}
+    storage.ruin_bags[bag_key] = bag
+  end
+
+  local fresh = {}
+  for _, ruin in pairs(allowed) do
+    if not bag.used[utils.get_ruin_name(ruin)] then
+      fresh[#fresh + 1] = ruin
+    end
+  end
+  if #fresh == 0 then
+    -- Everything allowed here was already used: start a new cycle.
+    bag.used = {}
+    bag.cycle = bag.cycle + 1
+    fresh = allowed
+  end
+
+  local ruin = pick_weighted(fresh)
+  bag.used[utils.get_ruin_name(ruin)] = true
+  return ruin
 end
 
 ---@param ruins Ruin[]
 ---@param half_size number
 ---@param center MapPosition
 ---@param surface LuaSurface
-spawning.spawn_random_ruin = function(ruins, half_size, center, surface)
+---@param size string|nil Ruin size, used for the anti-repeat bag and the spawn event
+---@param ruinset_name string|nil Ruin-set name, used for the anti-repeat bag and the spawn event
+spawning.spawn_random_ruin = function(ruins, half_size, center, surface, size, ruinset_name)
   if debug_log then log(string.format("[spawn_random_ruin]: ruins[]='%s',half_size[]='%s',center[]='%s',surface[]='%s' - CALLED!", type(ruins), type(half_size), type(center), type(surface))) end
   if type(ruins) ~= "table" then
     error(string.format("Parameter ruins[]='%s' is not of expected type 'table'", type(ruins)))
@@ -486,34 +603,32 @@ spawning.spawn_random_ruin = function(ruins, half_size, center, surface)
     error(string.format("surface.name='%s' is associated with a planet not allowing spawning", surface.name))
   end
 
-  ---@type Ruin
-  local ruin = nil
-  ---@type uint
-  local size = table_size(ruins)
-  if debug_log then log(string.format("[spawn_random_ruin]: size=%d", size)) end
+  -- Paranoidal: the old loop retried forever when no ruin was allowed on the surface and
+  -- picked ruins uniformly, so the same ruin could appear many times in a row.
+  local avoid_repeats = settings.global[constants.AVOID_REPEATS_KEY] == nil or settings.global[constants.AVOID_REPEATS_KEY].value
+  local bag_key = nil
+  if avoid_repeats and size ~= nil and ruinset_name ~= nil then
+    bag_key = ruinset_name .. "/" .. size
+  end
 
-  -- Spawn a random ruin from the list
-  while ruin == nil do
-    if debug_log then log(string.format("[spawn_random_ruin]: ruin[]='%s' - BEFORE!", type(ruin))) end
-    ruin = ruins[math.random(size)]
-    if debug_log then log(string.format("[spawn_random_ruin]: ruin[]='%s' - AFTER!", type(ruin))) end
+  ---@type Ruin|nil
+  local ruin = spawning.choose_ruin(ruins, surface, center, bag_key)
+  if ruin == nil then
+    if debug_log then log(string.format("[spawn_random_ruin]: No ruin is allowed on surface '%s' - EXIT!", surface.name)) end
+    return
+  end
 
-    ---@type string
-    local name = utils.get_ruin_name(ruin)
-
-    if debug_log then log(string.format("[spawn_random_ruin]: name='%s',ruin.spawn_on_surfaces[]='%s'", name, type(ruin.spawn_on_surfaces))) end
-    if ruin.spawn_on_surfaces ~= nil and (ruin.spawn_on_surfaces[surface.name] == nil or not ruin.spawn_on_surfaces[surface.name]) then
-      -- Ruin is not allowed on this surface
-      if debug_log then log(string.format("[spawn_random_ruin]: Ruin '%s' is not allowed to spawn on surface '%s' - SKIPPED!", name, surface.name)) end
-      ruin = nil
-    elseif ruin.no_spawning ~= nil and ruin.no_spawning[surface.name] then
-      if debug_log then log(string.format("[spawn_random_ruin]: Surface '%s' is banned from spawning ruin '%s' - SKIPPED!", surface.name, name)) end
-      ruin = nil
-    else
-      -- Spawn ruin
-      if debug_log then log(string.format("[spawn_random_ruin]: Spawning ruin '%s' at surface '%s' ...", name, surface.name)) end
-      spawning.spawn_ruin(ruin, half_size, center, surface)
-    end
+  local name = utils.get_ruin_name(ruin)
+  if debug_log then log(string.format("[spawn_random_ruin]: Spawning ruin '%s' at surface '%s' ...", name, surface.name)) end
+  if spawning.spawn_ruin(ruin, half_size, center, surface) and on_ruin_spawned_event then
+    script.raise_event(on_ruin_spawned_event, {
+      surface = surface,
+      center = {x = center.x, y = center.y},
+      half_size = half_size,
+      size = size,
+      ruin_set = ruinset_name,
+      ruin_name = name
+    })
   end
 
   if debug_log then log("[spawn_random_ruin]: EXIT!") end
@@ -594,7 +709,10 @@ function spawning.try_ruin_spawn(size, min_distance, center, surface)
   end
 
   if debug_log then log(string.format("[try_ruin_spawn]: min_distance=%d - BEFORE!", min_distance)) end
-  local distance = min_distance * spawning.ruin_min_distance_multiplier[size]
+  local distance = min_distance
+  if spawning.distance_matters() then
+    distance = min_distance * spawning.ruin_min_distance_multiplier[size]
+  end
   if debug_log then log(string.format("[try_ruin_spawn]: distance=%d - AFTER!", distance)) end
 
   if math.abs(center.x) < distance and math.abs(center.y) < distance then
@@ -607,8 +725,10 @@ function spawning.try_ruin_spawn(size, min_distance, center, surface)
   if debug_log then log(string.format("[try_ruin_spawn]: variance=%.2f,center.x=%d,center.y=%d - BEFORE!", variance, center.x, center.y)) end
   if variance > 0 then
     if debug_log then log(string.format("[try_ruin_spawn]: Applying random variance=%.2f ...", variance)) end
-    center.x = center.x + math.random(-variance, variance)
-    center.y = center.y + math.random(-variance, variance)
+    -- Paranoidal: even offsets keep the ruin on the 2x2 rail grid, so rails of a ruin stay connected.
+    local steps = math.floor(variance / 2)
+    center.x = center.x + 2 * math.random(-steps, steps)
+    center.y = center.y + 2 * math.random(-steps, steps)
   end
   if debug_log then log(string.format("[try_ruin_spawn]: variance=%.2f,center.x=%d,center.y=%d - AFTER!", variance, center.x, center.y)) end
 

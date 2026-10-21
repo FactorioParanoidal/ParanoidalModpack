@@ -1,4 +1,13 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.5.1
+Date: 2026-10-12
+  Changes:
+    - Paranoidal: the tick handler returns before its two pcalls on every tick that is not an update tick (update_delay); a persistent error is printed once instead of every update to every player.
+    - Paranoidal: while evolution is below the RampantFixed truce threshold, the evolution line adds "Peaceful mode. Attacks start at N% evolution." N is read from RampantFixed (remote getTruceInfo); nothing is added without RampantFixed or when its AI is off on the surface.
+    - Paranoidal: chunk pollution level is shown by default for new players.
+    - Paranoidal: the kill count sensor no longer fails with "LuaGameScript doesn't contain key entity_prototypes" when enabled (uses prototypes.entity in 2.0).
+    - Paranoidal: Russian name of the kill count sensor is "Убийства вашей команды".
+---------------------------------------------------------------------------------------------------
 Version: 0.5.0
 Date: 2025.09.05
   Changes:

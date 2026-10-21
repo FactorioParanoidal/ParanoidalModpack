@@ -235,7 +235,9 @@ end
 ---@param event EventData.CustomInputEvent
 function epd.dolly_move(event)
     local player, pdata = game.get_player(event.player_index), tools.pdata(event.player_index)
-    if not player then return end
+    if not (player and player.cursor_stack) then return end
+
+    if player.cursor_stack.valid_for_read or player.cursor_ghost then return end
 
     local save_time = epd.settings.get_save_entity(player)
     local entity = tools.get_entity_to_move(player, pdata, event.tick, save_time)
@@ -261,7 +263,7 @@ function epd.rotate_oblong_entity(event, reverse)
     local player = game.get_player(event.player_index)
     if not (player and player.cursor_stack) then return end
 
-    if player.cursor_stack.valid_for_read or player.cursor_ghost or player.selected then return end
+    if player.cursor_stack.valid_for_read or player.cursor_ghost then return end
 
     local pdata = tools.pdata(event.player_index)
 

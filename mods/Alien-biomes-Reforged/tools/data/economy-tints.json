@@ -1,0 +1,1249 @@
+{
+ "summary": [
+  {
+   "avg_psnr": 38.82,
+   "family": "mineral-dirt-1",
+   "matrix": "mineral-dirt-1-g2.png",
+   "worst_color": "purple",
+   "worst_psnr": 32.1
+  },
+  {
+   "avg_psnr": 36.24,
+   "family": "mineral-dirt-2",
+   "matrix": "mineral-dirt-2-g2.png",
+   "worst_color": "purple",
+   "worst_psnr": 28.77
+  },
+  {
+   "avg_psnr": 39.58,
+   "family": "mineral-dirt-3",
+   "matrix": "mineral-dirt-3-g2.png",
+   "worst_color": "purple",
+   "worst_psnr": 33.58
+  },
+  {
+   "avg_psnr": 41.28,
+   "family": "mineral-dirt-4",
+   "matrix": "mineral-dirt-4-g2.png",
+   "worst_color": "purple",
+   "worst_psnr": 33.31
+  },
+  {
+   "avg_psnr": 40.84,
+   "family": "mineral-dirt-5",
+   "matrix": "mineral-dirt-5-g2.png",
+   "worst_color": "purple",
+   "worst_psnr": 34.01
+  },
+  {
+   "avg_psnr": 38.92,
+   "family": "mineral-dirt-6",
+   "matrix": "mineral-dirt-6-g2.png",
+   "worst_color": "purple",
+   "worst_psnr": 30.05
+  },
+  {
+   "avg_psnr": 35.74,
+   "family": "mineral-sand-2",
+   "matrix": "mineral-sand-2-g2.png",
+   "worst_color": "violet",
+   "worst_psnr": 31.2
+  },
+  {
+   "avg_psnr": 37.69,
+   "family": "mineral-sand-3",
+   "matrix": "mineral-sand-3-g2.png",
+   "worst_color": "violet",
+   "worst_psnr": 33.7
+  },
+  {
+   "avg_psnr": 31.82,
+   "family": "vegetation-grass-1",
+   "matrix": "vegetation-grass-1-g1.png",
+   "worst_color": "yellow",
+   "worst_psnr": 23.06
+  },
+  {
+   "avg_psnr": 30.9,
+   "family": "vegetation-grass-2",
+   "matrix": "vegetation-grass-2-g1.png",
+   "worst_color": "yellow",
+   "worst_psnr": 21.61
+  },
+  {
+   "avg_psnr": 35.66,
+   "family": "volcanic-heat-2",
+   "matrix": "volcanic-heat-2-g1.png",
+   "worst_color": "orange",
+   "worst_psnr": 31.78
+  },
+  {
+   "avg_psnr": 32.89,
+   "family": "volcanic-heat-3",
+   "matrix": "volcanic-heat-3-g1.png",
+   "worst_color": "orange",
+   "worst_psnr": 28.77
+  },
+  {
+   "avg_psnr": 29.67,
+   "family": "volcanic-heat-4",
+   "matrix": "volcanic-heat-4-g1.png",
+   "worst_color": "orange",
+   "worst_psnr": 25.34
+  }
+ ],
+ "tiles": {
+  "mineral-aubergine-dirt-1": {
+   "matrix": "mineral-dirt-1-g2.png",
+   "psnr": 36.3,
+   "tint": [
+    0.3171,
+    0.3036,
+    0.45
+   ]
+  },
+  "mineral-aubergine-dirt-2": {
+   "matrix": "mineral-dirt-2-g2.png",
+   "psnr": 32.91,
+   "tint": [
+    0.3296,
+    0.2988,
+    0.3997
+   ]
+  },
+  "mineral-aubergine-dirt-3": {
+   "matrix": "mineral-dirt-3-g2.png",
+   "psnr": 38.01,
+   "tint": [
+    0.2913,
+    0.2622,
+    0.3492
+   ]
+  },
+  "mineral-aubergine-dirt-4": {
+   "matrix": "mineral-dirt-4-g2.png",
+   "psnr": 38.44,
+   "tint": [
+    0.2778,
+    0.2484,
+    0.3394
+   ]
+  },
+  "mineral-aubergine-dirt-5": {
+   "matrix": "mineral-dirt-5-g2.png",
+   "psnr": 39.04,
+   "tint": [
+    0.2544,
+    0.2532,
+    0.3404
+   ]
+  },
+  "mineral-aubergine-dirt-6": {
+   "matrix": "mineral-dirt-6-g2.png",
+   "psnr": 34.62,
+   "tint": [
+    0.2796,
+    0.2496,
+    0.347
+   ]
+  },
+  "mineral-aubergine-sand-2": {
+   "matrix": "mineral-sand-2-g2.png",
+   "psnr": 33.41,
+   "tint": [
+    0.3133,
+    0.2716,
+    0.4324
+   ]
+  },
+  "mineral-aubergine-sand-3": {
+   "matrix": "mineral-sand-3-g2.png",
+   "psnr": 35.32,
+   "tint": [
+    0.2662,
+    0.2442,
+    0.3616
+   ]
+  },
+  "mineral-beige-dirt-1": {
+   "matrix": "mineral-dirt-1-g2.png",
+   "psnr": 42.87,
+   "tint": [
+    0.7243,
+    0.6889,
+    0.55
+   ]
+  },
+  "mineral-beige-dirt-2": {
+   "matrix": "mineral-dirt-2-g2.png",
+   "psnr": 39.03,
+   "tint": [
+    0.7184,
+    0.6423,
+    0.5292
+   ]
+  },
+  "mineral-beige-dirt-3": {
+   "matrix": "mineral-dirt-3-g2.png",
+   "psnr": 41.55,
+   "tint": [
+    0.5583,
+    0.4979,
+    0.4122
+   ]
+  },
+  "mineral-beige-dirt-4": {
+   "matrix": "mineral-dirt-4-g2.png",
+   "psnr": 44.3,
+   "tint": [
+    0.5402,
+    0.4801,
+    0.3922
+   ]
+  },
+  "mineral-beige-dirt-5": {
+   "matrix": "mineral-dirt-5-g2.png",
+   "psnr": 42.99,
+   "tint": [
+    0.5791,
+    0.5527,
+    0.4596
+   ]
+  },
+  "mineral-beige-dirt-6": {
+   "matrix": "mineral-dirt-6-g2.png",
+   "psnr": 42.84,
+   "tint": [
+    0.6243,
+    0.5549,
+    0.4563
+   ]
+  },
+  "mineral-beige-sand-2": {
+   "matrix": "mineral-sand-2-g2.png",
+   "psnr": 39.64,
+   "tint": [
+    0.7399,
+    0.6597,
+    0.538
+   ]
+  },
+  "mineral-beige-sand-3": {
+   "matrix": "mineral-sand-3-g2.png",
+   "psnr": 39.87,
+   "tint": [
+    0.6354,
+    0.5866,
+    0.475
+   ]
+  },
+  "mineral-black-dirt-1": {
+   "matrix": "mineral-dirt-1-g2.png",
+   "psnr": 41.04,
+   "tint": [
+    0.2856,
+    0.3144,
+    0.3035
+   ]
+  },
+  "mineral-black-dirt-2": {
+   "matrix": "mineral-dirt-2-g2.png",
+   "psnr": 37.32,
+   "tint": [
+    0.3143,
+    0.3216,
+    0.3214
+   ]
+  },
+  "mineral-black-dirt-3": {
+   "matrix": "mineral-dirt-3-g2.png",
+   "psnr": 38.76,
+   "tint": [
+    0.2379,
+    0.2443,
+    0.2397
+   ]
+  },
+  "mineral-black-dirt-4": {
+   "matrix": "mineral-dirt-4-g2.png",
+   "psnr": 44.17,
+   "tint": [
+    0.2344,
+    0.2404,
+    0.2334
+   ]
+  },
+  "mineral-black-dirt-5": {
+   "matrix": "mineral-dirt-5-g2.png",
+   "psnr": 40.99,
+   "tint": [
+    0.2219,
+    0.2455,
+    0.2436
+   ]
+  },
+  "mineral-black-dirt-6": {
+   "matrix": "mineral-dirt-6-g2.png",
+   "psnr": 40.41,
+   "tint": [
+    0.2599,
+    0.2644,
+    0.2577
+   ]
+  },
+  "mineral-black-sand-2": {
+   "matrix": "mineral-sand-2-g2.png",
+   "psnr": 36.16,
+   "tint": [
+    0.2861,
+    0.2962,
+    0.2962
+   ]
+  },
+  "mineral-black-sand-3": {
+   "matrix": "mineral-sand-3-g2.png",
+   "psnr": 36.95,
+   "tint": [
+    0.2506,
+    0.2681,
+    0.26
+   ]
+  },
+  "mineral-brown-dirt-1": {
+   "matrix": "mineral-dirt-1-g2.png",
+   "psnr": 39.36,
+   "tint": [
+    0.6131,
+    0.4532,
+    0.3401
+   ]
+  },
+  "mineral-brown-dirt-2": {
+   "matrix": "mineral-dirt-2-g2.png",
+   "psnr": 35.65,
+   "tint": [
+    0.5665,
+    0.3988,
+    0.3051
+   ]
+  },
+  "mineral-brown-dirt-3": {
+   "matrix": "mineral-dirt-3-g2.png",
+   "psnr": 40.01,
+   "tint": [
+    0.4327,
+    0.3053,
+    0.2373
+   ]
+  },
+  "mineral-brown-dirt-4": {
+   "matrix": "mineral-dirt-4-g2.png",
+   "psnr": 42.38,
+   "tint": [
+    0.3862,
+    0.2624,
+    0.193
+   ]
+  },
+  "mineral-brown-dirt-5": {
+   "matrix": "mineral-dirt-5-g2.png",
+   "psnr": 42.13,
+   "tint": [
+    0.4972,
+    0.3853,
+    0.3052
+   ]
+  },
+  "mineral-brown-dirt-6": {
+   "matrix": "mineral-dirt-6-g2.png",
+   "psnr": 40.16,
+   "tint": [
+    0.5288,
+    0.3743,
+    0.2898
+   ]
+  },
+  "mineral-brown-sand-2": {
+   "matrix": "mineral-sand-2-g2.png",
+   "psnr": 35.14,
+   "tint": [
+    0.6741,
+    0.4697,
+    0.3568
+   ]
+  },
+  "mineral-brown-sand-3": {
+   "matrix": "mineral-sand-3-g2.png",
+   "psnr": 36.93,
+   "tint": [
+    0.5822,
+    0.4277,
+    0.3277
+   ]
+  },
+  "mineral-cream-dirt-1": {
+   "matrix": "mineral-dirt-1-g2.png",
+   "psnr": 39.45,
+   "tint": [
+    0.9999,
+    0.9924,
+    0.6554
+   ]
+  },
+  "mineral-cream-dirt-2": {
+   "matrix": "mineral-dirt-2-g2.png",
+   "psnr": 38.63,
+   "tint": [
+    0.9962,
+    0.9134,
+    0.6319
+   ]
+  },
+  "mineral-cream-dirt-3": {
+   "matrix": "mineral-dirt-3-g2.png",
+   "psnr": 41.09,
+   "tint": [
+    0.7475,
+    0.6833,
+    0.4799
+   ]
+  },
+  "mineral-cream-dirt-4": {
+   "matrix": "mineral-dirt-4-g2.png",
+   "psnr": 42.27,
+   "tint": [
+    0.7699,
+    0.6967,
+    0.4725
+   ]
+  },
+  "mineral-cream-dirt-5": {
+   "matrix": "mineral-dirt-5-g2.png",
+   "psnr": 41.45,
+   "tint": [
+    0.7998,
+    0.7808,
+    0.5352
+   ]
+  },
+  "mineral-cream-dirt-6": {
+   "matrix": "mineral-dirt-6-g2.png",
+   "psnr": 40.46,
+   "tint": [
+    0.8,
+    0.7384,
+    0.5144
+   ]
+  },
+  "mineral-cream-sand-2": {
+   "matrix": "mineral-sand-2-g2.png",
+   "psnr": 38.0,
+   "tint": [
+    0.9457,
+    0.8941,
+    0.5776
+   ]
+  },
+  "mineral-cream-sand-3": {
+   "matrix": "mineral-sand-3-g2.png",
+   "psnr": 40.15,
+   "tint": [
+    0.7975,
+    0.7769,
+    0.5079
+   ]
+  },
+  "mineral-dustyrose-dirt-1": {
+   "matrix": "mineral-dirt-1-g2.png",
+   "psnr": 40.62,
+   "tint": [
+    0.5307,
+    0.4527,
+    0.4224
+   ]
+  },
+  "mineral-dustyrose-dirt-2": {
+   "matrix": "mineral-dirt-2-g2.png",
+   "psnr": 38.55,
+   "tint": [
+    0.5569,
+    0.4587,
+    0.4382
+   ]
+  },
+  "mineral-dustyrose-dirt-3": {
+   "matrix": "mineral-dirt-3-g2.png",
+   "psnr": 40.82,
+   "tint": [
+    0.436,
+    0.3628,
+    0.345
+   ]
+  },
+  "mineral-dustyrose-dirt-4": {
+   "matrix": "mineral-dirt-4-g2.png",
+   "psnr": 44.35,
+   "tint": [
+    0.399,
+    0.3308,
+    0.3139
+   ]
+  },
+  "mineral-dustyrose-dirt-5": {
+   "matrix": "mineral-dirt-5-g2.png",
+   "psnr": 42.37,
+   "tint": [
+    0.4359,
+    0.3839,
+    0.3666
+   ]
+  },
+  "mineral-dustyrose-dirt-6": {
+   "matrix": "mineral-dirt-6-g2.png",
+   "psnr": 40.99,
+   "tint": [
+    0.4681,
+    0.3738,
+    0.3518
+   ]
+  },
+  "mineral-dustyrose-sand-2": {
+   "matrix": "mineral-sand-2-g2.png",
+   "psnr": 34.72,
+   "tint": [
+    0.5353,
+    0.4019,
+    0.3842
+   ]
+  },
+  "mineral-dustyrose-sand-3": {
+   "matrix": "mineral-sand-3-g2.png",
+   "psnr": 36.58,
+   "tint": [
+    0.4515,
+    0.3611,
+    0.3406
+   ]
+  },
+  "mineral-grey-dirt-1": {
+   "matrix": "mineral-dirt-1-g2.png",
+   "psnr": 42.3,
+   "tint": [
+    0.6454,
+    0.7061,
+    0.6945
+   ]
+  },
+  "mineral-grey-dirt-2": {
+   "matrix": "mineral-dirt-2-g2.png",
+   "psnr": 41.36,
+   "tint": [
+    0.6984,
+    0.7089,
+    0.708
+   ]
+  },
+  "mineral-grey-dirt-3": {
+   "matrix": "mineral-dirt-3-g2.png",
+   "psnr": 42.57,
+   "tint": [
+    0.5519,
+    0.5597,
+    0.5551
+   ]
+  },
+  "mineral-grey-dirt-4": {
+   "matrix": "mineral-dirt-4-g2.png",
+   "psnr": 43.83,
+   "tint": [
+    0.553,
+    0.5601,
+    0.5534
+   ]
+  },
+  "mineral-grey-dirt-5": {
+   "matrix": "mineral-dirt-5-g2.png",
+   "psnr": 43.47,
+   "tint": [
+    0.516,
+    0.5614,
+    0.5602
+   ]
+  },
+  "mineral-grey-dirt-6": {
+   "matrix": "mineral-dirt-6-g2.png",
+   "psnr": 42.93,
+   "tint": [
+    0.5629,
+    0.5691,
+    0.5628
+   ]
+  },
+  "mineral-grey-sand-2": {
+   "matrix": "mineral-sand-2-g2.png",
+   "psnr": 38.77,
+   "tint": [
+    0.6003,
+    0.6135,
+    0.6189
+   ]
+  },
+  "mineral-grey-sand-3": {
+   "matrix": "mineral-sand-3-g2.png",
+   "psnr": 41.21,
+   "tint": [
+    0.5227,
+    0.5515,
+    0.5463
+   ]
+  },
+  "mineral-purple-dirt-1": {
+   "matrix": "mineral-dirt-1-g2.png",
+   "psnr": 32.1,
+   "tint": [
+    0.3853,
+    0.422,
+    0.7667
+   ]
+  },
+  "mineral-purple-dirt-2": {
+   "matrix": "mineral-dirt-2-g2.png",
+   "psnr": 28.77,
+   "tint": [
+    0.3981,
+    0.3904,
+    0.6233
+   ]
+  },
+  "mineral-purple-dirt-3": {
+   "matrix": "mineral-dirt-3-g2.png",
+   "psnr": 33.58,
+   "tint": [
+    0.4152,
+    0.4033,
+    0.5957
+   ]
+  },
+  "mineral-purple-dirt-4": {
+   "matrix": "mineral-dirt-4-g2.png",
+   "psnr": 33.31,
+   "tint": [
+    0.3731,
+    0.3632,
+    0.582
+   ]
+  },
+  "mineral-purple-dirt-5": {
+   "matrix": "mineral-dirt-5-g2.png",
+   "psnr": 34.01,
+   "tint": [
+    0.3466,
+    0.3842,
+    0.5686
+   ]
+  },
+  "mineral-purple-dirt-6": {
+   "matrix": "mineral-dirt-6-g2.png",
+   "psnr": 30.05,
+   "tint": [
+    0.3378,
+    0.3315,
+    0.5629
+   ]
+  },
+  "mineral-purple-sand-2": {
+   "matrix": "mineral-sand-2-g2.png",
+   "psnr": 31.34,
+   "tint": [
+    0.3356,
+    0.3322,
+    0.7055
+   ]
+  },
+  "mineral-purple-sand-3": {
+   "matrix": "mineral-sand-3-g2.png",
+   "psnr": 33.93,
+   "tint": [
+    0.2895,
+    0.2959,
+    0.5836
+   ]
+  },
+  "mineral-red-dirt-1": {
+   "matrix": "mineral-dirt-1-g2.png",
+   "psnr": 39.79,
+   "tint": [
+    0.6709,
+    0.3482,
+    0.2762
+   ]
+  },
+  "mineral-red-dirt-2": {
+   "matrix": "mineral-dirt-2-g2.png",
+   "psnr": 39.25,
+   "tint": [
+    0.6634,
+    0.3557,
+    0.2946
+   ]
+  },
+  "mineral-red-dirt-3": {
+   "matrix": "mineral-dirt-3-g2.png",
+   "psnr": 43.35,
+   "tint": [
+    0.5404,
+    0.2957,
+    0.2497
+   ]
+  },
+  "mineral-red-dirt-4": {
+   "matrix": "mineral-dirt-4-g2.png",
+   "psnr": 42.95,
+   "tint": [
+    0.4326,
+    0.1982,
+    0.156
+   ]
+  },
+  "mineral-red-dirt-5": {
+   "matrix": "mineral-dirt-5-g2.png",
+   "psnr": 43.93,
+   "tint": [
+    0.586,
+    0.3605,
+    0.3086
+   ]
+  },
+  "mineral-red-dirt-6": {
+   "matrix": "mineral-dirt-6-g2.png",
+   "psnr": 41.75,
+   "tint": [
+    0.5754,
+    0.2948,
+    0.2397
+   ]
+  },
+  "mineral-red-sand-2": {
+   "matrix": "mineral-sand-2-g2.png",
+   "psnr": 34.05,
+   "tint": [
+    0.6863,
+    0.2976,
+    0.2395
+   ]
+  },
+  "mineral-red-sand-3": {
+   "matrix": "mineral-sand-3-g2.png",
+   "psnr": 37.41,
+   "tint": [
+    0.5603,
+    0.2658,
+    0.2169
+   ]
+  },
+  "mineral-tan-dirt-1": {
+   "matrix": "mineral-dirt-1-g2.png",
+   "psnr": 39.43,
+   "tint": [
+    0.7664,
+    0.6051,
+    0.368
+   ]
+  },
+  "mineral-tan-dirt-2": {
+   "matrix": "mineral-dirt-2-g2.png",
+   "psnr": 34.73,
+   "tint": [
+    0.6894,
+    0.5084,
+    0.3154
+   ]
+  },
+  "mineral-tan-dirt-3": {
+   "matrix": "mineral-dirt-3-g2.png",
+   "psnr": 38.19,
+   "tint": [
+    0.5137,
+    0.3759,
+    0.2327
+   ]
+  },
+  "mineral-tan-dirt-4": {
+   "matrix": "mineral-dirt-4-g2.png",
+   "psnr": 41.94,
+   "tint": [
+    0.5056,
+    0.3615,
+    0.2135
+   ]
+  },
+  "mineral-tan-dirt-5": {
+   "matrix": "mineral-dirt-5-g2.png",
+   "psnr": 41.62,
+   "tint": [
+    0.5895,
+    0.4762,
+    0.3124
+   ]
+  },
+  "mineral-tan-dirt-6": {
+   "matrix": "mineral-dirt-6-g2.png",
+   "psnr": 41.0,
+   "tint": [
+    0.6518,
+    0.4928,
+    0.3196
+   ]
+  },
+  "mineral-tan-sand-2": {
+   "matrix": "mineral-sand-2-g2.png",
+   "psnr": 38.15,
+   "tint": [
+    0.8661,
+    0.7005,
+    0.4509
+   ]
+  },
+  "mineral-tan-sand-3": {
+   "matrix": "mineral-sand-3-g2.png",
+   "psnr": 39.7,
+   "tint": [
+    0.7458,
+    0.6243,
+    0.403
+   ]
+  },
+  "mineral-violet-dirt-1": {
+   "matrix": "mineral-dirt-1-g2.png",
+   "psnr": 33.02,
+   "tint": [
+    0.601,
+    0.3807,
+    0.6427
+   ]
+  },
+  "mineral-violet-dirt-2": {
+   "matrix": "mineral-dirt-2-g2.png",
+   "psnr": 30.0,
+   "tint": [
+    0.5773,
+    0.365,
+    0.537
+   ]
+  },
+  "mineral-violet-dirt-3": {
+   "matrix": "mineral-dirt-3-g2.png",
+   "psnr": 35.43,
+   "tint": [
+    0.5307,
+    0.3574,
+    0.503
+   ]
+  },
+  "mineral-violet-dirt-4": {
+   "matrix": "mineral-dirt-4-g2.png",
+   "psnr": 35.19,
+   "tint": [
+    0.4873,
+    0.3102,
+    0.4731
+   ]
+  },
+  "mineral-violet-dirt-5": {
+   "matrix": "mineral-dirt-5-g2.png",
+   "psnr": 36.32,
+   "tint": [
+    0.4852,
+    0.3529,
+    0.5024
+   ]
+  },
+  "mineral-violet-dirt-6": {
+   "matrix": "mineral-dirt-6-g2.png",
+   "psnr": 31.49,
+   "tint": [
+    0.503,
+    0.3083,
+    0.4785
+   ]
+  },
+  "mineral-violet-sand-2": {
+   "matrix": "mineral-sand-2-g2.png",
+   "psnr": 31.2,
+   "tint": [
+    0.5987,
+    0.3224,
+    0.5887
+   ]
+  },
+  "mineral-violet-sand-3": {
+   "matrix": "mineral-sand-3-g2.png",
+   "psnr": 33.7,
+   "tint": [
+    0.4895,
+    0.286,
+    0.4909
+   ]
+  },
+  "mineral-white-dirt-1": {
+   "matrix": "mineral-dirt-1-g2.png",
+   "psnr": 39.5,
+   "tint": [
+    0.9211,
+    0.9994,
+    0.9998
+   ]
+  },
+  "mineral-white-dirt-2": {
+   "matrix": "mineral-dirt-2-g2.png",
+   "psnr": 38.71,
+   "tint": [
+    1.0,
+    0.9998,
+    1.0
+   ]
+  },
+  "mineral-white-dirt-3": {
+   "matrix": "mineral-dirt-3-g2.png",
+   "psnr": 41.57,
+   "tint": [
+    0.7966,
+    0.7969,
+    0.7967
+   ]
+  },
+  "mineral-white-dirt-4": {
+   "matrix": "mineral-dirt-4-g2.png",
+   "psnr": 42.22,
+   "tint": [
+    0.8,
+    0.7999,
+    0.7997
+   ]
+  },
+  "mineral-white-dirt-5": {
+   "matrix": "mineral-dirt-5-g2.png",
+   "psnr": 41.72,
+   "tint": [
+    0.7453,
+    0.8001,
+    0.7999
+   ]
+  },
+  "mineral-white-dirt-6": {
+   "matrix": "mineral-dirt-6-g2.png",
+   "psnr": 40.34,
+   "tint": [
+    0.7975,
+    0.7998,
+    0.7999
+   ]
+  },
+  "mineral-white-sand-2": {
+   "matrix": "mineral-sand-2-g2.png",
+   "psnr": 38.32,
+   "tint": [
+    0.9577,
+    0.9579,
+    0.9581
+   ]
+  },
+  "mineral-white-sand-3": {
+   "matrix": "mineral-sand-3-g2.png",
+   "psnr": 40.48,
+   "tint": [
+    0.7671,
+    0.7973,
+    0.7973
+   ]
+  },
+  "vegetation-blue-grass-1": {
+   "matrix": "vegetation-grass-1-g1.png",
+   "psnr": 33.71,
+   "tint": [
+    0.5051,
+    0.75,
+    0.7726
+   ]
+  },
+  "vegetation-blue-grass-2": {
+   "matrix": "vegetation-grass-2-g1.png",
+   "psnr": 34.83,
+   "tint": [
+    0.5766,
+    0.7791,
+    0.7413
+   ]
+  },
+  "vegetation-green-grass-1": {
+   "matrix": "vegetation-grass-1-g1.png",
+   "psnr": 33.85,
+   "tint": [
+    0.7521,
+    0.8463,
+    0.2307
+   ]
+  },
+  "vegetation-green-grass-2": {
+   "matrix": "vegetation-grass-2-g1.png",
+   "psnr": 30.73,
+   "tint": [
+    0.929,
+    0.956,
+    0.3196
+   ]
+  },
+  "vegetation-mauve-grass-1": {
+   "matrix": "vegetation-grass-1-g1.png",
+   "psnr": 35.43,
+   "tint": [
+    0.5919,
+    0.6599,
+    0.8043
+   ]
+  },
+  "vegetation-mauve-grass-2": {
+   "matrix": "vegetation-grass-2-g1.png",
+   "psnr": 35.72,
+   "tint": [
+    0.6281,
+    0.6549,
+    0.8054
+   ]
+  },
+  "vegetation-olive-grass-1": {
+   "matrix": "vegetation-grass-1-g1.png",
+   "psnr": 29.98,
+   "tint": [
+    0.982,
+    1.0,
+    0.1946
+   ]
+  },
+  "vegetation-olive-grass-2": {
+   "matrix": "vegetation-grass-2-g1.png",
+   "psnr": 26.01,
+   "tint": [
+    1.0,
+    1.0,
+    0.2913
+   ]
+  },
+  "vegetation-orange-grass-1": {
+   "matrix": "vegetation-grass-1-g1.png",
+   "psnr": 28.23,
+   "tint": [
+    1.0,
+    0.8034,
+    0.1747
+   ]
+  },
+  "vegetation-orange-grass-2": {
+   "matrix": "vegetation-grass-2-g1.png",
+   "psnr": 25.8,
+   "tint": [
+    1.0,
+    0.7993,
+    0.2645
+   ]
+  },
+  "vegetation-purple-grass-1": {
+   "matrix": "vegetation-grass-1-g1.png",
+   "psnr": 34.32,
+   "tint": [
+    0.7195,
+    0.5235,
+    0.8471
+   ]
+  },
+  "vegetation-purple-grass-2": {
+   "matrix": "vegetation-grass-2-g1.png",
+   "psnr": 34.96,
+   "tint": [
+    0.7031,
+    0.4617,
+    0.8921
+   ]
+  },
+  "vegetation-red-grass-1": {
+   "matrix": "vegetation-grass-1-g1.png",
+   "psnr": 29.53,
+   "tint": [
+    0.9752,
+    0.397,
+    0.1908
+   ]
+  },
+  "vegetation-red-grass-2": {
+   "matrix": "vegetation-grass-2-g1.png",
+   "psnr": 29.43,
+   "tint": [
+    1.0,
+    0.4296,
+    0.2622
+   ]
+  },
+  "vegetation-turquoise-grass-1": {
+   "matrix": "vegetation-grass-1-g1.png",
+   "psnr": 36.14,
+   "tint": [
+    0.6267,
+    0.7996,
+    0.5036
+   ]
+  },
+  "vegetation-turquoise-grass-2": {
+   "matrix": "vegetation-grass-2-g1.png",
+   "psnr": 34.98,
+   "tint": [
+    0.7946,
+    0.8932,
+    0.4919
+   ]
+  },
+  "vegetation-violet-grass-1": {
+   "matrix": "vegetation-grass-1-g1.png",
+   "psnr": 33.93,
+   "tint": [
+    0.8474,
+    0.4628,
+    0.5212
+   ]
+  },
+  "vegetation-violet-grass-2": {
+   "matrix": "vegetation-grass-2-g1.png",
+   "psnr": 34.97,
+   "tint": [
+    0.8925,
+    0.4455,
+    0.5734
+   ]
+  },
+  "vegetation-yellow-grass-1": {
+   "matrix": "vegetation-grass-1-g1.png",
+   "psnr": 23.06,
+   "tint": [
+    1.0,
+    1.0,
+    0.154
+   ]
+  },
+  "vegetation-yellow-grass-2": {
+   "matrix": "vegetation-grass-2-g1.png",
+   "psnr": 21.61,
+   "tint": [
+    1.0,
+    1.0,
+    0.2572
+   ]
+  },
+  "volcanic-blue-heat-2": {
+   "matrix": "volcanic-heat-2-g1.png",
+   "psnr": 39.51,
+   "tint": [
+    0.6575,
+    0.7897,
+    0.7904
+   ]
+  },
+  "volcanic-blue-heat-3": {
+   "matrix": "volcanic-heat-3-g1.png",
+   "psnr": 36.95,
+   "tint": [
+    0.5807,
+    0.7887,
+    0.7898
+   ]
+  },
+  "volcanic-blue-heat-4": {
+   "matrix": "volcanic-heat-4-g1.png",
+   "psnr": 33.7,
+   "tint": [
+    0.4645,
+    0.8359,
+    0.8405
+   ]
+  },
+  "volcanic-green-heat-2": {
+   "matrix": "volcanic-heat-2-g1.png",
+   "psnr": 32.0,
+   "tint": [
+    0.7309,
+    0.8387,
+    0.5675
+   ]
+  },
+  "volcanic-green-heat-3": {
+   "matrix": "volcanic-heat-3-g1.png",
+   "psnr": 29.07,
+   "tint": [
+    0.6597,
+    0.9419,
+    0.409
+   ]
+  },
+  "volcanic-green-heat-4": {
+   "matrix": "volcanic-heat-4-g1.png",
+   "psnr": 26.01,
+   "tint": [
+    0.5811,
+    1.0,
+    0.238
+   ]
+  },
+  "volcanic-orange-heat-2": {
+   "matrix": "volcanic-heat-2-g1.png",
+   "psnr": 31.78,
+   "tint": [
+    0.8504,
+    0.7171,
+    0.5686
+   ]
+  },
+  "volcanic-orange-heat-3": {
+   "matrix": "volcanic-heat-3-g1.png",
+   "psnr": 28.77,
+   "tint": [
+    0.963,
+    0.6395,
+    0.4108
+   ]
+  },
+  "volcanic-orange-heat-4": {
+   "matrix": "volcanic-heat-4-g1.png",
+   "psnr": 25.34,
+   "tint": [
+    1.0,
+    0.5456,
+    0.2372
+   ]
+  },
+  "volcanic-purple-heat-2": {
+   "matrix": "volcanic-heat-2-g1.png",
+   "psnr": 39.35,
+   "tint": [
+    0.7897,
+    0.647,
+    0.7913
+   ]
+  },
+  "volcanic-purple-heat-3": {
+   "matrix": "volcanic-heat-3-g1.png",
+   "psnr": 36.75,
+   "tint": [
+    0.7886,
+    0.5602,
+    0.7905
+   ]
+  },
+  "volcanic-purple-heat-4": {
+   "matrix": "volcanic-heat-4-g1.png",
+   "psnr": 33.63,
+   "tint": [
+    0.8342,
+    0.4324,
+    0.8401
+   ]
+  }
+ }
+}

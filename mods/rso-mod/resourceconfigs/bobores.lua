@@ -39,7 +39,7 @@ function fillBoboresConfig(config)
 				["bob-lead-ore"] = 3,
 				["bob-silver-ore"] = 3,
 				["bob-tin-ore"] = 3,
-				["bob-tungsten-ore"] = 3,
+				["tungsten-ore"] = 3,
 				["bob-zinc-ore"] = 3,
 				["bob-bauxite-ore"] = 3,
 			}
@@ -61,7 +61,7 @@ function fillBoboresConfig(config)
 				["bob-lead-ore"] = 3,
 				["bob-gold-ore"] = 3,
 				["bob-tin-ore"] = 3,
-				["bob-tungsten-ore"] = 3,
+				["tungsten-ore"] = 3,
 				["bob-zinc-ore"] = 3,
 				["bob-bauxite-ore"] = 3,
 			}
@@ -85,7 +85,7 @@ function fillBoboresConfig(config)
 				["bob-silver-ore"] = 3,
 				["bob-gold-ore"] = 3,
 				["bob-tin-ore"] = 3,
-				["bob-tungsten-ore"] = 3,
+				["tungsten-ore"] = 3,
 				["bob-zinc-ore"] = 3,
 				["bob-bauxite-ore"] = 3,
 			}
@@ -109,7 +109,7 @@ function fillBoboresConfig(config)
 				["bob-lead-ore"] = 3,
 				["bob-silver-ore"] = 3,
 				["bob-gold-ore"] = 3,
-				["bob-tungsten-ore"] = 3,
+				["tungsten-ore"] = 3,
 				["bob-zinc-ore"] = 3,
 				["copper-ore"] = 2,
 				["bob-bauxite-ore"] = 3,
@@ -117,8 +117,8 @@ function fillBoboresConfig(config)
 		}
 	end
 		
-	if checkOre("bob-tungsten-ore") then
-		config.nauvis["bob-tungsten-ore"] = {
+	if checkOre("tungsten-ore") then
+		config.nauvis["tungsten-ore"] = {
 			type="resource-ore",
 			
 			allotment=60,
@@ -156,7 +156,7 @@ function fillBoboresConfig(config)
 				["bob-silver-ore"] = 3,
 				["bob-gold-ore"] = 3,
 				["bob-tin-ore"] = 3,
-				["bob-tungsten-ore"] = 3,
+				["tungsten-ore"] = 3,
 				["bob-bauxite-ore"] = 3,
 			}
 		}
@@ -200,7 +200,7 @@ function fillBoboresConfig(config)
 				["bob-gold-ore"] = 3,
 				["bob-tin-ore"] = 3,
 				["bob-zinc-ore"] = 3,
-				["bob-tungsten-ore"] = 3,
+				["tungsten-ore"] = 3,
 			}
 		}
 	end
@@ -241,7 +241,7 @@ function fillBoboresConfig(config)
 			multi_resource_chance=0.20,
 			multi_resource={
 				["bob-lead-ore"] = 3,
-				["bob-tungsten-ore"] = 3,
+				["tungsten-ore"] = 3,
 				["bob-gold-ore"] = 3,
 				["bob-quartz"] = 3,
 			}
@@ -260,7 +260,7 @@ function fillBoboresConfig(config)
 			
 			multi_resource_chance=0.20,
 			multi_resource={
-				["bob-tungsten-ore"] = 3,
+				["tungsten-ore"] = 3,
 				["bob-rutile-ore"] = 3,
 				["bob-lead-ore"] = 3,
 				["bob-quartz"] = 3,
@@ -283,7 +283,7 @@ function fillBoboresConfig(config)
 			multi_resource={
 				["bob-lead-ore"] = 3,
 				["bob-tin-ore"] = 3,
-				["bob-tungsten-ore"] = 3,
+				["tungsten-ore"] = 3,
 				["bob-rutile-ore"] = 3,
 			}
 		}
@@ -303,7 +303,7 @@ function fillBoboresConfig(config)
 			multi_resource={
 				["bob-silver-ore"] = 3,
 				["bob-gold-ore"] = 3,
-				["bob-tungsten-ore"] = 3,
+				["tungsten-ore"] = 3,
 				["bob-rutile-ore"] = 3,
 			}
 		}

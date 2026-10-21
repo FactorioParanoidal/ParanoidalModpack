@@ -8,6 +8,32 @@
 ---@field is_support_burned_quality boolean
 ---@field is_support_factory boolean
 ---@field is_customized boolean
+
+---Reading LuaRecipePrototype.ingredients builds a new table on every call.
+---Prototypes are fixed for the session, so the quality support is memoized per recipe name.
+local recipe_quality_support_cache = {}
+
+---@param lua_recipe LuaRecipePrototype
+---@return boolean
+local function recipeSupportsQuality(lua_recipe)
+    local recipe_name = lua_recipe.name
+    local supported = recipe_quality_support_cache[recipe_name]
+    if supported == nil then
+        supported = false
+        local ingredients = lua_recipe.ingredients
+        if ingredients ~= nil then
+            for _, ingredient in pairs(ingredients) do
+                if ingredient.type == "item" then
+                    supported = true
+                    break
+                end
+            end
+        end
+        recipe_quality_support_cache[recipe_name] = supported
+    end
+    return supported
+end
+
 RecipePrototype = newclass(Prototype, function(base, object, object_type)
     base.classname = "HMRecipePrototype"
     base.is_voider = nil
@@ -25,14 +51,18 @@ RecipePrototype = newclass(Prototype, function(base, object, object_type)
         end
         if base.lua_type == nil or base.lua_type == defines.mod.recipes.recipe.name then
             local recipe = nil
+            ---true when recipe is a game prototype (not a customized lua table)
+            local is_game_prototype = false
             if base.is_customized then
                 recipe = Player.getCustomizedRecipe(base.object_name)
             else
                 recipe = Player.getRecipe(base.object_name)
+                is_game_prototype = recipe ~= nil
             end
             if recipe == nil and base.object_name ~= nil then
                 -- if recipe is null try find 
                 recipe = Player.findFirstRecipe(base.object_name)
+                is_game_prototype = recipe ~= nil
             end
             if recipe == nil and base.object_name ~= nil then
                 recipe = Player.getCustomizedRecipe(base.object_name)
@@ -40,11 +70,14 @@ RecipePrototype = newclass(Prototype, function(base, object, object_type)
             end
             Prototype.init(base, recipe)
             base.lua_type = defines.mod.recipes.recipe.name
-            if Player.hasFeatureQuality() then
-                if base.lua_prototype ~= nil and base.lua_prototype.ingredients ~= nil then
+            if Player.hasFeatureQuality() and base.lua_prototype ~= nil then
+                if is_game_prototype then
+                    base.is_support_quality = recipeSupportsQuality(base.lua_prototype)
+                elseif base.lua_prototype.ingredients ~= nil then
                     for _, ingredient in pairs(base.lua_prototype.ingredients) do
                         if ingredient.type == "item" then
                             base.is_support_quality = true
+                            break
                         end
                     end
                 end
@@ -865,9 +898,7 @@ function RecipePrototype:getHidden()
             end
             return false
         elseif self.lua_type == defines.mod.recipes.boiler.name then
-            for _, entity in pairs(Player.getBoilersForRecipe(self.lua_prototype.name)) do
-                return false
-            end
+            ---boiler recipes are never hidden (the former boiler scan returned false in every case)
             return false
         end
     end

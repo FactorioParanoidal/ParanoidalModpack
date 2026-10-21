@@ -54,5 +54,10 @@ return
     {"nuclear-ground", {x = 3, y = -3}},
     {"nuclear-ground", {x = 3, y = -2}},
     {"nuclear-ground", {x = 3, y = -1}},
+  },
+  no_spawning =
+  {
+    fulgora = true,
+    vulcanus = true
   }
 }

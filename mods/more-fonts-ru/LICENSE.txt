@@ -1,0 +1,14 @@
+More Fonts © 2024 by asher_sky is licensed under Attribution-NonCommercial-ShareAlike 4.0 International.
+To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-sa/4.0/
+or send a letter to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
+
+CC BY-NC-SA 4.0 License Overview:
+This license requires that reusers give credit to the creator.
+It allows reusers to distribute, remix, adapt, and build upon
+the material in any medium or format, for noncommercial purposes
+only. If others modify or adapt the material, they must license
+the modified material under identical terms.
+
+more-fonts-ru is an adaptation of More Fonts by asher_sky
+(https://mods.factorio.com/mod/more-fonts), distributed under the same
+CC BY-NC-SA 4.0 license. Changes are listed in changelog.txt.

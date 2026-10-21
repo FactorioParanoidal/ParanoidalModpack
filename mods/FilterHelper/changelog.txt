@@ -2,6 +2,7 @@
 Version: 0.2.24
 Date: 2026-02-20
   Changes:
+    - Paranoidal: the per-tick GUI refresh walks connected players only, not every player ever seen.
     - Added option to not show fuel items unless in inputs, for mods with many fuel items
     - Added option to not show result item qualities beyond unlocked qualities
 ---------------------------------------------------------------------------------------------------

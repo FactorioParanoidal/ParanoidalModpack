@@ -132,7 +132,7 @@ data:extend({
 	{
 		type = "recipe",
 		name = "simple-io",
-		category = "crafting",
+		category = "electronics",
 		enabled = false,
 		energy_required = 15,
 		ingredients = {
@@ -182,7 +182,7 @@ data:extend({
 	{
 		type = "recipe",
 		name = "predictive-io",
-		category = "crafting",
+		category = "electronics-machine", -- только автоматы, как standart/advanced-io
 		enabled = false,
 		energy_required = 60,
 		ingredients = {
@@ -203,7 +203,7 @@ data:extend({
 	{
 		type = "recipe",
 		name = "intelligent-io",
-		category = "crafting",
+		category = "electronics-machine", -- только автоматы, как standart/advanced-io
 		enabled = false,
 		energy_required = 75,
 		ingredients = {
@@ -509,121 +509,5 @@ data:extend({
 		},
 		icon_size = 64,
 		order = "kc",
-	},
-	{
-		type = "recipe",
-		name = "angels-iron-gear-wheel-stack-converting-2",
-		category = "advanced-crafting",
-		subgroup = "angels-iron-casting",
-		energy_required = 0.5,
-		allow_decomposition = false,
-		enabled = false,
-		ingredients = {
-			{ type = "item", name = "angels-iron-gear-wheel-stack", amount = 1 },
-		},
-		results = {
-			{ type = "item", name = "iron-gear-wheel", amount = 6 },
-		},
-		icons = {
-			{
-				icon = data.raw.item["iron-gear-wheel"].icon,
-				icon_size = data.raw.item["iron-gear-wheel"].iconsize,
-			},
-			{
-				icon = "__zzzparanoidal__/graphics/smelting/iron-gear-wheel-stack.png",
-				icon_size = 64,
-				scale = 0.2,
-				shift = { -12, -12 },
-			},
-		},
-		icon_size = 64,
-		order = "kd",
-	},
-	{
-		type = "recipe",
-		name = "angels-iron-gear-wheel-stack-converting-3",
-		category = "advanced-crafting",
-		subgroup = "angels-iron-casting",
-		energy_required = 0.5,
-		allow_decomposition = false,
-		enabled = false,
-		ingredients = {
-			{ type = "item", name = "angels-iron-gear-wheel-stack", amount = 1 },
-		},
-		results = {
-			{ type = "item", name = "iron-gear-wheel", amount = 8 },
-		},
-		icons = {
-			{
-				icon = data.raw.item["iron-gear-wheel"].icon,
-				icon_size = data.raw.item["iron-gear-wheel"].iconsize,
-			},
-			{
-				icon = "__zzzparanoidal__/graphics/smelting/iron-gear-wheel-stack.png",
-				icon_size = 64,
-				scale = 0.2,
-				shift = { -12, -12 },
-			},
-		},
-		icon_size = 64,
-		order = "ke",
-	},
-	{
-		type = "recipe",
-		name = "angels-steel-gear-wheel-stack-converting-2",
-		category = "advanced-crafting",
-		subgroup = "angels-steel-casting",
-		energy_required = 0.5,
-		enabled = false,
-		allow_decomposition = false,
-		ingredients = {
-			{ type = "item", name = "angels-steel-gear-wheel-stack", amount = 1 },
-		},
-		results = {
-			{ type = "item", name = "bob-steel-gear-wheel", amount = 6 },
-		},
-		icons = {
-			{
-				icon = "__bobplates__/graphics/icons/steel-gear-wheel.png",
-				icon_size = 32,
-			},
-			{
-				icon = "__zzzparanoidal__/graphics/smelting/steel-gear-wheel-stack.png",
-				icon_size = 64,
-				scale = 0.2,
-				shift = { -12, -12 },
-			},
-		},
-		icon_size = 64,
-		order = "kd",
-	},
-	{
-		type = "recipe",
-		name = "angels-steel-gear-wheel-stack-converting-3",
-		category = "advanced-crafting",
-		subgroup = "angels-steel-casting",
-		energy_required = 0.5,
-		enabled = false,
-		allow_decomposition = false,
-		ingredients = {
-			{ type = "item", name = "angels-steel-gear-wheel-stack", amount = 1 },
-		},
-		results = {
-			{ type = "item", name = "bob-steel-gear-wheel", amount = 8 },
-		},
-		icons = {
-			{
-				icon = "__bobplates__/graphics/icons/steel-gear-wheel.png",
-				icon_size = 32,
-			},
-			{
-				icon = "__zzzparanoidal__/graphics/smelting/steel-gear-wheel-stack.png",
-				icon_size = 64,
-				scale = 0.2,
-				shift = { -12, -12 },
-			},
-		},
-		icon_size = 64,
-		order = "ke",
 	},
 })

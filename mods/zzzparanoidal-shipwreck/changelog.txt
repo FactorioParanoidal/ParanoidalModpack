@@ -1,0 +1,21 @@
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 2026-10-18
+  Optimizations:
+    - Start fill and wreck-mining checks run every 5 ticks instead of every tick.
+  Features:
+    - Collects the whole start crash of Paranoidal: salvaged assembling machine, lab and generator with their graphics (from LootingSpaceshipWrecks), the AAI wrecks and their crash scene (from zzzcompability) and the wreck mining rules (from zzzparanoidal).
+    - Startup setting with three start levels: minimum (half of the supplies, random defects on finished items that can be defective), medium (the previous supplies) and rich (default: the previous supplies with a random +1…+5 quality of every finished item).
+    - One quality per item type per map; materials and intermediate products stay normal.
+    - All electric poles get defects on the minimum level, also the ones exempt from the defect system.
+    - Quality steps are weighted per level in shipwreck-config.lua; rich: normal 25%, +1 30%, +2 20%, +3 13%, +4 8%, +5 4%; minimum: normal 5%, −1 15%, −2 25%, −3 25%, −4 20%, −5 10%.
+    - Belts, undergrounds, splitters and loaders are always normal quality.
+    - Half of all start repair packs (rounded up, at least 10) are always normal quality without defects on every level, so the first refine workshop can be crafted; the rest gets the rolled quality.
+    - Quality of the salvaged generator scales its power production and energy capacity.
+  Changes:
+    - The power production and energy capacity lines of the salvaged generator are shown once in the item tooltip (they were listed twice).
+    - The player starts with an empty inventory; the former starting items are in the ship and its debris. Respawn items are unchanged.
+    - Supplies of the ship, the debris and the AAI wrecks are placed as whole stacks by this mod instead of the freeplay item lists.
+    - All wrecks and the ship use one balance table (shipwreck-config.lua), mining time 1.5 s and the pickaxe animation; the ship is mined in 6 s, big wrecks in 3 s.
+    - The starting offshore pump is no longer part of the ship mining loot.
+    - Ruins use the wreck prototypes with the medium loot and normal quality; the start level does not affect them.

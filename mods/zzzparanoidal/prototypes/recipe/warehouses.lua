@@ -1,3 +1,5 @@
+-- Removed Angels chests must not enter Quality's early recycling recipes.
+-- Preserve the installed pack's costs after RITEG's missing-ingredient cleanup.
 data:extend({
 	{ -- Basic Warehouse
 		type = "recipe",
@@ -11,71 +13,6 @@ data:extend({
 		},
 		energy_required = 30,
 		results = { { type = "item", name = "warehouse-basic", amount = 1 } },
-	},
-	{ -- Passive Provider Warehouse
-		type = "recipe",
-		name = "angels-warehouse-passive-provider",
-		enabled = false,
-		ingredients = {
-			{ type = "item", name = "warehouse-basic", amount = 1 },
-			{ type = "item", name = "angels-logistic-chest-passive-provider", amount = 1 },
-			{ type = "item", name = "steel-plate", amount = 10 },
-			{ type = "item", name = "iron-stick", amount = 15 },
-		},
-		energy_required = 5,
-		results = { { type = "item", name = "angels-warehouse-passive-provider", amount = 1 } },
-	},
-	{ -- Storage Warehouse
-		type = "recipe",
-		name = "angels-warehouse-storage",
-		enabled = false,
-		ingredients = {
-			{ type = "item", name = "warehouse-basic", amount = 1 },
-			{ type = "item", name = "angels-logistic-chest-storage", amount = 1 },
-			{ type = "item", name = "steel-plate", amount = 10 },
-			{ type = "item", name = "iron-stick", amount = 15 },
-		},
-		energy_required = 5,
-		results = { { type = "item", name = "angels-warehouse-storage", amount = 1 } },
-	},
-	{ -- Active Provider Warehouse
-		type = "recipe",
-		name = "angels-warehouse-active-provider",
-		enabled = false,
-		ingredients = {
-			{ type = "item", name = "warehouse-basic", amount = 1 },
-			{ type = "item", name = "angels-logistic-chest-active-provider", amount = 1 },
-			{ type = "item", name = "steel-plate", amount = 10 },
-			{ type = "item", name = "iron-stick", amount = 15 },
-		},
-		energy_required = 5,
-		results = { { type = "item", name = "angels-warehouse-active-provider", amount = 1 } },
-	},
-	{ -- Requester Warehouse
-		type = "recipe",
-		name = "angels-warehouse-requester",
-		enabled = false,
-		ingredients = {
-			{ type = "item", name = "warehouse-basic", amount = 1 },
-			{ type = "item", name = "angels-logistic-chest-requester", amount = 1 },
-			{ type = "item", name = "steel-plate", amount = 10 },
-			{ type = "item", name = "iron-stick", amount = 15 },
-		},
-		energy_required = 5,
-		results = { { type = "item", name = "angels-warehouse-requester", amount = 1 } },
-	},
-	{ -- Buffer Warehouse
-		type = "recipe",
-		name = "angels-warehouse-buffer",
-		enabled = false,
-		ingredients = {
-			{ type = "item", name = "warehouse-basic", amount = 1 },
-			{ type = "item", name = "angels-logistic-chest-buffer", amount = 1 },
-			{ type = "item", name = "steel-plate", amount = 10 },
-			{ type = "item", name = "iron-stick", amount = 15 },
-		},
-		energy_required = 5,
-		results = { { type = "item", name = "angels-warehouse-buffer", amount = 1 } },
 	},
 	{ -- Basic Storehouse
 		type = "recipe",
@@ -96,7 +33,6 @@ data:extend({
 		enabled = false,
 		ingredients = {
 			{ type = "item", name = "storehouse-basic", amount = 1 },
-			{ type = "item", name = "angels-logistic-chest-passive-provider", amount = 1 },
 			{ type = "item", name = "iron-stick", amount = 16 }, --drd
 		},
 		energy_required = 5,
@@ -108,7 +44,6 @@ data:extend({
 		enabled = false,
 		ingredients = {
 			{ type = "item", name = "storehouse-basic", amount = 1 },
-			{ type = "item", name = "angels-logistic-chest-storage", amount = 1 },
 			{ type = "item", name = "iron-stick", amount = 16 }, --drd
 		},
 		energy_required = 5,
@@ -120,7 +55,6 @@ data:extend({
 		enabled = false,
 		ingredients = {
 			{ type = "item", name = "storehouse-basic", amount = 1 },
-			{ type = "item", name = "angels-logistic-chest-active-provider", amount = 1 },
 			{ type = "item", name = "iron-stick", amount = 16 }, --drd
 		},
 		energy_required = 5,
@@ -132,7 +66,6 @@ data:extend({
 		enabled = false,
 		ingredients = {
 			{ type = "item", name = "storehouse-basic", amount = 1 },
-			{ type = "item", name = "angels-logistic-chest-requester", amount = 1 },
 			{ type = "item", name = "iron-stick", amount = 16 }, --drd
 		},
 		energy_required = 5,
@@ -144,7 +77,6 @@ data:extend({
 		enabled = false,
 		ingredients = {
 			{ type = "item", name = "storehouse-basic", amount = 1 },
-			{ type = "item", name = "angels-logistic-chest-buffer", amount = 1 },
 			{ type = "item", name = "iron-stick", amount = 16 }, --drd
 		},
 		energy_required = 5,

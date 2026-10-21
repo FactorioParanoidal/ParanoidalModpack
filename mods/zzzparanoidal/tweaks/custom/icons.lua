@@ -9,11 +9,14 @@ data.raw["technology"]["angels-fluid-control"].icon_size = 64
 data.raw["technology"]["angels-fluid-control"].icon_mipmaps = 4
 -------------------------------------------------------------------------------------------------
 -- замена иконки свалки
-data.raw["technology"]["zcs-trash-landfill-tech"].icon = "__zzzparanoidal__/graphics/stockpile-icon.png"
-
-data.raw["container"]["zcs-trash-landfill"].icon = "__zzzparanoidal__/graphics/stockpile-icon.png"
-
-data.raw["item"]["zcs-trash-landfill"].icon = "__zzzparanoidal__/graphics/stockpile-icon.png"
+-- ZCS-Trash-Landfill-Continued-Update is not a dependency of zzzparanoidal.
+-- The technology icon is set later by tweaks/technology/approved-icons.lua.
+for _, type_name in pairs({"container", "item"}) do
+	local prototype = data.raw[type_name]["zcs-trash-landfill"]
+	if prototype then
+		prototype.icon = "__zzzparanoidal__/graphics/stockpile-icon.png"
+	end
+end
 
 --графические фиксы
 data.raw.technology["bob-plutonium-fuel-cell"].icons =
@@ -65,15 +68,6 @@ data.raw.technology["angels-advanced-gas-processing"].icons = {
 	},
 }
 
-if data.raw.technology["angels-advanced-gas-processing-2"] then
-	data.raw.technology["angels-advanced-gas-processing-2"].icons = {
-		{
-			icon = "__reskins-angels__/graphics/technology/petrochem/advanced-gas-processing/advanced-gas-processing-technology-base.png",
-			icon_size = 256,
-			icon_mipmaps = 2,
-		},
-	}
-end
 
 data.raw.technology["angels-advanced-ore-refining-5"].icon_size = 256
 data.raw.technology["angels-advanced-ore-refining-5"].icon_mipmaps = 4

@@ -1,0 +1,12 @@
+{
+  "name": "immersive-sounds2",
+  "author": "Fooltaurus",
+  "version": "0.1.1",
+  "title": "Boombastique Immersive Sound Pack",
+  "homepage": "",
+  "description": "This mod replaces and add 400+ sounds !",
+  "dependencies": [
+    "base >= 2.0"
+  ],
+  "factorio_version": "2.0"
+}

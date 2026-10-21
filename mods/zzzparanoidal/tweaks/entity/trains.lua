@@ -28,32 +28,15 @@ data.raw["cargo-wagon"]["cargo-wagon"].air_resistance = 0.007
 -------------------------------------------------------------------------------------------------
 data.raw["cargo-wagon"]["bob-cargo-wagon-3"].max_speed = 10
 -- 1.1 Oberhaul (trains.lua, train-wagon-nerf): урезанная вместимость карго-вагонов.
--- Нерфим базу И копии OverloadedTrains (base-1..base-20 — deepcopy наследует inventory_size;
--- иначе при свапе вагона по загрузке вместимость вернулась бы к стоку).
--- angels-mobility (Mass Transit) — те же тиры/значения для консистентности (в 1.1 мода не было).
--- Гард `if cw[base]` пропускает отсутствующие вагоны → безопасно, если мода нет.
 local wagon_nerf = {
 	-- Bob (тиры 1/2/3)
 	["cargo-wagon"] = 20,
 	["bob-cargo-wagon-2"] = 40,
 	["bob-cargo-wagon-3"] = 60,
-	-- angels-mobility: crawler-карго, crawler-робот, smelting — те же тиры
-	["angels-crawler-cargo-wagon"] = 20,
-	["angels-crawler-cargo-wagon-2"] = 40,
-	["angels-crawler-cargo-wagon-3"] = 60,
-	["angels-crawler-robot-wagon"] = 20,
-	["angels-crawler-robot-wagon-2"] = 40,
-	["angels-crawler-robot-wagon-3"] = 60,
-	["angels-smelting-cargo-wagon"] = 20,
-	["angels-smelting-cargo-wagon-2"] = 40,
-	["angels-smelting-cargo-wagon-3"] = 60,
 }
 local cw = data.raw["cargo-wagon"]
 for base, size in pairs(wagon_nerf) do
 	if cw[base] then cw[base].inventory_size = size end
-	for i = 1, 20 do
-		if cw[base .. "-" .. i] then cw[base .. "-" .. i].inventory_size = size end
-	end
 end
 -------------------------------------------------------------------------------------------------
 --вагон-цистерна мк1
@@ -83,9 +66,13 @@ if mods["BatteryElectricTrain"] then
 	data.raw.locomotive["bet-locomotive"].braking_force = 20
 	data.raw.locomotive["bet-locomotive"].friction_force = 0.25
 	data.raw.locomotive["bet-locomotive"].air_resistance = 0.004
-	data.raw.locomotive["bet-locomotive"].resistances[1] = { type = "fire", decrease = 50, percent = 70 }
-	data.raw.locomotive["bet-locomotive"].resistances[2] = { type = "physical", decrease = 30, percent = 50 }
-	data.raw.locomotive["bet-locomotive"].resistances[3] = { type = "impact", decrease = 100, percent = 80 }
-	data.raw.locomotive["bet-locomotive"].resistances[4] = { type = "explosion", decrease = 30, percent = 50 }
-	data.raw.locomotive["bet-locomotive"].resistances[5] = { type = "acid", decrease = 70, percent = 80 }
+	-- Новая таблица, а не запись по индексу: BET делает неглубокую копию ванильного локомотива,
+	-- и таблица сопротивлений может быть общей с ним.
+	data.raw.locomotive["bet-locomotive"].resistances = {
+		{ type = "fire", decrease = 50, percent = 70 },
+		{ type = "physical", decrease = 30, percent = 50 },
+		{ type = "impact", decrease = 100, percent = 80 },
+		{ type = "explosion", decrease = 30, percent = 50 },
+		{ type = "acid", decrease = 70, percent = 80 },
+	}
 end

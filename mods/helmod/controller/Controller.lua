@@ -259,8 +259,34 @@ end
 ---@param event table
 ---
 function Controller:onTick(event)
-  if Player.native() ~= nil and Player.native().valid then
-    local next_event = User.getParameter("next_event")
+  ---Paranoidal: the queued work is per user and lives in storage, so every peer must walk the same
+  ---players. The former "current player" was a module-local set by the last GUI event handled on
+  ---this peer: a client that never opened Helmod skipped the queue (multiplayer desync risk).
+  local users = storage["users"]
+  if users == nil then return end
+  local previous = Player.native()
+  for _, lua_player in pairs(game.connected_players) do
+    local user = users[lua_player.name]
+    local parameter = user and user["parameter"]
+    if parameter ~= nil and (parameter["next_event"] ~= nil or parameter["event_queue"] ~= nil) then
+      Player.set(lua_player)
+      Controller:onTickPlayer(event)
+    end
+  end
+  Player.set(previous)
+end
+
+-------------------------------------------------------------------------------
+---On tick for the player currently set in Player
+---
+---@param event table
+---
+function Controller:onTickPlayer(event)
+  local lua_player = Player.native()
+  if lua_player ~= nil and lua_player.valid then
+    ---runs every tick: read the user parameters once
+    local parameter = User.getParameter()
+    local next_event = parameter["next_event"]
     if next_event ~= nil then
       if (next_event.event.iteration or 0) < 1000 then
         next_event.event.iteration = (next_event.event.iteration or 0) + 1
@@ -270,9 +296,11 @@ function Controller:onTick(event)
         event.message = {"", {"helmod_error.excessive-event-iteration"}, " (>1000)"}
         Dispatcher:send("on_gui_error", event, next_event.classname)
       end
+      ---handlers may replace the user data, read it again
+      parameter = User.getParameter()
     end
 
-    local event_queue = User.getParameter("event_queue")
+    local event_queue = parameter["event_queue"]
     if event_queue ~= nil then
       local current_tick = game.tick
       for _,event in pairs(event_queue) do

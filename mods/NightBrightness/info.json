@@ -1,0 +1,16 @@
+{
+  "name": "NightBrightness",
+  "version": "2.0.0",
+  "title": "Night Brightness — Paranoidal",
+  "description": "Paranoidal Beta 8 nights and seasons: cyclic night brightness, seasonal daylight and solar power. Maintained Factorio 2.0 port of darkfrei's NightBrightness 1.1.8.",
+  "author": "darkfrei, Paranoidal",
+  "license": "MIT",
+  "factorio_version": "2.0",
+  "dependencies": [
+    "base >= 2.0.77",
+    "? LightCone",
+    "? visible-pollutants",
+    "! Clockwork-2",
+    "! DarkNight"
+  ]
+}

@@ -3,7 +3,7 @@ local name_suffix_grounded = "-grounded"
 
 ---@param inv_a LuaInventory inventory to transfer FROM
 ---@param inv_b LuaInventory inventory to transfer TO
-function move_inventory_items(inv_a, inv_b)
+local function move_inventory_items(inv_a, inv_b)
     -- move all items from inv_a to inv_b
     -- preserves item data but inv_b MUST be able to accept the items or they are dropped on the ground.
     -- inventory A is cleared.
@@ -131,11 +131,10 @@ local banned_entities = table.invert {
     "spider-vehicle"
 }
 
-factorissimo.on_event(factorissimo.events.on_built(), function(event)
-    if not script.active_mods["space-exploration"] then
-        return
-    end
+-- Without Space Exploration there is no spaceship floor: nothing to listen to.
+if not script.active_mods["space-exploration"] then return end
 
+factorissimo.on_event(factorissimo.events.on_built(), function(event)
     local entity = event.entity
     if not entity.valid or has_layout(entity.name) then return end
 
@@ -146,7 +145,7 @@ factorissimo.on_event(factorissimo.events.on_built(), function(event)
 
     local entity_type = entity.type == "entity-ghost" and entity.ghost_type or entity.type
     if banned_entities[entity_type] then
-        factorissimo.cancel_creation(entity, event.player_index, {"factory-connection-text.se-cannot-build-in-spaceship-factory-building"})
+        factorissimo.cancel_creation(entity, event.player_index, {"factory-connection-text.se-cannot-build-in-spaceship-factory-building"}, nil, event.robot)
         return
     end
 

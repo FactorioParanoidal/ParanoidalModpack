@@ -20,6 +20,11 @@ remote.add_interface("AbandonedRuins",
   -- Mod event subscription explanation can be found lower in this file.
   get_on_entity_force_changed_event = function() return on_entity_force_changed_event end,
 
+  -- Paranoidal: raised after a randomly chosen ruin was spawned.
+  -- Data: surface (LuaSurface), center (MapPosition), half_size (number), size (string),
+  -- ruin_set (string), ruin_name (string). Subscribe in on_init and on_load.
+  get_on_ruin_spawned_event = function() return on_ruin_spawned_event end,
+
   -- Set whether ruins should be spawned at all
   ---@param spawn_ruins boolean
   enable_spawning_ruins = function(spawn_ruins)
@@ -61,7 +66,8 @@ remote.add_interface("AbandonedRuins",
     end
 
     if debug_log then log(string.format("[register_ruin_size]: Adding ruin size='%s',half_size=%d,multiplier=%.2f ...", size, half_size, multiplier)) end
-    spawning.ruin_sizes[#spawning.ruin_sizes] = size
+    -- Paranoidal: `#spawning.ruin_sizes` overwrote the last registered size.
+    spawning.ruin_sizes[#spawning.ruin_sizes + 1] = size
     spawning.ruin_half_sizes[size] = half_size
     spawning.ruin_min_distance_multiplier[size] = multiplier
 
@@ -192,7 +198,7 @@ remote.add_interface("AbandonedRuins",
   end,
 
   -- Registers ruin-set name as "no-spawning" to a surface. This means that ruins from given set will not spawn on given surface.
-  ---@param surface_name string Surface's name to the ruin-set should be exclusive to
+  ---@param surface_name string Surface's name to the ruin-set should not spawn any ruins on
   ---@param ruinset_name string Name of the ruin-set that is exclusive to given surface (aka. planet/moon)
   no_spawning_on = function(surface_name, ruinset_name)
     if debug_log then log(string.format("[no_spawning_on]: surface_name[]='%s',ruinset_name[]='%s' - CALLED!", type(surface_name), type(ruinset_name))) end

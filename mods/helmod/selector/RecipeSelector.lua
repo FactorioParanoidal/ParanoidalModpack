@@ -250,12 +250,20 @@ function RecipeSelector:buildPrototypeTooltip(prototype)
 end
 
 -------------------------------------------------------------------------------
+---Update item list
+---@param event LuaEvent
+function RecipeSelector:updateItemList(event)
+  ---model objects are resolved once for the whole list, not for every icon
+  self:getParameterObjects()
+  AbstractSelector.updateItemList(self, event)
+end
+
+-------------------------------------------------------------------------------
 ---Create prototype icon
 ---@param gui_element GuiLuaElement
 ---@param prototype table
 ---@param tooltip table
 function RecipeSelector:buildPrototypeIcon(gui_element, prototype, tooltip)
-  local model, block, recipe = self:getParameterObjects()
   local recipe_prototype = self:getPrototype(prototype)
   local color = nil
   if recipe_prototype:getEnabled() == false then

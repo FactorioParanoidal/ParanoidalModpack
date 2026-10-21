@@ -1,24 +1,15 @@
 --[[get rid of decorations under entities]]
-script.on_event(defines.events.on_built_entity, function(event)
-    if event.entity.type ~= "entity-ghost" and event.entity.type ~= "tile-ghost" and event.entity.prototype.selectable_in_game then
-        game.surfaces[event.entity.surface_index].destroy_decoratives{area={{event.entity.selection_box.left_top.x-0.6, event.entity.selection_box.left_top.y-0.6}, {event.entity.selection_box.right_bottom.x+0.6, event.entity.selection_box.right_bottom.y+0.6}}}
-    end
-end)
+-- One handler for the four build events; ghosts and non-selectable entities are skipped.
+local function clear_under(event)
+    local entity = event.entity
+    if not (entity and entity.valid) then return end
+    local kind = entity.type
+    if kind == "entity-ghost" or kind == "tile-ghost" or not entity.prototype.selectable_in_game then return end
+    local box = entity.selection_box
+    entity.surface.destroy_decoratives{area={{box.left_top.x-0.6, box.left_top.y-0.6}, {box.right_bottom.x+0.6, box.right_bottom.y+0.6}}}
+end
 
-script.on_event(defines.events.on_robot_built_entity, function(event)
-    if event.entity.type ~= "entity-ghost" and event.entity.type ~= "tile-ghost" and event.entity.prototype.selectable_in_game then
-        game.surfaces[event.entity.surface_index].destroy_decoratives{area={{event.entity.selection_box.left_top.x-0.6, event.entity.selection_box.left_top.y-0.6}, {event.entity.selection_box.right_bottom.x+0.6, event.entity.selection_box.right_bottom.y+0.6}}}
-    end
-end)
-
-script.on_event(defines.events.script_raised_built, function(event)
-    if event.entity.type ~= "entity-ghost" and event.entity.type ~= "tile-ghost" and event.entity.prototype.selectable_in_game then
-        game.surfaces[event.entity.surface_index].destroy_decoratives{area={{event.entity.selection_box.left_top.x-0.6, event.entity.selection_box.left_top.y-0.6}, {event.entity.selection_box.right_bottom.x+0.6, event.entity.selection_box.right_bottom.y+0.6}}}
-    end
-end)
-
-script.on_event(defines.events.script_raised_revive, function(event)
-    if event.entity.type ~= "entity-ghost" and event.entity.type ~= "tile-ghost" and event.entity.prototype.selectable_in_game then
-        game.surfaces[event.entity.surface_index].destroy_decoratives{area={{event.entity.selection_box.left_top.x-0.6, event.entity.selection_box.left_top.y-0.6}, {event.entity.selection_box.right_bottom.x+0.6, event.entity.selection_box.right_bottom.y+0.6}}}
-    end
-end)
+script.on_event(defines.events.on_built_entity, clear_under)
+script.on_event(defines.events.on_robot_built_entity, clear_under)
+script.on_event(defines.events.script_raised_built, clear_under)
+script.on_event(defines.events.script_raised_revive, clear_under)

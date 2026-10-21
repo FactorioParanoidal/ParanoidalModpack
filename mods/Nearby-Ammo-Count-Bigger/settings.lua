@@ -26,5 +26,15 @@ data:extend{
 		default_value = {255,57,47,255},
 		hidden = true,
 	},
-	
+
+	{ type = "bool-setting", name = "nearby-ammo-only-deficit",
+		setting_type = "runtime-per-user", order = "deficit-1",
+		default_value = true,
+	},
+	{ type = "int-setting", name = "nearby-ammo-deficit-percent",
+		setting_type = "runtime-per-user", order = "deficit-2",
+		default_value = 100,
+		minimum_value = 1,
+		maximum_value = 100,
+	},
 }

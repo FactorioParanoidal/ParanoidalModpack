@@ -344,6 +344,90 @@ local layout_generators = {
             {15,  -15},
             {-15, -15},
         },
+    },
+    -- Paranoidal: factory building 4, 20x20 outside and 90x90 inside. Ten ports per side and no quality
+    -- ports (those stay closed since factories ignore quality). Its interior reaches two chunks from the
+    -- centre, so it uses the larger hidden radar.
+    ["factory-4"] = {
+        name = "factory-4",
+        tier = 4,
+        inside_size = 90,
+        outside_size = 20,
+        inside_door_x = 0,
+        inside_door_y = 46,
+        outside_door_x = 0,
+        outside_door_y = 10,
+        outside_energy_receiver_type = "factory-power-input-20",
+        outside_requester_chest = "factory-requester-chest-factory-4",
+        outside_ejector_chest = "factory-eject-chest-factory-4",
+        hidden_radar = "factory-hidden-radar-large",
+        inside_energy_x = -4,
+        inside_energy_y = 47,
+        overlay_x = 0,
+        overlay_y = 9,
+        rectangles = {
+            {
+                x1 = -46, x2 = 46, y1 = -46, y2 = 46, tile = "factory-wall-4"
+            },
+            {
+                x1 = -45, x2 = 45, y1 = -45, y2 = 45, tile = "factory-floor"
+            },
+            {
+                x1 = -3, x2 = 3, y1 = 45, y2 = 48, tile = "factory-wall-4"
+            },
+            {
+                x1 = -2, x2 = 2, y1 = 45, y2 = 48, tile = "factory-entrance"
+            },
+        },
+        mosaics = {
+            {
+                x1 = -6,
+                x2 = 6,
+                y1 = -4,
+                y2 = 4,
+                tile = "factory-pattern-4",
+                pattern = {
+                    " ++++     ++",
+                    "++  ++   +++",
+                    "++  ++  + ++",
+                    "++ +++ +  ++",
+                    "+++ ++ +++++",
+                    "++  ++    ++",
+                    "++  ++    ++",
+                    " ++++     ++",
+                }
+            },
+        },
+        connection_tile = "factory-floor",
+        connections = (function()
+            -- Outside: the five tiles on each side of the middle of a wall (the middle of the south wall is the gate).
+            -- Inside: spread over the 90 tile wall, 8 tiles apart.
+            local outside = {-6.5, -5.5, -4.5, -3.5, -2.5, 2.5, 3.5, 4.5, 5.5, 6.5}
+            local inside = {-38.5, -30.5, -22.5, -14.5, -6.5, 6.5, 14.5, 22.5, 30.5, 38.5}
+            local connections = {}
+            for i = 1, #outside do
+                local o, n = outside[i], inside[i]
+                connections["w" .. i] = make_connection("w" .. i, -10.5, o, -45.5, n, west)
+                connections["e" .. i] = make_connection("e" .. i, 10.5, o, 45.5, n, east)
+                connections["n" .. i] = make_connection("n" .. i, o, -10.5, n, -45.5, north)
+                connections["s" .. i] = make_connection("s" .. i, o, 10.5, n, 45.5, south)
+            end
+            return connections
+        end)(),
+        overlays = {
+            outside_x = 0,
+            outside_y = -1,
+            outside_w = 20,
+            outside_h = 18,
+            inside_x = -3.5,
+            inside_y = 48.5,
+        },
+        cerys_radiative_towers = {
+            {-22, 22},
+            {22,  22},
+            {22,  -22},
+            {-22, -22},
+        },
     }
 }
 
@@ -373,6 +457,7 @@ local function add_space_factories()
         layout.connection_tile = tile_name_mapping[layout.connection_tile] or layout.connection_tile
         layout.surface_override = "space-factory-floor"
         storage.layout_generators[layout.name] = layout
+        factorissimo.clear_layout_cache()
     end
     make_space_layout("factory-1")
     make_space_layout("factory-2")
@@ -388,6 +473,7 @@ _G.reload_layouts = function()
     for name, layout in pairs(layout_generators) do
         storage.layout_generators[name] = layout
     end
+    factorissimo.clear_layout_cache()
     add_space_factories()
 end
 

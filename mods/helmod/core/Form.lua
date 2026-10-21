@@ -323,6 +323,10 @@ end
 ---Build first container
 ---@return boolean
 function Form:open(event)
+  ---a step of a step-by-step build (event.continue) of an opened form: it was prepared by the first call
+  if event ~= nil and event.continue == true and self:isOpened() then
+    return true
+  end
   self:style()
   self:onBeforeOpen(event)
   if self:isOpened() then
@@ -472,7 +476,11 @@ function Form:update(event)
   if not(self:isOpened()) then return end
   local flow_panel, content_panel, menu_panel = self:getPanel()
   if self.auto_clear then content_panel.clear() end
-  self:updateTopMenu(event)
+  ---a step of a step-by-step build (event.continue): the menu is already built,
+  ---by the first step or by Form:open when the form is reopened
+  if not(event ~= nil and event.continue == true) then
+    self:updateTopMenu(event)
+  end
   self:onUpdate(event)
   self:updateLocation(event)
   if self.has_tips and User.getPreferenceSetting("display_tips") then

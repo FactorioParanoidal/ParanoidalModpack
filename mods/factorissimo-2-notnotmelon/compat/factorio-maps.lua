@@ -13,6 +13,8 @@ local function cleanup_entities_for_factoriomaps()
                     local object = rendering.get_object_by_id(id)
                     if object then object.destroy() end
                 end
+                factory.outside_overlay_displays = {}
+                factory.overlay_signature = nil
 
                 remote.call("factoriomaps", "link_renderbox_area", {
                     from = {
@@ -32,8 +34,13 @@ local function cleanup_entities_for_factoriomaps()
     end
 end
 
-script.on_load(function()
+-- The capture event id belongs to the factoriomaps mod, so it is registered directly (after the
+-- dispatcher was finalized) both on a new game/configuration change and on load.
+local function register_factoriomaps_event()
     if not remote.interfaces.factoriomaps then return end
     local event_id = remote.call("factoriomaps", "get_start_capture_event_id")
-    factorissimo.on_event(event_id, cleanup_entities_for_factoriomaps)
-end)
+    if event_id then script.on_event(event_id, cleanup_entities_for_factoriomaps) end
+end
+
+factorissimo.on_event(factorissimo.events.on_init(), register_factoriomaps_event)
+script.on_load(register_factoriomaps_event)

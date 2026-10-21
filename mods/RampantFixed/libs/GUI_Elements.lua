@@ -25,6 +25,13 @@ local function setPlanetAISettings(root)
 		planetAISetting.peacePeriod = NewPeacePeriod
 		planetAISetting.minEvo = NewMinEvo
 		
+		-- Paranoidal: mirror the Nauvis threshold into the map setting "rampantFixed--nauvisMinEvo"
+		if (planetName == "nauvis") and (type(NewMinEvo) == "number") then
+			local value = math.max(0, math.min(100, math.floor(NewMinEvo)))
+			if settings.global["rampantFixed--nauvisMinEvo"].value ~= value then
+				settings.global["rampantFixed--nauvisMinEvo"] = {value = value}
+			end
+		end
 	end
 end
 
@@ -256,7 +263,7 @@ local function create_disableNewEnemies_frame(player)
 	if not (root and root.valid) then return end -- setting player.opened can cause other scripts to delete UIs
 	
 	root.add{type = "label", name = "rampantFixed--disableNewEnemies_text" , caption = {"description.rampantFixed--disableNewEnemies_text"}}
-	frame = root.add{type="table", name="rampantFixed--disableNewEnemies_table", column_count=2, draw_horizontal_lines=false}
+	local frame = root.add{type="table", name="rampantFixed--disableNewEnemies_table", column_count=2, draw_horizontal_lines=false}
 	frame.add{type = "button", name = "rampantFixed--button_disableNewEnemies_disable", caption = {"description.rampantFixed--button_disableNewEnemies_disable"}}
 	frame.add{type = "button", name = "rampantFixed--button_disableNewEnemies_cancel", caption = {"description.rampantFixed--button_disableNewEnemies_cancel"}}
 end

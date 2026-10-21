@@ -6,7 +6,7 @@ data:extend({
 		icon = "__zzzparanoidal__/graphics/train/electric/charger_icon.png",
 		icon_size = 32,
 		subgroup = "bet-logistics",
-		order = "b1",
+		order = "b",
 		stack_size = 10,
 		place_result = "super_charger",
 	},

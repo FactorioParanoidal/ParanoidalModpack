@@ -1,0 +1,16 @@
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 2026-10-14
+  Changes:
+    - Paranoidal fork of Wind Turbines (relaunched) 2.2.5 under a new name.
+    - Wind from Paranoidal Beta 8 (Texugo_windgenerator 9.17.0): random, one for the whole game, with calms and gusts at full power.
+    - Hidden poles connect turbines to neighbouring turbines and poles (6/11/18 tiles), as in Beta 8.
+    - Status and a window on click show the wind speed and the current output.
+    - Power follows quality: defects lower it, positive qualities raise it without a cap.
+    - Recipes, research, health, resistances, mining time and stack size as in Beta 8.
+    - Removed the giant turbine, wind modes, settings, Krastorio 2 and Space Age integrations.
+    - Collision boxes as in Beta 8 (4.2, 8 and 14 tiles): turbines need free space around them.
+    - Turbines cannot be built inside Factorissimo buildings (no wind indoors); the item goes back to the builder.
+  Bugfixes:
+    - Turbines placed by scripts (ruins) and turbines from older saves now follow the wind and get their base.
+    - Removed the damage handler that ran for every simple-entity-with-owner in the game; the base is indestructible, vehicles cannot destroy turbines (as in Beta 8).

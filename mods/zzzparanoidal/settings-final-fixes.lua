@@ -36,16 +36,47 @@ end
 -- руины
 if mods["AbandonedRuins_updated_fork"] then
     set_settings_default_value("int-setting", "ruins-min-distance-from-spawn", 400)
-    set_settings_default_value("double-setting", "ruins-small-ruin-chance", 0.025)
-    set_settings_default_value("double-setting", "ruins-medium-ruin-chance", 0.01)
-    set_settings_default_value("double-setting", "ruins-large-ruin-chance", 0.0025)
+    -- Шансы снижены на 25% (было 0.025 / 0.01 / 0.0025): исправленная очередь Abandoned Ruins
+    -- больше не теряет руины из чанков, сгенерированных за один интервал спавна.
+    set_settings_default_value("double-setting", "ruins-small-ruin-chance", 0.01875)
+    set_settings_default_value("double-setting", "ruins-medium-ruin-chance", 0.0075)
+    set_settings_default_value("double-setting", "ruins-large-ruin-chance", 0.001875)
+end
+-- Blueprint Sandboxes: отдельная сила песочницы, как в 1.x. При "none" производство и убийства
+-- в песочнице идут в статистику, Milestones, достижения и XP PMRPGsystem основной силы.
+if mods["blueprint-sandboxes"] then
+    set_settings_default_value("string-setting", "bpsb-isolation-level", "full")
+end
+-- Milestones: проверка вех раз в 10 секунд вместо 1 (решение пользователя, нагрузка в простое).
+-- Веха обнаруживается с задержкой до ~11 с; в начатой игре может остаться сохранённое значение.
+if mods["Milestones"] then
+    set_settings_default_value("int-setting", "milestones_check_frequency", 600)
+end
+-- MIRV: автозапуск ракет по умолчанию выключен (решение пользователя).
+if mods["MIRV2"] then
+    set_settings_default_value("bool-setting", "mirv-auto-launch", false)
+end
+-- Rate Calculator: показывать энергопотребление выделенных зданий по умолчанию.
+if mods["RateCalculator"] then
+    set_settings_default_value("bool-setting", "rcalc-show-power-consumption", true)
+end
+-- Наноботы работают автоматически по умолчанию.
+if mods["nanobots-refined"] then
+    set_settings_default_value("bool-setting", "nanobots-auto", true)
+    -- Звуки «Всё готово» и «Закончились материалы» нано-пушки выключены по умолчанию.
+    set_settings_default_value("bool-setting", "nanobots-mute-launcher", true)
 end
 --ритег
-if mods["__RITEG__"] then
+if mods["RITEG"] then
     set_settings_default_value("int-setting", "__RITEG__autodeconstruct-health-threshold", 15)
 end
 --биг монстры
 if mods["Big-Monsters"] then
+    -- 1.1: event-days=100, tree-events-chance=0, max=365. В 2.0 автор сменил дефолты (6 / 1.0) и срезал потолок до 20.
+    -- maximum_value правим первым: иначе значение/дефолт 100 нелегальны при max=20.
+    data.raw["int-setting"]["bm-event-days"].maximum_value = 365
+    set_settings_default_value("int-setting", "bm-event-days", 100)
+    set_settings_default_value("double-setting", "bm-tree-events-chance", 0)
     set_settings_default_value("double-setting", "bm-biterzilla-min_evo", 0.4)
     set_settings_default_value("int-setting", "bm-difficulty-level", 5)
     set_settings_default_value("int-setting", "bm-invasion-chance", 0)
@@ -70,11 +101,18 @@ end
 if mods["deep-storage-unit"] or mods["fluid-memory-storage"] then
     set_settings_default_value("string-setting", "memory-unit-power-usage", "480kW")
 end
-if mods["ModuleInserter"] then
+if mods["ModuleInserterEx"] then
     set_settings_default_value("int-setting", "module-inserter-ex-proxies-per-tick", 10)
 end
-if mods["namelists"] then
-    set_settings_default_value("bool-setting", "namelists-backer-stations", true)
+-- Namelists: станции получают русские названия RussianStations2 без примеси имён спонсоров (как в Beta 8).
+-- Настройка скрыта и принудительно выключена, чтобы сохранённое значение в mod-settings.dat её не включало.
+if mods["Namelists"] and mods["RussianStations2"] then
+    local backer_stations = data.raw["bool-setting"]["namelists-backer-stations"]
+    if backer_stations then
+        backer_stations.default_value = false
+        backer_stations.hidden = true
+        backer_stations.forced_value = false
+    end
 end
 if mods["NightBrightness"] then
     set_settings_default_value("int-setting", "night_brightness_period_days", 24)
@@ -82,9 +120,6 @@ end
 if mods["Noxys_Trees"] then
     set_settings_default_value("int-setting", "Noxys_Trees-maximum-trees-per-chunk", 256)
     set_settings_default_value("int-setting", "Noxys_Trees-ticks-between-operations", 61)
-end
-if mods["OverloadedTrains"] then
-    set_settings_default_value("double-setting", "OT_realism", 1)
 end
 if mods["MultipleUnitTrainControl"] then
     set_settings_default_value("string-setting", "multiple-unit-train-control-debug", "none") -- глушим лог-спам "registered upgrade mapping"
@@ -94,18 +129,6 @@ if mods["Picks-Inserter"] then
     set_settings_default_value("bool-setting", "PI_target_selection", false)
     set_settings_default_value("bool-setting", "PI_target_train_stop", false)
     set_settings_default_value("bool-setting", "PI_temp_unlock", false)
-end
-if mods["PickerInventoryTools"] then
-    set_settings_default_value("bool-setting", "picker-autodeconstruct", true)
-    set_settings_default_value("bool-setting", "picker-autodeconstruct-target", true)
-    set_settings_default_value(
-        "string-setting",
-        "picker-carousel-registry",
-        "{['medium-electric-pole'] = 'big-electric-pole', ['big-electric-pole'] = 'substation'}"
-    )
-    set_settings_default_value("bool-setting", "picker-copy-between-surfaces", false)
-    set_settings_default_value("bool-setting", "picker-get-out-of-the-way", false)
-    set_settings_default_value("bool-setting", "picker-train-honk", false)
 end
 if mods["QualityOfLife"] then
     set_settings_default_value("double-setting", "qol-logistic-slots-flat-bonus", 0)
@@ -117,18 +140,16 @@ if mods["RampantFixed"] then
     set_settings_default_value("int-setting", "rampantFixed--attackWaveMaxSize", 55)
     set_settings_default_value("int-setting", "rampantFixed--maxNumberOfBuilders", 25)
     set_settings_default_value("int-setting", "rampantFixed--maxNumberOfSquads", 20)
+    set_settings_default_value("bool-setting", "rampantFixed--undergroundAttack", false)
 
+    set_settings_default_value("bool-setting", "rampantFixed--showPlanetAISettings", false)
     set_settings_default_value("bool-setting", "rampantFixed--safeBuildings-bigElectricPole", true)
     set_settings_default_value("bool-setting", "rampantFixed--safeBuildings-lamps", true)
     set_settings_default_value("bool-setting", "rampantFixed--safeBuildings-straightRail", true)
 end
-if mods["TimedSpawnControl"] then
-    set_settings_default_value("bool-setting", "random-spawn", false)
-    set_settings_default_value("int-setting", "respawn-timer", 60)
-    set_settings_default_value("bool-setting", "unstuck-button", false)
-end
-if mods["robot-attrition"] then
-    set_settings_default_value("double-setting", "robot-attrition-factor", 0.4)
+-- Частота аварий как в Beta 8: 1.0 (там задуманные 0.4 не применялись из-за проверки с дефисом).
+if mods["robot_attrition"] then
+    set_settings_default_value("double-setting", "robot-attrition-factor", 1)
 end
 if mods["rso-mod"] then
     set_settings_default_value("double-setting", "rso-infinite-ore-threshold", 0.99)
@@ -137,22 +158,66 @@ if mods["rso-mod"] then
 end
 -- end runtime.global
 -- runtime.per_user влияют на каждого игрока в отдельности
+if mods["Fill4Me"] then
+    -- Защищаем здания, оружие и материалы от автоматической загрузки в топку.
+    local fuel_blacklist = {
+        "bi-dart-turret",
+        "bi-dart-rifle",
+        "bi-wood-pipe",
+        "bi-wood-pipe-to-ground",
+        "bi-wooden-chest-giga",
+        "bi-wooden-chest-huge",
+        "bi-wooden-chest-large",
+        "bi-wooden-fence",
+        "bi-wooden-pole-big",
+        "bi-wooden-pole-huge",
+        "small-electric-pole",
+        "wooden-chest",
+        "bi-seed",
+        "seedling",
+        "angels-solid-rubber",
+        "bob-alien-artifact",
+        "bob-alien-artifact-blue",
+        "bob-alien-artifact-green",
+        "bob-alien-artifact-orange",
+        "bob-alien-artifact-purple",
+        "bob-alien-artifact-red",
+        "bob-alien-artifact-yellow",
+        "bob-small-alien-artifact",
+        "bob-small-alien-artifact-blue",
+        "bob-small-alien-artifact-green",
+        "bob-small-alien-artifact-orange",
+        "bob-small-alien-artifact-purple",
+        "bob-small-alien-artifact-red",
+        "bob-small-alien-artifact-yellow",
+        "angels-gas-butane-barrel",
+        "angels-gas-ethane-barrel",
+        "angels-gas-ethanol-barrel",
+        "angels-gas-ethylene-barrel",
+        "angels-gas-hydrazine-barrel",
+        "angels-gas-hydrogen-barrel",
+        "angels-gas-methane-barrel",
+        "angels-gas-methanol-barrel",
+        "angels-gas-propene-barrel",
+        "angels-liquid-fuel-oil-barrel",
+        "angels-liquid-naphtha-barrel",
+        "bob-alien-fire-barrel",
+        "bob-hydrazine-barrel",
+        "bob-hydrogen-barrel",
+        "bob-liquid-fuel-barrel",
+        "crude-oil-barrel",
+        "diesel-fuel-barrel",
+        "heavy-oil-barrel",
+        "light-oil-barrel",
+        "petroleum-gas-barrel",
+    }
+    set_settings_default_value("string-setting", "fill4me-blacklist-fuel", table.concat(fuel_blacklist, ","))
+end
 if mods["PMRPGsystem"] then
+    set_settings_default_value("bool-setting", "charxpmod_print_xp_user", true)
     set_settings_default_value("bool-setting", "charxpmod_hide_xp_panel", true)
 end
-if mods["PickerInventoryTools"] then
-    set_settings_default_value("bool-setting", "picker-auto-sort-inventory", false)
-    set_settings_default_value("bool-setting", "picker-filter-filters", false)
-    set_settings_default_value("bool-setting", "picker-filter-requests", false)
-    set_settings_default_value("bool-setting", "picker-use-bar-limit", false)
-end
-if mods["PickerPipeTools"] then
-    set_settings_default_value("bool-setting", "picker-find-orphans", false)
-end
-if mods["PickerVehicles"] then
-    set_settings_default_value("bool-setting", "picker-manual-train-keys", true)
-end
-if mods["PipeVisualizer"] then
+if mods["PipeVisualizer-Updated"] then
     set_settings_default_value("double-setting", "pv-overlay-opacity", 0.6)
 end
 if mods["reskins-library"] then
@@ -162,8 +227,15 @@ end
 -- startup влияют на прототипы(сущности, предметы, рецепты, технологии и их связи между собой)
 if mods["aai-industry"] then
     set_settings_default_value("int-setting", "aai-burner-turbine-efficiency", 25)
+
+    local fuel_processor = data.raw["bool-setting"]["aai-fuel-processor"]
+    if fuel_processor then
+        fuel_processor.default_value = false
+        fuel_processor.hidden = true
+        fuel_processor.forced_value = false
+    end
 end
-if mods["Aircraft"] then
+if mods["Aircraft-space-age"] then
     set_settings_default_value("bool-setting", "aircraft-hardmode", true)
     set_settings_default_value("bool-setting", "inserter-immunity", true)
 end
@@ -210,6 +282,7 @@ if mods["bobores"] then
     set_settings_default_value("double-setting", "bobmods-gems-topazratio", 0.15)
 end
 if mods["boblogistics"] then
+    set_settings_default_value("int-setting", "bobmods-logistics-fluidwagonbase", 25)
     set_settings_default_value("bool-setting", "bobmods-logistics-beltoverhaulspeed", true)
     set_settings_default_value("int-setting", "bobmods-logistics-beltperlevel", 6)
     set_settings_default_value("double-setting", "bobmods-logistics-beltspeedperlevel", 12.5)
@@ -222,6 +295,30 @@ if mods["bobmining"] then
 end
 if mods["bobmodules"] then
     set_settings_default_value("bool-setting", "bobmods-modules-enablegodmodules", true)
+
+    -- Beta 8 defaults; Bob 2.1 raised these five lower bounds to 0.01.
+    for _, name in ipairs({
+        "bobmods-modules-start-bonus-speed",
+        "bobmods-modules-start-bonus-productivity",
+        "bobmods-modules-start-bonus-consumption",
+        "bobmods-modules-start-bonus-pollution",
+        "bobmods-modules-start-bonus-pollutioncreate",
+    }) do
+        local setting = data.raw["double-setting"] and data.raw["double-setting"][name]
+        if not setting then
+            error("mod setting data.raw['double-setting']['" .. name .. "'] not exists!")
+        end
+        setting.minimum_value = 0
+        set_settings_default_value("double-setting", name, 0)
+    end
+
+    set_settings_default_value("double-setting", "bobmods-modules-perlevel-bonus-speed", 0.20)
+    set_settings_default_value("double-setting", "bobmods-modules-perlevel-bonus-productivity", 0.05)
+    set_settings_default_value("double-setting", "bobmods-modules-perlevel-bonus-pollution", 0.15)
+    set_settings_default_value("double-setting", "bobmods-modules-perlevel-penalty-pollution", 0.15)
+    set_settings_default_value("double-setting", "bobmods-modules-start-penalty-speed", 0.20)
+    set_settings_default_value("double-setting", "bobmods-modules-start-penalty-consumption", 0)
+    set_settings_default_value("double-setting", "bobmods-modules-start-penalty-pollution", 0)
 end
 if mods["bobplates"] then
     set_settings_default_value("bool-setting", "bobmods-plates-bluedeuterium", true)
@@ -237,17 +334,10 @@ end
 if mods["bobrevamp"] then
     set_settings_default_value("bool-setting", "bobmods-revamp-oil", false)
 end
-if mods["DeadlockResearchNotifications"] then
-    set_settings_default_value("bool-setting", "deadlock-force-research-queue", true)
-end
-if mods["extended-descriptions"] then
-    set_settings_default_value("bool-setting", "ed-inserter-stats", false)
-    set_settings_default_value("bool-setting", "ed-solar-ratios", false)
-end
-if mods["ElectricResistance"] then
+if mods["ElectricResistance2"] then
     set_settings_default_value("int-setting", "electric-resistance-power-consumption", 2)
 end
-if mods["heroturrets"] then
+if mods["HeroTurretRedux"] then
     set_settings_default_value(
         "string-setting",
         "heroturrets-csv-names",
@@ -266,7 +356,7 @@ if mods["Lighted-Poles-Plus"] then
         "bi-power-to-rail-pole,bi-rail-hidden-power-pole,ee-super-electric-pole,ee-super-substation"
     )
 end
-if mods["toxicPollution"] then
+if mods["toxicPollution2"] then
     set_settings_default_value("double-setting", "min-pollution-to-damage", 150)
     set_settings_default_value("int-setting", "armor-absorb-multiplier", 1000)
     set_settings_default_value("bool-setting", "auto-equip-armor", true)
@@ -277,10 +367,6 @@ end
 if mods["minime"] then
     set_settings_default_value("bool-setting", "minime_character-selector", false)
 end
-if mods["multi-product-recipe-details"] then
-    set_settings_default_value("bool-setting", "mprd-amount-display", true)
-    set_settings_default_value("bool-setting", "mprd-vertical-display", true)
-end
 if mods["Noxys_Trees"] then
     set_settings_default_value("double-setting", "Noxys_Trees-emission_multiplier", 1.5)
 end
@@ -288,29 +374,12 @@ if mods["P-U-M-P-S"] then
     set_settings_default_value("bool-setting", "osm-pumps-burner-offshore-pump", true)
 end
 if mods["PCPRedux"] then
-    -- set_settings_default_value("bool-setting", "pcp-glass-sink", false)
-end
--- not adapted to kry-picker. needs to review
-if mods["PickerTweaks"] then
-    set_settings_default_value("double-setting", "picker-belt-sounds", 0.5)
-    set_settings_default_value("bool-setting", "picker-clean-tree-burning", true)
-    set_settings_default_value("bool-setting", "picker-fireproof-rail-signals", true)
-    set_settings_default_value("bool-setting", "picker-fireproof-rolling-stock", true)
-    set_settings_default_value("bool-setting", "picker-generic-vehicle-grids", true)
-    set_settings_default_value("string-setting", "picker-ghost-tint", "lightblue")
-    set_settings_default_value("int-setting", "picker-inventory-size", 60)
-    set_settings_default_value("string-setting", "picker-iondicators-arrow", "cyan")
-    set_settings_default_value("string-setting", "picker-iondicators-line", "green")
-    set_settings_default_value("bool-setting", "picker-no-artillery-reveal", true)
-    set_settings_default_value("double-setting", "picker-reacher-build-distance", 6)
-    set_settings_default_value("double-setting", "picker-reacher-drop-item-distance", 6)
-    set_settings_default_value("double-setting", "picker-reacher-reach-distance", 6)
-    set_settings_default_value("bool-setting", "picker-roundup-resources", true)
-    set_settings_default_value("bool-setting", "picker-show-bots-on-map", true)
-end
-if mods["PickerVehicles"] then
-    set_settings_default_value("bool-setting", "picker-naked-rails", false)
-    set_settings_default_value("bool-setting", "picker-unstoppable-trains", true)
+    local glass_sink = data.raw["bool-setting"]["pcp-glass-sink"]
+    if glass_sink then
+        glass_sink.default_value = false
+        glass_sink.hidden = true
+        glass_sink.forced_value = false
+    end
 end
 if mods["SchallPickupTower"] then
     set_settings_default_value("int-setting", "Schall-PT-tier-max", 4)
@@ -341,29 +410,8 @@ if mods["reskins-library"] then
     -- set_settings_default_value("string-setting", "reskins-lib-custom-colors-tier-4", "a600bf")
     -- set_settings_default_value("string-setting", "reskins-lib-custom-colors-tier-5", "23de55")
     -- set_settings_default_value("string-setting", "reskins-lib-custom-colors-tier-6", "4d4cff")
-    -- set_settings_default_value("string-setting", "reskins-lib-tier-mapping", "traditional-map")
-end
-if mods["ReStack"] then
-    set_settings_default_value("int-setting", "ReStack-ammo-bullet", 200)
-    set_settings_default_value("int-setting", "ReStack-ammo-cannon", 200)
-    set_settings_default_value("int-setting", "ReStack-ammo-flamethrower", 100)
-    set_settings_default_value("int-setting", "ReStack-ammo-rocket", 200)
-    set_settings_default_value("int-setting", "ReStack-ammo-shotgun", 200)
-    set_settings_default_value("int-setting", "ReStack-belt", 100)
-    set_settings_default_value("int-setting", "ReStack-combinator", 50)
-    set_settings_default_value("int-setting", "ReStack-electric-pole", 50)
-    set_settings_default_value("int-setting", "ReStack-inserter", 50)
-    set_settings_default_value("int-setting", "ReStack-nuclear-fuel", 10)
-    set_settings_default_value("int-setting", "ReStack-ores", 200)
-    set_settings_default_value("int-setting", "ReStack-pipe", 100)
-    set_settings_default_value("int-setting", "ReStack-plates", 400)
-    set_settings_default_value("int-setting", "ReStack-roboport", 20)
-    set_settings_default_value("int-setting", "ReStack-rocket-parts", 10)
-    set_settings_default_value("int-setting", "ReStack-science-pack", 200)
-    set_settings_default_value("int-setting", "ReStack-solid-fuel", 100)
-    set_settings_default_value("int-setting", "ReStack-uranium", 100)
-    set_settings_default_value("int-setting", "ReStack-wire", 400)
-    set_settings_default_value("int-setting", "ReStack-wood", 200)
+    -- Beta 8: цвет по номеру машины, а не по месту в технологической цепочке.
+    set_settings_default_value("string-setting", "reskins-lib-tier-mapping", "traditional-map")
 end
 if mods["Rocket-Silo-Construction"] then
     set_settings_default_value("bool-setting", "rsc-st-not-removable-silo", true)
@@ -378,19 +426,11 @@ if mods["SpaceModFeorasFork"] then
         rc.allowed_values = nil
     end
 end
-if mods["SchallTankPlatoon"] then
-    set_settings_default_value("bool-setting", "Schall-TP-ht-RA-enable", false)
-    set_settings_default_value(
-        "string-setting",
-        "Schall-TP-personal-laser-defense-equipment-energy-consumption",
-        "800kJ"
-    )
-end
 if mods["Warehousing"] then
     set_settings_default_value("bool-setting", "Warehousing-sixteen-mode", true)
 end
 if mods["WideChests"] then
-    set_settings_default_value("int-setting", "WideChests_inventory-size-limit", 220)
+    set_settings_default_value("int-setting", "WideChests_inventory-size-limit", 350)
     set_settings_default_value("double-setting", "WideChests_inventory-size-multiplier", 0.3)
     set_settings_default_value("int-setting", "WideChests_max-chest-height", 6)
     set_settings_default_value("int-setting", "WideChests_max-chest-width", 6)
@@ -401,4 +441,54 @@ if mods["UnrealisticReactors"] then
         set_settings_default_value("bool-setting", "realistic-reactors-disable-vanilla-reactor", false)
     end
 end
+if mods["scattergun_turret"] then
+    -- prepare_range всех турелей W93 задаёт zzz (turret-stats-1_1), переключатель ни на что не влиял.
+    local pretargeting = data.raw["bool-setting"]["enable-pretargeting"]
+    if pretargeting then
+        pretargeting.hidden = true
+        pretargeting.forced_value = true
+    end
+end
+-- HeroTurretRedux: всегда скрыт, как heroturrets в Beta 8 (перенесено из zzzparanoidal-settings 0.3.0).
+-- forced — значение, от которого зависит сборка; иначе остаётся значение из mod-settings.dat.
+if mods["HeroTurretRedux"] then
+	local function hide_hero_setting(setting_type, name, forced)
+		local setting = data.raw[setting_type] and data.raw[setting_type][name]
+		if not setting then
+			log("zzzparanoidal: setting not found: " .. name)
+			return
+		end
+		setting.hidden = true
+		if forced == nil then return end
+		if setting_type == "bool-setting" then
+			setting.forced_value = forced
+		else
+			setting.default_value = forced
+			setting.allowed_values = { forced }
+		end
+	end
+	-- Ранговые предметы видны в своей вкладке «Турели-герои», как в Beta 8.
+	hide_hero_setting("bool-setting", "heroturrets-hide-ranked-from-ghost-cursor", false)
+	-- Ранги строятся в data-final-fixes, после финальных характеристик турелей из zzzparanoidal.
+	hide_hero_setting("string-setting", "heroturrets-setting-run-in-updates", "False")
+	for _, name in ipairs({
+		"heroturrets-setting-level-up-modifier", "heroturrets-setting-level-buff-modifier",
+		"heroturrets-setting-ammo-turret-kill-multiplier", "heroturrets-setting-fluid-turret-kill-multiplier",
+		"heroturrets-setting-electric-turret-kill-multiplier", "heroturrets-setting-artillery-turret-kill-multiplier",
+	}) do hide_hero_setting("int-setting", name) end
+	for _, name in ipairs({
+		"heroturrets-allow-ghost-rank", "heroturrets-allow-artillery-turrets", "heroturrets-allow-blueprint-rank",
+		"heroturrets-use-csv", "heroturrets-use-csv-kills", "heroturrets-use-csv-damage", "heroturrets-use-csv-buff",
+		"heroturrets-use-csv-health-buff", "heroturrets-use-csv-range-buff", "heroturrets-use-csv-firerate-buff",
+		"heroturrets-use-csv-attack-speed-buff", "heroturrets-use-csv-turret-rotation-buff",
+		"heroturrets-max-health-on-rank", "heroturrets-update-ammo-ranges",
+	}) do hide_hero_setting("bool-setting", name) end
+	for _, name in ipairs({
+		"heroturrets-kill-counter", "heroturrets-damage-counter", "heroturrets-allow-damage", "heroturrets-csv-names",
+		"heroturrets-csv-kill", "heroturrets-csv-damage", "heroturrets-csv-buff", "heroturrets-csv-health-buff",
+		"heroturrets-csv-range-buff", "heroturrets-csv-firerate-buff", "heroturrets-csv-attack-speed-buff",
+		"heroturrets-csv-turret-rotation-buff",
+	}) do hide_hero_setting("string-setting", name) end
+end
 -- end startup
+require("tweaks.custom.locale-settings")

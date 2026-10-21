@@ -1,0 +1,4184 @@
+{
+ "dune-00": {
+  "n": 12,
+  "colors": [
+   "aubergine",
+   "beige",
+   "black",
+   "brown",
+   "cream",
+   "dustyrose",
+   "grey",
+   "purple",
+   "red",
+   "tan",
+   "violet",
+   "white"
+  ],
+  "shape": [
+   168,
+   212
+  ],
+  "pixels": 24437,
+  "grey_k1": 2.11,
+  "rgb_k1": 1.97,
+  "rgb_k2": 1.41,
+  "rgb_k2_parts": [
+   [
+    "aubergine",
+    "beige",
+    "black",
+    "brown",
+    "dustyrose",
+    "grey",
+    "purple",
+    "red",
+    "violet"
+   ],
+   [
+    "cream",
+    "tan",
+    "white"
+   ]
+  ],
+  "rgb_k3": 1.16,
+  "rgb_k3_parts": [
+   [
+    "aubergine",
+    "beige",
+    "black",
+    "brown",
+    "dustyrose",
+    "grey",
+    "purple",
+    "red",
+    "violet"
+   ],
+   [
+    "cream",
+    "tan"
+   ],
+   [
+    "white"
+   ]
+  ],
+  "alpha_maxdiff": 18.166671752929688,
+  "alpha_meandiff": 0.471
+ },
+ "dune-01": {
+  "n": 12,
+  "colors": [
+   "aubergine",
+   "beige",
+   "black",
+   "brown",
+   "cream",
+   "dustyrose",
+   "grey",
+   "purple",
+   "red",
+   "tan",
+   "violet",
+   "white"
+  ],
+  "shape": [
+   148,
+   211
+  ],
+  "pixels": 14529,
+  "grey_k1": 1.61,
+  "rgb_k1": 1.52,
+  "rgb_k2": 1.1,
+  "rgb_k2_parts": [
+   [
+    "aubergine",
+    "beige",
+    "black",
+    "brown",
+    "dustyrose",
+    "grey",
+    "purple",
+    "red",
+    "violet"
+   ],
+   [
+    "cream",
+    "tan",
+    "white"
+   ]
+  ],
+  "rgb_k3": 0.91,
+  "rgb_k3_parts": [
+   [
+    "aubergine",
+    "beige",
+    "black",
+    "brown",
+    "dustyrose",
+    "grey",
+    "purple",
+    "red",
+    "violet"
+   ],
+   [
+    "cream",
+    "tan"
+   ],
+   [
+    "white"
+   ]
+  ],
+  "alpha_maxdiff": 11.416671752929688,
+  "alpha_meandiff": 0.254
+ },
+ "dune-02": {
+  "n": 12,
+  "colors": [
+   "aubergine",
+   "beige",
+   "black",
+   "brown",
+   "cream",
+   "dustyrose",
+   "grey",
+   "purple",
+   "red",
+   "tan",
+   "violet",
+   "white"
+  ],
+  "shape": [
+   184,
+   260
+  ],
+  "pixels": 34460,
+  "grey_k1": 2.22,
+  "rgb_k1": 2.09,
+  "rgb_k2": 1.49,
+  "rgb_k2_parts": [
+   [
+    "aubergine",
+    "beige",
+    "black",
+    "brown",
+    "dustyrose",
+    "grey",
+    "purple",
+    "red",
+    "violet"
+   ],
+   [
+    "cream",
+    "tan",
+    "white"
+   ]
+  ],
+  "rgb_k3": 1.23,
+  "rgb_k3_parts": [
+   [
+    "aubergine",
+    "beige",
+    "black",
+    "brown",
+    "dustyrose",
+    "grey",
+    "purple",
+    "red",
+    "violet"
+   ],
+   [
+    "cream",
+    "tan"
+   ],
+   [
+    "white"
+   ]
+  ],
+  "alpha_maxdiff": 13.083328247070312,
+  "alpha_meandiff": 0.584
+ },
+ "dune-03": {
+  "n": 12,
+  "colors": [
+   "aubergine",
+   "beige",
+   "black",
+   "brown",
+   "cream",
+   "dustyrose",
+   "grey",
+   "purple",
+   "red",
+   "tan",
+   "violet",
+   "white"
+  ],
+  "shape": [
+   181,
+   129
+  ],
+  "pixels": 11458,
+  "grey_k1": 1.8,
+  "rgb_k1": 1.67,
+  "rgb_k2": 1.21,
+  "rgb_k2_parts": [
+   [
+    "aubergine",
+    "beige",
+    "black",
+    "brown",
+    "dustyrose",
+    "grey",
+    "purple",
+    "red",
+    "violet"
+   ],
+   [
+    "cream",
+    "tan",
+    "white"
+   ]
+  ],
+  "rgb_k3": 0.97,
+  "rgb_k3_parts": [
+   [
+    "aubergine",
+    "beige",
+    "black",
+    "brown",
+    "dustyrose",
+    "grey",
+    "purple",
+    "red",
+    "violet"
+   ],
+   [
+    "cream",
+    "tan"
+   ],
+   [
+    "white"
+   ]
+  ],
+  "alpha_maxdiff": 11.833328247070312,
+  "alpha_meandiff": 0.256
+ },
+ "dune-04": {
+  "n": 12,
+  "colors": [
+   "aubergine",
+   "beige",
+   "black",
+   "brown",
+   "cream",
+   "dustyrose",
+   "grey",
+   "purple",
+   "red",
+   "tan",
+   "violet",
+   "white"
+  ],
+  "shape": [
+   184,
+   196
+  ],
+  "pixels": 25065,
+  "grey_k1": 2.62,
+  "rgb_k1": 2.43,
+  "rgb_k2": 1.7,
+  "rgb_k2_parts": [
+   [
+    "aubergine",
+    "beige",
+    "black",
+    "brown",
+    "dustyrose",
+    "grey",
+    "purple",
+    "red",
+    "violet"
+   ],
+   [
+    "cream",
+    "tan",
+    "white"
+   ]
+  ],
+  "rgb_k3": 1.35,
+  "rgb_k3_parts": [
+   [
+    "aubergine",
+    "beige",
+    "black",
+    "brown",
+    "dustyrose",
+    "grey",
+    "purple",
+    "red",
+    "violet"
+   ],
+   [
+    "cream",
+    "tan"
+   ],
+   [
+    "white"
+   ]
+  ],
+  "alpha_maxdiff": 15.5,
+  "alpha_meandiff": 0.487
+ },
+ "dune-05": {
+  "n": 12,
+  "colors": [
+   "aubergine",
+   "beige",
+   "black",
+   "brown",
+   "cream",
+   "dustyrose",
+   "grey",
+   "purple",
+   "red",
+   "tan",
+   "violet",
+   "white"
+  ],
+  "shape": [
+   184,
+   215
+  ],
+  "pixels": 27499,
+  "grey_k1": 2.14,
+  "rgb_k1": 2.01,
+  "rgb_k2": 1.42,
+  "rgb_k2_parts": [
+   [
+    "aubergine",
+    "beige",
+    "black",
+    "brown",
+    "dustyrose",
+    "grey",
+    "purple",
+    "red",
+    "violet"
+   ],
+   [
+    "cream",
+    "tan",
+    "white"
+   ]
+  ],
+  "rgb_k3": 1.17,
+  "rgb_k3_parts": [
+   [
+    "aubergine",
+    "beige",
+    "black",
+    "brown",
+    "dustyrose",
+    "grey",
+    "purple",
+    "red",
+    "violet"
+   ],
+   [
+    "cream",
+    "tan"
+   ],
+   [
+    "white"
+   ]
+  ],
+  "alpha_maxdiff": 12.75,
+  "alpha_meandiff": 0.535
+ },
+ "dune-06": {
+  "n": 12,
+  "colors": [
+   "aubergine",
+   "beige",
+   "black",
+   "brown",
+   "cream",
+   "dustyrose",
+   "grey",
+   "purple",
+   "red",
+   "tan",
+   "violet",
+   "white"
+  ],
+  "shape": [
+   179,
+   218
+  ],
+  "pixels": 19640,
+  "grey_k1": 1.54,
+  "rgb_k1": 1.45,
+  "rgb_k2": 1.03,
+  "rgb_k2_parts": [
+   [
+    "aubergine",
+    "beige",
+    "black",
+    "brown",
+    "dustyrose",
+    "grey",
+    "purple",
+    "red",
+    "violet"
+   ],
+   [
+    "cream",
+    "tan",
+    "white"
+   ]
+  ],
+  "rgb_k3": 0.85,
+  "rgb_k3_parts": [
+   [
+    "aubergine",
+    "beige",
+    "black",
+    "brown",
+    "dustyrose",
+    "grey",
+    "purple",
+    "red",
+    "violet"
+   ],
+   [
+    "cream",
+    "tan"
+   ],
+   [
+    "white"
+   ]
+  ],
+  "alpha_maxdiff": 11.416671752929688,
+  "alpha_meandiff": 0.231
+ },
+ "dune-07": {
+  "n": 12,
+  "colors": [
+   "aubergine",
+   "beige",
+   "black",
+   "brown",
+   "cream",
+   "dustyrose",
+   "grey",
+   "purple",
+   "red",
+   "tan",
+   "violet",
+   "white"
+  ],
+  "shape": [
+   183,
+   250
+  ],
+  "pixels": 17178,
+  "grey_k1": 1.57,
+  "rgb_k1": 1.46,
+  "rgb_k2": 1.08,
+  "rgb_k2_parts": [
+   [
+    "aubergine",
+    "beige",
+    "black",
+    "brown",
+    "dustyrose",
+    "grey",
+    "purple",
+    "red",
+    "violet"
+   ],
+   [
+    "cream",
+    "tan",
+    "white"
+   ]
+  ],
+  "rgb_k3": 0.88,
+  "rgb_k3_parts": [
+   [
+    "aubergine",
+    "beige",
+    "black",
+    "brown",
+    "dustyrose",
+    "grey",
+    "purple",
+    "red",
+    "violet"
+   ],
+   [
+    "cream",
+    "tan"
+   ],
+   [
+    "white"
+   ]
+  ],
+  "alpha_maxdiff": 8.5,
+  "alpha_meandiff": 0.182
+ },
+ "dune-08": {
+  "n": 12,
+  "colors": [
+   "aubergine",
+   "beige",
+   "black",
+   "brown",
+   "cream",
+   "dustyrose",
+   "grey",
+   "purple",
+   "red",
+   "tan",
+   "violet",
+   "white"
+  ],
+  "shape": [
+   176,
+   260
+  ],
+  "pixels": 23884,
+  "grey_k1": 1.88,
+  "rgb_k1": 1.75,
+  "rgb_k2": 1.25,
+  "rgb_k2_parts": [
+   [
+    "aubergine",
+    "beige",
+    "black",
+    "brown",
+    "dustyrose",
+    "grey",
+    "purple",
+    "red",
+    "violet"
+   ],
+   [
+    "cream",
+    "tan",
+    "white"
+   ]
+  ],
+  "rgb_k3": 1.0,
+  "rgb_k3_parts": [
+   [
+    "aubergine",
+    "beige",
+    "black",
+    "brown",
+    "dustyrose",
+    "grey",
+    "purple",
+    "red",
+    "violet"
+   ],
+   [
+    "cream",
+    "tan"
+   ],
+   [
+    "white"
+   ]
+  ],
+  "alpha_maxdiff": 14.583328247070312,
+  "alpha_meandiff": 0.263
+ },
+ "dune-09": {
+  "n": 12,
+  "colors": [
+   "aubergine",
+   "beige",
+   "black",
+   "brown",
+   "cream",
+   "dustyrose",
+   "grey",
+   "purple",
+   "red",
+   "tan",
+   "violet",
+   "white"
+  ],
+  "shape": [
+   184,
+   260
+  ],
+  "pixels": 34439,
+  "grey_k1": 2.03,
+  "rgb_k1": 1.89,
+  "rgb_k2": 1.39,
+  "rgb_k2_parts": [
+   [
+    "aubergine",
+    "beige",
+    "black",
+    "brown",
+    "dustyrose",
+    "grey",
+    "purple",
+    "red",
+    "violet"
+   ],
+   [
+    "cream",
+    "tan",
+    "white"
+   ]
+  ],
+  "rgb_k3": 1.13,
+  "rgb_k3_parts": [
+   [
+    "aubergine",
+    "beige",
+    "black",
+    "brown",
+    "dustyrose",
+    "grey",
+    "purple",
+    "red",
+    "violet"
+   ],
+   [
+    "cream",
+    "tan"
+   ],
+   [
+    "white"
+   ]
+  ],
+  "alpha_maxdiff": 13.416671752929688,
+  "alpha_meandiff": 0.502
+ },
+ "dune-10": {
+  "n": 12,
+  "colors": [
+   "aubergine",
+   "beige",
+   "black",
+   "brown",
+   "cream",
+   "dustyrose",
+   "grey",
+   "purple",
+   "red",
+   "tan",
+   "violet",
+   "white"
+  ],
+  "shape": [
+   183,
+   233
+  ],
+  "pixels": 18384,
+  "grey_k1": 1.91,
+  "rgb_k1": 1.79,
+  "rgb_k2": 1.29,
+  "rgb_k2_parts": [
+   [
+    "aubergine",
+    "beige",
+    "black",
+    "brown",
+    "dustyrose",
+    "grey",
+    "purple",
+    "red",
+    "violet"
+   ],
+   [
+    "cream",
+    "tan",
+    "white"
+   ]
+  ],
+  "rgb_k3": 1.06,
+  "rgb_k3_parts": [
+   [
+    "aubergine",
+    "beige",
+    "black",
+    "brown",
+    "dustyrose",
+    "grey",
+    "purple",
+    "red",
+    "violet"
+   ],
+   [
+    "cream",
+    "tan"
+   ],
+   [
+    "white"
+   ]
+  ],
+  "alpha_maxdiff": 13.583328247070312,
+  "alpha_meandiff": 0.263
+ },
+ "dune-11": {
+  "n": 12,
+  "colors": [
+   "aubergine",
+   "beige",
+   "black",
+   "brown",
+   "cream",
+   "dustyrose",
+   "grey",
+   "purple",
+   "red",
+   "tan",
+   "violet",
+   "white"
+  ],
+  "shape": [
+   184,
+   172
+  ],
+  "pixels": 18486,
+  "grey_k1": 2.47,
+  "rgb_k1": 2.29,
+  "rgb_k2": 1.63,
+  "rgb_k2_parts": [
+   [
+    "aubergine",
+    "beige",
+    "black",
+    "brown",
+    "dustyrose",
+    "grey",
+    "purple",
+    "red",
+    "violet"
+   ],
+   [
+    "cream",
+    "tan",
+    "white"
+   ]
+  ],
+  "rgb_k3": 1.3,
+  "rgb_k3_parts": [
+   [
+    "aubergine",
+    "beige",
+    "black",
+    "brown",
+    "dustyrose",
+    "grey",
+    "purple",
+    "red",
+    "violet"
+   ],
+   [
+    "cream",
+    "tan"
+   ],
+   [
+    "white"
+   ]
+  ],
+  "alpha_maxdiff": 14.583328247070312,
+  "alpha_meandiff": 0.426
+ },
+ "dune-12": {
+  "n": 12,
+  "colors": [
+   "aubergine",
+   "beige",
+   "black",
+   "brown",
+   "cream",
+   "dustyrose",
+   "grey",
+   "purple",
+   "red",
+   "tan",
+   "violet",
+   "white"
+  ],
+  "shape": [
+   166,
+   260
+  ],
+  "pixels": 25642,
+  "grey_k1": 1.52,
+  "rgb_k1": 1.44,
+  "rgb_k2": 1.06,
+  "rgb_k2_parts": [
+   [
+    "aubergine",
+    "beige",
+    "black",
+    "brown",
+    "dustyrose",
+    "grey",
+    "purple",
+    "red",
+    "violet"
+   ],
+   [
+    "cream",
+    "tan",
+    "white"
+   ]
+  ],
+  "rgb_k3": 0.89,
+  "rgb_k3_parts": [
+   [
+    "aubergine",
+    "beige",
+    "black",
+    "brown",
+    "dustyrose",
+    "grey",
+    "purple",
+    "red",
+    "violet"
+   ],
+   [
+    "cream",
+    "tan"
+   ],
+   [
+    "white"
+   ]
+  ],
+  "alpha_maxdiff": 9.416671752929688,
+  "alpha_meandiff": 0.356
+ },
+ "dune-13": {
+  "n": 12,
+  "colors": [
+   "aubergine",
+   "beige",
+   "black",
+   "brown",
+   "cream",
+   "dustyrose",
+   "grey",
+   "purple",
+   "red",
+   "tan",
+   "violet",
+   "white"
+  ],
+  "shape": [
+   172,
+   259
+  ],
+  "pixels": 24622,
+  "grey_k1": 1.21,
+  "rgb_k1": 1.15,
+  "rgb_k2": 0.85,
+  "rgb_k2_parts": [
+   [
+    "aubergine",
+    "beige",
+    "black",
+    "brown",
+    "dustyrose",
+    "grey",
+    "purple",
+    "red",
+    "violet"
+   ],
+   [
+    "cream",
+    "tan",
+    "white"
+   ]
+  ],
+  "rgb_k3": 0.72,
+  "rgb_k3_parts": [
+   [
+    "aubergine",
+    "beige",
+    "black",
+    "brown",
+    "dustyrose",
+    "grey",
+    "purple",
+    "red",
+    "violet"
+   ],
+   [
+    "cream",
+    "tan"
+   ],
+   [
+    "white"
+   ]
+  ],
+  "alpha_maxdiff": 11.333328247070312,
+  "alpha_meandiff": 0.235
+ },
+ "dune-14": {
+  "n": 12,
+  "colors": [
+   "aubergine",
+   "beige",
+   "black",
+   "brown",
+   "cream",
+   "dustyrose",
+   "grey",
+   "purple",
+   "red",
+   "tan",
+   "violet",
+   "white"
+  ],
+  "shape": [
+   184,
+   199
+  ],
+  "pixels": 28529,
+  "grey_k1": 1.76,
+  "rgb_k1": 1.66,
+  "rgb_k2": 1.23,
+  "rgb_k2_parts": [
+   [
+    "aubergine",
+    "beige",
+    "black",
+    "brown",
+    "dustyrose",
+    "grey",
+    "purple",
+    "red",
+    "violet"
+   ],
+   [
+    "cream",
+    "tan",
+    "white"
+   ]
+  ],
+  "rgb_k3": 1.03,
+  "rgb_k3_parts": [
+   [
+    "aubergine",
+    "beige",
+    "black",
+    "brown",
+    "dustyrose",
+    "grey",
+    "purple",
+    "red",
+    "violet"
+   ],
+   [
+    "cream",
+    "tan"
+   ],
+   [
+    "white"
+   ]
+  ],
+  "alpha_maxdiff": 16.083328247070312,
+  "alpha_meandiff": 0.536
+ },
+ "dune-15": {
+  "n": 12,
+  "colors": [
+   "aubergine",
+   "beige",
+   "black",
+   "brown",
+   "cream",
+   "dustyrose",
+   "grey",
+   "purple",
+   "red",
+   "tan",
+   "violet",
+   "white"
+  ],
+  "shape": [
+   184,
+   214
+  ],
+  "pixels": 22046,
+  "grey_k1": 1.4,
+  "rgb_k1": 1.32,
+  "rgb_k2": 0.99,
+  "rgb_k2_parts": [
+   [
+    "aubergine",
+    "beige",
+    "black",
+    "brown",
+    "dustyrose",
+    "grey",
+    "purple",
+    "red",
+    "violet"
+   ],
+   [
+    "cream",
+    "tan",
+    "white"
+   ]
+  ],
+  "rgb_k3": 0.83,
+  "rgb_k3_parts": [
+   [
+    "aubergine",
+    "beige",
+    "black",
+    "brown",
+    "dustyrose",
+    "grey",
+    "purple",
+    "red",
+    "violet"
+   ],
+   [
+    "cream",
+    "tan"
+   ],
+   [
+    "white"
+   ]
+  ],
+  "alpha_maxdiff": 13.083328247070312,
+  "alpha_meandiff": 0.279
+ },
+ "dune-16": {
+  "n": 12,
+  "colors": [
+   "aubergine",
+   "beige",
+   "black",
+   "brown",
+   "cream",
+   "dustyrose",
+   "grey",
+   "purple",
+   "red",
+   "tan",
+   "violet",
+   "white"
+  ],
+  "shape": [
+   182,
+   162
+  ],
+  "pixels": 19529,
+  "grey_k1": 1.41,
+  "rgb_k1": 1.33,
+  "rgb_k2": 1.0,
+  "rgb_k2_parts": [
+   [
+    "aubergine",
+    "beige",
+    "black",
+    "brown",
+    "dustyrose",
+    "grey",
+    "purple",
+    "red",
+    "violet"
+   ],
+   [
+    "cream",
+    "tan",
+    "white"
+   ]
+  ],
+  "rgb_k3": 0.83,
+  "rgb_k3_parts": [
+   [
+    "aubergine",
+    "beige",
+    "black",
+    "brown",
+    "dustyrose",
+    "grey",
+    "purple",
+    "red",
+    "violet"
+   ],
+   [
+    "cream",
+    "tan"
+   ],
+   [
+    "white"
+   ]
+  ],
+  "alpha_maxdiff": 10.583328247070312,
+  "alpha_meandiff": 0.375
+ },
+ "dune-17": {
+  "n": 12,
+  "colors": [
+   "aubergine",
+   "beige",
+   "black",
+   "brown",
+   "cream",
+   "dustyrose",
+   "grey",
+   "purple",
+   "red",
+   "tan",
+   "violet",
+   "white"
+  ],
+  "shape": [
+   153,
+   222
+  ],
+  "pixels": 18085,
+  "grey_k1": 2.16,
+  "rgb_k1": 2.0,
+  "rgb_k2": 1.42,
+  "rgb_k2_parts": [
+   [
+    "aubergine",
+    "beige",
+    "black",
+    "brown",
+    "dustyrose",
+    "grey",
+    "purple",
+    "red",
+    "violet"
+   ],
+   [
+    "cream",
+    "tan",
+    "white"
+   ]
+  ],
+  "rgb_k3": 1.14,
+  "rgb_k3_parts": [
+   [
+    "aubergine",
+    "beige",
+    "black",
+    "brown",
+    "dustyrose",
+    "grey",
+    "purple",
+    "red",
+    "violet"
+   ],
+   [
+    "cream",
+    "tan"
+   ],
+   [
+    "white"
+   ]
+  ],
+  "alpha_maxdiff": 11.0,
+  "alpha_meandiff": 0.325
+ },
+ "dune-18": {
+  "n": 12,
+  "colors": [
+   "aubergine",
+   "beige",
+   "black",
+   "brown",
+   "cream",
+   "dustyrose",
+   "grey",
+   "purple",
+   "red",
+   "tan",
+   "violet",
+   "white"
+  ],
+  "shape": [
+   184,
+   247
+  ],
+  "pixels": 33367,
+  "grey_k1": 1.84,
+  "rgb_k1": 1.73,
+  "rgb_k2": 1.27,
+  "rgb_k2_parts": [
+   [
+    "aubergine",
+    "beige",
+    "black",
+    "brown",
+    "dustyrose",
+    "grey",
+    "purple",
+    "red",
+    "violet"
+   ],
+   [
+    "cream",
+    "tan",
+    "white"
+   ]
+  ],
+  "rgb_k3": 1.06,
+  "rgb_k3_parts": [
+   [
+    "aubergine",
+    "beige",
+    "black",
+    "brown",
+    "dustyrose",
+    "grey",
+    "purple",
+    "red",
+    "violet"
+   ],
+   [
+    "cream",
+    "tan"
+   ],
+   [
+    "white"
+   ]
+  ],
+  "alpha_maxdiff": 13.916671752929688,
+  "alpha_meandiff": 0.538
+ },
+ "dune-19": {
+  "n": 12,
+  "colors": [
+   "aubergine",
+   "beige",
+   "black",
+   "brown",
+   "cream",
+   "dustyrose",
+   "grey",
+   "purple",
+   "red",
+   "tan",
+   "violet",
+   "white"
+  ],
+  "shape": [
+   184,
+   211
+  ],
+  "pixels": 28019,
+  "grey_k1": 2.36,
+  "rgb_k1": 2.21,
+  "rgb_k2": 1.56,
+  "rgb_k2_parts": [
+   [
+    "aubergine",
+    "beige",
+    "black",
+    "brown",
+    "dustyrose",
+    "grey",
+    "purple",
+    "red",
+    "violet"
+   ],
+   [
+    "cream",
+    "tan",
+    "white"
+   ]
+  ],
+  "rgb_k3": 1.26,
+  "rgb_k3_parts": [
+   [
+    "aubergine",
+    "beige",
+    "black",
+    "brown",
+    "dustyrose",
+    "grey",
+    "purple",
+    "red",
+    "violet"
+   ],
+   [
+    "cream",
+    "tan"
+   ],
+   [
+    "white"
+   ]
+  ],
+  "alpha_maxdiff": 13.333328247070312,
+  "alpha_meandiff": 0.552
+ },
+ "dune-20": {
+  "n": 12,
+  "colors": [
+   "aubergine",
+   "beige",
+   "black",
+   "brown",
+   "cream",
+   "dustyrose",
+   "grey",
+   "purple",
+   "red",
+   "tan",
+   "violet",
+   "white"
+  ],
+  "shape": [
+   183,
+   248
+  ],
+  "pixels": 30688,
+  "grey_k1": 1.84,
+  "rgb_k1": 1.72,
+  "rgb_k2": 1.29,
+  "rgb_k2_parts": [
+   [
+    "aubergine",
+    "beige",
+    "black",
+    "brown",
+    "dustyrose",
+    "grey",
+    "purple",
+    "red",
+    "violet"
+   ],
+   [
+    "cream",
+    "tan",
+    "white"
+   ]
+  ],
+  "rgb_k3": 1.06,
+  "rgb_k3_parts": [
+   [
+    "aubergine",
+    "beige",
+    "black",
+    "brown",
+    "dustyrose",
+    "grey",
+    "purple",
+    "red",
+    "violet"
+   ],
+   [
+    "cream",
+    "tan"
+   ],
+   [
+    "white"
+   ]
+  ],
+  "alpha_maxdiff": 15.0,
+  "alpha_meandiff": 0.516
+ },
+ "dune-21": {
+  "n": 12,
+  "colors": [
+   "aubergine",
+   "beige",
+   "black",
+   "brown",
+   "cream",
+   "dustyrose",
+   "grey",
+   "purple",
+   "red",
+   "tan",
+   "violet",
+   "white"
+  ],
+  "shape": [
+   184,
+   176
+  ],
+  "pixels": 19283,
+  "grey_k1": 2.72,
+  "rgb_k1": 2.52,
+  "rgb_k2": 1.75,
+  "rgb_k2_parts": [
+   [
+    "aubergine",
+    "beige",
+    "black",
+    "brown",
+    "dustyrose",
+    "grey",
+    "purple",
+    "red",
+    "violet"
+   ],
+   [
+    "cream",
+    "tan",
+    "white"
+   ]
+  ],
+  "rgb_k3": 1.37,
+  "rgb_k3_parts": [
+   [
+    "aubergine",
+    "beige",
+    "black",
+    "brown",
+    "dustyrose",
+    "grey",
+    "purple",
+    "red",
+    "violet"
+   ],
+   [
+    "cream",
+    "tan"
+   ],
+   [
+    "white"
+   ]
+  ],
+  "alpha_maxdiff": 12.75,
+  "alpha_meandiff": 0.383
+ },
+ "dune-22": {
+  "n": 12,
+  "colors": [
+   "aubergine",
+   "beige",
+   "black",
+   "brown",
+   "cream",
+   "dustyrose",
+   "grey",
+   "purple",
+   "red",
+   "tan",
+   "violet",
+   "white"
+  ],
+  "shape": [
+   185,
+   208
+  ],
+  "pixels": 22301,
+  "grey_k1": 2.29,
+  "rgb_k1": 2.14,
+  "rgb_k2": 1.49,
+  "rgb_k2_parts": [
+   [
+    "aubergine",
+    "beige",
+    "black",
+    "brown",
+    "dustyrose",
+    "grey",
+    "purple",
+    "red",
+    "violet"
+   ],
+   [
+    "cream",
+    "tan",
+    "white"
+   ]
+  ],
+  "rgb_k3": 1.21,
+  "rgb_k3_parts": [
+   [
+    "aubergine",
+    "beige",
+    "black",
+    "brown",
+    "dustyrose",
+    "grey",
+    "purple",
+    "red",
+    "violet"
+   ],
+   [
+    "cream",
+    "tan"
+   ],
+   [
+    "white"
+   ]
+  ],
+  "alpha_maxdiff": 14.25,
+  "alpha_meandiff": 0.46
+ },
+ "dune-23": {
+  "n": 12,
+  "colors": [
+   "aubergine",
+   "beige",
+   "black",
+   "brown",
+   "cream",
+   "dustyrose",
+   "grey",
+   "purple",
+   "red",
+   "tan",
+   "violet",
+   "white"
+  ],
+  "shape": [
+   184,
+   227
+  ],
+  "pixels": 30658,
+  "grey_k1": 2.67,
+  "rgb_k1": 2.48,
+  "rgb_k2": 1.74,
+  "rgb_k2_parts": [
+   [
+    "aubergine",
+    "beige",
+    "black",
+    "brown",
+    "dustyrose",
+    "grey",
+    "purple",
+    "red",
+    "violet"
+   ],
+   [
+    "cream",
+    "tan",
+    "white"
+   ]
+  ],
+  "rgb_k3": 1.38,
+  "rgb_k3_parts": [
+   [
+    "aubergine",
+    "beige",
+    "black",
+    "brown",
+    "dustyrose",
+    "grey",
+    "purple",
+    "red",
+    "violet"
+   ],
+   [
+    "cream",
+    "tan"
+   ],
+   [
+    "white"
+   ]
+  ],
+  "alpha_maxdiff": 9.583328247070312,
+  "alpha_meandiff": 0.552
+ },
+ "dune-24": {
+  "n": 12,
+  "colors": [
+   "aubergine",
+   "beige",
+   "black",
+   "brown",
+   "cream",
+   "dustyrose",
+   "grey",
+   "purple",
+   "red",
+   "tan",
+   "violet",
+   "white"
+  ],
+  "shape": [
+   186,
+   158
+  ],
+  "pixels": 19053,
+  "grey_k1": 1.77,
+  "rgb_k1": 1.66,
+  "rgb_k2": 1.23,
+  "rgb_k2_parts": [
+   [
+    "aubergine",
+    "beige",
+    "black",
+    "brown",
+    "dustyrose",
+    "grey",
+    "purple",
+    "red",
+    "violet"
+   ],
+   [
+    "cream",
+    "tan",
+    "white"
+   ]
+  ],
+  "rgb_k3": 1.03,
+  "rgb_k3_parts": [
+   [
+    "aubergine",
+    "beige",
+    "black",
+    "brown",
+    "dustyrose",
+    "grey",
+    "purple",
+    "red",
+    "violet"
+   ],
+   [
+    "cream",
+    "tan"
+   ],
+   [
+    "white"
+   ]
+  ],
+  "alpha_maxdiff": 13.083328247070312,
+  "alpha_meandiff": 0.463
+ },
+ "dune-25": {
+  "n": 12,
+  "colors": [
+   "aubergine",
+   "beige",
+   "black",
+   "brown",
+   "cream",
+   "dustyrose",
+   "grey",
+   "purple",
+   "red",
+   "tan",
+   "violet",
+   "white"
+  ],
+  "shape": [
+   184,
+   260
+  ],
+  "pixels": 33495,
+  "grey_k1": 2.65,
+  "rgb_k1": 2.46,
+  "rgb_k2": 1.72,
+  "rgb_k2_parts": [
+   [
+    "aubergine",
+    "beige",
+    "black",
+    "brown",
+    "dustyrose",
+    "grey",
+    "purple",
+    "red",
+    "violet"
+   ],
+   [
+    "cream",
+    "tan",
+    "white"
+   ]
+  ],
+  "rgb_k3": 1.37,
+  "rgb_k3_parts": [
+   [
+    "aubergine",
+    "beige",
+    "black",
+    "brown",
+    "dustyrose",
+    "grey",
+    "purple",
+    "red",
+    "violet"
+   ],
+   [
+    "cream",
+    "tan"
+   ],
+   [
+    "white"
+   ]
+  ],
+  "alpha_maxdiff": 11.75,
+  "alpha_meandiff": 0.552
+ },
+ "dune-26": {
+  "n": 12,
+  "colors": [
+   "aubergine",
+   "beige",
+   "black",
+   "brown",
+   "cream",
+   "dustyrose",
+   "grey",
+   "purple",
+   "red",
+   "tan",
+   "violet",
+   "white"
+  ],
+  "shape": [
+   184,
+   134
+  ],
+  "pixels": 14820,
+  "grey_k1": 2.28,
+  "rgb_k1": 2.11,
+  "rgb_k2": 1.48,
+  "rgb_k2_parts": [
+   [
+    "aubergine",
+    "beige",
+    "black",
+    "brown",
+    "dustyrose",
+    "grey",
+    "purple",
+    "red",
+    "violet"
+   ],
+   [
+    "cream",
+    "tan",
+    "white"
+   ]
+  ],
+  "rgb_k3": 1.17,
+  "rgb_k3_parts": [
+   [
+    "aubergine",
+    "beige",
+    "black",
+    "brown",
+    "dustyrose",
+    "grey",
+    "purple",
+    "red",
+    "violet"
+   ],
+   [
+    "cream",
+    "tan"
+   ],
+   [
+    "white"
+   ]
+  ],
+  "alpha_maxdiff": 11.666671752929688,
+  "alpha_meandiff": 0.353
+ },
+ "dune-27": {
+  "n": 12,
+  "colors": [
+   "aubergine",
+   "beige",
+   "black",
+   "brown",
+   "cream",
+   "dustyrose",
+   "grey",
+   "purple",
+   "red",
+   "tan",
+   "violet",
+   "white"
+  ],
+  "shape": [
+   165,
+   127
+  ],
+  "pixels": 13077,
+  "grey_k1": 1.27,
+  "rgb_k1": 1.21,
+  "rgb_k2": 0.89,
+  "rgb_k2_parts": [
+   [
+    "aubergine",
+    "beige",
+    "black",
+    "brown",
+    "dustyrose",
+    "grey",
+    "purple",
+    "red",
+    "violet"
+   ],
+   [
+    "cream",
+    "tan",
+    "white"
+   ]
+  ],
+  "rgb_k3": 0.75,
+  "rgb_k3_parts": [
+   [
+    "aubergine",
+    "beige",
+    "black",
+    "brown",
+    "dustyrose",
+    "grey",
+    "purple",
+    "red",
+    "violet"
+   ],
+   [
+    "cream",
+    "tan"
+   ],
+   [
+    "white"
+   ]
+  ],
+  "alpha_maxdiff": 7.6666717529296875,
+  "alpha_meandiff": 0.326
+ },
+ "dune-28": {
+  "n": 12,
+  "colors": [
+   "aubergine",
+   "beige",
+   "black",
+   "brown",
+   "cream",
+   "dustyrose",
+   "grey",
+   "purple",
+   "red",
+   "tan",
+   "violet",
+   "white"
+  ],
+  "shape": [
+   158,
+   258
+  ],
+  "pixels": 30955,
+  "grey_k1": 2.14,
+  "rgb_k1": 2.01,
+  "rgb_k2": 1.44,
+  "rgb_k2_parts": [
+   [
+    "aubergine",
+    "beige",
+    "black",
+    "brown",
+    "dustyrose",
+    "grey",
+    "purple",
+    "red",
+    "violet"
+   ],
+   [
+    "cream",
+    "tan",
+    "white"
+   ]
+  ],
+  "rgb_k3": 1.18,
+  "rgb_k3_parts": [
+   [
+    "aubergine",
+    "beige",
+    "black",
+    "brown",
+    "dustyrose",
+    "grey",
+    "purple",
+    "red",
+    "violet"
+   ],
+   [
+    "cream",
+    "tan"
+   ],
+   [
+    "white"
+   ]
+  ],
+  "alpha_maxdiff": 16.833328247070312,
+  "alpha_meandiff": 0.601
+ },
+ "dune-29": {
+  "n": 12,
+  "colors": [
+   "aubergine",
+   "beige",
+   "black",
+   "brown",
+   "cream",
+   "dustyrose",
+   "grey",
+   "purple",
+   "red",
+   "tan",
+   "violet",
+   "white"
+  ],
+  "shape": [
+   184,
+   180
+  ],
+  "pixels": 22028,
+  "grey_k1": 2.29,
+  "rgb_k1": 2.11,
+  "rgb_k2": 1.52,
+  "rgb_k2_parts": [
+   [
+    "aubergine",
+    "beige",
+    "black",
+    "brown",
+    "dustyrose",
+    "grey",
+    "purple",
+    "red",
+    "violet"
+   ],
+   [
+    "cream",
+    "tan",
+    "white"
+   ]
+  ],
+  "rgb_k3": 1.19,
+  "rgb_k3_parts": [
+   [
+    "aubergine",
+    "beige",
+    "black",
+    "brown",
+    "dustyrose",
+    "grey",
+    "purple",
+    "red",
+    "violet"
+   ],
+   [
+    "cream",
+    "tan"
+   ],
+   [
+    "white"
+   ]
+  ],
+  "alpha_maxdiff": 11.25,
+  "alpha_meandiff": 0.399
+ },
+ "frozen-snow": {
+  "n": 10,
+  "colors": [
+   "snow-0",
+   "snow-1",
+   "snow-2",
+   "snow-3",
+   "snow-4",
+   "snow-5",
+   "snow-6",
+   "snow-7",
+   "snow-8",
+   "snow-9"
+  ],
+  "shape": [
+   576,
+   4096
+  ],
+  "pixels": 1738986,
+  "grey_k1": 12.18,
+  "rgb_k1": 12.17,
+  "rgb_k2": 9.48,
+  "rgb_k2_parts": [
+   [
+    "snow-0",
+    "snow-1",
+    "snow-2",
+    "snow-3",
+    "snow-5",
+    "snow-7",
+    "snow-8",
+    "snow-9"
+   ],
+   [
+    "snow-4",
+    "snow-6"
+   ]
+  ],
+  "rgb_k3": 7.57,
+  "rgb_k3_parts": [
+   [
+    "snow-0",
+    "snow-1",
+    "snow-2",
+    "snow-3",
+    "snow-5"
+   ],
+   [
+    "snow-4",
+    "snow-6"
+   ],
+   [
+    "snow-7",
+    "snow-8",
+    "snow-9"
+   ]
+  ],
+  "alpha_maxdiff": 128.0,
+  "alpha_meandiff": 1.792
+ },
+ "lava-00": {
+  "n": 4,
+  "colors": [
+   "blue",
+   "green",
+   "orange",
+   "purple"
+  ],
+  "shape": [
+   267,
+   351
+  ],
+  "pixels": 49352,
+  "grey_k1": 0.94,
+  "rgb_k1": 0.93,
+  "rgb_k2": 0.73,
+  "rgb_k2_parts": [
+   [
+    "blue",
+    "orange"
+   ],
+   [
+    "green",
+    "purple"
+   ]
+  ],
+  "rgb_k3": 0.51,
+  "rgb_k3_parts": [
+   [
+    "blue",
+    "orange"
+   ],
+   [
+    "green"
+   ],
+   [
+    "purple"
+   ]
+  ],
+  "alpha_maxdiff": 19.75,
+  "alpha_meandiff": 0.199
+ },
+ "lava-01": {
+  "n": 4,
+  "colors": [
+   "blue",
+   "green",
+   "orange",
+   "purple"
+  ],
+  "shape": [
+   262,
+   305
+  ],
+  "pixels": 38400,
+  "grey_k1": 0.97,
+  "rgb_k1": 0.96,
+  "rgb_k2": 0.77,
+  "rgb_k2_parts": [
+   [
+    "blue",
+    "green",
+    "orange"
+   ],
+   [
+    "purple"
+   ]
+  ],
+  "rgb_k3": 0.54,
+  "rgb_k3_parts": [
+   [
+    "blue"
+   ],
+   [
+    "green",
+    "orange"
+   ],
+   [
+    "purple"
+   ]
+  ],
+  "alpha_maxdiff": 17.25,
+  "alpha_meandiff": 0.177
+ },
+ "lava-02": {
+  "n": 4,
+  "colors": [
+   "blue",
+   "green",
+   "orange",
+   "purple"
+  ],
+  "shape": [
+   270,
+   327
+  ],
+  "pixels": 48799,
+  "grey_k1": 0.97,
+  "rgb_k1": 0.96,
+  "rgb_k2": 0.77,
+  "rgb_k2_parts": [
+   [
+    "blue",
+    "green",
+    "orange"
+   ],
+   [
+    "purple"
+   ]
+  ],
+  "rgb_k3": 0.52,
+  "rgb_k3_parts": [
+   [
+    "blue",
+    "green"
+   ],
+   [
+    "orange"
+   ],
+   [
+    "purple"
+   ]
+  ],
+  "alpha_maxdiff": 18.75,
+  "alpha_meandiff": 0.226
+ },
+ "lava-03": {
+  "n": 4,
+  "colors": [
+   "blue",
+   "green",
+   "orange",
+   "purple"
+  ],
+  "shape": [
+   268,
+   258
+  ],
+  "pixels": 41285,
+  "grey_k1": 0.97,
+  "rgb_k1": 0.96,
+  "rgb_k2": 0.77,
+  "rgb_k2_parts": [
+   [
+    "blue",
+    "orange"
+   ],
+   [
+    "green",
+    "purple"
+   ]
+  ],
+  "rgb_k3": 0.53,
+  "rgb_k3_parts": [
+   [
+    "blue",
+    "orange"
+   ],
+   [
+    "green"
+   ],
+   [
+    "purple"
+   ]
+  ],
+  "alpha_maxdiff": 20.0,
+  "alpha_meandiff": 0.222
+ },
+ "lava-04": {
+  "n": 4,
+  "colors": [
+   "blue",
+   "green",
+   "orange",
+   "purple"
+  ],
+  "shape": [
+   201,
+   231
+  ],
+  "pixels": 16899,
+  "grey_k1": 0.81,
+  "rgb_k1": 0.8,
+  "rgb_k2": 0.64,
+  "rgb_k2_parts": [
+   [
+    "blue"
+   ],
+   [
+    "green",
+    "orange",
+    "purple"
+   ]
+  ],
+  "rgb_k3": 0.43,
+  "rgb_k3_parts": [
+   [
+    "blue"
+   ],
+   [
+    "green",
+    "orange"
+   ],
+   [
+    "purple"
+   ]
+  ],
+  "alpha_maxdiff": 17.0,
+  "alpha_meandiff": 0.106
+ },
+ "lava-05": {
+  "n": 4,
+  "colors": [
+   "blue",
+   "green",
+   "orange",
+   "purple"
+  ],
+  "shape": [
+   234,
+   295
+  ],
+  "pixels": 27449,
+  "grey_k1": 0.89,
+  "rgb_k1": 0.88,
+  "rgb_k2": 0.71,
+  "rgb_k2_parts": [
+   [
+    "blue",
+    "green",
+    "orange"
+   ],
+   [
+    "purple"
+   ]
+  ],
+  "rgb_k3": 0.48,
+  "rgb_k3_parts": [
+   [
+    "blue",
+    "green"
+   ],
+   [
+    "orange"
+   ],
+   [
+    "purple"
+   ]
+  ],
+  "alpha_maxdiff": 22.25,
+  "alpha_meandiff": 0.121
+ },
+ "lava-06": {
+  "n": 4,
+  "colors": [
+   "blue",
+   "green",
+   "orange",
+   "purple"
+  ],
+  "shape": [
+   172,
+   271
+  ],
+  "pixels": 21303,
+  "grey_k1": 0.98,
+  "rgb_k1": 0.97,
+  "rgb_k2": 0.77,
+  "rgb_k2_parts": [
+   [
+    "blue",
+    "orange",
+    "purple"
+   ],
+   [
+    "green"
+   ]
+  ],
+  "rgb_k3": 0.53,
+  "rgb_k3_parts": [
+   [
+    "blue",
+    "orange"
+   ],
+   [
+    "green"
+   ],
+   [
+    "purple"
+   ]
+  ],
+  "alpha_maxdiff": 15.75,
+  "alpha_meandiff": 0.201
+ },
+ "lava-07": {
+  "n": 4,
+  "colors": [
+   "blue",
+   "green",
+   "orange",
+   "purple"
+  ],
+  "shape": [
+   266,
+   282
+  ],
+  "pixels": 32600,
+  "grey_k1": 11.5,
+  "rgb_k1": 10.91,
+  "rgb_k2": 8.39,
+  "rgb_k2_parts": [
+   [
+    "blue",
+    "green",
+    "purple"
+   ],
+   [
+    "orange"
+   ]
+  ],
+  "rgb_k3": 5.86,
+  "rgb_k3_parts": [
+   [
+    "blue"
+   ],
+   [
+    "green",
+    "orange"
+   ],
+   [
+    "purple"
+   ]
+  ],
+  "alpha_maxdiff": 30.25,
+  "alpha_meandiff": 0.306
+ },
+ "lava-08": {
+  "n": 4,
+  "colors": [
+   "blue",
+   "green",
+   "orange",
+   "purple"
+  ],
+  "shape": [
+   231,
+   377
+  ],
+  "pixels": 36065,
+  "grey_k1": 0.94,
+  "rgb_k1": 0.93,
+  "rgb_k2": 0.73,
+  "rgb_k2_parts": [
+   [
+    "blue",
+    "green",
+    "orange"
+   ],
+   [
+    "purple"
+   ]
+  ],
+  "rgb_k3": 0.49,
+  "rgb_k3_parts": [
+   [
+    "blue",
+    "green"
+   ],
+   [
+    "orange"
+   ],
+   [
+    "purple"
+   ]
+  ],
+  "alpha_maxdiff": 21.5,
+  "alpha_meandiff": 0.148
+ },
+ "lava-09": {
+  "n": 4,
+  "colors": [
+   "blue",
+   "green",
+   "orange",
+   "purple"
+  ],
+  "shape": [
+   202,
+   376
+  ],
+  "pixels": 36246,
+  "grey_k1": 0.93,
+  "rgb_k1": 0.92,
+  "rgb_k2": 0.73,
+  "rgb_k2_parts": [
+   [
+    "blue",
+    "green",
+    "orange"
+   ],
+   [
+    "purple"
+   ]
+  ],
+  "rgb_k3": 0.5,
+  "rgb_k3_parts": [
+   [
+    "blue",
+    "orange"
+   ],
+   [
+    "green"
+   ],
+   [
+    "purple"
+   ]
+  ],
+  "alpha_maxdiff": 17.75,
+  "alpha_meandiff": 0.163
+ },
+ "lava-10": {
+  "n": 4,
+  "colors": [
+   "blue",
+   "green",
+   "orange",
+   "purple"
+  ],
+  "shape": [
+   234,
+   372
+  ],
+  "pixels": 41881,
+  "grey_k1": 0.94,
+  "rgb_k1": 0.93,
+  "rgb_k2": 0.75,
+  "rgb_k2_parts": [
+   [
+    "blue",
+    "orange"
+   ],
+   [
+    "green",
+    "purple"
+   ]
+  ],
+  "rgb_k3": 0.52,
+  "rgb_k3_parts": [
+   [
+    "blue",
+    "orange"
+   ],
+   [
+    "green"
+   ],
+   [
+    "purple"
+   ]
+  ],
+  "alpha_maxdiff": 15.25,
+  "alpha_meandiff": 0.173
+ },
+ "lava-11": {
+  "n": 4,
+  "colors": [
+   "blue",
+   "green",
+   "orange",
+   "purple"
+  ],
+  "shape": [
+   224,
+   344
+  ],
+  "pixels": 40719,
+  "grey_k1": 0.89,
+  "rgb_k1": 0.88,
+  "rgb_k2": 0.7,
+  "rgb_k2_parts": [
+   [
+    "blue",
+    "green",
+    "orange"
+   ],
+   [
+    "purple"
+   ]
+  ],
+  "rgb_k3": 0.49,
+  "rgb_k3_parts": [
+   [
+    "blue",
+    "orange"
+   ],
+   [
+    "green"
+   ],
+   [
+    "purple"
+   ]
+  ],
+  "alpha_maxdiff": 16.75,
+  "alpha_meandiff": 0.185
+ },
+ "lava-12": {
+  "n": 4,
+  "colors": [
+   "blue",
+   "green",
+   "orange",
+   "purple"
+  ],
+  "shape": [
+   189,
+   290
+  ],
+  "pixels": 26690,
+  "grey_k1": 0.95,
+  "rgb_k1": 0.94,
+  "rgb_k2": 0.76,
+  "rgb_k2_parts": [
+   [
+    "blue",
+    "green",
+    "orange"
+   ],
+   [
+    "purple"
+   ]
+  ],
+  "rgb_k3": 0.53,
+  "rgb_k3_parts": [
+   [
+    "blue"
+   ],
+   [
+    "green",
+    "orange"
+   ],
+   [
+    "purple"
+   ]
+  ],
+  "alpha_maxdiff": 14.5,
+  "alpha_meandiff": 0.184
+ },
+ "lava-13": {
+  "n": 4,
+  "colors": [
+   "blue",
+   "green",
+   "orange",
+   "purple"
+  ],
+  "shape": [
+   228,
+   326
+  ],
+  "pixels": 27452,
+  "grey_k1": 0.92,
+  "rgb_k1": 0.92,
+  "rgb_k2": 0.74,
+  "rgb_k2_parts": [
+   [
+    "blue",
+    "purple"
+   ],
+   [
+    "green",
+    "orange"
+   ]
+  ],
+  "rgb_k3": 0.52,
+  "rgb_k3_parts": [
+   [
+    "blue"
+   ],
+   [
+    "green",
+    "orange"
+   ],
+   [
+    "purple"
+   ]
+  ],
+  "alpha_maxdiff": 17.75,
+  "alpha_meandiff": 0.139
+ },
+ "lava-14": {
+  "n": 4,
+  "colors": [
+   "blue",
+   "green",
+   "orange",
+   "purple"
+  ],
+  "shape": [
+   225,
+   312
+  ],
+  "pixels": 26378,
+  "grey_k1": 11.5,
+  "rgb_k1": 11.0,
+  "rgb_k2": 8.26,
+  "rgb_k2_parts": [
+   [
+    "blue",
+    "green",
+    "purple"
+   ],
+   [
+    "orange"
+   ]
+  ],
+  "rgb_k3": 5.55,
+  "rgb_k3_parts": [
+   [
+    "blue",
+    "purple"
+   ],
+   [
+    "green"
+   ],
+   [
+    "orange"
+   ]
+  ],
+  "alpha_maxdiff": 32.75,
+  "alpha_meandiff": 0.238
+ },
+ "lava-15": {
+  "n": 4,
+  "colors": [
+   "blue",
+   "green",
+   "orange",
+   "purple"
+  ],
+  "shape": [
+   186,
+   359
+  ],
+  "pixels": 27365,
+  "grey_k1": 13.18,
+  "rgb_k1": 12.66,
+  "rgb_k2": 9.3,
+  "rgb_k2_parts": [
+   [
+    "blue",
+    "green",
+    "purple"
+   ],
+   [
+    "orange"
+   ]
+  ],
+  "rgb_k3": 6.2,
+  "rgb_k3_parts": [
+   [
+    "blue",
+    "purple"
+   ],
+   [
+    "green"
+   ],
+   [
+    "orange"
+   ]
+  ],
+  "alpha_maxdiff": 23.0,
+  "alpha_meandiff": 0.263
+ },
+ "lava-16": {
+  "n": 4,
+  "colors": [
+   "blue",
+   "green",
+   "orange",
+   "purple"
+  ],
+  "shape": [
+   266,
+   287
+  ],
+  "pixels": 33674,
+  "grey_k1": 12.94,
+  "rgb_k1": 12.46,
+  "rgb_k2": 9.48,
+  "rgb_k2_parts": [
+   [
+    "blue",
+    "purple"
+   ],
+   [
+    "green",
+    "orange"
+   ]
+  ],
+  "rgb_k3": 5.68,
+  "rgb_k3_parts": [
+   [
+    "blue"
+   ],
+   [
+    "green",
+    "orange"
+   ],
+   [
+    "purple"
+   ]
+  ],
+  "alpha_maxdiff": 41.5,
+  "alpha_meandiff": 0.323
+ },
+ "lava-17": {
+  "n": 4,
+  "colors": [
+   "blue",
+   "green",
+   "orange",
+   "purple"
+  ],
+  "shape": [
+   267,
+   377
+  ],
+  "pixels": 40154,
+  "grey_k1": 13.34,
+  "rgb_k1": 12.91,
+  "rgb_k2": 9.71,
+  "rgb_k2_parts": [
+   [
+    "blue",
+    "purple"
+   ],
+   [
+    "green",
+    "orange"
+   ]
+  ],
+  "rgb_k3": 5.84,
+  "rgb_k3_parts": [
+   [
+    "blue"
+   ],
+   [
+    "green",
+    "orange"
+   ],
+   [
+    "purple"
+   ]
+  ],
+  "alpha_maxdiff": 26.0,
+  "alpha_meandiff": 0.265
+ },
+ "lava-18": {
+  "n": 4,
+  "colors": [
+   "blue",
+   "green",
+   "orange",
+   "purple"
+  ],
+  "shape": [
+   269,
+   375
+  ],
+  "pixels": 45626,
+  "grey_k1": 15.38,
+  "rgb_k1": 14.63,
+  "rgb_k2": 10.41,
+  "rgb_k2_parts": [
+   [
+    "blue",
+    "green",
+    "purple"
+   ],
+   [
+    "orange"
+   ]
+  ],
+  "rgb_k3": 6.56,
+  "rgb_k3_parts": [
+   [
+    "blue",
+    "purple"
+   ],
+   [
+    "green"
+   ],
+   [
+    "orange"
+   ]
+  ],
+  "alpha_maxdiff": 26.0,
+  "alpha_meandiff": 0.289
+ },
+ "lava-19": {
+  "n": 4,
+  "colors": [
+   "blue",
+   "green",
+   "orange",
+   "purple"
+  ],
+  "shape": [
+   270,
+   346
+  ],
+  "pixels": 47654,
+  "grey_k1": 13.43,
+  "rgb_k1": 13.11,
+  "rgb_k2": 9.66,
+  "rgb_k2_parts": [
+   [
+    "blue",
+    "purple"
+   ],
+   [
+    "green",
+    "orange"
+   ]
+  ],
+  "rgb_k3": 5.68,
+  "rgb_k3_parts": [
+   [
+    "blue"
+   ],
+   [
+    "green",
+    "orange"
+   ],
+   [
+    "purple"
+   ]
+  ],
+  "alpha_maxdiff": 29.25,
+  "alpha_meandiff": 0.341
+ },
+ "lava-20": {
+  "n": 4,
+  "colors": [
+   "blue",
+   "green",
+   "orange",
+   "purple"
+  ],
+  "shape": [
+   198,
+   261
+  ],
+  "pixels": 18031,
+  "grey_k1": 10.61,
+  "rgb_k1": 10.31,
+  "rgb_k2": 7.55,
+  "rgb_k2_parts": [
+   [
+    "blue",
+    "purple"
+   ],
+   [
+    "green",
+    "orange"
+   ]
+  ],
+  "rgb_k3": 5.19,
+  "rgb_k3_parts": [
+   [
+    "blue"
+   ],
+   [
+    "green",
+    "orange"
+   ],
+   [
+    "purple"
+   ]
+  ],
+  "alpha_maxdiff": 29.75,
+  "alpha_meandiff": 0.208
+ },
+ "lava-21": {
+  "n": 4,
+  "colors": [
+   "blue",
+   "green",
+   "orange",
+   "purple"
+  ],
+  "shape": [
+   205,
+   270
+  ],
+  "pixels": 28873,
+  "grey_k1": 10.98,
+  "rgb_k1": 10.72,
+  "rgb_k2": 7.89,
+  "rgb_k2_parts": [
+   [
+    "blue",
+    "purple"
+   ],
+   [
+    "green",
+    "orange"
+   ]
+  ],
+  "rgb_k3": 4.63,
+  "rgb_k3_parts": [
+   [
+    "blue"
+   ],
+   [
+    "green",
+    "orange"
+   ],
+   [
+    "purple"
+   ]
+  ],
+  "alpha_maxdiff": 29.5,
+  "alpha_meandiff": 0.349
+ },
+ "lava-22": {
+  "n": 4,
+  "colors": [
+   "blue",
+   "green",
+   "orange",
+   "purple"
+  ],
+  "shape": [
+   212,
+   266
+  ],
+  "pixels": 25305,
+  "grey_k1": 0.99,
+  "rgb_k1": 0.98,
+  "rgb_k2": 0.79,
+  "rgb_k2_parts": [
+   [
+    "blue",
+    "orange"
+   ],
+   [
+    "green",
+    "purple"
+   ]
+  ],
+  "rgb_k3": 0.55,
+  "rgb_k3_parts": [
+   [
+    "blue"
+   ],
+   [
+    "green",
+    "orange"
+   ],
+   [
+    "purple"
+   ]
+  ],
+  "alpha_maxdiff": 22.0,
+  "alpha_meandiff": 0.19
+ },
+ "lava-23": {
+  "n": 4,
+  "colors": [
+   "blue",
+   "green",
+   "orange",
+   "purple"
+  ],
+  "shape": [
+   164,
+   292
+  ],
+  "pixels": 22929,
+  "grey_k1": 1.04,
+  "rgb_k1": 1.03,
+  "rgb_k2": 0.83,
+  "rgb_k2_parts": [
+   [
+    "blue",
+    "orange"
+   ],
+   [
+    "green",
+    "purple"
+   ]
+  ],
+  "rgb_k3": 0.59,
+  "rgb_k3_parts": [
+   [
+    "blue",
+    "orange"
+   ],
+   [
+    "green"
+   ],
+   [
+    "purple"
+   ]
+  ],
+  "alpha_maxdiff": 16.25,
+  "alpha_meandiff": 0.233
+ },
+ "lava-24": {
+  "n": 4,
+  "colors": [
+   "blue",
+   "green",
+   "orange",
+   "purple"
+  ],
+  "shape": [
+   232,
+   377
+  ],
+  "pixels": 46855,
+  "grey_k1": 0.97,
+  "rgb_k1": 0.96,
+  "rgb_k2": 0.77,
+  "rgb_k2_parts": [
+   [
+    "blue",
+    "green",
+    "purple"
+   ],
+   [
+    "orange"
+   ]
+  ],
+  "rgb_k3": 0.53,
+  "rgb_k3_parts": [
+   [
+    "blue",
+    "green"
+   ],
+   [
+    "orange"
+   ],
+   [
+    "purple"
+   ]
+  ],
+  "alpha_maxdiff": 27.5,
+  "alpha_meandiff": 0.209
+ },
+ "lava-25": {
+  "n": 4,
+  "colors": [
+   "blue",
+   "green",
+   "orange",
+   "purple"
+  ],
+  "shape": [
+   204,
+   376
+  ],
+  "pixels": 39815,
+  "grey_k1": 16.36,
+  "rgb_k1": 15.49,
+  "rgb_k2": 11.85,
+  "rgb_k2_parts": [
+   [
+    "blue",
+    "green",
+    "purple"
+   ],
+   [
+    "orange"
+   ]
+  ],
+  "rgb_k3": 8.13,
+  "rgb_k3_parts": [
+   [
+    "blue"
+   ],
+   [
+    "green",
+    "orange"
+   ],
+   [
+    "purple"
+   ]
+  ],
+  "alpha_maxdiff": 44.25,
+  "alpha_meandiff": 0.296
+ },
+ "lava-26": {
+  "n": 4,
+  "colors": [
+   "blue",
+   "green",
+   "orange",
+   "purple"
+  ],
+  "shape": [
+   214,
+   376
+  ],
+  "pixels": 40566,
+  "grey_k1": 14.18,
+  "rgb_k1": 13.27,
+  "rgb_k2": 9.37,
+  "rgb_k2_parts": [
+   [
+    "blue",
+    "green",
+    "purple"
+   ],
+   [
+    "orange"
+   ]
+  ],
+  "rgb_k3": 5.45,
+  "rgb_k3_parts": [
+   [
+    "blue",
+    "purple"
+   ],
+   [
+    "green"
+   ],
+   [
+    "orange"
+   ]
+  ],
+  "alpha_maxdiff": 53.25,
+  "alpha_meandiff": 0.341
+ },
+ "lava-27": {
+  "n": 4,
+  "colors": [
+   "blue",
+   "green",
+   "orange",
+   "purple"
+  ],
+  "shape": [
+   209,
+   378
+  ],
+  "pixels": 48497,
+  "grey_k1": 12.64,
+  "rgb_k1": 12.24,
+  "rgb_k2": 9.16,
+  "rgb_k2_parts": [
+   [
+    "blue",
+    "purple"
+   ],
+   [
+    "green",
+    "orange"
+   ]
+  ],
+  "rgb_k3": 5.93,
+  "rgb_k3_parts": [
+   [
+    "blue"
+   ],
+   [
+    "green",
+    "orange"
+   ],
+   [
+    "purple"
+   ]
+  ],
+  "alpha_maxdiff": 32.5,
+  "alpha_meandiff": 0.521
+ },
+ "lava-28": {
+  "n": 4,
+  "colors": [
+   "blue",
+   "green",
+   "orange",
+   "purple"
+  ],
+  "shape": [
+   198,
+   378
+  ],
+  "pixels": 43322,
+  "grey_k1": 11.11,
+  "rgb_k1": 10.53,
+  "rgb_k2": 7.55,
+  "rgb_k2_parts": [
+   [
+    "blue",
+    "green",
+    "purple"
+   ],
+   [
+    "orange"
+   ]
+  ],
+  "rgb_k3": 4.8,
+  "rgb_k3_parts": [
+   [
+    "blue",
+    "purple"
+   ],
+   [
+    "green"
+   ],
+   [
+    "orange"
+   ]
+  ],
+  "alpha_maxdiff": 41.5,
+  "alpha_meandiff": 0.527
+ },
+ "lava-29": {
+  "n": 4,
+  "colors": [
+   "blue",
+   "green",
+   "orange",
+   "purple"
+  ],
+  "shape": [
+   218,
+   352
+  ],
+  "pixels": 36781,
+  "grey_k1": 0.95,
+  "rgb_k1": 0.94,
+  "rgb_k2": 0.75,
+  "rgb_k2_parts": [
+   [
+    "blue",
+    "green",
+    "purple"
+   ],
+   [
+    "orange"
+   ]
+  ],
+  "rgb_k3": 0.52,
+  "rgb_k3_parts": [
+   [
+    "blue",
+    "purple"
+   ],
+   [
+    "green"
+   ],
+   [
+    "orange"
+   ]
+  ],
+  "alpha_maxdiff": 15.75,
+  "alpha_meandiff": 0.175
+ },
+ "mineral-dirt-1": {
+  "n": 12,
+  "colors": [
+   "aubergine",
+   "beige",
+   "black",
+   "brown",
+   "cream",
+   "dustyrose",
+   "grey",
+   "purple",
+   "red",
+   "tan",
+   "violet",
+   "white"
+  ],
+  "shape": [
+   576,
+   4096
+  ],
+  "pixels": 1739158,
+  "grey_k1": 3.84,
+  "rgb_k1": 3.71,
+  "rgb_k2": 2.62,
+  "rgb_k2_parts": [
+   [
+    "aubergine",
+    "purple",
+    "violet"
+   ],
+   [
+    "beige",
+    "black",
+    "brown",
+    "cream",
+    "dustyrose",
+    "grey",
+    "red",
+    "tan",
+    "white"
+   ]
+  ],
+  "rgb_k3": 2.07,
+  "rgb_k3_parts": [
+   [
+    "aubergine",
+    "purple",
+    "violet"
+   ],
+   [
+    "beige",
+    "cream",
+    "grey",
+    "white"
+   ],
+   [
+    "black",
+    "brown",
+    "dustyrose",
+    "red",
+    "tan"
+   ]
+  ],
+  "alpha_maxdiff": 60.41667175292969,
+  "alpha_meandiff": 0.456
+ },
+ "mineral-dirt-2": {
+  "n": 12,
+  "colors": [
+   "aubergine",
+   "beige",
+   "black",
+   "brown",
+   "cream",
+   "dustyrose",
+   "grey",
+   "purple",
+   "red",
+   "tan",
+   "violet",
+   "white"
+  ],
+  "shape": [
+   576,
+   4096
+  ],
+  "pixels": 1738899,
+  "grey_k1": 4.99,
+  "rgb_k1": 4.92,
+  "rgb_k2": 3.15,
+  "rgb_k2_parts": [
+   [
+    "aubergine",
+    "black",
+    "brown",
+    "purple",
+    "tan",
+    "violet"
+   ],
+   [
+    "beige",
+    "cream",
+    "dustyrose",
+    "grey",
+    "red",
+    "white"
+   ]
+  ],
+  "rgb_k3": 2.47,
+  "rgb_k3_parts": [
+   [
+    "aubergine",
+    "purple",
+    "violet"
+   ],
+   [
+    "beige",
+    "black",
+    "brown",
+    "dustyrose",
+    "red",
+    "tan"
+   ],
+   [
+    "cream",
+    "grey",
+    "white"
+   ]
+  ],
+  "alpha_maxdiff": 114.5,
+  "alpha_meandiff": 0.546
+ },
+ "mineral-dirt-3": {
+  "n": 12,
+  "colors": [
+   "aubergine",
+   "beige",
+   "black",
+   "brown",
+   "cream",
+   "dustyrose",
+   "grey",
+   "purple",
+   "red",
+   "tan",
+   "violet",
+   "white"
+  ],
+  "shape": [
+   576,
+   4096
+  ],
+  "pixels": 1737686,
+  "grey_k1": 3.2,
+  "rgb_k1": 3.11,
+  "rgb_k2": 2.47,
+  "rgb_k2_parts": [
+   [
+    "aubergine",
+    "black",
+    "brown",
+    "purple",
+    "tan",
+    "violet"
+   ],
+   [
+    "beige",
+    "cream",
+    "dustyrose",
+    "grey",
+    "red",
+    "white"
+   ]
+  ],
+  "rgb_k3": 2.07,
+  "rgb_k3_parts": [
+   [
+    "aubergine",
+    "purple",
+    "violet"
+   ],
+   [
+    "beige",
+    "cream",
+    "grey",
+    "red",
+    "white"
+   ],
+   [
+    "black",
+    "brown",
+    "dustyrose",
+    "tan"
+   ]
+  ],
+  "alpha_maxdiff": 94.75,
+  "alpha_meandiff": 0.467
+ },
+ "mineral-dirt-4": {
+  "n": 12,
+  "colors": [
+   "aubergine",
+   "beige",
+   "black",
+   "brown",
+   "cream",
+   "dustyrose",
+   "grey",
+   "purple",
+   "red",
+   "tan",
+   "violet",
+   "white"
+  ],
+  "shape": [
+   576,
+   4096
+  ],
+  "pixels": 1736269,
+  "grey_k1": 2.91,
+  "rgb_k1": 2.86,
+  "rgb_k2": 1.94,
+  "rgb_k2_parts": [
+   [
+    "aubergine",
+    "purple",
+    "violet"
+   ],
+   [
+    "beige",
+    "black",
+    "brown",
+    "cream",
+    "dustyrose",
+    "grey",
+    "red",
+    "tan",
+    "white"
+   ]
+  ],
+  "rgb_k3": 1.58,
+  "rgb_k3_parts": [
+   [
+    "aubergine",
+    "purple",
+    "violet"
+   ],
+   [
+    "beige",
+    "black",
+    "brown",
+    "cream",
+    "dustyrose",
+    "red",
+    "tan"
+   ],
+   [
+    "grey",
+    "white"
+   ]
+  ],
+  "alpha_maxdiff": 75.08332824707031,
+  "alpha_meandiff": 0.384
+ },
+ "mineral-dirt-5": {
+  "n": 12,
+  "colors": [
+   "aubergine",
+   "beige",
+   "black",
+   "brown",
+   "cream",
+   "dustyrose",
+   "grey",
+   "purple",
+   "red",
+   "tan",
+   "violet",
+   "white"
+  ],
+  "shape": [
+   576,
+   4096
+  ],
+  "pixels": 1737645,
+  "grey_k1": 2.91,
+  "rgb_k1": 2.83,
+  "rgb_k2": 2.16,
+  "rgb_k2_parts": [
+   [
+    "aubergine",
+    "black",
+    "purple",
+    "violet"
+   ],
+   [
+    "beige",
+    "brown",
+    "cream",
+    "dustyrose",
+    "grey",
+    "red",
+    "tan",
+    "white"
+   ]
+  ],
+  "rgb_k3": 1.88,
+  "rgb_k3_parts": [
+   [
+    "aubergine",
+    "purple",
+    "violet"
+   ],
+   [
+    "beige",
+    "black",
+    "brown",
+    "dustyrose",
+    "tan"
+   ],
+   [
+    "cream",
+    "grey",
+    "red",
+    "white"
+   ]
+  ],
+  "alpha_maxdiff": 59.91667175292969,
+  "alpha_meandiff": 0.424
+ },
+ "mineral-dirt-6": {
+  "n": 12,
+  "colors": [
+   "aubergine",
+   "beige",
+   "black",
+   "brown",
+   "cream",
+   "dustyrose",
+   "grey",
+   "purple",
+   "red",
+   "tan",
+   "violet",
+   "white"
+  ],
+  "shape": [
+   576,
+   4096
+  ],
+  "pixels": 1739314,
+  "grey_k1": 4.15,
+  "rgb_k1": 4.09,
+  "rgb_k2": 2.39,
+  "rgb_k2_parts": [
+   [
+    "aubergine",
+    "purple",
+    "violet"
+   ],
+   [
+    "beige",
+    "black",
+    "brown",
+    "cream",
+    "dustyrose",
+    "grey",
+    "red",
+    "tan",
+    "white"
+   ]
+  ],
+  "rgb_k3": 1.9,
+  "rgb_k3_parts": [
+   [
+    "aubergine",
+    "purple",
+    "violet"
+   ],
+   [
+    "beige",
+    "cream",
+    "grey",
+    "white"
+   ],
+   [
+    "black",
+    "brown",
+    "dustyrose",
+    "red",
+    "tan"
+   ]
+  ],
+  "alpha_maxdiff": 76.58332824707031,
+  "alpha_meandiff": 0.442
+ },
+ "mineral-sand-1": {
+  "n": 12,
+  "colors": [
+   "aubergine",
+   "beige",
+   "black",
+   "brown",
+   "cream",
+   "dustyrose",
+   "grey",
+   "purple",
+   "red",
+   "tan",
+   "violet",
+   "white"
+  ],
+  "shape": [
+   576,
+   4096
+  ],
+  "pixels": 1737506,
+  "grey_k1": 2.05,
+  "rgb_k1": 1.93,
+  "rgb_k2": 1.33,
+  "rgb_k2_parts": [
+   [
+    "aubergine",
+    "black",
+    "brown",
+    "dustyrose",
+    "purple",
+    "red",
+    "violet"
+   ],
+   [
+    "beige",
+    "cream",
+    "grey",
+    "tan",
+    "white"
+   ]
+  ],
+  "rgb_k3": 1.16,
+  "rgb_k3_parts": [
+   [
+    "aubergine",
+    "black",
+    "brown",
+    "dustyrose",
+    "purple",
+    "red",
+    "violet"
+   ],
+   [
+    "beige",
+    "grey",
+    "white"
+   ],
+   [
+    "cream",
+    "tan"
+   ]
+  ],
+  "alpha_maxdiff": 32.41667175292969,
+  "alpha_meandiff": 0.295
+ },
+ "mineral-sand-2": {
+  "n": 12,
+  "colors": [
+   "aubergine",
+   "beige",
+   "black",
+   "brown",
+   "cream",
+   "dustyrose",
+   "grey",
+   "purple",
+   "red",
+   "tan",
+   "violet",
+   "white"
+  ],
+  "shape": [
+   576,
+   4096
+  ],
+  "pixels": 1738374,
+  "grey_k1": 4.74,
+  "rgb_k1": 4.43,
+  "rgb_k2": 2.86,
+  "rgb_k2_parts": [
+   [
+    "aubergine",
+    "black",
+    "brown",
+    "dustyrose",
+    "purple",
+    "red",
+    "violet"
+   ],
+   [
+    "beige",
+    "cream",
+    "grey",
+    "tan",
+    "white"
+   ]
+  ],
+  "rgb_k3": 2.38,
+  "rgb_k3_parts": [
+   [
+    "aubergine",
+    "black",
+    "brown",
+    "dustyrose",
+    "purple",
+    "red",
+    "violet"
+   ],
+   [
+    "beige",
+    "grey",
+    "white"
+   ],
+   [
+    "cream",
+    "tan"
+   ]
+  ],
+  "alpha_maxdiff": 65.41667175292969,
+  "alpha_meandiff": 0.466
+ },
+ "mineral-sand-3": {
+  "n": 12,
+  "colors": [
+   "aubergine",
+   "beige",
+   "black",
+   "brown",
+   "cream",
+   "dustyrose",
+   "grey",
+   "purple",
+   "red",
+   "tan",
+   "violet",
+   "white"
+  ],
+  "shape": [
+   576,
+   4096
+  ],
+  "pixels": 1739076,
+  "grey_k1": 3.54,
+  "rgb_k1": 3.45,
+  "rgb_k2": 2.31,
+  "rgb_k2_parts": [
+   [
+    "aubergine",
+    "black",
+    "brown",
+    "dustyrose",
+    "purple",
+    "red",
+    "violet"
+   ],
+   [
+    "beige",
+    "cream",
+    "grey",
+    "tan",
+    "white"
+   ]
+  ],
+  "rgb_k3": 1.99,
+  "rgb_k3_parts": [
+   [
+    "aubergine",
+    "black",
+    "brown",
+    "dustyrose",
+    "purple",
+    "red",
+    "violet"
+   ],
+   [
+    "beige",
+    "cream",
+    "grey",
+    "tan"
+   ],
+   [
+    "white"
+   ]
+  ],
+  "alpha_maxdiff": 43.5,
+  "alpha_meandiff": 0.438
+ },
+ "vegetation-grass-1": {
+  "n": 10,
+  "colors": [
+   "blue",
+   "green",
+   "mauve",
+   "olive",
+   "orange",
+   "purple",
+   "red",
+   "turquoise",
+   "violet",
+   "yellow"
+  ],
+  "shape": [
+   576,
+   4096
+  ],
+  "pixels": 1746164,
+  "grey_k1": 7.88,
+  "rgb_k1": 7.27,
+  "rgb_k2": 5.24,
+  "rgb_k2_parts": [
+   [
+    "blue",
+    "green",
+    "mauve",
+    "purple",
+    "turquoise",
+    "violet"
+   ],
+   [
+    "olive",
+    "orange",
+    "red",
+    "yellow"
+   ]
+  ],
+  "rgb_k3": 4.27,
+  "rgb_k3_parts": [
+   [
+    "blue",
+    "green",
+    "mauve",
+    "turquoise"
+   ],
+   [
+    "olive",
+    "orange",
+    "yellow"
+   ],
+   [
+    "purple",
+    "red",
+    "violet"
+   ]
+  ],
+  "alpha_maxdiff": 65.5,
+  "alpha_meandiff": 0.574
+ },
+ "vegetation-grass-2": {
+  "n": 10,
+  "colors": [
+   "blue",
+   "green",
+   "mauve",
+   "olive",
+   "orange",
+   "purple",
+   "red",
+   "turquoise",
+   "violet",
+   "yellow"
+  ],
+  "shape": [
+   576,
+   4096
+  ],
+  "pixels": 1745105,
+  "grey_k1": 8.22,
+  "rgb_k1": 7.91,
+  "rgb_k2": 5.58,
+  "rgb_k2_parts": [
+   [
+    "blue",
+    "mauve",
+    "purple",
+    "turquoise",
+    "violet"
+   ],
+   [
+    "green",
+    "olive",
+    "orange",
+    "red",
+    "yellow"
+   ]
+  ],
+  "rgb_k3": 4.64,
+  "rgb_k3_parts": [
+   [
+    "blue",
+    "mauve",
+    "purple"
+   ],
+   [
+    "green",
+    "red",
+    "turquoise",
+    "violet"
+   ],
+   [
+    "olive",
+    "orange",
+    "yellow"
+   ]
+  ],
+  "alpha_maxdiff": 64.80000305175781,
+  "alpha_meandiff": 1.273
+ },
+ "volcanic-heat-1": {
+  "n": 4,
+  "colors": [
+   "blue",
+   "green",
+   "orange",
+   "purple"
+  ],
+  "shape": [
+   576,
+   4096
+  ],
+  "pixels": 1737240,
+  "grey_k1": 1.21,
+  "rgb_k1": 1.19,
+  "rgb_k2": 0.91,
+  "rgb_k2_parts": [
+   [
+    "blue",
+    "purple"
+   ],
+   [
+    "green",
+    "orange"
+   ]
+  ],
+  "rgb_k3": 0.54,
+  "rgb_k3_parts": [
+   [
+    "blue",
+    "purple"
+   ],
+   [
+    "green"
+   ],
+   [
+    "orange"
+   ]
+  ],
+  "alpha_maxdiff": 42.75,
+  "alpha_meandiff": 0.24
+ },
+ "volcanic-heat-2": {
+  "n": 4,
+  "colors": [
+   "blue",
+   "green",
+   "orange",
+   "purple"
+  ],
+  "shape": [
+   576,
+   4096
+  ],
+  "pixels": 1733361,
+  "grey_k1": 4.97,
+  "rgb_k1": 4.93,
+  "rgb_k2": 3.33,
+  "rgb_k2_parts": [
+   [
+    "blue",
+    "purple"
+   ],
+   [
+    "green",
+    "orange"
+   ]
+  ],
+  "rgb_k3": 2.13,
+  "rgb_k3_parts": [
+   [
+    "blue",
+    "purple"
+   ],
+   [
+    "green"
+   ],
+   [
+    "orange"
+   ]
+  ],
+  "alpha_maxdiff": 43.25,
+  "alpha_meandiff": 0.318
+ },
+ "volcanic-heat-3": {
+  "n": 4,
+  "colors": [
+   "blue",
+   "green",
+   "orange",
+   "purple"
+  ],
+  "shape": [
+   576,
+   4096
+  ],
+  "pixels": 1731371,
+  "grey_k1": 7.21,
+  "rgb_k1": 7.11,
+  "rgb_k2": 4.8,
+  "rgb_k2_parts": [
+   [
+    "blue",
+    "purple"
+   ],
+   [
+    "green",
+    "orange"
+   ]
+  ],
+  "rgb_k3": 2.95,
+  "rgb_k3_parts": [
+   [
+    "blue",
+    "purple"
+   ],
+   [
+    "green"
+   ],
+   [
+    "orange"
+   ]
+  ],
+  "alpha_maxdiff": 63.75,
+  "alpha_meandiff": 0.339
+ },
+ "volcanic-heat-4": {
+  "n": 4,
+  "colors": [
+   "blue",
+   "green",
+   "orange",
+   "purple"
+  ],
+  "shape": [
+   576,
+   4096
+  ],
+  "pixels": 1730519,
+  "grey_k1": 9.66,
+  "rgb_k1": 9.48,
+  "rgb_k2": 6.56,
+  "rgb_k2_parts": [
+   [
+    "blue",
+    "purple"
+   ],
+   [
+    "green",
+    "orange"
+   ]
+  ],
+  "rgb_k3": 4.31,
+  "rgb_k3_parts": [
+   [
+    "blue",
+    "purple"
+   ],
+   [
+    "green"
+   ],
+   [
+    "orange"
+   ]
+  ],
+  "alpha_maxdiff": 58.5,
+  "alpha_meandiff": 0.434
+ }
+}

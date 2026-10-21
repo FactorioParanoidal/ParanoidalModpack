@@ -1,0 +1,133 @@
+-- Defect qualities and quality-control research. Runtime handling lives in control.lua.
+local M = {}
+local model = require("scripts.defects.model")
+
+-- User decision: defects stay at internal level 0, standard is NOT shifted.
+-- Level-scaled engine bonuses (fuel, beacon effectivity, default bonuses) are
+-- therefore identical to standard; only the explicit fields below penalize.
+function M.defect(tier)
+    local multiplier = model.multiplier(-tier)
+    local shade = .08 + (5 - tier) * .055
+    return {
+        type = "quality",
+        name = "ic-defect-" .. tier,
+        localised_name = {"quality-name.ic-defect-" .. tier},
+        localised_description = {"quality-description.ic-defect"},
+        level = 0,
+        -- Sorted before standard ("a"): -5, -4, ... -1.
+        order = "0-ic-defect-" .. (5 - tier),
+        subgroup = "qualities",
+        color = {r = shade, g = shade, b = shade},
+        icons = {{
+            icon = "__ic-more-qualities__/graphics/icons/quality-uncommon-t" .. tier .. ".png",
+            icon_size = 64,
+            tint = {r = 0, g = 0, b = 0, a = 1},
+        }},
+        next = tier > 1 and ("ic-defect-" .. (tier - 1)) or "normal",
+        next_probability = .1,
+        default_multiplier = multiplier,
+        accumulator_capacity_multiplier = multiplier,
+        crafting_machine_speed_multiplier = multiplier,
+        fluid_wagon_capacity_multiplier = multiplier,
+        flying_robot_max_energy_multiplier = multiplier,
+        inserter_speed_multiplier = multiplier,
+        inventory_size_multiplier = multiplier,
+        lab_research_speed_multiplier = multiplier,
+        logistic_cell_charging_energy_multiplier = multiplier,
+        tool_durability_multiplier = multiplier,
+        -- Penalty, not a bonus: more energy and therefore more pollution.
+        crafting_machine_energy_usage_multiplier = 1 / multiplier,
+        beacon_power_usage_multiplier = 1,
+        mining_drill_resource_drain_multiplier = 1,
+        science_pack_drain_multiplier = 1,
+        range_multiplier = 1,
+        asteroid_collector_collection_radius_bonus = 0,
+        beacon_supply_area_distance_bonus = 0,
+        -- Pole bonuses are assigned by defects-final.lua together with base radii.
+        electric_pole_supply_area_distance_bonus = 0,
+        electric_pole_wire_reach_bonus = 0,
+        equipment_grid_height_bonus = 0,
+        equipment_grid_width_bonus = 0,
+        logistic_cell_charging_station_count_bonus = 0,
+        mining_drill_mining_radius_bonus = 0,
+        beacon_module_slots_bonus = 0,
+        crafting_machine_module_slots_bonus = 0,
+        mining_drill_module_slots_bonus = 0,
+        lab_module_slots_bonus = 0,
+    }
+end
+
+function M.prepare(raw)
+    assert(raw.quality and raw.quality.normal, "Missing standard quality")
+    assert(raw.technology, "Missing technologies")
+    local quality_module = assert(raw.technology["quality-module"], "Missing first quality-module technology")
+    assert(raw.quality.normal.level == 0, "Defects require standard quality at level 0")
+    for tier = 1, 5 do
+        assert(not raw.quality["ic-defect-" .. tier], "Defect quality already registered")
+    end
+    for level = 1, 10 do
+        assert(not raw.technology[model.research(level).name], "Defect research already registered")
+    end
+
+    local prototypes = {}
+    for tier = 5, 1, -1 do prototypes[#prototypes + 1] = M.defect(tier) end
+
+    local control_component = raw.item and raw.item["bob-quality-processor"]
+    local control_icon = control_component and control_component.icon or "__quality__/graphics/icons/quality-module.png"
+    local control_icon_size = control_component and control_component.icon_size or 64
+    for level = 1, 10 do
+        local research = model.research(level)
+        local prerequisites = research.prerequisite and {research.prerequisite} or {}
+        -- Titanium gear under a magnifier: cracked at I-II, clean at VII-VIII, golden at IX-X.
+        local icons = {{icon = "__ic-more-qualities__/graphics/technology/defect-control-" .. level .. ".png", icon_size = 256}}
+        if mods and mods["zzzparanoidal"] then
+            -- Same upper-right geometry as zzzparanoidal's technology markers.
+            icons[#icons + 1] = {
+                icon = "__zzzparanoidal__/graphics/technology/icon-markers/level-" .. level .. ".png",
+                icon_size = 256,
+                scale = 0.425,
+                shift = {9.6, -9.6},
+                floating = true,
+            }
+        end
+        prototypes[#prototypes + 1] = {
+            type = "technology",
+            name = research.name,
+            localised_name = {"technology-name.ic-defect-control", tostring(level)},
+            localised_description = {"technology-description.ic-defect-control-preview"},
+            icons = icons,
+            order = "ic-defect-control-" .. string.format("%02d", level),
+            prerequisites = prerequisites,
+            unit = {count = research.count, time = research.time, ingredients = {{research.science, 1}}},
+            -- Runtime reads this force's completed chain.
+            enabled = true,
+            visible_when_disabled = true,
+            effects = {{
+                type = "nothing",
+                icon = control_icon,
+                icon_size = control_icon_size,
+                use_icon_overlay_constant = false,
+                effect_description = {"ic-defects.control-effect", tostring(level)},
+            }},
+        }
+    end
+    -- Quality modules follow defect control, not the other way around. Preserve
+    -- the upstream module prerequisites and all existing researched states.
+    -- Paranoidal (user decision 2026-10-18): the logistic science pack also follows quality control 10,
+    -- so defects end before green science.
+    local final_control = model.research_prefix .. model.maximum_research
+    local function require_final_control(technology)
+        local prerequisites, present = {}, false
+        for _, name in ipairs(technology.prerequisites or {}) do
+            prerequisites[#prerequisites + 1] = name
+            if name == final_control then present = true end
+        end
+        if not present then prerequisites[#prerequisites + 1] = final_control end
+        technology.prerequisites = prerequisites
+    end
+    require_final_control(quality_module)
+    if raw.technology["logistic-science-pack"] then require_final_control(raw.technology["logistic-science-pack"]) end
+    return prototypes
+end
+
+return M

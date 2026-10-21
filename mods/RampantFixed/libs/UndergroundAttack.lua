@@ -90,6 +90,38 @@ end
 -- end
 
 local sideVectors = {{1,0}, {0,1}, {-1,0}, {0,-1}}
+
+-- units dig out 6 per tile and at most ~200 at once, so more positions than this are never used
+local DIG_OUT_POSITIONS_LIMIT = 40
+
+-- walkable tile at x, y as a dig-out position; fast floors (concrete) slow the units down and cost them health
+local function addDigOutPosition(surface, positions, x, y)
+	local tile = surface.get_tile({x, y})
+	if tile and (not tile.collides_with("player")) then
+		local modifier = tile.prototype.walking_speed_modifier
+		local healthRate
+		if modifier >= 1.3 then
+			if modifier >= 2 then
+				healthRate = 0.5
+			else
+				healthRate = 0.5 + 0.5 * (2 - modifier) / 0.7
+			end
+		end
+		positions[#positions+1] = {x = x, y = y, slowdown = (modifier >= 1.5), healthRate = healthRate}
+	end
+end
+
+-- walkable tiles of the rectangle (x-major order) until DIG_OUT_POSITIONS_LIMIT positions are collected
+local function addDigOutArea(surface, positions, x1, x2, stepX, y1, y2, stepY)
+	for x = x1, x2, stepX do
+		for y = y1, y2, stepY do
+			if #positions >= DIG_OUT_POSITIONS_LIMIT then
+				return
+			end
+			addDigOutPosition(surface, positions, x, y)
+		end
+	end
+end
 local function digOut(undergroundSquad, targetPosition)
 	local map = undergroundSquad.map
 	if (not map) or (not map.surface.valid) then
@@ -104,7 +136,7 @@ local function digOut(undergroundSquad, targetPosition)
 			removeConcreteTile(surface, tile)
 			undergroundSquad.digOutTick = game.tick + 3600
 			
-			entity = surface.create_entity({name = "undeground-dust-cloud-rampant", position = {undergroundSquad.position.x, undergroundSquad.position.y}})			
+			local entity = surface.create_entity({name = "undeground-dust-cloud-rampant", position = {undergroundSquad.position.x, undergroundSquad.position.y}})
 			showAlert(surface, entity, "undergroundDigout-warning-rampant", 
 				{"", {"description.rampantFixed--undergroundAttackDigoutWarning"},": ", ("[gps=" .. undergroundSquad.position.x .. "," .. undergroundSquad.position.y .. "," .. map.surface.name .."]")}
 				)
@@ -126,98 +158,33 @@ local function digOut(undergroundSquad, targetPosition)
 	if squad and squad.group and squad.group.valid then
 		squad.rabid = true
 		local digOutPositions = {}
+		local px = undergroundSquad.position.x
+		local py = undergroundSquad.position.y
 		-------------------
 		if targetPosition then
-			digOutPositions = {}
-			local dx
-			local dy
-			if targetPosition.x > undergroundSquad.position.x then
-				dx = 1
-			else
-				dx = -1				
-			end
-			if targetPosition.y > undergroundSquad.position.y then
-				dy = 1
-			else
-				dy = -1				
-			end
-			for x = undergroundSquad.position.x - 5*dx, undergroundSquad.position.x, dx do
-				for y = undergroundSquad.position.y - 5*dy, undergroundSquad.position.y, dy do
-					local tile = surface.get_tile({x, y})
-					if tile and (not tile.collides_with("player")) then
-						local healthRate
-						if tile.prototype.walking_speed_modifier >= 1.3 then
-							if tile.prototype.walking_speed_modifier >= 2 then
-								healthRate = 0.5
-							else
-								healthRate = 0.5 + 0.5 * (2 - tile.prototype.walking_speed_modifier) / 0.7
-							end
-						end
-						digOutPositions[#digOutPositions+1] = {x = x, y = y, slowdown = (tile.prototype.walking_speed_modifier >= 1.5), healthRate = healthRate}
-						-- if tile.prototype.walking_speed_modifier >= 1.5 then
-							-- removeConcreteTile(surface, tile)
-						-- end
-					end
-				end
-			end
-			
+			local dx = (targetPosition.x > px) and 1 or -1
+			local dy = (targetPosition.y > py) and 1 or -1
+			-- behind the squad, then (if too few) towards the target; units come out 6 per tile, at most 200
+			-- at once, so more than DIG_OUT_POSITIONS_LIMIT positions are never used
+			addDigOutArea(surface, digOutPositions, px - 5*dx, px, dx, py - 5*dy, py, dy)
 			if #digOutPositions < 5 then
-				for x = undergroundSquad.position.x, targetPosition.x, dx do
-					for y = undergroundSquad.position.y, targetPosition.y, dy do
-						local tile = surface.get_tile({x , y})
-						if tile and (not tile.collides_with("player")) then
-							local healthRate
-							if tile.prototype.walking_speed_modifier >= 1.3 then
-								if tile.prototype.walking_speed_modifier >= 2 then
-									healthRate = 0.5
-								else
-									healthRate = 0.5 + 0.5 * (2 - tile.prototype.walking_speed_modifier) / 0.7
-								end
-							end
-							digOutPositions[#digOutPositions+1] = {x = x, y = y, slowdown = (tile.prototype.walking_speed_modifier >= 1.5), healthRate = healthRate}
-							-- if tile.prototype.walking_speed_modifier >= 1.5 then
-								-- removeConcreteTile(surface, tile)
-							-- end
-						end
-					end
-				end			
+				addDigOutArea(surface, digOutPositions, px, targetPosition.x, dx, py, targetPosition.y, dy)
 			end
-			
 			if #digOutPositions == 0 then
 				digOutPositions[1] = {x = targetPosition.x, y = targetPosition.y, slowdown = false}
 				surface.set_tiles({{name = "landfill", position = {digOutPositions[1].x, digOutPositions[1].y}}},true,true,true,true)
 			end
-			
 		else
-
-			for dx = 1, 5 do
-				for dy = 1, 5 do
-					for _, vector in pairs(sideVectors) do
-						local x = undergroundSquad.position.x + dx*vector[1]
-						local y = undergroundSquad.position.y + dx*vector[2]
-						local tile = surface.get_tile({x, y})
-						if tile and (not tile.collides_with("player")) then
-							local healthRate
-							if tile.prototype.walking_speed_modifier >= 1.3 then
-								if tile.prototype.walking_speed_modifier >= 2 then
-									healthRate = 0.5
-								else
-									healthRate = 0.5 + 0.5 * (2 - tile.prototype.walking_speed_modifier) / 0.7
-								end
-							end
-							digOutPositions[#digOutPositions+1] = {x = x, y = y, slowdown = (tile.prototype.walking_speed_modifier >= 1.5), healthRate = healthRate}
-							-- if tile.prototype.walking_speed_modifier >= 1.5 then
-								-- removeConcreteTile(surface, tile)
-							-- end
-						end
-					end	
-				end
-				if #digOutPositions == 0 then
-					digOutPositions[1] = {x = undergroundSquad.position.x, y = undergroundSquad.position.y, slowdown = false}
-					surface.set_tiles({{name = "landfill", position = {digOutPositions[1].x, digOutPositions[1].y}}},true,true,true,true)
+			-- a cross of 4 rays, 5 tiles each (the old loop added every ray tile 5 times)
+			for d = 1, 5 do
+				for _, vector in pairs(sideVectors) do
+					addDigOutPosition(surface, digOutPositions, px + d*vector[1], py + d*vector[2])
 				end
 			end
-		
+			if #digOutPositions == 0 then
+				digOutPositions[1] = {x = px, y = py, slowdown = false}
+				surface.set_tiles({{name = "landfill", position = {digOutPositions[1].x, digOutPositions[1].y}}},true,true,true,true)
+			end
 		end
 		-------------------
 		
@@ -306,7 +273,7 @@ local function digOut(undergroundSquad, targetPosition)
 			squad.onTheWay = true
 			
 			if undergroundSquad.digOutTick then	-- do not alert if "soft" ground
-				entity = surface.create_entity({name = "undeground-dust-cloud-rampant", position = {undergroundSquad.position.x, undergroundSquad.position.y}})			
+				local entity = surface.create_entity({name = "undeground-dust-cloud-rampant", position = {undergroundSquad.position.x, undergroundSquad.position.y}})
 				showAlert(surface, entity, "undergroundDigout-warning-rampant",
 				{"", {"description.rampantFixed--undergroundAttackDetectedWarning"},": ", ("[gps=" .. undergroundSquad.position.x .. "," .. undergroundSquad.position.y .. "," .. map.surface.name .. "]")}				
 				)
@@ -545,7 +512,7 @@ local function processUndergroundSquad(map, undergroundSquad)
 			else
 				local tile = surface.get_tile(undergroundSquad.position.x, undergroundSquad.position.y)
 				if tile.prototype.walking_speed_modifier >= 1.5 then
-					entity = surface.create_entity({name = "undeground-dust-cloud-rampant", position = {undergroundSquad.position.x, undergroundSquad.position.y}})			
+					local entity = surface.create_entity({name = "undeground-dust-cloud-rampant", position = {undergroundSquad.position.x, undergroundSquad.position.y}})
 					undergroundSquad.detected = showAlert(surface, entity, "undergroundPass-warning-rampant", 
 						{"", {"description.rampantFixed--undergroundAttackDetectedWarning"},": ", ("[gps=" .. undergroundSquad.position.x .. "," .. undergroundSquad.position.y .. "," .. map.surface.name .. "]")}
 						)
@@ -563,7 +530,7 @@ function undergroundAttack.processUndergroundSquads(universe)
 	end
 	local squadsProcessed = 0
 	for i, undergroundSquad in pairs(universe.undergroundSquads) do
-		map = undergroundSquad.map
+		local map = undergroundSquad.map
 		if map and map.surface and map.surface.valid then
 			if undergroundSquad.nextTick <= game.tick then
 				processUndergroundSquad(map, undergroundSquad)

@@ -8,6 +8,7 @@ local aiPlanning = {}
 local constants = require("Constants")
 local mathUtils = require("MathUtils")
 local config = require("__RampantFixed__/config")
+local aiBrain = require("AIBrain")
 
 -- local aiPredicates = require("AIPredicates")
 
@@ -42,6 +43,123 @@ local MINIMUM_AI_POINTS = constants.MINIMUM_AI_POINTS
 local K_NO_ACTIVE_NESTS = constants.K_NO_ACTIVE_NESTS
 local K_TOO_LOW_ACTIVE_NESTS = constants.K_TOO_LOW_ACTIVE_NESTS
 local K_LOW_ACTIVE_NESTS = constants.K_LOW_ACTIVE_NESTS
+
+-- AI state planner (same probabilities as the former if/else chain).
+-- The temperament selects a band. In the band the first rule whose roll limit (lt) and requirement (req) pass
+-- picks the first state of its chain whose requirement passes; the last state of a chain has none.
+-- Requirements: siege, raid (AI toggles), grow (bases can grow), migr (migration on),
+-- arnLow (fewer than 1000 active raid nests), strong (more than 70 active nests or any retribution).
+local ONLY_AGGRESSIVE = {{AI_STATE_AGGRESSIVE}}
+local ONLY_ONSLAUGHT = {{AI_STATE_ONSLAUGHT}}
+local ONLY_SIEGE = {{AI_STATE_SIEGE}}
+local ONLY_RAIDING = {{AI_STATE_RAIDING}}
+local ONLY_MIGRATING = {{AI_STATE_MIGRATING}}
+local ONLY_GROWING = {{AI_STATE_GROWING}}
+local RAID_OR_AGGRESSIVE = {{AI_STATE_RAIDING, "raid"}, {AI_STATE_AGGRESSIVE}}
+local SIEGE_RAID_ONSLAUGHT = {{AI_STATE_SIEGE, "siege"}, {AI_STATE_RAIDING, "raid"}, {AI_STATE_ONSLAUGHT}}
+local RAID_SIEGE_ONSLAUGHT = {{AI_STATE_RAIDING, "raid"}, {AI_STATE_SIEGE, "siege"}, {AI_STATE_ONSLAUGHT}}
+local RAID_SIEGE_AGGRESSIVE = {{AI_STATE_RAIDING, "raid"}, {AI_STATE_SIEGE, "siege"}, {AI_STATE_AGGRESSIVE}}
+
+local BAND_MIDDLE = {	-- 0.4 - 0.6, with or without migration
+	{lt = 0.6, chain = ONLY_AGGRESSIVE},
+	{lt = 0.65, req = "siege", chain = ONLY_SIEGE},
+	{chain = {{AI_STATE_MIGRATING, "migr"}, {AI_STATE_AGGRESSIVE}}}
+}
+local BAND_HOT = {	-- 0.6 - 0.8, with or without migration
+	{lt = 0.4, chain = ONLY_AGGRESSIVE},
+	{lt = 0.6, chain = ONLY_ONSLAUGHT},
+	{lt = 0.8, chain = RAID_OR_AGGRESSIVE},
+	{chain = ONLY_AGGRESSIVE}
+}
+
+local STATE_BANDS = {
+	{upTo = 0.05,
+		migration = {
+			{lt = 0.7, req = "siege", chain = ONLY_SIEGE},
+			{chain = ONLY_MIGRATING}},
+		noMigration = {
+			{lt = 0.85, chain = ONLY_AGGRESSIVE},
+			{chain = RAID_OR_AGGRESSIVE}}},
+	{upTo = 0.20,
+		migration = {
+			{lt = 0.4, req = "siege", chain = ONLY_SIEGE},
+			{lt = 0.6, req = "raid", chain = ONLY_RAIDING},
+			{chain = ONLY_MIGRATING}},
+		noMigration = {
+			{lt = 0.2, req = "siege", chain = ONLY_SIEGE},
+			{lt = 0.95, chain = ONLY_AGGRESSIVE},
+			{chain = RAID_OR_AGGRESSIVE}}},
+	{upTo = 0.4,
+		migration = {
+			{lt = 0.2, chain = {{AI_STATE_MIGRATING, "arnLow"}, {AI_STATE_AGGRESSIVE}}},
+			{lt = 0.4, req = "raid", chain = ONLY_RAIDING},
+			{lt = 0.6, req = "siege", chain = ONLY_SIEGE},
+			{lt = 0.8, chain = ONLY_MIGRATING},
+			{chain = {{AI_STATE_GROWING, "grow"}, {AI_STATE_MIGRATING}}}},
+		noMigration = {
+			{lt = 0.7, chain = ONLY_AGGRESSIVE},
+			{lt = 0.8, req = "raid", chain = ONLY_RAIDING},
+			{lt = 0.9, req = "grow", chain = ONLY_GROWING},
+			{chain = ONLY_AGGRESSIVE}}},
+	{upTo = 0.6, migration = BAND_MIDDLE, noMigration = BAND_MIDDLE},
+	{upTo = 0.8, migration = BAND_HOT, noMigration = BAND_HOT},
+	{upTo = 0.95,
+		migration = {
+			{lt = 0.2, req = "arnLow", chain = ONLY_MIGRATING},
+			{lt = 0.3, chain = SIEGE_RAID_ONSLAUGHT},
+			{lt = 0.65, chain = RAID_SIEGE_AGGRESSIVE},
+			{lt = 0.85, chain = ONLY_ONSLAUGHT},
+			{chain = ONLY_AGGRESSIVE}},
+		noMigration = {
+			{lt = 0.15, chain = SIEGE_RAID_ONSLAUGHT},
+			{lt = 0.3, req = "strong", chain = SIEGE_RAID_ONSLAUGHT},
+			{lt = 0.6, chain = {{AI_STATE_RAIDING, "raid"}, {AI_STATE_GROWING, "grow"}, {AI_STATE_SIEGE, "siege"}, {AI_STATE_AGGRESSIVE}}},
+			{lt = 0.85, chain = ONLY_ONSLAUGHT},
+			{chain = ONLY_AGGRESSIVE}}},
+	{upTo = nil,	-- 0.95 and above
+		migration = {
+			{lt = 0.3, req = "arnLow", chain = ONLY_MIGRATING},
+			{lt = 0.10, req = "grow", chain = ONLY_GROWING},
+			{lt = 0.3, chain = SIEGE_RAID_ONSLAUGHT},
+			{lt = 0.65, chain = RAID_SIEGE_ONSLAUGHT},
+			{lt = 0.85, chain = ONLY_ONSLAUGHT},
+			{chain = ONLY_AGGRESSIVE}},
+		noMigration = {
+			{lt = 0.05, req = "grow", chain = ONLY_GROWING},
+			{lt = 0.15, chain = SIEGE_RAID_ONSLAUGHT},
+			{lt = 0.3, req = "strong", chain = SIEGE_RAID_ONSLAUGHT},
+			{lt = 0.65, chain = RAID_SIEGE_ONSLAUGHT},
+			{lt = 0.85, chain = ONLY_ONSLAUGHT},
+			{chain = ONLY_AGGRESSIVE}}}
+}
+
+-- scratch table, filled before every pickPlannedState call
+local stateRuleContext = {}
+
+local function pickPlannedState(temperament, migration, roll, ctx)
+	local band = STATE_BANDS[#STATE_BANDS]
+	for i = 1, #STATE_BANDS - 1 do
+		if temperament < STATE_BANDS[i].upTo then
+			band = STATE_BANDS[i]
+			break
+		end
+	end
+	local rules = (migration and band.migration) or band.noMigration
+	for i = 1, #rules do
+		local rule = rules[i]
+		if ((not rule.lt) or (roll < rule.lt)) and ((not rule.req) or ctx[rule.req]) then
+			local chain = rule.chain
+			for c = 1, #chain do
+				local option = chain[c]
+				if (not option[2]) or ctx[option[2]] then
+					return option[1]
+				end
+			end
+		end
+	end
+	return AI_STATE_AGGRESSIVE	-- not reached: every rule list ends with an unconditional rule
+end
+aiPlanning.pickPlannedState = pickPlannedState
 
 
 -- imported functions
@@ -96,7 +214,7 @@ local function planningUniverseMap(map, tick)
 
     local attackWaveMaxSize = config.getAttackWaveMaxSize(universe)
     map.rallyThreshold = BASE_RALLY_CHANCE + (mMin(evolution_factor, 0.3) * BONUS_RALLY_CHANCE)
-	local vengefulnessModifier = settings.global["rampantFixed--vengenceProbabilityPercent"].value*25	-- 0.04 is default
+	local vengefulnessModifier = (universe.vengenceProbabilityPercent or settings.global["rampantFixed--vengenceProbabilityPercent"].value)*25	-- 0.04 is default
 	if vengefulnessModifier ~= 1 then
 		map.rallyThreshold = map.rallyThreshold * vengefulnessModifier
 	end
@@ -158,7 +276,7 @@ function aiPlanning.updateBasesToGrow(map, tick, ingnoreGrowingState)
 		basesToGrowSize = basesToGrowSize + 1
 	end
 	if (basesToGrowSize > 0) and ((map.state == AI_STATE_GROWING) or ingnoreGrowingState) then
-		growCnt = mRandom(mMin(basesToGrowSize, 2), mMin(basesToGrowSize, 4))
+		local growCnt = mRandom(mMin(basesToGrowSize, 2), mMin(basesToGrowSize, 4))
 		local growIndexes = mathUtils.getRandomElementIndexes(map.basesToGrow, growCnt)
 		for i = 1, #growIndexes do
 			local baseId = growIndexes[i]
@@ -265,12 +383,13 @@ local function planningMap(map, tick)
 				mapStateChanged = true
 				resetNextStateTick = false
 				map.points = 400
-				local truceLeft = mMax(math.floor((truceEndTick+5 - tick) / 3600), 0)
-				if truceLeft > 0 then
-					game.print({"description.rampantFixed--peacefullModeNotification", map.surface.name, truceLeft, planetAISetting.minEvo})
-				else
-					game.print({"description.rampantFixed--peacefullMode_LowEvoNotification", map.surface.name, planetAISetting.minEvo})
-				end
+				-- Paranoidal: the truce start is shown by EvoUI next to the evolution line, no chat message.
+				-- local truceLeft = mMax(math.floor((truceEndTick+5 - tick) / 3600), 0)
+				-- if truceLeft > 0 then
+					-- game.print({"description.rampantFixed--peacefullModeNotification", map.surface.name, truceLeft, planetAISetting.minEvo})
+				-- else
+					-- game.print({"description.rampantFixed--peacefullMode_LowEvoNotification", map.surface.name, planetAISetting.minEvo})
+				-- end
 			elseif (map.stateTick <= tick) then
 				map.stateTick = mMax(truceEndTick, tick + 3600)
 			end	
@@ -334,205 +453,18 @@ local function planningMap(map, tick)
 			local roll = mRandom()
 			if (evo < constants.highEvo) and (basesToGrowCnt > 0) and (mRandom() < 0.13) and (tick>36000) then	-- dont use "roll" variable here
 				map.state = AI_STATE_GROWING
-				mapStateChanged = true
-			-- elseif (map.temperament < 0.7) and siegeAIToggle and (map.siegeTick <= tick) then
-				-- mapStateChanged = true
-				-- map.state = AI_STATE_SIEGE
-			elseif (map.temperament < 0.05) then -- 0 - 0.05
-				if enabledMigration then
-					if (roll < 0.7) and siegeAIToggle then
-						map.state = AI_STATE_SIEGE
-					else
-						map.state = AI_STATE_MIGRATING
-					end
-				else
-					if universe.raidAIToggle then
-						if roll < 0.85 then	
-							map.state = AI_STATE_AGGRESSIVE
-						else
-							map.state = AI_STATE_RAIDING
-						end
-					else
-						map.state = AI_STATE_AGGRESSIVE
-					end
-				end
-			elseif (map.temperament < 0.20) then -- 0.05 - 0.2
-				if (enabledMigration) then
-					if (roll < 0.4) and siegeAIToggle then
-						map.state = AI_STATE_SIEGE
-					elseif (roll < 0.6) and universe.raidAIToggle then
-						map.state = AI_STATE_RAIDING
-					else
-						map.state = AI_STATE_MIGRATING
-					end
-				else
-					if (roll < 0.2) and siegeAIToggle then
-						map.state = AI_STATE_SIEGE				
-					elseif universe.raidAIToggle then
-						if (roll < 0.95) then
-							map.state = AI_STATE_AGGRESSIVE
-						else
-							map.state = AI_STATE_RAIDING
-						end
-					else
-						map.state = AI_STATE_AGGRESSIVE
-					end
-				end
-			elseif (map.temperament < 0.4) then -- 0.2 - 0.4
-				if (enabledMigration) then
-					if (roll < 0.2) then
-						if (activeRaidNests < 1000) then
-							map.state = AI_STATE_MIGRATING
-						else	
-							map.state = AI_STATE_AGGRESSIVE
-						end	
-					elseif (roll < 0.4) and universe.raidAIToggle then
-						map.state = AI_STATE_RAIDING
-					elseif (roll < 0.6) and siegeAIToggle then
-						map.state = AI_STATE_SIEGE				
-					elseif (roll < 0.8) then
-						map.state = AI_STATE_MIGRATING
-					elseif (basesToGrowCnt > 0) then
-						map.state = AI_STATE_GROWING
-					else
-						map.state = AI_STATE_MIGRATING
-					end
-				else
-					if (roll < 0.7) then
-						map.state = AI_STATE_AGGRESSIVE
-					elseif (roll < 0.8) and universe.raidAIToggle then
-						map.state = AI_STATE_RAIDING
-					elseif (basesToGrowCnt > 0) and (roll < 0.9) then
-						map.state = AI_STATE_GROWING
-					else
-						map.state = AI_STATE_AGGRESSIVE
-					end
-				end
-			elseif (map.temperament < 0.6) then -- 0.4 - 0.6
-				if (roll < 0.6) then
-					map.state = AI_STATE_AGGRESSIVE
-				elseif siegeAIToggle and (roll < 0.65) then	
-					map.state = AI_STATE_SIEGE			
-				else
-					if enabledMigration then
-						map.state = AI_STATE_MIGRATING
-					else
-						map.state = AI_STATE_AGGRESSIVE
-					end
-				end
-			elseif (map.temperament < 0.8) then -- 0.6 - 0.8
-				if (roll < 0.4) then
-					map.state = AI_STATE_AGGRESSIVE
-				elseif (roll < 0.6) then
-					map.state = AI_STATE_ONSLAUGHT
-				elseif (roll < 0.8) then
-					if universe.raidAIToggle then
-						map.state = AI_STATE_RAIDING
-					else
-						map.state = AI_STATE_AGGRESSIVE				
-					end					
-				else
-					map.state = AI_STATE_AGGRESSIVE
-				end
-			elseif (map.temperament < 0.95) then -- 0.8 - 0.95
-				if enabledMigration then
-					if (activeRaidNests < 1000) and (roll < 0.20) then
-						map.state = AI_STATE_MIGRATING
-					elseif (roll < 0.30) then
-						if siegeAIToggle then
-							map.state = AI_STATE_SIEGE
-						elseif universe.raidAIToggle then
-							map.state = AI_STATE_RAIDING
-						else
-							map.state = AI_STATE_ONSLAUGHT
-						end
-					elseif (roll < 0.65) then
-						if universe.raidAIToggle then
-							map.state = AI_STATE_RAIDING
-						elseif siegeAIToggle then
-							map.state = AI_STATE_SIEGE
-						else
-							map.state = AI_STATE_AGGRESSIVE
-						end
-					elseif (roll < 0.85) then
-						map.state = AI_STATE_ONSLAUGHT
-					else	
-						map.state = AI_STATE_AGGRESSIVE
-					end
-				else
-					if (roll < 0.30) then
-						if siegeAIToggle then
-							map.state = AI_STATE_SIEGE
-						elseif universe.raidAIToggle then
-							map.state = AI_STATE_RAIDING
-						else
-							map.state = AI_STATE_ONSLAUGHT
-						end
-					elseif (roll < 0.65) then
-						if universe.raidAIToggle then
-							map.state = AI_STATE_RAIDING
-						elseif siegeAIToggle then
-							map.state = AI_STATE_SIEGE
-						else
-							map.state = AI_STATE_AGGRESSIVE
-						end
-					elseif (roll < 0.85) then
-						map.state = AI_STATE_ONSLAUGHT
-					else	
-						map.state = AI_STATE_AGGRESSIVE
-					end
-				end
 			else
-				if enabledMigration then
-					if (activeRaidNests < 1000) and (roll < 0.30) then
-						map.state = AI_STATE_MIGRATING
-					elseif (basesToGrowCnt > 0) and (roll < 0.10) then
-						map.state = AI_STATE_GROWING
-					elseif (roll < 0.30) then
-						if siegeAIToggle then
-							map.state = AI_STATE_SIEGE
-						elseif universe.raidAIToggle then
-							map.state = AI_STATE_RAIDING
-						else
-							map.state = AI_STATE_ONSLAUGHT
-						end
-					elseif (roll < 0.65) then
-						if universe.raidAIToggle then
-							map.state = AI_STATE_RAIDING
-						elseif siegeAIToggle then
-							map.state = AI_STATE_SIEGE
-						else
-							map.state = AI_STATE_ONSLAUGHT
-						end
-					elseif (roll < 0.85) then
-						map.state = AI_STATE_ONSLAUGHT
-					else	
-						map.state = AI_STATE_AGGRESSIVE
-					end
-				else
-					if (basesToGrowCnt > 0) and (roll < 0.05) then
-						map.state = AI_STATE_GROWING
-					elseif (roll < 0.30) then
-						if siegeAIToggle then
-							map.state = AI_STATE_SIEGE
-						elseif universe.raidAIToggle then
-							map.state = AI_STATE_RAIDING
-						else
-							map.state = AI_STATE_ONSLAUGHT
-						end
-					elseif (roll < 0.65) then
-						if universe.raidAIToggle then
-							map.state = AI_STATE_RAIDING
-						elseif siegeAIToggle then
-							map.state = AI_STATE_SIEGE
-						else
-							map.state = AI_STATE_ONSLAUGHT
-						end
-					elseif (roll < 0.85) then
-						map.state = AI_STATE_ONSLAUGHT
-					else	
-						map.state = AI_STATE_AGGRESSIVE
-					end
+				local ctx = stateRuleContext
+				ctx.siege = siegeAIToggle
+				ctx.raid = universe.raidAIToggle
+				ctx.grow = (basesToGrowCnt > 0)
+				ctx.migr = enabledMigration
+				ctx.arnLow = (activeRaidNests < 1000)
+				ctx.strong = (activeNests > 70) or (map.retribution >= 1)
+				map.state = pickPlannedState(map.temperament, enabledMigration, roll, ctx)
+				if not universe.classicAI then
+					-- learning: a state whose squads keep failing is often replaced by a better one
+					map.state = aiBrain.adjustPlannedState(map, map.state, ctx, tick)
 				end
 			end
 

@@ -1,4 +1,14 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.7.5
+Date: 2026-07-24
+  Bugfixes:
+    - Fix rotating entities with the regular rotate key (reported by @LividLipid, @Roy192, @MiG53 on the forum)
+---------------------------------------------------------------------------------------------------
+Version: 2.7.4
+Date: 2026-07-23
+  Bugfixes:
+    - allow rotating oblong entities while being selected.
+---------------------------------------------------------------------------------------------------
 Version: 2.7.3
 Date: 2026-04-28
   Changes:

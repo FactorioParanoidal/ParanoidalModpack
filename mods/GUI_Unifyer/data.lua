@@ -17,7 +17,8 @@ local sprites = {
 "spawncontrol_random_button", "teamcoop_button1", "teamcoop_button2", "teleportation_button", "thefatcontroller_button", "todolist_button", "trainlog_button", "trainpubsub_button",
 "trashcan_button", "upgradeplannernext_button", "usagedetector_button", "whatsmissing_button", "wiiuf_button", "yarm_all_button", "yarm_none_button", "yarm_warnings_button",
 "blueprintlabdesign_button", "recexplo_button", "nonwavedefense2_button", "dana_button", "factorio_tweaks_button", "remoteswitch_button", "tsmoutpostbuilder_button", "credotimelapse_button", "spidersentinel_button",
-"citiesofearth_button", "enemyracemanager_button", "oarcmod_button", "decu_button", "leaderboard_button", "abd_on_button", "abd_off_button", "avatars_button", "newworlds_button", "quickitemmenu_button", "visualsignals_button"
+"citiesofearth_button", "enemyracemanager_button", "oarcmod_button", "decu_button", "leaderboard_button", "abd_on_button", "abd_off_button", "avatars_button", "newworlds_button", "quickitemmenu_button", "visualsignals_button",
+"blueprintsandboxes_button", "widechests_button"
 }
 
 for _, i in pairs(sprites) do
@@ -32,6 +33,12 @@ for _, i in pairs(sprites) do
 	p.priority = "extra-high-no-scale"
 	data:extend({p})
 end
+
+-- Paranoidal: the WideChests button uses the build's 128 px steel chest icon at full resolution
+-- (same 32 px on screen as the 64 px icons at scale 0.5).
+data.raw["sprite"]["widechests_button"].width = 128
+data.raw["sprite"]["widechests_button"].height = 128
+data.raw["sprite"]["widechests_button"].scale = 0.25
 
 --Autotrash
 if data.raw["sprite"]["autotrash_trash"] and data.raw["sprite"]["autotrash_trash_paused"] and data.raw["sprite"]["autotrash_requests_paused"] and data.raw["sprite"]["autotrash_both_paused"] then

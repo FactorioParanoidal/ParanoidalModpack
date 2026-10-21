@@ -1,0 +1,16 @@
+{
+  "name": "PipeVisualizer-Updated",
+  "version": "2.4.4",
+  "title": "Pipe Visualizer 2.0",
+  "description": "Visualize the layout and contents of pipe networks. Press Y to draw the selected entity's fluid systems. Press Shift + Y to draw all visible fluid systems. Press Alt + Y to automatically visualize systems on mouse-over. Press Control + Y to toggle between color-by-fluid and color-by-system.",
+  "author": "ashier",
+  "contact": "https://github.com/AtelierAmber/PipeVisualizer-Updated",
+  "homepage": "https://github.com/AtelierAmber/PipeVisualizer-Updated",
+  "factorio_version": "2.0",
+  "dependencies": [ "base >= 2.0.0", "flib >= 0.13.0" ],
+  "package": {
+    "git_publish_branch": "main",
+    "ignore": [ "imgui.ini", "screenshots/*" ],
+    "sync_portal_details": true
+  }
+}

@@ -105,7 +105,6 @@ local function compare_pheromones(map, neighbor, pheromone_neighbor)
 	pheromone = neighbor[BASE_PHEROMONE]
 	if pheromone_neighbor.chunkBase < pheromone then
 		pheromone_neighbor.chunkBase = pheromone
-		pheromone_neighbor.src = "[gps=" .. neighbor.x .. "," .. neighbor.y .."]"
 	end
 	pheromone = neighbor[BASE_DETECTION_PHEROMONE] or 0
 	if pheromone_neighbor.chunkBaseDetection < pheromone then
@@ -154,6 +153,9 @@ end
 	parameters.recursion - if true then make new neighbors table, else use universe.neighbors
 	parameters.color - color of chunk border if showPheromones is true
 ]]--
+-- Scratch data only: fully reset before every call, never stored or returned.
+-- This function has no recursive calls or event-raising engine writes.
+local staticPheromoneScratch = {}
 function pheromoneUtils.processStaticPheromone(map, chunk, parameters)
     local chunkBase = -MAGIC_MAXIMUM_NUMBER
 	local chunkBaseDetection = -MAGIC_MAXIMUM_NUMBER
@@ -169,7 +171,11 @@ function pheromoneUtils.processStaticPheromone(map, chunk, parameters)
 
     local chunkPass = getPassable(map, chunk)
     local pheromone
-	local pheromone_neighbor = {chunkBase = 0, chunkBaseDetection = 0, chunkResource = 0, isClaimedResource = false}
+	local pheromone_neighbor = staticPheromoneScratch
+	pheromone_neighbor.chunkBase = 0
+	pheromone_neighbor.chunkBaseDetection = 0
+	pheromone_neighbor.chunkResource = 0
+	pheromone_neighbor.isClaimedResource = false
 	
     if (chunkPass == CHUNK_ALL_DIRECTIONS) then
         neighbor = tempNeighbors[2]
@@ -271,12 +277,8 @@ function pheromoneUtils.processStaticPheromone(map, chunk, parameters)
         end
     end
 	
-    pheromone_neighbor.chunkBaseDetection = mMin(pheromone_neighbor.chunkBaseDetection, MAX_BASE_DETECTION_PHEROMONES_IN_CHUNK)
-	if pheromone_neighbor.chunkBaseDetection < 500 then
-		pheromone_neighbor.chunkBaseDetection = mMax(pheromone_neighbor.chunkBaseDetection - 1, 0)
-	else
-		pheromone_neighbor.chunkBaseDetection = pheromone_neighbor.chunkBaseDetection * 0.9
-	end
+    -- Beta 8 (RampantFixed 1.8.3) decay: -10% per chunk, no long tail below 500 (zero at ~72 chunks from a turret/radar)
+    pheromone_neighbor.chunkBaseDetection = mMin(pheromone_neighbor.chunkBaseDetection, MAX_BASE_DETECTION_PHEROMONES_IN_CHUNK) * 0.9
     pheromone = mMin(getPlayerBaseGenerator(map, chunk, BASE_DETECTION_PHEROMONE), MAX_BASE_DETECTION_PHEROMONES_IN_CHUNK)	
 	
     if pheromone_neighbor.chunkBaseDetection < pheromone then
@@ -288,17 +290,13 @@ function pheromoneUtils.processStaticPheromone(map, chunk, parameters)
         chunk[BASE_DETECTION_PHEROMONE] = pheromone * chunkPathRating	
 	end
 	
-	if pheromone_neighbor.chunkBase < 500 then
-		pheromone_neighbor.chunkBase = mMax(pheromone_neighbor.chunkBase - 1, 0)
-	else
-		pheromone_neighbor.chunkBase = pheromone_neighbor.chunkBase * 0.9
-	end
-   pheromone = getPlayerBaseGenerator(map, chunk, BASE_PHEROMONE)
-	chunk[BASE_PHEROMONE] = mMax(pheromone, pheromone_neighbor.chunkBase)
-    if chunk[BASE_PHEROMONE] > 100 then
-        chunk[BASE_PHEROMONE] = mMax(chunk[BASE_PHEROMONE] * chunkPathRating, 100)
-    elseif chunkPathRating <= 0.1 then
-        chunk[BASE_PHEROMONE] = mMax(0, chunk[BASE_PHEROMONE] - 5)
+    -- Beta 8 (RampantFixed 1.8.3) decay of the base scent: -10% per chunk, scaled by the path rating
+    pheromone_neighbor.chunkBase = pheromone_neighbor.chunkBase * 0.9
+    pheromone = getPlayerBaseGenerator(map, chunk, BASE_PHEROMONE)
+    if pheromone_neighbor.chunkBase < pheromone then
+        chunk[BASE_PHEROMONE] = pheromone * chunkPathRating
+    else
+        chunk[BASE_PHEROMONE] = pheromone_neighbor.chunkBase * chunkPathRating
     end
 		
 	-- turrets and kills

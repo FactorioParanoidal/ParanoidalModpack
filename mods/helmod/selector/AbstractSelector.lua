@@ -206,7 +206,8 @@ function AbstractSelector:onBeforeOpen(event)
     end
   else
     local filter_prototype = self:getFilter()
-    if filter_prototype ~= nil and event.continue ~= true then 
+    -- an empty filter builds the same list as no filter, keep the cached list
+    if filter_prototype ~= nil and filter_prototype ~= "" and event.continue ~= true then
       event.reset = true
       self:resetGroups()
     end
@@ -410,7 +411,7 @@ function AbstractSelector:translate(event)
   ---List du cache non vide
   if not(Cache.isEmpty(self.classname, "list_translate")) then
     ---bluid table translate
-    if User.getModGlobalSetting("filter_translated_string_active") and not(User.isTranslate()) and event.continue ~= true then
+    if event.continue ~= true and User.getModGlobalSetting("filter_translated_string_active") and not(User.isTranslate()) then
       local list_translate = Cache.getData(self.classname, "list_translate")
       local table_translate = {}
       local step_translate = User.getModGlobalSetting("user_cache_step") or 100
@@ -449,7 +450,12 @@ end
 ---On update
 ---@param event LuaEvent
 function AbstractSelector:onUpdate(event)
-  self:updateFilter(event)
+  ---the filter panel is already built when continuing a step-by-step build,
+  ---unless the form was closed and reopened by the next step
+  local filter_panel = self:getFilterPanel()
+  if event.continue ~= true or filter_panel["filter-options"] == nil then
+    self:updateFilter(event)
+  end
 
   local response = {wait=false, method="none"}
   
@@ -471,22 +477,93 @@ function AbstractSelector:onUpdate(event)
   end
 
 -------------------------------------------------------------------------------
+---UTF-8 aware lower case (Lua string.lower is ASCII only)
+local utf8_lower_map = nil
+
+local function utf8_encode(code)
+  if code < 0x80 then
+    return string.char(code)
+  elseif code < 0x800 then
+    return string.char(0xC0 + math.floor(code / 0x40), 0x80 + code % 0x40)
+  end
+  return string.char(0xE0 + math.floor(code / 0x1000), 0x80 + math.floor(code / 0x40) % 0x40, 0x80 + code % 0x40)
+end
+
+local function build_utf8_lower_map()
+  local map = {}
+  local function add(upper, lower)
+    map[utf8_encode(upper)] = utf8_encode(lower)
+  end
+  -- Latin-1: À-Þ except ×
+  for code = 0xC0, 0xDE do
+    if code ~= 0xD7 then add(code, code + 0x20) end
+  end
+  -- Latin Extended-A
+  for code = 0x100, 0x137, 2 do add(code, code + 1) end
+  for code = 0x139, 0x147, 2 do add(code, code + 1) end
+  for code = 0x14A, 0x177, 2 do add(code, code + 1) end
+  add(0x178, 0xFF)
+  for code = 0x179, 0x17D, 2 do add(code, code + 1) end
+  -- Greek
+  for code = 0x391, 0x3AB do
+    if code ~= 0x3A2 then add(code, code + 0x20) end
+  end
+  -- Cyrillic: Ѐ-Џ, А-Я, Ѡ-ӿ pairs
+  for code = 0x400, 0x40F do add(code, code + 0x50) end
+  for code = 0x410, 0x42F do add(code, code + 0x20) end
+  for code = 0x460, 0x481, 2 do add(code, code + 1) end
+  for code = 0x48A, 0x4BF, 2 do add(code, code + 1) end
+  add(0x4C0, 0x4CF)
+  for code = 0x4C1, 0x4CD, 2 do add(code, code + 1) end
+  for code = 0x4D0, 0x52F, 2 do add(code, code + 1) end
+  return map
+end
+
+local function utf8_lower(text)
+  if utf8_lower_map == nil then
+    utf8_lower_map = build_utf8_lower_map()
+  end
+  text = string.lower(text)
+  return (string.gsub(text, "[\xC3-\xD4][\x80-\xBF]", utf8_lower_map))
+end
+
+-------------------------------------------------------------------------------
+---Return a function checking a name against the current filter, nil if there is no filter.
+---Settings, translations and the lower-cased filter are read once instead of once per name.
+---@return function | nil
+function AbstractSelector:getFilterMatcher()
+  local filter_prototype = self:getFilter()
+  if filter_prototype == nil or filter_prototype == "" then
+    return nil
+  end
+  local filter_lower = utf8_lower(filter_prototype)
+  local translated = nil
+  if User.isFilterTranslate() then
+    translated = User.get("translated")
+  end
+  local find = string.find
+  if User.isFilterContain() then
+    return function(search)
+      if translated ~= nil and translated[search] ~= nil then search = translated[search] end
+      return find(utf8_lower(search), filter_lower, 1, true) ~= nil
+    end
+  end
+  return function(search)
+    if translated ~= nil and translated[search] ~= nil then search = translated[search] end
+    return utf8_lower(search) == filter_lower
+  end
+end
+
+-------------------------------------------------------------------------------
 ---Check filter
 ---@param search string
 ---@return boolean
 function AbstractSelector:checkFilter(search)
-  local filter_prototype = self:getFilter()
-  if filter_prototype ~= nil and filter_prototype ~= "" then
-    if User.isFilterTranslate()  then
-      search = User.getTranslate(search)
-    end
-    if User.isFilterContain() then
-      return string.find(search:lower(), filter_prototype:lower(), 1, true)
-    else
-      return search:lower() == filter_prototype:lower()
-    end
+  local matcher = self:getFilterMatcher()
+  if matcher == nil then
+    return true
   end
-  return true
+  return matcher(search)
 end
 
 local quality_selector_cell = nil
@@ -624,7 +701,9 @@ function AbstractSelector:updateFilter(event)
         end
       end
   end
-  if Player.hasFeatureQuality() and self.is_support_quality and quality_selector_cell ~= nil then
+  ---the cell is shared by all selectors and players: use it only if it is alive and belongs to this player
+  if Player.hasFeatureQuality() and self.is_support_quality and quality_selector_cell ~= nil
+    and quality_selector_cell.valid and quality_selector_cell.player_index == Player.native().index then
     quality_selector_cell.clear()
     local current_quality = "normal"
     local selector_quality_prototype = User.getParameter("selector_quality_prototype")
@@ -635,8 +714,11 @@ function AbstractSelector:updateFilter(event)
   end
 end
 
-function AbstractSelector:rulesFilter(prototype)
-  local rules_included, rules_excluded = Player.getRules("selector-filter")
+function AbstractSelector:rulesFilter(prototype, rules_excluded)
+  if rules_excluded == nil then
+    local rules_included
+    rules_included, rules_excluded = Player.getRules("selector-filter")
+  end
   local show = true
   ---resolve rule excluded
   show = Player.checkRules(show, rules_excluded, self.rule_category, prototype, false)
@@ -660,13 +742,17 @@ function AbstractSelector:createElementLists(event)
     local query_list = {}
     event.continue = true
     ---list_products[element.name][type - lua_recipe.name]
+    ---the name filter is cheap, apply it here so only matching keys are processed over the next ticks
+    local matcher = self:getFilterMatcher()
     for key, element in pairs(list) do
-      if index % step_list == 0 then
-        query_list = {index=index,list={}}
-        table.insert(table_element, query_list)
+      if matcher == nil or matcher(key) then
+        if index % step_list == 0 then
+          query_list = {index=index,list={}}
+          table.insert(table_element, query_list)
+        end
+        query_list.list[key] = element
+        index = index + 1
       end
-      query_list.list[key] = element
-      index = index + 1
     end
     event.table_element = table_element
     return User.createNextEvent(event, self.classname, "list")
@@ -683,12 +769,19 @@ function AbstractSelector:createElementLists(event)
       if query_list ~= nil then
         self:updateWaitMessage(string.format("Wait list build: %s", query_list.index or 0))
 
+        ---rules are resolved once per step, not per element
+        local rules_excluded = nil
+        if self.rules_filter and filter_show_excludes_by_rules ~= true then
+          local rules_included
+          rules_included, rules_excluded = Player.getRules("selector-filter")
+        end
+
         for key, element in pairs(query_list.list) do
-          ---filter sur le nom element (product ou ingredient)
-          if self:checkFilter(key) then
+          ---filter sur le nom element (product ou ingredient) deja applique lors du decoupage
+          do
             for element_name, element in pairs(element) do
               local prototype = self:getPrototype(element)
-              if (not(self.rules_filter) or (filter_show_excludes_by_rules == true or self:rulesFilter(prototype:native()) == true)) and
+              if (not(self.rules_filter) or (filter_show_excludes_by_rules == true or self:rulesFilter(prototype:native(), rules_excluded) == true)) and
                 (not(self.unlock_recipe) or (filter_show_lock_recipes == true or prototype:getUnlock() == true)) and 
                 (not(self.disable_option) or (filter_show_disable == true or prototype:getEnabled() == true)) and 
                 (not(self.hidden_option) or (filter_show_hidden == true or prototype:getHidden() == false)) and
@@ -698,8 +791,8 @@ function AbstractSelector:createElementLists(event)
                 if list_group_elements[element.group][element.subgroup] == nil then list_group_elements[element.group][element.subgroup] = {} end
                 list_group_elements[element.group][element.subgroup][element_name] = element
 
-                list_group[element.group] = prototype:getGroup()
-                list_subgroup[element.subgroup] = prototype:getSubgroup()
+                if list_group[element.group] == nil then list_group[element.group] = prototype:getGroup() end
+                if list_subgroup[element.subgroup] == nil then list_subgroup[element.subgroup] = prototype:getSubgroup() end
               end
             end
           end
@@ -767,8 +860,14 @@ end
 function AbstractSelector:updateWaitMessage(message)
   local panel = self:getGroupsPanel()
   local item_list_panel = self:getItemListPanel()
+  ---called on every build step: update the existing label instead of recreating it
+  local wait_label = item_list_panel["wait-step-message"]
+  if wait_label ~= nil and wait_label.valid and #item_list_panel.children_names == 1 then
+    wait_label.caption = message
+    return
+  end
   item_list_panel.clear()
-  GuiElement.add(item_list_panel, GuiLabel("wait message"):caption(message))
+  GuiElement.add(item_list_panel, GuiLabel("wait-step-message"):caption(message))
 end
 
 -------------------------------------------------------------------------------
@@ -793,7 +892,13 @@ function AbstractSelector:updateItemList(event)
   ---recuperation recipes et subgroupes
   local recipe_selector_list = GuiElement.add(item_list_panel, GuiFlowV("recipe_list"))
   if table.size(list_item) > 0 then
-    for subgroup, list in spairs(list_item, function(t,a,b) return list_subgroup[b]["order"] > list_subgroup[a]["order"] end) do
+    ---read the subgroup orders once instead of in every sort comparison (game objects)
+    local subgroup_orders = {}
+    for subgroup, _ in pairs(list_item) do
+      local lua_subgroup = list_subgroup[subgroup]
+      subgroup_orders[subgroup] = lua_subgroup and lua_subgroup["order"]
+    end
+    for subgroup, list in spairs(list_item, function(t,a,b) return subgroup_orders[b] > subgroup_orders[a] end) do
       ---boucle subgroup
       local guiRecipeSubgroup = GuiElement.add(recipe_selector_list, GuiTable("recipe-table-", subgroup):column(10):style("helmod_table_recipe_selector"))
       for key, prototype in spairs(list,function(t,a,b) return t[b]["order"] > t[a]["order"] end) do
@@ -839,23 +944,32 @@ function AbstractSelector.updateGroupSelector(self, event)
   ---ajouter de la table des groupes de recipe
   local gui_group_panel = GuiElement.add(panel, GuiTable("recipe-groups"):column(6):style("helmod_table_recipe_selector"))
 
-  for _, group in spairs(list_group,function(t,a,b) return t[b]["order"] > t[a]["order"] end) do
+  ---read the group orders once instead of in every sort comparison (game objects)
+  local group_orders = {}
+  for key, group in pairs(list_group) do
+    group_orders[key] = group["order"]
+  end
+  local group_selected = User.getParameter("recipe_group_selected")
+  for _, group in spairs(list_group,function(t,a,b) return group_orders[b] > group_orders[a] end) do
+    local group_name = group.name
     ---set le groupe
-    local group_selected = User.getParameter("recipe_group_selected")
-    if group_selected == nil then User.setParameter("recipe_group_selected",group.name) end
+    if group_selected == nil then
+      group_selected = group_name
+      User.setParameter("recipe_group_selected", group_name)
+    end
     local color = nil
-    if User.getParameter("recipe_group_selected") == group.name then
+    if group_selected == group_name then
       color = "yellow"
     end
     local tooltip
-    if group.name == "helmod" then
+    if group_name == "helmod" then
       tooltip = "Helmod"
     else
       tooltip = group.localised_name
     end
 
     ---ajoute les icons de groupe
-    local action = GuiElement.add(gui_group_panel, GuiButtonSelectSpriteXxl(self.classname, "recipe-group"):sprite(self.sprite_type, group.name):tooltip(tooltip):color(color))
+    local action = GuiElement.add(gui_group_panel, GuiButtonSelectSpriteXxl(self.classname, "recipe-group"):sprite(self.sprite_type, group_name):tooltip(tooltip):color(color))
   end
 
 end

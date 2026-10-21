@@ -1,0 +1,12 @@
+{
+  "entity": [
+    ["EasyWindTurbine1", "texugo-wind-turbine"],
+    ["EasyWindTurbine2", "texugo-wind-turbine2"],
+    ["EasyWindTurbine3", "texugo-wind-turbine3"]
+  ],
+  "item": [
+    ["EasyWindTurbine1", "texugo-wind-turbine"],
+    ["EasyWindTurbine2", "texugo-wind-turbine2"],
+    ["EasyWindTurbine3", "texugo-wind-turbine3"]
+  ]
+}

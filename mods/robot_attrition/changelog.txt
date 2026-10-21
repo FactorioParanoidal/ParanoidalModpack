@@ -3,6 +3,7 @@ Version: 0.6.6
 Date: 10. 05. 2026
   Bugfixes:
     - Fixed that robots with quaality that died were counted as normal quality in kill statistics.
+    - Fixed crash in the Repair75 setting for a logistic robot without minable: the minable check in make_repair_recipe_and_item had wrong operator precedence (Paranoidal local fix).
   Locale:
     - Updated Spanish translation, thanks to SpiderLove.
 ---------------------------------------------------------------------------------------------------

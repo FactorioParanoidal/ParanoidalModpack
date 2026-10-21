@@ -1,0 +1,14 @@
+{
+  "mod": "EvoUi",
+  "source": "portal",
+  "upstreamVersion": "0.5.1",
+  "changeReason": "Для Paranoidal эволюция и статистика убийств показываются для текущей поверхности игрока; до окончания перемирия RampantFixed строка эволюции сообщает о мирном режиме и пороге начала атак через getTruceInfo. Добавлены английская и русская строки перемирия, отображение загрязнения включено по умолчанию для новых игроков; изменения отражены в README и changelog.",
+  "original": {
+    "name": "EvoUI",
+    "authors": ["Octav \"narc\" Sandulescu"],
+    "portal": {
+      "name": "EvoUi",
+      "url": "https://mods.factorio.com/mod/EvoUi"
+    }
+  }
+}

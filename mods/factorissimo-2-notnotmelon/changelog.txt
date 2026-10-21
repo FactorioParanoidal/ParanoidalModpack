@@ -1,4 +1,80 @@
 ---------------------------------------------------------------------------------------------------
+Version: 9.12.0
+Date: 2026-10-19
+  Features:
+    - Paranoidal: factory building 4. 20x20 outside, 90x90 inside, 40 ports (10 per side, no quality ports), 7000 health. Picture: the user's art scaled uniformly to the MK3 pixel density (factor 1.71), white fringe removed, "04" painted on the green stripe like "03" on building 3; shadow: building 4 silhouette plus the MK3 cast shadow scaled by 1.25. Item icon and technology picture made from the facade. Green interior walls (factory-wall-3 picture with the hue turned to green) and a floor mosaic "04".
+    - Paranoidal: technology Architecture 4 (6000 x red, green, blue, purple, yellow science, 90 s) after Architecture 3 and Utility science pack, plus the technologies that unlock its ingredients when they exist (angels-metallurgy-3, angels-titanium-smelting-1, bob-electric-substation-2). Recipe (90 s): refined concrete 5000, titanium plate 2000, substation 2 x100 (steel 4000 and substation x200 without Bob's items); zzzparanoidal adds advanced structure components 50 and 2 factory buildings 3.
+    - Paranoidal: power of factories in the dispatcher. A list row shows a short figure before the buttons: what the factory takes, or "+..." in green when it gives power to the network; the details panel shows consumption (estimate), and with generators inside also production (with working/total generators) and balance. New states "Supplies power" and "No electric network" (separate from "No power"). Sorting "By power": factories that give power first, then by growing consumption, not yet measured ones last. Consumption is estimated (the engine has no power statistics per entity): working consumers at full usage with modules and beacons plus drain, idle ones at drain, roboports at idle usage; steam engines and turbines exactly, burner generators at full power while working, solar panels by the solar power of the floor (none on factory floors, whose surface property "solar-power" is 0: solar panels there, also the hidden panels of Bio Industries farms, solar boilers and musk mats, are not counted at all), energy interfaces by their settings; nested factories add their values.
+    - Paranoidal: factory building 4 in the dispatcher (picture, building filter), in the Milestones preset addon, PM RPG experience 50 % of the level bar when launched, standard quality only like buildings 1-3.
+  Changes:
+    - Paranoidal: pollution is collected from every chunk the interior covers (16 for building 4, 4 as before for buildings 1-3).
+    - Paranoidal: the construction roboport upgrade reaches 96 tiles instead of 64, enough for the far wall of building 4 (applies to all factories, no other effect).
+    - Paranoidal: building 4 uses a hidden radar revealing two chunks around its centre instead of one.
+    - Paranoidal: one interior pass once a minute per factory (and every 2 seconds for the factory selected in an open dispatcher) gives the activity, machines, nested factories and power; it replaces the separate activity check and the searches of the details panel. A factory whose generators produce counts as active (streaks, records).
+    - Paranoidal: factory names are no longer shown on the map and the minimap (a script label cannot be shown on the big map only), only on the building and inside above the gate in alt mode. Existing map labels are removed once by the sampling, without a migration.
+  Bugfixes:
+    - Paranoidal: crash when opening the factory dispatcher with factories in the list ("Invalid name \"name\": LuaGuiElement contains a property or method with the same name"). GUI elements named "name" and "text" are renamed (factory_name, status_text, status_icon).
+    - Paranoidal: the dispatcher no longer depends on the copper wire connector of the factory power pole existing: a pole without one counts as not connected instead of raising an error.
+    - Paranoidal: the dispatcher scroll panes are created without the unused "direction" parameter.
+    - Paranoidal: "No power" for every factory built before 9.11.19: the buffer size of an electric energy interface is saved in the entity, so old power sensors kept the empty buffer of the old prototype and never charged (the changelog of 9.11.19 wrongly said that no migration is needed). Such a sensor is replaced once by a new one from the current prototype during the sampling; the power of the factory does not go through it.
+    - Paranoidal: reinforced hull technologies showed "Unknown key" as their name: the engine drops a trailing "-<number>" of a technology name for its locale key, so the name is technology-name.factory-hull ("Reinforced hull 2"); the numbered keys are removed.
+  Locale:
+    - Paranoidal: Russian names of factory buildings: "Фабрика 1-4" instead of "Заводское строение 1-4", and "фабрика" / "фабричное здание" instead of "заводское строение" / "завод" in every Russian text of the mod (entities, tiles, technologies, descriptions, settings, messages, dispatcher, tips and tricks). The same texts in ParanoidalLocale are changed too, because it overrides this locale.
+---------------------------------------------------------------------------------------------------
+Version: 9.11.19
+Date: 2026-10-16
+  Features:
+    - Paranoidal: factory dispatcher. A button in the top bar (styled by GUI Unifier) and Ctrl+Shift+F open a window with every factory building of the force standing in the world: picture of the building (tier), name, place, state (working, idle machines, low power, no power, inactive) and the icons of its overlay controller. Search by name or number, filter by building and "only with problems", sorting by number, name, tier or place, 20 per page. The details panel shows a live view of the interior, power, ports in use, machines working, nested factories, pollution released outside, streaks without outages and without pollution, hull level; buttons open the building or its interior in remote view. Nothing is computed while the window is closed; the shown states refresh every 2 seconds.
+    - Paranoidal: factory names. A name (up to 40 characters, rich text icons allowed) is set in the dispatcher and kept also while the factory is packed. It is shown on the building under the overlay icons in alt mode, on the map under the building and inside above the gate (alt mode), and heads the description of the packed item.
+    - Paranoidal: power sensor. The hidden energy interface under every factory building now charges at 1 kW like a machine; its buffer is read once per second, which gives the power satisfaction of the network the factory is wired to. Existing buildings get it without migration.
+    - Paranoidal: factory statistics sampled once per second together with pollution: power, whether machines inside work (checked once a minute), pollution released, streaks of work without power shortage and without released pollution. The longest streaks of a force are available through remote get_force_records (used by MxlChievements).
+    - Paranoidal: Milestones. A preset addon (remote milestones_preset_addons, new games): first factory building 1, 2 and 3, first factory working inside another factory, first factory clean for an hour. The last two are hidden technologies with a scripted research trigger (factory-milestone-nested, factory-milestone-clean), researched by script.
+    - Paranoidal: PM RPG System experience when a factory is launched (powered, with at least one connection): 10/20/35 % of the current level bar for tiers 1/2/3, given to the last user of the building, only when the force has more launched factories of that tier at the same time than ever before. Rebuilding the same factories gives nothing; factories working when this appears count as launched without experience. Not in Blueprint Sandboxes.
+    - Paranoidal: tips and tricks about factory buildings: ports, connection research and settings, recursion, dispatcher, hull and alarm.
+    - Paranoidal: reinforced hull, technologies 1-3 (20/35/50 % less damage for factory buildings; part of each non-lethal hit is healed back, the engine cannot raise the maximum health of placed buildings). Pictures: building of tier 1/2/3 with a stone, steel (spiked) and reinforced wall taken from the final wall icons. From the first level an attack from outside raises the alarm inside the factory and inside all factories built in it: blinking red light for 10 seconds and a siren (alarm 2 of the programmable speaker) three times for the players inside. A running alarm is not restarted; friendly damage raises no alarm.
+  Changes:
+    - Paranoidal: artillery turrets, artillery wagons, rocket silos (also Rocket Silo Construction sites) and cargo landing pads cannot be built inside factory buildings, also without Space Age. Ghosts of them are removed. Buildings already standing inside are kept.
+    - Paranoidal: factory connections are only created after their connection research (fluid, chest, heat, circuit). Connections that already exist are kept.
+    - Paranoidal: deconstruction by script removes a factory building like a pickup: an empty factory is deleted, otherwise the packed factory is dropped. Inside a Blueprint Sandboxes lab (god mode) the factory is deleted completely, with the factories built inside it and packed factories lying inside. Other script destruction still rebuilds the building.
+    - Paranoidal: clearing or deleting a sandbox lab also deletes packed factories lying on its ground or in its chests.
+    - Paranoidal: factories are immune to quality and defects. Factory recipes are standard quality only (quality modules have no effect); factory items never get defects (ic-more-qualities). The quality of a building no longer changes its ports, fluid port speed or internal entities; factories placed before keep their ports and internal entities until they are moved.
+    - Paranoidal: factory ids are never reused.
+    - Paranoidal: fluid port speed (100 per tick) and the fluid flow limit (250 per tick) are fixed values instead of depending on load order. The factory tooltip shows the real values without per-quality values.
+  Bugfixes:
+    - Players without a character (god controller, e.g. Blueprint Sandboxes) can now walk out of a factory, not only into it.
+    - Paranoidal: the construction roboport upgrade finds construction requests on the factory floor itself (ghosts, tile ghosts and item request proxies waiting for a robot, entities waiting for an upgrade) instead of reading the alerts of the first connected player of the force: it now works without players online and does not depend on an arbitrary player in multiplayer. The construction chest keeps a stock of 5 repair packs instead of requesting them on a "not enough repair packs" alert. Packed factory items are no longer requested for any factory name, not only factory 1-3. Factories are checked a quarter every 64 ticks instead of all at once.
+    - Paranoidal: pollution of some or all factories was never released outside (the factory list has holes, the loop stopped at the first one).
+    - Paranoidal: crash of the construction roboport upgrade on item request proxies already removed by the game; delivered proxies were never forgotten.
+    - Paranoidal: /give-lost-factory-buildings gave duplicates of packed factories already in the inventory; the given item keeps quality and description.
+    - Paranoidal: the door cooldown in multiplayer was counted for the wrong player.
+    - Paranoidal: connections next to rotated entities larger than one tile were searched in an unrotated box.
+    - Paranoidal: possible crashes on a missing factory when hovering or cloning a building, on invalid surfaces, forces and proxies.
+    - Paranoidal: a factory with player-placed tiles inside was treated as empty and its tiles were lost on pickup.
+    - Paranoidal: a mined building that another mod destroyed by script was rebuilt without its quality.
+    - Paranoidal: the permission group of a player hovering a power pole was rewritten (and created anew for players without a group); script wires cannot be removed by players anyway. The migration gives the remove-cables permission back to groups with players.
+    - Paranoidal: clearing or deleting a surface (sandbox labs) deleted whole factory floors with all factories on them. Now only the factories built on that surface and their interiors are removed; floors left empty are deleted.
+    - Paranoidal: factory buildings that vanished without an event are kept as packed factories (recoverable with /give-lost-factory-buildings) instead of being lost.
+    - Paranoidal: a robot placing a packed factory from a ghost without tags unpacks that factory instead of creating a new one.
+    - Paranoidal: heat connections keep the heat energy when the two heat pipes have different specific heat.
+    - Paranoidal: delayed calls no longer need the surface "nauvis".
+    - Paranoidal: remote get_global/set_global used the removed 1.1 table `global`.
+    - Paranoidal: misspelled RSO call ignoreSuface, factoriomaps event registration after the dispatcher was finalized, undefined names in error paths.
+  Optimizations:
+    - Paranoidal: building or removing a belt, inserter, pipe, chest or heat pipe no longer walks over all factories; nearby factory buildings are found by area.
+    - Paranoidal: entity events are registered with filters (also ghosts by ghost type), unused GUI events and on_biter_base_built are not registered. On events that stay unfiltered (robot builds) filtered handlers are skipped in Lua for other entities.
+    - Paranoidal: overlay icons are redrawn only when the display controller settings change, not for all factories on every surface change.
+    - Paranoidal: research and setting changes rebuild only what they affect.
+    - Paranoidal: delayed calls use a tick schedule instead of a hidden render object per call; build animations are scheduled per group of tiles.
+    - Paranoidal: chest connections skip empty chests and no longer sort the chests; heat prototypes are cached; idle connection slots allocate nothing.
+    - Paranoidal: a new factory sets hidden tiles only under its own tiles; picking up a factory uncharts only its chunks.
+    - Paranoidal: the power pole search uses the reach of buildable poles first.
+    - Paranoidal: preview settings and layout lookups are cached; the preview GUI is not touched while hidden.
+    - Paranoidal: factory buildings are unbound when destroyed (storage no longer grows).
+  Modding:
+    - Paranoidal: remote get_surrounding_factory_exit(surface, position) returns only where the surrounding factory stands outside.
+  Locale:
+    - Paranoidal: fluid transfer speed in descriptions corrected from 12000/s to 6000/s; the note that it grows with quality is removed.
+---------------------------------------------------------------------------------------------------
 Version: 3.11.19
 Date: 2026-03-15
   Compatibility:

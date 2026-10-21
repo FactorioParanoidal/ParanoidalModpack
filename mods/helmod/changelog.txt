@@ -4,8 +4,27 @@ Date: 2026-06-19
   Features:
     - Added pipette tool to create combinator from input or ouput items
   Bugfixes:
+    - Paranoidal: the per-tick queue (deferred GUI events, tips) is processed for every connected player with queued work, read from storage. It used to depend on a module-local "current player" set by the last GUI event handled on each peer (multiplayer desync risk); peers that never opened Helmod did nothing.
     - Fixed rocket recipe that added twice time the rocket parts
     - Fixed module limitation in Recipe Edition
+    - Fixed case-insensitive selector filter for non-ASCII letters (Cyrillic, Latin-1/Extended-A, Greek)
+  Optimizations:
+    - Selector list build resolves selector rules once per step instead of once per recipe
+    - Cached script.active_mods and the quality feature flag, both rebuilt a table on every read
+    - Selector name filter is applied before splitting the list into steps, filtered lists build in one step
+    - Selector keeps its cached list when reopened with an empty filter
+    - Selector does not rebuild the filter panel on every step of the list build
+    - Forms do not rebuild the top menu on every step of a step-by-step build
+    - Selector updates the wait message label instead of recreating it on every step
+    - Selector reads group and subgroup orders once instead of in every sort comparison
+    - Selector filter reads settings and translations once per list instead of once per name
+    - Fluid, agricultural and spoiling recipes are built once per session (callers get copies)
+    - Boiler recipes, boiler fluids, offshore pumps and the rocket part recipe are cached per session
+    - Placing-item visibility check of machines is cached per entity
+    - Sprite path validity is cached per path
+    - Quality support of a game recipe is cached per recipe instead of reading its ingredients
+    - Removed a boiler scan in RecipePrototype:getHidden that always returned false
+    - Production rows read the row move step setting once per row
 ---------------------------------------------------------------------------------------------------
 Version: 2.2.13
 Date: 2026-03-20

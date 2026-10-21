@@ -1,4 +1,10 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.1.2
+Date: July 2, 2026
+  Minor Features:
+    - Backported many of the fixes and new features from the 2.1 version of the mod.
+      This includes Data:change_type, Entity:add/remove_category/catgories, and Table.contains
+---------------------------------------------------------------------------------------------------
 Version: 2.1.1
 Date: May 26, 2026
   Info:

@@ -1,14 +1,21 @@
 require("prototypes.tips-and-tricks.tips-and-tricks") -- подсказки
 
+-- Register early so research/evolution and compatibility mods see both labs.
+data:extend(table.deepcopy(require("prototypes.super-labs-beta8")))
+
 -- new entities
 require("prototypes.entity.bio-content")
 require("prototypes.entity.offshore-pumps")
+require("prototypes.pumpjacks-1_1") -- Недостающая нефтяная вышка MK4, до фильтруемых копий.
+require("prototypes.seafloor-pumps.data") -- донные насосы I–III Beta 8, электрические
+require("prototypes.dew-point-aggregator") -- агрегатор точки росы Beta 8, без скрипта биомов
 require("prototypes.entity.battery-electric-train")
 require("prototypes.entity.flame-car")
 require("prototypes.entity.concrete-brick")
 require("prototypes.entity.artillery-prototype")
 
 -- new items
+require("prototypes.item.storage-migration")
 require("prototypes.item.mining-drill-bit")
 require("prototypes.item.structured-components")
 require("prototypes.item.electronics")
@@ -42,12 +49,12 @@ require("prototypes.recipe.metallurgy")
 -- new technologies
 require("prototypes.technology.offshore-pumps")
 require("prototypes.technology.battery-electric-train")
-require("prototypes.technology.bio-content")
 require("prototypes.technology.flame-car")
 require("prototypes.technology.artillery-prototype")
 require("prototypes.technology.alien-artifacts")
 require("prototypes.technology.angels-alloys-smelting")
 require("prototypes.technology.angels-ironworks")
+require("prototypes.technology.bio-advanced-biotechnology-2")
 
 -- new selection-tools
 require("prototypes.selection-tool.heroturrets")
@@ -60,3 +67,10 @@ require("prototypes.recipe-category.alloy-mixing-tiers")
 
 -- tweaks
 require("tweaks.custom.angelsmods")
+require("tweaks.entity.aircraft-napalm-water")
+
+-- Normalize retired fluid IDs before Quality generates recycling recipes.
+require("tweaks.recipe.sulfuric-acid-early")
+
+-- Keep the original in shared state: require caches are reset between data rounds.
+paralib.bobtech_original_remove_prerequisite = require("tweaks.custom.bobtech-prerequisite-guards").install()

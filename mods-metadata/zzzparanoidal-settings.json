@@ -1,0 +1,5 @@
+{
+  "mod": "zzzparanoidal-settings",
+  "source": "local",
+  "changeReason": "Возвращает собственный мод настроек Paranoidal из Beta 8 для Factorio 2.0. В 0.3.0 скрывает настройки HeroTurretRedux, как в Beta 8, и фиксирует две из них (видимые ранговые предметы, генерация рангов в data-final-fixes); скрытие остальных модов отложено"
+}

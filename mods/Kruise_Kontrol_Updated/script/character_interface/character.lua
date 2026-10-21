@@ -693,8 +693,9 @@ local on_script_path_request_finished = function(event)
 end
 
 local on_object_destroyed = function(event)
-    local unit_number = event.unit_number
-    if not unit_number then return end
+    if event.type ~= defines.target_type.entity then return end
+    local unit_number = event.useful_id
+    if not unit_number or unit_number == 0 then return end
     local character = script_data.characters[unit_number]
     if character then
         character:on_destroyed()

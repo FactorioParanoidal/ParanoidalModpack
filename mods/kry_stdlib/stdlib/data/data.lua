@@ -246,6 +246,31 @@ function Data:replace_name(new_name, result, opts)
     end
 end
 
+--- Changes the type of a data object (recipe, item, entity, etc) by copying and removing the original.
+--- @param new_type string The new prototype type for the data object.
+--- @param opts table? Optional copy options table.
+--- @return self
+function Data:change_type(new_type)
+    assert(type(new_type) == 'string', 'new_type must be a string')
+	if self:is_valid() then
+		-- Copy the raw prototype so we do not mutate the original in-place
+        local copy = Table.deep_copy(rawget(self, '_raw'))
+		copy.type = new_type
+		
+		-- Wrap the copied prototype using the existing logic
+        local new_data = self(copy, nil, opts or self.options)
+		
+		-- Delete the original from data.raw
+        local raw = rawget(self, '_raw')
+        if raw and raw.type and raw.name then
+            data.raw[raw.type][raw.name] = nil
+        end
+		
+		return new_data
+    else
+        error('Cannot Change Type, Invalid Prototype: '..new_type, 4)
+	end
+end
 
 --(( Flags ))--
 function Data:Flags(create)

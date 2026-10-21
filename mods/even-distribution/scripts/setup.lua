@@ -5,6 +5,7 @@ local util = scripts.util
 local metatables = scripts.metatables
 local defaultTrash = require("default-trash")
 local config = require("config")
+local protocache = require("scripts.protocache")
 
 local helpers = scripts.helpers
 local _ = helpers.on
@@ -14,22 +15,17 @@ function setup.on_init()
 	storage.distrEvents = storage.distrEvents or {}
 	storage.settings = storage.settings or {}
 	storage.defaultTrash = setup.generateTrashItemList()
-	
 	storage.remoteIgnoredEntities = storage.remoteIgnoredEntities or {}
-	storage.allowedEntities = _(prototypes.entity)
-								:where(function(prototype)
-									return util.hasInventory(prototype) and 
-										   not config.ignoredEntities[prototype.type] and 
-										   not config.ignoredEntities[prototype.name]
-								end)
-								:map(function(name)
-									return name, true
-								end)
-								:toPlain()
+
+	-- Paranoidal: allowed entities and fuel/ammo upgrade lists are lazy per-session caches
+	-- (scripts/protocache.lua) instead of full prototype scans stored in every save.
+	storage.allowedEntities = nil
+	storage.fuelList = nil
+	storage.ammoList = nil
 
 	-- GUI events are saved in storage.guiEvents["EVENT NAME"][PLAYER INDEX][GUI ELEMENT INDEX]
-	storage.guiEvents = storage.guiEvents or 
-	{ 
+	storage.guiEvents = storage.guiEvents or
+	{
 		onCheckedStateChanged   = {},
 		onClicked               = {},
 		onElementChanged        = {},
@@ -39,36 +35,11 @@ function setup.on_init()
 		onConfirmed             = {},
 		onSelectedTabChanged    = {},
 		onSwitchStateChanged    = {},
-		onLocationChanged       = {}, 
+		onLocationChanged       = {},
 	}
 
-	-- Fuel upgrade list (ascending fuel value)
-	storage.fuelList = _(prototypes.item)
-						:where("fuel")
-						:toArray()
-						:groupBy("fuel_category")
-						:sort(function(a,b)
-							return a.fuel_value < b.fuel_value or
-								   a.fuel_acceleration_multiplier < b.fuel_acceleration_multiplier or
-								   a.fuel_top_speed_multiplier < b.fuel_top_speed_multiplier or
-								   a.fuel_emissions_multiplier < b.fuel_emissions_multiplier
-						end)
-						:toPlain()
-
-	-- Ammo upgrade list (ascending damage)
-	storage.ammoList = _(prototypes.item)
-						:where("ammo")
-						:toArray()
-						:groupBy(function(__,prototype)
-							return prototype.ammo_category.name
-						end)
-						:sort(function(a,b)
-							return _(a):calculateDamage() < _(b):calculateDamage()
-						end)
-						:toPlain()
-	
 	for _,force in pairs(game.forces) do
-		setup.enableLogisticsTab(force) 
+		setup.enableLogisticsTab(force)
 	end
 
 	for player_index,player in pairs(game.players) do
@@ -266,21 +237,20 @@ setup.on_research_reversed = setup.on_research_finished
 setup.on_research_started  = setup.on_research_finished
 
 function setup.enableLogisticsTab(force)
- 	if force.technologies["enable-logistics-tab"] and not setup.hasLogisticSlots(force) then
+	local tech = force.technologies["enable-logistics-tab"]
+	if tech and not setup.hasLogisticSlots(force) then
 		local enabled = not settings.global["disable-inventory-cleanup"].value
-        force.technologies["enable-logistics-tab"].researched = enabled
-    end
+		if tech.researched ~= enabled then tech.researched = enabled end
+	end
 end
 
 function setup.hasLogisticSlots(force)
-	for _,tech in pairs(force.technologies) do
-		if tech.researched and tech.name ~= "enable-logistics-tab" then
-			for _,effect in pairs(tech.prototype.effects) do
-				if effect.type == "character-logistic-requests" then
-					if effect.modifier then return true end
-				end
-			end
-		end
+	-- Paranoidal: check only the few technologies that unlock logistic requests instead of
+	-- reading the effects of every technology on each research start/finish.
+	local technologies = force.technologies
+	for _,name in ipairs(protocache.logisticRequestTechs()) do
+		local tech = technologies[name]
+		if tech and tech.researched then return true end
 	end
 
 	return false
@@ -307,7 +277,10 @@ function setup.generateTrashItemList()
 end
 
 function setup.on_load()
-	metatables.refresh(storage)
+	-- Paranoidal: only the player caches and pending distribution events carry metatables;
+	-- walking the whole storage on every load is unnecessary.
+	metatables.refresh(storage.cache)
+	metatables.refresh(storage.distrEvents)
 end
 
 return setup

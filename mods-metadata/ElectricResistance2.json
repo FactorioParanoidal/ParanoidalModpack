@@ -1,0 +1,13 @@
+{
+  "mod": "ElectricResistance2",
+  "source": "local",
+  "original": {
+    "name": "Electric Resistance",
+    "authors": ["darkfrei"],
+    "portal": {
+      "name": "ElectricResistance",
+      "url": "https://mods.factorio.com/mod/ElectricResistance"
+    }
+  },
+  "changeReason": "Нет версии для Factorio 2.0: поддержка оригинала заканчивается на Factorio 1.1."
+}

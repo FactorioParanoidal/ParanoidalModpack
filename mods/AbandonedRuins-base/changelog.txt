@@ -1,4 +1,13 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.1.8
+Date: 2026-07-16
+  Changes:
+    - excluded more ruins from being spawned at Fulgora and Vulcanus as these watered tiles would
+      beat the challange of having no water provided on those planets
+    - moons are probably to small, so no need to exclude them. Just keep the value for minimum
+      distance from spawn/starting point large enough (default value should be fine, I play on a
+      moon myself and have not seen any ruins spawning).
+---------------------------------------------------------------------------------------------------
 Version: 0.1.7
 Date: 2026-06-08
   Minor:

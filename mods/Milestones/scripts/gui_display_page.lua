@@ -82,6 +82,7 @@ local function add_milestone_item(gui_table, milestone, print_milliseconds, comp
     end
     if milestone.type == "technology" then
         local postfix = milestone.quantity == 1 and {"milestones.type_technology"} or "Level "..milestone.quantity
+        if prototype.hidden then postfix = {"milestones.type_event"} end -- Paranoidal: events marked by other mods
         tooltip = tooltip or {"", prototype.localised_name, " (", postfix, ")"}
     elseif milestone.type == "kill" then
         local prefix = milestone.quantity == 1 and "" or milestone.quantity .."x "
@@ -121,9 +122,10 @@ local function find_complete_milestone_from_UI_flow(milestone_flow, storage_forc
 end
 
 function enable_edit_time(player_index, element)
-    local force = game.players[player_index].force
+    local storage_force = get_display_storage_force(game.players[player_index].force)
+    if not storage_force then return end
     local milestone_flow = element.parent
-    local milestone = find_complete_milestone_from_UI_flow(milestone_flow, storage.forces[force.name])
+    local milestone = find_complete_milestone_from_UI_flow(milestone_flow, storage_force)
 
     milestone_flow.milestones_display_time.destroy()
     milestone_flow.milestones_edit_time.destroy()
@@ -156,9 +158,10 @@ local function parse_exact_time_to_ticks(time_string)
 end
 
 function confirm_edit_time(player_index, element)
-    local force = game.players[player_index].force
+    local storage_force, force = get_display_storage_force(game.players[player_index].force)
+    if not storage_force then return end
     local milestone_flow = element.parent
-    local milestone = find_complete_milestone_from_UI_flow(milestone_flow, storage.forces[force.name])
+    local milestone = find_complete_milestone_from_UI_flow(milestone_flow, storage_force)
 
     local time_quantity = milestone_flow.milestones_edit_time_field.text
     if time_quantity ~= nil then
@@ -167,8 +170,8 @@ function confirm_edit_time(player_index, element)
         if completion_tick then -- Could still be nil in case of parse error
             milestone.completion_tick = completion_tick
             milestone.lower_bound_tick = nil
-            sort_milestones(storage.forces[force.name].complete_milestones)
-            sort_milestones(storage.forces[force.name].milestones_by_group[milestone.group])
+            sort_milestones(storage_force.complete_milestones)
+            sort_milestones(storage_force.milestones_by_group[milestone.group])
         end
     end
 
@@ -235,7 +238,12 @@ function build_display_page(player)
     inner_frame.clear() -- Just in case the GUI didn't close through close_gui
     local display_scroll = inner_frame.add{type="scroll-pane", name="milestones_display_scroll", style="flib_naked_scroll_pane"}
 
-    local storage_force = storage.forces[player.force.name]
+    -- Paranoidal: players in a Blueprint Sandboxes force see their parent force's milestones.
+    local storage_force = get_display_storage_force(player.force)
+    if not storage_force then
+        display_scroll.add(empty_set_label)
+        return
+    end
 
     local print_milliseconds = settings.global["milestones_check_frequency"].value < 60
     local player_settings = settings.get_player_settings(player)

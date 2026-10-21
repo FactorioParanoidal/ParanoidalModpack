@@ -43,7 +43,7 @@ if data.raw.item["breeder-fuel-cell"] and data.raw.item["used-up-breeder-fuel-ce
             icon_size = 32,
             max_health = 600,
             flags = { "placeable-neutral", "player-creation", "not-repairable" },
-            minable = { hardness = 0.2, mining_time = 5, results = { { type = "item", name = used_up_RTG, amount = 10 }, { type = "item", name = "used-up-breeder-fuel-cell", amount = 10 } } },
+            minable = { mining_time = 5, results = { { type = "item", name = used_up_RTG, amount = 10 }, { type = "item", name = "used-up-breeder-fuel-cell", amount = 10 } } },
             corpse = "medium-remnants",
             collision_box = { { -size / 2 + 0.23, -size / 2 + 0.23 }, { size / 2 - 0.23, size / 2 - 0.23 } },
             selection_box = { { -size / 2, -size / 2 }, { size / 2, size / 2 } },

@@ -500,7 +500,7 @@ function common.draw_belt_stats(state, belt, belt_speed, speed1, speed2, stagger
 	local c1, c2, c3, c4 = {.9, .9, .9}, {0, 0, 0}, {1, .2, 0}, {.4, .4, .4}
 	x1 = x1 + stagger
 	local capacity_mult = 1
-	if state.use_stack_capacity_multiplier_choice then
+	if state.miner.drops_full_belt_stacks then
 		capacity_mult = 1 + state.player.force.belt_stack_size_bonus
 	end
 	
@@ -563,8 +563,11 @@ function common.draw_belt_total(state, pos_x, pos_y, speed, capped1, capped2, un
 	end
 	local c1 = {0.7, 0.7, 1.0}
 
-	local lower_bound = math.min(capped1, capped2)
+	-- local lower_bound = math.min(capped1, capped2)
 	local upper_bound = math.max(capped1, capped2)
+	if state.miner.drops_full_belt_stacks then
+		upper_bound = upper_bound / (1 + state.player.force.belt_stack_size_bonus)
+	end
 	local capped_total = capped1+capped2
 	local uncapped_total = uncapped1 + uncapped2
 	local unused_capacity = uncapped_total - capped_total
@@ -1037,7 +1040,7 @@ function common.display_lane_filling(state)
 
 	local belt_speed = state.belt.speed
 	local capacity_mult = 1
-	if state.use_stack_capacity_multiplier_choice then
+	if state.miner.drops_full_belt_stacks then
 		capacity_mult = 1 + state.player.force.belt_stack_size_bonus
 	end
 	

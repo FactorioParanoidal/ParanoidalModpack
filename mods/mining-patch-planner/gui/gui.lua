@@ -582,8 +582,9 @@ end
 
 gui.update_direction_section = update_direction_section
 
----@param player_data PlayerData
-local function update_miner_selection(player_data)
+---@param player LuaPlayer
+local function update_miner_selection(player)
+	local player_data = storage.players[player.index]
 	local player_choices = player_data.choices
 	local layout = layouts[player_choices.layout_choice]
 	local restrictions = layout.restrictions
@@ -607,13 +608,14 @@ local function update_miner_selection(player_data)
 
 		---@type List<LocalisedString>
 		local tooltip = List{
-			"", mpp_util.entity_name_with_quality(miner_proto.localised_name, player_choices.miner_quality_choice), "\n",
-			"[img=mpp_tooltip_category_size] ", {"description.tile-size"}, (": %ix%i\n"):format(miner.size, miner.size),
+			"", mpp_util.entity_name_with_quality(miner_proto.localised_name, player_choices.miner_quality_choice),
+			"\n[img=mpp_tooltip_category_size] ", {"description.tile-size"}, (": %ix%i\n"):format(miner.size, miner.size),
 			"[img=mpp_tooltip_category_mining_area] ", {"description.mining-area"}, (": %ix%i"):format(miner.real_area, miner.real_area),
 		}
 		tooltip
 			:conditional_append(miner.power_source_tooltip ~= nil, "\n", miner.power_source_tooltip)
 			:conditional_append(miner.area <= miner.size, "\n[color=yellow]", {"mpp.label_insufficient_area"}, "[/color]")
+			:conditional_append(miner.drops_full_belt_stacks, "\n", {"mpp.label_drops_full_belt_stacks", 1 + player.force.belt_stack_size_bonus})
 			:conditional_append(not miner.supports_fluids, "\n[color=yellow]", {"mpp.label_no_fluid_mining"}, "[/color]")
 			:conditional_append(miner.oversized, "\n[color=yellow]", {"mpp.label_oversized_drill"}, "[/color]")
 
@@ -1202,15 +1204,6 @@ local function update_misc_selection(player)
 			icon_enabled=("mpp_force_pipe_enabled"),
 		}
 	end
-	
-	if script.feature_flags.space_travel and layout.restrictions.lane_filling_info_available then
-		values:push{
-			value="use_stack_capacity_multiplier",
-			tooltip={"mpp.choice_use_stack_capacity_multiplier"},
-			icon=("mpp_stack_capacity_disabled"),
-			icon_enabled=("mpp_stack_capacity_enabled"),
-		}
-	end
 
 	if player_data.advanced and false then
 		values:push{
@@ -1388,7 +1381,7 @@ local function update_selections(player)
 	local player_data = storage.players[player.index]
 	player_data.gui.blueprint_add_button.visible = player_data.choices.layout_choice == "blueprints"
 	mpp_util.update_undo_button(player_data)
-	update_miner_selection(player_data)
+	update_miner_selection(player)
 	update_belt_selection(player)
 	update_space_belt_selection(player)
 	update_logistics_selection(player_data)

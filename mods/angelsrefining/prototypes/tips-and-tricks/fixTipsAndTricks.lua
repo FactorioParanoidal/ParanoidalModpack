@@ -1,15 +1,5 @@
 -- modify base game tips-and-tricks to prevent crashes
-
-if false and data.raw["tutorial"]["trains-stations"]["scenario"] == "trains-stations" then
-  data:extend({
-    {
-      type = "tutorial",
-      name = "angels-trains-stations",
-      scenario = "angels-trains-stations",
-    },
-  })
-  data.raw["tips-and-tricks-item"]["train-stops"]["tutorial"] = "angels-trains-stations"
-end
+-- The former angels-trains-stations tutorial (1.1 API, disabled by `if false`) was removed.
 
 data.raw["tips-and-tricks-item"]["clear-cursor"].simulation.init = [[
     require("__core__/lualib/story")

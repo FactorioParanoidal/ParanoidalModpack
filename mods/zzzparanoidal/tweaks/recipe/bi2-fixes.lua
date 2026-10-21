@@ -1,29 +1,47 @@
--- Фиксы регрессий Bio_Industries_2 для 2.0: мод сохранил старые 1.1-имена
--- items (stone-crushed, solid-sand), а Angels Refining в 2.0 переименовал их
--- в angels-stone-crushed / angels-solid-sand. Без этих патчей рецепты bi-*
--- сломаны (несуществующие ingredient/result).
+-- Bio Industries сохранил имена stone-crushed и solid-sand из Factorio 1.1,
+-- которые Angels Refining 2.0 заменил на angels-stone-crushed и angels-solid-sand.
 
 local function rename_item_in_list(list, old_name, new_name)
 	if not list then return end
+	-- Не создаём дубли ингредиентов и не схлопываем вероятностные результаты.
+	-- Если оба предмета уже есть, оставляем список без изменений.
 	for _, item in pairs(list) do
-		if item.name == old_name then item.name = new_name end
+		if (item.type == nil or item.type == "item") and (item.name or item[1]) == new_name then
+			return
+		end
+	end
+	for _, item in pairs(list) do
+		if item.type == nil or item.type == "item" then
+			if item.name == old_name then
+				item.name = new_name
+			elseif item[1] == old_name then
+				item[1] = new_name
+			end
+		end
 	end
 end
 
-local function patch_bi_recipe(name, renames)
-	local r = data.raw.recipe[name]
-	if not r then return end
-	for old, new in pairs(renames) do
-		rename_item_in_list(r.ingredients, old, new)
-		rename_item_in_list(r.results, old, new)
-	end
+local function rename_item_in_recipe(recipe, old_name, new_name)
+	if not recipe or not data.raw.item[new_name] then return end
+	rename_item_in_list(recipe.ingredients, old_name, new_name)
+	rename_item_in_list(recipe.results, old_name, new_name)
 end
 
--- bi-sand: 2 stone-crushed → 5 solid-sand (через bi-stone-crusher)
-patch_bi_recipe("bi-sand", {
-	["stone-crushed"] = "angels-stone-crushed",
-	["solid-sand"] = "angels-solid-sand",
-})
+-- Все рецепты сборки используют единый щебень Angels. Имена рецептов Bio
+-- Industries сохраняются, поэтому настроенные машины продолжают работать.
+for _, recipe in pairs(data.raw.recipe) do
+	rename_item_in_recipe(recipe, "stone-crushed", "angels-stone-crushed")
+end
+
+-- Старый предмет остаётся только как скрытый прототип для совместимости.
+local legacy_crushed_stone = data.raw.item["stone-crushed"]
+if legacy_crushed_stone and data.raw.item["angels-stone-crushed"] then
+	legacy_crushed_stone.hidden = true
+	legacy_crushed_stone.hidden_in_factoriopedia = true
+end
+
+-- bi-sand: 2 crushed stone → 5 solid sand (через bi-stone-crusher)
+rename_item_in_recipe(data.raw.recipe["bi-sand"], "solid-sand", "angels-solid-sand")
 
 -- Подменяем item-icon angels-solid-sand с "миски" (angelsrefininggraphics/
 -- solid-sand.png) на нормальную кучку песка из aai-industry. Это автоматически

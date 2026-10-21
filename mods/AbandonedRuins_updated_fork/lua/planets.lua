@@ -4,7 +4,9 @@ local constants = require("constants")
 ---@type boolean
 local debug_log = settings.global[constants.ENABLE_DEBUG_LOG_KEY].value
 
--- All planets from official mod "Space Age"
+-- All planets from Wuwe's mod "Space Age", Nauvis is included for easier
+-- code logic, to avoid extra "static" check on Nauvis. All other planet mods
+-- are considered as "custom" planets and not part of the "official" planets.
 ---@typpe table<string, boolean>
 local sa_planets = {
   ["nauvis"]   = true,
@@ -72,7 +74,11 @@ function planets.init()
   if debug_log then log("[init]: EXIT!") end
 end
 
--- Checks wether the given planet is allowed to spawn ruins on
+-- Checks wether the given planet is allowed to spawn ruins on. This function
+-- does not accept invalid (`planet.valid=false`), please check that condition
+-- before invoking this function. The simple reason here is that any other
+-- attempt to read a property from `LuaPlanet` type will fail and this function
+-- needs to read `name` from the `LuaPlanet` object.
 ---@param planet LuaPlanet
 ---@return boolean
 function planets.is_planet_allowed(planet)
@@ -84,7 +90,8 @@ function planets.is_planet_allowed(planet)
   end
 
   -- Check condition
-  local allowed = (storage.allowed_planets[planet.name] ~= nil)
+  -- Paranoidal: init() stores false for disallowed planets; `~= nil` treated them as allowed.
+  local allowed = (storage.allowed_planets ~= nil and storage.allowed_planets[planet.name] == true)
 
   if debug_log then log(string.format("[is_planet_allowed]: allowed='%s' - EXIT!", allowed)) end
   return allowed

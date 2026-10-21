@@ -1,4 +1,12 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.7.19
+Date: 2026-06-02
+  Changes:
+    - Throughput overlay now automatically accounts for mining drills that stack output items.
+    - Minimum required Factorio version bumped up to 2.0.77 due to Lua API requirement for above change.
+  Translation:
+    - Updated Chinese translation. (thanks to Lexcellent)
+---------------------------------------------------------------------------------------------------
 Version: 1.7.18
 Date: 2026-03-18
   Changes:

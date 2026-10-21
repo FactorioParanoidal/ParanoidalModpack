@@ -2,6 +2,7 @@
 Version: 2.0.1
 Date: 2020-12-02
   Changes:
+    - Optional load-order dependency points to the merged Alien-biomes-Reforged mod instead of alien-biomes (Paranoidal local fix)
     - Added "avoid resource patches" option
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.0

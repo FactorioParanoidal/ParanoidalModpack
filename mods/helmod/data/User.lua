@@ -37,7 +37,9 @@ end
 ---Get Name
 ---@return string
 function User.name()
-    return Player.native().name or Player.native().index or "nil"
+    ---called by every User.get, read the player only once
+    local player = Player.native()
+    return player.name or player.index or "nil"
 end
 
 -------------------------------------------------------------------------------
@@ -92,6 +94,9 @@ end
 -------------------------------------------------------------------------------
 ---Get default settings
 ---@return table
+---Read-only defaults for lookups, User.getDefaultSettings() returns a new table
+local default_settings = nil
+
 function User.getDefaultSettings()
     return {
         display_pin_beacon = false,
@@ -390,7 +395,8 @@ function User.getSetting(property)
     if settings ~= nil and property ~= nil then
         local value = settings[property]
         if value == nil then
-            value = User.getDefaultSettings()[property]
+            if default_settings == nil then default_settings = User.getDefaultSettings() end
+            value = default_settings[property]
         end
         return value
     end

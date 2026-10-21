@@ -1,3 +1,4 @@
+local Constants = require("constants")
 local Character = require("script/character_interface/character")
 
 local script_data =
@@ -66,12 +67,33 @@ function Klient:on_player_enqueue_action_command(event)
     character:defer_job(position, selected)
 end
 
+local function should_brake(player_index)
+    local player_settings = settings.get_player_settings(player_index)
+    return player_settings[Constants.settings.brake_on_cancel].value
+end
+
 function Klient:on_player_cancel_command(event)
     local character = self:get_or_make_character()
-    if not character then return end
-    if character:is_idle() then return end
+    if not character or character:is_idle() then return end
+
     character:remark({ "abort-command" })
     character:clear_state()
+
+    local player = game.get_player(event.player_index)
+
+    if player and player.vehicle then
+        if should_brake(event.player_index) then
+            player.riding_state = {
+                acceleration = defines.riding.acceleration.braking,
+                direction = defines.riding.direction.straight
+            }
+        else
+            player.riding_state = {
+                acceleration = defines.riding.acceleration.nothing,
+                direction = defines.riding.direction.straight
+            }
+        end
+    end
 end
 
 function Klient:make_character()
@@ -101,13 +123,13 @@ local lib = {}
 
 lib.events =
 {
-    ["klient-alt-move-to"] = on_player_action_command,
+    [Constants.events.alt_move_to] = on_player_action_command,
     --["klient-enqueue-command"] = on_player_enqueue_action_command,
     --["klient-cancel-w"] = on_player_cancel_command,
     --["klient-cancel-a"] = on_player_cancel_command,
     --["klient-cancel-s"] = on_player_cancel_command,
     --["klient-cancel-d"] = on_player_cancel_command,
-    ["klient-cancel-enter"] = on_player_cancel_command,
+    [Constants.events.cancel_enter] = on_player_cancel_command,
 
     [defines.events.on_pre_player_toggled_map_editor] = on_player_cancel_command,
     [defines.events.on_pre_player_left_game] = on_player_cancel_command,

@@ -195,7 +195,8 @@ end
 
 function paralib.bobmods.lib.tech.remove_science_pack(tech, pack)
 	paralib.EnsureExists("technology", tech)
-	paralib.EnsureExists("item", pack)
+	--пакеты науки в 2.0 — прототипы tool
+	paralib.EnsureExists("tool", pack)
 	bobmods.lib.tech.remove_science_pack(tech, pack)
 end
 
@@ -206,8 +207,8 @@ end
 
 function paralib.bobmods.lib.tech.replace_science_pack(tech, packOld, packNew)
 	paralib.EnsureExists("technology", tech)
-	paralib.EnsureExists("item", packOld)
-	paralib.EnsureExists("item", packNew)
+	paralib.EnsureExists("tool", packOld)
+	paralib.EnsureExists("tool", packNew)
 	bobmods.lib.tech.replace_science_pack(tech, packOld, packNew)
 end
 
@@ -273,7 +274,8 @@ end
 
 function paralib.bobmods.lib.recipe.replace_ingredient(recipe, ingredientOld, ingredientNew)
 	paralib.EnsureExists("recipe", recipe)
-	paralib.EnsureIngredientExists(ingredientOld)
+	--оба аргумента здесь — имена ингредиентов
+	paralib.EnsureType(ingredientOld, "string")
 	paralib.EnsureType(ingredientNew, "string")
 	bobmods.lib.recipe.replace_ingredient(recipe, ingredientOld, ingredientNew)
 end

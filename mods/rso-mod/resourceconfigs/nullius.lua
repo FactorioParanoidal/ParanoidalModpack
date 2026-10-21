@@ -1,6 +1,6 @@
 function fillNulliusConfig(config)
 
-	config["nullius-sandstone"] = {
+	config.nauvis["nullius-sandstone"] = {
 		type="resource-ore",
 		
 		allotment=95,
@@ -21,7 +21,7 @@ function fillNulliusConfig(config)
 		}
 	}
 	
-	config["nullius-bauxite"] = {
+	config.nauvis["nullius-bauxite"] = {
 		type="resource-ore",
 		
 		allotment=90,
@@ -41,7 +41,7 @@ function fillNulliusConfig(config)
 		}
 	}
 
-	config["nullius-limestone"] = {
+	config.nauvis["nullius-limestone"] = {
 		type="resource-ore",
 
 		allotment=80,
@@ -59,7 +59,7 @@ function fillNulliusConfig(config)
 		}
 	}
 	
-	config["nullius-fumarole"] = {
+	config.nauvis["nullius-fumarole"] = {
 		type="resource-liquid",
 		minimum_amount=320000,
 		allotment=90,
@@ -73,8 +73,8 @@ function fillNulliusConfig(config)
 		}
 	}
 
-	if config["iron-ore"] then
-		config["iron-ore"].multi_resource = {
+	if config.nauvis["iron-ore"] then
+		config.nauvis["iron-ore"].multi_resource = {
 			["iron-ore"] = 2,
 			["nullius-sandstone"] = 3,
 			["nullius-bauxite"] = 5,

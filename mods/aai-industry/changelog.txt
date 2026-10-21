@@ -2,6 +2,7 @@
 Version: 0.6.16
 Date: 27. 02. 2026
   Changes:
+    - Paranoidal: the on_tick handler (starting science on tick 1) is registered only until tick 1 has run; the done flag is saved so every peer derives the same registration on load.
     - Renamed the big mining drill to area mining drill to match the internal prototype name.
   Compatibility:
     - [Space Age] the area mining drill is no longer hidden in favor of the big mining drill.

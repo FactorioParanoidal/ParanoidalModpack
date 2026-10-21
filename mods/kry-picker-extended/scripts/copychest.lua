@@ -89,6 +89,17 @@ local function paste_chest(event)
         return flying_text(player, {'chest.no-copy-from'}, chest.position)
     end
 
+    -- Paranoidal: both chests must be within the character's reach (remote view must not move items
+    -- across the map). Cheat mode keeps the old behaviour.
+    if not player.cheat_mode then
+        local character = player.character
+        local source = pdata.copy_src.ent
+        if not (character and character.valid and source and source.valid
+            and character.can_reach_entity(source) and character.can_reach_entity(chest)) then
+            return flying_text(player, {'cant-reach'}, chest.position)
+        end
+    end
+
     if chest == pdata.copy_src.ent then
         return flying_text(player, {'chest.same-inventory'}, chest.position)
     end

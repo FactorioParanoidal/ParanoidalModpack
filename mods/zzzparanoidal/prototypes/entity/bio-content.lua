@@ -30,35 +30,15 @@ local biofarmpipepictures = {
 	},
 }
 
-local assembler2pipepicturesBioreactor = {
-	north = {
-		filename = "__Bio_Industries_2__/graphics/icons/empty.png",
-		priority = "extra-high",
-		width = 1,
-		height = 1,
-		shift = util.by_pixel(2.5, 14),
-	},
-	east = {
-		filename = "__base__/graphics/entity/assembling-machine-2/assembling-machine-2-pipe-E.png",
-		priority = "extra-high",
-		width = 20,
-		height = 38,
-		shift = util.by_pixel(-25, 1),
-	},
-	south = {
-		filename = "__base__/graphics/entity/assembling-machine-2/assembling-machine-2-pipe-S.png",
-		priority = "extra-high",
-		width = 44,
-		height = 31,
-		shift = util.by_pixel(0, -31.5),
-	},
-	west = {
-		filename = "__base__/graphics/entity/assembling-machine-2/assembling-machine-2-pipe-W.png",
-		priority = "extra-high",
-		width = 19,
-		height = 37,
-		shift = util.by_pixel(25.5, 1.5),
-	},
+-- Трубы сборщика 2 из base 2.0 (HR); север пустой, как раньше. Раньше здесь были размеры кадра 1.1,
+-- а файлы base 2.0 уже HR: рисовалась четверть картинки трубы.
+local assembler2pipepicturesBioreactor = assembler2pipepictures()
+assembler2pipepicturesBioreactor.north = {
+	filename = "__Bio_Industries_2__/graphics/icons/empty.png",
+	priority = "extra-high",
+	width = 1,
+	height = 1,
+	shift = util.by_pixel(2.5, 14),
 }
 
 data:extend({ -- ###############################################################################################
@@ -98,36 +78,8 @@ data:extend({ -- ###############################################################
 			{
 				volume = 1000,
 				production_type = "input",
-				pipe_picture = {
-					north = {
-						filename = "__zzzparanoidal__/graphics/Bio_Industries_graphics/graphics/entities/bio_greenhouse/pipe/assembling-machine-3-pipe-N.png",
-						priority = "extra-high",
-						width = 35,
-						height = 18,
-						shift = util.by_pixel(2.5, 14),
-					},
-					east = {
-						filename = "__zzzparanoidal__/graphics/Bio_Industries_graphics/graphics/entities/bio_greenhouse/pipe/assembling-machine-3-pipe-E.png",
-						priority = "extra-high",
-						width = 20,
-						height = 38,
-						shift = util.by_pixel(-25, 1),
-					},
-					south = {
-						filename = "__zzzparanoidal__/graphics/Bio_Industries_graphics/graphics/entities/bio_greenhouse/pipe/assembling-machine-3-pipe-S.png",
-						priority = "extra-high",
-						width = 44,
-						height = 31,
-						shift = util.by_pixel(0, -31.5),
-					},
-					west = {
-						filename = "__zzzparanoidal__/graphics/Bio_Industries_graphics/graphics/entities/bio_greenhouse/pipe/assembling-machine-3-pipe-W.png",
-						priority = "extra-high",
-						width = 19,
-						height = 37,
-						shift = util.by_pixel(25.5, 1.5),
-					},
-				},
+				-- HR-трубы теплицы BI 2.0 (Bio_Industries_2: biogreenhousepipepictures)
+				pipe_picture = biogreenhousepipepictures(),
 				pipe_covers = pipecoverspictures(),
 				base_area = 10,
 				base_level = -1,
@@ -144,6 +96,7 @@ data:extend({ -- ###############################################################
 			module_slots = 2,
 		},
 		allowed_effects = { "consumption", "speed", "productivity", "pollution" },
+		graphics_set = {
 		animation = {
 			layers = {
 				{
@@ -192,6 +145,7 @@ data:extend({ -- ###############################################################
 					},
 				},
 			},
+		},
 		},
 		open_sound = {
 			filename = "__base__/sound/machine-open.ogg",
@@ -259,36 +213,8 @@ data:extend({ -- ###############################################################
 			{
 				volume = 1000,
 				production_type = "input",
-				pipe_picture = {
-					north = {
-						filename = "__zzzparanoidal__/graphics/Bio_Industries_graphics/graphics/entities/bio_greenhouse/pipe/assembling-machine-3-pipe-N.png",
-						priority = "extra-high",
-						width = 35,
-						height = 18,
-						shift = util.by_pixel(2.5, 14),
-					},
-					east = {
-						filename = "__zzzparanoidal__/graphics/Bio_Industries_graphics/graphics/entities/bio_greenhouse/pipe/assembling-machine-3-pipe-E.png",
-						priority = "extra-high",
-						width = 20,
-						height = 38,
-						shift = util.by_pixel(-25, 1),
-					},
-					south = {
-						filename = "__zzzparanoidal__/graphics/Bio_Industries_graphics/graphics/entities/bio_greenhouse/pipe/assembling-machine-3-pipe-S.png",
-						priority = "extra-high",
-						width = 44,
-						height = 31,
-						shift = util.by_pixel(0, -31.5),
-					},
-					west = {
-						filename = "__zzzparanoidal__/graphics/Bio_Industries_graphics/graphics/entities/bio_greenhouse/pipe/assembling-machine-3-pipe-W.png",
-						priority = "extra-high",
-						width = 19,
-						height = 37,
-						shift = util.by_pixel(25.5, 1.5),
-					},
-				},
+				-- HR-трубы теплицы BI 2.0 (Bio_Industries_2: biogreenhousepipepictures)
+				pipe_picture = biogreenhousepipepictures(),
 				pipe_covers = pipecoverspictures(),
 				base_area = 10,
 				base_level = -1,
@@ -299,6 +225,7 @@ data:extend({ -- ###############################################################
 			module_slots = 3,
 		},
 		allowed_effects = { "consumption", "speed", "productivity", "pollution" },
+		graphics_set = {
 		animation = {
 			layers = {
 				{
@@ -347,6 +274,7 @@ data:extend({ -- ###############################################################
 					},
 				},
 			},
+		},
 		},
 		open_sound = {
 			filename = "__base__/sound/machine-open.ogg",
@@ -435,6 +363,7 @@ data:extend({ -- ###############################################################
 		collision_box = { { -4.2, -4.2 }, { 4.2, 4.2 } },
 		selection_box = { { -4.5, -4.5 }, { 4.5, 4.5 } },
 		scale_entity_info_icon = true,
+		graphics_set = {
 		animation = {
 			layers = {
 				{
@@ -442,7 +371,7 @@ data:extend({ -- ###############################################################
 					priority = "high",
 					width = 304,
 					height = 400,
-					shift = { 0, -1.5 },
+					shift = { 0, -2 },
 					scale = 1,
 				},
 				{
@@ -450,7 +379,7 @@ data:extend({ -- ###############################################################
 					priority = "high",
 					width = 400,
 					height = 400,
-					shift = { 1.5, -1.5 },
+					shift = { 1, -2 },
 					scale = 1,
 					draw_as_shadow = true,
 				},
@@ -468,12 +397,13 @@ data:extend({ -- ###############################################################
 							width = 400,
 							height = 400,
 							scale = 1,
-							shift = { 0, -1.5 },
+							shift = { 1, -2 },
 							blend_mode = "additive",
 						},
 					},
 				},
 			},
+		},
 		},
 		crafting_categories = { "biofarm-mod-farm", "biofarm-mod-farm-2" },
 		crafting_speed = 1.5,
@@ -576,6 +506,7 @@ data:extend({ -- ###############################################################
 		collision_box = { { -4.2, -4.2 }, { 4.2, 4.2 } },
 		selection_box = { { -4.5, -4.5 }, { 4.5, 4.5 } },
 		scale_entity_info_icon = true,
+		graphics_set = {
 		animation = {
 			layers = {
 				{
@@ -583,7 +514,7 @@ data:extend({ -- ###############################################################
 					priority = "high",
 					width = 304,
 					height = 400,
-					shift = { 0, -1.5 },
+					shift = { 0, -2 },
 					scale = 1,
 				},
 				{
@@ -591,7 +522,7 @@ data:extend({ -- ###############################################################
 					priority = "high",
 					width = 400,
 					height = 400,
-					shift = { 1.5, -1.5 },
+					shift = { 1, -2 },
 					scale = 1,
 					draw_as_shadow = true,
 				},
@@ -609,12 +540,13 @@ data:extend({ -- ###############################################################
 							width = 400,
 							height = 400,
 							scale = 1,
-							shift = { 0, -1.5 },
+							shift = { 1, -2 },
 							blend_mode = "additive",
 						},
 					},
 				},
 			},
+		},
 		},
 		crafting_categories = { "biofarm-mod-farm", "biofarm-mod-farm-2", "biofarm-mod-farm-3" },
 		crafting_speed = 2.0,
@@ -687,7 +619,7 @@ data:extend({ -- ###############################################################
 				base_level = -1,
 				pipe_connections = {
 					{
-						direction = 8,
+						direction = 0,
 						flow_direction = "input",
 						position = { 0, -1 },
 					},
@@ -704,7 +636,7 @@ data:extend({ -- ###############################################################
 				pipe_connections = {
 					{
 						flow_direction = "input",
-						direction = 8,
+						direction = 4,
 						position = { 1, 0 },
 					},
 				},
@@ -735,7 +667,7 @@ data:extend({ -- ###############################################################
 				base_level = 1,
 				pipe_connections = {
 					{
-						direction = 8,
+						direction = 12,
 						flow_direction = "output",
 						position = { -1, -1 },
 					},
@@ -751,7 +683,7 @@ data:extend({ -- ###############################################################
 				base_level = 1,
 				pipe_connections = {
 					{
-						direction = 8,
+						direction = 12,
 						flow_direction = "output",
 						position = { -1, 1 },
 					},
@@ -762,6 +694,7 @@ data:extend({ -- ###############################################################
 		fluid_boxes_off_when_no_fluid_recipe = true,
 		collision_box = { { -1.2, -1.2 }, { 1.2, 1.2 } },
 		selection_box = { { -1.5, -1.5 }, { 1.5, 1.5 } },
+		graphics_set = {
 		animation = {
 			layers = {
 				{
@@ -774,7 +707,7 @@ data:extend({ -- ###############################################################
 					repeat_count = 18,
 					animation_speed = 0.2,
 					scale = 1,
-					shift = { 0, -0.5 },
+					shift = { 0, -0.125 },
 				},
 				{
 					filename = "__zzzparanoidal__/graphics/Bio_Industries_graphics/graphics/entities/bio_reactor/bioreactor_shadow.png",
@@ -786,7 +719,7 @@ data:extend({ -- ###############################################################
 					repeat_count = 18,
 					animation_speed = 0.2,
 					scale = 1,
-					shift = { 0.5, -0.5 },
+					shift = { 0.5, -0.125 },
 					draw_as_shadow = true,
 				},
 			},
@@ -807,11 +740,12 @@ data:extend({ -- ###############################################################
 							repeat_count = 1,
 							animation_speed = 0.2,
 							scale = 1,
-							shift = { 0, -0.5 },
+							shift = { 0, -0.125 },
 						},
 					},
 				},
 			},
+		},
 		},
 		energy_source = {
 			type = "electric",
@@ -852,7 +786,7 @@ data:extend({ -- ###############################################################
 				base_level = -1,
 				pipe_connections = {
 					{
-						direction = 8,
+						direction = 0,
 						flow_direction = "input",
 						position = { 0, -1 },
 					},
@@ -869,7 +803,7 @@ data:extend({ -- ###############################################################
 				pipe_connections = {
 					{
 						flow_direction = "input",
-						direction = 8,
+						direction = 4,
 						position = { 1, 0 },
 					},
 				},
@@ -900,7 +834,7 @@ data:extend({ -- ###############################################################
 				base_level = 1,
 				pipe_connections = {
 					{
-						direction = 8,
+						direction = 12,
 						flow_direction = "output",
 						position = { -1, -1 },
 					},
@@ -916,7 +850,7 @@ data:extend({ -- ###############################################################
 				base_level = 1,
 				pipe_connections = {
 					{
-						direction = 8,
+						direction = 12,
 						flow_direction = "output",
 						position = { -1, 1 },
 					},
@@ -927,6 +861,7 @@ data:extend({ -- ###############################################################
 		fluid_boxes_off_when_no_fluid_recipe = true,
 		collision_box = { { -1.2, -1.2 }, { 1.2, 1.2 } },
 		selection_box = { { -1.5, -1.5 }, { 1.5, 1.5 } },
+		graphics_set = {
 		animation = {
 			layers = {
 				{
@@ -939,7 +874,7 @@ data:extend({ -- ###############################################################
 					repeat_count = 18,
 					animation_speed = 0.2,
 					scale = 1,
-					shift = { 0, -0.5 },
+					shift = { 0, -0.125 },
 				},
 				{
 					filename = "__zzzparanoidal__/graphics/Bio_Industries_graphics/graphics/entities/bio_reactor/bioreactor_shadow.png",
@@ -951,7 +886,7 @@ data:extend({ -- ###############################################################
 					repeat_count = 18,
 					animation_speed = 0.2,
 					scale = 1,
-					shift = { 0.5, -0.5 },
+					shift = { 0.5, -0.125 },
 					draw_as_shadow = true,
 				},
 			},
@@ -972,11 +907,12 @@ data:extend({ -- ###############################################################
 							repeat_count = 1,
 							animation_speed = 0.2,
 							scale = 1,
-							shift = { 0, -0.5 },
+							shift = { 0, -0.125 },
 						},
 					},
 				},
 			},
+		},
 		},
 		energy_source = {
 			type = "electric",

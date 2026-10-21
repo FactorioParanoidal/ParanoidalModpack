@@ -118,7 +118,7 @@ data:extend({ -- Greenhouse
 		energy_required = 10,
 		ingredients = {
 			{type="item", name= "concrete", amount=50 },
-			{type="item", name= "stone-crushed", amount=100 },
+			{type="item", name= "angels-stone-crushed", amount=100 },
 			{type="item", name= "seedling", amount=30 },
 		},
 		results = {{type="item", name = "bi-bio-garden", amount=1}},

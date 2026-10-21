@@ -12,6 +12,8 @@ if mods['Nuclear Fuel'] or mods['PlutoniumBreeding'] then
   require("mods/Nuclear_Fuel")
 end
 
+require("RITEG-heating")
+
 data:extend({
   {
     type = "sprite",

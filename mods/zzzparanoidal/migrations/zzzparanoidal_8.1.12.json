@@ -1,0 +1,32 @@
+{
+  "entity": [
+    ["angels-big-chest", "WideChests_steel-chest-warehouse-2x2"],
+    ["angels-logistic-chest-active-provider", "WideChests_steel-chest-warehouse-2x2"],
+    ["angels-logistic-chest-passive-provider", "WideChests_steel-chest-warehouse-2x2"],
+    ["angels-logistic-chest-storage", "WideChests_steel-chest-warehouse-2x2"],
+    ["angels-logistic-chest-buffer", "WideChests_steel-chest-warehouse-2x2"],
+    ["angels-logistic-chest-requester", "WideChests_steel-chest-warehouse-2x2"],
+    ["angels-cargo-box", "roboport"],
+    ["angels-cargo-roboport", "roboport"],
+    ["angels-cargo-hub", "roboport"],
+    ["angels-charging-station", "bob-robo-charge-port-large"],
+    ["angels-zone-expander", "bob-logistic-zone-expander"],
+    ["angels-zone-expander-2", "bob-logistic-zone-expander"],
+    ["angels-zone-expander-3", "bob-logistic-zone-expander"],
+    ["angels-construction-zone-expander", "bob-logistic-zone-expander"],
+    ["angels-construction-zone-expander-2", "bob-logistic-zone-expander-2"],
+    ["angels-construction-zone-expander-3", "bob-logistic-zone-expander-2"]
+  ],
+  "item": [
+    ["angels-cargo-box", "roboport"],
+    ["angels-cargo-roboport", "roboport"],
+    ["angels-cargo-hub", "roboport"],
+    ["angels-charging-station", "bob-robo-charge-port-large"],
+    ["angels-zone-expander", "bob-logistic-zone-expander"],
+    ["angels-zone-expander-2", "bob-logistic-zone-expander"],
+    ["angels-zone-expander-3", "bob-logistic-zone-expander"],
+    ["angels-construction-zone-expander", "bob-logistic-zone-expander"],
+    ["angels-construction-zone-expander-2", "bob-logistic-zone-expander-2"],
+    ["angels-construction-zone-expander-3", "bob-logistic-zone-expander-2"]
+  ]
+}

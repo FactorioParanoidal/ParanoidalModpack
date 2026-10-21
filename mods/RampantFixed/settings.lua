@@ -38,6 +38,18 @@ data:extend({
             order = "b[modifier]-f[wave]",
             per_user = false
         },
+
+        {
+            -- Paranoidal: Nauvis truce evolution threshold, synced with the planet AI window (RFx)
+            type = "int-setting",
+            name = "rampantFixed--nauvisMinEvo",
+            setting_type = "runtime-global",
+            minimum_value = 0,
+            maximum_value = 100,
+            default_value = 2,
+            order = "a[ai]-a[nauvisMinEvo]",
+            per_user = false
+        },
 		
         {
             type = "bool-setting",
@@ -389,6 +401,37 @@ data:extend({
             order = "l[modifier]-t4a[unit]",
             per_user = false
         },
+
+        {
+            type = "bool-setting",
+            name = "rampantFixed--flyers",
+            setting_type = "startup",
+            default_value = true,
+            order = "l[modifier]-t4b[unit]",
+            per_user = false
+        },
+
+        {
+            type = "int-setting",
+            name = "rampantFixed--flyersFirstTier",
+            setting_type = "startup",
+            minimum_value = 1,
+            maximum_value = 10,
+            default_value = 1,
+            order = "l[modifier]-t4c[unit]",
+            per_user = false
+        },
+
+        {
+            type = "double-setting",
+            name = "rampantFixed--flyersSpawnShare",
+            setting_type = "startup",
+            minimum_value = 0.01,
+            maximum_value = 0.9,
+            default_value = 0.12,
+            order = "l[modifier]-t4d[unit]",
+            per_user = false
+        },
 		
         {
             type = "bool-setting",
@@ -453,6 +496,34 @@ data:extend({
         --     order = "m[total]-a[ai]",
         --     per_user = false
         -- },
+
+        -- Reforged Paranoidal: learning AI (libs/AIBrain.lua, FlyerAI.lua, HeavyTactics.lua)
+        {
+            type = "bool-setting",
+            name = "rampantFixed--classicBehavior",
+            setting_type = "runtime-global",
+            default_value = false,
+            order = "m[total]-0a[ai]",
+            per_user = false
+        },
+
+        {
+            type = "bool-setting",
+            name = "rampantFixed--heavyBehavior",
+            setting_type = "runtime-global",
+            default_value = true,
+            order = "m[total]-0b[ai]",
+            per_user = false
+        },
+
+        {
+            type = "bool-setting",
+            name = "rampantFixed--champions",
+            setting_type = "runtime-global",
+            default_value = true,
+            order = "m[total]-0c[ai]",
+            per_user = false
+        },
 
         {
             type = "bool-setting",

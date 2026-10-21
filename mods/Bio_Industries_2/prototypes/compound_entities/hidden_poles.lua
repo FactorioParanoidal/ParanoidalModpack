@@ -119,7 +119,9 @@ BioInd.show("locale_name", locale_name)
       pole.pictures = BioInd.is_debug and vanilla.pictures or pole.pictures
       --~ pole.supply_area_distance = 1
       pole.supply_area_distance = 5
-      pole.maximum_wire_distance = 5
+      -- Paranoidal: the 9x9 farm needs a reach beyond its own edge (4.5), otherwise the
+      -- connector only joins adjacent farms/poles and the farm stays on its own solar panel.
+      pole.maximum_wire_distance = 10
 
       shift_picture(pole)
       BioInd.show("Adjusted properties of", pole_name)

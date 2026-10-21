@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "_build", ".nuke\_build.csproj", "{794ADF85-39CE-4246-90E2-FADC09DEC1E7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "_build", ".fallout\_build.csproj", "{794ADF85-39CE-4246-90E2-FADC09DEC1E7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

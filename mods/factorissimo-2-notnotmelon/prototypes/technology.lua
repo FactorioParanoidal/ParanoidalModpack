@@ -79,6 +79,35 @@ data:extend {{
     order = pf .. "a-c",
 }}
 
+-- Paranoidal: factory building 4. Prerequisites that unlock its ingredients in the Paranoidal mod set
+-- (titanium, substation 2, advanced structure components) are added in data-final-fixes when they exist
+-- (prototypes/architecture-4-final.lua).
+data:extend {{
+    type = "technology",
+    name = "factory-architecture-t4",
+    icon = F .. "/graphics/technology/factory-architecture-4.png",
+    icon_size = 256,
+    prerequisites = {"factory-architecture-t3", "utility-science-pack"},
+    effects = {
+        {
+            type = "unlock-recipe",
+            recipe = "factory-4",
+        }
+    },
+    unit = {
+        count = 6000,
+        ingredients = {
+            {"automation-science-pack", 1},
+            {"logistic-science-pack", 1},
+            {"chemical-science-pack", 1},
+            {"production-science-pack", 1},
+            {"utility-science-pack", 1},
+        },
+        time = 90
+    },
+    order = pf .. "a-c-4",
+}}
+
 if (mods["space-exploration"] or mods["space-age"]) and settings.startup["Factorissimo2-space-architecture"].value then
     local unit
     local prerequisites = {"factory-architecture-t3", "production-science-pack", "utility-science-pack"}

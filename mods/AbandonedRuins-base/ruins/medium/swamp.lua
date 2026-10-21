@@ -207,5 +207,10 @@ return
     {"water-shallow", {x = 7, y = 3}},
     {"water-shallow", {x = 7, y = 4}},
     {"water-shallow", {x = 7, y = 5}},
+  },
+  no_spawning =
+  {
+    fulgora = true,
+    vulcanus = true
   }
 }

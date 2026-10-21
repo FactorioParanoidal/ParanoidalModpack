@@ -1,0 +1,13 @@
+{
+    "name": "QueueToFrontLimited",
+    "version": "2.0.3",
+    "title": "Queue To Front (limited)",
+    "author": "billbo99",
+    "contact": "",
+    "homepage": "",
+    "factorio_version": "2.0",
+    "description": "Based off the original mod `QueueToFrontLimited`.    ALT+Q to toggle the queuing mode between back queueing(default) and front queueing.  This version adds a map setting that allows the admins block new recipes if the recipe queue limit has been reached.  There is also a command `/crafting_queue_list` that can be used to list the mode and count of all the connected players to help track who might be causing the server to lag.",
+    "dependencies": [
+        "!QueueToFrontNG"
+    ]
+}

@@ -6,91 +6,38 @@ local offshore_pumps = {
 	"offshore-mk4-pump",
 }
 
--- Convert single image to stripe
-local function make_stripes(count, filename)
-	local stripe = { filename = filename, width_in_frames = 1, height_in_frames = 1 }
-	local stripes = {}
-	for i = 1, count do
-		stripes[i] = stripe
-	end
-	return stripes
+-- Цветная маска тира поверх корпуса насоса. HR-маски (hr-*-mask_<Dir>.png) нарисованы в кадр корпуса
+-- base 2.0 один в один, поэтому размер, сдвиг и масштаб берутся у слоя корпуса. Маска статична:
+-- один кадр на весь цикл анимации (раньше — 32 одинаковых stripes и низкое разрешение 1.1).
+local function mask_layer(body, offshore_pump, direction)
+	return {
+		filename = "__zzzparanoidal__/graphics/entity/offshore-pump/"
+			.. offshore_pump
+			.. "/hr-"
+			.. offshore_pump
+			.. "-mask_"
+			.. direction
+			.. ".png",
+		priority = "high",
+		frame_count = 1,
+		repeat_count = (body.frame_count or 1) * (body.repeat_count or 1),
+		animation_speed = body.animation_speed,
+		width = body.width,
+		height = body.height,
+		shift = body.shift,
+		scale = body.scale,
+	}
 end
 
 for _, offshore_pump in pairs(offshore_pumps) do
-	local animation_table = {}
-
-	if data.raw["offshore-pump"][offshore_pump] then
-		table.insert(animation_table, data.raw["offshore-pump"][offshore_pump].graphics_set.animation)
-	end
-
-	for _, animation in pairs(animation_table) do
-		table.insert(animation.north.layers, {
-			stripes = make_stripes(
-				8 * 4,
-				"__zzzparanoidal__/graphics/entity/offshore-pump/"
-					.. offshore_pump
-					.. "/"
-					.. offshore_pump
-					.. "-mask_North.png"
-			),
-			priority = "high",
-			frame_count = 32,
-			animation_speed = 0.5,
-			width = 48,
-			height = 84,
-			shift = util.by_pixel(-2, -16),
-		})
-
-		table.insert(animation.east.layers, {
-			stripes = make_stripes(
-				8 * 4,
-				"__zzzparanoidal__/graphics/entity/offshore-pump/"
-					.. offshore_pump
-					.. "/"
-					.. offshore_pump
-					.. "-mask_East.png"
-			),
-			priority = "high",
-			frame_count = 32,
-			animation_speed = 0.5,
-			width = 52,
-			height = 16,
-			shift = util.by_pixel(14, -2),
-		})
-
-		table.insert(animation.south.layers, {
-			stripes = make_stripes(
-				8 * 4,
-				"__zzzparanoidal__/graphics/entity/offshore-pump/"
-					.. offshore_pump
-					.. "/"
-					.. offshore_pump
-					.. "-mask_South.png"
-			),
-			priority = "high",
-			frame_count = 32,
-			animation_speed = 0.5,
-			width = 48,
-			height = 96,
-			shift = util.by_pixel(-2, 0),
-		})
-
-		table.insert(animation.west.layers, {
-			stripes = make_stripes(
-				8 * 4,
-				"__zzzparanoidal__/graphics/entity/offshore-pump/"
-					.. offshore_pump
-					.. "/"
-					.. offshore_pump
-					.. "-mask_West.png"
-			),
-			priority = "high",
-			frame_count = 32,
-			animation_speed = 0.5,
-			width = 64,
-			height = 52,
-			shift = util.by_pixel(-16, -2),
-		})
+	local prototype = data.raw["offshore-pump"][offshore_pump]
+	local animation = prototype and prototype.graphics_set and prototype.graphics_set.animation
+	if animation then
+		for direction, key in pairs({ North = "north", East = "east", South = "south", West = "west" }) do
+			local layers = animation[key] and animation[key].layers
+			if layers and layers[1] then
+				table.insert(layers, mask_layer(layers[1], offshore_pump, direction))
+			end
+		end
 	end
 end
-

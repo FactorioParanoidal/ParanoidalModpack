@@ -1,0 +1,13 @@
+{
+  "mod": "carbon-capture2",
+  "source": "local",
+  "original": {
+    "name": "Carbon Capture REFORGED",
+    "authors": ["CyberWizard2261", "nastyslave"],
+    "portal": {
+      "name": "CW-carbon-capture-reforged",
+      "url": "https://mods.factorio.com/mod/CW-carbon-capture-reforged"
+    }
+  },
+  "changeReason": "Нет версии для Factorio 2.0, форк снят с Mod Portal. Заменяет несбалансированный air-filtering с тремя уровнями шестью уровнями фильтрации, регенерацией и слотами модулей. Рабочее имя CW-carbon-capture-reforged2 переименовано в carbon-capture2 при слиянии PR #310."
+}

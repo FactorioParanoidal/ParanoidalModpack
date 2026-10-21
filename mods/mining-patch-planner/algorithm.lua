@@ -92,7 +92,6 @@ require_layout("blueprints")
 ---@field belt_planner_choice boolean
 ---@field belt_merge_choice boolean
 ---@field balancer_choice boolean
----@field use_stack_capacity_multiplier_choice boolean
 ---
 ---@field grid Grid
 ---@field convolution_cache GridTile[]

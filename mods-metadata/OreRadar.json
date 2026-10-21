@@ -1,0 +1,10 @@
+{
+  "mod": "OreRadar",
+  "source": "local",
+  "original": {
+    "name": "Ore Radar",
+    "authors": ["darkfrei"],
+    "portal": {"name": "OreRadar", "url": "https://mods.factorio.com/mod/OreRadar"}
+  },
+  "changeReason": "Порт геологического радара OreRadar 0.0.3 из Paranoidal 1.1 на Factorio 2.0: сохраняет баланс и графику сборки, индексирует существующие чанки, ограничивает сканирование общим бюджетом на тик и исправляет удаление исчерпанных участков."
+}

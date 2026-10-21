@@ -117,7 +117,8 @@ function load_presets()
     if storage.current_preset_name == nil then
         storage.current_preset_name = get_auto_detected_preset_name()
         log("Auto-detected preset used: " .. storage.current_preset_name)
-        table.insert(storage.delayed_chat_messages, {"milestones.message_loaded_presets", storage.current_preset_name})
+        -- Paranoidal: no chat message about the auto-detected preset.
+        -- table.insert(storage.delayed_chat_messages, {"milestones.message_loaded_presets", storage.current_preset_name})
         storage.loaded_milestones = table.deep_copy(presets[storage.current_preset_name].milestones)
     end
 end
@@ -134,11 +135,12 @@ function load_preset_addons()
     end
     log("Preset addons loaded: " .. serpent.line(preset_addons_loaded))
 
-    if #preset_addons_loaded == 1 then
-        table.insert(storage.delayed_chat_messages, {"milestones.message_loaded_preset_addons_singular", preset_addons_loaded[1]})
-    elseif #preset_addons_loaded > 1 then
-        table.insert(storage.delayed_chat_messages, {"milestones.message_loaded_preset_addons_plural", table.concat(preset_addons_loaded, ", ")})
-    end
+    -- Paranoidal: no chat message about loaded preset addons.
+    -- if #preset_addons_loaded == 1 then
+    --     table.insert(storage.delayed_chat_messages, {"milestones.message_loaded_preset_addons_singular", preset_addons_loaded[1]})
+    -- elseif #preset_addons_loaded > 1 then
+    --     table.insert(storage.delayed_chat_messages, {"milestones.message_loaded_preset_addons_plural", table.concat(preset_addons_loaded, ", ")})
+    -- end
 end
 
 function reload_presets()
@@ -161,5 +163,77 @@ function reload_presets()
         table.insert(storage.delayed_chat_messages, {"milestones.message_reloaded_presets_singular", added_presets[1]})
     elseif #added_presets > 1 then
         table.insert(storage.delayed_chat_messages, {"milestones.message_reloaded_presets_plural", table.concat(added_presets, ", ")})
+    end
+    return added_presets
+end
+
+-- Paranoidal: the milestones a preset loads in on_init: the preset plus every enabled addon.
+local function get_default_milestones_for_preset(preset_name)
+    local milestones = table.deep_copy(presets[preset_name].milestones)
+    for _, preset_addon in pairs(preset_addons) do
+        if is_preset_mods_enabled(preset_addon) then
+            for _, milestone in pairs(preset_addon.milestones) do
+                table.insert(milestones, table.deep_copy(milestone))
+            end
+        end
+    end
+    return milestones
+end
+
+local function count_milestone_signatures(milestones)
+    local counts = {}
+    for _, milestone in pairs(milestones) do
+        local signature = serpent.line(milestone, {sortkeys = true, comment = false})
+        counts[signature] = (counts[signature] or 0) + 1
+    end
+    return counts
+end
+
+local function is_same_milestone_multiset(a, b)
+    if #a ~= #b then return false end
+    local counts_a, counts_b = count_milestone_signatures(a), count_milestone_signatures(b)
+    for signature, count in pairs(counts_a) do
+        if counts_b[signature] ~= count then return false end
+    end
+    return true
+end
+
+-- Paranoidal: when a mod update adds a preset that auto-detection now prefers (e.g. "Paranoidal"
+-- over "Vanilla"), switch existing saves to it, but only if the current set was never edited, i.e.
+-- it still equals the old preset plus the enabled addons. Completed milestones keep their times
+-- (merge_new_milestones), new ones are backfilled from statistics. Upstream only printed a hint.
+function upgrade_unmodified_preset(added_presets)
+    if not added_presets or #added_presets == 0 then return end
+    local current_name = storage.current_preset_name
+    if current_name == nil or presets[current_name] == nil then return end -- "Imported", "Empty", removed
+    local best_name = get_auto_detected_preset_name()
+    if best_name == nil or best_name == current_name or not table_contains(added_presets, best_name) then return end
+    if not is_same_milestone_multiset(storage.loaded_milestones, get_default_milestones_for_preset(current_name)) then
+        log("Preset " .. current_name .. " was modified, not switching to " .. best_name)
+        return
+    end
+
+    log("Switching unmodified preset " .. current_name .. " to " .. best_name)
+    local new_milestones = get_default_milestones_for_preset(best_name)
+    storage.current_preset_name = best_name
+    storage.loaded_milestones = table.deep_copy(new_milestones)
+    initialize_alias_table()
+    remove_invalid_aliases()
+    local backfilled_anything = false
+    for force_name, force in pairs(game.forces) do
+        if storage.forces[force_name] ~= nil then
+            merge_new_milestones(force_name, new_milestones)
+            remove_invalid_milestones_for_force(storage.forces[force_name])
+            backfilled_anything = backfill_completion_times(force) or backfilled_anything
+        end
+    end
+    table.insert(storage.delayed_chat_messages, {"milestones.message_loaded_presets", best_name})
+    if backfilled_anything then
+        table.insert(storage.delayed_chat_messages, {"milestones.message_loaded_into_exiting_game"})
+    end
+    for _, player in pairs(game.players) do
+        if storage.players[player.index] then
+            refresh_gui_for_player(player)
+        end
     end
 end

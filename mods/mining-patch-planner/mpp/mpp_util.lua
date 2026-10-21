@@ -206,6 +206,7 @@ end
 ---@field wrong_parity number Does miner have a wrong parity between size and area
 ---@field mining_speed number
 ---@field uses_force_mining_productivity_bonus boolean
+---@field drops_full_belt_stacks boolean
 
 ---@type table<string, MinerStruct>
 local miner_struct_cache = {}
@@ -254,6 +255,7 @@ function mpp_util.miner_struct(mining_drill_name, for_blueprint)
 	miner.extent_negative = -miner.outer_span
 	miner.extent_positive = miner.extent_negative + miner.area - 1
 	miner.middle = floor(miner.size / 2) + miner.parity
+	miner.drops_full_belt_stacks = miner_proto.drops_full_belt_stacks
 
 	miner.filtered = miner.filtered
 		or miner.area < miner.size

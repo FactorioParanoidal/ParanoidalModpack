@@ -102,7 +102,11 @@ local function on_init()
 
   default_researched_techs()
 end
-script.on_init(on_init)
+local register_start_tick
+script.on_init(function()
+  on_init()
+  register_start_tick()
+end)
 
 function on_force_created(event)
   default_researched_techs()
@@ -143,5 +147,15 @@ function on_tick(event)
       end
     end
   end
+  -- Only tick 1 matters. The flag is saved, so every peer derives the same registration on load.
+  if event.tick >= 1 then
+    storage.aai_start_done = true
+    script.on_event(defines.events.on_tick, nil)
+  end
 end
-script.on_event(defines.events.on_tick, on_tick)
+register_start_tick = function()
+  if not storage.aai_start_done then
+    script.on_event(defines.events.on_tick, on_tick)
+  end
+end
+script.on_load(register_start_tick)

@@ -1,313 +1,346 @@
 -- Inventory Cleanup Hotkey
+--
+-- Paranoidal rewrite of the hot paths (behaviour kept):
+--  * entities are searched only among types that can own an inventory (no belts, poles, rails,
+--    walls, pipes...), cheap name checks run before operable/to_be_deconstructed API calls;
+--  * static per-entity data (type, burner categories, recipe ingredients/products, requests,
+--    chest contents, ammo support) is read once per key press instead of once per trash item;
+--  * can_insert() is called only for entities that pass the cheap eligibility rules;
+--  * distribution works on plain arrays instead of entity-indexed metatables.
 
 local this = {}
 local drag = scripts.drag
 local util = scripts.util
 local metatables = scripts.metatables
+local protocache = require("scripts.protocache")
 local config = require("config")
 
 local helpers = scripts.helpers
 local _ = helpers.on
 
+local floor = math.floor
+
+local CRAFTING = { ["furnace"] = true, ["assembling-machine"] = true, ["rocket-silo"] = true }
+local CHESTS   = { ["container"] = true, ["logistic-container"] = true }
+local TURRETS  = { ["ammo-turret"] = true, ["artillery-turret"] = true, ["artillery-wagon"] = true }
+local VEHICLES = { ["car"] = true, ["spider-vehicle"] = true }
+local OUTPUT_PRODUCERS = { ["furnace"] = true, ["assembling-machine"] = true }
+local REQUESTER_TYPES = { ["logistic-container"] = true, ["infinity-container"] = true, ["spider-vehicle"] = true }
+
+-- prototype-derived memos (deterministic, per session)
+local labInputs = {}  -- lab prototype name -> set of accepted items
+local function labAccepts(entityPrototype, item)
+	local set = labInputs[entityPrototype.name]
+	if not set then
+		set = {}
+		for __,input in pairs(entityPrototype.lab_inputs or {}) do set[input] = true end
+		labInputs[entityPrototype.name] = set
+	end
+	return set[item] == true
+end
+
+local robotItems = {} -- item name -> can go into a roboport (robots, repair packs)
+local function isRoboportItem(prototype)
+	local value = robotItems[prototype.name]
+	if value == nil then
+		local placeResult = prototype.place_result
+		value = prototype.type == "repair-tool" or (placeResult ~= nil and placeResult.max_payload_size ~= nil)
+		robotItems[prototype.name] = value
+	end
+	return value
+end
+
 function this.on_inventory_cleanup(event)
-	local player   = _(game.players[event.player_index]); if player:isnot("valid player") or not player:setting("enableInventoryCleanupHotkey") then return end
+	local player   = _(game.get_player(event.player_index)); if player:isnot("valid player") or not player:setting("enableInventoryCleanupHotkey") then return end
 	local items    = _(player:trashItems())             ; if items:is("empty") then return end
 	local area     = _(player.position):perimeter(player:droprange())
-	local entities = _(this.getEntities(area, player))  ; if entities:is("empty") then return end
-	local dropToChests = player:setting("dropTrashToChests")
-	local dropToOutput = player:setting("dropTrashToOutput")
+	local records  = this.getEntities(area, player)     ; if #records == 0 then return end
 
-	if player:setting("distributionMode") == "distribute" then
-		this.distributeItems(player, entities, items, dropToChests, dropToOutput)
-	else
-		this.balanceItems(player, entities, items, dropToChests, dropToOutput)
-	end
-end
+	local options = {
+		dropToChests = player:setting("dropTrashToChests"),
+		dropToOutput = player:setting("dropTrashToOutput"),
+		useFuelLimit = player:setting("cleanupUseFuelLimit"),
+		useAmmoLimit = player:setting("cleanupUseAmmoLimit"),
+		balance      = player:setting("distributionMode") ~= "distribute",
+	}
 
-function this.distributeItems(player, entities, items, dropToChests, dropToOutput)
-	local offY, marked = 0, metatables.new("entityAsIndex")
-	
+	local offY, marked = 0, {}
 	items:each(function(item, totalItems)
-
-		local entitiesToProcess = this.filterEntities(entities, item, dropToChests, dropToOutput)
-		
-		if #entitiesToProcess > 0 then
-			local itemCounts = metatables.new("entityAsIndex")
-			totalItems = player:removeItems(item, totalItems, true, false, true)
-
-			_(entitiesToProcess):each(function(entity)
-				local count = entity:itemcount(item)
-				itemCounts[entity] = {
-					original = count,
-					current = count,
-				}
-			end)
-
-			-- distribute collected items evenly
-			local i = 0
-			while totalItems > 0 and #entitiesToProcess > 0 do -- retry if some containers full
-				if i == 1000 then dlog("WARNING: Distribute item loop did not finish!"); break end -- safeguard
-				i = i + 1
-
-				util.distribute(entitiesToProcess, totalItems, function(entity, amount)
-
-					if amount > 0 then
-						local itemCount = itemCounts[entity]
-						local itemsInserted = this.insert(player, entity, item, amount)
-
-						itemCount.current = itemCount.current + itemsInserted
-						totalItems = totalItems - itemsInserted
-
-						local failedToInsert = amount - itemsInserted
-						if failedToInsert > 0 then
-							if itemCount.current ~= itemCount.original then
-								entity:spawnDistributionText(player,item, itemCount.current - itemCount.original, offY)
-								if not marked[entity] then
-									entity:mark(player)
-									marked[entity] = true
-								end
-							end
-							entitiesToProcess[entity] = nil
-							return
-						end
-					end
-				end)
-			end
-
-			_(entitiesToProcess):each(function(entity)
-				local itemCount = itemCounts[entity]
-				local amount = itemCount.current - itemCount.original
-				if amount ~= 0 then
-					entity:spawnDistributionText(player,item, amount, offY)
-					if not marked[entity] then
-						entity:mark(player)
-						marked[entity] = true
-					end
-				end
-			end)
-
-			if totalItems > 0 then
-				player:returnItems(item, totalItems, false, true)
-			end
-
+		if this.processItem(player, records, item, totalItems, options, offY, marked) then
 			offY = offY - 0.5
 		end
 	end)
 end
 
-function this.balanceItems(player, entities, items, dropToChests, dropToOutput)
-	local offY, marked = 0, metatables.new("entityAsIndex")
+---------------------------------------------------------------------------------------------------
+-- per-entity data, read lazily and at most once per key press
 
-	items:each(function(item, totalItems)
-
-		local entitiesToProcess = this.filterEntities(entities, item, dropToChests, dropToOutput)
-
-		if #entitiesToProcess > 0 then
-			local itemCounts = metatables.new("entityAsIndex")
-			totalItems = player:removeItems(item, totalItems, true, false, true)
-
-			-- collect items from filtered entities
-			_(entitiesToProcess):each(function(entity)
-				local count = entity:itemcount(item)
-				local removed = 0
-				if count > 0 then
-					removed = entity.remove_item{ name = item, count = count }
-					totalItems = totalItems + removed
-				end
-
-				-- save entities in new list
-				itemCounts[entity] = {
-					original = count,
-					remaining = count - removed,  -- amount above balanced level (unable to take out)
-					current = count - removed,
-				}
-			end)
-
-			-- distribute collected items evenly
-			local i = 0
-			while totalItems > 0 and #entitiesToProcess > 0 do -- retry if some containers full
-				if i == 1000 then dlog("WARNING: Balance item loop did not finish!"); break end -- safeguard
-				i = i + 1
-
-				util.distribute(entitiesToProcess, totalItems, function(entity, amount)
-
-					local itemCount = itemCounts[entity]
-					
-					amount = amount - itemCount.remaining
-					if amount > 0 then
-						local itemsInserted = this.insert(player, entity, item, amount)
-
-						itemCount.current = itemCount.current + itemsInserted
-						totalItems = totalItems - itemsInserted
-
-						local failedToInsert = amount - itemsInserted
-						if failedToInsert > 0 then
-							if itemCount.current ~= itemCount.original then
-								entity:spawnDistributionText(player,item, itemCount.current - itemCount.original, offY)
-								if not marked[entity] then
-									entity:mark(player)
-									marked[entity] = true
-								end
-							end
-							entitiesToProcess[entity] = nil
-							return
-						end
-
-						amount = 0
-					end
-
-					itemCount.remaining = -amount -- update remaining item count (amount above balanced level)
-					-- add entity to new list?
-				end)
-			end
-
-			_(entitiesToProcess):each(function(entity)
-				local itemCount = itemCounts[entity]
-				local amount = itemCount.current - itemCount.original
-				if amount ~= 0 then
-					entity:spawnDistributionText(player,item, amount, offY)
-					if not marked[entity] then
-						entity:mark(player)
-						marked[entity] = true
+local function recipeSets(rec)
+	if rec.ingredients == nil then
+		local ingredients, products = {}, {}
+		if CRAFTING[rec.type] then
+			local recipe = rec.w:recipe():toPlain()
+			if recipe and recipe.valid then
+				for __,ingredient in pairs(recipe.ingredients) do ingredients[ingredient.name] = true end
+				for __,product in pairs(recipe.products) do
+					if (product.amount or product.amount_min or product.amount_max or product.probability or 1) > 0 then
+						products[product.name] = true
 					end
 				end
-			end)
-
-			if totalItems > 0 then
-				player:returnItems(item, totalItems, false, true)
 			end
-
-			offY = offY - 0.5
 		end
-	end)
-end
-
-function this.insert(player, entity, item, amount)
-
-	local useFuelLimit = player:setting("cleanupUseFuelLimit")
-	local useAmmoLimit = player:setting("cleanupUseAmmoLimit")
-	local dropToOutput = player:setting("dropTrashToOutput")
-
-	if entity.type == "furnace" and entity:recipe():isnot("valid") then
-		return entity:customInsert(player, item, amount, false, true, false, useFuelLimit, useAmmoLimit, false, {
-			fuel     = true,
-			ammo     = false,
-			input    = false,
-			output   = false,
-			modules  = false,
-			roboport = false,
-			main     = false,
-		})
-
-	elseif entity:is("crafting machine") then
-		return entity:customInsert(player, item, amount, false, true, false, useFuelLimit, useAmmoLimit, false, {
-			fuel     = true,
-			ammo     = false,
-			input    = entity:recipe():hasIngredient(item),
-			output   = dropToOutput and entity.type ~= "rocket-silo" and entity:recipe():hasProduct(item),
-			modules  = false,
-			roboport = false,
-			main     = false,
-		})
-
-	elseif entity.prototype.logistic_mode == "requester" then
-		return entity:customInsert(player, item, amount, false, true, false, useFuelLimit, useAmmoLimit, true, {
-			fuel     = false,
-			ammo     = false,
-			input    = false,
-			output   = false,
-			modules  = false,
-			roboport = false,
-			main     = true,
-		})
-
-	elseif entity.type == "spider-vehicle" and entity.get_logistic_point(defines.logistic_member_index.character_requester) then
-		return entity:customInsert(player, item, amount, false, true, false, useFuelLimit, useAmmoLimit, true, {
-			fuel     = true,
-			ammo     = true,
-			input    = false,
-			output   = false,
-			modules  = false,
-			roboport = false,
-			main     = true,
-		})
-		
-	elseif entity.type == "car" or entity.type == "spider-vehicle" then
-		return entity:customInsert(player, item, amount, false, true, false, useFuelLimit, useAmmoLimit, false, {
-			fuel     = true,
-			ammo     = true,
-			input    = false,
-			output   = false,
-			modules  = false,
-			roboport = false,
-			main     = false,
-		})
+		rec.ingredients, rec.products = ingredients, products
 	end
-	
-	-- Default priority insertion
-	return entity:customInsert(player, item, amount, false, true, false, useFuelLimit, useAmmoLimit, false, {
-		fuel     = true,
-		ammo     = true,
-		input    = true,
-		output   = false,
-		modules  = false,
-		roboport = true,
-		main     = true,
-	}) 
+	return rec.ingredients, rec.products
 end
 
-function this.filterEntities(entities, item, dropToChests, dropToOutput)
-	local result = metatables.new("entityAsIndex")
-	local prototype = prototypes.item[item]
-	
-	_(entities):each(function(__, entity)
-		entity = _(entity)
+local function isRequester(rec)
+	if rec.requester == nil then
+		local entity = rec.entity
+		rec.requester = rec.prototype.logistic_mode == "requester" or
+			(rec.type == "spider-vehicle" and entity.get_logistic_point(defines.logistic_member_index.character_requester) ~= nil)
+	end
+	return rec.requester
+end
 
-		if entity.can_insert(item) then
-			if entity.burner and entity.burner.fuel_categories[prototype.fuel_category] and entity:inventory("fuel").can_insert(item) then
-				result[entity] = entity
-			elseif entity:is("crafting machine") and entity:recipe():hasIngredient(item) then
-				result[entity] = entity
-			elseif (entity.prototype.logistic_mode == "requester" or (entity.type == "spider-vehicle" and entity.get_logistic_point(defines.logistic_member_index.character_requester))) and entity:remainingRequest(item) > 0 then
-				result[entity] = entity
-			elseif dropToChests and (entity.type == "container" or entity.type == "logistic-container") and entity:itemcount(item) > 0 then
-				result[entity] = entity
-			elseif entity.type == "lab" and entity:inventory("lab_input").can_insert(item) then
-				result[entity] = entity
-			elseif (entity.type == "ammo-turret" or entity.type == "artillery-turret" or entity.type == "artillery-wagon") and entity:supportsAmmo(prototype) then
-				result[entity] = entity
-			elseif entity.type == "roboport" then
-				result[entity] = entity
-			elseif (entity.type == "car" or entity.type == "spider-vehicle") and prototype.type == "ammo" then
-				result[entity] = entity
+local function requestOf(rec, item)
+	if rec.requests == nil then
+		rec.requests = {}
+		local point = rec.w:requesterPoint()
+		if point and point.valid then
+			for __,filter in pairs(point.filters or {}) do
+				if filter and filter.name and (filter.quality == nil or filter.quality == "normal") then
+					local count = filter.count or 0
+					if count > (rec.requests[filter.name] or 0) then rec.requests[filter.name] = count end
+				end
 			end
 		end
-		
-		if not result[entity] and dropToOutput and (entity.type == "furnace" or entity.type == "assembling-machine") and entity:recipe():hasProduct(item) then
-			result[entity] = entity
-		end
-	end)
-	
-	return result
+	end
+	return rec.requests[item] or 0
 end
+
+local function chestContents(rec)
+	if rec.contents == nil then
+		rec.contents = rec.w:contents() -- main inventory, normal quality: name -> count
+	end
+	return rec.contents
+end
+
+local function burnerCategories(rec)
+	if rec.burnerCats == nil then
+		local burner = rec.entity.burner
+		rec.burnerCats = burner and burner.fuel_categories or false
+	end
+	return rec.burnerCats
+end
+
+---------------------------------------------------------------------------------------------------
 
 function this.getEntities(area, player)
-	local entities = {}
+	local records = {}
+	local force = player.force
+	local playerIndex = player.index
+	local ignored = storage.settings[playerIndex].ignoredEntities
+	local remoteIgnored = storage.remoteIgnoredEntities or {}
 
-	for __,entity in ipairs(player.surface.find_entities_filtered{ area = area, force = player.force }) do
+	for __,entity in pairs(player.surface.find_entities_filtered{ area = area, force = force, type = protocache.allowedEntityTypes() }) do
+		local name = entity.name
+		if protocache.isAllowedEntity(name) and not ignored[name] and not remoteIgnored[name] and
+		   entity.operable and not entity.to_be_deconstructed() then -- 2.0: no force argument
 
-		if _(entity):is("valid") and 
-		   entity.operable and 
-		   not entity.to_be_deconstructed(player.force) and 
-		   not _(entity):isIgnored(player) then
-			
-			entities[#entities + 1] = entity
+			records[#records + 1] = {
+				entity    = entity,
+				w         = _(entity),
+				type      = entity.type,
+				prototype = entity.prototype,
+			}
 		end
 	end
-	
-	return entities
+
+	return records
 end
 
+-- same rules as upstream filterEntities; API-free preconditions decide whether can_insert is needed
+function this.isTarget(rec, item, prototype, dropToChests, dropToOutput)
+	local entity, entityType = rec.entity, rec.type
+	if not entity.valid then return false end
 
+	local fuelCats = prototype.fuel_category and burnerCategories(rec)
+	local fuelMatch = fuelCats and fuelCats[prototype.fuel_category]
+	local crafting = CRAFTING[entityType]
+	local ingredient = crafting and recipeSets(rec)[item]
+	local requester = REQUESTER_TYPES[entityType] and isRequester(rec)
+	local chest = dropToChests and CHESTS[entityType]
+	local isAmmo = prototype.type == "ammo"
+
+	local lab = entityType == "lab" and labAccepts(rec.prototype, item)
+	local roboport = entityType == "roboport" and isRoboportItem(prototype)
+
+	if fuelMatch or ingredient or requester or chest or lab or
+	   (TURRETS[entityType] and isAmmo) or roboport or (VEHICLES[entityType] and isAmmo) then
+
+		if entity.can_insert(item) then
+			if fuelMatch and rec.w:inventory("fuel").can_insert(item) then return true end
+			if ingredient then return true end
+			if requester and requestOf(rec, item) - entity.get_item_count(item) > 0 then return true end
+			if chest and (chestContents(rec)[item] or 0) > 0 then return true end
+			if lab and rec.w:inventory("lab_input").can_insert(item) then return true end
+			if TURRETS[entityType] and isAmmo and protocache.supportsAmmo(rec.prototype, prototype) then return true end
+			if roboport then return true end
+			if VEHICLES[entityType] and isAmmo then return true end
+		end
+	end
+
+	if dropToOutput and OUTPUT_PRODUCERS[entityType] then
+		local __, products = recipeSets(rec)
+		if products[item] then return true end
+	end
+
+	return false
+end
+
+function this.insert(player, rec, item, amount, options)
+	local entity, entityType = rec.w, rec.type
+	local useFuelLimit, useAmmoLimit = options.useFuelLimit, options.useAmmoLimit
+
+	if entityType == "furnace" and entity:recipe():isnot("valid") then
+		return entity:customInsert(player, item, amount, false, true, false, useFuelLimit, useAmmoLimit, false, {
+			fuel = true, ammo = false, input = false, output = false, modules = false, roboport = false, main = false,
+		})
+
+	elseif CRAFTING[entityType] then
+		local ingredients, products = recipeSets(rec)
+		return entity:customInsert(player, item, amount, false, true, false, useFuelLimit, useAmmoLimit, false, {
+			fuel     = true,
+			ammo     = false,
+			input    = ingredients[item] == true,
+			output   = options.dropToOutput and entityType ~= "rocket-silo" and products[item] == true,
+			modules  = false,
+			roboport = false,
+			main     = false,
+		})
+
+	elseif rec.prototype.logistic_mode == "requester" then
+		return entity:customInsert(player, item, amount, false, true, false, useFuelLimit, useAmmoLimit, true, {
+			fuel = false, ammo = false, input = false, output = false, modules = false, roboport = false, main = true,
+		})
+
+	elseif entityType == "spider-vehicle" and isRequester(rec) then
+		return entity:customInsert(player, item, amount, false, true, false, useFuelLimit, useAmmoLimit, true, {
+			fuel = true, ammo = true, input = false, output = false, modules = false, roboport = false, main = true,
+		})
+
+	elseif VEHICLES[entityType] then
+		return entity:customInsert(player, item, amount, false, true, false, useFuelLimit, useAmmoLimit, false, {
+			fuel = true, ammo = true, input = false, output = false, modules = false, roboport = false, main = false,
+		})
+	end
+
+	-- Default priority insertion
+	return entity:customInsert(player, item, amount, false, true, false, useFuelLimit, useAmmoLimit, false, {
+		fuel = true, ammo = true, input = true, output = false, modules = false, roboport = true, main = true,
+	})
+end
+
+local function markOnce(player, rec, marked)
+	local entity = rec.entity
+	local id = entity.unit_number or rec
+	if not marked[id] then
+		rec.w:mark(player)
+		marked[id] = true
+	end
+end
+
+-- distribute (or balance) one trash item; returns true if any entity was a target
+function this.processItem(player, records, item, totalItems, options, offY, marked)
+	local prototype = prototypes.item[item]
+	if not prototype then return false end
+
+	local targets = {}
+	for __,rec in ipairs(records) do
+		if this.isTarget(rec, item, prototype, options.dropToChests, options.dropToOutput) then
+			targets[#targets + 1] = { rec = rec }
+		end
+	end
+	if #targets == 0 then return false end
+
+	totalItems = player:removeItems(item, totalItems, true, false, true)
+
+	-- current counts (balance mode also collects the item from every target first)
+	for __,target in ipairs(targets) do
+		local entity = target.rec.entity
+		local count = entity.get_item_count(item)
+		local removed = 0
+		if options.balance and count > 0 then
+			removed = entity.remove_item{ name = item, count = count }
+			totalItems = totalItems + removed
+		end
+		target.original  = count
+		target.current   = count - removed
+		target.remaining = options.balance and (count - removed) or 0 -- amount above the balanced level
+	end
+
+	-- distribute collected items evenly, retrying while some targets are full
+	local active = targets
+	local i = 0
+	while totalItems > 0 and #active > 0 do
+		if i == 1000 then dlog("WARNING: Cleanup distribution loop did not finish!"); break end -- safeguard
+		i = i + 1
+
+		local count = #active
+		local share, remainder = floor(totalItems / count), totalItems % count
+		local nextActive = {}
+
+		for index,target in ipairs(active) do
+			local rec = target.rec
+			if rec.entity.valid then
+				local amount = share
+				if index <= remainder then amount = amount + 1 end
+				amount = amount - target.remaining
+
+				local full = false
+				if amount > 0 then
+					local inserted = this.insert(player, rec, item, amount, options)
+					target.current = target.current + inserted
+					totalItems = totalItems - inserted
+
+					if inserted < amount then
+						full = true
+						if target.current ~= target.original then
+							rec.w:spawnDistributionText(player, item, target.current - target.original, offY)
+							markOnce(player, rec, marked)
+						end
+						target.done = true
+					end
+					amount = 0
+				end
+
+				target.remaining = -amount
+				if not full then nextActive[#nextActive + 1] = target end
+			end
+		end
+
+		-- stop when nothing changed (all remaining targets are above the balanced level)
+		if #nextActive == count and share == 0 and remainder == 0 then break end
+		active = nextActive
+	end
+
+	for __,target in ipairs(targets) do
+		local rec = target.rec
+		if not target.done and rec.entity.valid then
+			local amount = target.current - target.original
+			if amount ~= 0 then
+				rec.w:spawnDistributionText(player, item, amount, offY)
+				markOnce(player, rec, marked)
+			end
+		end
+	end
+
+	if totalItems > 0 then
+		player:returnItems(item, totalItems, false, true)
+	end
+
+	return true
+end
 
 return this

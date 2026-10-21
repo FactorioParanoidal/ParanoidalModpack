@@ -38,30 +38,24 @@ utilities.str_contains_any_from_table = function(needle, haystack)
   elseif type(haystack) ~= "table" then
     error(string.format("haystack[]='%s' is not expected type 'table'", type(haystack)))
   elseif table_size(haystack) == 0 then
-    log("[str_contains_any_from_table]: No haystack to search for, returing false - EXIT!")
+    if debug_utils then log("[str_contains_any_from_table]: No haystack to search for, returing false - EXIT!") end
     return false
-  elseif cache["str_contains_any_from_table"] ~= nil and cache["str_contains_any_from_table"][needle] ~= nil then
-    if debug_utils then log(string.format("[str_contains_any_from_table]: Found cache[%s]='%s' - EXIT!", needle, cache["str_contains_any_from_table"][needle])) end
-    return cache["str_contains_any_from_table"][needle]
-  elseif cache["str_contains_any_from_table"] == nil then
-    -- Initialize own cache
-    cache["str_contains_any_from_table"] = {}
   end
 
-  -- Default is not found
-  cache["str_contains_any_from_table"][needle] = false
-
+  -- Paranoidal: no module-local cache. It was not invalidated when surfaces were excluded later
+  -- and was not part of the save, so a joining player could compute a different answer (desync).
+  -- The check also follows the documented meaning again: the surface name contains an excluded key
+  -- (previously the key had to contain the whole surface name, so "Factory floor 1" was not excluded).
   for key in pairs(haystack) do
     if debug_utils then log(string.format("[str_contains_any_from_table]: key='%s',needle[%s]='%s'", key, type(needle), needle)) end
-    if key:find(needle, 1, true) then -- plain find, no pattern
-      if debug_utils then log(string.format("[str_contains_any_from_table]: Found needle='%s' in key='%s' - BREAK!", needle, key)) end
-      cache["str_contains_any_from_table"][needle] = true
-      break
+    if needle:find(key, 1, true) then -- plain find, no pattern
+      if debug_utils then log(string.format("[str_contains_any_from_table]: Found key='%s' in needle='%s' - EXIT!", key, needle)) end
+      return true
     end
   end
 
-  if debug_utils then log(string.format("[str_contains_any_from_table]: cache[%s]='%s' EXIT!", needle, cache["str_contains_any_from_table"][needle])) end
-  return cache["str_contains_any_from_table"][needle]
+  if debug_utils then log(string.format("[str_contains_any_from_table]: needle='%s' not found - EXIT!", needle)) end
+  return false
 end
 
 -- TODO Bilka: this doesn't show in intellisense

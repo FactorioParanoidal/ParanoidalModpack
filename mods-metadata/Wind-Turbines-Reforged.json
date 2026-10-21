@@ -1,0 +1,5 @@
+{
+  "mod": "Wind-Turbines-Reforged",
+  "source": "local",
+  "changeReason": "Локальный форк Paranoidal на основе Wind-Turbines-relaunched 2.2.5 (MIT) под новым именем: ветер Beta 8, скрытые столбы, мощность по качеству и дефектам, окно скорости ветра, рецепты и исследования Beta 8, исправлена регистрация турбин из руин и старых сейвов. Заменяет Wind-Turbines-relaunched."
+}

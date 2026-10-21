@@ -1,0 +1,13 @@
+{
+  "mod": "Nearby-Ammo-Count-Bigger",
+  "source": "local",
+  "original": {
+    "name": "Nearby Ammo Count",
+    "authors": ["Schmendrick"],
+    "portal": {
+      "name": "Nearby-Ammo-Count",
+      "url": "https://mods.factorio.com/mod/Nearby-Ammo-Count"
+    }
+  },
+  "changeReason": "Версия для Factorio 2.0 существует, но текст счётчика мелкий и нечитаемый при стандартном масштабе; размер увеличен в 2.5 раза."
+}

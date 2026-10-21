@@ -62,9 +62,9 @@ script.on_event(defines.events.on_player_created, function(event)
   end
 
   local total_ruins_amount = 0
-  for _, size in pairs(remote_call("AbandonedRuins", "get_ruin_sizes")) do
+  for _, size in pairs(remote.call("AbandonedRuins", "get_ruin_sizes")) do
     log(string.format("[on_player_created]: size='%s'", size))
-    total_ruins_amount = total_ruins_amount + ruin_set[size]
+    total_ruins_amount = total_ruins_amount + #ruin_set[size]
   end
   local chunk_radius = math.ceil(math.sqrt(total_ruins_amount) / 2)
 
@@ -78,12 +78,12 @@ script.on_event(defines.events.on_player_created, function(event)
       elevation = 10
     }
   })
-  log(string.format("[on_player_created]: surface[]='%s'", type(surface))) end
+  log(string.format("[on_player_created]: surface[]='%s'", type(surface)))
 
   if not (surface and surface.valid) then
     -- skip invalid surfaces
     utils.output_message(string.format("Abandoned Ruins: Invalid surface created: '%s'", constants.DEBUG_SURFACE_NAME))
-    log(string.format("WARNING: surface[]='%s',name='%s' is not valid - EXIT!", type(surface), constants.DEBUG_SURFACE_NAME))
+    log(string.format("[on_player_created]: WARNING: surface[]='%s',name='%s' is not valid - EXIT!", type(surface), constants.DEBUG_SURFACE_NAME))
     return
   end
 

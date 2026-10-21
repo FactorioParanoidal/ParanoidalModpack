@@ -1,4 +1,117 @@
 ---------------------------------------------------------------------------------------------------
+Version: 9.02.14
+Date: 2026.10.13
+  Features:
+    - Learning AI (Paranoidal, libs/AIBrain.lua): every attack squad gets a tactic. Assault; flank (first to a waypoint in front of the least lethal or least defended side, then along the scent); probe (two small squads test two sides, the main strike follows 1-2 minutes later on the better one); feint (a small squad hits the strongest side, the main strike comes 30-60 seconds later from the opposite one); raider (weak spots: valuable chunks with few turrets around); sapper (turret clusters, for bases with suicide, nuclear, physical, troll or juggernaut factions); counter-battery (towards the artillery that shells the nests)
+    - The AI rates tactics and AI states by the outcome of their squads (kills against losses) and picks tactics by these ratings, faction leanings and some exploration: a tactic the player has learned to beat is dropped after a few failed squads and others are tried. Old verdicts fade, so a dropped tactic comes back when the defence changes. A losing streak makes the AI rethink (earlier state change, more experiments), a winning streak makes it press harder; a state whose squads keep failing is often replaced by a better one
+    - Approach memory per 8x8 chunk region of nests: losses and kills by approach direction, used by flanks, probes, feints and regroups
+    - Retreat: after heavy losses a squad (not kamikaze or rabid) pulls back two chunks, then joins a nearby squad or comes again from another side
+    - Less predictable movement: squads with a tactic sometimes take a near-best step instead of the best one
+    - Mutations adapt: when one damage type dominates the kills of the units and nests, mutations often pick a faction resistant to it
+    - Flights (libs/FlyerAI.lua): flyers leave the ground squads (3 or more) and act on their own; maps also launch flights from free flyers around active nests every 40-90 seconds, more often during ground strikes and then elsewhere. Flights strike weak spots (shore spots approached over water, outposts, valuable spots), hit and run to the next weak spot nearby (at most 2) or fly home, break off after heavy losses, and learn which kind of target works. No flights below 10% evolution
+    - Heavy models (libs/HeavyTactics.lua): pincer (two squads wait at staging points on both sides of a weak spot and strike together), ambush (a squad waits outside turret cover where players or trains pass often), sabotage (a small squad attacks poles, pipes and belts outside turret cover)
+    - Map setting "rampantFixed--classicBehavior" (off): the behaviour of 2.02.14 without all of the above. Optimizations and bug fixes stay
+    - Map setting "rampantFixed--heavyBehavior" (on): off keeps only the cheap models and also turns off the older heavy scripts - underground attacks (still also controlled by their own setting), enrage and bridgeheads
+    - Command /rampantAIReport and remote "getAILearning" ({surfaceIndex}): what the AI has learned on a surface; read-only
+    - Champions and hour bosses (libs/Champions.lua, map setting "rampantFixed--champions", on): every 7-11 minutes a champion, every 50-70 minutes an hour boss (at most 3 and 1 alive) leaves a random nest within reach of the base (never inside it) and attacks the most defended spot (most player turrets in the 3x3 chunks). Unit of the nest's faction one tier above the units it spawns now: biters below 10% evolution, biters/spitters 50/50 from 10%, biters/spitters/flyers by a third from 30% (falls back to what the faction has). Health x10 / x50 of the ordinary unit kept as a script pool (the health bar shows its share); the champion moves at half their speed. A random colour of the six Bob artifacts: glow and night light, a silver / bigger gold star above it. Below 35% of the pool it walks back to a nest ignoring enemies (an own command of the unit, out of its group) and takes 4 times less damage on the way (a blocked way ends within 32 tiles of the nest or is retried around it), regenerates in 90 seconds, gets one of 200 names (shown under the star) and attacks again. Death: one big artifact of its colour instead of the loot, the corpse stays 3 minutes with the glow. Units whose attack damages themselves (suicide and nuclear biters) are never chosen. Only the hour boss is announced in chat. Champions keep their own script-driven group and are never packed by squad compression
+    - Remotes "spawnChampion_ExtCtrl" ({surfaceIndex, kind = "champion"|"hourBoss", unitType}) and "getChampions" (read-only)
+  Optimizations:
+    - AI state planner: a rule table instead of seven copied if/else branches; same probabilities (compared with the old code on 20000 random cases)
+    - The four squad forming functions share placement, gathering and spending; the five neighbour scorers share one selection routine; same results
+    - Underground dig-out: one routine for the three tile loops, collection stops at the 40 positions that can be used
+    - Runtime settings read every few ticks (settlement probability, daytime hunting, vengeance probability, spending print) are cached; the player chunk table is reused instead of created every 16 ticks
+  Bugfixes:
+    - Crash "LuaCommandable API call when LuaCommandable was invalid" in FlyerAI goHome when a flight was shot down on its target: a new command to an empty finished group makes the engine delete it at once. A flight without members is now disbanded instead of getting a command; flights and ground squads also check the group after set_command before start_moving (libs/FlyerAI.lua, libs/SquadAttack.lua)
+    - Lone vanilla small biters no longer appear inside the player base. The helper biter RampantFixed adds to engine-made groups (so that engine expansion works with modded nests) is no longer placed in a chunk with player buildings or next to player turrets, nor during the truce (such groups are destroyed anyway); the helper itself is now removed instead of the first group member, also when the group is destroyed in peaceful/nocturnal mode, vanishes before it finishes gathering, loses the helper or gathers longer than the engine allows (libs/EngineGroupHelpers.lua). A helper that became the carrier of a compressed pack gives up one unit only
+    - Enrage: the enrage level of one unit no longer carries over to the units after it
+    - Underground dig-out without a target added every ray tile 5 times (the y offset used dx)
+    - Missing comma in the table of the unused collision-mask-util-extended file
+  Changes:
+    - Version number starts with 9 (Paranoidal fork): the Mod Portal never offers an "update" over local changes.
+    - New map setting "rampantFixed--nauvisMinEvo" (default 2): minimum evolution for the Nauvis truce to end. It is synced both ways with the planet AI window (RFx): new game takes the setting, an existing save keeps its RFx value and writes it into the setting.
+    - Remote "getTruceInfo" ({surfaceIndex}) returns {minEvo, peaceful} for EvoUI; read-only.
+    - Removed the two chat messages "Peaceful mode. Attacks will start..." (EvoUI shows the truce next to the evolution line). The "Peaceful mode expired" message is kept.
+  Locale:
+    - Names for the four alert virtual signals (underground passage, dig-out attempt, squad detected, attacking Demolisher); they showed Unknown key in the signal list
+    - Champion setting, hour boss chat line and 200 champion names (locale/*/champion-names.cfg)
+    - Names and descriptions of the two behaviour settings and the report command; the flyer setting descriptions mention the 10% evolution limit and the flights
+  Balancing:
+    - Flyers never spawn below 10% evolution, at any unit level: their weight in the nest and hive spawn tables is zero below 0.1
+    - Pollution wakes nests again, as in Beta 8 (RampantFixed 1.8.3): a nest that detects the player base at all becomes an ordinary active nest while pollution in its chunk or a neighbouring chunk is above 3, and calms down after the cloud is gone
+  Graphics:
+    - Factorio 2.0 ignores hr_version: drones (wasp, egg), electric/energy-thief beams and acid projectiles now use the HR sheets directly. Base 2.0 renamed its HR files without the hr- prefix, and the 1.1 low-res frame sizes cut a quarter of the drone frame (Paranoidal local fix)
+    - Enrage and regeneration crystal stickers use the base 2.0 fire-flame-01 layout (84x130, 10 per line, 90 frames); the 1.1 layout showed a piece of the new sheet (Paranoidal local fix)
+    - Removed the unused corpse acid-splash-purple: no prototype or script referenced it (Paranoidal local fix)
+---------------------------------------------------------------------------------------------------
+Version: 2.02.13
+Date: 2026.10.13
+  Balancing:
+    - Player base detection and base scent decay as in Beta 8 (RampantFixed 1.8.3): -10% per chunk without the long tail below 500. Raid zone stays ~27 chunks from turrets/radars and grows to at most ~36 with retribution (was up to ~280)
+    - Rocket launches raise retribution (+10) and give the AI 5000 points again, as in Beta 8 (+0.1 and 500 with Space Exploration)
+    - Nauvis truce is 60 minutes and attacks also need 2% evolution (was 20 minutes, 0%). Existing saves are migrated if they still have the old defaults; values set in the planet AI window are kept
+---------------------------------------------------------------------------------------------------
+Version: 2.02.12
+Date: 2026.10.13
+  Optimizations:
+    - Player building scan: chunks changed by build/mine/death events are rescanned first; the background safety pass checks 1 chunk per cycle instead of 8
+    - Factorissimo check searches only factory buildings by name instead of every storage tank in the chunk
+    - on_sector_scanned is filtered to Rampant's own radar-type entities; the player's radars no longer call Lua
+    - Player-area processing runs every 16 ticks instead of 8; hunting chances are rescaled so the chance per unit of time is unchanged
+  Balancing:
+    - Long-range squads are fully compressed from ~9 chunks from turrets/radars (was ~12) and switch to partial compression at ~8 chunks; decompression near the base and the player is unchanged
+---------------------------------------------------------------------------------------------------
+Version: 2.02.11
+Date: 2026.10.11
+  Features:
+    - Flyers: a new unit of biter nests and hives in every faction with biters except kamikaze and nuclear (startup setting, on by default)
+    - Startup settings for the first unit level with flyers (default 1, from the start) and their share of nest and hive output (default 0.12)
+    - Compared to the faction biter of the same level: health x1.5, damage x1.3, speed x1.15, 3 times more pollution to join an attack, 2 times longer spawning
+    - Flyers keep the faction resistances, loot and health/speed/regeneration traits, but not the special attacks, death effects, size and reach. They bite with the faction damage type (fire faction: physical)
+    - Flyers fly over walls, water and cliffs, land before biting and take off before moving. Every turret can hit them
+  Graphics:
+    - Flyer graphics from New Enemies (Vanilla+) 0.0.10 by Wolfenstain; landing and ground attack frames are packed into one attack sheet
+---------------------------------------------------------------------------------------------------
+Version: 2.02.10
+Date: 2026.10.08
+  Optimizations:
+    - Filter neutral deaths (except cliffs) and irrelevant build events before Lua dispatch
+    - Reuse squad member snapshots until the group changes
+    - Check alert visibility once per force and reuse static pheromone scratch data
+  Other:
+    - Reforged Paranoidal local fork; no changes to AI timings, spawning limits or difficulty
+---------------------------------------------------------------------------------------------------
+Version: 2.02.09
+Date: 2026.10.08
+  Info:
+    - Reforged Paranoidal fork of RampantFixed 2.02.08
+  Changes:
+    - Compressed squads decompress gradually: each squad over 2 seconds, at most 200 units per second on all surfaces together
+    - Nests no longer drop the combat power-up stone and the regeneration crystal. Existing items and crystals keep working
+    - Dying biters no longer landfill water
+  Optimizations:
+    - on_entity_damaged is registered only while damage protections are enabled or a oneshot power-up is active
+    - Cached prototype data and runtime settings in death, build and mine handlers
+    - Faster nearby base search
+    - Removed accidental global variables
+  Bugfixes:
+    - Damage protection startup settings are read by value
+---------------------------------------------------------------------------------------------------
+Version: 2.02.08
+Date: 2026.07.04
+  Other:
+    - Unscheduled release. There are no releases for Factorio 2.0 expected; the next releases will be for version 2.1
+  Bugfixes:
+    - Fixed error if combat power-up kill unit. If that unit, when killed, removes other objects from the map
+---------------------------------------------------------------------------------------------------
+Version: 2.02.07
+Date: 2026.07.01
+  Other:
+    - Unscheduled release. There are no releases for Factorio 2.0 expected; the next releases will be for version 2.1
+  Balancing:
+    - Now fed Demolishers stop attacking immediately 
+  Bugfixes:
+    - Fixed a bug where an attacking demolisher not react to food/fear 
+---------------------------------------------------------------------------------------------------
 Version: 2.02.06
 Date: 2026.05.08
   Bugfixes:

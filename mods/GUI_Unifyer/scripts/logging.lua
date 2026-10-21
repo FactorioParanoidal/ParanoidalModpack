@@ -15,10 +15,20 @@ local function get_log_level_name(level)
     return "UNKNOWN"
 end
 
-local function should_log(player)
+local player_levels = {}
+
+local function should_log(level, player)
     if not player or not player.valid then return false end
-    local settings = settings.get_player_settings(player)
-    return settings["gu_enable_logging"] and settings["gu_enable_logging"].value
+    local minimum = player_levels[player.index]
+    if minimum == nil then
+        local player_settings = settings.get_player_settings(player)
+        local enabled = player_settings["gu_enable_logging"]
+        local selected = player_settings["gu_log_level"]
+        minimum = enabled and enabled.value and
+            (LOG_LEVELS[selected and selected.value or "INFO"] or LOG_LEVELS.INFO) or false
+        player_levels[player.index] = minimum
+    end
+    return minimum and level >= minimum
 end
 
 local function format_message(level, category, message)
@@ -27,9 +37,22 @@ end
 
 local M = {}
 
+-- Local cache only; reload rebuilds it lazily without writing persistent state.
+function M.invalidate(player_index)
+    if player_index then
+        player_levels[player_index] = nil
+    else
+        player_levels = {}
+    end
+end
+
+function M.debug_enabled(player)
+    return should_log(LOG_LEVELS.DEBUG, player)
+end
+
 -- Main logging function
 function M.log(level, category, message, player)
-    if not should_log(player) then return end
+    if not should_log(level, player) then return end
     if type(message) ~= "string" then
         message = serpent.line(message)
     end

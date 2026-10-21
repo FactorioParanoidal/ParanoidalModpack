@@ -1,4 +1,12 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.0.2
+Date: 2026-06-24
+  Bugfixes:
+    - Fixed crash encountered when quality is not specified in blueprints [Thanks jim-hart]
+    - Fixed shift-selecting an area not including tile ghosts in count
+    - Fixed character inventories not being accounted for when in remote view [Thanks EvilPLa]
+    - Fixed crash in update_inventory_info when the player has no character (e.g. after death, before respawn)
+---------------------------------------------------------------------------------------------------
 Version: 2.0.1
 Date: 2024-11-04
   Changes:

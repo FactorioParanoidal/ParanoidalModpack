@@ -283,32 +283,10 @@ data:extend({
         }
       }
     },
-    copper_wire_picture = {
-      filename = ENTITYPATH .. "/small-electric-pole/copper-wire.png",
-      priority = "extra-high-no-scale",
-      width = 224,
-      height = 46,
-    },
-    green_wire_picture = {
-      filename = ENTITYPATH .. "/small-electric-pole/green-wire.png",
-      priority = "extra-high-no-scale",
-      width = 224,
-      height = 46
-    },
-    red_wire_picture = {
-      filename = ENTITYPATH .. "/small-electric-pole/red-wire.png",
-      priority = "extra-high-no-scale",
-      width = 224,
-      height = 46
-    },
-    wire_shadow_picture = {
-      filename = ENTITYPATH .. "/small-electric-pole/wire-shadow.png",
-      priority = "extra-high-no-scale",
-      width = 224,
-      height = 46
-    },
+    -- Factorio 2.0 has no per-pole wire sprites (copper/green/red/shadow_wire_picture); they pointed to
+    -- files that no longer exist and were ignored by the engine (Paranoidal, removed).
     radius_visualisation_picture = {
-      filename = ENTITYPATH .. "/small-electric-pole/electric-pole-radius-visualization.png",
+      filename = ENTITYPATH .. "small-electric-pole/electric-pole-radius-visualization.png",
       width = 12,
       height = 12
     },
@@ -437,7 +415,7 @@ data:extend({
       }
     },
     radius_visualisation_picture = {
-      filename = ENTITYPATH .. "/small-electric-pole/electric-pole-radius-visualization.png",
+      filename = ENTITYPATH .. "small-electric-pole/electric-pole-radius-visualization.png",
       width = 12,
       height = 12,
       priority = "extra-high-no-scale"
@@ -917,25 +895,25 @@ data:extend({
     },
         pictures = {
       north = {
-          filename = ENTITYPATH .. "/pipe-to-ground/pipe-to-ground-up.png",
+          filename = ENTITYPATH .. "pipe-to-ground/pipe-to-ground-up.png",
           priority = "extra-high",
           size = 128,
           scale = 0.5
       },
       south = {
-          filename = ENTITYPATH .. "/pipe-to-ground/pipe-to-ground-down.png",
+          filename = ENTITYPATH .. "pipe-to-ground/pipe-to-ground-down.png",
           priority = "extra-high",
           size = 128,
           scale = 0.5
       },
       west = {
-          filename = ENTITYPATH .. "/pipe-to-ground/pipe-to-ground-left.png",
+          filename = ENTITYPATH .. "pipe-to-ground/pipe-to-ground-left.png",
           priority = "extra-high",
           size = 128,
           scale = 0.5
       },
       east = {
-          filename = ENTITYPATH .. "/pipe-to-ground/pipe-to-ground-right.png",
+          filename = ENTITYPATH .. "pipe-to-ground/pipe-to-ground-right.png",
           priority = "extra-high",
           size = 128,
           scale = 0.5

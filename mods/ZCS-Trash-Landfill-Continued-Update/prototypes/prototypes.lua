@@ -1,4 +1,5 @@
 local GFX = "__ZCS-Trash-Landfill-Continued-Update__/graphics/"
+local sounds = require("__base__.prototypes.entity.sounds")
 
 -- ENTITY
 local landfill_entity = {
@@ -10,6 +11,9 @@ local landfill_entity = {
   minable = {mining_time = 0.5, result = "zcs-trash-landfill"},
   max_health = 1200,
   corpse = "big-remnants",
+  open_sound = sounds.metallic_chest_open,
+  close_sound = sounds.metallic_chest_close,
+  impact_category = "stone",
 
   collision_box = {{-8.4, -8.4}, {8.4, 8.4}},
   selection_box = {{-8.5, -8.5}, {8.5, 8.5}},
@@ -39,6 +43,7 @@ local landfill_recipe = {
   type = "recipe",
   name = "zcs-trash-landfill",
   enabled = false,
+  energy_required = 10,
   ingredients = {
     {type = "item", name = "stone-brick",  amount = 60},
     {type = "item", name = "stone-wall",   amount = 20},

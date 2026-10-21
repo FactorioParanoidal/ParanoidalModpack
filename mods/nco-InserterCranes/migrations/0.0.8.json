@@ -1,0 +1,38 @@
+{
+  "entity": [
+    ["nco-filter-crane", "nco-crane"],
+    ["nco-wide-filter-crane", "nco-wide-crane"],
+    ["nco-red-filter-crane", "nco-red-crane"],
+    ["nco-red-wide-filter-crane", "nco-red-wide-crane"],
+    ["nco-turbo-filter-crane", "nco-turbo-crane"],
+    ["nco-wide-turbo-filter-crane", "nco-wide-turbo-crane"],
+    ["nco-express-filter-crane", "nco-express-crane"],
+    ["nco-wide-express-filter-crane", "nco-wide-express-crane"],
+    ["nco-superior-filter-crane", "nco-superior-crane"],
+    ["nco-superior-wide-filter-crane", "nco-superior-wide-crane"]
+  ],
+  "item": [
+    ["nco-filter-crane", "nco-crane"],
+    ["nco-wide-filter-crane", "nco-wide-crane"],
+    ["nco-red-filter-crane", "nco-red-crane"],
+    ["nco-red-wide-filter-crane", "nco-red-wide-crane"],
+    ["nco-turbo-filter-crane", "nco-turbo-crane"],
+    ["nco-wide-turbo-filter-crane", "nco-wide-turbo-crane"],
+    ["nco-express-filter-crane", "nco-express-crane"],
+    ["nco-wide-express-filter-crane", "nco-wide-express-crane"],
+    ["nco-superior-filter-crane", "nco-superior-crane"],
+    ["nco-superior-wide-filter-crane", "nco-superior-wide-crane"]
+  ],
+  "recipe": [
+    ["nco-filter-crane", "nco-crane"],
+    ["nco-wide-filter-crane", "nco-wide-crane"],
+    ["nco-red-filter-crane", "nco-red-crane"],
+    ["nco-red-wide-filter-crane", "nco-red-wide-crane"],
+    ["nco-turbo-filter-crane", "nco-turbo-crane"],
+    ["nco-wide-turbo-filter-crane", "nco-wide-turbo-crane"],
+    ["nco-express-filter-crane", "nco-express-crane"],
+    ["nco-wide-express-filter-crane", "nco-wide-express-crane"],
+    ["nco-superior-filter-crane", "nco-superior-crane"],
+    ["nco-superior-wide-filter-crane", "nco-superior-wide-crane"]
+  ]
+}

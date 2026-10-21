@@ -1,0 +1,13 @@
+{
+  "mod": "paranoidal-tank-platoon",
+  "source": "local",
+  "original": {
+    "name": "Schall Tank Platoon",
+    "authors": ["Schallfalke"],
+    "portal": {
+      "name": "SchallTankPlatoon",
+      "url": "https://mods.factorio.com/mod/SchallTankPlatoon"
+    }
+  },
+  "changeReason": "Собственный мод проекта, написанный заново для Factorio 2.0: танки, вооружение, боеприпасы и транспортная экипировка Schall Tank Platoon с балансом Paranoidal Beta 8. Портальная версия 2.0.2 не загружается на base 2.0.77 (удалённые спрайты базовой игры) и заброшена."
+}

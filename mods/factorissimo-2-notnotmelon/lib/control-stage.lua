@@ -32,12 +32,13 @@ factorissimo.randomize_position = function(position, factor)
 end
 
 ---Intended to be called inside a build event. Cancels creation of the entity.
----Returns its item_to_place back to the player or spills it on the ground.
+---Returns its item_to_place back to the player or the building robot, or spills it on the ground.
 ---@param entity LuaEntity
 ---@param player_index integer?
 ---@param message LocalisedString?
 ---@param color Color?
-factorissimo.cancel_creation = function(entity, player_index, message, color)
+---@param robot LuaEntity?
+factorissimo.cancel_creation = function(entity, player_index, message, color, robot)
     local inserted = 0
     local items_to_place_this = entity.prototype.items_to_place_this
     local item_to_place = items_to_place_this and items_to_place_this[1]
@@ -45,9 +46,9 @@ factorissimo.cancel_creation = function(entity, player_index, message, color)
     local position = entity.position
     local quality = entity.quality.name
     local name = entity.name
+    local player = player_index and game.get_player(player_index)
 
-    if player_index then
-        local player = game.get_player(player_index)
+    if player then
         if player.mine_entity(entity, false) then
             inserted = 1
 
@@ -68,6 +69,12 @@ factorissimo.cancel_creation = function(entity, player_index, message, color)
             item_to_place.quality = quality
             inserted = player.insert(item_to_place)
         end
+    elseif robot and robot.valid and item_to_place then
+        local cargo = robot.get_inventory(defines.inventory.robot_cargo)
+        if cargo then
+            item_to_place.quality = quality
+            inserted = cargo.insert(item_to_place)
+        end
     end
 
     if inserted == 0 and item_to_place then
@@ -81,7 +88,7 @@ factorissimo.cancel_creation = function(entity, player_index, message, color)
         }
     end
 
-    entity.destroy {raise_destroy = true}
+    if entity.valid then entity.destroy {raise_destroy = true} end
 
     if not message then return end
 

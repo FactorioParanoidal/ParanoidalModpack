@@ -1,0 +1,13 @@
+{
+  "mod": "immersive-sounds2",
+  "source": "local",
+  "original": {
+    "name": "Boombastique Immersive Sound Pack",
+    "authors": ["Flouterose"],
+    "portal": {
+      "name": "immersive-sounds",
+      "url": "https://mods.factorio.com/mod/immersive-sounds"
+    }
+  },
+  "changeReason": "Нет версии для Factorio 2.0: оригинал поддерживает только Factorio 1.1."
+}

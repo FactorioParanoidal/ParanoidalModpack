@@ -45,13 +45,13 @@ local function get_borehole_smoke_position(borehole)
 end
 
 local function update_borehole_smokestacks()
-    for unit_number, smokestack_data in pairs(storage.borehole_smokestacks or {}) do
+    local smokestacks = storage.borehole_smokestacks
+    if not smokestacks then return end
+    for unit_number, smokestack_data in pairs(smokestacks) do
         local borehole, smokestack = smokestack_data.borehole, smokestack_data.smokestack
         if not borehole.valid then
             if smokestack.valid then smokestack.destroy() end
-            storage.borehole_smokestacks[unit_number] = nil
-            update_borehole_smokestacks()
-            return
+            smokestacks[unit_number] = nil -- assigning nil to the current key is allowed during pairs
         elseif not smokestack.valid and borehole.energy > 0 and borehole.is_crafting() and borehole.crafting_progress ~= 1 then
             smokestack_data.smokestack = borehole.surface.create_entity {
                 name = "borehole-pump-smokestack",
@@ -76,7 +76,7 @@ factorissimo.on_event(factorissimo.events.on_built(), function(event)
     if not fixed_recipe then return end
 
     if fixed_recipe == NO_FLUID_ON_THIS_SURFACE then
-        factorissimo.cancel_creation(borehole, event.player_index, {"factory-connection-text.borehole-pump-no-fluid"})
+        factorissimo.cancel_creation(borehole, event.player_index, {"factory-connection-text.borehole-pump-no-fluid"}, nil, event.robot)
         return
     end
 
@@ -92,4 +92,4 @@ factorissimo.on_event(factorissimo.events.on_built(), function(event)
 
     storage.borehole_smokestacks = storage.borehole_smokestacks or {}
     storage.borehole_smokestacks[borehole.unit_number] = {borehole = borehole, smokestack = smokestack}
-end)
+end, factorissimo.entity_filters({}, {"borehole-pump"}))

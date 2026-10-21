@@ -68,20 +68,14 @@ data:extend {
 		icon_mipmaps = 4,
 		name = "memory-unit",
 		inventory_size = 300,
+		-- 2.0 ignores hr_version: use the high resolution sprite directly.
 		picture = {
-			filename = "__deep-storage-unit__/graphics/entity/memory-unit.png",
-			height = 256,
+			filename = "__deep-storage-unit__/graphics/entity/hr-memory-unit.png",
+			height = 512,
 			priority = "high",
-			width = 256,
-			shift = {0.59375, 0},
-			hr_version = {
-				filename = "__deep-storage-unit__/graphics/entity/hr-memory-unit.png",
-				height = 512,
-				priority = "high",
-				width = 512,
-				scale = 0.5,
-				shift = {0.59375, 0}
-			}
+			width = 512,
+			scale = 0.5,
+			shift = {0.59375, 0}
 		},
 		max_health = 3000,
 		minable = {mining_time = 1, result = "memory-unit"},

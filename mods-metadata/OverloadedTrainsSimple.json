@@ -1,0 +1,13 @@
+{
+  "mod": "OverloadedTrainsSimple",
+  "source": "local",
+  "original": {
+    "name": "Overloaded Trains",
+    "authors": ["OwnlyMe"],
+    "portal": {
+      "name": "OverloadedTrains",
+      "url": "https://mods.factorio.com/mod/OverloadedTrains"
+    }
+  },
+  "changeReason": "Локальный форк SEO-master, не публикуемый на Mod Portal. Упрощённая безопасная замена механики Beta 8: ускорение зависит от занятых ячеек и объёма жидкости без уничтожения и пересоздания вагонов."
+}

@@ -1,0 +1,13 @@
+{
+  "mod": "newtrainsfx2",
+  "source": "local",
+  "original": {
+    "name": "New train sounds for CIS countries (SFX)",
+    "authors": ["Artanis_Mattias"],
+    "portal": {
+      "name": "newtrainsfx",
+      "url": "https://mods.factorio.com/mod/newtrainsfx"
+    }
+  },
+  "changeReason": "Нет версии для Factorio 2.0: поддержка оригинала заканчивается на Factorio 1.1."
+}

@@ -1,0 +1,13 @@
+{
+  "mod": "TimedSpawnControl",
+  "source": "local",
+  "original": {
+    "name": "Spawn Control with cooldown",
+    "authors": ["Maxikaaz"],
+    "portal": {
+      "name": "TimedSpawnControl",
+      "url": "https://mods.factorio.com/mod/TimedSpawnControl"
+    }
+  },
+  "changeReason": "Локальный форк версии 1.1.0 из пользовательской Beta 8 для Factorio 2.0.77. Сохраняет личные точки возрождения и функцию выхода из препятствий, исключает случайное возрождение и адаптирует runtime, GUI и сохранение данных к Factorio 2.0."
+}
