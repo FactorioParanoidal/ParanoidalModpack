@@ -11,6 +11,7 @@ Date: 2026-10-21
     - A tower re-reads its square for buildings created without events every 30 s (was every 5 s), in strips.
     - An undamaged turret under a shield is looked at every 30 s (was every 5 s). A hit that would kill it is still intercepted at once; only chip damage outside fights is repaired later.
   Changes:
+    - Shortened the Russian tower description; numbers and mechanics are unchanged.
     - First damage of a building outside a fight is noticed after up to about 3 s (was 1 s); inside hot chunks after up to 15 ticks.
 ---------------------------------------------------------------------------------------------------
 Version: 9.112.0
