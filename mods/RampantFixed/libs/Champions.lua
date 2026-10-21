@@ -2,9 +2,12 @@
 --
 -- Every 7-11 minutes a champion, every 50-70 minutes a bigger hour boss leaves a random nest within reach of the
 -- player base and attacks its most defended spot (the player chunk with most turrets in the 3x3 around).
---  * unit: same faction as the nest, one tier above the units the nest spawns now; ground biters below 10%
+--  * unit: the champion copy (prototypes/ChampionUnits.lua, name + constants.CHAMPION_SUFFIX; the unit itself if
+--    there is no copy) of a unit of the nest's faction one tier (hour boss: two tiers) above the units it spawns now
+--    (capped at tier 10); ground biters below 10%
 --    evolution, biters/spitters 50/50 from 10%, biters/spitters/flyers by a third from 30% (fallback to what the
---    faction has). Non-Rampant nests (vanilla, Bob) give their next stronger unit of the same kind. Units whose
+--    faction has). Non-Rampant nests (vanilla, Bob) give their next stronger unit of the same kind (hour boss: the
+--    one after it). Units whose
 --    attack damages themselves (suicide and nuclear biters) are never chosen: they would blow their pool up;
 --  * health: x10 (champion) / x50 (hour boss) of the ordinary unit of that kind, kept as a script pool on top of
 --    the engine health; the health bar shows the pool share. A champion moves at half the speed of those units;
@@ -16,8 +19,11 @@
 --    the star) and attacks again;
 --  * death: the loot is one big artifact of its colour; the corpse stays 3 minutes and keeps the glow;
 --  * only the hour boss is announced ("You hear a strange sound in the distance...");
---  * Rampant never packs champions (SquadCompression), they live in their own script-driven group (no group while
---    retreating).
+--  * other Rampant scripts skip champions (libs/UnitUtils.championUnits): no packing, digging in, enrage or speed
+--    stickers, bridgehead settlers, builder nests or flights; they live in their own script-driven group (no group
+--    while retreating).
+--  * the target and the nests are found from the strongpoints of the AI and on the chunk grid around the target, not
+--    by a scan of every turret or nest chunk of the map.
 -- Map setting rampantFixed--champions switches new spawns. Data: universe.champions, created on first use.
 
 if championsG then
@@ -33,11 +39,15 @@ local CHUNK_SIZE = constants.CHUNK_SIZE
 local AI_STATE_PEACEFUL = constants.AI_STATE_PEACEFUL
 
 local turretsAround = aiBrain.turretsAround
+local chunkIsLive = aiBrain.chunkIsLive
 local inPlayerBase = engineGroupHelpers.inPlayerBase
+local CHAMPION_SUFFIX = constants.CHAMPION_SUFFIX
 
 local mRandom = math.random
 local mMin = math.min
 local mMax = math.max
+local mFloor = math.floor
+local mCeil = math.ceil
 local sFind = string.find
 local sMatch = string.match
 local sFormat = string.format
@@ -56,6 +66,7 @@ local RETREAT_DETOUR = 12           -- a stuck champion tries a free point this 
 local ATTACK_RADIUS = 24
 local NEST_RANGE = 12 * CHUNK_SIZE  -- nests within this distance from the target
 local FALLBACK_NESTS = 6            -- otherwise the nearest ones
+local HOME_SEARCH_RINGS = 16        -- chunk rings searched for the nearest nest before a scan of all nests
 local SPAWN_TRIES = 12
 local CORPSE_TICKS = 3 * 3600
 local NAME_COUNT = 200
@@ -64,10 +75,10 @@ local NAME_LIFT = 0.35              -- name centre above the selection box top
 local GLOW_SPRITE = "rampantFixed-champion-glow"
 
 local KINDS = {
-    champion = {healthK = 10, speedK = 0.5, intervalMin = 7 * 3600, intervalMax = 11 * 3600, maxAlive = 3,
+    champion = {healthK = 10, speedK = 0.5, tierUp = 1, intervalMin = 7 * 3600, intervalMax = 11 * 3600, maxAlive = 3,
                 star = "rampantFixed-champion-star-silver", starScale = 0.35, starLift = 1.0,
                 glowScale = 0.9, lightScale = 1.5, warning = false},
-    hourBoss = {healthK = 50, intervalMin = 50 * 3600, intervalMax = 70 * 3600, maxAlive = 1,
+    hourBoss = {healthK = 50, tierUp = 2, intervalMin = 50 * 3600, intervalMax = 70 * 3600, maxAlive = 1,
                 star = "rampantFixed-champion-star-gold", starScale = 0.5, starLift = 1.2,
                 glowScale = 1.3, lightScale = 2.5, warning = true},
 }
@@ -178,9 +189,8 @@ local function unitKind(name)
     return "biter"
 end
 
-local function excludedSpawner(name)
-    return sFind(name, "^maf") or sFind(name, "^bm%-")    -- Big Monsters spawners
-end
+-- Big Monsters / mferrari spawners (libs/ForeignEnemies.lua)
+local excludedSpawner = require("ForeignEnemies").isForeign
 
 -- an attack that damages the attacker itself (suicide and nuclear biters); cached per prototype name
 local selfDestructCache = {}
@@ -214,8 +224,9 @@ local function selfDestructs(name)
     return cached
 end
 
--- boss unit and the ordinary unit it is compared with, or nil if the nest has no unit of that kind
-local function resolveBoss(spawnerPrototype, desiredType, evo)
+-- boss unit and the ordinary unit it is compared with, or nil if the nest has no unit of that kind.
+-- tierUp: tiers above the units the nest spawns now (vanilla / Bob nests: steps up the health ladder of the nest)
+local function resolveBoss(spawnerPrototype, desiredType, evo, tierUp)
     local units = spawnerPrototype.result_units
     if (not units) or (#units == 0) then
         return nil
@@ -239,7 +250,7 @@ local function resolveBoss(spawnerPrototype, desiredType, evo)
         end
         tier = tonumber(tier)
         local prefix = faction .. "-" .. desiredType .. "-v" .. variation .. "-t"
-        local bossName = prefix .. mMin(tier + 1, MAX_TIER) .. "-rampant"
+        local bossName = prefix .. mMin(tier + tierUp, MAX_TIER) .. "-rampant"
         local localName = prefix .. tier .. "-rampant"
         if entityPrototypes[bossName] and entityPrototypes[localName] and not selfDestructs(bossName) then
             return bossName, localName
@@ -249,21 +260,28 @@ local function resolveBoss(spawnerPrototype, desiredType, evo)
     if sFind(best, "rampant", 1, true) or (unitKind(best) ~= desiredType) or (not entityPrototypes[best]) then
         return nil
     end
-    -- vanilla / Bob nests: the next stronger unit of the same kind among the nest's units
-    local bestHealth = entityPrototypes[best].get_max_health()
-    local stronger, strongerHealth
-    for _, definition in pairs(units) do
-        local name = definition.unit
-        local prototype = entityPrototypes[name]
-        if prototype and (name ~= best) and (unitKind(name) == desiredType) then
-            local health = prototype.get_max_health()
-            if (health > bestHealth) and ((not strongerHealth) or (health < strongerHealth)) then
-                stronger = name
-                strongerHealth = health
+    -- vanilla / Bob nests: tierUp steps to the next stronger unit of the same kind among the nest's units
+    local bossName = best
+    local bossHealth = entityPrototypes[best].get_max_health()
+    for _ = 1, tierUp do
+        local stronger, strongerHealth
+        for _, definition in pairs(units) do
+            local name = definition.unit
+            local prototype = entityPrototypes[name]
+            if prototype and (unitKind(name) == desiredType) then
+                local health = prototype.get_max_health()
+                if (health > bossHealth) and ((not strongerHealth) or (health < strongerHealth)) then
+                    stronger = name
+                    strongerHealth = health
+                end
             end
         end
+        if not stronger then
+            break
+        end
+        bossName = stronger
+        bossHealth = strongerHealth
     end
-    local bossName = stronger or best
     if selfDestructs(bossName) then
         return nil
     end
@@ -295,20 +313,43 @@ end
 ----------------------------------------------------------------------------------------------------------------------
 -- target and nests
 
--- the most defended player chunk (most turrets in the 3x3 around), else the most valuable one
+-- the most defended player chunk (most turrets in the 3x3 around), else the most valuable one.
+-- The strongpoints the AI keeps (aiBrain, the best turret clusters) are checked first; the scan of every turret
+-- chunk is left for maps without them (classic behaviour, scattered turrets).
 local function pickTarget(map)
     local best, bestScore
     local ties = 0
-    for chunk in pairs(map.chunkToPlayerTurrets) do
-        local score = turretsAround(map, chunk)
-        if (not bestScore) or (score > bestScore) then
-            best = chunk
-            bestScore = score
-            ties = 1
-        elseif score == bestScore then
-            ties = ties + 1
-            if mRandom(ties) == 1 then
+    local strong = map.ai and map.ai.strong
+    if strong then
+        for i = 1, #strong do
+            local chunk = strong[i].chunk
+            if chunkIsLive(map, chunk) then
+                local score = turretsAround(map, chunk)
+                if (score > 0) and ((not bestScore) or (score > bestScore)) then
+                    best = chunk
+                    bestScore = score
+                    ties = 1
+                elseif score == bestScore then
+                    ties = ties + 1
+                    if mRandom(ties) == 1 then
+                        best = chunk
+                    end
+                end
+            end
+        end
+    end
+    if not best then
+        for chunk in pairs(map.chunkToPlayerTurrets) do
+            local score = turretsAround(map, chunk)
+            if (not bestScore) or (score > bestScore) then
                 best = chunk
+                bestScore = score
+                ties = 1
+            elseif score == bestScore then
+                ties = ties + 1
+                if mRandom(ties) == 1 then
+                    best = chunk
+                end
             end
         end
     end
@@ -325,23 +366,39 @@ local function pickTarget(map)
     end
 end
 
+local nestCenter = {x = 0, y = 0}
+
+-- a nest chunk a champion may leave from or come back to; sets nestCenter to its centre
+local function usableNest(map, chunk)
+    local count = map.chunkToNests[chunk]
+    if (not count) or (count <= 0) then
+        return false
+    end
+    nestCenter.x = chunk.x + CHUNK_SIZE * 0.5
+    nestCenter.y = chunk.y + CHUNK_SIZE * 0.5
+    return not inPlayerBase(map, nestCenter)
+end
+
+-- nest chunks within NEST_RANGE of the target (a walk over the chunk grid around it, was a scan of every nest of
+-- the map), else the FALLBACK_NESTS nearest ones
 local function nestCandidates(map, target)
     local inRange = {}
-    local all = {}
     local range2 = NEST_RANGE * NEST_RANGE
-    local center = {x = 0, y = 0}
-    for chunk, count in pairs(map.chunkToNests) do
-        if count > 0 then
-            center.x = chunk.x + CHUNK_SIZE * 0.5
-            center.y = chunk.y + CHUNK_SIZE * 0.5
-            if not inPlayerBase(map, center) then
-                local dx = center.x - target.x
-                local dy = center.y - target.y
-                local d2 = dx * dx + dy * dy
-                if d2 <= range2 then
-                    inRange[#inRange + 1] = chunk
-                else
-                    all[#all + 1] = {chunk = chunk, d2 = d2}
+    local x0 = mFloor((target.x - NEST_RANGE) / CHUNK_SIZE) * CHUNK_SIZE
+    local x1 = mFloor((target.x + NEST_RANGE) / CHUNK_SIZE) * CHUNK_SIZE
+    local y0 = mFloor((target.y - NEST_RANGE) / CHUNK_SIZE) * CHUNK_SIZE
+    local y1 = mFloor((target.y + NEST_RANGE) / CHUNK_SIZE) * CHUNK_SIZE
+    for x = x0, x1, CHUNK_SIZE do
+        local column = map[x]
+        if column then
+            for y = y0, y1, CHUNK_SIZE do
+                local chunk = column[y]
+                if chunk and usableNest(map, chunk) then
+                    local dx = nestCenter.x - target.x
+                    local dy = nestCenter.y - target.y
+                    if (dx * dx + dy * dy) <= range2 then
+                        inRange[#inRange + 1] = chunk
+                    end
                 end
             end
         end
@@ -349,11 +406,80 @@ local function nestCandidates(map, target)
     if #inRange > 0 then
         return inRange
     end
-    table.sort(all, function(a, b) return a.d2 < b.d2 end)
-    for i = 1, mMin(FALLBACK_NESTS, #all) do
-        inRange[i] = all[i].chunk
+    -- the nearest ones, kept sorted by distance (no table of every nest and no sort)
+    local nearestD2 = {}
+    local count = 0
+    for chunk in pairs(map.chunkToNests) do
+        if usableNest(map, chunk) then
+            local dx = nestCenter.x - target.x
+            local dy = nestCenter.y - target.y
+            local d2 = dx * dx + dy * dy
+            if (count < FALLBACK_NESTS) or (d2 < nearestD2[count]) then
+                if count < FALLBACK_NESTS then
+                    count = count + 1
+                end
+                local i = count
+                while (i > 1) and (nearestD2[i - 1] > d2) do
+                    inRange[i] = inRange[i - 1]
+                    nearestD2[i] = nearestD2[i - 1]
+                    i = i - 1
+                end
+                inRange[i] = chunk
+                nearestD2[i] = d2
+            end
+        end
     end
     return inRange
+end
+
+-- the nearest usable nest chunk centre: rings of chunks around the position, a full scan only if none is close
+local function nearestNest(map, position)
+    local cx = mFloor(position.x / CHUNK_SIZE) * CHUNK_SIZE
+    local cy = mFloor(position.y / CHUNK_SIZE) * CHUNK_SIZE
+    local best, bestD2
+    local lastRing = HOME_SEARCH_RINGS
+    local function consider(chunk)
+        if chunk and usableNest(map, chunk) then
+            local dx = nestCenter.x - position.x
+            local dy = nestCenter.y - position.y
+            local d2 = dx * dx + dy * dy
+            if (not bestD2) or (d2 < bestD2) then
+                best = {x = nestCenter.x, y = nestCenter.y}
+                bestD2 = d2
+            end
+        end
+    end
+    local r = 0
+    while r <= lastRing do
+        local offset = r * CHUNK_SIZE
+        for dx = -offset, offset, CHUNK_SIZE do
+            local column = map[cx + dx]
+            if column then
+                if (dx == -offset) or (dx == offset) then
+                    for dy = -offset, offset, CHUNK_SIZE do
+                        consider(column[cy + dy])
+                    end
+                else
+                    consider(column[cy - offset])
+                    if offset > 0 then
+                        consider(column[cy + offset])
+                    end
+                end
+            end
+        end
+        if best and (lastRing == HOME_SEARCH_RINGS) then
+            -- a nest on a farther ring can still be nearer (diagonal): look up to sqrt(2) rings further
+            lastRing = mMin(HOME_SEARCH_RINGS, mCeil(r * 1.4143) + 1)
+        end
+        r = r + 1
+    end
+    if best then
+        return best
+    end
+    for chunk in pairs(map.chunkToNests) do
+        consider(chunk)
+    end
+    return best
 end
 
 -- a nest to come back to: the original one if a spawner is still there, else the nearest nest chunk
@@ -364,22 +490,7 @@ local function findHome(map, record, position)
                                         limit = 1}) > 0 then
         return home
     end
-    local best, bestD2
-    local center = {x = 0, y = 0}
-    for chunk, count in pairs(map.chunkToNests) do
-        if count > 0 then
-            center.x = chunk.x + CHUNK_SIZE * 0.5
-            center.y = chunk.y + CHUNK_SIZE * 0.5
-            local dx = center.x - position.x
-            local dy = center.y - position.y
-            local d2 = dx * dx + dy * dy
-            if ((not bestD2) or (d2 < bestD2)) and (not inPlayerBase(map, center)) then
-                best = {x = center.x, y = center.y}
-                bestD2 = d2
-            end
-        end
-    end
-    return best or home
+    return nearestNest(map, position) or home
 end
 
 ----------------------------------------------------------------------------------------------------------------------
@@ -567,10 +678,19 @@ end
 ----------------------------------------------------------------------------------------------------------------------
 -- spawning
 
+-- the champion copy of the unit (prototypes/ChampionUnits.lua), the unit itself if there is none
+local function championPrototype(bossName)
+    local name = bossName .. CHAMPION_SUFFIX
+    if prototypes.entity[name] then
+        return name
+    end
+    return bossName
+end
+
 local function create(universe, map, kind, bossName, localName, position, home, target, tick)
     local spec = KINDS[kind]
     local surface = map.surface
-    local entity = surface.create_entity({name = bossName, position = position, force = "enemy"})
+    local entity = surface.create_entity({name = championPrototype(bossName), position = position, force = "enemy"})
     if not (entity and entity.valid and entity.unit_number) then
         return nil
     end
@@ -584,7 +704,7 @@ local function create(universe, map, kind, bossName, localName, position, home, 
         size = size,
         entity = entity,
         unitNumber = entity.unit_number,
-        prototypeName = bossName,
+        prototypeName = entity.name,
         kind = kind,
         colorIndex = mRandom(#COLORS),
         surfaceIndex = surface.index,
@@ -636,7 +756,7 @@ local function spawn(universe, map, kind, tick, forcedType)
             if #spawners > 0 then
                 local spawner = spawners[mRandom(#spawners)]
                 if not excludedSpawner(spawner.name) then
-                    local bossName, localName = resolveBoss(spawner.prototype, desiredType, evo)
+                    local bossName, localName = resolveBoss(spawner.prototype, desiredType, evo, KINDS[kind].tierUp)
                     if bossName then
                         local position = surface.find_non_colliding_position(bossName, spawner.position, 24, 0.5)
                         if position and not inPlayerBase(map, position) then

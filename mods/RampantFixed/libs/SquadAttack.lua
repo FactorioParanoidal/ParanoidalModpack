@@ -14,6 +14,8 @@ local chunkPropertyUtils = require("ChunkPropertyUtils")
 local scoreChunks = require("ScoreChunks")
 local squadCompression = require("SquadCompression")
 local aiBrain = require("AIBrain")
+local unitUtils = require("UnitUtils")
+local foreignEnemies = require("ForeignEnemies")
 
 
 -- constants
@@ -92,6 +94,8 @@ local validSettlerLocation = scoreChunks.validSettlerLocation
 
 local processCompression = squadCompression.processCompression
 local clearComresseData = squadCompression.clearComresseData
+local championUnits = unitUtils.championUnits
+local isForeign = foreignEnemies.isForeign
 
 local mCeil = math.ceil
 local mSqrt = math.sqrt
@@ -306,35 +310,36 @@ local function settleMove(map, squad)
     end
 end
 
-local function applySpeedBuffToGroup(group)
+-- Speed stickers last 600 ticks. They were created for every member on every move step of the squad (every 1-3
+-- seconds), now at most once per SPEED_BUFF_REFRESH ticks. Members that join later get it on the next refresh.
+-- Champions keep the speed they were given (libs/Champions.lua); Big Monsters enemies get no stickers either.
+local SPEED_BUFF_REFRESH = 540
+local speedStickerQuery = {name = nil, force = nil, position = nil, target = nil}
+local function applySpeedBuffToGroup(map, squad, group)
 	if (not group) or (not group.valid) then
 		return
 	end	
-	local stickerName
+	local tick = game.tick
+	if squad.speedBuffUntil and (squad.speedBuffUntil > tick) then
+		return
+	end
+	squad.speedBuffUntil = tick + SPEED_BUFF_REFRESH
+	local surface = map.surface
+	local champions = championUnits(map.universe)
+	local query = speedStickerQuery
+	query.force = group.force
 	for _, entity in pairs(group.members) do
-		if entity.valid and (entity.type == "unit") then
-			stickerName = "2xSpeed-sticker-rampantFixed"
-			if entity.speed < 0.8 then
-				stickerName = "3xSpeed-sticker-rampantFixed"
-			end
-			-- if entity.speed >= 0.2 then		
-				-- stickerName = "2xSpeed-sticker-rampantFixed"
-			-- elseif entity.speed > 0.13 then
-				-- stickerName = "3xSpeed-sticker-rampantFixed"
-			-- elseif entity.speed > 0.1 then
-				-- stickerName = "4xSpeed-sticker-rampantFixed"
-			-- else	--if entity.speed > 0.8 then
-				-- stickerName = "5xSpeed-sticker-rampantFixed"
-			-- else
-				-- stickerName = "6xSpeed-sticker-rampantFixed"
-			-- else
-				-- stickerName = "10xSpeed-sticker-rampantFixed"
-			--end
-		
-		entity.surface.create_entity({name= stickerName, force = entity.force, position = entity.position, target = entity})
-	
+		if entity.valid and (entity.type == "unit") and not (champions and champions[entity.unit_number])
+			and not isForeign(entity.name) then
+			-- 3x below 0.8 tiles per tick, which is every unit in practice
+			query.name = (entity.speed < 0.8) and "3xSpeed-sticker-rampantFixed" or "2xSpeed-sticker-rampantFixed"
+			query.position = entity.position
+			query.target = entity
+			surface.create_entity(query)
 		end
 	end
+	query.target = nil
+	query.force = nil
 end
 
 -- create non-rampant group and set command to create base. Original group has at least 1 member after this
@@ -377,11 +382,14 @@ local function partiallySettleHere(map, group, squad, numSettlers)
 	if numSettlers >= membersTotal then
 		numSettlers = membersTotal - 1
 	end
+	local champions = championUnits(universe)
 	for _, entity in pairs(members) do
 		if numSettlers <= 0 then
 			break
 		end
-		while (numSettlers > 0) and entity.valid and (entity.type == "unit") do
+		-- champions and Big Monsters enemies are not turned into settlers
+		while (numSettlers > 0) and entity.valid and (entity.type == "unit")
+			and not (champions and champions[entity.unit_number]) and not isForeign(entity.name) do
 			 local newEntity = surface.create_entity({
 				name = newEntityName,
 				quality = entity.quality,
@@ -537,7 +545,7 @@ local function goalMove(map, squad, group, chunk, groupPosition)
 	targetPosition.y = position.y
 	if (chunk ~= -1) and (chunk[BASE_DETECTION_PHEROMONE] < (MAX_BASE_DETECTION_PHEROMONES_IN_CHUNK*0.1))
 		and (chunk[PLAYER_PHEROMONE] < (PLAYER_PHEROMONE_GENERATOR_AMOUNT*0.02)) then
-		applySpeedBuffToGroup(group)
+		applySpeedBuffToGroup(map, squad, group)
 	end
 	setMoveCommand(universe, group, squad, goal.dash)
 	commandIssued(squad, tick)
@@ -748,7 +756,7 @@ local function attackMove(map, squad)
 	if (chunk ~= -1) then
 		if (chunk[BASE_DETECTION_PHEROMONE] < (MAX_BASE_DETECTION_PHEROMONES_IN_CHUNK*0.1)) then
 			if chunk[PLAYER_PHEROMONE] < (PLAYER_PHEROMONE_GENERATOR_AMOUNT*0.02) then
-				applySpeedBuffToGroup(group)
+				applySpeedBuffToGroup(map, squad, group)
 			-- else
 				-- game.print(chunk[PLAYER_PHEROMONE].."[gps=" .. group.position.x .. "," .. group.position.y .."]")	-- debug
 			end
@@ -940,6 +948,9 @@ function squadAttack.processSquads(universe)
         groupId, squad = next(squads, groupId)
     else
         squad = squads[groupId]
+        if not squad then
+            groupId, squad = next(squads, nil)	-- the stored squad is gone: start over
+        end
     end
     if not groupId then
         universe.squadIterator = nil
@@ -986,8 +997,9 @@ function squadAttack.squadDispatch(map, squad)
 	end
     local group = squad.group
     if group and group.valid then
+		local members
 		if not squad.detected then
-			local members = group.members
+			members = group.members
 			if #members > 0 then
 				squad.detected = showAlert(group.surface, members[1], "squadDetected-warning-rampant", {"", {"description.rampantFixed--squadDetectedWarning", #members}})
 			end
@@ -996,6 +1008,15 @@ function squadAttack.squadDispatch(map, squad)
 			if aiBrain.flyers then
 				aiBrain.flyers.dispatch(map, squad)
 			end
+			return
+		end
+		-- A squad that lost all its units: no move planning for it, and a new command would make the engine delete the
+		-- finished group at once. The member list is only read when the losses say that it may be empty.
+		if (not members) and squad.startSize and ((squad.losses or 0) >= squad.startSize) then
+			members = group.members
+		end
+		if members and (#members == 0) then
+			squad.disbandTick = game.tick
 			return
 		end
         local status = squad.status

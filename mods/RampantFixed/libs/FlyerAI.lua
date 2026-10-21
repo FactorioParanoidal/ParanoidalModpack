@@ -20,6 +20,8 @@ local aiBrain = require("AIBrain")
 local aiPredicates = require("AIPredicates")
 local unitGroupUtils = require("UnitGroupUtils")
 local mapUtils = require("MapUtils")
+local squadCompression = require("SquadCompression")
+local unitUtils = require("UnitUtils")
 
 local CHUNK_SIZE = constants.CHUNK_SIZE
 local SQUAD_RAIDING = constants.SQUAD_RAIDING
@@ -27,6 +29,8 @@ local SQUAD_RAIDING = constants.SQUAD_RAIDING
 local createSquad = unitGroupUtils.createSquad
 local canAttack = aiPredicates.canAttack
 local getChunkByXY = mapUtils.getChunkByXY
+local countPackedUnits = squadCompression.countPackedUnits
+local championUnits = unitUtils.championUnits
 
 local mRandom = math.random
 local mFloor = math.floor
@@ -295,11 +299,12 @@ function flyerAI.splitFlight(map, squad)
     end
     local group = squad.group
     local members = group.members
+    local champions = championUnits(universe)
     local flyers
     local count = 0
     for i = 1, #members do
         local member = members[i]
-        if member.valid and flyerNameSet[member.name] then
+        if member.valid and flyerNameSet[member.name] and not (champions and champions[member.unit_number]) then
             count = count + 1
             flyers = flyers or {}
             flyers[count] = member
@@ -313,9 +318,11 @@ function flyerAI.splitFlight(map, squad)
     for i = 1, count do
         flightGroup.add_member(flyers[i])
     end
-    local flight = registerFlight(map, flightGroup, count, tick)
+    -- packed flyers count with their whole pack: sizes and losses are in units
+    local units = count + countPackedUnits(universe, flyers)
+    local flight = registerFlight(map, flightGroup, units, tick)
     if squad.startSize then
-        squad.startSize = mMax(1, squad.startSize - count)
+        squad.startSize = mMax(1, squad.startSize - units)
     end
     launch(map, flight, tick)
 end
@@ -363,11 +370,13 @@ local function tryLaunch(map, tick)
     flyerQuery.position[2] = chunk.y + 16
     flyerQuery.name = flyerNameList
     local found = map.surface.find_entities_filtered(flyerQuery)
+    local champions = championUnits(universe)
     local free = {}
     for i = 1, #found do
         local unit = found[i]
         local commandable = unit.commandable
-        if commandable and not commandable.parent_group then
+        -- a flying champion walking home to regenerate has no group either
+        if commandable and (not commandable.parent_group) and not (champions and champions[unit.unit_number]) then
             free[#free + 1] = unit
         end
     end
@@ -378,10 +387,11 @@ local function tryLaunch(map, tick)
     for i = 1, #free do
         group.add_member(free[i])
     end
-    local flight = registerFlight(map, group, #free, tick)
+    local units = #free + countPackedUnits(universe, free)
+    local flight = registerFlight(map, group, units, tick)
     if launch(map, flight, tick) then
         ai.lastFlightTick = tick
-        local cost = FLIGHT_COST + #free
+        local cost = FLIGHT_COST + units
         map.points = map.points - cost
         if universe.aiPointsPrintSpendingToChat then
             game.print(map.surface.name .. ": Points: -" .. cost .. ". [Flight] Total: " .. string.format("%.2f", map.points))

@@ -14,6 +14,8 @@ local mathUtils = require("MathUtils")
 local config = require("__RampantFixed__/config")
 local scoreChunks = require("ScoreChunks")
 local aiBrain = require("AIBrain")
+local unitUtils = require("UnitUtils")
+local isForeign = require("ForeignEnemies").isForeign
 
 local TACTICS = aiBrain.TACTICS
 
@@ -483,8 +485,11 @@ local function formTacticExtras(map, chunk, tick, tactic, firstSquad, squadDirec
 end
 
 -- plan (optional): delayed main strike of a two-stage tactic, from aiBrain.popDueFollowUp
+-- remoteInterfaceParameters.external: an attack ordered by another mod (formStrikeSquads): any nest chunk, no
+-- cooldown, no cost and no effect on the attack schedule of the AI; the number of units is returned in .units
 function aiAttackWave.formSquads(map, chunk, tick, remoteInterfaceParameters, plan)
-	if (not plan) and chunk.nextSquadTick and (chunk.nextSquadTick > tick) then
+	local external = remoteInterfaceParameters and remoteInterfaceParameters.external
+	if (not plan) and (not external) and chunk.nextSquadTick and (chunk.nextSquadTick > tick) then
 		return false
 	end
     local universe = map.universe
@@ -492,12 +497,14 @@ function aiAttackWave.formSquads(map, chunk, tick, remoteInterfaceParameters, pl
 	local squad
 	local finalSquadCost = map.finalSquadCost
 	local canCreateSquad = (remoteInterfaceParameters and remoteInterfaceParameters.ignoreSquadLimit) or (universe.squadCount < (universe.AI_MAX_SQUAD_COUNT*0.7))
-	if remoteInterfaceParameters then
+	if external then
+		finalSquadCost = 0
+	elseif remoteInterfaceParameters then
 		finalSquadCost = mMin(finalSquadCost, map.points)
 	end
     if canCreateSquad  and
-        attackWaveValidCandidate(chunk, map) and
-        ((map.points - finalSquadCost) >= 0) and
+        (external or attackWaveValidCandidate(chunk, map)) and
+        (external or ((map.points - finalSquadCost) >= 0)) and
         (remoteInterfaceParameters or plan or (mRandom() < map.formSquadThreshold))
    then
         local squadPath, squadDirection = scoreNeighborsForFormation(getNeighborChunks(map, chunk.x, chunk.y),
@@ -532,7 +539,7 @@ function aiAttackWave.formSquads(map, chunk, tick, remoteInterfaceParameters, pl
                 squad.rabid = mRandom() < 0.03
 
                 local scaledWaveSize = attackWaveScaling(map)
-				if map.supressionData and (map.supressionData.supressionType >=2) and (map.supressionData.supressionEndTick >= tick) then
+				if (not external) and map.supressionData and (map.supressionData.supressionType >=2) and (map.supressionData.supressionEndTick >= tick) then
 					if not map.supressionData.artilleryEffectTick or (map.supressionData.artilleryEffectTick<game.tick) then
 						scaledWaveSize = math.floor(scaledWaveSize*0.5)
 						map.supressionData.supressionType = 1
@@ -550,15 +557,23 @@ function aiAttackWave.formSquads(map, chunk, tick, remoteInterfaceParameters, pl
 
                 local foundUnits = fillSquad(map, squad, unitCount)
 				foundUnits = addSpiders(map, squad, scaledWaveSize, foundUnits)
-                if (foundUnits > 0) then
+				-- an ordered attack does not send a few units on a long march: below minUnits the squad is dropped
+				local minUnits = (external and remoteInterfaceParameters.minUnits) or 1
+                if (foundUnits >= minUnits) then
                     squad.kamikaze = mRandom() < map.kamikazeThreshold
 
-                    map.points = map.points - squadCost
-					map.vengenceLimiter = mMax(0, map.vengenceLimiter - 2)
-					
 					squadCreated = true
                     universe.squadCount = universe.squadCount + 1
                     universe.groupNumberToSquad[squad.groupNumber] = squad
+					if external then
+						remoteInterfaceParameters.squad = squad
+						remoteInterfaceParameters.units = foundUnits
+						return true
+					end
+
+                    map.points = map.points - squadCost
+					map.vengenceLimiter = mMax(0, map.vengenceLimiter - 2)
+
 					if tactic then
 						squad.startSize = foundUnits
 						aiBrain.prepareSquad(map, squad, chunk, tactic, spec, plan, tick)
@@ -607,6 +622,67 @@ function aiAttackWave.formSquads(map, chunk, tick, remoteInterfaceParameters, pl
 		end
 	end
 	return squadCreated
+end
+
+-- Reforged Paranoidal: an attack ordered by another mod (remote strikePosition_ExtCtrl; Big Monsters swarms and
+-- rocket silo attacks through mferrari_lib CallFrenzyAttack). Was hundreds of single units commanded one by one;
+-- now ordinary Rampant squads (packing, retreat, scent) from the nest chunks in reach of the target, nearest first,
+-- until the ordered number of units is sent: at most the attack wave size each, at most STRIKE_SQUADS squads, no
+-- squad below STRIKE_MIN_UNITS units (those units stay at their nest). Each squad gets a strike goal on the target.
+-- Free for the AI: no points, cooldowns or schedule changes. Returns the number of units sent.
+local STRIKE_NESTS = 32         -- nearest nest chunks considered
+local STRIKE_SQUADS = 20
+local STRIKE_MIN_UNITS = 5
+local strikeParameters = {ignoreSquadLimit = true, external = true, minUnits = STRIKE_MIN_UNITS}
+function aiAttackWave.formStrikeSquads(map, position, units, searchRadius, tick)
+	local px = position.x or position[1]
+	local py = position.y or position[2]
+	local range2 = searchRadius * searchRadius
+	-- the nearest nest chunks, kept sorted by distance (no table of every nest)
+	local chunks = {}
+	local distances = {}
+	local count = 0
+	for chunk, nests in pairs(map.chunkToNests) do
+		if nests > 0 then
+			local dx = chunk.x + 16 - px
+			local dy = chunk.y + 16 - py
+			local d2 = dx * dx + dy * dy
+			if (d2 <= range2) and ((count < STRIKE_NESTS) or (d2 < distances[count])) then
+				if count < STRIKE_NESTS then
+					count = count + 1
+				end
+				local i = count
+				while (i > 1) and (distances[i - 1] > d2) do
+					chunks[i] = chunks[i - 1]
+					distances[i] = distances[i - 1]
+					i = i - 1
+				end
+				chunks[i] = chunk
+				distances[i] = d2
+			end
+		end
+	end
+	local waveMax = mMax(STRIKE_MIN_UNITS, getAttackWaveMaxSize(map.universe))
+	local parameters = strikeParameters
+	local sent = 0
+	local squads = 0
+	for i = 1, count do
+		if (units - sent < STRIKE_MIN_UNITS) or (squads >= STRIKE_SQUADS) then
+			break
+		end
+		parameters.size = mMin(waveMax, units - sent)
+		parameters.squad = nil
+		parameters.units = nil
+		if aiAttackWave.formSquads(map, chunks[i], tick, parameters) and parameters.squad then
+			local squad = parameters.squad
+			squad.goal = {x = px, y = py, kind = "strike", reach = 40, untilTick = tick + 5 * 3600}
+			squad.external = true
+			sent = sent + parameters.units
+			squads = squads + 1
+		end
+	end
+	parameters.squad = nil
+	return sent
 end
 
 ---- emulation of base building
@@ -696,8 +772,11 @@ function aiAttackWave.processBuilders(universe, tick)
 			surface = map.surface
 			group = squad.group
 			validMembers = 0
+			-- champions and Big Monsters enemies are never spent on a nest
+			local champions = unitUtils.championUnits(universe)
 			for _, entity in pairs(group.members) do
-				if entity.valid and (entity.type == "unit") then
+				if entity.valid and (entity.type == "unit") and not (champions and champions[entity.unit_number])
+					and not isForeign(entity.name) then
 					validMembers = validMembers + 1
 					local roll = math.random()
 					local newPosition

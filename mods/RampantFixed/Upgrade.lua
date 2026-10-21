@@ -1010,8 +1010,6 @@ function upgrade.attempt(universe)
 
 	if storage.version < 190  then	-- Version 1.9.0
 		storage.version = 190
-	    universe.powerupSettings = {}
-		universe.dropRandomizer = game.create_random_generator(game.default_map_gen_settings.seed)
 	end	
 	
 	if storage.version < 191  then	-- Version 1.9.1
@@ -1021,10 +1019,6 @@ function upgrade.attempt(universe)
 	
 	if storage.version < 193  then	-- Version 1.9.0
 		storage.version = 193
-		if not universe.powerupSettings then
-			universe.powerupSettings = {}
-			universe.dropRandomizer = game.create_random_generator(game.default_map_gen_settings.seed)
-		end	
 	end	
 	
 	if storage.version < 11001  then	-- Version 1.10.1

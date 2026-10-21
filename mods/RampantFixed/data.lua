@@ -103,11 +103,6 @@ data:extend(
 }
 )
 
------ Powerup
-local powerup = require("libs/Powerup")
-powerup.makePowerup_capsule()
-powerup.make_RegenerationCrystal()
-
 local stickers = require("prototypes/Stickers")
 stickers.makeSpeedStickers()
 

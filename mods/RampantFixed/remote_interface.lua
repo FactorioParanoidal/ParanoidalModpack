@@ -20,6 +20,7 @@ local baseUtils = require("libs/BaseUtils")
 local chunkPropertyUtils = require("libs/ChunkPropertyUtils")
 local constants = require("libs/Constants")
 local mapProcessor = require("libs/MapProcessor")
+local aiAttackWave = require("libs/AIAttackWave")
 local mapUtils = require("libs/MapUtils")
 local aiBrain = require("libs/AIBrain")
 local champions = require("libs/Champions")
@@ -411,9 +412,10 @@ remote.add_interface("rampantFixed", {
 	
 	,
 	--------------------
-	-- Paranoidal: read-only truce data for EvoUI.
+	-- Paranoidal: read-only truce data for EvoUI and Big Monsters.
 	-- parameters: {surfaceIndex = number}
-	-- return: nil (Rampant AI is off on the surface) or {minEvo = number (percent), peaceful = boolean}
+	-- return: nil (Rampant AI is off on the surface) or {minEvo = number (percent), peaceful = boolean (AI state),
+	--         truce = boolean (the evolution or the peace period of the planet setting is not reached yet)}
 	getTruceInfo = function(parameters)
 		if (not parameters) or (not parameters.surfaceIndex) then
 			return nil
@@ -428,7 +430,44 @@ remote.add_interface("rampantFixed", {
 		if not (planetAISetting and (type(planetAISetting.minEvo) == "number")) then
 			return nil
 		end
-		return {minEvo = planetAISetting.minEvo, peaceful = (map.state == constants.AI_STATE_PEACEFUL)}
+		local evo = game.forces.enemy.get_evolution_factor(map.surface)
+		local truce = ((evo * 100) < planetAISetting.minEvo)
+			or (game.tick < ((map.firstStateTick or 0) + (planetAISetting.peacePeriod or 0) * 3600))
+		return {minEvo = planetAISetting.minEvo, peaceful = (map.state == constants.AI_STATE_PEACEFUL), truce = truce}
+	end
+
+	,
+	--------------------
+	-- Paranoidal: an attack on a target ordered by another mod (Big Monsters swarms and rocket silo attacks through
+	-- mferrari_lib CallFrenzyAttack). Rampant squads of the nests in reach, nearest first, strike the target until the
+	-- number of units is sent (at most the attack wave size each, at most 20 squads, none below 5 units); free for the
+	-- AI. Not sent in the peaceful AI state, on a peaceful surface or by day in the nocturnal mode.
+	-- parameters: {surfaceIndex = number, position = {x, y}, units = number, searchRadius = number (tiles, 1500)}
+	-- return: nil - Rampant does not manage attacks there (AI off on the surface, external control off): the caller
+	--         attacks by itself; a number - units sent (0: no attack now or no nest in reach)
+	strikePosition_ExtCtrl = function(parameters)
+		local universe = storage.universe
+		if not (universe and universe.allowExternalControl) then
+			return nil
+		end
+		if not (parameters and parameters.surfaceIndex and (type(parameters.position) == "table")) then
+			return nil
+		end
+		local map = universe.maps and universe.maps[parameters.surfaceIndex]
+		if not (map and map.surface and map.surface.valid) then
+			return nil
+		end
+		local surface = map.surface
+		if surface.peaceful_mode or (map.state == constants.AI_STATE_PEACEFUL)
+			or (universe.aiNocturnalMode and (surface.darkness <= 0.65)) then
+			return 0
+		end
+		local units = math.floor(tonumber(parameters.units) or 0)
+		if units < 1 then
+			return 0
+		end
+		local searchRadius = math.min(math.max(tonumber(parameters.searchRadius) or 1500, 64), 3000)
+		return aiAttackWave.formStrikeSquads(map, parameters.position, math.min(units, 1000), searchRadius, game.tick)
 	end
 
 	,
