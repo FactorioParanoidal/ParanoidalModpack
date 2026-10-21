@@ -1,0 +1,30 @@
+---------------------------------------------------------------------------------------------------
+Version: 0.2.1
+  Changes:
+    - Renamed to beltbrush2-reforged, the Paranoidal fork of beltbrush2 (title "Belt Brush (Reforged)").
+      Key names are unchanged, so custom keybindings are kept
+  Bugfixes:
+    - Balancers of belts other than the four vanilla ones (Bob's basic and ultimate belts) kept
+      the express splitters of the template; the splitter with the same belt speed is used now
+    - Balancers whose underground jump is longer than the belt's underground belt can reach are
+      skipped instead of coming out broken (5x5 and up with yellow or Bob's basic undergrounds)
+    - Building with the brush no longer loses the items when the ghost cannot be revived: the
+      ghost is revived first and the items are taken after
+    - The cursor is no longer overwritten when it cannot be cleared (full inventory), which
+      destroyed the belts held in it
+    - A brush made from a belt ghost uses the entity the item places, not the item name
+    - Balancer width read from the label is a number, not a string
+    - Removed a dead branch in "decrease size" for balancers; behaviour unchanged
+  Changes:
+    - Revived ghosts raise script_raised_revive, so other mods see the built belts
+    - Balancer preview icons carry the brush quality, like the line and corner brushes
+    - Uses LuaPlayer.pipette instead of the deprecated pipette_entity
+  Optimizations:
+    - on_built_entity is filtered to ghosts and checks the brush in hand first, so ordinary
+      building no longer runs the handler
+    - Line and corner brushes are written with set_blueprint_entities instead of building JSON,
+      compressing it and importing it back; no hard-coded blueprint version
+    - Balancers are imported straight into the cursor instead of a temporary script inventory
+    - No more log() of the whole blueprint JSON and of every entity's quality on each key press
+    - Prototype types, belt/underground/splitter sets are cached outside storage
+    - No global variables (L, success, bbps, dinv)

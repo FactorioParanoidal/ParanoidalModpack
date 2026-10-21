@@ -1,4 +1,4 @@
-L = {}
+local L = {}
 
 L.balancers = {
     ['1x2'] = '0eNql0cFqwzAMANBfCTpt4BTi1OmSQw/5jVKG04nN4CjGckZL8L9P6QY7tFDGbrYsPQtpgcHPGKKjBN0C7jQRQ3dYgN07Wb/GyI4IHeA5RGQuU7TEYYqpHNAnyAocveEZuiofFSAllxx+G9fL5ZXmccAoCeqBpSBMLOUTrf8KWb5sjIKLHOrdxuSsbkz9d3P3yKxvTA7epSRvdzr8sZr71vY//ZnVlKG6hKMIv5tS4K1US6wXo+jjzB/FU2+9pRPG5+JQlXt9lLRPjHylTaPbbdsao01T6yrnLyyApwY=',
@@ -98,9 +98,77 @@ L.balancer_availability = {
     [9] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 0 },
 }
 
---------------------------------------------------------------------------------------------------
---- If a belt type is not in here mapped to a splitter, you can't make a balancer of that type ---
---------------------------------------------------------------------------------------------------
+-- Longest underground jump (entrance to exit, in tiles) in each balancer above. Generated from the
+-- strings; a balancer only works with an underground belt whose max_underground_distance reaches it
+-- (vanilla and Bob's basic undergrounds reach 5, so their 5x5 and similar balancers would come out broken).
+L.underground_distance = {
+    ['1x9'] = 4,
+    ['2x3'] = 3,
+    ['2x5'] = 2,
+    ['2x7'] = 3,
+    ['2x9'] = 3,
+    ['3x2'] = 3,
+    ['3x3'] = 2,
+    ['3x4'] = 3,
+    ['3x5'] = 4,
+    ['3x6'] = 3,
+    ['3x7'] = 3,
+    ['3x8'] = 4,
+    ['3x9'] = 5,
+    ['4x3'] = 3,
+    ['4x4'] = 4,
+    ['4x5'] = 4,
+    ['4x6'] = 5,
+    ['4x7'] = 5,
+    ['4x8'] = 5,
+    ['4x9'] = 6,
+    ['4x12'] = 9,
+    ['5x2'] = 3,
+    ['5x3'] = 4,
+    ['5x4'] = 4,
+    ['5x5'] = 6,
+    ['5x6'] = 8,
+    ['5x7'] = 6,
+    ['5x8'] = 7,
+    ['5x9'] = 9,
+    ['6x2'] = 3,
+    ['6x3'] = 3,
+    ['6x4'] = 5,
+    ['6x5'] = 8,
+    ['6x6'] = 7,
+    ['6x7'] = 5,
+    ['6x8'] = 6,
+    ['6x9'] = 9,
+    ['7x2'] = 4,
+    ['7x3'] = 5,
+    ['7x4'] = 5,
+    ['7x5'] = 6,
+    ['7x6'] = 5,
+    ['7x7'] = 8,
+    ['7x8'] = 6,
+    ['7x9'] = 9,
+    ['8x3'] = 3,
+    ['8x4'] = 5,
+    ['8x5'] = 7,
+    ['8x6'] = 5,
+    ['8x7'] = 6,
+    ['8x8'] = 6,
+    ['8x9'] = 9,
+    ['8x10'] = 9,
+    ['9x1'] = 4,
+    ['9x2'] = 3,
+    ['9x3'] = 5,
+    ['9x4'] = 7,
+    ['9x5'] = 9,
+    ['9x6'] = 8,
+    ['9x7'] = 9,
+    ['9x8'] = 9,
+    ['9x9'] = 9,
+}
+
+----------------------------------------------------------------------------------------------------
+--- Preferred splitter for a belt. Other belts get the splitter with the same belt speed, if any ---
+----------------------------------------------------------------------------------------------------
 L.splitter_mapping = {
     ["transport-belt"] = "splitter",
     ["fast-transport-belt"] = "fast-splitter",
@@ -112,28 +180,33 @@ function L.get_balancer_bpstr(in_width, out_width)
     return L.balancers[in_width .. 'x' .. out_width]
 end
 
-function L.next_ow(in_width, out_width)
-    if L.balancer_availability[in_width] == nil then return 0 end
-    for i,l in ipairs(L.balancer_availability[in_width]) do
-        if l == out_width then
-            return L.balancer_availability[in_width][i + 1] or 0
+--- Output widths offered for an input width, in cycling order, keeping only those `usable` accepts.
+---@param in_width integer
+---@param usable fun(in_width: integer, out_width: integer): boolean
+---@return integer[]
+function L.usable_outputs(in_width, usable)
+    local result = {}
+    for _, out_width in ipairs(L.balancer_availability[in_width] or {}) do
+        if out_width ~= 0 and usable(in_width, out_width) then
+            result[#result + 1] = out_width
         end
     end
-
-    return 0
+    return result
 end
 
-function L.prev_ow(in_width, out_width)
-    if L.balancer_availability[in_width] == nil then return 0 end
-    for i,l in ipairs(L.balancer_availability[in_width]) do
-        if l == out_width then
-            if i == 1 then
-                return 0
-            end
-            return L.balancer_availability[in_width][i - 1] or 0
+--- Next (step 1) or previous (step -1) usable output width after `out_width`, or 0 past either end.
+---@param in_width integer
+---@param out_width integer
+---@param step 1|-1
+---@param usable fun(in_width: integer, out_width: integer): boolean
+---@return integer
+function L.step_ow(in_width, out_width, step, usable)
+    local outputs = L.usable_outputs(in_width, usable)
+    for i, width in ipairs(outputs) do
+        if width == out_width then
+            return outputs[i + step] or 0
         end
     end
-
     return 0
 end
 
