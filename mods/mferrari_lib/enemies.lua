@@ -410,52 +410,55 @@ end
 
 
 
+-- Sends the enemies near the target at it (Big Monsters swarms and silo attacks, Rocket Silo Construction stages).
+-- Paranoidal: with RampantFixed the attack is made of Rampant squads (remote strikePosition_ExtCtrl): packing, retreat
+-- and one path per squad instead of hundreds of single units commanded one by one, and no attack while the Rampant AI
+-- is peaceful. Without RampantFixed (or on a surface it does not manage) the old single-unit command is used.
+local FRENZY_MIN = 10
+local FRENZY_MAX = 300
+local FRENZY_DISTANCE = 1500
 function CallFrenzyAttack(surface,target,limit,multiplier)
-	--disable this bcause of space age
-    --if surface.map_gen_settings.autoplace_controls and surface.map_gen_settings.autoplace_controls["enemy-base"] 
-      --and surface.map_gen_settings.autoplace_controls["enemy-base"].size>0 then
-local diff = 1 --= storage.settings.difficulty_level or
+    if not (surface and surface.valid and target) then return end
+    local entity = (type(target) == "userdata") and target or nil
     local position
-    if target.type and target.valid 
-        then 
-        position=target.position
-        else
-        position = target
-        end
-    
-    local Min = 10
-    local Max = 300
-    local Dist = 1500
-    
-    local spawn = surface.find_entities_filtered({type = "unit-spawner",limit=1,position=position,radius=Dist})
-    if #spawn>0 then
-    local force = spawn[1].force
-    
-    local aliens = Max * get_evo_here(surface,force) 
-    aliens = math.floor(aliens + (aliens * (diff-1))/2)
-    
-    if aliens < Min then aliens=Min end
-    if limit and aliens>limit then aliens=limit end
-    if multiplier then aliens=math.floor(aliens * multiplier) end 
-    
-        if target.type and target.valid then 
-            local sent = surface.set_multi_command({
-                command = {type=defines.command.attack, target=target, distraction = defines.distraction.by_anything },
-                unit_count = aliens,
-                force = force,
-                unit_search_distance = Dist,
-            })
-            else
-            local sent = surface.set_multi_command({
-                command = {type=defines.command.attack_area, destination=position, radius=80 },  --, distraction = defines.distraction.by_anything
-                unit_count = aliens,
-                force = force,
-                unit_search_distance = Dist,
-            })
-            end
-        end
-   -- end
+    if entity then
+        if not entity.valid then return end
+        position = entity.position
+    else
+        position = {x = target.x or target[1], y = target.y or target[2]}
     end
+
+    local spawn = surface.find_entities_filtered({type = "unit-spawner", limit = 1, position = position, radius = FRENZY_DISTANCE})
+    if #spawn == 0 then return end
+    local force = spawn[1].force
+
+    local aliens = math.max(FRENZY_MIN, math.floor(FRENZY_MAX * get_evo_here(surface, force)))
+    if limit and aliens > limit then aliens = limit end
+    if multiplier then aliens = math.floor(aliens * multiplier) end
+
+    local rampant = remote.interfaces["rampantFixed"]
+    if rampant and rampant["strikePosition_ExtCtrl"] and (force.name == "enemy") then
+        local sent = remote.call("rampantFixed", "strikePosition_ExtCtrl", {
+            surfaceIndex = surface.index, position = position, units = aliens, searchRadius = FRENZY_DISTANCE})
+        if sent ~= nil then return end
+    end
+
+    if entity then
+        surface.set_multi_command({
+            command = {type = defines.command.attack, target = entity, distraction = defines.distraction.by_anything},
+            unit_count = aliens,
+            force = force,
+            unit_search_distance = FRENZY_DISTANCE,
+        })
+    else
+        surface.set_multi_command({
+            command = {type = defines.command.attack_area, destination = position, radius = 80},
+            unit_count = aliens,
+            force = force,
+            unit_search_distance = FRENZY_DISTANCE,
+        })
+    end
+end
 
 
 function get_evolut_1_to_10(evolution)
