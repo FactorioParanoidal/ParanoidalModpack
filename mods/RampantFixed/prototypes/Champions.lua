@@ -19,4 +19,13 @@ data:extend({
         filename = "__RampantFixed__/graphics/champions/glow.png",
         size = 128,
     },
+    {
+        -- the shield over a retreating champion: the base energy shield icon
+        type = "sprite",
+        name = "rampantFixed-champion-shield",
+        filename = "__base__/graphics/icons/energy-shield-equipment.png",
+        size = 64,
+        mipmap_count = 4,
+        flags = {"icon"},
+    },
 })

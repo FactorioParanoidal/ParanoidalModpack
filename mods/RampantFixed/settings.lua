@@ -252,6 +252,17 @@ data:extend({
             order = "l[modifier]-m[unit]",
             per_user = false
         },
+
+        {
+            -- Paranoidal: the tier of the nests (factions they may take) follows the evolution and the distance from
+            -- the map centre only, not the game time (libs/BaseUtils.lua)
+            type = "bool-setting",
+            name = "rampantFixed--tierByEvolutionOnly",
+            setting_type = "startup",
+            default_value = true,
+            order = "l[modifier]-n[unit]",
+            per_user = false
+        },
 		
         {
             type = "bool-setting",

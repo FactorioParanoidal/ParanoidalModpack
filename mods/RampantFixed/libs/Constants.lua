@@ -644,9 +644,19 @@ constants.TIER_UPGRADE_SET_10_AS_IS = tiers10AsIs	-- + !КДА 2021.11
 
 local variations = (settings.startup["rampantFixed--newEnemyVariations"].value or 1)	-- + !КДА 2021.11
 
--- Paranoidal: champions and hour bosses (libs/Champions.lua) are copies of ordinary units with this suffix
--- (prototypes/ChampionUnits.lua): the damage event filter then matches the champions only
-constants.CHAMPION_SUFFIX = "-champion"
+-- Paranoidal: champions and hour bosses (libs/Champions.lua) are copies of ordinary units
+-- (prototypes/ChampionUnits.lua): the damage event filter then matches the champions only. A copy is made per kind and
+-- per unit of the nest it comes from, its max_health is the real health of the champion (x healthK of that unit)
+constants.CHAMPION_KINDS = {
+    champion = {suffix = "-champion", healthK = 10, tierUp = 1},
+    hourBoss = {suffix = "-hour-boss", healthK = 50, tierUp = 2},
+}
+
+-- name of the copy of bossName for a champion of the kind from a nest that spawns localName now
+function constants.championUnitName(kind, bossName, localName)
+    local tier = string.match(localName, "%-t(%d+)%-rampant$")
+    return bossName .. constants.CHAMPION_KINDS[kind].suffix .. "-from-" .. (tier and ("t" .. tier) or localName)
+end
 
 constants.ENERGY_THIEF_LOOKUP = {}
 
@@ -659,7 +669,13 @@ end
 for tier=1, 10 do
     for i=1,variations do
         constants.ENERGY_THIEF_LOOKUP["energy-thief-biter-v" .. i .. "-t" .. tier .. "-rampant"] = true
-        constants.ENERGY_THIEF_LOOKUP["energy-thief-biter-v" .. i .. "-t" .. tier .. "-rampant" .. constants.CHAMPION_SUFFIX] = true
+        for kind, spec in pairs(constants.CHAMPION_KINDS) do
+            for localTier = math.max(1, tier - spec.tierUp), tier do
+                constants.ENERGY_THIEF_LOOKUP[constants.championUnitName(kind,
+                    "energy-thief-biter-v" .. i .. "-t" .. tier .. "-rampant",
+                    "energy-thief-biter-v" .. i .. "-t" .. localTier .. "-rampant")] = true
+            end
+        end
     end
 end
 

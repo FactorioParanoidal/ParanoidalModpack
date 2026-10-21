@@ -2,21 +2,22 @@
 --
 -- Every 7-11 minutes a champion, every 50-70 minutes a bigger hour boss leaves a random nest within reach of the
 -- player base and attacks its most defended spot (the player chunk with most turrets in the 3x3 around).
---  * unit: the champion copy (prototypes/ChampionUnits.lua, name + constants.CHAMPION_SUFFIX; the unit itself if
+--  * unit: the champion copy (prototypes/ChampionUnits.lua, constants.championUnitName; the unit itself if
 --    there is no copy) of a unit of the nest's faction one tier (hour boss: two tiers) above the units it spawns now
 --    (capped at tier 10); ground biters below 10%
 --    evolution, biters/spitters 50/50 from 10%, biters/spitters/flyers by a third from 30% (fallback to what the
 --    faction has). Non-Rampant nests (vanilla, Bob) give their next stronger unit of the same kind (hour boss: the
 --    one after it). Units whose
 --    attack damages themselves (suicide and nuclear biters) are never chosen: they would blow their pool up;
---  * health: x10 (champion) / x50 (hour boss) of the ordinary unit of that kind, kept as a script pool on top of
---    the engine health; the health bar shows the pool share. A champion moves at half the speed of those units;
+--  * health: x10 (champion) / x50 (hour boss) of the ordinary unit of that kind. The copy has this max_health, so the
+--    health bar and the tooltip show the real health; the script pool equals the engine health then (it is only a
+--    share of it for a unit without a copy). A champion moves at half the speed of those units;
 --  * looks: a random colour (one of the six Bob artifact colours) as a glow (+ light at night), a silver / bigger
 --    gold star above it. The body colour cannot be changed at runtime;
 --  * below 35% of the pool it walks back to a nest ignoring enemies (an own command of the unit: a new command of
---    its group does not stop the fight the unit is in) and takes 4 times less damage on the way (a blocked way ends
---    within 32 tiles of the nest or is retried around it), regenerates there, gets one of 200 names (shown under
---    the star) and attacks again;
+--    its group does not stop the fight the unit is in) and takes 4 times less damage on the way (a glowing shield
+--    is drawn over it meanwhile; a blocked way ends within 32 tiles of the nest or is retried around it),
+--    regenerates there, gets one of 200 names (shown under the star) and attacks again;
 --  * death: the loot is one big artifact of its colour; the corpse stays 3 minutes and keeps the glow;
 --  * only the hour boss is announced ("You hear a strange sound in the distance...");
 --  * other Rampant scripts skip champions (libs/UnitUtils.championUnits): no packing, digging in, enrage or speed
@@ -41,7 +42,8 @@ local AI_STATE_PEACEFUL = constants.AI_STATE_PEACEFUL
 local turretsAround = aiBrain.turretsAround
 local chunkIsLive = aiBrain.chunkIsLive
 local inPlayerBase = engineGroupHelpers.inPlayerBase
-local CHAMPION_SUFFIX = constants.CHAMPION_SUFFIX
+local championUnitName = constants.championUnitName
+local CHAMPION_KINDS = constants.CHAMPION_KINDS
 
 local mRandom = math.random
 local mMin = math.min
@@ -73,12 +75,17 @@ local NAME_COUNT = 200
 local NAME_LIFT = 0.35              -- name centre above the selection box top
 
 local GLOW_SPRITE = "rampantFixed-champion-glow"
+local SHIELD_SPRITE = "rampantFixed-champion-shield"
+local SHIELD_COLOR = {r = 0.55, g = 0.8, b = 1, a = 0.9}
 
+-- healthK and tierUp: constants.CHAMPION_KINDS (the data stage makes the copies with them)
 local KINDS = {
-    champion = {healthK = 10, speedK = 0.5, tierUp = 1, intervalMin = 7 * 3600, intervalMax = 11 * 3600, maxAlive = 3,
+    champion = {healthK = CHAMPION_KINDS.champion.healthK, speedK = 0.5, tierUp = CHAMPION_KINDS.champion.tierUp,
+                intervalMin = 7 * 3600, intervalMax = 11 * 3600, maxAlive = 3,
                 star = "rampantFixed-champion-star-silver", starScale = 0.35, starLift = 1.0,
                 glowScale = 0.9, lightScale = 1.5, warning = false},
-    hourBoss = {healthK = 50, tierUp = 2, intervalMin = 50 * 3600, intervalMax = 70 * 3600, maxAlive = 1,
+    hourBoss = {healthK = CHAMPION_KINDS.hourBoss.healthK, tierUp = CHAMPION_KINDS.hourBoss.tierUp,
+                intervalMin = 50 * 3600, intervalMax = 70 * 3600, maxAlive = 1,
                 star = "rampantFixed-champion-star-gold", starScale = 0.5, starLift = 1.2,
                 glowScale = 1.3, lightScale = 2.5, warning = true},
 }
@@ -138,7 +145,8 @@ function champions.trackedNames(universe)
     local seen = {}
     for _, record in pairs(data.units) do
         local name = record.prototypeName
-        if not seen[name] then
+        -- a prototype removed since the save (its unit is gone with it, champions.update drops the record)
+        if (not seen[name]) and prototypes.entity[name] then
             seen[name] = true
             names = names or {}
             names[#names + 1] = name
@@ -557,6 +565,40 @@ local function drawMarks(record)
     end
 end
 
+-- the shield over a retreating champion (it takes RETREAT_DAMAGE_K of the damage); gone with the unit
+local function drawShield(record)
+    local entity = record.entity
+    local top, size = selectionTop(entity)
+    local scale = mMax(0.45, size * 0.5)
+    record.shield = rendering.draw_sprite({
+        sprite = SHIELD_SPRITE,
+        surface = entity.surface,
+        target = {entity = entity, offset = {0, top * 0.5}},
+        tint = SHIELD_COLOR,
+        x_scale = scale,
+        y_scale = scale,
+        render_layer = "air-entity-info-icon",
+    })
+    record.shieldLight = rendering.draw_light({
+        sprite = "utility/light_small",
+        surface = entity.surface,
+        target = {entity = entity, offset = {0, top * 0.5}},
+        color = SHIELD_COLOR,
+        scale = size * 1.5,
+        intensity = 0.6,
+    })
+end
+
+local function removeShield(record)
+    for _, key in ipairs({"shield", "shieldLight"}) do
+        local object = record[key]
+        if object and object.valid then
+            object.destroy()
+        end
+        record[key] = nil
+    end
+end
+
 local function giveName(data, record)
     if data.usedCount >= NAME_COUNT then
         data.usedNames = {}
@@ -673,14 +715,16 @@ local function startRetreat(universe, record, tick)
     record.stateTick = tick
     record.home = findHome(map, record, record.entity.position)
     orderRetreat(record)
+    drawShield(record)
 end
 
 ----------------------------------------------------------------------------------------------------------------------
 -- spawning
 
--- the champion copy of the unit (prototypes/ChampionUnits.lua), the unit itself if there is none
-local function championPrototype(bossName)
-    local name = bossName .. CHAMPION_SUFFIX
+-- the champion copy of the unit for the kind and the nest unit (prototypes/ChampionUnits.lua), the unit itself if
+-- there is none
+local function championPrototype(kind, bossName, localName)
+    local name = championUnitName(kind, bossName, localName)
     if prototypes.entity[name] then
         return name
     end
@@ -690,7 +734,8 @@ end
 local function create(universe, map, kind, bossName, localName, position, home, target, tick)
     local spec = KINDS[kind]
     local surface = map.surface
-    local entity = surface.create_entity({name = championPrototype(bossName), position = position, force = "enemy"})
+    local entity = surface.create_entity({name = championPrototype(kind, bossName, localName), position = position,
+                                          force = "enemy"})
     if not (entity and entity.valid and entity.unit_number) then
         return nil
     end
@@ -861,6 +906,7 @@ local function stepRecord(universe, data, record, tick)
         local stuck = walking and (commandable.moving_state == defines.moving_state.stuck)
         if (d2 <= HOME_RADIUS * HOME_RADIUS) or ((d2 <= HOME_NEAR * HOME_NEAR) and ((not walking) or stuck))
             or ((tick - record.stateTick) > RETREAT_TIMEOUT) then
+            removeShield(record)
             record.state = "regen"
             record.stateTick = tick
             orderRest(record)
@@ -924,7 +970,7 @@ end
 -- on_entity_damaged for a tracked champion (control.lua dispatches)
 function champions.onDamaged(universe, event, record)
     local entity = event.entity
-    local damage = event.final_damage_amount
+    local damage = mMax(0, event.final_damage_amount)
     if record.state == "retreat" then
         damage = damage * RETREAT_DAMAGE_K
     end
