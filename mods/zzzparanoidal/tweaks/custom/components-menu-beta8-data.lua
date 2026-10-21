@@ -70,6 +70,7 @@ return {
             {["name"] = "anotherworld-structure-components", ["order"] = "04"},
         }},
         {subgroup = "paranoidal-components-drill-bits", order = "a-12", recipes = {
+            {["name"] = "iron-stick", ["order"] = "00"},
             {["name"] = "mining-drill-bit-mk0", ["order"] = "01"},
             {["name"] = "mining-drill-bit-mk1", ["order"] = "02"},
             {["name"] = "mining-drill-bit-mk2", ["order"] = "03"},
