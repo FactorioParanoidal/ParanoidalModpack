@@ -2,7 +2,7 @@
 Version: 1.1.0
 Date: 2026-10-14
   Major Features:
-    - 370 new achievements for the Paranoidal mod set in ten themes: resources, industry, quality and
+    - 369 new achievements for the Paranoidal mod set in ten themes: resources, industry, quality and
       defects, energy, logistics, combat, nature, space, challenges and character.
     - 71 scripted achievements (control.lua): deaths, distances, teleports, rockets and their cargo,
       seasons, midnights, evolution, ruins, wind, RPG levels, entity counts and more.
@@ -12,6 +12,8 @@ Date: 2026-10-14
       objective in time, energy production and script.
     - Map setting "Scripted achievements" to stop all tracking.
   Changes:
+    - Removed the "Doping" achievement (use 10 combat power-up capsules): RampantFixed no longer has the
+      capsule.
     - Every entry is built in its own protected step: a missing target, an error in a catalog or a name
       taken by another mod skips the entry with a log line instead of stopping the game. Achievements
       with items nothing can produce or entities no item can place are skipped too.

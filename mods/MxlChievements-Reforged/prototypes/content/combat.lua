@@ -30,7 +30,6 @@ return lib.list(
   {id = "volcanologist", kind = "kill", to_kill = "bm-volcano"},
   {id = "overgrown-worm", kind = "kill", to_kill = "bm-worm-boss-acid-shooter"},
   {id = "evil-twin", kind = "kill", to_kill = {patterns = {"^bm_fake_human_boss_"}, types = {"unit"}}, label = "fake-human"},
-  {id = "powerup", kind = "use-item", item = "powerup-Combat5min-Capsule-rampantFixed", amount = 10},
   {id = "popular-place", kind = "group-attack", amount = 1000, icon = {entity = "big-biter"}},
 
   {id = "veteran", kind = "kill", type_to_kill = "unit", amounts = {100, 1000, 1e4}, label = "enemies",
