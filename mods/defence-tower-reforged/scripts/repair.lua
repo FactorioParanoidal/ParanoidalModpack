@@ -1,13 +1,16 @@
--- Repair Turret, Paranoidal fork 9.x: repair only.
--- Every `interval` ticks a turret heals up to `beams` damaged friendly entities in a square of +-range tiles,
+-- Defence tower: repair (from Repair Turret by Klonan, Paranoidal fork 9.0.6).
+-- Every `interval` ticks a tower heals up to `beams` damaged friendly entities in a square of +-range tiles,
 -- spending energy from its hidden electric-energy-interface and durability of the repair pack in its own slot.
--- Range, speed and beams come from the force's researched upgrade levels.
+-- Range, speed and beams come from the force's researched upgrade levels. The same square is the shield
+-- zone of the tower (scripts/shield.lua); turrets the shield repairs (shielded()) are left to it.
 --
 -- Damage is NOT tracked through on_entity_damaged (its cost grows with every hit on the map).
--- Instead every repairable building inside any turret area is kept once in a list, and a fixed small
--- portion of that list is polled each tick. Vehicles and characters are searched per turret area
--- every `moving_period` ticks. Without turrets the mod does nothing per tick.
+-- Instead every repairable building inside any tower area is kept once in a list, and a fixed small
+-- portion of that list is polled each tick. Vehicles and characters are searched per tower area
+-- every `moving_period` ticks. Without towers the module does nothing per tick.
 local C = require("shared")
+
+local R = {}
 
 local TURRET, ENERGY, BEAM = C.turret, C.energy, C.beam
 local INTERVAL = C.interval
@@ -34,6 +37,15 @@ local ignored_names = {["entity-ghost"] = true, ["tile-ghost"] = true, [ENERGY] 
 
 local area_fill = {r = 0.04, g = 0.16, b = 0.04, a = 0.16}
 local area_border = {r = 0.3, g = 0.9, b = 0.3, a = 0.9}
+
+-- Links to the shield (set by control.lua): shielded(entity, name) is true for turrets the shield of
+-- the towers repairs; range_changed(force_index) is called after the range of a force's towers changed.
+local shielded = function() return false end
+local range_changed = function() end
+
+function R.set_shield(is_shielded, on_range_changed)
+  shielded, range_changed = is_shielded, on_range_changed
+end
 
 -- Caches derived only from prototypes: identical on every peer, safe outside storage.
 local repairable_cache = {}
@@ -62,13 +74,13 @@ end
   v = DATA_VERSION
   turrets[uid] = T = {entity, eei, inventory, uid, surface, force, x, y, range, beam_pos, targets = {[uid] = entity}, active, warn}
   map[surface][chunk_x][chunk_y] = {[uid] = T}
-  buckets[uid % INTERVAL] = {[uid] = T}        -- active turrets only
-  mbuckets[uid % MOVING_PERIOD] = {[uid] = T}  -- all turrets, for the vehicle/character search
-  forces[force_index] = number of turrets
+  buckets[uid % INTERVAL] = {[uid] = T}        -- active towers only
+  mbuckets[uid % MOVING_PERIOD] = {[uid] = T}  -- all towers, for the vehicle/character search
+  forces[force_index] = number of towers
   stats[force_index] = {range, shot, beams, buffer}
   hover[player_index] = {fill, border}
-  watch = {n, cursor, list = {uid}, pos = {[uid] = index}, ent = {[uid] = entity}}  -- buildings in turret areas
-  rescan = uid of the turret last re-read
+  watch = {n, cursor, list = {uid}, pos = {[uid] = index}, ent = {[uid] = entity}}  -- buildings in tower areas
+  rescan = uid of the tower last re-read
 ]]
 local data
 
@@ -81,8 +93,7 @@ local function new_data()
 end
 
 -- Other mods can raise events (e.g. technology effects reset) in their on_configuration_changed
--- before ours has rebuilt storage from an older version. Until then events are ignored;
--- rebuild() rescans the map anyway.
+-- before ours has rebuilt storage. Until then events are ignored; rebuild() rescans the map anyway.
 local function stale()
   return not (data and data.v == DATA_VERSION)
 end
@@ -129,8 +140,14 @@ local function stats_of(force_index)
   return default_stats
 end
 
+-- Half side of the tower square of a force (repair and shield zone).
+function R.range_of(force_index)
+  if stale() then return C.range end
+  return stats_of(force_index).range
+end
+
 ---------------------------------------------------------------------------
--- Spatial map of turrets by covered chunks
+-- Spatial map of towers by covered chunks
 
 local function chunk_bounds(T)
   local r = T.range
@@ -181,7 +198,13 @@ local function turrets_at(surface_index, x, y)
   return mx[floor(y / CHUNK)]
 end
 
--- Is the point covered by a turret of the force (other than the entity itself)?
+-- Towers whose area may reach the point: {[uid] = T} (T.x, T.y, T.range, T.force); nil if none.
+function R.towers_at(surface_index, x, y)
+  if stale() then return nil end
+  return turrets_at(surface_index, x, y)
+end
+
+-- Is the point covered by a tower of the force (other than the entity itself)?
 local function covered(uid, x, y, surface_index, force_index)
   local list = turrets_at(surface_index, x, y)
   if not list then return false end
@@ -261,7 +284,7 @@ local function set_warning(T, on)
   end
 end
 
--- Offer a damaged entity to every turret of its force that covers it.
+-- Offer a damaged entity to every tower of its force that covers it.
 local function offer(entity, uid, x, y, surface_index, force_index)
   local list = turrets_at(surface_index, x, y)
   if not list then return end
@@ -297,7 +320,7 @@ local function check_moving(T)
   if any and not T.active then activate(T) end
 end
 
--- Put every repairable building of the turret's area into the watch list; damaged ones become targets.
+-- Put every repairable building of the tower's area into the watch list; damaged ones become targets.
 local function add_area(T)
   local x, y, r = T.x, T.y, T.range
   local found = T.entity.surface.find_entities_filtered
@@ -308,11 +331,14 @@ local function add_area(T)
   local targets = T.targets
   for _, e in pairs(found) do
     local uid = e.unit_number
-    if uid and uid ~= T.uid and not ignored_names[e.name] and not moving_types[e.type] then
-      local ratio = e.get_health_ratio()
-      if ratio and is_repairable(e) then
-        watch_add(e, uid)
-        if ratio > 0 and ratio < 1 then targets[uid] = e end
+    if uid and uid ~= T.uid then
+      local name = e.name
+      if not ignored_names[name] and not moving_types[e.type] and not shielded(e, name) then
+        local ratio = e.get_health_ratio()
+        if ratio and is_repairable(e) then
+          watch_add(e, uid)
+          if ratio > 0 and ratio < 1 then targets[uid] = e end
+        end
       end
     end
   end
@@ -320,7 +346,7 @@ local function add_area(T)
   if next(targets) and not T.active then activate(T) end
 end
 
--- Drop watched entities of an old area that no turret covers any more.
+-- Drop watched entities of an old area that no tower covers any more.
 local function prune_area(surface_index, force_index, x, y, r)
   local surface = game.surfaces[surface_index]
   if not surface then return end -- entities are invalid then and leave the list on their own
@@ -335,7 +361,7 @@ local function prune_area(surface_index, force_index, x, y, r)
 end
 
 ---------------------------------------------------------------------------
--- Turrets
+-- Towers
 
 local function create_energy(T)
   local entity = T.entity
@@ -498,18 +524,20 @@ local function relocate(T)
   add_area(T)
 end
 
--- Research changed: apply range and buffer to every turret of the force.
+-- Research changed: apply range and buffer to every tower of the force.
 local function refresh_force(force)
   local index = force.index
   local S = compute_stats(force)
   data.stats[index] = S
   if not data.forces[index] then return end
   local shrunk = {}
+  local moved = false
   for _, T in pairs(data.turrets) do
     if T.force == index and T.entity.valid then
       if T.eei and T.eei.valid then T.eei.electric_buffer_size = S.buffer end
       local old = T.range
       if old ~= S.range then
+        moved = true
         map_remove(T)
         T.range = S.range
         map_add(T)
@@ -521,11 +549,12 @@ local function refresh_force(force)
       end
     end
   end
-  -- after all turrets have their new range
+  -- after all towers have their new range
   for _, v in pairs(shrunk) do
     local T = v[1]
     prune_area(T.surface, index, T.x, T.y, v[2])
   end
+  if moved then range_changed(index) end
 end
 
 local function clear_hover(player_index)
@@ -538,8 +567,7 @@ local function clear_hover(player_index)
 end
 
 -- Full rebuild from the entities on the map: init, configuration change, force merge.
-local function rebuild()
-  storage.repair_turret = nil -- state of the original (roboport) version
+function R.rebuild()
   local old = storage.rt
   if old then
     for _, T in pairs(old.turrets or {}) do
@@ -568,10 +596,78 @@ local function rebuild()
   end
 end
 
+function R.on_load()
+  data = storage.rt
+end
+
+---------------------------------------------------------------------------
+-- Links from the shield
+
+-- The shield of a force was switched on (research) or off: turrets leave the watch list and the
+-- tower targets, or come back to them.
+function R.shield_force_changed(force_index, on)
+  if stale() then return end
+  if on then
+    local W = data.watch
+    local leave = {}
+    for uid, e in pairs(W.ent) do
+      if e.valid and e.force_index == force_index and shielded(e, e.name) then leave[#leave + 1] = uid end
+    end
+    for i = 1, #leave do watch_remove(leave[i]) end
+    for _, T in pairs(data.turrets) do
+      if T.force == force_index then
+        local targets = T.targets
+        for uid, e in pairs(targets) do
+          if e.valid and shielded(e, e.name) then targets[uid] = nil end
+        end
+      end
+    end
+  else
+    for _, T in pairs(data.turrets) do
+      if T.force == force_index and T.entity.valid then add_area(T) end
+    end
+  end
+end
+
+-- A turret switched out of the shield (toggle): repaired by beams again if a tower covers it.
+function R.turret_unshielded(entity)
+  if stale() or not entity.valid then return end
+  local name = entity.name
+  if shielded(entity, name) or ignored_names[name] or not is_repairable(entity) then return end
+  local uid = entity.unit_number
+  local p = entity.position
+  local surface_index, force_index = entity.surface_index, entity.force_index
+  if not covered(uid, p.x, p.y, surface_index, force_index) then return end
+  watch_add(entity, uid)
+  local ratio = entity.get_health_ratio()
+  if ratio and ratio > 0 and ratio < 1 then offer(entity, uid, p.x, p.y, surface_index, force_index) end
+end
+
+-- A turret given back to the shield (toggle): no longer watched or targeted by beams.
+function R.turret_shielded(entity)
+  if stale() or not entity.valid or not shielded(entity, entity.name) then return end
+  local uid = entity.unit_number
+  watch_remove(uid)
+  local p = entity.position
+  local list = turrets_at(entity.surface_index, p.x, p.y)
+  if list then
+    for _, T in pairs(list) do T.targets[uid] = nil end
+  end
+end
+
+-- Number of towers of a force (all forces if nil).
+function R.count(force_index)
+  if stale() then return 0 end
+  if force_index then return data.forces[force_index] or 0 end
+  local n = 0
+  for _ in pairs(data.turrets) do n = n + 1 end
+  return n
+end
+
 ---------------------------------------------------------------------------
 -- Per tick
 
--- Poll a portion of the watch list; damaged entities are offered to the turrets covering them.
+-- Poll a portion of the watch list; damaged entities are offered to the towers covering them.
 local function scan_watch()
   local W = data.watch
   local n = W.n
@@ -611,9 +707,9 @@ local function rescan_step()
 end
 
 ---------------------------------------------------------------------------
--- Events
+-- Events (registered by control.lua)
 
-local function on_built(event)
+function R.on_built(event)
   if stale() then return end
   local entity = event.entity or event.destination
   if not (entity and entity.valid) then return end
@@ -625,7 +721,7 @@ local function on_built(event)
   local surface_index = entity.surface_index
   if not turrets_at(surface_index, p.x, p.y) then return end
   local uid = entity.unit_number
-  if not uid or ignored_names[name] or moving_types[entity.type] then return end
+  if not uid or ignored_names[name] or moving_types[entity.type] or shielded(entity, name) then return end
   local ratio = entity.get_health_ratio()
   if not ratio or not is_repairable(entity) then return end
   if covered(uid, p.x, p.y, surface_index, force_index) then
@@ -634,25 +730,25 @@ local function on_built(event)
   end
 end
 
-local function on_cloned(event)
+function R.on_cloned(event)
   if stale() then return end
   local entity = event.destination
   if not (entity and entity.valid) then return end
   if entity.name == ENERGY then
-    entity.destroy() -- the turret clone gets its own
+    entity.destroy() -- the tower clone gets its own
   elseif entity.name == TURRET then
     add_turret(entity)
   end
 end
 
-local function on_object_destroyed(event)
+function R.on_object_destroyed(event)
   if stale() then return end
   if event.type == defines.target_type.entity then
     remove_turret(event.useful_id)
   end
 end
 
-local function on_tick(event)
+function R.on_tick(event)
   if stale() then return end
   local tick = event.tick
   if data.watch.n > 0 then scan_watch() end
@@ -670,7 +766,7 @@ local function on_tick(event)
   end
 end
 
-local function on_research(event)
+function R.on_research(event)
   if stale() then return end
   local research = event.research
   if research and research.valid and research.name:find("^repair%-turret%-") then
@@ -678,13 +774,13 @@ local function on_research(event)
   end
 end
 
-local function on_force_event(event)
+function R.on_force_event(event)
   if stale() then return end
   local force = event.force
   if force and force.valid then refresh_force(force) end
 end
 
-local function on_selected_entity_changed(event)
+function R.on_selected_entity_changed(event)
   if stale() then return end
   local index = event.player_index
   clear_hover(index)
@@ -710,12 +806,12 @@ local function on_selected_entity_changed(event)
   }
 end
 
-local function on_player_removed(event)
+function R.on_player_removed(event)
   if stale() then return end
   clear_hover(event.player_index)
 end
 
-local function on_surface_deleted(event)
+function R.on_surface_deleted(event)
   if stale() then return end
   data.map[event.surface_index] = nil
   for uid, T in pairs(data.turrets) do
@@ -723,49 +819,21 @@ local function on_surface_deleted(event)
   end
 end
 
-local function on_dolly_moved(event)
+-- A tower moved by a script (Even Pickier Dollies, script_raised_teleported).
+function R.on_moved(entity)
   if stale() then return end
-  local entity = event.moved_entity
   if not (entity and entity.valid and entity.name == TURRET) then return end
   local T = data.turrets[entity.unit_number]
   if T then relocate(T) end
 end
 
-local function register_remote_events()
+-- Event id of Picker Dollies style moves, if such a mod is present.
+function R.dolly_event_id()
   local dollies = remote.interfaces["PickerDollies"]
   if dollies and dollies["dolly_moved_entity_id"] then
-    script.on_event(remote.call("PickerDollies", "dolly_moved_entity_id"), on_dolly_moved)
+    return remote.call("PickerDollies", "dolly_moved_entity_id")
   end
+  return nil
 end
 
--- Every non-ghost build: turrets are registered, buildings inside turret areas are watched.
-local built_filter = {{filter = "ghost", invert = true}}
-script.on_event(defines.events.on_built_entity, on_built, built_filter)
-script.on_event(defines.events.on_robot_built_entity, on_built, built_filter)
-script.on_event(defines.events.script_raised_built, on_built, built_filter)
-script.on_event(defines.events.script_raised_revive, on_built, built_filter)
-script.on_event(defines.events.on_space_platform_built_entity, on_built, built_filter)
-script.on_event(defines.events.on_entity_cloned, on_cloned,
-  {{filter = "name", name = TURRET}, {filter = "name", name = ENERGY}})
-script.on_event(defines.events.on_object_destroyed, on_object_destroyed)
-script.on_event(defines.events.on_tick, on_tick)
-script.on_event(defines.events.on_research_finished, on_research)
-script.on_event(defines.events.on_research_reversed, on_research)
-script.on_event(defines.events.on_technology_effects_reset, on_force_event)
-script.on_event(defines.events.on_force_reset, on_force_event)
-script.on_event(defines.events.on_selected_entity_changed, on_selected_entity_changed)
-script.on_event(defines.events.on_player_removed, on_player_removed)
-script.on_event(defines.events.on_surface_deleted, on_surface_deleted)
-script.on_event(defines.events.on_forces_merged, rebuild)
-
-script.on_init(function()
-  rebuild()
-  register_remote_events()
-end)
-
-script.on_load(function()
-  data = storage.rt
-  register_remote_events()
-end)
-
-script.on_configuration_changed(rebuild)
+return R

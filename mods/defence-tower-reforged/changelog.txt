@@ -1,0 +1,17 @@
+---------------------------------------------------------------------------------------------------
+Version: 9.112.0
+Date: 2026-10-21
+  Major Features:
+    - Defence Tower Reforged: one Paranoidal mod built from Repair Turret 9.0.6 (Klonan, Paranoidal fork) and King's Turret Shields 9.111.0 (Kingdud, Paranoidal fork). Both former mods are removed from the build; their histories are in history/.
+    - The repair turret is now the defense tower. It keeps its building, graphics, repair packs, beams, power and the repair upgrade branches (speed, beams, range); the IDs are kept, so towers and researched levels of saves stay.
+    - New research "Shield generation" (after the defense tower and the chemical science pack, 500 × automation, logistic, chemical and military science packs): every defense tower of the force protects the turrets in its square with an energy shield. A hit that would destroy a turret is absorbed, turret damage is repaired from the shield without repair packs. The tower does not protect itself.
+    - The shield capacity and regeneration branches (25 levels each, formulas of 1.1) now follow "Shield generation"; regeneration still needs the production science pack.
+  Changes:
+    - One zone for repair and shield: the tower square, ±7 tiles from the centre, +1 per range research level. The shield generator building, its radius setting and its recipe are removed.
+    - Turrets inside a shielded tower square are left to the shield: the repair beams and repair packs only repair other buildings, vehicles and characters, and turrets switched out of the shield with the toggle.
+    - The shield has its own hidden energy buffer under the tower, separate from the repair energy: an empty shield does not stop repairs and repairs do not take shield energy. Its charge bar and "no power" icon are shown on the tower.
+    - A turret inside several towers is paid for by the tower with the highest shield charge; the next one pays when it runs dry.
+    - Setting "Turret shares per tower shield" (default 20: one tower shield = 20 turret shields of 1.1).
+    - Commands /dtr-stats and /dtr-rebuild; remote interface "defence-tower".
+  Info:
+    - No migration: saves keep their towers and research; the shield state of King's Turret Shields and its generators are dropped.

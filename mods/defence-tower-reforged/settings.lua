@@ -71,21 +71,12 @@ data:extend({
 	},
 	{
 		type = "int-setting",
-		name = "kts-generator-radius",
-		setting_type = "startup",
-		default_value = 25,
-		minimum_value = 5,
-		maximum_value = 60,
-		order = "h-a",
-	},
-	{
-		type = "int-setting",
-		name = "kts-generator-share",
+		name = "kts-tower-share",
 		setting_type = "startup",
 		default_value = 20,
 		minimum_value = 1,
 		maximum_value = 1000,
-		order = "h-b",
+		order = "h-a",
 	},
 	{
 		type = "bool-setting",

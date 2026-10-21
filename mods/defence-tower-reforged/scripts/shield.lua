@@ -1,38 +1,37 @@
--- King's Turret Shields, Paranoidal fork: runtime of the shield generators (9.111.0).
+-- Defence tower: turret shields (from King's Turret Shields 1.110.0 by Kingdud; Paranoidal 9.111.0).
 --
--- A shield generator protects the eligible turrets of its force whose centre lies within RADIUS of
--- the generator centre. Its shield is one hidden electric-energy-interface under the building
--- (the "buffer"); the electric network recharges it without any Lua. The generator does not
--- protect itself.
+-- After "Shield generation" every defence tower of the force protects the eligible turrets of the force
+-- inside its square (the repair zone, +-range tiles from the centre, growing with the range research).
+-- Its shield is one hidden electric-energy-interface under the tower (the "buffer"); the electric
+-- network recharges it without any Lua. The tower does not protect itself.
 --
--- The engine delivers only the hits that would kill a covered turret (damage filter: turret type
--- AND final health <= 0). Such a hit is intercepted: the generator pays the whole hull and the
--- turret survives. Every other hit is left to the engine and repaired later from the generator:
--- each covered turret is looked at by a tick schedule, every HOT ticks while it keeps being
--- damaged, the gap doubling up to IDLE ticks once it is not. Cost therefore follows the turrets
--- under fire and the hits that would kill, not the number of hits (stress save 2026-10-21:
--- ~418 hits per tick, of which ~12-36 would kill depending on the repair period).
+-- The engine delivers only the hits that would kill a covered turret (damage filter: turret type AND
+-- final health <= 0). Such a hit is intercepted: the tower pays the whole hull and the turret
+-- survives. Every other hit is left to the engine and repaired later from the shield, without repair
+-- packs (the repair beams leave these turrets alone): each covered turret is looked at by a tick
+-- schedule, every HOT ticks while it keeps being damaged, the gap doubling up to IDLE ticks once it
+-- is not. Cost follows the turrets under fire and the hits that would kill, not the number of hits.
 --
--- Who pays for a turret inside several generators: the one with the highest cached charge
--- fraction. The cache (generator.est) is the buffer energy read at the generator's own look every
--- GEN_LOOK ticks and after every payment, so choosing costs no engine call; one read and one
--- write of the chosen buffer per payment (looks of one tick share one read/write per generator).
--- An emptied generator stops for BROKEN_TICKS; a payment it cannot make goes on to the next one.
+-- Who pays for a turret inside several towers: the one with the highest cached charge fraction. The
+-- cache (g.est) is the buffer energy read at the tower's own shield look every TOWER_LOOK ticks and
+-- after every payment, so choosing costs no engine call; one read and one write of the chosen buffer
+-- per payment (looks of one tick share one read/write per tower). An emptied tower stops for
+-- BROKEN_TICKS; a payment it cannot make goes on to the next one.
 --
 -- Engine costs measured on 2.0.77 (bench 2026-10-21): an event to a handler that reads it ~7 us,
 -- an entity property read/write 0.15-0.3 us, a health write that makes an entity fully healthy
--- ~5.7 us (hence turrets under fire are repaired to RECORD.top, just below their maximum, and
--- get the rest SUSTAIN ticks after the last damage).
+-- ~5.7 us (hence turrets under fire are repaired to t.top, just below their maximum, and get the
+-- rest SUSTAIN ticks after the last damage).
 local shared = require("kts_shared")
+
+local S = {}
 
 local cfg = shared.read(settings.startup)
 local J_PER_HP = cfg.kj_per_hp * 1000
 local MAX_LEVEL = cfg.research and cfg.max_level or 0
-local RADIUS = cfg.radius
-local R2 = RADIUS * RADIUS
 
 local TECH_BASE, TECH_SIZE, TECH_RATE = shared.tech_base, shared.tech_size, shared.tech_rate
-local TOOL, GEN, BUFFER_PREFIX = shared.tool, shared.generator, shared.buffer_prefix
+local TOOL, TOWER, BUFFER_PREFIX = shared.tool, shared.tower, shared.buffer_prefix
 local TURRET_TYPES = shared.turret_types
 local BAR, STEPS = shared.bar_short, shared.bar_short_steps
 local HIT, HIT_SMOKE = shared.hit_animation, shared.hit_smoke
@@ -42,58 +41,60 @@ local UNPLUGGED = "utility/electricity_icon_unplugged"
 
 local HOT = 3 -- ticks between looks at a turret damaged at its last look or just intercepted
 local IDLE = 300 -- longest gap between two looks at an undamaged turret
-local UNPAID = 60 -- longest gap between two looks at a damaged turret no generator can repair now
+local UNPAID = 60 -- longest gap between two looks at a damaged turret no tower can repair now
 local SUSTAIN = 60 -- ticks after the last seen damage a turret is kept eps below its maximum
-local GEN_LOOK = 30 -- ticks between two looks at a generator (cached charge, bar, power icon, dome)
-local BROKEN_TICKS = 10 -- an emptied generator neither repairs nor intercepts for this many ticks
+local TOWER_LOOK = 30 -- ticks between two shield looks at a tower (cached charge, bar, power icon)
+local BROKEN_TICKS = 10 -- an emptied tower neither repairs nor intercepts for this many ticks
 local MIN_SAVE = 1 -- health points; an intercept that cannot give back this much is not made
 local EMPTY = 1 -- J; a buffer below this counts as empty
 local SPREAD = 30 -- first looks at new records are spread over this many ticks
-local LOW = 0.25 -- charge fraction below which the dome shows "low"
 local FX_INTERVAL = 5 -- a turret gets at most one bubble update per this many ticks
 local EXTEND_BEFORE = 10 -- a bubble is extended when fewer ticks than this are left
 
-local ENTITY = defines.target_type.entity
 local EAST, WEST, SOUTH = defines.direction.east, defines.direction.west, defines.direction.south
 local KIND_PLAIN, KIND_FLUID, KIND_LASER = 1, 2, 3
-local DOME_COLORS = {
-	{r = 0.1, g = 0.35, b = 0.6, a = 0.6}, -- charged
-	{r = 0.6, g = 0.4, b = 0.05, a = 0.6}, -- low
-	{r = 0.6, g = 0.1, b = 0.1, a = 0.6}, -- empty or broken
-	{r = 0.25, g = 0.25, b = 0.25, a = 0.5}, -- off (research)
-}
 local BAR_OFFSET = {0, 0.75}
-local PLUG_OFFSET = {0, -0.4}
+local PLUG_OFFSET = {0.6, 0.25}
 
-local ceil, min, max = math.ceil, math.min, math.max
+local ceil, min, max, abs = math.ceil, math.min, math.max, math.abs
 
--- The only place that registers handlers (the bench build swaps this line for its profiler).
-local on_event = script.on_event
+local TURRET_TYPE = {}
+for _, t in ipairs(TURRET_TYPES) do
+	TURRET_TYPE[t] = true
+end
+
+-- Links to the repair side (set by control.lua).
+local hooks = {
+	range_of = function() return 7 end, -- (force_index) half side of the tower square
+	towers_at = function() return nil end, -- (surface_index, x, y) {[uid] = repair record} or nil
+	force_changed = function() end, -- (force_index, on) the shield of a force was switched on/off
+	turret_off = function() end, -- (turret) taken out of the shield by the toggle
+	turret_on = function() end, -- (turret) given back to the shield by the toggle
+}
+
+function S.set_hooks(h)
+	for k, v in pairs(h) do
+		hooks[k] = v
+	end
+end
 
 local animated = settings.global["kts-animated-effect"].value
 
--- Storage layout of the generators. There is no migration: storage of any other layout (the
--- per-turret shields of 9.110.x) is dropped on configuration change, nothing is carried over.
-local LAYOUT = 2
-
--- Bound storage tables (bind()).
-local gens -- [generator unit_number] = generator record, see add_gen()
+-- Bound storage tables (bind()), all in storage.shield.
+local gens -- [tower unit_number] = tower record, see add_gen()
 local turrets -- [turret unit_number] = turret record, see new_record()
 local disabled -- [turret unit_number] = {turret = LuaEntity, icon = LuaRenderObject}
 local levels -- [force index] = {on = bool, size = int, rate = int, name = buffer prototype}
-local buckets -- [tick] = array of keys: turret unit_number, or -generator unit_number
-local stats -- counters, see init_storage()
-
-local ticking = false
-local on_tick
+local buckets -- [tick] = array of keys: turret unit_number, or -tower unit_number
+local stats -- counters, see S.init_storage()
 
 local function bind()
-	gens = storage.gens
-	turrets = storage.turrets
-	disabled = storage.disabled
-	levels = storage.levels
-	buckets = storage.buckets
-	stats = storage.stats
+	local s = storage.shield
+	if s then
+		gens, turrets, disabled, levels, buckets, stats = s.gens, s.turrets, s.disabled, s.levels, s.buckets, s.stats
+	else
+		gens, turrets, disabled, levels, buckets, stats = nil, nil, nil, nil, nil, nil
+	end
 end
 
 ---------------------------------------------------------------------------------------------------
@@ -116,7 +117,7 @@ local function eligible(name)
 	local v = eligible_cache[name]
 	if v == nil then
 		local p = prototypes.entity[name]
-		v = p ~= nil and not p.hidden and p.has_flag("player-creation")
+		v = p ~= nil and TURRET_TYPE[p.type] == true and not p.hidden and p.has_flag("player-creation")
 		eligible_cache[name] = v
 	end
 	return v
@@ -191,26 +192,25 @@ local function level(force_index)
 	return lv
 end
 
----------------------------------------------------------------------------------------------------
--- Tick schedule.
----------------------------------------------------------------------------------------------------
-local function set_ticking(on)
-	if on ~= ticking then
-		ticking = on
-		on_event(defines.events.on_tick, on and on_tick or nil)
+-- For the repair side: is this entity a turret the shield repairs (shield on for its force, eligible,
+-- not switched off)? name: entity.name, already read by the caller.
+function S.handles(entity, name)
+	if not (levels and eligible(name)) then
+		return false
 	end
+	return level(entity.force_index).on and not disabled[entity.unit_number]
 end
 
--- key: turret unit_number, or -unit_number of a generator. tick is always in the future.
+---------------------------------------------------------------------------------------------------
+-- Tick schedule. on_tick is always registered (the repair side needs it too).
+---------------------------------------------------------------------------------------------------
+-- key: turret unit_number, or -unit_number of a tower. tick is always in the future.
 local function schedule(key, tick)
 	local list = buckets[tick]
 	if list then
 		list[#list + 1] = key
 	else
 		buckets[tick] = {key}
-	end
-	if not ticking then
-		set_ticking(true)
 	end
 end
 
@@ -229,9 +229,8 @@ local function hot(t, tick)
 end
 
 ---------------------------------------------------------------------------------------------------
--- Payments. choose() picks the covering generator with the highest cached charge fraction;
--- take() pays from it through a per-call cache (one buffer read and one write per generator,
--- written by flush()).
+-- Payments. choose() picks the covering tower with the highest cached charge fraction; take() pays
+-- from it through a per-call cache (one buffer read and one write per tower, written by flush()).
 ---------------------------------------------------------------------------------------------------
 local cache_e, cache_list = {}, {}
 
@@ -255,7 +254,7 @@ local function take(g, hp, tick)
 	if not e then
 		local buf = g.buf
 		if not buf.valid then
-			g.broken = tick + BROKEN_TICKS -- the generator look builds a new buffer
+			g.broken = tick + BROKEN_TICKS -- the tower look builds a new buffer
 			return 0
 		end
 		e = buf.energy
@@ -284,8 +283,8 @@ local function flush()
 end
 
 -- Pays up to hp health points for turret record t; returns the points paid.
--- At most one attempt per covering generator: take() marks a generator that cannot pay in full
--- as broken, so choose() moves on; the bound keeps the loop finite whatever take() does.
+-- At most one attempt per covering tower: take() marks a tower that cannot pay in full as broken,
+-- so choose() moves on; the bound keeps the loop finite whatever take() does.
 local function pay(t, hp, tick)
 	local paid, n = 0, 0
 	for _ = 1, #t.gens do
@@ -308,7 +307,7 @@ local function pay(t, hp, tick)
 end
 
 ---------------------------------------------------------------------------------------------------
--- Turret records and coverage. t.gens: units of the covering generators by distance (then unit).
+-- Turret records and coverage. t.gens: units of the covering towers by distance (then unit).
 ---------------------------------------------------------------------------------------------------
 local function set_limits(t, turret)
 	local max_health = turret.max_health
@@ -392,8 +391,13 @@ local function drop(t)
 	end
 end
 
--- A turret that is eligible, not switched off and inside at least one generator of its force gets
--- a record. Generators are few, so they are looked up in Lua.
+-- The tower square, the same test as the repair side: the turret centre within +-range.
+local function inside(g, x, y, r)
+	return abs(x - g.x) <= r and abs(y - g.y) <= r
+end
+
+-- A turret that is eligible, not switched off and inside at least one shielding tower of its force
+-- gets a record. The towers near it come from the chunk map of the repair side.
 local function cover_turret(turret, tick)
 	local unit = turret.unit_number
 	local t = turrets[unit]
@@ -402,14 +406,17 @@ local function cover_turret(turret, tick)
 	end
 	local p = turret.position
 	local s, f = turret.surface_index, turret.force_index
+	local list = hooks.towers_at(s, p.x, p.y)
+	if not list then
+		return nil
+	end
+	local r = hooks.range_of(f)
 	local found
-	for _, g in pairs(gens) do
-		if g.surface == s and g.force == f then
-			local dx, dy = g.x - p.x, g.y - p.y
-			if dx * dx + dy * dy <= R2 then
-				found = found or {}
-				found[#found + 1] = g
-			end
+	for uid in pairs(list) do
+		local g = gens[uid]
+		if g and g.on and g.force == f and g.surface == s and inside(g, p.x, p.y, r) then
+			found = found or {}
+			found[#found + 1] = g
 		end
 	end
 	if not found then
@@ -422,17 +429,18 @@ local function cover_turret(turret, tick)
 	return t
 end
 
+-- Called only for towers whose shield is on.
 local function cover_gen(g, tick)
+	local r = hooks.range_of(g.force)
 	local found = g.entity.surface.find_entities_filtered({
-		position = {g.x, g.y}, radius = RADIUS + 0.01, type = TURRET_TYPES, force = g.force,
+		area = {{g.x - r, g.y - r}, {g.x + r, g.y + r}}, type = TURRET_TYPES, force = g.force,
 	})
 	for i = 1, #found do
 		local turret = found[i]
 		local unit = turret.unit_number
 		if not disabled[unit] and eligible(turret.name) then
 			local p = turret.position
-			local dx, dy = g.x - p.x, g.y - p.y
-			if dx * dx + dy * dy <= R2 then
+			if inside(g, p.x, p.y, r) then
 				link(turrets[unit] or new_record(turret, tick), g)
 			end
 		end
@@ -440,7 +448,7 @@ local function cover_gen(g, tick)
 end
 
 ---------------------------------------------------------------------------------------------------
--- Generators.
+-- Towers.
 ---------------------------------------------------------------------------------------------------
 local function destroy_render(o)
 	if o and o.valid then
@@ -498,14 +506,11 @@ local function add_gen(entity, energy, tick)
 	gens[unit] = g
 	script.register_on_object_destroyed(entity)
 	set_level(g, level(g.force), energy or 0)
-	g.dome = rendering.draw_circle({
-		color = DOME_COLORS[g.on and 1 or 4], radius = RADIUS, width = 2, filled = false, target = entity,
-		surface = g.surface, draw_on_ground = true, only_in_alt_mode = true,
-	})
-	g.band = g.on and 1 or 4
-	cover_gen(g, tick)
-	g.due = tick + 1
-	schedule(-unit, g.due)
+	if g.on then
+		cover_gen(g, tick)
+		g.due = tick + 1
+		schedule(-unit, g.due)
+	end
 	return g
 end
 
@@ -520,7 +525,6 @@ local function remove_gen(unit)
 	if buf and buf.valid then
 		buf.destroy()
 	end
-	destroy_render(g.dome)
 	destroy_render(g.bar)
 	destroy_render(g.plug)
 	for tu in pairs(g.members) do
@@ -535,7 +539,7 @@ local function remove_gen(unit)
 	g.members, g.count = {}, 0
 end
 
--- Generator look: cached charge, charge bar, "no power" icon, dome colour.
+-- Shield look at a tower: cached charge, charge bar, "no power" icon.
 local function look_gen(g, tick)
 	g.due = nil
 	local entity = g.entity
@@ -543,7 +547,7 @@ local function look_gen(g, tick)
 		return -- on_object_destroyed removes the record
 	end
 	if not g.on then
-		return -- research reversed; relevel() schedules the next look
+		return -- shield research reversed; relevel() schedules the next look
 	end
 	local buf = g.buf
 	if not buf.valid then
@@ -585,21 +589,13 @@ local function look_gen(g, tick)
 			g.plug = nil
 		end
 	end
-	local band = (g.broken >= tick or energy < EMPTY) and 3 or (energy < LOW * cap and 2 or 1)
-	if band ~= g.band then
-		local dome = g.dome
-		if dome and dome.valid then
-			dome.color = DOME_COLORS[band]
-		end
-		g.band = band
-	end
 	g.last, g.paid = energy, 0
-	g.due = tick + GEN_LOOK
+	g.due = tick + TOWER_LOOK
 	schedule(-g.unit, g.due)
 end
 
 ---------------------------------------------------------------------------------------------------
--- Turret look: repair from the generators.
+-- Turret look: repair from the towers.
 ---------------------------------------------------------------------------------------------------
 local function look_turret(t, tick)
 	t.due = nil
@@ -621,7 +617,7 @@ local function look_turret(t, tick)
 			stats.repaired_hp = stats.repaired_hp + paid
 			t.period = HOT
 		else
-			-- Empty, broken or switched off generators: look less often until one can pay.
+			-- Empty, broken or switched off towers: look less often until one can pay.
 			t.period = min(UNPAID, t.period * 2)
 		end
 	else
@@ -637,36 +633,34 @@ local function look_turret(t, tick)
 	look_at(t, tick + t.period)
 end
 
-on_tick = function(event)
+function S.on_tick(event)
 	local tick = event.tick
 	local list = buckets[tick]
-	if list then
-		buckets[tick] = nil
-		local later
-		for i = 1, #list do
-			local key = list[i]
-			if key > 0 then
-				local t = turrets[key]
-				if t and t.due == tick then
-					look_turret(t, tick)
-				end
-			else
-				local g = gens[-key]
-				if g and g.due == tick then
-					later = later or {}
-					later[#later + 1] = g
-				end
+	if not list then
+		return
+	end
+	buckets[tick] = nil
+	local later
+	for i = 1, #list do
+		local key = list[i]
+		if key > 0 then
+			local t = turrets[key]
+			if t and t.due == tick then
+				look_turret(t, tick)
 			end
-		end
-		flush()
-		if later then
-			for i = 1, #later do
-				look_gen(later[i], tick)
+		else
+			local g = gens[-key]
+			if g and g.due == tick then
+				later = later or {}
+				later[#later + 1] = g
 			end
 		end
 	end
-	if next(buckets) == nil then
-		set_ticking(false)
+	flush()
+	if later then
+		for i = 1, #later do
+			look_gen(later[i], tick)
+		end
 	end
 end
 
@@ -718,9 +712,9 @@ local function hit_effect(t, turret, tick)
 end
 
 -- The engine has already applied the hit: the turret has 0 health and dies after the handlers
--- unless one gives health back. The generator pays the whole hull up to t.top (it also covers the
--- not yet repaired damage of earlier hits).
-local function on_lethal(event)
+-- unless one gives health back. The tower pays the whole hull up to t.top (it also covers the not
+-- yet repaired damage of earlier hits).
+function S.on_lethal(event)
 	local turret = event.entity
 	if not turret.valid then
 		return -- destroyed by an earlier handler of another mod
@@ -748,8 +742,14 @@ local function on_lethal(event)
 	end
 end
 
+S.lethal_filter = {}
+for _, t in ipairs(TURRET_TYPES) do
+	S.lethal_filter[#S.lethal_filter + 1] = {filter = "type", type = t}
+	S.lethal_filter[#S.lethal_filter + 1] = {filter = "final-health", comparison = "<=", value = 0, mode = "and"}
+end
+
 ---------------------------------------------------------------------------------------------------
--- Switching turrets out of the protection and back (shortcut tool).
+-- Switching turrets out of the shield and back (shortcut tool).
 ---------------------------------------------------------------------------------------------------
 local function off_icon(turret)
 	return rendering.draw_sprite({
@@ -769,6 +769,7 @@ local function disable(turret)
 	end
 	disabled[unit] = {turret = turret, icon = off_icon(turret)}
 	script.register_on_object_destroyed(turret)
+	hooks.turret_off(turret)
 end
 
 local function enable(turret, tick)
@@ -779,6 +780,7 @@ local function enable(turret, tick)
 	end
 	destroy_render(entry.icon)
 	disabled[unit] = nil
+	hooks.turret_on(turret)
 	cover_turret(turret, tick)
 end
 
@@ -799,6 +801,14 @@ local function on_selected(event, on)
 	end
 end
 
+function S.on_player_selected_area(event)
+	on_selected(event, false)
+end
+
+function S.on_player_alt_selected_area(event)
+	on_selected(event, true)
+end
+
 ---------------------------------------------------------------------------------------------------
 -- Building, replacing, moving.
 ---------------------------------------------------------------------------------------------------
@@ -816,17 +826,17 @@ local function stash(turret, tick)
 	end
 	destroy_render(entry.icon)
 	disabled[unit] = nil
-	local carry = storage.carry
+	local carry = storage.shield.carry
 	if carry.tick ~= tick then
 		carry = {tick = tick}
-		storage.carry = carry
+		storage.shield.carry = carry
 	end
 	local p = turret.position
 	carry[#carry + 1] = {surface = turret.surface_index, x = p.x, y = p.y, off = true}
 end
 
 local function take_carried(turret, tick)
-	local carry = storage.carry
+	local carry = storage.shield.carry
 	if carry.tick ~= tick then
 		return nil
 	end
@@ -850,57 +860,60 @@ local function built_turret(turret, tick, carried)
 	cover_turret(turret, tick)
 end
 
-local function on_built(event)
-	local entity = event.entity
+-- Every non-ghost build reaches here (the repair side needs all of them); only towers and turrets matter.
+function S.on_built(event)
+	local entity = event.entity or event.destination
 	if not (entity and entity.valid) then
 		return
 	end
-	if entity.name == GEN then
+	local name = entity.name
+	if name == TOWER then
 		add_gen(entity, 0, event.tick)
-	else
+	elseif eligible(name) then
 		built_turret(entity, event.tick, nil)
 	end
 end
 
-local function on_script_built(event)
+function S.on_script_built(event)
 	local entity = event.entity
 	if not (entity and entity.valid) then
 		return
 	end
-	if entity.name == GEN then
+	local name = entity.name
+	if name == TOWER then
 		add_gen(entity, 0, event.tick)
-	else
+	elseif eligible(name) then
 		built_turret(entity, event.tick, take_carried(entity, event.tick))
 	end
 end
 
-local function on_script_destroy(event)
+function S.on_script_destroy(event)
 	local entity = event.entity
 	if not (entity and entity.valid) then
 		return
 	end
-	if entity.name == GEN then
+	if entity.name == TOWER then
 		remove_gen(entity.unit_number)
-	else
+	elseif eligible(entity.name) then
 		stash(entity, event.tick)
 	end
 end
 
-local function on_cloned(event)
+function S.on_cloned(event)
 	local clone = event.destination
-	if not clone.valid then
+	if not (clone and clone.valid) then
 		return
 	end
 	local name = clone.name
 	if clone.type == "electric-energy-interface" then
-		-- A buffer copied by an area clone has no owner; the cloned generator gets its own.
+		-- A buffer copied by an area clone has no owner; the cloned tower gets its own.
 		if name:sub(1, #BUFFER_PREFIX) == BUFFER_PREFIX then
 			clone.destroy()
 		end
 		return
 	end
 	local source = event.source
-	if name == GEN then
+	if name == TOWER then
 		local energy = 0
 		if source.valid then
 			local g = gens[source.unit_number]
@@ -911,31 +924,37 @@ local function on_cloned(event)
 		add_gen(clone, energy, event.tick)
 		return
 	end
-	built_turret(clone, event.tick, {off = source.valid and disabled[source.unit_number] ~= nil})
+	if eligible(name) then
+		built_turret(clone, event.tick, {off = source.valid and disabled[source.unit_number] ~= nil})
+	end
 end
 
-local function on_teleported(event)
-	local entity = event.entity
-	if not entity.valid then
+-- A tower or a turret moved by a script (script_raised_teleported, Even Pickier Dollies).
+function S.on_moved(entity, tick)
+	if not (entity and entity.valid) then
 		return
 	end
 	local unit = entity.unit_number
-	if entity.name == GEN then
+	local name = entity.name
+	if name == TOWER then
 		local g = gens[unit]
 		local energy = g and g.buf and g.buf.valid and g.buf.energy or 0
 		remove_gen(unit)
-		add_gen(entity, energy, event.tick)
+		add_gen(entity, energy, tick)
+		return
+	end
+	if not eligible(name) then
 		return
 	end
 	local t = turrets[unit]
 	if t then
 		drop(t)
 	end
-	cover_turret(entity, event.tick)
+	cover_turret(entity, tick)
 end
 
-local function on_object_destroyed(event)
-	if event.type ~= ENTITY then
+function S.on_object_destroyed(event)
+	if event.type ~= defines.target_type.entity then
 		return
 	end
 	local unit = event.useful_id
@@ -946,7 +965,7 @@ local function on_object_destroyed(event)
 end
 
 ---------------------------------------------------------------------------------------------------
--- Research and forces.
+-- Research, forces, the zone size.
 ---------------------------------------------------------------------------------------------------
 local function relevel(force)
 	local fi = force.index
@@ -957,43 +976,104 @@ local function relevel(force)
 		return
 	end
 	local tick = game.tick
+	if not lv.on then
+		for _, t in pairs(turrets) do
+			if t.force == fi then
+				drop(t)
+			end
+		end
+	end
 	for _, g in pairs(gens) do
 		if g.force == fi then
 			local was = g.on
 			set_level(g, lv, nil)
 			if g.on and not was then
 				g.last, g.paid = -1, 0
+				cover_gen(g, tick)
 				g.due = tick + 1
 				schedule(-g.unit, g.due)
 			elseif not g.on then
 				destroy_render(g.bar)
 				destroy_render(g.plug)
 				g.bar, g.plug, g.step = nil, nil, -1
-				local dome = g.dome
-				if dome and dome.valid then
-					dome.color = DOME_COLORS[4]
-				end
-				g.band = 4
 			end
+		end
+	end
+	if (old and old.on or false) ~= lv.on then
+		hooks.force_changed(fi, lv.on)
+	end
+end
+
+function S.on_research(event)
+	local research = event.research
+	local name = research.name
+	if name == TECH_BASE or name == TECH_SIZE or name == TECH_RATE then
+		relevel(research.force)
+	end
+end
+
+function S.on_force_event(event)
+	relevel(event.force)
+end
+
+function S.on_force_created(event)
+	levels[event.force.index] = compute_level(event.force)
+end
+
+-- The range research changed the square of every tower of the force: coverage is built again.
+function S.range_changed(force_index)
+	local tick = game.tick
+	for _, t in pairs(turrets) do
+		if t.force == force_index then
+			drop(t)
+		end
+	end
+	for _, g in pairs(gens) do
+		if g.force == force_index and g.on then
+			cover_gen(g, tick)
 		end
 	end
 end
 
-local function on_research(event)
-	local name = event.research.name
-	if name == TECH_BASE or name == TECH_SIZE or name == TECH_RATE then
-		relevel(event.research.force)
+function S.on_runtime_mod_setting_changed(event)
+	if event.setting == "kts-animated-effect" then
+		animated = settings.global["kts-animated-effect"].value
 	end
 end
 
-local function on_force_changed(event)
-	relevel(event.force)
+---------------------------------------------------------------------------------------------------
+-- Lifecycle. control.lua: init_storage() + compute_levels(), then the repair rebuild, then
+-- full_rescan() (coverage needs the repair zones).
+---------------------------------------------------------------------------------------------------
+local STAT_KEYS = {"saved", "partial", "lost", "looks", "repairs", "repaired_hp", "giveback", "fallback", "broken"}
+
+function S.init_storage()
+	local s = storage.shield or {}
+	storage.shield = s
+	s.gens = s.gens or {}
+	s.turrets = s.turrets or {}
+	s.disabled = s.disabled or {}
+	s.levels = s.levels or {}
+	s.buckets = s.buckets or {}
+	s.carry = s.carry or {tick = -1}
+	s.stats = s.stats or {}
+	for _, k in ipairs(STAT_KEYS) do
+		s.stats[k] = s.stats[k] or 0
+	end
+	bind()
 end
 
----------------------------------------------------------------------------------------------------
--- Rebuild everything (configuration change, /kts-rebuild, forces merged).
----------------------------------------------------------------------------------------------------
-local function full_rescan()
+function S.compute_levels()
+	for fi in pairs(levels) do
+		levels[fi] = nil
+	end
+	for _, force in pairs(game.forces) do
+		levels[force.index] = compute_level(force)
+	end
+end
+
+-- Rebuild everything from the map: towers, buffers (also removes ownerless ones), coverage.
+function S.full_rescan()
 	local tick = game.tick
 	for unit, entry in pairs(disabled) do
 		if not entry.turret.valid then
@@ -1008,16 +1088,13 @@ local function full_rescan()
 		if g.buf and g.buf.valid then
 			energy_of[unit] = g.buf.energy
 		end
-		destroy_render(g.dome)
 		destroy_render(g.bar)
 		destroy_render(g.plug)
 	end
-	storage.gens, storage.turrets, storage.buckets = {}, {}, {}
-	for fi in pairs(storage.levels) do
-		storage.levels[fi] = nil
-	end
+	local s = storage.shield
+	s.gens, s.turrets, s.buckets = {}, {}, {}
 	bind()
-	-- Every buffer is rebuilt from its generator; this also removes ownerless ones.
+	S.compute_levels()
 	local names = buffer_names()
 	for _, surface in pairs(game.surfaces) do
 		local found = surface.find_entities_filtered({type = "electric-energy-interface", name = names})
@@ -1025,121 +1102,27 @@ local function full_rescan()
 			found[i].destroy()
 		end
 	end
-	for _, force in pairs(game.forces) do
-		levels[force.index] = compute_level(force)
-	end
 	for _, surface in pairs(game.surfaces) do
-		local found = surface.find_entities_filtered({name = GEN})
+		local found = surface.find_entities_filtered({name = TOWER})
 		for i = 1, #found do
 			local e = found[i]
 			add_gen(e, energy_of[e.unit_number] or 0, tick)
 		end
 	end
-	if next(buckets) == nil then
-		set_ticking(false)
-	end
 end
 
----------------------------------------------------------------------------------------------------
--- Lifecycle.
----------------------------------------------------------------------------------------------------
-local STAT_KEYS = {"saved", "partial", "lost", "looks", "repairs", "repaired_hp", "giveback", "fallback", "broken"}
-
-local function init_storage()
-	storage.gens = storage.gens or {}
-	storage.turrets = storage.turrets or {}
-	storage.disabled = storage.disabled or {}
-	storage.levels = storage.levels or {}
-	storage.buckets = storage.buckets or {}
-	storage.carry = storage.carry or {tick = -1}
-	storage.stats = storage.stats or {}
-	for _, k in ipairs(STAT_KEYS) do
-		storage.stats[k] = storage.stats[k] or 0
-	end
+function S.on_load()
 	bind()
 end
 
--- Storage of another layout (9.110.x per-turret shields) is dropped together with the render
--- objects of this mod, so that such a save loads without errors. Not a migration: nothing is kept.
-local function drop_foreign_layout()
-	if storage.version == LAYOUT then
-		return
-	end
-	for k in pairs(storage) do
-		storage[k] = nil
-	end
-	rendering.clear(script.mod_name)
-	storage.version = LAYOUT
-end
-
-script.on_init(function()
-	init_storage()
-	storage.version = LAYOUT
-	full_rescan()
-end)
-
-script.on_load(function()
-	bind()
-	if storage.version == LAYOUT and next(buckets) ~= nil then
-		set_ticking(true)
-	end
-end)
-
-script.on_configuration_changed(function()
-	drop_foreign_layout()
-	init_storage()
-	full_rescan()
-end)
-
-on_event(defines.events.on_runtime_mod_setting_changed, function(event)
-	if event.setting == "kts-animated-effect" then
-		animated = settings.global["kts-animated-effect"].value
-	end
-end)
-
-local lethal_filter, built_filter = {}, {}
-for _, t in ipairs(TURRET_TYPES) do
-	lethal_filter[#lethal_filter + 1] = {filter = "type", type = t}
-	lethal_filter[#lethal_filter + 1] = {filter = "final-health", comparison = "<=", value = 0, mode = "and"}
-	built_filter[#built_filter + 1] = {filter = "type", type = t}
-end
-built_filter[#built_filter + 1] = {filter = "name", name = GEN}
-local clone_filter = {{filter = "type", type = "electric-energy-interface"}}
-for _, f in ipairs(built_filter) do
-	clone_filter[#clone_filter + 1] = f
-end
-
-on_event(defines.events.on_entity_damaged, on_lethal, lethal_filter)
-on_event(defines.events.on_built_entity, on_built, built_filter)
-on_event(defines.events.on_robot_built_entity, on_built, built_filter)
-on_event(defines.events.script_raised_built, on_script_built, built_filter)
-on_event(defines.events.script_raised_revive, on_script_built, built_filter)
-on_event(defines.events.script_raised_destroy, on_script_destroy, built_filter)
-on_event(defines.events.script_raised_teleported, on_teleported, built_filter)
-on_event(defines.events.on_entity_cloned, on_cloned, clone_filter)
-on_event(defines.events.on_object_destroyed, on_object_destroyed)
-on_event(defines.events.on_player_selected_area, function(event) on_selected(event, false) end)
-on_event(defines.events.on_player_alt_selected_area, function(event) on_selected(event, true) end)
-on_event(defines.events.on_research_finished, on_research)
-on_event(defines.events.on_research_reversed, on_research)
-on_event(defines.events.on_technology_effects_reset, on_force_changed)
-on_event(defines.events.on_force_reset, on_force_changed)
-on_event(defines.events.on_forces_merged, function() full_rescan() end)
-on_event(defines.events.on_force_created, function(event)
-	levels[event.force.index] = compute_level(event.force)
-end)
-
 ---------------------------------------------------------------------------------------------------
--- Commands and the remote interface.
+-- Numbers for the command and the remote interface.
 ---------------------------------------------------------------------------------------------------
-local function fmt(x)
-	return string.format("%.1f", x)
-end
-
-local function counts(force_index)
+-- force_index nil: all forces. Returns towers with a shield, protected turrets, stored J.
+function S.counts(force_index)
 	local n_gens, n_turrets, energy = 0, 0, 0
 	for _, g in pairs(gens) do
-		if not force_index or g.force == force_index then
+		if g.on and (not force_index or g.force == force_index) then
 			n_gens = n_gens + 1
 			energy = energy + g.est
 		end
@@ -1152,44 +1135,23 @@ local function counts(force_index)
 	return n_gens, n_turrets, energy
 end
 
-commands.add_command("kts-stats", {"kts.command-stats"}, function(command)
-	local player = command.player_index and game.get_player(command.player_index)
-	local force = player and player.force or game.forces.player
-	local print = player and player.print or game.print
-	local lv = level(force.index)
+-- Shield values of a force: nil if its shield is off, else the level and the buffer stats.
+function S.force_info(force_index)
+	local lv = level(force_index)
 	if not lv.on then
-		print({"kts.stats-off"})
-		return
+		return nil
 	end
-	local st = stats_of(lv)
-	local n_gens, n_turrets, energy = counts(force.index)
-	print({
-		"kts.stats", fmt(st.hp), fmt(st.hps), fmt(st.drain / 1000), fmt(st.recharge / 1000), RADIUS,
-		n_gens, n_turrets, fmt(energy / J_PER_HP), lv.size, lv.rate, stats.saved, stats.repairs,
-	})
-end)
+	return lv, stats_of(lv)
+end
 
-commands.add_command("kts-rebuild", {"kts.command-rebuild"}, function(command)
-	local player = command.player_index and game.get_player(command.player_index)
-	if player and not player.admin then
-		player.print({"kts.admin-only"})
-		return
+function S.stats()
+	local out = {}
+	for k, v in pairs(stats) do
+		out[k] = v
 	end
-	full_rescan()
-	local n_gens, n_turrets = counts(nil)
-	game.print({"kts.rebuilt", n_gens, n_turrets})
-end)
+	return out
+end
 
-remote.add_interface("kts-shields", {
-	-- Counters since the map started using generators, plus current record counts.
-	stats = function()
-		local out = {}
-		if stats then
-			for k, v in pairs(stats) do
-				out[k] = v
-			end
-			out.generators, out.turrets = counts(nil)
-		end
-		return out
-	end,
-})
+S.J_PER_HP = J_PER_HP
+
+return S

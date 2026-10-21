@@ -1,5 +1,6 @@
--- Shield switch: select turrets to take them out of the protection of shield generators,
--- alt-select to give it back. Spawned by a shortcut, never stored in inventories.
+-- Shield switch: select turrets to take them out of the shield of the defence towers (the repair
+-- beams look after them then), alt-select to give it back. Spawned by a shortcut, never stored in
+-- inventories.
 local shared = require("kts_shared")
 
 local cfg = shared.read(settings.startup)

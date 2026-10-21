@@ -1,22 +1,22 @@
--- Names and formulas shared by the data stage (prototypes) and the control stage (runtime).
+-- Shield names and formulas shared by the data stage (prototypes) and the control stage (runtime).
 -- Everything here is a pure function of the startup settings, so it is identical on every peer.
+-- The repair side of the defence tower has its own constants in shared.lua.
 local M = {}
 
-M.root = "__KingsTurret-Shields__"
-M.tech_base = "turret-shields-base"
+M.root = "__defence-tower-reforged__"
+M.tower = "repair-turret" -- the defence tower (container); the ID of Repair Turret is kept
+M.tech_base = "turret-shields-base" -- "Shield generation"
 M.tech_size = "turret-shields-size"
 M.tech_rate = "turret-shields-speed"
 M.tool = "kts-shield-toggle"
-M.generator = "kts-shield-generator" -- item, recipe and the visible building
-M.buffer_prefix = "kts-gen-" -- hidden electric-energy-interface of a generator: kts-gen-<size>-<rate>
-M.bar_short = "kts-bar-" -- sprites kts-bar-0 .. kts-bar-9 (generator charge bar)
+M.buffer_prefix = "kts-gen-" -- hidden electric-energy-interface of a tower shield: kts-gen-<size>-<rate>
+M.bar_short = "kts-bar-" -- sprites kts-bar-0 .. kts-bar-9 (shield charge bar on the tower)
 M.bar_short_steps = 9
 M.hit_animation = "kts-shield-hit"
 M.hit_frames = 9
 M.hit_speed = 0.3 -- frames per tick, the same as the 1.1 smoke
 M.hit_smoke = "kts-shield-smoke"
 M.turret_types = {"ammo-turret", "electric-turret", "fluid-turret"}
-M.generator_size = 2 -- tiles; the hidden buffer covers the same footprint (poles reaching any tile power it)
 
 -- Upper bound for generated energy values: absurd setting combinations (100 levels with one step
 -- per order of magnitude) would otherwise overflow into "inf" prototype strings.
@@ -35,8 +35,7 @@ function M.read(startup)
 		size_steps = value("kts-size-steps"),
 		rate_steps = value("kts-rate-steps"),
 		max_level = value("kts-max-level"),
-		radius = value("kts-generator-radius"),
-		share = value("kts-generator-share"),
+		share = value("kts-tower-share"),
 	}
 end
 
@@ -54,7 +53,7 @@ function M.buffer_name(size, rate)
 	return M.buffer_prefix .. size .. "-" .. rate
 end
 
--- Numbers of one generator for the given completed levels of the size and the recharge
+-- Shield of one tower for the given completed levels of the capacity and the regeneration
 -- technologies: the shields of cfg.share turrets of the 1.1 mod pooled in one buffer.
 -- hp: shield points; hps: recharge in points per second; buffer: J; recharge, drain: W.
 function M.stats(cfg, size, rate)
