@@ -5,8 +5,6 @@ local D = {}
 
 -- Пиксельно одинаковые файлы: копия -> канонический файл (мод канонического файла).
 D.file_remap = {
-	["__Aircraft-space-age__/graphics/entity/flying_fortress/hr-flying_fortress_spritesheet-light.png"] = { "__Aircraft-space-age__/graphics/entity/jet/hr-jet_spritesheet-light.png", "Aircraft-space-age" },
-	["__Aircraft-space-age__/graphics/entity/flying_fortress/hr-flying_fortress_spritesheet-shadow.png"] = { "__Aircraft-space-age__/graphics/entity/jet/hr-jet_spritesheet-shadow.png", "Aircraft-space-age" },
 	["__Bio_Industries_2__/graphics/entities/remnants/wooden_fence_remnant.png"] = { "__Bio_Industries_2__/graphics/entities/remnants/woodpipe_remnant.png", "Bio_Industries_2" },
 	["__Bio_Industries_2__/graphics/icons/Seedling1.png"] = { "__Bio_Industries_2__/graphics/icons/Seedling.png", "Bio_Industries_2" },
 	["__Bio_Industries_2__/graphics/icons/Woodpulp_raw-wood.png"] = { "__Bio_Industries_2__/graphics/icons/woodpulp_64.png", "Bio_Industries_2" },
