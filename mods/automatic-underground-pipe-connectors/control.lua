@@ -10,17 +10,34 @@ local undo = require("lib.undo")
 ---@type Storage
 storage=storage
 
---- Lookup table from underground pipe entity to the equivalent pipe entity and item, based on recipes
----@alias PipeLookupEntry { item:string, entity:string }
-storage.pipe_lookup = storage.pipe_lookup or {}
+-- Both tables are created in on_init/on_configuration_changed (rebuild_index). Writing `storage`
+-- from the main chunk did nothing useful: when a save loads, storage is replaced after it runs.
 
 --- Lookup table from underground pipe entity to the equivalent pipe entity and item, based on recipes
+---@alias PipeLookupEntry { item:string, entity:string }
 ---@alias PipeLookup table<string, PipeLookupEntry>
-storage.pipe_lookup = storage.pipe_lookup or {}
 
 --- Lookup table from tile name to the item name that places it, or `false` if no item does
 ---@alias TileLookup table<string, string|false>
-storage.tile_lookup = storage.tile_lookup or {}
+
+--- Which quality of an item to take from the inventory: normal first (the only one this mod
+--- used to look for, a plain item name means normal quality to the API), then the quality of
+--- the underground just placed, then any other quality the player carries.
+---@param inventory LuaInventory
+---@param item_name string
+---@param preferred_quality string
+---@return string? quality `nil` when the inventory holds none of the item
+local function pick_item_quality(inventory, item_name, preferred_quality)
+    if inventory.get_item_count(item_name) > 0 then return "normal" end
+    if preferred_quality ~= "normal"
+    and inventory.get_item_count({name = item_name, quality = preferred_quality}) > 0 then
+        return preferred_quality
+    end
+    for _, content in pairs(inventory.get_contents()) do
+        if content.name == item_name and content.count > 0 then return content.quality end
+    end
+    return nil
+end
 
 ---
 ---@alias EntityEtc
@@ -73,26 +90,29 @@ local function on_built_entity(event)
         placing_ghost = true
     end
 
-    local player = game.players[event.player_index]
+    local player = game.get_player(event.player_index) --[[@as LuaPlayer]]
     local inventory = player.get_main_inventory()
     -- The map editor does not charge for a build, so a connector placed alongside
     -- one should not be charged for either, and there is nothing to run out of
     -- that would justify downgrading it to a ghost.
     local free_build = player.controller_type == defines.controllers.editor
-    local pipe_stack --[[@type LuaItemStack?]]
+    -- quality of the pipe item we take from the inventory; the pipe is built with the same quality
+    local pipe_quality --[[@type string?]]
 
-    -- if we don't have any regular pipes in our inventory we want to place a ghost instead
+    -- if we don't have any pipes of any quality in our inventory we want to place a ghost instead
     if not placing_ghost and not free_build then
         if inventory then
-            pipe_stack = inventory.find_item_stack(pipe_item_name)
-            placing_ghost = not pipe_stack
+            pipe_quality = pick_item_quality(inventory, pipe_item_name, entity.quality.name)
+            placing_ghost = not pipe_quality
         else
             placing_ghost = true
         end
     end
 
-    local existing_tile = underground_surface.get_tile( pipe_position[ 1 ], pipe_position[ 2 ] );
-    local existing_tile_state = tiles.save_tile_state( existing_tile )
+    local existing_tile = underground_surface.get_tile( pipe_position[ 1 ], pipe_position[ 2 ] )
+    local existing_tile_name = existing_tile.name
+    -- captured only on the meltable path, the only one that changes the ground and may put it back
+    local existing_tile_state --[[@type TileState]]
     -- Only ground the pipe cannot sit on needs covering. A tile that merely names a
     -- default cover tile is not asking to be paved over: that field is the player's
     -- choice of paving material, and modded planets set it on ordinary buildable
@@ -100,7 +120,7 @@ local function on_built_entity(event)
     -- check used to take the whole connector down with it.
     ---@type LuaTilePrototype?
     local cover_tile_proto
-    if tiles.tile_blocks_entity( existing_tile.prototype, prototypes.entity[pipe_entity_name] ) then
+    if tiles.tile_name_blocks_entity( existing_tile_name, pipe_entity_name ) then
         cover_tile_proto = tiles.cover_tile_for( underground_surface, entity.force, existing_tile.prototype )
     end
     ---@type EntityEtc?
@@ -113,7 +133,7 @@ local function on_built_entity(event)
         name = "tile-ghost", position = pipe_position }
     for _, existing_tile_ghost in pairs(existing_tile_ghosts) do
         local existing_ghost_tile_prototype = existing_tile_ghost.ghost_prototype --[[@as LuaTilePrototype]]
-        if not ghosted_tile_prototype or not existing_ghost_tile_prototype.collision_mask.layers.meltable then
+        if not ghosted_tile_prototype or not tiles.tile_is_meltable( existing_ghost_tile_prototype.name ) then
             ghosted_tile_prototype = existing_ghost_tile_prototype
         end
     end
@@ -142,12 +162,10 @@ local function on_built_entity(event)
         end
     end
 
-    local tile_proto_to_check_for_melt = existing_tile.prototype
-    if ghosted_tile_prototype then
-        tile_proto_to_check_for_melt = ghosted_tile_prototype
-    elseif cover_tile_proto then
-        tile_proto_to_check_for_melt = cover_tile_proto
-    end
+    -- the existing tile's prototype is only fetched when it is the one that turns out to be meltable
+    local tile_proto_to_check_for_melt = ghosted_tile_prototype or cover_tile_proto
+    local tile_name_to_check_for_melt =
+        tile_proto_to_check_for_melt and tile_proto_to_check_for_melt.name or existing_tile_name
 
     -- a pipe collides with the meltable layer, so a meltable tile needs a cover tile of its own
     ---@type EntityEtc?
@@ -156,7 +174,11 @@ local function on_built_entity(event)
     local melt_tile
     ---@type string?
     local melt_tile_item_name
-    if tile_proto_to_check_for_melt.collision_mask.layers.meltable then
+    ---@type string?
+    local melt_tile_item_quality
+    if tiles.tile_is_meltable( tile_name_to_check_for_melt ) then
+        tile_proto_to_check_for_melt = tile_proto_to_check_for_melt or existing_tile.prototype
+        existing_tile_state = tiles.save_tile_state( existing_tile )
         local underground_tile = underground_surface.get_tile( underground_position.x, underground_position.y )
         local melt_cover_tile_proto = tiles.find_melt_cover_tile(
             underground_surface, entity.force, tile_proto_to_check_for_melt, underground_tile, inventory )
@@ -168,8 +190,11 @@ local function on_built_entity(event)
         local cover_ghost = placing_ghost
         if not cover_ghost and not free_build then
             local cover_item_name = tiles.tile_item_name( melt_cover_tile_proto.name )
-            if cover_item_name and inventory and inventory.find_item_stack( cover_item_name ) then
+            local cover_item_quality = cover_item_name and inventory
+                and pick_item_quality( inventory, cover_item_name, "normal" )
+            if cover_item_quality then
                 melt_tile_item_name = cover_item_name
+                melt_tile_item_quality = cover_item_quality
             else
                 -- without the item the cover has to be a ghost, and a pipe can't sit on an uncovered meltable tile
                 cover_ghost = true
@@ -194,7 +219,7 @@ local function on_built_entity(event)
             -- now. with another cover tile going underneath first the answer would be about the wrong
             -- tile, eg concrete refused over ammoniacal ocean when an ice platform ghost is going
             -- between them, so leave it to create_entity once the tile below it exists
-            if tile_proto_to_check_for_melt.name == existing_tile.name
+            if tile_name_to_check_for_melt == existing_tile_name
             and not underground_surface.can_place_entity(
                 melt_tile_ghost_definition --[[@as LuaSurface.can_place_entity_param]] ) then
                 -- bail out because we can't place the cover tile ghost
@@ -209,6 +234,8 @@ local function on_built_entity(event)
     local pipe_entity_definition = {
         name = placing_ghost and "entity-ghost" or pipe_entity_name,
         position = pipe_position,
+        -- a real pipe keeps the quality of the item spent on it; ghosts and free builds stay normal
+        quality = not placing_ghost and pipe_quality or nil,
         -- properties just for create_entity
         force = entity.force,
         player = event.player_index,
@@ -283,7 +310,7 @@ local function on_built_entity(event)
                 undo.restore_undo_state( player, undo_state_before_melt_tile )
             end
             if melt_tile_item_name and inventory then
-                inventory.insert({name=melt_tile_item_name, count=1})
+                inventory.insert({name=melt_tile_item_name, quality=melt_tile_item_quality, count=1})
             end
         end
     end
@@ -317,14 +344,14 @@ local function on_built_entity(event)
         placed_melt_tile = true
         if melt_tile_item_name and inventory then
             -- we only chose a real tile over a ghost because this item was in inventory
-            inventory.remove({name=melt_tile_item_name})
+            inventory.remove({name=melt_tile_item_name, quality=melt_tile_item_quality, count=1})
         end
     end
 
     if not placing_ghost and not free_build then
         -- we ensured above that placing_ghost is true xor we have the necessary item to remove from inventory
         if inventory then
-            inventory.remove({name=pipe_item_name})
+            inventory.remove({name=pipe_item_name, quality=pipe_quality, count=1})
         else
             player.print("Placed a pipe for free. This shouldn't happen. Please report a bug on "
                 .. "the Automatic Underground Pipe Connectors mod discussion page or github issue "
@@ -337,12 +364,33 @@ local function on_built_entity(event)
         -- the world changed under us between the checks above and now
         rollback()
         if not placing_ghost and not free_build and inventory then
-            inventory.insert({name=pipe_item_name, count=1})
+            inventory.insert({name=pipe_item_name, quality=pipe_quality, count=1})
         end
     end
 end
 
---- Find recipes that produce underground pipes to match them to pipes, save results to `global.pipe_lookup`
+--- Do the underground and pipe of a lookup entry still exist and fit together?
+---@param underground_entity string
+---@param lookup_entry PipeLookupEntry
+---@return boolean
+local function is_valid_lookup(underground_entity, lookup_entry)
+    local underground_prototype = prototypes.entity[underground_entity]
+    local pipe_prototype = type(lookup_entry.entity) == "string" and prototypes.entity[lookup_entry.entity]
+    -- The underground needs to be an actual underground, the pipe an actual pipe
+    if not underground_prototype or underground_prototype.type ~= "pipe-to-ground"
+    or not pipe_prototype or pipe_prototype.type ~= "pipe"
+    -- The item needs to exist
+    or type(lookup_entry.item) ~= "string" or not prototypes.item[lookup_entry.item] then
+        return false
+    end
+    -- The item needs to be able to place the pipe
+    for _, stack in pairs(pipe_prototype.items_to_place_this) do
+        if stack.name == lookup_entry.item then return true end
+    end
+    return false
+end
+
+--- Find recipes that produce underground pipes to match them to pipes, save results to `storage.pipe_lookup`
 local function rebuild_index()
     -- TODO recursively search through ingredient recipes to find pipe->X->Y->Z->underground like SchallPipeScaling
     -- TODO handle undergrounds with multiple recipes or multiple ingredients per recipe
@@ -350,8 +398,17 @@ local function rebuild_index()
         return
     end
     storage.index_rebuilt_tick = game.tick
+    storage.pipe_lookup = storage.pipe_lookup or {}
     -- tile prototypes and the items that place them can change with the mod list
     storage.tile_lookup = {}
+    -- Entries are kept across mod changes, since other mods may have added them through the remote
+    -- interface, but one whose prototypes are gone would break the next build next to it
+    for underground_entity_name, lookup_entry in pairs(storage.pipe_lookup) do
+        if not is_valid_lookup(underground_entity_name, lookup_entry) then
+            log("Removing the lookup entry for '"..underground_entity_name.."': its prototypes are gone")
+            storage.pipe_lookup[underground_entity_name] = nil
+        end
+    end
     local underground_recipe_prototypes = prototypes.get_recipe_filtered(
         {
             {
@@ -365,33 +422,26 @@ local function rebuild_index()
         }
     )
     for _, underground_recipe_prototype in pairs(underground_recipe_prototypes) do
-        local underground_entity_name --[[@type string]]
-        local pipe_item_name --[[@type string]]
-        local pipe_entity_name --[[@type string]]
+        local underground_entity_name --[[@type string?]]
         -- Find the entity for the first recipe product that is a pipe-to-ground
         for _, product in pairs(underground_recipe_prototype.products) do
             local result = product.type == "item" and prototypes.item[product.name].place_result
-            if result and prototypes.entity[result.name].type == "pipe-to-ground" then
+            if result and result.type == "pipe-to-ground" then
                 underground_entity_name = result.name
                 break
             end
         end
-        if underground_entity_name == nil then goto continue_underground_recipe_prototype end
-        -- Find the entity and item for the first recipe ingredient that is a pipe
-        for _, ingredient in pairs(underground_recipe_prototype.ingredients) do
-            local result = ingredient.type == "item" and prototypes.item[ingredient.name].place_result
-            if result and prototypes.entity[result.name].type == "pipe" then
-                pipe_item_name = ingredient.name
-                pipe_entity_name = result.name
-                break
+        if underground_entity_name then
+            -- Find the entity and item for the first recipe ingredient that is a pipe
+            for _, ingredient in pairs(underground_recipe_prototype.ingredients) do
+                local result = ingredient.type == "item" and prototypes.item[ingredient.name].place_result
+                if result and result.type == "pipe" then
+                    -- Remember that when this underground entity is placed, this pipe item and entity are the ones to use
+                    storage.pipe_lookup[underground_entity_name] = { item = ingredient.name, entity = result.name }
+                    break
+                end
             end
         end
-        if underground_entity_name and pipe_item_name and pipe_entity_name then
-            -- Remember that when this underground entity is placed, this pipe item and entity are the ones to use
-            -- Also remember which item places the underground entity
-            storage.pipe_lookup[underground_entity_name] = {item = pipe_item_name, entity = pipe_entity_name }
-        end
-        ::continue_underground_recipe_prototype::
     end
 end
 
@@ -405,26 +455,9 @@ script.on_configuration_changed(rebuild_index)
 local function validate_lookup(underground_entity, lookup_entry)
     -- Filter out the extra fields
     lookup_entry = { item = lookup_entry.item, entity = lookup_entry.entity }
-    local underground_prototype = prototypes.entity[underground_entity]
-    local pipe_prototype = prototypes.entity[lookup_entry.entity]
-
-    ---@type table<string, true>
-    local pipe_items = {}
-    for _, stack in pairs(pipe_prototype.items_to_place_this) do
-        pipe_items[stack.name] = true
-    end
-
-    -- The item needs to be able to place the pipe
-    if not pipe_items[lookup_entry.item]
-    -- The item needs to exist (theoretically we can skip this since it was in an items_to_place_this)
-    or not prototypes.item[lookup_entry.item]
-    -- The pipe needs to be an actual pipe
-    or not pipe_prototype or pipe_prototype.type ~= "pipe"
-    -- The underground needs to be an actual underground
-    or not underground_prototype or underground_prototype.type ~= "pipe-to-ground" then
+    if not is_valid_lookup(underground_entity, lookup_entry) then
         error("Given underground lookup entry is not valid: "..underground_entity.." -> "..serpent.line(lookup_entry))
     end
-
     return lookup_entry
 end
 
@@ -447,6 +480,7 @@ remote.add_interface("automatic-underground-pipe-connectors", {
     --- Allows mods to add underground and pipe connections for when they don't follow the expected recipe pattern.
     ---@param new_undergrounds PipeLookup
     add_undergrounds = function(new_undergrounds)
+        storage.pipe_lookup = storage.pipe_lookup or {}
         for underground, lookup_entry in pairs(new_undergrounds) do
             storage.pipe_lookup[underground] = validate_lookup(underground, lookup_entry)
         end
@@ -455,7 +489,7 @@ remote.add_interface("automatic-underground-pipe-connectors", {
     ---@param old_undergrounds string[]
     remove_undergrounds = function(old_undergrounds)
         for _, underground in pairs(old_undergrounds) do
-            if storage.pipe_lookup[underground] then
+            if storage.pipe_lookup and storage.pipe_lookup[underground] then
                 log("Removing the lookup entry for '"..underground.."'")
                 storage.pipe_lookup[underground] = nil
             end

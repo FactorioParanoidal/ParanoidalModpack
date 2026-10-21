@@ -47,6 +47,44 @@ local function tile_blocks_entity(tile_prototype, entity_prototype)
     return false
 end
 
+-- Answers derived only from prototypes, which cannot change while the game runs. Kept outside
+-- `storage` on purpose: every peer computes the same values, so the cache cannot desync.
+---@type table<string, table<string, boolean>>
+local blocks_cache = {}
+---@type table<string, boolean>
+local meltable_cache = {}
+
+--- `tile_blocks_entity` by name, remembered: collision masks are copied into a new table on
+--- every read, and this is asked on every connector placement.
+---@param tile_name string
+---@param entity_name string
+---@return boolean
+local function tile_name_blocks_entity(tile_name, entity_name)
+    local by_tile = blocks_cache[entity_name]
+    if not by_tile then
+        by_tile = {}
+        blocks_cache[entity_name] = by_tile
+    end
+    local blocks = by_tile[tile_name]
+    if blocks == nil then
+        blocks = tile_blocks_entity(prototypes.tile[tile_name], prototypes.entity[entity_name])
+        by_tile[tile_name] = blocks
+    end
+    return blocks
+end
+
+--- Does a tile have the meltable collision layer, which a pipe collides with?
+---@param tile_name string
+---@return boolean
+local function tile_is_meltable(tile_name)
+    local meltable = meltable_cache[tile_name]
+    if meltable == nil then
+        meltable = prototypes.tile[tile_name].collision_mask.layers.meltable == true
+        meltable_cache[tile_name] = meltable
+    end
+    return meltable
+end
+
 --- Would the game let a player place `cover_tile_prototype` on top of `target_tile_prototype`?
 --- `place_as_tile.condition` is an exclusion mask: the target must have none of its layers.
 ---@param cover_tile_prototype LuaTilePrototype
@@ -116,7 +154,7 @@ local function find_melt_cover_tile(surface, force, target_tile_prototype, under
     ---@return boolean
     local function usable(candidate)
         return candidate ~= nil
-            and not candidate.collision_mask.layers.meltable
+            and not tile_is_meltable(candidate.name)
             and tile_can_be_ghosted(candidate)
             and tile_can_cover(candidate, target_tile_prototype)
     end
@@ -181,6 +219,8 @@ tiles.tile_item_name = tile_item_name
 tiles.tile_can_be_ghosted = tile_can_be_ghosted
 tiles.cover_tile_for = cover_tile_for
 tiles.tile_blocks_entity = tile_blocks_entity
+tiles.tile_name_blocks_entity = tile_name_blocks_entity
+tiles.tile_is_meltable = tile_is_meltable
 tiles.tile_can_cover = tile_can_cover
 tiles.find_melt_cover_tile = find_melt_cover_tile
 tiles.save_tile_state = save_tile_state
