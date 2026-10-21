@@ -203,6 +203,10 @@ local function strike(map, squad, entry, kind, tick)
                                distraction = DEFINES_DISTRACTION_BY_ANYTHING}
     group.set_command({type = defines.command.compound, structure_type = defines.compound_command.return_last,
                        commands = commands})
+    if not group.valid then
+        squad.disbandTick = tick    -- the engine dropped the emptied group on the new command
+        return
+    end
     group.start_moving()
     local position = group.position
     local travel = aiBrain.distance(position.x, position.y, tx, ty) / FLYER_SPEED
@@ -223,6 +227,10 @@ local function goHome(map, squad, tick)
     squad.strikeUntil = nil
     group.set_command({type = defines.command.go_to_location, destination = {x = squad.originPosition.x, y = squad.originPosition.y},
                        radius = 16, distraction = DEFINES_DISTRACTION_NONE})
+    if not group.valid then
+        squad.disbandTick = tick    -- the engine dropped the emptied group on the new command
+        return
+    end
     group.start_moving()
     squad.onTheWay = true
     squad.nextCommandTick = tick + 60
@@ -407,6 +415,10 @@ function flyerAI.dispatch(map, squad)
     local tick = game.tick
     if not aiBrain.active(map.universe) then
         squad.disbandTick = tick
+        return
+    end
+    if #squad.group.members == 0 then
+        squad.disbandTick = tick     -- the whole flight was shot down: no new command for an empty group
         return
     end
     local phase = squad.flightPhase

@@ -438,7 +438,9 @@ local function setMoveCommand(universe, group, squad, quiet)
 		cmd.commands[2].distraction = DEFINES_DISTRACTION_BY_DAMAGE
 	end
 	group.set_command(cmd)
-	group.start_moving()
+	if group.valid then	-- the engine drops an emptied group on a new command
+		group.start_moving()
+	end
 end
 
 local function commandIssued(squad, tick)
@@ -474,7 +476,9 @@ local function goalMove(map, squad, group, chunk, groupPosition)
 				squad.frenzyPosition.y = groupPosition.y
 			end
 			group.set_command(universe.compoundAttackCommand)
-			group.start_moving()
+			if group.valid then
+				group.start_moving()
+			end
 			commandIssued(squad, tick)
 			return true
 		elseif kind == "ambush" then
@@ -769,6 +773,9 @@ local function attackMove(map, squad)
             squad.frenzyPosition.y = groupPosition.y
         end		
 		group.set_command(cmd)
+		if not group.valid then
+			return	-- the engine dropped the emptied group: processSquads disbands the squad
+		end
 		group.start_moving()
 		if squad.hasSpiders then	-- spider ignore group attack
 			for _, entity in pairs(group.members) do
@@ -787,6 +794,9 @@ local function attackMove(map, squad)
             cmd.commands[2].distraction = DEFINES_DISTRACTION_BY_ENEMY
         end
 		group.set_command(cmd)
+		if not group.valid then
+			return
+		end
 		group.start_moving()
 	elseif cmd_type == "wander" then
 		group.set_command(universe.wonderCommand)	
