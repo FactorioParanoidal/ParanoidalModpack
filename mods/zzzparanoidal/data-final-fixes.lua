@@ -412,6 +412,8 @@ require("tweaks.custom.hero-shortcut")
 require("removals.factoriopedia-cleanup")
 -- Временно: из «Советов и подсказок» остаётся только категория PARANOIDAL.
 require("removals.tips-and-tricks")
+-- Иконки и цвет в трубах расплавов олова и хрома как в Beta 8.
+require("tweaks.custom.molten-tin-chrome-beta8")
 -- Локальные иконки Reskins Library, включая слои рецептов и копии прототипов.
 require("tweaks.custom.reskins-library-icons")
 -- Оптимизация атласов графики: после всех правок, создающих и копирующих прототипы и иконки.
