@@ -3,3 +3,4 @@
 -- so that mods copying these prototypes later receive the final graphics.
 require("prototypes/reforged/trees")
 require("prototypes/reforged/economy")
+require("prototypes/reforged/geology")

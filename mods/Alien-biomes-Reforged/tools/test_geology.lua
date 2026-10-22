@@ -1,9 +1,10 @@
 -- Unit test of the geology logic outside the game (Lua 5.1/5.2):
---   lua tools/test_geology.lua MOD_DIR RSO_CONTROL_LUA
--- Loads scripts/reforged-geology.lua with mocked remote/settings, checks the soil -> resource
--- table, then extracts weighted_allotments() from the patched RSO control.lua and checks that
--- the probability of the favoured resource doubles and that no resource drops to zero.
-local mod_dir, rso_control = arg[1], arg[2]
+--   lua tools/test_geology.lua MOD_DIR
+-- Loads scripts/reforged-geology.lua with mocked remote/settings and checks the soil -> resource
+-- table of the remote interface, then checks the climate boxes and the noise expressions of
+-- prototypes/reforged/geology.lua (what RSO-reforged uses) on sample climate points.
+local mod_dir = arg[1]
+package.path = mod_dir .. "/?.lua;" .. package.path
 local failures = 0
 local function check(cond, msg)
   if not cond then failures = failures + 1; print("FAIL " .. msg) else print("ok   " .. msg) end
@@ -51,26 +52,45 @@ check(tie and tie["coal"] == 2 and not tie["angels-ore5"], "tie broken determini
 geology_on = false
 check(one("mineral-red-dirt-1") == nil, "setting off: no bias")
 
--- RSO weighted roll
-local src = assert(io.open(rso_control, "r")):read("*a")
-local fn = src:match("(local function weighted_allotments%(.-\nend\n)")
-check(fn ~= nil, "weighted_allotments found in RSO control.lua")
-local weighted_allotments = assert(loadstring(fn .. "\nreturn weighted_allotments"))()
-local cfg = {}
-local names = {"angels-ore1", "angels-ore2", "angels-ore3", "angels-ore4", "angels-ore5", "angels-ore6", "coal", "crude-oil"}
-local total = 0
-for i, n in ipairs(names) do
-  cfg[i] = {name = n, allotment_range = {min = total, max = total + 60}}
-  total = total + 60
+-- noise expressions alien-biomes-geology-<resource>
+local spec = dofile(mod_dir .. "/prototypes/biome/biome-spec.lua")
+local axes = dofile(mod_dir .. "/prototypes/biome/biome-axes.lua")
+local geology = dofile(mod_dir .. "/prototypes/reforged/geology.lua")
+local expressions = geology.expressions(spec, axes)
+local map = require("scripts/geology-map")
+for _, ore in pairs(map.BY_COLOUR) do check(expressions[ore] ~= nil, "expression for " .. ore) end
+for _, r in ipairs(map.VOLCANIC) do check(expressions[r] ~= nil, "expression for " .. r) end
+
+-- evaluate an expression at a climate point: comparisons become 0/1
+local function evaluate(expression, t, m, a)
+  local lua = expression:gsub("%((%a+) ([<>]=?) ([%d%.%-e]+)%)", "b(%1 %2 %3)")
+  local env = {temperature = t, moisture = m, aux = a, b = function(c) return c and 1 or 0 end}
+  local f = assert((loadstring or load)("return " .. lua))
+  if setfenv then setfenv(f, env) else f = assert(load("return " .. lua, "e", "t", env)) end
+  return f()
 end
-local ranges, max = weighted_allotments(cfg, {["angels-ore5"] = 2, ["infinite-angels-ore5"] = 2})
-local function share(r, idx, m) return (r[idx].max - r[idx].min) / m end
-check(max == total + 60, "total weight grows by the favoured allotment (" .. max .. ")")
-check(math.abs(share(ranges, 5, max) - 120 / 540) < 1e-9, "favoured share 120/540 (plain 60/480)")
-local allpos = true
-for i = 1, #names do if share(ranges, i, max) <= 0 then allpos = false end end
-check(allpos, "no resource drops to zero")
-check(ranges[1].min == 0 and ranges[#names].max == max, "ranges are contiguous from 0 to total")
+local points = {
+  {80, 0.3, 0.95, "purple", "angels-ore1"}, {80, 0.3, 0.7, "red", "angels-ore5"},
+  {45, 0.3, 0.45, "beige", "angels-ore6"}, {45, 0.3, 0.1, "cream", "angels-ore2"},
+  {10, 0.3, 0.9, "black", "coal"}, {10, 0.3, 0.5, "grey", "angels-ore4"},
+  {10, 0.8, 0.3, "turquoise", "angels-ore3"}, {70, 0.8, 0.3, "yellow", "angels-ore2"},
+  {90, 0.8, 0.9, "red", "angels-ore5"}, {30, 0.8, 0.9, "mauve", "angels-ore1"},
+  {120, 0.5, 0.5, "volcanic", "crude-oil"}, {-10, 0.5, 0.5, nil, nil},
+}
+for _, p in ipairs(points) do
+  local t, m, a, colour, ore = p[1], p[2], p[3], p[4], p[5]
+  local label = string.format("t=%g m=%g aux=%g", t, m, a)
+  check(geology.classify(spec, axes, t, m, a) == colour, label .. " is " .. tostring(colour))
+  local favoured = {}
+  for resource, expression in pairs(expressions) do
+    local v = evaluate(expression, t, m, a)
+    check(v == 1 or v == 2, label .. " " .. resource .. " multiplier " .. v)
+    if v == 2 then favoured[#favoured + 1] = resource end
+  end
+  table.sort(favoured)
+  local want = colour == "volcanic" and {"angels-fissure", "angels-natural-gas", "crude-oil"} or (ore and {ore} or {})
+  check(table.concat(favoured, ",") == table.concat(want, ","), label .. " favours " .. table.concat(want, ","))
+end
 
 print(failures == 0 and "ALL OK" or (failures .. " FAILED"))
 os.exit(failures == 0 and 0 or 1)
