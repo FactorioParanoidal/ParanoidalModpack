@@ -7,10 +7,12 @@
 --   stack_size, comfortable - stack size of the item and the amount kept in the chest
 --   output_only         - the locked item can no longer be stored (old saves): only given out
 --   previous_total      - last total shown on the combinator/text
+--   storage_unit        - logistic storage variant (cached on first use; the entity name never changes)
 --   text, icon, icon_quality - render object ids
 --   lag_id              - update slot
 
 local shared = require "shared"
+local variants = require "variants"
 
 local M = {}
 
@@ -46,6 +48,48 @@ function M.create_combinator(entity)
 	combinator.operable = false
 	combinator.destructible = false
 	return combinator
+end
+
+local function comfortable_slots(entity)
+	local variant = variants.variants[entity.name]
+	return variant and variant.comfortable_slots or shared.comfortable_slots
+end
+
+-- Only the storage variant has a storage filter. Cached in unit_data so the update does not read the
+-- entity name of every unit.
+local function is_storage_unit(unit_data)
+	local flag = unit_data.storage_unit
+	if flag == nil then
+		local variant = variants.variants[unit_data.entity.name]
+		flag = variant ~= nil and variant.logistic_mode == "storage"
+		unit_data.storage_unit = flag
+	end
+	return flag
+end
+
+-- Storage filter as names (the API reads it back as prototypes); nil without a filter.
+local function read_storage_filter(entity)
+	local filter = entity.storage_filter
+	if not filter then return nil end
+	local name, quality = filter.name, filter.quality or "normal"
+	if type(name) ~= "string" then name = name.name end
+	if type(quality) ~= "string" then quality = quality.name end
+	return name, quality
+end
+
+-- Storage memory units: robots bring only the locked item. Reapplied when a player changes it.
+local function sync_storage_filter(unit_data)
+	if not is_storage_unit(unit_data) then return end
+	local entity = unit_data.entity
+	local name, quality = read_storage_filter(entity)
+	local item = unit_data.item
+	if item then
+		if name ~= item or quality ~= unit_data.quality then
+			entity.storage_filter = {name = item, quality = unit_data.quality}
+		end
+	elseif name then
+		entity.storage_filter = nil
+	end
 end
 
 function M.inventory_count(unit_data)
@@ -129,11 +173,12 @@ function M.lock(unit_data, item, quality)
 	unit_data.item = item
 	unit_data.quality = quality or "normal"
 	unit_data.stack_size = prototype.stack_size
-	unit_data.comfortable = prototype.stack_size * shared.comfortable_slots
+	unit_data.comfortable = prototype.stack_size * comfortable_slots(unit_data.entity)
 	unit_data.output_only = (not shared.is_storable(item)) or nil
 	unit_data.previous_total = nil
 	M.set_filter(unit_data)
 	M.update_icon(unit_data)
+	sync_storage_filter(unit_data)
 end
 
 -- Back to an empty unit without a filter. The counter is dropped: callers make sure it is empty
@@ -148,6 +193,7 @@ function M.reset(unit_data)
 	unit_data.previous_total = nil
 	M.clear_filter(unit_data)
 	M.update_icon(unit_data)
+	sync_storage_filter(unit_data)
 	shared.destroy_render(unit_data.text)
 	unit_data.text = nil
 	shared.clear_combinator(unit_data.combinator)
@@ -162,7 +208,14 @@ function M.detect_item(unit_data)
 		if not shared.is_storable(content.name) then return false end
 		candidate = candidate or content
 	end
-	if not candidate then return false end
+	if not candidate then
+		-- An empty storage unit takes the item of a storage filter set by the player.
+		if not is_storage_unit(unit_data) then return false end
+		local name, quality = read_storage_filter(unit_data.entity)
+		if not (name and shared.is_storable(name) and prototypes.quality[quality]) then return false end
+		M.lock(unit_data, name, quality)
+		return true
+	end
 	M.lock(unit_data, candidate.name, candidate.quality)
 	return true
 end
@@ -215,6 +268,7 @@ function M.update(unit_data, unit_number, force)
 	if not M.ensure_valid(unit_data, unit_number) then return end
 	if not force and not shared.has_power(unit_data.powersource, unit_data.entity) then return end
 	if not unit_data.item and not M.detect_item(unit_data) then return end
+	sync_storage_filter(unit_data)
 
 	local inventory = unit_data.inventory
 	local item, quality = unit_data.item, unit_data.quality
@@ -365,7 +419,7 @@ end
 function M.on_cloned(source, destination)
 	local name = source.name
 	local surface = destination.surface
-	if name == "memory-unit" then
+	if variants.variants[name] then
 		local source_data = storage.units[source.unit_number]
 		local position = destination.position
 		local unit_data = {
@@ -394,7 +448,11 @@ function M.on_cloned(source, destination)
 	if name == "memory-unit-combinator" then
 		position = {position.x - combinator_shift_x, position.y - combinator_shift_y}
 	end
-	local unit = surface.find_entity("memory-unit", position)
+	local unit
+	for _, unit_name in ipairs(variants.names) do
+		unit = surface.find_entity(unit_name, position)
+		if unit then break end
+	end
 	local unit_data = unit and storage.units[unit.unit_number]
 	if not unit_data then return end -- the unit itself is cloned later and adopts this part
 

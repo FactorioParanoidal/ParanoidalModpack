@@ -1,5 +1,6 @@
 local shared = require "shared"
 local unit = require "unit"
+local variants = require "variants"
 require "gui"
 
 local update_slots = shared.update_slots
@@ -10,7 +11,9 @@ local function setup()
 	storage.blank_gui_inventories = storage.blank_gui_inventories or {}
 
 	if remote.interfaces["PickerDollies"] then
-		remote.call("PickerDollies", "add_blacklist_name", "memory-unit", true)
+		for _, name in ipairs(variants.names) do
+			remote.call("PickerDollies", "add_blacklist_name", name, true)
+		end
 		remote.call("PickerDollies", "add_blacklist_name", "memory-unit-combinator", true)
 	end
 end
@@ -60,11 +63,36 @@ script.on_nth_tick(shared.update_rate, function(event)
 	end
 end)
 
-local unit_filter = {{filter = "name", name = "memory-unit"}}
+local unit_filter = {}
+for _, name in ipairs(variants.names) do
+	unit_filter[#unit_filter + 1] = {filter = "name", name = name}
+end
+
+-- Built events also see unit ghosts (player and script placement), for the ghost cleanup below.
+local build_filter = {}
+for _, filter in ipairs(unit_filter) do build_filter[#build_filter + 1] = filter end
+for _, name in ipairs(variants.names) do
+	build_filter[#build_filter + 1] = {filter = "ghost_name", name = name}
+end
+
+-- A ghost placed from a packed unit inherits its tags. Any ghost-mediated build (robots with a plain unit,
+-- blueprint, undo, super-force build) would then restore the contents while the packed item stays in the
+-- inventory. Only our keys are dropped; tags of other mods stay.
+local function clear_ghost_tags(ghost)
+	local tags = ghost.tags
+	if not (tags and (tags.name ~= nil or tags.count ~= nil)) then return end
+	tags.name, tags.count, tags.quality = nil, nil, nil
+	ghost.tags = next(tags) and tags or nil
+end
 
 local function on_created(event)
 	local entity = event.entity
-	if not (entity and entity.valid) or entity.name ~= "memory-unit" then return end
+	if not (entity and entity.valid) then return end
+	if entity.type == "entity-ghost" then
+		if variants.variants[entity.ghost_name] then clear_ghost_tags(entity) end
+		return
+	end
+	if not variants.variants[entity.name] then return end
 	if storage.units[entity.unit_number] then return end
 
 	-- Packed unit: tags of the item used (player: consumed_items, robot/platform: stack).
@@ -76,20 +104,22 @@ local function on_created(event)
 	invalidate_buckets()
 end
 
-script.on_event(defines.events.on_built_entity, on_created, unit_filter)
+script.on_event(defines.events.on_built_entity, on_created, build_filter)
 script.on_event(defines.events.on_robot_built_entity, on_created, unit_filter)
-script.on_event(defines.events.script_raised_built, on_created, unit_filter)
+script.on_event(defines.events.script_raised_built, on_created, build_filter)
 script.on_event(defines.events.script_raised_revive, on_created, unit_filter)
 script.on_event(defines.events.on_space_platform_built_entity, on_created, unit_filter)
+
+local clone_filter = {
+	{filter = "name", name = "memory-unit-powersource"},
+	{filter = "name", name = "memory-unit-combinator"}
+}
+for _, filter in ipairs(unit_filter) do clone_filter[#clone_filter + 1] = filter end
 
 script.on_event(defines.events.on_entity_cloned, function(event)
 	unit.on_cloned(event.source, event.destination)
 	invalidate_buckets()
-end, {
-	{filter = "name", name = "memory-unit"},
-	{filter = "name", name = "memory-unit-powersource"},
-	{filter = "name", name = "memory-unit-combinator"}
-})
+end, clone_filter)
 
 -- Mined units keep their contents in a packed item; destroyed units lose everything.
 local function on_removed(event)
@@ -108,11 +138,11 @@ local function on_removed(event)
 
 	-- Only the unit item is replaced: anything else in the buffer (chest contents) stays.
 	local quality = entity.quality.name
-	if buffer.remove {name = "memory-unit", count = 1, quality = quality} == 0 then
+	if buffer.remove {name = entity.name, count = 1, quality = quality} == 0 then
 		log("memory unit " .. unit_number .. ": mined unit item not found in the buffer")
 	end
 	buffer.insert {
-		name = "memory-unit-with-tags",
+		name = variants.packed_name(entity.name),
 		count = 1,
 		quality = quality,
 		health = entity.health / entity.max_health,

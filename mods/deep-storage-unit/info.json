@@ -1,6 +1,6 @@
 {
   "name": "deep-storage-unit",
-  "version": "9.7.0",
+  "version": "9.8.0",
   "title": "Memory Storage",
   "author": "notnotmelon",
   "homepage": "https://github.com/notnotmelon/deep-storage-unit",
@@ -11,6 +11,8 @@
     "(?) Krastorio2",
     "(?) PickerDollies",
     "! logistic-memory-units",
+    "! logistic-memory-unit",
+    "! logistic-memory-units-fixed",
     "! space-exploration"
   ]
 }

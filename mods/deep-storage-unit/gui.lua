@@ -1,5 +1,13 @@
 local shared = require "shared"
 local unit = require "unit"
+local variants = require "variants"
+
+-- The plain unit replaces its chest window with an item window (one slot + this panel). Logistic units keep
+-- the chest window, which holds their logistic requests and storage filter, and get this panel beside it.
+local function is_logistic(name)
+	local variant = variants.variants[name]
+	return variant ~= nil and variant.logistic_mode ~= nil
+end
 
 local GUI_NAME = "memory_unit_gui"
 local NOT_WORKING = "utility/status_not_working"
@@ -24,8 +32,21 @@ end
 
 local function close_gui(player)
 	local gui = player.gui.relative[GUI_NAME]
+	local logistic = gui and gui.tags.logistic
 	if gui then gui.destroy() end
-	if player.opened_gui_type == defines.gui_type.item then player.opened = nil end
+	if logistic then
+		if player.opened_gui_type == defines.gui_type.entity then player.opened = nil end
+	elseif player.opened_gui_type == defines.gui_type.item then
+		player.opened = nil
+	end
+end
+
+-- The panel stays only while the window it belongs to is open.
+local function gui_still_open(player, gui)
+	if not gui.tags.logistic then return player.opened_gui_type == defines.gui_type.item end
+	if player.opened_gui_type ~= defines.gui_type.entity then return false end
+	local opened = player.opened
+	return opened ~= nil and opened.valid and opened.unit_number == gui.tags.unit_number
 end
 
 local function flying_text(player, text)
@@ -47,7 +68,8 @@ local function update_gui(player, gui)
 	local access = can_access(player, entity)
 	local item, quality = unit_data.item, unit_data.quality
 	local locked = item ~= nil and prototypes.item[item] ~= nil
-	local total = locked and (unit_data.count + unit.inventory_count(unit_data)) or 0
+	local in_chest = locked and unit.inventory_count(unit_data) or 0
+	local total = locked and (unit_data.count + in_chest) or 0
 
 	content_flow.storage_flow.visible = locked
 	content_flow.storage_seperator.visible = locked
@@ -68,7 +90,8 @@ local function update_gui(player, gui)
 		end
 		local label = content_flow.storage_flow.current_storage
 		label.caption = {"", "[font=default-semibold][color=255,230,192]", name, ":[/color][/font] ", shared.compactify(total)}
-		label.tooltip = {"mod-gui.exact-amount", shared.format_exact(total)}
+		-- The chest shows only its part (for logistic units, what robots can reach): say where the rest is.
+		label.tooltip = {"mod-gui.exact-amount-split", shared.format_exact(total), shared.format_exact(in_chest), shared.format_exact(unit_data.count)}
 
 		local io_flow = content_flow.io_flow
 		io_flow.mu_bulk_insert.enabled = access and not unit_data.output_only
@@ -113,15 +136,16 @@ end
 
 local function build_gui(player, entity)
 	local unit_number = entity.unit_number
+	local logistic = is_logistic(entity.name)
 	local main_frame = player.gui.relative.add {
-		type = "frame", name = GUI_NAME, caption = {"entity-name.memory-unit"}, direction = "vertical",
+		type = "frame", name = GUI_NAME, caption = {"entity-name." .. entity.name}, direction = "vertical",
 		anchor = {
-			gui = defines.relative_gui_type.item_with_inventory_gui,
+			gui = logistic and defines.relative_gui_type.container_gui or defines.relative_gui_type.item_with_inventory_gui,
 			position = defines.relative_gui_position.right
 		}
 	}
 	main_frame.style.width = 448
-	main_frame.tags = {unit_number = unit_number}
+	main_frame.tags = {unit_number = unit_number, logistic = logistic}
 
 	local content_frame = main_frame.add {type = "frame", name = "content_frame", direction = "vertical", style = "inside_shallow_frame_with_padding"}
 	local content_flow = content_frame.add {type = "flow", name = "content_flow", direction = "vertical"}
@@ -147,7 +171,8 @@ local function build_gui(player, entity)
 
 	local entity_preview = content_flow.add {type = "entity-preview", name = "entity_preview", style = "mu_entity_preview"}
 	entity_preview.entity = entity
-	entity_preview.visible = true
+	-- The chest window of a logistic unit already shows the building.
+	entity_preview.visible = not logistic
 	entity_preview.style.height = 155
 
 	local storage_flow = content_flow.add {type = "flow", name = "storage_flow", direction = "horizontal"}
@@ -258,7 +283,7 @@ script.on_nth_tick(2, function()
 	for _, player in pairs(game.connected_players) do
 		local gui = player.gui.relative[GUI_NAME]
 		if gui then
-			if player.opened_gui_type == defines.gui_type.item then
+			if gui_still_open(player, gui) then
 				update_gui(player, gui)
 			else
 				gui.destroy()
@@ -275,7 +300,7 @@ end)
 script.on_event(defines.events.on_gui_opened, function(event)
 	if event.gui_type ~= defines.gui_type.entity then return end
 	local entity = event.entity
-	if not (entity and entity.valid and entity.name == "memory-unit") then return end
+	if not (entity and entity.valid and variants.variants[entity.name]) then return end
 
 	local player = game.get_player(event.player_index)
 	-- A unit placed by a script without an event is registered on first use.
@@ -283,13 +308,20 @@ script.on_event(defines.events.on_gui_opened, function(event)
 
 	local old = player.gui.relative[GUI_NAME]
 	if old then old.destroy() end
-	shared.open_inventory(player)
+	if not is_logistic(entity.name) then shared.open_inventory(player) end
 	update_gui(player, build_gui(player, entity))
 end)
 
 script.on_event(defines.events.on_gui_closed, function(event)
-	if event.gui_type ~= defines.gui_type.item then return end
 	local player = game.get_player(event.player_index)
 	local gui = player.gui.relative[GUI_NAME]
-	if gui then gui.destroy() end
+	if not gui then return end
+	if event.gui_type == defines.gui_type.item then
+		if not gui.tags.logistic then gui.destroy() end
+	elseif event.gui_type == defines.gui_type.entity then
+		local entity = event.entity
+		if gui.tags.logistic and not (entity and entity.valid and entity.unit_number ~= gui.tags.unit_number) then
+			gui.destroy()
+		end
+	end
 end)

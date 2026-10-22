@@ -1,4 +1,17 @@
 ---------------------------------------------------------------------------------------------------
+Version: 9.8.0
+Date: 2026-10-22
+  Features:
+    - Logistic memory units: passive provider, storage, buffer and requester variants of the memory unit (logic after "Logistic Memory Units" by restjack, MIT). The chest is what the logistic network sees, the counter sits behind it; the update keeps the chest at 90% (provider), 10% (storage), 50% (buffer) or 25% (requester) of its 300 slots. No active provider: with endless contents it would push into storage forever.
+    - Logistic units are told apart by their dome rings painted in the colour of the vanilla logistic chest of the same mode (an overlay cut from the original sprite); the rest of the building is the original sprite.
+    - The storage variant sets its storage filter to the stored item and restores it if a player changes it; an empty unit clears it. A storage filter set on an empty storage unit (by hand or from a blueprint) assigns the item.
+    - The amount tooltip shows how much is in the chest and how much in memory.
+    - Logistic units keep the chest window (logistic requests, storage filter) with the memory unit panel beside it; the plain unit is unchanged.
+    - Recipe: memory unit, 2 logistic chests of the same mode, 10 processing units. Technology "Logistic memory units" after Memory storage and Logistic system, science packs of both.
+    - Packed logistic units, power, quality, circuit output, cloning and refusal of spoilable and data items work as for the plain unit.
+  Bugfixes:
+    - Fixed duplication of the stored contents: a ghost placed from a packed unit kept its tags, so a ghost-mediated build (robots with a plain unit, blueprint, undo, super-force build) restored the contents while the packed item stayed in the inventory. Unit ghosts lose the stored contents at creation; other mods' tags are kept (fix after Memory Storage (Continued) 1.6.10 by restjack).
+---------------------------------------------------------------------------------------------------
 Version: 9.7.0
 Date: 2026-10-14
   Optimizations:

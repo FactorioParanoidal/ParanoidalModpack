@@ -203,3 +203,5 @@ data:extend {
 		flags = {"gui-icon"}
 	}
 }
+
+require "logistic-units"
