@@ -734,7 +734,14 @@ local function post_dynamic(parent, record)
     local tbl = key_value_table(parent)
     row(tbl, {"ic-quality.col-state"}, {"ic-quality.order-state-" .. record.state})
     local required = record.order.required or 1
-    progressbar(parent, record.accepted / required, {"", {"ic-quality.accepted"}, " ", record.accepted, " / ", required}, 360)
+    -- The count is a separate label: a caption inside the thin bar is drawn off-centre.
+    local accepted = parent.add({type = "flow", direction = "horizontal"})
+    accepted.style.vertical_align = "center"
+    accepted.style.horizontal_spacing = 8
+    label(accepted, {"", {"ic-quality.accepted"}, " ", record.accepted, " / ", required}, "bold_label")
+    local bar = accepted.add({type = "progressbar", value = math.max(0, math.min(1, record.accepted / required))})
+    bar.style.horizontally_stretchable = true
+    bar.style.minimal_width = 120
     local stbl = key_value_table(parent)
     row(stbl, {"ic-quality.batches"}, tostring(record.batches or 0))
     row(stbl, {"ic-quality.sent-good"}, tostring(record.sent.good or 0))
@@ -769,7 +776,7 @@ local function post_panel(player, entity)
     condition_flow.style.vertical_align = "center"
     label(condition_flow, {"ic-quality.order-condition"})
     condition_flow.add({type = "drop-down", items = {{"ic-quality.condition-strict"}, {"ic-quality.condition-at-least"}},
-        selected_index = order.condition == "strict" and 1 or 2, tags = {ic = "post-condition"}})
+        selected_index = order.condition == "strict" and 1 or 2, tags = {ic = "post-condition"}}).style.width = 150
     local qualities = sorted_qualities(false)
     local items, selected = {}, 1
     for index, quality in ipairs(qualities) do
@@ -778,6 +785,7 @@ local function post_panel(player, entity)
     end
     local quality_dropdown = condition_flow.add({type = "drop-down", items = items, selected_index = selected,
         tags = {ic = "post-quality"}})
+    quality_dropdown.style.width = 140
     quality_dropdown.enabled = order.condition ~= "strict"
 
     local amount_flow = inside.add({type = "flow", direction = "horizontal"})
@@ -801,9 +809,17 @@ local function post_panel(player, entity)
 
     inside.add({type = "line"}).style.top_margin = 4
     local legend = inside.add({type = "table", column_count = 2})
+    legend.style.horizontal_spacing = 6
+    legend.style.vertical_spacing = 4
     for _, route in ipairs(post.routes) do
-        legend.add({type = "sprite", sprite = "ic-post-arrow-" .. route}).style.size = 20
-        label(legend, {"ic-quality.route-" .. route .. "-legend"})
+        -- Without stretching the 64 px arrow is drawn at full size over the text.
+        local arrow = legend.add({type = "sprite", sprite = "ic-post-arrow-" .. route})
+        arrow.resize_to_sprite = false
+        arrow.style.size = 20
+        arrow.style.stretch_image_to_widget_size = true
+        local text = label(legend, {"ic-quality.route-" .. route .. "-legend"})
+        text.style.single_line = false
+        text.style.maximal_width = 340
     end
     local rotate = inside.add({type = "flow", direction = "horizontal"})
     rotate.style.vertical_align = "center"
