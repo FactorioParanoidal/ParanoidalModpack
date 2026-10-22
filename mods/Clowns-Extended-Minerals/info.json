@@ -1,0 +1,19 @@
+{
+  "name": "Clowns-Extended-Minerals",
+  "version": "2.0.15",
+  "factorio_version": "2.0",
+  "title": "MadClown01's Extended AngelBob Minerals",
+  "author": "MadClown01,Pezzawinkle",
+  "contact": "",
+  "homepage": "",
+  "description": "Brings many new ores & minerals to games with Angel's Refining and Bob's Ores active.",
+  "dependencies": [
+	"? bobores",
+	"? bobplates",
+	"Clowns-Processing",
+  "(?) angelsinfiniteores",
+  "(?) omnimatter",
+  "? omnimatter_crystal",
+  "! angelsaddons-refiningthorium"
+	]
+}

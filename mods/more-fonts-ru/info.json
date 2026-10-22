@@ -1,0 +1,14 @@
+{
+  "name": "more-fonts-ru",
+  "version": "0.1.0",
+  "title": "More Fonts (RU)",
+  "author": "asher_sky, Paranoidal fork",
+  "contact": "",
+  "homepage": "https://mods.factorio.com/mod/more-fonts",
+  "description": "Fork of More Fonts by asher_sky (CC BY-NC-SA 4.0). Startup setting to change the game font. Missing characters (Cyrillic etc.) fall back to the game fonts; fonts of other mods are replaced too.",
+  "factorio_version": "2.0",
+  "dependencies": [
+    "base >= 2.0.0",
+    "! more-fonts"
+  ]
+}

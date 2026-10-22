@@ -2,7 +2,8 @@ Detector = class(function(self, interval)
     self.name = "Pollution Detector"
     self.signal = {type = "virtual", name = "signal-yellow-more-toxin"}
     self.interval = interval
-    self.step = 60
+    -- Called every `interval` ticks; `step` slots make one full refresh per 60 ticks.
+    self.step = math.max(1, math.floor(60 / interval))
     self.maxTime = interval * self.step
 end)
 
@@ -120,19 +121,28 @@ function Detector:DeleteEntity(entity)
 end
 
 function Detector:OnTick(event)
-    self:init()
-    local step = self.step
-    while (event.tick - (step * self.interval)) % self.maxTime ~= 0 do
-        step = step - 1
+    local combinators = storage.combinators
+    if combinators == nil then
+        self:init()
+        return
     end
-
+    if next(combinators) == nil then return end
+    -- Each combinator is refreshed once per self.step ticks; the slot is derived directly
+    -- instead of counting down from self.step every tick. Dead entries are dropped.
+    local period = self.step
+    local slot = math.floor(event.tick / self.interval) % period
     local count = 1
-    for _, el in pairs(storage.combinators) do
-        if el ~= nil then
-            if el.behavior.valid == false then
-                count = count -1
-            elseif (count - step) % self.step == 0 and el.behavior.enabled == true then
-                self:SetSignal(el, math.floor(game.surfaces[el.surface].get_pollution(el.position)))
+    for key, el in pairs(combinators) do
+        if not el.behavior.valid then
+            combinators[key] = nil
+        else
+            if count % period == slot and el.behavior.enabled == true then
+                local surface = game.surfaces[el.surface]
+                if surface then
+                    self:SetSignal(el, math.floor(surface.get_pollution(el.position)))
+                else
+                    combinators[key] = nil
+                end
             end
             count = count + 1
         end
@@ -146,8 +156,9 @@ function Detector:OnGuiClosed(event)
 end
 
 function Detector:OnBuild(event)
-    if event.created_entity ~= nil then
-        self:CheckEntity(event.created_entity)
+    local entity = event.entity
+    if entity ~= nil and entity.valid then
+        self:CheckEntity(entity)
     end
 end
 

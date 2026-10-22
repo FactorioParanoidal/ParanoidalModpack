@@ -1,0 +1,6 @@
+{
+  "mod": "Clowns-Processing",
+  "source": "portal",
+  "upstreamVersion": "2.0.14",
+  "changeReason": "Локальный патч технологических зависимостей в prototypes/technology-updates.lua для набора Bob/Angels в Paranoidal: использует bob-tungsten-alloy-processing как prerequisite centrifuging-2 при наличии bobplates и согласует открытие рецептов с технологиями Angel's."
+}

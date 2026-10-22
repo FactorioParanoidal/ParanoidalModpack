@@ -1,0 +1,12 @@
+{
+  "name": "zzzparanoidal-settings-cosmetic",
+  "version": "0.1.0",
+  "title": "PARANOIDAL: hide cosmetic settings",
+  "author": "SEO-master",
+  "factorio_version": "2.0",
+  "description": "Hides other mods' startup settings that only change visuals (colors, sounds, icons, light, reskins). Disable this mod to see them. Values in mod-settings.dat are not changed.",
+  "dependencies": [
+    "base >= 2.0.77",
+    "? zzzparanoidal"
+  ]
+}

@@ -3,6 +3,8 @@
 - API update
 - Moved the effect up a bit for the character
 - Added support for spidertron
+- Paranoidal: death/mined handler removes the record by unit_number (it was keyed by the entity object and never matched); storage table is created when the mod is added to an existing save
+- Paranoidal: the per-tick effect loop is registered only while a shield record exists (derived from storage on load); removed the global `print` override that pointed at player 1
 
 ----------------------------
 0.18.4

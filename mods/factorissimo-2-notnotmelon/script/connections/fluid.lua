@@ -4,13 +4,6 @@ Fluid.color = {r = 167 / 255, g = 229 / 255, b = 255 / 255}
 Fluid.entity_types = {"pipe", "pipe-to-ground", "pump", "storage-tank", "infinity-pipe", "offshore-pump", "elevated-pipe"}
 Fluid.unlocked = function(force) return force.technologies["factory-connection-type-fluid"].researched end
 
-local function is_connected(dummy_connector, entity)
-    if blacklist[entity.name] then return false end
-    for _, e in pairs(dummy_connector.neighbours[1]) do
-        if e.unit_number == entity.unit_number then return true end
-    end
-end
-
 local function create_linked_connections(factory, cpos, settings)
     local inside_surface = factory.inside_surface
     local outside_surface = factory.outside_surface

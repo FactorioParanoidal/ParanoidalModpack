@@ -1742,7 +1742,7 @@ cheat_insert_all_requests = function(entity, plans)
                                    count = count}
                 
                 if stack.can_set_stack(new_stack) then
-                    set_stack(new_stack)
+                    stack.set_stack(new_stack)
                 else
                     --...we have no recourse currently
                     game.print("Nanobots error! Set stack in cheat_insert_all_requests failed!")
@@ -1750,7 +1750,7 @@ cheat_insert_all_requests = function(entity, plans)
             else
                 --we assume they're the correct item, or there'd be a removal request as well (which takes priority)
                 --we also assume we HAVE a count
-                stack.count = stack.count + stack_pointer.count
+                stack.count = stack.count + (stack_pointer.count or 1)
             end
         end
     end

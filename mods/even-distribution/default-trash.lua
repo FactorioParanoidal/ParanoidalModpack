@@ -65,11 +65,24 @@ return {
 	["angels-tech"]               = 0,
 	["angels-power"]              = 0,
 	["angels-logistics"]          = 0,
+
+	-- ANGELS MODS GROUPS (2.0 names, Paranoidal)
+	["angels-resource-refining"]        = 0,
+	["angels-water-treatment"]          = 0,
+	["angels-petrochem-refining"]       = 0,
+	["angels-bio-processing-nauvis"]    = 0,
+	["angels-bio-processing-vegetables"] = 0,
+	["angels-bio-processing-alien"]     = 0,
 	
 	-- ANGELS MODS ITEMS
 	["wood-bricks"]               = 0,
 	["wood-pellets"]              = 0,
 	["coal-crushed"]              = 0,
+
+	-- ANGELS MODS ITEMS (2.0 names, Paranoidal)
+	["angels-wood-bricks"]        = 0,
+	["angels-wood-pellets"]       = 0,
+	["angels-coal-crushed"]       = 0,
 	
 	-- SCIENCE COST TWEAKER MOD GROUPS
 	["sct-science"]               = 0,

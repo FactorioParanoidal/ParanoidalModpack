@@ -13,6 +13,11 @@ local movementUtils = require("MovementUtils")
 local mathUtils = require("MathUtils")
 local config = require("__RampantFixed__/config")
 local scoreChunks = require("ScoreChunks")
+local aiBrain = require("AIBrain")
+local unitUtils = require("UnitUtils")
+local isForeign = require("ForeignEnemies").isForeign
+
+local TACTICS = aiBrain.TACTICS
 
 
 -- constants
@@ -52,6 +57,8 @@ local randomTickEvent = mathUtils.randomTickEvent
 local mRandom = math.random
 local mMax = math.max
 local mMin = math.min
+local mFloor = math.floor
+local mCeil = math.ceil
 
 local positionFromDirectionAndChunk = mapUtils.positionFromDirectionAndChunk
 
@@ -174,6 +181,42 @@ function aiAttackWave.rallyUnits(chunk, map, tick)
     end
 end
 
+-- New squad next to the chunk in the given direction (nil if there is no room)
+local function placeSquad(map, chunk, squadDirection, settlers)
+    local squadPosition = map.surface.find_non_colliding_position("chunk-scanner-squad-rampant",
+                                                                  positionFromDirectionAndChunk(squadDirection,
+                                                                                                chunk,
+                                                                                                map.universe.position,
+                                                                                                0.98),
+                                                                  CHUNK_SIZE,
+                                                                  4,
+                                                                  true)
+    if not squadPosition then
+        return nil
+    end
+    return createSquad(squadPosition, map, nil, settlers), squadPosition
+end
+
+-- Commands up to unitCount nearby units to join the squad; returns the number of units found
+local function fillSquad(map, squad, unitCount)
+    local universe = map.universe
+    universe.formGroupCommand.group = squad.group
+    universe.formCommand.unit_count = unitCount
+    return map.surface.set_multi_command(universe.formCommand)
+end
+
+local function dropSquad(squad)
+    if (squad.group.valid) then
+        squad.group.destroy()
+    end
+end
+
+local function printSpending(map, cost, label, position)
+    if map.universe.aiPointsPrintSpendingToChat then
+        game.print(map.surface.name .. ": Points: -" .. cost .. ". [" .. label .. "] Total: " .. string.format("%.2f", map.points) .. " [gps=" .. position.x .. "," .. position.y .. "," .. map.surface.name .. "]")
+    end
+end
+
 function aiAttackWave.formSettlers(map, chunk)
 	if chunk.nextSquadTick and (chunk.nextSquadTick > game.tick) then
 		return false
@@ -186,8 +229,6 @@ function aiAttackWave.formSettlers(map, chunk)
         (mRandom() < map.formSquadThreshold) and
         ((map.points - AI_SETTLER_COST) > 0)
     then
-        local surface = map.surface
-        local squadPath, squadDirection
 		local neighborChunks = getNeighborChunks(map, chunk.x, chunk.y) 
 		-- single nests have priority
 		local FreeNeighborChunks = getFreeNeighborChunks(neighborChunks, map)		-- number of non-settled chunks
@@ -218,11 +259,6 @@ function aiAttackWave.formSettlers(map, chunk)
 				end
 			end
 			settleRoll = settleRoll * siegeRoll
-			-- if showDebugMsg then
-				-- game.print(settlerType.." settleRoll = ".. tostring(settleRoll)..", siegeRoll = ".. tostring(siegeRoll))
-				-- game.print("pheromones = " .. pheromones .. ", no_pollution_attack_threshold = ".. map.no_pollution_attack_threshold.. ", raiding_minimum_base_threshold = "..map.raiding_minimum_base_threshold)
-				-- game.print("[gps=" .. chunk.x .. "," .. chunk.y .."]")
-			-- end	
 		end
 		local failChance = 1 - settleRoll
 		if map.points > 10000 then
@@ -231,69 +267,47 @@ function aiAttackWave.formSettlers(map, chunk)
 			failChance = failChance ^ 2
 		end
 		if (failChance==0) or (mRandom() >= failChance) then
+			local validFunction = validSettlerLocation
+			local scoreFunction = scoreSettlerLocation
 			if (settlerType == "Siege") then
-				squadPath, squadDirection = scoreNeighborsForResource(chunk,
-																	   getNeighborChunks(map, chunk.x, chunk.y),
-																	   validSiegeLocation,
-																	   scoreSiegeLocation,
-																	   map)
-				
-			else
-				squadPath, squadDirection = scoreNeighborsForResource(chunk,
-																	  getNeighborChunks(map, chunk.x, chunk.y),
-																	  validSettlerLocation,
-																	  scoreSettlerLocation,
-																	  map)
+				validFunction = validSiegeLocation
+				scoreFunction = scoreSiegeLocation
 			end
-
+			local squadPath, squadDirection = scoreNeighborsForResource(chunk,
+																		getNeighborChunks(map, chunk.x, chunk.y),
+																		validFunction,
+																		scoreFunction,
+																		map)
 			if (squadPath ~= -1) then
-            local squadPosition = surface.find_non_colliding_position("chunk-scanner-squad-rampant",
-                                                                      positionFromDirectionAndChunk(squadDirection,
-                                                                                                    chunk,
-                                                                                                    universe.position,
-                                                                                                    0.98),
-                                                                      CHUNK_SIZE,
-                                                                      4,
-                                                                      true)
-            if squadPosition then
-                local squad = createSquad(squadPosition, map, nil, true)
-
-                squad.maxDistance = gaussianRandomRange(universe.expansionMaxDistance * 0.5,
-                                                        universe.expansionMaxDistanceDerivation,
-                                                        10,
-                                                        universe.expansionMaxDistance)
-
-				if settlerType == "Siege" then
-					squad.siege = true
-				end	
-                local scaledWaveSize = settlerWaveScaling(map)
-                universe.formGroupCommand.group = squad.group
-                universe.formCommand.unit_count = scaledWaveSize
-                local foundUnits = surface.set_multi_command(universe.formCommand)
-                if (foundUnits > 0) then
-                    squad.kamikaze = mRandom() < map.kamikazeThreshold
-                    universe.builderCount = universe.builderCount + 1
-					local rangeKf = 1
-					if map.state == AI_STATE_MIGRATING then 
-						rangeKf =  0.7 + mMin(chunk[BASE_DETECTION_PHEROMONE]/map.no_pollution_attack_threshold, 0.3)
+				local squad, squadPosition = placeSquad(map, chunk, squadDirection, true)
+				if squad then
+					squad.maxDistance = gaussianRandomRange(universe.expansionMaxDistance * 0.5,
+															universe.expansionMaxDistanceDerivation,
+															10,
+															universe.expansionMaxDistance)
+					if settlerType == "Siege" then
+						squad.siege = true
 					end	
-					local settlerCost = math.floor(AI_SETTLER_COST * rangeKf)
-                    map.points = map.points - settlerCost
-                    if universe.aiPointsPrintSpendingToChat then
-                        game.print(map.surface.name .. ": Points: -" .. settlerCost .. ". ["..settlerType.."] Total: " .. string.format("%.2f", map.points) .. " [gps=" .. squadPosition.x .. "," .. squadPosition.y .. "," .. map.surface.name .. "]")
-                    end
-                    universe.groupNumberToSquad[squad.groupNumber] = squad
-					map.vengenceLimiter = mMax(0, map.vengenceLimiter - 3)
-					squadCreated = true
-					-- chunk.nextSquadTick = game.tick + 1800	-- 30 sec
-                else
-					squadCreated = nil
-                    if (squad.group.valid) then
-                        squad.group.destroy()
-                    end
-                end
-            end
-        end
+					local foundUnits = fillSquad(map, squad, settlerWaveScaling(map))
+					if (foundUnits > 0) then
+						squad.kamikaze = mRandom() < map.kamikazeThreshold
+						universe.builderCount = universe.builderCount + 1
+						local rangeKf = 1
+						if map.state == AI_STATE_MIGRATING then
+							rangeKf =  0.7 + mMin(chunk[BASE_DETECTION_PHEROMONE]/map.no_pollution_attack_threshold, 0.3)
+						end
+						local settlerCost = math.floor(AI_SETTLER_COST * rangeKf)
+						map.points = map.points - settlerCost
+						printSpending(map, settlerCost, settlerType, squadPosition)
+						universe.groupNumberToSquad[squad.groupNumber] = squad
+						map.vengenceLimiter = mMax(0, map.vengenceLimiter - 3)
+						squadCreated = true
+					else
+						squadCreated = nil
+						dropSquad(squad)
+					end
+				end
+			end
 		end
     end
 	
@@ -309,42 +323,27 @@ function aiAttackWave.formResourceSettlers(map, chunk)
 	end
 	
     local universe = map.universe
-	local surface = map.surface
-    local squadPath, squadDirection
 	local squadCreated = false
 	
-	squadPath, squadDirection = scoreNeighborsForResource(chunk,
+	local squadPath, squadDirection = scoreNeighborsForResource(chunk,
 								  getNeighborChunks(map, chunk.x, chunk.y),
 								  validSettlerLocation,
 								  scoreSettlerLocation,
 								  map)
 	if (squadPath ~= -1) then
-		local squadPosition = surface.find_non_colliding_position("chunk-scanner-squad-rampant",
-			positionFromDirectionAndChunk(squadDirection,
-			chunk,
-			universe.position,
-			0.98),
-			CHUNK_SIZE,
-			4,
-			true)
-		if squadPosition then
-			local squad = createSquad(squadPosition, map, nil, true)
-
+		local squad, squadPosition = placeSquad(map, chunk, squadDirection, true)
+		if squad then
 			squad.maxDistance = 17 * CHUNK_SIZE
 			squad.siege = false
 
-			universe.formGroupCommand.group = squad.group
-			universe.formCommand.unit_count = 6
-			local foundUnits = surface.set_multi_command(universe.formCommand)
+			local foundUnits = fillSquad(map, squad, 6)
 			if (foundUnits > 0) then
 				squad.kamikaze = false
 				universe.builderCount = universe.builderCount + 1
 
 				local settlerCost = 10
 				map.points = map.points - settlerCost
-				if universe.aiPointsPrintSpendingToChat then
-					game.print(map.surface.name .. ": Points: -" .. settlerCost .. " [claiming resource] Total: " .. string.format("%.2f", map.points) .. " [gps=" .. squadPosition.x .. "," .. squadPosition.y .. "," .. map.surface.name .. "]")
-				end
+				printSpending(map, settlerCost, "claiming resource", squadPosition)
 				universe.groupNumberToSquad[squad.groupNumber] = squad
 				squadCreated = true
 				
@@ -355,12 +354,9 @@ function aiAttackWave.formResourceSettlers(map, chunk)
 				end	
 			else
 				squadCreated = nil
-				if (squad.group.valid) then
-					squad.group.destroy()
-				end
+				dropSquad(squad)
 			end
 		end	
-			
 	end	
 	return squadCreated	
 end
@@ -376,29 +372,17 @@ function aiAttackWave.formVengenceSquad(map, chunk)
         ((map.points - finalVengenceSquadCost) > 0) and
         (mRandom() < map.formSquadThreshold)
     then
-        local surface = map.surface
         local squadPath, squadDirection = scoreNeighborsForFormation(getNeighborChunks(map, chunk.x, chunk.y),
                                                                      validUnitGroupLocation,
                                                                      scoreUnitGroupLocation,
                                                                      map)
         if (squadPath ~= -1) then
-            local squadPosition = surface.find_non_colliding_position("chunk-scanner-squad-rampant",
-                                                                      positionFromDirectionAndChunk(squadDirection,
-                                                                                                    chunk,
-                                                                                                    universe.position,
-                                                                                                    0.98),
-                                                                      CHUNK_SIZE,
-                                                                      4,
-                                                                      true)
-            if squadPosition then
-                local squad = createSquad(squadPosition, map)
+            local squad, squadPosition = placeSquad(map, chunk, squadDirection)
+            if squad then
 				squad.vengence = true
                 squad.rabid = mRandom() < 0.03
 
-                local scaledWaveSize = mMin(attackWaveScaling(map), getAttackWaveMaxSize(universe)*0.8)
-                universe.formGroupCommand.group = squad.group
-                universe.formCommand.unit_count = scaledWaveSize
-                local foundUnits = surface.set_multi_command(universe.formCommand)
+                local foundUnits = fillSquad(map, squad, mMin(attackWaveScaling(map), getAttackWaveMaxSize(universe)*0.8))
                 if (foundUnits > 0) then
                     squad.kamikaze = mRandom() < map.kamikazeThreshold
                     universe.groupNumberToSquad[squad.groupNumber] = squad
@@ -410,14 +394,15 @@ function aiAttackWave.formVengenceSquad(map, chunk)
 					end	
 					
                     map.points = map.points - finalVengenceSquadCost
-                    if universe.aiPointsPrintSpendingToChat then
-                        game.print(map.surface.name .. ": Points: -" .. finalVengenceSquadCost .. ". [Vengence] Total: " .. string.format("%.2f", map.points) .. " [gps=" .. squadPosition.x .. "," .. squadPosition.y  .. "," .. map.surface.name.. "]")
-                    end
+					printSpending(map, finalVengenceSquadCost, "Vengence", squadPosition)
 					chunk.nextSquadTick = game.tick + 900	-- 15 sec
+					if aiBrain.active(universe) then
+						-- hunters do not walk one predictable line either
+						squad.noise = 0.1
+						squad.startSize = foundUnits
+					end
                 else
-                    if (squad.group.valid) then
-                        squad.group.destroy()
-                    end
+                    dropSquad(squad)
                 end
             end
         end
@@ -426,8 +411,85 @@ end
 
 local spiderUnitWeight = 4
 
-function aiAttackWave.formSquads(map, chunk, tick, remoteInterfaceParameters)
-	if chunk.nextSquadTick and (chunk.nextSquadTick > tick) then
+-- squads that found too few units take nearby spider units (each counts as spiderUnitWeight units)
+local function addSpiders(map, squad, scaledWaveSize, foundUnits)
+	if (scaledWaveSize - foundUnits) > spiderUnitWeight then
+		local placesLeft = scaledWaveSize - foundUnits
+		local foundSpiders = map.surface.find_entities_filtered({
+			force  = squad.group.force,
+			position = map.universe.position,
+			radius = 64,
+			type = "spider-unit"
+			})
+		for _, spiderUnit in pairs(foundSpiders) do
+			squad.group.add_member(spiderUnit)
+			foundUnits = foundUnits + 1
+			placesLeft = placesLeft - spiderUnitWeight
+			if placesLeft <= 0 then
+				break
+			end
+		end
+		if #foundSpiders > 0 then
+			squad.hasSpiders = true
+		end
+	end
+	return foundUnits
+end
+
+-- extra squads of two-squad tactics (second probe, second pincer arm) and the delayed main strike
+local function formTacticExtras(map, chunk, tick, tactic, firstSquad, squadDirection, unitCount, finalSquadCost)
+	local universe = map.universe
+	local spec = TACTICS[tactic]
+	local stage1 = spec.stage1
+	local squads = {firstSquad}
+	if stage1 and (stage1.count > 1) then
+		for i = 2, stage1.count do
+			local cost = mFloor(finalSquadCost * stage1.costK)
+			if (universe.squadCount >= universe.AI_MAX_SQUAD_COUNT) or ((map.points - cost) < 0) then
+				break
+			end
+			local squad, squadPosition = placeSquad(map, chunk, squadDirection)
+			if not squad then
+				break
+			end
+			local foundUnits = fillSquad(map, squad, unitCount)
+			if foundUnits <= 0 then
+				dropSquad(squad)
+				break
+			end
+			squad.kamikaze = mRandom() < map.kamikazeThreshold
+			map.points = map.points - cost
+			universe.squadCount = universe.squadCount + 1
+			universe.groupNumberToSquad[squad.groupNumber] = squad
+			squad.startSize = foundUnits
+			aiBrain.prepareSquad(map, squad, chunk, tactic, stage1, {excludeSector = firstSquad.goalSector}, tick)
+			aiBrain.describeSquad(map, squad, "extra", foundUnits, squadPosition)
+			printSpending(map, cost, "Squad", squadPosition)
+			squads[#squads + 1] = squad
+		end
+	end
+	if (stage1 and (stage1.approach == "pincer")) and aiBrain.heavy then
+		aiBrain.heavy.preparePincer(map, squads, chunk, tick)
+	end
+	if spec.followUp then
+		aiBrain.scheduleFollowUp(map, chunk, tactic, tick, {approach = spec.approach, refSector = firstSquad.goalSector})
+	end
+	-- flights strike elsewhere while the ground attack is under way
+	local ai = aiBrain.getMapAI(map)
+	ai.escortUntil = tick + 5400
+	ai.escortX = (firstSquad.goal and firstSquad.goal.x) or (chunk.x + 16)
+	ai.escortY = (firstSquad.goal and firstSquad.goal.y) or (chunk.y + 16)
+	if (ai.nextFlightTick > tick + 600) and ((tick - (ai.lastFlightTick or 0)) > 1800) then
+		ai.nextFlightTick = tick + 600
+	end
+end
+
+-- plan (optional): delayed main strike of a two-stage tactic, from aiBrain.popDueFollowUp
+-- remoteInterfaceParameters.external: an attack ordered by another mod (formStrikeSquads): any nest chunk, no
+-- cooldown, no cost and no effect on the attack schedule of the AI; the number of units is returned in .units
+function aiAttackWave.formSquads(map, chunk, tick, remoteInterfaceParameters, plan)
+	local external = remoteInterfaceParameters and remoteInterfaceParameters.external
+	if (not plan) and (not external) and chunk.nextSquadTick and (chunk.nextSquadTick > tick) then
 		return false
 	end
     local universe = map.universe
@@ -435,87 +497,95 @@ function aiAttackWave.formSquads(map, chunk, tick, remoteInterfaceParameters)
 	local squad
 	local finalSquadCost = map.finalSquadCost
 	local canCreateSquad = (remoteInterfaceParameters and remoteInterfaceParameters.ignoreSquadLimit) or (universe.squadCount < (universe.AI_MAX_SQUAD_COUNT*0.7))
-	if remoteInterfaceParameters then
+	if external then
+		finalSquadCost = 0
+	elseif remoteInterfaceParameters then
 		finalSquadCost = mMin(finalSquadCost, map.points)
 	end
     if canCreateSquad  and
-        attackWaveValidCandidate(chunk, map) and
-        ((map.points - finalSquadCost) >= 0) and
-        (remoteInterfaceParameters or (mRandom() < map.formSquadThreshold)) 
+        (external or attackWaveValidCandidate(chunk, map)) and
+        (external or ((map.points - finalSquadCost) >= 0)) and
+        (remoteInterfaceParameters or plan or (mRandom() < map.formSquadThreshold))
    then
-        local surface = map.surface
         local squadPath, squadDirection = scoreNeighborsForFormation(getNeighborChunks(map, chunk.x, chunk.y),
                                                                      validUnitGroupLocation,
                                                                      scoreUnitGroupLocation,
                                                                      map)
         if (squadPath ~= -1) then
-            local squadPosition = surface.find_non_colliding_position("chunk-scanner-squad-rampant",
-                                                                      positionFromDirectionAndChunk(squadDirection,
-                                                                                                    chunk,
-                                                                                                    universe.position,
-                                                                                                    0.98),
-                                                                      CHUNK_SIZE,
-                                                                      4,
-                                                                      true)
-            if squadPosition then
-                squad = createSquad(squadPosition, map)
-				if universe.undergroundAttack and (not remoteInterfaceParameters) and (map.undergroundAttackProbability > 0) and (mRandom() < map.undergroundAttackProbability)  then
-					-- if mRandom() < 0.2 then
-						-- squad.undergoundAttack = "randomTarget"	-- look at undergroundAttack.createUndergroudAttack
-					-- else
-						squad.undergoundAttack = "common"
-					-- end		
+			local squadPosition
+            squad, squadPosition = placeSquad(map, chunk, squadDirection)
+            if squad then
+				-- tactic (new behaviour only; remote-created squads keep the old one)
+				local tactic
+				local spec
+				if not remoteInterfaceParameters then
+					if plan then
+						tactic = plan.tactic
+					else
+						tactic = aiBrain.chooseTactic(map, chunk, tick, config.getAttackWaveSize(map))
+					end
+					if tactic then
+						spec = TACTICS[tactic]
+						if (not plan) and spec.stage1 then
+							spec = spec.stage1
+						end
+					end
+				end
+				if universe.undergroundAttack and (not remoteInterfaceParameters) and aiBrain.heavyScriptsAllowed(universe)
+					and ((not tactic) or (tactic == "assault"))
+					and (map.undergroundAttackProbability > 0) and (mRandom() < map.undergroundAttackProbability)  then
+					squad.undergoundAttack = "common"
 				end
                 squad.rabid = mRandom() < 0.03
 
                 local scaledWaveSize = attackWaveScaling(map)
-				if map.supressionData and (map.supressionData.supressionType >=2) and (map.supressionData.supressionEndTick >= tick) then
+				if (not external) and map.supressionData and (map.supressionData.supressionType >=2) and (map.supressionData.supressionEndTick >= tick) then
 					if not map.supressionData.artilleryEffectTick or (map.supressionData.artilleryEffectTick<game.tick) then
 						scaledWaveSize = math.floor(scaledWaveSize*0.5)
 						map.supressionData.supressionType = 1
 					end				
 				end
-                universe.formGroupCommand.group = squad.group
+				local squadCost = finalSquadCost
+				if spec then
+					scaledWaveSize = mMax(spec.minSize or 1, mCeil(scaledWaveSize * spec.sizeK))
+					squadCost = mFloor(finalSquadCost * spec.costK)
+				end
+				local unitCount = scaledWaveSize
 				if remoteInterfaceParameters and remoteInterfaceParameters.size and remoteInterfaceParameters.size > 0 then
-					universe.formCommand.unit_count = remoteInterfaceParameters.size
-				else
-					universe.formCommand.unit_count = scaledWaveSize
-				end	
+					unitCount = remoteInterfaceParameters.size
+				end
 
-                local foundUnits = surface.set_multi_command(universe.formCommand)
-				if (scaledWaveSize - foundUnits) > spiderUnitWeight then
-					local placesLeft = scaledWaveSize - foundUnits
-					local foundSpiders = surface.find_entities_filtered({
-						force  = squad.group.force,
-						position = universe.position,
-						radius = 64,
-						type = "spider-unit"
-						})
-					for _, spiderUnit in pairs(foundSpiders) do
-						squad.group.add_member(spiderUnit)
-						foundUnits = foundUnits + 1	
-						placesLeft = placesLeft - spiderUnitWeight
-						if placesLeft <= 0 then
-							break
-						end	
-					end
-					if #foundSpiders > 0 then
-						squad.hasSpiders = true
-					end
-				end	
-                if (foundUnits > 0) then
+                local foundUnits = fillSquad(map, squad, unitCount)
+				foundUnits = addSpiders(map, squad, scaledWaveSize, foundUnits)
+				-- an ordered attack does not send a few units on a long march: below minUnits the squad is dropped
+				local minUnits = (external and remoteInterfaceParameters.minUnits) or 1
+                if (foundUnits >= minUnits) then
                     squad.kamikaze = mRandom() < map.kamikazeThreshold
 
-                    map.points = map.points - finalSquadCost
-					map.vengenceLimiter = mMax(0, map.vengenceLimiter - 2)
-					
 					squadCreated = true
                     universe.squadCount = universe.squadCount + 1
                     universe.groupNumberToSquad[squad.groupNumber] = squad
+					if external then
+						remoteInterfaceParameters.squad = squad
+						remoteInterfaceParameters.units = foundUnits
+						return true
+					end
+
+                    map.points = map.points - squadCost
+					map.vengenceLimiter = mMax(0, map.vengenceLimiter - 2)
+
+					if tactic then
+						squad.startSize = foundUnits
+						aiBrain.prepareSquad(map, squad, chunk, tactic, spec, plan, tick)
+						aiBrain.describeSquad(map, squad, plan and "follow-up" or nil, foundUnits, squadPosition)
+						if not plan then
+							formTacticExtras(map, chunk, tick, tactic, squad, squadDirection, scaledWaveSize, finalSquadCost)
+						end
+					end
 					
-                    if tick and ((map.state == AI_STATE_AGGRESSIVE) or (map.state ==AI_STATE_GROWING)) then
+                    if tick and (not plan) and ((map.state == AI_STATE_AGGRESSIVE) or (map.state ==AI_STATE_GROWING)) then
 						map.squadsGenerated = (map.squadsGenerated or 0) + 1	-- this "attack-wave" only
-						chanceForAdditionalSquad = map.activeNests/15-map.squadsGenerated
+						local chanceForAdditionalSquad = map.activeNests/15-map.squadsGenerated
 						if universe.aiPointsScaler > 1 then
 							chanceForAdditionalSquad = chanceForAdditionalSquad + universe.aiPointsScaler - 1
 						end
@@ -538,14 +608,10 @@ function aiAttackWave.formSquads(map, chunk, tick, remoteInterfaceParameters)
 						end										
                     end
 					chunk.nextSquadTick = tick + 1800	-- 30 sec
-                    if universe.aiPointsPrintSpendingToChat then
-                        game.print(map.surface.name .. ": Points: -" .. finalSquadCost .. ". [Squad] Total: " .. string.format("%.2f", map.points) .. " [gps=" .. squadPosition.x .. "," .. squadPosition.y  .. "," .. map.surface.name .. "]")
-                    end
+					printSpending(map, squadCost, "Squad", squadPosition)
                 else
 					squadCreated = nil
-                    if (squad.group.valid) then
-                        squad.group.destroy()
-                    end
+                    dropSquad(squad)
                 end
             end
         end
@@ -558,6 +624,66 @@ function aiAttackWave.formSquads(map, chunk, tick, remoteInterfaceParameters)
 	return squadCreated
 end
 
+-- Reforged Paranoidal: an attack ordered by another mod (remote strikePosition_ExtCtrl; Big Monsters swarms and
+-- rocket silo attacks through mferrari_lib CallFrenzyAttack). Was hundreds of single units commanded one by one;
+-- now ordinary Rampant squads (packing, retreat, scent) from the nest chunks in reach of the target, nearest first,
+-- until the ordered number of units is sent: at most the attack wave size each, at most STRIKE_SQUADS squads, no
+-- squad below STRIKE_MIN_UNITS units (those units stay at their nest). Each squad gets a strike goal on the target.
+-- Free for the AI: no points, cooldowns or schedule changes. Returns the number of units sent.
+local STRIKE_NESTS = 32         -- nearest nest chunks considered
+local STRIKE_SQUADS = 20
+local STRIKE_MIN_UNITS = 5
+local strikeParameters = {ignoreSquadLimit = true, external = true, minUnits = STRIKE_MIN_UNITS}
+function aiAttackWave.formStrikeSquads(map, position, units, searchRadius, tick)
+	local px = position.x or position[1]
+	local py = position.y or position[2]
+	local range2 = searchRadius * searchRadius
+	-- the nearest nest chunks, kept sorted by distance (no table of every nest)
+	local chunks = {}
+	local distances = {}
+	local count = 0
+	for chunk, nests in pairs(map.chunkToNests) do
+		if nests > 0 then
+			local dx = chunk.x + 16 - px
+			local dy = chunk.y + 16 - py
+			local d2 = dx * dx + dy * dy
+			if (d2 <= range2) and ((count < STRIKE_NESTS) or (d2 < distances[count])) then
+				if count < STRIKE_NESTS then
+					count = count + 1
+				end
+				local i = count
+				while (i > 1) and (distances[i - 1] > d2) do
+					chunks[i] = chunks[i - 1]
+					distances[i] = distances[i - 1]
+					i = i - 1
+				end
+				chunks[i] = chunk
+				distances[i] = d2
+			end
+		end
+	end
+	local waveMax = mMax(STRIKE_MIN_UNITS, getAttackWaveMaxSize(map.universe))
+	local parameters = strikeParameters
+	local sent = 0
+	local squads = 0
+	for i = 1, count do
+		if (units - sent < STRIKE_MIN_UNITS) or (squads >= STRIKE_SQUADS) then
+			break
+		end
+		parameters.size = mMin(waveMax, units - sent)
+		parameters.squad = nil
+		parameters.units = nil
+		if aiAttackWave.formSquads(map, chunks[i], tick, parameters) and parameters.squad then
+			local squad = parameters.squad
+			squad.goal = {x = px, y = py, kind = "strike", reach = 40, untilTick = tick + 5 * 3600}
+			squad.external = true
+			sent = sent + parameters.units
+			squads = squads + 1
+		end
+	end
+	parameters.squad = nil
+	return sent
+end
 
 ---- emulation of base building
 function aiAttackWave.processNonRampantBuilders(universe, tick)
@@ -646,10 +772,13 @@ function aiAttackWave.processBuilders(universe, tick)
 			surface = map.surface
 			group = squad.group
 			validMembers = 0
+			-- champions and Big Monsters enemies are never spent on a nest
+			local champions = unitUtils.championUnits(universe)
 			for _, entity in pairs(group.members) do
-				if entity.valid and (entity.type == "unit") then
+				if entity.valid and (entity.type == "unit") and not (champions and champions[entity.unit_number])
+					and not isForeign(entity.name) then
 					validMembers = validMembers + 1
-					roll = math.random()
+					local roll = math.random()
 					local newPosition
 					local entityName
 					if roll < 0.4 then
@@ -691,7 +820,7 @@ function aiAttackWave.processBuilders(universe, tick)
 						buildData.builded = buildData.builded + 1
 						buildData.nextTick = tick + (buildData.buildCooldown or 3600)
 						
-						newEntity = map.surface.create_entity({name = entityName, position = newPosition, force = entity.force, raise_built = false})
+						local newEntity = map.surface.create_entity({name = entityName, position = newPosition, force = entity.force, raise_built = false})
 						if newEntity and newEntity.valid then
 							newEntity.spawn_decorations()
 							script.raise_event(defines.events.on_biter_base_built, {entity = newEntity, tick = tick}) 

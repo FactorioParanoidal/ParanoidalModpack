@@ -26,9 +26,44 @@ local FLOW_PRECISION_BRACKETS_LENGTHS = {
 }
 
 QUALITY_NAMES_SET = {}
-for quality_name, _quality_prototype in pairs(prototypes.quality) do
+local visible_quality_count = 0
+for quality_name, quality_prototype in pairs(prototypes.quality) do
     QUALITY_NAMES_SET[quality_name] = true
+    if not quality_prototype.hidden then
+        visible_quality_count = visible_quality_count + 1
+    end
 end
+
+-- Paranoidal: with a single visible quality ("normal"; the hidden "quality-unknown" never appears in
+-- statistics) a plain name lookup is exact and cheaper than reading the whole counts dictionary.
+local MULTIPLE_QUALITIES = visible_quality_count > 1
+
+-- Paranoidal: where the per-cycle totals of non-quality milestones are collected.
+-- Key = statistics table + direction. Iterated in a fixed order for determinism.
+local STAT_KEY_BY_TYPE = {
+    item = "item_in",
+    item_consumption = "item_out",
+    fluid = "fluid_in",
+    fluid_consumption = "fluid_out",
+    kill = "kill_in",
+}
+local STAT_KEYS = {"item_in", "item_out", "fluid_in", "fluid_out", "kill_in"}
+local STATS_FIELD_BY_KEY = {
+    item_in = "item_stats",
+    item_out = "item_stats",
+    fluid_in = "fluid_stats",
+    fluid_out = "fluid_stats",
+    kill_in = "kill_stats",
+}
+local OUTPUT_KEYS = {item_out = true, fluid_out = true}
+-- Fluids have no quality: a few direct lookups are cheaper than the fluid dictionary.
+local DICTIONARY_KEYS = {
+    item_in = MULTIPLE_QUALITIES,
+    item_out = MULTIPLE_QUALITIES,
+    fluid_in = false,
+    fluid_out = false,
+    kill_in = MULTIPLE_QUALITIES,
+}
 
 local function find_possible_existing_completion_time(storage_force, new_milestone)
     for _, complete_milestone in pairs(storage_force.complete_milestones) do
@@ -84,6 +119,7 @@ function merge_new_milestones(force_name, new_loaded_milestones)
     storage_force.complete_milestones = new_complete
     storage_force.incomplete_milestones = new_incomplete
     storage_force.milestones_by_group = new_milestones_by_group
+    reset_milestones_tracker()
 end
 
 function initialize_alias_table()
@@ -102,7 +138,8 @@ function initialize_alias_table()
             local alias_type = milestone_type_by_name[loaded_milestone.equals]
             if alias_type then
                 local alias_milestone = {type=alias_type, name=loaded_milestone.name, quantity=loaded_milestone.quantity, quality=loaded_milestone.quality}
-                storage.production_aliases[loaded_milestone.equals] = {} or storage.production_aliases[loaded_milestone.equals]
+                -- Paranoidal: upstream had `{} or existing`, which kept only the last alias of each milestone.
+                storage.production_aliases[loaded_milestone.equals] = storage.production_aliases[loaded_milestone.equals] or {}
                 table.insert(storage.production_aliases[loaded_milestone.equals], alias_milestone)
             end
         end
@@ -123,6 +160,7 @@ function mark_milestone_unreached(storage_force, milestone, milestone_index)
     table.insert(storage_force.incomplete_milestones, milestone)
     table.remove(storage_force.complete_milestones, milestone_index)
     sort_milestones(storage_force.milestones_by_group[milestone.group])
+    reset_milestones_tracker()
 end
 
 function parse_next_formula(next_formula)
@@ -198,7 +236,9 @@ end
 local function sum_counts(flow_statistics_table, item_id, flow_stats_method_name)
     local total_count = 0
     for _, flow_statistics in pairs(flow_statistics_table) do
-        total_count = total_count + flow_statistics[flow_stats_method_name](item_id)
+        if flow_statistics.valid then
+            total_count = total_count + flow_statistics[flow_stats_method_name](item_id)
+        end
     end
     return total_count
 end
@@ -206,50 +246,29 @@ end
 local function sum_counts_merged_qualities(flow_statistics_table, item_name, flow_stats_method_name)
     local total_count = 0
     for _, flow_statistics in pairs(flow_statistics_table) do
-        for quality_name, _  in pairs(QUALITY_NAMES_SET) do
-            total_count = total_count + flow_statistics[flow_stats_method_name]({name=item_name, quality=quality_name})
+        if flow_statistics.valid then
+            for quality_name, _  in pairs(QUALITY_NAMES_SET) do
+                total_count = total_count + flow_statistics[flow_stats_method_name]({name=item_name, quality=quality_name})
+            end
         end
     end
     return total_count
 end
 
--- item_id could be a String or a ItemIDAndQualityIDPair
-local function sum_get_flow_counts(flow_statistics_table, item_id, category_type, precision_index, sample_index)
-    local total_count = 0
-    for _, flow_statistics in pairs(flow_statistics_table) do
-        total_count = total_count + flow_statistics.get_flow_count({
-            name=item_id,
-            category=category_type,
-            precision_index=precision_index,
-            sample_index=sample_index,
-            count=true,
-        })    
-    end
-    return total_count
+local function get_stats_method_name(milestone)
+    return is_consumption_type(milestone.type) and "get_output_count" or "get_input_count"
 end
 
-local function sum_get_flow_counts_merged_qualities(flow_statistics_table, item_name, category_type, precision_index, sample_index)
-    local total_count = 0
-    for _, flow_statistics in pairs(flow_statistics_table) do
-        for quality_name, _  in pairs(QUALITY_NAMES_SET) do
-            total_count = total_count + flow_statistics.get_flow_count({
-                name={name=item_name, quality=quality_name},
-                category=category_type,
-                precision_index=precision_index,
-                sample_index=sample_index,
-                count=true,
-            })
-        end
-    end
-    return total_count
-end
-
--- Sums get_input/output_count for an array of LuaFlowStatistics, merging qualities if needed
+-- Sums get_input/output_count for an array of LuaFlowStatistics, merging qualities if needed.
+-- Paranoidal: the periodic tracker uses per-cycle totals instead; this direct path remains for
+-- milestones with an explicit quality and for callers without totals.
 local function get_total_count(flow_statistics_table, milestone)
-    local flow_stats_method_name = is_consumption_type(milestone.type) and "get_output_count" or "get_input_count"
+    local flow_stats_method_name = get_stats_method_name(milestone)
     if milestone.type == "item" or milestone.type == "item_consumption" or milestone.type == "kill" then -- These are the Item or Kill LuaFlowStatistics, they always take a quality.
         if milestone.quality then -- Specific quality
             return sum_counts(flow_statistics_table, {name=milestone.name, quality=milestone.quality}, flow_stats_method_name)
+        elseif not MULTIPLE_QUALITIES then -- Only "normal" can appear in the statistics
+            return sum_counts(flow_statistics_table, milestone.name, flow_stats_method_name)
         else
             return sum_counts_merged_qualities(flow_statistics_table, milestone.name, flow_stats_method_name)
         end
@@ -258,51 +277,98 @@ local function get_total_count(flow_statistics_table, milestone)
     end
 end
 
--- Sums get_flow_counts for an array of LuaFlowStatistics, merging qualities if needed
-local function get_total_flow_count(flow_statistics_table, milestone, precision_index, sample_index)
-    local category_type = get_category_type(milestone)
-    local item_name
-    if milestone.type == "item" or milestone.type == "item_consumption" then -- These are the Item LuaFlowStatistics, they always take a quality.
-        if milestone.quality then -- Specific quality
-            return sum_get_flow_counts(flow_statistics_table, {name=milestone.name, quality=milestone.quality}, category_type, precision_index, sample_index)
-        else
-            return sum_get_flow_counts_merged_qualities(flow_statistics_table, milestone.name, category_type, precision_index, sample_index)
-        end
-    else -- Fluid or Kills LuaFlowStatistics, no qualities here.
-        return sum_get_flow_counts(flow_statistics_table, milestone.name, category_type, precision_index, sample_index)
+local function get_flow_statistics_table(milestone, storage_force)
+    if milestone.type == "item" or milestone.type == "item_consumption" then
+        return storage_force.item_stats
+    elseif milestone.type == "fluid" or milestone.type == "fluid_consumption" then
+        return storage_force.fluid_stats
+    elseif milestone.type == "kill" then
+        return storage_force.kill_stats
     end
+    error("Invalid milestone type! " .. milestone.type)
 end
 
-local function find_precision_bracket(milestone, flow_statistics_table, is_consumption)
-    local total_count = get_total_count(flow_statistics_table, milestone)
+-- Paranoidal: the (LuaFlowStatistics, id) pairs with a non-zero total for this milestone, and that total.
+-- Item and kill statistics are split by quality. Skipping qualities that were never produced keeps the
+-- backfill sample loops (up to 300 samples) from multiplying by every quality prototype.
+-- Kills are now also searched per quality (upstream searched kill samples for "normal" only).
+local function get_flow_sources(flow_statistics_table, milestone)
+    local method_name = get_stats_method_name(milestone)
+    local per_quality = milestone.type == "item" or milestone.type == "item_consumption" or milestone.type == "kill"
+    local sources = {}
+    local total_count = 0
+    local function add_source(flow_statistics, id)
+        local count = flow_statistics[method_name](id)
+        if count > 0 then
+            sources[#sources + 1] = {flow_statistics, id}
+            total_count = total_count + count
+        end
+    end
+    for _, flow_statistics in pairs(flow_statistics_table) do
+        if flow_statistics.valid then
+            if not per_quality then
+                add_source(flow_statistics, milestone.name)
+            elseif milestone.quality then
+                add_source(flow_statistics, {name=milestone.name, quality=milestone.quality})
+            elseif not MULTIPLE_QUALITIES then
+                add_source(flow_statistics, milestone.name)
+            else
+                for quality_name, _ in pairs(QUALITY_NAMES_SET) do
+                    add_source(flow_statistics, quality_name == "normal" and milestone.name or {name=milestone.name, quality=quality_name})
+                end
+            end
+        end
+    end
+    return sources, total_count
+end
+
+local function sum_flow_counts(sources, category_type, precision_index, sample_index)
+    local total_count = 0
+    for _, source in pairs(sources) do
+        total_count = total_count + source[1].get_flow_count({
+            name=source[2],
+            category=category_type,
+            precision_index=precision_index,
+            sample_index=sample_index,
+            count=true,
+        })
+    end
+    return total_count
+end
+
+-- Returns the bracket to search and, when it was already read, its count (reused by the sample search).
+local function find_precision_bracket(milestone, sources, total_count)
+    local category_type = get_category_type(milestone)
     local previous_bracket = "ALL"
+    local previous_count = nil
     for _, bracket in pairs(FLOW_PRECISION_BRACKETS) do
 
         -- The first bracket that does NOT match the total count indicates the upper bound first production time.
         -- e.g: if total_count = 4, and 4 were created in the last 1000 hours, 4 were created in the last 250 hours, and 2 were created in the last 50 hours,
         -- then the first creation was between 50 and 250 hours ago, and we should search the 250 hours precision bracket.
 
+        local bracket_count = nil
         if FLOW_PRECISION_BRACKETS_LENGTHS[bracket] <= game.tick then -- Skip bracket if the game is not long enough
-            local bracket_count = get_total_flow_count(flow_statistics_table, milestone, bracket, nil)
+            bracket_count = sum_flow_counts(sources, category_type, bracket, nil)
             if bracket_count <= total_count - milestone.quantity then
-                return previous_bracket
+                return previous_bracket, previous_count
             end
         end
         previous_bracket = bracket
+        previous_count = bracket_count
     end
     -- If we haven't found any count drop after going through all brackets
     -- then the item was produced during most recent bracket, which is within the last 5 seconds (improbable but could happen).
-    return previous_bracket
+    return previous_bracket, previous_count
 end
 
-local function find_sample_in_precision_bracket(milestone, bracket, flow_statistics_table)
-    local total_count = get_total_count(flow_statistics_table, milestone)
-     -- TODO: we already did this get_total_flow_count earlier in this same tick in find_precision_bracket, cache?
-    local bracket_count = get_total_flow_count(flow_statistics_table, milestone, bracket, nil)
+local function find_sample_in_precision_bracket(milestone, bracket, sources, total_count, bracket_count)
+    local category_type = get_category_type(milestone)
+    bracket_count = bracket_count or sum_flow_counts(sources, category_type, bracket, nil)
     local count_before_bracket = total_count - bracket_count
     local count_this_bracket = 0
     for i = 300,1,-1 do -- Start from oldest
-        local sample_count = get_total_flow_count(flow_statistics_table, milestone, bracket, i)
+        local sample_count = sum_flow_counts(sources, category_type, bracket, i)
         count_this_bracket = count_this_bracket + sample_count
         if count_this_bracket + count_before_bracket >= milestone.quantity then
             return i
@@ -342,7 +408,8 @@ local function get_realtime_tick_bounds(lower_bound_ticks_ago, upper_bound_ticks
 end
 
 local function find_production_tick_bounds(milestone, flow_statistics_table)
-    local precision_bracket = find_precision_bracket(milestone, flow_statistics_table)
+    local sources, total_count = get_flow_sources(flow_statistics_table, milestone)
+    local precision_bracket, bracket_count = find_precision_bracket(milestone, sources, total_count)
     log("bracket to search: " ..precision_bracket)
 
     local lower_bound_ticks_ago, upper_bound_ticks_ago
@@ -351,7 +418,7 @@ local function find_production_tick_bounds(milestone, flow_statistics_table)
         -- All we know is it's between tick 0 and 1000 hours ago
         lower_bound_ticks_ago, upper_bound_ticks_ago = game.tick, FLOW_PRECISION_BRACKETS_LENGTHS[defines.flow_precision_index.one_thousand_hours]
     else
-        local sample_index = find_sample_in_precision_bracket(milestone, precision_bracket, flow_statistics_table)
+        local sample_index = find_sample_in_precision_bracket(milestone, precision_bracket, sources, total_count, bracket_count)
         if sample_index == 0 then
             return game.tick, game.tick -- Created this exact tick, usually on tick 0 before the start of the game
         end
@@ -395,22 +462,120 @@ function filter_hidden_milestones(milestones, show_incomplete)
     return visible_milestones
 end
 
+-- Paranoidal: per-cycle totals for milestones without a quality condition.
+-- needed[key][name] = true for every incomplete non-technology milestone and its aliases.
+-- Returns nil when no flow statistics have to be read for this force.
+function collect_needed_names(storage_force)
+    local needed = nil
+    local function add(milestone_type, name)
+        local key = STAT_KEY_BY_TYPE[milestone_type]
+        if not key then return end
+        needed = needed or {}
+        local names = needed[key]
+        if not names then
+            names = {}
+            needed[key] = names
+        end
+        names[name] = true
+    end
+    local aliases_by_name = storage.production_aliases or {}
+    for _, milestone in pairs(storage_force.incomplete_milestones) do
+        if milestone.type ~= "technology" then
+            if milestone.quality == nil then
+                add(milestone.type, milestone.name)
+            end
+            local aliases = aliases_by_name[milestone.name]
+            if aliases then
+                for _, alias in pairs(aliases) do
+                    if alias.quality == nil then
+                        add(alias.type, alias.name)
+                    end
+                end
+            end
+        end
+    end
+    return needed
+end
+
+-- One unit of tracker work: one LuaFlowStatistics (one surface) for one key of one force.
+function add_flow_statistics_tasks(tasks, force_name, storage_force, needed)
+    for _, key in ipairs(STAT_KEYS) do
+        if needed[key] then
+            for _, flow_statistics in pairs(storage_force[STATS_FIELD_BY_KEY[key]]) do
+                tasks[#tasks + 1] = {force_name = force_name, key = key, flow_statistics = flow_statistics}
+            end
+        end
+    end
+end
+
+-- Adds the counts of `names` from one LuaFlowStatistics into `sums`.
+-- input_counts/output_counts already merge all qualities of a name (checked in Factorio 2.0.77),
+-- so with many qualities one dictionary read replaces names x qualities API calls.
+function accumulate_flow_totals(sums, flow_statistics, key, names)
+    if not flow_statistics.valid then return end
+    local is_output = OUTPUT_KEYS[key]
+    if DICTIONARY_KEYS[key] then
+        local counts = is_output and flow_statistics.output_counts or flow_statistics.input_counts
+        for name in pairs(names) do
+            local count = counts[name]
+            if count then
+                sums[name] = (sums[name] or 0) + count
+            end
+        end
+    else
+        local method_name = is_output and "get_output_count" or "get_input_count"
+        for name in pairs(names) do
+            sums[name] = (sums[name] or 0) + flow_statistics[method_name](name)
+        end
+    end
+end
+
+-- Synchronous version for one-off operations (backfill, settings changes).
+function compute_flow_totals(storage_force)
+    local totals = {}
+    local needed = collect_needed_names(storage_force)
+    if not needed then return totals end
+    for _, key in ipairs(STAT_KEYS) do
+        local names = needed[key]
+        if names then
+            local sums = {}
+            totals[key] = sums
+            for _, flow_statistics in pairs(storage_force[STATS_FIELD_BY_KEY[key]]) do
+                accumulate_flow_totals(sums, flow_statistics, key, names)
+            end
+        end
+    end
+    return totals
+end
+
+local function get_milestone_count(milestone, storage_force, totals)
+    if totals and milestone.quality == nil then
+        local sums = totals[STAT_KEY_BY_TYPE[milestone.type]]
+        return sums and sums[milestone.name] or 0
+    end
+    return get_total_count(get_flow_statistics_table(milestone, storage_force), milestone)
+end
+
 function backfill_completion_times(force)
     log("Backfilling completion times for " .. force.name)
     local backfilled_anything = false
     local technologies = force.technologies
     local storage_force = storage.forces[force.name]
+    -- Paranoidal: one dictionary read per statistics object instead of names x qualities x surfaces calls.
+    local totals = compute_flow_totals(storage_force)
 
     local i = 1
     while i <= #storage_force.incomplete_milestones do
         local milestone = storage_force.incomplete_milestones[i]
-        if is_valid_milestone(milestone) and is_milestone_reached(milestone, storage_force, technologies) then
+        if is_valid_milestone(milestone) and is_milestone_reached(milestone, storage_force, technologies, totals) then
             local lower_bound, upper_bound = find_completion_tick_bounds(milestone, storage_force.item_stats, storage_force.fluid_stats, storage_force.kill_stats)
             log("Tick bounds for " ..milestone.name.. " : " ..lower_bound.. " - " ..upper_bound)
             if milestone.next then
                 local next_milestone = create_next_milestone(force.name, milestone)
-                table.insert(storage_force.incomplete_milestones, next_milestone)
-                table.insert(storage_force.milestones_by_group[next_milestone.group], next_milestone)
+                if next_milestone then
+                    table.insert(storage_force.incomplete_milestones, next_milestone)
+                    table.insert(storage_force.milestones_by_group[next_milestone.group], next_milestone)
+                end
             end
             mark_milestone_reached(storage_force, milestone, upper_bound, i, lower_bound)
             backfilled_anything = true
@@ -425,32 +590,20 @@ function backfill_completion_times(force)
     return backfilled_anything
 end
 
-function is_production_milestone_reached(milestone, storage_force)
-    local flow_statistics_table
-    if milestone.type == "item" or milestone.type == "item_consumption" then
-        flow_statistics_table = storage_force.item_stats
-    elseif milestone.type == "fluid" or milestone.type == "fluid_consumption" then
-        flow_statistics_table = storage_force.fluid_stats
-    elseif milestone.type == "kill" then
-        flow_statistics_table = storage_force.kill_stats
-    else
-        error("Invalid milestone type! " .. milestone.type)
-    end
-
-    local milestone_count = get_total_count(flow_statistics_table, milestone)
+-- `totals` (optional) comes from the tracker cycle or compute_flow_totals(); without it the
+-- statistics are read directly.
+function is_production_milestone_reached(milestone, storage_force, totals)
+    local milestone_count = get_milestone_count(milestone, storage_force, totals)
 
     -- Aliases
-    if storage.production_aliases[milestone.name] then
-        for _, alias in pairs(storage.production_aliases[milestone.name]) do
-            local alias_count = get_total_count(flow_statistics_table, alias)
-            if alias_count then
-                milestone_count = milestone_count or 0 -- Could be nil
-                milestone_count = milestone_count + alias_count * alias.quantity
-            end
+    local aliases = storage.production_aliases[milestone.name]
+    if aliases then
+        for _, alias in pairs(aliases) do
+            milestone_count = milestone_count + get_milestone_count(alias, storage_force, totals) * alias.quantity
         end
     end
 
-    return milestone_count and milestone_count >= milestone.quantity
+    return milestone_count >= milestone.quantity
 end
 
 function is_tech_milestone_reached(milestone, technology)
@@ -464,12 +617,12 @@ function is_tech_milestone_reached(milestone, technology)
     return false
 end
 
-function is_milestone_reached(milestone, storage_force, technologies)
+function is_milestone_reached(milestone, storage_force, technologies, totals) -- totals is optional
     if milestone.type == "technology" then
         local technology = technologies[milestone.name]
         return is_tech_milestone_reached(milestone, technology)
     else
-        return is_production_milestone_reached(milestone, storage_force)
+        return is_production_milestone_reached(milestone, storage_force, totals)
     end
 end
 

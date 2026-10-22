@@ -1336,6 +1336,36 @@ local function checkForBobEnemies()
 	end
 end
 
+-- Paranoidal: geology by soil colour (Alien-biomes-Reforged, ПР-062). The soil of the chunk that
+-- opens a region is sampled on a 3x3 grid; Alien-biomes-Reforged answers which resources suit it
+-- (weight multipliers). Without that mod or with its setting off nothing changes, not even the
+-- RNG sequence, so maps are identical to plain RSO.
+local function geology_bias(surface, c_x, c_y)
+	local iface = remote.interfaces["alien-biomes-reforged"]
+	if not (iface and iface.geology_bias) then return nil end
+	local names = {}
+	for _, dx in ipairs({4, 16, 28}) do
+		for _, dy in ipairs({4, 16, 28}) do
+			local tile = surface.get_tile(c_x + dx, c_y + dy)
+			if tile and tile.valid then names[#names + 1] = tile.name end
+		end
+	end
+	return remote.call("alien-biomes-reforged", "geology_bias", surface.name, names)
+end
+
+-- allotment ranges of configIndexed with the weights multiplied by bias; returns ranges, total
+local function weighted_allotments(configIndexed, bias)
+	local ranges, total = {}, 0
+	for index, v in ipairs(configIndexed) do
+		if v.allotment_range then
+			local w = (v.allotment_range.max - v.allotment_range.min) * (bias[v.name] or 1)
+			ranges[index] = {min = total, max = total + w}
+			total = total + w
+		end
+	end
+	return ranges, math.floor(total)
+end
+
 local function roll_region(surface, c_x, c_y)
 	--in what region is this chunk?
 	local r_x=floor(c_x/REGION_TILE_SIZE)
@@ -1365,6 +1395,12 @@ local function roll_region(surface, c_x, c_y)
 		local resourceChanceMultiplier = surfaceData.config and surfaceData.config.resourceChanceMultiplier or 1.0
 		local resourceSetting = settings.global["rso-resource-chance"].value * resourceChanceMultiplier
 		local maxAllotment = surfaceData.maxAllotment
+		local geoRanges, geoMax = nil, nil
+		local geoBias = maxAllotment > 0 and geology_bias(surface, c_x, c_y)
+		if geoBias then
+			geoRanges, geoMax = weighted_allotments(configIndexed, geoBias)
+			debug("Geology bias for region "..r_x..","..r_y..": "..serpent.line(geoBias))
+		end
 		
 		-- rolle ores only if they are present (it will fail if allotment is 0)
 		if maxAllotment > 0 then
@@ -1375,9 +1411,10 @@ local function roll_region(surface, c_x, c_y)
 				local abct = rng()
 				debug("Rolling resource "..abct.." against "..resourceChance.." roll "..rollNumber)
 				if abct <= resourceChance then
-					local res_type=rng(1, maxAllotment)
+					local res_type=rng(1, geoMax or maxAllotment)
 					for index,v in pairs(configIndexed) do
-						if v.allotment_range and ((res_type >= v.allotment_range.min) and (res_type <= v.allotment_range.max)) then
+						local range = geoRanges and geoRanges[index] or (not geoRanges and v.allotment_range)
+						if range and ((res_type >= range.min) and (res_type <= range.max)) then
 							debug("Rolled primary resource "..v.name.." with roll="..res_type.." @ "..r_x..","..r_y)
 							local num_spawns = 0
 							if v.spawns_per_region.min == v.spawns_per_region.max then

@@ -1,0 +1,10 @@
+Shaft Mining
+Fix Crystal Deposits, release Crystal Deposits
+Stannic & Plumbic Ores
+Titanous / Titanic / Chromous / Chromic / Manganous / Manganic / Cobaltous / Cobaltic / Aurous / Auric / Mercurous / Mercuric / Stannous / Plumbous / Vanadous / Vanadic / Nickelous / Nickelic / Cuprous / Ferric / Antimonous / Antimonic / Bismuthous / Bismuthic minerals
+Better ore sheet for Phosphorite - should look more like salt than rock i.e. less shadows
+Drug Lab compatibility
+Use ore-sorting-advanced category
+Implement Zombrine
+Implement digestion pits
+remove reliance on bobs (angels industries overhaul integration)

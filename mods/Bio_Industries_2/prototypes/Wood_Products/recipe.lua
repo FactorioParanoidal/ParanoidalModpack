@@ -92,7 +92,7 @@ data:extend({
     results = {{type="item", name="bi-wood-pipe", amount=4}},
     main_product = "",
     requester_paste_multiplier = 15,
-    allow_as_intermediate = false,    -- Added for 0.18.34/1.1.4
+    allow_as_intermediate = true,     -- Paranoidal: hand crafting makes the pipes for a recipe (offshore-mk0-pump)
     always_show_made_in = false,      -- Added for 0.18.34/1.1.4
     allow_decomposition = true,       -- Added for 0.18.34/1.1.4
     subgroup = "energy-pipe-distribution",

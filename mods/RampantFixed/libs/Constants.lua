@@ -48,6 +48,7 @@ constants.SCAN_QUEUE_SIZE = 2
 constants.RESOURCE_QUEUE_SIZE = 7
 constants.ENEMY_QUEUE_SIZE = 7
 constants.PLAYER_QUEUE_SIZE = 7
+constants.PLAYER_BACKGROUND_QUEUE_SIZE = 0	-- background player-building rescan: 1 chunk per call (dirty chunks go first)
 constants.CLEANUP_QUEUE_SIZE = 8
 constants.ATTACK_QUEUE_SIZE = 18
 constants.BASE_QUEUE_SIZE = 1
@@ -343,9 +344,9 @@ for enitityType, pheromoneLvl in pairs(BUILDING_PHEROMONES) do
 	end	
 end
 -------------------------
-constants.IGNORED_BUILDINGS = {} 
+-- [entity name] = pheromone level: player buildings of a scored type that do not attract biters (none now)
+constants.IGNORED_BUILDINGS = {}
 local IGNORED_BUILDINGS = constants.IGNORED_BUILDINGS
-IGNORED_BUILDINGS["regenerationCrystal-rampantFixed"] = "radar"
 
 
 function constants.GET_ENTITY_PHEROMONES(entity, pheromoneType)	
@@ -416,7 +417,7 @@ function constants.SURFACE_IGNORED(surface, universe)
 			end	
 			if autoplace_controls then
 				for autoplaceControlName, autoplaceSettings in pairs (autoplace_controls) do
-					autoplaceControl = prototypes.autoplace_control[autoplaceControlName]
+					local autoplaceControl = prototypes.autoplace_control[autoplaceControlName]
 					if autoplaceControl.category == "enemy" then
 						-- game.print(surfaceName..".autoplace_control:"..autoplaceControlName.."fr/rch/sz"..autoplaceSettings.frequency.."/"..autoplaceSettings.richness.."/"..autoplaceSettings.size)	-- debug
 						if (autoplaceSettings.frequency>0) and (autoplaceSettings.richness>0) and (autoplaceSettings.size>0) then
@@ -643,6 +644,20 @@ constants.TIER_UPGRADE_SET_10_AS_IS = tiers10AsIs	-- + !КДА 2021.11
 
 local variations = (settings.startup["rampantFixed--newEnemyVariations"].value or 1)	-- + !КДА 2021.11
 
+-- Paranoidal: champions and hour bosses (libs/Champions.lua) are copies of ordinary units
+-- (prototypes/ChampionUnits.lua): the damage event filter then matches the champions only. A copy is made per kind and
+-- per unit of the nest it comes from, its max_health is the real health of the champion (x healthK of that unit)
+constants.CHAMPION_KINDS = {
+    champion = {suffix = "-champion", healthK = 10, tierUp = 1},
+    hourBoss = {suffix = "-hour-boss", healthK = 50, tierUp = 2},
+}
+
+-- name of the copy of bossName for a champion of the kind from a nest that spawns localName now
+function constants.championUnitName(kind, bossName, localName)
+    local tier = string.match(localName, "%-t(%d+)%-rampant$")
+    return bossName .. constants.CHAMPION_KINDS[kind].suffix .. "-from-" .. (tier and ("t" .. tier) or localName)
+end
+
 constants.ENERGY_THIEF_LOOKUP = {}
 
 for tier=1, 10 do
@@ -654,6 +669,13 @@ end
 for tier=1, 10 do
     for i=1,variations do
         constants.ENERGY_THIEF_LOOKUP["energy-thief-biter-v" .. i .. "-t" .. tier .. "-rampant"] = true
+        for kind, spec in pairs(constants.CHAMPION_KINDS) do
+            for localTier = math.max(1, tier - spec.tierUp), tier do
+                constants.ENERGY_THIEF_LOOKUP[constants.championUnitName(kind,
+                    "energy-thief-biter-v" .. i .. "-t" .. tier .. "-rampant",
+                    "energy-thief-biter-v" .. i .. "-t" .. localTier .. "-rampant")] = true
+            end
+        end
     end
 end
 
@@ -1866,6 +1888,107 @@ if settings.startup["rampantFixed--ArachnidsEnemy"].value then
         }
     }
 end
+
+-- Flyers (graphics: new-enemies 0.0.10 by Wolfenstain): an extra unit of biter nests and hives in the factions below.
+-- A flyer is the faction biter (resistances, loot, health/speed/regeneration traits) without its special attacks
+-- and death effects. It flies over walls, water and cliffs, lands to bite and can be hit by every turret.
+if settings.startup["rampantFixed--flyers"].value then
+    -- first unit level with flyers (1..10) and their share of a nest/hive output at that level and above
+    local FLYER_FIRST_TIER = settings.startup["rampantFixed--flyersFirstTier"].value
+    local FLYER_SPAWN_SHARE = settings.startup["rampantFixed--flyersSpawnShare"].value
+    -- bite damage type; the fire faction bites physically, as its biters do (poles and walls are immune to fire)
+    local FLYER_DAMAGE_TYPE = {
+        ["neutral"] = "physical",
+        ["acid"] = "acid",
+        ["laser"] = "laser",
+        ["fire"] = "physical",
+        ["electric"] = "electric",
+        ["physical"] = "physical",
+        ["troll"] = "physical",
+        ["poison"] = "poison",
+        ["energy-thief"] = "electric",
+        ["fast"] = "physical",
+        ["juggernaut"] = "poison",
+        ["arachnids"] = "acid"
+    }
+    local FLYER_INHERITED_FIELDS = {
+        "resitancePercent", "immunity", "extremeResistances", "majorResistances", "minorResistances",
+        "lesserResistances", "majorWeaknesses", "minorWeaknesses", "addFlatResistance", "drops"
+    }
+    -- size and reach traits are not inherited: the flyer art is already large and it bites from where it lands
+    local FLYER_INHERITED_ATTRIBUTES = {
+        ["lowHealth"] = true, ["lowestHealth"] = true, ["highHealth"] = true, ["highestHealth"] = true,
+        ["bonusHealth"] = true, ["slowCooldown"] = true, ["quickCooldown"] = true, ["slowMovement"] = true,
+        ["quickMovement"] = true, ["movement"] = true, ["quickSpawning"] = true, ["highRegen"] = true,
+        ["highestRegen"] = true, ["longRangeImmunity"] = true, ["overdamageProtection"] = true, ["noLoot"] = true,
+        ["not-flammable"] = true
+    }
+    -- relative to the faction biter of the same tier
+    local FLYER_BONUS_ATTRIBUTES = {
+        "altBiterFlyer",
+        {"bonusHealth", 1.5},
+        {"bonusDamage", 1.3},
+        {"movement", 1.15},
+        {"bonusPollutionToAttack", 3},
+        {"bonusSpawningTime", 2}
+    }
+
+    local function copy(value)
+        if type(value) ~= "table" then
+            return value
+        end
+        local result = {}
+        for k, v in pairs(value) do
+            result[k] = copy(v)
+        end
+        return result
+    end
+
+    for _, faction in pairs(constants.FACTION_SET) do
+        local damageType = FLYER_DAMAGE_TYPE[faction.type]
+        local biter
+        for _, unit in pairs(faction.units) do
+            if (unit.type == "biter") and (unit.name == "biter") then
+                biter = unit
+                break
+            end
+        end
+        if damageType and biter then
+            local flyer = {
+                type = "biter",
+                name = "flyer",
+                attackAttributes = {"melee"},
+                damageType = damageType,
+                attributes = {}
+            }
+            for _, field in pairs(FLYER_INHERITED_FIELDS) do
+                flyer[field] = copy(biter[field])
+            end
+            for _, attribute in pairs(biter.attributes or {}) do
+                local key = (type(attribute) == "table") and attribute[1] or attribute
+                if FLYER_INHERITED_ATTRIBUTES[key] then
+                    flyer.attributes[#flyer.attributes+1] = copy(attribute)
+                end
+            end
+            for _, attribute in pairs(FLYER_BONUS_ATTRIBUTES) do
+                flyer.attributes[#flyer.attributes+1] = copy(attribute)
+            end
+            faction.units[#faction.units+1] = flyer
+
+            for _, building in pairs(faction.buildings) do
+                if ((building.type == "biter-spawner") or (building.type == "hive")) and building.buildSets then
+                    for _, buildSet in pairs(building.buildSets) do
+                        if buildSet[1] == "biter" then
+                            building.buildSets[#building.buildSets+1] = {"flyer", FLYER_FIRST_TIER, 10, FLYER_SPAWN_SHARE}
+                            break
+                        end
+                    end
+                end
+            end
+        end
+    end
+end
+
 constants.HIVE_BUILDINGS_TYPES = {
     "trap",
     "turret",

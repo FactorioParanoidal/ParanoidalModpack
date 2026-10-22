@@ -1,0 +1,10 @@
+{
+  "mod": "Teleporters",
+  "source": "local",
+  "original": {
+    "name": "Teleporters",
+    "authors": ["Klonan"],
+    "portal": {"name": "Teleporters", "url": "https://mods.factorio.com/mod/Teleporters"}
+  },
+  "changeReason": "Поддерживаемый локальный форк Reforged Paranoidal от 2.0.0, по решению пользователя. Фильтр смерти по имени телепортера устанавливается после регистрации диспетчера core/event_handler в init/load. Телепортация, GUI и данные сохранений не меняются."
+}

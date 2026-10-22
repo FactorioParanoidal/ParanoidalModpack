@@ -139,6 +139,7 @@ function EvoUi.create_player_globals(player)
         player_settings.always_visible = {
             ["evolution_factor"] = true,
             ["play_time"] = true,
+            ["pollution_around_player"] = true,
         }
     end
 

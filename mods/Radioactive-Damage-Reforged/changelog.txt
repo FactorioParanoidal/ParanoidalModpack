@@ -1,0 +1,16 @@
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 2026. 10. 15
+  Info:
+    - Port of Radioactive Damage 0.0.4 by DellAquila (Factorio 1.1, Paranoidal Beta 8) to Factorio 2.0 as a separate mod, Radioactive Damage Reforged.
+    - Same damage as Beta 8: every 10 ticks 1 radioactive damage per carried kind of uranium ore, uranium-235, uranium-238, uranium fuel cell and depleted uranium fuel cell. Nuclear fuel is not radioactive.
+    - Hazmat suit as in Beta 8: 99% / 1 resistance to radioactive damage, no equipment grid, 100 plastic bars and 100 lead plates, unlocked by Plastics. Placed in the menu right after Heavy armor.
+  Changes:
+    - The character is damaged directly instead of through an area stream: nearby buildings, vehicles and other players are no longer hit, and no stream entity is created every check.
+    - Radioactive items count in the logistic trash and in the cursor too, not only in the main inventory; items of every quality count.
+    - Radiation passes through vehicles: a character inside a vehicle is damaged as well.
+    - Several sources add up (one hit per source); standing near a uranium ore deposit no longer cancels the inventory check.
+  Bugfixes:
+    - A connected player without a character (god mode, editor, waiting for respawn) no longer stops the check for all other players.
+    - The uranium ore proximity check is done only when a "uranium-ore" resource exists (it never matched in Paranoidal, where uranium comes from Angels ores).
+    - Used-up uranium fuel cell renamed to depleted uranium fuel cell (Factorio 2.0), lead plate to bob-lead-plate (Bob's 2.0).

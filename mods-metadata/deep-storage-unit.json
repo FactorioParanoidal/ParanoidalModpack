@@ -1,0 +1,11 @@
+{
+  "mod": "deep-storage-unit",
+  "source": "portal",
+  "upstreamVersion": "1.6.8",
+  "original": {
+    "name": "Memory Storage",
+    "authors": ["notnotmelon"],
+    "portal": {"name": "deep-storage-unit", "url": "https://mods.factorio.com/mod/deep-storage-unit"}
+  },
+  "changeReason": "Поддерживаемый патч Paranoidal опубликованной версии 1.6.8. Нативный фильтр смерти только memory-unit; запрет предметов с данными (броня, техника, чертежи, упакованные предметы), буфер всегда 300 слотов, снижение энергопотребления за качество, переименования и удаления предметов при обновлениях без уничтожения блока, исправления окна, клонирования и утечки инвентарей. Подробности в README.md мода."
+}

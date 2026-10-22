@@ -2,7 +2,7 @@
 -- + items/compression-extended.lua:62-73.
 
 if not data.raw.item["bob-insulated-cable"] then return end
-if not data.raw.technology["angels-rubbers"] then return end
+if not data.raw.technology["angels-rubber"] then return end
 
 -- 1.1 формула: count = ingredient[1] нативного bob-insulated-cable × 8.
 local count = 16
@@ -85,11 +85,11 @@ data:extend({
 	},
 })
 
--- 1.1 unlock'ил эти recipes через тех "rubber"; в 2.0 он переименован в "angels-rubbers".
+-- Beta 8: rubber -> angels-rubber (синяя наука), не ранняя angels-rubbers.
 local OV = angelsmods.functions.OV
-OV.add_unlock("angels-rubbers", "angels-wire-coil-insulated-casting")
-OV.add_unlock("angels-rubbers", "angels-wire-coil-insulated-casting-fast")
-OV.add_unlock("angels-rubbers", "angels-wire-coil-insulated-converting")
+OV.add_unlock("angels-rubber", "angels-wire-coil-insulated-casting")
+OV.add_unlock("angels-rubber", "angels-wire-coil-insulated-casting-fast")
+OV.add_unlock("angels-rubber", "angels-wire-coil-insulated-converting")
 
 -- 4-й fluid input на strand-casting-machine MK1..4. Одинаковая раскладка на
 -- всех тирах — upgrade'ы не сдвигают pipe-positions. Position x=±2 = граница

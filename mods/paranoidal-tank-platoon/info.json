@@ -1,0 +1,18 @@
+{
+  "name": "paranoidal-tank-platoon",
+  "version": "1.0.0",
+  "title": "Paranoidal Tank Platoon",
+  "author": "Paranoidal",
+  "contact": "https://discord.gg/MnXGAmC",
+  "homepage": "https://github.com/FactorioParanoidal/ParanoidalModpack",
+  "description": "Light, medium, heavy, super-heavy and flame tanks in three tiers with their guns, ammunition and vehicle equipment. Written from scratch for Factorio 2.0, balance follows Paranoidal Beta 8 (based on Schall Tank Platoon by Schallfalke).",
+  "factorio_version": "2.0",
+  "dependencies": [
+    "base >= 2.0.0",
+    "! SchallTankPlatoon",
+    "? bobvehicleequipment",
+    "(?) angelspetrochem",
+    "(?) angelsindustries",
+    "(?) immersive-sounds2"
+  ]
+}

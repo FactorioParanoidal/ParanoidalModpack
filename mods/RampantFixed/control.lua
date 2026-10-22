@@ -16,6 +16,12 @@
 local aiAttackWave = require("libs/AIAttackWave")
 local aiPredicates = require("libs/AIPredicates")
 local aiPlanning = require("libs/AIPlanning")
+local aiBrain = require("libs/AIBrain")
+local flyerAI = require("libs/FlyerAI")
+local heavyTactics = require("libs/HeavyTactics")
+local engineGroupHelpers = require("libs/EngineGroupHelpers")
+local champions = require("libs/Champions")
+local foreignEnemies = require("libs/ForeignEnemies")
 local baseUtils = require("libs/BaseUtils")
 local bitersEnrage = require("libs/BitersEnrage")
 local biterSupressors = require("libs/BiterSupressors")
@@ -30,7 +36,6 @@ local mapProcessor = require("libs/MapProcessor")
 local mapUtils = require("libs/MapUtils")
 local mathUtils = require("libs/MathUtils")
 local pheromoneUtils = require("libs/PheromoneUtils")
-local powerup = require("libs/Powerup")
 local squadAttack = require("libs/SquadAttack")
 local squadCompression = require("libs/SquadCompression")
 local squadDefense = require("libs/SquadDefense")
@@ -173,11 +178,12 @@ local thisIsNewEnemyPosition = chunkPropertyUtils.thisIsNewEnemyPosition
 local mMax = math.max
 local mMin = math.min
 
-local onUnitDamaged_oneshot = powerup.onUnitDamaged_oneshot
-
 -- local references to global
 
 local universe -- manages the chunks that make up the game universe
+
+-- assigned after onEntityDamaged; registers on_entity_damaged only while it can have an effect
+local updateEntityDamagedHandler
 
 -- hook functions
 
@@ -215,6 +221,7 @@ end
 local function onLoad()
     universe = storage.universe
     hookEvents()
+    updateEntityDamagedHandler()
 end
 
 local function onChunkGenerated(event)
@@ -462,63 +469,63 @@ local function onMine(event)
 end
 
 -----------------
-local landfillVectors = {{0,0}, {1,0}, {0,1}, {-1,0}, {0,-1}}
-
-local function biters_landfill(entity)
-	if (not entity) or (not entity.valid) then return end
-	if entity.max_health < 300 then return end	
-	local position = entity.position
-	local surface = entity.surface
-	for _, vector in pairs(landfillVectors) do
-		local tile = surface.get_tile({position.x + vector[1], position.y + vector[2]})
-		if tile.collides_with("water_tile") then
-			surface.set_tiles({{name = "landfill", position = tile.position}},true,true,true,true)
-			local particle_pos = {tile.position.x + 0.5, tile.position.y + 0.5}
-			for _ = 1, 50, 1 do
-				surface.create_particle({
-					name = "stone-particle",
-					position = particle_pos,
-					frame_speed = 0.1,
-					vertical_speed = 0.12,
-					height = 0.01,
-					movement = {-0.05 + mRandom(0, 100) * 0.001, -0.05 + mRandom(0, 100) * 0.001}
-				})
-			end
-		end
+-- Prototype data is constant during a session: cache by entity name (not saved, identical on every peer).
+local deathPrototypeInfo = {}
+local function getDeathPrototypeInfo(entity)
+	local entityName = entity.name
+	local info = deathPrototypeInfo[entityName]
+	if not info then
+		info = {
+			type = entity.type,
+			notInKillStatistics = entity.prototype.has_flag("not-in-kill-statistics"),
+			-- Big Monsters / mferrari enemies: their deaths are not Rampant's losses (libs/ForeignEnemies.lua)
+			foreign = foreignEnemies.isForeign(entityName)
+		}
+		deathPrototypeInfo[entityName] = info
 	end
+	return info
 end
------------------
+
+-- Runtime setting cache, reset in onModSettingsChange.
+local chainVengenceCoefficient
+
 local function onDeath(event)
     local entity = event.entity
     if entity.valid then
+        champions.onDied(universe, event)	-- champions drop one big artifact instead of their loot
         local surface = entity.surface
         local map = universe.maps[surface.index]
 		if not map then
 			return
 		end	
-		if (entity.force.name == "neutral") then
+		local entityForceName = entity.force.name
+		if (entityForceName == "neutral") then
 			if (entity.name == "cliff") then
 				entityForPassScan(map, entity)
 			end
 			return
 		end
-		if entity.prototype.has_flag("not-in-kill-statistics") then
+		local prototypeInfo = getDeathPrototypeInfo(entity)
+		if prototypeInfo.notInKillStatistics then
 			return
 		end
         local entityPosition = entity.position
         local chunk = getChunkByPosition(map, entityPosition)
         local cause = event.cause
         local tick = event.tick
-        local entityType = entity.type
-        if (entity.force.name == "enemy") then
+        local entityType = prototypeInfo.type
+        if (entityForceName == "enemy") then
 
             local artilleryBlast = (cause and
                                     ((cause.type == "artillery-wagon") or (cause.type == "artillery-turret")))
 
-			if (not artilleryBlast) and (entity.force.name == "enemy") then
+			if prototypeInfo.foreign then
+				artilleryBlast = false	-- Big Monsters enemies: not Rampant's losses, no counter-battery or retribution
+			elseif not artilleryBlast then
 				local incomingRange = 0
-				if event.cause and event.cause.valid then
-					incomingRange = mathUtils.euclideanDistancePoints(entity.position.x, entity.position.y, event.cause.position.x, event.cause.position.y)
+				if cause and cause.valid then
+					local causePosition = cause.position
+					incomingRange = mathUtils.euclideanDistancePoints(entityPosition.x, entityPosition.y, causePosition.x, causePosition.y)
 					if incomingRange >= 90 then
 						artilleryBlast = true
 					end
@@ -529,6 +536,9 @@ local function onDeath(event)
 			
             if artilleryBlast then
                 map.artilleryBlasts = map.artilleryBlasts + 1
+				if aiBrain.active(universe) then
+					aiBrain.recordArtillery(map, cause, tick)	-- counter-battery targets
+				end
 				map.vengenceLimiter = 0
 				map.retribution = map.retribution + 0.002
 				if map.supressionData then
@@ -547,29 +557,52 @@ local function onDeath(event)
             end
 
             if (entityType == "unit") then
-                if (chunk ~= -1) then
-					if event.force and (event.force.name ~= "enemy") then
-						biters_landfill(entity)
+				if event.force and (event.force.name ~= "enemy") and not prototypeInfo.foreign then
+					map.lostEnemyUnits = map.lostEnemyUnits + 1
+					if (chunk ~= -1) then
 						-- drop death pheromone where unit died
 						deathScent(map, chunk)
-
-						map.lostEnemyUnits = map.lostEnemyUnits + 1
-						local chainVengenceCoefficient = settings.global["rampantFixed--chainVengenceCoefficient"].value	-- 0.6 default
+						if not chainVengenceCoefficient then
+							chainVengenceCoefficient = settings.global["rampantFixed--chainVengenceCoefficient"].value	-- 0.6 default
+						end
 						local vengenceOffset = chainVengenceCoefficient ^ map.vengenceLimiter
 						if (chunk.nextSquadTick and (chunk.nextSquadTick < tick)) and (not surface.peaceful_mode) and (mRandom() < (map.rallyThreshold * vengenceOffset)) then
 							rallyUnits(chunk, map, tick)
 						end
 					end
-					if artilleryBlast and universe.undergroundAttack then
-						undergroundAttack.onUnitKilled_DigIn(map, entity, cause)
-					else	
-						squadCompression.onUnitKilled(universe, surface, entity, event.force, cause)
-					end	
+					-- Paranoidal: losses are counted on any chunk. Water and other impassable chunks are not registered,
+					-- and flights approach shore targets over them: the break-off and the learning missed those losses
+					if aiBrain.active(universe) then
+						-- learning: what kills the units, which squad lost it
+						local damageType = event.damage_type
+						if damageType then
+							aiBrain.recordUnitDamage(map, damageType.name)
+						end
+						local commandable = entity.commandable
+						local group = commandable and commandable.parent_group
+						local squad = group and universe.groupNumberToSquad[group.unique_id]
+						if squad then
+							if squad.flight then
+								flyerAI.onLoss(map, squad, entity, tick)
+							elseif aiBrain.onSquadUnitLost(map, squad, entity) then
+								squadAttack.retreatSquad(map, squad)
+							end
+						end
+					end
+				end
+				-- a squad that does not dig in keeps its packs: the pack of the killed carrier moves on
+				local dugIn = artilleryBlast and universe.undergroundAttack and aiBrain.heavyScriptsAllowed(universe)
+					and undergroundAttack.onUnitKilled_DigIn(map, entity, cause)
+				if not dugIn then
+					squadCompression.onUnitKilled(universe, surface, entity, event.force, cause)
 				end
 			elseif (entityType == "segmented-unit") then	
 				if map.nextDemolisherAttackTick then
 					map.nextDemolisherAttackTick = mMax(game.tick, map.nextDemolisherAttackTick) + 5*3600
 				end
+            elseif prototypeInfo.foreign and ((entityType == "unit-spawner") or (entityType == "turret")) then
+				-- a Big Monsters structure: no points, rally or enrage; its worms leave the turret count
+				unregisterEnemyBaseStructure(map, entity, event.damage_type)
             elseif event.force and (event.force.name ~= "enemy") and
                 ((entityType == "unit-spawner") or (entityType == "turret"))
             then
@@ -610,17 +643,20 @@ local function onDeath(event)
 						-- end	
 					-- end
 				-- end
+                if aiBrain.active(universe) and event.damage_type then
+                    local base = map.chunkToBase[chunk]
+                    if base then
+                        aiBrain.recordStructureDamage(base, event.damage_type.name)	-- mutations adapt to it
+                    end
+                end
                 unregisterEnemyBaseStructure(map, entity, event.damage_type)
 
                 if (chunk ~= -1) then
 					if (chunk.nextSquadTick and (chunk.nextSquadTick < tick)) then
 						rallyUnits(chunk, map, tick)
 					end	
-					if cause and cause.valid and (cause.type == "character") then
+					if cause and cause.valid and (cause.type == "character") and aiBrain.heavyScriptsAllowed(universe) then
 						enrageBitersInRange(map, cause.position, getChunkByPosition(map, cause.position), tick)
-						if not artilleryBlast then
-							powerup.checkAndDropPowerup(entity, cause, universe, entity.force.get_evolution_factor(surface))
-						end						
 					end
                     -- if artilleryBlast and cause and cause.valid then
                         -- retreatUnits(chunk,
@@ -652,7 +688,7 @@ local function onDeath(event)
                 end
             end
 
-        elseif (entity.force.name ~= "enemy") then
+        elseif (entityForceName ~= "enemy") then
             local creditNatives = false
             if (event.force ~= nil) and (event.force.name == "enemy") then
                 creditNatives = true
@@ -691,7 +727,7 @@ local function onDeath(event)
                         end
                     end
                 end
-            elseif (entity.type == "resource") and (entity.force.name == "neutral") then
+            elseif (entityType == "resource") and (entityForceName == "neutral") then
                 if (entity.amount == 0) then
                     unregisterResource(entity, map)
                 end
@@ -702,10 +738,15 @@ local function onDeath(event)
 				else	
 					accountPlayerEntity(entity, map, false, creditNatives)
 				end
-				if (entityType ~= "wall") and cause and cause.valid and (cause.type == "unit") and cause.commandable and cause.commandable.parent_group then
-					local squad = universe.groupNumberToSquad[cause.commandable.parent_group.unique_id]
+				local causeCommandable = (entityType ~= "wall") and cause and cause.valid and (cause.type == "unit") and cause.commandable
+				local causeGroup = causeCommandable and causeCommandable.parent_group
+				if causeGroup then
+					local squad = universe.groupNumberToSquad[causeGroup.unique_id]
 					if squad then
 						squad.kills = (squad.kills or 0) + 1
+						if aiBrain.active(universe) then
+							aiBrain.onSquadKill(squad, entity)
+						end
 					end
 				end
            else
@@ -884,28 +925,30 @@ local function onUsedCapsule(event)
     end
 end
 
+-- Restored from Beta 8 (RampantFixed 1.8.3): a rocket launch raises retribution and gives the AI points
+-- on the launch surface. Retribution is per map in 2.0.
 local function onRocketLaunch(event)
-    -- local entity = event.rocket_silo or event.rocket
-    -- if entity.valid then
-        -- local map = universe.maps[entity.surface.index]
-		-- local points
-		-- if game.active_mods["space-exploration"] then
-			-- map.retribution = map.retribution + 0.1
-			-- points = 500
-		-- else
-			-- map.retribution = map.retribution + 10
-			-- points = 5000
-		-- end	
-		-- if not map then
-			-- return
-		-- end	
- 		-- map.vengenceLimiter = 0
-        -- map.rocketLaunched = map.rocketLaunched + 1
-        -- map.points = map.points + points
-        -- if universe.aiPointsPrintGainsToChat then
-            -- game.print(map.surface.name .. ": Points: +" .. points .. ". [Rocket Launch] Total: " .. string.format("%.2f", map.points))
-        -- end
-    -- end
+    local entity = event.rocket_silo or event.rocket
+    if entity and entity.valid then
+        local map = universe.maps[entity.surface.index]
+        if not map then
+            return
+        end
+        local points
+        if script.active_mods["space-exploration"] then
+            map.retribution = map.retribution + 0.1
+            points = 500
+        else
+            map.retribution = map.retribution + 10
+            points = 5000
+        end
+        map.vengenceLimiter = 0
+        map.rocketLaunched = (map.rocketLaunched or 0) + 1
+        map.points = map.points + points
+        if universe.aiPointsPrintGainsToChat then
+            game.print(map.surface.name .. ": Points: +" .. points .. ". [Rocket Launch] Total: " .. string.format("%.2f", map.points))
+        end
+    end
 end
 
 local function onTriggerEntityCreated(event)
@@ -937,6 +980,7 @@ local function onGroupFinishedGathering(event)
 	if (not group.is_script_driven) or (squad and not squad.vengence) then
 		if (not group.is_script_driven) and (not settings.global["rampantFixed--allowDaytimeNonRampantActions"].value) then
 			if (map.state == constants.AI_STATE_PEACEFUL) or (universe.aiNocturnalMode and (group.surface.darkness <= 0.65)) then
+				engineGroupHelpers.release(universe, map, group)	-- the helper would stay behind as a lone biter
 				group.destroy()
 				return		
 			end	
@@ -947,7 +991,12 @@ local function onGroupFinishedGathering(event)
 		if squad.onTheWay then
 			return
 		end	
-		if (not squad.undergoundAttack) or squad.hasSpiders then
+		if squad.learn and (not squad.settlers) and (not squad.undergoundAttack) and aiBrain.active(universe) then
+			flyerAI.splitFlight(map, squad)	-- flyers leave the ground squad and act as a flight of their own
+		end
+		if squad.flight then
+			-- flights are dispatched at once and never compressed
+		elseif (not squad.undergoundAttack) or squad.hasSpiders then
 			processCompression(map, squad, getChunkByPosition(map, group.position), true)
 		else
 			createUndergroudAttack(map, squad)
@@ -957,6 +1006,9 @@ local function onGroupFinishedGathering(event)
 		if nonRampantSquad then
 			return
 		end	
+		-- the helper vanilla biter (see on_unit_group_created) is not needed any more; removed before compression,
+		-- which could make it the carrier of a pack
+		engineGroupHelpers.release(universe, map, group)
 		local nonRampantSquad = createSquad(group.position, map, group, false)
 		nonRampantSquad.nonRampantSquad = true
 		if (#group.members > 70) then
@@ -966,16 +1018,6 @@ local function onGroupFinishedGathering(event)
 			universe.nonRampantCompressedSquads[group.unique_id] = nonRampantSquad
 		else
 			universe.nonRampantSquads[group.unique_id] = nonRampantSquad				
-		end
-		-- 2025/07. AI bug. if no default units then group can't build new base 
-		-- so, lets create 1 unit when group created + destroy it when group finish gathering
-		if map.hasNonmoddedBiters then
-			local members = group.members
-			for _, entity in pairs(members) do
-				entity.destroy()
-				break
-			end	
-			
 		end
 	end
 	-- group can be destroyed after createUndergroudAttack()
@@ -987,24 +1029,23 @@ end
 -- debug
 		-- 2025/07. AI bug. if no default units then group can't build new base 
 		-- so, lets create 1 unit when group created + destroy it when group finish gathering
+-- Paranoidal: not in the player base and not during the truce; the helper is tracked and removed reliably
+-- (libs/EngineGroupHelpers.lua)
 local function on_unit_group_created(event)
     local group = event.group
-    if not group.valid or (group.force.name ~= "enemy") or group.is_script_driven then
+    if not group.valid then
+		return
+	end
+	engineGroupHelpers.noteGroupId(universe, group.unique_id)
+    if (group.force.name ~= "enemy") or group.is_script_driven then
 		return
 	end
 	local map = universe.maps[group.surface.index]
 	if not map then 
 		return		
 	end
-	
-	if map.hasNonmoddedBiters then
-		local newEntity = group.surface.create_entity({
-			name = "small-biter",
-			position = group.position, 
-			force = group.force,
-			})
-		group.add_member(newEntity)
-	end
+	engineGroupHelpers.onGroupCreated(universe, map, group, event.tick,
+		settings.global["rampantFixed--allowDaytimeNonRampantActions"].value)
 end
 ------
 
@@ -1158,8 +1199,6 @@ local function onSectorScanned(event)
 		elseif entity.name == "test-rampant" then
 			onEntitySpawned(event)
 			entity.damage(1, "neutral")
-		elseif entity.name == "regenerationCrystal-rampantFixed" then
-			powerup.onRegenerationCrystalTick(entity, game.forces.enemy.get_evolution_factor(entity.surface))
 		end
 	end
 	return
@@ -1189,8 +1228,8 @@ local LR_EfficiencyPercent = settings.startup["rampantFixed--longRangeImmunity_e
 local OP_efficienty = OP_EfficiencyPercent * 0.01
 local LR_Efficiency = LR_EfficiencyPercent * 0.01
 local LR_DamageKf = 1 - LR_Efficiency
-local allowOneshotProtection = settings.startup["rampantFixed--allowOneshotProtection"]
-local allowLongRangeImmunity = settings.startup["rampantFixed--allowLongRangeImmunity"]
+local allowOneshotProtection = settings.startup["rampantFixed--allowOneshotProtection"].value
+local allowLongRangeImmunity = settings.startup["rampantFixed--allowLongRangeImmunity"].value
 
 local LR_exceptions = {}
 LR_exceptions["fluid-turret"] = true
@@ -1234,9 +1273,6 @@ local function onEntityDamaged(event)
 		 
 		local unitProtection = fillAndReturnUnitProtections(event.entity)
 		if (event.final_damage_amount > 0) and event.cause and (event.cause ~= event.entity) then
-			if onUnitDamaged_oneshot(event, universe) then
-				return
-			 end
 			-----------------
 			if allowLongRangeImmunity and unitProtection.longRangeImmunity then
 				local incomingRange = 0
@@ -1298,6 +1334,86 @@ local function onEntityDamaged(event)
 		end
 	end		
 end
+
+local entityDamagedFilters = {
+	{filter="type", type="unit"},
+	{mode = "and", invert = true, filter="damage-type", type ="fire"},
+	{mode = "and", invert = true, filter="damage-type", type ="acid"},
+	{mode = "or", filter="original-damage-amount", value = 200, comparison = ">"},
+	{mode = "or", filter="type", type="spider-unit"},
+	{mode = "or", filter="type", type="segmented-unit"},
+	}
+
+-- onEntityDamaged only acts for the damage protections of the enemies (startup settings).
+-- Paranoidal: while champions (libs/Champions.lua) are alive the handler also gets damage of their prototypes. These are
+-- champion copies of the units (prototypes/ChampionUnits.lua), so ordinary units do not reach Lua; champions spawned
+-- before the copies existed keep the ordinary prototype until they die. Rampant's own filter is then checked in Lua
+-- ("and" binds stronger than "or": a unit hit by neither fire nor acid, any hit above 200, spider and segmented units)
+-- so ordinary units of such a prototype are not affected.
+local rampantDamageActive = false
+
+local function passesRampantDamageFilter(event)
+	local entityType = event.entity.type
+	if (entityType == "spider-unit") or (entityType == "segmented-unit") then
+		return true
+	end
+	if event.original_damage_amount > 200 then
+		return true
+	end
+	if entityType == "unit" then
+		local damageName = event.damage_type.name
+		return (damageName ~= "fire") and (damageName ~= "acid")
+	end
+	return false
+end
+
+local function onEntityDamagedWithChampions(event)
+	local entity = event.entity
+	if not (entity and entity.valid) then
+		return
+	end
+	local record = champions.recordOf(universe, entity)
+	if record then
+		if not record.died then
+			champions.onDamaged(universe, event, record)
+		end
+		return
+	end
+	if rampantDamageActive and passesRampantDamageFilter(event) then
+		onEntityDamaged(event)
+	end
+end
+
+local function onPostEntityDied(event)
+	champions.onPostDied(universe, event)
+end
+
+-- The state is derived from settings and storage, so on_load restores the same registration on every peer.
+updateEntityDamagedHandler = function()
+	rampantDamageActive = allowOneshotProtection or allowLongRangeImmunity
+	local championNames = champions.trackedNames(universe)
+	if championNames then
+		local filters = {}
+		if rampantDamageActive then
+			for i = 1, #entityDamagedFilters do
+				filters[i] = entityDamagedFilters[i]
+			end
+		end
+		for _, name in ipairs(championNames) do
+			filters[#filters + 1] = {mode = "or", filter = "name", name = name}
+		end
+		script.on_event(defines.events.on_entity_damaged, onEntityDamagedWithChampions, filters)
+		script.on_event(defines.events.on_post_entity_died, onPostEntityDied, {{filter = "type", type = "unit"}})
+		return
+	end
+	script.on_event(defines.events.on_post_entity_died, nil)
+	if rampantDamageActive then
+		script.on_event(defines.events.on_entity_damaged, onEntityDamaged, entityDamagedFilters)
+	else
+		script.on_event(defines.events.on_entity_damaged, nil)
+	end
+end
+champions.onTrackedChanged = updateEntityDamagedHandler
 
 local function onSegmentedEntityDamaged(event)
 	demolisherUtils.onSegmentedEntityDamaged(event)
@@ -1382,45 +1498,15 @@ end
 
 
 -- hooks
-local function on_player_cursor_stack_changed(event)
-	local player = game.players[event.player_index]
-	if universe.powerupSettings[player.name] and universe.powerupSettings[player.name].endlessAmmo then
-		powerup.on_player_cursor_stack_changed(player, universe.powerupSettings[player.name])
-	end
-end
-script.on_event(defines.events.on_player_cursor_stack_changed, on_player_cursor_stack_changed)
-
-
-local function on_player_ammo_inventory_changed(event)
-	local player = game.players[event.player_index]
-	if universe.powerupSettings[player.name] and universe.powerupSettings[player.name].endlessAmmo then
-		powerup.endlessAmmo_onInventoryChanged(player, universe.powerupSettings[player.name])
-	end
-end
-script.on_event(defines.events.on_player_ammo_inventory_changed, on_player_ammo_inventory_changed)
-
+-- demolisher triggers (Space Age); registered only with Space Age
 local function onScriptTriggerEffect(event)
-
-	if event.effect_id == "powerup-combat5min-rampantFixed" and event.target_entity and event.target_entity.valid then
-		powerup.applyCombatPowerup(event.target_entity.player, universe.powerupSettings, 3600*5)
-	elseif hasSpaceAgeMod and (event.effect_id == "feed-the-demolisher-rampant" and event.target_entity and event.target_entity.valid) then
+	if (event.effect_id == "feed-the-demolisher-rampant") and event.target_entity and event.target_entity.valid then
 		demolisherUtils.feedDemolisher(event.target_entity, event.cause_entity, event.surface_index)
-	elseif hasSpaceAgeMod and (event.effect_id == "fear-demolisher-rampant") then
+	elseif (event.effect_id == "fear-demolisher-rampant") then
 		demolisherUtils.fearDemolishers(event.surface_index)
 	end
 end
- 
-local function onPlayerRespawned(event)
-	local player = game.players[event.player_index]
-	if (not player.valid) or (not player.character) then
-		return
-	end
-	if universe.powerupSettings[player.name] then
-		powerup.onPlayerRespawned(player, universe.powerupSettings)
-		powerup.drawPowerups(player, universe.powerupSettings[player.name])
-	end
-end 
- 
+
 script.on_event(defines.events.on_tick,
                 function ()
                     local gameRef = game
@@ -1431,6 +1517,10 @@ script.on_event(defines.events.on_tick,
 					if tick == 1 then
 						showNewgameMessages()
 					end	
+					-- behaviour settings cache (also for saves loaded without a configuration change)
+					if universe.aiBehaviorVersion ~= aiBrain.BEHAVIOR_VERSION then
+						aiBrain.refreshSettings(universe)
+					end
 					---------
 					removeOneTickImmunity(universe)
 					processProtectedUnits()
@@ -1471,7 +1561,9 @@ script.on_event(defines.events.on_tick,
                         end
                         cleanUpMapTables(map, tick)
                     elseif (pick == 1) then
-						processPlayers(gameRef.connected_players, universe, tick)
+						if (tick % 16) == 1 then	-- every 16 ticks; hunting chances are rescaled in MapProcessor
+							processPlayers(gameRef.connected_players, universe, tick)
+						end
                     elseif (pick == 2) then
 						processMap(map, tick)			
                     elseif (pick == 3) then
@@ -1479,7 +1571,10 @@ script.on_event(defines.events.on_tick,
 						disperseVictoryScent(map)
                         processVengence(map)
                      elseif (pick == 4) then
-                        scanResourceMap(map, tick)		
+						-- every 16 ticks (was 8): resources change slowly, the scan cost as much as the pheromone pass
+						if (tick % 16) == 4 then
+							scanResourceMap(map, tick)
+						end
                     elseif (pick == 5) then
                         scanEnemyMap(map, tick)
                         processSpawners(map, tick)
@@ -1492,6 +1587,15 @@ script.on_event(defines.events.on_tick,
 					
 					if pick60 == 0 then	
 						processMapAIs(universe, tick)
+					end
+					if pick60 == 30 then
+						aiBrain.seedTargets(universe)		-- once per map: targets from the known player chunks
+					end
+					local pick600 = tick % 600
+					if (pick600 == 151) or (pick600 == 451) then
+						flyerAI.plan(universe, tick)			-- independent flights
+					elseif pick600 == 307 then
+						heavyTactics.periodic(universe, tick)	-- trains, heat map, pincer waves
 					end
 
 					if pick~=5 then
@@ -1540,6 +1644,7 @@ script.on_nth_tick(5000,
 script.on_nth_tick(300, 
 	function()
 		if universe then
+			engineGroupHelpers.sweep(universe, game.tick)	-- helpers of vanished or overlong engine groups
 			processPlanetAISettings()
 			processNewSurfaceStasus(universe)			
 			-----------
@@ -1575,6 +1680,7 @@ script.on_nth_tick(60,
 			if universe.nonRampantCompressedSquads then
 				nonRampantCompressedSquads(universe)
 			end
+			champions.update(universe, game.tick)	-- champions and hour bosses: spawn timers, retreat, regeneration
 		end
 	end
 )
@@ -1622,11 +1728,45 @@ local function on_gui_click(event)
 	return
 end
 
+-- Paranoidal: the Nauvis truce evolution threshold lives in two places: the map setting
+-- "rampantFixed--nauvisMinEvo" and the planet AI window (RFx). Keep them equal.
+local NAUVIS_MIN_EVO_SETTING = "rampantFixed--nauvisMinEvo"
+
+local function getNauvisAISetting()
+    local u = storage.universe
+    return u and u.planetAISettings and u.planetAISettings.nauvis
+end
+
+local function applyNauvisMinEvoSetting()
+    local nauvis = getNauvisAISetting()
+    if nauvis then
+        nauvis.minEvo = settings.global[NAUVIS_MIN_EVO_SETTING].value
+    end
+end
+
+local function syncNauvisMinEvoToSetting()
+    local nauvis = getNauvisAISetting()
+    if nauvis and (type(nauvis.minEvo) == "number") then
+        local value = math.max(0, math.min(100, math.floor(nauvis.minEvo)))
+        if settings.global[NAUVIS_MIN_EVO_SETTING].value ~= value then
+            settings.global[NAUVIS_MIN_EVO_SETTING] = {value = value}
+        end
+    end
+end
+
 local function onModSettingsChange(event)
 
     if not isRampantSetting(event.setting) then
         return
     end
+
+    if event.setting == NAUVIS_MIN_EVO_SETTING then
+        applyNauvisMinEvoSetting()
+        return
+    end
+
+    chainVengenceCoefficient = nil
+    aiBrain.refreshSettings(universe)
 
     -- game.print("onModSettingsChange() processing for Rampant")
 
@@ -1822,6 +1962,11 @@ local function onConfigChanged()
             prepMap(surface)
         end
     end
+
+    -- Paranoidal: bases above the tier by evolution (and distance) are brought down to it (rampantFixed--tierByEvolutionOnly)
+    baseUtils.lowerTiersToEvolution(universe)
+
+    updateEntityDamagedHandler()
 end
 
 local function onInit()
@@ -1829,6 +1974,7 @@ local function onInit()
     hookEvents()
     onConfigChanged()
 	setNewEnemySide()
+	applyNauvisMinEvoSetting()
 	
 end
 
@@ -1839,7 +1985,10 @@ script.on_event(defines.events.on_surface_created, onSurfaceCreated)
 script.on_init(onInit)
 script.on_load(onLoad)
 script.on_event(defines.events.on_runtime_mod_setting_changed, onModSettingsChange)
-script.on_configuration_changed(onConfigChanged)
+script.on_configuration_changed(function(data)
+    onConfigChanged(data)
+    syncNauvisMinEvoToSetting()
+end)
 
 script.on_event(defines.events.on_resource_depleted, onResourceDepleted)
 script.on_event({defines.events.on_player_built_tile,
@@ -1856,15 +2005,31 @@ script.on_event(defines.events.on_biter_base_built, onEnemyBaseBuild)
 script.on_event({defines.events.on_player_mined_entity,
                  defines.events.on_robot_mined_entity}, onMine)
 
-script.on_event({defines.events.on_built_entity,
-                 defines.events.on_robot_built_entity,
-                 defines.events.script_raised_built,
-                 defines.events.script_raised_revive}, onBuild)
+-- Keep resources, every pheromone producer and every type handled by safeBuildings.
+-- Build this union from Constants so later additions to building scores are not silently filtered out.
+local buildFilters = {{filter = "type", type = "resource"}, {filter = "type", type = "electric-pole"},
+    {filter = "type", type = "lamp"}, {filter = "rail"}, {filter = "rail-signal"},
+    {filter = "type", type = "rail-support"}, {filter = "type", type = "train-stop"}}
+for entityType in pairs(constants.BUILDING_PHEROMONES) do
+    buildFilters[#buildFilters + 1] = {filter = "type", type = entityType}
+end
+for _, eventId in ipairs({defines.events.on_built_entity,
+                         defines.events.on_robot_built_entity,
+                         defines.events.script_raised_built,
+                         defines.events.script_raised_revive}) do
+    script.on_event(eventId, onBuild, buildFilters)
+end
 
 
 script.on_event(defines.events.on_rocket_launched, onRocketLaunch)
-script.on_event({defines.events.on_entity_died,
-                 defines.events.script_raised_destroy}, onDeath)
+-- onDeath ignores neutral entities except the named cliff. Do not exclude trees
+-- by type: a non-neutral tree can still affect artillery/victory accounting.
+script.on_event(defines.events.on_entity_died, onDeath, {
+    {filter = "force", force = "neutral", invert = true},
+    {filter = "name", name = "cliff"},
+})
+-- script_raised_destroy has no force filter in Factorio 2.0; retain its Lua guard.
+script.on_event(defines.events.script_raised_destroy, onDeath)
 script.on_event(defines.events.on_chunk_generated, onChunkGenerated)
 script.on_event(defines.events.on_chunk_deleted, onChunkDeleted)
 script.on_event(defines.events.on_force_created, onForceCreated)
@@ -1876,18 +2041,28 @@ script.on_event(defines.events.on_unit_group_finished_gathering, onGroupFinished
 
 script.on_event(defines.events.on_build_base_arrived, onBuilderArrived)
 
-script.on_event(defines.events.on_sector_scanned, onSectorScanned)
-script.on_event(defines.events.on_script_trigger_effect, onScriptTriggerEffect)
-script.on_event(defines.events.on_player_respawned, onPlayerRespawned)
+-- Only Rampant's own radar-type entities need on_sector_scanned; the player's radars are filtered out
+-- in the engine. Names are checked against prototypes so the filter never references a missing entity.
+local sectorScannedFilters = {}
+local sectorFiltersBuilt = pcall(function()
+    for _, name in pairs({"targetDummyPlasma-rampant", "targetDummyFire-rampant", "targetDummyPhysical-rampant",
+                         "targetDummyLaser-rampant", "test-rampant",
+                         "biterSupressor1-rampant", "biterSupressor2-rampant", "biterSupressor3-rampant"}) do
+        if prototypes.entity[name] then
+            sectorScannedFilters[#sectorScannedFilters + 1] = {filter = "name", name = name}
+        end
+    end
+end)
+if not sectorFiltersBuilt then
+    script.on_event(defines.events.on_sector_scanned, onSectorScanned)	-- prototypes unavailable: old behaviour
+elseif #sectorScannedFilters > 0 then
+    script.on_event(defines.events.on_sector_scanned, onSectorScanned, sectorScannedFilters)
+end
+if hasSpaceAgeMod then
+    script.on_event(defines.events.on_script_trigger_effect, onScriptTriggerEffect)
+end
 
-script.on_event(defines.events.on_entity_damaged, onEntityDamaged, {
-	{filter="type", type="unit"}, 
-	{mode = "and", invert = true, filter="damage-type", type ="fire"},
-	{mode = "and", invert = true, filter="damage-type", type ="acid"},
-	{mode = "or", filter="original-damage-amount", value = 200, comparison = ">"},
-	{mode = "or", filter="type", type="spider-unit"},	
-	{mode = "or", filter="type", type="segmented-unit"},	
-	})
+-- on_entity_damaged is registered by updateEntityDamagedHandler (on_init, on_load, on_configuration_changed, champions)
 
 script.on_event(defines.events.on_segmented_unit_damaged, onSegmentedEntityDamaged)	
 	
@@ -1943,6 +2118,26 @@ local function rampantSetAIState(event)
 end
 
 commands.add_command('rampantSetAIState', "", rampantSetAIState)
+
+-- what the AI has learned on the player's surface (tactic values, streaks, targets)
+local function rampantAIReport(event)
+	local player = game.players[event.player_index]
+	local map = universe.maps[player.surface.index]
+	if not map then
+		player.print(player.surface.name .. " is excluded from processing")
+		return
+	end
+	if universe.classicAI then
+		player.print("Rampant: classic behaviour is on, the AI does not learn")
+	end
+	player.print("Rampant AI on " .. map.surface.name .. ", state " .. tostring(constants.stateEnglish[map.state])
+		.. ", heavy models " .. tostring(universe.heavyAI ~= false))
+	for _, line in pairs(aiBrain.report(map)) do
+		player.print(line)
+	end
+end
+
+commands.add_command('rampantAIReport', {"description.rampantFixed--aiReportCommand"}, rampantAIReport)
 
 local function rampantForceMutations(event)
     local i = 0

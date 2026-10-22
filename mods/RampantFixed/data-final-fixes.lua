@@ -241,3 +241,6 @@ end
 if settings.startup["rampantFixed--addWallResistanceAcid"].value then
     vanillaBuildings.addWallResistance()
 end
+
+-- Paranoidal: unit prototypes of champions and hour bosses (last: copies take the final resistances)
+require("prototypes/ChampionUnits")

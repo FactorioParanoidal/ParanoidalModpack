@@ -1,10 +1,12 @@
 require("classes.toxic")
 require("classes.detector")
 
-local interval = 1
+-- Detector combinators are refreshed in 12 slots, one slot every 5 ticks (each combinator once
+-- per 60 ticks as before); player damage runs once per TickInterval. No per-tick handler.
+local DETECTOR_TICKS = 5
 
 local toxic = Toxic()
-local detector = Detector(interval)
+local detector = Detector(DETECTOR_TICKS)
 
 script.on_init(function()
     toxic:init()
@@ -27,10 +29,11 @@ script.on_event(defines.events.on_player_joined_game, function(event)
     detector:init()
 end)
 
-script.on_nth_tick(interval, function(event)
-    if event.tick % conf:TickInterval() == 0 then
-        toxic:OnTick()
-    end
+script.on_nth_tick(conf:TickInterval(), function()
+    toxic:OnTick()
+end)
+
+script.on_nth_tick(DETECTOR_TICKS, function(event)
     detector:OnTick(event)
 end)
 
@@ -42,13 +45,25 @@ script.on_event(defines.events.on_entity_settings_pasted, function(event)
     detector:OnSettingPasted(event)
 end)
 
-script.on_event({defines.events.on_robot_build_entity, defines.events.on_build_entity}, function(event)
-    detector:OnBuild(event)
-end)
+-- Only constant combinators matter; filtered events are registered one at a time (2.0 API).
+-- The former names on_build_entity/on_robot_build_entity do not exist: nothing was registered.
+local combinator_filter = {{filter = "type", type = "constant-combinator"}}
+for _, event_id in ipairs({
+    defines.events.on_built_entity,
+    defines.events.on_robot_built_entity,
+    defines.events.script_raised_built,
+    defines.events.script_raised_revive,
+}) do
+    script.on_event(event_id, function(event)
+        detector:OnBuild(event)
+    end, combinator_filter)
+end
 
-script.on_event({defines.events.on_robot_mined_entity, defines.events.on_player_mined_entity}, function(event)
-    detector:DeleteEntity(event.entity)
-end)
+for _, event_id in ipairs({defines.events.on_robot_mined_entity, defines.events.on_player_mined_entity}) do
+    script.on_event(event_id, function(event)
+        detector:DeleteEntity(event.entity)
+    end, combinator_filter)
+end
 
 script.on_event(defines.events.on_research_finished, function(event)
     local tech = event.research

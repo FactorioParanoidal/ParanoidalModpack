@@ -161,21 +161,27 @@ local function deregister_player(pid)
 	storage.players[pid] = nil
 end
 
+-- Cached: the handler runs every tick, the setting changes rarely.
+local repair_interval
+local function read_interval()
+	repair_interval = settings.global["inventory-repair-interval"].value
+end
+
 local function check_all_players(event)
-	local interval = settings.global["inventory-repair-interval"].value
-	if event.tick % interval == 0 then
-		for pid,player in pairs(storage.players) do
-			if not player.valid then
+	if not repair_interval then read_interval() end
+	local interval = repair_interval
+	-- Registered with on_nth_tick(interval): every call is a due tick.
+	for pid,player in pairs(storage.players) do
+		if not player.valid then
+			deregister_player(pid)
+		elseif player.cheat_mode or player.controller_type == defines.controllers.editor then -- is the player in cheat mode or editor?
+			instant_repair(player)
+			deregister_player(pid)
+		else
+			-- attempt to repair an item and deregister the player if no repairs were performed
+			if not check_inventory_for_repairs(player, interval) then
 				deregister_player(pid)
-			elseif player.cheat_mode or player.controller_type == defines.controllers.editor then -- is the player in cheat mode or editor?
-				instant_repair(player)
-				deregister_player(pid)
-			else
-				-- attempt to repair an item and deregister the player if no repairs were performed
-				if not check_inventory_for_repairs(player, interval) then
-					deregister_player(pid)
-				end
-			end		
+			end
 		end
 	end
 end
@@ -184,19 +190,36 @@ script.on_event({defines.events.on_player_joined_game,defines.events.on_player_m
 script.on_event({defines.events.on_player_left_game}, function (event) deregister_player(event.player_index) end)
 
 --script.on_nth_tick(PERIOD, function(event) check_all_players(event) end)
+-- The check runs only on the interval ticks instead of every tick with a modulo gate.
+-- Registration is derived from the runtime setting on every peer (init, load, setting change).
+local registered_interval
+local function register_tick()
+	read_interval()
+	if registered_interval and registered_interval ~= repair_interval then
+		script.on_nth_tick(registered_interval, nil)
+	end
+	registered_interval = repair_interval
+	script.on_nth_tick(repair_interval, check_all_players)
+end
+
 script.on_init(function(event) 
 	index_tools() 
 	storage.players = {}
+	register_tick()
 end)
+
+script.on_load(register_tick)
 
 script.on_configuration_changed(function(event) 
 	index_tools() 
 	storage.players = storage.players or {}
+	register_tick()
 end)
 
-script.on_nth_tick(1, check_all_players)
-
 script.on_event(defines.events.on_runtime_mod_setting_changed, function(event)
+	if event.setting == "inventory-repair-interval" then
+		register_tick()
+	end
 	if event.setting == "inventory-repair-order" then
 		index_tools()
 	end

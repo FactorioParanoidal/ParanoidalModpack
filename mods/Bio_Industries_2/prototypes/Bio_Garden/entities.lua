@@ -5,12 +5,8 @@ local REMNANTSPATH = BioInd.modRoot .. "/graphics/entities/remnants/"
 
 require("util")
 
-local crafting_speed_quality_multiplier = mods["quality"] and {
-  uncommon = 0.83,
-  rare = 0.66,
-  epic = 0.50,
-  legendary = 0.16
-} or nil
+-- Quality tables of the gardens are built for every quality in data-final-fixes.lua (Paranoidal).
+local crafting_speed_quality_multiplier = nil
 
 --- Bio Garden
 data:extend({

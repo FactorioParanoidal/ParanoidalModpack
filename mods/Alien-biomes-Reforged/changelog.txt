@@ -1,0 +1,457 @@
+---------------------------------------------------------------------------------------------------
+Version: 0.8.5
+Date: 16. 10. 2026
+  Optimizations:
+    - Tree shadows and normal maps are stored at half resolution (tools/trees.py) and drawn at double scale; unused frames of their sheets are dropped. Trunks and leaves keep full resolution. Estimated atlas of the mod: normal 710 -> 579 MiB, economy 188 -> 162 MiB.
+  Info:
+    - Graphical test launch with base, Quality and Elevated Rails: all sprites load, video memory 2023 MB in total (atlases 2012 MB).
+    - tools/data/derived-graphics.json records the regenerated files and their upstream sources.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.8.4
+Date: 16. 10. 2026
+  Features:
+    - Geology by soil colour (startup setting, on by default): with Resource Spawner Overhaul, new regions favour (weight x2) the ore matching the soil colour: sapphirite on blue/purple/aubergine/violet/mauve, jivolite on cream/yellow/tan, stiratite on green/olive/turquoise, crotinnium on grey/white, rubyte on red/dustyrose/orange, bobmonium on brown/beige, coal on black, oil, gas and fissures on volcanic ground. Infinite ores follow their ore. No resource disappears; the starting area is unchanged.
+    - Remote interface alien-biomes-reforged / geology_bias(surface_name, tile_names) for resource generators.
+  Info:
+    - Unit test tools/test_geology.lua.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.8.3
+Date: 16. 10. 2026
+  Info:
+    - Map colours and biome particle colours were checked against the rendered textures (tools/colors.py, report in tools/data/colors-report.md): hues match the ground (median deviation 1 for the map, 2-5 for particles), so nothing is changed. The only outliers are the volcanic tiles, deliberately bright on the map (heat-4 is the slowest terrain) with rock-grey particles.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.8.2
+Date: 16. 10. 2026
+  Features:
+    - New startup setting "Terrain graphics memory" (alien-biomes-reforged-atlas): Normal (default) or Economy for graphics cards with little memory.
+    - Economy uses only the graphics already in the mod: one tint matrix per terrain family (tints refitted, tools/economy.py), 1x1 and half of the 2x2 tile variants, every third picture of decoratives with many shapes, similar tree species share graphics (willow to mangrove, greypine to conifer, specter and scarecrow to oaktapus, pear to ash), half of the tree variations, no tree normal maps.
+    - Tree variation counts and all prototype names are unchanged, so the setting can be switched on an existing map; only the look changes.
+  Info:
+    - Estimated atlas of the mod by loaded regions (tools/atlas_regions.py): normal 710 MiB, economy 188 MiB (original Alien Biomes 1374 MiB).
+
+---------------------------------------------------------------------------------------------------
+Version: 0.8.1
+Date: 16. 10. 2026
+  Info:
+    - Maintenance tools and source data are kept inside the mod in tools/ (see tools/README.md): matrix builder, variant selection, checks, isolated test launches.
+    - New tools/reforge.py: refreshes the code from a new Alien Biomes release and re-applies the Reforged patches (tools/patches.py) without touching optimised graphics; compares a new graphics release with the recorded upstream manifest; regenerates prototypes/tint-matrices.lua.
+    - Upstream manifests (versions and SHA-1 of the files the mod is built on) are recorded in tools/data.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.8.0
+Date: 16. 10. 2026
+  Info:
+    - Merged Alien Biomes 0.7.4 and Alien Biomes Graphics 0.7.1 into Alien-biomes-Reforged.
+  Optimizations:
+    - Dirt, sand, grass and volcanic tiles use shared tint matrices with per-tile tint instead of one texture per colour.
+    - Sand dune decals use one tinted matrix per shape instead of twelve coloured copies.
+    - Lava decals use an untinted base layer plus an additive tinted glow layer instead of four coloured copies.
+    - Removed graphics replaced by matrices and sprites the code never loads: unused lava decals, cliffs (cliff replacement is disabled upstream) and green coral.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.7.4
+Date: 23. 06. 2025
+  Changes:
+    - Now requires Alien Biomes Graphics 0.7.1
+
+---------------------------------------------------------------------------------------------------
+Version: 0.7.3
+Date: 23. 06. 2025
+  Bugfixes:
+    - Change rock names to align with vanilla for space exploration code purposes.
+    - Fixed crash when loading some custom planets.
+    - Fixed crash when disabling some tile types.
+    - Fixed being unable to plant trees on Nauvis, thanks to G'lek for the patch.
+    - Change rock names to be more consistent with Factorio 2.0.
+    - Move Alien Biome tiles to the correct tab in Factoriopedia.
+    - Add missing decorative locales.
+  Locale:
+    - Updated Chinese Simplified translation, thanks to plexpt.
+    - Added Chinese Traditional translation, thanks to Cassidy.
+    - Updated Russian translation, thanks to Shadow_Man.
+    - Added Turkish translation, thanks to UberReis.
+    - Added Japanese translation, thanks to YAMATO.
+    - Added Brazilian Portuguese translation, thanks to 123499.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.7.2
+Date: 06. 11. 2024
+  Bugfixes:
+    - Fixed collision mask definition for landfill from altering other tile collision masks. (This prevented placing concrete around vents on Aquilo)
+    - Fixed load error when adding mods that add more tiles, relating to running out of tile layers.
+    - Fixed load error when disabling coastal shallows.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.7.1
+Date: 27. 10. 2024
+  Bugfixes:
+    - Fixed shallow water and marsh tiles could not be landfilled,
+
+---------------------------------------------------------------------------------------------------
+Version: 0.7.0
+Date: 19. 10. 2024
+  Info:
+    - Updated for Factorio 2.0.
+    - When used with Space Age, only the Nauvis surface will be affected.
+
+  Changes:
+    - Removed the "priority tiles" system, no longer needed due to the larger tile limit of Factorio 2.0.
+    - Removed the "Remove obsolete tiles" mod setting.
+
+  Locale:
+    - Added Korean translation, thanks to Apeach.
+    - Added Ukrainian translation, thanks to Met en Bouldry.
+    - Updated Russian translation, thanks to Shadow_Man.
+    - Updated Spanish translation, thanks to SpiderLove.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.6.8
+Date: 03. 11. 2022
+  Compatibility:
+    - Added warning message when Alien Biomes has to remove tiles from other mods due to the tile limit.
+    - [K2] K2 tiles are now considered higher priority and will be kept before tiles from other mods when the tile limit is reached.
+    - [IR] Fixed a crash that could occur when trying to modify tree prototypes that don't have an autoplace specification.
+    - [IR] Eased tile restrictions for IR's rubber trees, which are now only restricted from spawning in volcanic and frozen biomes.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.6.7
+Date: 17. 02. 2022
+  Compatibility:
+    - Fixed load order problem with IR2.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.6.6
+Date: 16. 02. 2022
+  Bugfixes:
+    - Fix tile transition to "water wube" for future menu simulations.
+
+  Compatibility:
+    - Landfill won't collide with resources is water also doesn't (for mods with water resources).
+    - Allows IR2 rubber trees to spawn on grass.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.6.5
+Date: 15. 05. 2021
+  Locale:
+    - Russian translation thanks to Shadow_Man.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.6.4
+Date: 21. 01. 2021
+  Compatibility:
+    - Spider leg fix for Klonan.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.6.3
+Date: 14. 12. 2020
+  Bugfixes:
+    - Fixed player wouldn't collide with pipes due to shared code with Combat Mechanics Overhaul. (You can use Combat Mechanics Overhaul to get that feature.)
+
+---------------------------------------------------------------------------------------------------
+Version: 0.6.2
+Date: 12. 12. 2020
+  Changes:
+    - Tree collision changes: Previously trees were given much smaller collision boxes to make it easier for players to move through but this had unwanted sideffects. Now trees don't collide with the player at all and have their collision box restored to the vanilla default size.
+    - Some trees have additional tile restrictions. This prevents grassland trees from appearing on dirt and dryland trees appearing in desert.
+    - Increased tree pollution absorption by 50%.
+    - Trees have layered icons with tinted leaves.
+
+  Locle:
+    - Trees have names.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.6.1
+Date: 24. 11. 2020
+  Info:
+    - Updated for Factorio 1.1.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.5.8
+Date: 16. 08. 2020
+  Changes:
+    - Added nuclear ground as a priority tile.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.5.7
+Date: 07. 08. 2020
+  Locale:
+    - Added Japanese translation.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.5.6
+Date: 31. 05. 2020
+  Locale:
+    - Added Chinese translation thanks to Frost.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.5.5
+Date: 26. 05. 2020
+  Changes:
+    - Specified the minimum Factorio version number as 0.18.27.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.5.4
+Date: 24. 05. 2020
+  Changes:
+    - Added character footstep and vehicle driving partical effects for all tile types (but still a work in process).
+
+  Bugfixes:
+    - Fixed loading error with newer versions of Factorio if the "remove obsolete tiles" option was enabled.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.5.3
+Date: 29. 04. 2020
+  Changes:
+    - Added experimental rivers generation. The rivers genereration is acceptable in some cases but in most cases the effect is not great so it is disabled by default.
+    - Changed the structure of mod settings so that other mods can alter the list of allowed values and force certain tiles to exist if they are required. If you are not using the default settings then it is advisable to match your previous settings before loading an old save.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.5.2
+Date: 21. 03. 2020
+  Bugfixes:
+    - Fixed a mod compatibility issue related to removing tiles in settings.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.5.1
+Date: 27. 01. 2020
+  Info:
+    - Updated for Factorio 0.18.
+
+  Changes:
+    - Added reflections for trees.
+    - Added normal maps for trees (so the leaves sway in the wind).
+    - Updated licence file to specifically allow streamers and youtubers to feature the mod, and to list discord https://discord.gg/ymjUVMv as the primary locating for suggested code changes.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.4.16
+Date: 22. 10. 2019
+  Changes:
+    - Changed landfill texture to use new dedicated landfill texture.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.4.15
+  Changes:
+    - Increased frozen biome pollution absorption (more).
+
+---------------------------------------------------------------------------------------------------
+Version: 0.4.14
+  Changes:
+    - Increased frozen biome pollution absorption.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.4.13
+  Bugfixes:
+    - Update tree picture prototype to match a change in the base game.
+    - Added a missing terrain tile to the priority tiles list.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.4.12
+  Bugfixes:
+    - Mod portal zip file seemed to be broken for some reason. Also fixed the change log.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.4.11
+  Changes:
+    - Changed shallow water so it can't spawn above elevation 0 and put water on otherwise waterless planets.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.4.10
+  Graphics:
+    - Upscaled Medusa tree graphics by Kamsta99
+
+---------------------------------------------------------------------------------------------------
+Version: 0.4.9
+  Bugfixes:
+    - Fixed trees not being selectable over resources.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.4.8
+  Changes:
+    - Changed to static title transitions so that the mod can't be disabled by other mods recklessly changing vanilla functions.
+  Features:
+    - Changed tree selection priority so they are not in the way.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.4.7
+  Bugfixes:
+    - Fixed error if you disable all volcanic tiles.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.4.6
+  Changes:
+    - Put "out-of-map" tile back at layer index 0.
+
+  Ease of use:
+    - Reduced tree and rock health.
+    - Reduced rock spawn amounts.
+
+  Graphics:
+    - Partial hr graphics for snow biome trees thanks to Kamsta99.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.4.5
+  Bugfixes:
+    - Fixed issue with landfill and Dectorio.
+
+  Changes:
+    - Added pollution absorption rates matching the new spec.
+    - Increased scale of in-biome tile noise to reduce 'camo' effect.
+    - Moved 2 of the 5 dirt tiles into small rare dirt patches within grass biomes.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.4.4
+  Bugfixes:
+    - Fixed landfill would not work on wetland shallow water
+
+---------------------------------------------------------------------------------------------------
+Version: 0.4.3
+  Changes:
+    - Removed around 150 noise layers by changing tiles from having their own noise layer to using the same one but with offsets. This should fix issues where the game would crash from having too many noise layers. The mod only adds 5 now.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.4.2
+  Changes:
+    - Vanilla "grass-1" is no longer a required
+
+---------------------------------------------------------------------------------------------------
+Version: 0.4.1
+  Info:
+    - Updated for Factorio 0.17.
+
+  Changes:
+    - The terrain climate mod settings have been merged into map settings.
+    - Terrain placement changed to use the probability expression system of 0.17.
+    - The 'Regenerate Map' code has been removed and made into a standalone mod: "Regenerate Terrain".
+    - All tree settings have been tweaked.
+
+  Features:
+    - Sand now appears next to water for beaches.
+    - Original Palm trees have been added, they spawn on beaches.
+
+  Major Features:
+    - Shallow water has been added to coasts.
+    - Shallow water has been added to wetland biomes.
+
+  Sounds:
+    - Created spashing audio for shallow water.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.3.9
+  Changes:
+    - Added settings so that you completely remove biomes from the game, preventing them from loading and taking up tile ids (255 tile limit).
+
+  Optimisations:
+    - Most decoratives now use tinting instead of dedicated textures.
+
+  Ease of use:
+    - Added setting to reduce terrain player movement penalty.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.3.8
+  Changes:
+    - Added decal layer correction post process.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.3.6
+  Bugfixes:
+    - Fixed wrong function call.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.3.5
+  Major Features:
+    - If over 255 tiles are in data.raw the game won't load, so tiles are removed (replaced with landfill) until it will load an you can access the menu. This at least lets you access the menu and disable mods that add tiles you don't need, or you can play that way if you don't mind missing those tiles. You can see what is removed in your log file.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.3.4
+  Changes:
+    - Made obsolete vanilla tile removal optional (disabled by default) so that mods that require them will not break. Restored dead trees.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.3.3
+  Bugfixes:
+    - Fixed Craters for medium res.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.3.1
+  Info:
+    - Complete rebuild. There may be bugs.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.2.7
+  Bugfixes:
+    - Fixed stone decals being removed by vanilla change.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.2.6
+  Bugfixes:
+    - Fixed decals overlapping water (on newly generated sections).
+
+---------------------------------------------------------------------------------------------------
+Version: 0.2.5
+  Bugfixes:
+    - Fixed sounds were missing from v0.2.4 due to a new packaging script missing them.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.2.4
+  Changes:
+    - Added generic bedrock decals for most biomes.
+
+  Graphics:
+    - Added some High-Resolution graphics.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.2.3
+  Bugfixes:
+    - Fixed landfill appearing as red desert.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.2.2
+  Info:
+    - Updated for Factorio 0.15. High-resolution graphics will be in a future release. If continuing a 0.14 map there may be hard edges on newly generated chunks.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.1.7
+  Features:
+    - Adds 2 new tree types with completely original models (i.e. not a recolour of vanilla trees). Snow Fir Tree, and Volcanic Coral Tree.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.1.6
+  Bugfixes:
+    - Fixes placing landfill in deep water.
+
+  Features:
+    - Landfill now has it's own tile type and a new icon.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.1.5
+  Features:
+    - Added Volcanic Tileset.
+
+  Bugfixes:
+    - All biomes (including vanilla land tiles) now have the missing u and o variants, which means that you don't get the weirdness that can happen in vanilla when you place flooring near a biome transition.
+    - All tiles (including vanilla) now have order strings so they are in a sensible order in the map editor.
+
+  Locale:
+    - All tiles now have locale strings.
+
+
+---------------------------------------------------------------------------------------------------
+Version: 0.1.4
+  Sounds:
+    - Snow Footstep Sounds
+
+---------------------------------------------------------------------------------------------------
+Version: 0.1.3
+  Bugfixes:
+    - Fixed Tundra assignment.
+
+  Features:
+    - Added more tree variations.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.1.2
+  Changes:
+    - Improved biome distribution edge blending (less straight lines)

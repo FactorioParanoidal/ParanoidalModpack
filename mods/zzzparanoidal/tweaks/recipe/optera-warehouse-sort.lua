@@ -1,24 +1,24 @@
 -- Warehousing (Optera): basic-склады сидят в vanilla-подгруппе "storage", а
 -- логистические — в "logistic-network", поэтому разбросаны по разным рядам.
 -- Собираем каждое семейство в свою подгруппу-ряд по сетке постройки:
--- 6×6 (warehouse) и 3×3 (storehouse), порядок колонок как у Angel's-складов
--- (basic, active, passive, storage, buffer, requester).
+-- 6×6 (warehouse) и 3×3 (storehouse), порядок Beta 8 micro-final-fix:
+-- basic, active, buffer, passive, requester, storage. Цены и свойства не меняются.
 if not mods["Warehousing"] then
 	return
 end
 
 data:extend({
-	{ type = "item-subgroup", name = "optera-storehouse", group = "logistics", order = "ae[chests-warehouse]-e" },
-	{ type = "item-subgroup", name = "optera-warehouse", group = "logistics", order = "ae[chests-warehouse]-f" },
+	{ type = "item-subgroup", name = "optera-storehouse", group = "logistics", order = "f-4" },
+	{ type = "item-subgroup", name = "optera-warehouse", group = "logistics", order = "f-5" },
 })
 
 local cols = {
-	["basic"] = "a",
-	["active-provider"] = "b",
-	["passive-provider"] = "c",
-	["storage"] = "d",
-	["buffer"] = "e",
-	["requester"] = "f",
+	["basic"] = "1",
+	["active-provider"] = "2",
+	["passive-provider"] = "4",
+	["storage"] = "6",
+	["buffer"] = "3",
+	["requester"] = "5",
 }
 
 local function set_sub(proto, sg, order)

@@ -2,5 +2,13 @@
   "mod": "GUI_Unifyer",
   "source": "portal",
   "upstreamVersion": "2.0.1",
-  "changeReason": "Исправляет интеграцию локального TimedSpawnControl: вместо удалённой функции случайного возрождения оформляет кнопку «Я застрял», как в Beta 8."
+  "original": {
+    "name": "GUI Unifier",
+    "authors": ["Snouz", "Solus Caelum"],
+    "portal": {
+      "name": "GUI_Unifyer",
+      "url": "https://mods.factorio.com/mod/GUI_Unifyer"
+    }
+  },
+  "changeReason": "Локальный portal-патч Paranoidal на базе upstream 2.0.1 с сохранением опубликованного номера версии. Кнопка объединителя сундуков WideChests на верхней панели (нажатие обрабатывает сам WideChests по имени элемента), иконка — стальной сундук на прозрачном фоне без рамки. Кнопки inserter-throughput и PMRPGsystem в общем тёмном стиле (без серого mod_gui_button и auto_toggle, одна иконка во всех состояниях мыши), кнопка настроек Bob's inserters убрана с панели. Добавляет кнопку Blueprint Sandboxes (обработку нажатия выполняет сама песочница по имени элемента) и собственную чёрно-белую иконку blueprintsandboxes_button (PNG из приложенного SVG); это не предмет upstream-репорта. Сохраняет интеграцию TimedSpawnControl с кнопкой «Я застрял» вместо удалённого случайного возрождения. Оптимизирует runtime: очередь обновлений без дублей, storage и восстановление состояния при обновлении, запись только изменившихся свойств кнопок, фильтры строительных событий, уровни логирования. Имена GUI, спрайтов и настроек сохранены. Игровая проверка и замеры по команде пользователя не запускались. План upstream: после ручной приёмки предложить исправления lifecycle, очереди и лишних GUI-записей (ничего не опубликовано). При обновлении сверить патч с upstream. Интеграция Module Inserter переведена на ModuleInserterEx — кнопка module_inserter_config_button создаётся GUI Unifyer, нажатие вызывает remote ModuleInserterEx.toggle_gui, подсветка по окну miex_main_window. Интеграция EvoGUI переведена на EvoUi (корневой элемент EvoUi_root)."
 }

@@ -1229,6 +1229,8 @@ end
 ---@return LuaGuiElement
 function ProductionPanel:addTableRowRecipe(gui_table, model, block, recipe)
 	local recipe_prototype = RecipePrototype(recipe)
+	---read the player mod setting once per row (mod_settings builds a new table on every read)
+	local row_move_step = User.getModSetting("row_move_step")
 
 	---col action
 	local cell_action = GuiElement.add(gui_table, GuiTable("action", recipe.id):column(3))
@@ -1243,12 +1245,12 @@ function ProductionPanel:addTableRowRecipe(gui_table, model, block, recipe)
 		uri_button_bottom = "block-child-up"
 	end
 	local uri_button_copy = "recipe-copy"
-	local tree_down = GuiElement.add(cell_action, GuiButton(self.classname, "tree-recipe-down", model.id, block.id, recipe.id):sprite("menu", defines.sprites.arrow_left.black, defines.sprites.arrow_left.black):style("helmod_button_menu_sm"):tooltip({ "tooltip.down-element-in-tree", User.getModSetting("row_move_step") }))
-	GuiElement.add(cell_action, GuiButton(self.classname, uri_button_top, model.id, block.id, recipe.id):sprite("menu", defines.sprites.arrow_top.black, defines.sprites.arrow_top.black):style("helmod_button_menu_sm"):tooltip({"tooltip.up-element", User.getModSetting("row_move_step") }))
+	local tree_down = GuiElement.add(cell_action, GuiButton(self.classname, "tree-recipe-down", model.id, block.id, recipe.id):sprite("menu", defines.sprites.arrow_left.black, defines.sprites.arrow_left.black):style("helmod_button_menu_sm"):tooltip({ "tooltip.down-element-in-tree", row_move_step }))
+	GuiElement.add(cell_action, GuiButton(self.classname, uri_button_top, model.id, block.id, recipe.id):sprite("menu", defines.sprites.arrow_top.black, defines.sprites.arrow_top.black):style("helmod_button_menu_sm"):tooltip({"tooltip.up-element", row_move_step }))
 	GuiElement.add(cell_action, GuiButton(self.classname, uri_button_remove, model.id, block.id, recipe.id):sprite("menu", defines.sprites.close.black, defines.sprites.close.black):style("helmod_button_menu_sm_red"):tooltip({"tooltip.remove-element" }))
 
-	local tree_up = GuiElement.add(cell_action, GuiButton(self.classname, "tree-recipe-up", model.id, block.id, recipe.id):sprite("menu", defines.sprites.arrow_right.black, defines.sprites.arrow_right.black):style("helmod_button_menu_sm"):tooltip({ "tooltip.up-element-in-tree", User.getModSetting("row_move_step") }))
-	GuiElement.add(cell_action, GuiButton(self.classname, uri_button_bottom, model.id, block.id, recipe.id):sprite("menu", defines.sprites.arrow_bottom.black, defines.sprites.arrow_bottom.black):style("helmod_button_menu_sm"):tooltip({ "tooltip.down-element", User.getModSetting("row_move_step") }))
+	local tree_up = GuiElement.add(cell_action, GuiButton(self.classname, "tree-recipe-up", model.id, block.id, recipe.id):sprite("menu", defines.sprites.arrow_right.black, defines.sprites.arrow_right.black):style("helmod_button_menu_sm"):tooltip({ "tooltip.up-element-in-tree", row_move_step }))
+	GuiElement.add(cell_action, GuiButton(self.classname, uri_button_bottom, model.id, block.id, recipe.id):sprite("menu", defines.sprites.arrow_bottom.black, defines.sprites.arrow_bottom.black):style("helmod_button_menu_sm"):tooltip({ "tooltip.down-element", row_move_step }))
 	local tooltip_copy = {"", {"tooltip.copy-element"}}
 	if Player.hasFeatureQuality() and recipe_prototype.is_support_quality then
 		table.insert(tooltip_copy, "\n")
@@ -1484,6 +1486,8 @@ end
 ---@param block BlockData
 ---@return LuaGuiElement
 function ProductionPanel:addTableRowBlock(gui_table, model, parent, block)
+	---read the player mod setting once per row (mod_settings builds a new table on every read)
+	local row_move_step = User.getModSetting("row_move_step")
 	local by_limit = false -- parent.by_limit
 	local unlinked = Model.isUnlinkedBlock(block)
 	local block_by_product = not (block ~= nil and block.by_product == false)
@@ -1505,12 +1509,12 @@ function ProductionPanel:addTableRowBlock(gui_table, model, parent, block)
             uri_button_remove = "block-child-remove"
             uri_button_bottom = "block-child-up"
         end
-        GuiElement.add(cell_action, GuiButton(self.classname, "tree-block-down", model.id, parent.id, block.id):sprite("menu", defines.sprites.arrow_left.black, defines.sprites.arrow_left.black):style("helmod_button_menu_sm"):tooltip({ "tooltip.down-element-in-tree", User.getModSetting("row_move_step") }))
-        GuiElement.add(cell_action, GuiButton(self.classname, uri_button_top, model.id, parent.id, block.id):sprite("menu", defines.sprites.arrow_top.black, defines.sprites.arrow_top.black):style("helmod_button_menu_sm"):tooltip({"tooltip.up-element", User.getModSetting("row_move_step") }))
+        GuiElement.add(cell_action, GuiButton(self.classname, "tree-block-down", model.id, parent.id, block.id):sprite("menu", defines.sprites.arrow_left.black, defines.sprites.arrow_left.black):style("helmod_button_menu_sm"):tooltip({ "tooltip.down-element-in-tree", row_move_step }))
+        GuiElement.add(cell_action, GuiButton(self.classname, uri_button_top, model.id, parent.id, block.id):sprite("menu", defines.sprites.arrow_top.black, defines.sprites.arrow_top.black):style("helmod_button_menu_sm"):tooltip({"tooltip.up-element", row_move_step }))
         GuiElement.add(cell_action, GuiButton(self.classname, uri_button_remove, model.id, parent.id, block.id):sprite("menu", defines.sprites.close.black, defines.sprites.close.black):style("helmod_button_menu_sm_red"):tooltip({ "tooltip.remove-element" }))
 
-        local tree_up = GuiElement.add(cell_action, GuiButton(self.classname, "tree-block-up", model.id, parent.id, block.id):sprite("menu", defines.sprites.arrow_right.black, defines.sprites.arrow_right.black):style("helmod_button_menu_sm"):tooltip({ "tooltip.down-element-in-tree", User.getModSetting("row_move_step") }))
-        GuiElement.add(cell_action, GuiButton(self.classname, uri_button_bottom, model.id, parent.id, block.id):sprite("menu", defines.sprites.arrow_bottom.black, defines.sprites.arrow_bottom.black):style("helmod_button_menu_sm"):tooltip({ "tooltip.down-element", User.getModSetting("row_move_step") }))
+        local tree_up = GuiElement.add(cell_action, GuiButton(self.classname, "tree-block-up", model.id, parent.id, block.id):sprite("menu", defines.sprites.arrow_right.black, defines.sprites.arrow_right.black):style("helmod_button_menu_sm"):tooltip({ "tooltip.down-element-in-tree", row_move_step }))
+        GuiElement.add(cell_action, GuiButton(self.classname, uri_button_bottom, model.id, parent.id, block.id):sprite("menu", defines.sprites.arrow_bottom.black, defines.sprites.arrow_bottom.black):style("helmod_button_menu_sm"):tooltip({ "tooltip.down-element", row_move_step }))
         if unlinked then
             GuiElement.add(cell_action, GuiButton(self.classname, "block-unlink", model.id, block.id):sprite("menu", defines.sprites.unplugged.black, defines.sprites.unplugged.black):style("helmod_button_menu_sm"):tooltip({"tooltip.unlink-element" }))
         else

@@ -321,7 +321,8 @@ if mods["angelsrefining"] then
     },
   })
   thxbob.lib.tech.add_recipe_unlock("angels-water-treatment", "bi-mineralized-sulfuric-waste")
-  thxbob.lib.tech.add_recipe_unlock("slag-processing-1", "bi-slag-slurry")
+  -- Angels 2.0: the technology is angels-slag-processing-1.
+  thxbob.lib.tech.add_recipe_unlock("angels-slag-processing-1", "bi-slag-slurry")
 end
 
 

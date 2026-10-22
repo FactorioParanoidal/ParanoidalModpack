@@ -94,6 +94,7 @@ local function make_crane_entity(entityName, newName, wide, forced_ips)
 
   entity.pickup_position = {0.5, -1.7}
   entity.insert_position = {-0.5, 1.7}
+  entity.allow_custom_vectors = true
   --hand
   entity.hand_size = 1.5
   entity.hand_base_picture = change_sprite_scale(entity.hand_base_picture, 2)

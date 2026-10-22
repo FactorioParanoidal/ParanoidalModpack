@@ -1,0 +1,14 @@
+{
+  "mod": "qol_research",
+  "source": "portal",
+  "upstreamVersion": "3.4.2",
+  "changeReason": "Для Paranoidal убраны сообщения об установке Quality of Life Research v3 и ссылка на конфигуратор при создании игрока, чтобы не засорять игровой чат.",
+  "original": {
+    "name": "Quality of Life research",
+    "authors": ["Aidiakapi"],
+    "portal": {
+      "name": "qol_research",
+      "url": "https://mods.factorio.com/mod/qol_research"
+    }
+  }
+}

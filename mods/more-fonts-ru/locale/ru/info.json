@@ -1,0 +1,518 @@
+{
+  "font": {
+    "atkinson-hyperlegible": [
+      "__more-fonts-ru__/fonts/atkinson_hyperlegible/Atkinson-Hyperlegible-Regular-102.ttf",
+      "__core__/fonts/NotoSans-Regular.ttf",
+      "__core__/fonts/NotoSansCJKtc-Regular.ttf",
+      "__core__/fonts/NotoSansThai-Regular.ttf",
+      "__core__/fonts/NotoSansArabic-Regular.ttf",
+      "__core__/fonts/NotoSansHebrew-Regular.ttf",
+      "__core__/fonts/DejaVuSans.ttf"
+    ],
+    "atkinson-hyperlegible-semibold": [
+      "__more-fonts-ru__/fonts/atkinson_hyperlegible/Atkinson-Hyperlegible-Bold-102.ttf",
+      "__core__/fonts/NotoSans-SemiBold.ttf",
+      "__core__/fonts/NotoSansCJKtc-Medium.ttf",
+      "__core__/fonts/NotoSansThai-SemiBold.ttf",
+      "__core__/fonts/NotoSansArabic-SemiBold.ttf",
+      "__core__/fonts/NotoSansHebrew-SemiBold.ttf",
+      "__core__/fonts/DejaVuSans-Bold.ttf"
+    ],
+    "atkinson-hyperlegible-bold": [
+      "__more-fonts-ru__/fonts/atkinson_hyperlegible/Atkinson-Hyperlegible-Bold-102.ttf",
+      "__core__/fonts/NotoSans-Bold.ttf",
+      "__core__/fonts/NotoSansCJKtc-Bold.ttf",
+      "__core__/fonts/NotoSansThai-Bold.ttf",
+      "__core__/fonts/NotoSansArabic-Bold.ttf",
+      "__core__/fonts/NotoSansHebrew-Bold.ttf",
+      "__core__/fonts/DejaVuSans-Bold.ttf"
+    ],
+    "comic-sans": [
+      "__more-fonts-ru__/fonts/comic_sans/1_comic_sans.ttf",
+      "__core__/fonts/NotoSans-Regular.ttf",
+      "__core__/fonts/NotoSansCJKtc-Regular.ttf",
+      "__core__/fonts/NotoSansThai-Regular.ttf",
+      "__core__/fonts/NotoSansArabic-Regular.ttf",
+      "__core__/fonts/NotoSansHebrew-Regular.ttf",
+      "__core__/fonts/DejaVuSans.ttf"
+    ],
+    "comic-sans-semibold": [
+      "__more-fonts-ru__/fonts/comic_sans/2_comic_sans_semibold.ttf",
+      "__core__/fonts/NotoSans-SemiBold.ttf",
+      "__core__/fonts/NotoSansCJKtc-Medium.ttf",
+      "__core__/fonts/NotoSansThai-SemiBold.ttf",
+      "__core__/fonts/NotoSansArabic-SemiBold.ttf",
+      "__core__/fonts/NotoSansHebrew-SemiBold.ttf",
+      "__core__/fonts/DejaVuSans-Bold.ttf"
+    ],
+    "comic-sans-bold": [
+      "__more-fonts-ru__/fonts/comic_sans/3_comic_sans_bold.ttf",
+      "__core__/fonts/NotoSans-Bold.ttf",
+      "__core__/fonts/NotoSansCJKtc-Bold.ttf",
+      "__core__/fonts/NotoSansThai-Bold.ttf",
+      "__core__/fonts/NotoSansArabic-Bold.ttf",
+      "__core__/fonts/NotoSansHebrew-Bold.ttf",
+      "__core__/fonts/DejaVuSans-Bold.ttf"
+    ],
+    "papyrus": [
+      "__more-fonts-ru__/fonts/papyrus/1_papyrus.ttf",
+      "__core__/fonts/NotoSans-Regular.ttf",
+      "__core__/fonts/NotoSansCJKtc-Regular.ttf",
+      "__core__/fonts/NotoSansThai-Regular.ttf",
+      "__core__/fonts/NotoSansArabic-Regular.ttf",
+      "__core__/fonts/NotoSansHebrew-Regular.ttf",
+      "__core__/fonts/DejaVuSans.ttf"
+    ],
+    "papyrus-semibold": [
+      "__more-fonts-ru__/fonts/papyrus/2_papyrus_semibold.ttf",
+      "__core__/fonts/NotoSans-SemiBold.ttf",
+      "__core__/fonts/NotoSansCJKtc-Medium.ttf",
+      "__core__/fonts/NotoSansThai-SemiBold.ttf",
+      "__core__/fonts/NotoSansArabic-SemiBold.ttf",
+      "__core__/fonts/NotoSansHebrew-SemiBold.ttf",
+      "__core__/fonts/DejaVuSans-Bold.ttf"
+    ],
+    "papyrus-bold": [
+      "__more-fonts-ru__/fonts/papyrus/3_papyrus_bold.ttf",
+      "__core__/fonts/NotoSans-Bold.ttf",
+      "__core__/fonts/NotoSansCJKtc-Bold.ttf",
+      "__core__/fonts/NotoSansThai-Bold.ttf",
+      "__core__/fonts/NotoSansArabic-Bold.ttf",
+      "__core__/fonts/NotoSansHebrew-Bold.ttf",
+      "__core__/fonts/DejaVuSans-Bold.ttf"
+    ],
+    "helvetica": [
+      "__more-fonts-ru__/fonts/helvetica/1_helvetica.ttf",
+      "__core__/fonts/NotoSans-Regular.ttf",
+      "__core__/fonts/NotoSansCJKtc-Regular.ttf",
+      "__core__/fonts/NotoSansThai-Regular.ttf",
+      "__core__/fonts/NotoSansArabic-Regular.ttf",
+      "__core__/fonts/NotoSansHebrew-Regular.ttf",
+      "__core__/fonts/DejaVuSans.ttf"
+    ],
+    "helvetica-semibold": [
+      "__more-fonts-ru__/fonts/helvetica/2_helvetica_semibold.ttf",
+      "__core__/fonts/NotoSans-SemiBold.ttf",
+      "__core__/fonts/NotoSansCJKtc-Medium.ttf",
+      "__core__/fonts/NotoSansThai-SemiBold.ttf",
+      "__core__/fonts/NotoSansArabic-SemiBold.ttf",
+      "__core__/fonts/NotoSansHebrew-SemiBold.ttf",
+      "__core__/fonts/DejaVuSans-Bold.ttf"
+    ],
+    "helvetica-bold": [
+      "__more-fonts-ru__/fonts/helvetica/3_helvetica_bold.ttf",
+      "__core__/fonts/NotoSans-Bold.ttf",
+      "__core__/fonts/NotoSansCJKtc-Bold.ttf",
+      "__core__/fonts/NotoSansThai-Bold.ttf",
+      "__core__/fonts/NotoSansArabic-Bold.ttf",
+      "__core__/fonts/NotoSansHebrew-Bold.ttf",
+      "__core__/fonts/DejaVuSans-Bold.ttf"
+    ],
+    "times-new-roman": [
+      "__more-fonts-ru__/fonts/times_new_roman/1_times_new_roman.ttf",
+      "__core__/fonts/NotoSans-Regular.ttf",
+      "__core__/fonts/NotoSansCJKtc-Regular.ttf",
+      "__core__/fonts/NotoSansThai-Regular.ttf",
+      "__core__/fonts/NotoSansArabic-Regular.ttf",
+      "__core__/fonts/NotoSansHebrew-Regular.ttf",
+      "__core__/fonts/DejaVuSans.ttf"
+    ],
+    "times-new-roman-semibold": [
+      "__more-fonts-ru__/fonts/times_new_roman/2_times_new_roman_semibold.ttf",
+      "__core__/fonts/NotoSans-SemiBold.ttf",
+      "__core__/fonts/NotoSansCJKtc-Medium.ttf",
+      "__core__/fonts/NotoSansThai-SemiBold.ttf",
+      "__core__/fonts/NotoSansArabic-SemiBold.ttf",
+      "__core__/fonts/NotoSansHebrew-SemiBold.ttf",
+      "__core__/fonts/DejaVuSans-Bold.ttf"
+    ],
+    "times-new-roman-bold": [
+      "__more-fonts-ru__/fonts/times_new_roman/3_times_new_roman_bold.ttf",
+      "__core__/fonts/NotoSans-Bold.ttf",
+      "__core__/fonts/NotoSansCJKtc-Bold.ttf",
+      "__core__/fonts/NotoSansThai-Bold.ttf",
+      "__core__/fonts/NotoSansArabic-Bold.ttf",
+      "__core__/fonts/NotoSansHebrew-Bold.ttf",
+      "__core__/fonts/DejaVuSans-Bold.ttf"
+    ],
+    "arial": [
+      "__more-fonts-ru__/fonts/arial/1_arial.ttf",
+      "__core__/fonts/NotoSans-Regular.ttf",
+      "__core__/fonts/NotoSansCJKtc-Regular.ttf",
+      "__core__/fonts/NotoSansThai-Regular.ttf",
+      "__core__/fonts/NotoSansArabic-Regular.ttf",
+      "__core__/fonts/NotoSansHebrew-Regular.ttf",
+      "__core__/fonts/DejaVuSans.ttf"
+    ],
+    "arial-semibold": [
+      "__more-fonts-ru__/fonts/arial/2_arial_semibold.ttf",
+      "__more-fonts-ru__/fonts/arial/3_arial_bold.ttf",
+      "__core__/fonts/NotoSans-SemiBold.ttf",
+      "__core__/fonts/NotoSansCJKtc-Medium.ttf",
+      "__core__/fonts/NotoSansThai-SemiBold.ttf",
+      "__core__/fonts/NotoSansArabic-SemiBold.ttf",
+      "__core__/fonts/NotoSansHebrew-SemiBold.ttf",
+      "__core__/fonts/DejaVuSans-Bold.ttf"
+    ],
+    "arial-bold": [
+      "__more-fonts-ru__/fonts/arial/3_arial_bold.ttf",
+      "__core__/fonts/NotoSans-Bold.ttf",
+      "__core__/fonts/NotoSansCJKtc-Bold.ttf",
+      "__core__/fonts/NotoSansThai-Bold.ttf",
+      "__core__/fonts/NotoSansArabic-Bold.ttf",
+      "__core__/fonts/NotoSansHebrew-Bold.ttf",
+      "__core__/fonts/DejaVuSans-Bold.ttf"
+    ],
+    "courier-new": [
+      "__more-fonts-ru__/fonts/courier_new/1_courier_new.ttf",
+      "__core__/fonts/NotoSans-Regular.ttf",
+      "__core__/fonts/NotoSansCJKtc-Regular.ttf",
+      "__core__/fonts/NotoSansThai-Regular.ttf",
+      "__core__/fonts/NotoSansArabic-Regular.ttf",
+      "__core__/fonts/NotoSansHebrew-Regular.ttf",
+      "__core__/fonts/DejaVuSans.ttf"
+    ],
+    "courier-new-semibold": [
+      "__more-fonts-ru__/fonts/courier_new/2_courier_new_semibold.ttf",
+      "__core__/fonts/NotoSans-SemiBold.ttf",
+      "__core__/fonts/NotoSansCJKtc-Medium.ttf",
+      "__core__/fonts/NotoSansThai-SemiBold.ttf",
+      "__core__/fonts/NotoSansArabic-SemiBold.ttf",
+      "__core__/fonts/NotoSansHebrew-SemiBold.ttf",
+      "__core__/fonts/DejaVuSans-Bold.ttf"
+    ],
+    "courier-new-bold": [
+      "__more-fonts-ru__/fonts/courier_new/3_courier_new_bold.ttf",
+      "__core__/fonts/NotoSans-Bold.ttf",
+      "__core__/fonts/NotoSansCJKtc-Bold.ttf",
+      "__core__/fonts/NotoSansThai-Bold.ttf",
+      "__core__/fonts/NotoSansArabic-Bold.ttf",
+      "__core__/fonts/NotoSansHebrew-Bold.ttf",
+      "__core__/fonts/DejaVuSans-Bold.ttf"
+    ],
+    "copperplate": [
+      "__more-fonts-ru__/fonts/copperplate/1_copperplate.ttf",
+      "__core__/fonts/NotoSans-Regular.ttf",
+      "__core__/fonts/NotoSansCJKtc-Regular.ttf",
+      "__core__/fonts/NotoSansThai-Regular.ttf",
+      "__core__/fonts/NotoSansArabic-Regular.ttf",
+      "__core__/fonts/NotoSansHebrew-Regular.ttf",
+      "__core__/fonts/DejaVuSans.ttf"
+    ],
+    "copperplate-semibold": [
+      "__more-fonts-ru__/fonts/copperplate/2_copperplate_semibold.ttf",
+      "__core__/fonts/NotoSans-SemiBold.ttf",
+      "__core__/fonts/NotoSansCJKtc-Medium.ttf",
+      "__core__/fonts/NotoSansThai-SemiBold.ttf",
+      "__core__/fonts/NotoSansArabic-SemiBold.ttf",
+      "__core__/fonts/NotoSansHebrew-SemiBold.ttf",
+      "__core__/fonts/DejaVuSans-Bold.ttf"
+    ],
+    "copperplate-bold": [
+      "__more-fonts-ru__/fonts/copperplate/3_copperplate_bold.ttf",
+      "__core__/fonts/NotoSans-Bold.ttf",
+      "__core__/fonts/NotoSansCJKtc-Bold.ttf",
+      "__core__/fonts/NotoSansThai-Bold.ttf",
+      "__core__/fonts/NotoSansArabic-Bold.ttf",
+      "__core__/fonts/NotoSansHebrew-Bold.ttf",
+      "__core__/fonts/DejaVuSans-Bold.ttf"
+    ],
+    "chalkboard": [
+      "__more-fonts-ru__/fonts/chalkboard/1_chalkboard.ttf",
+      "__core__/fonts/NotoSans-Regular.ttf",
+      "__core__/fonts/NotoSansCJKtc-Regular.ttf",
+      "__core__/fonts/NotoSansThai-Regular.ttf",
+      "__core__/fonts/NotoSansArabic-Regular.ttf",
+      "__core__/fonts/NotoSansHebrew-Regular.ttf",
+      "__core__/fonts/DejaVuSans.ttf"
+    ],
+    "chalkboard-semibold": [
+      "__more-fonts-ru__/fonts/chalkboard/3_chalkboard_bold.ttf",
+      "__core__/fonts/NotoSans-SemiBold.ttf",
+      "__core__/fonts/NotoSansCJKtc-Medium.ttf",
+      "__core__/fonts/NotoSansThai-SemiBold.ttf",
+      "__core__/fonts/NotoSansArabic-SemiBold.ttf",
+      "__core__/fonts/NotoSansHebrew-SemiBold.ttf",
+      "__core__/fonts/DejaVuSans-Bold.ttf"
+    ],
+    "chalkboard-bold": [
+      "__more-fonts-ru__/fonts/chalkboard/3_chalkboard_bold.ttf",
+      "__core__/fonts/NotoSans-Bold.ttf",
+      "__core__/fonts/NotoSansCJKtc-Bold.ttf",
+      "__core__/fonts/NotoSansThai-Bold.ttf",
+      "__core__/fonts/NotoSansArabic-Bold.ttf",
+      "__core__/fonts/NotoSansHebrew-Bold.ttf",
+      "__core__/fonts/DejaVuSans-Bold.ttf"
+    ],
+    "ubuntu": [
+      "__more-fonts-ru__/fonts/ubuntu/1_ubuntu.ttf",
+      "__core__/fonts/NotoSans-Regular.ttf",
+      "__core__/fonts/NotoSansCJKtc-Regular.ttf",
+      "__core__/fonts/NotoSansThai-Regular.ttf",
+      "__core__/fonts/NotoSansArabic-Regular.ttf",
+      "__core__/fonts/NotoSansHebrew-Regular.ttf",
+      "__core__/fonts/DejaVuSans.ttf"
+    ],
+    "ubuntu-semibold": [
+      "__more-fonts-ru__/fonts/ubuntu/2_ubuntu_semibold.ttf",
+      "__core__/fonts/NotoSans-SemiBold.ttf",
+      "__core__/fonts/NotoSansCJKtc-Medium.ttf",
+      "__core__/fonts/NotoSansThai-SemiBold.ttf",
+      "__core__/fonts/NotoSansArabic-SemiBold.ttf",
+      "__core__/fonts/NotoSansHebrew-SemiBold.ttf",
+      "__core__/fonts/DejaVuSans-Bold.ttf"
+    ],
+    "ubuntu-bold": [
+      "__more-fonts-ru__/fonts/ubuntu/3_ubuntu_bold.ttf",
+      "__core__/fonts/NotoSans-Bold.ttf",
+      "__core__/fonts/NotoSansCJKtc-Bold.ttf",
+      "__core__/fonts/NotoSansThai-Bold.ttf",
+      "__core__/fonts/NotoSansArabic-Bold.ttf",
+      "__core__/fonts/NotoSansHebrew-Bold.ttf",
+      "__core__/fonts/DejaVuSans-Bold.ttf"
+    ],
+    "libre-baskerville": [
+      "__more-fonts-ru__/fonts/libre_baskerville/1_libre_baskerville.ttf",
+      "__core__/fonts/NotoSans-Regular.ttf",
+      "__core__/fonts/NotoSansCJKtc-Regular.ttf",
+      "__core__/fonts/NotoSansThai-Regular.ttf",
+      "__core__/fonts/NotoSansArabic-Regular.ttf",
+      "__core__/fonts/NotoSansHebrew-Regular.ttf",
+      "__core__/fonts/DejaVuSans.ttf"
+    ],
+    "libre-baskerville-semibold": [
+      "__more-fonts-ru__/fonts/libre_baskerville/2_libre_baskerville_semibold.ttf",
+      "__core__/fonts/NotoSans-SemiBold.ttf",
+      "__core__/fonts/NotoSansCJKtc-Medium.ttf",
+      "__core__/fonts/NotoSansThai-SemiBold.ttf",
+      "__core__/fonts/NotoSansArabic-SemiBold.ttf",
+      "__core__/fonts/NotoSansHebrew-SemiBold.ttf",
+      "__core__/fonts/DejaVuSans-Bold.ttf"
+    ],
+    "libre-baskerville-bold": [
+      "__more-fonts-ru__/fonts/libre_baskerville/3_libre_baskerville_bold.ttf",
+      "__core__/fonts/NotoSans-Bold.ttf",
+      "__core__/fonts/NotoSansCJKtc-Bold.ttf",
+      "__core__/fonts/NotoSansThai-Bold.ttf",
+      "__core__/fonts/NotoSansArabic-Bold.ttf",
+      "__core__/fonts/NotoSansHebrew-Bold.ttf",
+      "__core__/fonts/DejaVuSans-Bold.ttf"
+    ],
+    "josefin-sans": [
+      "__more-fonts-ru__/fonts/josefin_sans/1_josefin_sans.ttf",
+      "__core__/fonts/NotoSans-Regular.ttf",
+      "__core__/fonts/NotoSansCJKtc-Regular.ttf",
+      "__core__/fonts/NotoSansThai-Regular.ttf",
+      "__core__/fonts/NotoSansArabic-Regular.ttf",
+      "__core__/fonts/NotoSansHebrew-Regular.ttf",
+      "__core__/fonts/DejaVuSans.ttf"
+    ],
+    "josefin-sans-semibold": [
+      "__more-fonts-ru__/fonts/josefin_sans/2_josefin_sans_semibold.ttf",
+      "__core__/fonts/NotoSans-SemiBold.ttf",
+      "__core__/fonts/NotoSansCJKtc-Medium.ttf",
+      "__core__/fonts/NotoSansThai-SemiBold.ttf",
+      "__core__/fonts/NotoSansArabic-SemiBold.ttf",
+      "__core__/fonts/NotoSansHebrew-SemiBold.ttf",
+      "__core__/fonts/DejaVuSans-Bold.ttf"
+    ],
+    "josefin-sans-bold": [
+      "__more-fonts-ru__/fonts/josefin_sans/3_josefin_sans_bold.ttf",
+      "__core__/fonts/NotoSans-Bold.ttf",
+      "__core__/fonts/NotoSansCJKtc-Bold.ttf",
+      "__core__/fonts/NotoSansThai-Bold.ttf",
+      "__core__/fonts/NotoSansArabic-Bold.ttf",
+      "__core__/fonts/NotoSansHebrew-Bold.ttf",
+      "__core__/fonts/DejaVuSans-Bold.ttf"
+    ],
+    "noteworthy": [
+      "__more-fonts-ru__/fonts/noteworthy/1_noteworthy.ttf",
+      "__core__/fonts/NotoSans-Regular.ttf",
+      "__core__/fonts/NotoSansCJKtc-Regular.ttf",
+      "__core__/fonts/NotoSansThai-Regular.ttf",
+      "__core__/fonts/NotoSansArabic-Regular.ttf",
+      "__core__/fonts/NotoSansHebrew-Regular.ttf",
+      "__core__/fonts/DejaVuSans.ttf"
+    ],
+    "noteworthy-semibold": [
+      "__more-fonts-ru__/fonts/noteworthy/2_noteworthy_semibold.ttf",
+      "__core__/fonts/NotoSans-SemiBold.ttf",
+      "__core__/fonts/NotoSansCJKtc-Medium.ttf",
+      "__core__/fonts/NotoSansThai-SemiBold.ttf",
+      "__core__/fonts/NotoSansArabic-SemiBold.ttf",
+      "__core__/fonts/NotoSansHebrew-SemiBold.ttf",
+      "__core__/fonts/DejaVuSans-Bold.ttf"
+    ],
+    "noteworthy-bold": [
+      "__more-fonts-ru__/fonts/noteworthy/3_noteworthy_bold.ttf",
+      "__core__/fonts/NotoSans-Bold.ttf",
+      "__core__/fonts/NotoSansCJKtc-Bold.ttf",
+      "__core__/fonts/NotoSansThai-Bold.ttf",
+      "__core__/fonts/NotoSansArabic-Bold.ttf",
+      "__core__/fonts/NotoSansHebrew-Bold.ttf",
+      "__core__/fonts/DejaVuSans-Bold.ttf"
+    ],
+    "olympic-carrier": [
+      "__more-fonts-ru__/fonts/olympic_carrier/1_olympic_carrier.ttf",
+      "__core__/fonts/NotoSans-Regular.ttf",
+      "__core__/fonts/NotoSansCJKtc-Regular.ttf",
+      "__core__/fonts/NotoSansThai-Regular.ttf",
+      "__core__/fonts/NotoSansArabic-Regular.ttf",
+      "__core__/fonts/NotoSansHebrew-Regular.ttf",
+      "__core__/fonts/DejaVuSans.ttf"
+    ],
+    "olympic-carrier-semibold": [
+      "__more-fonts-ru__/fonts/olympic_carrier/4_olympic_carrier_italic.ttf",
+      "__core__/fonts/NotoSans-SemiBold.ttf",
+      "__core__/fonts/NotoSansCJKtc-Medium.ttf",
+      "__core__/fonts/NotoSansThai-SemiBold.ttf",
+      "__core__/fonts/NotoSansArabic-SemiBold.ttf",
+      "__core__/fonts/NotoSansHebrew-SemiBold.ttf",
+      "__core__/fonts/DejaVuSans-Bold.ttf"
+    ],
+    "olympic-carrier-bold": [
+      "__more-fonts-ru__/fonts/olympic_carrier/4_olympic_carrier_italic.ttf",
+      "__core__/fonts/NotoSans-Bold.ttf",
+      "__core__/fonts/NotoSansCJKtc-Bold.ttf",
+      "__core__/fonts/NotoSansThai-Bold.ttf",
+      "__core__/fonts/NotoSansArabic-Bold.ttf",
+      "__core__/fonts/NotoSansHebrew-Bold.ttf",
+      "__core__/fonts/DejaVuSans-Bold.ttf"
+    ],
+    "i-miss-your-kiss": [
+      "__more-fonts-ru__/fonts/i_miss_your_kiss/1_i_miss_your_kiss.ttf",
+      "__core__/fonts/NotoSans-Regular.ttf",
+      "__core__/fonts/NotoSansCJKtc-Regular.ttf",
+      "__core__/fonts/NotoSansThai-Regular.ttf",
+      "__core__/fonts/NotoSansArabic-Regular.ttf",
+      "__core__/fonts/NotoSansHebrew-Regular.ttf",
+      "__core__/fonts/DejaVuSans.ttf"
+    ],
+    "i-miss-your-kiss-semibold": [
+      "__more-fonts-ru__/fonts/i_miss_your_kiss/2_i_miss_your_kiss_semibold.ttf",
+      "__core__/fonts/NotoSans-SemiBold.ttf",
+      "__core__/fonts/NotoSansCJKtc-Medium.ttf",
+      "__core__/fonts/NotoSansThai-SemiBold.ttf",
+      "__core__/fonts/NotoSansArabic-SemiBold.ttf",
+      "__core__/fonts/NotoSansHebrew-SemiBold.ttf",
+      "__core__/fonts/DejaVuSans-Bold.ttf"
+    ],
+    "i-miss-your-kiss-bold": [
+      "__more-fonts-ru__/fonts/i_miss_your_kiss/3_i_miss_your_kiss_bold.ttf",
+      "__core__/fonts/NotoSans-Bold.ttf",
+      "__core__/fonts/NotoSansCJKtc-Bold.ttf",
+      "__core__/fonts/NotoSansThai-Bold.ttf",
+      "__core__/fonts/NotoSansArabic-Bold.ttf",
+      "__core__/fonts/NotoSansHebrew-Bold.ttf",
+      "__core__/fonts/DejaVuSans-Bold.ttf"
+    ],
+    "wingdings": [
+      "__more-fonts-ru__/fonts/wingdings/5_wingdings.ttf",
+      "__core__/fonts/NotoSans-Regular.ttf",
+      "__core__/fonts/NotoSansCJKtc-Regular.ttf",
+      "__core__/fonts/NotoSansThai-Regular.ttf",
+      "__core__/fonts/NotoSansArabic-Regular.ttf",
+      "__core__/fonts/NotoSansHebrew-Regular.ttf",
+      "__core__/fonts/DejaVuSans.ttf"
+    ],
+    "wingdings-semibold": [
+      "__more-fonts-ru__/fonts/wingdings/5_wingdings.ttf",
+      "__core__/fonts/NotoSans-SemiBold.ttf",
+      "__core__/fonts/NotoSansCJKtc-Medium.ttf",
+      "__core__/fonts/NotoSansThai-SemiBold.ttf",
+      "__core__/fonts/NotoSansArabic-SemiBold.ttf",
+      "__core__/fonts/NotoSansHebrew-SemiBold.ttf",
+      "__core__/fonts/DejaVuSans-Bold.ttf"
+    ],
+    "wingdings-bold": [
+      "__more-fonts-ru__/fonts/wingdings/5_wingdings.ttf",
+      "__core__/fonts/NotoSans-Bold.ttf",
+      "__core__/fonts/NotoSansCJKtc-Bold.ttf",
+      "__core__/fonts/NotoSansThai-Bold.ttf",
+      "__core__/fonts/NotoSansArabic-Bold.ttf",
+      "__core__/fonts/NotoSansHebrew-Bold.ttf",
+      "__core__/fonts/DejaVuSans-Bold.ttf"
+    ],
+    "space-age": [
+      "__more-fonts-ru__/fonts/space_age/1_space_age.ttf",
+      "__core__/fonts/NotoSans-Regular.ttf",
+      "__core__/fonts/NotoSansCJKtc-Regular.ttf",
+      "__core__/fonts/NotoSansThai-Regular.ttf",
+      "__core__/fonts/NotoSansArabic-Regular.ttf",
+      "__core__/fonts/NotoSansHebrew-Regular.ttf",
+      "__core__/fonts/DejaVuSans.ttf"
+    ],
+    "space-age-semibold": [
+      "__more-fonts-ru__/fonts/space_age/2_space_age_semibold.ttf",
+      "__core__/fonts/NotoSans-SemiBold.ttf",
+      "__core__/fonts/NotoSansCJKtc-Medium.ttf",
+      "__core__/fonts/NotoSansThai-SemiBold.ttf",
+      "__core__/fonts/NotoSansArabic-SemiBold.ttf",
+      "__core__/fonts/NotoSansHebrew-SemiBold.ttf",
+      "__core__/fonts/DejaVuSans-Bold.ttf"
+    ],
+    "space-age-bold": [
+      "__more-fonts-ru__/fonts/space_age/3_space_age_bold.ttf",
+      "__core__/fonts/NotoSans-Bold.ttf",
+      "__core__/fonts/NotoSansCJKtc-Bold.ttf",
+      "__core__/fonts/NotoSansThai-Bold.ttf",
+      "__core__/fonts/NotoSansArabic-Bold.ttf",
+      "__core__/fonts/NotoSansHebrew-Bold.ttf",
+      "__core__/fonts/DejaVuSans-Bold.ttf"
+    ],
+    "heroes-assemble": [
+      "__more-fonts-ru__/fonts/heroes_assemble/1_heroes_assemble.ttf",
+      "__core__/fonts/NotoSans-Regular.ttf",
+      "__core__/fonts/NotoSansCJKtc-Regular.ttf",
+      "__core__/fonts/NotoSansThai-Regular.ttf",
+      "__core__/fonts/NotoSansArabic-Regular.ttf",
+      "__core__/fonts/NotoSansHebrew-Regular.ttf",
+      "__core__/fonts/DejaVuSans.ttf"
+    ],
+    "heroes-assemble-semibold": [
+      "__more-fonts-ru__/fonts/heroes_assemble/2_heroes_assemble_semibold.ttf",
+      "__core__/fonts/NotoSans-SemiBold.ttf",
+      "__core__/fonts/NotoSansCJKtc-Medium.ttf",
+      "__core__/fonts/NotoSansThai-SemiBold.ttf",
+      "__core__/fonts/NotoSansArabic-SemiBold.ttf",
+      "__core__/fonts/NotoSansHebrew-SemiBold.ttf",
+      "__core__/fonts/DejaVuSans-Bold.ttf"
+    ],
+    "heroes-assemble-bold": [
+      "__more-fonts-ru__/fonts/heroes_assemble/3_heroes_assemble_bold.ttf",
+      "__core__/fonts/NotoSans-Bold.ttf",
+      "__core__/fonts/NotoSansCJKtc-Bold.ttf",
+      "__core__/fonts/NotoSansThai-Bold.ttf",
+      "__core__/fonts/NotoSansArabic-Bold.ttf",
+      "__core__/fonts/NotoSansHebrew-Bold.ttf",
+      "__core__/fonts/DejaVuSans-Bold.ttf"
+    ],
+    "powerpuff-girls": [
+      "__more-fonts-ru__/fonts/powerpuff_girls/1_powerpuff_girls.ttf",
+      "__core__/fonts/NotoSans-Regular.ttf",
+      "__core__/fonts/NotoSansCJKtc-Regular.ttf",
+      "__core__/fonts/NotoSansThai-Regular.ttf",
+      "__core__/fonts/NotoSansArabic-Regular.ttf",
+      "__core__/fonts/NotoSansHebrew-Regular.ttf",
+      "__core__/fonts/DejaVuSans.ttf"
+    ],
+    "powerpuff-girls-semibold": [
+      "__more-fonts-ru__/fonts/powerpuff_girls/2_powerpuff_girls_semibold.ttf",
+      "__core__/fonts/NotoSans-SemiBold.ttf",
+      "__core__/fonts/NotoSansCJKtc-Medium.ttf",
+      "__core__/fonts/NotoSansThai-SemiBold.ttf",
+      "__core__/fonts/NotoSansArabic-SemiBold.ttf",
+      "__core__/fonts/NotoSansHebrew-SemiBold.ttf",
+      "__core__/fonts/DejaVuSans-Bold.ttf"
+    ],
+    "powerpuff-girls-bold": [
+      "__more-fonts-ru__/fonts/powerpuff_girls/3_powerpuff_girls_bold.ttf",
+      "__core__/fonts/NotoSans-Bold.ttf",
+      "__core__/fonts/NotoSansCJKtc-Bold.ttf",
+      "__core__/fonts/NotoSansThai-Bold.ttf",
+      "__core__/fonts/NotoSansArabic-Bold.ttf",
+      "__core__/fonts/NotoSansHebrew-Bold.ttf",
+      "__core__/fonts/DejaVuSans-Bold.ttf"
+    ]
+  }
+}

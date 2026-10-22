@@ -3,6 +3,8 @@ Version: 0.3.0
 Date: 19/10/2025
   Changes:
     - Modified recipe to be more in line with Factorio 2.0 and Space Age.
+  Optimizations:
+    - The death handler that charts the chunk of an entity killed by artillery is filtered to nests, worms and turrets; it ran for every death on the map. Biters killed by artillery outside a nest no longer chart their chunk (Paranoidal local fix)
 ---------------------------------------------------------------------------------------------------
 Version: 0.2.5
 Date: 28/10/2024

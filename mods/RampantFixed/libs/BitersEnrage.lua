@@ -3,6 +3,8 @@ if (bitersEnrageG) then
 end
 local bitersEnrage = {}
 
+local isForeign = require("ForeignEnemies").isForeign	-- no requires inside: safe at the data stage
+
 local bitersInRange_Query = {
 	position = nil,
 	radius = 32,
@@ -33,10 +35,10 @@ function bitersEnrage.createStickers()
 		animation =
 		{
 		  filename = "__base__/graphics/entity/fire-flame/fire-flame-01.png",
-		  line_length = 8,
-		  width = 60,
-		  height = 118,
-		  frame_count = 25,
+		  line_length = 10, -- base 2.0 fire-flame-01: 84x130, 90 frames (1.1 layout cut a piece)
+		  width = 84,
+		  height = 130,
+		  frame_count = 90,
 		  blend_mode = "normal",
 		  animation_speed = 0.5,
 		  scale = 0.3,
@@ -121,9 +123,15 @@ function bitersEnrage.enrageBitersInRange(map, position, chunk, tick)
 				end	
 			end	
 		end
-		local enrageStickerName
+		-- champions keep the speed they were given (libs/Champions.lua; this file is also loaded at the data stage,
+		-- so libs/UnitUtils.championUnits is not required here); Big Monsters enemies are not enraged either
+		local championData = map.universe.champions
+		local champions = championData and next(championData.units) and championData.units
 		for i, entity in pairs(entities) do
-			if entity.valid and (not entity.has_flag("not-in-kill-statistics")) then
+			if entity.valid and (not entity.has_flag("not-in-kill-statistics"))
+				and not (champions and champions[entity.unit_number]) and not isForeign(entity.name) then
+				-- per unit: the next level after its own enrage sticker (was shared, so one unit's level leaked to the rest)
+				local enrageStickerName
 				if entity.stickers then
 					for ii, sticker in pairs(entity.stickers) do
 						if enrageSequence[sticker.name] then

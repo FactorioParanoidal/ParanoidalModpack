@@ -3,6 +3,7 @@ Version: 2.0.4
 Date: 2024-11-14
   Changes:
     - Added recycling support
+    - Paranoidal: script_raised_built / script_raised_revive / script_raised_destroy are registered separately with the electric-pole filter (they used to receive every script-built entity).
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.3
 Date: 2024-11-14

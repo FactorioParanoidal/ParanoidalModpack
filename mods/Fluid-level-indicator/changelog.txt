@@ -3,6 +3,15 @@ Version: 0.9.9
 Date: 09 May 2025
   Minor Changes:
     - Added Krastorio 2 compatibility back for steel pipes.
+  Optimizations:
+    - Paranoidal: the per-tick handler compared a function instead of calling it ("players present" was always true),
+      read both runtime settings every tick and re-targeted every render object on every update (4 writes per
+      indicator). Settings are cached, digits/text are attached to the indicator entity (no moves, removed with it),
+      fluidbox volume is cached per prototype. Existing indicators are rebuilt once on the first update after load.
+  Bugfixes:
+    - Paranoidal: an indicator removed without an event or mid-iteration no longer breaks the update cursor;
+      missing render objects are recreated instead of erroring.
+    - Paranoidal: removed the unused set_color helper that called the removed rendering.set_color API.
 ---------------------------------------------------------------------------------------------------
 Version: 0.9.8
 Date: 03 April 2025

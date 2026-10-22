@@ -1,0 +1,35 @@
+{
+  "recipe":
+  [
+    ["lithium-chloride-crystalization", "lithium-chloride-crystal"],
+    ["lithium-chloride-omnitraction", "lithium-chloride-crystal-omnitraction"],
+    ["lithium-chloride-solvation", "lithium-chloride-omnide-solution"],
+    ["magnesium-ore-crystalization", "magnesium-ore-crystal"],
+    ["magnesium-ore-omnitraction", "magnesium-ore-crystal-omnitraction"],
+    ["magnesium-ore-solvation", "magnesium-ore-omnide-solution"],
+    ["osmium-ore-crystalization", "osmium-ore-crystal"],
+    ["osmium-ore-omnitraction", "osmium-ore-crystal-omnitraction"],
+    ["osmium-ore-solvation", "osmium-ore-omnide-solution"],
+    ["phosphorus-ore-crystalization", "phosphorus-ore-crystal"],
+    ["phosphorus-ore-omnitraction", "phosphorus-ore-crystal-omnitraction"],
+    ["phosphorus-ore-solvation", "phosphorus-ore-omnide-solution"],
+    ["angels-platinum-ore-crystalization", "angels-platinum-ore-crystal"],
+    ["angels-platinum-ore-omnitraction", "angels-platinum-ore-crystal-omnitraction"],
+    ["angels-platinum-ore-solvation", "angels-platinum-ore-omnide-solution"],
+    ["angels-solid-calcium-sulfate-crystalization", "angels-solid-calcium-sulfate-crystal"],
+    ["angels-solid-calcium-sulfate-omnitraction", "angels-solid-calcium-sulfate-crystal-omnitraction"],
+    ["angels-solid-calcium-sulfate-solvation", "angels-solid-calcium-sulfate-omnide-solution"],
+    ["angels-solid-limestone-crystalization", "angels-solid-limestone-crystal"],
+    ["angels-solid-limestone-omnitraction", "angels-solid-limestone-crystal-omnitraction"],
+    ["angels-solid-limestone-solvation", "angels-solid-limestone-omnide-solution"],
+    ["angels-solid-sodium-carbonate-crystalization", "angels-solid-sodium-carbonate-crystal"],
+    ["angels-solid-sodium-carbonate-omnitraction", "angels-solid-sodium-carbonate-crystal-omnitraction"],
+    ["angels-solid-sodium-carbonate-solvation", "angels-solid-sodium-carbonate-omnide-solution"],
+    ["thorium-ore-crystalization", "thorium-ore-crystal"],
+    ["thorium-ore-omnitraction", "thorium-ore-crystal-omnitraction"],
+    ["thorium-ore-solvation", "thorium-ore-omnide-solution"],
+    ["magnesium-ore-crystalization", "magnesium-ore-crystal"],
+    ["magnesium-ore-omnitraction", "magnesium-ore-crystal-omnitraction"],
+    ["magnesium-ore-solvation", "magnesium-ore-omnide-solution"]
+  ]
+}

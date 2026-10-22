@@ -1,4 +1,24 @@
 ---------------------------------------------------------------------------------------------------
+Version: 9.4.8
+Date: 2026-10-13
+  Changes:
+    - Version number starts with 9 (Paranoidal fork): the Mod Portal never offers an "update" over local changes.
+    - Paranoidal: removed the chat messages about the auto-detected preset and loaded preset addons at game start. Error messages are kept.
+    - Paranoidal fork of 1.4.7 (local version number, not an official release). Mod ID, settings and save data are kept.
+    - Existing saves whose milestone set was never edited switch to a newly added preset that auto-detection prefers (e.g. Paranoidal over Vanilla). Completed milestones keep their times; new ones are backfilled.
+    - Players inside a Blueprint Sandboxes force see, and are notified about, the milestones of their real force.
+    - Paranoidal: hidden technologies (researched by script to mark events of other mods, e.g. Factorissimo) are announced as "Reached" instead of "Researched" and shown as "Event" in the milestone tooltip.
+  Optimizations:
+    - Production, consumption and kill milestones are checked from per-cycle totals: one counts dictionary read (already summed over all qualities) per statistics object and surface, spread over the last 60 ticks of the cycle, instead of one API call per milestone, surface and quality prototype.
+    - Without additional qualities, names are looked up directly and the hidden quality-unknown is no longer queried.
+    - Blueprint Sandboxes forces are no longer tracked (they had a full copy of the milestones and were polled forever).
+    - The GUI is refreshed once per force and cycle instead of once per reached milestone.
+    - Backfill skips qualities that were never produced and reuses the bracket count for the sample search.
+  Bugfixes:
+    - Fixed that only the last alias of a milestone was counted.
+    - Fixed a crash in backfill when an infinite milestone has an invalid "next" formula.
+    - Kill milestones are backfilled across all qualities, consistently with how they are tracked.
+---------------------------------------------------------------------------------------------------
 Version: 1.4.7
 Date: 2025-11-23
   Changes:

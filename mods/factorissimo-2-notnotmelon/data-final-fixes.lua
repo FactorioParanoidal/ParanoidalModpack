@@ -1,5 +1,15 @@
 require "compat.efficient-smelting"
+require "prototypes.quality-tooltips"
+
+-- Paranoidal: factories are immune to quality and defects. Their recipes never make quality buildings
+-- (quality modules have no effect, ingredients must be standard). Defects: ic-more-qualities exempt list.
+for _, name in pairs {"factory-1", "factory-2", "factory-3", "factory-4", "space-factory-1", "space-factory-2", "space-factory-3"} do
+    local recipe = data.raw.recipe[name]
+    if recipe then recipe.allow_quality = false end
+end
 require "compat.gregtorio"
+require "prototypes.hull-icons"
+require "prototypes.architecture-4-final"
 
 data.raw.item["factory-hidden-construction-robot"].stack_size = 1000
 

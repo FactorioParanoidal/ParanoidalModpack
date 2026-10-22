@@ -1,0 +1,413 @@
+local Line = require("backend.data.Line")
+
+-- ** LOCAL UTIL **
+-- Serves the dual-purpose of determining the appropriate settings for the recipe picker filter
+-- and finding any recipes that produce the given prototype
+local function match_recipes(player, modal_data, proto)
+    local force_recipes, force_technologies = player.force.recipes, player.force.technologies
+    local preferences = util.globals.preferences(player)
+
+    local relevant_recipes = {}
+    local user_disabled_recipe = false
+    local counts = {disabled = 0, hidden = 0, disabled_hidden = 0}
+
+    local map = RECIPE_MAPS[modal_data.production_type][proto.category_id][proto.id]
+    if map ~= nil then  -- this being nil means that the item has no recipes
+        for recipe_id, _ in pairs(map) do
+            local recipe = prototyper.util.find("recipes", recipe_id, nil)
+            local force_recipe = force_recipes[recipe.name]
+
+            if recipe.custom then  -- Add custom recipes by default
+                table.insert(relevant_recipes, {proto=recipe, enabled=true})
+                -- These are always enabled and non-hidden, so no need to tally them
+                -- They can also not be disabled by user preference
+
+            elseif force_recipe ~= nil then  -- only add recipes that exist on the current force
+                local user_disabled = (preferences.ignore_barreling_recipes and recipe.barreling)
+                    or (preferences.ignore_recycling_recipes and recipe.recycling)
+                user_disabled_recipe = user_disabled_recipe or user_disabled
+
+                if not user_disabled then  -- only add recipes that are not disabled by the user
+                    local recipe_enabled, recipe_hidden = force_recipe.enabled, recipe.hidden
+                    local recipe_should_show = recipe.enabled_from_the_start or recipe_enabled
+
+                    -- If the recipe is not enabled, it has to be made sure that there is at
+                    -- least one enabled technology that could potentially enable it
+                    if not recipe_should_show and recipe.enabling_technologies ~= nil then
+                        for _, technology_name in pairs(recipe.enabling_technologies) do
+                            local force_tech = force_technologies[technology_name]
+                            if force_tech and (force_tech.enabled or force_tech.visible_when_disabled) then
+                                recipe_should_show = true
+                                break
+                            end
+                        end
+                    end
+
+                    if recipe_should_show then
+                        table.insert(relevant_recipes, {proto=recipe, enabled=recipe_enabled})
+
+                        if not recipe_enabled and recipe_hidden then counts.disabled_hidden = counts.disabled_hidden + 1
+                        elseif not recipe_enabled then counts.disabled = counts.disabled + 1
+                        elseif recipe_hidden then counts.hidden = counts.hidden + 1 end
+                    end
+                end
+            end
+        end
+    end
+
+    -- Set filters to try and show at least one recipe, should one exist, incorporating user preferences
+    local filters = {}
+    local user_prefs = preferences.recipe_filters
+    local relevant_recipes_count = #relevant_recipes
+
+    if relevant_recipes_count - counts.disabled - counts.hidden - counts.disabled_hidden > 0 then
+        filters.disabled = user_prefs.disabled or false
+        filters.hidden = user_prefs.hidden or false
+    elseif relevant_recipes_count - counts.hidden - counts.disabled_hidden > 0 then
+        filters.disabled = true
+        filters.hidden = user_prefs.hidden or false
+    else
+        filters.disabled = true
+        filters.hidden = true
+    end
+
+    -- Return result, format: return recipe, error-message, filters
+    if relevant_recipes_count == 0 then
+        local issue = (user_disabled_recipe) and {"fp.no_recipe_enabled"} or {"fp.no_recipe_existing"}
+        local production_type = {"fp.no_recipe_" .. modal_data.production_type}
+        local error = {"fp.error_no_usable_recipe", proto.localised_name, issue, production_type}
+        return nil, error, filters
+    else
+        return relevant_recipes, nil, filters
+    end
+end
+
+-- Tries to add the given recipe to the current floor, then exiting the modal dialog
+local function attempt_adding_line(player, recipe_id, modal_data)
+    local recipe_proto = prototyper.util.find("recipes", recipe_id, nil)
+    local line = Line.init(recipe_proto, modal_data.production_type)
+    local recipe_name = recipe_proto.localised_name
+
+    -- If finding a machine fails, this line is invalid
+    if line:change_machine_to_default(player) == false then
+        util.messages.raise(player, "error", {"fp.error_no_compatible_machine", recipe_name}, 1)
+    else
+        local floor = util.context.get(player, "Floor")  --[[@as Floor]]
+        local relative_object = OBJECT_INDEX[modal_data.add_after_line_id]  --[[@as LineObject]]
+        floor:insert(line, relative_object, "next")  -- if not relative, insert uses last line
+
+        -- Apply defaults as appropriate
+        line.recipe:apply_temperature_defaults(player)
+        line.machine:reset(player)
+        line:setup_beacon(player)
+
+        -- Set ingredient temperature if this is a base_fluid dialog
+        if modal_data.temperature then
+            if modal_data.recipe_id then
+                local fluid_name = modal_data.base_fluid.name
+                OBJECT_INDEX[modal_data.recipe_id].temperatures[fluid_name] = modal_data.temperature
+            elseif modal_data.fuel_id then
+                OBJECT_INDEX[modal_data.fuel_id].temperature = modal_data.temperature
+            end
+        end
+
+        -- Set ingredient temperature to match byproduct recipe
+        if modal_data.production_type == "consume" then
+            local proto = prototyper.util.find("items", modal_data.product_id, modal_data.category_id)
+            if proto.temperature then line.recipe.temperatures[proto.base_name] = proto.temperature end
+        end
+
+        if not line.recipe:temperature_fully_configured() then
+            util.messages.raise(player, "warning", {"fp.warning_temperature_not_configured", recipe_name}, 1)
+        end
+
+        if not (recipe_proto.custom or player.force.recipes[recipe_proto.name].enabled) then
+            util.messages.raise(player, "warning", {"fp.warning_recipe_disabled", recipe_name}, 1)
+        end
+
+        if not line:get_surface_compatibility().overall then
+            util.messages.raise(player, "warning", {"fp.warning_surface_not_compatible", recipe_name}, 1)
+        end
+
+        solver.update(player)
+        util.gui.run_refresh(player, "factory")
+    end
+end
+
+
+local function create_filter_box(modal_data)
+    local content_frame =  modal_data.modal_elements.content_frame
+    local bordered_frame = content_frame.add{type="frame", direction="vertical", style="fp_frame_bordered_stretch"}
+    bordered_frame.style.left_padding = 12
+
+    local table_filters = bordered_frame.add{type="table", column_count=2}
+    table_filters.style.horizontal_spacing = 16
+
+    local label_filters = table_filters.add{type="label", caption={"fp.show"}}
+    label_filters.style.top_margin = 2
+
+    local flow_filter_switches = table_filters.add{type="flow", direction="vertical"}
+    util.gui.switch.add_on_off(flow_filter_switches, "toggle_recipe_filter", {filter_name="disabled"},
+        modal_data.filters.disabled, {"fp.unresearched_recipes"}, nil, false)
+    util.gui.switch.add_on_off(flow_filter_switches, "toggle_recipe_filter", {filter_name="hidden"},
+        modal_data.filters.hidden, {"fp.hidden_recipes"}, nil, false)
+
+    if modal_data.temperature then
+        bordered_frame.add{type="line", direction="horizontal"}
+        local flow_temperature = bordered_frame.add{type="flow", direction="horizontal"}
+        flow_temperature.style.vertical_align = "center"
+        flow_temperature.add{type="label", caption={"fp.compatible_temperatures"}}
+
+        local annotation = flow_temperature.add{type="label", caption=modal_data.annotation}
+        annotation.style.left_margin = 16
+
+        local table_temperatures = bordered_frame.add{type="table", column_count=#modal_data.applicable_values}
+        table_temperatures.style.horizontal_spacing = 0
+        table_temperatures.style.top_margin = 8
+
+        for _, temperature in pairs(modal_data.applicable_values) do
+            local toggled = (temperature == modal_data.temperature)
+            table_temperatures.add{type="button", caption={"fp.temperature_value", temperature},
+                tags={mod="fp", on_gui_click="change_recipe_temperature", temperature=temperature},
+                style="fp_button_push", toggled=toggled, mouse_button_filter={"left"}}
+        end
+    end
+end
+
+local function create_recipe_group_box(modal_data, relevant_group)
+    local modal_elements = modal_data.modal_elements
+    local bordered_frame = modal_elements.content_frame.add{type="frame", style="fp_frame_bordered_stretch"}
+    bordered_frame.style.padding = 8
+
+    local next_index = #modal_elements.groups + 1
+    modal_elements.groups[next_index] = {name=relevant_group.proto.name, frame=bordered_frame, recipe_buttons={}}
+    local recipe_buttons = modal_elements.groups[next_index].recipe_buttons
+
+    local flow_group = bordered_frame.add{type="flow", direction="horizontal"}
+    flow_group.style.vertical_align = "center"
+
+    local group_sprite = flow_group.add{type="sprite-button", sprite=("item-group/" .. relevant_group.proto.name),
+        tooltip=relevant_group.proto.localised_name, style="transparent_slot"}
+    group_sprite.style.size = 64
+    group_sprite.style.right_margin = 16
+
+    flow_group.add{type="empty-widget", style="flib_horizontal_pusher"}
+    local frame_recipes = flow_group.add{type="frame", direction="horizontal", style="fp_frame_light_slots"}
+    frame_recipes.style.width = MAGIC_NUMBERS.recipes_per_row * 40
+    local table_recipes = frame_recipes.add{type="table", column_count=MAGIC_NUMBERS.recipes_per_row,
+        style="slot_table"}
+
+    for _, recipe in pairs(relevant_group.recipes) do
+        local recipe_proto = recipe.proto
+        local recipe_name = recipe_proto.name
+
+        local style = "flib_slot_button_green"
+        if not recipe.enabled then style = "flib_slot_button_yellow"
+        elseif recipe_proto.hidden then style = "flib_slot_button_default" end
+
+        local button_tags = {mod="fp", on_gui_click="pick_recipe", recipe_proto_id=recipe_proto.id}
+        local button_recipe = nil
+
+        button_recipe = table_recipes.add{type="sprite-button", tags=button_tags, style=style,
+            sprite=recipe_proto.sprite, mouse_button_filter={"left"}}
+        if recipe_proto.custom then button_recipe.tooltip = recipe_proto.tooltip
+        else button_recipe.elem_tooltip = {type="recipe", name=recipe_name} end
+
+        -- Figure out the translated name here so search doesn't have to repeat the work for every character
+        local translations = modal_data.translations
+        local translated_name = (translations) and translations["recipe"][recipe_name] or nil
+        translated_name = (translated_name) and helpers.multilingual_to_lower(translated_name) or recipe_name
+        recipe_buttons[{name=recipe_name, translated_name=translated_name, hidden=recipe_proto.hidden}] = button_recipe
+    end
+end
+
+local function build_dialog_structure(modal_data)
+    local modal_elements = modal_data.modal_elements
+    local content_frame = modal_elements.content_frame
+    content_frame.clear()
+
+    create_filter_box(modal_data)
+
+    local label_warning = content_frame.add{type="label", caption={"fp.error_message", {"fp.no_recipe_found"}}}
+    label_warning.style.font = "heading-2"
+    label_warning.style.margin = {8, 0, 0, 8}
+    modal_elements.warning_label = label_warning
+
+    local recipe_groups = {}
+    for _, recipe in pairs(modal_data.result) do
+        local group_name = recipe.proto.group.name
+        recipe_groups[group_name] = recipe_groups[group_name] or {proto=recipe.proto.group, recipes={}}
+        recipe_groups[group_name].recipes[recipe.proto.name] = recipe
+    end
+    modal_data.recipe_groups = recipe_groups  -- used by filter
+
+    modal_elements.groups = {}
+    for _, group in ipairs(ORDERED_RECIPE_GROUPS) do
+        local relevant_group = modal_data.recipe_groups[group.name]
+
+        -- Only actually create this group if it contains any relevant recipes
+        if relevant_group ~= nil then create_recipe_group_box(modal_data, relevant_group) end
+    end
+end
+
+local function apply_recipe_filter(player, search_term)
+    local modal_data = util.globals.modal_data(player)  --[[@as table]]
+    local disabled, hidden = modal_data.filters.disabled, modal_data.filters.hidden
+
+    local any_recipe_visible, added_scroll_pane_height = false, 0
+    for _, group in ipairs(modal_data.modal_elements.groups) do
+        local group_data = modal_data.recipe_groups[group.name]
+        local any_group_recipe_visible = false
+
+        for recipe_data, button in pairs(group.recipe_buttons) do
+            local recipe_name = recipe_data.name
+            local recipe_enabled = group_data.recipes[recipe_name].enabled
+
+            -- Can only get to this if translations are complete, as the textfield is disabled otherwise
+            local found = (search_term == recipe_name) or string.find(recipe_data.translated_name, search_term, 1, true)
+            local visible = found and (disabled or recipe_enabled) and (hidden or not recipe_data.hidden) or false
+
+            button.visible = visible
+            any_group_recipe_visible = any_group_recipe_visible or visible
+        end
+
+        group.frame.visible = any_group_recipe_visible
+        any_recipe_visible = any_recipe_visible or any_group_recipe_visible
+
+        local button_table_height = math.ceil(table_size(group.recipe_buttons) / MAGIC_NUMBERS.recipes_per_row) * 40
+        local additional_height = math.max(88, button_table_height + 24) + 4
+        added_scroll_pane_height = added_scroll_pane_height + additional_height
+    end
+
+    modal_data.modal_elements.warning_label.visible = not any_recipe_visible
+
+    added_scroll_pane_height = math.max(added_scroll_pane_height, 42)  -- set minimum when no recipe matches
+    local base_scroll_pane_height = (modal_data.temperature) and (64+24)+70 or 64+24
+    local desired_scroll_pane_height = base_scroll_pane_height + added_scroll_pane_height
+    local bounded_scroll_pane_height = math.min(desired_scroll_pane_height, modal_data.dialog_maximal_height - 80)
+    modal_data.modal_elements.content_frame.style.height = bounded_scroll_pane_height
+end
+
+
+local function handle_filter_change(player, tags, event)
+    local boolean_state = util.gui.switch.convert_to_boolean(event.element.switch_state)
+    util.globals.modal_data(player).filters[tags.filter_name] = boolean_state
+    util.globals.preferences(player).recipe_filters[tags.filter_name] = boolean_state
+
+    modal_dialog.run_search(player)
+end
+
+local function apply_temperature(player, temperature)
+    local modal_data = util.globals.modal_data(player)  --[[@as table]]
+    modal_data.temperature = temperature
+
+    local name = modal_data.base_fluid.name .. "-" .. temperature
+    local proto = prototyper.util.find("items", name, "fluid")
+    local result, _, filters = match_recipes(player, modal_data, proto)
+    modal_data.result = result or {}  -- no match for a given temperature is fine
+    modal_data.filters = filters
+end
+
+
+-- Checks whether the dialog needs to be created at all
+local function recipe_early_abort_check(player, modal_data)
+    local proto = prototyper.util.find("items", modal_data.product_id, modal_data.category_id)
+
+    local base_fluid = (proto.type == "fluid" and proto.temperature == nil)
+    if base_fluid then return false end  -- proceed to opening the dialog right away
+
+    -- Result is either the single possible recipe_id, or a table of relevant recipes
+    local result, error, filters = match_recipes(player, modal_data, proto)
+
+    if error ~= nil then
+        util.messages.raise(player, "error", error, 1)
+        return true  -- signal that the dialog does not need to actually be opened
+
+    else
+        if #result == 1 then  -- if one relevant recipe is found, try it straight away
+            attempt_adding_line(player, result[1].proto.id, modal_data)
+            return true  -- idem above
+
+        else  -- Otherwise, save the relevant data for the dialog opener
+            modal_data.result = result
+            modal_data.filters = filters
+            return false  -- signal that the dialog should be opened
+        end
+    end
+end
+
+-- Handles populating the recipe dialog
+local function open_recipe_dialog(player, modal_data)
+    -- At this point, we're sure there's more than one recipe choice
+    if modal_data.result == nil then  -- this is a base_fluid dialog
+        modal_data.base_fluid = prototyper.util.find("items", modal_data.product_id, modal_data.category_id)
+
+        local object = OBJECT_INDEX[modal_data.recipe_id or modal_data.fuel_id]
+        local temperature_data = (modal_data.fuel_id) and object.temperature_data
+            or object.temperature_data[modal_data.base_fluid.name]
+
+        modal_data.annotation = temperature_data.annotation
+        modal_data.applicable_values = temperature_data.applicable_values
+        apply_temperature(player, modal_data.applicable_values[1])
+    end
+
+    modal_data.translations = util.globals.player_table(player).translation_tables
+    build_dialog_structure(modal_data)
+    modal_dialog.run_search(player)
+    modal_data.modal_elements.search_textfield.focus()
+end
+
+
+-- ** EVENTS **
+local listeners = {}
+
+listeners.gui = {
+    on_gui_click = {
+        {
+            name = "pick_recipe",
+            timeout = 20,
+            handler = (function(player, tags, _)
+                local modal_data = util.globals.modal_data(player)
+                attempt_adding_line(player, tags.recipe_proto_id, modal_data)
+                util.gui.close_dialog(player, "cancel")
+            end)
+        },
+        {
+            name = "change_recipe_temperature",
+            handler = (function(player, tags, _)
+                apply_temperature(player, tags.temperature)
+
+                local modal_data = util.globals.modal_data(player)
+                build_dialog_structure(modal_data)
+                modal_dialog.run_search(player)
+            end)
+        }
+    },
+    on_gui_switch_state_changed = {
+        {
+            name = "toggle_recipe_filter",
+            handler = handle_filter_change
+        }
+    }
+}
+
+listeners.dialog = {
+    dialog = "recipe",
+    metadata = (function(modal_data)
+        local product_proto = prototyper.util.find("items", modal_data.product_id, modal_data.category_id)
+        return {
+            caption = {"", {"fp.add"}, " ", {"fp.pl_recipe", 1}},
+            subheader_text = {"fp.recipe_instruction", {"fp." .. modal_data.production_type},
+                product_proto.localised_name},
+            search_handler_name = "apply_recipe_filter"
+        }
+    end),
+    early_abort_check = recipe_early_abort_check,
+    open = open_recipe_dialog
+}
+
+listeners.global = {
+    apply_recipe_filter = apply_recipe_filter
+}
+
+return { listeners }

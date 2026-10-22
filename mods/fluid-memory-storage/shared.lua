@@ -1,9 +1,17 @@
--- shared code between memory units and fluid memory units
+-- Shared helpers of the fluid memory unit (Paranoidal fork).
+-- deep-storage-unit keeps its own copy of the generic parts; keep both in sync.
 
-local min = math.min
 local floor = math.floor
+local min = math.min
 
-local function compactify(n)
+local M = {}
+
+M.update_rate = 15
+M.update_slots = 4
+-- Fluid amounts below this are treated as empty (float dust of remove/insert).
+M.epsilon = 0.001
+
+function M.compactify(n)
 	n = floor(n)
 
 	local suffix = 1
@@ -23,25 +31,33 @@ local function compactify(n)
 	return {"big-numbers." .. suffix, n}
 end
 
-local function open_inventory(player)
-	if not storage.blank_gui_item then
-		local inventory = game.create_inventory(1)
-		inventory[1].set_stack("blank-gui-item")
-		inventory[1].allow_manual_label_change = false
-		storage.empty_gui_item = inventory[1]
-	end
-	player.opened = nil
-	player.opened = storage.empty_gui_item
-	return player.opened
+-- Exact amount with digit groups: 1 234 567.
+function M.format_exact(n)
+	n = floor(n)
+	if n >= 1e21 then return string.format("%.4g", n) end
+	local digits = string.format("%.0f", n)
+	local grouped = digits:reverse():gsub("(%d%d%d)", "%1 "):reverse()
+	return (grouped:gsub("^ ", ""))
 end
 
-local function update_display_text(unit_data, entity, localised_string)
-	if unit_data.text then
-		local render_object = rendering.get_object_by_id(unit_data.text)
-		if render_object then
-			render_object.text = localised_string
-			return
-		end
+local function get_render(id)
+	if not id then return nil end
+	local object = rendering.get_object_by_id(id)
+	if object and object.valid then return object end
+	return nil
+end
+M.get_render = get_render
+
+function M.destroy_render(id)
+	local object = get_render(id)
+	if object then object.destroy() end
+end
+
+function M.update_display_text(unit_data, entity, localised_string)
+	local object = get_render(unit_data.text)
+	if object then
+		object.text = localised_string
+		return
 	end
 
 	unit_data.text = rendering.draw_text {
@@ -55,14 +71,23 @@ local function update_display_text(unit_data, entity, localised_string)
 	}.id
 end
 
-local function update_combinator(combinator, signal, count)
+local function control_section(combinator)
 	local control = combinator.get_or_create_control_behavior()
-	local count = min(2147483647, count)
-	control.get_section(1).set_slot(1, {
+	return control.get_section(1) or control.add_section()
+end
+
+function M.update_combinator(combinator, signal, count)
+	count = min(2147483647, floor(count))
+	control_section(combinator).set_slot(1, {
 		value = signal,
 		min = count,
-		max = count,
+		max = count
 	})
+end
+
+function M.clear_combinator(combinator)
+	local section = control_section(combinator)
+	if section.get_slot(1).value then section.clear_slot(1) end
 end
 
 local power_usages = {
@@ -81,19 +106,44 @@ local power_usages = {
 	["50MW"] = 40000 / 2.4 * 50,
 }
 
+-- Quality lowers the whole power usage along a parabola:
+-- factor = MIN + (1 - MIN) * (1 - i / N)^2, where i is the step above normal
+-- and N the number of steps in the quality chain (normal -> next -> ... -> last).
+-- Qualities outside the chain (defects, hidden) get no discount.
+M.min_quality_factor = 0.2
+local quality_factors
+function M.quality_factor(quality_name)
+	if not quality_factors then
+		quality_factors = {}
+		local chain, seen = {}, {}
+		local quality = prototypes.quality["normal"]
+		while quality and not seen[quality.name] do
+			seen[quality.name] = true
+			chain[#chain + 1] = quality.name
+			quality = quality.next
+		end
+		local steps = #chain - 1
+		local min_factor = M.min_quality_factor
+		for i, name in ipairs(chain) do
+			local step = i - 1
+			quality_factors[name] = steps > 0 and (min_factor + (1 - min_factor) * (1 - step / steps) ^ 2) or 1
+		end
+	end
+	return quality_factors[quality_name] or 1
+end
+
+-- Fluids count with a "stack size" of 1000.
 local base_usage = 1000000 / 60
-local function update_power_usage(unit_data, count)
+function M.update_power_usage(unit_data, count)
 	local powersource = unit_data.powersource
-	local power_usage = (math.ceil(count / (unit_data.stack_size or 1000)) ^ 0.35) * power_usages[settings.global["memory-unit-power-usage"].value]
-	power_usage = power_usage + base_usage
+	local multiplier = power_usages[settings.global["memory-unit-power-usage"].value] or power_usages["300kW"]
+	local power_usage = (math.ceil(count / (unit_data.stack_size or 1000)) ^ 0.35) * multiplier + base_usage
+	power_usage = power_usage * M.quality_factor(unit_data.entity.quality.name)
 	powersource.power_usage = power_usage
 	powersource.electric_buffer_size = power_usage
 end
 
-local update_rate = 15
-local update_slots = 4
-
-local function has_power(powersource, entity)
+function M.has_power(powersource, entity)
 	if powersource.energy < powersource.electric_buffer_size * 0.9 then
 		if powersource.energy ~= 0 then
 			rendering.draw_sprite {
@@ -111,61 +161,34 @@ local function has_power(powersource, entity)
 	return not entity.to_be_deconstructed()
 end
 
-local basic_item_types = {["item"] = true, ["capsule"] = true, ["gun"] = true, ["rail-planner"] = true, ["module"] = true}
-local function check_for_basic_item(item)
-	local items_with_metadata = storage.items_with_metadata
-	if not items_with_metadata then
-		items_with_metadata = {}
-		for item_name, prototype in pairs(prototypes.item) do
-			if not basic_item_types[prototype.type] then
-				items_with_metadata[item_name] = true
+-- Rename tables collected from configuration changes: old name -> new name, false if removed.
+function M.record_migrations(changes)
+	storage.renames = storage.renames or {}
+	local migrations = changes and changes.migrations
+	if not migrations then return end
+	for _, kind in pairs({"item", "fluid", "quality"}) do
+		local renames = migrations[kind]
+		if renames then
+			storage.renames[kind] = storage.renames[kind] or {}
+			for old, new in pairs(renames) do
+				storage.renames[kind][old] = (new ~= "" and new) or false
 			end
 		end
-		storage.items_with_metadata = items_with_metadata
 	end
-	return not items_with_metadata[item]
 end
 
-local function memory_unit_corruption(unit_number, unit_data)
-	local entity = unit_data.entity
-	local powersource = unit_data.powersource
-	local combinator = unit_data.combinator
-
-	if entity.valid then entity.destroy() end
-	if powersource.valid then powersource.destroy() end
-	if combinator.valid then combinator.destroy() end
-
-	game.print {"memory-unit-corruption", unit_data.count, unit_data.item or "nothing"}
-	storage.units[unit_number] = nil
-end
-
-local function validity_check(unit_number, unit_data, force)
-	if not unit_data.entity.valid or not unit_data.powersource.valid or not unit_data.combinator.valid then
-		memory_unit_corruption(unit_number, unit_data)
-		return true
+-- Current name of a stored prototype, following recorded renames; nil if it is gone.
+function M.resolve(kind, name, exists)
+	local renames = storage.renames and storage.renames[kind] or {}
+	local steps = 0
+	while name and not exists(name) and steps < 32 do
+		local new = renames[name]
+		if not new then return nil end
+		name = new
+		steps = steps + 1
 	end
-
-	if not force and not has_power(unit_data.powersource, unit_data.entity) then return true end
-	return false
+	if name and exists(name) then return name end
+	return nil
 end
 
-local function combine_tempatures(first_count, first_tempature, second_count, second_tempature)
-	if first_tempature == second_tempature then return first_tempature end
-	local total_count = first_count + second_count
-	return (first_tempature * first_count / total_count) + (second_tempature * second_count / total_count)
-end
-
-return {
-	update_display_text = update_display_text,
-	update_combinator = update_combinator,
-	has_power = has_power,
-	update_power_usage = update_power_usage,
-	update_rate = update_rate,
-	update_slots = update_slots,
-	compactify = compactify,
-	open_inventory = open_inventory,
-	check_for_basic_item = check_for_basic_item,
-	memory_unit_corruption = memory_unit_corruption,
-	validity_check = validity_check,
-	combine_tempatures = combine_tempatures
-}
+return M

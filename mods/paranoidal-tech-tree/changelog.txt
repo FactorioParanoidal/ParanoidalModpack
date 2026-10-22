@@ -1,0 +1,4 @@
+---------------------------------------------------------------------------------------------------
+Version: 0.2.2
+  Changes:
+    - Removed the per-player setting "Open this tree instead of the native research window" (ptt-replace-native). It never worked in 2.0: the handler compared the opened GUI with defines.gui_type.research, which does not exist, so the native window was never replaced. The tree still opens with its toolbar button and Ctrl+T.

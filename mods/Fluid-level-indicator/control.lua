@@ -12,7 +12,12 @@ script.on_event(defines.events.on_space_platform_built_entity, function(event) p
 
 script.on_event(defines.events.on_pre_player_mined_item, function(event) removedfli(event.entity) end)
 script.on_event(defines.events.on_robot_pre_mined, function(event) removedfli(event.entity) end)
-script.on_event(defines.events.on_entity_died, function(event) removedfli(event.entity) end)
+-- flientities already includes names added by compatibility/com_control.
+local death_filters = {}
+for _, name in ipairs(flientities) do
+    death_filters[#death_filters + 1] = {filter = "name", name = name}
+end
+script.on_event(defines.events.on_entity_died, function(event) removedfli(event.entity) end, death_filters)
 script.on_event(defines.events.script_raised_destroy, function(event) removedfli(event.entity) end)
 script.on_event(defines.events.on_space_platform_mined_entity, function(event) removedfli(event.entity) end)
 
@@ -30,14 +35,14 @@ end)
 
 script.on_event(defines.events.on_pre_surface_cleared,function(event)
     local surface = game.surfaces[event.surface_index]
-    for _,ent in pairs(surface.find_entities_filtered(surface.find_entities_filtered({name = flientities}))) do
+    for _,ent in pairs(surface.find_entities_filtered({name = flientities})) do
         removedfli(ent)
     end
 end)
 
 script.on_event(defines.events.on_pre_surface_deleted,function(event)
     local surface = game.surfaces[event.surface_index]
-    for _,ent in pairs(surface.find_entities_filtered(surface.find_entities_filtered({name = flientities}))) do
+    for _,ent in pairs(surface.find_entities_filtered({name = flientities})) do
         removedfli(ent)
     end
 end)
@@ -72,6 +77,12 @@ script.on_init(function()
 
 
 script.on_event(defines.events.on_tick, flion_tick)
+
+script.on_event(defines.events.on_runtime_mod_setting_changed, function(event)
+    if event.setting == "update_every_x_tick" or event.setting == "number_of_units_to_check_per_update" then
+        fli_refresh_settings()
+    end
+end)
 
 script.on_event(defines.events.on_gui_selection_state_changed, function(event)
     local player = game.players[event.player_index]

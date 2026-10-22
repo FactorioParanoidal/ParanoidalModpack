@@ -13,7 +13,7 @@ paralib.bobmods.lib.tech.add_recipe_unlock("angels-iron-smelting-1", "angels-iro
 paralib.bobmods.lib.tech.add_recipe_unlock("angels-sulfur-processing-1", "condensator2")
 paralib.bobmods.lib.tech.add_recipe_unlock("angels-aluminium-smelting-1", "condensator3")
 
-paralib.bobmods.lib.tech.add_recipe_unlock("electronics", "simple-io")
+paralib.bobmods.lib.tech.add_recipe_unlock("logistic-science-pack", "simple-io")
 paralib.bobmods.lib.tech.add_recipe_unlock("advanced-circuit", "standart-io")
 paralib.bobmods.lib.tech.add_recipe_unlock("processing-unit", "advanced-io")
 paralib.bobmods.lib.tech.add_recipe_unlock("bob-advanced-processing-unit", "predictive-io")
@@ -144,12 +144,12 @@ paralib.bobmods.lib.tech.remove_recipe_unlock("angels-geode-processing-2", "ange
 paralib.bobmods.lib.tech.remove_recipe_unlock("steel-processing", "basic-structure-components")
 paralib.bobmods.lib.tech.add_recipe_unlock("angels-metallurgy-1", "basic-structure-components")
 
---Перенос Каркаса 2, примитивного Цинка и Никеля в Металлургию 2 (AKMF)
+-- Каркас 2 и инвар — в Металлургию 2; электролиз цинка/никеля — раньше, к электролизёру I.
 paralib.bobmods.lib.tech.remove_recipe_unlock("angels-zinc-smelting-1", "bob-zinc-electrolysis-x")
 paralib.bobmods.lib.tech.remove_recipe_unlock("angels-nickel-smelting-1", "bob-nickel-electrolysis-x")
 paralib.bobmods.lib.tech.remove_recipe_unlock("angels-invar-smelting-1", "bob-invar-alloy-x")
-paralib.bobmods.lib.tech.add_recipe_unlock("angels-metallurgy-2", "bob-zinc-electrolysis-x")
-paralib.bobmods.lib.tech.add_recipe_unlock("angels-metallurgy-2", "bob-nickel-electrolysis-x")
+paralib.bobmods.lib.tech.add_recipe_unlock("angels-basic-chemistry-2", "bob-zinc-electrolysis-x")
+paralib.bobmods.lib.tech.add_recipe_unlock("angels-basic-chemistry-2", "bob-nickel-electrolysis-x")
 paralib.bobmods.lib.tech.add_recipe_unlock("angels-metallurgy-2", "bob-invar-alloy-x")
 paralib.bobmods.lib.tech.remove_recipe_unlock("angels-invar-smelting-1", "intermediate-structure-components")
 paralib.bobmods.lib.tech.add_recipe_unlock("angels-metallurgy-2", "intermediate-structure-components")
@@ -204,8 +204,7 @@ if data.raw.technology["OilBurning-5"] then
 end
 --Ремонт дерева исследований
 paralib.bobmods.lib.tech.add_prerequisite("nuclear-power", "bob-boiler-4") --Ставим ядерку под Бойлер МК4
-paralib.bobmods.lib.tech.add_prerequisite("gun-turret", "bob-electricity") --турель
-paralib.bobmods.lib.tech.add_prerequisite("logistics", "bob-electricity") --логистика1
+paralib.bobmods.lib.tech.add_prerequisite("gun-turret", "electricity") -- Beta 8: действующая технология AAI
 paralib.bobmods.lib.tech.add_prerequisite("angels-basic-chemistry-2", "angels-metallurgy-1") --базовая химия 2
 paralib.bobmods.lib.tech.add_prerequisite("angels-bio-processing-green", "angels-metallurgy-1") --водоросли 2
 paralib.bobmods.lib.tech.add_prerequisite("angels-bio-processing-green", "electronics") --водоросли 2
@@ -223,7 +222,7 @@ paralib.bobmods.lib.tech.add_prerequisite("angels-water-washing-2", "angels-meta
 paralib.bobmods.lib.tech.add_prerequisite("angels-ore-powderizer", "angels-stone-smelting-1") --измельчитель под кирпич
 paralib.bobmods.lib.tech.add_prerequisite("offshore-mk2-pump", "advanced-circuit") --ставим их вниз
 paralib.bobmods.lib.tech.add_prerequisite("angels-bio-refugium-fish-2", "advanced-circuit") --аквариум 2 под электронику 2
-paralib.bobmods.lib.tech.add_prerequisite("bob-drills-2", "angels-cobalt-steel-smelting-1") --буры3 под кобальт
+paralib.bobmods.lib.tech.add_prerequisite("bob-drills-3", "angels-cobalt-steel-smelting-1") --буры3 под кобальт (нумерация Bob 2.0 +1, пачка 01)
 paralib.bobmods.lib.tech.add_prerequisite("bob-area-drills-2", "angels-cobalt-steel-smelting-1") --буры3 под кобальт
 paralib.bobmods.lib.tech.add_prerequisite("warehouse-logistics-research-1", "construction-robotics") --склады под роботов
 paralib.bobmods.lib.tech.add_prerequisite("warehouse-logistics-research-1", "logistic-robotics") --склады под роботов
@@ -374,8 +373,8 @@ paralib.bobmods.lib.recipe.set_ingredients("radar", {
 	{ type = "item", name = "stone-brick", amount = 20 },
 	{ type = "item", name = "iron-plate", amount = 20 },
 }) --фикс радара
-paralib.bobmods.lib.tech.add_prerequisite("bob-area-drills-2", "bob-drills-2") --фикс буров
-paralib.bobmods.lib.tech.add_prerequisite("bob-area-drills-3", "bob-drills-3") --фикс буров
+paralib.bobmods.lib.tech.add_prerequisite("bob-area-drills-2", "bob-drills-3") --фикс буров (нумерация Bob 2.0 +1, пачка 01)
+paralib.bobmods.lib.tech.add_prerequisite("bob-area-drills-3", "bob-drills-4") --фикс буров (нумерация Bob 2.0 +1, пачка 01)
 paralib.bobmods.lib.tech.add_prerequisite("rocket-silo", "bob-area-drills-3") --фикс буров
 paralib.bobmods.lib.tech.add_prerequisite("bob-battery-3", "angels-powder-metallurgy-5") --Аккумулятор 3 поставить под Порошковая металлургия 4
 paralib.bobmods.lib.tech.remove_recipe_unlock("bob-advanced-processing-unit", "intelligent-io") -- Интеллектуальное арифметико-логическое устройство под Квантовые модули 1
@@ -422,7 +421,7 @@ paralib.bobmods.lib.tech.add_prerequisite("fission-reactor-equipment", "bob-sola
 paralib.bobmods.lib.tech.add_prerequisite("personal-roboport-equipment", "processing-unit")
 paralib.bobmods.lib.tech.add_prerequisite("mining-productivity-3", "production-science-pack")
 paralib.bobmods.lib.tech.add_prerequisite("mining-productivity-3", "utility-science-pack")
-paralib.bobmods.lib.tech.add_prerequisite("autonomous-space-mining-drones", "bob-drills-4")
+paralib.bobmods.lib.tech.add_prerequisite("autonomous-space-mining-drones", "bob-drills-5") -- буры IV Beta 8 = bob-drills-5 (пачка 01)
 paralib.bobmods.lib.tech.add_prerequisite("robot-attrition-explosion-safety", "utility-science-pack")
 paralib.bobmods.lib.tech.add_prerequisite("bob-nitinol-processing", "utility-science-pack")
 paralib.bobmods.lib.tech.add_prerequisite("bob-electronics-machine-2", "fast-inserter")
@@ -436,9 +435,6 @@ paralib.bobmods.lib.tech.add_prerequisite("bob-productivity-module-5", "bob-adva
 paralib.bobmods.lib.tech.add_prerequisite("bob-pollution-clean-module-5", "bob-advanced-processing-unit")
 paralib.bobmods.lib.tech.add_prerequisite("bob-pollution-create-module-5", "bob-advanced-processing-unit")
 
--- Hide starting bob-burner-lab tech
-paralib.bobmods.lib.tech.hide("bob-burner-lab")
-paralib.bobmods.lib.tech.remove_prerequisite("automation-science-pack", "bob-burner-lab")
 -- fix research trigger from bob-burner-lab -> burner-lab
 data.raw.technology["automation-science-pack"].research_trigger.item = "burner-lab"
 -- bobtech (recipe-updates.lua:98) добавляет bob-burner-lab в ингредиенты рецепта lab,
@@ -475,7 +471,5 @@ paralib.bobmods.lib.tech.add_recipe_unlock("steam-power", "steam-engine")
 paralib.bobmods.lib.tech.remove_science_pack("steam-power", "logistic-science-pack")
 paralib.bobmods.lib.tech.remove_prerequisite("steam-power", "logistic-science-pack")
 
-paralib.bobmods.lib.tech.remove_prerequisite("bob-steam-engine-2", "bob-steam-engine-1")
 paralib.bobmods.lib.tech.add_prerequisite("bob-steam-engine-2", "steam-power")
-paralib.bobmods.lib.tech.hide("bob-steam-engine-1")
 

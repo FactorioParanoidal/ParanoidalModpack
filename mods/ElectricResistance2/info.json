@@ -1,6 +1,6 @@
 {
   "name": "ElectricResistance2",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "title": "Electric Resistance",
   "description": "Каждый электростолб потребляет немного энергии — баланс сложности энергосети. По мотивам ElectricResistance (darkfrei, MIT), переписано под 2.0.",
   "author": "ParanoidalModpack",

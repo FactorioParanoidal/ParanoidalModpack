@@ -138,12 +138,25 @@ local function addCommandSet(queriesAndCommands)
 -- - !КДА 
 
 	 -- Factorissimo. Yes, this is a "storage-tank" enities
-    queriesAndCommands.filteredEntitiesPlayerQueryFactorissimo = {
-        area=queriesAndCommands.area,
-        force=queriesAndCommands.activePlayerForces,
-        collision_mask = "player",
-        type={"storage-tank"}
-    }
+    -- Only Factorissimo factory buildings (storage tanks named "factory-*", see constants.FACTORISSIMO_ENTITY),
+    -- instead of every storage tank in the chunk. nil when there are none.
+    local factorissimoNames = {}
+    for name in pairs(prototypes.get_entity_filtered({{filter = "type", type = "storage-tank"}})) do
+        if string.sub(name, 1, 8) == "factory-" then
+            factorissimoNames[#factorissimoNames+1] = name
+        end
+    end
+    if #factorissimoNames > 0 then
+        queriesAndCommands.filteredEntitiesPlayerQueryFactorissimo = {
+            area=queriesAndCommands.area,
+            force=queriesAndCommands.activePlayerForces,
+            collision_mask = "player",
+            type={"storage-tank"},
+            name=factorissimoNames
+        }
+    else
+        queriesAndCommands.filteredEntitiesPlayerQueryFactorissimo = nil
+    end
 	
 	
     queriesAndCommands.filteredEntitiesUnitQuery = {
@@ -997,8 +1010,6 @@ function upgrade.attempt(universe)
 
 	if storage.version < 190  then	-- Version 1.9.0
 		storage.version = 190
-	    universe.powerupSettings = {}
-		universe.dropRandomizer = game.create_random_generator(game.default_map_gen_settings.seed)
 	end	
 	
 	if storage.version < 191  then	-- Version 1.9.1
@@ -1008,10 +1019,6 @@ function upgrade.attempt(universe)
 	
 	if storage.version < 193  then	-- Version 1.9.0
 		storage.version = 193
-		if not universe.powerupSettings then
-			universe.powerupSettings = {}
-			universe.dropRandomizer = game.create_random_generator(game.default_map_gen_settings.seed)
-		end	
 	end	
 	
 	if storage.version < 11001  then	-- Version 1.10.1
@@ -1067,7 +1074,7 @@ function upgrade.attempt(universe)
 		-- AI = 2 - enabled if any nests in map generation
 		--	  = 3 - enabled if any nests or demolisher	
 		universe.planetAISettings = {}
-		universe.planetAISettings.nauvis = 		{changed = true, AI = 2, minEvo = 0, peacePeriod = 20, description = {"space-location-name.nauvis"}}	
+		universe.planetAISettings.nauvis = 		{changed = true, AI = 2, minEvo = 2, peacePeriod = 60, description = {"space-location-name.nauvis"}}
 		if script.active_mods["space-age"] then
 			universe.planetAISettings.vulcanus = 	{changed = true, AI = 3, minEvo = 25, peacePeriod = 120, description = {"space-location-name.vulcanus"}}	
 			universe.planetAISettings.gleba = 		{changed = true, AI = 2, minEvo = 20, peacePeriod = 120, description = {"space-location-name.gleba"}}	
@@ -1217,6 +1224,17 @@ function upgrade.attempt(universe)
 		end		
 	end
 	
+	if storage.version < 20213  then	-- Version 2.02.13
+		storage.version = 20213
+		-- Existing saves get the new Nauvis truce (60 minutes, 2% evolution) if they still have the old
+		-- defaults (20 minutes, 0%). Values changed by the player in the planet AI window are kept.
+		local nauvis = universe.planetAISettings and universe.planetAISettings.nauvis
+		if nauvis and (nauvis.peacePeriod == 20) and (nauvis.minEvo == 0) then
+			nauvis.peacePeriod = 60
+			nauvis.minEvo = 2
+		end
+	end
+
 	return (starting ~= storage.version) and storage.version
 end
 

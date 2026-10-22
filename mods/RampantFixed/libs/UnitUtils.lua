@@ -53,5 +53,17 @@ function unitUtils.convertTypeToDrainCrystal(evolutionFactor, entity)
     end
 end
 
+-- Paranoidal: units of the tracked champions and hour bosses (libs/Champions.lua) by unit number, nil when there are
+-- none. Scripts that destroy, replace, pack, buff or regroup units skip these: a champion lost that way vanishes
+-- without its loot. Callers look up entity.unit_number only when the table is not nil.
+function unitUtils.championUnits(universe)
+    local data = universe and universe.champions
+    local units = data and data.units
+    if units and (next(units) ~= nil) then
+        return units
+    end
+    return nil
+end
+
 unitUtilsG = unitUtils
 return unitUtils

@@ -164,6 +164,7 @@ local function init_launch_multiplier()
 	end
 end
 
+-- Paranoidal Beta 8: three stages, without laser cannons; launch multiplier is unchanged.
 local function init_stages()
 	if storage.stages == nil then
 		storage.stages = {
@@ -188,7 +189,6 @@ local function init_stages()
 					{ item_name = "astrometrics", base_required = 1, launched = 0 },
 					{ item_name = "command", base_required = 1, launched = 0 },
 					{ item_name = "fuel-cell", base_required = 2, launched = 0 },
-					{ item_name = "laser-cannon", base_required = 2, launched = 0 },
 					{ item_name = "space-thruster", base_required = 4, launched = 0 },
 					{ item_name = "hull-component", base_required = 10, launched = 0 },
 					{ item_name = "ftl-drive", base_required = 1, launched = 0 },
@@ -196,18 +196,32 @@ local function init_stages()
 			},
 		}
 	end
-	if not settings.startup["SpaceX-classic-mode"].value and #storage.stages == 3 then
-		table.insert(storage.stages, {
-			number = 4,
-			requirements = {
-				{ item_name = "exploration-satellite", base_required = 25, launched = 0 },
-				{ item_name = "space-ai-robot", base_required = 2, launched = 0 },
-				{ item_name = "space-water-tank", base_required = 2, launched = 0 },
-				{ item_name = "space-oxygen-tank", base_required = 2, launched = 0 },
-				{ item_name = "space-fuel-tank", base_required = 4, launched = 0 },
-				{ item_name = "space-map", base_required = 1, launched = 0 },
-			},
-		})
+end
+
+-- Saves started before the Beta 8 change keep the old four-stage layout with
+-- laser cannons in stage 3. init_stages() only writes when storage.stages is
+-- nil, so rebuild the layout here and carry the launch counts over by item.
+local function migrate_stages()
+	if storage.stages == nil then
+		return
+	end
+	local launched = {}
+	for _, stage in pairs(storage.stages) do
+		for _, item in pairs(stage.requirements or {}) do
+			launched[item.item_name] = item.launched or 0
+		end
+	end
+	storage.stages = nil
+	init_stages()
+	for _, stage in pairs(storage.stages) do
+		for _, item in pairs(stage.requirements) do
+			item.launched = launched[item.item_name] or 0
+		end
+	end
+	-- A save sitting on the removed fourth stage falls back to the last one;
+	-- required is recomputed by init_launch_multiplier right after this.
+	if (storage.current_stage or 1) > #storage.stages then
+		storage.current_stage = #storage.stages
 	end
 end
 
@@ -266,6 +280,8 @@ script.on_configuration_changed(function(event)
 				table.insert(storage.combinators, { entity = spacexCom })
 			end
 		end
+		-- Rebuild stages before init_spacex() so init_launch_multiplier() recomputes required
+		migrate_stages()
 		-- Update launch mult and combinators
 		storage.launch_mult = nil
 		init_spacex()
@@ -286,21 +302,6 @@ script.on_configuration_changed(function(event)
 						force.recipes["spacex-combinator-stage"].enabled = false
 						update_all_combinators()
 					end
-				end
-			end
-		end
-		-- Check classic mode
-		if storage.stages then
-			if settings.startup["SpaceX-classic-mode"].value then
-				if #storage.stages == 4 then
-					table.remove(storage.stages, #storage.stages)
-				end
-				if storage.current_stage == 4 then
-					storage.current_stage = 3
-				end
-			else
-				if #storage.stages == 3 then
-					init_stages()
 				end
 			end
 		end
@@ -613,6 +614,13 @@ script.on_event(defines.events.on_rocket_launched, function(event)
 	if storage.finished then
 		return
 	end
+	-- Paranoidal: launches from Blueprint Sandboxes (free building) do not count.
+	local rocket = event.rocket
+	local silo = event.rocket_silo
+	if (rocket and rocket.valid and rocket.surface.name:sub(1, 9) == "bpsb-lab-")
+		or (silo and silo.valid and silo.surface.name:sub(1, 9) == "bpsb-lab-") then
+		return
+	end
 	game.set_game_state({ game_finished = false, player_won = false, can_continue = true })
 
 	local current_stage = storage.stages[storage.current_stage]
@@ -696,7 +704,7 @@ if __DebugAdapter then
 	end
 
 	-- For every stage create a complete command
-	for i = 1, 4 do
+	for i = 1, 3 do
 		commands.add_command("SpaceX_complete_stage_" .. i, { "SpaceX_cheat_sat_help" }, function(event)
 			storage.current_stage = i
 			cheat_complete_stage()

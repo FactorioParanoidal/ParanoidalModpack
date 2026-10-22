@@ -1,0 +1,64 @@
+---------------------------------------------------------------------------------------------------
+Version: 1.1.0
+Date: 2026-10-14
+  Major Features:
+    - 369 new achievements for the Paranoidal mod set in ten themes: resources, industry, quality and
+      defects, energy, logistics, combat, nature, space, challenges and character.
+    - 71 scripted achievements (control.lua): deaths, distances, teleports, rockets and their cargo,
+      seasons, midnights, evolution, ruins, wind, RPG levels, entity counts and more.
+  Features:
+    - Entry kinds for every engine achievement type: build, kill, research, science pack, use item, equip
+      armor, shoot, robots, combat robots, damage, group attacks, avoid building, avoid crafting,
+      objective in time, energy production and script.
+    - Map setting "Scripted achievements" to stop all tracking.
+  Changes:
+    - Removed the "Doping" achievement (use 10 combat power-up capsules): RampantFixed no longer has the
+      capsule.
+    - Every entry is built in its own protected step: a missing target, an error in a catalog or a name
+      taken by another mod skips the entry with a log line instead of stopping the game. Achievements
+      with items nothing can produce or entities no item can place are skipped too.
+    - Every scripted tracker runs protected; a failing tracker is switched off until the next
+      configuration change and the game continues.
+    - Icons of items with explicitly scaled layers keep their proportions inside the tier frame.
+    - Optional flavor line under generated descriptions (locale section mxlr-flavor, keyed by the
+      achievement name); a language without the key shows the condition only.
+    - Two Factorissimo achievements read the streaks Factorissimo measures for every factory building
+      (remote get_force_records, polled once a minute): "Not a Gram Outside" (10 hours of work without
+      releasing pollution) and "Workshop 24/7" (10 hours of work without power shortage). Without that
+      remote interface the tracker does nothing.
+  Locale:
+    - Russian: new names for repetitive and plain achievements (numbered tiers, "!!!" series, module
+      tiers), duplicate names removed, jokes added to hand-written descriptions, 137 flavor lines.
+    - Russian production descriptions no longer end with a double period ("10 тыс..").
+    - Russian: Factorissimo buildings are called "фабрика" in the descriptions of five achievements, as in
+      Factorissimo itself.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 2026-10-14
+  Major Features:
+    - Merges MxlChievements2 3.0.1 (fork of MxlChievements by Mxlppxl) and More Achievements 0.0.2
+      (LuziferSenpai) into one mod. Achievement names are kept.
+  Bugfixes:
+    - Quality crafting-with achievements counted the quality of the module type (speed: uncommon,
+      efficiency: rare, productivity: epic) instead of their own quality.
+    - Quality computer-age achievements counted advanced circuits instead of processing units.
+    - Computer-age tier 4 was below Bob's tier 3; extra tiers now are 25k..1M per hour and quality
+      tiers 1-3 use the real base amounts.
+    - gear-production-1a..1d had no quality condition (limit_quality is not a 2.0 field) and no names.
+    - transport-belt-1..3 and express-underground-belt-2..3 were defined under underground-belt names
+      and never loaded.
+    - uranium-238-1 counted uranium ore.
+    - The 1.1 stack inserter series (bulk inserter in 2.0) is now bulk-inserter-1..3; stack-inserter-1..3
+      are the Space Age stack inserter.
+    - Achievements of items added by other mods in later stages (turbo belts, lithium plate, fusion
+      reactor, battery MK3) were skipped because the check ran in data.lua.
+    - Descriptions are generated from the real condition: wrong numbers (steam, gears, tanks) and the
+      Bob computer-age amounts are fixed, module names are translated.
+    - Quality badges use the icons of the active quality prototypes.
+    - Sorting order of all achievements.
+  Changes:
+    - Removed series duplicating a base game ladder: green-card, iron-madness, big-red-machine,
+      keep-on-smurfin.
+    - Russian names for turbo belts, recycler, quality modules, battery MK3, lithium plate and fusion
+      reactor achievements.
+    - Only used pictures are shipped.

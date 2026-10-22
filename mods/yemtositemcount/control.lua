@@ -138,9 +138,20 @@ local function calculatePlayerItem(player, stack)
 	end
 end
 
-local preview_queue = {}
+-- Players whose blueprint preview is still loading: player index -> true. Kept in storage and on_tick is
+-- registered only while it is not empty (also in on_load), so every peer, including a joining client, runs the
+-- same per-tick GUI updates. A module-local queue was empty on a joining client: a multiplayer desync risk.
+local wait_for_blueprint
 
-local function wait_for_blueprint()
+local function stop_waiting_if_empty()
+    if not (storage.preview_queue and next(storage.preview_queue)) then
+        storage.preview_queue = nil
+        script.on_event(defines.events.on_tick, nil)
+    end
+end
+
+wait_for_blueprint = function()
+    local preview_queue = storage.preview_queue or {}
     for pid, _ in pairs(preview_queue) do
         local player = game.players[pid]
         local blueprint = player and get_blueprint_record(player)
@@ -156,6 +167,7 @@ local function wait_for_blueprint()
             player.gui.center.total_item_count.caption = calculateFromCost(player, blueprint.cost_to_build) .. " "
         end
     end
+    stop_waiting_if_empty()
 end
 
 local function refresh(e)
@@ -170,7 +182,9 @@ local function refresh(e)
 
 	if blueprint then
         if blueprint.is_preview then
-            preview_queue[e.player_index] = true
+            storage.preview_queue = storage.preview_queue or {}
+            storage.preview_queue[e.player_index] = true
+            script.on_event(defines.events.on_tick, wait_for_blueprint)
         else
             create_gui(player)
             player.gui.center.total_item_count.caption = calculateFromCost(player, blueprint.cost_to_build) .. " "
@@ -187,5 +201,9 @@ script.on_event(defines.events.on_player_cursor_stack_changed, refresh)
 script.on_event(defines.events.on_player_main_inventory_changed, refresh)
 script.on_event(defines.events.on_player_ammo_inventory_changed, refresh)
 script.on_event(defines.events.on_player_armor_inventory_changed, refresh)
-script.on_event(defines.events.on_tick, wait_for_blueprint)
+script.on_load(function()
+    if storage.preview_queue and next(storage.preview_queue) then
+        script.on_event(defines.events.on_tick, wait_for_blueprint)
+    end
+end)
 

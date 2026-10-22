@@ -1,0 +1,14 @@
+{
+  "mod": "bobinserters",
+  "source": "portal",
+  "upstreamVersion": "2.0.3",
+  "changeReason": "Для манипуляторов nco-InserterCranes сетка выбора точек захвата и выгрузки поддерживает размеры больше 1×1, включая 2×2 и 6×2. Добавлена remote-функция unblacklist_inserters для снятия запрета настройки манипуляторов другими модами.",
+  "original": {
+    "name": "Bob's Adjustable Inserters mod",
+    "authors": ["Bobingabout"],
+    "portal": {
+      "name": "bobinserters",
+      "url": "https://mods.factorio.com/mod/bobinserters"
+    }
+  }
+}

@@ -9,5 +9,13 @@ data:extend({
     minimum_value = 0,
     maximum_value = 90,
     order = "ab",
+  },
+  {
+    -- only does something with a mod that brings the freezing mechanic
+    type = "bool-setting",
+    name = mod_name .. "heating",
+    setting_type = "startup",
+    default_value = true,
+    order = "ba",
   }
 })

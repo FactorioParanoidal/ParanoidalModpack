@@ -167,15 +167,6 @@ Data {
     base_animation = {
         layers = {
             {
-                filename = '__nanobots-refined__/graphics/entity/roboport-interface/roboport-interface-base.png',
-                scale = 1,
-                priority = 'medium',
-                width = 128,
-                height = 224,
-                animation_speed = 0.15,
-                repeat_count = 16,
-                shift = {0.5, -2.0},
-                hr_version = {
                     filename = '__nanobots-refined__/graphics/entity/roboport-interface/hr-roboport-interface-base.png',
                     scale = 0.5,
                     priority = 'medium',
@@ -184,19 +175,8 @@ Data {
                     animation_speed = 0.15,
                     repeat_count = 16,
                     shift = {0.5, -2.0},
-                }
-            },
+                },
             {
-                filename = '__nanobots-refined__/graphics/entity/roboport-interface/roboport-interface.png',
-                scale = 1,
-                priority = 'medium',
-                width = 128,
-                height = 224,
-                animation_speed = 0.15,
-                frame_count = 16,
-                line_length = 8,
-                shift = {0.5, -2.0},
-                hr_version = {
                     filename = '__nanobots-refined__/graphics/entity/roboport-interface/hr-roboport-interface.png',
                     scale = 0.5,
                     priority = 'medium',
@@ -206,19 +186,8 @@ Data {
                     frame_count = 16,
                     line_length = 8,
                     shift = {0.5, -2.0},
-                }
-            },
+                },
             {
-                filename = '__nanobots-refined__/graphics/entity/roboport-interface/roboport-interface-base-shadow.png',
-                scale = 1,
-                priority = 'medium',
-                width = 211,
-                height = 224,
-                animation_speed = 0.15,
-                repeat_count = 16,
-                shift = {0.5, -2.0},
-                draw_as_shadow = true,
-                hr_version = {
                     filename = '__nanobots-refined__/graphics/entity/roboport-interface/hr-roboport-interface-base-shadow.png',
                     scale = 0.5,
                     priority = 'medium',
@@ -228,20 +197,8 @@ Data {
                     repeat_count = 16,
                     shift = {0.5, -2.0},
                     draw_as_shadow = true,
-                }
-            },
+                },
             {
-                filename = '__nanobots-refined__/graphics/entity/roboport-interface/roboport-interface-shadow.png',
-                scale = 1,
-                priority = 'medium',
-                width = 128,
-                height = 224,
-                animation_speed = 0.15,
-                frame_count = 16,
-                line_length = 8,
-                shift = {2.5, -2.0},
-                draw_as_shadow = true,
-                hr_version = {
                     filename = '__nanobots-refined__/graphics/entity/roboport-interface/hr-roboport-interface-shadow.png',
                     scale = 0.5,
                     priority = 'medium',
@@ -252,20 +209,8 @@ Data {
                     line_length = 8,
                     shift = {2.5, -2.0},
                     draw_as_shadow = true,
-                }
-            },
+                },
             {
-                filename = '__nanobots-refined__/graphics/entity/roboport-interface/roboport-interface-glow.png',
-                scale = 1,
-                priority = 'medium',
-                width = 128,
-                height = 224,
-                animation_speed = 0.15,
-                frame_count = 16,
-                line_length = 8,
-                shift = {0.5, -2.0},
-                draw_as_light = true,
-                hr_version = {
                     filename = '__nanobots-refined__/graphics/entity/roboport-interface/hr-roboport-interface-glow.png',
                     scale = 0.5,
                     priority = 'medium',
@@ -276,8 +221,7 @@ Data {
                     line_length = 8,
                     shift = {0.5, -2.0},
                     draw_as_light = true,
-                }
-            },
+                },
         }
 
     },

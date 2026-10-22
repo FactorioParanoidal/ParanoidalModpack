@@ -1,4 +1,32 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.0.2
+Date: 2026-09-10
+  By:
+    - darkfrei
+  Info:
+    - Build for Factorio 2.0, the code is the same as in version 2.1.2.
+---------------------------------------------------------------------------------------------------
+Version: 2.1.2
+Date: 2026-09-10
+  By:
+    - darkfrei
+  Features:
+    - The RITEG now works as a heat source for the buildings and heat pipes that touch it, about 100 degrees, warm enough against the frost of a cold planet and too cold for a heat exchanger. Suggested by tabr. It only exists with a mod that brings the freezing mechanic, Space Age for example, and it can be switched off in the startup settings.
+  Bugfixes:
+    - Update to Factorio 2.1. Every function of the control script lived in the top scope, and writing there is not allowed anymore.
+    - Fixed that updating the mod added every existing RITEG to the list a second time, so it got a second glow and was handled twice per round.
+    - Fixed that the glow of a RITEG was never removed, it only disappeared with the entity itself.
+    - Fixed that vehicle_impact_sound was still used, 2.0 replaced it by impact_category, so the RITEG had no impact sound.
+    - Fixed that a dropped ingredient left a hole in the ingredient list of the recipe, which breaks the length of that list for every mod that looks at it afterwards.
+    - Added the localisation keys of the recycling recipes, one of them was reported as missing.
+    - Removed the leftover hardness of the mining properties, it has not existed for a long time.
+  Changes:
+    - The build and mine events are filtered by name now instead of comparing the name of every entity of the game.
+    - The list of RITEGs is rebuilt from the surfaces on a configuration change, and a heat source without its RITEG is cleaned up.
+    - The item list of the ingredient repair comes from the game instead of being written down by hand.
+    - Removed recycling.pdn from the release, it is an image source.
+    - The heat buffer of the hidden heat source keeps the default temperature at zero, the engine wants min_working_temperature to be at least the default temperature. The control script sets the working temperature right after it creates the entity.
+---------------------------------------------------------------------------------------------------
 Version: 1.3.11
 Date: 2025-05-01
   Fixes:

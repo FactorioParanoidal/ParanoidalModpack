@@ -379,11 +379,14 @@ local function on_entity_gui_opened_closed(event)
 end
 
 ---@param e EventData.on_gui_closed
-local function on_gui_closed(e)
+---Paranoidal: global, so main.lua can chain it with the manager handler (the two used to
+---compete for the single on_gui_closed registration; the later one silently won).
+function cybersyn_on_gui_closed(e)
 	if not on_entity_gui_opened_closed(e) and e.gui_type == defines.gui_type.custom then
 		flib_gui.dispatch(e)
 	end
 end
+local on_gui_closed = cybersyn_on_gui_closed
 
 function register_gui_actions()
 	add_entity_opened_handler(COMBINATOR_NAME, gui_opened) -- fully custom GUI, closes via flib handler

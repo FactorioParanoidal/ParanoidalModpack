@@ -4,6 +4,8 @@ Date: 2026-09-11
   Bugfixes:
     - Restored the non-wide express crane footprint and recipe scale
     - Namespaced the startup setting and removed leftover debug output
+  Changes:
+    - Cranes are no longer blacklisted in Bob's Adjustable Inserters: pickup/drop range and near/far offset are set with the same grid as inserters
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.8
 Date: 2026-09-10

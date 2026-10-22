@@ -1,4 +1,4 @@
-﻿--heroturrets = { util = get_liborio() }	
+--heroturrets = { util = get_liborio() }
 heroturrets = { }	
 
 --require("wiki") 

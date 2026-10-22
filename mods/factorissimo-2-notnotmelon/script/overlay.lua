@@ -103,55 +103,76 @@ local function get_nice_overlay_arrangement(width, height, amount)
     return result
 end
 
-local function convert_logistic_sections_into_overlay_icons(control_behavior)
-    local overlay_icons = {}
+--- Returns the icons of the active sections and a string that changes whenever they change.
+local function overlay_icons(control_behavior)
+    local icons, parts = {}, {}
     for _, section in pairs(control_behavior.sections) do
         if section.active then
             for _, filter in pairs(section.filters) do
-                if filter.value then
-                    table.insert(overlay_icons, filter.value)
+                local value = filter.value
+                if value then
+                    icons[#icons + 1] = value
+                    parts[#parts + 1] = tostring(value.type) .. "/" .. tostring(value.name) .. "/" .. tostring(value.quality)
                 end
             end
         end
     end
-    return overlay_icons
+    return icons, table.concat(parts, ";")
 end
 
-local function update_overlay(factory, draw_onto)
-    if not draw_onto then
-        for _, id in pairs(factory.outside_overlay_displays) do
-            local object = rendering.get_object_by_id(id)
-            if object then object.destroy() end
-        end
-        factory.outside_overlay_displays = {}
-    end
-
-    if not factory.built then return end
-    if not factory.building.valid then return end
-    local controller = factory.inside_overlay_controller
-    if not controller then return end
-    if not controller.valid then return end
-    local control_behavior = controller.get_or_create_control_behavior()
-    if not control_behavior.enabled then return end
-
-    local overlay_icons = convert_logistic_sections_into_overlay_icons(control_behavior)
-
-    local sprite_positions = get_nice_overlay_arrangement(
-        factory.layout.overlays.outside_w,
-        factory.layout.overlays.outside_h,
-        #overlay_icons
-    )
-    local i = 0
-    for _, param in pairs(overlay_icons) do
-        i = i + 1
+local function draw_overlay_icons(factory, icons, target, id_table)
+    local overlays = factory.layout.overlays
+    local sprite_positions = get_nice_overlay_arrangement(overlays.outside_w, overlays.outside_h, #icons)
+    for i, param in ipairs(icons) do
+        local sprite_position = sprite_positions[i]
         draw_overlay_sprite(
             param,
-            draw_onto or factory.building,
-            {sprite_positions[i].x + factory.layout.overlays.outside_x, sprite_positions[i].y + factory.layout.overlays.outside_y},
-            sprite_positions[i].scale,
-            factory.outside_overlay_displays
+            target,
+            {sprite_position.x + overlays.outside_x, sprite_position.y + overlays.outside_y},
+            sprite_position.scale,
+            id_table
         )
     end
+end
+
+local function clear_overlay(factory)
+    for _, id in pairs(factory.outside_overlay_displays or {}) do
+        local object = rendering.get_object_by_id(id)
+        if object then object.destroy() end
+    end
+    factory.outside_overlay_displays = {}
+    factory.overlay_signature = nil
+end
+
+--- Draws the display-upgrade icons on the factory building, or onto `draw_onto` (a ghost of a copy).
+--- The icons on the building are redrawn only when the controller settings or the building changed.
+local function update_overlay(factory, draw_onto)
+    if not factory.layout then return end
+    local controller = factory.inside_overlay_controller
+    local icons, signature
+    if controller and controller.valid then
+        local control_behavior = controller.get_or_create_control_behavior()
+        if control_behavior.enabled then icons, signature = overlay_icons(control_behavior) end
+    end
+
+    if draw_onto then
+        -- Render objects attached to the ghost disappear together with it; they are not tracked.
+        if icons and icons[1] and draw_onto.valid then draw_overlay_icons(factory, icons, draw_onto, {}) end
+        return
+    end
+
+    local building = factory.building
+    if not (factory.built and building and building.valid) then
+        clear_overlay(factory)
+        return
+    end
+
+    signature = signature or ""
+    if factory.overlay_signature == signature and factory.outside_overlay_displays then return end
+    clear_overlay(factory)
+    if icons and icons[1] then draw_overlay_icons(factory, icons, building, factory.outside_overlay_displays) end
+    factory.overlay_signature = signature
+    factorissimo.dispatch_changed() -- the factory list shows these icons
 end
 factorissimo.update_overlay = update_overlay
 
@@ -184,8 +205,17 @@ local function copy_overlay_between_factory_buildings(source, destination)
 end
 factorissimo.copy_overlay_between_factory_buildings = copy_overlay_between_factory_buildings
 
-factorissimo.on_event(defines.events.on_player_changed_surface, function(event)
-    for _, factory in pairs(storage.factories) do
-        factorissimo.update_overlay(factory)
-    end
+-- The icons follow the controller as soon as its settings are edited or pasted.
+local function update_overlay_of_controller(entity)
+    if not (entity and entity.valid and entity.name == "factory-overlay-controller") then return end
+    local factory = remote_api.find_surrounding_factory(entity.surface, entity.position)
+    if factory and factory.inside_overlay_controller == entity then update_overlay(factory) end
+end
+
+factorissimo.on_event(defines.events.on_gui_closed, function(event)
+    update_overlay_of_controller(event.entity)
+end)
+
+factorissimo.on_event(defines.events.on_entity_settings_pasted, function(event)
+    update_overlay_of_controller(event.destination)
 end)

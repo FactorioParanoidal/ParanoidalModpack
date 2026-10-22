@@ -2,6 +2,7 @@
 Version: 2.0.08
 Date: 2026-02-07
   Bugfixes:
+    - Paranoidal: control.lua regenerate_entity uses prototypes.entity (game.entity_prototypes no longer exists in 2.0).
     - Fixed crash with Bob's mods
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.07

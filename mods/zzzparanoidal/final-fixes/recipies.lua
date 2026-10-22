@@ -568,6 +568,11 @@ paralib.bobmods.lib.recipe.add_new_ingredient(
 	"fluid-memory-unit",
 	{ type = "item", name = "angels-storage-tank-1", amount = 2 }
 )
+-- Как в Beta 8 (fluid-memory-storage 1.4.6): четыре энергощита; версия мода для 2.0 даёт два.
+paralib.bobmods.lib.recipe.set_ingredient(
+	"fluid-memory-unit",
+	{ type = "item", name = "energy-shield-equipment", amount = 4 }
+)
 paralib.bobmods.lib.tech.add_prerequisite("fluid-memory-storage", "angels-gas-processing")
 
 paralib.bobmods.lib.recipe.add_new_ingredient("accumulator", { type = "item", name = "electronic-circuit", amount = 4 })
@@ -643,14 +648,6 @@ paralib.bobmods.lib.recipe.add_ingredient("ftl-drive", { type = "item", name = "
 paralib.bobmods.lib.recipe.set_ingredients("bob-tungsten-carbide-x", {
 	{ type = "item", name = "angels-solid-carbon", amount = 8 },
 	{ type = "item", name = "bob-tungsten-oxide", amount = 12 },
-})
-
---рецепты для новых донных насосов
-paralib.bobmods.lib.recipe.set_ingredients("angels-seafloor-pump", {
-	{ type = "item", name = "mining-drill-bit-mk1", amount = 3 },
-	{ type = "item", name = "pipe", amount = 25 },
-	{ type = "item", name = "bob-basic-circuit-board", amount = 10 },
-	{ type = "item", name = "iron-plate", amount = 25 },
 })
 
 --Разжижители
@@ -781,8 +778,8 @@ paralib.bobmods.lib.recipe.add_ingredient("bob-electric-mixing-furnace", { type 
 -- electric-chemical-mixing: electric-furnace → electric-mixing-furnace (1.1).
 paralib.bobmods.lib.recipe.replace_ingredient("bob-electric-chemical-mixing-furnace", "electric-furnace", "bob-electric-mixing-furnace")
 
--- Unlock iron-stick by default
-paralib.bobmods.lib.recipe.enabled("iron-stick", true)
+-- User exception: iron-stick opens through the existing burner-mechanics technology.
+paralib.bobmods.lib.recipe.enabled("iron-stick", false)
 
 --Фикс рецепта базовой микросхемы
 paralib.bobmods.lib.recipe.set_ingredients("bob-basic-circuit-board", {

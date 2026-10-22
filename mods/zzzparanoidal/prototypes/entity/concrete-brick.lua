@@ -5,8 +5,9 @@ hazard_tile_left.minable = { mining_time = 0.1, result = "hazard-concrete-brick"
 hazard_tile_left.layer = 225
 hazard_tile_left.next_direction = "hazard-concrete-brick-right"
 hazard_tile_left.variants.material_background = {
-	picture = "__zzzparanoidal__/graphics/grid/hazard-concrete-left.png",
+	picture = "__zzzparanoidal__/graphics/grid/hr-hazard-concrete-left.png",
 	count = 8,
+	scale = 0.5,
 }
 data:extend({ hazard_tile_left })
 
@@ -17,7 +18,8 @@ hazard_tile_right.minable = { mining_time = 0.1, result = "hazard-concrete-brick
 hazard_tile_right.layer = 225
 hazard_tile_right.next_direction = "hazard-concrete-brick-left"
 hazard_tile_right.variants.material_background = {
-	picture = "__zzzparanoidal__/graphics/grid/hazard-concrete-right.png",
+	picture = "__zzzparanoidal__/graphics/grid/hr-hazard-concrete-right.png",
 	count = 8,
+	scale = 0.5,
 }
 data:extend({ hazard_tile_right })

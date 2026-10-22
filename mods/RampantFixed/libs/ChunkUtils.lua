@@ -9,6 +9,9 @@ local baseUtils = require("BaseUtils")
 local constants = require("Constants")
 local mapUtils = require("MapUtils")
 local chunkPropertyUtils = require("ChunkPropertyUtils")
+local aiBrain = require("AIBrain")
+local unitUtils = require("UnitUtils")
+local foreignEnemies = require("ForeignEnemies")
 
 -- constants
 
@@ -107,8 +110,17 @@ local mRandom = math.random
 
 -- module code
 
+-- Prototype data is constant during a session: cache by entity name (not saved, identical on every peer).
+local overlapBoundingBoxes = {}
+
 local function getEntityOverlapChunks(map, entity)
-    local boundingBox = entity.prototype.collision_box or entity.prototype.selection_box;
+    local entityName = entity.name
+    local boundingBox = overlapBoundingBoxes[entityName]
+    if boundingBox == nil then
+        local prototype = entity.prototype
+        boundingBox = prototype.collision_box or prototype.selection_box or false
+        overlapBoundingBoxes[entityName] = boundingBox
+    end
     local overlapArray = map.universe.chunkOverlapArray
 
     overlapArray[1] = -1 --LeftTop
@@ -230,7 +242,9 @@ local function scorePlayerBuildings(map, chunk)
 			end	
 		end
 		
-		local entities = surface.find_entities_filtered(universe.filteredEntitiesPlayerQueryFactorissimo)	-- 
+		-- nil when the game has no Factorissimo factory prototypes (Upgrade.lua addCommandSet)
+		local factorissimoQuery = universe.filteredEntitiesPlayerQueryFactorissimo
+		local entities = (factorissimoQuery and surface.find_entities_filtered(factorissimoQuery)) or {}
 		for i = 1, #entities do
 			local entity = entities[i]
 			if FACTORISSIMO_ENTITY(entity) then
@@ -242,12 +256,19 @@ local function scorePlayerBuildings(map, chunk)
 	setPlayerBaseGenerator(map, chunk, pheromones[BASE_PHEROMONE], BASE_PHEROMONE)
 	setPlayerBaseGenerator(map, chunk, pheromones[BASE_DETECTION_PHEROMONE], BASE_DETECTION_PHEROMONE)
 	setPlayerTurretCount(map, chunk, turretsCount)
+	-- weak spots, strongpoints and infrastructure for the AI tactics (universe.area still holds this chunk)
+	aiBrain.onPlayerChunkScored(map, chunk, pheromones[BASE_PHEROMONE], turretsCount)
 
 	return pheromones[BASE_PHEROMONE]
 end
 
+-- Big Monsters / mferrari structures are never replaced (libs/ForeignEnemies.lua)
+local isForeign = foreignEnemies.isForeign
 function chunkUtils.needReplacement(map, entity)
 	local needReplacement = false
+	if isForeign(entity.name) then
+		return false
+	end
 	if not VANILLA_ENTITIES[entity.name] then
 		if not map.replaceModedNests then
 			needReplacement = false
@@ -306,9 +327,10 @@ function chunkUtils.initialScan(chunk, map, tick)
 				if map.hasNonmoddedBiters and thisIsRampantEnemy then
 					local alignment = base.alignment
 						local unitList = surface.find_entities_filtered(universe.filteredEntitiesUnitQuery)
+						local champions = unitUtils.championUnits(universe)
 						for i=1,#unitList do
 							local unit = unitList[i]
-							if (unit.valid) then
+							if unit.valid and not (champions and champions[unit.unit_number]) and not isForeign(unit.name) then
 								unit.destroy()
 							end
 						end
@@ -323,8 +345,12 @@ function chunkUtils.initialScan(chunk, map, tick)
 								if newEntity then
 									local hiveType = buildingHiveTypeLookup[newEntity.name]
 									counts[hiveType] = counts[hiveType] + 1
-								elseif (enemyBuilding and enemyBuilding.type == "unit-spawner") then
-									unknownNests = unknownNests + 1
+								elseif enemyBuilding.valid then
+									if enemyBuilding.type == "turret" then
+										counts["turret"] = counts["turret"] + 1	-- kept foreign worms are turrets of the chunk
+									elseif not isForeign(enemyBuilding.name) then
+										unknownNests = unknownNests + 1
+									end
 								end
 							end
 						end
@@ -341,7 +367,7 @@ function chunkUtils.initialScan(chunk, map, tick)
                             ((building.type == "turret") and "turret")
 							if hiveType then	
 								counts[hiveType] = counts[hiveType] + 1
-							elseif building.type == "unit-spawner" then
+							elseif (building.type == "unit-spawner") and not isForeign(building.name) then
 								unknownNests = unknownNests + 1
 							end
                     end
@@ -450,15 +476,17 @@ function chunkUtils.mapScanEnemyChunk(chunk, map)
 	local pendingEntitiesCnt = 0
 	local chunkIndex = "x"..chunk.x.."y"..chunk.y.."m"..map.surface.index
 	
-	local buildingsCnt = #buildings
+	local buildingsCnt = 0	-- own structures and foreign worms; foreign spawners are left out
 	
     for i=1,#buildings do
         local building = buildings[i]
         local newBuilding
+		local foreignSpawner = (building.type == "unit-spawner") and isForeign(building.name)
 		-- mutation and upgrade--
-		if thisIsRampantEnemy and (not pendingChunks[chunkIndex]) and building.valid then
+		if thisIsRampantEnemy and (not pendingChunks[chunkIndex]) and building.valid and not foreignSpawner then
 			if changingEntities then
-				if ((chunk.nextMutationTick  or 0) < tick) and (buildingHiveTypeLookup[building.name] or (building.type == "turret")) then
+				-- only structures a mutation can change (changeEntityAndUpdateDynamicRates): a faction of this mod
+				if ((chunk.nextMutationTick  or 0) < tick) and buildingHiveTypeLookup[building.name] and enemyAlignmentLookup[building.name] then
 					-- if mutatesCnt>maxMutations then
 						pendingEntitiesCnt = pendingEntitiesCnt + 1
 						local entityData = {
@@ -490,7 +518,8 @@ function chunkUtils.mapScanEnemyChunk(chunk, map)
 		end			
 		
 		-----
-		if building.valid then	
+		if building.valid and not foreignSpawner then
+			buildingsCnt = buildingsCnt + 1
 			local hiveType = buildingHiveTypeLookup[building.name] or
 				(((building.type == "turret") and "turret") 
 					or ((building.type =="unit-spawner") and "biter-spawner")
@@ -629,7 +658,8 @@ end
 
 function chunkUtils.registerEnemyBaseStructure(map, entity, base)
     local entityType = entity.type
-    if ((entityType == "unit-spawner") or (entityType == "turret")) and (entity.force.name == "enemy") then
+    if ((entityType == "unit-spawner") or (entityType == "turret")) and (entity.force.name == "enemy")
+        and not ((entityType == "unit-spawner") and isForeign(entity.name)) then
         local overlapArray = getEntityOverlapChunks(map, entity)
 
         local getFunc
@@ -685,7 +715,8 @@ end
 
 function chunkUtils.unregisterEnemyBaseStructure(map, entity, damageType)
     local entityType = entity.type
-    if ((entityType == "unit-spawner") or (entityType == "turret")) and (entity.force.name == "enemy") then
+    if ((entityType == "unit-spawner") or (entityType == "turret")) and (entity.force.name == "enemy")
+        and not ((entityType == "unit-spawner") and isForeign(entity.name)) then
         local overlapArray = getEntityOverlapChunks(map, entity)
         local getFunc
         local setFunc
@@ -746,10 +777,10 @@ function chunkUtils.unregisterEnemyBaseStructure(map, entity, damageType)
     end
 end
 
-local function ignoredForce(force, universe)
+local function ignoredForce(forceName, universe)
 	local forceIgnored = true
 	for i = 1, #universe.activePlayerForces do
-		if universe.activePlayerForces[i] == force.name then
+		if universe.activePlayerForces[i] == forceName then
 			forceIgnored = false
 			break
 		end
@@ -757,24 +788,45 @@ local function ignoredForce(force, universe)
 	return forceIgnored
 end
 
+local pointsToAccount = {BASE_PHEROMONE, BASE_DETECTION_PHEROMONE}
+-- GET_ENTITY_PHEROMONES of a valid entity depends only on its prototype name: cache it (not saved).
+local entityPheromoneValues = {}
+
 function chunkUtils.accountPlayerEntity(entity, map, addObject, creditNatives)
-	if ignoredForce(entity.force, map.universe) then
+	local forceName = entity.force.name
+	if ignoredForce(forceName, map.universe) then
 		return
 	end	
-	local GENERATOR_PHEROMONE_LEVEL = constants.GENERATOR_PHEROMONE_LEVEL
-	local pointsToAccount = {BASE_PHEROMONE, BASE_DETECTION_PHEROMONE}
+	local entityName = entity.name
+	local pheromoneValues = entityPheromoneValues[entityName]
+	if not pheromoneValues then
+		pheromoneValues = {}
+		for i = 1, #pointsToAccount do
+			local pheromoneType = pointsToAccount[i]
+			pheromoneValues[pheromoneType] = GET_ENTITY_PHEROMONES(entity, pheromoneType)
+		end
+		entityPheromoneValues[entityName] = pheromoneValues
+	end
+	local overlapArray
 	for i = 1, #pointsToAccount do
 		local pheromoneType = pointsToAccount[i]
-		if (entity.force.name ~= "enemy") then
+		if (forceName ~= "enemy") then
 			local universe = map.universe
-			local entityValue = GET_ENTITY_PHEROMONES(entity, pheromoneType)
-			local overlapArray = getEntityOverlapChunks(map, entity)
+			local entityValue = pheromoneValues[pheromoneType]
+			-- the shared overlap array is not touched inside this loop, so one lookup serves both pheromone types
+			if not overlapArray then
+				overlapArray = getEntityOverlapChunks(map, entity)
+			end
 			if not addObject then
 				if (creditNatives) and (pheromoneType==BASE_PHEROMONE) then					
 					if entity.type ~= "wall" then	-- + !КДА 2021.11
 						map.destroyPlayerBuildings = map.destroyPlayerBuildings + 1
 						if universe.aiDifficulty == "Hard" then
-							if not (map.supressionData or (map.supressionData.supressionType < 1) or (map.supressionData.supressionEndTick < game.tick)) then	--- prevent mass attack if destroing base
+							-- no points while a biter suppressor works (prevents a mass attack on the base it protects).
+							-- The old test was always false (supressionData exists on every map): no points at all
+							local supression = map.supressionData
+							if not (supression and ((supression.supressionType or 0) >= 1)
+								and ((supression.supressionEndTick or 0) >= game.tick)) then
 								if (map.state == AI_STATE_ONSLAUGHT) then
 									map.points = map.points + entityValue
 									if universe.aiPointsPrintGainsToChat then
@@ -793,10 +845,17 @@ function chunkUtils.accountPlayerEntity(entity, map, addObject, creditNatives)
 				entityValue = -entityValue
 			end
 
+			local dirtyChunks = map.playerDirtyChunks
+			if not dirtyChunks then
+				dirtyChunks = {}
+				map.playerDirtyChunks = dirtyChunks
+			end
 			for i=1,#overlapArray do
 				local chunk = overlapArray[i]
 				if chunk ~= -1 then
 					addPlayerBaseGenerator(map, chunk, entityValue, pheromoneType)
+					-- scanPlayerMap rescans changed chunks first (turret count, ignored buildings)
+					dirtyChunks[chunk] = true
 				end
 			end	
 		end	

@@ -2,6 +2,7 @@
 Version: 7.4.1
 Date: 2026-02-04
   Changes:
+    - Local Paranoidal patch: remote function toggle_gui(player_index) opens or closes the configuration window; used by the GUI Unifyer button.
     - Removed "Clear All" button (was causing a crash)
   Bugfixes:
     - Fix crash when another mod makes all machines have the same number of module slots

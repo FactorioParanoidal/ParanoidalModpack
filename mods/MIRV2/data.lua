@@ -324,7 +324,6 @@ local do_whacka_do = function()
   local watra = 1 + ((math.random() - 0.5))
   return
   {
-    filename = "__base__/graphics/entity/bigass-explosion/hr-bigass-explosion-36f.png",
     draw_as_glow = true,
     animation_speed = 0.5 * watra,
     width = 324,

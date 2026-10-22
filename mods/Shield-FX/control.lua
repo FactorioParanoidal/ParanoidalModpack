@@ -2,18 +2,25 @@
 
 
 
+-- The per-tick effect loop is registered only while a shield record exists (storage-derived on every peer).
+local shield_tick
+local function update_tick_registration()
+	script.on_nth_tick(1, (storage.shields and next(storage.shields)) and shield_tick or nil)
+end
+
 script.on_init(function()
 	storage.version = 1
 	storage.shields = {}
+	update_tick_registration()
 end)
 
+script.on_load(update_tick_registration)
 
---script.on_configuration_changed(function()
---	
---end)
-function print(str)
-game.players[1].print(str)
-end
+-- Mod added to an existing save: the per-tick loop needs the table.
+script.on_configuration_changed(function()
+	storage.shields = storage.shields or {}
+	update_tick_registration()
+end)
 
 
 
@@ -72,6 +79,7 @@ script.on_event(defines.events.on_entity_damaged or 97,function(event)
 
 			if not storage.shields[event.entity.unit_number] then
 				storage.shields[event.entity.unit_number] = {event.entity}
+				update_tick_registration()
 			end
 			if settings.global["SFX_alternate_effect"].value then
 				if storage.shields[event.entity.unit_number][3] == nil or storage.shields[event.entity.unit_number][3] < game.tick-5 then
@@ -124,7 +132,7 @@ function b2s(bool)
 if bool then return "true" else return "false" end
 end
 
-script.on_nth_tick(1, function(event)
+shield_tick = function(event)
 	for key, tbl in pairs(storage.shields) do
 		if tbl[1].valid and tbl[2] and tbl[2].valid then
 			local pos = projection(tbl[1].orientation, tbl[1].speed, tbl[1].position)
@@ -156,16 +164,20 @@ script.on_nth_tick(1, function(event)
 			storage.shields[key]=nil
 		end
 	end
-end)
+	if not next(storage.shields) then update_tick_registration() end
+end
 
 
 script.on_event({defines.events.on_entity_died,defines.events.on_player_mined_entity,defines.events.on_robot_mined_entity},function(event)
-		if (event.entity.type == "player"
-		or event.entity.type == "car")
-		and storage.shields[event.entity] then
-			storage.shields[event.entity] = nil
+	-- Records are keyed by unit_number (the previous entity key never matched).
+	local unit_number = event.entity.unit_number
+	if unit_number and storage.shields[unit_number] then
+		storage.shields[unit_number] = nil
 	end
 end)
+
+-- The removal handler only handles cars ("player" is a legacy, non-existent entity type).
+script.set_event_filter(defines.events.on_entity_died, {{filter = "type", type = "car"}})
 
 --storage.shields[entity.unit_number]
 -- 1	car / player entity

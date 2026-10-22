@@ -1,0 +1,11 @@
+{
+  "mod": "fluid-memory-storage",
+  "source": "portal",
+  "upstreamVersion": "1.7.9",
+  "original": {
+    "name": "Fluid Memory Storage",
+    "authors": ["notnotmelon"],
+    "portal": {"name": "fluid-memory-storage", "url": "https://mods.factorio.com/mod/fluid-memory-storage"}
+  },
+  "changeReason": "Поддерживаемый патч Paranoidal опубликованной версии 1.7.9. Нативный фильтр смерти только fluid-memory-unit; при смешивании температур сохраняется меньшая, выбор жидкости заранее и сброс в окне, снижение энергопотребления за качество, переименования жидкостей для упакованных ёмкостей, исправления дрейфа температуры, окна и клонирования. Подробности в README.md мода."
+}

@@ -85,6 +85,8 @@ for _, definition in ipairs(rail_definitions) do
   rail.fast_replaceable_group = target.fast_replaceable_group
   if not rail.fast_replaceable_group or rail.fast_replaceable_group == "" then
     rail.fast_replaceable_group = target.name
+    -- The upgrade target must share the group, otherwise the upgrade planner refuses scrap -> rail.
+    target.fast_replaceable_group = target.name
   end
   rail.factoriopedia_alternative = "straight-scrap-rail"
   apply_primitive_palette(rail.pictures)

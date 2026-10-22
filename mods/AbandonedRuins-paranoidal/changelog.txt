@@ -1,0 +1,26 @@
+---------------------------------------------------------------------------------------------------
+Version: 1.0.1
+Date: 2026-10-14
+  Features:
+    - Remote function "signal_ruin" for Ore Radar: marks a random undiscovered ruin with a "?" map
+      tag for the force. The tag disappears when a player discovers the ruin.
+  Bugfixes:
+    - Clearing a surface drops its undiscovered ruins from the journal.
+  Changes:
+    - Stonehenge: the inner ring is made of huge rocks (stone and coal) instead of RampantFixed loot stones;
+      the combat power-up capsule they held was removed from RampantFixed.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 2026-10-11
+  Features:
+    - Ruin set "paranoidal": 170 new ruins (87 small, 57 medium, 26 large) plus all ruins of the
+      "base" set when AbandonedRuins-base is enabled. It is the default and the only ruin set
+      offered besides "none"; a stored "base" value falls back to "paranoidal".
+    - 1.1 rails of "base" ruins (curved-rail, diagonal straight-rail) are rebuilt with 2.0 legacy
+      rails, so railSection3, railSection4 and eFurnaceRail spawn completely.
+    - Defect-quality junk and normal-quality starter kits for the Paranoidal defect system.
+    - Dangerous ruins (turrets, worms, mines, flamethrowers). Their distance limits apply only
+      when the core setting "Disable distance dependence of ruins" is turned off.
+    - Discovery journal: first-time finds are announced, map markers, /ruins shows progress.
+    - Oil traps "pd-flo-trap-pumping-station" and "pd-flo-trap-tank-farm" for Flammable Oils: a pipeline
+      starts burning when a player comes close and the fire reaches the storage tanks.

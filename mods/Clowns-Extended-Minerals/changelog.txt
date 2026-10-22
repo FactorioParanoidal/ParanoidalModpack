@@ -1,0 +1,274 @@
+---------------------------------------------------------------------------------------------------
+Version: 2.0.15
+Date: 2026-05-02
+  Bugfixes:
+    - Fixed missing productivity from Pure ore sorting
+    - Moved pure sorting icons from after uranium to after platinum
+---------------------------------------------------------------------------------------------------
+Version: 2.0.14
+Date: 2026-02-07
+  Bugfixes:
+    - Fixed Omnicrystal crash
+---------------------------------------------------------------------------------------------------
+Version: 2.0.13
+Date: 2026-02-04
+  Bugfixes:
+    - Tech Tree & Recipe Fixes
+---------------------------------------------------------------------------------------------------
+Version: 2.0.12
+Date: 2026-01-18
+  Bugfixes:
+    - A few challenges with ores 
+---------------------------------------------------------------------------------------------------
+Version: 2.0.11
+Date: 2026-01-11
+  Bugfixes:
+    - Fixed issue with icons missing sizes causing start-up crashes
+---------------------------------------------------------------------------------------------------
+Version: 2.0.02
+Date: 2026-01-10
+  Bugfixes:
+    - update to work with omnicrystal
+    - fixed icon size bug with manganese
+---------------------------------------------------------------------------------------------------
+Version: 2.0.01
+Date: 2026-01-10
+  Features:
+    - now works with 2.0
+---------------------------------------------------------------------------------------------------
+Version: 1.1.26
+Date: 2023-10-11
+  Bugfixes:
+    - Fixed missing productivity in blended ore recipes (stannic, plumbic etc)
+---------------------------------------------------------------------------------------------------
+Version: 1.1.25
+Date: 2023-04-16
+  Changes:
+    - Swapped Cobalt and Silver pure sorting tiers (slight tweak to recipes) to match angels
+    - Fixed an incorrect ore result amounts
+---------------------------------------------------------------------------------------------------
+Version: 1.1.24
+Date: 2021-08-10
+  Bugfixes:
+    - Small tweaks and optimisations
+---------------------------------------------------------------------------------------------------
+Version: 1.1.23
+Date: 2021-05-29
+  Bugfixes:
+    - Updated crafting categories to match angels new ones
+---------------------------------------------------------------------------------------------------
+Version: 1.1.22
+Date: 2021-05-26
+  Changes:
+    - Updated for angels release 1.0.1 (1.1 version 2)
+    - Small tweaks from previous version
+---------------------------------------------------------------------------------------------------
+Version: 1.1.21
+Date: 2021-01-22
+  Changes:
+    - Updated for 1.1.7
+    - Hide infinite ore settings if angelsinfiniteores is not active
+    - Disable/remove clowns-resource4 (found as a barrel) as that was not implemented.
+    - Patched to work with latest Omnimatter function lib
+---------------------------------------------------------------------------------------------------
+Version: 1.1.20
+Date: 2020-11-24
+  Changes:
+    - Updated for 1.1
+    - Small tweaks from previous version
+---------------------------------------------------------------------------------------------------
+Version: 1.1.19
+Date: 2020-11-19
+  Changes:
+    - Patched that the signal for platinum was hidden when it was required
+    - Another pass at fixing the localisation of ore processing
+---------------------------------------------------------------------------------------------------
+Version: 1.1.18
+Date: 2020-08-19
+  Bugfixes:
+    - Fixed Omnicrystal errors
+    - Fixes for pyanodon compatibility
+    - Fixed lithium chloride being handled incorrectly
+---------------------------------------------------------------------------------------------------
+Version: 1.1.17
+Date: 2020-06-29
+  Bugfixes:
+    - Fixed old style sorting recipes trying to work when not intended 
+    - Fixed broken function breaking fluorite activation system with petrochem
+---------------------------------------------------------------------------------------------------
+Version: 1.1.15
+  Bugfixes:
+    - Special vanilla with omnicrystal not working
+    - omnicrystal failing when analysing inactive recipes
+    - Patched bug with infinite resource mining
+---------------------------------------------------------------------------------------------------
+Version: 1.1.14
+  Features:
+    - Removed dependancy on bobs mods
+    - Added 2 new ores (Meta-Garnierite, Nova-Leucoxene)
+    - Added a new mixed sorting tier for a slightly higher yield of products (exacerbated by prod)
+    - Added 5 blended ores (Stannic, Plumbic, Manganic, Titanic, Phosphic)
+    - Added support to work with Angels Special-vanilla setting
+    - Prepared changes to integrate clowns resources into angels generation code (waiting for the angels update to come through)
+    - Added preliminary support for Pyanodons ores, some feedback on balance/usefulness would be good (i have not played Py too much)
+  Bugfixes:
+    - Removed duplicatated recipes from angels
+      - not deleted them yet, just hidden them to prevent base breakage
+    - Fixed infinite ores overriding reglar ores if enabled
+---------------------------------------------------------------------------------------------------
+Version: 1.1.13
+  Features:
+    - Prepared for updates to angels industries
+  Bugfixes:
+    - Fixed that I was setting require behind mod checks potentially causing CRC fails in multiplayer
+---------------------------------------------------------------------------------------------------
+Version: 1.1.12
+  Features:
+    - Integrated the omnicrystal setting to use angels sorting machines
+  Bugfixes:
+    - Removed log spam
+---------------------------------------------------------------------------------------------------
+Version: 1.1.11
+  Features:
+    - More functional updates in preparation for omnimatter updates
+    - Code clean-ups
+---------------------------------------------------------------------------------------------------
+Version: 1.1.10
+  Features:
+    - Updated omnicrystal scripts (in preparation for omnimatter updates)
+---------------------------------------------------------------------------------------------------
+Version: 1.1.9
+  Features:
+    - Updated ore generation script to use angels auto-place functions where possible
+      - basic ores and infinite ores are now functional, resources use custom sprites,
+        so i will need to rebuild those at a later stage if needed.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.8
+  Features:
+    - Updated to 0.18
+    - Integrated the compatibility patch with omnicrystal by Kremnari (last updated in 0.16)
+---------------------------------------------------------------------------------------------------
+Version: 1.1.7
+  Bugfixes:
+    - Fixed a small oversight with the last update with relation to infinite ores requiring acid under the wrong conditions
+---------------------------------------------------------------------------------------------------
+Version: 1.1.6
+  Bugfixes:
+    - Actually fix that acid was not being added to chunk processing recipes without angels infinite ores
+---------------------------------------------------------------------------------------------------
+Version: 1.1.5
+  Bugfixes:
+    - Stopped Thorium ore from spawning
+    - Added incompatability with the thorium patch mod (not needed with this mod)
+  Features:
+    - Fixed Changelog
+    - Added Thumbnail
+---------------------------------------------------------------------------------------------------
+Version: 1.1.4
+  Bugfixes:
+    - Patched mining with acids error
+    - Various minor changes
+---------------------------------------------------------------------------------------------------
+Version: 1.1.3
+  Features:
+    - Updated for 0.17
+---------------------------------------------------------------------------------------------------
+Version: 1.1.2
+  Bugfixes:
+    - Fixed a typo causing eliongate pure processing to be ridiculously demanding
+---------------------------------------------------------------------------------------------------
+Version: 1.1.1
+  Bugfixes:
+    - Fixed several large bugs preventing oil sand liquification, acid refining etc
+  Features:
+    - Added steam requirement to oil sand liquification
+---------------------------------------------------------------------------------------------------
+Version: 1.1.0
+  Bugfixes:
+    - Fixed a bug preventing Sapharite from properly spawning when RSO was off
+---------------------------------------------------------------------------------------------------
+Version: 1.0.10
+  Bugfix:
+    - Fixed an annoying bug that made my sorting recipes faster than Angel's
+---------------------------------------------------------------------------------------------------
+Version: 1.0.9
+  Features:
+    - Added German locale, thanks to Steino
+---------------------------------------------------------------------------------------------------
+Version: 1.0.8
+  Features:
+    - Omni support! Thanks to Derpurai Jack.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.7
+  Bugfixes:
+    - who knows?
+---------------------------------------------------------------------------------------------------
+Version: 1.0.6
+  Features:
+    - Added support for productivity effects.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.5
+  Bugfixes:
+    - Fixed bugs
+---------------------------------------------------------------------------------------------------
+Version: 1.0.4
+  Features:
+    - Added entity descriptions
+---------------------------------------------------------------------------------------------------
+Version: 1.0.3
+  Features:
+    - Added settings to toggle individual infinite ores
+---------------------------------------------------------------------------------------------------
+Version: 1.0.2
+  Bugfixes:
+    - Replaced a adamantite pure processing result - tungsten ore to osmium ore
+---------------------------------------------------------------------------------------------------
+Version: 1.0.1
+  Bugfixes:
+    - Fixed minor bug
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+  Features:
+    - Added hr ore sheets
+  Bugfix:
+    - Code brought into line with other MadClown01 mods
+---------------------------------------------------------------------------------------------------
+Version: 0.1.7
+  Bugfixes:
+    - Fixed bug with Angel's Infinite Ores settings
+---------------------------------------------------------------------------------------------------
+Version: 0.1.6
+  Bugfixes:
+    - Updated dependencies
+  Features:
+    - Added support to Angel's fluids settings
+    - Removed obsolete auto-place controls from RSO games
+    - Fixed graphics
+---------------------------------------------------------------------------------------------------
+Version: 0.1.5
+  Bugfixes:
+    - Fixed infinite resource mining fluids, graphics
+---------------------------------------------------------------------------------------------------
+Version: 0.1.4
+  Features:
+    - Implemented infinite resources
+---------------------------------------------------------------------------------------------------
+Version: 0.1.3
+  Features:
+    - Implemented infinite ores (updated dependencies appropriately) and added Omni support
+---------------------------------------------------------------------------------------------------
+Version: 0.1.2
+  Features:
+    - Rebalanced alluvium sluicing
+---------------------------------------------------------------------------------------------------
+Version: 0.1.1
+  Bugfixes:
+    - Updated dependencies
+    - Updated phosphorite icons
+  Features:
+    - Added alluvial deposits & alluvium sluicing
+    - Added oil sands & oil sand liquification
+---------------------------------------------------------------------------------------------------
+Version: 0.1.0
+  Features:
+    - Initial release

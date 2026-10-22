@@ -13,10 +13,10 @@ data:extend(
     name = "bi-seed",
     icons = { {icon = ICONPATH .. "bio_seed.png", icon_size = 64, }},
     pictures = {
-      { size = 64, filename = ICONPATHMIPS.."bio_seed_1.png", scale = 0.48, mipmap_count = 4 },
-      { size = 64, filename = ICONPATHMIPS.."bio_seed_2.png", scale = 0.46, mipmap_count = 4 },
-      { size = 64, filename = ICONPATHMIPS.."bio_seed_3.png", scale = 0.45, mipmap_count = 4 },
-      { size = 64, filename = ICONPATHMIPS.."bio_seed_4.png", scale = 0.43, mipmap_count = 4 }
+      { size = 64, filename = ICONPATHMIPS.."bio_seed_1.png", scale = 0.48 },
+      { size = 64, filename = ICONPATHMIPS.."bio_seed_2.png", scale = 0.46 },
+      { size = 64, filename = ICONPATHMIPS.."bio_seed_3.png", scale = 0.45 },
+      { size = 64, filename = ICONPATHMIPS.."bio_seed_4.png", scale = 0.43 }
     },
     category = "biofarm-mod-greenhouse",
     subgroup = "bio-bio-farm",
@@ -35,15 +35,15 @@ data:extend(
     localised_description = {"entity-description.seedling"},
 	icons = { {icon = ICONPATH .. "Seedling.png", icon_size = 64, }},
     pictures = {
-      { size = 64, filename = ICONPATHMIPS.."seedling_1.png", scale = 0.57, mipmap_count = 9 },
-      { size = 64, filename = ICONPATHMIPS.."seedling_2.png", scale = 0.52, mipmap_count = 9 },
-      { size = 64, filename = ICONPATHMIPS.."seedling_3.png", scale = 0.47, mipmap_count = 9 },
-      { size = 64, filename = ICONPATHMIPS.."seedling_4.png", scale = 0.52, mipmap_count = 9 },
-      { size = 64, filename = ICONPATHMIPS.."seedling_5.png", scale = 0.62, mipmap_count = 9 },
-      { size = 64, filename = ICONPATHMIPS.."seedling_6.png", scale = 0.52, mipmap_count = 9 },
-      { size = 64, filename = ICONPATHMIPS.."seedling_7.png", scale = 0.72, mipmap_count = 9 },
-      { size = 64, filename = ICONPATHMIPS.."seedling_8.png", scale = 0.52, mipmap_count = 9 },
-      { size = 64, filename = ICONPATHMIPS.."seedling_9.png", scale = 0.47, mipmap_count = 9 }
+      { size = 64, filename = ICONPATHMIPS.."seedling_1.png", scale = 0.57 },
+      { size = 64, filename = ICONPATHMIPS.."seedling_2.png", scale = 0.52 },
+      { size = 64, filename = ICONPATHMIPS.."seedling_3.png", scale = 0.47 },
+      { size = 64, filename = ICONPATHMIPS.."seedling_4.png", scale = 0.52 },
+      { size = 64, filename = ICONPATHMIPS.."seedling_5.png", scale = 0.62 },
+      { size = 64, filename = ICONPATHMIPS.."seedling_6.png", scale = 0.52 },
+      { size = 64, filename = ICONPATHMIPS.."seedling_7.png", scale = 0.72 },
+      { size = 64, filename = ICONPATHMIPS.."seedling_8.png", scale = 0.52 },
+      { size = 64, filename = ICONPATHMIPS.."seedling_9.png", scale = 0.47 }
     },
     subgroup = "bio-bio-farm",
     order = "x[bi]-b[bi-seedling]",
@@ -114,10 +114,10 @@ data:extend(
     name = "bi-woodpulp",
 	icons = { {icon = ICONPATH .. "woodpulp_64.png", icon_size = 64, }},
     pictures = {
-      { size = 64, filename = ICONPATHMIPS.."woodpulp_1.png", scale = 0.55, mipmap_count = 4 },
-      { size = 64, filename = ICONPATHMIPS.."woodpulp_2.png", scale = 0.53, mipmap_count = 4 },
-      { size = 64, filename = ICONPATHMIPS.."woodpulp_3.png", scale = 0.51, mipmap_count = 4 },
-      { size = 64, filename = ICONPATHMIPS.."woodpulp_4.png", scale = 0.49, mipmap_count = 4 }
+      { size = 64, filename = ICONPATHMIPS.."woodpulp_1.png", scale = 0.55 },
+      { size = 64, filename = ICONPATHMIPS.."woodpulp_2.png", scale = 0.53 },
+      { size = 64, filename = ICONPATHMIPS.."woodpulp_3.png", scale = 0.51 },
+      { size = 64, filename = ICONPATHMIPS.."woodpulp_4.png", scale = 0.49 }
     },
     fuel_value = "1MJ",
     fuel_category = "chemical",
@@ -147,10 +147,10 @@ data:extend(
     name = "bi-ash",
 	icons = { {icon = ICONPATH .. "ash.png", icon_size = 64, }},
     pictures = {
-      { size = 64, filename = ICONPATHMIPS.."ash_1.png", scale = 0.42, mipmap_count = 4 },
-      { size = 64, filename = ICONPATHMIPS.."ash_2.png", scale = 0.42, mipmap_count = 4 },
-      { size = 64, filename = ICONPATHMIPS.."ash_3.png", scale = 0.42, mipmap_count = 4 },
-      { size = 64, filename = ICONPATHMIPS.."ash_4.png", scale = 0.42, mipmap_count = 4 }
+      { size = 64, filename = ICONPATHMIPS.."ash_1.png", scale = 0.42 },
+      { size = 64, filename = ICONPATHMIPS.."ash_2.png", scale = 0.42 },
+      { size = 64, filename = ICONPATHMIPS.."ash_3.png", scale = 0.42 },
+      { size = 64, filename = ICONPATHMIPS.."ash_4.png", scale = 0.42 }
     },
     subgroup = "raw-material",
     order = "a[bi]-a-b[bi-ash]",
@@ -164,10 +164,10 @@ data:extend(
     name = "wood-charcoal",
 	icons = { {icon = ICONPATH .. "charcoal.png", icon_size = 64, }},
     pictures = {
-      { size = 64, filename = ICONPATHMIPS.."charcoal_1.png", scale = 0.49, mipmap_count = 4 },
-      { size = 64, filename = ICONPATHMIPS.."charcoal_2.png", scale = 0.5, mipmap_count = 4 },
-      { size = 64, filename = ICONPATHMIPS.."charcoal_3.png", scale = 0.5, mipmap_count = 4 },
-      { size = 64, filename = ICONPATHMIPS.."charcoal_4.png", scale = 0.51, mipmap_count = 4 }
+      { size = 64, filename = ICONPATHMIPS.."charcoal_1.png", scale = 0.49 },
+      { size = 64, filename = ICONPATHMIPS.."charcoal_2.png", scale = 0.5 },
+      { size = 64, filename = ICONPATHMIPS.."charcoal_3.png", scale = 0.5 },
+      { size = 64, filename = ICONPATHMIPS.."charcoal_4.png", scale = 0.51 }
     },
     fuel_value = "6MJ",
     fuel_category = "chemical",
@@ -199,10 +199,10 @@ data:extend(
     name = "stone-crushed",
 	icons = { {icon = ICONPATH .. "crushed-stone.png", icon_size = 64, }},
     pictures = {
-      { size = 64, filename = ICONPATHMIPS.."crush_1.png", scale = 0.44, mipmap_count = 4 },
-      { size = 64, filename = ICONPATHMIPS.."crush_2.png", scale = 0.45, mipmap_count = 4 },
-      { size = 64, filename = ICONPATHMIPS.."crush_3.png", scale = 0.45, mipmap_count = 4 },
-      { size = 64, filename = ICONPATHMIPS.."crush_4.png", scale = 0.46, mipmap_count = 4 }
+      { size = 64, filename = ICONPATHMIPS.."crush_1.png", scale = 0.44 },
+      { size = 64, filename = ICONPATHMIPS.."crush_2.png", scale = 0.45 },
+      { size = 64, filename = ICONPATHMIPS.."crush_3.png", scale = 0.45 },
+      { size = 64, filename = ICONPATHMIPS.."crush_4.png", scale = 0.46 }
     },
     subgroup = "raw-material",
     order = "a[bi]-a-z[stone-crushed]",

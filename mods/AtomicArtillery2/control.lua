@@ -29,4 +29,13 @@ function on_entity_died(event)
         end
     end
 end
-script.on_event(defines.events.on_entity_died, on_entity_died)
+-- Only the structures artillery shoots at (nests, worms, turrets): without a filter the handler ran for every
+-- death on the map, including each biter killed by the defences, trees and buildings.
+script.on_event(defines.events.on_entity_died, on_entity_died, {
+    { filter = "type", type = "unit-spawner" },
+    { filter = "type", type = "turret" },
+    { filter = "type", type = "ammo-turret" },
+    { filter = "type", type = "electric-turret" },
+    { filter = "type", type = "fluid-turret" },
+    { filter = "type", type = "artillery-turret" },
+})

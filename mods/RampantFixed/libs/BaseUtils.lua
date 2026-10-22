@@ -9,6 +9,7 @@ local mathUtils = require("MathUtils")
 local constants = require("Constants")
 local chunkPropertyUtils = require("ChunkPropertyUtils")
 local mapUtils = require("MapUtils")
+local aiBrain = require("AIBrain")
 
 -- constants
 
@@ -77,13 +78,15 @@ local mRandom = math.random
 
 -- module code
 local tierEnd = settings.startup["rampantFixed--tierEnd"].value
+-- Paranoidal: no tier growth with the game time (the evolution and the distance from the map centre stay)
+local tierByEvolutionOnly = settings.startup["rampantFixed--tierByEvolutionOnly"].value
 local ticksPerTier = mFloor(3600*60*1.3 * (1.6 ^ mMax(0, (tierEnd - 5))))
 local function evoToTierNorandom(universe, evolutionFactor, gameTick)
     if not universe.NEW_ENEMIES then
 		return 0
 	end
 	local tierByTime = 0
-	if gameTick then
+	if gameTick and not tierByEvolutionOnly then
 		tierByTime = 0 + mMin(math.floor(gameTick / ticksPerTier), 3)		
 	end
     local tier = 0
@@ -133,8 +136,9 @@ function baseUtils.findNearbyBase(map, chunk, maxDistance, baseChangingChance)
 		else
 			local bases = map.universe.bases
 			local basesScanned = 0
+			local mapIndex = map.surface.index
 			for i, base in pairs(bases) do
-				if base.mapIndex == map.surface.index then
+				if base.mapIndex == mapIndex then
 					basesScanned = basesScanned + 1
 					local distance = euclideanDistancePoints(base.x, base.y, x, y)
 					if (distance <= base.distanceThreshold) and (distance < closest) then
@@ -498,7 +502,7 @@ function baseUtils.recycleBases(universe)
     local bases = universe.bases
 	local id = universe.recycleBaseIterator
     if not id then
-        id, base = next(bases, nil)
+        id = next(bases, nil)
     end
     if not id then
         universe.recycleBaseIterator = nil
@@ -516,7 +520,7 @@ function baseUtils.recycleBases(universe)
 				return
 			end	
 			for chunk, _ in pairs(base.chunks) do
-				chunkBase = getChunkBase(map, chunk)
+				local chunkBase = getChunkBase(map, chunk)
 				if (not chunkBase) then
 					setChunkBase(map, chunk, base)
 					--game.print("restore lost chunk [gps=" .. chunk.x .. "," .. chunk.y .."] to base [gps=" .. base.x .. "," .. base.y .."]")	-- debug
@@ -709,7 +713,8 @@ function baseUtils.changeEntityLvl(entity, lvl, map)
 end
 
 
-function baseUtils.changeEntityAligment(entity, newAlignments, map, allowTierChanging)
+-- keepUnits (Paranoidal): the units of a replaced spawner are left alive
+function baseUtils.changeEntityAligment(entity, newAlignments, map, allowTierChanging, keepUnits)
 	if not entity.valid then
 		return nil	
 	end
@@ -749,7 +754,9 @@ function baseUtils.changeEntityAligment(entity, newAlignments, map, allowTierCha
 
 		local NewEntity = surface.create_entity(query)  
 		if NewEntity then
-			deleteAssociatedUnits(entity)
+			if not keepUnits then
+				deleteAssociatedUnits(entity)
+			end
 			entity.destroy()
 			return NewEntity		
 		end	
@@ -825,7 +832,7 @@ local function upgradeBase(map, base, upgradeType)
 			
 			if (oldAlignment[factions[roll]] - RateStep) < 0.005 then	-- if rate too low, then do nothing or change faction
 				if upgradeType == 1 then
-					newFaction = findBaseMutation(map, nil, baseTier, base.geneRandomizer)
+					local newFaction = findBaseMutation(map, nil, baseTier, base.geneRandomizer)
 					if not oldAlignment[newFaction] then
 						oldAlignment[newFaction] = oldAlignment[factions[roll]]
 						oldAlignment[factions[roll]] = nil
@@ -840,7 +847,8 @@ local function upgradeBase(map, base, upgradeType)
 			end				 
 		end
 	elseif upgradeType == 2 then
-		local newFaction = findBaseMutation(map, nil, baseTier, base.geneRandomizer)
+		-- new behaviour: often a faction that resists the damage killing these nests
+		local newFaction = aiBrain.mutationBias(map, base, baseTier) or findBaseMutation(map, nil, baseTier, base.geneRandomizer)
 		if not oldAlignment[newFaction] then
 			local oldFaction
 			local newAlignmentAndSteps = {10, {}}
@@ -869,7 +877,22 @@ local function upgradeBase(map, base, upgradeType)
 			factionTotal = factionTotal + 1
 			factionRates[factionTotal] = rate
 		end
-		base.newAlignmentAndSteps = {30, findBaseMutations(map, nil, baseTier, factionTotal, factionRates, base.geneRandomizer)}
+		local mutations = findBaseMutations(map, nil, baseTier, factionTotal, factionRates, base.geneRandomizer)
+		-- new behaviour: the adapted faction takes the weakest slot
+		local adapted = aiBrain.mutationBias(map, base, baseTier)
+		if adapted and not mutations[adapted] then
+			local weakest
+			for faction, rate in pairs(mutations) do
+				if (not weakest) or (rate < mutations[weakest]) then
+					weakest = faction
+				end
+			end
+			if weakest then
+				mutations[adapted] = mutations[weakest]
+				mutations[weakest] = nil
+			end
+		end
+		base.newAlignmentAndSteps = {30, mutations}
 		result = true
 	elseif upgradeType == 4 then
 		local newAlignmentAndSteps = {30, {}}
@@ -1078,7 +1101,7 @@ local function updateBaseStats(base)
 	-- base.factionsTotal = {totalCount, factionsTotal}
 	
 	updateBaseFactionsTotal(base)
-	dynamicRates = baseUtils.getDynamicRates(base)	-- => {totalRate=N, totalDynamicRate=N, changesCnt=N, obsoleteCnt=N, dynamicRatesTable=Table)
+	local dynamicRates = baseUtils.getDynamicRates(base)	-- => {totalRate=N, totalDynamicRate=N, changesCnt=N, obsoleteCnt=N, dynamicRatesTable=Table)
 			
 	base.changingEntities = false
 	-- if dynamicRates.obsoleteCnt > 0 then
@@ -1545,6 +1568,81 @@ function baseUtils.setRandomBaseToMutate(universe)
 	end
 	local base = universe.bases[basesId[mRandom(1, #basesId)]]
 	base.state = BASE_AI_STATE_MUTATE
+end
+
+-- Paranoidal: with "rampantFixed--tierByEvolutionOnly" a base above the tier it would get now without the game time
+-- (by the evolution of its surface and its distance from the map centre) is brought down to it: factions not allowed at
+-- that tier leave its alignment (pending alignment changes are dropped) and its nests, hives and worms of such factions
+-- are replaced at once by allowed ones of the same building level. Living units stay. Bases at or below that tier are
+-- not touched, so running it again changes nothing. Called on configuration change after rebuildNativeTables.
+function baseUtils.lowerTiersToEvolution(universe)
+	if not (tierByEvolutionOnly and universe.NEW_ENEMIES and universe.bases and universe.maps
+		and universe.evoToTierMapping and universe.evolutionTableAlignment) then
+		return
+	end
+	local enemyAlignmentLookup = universe.enemyAlignmentLookup
+	local area = {{0, 0}, {0, 0}}
+	local query = {area = area, force = "enemy", type = {"unit-spawner", "turret"}}
+	local lowered = 0
+	local replaced = 0
+	for _, base in pairs(universe.bases) do
+		local map = universe.maps[base.mapIndex]
+		if map and map.surface.valid and base.thisIsRampantEnemy and base.alignment and base.tier then
+			local surface = map.surface
+			local distanceIndex = mMin(1, euclideanDistancePoints(base.x, base.y, 0, 0) * BASE_DISTANCE_TO_EVO_INDEX)
+			local evo = game.forces.enemy.get_evolution_factor(surface)
+			local target = evoToTierNorandom(universe, mMax(distanceIndex, evo))
+			if base.tier > target then
+				base.tier = target
+				lowered = lowered + 1
+				local allowed = {}
+				for _, alignment in pairs(universe.evolutionTableAlignment[target] or {}) do
+					allowed[alignment[2]] = true
+				end
+				local count = 0
+				local rates = {}
+				local disallowed = false
+				for faction, rate in pairs(base.alignment) do
+					count = count + 1
+					rates[count] = rate
+					if not allowed[faction] then
+						disallowed = true
+					end
+				end
+				if disallowed then
+					local alignment = findBaseMutations(map, nil, target, count, rates, base.geneRandomizer)
+					if next(alignment) == nil then
+						alignment = {neutral = 1}
+					end
+					base.alignment = alignment
+				end
+				base.newAlignmentAndSteps = nil
+				base.changingEntities = false
+				if base.state == BASE_AI_STATE_MUTATE then
+					base.state = BASE_AI_STATE_ACTIVE
+				end
+				for chunk in pairs(base.chunks) do
+					area[1][1] = chunk.x
+					area[1][2] = chunk.y
+					area[2][1] = chunk.x + CHUNK_SIZE
+					area[2][2] = chunk.y + CHUNK_SIZE
+					local entities = surface.find_entities_filtered(query)
+					for i = 1, #entities do
+						local entity = entities[i]
+						local faction = entity.valid and enemyAlignmentLookup[entity.name]
+						if faction and not allowed[faction] then
+							if baseUtils.changeEntityAligment(entity, base.alignment, map, false, true) then
+								replaced = replaced + 1
+							end
+						end
+					end
+				end
+			end
+		end
+	end
+	if lowered > 0 then
+		log("RampantFixed: tiers by evolution only: bases lowered " .. lowered .. ", structures replaced " .. replaced)
+	end
 end
 
 -- + !КДА 2021.10 debug

@@ -1,15 +1,13 @@
--- Repair Turret (Klonan): переопределение рецепта.
-if not mods["Repair_Turret"] then return end
+-- Защитная башня (defence-tower-reforged, бывшая ремонтная турель Repair Turret): рецепт сборки.
+if not mods["defence-tower-reforged"] then return end
 
 local recipe = data.raw.recipe["repair-turret"]
 if recipe then
   recipe.ingredients = {
-    { type = "item", name = "basic-structure-components", amount = 1 },
-    { type = "item", name = "engine-unit",        amount = 4 },
-    { type = "item", name = "steel-plate",        amount = 20 },
-    { type = "item", name = "electronic-circuit", amount = 20 },
-    { type = "item", name = "iron-gear-wheel",    amount = 20 },
-    { type = "item", name = "repair-pack",        amount = 5 },
+    { type = "item", name = "bob-basic-circuit-board", amount = 25 },
+    { type = "item", name = "iron-gear-wheel",         amount = 100 },
+    { type = "item", name = "electric-motor",          amount = 15 },
+    { type = "item", name = "stone-brick",             amount = 100 },
   }
   recipe.energy_required = 30
 end

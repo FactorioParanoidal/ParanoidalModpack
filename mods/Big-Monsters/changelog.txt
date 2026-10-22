@@ -1,8 +1,31 @@
 ---------------------------------------------------------------------------------------------------
 Version: 2.1.2
   Changes:
+    - Paranoidal fork: swarms and rocket silo attacks are made of RampantFixed squads when it manages the surface (mferrari_lib CallFrenzyAttack); events are held during the RampantFixed truce
+    - Paranoidal fork: bosses, spidertrons and flying saucers spawn with full health (from 0.9 evolution it was cut to a fifth plus a share per player, a third for one player, while the weaker bosses kept all of it)
+    - Paranoidal fork: events are tried from the most dangerous one (was the order of the keys of a table)
+    - Paranoidal fork: the mother biterzilla broods units of a nest near her (vanilla biters if there is none)
+    - Paranoidal fork: spidertrons and flying saucers keep their target until it is gone (was a 1500 tile search every 18 seconds); the search for the event spawn walks at most 600 chunks
     - New biterzilla threat: the cyborg strafer (space-age required)
     - New volcano graphics
+    - Paranoidal fork: events are skipped on peaceful surfaces and on maps without enemy bases unless "bm-events-when-peaceful" is enabled; queued invasion spawns stop there too
+    - Paranoidal fork: silo attacks respect the registered surfaces and player forces
+    - Paranoidal fork: the planet evolution bonus applies only to the allowed extra planets, not to Nauvis
+    - Paranoidal fork: spidertron, demolisher and ultimate boss events have their own alert messages
+    - Paranoidal fork: Russian locale for the peaceful setting and the new alert messages
+  Bugfixes:
+    - Paranoidal fork: fixed a crash when changing the per-player camera settings (wrong setting names were read)
+    - Paranoidal fork: fixed event targets placed at the end of the search line instead of player chunks; only consecutive empty chunks count towards the enemy spawn distance
+    - Paranoidal fork: fixed possible crashes when no free position is found for a boss, soldier group or abduction boss
+    - Paranoidal fork: fixed the boss soldier list using the regular flamethrower soldier
+    - Paranoidal fork: fixed an undefined variable in the biterzilla selection
+    - Paranoidal fork: fixed level 1-2 mother biterzillas using fire/electric effects instead of brooding
+    - Paranoidal fork: fixed settings-updates looking up int/bool settings as double settings
+  Optimizations:
+    - Paranoidal fork: on_entity_died is filtered to bm-volcano
+    - Paranoidal fork: the boss kind is resolved once instead of string searches every second
+    - Paranoidal fork: brood limits use count_entities_filtered with a limit
+    - Paranoidal fork: invalid entities are pruned from the tracked enemy list; unused gleba invasion queue is cleared
 ---------------------------------------------------------------------------------------------------
 Version: 2.1.1
   Bugfixes:

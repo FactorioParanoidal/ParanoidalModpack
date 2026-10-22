@@ -182,6 +182,13 @@ function refresh_gui_for_force(force)
     for _, player in pairs(force.players) do
         refresh_gui_for_player(player)
     end
+    -- Paranoidal: players in this force's Blueprint Sandboxes force display this force's milestones.
+    local sandbox_force = get_sandbox_force(force)
+    if sandbox_force then
+        for _, player in pairs(sandbox_force.players) do
+            refresh_gui_for_player(player)
+        end
+    end
 end
 
 local function toggle_pinned(player, element)

@@ -261,6 +261,8 @@ paralib.bobmods.lib.recipe.set_ingredients("gun-turret", {
 data.raw.recipe["gun-turret"].energy_required = 10
 
 data.raw.recipe["landfill"].energy_required = 2
+-- Решение пользователя 2026-10-12: отсыпка дешевле — 20 камня вместо 50.
+data.raw.recipe["landfill"].ingredients = { { type = "item", name = "stone", amount = 20 } }
 
 
 -- Production / machines

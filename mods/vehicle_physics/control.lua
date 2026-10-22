@@ -24,6 +24,18 @@ function is_flycar(entity_name)
 	return storage.is_flycar[entity_name]
 end
 
+-- Friction per tile prototype name: constant for the session, read from the prototype once.
+local friction_cache = {}
+local function tile_friction(tile)
+	local name = tile.name
+	local friction = friction_cache[name]
+	if friction == nil then
+		friction = tile.prototype.vehicle_friction_modifier
+		friction_cache[name] = friction
+	end
+	return friction
+end
+
 function projection ( orientation, distance, position)
 if not position then position = {x=0,y=0} end
 local temp_x = math.sin((orientation+0)*2*math.pi)*distance
@@ -77,7 +89,7 @@ function make_tire_marks(surface,position,speed,unit_number)
 	--if tilename:find("sand") or tilename:find("desert") or tilename:find("dirt") or tilename:find("grass") then
 	--	return
 	--end
-	if tile.prototype.vehicle_friction_modifier >0.9 then
+	if tile_friction(tile) >0.9 then
 		return
 	end
 	surface.create_entity{name = "drifting-tire-marks", position = position}
@@ -142,8 +154,6 @@ script.on_event(defines.events.on_tick, function(event)
 				tbl.idle_ticks = 0
 			end
 			if tbl.idle_ticks < 50 then
-				local surroundings = #tbl.entity.surface.find_entities_filtered {area = {{pos.x-1,pos.y-1},{pos.x+1,pos.y+1}}}
-			--if speed ~=0 or surroundings == 1 then
 				local movement_x = pos.x-tbl.position.x
 				local movement_y = pos.y-tbl.position.y
 				local drift_x = pos.x-tbl.position.x
@@ -170,10 +180,11 @@ script.on_event(defines.events.on_tick, function(event)
 				local concrete_tiles = 0
 				local required_drift = 0.001
 				local make_no_tire_marks = false
-				if not flycar then
+				-- A standing car needs no tile scan: the result only matters for braking/drift.
+				if not flycar and speed ~= 0 then
 					local tiles = tbl.entity.surface.find_tiles_filtered{position=tbl.entity.position, radius = 1.5}
 					for a,b in pairs(tiles) do
-						if b.prototype.vehicle_friction_modifier <=0.9 then
+						if tile_friction(b) <=0.9 then
 							concrete_tiles = concrete_tiles + 1
 						end						
 					end

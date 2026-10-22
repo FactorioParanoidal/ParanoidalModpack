@@ -166,6 +166,7 @@ local function floor_color() return {r = 130, g = 110, b = 100} end
 local function factory_1_wall_color() return {r = 190, g = 125, b = 80} end
 local function factory_2_wall_color() return {r = 80, g = 140, b = 200} end
 local function factory_3_wall_color() return {r = 190, g = 190, b = 80} end
+local function factory_4_wall_color() return {r = 80, g = 170, b = 80} end -- Paranoidal: factory building 4
 
 make_tile {
     name = "factory-entrance",
@@ -249,6 +250,29 @@ make_tile {
     pictures = pictures_factory_wall_tile(3),
     map_color = factory_3_wall_color(),
     frozen_tint = {1, 1, 0.7},
+    growable = true,
+    localised_name = {"tile-name.factory-floor"},
+}
+
+-- Factory 4 (Paranoidal): green like the stripe of the building; the tile picture is factory-wall-3 with the hue turned to green.
+
+make_tile {
+    name = "factory-wall-4",
+    collision_mask = edge_mask(),
+    layer = 70,
+    pictures = pictures_factory_wall_tile(4),
+    map_color = factory_4_wall_color(),
+    frozen_tint = {0.85, 1, 0.85},
+    localised_name = {"tile-name.factory-wall"},
+}
+
+make_tile {
+    name = "factory-pattern-4",
+    collision_mask = floor_mask(),
+    layer = 70,
+    pictures = pictures_factory_wall_tile(4),
+    map_color = factory_4_wall_color(),
+    frozen_tint = {0.85, 1, 0.85},
     growable = true,
     localised_name = {"tile-name.factory-floor"},
 }

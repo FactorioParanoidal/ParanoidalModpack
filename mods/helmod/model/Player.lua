@@ -489,9 +489,16 @@ end
 ---Is valid sprite path
 ---@param sprite_path string
 ---@return boolean
+---sprites are fixed for the session, the answer is memoized per path
+local valid_sprite_path_cache = {}
 function Player.is_valid_sprite_path(sprite_path)
     if Lua_player == nil then return false end
-    return helpers.is_valid_sprite_path(sprite_path)
+    local valid = valid_sprite_path_cache[sprite_path]
+    if valid == nil then
+        valid = helpers.is_valid_sprite_path(sprite_path)
+        valid_sprite_path_cache[sprite_path] = valid
+    end
+    return valid
 end
 
 -------------------------------------------------------------------------------
@@ -722,6 +729,8 @@ function Player.getPlayerTechnology(name)
     return nil
 end
 
+local active_mods_cache = nil
+
 -------------------------------------------------------------------------------
 ---Return rule
 ---@param rule_name string
@@ -729,8 +738,10 @@ end
 function Player.getRules(rule_name)
     local rules_included = {}
     local rules_excluded = {}
+    -- script.active_mods builds a new table on every read; the mod set is constant for the session
+    if active_mods_cache == nil then active_mods_cache = script.active_mods end
     for rule_id, rule in spairs(Model.getRules(), function(t, a, b) return t[b].index > t[a].index end) do
-        if script.active_mods[rule.mod] and rule.name == rule_name then
+        if active_mods_cache[rule.mod] and rule.name == rule_name then
             if rule.excluded then
                 if rules_excluded[rule.category] == nil then rules_excluded[rule.category] = {} end
                 if rules_excluded[rule.category][rule.type] == nil then rules_excluded[rule.category][rule.type] = {} end
@@ -1194,40 +1205,49 @@ end
 ---Excludes entities that are placed only by a hidden item
 ---@param entities table
 ---@return table
+---prototypes are fixed for the session, the item check is memoized per entity name
+local placed_by_visible_item_cache = {}
+
+---Return true if the entity has no item to place it or at least one visible item
+---@param entity LuaEntityPrototype
+---@return boolean
+local function isPlacedByVisibleItem(entity)
+    local entity_name = entity.name
+    local visible = placed_by_visible_item_cache[entity_name]
+    if visible ~= nil then return visible end
+
+    local item_filters = {}
+    for _, item in pairs(entity.items_to_place_this or {}) do
+        if type(item) == "string" then
+            table.insert(item_filters, { filter = "name", name = item, mode = "or" })
+        elseif item.name then
+            table.insert(item_filters, { filter = "name", name = item.name, mode = "or" })
+        end
+    end
+
+    if #item_filters == 0 then
+        -- Has no items to place it. Probably placed by script.
+        -- e.g. Numal reef from Py
+        visible = true
+    else
+        visible = false
+        for _, item in pairs(prototypes.get_item_filtered(item_filters)) do
+            if not item.hidden then
+                visible = true
+                break
+            end
+        end
+    end
+    placed_by_visible_item_cache[entity_name] = visible
+    return visible
+end
+
 function Player.ExcludePlacedByHidden(entities)
     local results = {}
     local rules_included, rules_excluded = Player.getRules("production-crafting")
     for entity_name, entity in pairs(entities) do
-        local item_filters = {}
-
-        for _, item in pairs(entity.items_to_place_this or {}) do
-            if type(item) == "string" then
-                table.insert(item_filters, { filter = "name", name = item, mode = "or" })
-            elseif item.name then
-                table.insert(item_filters, { filter = "name", name = item.name, mode = "or" })
-            end
-        end
-
-        local show = false
-
-        ---resolve rule excluded
-        show = Player.checkRules(show, rules_excluded, "exclude-placed-by-hidden", entity, true)
-
-        if #item_filters == 0 then
-            -- Has no items to place it. Probably placed by script.
-            -- e.g. Numal reef from Py
-            show = true
-        else
-            local items = prototypes.get_item_filtered(item_filters)
-            for _, item in pairs(items) do
-                if not item.hidden then
-                    show = true
-                    break
-                end
-            end
-        end
-
-        if show == true then
+        ---visible placing item or rule "exclude-placed-by-hidden" keeps the entity
+        if isPlacedByVisibleItem(entity) or Player.checkRules(false, rules_excluded, "exclude-placed-by-hidden", entity, true) == true then
             results[entity_name] = entity
         end
     end
@@ -1346,15 +1366,22 @@ end
 ---Return list of boilers
 ---@param fluid_name string
 ---@return table
+local boiler_entities_cache = nil
 function Player.getBoilers(fluid_name)
-    local filters = {}
-    table.insert(filters, { filter = "type", type = "boiler", mode = "or" })
-    table.insert(filters, { filter = "hidden", mode = "and", invert = true })
-    table.insert(filters, { filter = "type", type = "boiler", mode = "or" })
-    table.insert(filters, { filter = "flag", flag = "player-creation", mode = "and" })
-    local entities = prototypes.get_entity_filtered(filters)
+    ---the prototype query is fixed for the session, the rules are applied on every call
+    if boiler_entities_cache == nil then
+        local filters = {}
+        table.insert(filters, { filter = "type", type = "boiler", mode = "or" })
+        table.insert(filters, { filter = "hidden", mode = "and", invert = true })
+        table.insert(filters, { filter = "type", type = "boiler", mode = "or" })
+        table.insert(filters, { filter = "flag", flag = "player-creation", mode = "and" })
+        boiler_entities_cache = {}
+        for boiler_name, boiler in pairs(prototypes.get_entity_filtered(filters)) do
+            boiler_entities_cache[boiler_name] = boiler
+        end
+    end
 
-    entities = Player.ExcludePlacedByHidden(entities)
+    local entities = Player.ExcludePlacedByHidden(boiler_entities_cache)
 
     if fluid_name == nil then
         return entities
@@ -1373,42 +1400,60 @@ function Player.getBoilers(fluid_name)
     end
 end
 
+---boiler prototype data is fixed for the session, memoized per boiler name
+---{target_temperature, input_fluid, output_fluid}, fluids are resolved only when needed
+local boiler_data_cache = {}
+
+---@param boiler LuaEntityPrototype
+---@return table
+local function getBoilerData(boiler)
+    local boiler_name = boiler.name
+    local data = boiler_data_cache[boiler_name]
+    if data == nil then
+        data = { target_temperature = boiler.target_temperature }
+        boiler_data_cache[boiler_name] = data
+    end
+    return data
+end
+
+---@param boiler LuaEntityPrototype
+---@param data table
+local function resolveBoilerFluids(boiler, data)
+    if data.input_fluid == nil then
+        local fluidbox_prototypes = boiler.fluidbox_prototypes
+        local input_fluid = "water"
+        local fluidbox = fluidbox_prototypes[1]
+        if fluidbox.filter then
+            input_fluid = fluidbox.filter.name
+        end
+        local output_fluid = "steam"
+        for _, fluidbox in pairs(fluidbox_prototypes) do
+            if fluidbox.filter and fluidbox.production_type == "output" then
+                output_fluid = fluidbox.filter.name
+            end
+        end
+        data.input_fluid = input_fluid
+        data.output_fluid = output_fluid
+    end
+    return data.input_fluid, data.output_fluid
+end
+
 -------------------------------------------------------------------------------
----Return table of boiler recipes
+---Return table of boilers for a boiler recipe
 ---@return table
 function Player.getBoilersForRecipe(recipe_prototype)
     local boilers = {}
 
     for boiler_name, boiler in pairs(Player.getBoilers()) do
+        local data = getBoilerData(boiler)
         ---Check temperature
-        if boiler.target_temperature ~= recipe_prototype.output_fluid_temperature then
-            goto continue
-        end
-
-        ---Check input fluid
-        local input_fluid = "water"
-        local fluidbox = boiler.fluidbox_prototypes[1]
-        if fluidbox.filter then
-            input_fluid = fluidbox.filter.name
-        end
-        if input_fluid ~= recipe_prototype.input_fluid_name then
-            goto continue
-        end
-
-        ---Check output fluid
-        local output_fluid = "steam"
-        for _, fluidbox in pairs(boiler.fluidbox_prototypes) do
-            if fluidbox.filter and fluidbox.production_type == "output" then
-                output_fluid = fluidbox.filter.name
+        if data.target_temperature == recipe_prototype.output_fluid_temperature then
+            ---Check input and output fluid
+            local input_fluid, output_fluid = resolveBoilerFluids(boiler, data)
+            if input_fluid == recipe_prototype.input_fluid_name and output_fluid == recipe_prototype.output_fluid_name then
+                boilers[boiler_name] = boiler
             end
         end
-        if output_fluid ~= recipe_prototype.output_fluid_name then
-            goto continue
-        end
-
-        boilers[boiler_name] = boiler
-
-        ::continue::
     end
 
     return boilers
@@ -1417,12 +1462,19 @@ end
 -------------------------------------------------------------------------------
 ---Return list of Offshore-Pump
 ---@return table
+local offshore_pumps_cache = nil
 function Player.getOffshorePumps()
-    local filters = {}
-    table.insert(filters, { filter = "type", type = "offshore-pump", mode = "or" })
-    local entities = prototypes.get_entity_filtered(filters)
+    ---the prototype query is fixed for the session, callers get their own table
+    if offshore_pumps_cache == nil then
+        local filters = {}
+        table.insert(filters, { filter = "type", type = "offshore-pump", mode = "or" })
+        offshore_pumps_cache = {}
+        for key, entity in pairs(prototypes.get_entity_filtered(filters)) do
+            offshore_pumps_cache[key] = entity
+        end
+    end
     local offshore_pump = {}
-    for key, entity in pairs(entities) do
+    for key, entity in pairs(offshore_pumps_cache) do
         offshore_pump[key] = entity
     end
     return offshore_pump
@@ -1579,10 +1631,22 @@ function Player.getEnergyRecipe(name)
     return recipe
 end
 
--------------------------------------------------------------------------------
----Return table of fluid recipes
----@return table
-function Player.getFluidRecipes()
+---Built recipe tables of prototype-only sources are memoized for the session.
+---Callers may change the returned tables, so they always get a deep copy.
+local fluid_recipes_cache = nil
+local agricultural_recipes_cache = nil
+local spoilable_recipes_cache = nil
+
+---@param recipes table
+---@param name string
+---@return table | nil
+local function copyCachedRecipe(recipes, name)
+    local recipe = recipes[name]
+    if recipe == nil then return nil end
+    return table.deepcopy(recipe)
+end
+
+local function buildFluidRecipes()
     local recipes = {}
 
     local tiles = Player.getTilePrototypes()
@@ -1602,12 +1666,20 @@ function Player.getFluidRecipes()
 end
 
 -------------------------------------------------------------------------------
+---Return table of fluid recipes
+---@return table
+function Player.getFluidRecipes()
+    if fluid_recipes_cache == nil then fluid_recipes_cache = buildFluidRecipes() end
+    return table.deepcopy(fluid_recipes_cache)
+end
+
+-------------------------------------------------------------------------------
 ---Return recipe
 ---@param name string
 ---@return table
 function Player.getFluidRecipe(name)
-    local recipes = Player.getFluidRecipes()
-    return recipes[name]
+    if fluid_recipes_cache == nil then fluid_recipes_cache = buildFluidRecipes() end
+    return copyCachedRecipe(fluid_recipes_cache, name)
 end
 
 -------------------------------------------------------------------------------
@@ -1701,7 +1773,7 @@ end
 -------------------------------------------------------------------------------
 ---Return table of Agricultural recipes for Agricultural Towers
 ---@return table
-function Player.getAgriculturalRecipes()
+local function buildAgriculturalRecipes()
     local recipes = {}
     local items = Player.getSeeds()
     for _, prototype in pairs(items) do
@@ -1736,13 +1808,18 @@ function Player.getAgriculturalRecipes()
     return recipes
 end
 
+function Player.getAgriculturalRecipes()
+    if agricultural_recipes_cache == nil then agricultural_recipes_cache = buildAgriculturalRecipes() end
+    return table.deepcopy(agricultural_recipes_cache)
+end
+
 -------------------------------------------------------------------------------
 ---Return recipe of Agricultural recipes for Agricultural Towers
 ---@param name string
 ---@return table
 function Player.getAgriculturalRecipe(name)
-    local recipes = Player.getAgriculturalRecipes()
-    return recipes[name]
+    if agricultural_recipes_cache == nil then agricultural_recipes_cache = buildAgriculturalRecipes() end
+    return copyCachedRecipe(agricultural_recipes_cache, name)
 end
 
 -------------------------------------------------------------------------------
@@ -1760,7 +1837,7 @@ end
 -------------------------------------------------------------------------------
 ---Return table of Spoilable recipes
 ---@return table
-function Player.getSpoilableRecipes()
+local function buildSpoilableRecipes()
     local recipes = {}
     local items = Player.getSpoilableItems()
     for _, prototype in pairs(items) do
@@ -1801,13 +1878,46 @@ function Player.getSpoilableRecipes()
     return recipes
 end
 
+function Player.getSpoilableRecipes()
+    if spoilable_recipes_cache == nil then spoilable_recipes_cache = buildSpoilableRecipes() end
+    return table.deepcopy(spoilable_recipes_cache)
+end
+
 -------------------------------------------------------------------------------
 ---Return Spoilable recipe
 ---@param name string
 ---@return table
 function Player.getSpoilableRecipe(name)
-    local recipes = Player.getSpoilableRecipes()
-    return recipes[name]
+    if spoilable_recipes_cache == nil then spoilable_recipes_cache = buildSpoilableRecipes() end
+    return copyCachedRecipe(spoilable_recipes_cache, name)
+end
+
+---Boiler recipe built from one boiler prototype, memoized per boiler name.
+---The list of boilers depends on the rules, so it is resolved on every call.
+local boiler_recipe_templates = {}
+
+---@param boiler LuaEntityPrototype
+---@return table {recipe=table|nil, hidden=boolean}
+local function getBoilerRecipeTemplate(boiler)
+    local boiler_name = boiler.name
+    local template = boiler_recipe_templates[boiler_name]
+    if template == nil then
+        local data = getBoilerData(boiler)
+        local input_fluid, output_fluid = resolveBoilerFluids(boiler, data)
+        template = { hidden = boiler.hidden == true }
+        if input_fluid ~= nil and output_fluid ~= nil then
+            local ingredients = { { name = input_fluid, type = "fluid", amount = 1 } }
+            local fluid_prototype = FluidPrototype(output_fluid)
+            local recipe = Player.buildFluidRecipe(fluid_prototype, ingredients, data.target_temperature, 10)
+            recipe.subgroup = { name = "helmod-boiler", order = "cccc" }
+            recipe.input_fluid_name = input_fluid
+            recipe.output_fluid_name = output_fluid
+            recipe.output_fluid_temperature = data.target_temperature
+            template.recipe = recipe
+        end
+        boiler_recipe_templates[boiler_name] = template
+    end
+    return template
 end
 
 -------------------------------------------------------------------------------
@@ -1817,36 +1927,14 @@ function Player.getBoilerRecipes()
     local recipes = {}
 
     ---Boilers
-    local boilers = Player.getBoilers()
-
-    for boiler_name, boiler in pairs(boilers) do
-        local input_fluid = "water"
-        local output_fluid = "steam"
-
-        local fluidbox = boiler.fluidbox_prototypes[1]
-        if fluidbox.filter then
-            input_fluid = fluidbox.filter.name
-        end
-
-        for _, fluidbox in pairs(boiler.fluidbox_prototypes) do
-            if fluidbox.filter and fluidbox.production_type == "output" then
-                output_fluid = fluidbox.filter.name
-            end
-        end
-
-        if input_fluid ~= nil and output_fluid ~= nil then
-            local ingredients = { { name = input_fluid, type = "fluid", amount = 1 } }
-            local fluid_prototype = FluidPrototype(output_fluid)
-            local recipe = Player.buildFluidRecipe(fluid_prototype, ingredients, boiler.target_temperature, 10)
-            recipe.subgroup = { name = "helmod-boiler", order = "cccc" }
-            recipe.input_fluid_name = input_fluid
-            recipe.output_fluid_name = output_fluid
-            recipe.output_fluid_temperature = boiler.target_temperature
-
+    for boiler_name, boiler in pairs(Player.getBoilers()) do
+        local template = getBoilerRecipeTemplate(boiler)
+        local recipe = template.recipe
+        if recipe ~= nil then
             if not recipes[recipe.name] then
-                recipes[recipe.name] = recipe
+                recipes[recipe.name] = table.deepcopy(recipe)
             end
-            if boiler.hidden then
+            if template.hidden then
                 recipes[recipe.name].hidden = true
             end
         end
@@ -1860,8 +1948,21 @@ end
 ---@param name string
 ---@return table
 function Player.getBoilerRecipe(name)
-    local recipes = Player.getBoilerRecipes()
-    return recipes[name]
+    ---same result as Player.getBoilerRecipes()[name] without copying the other recipes
+    local result = nil
+    for boiler_name, boiler in pairs(Player.getBoilers()) do
+        local template = getBoilerRecipeTemplate(boiler)
+        local recipe = template.recipe
+        if recipe ~= nil and recipe.name == name then
+            if result == nil then
+                result = table.deepcopy(recipe)
+            end
+            if template.hidden then
+                result.hidden = true
+            end
+        end
+    end
+    return result
 end
 
 -------------------------------------------------------------------------------
@@ -1907,7 +2008,13 @@ function Player.buildFluidRecipe(fluid, ingredients, temperature, product_amount
     return recipe
 end
 
+local rocket_part_recipe_cache = nil
 function Player.getRocketPartRecipe(factory)
+    -- the result without factory depends only on prototypes, memoized for the session (false = none)
+    local use_cache = not (factory and factory.name)
+    if use_cache and rocket_part_recipe_cache ~= nil then
+        return rocket_part_recipe_cache or nil
+    end
     -- Get rocket silos
     local silos = {}
     if factory and factory.name then
@@ -1928,11 +2035,11 @@ function Player.getRocketPartRecipe(factory)
         end
     end
 
-    if #rocket_part_recipes == 0 then
-        return nil
-    else
-        return rocket_part_recipes[1]
+    local result = rocket_part_recipes[1]
+    if use_cache then
+        rocket_part_recipe_cache = result or false
     end
+    return result
 end
 
 function Player.buildRocketRecipe(prototype)
@@ -2430,8 +2537,13 @@ function Player.getFluidTemperaturePrototypes(fluid)
     return items
 end
 
+local feature_quality_cache = nil
 function Player.hasFeatureQuality()
-    return script.feature_flags["quality"]
+    -- script.feature_flags builds a new table on every read; flags are constant for the session
+    if feature_quality_cache == nil then
+        feature_quality_cache = script.feature_flags["quality"] == true
+    end
+    return feature_quality_cache
 end
 
 -------------------------------------------------------------------------------

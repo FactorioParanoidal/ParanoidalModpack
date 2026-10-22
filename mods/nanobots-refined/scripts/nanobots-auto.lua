@@ -45,6 +45,8 @@ NanobotsAuto.process_queue_tasks = function(tick)
     end
     
     for _, player in pairs(game.connected_players) do
+        -- Dead or detached player: no character to check or fire from, wait for respawn.
+        if not player.character then goto continue end
         local pdata = storage.players[player.index]
         
         

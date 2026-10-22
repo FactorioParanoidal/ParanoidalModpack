@@ -39,7 +39,10 @@ end
 
 this.entityAsIndex = { -- metatable for using an entity as a table index
 	__index = function (tbl, entity)
-		if type(entity) == "table" and entity.valid then
+		-- Paranoidal: LuaEntity is userdata in 2.0; accept raw entities as well as helper wrappers
+		-- (raw event.entity lookups always returned nil before).
+		local keyType = type(entity)
+		if (keyType == "table" or keyType == "userdata") and entity.valid then
 			local id = entity.unit_number
 			
 			if id then
