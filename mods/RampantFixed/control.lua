@@ -21,6 +21,7 @@ local flyerAI = require("libs/FlyerAI")
 local heavyTactics = require("libs/HeavyTactics")
 local engineGroupHelpers = require("libs/EngineGroupHelpers")
 local champions = require("libs/Champions")
+local superHives = require("libs/SuperHives")
 local foreignEnemies = require("libs/ForeignEnemies")
 local baseUtils = require("libs/BaseUtils")
 local bitersEnrage = require("libs/BitersEnrage")
@@ -650,6 +651,13 @@ local function onDeath(event)
                     end
                 end
                 unregisterEnemyBaseStructure(map, entity, event.damage_type)
+
+                -- Paranoidal: a fallen super-hive brings AI points for revenge and an avenger (libs/SuperHives.lua)
+                local avenger = superHives.onDied(universe, map, entity)
+                if avenger and settings.global[champions.SETTING].value and (not surface.peaceful_mode)
+                    and (map.state ~= constants.AI_STATE_PEACEFUL) then
+                    champions.spawnNow(universe, surface.index, avenger)
+                end
 
                 if (chunk ~= -1) then
 					if (chunk.nextSquadTick and (chunk.nextSquadTick < tick)) then
@@ -1689,6 +1697,7 @@ script.on_nth_tick(30,
 	function()
 		if universe then
 			undergroundAttack.processUndergroundSquads(universe)
+			superHives.update(universe, game.tick)	-- super-hives: heart of the nest, dead records
 		end
 	end
 )
@@ -2184,6 +2193,15 @@ local function rampantAIReport(event)
 	for _, line in pairs(aiBrain.report(map)) do
 		player.print(line)
 	end
+	local hives = superHives.report(universe, map.surface.index)
+	local line = "Super-hives: " .. #hives .. " (limit now "
+		.. superHives.limit(game.forces.enemy.get_evolution_factor(map.surface)) .. ")"
+	for i = 1, math.min(#hives, 5) do
+		local hive = hives[i]
+		line = line .. " [gps=" .. math.floor(hive.position.x) .. "," .. math.floor(hive.position.y) .. ","
+			.. map.surface.name .. "]"
+	end
+	player.print(line)
 end
 
 commands.add_command('rampantAIReport', {"description.rampantFixed--aiReportCommand"}, rampantAIReport)

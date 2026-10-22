@@ -24,6 +24,7 @@ local roundToNearest = mathUtils.roundToNearest
 
 local mMax = math.max
 local mMin = math.min
+local mFloor = math.floor
 
 local deepcopy = util.table.deepcopy
 
@@ -346,13 +347,13 @@ eggsAttributeNumeric["damage"] = calculateValuesForLevels(eggsAttributeNumeric["
 eggsAttributeNumeric["health"] = calculateValuesForLevels(eggsAttributeNumeric["health"], TIER_UPGRADE_SET_10_AS_IS, 0)
 
 local unitSpawnerAttributeNumeric = {
-    -- ["health"] = { 400, 500, 750, 1000, 1500, 3500, 11000, 20000, 30000, 45000 },
-    ["health"] = { 400, 400, 400, 400, 400, 700, 1100, 2000, 3000, 4500 },
+    -- Paranoidal: health and size of Beta 8 (RampantFixed 1.8.3)
+    ["health"] = { 350, 500, 750, 1000, 1500, 3500, 11000, 20000, 30000, 45000 },
     ["healing"] = { 0.02, 0.02, 0.022, 0.024, 0.026, 0.028, 0.03, 0.032, 0.034, 0.036 },
     ["spawningCooldownStart"] = { 1080, 1075, 1020, 1015, 950, 940, 920, 910, 900, 880 },
     ["spawningCooldownEnd"] = { 350, 335, 320, 310, 300, 290, 280, 270, 260, 250 },
     ["unitsToSpawn"] = { 11, 11, 10, 10, 9, 9, 8, 8, 8, 7 },
-    ["scale"] = { 0.7, 0.75, 0.8, 0.9, 1, 1, 1, 1, 1, 1 },
+    ["scale"] = { 0.5, 0.6, 0.7, 0.8, 0.9, 1, 1.2, 1.4, 1.6, 1.8 },
     ["unitsOwned"] = { 9, 9, 9, 9, 9, 8, 8, 8, 8, 7 },
     ["physicalDecrease"] = { 1, 2, 3, 4, 6, 6, 8, 10, 12, 14 },
     ["physicalPercent"] = { 15, 15, 17, 17, 18, 18, 19, 19, 20, 20 },
@@ -373,13 +374,13 @@ unitSpawnerAttributeNumeric["fireDecrease"] = calculateValuesForLevels(unitSpawn
 -- - !КДА 2021.11
 
 local hiveAttributeNumeric = {
-    -- ["health"] = { 1000, 1500, 2000, 3000, 4500, 15000, 22000, 40000, 60000, 90000 },
-    ["health"] = { 1000, 1000, 1000, 1000, 1000, 1500, 2200, 4000, 6000, 9000 },
+    -- Paranoidal: health and size of Beta 8 (RampantFixed 1.8.3)
+    ["health"] = { 1000, 1500, 2000, 3000, 4500, 15000, 22000, 40000, 60000, 90000 },
     ["healing"] = { 0.02, 0.02, 0.022, 0.024, 0.026, 0.028, 0.03, 0.032, 0.034, 0.036 },
     ["spawningCooldownStart"] = {180, 180, 180, 180, 180, 180, 180, 180, 180, 180 },
     ["spawningCooldownEnd"] = { 60, 60, 60, 60, 60, 60, 60, 60, 60, 60 },
     ["unitsToSpawn"] = { 12, 12, 12, 12, 12, 12, 12, 12, 12, 12 },
-    ["scale"] = { 1, 1.1, 1.2, 1.3, 1.4, 1.4, 1.4, 1.4, 1.4, 1.4 },
+    ["scale"] = { 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2.0, 2.1 },
     ["unitsOwned"] = { 9, 9, 9, 9, 9, 9, 9, 9, 9, 9 },
     ["physicalDecrease"] = { 1, 2, 3, 4, 6, 6, 8, 10, 12, 14 },
     ["physicalPercent"] = { 15, 15, 17, 17, 18, 18, 19, 19, 20, 20 },
@@ -398,6 +399,39 @@ hiveAttributeNumeric["physicalDecrease"] = calculateValuesForLevels(hiveAttribut
 hiveAttributeNumeric["explosionDecrease"] = calculateValuesForLevels(hiveAttributeNumeric["explosionDecrease"], TIER_UPGRADE_SET_10_AS_IS, 2)
 hiveAttributeNumeric["fireDecrease"] = calculateValuesForLevels(hiveAttributeNumeric["fireDecrease"], TIER_UPGRADE_SET_10_AS_IS, 2)
 -- - !КДА 2021.11
+
+-- Paranoidal: super-hives (libs/SuperHives.lua). Health 3 times the hive of the same level, at least 10000 (the Bob
+-- super spawner of Beta 8), regeneration from 1 per tick (60/s, Bob super spawner) to 2 per tick; bigger than a hive,
+-- more units around it, quicker spawning and a wide call for help
+local superHiveAttributeNumeric = {
+    ["health"] = { 10000, 10000, 10000, 10000, 13500, 45000, 66000, 120000, 180000, 270000 },
+    ["healing"] = { 1, 1, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.8, 2 },
+    ["spawningCooldownStart"] = { 150, 150, 150, 150, 150, 150, 150, 150, 150, 150 },
+    ["spawningCooldownEnd"] = { 45, 45, 45, 45, 45, 45, 45, 45, 45, 45 },
+    ["unitsToSpawn"] = { 15, 15, 15, 15, 16, 16, 17, 17, 18, 18 },
+    ["scale"] = { 1.5, 1.6, 1.7, 1.8, 1.9, 2.0, 2.1, 2.2, 2.3, 2.4 },
+    ["unitsOwned"] = { 20, 20, 20, 20, 22, 22, 24, 24, 26, 26 },
+    ["helpRadius"] = { 64, 64, 64, 64, 72, 72, 80, 80, 88, 96 },
+    ["spawningRadius"] = { 14, 14, 14, 14, 14, 14, 14, 14, 14, 14 },
+    ["evolutionRequirement"] = { 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9 },
+    ["cooldown"] = { 50, 50, 45, 45, 40, 40, 35, 35, 30, 30 }
+}
+superHiveAttributeNumeric["health"] = calculateValuesForLevels(superHiveAttributeNumeric["health"], TIER_UPGRADE_SET_10_AS_IS, 0)
+superHiveAttributeNumeric["healing"] = calculateValuesForLevels(superHiveAttributeNumeric["healing"], TIER_UPGRADE_SET_10_AS_IS, 4)
+superHiveAttributeNumeric["scale"] = calculateValuesForLevels(superHiveAttributeNumeric["scale"], TIER_UPGRADE_SET_10_AS_IS, 2)
+
+-- extra resistances of a super-hive over the faction ones: flat decrease and percent per tier (immunities and the
+-- faction extremes stay as they are, a weakness only gets smaller)
+local SUPER_HIVE_RESISTANCE_BONUS = {
+    physical = {decrease = { 4, 5, 6, 7, 8, 9, 10, 11, 12, 14 }, percent = 10},
+    explosion = {decrease = { 6, 7, 8, 9, 10, 11, 12, 13, 14, 16 }, percent = 10},
+    fire = {decrease = { 2, 2, 3, 3, 4, 4, 5, 5, 6, 6 }, percent = 10},
+    acid = {decrease = { 2, 2, 3, 3, 4, 4, 5, 5, 6, 6 }, percent = 10},
+    laser = {decrease = { 0, 0, 1, 1, 2, 2, 3, 3, 4, 4 }, percent = 10},
+    electric = {decrease = { 0, 0, 1, 1, 2, 2, 3, 3, 4, 4 }, percent = 10}
+}
+local SUPER_HIVE_MAP_COLOR = {r = 0.25, g = 0.75, b = 1, a = 1}
+local SUPER_HIVE_GLOW_TINT = {r = 0.25, g = 0.55, b = 1}
 
 
 local wormAttributeNumeric = {
@@ -538,6 +572,22 @@ local function unitSetToHiveProbabilityTable(unitSet, unitWeights)		-- +1 lvl
 	
 end
 
+-- Paranoidal: super-hives breed about one level above a hive (two above a nest); flyers keep their 10% gate
+local function unitSetToSuperHiveProbabilityTable(unitSet, unitWeights)
+    local result = {}
+    fillUnitTable(result, unitSet, 1, {{0, 0.6}, {0.10, 0.0}}, unitWeights)
+    fillUnitTable(result, unitSet, 2, {{0.00, 0.4}, {0.10, 0.5}, {0.22, 0.0}}, unitWeights)
+    fillUnitTable(result, unitSet, 3, {{0.05, 0}, {0.18, 0.5}, {0.32, 0.0}}, unitWeights)
+    fillUnitTable(result, unitSet, 4, {{0.18, 0}, {0.30, 0.5}, {0.42, 0.0}}, unitWeights)
+    fillUnitTable(result, unitSet, 5, {{0.30, 0}, {0.40, 0.5}, {0.58, 0.0}}, unitWeights)
+    fillUnitTable(result, unitSet, 6, {{0.40, 0}, {0.56, 0.5}, {0.68, 0.0}}, unitWeights)
+    fillUnitTable(result, unitSet, 7, {{0.56, 0}, {0.66, 0.5}, {0.80, 0.0}}, unitWeights)
+    fillUnitTable(result, unitSet, 8, {{0.66, 0}, {0.74, 0.5}, {0.90, 0.0}}, unitWeights)
+    fillUnitTable(result, unitSet, 9, {{0.74, 0}, {0.80, 0.5}, {0.96, 0.0}}, unitWeights)
+    fillUnitTable(result, unitSet, 10, {{0.80, 0}, {1, 1.0}}, unitWeights)
+    return result
+end
+
 local function addResistance(entity, name, percent)
 	entity.resistances[name] = {decrease = 0, percent = percent}
 end
@@ -635,7 +685,7 @@ local function scaleAttributes (entity)
         entity["range"] = entity["range"] * settings.startup["rampantFixed--unitWormRangeScaler"].value
         entity["prepareRange"] = entity["prepareRange"] * settings.startup["rampantFixed--unitWormRangeScaler"].value	-- + !КДА 2021.11	
         entity["healing"] = entity["healing"] * settings.startup["rampantFixed--unitWormHealingScaler"].value
-    elseif (entity.type == "hive") then
+    elseif (entity.type == "hive") or (entity.type == "super-hive") then
         entity["health"] = entity["health"] * settings.startup["rampantFixed--unitHiveHealthScaler"].value
         entity["healing"] = entity["healing"] * settings.startup["rampantFixed--unitHiveHealingScaler"].value
         entity["spawningCooldownStart"] = entity["spawningCooldownStart"] * settings.startup["rampantFixed--unitHiveRespawnScaler"].value
@@ -687,6 +737,14 @@ local function fillEntityTemplate(entity)
 				entity[key] = entity[key][tier]
 			end
         end
+    elseif (entity.type == "super-hive") then
+        for key,value in pairs(superHiveAttributeNumeric) do
+			if not entity[key] then
+				entity[key] = value[tier]
+			else
+				entity[key] = entity[key][tier]
+			end
+        end
     elseif (entity.type == "turret") then
         for key,value in pairs(wormAttributeNumeric) do
 			if not entity[key] then
@@ -705,7 +763,7 @@ local function fillEntityTemplate(entity)
         end
     end
 	
-	if buildingsImmuneToElectic and ((entity.type == "turret") or (entity.type == "hive") or (entity.type == "biter-spawner") or (entity.type == "spitter-spawner")) then	
+	if buildingsImmuneToElectic and ((entity.type == "turret") or (entity.type == "hive") or (entity.type == "super-hive") or (entity.type == "biter-spawner") or (entity.type == "spitter-spawner")) then
 		entity.resistances["electric"] = {decrease = 0, percent = 100}
 	end	
 
@@ -1365,6 +1423,86 @@ function swarmUtils.buildEntitySpawner(template, factionBuildings)
     end
 end
 
+-- Paranoidal: super-hives (libs/SuperHives.lua). Built like hives, then: extra resistances, the map colour, a blue
+-- glow under it (draw_as_light: visible at night), a brood of the faction's biters (else spitters) one tier up released
+-- on death. The artifact loot is added in data-final-fixes (the Bob items may not exist yet).
+local function superHiveBrood(faction, tier)
+    local broodTier = mMin(tier + 1, 10)
+    for _, kind in pairs({"biter", "spitter"}) do
+        local name = faction .. "-" .. kind .. "-v1-t" .. broodTier .. "-rampant"
+        if data.raw["unit"][name] then
+            return {
+                type = "create-entity",
+                entity_name = name,
+                repeat_count = 3 + mFloor(tier / 2),
+                offset_deviation = {{-4, -4}, {4, 4}},
+                find_non_colliding_position = true,
+                non_colliding_search_radius = 8
+            }
+        end
+    end
+    return nil
+end
+
+function swarmUtils.buildSuperHive(template)
+    local variations = settings.startup["rampantFixed--newEnemyVariations"].value
+    local oldRedMapColor = settings.startup["rampantFixed--oldRedEnemyMapColor"].value
+
+    for tier=1, 10 do
+        local effectiveLevel = tier
+
+        for i=1,variations do
+            local unitSpawner = deepcopy(template)
+            unitSpawner.name = unitSpawner.name .. "-v" .. i .. "-t" .. tier
+            unitSpawner.effectiveLevel = effectiveLevel
+			unitSpawner.tier = tier
+            unitSpawner.variation = i
+            unitSpawner.unitSet = unitSetToSuperHiveProbabilityTable(template.unitSet, template.unitWeights)
+            generateApperance(unitSpawner)
+            fillEntityTemplate(unitSpawner)
+
+            for damageType, bonus in pairs(SUPER_HIVE_RESISTANCE_BONUS) do
+                local resistance = unitSpawner.resistances[damageType]
+                if not resistance then
+                    resistance = {decrease = 0, percent = 0}
+                    unitSpawner.resistances[damageType] = resistance
+                end
+                if (resistance.percent or 0) < 95 then
+                    resistance.percent = mMin((resistance.percent or 0) + bonus.percent, 95)
+                    resistance.decrease = (resistance.decrease or 0) + bonus.decrease[tier]
+                end
+            end
+
+			if (not unitSpawner.noLoot) then
+				addEntityLoot(unitSpawner, "spawnerLoot", effectiveLevel)
+			end
+
+            local brood = superHiveBrood(template.faction, tier)
+            if brood then
+                unitSpawner.dyingEffect = (unitSpawner.dyingEffect and addTrigger_effect(unitSpawner.dyingEffect, brood)) or brood
+            end
+
+            local prototype = makeUnitSpawner(unitSpawner)
+            prototype.localised_description = {"description.rampantFixed--superHiveDescription"}
+            if not oldRedMapColor then
+                prototype.enemy_map_color = SUPER_HIVE_MAP_COLOR
+            end
+            prototype.graphics_set.integration = {
+                filename = "__core__/graphics/light-medium.png",
+                width = 300,
+                height = 300,
+                scale = 1.2 * unitSpawner.scale,
+                priority = "high",
+                draw_as_light = true,
+                tint = SUPER_HIVE_GLOW_TINT,
+                shift = {0, 0.5}
+            }
+            prototype.order = "b-b-h"
+            data:extend({prototype})
+        end
+    end
+end
+
 function swarmUtils.buildUnitSpawner(template)
     local variations = settings.startup["rampantFixed--newEnemyVariations"].value
 
@@ -1438,7 +1576,7 @@ local function makeLootTables(template)
         makeLootTable = makeWormAlienLootTable
     elseif (template.type == "biter-spawner") or (template.type == "spitter-spawner") then
         makeLootTable = makeSpawnerAlienLootTable
-    elseif (template.type == "hive") then
+    elseif (template.type == "hive") or (template.type == "super-hive") then
         makeLootTable = makeSpawnerAlienLootTable
     else
         return nil
@@ -2194,6 +2332,10 @@ function swarmUtils.processFactions()
                 local template = buildUnitSpawnerTemplate(faction, building, unitSets, captiveBiterSpawnerName)
 
                 swarmUtils.buildEntitySpawner(template, factionBuildings)
+            elseif (building.type == "super-hive") then
+                local template = buildUnitSpawnerTemplate(faction, building, unitSets, captiveBiterSpawnerName)
+
+                swarmUtils.buildSuperHive(template)
            elseif (building.type == "trap") then
 
             elseif (building.type == "utility") then

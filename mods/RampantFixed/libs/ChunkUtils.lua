@@ -354,7 +354,7 @@ function chunkUtils.initialScan(chunk, map, tick)
 								end
 							end
 						end
-						setNestCount(map, chunk, counts["spitter-spawner"] + counts["biter-spawner"]  + unknownNests)
+						setNestCount(map, chunk, counts["spitter-spawner"] + counts["biter-spawner"] + counts["super-hive"] + unknownNests)
 						setUtilityCount(map, chunk, counts["utility"])
 						setHiveCount(map, chunk, counts["hive"])
 						setTrapCount(map, chunk, counts["trap"])
@@ -371,7 +371,7 @@ function chunkUtils.initialScan(chunk, map, tick)
 								unknownNests = unknownNests + 1
 							end
                     end
-                    setNestCount(map, chunk, counts["spitter-spawner"] + counts["biter-spawner"] + unknownNests)
+                    setNestCount(map, chunk, counts["spitter-spawner"] + counts["biter-spawner"] + counts["super-hive"] + unknownNests)
 					setTurretCount(map, chunk, counts["turret"])
 				end				
 				if map.suspended then
@@ -569,12 +569,12 @@ function chunkUtils.mapScanEnemyChunk(chunk, map)
 	end	
 
 
-    setNestCount(map, chunk, counts["spitter-spawner"] + counts["biter-spawner"])
+    setNestCount(map, chunk, counts["spitter-spawner"] + counts["biter-spawner"] + counts["super-hive"])
     setUtilityCount(map, chunk, counts["utility"])
     setHiveCount(map, chunk, counts["hive"])
     setTrapCount(map, chunk, counts["trap"])
     setTurretCount(map, chunk, counts["turret"])
-	if (counts["spitter-spawner"] == 0) and (counts["biter-spawner"] == 0) then
+	if (counts["spitter-spawner"] == 0) and (counts["biter-spawner"] == 0) and (counts["super-hive"] == 0) then
 		chunkPropertyUtils.setNestActiveness(map, chunk, 0)		
 		chunkPropertyUtils.setRaidNestActiveness(map, chunk, 0)
 	end	
@@ -667,7 +667,7 @@ function chunkUtils.registerEnemyBaseStructure(map, entity, base)
         local universe = map.universe
         local hiveTypeLookup = universe.buildingHiveTypeLookup
         local hiveType = hiveTypeLookup[entity.name]
-        if (hiveType == "spitter-spawner") or (hiveType == "biter-spawner") then
+        if (hiveType == "spitter-spawner") or (hiveType == "biter-spawner") or (hiveType == "super-hive") then
             map.builtEnemyBuilding = map.builtEnemyBuilding + 1
             getFunc = getNestCount
             setFunc = setNestCount
@@ -722,7 +722,7 @@ function chunkUtils.unregisterEnemyBaseStructure(map, entity, damageType)
         local setFunc
         local hiveTypeLookup = map.universe.buildingHiveTypeLookup
         local hiveType = hiveTypeLookup[entity.name]
-        if (hiveType == "spitter-spawner") or (hiveType == "biter-spawner") then
+        if (hiveType == "spitter-spawner") or (hiveType == "biter-spawner") or (hiveType == "super-hive") then
             map.lostEnemyBuilding = map.lostEnemyBuilding + 1
             getFunc = getNestCount
             setFunc = setNestCount
@@ -760,7 +760,7 @@ function chunkUtils.unregisterEnemyBaseStructure(map, entity, damageType)
 				local count = getFunc(map, chunk)
 				if count then
 					if (count <= 1) then
-						if (hiveType == "spitter-spawner") or (hiveType == "biter-spawner") then
+						if (hiveType == "spitter-spawner") or (hiveType == "biter-spawner") or (hiveType == "super-hive") then
 							setRaidNestActiveness(map, chunk, 0)
 							setNestActiveness(map, chunk, 0)
 						end

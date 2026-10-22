@@ -24,6 +24,7 @@ local aiAttackWave = require("libs/AIAttackWave")
 local mapUtils = require("libs/MapUtils")
 local aiBrain = require("libs/AIBrain")
 local champions = require("libs/Champions")
+local superHives = require("libs/SuperHives")
 local config = require("__RampantFixed__/config")
 
 local function getBaseStats(base)
@@ -514,6 +515,19 @@ remote.add_interface("rampantFixed", {
 			return nil
 		end
 		return champions.report(universe)
+	end
+
+	,
+	--------------------
+	-- Paranoidal: read-only list of living super-hives (libs/SuperHives.lua)
+	-- parameters: nil or {surfaceIndex = number}
+	-- return: {{unitNumber, name, surfaceIndex, position, health, maxHealth}}
+	getSuperHives = function(parameters)
+		local universe = storage.universe
+		if not universe then
+			return nil
+		end
+		return superHives.report(universe, parameters and parameters.surfaceIndex)
 	end
 
 	,

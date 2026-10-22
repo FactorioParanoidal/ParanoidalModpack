@@ -35,6 +35,7 @@ local champions = {}
 local constants = require("Constants")
 local aiBrain = require("AIBrain")
 local engineGroupHelpers = require("EngineGroupHelpers")
+local superHives = require("SuperHives")
 
 local CHUNK_SIZE = constants.CHUNK_SIZE
 local AI_STATE_PEACEFUL = constants.AI_STATE_PEACEFUL
@@ -776,18 +777,47 @@ local function create(universe, map, kind, bossName, localName, position, home, 
     return entity
 end
 
+-- Paranoidal: a super-hive within NEST_RANGE of the target is the lair of the champions: an hour boss always leaves
+-- from it, a champion with SUPER_HIVE_SHARE; it comes back there to regenerate (home)
+local SUPER_HIVE_SHARE = 0.5
+
+local function spawnFromSuperHive(universe, map, kind, tick, forcedType, target, evo)
+    local hive = superHives.nearTarget(universe, map, target, NEST_RANGE)
+    if (not hive) or ((kind ~= "hourBoss") and (mRandom() >= SUPER_HIVE_SHARE)) then
+        return nil
+    end
+    local surface = map.surface
+    for _, desiredType in ipairs(typesToTry(evo, forcedType)) do
+        local bossName, localName = resolveBoss(hive.prototype, desiredType, evo, KINDS[kind].tierUp)
+        if bossName then
+            local position = surface.find_non_colliding_position(bossName, hive.position, 24, 0.5)
+            if position and not inPlayerBase(map, position) then
+                local entity = create(universe, map, kind, bossName, localName, position, hive.position, target, tick)
+                if entity then
+                    return entity
+                end
+            end
+        end
+    end
+    return nil
+end
+
 local function spawn(universe, map, kind, tick, forcedType)
     local surface = map.surface
     local target = pickTarget(map)
     if not target then
         return nil
     end
+    local evo = game.forces.enemy.get_evolution_factor(surface)
+    local fromSuperHive = spawnFromSuperHive(universe, map, kind, tick, forcedType, target, evo)
+    if fromSuperHive then
+        return fromSuperHive
+    end
     local candidates = nestCandidates(map, target)
     local count = #candidates
     if count == 0 then
         return nil
     end
-    local evo = game.forces.enemy.get_evolution_factor(surface)
     local area = {{0, 0}, {0, 0}}
     local query = {area = area, force = "enemy", type = "unit-spawner"}
     for _, desiredType in ipairs(typesToTry(evo, forcedType)) do

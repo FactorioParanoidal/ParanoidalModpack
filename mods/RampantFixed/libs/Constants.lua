@@ -1989,13 +1989,47 @@ if settings.startup["rampantFixed--flyers"].value then
     end
 end
 
+-- Paranoidal: super-hives (libs/SuperHives.lua, prototypes/SwarmUtils.lua buildSuperHive): a building of every faction
+-- with a hive, made from a copy of the hive (same units incl. flyers, resistances and traits). Its weight is 0: it is
+-- never picked by the ordinary building rolls, only placed by libs/SuperHives.lua (new chunks and expansions) or by
+-- the evolution of a hive; a mutation of the base keeps it a super-hive of the new faction.
+do
+    local function copy(value)
+        if type(value) ~= "table" then
+            return value
+        end
+        local result = {}
+        for k, v in pairs(value) do
+            result[k] = copy(v)
+        end
+        return result
+    end
+    for _, faction in pairs(constants.FACTION_SET) do
+        local hive
+        for _, building in pairs(faction.buildings) do
+            if building.type == "hive" then
+                hive = building
+                break
+            end
+        end
+        if hive then
+            local superHive = copy(hive)
+            superHive.type = "super-hive"
+            superHive.name = "super-hive"
+            superHive.acceptRate = {1, 10, 0, 0}
+            faction.buildings[#faction.buildings+1] = superHive
+        end
+    end
+end
+
 constants.HIVE_BUILDINGS_TYPES = {
     "trap",
     "turret",
     "utility",
     "spitter-spawner",
     "biter-spawner",
-    "hive"
+    "hive",
+    "super-hive"
 }
 
 constants.VICTORY_SCENT_MULTIPLER = {}
@@ -2028,6 +2062,7 @@ constants.HIVE_BUILDINGS_COST["utility"] = constants.BASE_SPAWNER_UPGRADE * 1.5
 constants.HIVE_BUILDINGS_COST["spitter-spawner"] = constants.BASE_SPAWNER_UPGRADE
 constants.HIVE_BUILDINGS_COST["biter-spawner"] = constants.BASE_SPAWNER_UPGRADE
 constants.HIVE_BUILDINGS_COST["hive"] = constants.BASE_SPAWNER_UPGRADE * 2
+constants.HIVE_BUILDINGS_COST["super-hive"] = constants.BASE_SPAWNER_UPGRADE * 4
 
 local biterAndSpitter = {}
 biterAndSpitter["biter-spawner"] = 0
@@ -2037,6 +2072,7 @@ constants.FACTION_CHANGING_MAPPING = {}
 constants.FACTION_CHANGING_MAPPING["spitter-spawner"] = biterAndSpitter
 constants.FACTION_CHANGING_MAPPING["biter-spawner"] = biterAndSpitter
 constants.FACTION_CHANGING_MAPPING["hive"] = {hive = 0}
+constants.FACTION_CHANGING_MAPPING["super-hive"] = {["super-hive"] = 0}
 constants.FACTION_CHANGING_MAPPING["turret"] = {turret = 0}
 constants.FACTION_CHANGING_MAPPING["trap"] = {trap = 0}
 constants.FACTION_CHANGING_MAPPING["utility"] = {utility = 0}
@@ -2045,6 +2081,8 @@ constants.FACTION_EVOLVE_MAPPING = {}
 constants.FACTION_EVOLVE_MAPPING["spitter-spawner"] = {hive = 0}
 constants.FACTION_EVOLVE_MAPPING["biter-spawner"] = {hive = 0}
 constants.FACTION_EVOLVE_MAPPING["turret"] = biterAndSpitter
+-- a hive may grow into a super-hive (allowed by libs/SuperHives.lua: chance, spacing and limit)
+constants.FACTION_EVOLVE_MAPPING["hive"] = {["super-hive"] = 0}
 
 constantsG =  constants
 return constants

@@ -10,6 +10,7 @@ local constants = require("Constants")
 local chunkPropertyUtils = require("ChunkPropertyUtils")
 local mapUtils = require("MapUtils")
 local aiBrain = require("AIBrain")
+local superHives = require("SuperHives")
 
 -- constants
 
@@ -316,7 +317,8 @@ local function initialEntityUpgrade(faction, lvl, map, useHiveType, entityType)
                 end
             end
         end
-		if entityType then
+		-- a hive roll wins over the kind of the replaced structure (Paranoidal: the kind always overwrote it)
+		if entityType and not entity then
 			local validTypes = {}
             for ui=1,#upgrades do
                 local upgrade = upgrades[ui]
@@ -464,8 +466,16 @@ local function findEntityUpgrade(faction, originalEntity, map, evolve, entityTyp
     if evolve then
         local chunk = getChunkByPosition(map, originalEntity.position)
 		local makeHive = false
-		if not chunk == -1 then
-			if getResourceGenerator(map, chunk) > 0 then 
+		-- Paranoidal: was "not chunk == -1", always false: no hive was ever rolled. Worms stay worms
+		if (chunk ~= -1) and (entityType ~= "turret") then
+			local resourceChunk = getResourceGenerator(map, chunk) > 0
+			if superHives.rollPlacement(universe, map, originalEntity.position, resourceChunk) then
+				local superHiveName = superHives.prototypeName(universe, faction, map.buildingsLvl)
+				if superHiveName then
+					return superHiveName
+				end
+			end
+			if resourceChunk then
 				if mRandom() < 0.2 then
 					makeHive = true
 				end
@@ -473,6 +483,12 @@ local function findEntityUpgrade(faction, originalEntity, map, evolve, entityTyp
 				if mRandom() < 0.02 then
 					makeHive = true
 				end
+			end
+		elseif (entityType ~= "turret") and superHives.rollPlacement(universe, map, originalEntity.position, false) then
+			-- a chunk not registered yet (its first scan): a super-hive without the resource bonus
+			local superHiveName = superHives.prototypeName(universe, faction, map.buildingsLvl)
+			if superHiveName then
+				return superHiveName
 			end
 		end	
 		return initialEntityUpgrade(faction, map.buildingsLvl, map, (makeHive and "hive"), entityType)	-- maxTier
@@ -610,6 +626,8 @@ function baseUtils.upgradeEntity(entity, baseAlignment, map, disPos, evolve, add
 			local addEntityPrototype = "chunk-scanner-nest-rampant"
 			if addEntity and (universe.buildingHiveTypeLookup[name] == "turret") then
 				addEntityPrototype = "chunk-scanner-turret-rampant"
+			elseif universe.buildingHiveTypeLookup[name] == "super-hive" then
+				addEntityPrototype = name	-- larger than the nest scanner
 			end
             local newPosition = surface.find_non_colliding_position(
                 (addEntity and addEntityPrototype) or name,
@@ -633,6 +651,7 @@ function baseUtils.upgradeEntity(entity, baseAlignment, map, disPos, evolve, add
         end
 
         local newEntity = surface.create_entity(query)
+		superHives.register(universe, newEntity)
 		return newEntity
 
     end
@@ -651,6 +670,10 @@ function baseUtils.evolveEntity(entity, map)
 		local surface = map.surface
 		local position = entity.position
 		local universe = map.universe
+		-- a hive grows into a super-hive only when libs/SuperHives.lua allows it (chance, spacing, limit)
+		if superHives.isSuperHive(universe, spawnerName) and not superHives.allowEvolve(universe, map, position) then
+			return nil
+		end
 
 		deleteAssociatedUnits(entity)
         entity.destroy()
@@ -674,7 +697,9 @@ function baseUtils.evolveEntity(entity, map)
         if remote.interfaces["kr-creep"] then
             remote.call("kr-creep", "spawn_creep_at_position", surface, query.position)
         end
-       return surface.create_entity(query)
+       local newEntity = surface.create_entity(query)
+       superHives.register(universe, newEntity)
+       return newEntity
 	else   
 		--game.print("cant evolve "..entity.name)
 	end
@@ -706,6 +731,7 @@ function baseUtils.changeEntityLvl(entity, lvl, map)
 		if NewEntity then
 			deleteAssociatedUnits(entity)
 			entity.destroy()
+			superHives.register(universe, NewEntity)
 			return NewEntity		
 		end	
 	end
@@ -758,6 +784,7 @@ function baseUtils.changeEntityAligment(entity, newAlignments, map, allowTierCha
 				deleteAssociatedUnits(entity)
 			end
 			entity.destroy()
+			superHives.register(universe, NewEntity)
 			return NewEntity		
 		end	
 	end
@@ -1051,7 +1078,8 @@ function baseUtils.changeEntityAndUpdateDynamicRates(entity, dynamicRates, map, 
 		return nil
 	end
 	-- preventing the "flashing" of the hive. 
-	if (universe.buildingHiveTypeLookup[entity.name] == "hive") and (dynamicRates.dynamicRatesTable.dynamicRate[oldFaction] or 0)>-0.3 then
+	local hiveType = universe.buildingHiveTypeLookup[entity.name]
+	if ((hiveType == "hive") or (hiveType == "super-hive")) and (dynamicRates.dynamicRatesTable.dynamicRate[oldFaction] or 0)>-0.3 then
 		return nil
 	end
 	

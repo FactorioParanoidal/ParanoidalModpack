@@ -242,5 +242,34 @@ if settings.startup["rampantFixed--addWallResistanceAcid"].value then
     vanillaBuildings.addWallResistance()
 end
 
+-- Paranoidal: super-hives (libs/SuperHives.lua) also drop Bob artifacts: small ones by the tier and a chance of a big
+-- one of each of the six colours (the colours of the champions). Here because the Bob items may load after this mod
+do
+    local items = data.raw["item"]
+    local colours = {"red", "orange", "yellow", "green", "blue", "purple"}
+    local count = 0
+    for name, spawner in pairs(data.raw["unit-spawner"]) do
+        local tier = string.match(name, "%-super%-hive%-v%d+%-t(%d+)%-rampant$")
+        if tier then
+            tier = tonumber(tier)
+            local loot = spawner.loot or {}
+            if items["bob-alien-artifact"] then
+                loot[#loot + 1] = {item = "bob-alien-artifact", count_min = 2 * tier, count_max = 4 * tier, probability = 1}
+            end
+            for _, colour in pairs(colours) do
+                local item = "bob-alien-artifact-" .. colour
+                if items[item] then
+                    loot[#loot + 1] = {item = item, count_min = 1, count_max = 1 + math.floor(tier / 3), probability = 0.3}
+                end
+            end
+            if #loot > 0 then
+                spawner.loot = loot
+            end
+            count = count + 1
+        end
+    end
+    log("RampantFixed: super-hive prototypes: " .. count)
+end
+
 -- Paranoidal: unit prototypes of champions and hour bosses (last: copies take the final resistances)
 require("prototypes/ChampionUnits")
