@@ -18,6 +18,9 @@ Date: 2026-10-13
     - Fixed that only the last alias of a milestone was counted.
     - Fixed a crash in backfill when an infinite milestone has an invalid "next" formula.
     - Kill milestones are backfilled across all qualities, consistently with how they are tracked.
+    - Paranoidal: production, consumption and kill statistics of Blueprint Sandboxes lab surfaces
+      ("bpsb-lab-...") are not counted (they were, for the real force with the sandbox isolation "none").
+      Existing saves drop them on the next configuration change; milestones already reached stay.
 ---------------------------------------------------------------------------------------------------
 Version: 1.4.7
 Date: 2025-11-23
