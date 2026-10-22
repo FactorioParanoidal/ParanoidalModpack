@@ -685,6 +685,132 @@ script.on_event(defines.events.on_built_entity, function(event)
   then
     bobmods.logistics.set_positions(entity, event.player_index)
   end
+  bobmods.inserters.enforce_research(entity)
+end)
+
+-- Paranoidal: positions from blueprints and pasted settings are limited by the force's research,
+-- like the position GUI. Unresearched range/diagonals/near offset are reduced to the nearest allowed.
+local function _enforce_allowed(x, y, t)
+  local ax, ay = math.abs(x), math.abs(y)
+  local r, m = math.max(ax, ay), math.min(ax, ay)
+  if r == 0 then
+    return true
+  elseif r == 1 then
+    return m == 0 or t.more
+  elseif r == 2 then
+    return t.long and (m == 0 or (m == 2 and t.more) or (m == 1 and t.more2))
+  elseif r == 3 then
+    return t.long2 and (m == 0 or (m == 3 and t.more) or ((m == 1 or m == 2) and t.more2))
+  end
+  return false
+end
+
+local function _enforce_sign(v)
+  return v > 0 and 1 or (v < 0 and -1 or 0)
+end
+
+-- pos: integer tile position in normal form; vertical: inserter faces north/south.
+local function _enforce_clamp(pos, t, vertical)
+  local x, y = pos.x, pos.y
+  local rmax = t.long2 and 3 or 2
+  x = _enforce_sign(x) * math.min(math.abs(x), rmax)
+  y = _enforce_sign(y) * math.min(math.abs(y), rmax)
+  local guard = 0
+  while not _enforce_allowed(x, y, t) and guard < 10 do
+    guard = guard + 1
+    local ax, ay = math.abs(x), math.abs(y)
+    local keep_y = ay > ax or (ay == ax and vertical)
+    if keep_y and x ~= 0 then
+      x = 0
+    elseif not keep_y and y ~= 0 then
+      y = 0
+    elseif x ~= 0 then
+      x = x - _enforce_sign(x)
+    else
+      y = y - _enforce_sign(y)
+    end
+  end
+  return { x = x, y = y }
+end
+
+function bobmods.inserters.enforce_research(entity)
+  if not (entity and entity.valid) then
+    return
+  end
+  local proto
+  if entity.type == "entity-ghost" then
+    if entity.ghost_type ~= "inserter" then
+      return
+    end
+    proto = entity.ghost_prototype
+  elseif entity.type == "inserter" then
+    proto = entity.prototype
+  else
+    return
+  end
+  if not proto.allow_custom_vectors then
+    return
+  end
+  if storage.bobmods and storage.bobmods.inserters and storage.bobmods.inserters.blacklist[proto.name] then
+    return
+  end
+  -- Slim inserters have their own default geometry; larger ones (nco-InserterCranes) use the normal form.
+  if proto.tile_width == 0 or proto.tile_height == 0 then
+    return
+  end
+
+  local force = entity.force
+  local t = {
+    long = tech_unlocked(force, bobmods.inserters.long_technology),
+    long2 = tech_unlocked(force, bobmods.inserters.long2_technology),
+    more = tech_unlocked(force, bobmods.inserters.more_technology),
+    more2 = tech_unlocked(force, bobmods.inserters.more2_technology),
+    near = tech_unlocked(force, bobmods.inserters.near_technology),
+  }
+  if t.long and t.long2 and t.more and t.more2 and t.near then
+    return
+  end
+
+  local vertical = entity.direction == defines.direction.north or entity.direction == defines.direction.south
+  local pickup = get_pickup_position(entity)
+  pickup = { x = bobmods.math.round(pickup.x), y = bobmods.math.round(pickup.y) }
+  local drop, offset = get_split_drop_position(entity)
+  offset = bobmods.inserters.normalise_tile_offset(offset)
+
+  local new_pickup = _enforce_clamp(pickup, t, vertical)
+  local new_drop = _enforce_clamp(drop, t, vertical)
+  local new_offset = offset
+  if new_drop.x ~= drop.x or new_drop.y ~= drop.y then
+    new_offset = calculate_new_drop_offset(drop, offset, new_drop)
+  end
+  if not t.near then
+    -- Without near inserters an offset may only point away from the inserter (the default far one).
+    local function far_ok(tile, off)
+      return off == 0 or (tile ~= 0 and _enforce_sign(tile) == _enforce_sign(off))
+    end
+    if not (far_ok(new_drop.x, new_offset.x) and far_ok(new_drop.y, new_offset.y)) then
+      new_offset = bobmods.logistics.set_range(new_drop, bobmods.inserters.offset)
+    end
+  end
+
+  local function same(a, b)
+    return math.abs(a.x - b.x) < 0.01 and math.abs(a.y - b.y) < 0.01
+  end
+  if same(pickup, new_pickup) and same(drop, new_drop) and same(offset, new_offset) then
+    return
+  end
+  set_both_positions(entity, new_pickup, combine_drop_position(new_drop, new_offset))
+end
+
+local function _enforce_built(event)
+  bobmods.inserters.enforce_research(event.entity)
+end
+local _enforce_filter = { { filter = "type", type = "inserter" }, { filter = "ghost_type", type = "inserter" } }
+script.on_event(defines.events.on_robot_built_entity, _enforce_built, _enforce_filter)
+script.on_event(defines.events.script_raised_built, _enforce_built, _enforce_filter)
+script.on_event(defines.events.script_raised_revive, _enforce_built, _enforce_filter)
+script.on_event(defines.events.on_entity_settings_pasted, function(event)
+  bobmods.inserters.enforce_research(event.destination)
 end)
 
 script.on_event(defines.events.on_runtime_mod_setting_changed, function(event)
