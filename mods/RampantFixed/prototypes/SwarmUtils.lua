@@ -432,7 +432,6 @@ local SUPER_HIVE_RESISTANCE_BONUS = {
     electric = {decrease = { 0, 0, 1, 1, 2, 2, 3, 3, 4, 4 }, percent = 10}
 }
 local SUPER_HIVE_MAP_COLOR = {r = 0.25, g = 0.75, b = 1, a = 1}
-local SUPER_HIVE_GLOW_TINT = {r = 0.25, g = 0.55, b = 1}
 -- the body is drawn at the full scale, the collision box stops growing here (a hive of level 10 has 2.1)
 local SUPER_HIVE_MAX_COLLISION_SCALE = 2.4
 
@@ -1426,8 +1425,8 @@ function swarmUtils.buildEntitySpawner(template, factionBuildings)
     end
 end
 
--- Paranoidal: super-hives (libs/SuperHives.lua). Built like hives, then: extra resistances, the map colour, a blue
--- glow under it (draw_as_light: visible at night), a brood of the faction's biters (else spitters) one tier up released
+-- Paranoidal: super-hives (libs/SuperHives.lua). Built like hives, then: extra resistances, the map colour, a glow
+-- of the faction colour under it (draw_as_light: visible at night), a brood of the faction's biters (else spitters) one tier up released
 -- on death. The artifact loot is added in data-final-fixes (the Bob items may not exist yet).
 local function superHiveBrood(faction, tier)
     local broodTier = mMin(tier + 1, 10)
@@ -1497,7 +1496,7 @@ function swarmUtils.buildSuperHive(template)
                 scale = unitSpawner.scale,
                 priority = "high",
                 draw_as_light = true,
-                tint = SUPER_HIVE_GLOW_TINT,
+                tint = constants.superHiveAuraColor(template.tint, template.tint2),
                 shift = {0, 0.5}
             }
             local collisionHalf = 2.2 * mMin(unitSpawner.scale, SUPER_HIVE_MAX_COLLISION_SCALE)

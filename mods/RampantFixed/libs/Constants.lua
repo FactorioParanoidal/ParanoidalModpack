@@ -2105,5 +2105,25 @@ constants.FACTION_EVOLVE_MAPPING["turret"] = biterAndSpitter
 -- a hive may grow into a super-hive (allowed by libs/SuperHives.lua: chance, spacing and limit)
 constants.FACTION_EVOLVE_MAPPING["hive"] = {["super-hive"] = 0}
 
+-- the colour of a super-hive's aura and night light (prototypes/SwarmUtils.lua, libs/SuperHives.lua): the more saturated
+-- of the faction body tint and mask tint, brightened to a full channel; grey factions glow white
+function constants.superHiveAuraColor(tint, tint2)
+    local function saturation(c)
+        if not c then
+            return -1
+        end
+        return math.max(c.r, c.g, c.b) - math.min(c.r, c.g, c.b)
+    end
+    local color = tint or tint2 or {r = 1, g = 1, b = 1}
+    if saturation(tint2) > saturation(tint) then
+        color = tint2
+    end
+    local peak = math.max(color.r, color.g, color.b)
+    if peak <= 0.05 then
+        return {r = 1, g = 1, b = 1}
+    end
+    return {r = color.r / peak, g = color.g / peak, b = color.b / peak}
+end
+
 constantsG =  constants
 return constants

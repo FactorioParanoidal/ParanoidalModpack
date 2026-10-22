@@ -3,7 +3,7 @@
 -- In Beta 8 the "Super Hive" was the Bob super spawner (10000 health, 1 health per tick) that kept a share of its
 -- autoplaced nests through the Rampant replacement. Now it is a building of every Rampant faction with a hive
 -- (libs/Constants.lua, prototypes/SwarmUtils.lua buildSuperHive): tiers 1-10, 3x the health of the hive (at least 10000: 10000-270000), 60-120 health per
--- second, spawns about one level above a hive, faction resistances plus a bonus, a blue glow, a brood on death and
+-- second, spawns about one level above a hive, faction resistances plus a bonus, a glow of the faction colour, a brood on death and
 -- Bob artifacts as loot.
 --  * origin: a nest placed by Rampant (a new chunk, an expansion or the growth of a base) becomes a super-hive with a
 --    chance from the start of the game: 50% with a resource (ore, oil...) within RESOURCE_RADIUS, else 0.4% at 0%
@@ -13,9 +13,11 @@
 --    super-hive of the surface and at most LIMIT_BASE + LIMIT_EVO x evolution of them per surface;
 --  * it is a nest of its base for the AI (squads, activeness, champions), changes its faction with the base mutations
 --    and its level with the base level, as the other buildings do;
---  * looks: bigger than a hive of its level (prototype), a blue glow and a ring around it drawn by this script, a
---    blue light at night and a blue map colour (prototype);
---  * heart of the nest: every PULSE_TICKS it heals the damaged nests and worms of its force around it;
+--  * looks: bigger than a hive of its level (prototype), an aura drawn by this script: a soft glow of the faction
+--    colour (constants.superHiveAuraColor) that fades out at the aura radius, no ring; a light of the same colour at
+--    night (prototype) and a blue map colour (prototype);
+--  * heart of the nest: every PULSE_TICKS it heals the damaged nests and worms of its force around it; a heal makes
+--    the aura flare up and fade;
 --  * the lair of the champions (libs/Champions.lua): an hour boss always, a champion with 50% leaves from a random
 --    super-hive within reach of its target and comes back to it to regenerate; its unit and faction come from a random
 --    ordinary nest around, as without a super-hive. Without a super-hive near the target 3 of 4 hour bosses do not
@@ -62,12 +64,17 @@ local PULSES_PER_UPDATE = 4         -- superHives.update runs every 30 ticks (co
 local STEPS_PER_UPDATE = 12
 local DEATH_POINTS = constants.RECOVER_NEST_COST * 3
 local HOUR_BOSS_TIER = 7            -- the avenger of a super-hive of this tier and above is an hour boss
-local PULSE_COLOR = {r = 0.15, g = 0.35, b = 0.75, a = 0.35}
 local FALLEN_COLOR = {r = 0.45, g = 0.75, b = 1}
-local AURA_COLOR = {r = 0.3, g = 0.55, b = 1}
-local AURA_GLOW_SPRITE = "rampantFixed-champion-glow"     -- 128 px (4 tiles) at scale 1 (prototypes/Champions.lua)
-local AURA_GLOW_K = 1.5                                    -- glow width / selection width
-local AURA_RING_K = 0.8                                    -- ring radius / selection width
+-- aura: the champion glow sprite, a soft radial gradient of 128 px (radius 2 tiles at scale 1, prototypes/Champions.lua)
+-- whose alpha is below 10% in its outer quarter, so a glow of AURA_REACH x the aura radius fades out at the aura radius
+local AURA_GLOW_SPRITE = "rampantFixed-champion-glow"
+local AURA_RADIUS_K = 0.8           -- aura radius / selection width
+local AURA_REACH = 1.25             -- glow radius / aura radius
+local AURA_BRIGHTNESS = 0.6         -- colour of the glow...
+local AURA_ALPHA = 0.3              -- ...over its alpha: partly additive, so it shines over the ground
+local FLARE_STEPS = {15, 30, 45}    -- a heal: layers of this lifetime (ticks) over the aura, they go out one by one
+local FLARE_BRIGHTNESS = 0.25       -- per layer
+local AURA_VERSION = 2              -- record.aura: 2 = the glow without a ring (true: the blue glow and ring of 9.02.14)
 local HEALED_TYPES = {"unit-spawner", "turret"}
 
 ----------------------------------------------------------------------------------------------------------------------
@@ -106,33 +113,66 @@ local function forget(data, unitNumber)
     end
 end
 
--- the aura (like the glow of the champions): a blue glow under it and a ring on the ground; both are attached to the
--- entity, so they go with it
-local function drawAura(record)
-    local entity = record.entity
+-- aura colour by faction (constants.superHiveAuraColor), built on first use from the startup faction set
+local auraColors = {}
+
+local function auraColor(universe, name)
+    local faction = universe.enemyAlignmentLookup and universe.enemyAlignmentLookup[name]
+    local color = faction and auraColors[faction]
+    if not color then
+        for _, entry in pairs(constants.FACTION_SET) do
+            if entry.type == faction then
+                color = constants.superHiveAuraColor(entry.tint, entry.tint2)
+                break
+            end
+        end
+        color = color or {r = 1, g = 1, b = 1}
+        if faction then
+            auraColors[faction] = color
+        end
+    end
+    return color
+end
+
+-- a glow sprite under the super-hive, attached to it (goes and dies with it); tint premultiplied by brightness
+local function drawGlow(entity, color, brightness, alpha, timeToLive)
     local box = entity.prototype.selection_box
-    local width = mMax(1, box.right_bottom.x - box.left_top.x)
-    local glowScale = width * AURA_GLOW_K / 4
-    local alpha = 0.5
-    rendering.draw_sprite({
+    local radius = mMax(1, box.right_bottom.x - box.left_top.x) * AURA_RADIUS_K
+    local scale = radius * AURA_REACH / 2
+    return rendering.draw_sprite({
         sprite = AURA_GLOW_SPRITE,
         surface = entity.surface,
         target = entity,
-        tint = {r = AURA_COLOR.r * alpha, g = AURA_COLOR.g * alpha, b = AURA_COLOR.b * alpha, a = alpha},
-        x_scale = glowScale,
-        y_scale = glowScale * 0.75,
+        tint = {r = color.r * brightness, g = color.g * brightness, b = color.b * brightness, a = alpha},
+        x_scale = scale,
+        y_scale = scale,
         render_layer = "lower-object",
+        time_to_live = timeToLive,
     })
-    rendering.draw_circle({
-        color = {r = AURA_COLOR.r * 0.6, g = AURA_COLOR.g * 0.6, b = AURA_COLOR.b * 0.6, a = 0.6},
-        radius = width * AURA_RING_K,
-        width = 4,
-        filled = false,
-        target = entity,
-        surface = entity.surface,
-        draw_on_ground = true,
-    })
-    record.aura = true
+end
+
+local function drawAura(universe, record)
+    local entity = record.entity
+    drawGlow(entity, auraColor(universe, entity.name), AURA_BRIGHTNESS, AURA_ALPHA)
+    record.aura = AURA_VERSION
+end
+
+-- the aura of 9.02.14 (blue glow and ring) was not kept in the records: drop every render object of this mod attached
+-- to a super-hive once, the next updates draw the new aura (record.aura ~= AURA_VERSION)
+local function dropOldAuras(data)
+    data.auraVersion = AURA_VERSION
+    local records = data.records
+    for _, object in pairs(rendering.get_all_objects(script.mod_name)) do
+        local kind = object.valid and object.type
+        local target = ((kind == "sprite") or (kind == "circle")) and object.target
+        local entity = target and target.entity
+        if entity and entity.valid and entity.unit_number and records[entity.unit_number] then
+            object.destroy()
+        end
+    end
+    for _, record in pairs(records) do
+        record.aura = nil
+    end
 end
 
 -- every creation path of Rampant structures (libs/BaseUtils.lua) calls this with the new entity
@@ -155,7 +195,10 @@ function superHives.register(universe, entity)
         nextPulse = game.tick + mRandom(PULSE_TICKS)
     }
     data.counts[index] = (data.counts[index] or 0) + 1
-    drawAura(data.records[unitNumber])
+    if data.auraVersion ~= AURA_VERSION then
+        dropOldAuras(data)
+    end
+    drawAura(universe, data.records[unitNumber])
 end
 
 ----------------------------------------------------------------------------------------------------------------------
@@ -263,7 +306,7 @@ end
 
 local healQuery = {position = {x = 0, y = 0}, radius = HEART_RADIUS, force = "enemy", type = HEALED_TYPES}
 
-local function pulse(record, tick)
+local function pulse(universe, record, tick)
     record.nextPulse = tick + PULSE_TICKS
     local entity = record.entity
     local surface = entity.surface
@@ -286,16 +329,10 @@ local function pulse(record, tick)
         end
     end
     if healed > 0 then
-        rendering.draw_circle({
-            color = PULSE_COLOR,
-            radius = HEART_RADIUS,
-            width = 3,
-            filled = false,
-            target = entity,
-            surface = surface,
-            time_to_live = 45,
-            draw_on_ground = true
-        })
+        local color = auraColor(universe, entity.name)
+        for i = 1, #FLARE_STEPS do
+            drawGlow(entity, color, FLARE_BRIGHTNESS, 0, FLARE_STEPS[i])
+        end
     end
 end
 
@@ -310,6 +347,9 @@ function superHives.update(universe, tick)
     if (key ~= nil) and (records[key] == nil) then
         key = nil
     end
+    if data.auraVersion ~= AURA_VERSION then
+        dropOldAuras(data)
+    end
     local pulses = 0
     for _ = 1, STEPS_PER_UPDATE do
         local nextKey, record = next(records, key)
@@ -321,11 +361,11 @@ function superHives.update(universe, tick)
             forget(data, nextKey)       -- removed by a script without a death event (a mutation replaces it)
         else
             key = nextKey
-            if not record.aura then
-                drawAura(record)            -- a super-hive registered before the aura existed
+            if record.aura ~= AURA_VERSION then
+                drawAura(universe, record)  -- registered before the aura existed or with an old one
             end
             if tick >= record.nextPulse then
-                pulse(record, tick)
+                pulse(universe, record, tick)
                 pulses = pulses + 1
                 if pulses >= PULSES_PER_UPDATE then
                     break
