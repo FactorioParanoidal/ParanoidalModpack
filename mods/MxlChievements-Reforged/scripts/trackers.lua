@@ -165,7 +165,7 @@ trackers["workshop"] = {
       local entity = record.entity
       if entity and entity.valid then
         local finished = entity.products_finished
-        if finished > record.last then
+        if finished > record.last and not core.is_sandbox_surface(entity.surface) then
           add(core.force_data(entity.force.index), "refined", finished - record.last)
           changed[entity.force.index] = entity.force
         end
@@ -235,8 +235,10 @@ local function wind_share(core, names)
         if prototypes.entity[name] then table.insert(present, name) end
       end
       for _, surface in pairs(game.surfaces) do
-        turbine = surface.find_entities_filtered({name = present, limit = 1})[1]
-        if turbine then break end
+        if not core.is_sandbox_surface(surface) then
+          turbine = surface.find_entities_filtered({name = present, limit = 1})[1]
+          if turbine then break end
+        end
       end
     end
     world.turbine = turbine
@@ -522,9 +524,11 @@ trackers["gases"] = {
       local data = core.force_data(force.index)
       data.gases = data.gases or {}
       for _, surface in pairs(game.surfaces) do
-        local statistics = force.get_fluid_production_statistics(surface)
-        for _, gas in ipairs(list) do
-          if not data.gases[gas] and statistics.get_input_count(gas) > 0 then data.gases[gas] = true end
+        if not core.is_sandbox_surface(surface) then
+          local statistics = force.get_fluid_production_statistics(surface)
+          for _, gas in ipairs(list) do
+            if not data.gases[gas] and statistics.get_input_count(gas) > 0 then data.gases[gas] = true end
+          end
         end
       end
       local seen = 0

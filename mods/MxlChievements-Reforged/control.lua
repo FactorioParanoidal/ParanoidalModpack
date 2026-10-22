@@ -75,11 +75,66 @@ function core.world()
   return storage.mxlr.world
 end
 
--- Forces that have players, in index order.
+---------------------------------------------------------------------------------------------------
+-- Blueprint Sandboxes: nothing done in a lab counts. Its forces ("bpsb-sb-...") get no progress or
+-- unlocks, and tracker events of a player, entity, train, research or surface in a lab are ignored.
+
+local SANDBOX_FORCE_PATTERN = "^bpsb%-sb%-"
+local SANDBOX_SURFACE_PATTERN = "^bpsb%-lab%-"
+local sandboxes = script.active_mods["blueprint-sandboxes"] ~= nil
+
+function core.is_sandbox_force(force)
+  return sandboxes and force ~= nil and force.valid and force.name:find(SANDBOX_FORCE_PATTERN) ~= nil
+end
+
+function core.is_sandbox_surface(surface)
+  return sandboxes and surface ~= nil and surface.valid and surface.name:find(SANDBOX_SURFACE_PATTERN) ~= nil
+end
+
+function core.player_in_sandbox(player)
+  return player ~= nil and player.valid
+    and (core.is_sandbox_force(player.force) or core.is_sandbox_surface(player.surface))
+end
+
+local function entity_in_sandbox(entity)
+  return entity ~= nil and entity.valid
+    and (core.is_sandbox_surface(entity.surface) or core.is_sandbox_force(entity.force))
+end
+
+local EVENT_ENTITIES = {"entity", "rocket_silo", "rocket", "cause"}
+
+local function event_in_sandbox(event)
+  if not (sandboxes and type(event) == "table") then return false end
+  if event.player_index and core.player_in_sandbox(game.get_player(event.player_index)) then return true end
+  for _, key in ipairs(EVENT_ENTITIES) do
+    local entity = event[key]
+    if entity and entity.object_name == "LuaEntity" and entity_in_sandbox(entity) then return true end
+  end
+  local train = event.train
+  if train and train.valid then
+    local carriage = train.carriages[1]
+    if carriage and entity_in_sandbox(carriage) then return true end
+  end
+  local research = event.research
+  if research and research.valid and core.is_sandbox_force(research.force) then return true end
+  local force = event.force
+  if force and force.object_name == "LuaForce" and core.is_sandbox_force(force) then return true end
+  if event.surface_index and core.is_sandbox_surface(game.get_surface(event.surface_index)) then return true end
+  return false
+end
+
+-- Wraps a tracker handler fn(event, ...) so that it skips events in a lab.
+local function outside_sandbox(fn)
+  return function(event, ...)
+    if not event_in_sandbox(event) then return fn(event, ...) end
+  end
+end
+
+-- Forces that have players, in index order (Blueprint Sandboxes forces excluded).
 function core.player_forces()
   local list = {}
   for _, force in pairs(game.forces) do
-    if #force.players > 0 then table.insert(list, force) end
+    if #force.players > 0 and not core.is_sandbox_force(force) then table.insert(list, force) end
   end
   table.sort(list, function(a, b) return a.index < b.index end)
   return list
@@ -126,6 +181,7 @@ function core.unlock(scope, runtime, tier)
     unlocked.world[name] = true
     for _, player in pairs(game.players) do unlock_player(player, name) end
   elseif is_force(scope) then
+    if core.is_sandbox_force(scope) then return end
     local list = unlocked.forces[scope.index]
     if not list then
       list = {}
@@ -135,6 +191,7 @@ function core.unlock(scope, runtime, tier)
     list[name] = true
     for _, player in pairs(scope.players) do unlock_player(player, name) end
   else
+    if core.player_in_sandbox(scope) then return end
     unlock_player(scope, name)
   end
 end
@@ -226,14 +283,15 @@ local function register_static()
     local tracker, entries = trackers[tracker_name], active[tracker_name]
     for event_name, fn in pairs(tracker.events or {}) do
       local filter = tracker.filters and tracker.filters[event_name] and tracker.filters[event_name](entries)
-      add_handler(event_name, tracker_name, function(event) fn(event, entries, core) end, filter)
+      local guarded = outside_sandbox(fn)
+      add_handler(event_name, tracker_name, function(event) guarded(event, entries, core) end, filter)
     end
     if tracker.poll then
       table.insert(polls, {tracker_name, tracker.poll.every, function() tracker.poll.run(entries, core) end})
     end
     for input_name, fn in pairs(tracker.inputs or {}) do
       if prototypes.custom_input[input_name] then
-        inputs[input_name] = function(event) run(tracker_name, fn, event, entries, core) end
+        inputs[input_name] = function(event) run(tracker_name, outside_sandbox(fn), event, entries, core) end
       end
     end
   end
@@ -271,7 +329,7 @@ local function register_custom()
       local ok, map = pcall(tracker.custom)
       if ok and type(map) == "table" then
         for id, fn in pairs(map) do
-          script.on_event(id, function(event) run(tracker_name, fn, event, entries, core) end)
+          script.on_event(id, function(event) run(tracker_name, outside_sandbox(fn), event, entries, core) end)
         end
       elseif not ok then
         log(LOG .. "events of tracker " .. tracker_name .. " not registered: " .. tostring(map))

@@ -26,6 +26,11 @@ Date: 2026-10-14
       (remote get_force_records, polled once a minute): "Not a Gram Outside" (10 hours of work without
       releasing pollution) and "Workshop 24/7" (10 hours of work without power shortage). Without that
       remote interface the tracker does nothing.
+  Bugfixes:
+    - Nothing done in a Blueprint Sandboxes lab counts for scripted achievements: forces "bpsb-sb-..."
+      are not tracked and get no unlocks, tracker events of a player, entity, train, research or surface
+      in a lab ("bpsb-lab-...") are ignored, and lab surfaces are skipped by the gas statistics, the
+      workshop counter and the wind gauge. Achievements already unlocked stay.
   Locale:
     - Russian: new names for repetitive and plain achievements (numbered tiers, "!!!" series, module
       tiers), duplicate names removed, jokes added to hand-written descriptions, 137 flavor lines.
