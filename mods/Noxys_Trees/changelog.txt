@@ -9,6 +9,7 @@ Version: 9.5.3
     - Restrict the one-time planted-tree exclusion scan to tree prototypes.
     - Keep the missing-uranium guard, original random draws and gameplay settings.
     - Restore the 1.1 spreading exclusions for Angel's trees, gardens and puffer nests under their 2.0 names.
+    - Never kill the growing trees of Bio Industries (bio-tree-<tree>-<stage>), for any reason: Bio Industries decides their survival by the soil, while Noxys killed them next to the player's own seedlings and buildings. Grown trees are treated as before.
   Bug Fixes:
     - Growing trees of Bio Industries (bio-tree-<tree>-<stage>) no longer spread: the copies were not in its grow tables, so they never grew up and gave seedlings when cut.
 ---------------------------------------------------------------------------------------------------

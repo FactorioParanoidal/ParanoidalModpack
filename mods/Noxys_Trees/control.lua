@@ -41,6 +41,13 @@ noxy_trees.disabled_match = {
   -- Bio Industries grow stages: copies would not be in its grow tables and never grow up.
   ["^bio[-]tree[-].+[-]%d$"] = true,
 }
+-- Trees Noxys never kills: the grow stages of Bio Industries. Their growth and
+-- survival are handled by Bio Industries (soil fertility); Noxys would also kill them
+-- next to the player's own seedlings and buildings. Filled from these patterns.
+noxy_trees.protected = {}
+noxy_trees.protected_match = {
+  ["^bio[-]tree[-].+[-]%d$"] = true,
+}
 noxy_trees.degradable = { -- The floor tiles that can be degraded and into what.
   -- Vanilla tiles
   ["concrete"]                                   = "stone-path",
@@ -684,6 +691,7 @@ end
 
 local function deadening_tree(surface, tree, near_player)
   local name = tree.name
+  if noxy_trees.protected[name] then return end
   local dead = noxy_trees.dead[name]
   if dead == true then
     kill_tree(tree)
@@ -887,6 +895,11 @@ local function prepare_tree_prototypes()
     for pattern, _ in pairs(noxy_trees.disabled_match) do
       if name:find(pattern) then
         noxy_trees.disabled[name] = true
+      end
+    end
+    for pattern, _ in pairs(noxy_trees.protected_match) do
+      if name:find(pattern) then
+        noxy_trees.protected[name] = true
       end
     end
   end
