@@ -10,7 +10,7 @@
   "dependencies": [
     "base >= 2.0.0",
     "? angelsrefining >= 2.0.3",
-    "(?) rso-mod >= 7.0.0",
+    "(?) RSO-reforged >= 9.0.0",
     "? bobores >= 2.1.0",
     "? bobplates >= 2.1.0",
     "? Yuoki >= 1.2.0",

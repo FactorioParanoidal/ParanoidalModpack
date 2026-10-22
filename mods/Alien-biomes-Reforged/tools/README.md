@@ -134,12 +134,12 @@ Startup-настройка `alien-biomes-reforged-geology` (по умолчан�
 «цвет почвы → ресурс» живёт в `scripts/reforged-geology.lua` и отдаётся через
 `remote.call("alien-biomes-reforged", "geology_bias", surface_name, tile_names)` — таблица
 множителей весов для доминирующей почвы или `nil`. Само размещение руд делает RSO
-(`rso-mod/control.lua`, функции `geology_bias` и `weighted_allotments` перед `roll_region`):
+(`RSO-reforged/control.lua`, функции `geology_bias` и `weighted_allotments` перед `roll_region`):
 при первом броске нового региона он берёт 9 тайлов чанка, открывшего регион, и умножает вес
 подходящих ресурсов на 2. Без Reforged или с выключенной настройкой RSO работает как раньше,
 вплоть до последовательности случайных чисел. Стартовая зона RSO не затрагивается.
 
-Проверка логики без игры: `lua tools/test_geology.lua . ../rso-mod/control.lua`.
+Проверка логики без игры: `lua tools/test_geology.lua . ../RSO-reforged/control.lua`.
 
 ## Деревья: тени и карты нормалей в половинном разрешении
 

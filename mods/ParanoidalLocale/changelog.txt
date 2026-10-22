@@ -1,6 +1,7 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.26.0
   Changes:
+    - rso-mod was renamed to RSO-reforged: optional dependency and its [mod-name] key follow the new name.
     - RampantFixed.locale.cfg: removed the keys of the combat power-up capsule, its loot stone and the regeneration crystal (no longer in RampantFixed).
     - Russian mod names in the mod list now follow the format "English title (Russian translation)" for every mod of the build; all [mod-name] keys are kept in zzzz-user-overrides.cfg.
     - Removed duplicate [mod-name] keys from the other ru files (prismatic-belts.prismatic-belts-locale.cfg contained only that key and was deleted).

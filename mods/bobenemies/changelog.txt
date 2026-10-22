@@ -6,6 +6,7 @@ Date: 01. 06. 2026
     - Fixed artifacts on ground being covered by worm / spawner remains #568
   Changes:
     - Set item weights #553
+    - Paranoidal: removed settings-updates.lua: it only forced the enemy settings of rso-mod, which is now RSO-reforged and places all enemy bases itself.
     - Make Ground Radar adjust with quality #564
     - Allowed Alien artifact from small recipes to be selected as signals #592
 ---------------------------------------------------------------------------------------------------

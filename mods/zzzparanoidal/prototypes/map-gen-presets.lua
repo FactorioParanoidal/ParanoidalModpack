@@ -5,7 +5,7 @@
 --   * "Богатый ресурсами"-style: frequency = normal, size = big,
 --     richness = very-good для всех руд. С учётом того, что RSO
 --     читает все три слайдера и применяет их множителями к своему
---     конфигу (mods/rso-mod/control.lua:1180-1233), настройки реально
+--     конфигу (mods/RSO-reforged/control.lua, build_config_data), настройки реально
 --     влияют на размер/частоту/богатство залежей.
 --   * "Paranoidal: без врагов" — peaceful_mode + enemy-base.size=none,
 --     гнёзда не генерируются (Big-Monsters guard в этом случае тоже

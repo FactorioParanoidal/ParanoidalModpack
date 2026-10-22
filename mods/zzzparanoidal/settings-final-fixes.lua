@@ -151,7 +151,7 @@ end
 if mods["robot_attrition"] then
     set_settings_default_value("double-setting", "robot-attrition-factor", 1)
 end
-if mods["rso-mod"] then
+if mods["RSO-reforged"] then
     set_settings_default_value("double-setting", "rso-infinite-ore-threshold", 0.99)
     set_settings_default_value("bool-setting", "rso-remove-trees", true)
     set_settings_default_value("bool-setting", "rso-use-donuts", true)
