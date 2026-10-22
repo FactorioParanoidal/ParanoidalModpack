@@ -293,7 +293,28 @@ script.on_event(defines.events.on_chunk_charted, on_chunk_charted)
 
 script.on_nth_tick(CHECK_INTERVAL, check_players)
 
--- Read-only statistics for diagnostics and other mods, plus ruin signals for OreRadar.
+-- Old mines for RSO Reforged: these ruins of the set are placed next to rich ore fields.
+local MINES = {
+  small = { "pd-geologist-box" },
+  medium = { "pd-miners-village", "pd-prospect-drill" },
+  large = { "pd-mining-camp" },
+}
+
+local function spawn_mine(surface_index, center, size)
+  local names = MINES[size]
+  local core = remote.interfaces[CORE]
+  if not (names and core and core.spawn_ruin) or setting("current-ruin-set") ~= SET_NAME then return false end
+  local pick = names[math.random(#names)]
+  for _, ruin in ipairs(own[size]) do
+    if ruin.name == pick then
+      return remote.call(CORE, "spawn_ruin", ruin, size, center, surface_index, SET_NAME) == true
+    end
+  end
+  return false
+end
+
+-- Read-only statistics for diagnostics and other mods, ruin signals for OreRadar and old mines
+-- for RSO Reforged.
 remote.add_interface("AbandonedRuins-paranoidal", {
   ---@return {pending: integer, types: table<string, integer>, found: table<integer, integer>}
   get_stats = function()
@@ -306,6 +327,9 @@ remote.add_interface("AbandonedRuins-paranoidal", {
   -- Used by OreRadar: marks a random undiscovered ruin on the surface with a "?" chart tag for the
   -- force (once the chunk is charted) and returns its center. The tag is removed on discovery.
   signal_ruin = signal_ruin,
+  -- Used by RSO Reforged: places an old mine ruin of the given size ("small", "medium", "large")
+  -- centered at the position. Returns true if it was spawned (the journal records it as usual).
+  spawn_mine = spawn_mine,
 })
 
 commands.add_command("ruins", { "pd-ruins.command-help" }, show_progress)

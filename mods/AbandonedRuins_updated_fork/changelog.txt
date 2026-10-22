@@ -1,6 +1,9 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.5.7
 Date: 2026-09-07
+  Features:
+    - Paranoidal: remote function "spawn_ruin" places a given ruin at a position (global switch, excluded
+      surfaces and the ruin's surface list respected, "ruin spawned" event raised); used by RSO Reforged.
   Fixes:
     - ops, `spawn_ruin()` need to allow debug world to spawn ruins, too (thanks to @MoSII2710)
 ---------------------------------------------------------------------------------------------------

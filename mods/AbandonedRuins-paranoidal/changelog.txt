@@ -2,6 +2,8 @@
 Version: 1.0.1
 Date: 2026-10-14
   Features:
+    - Remote function "spawn_mine" for RSO Reforged: places an old mine ruin of this set (geologist's box,
+      miners' village, prospecting drill, mining camp) next to a rich ore field; the journal records it.
     - Remote function "signal_ruin" for Ore Radar: marks a random undiscovered ruin with a "?" map
       tag for the force. The tag disappears when a player discovers the ruin.
   Bugfixes:

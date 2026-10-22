@@ -25,6 +25,36 @@ remote.add_interface("AbandonedRuins",
   -- ruin_set (string), ruin_name (string). Subscribe in on_init and on_load.
   get_on_ruin_spawned_event = function() return on_ruin_spawned_event end,
 
+  -- Paranoidal: spawns the given ruin at a position (used by RSO Reforged for old mines through
+  -- AbandonedRuins-paranoidal). Respects the global switch, excluded surfaces and the ruin's own
+  -- surface list, clears the area like a random ruin and raises the "ruin spawned" event.
+  ---@param ruin Ruin
+  ---@param size string
+  ---@param center MapPosition
+  ---@param surface_index uint
+  ---@param ruinset_name string
+  ---@return boolean spawned
+  spawn_ruin = function(ruin, size, center, surface_index, ruinset_name)
+    local surface = game.get_surface(surface_index)
+    local half_size = spawning.ruin_half_sizes[size]
+    if not (surface and half_size and type(ruin) == "table" and type(center) == "table") then return false end
+    if not spawning.is_spawning_ruins_enabled()
+      or utils.str_contains_any_from_table(surface.name, surfaces.get_all_excluded())
+      or (ruin.spawn_on_surfaces ~= nil and ruin.spawn_on_surfaces[surface.name] == nil) then
+      return false
+    end
+    if not spawning.spawn_ruin(ruin, half_size, center, surface) then return false end
+    script.raise_event(on_ruin_spawned_event, {
+      surface = surface,
+      center = {x = center.x, y = center.y},
+      half_size = half_size,
+      size = size,
+      ruin_set = ruinset_name,
+      ruin_name = utils.get_ruin_name(ruin)
+    })
+    return true
+  end,
+
   -- Set whether ruins should be spawned at all
   ---@param spawn_ruins boolean
   enable_spawning_ruins = function(spawn_ruins)
