@@ -26,7 +26,23 @@ local function getCountColor(count)
     end
 end
 
-function helpers:mark(player, item, count) -- create highlight-box marker with item and count
+-- Paranoidal: quality icon in the lower left corner of the item icon (nil for normal quality).
+local function drawQuality(self, player, quality, scale, offset)
+    if quality == nil or quality == "normal" or not prototypes.quality[quality] then return nil end
+    local base = offset or {0, 0}
+    return rendering.draw_sprite{
+        sprite = "quality/" .. quality,
+        render_layer = "selection-box",
+        target = self:toPlain(),
+        target_offset = {base[1] - 0.25 * scale, base[2] + 0.25 * scale},
+        players = player and {player:toPlain()},
+        surface = self.surface,
+        x_scale = scale * 0.4,
+        y_scale = scale * 0.4,
+    }
+end
+
+function helpers:mark(player, item, count, quality) -- create highlight-box marker with item and count
     
     if item ~= nil then
 
@@ -64,6 +80,9 @@ function helpers:mark(player, item, count) -- create highlight-box marker with i
                 x_scale = scale,
                 y_scale = scale,
             },
+            qualityIcon = drawQuality(self, player, quality, scale,
+                self.type == "spider-vehicle" and {0,-box:boxheight()*3/4} or nil),
+            quality = quality,
             text = rendering.draw_text({
                 text = getShortCount(count),
                 target = self:toPlain(),
@@ -125,11 +144,13 @@ function this.unmark(cache) -- destroy all distribution markers of a player (usi
 	cache.markers = metatables.new("entityAsIndex")
 end
 
-function helpers:spawnDistributionText(player, item, amount, offY, color) -- spawn distribution text on entity
+
+function helpers:spawnDistributionText(player, item, amount, offY, color, quality) -- spawn distribution text on entity
 	local pos = self.position
+	local qualityTag = (quality and quality ~= "normal") and (" [quality=" .. quality .. "]") or ""
 
     player.create_local_flying_text{ -- spawn text
-        text = {"", "       ", -amount, " ", prototypes.item[item].localised_name},
+        text = {"", "       ", -amount, " ", prototypes.item[item].localised_name, qualityTag},
 		position = { pos.x - 0.5, pos.y + (offY or 0) },
 		color = color or config.colors.default
 	}

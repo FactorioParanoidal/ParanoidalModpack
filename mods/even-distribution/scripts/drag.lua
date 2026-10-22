@@ -3,7 +3,11 @@ local util = scripts.util
 local visuals = scripts.visuals
 local metatables = scripts.metatables
 local protocache = require("scripts.protocache")
+local itemstate = require("scripts.itemstate")
 local config = require("config")
+
+-- Paranoidal: the dragged item has a quality (cache.quality, nil in caches of older saves = normal); the
+-- original skipped every item that was not of normal quality ("TODO: Add support for quality").
 
 local helpers = scripts.helpers
 local _ = helpers.on
@@ -98,7 +102,8 @@ function this.distributeItems(player, cache)
 	local takeFromCar  = player:setting("takeFromCar")
 	local replaceItems = player:setting("replaceItems")
 	local item         = cache.item
-	local totalItems   = player:itemcount(item, takeFromInv, takeFromCar)
+	local quality      = cache.quality or "normal"
+	local totalItems   = player:itemcount(item, takeFromInv, takeFromCar, quality)
 
 	if cache.half then totalItems = math.ceil(totalItems / 2) end
 
@@ -106,9 +111,10 @@ function this.distributeItems(player, cache)
 
 		local itemsInserted = 0
 		local color
+		local transfer = itemstate.begin(item, quality, {player, entity})
 		
 		if amount > 0 then
-			local takenFromPlayer = player:removeItems(item, amount, takeFromInv, takeFromCar, false)
+			local takenFromPlayer = player:removeItems(item, amount, takeFromInv, takeFromCar, false, quality)
 			
 			if takenFromPlayer < amount then color = config.colors.insufficientItems end
 			
@@ -117,20 +123,21 @@ function this.distributeItems(player, cache)
 					-- if modules are recipe ingredients, dont put into module slots
 					-- modules = not entity:is("crafting machine") or not _(entity.get_recipe()):hasIngredient(item),
 					output = false,
-				})
+				}, quality)
 
 				local failedToInsert = takenFromPlayer - itemsInserted
 				if failedToInsert > 0 then
-					player:returnItems(item, failedToInsert, takeFromCar, false)
+					player:returnItems(item, failedToInsert, takeFromCar, false, quality)
 					color = config.colors.targetFull
 				end
 			end
 		else
 			color = config.colors.insufficientItems
 		end
+		itemstate.finish(transfer, {entity, player})
 		
 		-- feedback
-		entity:spawnDistributionText(player,item, itemsInserted, 0, color)
+		entity:spawnDistributionText(player,item, itemsInserted, 0, color, quality)
 		-- player.play_sound{ path = "utility/inventory_move" }
 
 	end)
@@ -143,21 +150,27 @@ function this.balanceItems(player, cache)
 	local takeFromCar       = player:setting("takeFromCar")
 	local replaceItems      = player:setting("replaceItems")
 	local item              = cache.item
+	local quality           = cache.quality or "normal"
 	local entitiesToProcess = metatables.new("entityAsIndex")
 	local itemCounts        = metatables.new("entityAsIndex")
 
-	local totalItems  = player:itemcount(item, takeFromInv, takeFromCar)
+	-- durability/rounds of the item over the player and every target, kept through the whole balance
+	local involved = {player}
+	_(cache.entities):where("valid", function(entity) involved[#involved + 1] = entity end)
+	local transfer = itemstate.begin(item, quality, involved)
+
+	local totalItems  = player:itemcount(item, takeFromInv, takeFromCar, quality)
 	if cache.half then totalItems = math.ceil(totalItems / 2) end
 	if totalItems > 0 then
-		totalItems = player:removeItems(item, totalItems, takeFromInv, takeFromCar, false)
+		totalItems = player:removeItems(item, totalItems, takeFromInv, takeFromCar, false, quality)
 	end
 
 	-- collect all items from all entities
 	_(cache.entities):where("valid", function(entity)
-		local count = _(entity):itemcount(item)
+		local count = _(entity):itemcount(item, nil, nil, quality)
 		local removed = 0
 		if count > 0 then
-			removed = entity.remove_item{ name = item, count = count }
+			removed = entity.remove_item{ name = item, quality = quality, count = count }
 			totalItems = totalItems + removed
 		end
 
@@ -186,14 +199,14 @@ function this.balanceItems(player, cache)
 					-- if modules are recipe ingredients, dont put into module slots
 					-- modules = not entity:is("crafting machine") or not _(entity.get_recipe()):hasIngredient(item),
 					output = false,
-				})
+				}, quality)
 
 				itemCount.current = itemCount.current + itemsInserted
 				totalItems = totalItems - itemsInserted
 
 				local failedToInsert = amount - itemsInserted
 				if failedToInsert > 0 then
-					entity:spawnDistributionText(player,item, itemCount.current - itemCount.original, 0, config.colors.targetFull)
+					entity:spawnDistributionText(player,item, itemCount.current - itemCount.original, 0, config.colors.targetFull, quality)
 					entitiesToProcess[entity] = nil -- set nil while iterating bad?
 					return
 				end
@@ -210,12 +223,17 @@ function this.balanceItems(player, cache)
 		local itemCount = itemCounts[entity]
 		local amount = itemCount.current - itemCount.original
 		_(entity):spawnDistributionText(player,item, amount, 0, (itemCount.current == 0) and config.colors.insufficientItems 
-																				   or config.colors.default)
+																				   or config.colors.default, quality)
 	end)
 
 	if totalItems > 0 then
-		player:returnItems(item, totalItems, takeFromCar, false)
+		player:returnItems(item, totalItems, takeFromCar, false, quality)
 	end
+
+	local drainOrder = {}
+	for index = 2, #involved do drainOrder[#drainOrder + 1] = involved[index] end
+	drainOrder[#drainOrder + 1] = player
+	itemstate.finish(transfer, drainOrder)
 end
 
 function this.on_fast_entity_transfer_hook(event) -- fires on every CTRL+click: keep it trivial
@@ -236,7 +254,6 @@ function this.on_selected_entity_changed(event)
 	local selected = player.selected        ; if not selected then return end
 	local cursor_stack = player.cursor_stack
 	if not (cursor_stack and cursor_stack.valid_for_read) then return end
-	if cursor_stack.quality.name ~= "normal" then return end -- TODO: Add support for quality
 	if not protocache.isAllowedEntity(selected.name) then return end
 
 	local cache = storage.cache[index]; if not cache then return end
@@ -245,10 +262,12 @@ function this.on_selected_entity_changed(event)
 	if _(selected):isIgnored(player) then return end
 
 	local item = cursor_stack.name
+	local quality = cursor_stack.quality.name
 	cache.selectedEvent = {
 		tick             = event.tick,
 		item             = item,
-		itemCount        = selected.get_item_count(item),
+		quality          = quality,
+		itemCount        = selected.get_item_count({ name = item, quality = quality }),
 		cursorStackCount = cursor_stack.count,
 	}
 end
@@ -264,8 +283,10 @@ function this.on_player_fast_transferred(event)
 	local selected = _(player.selected)       ; if selected:isnot("valid") or selected:isIgnored(player) then return end
 	if event.entity ~= selected:toPlain() then return end
 
+	local quality = selectedEvent.quality or "normal"
 	cache.item             = selectedEvent.item
-	cache.itemCount        = selected.get_item_count(selectedEvent.item) - selectedEvent.itemCount
+	cache.quality          = quality
+	cache.itemCount        = selected.get_item_count({ name = selectedEvent.item, quality = quality }) - selectedEvent.itemCount
 	cache.cursorStackCount = selectedEvent.cursorStackCount
 
 	this.onStackTransferred(selected, player, cache) -- handle stack transfer
@@ -276,9 +297,10 @@ function this.onStackTransferred(entity, player, cache) -- handle vanilla drag s
 	local takeFromCar      = player:setting("takeFromCar")
 	local distributionMode = player:setting("distributionMode")
 	local item = cache.item
+	local quality = cache.quality or "normal"
 	local first = #cache.entities > 0 and util.epairs(cache.entities)() or nil
 
-	if _(entity):is("valid") and not _(entity):isIgnored(player) and this.isEntityEligible(entity, item) and 
+	if _(entity):is("valid") and not _(entity):isIgnored(player) and this.isEntityEligible(entity, item, quality) and
 	   (_(first):isnot("valid") or ((first.type == "car" or  first.type == "spider-vehicle") and (entity.type == "car" or  entity.type == "spider-vehicle"))
 	   				 		    or ((first.type ~= "car" and first.type ~= "spider-vehicle") and (entity.type ~= "car" and entity.type ~= "spider-vehicle"))) then
 	
@@ -297,7 +319,7 @@ function this.onStackTransferred(entity, player, cache) -- handle vanilla drag s
 		this.updateRegistration()
 
 		if not cache.entities[entity] then
-			cache.markers[entity] = entity:mark(player, item)
+			cache.markers[entity] = entity:mark(player, item, nil, quality)
 			cache.entities[entity] = entity -- helper wrapper: distribution callbacks use its methods
 		end
 
@@ -306,17 +328,18 @@ function this.onStackTransferred(entity, player, cache) -- handle vanilla drag s
 		end
 	end
 
-	-- give back transferred items
+	-- give back transferred items (their durability/rounds go back to the cursor first)
 	local collected = 0
 	local cursor_stack = player.cursor_stack
+	local transfer = itemstate.begin(item, quality, {player, entity})
 
 	if cache.itemCount > 0 then
-		collected = entity.remove_item{ name = item, count = cache.itemCount }
+		collected = entity.remove_item{ name = item, quality = quality, count = cache.itemCount }
 	end
 
-	if cursor_stack.valid_for_read and cursor_stack.name ~= item then
+	if cursor_stack.valid_for_read and (cursor_stack.name ~= item or cursor_stack.quality.name ~= quality) then
 		-- other items in cursor
-		player:inventory().insert{ name = item, count = collected }
+		player:inventory().insert{ name = item, quality = quality, count = collected }
 
 	else -- same items
 		-- collect cursor and transferred items temporarily
@@ -326,29 +349,30 @@ function this.onStackTransferred(entity, player, cache) -- handle vanilla drag s
 
 		-- fill cursor to previous amount
 		if collected < cache.cursorStackCount then
-			collected = collected + player:inventory().remove{ name = item, count = cache.cursorStackCount - collected }
+			collected = collected + player:inventory().remove{ name = item, quality = quality, count = cache.cursorStackCount - collected }
 		end
 		
 		if collected > 0 then
 			if collected < cache.cursorStackCount then
-				cursor_stack.set_stack{ name = item, count = collected }
+				cursor_stack.set_stack{ name = item, quality = quality, count = collected }
 			else
-				cursor_stack.set_stack{ name = item, count = cache.cursorStackCount }
+				cursor_stack.set_stack{ name = item, quality = quality, count = cache.cursorStackCount }
 				collected = collected - cache.cursorStackCount
 				if collected > 0 then
-					player:inventory().insert{ name = item, count = collected }
+					player:inventory().insert{ name = item, quality = quality, count = collected }
 				end
 			end
 		end
 	end
+	itemstate.finish(transfer, {player, entity})
 
 	---- visuals ----
-	local totalItems  = player:itemcount(item, takeFromInv, takeFromCar)
+	local totalItems  = player:itemcount(item, takeFromInv, takeFromCar, quality)
 	if cache.half then totalItems = math.ceil(totalItems / 2) end
 
 	if distributionMode == "balance" then
 		_(cache.entities):where("valid", function(entity)
-			totalItems = totalItems + _(entity):itemcount(item)
+			totalItems = totalItems + _(entity):itemcount(item, nil, nil, quality)
 		end)
 	end
 
@@ -367,11 +391,11 @@ function this.onStackTransferred(entity, player, cache) -- handle vanilla drag s
 	player.clear_local_flying_texts()
 end
 
-function this.isEntityEligible(entity, item)
+function this.isEntityEligible(entity, item, quality)
 	local prototype = prototypes.item[item]
 	entity = _(entity)
 	
-	if entity.can_insert(item) then
+	if entity.can_insert({ name = item, quality = quality or "normal" }) then
 		return true
 	elseif entity.burner and entity.burner.fuel_categories[prototype.fuel_category] then
 		return true
@@ -398,6 +422,7 @@ end
 
 function this.resetCache(cache)
 	cache.item = nil
+	cache.quality = nil
 	cache.half = false
 	cache.entities = metatables.new("entityAsIndex")
 	visuals.unmark(cache)
