@@ -37,6 +37,8 @@ return {
     icon = {item = "repair-pack"}},
   {id = "chemist", kind = "script", theme = "resources", tracker = "gases", mods = {"angelspetrochem"},
     icon = {fluid = "angels-gas-hydrogen"}},
+  {id = "prospector", kind = "script", theme = "resources", tracker = "rso", params = {stat = "veins"},
+    amounts = {1, 10}, mods = {"RSO-reforged"}, icon = {entity = "coal"}},
 
   -- quality
   {id = "restorer", kind = "script", theme = "quality", tracker = "workshop", amounts = {1e4, 1e6},
@@ -86,6 +88,8 @@ return {
     needs = {entities = {"bm-volcano"}}, icon = {entity = "biterzilla35"}},
   {id = "evolution", kind = "script", theme = "combat", tracker = "evolution", amounts = {50, 90, 99}, fight = true,
     icon = {entity = "behemoth-biter"}},
+  {id = "guard-breaker", kind = "script", theme = "combat", tracker = "rso", params = {stat = "guards"},
+    amounts = {1, 10}, fight = true, mods = {"RSO-reforged"}, icon = {entity = "biter-spawner"}},
 
   -- nature
   {id = "first-winter", kind = "script", theme = "nature", tracker = "season", params = {season = "winter"},

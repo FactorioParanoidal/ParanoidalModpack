@@ -7,6 +7,8 @@ Date: 2026-10-14
     - 71 scripted achievements (control.lua): deaths, distances, teleports, rockets and their cargo,
       seasons, midnights, evolution, ruins, wind, RPG levels, entity counts and more.
   Features:
+    - RSO Reforged achievements (tracker "rso"): "Prospector" — find 1 / 10 rich ore veins (charted), "Guard Breaker" —
+      destroy 1 / 10 nests guarding rich ore fields.
     - Entry kinds for every engine achievement type: build, kill, research, science pack, use item, equip
       armor, shoot, robots, combat robots, damage, group attacks, avoid building, avoid crafting,
       objective in time, energy production and script.

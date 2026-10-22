@@ -296,6 +296,8 @@
 | Голографический бред | `mxlr-holo` | построить `hs_holo_sign`: 50 |
 | Да будет СВЕТ | `mxlr-let-there-be-light` | построить `deadlock-large-lamp`: 100 |
 | Огни большого города | `mxlr-city-lights` | построить `flat-lamp`: 1 тыс. |
+| Золотая жила | `mxlr-prospector-1…2` | Найдите 1 / 10 богатых рудных жил. *(скрипт: rso)* — нужен `RSO-reforged` |
+| Охрана снята | `mxlr-guard-breaker-1…2` | Уничтожьте 1 / 10 гнёзд, охраняющих богатые месторождения. *(скрипт: rso)* — нужен `RSO-reforged` ⚔ |
 | Археолог | `mxlr-archaeologist-1…2` | Найдите 10 / 50 разных руин. *(скрипт: ruins)* — нужен `AbandonedRuins-paranoidal` |
 | Археолог: все руины | `mxlr-archaeologist-all` | Найдите руины всех видов. *(скрипт: ruins)* — нужен `AbandonedRuins-paranoidal` |
 

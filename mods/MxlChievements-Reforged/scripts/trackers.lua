@@ -635,6 +635,25 @@ trackers["ruins"] = {
 }
 
 ---------------------------------------------------------------------------------------------------
+-- RSO Reforged: rich veins found (charted) and guard nests cleared by the force (remote force_stats).
+
+trackers["rso"] = {
+  poll = {every = MINUTE, run = function(entries, core)
+    if not has_remote("RSO", "force_stats") then return end
+    local ok, stats = pcall(remote.call, "RSO", "force_stats")
+    if not ok or type(stats) ~= "table" then return end
+    for _, force in ipairs(core.player_forces()) do
+      local own = stats[force.index]
+      if type(own) == "table" then
+        for _, entry in ipairs(entries) do
+          core.progress(force, entry, tonumber(own[entry.params.stat]) or 0)
+        end
+      end
+    end
+  end},
+}
+
+---------------------------------------------------------------------------------------------------
 -- Rockets
 
 local function silo_force(event)
