@@ -1,14 +1,18 @@
 -- Ore Radar: each radar has a mode chosen in a window opened by clicking the radar. In the resource
 -- mode (default) a completed scan reveals a generated chunk with resources; in the signal mode it
--- marks an undiscovered ruin of AbandonedRuins-paranoidal and falls back to ore when none is left.
+-- marks an undiscovered ruin of AbandonedRuins-paranoidal; in the survey mode RSO Reforged marks on
+-- the map the nearest field that is planned but not generated yet. The last two fall back to ore.
 local WORK_PER_TICK = 8
 local SCANS_PER_TICK = 4
 -- Random picks per ore scan: depleted chunks are dropped, chunks unknown to the force are preferred.
 local PICKS_PER_SCAN = 8
 local RUINS = "AbandonedRuins-paranoidal"
+local RSO = "RSO"
+local SURVEY = "survey"
 local NAME = "ore-radar"
 local FRAME = "ore-radar-mode"
--- storage.modes[unit number] = true for radars in the signal mode; absent means resources.
+-- storage.modes[unit number] = true for radars in the signal mode, "survey" in the survey mode;
+-- absent means resources.
 local on_tick
 
 local function queue()
@@ -145,13 +149,24 @@ local function reveal_ruin(surface, force)
   return true
 end
 
+local function forecast(surface, force, position)
+  local interface = remote.interfaces[RSO]
+  if not (interface and interface.forecast) then return false end
+  return remote.call(RSO, "forecast", surface.index, force.index, position) ~= nil
+end
+
 local function modes()
   storage.modes = storage.modes or {}
   return storage.modes
 end
 
+-- false (resources), true (signals) or "survey"
+local function mode_of(entity)
+  return storage.modes ~= nil and storage.modes[entity.unit_number] or false
+end
+
 local function is_signal(entity)
-  return storage.modes ~= nil and storage.modes[entity.unit_number] == true
+  return mode_of(entity) == true
 end
 
 local function scan_step()
@@ -162,9 +177,16 @@ local function scan_step()
   if not radar.valid then return end
   local surface, force = radar.surface, radar.force
   -- The mode is read when the scan is processed; a kept scan looks for a ruin only once.
-  if not entry.tried and is_signal(radar) then
-    entry.tried = true
-    if reveal_ruin(surface, force) then return end
+  if not entry.tried then
+    local mode = mode_of(radar)
+    if mode then
+      entry.tried = true
+      if mode == SURVEY then
+        if forecast(surface, force, radar.position) then return end
+      elseif reveal_ruin(surface, force) then
+        return
+      end
+    end
   end
   local index = storage.surfaces[surface.index]
   if index and (not index.ready or (#index.chunks == 0 and index.pending > 0)) then
@@ -232,6 +254,11 @@ local function ruins_available()
   return interface ~= nil and interface.signal_ruin ~= nil
 end
 
+local function survey_available()
+  local interface = remote.interfaces[RSO]
+  return interface ~= nil and interface.forecast ~= nil
+end
+
 local function close_window(player)
   local frame = player.gui.screen[FRAME]
   if frame then frame.destroy() end
@@ -241,9 +268,10 @@ end
 local function update_window(player, entity)
   local frame = player.gui.screen[FRAME]
   if not frame then return end
-  local signal = is_signal(entity)
-  frame.inner.resources.state = not signal
-  frame.inner.signals.state = signal
+  local mode = mode_of(entity)
+  frame.inner.resources.state = mode == false
+  frame.inner.signals.state = mode == true
+  frame.inner.survey.state = mode == SURVEY
 end
 
 local function open_window(player, entity)
@@ -267,6 +295,10 @@ local function open_window(player, entity)
   inner.add{type = "radiobutton", name = "signals", state = false, caption = {"ore-radar.mode-signals"},
     tooltip = available and {"ore-radar.mode-signals-tooltip"} or {"ore-radar.mode-signals-unavailable"},
     enabled = available, tags = {ore_radar_mode = true}}
+  local survey = survey_available()
+  inner.add{type = "radiobutton", name = "survey", state = false, caption = {"ore-radar.mode-survey"},
+    tooltip = survey and {"ore-radar.mode-survey-tooltip"} or {"ore-radar.mode-survey-unavailable"},
+    enabled = survey, tags = {ore_radar_mode = SURVEY}}
   frame.force_auto_center()
   storage.open = storage.open or {}
   storage.open[player.index] = entity
@@ -274,9 +306,9 @@ local function open_window(player, entity)
   player.opened = frame
 end
 
-local function set_mode(entity, signal)
-  if signal then
-    modes()[entity.unit_number] = true
+local function set_mode(entity, mode)
+  if mode then
+    modes()[entity.unit_number] = mode
     script.register_on_object_destroyed(entity)
   elseif storage.modes then
     storage.modes[entity.unit_number] = nil
@@ -328,16 +360,18 @@ end)
 -- Copy-paste, cloning and blueprints keep the mode.
 script.on_event(defines.events.on_entity_settings_pasted, function(event)
   local source, destination = event.source, event.destination
-  if source.name == NAME and destination.name == NAME then set_mode(destination, is_signal(source)) end
+  if source.name == NAME and destination.name == NAME then set_mode(destination, mode_of(source)) end
 end)
 
 script.on_event(defines.events.on_entity_cloned, function(event)
-  if is_signal(event.source) then set_mode(event.destination, true) end
+  local mode = mode_of(event.source)
+  if mode then set_mode(event.destination, mode) end
 end, {{filter = "name", name = NAME}})
 
 local function on_built(event)
   local tags = event.tags
   if tags and tags.ore_radar_signal then set_mode(event.entity, true) end
+  if tags and tags.ore_radar_survey then set_mode(event.entity, SURVEY) end
 end
 script.on_event(defines.events.on_built_entity, on_built, {{filter = "name", name = NAME}})
 script.on_event(defines.events.on_robot_built_entity, on_built, {{filter = "name", name = NAME}})
@@ -349,8 +383,13 @@ script.on_event(defines.events.on_player_setup_blueprint, function(event)
   if not (blueprint and blueprint.valid_for_read and blueprint.is_blueprint) then blueprint = event.record end
   if not (blueprint and blueprint.valid) then return end
   for i, entity in pairs(event.mapping.get()) do
-    if entity.valid and entity.name == NAME and is_signal(entity) then
-      blueprint.set_blueprint_entity_tag(i, "ore_radar_signal", true)
+    if entity.valid and entity.name == NAME then
+      local mode = mode_of(entity)
+      if mode == true then
+        blueprint.set_blueprint_entity_tag(i, "ore_radar_signal", true)
+      elseif mode == SURVEY then
+        blueprint.set_blueprint_entity_tag(i, "ore_radar_survey", true)
+      end
     end
   end
 end)
