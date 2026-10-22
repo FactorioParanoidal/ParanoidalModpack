@@ -1,8 +1,13 @@
-BioInd.writeDebug("Entered control_arboretum.lua")
+------------------------------------------------------------------------------------
+-- Terraformer (arboretum): every sector scan of its hidden radar plants a seedling
+-- and/or fertilizes a random tile within plant_radius, using one set of ingredients.
+-- The machine itself never finishes a craft (crafting speed ~0); the script consumes
+-- the ingredients from its input inventory.
+------------------------------------------------------------------------------------
+local M = {}
 
----Arboretum Stuff
-
-local Event = require('__kry_stdlib__/stdlib/event/event').set_protected_mode(false)
+local trees = require("control_tree")
+local fertility = trees.fertility
 
 -- If a recipe with NORMAL FERTILIZER is used, don't fertilize tiles set have "true"
 -- set! (Fertile tiles set to true in this table can't be made more fertile with
@@ -24,97 +29,92 @@ local Terrain_Check_2 = {
 
 local plant_radius = 75
 
--- Different tiles are used if AlienBiomes is active
-local AB, terrain_name_g1, terrain_name_g3
+-- Different tiles are used if Alien Biomes is active
+local AB = BioInd.AB_tiles()
+local terrain_name_g1 = AB and "vegetation-green-grass-1" or "grass-1"
+local terrain_name_g3 = AB and "vegetation-green-grass-3" or "grass-3"
 
--- OmniFluid replaces all fluids with items, so the arboretum won't have a fluidbox!
+-- Ingredients of the terraformer recipes, read from the prototypes as other mods may
+-- have changed them: recipe name -> {items = {name = amount}, fluids = {name = amount}}
+local recipes
+function M.get_recipes()
+    if not recipes then
+        recipes = {}
+        for i = 1, 5 do
+            local name = "bi-arboretum-r" .. i
+            local recipe = prototypes.recipe[name]
+            if recipe then
+                local need = { items = {}, fluids = {} }
+                for _, ingredient in pairs(recipe.ingredients) do
+                    if ingredient.type == "item" then
+                        need.items[ingredient.name] = ingredient.amount
+                    else
+                        need.fluids[ingredient.name] = ingredient.amount
+                    end
+                end
+                recipes[name] = need
+            end
+        end
+    end
+    return recipes
+end
 
+
+-- Are all ingredients available? Items count only in the quality of the selected
+-- recipe, as the machine itself would use them.
+local function check_ingredients(arboretum)
+    local recipe, quality = arboretum.get_recipe()
+    if not recipe then
+        return
+    end
+    local need = M.get_recipes()[recipe.name]
+    if not need then
+        return
+    end
+    local inventory = arboretum.get_inventory(defines.inventory.assembling_machine_input)
+    if not inventory then
+        return
+    end
+
+    local quality_name = quality and quality.name or "normal"
+    for item, amount in pairs(need.items) do
+        if inventory.get_item_count({ name = item, quality = quality_name }) < amount then
+            return
+        end
+    end
+    if next(need.fluids) then
+        local fluids = arboretum.get_fluid_contents()
+        for fluid, amount in pairs(need.fluids) do
+            if (fluids[fluid] or 0) < amount then
+                return
+            end
+        end
+    end
+    return need, recipe.name, inventory, quality_name
+end
+
+local function consume_ingredients(arboretum, inventory, need, quality)
+    for item, amount in pairs(need.items) do
+        inventory.remove({ name = item, count = amount, quality = quality })
+    end
+    for fluid, amount in pairs(need.fluids) do
+        arboretum.remove_fluid({ name = fluid, amount = amount })
+    end
+end
+
+-- Fertilizer is not wasted on ground that is already fertile enough.
+local function refund(inventory, need, item, quality)
+    local amount = need.items[item]
+    if amount then
+        inventory.insert({ name = item, count = amount, quality = quality })
+    end
+end
 
 local function get_new_position(pos)
-    pos = BioInd.normalize_position(pos) or BioInd.arg_err("nil", position)
     local xxx = math.random(-plant_radius, plant_radius)
     local yyy = math.random(-plant_radius, plant_radius)
-
     return { x = pos.x + xxx, y = pos.y + yyy }
 end
-
-
--- Check that all ingredients are available!
-local function check_ingredients(arboretum)
-    local recipe = arboretum.get_recipe()
-    if not recipe then
-        --game.print("No recipe set on arboretum")
-        return nil
-    end
-    --game.print("Recipe name: " .. recipe.name)
-    local need = storage.bi_arboretum_recipe_table[recipe.name]
-    if not need then
-        --game.print("No recipe data found for " .. recipe.name)
-        return nil
-    end
-
-    local function check(need, have)
-        for name, amount in pairs(need or {}) do
-            if not (have and have[name]) or (have[name] < amount) then
-                --game.print("Missing ingredient " .. name .. " (have " .. (have[name] or 0) .. " of " .. amount .. ")")
-                return false
-            end
-        end
-        return true
-    end
-
-    local inventory = arboretum.get_inventory(defines.inventory.assembling_machine_input)
-    local inv_contents_raw = inventory and inventory.get_contents() or {}
-
-    -- Check if inv_contents_raw is a map or list, convert if needed
-    local function is_map(t)
-        if type(t) ~= "table" then return false end
-        for k, v in pairs(t) do
-            if type(k) ~= "string" or type(v) ~= "number" then
-                return false
-            end
-        end
-        return true
-    end
-
-    local inv_contents
-    if is_map(inv_contents_raw) then
-        inv_contents = inv_contents_raw
-    else
-        -- Convert list of item stacks to map
-        inv_contents = {}
-        for _, item in pairs(inv_contents_raw) do
-            inv_contents[item.name] = (inv_contents[item.name] or 0) + item.count
-        end
-    end
-
-    local fluid_contents = arboretum.get_fluid_contents() or {}
-
-    --game.print("Inventory contents (map): " .. serpent.line(inv_contents))
-    --game.print("Fluid contents: " .. serpent.line(fluid_contents))
-
-    return need and
-        check(need.items, inv_contents) and
-        check(need.fluids, fluid_contents) and
-        { ingredients = need, name = recipe.name } or nil
-end
-
-
-local function consume_ingredients(arboretum, need)
-    local inventory = arboretum.get_inventory(defines.inventory.assembling_machine_input)
-    for item, i in pairs(need.items or {}) do
-        inventory.remove({ name = item, count = i })
-        BioInd.writeDebug("Removed %s (%s)", { item, i })
-    end
-    BioInd.show("Inventory", inventory.get_contents() or "nil")
-
-    for fluid, f in pairs(need.fluids or {}) do
-        arboretum.remove_fluid({ name = fluid, amount = f })
-        BioInd.writeDebug("Removed %s (%s)", { fluid, f })
-    end
-    BioInd.show("Fluid contents", arboretum.get_fluid_contents() or "nil")
-end
-
 
 local function set_tile(current, target, surface, position)
     if current ~= target then
@@ -128,175 +128,118 @@ local function set_tile(current, target, surface, position)
     end
 end
 
-function Get_Arboretum_Recipe(ArboretumTable, event)
-    BioInd.writeDebug("Entered function Get_Arboretum_Recipe(%s, %s)", { ArboretumTable, event })
-    if not ArboretumTable then
-        BioInd.writeDebug("%s is not a valid ArboretumTable. Leaving immediately!")
+local function plant_seedling(surface, plant, tick)
+    local seedling = surface.create_entity(plant)
+    if seedling then
+        trees.seed_planted_arboretum(seedling, tick)
+    end
+end
+
+
+------------------------------------------------------------------------------------
+-- entry: the terraformer's entry in storage.bi_arboretum_table
+function M.process(entry, tick)
+    local arboretum = entry.base
+    if not (arboretum and arboretum.valid) then
+        return
+    end
+    local need, recipe_name, inventory, quality = check_ingredients(arboretum)
+    if not need then
         return
     end
 
-    local arboretum = ArboretumTable.base
-    local new_position, currentTilename
-    local pos, surface, Inventory, stack
+    local pos = arboretum.position
+    local surface = arboretum.surface
+    local new_position, current, plant
 
-    -- 'AlienBiomes' is a bool value -- we don't want to read it again if it's false,
-    -- but only if it hasn't been set yet!
-    AB = storage.compatible.AlienBiomes
-    terrain_name_g1 = terrain_name_g1 or (AB and "vegetation-green-grass-1" or "grass-1")
-    terrain_name_g3 = terrain_name_g3 or (AB and "vegetation-green-grass-3" or "grass-3")
-
-
-    local check = check_ingredients(arboretum)
-    local ingredients, recipe_name
-    if check then
-	--game.print("There are ingredients")
-        ingredients, recipe_name = check.ingredients, check.name
-	else
-	--game.print("No ingredients")
-    end
-
-    if ingredients then
-	
-        local create_seedling, new_plant
-        pos = BioInd.normalize_position(arboretum.position) or
-            BioInd.arg_err("nil", "position")
-        surface = arboretum.surface
-
-        -- Just plant a tree and hope the ground is fertile!
-        if recipe_name == "bi-arboretum-r1" then
-            BioInd.writeDebug(tostring(recipe_name) .. ": Just plant a tree")
-
-            --- 10 attempts to find a random spot to plant a tree and/or change terrain
-            for k = 1, 10 do
-                new_position = get_new_position(pos)
-                new_plant = {
-                    name = "seedling",
-                    position = new_position,
-                    force = "neutral"
-                }
-
-                if surface.can_place_entity(new_plant) then
-                    consume_ingredients(arboretum, ingredients)
-                    create_seedling = surface.create_entity(new_plant)
-                    seed_planted_arboretum(event, create_seedling)
-                    --- After sucessfully planting a tree, break out of the loop.
-                    break
-                else
-                    BioInd.writeDebug("Can't plant here (attempt %s)", k)
-                end
+    -- Just plant a tree and hope the ground is fertile!
+    if recipe_name == "bi-arboretum-r1" then
+        --- 10 attempts to find a random spot to plant a tree
+        for k = 1, 10 do
+            new_position = get_new_position(pos)
+            plant = { name = "seedling", position = new_position, force = "neutral" }
+            if surface.can_place_entity(plant) then
+                consume_ingredients(arboretum, inventory, need, quality)
+                plant_seedling(surface, plant, tick)
+                break
             end
-            -- Fertilize the ground with normal fertilizer. Ignore tiles listed in Terrain_Check_1!
-        elseif recipe_name == "bi-arboretum-r2" then
-            BioInd.writeDebug(tostring(recipe_name) .. ": Just change terrain to grass-3 (basic)")
+        end
 
-            for k = 1, 10 do --- 10 attempts to find a random spot to plant a tree and / or change terrain
-                new_position = get_new_position(pos)
-                currentTilename = surface.get_tile(new_position.x, new_position.y).name
-
-                -- We need to fertilize the ground!
-                if Bi_Industries.fertility[currentTilename] and not Terrain_Check_1[currentTilename] then
-                    consume_ingredients(arboretum, ingredients)
-                    BioInd.writeDebug("%s: Changing terrain from %s to %s (%s)",
-                        { k, currentTilename or "unknown tile",
-                            terrain_name_g3, serpent.line(new_position) })
-                    set_tile(currentTilename, terrain_name_g3, surface, new_position)
-                    --- After sucessfully changing the terrain, break out of the loop.
-                    break
-                else
-                    BioInd.writeDebug("%s: Can't change terrain (%s)",
-                        { k, currentTilename or "unknown tile" })
-                end
+        -- Fertilize the ground with normal fertilizer. Ignore tiles listed in Terrain_Check_1!
+    elseif recipe_name == "bi-arboretum-r2" then
+        for k = 1, 10 do
+            new_position = get_new_position(pos)
+            current = surface.get_tile(new_position.x, new_position.y).name
+            if fertility[current] and not Terrain_Check_1[current] then
+                consume_ingredients(arboretum, inventory, need, quality)
+                set_tile(current, terrain_name_g3, surface, new_position)
+                break
             end
-            -- Fertilize the ground with advanced fertilizer. Ignore tiles listed in Terrain_Check_2!
-        elseif recipe_name == "bi-arboretum-r3" then
-            BioInd.writeDebug(tostring(recipe_name) .. ": Just change terrain to grass-1 (advanced)")
+        end
 
-            for k = 1, 10 do --- 10 attempts to find a random spot to plant a tree and / or change terrain
-                new_position = get_new_position(pos)
-                currentTilename = surface.get_tile(new_position.x, new_position.y).name
-
-                if Bi_Industries.fertility[currentTilename] and currentTilename ~= terrain_name_g1 then
-                    consume_ingredients(arboretum, ingredients)
-                    BioInd.writeDebug("%s: Changing terrain from %s to %s (%s)",
-                        { k, currentTilename or "unknown tile",
-                            terrain_name_g1, serpent.line(new_position) })
-                    set_tile(currentTilename, terrain_name_g1, surface, new_position)
-                    --- After sucessfully changing the terrain, break out of the loop.
-                    break
-                else
-                    BioInd.writeDebug("%s: Can't change terrain (%s)",
-                        { k, currentTilename or "unknown tile" })
-                end
+        -- Fertilize the ground with advanced fertilizer. Ignore tiles listed in Terrain_Check_2!
+    elseif recipe_name == "bi-arboretum-r3" then
+        for k = 1, 10 do
+            new_position = get_new_position(pos)
+            current = surface.get_tile(new_position.x, new_position.y).name
+            if fertility[current] and current ~= terrain_name_g1 then
+                consume_ingredients(arboretum, inventory, need, quality)
+                set_tile(current, terrain_name_g1, surface, new_position)
+                break
             end
-            -- Fertilize the ground with normal fertilizer. Ignore tiles listed in Terrain_Check_1!
-            -- Also plant a tree.
-        elseif recipe_name == "bi-arboretum-r4" then
-            BioInd.writeDebug(tostring(recipe_name) .. ": Plant Tree AND change the terrain to grass-3 (basic)")
+        end
 
-            for k = 1, 10 do --- 10 attempts to find a random spot to plant a tree and / or change terrain
-                new_position = get_new_position(pos)
-                currentTilename = surface.get_tile(new_position.x, new_position.y).name
-                new_plant = {
-                    name = "seedling",
-                    position = new_position,
-                    force = "neutral"
-                }
-
-                -- Test to see if we can plant
-                if surface.can_place_entity(new_plant) and Bi_Industries.fertility[currentTilename] then
-                    consume_ingredients(arboretum, ingredients)
-                    -- Refund fertilizer -- no need to waste it on fertile ground!
-                    if Terrain_Check_1[currentTilename] then
-                        arboretum.insert({ name = "fertilizer", count = ingredients.items.fertilizer })
-                        BioInd.writeDebug("Refunded fertilizer!")
-                    end
-
-                    set_tile(currentTilename, terrain_name_g3, surface, new_position)
-                    create_seedling = surface.create_entity(new_plant)
-                    seed_planted_arboretum(event, create_seedling)
-                    --- After sucessfully planting a tree or changing the terrain, break out of the loop.
-                    break
-                else
-                    BioInd.writeDebug("%s: Can't change terrain and plant a tree (%s)",
-                        { k, currentTilename or "unknown tile" })
+        -- Fertilize the ground with normal fertilizer and plant a tree.
+    elseif recipe_name == "bi-arboretum-r4" then
+        for k = 1, 10 do
+            new_position = get_new_position(pos)
+            current = surface.get_tile(new_position.x, new_position.y).name
+            plant = { name = "seedling", position = new_position, force = "neutral" }
+            if surface.can_place_entity(plant) and fertility[current] then
+                consume_ingredients(arboretum, inventory, need, quality)
+                if Terrain_Check_1[current] then
+                    refund(inventory, need, "fertilizer", quality)
                 end
+                set_tile(current, terrain_name_g3, surface, new_position)
+                plant_seedling(surface, plant, tick)
+                break
             end
-            -- Fertilize the ground with advanced fertilizer. Ignore tiles listed in Terrain_Check_2!
-            -- Also plant a tree.
-        elseif recipe_name == "bi-arboretum-r5" then
-            BioInd.writeDebug(tostring(recipe_name) .. ": Plant Tree and change the terrain to grass-1 (advanced)")
+        end
 
-            for k = 1, 10 do --- 10 attempts to find a random spot to plant a tree and / or change terrain
-                new_position = get_new_position(pos)
-                currentTilename = surface.get_tile(new_position.x, new_position.y).name
-                new_plant = {
-                    name = "seedling",
-                    position = new_position,
-                    force = "neutral"
-                }
-
-                if surface.can_place_entity(new_plant) and Bi_Industries.fertility[currentTilename] then
-                    consume_ingredients(arboretum, ingredients)
-                    -- Refund fertilizer -- no need to waste it on fertile ground!
-                    if Terrain_Check_2[currentTilename] then
-                        arboretum.insert({
-                            name = "bi-adv-fertilizer", count = ingredients.items["bi-adv-fertilizer"]
-                        })
-                        BioInd.writeDebug("Refunded advanced fertilizer!")
-                    end
-
-                    set_tile(currentTilename, terrain_name_g1, surface, new_position)
-                    create_seedling = surface.create_entity(new_plant)
-                    seed_planted_arboretum(event, create_seedling)
-                    --- After sucessfully planting a tree or changing the terrain, break out of the loop.
-                    break
-                else
-                    BioInd.writeDebug("%s: Can't change terrain and plant a tree (%s)",
-                        { k, currentTilename or "unknown tile" })
+        -- Fertilize the ground with advanced fertilizer and plant a tree.
+    elseif recipe_name == "bi-arboretum-r5" then
+        for k = 1, 10 do
+            new_position = get_new_position(pos)
+            current = surface.get_tile(new_position.x, new_position.y).name
+            plant = { name = "seedling", position = new_position, force = "neutral" }
+            if surface.can_place_entity(plant) and fertility[current] then
+                consume_ingredients(arboretum, inventory, need, quality)
+                if Terrain_Check_2[current] then
+                    refund(inventory, need, "bi-adv-fertilizer", quality)
                 end
+                set_tile(current, terrain_name_g1, surface, new_position)
+                plant_seedling(surface, plant, tick)
+                break
             end
-        else
-            BioInd.writeDebug("Terraformer has no recipe!")
         end
     end
 end
+
+
+------------------------------------------------------------------------------------
+-- The hidden radar of a terraformer has scanned a sector
+function M.on_sector_scanned(event)
+    local radar = event.radar
+    if not (radar and radar.valid) then
+        return
+    end
+    local map = storage.bi_arboretum_radar_table
+    local base_id = map and map[radar.unit_number]
+    local tab = base_id and storage.bi_arboretum_table
+    local entry = tab and tab[base_id]
+    if entry then
+        M.process(entry, event.tick)
+    end
+end
+
+return M

@@ -1,4 +1,3 @@
-BioInd = require("__" .. script.mod_name .. "__.common")(script.mod_name)
 -- Presets for Milestones mod
 local function milestones_preset_addons()
 local grouped_milestones = {}

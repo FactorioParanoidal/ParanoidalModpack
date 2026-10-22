@@ -233,6 +233,18 @@ ret.get_HE_list = function(get_complete_list)
           end
   end
 
+  -- Paranoidal: Bio farm MK2/MK3 (zzzparanoidal) are the same 9x9 building as MK1 and
+  -- replace it by upgrade. In the control stage they get the hidden connector, solar
+  -- panel and lamp of MK1 (the same prototypes) and share its table, so the farm keeps
+  -- its roof panel, light and pole connection after an upgrade. Only bases whose
+  -- prototype exists are used at runtime. Not added in the data stage: no new prototypes.
+  if script and ret.compound_entities["bi-bio-farm"] then
+    for _, tier in ipairs({"bi-bio-farm-2", "bi-bio-farm-3"}) do
+      ret.compound_entities[tier] = util.table.deepcopy(ret.compound_entities["bi-bio-farm"])
+      ret.compound_entities[tier].base.name = tier
+    end
+  end
+
   return ret.compound_entities
 end
 

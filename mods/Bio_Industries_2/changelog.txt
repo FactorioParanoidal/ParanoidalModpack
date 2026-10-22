@@ -4,7 +4,22 @@ Date: 24.02.2026
   Changes:
     - Add glass to the bio nursery if it exists
     - Alien Biomes integration (optional dependency, removing AB tiles from blueprints) follows the merged Alien-biomes-Reforged mod instead of alien-biomes (Paranoidal local fix)
+    - Bio farm MK2/MK3 (zzzparanoidal) are compound entities like MK1: they have the hidden connector pole, solar panel and lamp of the farm, so an upgraded farm keeps its roof panel, light and pole connection. A migration gives existing MK2/MK3 farms these entities (Paranoidal local change)
+    - Runtime script split into modules (control_compound, control_tree, control_arboretum, control_musk_floor); the unused libs/util_ext.lua and the never called settings_changed.bio_garden are removed (Paranoidal local cleanup)
+    - Hidden entities are looked up by their centre: their collision box is empty, and a plain position search looks at collision boxes (Paranoidal local change)
   Bug Fixes:
+    - Seedlings and growing trees on a surface that was deleted (Factorissimo, Blueprint Sandboxes and others) no longer crash the game when they are due to grow (Paranoidal local fix)
+    - A mined, destroyed or burnt seedling or growing tree is removed from the grow tables again: the lookup compared the per-tick lists instead of the trees, so nothing was ever removed and a seedling planted at the same place grew too early (Paranoidal local fix)
+    - After a tree mod has been removed, entries of trees that no longer exist are dropped on configuration change; the old clean-up did nothing (the tables are indexed by tick) and the game crashed when such a tree was due (Paranoidal local fix)
+    - Tree choice only uses trees that exist in the game: a tile that lists a missing tree crashed the game when that tree was chosen (Paranoidal local fix)
+    - Terraformer: ingredients are checked and taken in the quality of the selected recipe; before, items of every quality were counted but normal ones were taken, so a recipe of another quality worked without using up anything. Refunded fertilizer keeps that quality, and the terraformer placed from a quality item keeps its quality (Paranoidal local fix)
+    - Musk floor: fertilizer used on it no longer creates a second hidden solar panel and pole when the tile is restored; the hidden entities of tiles placed again by a script are reused too (Paranoidal local fix)
+    - Musk floor is tracked per surface: placing another tile at the same coordinates on another surface no longer removes it from the table; a script that replaces musk floor with grass removes its hidden entities instead of creating a second set; musk floor placed by a script belongs to the players' force instead of "neutral" (Paranoidal local fix)
+    - A building replaced by a script without a removal event (fast replace by Nanobots, Blueprint Sandboxes) leaves no second set of hidden entities: the new building takes over the old ones (Paranoidal local fix)
+    - The Bio cannon table is no longer deleted on every configuration change because its unused area overlay prototype does not exist; tables shared by several compound entities are only removed when none of them exists (Paranoidal local fix)
+    - Terraformer radars found again when their table was rebuilt are mapped to their terraformer again, so the terraformer keeps working (Paranoidal local fix)
+    - "Easy gardens": the hidden garden pole is wired with the 2.0 wire connector API (connecting to an entity was an error) (Paranoidal local fix)
+    - Removed the handler that un-researched Fluid handling and reloaded technologies on every player join when the setting "angels-use-angels-barreling" exists (it does not in Angels for 2.0) (Paranoidal local fix)
     - Wood pipe: may be made as an intermediate product by hand crafting, so recipes that need wood pipes (the solid fuel offshore pump) are crafted in one click (Paranoidal local fix)
     - Bio gardens: the defect qualities of ic-more-qualities are added to the garden quality tables only when its "Paranoidal: quality" switch is on too; with it off the defect qualities do not exist (Paranoidal local fix)
     - Bio gardens and quality: every quality keeps the standard crafting speed (the same water and fertilizer per minute) and absorbs pollution and uses power x the quality's default multiplier; defects of ic-more-qualities absorb less with the same fertilizer. The old slowdown table covered only the four vanilla qualities, so higher qualities used the general speed bonus and ate several times more fertilizer for the same absorption (Paranoidal local fix)
@@ -14,6 +29,14 @@ Date: 24.02.2026
     - Bio farm: the hidden connector pole has a wire reach of 10 again (was 5, barely past the 9x9 farm's own edge), so farms join neighbouring farms and the power poles around them instead of running on their built-in solar panel only; a migration recreates the connectors of existing farms so that they connect (Paranoidal local fix)
   Optimizations:
     - The build handler no longer serialises every build event with serpent outside debug mode: the debug text was built before the debug check, on every entity built by hand, robot or script (Paranoidal local fix)
+    - Build, mining, script destroy and radar scan events are filtered by name in the engine, like death and damage already were: only Bio Industries buildings, seedlings and growing trees reach the script. Before, every entity built or mined anywhere (also every natural tree cut) ran the handlers; mining ran them twice (before and after) (Paranoidal local optimization)
+    - Events are registered directly; the kry_stdlib dispatcher (a new table, a metatable and a scan of the event fields per event) is no longer used. The dependency stays for the load order (Paranoidal local optimization)
+    - Growing trees are processed every 60 ticks instead of every tick (at most 1 s later, in the same order); nothing is done while no tree grows (Paranoidal local optimization)
+    - Debug output costs nothing outside debug mode; hot paths no longer build debug arguments (Paranoidal local optimization)
+    - Tiles: placing or mining tiles only checks the old tile names; fertilizer on fertile ground no longer calls set_tiles with an empty list (which raised script_raised_set_tiles for all mods) (Paranoidal local optimization)
+    - Configuration change: one entity search per surface for all compound entities instead of one per entity type; no technology reset (the game resets technologies itself since 2.0); the musk floor pole scan only runs when its setting has changed (Paranoidal local optimization)
+    - The tree table (libs/trees-and-terrains.lua) shrank from 20077 to 3947 lines: the vanilla block was listed twice and each weight was a table with tile and tree names. Weights and choice probabilities unchanged; the cumulative weights are computed once per tile (Paranoidal local optimization)
+    - Prototype-derived lists (our trees, barren tiles, terraformer recipes, compound entities) are built from prototypes instead of being read from storage (Paranoidal local optimization)
   Graphics:
     - Item pictures from graphics/icons/mips no longer declare mipmap_count: the files have no mip chain (25 load warnings); the engine generates icon mipmaps itself (Paranoidal local fix)
     - Big wooden poles: removed the 1.1 copper/green/red/shadow wire pictures (2.0 has no per-pole wire sprites; the files did not exist) and fixed double slashes in base paths (Paranoidal local fix)
