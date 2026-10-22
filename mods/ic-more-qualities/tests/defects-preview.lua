@@ -180,7 +180,7 @@ for _, line in ipairs(report) do
     if line:find("recycling of items that can be defective takes at least 0.0625 s: recipes slowed 1", 1, true) then floor_line = true end
 end
 assert(floor_line, "recycling floor logged")
-assert(#final.exempt_items == 46) -- 29 + 12 Factorissimo factory items (2026-10-15) + 3 Flow Control pipes (2026-10-18) + 2 factory 4 items (2026-10-19)
+assert(#final.exempt_items == 54) -- 29 + 12 Factorissimo factory items (2026-10-15) + 3 Flow Control pipes (2026-10-18) + 2 factory 4 items (2026-10-19) + 8 logistic memory units (2026-10-22)
 assert(raw.recipe.gear.allow_quality == false and raw.recipe.mixed.allow_quality == false)
 assert(raw.recipe.sorting.allow_quality == false)
 assert(raw.recipe.assembler.allow_quality == nil and raw.recipe.science.allow_quality == true)

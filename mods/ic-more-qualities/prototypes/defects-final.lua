@@ -13,6 +13,11 @@ M.exempt_items = {"memory-unit", "fluid-memory-unit", "memory-unit-with-tags", "
     "vehicle-fuel-cell-2-equipment", "vehicle-fuel-cell-3-equipment", "vehicle-fuel-cell-4-equipment", "hazmat-suit",
     -- Flow Control restricted pipes (user decision 2026-10-18): made 1:1 from a plain pipe, always standard.
     "pipe-straight", "pipe-elbow", "pipe-junction"}
+-- Logistic memory units (deep-storage-unit 9.8.0): the same upgrade chain as the memory unit.
+for _, mode in ipairs({"passive-provider", "storage", "buffer", "requester"}) do
+    M.exempt_items[#M.exempt_items + 1] = "logistic-memory-unit-" .. mode
+    M.exempt_items[#M.exempt_items + 1] = "logistic-memory-unit-" .. mode .. "-with-tags"
+end
 for _, tank in ipairs({"L", "M", "H", "SH", "F"}) do
     for _, suffix in ipairs({"", "-mk1", "-mk2"}) do
         M.exempt_items[#M.exempt_items + 1] = "Schall-tank-" .. tank .. suffix
