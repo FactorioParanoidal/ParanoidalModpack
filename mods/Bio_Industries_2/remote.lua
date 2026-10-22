@@ -50,10 +50,30 @@ end
 
 
 
+  -- Paranoidal: only items a player can get. Items renamed by Angels 2.0 (stone-crushed ->
+  -- angels-stone-crushed) use the new name; hidden or missing items (e.g. the Bio cannon,
+  -- excluded by zzzparanoidal) are dropped, and so are groups left without milestones.
+  local function usable(name)
+    local item = prototypes.item[name]
+    return item and not item.hidden
+  end
   local milestones = {}
   for group_name, group_milestones in pairs(grouped_milestones) do
+    local kept = {}
     for _, milestone in pairs(group_milestones) do
-      table.insert(milestones, milestone)
+      if milestone.type == "item" and not usable(milestone.name) then
+        if usable("angels-" .. milestone.name) then
+          milestone.name = "angels-" .. milestone.name
+          kept[#kept + 1] = milestone
+        end
+      else
+        kept[#kept + 1] = milestone
+      end
+    end
+    if kept[2] or (kept[1] and kept[1].type ~= "group") then
+      for _, milestone in ipairs(kept) do
+        table.insert(milestones, milestone)
+      end
     end
   end
 

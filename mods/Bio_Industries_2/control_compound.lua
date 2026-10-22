@@ -315,6 +315,25 @@ end
 
 
 ------------------------------------------------------------------------------------
+-- A surface was deleted or cleared: its buildings are gone without events.
+function M.surface_removed()
+    local checked = {}
+    for _, compound in pairs(compounds) do
+        local tab = storage[compound.tab]
+        if tab and not checked[compound.tab] then
+            checked[compound.tab] = true
+            for unit_number, entry in pairs(tab) do
+                if not (entry.base and entry.base.valid) then
+                    destroy_hidden(entry)
+                    tab[unit_number] = nil
+                end
+            end
+        end
+    end
+end
+
+
+------------------------------------------------------------------------------------
 -- Terraformer and its radar share their health
 function M.damaged(event)
     local entity = event.entity

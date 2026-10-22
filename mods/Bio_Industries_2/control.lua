@@ -35,8 +35,9 @@ local function Create_dummy_force()
 end
 
 
--- Older script versions read these prototype-derived values from storage. They are
--- still written so that a save made now keeps working if the mod is rolled back.
+-- Older script versions read these prototype-derived values from storage, so they are
+-- still written. A rollback is not fully supported: the old script does not know that
+-- farm MK2/MK3 entries share the MK1 table.
 local function write_legacy_storage()
     storage.compound_entities = table.deepcopy(compounds)
     storage.bi.trees = {}
@@ -115,7 +116,9 @@ local function on_built(event)
     end
 end
 
--- Mined (before removal), died or destroyed by a script
+-- Mined, died or destroyed by a script. Mining uses the events after the results are
+-- collected: the "pre" events also come when the entity is not removed in the end
+-- (e.g. its contents do not fit into the player's inventory).
 local function on_removed(event)
     local entity = event.entity
     if not (entity and entity.valid) then
@@ -194,7 +197,7 @@ register({ events.on_built_entity, events.on_robot_built_entity,
         events.script_raised_built, events.script_raised_revive },
     on_built, name_filters(compound.names, { "seedling" }))
 
-register({ events.on_pre_player_mined_item, events.on_robot_pre_mined,
+register({ events.on_player_mined_entity, events.on_robot_mined_entity,
         events.on_entity_died, events.script_raised_destroy },
     on_removed, name_filters(compound.names, { "seedling" }, tree_names))
 
@@ -209,7 +212,11 @@ script.on_event(events.on_trigger_created_entity, on_trigger_created_entity)
 script.on_event({ events.on_player_built_tile, events.on_robot_built_tile }, musk_floor.on_tile_built)
 script.on_event({ events.on_player_mined_tile, events.on_robot_mined_tile }, musk_floor.on_tile_mined)
 script.on_event(events.script_raised_set_tiles, musk_floor.on_script_set_tiles)
-script.on_event({ events.on_surface_deleted, events.on_surface_cleared }, musk_floor.on_surface_removed)
+script.on_event({ events.on_surface_deleted, events.on_surface_cleared }, function(event)
+    musk_floor.on_surface_removed(event)
+    trees.surface_removed(event.surface_index)
+    compound.surface_removed()
+end)
 
 script.on_nth_tick(trees.PROCESS_INTERVAL, trees.on_nth_tick)
 

@@ -4,6 +4,8 @@
 -- storage.bi.tree_growing_stage_N[tick]     young trees (stage N) that grow at that tick
 -- Entries: {position, time, surface, seed_bomb} / {tree_name, final_tree, position, time, surface}
 -- storage.bi.tree_tick                      last tick that has been processed
+-- storage.bi.tree_index[table][surface]["x,y"] tick of the entry at that place (for removal);
+--                                          rebuilt from the tables when missing
 ------------------------------------------------------------------------------------
 local M = {}
 
@@ -324,6 +326,9 @@ local barren_tile_patterns = {
     ".*stone%-path.*",
     "^bi%-solar%-mat$",
     "^bi%-wood%-floor$",
+    -- Paranoidal: Angels floors (clay and concrete bricks, bio tiles)
+    ".*brick.*",
+    "^angels%-bio%-tile$",
 }
 local barren_tiles
 function M.get_barren_tiles()
@@ -351,16 +356,85 @@ local function tile_fertility(surface, position)
     return value or 1, value ~= nil
 end
 
-local function schedule(tab, data, create_tree)
+------------------------------------------------------------------------------------
+-- Position index: finds the entry of a removed seedling/tree without scanning all
+-- entries.
+------------------------------------------------------------------------------------
+local TABLES = { "tree_growing", "tree_growing_stage_1", "tree_growing_stage_2", "tree_growing_stage_3",
+    "tree_growing_stage_4" }
+
+local function pos_key(position)
+    return position.x .. "," .. position.y
+end
+
+local function build_index(bi)
+    local index = {}
+    for _, name in ipairs(TABLES) do
+        local by_surface = {}
+        index[name] = by_surface
+        for tick, bucket in pairs(bi[name] or {}) do
+            for _, data in pairs(bucket) do
+                local surface = data.surface
+                if surface and surface.valid and data.position then
+                    local keys = by_surface[surface.index]
+                    if not keys then
+                        keys = {}
+                        by_surface[surface.index] = keys
+                    end
+                    local key = pos_key(data.position)
+                    if not keys[key] or keys[key] < tick then
+                        keys[key] = tick
+                    end
+                end
+            end
+        end
+    end
+    bi.tree_index = index
+    return index
+end
+
+local function get_index(bi)
+    return bi.tree_index or build_index(bi)
+end
+
+local function index_drop(bi, name, data, tick)
+    local surface = data.surface
+    if not surface.valid then
+        return
+    end
+    local keys = get_index(bi)[name][surface.index]
+    local key = pos_key(data.position)
+    if keys and keys[key] == tick then
+        keys[key] = nil
+    end
+end
+
+local function schedule(name, data, create_tree)
+    if create_tree then
+        local tree = data.surface.create_entity({ name = data.tree_name, position = data.position, force = "neutral" })
+        if not tree then
+            return
+        end
+        -- The entry keeps the actual position of the tree (the index and removal use it).
+        local p = tree.position
+        data.position = { x = p.x, y = p.y }
+    end
+    local bi = storage.bi
+    local tab = bi[name]
     local bucket = tab[data.time]
     if bucket then
         bucket[#bucket + 1] = data
     else
         tab[data.time] = { data }
     end
-    if create_tree then
-        data.surface.create_entity({ name = data.tree_name, position = data.position, force = "neutral" })
+    local by_surface = get_index(bi)[name]
+    local surface_index = data.surface.index
+    local keys = by_surface[surface_index]
+    if not keys then
+        keys = {}
+        by_surface[surface_index] = keys
     end
+    keys[pos_key(data.position)] = data.time
 end
 
 local function plant_seed(entity, tick, t_base, t_penalty, seed_bomb)
@@ -371,7 +445,7 @@ local function plant_seed(entity, tick, t_base, t_penalty, seed_bomb)
     -- (No penalty for tiles with maximum fertility)
     local value = tile_fertility(surface, position)
     local grow_time = math.max(1, math.random(t_base) + t_penalty - (40 * value))
-    schedule(storage.bi.tree_growing, {
+    schedule("tree_growing", {
         position = position,
         time = tick + grow_time,
         surface = surface,
@@ -431,7 +505,7 @@ local function grow_first_stage(data, tick)
             growth_chance <= (value + 5) then
             -- Trees will grow faster on fertile than on barren tiles
             local grow_time = math.max(1, math.random(2000) + 4000 - (40 * value))
-            schedule(storage.bi.tree_growing_stage_1, {
+            schedule("tree_growing_stage_1", {
                 tree_name = stage_name(tree_name, 1),
                 final_tree = tree_name,
                 position = position,
@@ -505,7 +579,7 @@ local function grow_stage(data, stage, tick)
             -- Trees will grow faster on fertile than on barren tiles!
             local s = stage_settings[stage][fertile and "fertilizer" or "default"]
             local grow_time = math.max(1, math.random(s.max) + s.penalty - (s.factor * value))
-            schedule(storage.bi["tree_growing_stage_" .. next_stage], {
+            schedule("tree_growing_stage_" .. next_stage, {
                 tree_name = next_name,
                 final_tree = final_tree,
                 position = position,
@@ -527,15 +601,18 @@ local function process_tick(bi, tick)
     if bucket then
         bi.tree_growing[tick] = nil
         for _, data in pairs(bucket) do
+            index_drop(bi, "tree_growing", data, tick)
             grow_first_stage(data, tick)
         end
     end
     for stage = 1, 4 do
-        local tab = bi["tree_growing_stage_" .. stage]
+        local name = TABLES[stage + 1]
+        local tab = bi[name]
         bucket = tab[tick]
         if bucket then
             tab[tick] = nil
             for _, data in pairs(bucket) do
+                index_drop(bi, name, data, tick)
                 grow_stage(data, stage, tick)
             end
         end
@@ -598,41 +675,70 @@ end
 ------------------------------------------------------------------------------------
 -- A seedling or a growing tree has been removed: forget it.
 ------------------------------------------------------------------------------------
-local function remove_entry(tab, surface_index, x, y)
-    for tick, bucket in pairs(tab) do
-        for i = #bucket, 1, -1 do
-            local data = bucket[i]
-            local position = data.position
-            if position.x == x and position.y == y then
-                local surface = data.surface
-                if surface.valid and surface.index == surface_index then
-                    table.remove(bucket, i)
-                    if not bucket[1] then
-                        tab[tick] = nil
-                    end
-                    return true
-                end
+function M.removed(entity)
+    local bi = storage.bi
+    local name = entity.name
+    local tab_name
+    if name == "seedling" then
+        tab_name = "tree_growing"
+    else
+        local stage = M.bio_trees[name]
+        tab_name = stage and TABLES[stage + 1]
+    end
+    if not tab_name then
+        return false
+    end
+    local surface_index = entity.surface.index
+    local keys = get_index(bi)[tab_name][surface_index]
+    local position = entity.position
+    local key = pos_key(position)
+    local tick = keys and keys[key]
+    if not tick then
+        return false
+    end
+    keys[key] = nil
+    local tab = bi[tab_name]
+    local bucket = tab[tick]
+    if not bucket then
+        return false
+    end
+    local x, y = position.x, position.y
+    for i = #bucket, 1, -1 do
+        local data = bucket[i]
+        local p, surface = data.position, data.surface
+        if p.x == x and p.y == y and surface.valid and surface.index == surface_index then
+            table.remove(bucket, i)
+            if not bucket[1] then
+                tab[tick] = nil
             end
+            return true
         end
     end
     return false
 end
 
-function M.removed(entity)
+
+-- A surface was deleted or cleared: forget the entries on it (and of deleted surfaces).
+function M.surface_removed(surface_index)
     local bi = storage.bi
-    local name = entity.name
-    local tab
-    if name == "seedling" then
-        tab = bi.tree_growing
-    else
-        local stage = M.bio_trees[name]
-        tab = stage and bi["tree_growing_stage_" .. stage]
+    if not (bi and bi.tree_growing) then
+        return
     end
-    if tab then
-        local position = entity.position
-        return remove_entry(tab, entity.surface.index, position.x, position.y)
+    for _, name in ipairs(TABLES) do
+        local tab = bi[name]
+        for tick, bucket in pairs(tab) do
+            for i = #bucket, 1, -1 do
+                local surface = bucket[i].surface
+                if not surface.valid or surface.index == surface_index then
+                    table.remove(bucket, i)
+                end
+            end
+            if not bucket[1] then
+                tab[tick] = nil
+            end
+        end
     end
-    return false
+    build_index(bi)
 end
 
 
@@ -678,6 +784,7 @@ function M.setup_storage()
     for stage = 1, 4 do
         clean(bi["tree_growing_stage_" .. stage], true)
     end
+    build_index(bi)
     return removed
 end
 

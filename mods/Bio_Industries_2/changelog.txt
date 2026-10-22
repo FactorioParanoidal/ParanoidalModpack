@@ -20,6 +20,10 @@ Date: 24.02.2026
     - Terraformer radars found again when their table was rebuilt are mapped to their terraformer again, so the terraformer keeps working (Paranoidal local fix)
     - "Easy gardens": the hidden garden pole is wired with the 2.0 wire connector API (connecting to an entity was an error) (Paranoidal local fix)
     - Removed the handler that un-researched Fluid handling and reloaded technologies on every player join when the setting "angels-use-angels-barreling" exists (it does not in Angels for 2.0) (Paranoidal local fix)
+    - Hidden entities of a building are removed after it has been mined, not before: the event before mining also comes when the building stays (its contents do not fit into the inventory), and the building lost its hidden pole, panel and lamp (Paranoidal local fix)
+    - Milestones: the Bio Industries milestones only use items a player can get: crushed stone is counted as angels-stone-crushed, the Bio cannon milestone is dropped while its item is hidden (Paranoidal local fix)
+    - Fertilizer can no longer replace brick floors (Angels clay and concrete bricks) and Angels bio tiles: they are treated like concrete (Paranoidal local fix)
+    - Buildings, seedlings and growing trees of a deleted or cleared surface are removed from the tables at once (Paranoidal local fix)
     - Wood pipe: may be made as an intermediate product by hand crafting, so recipes that need wood pipes (the solid fuel offshore pump) are crafted in one click (Paranoidal local fix)
     - Bio gardens: the defect qualities of ic-more-qualities are added to the garden quality tables only when its "Paranoidal: quality" switch is on too; with it off the defect qualities do not exist (Paranoidal local fix)
     - Bio gardens and quality: every quality keeps the standard crafting speed (the same water and fertilizer per minute) and absorbs pollution and uses power x the quality's default multiplier; defects of ic-more-qualities absorb less with the same fertilizer. The old slowdown table covered only the four vanilla qualities, so higher qualities used the general speed bonus and ate several times more fertilizer for the same absorption (Paranoidal local fix)
@@ -37,6 +41,7 @@ Date: 24.02.2026
     - Configuration change: one entity search per surface for all compound entities instead of one per entity type; no technology reset (the game resets technologies itself since 2.0); the musk floor pole scan only runs when its setting has changed (Paranoidal local optimization)
     - The tree table (libs/trees-and-terrains.lua) shrank from 20077 to 3947 lines: the vanilla block was listed twice and each weight was a table with tile and tree names. Weights and choice probabilities unchanged; the cumulative weights are computed once per tile (Paranoidal local optimization)
     - Prototype-derived lists (our trees, barren tiles, terraformer recipes, compound entities) are built from prototypes instead of being read from storage (Paranoidal local optimization)
+    - A removed seedling or growing tree is found through a position index instead of a scan of all growing entries (the time grew with the square of their number on mass removal or a forest fire) (Paranoidal local optimization)
   Graphics:
     - Item pictures from graphics/icons/mips no longer declare mipmap_count: the files have no mip chain (25 load warnings); the engine generates icon mipmaps itself (Paranoidal local fix)
     - Big wooden poles: removed the 1.1 copper/green/red/shadow wire pictures (2.0 has no per-pole wire sprites; the files did not exist) and fixed double slashes in base paths (Paranoidal local fix)
