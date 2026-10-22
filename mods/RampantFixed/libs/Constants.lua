@@ -647,10 +647,31 @@ local variations = (settings.startup["rampantFixed--newEnemyVariations"].value o
 -- Paranoidal: champions and hour bosses (libs/Champions.lua) are copies of ordinary units
 -- (prototypes/ChampionUnits.lua): the damage event filter then matches the champions only. A copy is made per kind and
 -- per unit of the nest it comes from, its max_health is the real health of the champion (x healthK of that unit)
+-- sizeK: the sprites and the selection box of the copy, collisionK: its collision box (kept small: a wide unit gets stuck)
 constants.CHAMPION_KINDS = {
-    champion = {suffix = "-champion", healthK = 10, tierUp = 1},
-    hourBoss = {suffix = "-hour-boss", healthK = 50, tierUp = 2},
+    champion = {suffix = "-champion", healthK = 10, tierUp = 1, sizeK = 1.15, collisionK = 1},
+    hourBoss = {suffix = "-hour-boss", healthK = 50, tierUp = 2, sizeK = 1.4, collisionK = 1.15},
 }
+
+-- Paranoidal: lowest health of a champion / an hour boss by the building level of the surface (1-10): 500 / 5000 at
+-- the start, from level 2 a hive / a super-hive of that level (prototypes/SwarmUtils.lua hiveAttributeNumeric and
+-- superHiveAttributeNumeric with tierEnd 10, without the hive health scaler)
+constants.CHAMPION_HEALTH_FLOOR = {
+    champion = {500, 1500, 2000, 3000, 4500, 15000, 22000, 40000, 60000, 90000},
+    hourBoss = {5000, 10000, 10000, 10000, 13500, 45000, 66000, 120000, 180000, 270000},
+}
+-- the building level at which the nest unit of a tier becomes the most common one (start of its evolution range). The
+-- copy (prototypes/ChampionUnits.lua) gets the floor of this level, so its max health is never above the rule;
+-- libs/Champions.lua raises the pool to the floor of the current building level
+constants.CHAMPION_FLOOR_LEVEL_BY_UNIT_TIER = {1, 3, 4, 5, 7, 8, 9, 9, 9, 10}
+
+function constants.championHealthFloor(kind, level)
+    local floors = constants.CHAMPION_HEALTH_FLOOR[kind]
+    if (not floors) or (not level) then
+        return 0
+    end
+    return floors[math.max(1, math.min(10, level))]
+end
 
 -- name of the copy of bossName for a champion of the kind from a nest that spawns localName now
 function constants.championUnitName(kind, bossName, localName)

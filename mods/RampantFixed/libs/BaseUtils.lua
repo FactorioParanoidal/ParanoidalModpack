@@ -466,16 +466,17 @@ local function findEntityUpgrade(faction, originalEntity, map, evolve, entityTyp
     if evolve then
         local chunk = getChunkByPosition(map, originalEntity.position)
 		local makeHive = false
-		-- Paranoidal: was "not chunk == -1", always false: no hive was ever rolled. Worms stay worms
-		if (chunk ~= -1) and (entityType ~= "turret") then
-			local resourceChunk = getResourceGenerator(map, chunk) > 0
-			if superHives.rollPlacement(universe, map, originalEntity.position, resourceChunk) then
-				local superHiveName = superHives.prototypeName(universe, faction, map.buildingsLvl)
-				if superHiveName then
-					return superHiveName
-				end
+		-- Paranoidal: a nest (also of the first scan of a chunk, not registered yet) may become a super-hive
+		-- (libs/SuperHives.lua: chance, resources near it, spacing, limit). Worms stay worms
+		if (entityType ~= "turret") and superHives.rollPlacement(universe, map, originalEntity.position) then
+			local superHiveName = superHives.prototypeName(universe, faction, map.buildingsLvl)
+			if superHiveName then
+				return superHiveName
 			end
-			if resourceChunk then
+		end
+		-- Paranoidal: was "not chunk == -1", always false: no hive was ever rolled
+		if (chunk ~= -1) and (entityType ~= "turret") then
+			if getResourceGenerator(map, chunk) > 0 then
 				if mRandom() < 0.2 then
 					makeHive = true
 				end
@@ -483,12 +484,6 @@ local function findEntityUpgrade(faction, originalEntity, map, evolve, entityTyp
 				if mRandom() < 0.02 then
 					makeHive = true
 				end
-			end
-		elseif (entityType ~= "turret") and superHives.rollPlacement(universe, map, originalEntity.position, false) then
-			-- a chunk not registered yet (its first scan): a super-hive without the resource bonus
-			local superHiveName = superHives.prototypeName(universe, faction, map.buildingsLvl)
-			if superHiveName then
-				return superHiveName
 			end
 		end	
 		return initialEntityUpgrade(faction, map.buildingsLvl, map, (makeHive and "hive"), entityType)	-- maxTier

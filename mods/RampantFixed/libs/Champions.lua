@@ -1,7 +1,8 @@
 -- Reforged Paranoidal: champions ("вожаки") and hour bosses.
 --
 -- Every 7-11 minutes a champion, every 50-70 minutes a bigger hour boss leaves a random nest within reach of the
--- player base and attacks its most defended spot (the player chunk with most turrets in the 3x3 around).
+-- player base and attacks its most defended spot (the player chunk with most turrets in the 3x3 around). A super-hive
+-- near the target is its lair (spawnFromSuperHive); without one 3 of 4 hour bosses do not come.
 --  * unit: the champion copy (prototypes/ChampionUnits.lua, constants.championUnitName; the unit itself if
 --    there is no copy) of a unit of the nest's faction one tier (hour boss: two tiers) above the units it spawns now
 --    (capped at tier 10); ground biters below 10%
@@ -9,7 +10,9 @@
 --    faction has). Non-Rampant nests (vanilla, Bob) give their next stronger unit of the same kind (hour boss: the
 --    one after it). Units whose
 --    attack damages themselves (suicide and nuclear biters) are never chosen: they would blow their pool up;
---  * health: x10 (champion) / x50 (hour boss) of the ordinary unit of that kind. The copy has this max_health, so the
+--  * health: x10 (champion) / x50 (hour boss) of the ordinary unit of that kind, at least the floor of the building
+--    level (constants.CHAMPION_HEALTH_FLOOR: 500 / 5000 at the start, then a hive / a super-hive of the level). The
+--    copy is bigger than its unit (an hour boss clearly). The copy has this max_health, so the
 --    health bar and the tooltip show the real health; the script pool equals the engine health then (it is only a
 --    share of it for a unit without a copy). A champion moves at half the speed of those units;
 --  * looks: a random colour (one of the six Bob artifact colours) as a glow (+ light at night), a silver / bigger
@@ -744,7 +747,10 @@ local function create(universe, map, kind, bossName, localName, position, home, 
     if spec.speedK and localPrototype.speed then
         entity.speed = localPrototype.speed * spec.speedK
     end
-    local poolMax = mMax(entity.max_health, localPrototype.get_max_health() * spec.healthK)
+    -- the floor of the current building level (constants.CHAMPION_HEALTH_FLOOR); above the max health of the copy the
+    -- pool keeps the health bar as a share
+    local poolMax = mMax(entity.max_health, localPrototype.get_max_health() * spec.healthK,
+        constants.championHealthFloor(kind, map.buildingsLvl or 1))
     local _, size = selectionTop(entity)
     local record = {
         size = size,
@@ -777,69 +783,132 @@ local function create(universe, map, kind, bossName, localName, position, home, 
     return entity
 end
 
--- Paranoidal: a super-hive within NEST_RANGE of the target is the lair of the champions: an hour boss always leaves
--- from it, a champion with SUPER_HIVE_SHARE; it comes back there to regenerate (home)
+-- Paranoidal: super-hives (libs/SuperHives.lua) are the lairs of the champions. A random super-hive within NEST_RANGE
+-- of the target is where an hour boss always, a champion with SUPER_HIVE_SHARE leaves from and comes back to; its unit
+-- and faction still come from a random ordinary nest around (as without a super-hive), so a lair does not make it
+-- stronger. Without a super-hive near the target only NO_LAIR_HOUR_BOSS_SHARE of the hour bosses come (not for the
+-- avenger of a super-hive and the remote call)
 local SUPER_HIVE_SHARE = 0.5
+local NO_LAIR_HOUR_BOSS_SHARE = 0.25
 
-local function spawnFromSuperHive(universe, map, kind, tick, forcedType, target, evo)
-    local hive = superHives.nearTarget(universe, map, target, NEST_RANGE)
-    if (not hive) or ((kind ~= "hourBoss") and (mRandom() >= SUPER_HIVE_SHARE)) then
+local spawnerArea = {{0, 0}, {0, 0}}
+local spawnerQuery = {area = spawnerArea, force = "enemy", type = "unit-spawner"}
+
+-- the spawners of a random candidate chunk
+local function spawnersOfRandomChunk(surface, candidates)
+    local chunk = candidates[mRandom(#candidates)]
+    spawnerArea[1][1] = chunk.x
+    spawnerArea[1][2] = chunk.y
+    spawnerArea[2][1] = chunk.x + CHUNK_SIZE
+    spawnerArea[2][2] = chunk.y + CHUNK_SIZE
+    return surface.find_entities_filtered(spawnerQuery)
+end
+
+-- a random spawner of a random candidate chunk that may give the unit: no super-hive (it breeds stronger units, it is
+-- only a lair) and no Big Monsters spawner; nil if the chunk has none
+local function randomOrdinarySpawner(universe, surface, candidates)
+    local spawners = spawnersOfRandomChunk(surface, candidates)
+    local n = #spawners
+    if n == 0 then
         return nil
     end
-    local surface = map.surface
-    for _, desiredType in ipairs(typesToTry(evo, forcedType)) do
-        local bossName, localName = resolveBoss(hive.prototype, desiredType, evo, KINDS[kind].tierUp)
-        if bossName then
-            local position = surface.find_non_colliding_position(bossName, hive.position, 24, 0.5)
-            if position and not inPlayerBase(map, position) then
-                local entity = create(universe, map, kind, bossName, localName, position, hive.position, target, tick)
-                if entity then
-                    return entity
-                end
+    local first = mRandom(n)
+    for i = 0, n - 1 do
+        local spawner = spawners[((first + i - 1) % n) + 1]
+        if (not excludedSpawner(spawner.name)) and (not superHives.isSuperHive(universe, spawner.name)) then
+            return spawner
+        end
+    end
+    return nil
+end
+
+-- the prototype that gives the unit and the faction: a random ordinary nest or hive around (no super-hive, no
+-- Big Monsters), else an ordinary nest of the faction of the super-hive
+local function ordinarySource(universe, map, candidates, hive)
+    local count = #candidates
+    if count > 0 then
+        for _ = 1, mMin(SPAWN_TRIES, count * 2) do
+            local spawner = randomOrdinarySpawner(universe, map.surface, candidates)
+            if spawner then
+                return spawner.prototype
+            end
+        end
+    end
+    local faction = universe.enemyAlignmentLookup and universe.enemyAlignmentLookup[hive.name]
+    if faction then
+        for _, building in ipairs({"biter-spawner", "spitter-spawner", "hive"}) do
+            local prototype = prototypes.entity[faction .. "-" .. building .. "-v1-t1-rampant"]
+            if prototype then
+                return prototype
             end
         end
     end
     return nil
 end
 
-local function spawn(universe, map, kind, tick, forcedType)
+local function spawnFromSuperHive(universe, map, kind, tick, forcedType, target, evo, hive, candidates)
+    local surface = map.surface
+    local origin = hive.position
+    for _, desiredType in ipairs(typesToTry(evo, forcedType)) do
+        for _ = 1, 4 do
+            local source = ordinarySource(universe, map, candidates, hive)
+            if not source then
+                return nil
+            end
+            local bossName, localName = resolveBoss(source, desiredType, evo, KINDS[kind].tierUp)
+            if bossName then
+                local position = surface.find_non_colliding_position(championPrototype(kind, bossName, localName),
+                    origin, 24, 0.5)
+                if position and not inPlayerBase(map, position) then
+                    local entity = create(universe, map, kind, bossName, localName, position, origin, target, tick)
+                    if entity then
+                        return entity
+                    end
+                end
+                break       -- no place at the lair for this unit: the next unit type
+            end
+        end
+    end
+    return nil
+end
+
+-- the entity, or nil and true when an hour boss without a lair does not come this time (no retry)
+local function spawn(universe, map, kind, tick, forcedType, forced)
     local surface = map.surface
     local target = pickTarget(map)
     if not target then
         return nil
     end
     local evo = game.forces.enemy.get_evolution_factor(surface)
-    local fromSuperHive = spawnFromSuperHive(universe, map, kind, tick, forcedType, target, evo)
-    if fromSuperHive then
-        return fromSuperHive
-    end
     local candidates = nestCandidates(map, target)
+    local hive = superHives.randomNear(universe, map, target, NEST_RANGE)
+    if hive then
+        if (kind == "hourBoss") or (mRandom() < SUPER_HIVE_SHARE) then
+            local entity = spawnFromSuperHive(universe, map, kind, tick, forcedType, target, evo, hive, candidates)
+            if entity then
+                return entity
+            end
+        end
+    elseif (kind == "hourBoss") and (not forced) and (mRandom() >= NO_LAIR_HOUR_BOSS_SHARE) then
+        return nil, true
+    end
     local count = #candidates
     if count == 0 then
         return nil
     end
-    local area = {{0, 0}, {0, 0}}
-    local query = {area = area, force = "enemy", type = "unit-spawner"}
     for _, desiredType in ipairs(typesToTry(evo, forcedType)) do
         for _ = 1, mMin(SPAWN_TRIES, count * 2) do
-            local chunk = candidates[mRandom(count)]
-            area[1][1] = chunk.x
-            area[1][2] = chunk.y
-            area[2][1] = chunk.x + CHUNK_SIZE
-            area[2][2] = chunk.y + CHUNK_SIZE
-            local spawners = surface.find_entities_filtered(query)
-            if #spawners > 0 then
-                local spawner = spawners[mRandom(#spawners)]
-                if not excludedSpawner(spawner.name) then
-                    local bossName, localName = resolveBoss(spawner.prototype, desiredType, evo, KINDS[kind].tierUp)
-                    if bossName then
-                        local position = surface.find_non_colliding_position(bossName, spawner.position, 24, 0.5)
-                        if position and not inPlayerBase(map, position) then
-                            local entity = create(universe, map, kind, bossName, localName, position,
-                                spawner.position, target, tick)
-                            if entity then
-                                return entity
-                            end
+            local spawner = randomOrdinarySpawner(universe, surface, candidates)
+            if spawner then
+                local bossName, localName = resolveBoss(spawner.prototype, desiredType, evo, KINDS[kind].tierUp)
+                if bossName then
+                    local position = surface.find_non_colliding_position(
+                        championPrototype(kind, bossName, localName), spawner.position, 24, 0.5)
+                    if position and not inPlayerBase(map, position) then
+                        local entity = create(universe, map, kind, bossName, localName, position,
+                            spawner.position, target, tick)
+                        if entity then
+                            return entity
                         end
                     end
                 end
@@ -899,7 +968,11 @@ local function schedule(universe, tick)
                 nextTick[kind] = tick + interval(spec)
             else
                 local map = pickMap(universe)
-                if map and spawn(universe, map, kind, tick) then
+                local entity, skipped
+                if map then
+                    entity, skipped = spawn(universe, map, kind, tick)
+                end
+                if entity or skipped then
                     nextTick[kind] = tick + interval(spec)
                 else
                     nextTick[kind] = tick + RETRY_TICKS
@@ -1078,7 +1151,7 @@ function champions.spawnNow(universe, surfaceIndex, kind, unitType)
     if (not map) or (not KINDS[kind]) or (unitType and not TYPES[unitType]) then
         return nil
     end
-    return spawn(universe, map, kind, game.tick, unitType)
+    return (spawn(universe, map, kind, game.tick, unitType, true))
 end
 
 -- read-only snapshot

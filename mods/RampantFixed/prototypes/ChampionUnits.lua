@@ -2,7 +2,8 @@
 --
 -- A champion is a copy of a unit named constants.championUnitName(kind, unit, nest unit): one copy per kind and per
 -- unit the nest spawns now, as libs/Champions.lua (resolveBoss) picks them. The copy has the real health of the
--- champion: max(own health, healthK x health of the nest unit), so the health bar and the tooltip show it as it is, and
+-- champion: max(own health, healthK x health of the nest unit, the floor of the level where that nest unit starts:
+-- constants.CHAMPION_HEALTH_FLOOR), so the health bar and the tooltip show it as it is, and
 -- no natural regeneration (it regenerates at a nest by script). on_entity_damaged can only be filtered by prototype,
 -- not by unit: with own prototypes the filter reaches the champions only. Copies are made for:
 --  * Rampant biters, spitters and flyers: the unit tierUp tiers above every unit of the line (capped at tier 10);
@@ -10,6 +11,7 @@
 --    same kind among the nest's units (hour boss: the one after it);
 -- and never for units whose attack damages themselves (suicide and nuclear biters).
 -- Copies are not spawned by nests, have no loot (the champion drops one artifact) and are hidden in Factoriopedia.
+-- They are bigger than their unit (constants.CHAMPION_KINDS sizeK: sprites and selection box; collisionK: collision).
 -- Runs at the end of data-final-fixes, after the resistance updates of this mod. If a copy is missing, the runtime
 -- spawns the ordinary unit with a script health pool as before.
 
@@ -128,6 +130,60 @@ for spawnerName, spawner in pairs(data.raw["unit-spawner"]) do
     end
 end
 
+-- sprites (anything with a file) grow with their shift; layers and variations are walked, each table once
+local function scaleSprites(value, k, seen)
+    if (type(value) ~= "table") or seen[value] then
+        return
+    end
+    seen[value] = true
+    if value.filename or value.filenames or value.stripes then
+        value.scale = (value.scale or 1) * k
+        if value.shift then
+            value.shift = {(value.shift[1] or value.shift.x or 0) * k, (value.shift[2] or value.shift.y or 0) * k}
+        end
+        return
+    end
+    for _, child in pairs(value) do
+        scaleSprites(child, k, seen)
+    end
+end
+
+local function scaleBox(box, k)
+    if not box then
+        return nil
+    end
+    local a = box[1] or box.left_top
+    local b = box[2] or box.right_bottom
+    return {{(a[1] or a.x) * k, (a[2] or a.y) * k}, {(b[1] or b.x) * k, (b[2] or b.y) * k}}
+end
+
+-- Paranoidal: champions are a bit bigger than their unit, hour bosses clearly bigger (constants.CHAMPION_KINDS)
+local function enlarge(copy, spec)
+    local k = spec.sizeK or 1
+    if k ~= 1 then
+        local seen = {}
+        scaleSprites(copy.run_animation, k, seen)
+        scaleSprites(copy.attack_parameters and copy.attack_parameters.animation, k, seen)
+        scaleSprites(copy.water_reflection, k, seen)
+        copy.selection_box = scaleBox(copy.selection_box, k)
+        copy.sticker_box = scaleBox(copy.sticker_box, k)
+    end
+    local c = spec.collisionK or 1
+    if c ~= 1 then
+        copy.collision_box = scaleBox(copy.collision_box, c)
+    end
+end
+
+-- the floor of the health by the tier of the nest unit (constants.CHAMPION_HEALTH_FLOOR); other units: none here,
+-- libs/Champions.lua raises their pool at the spawn
+local function healthFloor(kind, localName)
+    local tier = tonumber(string.match(localName, "%-t(%d+)%-rampant$"))
+    if not tier then
+        return 0
+    end
+    return constants.championHealthFloor(kind, constants.CHAMPION_FLOOR_LEVEL_BY_UNIT_TIER[math.min(tier, 10)])
+end
+
 local names = {}
 for name in pairs(pairsByName) do
     names[#names + 1] = name
@@ -142,7 +198,9 @@ for _, copyName in ipairs(names) do
         local copy = table.deepcopy(unit)
         copy.name = copyName
         copy.localised_name = unit.localised_name or {"entity-name." .. pair.boss}
-        copy.max_health = math.max(healthOf(unit), healthOf(units[pair.nest]) * KINDS[pair.kind].healthK)
+        copy.max_health = math.max(healthOf(unit), healthOf(units[pair.nest]) * KINDS[pair.kind].healthK,
+            healthFloor(pair.kind, pair.nest))
+        enlarge(copy, KINDS[pair.kind])
         copy.healing_per_tick = 0
         copy.loot = nil
         copy.hidden_in_factoriopedia = true

@@ -6,14 +6,20 @@
 -- second, spawns about one level above a hive, faction resistances plus a bonus, a blue glow, a brood on death and
 -- Bob artifacts as loot.
 --  * origin: a nest placed by Rampant (a new chunk, an expansion or the growth of a base) becomes a super-hive with a
---    small chance from the start of the game (0.4% at 0% evolution, 1.2% at 100%, x2.5 in a chunk with resources);
+--    chance from the start of the game: 50% with a resource (ore, oil...) within RESOURCE_RADIUS, else 0.4% at 0%
+--    evolution and 1.2% at 100%;
 --    a hive chosen by the base evolution grows into one with EVOLVE_CHANCE. Always: not near the map centre early
 --    (START_DISTANCE shrinks with the evolution), no player entity within PLAYER_RADIUS, MIN_SPACING from another
 --    super-hive of the surface and at most LIMIT_BASE + LIMIT_EVO x evolution of them per surface;
 --  * it is a nest of its base for the AI (squads, activeness, champions), changes its faction with the base mutations
 --    and its level with the base level, as the other buildings do;
+--  * looks: bigger than a hive of its level (prototype), a blue glow and a ring around it drawn by this script, a
+--    blue light at night and a blue map colour (prototype);
 --  * heart of the nest: every PULSE_TICKS it heals the damaged nests and worms of its force around it;
---  * champions and hour bosses near it leave from it (libs/Champions.lua) and come back to it to regenerate;
+--  * the lair of the champions (libs/Champions.lua): an hour boss always, a champion with 50% leaves from a random
+--    super-hive within reach of its target and comes back to it to regenerate; its unit and faction come from a random
+--    ordinary nest around, as without a super-hive. Without a super-hive near the target 3 of 4 hour bosses do not
+--    come;
 --  * death: a brood of units one tier up (prototype), Bob artifacts, AI points for revenge, a chat line with the
 --    place and an avenger: a champion (an hour boss for tier 7+) from the nests near the base (control.lua).
 -- Map setting rampantFixed--superHives switches new super-hives; living ones keep working.
@@ -38,7 +44,8 @@ superHives.SETTING = "rampantFixed--superHives"
 
 local BASE_CHANCE = 0.004           -- per nest placed by Rampant, at 0% evolution
 local EVO_CHANCE = 0.008            -- added at 100% evolution
-local RESOURCE_K = 2.5              -- in a chunk with resources (known chunks only)
+local RESOURCE_CHANCE = 0.5         -- with a resource within RESOURCE_RADIUS of the nest
+local RESOURCE_RADIUS = 40
 local EVOLVE_CHANCE = 0.3           -- a hive picked by the base evolution grows into a super-hive
 local MIN_SPACING = 224             -- tiles between super-hives of a surface
 local START_DISTANCE = 320          -- from the map centre at 0% evolution...
@@ -57,6 +64,10 @@ local DEATH_POINTS = constants.RECOVER_NEST_COST * 3
 local HOUR_BOSS_TIER = 7            -- the avenger of a super-hive of this tier and above is an hour boss
 local PULSE_COLOR = {r = 0.15, g = 0.35, b = 0.75, a = 0.35}
 local FALLEN_COLOR = {r = 0.45, g = 0.75, b = 1}
+local AURA_COLOR = {r = 0.3, g = 0.55, b = 1}
+local AURA_GLOW_SPRITE = "rampantFixed-champion-glow"     -- 128 px (4 tiles) at scale 1 (prototypes/Champions.lua)
+local AURA_GLOW_K = 1.5                                    -- glow width / selection width
+local AURA_RING_K = 0.8                                    -- ring radius / selection width
 local HEALED_TYPES = {"unit-spawner", "turret"}
 
 ----------------------------------------------------------------------------------------------------------------------
@@ -95,6 +106,35 @@ local function forget(data, unitNumber)
     end
 end
 
+-- the aura (like the glow of the champions): a blue glow under it and a ring on the ground; both are attached to the
+-- entity, so they go with it
+local function drawAura(record)
+    local entity = record.entity
+    local box = entity.prototype.selection_box
+    local width = mMax(1, box.right_bottom.x - box.left_top.x)
+    local glowScale = width * AURA_GLOW_K / 4
+    local alpha = 0.5
+    rendering.draw_sprite({
+        sprite = AURA_GLOW_SPRITE,
+        surface = entity.surface,
+        target = entity,
+        tint = {r = AURA_COLOR.r * alpha, g = AURA_COLOR.g * alpha, b = AURA_COLOR.b * alpha, a = alpha},
+        x_scale = glowScale,
+        y_scale = glowScale * 0.75,
+        render_layer = "lower-object",
+    })
+    rendering.draw_circle({
+        color = {r = AURA_COLOR.r * 0.6, g = AURA_COLOR.g * 0.6, b = AURA_COLOR.b * 0.6, a = 0.6},
+        radius = width * AURA_RING_K,
+        width = 4,
+        filled = false,
+        target = entity,
+        surface = entity.surface,
+        draw_on_ground = true,
+    })
+    record.aura = true
+end
+
 -- every creation path of Rampant structures (libs/BaseUtils.lua) calls this with the new entity
 function superHives.register(universe, entity)
     if not (entity and entity.valid and isSuperHive(universe, entity.name)) then
@@ -115,6 +155,7 @@ function superHives.register(universe, entity)
         nextPulse = game.tick + mRandom(PULSE_TICKS)
     }
     data.counts[index] = (data.counts[index] or 0) + 1
+    drawAura(data.records[unitNumber])
 end
 
 ----------------------------------------------------------------------------------------------------------------------
@@ -124,12 +165,13 @@ local function enabled()
     return settings.global[superHives.SETTING].value
 end
 
-local function chance(evo, resourceChunk)
-    local value = BASE_CHANCE + EVO_CHANCE * evo
-    if resourceChunk then
-        value = value * RESOURCE_K
-    end
-    return value
+local resourceQuery = {position = {x = 0, y = 0}, radius = RESOURCE_RADIUS, type = "resource", limit = 1}
+
+-- a resource near the position (searched directly: on the first scan of a chunk Rampant knows no resources yet)
+local function resourceNear(surface, position)
+    resourceQuery.position.x = position.x
+    resourceQuery.position.y = position.y
+    return surface.count_entities_filtered(resourceQuery) > 0
 end
 
 -- forces at war with the enemy force (players), nil if none
@@ -145,7 +187,8 @@ local function hostileForces()
     return result
 end
 
-local function placementAllowed(universe, map, position, evo)
+-- the cheap conditions first: limit, distance from the centre, spacing
+local function placeAvailable(universe, map, position, evo)
     local surface = map.surface
     if not surface.valid then
         return false
@@ -171,6 +214,11 @@ local function placementAllowed(universe, map, position, evo)
             end
         end
     end
+    return true
+end
+
+-- no entity of a force at war with the enemy around
+local function farFromPlayers(surface, position)
     local forces = hostileForces()
     if forces and (surface.count_entities_filtered({position = position, radius = PLAYER_RADIUS, force = forces,
                                                     limit = 1}) > 0) then
@@ -180,15 +228,25 @@ local function placementAllowed(universe, map, position, evo)
 end
 
 -- a nest that Rampant places now (new chunk, expansion, growth) becomes a super-hive?
-function superHives.rollPlacement(universe, map, position, resourceChunk)
+function superHives.rollPlacement(universe, map, position)
     if not enabled() then
         return false
     end
-    local evo = game.forces.enemy.get_evolution_factor(map.surface)
-    if mRandom() >= chance(evo, resourceChunk) then
+    local surface = map.surface
+    local evo = game.forces.enemy.get_evolution_factor(surface)
+    if not placeAvailable(universe, map, position, evo) then
         return false
     end
-    return placementAllowed(universe, map, position, evo)
+    local chance
+    if resourceNear(surface, position) then
+        chance = RESOURCE_CHANCE
+    else
+        chance = BASE_CHANCE + EVO_CHANCE * evo
+    end
+    if mRandom() >= chance then
+        return false
+    end
+    return farFromPlayers(surface, position)
 end
 
 -- a hive chosen by the base evolution grows into a super-hive?
@@ -196,7 +254,8 @@ function superHives.allowEvolve(universe, map, position)
     if (not enabled()) or (mRandom() >= EVOLVE_CHANCE) then
         return false
     end
-    return placementAllowed(universe, map, position, game.forces.enemy.get_evolution_factor(map.surface))
+    local evo = game.forces.enemy.get_evolution_factor(map.surface)
+    return placeAvailable(universe, map, position, evo) and farFromPlayers(map.surface, position)
 end
 
 ----------------------------------------------------------------------------------------------------------------------
@@ -262,6 +321,9 @@ function superHives.update(universe, tick)
             forget(data, nextKey)       -- removed by a script without a death event (a mutation replaces it)
         else
             key = nextKey
+            if not record.aura then
+                drawAura(record)            -- a super-hive registered before the aura existed
+            end
             if tick >= record.nextPulse then
                 pulse(record, tick)
                 pulses = pulses + 1
@@ -307,8 +369,8 @@ function superHives.onDied(universe, map, entity)
     return "champion"
 end
 
--- a living super-hive of the map within range of the position (the nearest), nil if none
-function superHives.nearTarget(universe, map, position, range)
+-- a random living super-hive of the map within range of the position, nil if none (the lair of the champions)
+function superHives.randomNear(universe, map, position, range)
     local data = universe.superHives
     if not data then
         return nil
@@ -317,20 +379,19 @@ function superHives.nearTarget(universe, map, position, range)
     if (data.counts[index] or 0) == 0 then
         return nil
     end
-    local best, bestD2
+    local found
     local range2 = range * range
     for _, record in pairs(data.records) do
         if (record.surfaceIndex == index) and record.entity.valid then
             local dx = record.x - position.x
             local dy = record.y - position.y
-            local d2 = (dx * dx) + (dy * dy)
-            if (d2 <= range2) and ((not bestD2) or (d2 < bestD2)) then
-                best = record.entity
-                bestD2 = d2
+            if ((dx * dx) + (dy * dy)) <= range2 then
+                found = found or {}
+                found[#found + 1] = record.entity
             end
         end
     end
-    return best
+    return found and found[mRandom(#found)]
 end
 
 -- read-only snapshot; surfaceIndex optional

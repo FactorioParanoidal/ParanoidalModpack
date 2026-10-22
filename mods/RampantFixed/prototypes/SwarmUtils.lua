@@ -409,7 +409,8 @@ local superHiveAttributeNumeric = {
     ["spawningCooldownStart"] = { 150, 150, 150, 150, 150, 150, 150, 150, 150, 150 },
     ["spawningCooldownEnd"] = { 45, 45, 45, 45, 45, 45, 45, 45, 45, 45 },
     ["unitsToSpawn"] = { 15, 15, 15, 15, 16, 16, 17, 17, 18, 18 },
-    ["scale"] = { 1.5, 1.6, 1.7, 1.8, 1.9, 2.0, 2.1, 2.2, 2.3, 2.4 },
+    -- about 1.6 times a hive of the same level (hives 1.2-2.1, nests 0.5-1.8): bigger than both at every level
+    ["scale"] = { 2.0, 2.15, 2.3, 2.45, 2.6, 2.75, 2.9, 3.05, 3.2, 3.4 },
     ["unitsOwned"] = { 20, 20, 20, 20, 22, 22, 24, 24, 26, 26 },
     ["helpRadius"] = { 64, 64, 64, 64, 72, 72, 80, 80, 88, 96 },
     ["spawningRadius"] = { 14, 14, 14, 14, 14, 14, 14, 14, 14, 14 },
@@ -432,6 +433,8 @@ local SUPER_HIVE_RESISTANCE_BONUS = {
 }
 local SUPER_HIVE_MAP_COLOR = {r = 0.25, g = 0.75, b = 1, a = 1}
 local SUPER_HIVE_GLOW_TINT = {r = 0.25, g = 0.55, b = 1}
+-- the body is drawn at the full scale, the collision box stops growing here (a hive of level 10 has 2.1)
+local SUPER_HIVE_MAX_COLLISION_SCALE = 2.4
 
 
 local wormAttributeNumeric = {
@@ -1491,12 +1494,14 @@ function swarmUtils.buildSuperHive(template)
                 filename = "__core__/graphics/light-medium.png",
                 width = 300,
                 height = 300,
-                scale = 1.2 * unitSpawner.scale,
+                scale = unitSpawner.scale,
                 priority = "high",
                 draw_as_light = true,
                 tint = SUPER_HIVE_GLOW_TINT,
                 shift = {0, 0.5}
             }
+            local collisionHalf = 2.2 * mMin(unitSpawner.scale, SUPER_HIVE_MAX_COLLISION_SCALE)
+            prototype.collision_box = {{-collisionHalf, -collisionHalf}, {collisionHalf, collisionHalf}}
             prototype.order = "b-b-h"
             data:extend({prototype})
         end
