@@ -5,6 +5,10 @@ require("utils")
 
 ic.quality_normal = data.raw.quality["normal"]
 ic.update_quality_name(ic.quality_normal, { "default-quality-name.normal" })
+-- Paranoidal: normal is the first step of the same chance curve as the positive tiers
+-- (one dynamic step before uncommon), not the vanilla 0.1. Defaults: 0.204 -> 0.2 -> 0.196 ...
+-- so the first upgrade is the easiest one. Defect grades keep their own 0.1.
+ic.quality_normal.next_probability = math.max(0.001, math.min(1, ic.chance.value - ic.chance.dynamic_bonus))
 
 ic.quality_uncommon = data.raw.quality["uncommon"]
 ic.quality_uncommon.level = math.floor(2 * ic.conf.level_multiplier)

@@ -2,6 +2,8 @@
 Version: 9.1.5
 Date: 2026. 10. 14
   Changes:
+    - Normal quality upgrades on the same chance curve as the positive tiers, one step before uncommon (default 20.4% instead of the vanilla 10%): the chance ladder now decreases from the very first tier (normal -> uncommon is no longer half as likely as uncommon -> rare). Defect grades keep 10%.
+    - README: the chance ladder is described (section 1); materials and drills get positive quality from modules while "Quality for all production" is on (the old text said they always stay white). New mock test tests/quality-chance-curve.lua; tests/expansion-gui.lua uses normal next_probability 0.204.
     - Logistic memory units (passive provider, storage, buffer, requester; packed and unpacked) never get defects, like the memory unit.
     - Post (batch control) window layout: legend arrows are scaled to 20 px instead of drawing at full size over the text, legend lines wrap instead of being cut off, the accepted count is a label next to the progress bar instead of an off-centre caption, the condition and quality drop-downs have fixed widths so the quality one is not cut off.
     - Attack range (turrets, guns, combat robots) grows over all 40 positive tiers on a convex curve 1 + 2 * sqrt(tier / 40): x1.32 at tier 1, x2 at tier 10, x2.41 at tier 20, the engine cap x3 only at the last tier. Before, the engine default reached x3 at tier 20 and higher tiers added no range.

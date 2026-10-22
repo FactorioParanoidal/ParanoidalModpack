@@ -112,7 +112,8 @@ settings = {global = {["ic-more-qualities-initial-loss-percent"] = {value = 33}}
 rendering = {draw_sprite = function() return {id = 1} end, get_object_by_id = function() return nil end}
 prototypes = {
     quality = {
-        normal = {name = "normal", level = 0, order = "a", next_probability = 0.1, localised_name = {"quality-name.normal"}},
+        -- 0.204: normal is the first step of the chance curve (prototypes/quality-base.lua).
+        normal = {name = "normal", level = 0, order = "a", next_probability = 0.204, localised_name = {"quality-name.normal"}},
         rare = {name = "rare", level = 3, order = "b", localised_name = {"quality-name.rare"}},
         ["ic-defect-3"] = {name = "ic-defect-3", level = 0, order = "0", localised_name = {"quality-name.ic-defect-3"}},
     },
@@ -273,11 +274,11 @@ do
     assert(rawget(frame, "caption") == nil)
     -- Live refresh: the quality chance follows the machine effects without reopening.
     local tbl = inside.ic_mode_table
-    assert(tbl.quality_1.caption == "2.00%" and tbl.quality_3.caption == "18.29%", tbl.quality_3.caption)
+    assert(tbl.quality_1.caption == "4.08%" and tbl.quality_2.caption == "11.75%" and tbl.quality_3.caption == "34.07%", tbl.quality_3.caption)
     am.effects = {quality = 0.5}
     gui.refresh_entity(player)
     assert(player.gui.relative.ic_quality_relative == frame and frame.valid)
-    assert(tbl.quality_1.caption == "5.00%" and tbl.quality_2.caption == "14.26%" and tbl.quality_3.caption == "40.13%")
+    assert(tbl.quality_1.caption == "10.20%" and tbl.quality_2.caption == "27.58%" and tbl.quality_3.caption == "65.90%")
     am.effects = {quality = 0}
     gui.refresh_entity(player)
     assert(tbl.quality_3.caption == "0.00%")
