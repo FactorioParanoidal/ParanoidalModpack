@@ -372,6 +372,7 @@ require("removals.area-mining-drill")
 require("tweaks.technology.icon-markers") -- Уровни и значки веток на иконках технологий, после всех правок иконок.
 -- Цена исследований Beta 8 (циклы, наука, время) после всех правок дерева; эффект эволюции считается ниже.
 require("tweaks.technology.research-beta8")
+require("tweaks.technology.missing-science-packs") -- недостающие основные пакеты после предшественников
 -- Согласованная энергетика: после OV, restack, flowfix, меню и всех поздних замен.
 require("tweaks.custom.energy-port")
 -- Отдельный MK3 с собственным предметом и открытием на существующей технологии IV.

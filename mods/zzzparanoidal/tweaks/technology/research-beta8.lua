@@ -38,11 +38,11 @@ local units = {
     ["battery-mk3-equipment"] = {count = 150, time = 30, ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"chemical-science-pack", 1}}}, -- Р-1: bob-battery-equipment-3
     ["bob-advanced-research"] = {count = 100, time = 30, ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"chemical-science-pack", 1}}}, -- Р-10: advanced-research
     ["bob-alien-research"] = {count = 300, time = 30, ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"military-science-pack", 1}, {"chemical-science-pack", 1}}}, -- Р-10: alien-research
-    ["bob-area-drills-1"] = {count = 50, time = 30, ingredients = {{"automation-science-pack", 1}}}, -- Р-5: bob-area-drills-1
+    ["bob-area-drills-1"] = {count = 50, time = 30, ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}}}, -- зелёные добавлены: технология стоит после logistic-science-pack; Р-5: bob-area-drills-1
     ["bob-area-drills-3"] = {count = 100, time = 30, ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"chemical-science-pack", 1}}}, -- Р-5: bob-area-drills-3
     ["bob-area-drills-4"] = {count = 150, time = 30, ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"chemical-science-pack", 1}, {"production-science-pack", 1}}}, -- Р-5: bob-area-drills-4
     ["bob-battery-equipment-5"] = {count = 250, time = 45, ingredients = {{"bob-science-pack-gold", 1}, {"bob-alien-science-pack", 1}, {"bob-alien-science-pack-purple", 1}, {"bob-alien-science-pack-yellow", 1}}}, -- Р-1: bob-battery-equipment-5
-    ["bob-drills-2"] = {count = 50, time = 30, ingredients = {{"automation-science-pack", 1}}}, -- Р-5: bob-drills-1
+    ["bob-drills-2"] = {count = 50, time = 30, ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}}}, -- зелёные добавлены: технология стоит после logistic-science-pack; Р-5: bob-drills-1
     ["bob-drills-4"] = {count = 100, time = 30, ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"chemical-science-pack", 1}}}, -- Р-5: bob-drills-3
     ["bob-drills-5"] = {count = 150, time = 30, ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"chemical-science-pack", 1}, {"production-science-pack", 1}}}, -- Р-5: bob-drills-4
     ["bob-electronics-machine-3"] = {count = 100, time = 45, ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"chemical-science-pack", 1}, {"production-science-pack", 1}}}, -- Р-8: electronics-machine-3
