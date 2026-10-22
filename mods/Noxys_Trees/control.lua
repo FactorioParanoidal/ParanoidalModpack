@@ -38,6 +38,8 @@ noxy_trees.disabled = { -- Disables the spreading of these specific entities.
 noxy_trees.disabled_match = {
   ["[-]planted"]         = true,
   ["sapling[-]stage[-]"] = true,
+  -- Bio Industries grow stages: copies would not be in its grow tables and never grow up.
+  ["^bio[-]tree[-].+[-]%d$"] = true,
 }
 noxy_trees.degradable = { -- The floor tiles that can be degraded and into what.
   -- Vanilla tiles
