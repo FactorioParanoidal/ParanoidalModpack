@@ -298,9 +298,10 @@ tick = run(machine, record, 1000, mock.sequence({.5, .5}), tick)
 assert(not machine.source and machine.outputs[2] == "ic-defect-2", tostring(machine.outputs[2]))
 assert(not record.starved_since)
 
--- 10. Science packs and ammo (per-item durability / rounds) are never taken by the furnace: its recipe
--- output is a fresh full item, so a used pack came back full (endless science). The script refines them
--- from the input slot with the same cost and time and keeps the share of durability.
+-- 10. Partly used science packs and magazines (per-item durability / rounds) are never taken by the
+-- furnace: its recipe output is a fresh full item, so a used pack came back full (endless science). The
+-- script refines them from the input slot with the same cost and time and keeps the share of durability.
+-- Whole packs and full magazines are taken by the furnace like other items (fresh full = whole input).
 local MAX = {normal = 100, ["ic-defect-3"] = 60, ["ic-defect-2"] = 75, rare = 150}
 local function qname(q) return type(q) == "table" and q.name or q end
 local function typed_stack(kind, name, quality, count, value)
@@ -334,27 +335,41 @@ local function make_pack_machine(unit)
         return source_inventory
     end
     local update = machine.update
+    -- The furnace takes one item of a stack; a pack or magazine it takes must be whole.
     function machine.update()
-        if not entity.disabled_by_script and not machine.crafting and machine.source and machine.source.valid_for_read then
-            assert(machine.source.type ~= "tool" and machine.source.type ~= "ammo", "the furnace took a pack")
-        end
         if machine.source and not machine.source.valid_for_read then machine.source = nil end
+        local source = machine.source
+        if not entity.disabled_by_script and not machine.crafting and source then
+            if source.type == "tool" then
+                assert(source.durability >= MAX[source.quality.name], "the furnace took a used pack")
+            elseif source.type == "ammo" then
+                assert(source.ammo >= source.prototype.magazine_size, "the furnace took a used magazine")
+            end
+            if source.type then
+                local _, seconds = workshop.cost_of(source.name)
+                machine.taken = (machine.taken or 0) + 1
+                if source.count > 1 then source.count = source.count - 1 else machine.source = nil end
+                machine.start(source.name, source.quality.name, seconds)
+            end
+        end
         update()
     end
     return machine
 end
 
--- 10a. A used standard pack passes unchanged; the whole packs below it stay whole; no packs spent.
+-- 10a. A used standard pack passes unchanged by script; the whole packs below it go to the furnace and
+-- pass there; no packs spent.
 machine = make_pack_machine(11)
 record = workshop.track(machine.entity)
 tick = run(machine, record, 10, mock.sequence({.5}), tick)
 machine.source = typed_stack("tool", "automation-science-pack", "normal", 3, 40)
 local packs_before = workshop.available(machine.entity)
 tick = run(machine, record, 20, mock.sequence({.5}), tick)
-assert(#machine.result == 3 and not machine.source, "three packs passed: " .. #machine.result)
-assert(machine.result[1].durability == 40 and machine.result[2].durability == 100 and machine.result[3].durability == 100)
-assert(machine.result[1].quality == "normal" and workshop.available(machine.entity) == packs_before)
-assert(not machine.crafting and #machine.outputs == 0, "the furnace itself crafted nothing")
+assert(#machine.result == 1 and not machine.source, "one used pack passed by script: " .. #machine.result)
+assert(machine.result[1].durability == 40 and machine.result[1].quality == "normal")
+assert(workshop.available(machine.entity) == packs_before)
+assert(machine.taken == 2 and #machine.outputs == 2 and machine.outputs[1] == "normal" and machine.outputs[2] == "normal",
+    "the whole packs passed through the furnace")
 
 -- 10b. A used defective pack is refined for the same cost and time; the share of durability is kept.
 machine = make_pack_machine(12)
@@ -369,10 +384,11 @@ assert(#machine.result == 1 and machine.result[1].quality == "ic-defect-2", tost
 near(machine.result[1].durability, 0.5 * 75)
 assert(math.abs(tick - start_tick - 600) <= 2 * workshop.LOOK + 1, "same time as the furnace: " .. (tick - start_tick))
 near(packs_before - workshop.available(machine.entity), (workshop.cost_of("automation-science-pack")), 1e-6)
-assert(machine.source.count == 1 and machine.source.durability == 60, "the pack left in the slot is whole")
+-- The furnace takes the whole pack left in the slot right after the used one is delivered.
+assert((machine.taken or 0) <= 1)
 tick = run(machine, record, 700, random10, tick)
-assert(#machine.result == 2 and machine.result[2].durability == 75 and not machine.source)
-assert(not machine.crafting and #machine.outputs == 0)
+assert(#machine.result == 1 and not machine.source and not machine.crafting)
+assert(machine.taken == 1 and machine.outputs[1] == "ic-defect-2", "the whole pack was refined by the furnace")
 
 -- 10c. Ammo keeps its rounds; positive quality is reset with the share of durability on request.
 machine = make_pack_machine(13)
@@ -380,7 +396,8 @@ record = workshop.track(machine.entity)
 tick = run(machine, record, 10, mock.sequence({.5}), tick)
 machine.source = typed_stack("ammo", "firearm-magazine", "normal", 2, 4)
 tick = run(machine, record, 20, mock.sequence({.5}), tick)
-assert(#machine.result == 2 and machine.result[1].ammo == 4 and machine.result[2].ammo == 10)
+assert(#machine.result == 1 and machine.result[1].ammo == 4 and not machine.source)
+assert(machine.taken == 1 and machine.outputs[1] == "normal", "the full magazine passed through the furnace")
 workshop.apply_settings(record, {reset_positive = true})
 machine.result = {}
 machine.source = typed_stack("tool", "automation-science-pack", "rare", 1, 75)
@@ -421,8 +438,22 @@ assert(machine.entity.crafting_progress >= held_progress, "the attempt of the fu
 tick = run(machine, record, 700, mock.sequence({.5, .5}), tick)
 assert(machine.outputs[1] == "ic-defect-2", tostring(machine.outputs[1]))
 
-print("PASS: science packs and ammo are refined by script with the share of durability / rounds kept,")
-print("the furnace never takes them; same cost and time; blocked output and missing packs wait.")
+-- 10f. A whole defective pack is refined by the furnace: the building is not stopped by script, the
+-- script result slot stays untouched, packs are spent as for any item.
+machine = make_pack_machine(16)
+record = workshop.track(machine.entity)
+tick = run(machine, record, 10, mock.sequence({.5}), tick)
+machine.source = typed_stack("tool", "automation-science-pack", "ic-defect-3", 1, 60)
+packs_before = workshop.available(machine.entity)
+tick = run(machine, record, 10, mock.sequence({.5, .5}), tick)
+assert(machine.crafting and not machine.entity.disabled_by_script and not record.sc, "the furnace refines the whole pack")
+tick = run(machine, record, 700, mock.sequence({.5, .5}), tick)
+assert(machine.taken == 1 and machine.outputs[1] == "ic-defect-2" and #machine.result == 0)
+near(packs_before - workshop.available(machine.entity), (workshop.cost_of("automation-science-pack")), 1e-6)
+
+print("PASS: used science packs and magazines are refined by script with the share of durability / rounds")
+print("kept, the furnace never takes them; whole ones go through the furnace; same cost and time; blocked")
+print("output and missing packs wait.")
 print("PASS: workshop streams pack durability (partial packs), waits without packs or power,")
 print("makes one attempt per item (90% + 10% chain, capped at standard) and always releases it, passes standard,")
 print("resets positive quality on request, returns the reached grade when mined; modes take 5x/20x the")

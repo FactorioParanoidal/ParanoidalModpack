@@ -12,10 +12,12 @@
 -- Modes (rules.workshop_modes): an attempt in the precise/flawless mode takes 5/20 times longer at
 -- the same power and the same packs and gains 2 grades / reaches standard for sure. The mode is
 -- taken when the attempt starts; a switch applies from the next attempt.
--- Science packs and other tools (durability) and ammo (rounds) are never crafted by the furnace: its
--- recipe output is a fresh full item, so a used pack came back full (endless science). The script
--- refines them in place from the input slot with the same cost, time, modes and outcome and writes the
--- result with the same share of durability (rounds unchanged); the furnace stays stopped meanwhile.
+-- Partly used science packs and other tools (durability) and magazines (rounds) are never crafted by the
+-- furnace: its recipe output is a fresh full item, so a used pack came back full (endless science). The
+-- script refines them in place from the input slot with the same cost, time, modes and outcome and
+-- writes the result with the same share of durability (rounds unchanged); the furnace stays stopped
+-- meanwhile. Whole packs and full magazines go through the furnace like other items: its fresh full
+-- output equals the whole input, and the building shows its recipe, animation and status.
 local names = require("scripts.expansion.names")
 local rules = require("scripts.expansion.rules")
 local model = require("scripts.defects.model")
@@ -430,10 +432,20 @@ end
 ---------------------------------------------------------------------------------------------------
 -- Items with a per-item state (science packs and other tools: durability; ammo: rounds)
 ---------------------------------------------------------------------------------------------------
-local STATEFUL = {tool = true, ammo = true}
+-- Only the top item of a stack can be partly used; the items below it are whole.
+local USED_EPSILON = 1e-9
 
 local function stateful(stack)
-    return stack ~= nil and stack.valid_for_read and STATEFUL[stack.type] == true
+    if not (stack ~= nil and stack.valid_for_read) then return false end
+    local kind = stack.type
+    if kind == "tool" then
+        local maximum = stack.prototype.get_durability(stack.quality)
+        return maximum ~= nil and stack.durability < maximum - USED_EPSILON
+    elseif kind == "ammo" then
+        local size = stack.prototype.magazine_size
+        return size ~= nil and stack.ammo < size - USED_EPSILON
+    end
+    return false
 end
 
 -- The leaving item: the top item of the input stack (the partly used one) at the reached quality,
