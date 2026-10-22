@@ -2,6 +2,7 @@
 Version: 2.0.2
 Date: 2026-01-16
   Changes:
+    - Paranoidal: build events are filtered: resources (RSO Reforged raises an event per ore tile) and ghosts no longer reach the handler.
     - Paranoidal: the four build handlers share one function; invalid entities are skipped and the selection box is read once.
 
   Changed:

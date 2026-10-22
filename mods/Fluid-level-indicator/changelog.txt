@@ -4,6 +4,7 @@ Date: 09 May 2025
   Minor Changes:
     - Added Krastorio 2 compatibility back for steel pipes.
   Optimizations:
+    - Paranoidal: build events are filtered by the indicator names (RSO Reforged raises script_raised_built for every ore tile).
     - Paranoidal: the per-tick handler compared a function instead of calling it ("players present" was always true),
       read both runtime settings every tick and re-targeted every render object on every update (4 writes per
       indicator). Settings are cached, digits/text are attached to the indicator entity (no moves, removed with it),

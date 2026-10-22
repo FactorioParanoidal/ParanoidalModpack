@@ -9,7 +9,9 @@ local function clear_under(event)
     entity.surface.destroy_decoratives{area={{box.left_top.x-0.6, box.left_top.y-0.6}, {box.right_bottom.x+0.6, box.right_bottom.y+0.6}}}
 end
 
-script.on_event(defines.events.on_built_entity, clear_under)
-script.on_event(defines.events.on_robot_built_entity, clear_under)
-script.on_event(defines.events.script_raised_built, clear_under)
-script.on_event(defines.events.script_raised_revive, clear_under)
+-- Resources (e.g. ore placed by RSO Reforged, one event per tile) and ghosts never reach the handler.
+local filters = {{filter = "type", type = "resource", invert = true}, {filter = "ghost", invert = true, mode = "and"}}
+for _, event in ipairs({defines.events.on_built_entity, defines.events.on_robot_built_entity,
+    defines.events.script_raised_built, defines.events.script_raised_revive}) do
+    script.on_event(event, clear_under, filters)
+end

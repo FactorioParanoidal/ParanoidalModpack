@@ -12,6 +12,15 @@ local function refresh_death_filter()
   script.set_event_filter(defines.events.on_entity_died, {
     { filter = "name", name = sea_pump:get_pump_name() },
   })
+  -- only the sea pump placeable reaches the build handlers (RSO raises an event for every ore tile)
+  local placeable = data.prototype_data.sea_pump_placeable
+  if placeable and prototypes.entity[placeable] then
+    local filter = { { filter = "name", name = placeable } }
+    for _, event in ipairs({ defines.events.on_built_entity, defines.events.on_robot_built_entity,
+      defines.events.script_raised_built, defines.events.script_raised_revive }) do
+      script.set_event_filter(event, filter)
+    end
+  end
 end
 
 -- initialisation

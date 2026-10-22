@@ -3,10 +3,13 @@ require "fli/fli"
 require("compatibility/com_control")
 
 
-script.on_event(defines.events.on_built_entity, function(event) placedfli(event.entity) end)
-script.on_event(defines.events.on_robot_built_entity, function(event) placedfli(event.entity) end)
-script.on_event(defines.events.script_raised_built, function(event) placedfli(event.entity) end)
-script.on_event(defines.events.script_raised_revive, function(event) placedfli(event.entity) end)
+-- Only the indicators reach the handler (script_raised_built is raised for every ore tile of RSO).
+local fli_filter = {}
+for _, name in ipairs(flientities) do fli_filter[#fli_filter + 1] = {filter = "name", name = name} end
+script.on_event(defines.events.on_built_entity, function(event) placedfli(event.entity) end, fli_filter)
+script.on_event(defines.events.on_robot_built_entity, function(event) placedfli(event.entity) end, fli_filter)
+script.on_event(defines.events.script_raised_built, function(event) placedfli(event.entity) end, fli_filter)
+script.on_event(defines.events.script_raised_revive, function(event) placedfli(event.entity) end, fli_filter)
 script.on_event(defines.events.on_entity_cloned, function(event) placedfli(event.destination) end)
 script.on_event(defines.events.on_space_platform_built_entity, function(event) placedfli(event.entity) end)
 

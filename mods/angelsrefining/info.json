@@ -22,7 +22,7 @@
     "(?) bobtech >= 2.1.0",
     "(?) bobvehicleequipment >= 2.1.0",
     "? bobwarfare >= 2.1.0",
-    "(?) rso-mod >= 7.0.0",
+    "(?) RSO-reforged >= 9.0.0",
     "? Yuoki >= 1.2.0"
   ]
 }

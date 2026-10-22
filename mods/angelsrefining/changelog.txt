@@ -2,6 +2,8 @@
 Version: 2.0.4
 Date: 04.06.2026
   Bugfixes:
+    - Paranoidal: the optional dependency on rso-mod follows its rename to RSO-reforged (same load order).
+    - Paranoidal: the build handlers get a name filter for the sea pump placeable (RSO Reforged raises an event per ore tile).
     - Paranoidal: angelsrefininggraphics is now a plain required dependency instead of "~" (load order is unchanged): Factorio 2.0 never reuses the data stage cache (cache-prototype-data) while any enabled mod has a "~" dependency.
     - Paranoidal: sea pumps built by robots are converted again (handler read event.created_entity, which is nil in 2.0).
     - Paranoidal: angelspump migration branch uses storage instead of the removed global table.
