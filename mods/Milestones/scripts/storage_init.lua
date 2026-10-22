@@ -84,38 +84,13 @@ function initialize_force_if_needed(force)
     return false
 end
 
--- Paranoidal: surfaces of Blueprint Sandboxes labs ("bpsb-lab-...") are not counted: what is produced or
--- killed in a lab (also by the real force when the sandbox isolation is "none") must not reach milestones.
-local SANDBOX_SURFACE_PREFIX = "bpsb-lab-"
-
-function is_ignored_surface_name(surface_name)
-    return script.active_mods["blueprint-sandboxes"] ~= nil
-        and string.sub(surface_name, 1, #SANDBOX_SURFACE_PREFIX) == SANDBOX_SURFACE_PREFIX
-end
-
 function add_flow_statistics_to_storage_force(force)
     local storage_force = storage.forces[force.name]
     for surface_name, _surface in pairs(game.surfaces) do
         -- TODO: Check for surfaces that the force has not built on and skip them?
-        if not is_ignored_surface_name(surface_name) then
-            table.insert(storage_force.item_stats, force.get_item_production_statistics(surface_name))
-            table.insert(storage_force.fluid_stats, force.get_fluid_production_statistics(surface_name))
-            table.insert(storage_force.kill_stats, force.get_kill_count_statistics(surface_name))
-        end
-    end
-end
-
--- Paranoidal: rebuilds the statistics lists without the lab surfaces (older versions included them).
--- Idempotent; completion times are not touched.
-function remove_ignored_surface_statistics()
-    for force_name, storage_force in pairs(storage.forces) do
-        local force = game.forces[force_name]
-        if force then
-            storage_force.item_stats = {}
-            storage_force.fluid_stats = {}
-            storage_force.kill_stats = {}
-            add_flow_statistics_to_storage_force(force)
-        end
+        table.insert(storage_force.item_stats, force.get_item_production_statistics(surface_name))
+        table.insert(storage_force.fluid_stats, force.get_fluid_production_statistics(surface_name))
+        table.insert(storage_force.kill_stats, force.get_kill_count_statistics(surface_name))
     end
 end
 

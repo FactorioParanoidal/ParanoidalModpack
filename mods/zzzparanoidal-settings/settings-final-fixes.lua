@@ -276,7 +276,7 @@ hide("bool-setting", "minime_debug_to_log")
 -- MultipleUnitTrainControl
 hide("bool-setting", "multiple-unit-train-control-allow_yuoki_steam")
 hide("string-setting", "multiple-unit-train-control-blacklist")
--- nanobots-refined-reforged
+-- nanobots-refined
 hide("bool-setting", "nanobots-auto")
 hide("int-setting", "nanobots-manual-speed")
 hide("int-setting", "nanobots-auto-speed")

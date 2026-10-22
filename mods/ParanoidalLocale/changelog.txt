@@ -5,5 +5,3 @@ Version: 1.26.0
     - Russian mod names in the mod list now follow the format "English title (Russian translation)" for every mod of the build; all [mod-name] keys are kept in zzzz-user-overrides.cfg.
     - Removed duplicate [mod-name] keys from the other ru files (prismatic-belts.prismatic-belts-locale.cfg contained only that key and was deleted).
     - Added optional dependencies on mods that ship their own ru [mod-name], so these overrides load after them.
-    - beltbrush2 was renamed to beltbrush2-reforged: the optional dependency and the [mod-name] key follow the new name.
-    - nanobots-refined was renamed to nanobots-refined-reforged: the optional dependency and the [mod-name] key follow the new name.

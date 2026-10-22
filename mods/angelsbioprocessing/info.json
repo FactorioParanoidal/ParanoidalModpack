@@ -11,7 +11,7 @@
     "angelsrefining >= 2.0.3",
     "angelspetrochem >= 2.0.2",
     "angelssmelting >= 2.0.2",
-    "angelsbioprocessinggraphics >= 2.0.0",
+    "~ angelsbioprocessinggraphics >= 2.0.0",
     "(?) bobmodules >= 2.1.0"
   ]
 }

@@ -82,7 +82,7 @@ end
 
 local status_sprites = {
     working = "utility/status_working", reset = "utility/status_working", passing = "utility/status_working",
-    ["no-resource"] = "utility/status_not_working", ["no-power"] = "utility/status_not_working",
+    ["no-resource"] = "utility/status_not_working",
 }
 local function status_sprite(key)
     return status_sprites[key] or "utility/status_yellow"

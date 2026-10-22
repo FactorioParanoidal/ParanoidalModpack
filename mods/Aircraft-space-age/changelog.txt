@@ -3,12 +3,6 @@ Version: 2.3.4
 Date: 2025-10-22
   Changes:
     - Added option to disable Aircraft's changes to the Space Age tech tree. https://mods.factorio.com/mod/Aircraft-space-age/discussion/67ef131ed2abb65391774eff
-  Optimizations:
-    - Aircraft trail smoke now respects the graphics "smoke" option (show_when_smoke_off = false), so players who disable smoke no longer render it.
-    - Aircraft trail is shorter: duration 255 -> 120 ticks, end_scale 6 -> 3.1 (same growth rate), less glow overdraw.
-    - Napalm fire: spread_delay 5 -> 60, smoke frequency 0.4 -> 0.15, light size 25 -> 12, fade_out_duration 300 -> 60. Damage and fire count are unchanged.
-    - Aircraft shadow sheets are stored at half resolution (224 px frames at scale 1, same on-screen size), including the AircraftRealism shadow sprites.
-    - Flying Fortress uses the Jet light and shadow sheets; its pixel-identical copies were removed.
 ---------------------------------------------------------------------------------------------------
 Version: 2.3.3
 Date: 2025-10-22

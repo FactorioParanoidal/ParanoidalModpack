@@ -2,7 +2,6 @@
 Version: 2.0.4
 Date: 04.06.2026
   Bugfixes:
-    - Paranoidal: angelsrefininggraphics is now a plain required dependency instead of "~" (load order is unchanged): Factorio 2.0 never reuses the data stage cache (cache-prototype-data) while any enabled mod has a "~" dependency.
     - Paranoidal: sea pumps built by robots are converted again (handler read event.created_entity, which is nil in 2.0).
     - Paranoidal: angelspump migration branch uses storage instead of the removed global table.
     - Paranoidal: removed the unused angels-trains-stations tutorial scenario (1.1 API: global, created_entity, removed input_action defines); it was disabled by `if false` and would crash if started.

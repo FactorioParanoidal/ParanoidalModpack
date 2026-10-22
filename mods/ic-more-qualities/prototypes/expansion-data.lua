@@ -159,7 +159,7 @@ data:extend({
         circuit_connector = connector(),
         graphics_set = {animation = {layers = machine_layers(G .. "entity/refine-workshop/refine-workshop.png", true)}},
     },
-    hidden_power(names.workshop_power, 3, 3, true),
+    hidden_power(names.workshop_power, 3, 3),
 
     -- Control post: orange stripes in the other direction. Arrows of the outputs are drawn by
     -- script and can be rotated without changing the building picture.

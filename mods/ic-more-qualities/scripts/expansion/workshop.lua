@@ -5,22 +5,17 @@
 --     ticks; without resource the attempt is held: the furnace is disabled by script at the paid
 --     share and draws idle power until packs arrive, nothing is lost); an idle workshop without
 --     packs stays stopped, so a defective item waits in the input slot instead of being taken in,
---   * scales progress by the supply of the hidden electric consumer; without electricity at all the
---     attempt is held like without packs (the furnace is disabled by script, so its progress bar no
---     longer runs ahead between looks and gets rewound) and the hidden consumer shows the engine's
---     "no power" / "no network" icon over the building,
+--   * scales progress by the supply of the hidden electric consumer,
 --   * decides the single attempt shortly before completion: 10% unchanged, 90% one grade up, then
 --     10% per extra grade, never above standard; the item always leaves after one attempt,
 --   * resets positive quality (optional, 1/5 time, no packs) and passes standard items through.
 -- Modes (rules.workshop_modes): an attempt in the precise/flawless mode takes 5/20 times longer at
 -- the same power and the same packs and gains 2 grades / reaches standard for sure. The mode is
 -- taken when the attempt starts; a switch applies from the next attempt.
--- Partly used science packs and other tools (durability) and magazines (rounds) are never crafted by the
--- furnace: its recipe output is a fresh full item, so a used pack came back full (endless science). The
--- script refines them in place from the input slot with the same cost, time, modes and outcome and
--- writes the result with the same share of durability (rounds unchanged); the furnace stays stopped
--- meanwhile. Whole packs and full magazines go through the furnace like other items: its fresh full
--- output equals the whole input, and the building shows its recipe, animation and status.
+-- Science packs and other tools (durability) and ammo (rounds) are never crafted by the furnace: its
+-- recipe output is a fresh full item, so a used pack came back full (endless science). The script
+-- refines them in place from the input slot with the same cost, time, modes and outcome and writes the
+-- result with the same share of durability (rounds unchanged); the furnace stays stopped meanwhile.
 local names = require("scripts.expansion.names")
 local rules = require("scripts.expansion.rules")
 local model = require("scripts.defects.model")
@@ -34,8 +29,6 @@ local NO_RESOURCE_ALERT_TICKS = 300
 -- A held attempt never goes back to exactly 0: the engine treats a started craft at 0 progress as
 -- not started, and the item already taken from the source slot was lost without repair packs.
 local MIN_HELD_PROGRESS = 1e-4
--- Supply below this share counts as no electricity at all: the attempt is held, not slowed.
-local NO_POWER = 1e-3
 -- Ticks between looks. A working attempt is paid look + 1 ticks ahead and decided or held at least
 -- look + 0.5 ticks before completion, so the engine cannot finish it between two looks; the look
 -- shrinks for very short attempts (fast high-quality workshops). An idle workshop must see a new
@@ -406,10 +399,7 @@ local function refine_step(record, entity, craft, progress, ctx)
     -- Without packs the furnace is stopped (M.step disables it) instead of running ahead between
     -- looks and being rewound on every look: the progress bar jittered and full power was drawn.
     -- The paid share stays credited; a look with packs drains them and releases the furnace.
-    -- Without electricity it is stopped the same way; the full power stays requested, so the buffer
-    -- refills as soon as the network has power again and the next look releases the furnace.
-    local unpowered = supply < NO_POWER
-    record.held = (starved or unpowered) or nil
+    record.held = starved or nil
     power.set(record.interface, starved and machine_power(entity) / 30 or machine_power(entity))
 
     if starved then
@@ -417,9 +407,7 @@ local function refine_step(record, entity, craft, progress, ctx)
         record.starved_since = record.starved_since or ctx.tick
     else
         record.starved_since = nil
-        if unpowered then
-            set_status(record, "no-power", "red")
-        elseif supply < 0.999 then
+        if supply < 0.999 then
             set_status(record, "low-power", "yellow")
         else
             set_status(record, "working", "green", craft.grade)
@@ -442,20 +430,10 @@ end
 ---------------------------------------------------------------------------------------------------
 -- Items with a per-item state (science packs and other tools: durability; ammo: rounds)
 ---------------------------------------------------------------------------------------------------
--- Only the top item of a stack can be partly used; the items below it are whole.
-local USED_EPSILON = 1e-9
+local STATEFUL = {tool = true, ammo = true}
 
 local function stateful(stack)
-    if not (stack ~= nil and stack.valid_for_read) then return false end
-    local kind = stack.type
-    if kind == "tool" then
-        local maximum = stack.prototype.get_durability(stack.quality)
-        return maximum ~= nil and stack.durability < maximum - USED_EPSILON
-    elseif kind == "ammo" then
-        local size = stack.prototype.magazine_size
-        return size ~= nil and stack.ammo < size - USED_EPSILON
-    end
-    return false
+    return stack ~= nil and stack.valid_for_read and STATEFUL[stack.type] == true
 end
 
 -- The leaving item: the top item of the input stack (the partly used one) at the reached quality,
@@ -611,9 +589,7 @@ local function script_step(record, entity, ctx, stack, paused, stop)
         record.starved_since = record.starved_since or tick
     else
         record.starved_since = nil
-        if supply < NO_POWER then
-            set_status(record, "no-power", "red")
-        elseif supply < 0.999 then
+        if supply < 0.999 then
             set_status(record, "low-power", "yellow")
         elseif sc.kind == "refine" then
             set_status(record, "working", "green", sc.grade)
@@ -673,15 +649,11 @@ function M.step(record, ctx)
             record.starved_since = nil
         end
         alert(record, record.starved_since ~= nil and tick - record.starved_since >= NO_RESOURCE_ALERT_TICKS)
-        -- Read before the demand changes (a new consumer demands nothing yet and counts as supplied).
-        local unpowered = power.satisfaction(record.interface) < NO_POWER
         power.set(record.interface, machine_power(entity) / 30)
         if disable then
             set_status(record, "paused", "yellow")
         elseif item_waits then
             set_status(record, "no-resource", "red")
-        elseif unpowered then
-            set_status(record, "no-power", "red")
         elseif entity.status == defines.entity_status.full_output then
             set_status(record, "output-full", "yellow")
         elseif source and source.is_empty() then
@@ -710,15 +682,9 @@ function M.step(record, ctx)
         refine_step(record, entity, craft, progress, ctx)
         look = record.look
     else
-        -- A quality reset takes time and stops without electricity like a refinement; passing is instant.
-        local unpowered = craft.kind == "reset" and power.satisfaction(record.interface) < NO_POWER
-        record.held = unpowered or nil
+        record.held = nil
         power.set(record.interface, machine_power(entity))
-        if unpowered then
-            set_status(record, "no-power", "red")
-        else
-            set_status(record, craft.kind == "reset" and "reset" or "passing", "green")
-        end
+        set_status(record, craft.kind == "reset" and "reset" or "passing", "green")
     end
     -- Close to completion the furnace takes the next item from the input slot by itself: look every
     -- tick so that a pack put there is seen (and handled by script) before that.

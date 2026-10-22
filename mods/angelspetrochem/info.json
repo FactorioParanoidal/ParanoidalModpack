@@ -10,6 +10,6 @@
   "dependencies": [
     "base >= 2.0.48",
     "angelsrefining >= 2.0.3",
-    "angelspetrochemgraphics >= 2.0.0"
+    "~ angelspetrochemgraphics >= 2.0.0"
   ]
 }

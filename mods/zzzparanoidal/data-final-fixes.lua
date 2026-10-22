@@ -414,8 +414,6 @@ require("tweaks.custom.upstream-light-fixes")
 require("tweaks.custom.hero-shortcut")
 -- Очистка Факториопедии: после всех правок, создающих и копирующих прототипы.
 require("removals.factoriopedia-cleanup")
--- Временно: из «Советов и подсказок» остаётся только категория PARANOIDAL.
-require("removals.tips-and-tricks")
 -- Локальные иконки Reskins Library, включая слои рецептов и копии прототипов.
 require("tweaks.custom.reskins-library-icons")
 -- Оптимизация атласов графики: после всех правок, создающих и копирующих прототипы и иконки.

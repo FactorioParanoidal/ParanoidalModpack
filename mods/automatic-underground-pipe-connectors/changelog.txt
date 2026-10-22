@@ -14,23 +14,6 @@ Date: 2026-09-08
       connector over ground that needs covering now uses a tile that is actually
       allowed there, or leaves the gap alone, instead of ordering a tile ghost that
       can never be finished and a pipe ghost stuck waiting behind it
-    - Use pipes of any quality from the inventory. Only normal pipes used to count, so
-      a player carrying only other qualities got a ghost. Normal is still taken first,
-      then the quality of the underground just placed, then any other; the connector
-      is built with the quality of the pipe spent on it and a refund keeps that quality.
-      The same applies to the item of a meltable-ground cover tile
-    - Drop lookup entries whose underground, pipe or item prototypes are gone after a
-      mod change, instead of keeping them to fail at the next placement
-    - An invalid remote add_undergrounds/set_undergrounds entry with a missing pipe
-      now gets the intended error message instead of a nil index error
-  Optimizations:
-    - One area search per neighbor position instead of three (find_entity for the
-      underground, find_entity for its ghost, then find_entities)
-    - Tile collision checks and the meltable test are cached per tile name, instead of
-      copying collision masks on every placement; the ground state is only read on
-      the meltable path that may need to restore it
-    - storage is no longer written from the main chunk; on_init and
-      on_configuration_changed create it
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.14
 Date: 2026-09-05

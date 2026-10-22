@@ -13,8 +13,6 @@ local drag = scripts.drag
 local util = scripts.util
 local metatables = scripts.metatables
 local protocache = require("scripts.protocache")
-local itemstate = require("scripts.itemstate")
-local qualities = require("scripts.quality")
 local config = require("config")
 
 local helpers = scripts.helpers
@@ -54,7 +52,7 @@ end
 
 function this.on_inventory_cleanup(event)
 	local player   = _(game.get_player(event.player_index)); if player:isnot("valid player") or not player:setting("enableInventoryCleanupHotkey") then return end
-	local items    = player:trashItems()                ; if #items == 0 then return end -- Paranoidal: { name, quality, count }
+	local items    = _(player:trashItems())             ; if items:is("empty") then return end
 	local area     = _(player.position):perimeter(player:droprange())
 	local records  = this.getEntities(area, player)     ; if #records == 0 then return end
 
@@ -67,11 +65,11 @@ function this.on_inventory_cleanup(event)
 	}
 
 	local offY, marked = 0, {}
-	for __,entry in ipairs(items) do
-		if this.processItem(player, records, entry.name, entry.count, options, offY, marked, entry.quality) then
+	items:each(function(item, totalItems)
+		if this.processItem(player, records, item, totalItems, options, offY, marked) then
 			offY = offY - 0.5
 		end
-	end
+	end)
 end
 
 ---------------------------------------------------------------------------------------------------
@@ -105,32 +103,25 @@ local function isRequester(rec)
 	return rec.requester
 end
 
--- Paranoidal: requests of every quality; a filter counts for the qualities it matches
-local function requestOf(rec, item, quality)
+local function requestOf(rec, item)
 	if rec.requests == nil then
-		rec.requests = {} -- name -> array of filters
+		rec.requests = {}
 		local point = rec.w:requesterPoint()
 		if point and point.valid then
 			for __,filter in pairs(point.filters or {}) do
-				if filter and filter.name then
-					local list = rec.requests[filter.name] or {}
-					list[#list + 1] = filter
-					rec.requests[filter.name] = list
+				if filter and filter.name and (filter.quality == nil or filter.quality == "normal") then
+					local count = filter.count or 0
+					if count > (rec.requests[filter.name] or 0) then rec.requests[filter.name] = count end
 				end
 			end
 		end
 	end
-	local request = 0
-	for __,filter in ipairs(rec.requests[item] or {}) do
-		local count = filter.count or 0
-		if count > request and qualities.matches(filter, quality) then request = count end
-	end
-	return request
+	return rec.requests[item] or 0
 end
 
 local function chestContents(rec)
 	if rec.contents == nil then
-		rec.contents = rec.w:qualityContents("main") -- main inventory: "name|quality" -> {name, quality, count}
+		rec.contents = rec.w:contents() -- main inventory, normal quality: name -> count
 	end
 	return rec.contents
 end
@@ -170,11 +161,9 @@ function this.getEntities(area, player)
 end
 
 -- same rules as upstream filterEntities; API-free preconditions decide whether can_insert is needed
-function this.isTarget(rec, item, prototype, dropToChests, dropToOutput, quality)
+function this.isTarget(rec, item, prototype, dropToChests, dropToOutput)
 	local entity, entityType = rec.entity, rec.type
 	if not entity.valid then return false end
-	quality = quality or "normal"
-	local id = { name = item, quality = quality }
 
 	local fuelCats = prototype.fuel_category and burnerCategories(rec)
 	local fuelMatch = fuelCats and fuelCats[prototype.fuel_category]
@@ -190,12 +179,12 @@ function this.isTarget(rec, item, prototype, dropToChests, dropToOutput, quality
 	if fuelMatch or ingredient or requester or chest or lab or
 	   (TURRETS[entityType] and isAmmo) or roboport or (VEHICLES[entityType] and isAmmo) then
 
-		if entity.can_insert(id) then
-			if fuelMatch and rec.w:inventory("fuel").can_insert(id) then return true end
+		if entity.can_insert(item) then
+			if fuelMatch and rec.w:inventory("fuel").can_insert(item) then return true end
 			if ingredient then return true end
-			if requester and requestOf(rec, item, quality) - entity.get_item_count(id) > 0 then return true end
-			if chest and chestContents(rec)[qualities.key(item, quality)] ~= nil then return true end
-			if lab and rec.w:inventory("lab_input").can_insert(id) then return true end
+			if requester and requestOf(rec, item) - entity.get_item_count(item) > 0 then return true end
+			if chest and (chestContents(rec)[item] or 0) > 0 then return true end
+			if lab and rec.w:inventory("lab_input").can_insert(item) then return true end
 			if TURRETS[entityType] and isAmmo and protocache.supportsAmmo(rec.prototype, prototype) then return true end
 			if roboport then return true end
 			if VEHICLES[entityType] and isAmmo then return true end
@@ -210,15 +199,14 @@ function this.isTarget(rec, item, prototype, dropToChests, dropToOutput, quality
 	return false
 end
 
--- quality: Paranoidal, the quality of the item (nil = normal)
-function this.insert(player, rec, item, amount, options, quality)
+function this.insert(player, rec, item, amount, options)
 	local entity, entityType = rec.w, rec.type
 	local useFuelLimit, useAmmoLimit = options.useFuelLimit, options.useAmmoLimit
 
 	if entityType == "furnace" and entity:recipe():isnot("valid") then
 		return entity:customInsert(player, item, amount, false, true, false, useFuelLimit, useAmmoLimit, false, {
 			fuel = true, ammo = false, input = false, output = false, modules = false, roboport = false, main = false,
-		}, quality)
+		})
 
 	elseif CRAFTING[entityType] then
 		local ingredients, products = recipeSets(rec)
@@ -230,28 +218,28 @@ function this.insert(player, rec, item, amount, options, quality)
 			modules  = false,
 			roboport = false,
 			main     = false,
-		}, quality)
+		})
 
 	elseif rec.prototype.logistic_mode == "requester" then
 		return entity:customInsert(player, item, amount, false, true, false, useFuelLimit, useAmmoLimit, true, {
 			fuel = false, ammo = false, input = false, output = false, modules = false, roboport = false, main = true,
-		}, quality)
+		})
 
 	elseif entityType == "spider-vehicle" and isRequester(rec) then
 		return entity:customInsert(player, item, amount, false, true, false, useFuelLimit, useAmmoLimit, true, {
 			fuel = true, ammo = true, input = false, output = false, modules = false, roboport = false, main = true,
-		}, quality)
+		})
 
 	elseif VEHICLES[entityType] then
 		return entity:customInsert(player, item, amount, false, true, false, useFuelLimit, useAmmoLimit, false, {
 			fuel = true, ammo = true, input = false, output = false, modules = false, roboport = false, main = false,
-		}, quality)
+		})
 	end
 
 	-- Default priority insertion
 	return entity:customInsert(player, item, amount, false, true, false, useFuelLimit, useAmmoLimit, false, {
 		fuel = true, ammo = true, input = true, output = false, modules = false, roboport = true, main = true,
-	}, quality)
+	})
 end
 
 local function markOnce(player, rec, marked)
@@ -263,34 +251,28 @@ local function markOnce(player, rec, marked)
 	end
 end
 
--- distribute (or balance) one trash item of one quality; returns true if any entity was a target
-function this.processItem(player, records, item, totalItems, options, offY, marked, quality)
+-- distribute (or balance) one trash item; returns true if any entity was a target
+function this.processItem(player, records, item, totalItems, options, offY, marked)
 	local prototype = prototypes.item[item]
 	if not prototype then return false end
-	quality = quality or "normal"
 
 	local targets = {}
 	for __,rec in ipairs(records) do
-		if this.isTarget(rec, item, prototype, options.dropToChests, options.dropToOutput, quality) then
+		if this.isTarget(rec, item, prototype, options.dropToChests, options.dropToOutput) then
 			targets[#targets + 1] = { rec = rec }
 		end
 	end
 	if #targets == 0 then return false end
 
-	-- Paranoidal: durability/rounds of used packs and magazines are kept (name/count transfers make them whole)
-	local involved = {player}
-	for __,target in ipairs(targets) do involved[#involved + 1] = target.rec.entity end
-	local transfer = itemstate.begin(item, quality, involved)
-
-	totalItems = player:removeItems(item, totalItems, true, false, true, quality)
+	totalItems = player:removeItems(item, totalItems, true, false, true)
 
 	-- current counts (balance mode also collects the item from every target first)
 	for __,target in ipairs(targets) do
 		local entity = target.rec.entity
-		local count = entity.get_item_count({ name = item, quality = quality })
+		local count = entity.get_item_count(item)
 		local removed = 0
 		if options.balance and count > 0 then
-			removed = entity.remove_item{ name = item, quality = quality, count = count }
+			removed = entity.remove_item{ name = item, count = count }
 			totalItems = totalItems + removed
 		end
 		target.original  = count
@@ -318,14 +300,14 @@ function this.processItem(player, records, item, totalItems, options, offY, mark
 
 				local full = false
 				if amount > 0 then
-					local inserted = this.insert(player, rec, item, amount, options, quality)
+					local inserted = this.insert(player, rec, item, amount, options)
 					target.current = target.current + inserted
 					totalItems = totalItems - inserted
 
 					if inserted < amount then
 						full = true
 						if target.current ~= target.original then
-							rec.w:spawnDistributionText(player, item, target.current - target.original, offY, nil, quality)
+							rec.w:spawnDistributionText(player, item, target.current - target.original, offY)
 							markOnce(player, rec, marked)
 						end
 						target.done = true
@@ -348,20 +330,15 @@ function this.processItem(player, records, item, totalItems, options, offY, mark
 		if not target.done and rec.entity.valid then
 			local amount = target.current - target.original
 			if amount ~= 0 then
-				rec.w:spawnDistributionText(player, item, amount, offY, nil, quality)
+				rec.w:spawnDistributionText(player, item, amount, offY)
 				markOnce(player, rec, marked)
 			end
 		end
 	end
 
 	if totalItems > 0 then
-		player:returnItems(item, totalItems, false, true, quality)
+		player:returnItems(item, totalItems, false, true)
 	end
-
-	local drainOrder = {}
-	for index = 2, #involved do drainOrder[#drainOrder + 1] = involved[index] end
-	drainOrder[#drainOrder + 1] = player
-	itemstate.finish(transfer, drainOrder)
 
 	return true
 end

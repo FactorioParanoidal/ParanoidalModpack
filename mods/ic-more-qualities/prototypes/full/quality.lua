@@ -88,14 +88,6 @@ do
     quality.equipment_grid_width_bonus = bonus
     quality.equipment_grid_height_bonus = bonus
   end
-
-  -- Paranoidal: attack range (turrets, guns, combat robots). The engine default min(1 + 0.1 * level, 3)
-  -- reaches its cap x3 at level 20 and the upper half of the tiers adds nothing; range_multiplier must
-  -- stay within [1, 3]. Convex curve over the tier number: x3 only on the last tier,
-  -- multiplier = 1 + 2 * sqrt(tier / tiers) (tier 1 ~x1.32, tier 10 x2, tier 20 ~x2.41).
-  for tier, quality in ipairs(positive) do
-    quality.range_multiplier = math.min(1 + 2 * math.sqrt(tier / #positive), 3)
-  end
 end
 
 -- upravi technologie

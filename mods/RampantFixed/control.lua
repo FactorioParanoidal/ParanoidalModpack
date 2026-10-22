@@ -1702,56 +1702,9 @@ script.on_nth_tick(252,
 	end
 )
 
--- Paranoidal: one warning per game shortly before the first flyers and one when they can appear.
--- Earliest flyer evolution: hive table start of the first flyer level (prototypes/SwarmUtils.lua
--- unitSetToHiveProbabilityTable), never below 10% (FLYER_MIN_EVOLUTION there, flyerAI.MIN_EVOLUTION here).
-local FLYER_HIVE_TIER_START = { 0, 0, 0.15, 0.27, 0.38, 0.47, 0.65, 0.74, 0.80, 0.85 }
-local FLYER_WARNING_LEAD = 0.01
-
-local function flyerAlertEvolution()
-	if not settings.startup["rampantFixed--flyers"].value then
-		return nil
-	end
-	local tier = settings.startup["rampantFixed--flyersFirstTier"].value
-	return math.max(flyerAI.MIN_EVOLUTION, FLYER_HIVE_TIER_START[tier] or 0)
-end
-
--- saves already past the threshold get no late alert
-local function initFlyerAlerts()
-	if universe.flyerAlertStage ~= nil then
-		return
-	end
-	local alertEvo = flyerAlertEvolution()
-	if alertEvo and (game.forces.enemy.get_evolution_factor() >= alertEvo) then
-		universe.flyerAlertStage = 2
-	else
-		universe.flyerAlertStage = 0
-	end
-end
-
-local function checkFlyerAlerts()
-	local stage = universe.flyerAlertStage or 0
-	if stage >= 2 then
-		return
-	end
-	local alertEvo = flyerAlertEvolution()
-	if not alertEvo then
-		return
-	end
-	local evo = game.forces.enemy.get_evolution_factor()
-	if evo >= alertEvo then
-		universe.flyerAlertStage = 2
-		game.print({"description.rampantFixed--flyersAlert", math.floor(alertEvo * 100 + 0.5)})
-	elseif (stage < 1) and (evo >= alertEvo - FLYER_WARNING_LEAD) then
-		universe.flyerAlertStage = 1
-		game.print({"description.rampantFixed--flyersWarning", math.floor((alertEvo - FLYER_WARNING_LEAD) * 100 + 0.5)})
-	end
-end
-
 script.on_nth_tick(3600,
 	function()
-		if universe then
-			checkFlyerAlerts()
+		if universe then			
 			for _, map in pairs(universe.maps) do
 				if map and (not map.suspended) and map.surface.valid then
 					undergroundAttack.updateUndergroundAttackProbability(map)
@@ -2012,8 +1965,6 @@ local function onConfigChanged()
 
     -- Paranoidal: bases above the tier by evolution (and distance) are brought down to it (rampantFixed--tierByEvolutionOnly)
     baseUtils.lowerTiersToEvolution(universe)
-
-    initFlyerAlerts()
 
     updateEntityDamagedHandler()
 end

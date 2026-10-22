@@ -50,24 +50,7 @@ local function should_place_based_on_neighbor_fluidbox_prototypes(entity, positi
     return false
 end
 
---- Is this entity, found at a candidate position, a non-pipe entity with a fluid connection onto `pipe_position`?
----@param candidate_entity LuaEntity
----@param entity_type string
----@param pipe_position MapPosition
----@return boolean
-local function is_fluidbox_neighbor(candidate_entity, entity_type, pipe_position)
-    -- fluid wagons have fluidbox connections for pumps, but not for pipes
-    if entity_type == "pipe" or entity_type == "pipe-to-ground" or entity_type == "fluid-wagon" then
-        return false
-    end
-    local fluidbox = candidate_entity.fluidbox
-    return fluidbox ~= nil and #fluidbox > 0
-        and should_place_based_on_neighbor_fluidbox_prototypes(candidate_entity, pipe_position)
-end
-
---- Look at the three possible locations for another underground or entity to connect to.
---- One area search per location: it already returns the undergrounds and ghosts that
---- separate find_entity calls used to look up first, so they are recognized from its result.
+--- Look at the three possible locations for another underground or entity to connect to
 ---@param surface LuaSurface
 ---@param underground_position MapPosition
 ---@param neighbors_directions { pos: Vector, dir: defines.direction }[]
@@ -82,30 +65,40 @@ local function find_connection_neighbor(
             underground_position.x + neighbor_candidate.pos[1],
             underground_position.y + neighbor_candidate.pos[2],
         }
-        -- priority at one location, as before: a matching underground, then a matching
-        -- underground ghost, then a non-pipe entity with a fluidbox connection
-        local ghost_match, fluidbox_match = false, false
-        for _, candidate_entity in pairs(surface.find_entities( { candidate_pos, candidate_pos } )) do
-            local entity_type = candidate_entity.type
-            if entity_type == "entity-ghost" then
-                if candidate_entity.ghost_name == underground_entity_name
-                and candidate_entity.direction == neighbor_candidate.dir then
-                    ghost_match = true
-                elseif not ghost_match and not fluidbox_match
-                and is_fluidbox_neighbor(candidate_entity, candidate_entity.ghost_type, pipe_position) then
-                    fluidbox_match = true
-                end
-            elseif entity_type == "pipe-to-ground"
-            and candidate_entity.name == underground_entity_name
-            and candidate_entity.direction == neighbor_candidate.dir then
-                return true, false
-            elseif not ghost_match and not fluidbox_match
-            and is_fluidbox_neighbor(candidate_entity, entity_type, pipe_position) then
-                fluidbox_match = true
-            end
+        -- first, check for a matching underground pipe
+        local neighbor_entity = surface.find_entity( underground_entity_name, candidate_pos )
+        if neighbor_entity
+        and neighbor_entity.name == underground_entity_name
+        and neighbor_entity.direction == neighbor_candidate.dir then
+            return true, false
         end
-        if ghost_match then return true, true end
-        if fluidbox_match then return true, false end
+        -- check for a matching underground pipe ghost
+        local neighbor_ghost = surface.find_entity( "entity-ghost", candidate_pos )
+        if neighbor_ghost
+        and neighbor_ghost.ghost_name == underground_entity_name
+        and neighbor_ghost.direction == neighbor_candidate.dir then
+            return true, true
+        end
+        -- check for a matching non-pipe entity with a fluidbox connection
+        local neighbor_entities = surface.find_entities( { candidate_pos, candidate_pos } )
+        for _,candidate_entity in pairs(neighbor_entities) do
+            local entity_type = entity_type_or_ghost_type(candidate_entity)
+            if entity_type == "fluid-wagon" then
+                -- these have fluidbox connections for pumps, but not for pipes
+                goto continue_neighbor_entities
+            end
+            if  ( entity_type ~= "pipe" and entity_type ~= "pipe-to-ground"
+                ) and (
+                    candidate_entity.fluidbox and
+                    #candidate_entity.fluidbox > 0
+                )
+            then
+                if should_place_based_on_neighbor_fluidbox_prototypes(candidate_entity, pipe_position) then
+                    return true, false
+                end
+            end
+            ::continue_neighbor_entities::
+        end
     end
     return false, false
 end

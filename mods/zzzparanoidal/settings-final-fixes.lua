@@ -61,7 +61,7 @@ if mods["RateCalculator"] then
     set_settings_default_value("bool-setting", "rcalc-show-power-consumption", true)
 end
 -- Наноботы работают автоматически по умолчанию.
-if mods["nanobots-refined-reforged"] then
+if mods["nanobots-refined"] then
     set_settings_default_value("bool-setting", "nanobots-auto", true)
     -- Звуки «Всё готово» и «Закончились материалы» нано-пушки выключены по умолчанию.
     set_settings_default_value("bool-setting", "nanobots-mute-launcher", true)

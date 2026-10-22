@@ -1,0 +1,49 @@
+# This is a basic workflow that is manually triggered
+
+name: New Release
+
+# Controls when the action will run. Workflow runs when manually triggered using the UI
+# or API.
+on:
+  workflow_dispatch:
+  
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "greet"
+  release:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4.2.2
+        with:
+          path: 'beltbrush2/'
+      - name: Read Info
+        id: readinfo
+        run: |
+          {
+            echo "INFO_JSON<<EOF"
+            cat ./beltbrush2/info.json
+            echo $'\n'
+            echo EOF
+          } >> "$GITHUB_OUTPUT"
+      - name: Read Version
+        id: readver
+        run: |
+          echo "version=${{fromJson(steps.readinfo.outputs.INFO_JSON).version}}" >> $GITHUB_OUTPUT
+      - name: Zip
+        run: zip -r -q "beltbrush2_${{ steps.readver.outputs.version }}.zip" "beltbrush2"
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        with:
+            files: 'beltbrush2_${{ steps.readver.outputs.version }}.zip'
+            tag_name: 'v${{ steps.readver.outputs.version }}'
+            generate_release_notes: true
+            make_latest: true
+            
+        
+
