@@ -1155,13 +1155,17 @@ function ModelCompute.computeQualityProbability(lua_quality, quality_effect)
         return nil
     end
     local results = {}
-    local next_probability = lua_quality.next_probability
+    local next_probability = lua_quality.next_probability or 0
     local current_probability = 1
-    if next_probability > 0 and quality_effect > 0  then
-        local next_result = ModelCompute.computeNextQualityProbability(lua_quality.next, quality_effect)
+    -- Paranoidal: quality_effect is the displayed effect (engine value / 10). The engine's first upgrade
+    -- chance is engine value x next_probability of the input quality; the old code used quality_effect
+    -- directly, which is right only for next_probability = 0.1 (vanilla).
+    local upgrade_probability = math.min(1, quality_effect * 10 * next_probability)
+    if next_probability > 0 and upgrade_probability > 0  then
+        local next_result = ModelCompute.computeNextQualityProbability(lua_quality.next, upgrade_probability)
         if next_result ~= nil then
             results = next_result
-            current_probability = 1 - quality_effect
+            current_probability = 1 - upgrade_probability
         end
     end
     if current_probability < 0 then

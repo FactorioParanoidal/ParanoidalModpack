@@ -2550,7 +2550,22 @@ end
 ---Return quality prototypes
 ---@return LuaQualityPrototype
 function Player.getQualityPrototypes()
-    return prototypes.quality
+    -- Paranoidal: defect grades (ic-more-qualities "ic-defect-N") are not offered in Helmod.
+    local lua_qualities = {}
+    for key, lua_quality in pairs(prototypes.quality) do
+        if not Player.isDefectQuality(lua_quality.name) then
+            lua_qualities[key] = lua_quality
+        end
+    end
+    return lua_qualities
+end
+
+-------------------------------------------------------------------------------
+---Paranoidal: is a defect grade of ic-more-qualities
+---@param name string
+---@return boolean
+function Player.isDefectQuality(name)
+    return type(name) == "string" and string.sub(name, 1, 10) == "ic-defect-"
 end
 
 -------------------------------------------------------------------------------
@@ -2595,7 +2610,7 @@ end
 ---@return LuaQualityPrototype
 function Player.getPreviousQualityPrototype(name)
     if name == nil then return nil end
-    for _, quality in pairs(prototypes.quality) do
+    for _, quality in pairs(Player.getQualityPrototypes()) do
         if quality.next ~= nil and quality.next.name == name then
             return quality
         end

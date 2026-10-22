@@ -4,6 +4,12 @@ Date: 2026-06-19
   Features:
     - Added pipette tool to create combinator from input or ouput items
   Bugfixes:
+    - Paranoidal: Quality panel rewritten: fixed-size window, one row per input quality (stays / +1 / +2 / +3 and more), vertical scroll only, percents with up to 4 decimals and "<0.0001%" for tiny values (was a matrix several screens wide with values like 1e-10%).
+    - Paranoidal: Quality panel upgrade chance uses the input quality's next_probability (engine rule) instead of a hard-coded /10; ic-more-qualities tiers above normal have 0.2 and less, so chances from uncommon and above were understated.
+    - Paranoidal: Quality panel lists no god modules.
+    - Paranoidal: Quality panel has a machine mode selector when IC More Qualities production modes exist (Precise = 3 quality rolls, Flawless = 10); the header shows the module effect and explains that the upgrade chance differs per ingredient quality.
+    - Paranoidal: planner quality products (RecipePrototype:getQualityProducts -> ModelCompute.computeQualityProbability) use the engine rule for the first upgrade: effect x next_probability of the ingredient quality, instead of assuming next_probability = 0.1.
+    - Paranoidal: ic-more-qualities defect grades (ic-defect-N) are excluded from all Helmod quality lists and selectors.
     - Paranoidal: the per-tick queue (deferred GUI events, tips) is processed for every connected player with queued work, read from storage. It used to depend on a module-local "current player" set by the last GUI event handled on each peer (multiplayer desync risk); peers that never opened Helmod did nothing.
     - Fixed rocket recipe that added twice time the rocket parts
     - Fixed module limitation in Recipe Edition
