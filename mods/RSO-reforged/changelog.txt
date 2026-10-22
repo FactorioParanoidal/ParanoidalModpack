@@ -1,4 +1,23 @@
 ---------------------------------------------------------------------------------------------------
+Version: 9.1.0
+Date: 2026.10.23
+  Major Features:
+    - Resources are placed by the map generator from noise expressions (prototypes/noise.lua) instead of control.lua: the map preview of the map generator shows the real fields, and chunk generation runs no Lua for resources and raises no script_raised_built for ore.
+    - Resource settings, region size and shapes are startup settings now (the map generator reads them); enemy bases, guards, mine ruins, new veins and revealing stay runtime settings.
+  Changes:
+    - Fields: one site per cell of about a region (the density of the RSO rolls of a region); the resource is picked from the RSO weights with geological provinces, composition by distance and the soil geology of Alien Biomes Reforged (noise expressions alien-biomes-geology-<resource>). Shapes: rotated ellipses, squares and rings (donuts), a second lobe that holds the partner ore of a multi-resource roll, a bite and noisy edges; rich veins and infinite cores as before. Oil, gas and fissures: wells on a jittered grid spaced by their size.
+    - Starting fields: one field of every starting resource on an arc around each start that keeps the starting lake free.
+    - Guaranteed first ring: every cell of the ring around the start holds a field, the cells of evenly spread ring points get one field of every resource.
+    - Trees and rocks (setting "Remove trees") are not placed on ore and around wells; decoratives are not placed within 2 tiles of ore (large flat sand decals may still reach over a field edge).
+    - The control stage reads the field sites with LuaSurface.calculate_tile_properties (blocks of 12x12 cells, cached): an enemy base along a field, guard nests, old mine ruins and the achievement counters work as before. A geological survey forecast marks the nearest field the force has not charted yet; its label also shows the partner ore of a mixed field.
+    - New veins under depleted ore are placed by a small own routine; the metaball generator was removed.
+    - Removed: the command /rso-override-seed, the remote functions addStartLocation and disableStartingArea and the variant "all" of /rso-regenerate-surface (starting fields belong to the map generator). /rso-regenerate clears RSO resources outside the starting areas and lets the map generator place them again (LuaSurface.regenerate_entity).
+  Optimizations:
+    - Chunks within 26 chunks of the start are generated in 2.8 s instead of 3.7 s (9.0.0), as fast as without RSO.
+  Compatibility:
+    - Old saves: chunks generated before keep their resources, new chunks get the new fields, so a field at the border of the explored area may be cut. Enemy regions rolled before are kept; resource entries of old rolls are dropped. Values of the RSO settings that became startup settings return to their defaults.
+    - The remote interface "RSO" and the setting names are unchanged. ignoreSurface stops enemy bases, forecasts and field extras; resources follow the map generator settings of the surface (a surface created with the Nauvis settings, e.g. by Teleporters, gets RSO fields).
+---------------------------------------------------------------------------------------------------
 Version: 9.0.0
 Date: 2026.10.22
   Major Features:

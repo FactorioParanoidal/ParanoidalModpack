@@ -1,12 +1,5 @@
-local function checkOre(name)
-	local data = prototypes.entity[name]
-	if data and data.autoplace_specification then
-		return true
-	end
-	return false
-end
-
-local function fillAngelsOresConfig(config)
+local function fillAngelsOresConfig(config, env)
+	local checkOre = env.has
 	if checkOre("angels-ore1") then
 		config.nauvis["angels-ore1"] =
 		{
@@ -151,7 +144,7 @@ local function fillAngelsOresConfig(config)
 		end
 	end
 
-	if script.active_mods["angelspetrochem"] then
+	if env.mods["angelspetrochem"] then
 		config.nauvis["angels-natural-gas"] =
 		{
 			type="resource-liquid",

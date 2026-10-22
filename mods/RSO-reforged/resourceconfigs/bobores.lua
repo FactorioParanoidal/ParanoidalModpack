@@ -1,4 +1,4 @@
-local function fillBoboresConfig(config)
+local function fillBoboresConfig(config, env)
 	
 	-- BobOres
 	-- up resources at start
@@ -16,13 +16,7 @@ local function fillBoboresConfig(config)
   config.nauvis["crude-oil"].richness.max = 1800000
   config.nauvis["crude-oil"].size = {min = 6, max = 14}
 	
-	local function checkOre(name)
-		local data = prototypes.entity[name]
-		if data and data.autoplace_specification then
-			return true
-		end
-		return false
-	end
+	local checkOre = env.has
 	
 	if checkOre("bob-gold-ore") then
 		config.nauvis["bob-gold-ore"] = {

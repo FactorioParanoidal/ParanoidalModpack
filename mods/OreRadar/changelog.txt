@@ -3,8 +3,8 @@ Version: 2.0.1
 Date: 2026-10-14
   Features:
     - Third radar mode "Geological survey" (with RSO Reforged): each scan marks on the map the nearest
-      planned field that is not generated yet, with its resource and rough size, and announces it in chat;
-      falls back to ore when nothing is planned. Kept by copy-paste, cloning and blueprints.
+      field the force has not charted yet (generated or not), with its resource and rough size, and
+      announces it in chat; falls back to ore when nothing is left around. Kept by copy-paste, cloning and blueprints.
     - Every scan reveals either an ore chunk or an unusual signal: an undiscovered ruin of the
       Paranoidal ruin journal marked with "?" on the map and announced in chat.
     - Clicking the radar opens a window that selects the mode of each radar: "Resources" (default) reveals

@@ -1,29 +1,29 @@
 --[[ RSO Reforged (Resource Spawner Overhaul, Paranoidal fork) — control stage.
 
-The map is split into regions of rso-region-size chunks. When the first chunk of a region is
-generated, the region is "rolled": a region RNG seeded from the region position and the map seed
-picks which resources (and enemy bases) go to which chunks of the region. When such a chunk is
-generated, its entries are spawned with a chunk RNG seeded from the chunk centre.
+Resources are placed by the map generator from the noise expressions of prototypes/noise.lua;
+this file reads the same expressions (LuaSurface.calculate_tile_properties) to know the field
+sites, and places what the map generator cannot:
 
-Determinism matters: every rng() call is part of the map. Keep the order and number of RNG calls
-when changing the generation code, otherwise existing maps change in regions not yet generated.
-
-Reforged additions: geological provinces, distance-dependent composition, a guaranteed first ring,
-rich veins, nests guarding rich fields, old mine ruins near them, new veins under depleted fields
-and geological survey forecasts (Ore Radar). They draw from their own RNGs where the main sequence
-must not shift, and only regions rolled after the change are affected.
+* enemy bases: the map is split into regions of rso-region-size chunks; when the first chunk of
+  a region is generated, a region RNG seeded from the region position and the map seed picks
+  the chunks that get bases, which are spawned when those chunks are generated;
+* when the chunk holding the centre of a field is generated: an enemy base along the field, a
+  guard nest and an old mine ruin (AbandonedRuins-paranoidal) by a rich field (vein or infinite
+  core), the counters of the achievements;
+* geological survey forecasts (Ore Radar), new veins under depleted ore, charting of new fields.
 ]]--
 
 local util = require("util")
 local C = require("config")
-local MB = require("libs.metaball")
 local loadResourceConfig = require("resourceconfigs.mainconfig")
+local fillEnemies = require("resourceconfigs.vanilla_enemies")
 
 local floor = math.floor
 local ceil = math.ceil
 local abs = math.abs
 local cos = math.cos
 local sin = math.sin
+local sqrt = math.sqrt
 local pi = math.pi
 local max = math.max
 local min = math.min
@@ -32,23 +32,21 @@ local distance = util.distance
 local DEBUG = C.debug_enabled
 
 local CHUNK_SIZE = 32
-local MIN_BALL_DISTANCE = CHUNK_SIZE / 6
 local NEGATIVE_MODIFICATOR = 9973
-local MAX_AMOUNT = 1e9
+local REGION_TILE_SIZE = CHUNK_SIZE * settings.startup["rso-region-size"].value
+local RUINS = "AbandonedRuins-paranoidal"
+local RUIN_HALF = {small = 4, medium = 8, large = 16}
+local FORECAST_CELLS = 5 -- forecasts look this many cells around the radar
+-- Sites are read in blocks of BLOCK x BLOCK cells: every calculate_tile_properties call compiles
+-- a noise program (about 17 ms whatever is asked), the number of positions costs little.
+local BLOCK = 12
+local GUARD_RADIUS = 40
 
--- region size is a runtime setting; it is re-read on change (same value on every peer)
-local region_size = settings.global["rso-region-size"].value
-local REGION_TILE_SIZE = CHUNK_SIZE * region_size
-
-local SHAPES = {MB.MetaEllipse, MB.MetaSquare}
-local SHAPES_WITH_DONUTS = {MB.MetaEllipse, MB.MetaSquare, MB.MetaDonut}
+-- sites of the noise generator per planet: {prefix, cell, region, resources = {index -> name}}
+local PLANETS = prototypes.mod_data["rso-reforged"].data.planets
 
 local function debug(str)
 	log(str)
-end
-
-local function round(value)
-	return floor(value + 0.5)
 end
 
 local function setting(name)
@@ -59,10 +57,6 @@ end
 
 local function normalize(n) -- keep numbers at 32 bits
 	return floor(n) % 0xffffffff
-end
-
-local function bearing(origin, dest)
-	return math.atan2(dest.x - origin.x, dest.y - origin.y)
 end
 
 local function rng_for_reg_pos(surfaceIndex, pos)
@@ -80,28 +74,8 @@ local function rng_for_reg_pos(surfaceIndex, pos)
 	rng.re_seed(normalize(y * 32768))
 	local valY = rng(32768)
 
-	local mapSeed = storage.mapSeedOverride or storage.surfaces[surfaceIndex].seed
-	rng.re_seed(normalize(valX * valY * mapSeed))
+	rng.re_seed(normalize(valX * valY * storage.surfaces[surfaceIndex].seed))
 	return rng
-end
-
-local function rng_restricted_angle(restrictions, rng)
-	local value = rng()
-	local deformX = rng() * 2 - 1
-	local deformY = rng() * 2 - 1
-
-	if restrictions == 'xy' then
-		return value*pi*2, 1.0 + deformX*0.5, 1.0 + deformY*0.5
-	elseif restrictions == 'x' then
-		return value*pi/2 - pi/4, 1.0 + deformX*0.6, 1.0 + deformY*0.6
-	elseif restrictions == 'y' then
-		return value*pi/2 + pi/2, 1.0 + deformX*0.6, 1.0 + deformY*0.6
-	end
-	return value*pi*2, 1.0 + deformX*0.3, 1.0 + deformY*0.3
-end
-
-local function vary_by_percentage(x, p, rng)
-	return x + (0.5 - rng())*2*x*p
 end
 
 local TREE_TYPES = {"tree", "simple-entity"}
@@ -123,94 +97,20 @@ local function remove_trees_based_on_bb(surface, x, y, boundingBox)
 	end
 end
 
--- Flat key of an integer tile position (|x|, |y| < 2^21).
+-- Flat key of an integer position (|x|, |y| < 2^21).
 local function tile_key(x, y)
 	return (x + 2097152) * 4194304 + (y + 2097152)
 end
 
--- Trees and rocks touching the ore tiles: one search instead of one per tile. Same rule as a
--- per-tile search of the area {{x-1, y-1}, {x+1, y+1}} around every placed tile (x, y).
-local function remove_trees_on_tiles(surface, placed, minX, minY, maxX, maxY)
-	local area = {{minX - 1, minY - 1}, {maxX + 1, maxY + 1}}
-	for _, entity in pairs(surface.find_entities_filtered{area = area, type = TREE_TYPES}) do
-		if entity.valid then
-			local box = entity.bounding_box
-			local lt, rb = box.left_top, box.right_bottom
-			local hit = false
-			-- boxes that only touch the area count, as in the engine search
-			for tx = ceil(lt.x - 1), floor(rb.x + 1) do
-				if tx - 1 <= rb.x and tx + 1 >= lt.x then
-					for ty = ceil(lt.y - 1), floor(rb.y + 1) do
-						if ty - 1 <= rb.y and ty + 1 >= lt.y and placed[tile_key(tx, ty)] then
-							hit = true
-							break
-						end
-					end
-				end
-				if hit then break end
-			end
-			if hit then entity.destroy() end
-		end
-	end
-end
-
--- decoratives (grass, small stones) on the ore tiles; one search per field
-local function remove_decoratives_on_tiles(surface, placed, minX, minY, maxX, maxY)
-	local destroy = surface.destroy_decoratives
-	for _, found in pairs(surface.find_decoratives_filtered{area = {{minX, minY}, {maxX + 1, maxY + 1}}}) do
-		local p = found.position
-		if placed[tile_key(p.x, p.y)] then
-			destroy{position = p}
-		end
-	end
-end
-
-local function find_intersection(surface, x, y)
-	-- try to get position in between of valid chunks by probing map
-	local gt = surface.get_tile
-	local d = CHUNK_SIZE*2
-	local h = CHUNK_SIZE/2
-	if gt(x + d, y + d).valid and gt(x - d, y - d).valid and gt(x + d, y - d).valid and gt(x - d, y + d).valid then
-		return x, y, 'xy'
-	elseif gt(x + d, y + d).valid and gt(x + d, y).valid and gt(x, y + d).valid then
-		return x + h, y + h, 'xy'
-	elseif gt(x + d, y - d).valid and gt(x + d, y).valid and gt(x, y - d).valid then
-		return x + h, y - h, 'xy'
-	elseif gt(x - d, y + d).valid and gt(x - d, y).valid and gt(x, y + d).valid then
-		return x - h, y + h, 'xy'
-	elseif gt(x - d, y - d).valid and gt(x - d, y).valid and gt(x, y - d).valid then
-		return x - h, y - h, 'xy'
-	elseif gt(x + d, y).valid then
-		return x + h, y, 'x'
-	elseif gt(x - d, y).valid then
-		return x - h, y, 'x'
-	elseif gt(x, y + d).valid then
-		return x, y + h, 'y'
-	elseif gt(x, y - d).valid then
-		return x, y - h, 'y'
-	end
-	return x, y, ''
+local function chunk_key(x, y)
+	return tile_key(floor(x / CHUNK_SIZE), floor(y / CHUNK_SIZE))
 end
 
 local function find_random_chunk(r_x, r_y, rng)
+	local region_size = REGION_TILE_SIZE / CHUNK_SIZE
 	local offset_x = rng(region_size) - 1
 	local offset_y = rng(region_size) - 1
 	return r_x*REGION_TILE_SIZE + offset_x*CHUNK_SIZE, r_y*REGION_TILE_SIZE + offset_y*CHUNK_SIZE
-end
-
-local function is_same_region(c_x1, c_y1, c_x2, c_y2)
-	return floor(c_x1/REGION_TILE_SIZE) == floor(c_x2/REGION_TILE_SIZE)
-		and floor(c_y1/REGION_TILE_SIZE) == floor(c_y2/REGION_TILE_SIZE)
-end
-
-local function find_random_neighbour_chunk(ocx, ocy, rng)
-	local dx = rng(-2, 2) * CHUNK_SIZE
-	local dy = rng(-2, 2) * CHUNK_SIZE
-	if is_same_region(ocx + dx, ocy + dy, ocx, ocy) then return ocx + dx, ocy + dy end
-	if is_same_region(ocx - dx, ocy - dy, ocx, ocy) then return ocx - dx, ocy - dy end
-	if is_same_region(ocx - dx, ocy + dy, ocx, ocy) then return ocx - dx, ocy + dy end
-	if is_same_region(ocx + dx, ocy - dy, ocx, ocy) then return ocx + dx, ocy - dy end
-	return ocx, ocy
 end
 
 local function isInStartingArea(surfaceIndex, tileX, tileY)
@@ -228,6 +128,7 @@ local function isInStartingArea(surfaceIndex, tileX, tileY)
 	return false
 end
 
+-- distance in regions from the nearest starting area
 local function distanceFromStartingAreas(surfaceData, regionX, regionY)
 	local minDistance = nil
 	local region = {x = regionX, y = regionY}
@@ -238,449 +139,13 @@ local function distanceFromStartingAreas(surfaceData, regionX, regionY)
 	return minDistance or distance({x = 0, y = 0}, region)
 end
 
--- global size multiplier outside the starting area; infinite resources are made smaller
-local function modify_resource_size(resourceName, resourceSize, startingArea)
-	if not startingArea then
-		resourceSize = ceil(resourceSize * setting("rso-global-size-mult"))
-	end
-	local resourceEntity = prototypes.entity[resourceName]
-	if resourceEntity and resourceEntity.infinite_resource then
-		local newResourceSize = ceil(resourceSize * C.endless_resource_mode_sizeModifier)
-		if newResourceSize == 0 then newResourceSize = 1 end
-		return newResourceSize
-	end
-	return resourceSize
+-- counters of the Reforged mechanics (remote "stats")
+local function count(name)
+	storage.stats = storage.stats or {}
+	storage.stats[name] = (storage.stats[name] or 0) + 1
 end
 
---[[ SPAWN METHODS ]]--
-
--- offsets (in chunks) tried when an ore field collides with other resources
-local locationOrder =
-{
-	{x = 0, y = 0},
-	{x = -1, y = 0},
-	{x = 1, y = 0},
-	{x = 0, y = -1},
-	{x = 0, y = 1},
-	{x = -1, y = -1},
-	{x = 1, y = -1},
-	{x = -1, y = 1},
-	{x = 1, y = 1},
-}
-
-local function newRect()
-	return {xmin = 1e10, xmax = -1e10, ymin = 1e10, ymax = -1e10}
-end
-
-local function updateRect(rect, x, y, radius)
-	rect.xmin = min(rect.xmin, x - radius)
-	rect.xmax = max(rect.xmax, x + radius)
-	rect.ymin = min(rect.ymin, y - radius)
-	rect.ymax = max(rect.ymax, y + radius)
-end
-
--- Options of the spawn functions (all optional):
---   quiet     {x1, y1, x2, y2}: tiles inside are created without script_raised_built. Used for the
---             chunk being generated: like vanilla ore, its tiles are found by the chunk scans of
---             other mods; only the tiles that spill into neighbouring chunks are announced
---   veins     roll a rich vein through the field
---   distance  regions from the start: scales the infinite core of the field
---   no_shift  do not move the field by a chunk to avoid other resources
---   min_ratio placeable share needed to spawn (default resourceCollisionDetectionRatioFallback)
-local NO_OPTIONS = {}
-
-local function is_quiet(quiet, x, y)
-	return quiet ~= nil and x >= quiet[1] and y >= quiet[2] and x < quiet[3] and y < quiet[4]
-end
-
---[[ entity-field ]]--
--- returns the total amount and, if anything was placed, info {infinite = tiles, veined = tiles,
--- box = {minX, minY, maxX, maxY}}
-local function spawn_resource_ore(surface, rname, pos, size, richness, startingArea, restrictions, rng, opts)
-	-- blob generator, centered at pos, size controls blob diameter
-	restrictions = restrictions or ''
-	opts = opts or NO_OPTIONS
-	if DEBUG then debug("spawn_resource_ore "..rname.." at "..pos.x..","..pos.y.." size "..size.." richness "..richness.." start "..tostring(startingArea).." restrictions "..restrictions) end
-
-	size = modify_resource_size(rname, size, startingArea)
-	local radius = size / 2
-	local minBallDistance = min(MIN_BALL_DISTANCE, radius/2)
-	local shapes = setting("rso-use-donuts") and SHAPES_WITH_DONUTS or SHAPES
-
-	local p_balls = {}
-	local n_balls = {}
-	local outside = newRect() -- every tile that can get ore
-	local inside = newRect()  -- extent of the positive balls
-
-	local function add_ball(list, x, y, b_radius, angle, x_scale, y_scale, goo)
-		local shape = shapes[rng(1, #shapes)]
-		if shape == MB.MetaDonut then
-			local inRadius = b_radius / 4 + b_radius / 2 * rng()
-			list[#list + 1] = shape:new(x, y, b_radius, inRadius, angle, x_scale, y_scale, goo)
-		else
-			list[#list + 1] = shape:new(x, y, b_radius, angle, x_scale, y_scale, goo)
-		end
-	end
-
-	local function generate_p_ball()
-		local angle, x_scale, y_scale = rng_restricted_angle(restrictions, rng)
-		local dev = radius / 2 + rng() * radius / 4
-		local x = rng(-dev, dev) + pos.x
-		local y = rng(-dev, dev) + pos.y
-		local count = #p_balls
-		local last = p_balls[count]
-		if last and distance(last, {x = x, y = y}) < minBallDistance then
-			local new_angle = bearing(last, {x = x, y = y})
-			x = (cos(new_angle)*minBallDistance) + x
-			y = (sin(new_angle)*minBallDistance) + y
-		end
-
-		local b_radius
-		if count == 0 then
-			b_radius = 3 * radius / 4 + rng() * radius / 4
-		else
-			b_radius = radius / 4 + rng() * radius / 2
-			-- keep the field within 1.25 of its size
-			local tempRect = {xmin = inside.xmin, xmax = inside.xmax, ymin = inside.ymin, ymax = inside.ymax}
-			updateRect(tempRect, x, y, b_radius)
-			local targetSize = size * 1.25
-			if max(tempRect.xmax - tempRect.xmin, tempRect.ymax - tempRect.ymin) > targetSize then
-				local widthLeft = targetSize - (inside.xmax - inside.xmin)
-				local heightLeft = targetSize - (inside.ymax - inside.ymin)
-				local widthMod = min(x - inside.xmin, inside.xmax - x)
-				local heightMod = min(y - inside.ymin, inside.ymax - y)
-				b_radius = min(widthLeft + widthMod, heightLeft + heightMod)
-			end
-		end
-
-		if b_radius < 2 and count == 0 then
-			b_radius = 2
-		end
-
-		if b_radius > 0 then
-			add_ball(p_balls, x, y, b_radius, angle, x_scale, y_scale, 1.1)
-			updateRect(outside, x, y, b_radius * 2.5) -- big enough to not cut any metaball
-			updateRect(inside, x, y, b_radius)
-		end
-	end
-
-	local function generate_n_ball(i)
-		local angle, x_scale, y_scale = rng_restricted_angle('xy', rng)
-		local x, y, b_radius
-		local p = p_balls[i]
-		if p then
-			local new_angle = p.angle + pi*rng(0, 2) + (rng() - 0.5)*pi/2
-			local dist = p.radius
-			x = (cos(new_angle)*dist) + p.x
-			y = (sin(new_angle)*dist) + p.y
-			angle = p.angle + pi/2 + (rng() - 0.5)*pi*2/3
-			b_radius = p.radius / 4 + rng() * p.radius / 2
-		else
-			x = rng(-radius, radius) + pos.x
-			y = rng(-radius, radius) + pos.y
-			b_radius = radius / 4 + rng() * radius / 2
-		end
-		if b_radius < 1 then
-			b_radius = 1
-		end
-		add_ball(n_balls, x, y, b_radius, angle, x_scale, y_scale, 1.15)
-	end
-
-	local surfaceConfig = storage.surfaces[surface.index].config
-	local min_amount = surfaceConfig[rname].min_amount or C.min_amount
-	local max_p_balls = restrictions == 'xy' and 3 or 2 -- 'xy': the field has 4 full chunks
-
-	radius = min(radius, 2*CHUNK_SIZE)
-
-	for _ = 1, max_p_balls do
-		generate_p_ball()
-	end
-	for i = 1, rng(1, #p_balls) do
-		generate_n_ball(i)
-	end
-
-	-- metaball field: positive balls minus negative balls, ore where p - n > 1
-	local np, nn = #p_balls, #n_balls
-	local locX, locY, locForce = {}, {}, {}
-	local count = 0
-	local forceTotal = 0
-	local xmin, xmax = round(outside.xmin), round(outside.xmax)
-	for y = round(outside.ymin), round(outside.ymax) do
-		for x = xmin, xmax do
-			local p_force = 0
-			for b = 1, np do
-				p_force = p_force + p_balls[b]:force(x, y)
-			end
-			-- n >= 0, so p <= 1 cannot give a positive force: skip the negative balls
-			if p_force > 1 then
-				local n_force = 0
-				for b = 1, nn do
-					n_force = n_force + n_balls[b]:force(x, y)
-				end
-				if p_force > n_force then
-					local force = 1 - 1/(p_force - n_force)
-					if force > 0 then
-						count = count + 1
-						locX[count], locY[count], locForce[count] = x, y, force
-						forceTotal = forceTotal + force
-					end
-				end
-			end
-		end
-	end
-
-	-- choose the offset with the largest placeable share
-	local can_place = surface.can_place_entity
-	local placeCheck = {name = rname, position = {0, 0}, build_check_type = defines.build_check_type.manual, forced = false}
-	local placeable = {}
-	local bestRatio = 0
-	local bestRatioIndex = -1
-	for index, locationOffset in ipairs(locationOrder) do
-		local validCount = 0
-		local offX = locationOffset.x * CHUNK_SIZE
-		local offY = locationOffset.y * CHUNK_SIZE
-		for i = 1, count do
-			local key = tile_key(locX[i] + offX, locY[i] + offY)
-			local ok = placeable[key]
-			if ok == nil then
-				placeCheck.position = {x = locX[i] + offX, y = locY[i] + offY}
-				ok = can_place(placeCheck)
-				placeable[key] = ok
-			end
-			if ok then
-				validCount = validCount + 1
-			end
-		end
-
-		local ratio = 0
-		if validCount > 0 then
-			ratio = validCount / count
-		end
-		if not C.useResourceCollisionDetection then
-			break
-		end
-		if ratio > bestRatio then
-			bestRatio = ratio
-			bestRatioIndex = index
-		end
-		if ratio > C.resourceCollisionDetectionRatio or opts.no_shift then
-			break
-		end
-	end
-
-	local _total = 0
-	local info = nil
-	local validCount, resOffsetX, resOffsetY
-	if C.resourceCollisionFieldSkip and bestRatio < (opts.min_ratio or C.resourceCollisionDetectionRatioFallback) then
-		validCount = 0
-		if DEBUG then debug("Cancelled with best ratio "..bestRatio) end
-	else
-		resOffsetX = locationOrder[bestRatioIndex].x * CHUNK_SIZE
-		resOffsetY = locationOrder[bestRatioIndex].y * CHUNK_SIZE
-		validCount = floor(bestRatio * count)
-	end
-
-	if validCount > 0 then
-		local removeTrees = setting("rso-remove-trees")
-		local inSize = ((inside.xmax - inside.xmin) + (inside.ymax - inside.ymin)) / 2
-		local sizeMultiplier = inSize ^ 0.6
-		local minSize = richness * 5 * sizeMultiplier
-		local maxSize = richness * 10 * sizeMultiplier
-		local approxDepositSize = rng(minSize, maxSize) - validCount * min_amount
-		if approxDepositSize < 0 then
-			approxDepositSize = 100 * validCount
-		end
-
-		local forceFactor = approxDepositSize / forceTotal
-		-- don't create very dense resources in starting area - another field will be generated
-		if startingArea and forceFactor > 4000 then
-			forceFactor = rng(3000, 4000)
-		end
-
-		local richnessMultiplier = startingArea and setting("rso-starting-richness-mult") or setting("rso-global-richness-mult")
-
-		-- infinite variants (Angel's infinite ores) in the densest part of the field
-		local infiniteOreName = "infinite-" .. rname
-		local infinitePrototype = prototypes.entity[infiniteOreName]
-		if startingArea and not setting("rso-infinite-ores-in-start-area") then
-			infinitePrototype = nil
-		end
-		local minimumInfiniteOreAmount = infinitePrototype and infinitePrototype.minimum_resource_amount
-		local infiniteThreshold = setting("rso-infinite-ore-threshold")
-		if opts.distance then
-			-- the infinite core grows with the distance
-			infiniteThreshold = 1 - (1 - infiniteThreshold) * min(C.infinite_distance_max, 1 + opts.distance / C.infinite_distance_scale)
-		end
-
-		-- a rich vein: a narrow strip across the field
-		local vein = nil
-		if opts.veins then
-			local chance = setting("rso-vein-chance")
-			if chance > 0 and rng() < chance then
-				local angle = rng() * pi
-				local spread = inSize * 0.15
-				vein = {
-					x = (inside.xmin + inside.xmax) / 2 + resOffsetX + (rng() - 0.5) * spread,
-					y = (inside.ymin + inside.ymax) / 2 + resOffsetY + (rng() - 0.5) * spread,
-					s = sin(angle), c = cos(angle),
-					half = C.vein_half_width[1] + rng() * (C.vein_half_width[2] - C.vein_half_width[1]),
-					mult = C.vein_multiplier[1] + rng() * (C.vein_multiplier[2] - C.vein_multiplier[1]),
-				}
-			end
-		end
-		local quiet = opts.quiet
-		local infiniteCount, veinCount = 0, 0
-
-		local neutral = game.forces.neutral
-		local create = surface.create_entity
-		local spec = {name = rname, position = {0, 0}, force = neutral, amount = 0, raise_built = true}
-		local placed = {}
-		local minX, minY, maxX, maxY = 1e9, 1e9, -1e9, -1e9
-
-		for i = 1, count do
-			local spawnX = locX[i] + resOffsetX
-			local spawnY = locY[i] + resOffsetY
-			local key = tile_key(spawnX, spawnY)
-			if placeable[key] then
-				local force = locForce[i]
-				local amount = floor((forceFactor * force + min_amount) * richnessMultiplier)
-				if vein and abs((spawnX - vein.x) * vein.s - (spawnY - vein.y) * vein.c) <= vein.half then
-					amount = floor(amount * vein.mult)
-					veinCount = veinCount + 1
-				end
-				if amount > MAX_AMOUNT then
-					amount = MAX_AMOUNT
-				end
-				_total = _total + amount
-
-				local spawnName = rname
-				if infinitePrototype and force > infiniteThreshold then
-					spawnName = infiniteOreName
-					infiniteCount = infiniteCount + 1
-					if minimumInfiniteOreAmount and amount < minimumInfiniteOreAmount then
-						amount = minimumInfiniteOreAmount
-					end
-				end
-
-				if amount > 0 then
-					spec.name = spawnName
-					spec.position = {spawnX, spawnY}
-					spec.amount = amount
-					spec.raise_built = not is_quiet(quiet, spawnX, spawnY)
-					create(spec)
-					placed[key] = true
-					if spawnX < minX then minX = spawnX end
-					if spawnY < minY then minY = spawnY end
-					if spawnX > maxX then maxX = spawnX end
-					if spawnY > maxY then maxY = spawnY end
-				end
-			end
-		end
-
-		if minX <= maxX then
-			info = {infinite = infiniteCount, veined = veinCount, box = {minX, minY, maxX, maxY}}
-			if removeTrees then
-				remove_trees_on_tiles(surface, placed, minX, minY, maxX, maxY)
-			end
-			remove_decoratives_on_tiles(surface, placed, minX, minY, maxX, maxY)
-			if setting("rso-reveal-spawned-resources") then
-				for _, force in pairs(game.forces) do
-					force.chart(surface, {{x = minX, y = minY}, {x = maxX, y = maxY}})
-				end
-			end
-		end
-	end
-
-	if DEBUG then debug("spawn_resource_ore total amount: ".._total) end
-	return _total, info
-end
-
---[[ entity-liquid ]]--
-local function spawn_resource_liquid(surface, rname, pos, size, richness, startingArea, restrictions, rng, opts)
-	if DEBUG then debug("spawn_resource_liquid "..rname.." "..pos.x..","..pos.y.." "..size.." "..richness.." "..tostring(startingArea)) end
-	local _total = 0
-	local max_radius = rng() * CHUNK_SIZE / 2 + CHUNK_SIZE
-	-- liquids are not reduced by the size multiplier: they are already infinite
-	richness = (0.75 + rng() / 2) * richness * size
-
-	local total_share = 0
-	local avg_share = 1/size
-	local angle = rng()*pi*2
-	local saved = 0
-	local removeTrees = setting("rso-remove-trees")
-	local richnessMultiplier = startingArea and setting("rso-starting-richness-mult") or setting("rso-global-richness-mult")
-	local minimum_amount = storage.surfaces[surface.index].config[rname].minimum_amount
-	local spawnCount = 0
-
-	while total_share < 1 do
-		local new_share = vary_by_percentage(avg_share, 0.25, rng)
-		if size == 1 then
-			new_share = 1
-		end
-		if new_share + total_share > 1 then
-			new_share = 1 - total_share
-		end
-		total_share = new_share + total_share
-		if new_share < avg_share/10 then
-			break -- too small
-		end
-		local amount = floor(richness*new_share) + saved
-
-		if amount >= minimum_amount then
-			saved = 0
-			local spawned = false
-			local x, y
-
-			for try = 1, 15 do
-				local dist = rng()*(max_radius - max_radius*0.1) * try / 15
-				angle = angle + pi/4 + rng()*pi/2
-				x = floor(pos.x + cos(angle)*dist) + 0.5
-				y = floor(pos.y + sin(angle)*dist) + 0.5
-				if surface.can_place_entity{name = rname, position = {x, y}} then
-					amount = min(floor(amount * richnessMultiplier), MAX_AMOUNT)
-					_total = _total + amount
-					if amount > 0 then
-						-- direction only picks a sprite variation; rng(4) is part of the map
-						surface.create_entity{name = rname, position = {x, y}, force = game.forces.neutral,
-							amount = amount, direction = rng(4), raise_built = not (opts and is_quiet(opts.quiet, x, y))}
-						if removeTrees then
-							remove_trees(surface, x, y, 4, 4)
-						end
-						surface.destroy_decoratives{area = {{x - 1.5, y - 1.5}, {x + 1.5, y + 1.5}}}
-					end
-					if spawnCount == 0 then
-						pos.x = x
-						pos.y = y
-					end
-					spawnCount = spawnCount + 1
-					spawned = true
-					break
-				end
-			end
-
-			-- outside the starting area a share that found no place is added to the wells nearby
-			-- (in the starting area a failure makes another field instead of ultra rich wells)
-			if not startingArea and not spawned then
-				local entities = surface.find_entities_filtered{area = {{x - 5, y - 5}, {x + 5, y + 5}}, name = rname}
-				if #entities > 0 then
-					local share = floor(amount/#entities)
-					for _, ent in pairs(entities) do
-						local newAmount = min(ent.amount + share, MAX_AMOUNT)
-						_total = _total + newAmount - ent.amount
-						ent.amount = newAmount
-					end
-					break
-				end
-			end
-		else
-			saved = amount
-		end
-	end
-	if DEBUG then debug("spawn_resource_liquid total amount: ".._total.." in "..spawnCount.." wells") end
-	return _total
-end
-
---[[ enemies ]]--
+--[[ ENEMIES ]]--
 local spawnerTable = nil
 
 local function initSpawnerTable()
@@ -731,6 +196,7 @@ local function spawn_entity_helper(surface, prototype, x, y, config)
 	return true
 end
 
+-- an enemy base of config r_config around (x, y); returns the number of spawners placed
 local function spawn_entity(surface, ent, r_config, x, y, rng, sizeMult)
 	local size = rng(r_config.size.min, r_config.size.max)
 
@@ -828,87 +294,11 @@ local function spawn_entity(surface, ent, r_config, x, y, rng, sizeMult)
 	return total
 end
 
---[[ STARTING AREA ]]--
-
-local function hasStartingResources(config)
-	for _, resConfig in pairs(config) do
-		if type(resConfig) == "table" and resConfig.starting and resConfig.valid and resConfig.allotment > 0
-			and resConfig.starting.probability > 0 then
-			return true
-		end
-	end
-	return false
-end
-
-local function spawn_starting_resources(surface, index)
-	local surfaceData = storage.surfaces[surface.index]
-	if not (surfaceData and surfaceData.startingAreas and surfaceData.startingAreas[index]) then return end
-	local area = surfaceData.startingAreas[index]
-	if area.spawned then return end
-
-	local config = surfaceData.config or {}
-	-- skip if starting area is too small, starting areas are disabled or there is nothing to spawn
-	-- (surfaces of other mods: no chunks are forced to generate for nothing)
-	if storage.disableStartingArea or surfaceData.starting_area_size < 0.1 or not hasStartingResources(config) then
-		area.spawned = true
-		return
-	end
-
-	-- generate chunks for starting area - it shouldn't matter at 0,0 but it's needed if it has been moved
-	local areaRadius = surfaceData.starting_area_size * REGION_TILE_SIZE
-	surface.request_to_generate_chunks(area, ceil(areaRadius/CHUNK_SIZE))
-	surface.force_generate_chunk_requests()
-
-	local rng = rng_for_reg_pos(surface.index, area)
-	for resName, resConfig in pairs(config) do
-		if type(resConfig) == "table" and resConfig.starting and resConfig.valid and resConfig.allotment > 0 then
-			local starting = resConfig.starting
-			local prob = rng() -- probability that this resource is spawned
-			if starting.probability > 0 and prob <= starting.probability then
-				local total = 0
-				local radius = starting.distance or 50
-				local maxRadius = max(350, radius + 100)
-				if not starting.distance then
-					maxRadius = maxRadius * surface.map_gen_settings.starting_area
-				end
-				local radiusStep = starting.distance and 5 or 25
-				local richness = starting.richness
-				local min_threshold = 0
-				if resConfig.type == "resource-ore" then
-					min_threshold = richness * rng(5, 10) -- at least 5-10 times starting richness
-				elseif resConfig.type == "resource-liquid" then
-					min_threshold = richness * 0.5 * starting.size
-				end
-
-				while radius < maxRadius and total < min_threshold do
-					radius = radius + radiusStep
-					local angle = rng() * pi * 2
-					local dist = radius / 2 + rng(radius / 2)
-					local pos = {x = floor(cos(angle) * dist) + area.x, y = floor(sin(angle) * dist) + area.y}
-					if resConfig.type == "resource-ore" then
-						total = total + spawn_resource_ore(surface, resName, pos, starting.size, richness, true, nil, rng)
-					elseif resConfig.type == "resource-liquid" then
-						total = total + spawn_resource_liquid(surface, resName, pos, starting.size, richness, true, nil, rng)
-					end
-					if richness == starting.richness and total > 0 then
-						richness = starting.richness / 4
-					end
-				end
-				if total < min_threshold then
-					log("RSO: starting area "..index.." on "..surface.name.." got "..total.." of "..min_threshold.." "..resName)
-				end
-			end
-		end
-	end
-
-	area.spawned = true
-end
-
 --[[ CONFIG ]]--
 
 local function modifyMinMax(value, mod)
-	value.min = round(value.min * mod)
-	value.max = round(value.max * mod)
+	value.min = floor(value.min * mod + 0.5)
+	value.max = floor(value.max * mod + 0.5)
 end
 
 local function adjustSizeMod(sizeMod)
@@ -918,300 +308,66 @@ local function adjustSizeMod(sizeMod)
 	return sizeMod
 end
 
--- applies the map generator sliders and builds the sorted list with the roll ranges
-local function build_config_data(surface)
-	local mapGenSettings = not C.ignoreMapGenSettings and surface.map_gen_settings or nil
-	local autoPlaceSettings = mapGenSettings and mapGenSettings.autoplace_controls
+local CONFIG_ENV = {
+	has = function(name)
+		local prototype = prototypes.entity[name]
+		return prototype ~= nil and prototype.autoplace_specification ~= nil
+	end,
+	mods = script.active_mods,
+}
 
-	local configIndexed = {}
+-- resource configs (new veins) and enemy bases of the surface; the enemy sliders are applied
+local function loadAndPrepareConfig(surface)
 	local surfaceData = storage.surfaces[surface.index]
-	local config = surfaceData.config or {}
-	local multiResource = setting("rso-multi-resource-active")
-	local oilInStart = setting("rso-oil-in-start-area")
-	local oreInStart = setting("rso-ore-in-start-area")
-	local validCount = 0
+	local planet = surface.planet
+	local all = loadResourceConfig(CONFIG_ENV)
+	fillEnemies(all)
+	local config = planet and all[planet.name] or {}
+	surfaceData.config = config
 	surfaceData.enemyName = nil
 
-	for res_name, resConf in pairs(config) do
-		if type(resConf) == "table" and resConf.valid then
-			validCount = validCount + 1
-			local isEntity = resConf.type == "entity"
-			local addResource = true
-			local settingsForResource = autoPlaceSettings and autoPlaceSettings[resConf.autoplace_name or res_name]
-
-			if settingsForResource then
-				local allotmentMod = settingsForResource.frequency
-				local sizeMod = settingsForResource.size
-				local richnessMod = settingsForResource.richness
-
-				if allotmentMod then
-					if isEntity then
-						resConf.absolute_probability = resConf.absolute_probability * allotmentMod
-					else
-						resConf.allotment = round(resConf.allotment * allotmentMod)
-					end
-				end
-
-				if sizeMod ~= nil then
-					if sizeMod == 0 then
-						addResource = false
-					end
-					sizeMod = adjustSizeMod(sizeMod)
-					modifyMinMax(resConf.size, sizeMod)
-					if resConf.starting then
-						if sizeMod == 0 then
-							resConf.starting = nil
-						else
-							resConf.starting.size = round(resConf.starting.size * sizeMod)
-						end
-					end
-					if isEntity then
-						if resConf.sub_spawn_size then
-							modifyMinMax(resConf.sub_spawn_size, sizeMod)
-						end
-						modifyMinMax(resConf.spawns_per_region, sizeMod)
-					end
-				end
-
-				if richnessMod then
-					if resConf.type == "resource-ore" then
-						resConf.richness = round(resConf.richness * richnessMod)
-					elseif resConf.type == "resource-liquid" then
-						modifyMinMax(resConf.richness, richnessMod)
-					end
-					if resConf.starting then
-						resConf.starting.richness = round(resConf.starting.richness * richnessMod)
-					end
+	local controls = surface.map_gen_settings.autoplace_controls
+	local entities = {}
+	for name, cfg in pairs(config) do
+		if type(cfg) == "table" and cfg.type == "entity" then
+			local slider = controls and controls[cfg.autoplace_name or name]
+			local keep = true
+			if slider then
+				if slider.frequency then cfg.absolute_probability = cfg.absolute_probability * slider.frequency end
+				if slider.size then
+					keep = slider.size > 0
+					local sizeMod = adjustSizeMod(slider.size)
+					modifyMinMax(cfg.size, sizeMod)
+					modifyMinMax(cfg.spawns_per_region, sizeMod)
+					if cfg.sub_spawn_size then modifyMinMax(cfg.sub_spawn_size, sizeMod) end
 				end
 			end
-
-			if not oilInStart and res_name == "crude-oil" and surface.name == "nauvis" then
-				resConf.starting = nil
-			end
-			if not oreInStart and resConf.type == "resource-ore" then
-				resConf.starting = nil
-			end
-
-			if addResource then
-				local res_conf = table.deepcopy(resConf)
-				res_conf.name = res_name
-				if res_conf.multi_resource and multiResource then
-					local new_list = {}
-					for sub_res_name, allotment in pairs(res_conf.multi_resource) do
-						if config[sub_res_name] and config[sub_res_name].valid then
-							new_list[#new_list + 1] = {name = sub_res_name, allotment = allotment}
-						end
-					end
-					table.sort(new_list, function(a, b) return a.name < b.name end)
-					res_conf.multi_resource = new_list
-				else
-					res_conf.multi_resource_chance = nil
-				end
-				configIndexed[#configIndexed + 1] = res_conf
-				if isEntity and res_conf.bases and (not surfaceData.enemyName or res_name < surfaceData.enemyName) then
-					surfaceData.enemyName = res_name
+			if keep then
+				cfg.name = name
+				entities[#entities + 1] = cfg
+				if cfg.bases and (not surfaceData.enemyName or name < surfaceData.enemyName) then
+					surfaceData.enemyName = name
 				end
 			end
 		end
 	end
-
-	table.sort(configIndexed, function(a, b) return a.name < b.name end)
-
-	local pr = 0
-	local maxAllotment = 0
-	for _, v in pairs(configIndexed) do
-		if v.along_resource_probability then
-			v.along_resource_probability_range = {min = pr, max = pr + v.along_resource_probability}
-			pr = pr + v.along_resource_probability
-		end
-		if v.allotment and v.allotment > 0 then
-			v.allotment_range = {min = maxAllotment, max = maxAllotment + v.allotment}
-			maxAllotment = maxAllotment + v.allotment
-		end
-	end
-
-	surfaceData.maxAllotment = maxAllotment
-	-- resource rolls per region (0 based) follow the number of configured entries; entries switched
-	-- off by the map sliders still count, so that e.g. a map without enemies keeps the ore density
-	surfaceData.rollCount = min(ceil(validCount / 10) - 1, 3)
-	surfaceData.starting_area_size = C.starting_area_size
-	if mapGenSettings and mapGenSettings.starting_area then
-		surfaceData.starting_area_size = C.starting_area_size * mapGenSettings.starting_area
-	end
-	surfaceData.configIndexed = configIndexed
+	table.sort(entities, function(a, b) return a.name < b.name end)
+	surfaceData.configIndexed = entities
+	surfaceData.starting_area_size = C.starting_area_size * (surface.map_gen_settings.starting_area or 1)
 end
 
--- marks every configured resource as valid (prototype with autoplace present) or not
-local function checkConfigForInvalidResources(surfaceIndex)
-	local entities = prototypes.entity
-	local config = storage.surfaces[surfaceIndex].config or {}
-	for resourceName, resourceConfig in pairs(config) do
-		if type(resourceConfig) == "table" then
-			if resourceConfig.type == "entity" then
-				resourceConfig.valid = true
-			else
-				local prototype = entities[resourceName]
-				resourceConfig.valid = prototype ~= nil and prototype.autoplace_specification ~= nil
-				if not prototype then
-					log("RSO: resource not available: " .. resourceName)
-				end
-			end
-		end
-	end
+local function isIgnoredSurface(surface)
+	return storage.ignoreSurfaceNames and storage.ignoreSurfaceNames[surface.name]
 end
 
--- Paranoidal: geology by soil colour (Alien-biomes-Reforged, ПР-062). The soil of the chunk that
--- opens a region is sampled on a 3x3 grid; Alien-biomes-Reforged answers which resources suit it
--- (weight multipliers). Without that mod or with its setting off nothing changes, not even the
--- RNG sequence, so maps are identical to plain RSO.
-local GEOLOGY_SAMPLES = {4, 16, 28}
-
-local function geology_bias(surface, c_x, c_y)
-	local iface = remote.interfaces["alien-biomes-reforged"]
-	if not (iface and iface.geology_bias) then return nil end
-	local names = {}
-	for _, dx in ipairs(GEOLOGY_SAMPLES) do
-		for _, dy in ipairs(GEOLOGY_SAMPLES) do
-			local tile = surface.get_tile(c_x + dx, c_y + dy)
-			if tile and tile.valid then names[#names + 1] = tile.name end
-		end
-	end
-	return remote.call("alien-biomes-reforged", "geology_bias", surface.name, names)
+local function planet_info(surface)
+	local planet = surface.planet
+	return planet and not isIgnoredSurface(surface) and PLANETS[planet.name] or nil
 end
 
--- allotment ranges of configIndexed with the weights multiplied by bias; returns ranges, total
-local function weighted_allotments(configIndexed, bias)
-	local ranges, total = {}, 0
-	for index, v in ipairs(configIndexed) do
-		if v.allotment_range then
-			local w = (v.allotment_range.max - v.allotment_range.min) * (bias[v.name] or 1)
-			ranges[index] = {min = total, max = total + w}
-			total = total + w
-		end
-	end
-	return ranges, math.floor(total)
-end
+--[[ ENEMY REGIONS ]]--
 
---[[ REGIONS ]]--
-
-local function region_key(r_x, r_y)
-	return r_x .. ":" .. r_y
-end
-
--- dominant resource of the province of a region (nil: a mixed province); own RNG per province
-local function province_dominant(surface, surfaceData, r_x, r_y)
-	local px, py = floor(r_x / C.province_size), floor(r_y / C.province_size)
-	surfaceData.provinces = surfaceData.provinces or {}
-	local key = region_key(px, py)
-	local dominant = surfaceData.provinces[key]
-	if dominant == nil then
-		dominant = false
-		local rng = rng_for_reg_pos(surface.index, {x = px + 0.25, y = py + 0.25})
-		if rng() >= C.province_mixed_chance then
-			local total = 0
-			for _, v in ipairs(surfaceData.configIndexed) do
-				if v.allotment_range and v.type ~= "entity" then total = total + v.allotment end
-			end
-			if total > 0 then
-				local roll = rng() * total
-				for _, v in ipairs(surfaceData.configIndexed) do
-					if v.allotment_range and v.type ~= "entity" then
-						roll = roll - v.allotment
-						if roll < 0 then
-							dominant = v.name
-							break
-						end
-					end
-				end
-			end
-		end
-		surfaceData.provinces[key] = dominant
-	end
-	return dominant or nil
-end
-
-local function distance_weight(weight, dist)
-	local t = (dist - C.distance_near) / (C.distance_far - C.distance_near)
-	t = max(0, min(1, t))
-	return weight.near + (weight.far - weight.near) * t
-end
-
--- weight multipliers of the region: soil (geology), province and distance; nil if all are 1
-local function region_bias(surface, surfaceData, c_x, c_y, r_x, r_y)
-	local geoBias = geology_bias(surface, c_x, c_y)
-	local provinceWeight = setting("rso-province-weight")
-	local dominant = provinceWeight ~= 1 and province_dominant(surface, surfaceData, r_x, r_y)
-	local useDistance = setting("rso-distance-composition")
-	local dist = distanceFromStartingAreas(surfaceData, r_x, r_y)
-	local bias, biased = {}, false
-	for _, v in ipairs(surfaceData.configIndexed) do
-		if v.allotment_range then
-			local m = geoBias and geoBias[v.name] or 1
-			if v.name == dominant then m = m * provinceWeight end
-			if useDistance and v.distance_weight then m = m * distance_weight(v.distance_weight, dist) end
-			if m ~= 1 then
-				bias[v.name] = m
-				biased = true
-			end
-		end
-	end
-	if DEBUG and biased then debug("Region bias "..r_x..","..r_y..": "..serpent.line(bias)) end
-	return biased and bias or nil
-end
-
--- Guaranteed ring: every resource gets one field in a region around the first starting area.
--- Planned once per surface among regions that are not rolled and not fully generated yet.
-local function plan_guarantees(surface, surfaceData)
-	if surfaceData.guarantees or not setting("rso-guaranteed-ring") then return end
-	local area = surfaceData.startingAreas and surfaceData.startingAreas[1]
-	if not (area and surfaceData.configIndexed) then return end
-	surfaceData.guarantees = {}
-	local names = {}
-	for _, v in ipairs(surfaceData.configIndexed) do
-		if v.allotment_range and v.type ~= "entity" then names[#names + 1] = v.name end
-	end
-	if #names == 0 then return end
-
-	local cx, cy = area.x / REGION_TILE_SIZE, area.y / REGION_TILE_SIZE
-	local inner = surfaceData.starting_area_size + 0.5
-	local outer = surfaceData.starting_area_size + C.ring_width
-	local regions = surfaceData.regions
-	local candidates = {}
-	for r_x = floor(cx - outer) - 1, ceil(cx + outer) do
-		for r_y = floor(cy - outer) - 1, ceil(cy + outer) do
-			local d = distance({x = r_x + 0.5, y = r_y + 0.5}, {x = cx, y = cy})
-			if d > inner and d <= outer and not (regions[r_x] and regions[r_x][r_y]) then
-				local open = false
-				for ox = 0, region_size - 1 do
-					for oy = 0, region_size - 1 do
-						if not surface.is_chunk_generated({r_x * region_size + ox, r_y * region_size + oy}) then
-							open = true
-							break
-						end
-					end
-					if open then break end
-				end
-				if open then candidates[#candidates + 1] = {r_x, r_y} end
-			end
-		end
-	end
-	if #candidates == 0 then return end
-
-	local rng = rng_for_reg_pos(surface.index, {x = 0.375, y = 0.375})
-	for i = #candidates, 2, -1 do
-		local j = rng(1, i)
-		candidates[i], candidates[j] = candidates[j], candidates[i]
-	end
-	for i, name in ipairs(names) do
-		local c = candidates[(i - 1) % #candidates + 1]
-		local key = region_key(c[1], c[2])
-		local list = surfaceData.guarantees[key] or {}
-		list[#list + 1] = name
-		surfaceData.guarantees[key] = list
-	end
-end
-
-local function add_chunk_entry(r_data, c_x, c_y, name, deep)
+local function add_chunk_entry(r_data, c_x, c_y, name)
 	local column = r_data[c_x]
 	if not column then
 		column = {}
@@ -1222,14 +378,13 @@ local function add_chunk_entry(r_data, c_x, c_y, name, deep)
 		c_data = {}
 		column[c_y] = c_data
 	end
-	c_data[#c_data + 1] = {name, deep}
+	c_data[#c_data + 1] = {name, 1}
 end
 
 local function roll_region(surface, c_x, c_y)
 	if isInStartingArea(surface.index, c_x, c_y) then
 		return
 	end
-
 	local r_x = floor(c_x/REGION_TILE_SIZE)
 	local r_y = floor(c_y/REGION_TILE_SIZE)
 	local surfaceData = storage.surfaces[surface.index]
@@ -1245,112 +400,8 @@ local function roll_region(surface, c_x, c_y)
 	local r_data = {}
 	column[r_y] = r_data
 
-	local configIndexed = surfaceData.configIndexed
 	local rng = rng_for_reg_pos(surface.index, {x = r_x, y = r_y})
-
-	local rollCount = surfaceData.rollCount or min(ceil(#configIndexed / 10) - 1, 3) -- 0 based
-	local resourceChanceMultiplier = surfaceData.config and surfaceData.config.resourceChanceMultiplier or 1.0
-	local resourceSetting = setting("rso-resource-chance") * resourceChanceMultiplier
-	local maxAllotment = surfaceData.maxAllotment
-	local geoRanges, geoMax = nil, nil
-	local bias = maxAllotment > 0 and region_bias(surface, surfaceData, c_x, c_y, r_x, r_y)
-	if bias then
-		geoRanges, geoMax = weighted_allotments(configIndexed, bias)
-	end
-	local rolled = {}
-
-	-- roll ores only if they are present (rng fails if the allotment is 0)
-	if maxAllotment > 0 then
-		for rollNumber = 0, rollCount do
-			local resourceChance = resourceSetting - rollNumber * 0.1
-			if rng() <= resourceChance then
-				local res_type = rng(1, geoMax or maxAllotment)
-				for index, v in ipairs(configIndexed) do
-					local range = geoRanges and geoRanges[index] or (not geoRanges and v.allotment_range)
-					if range and res_type >= range.min and res_type <= range.max then
-						rolled[v.name] = true
-						if DEBUG then debug("Rolled primary resource "..v.name.." with roll="..res_type.." @ "..r_x..","..r_y) end
-						local num_spawns
-						if v.spawns_per_region.min == v.spawns_per_region.max then
-							num_spawns = v.spawns_per_region.min
-						else
-							num_spawns = rng(v.spawns_per_region.min, v.spawns_per_region.max)
-						end
-						local last_spawn_coords = {}
-						for i = 1, num_spawns do
-							local s_x, s_y = find_random_chunk(r_x, r_y, rng)
-							-- the region may overlap the starting area
-							if not isInStartingArea(surface.index, s_x, s_y) then
-								add_chunk_entry(r_data, s_x, s_y, v.name, rollNumber)
-								last_spawn_coords[#last_spawn_coords + 1] = {s_x, s_y}
-								-- resource that comes along (enemies), only once
-								if i == 1 then
-									local am_roll = rng()
-									for _, vv in ipairs(configIndexed) do
-										local along = vv.along_resource_probability_range
-										if along and am_roll >= along.min and am_roll <= along.max then
-											add_chunk_entry(r_data, s_x, s_y, vv.name, rollNumber)
-										end
-									end
-								end
-							end
-						end
-						-- more resources around the primary one
-						if #last_spawn_coords > 0 and v.multi_resource_chance and v.multi_resource then
-							local multi = v.multi_resource
-							local multiAllotmentMax = 0
-							for _, sub_res in ipairs(multi) do multiAllotmentMax = multiAllotmentMax + sub_res.allotment end
-							local deep = 0
-							while rng() <= v.multi_resource_chance*(C.multi_resource_chance_diminish^deep) do
-								deep = deep + 1
-								local multi_type = 1 -- rng complains when its range is 0
-								if multiAllotmentMax > 1 then
-									multi_type = rng(1, multiAllotmentMax)
-								end
-								local low = 0
-								for _, sub_res in ipairs(multi) do
-									if multi_type >= low and multi_type <= sub_res.allotment + low then
-										local last_coords = last_spawn_coords[rng(1, #last_spawn_coords)]
-										local n_x, n_y = find_random_neighbour_chunk(last_coords[1], last_coords[2], rng)
-										add_chunk_entry(r_data, n_x, n_y, sub_res.name, deep)
-										break
-									end
-									low = low + sub_res.allotment
-								end
-							end
-						end
-						break
-					end
-				end
-			end
-		end
-	end
-
-	-- guaranteed ring: a missing resource goes to a chunk that is not generated yet (or this one)
-	local key = region_key(r_x, r_y)
-	local guaranteed = surfaceData.guarantees and surfaceData.guarantees[key]
-	if guaranteed then
-		surfaceData.guarantees[key] = nil
-		local grng = rng_for_reg_pos(surface.index, {x = r_x + 0.625, y = r_y + 0.625})
-		for _, name in ipairs(guaranteed) do
-			if not rolled[name] then
-				for _ = 1, 16 do
-					local s_x, s_y = find_random_chunk(r_x, r_y, grng)
-					if not isInStartingArea(surface.index, s_x, s_y) and ((s_x == c_x and s_y == c_y)
-						or not surface.is_chunk_generated({s_x / CHUNK_SIZE, s_y / CHUNK_SIZE})) then
-						add_chunk_entry(r_data, s_x, s_y, name, 0)
-						storage.stats = storage.stats or {}
-						storage.stats.guaranteed = (storage.stats.guaranteed or 0) + 1
-						if DEBUG then debug("Guaranteed "..name.." @ "..s_x..","..s_y) end
-						break
-					end
-				end
-			end
-		end
-	end
-
-	-- absolute_probability: enemies
-	for _, v in ipairs(configIndexed) do
+	for _, v in ipairs(surfaceData.configIndexed) do
 		if v.absolute_probability then
 			local prob_factor = 1
 			if v.probability_distance_factor then
@@ -1360,7 +411,7 @@ local function roll_region(surface, c_x, c_y)
 				for _ = 1, rng(v.spawns_per_region.min, v.spawns_per_region.max) do
 					local s_x, s_y = find_random_chunk(r_x, r_y, rng)
 					if not isInStartingArea(surface.index, s_x, s_y) then
-						add_chunk_entry(r_data, s_x, s_y, v.name, 1)
+						add_chunk_entry(r_data, s_x, s_y, v.name)
 					end
 				end
 			end
@@ -1368,34 +419,111 @@ local function roll_region(surface, c_x, c_y)
 	end
 end
 
-local function calculateFactor(dist, exponent)
-	if dist < 1 and exponent < 1 then
-		return dist
+local function roll_chunk(surface, c_x, c_y)
+	local surfaceData = storage.surfaces[surface.index]
+	local r_x = floor(c_x/REGION_TILE_SIZE)
+	local r_y = floor(c_y/REGION_TILE_SIZE)
+	local column = surfaceData.regions[r_x]
+	local r_data = column and column[r_y]
+	local list = r_data and r_data[c_x] and r_data[c_x][c_y]
+	if not list then
+		return
 	end
-	return dist^exponent
+	r_data[c_x][c_y] = nil
+	if next(r_data[c_x]) == nil then
+		r_data[c_x] = nil
+	end
+	if storage.skipEnemies then return end
+
+	local c_center_x = c_x + CHUNK_SIZE/2
+	local c_center_y = c_y + CHUNK_SIZE/2
+	local rng = rng_for_reg_pos(surface.index, {x = c_center_x, y = c_center_y})
+	for _, entry in ipairs(list) do
+		-- regions rolled before 9.1.0 may also list resources: those are placed by the map generator now
+		local r_config = surfaceData.config[entry[1]]
+		if r_config and r_config.type == "entity" then
+			spawn_entity(surface, entry[1], r_config, c_center_x, c_center_y, rng)
+		end
+	end
 end
 
-local function sort_by_deep(res1, res2)
-	return res1[2] < res2[2]
+--[[ FIELD SITES ]]--
+
+-- Sites of the noise generator, cached per cell: storage.cells[surface index][cell key] =
+-- {x, y, name, liquid, radius, estimate, vein, core, partner}; storage.blocks[surface index]
+-- [block key] = true once a block is read. The values are those of the expressions, the same on
+-- every peer.
+local function query_cells(surface, info, wanted)
+	local p, G = info.prefix, info.cell
+	local cells = storage.cells[surface.index]
+	local positions = {}
+	for i, c in ipairs(wanted) do positions[i] = {(c[1] + 0.5) * G, (c[2] + 0.5) * G} end
+	local r = surface.calculate_tile_properties({p .. "cell_on", p .. "cell_x", p .. "cell_y"}, positions)
+	local on, centres = {}, {}
+	for i, c in ipairs(wanted) do
+		if r[p .. "cell_on"][i] > 0 then
+			on[#on + 1] = c
+			centres[#centres + 1] = {r[p .. "cell_x"][i], r[p .. "cell_y"][i]}
+		end
+	end
+	if #on == 0 then return end
+	local names = {"kind", "valid", "liq", "rad", "estimate", "veinon", "coretiles", "multi", "partner"}
+	local props = {}
+	for i, name in ipairs(names) do props[i] = p .. name end
+	local d = surface.calculate_tile_properties(props, centres)
+	local function v(name, i) return d[p .. name][i] end
+	for i, c in ipairs(on) do
+		local name = info.resources[floor(v("kind", i) + 0.5)]
+		if v("valid", i) > 0 and name then
+			cells[tile_key(c[1], c[2])] = {
+				x = centres[i][1], y = centres[i][2], name = name, liquid = v("liq", i) > 0, radius = v("rad", i),
+				estimate = v("estimate", i), vein = v("veinon", i) > 0 and v("liq", i) == 0,
+				core = v("liq", i) == 0 and v("coretiles", i) >= C.infinite_core_tiles,
+				partner = v("multi", i) > 0 and info.resources[floor(v("partner", i) + 0.5)] or nil,
+			}
+		end
+	end
 end
 
-local RUINS = "AbandonedRuins-paranoidal"
-local RUIN_HALF = {small = 4, medium = 8, large = 16}
+local function block_of(c)
+	return floor((c + BLOCK / 2) / BLOCK)
+end
 
--- counters of the Reforged mechanics (remote "stats")
-local function count(name)
-	storage.stats = storage.stats or {}
-	storage.stats[name] = (storage.stats[name] or 0) + 1
+-- sites of the cells ci1..ci2 x cj1..cj2 (read by blocks)
+local function sites_in(surface, info, ci1, cj1, ci2, cj2)
+	storage.cells = storage.cells or {}
+	storage.blocks = storage.blocks or {}
+	local index = surface.index
+	storage.cells[index] = storage.cells[index] or {}
+	storage.blocks[index] = storage.blocks[index] or {}
+	local cells, blocks = storage.cells[index], storage.blocks[index]
+	for bi = block_of(ci1), block_of(ci2) do
+		for bj = block_of(cj1), block_of(cj2) do
+			local key = tile_key(bi, bj)
+			if not blocks[key] then
+				blocks[key] = true
+				local wanted = {}
+				for ci = bi * BLOCK - BLOCK / 2, bi * BLOCK + BLOCK / 2 - 1 do
+					for cj = bj * BLOCK - BLOCK / 2, bj * BLOCK + BLOCK / 2 - 1 do
+						wanted[#wanted + 1] = {ci, cj}
+					end
+				end
+				query_cells(surface, info, wanted)
+			end
+		end
+	end
+	local out = {}
+	for ci = ci1, ci2 do
+		for cj = cj1, cj2 do
+			local site = cells[tile_key(ci, cj)]
+			if site then out[#out + 1] = site end
+		end
+	end
+	return out
 end
 
 -- Sites of rich veins and guard nests, for the per-force counters read by achievements (remote
 -- "force_stats"): storage.sites[surface index][chunk key] = list of {kind, x, y, found = {force index}}
-local GUARD_RADIUS = 40
-
-local function chunk_key(x, y)
-	return tile_key(floor(x / CHUNK_SIZE), floor(y / CHUNK_SIZE))
-end
-
 local function add_site(surface, kind, x, y)
 	storage.sites = storage.sites or {}
 	local sites = storage.sites[surface.index] or {}
@@ -1412,46 +540,44 @@ local function credit(force, stat)
 	stats[stat] = (stats[stat] or 0) + 1
 end
 
--- A field with an infinite core or a rich vein may get a guard nest and an old mine ruin next to it.
-local function rich_field_extras(surface, surfaceData, info, dist, rng)
-	if not info then return end
-	local core = info.infinite >= C.infinite_core_tiles
-	if not (core or info.veined > 0) then return end
-	local box = info.box
-	local cx, cy = (box[1] + box[3]) / 2, (box[2] + box[4]) / 2
-	if info.veined > 0 then
-		count("veins")
-		add_site(surface, "vein", cx, cy)
+-- the chunk holding the centre of a field is generated: enemies along it, guards and mine ruins
+-- by a rich field
+local function field_extras(surface, surfaceData, site)
+	local rng = rng_for_reg_pos(surface.index, {x = site.x, y = site.y})
+	local dist = distanceFromStartingAreas(surfaceData, site.x / REGION_TILE_SIZE, site.y / REGION_TILE_SIZE)
+	local enemyName = surfaceData.enemyName
+	local enemy = enemyName and surfaceData.config[enemyName]
+	local fight = enemy and not storage.skipEnemies
+
+	-- an enemy base along the field (RSO along_resource_probability)
+	if fight and enemy.along_resource_probability and rng() < enemy.along_resource_probability then
+		spawn_entity(surface, enemyName, enemy, site.x, site.y, rng)
 	end
 
+	if not (site.vein or site.core) then return end
+	-- a regeneration (command) places the guards again, but no second ruin and no counters
+	local fresh = not storage.regenerating
+	if site.vein and fresh then
+		count("veins")
+		add_site(surface, "vein", site.x, site.y)
+	end
 	local guardChance = setting("rso-guard-chance")
-	local enemyName = surfaceData.enemyName
-	if guardChance > 0 and enemyName and not storage.skipEnemies and dist >= C.guard_min_distance and rng() < guardChance then
-		if DEBUG then debug("Guard nest for the field at "..cx..","..cy) end
-		count("guards")
-		if spawn_entity(surface, enemyName, surfaceData.config[enemyName], cx, cy, rng, C.guard_size_mult) > 0 then
-			add_site(surface, "guard", cx, cy)
+	if fight and guardChance > 0 and dist >= C.guard_min_distance and rng() < guardChance then
+		if DEBUG then debug("Guard nest for the field at "..site.x..","..site.y) end
+		if spawn_entity(surface, enemyName, enemy, site.x, site.y, rng, C.guard_size_mult) > 0 and fresh then
+			count("guards")
+			add_site(surface, "guard", site.x, site.y)
 		end
 	end
 
 	local mineChance = setting("rso-mine-ruin-chance")
 	local iface = remote.interfaces[RUINS]
-	if mineChance > 0 and iface and iface.spawn_mine and dist >= C.mine_min_distance and rng() < mineChance then
-		local size = core and "large" or (rng() < 0.5 and "medium" or "small")
+	if fresh and mineChance > 0 and iface and iface.spawn_mine and dist >= C.mine_min_distance and rng() < mineChance then
+		local size = site.core and "large" or (rng() < 0.5 and "medium" or "small")
 		local half = RUIN_HALF[size]
-		local gap = half + 3
-		local side = rng(1, 4)
-		local x, y
-		if side == 1 then
-			x, y = box[1] - gap, cy
-		elseif side == 2 then
-			x, y = box[3] + gap, cy
-		elseif side == 3 then
-			x, y = cx, box[2] - gap
-		else
-			x, y = cx, box[4] + gap
-		end
-		x, y = floor(x), floor(y)
+		local gap = site.radius * 1.4 + half + 3
+		local angle = rng() * 2 * pi
+		local x, y = floor(site.x + cos(angle) * gap), floor(site.y + sin(angle) * gap)
 		-- only on generated ground
 		for _, corner in ipairs({{x - half, y - half}, {x + half, y - half}, {x - half, y + half}, {x + half, y + half}}) do
 			if not surface.is_chunk_generated({floor(corner[1] / CHUNK_SIZE), floor(corner[2] / CHUNK_SIZE)}) then
@@ -1462,147 +588,90 @@ local function rich_field_extras(surface, surfaceData, info, dist, rng)
 	end
 end
 
--- generating: called for the chunk that is being generated right now
-local function roll_chunk(surface, c_x, c_y, generating)
-	if isInStartingArea(surface.index, c_x, c_y) then
-		return
-	end
-
-	local r_x = floor(c_x/REGION_TILE_SIZE)
-	local r_y = floor(c_y/REGION_TILE_SIZE)
+local function generate_chunk(surface, c_x, c_y)
 	local surfaceData = storage.surfaces[surface.index]
-	local column = surfaceData.regions[r_x]
-	local r_data = column and column[r_y]
-	local resource_list = r_data and r_data[c_x] and r_data[c_x][c_y]
-	if not resource_list then
-		return
+	if not surfaceData or isIgnoredSurface(surface) then return end
+	if #surfaceData.configIndexed > 0 then
+		roll_region(surface, c_x, c_y)
+		roll_chunk(surface, c_x, c_y)
 	end
 
-	local c_center_x = c_x + CHUNK_SIZE/2
-	local c_center_y = c_y + CHUNK_SIZE/2
-	local rng = rng_for_reg_pos(surface.index, {x = c_center_x, y = c_center_y})
-	local richness_distance_factor = setting("rso-distance-exponent")
-	local fluid_richness_distance_factor = setting("rso-fluid-distance-exponent")
-	local size_distance_factor = setting("rso-size-exponent")
-	local dist = distanceFromStartingAreas(surfaceData, r_x, r_y)
-	local sizeFactor = calculateFactor(dist, size_distance_factor)
-	local quiet = generating and {c_x, c_y, c_x + CHUNK_SIZE, c_y + CHUNK_SIZE} or nil
-	local oreOptions = {quiet = quiet, veins = true, distance = dist}
-	local liquidOptions = {quiet = quiet}
-
-	table.sort(resource_list, sort_by_deep)
-
-	for _, res_con in pairs(resource_list) do
-		local resource = res_con[1]
-		local deep = res_con[2]
-		local r_config = surfaceData.config and surfaceData.config[resource]
-		if r_config and r_config.valid then
-			local restriction
-			if r_config.type == "resource-ore" then
-				local richFactor = calculateFactor(dist, richness_distance_factor)
-				local size = rng(r_config.size.min, r_config.size.max) * (C.multi_resource_size_factor^deep) * sizeFactor
-				local richness = r_config.richness * richFactor * (C.multi_resource_richness_factor^deep)
-				-- the centre moves for every following resource of the chunk (as in the original)
-				c_center_x, c_center_y, restriction = find_intersection(surface, c_center_x, c_center_y)
-				local _, info = spawn_resource_ore(surface, resource, {x = c_center_x, y = c_center_y}, size, richness, false, restriction, rng, oreOptions)
-				rich_field_extras(surface, surfaceData, info, dist, rng)
-			elseif r_config.type == "resource-liquid" then
-				local richFactor = calculateFactor(dist, r_config.useOreScaling and richness_distance_factor or fluid_richness_distance_factor)
-				local size = rng(r_config.size.min, r_config.size.max) * (C.multi_resource_size_factor^deep) * sizeFactor
-				if r_config.size.min == 1 and r_config.size.max == 1 then
-					size = 1
-				end
-				local richness = rng(r_config.richness.min, r_config.richness.max) * richFactor * (C.multi_resource_richness_factor^deep)
-				c_center_x, c_center_y, restriction = find_intersection(surface, c_center_x, c_center_y)
-				spawn_resource_liquid(surface, resource, {x = c_center_x, y = c_center_y}, size, richness, false, restriction, rng, liquidOptions)
-			elseif r_config.type == "entity" and not storage.skipEnemies then
-				spawn_entity(surface, resource, r_config, c_center_x, c_center_y, rng)
-			end
-		else
-			log("RSO: no valid config for " .. tostring(resource) .. " on " .. surface.name)
+	local info = planet_info(surface)
+	if not info then return end
+	local G = info.cell
+	for _, site in ipairs(sites_in(surface, info, floor(c_x / G), floor(c_y / G),
+		floor((c_x + CHUNK_SIZE - 1) / G), floor((c_y + CHUNK_SIZE - 1) / G))) do
+		if site.x >= c_x and site.y >= c_y and site.x < c_x + CHUNK_SIZE and site.y < c_y + CHUNK_SIZE then
+			field_extras(surface, surfaceData, site)
 		end
 	end
 
-	r_data[c_x][c_y] = nil
-	if next(r_data[c_x]) == nil then
-		r_data[c_x] = nil
+	if setting("rso-reveal-spawned-resources") then
+		local area = {{c_x, c_y}, {c_x + CHUNK_SIZE, c_y + CHUNK_SIZE}}
+		if surface.count_entities_filtered{area = area, type = "resource", limit = 1} > 0 then
+			for _, force in pairs(game.forces) do
+				force.chart(surface, area)
+			end
+		end
 	end
 end
 
 --[[ REGENERATION ]]--
 
-local function clear_chunk(surface, tileX, tileY, ent_list)
-	local area = {{tileX, tileY}, {tileX + CHUNK_SIZE, tileY + CHUNK_SIZE}}
-	if #ent_list > 0 then
-		for _, obj in pairs(surface.find_entities_filtered{area = area, name = ent_list}) do
-			if obj.valid then
-				obj.destroy()
-			end
-		end
+-- resource prototypes placed by RSO on the surface (with their infinite variants)
+local function resource_names(info)
+	local names = {}
+	for _, name in ipairs(info and info.resources or {}) do
+		names[#names + 1] = name
+		if prototypes.entity["infinite-" .. name] then names[#names + 1] = "infinite-" .. name end
 	end
-	if not storage.skipEnemies then
-		for _, obj in pairs(surface.find_entities_filtered{area = area, type = "unit", force = "enemy"}) do
-			if obj.valid then
-				obj.destroy()
-			end
-		end
+	return names
+end
+
+local function enemy_names(surfaceData)
+	local names = {}
+	for _, v in ipairs(surfaceData.configIndexed or {}) do
+		for base in pairs(v.bases or {}) do names[#names + 1] = base end
+		for ent in pairs(v.sub_spawns or {}) do names[#names + 1] = ent end
 	end
+	return names
 end
 
-local function prepareEntityList(surfaceIndex)
-	local entityList = {}
-	for _, v in pairs(storage.surfaces[surfaceIndex].configIndexed or {}) do
-		if prototypes.entity[v.name] then
-			entityList[#entityList + 1] = v.name
-		end
-		if prototypes.entity["infinite-" .. v.name] then
-			entityList[#entityList + 1] = "infinite-" .. v.name
-		end
-		if not storage.skipEnemies then
-			for base in pairs(v.bases or {}) do
-				entityList[#entityList + 1] = base
-			end
-			for ent in pairs(v.sub_spawns or {}) do
-				entityList[#entityList + 1] = ent
-			end
-		end
-	end
-	return entityList
-end
-
-local function isIgnoredSurface(surface)
-	return storage.ignoreSurfaceNames and storage.ignoreSurfaceNames[surface.name]
-end
-
--- surfaces where RSO actually generates something
-local function isGeneratedSurface(surface)
-	local surfaceData = storage.surfaces[surface.index]
-	return surfaceData and not isIgnoredSurface(surface) and surfaceData.configIndexed and #surfaceData.configIndexed > 0
-end
-
+-- clears RSO resources (and enemy bases unless storage.skipEnemies) outside the starting areas;
+-- then the map generator places the resources again and the enemy regions are rolled anew
 local function regenerateSurface(surface, clearOnly)
-	if not isGeneratedSurface(surface) then return end
 	local surfaceData = storage.surfaces[surface.index]
-	surfaceData.regions = {}
-
-	local entityList = prepareEntityList(surface.index)
+	local info = planet_info(surface)
+	if not surfaceData or isIgnoredSurface(surface) then return end
+	local resources = resource_names(info)
+	local enemies = storage.skipEnemies and {} or enemy_names(surfaceData)
+	local chunks = {}
 	for chunk in surface.get_chunks() do
-		local tileX = chunk.x * CHUNK_SIZE
-		local tileY = chunk.y * CHUNK_SIZE
-		if not isInStartingArea(surface.index, tileX, tileY) then
-			clear_chunk(surface, tileX, tileY, entityList)
-		end
-	end
-
-	if not clearOnly then
-		for chunk in surface.get_chunks() do
-			local tileX = chunk.x * CHUNK_SIZE
-			local tileY = chunk.y * CHUNK_SIZE
-			if not isInStartingArea(surface.index, tileX, tileY) then
-				roll_region(surface, tileX, tileY)
-				roll_chunk(surface, tileX, tileY)
+		local x, y = chunk.x * CHUNK_SIZE, chunk.y * CHUNK_SIZE
+		if not isInStartingArea(surface.index, x, y) then
+			chunks[#chunks + 1] = {chunk.x, chunk.y}
+			local area = {{x, y}, {x + CHUNK_SIZE, y + CHUNK_SIZE}}
+			if #resources > 0 then
+				for _, entity in pairs(surface.find_entities_filtered{area = area, name = resources}) do entity.destroy() end
+			end
+			if #enemies > 0 then
+				for _, entity in pairs(surface.find_entities_filtered{area = area, name = enemies}) do entity.destroy() end
+				for _, entity in pairs(surface.find_entities_filtered{area = area, type = "unit", force = "enemy"}) do entity.destroy() end
 			end
 		end
+	end
+	surfaceData.regions = {}
+	if storage.cells then storage.cells[surface.index] = nil end
+	if storage.blocks then storage.blocks[surface.index] = nil end
+	if not clearOnly then
+		if #resources > 0 and #chunks > 0 then
+			surface.regenerate_entity(resources, chunks)
+		end
+		storage.regenerating = true
+		for _, chunk in ipairs(chunks) do
+			generate_chunk(surface, chunk[1] * CHUNK_SIZE, chunk[2] * CHUNK_SIZE)
+		end
+		storage.regenerating = nil
 	end
 	log(clearOnly and "RSO: ore clear done on " .. surface.name or "RSO: ore regeneration done on " .. surface.name)
 end
@@ -1618,30 +687,7 @@ local function regenerate_everything(clearOnly, noEnemies)
 	storage.skipEnemies = nil
 end
 
-local function clearStartingArea(surface, pos)
-	local startingAreaTilesSize = ceil(storage.surfaces[surface.index].starting_area_size * REGION_TILE_SIZE)
-	local chunkPosX = floor(pos.x/CHUNK_SIZE) * CHUNK_SIZE
-	local chunkPosY = floor(pos.y/CHUNK_SIZE) * CHUNK_SIZE
-	local entityList = prepareEntityList(surface.index)
-	for posX = chunkPosX - startingAreaTilesSize, chunkPosX + startingAreaTilesSize, CHUNK_SIZE do
-		for posY = chunkPosY - startingAreaTilesSize, chunkPosY + startingAreaTilesSize, CHUNK_SIZE do
-			clear_chunk(surface, posX, posY, entityList)
-		end
-	end
-end
-
 --[[ DIAGNOSTICS ]]--
-
-local function printResourceProbability(player)
-	local surfaceData = storage.surfaces[player.surface.index]
-	local maxAllotment = surfaceData.maxAllotment
-	player.print("Max allotment " .. string.format("%.1f", maxAllotment))
-	for _, v in pairs(surfaceData.configIndexed) do
-		if v.type ~= "entity" and v.allotment then
-			player.print("Resource: " .. v.name .. " Prob: " .. string.format("%.1f", (v.allotment/maxAllotment) * 100))
-		end
-	end
-end
 
 local function IsIgnoreResource(prototype)
 	local name = prototype.name
@@ -1655,11 +701,12 @@ end
 -- tells the player about resources with autoplace that RSO has no config for (they are not spawned)
 local function checkForUnusedResources(player)
 	if script.active_mods["space-age"] then return end
-	local surfaceData = storage.surfaces[player.surface.index]
-	local config = surfaceData and surfaceData.config
-	if not config then return end
+	local info = planet_info(player.surface)
+	if not info then return end
+	local used = {}
+	for _, name in ipairs(info.resources) do used[name] = true end
 	for name, prototype in pairs(prototypes.get_entity_filtered{{filter = "type", type = "resource"}}) do
-		if not config[name] and not IsIgnoreResource(prototype) then
+		if not used[name] and not IsIgnoreResource(prototype) then
 			player.print("The resource " .. name .. " is not configured in RSO. It won't be spawned!")
 		end
 	end
@@ -1667,99 +714,41 @@ end
 
 --[[ LIFECYCLE ]]--
 
-local function loadAndPrepareConfig(surface)
-	local planet = surface.planet
-	if planet then
-		storage.surfaces[surface.index].config = loadResourceConfig()[planet.name]
-	end
-	checkConfigForInvalidResources(surface.index)
-	build_config_data(surface)
-end
-
-local function updateSurfaceConfig(surface, justCreated, surfaceData)
-	if not surfaceData then
-		storage.surfaces[surface.index] = storage.surfaces[surface.index] or {}
-		surfaceData = storage.surfaces[surface.index]
-	end
-
+local function updateSurfaceConfig(surface)
+	storage.surfaces[surface.index] = storage.surfaces[surface.index] or {}
+	local surfaceData = storage.surfaces[surface.index]
 	surfaceData.seed = surface.map_gen_settings.seed
 	surfaceData.regions = surfaceData.regions or {}
-
 	if not surfaceData.startingAreas then
 		surfaceData.startingAreas = {}
 		for _, startingPoint in pairs(surface.map_gen_settings.starting_points or {}) do
-			table.insert(surfaceData.startingAreas, {x = startingPoint.x, y = startingPoint.y, spawned = false})
-			if not justCreated then
-				surfaceData.startingAreas[1].spawned = true
-			end
+			table.insert(surfaceData.startingAreas, {x = startingPoint.x, y = startingPoint.y})
 		end
 	end
-
+	-- 9.0.0 data of the scripted ore generation
+	surfaceData.provinces, surfaceData.guarantees, surfaceData.rollCount, surfaceData.maxAllotment = nil, nil, nil, nil
 	loadAndPrepareConfig(surface)
-	plan_guarantees(surface, surfaceData)
-
-	if C.config_log_enabled then
-		log("***** Config for surface " .. surface.index)
-		log(serpent.block(surfaceData.config))
-		log(serpent.block(surfaceData.configIndexed))
-	end
-end
-
--- first run: nauvis data, including regions of very old saves; returns the index it built
-local function initConfig()
-	if storage.surfaces then return nil end
-	storage.surfaces = {}
-	local nauvis = game.surfaces.nauvis
-	local nauvisSurfaceData = {}
-	local justCreated = true
-	if storage.regions then
-		nauvisSurfaceData.regions = storage.regions
-		storage.regions = nil
-		justCreated = false
-	elseif game.tick > 10 then
-		justCreated = false
-	else
-		-- a map saved right after its creation (e.g. by rso-mod before the rename) already has the
-		-- starting resources: do not spawn them a second time
-		local spawn = nauvis.map_gen_settings.starting_points
-		spawn = spawn and spawn[1] or {x = 0, y = 0}
-		local r = C.starting_area_size * REGION_TILE_SIZE
-		if nauvis.count_entities_filtered{type = "resource", limit = 1,
-			area = {{spawn.x - r, spawn.y - r}, {spawn.x + r, spawn.y + r}}} > 0 then
-			justCreated = false
-		end
-	end
-	storage.surfaces[nauvis.index] = nauvisSurfaceData
-	updateSurfaceConfig(nauvis, justCreated)
-	return nauvis.index
 end
 
 local function updateConfig()
-	local built = initConfig()
-	for surfaceIndex, surfaceData in pairs(storage.surfaces) do
-		local surface = game.surfaces[surfaceIndex]
-		if surface and surfaceIndex ~= built then
-			updateSurfaceConfig(surface, false, surfaceData)
-		end
-	end
+	storage.surfaces = storage.surfaces or {}
+	storage.regions = nil -- very old saves
 	for _, surface in pairs(game.surfaces) do
-		if not storage.surfaces[surface.index] then
-			updateSurfaceConfig(surface, false)
-		end
+		updateSurfaceConfig(surface)
 	end
-	storage.useBobEntity = nil -- no longer used
+	for index in pairs(storage.surfaces) do
+		if not game.get_surface(index) then storage.surfaces[index] = nil end
+	end
+	storage.useBobEntity = nil
+	storage.mapSeedOverride = nil
+	storage.disableStartingArea = nil
+	-- the cell grid follows startup settings (region size, resource chance): sites are read again
+	storage.cells, storage.blocks = nil, nil
 	log("RSO: Updated resource configurations")
 end
 
 local function localGenerateChunk(event)
-	local surface = event.surface
-	if not isGeneratedSurface(surface) then
-		return
-	end
-	local c_x = event.area.left_top.x
-	local c_y = event.area.left_top.y
-	roll_region(surface, c_x, c_y)
-	roll_chunk(surface, c_x, c_y, true)
+	generate_chunk(event.surface, event.area.left_top.x, event.area.left_top.y)
 end
 
 local function registerChunkHandler()
@@ -1770,9 +759,6 @@ end
 
 script.on_init(function()
 	updateConfig()
-	if game.surfaces.nauvis then
-		spawn_starting_resources(game.surfaces.nauvis, 1)
-	end
 	registerChunkHandler()
 end)
 
@@ -1790,18 +776,9 @@ local function notify(event, message)
 end
 
 script.on_event(defines.events.on_runtime_mod_setting_changed, function(event)
-	if event.setting == "rso-region-size" then
-		region_size = setting("rso-region-size")
-		REGION_TILE_SIZE = CHUNK_SIZE*region_size
-		notify(event, "Warning: Region size changed. Dynamic size changes are not supported - recommend regenerating of resources to use new region size")
-	elseif event.setting == "rso-enemy-chance" then
-		local chance = setting("rso-enemy-chance")
-		for _, surfaceData in pairs(storage.surfaces) do
-			for _, v in pairs(surfaceData.configIndexed or {}) do
-				if v.absolute_probability then
-					v.absolute_probability = chance
-				end
-			end
+	if event.setting == "rso-enemy-chance" then
+		for _, surface in pairs(game.surfaces) do
+			if storage.surfaces[surface.index] then loadAndPrepareConfig(surface) end
 		end
 		notify(event, "Enemy spawn chance update - it will be applied to new regions.")
 	end
@@ -1810,27 +787,22 @@ end)
 script.on_event(defines.events.on_player_created, function(event)
 	local player = game.get_player(event.player_index)
 	if not storage.surfaces[player.surface.index] then
-		updateSurfaceConfig(player.surface, false)
+		updateSurfaceConfig(player.surface)
 	end
 	checkForUnusedResources(player)
-	if DEBUG then
-		printResourceProbability(player)
-	end
 end)
 
 script.on_event(defines.events.on_surface_created, function(event)
 	local surface = game.surfaces[event.surface_index]
-	if isIgnoredSurface(surface) then
-		return
+	if not isIgnoredSurface(surface) then
+		updateSurfaceConfig(surface)
 	end
-	initConfig()
-	updateSurfaceConfig(surface, true)
-	spawn_starting_resources(surface, 1)
 end)
 
 --[[ GEOLOGICAL SURVEY ]]--
 
--- storage.forecasts[surface index][chunk key][force index] = map label (LuaRenderObject)
+-- storage.forecasts[surface index][chunk key][force index] = map label (LuaRenderObject); the chunk
+-- key is tile_key of the chunk's top left tile
 local function forecast_marks(surface_index)
 	storage.forecasts = storage.forecasts or {}
 	local marks = storage.forecasts[surface_index]
@@ -1852,63 +824,46 @@ local function clear_forecasts(surface_index)
 	storage.forecasts[surface_index] = nil
 end
 
--- rough expected amount of an ore field at the region, from the config and the settings
-local function estimate(surfaceData, cfg, r_x, r_y)
-	if cfg.type ~= "resource-ore" then return "?" end
-	local dist = distanceFromStartingAreas(surfaceData, r_x, r_y)
-	local size = (cfg.size.min + cfg.size.max) / 2 * calculateFactor(dist, setting("rso-size-exponent")) * setting("rso-global-size-mult")
-	local amount = cfg.richness * calculateFactor(dist, setting("rso-distance-exponent")) * 7.5 * size ^ 0.6 * setting("rso-global-richness-mult")
+local function amount_text(amount)
 	if amount >= 1e6 then
 		return string.format("~%.1fM", amount / 1e6)
 	end
 	return string.format("~%dk", floor(amount / 1000 + 0.5))
 end
 
+-- marks for the force on its map the nearest field around position that the force has not charted
 local function forecast(surface_index, force_index, position)
 	local surface = game.get_surface(surface_index)
 	local force = game.forces[force_index]
-	local surfaceData = storage.surfaces and storage.surfaces[surface_index]
-	if not (surface and force and type(position) == "table" and position.x and position.y and isGeneratedSurface(surface)) then
+	local info = surface and planet_info(surface)
+	if not (info and force and type(position) == "table" and position.x and position.y) then
 		return nil
 	end
 	local marks = forecast_marks(surface_index)
-	local best, bestD = nil, nil
-	for r_x, column in pairs(surfaceData.regions) do
-		for r_y, r_data in pairs(column) do
-			for c_x, chunks in pairs(r_data) do
-				for c_y, list in pairs(chunks) do
-					local d = (c_x + 16 - position.x)^2 + (c_y + 16 - position.y)^2
-					local key = tile_key(c_x, c_y)
-					if (not bestD or d < bestD) and not (marks[key] and marks[key][force_index]) then
-						-- the primary resource of the chunk (the lowest depth)
-						local name, deep = nil, nil
-						for _, entry in ipairs(list) do
-							local cfg = surfaceData.config[entry[1]]
-							if cfg and cfg.valid and cfg.type ~= "entity" and (not deep or entry[2] < deep) then
-								name, deep = entry[1], entry[2]
-							end
-						end
-						if name and not force.is_chunk_charted(surface, {c_x / CHUNK_SIZE, c_y / CHUNK_SIZE}) then
-							best = {c_x = c_x, c_y = c_y, r_x = r_x, r_y = r_y, name = name, key = key}
-							bestD = d
-						end
-					end
-				end
-			end
+	local G = info.cell
+	local ci, cj = floor(position.x / G), floor(position.y / G)
+	local best, bestD, bestKey = nil, nil, nil
+	for _, site in ipairs(sites_in(surface, info, ci - FORECAST_CELLS, cj - FORECAST_CELLS, ci + FORECAST_CELLS, cj + FORECAST_CELLS)) do
+		local chunk = {floor(site.x / CHUNK_SIZE), floor(site.y / CHUNK_SIZE)}
+		local key = tile_key(chunk[1] * CHUNK_SIZE, chunk[2] * CHUNK_SIZE)
+		local d = (site.x - position.x)^2 + (site.y - position.y)^2
+		if (not bestD or d < bestD) and not (marks[key] and marks[key][force_index])
+			and not force.is_chunk_charted(surface, chunk) then
+			best, bestD, bestKey = site, d, key
 		end
 	end
 	if not best then return nil end
 
-	local x, y = best.c_x + CHUNK_SIZE / 2, best.c_y + CHUNK_SIZE / 2
-	local icon = "[img=entity/" .. best.name .. "]"
+	local x, y = floor(best.x), floor(best.y)
+	local icon = "[img=entity/" .. best.name .. "]" .. (best.partner and "[img=entity/" .. best.partner .. "]" or "")
 	local label = rendering.draw_text{
-		text = icon .. " " .. estimate(surfaceData, surfaceData.config[best.name], best.r_x, best.r_y),
+		text = icon .. " " .. amount_text(best.estimate),
 		surface = surface, target = {x, y}, color = {1, 0.85, 0.4}, forces = {force},
 		render_mode = "chart", scale = 1.5, scale_with_zoom = true, use_rich_text = true,
 		alignment = "center", vertical_alignment = "middle",
 	}
-	marks[best.key] = marks[best.key] or {}
-	marks[best.key][force_index] = label
+	marks[bestKey] = marks[bestKey] or {}
+	marks[bestKey][force_index] = label
 	count("forecasts")
 	force.print({"rso-message.forecast", icon, string.format("[gps=%d,%d,%s]", x, y, surface.name)})
 	return {x = x, y = y}
@@ -1973,16 +928,48 @@ end, {{filter = "type", type = "unit-spawner"}})
 
 --[[ NEW VEINS UNDER DEPLETED FIELDS ]]--
 
+-- a small field of name around pos on free ground; returns the placed box or nil
+local function spawn_vein(surface, name, pos, size, richness, min_amount, rng)
+	local radius = size / 2
+	local reach = ceil(radius)
+	local density = richness * 7.5 * size ^ 0.6 * 3 / (pi * radius * radius)
+	local spots = {}
+	local total = 0
+	for dx = -reach, reach do
+		for dy = -reach, reach do
+			local d = sqrt(dx * dx + dy * dy) / radius
+			if d <= 0.8 + 0.4 * rng() then
+				total = total + 1
+				local position = {pos.x + dx, pos.y + dy}
+				if surface.can_place_entity{name = name, position = position} then
+					spots[#spots + 1] = {position, max(0, 1 - d)}
+				end
+			end
+		end
+	end
+	if #spots == 0 or #spots < 0.1 * total then return nil end
+	local box = {1e9, 1e9, -1e9, -1e9}
+	local neutral = game.forces.neutral
+	for _, spot in ipairs(spots) do
+		local position = spot[1]
+		surface.create_entity{name = name, position = position, force = neutral,
+			amount = floor(min_amount + density * spot[2]), raise_built = true}
+		box = {min(box[1], position[1]), min(box[2], position[2]), max(box[3], position[1]), max(box[4], position[2])}
+	end
+	surface.destroy_decoratives{area = {{box[1], box[2]}, {box[3] + 1, box[4] + 1}}}
+	return box
+end
+
 script.on_event(defines.events.on_resource_depleted, function(event)
 	local chance = setting("rso-depletion-vein-chance")
 	local entity = event.entity
 	if chance <= 0 or not (entity and entity.valid) then return end
 	local surface = entity.surface
-	if not isGeneratedSurface(surface) then return end
 	local surfaceData = storage.surfaces[surface.index]
+	if not (surfaceData and planet_info(surface)) then return end
 	local name = entity.name
 	local cfg = surfaceData.config and surfaceData.config[name]
-	if not (cfg and cfg.valid and cfg.type == "resource-ore") then return end
+	if not (cfg and cfg.type == "resource-ore") then return end
 
 	storage.depletionRng = storage.depletionRng or game.create_random_generator(surfaceData.seed % 4294967296)
 	local rng = storage.depletionRng
@@ -1993,13 +980,13 @@ script.on_event(defines.events.on_resource_depleted, function(event)
 	local d = C.depletion_vein_distance[1] + rng() * (C.depletion_vein_distance[2] - C.depletion_vein_distance[1])
 	local pos = {x = floor(p.x + cos(angle) * d) + 0.5, y = floor(p.y + sin(angle) * d) + 0.5}
 	local dist = distanceFromStartingAreas(surfaceData, pos.x / REGION_TILE_SIZE, pos.y / REGION_TILE_SIZE)
-	local richness = cfg.richness * calculateFactor(dist, setting("rso-distance-exponent")) * C.depletion_vein_richness
+	local richness = cfg.richness * settings.startup["rso-global-richness-mult"].value
+		* max(dist, 0.1) ^ settings.startup["rso-distance-exponent"].value * C.depletion_vein_richness
 	local size = rng(C.depletion_vein_size[1], C.depletion_vein_size[2])
-	local total, info = spawn_resource_ore(surface, name, pos, size, richness, false, '', rng, {no_shift = true, min_ratio = C.depletion_vein_min_ratio})
-	if total <= 0 or not info then return end
+	local box = spawn_vein(surface, name, pos, size, richness, cfg.min_amount or C.min_amount, rng)
+	if not box then return end
 
 	count("depletion_veins")
-	local box = info.box
 	local chunk = {floor(pos.x / CHUNK_SIZE), floor(pos.y / CHUNK_SIZE)}
 	local gps = string.format("[gps=%d,%d,%s]", floor(pos.x), floor(pos.y), surface.name)
 	for _, force in pairs(game.forces) do
@@ -2014,6 +1001,8 @@ script.on_event(defines.events.on_surface_deleted, function(event)
 	storage.surfaces[event.surface_index] = nil
 	if storage.forecasts then storage.forecasts[event.surface_index] = nil end
 	if storage.sites then storage.sites[event.surface_index] = nil end
+	if storage.cells then storage.cells[event.surface_index] = nil end
+	if storage.blocks then storage.blocks[event.surface_index] = nil end
 end)
 
 script.on_event(defines.events.on_surface_cleared, function(event)
@@ -2022,6 +1011,8 @@ script.on_event(defines.events.on_surface_cleared, function(event)
 	end
 	clear_forecasts(event.surface_index)
 	if storage.sites then storage.sites[event.surface_index] = nil end
+	if storage.cells then storage.cells[event.surface_index] = nil end
+	if storage.blocks then storage.blocks[event.surface_index] = nil end
 end)
 
 --[[ COMMANDS ]]--
@@ -2050,11 +1041,6 @@ local function clearCommand(parameters)
 	regenerate_everything(true, skipEnemiesParameter(parameters))
 end
 
-local function seedCommand(parameters)
-	if not allowed(parameters) then return end
-	storage.mapSeedOverride = parameters.parameter and tonumber(parameters.parameter) or nil
-end
-
 local function regenerateSurfaceCommand(parameters)
 	if not allowed(parameters) then return end
 	local player = parameters.player_index and game.get_player(parameters.player_index)
@@ -2062,31 +1048,16 @@ local function regenerateSurfaceCommand(parameters)
 		log("RSO: surface regenerate command used without player")
 		return
 	end
-	local surface = player.surface
-	local surfaceData = storage.surfaces[surface.index]
-	if not isGeneratedSurface(surface) then
-		player.print("RSO does not generate resources on surface " .. surface.name)
+	if not planet_info(player.surface) then
+		player.print("RSO does not generate resources on surface " .. player.surface.name)
 		return
 	end
-	local withStartingArea = parameters.parameter == "all"
-	if withStartingArea then
-		for _, startingArea in pairs(surfaceData.startingAreas) do
-			clearStartingArea(surface, startingArea)
-			startingArea.spawned = false
-		end
-	end
-	regenerateSurface(surface, false)
-	if withStartingArea then
-		for index in pairs(surfaceData.startingAreas) do
-			spawn_starting_resources(surface, index)
-		end
-	end
-	player.print("Surface " .. surface.name .. " regenerated" .. (withStartingArea and " with starting area" or ""))
+	regenerateSurface(player.surface, false)
+	player.print("Surface " .. player.surface.name .. " regenerated")
 end
 
 commands.add_command("rso-regenerate", "", regenerateCommand)
 commands.add_command("rso-clear", "", clearCommand)
-commands.add_command("rso-override-seed", "", seedCommand)
 commands.add_command("rso-regenerate-surface", "", regenerateSurfaceCommand)
 
 --[[ REMOTE INTERFACE ]]--
@@ -2101,7 +1072,8 @@ remote.add_interface("RSO", {
 		clearCommand(nil)
 	end,
 
-	-- remote.call("RSO", "ignoreSurface", "name-of-surface")
+	-- remote.call("RSO", "ignoreSurface", "name-of-surface"): no enemy bases, forecasts and field
+	-- extras there (resources follow the map generator settings of the surface)
 	ignoreSurface = function(surfaceName)
 		if type(surfaceName) ~= "string" then
 			log("RSO ignoreSurface interface: surfaceName should be a string")
@@ -2109,33 +1081,6 @@ remote.add_interface("RSO", {
 		end
 		storage.ignoreSurfaceNames = storage.ignoreSurfaceNames or {}
 		storage.ignoreSurfaceNames[surfaceName] = true
-	end,
-
-	-- remote.call("RSO", "addStartLocation", {x = 0, y = 0}, player)
-	addStartLocation = function(pos, player)
-		if not (pos and pos.x and pos.y) then
-			log("Invalid parameters for new start location - please use following format: {x=0, y=0}")
-			return
-		end
-		local outputPlayer = player or game.player
-		local surface = outputPlayer and outputPlayer.surface or game.surfaces.nauvis
-		local surfaceData = storage.surfaces[surface.index]
-		if not surfaceData then
-			log("RSO: no data for surface " .. surface.name)
-			return
-		end
-		local radius = surfaceData.starting_area_size * REGION_TILE_SIZE
-		for _, startingPos in pairs(surfaceData.startingAreas) do
-			if distance(startingPos, pos) < 2 * radius then
-				log("Creation of starting area on "..surface.name.." failed - to close to starting area at "..startingPos.x..","..startingPos.y)
-				return
-			end
-		end
-		log("Creating new starting area on "..surface.name.." at "..pos.x..","..pos.y)
-		clearStartingArea(surface, pos)
-		pos.spawned = false
-		table.insert(surfaceData.startingAreas, pos)
-		spawn_starting_resources(surface, #surfaceData.startingAreas)
 	end,
 
 	regenConfig = function()
@@ -2154,40 +1099,29 @@ remote.add_interface("RSO", {
 		storage.disableEventHandler = true
 	end,
 
-	disableStartingArea = function()
-		storage.disableStartingArea = true
-	end,
-
 	generateChunk = function(event)
 		localGenerateChunk(event)
 	end,
 
-	resetGeneration = function(surface, ignoreStartingAreas)
+	-- forgets the enemy regions of the surface (they are rolled again for new chunks)
+	resetGeneration = function(surface)
 		if surface == nil then
 			return
 		end
-		local surfaceData = storage.surfaces[surface.index]
-		updateSurfaceConfig(surface, false, surfaceData)
-		surfaceData = storage.surfaces[surface.index]
-		surfaceData.regions = {}
-		if not ignoreStartingAreas then
-			for index, startingArea in pairs(surfaceData.startingAreas) do
-				startingArea.spawned = false
-				spawn_starting_resources(surface, index)
-			end
-		end
+		updateSurfaceConfig(surface)
+		storage.surfaces[surface.index].regions = {}
 	end,
 
 	isInStartingArea = function(surfaceIndex, tileX, tileY)
 		return isInStartingArea(surfaceIndex, tileX, tileY)
 	end,
 
-	-- Geological survey (Ore Radar): marks for the force on its map the nearest field that is rolled
-	-- but not generated yet. Returns the marked position or nil.
+	-- Geological survey (Ore Radar): marks for the force on its map the nearest field the force has
+	-- not charted yet. Returns the marked position or nil.
 	-- remote.call("RSO", "forecast", surface_index, force_index, {x = 0, y = 0})
 	forecast = forecast,
 
-	-- counters of the Reforged mechanics: veins, guards, mines, guaranteed, depletion_veins, forecasts
+	-- counters of the Reforged mechanics: veins, guards, mines, depletion_veins, forecasts
 	stats = function()
 		return storage.stats or {}
 	end,

@@ -1,7 +1,7 @@
 -- Ore Radar: each radar has a mode chosen in a window opened by clicking the radar. In the resource
 -- mode (default) a completed scan reveals a generated chunk with resources; in the signal mode it
 -- marks an undiscovered ruin of AbandonedRuins-paranoidal; in the survey mode RSO Reforged marks on
--- the map the nearest field that is planned but not generated yet. The last two fall back to ore.
+-- the map the nearest field the force has not charted yet. The last two fall back to ore.
 local WORK_PER_TICK = 8
 local SCANS_PER_TICK = 4
 -- Random picks per ore scan: depleted chunks are dropped, chunks unknown to the force are preferred.
