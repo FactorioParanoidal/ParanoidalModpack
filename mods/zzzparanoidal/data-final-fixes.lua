@@ -408,6 +408,8 @@ require("tweaks.custom.fuel-emissions-beta8")
 require("tweaks.custom.upstream-prototype-fixes")
 require("tweaks.custom.upstream-light-fixes")
 require("tweaks.custom.hero-shortcut")
+-- Единый песок: aai sand → angels-solid-sand (до очистки Факториопедии).
+require("tweaks.recipe.sand-merge")
 -- Очистка Факториопедии: после всех правок, создающих и копирующих прототипы.
 require("removals.factoriopedia-cleanup")
 -- Временно: из «Советов и подсказок» остаётся только категория PARANOIDAL.
