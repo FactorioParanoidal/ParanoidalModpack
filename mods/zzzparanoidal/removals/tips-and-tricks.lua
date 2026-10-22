@@ -6,6 +6,9 @@
 
 local KEEP_CATEGORIES = {
     ["start"] = true,
+    -- Презентации «Брак и доводка» и «Качество» (prototypes/tips-and-tricks/quality).
+    ["zzz-defects"] = true,
+    ["zzz-quality"] = true,
 }
 
 local items = data.raw["tips-and-tricks-item"] or {}

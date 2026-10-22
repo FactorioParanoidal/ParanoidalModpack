@@ -1,2 +1,3 @@
 require("prototypes.tips-and-tricks.1-1-1-start.1-1-1-start")
 require("prototypes.tips-and-tricks.pollution")
+require("prototypes.tips-and-tricks.quality.quality")
