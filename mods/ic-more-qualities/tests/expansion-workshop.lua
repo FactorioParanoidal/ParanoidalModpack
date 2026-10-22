@@ -143,20 +143,47 @@ machine.start("gear", "ic-defect-1", 10)
 tick = run(machine, record, 1000, mock.sequence({.05}), tick)
 assert(machine.outputs[4] == "normal" and counters["refine.normalized"] == 1)
 
--- 3. Power gating: an unsupplied interface holds the progress.
+-- 3. Power gating. Without electricity the attempt is held like without packs: the furnace is
+-- disabled, so the progress bar no longer runs ahead between looks and gets rewound (it jittered);
+-- the full power stays requested. Partial power slows the attempt; power back releases it.
 machine.start("gear", "ic-defect-1", 10)
 workshop.step(record, {tick = tick + 1, random = mock.sequence({.5})})
 machine.update()
-local progress = machine.entity.crafting_progress
-for t = tick + 2, tick + 30 do
+tick = tick + 1
+local function unpowered_tick()
+    tick = tick + 1
     machine.interface.energy = 0
-    workshop.step(record, {tick = t, random = mock.sequence({.5})})
+    if record.next_tick <= tick then workshop.step(record, {tick = tick, random = mock.sequence({.5})}) end
     machine.update()
 end
-assert(machine.entity.crafting_progress - progress < 0.01, "progress held without electricity")
-assert(record.status_key == "low-power")
-tick = run(machine, record, 700, mock.sequence({.5}), tick + 30)
+for _ = 1, 4 do unpowered_tick() end -- the first look without power stops the furnace
+local progress = machine.entity.crafting_progress
+assert(progress > 0 and progress < 0.01)
+for _ = 1, 60 do
+    unpowered_tick()
+    assert(machine.entity.crafting_progress == progress, "progress must not move without electricity")
+end
+assert(record.held and machine.entity.disabled_by_script, "held without electricity")
+assert(record.status_key == "no-power" and machine.entity.custom_status.diode == "red")
+near(machine.interface.power_usage, 1250, 1e-9) -- full power requested: the buffer refills when power is back
+assert(record.starved_since == nil, "no repair-pack alert without electricity")
+local paid_before = record.craft.paid
+-- Half supply: released, slowed, "not enough electricity".
+for _ = 1, 30 do
+    tick = tick + 1
+    machine.interface.energy = machine.interface.electric_buffer_size * 0.25
+    if record.next_tick <= tick then workshop.step(record, {tick = tick, random = mock.sequence({.5})}) end
+    machine.update()
+end
+assert(not record.held and not machine.entity.disabled_by_script, "released with some electricity")
+assert(record.status_key == "low-power" and record.craft.paid >= paid_before)
+local slowed = machine.entity.crafting_progress - progress
+assert(slowed > 0 and slowed < 30 / 600 * 0.75, "half supply: about half speed, got " .. slowed)
+tick = run(machine, record, 700, mock.sequence({.5}), tick)
 assert(machine.outputs[#machine.outputs] == "normal")
+-- Idle without electricity: the status says so (red), not "waiting".
+for _ = 1, 10 do unpowered_tick() end
+assert(record.status_key == "no-power" and not machine.crafting)
 
 -- 4. Standard quality passes for free; positive quality passes unchanged or is reset.
 local available = workshop.available(machine.entity)
@@ -176,6 +203,15 @@ tick = run(machine, record, 10 + workshop.IDLE_LOOK, mock.sequence({.5}), tick)
 assert(not machine.crafting, "reset needs at most one second after the workshop sees the item")
 assert(machine.outputs[#machine.outputs] == "normal" and workshop.available(machine.entity) == available)
 assert(storage.ic_stats[1]["refine.resets"] == 1 and storage.ic_stats[1]["refine.passed"] == 2)
+-- A quality reset stops without electricity as well and finishes once power is back.
+machine.start("gear", "rare", 10)
+for _ = 1, workshop.IDLE_LOOK + 2 do unpowered_tick() end -- seen by a look, then stopped
+local reset_at = machine.entity.crafting_progress
+for _ = 1, 30 do unpowered_tick() end
+assert(machine.crafting and machine.entity.crafting_progress == reset_at, "reset held without electricity")
+assert(record.held and record.status_key == "no-power")
+tick = run(machine, record, 70, mock.sequence({.5}), tick)
+assert(not machine.crafting and machine.outputs[#machine.outputs] == "normal" and not record.held)
 
 -- 5. Mining after the outcome is decided (before the craft completes) returns the reached grade.
 machine.start("gear", "ic-defect-5", 10)
