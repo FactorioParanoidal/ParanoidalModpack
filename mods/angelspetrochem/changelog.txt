@@ -2,6 +2,7 @@
 Version: 2.0.3
 Date: 04.06.2026
   Bugfixes:
+    - Paranoidal: angelspetrochemgraphics is now a plain required dependency instead of "~" (load order is unchanged): Factorio 2.0 never reuses the data stage cache (cache-prototype-data) while any enabled mod has a "~" dependency.
     - Fixed Centrifuge pipe graphics (1293)
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.2

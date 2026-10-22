@@ -10,7 +10,10 @@ M.hidden_flags = {
 }
 
 -- Hidden electric consumer: the workshop's electricity and the extra power of production modes.
-function M.hidden_power(name, width, height)
+-- show_icons: the engine draws its "no power" / "no network" icons. Only for the workshop: its building is
+-- a burner with an endless drive and has no electric icons of its own; machines in production modes
+-- already show their own.
+function M.hidden_power(name, width, height, show_icons)
     local util = require("util")
     return {
         type = "electric-energy-interface",
@@ -29,8 +32,8 @@ function M.hidden_power(name, width, height)
             type = "electric",
             usage_priority = "secondary-input",
             buffer_capacity = "1kJ",
-            render_no_power_icon = false,
-            render_no_network_icon = false,
+            render_no_power_icon = show_icons == true,
+            render_no_network_icon = show_icons == true,
         },
         energy_usage = "0W",
         gui_mode = "none",

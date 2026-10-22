@@ -1,9 +1,0 @@
-{
-    "name": "beltbrush2",
-    "version": "0.2.1",
-    "title": "Belt Brush",
-    "author": "superspeeder101",
-    "factorio_version": "2.0",
-    "dependencies": [],
-    "description": "This mod adds a beltbrush tool like the one from Picker Belt Tools (because I miss it and am losing efficiency without it). This mod will build belts as you go, but doesn't (currently) support any sort of \"smart belt building\" mode style belt brush."
-}

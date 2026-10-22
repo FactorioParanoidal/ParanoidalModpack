@@ -56,6 +56,8 @@ script.on_init(function()
 end)
 
 script.on_event(defines.events.on_surface_created, function(event)
+    local surface = game.get_surface(event.surface_index)
+    if surface and is_ignored_surface_name(surface.name) then return end
     for _, force in pairs(game.forces) do
         local storage_force = storage.forces[force.name]
         if storage_force then
@@ -141,6 +143,8 @@ script.on_configuration_changed(function(event)
 
     -- Paranoidal: drop Blueprint Sandboxes forces tracked by older versions (idempotent).
     remove_ignored_forces()
+    -- Paranoidal: drop the statistics of Blueprint Sandboxes lab surfaces (idempotent).
+    remove_ignored_surface_statistics()
 
     if next(event.mod_changes) ~= nil then
         fetch_remote_presets()

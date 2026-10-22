@@ -5,8 +5,6 @@ local D = {}
 
 -- Пиксельно одинаковые файлы: копия -> канонический файл (мод канонического файла).
 D.file_remap = {
-	["__Aircraft-space-age__/graphics/entity/flying_fortress/hr-flying_fortress_spritesheet-light.png"] = { "__Aircraft-space-age__/graphics/entity/jet/hr-jet_spritesheet-light.png", "Aircraft-space-age" },
-	["__Aircraft-space-age__/graphics/entity/flying_fortress/hr-flying_fortress_spritesheet-shadow.png"] = { "__Aircraft-space-age__/graphics/entity/jet/hr-jet_spritesheet-shadow.png", "Aircraft-space-age" },
 	["__Bio_Industries_2__/graphics/entities/remnants/wooden_fence_remnant.png"] = { "__Bio_Industries_2__/graphics/entities/remnants/woodpipe_remnant.png", "Bio_Industries_2" },
 	["__Bio_Industries_2__/graphics/icons/Seedling1.png"] = { "__Bio_Industries_2__/graphics/icons/Seedling.png", "Bio_Industries_2" },
 	["__Bio_Industries_2__/graphics/icons/Woodpulp_raw-wood.png"] = { "__Bio_Industries_2__/graphics/icons/woodpulp_64.png", "Bio_Industries_2" },
@@ -175,9 +173,9 @@ D.file_remap = {
 	["__flib__/graphics/frame-action-icons.png"] = { "__FactorySearch__/graphics/frame-action-icons.png", "FactorySearch" },
 	["__fluid-memory-storage__/graphics/icon/packing-tape-50.png"] = { "__deep-storage-unit__/graphics/icon/packing-tape-50.png", "deep-storage-unit" },
 	["__immersive-sounds2__/graphics/dummy.png"] = { "__Bio_Industries_2__/graphics/icons/empty.png", "Bio_Industries_2" },
-	["__nanobots-refined__/graphics/entity/cloud/cloud-45-frames.png"] = { "__RampantFixed__/graphics/entities/cloud/cloud-45-frames.png", "RampantFixed" },
-	["__nanobots-refined__/graphics/equipment/equipment-bot-chip-nanointerface.png"] = { "__nanobots-refined__/graphics/icons/equipment-bot-chip-nanointerface.png", "nanobots-refined" },
-	["__nanobots-refined__/graphics/technology/tech-nano-speed.png"] = { "__nanobots-refined__/graphics/technology/tech-nano-range.png", "nanobots-refined" },
+	["__nanobots-refined-reforged__/graphics/entity/cloud/cloud-45-frames.png"] = { "__RampantFixed__/graphics/entities/cloud/cloud-45-frames.png", "RampantFixed" },
+	["__nanobots-refined-reforged__/graphics/equipment/equipment-bot-chip-nanointerface.png"] = { "__nanobots-refined-reforged__/graphics/icons/equipment-bot-chip-nanointerface.png", "nanobots-refined-reforged" },
+	["__nanobots-refined-reforged__/graphics/technology/tech-nano-speed.png"] = { "__nanobots-refined-reforged__/graphics/technology/tech-nano-range.png", "nanobots-refined-reforged" },
 	["__paranoidal-tank-platoon__/graphics/icons/mk2.png"] = { "__SchallPickupTower__/graphics/icons/mk2.png", "SchallPickupTower" },
 	["__reskins-angels__/graphics/icons/industries/nuclear/americium-241.png"] = { "__angelspetrochemgraphics__/graphics/icons/americium-241.png", "angelspetrochemgraphics" },
 	["__reskins-angels__/graphics/icons/industries/nuclear/curium-245.png"] = { "__angelspetrochemgraphics__/graphics/icons/curium-245.png", "angelspetrochemgraphics" },

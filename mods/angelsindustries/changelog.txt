@@ -21,6 +21,7 @@ Date: ???
     - Enabled logistics tab for Crawler construction vehicle (1111)
     - Added circuit connectors to all machines (1114)
   Bugfixes:
+    - Paranoidal: angelsindustriesgraphics is now a plain required dependency instead of "~" (load order is unchanged): Factorio 2.0 never reuses the data stage cache (cache-prototype-data) while any enabled mod has a "~" dependency.
     - Fixed potential softlock with Tech Overhaul and Bob's Technology mod (986)
 ---------------------------------------------------------------------------------------------------
 Version: 0.4.21

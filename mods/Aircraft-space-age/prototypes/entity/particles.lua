@@ -37,7 +37,7 @@ napalm_fire_flame.emissions = {
 }
 napalm_fire_flame.damage_per_tick = {amount = 9 / 60, type = "fire"}
 napalm_fire_flame.maximum_damage_multiplier = 6
-napalm_fire_flame.spread_delay = 5
+napalm_fire_flame.spread_delay = 60 -- was 5 (vanilla fire-flame: 300): far fewer fire-spread events in forests
 napalm_fire_flame.spread_delay_deviation = 5
 napalm_fire_flame.maximum_spread_count = 500
 napalm_fire_flame.initial_lifetime = 600
@@ -46,13 +46,13 @@ napalm_fire_flame.lifetime_increase_cooldown = 1
 napalm_fire_flame.maximum_lifetime = 5000
 napalm_fire_flame.delay_between_initial_flames = 1
 napalm_fire_flame.smoke[1].deviation = {1.5, 1.5}
-napalm_fire_flame.smoke[1].frequency = 0.4
+napalm_fire_flame.smoke[1].frequency = 0.15 -- was 0.4
 napalm_fire_flame.smoke[1].vertical_speed_slowdown = 0.5
-napalm_fire_flame.light = {intensity = 0.1, size = 25, color = napalm_tint}
+napalm_fire_flame.light = {intensity = 0.1, size = 12, color = napalm_tint} -- size was 25
 napalm_fire_flame.smoke_fade_in_duration = 90
 napalm_fire_flame.smoke_fade_out_duration = 120
 napalm_fire_flame.fade_in_duration = 45
-napalm_fire_flame.fade_out_duration = 300
+napalm_fire_flame.fade_out_duration = 60 -- was 300
 
 local norendertiles = { "water", "deepwater", "water-green", "deepwater-green", "water-shallow", "water-mud", "water-wube" }
 for _,tile in pairs(norendertiles) do
@@ -91,11 +91,12 @@ data:extend({
     render_layer = "air-object",
     affected_by_wind = false,
     movement_slow_down_factor = 0,
-    duration = 255,
-    fade_away_duration = 255,
-    show_when_smoke_off = true,
+    -- Was 255 ticks / end_scale 6: a shorter, narrower trail (same growth rate) means far less glow overdraw.
+    duration = 120,
+    fade_away_duration = 120,
+    show_when_smoke_off = false, -- respect the graphics "smoke" option: the long glowing trail is pure overdraw
     start_scale = 0.5,
-    end_scale = 6,
+    end_scale = 3.1,
     --cyclic = true,
   },
 -----------------------------------------------------napalm stream
