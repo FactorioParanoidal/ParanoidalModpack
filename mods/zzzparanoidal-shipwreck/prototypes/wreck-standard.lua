@@ -59,6 +59,28 @@ local function mining_target(wreck, time)
     }})
 end
 
+-- Deconstruction planner marking (fast collection by robots or auto-mining mods): the vanilla
+-- wrecks are "not-deconstructable", the AAI containers lack "player-creation", which containers
+-- need to be deconstructable. Big AAI wrecks get the vanilla wreck map colour instead of the
+-- default player-building colour that "player-creation" would give them.
+local wreck_map_color = {r = 0, g = 0.365, b = 0.58, a = 1}
+
+local function make_deconstructable(wreck)
+    local flags = {}
+    local creation, blueprint = false, true
+    for _, flag in ipairs(wreck.flags or {}) do
+        if flag ~= "not-deconstructable" then flags[#flags + 1] = flag end
+        if flag == "player-creation" then creation = true end
+        if flag == "not-blueprintable" then blueprint = false end
+    end
+    if not creation and wreck.type ~= "simple-entity" then
+        flags[#flags + 1] = "player-creation"
+        if blueprint then flags[#flags + 1] = "not-blueprintable" end
+        if not wreck.map_color then wreck.map_color = wreck_map_color end
+    end
+    wreck.flags = flags
+end
+
 local function standardize(name, loot)
     local wreck = find_wreck(name)
     if not wreck then
@@ -67,6 +89,7 @@ local function standardize(name, loot)
     end
     local time = config.mining_times[name] or config.mining_time
     wreck.minable = {mining_time = time, results = results(name, loot)}
+    make_deconstructable(wreck)
     if wreck.type ~= "simple-entity" then mining_target(wreck, time) end
 end
 

@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.0
 Date: 2026-10-18
+  Bugfixes:
+    - The ship and all its wrecks (vanilla and AAI) can be marked with the deconstruction planner; the vanilla ones were not deconstructable, the AAI containers lacked the player-creation flag. They stay not blueprintable.
   Optimizations:
     - Start fill and wreck-mining checks run every 5 ticks instead of every tick.
   Features:
