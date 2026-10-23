@@ -1,6 +1,6 @@
--- Fixed generation constants (data and control stage). Player-facing values are mod settings.
--- Distances in regions are measured from the nearest starting position; a region is
--- rso-region-size chunks.
+-- Fixed generation constants (data and control stage). Player-facing values are mod settings and
+-- the rows "RSO fields" / "Enemy bases" of the map generator. Distances in regions are measured
+-- from the nearest starting position; a region is rso-region-size chunks.
 return {
 	debug_enabled = false, -- verbose log of the control stage (factorio-current.log)
 
@@ -12,6 +12,7 @@ return {
 
 	-- sites and fields of the noise generator (prototypes/noise.lua)
 	site_jitter = 0.8,        -- share of a cell the site can move in; fields never reach past the 2x2 cells
+	site_dry_elevation = 1,   -- a site lower than this (water, shore) moves to its second place in the cell
 	field_extent = 2.1,       -- field reach in radii: lobe, edge noise
 	field_radius = 0.72,      -- field radius per unit of the config "size"
 	edge_noise = 0.3,         -- edge noise amplitude in radii
@@ -25,6 +26,15 @@ return {
 	starting_distance = {70, 105}, -- starting fields alternate between these distances (tiles)
 	starting_amount_cap = 4000,    -- per tile in starting fields (as RSO)
 	lake_clearance = 50,      -- degrees on both sides of the starting lake kept free of starting fields
+
+	-- enemy bases (noise generator); sizes and chances come from resourceconfigs/vanilla_enemies.lua
+	enemy_radius = 8.5,       -- base radius per sqrt(spawners): a spawner needs about 230 tiles
+	enemy_radius_min = 10,
+	enemy_radius_max = 48,
+	enemy_spacing = 48,       -- minimal distance of candidate base sites (spot noise)
+	enemy_candidates = 100,   -- candidate base sites per 512x512 tiles
+	spawner_boost = 1.4,      -- placement attempts per expected spawner (some collide)
+	worm_boost = 1.0,
 
 	-- RSO Reforged
 	province_size = 3,            -- a geological province is province_size x province_size cells
@@ -44,4 +54,6 @@ return {
 	depletion_vein_size = {5, 9},
 	depletion_vein_richness = 0.4, -- against a fresh field at the same place
 	depletion_vein_distance = {0, 6}, -- tiles from the depleted tile: the vein fills the mined-out ground
+	grade_poor = 0.85,            -- forecast grades: field amount against the average of its resource
+	grade_rich = 1.15,            -- and distance (grade 1)
 }

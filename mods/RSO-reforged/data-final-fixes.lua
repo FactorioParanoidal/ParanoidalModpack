@@ -29,7 +29,8 @@ for planet_name, planet in pairs(data.raw.planet) do
 	end
 end
 
--- Enemy bases are placed by control.lua. Enemies of Big Monsters and of the mferrari library
+-- The vanilla autoplace of enemy bases is switched off too: RSO places its spawners and worms with
+-- noise expressions (prototypes/noise.lua). Enemies of Big Monsters and of the mferrari library
 -- (bosses, giant worms) keep their own placement: those mods own them, as RampantFixed treats
 -- them (libs/ForeignEnemies.lua).
 local FOREIGN_ENEMY_PREFIXES = {"bm-", "bm_", "maf", "mf_"}

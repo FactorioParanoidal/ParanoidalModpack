@@ -1,11 +1,11 @@
 {
   "name": "RSO-reforged",
-  "version": "9.1.0",
+  "version": "9.2.0",
   "factorio_version": "2.0",
   "title": "RSO Reforged",
   "author": "Dark, orzelek, Paranoidal",
   "contact": "https://github.com/FactorioParanoidal/ParanoidalModpack",
   "homepage": "https://forums.factorio.com/viewforum.php?f=79",
-  "description": "Paranoidal fork of Resource Spawner Overhaul. Resources are sparse, so trains are needed early. They are placed by the map generator, so the map preview shows them. Geological provinces, composition by distance, a guaranteed first ring of resources, rich veins guarded by nests, old mine ruins, new veins under depleted fields and geological survey forecasts with the Ore Radar. RSO alone places the enemy bases.",
+  "description": "Paranoidal fork of Resource Spawner Overhaul. Resources are sparse, so trains are needed early. Resources and enemy bases are placed by the map generator, so the map preview shows them; one row of the map generator sets the frequency, size and richness of all fields. Geological provinces, composition by distance, a guaranteed first ring of resources, rich veins guarded by nests, old mine ruins, new veins under depleted fields and geological survey forecasts with the Ore Radar. RSO alone places the enemy bases.",
   "dependencies": ["base >= 2.0.0", "? bobenemies", "? bobores", "(?) Alien-biomes-Reforged", "! bitumen"]
 }

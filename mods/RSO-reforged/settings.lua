@@ -1,6 +1,6 @@
 -- Generation settings are startup settings: the map generator reads them as noise expressions
--- (prototypes/noise.lua). Runtime settings belong to the script parts: enemy bases, guards, mine
--- ruins, new veins and charting.
+-- (prototypes/noise.lua), resources and enemy bases alike. Runtime settings belong to the script
+-- parts: mine ruins, new veins and charting.
 local function setting(type, kind, name, default, order, minimum, maximum)
 	return {type = type, name = name, setting_type = kind, default_value = default, order = order,
 		minimum_value = minimum, maximum_value = maximum}
@@ -35,11 +35,11 @@ data:extend({
 	startup_bool("rso-distance-composition", true, "hb"),
 	startup_bool("rso-guaranteed-ring", true, "hc"),
 	startup_double("rso-vein-chance", 0.25, 0, 1, "hd"),
+	startup_double("rso-enemy-chance", 0.25, 0.01, 1.0, "cb"),
+	startup_double("rso-enemy-base-size", 1.0, 1.0, 20.0, "cc"),
+	startup_double("rso-guard-chance", 0.5, 0, 1, "he"),
 
-	runtime_double("rso-enemy-chance", 0.25, 0.01, 1.0, "cb"),
-	runtime_double("rso-enemy-base-size", 1.0, 1.0, 20.0, "cc"),
 	runtime_bool("rso-reveal-spawned-resources", false, "ga"),
-	runtime_double("rso-guard-chance", 0.5, 0, 1, "he"),
 	runtime_double("rso-mine-ruin-chance", 0.35, 0, 1, "hf"),
 	runtime_double("rso-depletion-vein-chance", 0.003, 0, 0.05, "hg"),
 })

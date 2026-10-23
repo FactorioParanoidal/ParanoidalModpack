@@ -1,41 +1,50 @@
---[[ RSO Reforged: resources are placed by the engine's map generator from the noise expressions
-built here. The map preview shows the real map and chunk generation runs no Lua for resources.
+--[[ RSO Reforged: resources and enemy bases are placed by the engine's map generator from the
+noise expressions built here. The map preview shows the real map and chunk generation runs no Lua.
 
 Per planet with an RSO config (expression prefix p = "rso_<planet>_"):
 
 * Sites. The map is a grid of cells of about one RSO region (size chosen so that the density
-  of fields matches the RSO rolls). A cell holds at most one field site at a jittered position;
-  its random numbers come from one voronoi cell id of the cell index (rso_rand; random_penalty
-  is not usable, it also depends on the evaluated tile), spread by rso_frac. A field never
-  reaches past the 2x2 cells around a tile, so every tile evaluates four sites; the owner is the
-  nearest one relative to its size. Every expression runs for every tile: the code keeps the
-  number of operations low (one cell id per site, lookups as short if-chains).
+  of fields matches the RSO rolls; the frequency of the map generator row "RSO fields" scales
+  it). A cell holds at most one field site at a jittered position; its random numbers come from
+  one voronoi cell id of the cell index (rso_rand; random_penalty is not usable, it also depends
+  on the evaluated tile), spread by rso_frac. A site in water or on the shore (elevation at the
+  site, prototypes/relocate.lua) moves to its second place in the cell. A field never reaches
+  past the 2x2 cells around a tile, so every tile evaluates four sites; the owner is the nearest
+  one relative to its size. Every expression runs for every tile: the code keeps the number of
+  operations low (one cell id per site, lookups as short if-chains).
 * Resource of a site: RSO weights (allotment and frequency slider) times the distance
   composition, the dominant resource of the province (3x3 cells) and the soil geology of
-  Alien-biomes-Reforged (alien-biomes-geology-<resource>). Guaranteed ring: every cell of a
-  band around the first start holds a field, the cells of the ring points get one field of
-  every resource.
+  Alien-biomes-Reforged (alien-biomes-geology-<resource>, evaluated at the site so that the whole
+  field has one resource). Guaranteed ring: every cell of a band around the first start holds a
+  field, the cells of the ring points get one field of every resource.
 * Field: rotated ellipse or square, or a ring (donuts), a second lobe (with a multi-resource
   roll the partner ore lies in it), a bite and noisy edges; amounts grow to the centre, a
   rich vein crosses some fields, infinite cores lie in the densest part. Liquids: wells on a
   jittered grid around the site, spaced by their collision box.
 * Starting fields: one field of every starting resource around every start, on an arc that
   leaves the starting lake free.
+* Enemy bases (config entries of type "entity"): regular bases are spots of spot_noise (the
+  engine picks candidate sites, preferring dry land, with the RSO chance per region growing with
+  the distance); a field site may get a base along it (along_resource_probability) and a rich
+  field (vein or infinite core) a bigger guard base. Spawner and worm kinds follow the RSO
+  allotments by distance. They are placed before trees and rocks, so they never stand in a forest.
 * rso_free = 0 on ore tiles and around wells: trees and rocks (rso-remove-trees) are not placed
   there; rso_free_decor = 0 also within 2 tiles of them (large decoratives reach that far), so
   no grass lies on the ore.
 
 The control stage reads the same expressions with LuaSurface.calculate_tile_properties (sites,
-forecasts, guards) and the constants from the mod-data prototype "rso-reforged".
+forecasts, guards, grades) and the names from the mod-data prototype "rso-reforged".
 ]]
 local C = require("config")
 local loadConfig = require("resourceconfigs.mainconfig")
+local relocate = require("prototypes.relocate")
 
 local fmt, concat = string.format, table.concat
 local function setting(name) return settings.startup[name].value end
 
 local REGION = setting("rso-region-size") * 32 -- RSO region (distance unit), tiles
 local SA = "(starting_area_radius / 150)"       -- starting area slider (150 at 100 %)
+local FIELDS = "rso-fields"                     -- map generator row of all RSO fields (data.lua)
 
 local defs, defined = {}, {}
 local function define(prototype)
@@ -93,10 +102,31 @@ noise_function("rso_rand", {"k", "ci", "cj"},
 -- more numbers from one: fractional part of v * a (a of a few thousand keeps 12+ bits)
 noise_function("rso_frac", {"v", "a"}, "v * a - floor(v * a)")
 local SPREAD = {1013.7, 2711.3, 1531.9, 3299.1, 2083.3, 1777.7, 3919.3, 1201.1, 2459.7, 3607.9, 1399.3,
-	2903.9, 1867.1, 3203.3, 2237.9, 1657.3}
+	2903.9, 1867.1, 3203.3, 2237.9, 1657.3, 3511.7, 2591.3}
 -- edge noise of the fields
 expression("rso_wobble", "basis_noise{x = x, y = y, seed0 = map_seed, seed1 = 'rso-wobble', input_scale = 1/9}"
 	.. " + basis_noise{x = x, y = y, seed0 = map_seed, seed1 = 'rso-wobble-fine', input_scale = 1/3.5, output_scale = 0.5}")
+
+-- Dry land at a point for the sites (evaluated at four sites for every tile, so it must be cheap):
+-- the elevation of Nauvis without its small-scale detail and the starting lake, which only
+-- shape coasts and the starting area. Built from the named parts of the game's elevation; without
+-- them the full elevation is used.
+local function dry_land_expressions()
+	local parts = {"nauvis_hills_plateaus", "nauvis_bridges", "nauvis_macro", "nauvis_segmentation_multiplier", "water_level"}
+	for _, name in ipairs(parts) do
+		if not data.raw["noise-expression"][name] then return nil end
+	end
+	-- in data.raw at once: relocate.at() reads it
+	data:extend({{type = "noise-expression", name = "rso_dry_land",
+		local_expressions = {main = "20 * (lerp(0.5 * nauvis_hills_plateaus - 0.6, 1.9 * nauvis_hills_plateaus + 1.6, "
+			.. "0.1 + 0.5 * nauvis_bridges) + 3 * nauvis_macro * clamp(distance * nauvis_segmentation_multiplier / 2000, 0, 1))"},
+		expression = "max(main - 2 * water_level, main + 20 * (2.5 - distance * segmentation_multiplier / 200))"}})
+	defined.rso_dry_land = true
+	return "rso_dry_land"
+end
+-- Measured on seed 20261022: agrees with the elevation on 94 % of the map; 31 % of the sites were
+-- in water and move, 21 % stay there (in large lakes both places of the cell are wet).
+local DRY_LAND = dry_land_expressions() or "elevation"
 
 local env = {
 	has = function(name)
@@ -104,9 +134,8 @@ local env = {
 		return resource ~= nil and resource.autoplace ~= nil
 	end,
 	mods = mods,
+	setting = setting,
 }
-
-local ENEMY_PLANETS = {nauvis = true, gleba = true} -- resourceconfigs/vanilla_enemies.lua
 
 local function collision_size(resource)
 	local box = resource.collision_box
@@ -117,7 +146,125 @@ local function collision_size(resource)
 	return math.max(1, math.ceil(math.max(w, h)))
 end
 
--- builds the expressions of a planet; returns {names = {resource -> {probability, richness}}, info}
+-- the enemy config of a planet: the first entity entry (by name) with bases
+local function enemy_config(config)
+	local names = {}
+	for name, cfg in pairs(config) do
+		if type(cfg) == "table" and cfg.type == "entity" and cfg.bases then names[#names + 1] = name end
+	end
+	table.sort(names)
+	return names[1] and config[names[1]]
+end
+
+-- weights of allotment entries at the distance d (regions beyond the starting area, an
+-- expression) as RSO computeAllotments: allotment * d ^ allotment_distance_factor when d >
+-- min_distance (RSO never applied max_allotment_distance_factor; kept so)
+local function allotments(entries, d, prototype_types)
+	local list = {}
+	for name, v in pairs(entries or {}) do
+		local kind
+		for _, t in ipairs(prototype_types) do
+			if data.raw[t][name] then kind = t break end
+		end
+		if kind then
+			local w = num(v.allotment)
+			if v.allotment_distance_factor then w = fmt("%s * %s ^ %s", w, d, num(v.allotment_distance_factor)) end
+			if v.min_distance then w = fmt("%s * (%s > %s)", w, d, num(v.min_distance)) end
+			list[#list + 1] = {name = name, type = kind, weight = w}
+		end
+	end
+	table.sort(list, function(a, b) return a.name < b.name end)
+	return list
+end
+
+-- Enemy bases of a planet. f: names of the field expressions. Returns {{name, type, probability}}.
+local function build_enemies(planet_name, e, P, f)
+	local EON = fmt("%s * (1 - no_enemies_mode)", enabled("enemy-base"))
+	local ESM = size_mod("enemy-base")
+	expression(P("e_d"), fmt("distance / %s", num(REGION)))
+	expression(P("e_dp"), fmt("max(%s - %s * %s, 0.5)", P("e_d"), num(C.starting_area_size), SA))
+	expression(P("e_mult"), e.size_per_region_factor and fmt("min(%s ^ %s, 5)", P("e_dp"), num(e.size_per_region_factor)) or "1")
+	-- spawners of a base and its radius (a spawner needs about 230 tiles of the map generator box)
+	expression(P("e_n"), fmt("%s * %s * %s * %s", num((e.size.min + e.size.max) / 2), P("e_mult"),
+		num(setting("rso-enemy-base-size")), ESM))
+	local function radius(n)
+		return fmt("clamp(%s * sqrt(%s), %s, %s)", num(C.enemy_radius), n, num(C.enemy_radius_min), num(C.enemy_radius_max))
+	end
+	expression(P("e_r"), radius(P("e_n")))
+	local excl = fmt("(%s * %s)", num(REGION * C.starting_area_size), SA)
+
+	-- regular bases: RSO rolls absolute_probability per region (growing with the distance), then
+	-- spawns_per_region bases
+	local base = "0"
+	if e.absolute_probability then
+		local chance = num(e.absolute_probability)
+		if e.probability_distance_factor then
+			chance = fmt("%s * min(%s, %s ^ %s)", chance, num(e.max_probability_distance_factor or 1e9),
+				num(e.probability_distance_factor), P("e_d"))
+		end
+		expression(P("e_rate"), fmt("%s * %s * %s * %s / %s", chance, slider("enemy-base", "frequency"),
+			num((e.spawns_per_region.min + e.spawns_per_region.max) / 2), ESM, num(REGION * REGION)))
+		expression(P("e_spot"), fmt("spot_noise{x = x, y = y, density_expression = %s * %s, spot_quantity_expression = %s, "
+			.. "spot_radius_expression = %s, spot_favorability_expression = %s, seed0 = map_seed, seed1 = noise_layer_id('rso-enemy-%s'), "
+			.. "region_size = 512, candidate_point_count = %d, suggested_minimum_candidate_point_spacing = %s, "
+			.. "hard_region_target_quantity = 0, basement_value = -1, maximum_spot_basement_radius = %s}",
+			P("e_rate"), P("e_n"), P("e_n"), P("e_r"),
+			-- dry land first, in random order; candidates of the starting area last
+			fmt("(elevation > %s) + random_penalty{x = x, y = y, seed = 31, source = 1, amplitude = 1} - 4 * (distance < %s + %s)",
+				num(C.site_dry_elevation), excl, num(C.enemy_radius_max)),
+			planet_name, C.enemy_candidates, num(C.enemy_spacing), num(C.enemy_radius_max)))
+		base = fmt("max(0, %s) * (distance > %s)", P("e_spot"), excl)
+	end
+
+	-- a base along a field, a bigger guard base by a rich field (vein or infinite core)
+	local along = e.along_resource_probability and fmt("(%s < %s)", f.r_along, num(e.along_resource_probability)) or "0"
+	local guard_chance = setting("rso-guard-chance")
+	expression(P("e_guard"), guard_chance > 0 and fmt("(1 - %s) * max(%s, %s >= %s) * (%s >= %s) * (%s < %s)", f.liq,
+		f.veinon, f.coretiles, num(C.infinite_core_tiles), f.d, num(C.guard_min_distance), f.r_guard, num(guard_chance)) or "0")
+	expression(P("e_fn"), fmt("%s * if(%s, %s, 1)", P("e_n"), P("e_guard"), num(C.guard_size_mult)))
+	expression(P("e_fr"), radius(P("e_fn")))
+	local field = fmt("%s * max(%s, %s) * 3 * %s / (pi * %s ^ 2) * max(0, 1 - sqrt(%s ^ 2 + %s ^ 2) / %s)", f.active, along,
+		P("e_guard"), P("e_fn"), P("e_fr"), f.dx, f.dy, P("e_fr"))
+	-- expected spawners per tile (the cones of all bases)
+	expression(P("e_h"), fmt("%s * max(%s, %s)", EON, base, field))
+
+	-- one kind per tile, picked by a random number of the tile: otherwise the kind placed first
+	-- would win every collision
+	local out = {}
+	local function shares(list, scale, seed)
+		if #list == 0 then return end
+		local sum = {}
+		for _, v in ipairs(list) do sum[#sum + 1] = v.weight end
+		expression(scale .. "_pick", fmt("(1 - random_penalty{x = x, y = y, seed = %d, source = 1, amplitude = 1}) * (%s)",
+			seed, concat(sum, " + ")))
+		local low = "0"
+		for _, v in ipairs(list) do
+			local high = low .. " + " .. v.weight
+			out[#out + 1] = {name = v.name, type = v.type,
+				probability = fmt("%s * (%s_pick >= %s) * (%s_pick < %s)", scale, scale, low, scale, high)}
+			low = "(" .. high .. ")"
+		end
+	end
+	expression(P("e_spawners"), fmt("%s * %s", P("e_h"), num(C.spawner_boost)))
+	shares(allotments(e.bases, P("e_dp"), {"unit-spawner"}), P("e_spawners"), 41)
+	if e.sub_spawns and e.sub_spawn_probability then
+		-- worms per spawner: RSO sub_spawn_probability (growing with the distance) times the
+		-- sub_spawn_size, scaled as the base size
+		local chance = num(e.sub_spawn_probability)
+		if e.sub_spawn_distance_factor then
+			chance = fmt("%s * min(%s, %s ^ %s)", chance, num(e.sub_spawn_max_distance_factor or 1e9),
+				num(e.sub_spawn_distance_factor), P("e_dp"))
+		end
+		local size = e.sub_spawn_size and (e.sub_spawn_size.min + e.sub_spawn_size.max) / 2 or 1
+		expression(P("e_worms"), fmt("%s * %s * %s * %s * %s * %s", P("e_h"), chance, num(size), ESM, P("e_mult"),
+			num(C.worm_boost)))
+		shares(allotments(e.sub_spawns, P("e_dp"), {"turret"}), P("e_worms"), 43)
+	end
+	return out
+end
+
+-- builds the expressions of a planet; returns names {entity -> {probability, richness}}, enemies
+-- {{name, type, probability}}, info
 local function build_planet(planet_name, config, ignored)
 	local p = "rso_" .. planet_name:gsub("[^%w]", "_") .. "_"
 	local function P(name) return p .. name end
@@ -135,9 +282,11 @@ local function build_planet(planet_name, config, ignored)
 	local index = {}
 	for k, name in ipairs(list) do index[name] = k end
 	local n = #list
+	local enemy = enemy_config(config)
 
-	-- density: the RSO rolls of a region (resourceChanceMultiplier per planet)
-	local count = n + (ENEMY_PLANETS[planet_name] and 1 or 0)
+	-- density: the RSO rolls of a region (resourceChanceMultiplier per planet); the enemy entry
+	-- counts as in RSO
+	local count = n + (enemy and 1 or 0)
 	local rolls = math.min(math.ceil(count / 10) - 1, 3)
 	local chance = setting("rso-resource-chance") * (config.resourceChanceMultiplier or 1)
 	local none, expected = 1, 0
@@ -146,19 +295,22 @@ local function build_planet(planet_name, config, ignored)
 		none, expected = none * (1 - c), expected + c
 	end
 	local site_chance = 1 - none
-	local G = expected > 0 and REGION * math.sqrt(site_chance / expected) or REGION
 	local J = C.site_jitter
-	local rcap = math.min(64, (1 - J / 2) * G / C.field_extent)
-	local global_size = setting("rso-global-size-mult")
-	local global_rich = setting("rso-global-richness-mult")
+	-- cell size: one site per cell; the frequency of "RSO fields" makes cells smaller
+	local G0 = expected > 0 and REGION * math.sqrt(site_chance / expected) or REGION
+	expression(P("G"), fmt("%s / sqrt(%s)", num(G0), slider(FIELDS, "frequency")))
+	local G = P("G")
+	expression(P("rcap"), fmt("min(64, %s * %s)", num((1 - J / 2) / C.field_extent), G))
+	local GS = fmt("(%s * %s)", num(setting("rso-global-size-mult")), size_mod(FIELDS))
+	local GR = fmt("(%s * %s)", num(setting("rso-global-richness-mult")), slider(FIELDS, "richness"))
 	local donuts = setting("rso-use-donuts")
 	local multi_active = setting("rso-multi-resource-active")
 	local vein_chance = setting("rso-vein-chance")
 	local threshold = setting("rso-infinite-ore-threshold")
 
 	-- per-resource values (index order)
-	local V = {a = {}, liq = {}, smin = {}, sspan = {}, R = {}, Rspan = {}, minA = {}, multiC = {}, partner = {},
-		infC = {}, infMin = {}, infR = {}, spacing = {}, geo = {}, dw = {}}
+	local V = {a = {}, liq = {}, smin = {}, sspan = {}, smean = {}, R = {}, Rspan = {}, minA = {}, multiC = {},
+		partner = {}, infC = {}, infMin = {}, infR = {}, spacing = {}, geo = {}, dw = {}}
 	local radius_sum, ore_count = 0, 0
 	for k, name in ipairs(list) do
 		local cfg = config[name]
@@ -170,14 +322,15 @@ local function build_planet(planet_name, config, ignored)
 		local sm = size_mod(control)
 		V.smin[k] = fmt("(%s * %s)", num(cfg.size.min), sm)
 		V.sspan[k] = fmt("(%s * %s)", num(cfg.size.max - cfg.size.min), sm)
+		V.smean[k] = fmt("(%s * %s)", num((cfg.size.min + cfg.size.max) / 2), sm)
 		local rich = slider(control, "richness")
 		if liquid then
-			V.R[k] = fmt("(%s * %s)", num(cfg.richness.min * global_rich), rich)
-			V.Rspan[k] = fmt("(%s * %s)", num((cfg.richness.max - cfg.richness.min) * global_rich), rich)
+			V.R[k] = fmt("(%s * %s * %s)", num(cfg.richness.min), rich, GR)
+			V.Rspan[k] = fmt("(%s * %s * %s)", num(cfg.richness.max - cfg.richness.min), rich, GR)
 			V.minA[k] = cfg.minimum_amount or 1
 			V.spacing[k] = collision_size(data.raw.resource[name]) + C.well_gap
 		else
-			V.R[k] = fmt("(%s * %s)", num(cfg.richness * global_rich), rich)
+			V.R[k] = fmt("(%s * %s * %s)", num(cfg.richness), rich, GR)
 			V.Rspan[k] = 0
 			V.minA[k] = cfg.min_amount or C.min_amount
 			V.spacing[k] = 0
@@ -226,12 +379,13 @@ local function build_planet(planet_name, config, ignored)
 		else
 			V.infC[k], V.infMin[k], V.infR[k] = 0, 0, 1
 		end
+		-- soil geology at the site: the whole field gets the same resource
 		local geo = "alien-biomes-geology-" .. name
-		V.geo[k] = planet_name == "nauvis" and data.raw["noise-expression"][geo] and fmt("var('%s')", geo) or nil
+		V.geo[k] = planet_name == "nauvis" and data.raw["noise-expression"][geo] and relocate.at(geo, P("sx"), P("sy")) or nil
 		V.dw[k] = setting("rso-distance-composition") and cfg.distance_weight or nil
 	end
-	local RP0 = (ore_count > 0 and radius_sum / ore_count or 10) * C.field_radius * global_size
-	local excl = fmt("(%s * %s + %s)", num(REGION * C.starting_area_size), SA, num(RP0 * C.field_extent))
+	expression(P("RP0"), fmt("%s * %s", num((ore_count > 0 and radius_sum / ore_count or 10) * C.field_radius), GS))
+	local excl = fmt("(%s * %s + %s * %s)", num(REGION * C.starting_area_size), SA, P("RP0"), num(C.field_extent))
 	local start_x = "(-distance_from_nearest_point_x{x = 0, y = 0, points = starting_positions})"
 	local start_y = "(-distance_from_nearest_point_y{x = 0, y = 0, points = starting_positions})"
 
@@ -241,35 +395,55 @@ local function build_planet(planet_name, config, ignored)
 	local band = "0"
 	local ring_terms = {}
 	if setting("rso-guaranteed-ring") then
-		band = fmt("abs(%%s - %s) < %s", ring, num(1.3 * G)) -- holds the sites of the ring point cells
+		band = fmt("abs(%%s - %s) < 1.3 * %s", ring, G) -- holds the sites of the ring point cells
 		for k, name in ipairs(list) do
 			local angle = fmt("(2 * pi * (map_seed_normalized + %s))", num((k - 1) / n))
 			expression(P("ring" .. k), fmt("floor((%s + %s * cos(%s)) / %s) * 4096 + floor((%s + %s * sin(%s)) / %s)",
-				start_x, ring, angle, num(G), start_y, ring, angle, num(G)))
+				start_x, ring, angle, G, start_y, ring, angle, G))
 			ring_terms[#ring_terms + 1] = fmt("%d * %s * (%s == %s)", k, enabled(config[name].autoplace_name or name),
 				P("key"), P("ring" .. k))
 		end
 	end
 
-	-- one site per cell (ci, cj)
+	-- one site per cell (ci, cj); a site in water moves to the second place of its cell
 	local cell = "(ci, cj)"
 	noise_function(P("fv"), {"ci", "cj"}, "rso_rand(0, ci, cj)")
-	noise_function(P("fx"), {"ci", "cj"}, fmt("(ci + 0.5 + %s * (rso_frac(%s, %s) - 0.5)) * %s", num(J), P("fv") .. cell, num(SPREAD[1]), num(G)))
-	noise_function(P("fy"), {"ci", "cj"}, fmt("(cj + 0.5 + %s * (rso_frac(%s, %s) - 0.5)) * %s", num(J), P("fv") .. cell, num(SPREAD[2]), num(G)))
+	-- first place: anywhere in the inner part of the cell; second place: on the other side of the
+	-- cell centre, far from the first one (lakes are large)
+	local function first(axis, spread)
+		return fmt("(%s + 0.5 + %s * (rso_frac(%s, %s) - 0.5)) * %s", axis, num(J), P("fv") .. cell, num(spread), G)
+	end
+	local function second(axis, spread, other)
+		return fmt("(%s + 0.5 + if(rso_frac(%s, %s) > 0.5, -1, 1) * (0.15 + 0.25 * rso_frac(%s, %s))) * %s", axis,
+			P("fv") .. cell, num(spread), P("fv") .. cell, num(other), G)
+	end
+	noise_function(P("fxa"), {"ci", "cj"}, first("ci", SPREAD[1]))
+	noise_function(P("fya"), {"ci", "cj"}, first("cj", SPREAD[2]))
+	noise_function(P("fxb"), {"ci", "cj"}, second("ci", SPREAD[1], SPREAD[3]))
+	noise_function(P("fyb"), {"ci", "cj"}, second("cj", SPREAD[2], SPREAD[4]))
+	local elevation = planet_name == "nauvis" and relocate.at(DRY_LAND, P("fxa") .. cell, P("fya") .. cell)
+	if elevation then
+		noise_function(P("fwet"), {"ci", "cj"}, fmt("%s < %s", elevation, num(C.site_dry_elevation)))
+		noise_function(P("fx"), {"ci", "cj"}, fmt("if(%s, %s, %s)", P("fwet") .. cell, P("fxb") .. cell, P("fxa") .. cell))
+		noise_function(P("fy"), {"ci", "cj"}, fmt("if(%s, %s, %s)", P("fwet") .. cell, P("fyb") .. cell, P("fya") .. cell))
+	else
+		noise_function(P("fx"), {"ci", "cj"}, P("fxa") .. cell)
+		noise_function(P("fy"), {"ci", "cj"}, P("fya") .. cell)
+	end
 	noise_function(P("fd"), {"ci", "cj"}, fmt("distance_from_nearest_point{x = %s, y = %s, points = starting_positions}",
 		P("fx") .. cell, P("fy") .. cell))
 	local d_site = P("fd") .. cell
 	noise_function(P("fon"), {"ci", "cj"}, fmt("max(%s < %s, %s) * (%s > %s)",
 		P("fv") .. cell, num(site_chance), band == "0" and "0" or fmt(band, d_site), d_site, excl))
 	noise_function(P("fq"), {"ci", "cj"}, fmt("if(%s, ((x - %s) ^ 2 + (y - %s) ^ 2) / (%s * max(1, %s / %s) ^ %s) ^ 2, 1e9)",
-		P("fon") .. cell, P("fx") .. cell, P("fy") .. cell, num(RP0), P("fd") .. cell, num(REGION), num(setting("rso-size-exponent"))))
+		P("fon") .. cell, P("fx") .. cell, P("fy") .. cell, P("RP0"), P("fd") .. cell, num(REGION), num(setting("rso-size-exponent"))))
 
 	-- the four cells around the tile and their owner
 	local i0, j0 = P("i0"), P("j0")
-	expression(i0, fmt("floor(x / %s - 0.5)", num(G)))
-	expression(j0, fmt("floor(y / %s - 0.5)", num(G)))
+	expression(i0, fmt("floor(x / %s - 0.5)", G))
+	expression(j0, fmt("floor(y / %s - 0.5)", G))
 	local cells = {{i0, j0}, {i0 .. " + 1", j0}, {i0, j0 .. " + 1"}, {i0 .. " + 1", j0 .. " + 1"}}
-	local function at(f, c) return fmt("%s(%s, %s)", P(f), c[1], c[2]) end
+	local function at(fn, c) return fmt("%s(%s, %s)", P(fn), c[1], c[2]) end
 	for q, c in ipairs(cells) do expression(P("q" .. q), at("fq", c)) end
 	expression(P("c1"), fmt("%s <= min(%s, %s, %s)", P("q1"), P("q2"), P("q3"), P("q4")))
 	expression(P("c2"), fmt("%s <= min(%s, %s)", P("q2"), P("q3"), P("q4")))
@@ -277,7 +451,7 @@ local function build_planet(planet_name, config, ignored)
 	local function owner(a, b, c, d)
 		return fmt("if(%s, %s, if(%s, %s, if(%s, %s, %s)))", P("c1"), a, P("c2"), b, P("c3"), c, d)
 	end
-	local function owner_of(f) return owner(at(f, cells[1]), at(f, cells[2]), at(f, cells[3]), at(f, cells[4])) end
+	local function owner_of(fn) return owner(at(fn, cells[1]), at(fn, cells[2]), at(fn, cells[3]), at(fn, cells[4])) end
 	expression(P("ci"), i0 .. " + " .. owner(0, 1, 0, 1))
 	expression(P("cj"), j0 .. " + " .. owner(0, 0, 1, 1))
 	expression(P("on"), fmt("min(%s, %s, %s, %s) < 1e8", P("q1"), P("q2"), P("q3"), P("q4")))
@@ -286,19 +460,17 @@ local function build_planet(planet_name, config, ignored)
 	expression(P("sd"), owner_of("fd"))
 	expression(P("key"), fmt("%s * 4096 + %s", P("ci"), P("cj")))
 	expression(P("forced"), #ring_terms > 0 and "max(0, " .. concat(ring_terms, ", ") .. ")" or "0")
-	-- random numbers of the owner site: r3 .. r17 from one cell id
+	-- random numbers of the owner site: r3 .. r19 from one cell id
 	expression(P("rnd"), fmt("rso_rand(3, %s, %s)", P("ci"), P("cj")))
-	for r = 3, 17 do expression(P("r" .. r), fmt("rso_frac(%s, %s)", P("rnd"), num(SPREAD[r - 2]))) end
+	for r = 3, 19 do expression(P("r" .. r), fmt("rso_frac(%s, %s)", P("rnd"), num(SPREAD[r - 2]))) end
 	expression(P("d"), fmt("%s / %s", P("sd"), num(REGION)))
 
 	-- resource of the site
 	expression(P("t"), fmt("clamp((%s - %s) / %s, 0, 1)", P("d"), num(C.distance_near), num(C.distance_far - C.distance_near)))
 	local weight = setting("rso-province-weight")
-	local acum = {}
 	for k = 1, n do
 		expression(P("a" .. k), V.a[k])
-		acum[k] = k == 1 and P("a1") or fmt("%s + %s", P("acum" .. (k - 1)), P("a" .. k))
-		expression(P("acum" .. k), acum[k])
+		expression(P("acum" .. k), k == 1 and P("a1") or fmt("%s + %s", P("acum" .. (k - 1)), P("a" .. k)))
 	end
 	if weight ~= 1 and n > 1 then
 		local pi_, pj_ = fmt("floor(%s / %d)", P("ci"), C.province_size), fmt("floor(%s / %d)", P("cj"), C.province_size)
@@ -321,12 +493,13 @@ local function build_planet(planet_name, config, ignored)
 	local pick = fmt("%s * 0.999999 * %s", P("r3"), P("cum" .. n))
 	for k = 1, n - 1 do passed[k] = fmt("(%s >= %s)", pick, P("cum" .. k)) end
 	expression(P("kind"), fmt("if(%s > 0, %s, 1%s)", P("forced"), P("forced"), n > 1 and " + " .. concat(passed, " + ") or ""))
-	expression(P("valid"), fmt("max(%s > 0, %s > 0)", P("forced"), P("cum" .. n)))
+	expression(P("valid"), fmt("max(%s > 0, %s > 0) * %s", P("forced"), P("cum" .. n), enabled(FIELDS)))
 	local K = P("kind")
 	expression(P("liq"), lookup(K, V.liq))
 	expression(P("size"), fmt("%s + %s * %s", lookup(K, V.smin), lookup(K, V.sspan), P("r4")))
 	expression(P("sizef"), fmt("max(%s, 1) ^ %s", P("d"), num(setting("rso-size-exponent"))))
-	expression(P("rad"), fmt("clamp(%s * %s * %s, 2, %s)", P("size"), P("sizef"), num(C.field_radius * global_size), num(rcap)))
+	local FR = fmt("%s * %s", num(C.field_radius), GS)
+	expression(P("rad"), fmt("clamp(%s * %s * %s, 2, %s)", P("size"), P("sizef"), FR, P("rcap")))
 	expression(P("partner"), lookup(K, V.partner))
 	expression(P("multi"), fmt("(%s < %s) * (%s > 0)", P("r12"), lookup(K, V.multiC), P("partner")))
 
@@ -400,17 +573,29 @@ local function build_planet(planet_name, config, ignored)
 	expression(P("estimate"), fmt("if(%s, %s * (%s + %s * %s) * max(%s, 0.1) ^ %s, %s)", P("liq"), P("wells"),
 		lookup(K, V.R), lookup(K, V.Rspan), P("r14"), P("d"), fluid_exp, P("total")))
 
+	-- grade of the field against the average one of its resource at its distance (forecasts)
+	local smean = lookup(K, V.smean)
+	expression(P("grade"), fmt("if(%s, (%s + %s * %s) / (%s + 0.5 * %s) * %s / clamp(floor(%s * %s + 0.5), 1, 30), "
+		.. "(5 + 5 * %s) / 7.5 * (%s / clamp(%s * %s * %s, 2, %s)) ^ 0.6)",
+		P("liq"), lookup(K, V.R), lookup(K, V.Rspan), P("r14"), lookup(K, V.R), lookup(K, V.Rspan), P("wells"), smean, P("sizef"),
+		P("r14"), rad, smean, P("sizef"), FR, P("rcap")))
+
 	-- what the owner site places on this tile
 	expression(P("active"), fmt("%s * %s", P("on"), P("valid")))
 	expression(P("ore"), fmt("%s * (1 - %s) * %s", P("active"), P("liq"), P("inside")))
 	expression(P("well"), fmt("%s * %s * %s", P("active"), P("liq"), P("here")))
 
 	-- queries of the control stage: the site of the cell holding the tile
-	local own = "(floor(x / " .. num(G) .. "), floor(y / " .. num(G) .. "))"
+	local own = "(floor(x / " .. G .. "), floor(y / " .. G .. "))"
 	expression(P("cell_on"), P("fon") .. own)
 	expression(P("cell_x"), P("fx") .. own)
 	expression(P("cell_y"), P("fy") .. own)
 	expression(P("veinon"), vein_chance > 0 and fmt("%s < %s", P("r15"), num(vein_chance)) or "0")
+
+	-- enemy bases
+	local enemies = enemy and build_enemies(planet_name, enemy, P, {active = P("active"), liq = P("liq"),
+		veinon = P("veinon"), coretiles = P("coretiles"), d = P("d"), dx = P("dx"), dy = P("dy"),
+		r_along = P("r18"), r_guard = P("r19")}) or {}
 
 	-- starting fields: around every start, on an arc away from the starting lake
 	local starting = {}
@@ -439,8 +624,8 @@ local function build_planet(planet_name, config, ignored)
 				num(0.8 * arc / #starting))
 			local dist = fmt("(%s * sqrt(%s))", num(C.starting_distance[(i - 1) % 2 + 1]), SA)
 			local cx, cy = fmt("(%s * cos(%s))", dist, angle), fmt("(%s * sin(%s))", dist, angle)
-			local rich = fmt("%s * %s", num(s.richness * start_mult), slider(control, "richness"))
-			local on = enabled(control)
+			local rich = fmt("%s * %s * %s", num(s.richness * start_mult), slider(control, "richness"), slider(FIELDS, "richness"))
+			local on = fmt("%s * %s", enabled(control), enabled(FIELDS))
 			if cfg.type == "resource-liquid" then
 				local wells, near = {}, {}
 				local spacing = V.spacing[k]
@@ -454,7 +639,7 @@ local function build_planet(planet_name, config, ignored)
 				free[#free + 1] = fmt("%s * (%s)", on, concat(near, " + "))
 				start[name] = {inside = P("s" .. i), amount = fmt("max(%s, %s)", num(V.minA[k]), rich)}
 			else
-				local r = fmt("(%s * %s)", num(s.size * C.starting_radius), size_mod(control))
+				local r = fmt("(%s * %s * %s)", num(s.size * C.starting_radius), size_mod(control), size_mod(FIELDS))
 				expression(P("sf" .. i), fmt("1 - sqrt((x_from_start - %s) ^ 2 + (y_from_start - %s) ^ 2) / %s", cx, cy, r))
 				expression(P("s" .. i), fmt("%s * (%s + %s * rso_wobble > 0)", on, P("sf" .. i), num(C.edge_noise)))
 				free[#free + 1] = P("s" .. i)
@@ -501,7 +686,22 @@ local function build_planet(planet_name, config, ignored)
 		end
 	end
 
-	return names, {prefix = p, cell = G, region = REGION, resources = list}
+	local enemy_names = {}
+	for _, e in ipairs(enemies) do enemy_names[#enemy_names + 1] = e.name end
+	return names, enemies, {prefix = p, region = REGION, resources = list, enemies = enemy_names}
+end
+
+-- autoplace of an enemy prototype placed by RSO: before trees and rocks ("a[tree]", "a[doodad]")
+local function enemy_autoplace(prototype, probability)
+	local autoplace = prototype.autoplace or {}
+	prototype.autoplace = autoplace
+	autoplace.control = autoplace.control or "enemy-base"
+	autoplace.force = "enemy"
+	-- own order per prototype: of entities with an equal order only the most probable one is tried
+	autoplace.order = (prototype.type == "unit-spawner" and "a-a[rso-enemy]-a[spawner]-" or "a-a[rso-enemy]-b[worm]-") .. prototype.name
+	autoplace.probability_expression = probability
+	autoplace.richness_expression = 1
+	autoplace.local_expressions, autoplace.local_functions = nil, nil
 end
 
 -- applies everything; called from data-final-fixes.lua after the vanilla autoplace is switched off
@@ -515,9 +715,13 @@ return function(ignored_resources, ignored_planets)
 	for _, planet_name in ipairs(planet_names) do
 		local planet = data.raw.planet[planet_name]
 		if planet and not ignored_planets[planet_name] then
-			local names, info = build_planet(planet_name, config[planet_name], ignored_resources)
+			local names, enemies, info = build_planet(planet_name, config[planet_name], ignored_resources)
 			if names then
 				planets[planet_name] = info
+				planet.map_gen_settings = planet.map_gen_settings or {}
+				local mgs = planet.map_gen_settings
+				mgs.autoplace_controls = mgs.autoplace_controls or {}
+				mgs.autoplace_controls[FIELDS] = mgs.autoplace_controls[FIELDS] or {}
 				if planet_name == "nauvis" then
 					for resource, pair in pairs(names) do
 						local autoplace = data.raw.resource[resource].autoplace
@@ -525,29 +729,35 @@ return function(ignored_resources, ignored_planets)
 						autoplace.richness_expression = pair[2]
 						autoplace.local_expressions, autoplace.local_functions = nil, nil
 					end
+					for _, e in ipairs(enemies) do enemy_autoplace(data.raw[e.type][e.name], e.probability) end
 					free = info.prefix .. "free"
 				else
-					planet.map_gen_settings = planet.map_gen_settings or {}
-					local overrides = planet.map_gen_settings.property_expression_names or {}
-					planet.map_gen_settings.property_expression_names = overrides
+					local overrides = mgs.property_expression_names or {}
+					mgs.property_expression_names = overrides
 					for resource, pair in pairs(names) do
 						overrides["entity:" .. resource .. ":probability"] = pair[1]
 						overrides["entity:" .. resource .. ":richness"] = pair[2]
 					end
+					for _, e in ipairs(enemies) do
+						local prototype = data.raw[e.type][e.name]
+						if not prototype.autoplace then enemy_autoplace(prototype, "0") end
+						overrides["entity:" .. e.name .. ":probability"] = e.probability
+					end
 					overrides.rso_free = info.prefix .. "free"
 				end
 				for resource in pairs(names) do managed[resource] = true end
+				for _, e in ipairs(enemies) do managed[e.name] = true end
 			end
 		end
 	end
-	-- other planets do not get the nauvis fields of the managed resources
+	-- other planets do not get the nauvis fields and bases of the managed prototypes
 	for planet_name, planet in pairs(data.raw.planet) do
 		if planet_name ~= "nauvis" and not planets[planet_name] and not ignored_planets[planet_name] then
 			planet.map_gen_settings = planet.map_gen_settings or {}
 			local overrides = planet.map_gen_settings.property_expression_names or {}
 			planet.map_gen_settings.property_expression_names = overrides
-			for resource in pairs(managed) do
-				overrides["entity:" .. resource .. ":probability"] = "0"
+			for name in pairs(managed) do
+				overrides["entity:" .. name .. ":probability"] = "0"
 			end
 			overrides.rso_free = "1"
 		end
@@ -561,6 +771,7 @@ return function(ignored_resources, ignored_planets)
 		for dy = -2, 2 do around[#around + 1] = fmt("multisample(rso_busy, %d, %d)", dx, dy) end
 	end
 	expression("rso_free_decor", "1 - max(" .. concat(around, ", ") .. ")")
+	for _, prototype in ipairs(relocate.prototypes()) do define(prototype) end
 	data:extend(defs)
 	data:extend({{type = "mod-data", name = "rso-reforged", data = {planets = planets}}})
 end

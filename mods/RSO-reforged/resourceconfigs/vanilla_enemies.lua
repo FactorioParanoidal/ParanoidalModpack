@@ -1,4 +1,5 @@
-local function fillEnemies(config)
+-- Enemy bases per planet; placed by the map generator (prototypes/noise.lua).
+local function fillEnemies(config, env)
 	config.nauvis["enemy-base"] =
 	{
 		type="entity",
@@ -10,7 +11,7 @@ local function fillEnemies(config)
 		size_per_region_factor=0.4,
 		richness=1,
 		
-		absolute_probability=settings.global["rso-enemy-chance"].value, -- chance to spawn in region
+		absolute_probability=env.setting("rso-enemy-chance"), -- chance to spawn in region
 		probability_distance_factor=1.15, -- relative increase per region
 		max_probability_distance_factor=3.0, -- absolute value
 		
@@ -67,7 +68,7 @@ local function fillEnemies(config)
 		size_per_region_factor=0.4,
 		richness=1,
 		
-		absolute_probability=settings.global["rso-enemy-chance"].value, -- chance to spawn in region
+		absolute_probability=env.setting("rso-enemy-chance"), -- chance to spawn in region
 		probability_distance_factor=1.15, -- relative increase per region
 		max_probability_distance_factor=3.0, -- absolute value
 		

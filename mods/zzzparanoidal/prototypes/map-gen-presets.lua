@@ -17,10 +17,12 @@
 local rich = { frequency = "normal", size = "big", richness = "very-good" }
 
 -- Собираем все resource-autoplace-control'ы динамически, чтобы покрыть
--- vanilla + Angels + Bob + любые будущие моды без хардкода.
+-- vanilla + Angels + Bob + любые будущие моды без хардкода. Общая строка
+-- RSO-reforged "rso-fields" (все месторождения сразу) остаётся обычной:
+-- иначе размер и богатство применились бы дважды.
 local rich_controls = {}
 for name, ctrl in pairs(data.raw["autoplace-control"] or {}) do
-    if ctrl.category == "resource" then
+    if ctrl.category == "resource" and name ~= "rso-fields" then
         rich_controls[name] = rich
     end
 end

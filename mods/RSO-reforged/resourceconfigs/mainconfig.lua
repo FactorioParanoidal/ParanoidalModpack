@@ -1,8 +1,9 @@
 -- Resource configuration per planet. Paranoidal keeps only the configs of mods that can be in
 -- the build: vanilla (incl. Space Age planets), Bob's ores, Angel's ores and Yuoki Industries.
 -- Used by both stages: env.has(name) tells whether a resource prototype with autoplace exists,
--- env.mods is the table of active mods. Enemy bases are added by control.lua.
+-- env.mods is the table of active mods, env.setting(name) the value of a startup setting.
 local fillVanillaConfig = require("resourceconfigs.vanilla")
+local fillEnemies = require("resourceconfigs.vanilla_enemies")
 local fillBoboresConfig = require("resourceconfigs.bobores")
 local fillAngelsOresConfig = require("resourceconfigs.angelsores")
 local fillYuokiConfig = require("resourceconfigs.yuoki_industries")
@@ -16,6 +17,7 @@ return function(env)
 	}
 
 	fillVanillaConfig(config)
+	fillEnemies(config, env)
 
 	if env.has("y-res1") then
 		fillYuokiConfig(config)
