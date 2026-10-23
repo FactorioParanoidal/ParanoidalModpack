@@ -1,4 +1,5 @@
 local cmu = require("collision-mask-util")
+local util = require("util")
 
 -- IndustrialRevolution3
 -- do
@@ -21,7 +22,8 @@ local cmu = require("collision-mask-util")
 do
     local prototype = data.raw["constant-combinator"]["realistic-reactor-interface"]
     if prototype then
-        prototype.collision_mask = cmu.get_mask(prototype)
-        cmu.remove_layer(prototype.collision_mask, "player-layer")
+        -- 2.0: the layer is "player" and collision_mask_util.remove_layer no longer exists.
+        prototype.collision_mask = util.copy(cmu.get_mask(prototype))
+        prototype.collision_mask.layers.player = nil
     end
 end

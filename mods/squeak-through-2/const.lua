@@ -12,6 +12,7 @@ const.groups = {
         "arithmetic-combinator",
         "constant-combinator",
         "decider-combinator",
+        "display-panel",
         "lamp",
         "power-switch",
         "programmable-speaker",
@@ -35,6 +36,7 @@ const.groups = {
         "pipe-to-ground",
         "pump",
         "storage-tank",
+        "valve",
     },
     solar = {
         "accumulator",
@@ -70,6 +72,7 @@ const.overrides = {
     ["pipe"] = 0.1,
     ["pipe-to-ground"] = 0.1,
     ["tree"] = 0.2,
+    ["valve"] = 0.1,
 }
 
 return const

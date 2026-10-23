@@ -1,8 +1,20 @@
 ---------------------------------------------------------------------------------------------------
 Version: 0.1.5
 Date: 2026-04-23
+  Changes:
+    - Trees: the collision box is clamped to 0.2 from the center for all trees, large ones included (no tile-grid trimming for off-grid trees)
+    - Valves and display panels are modified (valves with the pipe trim of 0.1)
+    - Remove collision lists keep the train layer; entities that would still block the character through it (gates) are left unchanged
+    - All character prototypes get the 1/256 shrink; any BoundingBox notation is accepted
   Bugfixes:
     - Fixed crash with character collision boxes of size 0
+    - Fixed crash of remove collision lists when next_upgrade points to an entity of another type
+    - Fixed upgrade chains getting different collision boxes when only part of the chain is excluded (blacklist, squeak_behaviour, disabled group); such chains are left unchanged
+    - Fixed shared collision masks being changed in place by remove collision lists
+    - Fixed removed_layers leaking as a global variable
+    - Fixed RealisticReactors compatibility for 2.0 (layer "player", collision_mask_util.remove_layer no longer exists)
+  Locale:
+    - Added descriptions of chests, drills, trees and turrets; valves and display panels in the descriptions (en, ru)
 ---------------------------------------------------------------------------------------------------
 Version: 0.1.4
 Date: 2026-01-25
