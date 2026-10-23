@@ -36,6 +36,9 @@ return {
 		{name = "star", setting = "rso-shape-star", weight = 0.4, edge = 0.6, volume = 0.47, exotic = true},
 	},
 	shape_near = 0.35, -- weight of exotic shapes up to distance_near (full from distance_far on)
+	-- without the experimental settings: weight multipliers of rare shapes (no signature resources,
+	-- none up to distance_near)
+	rare_shapes = {star = 0.25, specks = 0.25},
 	-- signature shapes of resources: weight multipliers
 	shape_preference = {
 		coal = {seam = 4},
@@ -59,6 +62,7 @@ return {
 	well_gap = 4,             -- jitter of a well in its grid cell, tiles
 	starting_radius = 0.5,    -- starting field radius per unit of starting.size (as the RSO metaballs)
 	starting_distance = {70, 105}, -- starting fields alternate between these distances (tiles)
+	starting_distance_random = {40, 100}, -- without the experimental settings: random distance (tiles)
 	starting_amount_cap = 4000,    -- per tile in starting fields (as RSO)
 	lake_clearance = 50,      -- degrees on both sides of the starting lake kept free of starting fields
 
@@ -78,6 +82,7 @@ return {
 	distance_far = 12,            -- ... and distance_weight.far from here on
 	infinite_distance_scale = 10, -- the infinite core grows by 1x per this many regions ...
 	infinite_distance_max = 3,    -- ... up to this many times
+	infinite_distance_max_fixed = 1.5, -- the same without the experimental settings
 	ring_width = 2.5,             -- guaranteed ring: regions beyond the starting area (mid at 1.5)
 	vein_multiplier = {3, 5},     -- richness of a vein against the field around it
 	vein_half_width = {0.8, 2},   -- tiles from the vein axis

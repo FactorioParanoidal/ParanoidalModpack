@@ -16,6 +16,8 @@ local function runtime_double(name, default, minimum, maximum, order)
 end
 
 data:extend({
+	-- on: the generation of 9.2.0 as it was; off: with the fixes (prototypes/noise.lua)
+	startup_bool("rso-experimental", false, "0"),
 	setting("int-setting", "startup", "rso-region-size", 7, "a", 3, 100),
 	startup_double("rso-starting-richness-mult", 1.0, 0.001, 100, "aa"),
 	startup_double("rso-resource-chance", 0.5, 0.01, 1.0, "ba"),
