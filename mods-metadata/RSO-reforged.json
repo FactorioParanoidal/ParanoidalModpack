@@ -1,0 +1,10 @@
+{
+  "mod": "RSO-reforged",
+  "source": "local",
+  "original": {
+    "name": "Resource Spawner Overhaul",
+    "authors": ["Dark", "orzelek"],
+    "portal": {"name": "rso-mod", "url": "https://mods.factorio.com/mod/rso-mod"}
+  },
+  "changeReason": "Локальный форк Paranoidal на основе rso-mod 7.0.26 под новым именем RSO-reforged (ПР-064, ПР-065): ресурсы и вражеские базы размещает генератор карты по шумовым выражениям (предпросмотр показывает настоящую карту), геологические провинции, состав по расстоянию, геология почвы Alien-biomes-Reforged, гарантированное первое кольцо, богатые жилы, базы-охрана, старые прииски AbandonedRuins-paranoidal, новые жилы в выработке, геологоразведка OreRadar, счётчики достижений MxlChievements-Reforged. Конфиги модов вне сборки удалены; имена настроек и remote-интерфейс RSO сохранены."
+}

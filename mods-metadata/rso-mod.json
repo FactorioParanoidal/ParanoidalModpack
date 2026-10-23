@@ -1,6 +1,0 @@
-{
-  "mod": "rso-mod",
-  "source": "portal",
-  "upstreamVersion": "7.0.26",
-  "changeReason": "Локальный portal-патч Paranoidal на upstream 7.0.26, версия не менялась. control.lua: геология по цвету почвы (ПР-062) — при первом броске нового региона RSO берёт 9 тайлов чанка, открывшего регион, спрашивает у Alien-biomes-Reforged через remote-интерфейс alien-biomes-reforged/geology_bias множители весов и удваивает вес подходящих ресурсов (функции geology_bias и weighted_allotments перед roll_region, выбор ресурса в roll_region). Без Reforged или с выключенной настройкой поведение и последовательность случайных чисел прежние. Запись в changelog.txt. При обновлении сверить с upstream."
-}
