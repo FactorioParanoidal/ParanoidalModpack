@@ -476,6 +476,23 @@ paralib.bobmods.lib.recipe.add_new_ingredient(
 	"angels-strand-casting-machine-4",
 	{ type = "item", name = "angels-strand-casting-machine-3", amount = 2 }
 )
+-- МНЛЗ: каркасы на тир выше, чем у остальных металлургических машин
+paralib.bobmods.lib.recipe.add_new_ingredient(
+	"angels-strand-casting-machine",
+	{ type = "item", name = "intermediate-structure-components", amount = 5 }
+)
+paralib.bobmods.lib.recipe.add_new_ingredient(
+	"angels-strand-casting-machine-2",
+	{ type = "item", name = "advanced-structure-components", amount = 5 }
+)
+paralib.bobmods.lib.recipe.add_new_ingredient(
+	"angels-strand-casting-machine-3",
+	{ type = "item", name = "advanced-structure-components", amount = 5 }
+)
+paralib.bobmods.lib.recipe.add_new_ingredient(
+	"angels-strand-casting-machine-4",
+	{ type = "item", name = "anotherworld-structure-components", amount = 5 }
+)
 
 paralib.bobmods.lib.recipe.remove_ingredient("angels-sintering-oven-5", "angels-sintering-oven-4")
 paralib.bobmods.lib.recipe.add_new_ingredient("angels-sintering-oven-5", { type = "item", name = "angels-sintering-oven-4", amount = 2 })
