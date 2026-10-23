@@ -19,7 +19,8 @@ Per planet with an RSO config (expression prefix p = "rso_<planet>_"):
   field, the cells of the ring points get one field of every resource.
 * Field: the coordinates are bent by noise, turned and stretched; the shape is one of
   config.shapes: classic blob, diamond or ring (donuts) with a second lobe and a bite, or an
-  exotic crescent, seam, specks (many small spots), archipelago or star; exotic shapes are rarer
+  exotic crescent, seam, specks (many small spots), archipelago or star (each has its own startup
+  setting rso-shape-<name>, as the chains of wells rso-shape-chain); exotic shapes are rarer
   near the start and resources have signature shapes (config.shape_preference). The partner ore of
   a multi-resource field lies in the lobe, in the core or in stripes. Amounts grow to the centre
   and are divided by the shape volume, a rich vein crosses some fields, infinite cores lie in the
@@ -546,10 +547,9 @@ local function build_planet(planet_name, config, ignored)
 	local u, v, de = P("u"), P("v"), P("de")
 	expression(de, fmt("sqrt(%s ^ 2 + %s ^ 2)", u, v))
 
-	local exotic_on = setting("rso-exotic-shapes")
 	local shapes = {}
 	for _, s in ipairs(C.shapes) do
-		if (not s.donuts or donuts) and (not s.exotic or exotic_on) then shapes[#shapes + 1] = s end
+		if (not s.donuts or donuts) and (not s.setting or setting(s.setting)) then shapes[#shapes + 1] = s end
 	end
 	local classic_count = 0
 	for i, s in ipairs(shapes) do
@@ -648,7 +648,8 @@ local function build_planet(planet_name, config, ignored)
 	expression(P("oy"), fmt("%s * %s + (%s - %s) / 2 + %s * %s", P("wb"), sp, sp, gap, gap, P("w2")))
 	-- a cluster around the site or a chain along a fault line through it
 	local chain_probs = {}
-	for k, name in ipairs(list) do chain_probs[k] = C.liquid_chain[name] or C.liquid_chain.default end
+	local chains_on = setting("rso-shape-chain")
+	for k, name in ipairs(list) do chain_probs[k] = chains_on and (C.liquid_chain[name] or C.liquid_chain.default) or 0 end
 	expression(P("chain"), fmt("%s * (%s < %s)", P("liq"), P("r22"), lookup(K, chain_probs)))
 	local along = fmt("(%s * cos(%s) + %s * sin(%s))", P("ox"), ang, P("oy"), ang)
 	local across = fmt("(%s * cos(%s) - %s * sin(%s))", P("oy"), ang, P("ox"), ang)

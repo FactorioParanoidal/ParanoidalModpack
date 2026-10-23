@@ -23,17 +23,17 @@ return {
 	-- Shapes of ore fields. weight: base chance; edge: share of the edge noise; volume: amount of
 	-- clamp(shape, 0, 1) against the blob, so every shape holds the same ore: integrated numerically,
 	-- then corrected by the sums of real fields (seed 20261022: edge noise, bites, lobes);
-	-- classic: may get the second lobe, the bite and a partner lobe; exotic: rarer near the start,
-	-- switched off with rso-exotic-shapes; donuts: only with rso-use-donuts.
+	-- classic: may get the second lobe, the bite and a partner lobe; exotic: rarer near the start;
+	-- setting: startup setting that switches the shape on; donuts: only with rso-use-donuts.
 	shapes = {
 		{name = "blob", weight = 5, edge = 1, volume = 0.95, classic = true},
 		{name = "diamond", weight = 1.5, edge = 1, volume = 0.88, classic = true},
 		{name = "ring", weight = 1.5, edge = 0.8, volume = 1.3, classic = true, donuts = true},
-		{name = "crescent", weight = 1.2, edge = 0.7, volume = 0.83, exotic = true},
-		{name = "seam", weight = 1.2, edge = 0.6, volume = 0.7, exotic = true},
-		{name = "specks", weight = 1, edge = 0.25, volume = 0.45, exotic = true},
-		{name = "archipelago", weight = 1, edge = 0.5, volume = 0.5, exotic = true},
-		{name = "star", weight = 0.4, edge = 0.6, volume = 0.47, exotic = true},
+		{name = "crescent", setting = "rso-shape-crescent", weight = 1.2, edge = 0.7, volume = 0.83, exotic = true},
+		{name = "seam", setting = "rso-shape-seam", weight = 1.2, edge = 0.6, volume = 0.7, exotic = true},
+		{name = "specks", setting = "rso-shape-specks", weight = 1, edge = 0.25, volume = 0.45, exotic = true},
+		{name = "archipelago", setting = "rso-shape-archipelago", weight = 1, edge = 0.5, volume = 0.5, exotic = true},
+		{name = "star", setting = "rso-shape-star", weight = 0.4, edge = 0.6, volume = 0.47, exotic = true},
 	},
 	shape_near = 0.35, -- weight of exotic shapes up to distance_near (full from distance_far on)
 	-- signature shapes of resources: weight multipliers
@@ -54,7 +54,7 @@ return {
 	partner_lobe = 0.4,
 	partner_core = 0.3,
 	-- wells of a liquid field: a chain along a fault line with this chance, else a cluster
-	liquid_chain = {default = 0.3, ["angels-fissure"] = 0.7},
+	liquid_chain = {default = 0.3, ["angels-fissure"] = 0.7}, -- setting rso-shape-chain
 	well_occupancy = 0.6,     -- share of the well grid cells with a well
 	well_gap = 4,             -- jitter of a well in its grid cell, tiles
 	starting_radius = 0.5,    -- starting field radius per unit of starting.size (as the RSO metaballs)
