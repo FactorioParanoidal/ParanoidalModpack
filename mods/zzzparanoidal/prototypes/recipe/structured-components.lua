@@ -33,25 +33,23 @@ newRecipe("advanced", 60).ingredients = {
 }
 if data.raw.item["bob-alien-science-pack"] then
 	newRecipe("anotherworld", 120).ingredients = {
-		{ type = "item", name = "advanced-structure-components", amount = 10 },
-		{ type = "item", name = "plastic-bar", amount = 200 },
-		{ type = "item", name = "tungsten-carbide", amount = 200 },
-		{ type = "item", name = "bob-titanium-bearing", amount = 200 },
-		{ type = "item", name = "bob-titanium-bearing", amount = 200 },
+		{ type = "item", name = "advanced-structure-components", amount = 2 },
+		{ type = "item", name = "plastic-bar", amount = 100 },
+		{ type = "item", name = "tungsten-carbide", amount = 100 },
+		{ type = "item", name = "bob-titanium-bearing", amount = 100 },
 		{ type = "item", name = "bob-gold-plate", amount = 100 },
 		{ type = "item", name = "bob-silver-plate", amount = 100 },
-		{ type = "item", name = "bob-nitinol-gear-wheel", amount = 200 },
-		{ type = "item", name = "bob-alien-science-pack", amount = 200 },
+		{ type = "item", name = "bob-nitinol-gear-wheel", amount = 100 },
+		{ type = "item", name = "bob-alien-science-pack", amount = 100 },
 	}
 else
 	newRecipe("anotherworld", 120).ingredients = {
-		{ type = "item", name = "advanced-structure-components", amount = 10 },
-		{ type = "item", name = "plastic-bar", amount = 200 },
-		{ type = "item", name = "tungsten-carbide", amount = 200 },
-		{ type = "item", name = "bob-titanium-bearing", amount = 200 },
-		{ type = "item", name = "bob-titanium-bearing", amount = 200 },
+		{ type = "item", name = "advanced-structure-components", amount = 2 },
+		{ type = "item", name = "plastic-bar", amount = 100 },
+		{ type = "item", name = "tungsten-carbide", amount = 100 },
+		{ type = "item", name = "bob-titanium-bearing", amount = 100 },
 		{ type = "item", name = "bob-gold-plate", amount = 100 },
 		{ type = "item", name = "bob-silver-plate", amount = 100 },
-		{ type = "item", name = "bob-nitinol-gear-wheel", amount = 200 },
+		{ type = "item", name = "bob-nitinol-gear-wheel", amount = 100 },
 	}
 end
