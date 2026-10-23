@@ -12,7 +12,8 @@ return {
 
 	-- sites and fields of the noise generator (prototypes/noise.lua)
 	site_jitter = 0.8,        -- share of a cell the site can move in; fields never reach past the 2x2 cells
-	site_dry_elevation = 1,   -- a site lower than this (water, shore) moves to its second place in the cell
+	site_dry_elevation = 1,   -- a site lower than this (water, shore) moves to its second place in the cell;
+	                          -- with both places that low the cell has no field
 	field_extent = 2.1,       -- field reach in radii: lobe, edge noise
 	field_radius = 0.72,      -- field radius per unit of the config "size"
 	edge_noise = 0.3,         -- edge noise amplitude in radii

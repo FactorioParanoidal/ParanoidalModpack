@@ -8,6 +8,7 @@ data.rso_ignore_resource_entities = data.rso_ignore_resource_entities or {}
 data:extend({{
 	type = "autoplace-control",
 	name = "rso-fields",
+	localised_description = {"autoplace-control-description.rso-fields"},
 	category = "resource",
 	richness = true,
 	can_be_disabled = true,

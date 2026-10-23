@@ -125,7 +125,7 @@ local function dry_land_expressions()
 	return "rso_dry_land"
 end
 -- Measured on seed 20261022: agrees with the elevation on 94 % of the map; 31 % of the sites were
--- in water and move, 21 % stay there (in large lakes both places of the cell are wet).
+-- in water and move, about 20 % have both places wet (large lakes) and are not placed.
 local DRY_LAND = dry_land_expressions() or "elevation"
 
 local env = {
@@ -157,8 +157,9 @@ local function enemy_config(config)
 end
 
 -- weights of allotment entries at the distance d (regions beyond the starting area, an
--- expression) as RSO computeAllotments: allotment * d ^ allotment_distance_factor when d >
--- min_distance (RSO never applied max_allotment_distance_factor; kept so)
+-- expression): allotment * min(d ^ allotment_distance_factor, max_allotment_distance_factor) when
+-- d > min_distance. RSO computeAllotments never applied the cap of the configs (it read a field of
+-- another name), so far from the start the biggest worms pushed out all others.
 local function allotments(entries, d, prototype_types)
 	local list = {}
 	for name, v in pairs(entries or {}) do
@@ -168,7 +169,13 @@ local function allotments(entries, d, prototype_types)
 		end
 		if kind then
 			local w = num(v.allotment)
-			if v.allotment_distance_factor then w = fmt("%s * %s ^ %s", w, d, num(v.allotment_distance_factor)) end
+			if v.allotment_distance_factor then
+				local growth = fmt("%s ^ %s", d, num(v.allotment_distance_factor))
+				if v.max_allotment_distance_factor then
+					growth = fmt("min(%s, %s)", growth, num(v.max_allotment_distance_factor))
+				end
+				w = fmt("%s * %s", w, growth)
+			end
 			if v.min_distance then w = fmt("%s * (%s > %s)", w, d, num(v.min_distance)) end
 			list[#list + 1] = {name = name, type = kind, weight = w}
 		end
@@ -405,7 +412,8 @@ local function build_planet(planet_name, config, ignored)
 		end
 	end
 
-	-- one site per cell (ci, cj); a site in water moves to the second place of its cell
+	-- one site per cell (ci, cj); a site in water moves to the second place of its cell, a site
+	-- whose both places are in water is not placed: the density per land area stays as configured
 	local cell = "(ci, cj)"
 	noise_function(P("fv"), {"ci", "cj"}, "rso_rand(0, ci, cj)")
 	-- first place: anywhere in the inner part of the cell; second place: on the other side of the
@@ -424,6 +432,8 @@ local function build_planet(planet_name, config, ignored)
 	local elevation = planet_name == "nauvis" and relocate.at(DRY_LAND, P("fxa") .. cell, P("fya") .. cell)
 	if elevation then
 		noise_function(P("fwet"), {"ci", "cj"}, fmt("%s < %s", elevation, num(C.site_dry_elevation)))
+		noise_function(P("fdrown"), {"ci", "cj"}, fmt("%s * (%s < %s)", P("fwet") .. cell,
+			relocate.at(DRY_LAND, P("fxb") .. cell, P("fyb") .. cell), num(C.site_dry_elevation)))
 		noise_function(P("fx"), {"ci", "cj"}, fmt("if(%s, %s, %s)", P("fwet") .. cell, P("fxb") .. cell, P("fxa") .. cell))
 		noise_function(P("fy"), {"ci", "cj"}, fmt("if(%s, %s, %s)", P("fwet") .. cell, P("fyb") .. cell, P("fya") .. cell))
 	else
@@ -433,8 +443,10 @@ local function build_planet(planet_name, config, ignored)
 	noise_function(P("fd"), {"ci", "cj"}, fmt("distance_from_nearest_point{x = %s, y = %s, points = starting_positions}",
 		P("fx") .. cell, P("fy") .. cell))
 	local d_site = P("fd") .. cell
-	noise_function(P("fon"), {"ci", "cj"}, fmt("max(%s < %s, %s) * (%s > %s)",
-		P("fv") .. cell, num(site_chance), band == "0" and "0" or fmt(band, d_site), d_site, excl))
+	-- sites of the guaranteed ring stay even in water: they hold the resources of the ring
+	local dry = elevation and fmt(" * (1 - %s)", P("fdrown") .. cell) or ""
+	noise_function(P("fon"), {"ci", "cj"}, fmt("max((%s < %s)%s, %s) * (%s > %s)",
+		P("fv") .. cell, num(site_chance), dry, band == "0" and "0" or fmt(band, d_site), d_site, excl))
 	noise_function(P("fq"), {"ci", "cj"}, fmt("if(%s, ((x - %s) ^ 2 + (y - %s) ^ 2) / (%s * max(1, %s / %s) ^ %s) ^ 2, 1e9)",
 		P("fon") .. cell, P("fx") .. cell, P("fy") .. cell, P("RP0"), P("fd") .. cell, num(REGION), num(setting("rso-size-exponent"))))
 
