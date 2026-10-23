@@ -17,10 +17,14 @@ Per planet with an RSO config (expression prefix p = "rso_<planet>_"):
   Alien-biomes-Reforged (alien-biomes-geology-<resource>, evaluated at the site so that the whole
   field has one resource). Guaranteed ring: every cell of a band around the first start holds a
   field, the cells of the ring points get one field of every resource.
-* Field: rotated ellipse or square, or a ring (donuts), a second lobe (with a multi-resource
-  roll the partner ore lies in it), a bite and noisy edges; amounts grow to the centre, a
-  rich vein crosses some fields, infinite cores lie in the densest part. Liquids: wells on a
-  jittered grid around the site, spaced by their collision box.
+* Field: the coordinates are bent by noise, turned and stretched; the shape is one of
+  config.shapes: classic blob, diamond or ring (donuts) with a second lobe and a bite, or an
+  exotic crescent, seam, specks (many small spots), archipelago or star; exotic shapes are rarer
+  near the start and resources have signature shapes (config.shape_preference). The partner ore of
+  a multi-resource field lies in the lobe, in the core or in stripes. Amounts grow to the centre
+  and are divided by the shape volume, a rich vein crosses some fields, infinite cores lie in the
+  densest part. Liquids: wells on a jittered grid, as a cluster around the site or a chain along
+  a fault line, spaced by their collision box.
 * Starting fields: one field of every starting resource around every start, on an arc that
   leaves the starting lake free.
 * Enemy bases (config entries of type "entity"): regular bases are spots of spot_noise (the
@@ -102,7 +106,7 @@ noise_function("rso_rand", {"k", "ci", "cj"},
 -- more numbers from one: fractional part of v * a (a of a few thousand keeps 12+ bits)
 noise_function("rso_frac", {"v", "a"}, "v * a - floor(v * a)")
 local SPREAD = {1013.7, 2711.3, 1531.9, 3299.1, 2083.3, 1777.7, 3919.3, 1201.1, 2459.7, 3607.9, 1399.3,
-	2903.9, 1867.1, 3203.3, 2237.9, 1657.3, 3511.7, 2591.3}
+	2903.9, 1867.1, 3203.3, 2237.9, 1657.3, 3511.7, 2591.3, 2851.7, 3797.3, 1129.9}
 -- edge noise of the fields
 expression("rso_wobble", "basis_noise{x = x, y = y, seed0 = map_seed, seed1 = 'rso-wobble', input_scale = 1/9}"
 	.. " + basis_noise{x = x, y = y, seed0 = map_seed, seed1 = 'rso-wobble-fine', input_scale = 1/3.5, output_scale = 0.5}")
@@ -434,8 +438,19 @@ local function build_planet(planet_name, config, ignored)
 		noise_function(P("fwet"), {"ci", "cj"}, fmt("%s < %s", elevation, num(C.site_dry_elevation)))
 		noise_function(P("fdrown"), {"ci", "cj"}, fmt("%s * (%s < %s)", P("fwet") .. cell,
 			relocate.at(DRY_LAND, P("fxb") .. cell, P("fyb") .. cell), num(C.site_dry_elevation)))
-		noise_function(P("fx"), {"ci", "cj"}, fmt("if(%s, %s, %s)", P("fwet") .. cell, P("fxb") .. cell, P("fxa") .. cell))
-		noise_function(P("fy"), {"ci", "cj"}, fmt("if(%s, %s, %s)", P("fwet") .. cell, P("fyb") .. cell, P("fya") .. cell))
+		-- both places wet: a site of the guaranteed ring moves from the first place towards the
+		-- nearest start (the elevation keeps the land around a start dry), within the inner part of
+		-- its cell; other such sites are not placed (fon)
+		local function inland(axis, f, dfn)
+			return fmt("clamp(%s - 0.4 * %s * %s{x = %s, y = %s, points = starting_positions} / max(1, %s), (%s + 0.1) * %s, (%s + 0.9) * %s)",
+				P(f) .. cell, G, dfn, P("fxa") .. cell, P("fya") .. cell, P("fda") .. cell, axis, G, axis, G)
+		end
+		noise_function(P("fda"), {"ci", "cj"}, fmt("distance_from_nearest_point{x = %s, y = %s, points = starting_positions}",
+			P("fxa") .. cell, P("fya") .. cell))
+		noise_function(P("fx"), {"ci", "cj"}, fmt("if(%s, if(%s, %s, %s), %s)", P("fwet") .. cell, P("fdrown") .. cell,
+			inland("ci", "fxa", "distance_from_nearest_point_x"), P("fxb") .. cell, P("fxa") .. cell))
+		noise_function(P("fy"), {"ci", "cj"}, fmt("if(%s, if(%s, %s, %s), %s)", P("fwet") .. cell, P("fdrown") .. cell,
+			inland("cj", "fya", "distance_from_nearest_point_y"), P("fyb") .. cell, P("fya") .. cell))
 	else
 		noise_function(P("fx"), {"ci", "cj"}, P("fxa") .. cell)
 		noise_function(P("fy"), {"ci", "cj"}, P("fya") .. cell)
@@ -474,7 +489,7 @@ local function build_planet(planet_name, config, ignored)
 	expression(P("forced"), #ring_terms > 0 and "max(0, " .. concat(ring_terms, ", ") .. ")" or "0")
 	-- random numbers of the owner site: r3 .. r19 from one cell id
 	expression(P("rnd"), fmt("rso_rand(3, %s, %s)", P("ci"), P("cj")))
-	for r = 3, 19 do expression(P("r" .. r), fmt("rso_frac(%s, %s)", P("rnd"), num(SPREAD[r - 2]))) end
+	for r = 3, 22 do expression(P("r" .. r), fmt("rso_frac(%s, %s)", P("rnd"), num(SPREAD[r - 2]))) end
 	expression(P("d"), fmt("%s / %s", P("sd"), num(REGION)))
 
 	-- resource of the site
@@ -515,18 +530,71 @@ local function build_planet(planet_name, config, ignored)
 	expression(P("partner"), lookup(K, V.partner))
 	expression(P("multi"), fmt("(%s < %s) * (%s > 0)", P("r12"), lookup(K, V.multiC), P("partner")))
 
-	-- shape of an ore field
+	-- shape of an ore field: the coordinates are bent by noise (no straight edges), turned by the
+	-- angle of the field and stretched; the shape is picked by the weights of config.shapes
 	expression(P("dx"), "x - " .. P("sx"))
 	expression(P("dy"), "y - " .. P("sy"))
-	local ang, rad = P("r5") .. " * 2 * pi", P("rad")
-	expression(P("u"), fmt("(%s * cos(%s) + %s * sin(%s)) / (0.7 + 0.6 * %s)", P("dx"), ang, P("dy"), ang, P("r6")))
-	expression(P("v"), fmt("(%s * cos(%s) - %s * sin(%s)) * (0.7 + 0.6 * %s)", P("dy"), ang, P("dx"), ang, P("r6")))
-	expression(P("de"), fmt("sqrt(%s ^ 2 + %s ^ 2)", P("u"), P("v")))
-	local square = fmt("if(%s < %s, (abs(%s) + abs(%s)) * 0.8, %s)", P("r7"),
-		num(donuts and C.square_chance_donuts or C.square_chance), P("u"), P("v"), P("de"))
-	local plain = fmt("1 - %s / %s", square, rad)
-	expression(P("f1"), donuts and fmt("if(%s < %s, 1 - abs(%s - 0.6 * %s) / (0.4 * %s), %s)", P("r8"), num(C.donut_chance),
-		P("de"), rad, rad, plain) or plain)
+	local rad = P("rad")
+	local warp = fmt("%s * %s", num(C.warp), rad)
+	expression(P("wx"), fmt("%s + %s * basis_noise{x = x, y = y, seed0 = map_seed, seed1 = 7201, input_scale = 1/24}", P("dx"), warp))
+	expression(P("wy"), fmt("%s + %s * basis_noise{x = x, y = y, seed0 = map_seed, seed1 = 7202, input_scale = 1/24}", P("dy"), warp))
+	local ang = P("r5") .. " * 2 * pi"
+	expression(P("pr"), fmt("%s * cos(%s) + %s * sin(%s)", P("wx"), ang, P("wy"), ang)) -- along the field
+	expression(P("qr"), fmt("%s * cos(%s) - %s * sin(%s)", P("wy"), ang, P("wx"), ang)) -- across it
+	expression(P("u"), fmt("%s / (0.7 + 0.6 * %s)", P("pr"), P("r6")))
+	expression(P("v"), fmt("%s * (0.7 + 0.6 * %s)", P("qr"), P("r6")))
+	local u, v, de = P("u"), P("v"), P("de")
+	expression(de, fmt("sqrt(%s ^ 2 + %s ^ 2)", u, v))
+
+	local exotic_on = setting("rso-exotic-shapes")
+	local shapes = {}
+	for _, s in ipairs(C.shapes) do
+		if (not s.donuts or donuts) and (not s.exotic or exotic_on) then shapes[#shapes + 1] = s end
+	end
+	local classic_count = 0
+	for i, s in ipairs(shapes) do
+		if s.classic then classic_count = i end
+		local prefs, special = {}, false
+		for k, name in ipairs(list) do
+			local p = C.shape_preference[name]
+			prefs[k] = p and p[s.name] or 1
+			special = special or prefs[k] ~= 1
+		end
+		local w = num(s.weight)
+		if special then w = fmt("%s * %s", w, lookup(K, prefs)) end
+		if s.exotic then w = fmt("%s * (%s + %s * %s)", w, num(C.shape_near), num(1 - C.shape_near), P("t")) end
+		expression(P("sw" .. i), i == 1 and w or fmt("%s + %s", P("sw" .. (i - 1)), w))
+	end
+	local passed = {}
+	for i = 1, #shapes - 1 do passed[i] = fmt("(%s * %s >= %s)", P("r7"), P("sw" .. #shapes), P("sw" .. i)) end
+	expression(P("shape"), #passed > 0 and "1 + " .. concat(passed, " + ") or "1")
+	local SH = P("shape")
+	local cos_tip = math.cos(math.rad(110)) -- the crescent covers 220 degrees
+	local function spots(grid, seed, r0, r1, envelope)
+		return fmt("min(1 - %d * voronoi_spot_noise{x = x, y = y, seed0 = map_seed, seed1 = %d, grid_size = %d, "
+			.. "distance_type = 'euclidean', jitter = 1} / (%s + %s * %s), 2.5 * (1 - %s / (%s * %s)))",
+			grid, seed, grid, num(r0), num(r1 - r0), P("r20"), de, num(envelope), rad)
+	end
+	local F = {
+		blob = fmt("1 - %s / %s", de, rad),
+		diamond = fmt("1 - (abs(%s) + abs(%s)) * 0.8 / %s", u, v, rad),
+		ring = fmt("1 - abs(%s - 0.6 * %s) / (0.4 * %s)", de, rad, rad),
+		crescent = fmt("min(1 - abs(%s - 0.7 * %s) / (0.3 * %s), (%s / max(%s, 0.01) - %s) * %s)", de, rad, rad, u, de,
+			num(cos_tip), num(3 / (1 - cos_tip))),
+		-- a long narrow band, bent to a side
+		seam = fmt("min(1 - abs(%s - (%s - 0.5) * 0.8 * %s ^ 2 / (1.6 * %s)) / (0.3 * %s), 1 - abs(%s) / (1.6 * %s))",
+			P("qr"), P("r10"), P("pr"), rad, rad, P("pr"), rad),
+		-- many small spots (1.3 - 2.2 tiles) on a 6 tile grid, or islands (3.5 - 5.5 tiles) on a 14 tile grid
+		specks = spots(6, 7203, 1.3, 2.2, 1.3),
+		archipelago = spots(14, 7204, 3.5, 5.5, 1.35),
+		-- 4 - 6 rays
+		star = fmt("1 - %s / (%s * (0.45 + 0.6 * max(0, cos((4 + floor(%s * 3)) * atan2(%s, %s))) ^ 2))", de, rad, P("r10"), v, u),
+	}
+	local chain, edges, volumes = F[shapes[#shapes].name], {}, {}
+	for i = #shapes - 1, 1, -1 do chain = fmt("if(%s == %d, %s, %s)", SH, i, F[shapes[i].name], chain) end
+	for i, s in ipairs(shapes) do edges[i], volumes[i] = s.edge, s.volume end
+	expression(P("f1"), chain)
+	expression(P("classic"), fmt("%s <= %d", SH, classic_count))
 	local lobe_angle = P("r9") .. " * 2 * pi"
 	local lobe_dist = fmt("%s * if(%s, 0.95, 0.55)", rad, P("multi"))
 	expression(P("f2"), fmt("(%s * (0.45 + 0.3 * %s) * if(%s, %s, 1) - sqrt((%s - %s * cos(%s)) ^ 2 + (%s - %s * sin(%s)) ^ 2)) / %s",
@@ -534,9 +602,14 @@ local function build_planet(planet_name, config, ignored)
 	local bite_angle = fmt("(%s + pi + %s - 0.5)", lobe_angle, P("r11"))
 	expression(P("fb"), fmt("if(%s < %s, (sqrt((%s - 0.9 * %s * cos(%s)) ^ 2 + (%s - 0.9 * %s * sin(%s)) ^ 2) - %s * (0.25 + 0.25 * %s)) / %s, 1)",
 		P("r11"), num(C.bite_chance), P("dx"), rad, bite_angle, P("dy"), rad, bite_angle, rad, P("r11"), rad))
-	expression(P("f"), fmt("min(max(%s, %s), %s)", P("f1"), P("f2"), P("fb")))
-	expression(P("inside"), fmt("%s + %s * rso_wobble > 0", P("f"), num(C.edge_noise)))
-	expression(P("ptile"), fmt("%s * (%s > %s)", P("multi"), P("f2"), P("f1")))
+	expression(P("f"), fmt("if(%s, min(max(%s, %s), %s), %s)", P("classic"), P("f1"), P("f2"), P("fb"), P("f1")))
+	expression(P("inside"), fmt("%s + %s * %s * rso_wobble > 0", P("f"), num(C.edge_noise), lookup(SH, edges)))
+	-- the partner ore of a multi-resource field: in the lobe (classic shapes), in the core or in
+	-- stripes across the field
+	expression(P("p_lobe"), fmt("%s * (%s < %s)", P("classic"), P("r21"), num(C.partner_lobe)))
+	expression(P("p_core"), fmt("(%s < %s) * (1 - %s)", P("r21"), num(C.partner_lobe + C.partner_core), P("p_lobe")))
+	expression(P("ptile"), fmt("%s * max(%s * (%s > %s), %s * (%s > 0.55), (1 - %s - %s) * (sin(2 * pi * %s / (6 + 5 * %s)) > 0.2))",
+		P("multi"), P("p_lobe"), P("f2"), P("f1"), P("p_core"), P("f"), P("p_lobe"), P("p_core"), P("pr"), P("r22")))
 	expression(P("kt"), fmt("if(%s, %s, %s)", P("ptile"), P("partner"), K))
 	local KT = P("kt")
 
@@ -548,12 +621,14 @@ local function build_planet(planet_name, config, ignored)
 	if vein_chance > 0 then
 		local va = P("r16") .. " * pi"
 		expression(P("vein"), fmt("(%s < %s) * (abs(%s * cos(%s) - %s * sin(%s)) <= %s + %s * %s)", P("r15"), num(vein_chance),
-			P("dy"), va, P("dx"), va, num(C.vein_half_width[1]), num(C.vein_half_width[2] - C.vein_half_width[1]), P("r17")))
+			P("wy"), va, P("wx"), va, num(C.vein_half_width[1]), num(C.vein_half_width[2] - C.vein_half_width[1]), P("r17")))
 		vein = fmt("if(%s, %s + %s * %s, 1)", P("vein"), num(C.vein_multiplier[1]),
 			num((C.vein_multiplier[2] - C.vein_multiplier[1]) / vein_chance), P("r15"))
 	end
-	expression(P("amount"), fmt("(%s + %s * %s * 3 / (pi * %s ^ 2) * if(%s, %s, 1) * clamp(%s, 0, 1)) * %s",
-		lookup(K, V.minA), lookup(K, V.R), common, rad, P("ptile"), num(C.multi_resource_richness_factor), P("f"), vein))
+	-- the shape volume keeps the amount of a field the same for every shape
+	expression(P("amount"), fmt("(%s + %s * %s * 3 / (pi * %s ^ 2 * %s) * if(%s, %s, 1) * clamp(%s, 0, 1)) * %s",
+		lookup(K, V.minA), lookup(K, V.R), common, rad, lookup(SH, volumes), P("ptile"), num(C.multi_resource_richness_factor),
+		P("f"), vein))
 	local growth = fmt("sqrt(min(%s, 1 + %s / %s))", num(C.infinite_distance_max), P("d"), num(C.infinite_distance_scale))
 	expression(P("ccore"), fmt("%s * %s * (1 - %s)", lookup(K, V.infC), growth, P("ptile")))
 	expression(P("core"), fmt("(%s > 0) * (%s > 1 - %s)", P("ccore"), P("f"), P("ccore")))
@@ -571,8 +646,16 @@ local function build_planet(planet_name, config, ignored)
 	for w = 1, 4 do expression(P("w" .. w), fmt("rso_frac(%s, %s)", P("w0"), num(SPREAD[w + 2]))) end
 	expression(P("ox"), fmt("%s * %s + (%s - %s) / 2 + %s * %s", P("wa"), sp, sp, gap, gap, P("w1")))
 	expression(P("oy"), fmt("%s * %s + (%s - %s) / 2 + %s * %s", P("wb"), sp, sp, gap, gap, P("w2")))
-	expression(P("wexists"), fmt("max((%s == 0) * (%s == 0), (%s < %s) * (%s ^ 2 + %s ^ 2 <= %s ^ 2 * %s / (pi * %s)))",
-		P("wa"), P("wb"), P("w0"), occ, P("ox"), P("oy"), sp, P("wells"), occ))
+	-- a cluster around the site or a chain along a fault line through it
+	local chain_probs = {}
+	for k, name in ipairs(list) do chain_probs[k] = C.liquid_chain[name] or C.liquid_chain.default end
+	expression(P("chain"), fmt("%s * (%s < %s)", P("liq"), P("r22"), lookup(K, chain_probs)))
+	local along = fmt("(%s * cos(%s) + %s * sin(%s))", P("ox"), ang, P("oy"), ang)
+	local across = fmt("(%s * cos(%s) - %s * sin(%s))", P("oy"), ang, P("ox"), ang)
+	expression(P("wexists"), fmt("max((%s == 0) * (%s == 0), if(%s, (%s < 0.85) * (abs(%s) < 0.75 * %s) * (abs(%s) <= %s * %s / 2.55), "
+		.. "(%s < %s) * (%s ^ 2 + %s ^ 2 <= %s ^ 2 * %s / (pi * %s))))",
+		P("wa"), P("wb"), P("chain"), P("w0"), across, sp, along, sp, P("wells"),
+		P("w0"), occ, P("ox"), P("oy"), sp, P("wells"), occ))
 	expression(P("here"), fmt("%s * (floor(x) == floor(%s + %s)) * (floor(y) == floor(%s + %s))",
 		P("wexists"), P("sx"), P("ox"), P("sy"), P("oy")))
 	expression(P("near"), fmt("%s * (abs(x - %s - %s) < 2.5) * (abs(y - %s - %s) < 2.5)",
@@ -596,6 +679,12 @@ local function build_planet(planet_name, config, ignored)
 	expression(P("active"), fmt("%s * %s", P("on"), P("valid")))
 	expression(P("ore"), fmt("%s * (1 - %s) * %s", P("active"), P("liq"), P("inside")))
 	expression(P("well"), fmt("%s * %s * %s", P("active"), P("liq"), P("here")))
+
+	-- form of the field for the forecasts: a shape, a cluster of wells or a chain of wells
+	expression(P("form"), fmt("if(%s, %d + %s, %s)", P("liq"), #shapes + 1, P("chain"), SH))
+	local forms = {}
+	for i, s in ipairs(shapes) do forms[i] = s.name end
+	forms[#forms + 1], forms[#forms + 2] = "wells", "chain"
 
 	-- queries of the control stage: the site of the cell holding the tile
 	local own = "(floor(x / " .. G .. "), floor(y / " .. G .. "))"
@@ -700,7 +789,7 @@ local function build_planet(planet_name, config, ignored)
 
 	local enemy_names = {}
 	for _, e in ipairs(enemies) do enemy_names[#enemy_names + 1] = e.name end
-	return names, enemies, {prefix = p, region = REGION, resources = list, enemies = enemy_names}
+	return names, enemies, {prefix = p, region = REGION, resources = list, enemies = enemy_names, forms = forms}
 end
 
 -- autoplace of an enemy prototype placed by RSO: before trees and rocks ("a[tree]", "a[doodad]")

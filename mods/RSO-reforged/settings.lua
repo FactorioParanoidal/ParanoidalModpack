@@ -25,6 +25,7 @@ data:extend({
 	startup_double("rso-fluid-distance-exponent", 0.6, 0.0, 3.0, "db"),
 	startup_double("rso-size-exponent", 0.2, 0.0, 0.5, "dc"),
 	startup_bool("rso-use-donuts", false, "ea"),
+	startup_bool("rso-exotic-shapes", true, "eaa"),
 	startup_bool("rso-remove-trees", false, "eb"),
 	startup_bool("rso-oil-in-start-area", false, "ef"),
 	startup_bool("rso-ore-in-start-area", true, "eg"),

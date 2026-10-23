@@ -2,11 +2,16 @@
 Version: 9.2.0
 Date: 2026.10.23
   Major Features:
+    - Field shapes: besides the classic blob, diamond and ring, fields are crescents, long bent seams, specks (many small spots), archipelagos of islands and stars with 4-6 rays; every field is bent by noise, so no two look alike. Exotic shapes are rarer near the start (35 % of their weight) and common far away; many resources have a signature shape: coal seams, rubyte specks, crotinnium diamonds, sapphirite stars and diamonds, jivolite crescents, bobmonium and stiratite archipelagos. The amount of a field is divided by the volume of its shape, so every shape holds the same ore. Startup setting "Unusual field shapes" (on by default) switches the exotic shapes off.
+    - The partner ore of a multi-resource field lies in the lobe of a classic shape, in the core of the field or in stripes across it.
+    - Oil, gas and fissures: wells lie as a cluster or as a chain along a fault line (fissures 70 %, others 30 %).
+    - Geological survey names the form of the field (crescent, seam, specks, chain along a fault...).
     - Enemy bases are placed by the map generator too: the map preview shows them and chunk generation runs no Lua at all. Regular bases are spots of spot_noise with the RSO chance per region (growing with the distance) and size; spawner and worm kinds follow the RSO allotments by distance. A field may get a base along it, a field with a rich vein or an infinite core a bigger guard base. Bases are placed before trees and rocks, prefer dry land and never stand in the starting area.
     - New row of the map generator "RSO fields (all)": frequency, size and richness of all fields of the map at once, on top of the rows of the single resources, so every map can have its own density without changing mod settings.
   Changes:
     - Worm kinds: the cap of the weight growth with the distance (max_allotment_distance_factor of the configs) is applied; original RSO never applied it, so far from the start the biggest worms pushed out all others. With the vanilla config at 20 regions: small worms about 58 %, medium 10 %, big 16 %, behemoth 16 %.
-    - A field whose both places in its cell are in water (large lakes) is not placed; sites of the guaranteed ring stay.
+    - A field whose both places in its cell are in water (large lakes) is not placed; a site of the guaranteed ring moves towards the nearest start instead, where the land is kept dry.
+    - Shape volumes are calibrated by the sums of real fields, so classic and unusual shapes hold the same ore (before the calibration unusual shapes were about 25 % richer).
     - The row "RSO fields (all)" has a description of its sliders.
     - A field site that falls into water or onto a shore moves to a second place on the other side of its cell (dry land is a cheap form of the Nauvis elevation, computed at the site by cloning the named noise expressions with the position as parameters, prototypes/relocate.lua).
     - The soil geology of Alien Biomes Reforged is read at the site of a field, so the whole field has one resource and the choice no longer flickers along soil borders.

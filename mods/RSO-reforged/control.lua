@@ -150,7 +150,8 @@ end
 -- {x, y, name, liquid, radius, estimate, grade, vein, core, guard, partner};
 -- storage.blocks[surface index][block key] = true once a block is read. The values are those of
 -- the expressions, the same on every peer.
-local SITE_PROPERTIES = {"kind", "valid", "liq", "rad", "estimate", "grade", "veinon", "coretiles", "multi", "partner", "e_guard"}
+local SITE_PROPERTIES = {"kind", "valid", "liq", "rad", "estimate", "grade", "veinon", "coretiles", "multi", "partner",
+	"e_guard", "form"}
 
 local function query_cells(surface, info, G, wanted)
 	local p = info.prefix
@@ -182,6 +183,7 @@ local function query_cells(surface, info, G, wanted)
 				estimate = v("estimate", i), grade = v("grade", i), vein = ore and v("veinon", i) > 0,
 				core = ore and v("coretiles", i) >= C.infinite_core_tiles, guard = v("e_guard", i) > 0,
 				partner = v("multi", i) > 0 and info.resources[floor(v("partner", i) + 0.5)] or nil,
+				form = info.forms and info.forms[floor(v("form", i) + 0.5)] or nil,
 			}
 		end
 	end
@@ -486,10 +488,14 @@ local function grade_of(site)
 	return "rich", {1, 0.55, 0.2}
 end
 
--- "~350k, rich, a rich vein, guarded" as a localised string
+-- "~350k, rich, crescent, a rich vein, guarded" as a localised string
 local function description(site)
 	local grade = grade_of(site)
 	local text = {"", amount_text(site.estimate), ", ", {"rso-message.grade-" .. grade}}
+	if site.form then
+		text[#text + 1] = ", "
+		text[#text + 1] = {"rso-message.form-" .. site.form}
+	end
 	for _, flag in ipairs({"vein", "core", "guard"}) do
 		if site[flag] then
 			text[#text + 1] = ", "

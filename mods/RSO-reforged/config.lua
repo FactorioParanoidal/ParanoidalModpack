@@ -17,10 +17,44 @@ return {
 	field_extent = 2.1,       -- field reach in radii: lobe, edge noise
 	field_radius = 0.72,      -- field radius per unit of the config "size"
 	edge_noise = 0.3,         -- edge noise amplitude in radii
-	square_chance = 0.5,      -- rotated square fields (RSO MetaSquare) ...
-	square_chance_donuts = 0.33, -- ... when donuts are on
-	donut_chance = 0.33,      -- rings with rso-use-donuts
-	bite_chance = 0.5,        -- a bite out of the edge
+	bite_chance = 0.5,        -- a bite out of the edge (classic shapes)
+	warp = 0.18,              -- the coordinates of a field are bent by noise by up to this share of its radius
+
+	-- Shapes of ore fields. weight: base chance; edge: share of the edge noise; volume: amount of
+	-- clamp(shape, 0, 1) against the blob, so every shape holds the same ore: integrated numerically,
+	-- then corrected by the sums of real fields (seed 20261022: edge noise, bites, lobes);
+	-- classic: may get the second lobe, the bite and a partner lobe; exotic: rarer near the start,
+	-- switched off with rso-exotic-shapes; donuts: only with rso-use-donuts.
+	shapes = {
+		{name = "blob", weight = 5, edge = 1, volume = 0.95, classic = true},
+		{name = "diamond", weight = 1.5, edge = 1, volume = 0.88, classic = true},
+		{name = "ring", weight = 1.5, edge = 0.8, volume = 1.3, classic = true, donuts = true},
+		{name = "crescent", weight = 1.2, edge = 0.7, volume = 0.83, exotic = true},
+		{name = "seam", weight = 1.2, edge = 0.6, volume = 0.7, exotic = true},
+		{name = "specks", weight = 1, edge = 0.25, volume = 0.45, exotic = true},
+		{name = "archipelago", weight = 1, edge = 0.5, volume = 0.5, exotic = true},
+		{name = "star", weight = 0.4, edge = 0.6, volume = 0.47, exotic = true},
+	},
+	shape_near = 0.35, -- weight of exotic shapes up to distance_near (full from distance_far on)
+	-- signature shapes of resources: weight multipliers
+	shape_preference = {
+		coal = {seam = 4},
+		["angels-ore1"] = {star = 3, diamond = 2},  -- sapphirite: crystals
+		["angels-ore2"] = {crescent = 3},           -- jivolite
+		["angels-ore3"] = {archipelago = 2, blob = 1.5}, -- stiratite
+		["angels-ore4"] = {diamond = 3},            -- crotinnium
+		["angels-ore5"] = {specks = 4},             -- rubyte
+		["angels-ore6"] = {archipelago = 3},        -- bobmonium
+		["iron-ore"] = {blob = 2},
+		["copper-ore"] = {crescent = 2},
+		stone = {archipelago = 3},
+		["uranium-ore"] = {specks = 3},
+	},
+	-- where the partner ore of a multi-resource field lies: a lobe (classic shapes), the core, else stripes
+	partner_lobe = 0.4,
+	partner_core = 0.3,
+	-- wells of a liquid field: a chain along a fault line with this chance, else a cluster
+	liquid_chain = {default = 0.3, ["angels-fissure"] = 0.7},
 	well_occupancy = 0.6,     -- share of the well grid cells with a well
 	well_gap = 4,             -- jitter of a well in its grid cell, tiles
 	starting_radius = 0.5,    -- starting field radius per unit of starting.size (as the RSO metaballs)
