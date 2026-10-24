@@ -168,7 +168,10 @@ function KIND.lever(site, key, player, entity, K)
 end
 
 function KIND.step(site, p, K)
-  if p.rx > -7 and p.rx < 7 and p.ry > -7 and p.ry < 7 then K.solve(site, p.player) end
+  if p.rx > -7 and p.rx < 7 and p.ry > -7 and p.ry < 7 then
+    if site.data.alarms == 0 then K.feat(site, "searchlight-ghost", p.player) end
+    K.solve(site, p.player)
+  end
 end
 
 return KIND

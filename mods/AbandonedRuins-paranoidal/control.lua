@@ -273,6 +273,7 @@ local function spawn_legendary_command(command)
   local offset = kind.size / 2 + 48
   local site = legendary.site.force_spawn(player.surface, { x = player.position.x + offset, y = player.position.y }, name)
   if site then
+    legendary.spawned_by_command(player)
     player.print({ "pd-legendary.spawned", { "pd-legendary-name." .. name },
       string.format("[gps=%d,%d,%s]", site.x, site.y, player.surface.name) })
   end
@@ -350,6 +351,12 @@ script.on_event(defines.events.on_pre_player_died, legendary.on_pre_player_died)
 script.on_event(defines.events.on_player_respawned, legendary.on_player_respawned)
 script.on_event(defines.events.on_chunk_deleted, legendary.on_chunk_deleted)
 script.on_event(defines.events.on_force_created, legendary.on_force_created)
+do
+  -- relics that die in battle (not mined) are gone: fact "relic-died"
+  local filters = {}
+  for _, name in ipairs(legendary.relic_prototypes()) do filters[#filters + 1] = { filter = "name", name = name } end
+  if #filters > 0 then script.on_event(defines.events.on_entity_died, legendary.on_entity_died, filters) end
+end
 
 -- Old mines for RSO Reforged: these ruins of the set are placed next to rich ore fields.
 local MINES = {
@@ -389,6 +396,9 @@ remote.add_interface("AbandonedRuins-paranoidal", {
   -- Used by RSO Reforged: places an old mine ruin of the given size ("small", "medium", "large")
   -- centered at the position. Returns true if it was spawned (the journal records it as usual).
   spawn_mine = spawn_mine,
+  -- Legendary ruins: custom event with facts about them (found, solved, feats, relics...), see
+  -- legendary/feats.lua. MxlChievements-Reforged builds its achievements on it.
+  get_on_legendary_event = function() return legendary.feats_event end,
   -- Legendary ruins: is the position inside (or within `margin` tiles of) a legendary site?
   legendary_reserved = function(surface_index, position, margin)
     return legendary.reserved(surface_index, position, margin)

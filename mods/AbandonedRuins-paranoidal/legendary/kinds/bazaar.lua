@@ -108,6 +108,7 @@ function KIND.tick(site, ctx, K)
         take(inv, TRIBUTE)
         K.destroy_list(site, "door")
         K.say(site, { "pd-legendary-bazaar.paid" })
+        K.feat(site, "bazaar-taxpayer", nil)
         local p = ctx.players[1]
         K.solve(site, p and p.player)
       end
@@ -121,6 +122,7 @@ function KIND.lever(site, key, player, entity, K)
   d.robbed = true
   K.destroy_list(site, "door")
   K.say(site, { "pd-legendary-bazaar.robbery" })
+  K.feat(site, "bazaar-robbery", player)
   local guardian = K.spawn(site, "bm_fake_human_melee_5", K.abs(site, 0, -24), C.boss_tier(8))
     or K.spawn(site, "big-biter", K.abs(site, 0, -24), C.boss_tier(10))
   if guardian then

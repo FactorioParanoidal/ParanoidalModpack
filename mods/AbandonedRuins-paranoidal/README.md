@@ -345,6 +345,10 @@
 | `yggdrasil` | Иггдрасиль | 128 | Живой лабиринт из отрастающих изгородей, корни, споры; огонь сжигает награду | Росток Иггдрасиля — древесина, поглощает загрязнение |
 | `cemetery` | Кладбище первых колонистов | 128 | Могилы-лотереи (сокровища качества 7–10, пустота, мертвецы), гнев кладбища, Основатель | Погребальный колокол — точка возрождения |
 
+### Достижения
+
+Своих достижений у мода нет. Он сообщает о событиях легендарных руин одним событием (`get_on_legendary_event` в интерфейсе `AbandonedRuins-paranoidal`), а достижения строит MxlChievements-Reforged (тема «Легендарные руины»). Руины, вызванные командой или через remote, сообщают только сам факт вызова.
+
 ### Реликвии
 
 22 реликвии — копии существующих зданий со своими характеристиками; у них нет рецептов, они не перерабатываются и не повышают качество. Подробности — в описании каждой реликвии в игре. Мастерская Дедала и Горн Гефеста не отслеживаются системой брака `ic-more-qualities` (не добавляют брак); турели-реликвии не получают ранги HeroTurretRedux. Реликвия, уничтоженная в бою, теряется.
@@ -385,7 +389,7 @@ end):weight(0.5):far(800):tag("danger")
 - Опции ядра: `force`, `dir`, `items`, `fluids`, `dmg`, `recipe`, `dead` и новая `quality` (качество здания).
 - Поля руины: `weight`, `min_distance` (действует только при выключенной галочке `ruins-ignore-distance`), `pd_tag` (`danger`/`rare`).
 - Событие ядра `remote.call("AbandonedRuins", "get_on_ruin_spawned_event")`. Данные: `surface`, `center`, `half_size`, `size`, `ruin_set`, `ruin_name`.
-- Легендарные руины: код в `legendary/` (`config`, `plan`, `kit`, `site`, `loot`, `relics`, `kinds/*.lua` — по файлу на руину), прототипы — `prototypes/legendary.lua` (data-updates) и `data-final-fixes.lua`. Состояние — `storage.legend`. Интерфейс: `legendary_reserved(surface_index, position, margin)` и `spawn_legendary(surface_index, position, name)`.
+- Легендарные руины: код в `legendary/` (`config`, `plan`, `kit`, `site`, `loot`, `relics`, `feats` (события для модов достижений), `kinds/*.lua` — по файлу на руину), прототипы — `prototypes/legendary.lua` (data-updates) и `data-final-fixes.lua`. Состояние — `storage.legend`. Интерфейс: `legendary_reserved(surface_index, position, margin)`, `spawn_legendary(surface_index, position, name)` и `get_on_legendary_event()` — событие с полями `fact`, `force_index`, `player_index`, `kind`, `tier`, `feat`, `member`, `amount`, `ferocity` (список фактов — в `legendary/feats.lua`).
 - Интерфейс `AbandonedRuins-paranoidal`: `get_stats()` — статистика журнала; `signal_ruin(surface_index, force_index)` — для геологического радара: выбирает случайную ненайденную руину, о которой сила ещё не получала сигнала, ставит на её центр метку «?» (когда чанк открыт силой) и возвращает центр руины или `nil`. Метка удаляется, когда руину находит игрок.
 
 Названия руин для журнала лежат в секции `[pd-ruin-name]` локализации. Для руин base используется название без цифры в конце (`rockStash3` → `rockStash`).

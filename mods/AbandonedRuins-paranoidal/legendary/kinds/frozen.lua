@@ -83,6 +83,7 @@ end
 
 local function rewind(site, ctx, K)
   reset(site, K)
+  K.fact(site, "rewind", nil)
   for _, p in ipairs(ctx.players) do
     if p.inside then
       p.player.teleport({ x = site.x + START[1] + 0.5, y = site.y + START[2] + 4.5 })

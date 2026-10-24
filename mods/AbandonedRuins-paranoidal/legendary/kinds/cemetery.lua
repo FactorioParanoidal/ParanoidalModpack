@@ -113,6 +113,7 @@ function KIND.lever(site, key, player, entity, K)
   if d.wrath >= WRATH_MAX and not d.swarm then
     d.swarm = true
     K.say(site, { "pd-legendary-cemetery.swarm" })
+    K.feat(site, "cemetery-gravedigger", player)
     rise(site, K, player and player.position or pos, 16, player and player.character, 6)
     for n, grave in ipairs(d.graves) do
       local lever = K.get(site, "grave-" .. n)

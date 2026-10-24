@@ -1,5 +1,7 @@
 -- Runtime of relic buildings (rewards of legendary ruins). Relics whose effect needs a script
 -- are registered when built; the rest are plain prototypes (see prototypes/relics.lua).
+local F = require("legendary.feats")
+
 local R = {}
 
 R.PREFIX = "pd-relic-"
@@ -42,6 +44,17 @@ function R.on_built(entity)
   local reg = script.register_on_object_destroyed(entity)
   L.relic_reg[reg] = id
   if entity.name == "pd-relic-star-telescope" then R.telescope(entity, true) end
+end
+
+-- Any relic built (scripted or not) is reported to other mods.
+function R.count_built(entity)
+  F.force(entity.force, "relic-built", { member = entity.name })
+end
+
+function R.on_died(entity)
+  if entity and entity.valid and entity.name:sub(1, #R.PREFIX) == R.PREFIX then
+    F.force(entity.force, "relic-died", { member = entity.name })
+  end
   if entity.name == "pd-relic-rescue-beacon" then L.relics[id].next_drop = game.tick + 60 * 60 * 30 end
 end
 
@@ -111,7 +124,10 @@ local function scales(r)
         local removed = inv.remove({ name = content.name, count = batches * need, quality = content.quality })
         local made = math.floor(removed / need)
         local rest = removed - made * need
-        if made > 0 then inv.insert({ name = content.name, count = made }) end
+        if made > 0 then
+          inv.insert({ name = content.name, count = made })
+          F.force(r.entity.force, "themis", { member = r.name, amount = made * need })
+        end
         if rest > 0 then inv.insert({ name = content.name, count = rest, quality = content.quality }) end
       end
     end
@@ -241,6 +257,7 @@ function R.on_player_changed_position(player)
       L.gate_cooldown[player.index] = game.tick
       mover.teleport(dest)
       target.surface.create_entity({ name = "spark-explosion", position = dest })
+      F.player(player, "gate", { member = "pd-relic-forerunner-gate" })
       return
     end
   end
@@ -282,6 +299,7 @@ function R.on_pre_player_died(player)
   end
   if moved > 0 then
     L.anchor_ready[player.force.index] = game.tick + 60 * 60 * 20
+    F.player(player, "anchor", { member = "pd-relic-time-anchor" })
     player.force.print({ "pd-legendary-relic.anchor-saved", player.name,
       string.format("[gps=%d,%d,%s]", math.floor(anchor.position.x), math.floor(anchor.position.y), anchor.surface.name) })
   end
@@ -297,6 +315,7 @@ function R.on_player_respawned(player)
   if dest then
     player.teleport(dest, bell.surface)
     player.print({ "pd-legendary-relic.bell" })
+    F.player(player, "bell", { member = "pd-relic-funeral-bell" })
   end
 end
 

@@ -18,6 +18,10 @@ Date: 2026-10-24
       core's hostile defences), chance per chunk, distance, spacing, repeat after all.
     - Discovery with lore and hints, lock/unlock/skull map tags, /ruins counts legendary ruins,
       /legendary-spawn <name> for admins, remote functions legendary_reserved and spawn_legendary.
+    - Facts about the legendary ruins for achievement mods: one custom event (remote
+      get_on_legendary_event) raised when a ruin is found, beaten or ruined, for special feats, relics
+      and sanctuary events. Ruins laid out by /legendary-spawn or the remote interface report only that.
+      The achievements themselves live in MxlChievements-Reforged.
     - RSO old mines are not placed inside legendary ruins. A legendary ruin is given up (and may appear
       elsewhere) when players already have buildings in its area; corpses of characters are kept.
   Changes:

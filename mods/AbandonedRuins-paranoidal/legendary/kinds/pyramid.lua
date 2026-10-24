@@ -112,6 +112,7 @@ function KIND.step(site, p, K)
     if outside and p.player.get_item_count(KIND.relic) > 0 then
       d.done = true
       K.say(site, { "pd-legendary-pyramid.escaped", p.player.name })
+      if d.deadline - game.tick < 300 then K.feat(site, "pyramid-last-second", p.player) end
       K.solve(site, p.player)
     end
   end

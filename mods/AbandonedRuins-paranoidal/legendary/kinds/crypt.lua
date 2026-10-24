@@ -101,6 +101,7 @@ function KIND.lever(site, key, player, entity, K)
     d.open = true
   else
     K.say(site, { "pd-legendary-crypt.wrong" })
+    K.fact(site, "crypt-wrong", player)
     for _ = 1, 8 do K.cloud(site, K.abs(site, math.random(-8, 8), math.random(8, 16))) end
     for _ = 1, 3 do
       local keeper = K.spawn(site, "bm_fake_human_melee_2", K.abs(site, math.random(-20, 20), -14), C.boss_tier(3))

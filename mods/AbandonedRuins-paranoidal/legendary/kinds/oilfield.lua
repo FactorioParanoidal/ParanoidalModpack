@@ -184,6 +184,7 @@ function KIND.tick(site, ctx, K)
     d.next_spread = ctx.tick + K.ticks(12)
     if not spread(site, K) then
       K.say(site, { "pd-legendary-oilfield.contained" })
+      if d.tanks == 4 then K.feat(site, "oilfield-dry", nil) end
       local p = ctx.players[1]
       K.solve(site, p and p.player)
     end

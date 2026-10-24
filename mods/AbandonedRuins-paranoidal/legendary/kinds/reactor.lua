@@ -93,6 +93,7 @@ function KIND.tick(site, ctx, K)
     else
       surface.create_entity({ name = "atomic-rocket", position = K.abs(site, 0, 0), target = K.abs(site, 0, 0), speed = 1, force = C.FORCE })
     end
+    K.feat(site, "reactor-meltdown", nil)
     K.ruin(site, { "pd-legendary-reactor.meltdown" })
   end
 end
@@ -121,6 +122,7 @@ function KIND.lever(site, key, player, entity, K)
   K.line(site, K.abs(site, PUMPS[i][1] + 0.5, PUMPS[i][2] + 0.5), K.abs(site, 0, 0), { 0.3, 0.6, 1, 0.8 }, 600, 6)
   if running >= #PUMPS then
     K.say(site, { "pd-legendary-reactor.stable" })
+    if d.deadline and d.deadline - game.tick < 3600 then K.feat(site, "reactor-photo-finish", player) end
     K.solve(site, player)
   end
 end

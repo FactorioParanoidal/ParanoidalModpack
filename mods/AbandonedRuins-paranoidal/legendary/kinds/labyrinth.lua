@@ -415,12 +415,14 @@ end
 function KIND.destroyed(site, tag, _, K)
   if tag == "minotaur" then
     site.data.minotaur_alive = false
+    K.feat(site, "labyrinth-theseus", nil)
     open_door(site, K, { "pd-legendary-labyrinth.minotaur-dead" })
   end
 end
 
 function KIND.step(site, p, K)
   if site.data.door_open and p.rx >= -7 and p.rx < 8 and p.ry >= -7 and p.ry < 8 then
+    if site.data.minotaur_alive ~= false then K.feat(site, "labyrinth-pacifist", p.player) end
     K.solve(site, p.player)
   end
 end

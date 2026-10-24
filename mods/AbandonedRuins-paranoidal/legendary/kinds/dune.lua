@@ -99,6 +99,7 @@ function KIND.tick(site, ctx, K)
     if m >= 100 then
       m = 35
       p.player.print({ "pd-legendary-dune.rumble" }, { color = { 1, 0.6, 0.2 } })
+      K.feat(site, "dune-dinner", p.player)
       K.circle(site, p.pos, 4.5, { 0.9, 0.6, 0.2, 0.35 }, 75, true)
       d.strikes = d.strikes or {}
       table.insert(d.strikes, { at = ctx.tick + 75, pos = { x = p.pos.x, y = p.pos.y } })

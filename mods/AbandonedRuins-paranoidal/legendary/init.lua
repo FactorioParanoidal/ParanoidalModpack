@@ -5,11 +5,14 @@ local K = require("legendary.kit")
 local S = require("legendary.site")
 local R = require("legendary.relics")
 local kinds = require("legendary.kinds")
+local F = require("legendary.feats")
 
 -- Late-bound site functions for the kinds (site.lua requires the kinds, so they cannot require it).
 K.solve = S.solve
 K.ruin = S.ruin
 K.watch = S.watch
+K.feat = F.feat
+K.fact = F.site
 
 local M = {}
 
@@ -35,7 +38,10 @@ function M.on_chunk_generated(event) S.on_chunk_generated(event) end
 function M.on_built(event)
   local entity = event.entity
   if not (entity and entity.valid) then return end
-  if entity.name:sub(1, #R.PREFIX) == R.PREFIX then R.on_built(entity) end
+  if entity.name:sub(1, #R.PREFIX) == R.PREFIX then
+    R.on_built(entity)
+    R.count_built(entity)
+  end
   S.on_built(event)
 end
 
@@ -69,6 +75,14 @@ end
 
 function M.on_chunk_deleted(event) S.on_chunk_deleted(event) end
 
+function M.on_entity_died(event) R.on_died(event.entity) end
+
+---The /legendary-spawn command was used by this player.
+function M.spawned_by_command(player) F.player(player, "summoned") end
+
+---Custom event with the facts of the legendary ruins (legendary/feats.lua).
+M.feats_event = F.event
+
 function M.on_surface_removed(surface_index) S.on_surface_removed(surface_index) end
 
 function M.on_force_created() if storage.legend then S.setup_force() end end
@@ -90,5 +104,15 @@ function M.total() return #kinds.list end
 M.site = S
 M.config = C
 M.relic_names = R.names
+
+---Names of all relic entity prototypes (event filters).
+function M.relic_prototypes()
+  local out = {}
+  for name in pairs(prototypes.entity) do
+    if name:sub(1, #R.PREFIX) == R.PREFIX then out[#out + 1] = name end
+  end
+  table.sort(out)
+  return out
+end
 
 return M

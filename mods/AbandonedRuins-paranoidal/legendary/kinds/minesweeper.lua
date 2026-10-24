@@ -125,7 +125,10 @@ end
 function KIND.step(site, p, K)
   local d = site.data
   if p.ry < -41 then
-    if d.gate_open then K.solve(site, p.player) end
+    if d.gate_open then
+      if not next(d.boom) then K.feat(site, "minesweeper-flawless", p.player) end
+      K.solve(site, p.player)
+    end
     return
   end
   local i, j = cell_at(p.rx, p.ry)

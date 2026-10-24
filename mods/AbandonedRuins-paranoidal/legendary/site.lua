@@ -5,6 +5,7 @@ local K = require("legendary.kit")
 local P = require("legendary.plan")
 local loot = require("legendary.loot")
 local kinds = require("legendary.kinds")
+local F = require("legendary.feats")
 
 local S = {}
 
@@ -337,6 +338,7 @@ local function discover(site, player)
   storage.found[force.index] = storage.found[force.index] or {}
   local key = "legendary/" .. site.kind
   storage.found[force.index][key] = (storage.found[force.index][key] or 0) + 1
+  F.found(site, player)
 end
 
 local function scan(L)
@@ -393,6 +395,7 @@ local function push_out(site, p)
   end
   vehicle.teleport(target)
   p.player.print({ "pd-legendary.updraft" }, { color = { 1, 0.5, 0.3 } })
+  F.player(p.player, "updraft")
 end
 
 local function tick_site(L, site)
@@ -410,6 +413,7 @@ function S.solve(site, player)
   local kind = kinds.by_name[site.kind]
   site.state = "solved"
   site.solved = game.tick
+  F.solved(site, player)
   storage.legend.awake[site.id] = nil
   for _, vault in ipairs(K.list(site, "vault")) do
     loot.fill(site, kind, vault)
@@ -432,6 +436,7 @@ function S.ruin(site, reason)
   local kind = kinds.by_name[site.kind]
   site.state = "ruined"
   storage.legend.awake[site.id] = nil
+  F.ruined(site)
   for _, vault in ipairs(K.list(site, "vault")) do vault.destroy() end
   K.clear_renders(site)
   if kind.ruined then kind.ruined(site, K) end
@@ -516,6 +521,7 @@ function S.on_built(event)
   end
   if player and player.valid then
     player.create_local_flying_text({ text = { "pd-legendary.no-build" }, position = event.entity.valid and entity.position or player.position, color = { 1, 0.4, 0.3 } })
+    F.player(player, "refused-build")
   end
 end
 
@@ -584,6 +590,7 @@ function S.on_mined_tile(event)
   if player and player.valid then
     inventory = player.get_main_inventory()
     player.create_local_flying_text({ text = { "pd-legendary.no-mine-tiles" }, position = player.position, color = { 1, 0.4, 0.3 } })
+    F.player(player, "floor")
   elseif event.robot and event.robot.valid then
     inventory = event.robot.get_inventory(defines.inventory.robot_cargo)
   end

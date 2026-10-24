@@ -5,7 +5,7 @@
   "author": "FactorioParanoidal",
   "homepage": "https://github.com/FactorioParanoidal/ParanoidalModpack",
   "factorio_version": "2.0",
-  "description": "Paranoidal ruin set for 'Abandoned Ruins - Updated': 170 new ruins (small, medium, large) with Bob's, Angels and Bio Industries content, defect-quality junk and clean starter kits, dangerous outposts, plus all 'base' ruins with their rails rebuilt for 2.0. 22 legendary ruins far beyond the starting zone: huge challenge sites with their own mechanics, guardians, rewards of quality 4-10 and unique relic buildings. Default ruin set. Ruins do not repeat until every ruin of a size has appeared once and, by default, do not depend on the distance from the map center. Discovery journal with map markers and the /ruins command.",
+  "description": "Paranoidal ruin set for 'Abandoned Ruins - Updated': 170 new ruins (small, medium, large) with Bob's, Angels and Bio Industries content, defect-quality junk and clean starter kits, dangerous outposts, plus all 'base' ruins with their rails rebuilt for 2.0. 22 legendary ruins far beyond the starting zone: huge challenge sites with their own mechanics, guardians, rewards of quality 4-10, unique relic buildings. Default ruin set. Ruins do not repeat until every ruin of a size has appeared once and, by default, do not depend on the distance from the map center. Discovery journal with map markers and the /ruins command.",
   "dependencies": [
     "base >= 2.0.77",
     "AbandonedRuins_updated_fork >= 1.5.7",

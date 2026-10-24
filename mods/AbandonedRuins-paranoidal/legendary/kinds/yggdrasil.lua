@@ -141,7 +141,10 @@ function KIND.tick(site, ctx, K)
       d.burn = d.burn + 1
       d.extra_stacks = (d.extra_stacks or 0) - 1
       K.say(site, { "pd-legendary-yggdrasil.fire", d.burn, 5 })
-      if d.burn >= 5 then K.ruin(site, { "pd-legendary-yggdrasil.burnt" }) end
+      if d.burn >= 5 then
+        K.feat(site, "yggdrasil-arson", nil)
+        K.ruin(site, { "pd-legendary-yggdrasil.burnt" })
+      end
     end
   end
 end

@@ -130,6 +130,7 @@ function KIND.step(site, p, K)
       K.effect(site, "spark-explosion", dest)
       if pad.dest > 0 and d.platforms[pad.dest].kind == "pit" then
         p.player.print({ "pd-legendary-gates.pit" }, { color = { 1, 0.4, 0.3 } })
+        K.feat(site, "gates-pit", p.player)
       end
       return
     end

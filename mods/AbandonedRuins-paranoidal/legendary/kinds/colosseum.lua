@@ -153,6 +153,7 @@ function KIND.tick(site, ctx, K)
     if d.wave >= #WAVES then
       d.bonus, d.extra_stacks = 3, 6
       K.say(site, { "pd-legendary-colosseum.victory" })
+      K.feat(site, "colosseum-bread", inside[1].player)
       K.solve(site, inside[1].player)
       return
     end
@@ -176,7 +177,10 @@ function KIND.lever(site, key, player, entity, K)
   local d = site.data
   d.bonus = math.floor(d.wave / 3)
   d.extra_stacks = math.max(0, d.wave - 4)
-  if d.wave < 5 then d.relic = false end
+  if d.wave < 5 then
+    d.relic = false
+    K.feat(site, "colosseum-coward", player)
+  end
   K.say(site, { "pd-legendary-colosseum.cashout", player and player.name or "?", d.wave })
   K.solve(site, player)
 end
