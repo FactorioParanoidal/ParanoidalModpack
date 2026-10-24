@@ -16,6 +16,10 @@ local turret_exclude_start = {
 	["big-artillery-turret"] = true,
 	-- Paranoidal: fire safety turrets put out fires and never kill.
 	["pd-fire-safety-turret"] = true,
+	-- Paranoidal: relics of the legendary ruins (AbandonedRuins-paranoidal) are unique buildings;
+	-- a ranked copy would lose the relic.
+	["pd-relic-"] = true,
+	["pd-legend-"] = true,
 --	["obelisk-"] = true, --[[ Obelisk-of-light turrets ]]
 }
 
