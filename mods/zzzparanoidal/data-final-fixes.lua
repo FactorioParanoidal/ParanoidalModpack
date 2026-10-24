@@ -335,6 +335,8 @@ require("tweaks.custom.recipe-item-icon-sync").apply(data.raw, defines.prototype
 require("tweaks.custom.recipe-product-menu-sync").apply(data.raw, defines.prototypes, log)
 -- Согласованные иконки предметов по рецептам; после общих синхронизаторов, чтобы их не перезаписали.
 require("tweaks.custom.recipe-presentation-items")
+-- Руда везде как на земле: слои старых иконок руд в составных иконках → иконка Beta 8 предмета.
+require("tweaks.custom.ore-icon-layers-beta8")
 -- Цвета исследований жидкостей согласованы с восстановленными иконками резервуаров.
 require("tweaks.technology.fluid-handling-colors")
 -- Только обычная деревянная труба: без стрелок и прохода сквозь сплошной ряд.
