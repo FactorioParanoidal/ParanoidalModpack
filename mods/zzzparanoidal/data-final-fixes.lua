@@ -41,7 +41,6 @@ require("tweaks.recipe.pumps")
 require("tweaks.recipe.gems")
 require("tweaks.recipe.module")
 require("tweaks.recipe.poles") -- Изменение рецептов ЛЭП
-require("tweaks.recipe.yuoki")
 require("tweaks.recipe.concrete")
 require("tweaks.recipe.optera-warehouse-sort") -- Optera warehouse (6×6) и storehouse (3×3) — каждый одним рядом
 require("tweaks.recipe.fuel")
@@ -55,7 +54,6 @@ require("tweaks.recipe.inserter-cranes-port") -- Beta 8: цены кранов �
 require("tweaks.technology.metallurgy")
 require("tweaks.technology.warfare")
 require("tweaks.technology.pumps")
-require("tweaks.technology.yuoki")
 require("tweaks.technology.concrete")
 require("tweaks.technology.fuel")
 require("tweaks.technology.oberhaul-inserter-cost") -- 1.1 Oberhaul: дороже near/long/more-инсертер техи

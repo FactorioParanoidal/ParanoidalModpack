@@ -5,6 +5,9 @@ local protected_groups = {
     ["angels-bio-processing-vegetables"] = true,
     ["angels-bio-processing-alien"] = true,
     ["bio-industries"] = true,
+    -- Yuoki (Paranoidal fork): its exchange/transmutation recipes are not the home of build products.
+    yuoki = true, ["yuoki-energy"] = true, ["yuoki-atomics"] = true, yuoki_liquids = true,
+    j_yuoki_logistics = true, yi_engines = true, yie_harvest = true,
 }
 -- These tabs were merged for recipes; uncrafted products must follow the same merge.
 local merged_groups = {satellites = "space-exploration", ["angels-power"] = "intermediate-products",

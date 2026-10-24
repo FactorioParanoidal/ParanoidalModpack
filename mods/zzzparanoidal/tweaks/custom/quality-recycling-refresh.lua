@@ -50,6 +50,11 @@ local excluded = {
 	["factory-1-instantiated"] = true, ["factory-2-instantiated"] = true, ["factory-3-instantiated"] = true,
 	["factory-4-instantiated"] = true,
 	["blueprint"] = true, ["blueprint-book"] = true, ["deconstruction-planner"] = true, ["upgrade-planner"] = true,
+	-- Валюты форка Yuoki (решение пользователя 2026-10-24): знаки, репутация, УК-A2 и символы
+	-- господства без качества, переработка дала бы им качество через самопереработку.
+	["y_rwtechsign"] = true, ["ypfw_trader_sign"] = true, ["y_greensign"] = true, ["ye_science_blue"] = true,
+	["y-fame"] = true, ["y-unicomp-a2"] = true, ["y-infused-uca2"] = true,
+	["ye_science_ultimate"] = true, ["y_trade_ultimate"] = true, ["ye_green_ultimate"] = true,
 }
 -- Как в Quality: эти рецепты не разбираются никогда.
 local quality_excluded = {["tungsten-carbide"] = true, ["superconductor"] = true, ["biolab"] = true}

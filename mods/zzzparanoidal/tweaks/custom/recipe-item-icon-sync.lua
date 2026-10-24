@@ -1,6 +1,13 @@
 -- Crafting-menu icons are authoritative. Never choose between different recipe icons.
 local M = {}
 
+-- Recipes of these item groups never give their icon to an item (Yuoki exchange/transmutation
+-- recipes would otherwise make ores, plates and fuels conflict or wear the exchange icon).
+local foreign_icon_groups = {
+    yuoki = true, ["yuoki-energy"] = true, ["yuoki-atomics"] = true, yuoki_liquids = true,
+    j_yuoki_logistics = true, yi_engines = true, yie_harvest = true,
+}
+
 local function equal(a, b)
     if type(a) ~= type(b) then return false end
     if type(a) ~= "table" then return a == b end
@@ -27,11 +34,22 @@ function M.apply(raw, item_types, emit)
     end
 
     -- Collect before writing: recipe fallback must not depend on traversal order.
+    local subgroups = raw["item-subgroup"] or {}
+    local function foreign(subgroup_name)
+        local subgroup = subgroup_name and subgroups[subgroup_name]
+        return subgroup and foreign_icon_groups[subgroup.group] or false
+    end
+    -- A foreign-group recipe still speaks for items of its own groups.
+    local function ignored(recipe, item_name)
+        local item = items[item_name]
+        return foreign(recipe.subgroup) and not (item and foreign(item.subgroup))
+    end
     for name, recipe in pairs(raw.recipe or {}) do
         if not recipe.hidden then
             local results = recipe.results or {}
             local product = #results == 1 and results[1] or nil
-            if product and (product.type or "item") == "item" and items[product.name] then
+            if product and (product.type or "item") == "item" and items[product.name]
+                and not ignored(recipe, product.name) then
                 local layers = icon_layers(recipe)
                 if layers then
                     local list = candidates[product.name] or {}
@@ -41,7 +59,7 @@ function M.apply(raw, item_types, emit)
             elseif #results > 1 then
                 report.ambiguous[#report.ambiguous + 1] = name
                 for _, result in ipairs(results) do
-                    if (result.type or "item") == "item" then
+                    if (result.type or "item") == "item" and not ignored(recipe, result.name) then
                         blocked[result.name] = true
                     end
                 end
