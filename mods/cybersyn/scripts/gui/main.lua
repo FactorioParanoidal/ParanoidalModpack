@@ -53,7 +53,7 @@ function manager_gui.on_lua_shortcut(e)
 		if e.element then
 			-- The combinator window is closed by its own flib handler (gui.lua), which main.lua
 			-- now chains before this function.
-			if e.element.name == "manager_window" then
+			if e.element.valid and e.element.name == "manager_window" then
 				manager.wrapper(e, manager.handle.manager_toggle)
 			end
 		else
