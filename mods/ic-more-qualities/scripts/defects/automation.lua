@@ -51,7 +51,8 @@ local function spread(s)
 end
 
 -- Player-placeable entities only: hidden technical machines of other mods,
--- Creative Mod test sources and the refinement workshop (own logic) are left alone.
+-- Creative Mod test sources, the refinement workshop (own logic) and the relics of the
+-- legendary ruins (AbandonedRuins-paranoidal, "pd-relic-*": they never add defects) are left alone.
 function M.trackable(entity)
     if not (entity and entity.valid and M.kinds[entity.type] and entity.unit_number) then return false end
     local name = entity.name
@@ -59,6 +60,7 @@ function M.trackable(entity)
     if result == nil then
         local items = entity.prototype.items_to_place_this
         result = items ~= nil and #items > 0 and not name:find("^creative%-mod") and name ~= names.workshop
+            and not name:find("^pd%-relic%-")
         trackable_names[name] = result
     end
     return result
