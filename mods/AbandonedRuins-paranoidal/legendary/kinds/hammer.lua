@@ -15,7 +15,7 @@ function KIND.layout(plan, site)
   plan:fill(function() return rng.pick({ "dirt-4", "dirt-5", "dirt-6", "dirt-7" }) end, -80, -80, 79, 79)
   -- the keep
   plan:fill("stone-path", KEEP[1], KEEP[2], KEEP[3], KEEP[4])
-  plan:wall_ring(KEEP[1], KEEP[2], KEEP[3], KEEP[4], {})
+  plan:wall_ring(KEEP[1], KEEP[2], KEEP[3], KEEP[4], { { -1, KEEP[4] }, { 0, KEEP[4] }, { 1, KEEP[4] } })
   for x = -1, 1 do plan:put(C.WALL, x, KEEP[4], { force = "legend", invincible = true, locked = true, list = "gate" }) end
   plan:fill("refined-concrete", -6, -74, 5, -66)
   plan:vault(-2, -71)

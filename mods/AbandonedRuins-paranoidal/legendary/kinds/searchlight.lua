@@ -30,7 +30,7 @@ function KIND.layout(plan, site)
   end
   -- the vault building
   plan:fill("lab-dark-2", -7, -7, 6, 6)
-  plan:wall_ring(-8, -8, 7, 7, {})
+  plan:wall_ring(-8, -8, 7, 7, { { -1, 7 }, { 0, 7 } })
   for x = -1, 0 do
     plan:put(C.WALL, x, 7, { force = "legend", invincible = true, locked = true, list = "door" })
     plan.walls[x .. ",7"] = true

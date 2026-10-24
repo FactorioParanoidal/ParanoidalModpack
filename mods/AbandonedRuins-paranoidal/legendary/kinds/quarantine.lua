@@ -16,7 +16,7 @@ function KIND.layout(plan, site)
   plan:wall_ring(-46, -46, 45, 45, { { -1, 45 }, { 0, 45 } })
   -- central lab
   plan:fill("lab-white", -8, -8, 7, 7)
-  plan:wall_ring(-9, -9, 8, 8, {})
+  plan:wall_ring(-9, -9, 8, 8, { { -1, 8 }, { 0, 8 } })
   for x = -1, 0 do plan:put(C.WALL, x, 8, { force = "legend", invincible = true, locked = true, list = "door" }) end
   plan:vault(-3, -3)
   plan:vault(2, -3)
