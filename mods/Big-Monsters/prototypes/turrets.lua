@@ -27,7 +27,8 @@ local wormkit = make_new_worm({
     })
 local worm = wormkit.worm
 worm.build_base_evolution_requirement = 0.93
-worm.autoplace = enemy_autoplace.enemy_worm_autoplace("enemy_autoplace_base(9, 6)")
+-- Paranoidal: no map autoplace; RSO places all other enemies, so this worm alone took every vanilla worm spot
+worm.autoplace = nil --enemy_autoplace.enemy_worm_autoplace("enemy_autoplace_base(9, 6)")
 worm.call_for_help_radius = 90
 data:extend({worm, wormkit.corpse1,wormkit.corpse2})
 
@@ -65,7 +66,8 @@ local wormkit = make_new_worm({
 local worm = wormkit.worm
 worm.build_base_evolution_requirement = 1
 worm.loot = Loot
-worm.autoplace = enemy_autoplace.enemy_worm_autoplace("enemy_autoplace_base(10, 7)")
+-- Paranoidal: no map autoplace (see the behemoth worm above); only the late events spawn it
+worm.autoplace = nil --enemy_autoplace.enemy_worm_autoplace("enemy_autoplace_base(10, 7)")
 worm.call_for_help_radius = 120
 data:extend({worm, wormkit.corpse1,wormkit.corpse2})
 

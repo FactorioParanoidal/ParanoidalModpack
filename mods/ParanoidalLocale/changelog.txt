@@ -1,6 +1,7 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.26.0
   Changes:
+    - Big-Monsters.en.cfg (ru): the names of the acid and the fire boss worm were swapped.
     - squeak-through-2.config.cfg: descriptions of chests, drills, trees and turrets; valves and display panels in the pipe and circuit descriptions.
     - rso-mod was renamed to RSO-reforged: optional dependency and its [mod-name] key follow the new name.
     - rso-mod.en.cfg: descriptions of RSO Reforged 9.1.0 (resources placed by the map generator: region size, size limit, trees and rocks, infinite cores, revealing); removed the keys of the enemy generator settings that RSO Reforged no longer has; enemy chance of RSO Reforged 9.2.0 (startup, scaled by the map generator row).

@@ -31,7 +31,8 @@ end
 
 -- The vanilla autoplace of enemy bases is switched off too: RSO places its spawners and worms with
 -- noise expressions (prototypes/noise.lua). Enemies of Big Monsters and of the mferrari library
--- (bosses, giant worms) keep their own placement: those mods own them, as RampantFixed treats
+-- (bosses, giant worms) keep their own placement: those mods own them (Big Monsters has no autoplace
+-- for its giant worms in the Paranoidal fork), as RampantFixed treats
 -- them (libs/ForeignEnemies.lua).
 local FOREIGN_ENEMY_PREFIXES = {"bm-", "bm_", "maf", "mf_"}
 

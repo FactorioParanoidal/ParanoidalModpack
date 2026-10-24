@@ -1,6 +1,7 @@
 ---------------------------------------------------------------------------------------------------
 Version: 2.1.2
   Changes:
+    - Paranoidal fork: the behemoth worm and the acid boss worm have no map autoplace any more; RSO-reforged switches off the autoplace of all other enemies, so these two took every vanilla worm spot from a moderate distance at 0% evolution. They appear only in the late events.
     - Paranoidal fork: swarms and rocket silo attacks are made of RampantFixed squads when it manages the surface (mferrari_lib CallFrenzyAttack); events are held during the RampantFixed truce
     - Paranoidal fork: bosses, spidertrons and flying saucers spawn with full health (from 0.9 evolution it was cut to a fifth plus a share per player, a third for one player, while the weaker bosses kept all of it)
     - Paranoidal fork: events are tried from the most dangerous one (was the order of the keys of a table)
