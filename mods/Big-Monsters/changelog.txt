@@ -7,6 +7,7 @@ Version: 2.1.2
     - Paranoidal fork: events are tried from the most dangerous one (was the order of the keys of a table)
     - Paranoidal fork: the mother biterzilla broods units of a nest near her (vanilla biters if there is none)
     - Paranoidal fork: spidertrons and flying saucers keep their target until it is gone (was a 1500 tile search every 18 seconds); the search for the event spawn walks at most 600 chunks
+    - Paranoidal fork: spidertron and flying saucer AI: moves every 4 seconds (was 18); target priority player character within 60 tiles, turret within 50, current target, military target within 50, nearest enemy; stops at 22 tiles on the straight line and circles the target; a target neither damaged nor approached for 3 moves is ignored for 5 minutes; scripted laser/rocket fire when the target is in range and the auto targeting spends no rockets; targets are reset on configuration change; rockets and atomic rockets are refilled only when low
     - New biterzilla threat: the cyborg strafer (space-age required)
     - New volcano graphics
     - Paranoidal fork: events are skipped on peaceful surfaces and on maps without enemy bases unless "bm-events-when-peaceful" is enabled; queued invasion spawns stop there too

@@ -131,6 +131,8 @@ script.on_init(on_init)
 function on_configuration_changed()
 cam_on_init()
 setup_mod_vars()
+-- Paranoidal: targets picked by the old AI could be out of reach forever
+for _, ZI in pairs(storage.biterzillas) do ZI.target = nil ZI.stuck = nil ZI.last_hp = nil ZI.last_dist = nil end
 end
 script.on_configuration_changed(on_configuration_changed)
 
@@ -847,9 +849,89 @@ end
 
 
 
--- ZI: the record in storage.biterzillas; the target is kept until it is gone (was a 1500 tile search every 18 s)
+-- Paranoidal: boss spidertron / flying saucer AI.
+-- Target priority: player character near -> turret near -> current target -> military target near -> nearest enemy.
+-- The boss stops on the straight line at BM_SPIDER_ENGAGE tiles (inside rocket ~36 and laser 40 range) and circles the target.
+-- A target that is neither damaged nor approached for 3 move cycles is ignored for 5 minutes.
+local BM_SPIDER_ENGAGE   = 22
+local BM_SPIDER_RANGE    = 36
+local BM_SPIDER_PLAYER_R = 60
+local BM_SPIDER_LOCAL_R  = 50
+local BM_SPIDER_TURRETS  = {"ammo-turret", "electric-turret", "fluid-turret", "artillery-turret"}
+local BM_SPIDER_ROCKETS  = {"rocket", "explosive-rocket"}
+local BM_SPIDER_TURRET_SET = {}
+for _, t in pairs(BM_SPIDER_TURRETS) do BM_SPIDER_TURRET_SET[t] = true end
+
+local function bm_enemy_forces(force)
+local list = {}
+for _, f in pairs(game.forces) do
+	if f ~= force and force.is_enemy(f) then list[#list+1] = f end
+	end
+return list
+end
+
+local function bm_valid_target(ZI, e)
+if not (e and e.valid and e.destructible and e.health) then return false end
+local un = e.unit_number
+if un and ZI.ignore and ZI.ignore[un] and ZI.ignore[un] > game.tick then return false end
+return true
+end
+
+local function bm_nearest(spider, ZI, filter)
+local best, bd
+local p = spider.position
+for _, e in pairs(spider.surface.find_entities_filtered(filter)) do
+	if bm_valid_target(ZI, e) then
+		local d = distance_squared(p, e.position)
+		if not bd or d < bd then best, bd = e, d end
+		end
+	end
+return best
+end
+
+local function bm_spider_pick_target(spider, ZI)
+local forces = bm_enemy_forces(spider.force)
+if #forces == 0 then return nil end
+local pos = spider.position
+local current = ZI.target
+if not bm_valid_target(ZI, current) then current = nil end
+if current and current.type == 'character' then return current end
+local e = bm_nearest(spider, ZI, {position=pos, radius=BM_SPIDER_PLAYER_R, type='character', force=forces})
+if e then return e end
+if current and BM_SPIDER_TURRET_SET[current.type] then return current end
+e = bm_nearest(spider, ZI, {position=pos, radius=BM_SPIDER_LOCAL_R, type=BM_SPIDER_TURRETS, force=forces})
+if e then return e end
+if current then return current end
+e = bm_nearest(spider, ZI, {position=pos, radius=BM_SPIDER_LOCAL_R, is_military_target=true, force=forces})
+if e then return e end
+e = spider.surface.find_nearest_enemy{position=pos, max_distance=1500, force=spider.force}
+if bm_valid_target(ZI, e) then return e end
+-- the nearest one is ignored: any other building near
+return bm_nearest(spider, ZI, {position=pos, radius=BM_SPIDER_LOCAL_R*2, force=forces, limit=300})
+end
+
+-- Fallback fire: the target is in range, but the vehicle auto targeting does not shoot it (no rocket spent for 2 s).
+function bm_spider_fallback_fire(spider, ZI)
+if game.tick % 120 ~= 0 then return end
+local ammo = 0
+for _, n in pairs(BM_SPIDER_ROCKETS) do ammo = ammo + spider.get_item_count(n) end
+local prev = ZI.ammo_prev
+ZI.ammo_prev = ammo
+if prev and ammo < prev then return end
+local t = ZI.target
+if not (t and t.valid and t.health) then return end
+if distance(t.position, spider.position) > BM_SPIDER_RANGE then return end
+if ZI.saucer then
+	spider.surface.create_entity{name='flying-saucer-laser-projectile', position=spider.position, target=t, source=spider, force=spider.force, speed=1}
+	else
+	spider.surface.create_entity{name='explosive-rocket', position=spider.position, target=t, source=spider, force=spider.force, speed=0.4}
+	end
+end
+
+-- ZI: the record in storage.biterzillas
 function Spidertron_Moves(spider, ZI)
-if storage.spidertron_nuke then 	
+ZI = ZI or {}
+if storage.spidertron_nuke and spider.get_item_count('maf-small-atomic-rocket') < 5 then
 	spider.insert{name='maf-small-atomic-rocket',count=5}
 	end
 
@@ -858,17 +940,43 @@ if FI then
 	if FI.get_item_count('solid-fuel')<20 and FI.can_insert{name='solid-fuel', count=20} then spider.insert {name='solid-fuel', count=20} end 
 	end
 
-if get_evo_here(spider.surface)>0.95 then spider.insert{name='explosive-rocket',count=400} else spider.insert{name='rocket',count=400} end
+local rocket = get_evo_here(spider.surface)>0.95 and 'explosive-rocket' or 'rocket'
+if spider.get_item_count(rocket) < 200 then spider.insert{name=rocket,count=400} end
 
-local enemy = ZI and ZI.target
-if not (enemy and enemy.valid) then
-	enemy = spider.surface.find_nearest_enemy{position=spider.position, max_distance=1500, force=spider.force} --zilla.force
-	if ZI then ZI.target = enemy end
+local spos = spider.position
+local target = bm_spider_pick_target(spider, ZI)
+if target ~= ZI.target then ZI.target = target ZI.stuck = 0 ZI.last_hp = nil ZI.last_dist = nil end
+if not target then
+	spider.autopilot_destination = get_random_pos_near(spos, 30)
+	return
 	end
-	if enemy and enemy.valid then
-		local go_to = get_pos_near_from_aproach(enemy.position, spider.position, 30, 2 )
-		spider.autopilot_destination = go_to
+
+local tpos = target.position
+local d  = distance(tpos, spos)
+local hp = target.health
+-- no damage and no approach: blocked (water, cliffs) or out of weapons reach
+if ZI.last_hp and hp >= ZI.last_hp and ZI.last_dist and d > ZI.last_dist - 1 then ZI.stuck = (ZI.stuck or 0) + 1 else ZI.stuck = 0 end
+ZI.last_hp, ZI.last_dist = hp, d
+if ZI.stuck >= 3 then
+	if target.unit_number then
+		ZI.ignore = ZI.ignore or {}
+		for un, t in pairs(ZI.ignore) do if t <= game.tick then ZI.ignore[un] = nil end end
+		ZI.ignore[target.unit_number] = game.tick + 5*60*60
 		end
+	ZI.target, ZI.stuck, ZI.last_hp, ZI.last_dist = nil, 0, nil, nil
+	spider.autopilot_destination = get_random_pos_near(spos, 30)
+	return
+	end
+
+if d <= BM_SPIDER_ENGAGE + 8 then
+	-- circle the target
+	ZI.orbit = ZI.orbit or (math.random(2) == 1 and 1 or -1)
+	local a = math.atan2(spos.y - tpos.y, spos.x - tpos.x) + ZI.orbit * 0.6
+	spider.autopilot_destination = {x = tpos.x + math.cos(a) * BM_SPIDER_ENGAGE, y = tpos.y + math.sin(a) * BM_SPIDER_ENGAGE}
+	ZI.last_dist = nil -- circling is not a missed approach
+	else
+	spider.autopilot_destination = get_pos_near_from_aproach(tpos, spos, BM_SPIDER_ENGAGE, 2)
+	end
 end
 
 
@@ -963,7 +1071,10 @@ for z=#storage.biterzillas,1,-1 do
 				end
 		end	
 		
-	if ZI.spider and zilla.valid and game.tick % (tick_zillas*18) ==0 then Spidertron_Moves(zilla, ZI) end
+	if ZI.spider and zilla.valid then
+		if game.tick % (tick_zillas*4) == 0 then Spidertron_Moves(zilla, ZI) end
+		if zilla.valid then bm_spider_fallback_fire(zilla, ZI) end
+		end
 		
 	end
 end
