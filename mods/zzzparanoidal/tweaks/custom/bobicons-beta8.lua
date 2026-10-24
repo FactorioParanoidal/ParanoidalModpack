@@ -50,11 +50,16 @@ end
 log(string.format("[bobicons-beta8] applied=%d missing=%d changed=%d", applied, missing, changed))
 
 -- Beta 8 bobicons also replaced the ground/belt pictures of ores; match them to the restored icons.
+-- The data keeps the 1.1 scale (32 px per tile); 2.0 renders 64 px per tile, so double it
+-- (vanilla 2.0 ores: size 64, scale 0.5), otherwise ores on the ground/belts are half-sized.
 local pictures = 0
 for name, list in pairs(require("tweaks.custom.bobicons-beta8-ore-pictures-data")) do
     local item = data.raw.item[name]
     if item then
         item.pictures = table.deepcopy(list)
+        for _, picture in pairs(item.pictures) do
+            picture.scale = (picture.scale or 1) * 2
+        end
         pictures = pictures + 1
     end
 end
