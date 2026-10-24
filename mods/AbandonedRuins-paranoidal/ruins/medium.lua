@@ -474,4 +474,14 @@ def("pd-flo-trap-pumping-station", function(b)
   b:tiles_blob("dirt-6", -3, -3, 6, 0.5)
 end):weight(0.7):far(700)
 
+def("pd-landfill-yard", function(b)
+  -- Early landfill for the small holes under wide blueprints.
+  b:tiles_blob("dirt-6", 0, 0, 7, 0.7)
+  b:put("iron-chest", -1, -1, { items = { landfill = R(30, 100) } })
+  b:put("wooden-chest", 2, -1, { items = { stone = R(10, 40) }, dead = 0.5 })
+  b:put("burner-mining-drill", -5, 3, { dmg = DMG(20, 80) })
+  b:scatter(lib.ROCKS, 4)
+  b:scatter("wooden-chest", 2, { dead = 1 })
+end)
+
 return list

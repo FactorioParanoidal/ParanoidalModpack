@@ -534,4 +534,11 @@ def("pd-uncommon-find", function(b)
   b:tiles_rect("refined-concrete", -1, -1, 1, 1)
 end):weight(0.2):far(1000):tag("rare")
 
+def("pd-landfill-cache", function(b)
+  -- Early landfill for the small holes under wide blueprints.
+  b:tiles_blob("dirt-4", 0, 0, 3.5, 0.8)
+  b:put("wooden-chest", 0, 0, { items = { landfill = R(30, 100) } })
+  b:scatter(lib.ROCKS, 2)
+end)
+
 return list

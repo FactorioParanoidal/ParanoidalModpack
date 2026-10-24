@@ -332,4 +332,18 @@ def("pd-flo-trap-tank-farm", function(b)
   b:tiles_blob("dirt-6", -4, -6, 12, 0.5)
 end):weight(0.5):far(1200)
 
+def("pd-landfill-earthworks", function(b)
+  -- Abandoned earthworks: heaps of dirt, the landfill stock in the middle.
+  b:tiles_blob("dirt-6", 0, 0, 12, 0.6)
+  b:tiles_blob("dirt-4", -8, -6, 5, 0.8)
+  b:tiles_blob("dirt-4", 7, 6, 5, 0.8)
+  b:put("iron-chest", 0, 0, { items = { landfill = R(30, 100) } })
+  b:put("wooden-chest", 1, 0, { items = { stone = R(20, 60), wood = R(0, 10) }, dead = 0.3 })
+  b:put("burner-mining-drill", -10, 8, { dmg = DMG(30, 120) })
+  b:put("burner-mining-drill", 8, -10, { dead = 0.6 })
+  b:scatter(lib.ROCKS, 8)
+  b:scatter_deco(lib.STUMPS, 6)
+  b:scatter("wooden-chest", 3, { dead = 1 })
+end)
+
 return list
