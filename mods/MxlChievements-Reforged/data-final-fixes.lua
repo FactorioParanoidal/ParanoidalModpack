@@ -2,7 +2,9 @@
 -- A catalog that fails to load is skipped with a log line; the game keeps loading.
 
 local THEMES = {"resources", "industry", "quality", "energy", "logistics", "combat", "nature", "space",
-  "challenges", "character"}
+  "challenges", "character", "legendary"}
+-- Themes made only of scripted entries (no prototypes/content/<theme>.lua).
+local SCRIPTED_ONLY = {character = true, legendary = true}
 
 local function load(module)
   local ok, result = pcall(require, module)
@@ -13,7 +15,7 @@ end
 
 local themes, by_key = {}, {}
 for _, key in ipairs(THEMES) do
-  local entries = key == "character" and {} or load("prototypes.content." .. key)
+  local entries = SCRIPTED_ONLY[key] and {} or load("prototypes.content." .. key)
   local theme = {key = key, entries = entries}
   table.insert(themes, theme)
   by_key[key] = theme

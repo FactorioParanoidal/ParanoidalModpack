@@ -837,6 +837,60 @@ trackers["rpg-attribute"] = {
 }
 
 ---------------------------------------------------------------------------------------------------
+-- Legendary ruins of AbandonedRuins-paranoidal: facts of its custom event (remote
+-- get_on_legendary_event; fields fact, force_index, player_index, kind, tier, feat, member, amount,
+-- ferocity). Params of the entries: prototypes/legendary-ruins.lua.
+
+local function legendary_matches(params, event)
+  return params.fact == event.fact
+    and (params.kind == nil or params.kind == event.kind)
+    and (params.feat == nil or params.feat == event.feat)
+    and (params.tier == nil or params.tier == event.tier)
+    and (params.ferocity == nil or params.ferocity == event.ferocity)
+end
+
+trackers["legendary"] = {
+  custom = function()
+    if not has_remote("AbandonedRuins-paranoidal", "get_on_legendary_event") then return nil end
+    return {[remote.call("AbandonedRuins-paranoidal", "get_on_legendary_event")] = function(event, entries, core)
+      if type(event.fact) ~= "string" then return end
+      local player = player_of(event)
+      local force = event.force_index and game.forces[event.force_index] or (player and player.force)
+      if not (force and force.valid) then return end
+      local member = event.member or event.kind
+      local amount = tonumber(event.amount) or 1
+      local counted = {}   -- a counter shared by several entries grows once per event
+      for _, entry in ipairs(entries) do
+        local params = entry.params
+        if legendary_matches(params, event) then
+          local scope = params.scope == "player" and player or force
+          if scope then
+            local data = scope == player and core.player_data(player.index) or core.force_data(force.index)
+            data.legendary = data.legendary or {}
+            local own = data.legendary
+            if params.set then
+              local set = own[params.set] or {}
+              own[params.set] = set
+              if member then set[member] = true end
+              core.progress(scope, entry, table_size(set))
+            elseif params.sum then
+              local key = (scope == player and "p" or "f") .. params.sum
+              if not counted[key] then
+                counted[key] = true
+                add(own, params.sum, amount)
+              end
+              core.progress(scope, entry, own[params.sum])
+            else
+              core.unlock(scope, entry)
+            end
+          end
+        end
+      end
+    end}
+  end,
+}
+
+---------------------------------------------------------------------------------------------------
 -- Small actions of players and other mods
 
 trackers["rename"] = {

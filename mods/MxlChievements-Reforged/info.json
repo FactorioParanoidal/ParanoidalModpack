@@ -1,11 +1,11 @@
 {
   "name": "MxlChievements-Reforged",
-  "version": "1.1.0",
+  "version": "9.1.0",
   "title": "MxlChievements (Reforged)",
   "author": "FactorioParanoidal; based on MxlChievements by Mxlppxl and More Achievements by LuziferSenpai",
   "contact": "",
   "homepage": "",
-  "description": "Paranoidal achievements: the production achievements of MxlChievements 3.0.1 and More Achievements 0.0.2, plus achievements for the whole Paranoidal mod set — Angels and Bob, quality and defects, energy, trains and Factorissimo, Rampant and Big Monsters, space, challenges and scripted ones (deaths, distances, rockets, seasons, ruins). Achievements whose targets are missing in the active mod set are skipped; scripted tracking never stops the game.",
+  "description": "Paranoidal achievements: the production achievements of MxlChievements 3.0.1 and More Achievements 0.0.2, plus achievements for the whole Paranoidal mod set — Angels and Bob, quality and defects, energy, trains and Factorissimo, Rampant and Big Monsters, space, challenges and scripted ones (deaths, distances, rockets, seasons, ruins and legendary ruins). Achievements whose targets are missing in the active mod set are skipped; scripted tracking never stops the game.",
   "factorio_version": "2.0",
   "dependencies": [
     "base >= 2.0",

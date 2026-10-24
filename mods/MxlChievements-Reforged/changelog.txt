@@ -1,4 +1,19 @@
 ---------------------------------------------------------------------------------------------------
+Version: 9.1.0
+Date: 2026-10-24
+  Features:
+    - Theme "Legendary ruins": 80 achievements for the legendary ruins of AbandonedRuins-paranoidal
+      9.1.0 - finding and beating each of the 22 ruins, 18 special feats of single ruins, the
+      collection (all found, 5 and all beaten, all trials, all citadels, 5 on "Legendary" ferocity, a
+      lost reward, a ruin summoned by command), relics (first, 10 different, lost in battle, time
+      anchor, funeral bell, Scales of Themis, Forerunner gates) and the sanctuary (building, flying over,
+      taking up the floor).
+    - Tracker "legendary" listens to the ruins' custom event (remote get_on_legendary_event): no
+      polling. Counters and sets are kept per force or player; ruins summoned by command count only for
+      "The mountain came to you".
+  Changes:
+    - Version number starts with 9 (Paranoidal mod).
+---------------------------------------------------------------------------------------------------
 Version: 1.1.0
 Date: 2026-10-14
   Major Features:

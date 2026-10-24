@@ -27,7 +27,7 @@ local function cargo(id, items, icon)
     needs = {any_item = items, entities = {"rocket-silo"}}, icon = icon}
 end
 
-return {
+local list = {
   -- resources
   {id = "robinson", kind = "script", theme = "resources", tracker = "wreck",
     needs = {any_entity = {patterns = {"^crash%-site%-spaceship", "ship%-wreck"}}}, icon = {entity = "crash-site-spaceship"}},
@@ -151,3 +151,8 @@ return {
   {id = "stuck", kind = "script", theme = "character", tracker = "unstuck", mods = {"TimedSpawnControl"},
     icon = {item = "stone-wall"}},
 }
+
+-- legendary ruins of AbandonedRuins-paranoidal (tracker "legendary", prototypes/legendary-ruins.lua)
+for _, entry in ipairs(require("prototypes.legendary-ruins")) do table.insert(list, entry) end
+
+return list
