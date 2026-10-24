@@ -1,10 +1,10 @@
 -- Beta 8 port of comb 0.1.2 (BiusArt Combinator graphics): sprites, displays, wire points
 -- of the vanilla arithmetic/decider/constant combinators and the circuit-network research icon.
 -- Graphics only. Startup setting "paranoidal-comb-graphics":
---   all      - icons and placed buildings (default);
+--   all      - icons and placed buildings;
 --   icons    - item/entity/research icons only;
 --   entities - sprites, displays and wire points of placed buildings only;
---   none     - nothing is changed, prototypes stay as without comb (item icons from bobicons-beta8).
+--   none     - nothing is changed, prototypes stay as without comb (item icons from bobicons-beta8) (default).
 local util = require("util")
 
 local mode = settings.startup["paranoidal-comb-graphics"].value
