@@ -167,10 +167,13 @@ end
 
 --------------------------------------------------------------------------------------
 function get_pos_near_from_aproach(pos, from, dist,rnd )
-	local x=pos.x
-	local y=pos.x
-	if x>from.x then x=pos.x-dist else x=pos.x+dist end
-	if y>from.y then y=pos.y-dist else y=pos.y+dist end
+	-- Paranoidal: the point at dist from pos on the straight line to from
+	-- (was pos.x for y and an offset on both axes, a diagonal of dist*1.41)
+	local dx, dy = from.x - pos.x, from.y - pos.y
+	local len = math.sqrt(dx*dx + dy*dy)
+	local x, y
+	if len < 0.001 then x, y = pos.x + dist, pos.y
+		else x, y = pos.x + dx/len*dist, pos.y + dy/len*dist end
 	
 	if rnd then 
 		x=x+ math.random(rnd)*RandomNegPos()
