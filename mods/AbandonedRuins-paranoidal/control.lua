@@ -6,6 +6,7 @@
 local SET_NAME = "paranoidal"
 local CORE = "AbandonedRuins"
 local balance_base = require("ruins.base-balance")
+local legendary = require("legendary.init")
 
 local own = {
   small = require("ruins.small"),
@@ -108,7 +109,11 @@ end
 local function count_found(found_force, size)
   local n = 0
   for key in pairs(found_force) do
-    if size == nil or key:sub(1, #size + 1) == size .. "/" then n = n + 1 end
+    if size == nil then
+      if key:sub(1, 10) ~= "legendary/" then n = n + 1 end
+    elseif key:sub(1, #size + 1) == size .. "/" then
+      n = n + 1
+    end
   end
   return n
 end
@@ -245,6 +250,32 @@ local function show_progress(command)
     count_found(mine, "small"), totals.small or 0,
     count_found(mine, "medium"), totals.medium or 0,
     count_found(mine, "large"), totals.large or 0 })
+  player.print({ "pd-legendary.progress", legendary.found(mine), legendary.total() })
+end
+
+-- Admin command for tests and showcases: /legendary-spawn <name> places a legendary ruin a few
+-- chunks east of the player, ignoring the distance rule. Without a name it lists the names.
+local function spawn_legendary_command(command)
+  local player = command.player_index and game.get_player(command.player_index)
+  if not player then return end
+  if not player.admin then
+    player.print({ "pd-legendary.admin-only" })
+    return
+  end
+  local name = command.parameter and command.parameter:match("^%s*(%S+)")
+  local kind = name and legendary.kinds.by_name[name]
+  if not kind then
+    local names = {}
+    for _, k in ipairs(legendary.kinds.list) do names[#names + 1] = k.name end
+    player.print({ "pd-legendary.spawn-help", table.concat(names, ", ") })
+    return
+  end
+  local offset = kind.size / 2 + 48
+  local site = legendary.site.force_spawn(player.surface, { x = player.position.x + offset, y = player.position.y }, name)
+  if site then
+    player.print({ "pd-legendary.spawned", { "pd-legendary-name." .. name },
+      string.format("[gps=%d,%d,%s]", site.x, site.y, player.surface.name) })
+  end
 end
 
 local function subscribe()
@@ -259,7 +290,10 @@ local function on_init()
   journal()
 end
 
-script.on_init(on_init)
+script.on_init(function()
+  on_init()
+  legendary.on_init()
+end)
 script.on_load(function()
   build_set()
   subscribe()
@@ -267,14 +301,17 @@ end)
 script.on_configuration_changed(function()
   build_set()
   journal()
+  legendary.on_configuration_changed()
 end)
 
 script.on_event(defines.events.on_runtime_mod_setting_changed, function(event)
   if event.setting == "pd-ruins-include-base" then build_set() end
+  legendary.on_setting_changed(event.setting)
 end)
 
 -- Clearing removes the ruins too, so their journal entries and signals go with them.
 script.on_event({ defines.events.on_surface_deleted, defines.events.on_surface_cleared }, function(event)
+  legendary.on_surface_removed(event.surface_index)
   local pending = storage.pending
   if not pending then return end
   local prefix = event.surface_index .. ":"
@@ -293,6 +330,27 @@ script.on_event(defines.events.on_chunk_charted, on_chunk_charted)
 
 script.on_nth_tick(CHECK_INTERVAL, check_players)
 
+-- Legendary ruins (legendary/init.lua) ------------------------------------------------------
+script.on_event(defines.events.on_tick, legendary.on_tick)
+script.on_event(defines.events.on_chunk_generated, legendary.on_chunk_generated)
+script.on_event(defines.events.on_built_entity, legendary.on_built)
+script.on_event(defines.events.on_robot_built_entity, legendary.on_built)
+script.on_event(defines.events.script_raised_built, legendary.on_built)
+script.on_event(defines.events.on_player_built_tile, legendary.on_built_tile)
+script.on_event(defines.events.on_robot_built_tile, legendary.on_built_tile)
+script.on_event(defines.events.on_player_mined_tile, legendary.on_mined_tile)
+script.on_event(defines.events.on_robot_mined_tile, legendary.on_mined_tile)
+script.on_event(defines.events.on_player_mined_entity, legendary.on_mined)
+script.on_event(defines.events.on_robot_mined_entity, legendary.on_mined)
+script.on_event(defines.events.on_marked_for_deconstruction, legendary.on_marked_for_deconstruction,
+  { { filter = "name", name = "pd-legend-lever" } })
+script.on_event(defines.events.on_object_destroyed, legendary.on_object_destroyed)
+script.on_event(defines.events.on_player_changed_position, legendary.on_player_changed_position)
+script.on_event(defines.events.on_pre_player_died, legendary.on_pre_player_died)
+script.on_event(defines.events.on_player_respawned, legendary.on_player_respawned)
+script.on_event(defines.events.on_chunk_deleted, legendary.on_chunk_deleted)
+script.on_event(defines.events.on_force_created, legendary.on_force_created)
+
 -- Old mines for RSO Reforged: these ruins of the set are placed next to rich ore fields.
 local MINES = {
   small = { "pd-geologist-box" },
@@ -304,6 +362,7 @@ local function spawn_mine(surface_index, center, size)
   local names = MINES[size]
   local core = remote.interfaces[CORE]
   if not (names and core and core.spawn_ruin) or setting("current-ruin-set") ~= SET_NAME then return false end
+  if legendary.reserved(surface_index, center, 40) then return false end
   local pick = names[math.random(#names)]
   for _, ruin in ipairs(own[size]) do
     if ruin.name == pick then
@@ -330,6 +389,18 @@ remote.add_interface("AbandonedRuins-paranoidal", {
   -- Used by RSO Reforged: places an old mine ruin of the given size ("small", "medium", "large")
   -- centered at the position. Returns true if it was spawned (the journal records it as usual).
   spawn_mine = spawn_mine,
+  -- Legendary ruins: is the position inside (or within `margin` tiles of) a legendary site?
+  legendary_reserved = function(surface_index, position, margin)
+    return legendary.reserved(surface_index, position, margin)
+  end,
+  -- Legendary ruins: plans the named legendary ruin around the position (distance rules ignored).
+  -- Returns the site center or nil.
+  spawn_legendary = function(surface_index, position, name)
+    local surface = game.get_surface(surface_index)
+    local site = surface and legendary.site.force_spawn(surface, position, name)
+    return site and { x = site.x, y = site.y } or nil
+  end,
 })
 
 commands.add_command("ruins", { "pd-ruins.command-help" }, show_progress)
+commands.add_command("legendary-spawn", { "pd-legendary.spawn-command-help" }, spawn_legendary_command)

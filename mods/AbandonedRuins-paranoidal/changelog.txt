@@ -1,4 +1,28 @@
 ---------------------------------------------------------------------------------------------------
+Version: 9.1.0
+Date: 2026-10-24
+  Features:
+    - Legendary ruins: 22 huge sites (64x64 to 160x160 tiles, built over several chunks) no closer than
+      100 chunks (setting) beyond the edge of the starting zone; each appears once per map. Trials (beaten
+      with early gear): Labyrinth of the Minotaur, Sapper's Field, Pharaoh's Pyramid, "Searchlight" Vault,
+      Dune, Broken Gates, Archivist's Crypt, Hall of Mirrors, Frozen Moment, Forerunners' Bazaar, Forge of
+      Hephaestus. Citadels (green-science weapons): Colosseum, Hive of the Queen, "Red Director" Works,
+      Reactor "Half-Life", Inferno Oilfield, Plague Quarantine, Citadel of the Hammer, Mothership,
+      Observatory on the Cliff, Yggdrasil, Cemetery of the First Colonists.
+    - Sanctuary rules while a legendary ruin is not beaten: untouchable walls (full-tile collision), no
+      building, no tiles, flying vehicles are thrown out, the treasury is sealed and empty. The floor of
+      a legendary ruin cannot be taken up (tiles laid by players after the victory can).
+    - Rewards: 22 relic buildings without recipes (not recycled) and stacks of quality 4-7 (trials) or
+      6-10 (citadels). Lost forever if the ruin is ruined.
+    - Map settings: legendary ruins on/off, ferocity (legendary / harsh / truce, independent of the
+      core's hostile defences), chance per chunk, distance, spacing, repeat after all.
+    - Discovery with lore and hints, lock/unlock/skull map tags, /ruins counts legendary ruins,
+      /legendary-spawn <name> for admins, remote functions legendary_reserved and spawn_legendary.
+    - RSO old mines are not placed inside legendary ruins. A legendary ruin is given up (and may appear
+      elsewhere) when players already have buildings in its area; corpses of characters are kept.
+  Changes:
+    - Version number starts with 9 (Paranoidal mod).
+---------------------------------------------------------------------------------------------------
 Version: 1.0.1
 Date: 2026-10-14
   Features:
