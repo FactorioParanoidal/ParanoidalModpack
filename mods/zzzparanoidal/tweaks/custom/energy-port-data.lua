@@ -77,8 +77,8 @@ return {
     ["angels-gas-natural-1"] = {["fuel_value"] = "250kJ", ["emissions_multiplier"] = 10}, -- B8 560/1: separation lost energy (x0.54)
     ["angels-gas-raw-1"] = {["fuel_value"] = "500kJ", ["emissions_multiplier"] = 4}, -- B8 default 1; contains acid gas
     ["angels-gas-acid"] = {["fuel_value"] = "304kJ", ["emissions_multiplier"] = 7},
-    ["angels-liquid-ngl"] = {["fuel_value"] = "780kJ", ["emissions_multiplier"] = 1.2},
-    ["angels-liquid-condensates"] = {["fuel_value"] = "680kJ", ["emissions_multiplier"] = 8}, -- B8 not a fuel; raw gas condensate, 2026-10-25
+    ["angels-liquid-ngl"] = {["fuel_value"] = "780kJ", ["emissions_multiplier"] = 1.8}, -- B8 1.2: fractioning raised emissions
+    ["angels-liquid-condensates"] = {["fuel_value"] = "250kJ", ["emissions_multiplier"] = 8}, -- B8 not a fuel; raw gas condensate, 2026-10-25
     ["angels-gas-methane"] = {["fuel_value"] = "558kJ", ["emissions_multiplier"] = 1.1},
     ["petroleum-gas"] = {["fuel_value"] = "558kJ", ["emissions_multiplier"] = 1.1}, -- hidden, = methane
     ["angels-gas-ethane"] = {["fuel_value"] = "1000kJ", ["emissions_multiplier"] = 1.5},
