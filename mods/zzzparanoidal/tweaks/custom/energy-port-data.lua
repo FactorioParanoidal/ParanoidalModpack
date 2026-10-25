@@ -60,66 +60,90 @@ return {
     ["nco-express-crane"] = {["stack_size_bonus"] = 197, ["rotation_speed"] = 0.096, ["extension_speed"] = 0.096, ["energy_per_movement"] = "729170J", ["energy_per_rotation"] = "729170J", ["bulk"] = false, ["drain"] = "1.6kW"},
   },
   fluids = {
-    -- 2026-10-15 user decision: diesel 700 kJ (Beta 8 recipe below, gain x1.65); aromatics = mean of
-    -- "Beta 8 gains" (x0.8) and "like diesel" (x0.3) variants. Barrel = fluid x100, emissions unchanged.
-    ["diesel-fuel"] = {["fuel_value"] = "700000J"},
-    ["bob-nitroglycerin"] = {["fuel_value"] = "365000J", ["emissions_multiplier"] = 10},
-    ["angels-gas-deuterium"] = {["fuel_value"] = "75000J", ["emissions_multiplier"] = 10},
-    ["angels-gas-benzene"] = {["fuel_value"] = "670000J", ["emissions_multiplier"] = 10},
-    ["angels-gas-synthesis"] = {["fuel_value"] = "120000J", ["emissions_multiplier"] = 10},
-    ["angels-liquid-toluene"] = {["fuel_value"] = "720000J", ["emissions_multiplier"] = 10},
-    ["angels-gas-butadiene"] = {["fuel_value"] = "505000J", ["emissions_multiplier"] = 10},
-    ["angels-liquid-phenol"] = {["fuel_value"] = "470000J", ["emissions_multiplier"] = 10},
-    ["angels-liquid-ethylbenzene"] = {["fuel_value"] = "720000J", ["emissions_multiplier"] = 10},
-    ["angels-liquid-styrene"] = {["fuel_value"] = "715000J", ["emissions_multiplier"] = 10},
-    ["angels-gas-formaldehyde"] = {["fuel_value"] = "140000J", ["emissions_multiplier"] = 10},
-    ["angels-liquid-polyethylene"] = {["fuel_value"] = "898000J", ["emissions_multiplier"] = 10},
-    ["angels-liquid-glycerol"] = {["fuel_value"] = "155000J", ["emissions_multiplier"] = 10},
-    ["angels-liquid-bisphenol-a"] = {["fuel_value"] = "252500J", ["emissions_multiplier"] = 10},
-    ["angels-gas-acetone"] = {["fuel_value"] = "262000J", ["emissions_multiplier"] = 10},
-    ["angels-gas-allylchlorid"] = {["fuel_value"] = "180000J", ["emissions_multiplier"] = 10},
-    ["angels-gas-chlor-methane"] = {["fuel_value"] = "216000J", ["emissions_multiplier"] = 10},
-    ["angels-gas-ammonia"] = {["fuel_value"] = "155000J", ["emissions_multiplier"] = 10},
-    ["angels-gas-urea"] = {["fuel_value"] = "83500J", ["emissions_multiplier"] = 10},
-    ["angels-gas-melamine"] = {["fuel_value"] = "131000J", ["emissions_multiplier"] = 10},
-    ["angels-gas-methylamine"] = {["fuel_value"] = "287500J", ["emissions_multiplier"] = 10},
-    ["angels-gas-dimethylamine"] = {["fuel_value"] = "310000J", ["emissions_multiplier"] = 10},
-    ["angels-gas-dimethylhydrazine"] = {["fuel_value"] = "275000J", ["emissions_multiplier"] = 10},
-    -- 2026-10-25 user decision: natural gas 300 kJ / 500%, LNG 400 kJ / 300%, methane emissions 105%.
-    ["angels-gas-natural-1"] = {["fuel_value"] = "300000J", ["emissions_multiplier"] = 5},
-    ["angels-gas-methane"] = {["fuel_value"] = "230kJ", ["emissions_multiplier"] = 1.05},
-    -- 2026-10-25 user decision: crude 250 kJ, naphtha 480 kJ / 350%, fuel oil 400 kJ / 150%, liquid fuel 500 kJ.
-    ["crude-oil"] = {["fuel_value"] = "250kJ", ["emissions_multiplier"] = 10},
-    ["angels-liquid-naphtha"] = {["fuel_value"] = "480kJ", ["emissions_multiplier"] = 3.5},
-    ["angels-liquid-fuel-oil"] = {["fuel_value"] = "400kJ", ["emissions_multiplier"] = 1.5},
-    ["bob-liquid-fuel"] = {["fuel_value"] = "500kJ", ["emissions_multiplier"] = 1.5},
-    ["angels-liquid-multi-phase-oil"] = {["fuel_value"] = "180000J", ["emissions_multiplier"] = 15},
-    ["angels-gas-raw-1"] = {["fuel_value"] = "400000J", ["emissions_multiplier"] = 3},
-    ["angels-gas-acid"] = {["fuel_value"] = "152000J", ["emissions_multiplier"] = 10},
-    ["angels-liquid-ngl"] = {["fuel_value"] = "250000J", ["emissions_multiplier"] = 10},
-    ["angels-gas-residual"] = {["fuel_value"] = "250000J", ["emissions_multiplier"] = 10},
-    ["angels-liquid-plastic"] = {["fuel_value"] = "960000J", ["emissions_multiplier"] = 10},
-    ["angels-liquid-resin"] = {["fuel_value"] = "948000J", ["emissions_multiplier"] = 10},
-    ["angels-liquid-rubber"] = {["fuel_value"] = "1.225e+06J", ["emissions_multiplier"] = 15},
-    ["angels-gas-hydrogen-sulfide"] = {["fuel_value"] = "182000J", ["emissions_multiplier"] = 10},
-    ["angels-gas-enriched-hydrogen-sulfide"] = {["fuel_value"] = "182000J", ["emissions_multiplier"] = 10},
-    ["angels-liquid-raw-vegetable-oil"] = {["fuel_value"] = "800000J", ["emissions_multiplier"] = 10},
-    ["angels-liquid-vegetable-oil"] = {["fuel_value"] = "1.05e+06J", ["emissions_multiplier"] = 10},
-    ["angels-liquid-acetic-anhydride"] = {["fuel_value"] = "127500J", ["emissions_multiplier"] = 10},
-    ["angels-liquid-cellulose-acetate"] = {["fuel_value"] = "155000J", ["emissions_multiplier"] = 10},
-    ["angels-liquid-raw-fish-oil"] = {["fuel_value"] = "700000J", ["emissions_multiplier"] = 10},
-    ["angels-liquid-fish-oil"] = {["fuel_value"] = "950000J", ["emissions_multiplier"] = 10},
-    ["gas-chloroethane"] = {["fuel_value"] = "77500J", ["emissions_multiplier"] = 10},
-    ["liquid-dichlorobutene"] = {["fuel_value"] = "250000J", ["emissions_multiplier"] = 10},
-    ["gas-hydrogen-cyanide"] = {["fuel_value"] = "205000J", ["emissions_multiplier"] = 10},
-    ["liquid-acetone-cyanohydrin"] = {["fuel_value"] = "150000J", ["emissions_multiplier"] = 10},
-    ["liquid-acrylonitrile"] = {["fuel_value"] = "275000J", ["emissions_multiplier"] = 10},
-    ["liquid-methyl-methacrylate"] = {["fuel_value"] = "225000J", ["emissions_multiplier"] = 10},
-    ["gas-vinyl-chloride"] = {["fuel_value"] = "155000J", ["emissions_multiplier"] = 10},
-    ["gas-vinyl-acetylene"] = {["fuel_value"] = "275000J", ["emissions_multiplier"] = 10},
-    ["gas-nitrous-oxide"] = {["fuel_value"] = "250000J", ["emissions_multiplier"] = 10},
-    ["liquid-rubber-pre"] = {["fuel_value"] = "1.075e+06J", ["emissions_multiplier"] = 10},
-    ["liquid-rubber-masterbatch"] = {["fuel_value"] = "925000J", ["emissions_multiplier"] = 10},
+    -- 2026-10-25 user decision: corrected Beta 8 (KS_Power) table at Beta 8 scale. Ladder: well products
+    -- weak and dirty, each refining step gains energy and loses emissions. No fluid has exactly 100%
+    -- emissions (the engine hides x1). Source: review/fuel-compare-20261025/build_fluids.py.
+    -- Oil chain: multi-phase -> crude -> naphtha/fuel oil -> liquid fuel -> diesel
+    ["angels-liquid-multi-phase-oil"] = {["fuel_value"] = "360kJ", ["emissions_multiplier"] = 15},
+    ["crude-oil"] = {["fuel_value"] = "560kJ", ["emissions_multiplier"] = 10}, -- B8 734: refining lost energy (x0.92); wet well crude
+    ["angels-liquid-naphtha"] = {["fuel_value"] = "660kJ", ["emissions_multiplier"] = 3},
+    ["heavy-oil"] = {["fuel_value"] = "660kJ", ["emissions_multiplier"] = 3}, -- hidden, = naphtha
+    ["angels-liquid-fuel-oil"] = {["fuel_value"] = "890kJ", ["emissions_multiplier"] = 1.2},
+    ["light-oil"] = {["fuel_value"] = "890kJ", ["emissions_multiplier"] = 1.2}, -- hidden, = fuel oil
+    ["bob-liquid-fuel"] = {["fuel_value"] = "1140kJ", ["emissions_multiplier"] = 0.95}, -- B8 default 1
+    ["diesel-fuel"] = {["fuel_value"] = "2250kJ", ["emissions_multiplier"] = 0.9}, -- B8 1.5 was dirtier than its input
+    ["angels-gas-residual"] = {["fuel_value"] = "700kJ", ["emissions_multiplier"] = 4.5},
+    -- Gas chain: free gas -> natural gas -> NGL -> methane/ethane/butane
+    ["angels-gas-natural-1"] = {["fuel_value"] = "250kJ", ["emissions_multiplier"] = 10}, -- B8 560/1: separation lost energy (x0.54)
+    ["angels-gas-raw-1"] = {["fuel_value"] = "500kJ", ["emissions_multiplier"] = 4}, -- B8 default 1; contains acid gas
+    ["angels-gas-acid"] = {["fuel_value"] = "304kJ", ["emissions_multiplier"] = 7},
+    ["angels-liquid-ngl"] = {["fuel_value"] = "780kJ", ["emissions_multiplier"] = 1.2},
+    ["angels-gas-methane"] = {["fuel_value"] = "558kJ", ["emissions_multiplier"] = 1.1},
+    ["petroleum-gas"] = {["fuel_value"] = "558kJ", ["emissions_multiplier"] = 1.1}, -- hidden, = methane
+    ["angels-gas-ethane"] = {["fuel_value"] = "1000kJ", ["emissions_multiplier"] = 1.5},
+    ["angels-gas-butane"] = {["fuel_value"] = "1900kJ", ["emissions_multiplier"] = 1.8},
+    ["angels-gas-propene"] = {["fuel_value"] = "920kJ", ["emissions_multiplier"] = 5}, -- unit fix 760->1380 (MJ/m3), then /1.5 (synthesis gain)
+    ["angels-gas-ethylene"] = {["fuel_value"] = "930kJ", ["emissions_multiplier"] = 2.8}, -- unit fix 800->930 (MJ/m3)
+    ["angels-gas-synthesis"] = {["fuel_value"] = "240kJ", ["emissions_multiplier"] = 0.8},
+    ["angels-gas-hydrogen"] = {["fuel_value"] = "150kJ", ["emissions_multiplier"] = 0.1},
+    ["bob-hydrogen"] = {["fuel_value"] = "150kJ", ["emissions_multiplier"] = 0.1}, -- hidden, = hydrogen
+    ["angels-gas-deuterium"] = {["fuel_value"] = "150kJ", ["emissions_multiplier"] = 0.1},
+    ["bob-deuterium"] = {["fuel_value"] = "150kJ", ["emissions_multiplier"] = 0.1}, -- hidden, = deuterium
+    ["angels-gas-hydrazine"] = {["fuel_value"] = "760kJ", ["emissions_multiplier"] = 0.2},
+    ["bob-hydrazine"] = {["fuel_value"] = "760kJ", ["emissions_multiplier"] = 0.2}, -- hidden, = hydrazine
+    -- Aromatics and dienes (liquids per kg, gases per m3)
+    ["angels-gas-benzene"] = {["fuel_value"] = "1615kJ", ["emissions_multiplier"] = 6.5}, -- B8 2420 /1.5 (synthesis gain)
+    ["angels-gas-butadiene"] = {["fuel_value"] = "1265kJ", ["emissions_multiplier"] = 3}, -- B8 1896 /1.5 (synthesis gain)
+    ["angels-liquid-toluene"] = {["fuel_value"] = "680kJ", ["emissions_multiplier"] = 6.5}, -- B8 2616 counted per m3 of vapour
+    ["angels-liquid-ethylbenzene"] = {["fuel_value"] = "685kJ", ["emissions_multiplier"] = 6.5}, -- B8 2616 per m3 of vapour
+    ["angels-liquid-styrene"] = {["fuel_value"] = "710kJ", ["emissions_multiplier"] = 6.5}, -- B8 2600 per m3 of vapour
+    ["angels-liquid-phenol"] = {["fuel_value"] = "540kJ", ["emissions_multiplier"] = 6.5}, -- B8 1716 per m3 of vapour
+    ["gas-vinyl-acetylene"] = {["fuel_value"] = "550kJ", ["emissions_multiplier"] = 3}, -- B8 default 1
+    -- Polymers
+    ["angels-liquid-polyethylene"] = {["fuel_value"] = "1796kJ", ["emissions_multiplier"] = 6.5},
+    ["angels-liquid-plastic"] = {["fuel_value"] = "1280kJ", ["emissions_multiplier"] = 8}, -- B8 1920 /1.5 (synthesis gain)
+    ["angels-liquid-resin"] = {["fuel_value"] = "1896kJ", ["emissions_multiplier"] = 6.5},
+    ["liquid-rubber-masterbatch"] = {["fuel_value"] = "1850kJ", ["emissions_multiplier"] = 7},
+    ["liquid-rubber-pre"] = {["fuel_value"] = "2150kJ", ["emissions_multiplier"] = 9},
+    ["angels-liquid-rubber"] = {["fuel_value"] = "2450kJ", ["emissions_multiplier"] = 15},
+    -- Alcohols and oxygenates (B8 default 1)
+    ["angels-gas-methanol"] = {["fuel_value"] = "240kJ", ["emissions_multiplier"] = 0.95}, -- B8 360 /1.5 (synthesis gain)
+    ["angels-gas-ethanol"] = {["fuel_value"] = "510kJ", ["emissions_multiplier"] = 0.7},
+    ["angels-gas-acetone"] = {["fuel_value"] = "524kJ", ["emissions_multiplier"] = 1.05},
+    ["angels-gas-formaldehyde"] = {["fuel_value"] = "280kJ", ["emissions_multiplier"] = 1.05},
+    ["angels-liquid-acetic-anhydride"] = {["fuel_value"] = "255kJ", ["emissions_multiplier"] = 1.05},
+    ["angels-liquid-cellulose-acetate"] = {["fuel_value"] = "310kJ", ["emissions_multiplier"] = 1.05},
+    ["angels-liquid-glycerol"] = {["fuel_value"] = "310kJ", ["emissions_multiplier"] = 0.95},
+    ["bob-glycerol"] = {["fuel_value"] = "310kJ", ["emissions_multiplier"] = 0.95}, -- hidden, = glycerol
+    ["liquid-methyl-methacrylate"] = {["fuel_value"] = "450kJ", ["emissions_multiplier"] = 1.5},
+    ["angels-liquid-bisphenol-a"] = {["fuel_value"] = "505kJ", ["emissions_multiplier"] = 4}, -- aromatic
+    -- Nitrogen compounds (B8 default 1)
+    ["angels-gas-ammonia"] = {["fuel_value"] = "155kJ", ["emissions_multiplier"] = 2}, -- unit fix 310->230 (MJ/m3), then /1.5 (synthesis gain)
+    ["angels-gas-methylamine"] = {["fuel_value"] = "575kJ", ["emissions_multiplier"] = 2},
+    ["angels-gas-dimethylamine"] = {["fuel_value"] = "620kJ", ["emissions_multiplier"] = 2},
+    ["angels-gas-dimethylhydrazine"] = {["fuel_value"] = "550kJ", ["emissions_multiplier"] = 2},
+    ["angels-gas-urea"] = {["fuel_value"] = "167kJ", ["emissions_multiplier"] = 2},
+    ["angels-gas-melamine"] = {["fuel_value"] = "262kJ", ["emissions_multiplier"] = 2},
+    ["gas-hydrogen-cyanide"] = {["fuel_value"] = "410kJ", ["emissions_multiplier"] = 4},
+    ["liquid-acrylonitrile"] = {["fuel_value"] = "550kJ", ["emissions_multiplier"] = 4},
+    ["liquid-acetone-cyanohydrin"] = {["fuel_value"] = "300kJ", ["emissions_multiplier"] = 4},
+    ["bob-nitroglycerin"] = {["fuel_value"] = "730kJ", ["emissions_multiplier"] = 3},
+    -- Chlorinated (B8 default 1)
+    ["angels-gas-chlor-methane"] = {["fuel_value"] = "432kJ", ["emissions_multiplier"] = 6},
+    ["gas-chloroethane"] = {["fuel_value"] = "155kJ", ["emissions_multiplier"] = 6},
+    ["gas-vinyl-chloride"] = {["fuel_value"] = "310kJ", ["emissions_multiplier"] = 6},
+    ["angels-gas-allylchlorid"] = {["fuel_value"] = "360kJ", ["emissions_multiplier"] = 6},
+    ["liquid-dichlorobutene"] = {["fuel_value"] = "500kJ", ["emissions_multiplier"] = 6},
+    -- Sulphur (B8 default 1)
+    ["angels-gas-hydrogen-sulfide"] = {["fuel_value"] = "364kJ", ["emissions_multiplier"] = 8},
+    ["angels-gas-enriched-hydrogen-sulfide"] = {["fuel_value"] = "364kJ", ["emissions_multiplier"] = 8},
+    -- Bio oils (B8 default 1)
+    ["angels-liquid-vegetable-oil"] = {["fuel_value"] = "2100kJ", ["emissions_multiplier"] = 0.95},
+    ["angels-liquid-raw-vegetable-oil"] = {["fuel_value"] = "1600kJ", ["emissions_multiplier"] = 1.5},
+    ["angels-liquid-fish-oil"] = {["fuel_value"] = "1900kJ", ["emissions_multiplier"] = 0.95},
+    ["angels-liquid-raw-fish-oil"] = {["fuel_value"] = "1400kJ", ["emissions_multiplier"] = 1.5},
+    -- 2.0 only
+    ["bob-alien-fire"] = {["fuel_value"] = "2600kJ", ["emissions_multiplier"] = 1.05}, -- 2.0 value, emissions not 100%
   },
   barrels = {
     ["diesel-fuel"] = {"diesel-fuel-barrel"},

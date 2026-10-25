@@ -38,12 +38,48 @@ if not found then prerequisites[#prerequisites + 1] = "bob-cobalt-processing" en
 
 for name, fields in pairs(port.fluids) do
     apply(data.raw.fluid[name], fields)
-    for _, barrel_name in ipairs(port.barrels[name]) do
+    for _, barrel_name in ipairs(port.barrels[name] or {}) do
         local barrel = assert(data.raw.item[barrel_name])
         barrel.fuel_category = "chemical"
         barrel.fuel_value = tostring(util.parse_energy(fields.fuel_value) * 100) .. "J"
         barrel.fuel_emissions_multiplier = fields.emissions_multiplier
         -- Keep the 2.0 container lifecycle; burning does not introduce a new return-container rule.
+    end
+end
+
+-- 2026-10-25 user decision (variant A): every fuel barrel equals its fluid. A fill recipe is
+-- 1 fluid + 1 container -> 1 item, confirmed by an empty recipe returning that fluid from the item.
+-- Energy = fluid fuel_value x fluid per item, emissions = fluid emissions (no clean-burning loophole).
+local function list(recipe, key)
+    local out = {}
+    for _, entry in pairs(recipe[key] or {}) do
+        out[#out + 1] = {type = entry.type or "item", name = entry.name or entry[1], amount = entry.amount or entry[2] or 1}
+    end
+    return out
+end
+local emptied = {}
+for _, recipe in pairs(data.raw.recipe) do
+    local ingredients = list(recipe, "ingredients")
+    if #ingredients == 1 and ingredients[1].type == "item" then
+        for _, result in ipairs(list(recipe, "results")) do
+            if result.type == "fluid" then emptied[ingredients[1].name .. "|" .. result.name] = true end
+        end
+    end
+end
+for _, recipe in pairs(data.raw.recipe) do
+    local ingredients, results = list(recipe, "ingredients"), list(recipe, "results")
+    if #ingredients == 2 and #results == 1 and results[1].type == "item" then
+        local fluid_in = ingredients[1].type == "fluid" and ingredients[1] or ingredients[2].type == "fluid" and ingredients[2]
+        local other = fluid_in == ingredients[1] and ingredients[2] or ingredients[1]
+        local fluid = fluid_in and data.raw.fluid[fluid_in.name]
+        local barrel = data.raw.item[results[1].name]
+        if fluid and fluid.fuel_value and other.type == "item" and barrel
+            and emptied[barrel.name .. "|" .. fluid.name] then
+            local per_item = fluid_in.amount / results[1].amount
+            barrel.fuel_category = barrel.fuel_category or "chemical"
+            barrel.fuel_value = tostring(util.parse_energy(fluid.fuel_value) * per_item) .. "J"
+            barrel.fuel_emissions_multiplier = fluid.emissions_multiplier or 1
+        end
     end
 end
 
