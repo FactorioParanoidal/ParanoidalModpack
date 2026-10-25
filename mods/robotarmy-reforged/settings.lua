@@ -46,6 +46,10 @@ data:extend({
     default_value = true, order = "c[ai]-b",
   },
   {
+    type = "int-setting", name = S.repair_at_base, setting_type = "runtime-global",
+    default_value = 2, minimum_value = 0, maximum_value = 20, order = "c[ai]-c",
+  },
+  {
     type = "bool-setting", name = S.squad_messages, setting_type = "runtime-global",
     default_value = true, order = "d[messages]-a",
   },

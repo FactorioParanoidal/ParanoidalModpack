@@ -12,9 +12,14 @@ local tools = require("script.tools")
 local qrf = require("script.qrf")
 local gui = require("script.gui")
 local compat = require("script.compat")
+local droids = require("script.droids")
+local ranks = require("script.ranks")
+local pods = require("script.pods")
+local territory = require("script.territory")
 
 local B = shared.buildings
-local is_droid = shared.is_droid
+local is_droid = droids.is_droid
+local POD = shared.pod.entity
 
 local BUILDING_KIND = {
   [B.assembler] = "assemblers",
@@ -68,7 +73,13 @@ local function on_built(event)
   if not (entity and entity.valid) then return end
   local name = entity.name
   if is_droid[name] then
-    spawners.adopt(entity, nil, event.name == defines.events.on_built_entity)
+    if droids.allowed(entity) then
+      spawners.adopt(entity, nil, event.name == defines.events.on_built_entity)
+    end
+    return
+  end
+  if name == POD then
+    pods.on_built(event)
     return
   end
   local kind = BUILDING_KIND[name]
@@ -106,6 +117,9 @@ local function on_object_destroyed(event)
   if not unit_number or unit_number == 0 then return end
   if storage.units[unit_number] then
     storage.units[unit_number] = nil
+    storage.kills[unit_number] = nil
+    storage.mines[unit_number] = nil
+    storage.mine_tick[unit_number] = nil
     local id = storage.unit_squad[unit_number]
     if id then
       local squad = storage.squads[id]
@@ -115,6 +129,10 @@ local function on_object_destroyed(event)
         storage.unit_squad[unit_number] = nil
       end
     end
+    return
+  end
+  if storage.pods[unit_number] then
+    storage.pods[unit_number] = nil -- destroyed before it opened: the squad is lost
     return
   end
   forget_structure(unit_number)
@@ -175,8 +193,11 @@ local function rescan()
     for _, entity in pairs(surface.find_entities_filtered({name = names})) do
       register_building(entity, BUILDING_KIND[entity.name], nil)
     end
-    for _, droid in pairs(surface.find_entities_filtered({name = shared.unit_names})) do
-      spawners.adopt(droid, nil, false)
+    for _, droid in pairs(surface.find_entities_filtered({name = droids.names})) do
+      if droids.allowed(droid) then
+        spawners.adopt(droid, nil, false)
+        ranks.mark(droid)
+      end
     end
   end
 end
@@ -203,6 +224,14 @@ local function cleanup()
   end
   for player_index in pairs(storage.selection) do
     if not game.get_player(player_index) then tools.deselect(player_index) end
+  end
+  for _, key in pairs({"kills", "mines", "mine_tick"}) do
+    for unit_number in pairs(storage[key]) do
+      if not storage.units[unit_number] then storage[key][unit_number] = nil end
+    end
+  end
+  for unit_number, record in pairs(storage.pods) do
+    if not record.entity.valid then storage.pods[unit_number] = nil end
   end
 end
 
@@ -264,8 +293,20 @@ local function on_settings_pasted(event)
   on_gui_closed({entity = event.destination, player_index = event.player_index})
 end
 
+--- Kill counter of the droids (script/ranks.lua) and the quick reaction force (script/qrf.lua).
+local function on_entity_died(event)
+  local cause = event.cause
+  if cause and cause.valid and is_droid[cause.name] and cause.force.is_enemy(event.entity.force) then
+    ranks.on_kill(cause)
+  end
+  qrf.on_entity_died(event)
+end
+
 local function on_player_left(event)
   tools.deselect(event.player_index)
+  ranks.clear_hover(event.player_index)
+  storage.rally_pick[event.player_index] = nil
+  storage.pod_prebuild[event.player_index] = nil
   local player = game.get_player(event.player_index)
   if player then gui.close_window(player) else storage.windows[event.player_index] = nil end
 end
@@ -335,19 +376,52 @@ remote.add_interface("robotarmy-reforged", {
   squad_of = function(unit_number)
     return storage.unit_squad[unit_number]
   end,
+  --- Droid state: {kills, mines, rank, kind} or nil for an unknown droid.
+  droid = function(unit_number)
+    local entity = storage.units[unit_number]
+    if not (entity and entity.valid) then return nil end
+    return {kills = storage.kills[unit_number] or 0, mines = storage.mines[unit_number],
+      rank = droids.rank[entity.name] or 0, kind = droids.kind[entity.name]}
+  end,
+  --- Starts (true) or ends (false) the base patrol of a squad.
+  set_patrol = function(squad_id, on)
+    local squad = storage.squads[squad_id]
+    if squad then gui.set_patrol(squad, on) end
+  end,
+  --- Base chunks known for patrols of a force on a surface: {chunks = {{x, y}...}, seen, queued}.
+  territory = function(force, surface_index)
+    local f, surface = game.forces[force], game.get_surface(surface_index)
+    return f and surface and territory.info(f, surface)
+  end,
+  --- Sets (x, y) or clears (no position) the rally point of a droid assembler; false if too far.
+  set_rally = function(unit_number, x, y)
+    local record = storage.spawners[unit_number]
+    if not record then return false end
+    return spawners.set_rally(record, x and {x = x, y = y} or nil)
+  end,
+  --- Loads a squad into a drop pod item stack (LuaItemStack, empty pod); returns the count.
+  pod_load = function(squad_id, stack)
+    local squad = storage.squads[squad_id]
+    return squad and pods.load(squad, stack) or 0
+  end,
+  --- Places a drop pod from an item stack (the stack is emptied); returns the pod entity.
+  pod_place = function(stack, surface_index, position, force)
+    local surface = game.get_surface(surface_index)
+    return surface and pods.place_from_stack(stack, surface, position, force)
+  end,
 })
 
 ------------------------------------------------------------------------------------------
 -- Registration
 
-local built_filter = {}
+local built_filter = {{filter = "name", name = POD}}
 for name in pairs(BUILDING_KIND) do
   -- the loot chest prototype only exists with its startup setting on
   if name ~= B.loot or settings.startup[shared.setting.loot_chest].value then
     built_filter[#built_filter + 1] = {filter = "name", name = name}
   end
 end
-for _, name in pairs(shared.unit_names) do
+for _, name in pairs(droids.names) do
   built_filter[#built_filter + 1] = {filter = "name", name = name}
 end
 
@@ -365,17 +439,23 @@ script.on_event(defines.events.on_object_destroyed, on_object_destroyed)
 
 script.on_event(defines.events.on_tick, on_tick)
 script.on_nth_tick(config.CIRCUIT_PERIOD, circuit.on_nth_tick)
-script.on_nth_tick(config.GUI_PERIOD, function()
+script.on_nth_tick(config.GUI_PERIOD, function(event)
   if next(storage.selection) then tools.refresh() end
   gui.refresh()
+  if next(storage.hover) then ranks.refresh_hover() end
+  if next(storage.pods) then pods.on_nth_tick(event.tick) end
 end)
+script.on_nth_tick(config.TERRITORY_PERIOD, territory.on_nth_tick)
 script.on_event(defines.events.on_ai_command_completed, on_ai_command_completed)
-script.on_event(defines.events.on_entity_died, qrf.on_entity_died, qrf.event_filter)
+script.on_event(defines.events.on_entity_died, on_entity_died, qrf.event_filter)
+script.on_event(defines.events.on_selected_entity_changed, ranks.on_selected_entity_changed)
+script.on_event(defines.events.on_player_cursor_stack_changed, tools.on_cursor_changed)
+script.on_event(defines.events.on_pre_build, pods.on_pre_build)
 
 script.on_event(defines.events.on_player_selected_area, tools.on_selected_area)
 script.on_event(defines.events.on_player_alt_selected_area, tools.on_alt_selected_area)
 script.on_event(defines.events.on_player_reverse_selected_area, tools.on_reverse_selected_area)
-script.on_event(defines.events.on_player_alt_reverse_selected_area, tools.on_reverse_selected_area)
+script.on_event(defines.events.on_player_alt_reverse_selected_area, tools.on_alt_reverse_selected_area)
 
 script.on_event(defines.events.on_gui_opened, gui.on_opened)
 script.on_event(defines.events.on_gui_closed, on_gui_closed)

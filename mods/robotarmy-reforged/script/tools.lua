@@ -3,15 +3,21 @@
 --                                  empty ground deselects
 --   alt-select (Shift + drag):     the picked squad attack-moves to the middle of the box
 --   reverse-select (right drag):   pick up the selected droids
+--   alt-reverse-select (Shift + right drag): merge the squads of the selected droids into one
+--   while a player sets the rally point of a droid assembler (button in its panel), a click with
+--   the tool sets it instead of picking a squad
 -- A picked squad is shown only to the picking player: a mark on every member, a label with
--- the squad number and size above one member, and a line to where the squad is going.
+-- the squad number and size above one member, and a line to where the squad is going
+-- (the label and the line also on the map).
 local shared = require("lib.shared")
 local config = require("script.config")
 local state = require("script.state")
 local Squad = require("script.squad")
 local util = require("script.util")
+local droids = require("script.droids")
+local spawners = require("script.spawners")
 
-local is_droid = shared.is_droid
+local is_droid = droids.is_droid
 local rendering = rendering
 
 local tools = {}
@@ -58,8 +64,9 @@ local function draw(player, selection, squad)
     end
   end
   if not leader then return end
+  local label = {"robotarmy-gui.squad-label", squad.id, squad.size}
   objects[#objects + 1] = rendering.draw_text({
-    text = {"robotarmy-gui.squad-label", squad.id, squad.size},
+    text = label,
     target = {entity = leader, offset = {0, -2.2}},
     surface = leader.surface,
     players = players,
@@ -67,8 +74,20 @@ local function draw(player, selection, squad)
     alignment = "center",
     scale = 1.2,
   })
+  -- map view: the label at the squad and the line (redrawn with the marks every GUI period)
+  local at = leader.position
+  objects[#objects + 1] = rendering.draw_text({
+    text = label,
+    target = {at.x, at.y - 3},
+    surface = leader.surface,
+    players = players,
+    color = TEXT_COLOR,
+    alignment = "center",
+    scale = 3,
+    render_mode = "chart",
+  })
   local destination = Squad.destination(squad)
-  if destination and util.distance2(leader.position, destination) > 25 then
+  if destination and util.distance2(at, destination) > 25 then
     objects[#objects + 1] = rendering.draw_line({
       from = leader,
       to = destination,
@@ -78,6 +97,17 @@ local function draw(player, selection, squad)
       width = 2,
       dash_length = 0.6,
       gap_length = 0.4,
+    })
+    objects[#objects + 1] = rendering.draw_line({
+      from = at,
+      to = destination,
+      surface = leader.surface,
+      players = players,
+      color = LINE_COLOR,
+      width = 3,
+      dash_length = 2,
+      gap_length = 1,
+      render_mode = "chart",
     })
   end
 end
@@ -143,7 +173,50 @@ local function squad_from_event(fd, event)
   return Squad.find_near(fd, event.surface.index, area_center(event.area), config.SQUAD_CHECK_RANGE)
 end
 
+------------------------------------------------------------------------------------------
+-- Rally point of a droid assembler
+
+--- The panel button: the next click with the tool sets the rally point of the assembler.
+function tools.start_rally_pick(player, unit_number)
+  storage.rally_pick[player.index] = unit_number
+  if player.clear_cursor() then
+    player.cursor_stack.set_stack({name = shared.tool})
+  end
+  player.opened = nil
+  flying_text(player, {"robotarmy-gui.rally-pick", shared.rally_range})
+end
+
+--- The tool left the cursor: no more rally point picking.
+function tools.on_cursor_changed(event)
+  if not storage.rally_pick[event.player_index] then return end
+  local player = game.get_player(event.player_index)
+  local stack = player and player.cursor_stack
+  if not (stack and stack.valid_for_read and stack.name == shared.tool) then
+    storage.rally_pick[event.player_index] = nil
+  end
+end
+
+local function set_rally(player, event, unit_number)
+  storage.rally_pick[player.index] = nil
+  local record = storage.spawners[unit_number]
+  if not (record and record.entity.valid and record.entity.force.index == player.force.index) then return end
+  if record.entity.surface_index ~= event.surface.index then
+    flying_text(player, {"robotarmy-gui.other-surface"})
+    return
+  end
+  if spawners.set_rally(record, area_center(event.area)) then
+    flying_text(player, {"robotarmy-gui.rally-set"})
+  else
+    flying_text(player, {"robotarmy-gui.rally-too-far", shared.rally_range})
+  end
+end
+
 local function on_select(player, event)
+  local rally = storage.rally_pick[player.index]
+  if rally then
+    set_rally(player, event, rally)
+    return
+  end
   local squad = squad_from_event(state.force_data(player.force), event)
   if squad then
     tools.select(player, squad)
@@ -178,12 +251,14 @@ local function on_command(player, event)
 end
 
 local function pick_up(player, event)
-  local picked, full = 0, false
+  local picked, full, veterans = 0, false, 0
   for _, unit in pairs(event.entities) do
-    if unit.valid and is_droid[unit.name] then
+    if unit.valid and is_droid[unit.name] and (droids.rank[unit.name] or 0) > 0 then
+      veterans = veterans + 1 -- the rank would be lost: only a drop pod carries veterans
+    elseif unit.valid and is_droid[unit.name] then
       local max_health = unit.max_health
       local stack = {
-        name = unit.name,
+        name = droids.kind[unit.name],
         count = 1,
         quality = unit.quality.name,
         health = max_health > 0 and unit.health / max_health or 1,
@@ -198,9 +273,49 @@ local function pick_up(player, event)
   end
   if full then
     flying_text(player, {"robotarmy-gui.pickup-no-space", picked})
+  elseif veterans > 0 then
+    flying_text(player, {"robotarmy-gui.pickup-veterans", picked, veterans})
   elseif picked > 0 then
     flying_text(player, {"robotarmy-gui.picked-up", picked})
   end
+end
+
+--- Merges the squads of the selected droids (garrisons excluded) into the biggest one.
+local function merge_selected(player, event)
+  local fd = state.force_data(player.force)
+  local ids, list = {}, {}
+  local unit_squad = storage.unit_squad
+  for _, entity in pairs(event.entities) do
+    local id = entity.valid and unit_squad[entity.unit_number]
+    local squad = id and not ids[id] and storage.squads[id]
+    if squad then
+      ids[id] = true
+      if squad.force_index == fd.force.index and not squad.station and squad.mode ~= Squad.MODE.guard then
+        list[#list + 1] = squad
+      end
+    end
+  end
+  if #list < 2 then
+    flying_text(player, {"robotarmy-gui.merge-nothing"})
+    return
+  end
+  table.sort(list, function(a, b) return a.size > b.size end)
+  local into = list[1]
+  local merged = 1
+  for i = 2, #list do
+    local other = list[i]
+    if not other.deleted and other.surface_index == into.surface_index then
+      into = Squad.merge(into, other) or into
+      merged = merged + 1
+    end
+  end
+  if merged < 2 then
+    flying_text(player, {"robotarmy-gui.merge-nothing"})
+    return
+  end
+  into.order.dirty = true
+  tools.select(player, into)
+  flying_text(player, {"robotarmy-gui.merged", merged, into.id, into.size})
 end
 
 ------------------------------------------------------------------------------------------
@@ -221,6 +336,12 @@ function tools.on_reverse_selected_area(event)
   if event.item ~= shared.tool then return end
   local player = game.get_player(event.player_index)
   if player then pick_up(player, event) end
+end
+
+function tools.on_alt_reverse_selected_area(event)
+  if event.item ~= shared.tool then return end
+  local player = game.get_player(event.player_index)
+  if player then merge_selected(player, event) end
 end
 
 return tools

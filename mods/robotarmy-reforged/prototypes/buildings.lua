@@ -1,4 +1,4 @@
--- Droid assembler, guard station, droid counter and (optional) loot chest.
+-- Droid assembler, guard station, droid counter, drop pod and (optional) loot chest.
 local util = require("util")
 local shared = require("lib.shared")
 
@@ -53,6 +53,9 @@ local function deployer(p)
     ingredient_count = p.ingredient_count,
     module_slots = p.module_slots,
     allowed_effects = {"consumption", "speed", "pollution"},
+    -- circuit network: enable/disable by condition, read contents, set the deploy recipe
+    circuit_wire_max_distance = assembling_machine_circuit_wire_max_distance,
+    circuit_connector = circuit_connector_definitions["assembling-machine"],
   }
 end
 
@@ -123,10 +126,33 @@ data:extend({
     collision_box = {{-1.7, -1.7}, {1.7, 1.7}},
     selection_box = {{-2, -2}, {2, 2}},
     animation = picture("guard-station", 416, 456),
-    ingredient_count = 1,
+    ingredient_count = 2, -- the miner deploy recipe also takes its land mines
     module_slots = 0,
   }),
   combinator(B.counter, {0.234375, -0.484375}, {r = 1, g = 1, b = 1}),
+  {
+    -- Drop pod on the ground. Not minable while it holds a squad (the control script turns mining
+    -- on once the squad has landed); not blueprintable: the squad lives in the item tags.
+    type = "simple-entity-with-owner",
+    name = shared.pod.entity,
+    icons = {{icon = ICONS .. "loot-chest.png", icon_size = 64, tint = {r = 0.6, g = 0.75, b = 0.45}}},
+    flags = {"placeable-neutral", "placeable-player", "player-creation", "not-blueprintable"},
+    minable = {mining_time = 0.5, result = shared.pod.item},
+    max_health = 500,
+    corpse = "small-remnants",
+    dying_explosion = "medium-explosion",
+    resistances = {{type = "fire", percent = 80}, {type = "acid", percent = 50}},
+    collision_box = {{-0.8, -0.8}, {0.8, 0.8}},
+    selection_box = {{-1, -1}, {1, 1}},
+    render_layer = "object",
+    picture = {
+      layers = {
+        {filename = BUILDINGS .. "hr-loot-chest.png", width = 66, height = 76, shift = util.by_pixel(-1, -1), scale = 1,
+         tint = {r = 0.6, g = 0.75, b = 0.45}},
+        {filename = BUILDINGS .. "hr-loot-chest-shadow.png", width = 110, height = 50, shift = util.by_pixel(25, 16), scale = 1, draw_as_shadow = true},
+      },
+    },
+  },
 })
 
 if settings.startup[shared.setting.loot_chest].value then

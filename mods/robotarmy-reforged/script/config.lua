@@ -39,4 +39,12 @@ return {
   QRF_ALERT_COOLDOWN = 600,
 
   ARTIFACT_GRAB_RADIUS = 30,
+
+  REPAIR_RANGE = 25,                  -- repair droids reach members this close to the squad position (health: lib/shared.lua)
+  MINE_COOLDOWN = 300,                -- a miner lays at most one land mine per this many ticks
+  MINE_SPACING = 2.5,                 -- ... and not this close to another land mine of the force
+  MINE_ENEMY_RANGE = 12,              -- a miner is in battle when an enemy is this close (or it fights)
+
+  TERRITORY_PERIOD = 13,              -- patrol: one chunk of a base is checked for buildings per this many ticks
+  PATROL_RETURN_CHUNKS = 3,           -- a patrol outside the base walks back only to a base chunk this close (chunks)
 }

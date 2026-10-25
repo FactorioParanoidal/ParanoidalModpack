@@ -8,15 +8,23 @@ local compat = require("script.compat")
 
 local qrf = {}
 
--- Entity types that die without triggering a QRF. Biters, spitters, our own droids, robots and
--- characters are already excluded by the event filter (see qrf.event_filter).
+-- Entity types that die without triggering a QRF: see qrf.event_filter (mobile units, robots,
+-- characters, land mines that went off) and the settings for vehicles and walls.
 local VEHICLES = {
   ["car"] = true, ["spider-vehicle"] = true, ["locomotive"] = true, ["cargo-wagon"] = true,
   ["fluid-wagon"] = true, ["artillery-wagon"] = true, ["infinity-cargo-wagon"] = true,
 }
 local WALLS = {["wall"] = true, ["gate"] = true, ["simple-entity-with-owner"] = true}
 
---- on_entity_died filter: not an enemy/neutral entity and not a mobile unit.
+-- Types that never call the QRF (also checked in the handler: the event filter lets enemy deaths
+-- through for the droid kill counter).
+local IGNORED = {
+  ["unit"] = true, ["character"] = true, ["combat-robot"] = true, ["construction-robot"] = true,
+  ["logistic-robot"] = true, ["land-mine"] = true,
+}
+
+--- on_entity_died filter: (own building: not an enemy / neutral entity and not a mobile unit,
+--- robot, character or land mine) or any entity of the enemy force (droid kills, script/ranks.lua).
 qrf.event_filter = {
   {filter = "force", force = "enemy", invert = true},
   {filter = "force", force = "neutral", invert = true, mode = "and"},
@@ -25,6 +33,8 @@ qrf.event_filter = {
   {filter = "type", type = "combat-robot", invert = true, mode = "and"},
   {filter = "type", type = "construction-robot", invert = true, mode = "and"},
   {filter = "type", type = "logistic-robot", invert = true, mode = "and"},
+  {filter = "type", type = "land-mine", invert = true, mode = "and"},
+  {filter = "force", force = "enemy", mode = "or"},
 }
 
 function qrf.on_entity_died(event)
@@ -34,6 +44,7 @@ function qrf.on_entity_died(event)
   local fd = storage.forces[entity.force.index]
   if not fd or next(fd.squads) == nil then return end
   local entity_type = entity.type
+  if IGNORED[entity_type] then return end
   if VEHICLES[entity_type] then
     if not cache.qrf_vehicles then return end
   elseif WALLS[entity_type] then

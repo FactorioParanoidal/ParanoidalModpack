@@ -14,12 +14,19 @@
 -- storage.spawner_count, storage.spawner_cursor, storage.spawner_budget
 -- storage.selection      player index -> {squad = id, objects = {LuaRenderObject}}
 -- storage.windows        player index -> true while the army window is open
+-- storage.kills          unit_number -> enemies killed by the droid (script/ranks.lua)
+-- storage.mines, storage.mine_tick   unit_number -> land mines a miner carries, its next mine tick
+-- storage.hover          player index -> text over the droid the player points at
+-- storage.pods           pod unit_number -> squad waiting to land (script/pods.lua)
+-- storage.pod_prebuild   player index -> tags of the pod the player is placing
+-- storage.territories    force index -> surface index -> base chunks for patrols (script/territory.lua)
+-- storage.rally_pick     player index -> assembler unit_number whose rally point the player is setting
 local shared = require("lib.shared")
 local config = require("script.config")
 
 local state = {}
 
-state.SCHEMA = 2
+state.SCHEMA = 3
 
 --- Fresh state. Anything left from another schema (or the original mod) is dropped.
 function state.init()
@@ -47,6 +54,15 @@ function state.init()
   storage.spawner_budget = 0
   storage.selection = {}
   storage.windows = {}
+  storage.kills = {}
+  storage.mines = {}
+  storage.mine_tick = {}
+  storage.hover = {}
+  storage.pods = {}
+  storage.pod_prebuild = {}
+  storage.territories = {}
+  storage.territory_turn = 0
+  storage.rally_pick = {}
 end
 
 --- Force data, created on first use.

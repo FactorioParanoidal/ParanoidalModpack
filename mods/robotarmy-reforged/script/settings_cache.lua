@@ -21,6 +21,7 @@ function cache.refresh()
   cache.squad_messages = global[S.squad_messages].value
   cache.teleport = global[S.teleport].value
   cache.debug = global[S.debug].value
+  cache.repair_at_base = global[S.repair_at_base].value / 100 -- share of max health per second
   cache.loot_chest = settings.startup[S.loot_chest].value
 end
 

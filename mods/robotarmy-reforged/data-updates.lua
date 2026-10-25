@@ -4,6 +4,9 @@ local shared = require("lib.shared")
 -- Paranoidal), which all exist once every data.lua has run.
 require("prototypes.recipes")
 require("prototypes.technologies")
+-- Rank prototypes (copies of the final droid units, Bob's drones included), droid tooltips and
+-- the entity filters of the command tool.
+require("prototypes.ranks")
 
 -- Optional (startup setting, off by default): ground acid puddles of worms/spitters deal no damage.
 -- This is a global change that affects every entity, not only droids.

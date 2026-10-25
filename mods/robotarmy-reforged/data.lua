@@ -1,3 +1,4 @@
+require("prototypes.ammo")
 require("prototypes.items")
 require("prototypes.units")
 require("prototypes.buildings")

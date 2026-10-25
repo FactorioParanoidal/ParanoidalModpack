@@ -10,17 +10,20 @@
 -- spawner record (storage.spawners[unit_number]):
 --   entity, station (bool), surface, position, finished (last products_finished),
 --   unit / quality (deploy recipe at the last check), pending = {{unit, quality}, ...},
---   garrison (guard stations: wanted garrison size)
+--   garrison (guard stations: wanted garrison size),
+--   rally = {x, y} and rally_objects (assemblers: rally point set by a player and its marks)
 local shared = require("lib.shared")
 local config = require("script.config")
 local state = require("script.state")
 local Squad = require("script.squad")
 local compat = require("script.compat")
+local droids = require("script.droids")
+local util = require("script.util")
 
 local random, floor, min = math.random, math.floor, math.min
 local direction = defines.direction
 local deploy_to_unit = shared.deploy_to_unit
-local unit_names = shared.unit_names
+local unit_names = droids.names
 
 local spawners = {}
 
@@ -87,13 +90,20 @@ local function room(record, fd)
     local squad = id and storage.squads[id]
     return record.garrison - (squad and squad.size or 0)
   end
-  local p = entity.position
+  -- droids around the assembler, and around its rally point when that is elsewhere
   local h = config.NEARBY_DROIDS_HALF_SIZE
-  local nearby = entity.surface.count_entities_filtered({
-    area = {{p.x - h, p.y - h}, {p.x + h, p.y + h}},
-    name = unit_names,
-    force = entity.force,
-  })
+  local function around(p)
+    return entity.surface.count_entities_filtered({
+      area = {{p.x - h, p.y - h}, {p.x + h, p.y + h}},
+      name = unit_names,
+      force = entity.force,
+    })
+  end
+  local nearby = around(entity.position)
+  local rally = record.rally
+  if rally and math.max(math.abs(rally.x - entity.position.x), math.abs(rally.y - entity.position.y)) >= 2 * h then
+    nearby = nearby + around(rally)
+  end
   return floor(fd.thresholds.hunt_size * config.ASSEMBLER_SPAWN_LIMIT_FACTOR) - nearby + 1
 end
 
@@ -110,6 +120,9 @@ local function deploy(record, unit_name, quality)
     quality = quality,
   })
   if not droid then return false end
+  if droids.role[unit_name] == "miner" and prototypes.item[shared.miner_mine] then
+    storage.mines[droid.unit_number] = shared.miner_mines -- the deploy recipe consumed them
+  end
   if compat.unit_control then
     state.track_unit(droid)
     compat.unit_spawned(droid, entity)
@@ -186,9 +199,63 @@ function spawners.on_tick()
   storage.spawner_cursor = key
 end
 
+------------------------------------------------------------------------------------------
+-- Rally point of a droid assembler: squads gather there instead of next to the output side.
+
+local function clear_rally_marks(record)
+  for _, object in pairs(record.rally_objects or {}) do
+    if object.valid then object.destroy() end
+  end
+  record.rally_objects = nil
+end
+
+--- Sets (position) or clears (nil) the rally point. Returns false when it is too far away.
+function spawners.set_rally(record, position)
+  local entity = record.entity
+  if not entity.valid or record.station then return false end
+  if position and util.distance(position, entity.position) > shared.rally_range then return false end
+  clear_rally_marks(record)
+  record.rally = position and {x = position.x, y = position.y} or nil
+  if position then
+    local force = {entity.force}
+    record.rally_objects = {
+      rendering.draw_sprite({
+        sprite = "virtual-signal/signal-map-marker",
+        target = record.rally,
+        surface = entity.surface,
+        forces = force,
+        only_in_alt_mode = true,
+        x_scale = 1.2,
+        y_scale = 1.2,
+      }),
+      rendering.draw_line({
+        from = entity,
+        to = record.rally,
+        surface = entity.surface,
+        forces = force,
+        only_in_alt_mode = true,
+        color = {r = 0.3, g = 0.8, b = 0.3, a = 0.5},
+        width = 2,
+        dash_length = 0.5,
+        gap_length = 0.5,
+      }),
+    }
+  end
+  -- squads gathering here go to the new place
+  local fd = storage.forces[entity.force.index]
+  local set = fd and fd.retreats[entity.unit_number]
+  for id in pairs(set or {}) do
+    local squad = storage.squads[id]
+    if squad then squad.order.dirty = true end
+  end
+  return true
+end
+
 --- A spawner was removed: its waiting droids drop as items where it stood.
 function spawners.removed(record)
-  if not record or #record.pending == 0 then return end
+  if not record then return end
+  clear_rally_marks(record)
+  if #record.pending == 0 then return end
   local surface = record.surface
   if not (surface and surface.valid) then return end
   for _, waiting in pairs(record.pending) do

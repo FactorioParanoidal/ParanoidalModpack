@@ -1,6 +1,9 @@
--- Squad decisions: hunting, retreat and merging, guarding, targeting, quick reaction force,
--- and the nearest-enemy retargeting of distracted droids.
+-- Squad decisions: hunting, retreat and merging, guarding, patrolling the base, targeting, quick
+-- reaction force, repairs, land mines of miners, and the nearest-enemy retargeting of distracted droids.
+local shared = require("lib.shared")
 local config = require("script.config")
+local droids = require("script.droids")
+local territory = require("script.territory")
 local cache = require("script.settings_cache")
 local util = require("script.util")
 local Squad = require("script.squad")
@@ -96,7 +99,7 @@ local function merge_at_assembler(squad, fd)
     return squad
   end
   local range2 = config.MERGE_RANGE * config.MERGE_RANGE
-  if distance2(squad.pos, assembler.position) >= range2 then return squad end
+  if distance2(squad.pos, Squad.retreat_position(assembler)) >= range2 then return squad end
   local set = fd.retreats[squad.retreat]
   if not set then return squad end
   for id in pairs(set) do
@@ -238,6 +241,131 @@ local function qrf_step(squad)
 end
 
 ------------------------------------------------------------------------------------------
+-- Repairs and land mines (once per squad update, i.e. once per second)
+
+local REPAIR_HP = shared.repair_hp * settings.startup[shared.setting.health_scale].value
+local REPAIR_RANGE2 = config.REPAIR_RANGE * config.REPAIR_RANGE
+local AT_BASE2 = config.AT_ASSEMBLER_RANGE * config.AT_ASSEMBLER_RANGE
+local GUARD_HOME2 = config.GUARD_HOME_RADIUS * config.GUARD_HOME_RADIUS
+local REPAIR_GROWTH = (shared.droid_by_name["droid-repair"].growth or {}).repair or 0
+
+--- Share of max health per second the squad gets from its base: a squad resting (retreated or
+--- recalled) at a droid assembler, or a garrison at its guard station (map setting).
+local function base_repair(squad, fd)
+  local share = cache.repair_at_base
+  if share <= 0 or squad.qrf then return 0 end
+  if squad.mode == MODE.guard then
+    local station = squad.station and fd.stations[squad.station]
+    if station and station.valid and distance2(squad.pos, squad.home) < GUARD_HOME2 then return share end
+  elseif squad.mode == MODE.assemble and squad.retreat then
+    local assembler = fd.assemblers[squad.retreat]
+    if assembler and assembler.valid and distance2(Squad.retreat_position(assembler), squad.pos) < AT_BASE2 then return share end
+  end
+  return 0
+end
+
+--- Repair droids restore REPAIR_HP each (more with rank) to the damaged members near the squad;
+--- the base repairs every member by its share.
+local function repair(squad, fd)
+  local pool = 0
+  local repairers = squad.roles and squad.roles.repair
+  if repairers then
+    local members = squad.members
+    for unit_number in pairs(repairers) do
+      local droid = members[unit_number]
+      if droid and droid.valid then
+        pool = pool + REPAIR_HP * (1 + REPAIR_GROWTH * (droids.rank[droid.name] or 0))
+      end
+    end
+  end
+  local share = base_repair(squad, fd)
+  if pool <= 0 and share <= 0 then return end
+  local center = squad.pos
+  for _, member in pairs(squad.members) do
+    if member.valid then
+      local max_health = member.max_health
+      local health = member.health
+      if health < max_health then
+        local add = share * max_health
+        if pool > 0 and distance2(member.position, center) < REPAIR_RANGE2 then
+          local use = min(pool, max_health - health - add)
+          if use > 0 then
+            add = add + use
+            pool = pool - use
+          end
+        end
+        if add > 0 then member.health = health + add end
+      end
+    end
+  end
+end
+ai.repair = repair
+
+local MINE = shared.miner_mine
+
+--- A miner fights: its squad is attacking, it is distracted by an enemy, or an enemy is close.
+local function in_battle(miner, group_attacking)
+  if group_attacking then return true end
+  local commandable = miner.commandable
+  if commandable and commandable.distraction_command then return true end
+  return miner.surface.find_nearest_enemy({position = miner.position, max_distance = config.MINE_ENEMY_RANGE, force = miner.force}) ~= nil
+end
+
+--- Miners in battle lay a land mine where they stand (one per MINE_COOLDOWN, not next to another
+--- mine of the force) while they carry any.
+local function lay_mines(squad)
+  local miners = squad.roles and squad.roles.miner
+  if not miners or (squad.role_count.miner or 0) <= 0 then return end
+  if not prototypes.entity[MINE] then return end
+  local group = squad.group
+  local group_attacking = group and group.valid and Squad.is_attacking(group)
+  local now = game.tick
+  local mines, next_mine = storage.mines, storage.mine_tick
+  local members = squad.members
+  for unit_number in pairs(miners) do
+    local miner = members[unit_number]
+    local left = mines[unit_number]
+    if miner and miner.valid and left and left > 0 and now >= (next_mine[unit_number] or 0)
+      and in_battle(miner, group_attacking) then
+      next_mine[unit_number] = now + config.MINE_COOLDOWN
+      local surface, force = miner.surface, miner.force
+      local position = surface.find_non_colliding_position(MINE, miner.position, 3, 0.5)
+      if position and surface.count_entities_filtered({position = position, radius = config.MINE_SPACING,
+          type = "land-mine", force = force, limit = 1}) == 0 then
+        if surface.create_entity({name = MINE, position = position, force = force, raise_built = true}) then
+          mines[unit_number] = left - 1
+        end
+      end
+    end
+  end
+end
+
+------------------------------------------------------------------------------------------
+-- Patrol: the squad walks from chunk to neighbouring chunk of the base (chunks with buildings of
+-- the force), never through chunks without buildings, fighting the enemies it meets.
+
+local function patrol(squad, fd)
+  local group = squad.group
+  if group and group.valid and Squad.is_attacking(group) then
+    squad.order.dirty = true -- next chunk once the fight is over
+    return
+  end
+  local order = squad.order
+  if not (order.dirty or Squad.order_due(squad)) then return end
+  if game.tick < order.tick + config.MIN_ORDER_INTERVAL then return end
+  local valid, may_order = Squad.validate(squad)
+  if not valid or not may_order then return end
+  local target = territory.next_position(fd.force, squad)
+  if target then
+    Squad.order_patrol(squad, target)
+  else
+    -- the base around the squad is not scanned yet: wait and look again shortly
+    Squad.order_wander(squad, squad.group.position, true)
+    squad.order.dirty = true
+  end
+end
+
+------------------------------------------------------------------------------------------
 
 --- Periodic update of one squad.
 function ai.update(squad)
@@ -248,9 +376,13 @@ function ai.update(squad)
   end
   local fd = storage.forces[squad.force_index]
   Squad.position(squad)
+  repair(squad, fd)
+  lay_mines(squad)
   if squad.qrf and qrf_step(squad) then return end
   if squad.mode == MODE.guard then
     guard(squad)
+  elseif squad.mode == MODE.patrol then
+    patrol(squad, fd)
   else
     battle(squad, fd)
   end
