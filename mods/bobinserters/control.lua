@@ -603,6 +603,7 @@ script.on_event(defines.events.on_player_rotated_entity, function(event)
 end)
 
 script.on_event(defines.events.on_tick, function(event)
+  bobmods.inserters.enforce_tick(event.tick)
   if game.tick % 20 == 0 then
     if storage and storage.bobmods and storage.bobmods.inserters then
       for i, player in pairs(game.connected_players) do
@@ -633,6 +634,7 @@ script.on_configuration_changed(function(event)
     bobmods.logistics.create_gui_button(player.index)
     player.gui.center.visible = true
   end
+  bobmods.inserters.enforce_fill()
 end)
 
 script.on_init(function(event)
@@ -640,6 +642,7 @@ script.on_init(function(event)
     bobmods.inserters.create_global_table(player.index)
     bobmods.logistics.create_gui_button(player.index)
   end
+  bobmods.inserters.enforce_fill()
 end)
 
 script.on_event(defines.events.on_player_created, function(event)
@@ -685,7 +688,7 @@ script.on_event(defines.events.on_built_entity, function(event)
   then
     bobmods.logistics.set_positions(entity, event.player_index)
   end
-  bobmods.inserters.enforce_research(entity)
+  bobmods.inserters.enforce_and_track(entity)
 end)
 
 -- Paranoidal: positions from blueprints and pasted settings are limited by the force's research,
@@ -733,7 +736,23 @@ local function _enforce_clamp(pos, t, vertical)
   return { x = x, y = y }
 end
 
-function bobmods.inserters.enforce_research(entity)
+local function _enforce_research_table(force)
+  local t = {
+    long = tech_unlocked(force, bobmods.inserters.long_technology),
+    long2 = tech_unlocked(force, bobmods.inserters.long2_technology),
+    more = tech_unlocked(force, bobmods.inserters.more_technology),
+    more2 = tech_unlocked(force, bobmods.inserters.more2_technology),
+    near = tech_unlocked(force, bobmods.inserters.near_technology),
+  }
+  t.full = t.long and t.long2 and t.more and t.more2 and t.near and true or false
+  return t
+end
+
+-- cache (optional): force index -> research table, reused within one batch of checks.
+-- Returns false when the inserter is checked against an incomplete research set (worth re-checking later),
+-- true when its force has everything researched, nil when the entity is not subject to the check.
+-- dry: only report; the second return value tells whether the positions exceed the research.
+function bobmods.inserters.enforce_research(entity, cache, dry)
   if not (entity and entity.valid) then
     return
   end
@@ -760,15 +779,18 @@ function bobmods.inserters.enforce_research(entity)
   end
 
   local force = entity.force
-  local t = {
-    long = tech_unlocked(force, bobmods.inserters.long_technology),
-    long2 = tech_unlocked(force, bobmods.inserters.long2_technology),
-    more = tech_unlocked(force, bobmods.inserters.more_technology),
-    more2 = tech_unlocked(force, bobmods.inserters.more2_technology),
-    near = tech_unlocked(force, bobmods.inserters.near_technology),
-  }
-  if t.long and t.long2 and t.more and t.more2 and t.near then
-    return
+  local t
+  if cache then
+    t = cache[force.index]
+    if not t then
+      t = _enforce_research_table(force)
+      cache[force.index] = t
+    end
+  else
+    t = _enforce_research_table(force)
+  end
+  if t.full then
+    return true
   end
 
   local vertical = entity.direction == defines.direction.north or entity.direction == defines.direction.south
@@ -796,22 +818,288 @@ function bobmods.inserters.enforce_research(entity)
   local function same(a, b)
     return math.abs(a.x - b.x) < 0.01 and math.abs(a.y - b.y) < 0.01
   end
-  if same(pickup, new_pickup) and same(drop, new_drop) and same(offset, new_offset) then
-    return
+  local changed = not (same(pickup, new_pickup) and same(drop, new_drop) and same(offset, new_offset))
+  if changed and not dry then
+    set_both_positions(entity, new_pickup, combine_drop_position(new_drop, new_offset))
   end
-  set_both_positions(entity, new_pickup, combine_drop_position(new_drop, new_offset))
+  return false, changed
 end
 
+-- Paranoidal: a blueprint pasted over an existing identical inserter only updates its settings and raises
+-- no build event. Two layers close this:
+--  1) on_pre_build with a blueprint in the cursor queues the pasted area; it is checked on the next tick;
+--  2) a slow background sweep re-checks tracked inserters of forces that still miss some of the technologies.
+-- Inserters leave the sweep list once their force has researched everything, so late game costs nothing.
+-- Inserters that already exceeded the research when this check was introduced are kept as they are
+-- (storage.bob_enforce.grand) until a player pastes settings onto that exact inserter.
+local ENFORCE_SWEEP_INTERVAL = 2 -- ticks between sweep steps
+local ENFORCE_SWEEP_COUNT = 1 -- inserters checked per sweep step
+local ENFORCE_AREA_MARGIN = 4 -- tiles added around the blueprint extent
+local ENFORCE_AREA_FALLBACK = 32 -- half-size of the area when the blueprint contents cannot be read
+
+local function _enforce_state()
+  local s = storage.bob_enforce
+  if not s then
+    s = { list = {}, ids = {}, set = {}, pos = 1, pending = {}, grand = {} }
+    storage.bob_enforce = s
+  end
+  s.grand = s.grand or {}
+  return s
+end
+
+local function _enforce_is_grand(entity)
+  local s = storage.bob_enforce
+  local id = entity.unit_number
+  return s and id and s.grand[id] or false
+end
+
+local function _enforce_track(entity)
+  local id = entity.unit_number
+  if not id then
+    return
+  end
+  local s = _enforce_state()
+  if not s.set[id] then
+    s.set[id] = true
+    local n = #s.list + 1
+    s.list[n] = entity
+    s.ids[n] = id
+  end
+end
+
+local function _enforce_and_track(entity, cache)
+  if not (entity and entity.valid) or _enforce_is_grand(entity) then
+    return
+  end
+  if bobmods.inserters.enforce_research(entity, cache) == false and entity.valid and entity.type == "inserter" then
+    _enforce_track(entity)
+  end
+end
+bobmods.inserters.enforce_and_track = _enforce_and_track
+
+-- One-time registration of already built inserters (existing save, new game). Inserters already
+-- beyond the research are only remembered as kept, everything else goes to the sweep list.
+local function _enforce_fill()
+  local s = _enforce_state()
+  if s.filled then
+    return
+  end
+  s.filled = true
+  local cache = {}
+  local forces = {}
+  for _, force in pairs(game.forces) do
+    local t = _enforce_research_table(force)
+    cache[force.index] = t
+    if not t.full then
+      forces[#forces + 1] = force
+    end
+  end
+  if #forces == 0 then
+    return
+  end
+  for _, surface in pairs(game.surfaces) do
+    for _, entity in pairs(surface.find_entities_filtered({ type = "inserter", force = forces })) do
+      local status, exceeds = bobmods.inserters.enforce_research(entity, cache, true)
+      if status == false and entity.unit_number then
+        if exceeds then
+          s.grand[entity.unit_number] = true
+        else
+          _enforce_track(entity)
+        end
+      end
+    end
+  end
+end
+
+local function _cursor_blueprint(player)
+  local stack = player.cursor_stack
+  if stack and stack.valid_for_read then
+    local bp = stack
+    local guard = 0
+    while bp.is_blueprint_book and guard < 16 do
+      guard = guard + 1
+      local idx = bp.active_index
+      local inv = idx and bp.get_inventory(defines.inventory.item_main)
+      bp = inv and inv[idx]
+      if not (bp and bp.valid_for_read) then
+        return nil
+      end
+    end
+    if bp.is_blueprint and bp.is_blueprint_setup() then
+      return bp
+    end
+    return nil
+  end
+  local rec = player.cursor_record
+  local guard = 0
+  while rec and rec.valid and rec.type == "blueprint-book" and guard < 16 do
+    guard = guard + 1
+    local idx = rec.get_active_index(player)
+    rec = idx and rec.contents[idx]
+  end
+  if rec and rec.valid and rec.type == "blueprint" and rec.is_blueprint_setup() then
+    return rec
+  end
+  return nil
+end
+
+-- Half-size of the area around the build position that may contain pasted inserters;
+-- nil when the blueprint has no adjustable inserters.
+local function _blueprint_reach(bp)
+  local ok, entities = pcall(bp.get_blueprint_entities)
+  if not ok or not entities then
+    return ENFORCE_AREA_FALLBACK
+  end
+  local has_inserter = false
+  local minx, miny, maxx, maxy = math.huge, math.huge, -math.huge, -math.huge
+  local proto_cache = {}
+  for _, e in pairs(entities) do
+    local p = e.position
+    if p.x < minx then minx = p.x end
+    if p.x > maxx then maxx = p.x end
+    if p.y < miny then miny = p.y end
+    if p.y > maxy then maxy = p.y end
+    if not has_inserter then
+      local hit = proto_cache[e.name]
+      if hit == nil then
+        local proto = prototypes.entity[e.name]
+        hit = proto and proto.type == "inserter" and proto.allow_custom_vectors or false
+        proto_cache[e.name] = hit
+      end
+      has_inserter = hit
+    end
+  end
+  if not has_inserter then
+    return nil
+  end
+  local ok_t, tiles = pcall(bp.get_blueprint_tiles)
+  if ok_t and tiles then
+    for _, tile in pairs(tiles) do
+      local p = tile.position
+      if p.x < minx then minx = p.x end
+      if p.x + 1 > maxx then maxx = p.x + 1 end
+      if p.y < miny then miny = p.y end
+      if p.y + 1 > maxy then maxy = p.y + 1 end
+    end
+  end
+  local reach = math.max(maxx - minx, maxy - miny) + ENFORCE_AREA_MARGIN
+  local snap = bp.blueprint_snap_to_grid
+  if snap then
+    reach = reach + math.max(snap.x, snap.y)
+  end
+  return reach
+end
+
+local function _enforce_pre_build(event)
+  local player = game.get_player(event.player_index)
+  if not (player and player.valid and player.is_cursor_blueprint()) then
+    return
+  end
+  if _enforce_research_table(player.force).full then
+    return
+  end
+  local bp = _cursor_blueprint(player)
+  local reach = bp and _blueprint_reach(bp) or (not bp and ENFORCE_AREA_FALLBACK) or nil
+  if not reach then
+    return
+  end
+  local p = event.position
+  local s = _enforce_state()
+  s.pending[#s.pending + 1] = {
+    tick = event.tick,
+    surface = player.surface.index,
+    force = player.force.index,
+    area = { { p.x - reach, p.y - reach }, { p.x + reach, p.y + reach } },
+  }
+end
+
+local function _enforce_tick(tick)
+  local s = storage.bob_enforce
+  if not (s and s.filled) then
+    -- Saves where on_configuration_changed did not run for this code (same mod version).
+    _enforce_fill()
+    s = storage.bob_enforce
+  end
+
+  local pending = s.pending
+  if pending[1] then
+    local cache = {}
+    local rest = {}
+    for _, p in ipairs(pending) do
+      if p.tick < tick then
+        local surface = game.surfaces[p.surface]
+        local force = game.forces[p.force]
+        if surface and surface.valid and force and force.valid then
+          for _, entity in pairs(surface.find_entities_filtered({ area = p.area, type = "inserter", force = force })) do
+            _enforce_and_track(entity, cache)
+          end
+        end
+      else
+        rest[#rest + 1] = p
+      end
+    end
+    s.pending = rest
+  end
+
+  if tick % ENFORCE_SWEEP_INTERVAL ~= 0 then
+    return
+  end
+  local list, ids, set = s.list, s.ids, s.set
+  local n = #list
+  if n == 0 then
+    s.pos = 1
+    return
+  end
+  local cache = {}
+  local pos = s.pos
+  for _ = 1, math.min(ENFORCE_SWEEP_COUNT, n) do
+    if pos > n then
+      pos = 1
+    end
+    local entity = list[pos]
+    if entity.valid and not _enforce_is_grand(entity) and bobmods.inserters.enforce_research(entity, cache) == false then
+      pos = pos + 1
+    else
+      -- Destroyed, or its force has everything researched: drop it (swap with the last element).
+      set[ids[pos]] = nil
+      list[pos] = list[n]
+      ids[pos] = ids[n]
+      list[n] = nil
+      ids[n] = nil
+      n = n - 1
+      if n == 0 then
+        break
+      end
+    end
+  end
+  s.pos = pos
+end
+bobmods.inserters.enforce_tick = _enforce_tick
+bobmods.inserters.enforce_fill = _enforce_fill
+
 local function _enforce_built(event)
-  bobmods.inserters.enforce_research(event.entity)
+  _enforce_and_track(event.entity)
 end
 local _enforce_filter = { { filter = "type", type = "inserter" }, { filter = "ghost_type", type = "inserter" } }
 script.on_event(defines.events.on_robot_built_entity, _enforce_built, _enforce_filter)
 script.on_event(defines.events.script_raised_built, _enforce_built, _enforce_filter)
 script.on_event(defines.events.script_raised_revive, _enforce_built, _enforce_filter)
+script.on_event(defines.events.on_entity_cloned, function(event)
+  local src, dst = event.source, event.destination
+  if src and src.valid and dst and dst.valid and dst.unit_number and _enforce_is_grand(src) then
+    storage.bob_enforce.grand[dst.unit_number] = true -- a moved kept inserter stays kept
+    return
+  end
+  _enforce_and_track(dst)
+end, { { filter = "type", type = "inserter" } })
 script.on_event(defines.events.on_entity_settings_pasted, function(event)
-  bobmods.inserters.enforce_research(event.destination)
+  local dst = event.destination
+  if dst and dst.valid and dst.unit_number and storage.bob_enforce then
+    storage.bob_enforce.grand[dst.unit_number] = nil -- the player replaced its settings explicitly
+  end
+  _enforce_and_track(dst)
 end)
+script.on_event(defines.events.on_pre_build, _enforce_pre_build)
 
 script.on_event(defines.events.on_runtime_mod_setting_changed, function(event)
   if event.setting == "bobmods-inserters-button-enable" then
