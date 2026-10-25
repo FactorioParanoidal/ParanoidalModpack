@@ -7,6 +7,8 @@ Date: 15. 01. 2026
     - Paranoidal: added remote function unblacklist_inserters
     - Paranoidal: positions from blueprints, robot/script builds and pasted settings are limited by researched inserter technologies; unresearched range, diagonals and near offset are reduced to the nearest allowed (including nco-InserterCranes; slim inserters are not checked)
     - Paranoidal: inserter positions are also re-checked after blueprint placement and by a light background pass (1 inserter every 2 ticks, stops once all inserter technologies are researched); already built inserters keep their positions
+  Bugfixes:
+    - Paranoidal: fixed a crash in on_tick (control.lua:853, field 'grand') on saves that already had the position check data from an earlier build
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.2
 Date: 02. 01. 2026

@@ -850,7 +850,7 @@ end
 local function _enforce_is_grand(entity)
   local s = storage.bob_enforce
   local id = entity.unit_number
-  return s and id and s.grand[id] or false
+  return s and id and s.grand and s.grand[id] or false
 end
 
 local function _enforce_track(entity)
@@ -1094,7 +1094,7 @@ script.on_event(defines.events.on_entity_cloned, function(event)
 end, { { filter = "type", type = "inserter" } })
 script.on_event(defines.events.on_entity_settings_pasted, function(event)
   local dst = event.destination
-  if dst and dst.valid and dst.unit_number and storage.bob_enforce then
+  if dst and dst.valid and dst.unit_number and storage.bob_enforce and storage.bob_enforce.grand then
     storage.bob_enforce.grand[dst.unit_number] = nil -- the player replaced its settings explicitly
   end
   _enforce_and_track(dst)
