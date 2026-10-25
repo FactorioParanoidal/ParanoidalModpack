@@ -18,6 +18,7 @@ for name in pairs(data.raw.recipe) do
 	end
 end
 
+require("prototypes.paranoidal.energy-quality") -- quality machines: more power, not more efficiency
 require("prototypes.paranoidal.quality")
 require("prototypes.paranoidal.technology")
 require("prototypes.paranoidal.verify")

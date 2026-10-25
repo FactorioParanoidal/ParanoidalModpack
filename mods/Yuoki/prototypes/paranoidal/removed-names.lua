@@ -64,4 +64,7 @@ return {
 	"y_chunks1", "y_chunks2",
 	-- UC-A2 -> chunk recipes (chunks only from the centrifuge)
 	"y-ac-uc2y-res1", "y-ac-uc2y-res2",
+	-- steam boilers and turbines (user, 2026-10-25): capped at 265-500 °C and 74-90 % they lose to Bob's boilers and
+	-- turbines of the same stage; the mastercrafted versions are built from them
+	"y-boiler-iv", "y-steam-turbine", "y_boiler4_mc", "y_boiler4_tech", "y_steam_turbine_mc", "y_steam_turbine_gr",
 }

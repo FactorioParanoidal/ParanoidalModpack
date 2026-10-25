@@ -20,12 +20,21 @@ Date: 2026-10-24
     - YI suits continue power armor MK2; grids 9x9, 10x10, 11x11, walkers 12x12 and 13x13.
     - Research Center 45 MW and 100 pollution (JATMN values).
     - Trailing whitespace removed from the text files (repository whitespace check).
+    - MF chain: the liquid- and gas-fuel engines burn their fuel themselves (any fluid with a fuel value, pollution scaled by the fluid, no electricity, fuel pipe through the centre of the north and south sides) and craft the three solid-fuel engine modes twice as fast: liquid 90 / 78 / 67 %, gas 95 / 83 / 71 % of the fuel energy (gas: half the exhaust). Their own fuel recipes y-mf2a..e are removed; Yuoki hydrogen and corn oil burn (150 kJ). The liquid-fuel engine moved to Mechanical Force 1; SFE, liquid and gas engines fast-replace each other.
+    - MF as a resource from Mechanical Force 2: the Fatmice air scrubber (was in Genetics: -2500 pollution/min for 1.25 MW, now -150/min for 200 kW and 0.4 MF/s, built from mid-game products), fly-ash condensing into fuel blocks, the small electric motor (cold MF from the grid, was in Agronomy, built from mid-game products). H-Metal forged with MF in an assembler (3 steel + 2 coal + 2 MF -> 2) in Mechanical Force 1. Mixed fuel blocks burn (4 MJ).
+    - MF cannot be barrelled (a barrel keeps no temperature): no MF barrel.
+    - Removed: the 3M6/4 boiler, the MS-1.8-S turbine and the mastercrafted boilers and turbines T25, T50, MS (265-500 °C, weaker than Bob's boilers and turbines of the same stage).
   Bugfixes:
     - Perpetual-motion chains fixed: Yuoki generators at most 100 % effectivity (the eco and tech mastercrafted turbines and the small turbine had 114-120 %), burner generator 50 %, water -> MF at 10 °C, MF heat generator 6 MF, steam -> MF turbine 22 and 60 MF, overheater 280 steam, Rheinsberg MT/HT 770/380 steam, solid-fuel engine 4 / 3.5 / 3 MF, liquid and gas fuel engines below the fuel value of fuel oil and methane.
     - Mixed fuel -> rocket fuel shows the product icon (its own icon replaced the build's rocket fuel icon through recipe icon sync).
+    - Yuoki recipes that make MF or steam ignore consumption, speed and productivity effects (efficiency modules in beacons pushed every MF chain above 100 %).
+    - Yuoki machines that make hot MF or steam draw energy in proportion to their crafting speed at every quality (a legendary engine was 2.5 times, an extreme one 40.9 times as efficient).
+    - Rheinsberg low-temperature steam 1600 -> 1590 (was 100.3 % of the fuel).
+    - The MF engines no longer fast-replace assembling machines.
   Graphics:
     - 813 graphics files that no remaining prototype references were removed (47 -> 33 MB). The removed prototypes are still defined in the source files and deleted at the end of data.lua, so their definitions point to deleted files: restoring one of them needs its graphics back from Yuoki 1.2.23 / Engines 1.2.9.
     - 106 icons of 32x32 px (all from Engines) replaced by a neural upscale to 64x64 (Real-ESRGAN x4plus, alpha upscaled separately, Lanczos down to 64, no mipmaps); icon_size 32 -> 64 in the 213 prototype tables that use them.
+    - 11 files used only by the removed steam boilers and turbines and the removed fluid-fuel recipes deleted.
     - Technologies use their own 256x256 icons (graphics/technology/, the same neural upscale of the item icon) instead of the 32-96 px item icons.
   Locale:
     - Complete en/ru for all remaining content (888 keys each); Engines locale merged into locale/*/yi_engines.cfg; additions in locale/*/paranoidal.cfg; keys of removed content pruned; languages other than en and ru dropped.

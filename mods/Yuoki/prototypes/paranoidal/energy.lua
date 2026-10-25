@@ -4,6 +4,9 @@
 -- 2. The mechanical-force (MF) power plant of Yuoki Engines and the simple Yuoki steam machines are decoupled from
 --    Yuoki materials and built from mid-game products of the build (user, 2026-10-24: generators/turbines/motors are
 --    not near-end-game content). Heavy MF, Obninsk, Rheinsberg and TMFW stay in the late Yuoki branch.
+-- 3. MF chain for the player (user, 2026-10-25): all MF engines burn fuel themselves and share the three modes of the
+--    solid-fuel engine; MF is also consumed early (air scrubber, H-Metal forging); MF cannot be barrelled; the
+--    Yuoki steam boilers and turbines (weaker than Bob's) are removed in removed-names.lua.
 local P = require("prototypes.paranoidal.lib")
 
 -- generators above 100 % turn the Angels electric boiler into an energy source
@@ -30,16 +33,13 @@ for _, r in pairs(P.recipe("ye_makesteam").results) do
 		r.amount = 280
 	end
 end
-for name, amount in pairs({ ye_rheins_HT = 380, ye_rheins_MT = 770 }) do
+for name, amount in pairs({ ye_rheins_HT = 380, ye_rheins_MT = 770, ye_rheins_LT = 1590 }) do -- LT was 100.3 %
 	for _, r in pairs(P.recipe(name).results) do
 		if r.name == "steam" then
 			r.amount = amount
 		end
 	end
 end
--- liquid/gas fuel engines below the fuel value of Angels fuel oil (250 kJ) and methane (230 kJ)
-P.result_amount("y-mf2b", "y-mechanical-force", 5)
-P.result_amount("y-mf2c", "y-mechanical-force", 7)
 -- solid-fuel engine: about 0.95 / 0.83 / 0.71 of the burned fuel instead of 1.43 / 1.19 / 1.07
 P.result_amount("y-mf1a", "y-mechanical-force", 4)
 P.result_amount("y-mf1a1", "y-mechanical-force", 3.5)
@@ -66,9 +66,10 @@ local mid = {
 	["y_bg-1"] = { { "engine-unit", 2 }, { "y-iron-case", 2 }, { "steel-plate", 10 }, { "electronic-circuit", 2 } },
 	["y-notfall-generator-s2"] = { { "steel-plate", 10 }, { "bob-steel-gear-wheel", 4 }, { "copper-cable", 4 },
 		{ "y-winding", 2 } },
-	["y-steam-turbine"] = { { "steam-engine", 1 }, { "y-iron-case", 2 }, { "y-winding", 4 }, { "steel-plate", 10 },
-		{ "advanced-circuit", 4 } },
-	["y-boiler-iv"] = { { "boiler", 1 }, { "steel-plate", 10 }, { "bob-steel-pipe", 4 }, { "y-iron-case", 2 } },
+	-- MF consumers of the mid game
+	["y-electric-air-heater"] = { { "steel-plate", 10 }, { "y-iron-case", 2 }, { "electric-engine-unit", 1 },
+		{ "advanced-circuit", 2 }, { "bob-steel-pipe", 4 } },
+	["y-emotor-s"] = { { "electric-engine-unit", 1 }, { "y-iron-case", 1 }, { "y-winding", 1 }, { "copper-cable", 4 } },
 }
 for name, ingredients in pairs(mid) do
 	P.ingredients(name, ingredients)
@@ -81,6 +82,99 @@ seg_p.results = { { type = "item", name = "y-seg-p", amount = 1 } }
 seg_p.main_product = "y-seg-p"
 data:extend({ seg_p })
 
+-- Liquid- and gas-fuel engines: they took the fuel as a recipe ingredient while running on electricity (no fuel
+-- pollution, 24-35 % of the fuel energy after zzzparanoidal raised the fuel values). Now the fuel is their energy source
+-- (any fluid with a fuel value, pollution scaled by the fluid), fed through the centre of the north/south side, and
+-- they craft the solid-fuel engine recipes: water + lubricant / water / dry -> 4 / 3.5 / 3 MF per craft of 3 MJ.
+-- Fuel -> MF: solid 95/83/71 % (SFE, effectivity 0.85), liquid 90/78/67 % (0.8, twice the power), gas 95/83/71 %
+-- (0.85, twice the power, cleaner). The pipe-passthrough mod lays out their water/lubricant/MF boxes like the SFE.
+local function fuel_engine(name, effectivity, pollution)
+	local engine = P.entity("assembling-machine", name)
+	local output, by_x = nil, {}
+	for _, box in ipairs(engine.fluid_boxes) do
+		if box.production_type == "output" then
+			output = box
+		else
+			by_x[box.pipe_connections[1].position[1]] = box
+		end
+	end
+	assert(output and by_x[0] and by_x[1] and by_x[-1], "Yuoki (Paranoidal): unexpected fluid boxes of " .. name)
+	engine.fluid_boxes = { output, by_x[1], by_x[-1] }
+	engine.energy_source = {
+		type = "fluid",
+		burns_fluid = true,
+		scale_fluid_usage = true,
+		effectivity = effectivity,
+		emissions_per_minute = { pollution = pollution },
+		fluid_box = {
+			volume = 200,
+			production_type = "input",
+			pipe_connections = {
+				{ flow_direction = "input-output", direction = defines.direction.north, position = { 0, -1 } },
+				{ flow_direction = "input-output", direction = defines.direction.south, position = { 0, 1 } },
+			},
+		},
+		smoke = { { name = "smoke", deviation = { 0.65, -0.2 }, frequency = 1 } },
+	}
+	engine.crafting_categories = { "yrcat-mf1a" }
+	engine.crafting_speed = 2
+	engine.energy_usage = "6MW"
+	engine.fast_replaceable_group = "yuoki-mf-engine"
+end
+fuel_engine("y-ffe", 0.8, 24)
+fuel_engine("ye_gasmotor", 0.85, 12)
+P.entity("assembling-machine", "y-sfe").fast_replaceable_group = "yuoki-mf-engine" -- was "assembling-machine"
+for _, name in ipairs({ "y-mf2a", "y-mf2b", "y-mf2c", "y-mf2d", "y-mf2e" }) do
+	P.recipe(name)
+	data.raw.recipe[name] = nil
+end
+-- Yuoki fuels for these engines, on the scale of the build (Angels hydrogen 150 kJ / 0.1; corn oil like a bio oil)
+for name, v in pairs({ y_hydrogen = { "150kJ", 0.1 }, ye_cornoil = { "150kJ", 0.5 } }) do
+	local fluid = P.entity("fluid", name)
+	fluid.fuel_value, fluid.emissions_multiplier = v[1], v[2]
+end
+
+-- MF is a pressurised working fluid: a barrel would keep the amount but not the temperature (no energy).
+P.entity("fluid", "y-mechanical-force").auto_barrel = false
+
+-- Early MF consumers.
+-- Air scrubber ("Fatmice"): at -2500 pollution/min for 1.25 MW it was 20 times the build's best filter. Now about the
+-- Clowns filter of the same stage (CW 3: -125/min, 1.2 MW and filters) without consumables, but it needs MF: one small
+-- electric motor or a tenth of an engine drives one scrubber. The fly ash is condensed into burnable fuel blocks.
+local scrubber = P.entity("assembling-machine", "y-electric-air-heater")
+scrubber.energy_usage = "200kW"
+scrubber.energy_source.emissions_per_minute = { pollution = -150 }
+scrubber.fast_replaceable_group = nil
+P.ingredients("y-rmvpol", { { "water", 60, "fluid" }, { "y-mechanical-force", 0.4, "fluid" } })
+local mixed_fuel = P.entity("item", "y-mixed-fuel")
+mixed_fuel.fuel_category, mixed_fuel.fuel_value = "chemical", "4MJ"
+-- H-Metal forged with MF in an assembler: less steel and coal per H-Metal than the plain recipe.
+local forged = table.deepcopy(P.recipe("yie_hard_metals"))
+forged.name = "yie_hard_metals_mf"
+forged.category = "crafting-with-fluid"
+forged.ingredients = P.list({ { "steel-plate", 3 }, { "coal", 2 }, { "y-mechanical-force", 2, "fluid" } })
+forged.results = { { type = "item", name = "yie_hard_metals", amount = 2 } }
+forged.main_product = "yie_hard_metals"
+forged.localised_name = { "recipe-name.yie_hard_metals_mf" }
+forged.order = (forged.order or "c1") .. "-mf"
+data:extend({ forged })
+
 -- Mixed fuel -> rocket fuel shows the product icon: a recipe icon of its own would replace the build's rocket fuel
 -- icon through zzzparanoidal's recipe-item-icon-sync.
 P.set("y_mixedfuel2rocketfuel", { icon = nil, icon_size = nil, icons = nil })
+
+-- Efficiency modules in beacons lower the energy of a craft but not its MF/steam output: no consumption, speed
+-- (it would be free once consumption is ignored) or productivity effect on any Yuoki recipe that makes MF or steam
+-- (otherwise every MF chain exceeds 100 %).
+for name, recipe in pairs(data.raw.recipe) do
+	if not YUOKI_PARANOIDAL.foreign_recipes[name] then
+		for _, r in pairs(recipe.results or {}) do
+			if r.type == "fluid" and (r.name == "y-mechanical-force" or r.name == "steam") then
+				recipe.allow_consumption = false
+				recipe.allow_speed = false
+				recipe.allow_productivity = false
+				break
+			end
+		end
+	end
+end

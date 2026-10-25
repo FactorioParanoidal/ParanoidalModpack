@@ -9,13 +9,16 @@ local R, G, B, PR, U, M, BIO = "automation-science-pack", "logistic-science-pack
 
 -- name, icon item, base packs, count, time, anchors, recipes
 local tree = {
-	-- mid game: decoupled mechanical-force power plant and simple steam machines
-	{ "yuoki-mechanical-force", "y-seg", { R, G, B }, 150, 30, { "electric-engine", "bob-steam-engine-3" }, {
-		"yie_hard_metals", "y-iron-case", "y-winding", "y-mftrans-shaft", "y-mftrans-shaft-ground", "y-mftrans-shaft-red",
-		"y-mftrans-shaft-ground-red", "y-sfe", "y-mf1a", "y-mf1a1", "y-mf1f", "y-seg", "y-seg-p", "y_bg-1",
-		"y-notfall-generator-s2" } },
-	{ "yuoki-mechanical-force-2", "y-meg-s", { R, G, B }, 200, 30, { "yuoki-mechanical-force", "bob-boiler-3" }, {
-		"y-ffe", "ye_gasmotor", "y-mf2a", "y-mf2b", "y-mf2c", "y-meg-s", "y-steam-turbine", "y-boiler-iv" } },
+	-- mid game: decoupled mechanical-force power plant (solid and liquid fuel), then the efficient gas engine and the
+	-- first MF consumers (MF chain, user 2026-10-25)
+	{ "yuoki-mechanical-force", "y-seg", { R, G, B }, 150, 30,
+		{ "electric-engine", "bob-steam-engine-3", "angels-oil-processing" }, {
+		"yie_hard_metals", "yie_hard_metals_mf", "y-iron-case", "y-winding", "y-mftrans-shaft", "y-mftrans-shaft-ground",
+		"y-mftrans-shaft-red", "y-mftrans-shaft-ground-red", "y-sfe", "y-ffe", "y-mf1a", "y-mf1a1", "y-mf1f", "y-seg",
+		"y-seg-p", "y_bg-1", "y-notfall-generator-s2" } },
+	{ "yuoki-mechanical-force-2", "y-meg-s", { R, G, B }, 200, 30,
+		{ "yuoki-mechanical-force", "angels-gas-processing", "CW-air-filtering-3" }, {
+		"ye_gasmotor", "y-meg-s", "y-electric-air-heater", "y-rmvpol", "y-waste-condense", "y-emotor-s", "y-mf1c" } },
 
 	-- production era: entry into Yuoki
 	{ "yuoki-materials", "y-res1", { R, G, B, PR }, 200, 30, { "angels-ore-refining", "uranium-processing" }, {
@@ -44,14 +47,13 @@ local tree = {
 		"y-centrifuge-f7-seeded" } },
 	{ "yuoki-chemistry", "y_catalyst_ft", { R, G, B, PR }, 300, 30, { "yuoki-transmutation" }, {
 		"y_rawsyngas1", "y_rawsyngas2", "y_granulate_wood", "y_refinehydrogen", "y_catalyst_ft", "y_catalyst_bp",
-		"y_regcatbp", "y_regcatft", "y_ft", "y_coal2liquid", "y-mf2d", "y_mixedfuel2rocketfuel" } },
+		"y_regcatbp", "y_regcatft", "y_ft", "y_coal2liquid", "y_mixedfuel2rocketfuel" } },
 	{ "yuoki-accumulators", "y-ups-flywheel-b", { R, G, B, PR }, 300, 30, { "yuoki-archaeology" }, {
 		"y-ups-flywheel-b", "y_compensator_25" } },
 	{ "yuoki-agronomy", "ye_farm", { R, G, B, PR, BIO }, 300, 30, { "yuoki-electronics", "angels-bio-farm-2" }, {
 		"ye_farm", "ye-seed_a1", "ye-seed_a2", "ye-growcorn", "ye_seed_b", "ye_cornb", "ye_sugar", "ye_celluose",
 		"ye_biomixed", "ye_biofuel", "ye_granulate_corn", "ye_granulate_vuger", "ye_granulate_trifitan", "ye_synwood",
-		"ye-corn2fluid", "ye-cf2lubricant", "y-mf2e", "ye-corn-to-angels", "ye-corn-from-angels", "y-emotor-s", "y-mf1c",
-		"y-1stirling-engine" } },
+		"ye-corn2fluid", "ye-cf2lubricant", "ye-corn-to-angels", "ye-corn-from-angels", "y-1stirling-engine" } },
 
 	-- utility era: the alien part
 	{ "yuoki-research-center", "yie_science_blue_gen", { R, G, B, PR, U }, 300, 45, { "yuoki-electronics", "utility-science-pack" }, {
@@ -85,8 +87,8 @@ local tree = {
 		"ye_dna_plant0", "ye_dna_plant1", "ye_dna_plant3", "ye_meatfarm", "ye_grow_animal_a", "ye_grow_animal2",
 		"ye_grow_animal3", "ye_grow_animal4", "ye_canmachine", "ye_grow_plant1", "ye_grow_plant1_waste",
 		"y-yellow-waste-purification", "yie_bloodfrommeat", "ye_cooking_meat", "yie_pureiron", "ye_neutralisatzion",
-		"ye_pool", "ye_pool_slurry", "ye-growcorn_ws", "ye_cornb_ws", "ye_slurry2ethanol", "y-electric-air-heater",
-		"y-rmvpol", "y-waste-condense", "ye_futtermittel_d" } },
+		"ye_pool", "ye_pool_slurry", "ye-growcorn_ws", "ye_cornb_ws", "ye_slurry2ethanol",
+		"ye_futtermittel_d" } },
 	{ "yuoki-rheinsberg", "ye_rheinsberg", { R, G, B, PR, U }, 800, 60, { "yuoki-obninsk", "yuoki-genetics" }, {
 		"ye_rheinsberg", "ye_rheins_LT", "ye_rheins_MT", "ye_rheins_HT", "ye_tfmw_turbine-s", "y-quantrinum-reactor",
 		"y-mf1-q1", "y-mf1-q2", "y-mf1-q3" } },
@@ -104,9 +106,8 @@ local tree = {
 		"ye_buechse_empty", "ye_buechse_gelb", "ye_buechse_white", "ye_buechse_gelb_export", "ye_buechse_weiss_export",
 		"ye_trademeat1", "ye_trademeat2", "ye_export02", "ye_export03", "ye_export_fish2", "ye_fish2", "ye_dna_fish2",
 		"ye-export-blood", "ye_futtermittel_c", "ye_grow_animal3fast", "y_exchange_b1" } },
-	{ "yuoki-mastercraft", "y_mc_dirtwasher", { R, G, B, PR, U }, 600, 45, { "yuoki-genetics", "yuoki-steam-heritage" }, {
-		"y_boiler4_mc", "y_boiler4_tech", "y_steam_turbine_mc", "y_steam_turbine_gr", "y_mc_dirtwasher",
-		"y_mc_underground_drill" } },
+	{ "yuoki-mastercraft", "y_mc_dirtwasher", { R, G, B, PR, U }, 600, 45, { "yuoki-genetics", "yuoki-archaeology" }, {
+		"y_mc_dirtwasher", "y_mc_underground_drill" } },
 	{ "yuoki-ultimates", "y_trade_ultimate", { R, G, B, PR, U }, 1000, 60, { "yuoki-trade", "yuoki-genetics" }, {
 		"y_trade_ultimate", "ypfw_trader_sign", "ye_science_ultimate", "ye_green_ultimate", "y_greensign_ulti",
 		"y_unlimited_wood" } },
@@ -125,14 +126,6 @@ local tree = {
 	{ "yuoki-repair-2", "y_repair_quantrinum", { R, G, B, PR, U }, 400, 45, { "yuoki-repair", "yuoki-alien-technology" }, {
 		"y_repair_quantrinum" } },
 }
--- the mastercraft anchor for the simple Yuoki steam machines is the decoupled MF branch
-for _, t in ipairs(tree) do
-	for i, a in ipairs(t[6]) do
-		if a == "yuoki-steam-heritage" then
-			t[6][i] = "yuoki-mechanical-force-2"
-		end
-	end
-end
 
 local owned = YUOKI_PARANOIDAL.owned_recipes
 local assigned = {}
