@@ -3,6 +3,13 @@ data:extend({
     default_value = 4, minimum_value = 0.01, maximum_value = 100, order = "loader-a"},
   {type = "bool-setting", name = "paranoidal-loader-auto-connect", setting_type = "runtime-global",
     default_value = true, order = "loader-b"},
+  -- Развёртывание турелей (controls/turret-deploy.lua): секунды до первого выстрела после постройки, 0 — выкл.
+  {type = "double-setting", name = "paranoidal-turret-deploy-delay", setting_type = "runtime-global",
+    default_value = 4, minimum_value = 0, maximum_value = 60, order = "turret-deploy-a"},
+  {type = "double-setting", name = "paranoidal-artillery-deploy-delay", setting_type = "runtime-global",
+    default_value = 10, minimum_value = 0, maximum_value = 120, order = "turret-deploy-b"},
+  {type = "bool-setting", name = "paranoidal-turret-deploy-indicator", setting_type = "runtime-global",
+    default_value = true, order = "turret-deploy-c"},
   --Разброс вещей из сундуков
   {type = "bool-setting", name = "item-drop", setting_type = "startup", default_value = true, order = "b"},
   --Ресурсы на дефолте х5 богатство
