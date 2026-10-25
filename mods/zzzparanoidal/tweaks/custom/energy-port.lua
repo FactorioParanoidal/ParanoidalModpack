@@ -47,6 +47,21 @@ for name, fields in pairs(port.fluids) do
     end
 end
 
+-- 2026-10-25 user decision (variant B): close energy-from-nothing at the raw sources by amounts only.
+-- Coal cracking ~x1.5 like a ladder step; propene from methanol 80 -> 45.
+local amount_fixes = {
+    {recipe = "angels-coal-cracking-1", key = "ingredients", name = "coal", amount = 20},
+    {recipe = "angels-coal-cracking-2", key = "ingredients", name = "coal", amount = 12},
+    {recipe = "angels-gas-propene", key = "results", name = "angels-gas-propene", amount = 45},
+}
+for _, fix in ipairs(amount_fixes) do
+    local found = false
+    for _, entry in pairs(assert(data.raw.recipe[fix.recipe], fix.recipe)[fix.key]) do
+        if entry.name == fix.name then entry.amount, found = fix.amount, true end
+    end
+    assert(found, "Energy port: " .. fix.recipe .. " has no " .. fix.name)
+end
+
 -- 2026-10-25 user decision (variant A): every fuel barrel equals its fluid. A fill recipe is
 -- 1 fluid + 1 container -> 1 item, confirmed by an empty recipe returning that fluid from the item.
 -- Energy = fluid fuel_value x fluid per item, emissions = fluid emissions (no clean-burning loophole).
