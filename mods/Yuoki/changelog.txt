@@ -1,0 +1,634 @@
+---------------------------------------------------------------------------------------------------
+Version: 9.0.0
+Date: 2026-10-24
+  Major Features:
+    - Paranoidal fork: one mod from Yuoki Industries 1.2.23 and Yuoki Industries - Engines 1.2.9 (Engines under engines/, graphics paths __Yuoki__/engines/), with selected content of zJatmnYiFixes 0.2.23. Incompatible with yi_engines, yi_pfw, zJatmnYiFixes, Yi_Tech_Tree(_ExtraVanilla), jatmn_yuoki_reimagined, Yuoki_F2, yi_engines_F2, YuokiTweaks. Version 9 keeps the mod portal from auto-updating it.
+    - Technology tree of 34 technologies grafted onto the Paranoidal build (prototypes/paranoidal/technology.lua); every Yuoki recipe is unlocked by research. Missing ingredients and machines of the build are added as prerequisites automatically (technology-derive.lua), units take the packs of their prerequisites; unreachable recipes stop the load.
+    - N4 and F7 chunks only from centrifuging super-pure Angels ores: saphirite + rubyte + bobmonium -> 3 N4, jivolite + stiratite + crotinnium -> 3 F7 in any centrifuge; with a crystal seed 5 (centrifuge 2+); with a seed and a Lachnan crystal catalyst, returned with 90 %, 8 (centrifuge 3). The chunk items are declared in data-final-fixes so that the Angels Refining Yuoki integration (chunks from ore sorting, slag and chunk mixes) is not created.
+    - Crystallization grows crystal seeds instead of chunks: rich dust seeds the washing emulsion; seeds from crystal dust, from crystal dust and ancient data fragments, or from crystal dust and Angels crystal dust.
+    - The C1, Y2 and P3 factories are the only machines that fabricate Yuoki components (categories yuoki-fabrication and yuoki-fabrication-advanced); they no longer craft other recipes.
+  Changes:
+    - Removed: map resources and autoplace of N4/F7, control.lua, character inventory/reach settings and the start suit, all inserters, lamps, the owner's monument, walls except Vitduo, tiles and slag bricks, chests and bunkers, tanks, Yuoki pipes, the St-A substation and the signal pole, robots and roboports, the radar, the beacon, mining drills, modules, personal equipment and guns, bullets, shells and mines, transport tubes and special sheet metal, all canisters and sealing, water generators, the burner crusher and form press, the MF water pump, coal and wood briquettes, the basic accumulators, recipes into vanilla science packs and batteries, JATMN air filters, orphan items and fluids, the smoker, smoked food, two fish species, three cans, five packages, four exports, the carnivorous plant, UC-A2 -> chunk recipes; the Space Age, Krastorio 2, Omnimatter, Planet Omnia and Tiberium integrations. Removal is in prototypes/paranoidal/removals.lua.
+    - Entry machines are built from late products of the build; every Yuoki component consumes one late product of the build (prototypes/paranoidal/ingredients.lua).
+    - The mechanical-force power plant (solid/liquid/gas fuel engines, power shafts, small and medium generators), the burner generator, the small turbine, the 1.8-MS turbine and the 3M6/4 boiler are built from mid-game products and researched with chemical science (decoupled from Yuoki materials). H-Metal is made in an assembler from steel and coal.
+    - Transmutation: selling into UC-A2 needs 5x more input; buying from UC-A2 gives half, takes 10 s and needs 5 Merchant Signs and 1 Charged F-C; fluid hand-in only with the new startup setting yuoki-uc-from-fluids (default off, 500 per UC-A2); the Cimota Restructor draws 8 MW; chunks hand in at 20 per UC-A2.
+    - Agronomy: the first seeds from Angels corn, fertilizer and production science; the first DNA from production and chemical science or bought for 2000 Merchant Signs; Yuoki and Angels corn exchangeable; substratin also on Angels yellow waste water; yellow waste water purification into contaminated water; exports pay with Merchant Signs, UC-A2, Quantrinum and reputation instead of vanilla science packs; alien blood exported in barrels.
+    - Trade: Krakon, I286 chips and Obninsk reactor cells can be exported for Merchant Signs.
+    - Currencies (Techanic, Merchant, Nature and Science Signs, Reputation, UC-A2, transmuted UC-A2, the three Mighty Domination Symbols) never get quality; finished products keep quality and lose their currency by-products.
+    - F12+ turrets are advanced versions of the build's top turrets (each consumes the turret it supersedes): Maudlin above Bob's gun turret 5, BruteMan rapid cannon, Eisenwulf above Bob's laser turret 5, plasma turret from Bob's plasma turret 2, blaze turret from the flamethrower turret, D-ZTT from two Bob laser turrets 5. Vitduo on Bob's reinforced wall.
+    - Repair tools above Bob's repair pack 5: Durotal 12 / 8000, Airat9000 16 / 15000, Quantrinum-R 30 / 30000.
+    - YI suits continue power armor MK2; grids 9x9, 10x10, 11x11, walkers 12x12 and 13x13.
+    - Research Center 45 MW and 100 pollution (JATMN values).
+    - Trailing whitespace removed from the text files (repository whitespace check).
+  Bugfixes:
+    - Perpetual-motion chains fixed: Yuoki generators at most 100 % effectivity (the eco and tech mastercrafted turbines and the small turbine had 114-120 %), burner generator 50 %, water -> MF at 10 °C, MF heat generator 6 MF, steam -> MF turbine 22 and 60 MF, overheater 280 steam, Rheinsberg MT/HT 770/380 steam, solid-fuel engine 4 / 3.5 / 3 MF, liquid and gas fuel engines below the fuel value of fuel oil and methane.
+    - Mixed fuel -> rocket fuel shows the product icon (its own icon replaced the build's rocket fuel icon through recipe icon sync).
+  Graphics:
+    - 813 graphics files that no remaining prototype references were removed (47 -> 33 MB). The removed prototypes are still defined in the source files and deleted at the end of data.lua, so their definitions point to deleted files: restoring one of them needs its graphics back from Yuoki 1.2.23 / Engines 1.2.9.
+    - 106 icons of 32x32 px (all from Engines) replaced by a neural upscale to 64x64 (Real-ESRGAN x4plus, alpha upscaled separately, Lanczos down to 64, no mipmaps); icon_size 32 -> 64 in the 213 prototype tables that use them.
+    - Technologies use their own 256x256 icons (graphics/technology/, the same neural upscale of the item icon) instead of the 32-96 px item icons.
+  Locale:
+    - Complete en/ru for all remaining content (888 keys each); Engines locale merged into locale/*/yi_engines.cfg; additions in locale/*/paranoidal.cfg; keys of removed content pruned; languages other than en and ru dropped.
+---------------------------------------------------------------------------------------------------
+Version: 1.2.23
+Date: 4. 7. 2026
+  Updates:
+    - Added a couple power ratio notes for steam and mechanical force setups, mostly so future balance poking has fewer mystery numbers.
+  Fixes:
+    - Added missing names for the Burner Generator and Mechanical Force bits. No more blank spots where names should be.
+    - Bob's Ores tungsten changed names again, so the Atomic's recipe now follows the new name and should stop crashing on startup.
+---------------------------------------------------------------------------------------------------
+Version: 1.2.22
+Date: 22. 4. 2026
+  Additions:
+    - Added new test Burner Generator: y_bg-1
+  Updates:
+    - This whole release is thanks to mod creator YuokiTani who showed up with surprise updates!
+    - Large refresh of Yuoki icons and graphics across energy, electric, defense, modules, lamps, storage, tiles, ammo, signs, and materials
+    - Updated accumulator, flywheel, AQE, crystal, beacon, 8080 roboport, Stirling dish, 3x3 storage, and lamp visuals to newer artwork
+    - Beacon visuals updated to newer animated HR graphics with improved shadow/placement visuals
+    - Updated Yuoki path tile layering and several storage/tank sprites
+  Changes:
+    - Rebalanced several accumulators and capacitor devices, including buffer sizes, throughput, cooldowns, and AQE/Crystal durability
+    - YI Beacon distribution effectivity increased from 0.7 to 0.8
+    - YI Roboport energy buffer increased from 800MJ to 900MJ
+    - YI Roboport input flow reduced from 25MW to 20MW
+    - YI Roboport charging energy reduced from 4MW to 2MW
+    - Flywheel, AQE, and Crystal accumulators updated with new footprints, visuals, and power stats
+    - AQE accumulator health increased from 300 to 800
+    - Crystal accumulator health increased from 350 to 1000
+    - Stirling Solar Dish output reduced from 75kW to 50kW
+    - Alien Solar 1 output reduced from 1600kW to 1000kW
+    - Alien Solar 2 output reduced from 3750kW to 2000kW
+    - Rebalanced several electric and energy recipes, including chips, batteries, substations, generators, Obninsk components, and steam turbine crafting
+    - Archaeology dirt digging and washing recipes rebalanced
+    - Several liquid storage tanks had their capacity values increased
+    - Alien lamp and colored lamp recipes are disabled again for now
+---------------------------------------------------------------------------------------------------
+Version: 1.2.21
+Date: 7. 2. 2026
+  Integrations:
+    - Bob's Ores / Bob's Ores + Angel's - fixed missing Atomic's recipe for Thorium ore
+    - Bob's Ores + Angel's Refining - fixed missing Atomic's recipes for Bob's Ores
+    - Angel's Refining - Yi slag is now same item as Angel's slag
+    - Angel's Petrochemical Processing - Updated Atomics icons to match related Angel's liquids/gas's, still uses old naming sorry for the confusion. Maybe next update?
+  Changes:
+    - Removed optional dependencies for overhaul mods and added them to the mod description to address Circular Dependency loops by those same mods.
+    - LOTS of code refactoring and expansion of internal functions library...
+---------------------------------------------------------------------------------------------------
+Version: 1.2.20
+Date: 7. 12. 2025
+  Space Age:
+    - New Quality module, Yuoki Style!
+    - Quantrinum - Can now be quality
+    - Alien Infuser, Cimota Restructor - Now accepts quality modules
+    - Added Atomic's recipe: Scrap
+    - Added New Crushing recipes to Asteroid Reprocessing to produce both N4-Material Chunk and F7-Material Chunk
+    - Quality now affects Module slots and Energy usage (Increased usage) of Cimota Restructor, Washer, Mastercrafted Washer, Atomic Quantum Composer, Alien Infuser, Electric Crusher, Electric Form Press
+  Integrations:
+    - Simplified the Krastorio 2 and Krastorio 2 Spaced Out Integration support code and removed redundancy.
+    - Krastorio 2 and Krastorio 2 Spaced Out updates are combined in release notes from here unless otherwise stated. I will also refer to the mods as K2.
+    - K2 - Small Turbine Generator-S steam consumption reduced to match changes to K2's boilers power output has also scaled down but maintains 3:4 ratio
+  Updates:
+    - Passive Vitduo Defense System - Has been updated to do minor knockback and stun damage when attacked. Additionally shows electric shock beam showing where the damage came from. No astroid impacts will not trigger these effects.
+    - Make Mines great again! - Plasma Mine Base damage 100 -> 350, Poison Mine base damage 30 -> 150, mineammo category added to mines so they received damage boosting when research boosts vanilla mines.
+    - Migrated the legacy changelog from the mod portal page to the correct location of the changelog
+  Fixes:
+    - Not really a fix but notes here for those that saw 1.2.19 released, that was a incomplete release and was taken down 1.2.20 includes all changes that was in 1.2.19 release as well.
+    - Poison Mines were missing there secondary effect of Impact damage, that has been added back.
+    - Fixed A2 Pipes was incorrectly set to 200 vs 130 volume as intented
+    - Fixed N4 Pipes was incorrectly set to 200 vs 80 volume as intended
+    - Fixed Green Pipes was incorrectly set to 200 vs 100 volume as intented
+  Changes:
+    - Some legacy code cleanup...
+---------------------------------------------------------------------------------------------------
+Version: 1.2.18
+Date: 10. 11. 2025
+  Integrations:
+    - Bob's Ores - Atomic's recipes added for Bob's Ores resources
+    - Krastorio 2 - Atomic's recipes added for K2 resources
+    - Krastorio 2 - Atomic's recipe icons for science changed to K2 tech cards, left names the same though
+    - Krastorio 2 Spaced Out - Atomic's recipes added for K2 resources
+    - Krastorio 2 Spaced Out - Atomic's recipe icons for science changed to K2 tech cards, left names the same though
+    - Omnimatter - Atomic's recipe added for Omnite
+    - Planet Omnia - Atomic's recipe added for Omnite
+    - Factorio & Conquer: Tiberian Dawn - Atomic's recipes added for Green Tiberium
+  Changes:
+    - Some legacy code cleanup...
+    - Reworked Atomic's crafting groups to make room for Integration recipes
+    - Refactored Atomic's recipe code to make adding Integration recipes easier later
+    - Refactored existing Atomic's recipes code to simplify future updates
+    - Cleaned up and removed inactive recipes from local/en
+---------------------------------------------------------------------------------------------------
+Version: 1.2.17
+Date: 7. 11. 2025
+  Space Age:
+    - Cimota Restructor now accepts Quality modules, but only for science pack recipes
+    - Atomic Quantum Composer now accepts Quality modules
+    - Frank & Peppe now has 50% productivity built-in
+    - Frank & Peppe now sounds like a foundry
+    - Hot and Cold Heat Blocks, cant be recycled
+    - Crusher now uses Space Age Crusher sound effects
+    - YI Beacon Module Slots and Range is now impacted by Quality, reminder efficiency is fixed at 0.7
+  Fixes:
+    - Fixed the broken water generation recipe name and description
+    - Frank & Peppe related recipes now have main product identification fixed
+    - YI Beacon coverage range now uses correct indicator area for Beacon
+  Changes:
+    - F7 Ore patches (yellow resource) now Glow at night like Uranium Ore does!
+    - Frank & Peppe now glows!
+    - Frank & Peppe now accepts productivity modules, Cold Heat Storage Block is not impacted by productivity in Frank & Peppe
+    - Hot Heat Storage Blocks now glow!
+    - Zaydon Charger now glows!
+    - YI Beacon now glows!
+    - YI Science Pack recipes now allow productivity module use.
+    - YI Science Pack recipes now produce double the science packs, most only produced 1 science before.
+---------------------------------------------------------------------------------------------------
+Version: 1.2.16
+Date: 4. 11. 2025
+  Space Age:
+    - Molten Copper and Iron recipes from Pure Copper and Iron in Foundry (Icons are placeholders for now!)
+    - Added Atomic's recipes: Calcite, Tungsten ore, and Holmium ore
+    - Electric Crusher changes: Increased power to 655kw, now uses Space Age Crusher sound effects, supports asteroid crushing recipes on platform or on planet!
+    - Updated weight values of various items to prevent rockets from delivering partial stack remainders, this resulted in some default stack size adjustments. Open to feedback on these changes.
+  Updates:
+    - Changed how Atomic's recipe icons are created (less photoshop work for me and easier to integrate with other mods later) This also is why there is a reduced file size for the mod itself.
+  Fixes:
+    - Turrets no longer have ghost turret barrels (Thanks Rau771)
+    - Fixed shadows under YI Logistiker and YI Constructor bots (Turbos too)
+    - Fixed YI Constructor bot image flashing (Turbos too)
+    - Fixed a few broken locals
+  Changes:
+    - Some legacy code cleanup...
+    - Small Turbine Generator-S steam consumption changed from 24/s to 45/s and max temp from 265c to 165c, power output 1.6MW
+    - Copper Plate from Pure Copper / Iron Plate from Pure Iron recipes have been changed to 2 pure = 5 plate in furnace, to be more viable mid-late game
+---------------------------------------------------------------------------------------------------
+Version: 1.2.15
+Date: 24. 8. 2025
+  Fixes:
+    - Accidently made optional DLC required.. fixed now.
+---------------------------------------------------------------------------------------------------
+Version: 1.2.14
+Date: 17. 8. 2025
+  Additions:
+    - Contaminated water to Unicomp recipe added from Fixes Mod
+    - Added the 8080 logistics and construction network expander ports from Fixes Mod
+    - Added turbo bots from Fixes Mod
+  Fixes:
+    - Fixed Yuoki inserters to be bulk (stack) class like they were in 1.0 - No they wont stack belts.
+  Changes:
+    - Changed Start with YI Suite option to only start with 25 Yi Constructor robots, made no sense to start with 50 as you only could use 25.
+    - Reformat all code using Stylua, attempting to keep this format moving forward as the code is a heavy mix of styles over the years. This should have zero impact to the mod itself just my sanity working on it.
+    - Prototype 41 - former "filter inserter" is now a stack inserter. Should stack belts when that research is unlocked, still need to verify this though. Recipe changed as well.
+  Known Issues:
+    - Yes I know logi and construction class bots have broken images when doing construction and that their shadows need fixed....
+---------------------------------------------------------------------------------------------------
+Version: 1.2.13
+Date: 11. 4. 2025
+  Updates:
+    - Turrets are now boosted by Space Age Bonus Damage Research
+    - Yuoki ammo types now are boosted by Space Age Bonus Damage Research
+  Fixes:
+    - Cannon Turret Ammo is now named
+    - D-ZTT damage type corrected to Laser as it should be, and now is boosted by Laser research Bonus
+  Changes:
+    - N4 and F7 Crushing with Technic recipes now allow Productivity modules without duplicating the toolhead
+    - Improved Dirt Digging recipe now allows Productivity modules without duplicating the drillhead
+    - Pure Iron and Copper recipes that boost with toolhead, now allow Productivity modules without duplicating the toolhead
+    - Mastercraft Washer now allows for Productivity modules
+    - Mastercraft Washer module slots increased to 3 so that it had more than regular Washer
+---------------------------------------------------------------------------------------------------
+Version: 1.2.12
+Date: 5. 4. 2025
+  Updates:
+    - Code cleanup for Atomics recipes
+    - Code cleanup for some recipe/item groups
+    - Fixed some of the jarring recipe/item groups that were inconsistent
+    - YI E2 Mining Dril (and Mastercraft version) now part of fast replace group of Big mining drill
+  Fixes:
+    - Fixed up Atomics recipe names
+    - Fixed up some of the mess in Factoriopedia
+    - Fixed YI Beacon fast replace group
+  Changes:
+    - Added optional dependency support for Space age and Quality mods. This is for future stuff.
+---------------------------------------------------------------------------------------------------
+Version: 1.2.11
+Date: 30. 3. 2025
+  Fixes:
+    - Fixed storage volume of all liquid storage tanks.
+    - Fixed Atomics Trade recipe icon color for F7 ore.
+  Changes:
+    - Yuoki recipe for Vanilla Battery removed from recycling. This is to resolve the broken recycle process on Fulgora
+    - Removed Nature, Techanic, Science, and Merchant Signs from recycling. This means all recipes that produce one of these signs as a byproduct also can not be recycled either.
+    - Removed Reputation from recycling. This means all recipes that produce one of these signs as a byproduct also can not be recycled either.
+    - Removed Unicomp from recycling.
+  Additions:
+    - Heavy Oil to Unicomp recipe can now be turned on and off from mod settings. On by default. You may want to disable this recipe when playing Space Age for balance reasons.
+---------------------------------------------------------------------------------------------------
+Version: 1.2.10
+Date: 23. 3. 2025
+  Updates:
+    - pl locale added (Thanks S3BA-pl)
+  Fixes:
+    - Fixed crash related to Obninsk Reactor in 2.0.24 update
+---------------------------------------------------------------------------------------------------
+Version: 1.2.9
+Date: 22. 12. 2024
+  Fixes:
+    - Picking up YI-22/80 Buffer Chest now correctly gives you.. well the Buffer Chest.
+    - Picking up Yuoki pipes, now give you the pipe you picked up not vanilla pipes...
+    - Construction bots should now show correctly scaled alt icon when building, I think?
+    - Productivity is now allowed for intermediate items again
+    - Fixed up Atomics recipe icon issues
+  Updates:
+    - All Logistics Chests now support auto trashing.
+---------------------------------------------------------------------------------------------------
+Version: 1.2.8
+Date: 28. 11. 2024
+  Fixes:
+    - YI Mining Drills fluid inputs were facing wrong directions.
+    - Icon for Crystal Dust was fixed to match the correct resource colors
+---------------------------------------------------------------------------------------------------
+Version: 1.2.7
+Date: 28. 11. 2024
+  Updates:
+    - stuff
+  Fixes:
+    - Yuoki inserters did not have filter slots to align with vanilla, they now do.
+    - Fixed water input of Boiler 3M6/4
+    - Fixed broken sprite for Durotal Wall
+    - Fixed broken sprite for Alien Light Source
+  Changes:
+    - Yuoki class armor now requires the prior armor to be crafted. This is to help offset quality loop costs.
+    - Slightly boost of grid size for Yuoki class armor due to the considerable cost increases for each
+    - Mastercrafted Miner has been overhauled to align more like the Big mining drills, recipe has been changed as well (this recipe will change again later for SA)
+    - YI Beacon distribution efficiency changed from 0.65 to 0.7 to balance it against vanilla Beacon changes
+---------------------------------------------------------------------------------------------------
+Version: 1.2.6
+Date: 24. 11. 2024
+  Updates:
+    - Added Small logistics chests from Fixes mod by JATMN
+    - Added New YI Logistics Group and moved some recipes around into it (More of this stuff to come!)
+  Fixes:
+    - Some recipe name fixes
+    - Fixed Washer "Upgrade" to MC Washer
+  Changes:
+    - Pure Iron, Pure Copper, and Dirt Washing recipes had fluid requirement and results reduced
+    - Rearranged Atomic's recipes list to make more sense
+    - Removed native support for Deadlock Stacking mod, its broken in 2.0 and not had time to look into it so removed for now to fix load issues.
+  Known Issues:
+    - Lots of recipes still missing "Names" working on these over time, there's over a 100 to fix :(
+    - Factoriopedia recipes are still kind of scattered around vs crafting menu order. I hope to address this in the next update or so.
+---------------------------------------------------------------------------------------------------
+Version: 1.2.5
+Date: 22. 11. 2024
+  Updates:
+    - Minimum game version changed to 2.0.20 due to various changes
+    - Upscaled some icons from 32 to 64 to help with other mods breaking when failing to interact with Yuoki properly (not sure if ill change this again or not)
+  Fixes:
+    - Fixed water input direction on Frank & Peppe Industrial Smelter
+---------------------------------------------------------------------------------------------------
+Version: 1.2.4
+Date: 15. 11. 2024
+  Updates:
+    - Some basic code clean up
+    - Merged locale's into single files for easier translations
+    - zh-CN locale added (Thanks PlexPt)
+  Fixes:
+    - Fixed crash introduced in 2.0.18 related to tiles
+    - Fixed module slots
+---------------------------------------------------------------------------------------------------
+Version: 1.2.3
+Date: 10. 11. 2024
+  Updates:
+    - This was migrated from Yuoki Industries (Factorio 2.0)
+---------------------------------------------------------------------------------------------------
+Version: 1.2.2
+Date: 10. 11. 2024
+  Updates:
+    - This will be the final release of Yuoki Industries (Factorio 2.0)
+    - Added Nag notice to stop using this mod, my work will move to Yuoki Industries main mod!
+    - Added Migration support for saves with Yuoki versions prior to 2.0 update.
+  Fixes:
+    - Ground Tiles should be working now.
+---------------------------------------------------------------------------------------------------
+Version: 1.2.1
+Date: 31. 10. 2024
+  Fixes:
+    - Resource spawning on map should work now (currently only on Nauvis) Note: It wont spawn in your starting area on existing saves, please explore more of the map to spawn the ore.
+---------------------------------------------------------------------------------------------------
+Version: 1.2.0
+Date: 30. 10. 2024
+  Updates:
+    - Factorio 2.0
+    - Removed negative pollution from lamps, this is no longer supported by the game.
+    - Refactor many recipe names (this might break integration with other mods or existing saves)
+  Known Issues:
+    - Disabled ground tiles, currently there is issues with the graphics for these with 2.0 update.
+    - pipe_connections = is a mess all machines with pipe connections need to be double checked.
+    - Pipe Valve, Flow Trigger 10, Fluid Buffer Station - no longer works as a one-way valve
+    - Resource patch spawning might need revisited (Force patched it to what JATMN's Fixs Mod Used in 1.0 didnt work)
+    - Turrets probably need revisited
+    - Some machines and items are invisible
+    - Recipes names need modernized to work with the built in Factoriopedia
+    - All locale's need fixed up to match recipe name changes
+---------------------------------------------------------------------------------------------------
+Version: 1.1.03
+Date: 9. 5. 2022
+  Features:
+    - Flow-Rates of all generators tweaked
+    - green pipes for variant and comfort added
+---------------------------------------------------------------------------------------------------
+Version: 1.1.02
+Date: 26. 11. 2020
+  Features:
+    - Added Yuoki steam turbine fast replace and upgrade planner compatibility
+---------------------------------------------------------------------------------------------------
+Version: 1.1.01
+Date: 25. 11. 2020
+  Features:
+    - Added boiler fast replace and upgrade planner compatibility
+---------------------------------------------------------------------------------------------------
+Version: 1.1.00
+Date: 24. 11. 2020
+  Features:
+    - Factorio 1.1 compatibility fixes
+---------------------------------------------------------------------------------------------------
+Version: 1.0.02
+Date: 21. 08. 2020
+  Fixes:
+    - Fixed bad zip file.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.01
+Date: 20. 08. 2020
+  Features:
+    - Added option to start with YI Work Suit, basic equipment and Yuoki Construction bots
+---------------------------------------------------------------------------------------------------
+Version: 1.0.00
+Date: 15. 08. 2020
+  Fixes:
+    - Added setting-names.cfg file to fix unknown key errors
+---------------------------------------------------------------------------------------------------
+Version: 0.8.98
+Date: 11. 08. 2020
+  Major Features:
+    - Final? Release before Factorio 1.0
+  Fixes:
+    - Added some intermediates which got missed
+    - Add produuctivity to module types for undergrouund drill
+---------------------------------------------------------------------------------------------------
+Version: 0.8.97
+Date: 07. 08. 2020
+  Fixes:
+    - Add productivity to module types for crusher and washer
+---------------------------------------------------------------------------------------------------
+Version: 0.8.96
+Date: 07. 08. 2020
+  Major Features:
+    - Release Candidate for Factorio 1.0.
+---------------------------------------------------------------------------------------------------
+Version: 0.8.95
+Date: 06. 08. 2020
+  Features:
+    - Adds settings for player reach, inventory size and Yuoki Productivity mod behaviour
+    - Adds Yuoki intermediate products to vanilla list
+    - Yuoki productivity modules behave as vanilla unless configured not to.
+---------------------------------------------------------------------------------------------------
+Version: 0.8.94
+Date: 04. 08. 2020
+  Fixes:
+    - Fix changelog so it appears in game.
+---------------------------------------------------------------------------------------------------
+Version: 0.8.93
+Date: 02. 08. 2020
+  Locale:
+    - Add locale entries for Buffer Chests
+  Balancing:
+    - Wall mining times reduced to match vanilla
+    - Fluid entity mining times reduced to match vanilla
+---------------------------------------------------------------------------------------------------
+Version: 0.8.92
+Date: 27. 07. 2020
+  Major Features:
+    - Merge changes from Yuoki Tweaks mod
+  Additions:
+    - Circuit Connections to mining drills
+    - Radar Visualisation to Yuoki Radar
+    - Logistic filters to storage chests
+    - Logistic Buffer Chests
+---------------------------------------------------------------------------------------------------
+Version: 0.8.91
+Date: 02. 07. 2020
+  Fixes:
+    - fixed Deadlock Stacking - provided by Glendening - Thank You
+    - fixed rocket-fuel icon
+---------------------------------------------------------------------------------------------------
+Version: 0.8.90
+Date: 13. 04. 2020
+  Fixes:
+    - pollution-fix provided by ChurchOrganist - Thank You
+---------------------------------------------------------------------------------------------------
+Version: 0.8.89
+Date: 20. 02. 2020
+  Fixes:
+    - Fix robot sprite shadow definitions
+---------------------------------------------------------------------------------------------------
+Version: 0.8.88
+Date: 28. 01. 2020
+  Fixes:
+    - N4/F7-Chunks spawn fixed
+---------------------------------------------------------------------------------------------------
+Version: 0.8.87
+Date: 25. 01. 2020
+  Features:
+    - N4/F7-Chunks as ressource removed
+    - new way to get N4/F7 Chunks implemented
+---------------------------------------------------------------------------------------------------
+Version: 0.8.86
+  Features:
+    - works with factorio 18.0
+---------------------------------------------------------------------------------------------------
+Version: 0.7.85
+  Features:
+    - tested with factorio 0.17.79
+  Changes:
+    - recipe pressed-mud -> mixed fuel (old was solid fuel) -> rocket-fuel
+    - Tiny Sol-Ray Stream has a better fitting gfx - output reduced to 1.6 MW  25 kW/Tile
+    - Small Sol-Ray Stream - output reduced to 3.75 MW  37.5 kW/Tile
+    - generators have clean consumptions in fluid/s (helps to caculate how many engines you need)
+    - Boiler 3M6/4 pollution now 54/m
+    - recipe hydrotin-gas outputs additional petroleum-gas
+  Additions:
+    - added: MX-C Fuel (7 GJ) can splitted into 10x MX-C Reduced (600 MJ each chemical)
+    - added: crafting blue-signs from all vanilla-science-packs
+---------------------------------------------------------------------------------------------------
+Version: 0.7.84
+  Fixes:
+    - circuit-cable visibility fixed
+---------------------------------------------------------------------------------------------------
+Version: 0.7.83
+  Features:
+    - compatible with factorio 0.17.48+
+    - stack-sizes for some vanilla products higher as normal
+---------------------------------------------------------------------------------------------------
+Version: 0.7.82
+  Features:
+    - compatible with factorio 0.17.35+
+    - some sort of long reach included
+---------------------------------------------------------------------------------------------------
+Version: 0.7.81
+  Features:
+    - compatible with factorio 0.17.25+
+    - added a green turbine to round the line
+  Fixes:
+    - fix the double-entry bug
+---------------------------------------------------------------------------------------------------
+Version: 0.7.80
+  Features:
+    - compatible with factorio 0.17.12+
+    - Deadlock Stacking Support included
+    - temperatures MC Boiler and MC Turbine changed
+    - new Boiler added, to feed rensuir
+---------------------------------------------------------------------------------------------------
+Version: 0.7.79
+  Major Features:
+    - compatible with factorio 0.17.9
+  Changes:
+    - Hand-Tools removed
+    - some gfx changed to HR
+    - Fuel-Mixer different gfx/animation
+---------------------------------------------------------------------------------------------------
+Version: 0.7.78
+  Major Features:
+    - first version for factorio 0.17.0
+---------------------------------------------------------------------------------------------------
+Version: 0.6.75
+  Changes:
+    - fixes some old problems
+---------------------------------------------------------------------------------------------------
+Version: 0.6.74
+  Changes:
+    - Happy New Year
+---------------------------------------------------------------------------------------------------
+Version: 0.6.73
+  Changes:
+    - MC Boiler now working and outputs 270°C steam
+    - Boiler 3M6/4 outputs 250°C steam
+    - Turbines consume 250°C, MC-Turbine 270°C -> result = higher MW-outputs
+    - Generators fixed MF-Temperatures 200°C-400°C -> result = lower MW-output but still strong
+    - added Steam-Overheater - overheats steam up to 1000°C (input steam any temperature)
+---------------------------------------------------------------------------------------------------
+Version: 0.6.72
+  Changes:
+    - 0.16 compatible
+---------------------------------------------------------------------------------------------------
+Version: 0.5.70
+  Changes:
+    - fixes Fluid-Valve, Flow-Trigger, Buffer-Tank rotation
+---------------------------------------------------------------------------------------------------
+Version: 0.5.69
+  Changes:
+    - compatible with factorio 0.15.10
+---------------------------------------------------------------------------------------------------
+Version: 0.4.63
+  Changes:
+    - recipes for gun-turrets changed, can now handcrafted agian
+    - recipes for laser-turrets use wired-capaciters instead of accumulators
+    - missing UI descriptions reactivated
+    - robots have now 400 health and physical-resistence (not shown ingame)
+    - icons changes for better view
+    - Big Advanced Accumulator - yeah animation is back (forum-post contrast ?)
+    - fix Special Drill vibration (forum-post) and hopefully also jitter removed
+    - hardic-wall gfx fixed (now it connect's in intended way - after 1.5 years)
+    - YI-Atomics Icons all one style
+    - Flame-Thrower-Turret reactivated
+    - fixed some pipe-gfx
+    - changed graphic Underground Tank 9.000
+    - changed graphic Underground Tank 15.000, also now holds 24.000 units
+    - changes the selection-box - basements
+    - many recipes changed to give different signs
+    - Roboport high-resolution, fixed view-angle
+  Additions:
+    - slag can now used as tile (just place it)
+    - Signal-Connector (pole for wire with long connection range)
+    - basement-ground-floor lamp (4x4)
+---------------------------------------------------------------------------------------------------
+Version: 0.4.62
+  Changes:
+    - ground floor lamps have no collision-box and can placed/removed with robots
+    - repair-icons and smelter-product-icons changed, to get better visual feedback
+    - plasma-capsules can used in Energy-Gun
+    - weapon energy cartridges also taken from plasma-turrets
+    - power-armor inventory-boni changed
+    - YI-Roboports transfer much more charge-power
+    - retrade from Reputation into Signs removed
+    - both "brown"-modules removed
+    - removed some leftovers (SCD-Accumulators, Steam-Powerplant, SS-Turbine-P and -T)
+  Additions:
+    - electric structure element (for later recipe-changes)
+    - Techanic-Module (similar to old better brown module)
+    - Science-Module (better productivity)
+    - mastercrafted green boiler 4M2/4 (green 3M6/4)
+    - YI-Personal-Roboport to get YI-Robots charged
+    - new Basement-Decoration-Set (Theme)
+    - basement-factory
+    - ground-floor lamp (2x2)
+    - 7 basement-tiles 5x5
+    - 1 basement-tile 4x4
+---------------------------------------------------------------------------------------------------
+Version: 0.4.61
+  Changes:
+    - moved and added YI-PFW Power-Armor + Equipment into YI
+---------------------------------------------------------------------------------------------------
+Version: 0.4.60
+  Changes:
+    - recipe-lines and icons in better order
+    - new IWE-Fluid, produced in Water-Mixer (Liquids-Tab)
+    - YI-Chemical-Turret (Flame-Thrower) removed
+    - light-radius higher from Floor-Lamps
+---------------------------------------------------------------------------------------------------
+Version: 0.4.59
+  Changes:
+    - 0.14 compatible + small changes
+---------------------------------------------------------------------------------------------------
+Version: 0.3.58
+  Changes:
+    - changed values roboport and robot to match factorio 0.13 energy-consumption
+    - added some more use for slag (visit forum for more information)
+    - added a smelting-concept for faster iron-, copper-plate and steel-production
+    - tweaked toolhead dirt-digging
+    - tweaked repair-recipes and maintance-workshop work
+---------------------------------------------------------------------------------------------------
+Version: 0.3.57
+  Changes:
+    - fix Obninsk pipe-connection (0.13.9 patch)
+    - YI-Inserter changed to stack-inserter
+    - dircet battery-recipe changed empty battery->unicomp->vanilla-battery - prevents crazy raw-value calcs
+    - alien-artifacts now unicomp->alien-artifacts->unicomp (bad solution i know) - reduce crazy raw-value calcs
+---------------------------------------------------------------------------------------------------
+Version: 0.3.56
+  Changes:
+    - fix missing circuit accumulator connection
+    - add/fix some missing descriptions
+    - add circuit connection for Pipe-Valve
+    - add new Fluid Buffer Station (please see forum for details)
+---------------------------------------------------------------------------------------------------
+Version: 0.3.55
+  Changes:
+    - icons for mastercrafts changed
+    - burner-miner now 5x5 with improved stats and gfx
+    - new bug-statue / obelisk crafting removed
+---------------------------------------------------------------------------------------------------
+Version: 0.3.54
+  Changes:
+    - AQE build fix
+---------------------------------------------------------------------------------------------------
+Version: 0.3.53
+  Changes:
+    - spawn more YI-Ore (if it spawn)
+  Additions:
+    - obelisk (A3.5X)
+---------------------------------------------------------------------------------------------------
+Version: 0.3.52
+  Changes:
+    - fixes spawning Nuatreel (green stuff)

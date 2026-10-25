@@ -1,0 +1,265 @@
+---------------------------------------------------------------------------------------------------
+Version: 1.2.9
+Date: 9. 11. 2025
+  Space Age:
+    - Peter T.'s Transport V-Tubes (green) is now locked behind Valcanus to craft
+    - Peter T.'s Transport V-Tubes (green) recipes updated to require Tungsten Plate as well as Foundry for crafting
+  Updates:
+    - Setting for Special Sheet Metal added to change recipe requirements, this is from jatmn's Fixes mod.
+  Fixes:
+    - Fixed Vacumatic Transport Tubes (orange) to work in 2.0. Yes I know they look odd, need someone to cleanup the sprite for me... please...
+    - Fixed Peter T.'s Transport V-Tubes (green) to work in 2.0
+    - Fixed Peters V-Tube-Splitter recipe icon
+  Changes:
+    - Some legacy code cleanup...
+    - Vacumatic Transport Tubes (orange) - Tube (belt), underground and splitter recipes all changed considerably to be accessible early game as intended.
+    - Vacumatic Transport Tubes (orange) changes speed from 22.5 -> 20 items a second
+    - Peter T.'s Transport V-Tubes (green) - Tube (belt), underground and splitter recipes adjusted to require orange tubes (belts) and ballanced a bit
+    - Peter T.'s Transport V-Tubes (green) changed speed from 72 -> 75 items a second
+  Locale:
+    - Paranoidal fork: added complete Russian locale locale/ru/yi_engines.cfg (all 582 en keys); Mechanical Force named consistently with Yuoki; swapped en descriptions of Corn and Corn Seed are correct in ru.
+---------------------------------------------------------------------------------------------------
+Version: 1.2.8
+Date: 7. 11. 2025
+  Space Age:
+    - C1-Factory, Y2-Factory, P3-Factory - All support Quality modules now
+  Changes:
+    - Some legacy code cleanup...
+    - Merged a bunch of legacy changelog information into main changelog and fixed formatting where possible
+    - Rebuilt locale/en to be same format as Yuoki Industries mod for consistency
+    - Reformat all code using Stylua, attempting to keep this format moving forward as the code is a heavy mix of styles over the years. This should have zero impact to the mod itself just my sanity working on it.
+---------------------------------------------------------------------------------------------------
+Version: 1.2.7
+Date: 30. 12. 2024
+  Major Features:
+    - Factorio Space Age compatibility - This is the first mod update that adds (minor) support for Space Age
+  Fixes:
+    - Fixed Factory machines next upgrade planner issues
+    - Added C1 Factory as next upgrade for Assembling Machine 3
+    - Fixed some more broken recipe names (yes, I know still more to go...)
+  Updates:
+    - Polish locals added (Thanks S3BA-pl)
+    - Minor code cleanup
+    - Added setting option for module slot count on Factory Machines. (From JATMN's Fixes Mod)
+  Changes:
+    - Factory machines now support all same recipes as Assembling Machine 3 (This supports Space Age)
+    - Added Fluid input/outputs to C1 Factory
+    - Factory machines HP increased to align with Assembling Machine progressions
+---------------------------------------------------------------------------------------------------
+Version: 1.2.6
+Date: 22. 12. 2024
+  Fixes:
+    - Hydra-Farm pipe input incorrectly set as output fixed
+---------------------------------------------------------------------------------------------------
+Version: 1.2.5
+Date: 29. 11. 2024
+  Fixes:
+    - Fixed module slots on Factories
+    - Fixed a few recipe names and descriptions
+  Updates:
+    - Added setting to fatmice from JATMN's Fixes that makes fatmice have reusable filters inspired by K2 (Default is disabled)
+  Changes:
+    - Added module slots to Farms because it made no sense that they didnt have them before
+---------------------------------------------------------------------------------------------------
+Version: 1.2.4
+Date: 17. 11. 2024
+  Updates:
+    - zh-CN locale added (Thanks PlexPt)
+---------------------------------------------------------------------------------------------------
+Version: 1.2.3
+Date: 10. 11. 2024
+  Updates:
+    - This was migrated from Yuoki Industries - Engines (Addon) (Factorio 2.0)
+---------------------------------------------------------------------------------------------------
+Version: 1.2.2
+Date: 10. 11. 2024
+  Updates:
+    - Added migration support for saves running older versions.
+    - Added conflit flag for running main version of Yuoki
+---------------------------------------------------------------------------------------------------
+Version: 1.2.1
+Date: 31. 10. 2024
+  Updates:
+    - Factorio 2.0
+  Known Issues:
+    - Transport belts (tubes) are disabled, the graphics need reworked/redone for 2.0
+---------------------------------------------------------------------------------------------------
+Version: 1.1.02
+Date: 9. 5. 2022
+  Features:
+    - Added Gas-Fuel-Engine for Hydrogen & Petroleum
+  Balancing:
+    - Recipe-Chain for Hydrogen tweaked
+    - Recipes for MF-Generation in Fluid-Engine changed
+    - Overheater and Turbine different working recipes
+    - Rheinsberg different working behavior to work with 70 MW Turbine
+---------------------------------------------------------------------------------------------------
+Version: 1.1.00
+Date: 26. 11. 2020
+  Major Features:
+    - Factorio 1.1 compatibility
+---------------------------------------------------------------------------------------------------
+Version: 1.0.45
+Date: 07. 08. 2020
+  Major Features:
+    - Factorio 1.0 final version
+---------------------------------------------------------------------------------------------------
+Version: 0.8.43
+Date: 07. 08. 2020
+  Major Features:
+    - Release Candidate for Factorio 1.0.
+---------------------------------------------------------------------------------------------------
+Version: 0.8.42
+Date: 07. 08. 2020
+  Fixes:
+    - Fix changelog so it appears in game.
+---------------------------------------------------------------------------------------------------
+Version: 0.8.41
+Date: 06. 08. 2020
+  Features:
+    - Add YIE intermediate products to the vanilla list.
+---------------------------------------------------------------------------------------------------
+Version: 0.8.40
+Date: 02. 08. 2020
+  Balancing:
+    - Belt mining times reduced to match vanilla
+---------------------------------------------------------------------------------------------------
+Version: 0.8.39
+Date: 13. 04. 2020
+  Fixes:
+    - pollution-fix provided by ChurchOrganist
+---------------------------------------------------------------------------------------------------
+Version: 0.8.38
+  Major Features:
+    - compatible with factorio 0.18.3
+  Fixes:
+    - Small Electric Motor - Fluid output tiny change to avoid connecting problems
+  Additions:
+    - Added MF-Heater (generates MF from electricity ... MF can used as fluid-battery)
+---------------------------------------------------------------------------------------------------
+Version: 0.8.37
+  Major Feature:
+    - compatible with factorio 0.18.0
+---------------------------------------------------------------------------------------------------
+Version: 0.7.36
+  Changes:
+    - 70 MW Turbine feeded from Rheinsberg
+    - recipe to use petroleum-gas in fluid-fuel-engine
+    - recipe to use hydrotin-gas in fluid-fuel-engine
+  Features:
+    - tested with factorio 0.17.79
+---------------------------------------------------------------------------------------------------
+Version: 0.7.35
+  Fixes:
+    - fixed error-message with belts
+---------------------------------------------------------------------------------------------------
+Version: 0.7.34
+  Features:
+    - tested with factorio 0.17.48
+  Changes:
+    - recipes for Rheinsberg changed
+    - added new recipe for transforming 1000°C steam through turbine (need a little more balance)
+    - most (sell)-trade recipes changed to get more value (other materials)
+    - Fatmice-Cycle now useful again to remove a lot of pollution
+---------------------------------------------------------------------------------------------------
+Version: 0.7.33
+  Features:
+    - tested with factorio 0.17.25
+  Fixes:
+    - fix the double-entry bug
+---------------------------------------------------------------------------------------------------
+Version: 0.7.32
+  Major Features:
+    - first version for factorio 0.17.0
+---------------------------------------------------------------------------------------------------
+Version: 0.6.31
+Date: 25. 2. 2019
+  Changes:
+    - overheater produces YIE-Steam for turbine -> this steam can't be used in other turbines (reduces OP)
+---------------------------------------------------------------------------------------------------
+Version: 0.4.20
+Date: 16. 2. 2016
+  Changes:
+    - reseach-center back to 220 MW power consume
+    - overheater power-consume increase to 28 MW
+    - new icons to DNA's
+    - a lot recipes give now trade-signs
+    - iron-casing needs now H-metal instead of iron-plates
+  Updates:
+    - vacumatic-tubes in orange and green 0.5 and 1.5 belt-transportation-rate
+    - sheet-metal
+    - trade-node - easier laika-gate access
+    - trade-import sealings/sheet-metal
+    - Hydra-Farm (for fish breeding)
+    - Smoker - smoke meat and fish
+    - new product package - Can's
+    - 3 fish-types
+    - 8 types of final farm-products
+---------------------------------------------------------------------------------------------------
+Version: 0.3.12
+  Updates:
+    - powerful e-motor
+    - powerful MF-Waterpump
+---------------------------------------------------------------------------------------------------
+Version: 0.3.11
+  Updates:
+    - new recipes for some things
+    - empty canister can be smelt into iron-plates
+    - 5 new export recipes (trade)
+    - 1 new canister-types (dirty(c)-water)
+    - Quantrinum-Reactor outputs changed (~ double MF-output)
+    - some icons changed
+    - additional plant, DNA
+    - fixed all Fluid-Handles (wrong over a long time - sry discovered only now)
+    - Sulfuric-Acid + Substration turns into MF (Washer)
+    - support for green leafs
+---------------------------------------------------------------------------------------------------
+Version: 0.3.10
+  Updates:
+    - more agriculture recipes (1 plant, 3 animals, 7 DNAs)
+    - new entity DNA-Splicer
+    - new entity Eci-Machinery
+    - product package-system for trade (->0.1.11)
+---------------------------------------------------------------------------------------------------
+Version: 0.1.8
+Date: 9. 1. 2016
+  Updates:
+    - new recipes for some things
+    - new factory to generate Blue-Unified-Science
+    - new materials such as H-Metal, Blue-Unified-Science, Fuseing-Center-Core
+    - Stirling generates now direct pressured MF without gearbox
+    - overheater uses burner
+---------------------------------------------------------------------------------------------------
+Version: 0.1.6
+Date: 25. 8. 2015
+  Updates:
+    - recipe-reorganisation moves fluids and handling to main-mod liquids-tab
+    - a new tab "agronomie" collects all farming and animal stuff
+    - some minor tweaks
+---------------------------------------------------------------------------------------------------
+Version: 0.1.5
+Date: 8. 9. 2015
+  Updates:
+    - uses latest Fatmice MP-Code (can switched in control.lua)
+    - still some WIP-Icons not for normal gameplays at the moment
+    - fluids can transported with canister
+    - you can now try play as Cowboy/Cowgirl (animal breed cycle)
+    - slurry for better growing plants
+---------------------------------------------------------------------------------------------------
+Version: 0.1.4
+Date: 25. 7. 2015
+  Updates:
+    - works now better with factorio 0.12
+    - experimental stuff included -> WIP-Icons not for normal gameplays at the moment
+    - added new items for farming
+    - WWER-210 (Rheinsberg) boiler added
+---------------------------------------------------------------------------------------------------
+Version: 0.1.3
+Date: 16. 7. 2015
+  Updates:
+    - new graphics for some icons
+    - internal gearbox (fluid)-storeage changed
+    - 1 gearbox bump 100 Pressure/Torque (ingame temperature) so you need to combine for maximal power-output (max is 500 T)
+    - every gearbox has a friction-loss with lubricant-oil it's lower compare to water-cooling
+    - you can build a cycle but friction-loss makes this idea useless, but you can after a generator bump Pressure/Torque again.
+    - works with factorio 0.12

@@ -1,0 +1,10 @@
+{
+  "mod": "Yuoki",
+  "source": "local",
+  "original": {
+    "name": "Yuoki Industries",
+    "authors": ["YuokiTani", "jatmn"],
+    "portal": {"name": "Yuoki", "url": "https://mods.factorio.com/mod/Yuoki"}
+  },
+  "changeReason": "Единый локальный форк Paranoidal 9.0.0: Yuoki Industries 1.2.23 и Yuoki Industries - Engines 1.2.9 (yi_engines, порт 2.0 от jatmn) в одном моде, с выбранным содержимым JATMN's Fixes & Integrations. Поздняя ветка технологий Paranoidal: материалы N4/F7 из сверхчистых руд Angels, трансмутация, агрономия и торговля, механическая сила и паровая энергетика; стартовое содержимое и рудные залежи удалены, иконки 32 px заменены нейросетевым увеличением до 64 px. Версия 9 не даёт порталу обновить мод."
+}

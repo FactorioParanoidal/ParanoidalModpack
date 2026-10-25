@@ -1,0 +1,181 @@
+data:extend({
+	{
+		type = "item",
+		name = "y_chip_plate",
+		icon_size = 64,
+		icon = "__Yuoki__/graphics/icons/chip_plate_base_icon.png",
+		subgroup = "y_parts_e",
+		order = "a-0",
+		stack_size = 250,
+		weight = 2 * kg,
+	},
+
+	{
+		type = "item",
+		name = "y_dotzetron",
+		icon_size = 64,
+		icon = "__Yuoki__/graphics/icons/dot-zetron_64.png",
+		subgroup = "y-parts",
+		order = "a-0",
+		stack_size = 250,
+	},
+
+	{
+		type = "item",
+		name = "y-battery-single-use1",
+		icon_size = 64,
+		icon = "__Yuoki__/graphics/icons/battery_2.png",
+		subgroup = "y-electric",
+		order = "a-1",
+		stack_size = 250,
+	},
+
+	{
+		type = "item",
+		name = "y-battery-single-use2",
+		icon_size = 64,
+		icon = "__Yuoki__/graphics/icons/battery_1.png",
+		subgroup = "y-electric",
+		order = "a-2",
+		fuel_category = "chemical",
+		fuel_value = "18MJ",
+		stack_size = 250,
+	},
+
+	{
+		type = "item",
+		name = "y-battery-single-use3",
+		icon_size = 64,
+		icon = "__Yuoki__/graphics/icons/battery_3.png",
+		subgroup = "y-electric",
+		order = "a-3",
+		fuel_category = "chemical",
+		fuel_value = "38MJ",
+		stack_size = 250,
+	},
+
+	{
+		type = "item",
+		name = "y_blocked_capa",
+		icon_size = 96,
+		icon = "__Yuoki__/graphics/icons/scd-icon.png",
+		subgroup = "y-electric",
+		order = "a-4",
+		stack_size = 250,
+	},
+
+	{
+		type = "item",
+		name = "y-substation-m",
+		icon_size = 64,
+		icon = "__Yuoki__/graphics/icons/substation-icon.png",
+		subgroup = "y-lamps",
+		order = "a[energy]-d[substation]-1",
+		place_result = "y-substation-m",
+		stack_size = 25,
+	},
+
+	{
+		type = "item",
+		name = "y-substation-h",
+		icon_size = 64,
+		icon = "__Yuoki__/graphics/entity/substation-h-icon.png",
+		subgroup = "y-lamps",
+		order = "a[energy]-d[substation]-2",
+		place_result = "y-substation-h",
+		stack_size = 24,
+		weight = 200 * kg,
+	},
+
+	{
+		type = "item",
+		name = "y-accumulator-m",
+		icon_size = 64,
+		icon = "__Yuoki__/graphics/icons/medium_accu_icon.png",
+		subgroup = "y-energy-2",
+		order = "ac-1",
+		place_result = "y-accumulator-m",
+		stack_size = 50,
+	},
+
+	{
+		type = "item",
+		name = "y-accumulator-b",
+		icon_size = 64,
+		icon = "__Yuoki__/graphics/icons/accu_b_icon.png",
+		subgroup = "y-energy-2",
+		order = "ac-3",
+		place_result = "y-accumulator-b",
+		stack_size = 30,
+	},
+
+	{
+		type = "item",
+		name = "y-ups-flywheel-b",
+		place_result = "y-ups-flywheel-b",
+		stack_size = 30,
+		icon_size = 96,
+		icon = "__Yuoki__/graphics/icons/accflywheel_icon.png",
+		subgroup = "y-energy-2",
+		order = "ac-7",
+	},
+
+	{
+		type = "item",
+		name = "y-accumulator-m-t2",
+		place_result = "y-accumulator-m-t2",
+		stack_size = 50,
+		icon_size = 64,
+		icon = "__Yuoki__/graphics/icons/mcd-icon.png",
+		subgroup = "y-energy-2",
+		order = "ac-2",
+		weight = 20 * kg,
+	},
+
+	{
+		type = "item",
+		name = "y-accumulator-b-t2",
+		place_result = "y-accumulator-b-t2",
+		stack_size = 25,
+		icon_size = 64,
+		icon = "__Yuoki__/graphics/icons/bcd-icon.png",
+		subgroup = "y-energy-2",
+		order = "ac-4",
+	},
+
+	{
+		type = "item",
+		name = "y-accumulator-b-tx",
+		place_result = "y-accumulator-b-tx",
+		stack_size = 25,
+		icon_size = 64,
+		icon = "__Yuoki__/graphics/icons/aqe-icon.png",
+		subgroup = "y-energy-2",
+		order = "ac-5",
+	},
+
+	-- Accumulator Crystal
+	{
+		type = "item",
+		name = "y-accumulator-crystal-m",
+		place_result = "y-accumulator-crystal-m",
+		stack_size = 25,
+		icon_size = 64,
+		icon = "__Yuoki__/graphics/icons/accu_crystal-m-icon.png",
+		subgroup = "y-energy-2",
+		order = "ac-6",
+		weight = 40 * kg,
+	},
+
+	-- compensator 25
+	{
+		type = "item",
+		name = "y_compensator_25",
+		place_result = "y_compensator_25",
+		stack_size = 15,
+		icon_size = 64,
+		icon = "__Yuoki__/graphics/icons/compensator25-icon.png",
+		subgroup = "y-energy-2",
+		order = "ac-8",
+	},
+})
