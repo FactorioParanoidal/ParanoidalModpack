@@ -38,7 +38,7 @@ P.ingredients("y_turret_flame", { { "flamethrower-turret", 1 }, { "y_structure_e
 	{ "y-basic-t1-mf", 2 } })
 -- 3x3 rapid laser fortress
 P.ingredients("y-weapon-ztt", { { "bob-laser-turret-5", 2 }, { "bob-reinforced-wall", 8 }, { "y-basic-t2-mf", 2 },
-	{ "y-chip-2", 2 }, { "y-accumulator-b-t2", 1 }, { "y-infused-uca2", 1 } })
+	{ "y-chip-2", 2 }, { "y_compensator_25", 1 }, { "y-infused-uca2", 1 } })
 -- Vitduo force field (reflects damage) on top of a reinforced wall
 P.ingredients("y-wall-forcefield", { { "bob-reinforced-wall", 1 }, { "y-conductive-coil-1", 3 },
 	{ "y-conductive-wire-1", 1 } })

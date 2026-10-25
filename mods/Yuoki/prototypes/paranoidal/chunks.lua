@@ -23,6 +23,24 @@ data:extend({
 	},
 })
 
+-- Recipes declared in data.lua with a chunk ingredient lose it before data-final-fixes (the item did not exist yet):
+-- the crushers made crushed N4/F7 from water and from a tool head alone. Restore the chunks.
+for recipe_name, chunk in pairs({
+	["y-crush-unicomp-raw"] = { "y-res1", 3 }, ["y-crush-fuel-raw"] = { "y-res2", 3 },
+	["y-crush-blue_whead"] = { "y-res1", 6 }, ["y-crush-green_whead"] = { "y-res2", 6 },
+}) do
+	local recipe = assert(data.raw.recipe[recipe_name], recipe_name)
+	local found = false
+	for _, ing in pairs(recipe.ingredients) do
+		if ing.name == chunk[1] then
+			found = true
+		end
+	end
+	if not found then
+		table.insert(recipe.ingredients, 1, { type = "item", name = chunk[1], amount = chunk[2] })
+	end
+end
+
 -- chunks can be handed in for UC-A2 (one way: UC-A2 no longer turns back into chunks)
 for _, name in pairs({ "y-res1", "y-res2" }) do
 	yi.lib.recipe.atomics.recipes_make_item(name, 64, 20, 1, "ore")

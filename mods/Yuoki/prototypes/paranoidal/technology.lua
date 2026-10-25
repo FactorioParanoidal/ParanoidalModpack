@@ -9,6 +9,8 @@ local R, G, B, PR, U, M, BIO = "automation-science-pack", "logistic-science-pack
 
 -- name, icon item, base packs, count, time, anchors, recipes
 local tree = {
+	-- green science: the solar Stirling dish, a panel that also works at night (user 2026-10-26)
+	{ "yuoki-solar-dish", "y-stirling-solar-dish", { R, G }, 75, 30, { "solar-energy" }, { "y-stirling-solar-dish" } },
 	-- mid game: decoupled mechanical-force power plant (solid and liquid fuel), then the efficient gas engine and the
 	-- first MF consumers (MF chain, user 2026-10-25)
 	{ "yuoki-mechanical-force", "y-seg", { R, G, B }, 150, 30,
@@ -48,8 +50,8 @@ local tree = {
 	{ "yuoki-chemistry", "y_catalyst_ft", { R, G, B, PR }, 300, 30, { "yuoki-transmutation" }, {
 		"y_rawsyngas1", "y_rawsyngas2", "y_granulate_wood", "y_refinehydrogen", "y_catalyst_ft", "y_catalyst_bp",
 		"y_regcatbp", "y_regcatft", "y_ft", "y_coal2liquid", "y_mixedfuel2rocketfuel" } },
-	{ "yuoki-accumulators", "y-ups-flywheel-b", { R, G, B, PR }, 300, 30, { "yuoki-archaeology" }, {
-		"y-ups-flywheel-b", "y_compensator_25" } },
+	{ "yuoki-accumulators", "y_compensator_25", { R, G, B, PR }, 300, 30, { "yuoki-archaeology" }, {
+		"y_compensator_25" } },
 	{ "yuoki-agronomy", "ye_farm", { R, G, B, PR, BIO }, 300, 30, { "yuoki-electronics", "angels-bio-farm-2" }, {
 		"ye_farm", "ye-seed_a1", "ye-seed_a2", "ye-growcorn", "ye_seed_b", "ye_cornb", "ye_sugar", "ye_celluose",
 		"ye_biomixed", "ye_biofuel", "ye_granulate_corn", "ye_granulate_vuger", "ye_granulate_trifitan", "ye_synwood",
@@ -67,16 +69,15 @@ local tree = {
 		{ "yuoki-crystallization", "yuoki-alien-technology", "bob-centrifuge-3" }, {
 		"y-centrifuge-n4-catalytic", "y-centrifuge-f7-catalytic" } },
 	{ "yuoki-accumulators-2", "y-accumulator-b-tx", { R, G, B, PR, U }, 500, 45, { "yuoki-accumulators", "yuoki-alien-technology" }, {
-		"y-accumulator-m-t2", "y-accumulator-b-t2", "y-accumulator-b-tx", "y-accumulator-crystal-m" } },
+		"y-accumulator-b-tx", "y-accumulator-crystal-m" } },
 	{ "yuoki-aeet", "y-substation-h", { R, G, B, PR, U }, 300, 45, { "yuoki-accumulators-2", "bob-electric-substation-4" }, {
 		"y-substation-h" } },
 	{ "yuoki-solar", "y_alien_solar2", { R, G, B, PR, U }, 400, 45, { "yuoki-alien-technology", "bob-solar-energy-3" }, {
-		"y-stirling-solar-dish", "y_alien_solar", "y_alien_solar2" } },
+		"y_alien_solar", "y_alien_solar2" } },
 	{ "yuoki-heavy-mf", "y-heg", { R, G, B, PR, U }, 400, 45,
 		{ "yuoki-mechanical-force-2", "yuoki-research-center", "yuoki-archaeology" }, {
 		"y-beg", "y-heg", "ye_overheater", "ye_makesteam", "ye_sturbine", "ye_steam2mf", "ye_steam3mf",
-		"ye_tfmw_generator-s", "ye_emotor_m", "ye_motorm_mf", "ye_mfheatmotor_m", "ye_mf_mfheatmotor_m", "ye_wpump_m",
-		"y_mpump_mf", "y_mpump_water" } },
+		"ye_tfmw_generator-s", "ye_emotor_m", "ye_motorm_mf", "ye_mfheatmotor_m", "ye_mf_mfheatmotor_m" } },
 	{ "yuoki-obninsk", "y-obninsk-reactor", { R, G, B, PR, U }, 600, 45,
 		{ "yuoki-heavy-mf", "yuoki-alien-technology", "yuoki-smelting", "nuclear-power" }, {
 		"y-obninsk-reactor", "y-obninsk-turbine", "y_moxmixer", "yi_graphite", "y_mox1mixed", "y_mox2mixed",
@@ -135,14 +136,14 @@ local techs = {}
 
 -- 256 px technology icons, neural upscale of the item icon (graphics/technology/<same file name>).
 local tech_icon_files = {
-	"accflywheel_icon.png", "aqe-icon.png", "substation-h-icon.png", "farm-icon.png", "quantrinum_icon.png",
+	"aqe-icon.png", "substation-h-icon.png", "farm-icon.png", "quantrinum_icon.png",
 	"dw.png", "mcb_icon.png", "neron_u3_32.png", "crystal_3.png", "icon_ftcat32.png", "crys_icon.png",
 	"gun2_icon.png", "zzt-icon.png", "chip2-icon.png", "factory_var_3_icon.png", "icemaker_icon.png",
 	"dna_splicer_icon.png", "heg-icon.png", "mc_washer_icon.png", "uni-com-pur.png", "seg-s_icon.png",
 	"meg-s-icon.png", "obninsk-reactor-icon.png", "repair-krakon-icon.png", "repair_quantrinum.png",
 	"thanks-icon.png", "science_gen_icon.png", "rheinsberg-icon.png", "smelter_icon.png",
 	"yi_alien_solar2_icon.png", "laika-gate-icon.png", "cimota_64.png", "unicomp_icon.png",
-	"trade_ultimate_icon.png",
+	"trade_ultimate_icon.png", "stir-solar-dish-icon.png", "compensator25-icon.png",
 }
 local tech_icons = {}
 for _, file in ipairs(tech_icon_files) do

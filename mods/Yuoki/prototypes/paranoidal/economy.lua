@@ -23,5 +23,12 @@ for name, amount in pairs({
 }) do
 	P.upsert_ingredient(name, { "y_rwtechsign", amount })
 end
+-- The first animal DNA line took 8 automation packs at the utility stage: one Angels bio token instead.
+local dna = P.recipe("ye_dna_animal1")
+for _, ing in pairs(dna.ingredients) do
+	if ing.name == "automation-science-pack" then
+		ing.name, ing.amount = "angels-token-bio", 1
+	end
+end
 -- Nature signs start with agronomy: no sign from condensing fly ash of the mid-game air scrubber.
 P.results("y-waste-condense", { { "y-mixed-fuel", 2 } }, "y-mixed-fuel")

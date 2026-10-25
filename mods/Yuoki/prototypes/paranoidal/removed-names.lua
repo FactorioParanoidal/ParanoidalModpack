@@ -67,4 +67,8 @@ return {
 	-- steam boilers and turbines (user, 2026-10-25): capped at 265-500 °C and 74-90 % they lose to Bob's boilers and
 	-- turbines of the same stage; the mastercrafted versions are built from them
 	"y-boiler-iv", "y-steam-turbine", "y_boiler4_mc", "y_boiler4_tech", "y_steam_turbine_mc", "y_steam_turbine_gr",
+	-- MF is honest energy (user, 2026-10-26): the MF water pump made MF from water almost for free
+	"ye_wpump_m", "y_mpump_mf", "y_mpump_water",
+	-- accumulators (user, 2026-10-26): three strong steps stay (compensator, AQE, crystal)
+	"y-ups-flywheel-b", "y-accumulator-m-t2", "y-accumulator-b-t2",
 }

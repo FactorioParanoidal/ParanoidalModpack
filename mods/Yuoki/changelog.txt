@@ -29,15 +29,23 @@ Date: 2026-10-24
     - Mixed fuel -> rocket fuel shows the product icon (its own icon replaced the build's rocket fuel icon through recipe icon sync).
     - Yuoki recipes that make MF or steam ignore consumption, speed and productivity effects (efficiency modules in beacons pushed every MF chain above 100 %).
     - Yuoki machines that make hot MF or steam draw energy in proportion to their crafting speed at every quality (a legendary engine was 2.5 times, an extreme one 40.9 times as efficient).
+    - The crushers made crushed N4/F7 from water or a tool head alone: the chunk ingredient was lost before data-final-fixes, where the chunks are declared; it is restored there.
     - Rheinsberg low-temperature steam 1600 -> 1590 (was 100.3 % of the fuel).
     - The MF engines no longer fast-replace assembling machines.
     - The liquid- and gas-fuel engines lay out their water/lubricant/MF pipes themselves (assembler-pipe-passthrough put one onto the fuel connection: load error).
     - Transmuted UC-A2 is no longer fuel (3 GJ from 100 ore); split MOX fuel burns only in Yuoki reactors (was 600 MJ chemical fuel).
     - Quantrinum from meat export: 20 packages in 30 s instead of 1 in 3 s.
     - Techanic signs: chips I286, machine frames 2, magnetrons, reactor fuel and loaded fuel blocks yield 3; suits, walkers, mastercrafted Obninsk, drill and washer cost about a quarter. Fly-ash condensing yields no nature sign.
+    - MF is honest energy: the small and medium electric motors make hot MF at 96 % (medium motor 3.5 MW), every MF consumer needs MF of at least 150 °C, neutralisation no longer yields MF, the MF water pump is removed (the Rheinsberg takes two medium motors instead). New MF consumers: Zeidon charger heat blocks (20 MF), crystal seeds (10 MF instead of 100 steam), raw fuelnium and raw Unicomp in the form press (2 MF). The small motor costs more.
+    - Sol-Ray collectors work day and night: 1.5 and 3 MW (were 1 and 2 MW by day only).
+    - Solar Stirling dish: own green-science technology after Solar energy, built from steel, gears, cable, circuits and pipes, 30 kW day and night.
+    - Accumulators: flow compensator 50 MJ / 8 MW, AQE 200 MJ / 20 MW, quantrinum accumulator 600 MJ / 40 MW; the UPS flywheel, MCD and BCD are removed (the monument and the D-ZTT take a compensator).
+    - The first animal DNA line takes 1 Angels bio token instead of 8 automation packs.
+    - H-Metal is called T-Metal in English as well.
   Graphics:
     - 813 graphics files that no remaining prototype references were removed (47 -> 33 MB). The removed prototypes are still defined in the source files and deleted at the end of data.lua, so their definitions point to deleted files: restoring one of them needs its graphics back from Yuoki 1.2.23 / Engines 1.2.9.
     - 106 icons of 32x32 px (all from Engines) replaced by a neural upscale to 64x64 (Real-ESRGAN x4plus, alpha upscaled separately, Lanczos down to 64, no mipmaps); icon_size 32 -> 64 in the 213 prototype tables that use them.
+    - 12 files used only by the removed MF water pump and accumulators deleted; technology icons for the Stirling dish and the flow compensator.
     - 11 files used only by the removed steam boilers and turbines and the removed fluid-fuel recipes deleted.
     - Technologies use their own 256x256 icons (graphics/technology/, the same neural upscale of the item icon) instead of the 32-96 px item icons.
   Locale:
