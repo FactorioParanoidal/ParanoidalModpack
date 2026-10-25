@@ -77,9 +77,32 @@ for _, d in pairs(shared.droids) do
   shared.droid_by_name[d.unit] = d
 end
 
---- Ranks: kills a droid needs for each rank (rank 0 is the deployed droid). A promoted droid is
---- replaced by the rank prototype "<droid>-rank-<n>" (more health, damage, range ... by its growth).
-shared.rank_kills = {10, 40, 120, 300}
+--- Ranks: ten ranks with the names and insignia of HeroTurrets (names as set by Paranoidal for
+--- turrets). Kills for each rank: the default HeroTurrets reference values (50 ... 5000 for turrets)
+--- x 0.2, spread linearly. A promoted droid is replaced by the rank prototype "<droid>-rank-<n>"
+--- (more health, damage, range ... by its growth, which adds up with every rank).
+shared.rank_kills = {10, 120, 230, 340, 450, 560, 670, 780, 890, 1000}
+
+--- Kill thresholds per droid kind: droids that hit many enemies at once or have a high rate of
+--- fire need more kills, support droids that rarely kill need fewer (default 1).
+shared.kill_factor = {
+  ["droid-rocket"] = 1.5, ["droid-tesla"] = 1.5, ["terminator-plasma"] = 1.5, ["droid-flame"] = 1.5,
+  ["bob-robot-flamethrower-drone"] = 1.5,
+  ["droid-heavy"] = 1.25, ["terminator"] = 1.25, ["destroyer-unit"] = 1.25, ["defender-unit"] = 1.25,
+  ["bob-robot-gun-drone"] = 1.25, ["bob-robot-laser-drone"] = 1.25,
+  ["droid-repair"] = 0.5, ["droid-scout"] = 0.5, ["droid-miner"] = 0.5, ["droid-poison"] = 0.5,
+}
+
+--- Kills a droid of `kind` needs for `rank` (nil above the last rank).
+function shared.rank_threshold(kind, rank)
+  local base = shared.rank_kills[rank]
+  if not base then return nil end
+  return math.max(1, math.floor(base * (shared.kill_factor[kind] or 1) + 0.5))
+end
+
+--- Insignia of HeroTurrets (used from that mod when it is active): sprite per rank.
+shared.rank_sprite_prefix = "robotarmy-rank-"
+
 function shared.rank_name(unit, rank)
   if rank <= 0 then return unit end
   return unit .. "-rank-" .. rank

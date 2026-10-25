@@ -9,6 +9,7 @@ local util = require("util")
 local shared = require("lib.shared")
 
 local STAR = "__base__/graphics/icons/signal/signal-star.png"
+local DIGIT = "__base__/graphics/icons/signal/signal_%d.png"
 
 -- Special abilities shown in the tooltip (locale robotarmy-tooltip.role-<droid>).
 local ABILITY = {
@@ -81,6 +82,11 @@ local function tooltip(unit, kind, rank)
   if rank > 0 then
     fields[#fields + 1] = {name = {"robotarmy-tooltip.rank"}, value = {"robotarmy-rank.rank-" .. rank}, order = 0}
   end
+  local next_kills = shared.rank_threshold(kind, rank + 1)
+  if next_kills then
+    fields[#fields + 1] = {name = {"robotarmy-tooltip.next-rank"},
+      value = {"robotarmy-tooltip.next-rank-value", {"robotarmy-rank.rank-" .. (rank + 1)}, tostring(next_kills)}, order = 7}
+  end
   return fields
 end
 
@@ -89,12 +95,16 @@ local function icons_of(proto)
   return {{icon = proto.icon, icon_size = proto.icon_size or 64}}
 end
 
---- Icon of a rank droid: the droid icon with a star per rank.
+--- Icon of a rank droid: the droid icon with a star and the rank number.
 local function rank_icons(unit, rank)
   local icons = icons_of(unit)
   local size = icons[1].icon_size or 64
-  for i = 1, rank do
-    icons[#icons + 1] = {icon = STAR, icon_size = 64, scale = 0.12 * size / 64, shift = {-12 + (i - 1) * 8, -12}, floating = true}
+  local scale = 0.18 * size / 64
+  icons[#icons + 1] = {icon = STAR, icon_size = 64, scale = scale, shift = {-10, -10}, floating = true}
+  local digits = tostring(rank)
+  for i = 1, #digits do
+    icons[#icons + 1] = {icon = string.format(DIGIT, tonumber(digits:sub(i, i))), icon_size = 64, scale = scale,
+      shift = {2 + (i - 1) * 9, -10}, floating = true}
   end
   return icons
 end
@@ -111,7 +121,7 @@ local function grow(u, g, r)
     a.range = a.range + g.range * r
     if (u.vision_distance or 0) < a.range + 5 then u.vision_distance = math.min(49, a.range + 5) end
   end
-  if g.cooldown then a.cooldown = math.max(1, a.cooldown * (1 - g.cooldown * r)) end
+  if g.cooldown then a.cooldown = math.max(1, a.cooldown * math.max(0.25, 1 - g.cooldown * r)) end
   if g.damage then a.damage_modifier = (a.damage_modifier or 1) * (1 + g.damage * r) end
   if g.resist then
     local list = u.resistances or {}
@@ -135,7 +145,7 @@ for _, d in pairs(shared.droids) do
     for r = 1, #shared.rank_kills do
       local u = util.table.deepcopy(base)
       u.name = shared.rank_name(d.unit, r)
-      u.localised_name = {"robotarmy-rank.unit-name", base.localised_name or {"entity-name." .. d.unit}, {"robotarmy-rank.rank-" .. r}}
+      u.localised_name = {"robotarmy-rank.unit-name", base.localised_name or {"entity-name." .. d.unit}, {"robotarmy-rank.rank-in-name-" .. r}}
       u.localised_description = base.localised_description or {"?", {"entity-description." .. d.unit}, ""}
       u.icons = rank_icons(base, r)
       u.icon, u.icon_size = nil, nil
@@ -150,6 +160,22 @@ for _, d in pairs(shared.droids) do
   end
 end
 data:extend(new)
+
+-- Insignia of HeroTurrets over rank droids (the files stay in that mod; without it: star and number).
+if mods["HeroTurretRedux"] then
+  local sprites = {}
+  for r = 1, #shared.rank_kills do
+    sprites[r] = {
+      type = "sprite",
+      name = shared.rank_sprite_prefix .. r,
+      filename = "__HeroTurretRedux__/graphics/entity/turret/hero-" .. r .. "-base.png",
+      width = 23,
+      height = 24,
+      priority = "extra-high-no-scale",
+    }
+  end
+  data:extend(sprites)
+end
 
 local tool = data.raw["selection-tool"][shared.tool]
 for _, mode in pairs({"select", "reverse_select", "alt_reverse_select"}) do

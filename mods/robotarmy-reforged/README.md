@@ -26,8 +26,8 @@ Saves made with 2.4.x start the mod state over.
   Rocket droid, Chemical droid, Flamebot, Heavy assault droid, Terminator, Plasma terminator;
   defender / distractor / destroyer robot units; Bob's gun / laser / flamethrower drones after their
   research. The item tooltip shows health, attack, range, speed and the special ability.
-- **Ranks**: droids are promoted at 10 / 40 / 120 / 300 kills (Corporal ... Captain), each kind with its
-  own growth. Veterans travel only in a **drop pod** (up to 32 droids, placed on the ground it lands them).
+- **Ranks**: ten ranks of HeroTurrets (Lance Corporal ... General) at 10 / 120 / ... / 1000 kills times a
+  factor of the droid kind, each kind with its own growth; the HeroTurrets insignia over the droid. Veterans travel only in a **drop pod** (up to 32 droids, placed on the ground it lands them).
 - **Patrol**: a squad walks through the chunks with buildings of its force and never crosses empty chunks.
 - **Research**: damage and rate of fire of droid weapons (own ammo categories).
 - **Droid counter**: every droid type as the item signal of its droid, "Droids alive", squads by state,

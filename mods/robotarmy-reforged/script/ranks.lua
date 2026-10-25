@@ -5,9 +5,10 @@
 -- storage.hover[player_index]  text object over the droid the player points at
 --
 -- Kills: on_entity_died of an entity of an enemy force whose cause is a droid of the army
--- (tracked by the mod). At shared.rank_kills[rank + 1] kills the droid is replaced by
+-- (tracked by the mod). At shared.rank_threshold(kind, rank + 1) kills the droid is replaced by
 -- "<droid>-rank-<rank + 1>" in the same place and squad, with the same quality, health share,
--- kills and land mines. Rank droids show their stars over them.
+-- kills and land mines. Rank droids show the insignia of their rank (HeroTurrets) over them, or a
+-- star and the rank number without that mod.
 local shared = require("lib.shared")
 local state = require("script.state")
 local Squad = require("script.squad")
@@ -19,20 +20,33 @@ local STAR = "[img=virtual-signal/signal-star]"
 local MARK_COLOR = {r = 1, g = 0.85, b = 0.2}
 local HOVER_COLOR = {r = 0.95, g = 0.95, b = 0.85}
 
---- Stars over a rank droid (destroyed with the droid).
+local has_insignia = helpers.is_valid_sprite_path(shared.rank_sprite_prefix .. "1")
+
+--- Insignia over a rank droid, centred (destroyed with the droid).
 function ranks.mark(droid)
   local rank = droids.rank[droid.name] or 0
   if rank <= 0 then return end
-  rendering.draw_text({
-    text = string.rep(STAR, rank),
-    target = {entity = droid, offset = {0, -1.5}},
-    surface = droid.surface,
-    color = MARK_COLOR,
-    scale = 0.6,
-    alignment = "center",
-    vertical_alignment = "middle",
-    use_rich_text = true,
-  })
+  local sprite = shared.rank_sprite_prefix .. rank
+  if has_insignia and helpers.is_valid_sprite_path(sprite) then
+    rendering.draw_sprite({
+      sprite = sprite,
+      target = {entity = droid, offset = {0, -1.6}},
+      surface = droid.surface,
+      x_scale = 1,
+      y_scale = 1,
+    })
+  else
+    rendering.draw_text({
+      text = STAR .. rank,
+      target = {entity = droid, offset = {0, -1.6}},
+      surface = droid.surface,
+      color = MARK_COLOR,
+      scale = 0.8,
+      alignment = "center",
+      vertical_alignment = "middle",
+      use_rich_text = true,
+    })
+  end
 end
 
 --- Moves the per-droid data from one entity to another (promotion).
@@ -91,7 +105,7 @@ function ranks.on_kill(droid)
   local kills = (storage.kills[unit_number] or 0) + 1
   storage.kills[unit_number] = kills
   local rank = droids.rank[droid.name] or 0
-  local need = shared.rank_kills[rank + 1]
+  local need = shared.rank_threshold(droids.kind[droid.name], rank + 1)
   if need and kills >= need then promote(droid, rank + 1) end
 end
 
@@ -102,7 +116,7 @@ function ranks.caption(entity)
   local unit_number = entity.unit_number
   local kills = storage.kills[unit_number] or 0
   local rank = droids.rank[entity.name] or 0
-  local need = shared.rank_kills[rank + 1]
+  local need = shared.rank_threshold(droids.kind[entity.name], rank + 1)
   local text = need and {"robotarmy-gui.hover-kills-next", kills, need} or {"robotarmy-gui.hover-kills", kills}
   local mines = storage.mines[unit_number]
   if mines then text = {"", text, "   ", {"robotarmy-gui.hover-mines", mines}} end
