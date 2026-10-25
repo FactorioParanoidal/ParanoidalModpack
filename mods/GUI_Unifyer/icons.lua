@@ -246,7 +246,10 @@ local icons = {
     create_icon_entry("qiMenu", "quickitemmenu_button", "qiMenu_button", {'guiu.quickitemmenu_button'}, nil, nil,
         {"left", "qiMenu-frame-layout"}),
     create_icon_entry("visual-signals", "visualsignals_button", "visual_signals", {'guiu.visual_signals_button'}, nil, nil, 
-    {"left", "gui_signal_display"})
+    {"left", "gui_signal_display"}),
+    -- Paranoidal: the button and its sprite are created by paranoidal-autofill; highlighted while its window is open.
+    create_icon_entry("paranoidal-autofill", "paranoidal-autofill-button", "paranoidal_autofill_button", {'paranoidal-autofill.button-tooltip'}, nil, nil,
+        {"screen", "paranoidal_autofill_frame"})
 
 }
 

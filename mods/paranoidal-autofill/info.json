@@ -1,0 +1,13 @@
+{
+	"name": "paranoidal-autofill",
+	"version": "1.1.0",
+	"title": "Paranoidal Autofill",
+	"author": "Factorio Paranoidal",
+	"homepage": "https://github.com/FactorioParanoidal/ParanoidalModpack",
+	"description": "Puts fuel and ammo into buildings you place by hand, by your own rules: which building, which items, how many, in what order. Refill nearby buildings with a hotkey or the shortcut button. Based on Fill4Me by Kovus.",
+	"factorio_version": "2.0",
+	"dependencies": [
+		"base >= 2.0.0",
+		"! Fill4Me"
+	]
+}

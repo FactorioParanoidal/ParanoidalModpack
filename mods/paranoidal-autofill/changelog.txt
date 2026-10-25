@@ -1,0 +1,16 @@
+---------------------------------------------------------------------------------------------------
+Version: 1.1.0
+Date: 2026-10-25
+  Features:
+    - "Show" switch in the window: Researched (default) or All. Researched offers buildings with a researched recipe and fuel/ammo with a researched recipe, raw resources (coal, wood) and items without a recipe. Hidden recipes, recycling and recipes that give back their own ingredient do not count. Items already chosen in a rule stay visible in both modes.
+  Changes:
+    - Script copies of buildings are no longer offered and use the rule of their main building: HeroTurretRedux ranked turrets (hero-turret-N-for-<base>) and copies without an own item (Cursed-FMD per-ore drills). Top up nearby also fills them.
+    - Rules saved for such a copy by 1.0.0 are moved to the main building on load.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 2026-10-25
+  Features:
+    - First version for Factorio Paranoidal, based on Fill4Me 0.12.1 by Kovus.
+    - Rules window from the top panel button: building, ordered items with quality and count, a checkbox per rule and a common "When placing" switch.
+    - A hand-placed building gets the first listed item of each compartment (fuel, each gun group) that is in the inventory, up to the count. Buildings without a rule get nothing.
+    - Top up nearby buildings with Shift+Alt+F or the shortcut button.
