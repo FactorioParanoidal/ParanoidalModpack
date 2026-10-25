@@ -1,0 +1,20 @@
+{
+  "name": "robotarmy-reforged",
+  "version": "9.0.0",
+  "title": "Robot Army Reforged",
+  "author": "Kyranzor",
+  "contact": "kyranzor@gmail.com",
+  "homepage": "https://github.com/kyranf/robotarmyfactorio",
+  "description": "Manufacture and deploy automated robot soldiers to attack your foes and defend your factory!\nParanoidal fork: rewritten control script (performance, quality support, fixes).",
+  "dependencies": [
+    "base >= 2.0.60",
+    "? Unit_Controll >= 2.0.3",
+    "? bobwarfare",
+    "? bobplates",
+    "? angelssmelting",
+    "? zzzparanoidal",
+    "! CombatRobotsOverhaul",
+    "! robotarmy"
+  ],
+  "factorio_version": "2.0"
+}

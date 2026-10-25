@@ -1,0 +1,5 @@
+require("prototypes.items")
+require("prototypes.units")
+require("prototypes.buildings")
+require("prototypes.signals")
+require("prototypes.controls")

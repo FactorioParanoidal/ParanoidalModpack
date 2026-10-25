@@ -1,0 +1,239 @@
+---------------------------------------------------------------------------------------------------
+Version: 9.0.0
+Date: 2026.10.25
+  Info:
+    - Renamed to robotarmy-reforged (title Robot Army Reforged); incompatible with the original robotarmy mod (same prototype names).
+    - Paranoidal fork. The control script is rewritten; save compatibility with 2.4.x is not kept (a save with 2.4.x data starts the mod state over and picks up the droids and buildings found on the map).
+  Balancing:
+    - The droid technology tree starts in the chemical science era and uses military science packs throughout: Army robotics (after chemical science pack, military 3, automation 3, circuit network) -> Riflebot -> Battle droid -> Rocket droid / Flamebot -> Terminator (with utility science, after military 4, power armour and laser turrets 2); Army robotics -> Defender -> Distractor -> Destroyer robot units (after the matching Bob's robot technologies). A technology also asks for the science packs of its prerequisites from other mods.
+    - Recipes are rebuilt from Bob's, Angels and Paranoidal parts and cost about five times more: weapon, frame or armour (invar, cobalt steel, titanium, modular or power armour), actuators (bearings, gears, electric engines), power and control (circuits, batteries, processing units). Flying units are built from ten Bob's combat robots of their type and five combat brains of the same tier. Without these mods every ingredient falls back to a vanilla item.
+    - The droid assembler and the guard station are built from an assembling machine 3 and intermediate structure components.
+    - Droid recipes take about twice as long to craft.
+  Optimizations:
+    - The squad integrity check no longer reads the unit group member list once per member (was O(n^2) API calls per check); membership is read from each droid's parent group.
+    - script.active_mods is no longer read every tick for every force and on every squad update (each read built a table of all active mods).
+    - on_entity_died uses event filters (force and unit types) instead of handling every death in the game; QRF settings are cached.
+    - Built events use name filters; destroyed droids and buildings are removed through on_object_destroyed instead of growing tables (storage.units was never cleaned before).
+    - Droid assemblers and guard stations are checked round robin, evenly spread over the ticks; one count_entities_filtered call with all droid names instead of eight.
+    - Droid counters are written only when a count changes, with one assignment of the section filters (each set_slot/clear_slot raised an event for every listening mod every second); only forces that use the mod are processed.
+    - No per-tick work for forces without droids or buildings; retreat merging runs from the squad update instead of scanning every assembler every tick.
+    - Hunting squads that find no enemy search less often (up to every 30 s) until they find one.
+    - Proximity searches use the cached squad position before reading the unit group position.
+    - The always-on logger (an endlessly growing script-output/logs/robotarmy file) and the session statistics are removed; an optional debug setting writes to factorio-current.log.
+  Bugfixes:
+    - Adding the mod to a save no longer runs force.reset_recipes()/reset_technologies() for every force (it disabled recipes unlocked by scripts of other mods); the old migrations are removed.
+    - Deployed droids keep the quality of the droid item, and quality modules in the droid assembler can no longer raise it (deploy recipes have no product); picked up droids return as items of their quality and health; refused duplicate buildings are returned with their quality.
+    - Guard stations spawn on their own surface (surface 1 was hard-coded).
+    - QRF ignores squads on other surfaces, does not overwrite the saved state of a squad that is already responding, and does not command squads while Unit Control is active.
+    - Retreating squads only consider assemblers on their own surface.
+    - Spawn positions are searched for the droid's collision box instead of the building's.
+    - Guard garrisons get an order to stay at their station and are sent back when they wander off more than 15 tiles; failure handling keeps them in guard mode.
+    - Droids created by other mods (script_raised_built/revive, cloning) join squads.
+    - Selection and pick-up use the surface of the selection (map view on another surface).
+    - The tool hotkey works (the old hotkeys had action = "lua" without a handler).
+    - A droid kicked out of its squad is no longer left without a squad when there is no assembler.
+    - Counters and guard stations are removed from the tables when destroyed.
+  Changes:
+    - Deploying without placeholder items: a deploy recipe consumes the droid item in a droid assembler or guard station and every finished craft becomes a droid. When there is no room (too many droids around the assembler, full garrison) the finished droids wait and the machine pauses; a removed machine drops its waiting droids as items. The eight "deployable" items are removed.
+    - One squad command tool instead of two: drag over a squad to pick it, Shift + drag to send it (attack-move), right-drag to pick droids up. One shortcut and one hotkey.
+    - Army window (shortcut "Droid army" or its hotkey): squad thresholds of the force (hunt from, retreat at, hunt radius) with sliders, and the list of squads with composition, state and actions: show on the map, pick, recall or release.
+    - Recalled squads go back to the nearest droid assembler and wait there until they are released or sent with the tool.
+    - Panel next to the droid assembler and guard station window: droids waiting to be deployed; the guard station sets its own garrison size (copy-paste between stations copies it).
+    - The droid settings module and its four signals are removed; their settings are in the army window and the guard station panel.
+    - A picked squad shows only to the picking player: a mark on every member, a label with the squad number and size, and a line to where it is going (instead of a slowing sticker entity).
+    - Alerts with a map marker instead of chat messages for responding squads (removed when the last one is back), squads without an assembler and stuck squads; the lost squad message has a map link. Flying text instead of chat for the tool.
+    - Hunting squads that become too small retreat on their next update; finished orders of a squad are followed by a new order on its next update.
+    - Droid assembler: 3 module slots (the 1.1 module_specification was ignored by 2.0, so it had none).
+    - Map settings: QRF for vehicles, QRF for walls, QRF alert, targeting mode (nearest / defend assembler / keep radius clear; the last two were only reachable by editing the code), teleporting stray droids, squad alerts, debug log.
+    - Startup settings: army loot chest (off; the chest, its recipe and unlock exist only when on), harmless acid puddles (off; the original always removed the damage of every acid splash fire), droid health and damage multipliers.
+    - Remote interface "robotarmy-reforged": squads, thresholds, set_threshold, spawner, set_garrison, tracked_units, squad_of.
+  Graphics:
+    - Droid counter activity LED uses the 2.0 sprite size; the loot chest has a 2.0 circuit connector.
+    - Symmetric selection boxes of the ground droids.
+    - Deploy recipes show the droid icon.
+  Locale:
+    - Messages are localised (en, ru); descriptions match the current behaviour. Russian names reworked (Заводной стрелок for the Clockwork Riflebot, звено роботов for the flying units).
+  Modding:
+    - Code split into lib/shared.lua, prototypes/*.lua and script/*.lua; no globals are written in any stage. Recipes and technologies are created in data-updates so that the items and technologies of Bob's, Angels and Paranoidal exist; optional dependencies on bobwarfare, bobplates, angelssmelting and zzzparanoidal set the load order.
+    - Removed the unused stdlib, 30log, robolib, config, migrations, WARP.md, QRF_Testing_Commands.txt, .gitignore, unused images (low resolution sprites, patrol pole, settings module, deployable item icons, settings signals, pick-up tool), and prototype fields that 2.0 does not read (destroy_action, idle, icon_mipmaps, is_deployer, item_slot_count, base_area/base_level, stackable, hr_version, ammo_type category).
+    - ai_settings use the 2.0 field destroy_when_commands_fail.
+---------------------------------------------------------------------------------------------------
+Version: 2.4.27
+Date: 2025.10.06
+  Major Features:
+    - Added Quick Reaction Force (QRF) system - squads automatically respond to building destruction within configurable range
+    - QRF squads attack threat area, then return to their original positions and resume previous behavior
+    - New runtime setting "QRF Response Distance" (0-500 tiles, default 500) - adjustable in-game without restart
+  Settings:
+    - Fixed mod loading error caused by incorrectly placed int-setting in data phase
+    - Moved QRF distance setting to proper settings.lua file with full localization support
+    - Added mod setting descriptions in English locale
+  Stability:
+    - Added comprehensive crash protection for pick-up tool interactions during QRF operations
+    - Implemented protected API calls (pcall) for all unit group operations to prevent invalid commandable errors
+    - Added squad member count validation to prevent operations on empty squads
+    - Enhanced error handling with graceful QRF state cleanup when squads become invalid
+  Quality of Life:
+    - Added detailed QRF debug messages for testing and troubleshooting
+    - Created comprehensive testing command file (QRF_Testing_Commands.txt) with console commands
+    - Improved QRF state management with proper cleanup in all edge cases
+---------------------------------------------------------------------------------------------------
+Version: 2.4.26
+Date: 2025.10.02
+  Bugfixes:
+    - Fixed droid sprite resolution issues for Factorio 2.0+ compatibility by removing hr_version definitions and using HR sprites as main sprites.
+    - Updated robotAnimation function to use high-resolution sprites directly.
+    - Fixed droid assembler, guard station, droid counter, settings, and loot chest sprite rendering.
+---------------------------------------------------------------------------------------------------
+Version: 2.4.25
+Date: 2025.08.20
+  Bugfixes:
+    - Fixed flying robots sprites and electric beam visuals since v2.0+ changes. 
+---------------------------------------------------------------------------------------------------
+Version: 2.4.24
+Date: 2025.08.12
+  Bugfixes:
+    - Fixed Unit Controll remote call references back to "Unit_Control" naming.
+    - removed the "place_result" empty elements to help Krastorio2 support.
+---------------------------------------------------------------------------------------------------
+Version: 2.4.23
+Date: 2025.08.04
+  Changes:
+    - Updated the Unit Control mod reference - only the "Unit_Controll" one is updated for v2.0+ of Factorio.
+---------------------------------------------------------------------------------------------------
+Version: 2.4.22
+Date: 2025.08.03
+  Changes:
+    - Removed the selection and pickup tool as recipe items, now you can add them to the filter bar as shortcut style items at any time.
+    - Selection and pickup tools work on the map view now. Rejoice!
+  Bugfixes:
+    - Tried to fix the invalid commandable bug yet again - completely removed the code which does the check, that should do it! haha
+---------------------------------------------------------------------------------------------------
+Version: 2.4.21
+Date: 2025.04.01
+  Changes:
+    - completely removed patrol poles from the mod, will replace with something else in the future, maybe.
+  Bugfixes:
+    - Fixed german locale file encoding
+    - added more unitgroup/commandable validity checks to reduce crashing
+---------------------------------------------------------------------------------------------------
+Version: 2.4.20
+Date: 2025.01.05
+  Bugfixes:
+    - Fixed code error causing crash on load or newgame
+---------------------------------------------------------------------------------------------------
+Version: 2.4.19
+Date: 2025.01.05
+  Changes:
+    - Adding mod conflict for Combat Robot Overhaul mod (#190)
+    - temporarily disabled patrol post processing to prevent crashing user's games, until a new system can be made. (#189)
+  Bugfixes:
+    - Fixed flamebot not able to be manufactured due to stack size changes for light armour (#191)
+    - Fixed new api change for spill-item-stack when making multiple settings modules (#188)
+---------------------------------------------------------------------------------------------------
+Version: 2.4.18
+Date: 2024.12.13
+  Changes:
+    - ported to support v2.0, thanks greatly to Cyril Orlov
+    - changed target type to search&destroy for more direct fighting behaviours. can change target type back to 3 if you want.
+    - reducing flame droid fire resist from 100% to 95%, so they can eventually kill eachother if they get into friendly fire or against other forces
+  Bugfixes:
+    - much better AI update rates which you can tune in the config.lua sanity-check seconds and distance multiplier.
+---------------------------------------------------------------------------------------------------
+Version: 0.4.17
+Date: 2022.06.06
+  Changes:
+    - adding Polish translation thanks to Ziomek24
+    - updated Russian translation by Varoga, issue #180
+    - reducing flame droid fire resist from 100% to 95%, so they can eventually kill eachother if they get into friendly fire or against other forces
+  Bugfixes:
+    - bugfix for invalid unit group during attack orders with command tool
+---------------------------------------------------------------------------------------------------
+Version: 0.4.16
+Date: 2021.10.23
+  Changes:
+    - (snouz)
+    - 9 new technologies
+    - Buildings visual adjustments (combinators, loot chest, patrol pole).
+    - New building icons.
+    - Sorted recipe/item order.
+    - Description improvements.
+    - (kyranzor)
+    - fixing issue #173
+    - adjusting migration for 0.4.12 to consume less RAM again.
+---------------------------------------------------------------------------------------------------
+Version: 0.4.15
+Date: 2021.10.23
+  Bugfixes:
+    - removed old migration file which causes script issues
+---------------------------------------------------------------------------------------------------
+Version: 0.4.14
+Date: 2021.10.22
+  Changes:
+    - snouz joining force to work on the mod.
+    - Added HR versions for all robots (Upscaled using ESRGAN).
+    - Removed the artificial tint to apply some custom ones in the images.
+    - Attacking bots now use 22 directions animation instead of 8.
+    - Standardized and redrew shadows.
+    - Removed unused images and optimized PNGs.
+    - New 64px icons for bots and signals.
+    - Deployment icons now don't display in player crafting.
+    - Standardized/renamed changelog (so it displays in the mod portal).
+    - New mod thumbnail.
+    - HR version of buildings (temporary upscale).
+    - Visually shifted robots up, so it looks more natural.
+    - Some code and file structure improvements.
+  Bugfixes:
+    - Fixed flying bots shadows, using HR version from vanilla.
+    - Removed visible "deploy" dummy items.
+---------------------------------------------------------------------------------------------------
+Version: 0.4.13
+  Bugfixes:
+    - attempting to fix github issue #164
+    - attempting to fix github issue #172
+    - fixing migration script issue with the 0.4.12 migration where it would chew up peoples RAM and break their computers. made it do +-1000 tiles instead of +-15000 tiles for each surface, and each force.
+---------------------------------------------------------------------------------------------------
+Version: 0.4.12
+  Changes:
+    - added migration script to detect and add all droid units to script-tracked array
+    - added AI distraction custom commands for selecting nearest target instead of random target (overriding default ai behaviour of biters) thanks to Klonan
+  Locale:
+    - added Brazilian Portuguese language translations thanks to Felipe Bueno Aliski Alves
+    - added Russian language translations thanks to Varoga on Github
+---------------------------------------------------------------------------------------------------
+Version: 0.4.11
+  Changes:
+    - added a for-each-force loop instead of specific forces, during init routine to set up each force
+    - added a handleOnScriptRaisedBuilt function for script-spawned entity event handling.
+    - adding migration file to help players who add mod after starting game to auto detect existing techs and unlock recipes properly for them.
+---------------------------------------------------------------------------------------------------
+Version: 0.4.10
+  Changes:
+    - if unit control is active, don't run the runtime logic for assemblers squad management/merging/retreat and assembler-centric targetting, and don't run the squad logic at all. This should help in-progress games which add unit control halfway through.
+    - added ai_settings to all droid units and flying units to try to prevent units from being deleted if they fail a command, and for them to attempt to spread out from eachother and not stack up.
+---------------------------------------------------------------------------------------------------
+Version: 0.4.9
+  Changes:
+    - upgrading the version requirement of Unit Control (optional mod) to 3.10 for supporting the new API
+    - fixes to how the mod uses the new Unit Control API for raising unit events from known deployers.
+    - adding Guard Station to deployer supported for Unit Control
+    - reducing how/when the guard and assembler stations try to run logic when spawning units while Unit Control is active. Basically all droid processing is halted.
+---------------------------------------------------------------------------------------------------
+Version: 0.4.8
+  Bugfixes:
+    - fixes to the Droid Counter module and the Settings Module code, which had issues with referencing parameters tables which have changed in recent history. instead of  control_behaviours.parameters.parameters, there's only one layer of parameters table now. Yay! Means I can get rid of the comment I had in the code, "-- ridiculous, we have to do parameters WHY WUBE WHY"
+---------------------------------------------------------------------------------------------------
+Version: 0.4.7
+  Bugfixes:
+    - removed migration file for v.0.3.5, super old and not needed, was causing issues with referring to old/out-dated tech names too.
+---------------------------------------------------------------------------------------------------
+Version: 0.4.6
+  Changes:
+    - Compatible with 1.1.1
+    - deployable flying robots unlocked at same tech level as their capsule friends. defender, distractor, and destroyer at the same tech levels, rather than all of them ready as soon as you get Defender tech.
+---------------------------------------------------------------------------------------------------
+Version: 0.4.5
+  Changes:
+    - Compatible with 0.18.27 (by using the new raise_built flag instead of calling script raise entity event).
+    - biter factions should no longer cause a tick error for squads/forces
+---------------------------------------------------------------------------------------------------
