@@ -44,6 +44,14 @@ if turret then
     turret.icons = nil
     turret.icon_mipmaps = nil
 end
+-- The placed turret shows the same artwork (alerts, planners, building pickers).
+local turret_entity = data.raw["ammo-turret"]["bi-dart-turret"]
+if turret and turret_entity then
+    turret_entity.icon = turret.icon
+    turret_entity.icon_size = turret.icon_size
+    turret_entity.icons = nil
+    turret_entity.icon_mipmaps = nil
+end
 match_product("bi-dart-turret", "bi-dart-turret")
 
 for _, name in ipairs({"quartz-glass", "glass-from-ore4", "angels-plate-glass",
