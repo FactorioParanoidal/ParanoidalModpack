@@ -31,6 +31,10 @@ Date: 2026-10-24
     - Yuoki machines that make hot MF or steam draw energy in proportion to their crafting speed at every quality (a legendary engine was 2.5 times, an extreme one 40.9 times as efficient).
     - Rheinsberg low-temperature steam 1600 -> 1590 (was 100.3 % of the fuel).
     - The MF engines no longer fast-replace assembling machines.
+    - The liquid- and gas-fuel engines lay out their water/lubricant/MF pipes themselves (assembler-pipe-passthrough put one onto the fuel connection: load error).
+    - Transmuted UC-A2 is no longer fuel (3 GJ from 100 ore); split MOX fuel burns only in Yuoki reactors (was 600 MJ chemical fuel).
+    - Quantrinum from meat export: 20 packages in 30 s instead of 1 in 3 s.
+    - Techanic signs: chips I286, machine frames 2, magnetrons, reactor fuel and loaded fuel blocks yield 3; suits, walkers, mastercrafted Obninsk, drill and washer cost about a quarter. Fly-ash condensing yields no nature sign.
   Graphics:
     - 813 graphics files that no remaining prototype references were removed (47 -> 33 MB). The removed prototypes are still defined in the source files and deleted at the end of data.lua, so their definitions point to deleted files: restoring one of them needs its graphics back from Yuoki 1.2.23 / Engines 1.2.9.
     - 106 icons of 32x32 px (all from Engines) replaced by a neural upscale to 64x64 (Real-ESRGAN x4plus, alpha upscaled separately, Lanczos down to 64, no mipmaps); icon_size 32 -> 64 in the 213 prototype tables that use them.

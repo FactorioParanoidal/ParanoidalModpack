@@ -87,7 +87,9 @@ data:extend({ seg_p })
 -- (any fluid with a fuel value, pollution scaled by the fluid), fed through the centre of the north/south side, and
 -- they craft the solid-fuel engine recipes: water + lubricant / water / dry -> 4 / 3.5 / 3 MF per craft of 3 MJ.
 -- Fuel -> MF: solid 95/83/71 % (SFE, effectivity 0.85), liquid 90/78/67 % (0.8, twice the power), gas 95/83/71 %
--- (0.85, twice the power, cleaner). The pipe-passthrough mod lays out their water/lubricant/MF boxes like the SFE.
+-- (0.85, twice the power, cleaner). Their boxes are laid out here as pass-through pipes (inputs on the north/south
+-- corners, MF output east/west): assembler-pipe-passthrough skips machines with input-output connections; its own
+-- layout collided with the fuel connection (load error y-ffe, 2026-10-26).
 local function fuel_engine(name, effectivity, pollution)
 	local engine = P.entity("assembling-machine", name)
 	local output, by_x = nil, {}
@@ -99,6 +101,17 @@ local function fuel_engine(name, effectivity, pollution)
 		end
 	end
 	assert(output and by_x[0] and by_x[1] and by_x[-1], "Yuoki (Paranoidal): unexpected fluid boxes of " .. name)
+	local function connections(a, b)
+		return {
+			{ flow_direction = "input-output", direction = a[3], position = { a[1], a[2] } },
+			{ flow_direction = "input-output", direction = b[3], position = { b[1], b[2] } },
+		}
+	end
+	local d = defines.direction
+	output.pipe_connections = connections({ 1, 0, d.east }, { -1, 0, d.west })
+	by_x[1].pipe_connections = connections({ 1, -1, d.north }, { 1, 1, d.south })
+	by_x[-1].pipe_connections = connections({ -1, -1, d.north }, { -1, 1, d.south })
+	by_x[1].base_level, by_x[-1].base_level = -1, -1
 	engine.fluid_boxes = { output, by_x[1], by_x[-1] }
 	engine.energy_source = {
 		type = "fluid",
