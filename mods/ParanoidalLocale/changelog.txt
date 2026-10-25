@@ -1,6 +1,7 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.26.0
   Changes:
+    - Wooden pipe and wooden pipe to ground (Bio_Industries_2): humorous ru/en entity descriptions.
     - Big-Monsters.en.cfg (ru): the names of the acid and the fire boss worm were swapped.
     - squeak-through-2.config.cfg: descriptions of chests, drills, trees and turrets; valves and display panels in the pipe and circuit descriptions.
     - rso-mod was renamed to RSO-reforged: optional dependency and its [mod-name] key follow the new name.
