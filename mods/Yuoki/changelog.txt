@@ -2,8 +2,9 @@
 Version: 9.0.0
 Date: 2026-10-24
   Major Features:
+    - Tips and tricks: 26 illustrated entries (category Yuoki) explain every Yuoki mechanic for a new player, from the solar Stirling dish and mechanical force to trade, armor and the domination symbols; each unlocks with its technology. Texts in locale/*/tips.cfg, pictures in graphics/tips.
     - Paranoidal fork: one mod from Yuoki Industries 1.2.23 and Yuoki Industries - Engines 1.2.9 (Engines under engines/, graphics paths __Yuoki__/engines/), with selected content of zJatmnYiFixes 0.2.23. Incompatible with yi_engines, yi_pfw, zJatmnYiFixes, Yi_Tech_Tree(_ExtraVanilla), jatmn_yuoki_reimagined, Yuoki_F2, yi_engines_F2, YuokiTweaks. Version 9 keeps the mod portal from auto-updating it.
-    - Technology tree of 34 technologies grafted onto the Paranoidal build (prototypes/paranoidal/technology.lua); every Yuoki recipe is unlocked by research. Missing ingredients and machines of the build are added as prerequisites automatically (technology-derive.lua), units take the packs of their prerequisites; unreachable recipes stop the load.
+    - Technology tree of 37 technologies grafted onto the Paranoidal build (prototypes/paranoidal/technology.lua); every Yuoki recipe is unlocked by research. Missing ingredients and machines of the build are added as prerequisites automatically (technology-derive.lua), units take the packs of their prerequisites; unreachable recipes stop the load.
     - N4 and F7 chunks only from centrifuging super-pure Angels ores: saphirite + rubyte + bobmonium -> 3 N4, jivolite + stiratite + crotinnium -> 3 F7 in any centrifuge; with a crystal seed 5 (centrifuge 2+); with a seed and a Lachnan crystal catalyst, returned with 90 %, 8 (centrifuge 3). The chunk items are declared in data-final-fixes so that the Angels Refining Yuoki integration (chunks from ore sorting, slag and chunk mixes) is not created.
     - Crystallization grows crystal seeds instead of chunks: rich dust seeds the washing emulsion; seeds from crystal dust, from crystal dust and ancient data fragments, or from crystal dust and Angels crystal dust.
     - The C1, Y2 and P3 factories are the only machines that fabricate Yuoki components (categories yuoki-fabrication and yuoki-fabrication-advanced); they no longer craft other recipes.
@@ -42,11 +43,13 @@ Date: 2026-10-24
     - Accumulators: flow compensator 50 MJ / 8 MW, AQE 200 MJ / 20 MW, quantrinum accumulator 600 MJ / 40 MW; the UPS flywheel, MCD and BCD are removed (the monument and the D-ZTT take a compensator).
     - The first animal DNA line takes 1 Angels bio token instead of 8 automation packs.
     - H-Metal is called T-Metal in English as well.
+    - YI suits and walkers improve the build's power armor: the working suit is built from power armor MK2, the master technician suit from Bob's MK3, the master suit from Bob's MK4, the T.R. walker from Bob's MK5, the top walker from the T.R. walker. Each has the base armor's resistances +5 % and +2, 5 more inventory slots, 1.25 x durability and a grid one size larger; four technologies after Bob's power armor 3/4/5 (37 technologies).
   Graphics:
     - 813 graphics files that no remaining prototype references were removed (47 -> 33 MB). The removed prototypes are still defined in the source files and deleted at the end of data.lua, so their definitions point to deleted files: restoring one of them needs its graphics back from Yuoki 1.2.23 / Engines 1.2.9.
     - 106 icons of 32x32 px (all from Engines) replaced by a neural upscale to 64x64 (Real-ESRGAN x4plus, alpha upscaled separately, Lanczos down to 64, no mipmaps); icon_size 32 -> 64 in the 213 prototype tables that use them.
     - 12 files used only by the removed MF water pump and accumulators deleted; technology icons for the Stirling dish and the flow compensator.
     - 11 files used only by the removed steam boilers and turbines and the removed fluid-fuel recipes deleted.
+    - 25 language-neutral scheme pictures for the tips (graphics/tips, 1024x440, icons of the build); technology icons for the four YI armor technologies.
     - Technologies use their own 256x256 icons (graphics/technology/, the same neural upscale of the item icon) instead of the 32-96 px item icons.
   Locale:
     - Complete en/ru for all remaining content (888 keys each); Engines locale merged into locale/*/yi_engines.cfg; additions in locale/*/paranoidal.cfg; keys of removed content pruned; languages other than en and ru dropped.

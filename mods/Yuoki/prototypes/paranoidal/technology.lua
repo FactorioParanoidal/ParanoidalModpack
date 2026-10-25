@@ -112,10 +112,15 @@ local tree = {
 	{ "yuoki-ultimates", "y_trade_ultimate", { R, G, B, PR, U }, 1000, 60, { "yuoki-trade", "yuoki-genetics" }, {
 		"y_trade_ultimate", "ypfw_trader_sign", "ye_science_ultimate", "ye_green_ultimate", "y_greensign_ulti",
 		"y_unlimited_wood" } },
+	-- YI armor: each suit improves the power armor of its tier (user 2026-10-26, armor.lua)
 	{ "yuoki-armor", "yi_armor_gray", { R, G, B, PR, U, M }, 500, 45, { "yuoki-trade", "power-armor-mk2" }, {
-		"yi_armor_gray", "yi_armor_red" } },
-	{ "yuoki-armor-2", "yi_walker_a", { R, G, B, PR, U, M }, 1000, 60, { "yuoki-armor", "bob-power-armor-3" }, {
-		"yi_armor_gold", "yi_walker_a", "yi_walker_c" } },
+		"yi_armor_gray" } },
+	{ "yuoki-armor-2", "yi_armor_red", { R, G, B, PR, U, M }, 600, 60, { "yuoki-armor", "bob-power-armor-3" }, {
+		"yi_armor_red" } },
+	{ "yuoki-armor-3", "yi_armor_gold", { R, G, B, PR, U, M }, 800, 60, { "yuoki-armor-2", "bob-power-armor-4" }, {
+		"yi_armor_gold" } },
+	{ "yuoki-armor-4", "yi_walker_a", { R, G, B, PR, U, M }, 1000, 60, { "yuoki-armor-3", "bob-power-armor-5" }, {
+		"yi_walker_a", "yi_walker_c" } },
 	{ "yuoki-defense", "y_turret_gun2f12", { R, G, B, PR, U, M }, 400, 45,
 		{ "yuoki-electronics", "bob-turrets-5", "bob-laser-turrets-5" }, {
 		"y_turret_gun2f12", "y_turret_gun1f12", "y_turret_laser22f12", "y-wall-forcefield" } },
@@ -143,7 +148,7 @@ local tech_icon_files = {
 	"meg-s-icon.png", "obninsk-reactor-icon.png", "repair-krakon-icon.png", "repair_quantrinum.png",
 	"thanks-icon.png", "science_gen_icon.png", "rheinsberg-icon.png", "smelter_icon.png",
 	"yi_alien_solar2_icon.png", "laika-gate-icon.png", "cimota_64.png", "unicomp_icon.png",
-	"trade_ultimate_icon.png", "stir-solar-dish-icon.png", "compensator25-icon.png",
+	"trade_ultimate_icon.png", "stir-solar-dish-icon.png", "compensator25-icon.png", "cb3_icon.png", "cb5_icon.png",
 }
 local tech_icons = {}
 for _, file in ipairs(tech_icon_files) do

@@ -9,6 +9,8 @@ local KEEP_CATEGORIES = {
     -- Презентации «Брак и доводка» и «Качество» (prototypes/tips-and-tricks/quality).
     ["zzz-defects"] = true,
     ["zzz-quality"] = true,
+    -- Советы форка Yuoki (prototypes/paranoidal/tips.lua в моде Yuoki); без мода категории нет.
+    ["yuoki"] = true,
 }
 
 local items = data.raw["tips-and-tricks-item"] or {}

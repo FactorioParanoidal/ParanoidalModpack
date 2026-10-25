@@ -24,8 +24,7 @@ else
 	log("Yuoki (Paranoidal): ye_blood-barrel not found, blood export not created")
 end
 
--- YI suits: a continuation of power armor MK2; grids slightly above Bob's power armor MK5 only for the walkers.
-P.upsert_ingredient("yi_armor_gray", { "power-armor-mk2", 1 })
+-- YI suit grids, one step above the power armor each suit improves (recipes and stats: armor.lua).
 local grids = { y_armor_grid_a = { 9, 9 }, y_armor_grid_b = { 10, 10 }, y_armor_grid_c = { 11, 11 },
 	y_walker_grid = { 12, 12 }, y_walker_grid_b = { 13, 13 } }
 for name, size in pairs(grids) do

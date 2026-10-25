@@ -11,6 +11,7 @@ require("prototypes.integration.angels._all") -- Integration - Angel's (atomics 
 
 require("prototypes.paranoidal.atomics")
 require("prototypes.paranoidal.build-links")
+require("prototypes.paranoidal.armor") -- YI suits and walkers improve the build's power armor
 
 for name in pairs(data.raw.recipe) do
 	if not before[name] then

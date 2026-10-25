@@ -100,6 +100,7 @@ require("prototypes.paranoidal.agronomy") -- agronomy and trade changes
 require("prototypes.paranoidal.energy") -- perpetual-motion fixes and the decoupled mechanical-force branch
 require("prototypes.paranoidal.defense") -- F12+ turrets, Vitduo, high-tier repair tools
 require("prototypes.paranoidal.economy") -- currencies are not fuel, quantrinum and techanic sign balance
+require("prototypes.paranoidal.tips") -- tips and tricks: how the Yuoki mechanics work
 
 YUOKI_PARANOIDAL.owned_recipes = {}
 for name in pairs(data.raw.recipe) do

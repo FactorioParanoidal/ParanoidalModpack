@@ -13,12 +13,11 @@ P.ingredients("ye_trademeat2", { { "ye_package_c_meat", 20 } })
 P.set("ye_trademeat2", { energy_required = 30 })
 
 -- 3. Techanic signs: their sinks needed 62 811 signs from by-products of 1-2 per craft. The mass intermediates now
---    yield 3, the big sinks cost about a quarter.
+--    yield 3, the big sinks cost about a quarter (YI armor: armor.lua).
 for _, name in ipairs({ "y-chip-2", "y-basic-t2-mf", "yi_magnetron", "y-fuel-reactor", "y-mixfuel-load" }) do
 	P.result_amount(name, "y_rwtechsign", 3)
 end
 for name, amount in pairs({
-	yi_walker_c = 6000, yi_walker_a = 2500, yi_armor_gold = 1200, yi_armor_red = 600, yi_armor_gray = 400,
 	y_obninsk_mc = 2500, y_mc_underground_drill = 1000, y_mc_dirtwasher = 600,
 }) do
 	P.upsert_ingredient(name, { "y_rwtechsign", amount })
