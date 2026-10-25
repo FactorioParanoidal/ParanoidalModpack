@@ -197,6 +197,9 @@ local function replace_turret(entity, new_name, keep_counters)
 	local health, max_health = entity.health, entity.max_health
 	local kills, damage = entity.kills, entity.damage_dealt
 	local last_user = entity.last_user
+	-- zzzparanoidal turret deployment: a working turret stays working after the replacement;
+	-- a still deploying one gets the full delay again.
+	local deploy = not entity.disabled_by_script and remote.interfaces["paranoidal_turret_deploy"]
 	local ignore_unprioritised = nil
 	if entity.type ~= "artillery-turret" then ignore_unprioritised = entity.ignore_unprioritised_targets end
 	local targets = priority_targets(entity)
@@ -221,10 +224,12 @@ local function replace_turret(entity, new_name, keep_counters)
 		return nil
 	end
 
+	if deploy then remote.call("paranoidal_turret_deploy", "skip_next", new_name) end
 	local new_entity = surface.create_entity({
 		name = new_name, position = position, force = force, direction = direction,
 		orientation = orientation, quality = quality, raise_built = true,
 	})
+	if deploy then remote.call("paranoidal_turret_deploy", "skip_next", nil) end
 	if new_entity and new_entity.valid then
 		if not max_health_on_rank and health ~= max_health then new_entity.health = health end
 		new_entity.kills = keep_counters and kills or 0
