@@ -39,6 +39,35 @@ Per planet with an RSO config (expression prefix p = "rso_<planet>_"):
 
 The control stage reads the same expressions with LuaSurface.calculate_tile_properties (sites,
 forecasts, guards, grades) and the names from the mod-data prototype "rso-reforged".
+
+Load time (game start). When the game builds the prototypes (loading screen "Building
+prototypes"), the engine (2.0.77) compiles every named noise expression on its own and inlines every
+call of a noise function into it anew: a function called twice with the same arguments is
+instantiated twice, and so is everything it calls. Named expressions are not inlined: one compiled
+once is shared by all expressions that refer to it, at any depth. Noise functions that no named
+expression calls cost nothing. Measured: about 8.5 microseconds per instantiated function body.
+
+In 9.1.0-9.2.0 the values of a cell (resource kind, size, reach, site, ...) were read by calling the
+cell functions P(fn)(ci, cj) directly from the expressions. These functions call each other many
+times: a lookup by the kind (lookup()) repeats the kind for every resource (fsize calls fkind 18
+times, freach 9 times), the kind repeats the cumulated weights fcum1..fcumN, every weight calls the
+site fx/fy with its dry-land test. One call of fq grew to about 1.1 million bodies, the whole
+program to about 6.45 million: the prototypes took about 55 s instead of 4 s and Windows reported
+the game as not responding. The map and the compiled program were right (the engine merges equal
+subexpressions later), only the loading was slow, on every start (the data stage cache does not
+skip it).
+
+So the cell functions are defined (cell_function) but the expressions read them through
+cell_value(fn, q): one named expression "<p>n<q>_<fn>" per function and cell, its text is the body
+of the function with the calls of other cell functions replaced by their named expressions of the
+same cell and ci/cj by the named cell indices (q = 1..4 the cells around the tile, 0 the cell holding
+the tile). Now about 800 function bodies are instantiated in the whole modset. The values are the
+same: 210 expressions at 3721 points of one map gave 781410 equal values.
+
+Rule for new expressions: a function is fine for a small leaf (rso_rand, rso_frac, the relocate
+clones); a value used more than once with the same arguments must be a named expression. The cost
+of a data-raw dump can be estimated without the game by counting the instantiations (inline each
+function call recursively, do not inline named expressions) and multiplying by 8.5 microseconds.
 ]]
 local C = require("config")
 local loadConfig = require("resourceconfigs.mainconfig")
@@ -435,7 +464,35 @@ local function build_planet(planet_name, config, ignored)
 	-- one site per cell (ci, cj); a site in water moves to the second place of its cell, a site
 	-- whose both places are in water is not placed: the density per land area stays as configured
 	local cell = "(ci, cj)"
-	noise_function(P("fv"), {"ci", "cj"}, "rso_rand(0, ci, cj)")
+	-- Functions of the cell (ci, cj): the expressions never call them, they read their values through
+	-- cell_value, one named expression per function and cell (see "Load time" in the header: called
+	-- directly, these functions made the prototypes load about 50 s longer).
+	local cell_texts, cell_names = {}, {}
+	local function cell_function(name, text)
+		cell_texts[name] = text
+		noise_function(name, {"ci", "cj"}, text)
+	end
+	local function cell_value(fn, q)
+		local names = cell_names[q]
+		if not names[fn] then
+			local text = assert(cell_texts[fn], fn)
+			local name = fmt("%sn%d_%s", p, q, fn:sub(#p + 1))
+			names[fn] = name
+			text = text:gsub("(rso_[%w_]+)%(ci, cj%)", function(g)
+				if cell_texts[g] then return cell_value(g, q) end
+			end)
+			text = text:gsub("%f[%w_]ci%f[^%w_]", names.ci):gsub("%f[%w_]cj%f[^%w_]", names.cj)
+			expression(name, text)
+		end
+		return names[fn]
+	end
+	-- cell q of the values: q = 1..4 the cells around the tile, 0 the cell holding the tile
+	local function cell_at(q, ci, cj)
+		cell_names[q] = {ci = fmt("%sn%d_ci", p, q), cj = fmt("%sn%d_cj", p, q)}
+		expression(cell_names[q].ci, ci)
+		expression(cell_names[q].cj, cj)
+	end
+	cell_function(P("fv"), "rso_rand(0, ci, cj)")
 	-- first place: anywhere in the inner part of the cell; second place: on the other side of the
 	-- cell centre, far from the first one (lakes are large)
 	local function first(axis, spread)
@@ -445,14 +502,14 @@ local function build_planet(planet_name, config, ignored)
 		return fmt("(%s + 0.5 + if(rso_frac(%s, %s) > 0.5, -1, 1) * (0.15 + 0.25 * rso_frac(%s, %s))) * %s", axis,
 			P("fv") .. cell, num(spread), P("fv") .. cell, num(other), G)
 	end
-	noise_function(P("fxa"), {"ci", "cj"}, first("ci", SPREAD[1]))
-	noise_function(P("fya"), {"ci", "cj"}, first("cj", SPREAD[2]))
-	noise_function(P("fxb"), {"ci", "cj"}, second("ci", SPREAD[1], SPREAD[3]))
-	noise_function(P("fyb"), {"ci", "cj"}, second("cj", SPREAD[2], SPREAD[4]))
+	cell_function(P("fxa"), first("ci", SPREAD[1]))
+	cell_function(P("fya"), first("cj", SPREAD[2]))
+	cell_function(P("fxb"), second("ci", SPREAD[1], SPREAD[3]))
+	cell_function(P("fyb"), second("cj", SPREAD[2], SPREAD[4]))
 	local elevation = planet_name == "nauvis" and relocate.at(DRY_LAND, P("fxa") .. cell, P("fya") .. cell)
 	if elevation then
-		noise_function(P("fwet"), {"ci", "cj"}, fmt("%s < %s", elevation, num(C.site_dry_elevation)))
-		noise_function(P("fdrown"), {"ci", "cj"}, fmt("%s * (%s < %s)", P("fwet") .. cell,
+		cell_function(P("fwet"), fmt("%s < %s", elevation, num(C.site_dry_elevation)))
+		cell_function(P("fdrown"), fmt("%s * (%s < %s)", P("fwet") .. cell,
 			relocate.at(DRY_LAND, P("fxb") .. cell, P("fyb") .. cell), num(C.site_dry_elevation)))
 		-- both places wet: a site of the guaranteed ring moves from the first place towards the
 		-- nearest start (the elevation keeps the land around a start dry), within the inner part of
@@ -461,22 +518,22 @@ local function build_planet(planet_name, config, ignored)
 			return fmt("clamp(%s - 0.4 * %s * %s{x = %s, y = %s, points = starting_positions} / max(1, %s), (%s + 0.1) * %s, (%s + 0.9) * %s)",
 				P(f) .. cell, G, dfn, P("fxa") .. cell, P("fya") .. cell, P("fda") .. cell, axis, G, axis, G)
 		end
-		noise_function(P("fda"), {"ci", "cj"}, fmt("distance_from_nearest_point{x = %s, y = %s, points = starting_positions}",
+		cell_function(P("fda"), fmt("distance_from_nearest_point{x = %s, y = %s, points = starting_positions}",
 			P("fxa") .. cell, P("fya") .. cell))
-		noise_function(P("fx"), {"ci", "cj"}, fmt("if(%s, if(%s, %s, %s), %s)", P("fwet") .. cell, P("fdrown") .. cell,
+		cell_function(P("fx"), fmt("if(%s, if(%s, %s, %s), %s)", P("fwet") .. cell, P("fdrown") .. cell,
 			inland("ci", "fxa", "distance_from_nearest_point_x"), P("fxb") .. cell, P("fxa") .. cell))
-		noise_function(P("fy"), {"ci", "cj"}, fmt("if(%s, if(%s, %s, %s), %s)", P("fwet") .. cell, P("fdrown") .. cell,
+		cell_function(P("fy"), fmt("if(%s, if(%s, %s, %s), %s)", P("fwet") .. cell, P("fdrown") .. cell,
 			inland("cj", "fya", "distance_from_nearest_point_y"), P("fyb") .. cell, P("fya") .. cell))
 	else
-		noise_function(P("fx"), {"ci", "cj"}, P("fxa") .. cell)
-		noise_function(P("fy"), {"ci", "cj"}, P("fya") .. cell)
+		cell_function(P("fx"), P("fxa") .. cell)
+		cell_function(P("fy"), P("fya") .. cell)
 	end
-	noise_function(P("fd"), {"ci", "cj"}, fmt("distance_from_nearest_point{x = %s, y = %s, points = starting_positions}",
+	cell_function(P("fd"), fmt("distance_from_nearest_point{x = %s, y = %s, points = starting_positions}",
 		P("fx") .. cell, P("fy") .. cell))
 	local d_site = P("fd") .. cell
 	-- sites of the guaranteed ring stay even in water: they hold the resources of the ring
 	local dry = elevation and fmt(" * (1 - %s)", P("fdrown") .. cell) or ""
-	noise_function(P("fon"), {"ci", "cj"}, fmt("max((%s < %s)%s, %s) * (%s > %s)",
+	cell_function(P("fon"), fmt("max((%s < %s)%s, %s) * (%s > %s)",
 		P("fv") .. cell, num(site_chance), dry, band == "0" and "0" or fmt(band, d_site), d_site, excl))
 	local FR = fmt("%s * %s", num(C.field_radius), GS)
 	local weight = setting("rso-province-weight")
@@ -487,7 +544,7 @@ local function build_planet(planet_name, config, ignored)
 		return fmt("(%s >= %s) * (%s > 0) * (1 + %s)", pv, num(C.province_mixed_chance), P("acum" .. n), concat(passed, " + "))
 	end
 	if EXPERIMENTAL then
-		noise_function(P("fq"), {"ci", "cj"}, fmt("if(%s, ((x - %s) ^ 2 + (y - %s) ^ 2) / (%s * max(1, %s / %s) ^ %s) ^ 2, 1e9)",
+		cell_function(P("fq"), fmt("if(%s, ((x - %s) ^ 2 + (y - %s) ^ 2) / (%s * max(1, %s / %s) ^ %s) ^ 2, 1e9)",
 			P("fon") .. cell, P("fx") .. cell, P("fy") .. cell, P("RP0"), P("fd") .. cell, num(REGION), num(setting("rso-size-exponent"))))
 	else
 		-- fixes: the resource, size and radius of every site are functions of its cell, so a tile
@@ -495,7 +552,7 @@ local function build_planet(planet_name, config, ignored)
 		-- meet where both have ore, not on a straight line through one of them); a site without a
 		-- resource takes no tiles
 		local function call(fn) return P(fn) .. cell end
-		local function cellfn(name, text) noise_function(P(name), {"ci", "cj"}, text) end
+		local function cellfn(name, text) cell_function(P(name), text) end
 		cellfn("fr3", fmt("rso_frac(rso_rand(3, ci, cj), %s)", num(SPREAD[1])))
 		cellfn("fr4", fmt("rso_frac(rso_rand(3, ci, cj), %s)", num(SPREAD[2])))
 		cellfn("fdr", fmt("%s / %s", call("fd"), num(REGION)))
@@ -536,15 +593,16 @@ local function build_planet(planet_name, config, ignored)
 	expression(i0, fmt("floor(x / %s - 0.5)", G))
 	expression(j0, fmt("floor(y / %s - 0.5)", G))
 	local cells = {{i0, j0}, {i0 .. " + 1", j0}, {i0, j0 .. " + 1"}, {i0 .. " + 1", j0 .. " + 1"}}
-	local function at(fn, c) return fmt("%s(%s, %s)", P(fn), c[1], c[2]) end
-	for q, c in ipairs(cells) do expression(P("q" .. q), at("fq", c)) end
+	for q, c in ipairs(cells) do cell_at(q, c[1], c[2]) end
+	local function at(fn, q) return cell_value(P(fn), q) end
+	for q in ipairs(cells) do expression(P("q" .. q), at("fq", q)) end
 	expression(P("c1"), fmt("%s <= min(%s, %s, %s)", P("q1"), P("q2"), P("q3"), P("q4")))
 	expression(P("c2"), fmt("%s <= min(%s, %s)", P("q2"), P("q3"), P("q4")))
 	expression(P("c3"), fmt("%s <= %s", P("q3"), P("q4")))
 	local function owner(a, b, c, d)
 		return fmt("if(%s, %s, if(%s, %s, if(%s, %s, %s)))", P("c1"), a, P("c2"), b, P("c3"), c, d)
 	end
-	local function owner_of(fn) return owner(at(fn, cells[1]), at(fn, cells[2]), at(fn, cells[3]), at(fn, cells[4])) end
+	local function owner_of(fn) return owner(at(fn, 1), at(fn, 2), at(fn, 3), at(fn, 4)) end
 	expression(P("ci"), i0 .. " + " .. owner(0, 1, 0, 1))
 	expression(P("cj"), j0 .. " + " .. owner(0, 0, 1, 1))
 	expression(P("on"), fmt("min(%s, %s, %s, %s) < 1e8", P("q1"), P("q2"), P("q3"), P("q4")))
@@ -767,10 +825,10 @@ local function build_planet(planet_name, config, ignored)
 	forms[#forms + 1], forms[#forms + 2] = "wells", "chain"
 
 	-- queries of the control stage: the site of the cell holding the tile
-	local own = "(floor(x / " .. G .. "), floor(y / " .. G .. "))"
-	expression(P("cell_on"), P("fon") .. own)
-	expression(P("cell_x"), P("fx") .. own)
-	expression(P("cell_y"), P("fy") .. own)
+	cell_at(0, fmt("floor(x / %s)", G), fmt("floor(y / %s)", G))
+	expression(P("cell_on"), at("fon", 0))
+	expression(P("cell_x"), at("fx", 0))
+	expression(P("cell_y"), at("fy", 0))
 	expression(P("veinon"), vein_chance > 0 and fmt("%s < %s", P("r15"), num(vein_chance)) or "0")
 
 	-- enemy bases
