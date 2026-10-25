@@ -590,7 +590,7 @@ paralib.bobmods.lib.recipe.set_ingredient(
 	"fluid-memory-unit",
 	{ type = "item", name = "energy-shield-equipment", amount = 4 }
 )
-paralib.bobmods.lib.tech.add_prerequisite("fluid-memory-storage", "angels-gas-processing")
+paralib.bobmods.lib.tech.add_prerequisite("fluid-memory-storage", "angels-metallurgy-2") -- газовый резервуар открывается в Металлургии 2
 
 paralib.bobmods.lib.recipe.add_new_ingredient("accumulator", { type = "item", name = "electronic-circuit", amount = 4 })
 

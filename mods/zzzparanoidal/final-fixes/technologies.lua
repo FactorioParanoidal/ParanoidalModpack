@@ -153,6 +153,9 @@ paralib.bobmods.lib.tech.add_recipe_unlock("angels-basic-chemistry-2", "bob-nick
 paralib.bobmods.lib.tech.add_recipe_unlock("angels-metallurgy-2", "bob-invar-alloy-x")
 paralib.bobmods.lib.tech.remove_recipe_unlock("angels-invar-smelting-1", "intermediate-structure-components")
 paralib.bobmods.lib.tech.add_recipe_unlock("angels-metallurgy-2", "intermediate-structure-components")
+-- Газовый резервуар требует Каркас 2 — открываем его вместе с каркасом, а не в Переработке газа.
+paralib.bobmods.lib.tech.remove_recipe_unlock("angels-gas-processing", "angels-storage-tank-1")
+paralib.bobmods.lib.tech.add_recipe_unlock("angels-metallurgy-2", "angels-storage-tank-1")
 
 --Перенос Каркаса 3, примитивного Титана и Кобальта в Металлургию 3 (AKMF https://discord.com/channels/569536773701500928/1196117081691795496)
 paralib.bobmods.lib.tech.remove_recipe_unlock("angels-cobalt-smelting-1", "cobalat-electrolysis-x")
@@ -212,7 +215,7 @@ paralib.bobmods.lib.tech.add_prerequisite("angels-steel-smelting-2", "angels-str
 paralib.bobmods.lib.tech.add_prerequisite("CW-air-filtering-1", "automation-2") --фильтры под автомат 2
 paralib.bobmods.lib.tech.add_prerequisite("angels-water-treatment-2", "angels-metallurgy-2") --гидростанцию 2 под металлургию 2
 paralib.bobmods.lib.tech.add_prerequisite("angels-advanced-chemistry-1", "angels-metallurgy-2") --химию 2 под металлургию 2
-paralib.bobmods.lib.tech.add_prerequisite("angels-gas-processing", "angels-metallurgy-2") --газ под металлургию 2
+paralib.bobmods.lib.tech.remove_prerequisite("angels-gas-processing", "angels-metallurgy-2") --газ не ждёт металлургию 2: резервуар перенесён туда
 paralib.bobmods.lib.tech.add_prerequisite("CW-air-filtering-2", "advanced-circuit") --фильтры 2 под контроллеры
 paralib.bobmods.lib.tech.remove_prerequisite("angels-zinc-smelting-1", "angels-metallurgy-2") --металлургия 2 под латунь
 paralib.bobmods.lib.tech.remove_prerequisite("bob-zinc-processing", "angels-sulfur-processing-1") --металлургия 2 под латунь
