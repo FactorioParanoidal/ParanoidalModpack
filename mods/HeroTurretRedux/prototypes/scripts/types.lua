@@ -205,7 +205,8 @@ local update_fluid_turret_tech = function(entity, name,rank)
             end
             if effect ~= nil then 
                 log("Adding tech for "..tech.name .. " for "..entity.name)
-                table.insert(tech.effects, {type="turret-attack", turret_id = name, modifier = effect.modifier*(1+(0.25*rank)) })
+                -- Paranoidal: hidden, the research shows only the base turrets; the bonus still applies.
+                table.insert(tech.effects, {type="turret-attack", turret_id = name, modifier = effect.modifier*(1+(0.25*rank)), hidden = true })
             else
                 log("Missing tech for "..tech.name .. " for "..entity.name)
             end
@@ -228,7 +229,8 @@ local update_fluid_turret_tech = function(entity, name,rank)
             end
             if effect ~= nil then
                 -- Beta 8: a rank gets the same damage research bonus as its base turret.
-                table.insert(tech.effects, {type="turret-attack", turret_id = name, modifier = effect.modifier})
+                -- Paranoidal: hidden, the research shows only the base turrets; the bonus still applies.
+                table.insert(tech.effects, {type="turret-attack", turret_id = name, modifier = effect.modifier, hidden = true})
             end
         end
     end
