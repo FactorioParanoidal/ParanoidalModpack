@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.0
 Date: 2026-10-20
+  Changes:
+    - The respirator filters poison clouds (poison capsules, battery fumes): 90% poison resistance, the absorbed damage drains its durability; a worn-out respirator is gone.
   Bugfixes:
     - Pollution detector combinators are registered again when built: the build events were
       registered under names that do not exist in the 2.0 API (and read event.created_entity).

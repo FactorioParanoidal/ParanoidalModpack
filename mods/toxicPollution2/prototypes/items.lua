@@ -9,7 +9,9 @@ data:extend({
             {type = "acid",         decrease = 0, percent = 0},
             {type = "explosion",    decrease = 0, percent = 0},
             {type = "fire",         decrease = 0, percent = 0},
-            {type = "toxin",        decrease = 0, percent = 5}
+            {type = "toxin",        decrease = 0, percent = 5},
+            -- poison clouds (poison capsules, battery fumes): paid with durability, control.lua
+            {type = "poison",       decrease = 0, percent = 90}
         },
         durability = 100,
         subgroup = "armor",

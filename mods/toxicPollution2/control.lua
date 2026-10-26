@@ -77,3 +77,23 @@ end)
 script.on_event(defines.events.on_player_respawned, function(event)
     toxic:OnPlayerRespawned(event)
 end)
+
+-- The respirator filters poison clouds (90% poison resistance, prototypes/items.lua) at the cost of
+-- its durability: the absorbed part of every poison hit drains it; a worn-out respirator is gone.
+local RESPIRATOR = "respirator"
+local RESPIRATOR_POISON_SHARE = 0.9
+script.on_event(defines.events.on_entity_damaged, function(event)
+    local character = event.entity
+    if not (character and character.valid) then return end
+    local inventory = character.get_inventory(defines.inventory.character_armor)
+    local stack = inventory and inventory[1]
+    if not (stack and stack.valid_for_read and stack.name == RESPIRATOR) then return end
+    local absorbed = event.original_damage_amount * RESPIRATOR_POISON_SHARE
+    if absorbed <= 0 then return end
+    if stack.durability <= absorbed then
+        stack.clear()
+        if character.player then character.player.print({"Armor-destroyed"}) end
+    else
+        stack.drain_durability(absorbed)
+    end
+end, {{filter = "type", type = "character"}, {mode = "and", filter = "damage-type", type = "poison"}})
