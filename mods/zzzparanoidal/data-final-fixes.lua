@@ -260,6 +260,7 @@ require("tweaks.technology.platinum-wire")
 require("tweaks.custom.super-labs-beta8") -- Отдельные Гиг-лаба и Гипер-лаба; параметры Beta 8.
 require("tweaks.entity.space-data-labs") -- Космические данные принимает только центр обработки данных.
 require("tweaks.item.titanium-icon") -- После reskins и поздних копирований иконок.
+require("tweaks.item.motor-icon") -- Иконка мотора Beta 8 вместо новой AAI 2.0.
 -- После финальных скоростей лент, стоимости AAI, restack, flowfix и OV.execute.
 require("prototypes.electric-loaders")
 require("prototypes.loader-shells")
