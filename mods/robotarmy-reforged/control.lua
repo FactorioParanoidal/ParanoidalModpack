@@ -409,6 +409,11 @@ remote.add_interface("robotarmy-reforged", {
     local surface = game.get_surface(surface_index)
     return surface and pods.place_from_stack(stack, surface, position, force)
   end,
+  --- A droid killed an enemy that the death filter of this mod does not see (the units of other
+  --- hostile forces, e.g. the replicator droids of Robot Army: Replicator Citadel): counts the kill.
+  credit_kill = function(droid)
+    if droid and droid.valid and is_droid[droid.name] then ranks.on_kill(droid) end
+  end,
 })
 
 ------------------------------------------------------------------------------------------

@@ -85,6 +85,7 @@ Date: 2026.10.25
     - Code split into lib/shared.lua, prototypes/*.lua and script/*.lua; no globals are written in any stage. Recipes and technologies are created in data-updates so that the items and technologies of Bob's, Angels and Paranoidal exist; optional dependencies on bobwarfare, bobplates, angelssmelting and zzzparanoidal set the load order (Yuoki needs no dependency: only its files are referenced when it is active).
     - Removed the unused stdlib, 30log, robolib, config, migrations, WARP.md, QRF_Testing_Commands.txt, .gitignore, unused images (low resolution sprites, patrol pole, settings module, deployable item icons, settings signals, pick-up tool), and prototype fields that 2.0 does not read (destroy_action, idle, icon_mipmaps, is_deployer, item_slot_count, base_area/base_level, stackable, hr_version, ammo_type category).
     - ai_settings use the 2.0 field destroy_when_commands_fail.
+    - Remote function credit_kill(droid): another mod reports a kill by a droid that the death filter of this mod does not see (units of other hostile forces, such as the replicator droids of Robot Army: Replicator Citadel); the kill counts for the ranks.
 ---------------------------------------------------------------------------------------------------
 Version: 2.4.27
 Date: 2025.10.06
