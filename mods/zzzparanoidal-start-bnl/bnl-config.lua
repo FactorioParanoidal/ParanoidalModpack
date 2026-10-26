@@ -216,11 +216,14 @@ config.fire = {
     -- Water barrels in a burning wreck (a kit is in the ship; players put them in): the fire burns
     -- slower while there is water, a barrel bursts into steam every interval, after `quench` barrels
     -- by wreck size the fire is out (no last blast, no 4th quality step; it may light again later).
+    -- Water barrels: inside a burning wreck one bursts every interval (slows the fire, enough of them
+    -- put it out); poured from the hand (scripts/douse.lua) one puts a wreck fire out at once.
     water = {
         items = {"water-barrel", "angels-water-purified-barrel"},
         slow = 0.5,
         interval = {4 * 60, 6 * 60},
-        quench = {small = 2, medium = 3, big = 5},
+        quench = {small = 1, medium = 2, big = 3}, -- barrels inside; one from the hand is enough
+        spill_radius = 2.5, -- a barrel poured on the ground puts out ordinary fires this far
         calm = 3 * MINUTE,
         ship_kit = {"water-barrel", 10},
     },

@@ -25,6 +25,7 @@ local intro = require("scripts.intro")
 local util = require("scripts.util")
 require("scripts.recorder")
 require("scripts.reactor")
+require("scripts.douse")
 
 local function state()
     local s = storage.shipwreck

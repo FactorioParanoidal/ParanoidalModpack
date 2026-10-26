@@ -24,6 +24,8 @@ Date: 2026-10-26
     - Map tags of the BnL start show icons only (no texts).
     - The starliner burns like every start wreck (as a big one, with its own hazardous cargo); its flames keep off the BnL logo, and no start wreck lies within 5 tiles of the logo (their cargo goes into the ship).
     - The journal button: the BnL logo fills the whole button.
+    - Water from the hand: a left click with a water barrel puts out the burning wreck under the cursor at once (a big white steam cloud); elsewhere the water spills and puts out ordinary fires within 2.5 tiles (a little steam), wreck fires keep burning. Within reach, one barrel per click, the empty barrel drops next to the player.
+    - Water barrels inside a wreck: 1/2/3 put out a small/medium/big wreck (was 2/3/5); every barrel bursts into a little white steam, the last one into a big cloud.
     - The own intro flight is switched off (code kept commented out): the vanilla crash cutscene plays and the profession choice opens at once.
     - Long torches (base scale 1.5 and more: gas column, the middle barrel torch, rocket and nuclear fuel) are twice as tall; their base stays in place.
     - The previous expedition is moved further out along its direction when its place is in water.

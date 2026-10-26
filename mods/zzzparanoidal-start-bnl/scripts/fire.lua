@@ -621,17 +621,46 @@ local function burn_out(rec, entity)
 end
 
 -- Water: one barrel bursts into steam; enough of them put the fire out (no last blast).
-local function douse(rec, entity, stack)
-    if stack.count > 1 then stack.count = stack.count - 1 else stack.clear() end
-    local smoke = entity.surface.create_entity({name = "crash-site-explosion-smoke", position = around(entity, entity.get_radius())})
-    if smoke then smoke.time_to_live = 120 end
-    rec.quench = (rec.quench or 0) + 1
-    if rec.quench < (cfg.water.quench[rec.size] or cfg.water.quench.small) then return false end
+-- `count` white steam puffs within `radius` of `position` (prototypes/bnl-water.lua).
+function M.steam(surface, position, radius, count, name)
+    for _ = 1, count do
+        local a, r = math.random() * 2 * math.pi, radius * math.sqrt(math.random())
+        surface.create_trivial_smoke({name = name or "bnl-steam",
+            position = {x = position.x + r * math.cos(a), y = position.y + r * math.sin(a)}})
+    end
+end
+
+-- The fire goes out by water: a big steam cloud over the wreck, no last blast.
+local function quench(rec, entity)
     extinguish(rec)
     rec.calm_until = game.tick + cfg.water.calm
     rec.quench = 0
+    local radius = entity.get_radius()
+    M.steam(entity.surface, entity.position, radius, math.max(10, math.floor(radius * 6)), "bnl-steam")
     float_text(entity, {"bnl.fire-quenched"}, -1.6, {r = 0.5, g = 0.8, b = 1}, 1.3, 240)
+end
+
+local function douse(rec, entity, stack)
+    if stack.count > 1 then stack.count = stack.count - 1 else stack.clear() end
+    rec.quench = (rec.quench or 0) + 1
+    if rec.quench < (cfg.water.quench[rec.size] or cfg.water.quench.small) then
+        M.steam(entity.surface, around(entity, entity.get_radius()), 0.5, 3, "bnl-steam-small")
+        return false
+    end
+    quench(rec, entity)
     return true
+end
+
+function M.is_burning(entity)
+    local s = storage.bnl and storage.bnl.fire
+    local rec = s and s.wrecks[reg_of(entity)]
+    return rec ~= nil and rec.burning == true
+end
+
+-- A water barrel poured from the hand (scripts/douse.lua): the fire goes out at once.
+function M.quench_by_hand(entity)
+    local rec = storage.bnl.fire.wrecks[reg_of(entity)]
+    if rec and rec.burning then quench(rec, entity) end
 end
 
 local function burn(rec, entity, tick)
