@@ -181,6 +181,9 @@ local function tag_compartment(key, entity)
         {type = "item", name = "bnl-antenna-part"})
 end
 
+local COMPARTMENT_TRIES = 20
+local COMPARTMENT_STEP = 48 -- tiles further out along the trail per try
+
 local function place_compartment(surface, obj)
     local spec = spec_of(obj.key)
     local name = spec and spec.name
@@ -190,7 +193,20 @@ local function place_compartment(surface, obj)
     if water then p = water end
     util.clear(surface, util.area(p, 8))
     if spec.water and not water then water = crater_pond(surface, p) end
-    local spot = water or surface.find_non_colliding_position(name, p, 30, 1) or p
+    local spot = water or surface.find_non_colliding_position(name, p, 30, 1)
+    if not spot then
+        -- water all around (a lake or sea): further out along the trail, on land; the old drop in
+        -- place only when there is no land after every try (the antenna parts must stay in the game)
+        obj.tries = (obj.tries or 0) + 1
+        if obj.tries <= COMPARTMENT_TRIES then
+            queue(surface, {kind = "compartment", key = obj.key, tries = obj.tries,
+                position = util.add(p, util.vector(util.trail_angle(), COMPARTMENT_STEP))})
+            events.refresh()
+            return
+        end
+        log("zzzparanoidal-start-bnl: no land for the " .. obj.key .. " compartment, placed in the water")
+        spot = p
+    end
     local entity = surface.create_entity({name = name, position = spot,
         force = obj.key == "reactor" and "player" or "neutral", create_build_effect_smoke = false})
     if not entity then return end

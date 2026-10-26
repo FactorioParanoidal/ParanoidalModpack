@@ -431,7 +431,7 @@ config.scrap = {
 
 -- 10. The previous expedition.
 config.expedition = {
-    distance = {2000, 4000}, -- far: the car must be earned
+    distance = {500, 1000}, -- far: the car must be earned (4x closer than the first 2000-4000, user decision 2026-10-26)
     min_angle = 0.2, -- turns away from the trail
     items = {
         {"assembling-machine-1", 2, 2, quality = "ic-defect-5"}, {"burner-mining-drill", 3, 3, quality = "ic-defect-4"},
