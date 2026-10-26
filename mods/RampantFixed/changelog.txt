@@ -69,6 +69,7 @@ Date: 2026.10.13
     - Remote "getTruceInfo" ({surfaceIndex}) returns {minEvo, peaceful} for EvoUI; read-only.
     - Removed the two chat messages "Peaceful mode. Attacks will start..." (EvoUI shows the truce next to the evolution line). The "Peaceful mode expired" message is kept.
   Locale:
+    - No spoilers before contact: the evolution warning about the juggernauts no longer names the faction, the 82 % threshold or the resistances; the warning before the flyers no longer says that the biters learn to fly (the flyers alert itself is unchanged). EN/RU; the RU text is also overridden in ParanoidalLocale.
     - Names for the four alert virtual signals (underground passage, dig-out attempt, squad detected, attacking Demolisher); they showed Unknown key in the signal list
     - Champion setting, hour boss chat line and 200 champion names (locale/*/champion-names.cfg)
     - Super-hive name, Factoriopedia description, setting and the chat line of a fallen super-hive (en, ru)
