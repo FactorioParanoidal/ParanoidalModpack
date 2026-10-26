@@ -117,7 +117,11 @@ commands.add_command("signal", {"replicator-message.command-help"}, function(com
   local print = player and player.print or game.print
   if not status then return end
   if status.phase ~= "active" and status.phase ~= "destroyed" then
-    print({"replicator-message.status-quiet", {"replicator-phase." .. status.phase}})
+    if status.phase == "dormant" then
+      print({"replicator-message.status-silent"})
+    else
+      print({"replicator-message.status-quiet", {"replicator-phase." .. status.phase}})
+    end
     return
   end
   print({"replicator-message.status", {"replicator-phase." .. status.phase}, status.modules, status.ruined,
