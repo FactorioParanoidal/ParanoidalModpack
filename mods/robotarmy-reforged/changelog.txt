@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 9.0.0
 Date: 2026.10.25
+  Changes:
+    - Rank droids are hidden prototypes: the ammo damage and shooting speed research tooltips list only the base droids; the bonuses of the ammo categories still apply to every rank.
   Info:
     - Renamed to robotarmy-reforged (title Robot Army Reforged); incompatible with the original robotarmy mod (same prototype names).
     - Paranoidal fork. The control script is rewritten; save compatibility with 2.4.x is not kept (a save with 2.4.x data starts the mod state over and picks up the droids and buildings found on the map).

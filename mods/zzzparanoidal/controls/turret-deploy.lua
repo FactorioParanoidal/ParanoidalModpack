@@ -28,7 +28,8 @@ local function ring_radius(entity)
 	if radius == nil then
 		local prototype = entity.prototype
 		radius = false
-		if not prototype.hidden and prototype.has_flag("player-creation") then
+		-- ранги HeroTurretRedux с встроенным боеприпасом скрыты только ради подсказок исследований
+		if (not prototype.hidden or name:find("^hero%-turret%-%d+%-for%-")) and prototype.has_flag("player-creation") then
 			local box = prototype.selection_box
 			local size = math.max(box.right_bottom.x - box.left_top.x, box.right_bottom.y - box.left_top.y)
 			radius = math.max(0.35, size * 0.28)

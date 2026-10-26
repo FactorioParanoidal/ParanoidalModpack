@@ -3,6 +3,7 @@ Version: 1.0.38
 Date: 03/11/2026
   Changes:
     - Paranoidal: the research bonuses of the turret ranks (physical projectile damage, refined flammables) are hidden; the technologies show only the base turrets, the rank bonuses still apply.
+    - Paranoidal: ranks with built-in ammo (electric and fluid turrets: laser, flamethrower) are hidden prototypes, so the laser and refined flammables research tooltips list only the base turrets; the ammo category bonuses still apply. Item-fed ranks stay visible.
     - Paranoidal: a rank change or demotion of a working turret does not restart the zzzparanoidal turret deployment delay (remote "paranoidal_turret_deploy".skip_next); a turret that is still deploying gets the full delay again.
   Fixes:
     - Paranoidal: turrets of the legendary ruins (AbandonedRuins-paranoidal: relics "pd-relic-*", guardians "pd-legend-*") get no ranks; a ranked copy would lose the relic.

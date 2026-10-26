@@ -155,7 +155,8 @@ function util.entities(spec)
   end
   local found = {}
   local function accept(name, prototype)
-    if prototype and not prototype.hidden and (not types or types[prototype.type]) then
+    -- HeroTurretRedux ranks with built-in ammo are hidden only for the research tooltips
+    if prototype and (not prototype.hidden or name:find("^hero%-turret%-%d+%-for%-")) and (not types or types[prototype.type]) then
       if not (spec.exclude and name:find(spec.exclude)) then found[name] = true end
     end
   end

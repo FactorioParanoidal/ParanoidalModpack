@@ -151,6 +151,8 @@ for _, d in pairs(shared.droids) do
       u.icon, u.icon_size = nil, nil
       u.minable = nil -- only a drop pod carries a rank droid
       u.hidden_in_factoriopedia = true
+      -- not listed in the tooltips of the ammo research (the bonuses of the ammo category still apply)
+      u.hidden = true
       u.order = (base.order or "") .. "-r" .. r
       grow(u, d.growth or {health = 0.1, damage = 0.1}, r)
       u.custom_tooltip_fields = tooltip(u, d.unit, r)

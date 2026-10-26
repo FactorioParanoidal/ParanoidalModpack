@@ -804,6 +804,10 @@ local local_create_turret = function(turret,rank,rank_string,mod,custom_buff_mod
         entity.localised_name = localised_name
         entity.localised_description = localised_desc
         entity.hidden_in_factoriopedia = true
+        -- Paranoidal: ranks with built-in ammo (laser, flamethrower) are hidden so the ammo research tooltips
+        -- list only the base turrets; the bonuses of the ammo category still apply. Turrets fed by items
+        -- are not listed there and stay visible (ammo autofill skips hidden entities).
+        if entity.type == "electric-turret" or entity.type == "fluid-turret" then entity.hidden = true end
 
         local left = nil        
         local top = nil
