@@ -1,6 +1,7 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.26.0
   Changes:
+    - zzzz-missing-keys.cfg (en, ru): 710 keys that no locale of the build had ("Unknown key"): technology modifiers of the hero turrets (HeroTurretRedux), droid ammo (robotarmy), Schall tank and sniper ammo; the Cursed-FMD drill description; FactorySearch corpse signals of Big-Monsters fighters; MultipleUnitTrainControl technology, plasma ammo category (Yuoki), BnL douse control, Angels seed and semiheavy water references, Bob boiler and accumulator descriptions, hidden service entities, items and fluids. RU also gets the keys that had only EN (Shortcuts-ick controls, BnL scrap achievements, SpaceX group, Schall pickup tower and arboretum radar parts).
     - RampantFixed.locale.cfg: rampantFixed--JuggernautAlert without the faction name, threshold and resistances; zzzz-user-overrides.cfg: bm-txt-human_soldiers and bm-txt-ufo hint at the threat instead of naming it (no spoilers before contact).
     - zzzparanoidal-shipwreck was renamed to zzzparanoidal-start-bnl: its [mod-name] key follows the new name ("PARANOIDAL: Start with BnL").
     - GUI_Unifyer.buttons.cfg: name of the Paranoidal Autofill button visibility setting; zzzz-user-overrides.cfg: [mod-name] of paranoidal-autofill.
