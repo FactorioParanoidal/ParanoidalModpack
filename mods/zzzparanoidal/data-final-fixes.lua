@@ -396,6 +396,8 @@ require("tweaks.recipe.batch03-rest-beta8")
 -- После синхронизаторов меню: иконка конвертации не заменяет иконку средней опоры.
 require("tweaks.recipe.iron-pole-upgrade")
 require("tweaks.custom.locale-overrides")
+-- Зенитные турели 1–3: копии снайперских после всех правок характеристик, рецептов и дерева; до переработки.
+require("prototypes.anti-air-turret")
 -- Пожарная турель (вода, защита от Flammable Oils): до пересборки переработки.
 require("prototypes.fire-safety-turret")
 -- Ветка качества: ранний модуль качества и тиры из двух предыдущих (до пересборки переработки).
