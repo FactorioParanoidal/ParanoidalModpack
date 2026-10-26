@@ -38,3 +38,13 @@ data:extend({
 		results = { { type = "item", name = SUIT, amount = 1 } },
 	},
 })
+
+-- Geiger counter clicks (control.lua): synthesized, 1 s clips, low / mid / high dose rate.
+local function geiger(level)
+	local variations = {}
+	for i = 1, 4 do
+		variations[i] = { filename = "__Radioactive-Damage-Reforged__/sound/geiger-" .. level .. "-" .. i .. ".ogg", volume = 0.6 }
+	end
+	return { type = "sound", name = "rdr-geiger-" .. level, category = "game-effect", variations = variations }
+end
+data:extend({ geiger("low"), geiger("mid"), geiger("high") })

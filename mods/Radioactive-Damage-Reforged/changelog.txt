@@ -10,6 +10,8 @@ Date: 2026. 10. 15
     - Radioactive items count in the logistic trash and in the cursor too, not only in the main inventory; items of every quality count.
     - Radiation passes through vehicles: a character inside a vehicle is damaged as well.
     - Several sources add up (one hit per source); standing near a uranium ore deposit no longer cancels the inventory check.
+    - Geiger counter: clicks once a second while the character takes radiation, at three rates by the dose (synthesized sounds); per-player setting, on by default.
+    - Remote interface "radioactive_damage", set_source(entity, dps, radius, hear_radius): other mods register radiating entities; characters within the radius take uranium damage per second, the Geiger counter clicks up to hear_radius. A source goes away with its entity or with dps 0.
   Bugfixes:
     - A connected player without a character (god mode, editor, waiting for respawn) no longer stops the check for all other players.
     - The uranium ore proximity check is done only when a "uranium-ore" resource exists (it never matched in Paranoidal, where uranium comes from Angels ores).
