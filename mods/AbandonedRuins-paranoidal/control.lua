@@ -250,7 +250,13 @@ local function show_progress(command)
     count_found(mine, "small"), totals.small or 0,
     count_found(mine, "medium"), totals.medium or 0,
     count_found(mine, "large"), totals.large or 0 })
-  player.print({ "pd-legendary.progress", legendary.found(mine), legendary.total() })
+  -- no spoilers: the legendary ruins are counted only after the first one is found
+  local legendary_found = legendary.found(mine)
+  if legendary_found > 0 then
+    player.print({ "pd-legendary.progress", legendary_found, legendary.total() })
+  else
+    player.print({ "pd-legendary.progress-none" })
+  end
 end
 
 -- Admin command for tests and showcases: /legendary-spawn <name> places a legendary ruin a few
