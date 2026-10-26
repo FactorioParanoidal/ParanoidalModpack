@@ -368,10 +368,11 @@ local function update_torches(rec, entity, r)
         rec.torch_points = {}
         for i, point in ipairs(spec.points) do
             local scale = point[3] * item * math.max(0.6, size)
-            rec.torch_points[i] = {point[1] * size, point[2] * size, scale}
+            local stretch = point[3] * item >= t.long_from and t.long_stretch or 1
+            rec.torch_points[i] = {point[1] * size, point[2] * size, scale, stretch}
             rec.torches[i] = rendering.draw_animation({animation = spec.animation, surface = entity.surface,
-                target = {entity = entity, offset = {point[1] * size, point[2] * size - (t.lift[spec.animation] or 0.5) * scale}},
-                x_scale = scale, y_scale = scale, render_layer = "higher-object-under",
+                target = {entity = entity, offset = {point[1] * size, point[2] * size - (t.lift[spec.animation] or 0.5) * scale * stretch}},
+                x_scale = scale, y_scale = scale * stretch, render_layer = "higher-object-under",
                 animation_offset = math.random(0, 59), animation_speed = 0.8 + 0.4 * math.random()})
         end
         rec.torch_animation = spec.animation
@@ -381,9 +382,9 @@ local function update_torches(rec, entity, r)
     for i, object in ipairs(rec.torches) do
         local point = rec.torch_points[i]
         if object.valid and point then
-            local scale = point[3] * k
-            object.x_scale, object.y_scale = scale, scale
-            object.target = {entity = entity, offset = {point[1], point[2] - lift * scale}}
+            local scale, stretch = point[3] * k, point[4] or 1
+            object.x_scale, object.y_scale = scale, scale * stretch
+            object.target = {entity = entity, offset = {point[1], point[2] - lift * scale * stretch}}
         end
     end
 end

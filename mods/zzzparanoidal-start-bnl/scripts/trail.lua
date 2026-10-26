@@ -91,7 +91,7 @@ function M.plan(surface)
     end
     local e = config.expedition
     local away = angle + e.min_angle + math.random() * (1 - 2 * e.min_angle)
-    queue(surface, {kind = "expedition", position = util.add(origin, util.vector(away, util.int(e.distance)))})
+    queue(surface, {kind = "expedition", angle = away, position = util.add(origin, util.vector(away, util.int(e.distance)))})
     events.refresh()
 end
 
@@ -206,7 +206,16 @@ local function place_expedition(surface, obj)
     if not util.entity_exists(name) then return end
     util.clear(surface, util.area(obj.position, 12))
     local spot = surface.find_non_colliding_position(name, obj.position, 40, 1)
-    if not spot then return end
+    if not spot then
+        -- water (a lake or sea): try further out along the same direction, on land
+        obj.tries = (obj.tries or 0) + 1
+        if obj.angle and obj.tries <= 20 then
+            queue(surface, {kind = "expedition", angle = obj.angle, tries = obj.tries,
+                position = util.add(obj.position, util.vector(obj.angle, 64))})
+            events.refresh()
+        end
+        return
+    end
     local ship = surface.create_entity({name = name, position = spot, force = "neutral", create_build_effect_smoke = false})
     if not ship then return end
     fill(ship, config.expedition.items)

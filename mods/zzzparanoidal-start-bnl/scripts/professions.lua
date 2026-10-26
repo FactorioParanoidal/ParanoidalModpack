@@ -2,14 +2,16 @@
 -- player the game is paused (tick_paused) until the choice. Each profession half-researches a few
 -- technologies (saved progress 0.5) and gives its kit; the mechanic also has four defect-control
 -- levels researched and doubles the start repair packs; the biologist gets seed recipes and,
--- later, a big bio farm by supply pod. The guard takes all the ammo lying in the start wrecks and
--- the ship (once per map, the first guard).
+-- later, a big bio farm by supply pod. The guards take all the ammo lying in the start wrecks and
+-- the ship: in single player at once, in multiplayer shared equally among the guards once every
+-- connected player has chosen or a minute after the first guard.
 local config = require("bnl-config")
 local util = require("scripts.util")
 local journal = require("scripts.journal")
 local events = require("scripts.events")
 local start = require("scripts.start")
 local pods = require("scripts.pods")
+local scheduler = require("scripts.scheduler")
 local M = {}
 local cfg = config.professions
 
@@ -126,10 +128,14 @@ local function start_wrecks()
     return list
 end
 
--- Moves every ammo stack of the start wrecks into the player's inventory (the rest spills at the
--- player); ammo kept virtually by wrecks without an inventory comes too. Returns the item count.
-local function take_wreck_ammo(player)
-    local total = 0
+-- Takes every ammo stack out of the start wrecks and the ship (also ammo kept virtually by wrecks
+-- without an inventory) into a pool {name, count, quality}.
+local function collect_wreck_ammo()
+    local pool, total = {}, 0
+    local function add(name, count, quality_name)
+        pool[#pool + 1] = {name = name, count = count, quality = quality_name or "normal"}
+        total = total + count
+    end
     for _, item in ipairs(start_wrecks()) do
         local entity = item.entity
         if entity.valid then
@@ -138,39 +144,87 @@ local function take_wreck_ammo(player)
                 for i = 1, #inventory do
                     local stack = inventory[i]
                     if stack.valid_for_read and stack.type == "ammo" then
-                        local count = stack.count
-                        local inserted = player.insert(stack)
-                        if inserted < count then
-                            stack.count = count - inserted
-                            spill(player, stack)
-                        end
+                        add(stack.name, stack.count, stack.quality.name)
                         stack.clear()
-                        total = total + count
                     end
                 end
             end
             local v = item.rec and item.rec.virtual
             if v and v.count > 0 and prototypes.item[v.name] and prototypes.item[v.name].type == "ammo" then
-                give(player, {{v.name, v.count}})
-                total = total + v.count
+                add(v.name, v.count)
                 item.rec.virtual = nil
             end
         end
     end
-    return total
+    return pool, total
 end
 
--- The guard chose before the crash site was filled: called by control.lua once it is.
-function M.on_start_ready()
-    local s = state()
-    local index = s and s.wreck_ammo_for
-    if not index then return end
-    s.wreck_ammo_for = nil
-    local player = game.get_player(index)
-    if player and player.valid then
-        s.wreck_ammo_taken = true
-        player.print({"bnl.guard-ammo", take_wreck_ammo(player)}, {color = util.CHAT_COLOR})
+local function give_stack(player, stack)
+    if stack.count <= 0 then return end
+    local inserted = player.character and player.insert(stack) or 0
+    if inserted < stack.count then
+        spill(player, {name = stack.name, count = stack.count - inserted, quality = stack.quality})
     end
+end
+
+-- The pool goes to the guards in equal shares, the remainder to the first one.
+local function share_ammo()
+    local s = state()
+    if not s.ammo_pool or s.ammo_shared then return end
+    s.ammo_shared = true
+    scheduler.cancel("guard-ammo-share")
+    local guards = {}
+    for _, index in ipairs(s.guards or {}) do
+        local player = game.get_player(index)
+        if player and player.valid then guards[#guards + 1] = player end
+    end
+    local pool = s.ammo_pool
+    s.ammo_pool = nil
+    if not guards[1] then return end
+    local got = {}
+    for _, stack in ipairs(pool) do
+        local part = math.floor(stack.count / #guards)
+        for i, player in ipairs(guards) do
+            local count = part + (i == 1 and stack.count - part * #guards or 0)
+            give_stack(player, {name = stack.name, count = count, quality = stack.quality})
+            got[i] = (got[i] or 0) + count
+        end
+    end
+    for i, player in ipairs(guards) do
+        player.print({"bnl.guard-ammo", got[i] or 0}, {color = util.CHAT_COLOR})
+    end
+end
+
+scheduler.handler("guard-ammo-share", share_ammo)
+
+-- Multiplayer: share once every connected player has chosen (or after config ammo_share_wait).
+local function share_if_all_chose()
+    local s = state()
+    if not (s and s.ammo_pool) then return end
+    for _, player in pairs(game.connected_players) do
+        if not s.chosen[player.index] then return end
+    end
+    share_ammo()
+end
+
+-- Collects the ammo once there is a guard and the crash site is filled. Single player: at once to
+-- the guard; multiplayer: shared among the guards chosen within config.professions.ammo_share_wait.
+local function collect_for_guards()
+    local s = state()
+    if s.ammo_pool or s.ammo_shared or not (s.guards and s.guards[1]) then return end
+    if not (storage.shipwreck and storage.shipwreck.filled) then return end
+    s.ammo_pool = collect_wreck_ammo()
+    if not game.is_multiplayer() then
+        share_ammo()
+    else
+        scheduler.after(cfg.ammo_share_wait, "guard-ammo-share")
+        share_if_all_chose()
+    end
+end
+
+-- The crash site is filled (called by control.lua): a guard who chose before it takes the ammo now.
+function M.on_start_ready()
+    if state() then collect_for_guards() end
 end
 
 local function apply(player, key)
@@ -192,13 +246,10 @@ local function apply(player, key)
     give(player, items)
     if spec.wreck_ammo then
         local s = state()
-        if not s.wreck_ammo_taken then
-            if storage.shipwreck and storage.shipwreck.filled then
-                s.wreck_ammo_taken = true
-                player.print({"bnl.guard-ammo", take_wreck_ammo(player)}, {color = util.CHAT_COLOR})
-            elseif not s.wreck_ammo_for then
-                s.wreck_ammo_for = player.index
-            end
+        if not s.ammo_shared then
+            s.guards = s.guards or {}
+            s.guards[#s.guards + 1] = player.index
+            collect_for_guards()
         end
     end
     local ship_state = storage.shipwreck
@@ -232,6 +283,7 @@ function M.choose(player, key)
     end
     util.say({"bnl.profession-chosen", player.name, {"bnl-profession." .. key}}, false)
     journal.add("profession-" .. key, {player.name}, {silent = true})
+    share_if_all_chose()
 end
 
 local function on_click(event)

@@ -199,8 +199,11 @@ scheduler.handler("falling-warn", function(job, tick)
     if not target then return end
     job.target = target
     M.shadow(surface, target, job.kind, tick + cfg.warning) -- launch at +warning-flight, flight ticks
-    if job.kind ~= "small" then
+    -- small pieces fall silently, medium ones are announced, big ones with the impact point
+    if job.kind == "big" then
         util.say({"bnl.falling-warning", {"bnl.falling-size-" .. job.kind}, util.gps(target, surface)})
+    elseif job.kind == "medium" then
+        util.say({"bnl.falling-warning-medium", {"bnl.falling-size-" .. job.kind}})
     end
     scheduler.at(tick + cfg.warning - cfg.flight, "falling-launch", job)
     M.sound_before(surface, target, tick + cfg.warning - cfg.flight)

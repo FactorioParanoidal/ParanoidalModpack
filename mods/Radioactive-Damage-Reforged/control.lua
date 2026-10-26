@@ -79,9 +79,10 @@ local function area_sources()
 	return storage.sources
 end
 
-local function set_source(entity, dps, radius, hear_radius)
+local function set_source(entity, dps, radius, hear_radius, key)
 	if not (entity and entity.valid) then return end
 	local id = script.register_on_object_destroyed(entity)
+	if key then id = id .. ":" .. tostring(key) end
 	storage.sources = storage.sources or {}
 	if not dps or dps <= 0 or not radius or radius <= 0 then
 		storage.sources[id] = nil
@@ -92,7 +93,8 @@ end
 
 remote.add_interface("radioactive_damage", {
 	-- entity: LuaEntity; dps: damage per second (0 or nil removes the source); radius: tiles;
-	-- hear_radius (optional, >= radius): the Geiger counter clicks there without damage.
+	-- hear_radius (optional, >= radius): the Geiger counter clicks there without damage;
+	-- key (optional): a second, independent source on the same entity.
 	set_source = set_source,
 })
 

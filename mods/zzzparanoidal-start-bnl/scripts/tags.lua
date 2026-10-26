@@ -17,8 +17,8 @@ local function make(spec)
     local force = game.forces[spec.force]
     local surface = game.get_surface(spec.surface)
     if not (force and surface) then return true end
-    local tag = force.add_chart_tag(surface, {position = spec.position, icon = spec.icon,
-        text = util.tag_text(force, spec.key, spec.suffix)})
+    -- icons only: the names are in the chat and the journal (user decision 2026-10-26)
+    local tag = force.add_chart_tag(surface, {position = spec.position, icon = spec.icon})
     if not tag then return false end
     state().made[spec.slot] = tag
     return true

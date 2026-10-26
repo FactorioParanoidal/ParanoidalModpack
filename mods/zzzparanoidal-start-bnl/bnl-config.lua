@@ -209,6 +209,8 @@ config.fire = {
         -- how far above the anchor the animation centre is, per unit of scale (flame base on the anchor)
         lift = {["bnl-torch-refinery"] = 0.55, ["bnl-torch-blaze"] = 0.8},
         min_scale = 0.35,
+        long_from = 1.5, -- torches of this base scale (and more) are stretched vertically
+        long_stretch = 2,
     },
     -- Water barrels in a burning wreck (a kit is in the ship; players put them in): the fire burns
     -- slower while there is water, a barrel bursts into steam every interval, after `quench` barrels
@@ -263,14 +265,21 @@ config.trail = {
     guard = {spawner = {"biter-spawner", 1, 14, 20}, worms = {"small-worm-turret", 2, 6, 10}},
 }
 
--- 6. Reactor compartment: 10 MW when repaired, 1 MW at 10 minutes, zero on the same parabola.
+-- 6. Reactor compartment: no power until fully repaired; from the repair 15 MW, 5 MW at 5 minutes,
+-- then slowly down to zero at 60 minutes (scripts/reactor.lua).
 config.reactor = {
-    power_mw = 10,
-    at_ten_minutes_mw = 1,
+    power_mw = 15,
+    knee_mw = 5,
+    knee_minutes = 5,
+    life_minutes = 60,
     start_health = 0.2,
     interval = 300,
     radiation_radius = 12,
-    radiation_damage = 10, -- per interval at full power, scaled with the power; halved when repaired
+    radiation_damage = 10, -- per interval: full while broken; when repaired scaled with the power and halved
+    meltdown = 3 * 60 * MINUTE, -- after the landing, if never repaired: an atomic blast
+    meltdown_warning = 3 * MINUTE, -- before it: light radiation over the whole surface and a hint
+    meltdown_dps = 0.25,
+    meltdown_radius = 100000,
     geiger_radius = 20, -- Radioactive-Damage-Reforged: the Geiger counter clicks this far, damage only within radiation_radius
 }
 
@@ -306,6 +315,7 @@ config.pods = {
 config.professions = {
     order = {"guard", "geologist", "mechanic", "biologist", "passenger"},
     window = 30 * MINUTE, -- players created later start as passengers
+    ammo_share_wait = MINUTE, -- multiplayer: the wreck ammo is shared among the guards chosen by then
     list = {
         guard = {
             sprite = "item/submachine-gun",
@@ -361,7 +371,7 @@ config.scrap = {
 
 -- 10. The previous expedition.
 config.expedition = {
-    distance = {200, 400},
+    distance = {2000, 4000}, -- far: the car must be earned
     min_angle = 0.2, -- turns away from the trail
     items = {
         {"assembling-machine-1", 2, 2, quality = "ic-defect-5"}, {"burner-mining-drill", 3, 3, quality = "ic-defect-4"},

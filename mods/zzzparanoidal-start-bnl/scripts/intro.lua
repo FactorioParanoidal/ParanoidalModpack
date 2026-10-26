@@ -1,10 +1,6 @@
--- Landing sequence of a new player. The first player's freeplay crash cutscene is replaced by a
--- longer flight along the debris trail (from the west-south-west to the ship, with the last
--- explosions of the break-up under the camera); when it ends - or right away for other players -
--- the profession choice opens. The BnL landing message is printed at once.
--- Replacing: the freeplay cutscene is exited one tick after creation (its own cancel handler
--- restores the character as usual), the flight starts on the next tick, so freeplay never sees it.
--- One on_tick handler exists only for these two or three ticks.
+-- Landing sequence of a new player: the BnL landing message and the profession choice at once,
+-- the vanilla freeplay crash cutscene plays as usual. The own flight along the debris trail (below,
+-- commented out) is off since 2026-10-26.
 local config = require("bnl-config")
 local util = require("scripts.util")
 local scheduler = require("scripts.scheduler")
@@ -36,9 +32,12 @@ function M.on_player_created(player)
     if not s then return end
     if not storage.bnl.landing_tick then welcome(player) end -- the players of the landing
     if not professions.allowed(player) then professions.passenger(player) end
-    s.pending[player.index] = {tick = game.tick, stage = "created"}
-    events.refresh()
+    -- The own flight along the debris trail is switched off (user decision 2026-10-26): the vanilla
+    -- freeplay cutscene plays and the profession choice opens at once.
+    professions.show(player)
 end
+
+--[==[ Own flight along the debris trail (off; kept for a possible return).
 
 local function explosions(surface, start_tick)
     local ship = util.ship_position()
@@ -159,5 +158,7 @@ events.on("crash-site-skip-cutscene", function(event)
     local player = game.get_player(event.player_index)
     if player and player.controller_type == defines.controllers.cutscene then player.exit_cutscene() end
 end)
+
+]==]
 
 return M
