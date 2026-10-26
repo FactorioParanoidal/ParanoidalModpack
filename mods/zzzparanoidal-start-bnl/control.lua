@@ -74,6 +74,12 @@ start.on_ready = function(shipwreck, ship, wrecks)
     turret.place(surface, shipwreck)
     falling.plan(surface)
     anomalies.start(surface)
+    local list = {}
+    for _, wreck in ipairs(wrecks) do
+        if wreck.valid and wreck ~= ship then list[#list + 1] = wreck end
+    end
+    storage.bnl.start_wrecks = list -- the start wrecks without later debris (the guard's ammo)
+    professions.on_start_ready()
     events.refresh()
 end
 

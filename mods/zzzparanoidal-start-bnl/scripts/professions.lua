@@ -2,7 +2,8 @@
 -- player the game is paused (tick_paused) until the choice. Each profession half-researches a few
 -- technologies (saved progress 0.5) and gives its kit; the mechanic also has four defect-control
 -- levels researched and doubles the start repair packs; the biologist gets seed recipes and,
--- later, a big bio farm by supply pod.
+-- later, a big bio farm by supply pod. The guard takes all the ammo lying in the start wrecks and
+-- the ship (once per map, the first guard).
 local config = require("bnl-config")
 local util = require("scripts.util")
 local journal = require("scripts.journal")
@@ -90,6 +91,88 @@ local function give(player, items)
     end
 end
 
+local function put_armor(player, name)
+    local character = player.character
+    local slot = character and character.get_inventory(defines.inventory.character_armor)
+    if slot and slot.is_empty() and util.item_exists(name) and prototypes.item[name].type == "armor" then
+        return slot.insert({name = name, count = 1}) > 0
+    end
+    return false
+end
+
+local function spill(player, stack)
+    player.surface.spill_item_stack({position = player.position, stack = stack, enable_looted = true, allow_belts = false})
+end
+
+-- Start wrecks of the map: the list kept at the crash fill, for older maps the wrecks tracked by fires.
+local function start_wrecks()
+    local list = {}
+    local bnl = storage.bnl
+    for _, entity in ipairs(bnl.start_wrecks or {}) do list[#list + 1] = {entity = entity} end
+    if not bnl.start_wrecks and bnl.fire then
+        for _, rec in pairs(bnl.fire.wrecks) do list[#list + 1] = {entity = rec.entity} end
+    end
+    local ship = storage.shipwreck and storage.shipwreck.ship
+    if ship then list[#list + 1] = {entity = ship} end
+    if bnl.fire then
+        for _, item in ipairs(list) do
+            local entity = item.entity
+            if entity.valid then
+                local rec = bnl.fire.wrecks[script.register_on_object_destroyed(entity)]
+                item.rec = rec
+            end
+        end
+    end
+    return list
+end
+
+-- Moves every ammo stack of the start wrecks into the player's inventory (the rest spills at the
+-- player); ammo kept virtually by wrecks without an inventory comes too. Returns the item count.
+local function take_wreck_ammo(player)
+    local total = 0
+    for _, item in ipairs(start_wrecks()) do
+        local entity = item.entity
+        if entity.valid then
+            local inventory = entity.get_inventory(defines.inventory.chest)
+            if inventory then
+                for i = 1, #inventory do
+                    local stack = inventory[i]
+                    if stack.valid_for_read and stack.type == "ammo" then
+                        local count = stack.count
+                        local inserted = player.insert(stack)
+                        if inserted < count then
+                            stack.count = count - inserted
+                            spill(player, stack)
+                        end
+                        stack.clear()
+                        total = total + count
+                    end
+                end
+            end
+            local v = item.rec and item.rec.virtual
+            if v and v.count > 0 and prototypes.item[v.name] and prototypes.item[v.name].type == "ammo" then
+                give(player, {{v.name, v.count}})
+                total = total + v.count
+                item.rec.virtual = nil
+            end
+        end
+    end
+    return total
+end
+
+-- The guard chose before the crash site was filled: called by control.lua once it is.
+function M.on_start_ready()
+    local s = state()
+    local index = s and s.wreck_ammo_for
+    if not index then return end
+    s.wreck_ammo_for = nil
+    local player = game.get_player(index)
+    if player and player.valid then
+        s.wreck_ammo_taken = true
+        player.print({"bnl.guard-ammo", take_wreck_ammo(player)}, {color = util.CHAT_COLOR})
+    end
+end
+
 local function apply(player, key)
     local spec = cfg.list[key]
     local force = player.force
@@ -102,7 +185,22 @@ local function apply(player, key)
         local recipe = force.recipes[name]
         if recipe then recipe.enabled = true end
     end
-    give(player, spec.items)
+    local items = {}
+    for _, entry in ipairs(spec.items or {}) do
+        if not (entry[2] == 1 and put_armor(player, entry[1])) then items[#items + 1] = entry end
+    end
+    give(player, items)
+    if spec.wreck_ammo then
+        local s = state()
+        if not s.wreck_ammo_taken then
+            if storage.shipwreck and storage.shipwreck.filled then
+                s.wreck_ammo_taken = true
+                player.print({"bnl.guard-ammo", take_wreck_ammo(player)}, {color = util.CHAT_COLOR})
+            elseif not s.wreck_ammo_for then
+                s.wreck_ammo_for = player.index
+            end
+        end
+    end
     local ship_state = storage.shipwreck
     local ship = ship_state and ship_state.ship
     for _, entry in ipairs(spec.ship_items or {}) do

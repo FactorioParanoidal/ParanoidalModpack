@@ -21,7 +21,7 @@ config.falling = {
     count = {14, 20},
     first_tick = 40 * 60,
     last_tick = 9 * MINUTE + 30 * 60,
-    warning = 6 * 60, -- red mark before the impact; the roar of the low pass starts with the flight
+    warning = 6 * 60, -- shadow and chat warning before the impact; the roar of the low pass starts with the flight
     flight = 2 * 60, -- projectile flight time
     sound_lead = 3 * 60, -- the roar of the low pass starts this long before the launch
     -- Players this close to the impact point hear the incoming shell whistle (it ends at the impact)
@@ -271,6 +271,7 @@ config.reactor = {
     interval = 300,
     radiation_radius = 12,
     radiation_damage = 10, -- per interval at full power, scaled with the power; halved when repaired
+    geiger_radius = 20, -- Radioactive-Damage-Reforged: the Geiger counter clicks this far, damage only within radiation_radius
 }
 
 -- 4. Flight recorder: red science reward of the decoding research.
@@ -309,7 +310,8 @@ config.professions = {
         guard = {
             sprite = "item/submachine-gun",
             half = {"military", "gun-turret", "stone-wall"},
-            items = {{"submachine-gun", 1}, {"gun-turret", 1}, {"firearm-magazine", 3}},
+            items = {{"submachine-gun", 1}, {"shotgun", 1}, {"light-armor", 1}, {"gun-turret", 1}, {"firearm-magazine", 3}},
+            wreck_ammo = true, -- all ammo of the start wrecks and the ship goes into the guard's inventory
         },
         geologist = {
             sprite = "item/ore-radar",
@@ -348,7 +350,7 @@ config.anomalies = {
 
 -- 9. Scrap deposit along the crash furrow behind the ship.
 config.scrap = {
-    from = 6, to = 52, width = {5, 8}, amount = {300, 1100}, noise = 0.35,
+    from = 6, to = 52, width = {5, 8}, amount = {1000, 10000}, noise = 0.35, -- amount: the whole deposit, uniform
     results = {
         {"iron-gear-wheel", 0.18}, {"iron-stick", 0.12}, {"iron-plate", 0.10}, {"copper-cable", 0.08},
         {"stone", 0.06}, {"pipe", 0.05}, {"bob-basic-circuit-board", 0.05}, {"angels-slag", 0.05},

@@ -22,6 +22,28 @@ local function damage_type()
     return prototypes.damage["uranium-damage"] and "uranium-damage" or "poison"
 end
 
+-- Radiation goes through Radioactive-Damage-Reforged when it is loaded (its damage, hazmat suit and
+-- Geiger counter); without it the core damages characters around itself every interval.
+local RDR = "radioactive_damage"
+local function rdr()
+    local interface = remote.interfaces[RDR]
+    return interface and interface.set_source
+end
+
+local function radiate(entity, dose)
+    if rdr() then
+        local dps = dose > 0.2 and dose * 60 / cfg.interval or 0
+        remote.call(RDR, "set_source", entity, dps, cfg.radiation_radius, cfg.geiger_radius)
+        return
+    end
+    if dose <= 0.2 then return end
+    local kind = damage_type()
+    for _, character in pairs(entity.surface.find_entities_filtered({type = "character", position = entity.position,
+        radius = cfg.radiation_radius})) do
+        if character.valid and character.destructible then character.damage(dose, "neutral", kind) end
+    end
+end
+
 function M.setup(entity)
     local s = storage.bnl
     entity.health = entity.max_health * cfg.start_health
@@ -48,6 +70,7 @@ function M.cool(rec)
     if rec.light and rec.light.valid then rec.light.destroy() end
     if rec.label and rec.label.valid then rec.label.destroy() end
     if not entity.valid then return end
+    if rdr() then remote.call(RDR, "set_source", entity, 0) end
     entity.power_production = 0
     entity.minable_flag = true
     entity.destructible = true
@@ -76,14 +99,7 @@ scheduler.handler("reactor", function(_, tick)
     if rec.label and rec.label.valid then
         rec.label.text = rec.repaired and {"bnl.reactor-label", string.format("%.2f", p)} or {"bnl.reactor-label-broken"}
     end
-    local dose = cfg.radiation_damage * p / cfg.power_mw * (rec.repaired and 0.5 or 1)
-    if dose > 0.2 then
-        local kind = damage_type()
-        for _, character in pairs(entity.surface.find_entities_filtered({type = "character", position = entity.position,
-            radius = cfg.radiation_radius})) do
-            if character.valid and character.destructible then character.damage(dose, "neutral", kind) end
-        end
-    end
+    radiate(entity, cfg.radiation_damage * p / cfg.power_mw * (rec.repaired and 0.5 or 1))
     scheduler.after(cfg.interval, "reactor")
 end)
 

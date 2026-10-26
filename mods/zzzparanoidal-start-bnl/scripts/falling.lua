@@ -1,5 +1,5 @@
 -- The ship keeps falling apart: for the first minutes stragglers come down around the crash site
--- from the west-south-west. A red mark warns a few seconds before, the roar of a low pass comes with the flight; the impact
+-- from the west-south-west. The growing shadow warns a few seconds before, the roar of a low pass comes with the flight; the impact
 -- (prototypes/bnl-falling.lua) damages the area and raises a script trigger, then a new wreck with
 -- start loot and ammo lies there, often burning. Sometimes a piece aims at a player building.
 -- The big piece closest to config.falling.recorder_tick carries the flight recorder.
@@ -53,7 +53,7 @@ local function pick_target(surface)
     return nil
 end
 
--- Red mark at the impact point for `ticks`.
+-- Red mark at the impact point for `ticks` (supply pods only; falling debris has none).
 function M.warn(surface, target, kind, ticks)
     local radius = RADIUS[kind] or 3
     rendering.draw_circle({color = {r = 1, g = 0.15, b = 0.05, a = 0.85}, radius = radius, width = 4, filled = false,
@@ -198,7 +198,6 @@ scheduler.handler("falling-warn", function(job, tick)
     local target = pick_target(surface)
     if not target then return end
     job.target = target
-    M.warn(surface, target, job.kind, cfg.warning + 30)
     M.shadow(surface, target, job.kind, tick + cfg.warning) -- launch at +warning-flight, flight ticks
     if job.kind ~= "small" then
         util.say({"bnl.falling-warning", {"bnl.falling-size-" .. job.kind}, util.gps(target, surface)})
