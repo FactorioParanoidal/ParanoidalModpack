@@ -54,9 +54,9 @@ config.falling = {
         blaze_tiles = 2.03, -- height of bnl-torch-blaze at scale 1
         refinery_tiles = 1.27, -- height of bnl-torch-refinery at scale 1
         kinds = {
-            small = {tail = 2, width = 0.7, smoke = 1, light = 2},
-            medium = {tail = 3, width = 1.0, smoke = 2, light = 3},
-            big = {tail = 5, width = 1.5, smoke = 3, light = 4.5},
+            small = {tail = 4, width = 1.05, smoke = 1, light = 2},
+            medium = {tail = 6, width = 1.5, smoke = 2, light = 3},
+            big = {tail = 10, width = 2.25, smoke = 3, light = 4.5},
         },
     },
     names = {
