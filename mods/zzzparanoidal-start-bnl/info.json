@@ -1,0 +1,17 @@
+{
+  "name": "zzzparanoidal-start-bnl",
+  "version": "2.0.0",
+  "title": "PARANOIDAL: Start with BnL",
+  "author": "FactorioParanoidal; machines and graphics: darkfrei, sbelyakov (Looting Spaceship Wrecks); AAI wreck graphics: Earendel; scrap graphics: Wube Software (Factorio: Space Age)",
+  "homepage": "https://github.com/FactorioParanoidal/ParanoidalModpack",
+  "factorio_version": "2.0",
+  "description": "The whole start of Paranoidal (formerly PARANOIDAL: start shipwreck): the crashed BnL ship, its debris and the AAI wrecks with their supplies and quality, the salvaged machines, plus the new start: debris still falling from the sky, burning wrecks whose ammo cooks off and spoils the cargo, a debris trail west-south-west with detached compartments (a dying reactor, medbay, armory, hydroponics, engineering bay), the flight recorder, BnL insurance supply pods, professions, landing anomalies, a scrap deposit, the previous expedition, the ship turret, the captain's safe, multiplayer escape pods, the distress signal and the intro flight.",
+  "dependencies": [
+    "base >= 2.0.77",
+    "quality",
+    "? aai-industry",
+    "? angelsrefining",
+    "? zzzparanoidal",
+    "? ic-more-qualities"
+  ]
+}
