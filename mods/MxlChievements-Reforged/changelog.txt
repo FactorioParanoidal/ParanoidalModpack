@@ -12,6 +12,7 @@ Date: 2026-10-24
       polling. Counters and sets are kept per force or player; ruins summoned by command count only for
       "The mountain came to you".
   Changes:
+    - No spoilers before contact, with jokes instead: the achievements of the legendary ruins no longer name the ruins, their keepers and their solutions; the boss achievements no longer name the bosses (new names for hive-raider, face-to-face, volcanologist, overgrown-worm, evil-twin); the Rampant faction labels in the "Entomologist" names are nicknames. Icons unchanged. EN/RU.
     - Version number starts with 9 (Paranoidal mod).
 ---------------------------------------------------------------------------------------------------
 Version: 1.1.0
