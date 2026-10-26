@@ -1,5 +1,7 @@
 ---------------------------------------------------------------------------------------------------
 Version: 9.0.4
+  Features:
+    - Remote interface RPG.gift_levels(player_index, attribute, levels): other mods gift attribute levels that cost no skill points and survive /rpg-reset-points (Start with BnL professions).
   Bugfixes:
     - Blueprint Sandboxes no longer grants XP: research synced or unlocked for the sandbox force, kills, rockets and tree/rock mining inside sandboxes.
     - Discards XP already accumulated by sandbox forces on existing saves.

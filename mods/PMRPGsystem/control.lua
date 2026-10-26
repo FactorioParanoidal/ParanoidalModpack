@@ -206,7 +206,7 @@ local name= player.name
 
 	for k=1,#storage.Player_Attributes do
 		local attrib = storage.Player_Attributes[k]
-		storage.personalxp[attrib][name]= 0
+		storage.personalxp[attrib][name]= Gifted(attrib, name) -- gifted levels survive point resets
 		end
 
 	storage.personalxp.opt_Pick_Extender[name] = false
@@ -599,11 +599,17 @@ end
 
 
 
+-- Attribute levels gifted by other mods (interface.gift_levels): they cost no skill points.
+function Gifted(attrib, name)
+	local gifted = storage.rpg_gifted and storage.rpg_gifted[attrib]
+	return gifted and gifted[name] or 0
+end
+
 function SumPointSpent(name)
 local sum = 0
 for k=1,#storage.Player_Attributes do
 	local attrib = storage.Player_Attributes[k]
-	sum = sum + storage.personalxp[attrib][name]
+	sum = sum + storage.personalxp[attrib][name] - Gifted(attrib, name)
 	end
 return sum	
 end
@@ -1822,5 +1828,48 @@ function interface.get_potions_list()
 return {}
 end
 
+
+-- Gifts `levels` levels of an attribute (e.g. "LV_Health_Bonus", "LV_Inv_Bonus") to a player: they
+-- cost no skill points and survive /rpg-reset-points. Applied to the character at once, also to the
+-- character kept aside during a cutscene. Returns true when given.
+function interface.gift_levels(player_index, attrib, levels)
+	local player = game.get_player(player_index)
+	levels = math.floor(tonumber(levels) or 0)
+	if not (player and player.valid and levels > 0 and storage.RPG_Bonus and storage.RPG_Bonus[attrib]) then return false end
+	local name = player.name
+	local known = false
+	for k=1,#storage.Player_Attributes do
+		if storage.Player_Attributes[k] == attrib then known = true break end
+		end
+	if not (known and storage.personalxp[attrib]) then return false end
+	storage.rpg_gifted = storage.rpg_gifted or {}
+	storage.rpg_gifted[attrib] = storage.rpg_gifted[attrib] or {}
+	storage.rpg_gifted[attrib][name] = Gifted(attrib, name) + levels
+	storage.personalxp[attrib][name] = (storage.personalxp[attrib][name] or 0) + levels
+	local character = player.character or player.cutscene_character
+	if character and character.valid then
+		local bonus = storage.RPG_Bonus[attrib] * levels
+		if attrib == 'LV_Health_Bonus' then
+			character.character_health_bonus = character.character_health_bonus + bonus
+		elseif attrib == 'LV_Inv_Bonus' then
+			character.character_inventory_slots_bonus = character.character_inventory_slots_bonus + bonus
+		elseif attrib == 'LV_InvTrash_Bonus' then
+			character.character_trash_slot_count_bonus = character.character_trash_slot_count_bonus + bonus
+		elseif attrib == 'LV_Robot_Bonus' then
+			character.character_maximum_following_robot_count_bonus = character.character_maximum_following_robot_count_bonus + bonus
+		elseif attrib == 'LV_Craft_Speed' then
+			character.character_crafting_speed_modifier = character.character_crafting_speed_modifier + bonus / 100
+		elseif attrib == 'LV_Mining_Speed' then
+			character.character_mining_speed_modifier = character.character_mining_speed_modifier + bonus / 100
+		elseif attrib == 'LV_Run_Speed' then
+			character.character_running_speed_modifier = character.character_running_speed_modifier + bonus / 100
+		end
+	end
+	local top = player.gui.top.chartopframe
+	if top and top.tabtopframexp then UpdatePanel(player) end
+	local frame = player.gui.center["char-panel"] or player.gui.screen["char-panel"]
+	if frame and not top then expand_char_gui(player) end
+	return true
+end
 
 remote.add_interface("RPG", interface )
