@@ -1,0 +1,17 @@
+{
+  "name": "robotarmy-citadel",
+  "version": "1.0.0",
+  "title": "Robot Army: Replicator Citadel",
+  "author": "Paranoidal",
+  "factorio_version": "2.0",
+  "description": "At 50 % evolution a fortified citadel of replicator droids appears far from the player base. It grows by one walled module chunk every 10 minutes (factories of its own droids, power plants, towers, minefields, repair docks, radars, jammers, armouries, computing cores and, from 25 modules, shields), sends every finished squad against the player base and becomes smarter, tougher and stronger with its modules. Uses the droids of Robot Army Reforged.",
+  "dependencies": [
+    "base >= 2.0.60",
+    "robotarmy-reforged >= 9.0.0",
+    "? defence-tower-reforged",
+    "? bobplates",
+    "? bobelectronics",
+    "? angelssmelting",
+    "? zzzparanoidal"
+  ]
+}
