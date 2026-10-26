@@ -78,6 +78,7 @@ config.fire = {
     splash_radius = 3,
     splash_damage = 8, -- per cook-off to characters around
     building_radius = 6, -- big blasts (fuel barrels, explosives, the last blast) also hit player buildings
+    step_interval = {10 * 60, 15 * 60}, -- a burning wreck lowers the quality of its cargo this often
     lose_chance = 0.2, -- each 'cargo burnt -1' destroys one whole cargo stack with this chance
     scatter_chance = 0.12, -- a cook-off throws part of a stack out of the wreck (saved from the fire)
     spark_chance = 0.2, -- a cook-off sets the ground around on fire
@@ -423,7 +424,8 @@ config.distress = {
 
 -- Weathered BnL logo painted on the crashed starliner (the lower hull panel, as marked by the user):
 -- offset from the ship centre in tiles, width in tiles, rotation in turns (counter-clockwise < 1).
-config.ship_decal = {offset = {1.58, 3.05}, width = 1.8, orientation = 1 - 25 / 360, tint = {0.88, 0.88, 0.88, 0.92}}
+-- clear_radius: no start wreck within it (their fire would cover the logo), ship flames avoid flame_radius.
+config.ship_decal = {offset = {1.58, 3.05}, clear_radius = 5, flame_radius = 1.6, width = 1.8, orientation = 1 - 25 / 360, tint = {0.88, 0.88, 0.88, 0.92}}
 
 -- 15. Intro flight along the trail.
 config.intro = {start_distance = 100, transition = 660, wait = 120, explosions = 6}

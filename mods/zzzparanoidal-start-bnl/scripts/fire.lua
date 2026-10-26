@@ -6,13 +6,14 @@
 -- share of the start wrecks) sets it burning. A burning wreck cannot be destroyed by anything else;
 -- it loses health steadily until it reaches a random floor of 2-10% of its max health, then the fire
 -- goes out and a share of the hazardous cargo left goes off in a last blast; the rest of it is loot.
--- The cargo whose quality can change loses one quality step at 75%, 50% and 25% health and one more
--- when the fire goes out (4 steps, down to defect -5 at most), each step may burn a whole stack away;
+-- The cargo whose quality can change loses one quality step every 10-15 s of fire (config.fire.
+-- step_interval; down to defect -5 at most, materials not below normal), each step may burn a whole stack away;
 -- mining loot follows the same steps. Water barrels put into the wreck slow the fire and burst into
 -- steam one by one; enough of them put it out. Fires from bursts reach player buildings nearby.
 local config = require("bnl-config")
 local util = require("scripts.util")
 local quality = require("scripts.quality")
+local shipwreck = require("shipwreck-config")
 local scheduler = require("scripts.scheduler")
 local M = {}
 local cfg = config.fire
@@ -51,6 +52,7 @@ function M.init()
 end
 
 local function size_of(name)
+    if name == shipwreck.ship then return "big" end
     if name:find("big", 1, true) then return "big" end
     if name:find("medium", 1, true) then return "medium" end
     return "small"
@@ -126,10 +128,15 @@ function M.track(entity, with_hazard)
     return rec
 end
 
--- Water barrels of the ship's fire kit.
+-- Water barrels of the ship's fire kit: on the ground next to it (inside, the burning ship would
+-- burst them by itself).
 function M.ship_kit(ship)
     local kit = cfg.water.ship_kit
-    if kit and ship and ship.valid and util.item_exists(kit[1]) then ship.insert({name = kit[1], count = kit[2]}) end
+    if kit and ship and ship.valid and util.item_exists(kit[1]) then
+        local box = ship.bounding_box
+        ship.surface.spill_item_stack({position = {x = ship.position.x, y = box.right_bottom.y + 1.5},
+            stack = {name = kit[1], count = kit[2]}, enable_looted = true, allow_belts = false})
+    end
 end
 
 function M.ignite(entity_or_rec, duration)
@@ -148,6 +155,7 @@ function M.ignite(entity_or_rec, duration)
     rec.rate = (1 - rec.floor) / math.max(1, seconds) -- share of max health per second
     rec.next_pop = tick + util.int(cfg.idle_interval)
     rec.next_flame = tick
+    rec.next_step = tick + util.int(cfg.step_interval)
     rec.next_water = nil
     rec.quench = 0
     rec.budget = nil -- counted at the first fire tick (after the start cargo is in)
@@ -175,8 +183,14 @@ local function flame(rec, entity, tick)
     rec.next_flame = tick + math.floor(cfg.flame_interval * (temper_of(rec).flame_factor or 1))
     local surface = entity.surface
     local box = entity.bounding_box
-    local p = {x = box.left_top.x + (box.right_bottom.x - box.left_top.x) * (0.2 + 0.6 * math.random()),
-        y = box.left_top.y + (box.right_bottom.y - box.left_top.y) * (0.2 + 0.6 * math.random())}
+    local p
+    -- the starliner's flames keep off the BnL logo on its hull
+    local decal = entity.name == shipwreck.ship and util.add(entity.position, util.pos(config.ship_decal.offset))
+    for _ = 1, 6 do
+        p = {x = box.left_top.x + (box.right_bottom.x - box.left_top.x) * (0.2 + 0.6 * math.random()),
+            y = box.left_top.y + (box.right_bottom.y - box.left_top.y) * (0.2 + 0.6 * math.random())}
+        if not decal or util.distance(p, decal) > config.ship_decal.flame_radius then break end
+    end
     surface.create_entity({name = "crash-site-fire-flame", position = p})
     if not (rec.smoke and rec.smoke.valid) then
         rec.smoke = surface.create_entity({name = "crash-site-fire-smoke", position = p})
@@ -267,15 +281,13 @@ local function degrade(rec, entity, n)
     end
 end
 
--- Steps at 75%, 50% and 25% health; the 4th comes when the fire goes out (burn_out).
-local function apply_steps(rec, entity)
-    local lost = 1 - entity.health / entity.max_health
-    local steps = math.min(3, math.floor(lost * 4 + 1e-6))
-    if steps > rec.steps then
-        local n = steps - rec.steps
-        rec.steps = steps
-        degrade(rec, entity, n)
-    end
+-- One step every config.fire.step_interval while it burns.
+local function apply_steps(rec, entity, tick)
+    if not rec.next_step then rec.next_step = tick + util.int(cfg.step_interval) end
+    if tick < rec.next_step then return end
+    rec.next_step = tick + util.int(cfg.step_interval)
+    rec.steps = (rec.steps or 0) + 1
+    degrade(rec, entity, 1)
 end
 
 -- One pass over a burning wreck: the first hazardous cargo (virtual first), the burn speed factor
@@ -604,16 +616,11 @@ local function burn_out(rec, entity)
         local smoke = entity.surface.create_entity({name = "crash-site-fire-smoke", position = entity.position})
         if smoke then smoke.time_to_live = afterglow end
     end
-    if rec.steps < 4 then
-        local n = 4 - rec.steps
-        rec.steps = 4
-        degrade(rec, entity, n)
-    end
     rec.burnt = true
     extinguish(rec)
 end
 
--- Water: one barrel bursts into steam; enough of them put the fire out (no last blast, no 4th step).
+-- Water: one barrel bursts into steam; enough of them put the fire out (no last blast).
 local function douse(rec, entity, stack)
     if stack.count > 1 then stack.count = stack.count - 1 else stack.clear() end
     local smoke = entity.surface.create_entity({name = "crash-site-explosion-smoke", position = around(entity, entity.get_radius())})
@@ -671,7 +678,7 @@ local function burn(rec, entity, tick)
         return
     end
     entity.health = health
-    apply_steps(rec, entity)
+    apply_steps(rec, entity, tick)
     flame(rec, entity, tick)
 end
 

@@ -59,7 +59,38 @@ start.on_ready = function(shipwreck, ship, wrecks)
     if not storage.bnl then return end
     storage.bnl.landing_tick = game.tick
     local surface = ship.surface
+    -- No start wreck next to the BnL logo on the hull: its fire would cover the logo. Their cargo
+    -- goes into the ship.
+    local decal = util.add(ship.position, util.pos(config.ship_decal.offset))
+    local kept = {}
+    for _, wreck in ipairs(wrecks) do
+        if wreck.valid and wreck ~= ship and util.distance(wreck.position, decal) < config.ship_decal.clear_radius then
+            local inventory = wreck.get_inventory(defines.inventory.chest)
+            local target = ship.get_inventory(defines.inventory.chest)
+            if inventory and target then
+                for i = 1, #inventory do
+                    local stack = inventory[i]
+                    if stack.valid_for_read then
+                        local n = target.insert(stack)
+                        if n < stack.count then
+                            stack.count = stack.count - n
+                            surface.spill_item_stack({position = ship.position, stack = stack, enable_looted = true, allow_belts = false})
+                        end
+                    end
+                end
+            end
+            wreck.destroy()
+        elseif wreck.valid then
+            kept[#kept + 1] = wreck
+        end
+    end
+    wrecks = kept
     fire.ship_kit(ship)
+    -- The starliner burns like every start wreck.
+    local ship_rec = fire.track(ship, true)
+    if ship_rec and math.random() < config.fire.start_burning then
+        fire.ignite_later(ship_rec, math.random(config.fire.start_delay[1], config.fire.start_delay[2]))
+    end
     for _, wreck in ipairs(wrecks) do
         if wreck.valid and wreck ~= ship then
             local rec = fire.track(wreck, true)

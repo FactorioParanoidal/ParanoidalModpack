@@ -23,9 +23,9 @@ end
 
 local function button(player)
     local flow = mod_gui.get_button_flow(player)
-    if flow[BUTTON] then return end
-    flow.add({type = "sprite-button", name = BUTTON, sprite = "bnl-journal", style = mod_gui.button_style,
-        tooltip = {"bnl.journal-button"}})
+    local b = flow[BUTTON] or flow.add({type = "sprite-button", name = BUTTON, sprite = "bnl-journal",
+        style = mod_gui.button_style, tooltip = {"bnl.journal-button"}})
+    b.style.padding = 1 -- the logo fills the whole button
 end
 
 -- Entries written by the company carry its seal.
