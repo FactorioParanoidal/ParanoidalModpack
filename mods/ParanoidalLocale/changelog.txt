@@ -1,6 +1,7 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.26.0
   Changes:
+    - RampantFixed.locale.cfg: rampantFixed--JuggernautAlert without the faction name, threshold and resistances; zzzz-user-overrides.cfg: bm-txt-human_soldiers and bm-txt-ufo hint at the threat instead of naming it (no spoilers before contact).
     - zzzparanoidal-shipwreck was renamed to zzzparanoidal-start-bnl: its [mod-name] key follows the new name ("PARANOIDAL: Start with BnL").
     - GUI_Unifyer.buttons.cfg: name of the Paranoidal Autofill button visibility setting; zzzz-user-overrides.cfg: [mod-name] of paranoidal-autofill.
     - Wooden pipe and wooden pipe to ground (Bio_Industries_2): humorous ru/en entity descriptions.
