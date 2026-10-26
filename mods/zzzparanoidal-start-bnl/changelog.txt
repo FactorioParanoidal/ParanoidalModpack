@@ -17,7 +17,7 @@ Date: 2026-10-26
   Changes:
     - No spoilers at the start: the profession cards hint at the kit and the half-researched technologies instead of listing them; the exact kit is told, less precisely, in the journal entry after the choice. The reactor, medical bay and engineering bay descriptions and the flight recorder decoding bonus no longer list exact numbers and contents. EN/RU.
     - Security sergeant: also a shotgun and light armor (worn at once when the armor slot is empty); all the ammo in the start wrecks and the starliner (also the ammo of wrecks without an inventory) moves into the guard's inventory, the rest spills next to them; in multiplayer it is shared equally among the guards once every connected player has chosen or a minute after the first guard.
-    - The journal button on the top panel is the red and blue BnL logo on a dark plate filling the whole button.
+    - The journal button on the top panel is the red and blue BnL logo on a dark plate filling the whole button (new file name graphics/gui/journal-button.png, so a cached sprite atlas no longer shows the old tablet picture).
     - Falling debris has no red circle and warning sign at the impact point any more; insurance pods keep it.
     - Falling debris: small pieces fall without a chat message, medium ones are announced without the impact point, big ones with it.
     - A broken reactor compartment melts down 3 hours after the landing: 3 minutes before, a light radiation covers the whole surface and a hint is printed, then it blows up like an atomic bomb and throws out its antenna part. Repairing it stops the meltdown.

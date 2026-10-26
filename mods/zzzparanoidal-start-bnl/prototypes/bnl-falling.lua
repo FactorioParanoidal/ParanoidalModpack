@@ -239,7 +239,7 @@ data:extend({
     {
         type = "sprite",
         name = "bnl-journal",
-        filename = "__zzzparanoidal-start-bnl__/graphics/gui/journal.png",
+        filename = "__zzzparanoidal-start-bnl__/graphics/gui/journal-button.png",
         width = 64,
         height = 64,
         flags = {"gui-icon"},
