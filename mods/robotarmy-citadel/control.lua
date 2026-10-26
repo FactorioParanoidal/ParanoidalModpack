@@ -110,11 +110,16 @@ remote.add_interface(S.mod, {
   end,
 })
 
-commands.add_command("citadel", {"replicator-message.command-help"}, function(command)
+-- A neutral name: the command is listed in /help long before the citadel appears.
+commands.add_command("signal", {"replicator-message.command-help"}, function(command)
   local player = command.player_index and game.get_player(command.player_index)
   local status = C.status()
   local print = player and player.print or game.print
   if not status then return end
+  if status.phase ~= "active" and status.phase ~= "destroyed" then
+    print({"replicator-message.status-quiet", {"replicator-phase." .. status.phase}})
+    return
+  end
   print({"replicator-message.status", {"replicator-phase." .. status.phase}, status.modules, status.ruined,
     status.droids, status.squads, status.foundries, status.upgrades.intel, status.upgrades.armor,
     {"replicator.focus-" .. status.focus}, status.upgrades.damage * 10, status.known_chunks})

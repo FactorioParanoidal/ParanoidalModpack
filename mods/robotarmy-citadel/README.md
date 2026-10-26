@@ -69,7 +69,7 @@ squads, squad size and maximum, cleared radius, messages.
 Remote interface `robotarmy-citadel`: `status()`, `modules()`, `squads()`, `spawn(x, y)`,
 `grow(n, module_type)`, `defeat()`, `configure(overrides)` (keys of the cached settings such as
 `growth_ticks`, `stun_ticks`, `base_radius`, `distance`, `squad_base`, `cull_min`; kept in the save,
-`configure(nil)` clears them; `grow` forces chunk generation and is meant for tests and admins). Command `/citadel` prints the state. Robot Army Reforged gets the kills of its droids
+`configure(nil)` clears them; `grow` forces chunk generation and is meant for tests and admins). Command `/signal` (a neutral name: it is listed in `/help` from the start) prints the phase before the citadel appears and the full state after. Robot Army Reforged gets the kills of its droids
 through its remote function `credit_kill`.
 
 ## Tests (pure Lua 5.1, run from the mod root; not engine evidence)
