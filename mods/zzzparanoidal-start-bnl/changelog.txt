@@ -39,6 +39,7 @@ Date: 2026-10-26
     - Journal button: the BnL logo on a dark plate, without padding.
     - A burning wreck cannot be opened ("too hot"): put the fire out or mine it.
     - The burning trees of the AAI crash scene no longer light the start wrecks at once: fires touching a start wreck or the starliner are put out when the crash site is filled, and for the first minute after the landing a fire nearby does not ignite wrecks.
+    - A falling piece is drawn by script on a straight descent from the west-south-west: a long flame tail (2/3/5 tiles for small/medium/big) points back the way it came, black smoke is left along its path, it glows and tumbles; nothing changes after the impact.
     - Optimizations: the 5-tick wreck mining handler runs only while the start fill is pending or a player points at a wreck (it ran all game); the fire watch asks once per surface whether any fire is near the wrecks before checking every wreck.
     - Water barrels inside a wreck: 1/2/3 put out a small/medium/big wreck (was 2/3/5); every barrel bursts into a little white steam, the last one into a big cloud.
     - The own intro flight is switched off (code kept commented out): the vanilla crash cutscene plays and the profession choice opens at once.

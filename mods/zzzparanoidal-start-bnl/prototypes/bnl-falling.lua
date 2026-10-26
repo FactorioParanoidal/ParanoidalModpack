@@ -86,14 +86,8 @@ for name, kind in pairs(kinds) do
         reveal_map = false,
         map_color = {r = 1, g = 0.5, b = 0},
         rotatable = false,
-        picture = {
-            filename = falling .. "debris-" .. name .. ".png",
-            width = kind.size,
-            height = kind.size,
-            scale = 0.5,
-            priority = "high",
-            draw_as_glow = true,
-        },
+        -- the piece itself, its flame tail and smoke are drawn by scripts/flight.lua along its path
+        picture = {filename = "__core__/graphics/empty.png", width = 1, height = 1, priority = "high"},
         shadow = {
             filename = falling .. "debris-" .. name .. "-shadow.png",
             width = kind.size,
@@ -122,6 +116,17 @@ projectiles[#projectiles + 1] = {
 }
 
 data:extend(projectiles)
+
+-- The falling pieces as drawn in the air (scripts/flight.lua) and their black smoke trail.
+local smoke_animations = require("__base__.prototypes.entity.smoke-animations")
+local pieces = {}
+for name, kind in pairs(kinds) do
+    pieces[#pieces + 1] = {type = "sprite", name = "bnl-falling-piece-" .. name, filename = falling .. "debris-" .. name .. ".png",
+        width = kind.size, height = kind.size, scale = 0.5, priority = "high", draw_as_glow = true}
+end
+pieces[#pieces + 1] = smoke_animations.trivial_smoke({name = "bnl-trail-smoke", color = {r = 0.06, g = 0.05, b = 0.05, a = 0.8},
+    duration = 300, fade_in_duration = 4, spread_duration = 300, start_scale = 0.45, end_scale = 2.4})
+data:extend(pieces)
 
 -- Torches over burning wrecks with fuel inside (scripts/fire.lua draws them): the flame of the oil
 -- refinery stacks (also the flame of the Angels flare stack) and the vanilla fire flame.

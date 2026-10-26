@@ -13,6 +13,7 @@ local start = require("scripts.start")
 local fire = require("scripts.fire")
 local events = require("scripts.events")
 local tags = require("scripts.tags")
+local flight = require("scripts.flight")
 local M = {}
 local cfg = config.falling
 
@@ -166,6 +167,7 @@ function M.launch(surface, target, kind, data)
     local projectile = surface.create_entity({name = name, position = from, target = target, force = "neutral",
         speed = distance / cfg.flight})
     if not projectile then return false end
+    flight.start(projectile, from, target, kind, cfg.flight) -- the piece, its flame tail and smoke (not pods)
     local incoming = storage.bnl.falling.incoming
     incoming[#incoming + 1] = {target = target, surface = surface.index, kind = kind, data = data, tick = game.tick}
     return true

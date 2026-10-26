@@ -43,6 +43,22 @@ config.falling = {
     shadow_alpha = 0.15,
     shadow_spin = 0.12, -- the tumbling piece turns its shadow by up to this many turns on the way down
     shadow_interval = 2,
+    -- The piece in the air (scripts/flight.lua): drawn on a straight descent from start_height (tiles
+    -- above the ground at source_distance, less for a closer source) to the impact, with a flame tail
+    -- pointing back the way it came and black smoke left along its path. Per size: tail length and
+    -- width (tiles / scale), smoke puffs per tick, light scale.
+    fx = {
+        start_height = 14,
+        spin = 0.35, -- the piece tumbles by up to this many turns on the way
+        smoke_jitter = 0.35,
+        blaze_tiles = 2.03, -- height of bnl-torch-blaze at scale 1
+        refinery_tiles = 1.27, -- height of bnl-torch-refinery at scale 1
+        kinds = {
+            small = {tail = 2, width = 0.7, smoke = 1, light = 2},
+            medium = {tail = 3, width = 1.0, smoke = 2, light = 3},
+            big = {tail = 5, width = 1.5, smoke = 3, light = 4.5},
+        },
+    },
     names = {
         small = {"crash-site-spaceship-wreck-small-1", "crash-site-spaceship-wreck-small-2", "crash-site-spaceship-wreck-small-3",
             "crash-site-spaceship-wreck-small-4", "crash-site-spaceship-wreck-small-5", "crash-site-spaceship-wreck-small-6",
