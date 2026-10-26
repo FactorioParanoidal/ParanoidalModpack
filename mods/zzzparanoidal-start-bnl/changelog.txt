@@ -31,6 +31,10 @@ Date: 2026-10-26
     - Small falling debris comes twice as often; medium and big pieces keep their number.
     - Professions: the kit goes into the inventory also during the vanilla crash cutscene (the character kept aside), the armor into the armor slot; in multiplayer the guard ammo that does not fit goes to the first guard.
     - Guard: starting running speed I and II researched, 3-9 gifted RPG health levels. Geologist: starting mining speed I and II researched, radar and radars 2 half researched, 10 gifted RPG inventory levels. Mechanic: starting crafting speed I and starting reach I researched. Biologist: pollution absorption 1-3 researched, a respirator worn, seeds one random quality step +1..+4 better, 20 water barrels.
+    - Mechanic: the first one doubles the start repair packs, every further mechanic adds 100 (was: doubled again by each).
+    - Geologist: ore radar and 3 burner mining drills in the inventory; the land within 150 tiles of the ship is charted and the nearest deposit of every ore gets a map tag; the scrap deposit and the rich vein are tagged at once (without a geologist when the flight recorder is decoded); ore mined by hand comes twice in half of the cases.
+    - Biologist: a tree cut by hand gives twice the wood in half of the cases.
+    - Optimizations: the 5-tick wreck mining handler runs only while the start fill is pending or a player points at a wreck (it ran all game); the fire watch asks once per surface whether any fire is near the wrecks before checking every wreck.
     - Water barrels inside a wreck: 1/2/3 put out a small/medium/big wreck (was 2/3/5); every barrel bursts into a little white steam, the last one into a big cloud.
     - The own intro flight is switched off (code kept commented out): the vanilla crash cutscene plays and the profession choice opens at once.
     - Long torches (base scale 1.5 and more: gas column, the middle barrel torch, rocket and nuclear fuel) are twice as tall; their base stays in place.

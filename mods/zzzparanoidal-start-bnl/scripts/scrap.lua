@@ -42,6 +42,8 @@ function M.place(surface)
     -- The whole deposit holds a random total (cfg.amount), split over the tiles by weight; map
     -- settings do not apply. Remainders go one by one to random tiles, empty tiles are skipped.
     if not tiles[1] then return 0 end
+    local middle = tiles[math.ceil(#tiles / 2)].position
+    if storage.bnl then storage.bnl.scrap = {surface = surface.index, center = middle} end
     local total = util.int(cfg.amount)
     local given = 0
     for _, tile in ipairs(tiles) do

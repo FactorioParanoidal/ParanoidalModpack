@@ -8,6 +8,7 @@ local journal = require("scripts.journal")
 local trail = require("scripts.trail")
 local events = require("scripts.events")
 local tags = require("scripts.tags")
+local geology = require("scripts.geology")
 local M = {}
 
 local TECH = "bnl-flight-recorder-decoding"
@@ -46,6 +47,7 @@ local function on_research_finished(event)
     journal.add("flight-log-reward", {packs}, {open = true})
     tags.remove("recorder")
     trail.reveal()
+    geology.reveal()
 end
 
 events.on(defines.events.on_research_finished, on_research_finished)

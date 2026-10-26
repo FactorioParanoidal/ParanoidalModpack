@@ -123,6 +123,16 @@ function M.track(entity, with_hazard)
     if rec then return rec end
     rec = {entity = entity, size = size_of(entity.name), steps = 0}
     s.wrecks[reg] = rec
+    -- area of all tracked wrecks per surface: fire-watch asks once whether any fire is near them
+    local p, r = entity.position, entity.get_radius() + 2
+    s.boxes = s.boxes or {}
+    local box = s.boxes[entity.surface.index]
+    if box then
+        box[1], box[2] = math.min(box[1], p.x - r), math.min(box[2], p.y - r)
+        box[3], box[4] = math.max(box[3], p.x + r), math.max(box[4], p.y + r)
+    else
+        s.boxes[entity.surface.index] = {p.x - r, p.y - r, p.x + r, p.y + r}
+    end
     if with_hazard then M.load_hazard(rec) end
     start_watch()
     return rec
@@ -741,6 +751,13 @@ end)
 scheduler.handler("fire-watch", function(_, tick)
     local s = state()
     local burning = false
+    -- one query per surface: without any fire near the wrecks no wreck needs its own query
+    local fire_near = {}
+    for index, box in pairs(s.boxes or {}) do
+        local surface = game.get_surface(index)
+        fire_near[index] = surface ~= nil and surface.count_entities_filtered({type = "fire",
+            area = {{box[1], box[2]}, {box[3], box[4]}}, limit = 1}) > 0
+    end
     for reg, rec in pairs(s.wrecks) do
         local entity = rec.entity
         if not entity.valid then
@@ -749,6 +766,7 @@ scheduler.handler("fire-watch", function(_, tick)
         elseif rec.burning then
             burning = true
         elseif not rec.burnt and (rec.calm_until or 0) <= tick
+            and fire_near[entity.surface.index] ~= false
             and entity.surface.count_entities_filtered({type = "fire", position = entity.position,
             radius = entity.get_radius() + 1.5, limit = 1}) > 0 then
             M.ignite(rec)

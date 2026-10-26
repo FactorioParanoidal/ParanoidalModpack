@@ -13,6 +13,7 @@ local start = require("scripts.start")
 local pods = require("scripts.pods")
 local scheduler = require("scripts.scheduler")
 local quality = require("scripts.quality")
+local geology = require("scripts.geology")
 local M = {}
 local cfg = config.professions
 
@@ -300,12 +301,22 @@ local function apply(player, key)
         end
     end
     if spec.repair_packs and ship_state then
-        if ship_state.filled then
+        -- the first mechanic doubles the start repair packs, every further one adds a fixed number
+        local s = state()
+        s.mechanics = (s.mechanics or 0) + 1
+        if s.mechanics > 1 then
+            if ship_state.filled then
+                start.add_repair_packs(ship_state, spec.repair_packs_more or 0)
+            else
+                ship_state.repair_bonus = (ship_state.repair_bonus or 0) + (spec.repair_packs_more or 0)
+            end
+        elseif ship_state.filled then
             start.add_repair_packs(ship_state, (ship_state.repair_total or 0) * (spec.repair_packs - 1))
         else
             ship_state.repair_multiplier = spec.repair_packs
         end
     end
+    if spec.prospect then geology.prospect() end
     if spec.biofarm then pods.schedule_biofarm(player.index) end
 end
 

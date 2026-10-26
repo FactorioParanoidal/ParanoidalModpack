@@ -348,7 +348,8 @@ config.professions = {
             researched = {"qol-mining-speed-1-1", "qol-mining-speed-1-2"},
             half = {"ore-radar", "angels-ore-crushing", "electric-mining-drill", "radar", "bob-radar-2"},
             rpg = {{"LV_Inv_Bonus", 10}}, -- +10 inventory slots
-            ship_items = {{"ore-radar", 1}},
+            items = {{"ore-radar", 1}, {"burner-mining-drill", 3}},
+            prospect = true, -- scripts/geology.lua: charted land, ore tags, deposits at once, ore x2 at 50%
         },
         mechanic = {
             sprite = "item/ic-refine-workshop",
@@ -356,7 +357,8 @@ config.professions = {
                 "qol-crafting-speed-1-1", "qol-player-reach-1-1"},
             half = {"automation", "bob-repair-pack-2", "ic-defect-control-5"},
             items = {{"ic-refine-workshop", 1}},
-            repair_packs = 2, -- start repair packs x2
+            repair_packs = 2, -- start repair packs x2 (the first mechanic)
+            repair_packs_more = 100, -- every further mechanic: this many more
         },
         biologist = {
             sprite = "item/bi-seed",
@@ -370,6 +372,14 @@ config.professions = {
         },
         passenger = {sprite = "item/raw-fish"},
     },
+}
+
+-- 7b. Geology (scripts/geology.lua): the geologist's survey and the hand mining bonus.
+config.geology = {
+    chart_radius = 150,
+    ring = 30, -- the nearest deposit of an ore is searched ring by ring
+    reveal_chart = 24, -- charted around the scrap deposit and the rich vein
+    double_chance = 0.5, -- hand mining: geologist ore, biologist wood twice
 }
 
 -- 8. Landing anomalies (one per map).

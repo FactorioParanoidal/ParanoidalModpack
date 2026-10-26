@@ -128,6 +128,11 @@ local function fill(state, ship)
     end
     state.aai, state.aai_all = nil, nil
     state.ship = ship
+    if state.repair_bonus then
+        local bonus = state.repair_bonus
+        state.repair_bonus = nil
+        M.add_repair_packs(state, bonus)
+    end
     state.filled = true
     if M.on_ready then M.on_ready(state, ship, wrecks) end
 end

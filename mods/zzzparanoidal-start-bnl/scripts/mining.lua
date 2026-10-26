@@ -53,9 +53,14 @@ function M.on_tick(state)
         end
     end
 
-    for _, player in pairs(game.connected_players) do
-        local wreck = player.selected
+    local watch = state.watch or {}
+    for index in pairs(watch) do
+        local player = game.get_player(index)
+        local wreck = player and player.connected and player.selected
         local target_name = wreck and wreck.valid and targets[wreck.name]
+        if not (target_name or (wreck and wreck.valid and wreck_of[wreck.name])) then
+            watch[index] = nil -- points elsewhere now
+        end
         if target_name and mining(player, wreck) and wreck.minable and player.can_reach_entity(wreck) then
             local entry = entries[wreck.unit_number]
             if not entry then
@@ -70,6 +75,21 @@ function M.on_tick(state)
             if entry then player.selected = entry.target end
         end
     end
+end
+
+-- Selection changed: a player pointing at a wreck (or its pickaxe target) is watched by on_tick.
+-- Returns true when the watch list may have changed.
+function M.on_selected(state, event)
+    local player = game.get_player(event.player_index)
+    local selected = player and player.selected
+    if selected and selected.valid and (targets[selected.name] or wreck_of[selected.name]) then
+        state.watch = state.watch or {}
+        if not state.watch[event.player_index] then
+            state.watch[event.player_index] = true
+            return true
+        end
+    end
+    return false
 end
 
 local function is_start(state, entity)

@@ -200,6 +200,7 @@ function M.start(surface)
             return
         end
         params = {{"entity-name." .. ore}, util.gps(center, surface)}
+        s.vein = {ore = ore, center = center, surface = surface.index} -- scripts/geology.lua
     elseif name == "quiet-planet" then
         if surface.peaceful_mode then
             s.name = nil

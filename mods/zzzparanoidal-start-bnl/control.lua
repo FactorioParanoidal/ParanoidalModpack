@@ -23,9 +23,11 @@ local capsules = require("scripts.capsules")
 local distress = require("scripts.distress")
 local intro = require("scripts.intro")
 local util = require("scripts.util")
+local geology = require("scripts.geology")
 require("scripts.recorder")
 require("scripts.reactor")
 require("scripts.douse")
+local update_tick -- the 5-tick handler switch, defined below
 
 local function state()
     local s = storage.shipwreck
@@ -112,6 +114,7 @@ start.on_ready = function(shipwreck, ship, wrecks)
     end
     storage.bnl.start_wrecks = list -- the start wrecks without later debris (the guard's ammo)
     professions.on_start_ready()
+    geology.on_start_ready()
     events.refresh()
 end
 
@@ -119,6 +122,7 @@ script.on_init(function()
     start.init(state())
     generator.refresh()
     if game.tick < 2 then bnl_init() end
+    update_tick()
     scheduler.on_init()
     events.refresh()
 end)
@@ -131,6 +135,7 @@ script.on_configuration_changed(function()
 end)
 
 script.on_load(function()
+    update_tick()
     scheduler.on_load()
     falling.on_load()
     events.refresh()
@@ -138,6 +143,7 @@ end)
 
 events.on(defines.events.on_player_created, function(event)
     start.on_player_created(state(), event)
+    update_tick()
     local player = game.get_player(event.player_index)
     if not (player and storage.bnl) then return end
     capsules.on_player_created(player)
@@ -145,12 +151,32 @@ events.on(defines.events.on_player_created, function(event)
 end)
 
 -- Every 5 ticks: the start fill tolerates the delay and the wreck selection lag (83 ms) is invisible.
-script.on_nth_tick(5, function(event)
+-- Registered only while needed: the start fill is pending, a player points at a wreck (selection
+-- event) or a pickaxe target exists. The rest of the game it costs nothing.
+local TICK = 5
+local tick_on = false
+local tick_handler
+update_tick = function()
     local s = storage.shipwreck
-    if not s then return end
-    start.on_tick(s, event.tick)
-    mining.on_tick(s)
-end)
+    local want = s ~= nil and (s.fill_tick ~= nil or next(s.targets) ~= nil or (s.watch ~= nil and next(s.watch) ~= nil))
+    if want ~= tick_on then
+        tick_on = want
+        script.on_nth_tick(TICK, want and tick_handler or nil)
+    end
+end
+tick_handler = function(event)
+    local s = storage.shipwreck
+    if s then
+        start.on_tick(s, event.tick)
+        mining.on_tick(s)
+    end
+    update_tick()
+end
+
+events.dynamic(defines.events.on_selected_entity_changed, function(event)
+    local s = storage.shipwreck
+    if s and mining.on_selected(s, event) then update_tick() end
+end, function() return storage.shipwreck ~= nil end)
 
 local mined_filters = mining.filters()
 if not mined_filters[1] then mined_filters = nil end
