@@ -29,5 +29,6 @@ Date: 2026.10.26
     - A squad is given its next step only when its command is over or it stands still while not fighting, gathering or waiting for a path (so slow path requests are not restarted).
     - Towers, lamps and most buildings need no script: towers run on the citadel power network (destroying the power plants darkens them), lamps have no power, buildings are simple entities with animations.
   Changes:
+    - Every citadel prototype is hidden in the Factoriopedia (was: only the higher droid marks and the towers).
     - No spoilers before contact: the chat messages before and during the life of the citadel speak of "a signal from the wilds" and do not name the citadel, the replicators, droids, foundries, the hive or the shields; the mod name and description are neutral; the core item and its decryption recipe (unlocked when the citadel appears) are "Unknown core" / "Unknown core decryption" with neutral descriptions. Entity names and the final "destroyed" message are unchanged.
     - The state command is /signal (was /citadel); before the citadel appears it prints only the phase.
