@@ -133,17 +133,7 @@ end)
 
 script.on_event(defines.events.on_player_joined_game, disable_obsolete_basic_logistics)
 
--- Стартовое сообщение бортового компьютера (было в Beta 8 через aai-industry). Только в начале новой игры.
-script.on_event(defines.events.on_player_created, function(event)
-	if game.tick > 1 then return end
-	local player = game.get_player(event.player_index)
-	if not player then return end
-	local name = player.name
-	if not name or name == "" then
-		name = {"paranoidal.fallback-player-name"}
-	end
-	player.print({"paranoidal.player-crash-landed", name})
-end)
+-- Стартовое сообщение бортового компьютера показывает zzzparanoidal-start-bnl (весь старт в одном моде).
 
 -- Пресет вех Paranoidal для Milestones (remote-интерфейс paranoidal_milestones).
 require("controls.milestones-preset").install()
