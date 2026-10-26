@@ -18,7 +18,8 @@ config.wreck_min_slots = 4
 
 -- 1. Falling debris: the ship keeps falling apart for the first minutes.
 config.falling = {
-    count = {14, 20},
+    count = {14, 20}, -- rolled by sizes, then small ones are added (small_factor)
+    small_factor = 2,
     first_tick = 40 * 60,
     last_tick = 9 * MINUTE + 30 * 60,
     warning = 6 * 60, -- shadow and chat warning before the impact; the roar of the low pass starts with the flight
@@ -223,9 +224,22 @@ config.fire = {
         slow = 0.5,
         interval = {4 * 60, 6 * 60},
         quench = {small = 1, medium = 2, big = 3}, -- barrels inside; one from the hand is enough
-        spill_radius = 2.5, -- a barrel poured on the ground puts out ordinary fires this far
+        spill_radius = 2.5, -- a barrel poured on the ground puts out ordinary fires this far (also: "burning ground")
         calm = 3 * MINUTE,
-        ship_kit = {"water-barrel", 10},
+        ship_kit = {"water-barrel", 20},
+    },
+    -- Fuel poured on a fire from the hand (scripts/douse.lua): fuel and gas barrels, oxygen, the
+    -- high-tech fuel of the wrecks and every chemical fuel of at least min_fuel_value (solid fuel 12 MJ).
+    misuse = {
+        min_fuel_value = 12000000,
+        fireball_radius = 7,
+        blasts = 10,
+        building_radius = 10, -- every building and wreck within it catches fire
+        max_buildings = 80,
+        player_burn_ticks = 10 * 60,
+        cursor_ticks = 10 * 60, -- the cursor burns this long
+        cursor_interval = 10,
+        sound_interval = 200, -- the 3.5 s flamethrower roar repeats
     },
 }
 
@@ -323,26 +337,34 @@ config.professions = {
     list = {
         guard = {
             sprite = "item/submachine-gun",
+            researched = {"qol-movement-speed-1-1", "qol-movement-speed-1-2"},
             half = {"military", "gun-turret", "stone-wall"},
+            rpg = {{"LV_Health_Bonus", 3, 9}}, -- +10 health per level
             items = {{"submachine-gun", 1}, {"shotgun", 1}, {"light-armor", 1}, {"gun-turret", 1}, {"firearm-magazine", 3}},
             wreck_ammo = true, -- all ammo of the start wrecks and the ship goes into the guard's inventory
         },
         geologist = {
             sprite = "item/ore-radar",
-            half = {"ore-radar", "angels-ore-crushing", "electric-mining-drill"},
+            researched = {"qol-mining-speed-1-1", "qol-mining-speed-1-2"},
+            half = {"ore-radar", "angels-ore-crushing", "electric-mining-drill", "radar", "bob-radar-2"},
+            rpg = {{"LV_Inv_Bonus", 10}}, -- +10 inventory slots
             ship_items = {{"ore-radar", 1}},
         },
         mechanic = {
             sprite = "item/ic-refine-workshop",
-            researched = {"ic-defect-control-1", "ic-defect-control-2", "ic-defect-control-3", "ic-defect-control-4"},
+            researched = {"ic-defect-control-1", "ic-defect-control-2", "ic-defect-control-3", "ic-defect-control-4",
+                "qol-crafting-speed-1-1", "qol-player-reach-1-1"},
             half = {"automation", "bob-repair-pack-2", "ic-defect-control-5"},
             items = {{"ic-refine-workshop", 1}},
             repair_packs = 2, -- start repair packs x2
         },
         biologist = {
             sprite = "item/bi-seed",
+            researched = {"armor-absorb-1", "armor-absorb-2", "armor-absorb-3"},
             half = {"bi-tech-bio-farming", "bi-tech-timber", "lamp"},
-            items = {{"bi-seed", 100}, {"bi-bio-greenhouse", 2}},
+            -- the respirator goes into the armor slot
+            items = {{"respirator", 1}, {"bi-seed", 100, quality_steps = {1, 4}}, {"bi-bio-greenhouse", 2},
+                {"water-barrel", 20}},
             recipes = {"bi-seedling-1", "bi-seed-1"},
             biofarm = true,
         },

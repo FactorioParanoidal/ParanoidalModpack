@@ -186,6 +186,15 @@ function M.plan(surface)
         if d < best then best, recorder = d, i end
     end
     sizes[recorder] = "big"
+    -- small pieces fall cfg.small_factor times as often; medium and big ones keep their number
+    local small = 0
+    for i = 1, #sizes do
+        if sizes[i] == "small" then small = small + 1 end
+    end
+    for _ = 1, math.floor(small * ((cfg.small_factor or 1) - 1) + 0.5) do
+        times[#times + 1] = landing + math.random(cfg.first_tick, cfg.last_tick)
+        sizes[#sizes + 1] = "small"
+    end
     for i, t in ipairs(times) do
         scheduler.at(math.max(game.tick + 1, t - cfg.warning), "falling-warn",
             {kind = sizes[i], surface = surface.index, recorder = i == recorder or nil})

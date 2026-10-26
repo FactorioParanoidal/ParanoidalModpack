@@ -25,6 +25,12 @@ Date: 2026-10-26
     - The starliner burns like every start wreck (as a big one, with its own hazardous cargo); its flames keep off the BnL logo, and no start wreck lies within 5 tiles of the logo (their cargo goes into the ship).
     - The journal button: the BnL logo fills the whole button.
     - Water from the hand: a left click with a water barrel puts out the burning wreck under the cursor at once (a big white steam cloud); elsewhere the water spills and puts out ordinary fires within 2.5 tiles (a little steam), wreck fires keep burning. Within reach, one barrel per click, the empty barrel drops next to the player.
+    - Empty barrel in hand, left click on water within reach: every empty barrel in the inventory is filled with water.
+    - Fuel poured on a fire (fuel and gas barrels, oxygen, solid fuel and better, also fuel canisters) on a burning wreck or burning ground: a huge fireball, every building and wreck within 10 tiles catches fire, the player burns for 10 s and for 10 s the cursor burns: whatever it points at catches fire, every click sets the ground alight, a loud fire sound plays.
+    - The final steam cloud of a quenched wreck covers twice the area and lasts twice as long; the fire kit next to the starliner is 20 water barrels.
+    - Small falling debris comes twice as often; medium and big pieces keep their number.
+    - Professions: the kit goes into the inventory also during the vanilla crash cutscene (the character kept aside), the armor into the armor slot; in multiplayer the guard ammo that does not fit goes to the first guard.
+    - Guard: starting running speed I and II researched, 3-9 gifted RPG health levels. Geologist: starting mining speed I and II researched, radar and radars 2 half researched, 10 gifted RPG inventory levels. Mechanic: starting crafting speed I and starting reach I researched. Biologist: pollution absorption 1-3 researched, a respirator worn, seeds one random quality step +1..+4 better, 20 water barrels.
     - Water barrels inside a wreck: 1/2/3 put out a small/medium/big wreck (was 2/3/5); every barrel bursts into a little white steam, the last one into a big cloud.
     - The own intro flight is switched off (code kept commented out): the vanilla crash cutscene plays and the profession choice opens at once.
     - Long torches (base scale 1.5 and more: gas column, the middle barrel torch, rocket and nuclear fuel) are twice as tall; their base stays in place.

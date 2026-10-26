@@ -12,6 +12,7 @@ local events = require("scripts.events")
 local start = require("scripts.start")
 local pods = require("scripts.pods")
 local scheduler = require("scripts.scheduler")
+local quality = require("scripts.quality")
 local M = {}
 local cfg = config.professions
 
@@ -81,29 +82,49 @@ local function half(force, name)
     end
 end
 
+-- The player's character; during the vanilla crash cutscene (the choice opens at once) it is kept
+-- aside as cutscene_character and player.character is nil.
+local function body(player)
+    local character = player.character
+    if character and character.valid then return character end
+    character = player.cutscene_character
+    if character and character.valid then return character end
+    return nil
+end
+
+local function spill(player, stack)
+    local character = body(player)
+    local surface = character and character.surface or player.surface
+    surface.spill_item_stack({position = character and character.position or player.position, stack = stack,
+        enable_looted = true, allow_belts = false})
+end
+
+-- Inserts into the character's inventory; returns the count inserted.
+local function insert(player, stack)
+    local character = body(player)
+    return character and character.insert(stack) or 0
+end
+
+-- entry: {name, count, quality_steps = {min, max}} (one random step up for the whole entry).
 local function give(player, items)
     for _, entry in ipairs(items or {}) do
         if util.item_exists(entry[1]) then
-            local inserted = player.insert({name = entry[1], count = entry[2]})
-            if inserted < entry[2] and player.character then
-                player.surface.spill_item_stack({position = player.character.position,
-                    stack = {name = entry[1], count = entry[2] - inserted}, enable_looted = true, allow_belts = false})
+            local q = entry.quality_steps and quality.step_up(util.int(entry.quality_steps)) or "normal"
+            local inserted = insert(player, {name = entry[1], count = entry[2], quality = q})
+            if inserted < entry[2] then
+                spill(player, {name = entry[1], count = entry[2] - inserted, quality = q})
             end
         end
     end
 end
 
 local function put_armor(player, name)
-    local character = player.character
+    local character = body(player)
     local slot = character and character.get_inventory(defines.inventory.character_armor)
     if slot and slot.is_empty() and util.item_exists(name) and prototypes.item[name].type == "armor" then
         return slot.insert({name = name, count = 1}) > 0
     end
     return false
-end
-
-local function spill(player, stack)
-    player.surface.spill_item_stack({position = player.position, stack = stack, enable_looted = true, allow_belts = false})
 end
 
 -- Start wrecks of the map: the list kept at the crash fill, for older maps the wrecks tracked by fires.
@@ -159,12 +180,14 @@ local function collect_wreck_ammo()
     return pool, total
 end
 
+-- Returns what did not fit (or nil).
 local function give_stack(player, stack)
-    if stack.count <= 0 then return end
-    local inserted = player.character and player.insert(stack) or 0
+    if stack.count <= 0 then return nil end
+    local inserted = insert(player, stack)
     if inserted < stack.count then
-        spill(player, {name = stack.name, count = stack.count - inserted, quality = stack.quality})
+        return {name = stack.name, count = stack.count - inserted, quality = stack.quality}
     end
+    return nil
 end
 
 -- The pool goes to the guards in equal shares, the remainder to the first one.
@@ -181,14 +204,24 @@ local function share_ammo()
     local pool = s.ammo_pool
     s.ammo_pool = nil
     if not guards[1] then return end
-    local got = {}
+    local got, rest = {}, {}
     for _, stack in ipairs(pool) do
         local part = math.floor(stack.count / #guards)
         for i, player in ipairs(guards) do
             local count = part + (i == 1 and stack.count - part * #guards or 0)
-            give_stack(player, {name = stack.name, count = count, quality = stack.quality})
+            local left = give_stack(player, {name = stack.name, count = count, quality = stack.quality})
             got[i] = (got[i] or 0) + count
+            if left then
+                rest[#rest + 1] = left
+                got[i] = got[i] - left.count
+            end
         end
+    end
+    -- what a guard could not take goes to the first guard, only then onto the ground next to him
+    for _, stack in ipairs(rest) do
+        local left = give_stack(guards[1], stack)
+        got[1] = got[1] + stack.count - (left and left.count or 0)
+        if left then spill(guards[1], left) end
     end
     for i, player in ipairs(guards) do
         player.print({"bnl.guard-ammo", got[i] or 0}, {color = util.CHAT_COLOR})
@@ -244,6 +277,13 @@ local function apply(player, key)
         if not (entry[2] == 1 and put_armor(player, entry[1])) then items[#items + 1] = entry end
     end
     give(player, items)
+    -- RPG attribute levels (PMRPGsystem gift_levels: no skill points spent): {attribute, min, max}
+    local rpg = remote.interfaces.RPG
+    if rpg and rpg.gift_levels then
+        for _, entry in ipairs(spec.rpg or {}) do
+            remote.call("RPG", "gift_levels", player.index, entry[1], util.int({entry[2], entry[3] or entry[2]}))
+        end
+    end
     if spec.wreck_ammo then
         local s = state()
         if not s.ammo_shared then

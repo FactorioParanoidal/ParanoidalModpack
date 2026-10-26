@@ -635,8 +635,8 @@ local function quench(rec, entity)
     extinguish(rec)
     rec.calm_until = game.tick + cfg.water.calm
     rec.quench = 0
-    local radius = entity.get_radius()
-    M.steam(entity.surface, entity.position, radius, math.max(10, math.floor(radius * 6)), "bnl-steam")
+    local radius = entity.get_radius() * 1.41 -- twice the area of the first version
+    M.steam(entity.surface, entity.position, radius, math.max(20, math.floor(radius * 12)), "bnl-steam")
     float_text(entity, {"bnl.fire-quenched"}, -1.6, {r = 0.5, g = 0.8, b = 1}, 1.3, 240)
 end
 
@@ -649,6 +649,11 @@ local function douse(rec, entity, stack)
     end
     quench(rec, entity)
     return true
+end
+
+function M.is_tracked(entity)
+    local s = storage.bnl and storage.bnl.fire
+    return s ~= nil and s.wrecks[reg_of(entity)] ~= nil
 end
 
 function M.is_burning(entity)
