@@ -138,6 +138,26 @@ function M.track(entity, with_hazard)
     return rec
 end
 
+-- Fires of the crash scene touching a start wreck go out (called once when the crash site is filled).
+function M.clear_scene_fires(entity)
+    if not (entity and entity.valid) then return end
+    for _, flame in pairs(entity.surface.find_entities_filtered({type = "fire", position = entity.position,
+        radius = entity.get_radius() + cfg.clear_margin})) do
+        if flame.valid then flame.destroy() end
+    end
+end
+
+-- A burning wreck cannot be opened: put the fire out or mine it (mining takes the cargo too).
+function M.on_gui_opened(event)
+    local entity = event.entity
+    if not (entity and entity.valid and M.is_burning(entity)) then return end
+    local player = game.get_player(event.player_index)
+    if not player then return end
+    player.opened = nil
+    player.create_local_flying_text({text = {"bnl.wreck-too-hot"}, position = entity.position,
+        color = {r = 1, g = 0.45, b = 0.15}})
+end
+
 -- Water barrels of the ship's fire kit: on the ground next to it (inside, the burning ship would
 -- burst them by itself).
 function M.ship_kit(ship)
@@ -751,6 +771,7 @@ end)
 scheduler.handler("fire-watch", function(_, tick)
     local s = state()
     local burning = false
+    local grace_over = util.since_landing() >= cfg.ignite_grace
     -- one query per surface: without any fire near the wrecks no wreck needs its own query
     local fire_near = {}
     for index, box in pairs(s.boxes or {}) do
@@ -765,7 +786,7 @@ scheduler.handler("fire-watch", function(_, tick)
             s.wrecks[reg] = nil
         elseif rec.burning then
             burning = true
-        elseif not rec.burnt and (rec.calm_until or 0) <= tick
+        elseif not rec.burnt and (rec.calm_until or 0) <= tick and grace_over
             and fire_near[entity.surface.index] ~= false
             and entity.surface.count_entities_filtered({type = "fire", position = entity.position,
             radius = entity.get_radius() + 1.5, limit = 1}) > 0 then

@@ -75,7 +75,7 @@ local function compartment(key, w, h, extra)
         resistances = {{type = "fire", percent = 100}, {type = "explosion", percent = 50}},
         inventory_size = 32,
         inventory_type = "normal",
-        minable = {mining_time = 6, results = hull()},
+        minable = {mining_time = 12, results = hull()}, -- wreck mining times doubled 2026-10-26
         collision_box = {{-w, -h * 1.1}, {w, h * 0.9}},
         selection_box = {{-w - 0.5, -h * 1.1 - 0.6}, {w + 0.5, h * 0.9 + 0.3}},
         dying_explosion = "big-explosion",
@@ -97,7 +97,7 @@ local entities = {
     }),
     -- Multiplayer escape pod (scripts/capsules.lua).
     compartment("pod", 1.0, 0.7, {name = "bnl-escape-pod", max_health = 1500, inventory_size = 16,
-        minable = {mining_time = 3, results = salvage({{"steel-plate", 4, 8}, {"iron-plate", 10, 20}})}}),
+        minable = {mining_time = 6, results = salvage({{"steel-plate", 4, 8}, {"iron-plate", 10, 20}})}}),
 }
 
 -- Captain's safe: opens for the BnL code given as circuit signals (scripts/safe.lua).
@@ -106,7 +106,7 @@ local safe = compartment("safe", 0.9, 0.6, {
     name = "bnl-captain-safe",
     max_health = 2000,
     inventory_size = 16,
-    minable = {mining_time = 3, results = salvage({{"steel-plate", 5, 10}})},
+    minable = {mining_time = 6, results = salvage({{"steel-plate", 5, 10}})},
     circuit_connector = steel_chest and table.deepcopy(steel_chest.circuit_connector) or nil,
     circuit_wire_max_distance = steel_chest and steel_chest.circuit_wire_max_distance or 9,
 })
@@ -126,7 +126,7 @@ entities[#entities + 1] = {
     alert_when_damaged = false,
     allow_copy_paste = false,
     resistances = {{type = "fire", percent = 100}, {type = "explosion", percent = 50}},
-    minable = {mining_time = 10, results = salvage({
+    minable = {mining_time = 20, results = salvage({
         {"steel-plate", 50, 80}, {"iron-gear-wheel", 30, 50}, {"copper-cable", 60, 100}, {"pipe", 20, 40},
         {"concrete", 40, 80}, {"bnl-antenna-part", 1, 1},
     })},
@@ -161,7 +161,7 @@ if ship then
     old.flags = flags()
     old.max_health = 3000
     old.inventory_size = 32
-    old.minable = {mining_time = 8, results = salvage({{"steel-plate", 20, 40}, {"iron-plate", 40, 80}, {"pipe", 10, 30}})}
+    old.minable = {mining_time = 16, results = salvage({{"steel-plate", 20, 40}, {"iron-plate", 40, 80}, {"pipe", 10, 30}})}
     old.dying_explosion = "big-explosion"
     old.map_color = {r = 0.45, g = 0.55, b = 0.35, a = 1}
     for _, layer in ipairs(old.picture.layers or {}) do

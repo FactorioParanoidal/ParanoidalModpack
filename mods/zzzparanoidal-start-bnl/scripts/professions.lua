@@ -278,6 +278,12 @@ local function apply(player, key)
         if not (entry[2] == 1 and put_armor(player, entry[1])) then items[#items + 1] = entry end
     end
     give(player, items)
+    -- water for the start fires, ready in hand
+    local kit = cfg.water_kit
+    if kit and util.item_exists(kit[1]) then
+        give(player, {kit})
+        if player.get_quick_bar_slot(1) == nil then player.set_quick_bar_slot(1, kit[1]) end
+    end
     -- RPG attribute levels (PMRPGsystem gift_levels: no skill points spent): {attribute, min, max}
     local rpg = remote.interfaces.RPG
     if rpg and rpg.gift_levels then

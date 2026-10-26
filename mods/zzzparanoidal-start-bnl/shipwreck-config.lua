@@ -43,15 +43,17 @@ config.never_quality_place_types = {
     ["linked-belt"] = true, ["loader"] = true, ["loader-1x1"] = true,
 }
 
-config.mining_time = 1.5 -- every wreck without its own time below
--- Own mining time (user decision 2026-10-18): the ship 6 s, big wrecks 3 s.
+-- Mining times doubled (user decision 2026-10-26: putting a fire out must be faster than mining
+-- a burning wreck); the compartments of prototypes/bnl-entities.lua likewise.
+config.mining_time = 3 -- every wreck without its own time below
+-- Own mining time (user decision 2026-10-18, doubled 2026-10-26): the ship 12 s, big wrecks 6 s.
 config.mining_times = {
-    ["crash-site-spaceship"] = 6,
-    ["crash-site-spaceship-wreck-big-1"] = 3,
-    ["crash-site-spaceship-wreck-big-2"] = 3,
-    ["aai-big-ship-wreck-1"] = 3,
-    ["aai-big-ship-wreck-2"] = 3,
-    ["aai-big-ship-wreck-3"] = 3,
+    ["crash-site-spaceship"] = 12,
+    ["crash-site-spaceship-wreck-big-1"] = 6,
+    ["crash-site-spaceship-wreck-big-2"] = 6,
+    ["aai-big-ship-wreck-1"] = 6,
+    ["aai-big-ship-wreck-2"] = 6,
+    ["aai-big-ship-wreck-3"] = 6,
 }
 config.target_prefix = "paranoidal-shipwreck-mining-" -- invisible pickaxe targets
 config.ship = "crash-site-spaceship"

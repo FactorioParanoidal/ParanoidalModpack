@@ -3,7 +3,7 @@
 -- * Water barrel: on a burning start wreck (or the starliner) under the cursor the fire goes out at
 --   once with a big steam cloud; anywhere else the water spills over the ground and puts out
 --   ordinary fires (grass, trees, fuel pools) around the click, the scripted wreck fires keep burning.
---   One barrel per click within reach; the empty barrel drops next to the player.
+--   One barrel per click within reach; the empty barrel goes back into the inventory.
 -- * Empty barrel on a water tile within reach: every empty barrel in the inventory is filled.
 -- * Fuel (a fuel or gas barrel, oxygen, solid fuel and better) on a burning wreck or burning ground:
 --   a huge fireball, every building around catches fire, the player burns for a while and for
@@ -64,8 +64,12 @@ local function take_one(player)
     return name
 end
 
+-- The empty barrel goes back into the inventory (ready to be filled at water), onto the ground only
+-- when there is no room.
 local function drop_empty(player, name)
     if name:sub(-7) == "-barrel" and prototypes.item[EMPTY] then
+        local character = player.character
+        if character and character.insert({name = EMPTY, count = 1}) > 0 then return end
         player.surface.spill_item_stack({position = player.position, stack = {name = EMPTY, count = 1},
             enable_looted = true, allow_belts = false})
     end
@@ -180,6 +184,7 @@ local function on_click(event)
 end
 
 events.on("bnl-douse", on_click)
+events.on(defines.events.on_gui_opened, fire.on_gui_opened)
 
 -- The burning cursor: every misuse.cursor_interval ticks whatever the player points at catches fire,
 -- with a big flame drawn on it; the fire sound repeats while it lasts.

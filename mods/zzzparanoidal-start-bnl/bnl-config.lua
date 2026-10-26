@@ -66,6 +66,11 @@ config.falling = {
 config.fire = {
     watch_until = 30 * MINUTE, -- fires near start wrecks can ignite them until then
     watch_interval = 120,
+    -- The AAI crash scene leaves burning trees around the ship: fires touching a start wreck are put
+    -- out when the crash site is filled, and for this long after the landing a fire nearby does not
+    -- ignite wrecks, so only config.fire.start_burning sets them burning at first.
+    ignite_grace = 60 * 60,
+    clear_margin = 2,
     tick_interval = 60,
     -- A burning wreck burns down to a random floor of its max health, then the fire goes out.
     burn_floor = {0.02, 0.10},
@@ -79,7 +84,7 @@ config.fire = {
     splash_radius = 3,
     splash_damage = 8, -- per cook-off to characters around
     building_radius = 6, -- big blasts (fuel barrels, explosives, the last blast) also hit player buildings
-    step_interval = {10 * 60, 15 * 60}, -- a burning wreck lowers the quality of its cargo this often
+    step_interval = {14 * 60, 27 * 60}, -- a burning wreck lowers the quality of its cargo (and may lose a stack) this often
     lose_chance = 0.2, -- each 'cargo burnt -1' destroys one whole cargo stack with this chance
     scatter_chance = 0.12, -- a cook-off throws part of a stack out of the wreck (saved from the fire)
     spark_chance = 0.2, -- a cook-off sets the ground around on fire
@@ -226,7 +231,7 @@ config.fire = {
         quench = {small = 1, medium = 2, big = 3}, -- barrels inside; one from the hand is enough
         spill_radius = 2.5, -- a barrel poured on the ground puts out ordinary fires this far (also: "burning ground")
         calm = 3 * MINUTE,
-        ship_kit = {"water-barrel", 20},
+        ship_kit = nil, -- no kit on the ground: every player gets config.professions.water_kit
     },
     -- Fuel poured on a fire from the hand (scripts/douse.lua): fuel and gas barrels, oxygen, the
     -- high-tech fuel of the wrecks and every chemical fuel of at least min_fuel_value (solid fuel 12 MJ).
@@ -334,6 +339,9 @@ config.professions = {
     order = {"guard", "geologist", "mechanic", "biologist", "passenger"},
     window = 30 * MINUTE, -- players created later start as passengers
     ammo_share_wait = MINUTE, -- multiplayer: the wreck ammo is shared among the guards chosen by then
+    -- every profession (the passenger too): water barrels straight into the inventory, pinned to the
+    -- first quick bar slot when it is empty (the biologist has his own 20 more in his kit)
+    water_kit = {"water-barrel", 20},
     list = {
         guard = {
             sprite = "item/submachine-gun",
