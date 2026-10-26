@@ -53,7 +53,10 @@ for n, t in pairs(type_of) do
 end
 -- the key buildings drop replicator cores (prototypes/loot.lua)
 for _, n in pairs({S.entity.core, S.entity.radar, S.entity.depot, S.entity.armory}) do prototypes.entity[n].loot = CORE_LOOT end
-for _, c in pairs(S.ammo_categories) do prototypes.ammo_category[c] = {} end
+for _, c in pairs(S.ammo_categories) do
+  prototypes.ammo_category[c] = {}
+  prototypes.ammo_category[S.own_ammo(c)] = {}
+end
 
 storage = {}
 F.handlers, F.nth = {}, {}

@@ -66,6 +66,10 @@ check(st.shields, "shield stage")
 local f = game.forces[S.force]
 check(f.technologies["turret-shields-base"].researched and f.technologies["repair-turret-range-10"].researched,
   "shield and tower range research for the citadel force")
+local own_energy = S.own_ammo("droid-energy")
+check(math.abs(f.get_ammo_damage_modifier(own_energy) - 0.1 * st.upgrades.damage) < 1e-9
+  and f.get_ammo_damage_modifier("droid-energy") == 0,
+  "damage bonus on the own category only: " .. f.get_ammo_damage_modifier(own_energy) .. " (arsenals " .. st.upgrades.damage .. ")")
 local towers = surface.count_entities_filtered({name = S.entity.shield_tower})
 check(towers >= 25, "shield towers placed: " .. towers)
 check(st.droids <= settings.global[S.setting.unit_limit].value, "droid limit holds: " .. st.droids)

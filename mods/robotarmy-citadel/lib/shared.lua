@@ -148,10 +148,20 @@ S.tile_road = P .. "road"
 S.core_item = P .. "core-item"
 S.decrypt_recipe = P .. "core-decryption"
 
---- Ammo categories of Robot Army Reforged: the citadel force gets its damage / rate bonuses on them.
+--- Ammo categories of Robot Army Reforged. The replicator droids and towers fire their own copies of
+--- them (S.own_ammo, prototypes/ammo.lua), and the citadel force gets its damage / rate bonuses on
+--- those copies.
 S.ammo_categories = {"droid-bullet", "droid-rocket", "droid-energy", "droid-flame", "droid-electric"}
 --- Categories whose damage bonus works (measured by Robot Army Reforged: not flame and electric).
 S.damage_categories = {"droid-bullet", "droid-rocket", "droid-energy"}
+
+--- Own ammo category of the citadel for a category of its source weapons ("replicator-<category>"):
+--- the research of the players lists every entity that fires the category it boosts, and the
+--- replicators must not be listed there.
+function S.own_ammo(category)
+  if category:sub(1, #S.prefix) == S.prefix then return category end
+  return S.prefix .. category
+end
 
 ---------------------------------------------------------------------------------------------------
 -- Map settings.

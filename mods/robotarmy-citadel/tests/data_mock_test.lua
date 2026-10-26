@@ -80,7 +80,8 @@ for _, p in ipairs(added) do
       end
     end
   end
-  if p.type ~= "recipe" and p.type ~= "item" and p.type ~= "tile" and p.type ~= "projectile" then
+  if p.type ~= "recipe" and p.type ~= "item" and p.type ~= "tile" and p.type ~= "projectile"
+    and p.type ~= "ammo-category" then
     check(p.max_health and p.max_health > 0, where .. ": max_health")
     check(p.selection_box and (p.collision_box or p.type == "unit"), where .. ": boxes") -- flying units may have none
     check(p.minable == nil, where .. ": minable")
@@ -98,6 +99,16 @@ for _, p in ipairs(added) do
     for _, f in pairs(p.flags) do if f == "player-creation" then player_creation = true end end
     check(player_creation, where .. ": no player-creation (shields)")
   end
+  local attack = p.attack_parameters
+  if attack then
+    local cats = attack.ammo_categories or {attack.ammo_category}
+    check(#cats > 0, where .. ": attack without ammo category")
+    for _, c in pairs(cats) do
+      check(c:sub(1, #S.prefix) == S.prefix, where .. ": fires a shared ammo category " .. c)
+      check(raw["ammo-category"] and raw["ammo-category"][c], where .. ": no ammo category " .. c)
+    end
+  end
+  if p.type == "ammo-category" then check(p.hidden == true, where .. ": not hidden") end
   if p.type == "unit" then
     check(p.loot and #p.loot > 0, where .. ": no loot")
     check(p.run_animation, where .. ": run animation")

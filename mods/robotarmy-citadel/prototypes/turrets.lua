@@ -1,6 +1,7 @@
 -- Defence towers of the citadel: electric turrets on the citadel power network (a module whose power
--- plants are destroyed goes dark). They fire the droid ammo categories, so the damage and rate
--- bonuses of the citadel force apply to them as well. "player-creation" lets the shield of Defence
+-- plants are destroyed goes dark). They fire the droid ammo categories (remapped to the own
+-- categories of the citadel in prototypes/ammo.lua), so the damage and rate bonuses of the citadel
+-- force apply to them as well. "player-creation" lets the shield of Defence
 -- Tower Reforged protect them (it only covers buildable-looking turrets).
 local S = require("lib.shared")
 local G = require("prototypes.gfx")

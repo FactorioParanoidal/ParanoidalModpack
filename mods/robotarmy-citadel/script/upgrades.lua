@@ -4,7 +4,8 @@
 --   targeting      +8 % rate of fire (no limit)
 --   computing core intelligence level (at most 6, script/intel.lua)
 --   shield modules levels of the shield research of Defence Tower Reforged for the citadel force
--- Damage and rate are force bonuses on the droid ammo categories: no cost in a fight. The armour
+-- Damage and rate are force bonuses on the own ammo categories of the citadel (copies of the droid
+-- categories, S.own_ammo): no cost in a fight. The armour
 -- focus follows the killing blows of the lost droids (adaptive armour).
 local S = require("lib.shared")
 local forces = require("script.forces")
@@ -46,10 +47,12 @@ end
 
 local function apply_force(c, force)
   local u = c.upgrades
-  for _, cat in pairs(S.damage_categories) do
+  for _, from in pairs(S.damage_categories) do
+    local cat = S.own_ammo(from)
     if prototypes.ammo_category[cat] then force.set_ammo_damage_modifier(cat, UP.DAMAGE_PER_ARSENAL * u.damage) end
   end
-  for _, cat in pairs(S.ammo_categories) do
+  for _, from in pairs(S.ammo_categories) do
+    local cat = S.own_ammo(from)
     if prototypes.ammo_category[cat] then force.set_gun_speed_modifier(cat, UP.RATE_PER_TARGETING * u.rate) end
   end
 end
