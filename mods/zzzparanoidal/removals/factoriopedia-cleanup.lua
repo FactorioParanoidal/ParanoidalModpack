@@ -3802,3 +3802,28 @@ end
 if missing > 0 then
 	log("factoriopedia-cleanup: skipped absent prototypes: " .. missing)
 end
+
+-- Боссы событий Big Monsters / mferrari_lib скрываются целиком: Факториопедия показывает их с начала
+-- игры, до встречи (решение пользователя 2026-10-26, «без спойлеров»). Обычные фракции не трогаются.
+local boss_patterns = {
+	"^biterzilla%d+$",
+	"^bm%-motherbiterzilla%d+$",
+	"^bm%-volcano$",
+	"^bm%-worm%-boss%-",
+	"^maf%-worm%-boss%-",
+	"^maf%-boss%-",
+	"^maf%-big%-boss%-spawner$",
+	"^maf_infected_ship$",
+	"^bm_fake_human_boss_",
+	"^bm_fake_human_ultimate_boss_",
+}
+for _, type_name in ipairs({"unit", "unit-spawner", "turret", "spider-vehicle", "car"}) do
+	for name, proto in pairs(data.raw[type_name] or {}) do
+		for _, pattern in ipairs(boss_patterns) do
+			if name:find(pattern) then
+				proto.hidden_in_factoriopedia = true
+				break
+			end
+		end
+	end
+end
