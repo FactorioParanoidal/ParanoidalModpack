@@ -25,6 +25,7 @@ Date: 2026-10-24
     - RSO old mines are not placed inside legendary ruins. A legendary ruin is given up (and may appear
       elsewhere) when players already have buildings in its area; corpses of characters are kept.
   Changes:
+    - The relics (items, buildings, recipes and categories) are hidden in the Factoriopedia: no spoilers before they are found.
     - Version number starts with 9 (Paranoidal mod).
     - New ruins with 30-100 landfill for the small holes under wide blueprints early in the game:
       Landfill cache (small), Landfill yard (medium), Abandoned earthworks (large).

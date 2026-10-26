@@ -42,3 +42,11 @@ for name, recipe in pairs(data.raw.recipe) do
     end
   end
 end
+
+-- No spoilers before contact: the relics (items, buildings, their recipes and categories) are hidden
+-- in the Factoriopedia, which shows them from the start of the game.
+for _, protos in pairs(data.raw) do
+  for name, proto in pairs(protos) do
+    if type(name) == "string" and name:find("^pd%-relic%-") then proto.hidden_in_factoriopedia = true end
+  end
+end
