@@ -14,6 +14,7 @@ local pods = require("scripts.pods")
 local scheduler = require("scripts.scheduler")
 local quality = require("scripts.quality")
 local geology = require("scripts.geology")
+local goals = require("scripts.goals")
 local M = {}
 local cfg = config.professions
 
@@ -344,6 +345,7 @@ function M.choose(player, key)
     util.say({"bnl.profession-chosen", player.name, {"bnl-profession." .. key}}, false)
     journal.add("profession-" .. key, {player.name}, {silent = true})
     share_if_all_chose()
+    goals.brief(player)
 end
 
 local function on_click(event)

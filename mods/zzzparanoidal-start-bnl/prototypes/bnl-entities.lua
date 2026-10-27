@@ -106,6 +106,8 @@ local safe = compartment("safe", 0.9, 0.6, {
     name = "bnl-captain-safe",
     max_health = 2000,
     inventory_size = 16,
+    -- a bar: scripts/safe.lua closes the whole chest to inserters until it opens
+    inventory_type = "with_bar",
     minable = {mining_time = 6, results = salvage({{"steel-plate", 5, 10}})},
     circuit_connector = steel_chest and table.deepcopy(steel_chest.circuit_connector) or nil,
     circuit_wire_max_distance = steel_chest and steel_chest.circuit_wire_max_distance or 9,
@@ -188,6 +190,19 @@ if radar then
     local layers = beacon.pictures and beacon.pictures.layers
     if layers and layers[1] then layers[1].tint = {r = 1, g = 0.7, b = 0.4, a = 1} end
     entities[#entities + 1] = beacon
+
+    -- After the SOS (scripts/distress.lua) the beacon only listens: an ordinary radar in paler
+    -- orange that is taken apart back into the beacon item.
+    local receiver = table.deepcopy(beacon)
+    receiver.name = "bnl-distress-receiver"
+    receiver.energy_usage = radar.energy_usage
+    receiver.max_distance_of_sector_revealed = radar.max_distance_of_sector_revealed
+    receiver.max_distance_of_nearby_sector_revealed = radar.max_distance_of_nearby_sector_revealed
+    receiver.placeable_by = {item = "bnl-distress-beacon", count = 1}
+    receiver.hidden_in_factoriopedia = true
+    local receiver_layers = receiver.pictures and receiver.pictures.layers
+    if receiver_layers and receiver_layers[1] then receiver_layers[1].tint = {r = 1, g = 0.85, b = 0.7, a = 1} end
+    entities[#entities + 1] = receiver
 end
 
 data:extend(entities)

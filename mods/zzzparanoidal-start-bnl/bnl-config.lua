@@ -324,6 +324,11 @@ config.reactor = {
     meltdown_dps = 0.25,
     meltdown_radius = 100000,
     geiger_radius = 20, -- Radioactive-Damage-Reforged: the Geiger counter clicks this far, damage only within radiation_radius
+    -- The broken core heats up towards the meltdown, without any message (user decision 2026-10-27):
+    -- its glow and smoke grow with the share of the meltdown time gone, from the first value to the
+    -- second. Smoke: one roll every smoke_interval ticks (chance, then puffs) at the hole of the light.
+    glow = {scale = {2.5, 4.2}, intensity = {0.8, 1}, smoke_interval = 60, smoke_chance = {0.12, 0.9},
+        smoke_puffs = {1, 3}, offset = {1.2, -0.8}},
 }
 
 -- 4. Flight recorder: red science reward of the decoding research.
@@ -459,9 +464,28 @@ config.safe = {
     distance = {10, 18},
     signals = {"signal-B", "signal-N", "signal-L"},
     code = {1, 999},
-    items = {
-        {"modular-armor", 1, 1, quality_steps = 3}, {"night-vision-equipment", 1, 1}, {"solar-panel-equipment", 4, 4},
-        {"battery-equipment", 2, 2}, {"logistic-science-pack", 25, 25},
+    -- Lock check (scripts/safe.lua): every poll_idle ticks, every poll_wired while a wire is on the
+    -- safe. Picking the lock: a letter clicks (stays solved) once its right value is seen at
+    -- latch_polls polls in a row (poll_wired 30 x 2 = a value held for one second).
+    poll_idle = 300,
+    poll_wired = 30,
+    latch_polls = 2,
+    -- The safe looks empty (no item can be put in either); what is inside is rolled once at the map
+    -- start from the map seed (scripts/loot.lua) and appears when it opens. Entries {item, min, max,
+    -- quality_steps = {min, max}}; the variant also names its journal entry (safe-open-<key>).
+    loot = {
+        {key = "bridge", weight = 40, items = {
+            {"modular-armor", 1, 1, quality_steps = {2, 3}}, {"personal-roboport-equipment", 1, 1},
+            {"construction-robot", 10, 10}, {"battery-equipment", 2, 2}, {"solar-panel-equipment", 4, 4},
+        }},
+        {key = "quality", weight = 30, items = {
+            {"quality-module", 4, 6, quality_steps = {0, 1}}, {"assembling-machine-2", 2, 2, quality_steps = {2, 3}},
+            {"electric-mining-drill", 4, 4, quality_steps = {1, 2}}, {"long-handed-inserter", 20, 20, quality_steps = {1, 1}},
+        }},
+        {key = "personal", weight = 30, items = {
+            {"modular-armor", 1, 1, quality_steps = {1, 1}}, {"exoskeleton-equipment", 1, 1}, {"night-vision-equipment", 1, 1},
+            {"energy-shield-equipment", 2, 2}, {"battery-equipment", 1, 1},
+        }},
     },
 }
 
@@ -481,7 +505,31 @@ config.capsules = {
 config.distress = {
     transmit_s = 60,
     reply_delay = 2 * MINUTE,
-    check_interval = 600,
+    check_interval = 300,
+    label_offset = {0, -3.6},
+    -- After the reply the beacon becomes an ordinary radar (bnl-distress-receiver), BnL sends a
+    -- severance pod next to it, and the SOS goes to the insurance: the pods start (no radar needed)
+    -- or, already started, insurance_bonus more pods come. The severance variant and its contents
+    -- are rolled once at the map start from the map seed (scripts/loot.lua); entries {item, min, max,
+    -- quality = name or defect = {min, max} (defect grade, only for items that can be defective)}.
+    severance_delay = 90 * 60,
+    severance_distance = {8, 25},
+    severance = {
+        {key = "pay", weight = 30, items = {
+            {"bnl-advertising-flyer", 100, 100}, {"repair-pack", 30, 50}, {"steel-plate", 50, 100},
+            {"electronic-circuit", 30, 50}, {"small-electric-pole", 20, 30}, {"solid-fuel", 20, 40},
+        }},
+        {key = "kind", weight = 30, items = {
+            {"assembling-machine-1", 2, 3, defect = {3, 5}}, {"burner-mining-drill", 3, 4, defect = {3, 5}},
+            {"inserter", 10, 15, defect = {4, 5}}, {"stone-furnace", 4, 6, defect = {3, 4}}, {"bnl-advertising-flyer", 100, 100},
+        }},
+        {key = "parachute", weight = 20, items = {{"salvaged-generator", 1, 1}, {"bnl-advertising-flyer", 400, 400}}},
+        {key = "kit", weight = 20, items = {
+            {"bnl-advertising-flyer", 200, 200}, {"raw-fish", 20, 30}, {"firearm-magazine", 30, 50}, {"repair-pack", 10, 20},
+            {"wood", 50, 50},
+        }},
+    },
+    insurance_bonus = 2,
     letters = {"logistic-science-pack", "chemical-science-pack", "rocket-silo", "space-construction"},
 }
 
@@ -489,6 +537,21 @@ config.distress = {
 -- offset from the ship centre in tiles, width in tiles, rotation in turns (counter-clockwise < 1).
 -- clear_radius: no start wreck within it (their fire would cover the logo), ship flames avoid flame_radius.
 config.ship_decal = {offset = {1.58, 3.05}, clear_radius = 5, flame_radius = 1.6, width = 1.8, orientation = 1 - 25 / 360, tint = {0.88, 0.88, 0.88, 0.92}}
+
+-- 16. AUTO protocol (scripts/goals.lua): the objectives window and the briefing after the landing.
+config.goals = {
+    interval = 300, -- refresh while something changes by itself (fires, recorder, antenna, SOS)
+    done_ttl = 60 * 60, -- a finished goal stays green this long
+    antenna_delay = 90 * 60, -- the antenna briefing comes this long after the fire briefing
+    parts = 3, -- antenna parts of the beacon recipe
+    width = 360,
+    antenna_sources = {"medbay", "armory", "engineering", "reactor"},
+    -- After this long since the landing the reminders of the recorder and the antenna go into the
+    -- journal and nothing refreshes by itself any more (the safe line lives by events).
+    retire = 2 * 60 * MINUTE,
+    act_delay = 3 * MINUTE, -- the closing act of the insurance case this long after the BnL answer
+    water = "water-barrel",
+}
 
 -- 15. Intro flight along the trail.
 config.intro = {start_distance = 100, transition = 660, wait = 120, explosions = 6}

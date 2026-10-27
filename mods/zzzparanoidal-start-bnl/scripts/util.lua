@@ -79,6 +79,29 @@ function M.entity_exists(name)
     return prototypes.entity[name] ~= nil
 end
 
+-- Rotating texts: a message has several variants "bnl.<base>-1..n" (locale), one is picked at random
+-- (math.random: the same in multiplayer). Lines of the objectives window pick once per stage.
+M.JOKES = {
+    ["brief-fire"] = 3, ["brief-antenna"] = 3, ["antenna-found"] = 4, ["antenna-found-extra"] = 3, ["antenna-all"] = 3,
+    ["distress-interrupted"] = 3, ["falling-warning-medium"] = 4,
+    ["safe-no-signal"] = 3, ["safe-wrong-code"] = 4, ["safe-latched"] = 4,
+    ["first-quench"] = 3, ["first-stack-lost"] = 3, ["water-out"] = 3,
+    ["goal-recorder-find"] = 3, ["goal-recorder-decode"] = 3, ["goal-recorder-decoding"] = 3,
+    ["goal-recorder-done"] = 3, ["goal-recorder-lost"] = 3,
+    ["goal-antenna-parts"] = 4, ["goal-antenna-build"] = 3, ["goal-antenna-power"] = 3,
+    ["goal-antenna-waiting"] = 4, ["goal-antenna-done"] = 3,
+    ["goal-safe-partial"] = 3, ["goal-safe-code"] = 3, ["goal-safe-done"] = 3,
+}
+
+function M.variant(base)
+    return math.random(M.JOKES[base] or 1)
+end
+
+-- {"bnl.<base>-N", ...}: a random variant with the parameters.
+function M.joke(base, ...)
+    return {"bnl." .. base .. "-" .. M.variant(base), ...}
+end
+
 -- Chat message with the BnL prefix and the radio sound (nil sound = radio, false = silent).
 function M.say(message, sound, target)
     local settings = {color = M.CHAT_COLOR}

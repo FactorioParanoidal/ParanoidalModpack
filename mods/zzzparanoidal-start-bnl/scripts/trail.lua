@@ -1,14 +1,18 @@
 -- Debris trail: the ship broke up while coming in from the west-south-west. Small debris lies along
 -- the line, the detached compartments further out, the previous expedition aside. Every object is
 -- placed when the 3x3 chunks around it are generated (requested at once); the chunk handler is
--- registered only while something waits. Compartments send an emergency beacon (chart tag); the
--- flight recorder tells what each of them is.
+-- registered only while something waits; the object itself comes a scheduler pass later, after the
+-- ruins mods have spawned their ruins on those chunks (AbandonedRuins clears the whole area of a
+-- ruin of every entity on the tick after the chunk generation; plain ruins start at 400 tiles from
+-- spawn, the hydroponics and everything further out was lost that way). Compartments send an emergency beacon (a chart tag whose
+-- icon shows what is useful there now); the flight recorder tells their story.
 local config = require("bnl-config")
 local util = require("scripts.util")
 local quality = require("scripts.quality")
 local events = require("scripts.events")
 local reactor = require("scripts.reactor")
 local tags = require("scripts.tags")
+local scheduler = require("scripts.scheduler")
 local M = {}
 local cfg = config.trail
 
@@ -36,16 +40,28 @@ end
 
 local place -- forward
 
+-- Placed at the next scheduler pass (at least 2 ticks later): the ruins of its chunks are there.
+local function place_later(obj)
+    obj.placing = true
+    scheduler.after(2, "trail-place", {id = obj.id})
+end
+
+scheduler.handler("trail-place", function(job)
+    local t = storage.bnl and storage.bnl.trail
+    local obj = t and t.objects[job.id]
+    if obj then place(obj) end
+end)
+
 local function queue(surface, obj)
     local t = state()
     t.next_id = t.next_id + 1
     obj.id = t.next_id
     obj.surface = surface.index
+    t.objects[obj.id] = obj
     if ready(surface, obj.position) then
-        place(obj)
+        place_later(obj)
         return
     end
-    t.objects[obj.id] = obj
     local cx, cy = chunk_of(obj.position)
     for dx = -1, 1 do
         for dy = -1, 1 do
@@ -144,13 +160,32 @@ local function crater_pond(surface, p)
     local center = util.add(p, util.vector(math.random(), 4))
     local r = 6 + 2 * math.random()
     local phase = math.random() * 2 * math.pi
+    -- no tile of the pond under anything that is not cleared below (another compartment, a wreck,
+    -- the expedition): set_tiles would remove it as colliding
+    local keep = {}
+    for _, entity in pairs(surface.find_entities_filtered({position = center, radius = r + 6})) do
+        local kind = entity.type
+        if kind ~= "resource" and kind ~= "tree" and kind ~= "simple-entity" and kind ~= "item-entity" then
+            keep[#keep + 1] = entity.bounding_box
+        end
+    end
+    local function covered(x, y)
+        for _, box in ipairs(keep) do
+            if x + 1 > box.left_top.x and x < box.right_bottom.x and y + 1 > box.left_top.y and y < box.right_bottom.y then
+                return true
+            end
+        end
+        return false
+    end
     local tiles = {}
     for x = math.floor(center.x - r - 1), math.ceil(center.x + r + 1) do
         for y = math.floor(center.y - r - 1), math.ceil(center.y + r + 1) do
             local dx, dy = x + 0.5 - center.x, y + 0.5 - center.y
             local edge = r * (0.85 + 0.15 * math.sin(math.atan2(dy, dx) * 3 + phase))
             local d = math.sqrt(dx * dx + dy * dy) / edge
-            if d <= 1 then tiles[#tiles + 1] = {name = d < 0.55 and "water" or "water-shallow", position = {x, y}} end
+            if d <= 1 and not covered(x, y) then
+                tiles[#tiles + 1] = {name = d < 0.55 and "water" or "water-shallow", position = {x, y}}
+            end
         end
     end
     for _, entity in pairs(surface.find_entities_filtered({position = center, radius = r + 1.5, type = {"resource", "tree", "simple-entity"}})) do
@@ -174,12 +209,116 @@ local function guard(surface, center)
     end
 end
 
-local function tag_compartment(key, entity)
-    local force = util.player_force()
-    util.chart(force, entity.surface, entity.position, 24)
-    tags.set("compartment-" .. key, force, entity.surface, entity.position, state().revealed and key or "beacon",
-        {type = "item", name = "bnl-antenna-part"})
+-- Map icon of a compartment by what is useful there now (icons only, no names: user decision
+-- 2026-10-26): the reactor shows radiation while it stands, the hydroponics a seedling while
+-- something is left, the others the antenna part while it lies inside; an emptied or gone
+-- compartment a check mark, the blown-up reactor the antenna part until it is picked up.
+local PART = "bnl-antenna-part"
+local CHECK = {type = "virtual", name = "signal-check"}
+
+local function signal(kind, name, fallback)
+    local list = kind == "virtual" and prototypes.virtual_signal or prototypes.item
+    if list[name] then return {type = kind, name = name} end
+    return fallback
 end
+
+local function part_drops_left()
+    for _, drop in ipairs(storage.bnl.antenna_drops or {}) do
+        if drop.valid then return true end
+    end
+    return false
+end
+
+local function icon_of(key, entity)
+    local part = signal("item", PART, CHECK)
+    local alive = entity and entity.valid
+    if key == "reactor" then
+        -- hot: radiation; cold: the part inside is waiting to be taken apart
+        if alive then
+            local rec = storage.bnl.reactor
+            if rec and rec.cold then return part end
+            return signal("virtual", "signal-radioactivity", part)
+        end
+        return part_drops_left() and part or CHECK
+    end
+    local inventory = alive and entity.get_inventory(defines.inventory.chest)
+    if key == "hydroponics" then
+        if inventory and not inventory.is_empty() then return signal("item", "seedling", CHECK) end
+        return CHECK
+    end
+    if inventory and inventory.get_item_count(PART) > 0 then return part end
+    return CHECK
+end
+
+local function tag_compartment(key, entity)
+    local t = state()
+    local position = entity.valid and entity.position or (t.positions and t.positions[key])
+    if not position then return end
+    local force = util.player_force()
+    local surface = entity.valid and entity.surface or game.get_surface(t.surfaces and t.surfaces[key] or 1)
+    if not surface then return end
+    local icon = icon_of(key, entity)
+    t.icons = t.icons or {}
+    t.icons[key] = icon.name
+    tags.set("compartment-" .. key, force, surface, position, key, icon)
+end
+
+-- Map icons follow the compartments (the objectives refresh, a cooled or blown-up reactor, a
+-- compartment taken apart); a tag is replaced only when its icon changes.
+function M.update_tags()
+    local t = storage.bnl and storage.bnl.trail
+    if not t then return end
+    t.icons = t.icons or {}
+    for key, entity in pairs(t.placed) do
+        if key ~= "expedition" and (entity.valid or (t.positions and t.positions[key])) then
+            if entity.valid and not (t.regs and t.regs[key]) then
+                -- compartments placed before the icons followed them
+                t.regs = t.regs or {}
+                t.regs[key] = script.register_on_object_destroyed(entity)
+                t.positions = t.positions or {}
+                t.positions[key] = util.pos(entity.position)
+                t.surfaces = t.surfaces or {}
+                t.surfaces[key] = entity.surface.index
+            end
+            if t.icons[key] ~= icon_of(key, entity).name then tag_compartment(key, entity) end
+        end
+    end
+end
+
+reactor.on_change = M.update_tags
+
+-- A compartment is gone (taken apart or destroyed): its icon becomes a check mark.
+function M.on_destroyed(registration)
+    local t = storage.bnl and storage.bnl.trail
+    if not (t and t.regs) then return end
+    for key, reg in pairs(t.regs) do
+        if reg == registration then
+            t.regs[key] = nil
+            local died = t.died and t.died[key]
+            log(string.format("zzzparanoidal-start-bnl: %s at %s gone at tick %d: %s", key,
+                serpent.line(t.positions and t.positions[key]), game.tick,
+                died or "taken apart or removed by a script (ruins clear their area this way)"))
+            if key ~= "expedition" then M.update_tags() end
+            return
+        end
+    end
+end
+
+-- Who killed a trail object (the log line of on_destroyed names it).
+local KEY_OF = {["bnl-old-expedition"] = "expedition"}
+for _, spec in ipairs(cfg.compartments) do KEY_OF[spec.name] = spec.key end
+local died_filter = {}
+for name in pairs(KEY_OF) do died_filter[#died_filter + 1] = {filter = "name", name = name} end
+events.on(defines.events.on_entity_died, function(event)
+    local entity = event.entity
+    local key = entity and entity.valid and KEY_OF[entity.name]
+    local t = key and storage.bnl and storage.bnl.trail
+    if not (t and t.placed[key] == entity) then return end
+    t.died = t.died or {}
+    local cause = event.cause
+    t.died[key] = "died, cause " .. (cause and cause.valid and (cause.name .. " of " .. cause.force.name) or "unknown")
+        .. ", damage " .. (event.damage_type and event.damage_type.name or "?")
+end, died_filter)
 
 local COMPARTMENT_TRIES = 20
 local COMPARTMENT_STEP = 48 -- tiles further out along the trail per try
@@ -213,7 +352,15 @@ local function place_compartment(surface, obj)
     if spec.items then fill(entity, spec.items) end
     if spec.guard then guard(surface, entity.position) end
     if obj.key == "reactor" then reactor.setup(entity) end
-    state().placed[obj.key] = entity
+    local t = state()
+    t.placed[obj.key] = entity
+    t.positions = t.positions or {}
+    t.positions[obj.key] = util.pos(entity.position)
+    t.surfaces = t.surfaces or {}
+    t.surfaces[obj.key] = surface.index
+    t.regs = t.regs or {}
+    t.regs[obj.key] = script.register_on_object_destroyed(entity)
+    util.chart(util.player_force(), surface, entity.position, 24)
     tag_compartment(obj.key, entity)
 end
 
@@ -243,6 +390,10 @@ local function place_expedition(surface, obj)
     end
     local t = state()
     t.placed.expedition = ship
+    t.positions = t.positions or {}
+    t.positions.expedition = util.pos(ship.position)
+    t.regs = t.regs or {}
+    t.regs.expedition = script.register_on_object_destroyed(ship)
     -- the corpse tag appears once the place is charted (or when the recorder is decoded)
     tags.set("expedition", util.player_force(), surface, util.add(spot, {x = 3, y = 5}), "expedition",
         {type = "virtual", name = "signal-info"})
@@ -287,7 +438,7 @@ local function on_chunk_generated(event)
     local surface = event.surface
     for _, id in ipairs(list) do
         local obj = t.objects[id]
-        if obj and obj.surface == surface.index and ready(surface, obj.position) then place(obj) end
+        if obj and not obj.placing and obj.surface == surface.index and ready(surface, obj.position) then place_later(obj) end
     end
     if not next(t.waiting) then events.refresh() end
 end
@@ -303,13 +454,19 @@ function M.reveal()
     t.revealed = true
     for key, entity in pairs(t.placed) do
         if entity.valid then
-            if key == "expedition" then
-                util.chart(util.player_force(), entity.surface, entity.position, 24)
-            else
-                tag_compartment(key, entity)
-            end
+            util.chart(util.player_force(), entity.surface, entity.position, 24)
+            if key ~= "expedition" then tag_compartment(key, entity) end
         end
     end
+end
+
+-- "pending" (not placed yet or never), "valid" with the entity, or "gone" (taken apart, destroyed).
+function M.placed(key)
+    local t = storage.bnl and storage.bnl.trail
+    local entity = t and t.placed[key]
+    if entity == nil then return "pending" end
+    if entity.valid then return "valid", entity end
+    return "gone"
 end
 
 function M.compartment(key)

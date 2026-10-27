@@ -24,6 +24,8 @@ local distress = require("scripts.distress")
 local intro = require("scripts.intro")
 local util = require("scripts.util")
 local geology = require("scripts.geology")
+local goals = require("scripts.goals")
+local loot = require("scripts.loot")
 require("scripts.recorder")
 require("scripts.reactor")
 require("scripts.douse")
@@ -52,6 +54,11 @@ local function bnl_init()
     anomalies.init()
     distress.init()
     intro.init()
+    goals.init()
+    loot.init() -- the safe and the severance pay are fixed from the map seed now
+    -- without the debris trail there are no antenna parts: no beacon recipe to stare at
+    local recipe = not util.enabled("bnl-start-debris-trail") and game.forces.player.recipes["bnl-distress-beacon"]
+    if recipe then recipe.enabled = false end
     local surface = game.surfaces.nauvis
     if surface then trail.plan(surface) end
 end
@@ -104,6 +111,7 @@ start.on_ready = function(shipwreck, ship, wrecks)
     storage.bnl.start_wrecks = list -- the start wrecks without later debris (the guard's ammo)
     professions.on_start_ready()
     geology.on_start_ready()
+    goals.on_landing(professions.enabled())
     events.refresh()
 end
 
@@ -184,6 +192,7 @@ events.on(defines.events.on_object_destroyed, function(event)
         fire.on_destroyed(registration)
         pods.on_destroyed(registration)
         turret.on_destroyed(registration)
+        trail.on_destroyed(registration)
     end
 end)
 

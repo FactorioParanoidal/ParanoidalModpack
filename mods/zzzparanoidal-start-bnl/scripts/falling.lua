@@ -14,6 +14,7 @@ local fire = require("scripts.fire")
 local events = require("scripts.events")
 local tags = require("scripts.tags")
 local flight = require("scripts.flight")
+local journal = require("scripts.journal")
 local M = {}
 local cfg = config.falling
 
@@ -63,20 +64,29 @@ end
 
 -- The flight recorder must reach the players (its research is the only source of the safe code
 -- digits B and N and the beacon names): when its piece is lost (falling debris switched off, no
--- projectile, no wreck) it lies in the starliner instead, or next to it.
+-- projectile, no wreck) it lies in the starliner instead, or next to it while the starliner burns
+-- (a burning starliner is locked). Where it lies is kept for the objectives window
+-- (f.recorder_box: the container, f.recorder_drops: items on the ground).
+local function announce_recorder(surface, position)
+    tags.set("recorder", util.player_force(), surface, position, "recorder", {type = "item", name = "bnl-flight-recorder"})
+    util.say({"bnl.recorder-signal", util.gps(position, surface)})
+    journal.add("recorder-signal", {util.gps(position, surface)}, {silent = true})
+end
+
 local function recorder_fallback(surface)
     local f = storage.bnl.falling
     if f.recorder_landed or not util.item_exists("bnl-flight-recorder") then return end
     f.recorder_landed = true
     local ship = storage.shipwreck and storage.shipwreck.ship
     local position = ship and ship.valid and ship.position or util.ship_position()
-    if not (ship and ship.valid and ship.insert({name = "bnl-flight-recorder", count = 1}) > 0) then
-        surface.spill_item_stack({position = position, stack = {name = "bnl-flight-recorder", count = 1},
+    if ship and ship.valid and not fire.is_burning(ship) and ship.insert({name = "bnl-flight-recorder", count = 1}) > 0 then
+        f.recorder_box = ship
+    else
+        f.recorder_drops = surface.spill_item_stack({position = position, stack = {name = "bnl-flight-recorder", count = 1},
             enable_looted = true, allow_belts = false})
     end
-    tags.set("recorder", util.player_force(), surface, position, "recorder", {type = "item", name = "bnl-flight-recorder"})
-    util.say({"bnl.recorder-signal", util.gps(position, surface)})
-    log("zzzparanoidal-start-bnl: flight recorder placed in the starliner (its falling piece did not land)")
+    announce_recorder(surface, position)
+    log("zzzparanoidal-start-bnl: flight recorder placed at the starliner (its falling piece did not land)")
 end
 
 scheduler.handler("falling-recorder-check", function(job)
@@ -249,7 +259,7 @@ scheduler.handler("falling-warn", function(job, tick)
     if job.kind == "big" then
         util.say({"bnl.falling-warning", {"bnl.falling-size-" .. job.kind}, util.gps(target, surface)})
     elseif job.kind == "medium" then
-        util.say({"bnl.falling-warning-medium", {"bnl.falling-size-" .. job.kind}})
+        util.say(util.joke("falling-warning-medium"))
     end
     scheduler.at(tick + cfg.warning - cfg.flight, "falling-launch", job)
     M.sound_before(surface, target, tick + cfg.warning - cfg.flight)
@@ -298,17 +308,20 @@ local function land_debris(surface, position, kind, data)
         start.mark(state, wreck)
         if wreck.type == "container" then cargo(state, wreck, kind) end
     end
-    if data and data.recorder and wreck.type == "container" and not storage.bnl.falling.recorder_landed then
-        if wreck.insert({name = "bnl-flight-recorder", count = 1}) == 0 then
-            surface.spill_item_stack({position = wreck.position, stack = {name = "bnl-flight-recorder", count = 1},
+    local f = storage.bnl.falling
+    if data and data.recorder and wreck.type == "container" and not f.recorder_landed then
+        if wreck.insert({name = "bnl-flight-recorder", count = 1}) > 0 then
+            f.recorder_box = wreck
+        else
+            f.recorder_drops = surface.spill_item_stack({position = wreck.position, stack = {name = "bnl-flight-recorder", count = 1},
                 enable_looted = true, allow_belts = false})
         end
-        storage.bnl.falling.recorder_landed = true
-        -- the piece with the recorder survives the blasts and impacts around it (its fire never burns
-        -- the recorder, scripts/fire.lua)
+        f.recorder_landed = true
+        -- the piece with the recorder survives the blasts and impacts around it and never burns: it
+        -- is not tracked by the fire (no hazardous cargo, nothing can set it alight)
         wreck.destructible = false
-        tags.set("recorder", util.player_force(), surface, wreck.position, "recorder", {type = "item", name = "bnl-flight-recorder"})
-        util.say({"bnl.recorder-signal", util.gps(wreck.position, surface)})
+        announce_recorder(surface, wreck.position)
+        return
     end
     local rec = fire.track(wreck, true)
     if rec and math.random() < cfg.ignite_chance then fire.ignite(rec) end

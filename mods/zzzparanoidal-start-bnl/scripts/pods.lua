@@ -42,7 +42,8 @@ local function target_near(surface, center, range)
     return nil
 end
 
--- Announces a pod and launches it after the warning; items = {name, min, max}.
+-- Announces a pod and launches it after the warning; items = {name, min, max}, {list = {entries}}
+-- or {stacks = {{name, count, quality}}} (a reward rolled in advance, scripts/loot.lua).
 function M.drop(surface, center, items, range, message)
     local target = target_near(surface, center, range or cfg.distance) or target_near(surface, center, {8, 30})
     if not target then return end
@@ -65,7 +66,22 @@ falling.landers.pod = function(surface, position, data)
     local chest = surface.create_entity({name = CHEST, position = spot, force = "player", create_build_effect_smoke = false})
     if not chest then return end
     local items = data and data.items
-    if items and util.item_exists(items[1]) then chest.insert({name = items[1], count = util.int({items[2], items[3]})}) end
+    if items and items.stacks then
+        for _, stack in ipairs(items.stacks) do
+            if util.item_exists(stack.name) then
+                local q = prototypes.quality[stack.quality or "normal"] and stack.quality or "normal"
+                local n = chest.insert({name = stack.name, count = stack.count, quality = q})
+                if n < stack.count then
+                    surface.spill_item_stack({position = spot, stack = {name = stack.name, count = stack.count - n, quality = q},
+                        enable_looted = true, allow_belts = false})
+                end
+            end
+        end
+        items = nil
+    end
+    for _, entry in ipairs(items and (items.list or {items}) or {}) do
+        if util.item_exists(entry[1]) then chest.insert({name = entry[1], count = util.int({entry[2], entry[3]})}) end
+    end
     if items and items[1] == "bnl-advertising-flyer" then
         util.say({"bnl.flyer-pod", {"bnl.flyer-" .. math.random(4)}, util.gps(spot, surface)})
     end
@@ -104,23 +120,48 @@ scheduler.handler("pod", function()
         local far = math.random() < cfg.far_chance
         M.drop(surface, s.radar, contents, far and cfg.far_distance or cfg.distance, far and "bnl.pod-incoming-far" or nil)
     end
-    if s.index > #cfg.intervals then
+    -- the SOS of the distress beacon may add pods (s.bonus), they come at the last interval
+    if s.index > #cfg.intervals + (s.bonus or 0) then
         finish("insurance-end")
     else
-        scheduler.after(cfg.intervals[s.index], "pod")
+        scheduler.after(cfg.intervals[s.index] or cfg.intervals[#cfg.intervals], "pod")
     end
 end)
+
+-- The insurance starts: pods fall around `position` (the first radar or the distress beacon).
+local function start(surface, position, key)
+    local s = state()
+    s.started = true
+    s.radar = util.pos(position)
+    s.surface = surface.index
+    journal.add(key, {util.gps(position, surface)})
+    scheduler.after(util.int(cfg.first_delay), "pod")
+end
+
+local RADARS = {}
+for _, name in ipairs(config.radars) do RADARS[name] = true end
 
 local function on_built(event)
     local entity = event.entity
     local s = state()
-    if not (s and entity and entity.valid and entity.type == "radar") then return end
+    -- by name: the build events share one filter with the distress beacon (a radar that only
+    -- transmits, scripts/distress.lua), which must not count as the first radar
+    if not (s and entity and entity.valid and RADARS[entity.name]) then return end
     if s.started or s.ended or entity.force.name ~= "player" or not util.enabled("bnl-start-supply-pods") then return end
-    s.started = true
-    s.radar = util.pos(entity.position)
-    s.surface = entity.surface.index
-    journal.add("insurance-start", {util.gps(entity.position, entity.surface)})
-    scheduler.after(util.int(cfg.first_delay), "pod")
+    start(entity.surface, entity.position, "insurance-start")
+end
+
+-- The SOS reached BnL (scripts/distress.lua): the crash becomes an insurance case without a radar,
+-- or an insurance already running owes `bonus` more pods. Nothing once the insurance has ended.
+function M.sos(surface, position, bonus)
+    local s = state()
+    if not s or s.ended or not util.enabled("bnl-start-supply-pods") then return end
+    if not s.started then
+        start(surface, position, "insurance-sos")
+        return
+    end
+    s.bonus = (s.bonus or 0) + bonus
+    util.say({"bnl.insurance-bonus", bonus})
 end
 
 local radar_filter = {}

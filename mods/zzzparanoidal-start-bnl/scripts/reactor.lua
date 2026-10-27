@@ -13,6 +13,13 @@ local scheduler = require("scripts.scheduler")
 local M = {}
 local cfg = config.reactor
 
+-- Called when the compartment cools down or blows up (scripts/trail.lua updates its map tag).
+M.on_change = nil
+
+local function changed()
+    if M.on_change then M.on_change() end
+end
+
 -- Power in MW `ticks` after the full repair.
 local function power_mw(ticks)
     local t = ticks / 3600
@@ -62,8 +69,9 @@ local function explode(rec)
         remote.call(RDR, "set_source", entity, 0, nil, nil, MELTDOWN_KEY)
     end
     if util.item_exists("bnl-antenna-part") then
-        surface.spill_item_stack({position = position, stack = {name = "bnl-antenna-part", count = 1},
-            enable_looted = true, allow_belts = false})
+        -- kept for the antenna count and the map tag (scripts/goals.lua, scripts/trail.lua)
+        storage.bnl.antenna_drops = surface.spill_item_stack({position = position,
+            stack = {name = "bnl-antenna-part", count = 1}, enable_looted = true, allow_belts = false})
     end
     entity.destructible = true
     entity.die()
@@ -73,7 +81,54 @@ local function explode(rec)
         surface.create_entity({name = "massive-explosion", position = position})
     end
     util.say({"bnl.reactor-exploded", util.gps(position, surface)}, false)
+    changed()
 end
+
+-- Share of the meltdown time gone (0 at the landing, 1 at the meltdown).
+local function heat()
+    return math.min(1, util.since_landing() / cfg.meltdown)
+end
+
+local function between(range, k)
+    return range[1] + (range[2] - range[1]) * k
+end
+
+-- The broken core heats up: its glow grows slowly with the time to the meltdown; a repaired core
+-- glows as at the start.
+local function glow(rec)
+    local light = rec.light
+    if not (light and light.valid) then return end
+    local k = rec.repaired and 0 or heat()
+    light.scale = between(cfg.glow.scale, k)
+    light.intensity = between(cfg.glow.intensity, k)
+end
+
+-- Smoke from the hole of the broken core: rare at first, thick before the meltdown.
+local function start_smoke(rec)
+    if rec.smoking or rec.repaired or rec.cold then return end
+    rec.smoking = true
+    scheduler.after(cfg.glow.smoke_interval, "reactor-smoke")
+end
+
+scheduler.handler("reactor-smoke", function()
+    local rec = storage.bnl.reactor
+    if not rec then return end
+    local entity = rec.entity
+    if rec.repaired or rec.cold or not entity.valid then
+        rec.smoking = nil
+        return
+    end
+    local g = cfg.glow
+    local k = heat()
+    if math.random() < between(g.smoke_chance, k) then
+        local p = util.add(entity.position, util.pos(g.offset))
+        for _ = 1, math.floor(between(g.smoke_puffs, k) + math.random()) do
+            entity.surface.create_trivial_smoke({name = "fire-smoke-without-glow",
+                position = {x = p.x + (math.random() - 0.5) * 0.8, y = p.y + (math.random() - 0.5) * 0.6}})
+        end
+    end
+    scheduler.after(g.smoke_interval, "reactor-smoke")
+end)
 
 local function radiate(entity, dose)
     if rdr() then
@@ -103,6 +158,7 @@ function M.setup(entity)
         color = {r = 1, g = 0.6, b = 0.2}, scale = 1.2, alignment = "center", only_in_alt_mode = true})
     s.reactor = rec
     scheduler.after(1, "reactor")
+    start_smoke(rec)
 end
 
 function M.cool(rec)
@@ -116,6 +172,7 @@ function M.cool(rec)
     entity.minable_flag = true
     entity.destructible = true
     util.say({"bnl.reactor-cold", util.gps(entity.position, entity.surface)})
+    changed()
 end
 
 scheduler.handler("reactor", function(_, tick)
@@ -156,6 +213,8 @@ scheduler.handler("reactor", function(_, tick)
     if rec.label and rec.label.valid then
         rec.label.text = rec.repaired and {"bnl.reactor-label", string.format("%.2f", p)} or {"bnl.reactor-label-broken"}
     end
+    glow(rec)
+    start_smoke(rec) -- also for a compartment set up before the smoke existed
     radiate(entity, rec.repaired and cfg.radiation_damage * p / cfg.power_mw * 0.5 or cfg.radiation_damage)
     scheduler.after(cfg.interval, "reactor")
 end)

@@ -26,4 +26,6 @@ data:extend({
         order = "b-h",
     },
     {type = "bool-setting", name = "bnl-start-mp-capsules", setting_type = "runtime-global", default_value = true, order = "b-i"},
+    -- Per player: the goals of the start in the objectives window (scripts/goals.lua).
+    {type = "bool-setting", name = "bnl-goals", setting_type = "runtime-per-user", default_value = true, order = "c-a"},
 })

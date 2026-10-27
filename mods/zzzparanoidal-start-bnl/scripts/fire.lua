@@ -466,6 +466,19 @@ local function lose_stack(inventory)
     return text, count
 end
 
+-- Counters of the start for the AUTO remarks and the closing act (scripts/goals.lua).
+local function tally(key, n)
+    local s = storage.bnl and storage.bnl.fire
+    if not s then return end
+    s.stats = s.stats or {}
+    s.stats[key] = (s.stats[key] or 0) + (n or 1)
+end
+
+function M.stats()
+    local s = storage.bnl and storage.bnl.fire
+    return s and s.stats or {}
+end
+
 local function float_text(entity, text, offset, color, scale, ttl)
     rendering.draw_text({
         text = text,
@@ -489,8 +502,11 @@ local function degrade(rec, entity, n)
         end
         for _ = 1, n do -- every step burnt is one roll
             if math.random() < cfg.lose_chance then
-                local text, count = lose_stack(inventory)
-                if text then lost[#lost + 1] = {text, count} end
+                local text, n = lose_stack(inventory)
+                if text then
+                    lost[#lost + 1] = {text, n}
+                    tally("stacks_lost")
+                end
             end
         end
     end
@@ -886,12 +902,14 @@ local function burn_out(rec, entity)
         scheduler.after(1, "fire-afterglow", {entity = entity, until_tick = game.tick + afterglow})
     end
     rec.burnt = true
+    tally("burnt_out")
     extinguish(rec)
 end
 
 -- The fire goes out by water: a big steam cloud over the wreck, no last blast; the cargo comes
 -- back, the wreck and the spot around it stay wet (its own flames around go out too).
 local function quench(rec, entity)
+    tally("quenched")
     extinguish(rec)
     M.wet(entity.surface, entity.position, entity.get_radius() + cfg.water.wet_margin)
     local radius = entity.get_radius() * 1.41 -- twice the area of the first version
@@ -908,6 +926,35 @@ function M.is_burning(entity)
     local s = storage.bnl and storage.bnl.fire
     local rec = s and WRECK[entity.name] and s.wrecks[reg_of(entity)]
     return rec ~= nil and rec.burning == true
+end
+
+-- Burning wrecks now (the objectives window, scripts/goals.lua).
+function M.burning_count()
+    local s = storage.bnl and storage.bnl.fire
+    if not s then return 0 end
+    local n = 0
+    for _, rec in pairs(s.wrecks) do
+        if rec.burning and rec.entity.valid then n = n + 1 end
+    end
+    return n
+end
+
+-- Wrecks can still catch fire by themselves (the watch runs) or something burns.
+function M.active()
+    local s = storage.bnl and storage.bnl.fire
+    return s ~= nil and (s.watching == true or s.ticking == true)
+end
+
+-- Items of `name` in an entity's chest, also while its fire holds the cargo.
+function M.item_count(entity, name)
+    local n = 0
+    local inventory = chest(entity)
+    if inventory then n = inventory.get_item_count(name) end
+    local s = storage.bnl and storage.bnl.fire
+    local rec = s and WRECK[entity.name] and s.wrecks[reg_of(entity)]
+    local held = rec and rec.held
+    if held and held.valid then n = n + held.get_item_count(name) end
+    return n
 end
 
 -- A water barrel poured from the hand (scripts/douse.lua): the fire goes out at once.

@@ -9,6 +9,8 @@ local trail = require("scripts.trail")
 local events = require("scripts.events")
 local tags = require("scripts.tags")
 local geology = require("scripts.geology")
+local goals = require("scripts.goals")
+local safe = require("scripts.safe")
 local M = {}
 
 local TECH = "bnl-flight-recorder-decoding"
@@ -48,6 +50,9 @@ local function on_research_finished(event)
     tags.remove("recorder")
     trail.reveal()
     geology.reveal()
+    goals.refresh()
+    goals.wake()
+    safe.wake()
 end
 
 events.on(defines.events.on_research_finished, on_research_finished)
