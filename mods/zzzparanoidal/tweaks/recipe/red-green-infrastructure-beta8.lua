@@ -85,6 +85,15 @@ local definitions = {
 			{ type = "item", name = "bob-steel-gear-wheel", amount = 20 },
 		},
 	},
+	-- Paranoidal: 3 storage tanks (user decision 2026-10-27), the rest as before.
+	["fluid-wagon"] = {
+		["ingredients"] = {
+			{ type = "item", name = "steel-plate", amount = 16 },
+			{ type = "item", name = "storage-tank", amount = 3 },
+			{ type = "item", name = "bob-bronze-pipe", amount = 8 },
+			{ type = "item", name = "bob-steel-bearing", amount = 10 },
+		},
+	},
 	["bob-fluid-wagon-2"] = {
 		["ingredients"] = {
 			{ type = "item", name = "fluid-wagon", amount = 1 },

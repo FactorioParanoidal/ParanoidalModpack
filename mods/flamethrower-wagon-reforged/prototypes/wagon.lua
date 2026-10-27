@@ -64,7 +64,7 @@ local recipe = {
         { type = "item", name = "fluid-wagon", amount = 1 },
         { type = "item", name = "flamethrower-turret", amount = 2 },
         { type = "item", name = "pump", amount = 1 },
-        { type = "item", name = "bob-steel-bearing", amount = 8 },
+        { type = "item", name = "bob-steel-bearing", amount = 20 },
         { type = "item", name = "steel-plate", amount = 20 },
     },
     results = { { type = "item", name = NAME, amount = 1 } },

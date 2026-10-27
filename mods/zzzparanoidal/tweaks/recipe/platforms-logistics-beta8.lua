@@ -17,7 +17,8 @@ local ingredients = {
 		item("engine-unit", 32), item("steel-plate", 50), item("iron-gear-wheel", 15), item("advanced-circuit", 10),
 	},
 	["artillery-wagon"] = {
-		item("engine-unit", 64), item("iron-gear-wheel", 10), item("pipe", 16),
+		-- Paranoidal: an artillery turret instead of 16 pipes (user decision 2026-10-27).
+		item("engine-unit", 64), item("iron-gear-wheel", 10), item("artillery-turret", 1),
 		item("advanced-circuit", 20), item("bob-invar-alloy", 40),
 	},
 	["power-armor"] = {
