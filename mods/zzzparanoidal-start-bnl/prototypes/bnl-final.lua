@@ -2,7 +2,8 @@
 -- targets copy the new health):
 -- * every wreck of the start crash and the ship: x10 health, containers at least N slots (room
 --   for the ammo that cooks off in a fire, scripts/fire.lua); the ship x1.25 (config.ship_health_multiplier);
--- * every lab that takes red science also takes the flight recorder;
+-- * only the salvaged lab from the starliner takes the flight recorder (no other lab, also when an
+--   earlier stage copied the lab inputs; this is the last data-final-fixes of the modset);
 -- * characters can hand-craft "recycling-or-hand-crafting" recipes (scrap recycling).
 local config = require("bnl-config")
 local shipwreck = require("shipwreck-config")
@@ -21,13 +22,14 @@ for kind in pairs({container = true, ["simple-entity"] = true, ["simple-entity-w
     end
 end
 
-for _, lab in pairs(data.raw.lab or {}) do
-    local red, present = false, false
+local RECORDER, RECORDER_LAB = "bnl-flight-recorder", "salvaged-lab"
+for name, lab in pairs(data.raw.lab or {}) do
+    local inputs = {}
     for _, input in ipairs(lab.inputs or {}) do
-        if input == "automation-science-pack" then red = true end
-        if input == "bnl-flight-recorder" then present = true end
+        if input ~= RECORDER then inputs[#inputs + 1] = input end
     end
-    if red and not present then table.insert(lab.inputs, "bnl-flight-recorder") end
+    if name == RECORDER_LAB then inputs[#inputs + 1] = RECORDER end
+    lab.inputs = inputs
 end
 
 for _, character in pairs(data.raw.character or {}) do

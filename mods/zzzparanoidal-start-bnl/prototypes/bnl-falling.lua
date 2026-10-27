@@ -1,6 +1,7 @@
 -- Falling ship debris and BnL supply pods: artillery projectiles flying in from the
--- west-south-west. The impact damages the area, leaves a scorch mark and fire, shakes the camera
--- and raises a script trigger: scripts/falling.lua creates the wreck or the supply chest there.
+-- west-south-west. The impact damages the area, leaves a scorch mark, shakes the camera and raises
+-- a script trigger: scripts/falling.lua creates the wreck (burning or not, config.falling.
+-- ignite_chance: no ground fire of the impact decides it instead) or the supply chest there.
 local falling = "__zzzparanoidal-start-bnl__/graphics/entity/falling/"
 
 local kinds = {
@@ -69,15 +70,11 @@ local function impact(kind, effect_id)
         table.insert(effects, 2, {type = "create-entity", entity_name = kind.blast[1], repeat_count = kind.blast[2],
             offset_deviation = {{-r, -r}, {r, r}}})
     end
-    if kind.fire then
-        table.insert(effects, {type = "create-fire", entity_name = "crash-site-fire-flame", initial_ground_flame_count = 2})
-    end
     return {type = "direct", action_delivery = {type = "instant", target_effects = effects}}
 end
 
 local projectiles = {}
 for name, kind in pairs(kinds) do
-    kind.fire = true
     projectiles[#projectiles + 1] = {
         type = "artillery-projectile",
         name = "bnl-falling-debris-" .. name,

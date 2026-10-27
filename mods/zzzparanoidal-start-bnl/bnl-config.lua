@@ -35,7 +35,7 @@ config.falling = {
     building_radius = 70,
     sizes = {small = 60, medium = 30, big = 10}, -- weights
     recorder_tick = 3 * MINUTE + 20 * 60, -- the big piece closest to this time carries the flight recorder
-    ignite_chance = 0.6,
+    ignite_chance = 0.6, -- a piece lands burning (the only roll: the impact leaves no ground fire)
     -- Shadow of the coming piece over the impact point from the warning on: linear size x10-16 and
     -- 1% opacity at first, shrinking to the real shadow at full opacity at the impact (perspective:
     -- size falls linearly with the height, opacity follows 1/size). Updated every shadow_interval ticks.
@@ -80,22 +80,22 @@ config.falling = {
 
 -- 2. Burning wrecks: what burns, cooks off and blows up inside them.
 config.fire = {
-    watch_until = 30 * MINUTE, -- fires near start wrecks can ignite them until then
+    -- One scheme (scripts/fire.lua): the starliner and the wrecks the crash set alight burn from the
+    -- landing; any wreck catches fire from a real fire within 1.5 tiles of it, checked every
+    -- watch_interval until watch_until after the landing (and while something burns).
+    watch_until = 30 * MINUTE,
     watch_interval = 120,
-    -- The AAI crash scene leaves burning trees around the ship: fires touching a start wreck are put
-    -- out when the crash site is filled, and for this long after the landing a fire nearby does not
-    -- ignite wrecks, so only config.fire.start_burning sets them burning at first.
-    ignite_grace = 60 * 60,
-    clear_margin = 2,
     tick_interval = 60,
+    -- The cargo loses no quality step (nor a stack) before this time after the landing: the vanilla
+    -- crash cutscene runs on game time.
+    cargo_grace = 25 * 60,
     -- A burning wreck burns down to a random floor of its max health, then the fire goes out.
     burn_floor = {0.02, 0.10},
     -- Time to burn from full health to the floor, seconds, by wreck size (cook-offs make it faster).
     burn_seconds = {small = {150, 240}, medium = {240, 420}, big = {360, 600}},
-    flame_interval = 10 * 60, -- a burning wreck shows a crash-site flame on itself this often
-    -- Start wrecks set burning at the landing (besides those the crash fires reach) and the delay.
-    start_burning = 0.35,
-    start_delay = {5 * 60, 90 * 60},
+    -- Drawn flames over a burning wreck (divided by the temperament flame_factor, at least 1) and
+    -- their scale by size.
+    flames = {small = 1, medium = 2, big = 3, ship = 4, scale = {small = 0.8, medium = 1, big = 1.2}},
     idle_interval = {4 * 60, 10 * 60}, -- next check for something to cook off when nothing went off
     splash_radius = 3,
     splash_damage = 8, -- per cook-off to characters around

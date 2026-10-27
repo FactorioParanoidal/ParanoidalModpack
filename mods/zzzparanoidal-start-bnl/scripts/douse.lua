@@ -180,19 +180,17 @@ local function burning_here(surface, target, position)
     return surface.count_entities_filtered({type = "fire", position = position, radius = cfg.spill_radius, limit = 1}) > 0
 end
 
--- Whatever the fire reaches: a character burns, a wreck catches fire, a ground fire under anything
--- else; wet things only steam.
+-- Whatever the fire reaches: a character burns, a wreck catches fire (one way only, no extra ground
+-- fire under it), a ground fire under anything else; wet things only steam.
 local function set_on_fire(entity)
     if not (entity and entity.valid) then return end
     if entity.type == "character" then
         burn_character(entity)
-        return
+    elseif fire.is_tracked(entity) then
+        fire.ignite(entity)
+    else
+        fire.make_fire(entity.surface, entity.position, 3)
     end
-    if fire.is_tracked(entity) then
-        local _, why = fire.ignite(entity)
-        if why == "wet" then return end
-    end
-    fire.make_fire(entity.surface, entity.position, 3)
 end
 
 -- The fuel hits the fire: a huge fireball, the buildings around burn, the player and the cursor too.

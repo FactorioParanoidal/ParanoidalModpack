@@ -88,22 +88,9 @@ start.on_ready = function(shipwreck, ship, wrecks)
         end
     end
     wrecks = kept
-    -- The burning trees of the AAI scene must not light the start wrecks at once (fire.ignite_grace).
-    fire.clear_scene_fires(ship)
-    for _, wreck in ipairs(wrecks) do fire.clear_scene_fires(wreck) end
-    -- The starliner burns like every start wreck.
-    local ship_rec = fire.track(ship, true)
-    if ship_rec and math.random() < config.fire.start_burning then
-        fire.ignite_later(ship_rec, math.random(config.fire.start_delay[1], config.fire.start_delay[2]))
-    end
-    for _, wreck in ipairs(wrecks) do
-        if wreck.valid and wreck ~= ship then
-            local rec = fire.track(wreck, true)
-            if rec and math.random() < config.fire.start_burning then
-                fire.ignite_later(rec, math.random(config.fire.start_delay[1], config.fire.start_delay[2]))
-            end
-        end
-    end
+    -- The starliner and the wrecks that came down in flames burn from now on, the others can catch
+    -- fire from a fire next to them (scripts/fire.lua).
+    fire.start(ship, wrecks)
     local placed = scrap.place(surface)
     log("zzzparanoidal-start-bnl: scrap tiles " .. placed .. ", anomaly " .. tostring(storage.bnl.anomaly and storage.bnl.anomaly.name))
     safe.place(surface)

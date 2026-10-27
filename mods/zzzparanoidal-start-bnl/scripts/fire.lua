@@ -2,12 +2,19 @@
 -- (config.fire.hazards): ammo (frequent cook-offs), fuel barrels (rare bursts, a pool of burning fuel),
 -- gas cylinders (a burst cylinder flies off and falls burning), high-tech fuel (burns as the fire's
 -- fuel, the fire gets hotter), explosives (one big blast), oxygen (jets of flame, the fire burns twice
--- as fast) or batteries (sparks, a poison cloud). A fire next to a wreck (or the crash itself, for a
--- share of the start wrecks) sets it burning. A burning wreck cannot be destroyed by anything else;
+-- as fast) or batteries (sparks, a poison cloud).
+-- One scheme of fire: what comes down in flames burns for real from the first second (the starliner
+-- and the vanilla crash site parts the engine set alight, M.start; falling pieces that land burning,
+-- scripts/falling.lua); anything else catches fire only from a real fire of the engine next to it
+-- (ground fire, burning trees, cook-offs, misused fuel; fire-watch, the first config.fire.watch_until
+-- after the landing and while something burns). The fire of a wreck itself is drawn only (it never
+-- lights anything); its cook-offs and embers make the real fires that spread. A burning wreck cannot
+-- be destroyed by anything else;
 -- it loses health steadily until it reaches a random floor of 2-10% of its max health, then the fire
 -- goes out and a share of the hazardous cargo left goes off in a last blast; the rest of it is loot.
--- The cargo whose quality can change loses one quality step every 10-15 s of fire (config.fire.
--- step_interval; down to defect -5 at most, materials not below normal), each step may burn a whole stack away;
+-- The cargo whose quality can change loses one quality step every 14-27 s of fire (config.fire.
+-- step_interval, counted from config.fire.cargo_grace after the landing at the earliest; down to
+-- defect -5 at most, materials not below normal), each step may burn a whole stack away;
 -- mining loot follows the same steps. Fires from bursts reach player buildings nearby.
 -- First put it out, then mine it: while a wreck burns its cargo is held by the fire (a script
 -- inventory, the chest is empty and locked: no GUI, no fast transfer, no inserters, no mining).
@@ -232,12 +239,40 @@ function M.track(entity, with_hazard)
     return rec
 end
 
--- Fires of the crash scene touching a start wreck go out (called once when the crash site is filled).
-function M.clear_scene_fires(entity)
-    if not (entity and entity.valid) then return end
-    for _, flame in pairs(entity.surface.find_entities_filtered({type = "fire", position = entity.position,
-        radius = entity.get_radius() + cfg.clear_margin})) do
-        if flame.valid then flame.destroy() end
+-- The vanilla crash site fire: flames and the hidden generators (crash-site-fire-smoke, a cyclic
+-- smoke that keeps making new flames for 15-30 s) on the starliner and its parts.
+local VANILLA_FIRE = {}
+for _, name in ipairs({"crash-site-fire-flame", "crash-site-fire-smoke"}) do
+    if prototypes.entity[name] then VANILLA_FIRE[#VANILLA_FIRE + 1] = name end
+end
+
+-- The crash site is filled (control.lua): every start wreck is tracked with its hazardous cargo;
+-- the starliner and every wreck the engine set alight (a vanilla flame or flame generator in its
+-- box) burn for real from now on, the others only catch fire from a fire next to them. The vanilla
+-- fire goes: the fire of a burning wreck is the mod's, drawn only.
+function M.start(ship, wrecks)
+    if not (ship and ship.valid and util.enabled("bnl-start-wreck-fires")) then return end
+    local surface = ship.surface
+    local list = {ship}
+    for _, wreck in ipairs(wrecks) do
+        if wreck.valid and wreck ~= ship then list[#list + 1] = wreck end
+    end
+    local alight = {}
+    if VANILLA_FIRE[1] then
+        for _, entity in ipairs(list) do
+            alight[entity] = entity == ship
+                or surface.count_entities_filtered({name = VANILLA_FIRE, area = entity.bounding_box, limit = 1}) > 0
+        end
+        for _, flame in pairs(surface.find_entities_filtered({name = VANILLA_FIRE, position = ship.position,
+            radius = shipwreck.crash_radius})) do
+            if flame.valid then flame.destroy() end
+        end
+    else
+        alight[ship] = true
+    end
+    for _, entity in ipairs(list) do
+        local rec = M.track(entity, true)
+        if rec and alight[entity] then M.ignite(rec) end
     end
 end
 
@@ -342,18 +377,20 @@ scheduler.handler("fire-wet", function(_, tick)
     end
 end)
 
--- A scripted ground fire (bursts, embers, the misused fuel, a burning cursor): steam on a wet spot.
-function M.make_fire(surface, position, flames)
+-- Every scripted real fire (bursts, embers, jets, the misused fuel, a burning cursor): steam on a
+-- wet spot. `name`: the fire entity (default fire-flame).
+function M.make_fire(surface, position, flames, name)
     if M.is_wet(surface, position) then
         M.hiss(surface, position)
         return false
     end
-    surface.create_entity({name = "fire-flame", position = position, initial_ground_flame_count = flames})
+    surface.create_entity({name = name or "fire-flame", position = position, initial_ground_flame_count = flames})
     return true
 end
 
--- Returns true when the wreck caught fire; a wet wreck (put out less than water.calm ago, or on a
--- wet spot) steams instead and returns false, "wet".
+-- Returns true when the wreck caught fire; a wet wreck (on a spot where water was poured less than
+-- water.calm ago; a quenched wreck is one) steams instead and returns false, "wet". A burnt-out
+-- wreck never burns again.
 function M.ignite(entity_or_rec, duration)
     local rec = entity_or_rec
     if rec and rec.object_name == "LuaEntity" then rec = state().wrecks[reg_of(rec)] end
@@ -361,7 +398,7 @@ function M.ignite(entity_or_rec, duration)
     local entity = rec.entity
     if not (entity and entity.valid) then return false end
     local tick = game.tick
-    if (rec.calm_until or 0) > tick or M.is_wet(entity.surface, entity.position) then
+    if M.is_wet(entity.surface, entity.position) then
         if (rec.next_hiss or 0) <= tick then
             rec.next_hiss = tick + cfg.water.hiss_interval
             M.hiss(entity.surface, entity.position, entity.get_radius())
@@ -377,8 +414,8 @@ function M.ignite(entity_or_rec, duration)
     local seconds = duration or util.int(cfg.burn_seconds[rec.size] or cfg.burn_seconds.small)
     rec.rate = (1 - rec.floor) / math.max(1, seconds) -- share of max health per second
     rec.next_pop = tick + util.int(cfg.idle_interval)
-    rec.next_flame = tick
-    rec.next_step = tick + util.int(cfg.step_interval)
+    -- the cargo is spared while the players land (the vanilla cutscene runs on game time)
+    rec.next_step = math.max(tick, util.landing_tick() + cfg.cargo_grace) + util.int(cfg.step_interval)
     rec.budget = nil -- counted at the first fire tick (after the start cargo is in)
     local tempers = {}
     for name, spec in pairs(cfg.temperaments) do tempers[#tempers + 1] = {name, spec.weight} end
@@ -390,44 +427,8 @@ function M.ignite(entity_or_rec, duration)
     return true
 end
 
--- Start wrecks set burning by the crash itself, staggered after the landing.
-function M.ignite_later(rec, delay)
-    if rec then scheduler.after(delay, "fire-ignite", {entity = rec.entity}) end
-end
-
-scheduler.handler("fire-ignite", function(job)
-    if job.entity and job.entity.valid then M.ignite(job.entity) end
-end)
-
--- Visible fire on a burning wreck: a crash-site flame (short lived, harmless) and its smoke.
-local function flame(rec, entity, tick)
-    if tick < (rec.next_flame or 0) then return end
-    rec.next_flame = tick + math.floor(cfg.flame_interval * (temper_of(rec).flame_factor or 1))
-    local surface = entity.surface
-    local box = entity.bounding_box
-    local p
-    -- the starliner's flames keep off the BnL logo on its hull
-    local decal = entity.name == shipwreck.ship and util.add(entity.position, util.pos(config.ship_decal.offset))
-    for _ = 1, 6 do
-        p = {x = box.left_top.x + (box.right_bottom.x - box.left_top.x) * (0.2 + 0.6 * math.random()),
-            y = box.left_top.y + (box.right_bottom.y - box.left_top.y) * (0.2 + 0.6 * math.random())}
-        if not decal or util.distance(p, decal) > config.ship_decal.flame_radius then break end
-    end
-    surface.create_entity({name = "crash-site-fire-flame", position = p})
-    if not (rec.smoke and rec.smoke.valid) then
-        rec.smoke = surface.create_entity({name = "crash-site-fire-smoke", position = p})
-    end
-    if rec.smoke and rec.smoke.valid then rec.smoke.time_to_live = cfg.flame_interval * 2 end
-end
-
 local function extinguish(rec)
-    if rec.burning then
-        -- its own last flames must not light it again at once
-        rec.calm_until = game.tick + 90 * 60
-    end
     rec.burning = false
-    if rec.smoke and rec.smoke.valid then rec.smoke.destroy() end
-    rec.smoke = nil
     clear_visuals(rec)
     release(rec)
 end
@@ -628,16 +629,64 @@ end
 
 clear_visuals = function(rec)
     clear_torches(rec)
+    destroy_all(rec.flames)
     destroy_all({rec.light, rec.flare})
-    rec.light, rec.flare = nil, nil
+    rec.light, rec.flare, rec.flames, rec.smoke_points = nil, nil, nil, nil
 end
 
--- Light of the fire on the ground (and at night), coloured by its character.
+-- The flames of a burning wreck (rendering only: they light nothing and do not spread), by size
+-- and character (config.fire.flames, temperament flame_factor); the starliner's keep off its logo.
+local function draw_flames(rec, entity)
+    local count = entity.name == shipwreck.ship and cfg.flames.ship or cfg.flames[rec.size] or 1
+    count = math.max(1, math.floor(count / (temper_of(rec).flame_factor or 1) + 0.5))
+    local box, p0 = entity.bounding_box, entity.position
+    local decal = entity.name == shipwreck.ship and util.add(p0, util.pos(config.ship_decal.offset))
+    local lift = cfg.torches.lift["bnl-torch-blaze"]
+    local scale0 = cfg.flames.scale[rec.size] or 1
+    rec.flames, rec.smoke_points = {}, {}
+    for i = 1, count do
+        local p
+        for _ = 1, 6 do
+            p = {x = box.left_top.x + (box.right_bottom.x - box.left_top.x) * (0.2 + 0.6 * math.random()),
+                y = box.left_top.y + (box.right_bottom.y - box.left_top.y) * (0.2 + 0.6 * math.random())}
+            if not decal or util.distance(p, decal) > config.ship_decal.flame_radius then break end
+        end
+        local dx, dy = p.x - p0.x, p.y - p0.y
+        local scale = scale0 * (0.8 + 0.4 * math.random())
+        rec.flames[i] = rendering.draw_animation({animation = "bnl-torch-blaze", surface = entity.surface,
+            target = {entity = entity, offset = {dx, dy - lift * scale}}, x_scale = scale, y_scale = scale,
+            render_layer = "higher-object-under", animation_offset = math.random(0, 89),
+            animation_speed = 0.8 + 0.4 * math.random()})
+        rec.smoke_points[i] = {dx, dy - 2 * lift * scale}
+    end
+end
+
+-- Smoke over the flames, every fire tick.
+local function smoke(rec, entity)
+    local p = entity.position
+    for _, o in ipairs(rec.smoke_points or {}) do
+        entity.surface.create_trivial_smoke({name = "fire-smoke-without-glow", position = {x = p.x + o[1], y = p.y + o[2]}})
+    end
+end
+
+-- Light of the fire on the ground (and at night), coloured by its character, and the flames.
 light_up = function(rec, entity)
     local c = temper_of(rec).light or {1, 0.55, 0.2}
     rec.light = rendering.draw_light({sprite = "utility/light_medium", surface = entity.surface, target = entity,
         scale = 1.5 + entity.get_radius(), intensity = 0.55, color = {r = c[1], g = c[2], b = c[3]}})
+    draw_flames(rec, entity)
 end
+
+-- A smouldering wreck keeps smoking after it is out (temperament afterglow): puffs every 2 s.
+scheduler.handler("fire-afterglow", function(job, tick)
+    local entity = job.entity
+    if not (entity and entity.valid) or tick >= job.until_tick then return end
+    for _ = 1, 2 do
+        entity.surface.create_trivial_smoke({name = "fire-smoke-without-glow",
+            position = around(entity, entity.get_radius() * 0.6)})
+    end
+    scheduler.after(120, "fire-afterglow", job)
+end)
 
 -- Character effects every fire tick; returns extra health share lost.
 local function temper_tick(rec, entity, tick)
@@ -761,7 +810,7 @@ end
 
 effects.fuel = function(entity)
     local surface = entity.surface
-    surface.create_entity({name = "crash-site-fire-flame", position = around(entity, entity.get_radius() * 0.7)})
+    M.make_fire(surface, around(entity, entity.get_radius() * 0.7), 1, "crash-site-fire-flame")
     if math.random() < cfg.spark_chance then ground_fire(surface, around(entity, entity.get_radius() + 2), 2) end
 end
 
@@ -780,7 +829,7 @@ end
 effects.oxygen = function(entity)
     local surface = entity.surface
     for _ = 1, 2 do
-        surface.create_entity({name = "crash-site-fire-flame", position = around(entity, entity.get_radius())})
+        M.make_fire(surface, around(entity, entity.get_radius()), 1, "crash-site-fire-flame")
     end
     ground_fire(surface, around(entity, entity.get_radius() + 2), 2)
 end
@@ -834,8 +883,7 @@ local function burn_out(rec, entity)
     if toxic then poison(entity) end
     local afterglow = temper_of(rec).afterglow
     if afterglow then
-        local smoke = entity.surface.create_entity({name = "crash-site-fire-smoke", position = entity.position})
-        if smoke then smoke.time_to_live = afterglow end
+        scheduler.after(1, "fire-afterglow", {entity = entity, until_tick = game.tick + afterglow})
     end
     rec.burnt = true
     extinguish(rec)
@@ -845,7 +893,6 @@ end
 -- back, the wreck and the spot around it stay wet (its own flames around go out too).
 local function quench(rec, entity)
     extinguish(rec)
-    rec.calm_until = game.tick + cfg.water.calm
     M.wet(entity.surface, entity.position, entity.get_radius() + cfg.water.wet_margin)
     local radius = entity.get_radius() * 1.41 -- twice the area of the first version
     M.steam(entity.surface, entity.position, radius, math.max(20, math.floor(radius * 12)), "bnl-steam")
@@ -907,7 +954,8 @@ local function burn(rec, entity, tick)
     end
     entity.health = health
     apply_steps(rec, entity, tick)
-    flame(rec, entity, tick)
+    if not rec.flames then draw_flames(rec, entity) end -- set burning before the drawn flames
+    smoke(rec, entity)
 end
 
 scheduler.handler("fire-tick", function(_, tick)
@@ -935,7 +983,6 @@ end)
 scheduler.handler("fire-watch", function(_, tick)
     local s = state()
     local burning = false
-    local grace_over = util.since_landing() >= cfg.ignite_grace
     -- one query per surface: without any fire near the wrecks no wreck needs its own query
     local fire_near = {}
     for index, box in pairs(s.boxes or {}) do
@@ -950,8 +997,7 @@ scheduler.handler("fire-watch", function(_, tick)
             s.wrecks[reg] = nil
         elseif rec.burning then
             burning = true
-        elseif not rec.burnt and (rec.calm_until or 0) <= tick and grace_over
-            and fire_near[entity.surface.index] ~= false
+        elseif not rec.burnt and fire_near[entity.surface.index] ~= false
             and entity.surface.count_entities_filtered({type = "fire", position = entity.position,
             radius = entity.get_radius() + 1.5, limit = 1}) > 0 then
             burning = M.ignite(rec) or burning
