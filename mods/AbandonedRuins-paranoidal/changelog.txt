@@ -27,6 +27,7 @@ Date: 2026-10-24
   Changes:
     - /ruins counts the legendary ruins only after the first one is found; before that it prints a vague hint.
     - The relics (items, buildings, recipes and categories) are hidden in the Factoriopedia: no spoilers before they are found.
+    - The relic deep drill is hidden, so ore tooltips no longer list it among the drills that mine them.
     - Version number starts with 9 (Paranoidal mod).
     - New ruins with 30-100 landfill for the small holes under wide blueprints early in the game:
       Landfill cache (small), Landfill yard (medium), Abandoned earthworks (large).

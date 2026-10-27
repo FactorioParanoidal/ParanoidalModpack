@@ -32,6 +32,8 @@ local drill = get("mining-drill", "pd-relic-deep-drill")
 if drill then
   local electric, area = get("mining-drill", "electric-mining-drill"), get("mining-drill", "bob-area-mining-drill-1")
   drill.resource_categories = union(electric and electric.resource_categories, area and area.resource_categories, drill.resource_categories)
+  -- No spoiler in the "Mined by" list of every ore tooltip.
+  drill.hidden = true
 end
 
 -- Relics are found only in legendary ruins: report a recipe that makes one (another mod).
