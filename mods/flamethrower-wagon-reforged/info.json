@@ -1,0 +1,14 @@
+{
+  "name": "flamethrower-wagon-reforged",
+  "version": "9.0.0",
+  "title": "Flamethrower Wagon Reforged",
+  "author": "fgardt, Paranoidal",
+  "contact": "",
+  "homepage": "https://github.com/fgardt/factorio-flamethrower-wagon",
+  "factorio_version": "2.0",
+  "dependencies": [
+    "base >= 2.0",
+    "! flamethrower-wagon"
+  ],
+  "description": "Paranoidal: a fluid wagon with two flamethrower turrets fed from its tank, rewritten for a low script load. Fork of Flamethrower Wagon by fgardt."
+}

@@ -1,0 +1,90 @@
+local MOD = "__flamethrower-wagon-reforged__"
+local NAME = "flamethrower-wagon"
+
+local base_entity = data.raw["fluid-wagon"]["fluid-wagon"]
+local base_item = data.raw["item-with-entity-data"]["fluid-wagon"]
+local base_recipe = data.raw.recipe["fluid-wagon"]
+
+local entity = table.deepcopy(base_entity)
+entity.name = NAME
+entity.icons = nil
+entity.icon = MOD .. "/graphics/icon.png"
+entity.icon_size = 64
+entity.minable = { mining_time = base_entity.minable.mining_time, result = NAME }
+entity.placeable_by = nil
+entity.next_upgrade = nil
+entity.fast_replaceable_group = nil
+entity.factoriopedia_simulation = nil
+entity.minimap_representation = {
+    filename = MOD .. "/graphics/minimap-representation.png",
+    flags = { "icon" },
+    size = { 20, 40 },
+    scale = 0.5,
+}
+entity.selected_minimap_representation = {
+    filename = MOD .. "/graphics/selected-minimap-representation.png",
+    flags = { "icon" },
+    size = { 20, 40 },
+    scale = 0.5,
+}
+entity.allow_passengers = false
+entity.tank_count = 1 -- one fluid storage: the script reads and drains storage 1
+entity.capacity = 5000
+entity.quality_affects_capacity = true
+entity.max_health = 800
+
+-- Immune to its own fire, whatever resistances the copied wagon had.
+local resistances = {}
+for _, r in pairs(entity.resistances or {}) do
+    if r.type ~= "fire" then resistances[#resistances + 1] = r end
+end
+resistances[#resistances + 1] = { type = "fire", percent = 100 }
+entity.resistances = resistances
+
+local item = table.deepcopy(base_item)
+item.name = NAME
+item.icons = nil
+item.pictures = nil
+item.icon = MOD .. "/graphics/icon.png"
+item.icon_size = 64
+item.order = "c[rolling-stock]-d[aaflamethrower-wagon]"
+item.place_result = NAME
+item.localised_name = { "entity-name." .. NAME }
+item.localised_description = { "entity-description." .. NAME }
+
+local recipe = {
+    type = "recipe",
+    name = NAME,
+    localised_name = { "entity-name." .. NAME },
+    category = base_recipe and base_recipe.category,
+    energy_required = base_recipe and base_recipe.energy_required or 1.5,
+    enabled = false,
+    ingredients = {
+        { type = "item", name = "fluid-wagon", amount = 1 },
+        { type = "item", name = "flamethrower-turret", amount = 2 },
+        { type = "item", name = "engine-unit", amount = 6 },
+        { type = "item", name = "steel-plate", amount = 10 },
+    },
+    results = { { type = "item", name = NAME, amount = 1 } },
+}
+
+local technology = {
+    type = "technology",
+    name = NAME,
+    icon = MOD .. "/graphics/technology.png",
+    icon_size = 256,
+    prerequisites = { "fluid-wagon", "flamethrower", "chemical-science-pack" },
+    effects = { { type = "unlock-recipe", recipe = NAME } },
+    unit = {
+        count = 350,
+        ingredients = {
+            { "automation-science-pack", 1 },
+            { "logistic-science-pack", 1 },
+            { "chemical-science-pack", 1 },
+            { "military-science-pack", 1 },
+        },
+        time = 30,
+    },
+}
+
+data:extend({ entity, item, recipe, technology })

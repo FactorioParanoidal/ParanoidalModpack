@@ -1,0 +1,80 @@
+---------------------------------------------------------------------------------------------------
+Version: 9.0.0
+Date: 2026-10-27
+  Major Features:
+    - Paranoidal fork of Flamethrower Wagon 2.1.0 (fgardt) for Factorio 2.0, renamed to flamethrower-wagon-reforged. Prototype names are unchanged; the original mod is marked incompatible.
+  Optimizations:
+    - The control script is rewritten. Without flamethrower wagons only name-filtered build and clone events and on_train_created stay registered; on_tick, on_object_destroyed, on_train_changed_state, on_entity_died and on_player_rotated_entity are registered only while wagons exist (the same rule on load).
+    - Wagons of trains waiting at a station or signal, or without a path or schedule, are not polled. A train state change wakes them up. A stopped manual train is polled for its speed only.
+    - Moving wagons are teleported from reused position tables without new allocations; a stopped manual train costs two reads per tick (validity and speed).
+    - Fuel service no longer runs for all wagons at once every 30 ticks: each wagon is serviced once per 60 ticks, spread evenly over the ticks. Turrets that are full are skipped without reading the wagon tank.
+  Bugfixes:
+    - Uses the Factorio 2.0 fluid API (fluidbox, get_fluid, remove_fluid); the 2.1 calls get_fluid_capacity, add_fluid, clear_fluid and add_fluid_box_linked_connection do not exist in 2.0.
+    - The turrets get the fuels of the build's flamethrower turret at data-final-fixes (Bob's and Angels change that list after this mod copies the turret). Only these fuels are moved from the wagon tank, other fluids stay in it.
+    - The turrets are no longer emptied when the wagon tank runs dry; the fuel left in them is still fired. A turret holding another fuel fires it first and switches to the wagon fuel when nearly empty; a fluid that is no fuel is replaced at once.
+    - The fluid temperature is kept when moving fuel into the turrets.
+    - Cloning a wagon no longer destroys the source wagon and no longer crashes for an unregistered source. Turrets copied by an area clone are removed; the clone gets its own turrets with the fuel and health of the source turrets.
+    - Wagons created by scripts without raise_built get their turrets from on_train_created; on configuration change unknown wagons are adopted and orphan turrets are removed.
+    - On curves the turret base direction follows the wagon quarter (north/east/south/west), so the gun picture stays on the roof after a turn; before, the turrets kept the direction they were built with.
+    - When a wagon is flipped (rotation) the turrets swap roles, so the turret at the front keeps the matching base direction.
+    - A turret that is killed now kills its wagon (death events, remnants, ghost) instead of silently deleting it.
+    - Turrets settle exactly at the stopping point of the wagon.
+    - The fire resistance of the wagon is found by type instead of assuming it is the first entry.
+  Changes:
+    - Item and entity icons no longer inherit icons or item pictures of a reskinned fluid wagon. Recipe and technology are defined directly instead of being copied from the fluid wagon recipe and the flamethrower technology; values are unchanged.
+    - Russian locale added; mod name and description locale keys fixed.
+    - Remote interface flamethrower-wagon-reforged.stats for diagnostics: number of wagons, number of polled wagons and their unit numbers, whether the dynamic handlers are on.
+---------------------------------------------------------------------------------------------------
+Version: 2.1.0
+Date: 2026-06-23
+  Features:
+    - updated to 2.1
+---------------------------------------------------------------------------------------------------
+Version: 2.0.1
+Date: 2024-11-02
+  Translation:
+    - added simplified chinese
+---------------------------------------------------------------------------------------------------
+Version: 2.0.0
+Date: 2024-11-01
+  Features:
+    - updated to 2.0, wagons are a bit broken on elevated rails
+---------------------------------------------------------------------------------------------------
+Version: 1.0.6
+Date: 2023-08-17
+  Optimizations:
+    - roughly doubled performance thanks to new API addition (thanks to boskid)
+    - significantly improved performance when flamethrower wagons are standing still
+  Bugfixes:
+    - use correct mining time and sound for turrets
+---------------------------------------------------------------------------------------------------
+Version: 1.0.5
+Date: 2023-08-13
+  Bugfixes:
+    - recipe was immediately unlocked without researching the technology
+---------------------------------------------------------------------------------------------------
+Version: 1.0.4
+Date: 2023-08-13
+  Bugfixes:
+    - potential crash when some entity gets destroyed
+---------------------------------------------------------------------------------------------------
+Version: 1.0.3
+Date: 2023-08-09
+  Bugfixes:
+    - removed aim overshoot caused by predictive aiming
+    - return flamethrower wagon item when deconstructing turrets
+---------------------------------------------------------------------------------------------------
+Version: 1.0.2
+Date: 2023-08-09
+  Bugfixes:
+    - use the correct collision mask
+---------------------------------------------------------------------------------------------------
+Version: 1.0.1
+Date: 2023-08-09
+  Bugfixes:
+    - fixed rails colliding with turrets
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 2023-08-09
+  Features:
+    - initial release
