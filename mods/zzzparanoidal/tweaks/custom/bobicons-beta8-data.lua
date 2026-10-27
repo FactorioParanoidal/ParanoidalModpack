@@ -720,8 +720,6 @@ return {
     {type = "item", name = "stone", before = {["icon"] = "__base__/graphics/icons/stone.png", ["icon_size"] = 64}, after = {["icon"] = "__zzzparanoidal__/graphics/bobicons-beta8/bobicons/graphics/icons/base/stone-128.png", ["icon_size"] = 128}},
     -- item/stone-brick
     {type = "item", name = "stone-brick", before = {["icon"] = "__base__/graphics/icons/stone-brick.png", ["icon_size"] = 64}, after = {["icon"] = "__zzzparanoidal__/graphics/bobicons-beta8/bobicons/graphics/icons/base/stone-brick-128.png", ["icon_size"] = 128}},
-    -- item/stone-wall
-    {type = "item", name = "stone-wall", before = {["icon"] = "__aai-industry__/graphics/icons/stone-wall.png", ["icon_size"] = 64}, after = {["icon"] = "__zzzparanoidal__/graphics/bobicons-beta8/bobicons/graphics/icons/base/stone-wall-128.png", ["icon_size"] = 128}},
     -- item/tungsten-carbide
     {type = "item", name = "tungsten-carbide", before = {["icons"] = {{["icon"] = "__reskins-bobs__/graphics/icons/plates/plates/bob-tungsten-carbide.png", ["icon_size"] = 64, ["scale"] = 0.5}}}, after = {["icon"] = "__zzzparanoidal__/graphics/bobicons-beta8/bobicons/graphics/icons/plate/tungsten-carbide-128.png", ["icon_size"] = 128}},
     -- item/tungsten-ore
