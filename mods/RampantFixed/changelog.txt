@@ -3,6 +3,7 @@ Version: 9.02.15
 Date: 2026.10.27
   Changes:
     - Turning off mini-bosses also kills living champions and hour bosses. Saves with the setting already off are cleaned up on the configuration update; only tracked bosses are visited, with no map scans or extra tick checks.
+    - Settlers: when the usual search finds no room for a nest or a worm and player buildings stand nearby, the settler looks again for room of the real size (new hidden scanners chunk-scanner-nest-small-rampant and chunk-scanner-turret-small-rampant, which also keep off elevated rails). Where there is still no room, the player's ground rails, rail signals, train stops and electric poles under one nest or worm give way to it: they are destroyed, the kill is given to the neutral force (no rebuild by the safety settings, no AI points), signals and stops before rails. Other buildings, rail supports, elevated rails, water and trains are left as they are.
 ---------------------------------------------------------------------------------------------------
 Version: 9.02.14
 Date: 2026.10.13

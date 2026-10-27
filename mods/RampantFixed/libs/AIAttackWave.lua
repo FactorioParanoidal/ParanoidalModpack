@@ -739,6 +739,137 @@ function aiAttackWave.processNonRampantBuilders(universe, tick)
 	end
 end
 
+----------------------------------------------------------------------------------------------------------------------
+-- Paranoidal: settling next to player buildings.
+-- The usual search (above, in processBuilders) wants a free 12x12 square for a nest or 6x6 for a worm within 16 tiles.
+-- Only when that search fails and player
+-- buildings stand within those 16 tiles: search again for the real size (the small scanners, still off elevated
+-- rails); if that fails too, clear the player's ground rails, rail signals, train stops and electric poles under one
+-- nest or worm and build there. A failure caused by nature (trees, rocks, water) or by other buildings is left as before.
+-- Runs only on such a failure, never in the usual search.
+
+local SETTLE_SEARCH_RADIUS = 16
+local SCANNER_LAYERS = {"object", "water_tile", "elevated_rail"}
+local SMALL_SCANNER_HALF_SIZE = {
+	["chunk-scanner-nest-small-rampant"] = 3,
+	["chunk-scanner-turret-small-rampant"] = 1.5,
+}
+-- what may be cleared, and in which pass: signals and stops go before the rails they stand at
+local CLEAR_PASS = {
+	["rail-signal"] = 1,
+	["rail-chain-signal"] = 1,
+	["train-stop"] = 1,
+	["electric-pole"] = 2,
+	["straight-rail"] = 3,
+	["half-diagonal-rail"] = 3,
+	["curved-rail-a"] = 3,
+	["curved-rail-b"] = 3,
+	["legacy-straight-rail"] = 3,
+	["legacy-curved-rail"] = 3,
+}
+local ROLLING_STOCK = {"locomotive", "cargo-wagon", "fluid-wagon", "artillery-wagon"}
+
+local nearPlayerBuildingsQuery = {position = nil, radius = SETTLE_SEARCH_RADIUS, force = nil,
+                                  collision_mask = SCANNER_LAYERS, limit = 1}
+local footprintQuery = {area = nil, collision_mask = SCANNER_LAYERS}
+local footprintTilesQuery = {area = nil, collision_mask = SCANNER_LAYERS, limit = 1}
+local rollingStockQuery = {area = nil, type = ROLLING_STOCK, limit = 1}
+
+-- the player's entities under the footprint, all of them clearable; nil if anything else is there
+local function clearableBlockers(surface, area, playerForces)
+	footprintQuery.area = area
+	local found = surface.find_entities_filtered(footprintQuery)
+	footprintQuery.area = nil
+	local blockers = {}
+	for i = 1, #found do
+		local blocker = found[i]
+		local pass = CLEAR_PASS[blocker.type]
+		if not (pass and playerForces[blocker.force.name]) then
+			return nil
+		end
+		if pass == 2 then
+			-- only electric poles a player builds; hidden service poles of other mods stay
+			local prototype = blocker.prototype
+			if prototype.hidden or not prototype.has_flag("player-creation") then
+				return nil
+			end
+		end
+		blockers[#blockers + 1] = blocker
+	end
+	return blockers
+end
+
+-- Removed like destroyed (explosion, remnants, alert, a ghost if the force rebuilds dead entities), but the kill is
+-- given to "neutral": the safety rebuild and the AI points react only to kills by the enemy force.
+local function clearBlockers(blockers)
+	for pass = 1, 3 do
+		for i = 1, #blockers do
+			local blocker = blockers[i]
+			if blocker.valid and (CLEAR_PASS[blocker.type] == pass) then
+				blocker.destructible = true
+				blocker.die("neutral")
+				if blocker.valid then
+					return false
+				end
+			end
+		end
+	end
+	return true
+end
+
+local function settleAmongPlayerBuildings(universe, surface, scanner, position)
+	local activeForces = universe.activePlayerForces
+	if not (activeForces and activeForces[1]) then
+		return nil
+	end
+	nearPlayerBuildingsQuery.position = position
+	nearPlayerBuildingsQuery.force = activeForces
+	local nearPlayer = surface.count_entities_filtered(nearPlayerBuildingsQuery) > 0
+	nearPlayerBuildingsQuery.position = nil
+	nearPlayerBuildingsQuery.force = nil
+	if not nearPlayer then
+		return nil
+	end
+
+	local newPosition = surface.find_non_colliding_position(scanner, position, SETTLE_SEARCH_RADIUS, 1, true)
+	if newPosition then
+		return newPosition
+	end
+
+	-- still no room: clear the place of one nest (worm) where the settler stands
+	local half = SMALL_SCANNER_HALF_SIZE[scanner]
+	local x = mFloor(position.x) + 0.5
+	local y = mFloor(position.y) + 0.5
+	local area = {{x - half, y - half}, {x + half, y + half}}
+
+	footprintTilesQuery.area = area
+	local blockedByTiles = surface.count_tiles_filtered(footprintTilesQuery) > 0
+	footprintTilesQuery.area = nil
+	if blockedByTiles then
+		return nil
+	end
+	-- a rail under a train cannot be removed
+	rollingStockQuery.area = {{x - half - 3, y - half - 3}, {x + half + 3, y + half + 3}}
+	local trainNear = surface.count_entities_filtered(rollingStockQuery) > 0
+	rollingStockQuery.area = nil
+	if trainNear then
+		return nil
+	end
+
+	local playerForces = {}
+	for i = 1, #activeForces do
+		playerForces[activeForces[i]] = true
+	end
+	local blockers = clearableBlockers(surface, area, playerForces)
+	if not (blockers and blockers[1]) then
+		return nil
+	end
+	if not clearBlockers(blockers) then
+		return nil
+	end
+	return surface.find_non_colliding_position(scanner, {x = x, y = y}, 2, 1, true)
+end
+
 function aiAttackWave.processBuilders(universe, tick)
 	
 	local builderSquads = universe.builderSquads
@@ -816,6 +947,12 @@ function aiAttackWave.processBuilders(universe, tick)
 						)
 					end
 											-- game.print("entityName = ".. tostring(entityName).." newPosition is ".. tostring(newPosition and true or false))	-- debug
+					if not newPosition then
+						-- Paranoidal: no room the usual way; settle between player buildings if they are the cause
+						newPosition = settleAmongPlayerBuildings(universe, surface,
+							(roll < 0.4) and "chunk-scanner-turret-small-rampant" or "chunk-scanner-nest-small-rampant",
+							entity.position)
+					end
 					if newPosition then
 						buildData.builded = buildData.builded + 1
 						buildData.nextTick = tick + (buildData.buildCooldown or 3600)

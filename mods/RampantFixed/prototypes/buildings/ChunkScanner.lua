@@ -34,6 +34,19 @@ chunkScannerTurret.build_base_evolution_requirement = 1
 chunkScannerTurret.autoplace = nil
 data:extend({chunkScannerTurret})
 
+-- Paranoidal: real-size scanners for settling between player buildings (libs/AIAttackWave.lua): room for the
+-- largest Rampant nest (5.28 tiles) and worm (2.74 tiles); like the big scanners they keep off elevated rails.
+local chunkScannerNestSmall = util.table.deepcopy(chunkScannerNest)
+chunkScannerNestSmall.name = "chunk-scanner-nest-small-rampant"
+chunkScannerNestSmall.collision_box = {{-3, -3}, {3, 3}}
+data:extend({chunkScannerNestSmall})
+
+local chunkScannerTurretSmall = util.table.deepcopy(chunkScannerTurret)
+chunkScannerTurretSmall.name = "chunk-scanner-turret-small-rampant"
+chunkScannerTurretSmall.collision_box = {{-1.5, -1.5}, {1.5, 1.5}}
+chunkScannerTurretSmall.map_generator_bounding_box = {{-2, -2}, {2, 2}}
+data:extend({chunkScannerTurretSmall})
+
 
 local chunkScannerSquadMovement = util.table.deepcopy(data.raw["unit"]["small-biter"])
 chunkScannerSquadMovement.name = "chunk-scanner-squad-movement-rampant"
