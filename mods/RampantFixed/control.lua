@@ -1816,6 +1816,11 @@ local function onModSettingsChange(event)
         return
     end
 
+    if event.setting == champions.SETTING then
+        champions.onSettingsChanged(universe)
+        return
+    end
+
     if event.setting == NAUVIS_MIN_EVO_SETTING then
         applyNauvisMinEvoSetting()
         return
@@ -2025,6 +2030,7 @@ local function onConfigChanged()
     initFlyerAlerts()
 
     updateEntityDamagedHandler()
+    champions.onSettingsChanged(universe)
 end
 
 local function onInit()

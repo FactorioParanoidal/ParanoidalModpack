@@ -28,7 +28,8 @@
 --    while retreating).
 --  * the target and the nests are found from the strongpoints of the AI and on the chunk grid around the target, not
 --    by a scan of every turret or nest chunk of the map.
--- Map setting rampantFixed--champions switches new spawns. Data: universe.champions, created on first use.
+-- Map setting rampantFixed--champions switches new spawns and kills living champions when disabled.
+-- Data: universe.champions, created on first use.
 
 if championsG then
     return championsG
@@ -1030,6 +1031,29 @@ local function stepRecord(universe, data, record, tick)
                 orderRest(record)
             end
         end
+    end
+end
+
+-- Runtime setting change and configuration update: existing saves may already have champions disabled.
+function champions.onSettingsChanged(universe)
+    if settings.global[champions.SETTING].value then
+        return
+    end
+    local data = universe.champions
+    if not data then
+        return
+    end
+    local changed = false
+    for unitNumber, record in pairs(data.units) do
+        if not record.entity.valid then
+            data.units[unitNumber] = nil
+            changed = true
+        elseif not record.died then
+            record.entity.die()
+        end
+    end
+    if changed then
+        notifyChanged()
     end
 end
 
