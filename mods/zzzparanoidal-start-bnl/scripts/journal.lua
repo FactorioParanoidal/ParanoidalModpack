@@ -37,12 +37,27 @@ local function sealed(entry)
     return SEALED[key] or key:sub(1, 7) == "letter-"
 end
 
-local function fill(frame)
+-- Current goals of a player (scripts/goals.lua sets it): a list of captions, shown pinned on top.
+M.goals = nil
+
+local function fill(frame, player)
     -- child lookup by name sees direct children only: frame > inner frame > scroll pane
     local inner = frame.bnl_journal_inner
     local list = inner and inner.bnl_journal_scroll
     if not list then return end
     list.clear()
+    local lines = M.goals and player and M.goals(player)
+    if lines and lines[1] then
+        local box = list.add({type = "frame", style = "inside_deep_frame", direction = "vertical"})
+        box.style.padding = 8
+        box.style.horizontally_stretchable = true
+        box.add({type = "label", caption = {"bnl.goal-title"}})
+        for _, caption in ipairs(lines) do
+            local label = box.add({type = "label", caption = caption})
+            label.style.single_line = false
+            label.style.maximal_width = 560
+        end
+    end
     local entries = state().entries
     for i = #entries, 1, -1 do
         local entry = entries[i]
@@ -67,7 +82,7 @@ function M.open(player)
     local screen = player.gui.screen
     if screen[FRAME] then
         if screen[FRAME].bnl_journal_inner then
-            fill(screen[FRAME])
+            fill(screen[FRAME], player)
             return
         end
         screen[FRAME].destroy() -- older layout without the named inner frame
@@ -89,8 +104,15 @@ function M.open(player)
     local list = inner.add({type = "scroll-pane", name = "bnl_journal_scroll", direction = "vertical"})
     list.style.maximal_height = 560
     list.style.minimal_width = 600
-    fill(frame)
+    fill(frame, player)
     player.opened = frame
+end
+
+-- The goals changed: the button exists, an open journal shows them.
+function M.refresh(player)
+    button(player)
+    local frame = player.gui.screen[FRAME]
+    if frame and frame.bnl_journal_inner then fill(frame, player) end
 end
 
 function M.close(player)
@@ -109,7 +131,7 @@ function M.add(key, params, opts)
     entries[#entries + 1] = entry
     for _, player in pairs(game.players) do
         button(player)
-        if player.gui.screen[FRAME] then fill(player.gui.screen[FRAME]) end
+        if player.gui.screen[FRAME] then fill(player.gui.screen[FRAME], player) end
     end
     if not (opts and opts.silent) then
         util.say({"bnl.journal-new", entry.title})

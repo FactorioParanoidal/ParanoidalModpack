@@ -1,5 +1,5 @@
--- AUTO protocol: the goals of the BnL start in the objectives window (top left, labels in
--- player.gui.goal: the window shows while that flow is not empty), the AUTO briefing after the
+-- AUTO protocol: the goals of the BnL start, pinned on top of the BnL journal (a new stage is also
+-- told in the chat), the AUTO briefing after the
 -- landing, one-off AUTO remarks and the closing act of the insurance case. Lines (each only once it
 -- matters; most stages rotate between several texts, picked once when the stage begins):
 --   * burning wrecks: their number while any burns, with the player's own water barrels;
@@ -185,40 +185,31 @@ local function lines_for(s, player)
     return out
 end
 
-local function render(s, player, sound, force)
+-- The goals live in the BnL journal (pinned on top); a new stage is also told in the chat.
+local function render(s, player, news)
     local root = player.gui.goal
-    if not root then return end
-    local lines = lines_for(s, player)
-    local flow = root[FLOW]
-    if not (lines[1] and wanted(player)) then
-        if flow then flow.destroy() end
-        s.keys[player.index] = nil
-        return
+    if root and root[FLOW] then root[FLOW].destroy() end -- the objectives window of the first version
+    local key = helpers.table_to_json(lines_for(s, player))
+    if s.keys[player.index] ~= key then
+        s.keys[player.index] = key
+        journal.refresh(player)
     end
-    local key = helpers.table_to_json(lines)
-    if flow and not force and s.keys[player.index] == key then
-        if sound then player.play_sound({path = "utility/new_objective"}) end
-        return
+    if news and news[1] and wanted(player) then
+        for _, caption in ipairs(news) do
+            util.say({"bnl.goal-news", caption}, "utility/new_objective", player)
+        end
     end
-    s.keys[player.index] = key
-    if flow then
-        flow.clear()
-    else
-        flow = root.add({type = "flow", name = FLOW, direction = "vertical"})
-    end
-    flow.add({type = "label", caption = {"bnl.goal-title"}})
-    for _, caption in ipairs(lines) do
-        local label = flow.add({type = "label", caption = caption})
-        label.style.single_line = false
-        label.style.maximal_width = cfg.width
-    end
-    if sound then player.play_sound({path = "utility/new_objective"}) end
+end
+
+journal.goals = function(player)
+    local s = state()
+    return s and lines_for(s, player) or nil
 end
 
 local function lines_now(s)
     local force = util.player_force()
     local tick = game.tick
-    local lines, sound = {}, false
+    local lines, news = {}, {}
     local function add(key, stage, base, params)
         local before = s.stages[key]
         s.stages[key] = stage
@@ -237,7 +228,7 @@ local function lines_now(s)
                 if not s.done[key] then return end
             else
                 s.done[key] = tick
-                sound = true
+                news[#news + 1] = {"", "[virtual-signal=signal-check] ", caption}
             end
             if tick >= s.done[key] + cfg.done_ttl then return end
             lines[#lines + 1] = {"", DONE_COLOR, "[virtual-signal=signal-check] ", caption, "[/color]"}
@@ -245,7 +236,7 @@ local function lines_now(s)
         end
         -- fires come and go all start long: their line never rings
         if before ~= stage and stage ~= "burning" and (QUIET[before] or before) ~= (QUIET[stage] or stage) then
-            sound = true
+            news[#news + 1] = caption
         end
         lines[#lines + 1] = caption
     end
@@ -253,7 +244,7 @@ local function lines_now(s)
     add("recorder", recorder_line(s, force))
     add("antenna", antenna_line(s))
     add("safe", safe_line())
-    return lines, sound
+    return lines, news
 end
 
 -- One-off AUTO remarks on the first events of the start (fire counters, scripts/fire.lua).
@@ -275,15 +266,16 @@ function M.refresh(silent, only)
     local s = state()
     if not s then return end
     if only then
-        if only.valid then render(s, only, false, true) end
+        if only.valid then render(s, only) end
         return
     end
     remarks(s)
-    local lines, sound = lines_now(s)
+    local lines, news = lines_now(s)
     trail.update_tags()
     s.lines = lines
+    if silent then news = nil end
     for _, player in pairs(game.connected_players) do
-        render(s, player, sound and not silent)
+        render(s, player, news)
     end
 end
 
