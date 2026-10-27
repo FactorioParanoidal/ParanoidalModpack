@@ -82,7 +82,10 @@ local function update_camera(player)
 
     local factory = storage.factories_by_entity[selected.unit_number]
     if not factory or not factory.layout then return end
-    local zoom = player.zoom
+    -- Screen pixels per tile are 32 * zoom * display_density_scale: since 2.0.7 the world view is scaled by the
+    -- display density on high-DPI Windows displays like on Retina (4K with Windows scaling 150-200 %).
+    -- Without the density factor the preview was drawn smaller and shifted towards the screen centre there.
+    local zoom = player.zoom * player.display_density_scale
     local display_resolution = player.display_resolution
     local display_scale = player.display_scale
 
