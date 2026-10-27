@@ -3,7 +3,6 @@ local NAME = "flamethrower-wagon"
 
 local base_entity = data.raw["fluid-wagon"]["fluid-wagon"]
 local base_item = data.raw["item-with-entity-data"]["fluid-wagon"]
-local base_recipe = data.raw.recipe["fluid-wagon"]
 
 local entity = table.deepcopy(base_entity)
 entity.name = NAME
@@ -48,6 +47,7 @@ item.pictures = nil
 item.icon = MOD .. "/graphics/icon.png"
 item.icon_size = 64
 item.order = "c[rolling-stock]-d[aaflamethrower-wagon]"
+item.stack_size = 10 -- as every fluid wagon of the build
 item.place_result = NAME
 item.localised_name = { "entity-name." .. NAME }
 item.localised_description = { "entity-description." .. NAME }
@@ -56,14 +56,16 @@ local recipe = {
     type = "recipe",
     name = NAME,
     localised_name = { "entity-name." .. NAME },
-    category = base_recipe and base_recipe.category,
-    energy_required = base_recipe and base_recipe.energy_required or 1.5,
+    energy_required = 5,
     enabled = false,
+    -- Paranoidal price: the turrets already carry 10 engines; the pump feeds them from the tank,
+    -- steel bearings carry the turret rings as in the other rolling stock of the build.
     ingredients = {
         { type = "item", name = "fluid-wagon", amount = 1 },
         { type = "item", name = "flamethrower-turret", amount = 2 },
-        { type = "item", name = "engine-unit", amount = 6 },
-        { type = "item", name = "steel-plate", amount = 10 },
+        { type = "item", name = "pump", amount = 1 },
+        { type = "item", name = "bob-steel-bearing", amount = 8 },
+        { type = "item", name = "steel-plate", amount = 20 },
     },
     results = { { type = "item", name = NAME, amount = 1 } },
 }
@@ -73,14 +75,14 @@ local technology = {
     name = NAME,
     icon = MOD .. "/graphics/technology.png",
     icon_size = 256,
-    prerequisites = { "fluid-wagon", "flamethrower", "chemical-science-pack" },
+    -- Right after the flamethrower, on its science tier (Bob's armoured trains come later, with blue).
+    prerequisites = { "fluid-wagon", "flamethrower" },
     effects = { { type = "unlock-recipe", recipe = NAME } },
     unit = {
-        count = 350,
+        count = 100,
         ingredients = {
             { "automation-science-pack", 1 },
             { "logistic-science-pack", 1 },
-            { "chemical-science-pack", 1 },
             { "military-science-pack", 1 },
         },
         time = 30,

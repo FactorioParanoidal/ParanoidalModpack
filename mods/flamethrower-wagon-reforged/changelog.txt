@@ -20,8 +20,12 @@ Date: 2026-10-27
     - A turret that is killed now kills its wagon (death events, remnants, ghost) instead of silently deleting it.
     - Turrets settle exactly at the stopping point of the wagon.
     - The fire resistance of the wagon is found by type instead of assuming it is the first entry.
+  Balancing:
+    - Recipe for the Paranoidal build: fluid wagon, 2 flamethrower turrets, pump, 8 steel bearings, 20 steel plates, 5 s (was fluid wagon, 2 flamethrower turrets, 6 engine units, 10 steel plates, 1.5 s). The turrets already contain 10 engine units.
+    - Technology right after Flamethrower and Fluid wagon, on the flamethrower science tier: 100 × red, green and military science, 30 s (was 350 × red, green, blue and military science, also after Chemical science pack).
+    - Stack size 10, as the other fluid wagons of the build (was 5).
   Changes:
-    - Item and entity icons no longer inherit icons or item pictures of a reskinned fluid wagon. Recipe and technology are defined directly instead of being copied from the fluid wagon recipe and the flamethrower technology; values are unchanged.
+    - Item and entity icons no longer inherit icons or item pictures of a reskinned fluid wagon. Recipe and technology are defined directly instead of being copied from the fluid wagon recipe and the flamethrower technology.
     - Russian locale added; mod name and description locale keys fixed.
     - Remote interface flamethrower-wagon-reforged.stats for diagnostics: number of wagons, number of polled wagons and their unit numbers, whether the dynamic handlers are on.
 ---------------------------------------------------------------------------------------------------
