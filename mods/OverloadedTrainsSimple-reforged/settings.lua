@@ -29,4 +29,21 @@ data:extend({
     maximum_value = 1,
     order = "c",
   },
+  {
+    -- Share of a train's own current top speed allowed on curved rails; 1 disables curve limits.
+    type = "double-setting",
+    name = "otsr-curve-speed",
+    setting_type = "runtime-global",
+    default_value = 0.5,
+    minimum_value = 0.1,
+    maximum_value = 1,
+    order = "d",
+  },
+  {
+    type = "bool-setting",
+    name = "otsr-overload-alert",
+    setting_type = "runtime-per-user",
+    default_value = true,
+    order = "e",
+  },
 })

@@ -1,4 +1,18 @@
 ---------------------------------------------------------------------------------------------------
+Version: 9.1.0
+Date: 2026-10-27
+  Major Features:
+    - Speed in curves: a train passes curved rails (including elevated and legacy curves) at no more than a share of its own current top speed (setting, 50% by default, 100% disables). It slows down smoothly before the curve with half of its own braking ability and keeps the limit until its last carriage has left the curve; afterwards it accelerates normally, a loaded train with its cargo inertia. Applies to automatic and manual trains.
+    - Automatic trains read the curves ahead from their path, scanned incrementally only as far as their braking distance needs. Manual and path-less trains look ahead along the rails every 10 ticks.
+  Features:
+    - Alert when a train departs so heavily loaded that its acceleration is held at the minimum (per-player setting, on by default). The alert is removed at the next departure or when the train is split or joined.
+    - Panel next to the train window: cargo, cargo weight, acceleration multiplier, overload and curve speed limit, filled when the window is opened.
+    - /otsr and describe_train also report the curve speed limit.
+  Changes:
+    - Cargo inertia and the curve limit are combined into a single speed write per train and tick; the speed is never lowered faster than the train's full braking.
+  Optimizations:
+    - All tracked trains share one timing wheel: each train is processed only on its own due tick. Trains on straight track sleep until the next curve matters (at most 60 ticks), loaded cruising trains at most 30 ticks; waiting automatic trains cost nothing.
+---------------------------------------------------------------------------------------------------
 Version: 9.0.0
 Date: 2026-10-27
   Major Features:
