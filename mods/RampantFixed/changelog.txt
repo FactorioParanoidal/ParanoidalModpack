@@ -4,6 +4,10 @@ Date: 2026.10.27
   Changes:
     - Turning off mini-bosses also kills living champions and hour bosses. Saves with the setting already off are cleaned up on the configuration update; only tracked bosses are visited, with no map scans or extra tick checks.
     - Settlers: when the usual search finds no room for a nest or a worm and player buildings stand nearby, the settler looks again for room of the real size (new hidden scanners chunk-scanner-nest-small-rampant and chunk-scanner-turret-small-rampant, which also keep off elevated rails). Where there is still no room, the player's ground rails, rail signals, train stops and electric poles under one nest or worm give way to it: they are destroyed, the kill is given to the neutral force (no rebuild by the safety settings, no AI points), signals and stops before rails. Other buildings, rail supports, elevated rails, water and trains are left as they are.
+    - Railway safety does not cover the wooden railway of JunkTrain3 (wooden rails, primitive rail signals, chain signals and train stops).
+    - The checkbox "Safety: Make big electric poles safe from biters" is replaced by the list "Safety: Big electric poles" (rampantFixed--safeBuildings-bigElectricPoles): all vulnerable / tiers 1-2 vulnerable, tiers 3-4 invulnerable (default) / all invulnerable. It covers only the big electric poles of tiers 1-4 (bob-big-electric-pole-2..4) and their lighted versions. Like the other safety settings it applies when a pole is built or rebuilt after its destruction. The old checkbox is dropped, saves get the default of the list.
+    - The main safety switch is named "Safety: Railway".
+    - A big electric pole or a lamp that blocks units is not made safe when another such pole or lamp stands closer than 1.3 tiles to it (also diagonally); hidden lamps of lighted poles and floor lamps do not count. Once per save such poles and lamps already standing side by side lose their protection. The safety rules are kept in one local table of control.lua.
 ---------------------------------------------------------------------------------------------------
 Version: 9.02.14
 Date: 2026.10.13

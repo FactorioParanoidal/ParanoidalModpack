@@ -143,8 +143,10 @@ if mods["RampantFixed"] then
     set_settings_default_value("bool-setting", "rampantFixed--undergroundAttack", false)
 
     set_settings_default_value("bool-setting", "rampantFixed--showPlanetAISettings", false)
-    set_settings_default_value("bool-setting", "rampantFixed--safeBuildings-bigElectricPole", true)
-    set_settings_default_value("bool-setting", "rampantFixed--safeBuildings-lamps", true)
+    -- Безопасность: главный переключатель и ж/д включены, большие опоры ЛЭП тира 3–4 неуязвимы, лампы — нет.
+    set_settings_default_value("bool-setting", "rampantFixed--safeBuildings", true)
+    set_settings_default_value("string-setting", "rampantFixed--safeBuildings-bigElectricPoles", "tier-3-4")
+    set_settings_default_value("bool-setting", "rampantFixed--safeBuildings-lamps", false)
     set_settings_default_value("bool-setting", "rampantFixed--safeBuildings-straightRail", true)
 end
 -- Частота аварий как в Beta 8: 1.0 (там задуманные 0.4 не применялись из-за проверки с дефисом).

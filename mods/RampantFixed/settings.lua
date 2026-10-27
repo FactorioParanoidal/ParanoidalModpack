@@ -149,10 +149,11 @@ data:extend({
         },
 
         {
-            type = "bool-setting",
-            name = "rampantFixed--safeBuildings-bigElectricPole",
+            type = "string-setting",
+            name = "rampantFixed--safeBuildings-bigElectricPoles",
             setting_type = "runtime-global",
-            default_value = false,
+            default_value = "tier-3-4",
+            allowed_values = {"none", "tier-3-4", "all"},
             order = "c[modifier]-d[safe]",
             per_user = false
         },

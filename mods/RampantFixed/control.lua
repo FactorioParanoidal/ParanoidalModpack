@@ -416,20 +416,143 @@ local function setNewEnemySide()
 	universe["NEW_ENEMIES_SIDE"] = settings.startup["rampantFixed--newEnemiesSide"].value
 end
 
-local additionalPoles = {}	-- reseted after save/load
-local function entityIsImmortal(entity)	
-	if (universe.safeEntities[entity.type] or universe.safeEntities[entity.name]) then
-		return true						 
-	elseif universe.safeEntities["big-electric-pole"] and (entity.type == "electric-pole") then
-		if not additionalPoles[entity.name] then
-			additionalPoles[entity.name] = {safe = ((entity.prototype.get_max_wire_distance() > 18) and (entity.prototype.get_supply_area_distance() < 7))}
+-- Paranoidal: rules of the safety settings. One local table: the main chunk of control.lua is at the limit of
+-- 200 local variables.
+local safeRules = {}
+do
+	-- the wooden railway of JunkTrain3 is never made safe: enemies may destroy it, and its wear
+	-- (damage from fast trains) needs a destructible rail
+	local NEVER_SAFE = {
+		["straight-scrap-rail"] = true,
+		["half-diagonal-scrap-rail"] = true,
+		["curved-scrap-rail"] = true,
+		["curved-scrap-rail-b"] = true,
+		["rail-signal-scrap"] = true,
+		["rail-chain-signal-scrap"] = true,
+		["train-stop-scrap"] = true,
+	}
+
+	-- big electric poles of the setting "rampantFixed--safeBuildings-bigElectricPoles", by tier.
+	-- Only this list: wooden and other long-distance poles are never made safe.
+	local BIG_POLE_TIER = {
+		["big-electric-pole"] = 1,
+		["lighted-big-electric-pole"] = 1,
+		["bob-big-electric-pole-2"] = 2,
+		["lighted-bob-big-electric-pole-2"] = 2,
+		["bob-big-electric-pole-3"] = 3,
+		["lighted-bob-big-electric-pole-3"] = 3,
+		["bob-big-electric-pole-4"] = 4,
+		["lighted-bob-big-electric-pole-4"] = 4,
+	}
+	-- setting value -> lowest safe tier (5: none)
+	safeRules.BIG_POLE_MIN_SAFE_TIER = {
+		["none"] = 5,
+		["tier-3-4"] = 3,
+		["all"] = 1,
+	}
+
+	-- Neighbours. A big pole or a lamp that blocks units is not made safe when another such pole or lamp stands closer
+	-- than WALL_GAP to it (the largest unit of the build is 1.28 tiles wide). Checked only when it would be made safe
+	-- (built or rebuilt), on a small area around it.
+	local WALL_GAP = 1.3
+	local wallNeighbourQuery = {area = nil, type = {"electric-pole", "lamp"}}
+	local wallPieceCache = {}	-- entity name -> boolean; prototype data, same on every peer, not saved
+
+	local function isWallPiece(entity)
+		local name = entity.name
+		local piece = wallPieceCache[name]
+		if piece == nil then
+			piece = false
+			if BIG_POLE_TIER[name] or (entity.type == "lamp") then
+				local prototype = entity.prototype
+				local mask = prototype.collision_mask
+				-- units collide with the "player" layer; hidden lamps of lighted poles have neither it nor player-creation
+				piece = (mask and mask.layers and mask.layers.player and prototype.has_flag("player-creation")
+					and not prototype.hidden) and true or false
+			end
+			wallPieceCache[name] = piece
 		end
-		if additionalPoles[entity.name].safe then 
-			return true
+		return piece
+	end
+
+	local function hasWallNeighbour(entity)
+		local box = entity.bounding_box
+		local leftTop = box.left_top
+		local rightBottom = box.right_bottom
+		wallNeighbourQuery.area = {{leftTop.x - WALL_GAP, leftTop.y - WALL_GAP},
+		                           {rightBottom.x + WALL_GAP, rightBottom.y + WALL_GAP}}
+		local found = entity.surface.find_entities_filtered(wallNeighbourQuery)
+		wallNeighbourQuery.area = nil
+		for i = 1, #found do
+			local other = found[i]
+			if (other ~= entity) and isWallPiece(other) then
+				return true
+			end
+		end
+		return false
+	end
+
+	function safeRules.entityIsImmortal(entity)
+		local name = entity.name
+		if NEVER_SAFE[name] then
+			return false
+		end
+		local tier = BIG_POLE_TIER[name]
+		if tier then
+			-- set by onModSettingsChange; a save from before the setting existed reads it here once
+			local minTier = universe.safeBigPoleMinTier
+			if not minTier then
+				minTier = safeRules.BIG_POLE_MIN_SAFE_TIER[settings.global["rampantFixed--safeBuildings-bigElectricPoles"].value] or 5
+				universe.safeBigPoleMinTier = minTier
+			end
+			if tier < minTier then
+				return false
+			end
+		elseif not (universe.safeEntities[entity.type] or universe.safeEntities[name]) then
+			return false
+		end
+		if isWallPiece(entity) and hasWallNeighbour(entity) then
+			return false
+		end
+		return true
+	end
+
+	-- Once per save, safe big poles and lamps placed before the neighbour rule follow it (big poles and lamps of the player
+	-- forces that are indestructible and stand next to another such pole or lamp). Hidden lamps of lighted poles and
+	-- other service entities are not wall pieces and are not touched.
+	function safeRules.unprotectExistingWalls()
+		if universe.paranoidalSafeWallsChecked then
+			return
+		end
+		universe.paranoidalSafeWallsChecked = true
+		local forces = universe.activePlayerForces
+		if not (forces and forces[1]) then
+			return
+		end
+		local poleNames = {}
+		for name in pairs(BIG_POLE_TIER) do
+			if prototypes.entity[name] then
+				poleNames[#poleNames + 1] = name
+			end
+		end
+		for _, surface in pairs(game.surfaces) do
+			local candidates = surface.find_entities_filtered({type = "lamp", force = forces})
+			if poleNames[1] then
+				local poles = surface.find_entities_filtered({name = poleNames, force = forces})
+				for i = 1, #poles do
+					candidates[#candidates + 1] = poles[i]
+				end
+			end
+			for i = 1, #candidates do
+				local entity = candidates[i]
+				if entity.valid and (not entity.destructible) and isWallPiece(entity) and hasWallNeighbour(entity) then
+					entity.destructible = true
+				end
+			end
 		end
 	end
-	return false
 end
+local entityIsImmortal = safeRules.entityIsImmortal
 
 local function onBuild(event)
     local entity = event.created_entity or event.entity
@@ -1891,19 +2014,13 @@ local function onModSettingsChange(event)
                          "lamp",
                          settings.global["rampantFixed--safeBuildings-lamps"].value)
 
-    local changed, newValue = upgrade.compareTable(universe.safeEntities,
-                                                   "big-electric-pole",
-                                                   settings.global["rampantFixed--safeBuildings-bigElectricPole"].value)
-    if changed then
-        universe.safeEntities["big-electric-pole"] = newValue
-        universe.safeEntities["big-electric-pole-2"] = newValue
-        universe.safeEntities["big-electric-pole-3"] = newValue
-        universe.safeEntities["big-electric-pole-4"] = newValue
-        universe.safeEntities["lighted-big-electric-pole-4"] = newValue
-        universe.safeEntities["lighted-big-electric-pole-3"] = newValue
-        universe.safeEntities["lighted-big-electric-pole-2"] = newValue
-        universe.safeEntities["lighted-big-electric-pole"] = newValue
-		-- planned: chande "destructible" flag for enities on the map
+    -- Paranoidal: big electric poles by tier (safeRules); the old per-name entries are not used any more.
+    universe.safeBigPoleMinTier =
+        safeRules.BIG_POLE_MIN_SAFE_TIER[settings.global["rampantFixed--safeBuildings-bigElectricPoles"].value] or 5
+    for _, oldName in pairs({"big-electric-pole", "big-electric-pole-2", "big-electric-pole-3", "big-electric-pole-4",
+                             "lighted-big-electric-pole", "lighted-big-electric-pole-2",
+                             "lighted-big-electric-pole-3", "lighted-big-electric-pole-4"}) do
+        universe.safeEntities[oldName] = nil
     end
 
     upgrade.compareTable(universe,
@@ -2026,6 +2143,9 @@ local function onConfigChanged()
 
     -- Paranoidal: bases above the tier by evolution (and distance) are brought down to it (rampantFixed--tierByEvolutionOnly)
     baseUtils.lowerTiersToEvolution(universe)
+
+    -- Paranoidal: safe big poles and lamps placed before the neighbour rule follow it (once per save)
+    safeRules.unprotectExistingWalls()
 
     initFlyerAlerts()
 
