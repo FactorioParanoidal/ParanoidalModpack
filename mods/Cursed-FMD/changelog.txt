@@ -5,6 +5,7 @@ Date: 2020-12-6
     - Updated to Factorio 2.0
     - Paranoidal: changing a drill filter keeps the drill quality (a defective drill was rebuilt as normal); removed the debug chat message.
     - Paranoidal: build/mine/death handlers are filtered to mining drills (they ran for every entity death, e.g. each biter).
+    - Paranoidal: the per-resource filter copies of drills are hidden, so the resource tooltip lists only the real drills.
 ---------------------------------------------------------------------------------------------------
 Version: 0.1.8
 Date: 2020-12-6

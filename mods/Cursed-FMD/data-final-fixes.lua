@@ -86,6 +86,9 @@ for i, arrResource in ipairs(newRes) do
                     newDrill.localised_name = drill.localised_name or {"entity-name." .. drillName}
                     newDrill.localised_description = drill.localised_description or {"entity-description.drillName"}
                     newDrill.flags = {"placeable-neutral", "player-creation", "not-in-made-in"}
+                    -- Paranoidal: filter copies are script-only; hidden keeps them out of the
+                    -- resource "Mined by" tooltip and the Factoriopedia.
+                    newDrill.hidden = true
                     newDrill.order = newName
                     newDrill.placeable_by = util.table.deepcopy(placeable[drill.name])
                     if newDrill.localised_name then
