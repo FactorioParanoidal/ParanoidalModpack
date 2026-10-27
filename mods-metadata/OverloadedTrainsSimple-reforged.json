@@ -1,0 +1,13 @@
+{
+  "mod": "OverloadedTrainsSimple-reforged",
+  "source": "local",
+  "original": {
+    "name": "Overloaded Trains",
+    "authors": ["OwnlyMe"],
+    "portal": {
+      "name": "OverloadedTrains",
+      "url": "https://mods.factorio.com/mod/OverloadedTrains"
+    }
+  },
+  "changeReason": "Локальный форк SEO-master, не публикуемый на Mod Portal (ранее OverloadedTrainsSimple). Замена механики Beta 8 без уничтожения и пересоздания вагонов: разгон поезда умножается на вес состава / (вес состава + вес груза) по заполнению ячеек и объёму жидкости."
+}

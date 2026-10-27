@@ -1,0 +1,26 @@
+---------------------------------------------------------------------------------------------------
+Version: 9.0.0
+Date: 2026-10-27
+  Major Features:
+    - Renamed to OverloadedTrainsSimple-reforged. Settings of OverloadedTrainsSimple are not carried over; the mod is incompatible with OverloadedTrainsSimple and OverloadedTrains so that train speed is never scaled twice.
+    - Mass model: every positive speed increment is multiplied by W / (W + M), where W is the train weight and M is the cargo weight (item stacks as fractions of a full slot times the full-slot weight, plus fluid amount times the fluid unit weight), bounded below by the minimum acceleration. More locomotives and wagons now mean less slowdown from the same cargo, and there is no saturation at a fixed slot count.
+    - Higher-quality wagons carry more slots or fluid and therefore get heavier when full.
+  Changes:
+    - New runtime settings: weight of a full cargo slot (150), weight of one fluid unit (0.12), minimum acceleration (0.1). With the defaults a full base cargo wagon or fluid wagon is four times as heavy as an empty one.
+    - Console command /otsr shows the load, cargo weight, acceleration multiplier and tracking status of the train under the cursor or the train being ridden. Remote interface OverloadedTrainsSimple-reforged.describe_train(train_id) returns the same data.
+  Bugfixes:
+    - Empty wagons with filtered slots were counted as full (count_empty_stacks ignores filtered empty slots by default), slowing empty trains.
+    - Loading was judged against absolute slot and fluid thresholds, so high-quality wagons hit the minimum acceleration almost empty and the fluid threshold no longer matched the current fluid wagon capacity.
+    - A single item in a slot counted as a full slot.
+    - The effect weakened as the number of trains grew: each train was visited once per (train count / 6) ticks and accelerated freely in between.
+    - Speed gained between the last visit and a train state change was never corrected.
+    - Removing an invalid train restarted the round-robin, so trains at the end of the list could miss rounds.
+  Optimizations:
+    - Only trains that can gain speed are processed: accelerating and player-driven trains every tick, loaded moving trains sampled round-robin at least once per 30 ticks, waiting and empty automatic trains not at all. on_tick is subscribed only while some train is tracked.
+    - Cargo is measured only when a train leaves a stop or manual control, or is created, instead of on every state change and every 60 ticks while moving.
+    - No periodic scan of all trains; trains are tracked from on_train_created, on_train_changed_state and on_player_driving_changed_state, with O(1) list updates.
+---------------------------------------------------------------------------------------------------
+Version: 0.1.0
+Date: 2026-10-20
+  Optimizations:
+    - Runtime settings are cached (read on init, load, configuration and setting change) instead of being read from settings.global for every accelerating train every tick.

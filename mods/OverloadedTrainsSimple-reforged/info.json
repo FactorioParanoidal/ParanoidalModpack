@@ -1,0 +1,14 @@
+{
+  "name": "OverloadedTrainsSimple-reforged",
+  "version": "9.0.0",
+  "title": "Overloaded Trains Simple Reforged (Paranoidal Fork)",
+  "author": "SEO-master",
+  "factorio_version": "2.0",
+  "description": "Local Paranoidal fork. Train acceleration follows the real inertia of the carried cargo: item stacks and fluid add mass to the rolling stock weight, so the effect scales with the size of the train and its locomotives. Braking and top speed are unchanged; rolling stock is never replaced. This fork is not published on the Mod Portal.",
+  "dependencies": [
+    "base >= 2.0.77",
+    "! OverloadedTrainsSimple",
+    "! OverloadedTrains",
+    "! OverloadedTrains-Dead2"
+  ]
+}
