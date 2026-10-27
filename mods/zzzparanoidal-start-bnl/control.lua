@@ -88,7 +88,6 @@ start.on_ready = function(shipwreck, ship, wrecks)
         end
     end
     wrecks = kept
-    fire.ship_kit(ship)
     -- The burning trees of the AAI scene must not light the start wrecks at once (fire.ignite_grace).
     fire.clear_scene_fires(ship)
     for _, wreck in ipairs(wrecks) do fire.clear_scene_fires(wreck) end

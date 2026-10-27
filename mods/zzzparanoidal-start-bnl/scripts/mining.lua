@@ -61,7 +61,10 @@ function M.on_tick(state)
         if not (target_name or (wreck and wreck.valid and wreck_of[wreck.name])) then
             watch[index] = nil -- points elsewhere now
         end
-        if target_name and mining(player, wreck) and wreck.minable and player.can_reach_entity(wreck) then
+        if target_name and mining(player, wreck) and fire.is_burning(wreck) then
+            -- first put it out, then mine it (scripts/fire.lua locks a burning wreck)
+            if player.can_reach_entity(wreck) then fire.too_hot(player, wreck) end
+        elseif target_name and mining(player, wreck) and wreck.minable and player.can_reach_entity(wreck) then
             local entry = entries[wreck.unit_number]
             if not entry then
                 local target = wreck.surface.create_entity({name = target_name, position = wreck.position, force = wreck.force})

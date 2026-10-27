@@ -235,19 +235,18 @@ config.fire = {
         long_from = 1.5, -- torches of this base scale (and more) are stretched vertically
         long_stretch = 2,
     },
-    -- Water barrels in a burning wreck (a kit is in the ship; players put them in): the fire burns
-    -- slower while there is water, a barrel bursts into steam every interval, after `quench` barrels
-    -- by wreck size the fire is out (no last blast, no 4th quality step; it may light again later).
-    -- Water barrels: inside a burning wreck one bursts every interval (slows the fire, enough of them
-    -- put it out); poured from the hand (scripts/douse.lua) one puts a wreck fire out at once.
+    -- Water barrels poured from the hand (scripts/douse.lua): one puts a burning wreck out at once
+    -- (no last blast, no further quality step); on the ground it puts out ordinary fires and burning
+    -- characters around. What was put out stays wet for `calm`: a wet wreck or character does not
+    -- catch fire, a fire started in a wet spot (scripted or spread by the engine) dies in steam.
     water = {
         items = {"water-barrel", "angels-water-purified-barrel"},
-        slow = 0.5,
-        interval = {4 * 60, 6 * 60},
-        quench = {small = 1, medium = 2, big = 3}, -- barrels inside; one from the hand is enough
-        spill_radius = 2.5, -- a barrel poured on the ground puts out ordinary fires this far (also: "burning ground")
-        calm = 3 * MINUTE,
-        ship_kit = nil, -- no kit on the ground: every player gets config.professions.water_kit
+        spill_radius = 2.5, -- a barrel poured on the ground puts out fires and characters this far (also: "burning ground")
+        calm = 5 * MINUTE,
+        wet_margin = 2.5, -- a quenched wreck: the wet spot reaches this far beyond its radius
+        wet_check = 60, -- fires inside wet spots are put out this often
+        max_spots = 64, -- the oldest wet spot dries first beyond this
+        hiss_interval = 30, -- a wet thing set alight steams at most this often
     },
     -- Fuel poured on a fire from the hand (scripts/douse.lua): fuel and gas barrels, oxygen, the
     -- high-tech fuel of the wrecks and every chemical fuel of at least min_fuel_value (solid fuel 12 MJ).
@@ -257,8 +256,13 @@ config.fire = {
         blasts = 10,
         building_radius = 10, -- every building and wreck within it catches fire
         max_buildings = 80,
+        -- A burning character: a harmless sticker with flames (prototypes/bnl-water.lua) and a scripted
+        -- fire damage of player_burn_share of its max health every player_burn_interval (resistances
+        -- apply); a new fire sets the time back to player_burn_ticks, water poured near puts it out.
         player_burn_ticks = 10 * 60,
-        cursor_ticks = 10 * 60, -- the cursor burns this long
+        player_burn_share = 0.03,
+        player_burn_interval = 60,
+        -- the cursor of the player who poured the fuel burns while that player's character burns
         cursor_interval = 10,
         sound_interval = 200, -- the 3.5 s flamethrower roar repeats
     },

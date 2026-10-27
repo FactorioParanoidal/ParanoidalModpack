@@ -51,6 +51,10 @@ function M.install()
     end
 end
 
+-- Registers the dynamic handlers that are needed now. Only a change is applied: several modules
+-- share on_tick and call this whenever their own list runs empty, which happens every tick while
+-- another module still needs the event. `entry.on` lives in the Lua state only (not saved): after
+-- on_load it starts nil, so the first refresh registers exactly what storage needs.
 function M.refresh()
     for _, id in ipairs(dynamic_order) do
         local entry = dynamic[id]
@@ -61,10 +65,14 @@ function M.refresh()
                 break
             end
         end
-        if needed then
-            script.on_event(id, caller(entry.fns))
-        else
-            script.on_event(id, nil)
+        if needed ~= entry.on then
+            entry.on = needed
+            if needed then
+                entry.handler = entry.handler or caller(entry.fns)
+                script.on_event(id, entry.handler)
+            else
+                script.on_event(id, nil)
+            end
         end
     end
 end

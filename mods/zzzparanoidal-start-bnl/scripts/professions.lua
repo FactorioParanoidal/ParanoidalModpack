@@ -151,7 +151,7 @@ local function start_wrecks()
 end
 
 -- Takes every ammo stack out of the start wrecks and the ship (also ammo kept virtually by wrecks
--- without an inventory) into a pool {name, count, quality}.
+-- without an inventory and the cargo held by the fire of a burning wreck) into a pool {name, count, quality}.
 local function collect_wreck_ammo()
     local pool, total = {}, 0
     local function add(name, count, quality_name)
@@ -161,13 +161,16 @@ local function collect_wreck_ammo()
     for _, item in ipairs(start_wrecks()) do
         local entity = item.entity
         if entity.valid then
-            local inventory = entity.get_inventory(defines.inventory.chest)
-            if inventory then
-                for i = 1, #inventory do
-                    local stack = inventory[i]
-                    if stack.valid_for_read and stack.type == "ammo" then
-                        add(stack.name, stack.count, stack.quality.name)
-                        stack.clear()
+            local held = item.rec and item.rec.held
+            for _, inventory in ipairs({entity.get_inventory(defines.inventory.chest) or false,
+                held and held.valid and held or false}) do
+                if inventory then
+                    for i = 1, #inventory do
+                        local stack = inventory[i]
+                        if stack.valid_for_read and stack.type == "ammo" then
+                            add(stack.name, stack.count, stack.quality.name)
+                            stack.clear()
+                        end
                     end
                 end
             end

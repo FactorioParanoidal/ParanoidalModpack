@@ -8,8 +8,11 @@
 -- goes out and a share of the hazardous cargo left goes off in a last blast; the rest of it is loot.
 -- The cargo whose quality can change loses one quality step every 10-15 s of fire (config.fire.
 -- step_interval; down to defect -5 at most, materials not below normal), each step may burn a whole stack away;
--- mining loot follows the same steps. Water barrels put into the wreck slow the fire and burst into
--- steam one by one; enough of them put it out. Fires from bursts reach player buildings nearby.
+-- mining loot follows the same steps. Fires from bursts reach player buildings nearby.
+-- First put it out, then mine it: while a wreck burns its cargo is held by the fire (a script
+-- inventory, the chest is empty and locked: no GUI, no fast transfer, no inserters, no mining).
+-- A water barrel poured from the hand (scripts/douse.lua) puts it out and gives the cargo back; the
+-- wreck and the spot around it stay wet for config.fire.water.calm: no new fire there, only steam.
 local config = require("bnl-config")
 local util = require("scripts.util")
 local quality = require("scripts.quality")
@@ -33,13 +36,19 @@ for kind, spec in pairs(cfg.hazards) do
         end
     end
 end
-local water = {}
-for _, name in ipairs(cfg.water.items) do water[name] = true end
+-- Story items of the start never burn: the flight recorder (its research decodes the safe code and
+-- names the beacons), the antenna parts of the distress beacon, the note of the previous expedition.
+local STORY = {["bnl-flight-recorder"] = true, ["bnl-antenna-part"] = true, ["bnl-engineer-note"] = true}
 
--- Hazards and water are not cargo: no quality steps, never burnt away or thrown out.
+-- Hazards and story items are not cargo: no quality steps, never burnt away or thrown out.
 local function special(name)
-    return hazard[name] ~= nil or water[name] == true
+    return hazard[name] ~= nil or STORY[name] == true
 end
+
+-- Only wrecks and the ship are ever tracked: other entities are rejected by name before any
+-- registration (clicks, opened GUIs and the burning cursor ask about everything).
+local WRECK = {[shipwreck.ship] = true}
+for name in pairs(shipwreck.wrecks) do WRECK[name] = true end
 
 local function state()
     return storage.bnl.fire
@@ -64,6 +73,91 @@ end
 
 local function chest(entity)
     return entity.type == "container" and entity.get_inventory(defines.inventory.chest) or nil
+end
+
+-- The cargo of a wreck: held by the fire while it burns, else its chest.
+local function cargo(rec, entity)
+    local held = rec.held
+    if held and held.valid then return held end
+    return chest(entity)
+end
+
+-- Whatever is in the chest of a burning wreck (the cargo when it caught fire, later cargo of the
+-- start fill, inserters) goes into the inventory held by the fire.
+local function absorb(rec, entity)
+    local inventory = chest(entity)
+    if not inventory or inventory.is_empty() then return end
+    local held = rec.held
+    if not (held and held.valid) then
+        held = game.create_inventory(#inventory)
+        rec.held = held
+    end
+    for i = 1, #inventory do
+        local stack = inventory[i]
+        if stack.valid_for_read then
+            local slot = held.find_empty_stack()
+            if not slot then
+                held.resize(#held + 1)
+                slot = held[#held]
+            end
+            slot.transfer_stack(stack)
+        end
+    end
+end
+
+-- The fire is out: the cargo goes back into the chest (what does not fit spills next to it) and
+-- the wreck can be opened and mined again.
+local function release(rec)
+    local entity, held = rec.entity, rec.held
+    rec.held = nil
+    if entity and entity.valid then
+        local locked = rec.locked
+        if locked then
+            if entity.type == "container" then entity.operable = locked.operable end
+            entity.minable_flag = locked.minable
+        end
+        if held and held.valid then
+            local inventory = chest(entity)
+            for i = 1, #held do
+                local stack = held[i]
+                if stack.valid_for_read then
+                    local slot = inventory and inventory.find_empty_stack()
+                    if not (slot and slot.transfer_stack(stack)) and stack.valid_for_read then
+                        entity.surface.spill_item_stack({position = entity.position, stack = stack,
+                            enable_looted = true, allow_belts = false})
+                        stack.clear()
+                    end
+                end
+            end
+        end
+    end
+    rec.locked = nil
+    if held and held.valid then held.destroy() end
+end
+
+-- A wreck set burning: locked (no GUI, fast transfer or mining), its GUI closed for everyone, a
+-- pickaxe target of a player mining it removed (scripts/mining.lua), the cargo taken by the fire.
+local function lock(rec, entity)
+    if not rec.locked then
+        rec.locked = {operable = entity.operable, minable = entity.minable_flag}
+    end
+    if entity.type == "container" then entity.operable = false end
+    entity.minable_flag = false
+    -- a robot sent to take it apart would find it locked: the order goes, mark it again when it is out
+    if entity.to_be_deconstructed() then entity.cancel_deconstruction(util.player_force()) end
+    for _, player in pairs(game.players) do
+        if player.opened == entity then player.opened = nil end
+    end
+    local s = storage.shipwreck
+    if s and s.targets then
+        for id, entry in pairs(s.targets) do
+            if entry.wreck == entity then
+                s.targets[id] = nil
+                if entry.target.valid then entry.target.destroy() end
+            end
+        end
+    end
+    absorb(rec, entity)
 end
 
 -- Item entries of a hazard kind for a wreck size and the count factor of the size.
@@ -147,36 +241,135 @@ function M.clear_scene_fires(entity)
     end
 end
 
--- A burning wreck cannot be opened: put the fire out or mine it (mining takes the cargo too).
+-- "Too hot" over a burning wreck a player tries to open or mine (once a second at most).
+function M.too_hot(player, entity)
+    local s = storage.bnl and storage.bnl.fire
+    if not s then return end
+    s.hot = s.hot or {}
+    if (s.hot[player.index] or 0) > game.tick then return end
+    s.hot[player.index] = game.tick + 60
+    player.create_local_flying_text({text = {"bnl.wreck-too-hot"}, position = entity.position,
+        color = {r = 1, g = 0.45, b = 0.15}})
+end
+
+-- A burning wreck is not operable, so the engine does not open it; this catches the rest (a GUI
+-- opened by another mod or by script).
 function M.on_gui_opened(event)
     local entity = event.entity
     if not (entity and entity.valid and M.is_burning(entity)) then return end
     local player = game.get_player(event.player_index)
     if not player then return end
     player.opened = nil
-    player.create_local_flying_text({text = {"bnl.wreck-too-hot"}, position = entity.position,
-        color = {r = 1, g = 0.45, b = 0.15}})
+    M.too_hot(player, entity)
 end
 
--- Water barrels of the ship's fire kit: on the ground next to it (inside, the burning ship would
--- burst them by itself).
-function M.ship_kit(ship)
-    local kit = cfg.water.ship_kit
-    if kit and ship and ship.valid and util.item_exists(kit[1]) then
-        local box = ship.bounding_box
-        ship.surface.spill_item_stack({position = {x = ship.position.x, y = box.right_bottom.y + 1.5},
-            stack = {name = kit[1], count = kit[2]}, enable_looted = true, allow_belts = false})
+-- Wet spots ---------------------------------------------------------------------------------------
+
+-- `count` white steam puffs within `radius` of `position` (prototypes/bnl-water.lua).
+function M.steam(surface, position, radius, count, name)
+    for _ = 1, count do
+        local a, r = math.random() * 2 * math.pi, radius * math.sqrt(math.random())
+        surface.create_trivial_smoke({name = name or "bnl-steam",
+            position = {x = position.x + r * math.cos(a), y = position.y + r * math.sin(a)}})
     end
 end
 
+-- A wet thing set alight: a little white steam instead of fire.
+function M.hiss(surface, position, radius)
+    M.steam(surface, position, radius or 0.6, 4, "bnl-steam-small")
+end
+
+function M.is_wet(surface, position)
+    local s = storage.bnl and storage.bnl.fire
+    local list = s and s.wet
+    if not list then return false end
+    local tick, index = game.tick, surface.index
+    for _, spot in ipairs(list) do
+        if spot.surface == index and spot.until_tick > tick then
+            local dx, dy = position.x - spot.x, position.y - spot.y
+            if dx * dx + dy * dy <= spot.r * spot.r then return true end
+        end
+    end
+    return false
+end
+
+-- Puts out the fires (entities of type fire) within radius; returns their number.
+local function put_out(surface, position, radius, steam)
+    local n = 0
+    for _, flame in pairs(surface.find_entities_filtered({type = "fire", position = position, radius = radius})) do
+        if flame.valid then
+            local p = flame.position
+            flame.destroy()
+            n = n + 1
+            if steam then M.steam(surface, p, 0.4, 2, "bnl-steam-small") end
+        end
+    end
+    return n
+end
+
+-- Water poured here: the fires within radius go out and the spot stays wet for water.calm.
+function M.wet(surface, position, radius)
+    put_out(surface, position, radius)
+    local s = storage.bnl and storage.bnl.fire
+    if not s then return end
+    s.wet = s.wet or {}
+    local list = s.wet
+    list[#list + 1] = {surface = surface.index, x = position.x, y = position.y, r = radius,
+        until_tick = game.tick + cfg.water.calm}
+    while #list > cfg.water.max_spots do table.remove(list, 1) end
+    if not s.drying then
+        s.drying = true
+        scheduler.after(cfg.water.wet_check, "fire-wet")
+    end
+end
+
+-- Fires that reach a wet spot (spread by the engine, lit by bursts) die in steam until it dries.
+scheduler.handler("fire-wet", function(_, tick)
+    local s = state()
+    local kept = {}
+    for _, spot in ipairs(s.wet or {}) do
+        local surface = spot.until_tick > tick and game.get_surface(spot.surface)
+        if surface then
+            kept[#kept + 1] = spot
+            put_out(surface, {x = spot.x, y = spot.y}, spot.r, true)
+        end
+    end
+    s.wet = kept
+    if kept[1] then
+        scheduler.after(cfg.water.wet_check, "fire-wet")
+    else
+        s.drying = false
+    end
+end)
+
+-- A scripted ground fire (bursts, embers, the misused fuel, a burning cursor): steam on a wet spot.
+function M.make_fire(surface, position, flames)
+    if M.is_wet(surface, position) then
+        M.hiss(surface, position)
+        return false
+    end
+    surface.create_entity({name = "fire-flame", position = position, initial_ground_flame_count = flames})
+    return true
+end
+
+-- Returns true when the wreck caught fire; a wet wreck (put out less than water.calm ago, or on a
+-- wet spot) steams instead and returns false, "wet".
 function M.ignite(entity_or_rec, duration)
     local rec = entity_or_rec
     if rec and rec.object_name == "LuaEntity" then rec = state().wrecks[reg_of(rec)] end
-    if not rec or rec.burning or rec.burnt then return end
+    if not rec or rec.burning or rec.burnt then return false end
     local entity = rec.entity
-    if not (entity and entity.valid) then return end
+    if not (entity and entity.valid) then return false end
     local tick = game.tick
+    if (rec.calm_until or 0) > tick or M.is_wet(entity.surface, entity.position) then
+        if (rec.next_hiss or 0) <= tick then
+            rec.next_hiss = tick + cfg.water.hiss_interval
+            M.hiss(entity.surface, entity.position, entity.get_radius())
+        end
+        return false, "wet"
+    end
     rec.burning = true
+    lock(rec, entity)
     -- Only the fire itself (scripted health) burns a wreck down; ground fires, impacts and
     -- explosions around can no longer destroy it with its cargo. Stays so after the fire.
     entity.destructible = false
@@ -186,8 +379,6 @@ function M.ignite(entity_or_rec, duration)
     rec.next_pop = tick + util.int(cfg.idle_interval)
     rec.next_flame = tick
     rec.next_step = tick + util.int(cfg.step_interval)
-    rec.next_water = nil
-    rec.quench = 0
     rec.budget = nil -- counted at the first fire tick (after the start cargo is in)
     local tempers = {}
     for name, spec in pairs(cfg.temperaments) do tempers[#tempers + 1] = {name, spec.weight} end
@@ -196,6 +387,7 @@ function M.ignite(entity_or_rec, duration)
     rec.next_flare = tick + util.int((cfg.temperaments[rec.temper].flare or {interval = {0, 0}}).interval)
     light_up(rec, entity)
     start_ticking()
+    return true
 end
 
 -- Start wrecks set burning by the crash itself, staggered after the landing.
@@ -237,6 +429,7 @@ local function extinguish(rec)
     if rec.smoke and rec.smoke.valid then rec.smoke.destroy() end
     rec.smoke = nil
     clear_visuals(rec)
+    release(rec)
 end
 
 -- One stack, n quality steps down. Items with data (armor with equipment, blueprints) are kept.
@@ -286,7 +479,7 @@ local function float_text(entity, text, offset, color, scale, ttl)
 end
 
 local function degrade(rec, entity, n)
-    local inventory = chest(entity)
+    local inventory = cargo(rec, entity)
     local lost = {}
     if inventory then
         for i = 1, #inventory do
@@ -321,7 +514,7 @@ local function apply_steps(rec, entity, tick)
 end
 
 -- One pass over a burning wreck: the first hazardous cargo (virtual first), the burn speed factor
--- of fuel and oxygen inside, the first water stack.
+-- of fuel and oxygen inside.
 local function survey(rec, entity)
     local r = {boost = 1}
     local boosted = {}
@@ -338,7 +531,7 @@ local function survey(rec, entity)
         r.count = rec.virtual.count
         note(r.hazard)
     end
-    local inventory = chest(entity)
+    local inventory = cargo(rec, entity)
     if inventory then
         for i = 1, #inventory do
             local stack = inventory[i]
@@ -348,8 +541,6 @@ local function survey(rec, entity)
                     note(name)
                     if not r.hazard then r.hazard, r.stack = name, stack end
                     if name == r.hazard then r.count = r.count + stack.count end
-                elseif water[name] and not r.water then
-                    r.water = stack
                 end
             end
         end
@@ -360,7 +551,7 @@ end
 -- Units of hazardous cargo in a wreck.
 local function hazard_count(rec, entity)
     local n = rec.virtual and hazard[rec.virtual.name] and rec.virtual.count or 0
-    local inventory = chest(entity)
+    local inventory = cargo(rec, entity)
     if inventory then
         for i = 1, #inventory do
             local stack = inventory[i]
@@ -377,7 +568,7 @@ local function around(entity, radius)
 end
 
 local function ground_fire(surface, position, flames)
-    surface.create_entity({name = "fire-flame", position = position, initial_ground_flame_count = flames})
+    M.make_fire(surface, position, flames)
 end
 
 -- Visuals of a burning wreck ------------------------------------------------------------------
@@ -515,8 +706,8 @@ local function hit_buildings(entity, radius, damage)
     end
 end
 
-local function scatter(entity, distance)
-    local inventory = chest(entity)
+local function scatter(rec, entity, distance)
+    local inventory = cargo(rec, entity)
     if not inventory then return end
     local candidates = {}
     for i = 1, #inventory do
@@ -538,22 +729,22 @@ end
 -- What a hazard does when it goes off in a burning wreck.
 local effects = {}
 
-effects.ammo = function(entity, h)
+effects.ammo = function(entity, h, rec)
     local surface = entity.surface
     surface.create_entity({name = h.explosion, position = around(entity, entity.get_radius())})
     hurt(entity, cfg.splash_radius, cfg.splash_damage)
     if h.fire or math.random() < cfg.spark_chance then ground_fire(surface, around(entity, entity.get_radius() + 3), 3) end
-    if math.random() < cfg.scatter_chance then scatter(entity) end
+    if math.random() < cfg.scatter_chance then scatter(rec, entity) end
 end
 
-effects.barrel = function(entity, h)
+effects.barrel = function(entity, h, rec)
     local spec, surface = h.spec, entity.surface
     surface.create_entity({name = spec.explosion, position = around(entity, entity.get_radius())})
     local reach = entity.get_radius() + util.float(spec.pool_radius)
     for _ = 1, util.int(spec.pool_flames) do ground_fire(surface, around(entity, reach), 4) end
     hurt(entity, spec.hurt[1], spec.hurt[2])
     hit_buildings(entity, spec.hurt[1], spec.hurt[2])
-    if math.random() < cfg.scatter_chance then scatter(entity) end
+    if math.random() < cfg.scatter_chance then scatter(rec, entity) end
 end
 
 effects.gas = function(entity, h)
@@ -574,7 +765,7 @@ effects.fuel = function(entity)
     if math.random() < cfg.spark_chance then ground_fire(surface, around(entity, entity.get_radius() + 2), 2) end
 end
 
-effects.explosive = function(entity, h)
+effects.explosive = function(entity, h, rec)
     local spec, surface = h.spec, entity.surface
     surface.create_entity({name = spec.explosion, position = entity.position})
     for _ = 1, spec.blasts do
@@ -582,7 +773,7 @@ effects.explosive = function(entity, h)
     end
     hurt(entity, spec.hurt[1], spec.hurt[2])
     hit_buildings(entity, spec.hurt[1], spec.hurt[2])
-    for _ = 1, spec.scatter do scatter(entity, 8) end
+    for _ = 1, spec.scatter do scatter(rec, entity, 8) end
     ground_fire(surface, around(entity, entity.get_radius() + 2), 4)
 end
 
@@ -625,7 +816,7 @@ local function burn_out(rec, entity)
         v.count = v.count - going(v.name, v.count)
         if v.count <= 0 then rec.virtual = nil end
     end
-    local inventory = chest(entity)
+    local inventory = cargo(rec, entity)
     if inventory then
         for i = 1, #inventory do
             local stack = inventory[i]
@@ -650,45 +841,25 @@ local function burn_out(rec, entity)
     extinguish(rec)
 end
 
--- Water: one barrel bursts into steam; enough of them put the fire out (no last blast).
--- `count` white steam puffs within `radius` of `position` (prototypes/bnl-water.lua).
-function M.steam(surface, position, radius, count, name)
-    for _ = 1, count do
-        local a, r = math.random() * 2 * math.pi, radius * math.sqrt(math.random())
-        surface.create_trivial_smoke({name = name or "bnl-steam",
-            position = {x = position.x + r * math.cos(a), y = position.y + r * math.sin(a)}})
-    end
-end
-
--- The fire goes out by water: a big steam cloud over the wreck, no last blast.
+-- The fire goes out by water: a big steam cloud over the wreck, no last blast; the cargo comes
+-- back, the wreck and the spot around it stay wet (its own flames around go out too).
 local function quench(rec, entity)
     extinguish(rec)
     rec.calm_until = game.tick + cfg.water.calm
-    rec.quench = 0
+    M.wet(entity.surface, entity.position, entity.get_radius() + cfg.water.wet_margin)
     local radius = entity.get_radius() * 1.41 -- twice the area of the first version
     M.steam(entity.surface, entity.position, radius, math.max(20, math.floor(radius * 12)), "bnl-steam")
     float_text(entity, {"bnl.fire-quenched"}, -1.6, {r = 0.5, g = 0.8, b = 1}, 1.3, 240)
 end
 
-local function douse(rec, entity, stack)
-    if stack.count > 1 then stack.count = stack.count - 1 else stack.clear() end
-    rec.quench = (rec.quench or 0) + 1
-    if rec.quench < (cfg.water.quench[rec.size] or cfg.water.quench.small) then
-        M.steam(entity.surface, around(entity, entity.get_radius()), 0.5, 3, "bnl-steam-small")
-        return false
-    end
-    quench(rec, entity)
-    return true
-end
-
 function M.is_tracked(entity)
     local s = storage.bnl and storage.bnl.fire
-    return s ~= nil and s.wrecks[reg_of(entity)] ~= nil
+    return s ~= nil and WRECK[entity.name] == true and s.wrecks[reg_of(entity)] ~= nil
 end
 
 function M.is_burning(entity)
     local s = storage.bnl and storage.bnl.fire
-    local rec = s and s.wrecks[reg_of(entity)]
+    local rec = s and WRECK[entity.name] and s.wrecks[reg_of(entity)]
     return rec ~= nil and rec.burning == true
 end
 
@@ -704,21 +875,14 @@ local function burn(rec, entity, tick)
         rec.floor = cfg.burn_floor[1] + math.random() * (cfg.burn_floor[2] - cfg.burn_floor[1])
         rec.rate = (1 - rec.floor) / util.int(cfg.burn_seconds[rec.size] or cfg.burn_seconds.small)
     end
+    -- cargo that came into the chest since (start fill, inserters); only for a locked wreck: an
+    -- unlocked one (set burning before the lock existed) can still be mined with its chest
+    if rec.locked then absorb(rec, entity) end
     if not rec.budget then -- what may go off in this fire, counted once when it caught fire
         rec.budget = math.floor(hazard_count(rec, entity) * cfg.fire_share + math.random())
     end
     local r = survey(rec, entity)
-    local factor = r.boost
-    if r.water then
-        factor = factor * cfg.water.slow
-        if not rec.next_water then
-            rec.next_water = tick + util.int(cfg.water.interval)
-        elseif tick >= rec.next_water then
-            rec.next_water = tick + util.int(cfg.water.interval)
-            if douse(rec, entity, r.water) then return end
-        end
-    end
-    factor = factor * (temper_of(rec).speed or 1)
+    local factor = r.boost * (temper_of(rec).speed or 1)
     update_torches(rec, entity, r)
     local health = entity.health - max * rec.rate * factor * cfg.tick_interval / 60
     health = health - max * temper_tick(rec, entity, tick)
@@ -729,7 +893,7 @@ local function burn(rec, entity, tick)
         local spec, taken = take(rec, r, units)
         if spec then
             health = health - max * spec.damage * (spec.spec.pop_units == "all" and 1 or taken)
-            effects[spec.kind](entity, spec)
+            effects[spec.kind](entity, spec, rec)
             rec.next_pop = tick + util.int(spec.spec.pop_interval)
         else
             rec.next_pop = tick + util.int(cfg.idle_interval)
@@ -790,8 +954,7 @@ scheduler.handler("fire-watch", function(_, tick)
             and fire_near[entity.surface.index] ~= false
             and entity.surface.count_entities_filtered({type = "fire", position = entity.position,
             radius = entity.get_radius() + 1.5, limit = 1}) > 0 then
-            M.ignite(rec)
-            burning = true
+            burning = M.ignite(rec) or burning
         end
     end
     if util.since_landing() < cfg.watch_until or burning then
