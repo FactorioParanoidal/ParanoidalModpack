@@ -2,6 +2,8 @@
 Version: 9.0.5
 Date: 2026-10-14
   Changes:
+    - Local Paranoidal patch: one fixed order of the top panel buttons for every player (spawn, unstuck, Todo-List, Inserter Throughput, Autofill, WideChests, tech tree, Blueprint Sandboxes, RPG, Module Inserter, Factory Planner, Helmod, SpaceX, Factorissimo dispatcher, BnL journal, Creative Mod). Buttons that appear later take their place on the next panel update; other buttons follow at the end. Buttons are swapped in place, not recreated.
+    - Local Paranoidal patch: the SpaceX button of SpaceModFeorasFork (the fork used by the build) gets the unified style and the SpaceX icon instead of its text caption, and is highlighted while its progress window is open; per-player visibility setting.
     - Local Paranoidal patch: the Inserter Throughput button is no longer highlighted when the overlay is enabled; the on/off state is shown only by the switch on its icon (green when enabled).
     - Local Paranoidal patch: the BnL journal button (created and handled by zzzparanoidal-start-bnl, the round BnL logo) gets the unified style and is highlighted while the journal is open; its own tooltip is kept; per-player visibility setting.
     - Version number starts with 9 (Paranoidal fork): the Mod Portal never offers an "update" over local changes.

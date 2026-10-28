@@ -679,12 +679,67 @@ local function on_player_configuration_changed(event)
     end
 end
 
+-- Paranoidal: one fixed order of the top panel buttons for every player (element names in the mod-gui
+-- button flow). Listed buttons take their place whenever they exist (also the ones that appear later),
+-- every other element follows at the end in its current order. Elements are swapped, never recreated:
+-- their style, sprite and state stay.
+local PANEL_ORDER = {
+	"spawn",                                -- TimedSpawnControl: teleport to spawn
+	"unstuck",                              -- TimedSpawnControl: unstuck
+	"todo_maximize_button",                 -- Todo-List
+	"inserter-throughput-toggle",           -- inserter-throughput
+	"paranoidal_autofill_button",           -- paranoidal-autofill
+	"WideChests_merge-chest-button",        -- WideChests
+	"ptt_toolbar_toggle",                   -- paranoidal-tech-tree
+	"bpsb-toggle-gui-sb-toggle-shortcut",   -- blueprint-sandboxes
+	"btcharxp",                             -- PMRPGsystem
+	"module_inserter_config_button",        -- ModuleInserterEx
+	"fp_button_toggle_interface",           -- factoryplanner
+	"helmod_planner-command",               -- helmod
+	"space_toggle_button",                  -- SpaceModFeorasFork (SpaceX)
+	"factorissimo_dispatch_button",         -- factorissimo-2-notnotmelon
+	"bnl_journal_button",                   -- zzzparanoidal-start-bnl
+	"creative-mod_main-menu-open-button",   -- creative-mod
+}
+local PANEL_RANK = {}
+for i, name in ipairs(PANEL_ORDER) do PANEL_RANK[name] = i end
+
+local function sort_panel_buttons(player)
+	local flow = mod_gui.get_button_flow(player)
+	if not (flow and flow.valid) then return end
+	local children = flow.children
+	local n = #children
+	if n < 2 then return end
+	-- target: the listed elements by rank, then the others in their current order
+	local target = {}
+	for i, element in ipairs(children) do
+		target[i] = {element = element, rank = PANEL_RANK[element.name] or #PANEL_ORDER + 1, pos = i}
+	end
+	table.sort(target, function(a, b)
+		if a.rank ~= b.rank then return a.rank < b.rank end
+		return a.pos < b.pos
+	end)
+	for i = 1, n do
+		local want = target[i].element
+		if children[i].index ~= want.index then
+			for j = i + 1, n do
+				if children[j].index == want.index then
+					flow.swap_children(i, j)
+					children[i], children[j] = children[j], children[i]
+					break
+				end
+			end
+		end
+	end
+end
+
 local function update_player_buttons(player)
     cycle_buttons_to_rename(player)
     cycle_frames_to_rename(player)
     create_new_buttons(player)
     fix_buttons(player)
     destroy_obsolete_buttons(player)
+    sort_panel_buttons(player)
     if global.player[player.index].update_frame then
         update_frame_style({player_index = player.index})
         global.player[player.index].update_frame = nil

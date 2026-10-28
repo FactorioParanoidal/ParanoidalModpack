@@ -77,6 +77,9 @@ local icons = {
     {"center", "niet-sr-guiframe"}),
     create_icon_entry("SpaceMod", "spacemod_button", "space_toggle_button", {'guiu.spacemod_button'}, nil, nil,
     {"left", "mod_gui_frame_flow", "space_progress_frame"}),
+    -- Paranoidal: the build uses the fork SpaceModFeorasFork (same button and window names).
+    create_icon_entry("SpaceModFeorasFork", "spacemod_button", "space_toggle_button", {'guiu.spacemod_button'}, nil, nil,
+    {"left", "mod_gui_frame_flow", "space_progress_frame"}),
     create_icon_entry("train-log", "trainlog_button", "train_log", nil, nil, nil,
     {"screen", "trainlog_mainframe"}),
     create_icon_entry("train-pubsub", "trainpubsub_button", "tm_sprite_button", nil, nil, nil,
