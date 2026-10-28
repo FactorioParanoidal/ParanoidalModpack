@@ -111,7 +111,7 @@ start.on_ready = function(shipwreck, ship, wrecks)
     storage.bnl.start_wrecks = list -- the start wrecks without later debris (the guard's ammo)
     professions.on_start_ready()
     geology.on_start_ready()
-    -- without professions every player of the landing gets the water now (if anything burns)
+    -- without professions every player of the landing gets the water now
     if not professions.enabled() then
         for _, player in pairs(game.players) do professions.give_water(player) end
     end
@@ -148,7 +148,7 @@ events.on(defines.events.on_player_created, function(event)
     local player = game.get_player(event.player_index)
     if not (player and storage.bnl) then return end
     capsules.on_player_created(player)
-    -- without professions a player joining after the landing gets the water at once (if anything burns)
+    -- without professions a player joining after the landing gets the water at once
     if storage.bnl.landing_tick and not professions.enabled() then professions.give_water(player) end
     intro.on_player_created(player)
 end)

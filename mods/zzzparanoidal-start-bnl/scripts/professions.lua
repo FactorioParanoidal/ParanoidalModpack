@@ -15,7 +15,6 @@ local scheduler = require("scripts.scheduler")
 local quality = require("scripts.quality")
 local geology = require("scripts.geology")
 local goals = require("scripts.goals")
-local fire = require("scripts.fire")
 local M = {}
 local cfg = config.professions
 
@@ -281,7 +280,7 @@ local function apply(player, key)
     local items = {}
     local water = cfg.water_kit and cfg.water_kit[1]
     for _, entry in ipairs(spec.items or {}) do
-        -- water goes by M.give_water (only while something burns), not with the kit
+        -- water goes by M.give_water (at once, also during the probation), not with the kit
         if entry[1] ~= water and not (entry[2] == 1 and put_armor(player, entry[1])) then items[#items + 1] = entry end
     end
     give(player, items)
@@ -328,13 +327,12 @@ local function apply(player, key)
 end
 
 -- Water for the start fires, ready in hand: the water kit (and the water of a profession's kit, the
--- biologist's) at once, also during the multiplayer probation, but only while a start wreck burns;
--- nothing to put out, no barrels. Once per player.
+-- biologist's) at once, also during the multiplayer probation, to every player whatever burns or not
+-- (passengers and players without professions too). Once per player.
 function M.give_water(player, key)
     local s = state()
     local kit = cfg.water_kit
     if not (s and kit and util.item_exists(kit[1])) or (s.watered and s.watered[player.index]) then return end
-    if fire.burning_count() <= 0 then return end
     s.watered = s.watered or {}
     s.watered[player.index] = true
     local count = kit[2]
@@ -413,6 +411,7 @@ end
 function M.passenger(player)
     local s = state()
     if s and not s.chosen[player.index] then s.chosen[player.index] = "passenger" end
+    M.give_water(player)
 end
 
 commands.add_command("bnl-profession", {"bnl.profession-command"}, function(command)
