@@ -1,4 +1,5 @@
 ---------------------------------------------------------------------------------------------------
 Version: 0.2.2
   Changes:
+    - The toolbar button has its own icon: a flask with layers of science pack colors (graphics/toolbar-flask.png, 64 px at scale 0.5 like the GUI Unifier icons) instead of the white technology flask; existing buttons get it on load and join.
     - Removed the per-player setting "Open this tree instead of the native research window" (ptt-replace-native). It never worked in 2.0: the handler compared the opened GUI with defines.gui_type.research, which does not exist, so the native window was never replaced. The tree still opens with its toolbar button and Ctrl+T.
