@@ -383,9 +383,11 @@ end
 
 -- Add recipe for sand from crushed stone if any other mod provides sand
 
-if data.raw.item[data.raw.item["kr-sand"] and "kr-sand" or "sand"] or
+-- Paranoidal: the stone crusher is removed; "Crushed stone grinding" (2 crushed stone -> 2 sand)
+-- runs in the Angels ore crushers, so the recipe needs angelsrefining.
+if mods["angelsrefining"] and (data.raw.item[data.raw.item["kr-sand"] and "kr-sand" or "sand"] or
    data.raw.item["biotech-sand"] or
-   data.raw.item["solid-sand"] then
+   data.raw.item["solid-sand"]) then
 
    BioInd.writeDebug("Generating recipe for sand from crushed stone!")
   -- General recipe for sand (will be adjusted later if necessary)
@@ -400,12 +402,12 @@ if data.raw.item[data.raw.item["kr-sand"] and "kr-sand" or "sand"] or
           mip_maps = 1,
         }
       },
-      category = "biofarm-mod-crushing",
+      category = "angels-ore-refining-t1",
       subgroup = "bio-bio-farm-raw",
       order = "a[bi]-a-z[bi-9-sand]",
       energy_required = 1,
       ingredients = {{type="item", name="stone-crushed", amount=2}},
-      results = {{type="item", name=data.raw.item["kr-sand"] and "kr-sand" or "sand", amount=5}},
+      results = {{type="item", name=data.raw.item["kr-sand"] and "kr-sand" or "sand", amount=2}},
       main_product = "",
       enabled = false,
       allow_as_intermediate = true,     -- Changed for 0.18.34/1.1.4
@@ -435,11 +437,4 @@ BioInd.writeDebug("Using Krastorio icon …")
   -- Add recipe to technology
 BioInd.writeDebug("Add unlock for recipe bi-sand")
   thxbob.lib.tech.add_recipe_unlock("steel-processing", "bi-sand")
-
-  -- Use alternative descriptions for stone crusher!
-BioInd.writeDebug("Using alternative descriptions for \"bi-stone-crusher\"!")
-  for _, t in ipairs({"furnace", "item", "recipe"}) do
-    data.raw[t]["bi-stone-crusher"].localised_description =
-      {"entity-description.bi-stone-crusher-sand"}
-  end
 end

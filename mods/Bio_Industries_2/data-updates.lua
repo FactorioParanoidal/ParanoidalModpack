@@ -44,15 +44,7 @@ if not mods["Natural_Evolution_Buildings"] and BI.Settings.Bio_Cannon then
 end
 
 
---- Move Stone Crusher up in tech tree
-thxbob.lib.tech.add_recipe_unlock("steel-processing", "bi-stone-crusher")
-thxbob.lib.tech.add_recipe_unlock("steel-processing", "bi-crushed-stone-1")
-
--- Unlock recipes for Crushed Stone from concrete/hazard concrete
-thxbob.lib.tech.add_recipe_unlock("advanced-material-processing-2", "bi-crushed-stone-2")
-thxbob.lib.tech.add_recipe_unlock("advanced-material-processing-2", "bi-crushed-stone-3")
-thxbob.lib.tech.add_recipe_unlock("advanced-material-processing-2", "bi-crushed-stone-4")
-thxbob.lib.tech.add_recipe_unlock("advanced-material-processing-2", "bi-crushed-stone-5")
+-- Paranoidal: the stone crusher and its stone/concrete crushing recipes are removed.
 
 -- Add Wooden Chests
 thxbob.lib.tech.add_recipe_unlock("logistics", "bi-wooden-chest-large")

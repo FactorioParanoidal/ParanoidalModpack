@@ -86,20 +86,23 @@ do
     end
 end
 
--- Bio Industries stone crushing: crushed-stone base plus a small source-stone mark.
+-- Crushed stone grinding (bi-sand, Angels ore crushers): sand base plus a small crushed-stone mark.
+-- The name replaces the Bio Industries texts, which name the removed stone crusher.
 do
-    local item = data.raw.item["angels-stone-crushed"]
-    local stone = data.raw.item["stone"]
-    local recipe = data.raw.recipe["bi-crushed-stone-1"]
-    if item and stone and stone.icon and recipe and item.icon then
-        local stone_size = stone.icon_size or 64
-        recipe.icons = {
-            {icon = item.icon, icon_size = item.icon_size or 64},
-            {icon = stone.icon, icon_size = stone_size, scale = 14 / stone_size, shift = {-10, -10}},
-        }
-        recipe.icon, recipe.icon_size, recipe.icon_mipmaps = nil, nil, nil
-        recipe.localised_name = {"recipe-name.paranoidal-bi-crushed-stone-1"}
-        recipe.localised_description = {"recipe-description.paranoidal-bi-crushed-stone-1"}
+    local sand = data.raw.item["angels-solid-sand"]
+    local crushed = data.raw.item["angels-stone-crushed"]
+    local recipe = data.raw.recipe["bi-sand"]
+    if recipe then
+        recipe.localised_name = {"recipe-name.paranoidal-bi-sand"}
+        recipe.localised_description = {"recipe-description.paranoidal-bi-sand"}
+        if sand and sand.icon and crushed and crushed.icon then
+            local crushed_size = crushed.icon_size or 64
+            recipe.icons = {
+                {icon = sand.icon, icon_size = sand.icon_size or 64},
+                {icon = crushed.icon, icon_size = crushed_size, scale = 14 / crushed_size, shift = {-10, -10}},
+            }
+            recipe.icon, recipe.icon_size, recipe.icon_mipmaps = nil, nil, nil
+        end
     end
 end
 

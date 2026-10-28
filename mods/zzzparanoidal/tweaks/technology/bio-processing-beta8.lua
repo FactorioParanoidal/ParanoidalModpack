@@ -3,7 +3,7 @@
 if not mods["Bio_Industries_2"] then return end
 local technologies = data.raw.technology
 local clones = {
-	["bi-tech-stone-crushing-1"] = { "steel-processing", { "entity-name.bi-stone-crusher" } },
+	["bi-tech-stone-crushing-1"] = { "steel-processing", { "technology-name.paranoidal-crushed-stone-grinding" } },
 	["bi-dart-turret"] = { "military", { "entity-name.bi-dart-turret" } },
 	["bi-tech-darts-1"] = { "military", { "item-name.bi-dart-magazine-standard" } },
 	["bi-tech-darts-2"] = { "military-2", { "item-name.bi-dart-magazine-enhanced" } },
@@ -24,6 +24,12 @@ for name, definition in pairs(clones) do
 		technology.effects = {}
 		data:extend({ technology })
 	end
+end
+-- Камнедробилка удалена (петля камень -> щебень -> камень): исследование открывает только
+-- «Измельчение щебня» (bi-sand). ID прежний, изученное в сохранениях остаётся изученным.
+if technologies["bi-tech-stone-crushing-1"] then
+	technologies["bi-tech-stone-crushing-1"].localised_name = { "technology-name.paranoidal-crushed-stone-grinding" }
+	technologies["bi-tech-stone-crushing-1"].localised_description = { "technology-description.paranoidal-crushed-stone-grinding" }
 end
 local definitions = {
 	["bi-tech-stone-crushing-1"] = { 75, 30, { "automation-science-pack" }, { "steel-processing" } },
@@ -53,7 +59,7 @@ if technologies["military"] and technologies["bi-dart-turret"] then
 	technologies["military"].prerequisites = { "bi-dart-turret" }
 end
 local moves = {
-	{ "bi-tech-stone-crushing-1", { "bi-stone-crusher", "bi-crushed-stone-1", "bi-sand", "stone-crushed-2" } },
+	{ "bi-tech-stone-crushing-1", { "bi-sand" } },
 	{ "bi-dart-turret", { "bi-dart-turret", "bi-dart-magazine-basic", "bi-dart-rifle" } },
 	{ "bi-tech-darts-1", { "bi-dart-magazine-standard" } },
 	{ "bi-tech-darts-2", { "bi-dart-magazine-enhanced" } },

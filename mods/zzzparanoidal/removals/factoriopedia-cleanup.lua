@@ -272,7 +272,6 @@ local hide = {
 		"bi-dart-turret-remnant",
 		"bi-large-substation-remnant",
 		"bi-solar-boiler-remnant",
-		"bi-stone-crusher-remnant",
 		"bi-wood-pipe-remnant",
 		"bi-wooden-chest-giga-remnant",
 		"bi-wooden-chest-huge-remnant",

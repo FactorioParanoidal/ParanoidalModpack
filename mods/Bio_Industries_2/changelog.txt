@@ -7,6 +7,7 @@ Date: 24.02.2026
     - Bio farm MK2/MK3 (zzzparanoidal) are compound entities like MK1: they have the hidden connector pole, solar panel and lamp of the farm, so an upgraded farm keeps its roof panel, light and pole connection. A migration gives existing MK2/MK3 farms these entities (Paranoidal local change)
     - Runtime script split into modules (control_compound, control_tree, control_arboretum, control_musk_floor); the unused libs/util_ext.lua and the never called settings_changed.bio_garden are removed (Paranoidal local cleanup)
     - Hidden entities are looked up by their centre: their collision box is empty, and a plain position search looks at collision boxes (Paranoidal local change)
+    - The stone crusher is removed together with its recipe category, its remnant and its recipes (crushed stone from stone and from the four concretes): the stone -> crushed stone -> stone loop multiplied quality for free. "bi-sand" is now made in the Angels ore crushers, 2 crushed stone -> 2 sand, and only with angelsrefining (Paranoidal local change)
   Bug Fixes:
     - Seedlings of any quality grow: the grow step looked the seedling up by its name only, which finds normal quality, so a seedling of another quality never grew and stayed forever (Paranoidal local fix)
     - Seedlings and growing trees on a surface that was deleted (Factorissimo, Blueprint Sandboxes and others) no longer crash the game when they are due to grow (Paranoidal local fix)

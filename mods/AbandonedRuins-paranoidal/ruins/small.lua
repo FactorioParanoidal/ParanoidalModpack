@@ -295,12 +295,6 @@ def("pd-coke-oven", function(b)
   b:put("wooden-chest", 2, 0, { items = { ["angels-solid-coke"] = R(5, 25), ["angels-solid-carbon"] = R(0, 10), ["bi-ash"] = R(5, 20) } })
 end)
 
-def("pd-stone-crusher", function(b)
-  b:put("bi-stone-crusher", -1, -1, { dmg = DMG(20, 80) })
-  b:put("wooden-chest", 2, -1, { items = { ["angels-stone-crushed"] = R(20, 60), stone = R(5, 25) } })
-  b:scatter(lib.ROCKS, 2)
-end)
-
 def("pd-glass-kiln", function(b)
   b:put("bob-stone-mixing-furnace", -1, -1, { dmg = DMG(10, 60) })
   b:put("wooden-chest", 2, -1, { items = { ["bob-glass"] = R(5, 30), ["angels-solid-sand"] = R(5, 20) } })

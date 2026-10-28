@@ -94,20 +94,6 @@ data:extend(
     weight = 100 * kg,	
   },
 
-  --- Stone Crusher
-  {
-    type = "item",
-    name = "bi-stone-crusher",
-    localised_name = {"entity-name.bi-stone-crusher"},
-    localised_description = {"entity-description.bi-stone-crusher"},
-	icons = { {icon = ICONPATH_E .. "stone_crusher.png", icon_size = 64, }},
-    subgroup = "production-machine",
-    order = "x[bi]-c[bi-stone-crusher]",
-    place_result = "bi-stone-crusher",
-    stack_size = 10,
-    weight = 400 * kg,
-  },
-
   --- Wood Pulp
   {
     type = "item",

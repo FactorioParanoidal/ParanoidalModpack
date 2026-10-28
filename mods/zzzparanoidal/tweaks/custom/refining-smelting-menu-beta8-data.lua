@@ -5,7 +5,7 @@ return {
         {group = "angels-resource-refining", subgroup = "paranoidal-refining-hand-stone", order = "a-01", recipes = {
             {["name"] = "angels-ore1-crushed-hand", ["order"] = "01"},
             {["name"] = "angels-ore3-crushed-hand", ["order"] = "02"},
-            {["name"] = "stone-crushed-2", ["order"] = "03"},
+            {["name"] = "bi-sand", ["order"] = "03"},
             {["name"] = "angels-stone-crushed", ["order"] = "04", ["icon"] = {["icon"] = "__zzzparanoidal__/graphics/refining-smelting-menu-beta8/74f7849e98f57efb8b31.png", ["icon_size"] = 64}},
             {["name"] = "angels-stone-from-crushed-stone", ["order"] = "05"},
             {["name"] = "landfill", ["order"] = "06"},

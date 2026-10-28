@@ -19,7 +19,7 @@ local SIZES = {
   ["bi-bio-farm"] = { 9, 9 }, ["bob-mining-drill-1"] = { 3, 3 }, ["burner-mining-drill"] = { 2, 2 },
   ["electric-mining-drill"] = { 3, 3 }, ["bob-area-mining-drill-1"] = { 3, 3 },
   ["steam-engine"] = { 3, 5 }, ["boiler"] = { 3, 2 }, ["bob-stone-mixing-furnace"] = { 2, 2 },
-  ["angels-blast-furnace"] = { 5, 5 }, ["bi-cokery"] = { 3, 3 }, ["bi-stone-crusher"] = { 2, 2 },
+  ["angels-blast-furnace"] = { 5, 5 }, ["bi-cokery"] = { 3, 3 },
   ["angels-flare-stack"] = { 2, 2 }, ["angels-clarifier"] = { 5, 5 }, ["angels-washing-plant"] = { 5, 5 },
   ["angels-algae-farm"] = { 7, 7 }, ["angels-composter"] = { 3, 3 }, ["bob-electronics-machine-1"] = { 2, 2 },
   ["big-lab"] = { 15, 15 }, ["burner-lab"] = { 3, 3 }, ["lab"] = { 3, 3 },

@@ -6,7 +6,6 @@ local slots = {
         ["bi-bio-garden-large"] = 0,
         ["bi-bio-garden-huge"] = 0,
     },
-    furnace = { ["bi-stone-crusher"] = 2 },
     ["mining-drill"] = {
         ["bob-area-mining-drill-1"] = 3,
         ["bob-area-mining-drill-2"] = 4,

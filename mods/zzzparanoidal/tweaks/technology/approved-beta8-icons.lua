@@ -20,7 +20,6 @@ local icons = {
     { "military-2", "military-2", 128 },
     { "military-3", "military-3", 128 },
     { "military-4", "military-4", 128 },
-    { "bi-tech-stone-crushing-1", "bi-tech-stone-crushing-1", 256 },
     { "steel-processing", "steel-processing", 128 },
     { "bob-long-inserters-1", "long-inserters-1", 128 },
     { "bob-long-inserters-2", "long-inserters", 128 },
@@ -51,6 +50,23 @@ for _, entry in ipairs(icons) do
         technology.icon = root .. entry[2] .. ".png"
         technology.icon_size = entry[3]
         -- В файлах оставлен только основной квадрат, без старых полос mipmaps 1.1.
+        technology.icon_mipmaps = nil
+    end
+end
+
+-- «Измельчение щебня» (бывший «Измельчитель камня», камнедробилка удалена): иконка щебня.
+do
+    local technology = data.raw.technology["bi-tech-stone-crushing-1"]
+    local crushed = data.raw.item["angels-stone-crushed"]
+    if technology and crushed and (crushed.icon or crushed.icons) then
+        if crushed.icons then
+            technology.icons = table.deepcopy(crushed.icons)
+            technology.icon, technology.icon_size = nil, nil
+        else
+            technology.icons = nil
+            technology.icon = crushed.icon
+            technology.icon_size = crushed.icon_size or 64
+        end
         technology.icon_mipmaps = nil
     end
 end

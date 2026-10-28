@@ -7,11 +7,6 @@ data:extend(
 
   {
     type = "recipe-category",
-    name = "biofarm-mod-crushing"
-  },
-
-  {
-    type = "recipe-category",
     name = "biofarm-mod-bioreactor"
   },
 

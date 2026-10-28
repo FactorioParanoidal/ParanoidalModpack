@@ -43,7 +43,6 @@ require("prototypes.recipe.flame-car")
 require("prototypes.recipe.artillery-prototype")
 require("prototypes.recipe.glass")
 require("prototypes.recipe.concrete-brick")
-require("prototypes.recipe.stone")
 require("prototypes.recipe.ammo-pistol")
 require("prototypes.recipe.metallurgy")
 

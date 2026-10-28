@@ -40,7 +40,7 @@ if legacy_crushed_stone and data.raw.item["angels-stone-crushed"] then
 	legacy_crushed_stone.hidden_in_factoriopedia = true
 end
 
--- bi-sand: 2 crushed stone → 5 solid sand (через bi-stone-crusher)
+-- bi-sand («Измельчение щебня»): 2 crushed stone → 2 solid sand (в дробилках руды Angels)
 rename_item_in_recipe(data.raw.recipe["bi-sand"], "solid-sand", "angels-solid-sand")
 
 -- Подменяем item-icon angels-solid-sand с "миски" (angelsrefininggraphics/

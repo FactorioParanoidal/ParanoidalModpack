@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 9.1.0
 Date: 2026-10-24
+  Changes:
+    - The small ruin "pd-stone-crusher" is removed and the Quarry has no BI stone crusher: Bio Industries no longer has the stone crusher.
   Features:
     - Legendary ruins: 22 huge sites (64x64 to 160x160 tiles, built over several chunks) no closer than
       100 chunks (setting) beyond the edge of the starting zone; each appears once per map. Trials (beaten
