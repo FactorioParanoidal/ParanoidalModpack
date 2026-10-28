@@ -8,6 +8,7 @@ Date: 24.02.2026
     - Runtime script split into modules (control_compound, control_tree, control_arboretum, control_musk_floor); the unused libs/util_ext.lua and the never called settings_changed.bio_garden are removed (Paranoidal local cleanup)
     - Hidden entities are looked up by their centre: their collision box is empty, and a plain position search looks at collision boxes (Paranoidal local change)
   Bug Fixes:
+    - Seedlings of any quality grow: the grow step looked the seedling up by its name only, which finds normal quality, so a seedling of another quality never grew and stayed forever (Paranoidal local fix)
     - Seedlings and growing trees on a surface that was deleted (Factorissimo, Blueprint Sandboxes and others) no longer crash the game when they are due to grow (Paranoidal local fix)
     - A mined, destroyed or burnt seedling or growing tree is removed from the grow tables again: the lookup compared the per-tick lists instead of the trees, so nothing was ever removed and a seedling planted at the same place grew too early (Paranoidal local fix)
     - After a tree mod has been removed, entries of trees that no longer exist are dropped on configuration change; the old clean-up did nothing (the tables are indexed by tick) and the game crashed when such a tree was due (Paranoidal local fix)

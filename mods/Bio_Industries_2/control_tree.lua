@@ -472,6 +472,11 @@ end
 ------------------------------------------------------------------------------------
 -- Grow stages
 ------------------------------------------------------------------------------------
+-- find_entity() with a plain name only finds normal quality; seedlings of any quality must grow
+local function find_seedling(surface, name, position)
+    return surface.find_entities_filtered({ name = name, position = position, limit = 1 })[1]
+end
+
 local function grow_first_stage(data, tick)
     local surface = data.surface
     if not surface.valid then
@@ -480,10 +485,10 @@ local function grow_first_stage(data, tick)
     local position = data.position
     local seed_bomb = data.seed_bomb
 
-    local seedling = surface.find_entity("seedling", position)
+    local seedling = find_seedling(surface, "seedling", position)
     -- Seedlings of the standard and advanced seed bombs
-    local seedling_2 = seed_bomb and surface.find_entity("seedling-2", position)
-    local seedling_3 = seed_bomb and surface.find_entity("seedling-3", position)
+    local seedling_2 = seed_bomb and find_seedling(surface, "seedling-2", position)
+    local seedling_3 = seed_bomb and find_seedling(surface, "seedling-3", position)
 
     local tile_name = surface.get_tile(position.x, position.y).name
     -- fertility will be 1 if terrain type is not listed above, so very small chance to grow.
