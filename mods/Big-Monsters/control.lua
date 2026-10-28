@@ -121,9 +121,37 @@ storage.next_event       = storage.next_event or (game.tick + (storage.days * 7 
 storage.next_silo_event  = storage.next_silo_event or (game.tick + (storage.days * 4 * 60 * 60))
 end
 
+-- Paranoidal: maps generated before the autoplace of these worms was removed (prototypes/turrets.lua) keep them
+-- in every chunk generated then. Removed once per save; the worms of the events (storage.other_enemies) stay.
+local AUTOPLACED_WORMS = {"maf-behemoth-worm-turret", "bm-worm-boss-acid-shooter"}
+
+local function remove_autoplaced_worms()
+local names = {}
+for _, name in pairs(AUTOPLACED_WORMS) do
+	if prototypes.entity[name] then names[#names+1] = name end
+	end
+if #names == 0 then return end
+local keep = {}
+for _, e in pairs(storage.other_enemies) do
+	if e and e.valid and e.unit_number then keep[e.unit_number] = true end
+	end
+local removed = 0
+for _, surface in pairs(game.surfaces) do
+	for _, worm in pairs(surface.find_entities_filtered{name=names}) do
+		if worm.valid and not (worm.unit_number and keep[worm.unit_number]) then
+			-- raised: RampantFixed takes the worm out of the turret count of its chunk
+			worm.destroy{raise_destroy=true}
+			removed = removed + 1
+			end
+		end
+	end
+if removed > 0 then log("Big-Monsters: removed " .. removed .. " giant worms placed by the map generator") end
+end
+
 function on_init()
 cam_on_init()
 setup_mod_vars()
+storage.autoplaced_worms_removed = true
 RegisterModEvents()
 end
 script.on_init(on_init)
@@ -133,6 +161,10 @@ cam_on_init()
 setup_mod_vars()
 -- Paranoidal: targets picked by the old AI could be out of reach forever
 for _, ZI in pairs(storage.biterzillas) do ZI.target = nil ZI.stuck = nil ZI.last_hp = nil ZI.last_dist = nil end
+if not storage.autoplaced_worms_removed then
+	remove_autoplaced_worms()
+	storage.autoplaced_worms_removed = true
+	end
 end
 script.on_configuration_changed(on_configuration_changed)
 
