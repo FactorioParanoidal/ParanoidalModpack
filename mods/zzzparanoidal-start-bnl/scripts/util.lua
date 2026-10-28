@@ -185,6 +185,13 @@ function M.nauvis()
     return game.surfaces.nauvis
 end
 
+-- Ticks a joining multiplayer player still has to stay connected before the start bonuses
+-- (config.probation); 0 in single player.
+function M.probation_left(player)
+    if not game.is_multiplayer() then return 0 end
+    return math.max(0, config.probation.online - player.online_time)
+end
+
 function M.enabled(name)
     local setting = settings.global[name]
     return setting == nil or setting.value ~= false

@@ -35,9 +35,12 @@ Everything starts only on a new map (`game.tick < 2` at init); each part has a m
 | Reactor compartment | `scripts/reactor.lua` | P(t) = 10 MW·(1 − t/T)², T ≈ 14.6 min; radiation while hot; the broken core glows and smokes more towards the meltdown (`config.reactor.glow`, no message) |
 | Flight recorder | `scripts/recorder.lua`, `prototypes/bnl-technology.lua` | Research ingredient read only by the salvaged lab from the starliner (`prototypes/bnl-final.lua` removes it from every other lab); journal, tags, safe code B/N, 20–30 red packs; its falling piece is not tracked by the fire (never burns) |
 | Journal | `scripts/journal.lua` | Button + `/bnl-journal` |
-| AUTO protocol | `scripts/goals.lua` | Objectives window (`player.gui.goal` labels, per player: the fire line shows the player's water barrels): burning wrecks, recorder, antenna, safe; rotating texts (`util.JOKES`, a variant per stage); briefing after the profession choice; one-off remarks; the closing act of the insurance case; per-user setting `bnl-goals`; one 5 s job while something changes by itself, at most 2 h after the landing |
+| AUTO protocol | `scripts/goals.lua` | Pinned on top of the BnL journal (per player: the fire line shows the player's water barrels): burning wrecks, recorder, antenna, safe; rotating texts (`util.JOKES`, a variant per stage); briefing after the profession choice; one-off remarks; the closing act of the insurance case; per-user setting `bnl-goals`; one 5 s job while something changes by itself, at most 2 h after the landing |
 | Rewards | `scripts/loot.lua` | Safe and severance variant and contents rolled once at the map start from the map seed (`game.create_random_generator()`), kept in `storage.bnl.loot` |
-| Insurance pods | `scripts/pods.lua` | After the first radar; contents are a draft |
+| Insurance pods | `scripts/pods.lua` | After the first sector scanned by a player radar (`on_sector_scanned`, registered only until then); contents are a draft |
+| Water and fuel from the hand | `scripts/douse.lua` | Click handler only during the start fires; fuel thrown into a fire: 5–7 ordinary ground fires removed after 5–10 s (`config.fire.misuse`); no burning cursor or character |
+| Multiplayer probation | `scripts/professions.lua`, `scripts/capsules.lua` | Later players get the profession and pod kits after 5 min online (`config.probation`) |
+| Even Pickier Dollies | `prototypes/bnl-final.lua` | Start objects added to its mod-data blacklist |
 | Professions | `scripts/professions.lua`, `scripts/intro.lua` | Pause in single player; `/bnl-profession` |
 | Anomalies | `scripts/anomalies.lua` | One per map |
 | Scrap | `scripts/scrap.lua`, `prototypes/scrap.lua` | Space Age prototype and graphics, hand or recycler |

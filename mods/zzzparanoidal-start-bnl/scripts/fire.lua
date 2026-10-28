@@ -6,7 +6,7 @@
 -- One scheme of fire: what comes down in flames burns for real from the first second (the starliner
 -- and the vanilla crash site parts the engine set alight, M.start; falling pieces that land burning,
 -- scripts/falling.lua); anything else catches fire only from a real fire of the engine next to it
--- (ground fire, burning trees, cook-offs, misused fuel; fire-watch, the first config.fire.watch_until
+-- (ground fire, burning trees, cook-offs, fuel thrown into a fire; fire-watch, the first config.fire.watch_until
 -- after the landing and while something burns). The fire of a wreck itself is drawn only (it never
 -- lights anything); its cook-offs and embers make the real fires that spread. A burning wreck cannot
 -- be destroyed by anything else;
@@ -25,6 +25,7 @@ local util = require("scripts.util")
 local quality = require("scripts.quality")
 local shipwreck = require("shipwreck-config")
 local scheduler = require("scripts.scheduler")
+local events = require("scripts.events")
 local M = {}
 local cfg = config.fire
 
@@ -377,15 +378,15 @@ scheduler.handler("fire-wet", function(_, tick)
     end
 end)
 
--- Every scripted real fire (bursts, embers, jets, the misused fuel, a burning cursor): steam on a
--- wet spot. `name`: the fire entity (default fire-flame).
+-- Every scripted real fire (bursts, embers, jets, fuel thrown into a fire): steam on a wet spot.
+-- `name`: the fire entity (default fire-flame). Returns the fire entity, false on a wet spot.
 function M.make_fire(surface, position, flames, name)
     if M.is_wet(surface, position) then
         M.hiss(surface, position)
         return false
     end
-    surface.create_entity({name = name or "fire-flame", position = position, initial_ground_flame_count = flames})
-    return true
+    return surface.create_entity({name = name or "fire-flame", position = position, initial_ground_flame_count = flames})
+        or false
 end
 
 -- Returns true when the wreck caught fire; a wet wreck (on a spot where water was poured less than
@@ -1024,6 +1025,7 @@ scheduler.handler("fire-tick", function(_, tick)
         scheduler.after(cfg.tick_interval, "fire-tick")
     else
         s.ticking = false
+        events.refresh() -- the start fires may be over: the water clicks stop listening
     end
 end)
 
@@ -1054,6 +1056,7 @@ scheduler.handler("fire-watch", function(_, tick)
         scheduler.after(cfg.watch_interval, "fire-watch")
     else
         s.watching = false
+        events.refresh()
         -- The start is over: wrecks keep their steps for the mining loot, nothing ticks any more.
     end
 end)

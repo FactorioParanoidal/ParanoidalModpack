@@ -15,6 +15,7 @@ local scheduler = require("scripts.scheduler")
 local quality = require("scripts.quality")
 local geology = require("scripts.geology")
 local goals = require("scripts.goals")
+local fire = require("scripts.fire")
 local M = {}
 local cfg = config.professions
 
@@ -278,16 +279,12 @@ local function apply(player, key)
         if recipe then recipe.enabled = true end
     end
     local items = {}
+    local water = cfg.water_kit and cfg.water_kit[1]
     for _, entry in ipairs(spec.items or {}) do
-        if not (entry[2] == 1 and put_armor(player, entry[1])) then items[#items + 1] = entry end
+        -- water goes by M.give_water (only while something burns), not with the kit
+        if entry[1] ~= water and not (entry[2] == 1 and put_armor(player, entry[1])) then items[#items + 1] = entry end
     end
     give(player, items)
-    -- water for the start fires, ready in hand
-    local kit = cfg.water_kit
-    if kit and util.item_exists(kit[1]) then
-        give(player, {kit})
-        if player.get_quick_bar_slot(1) == nil then player.set_quick_bar_slot(1, kit[1]) end
-    end
     -- RPG attribute levels (PMRPGsystem gift_levels: no skill points spent): {attribute, min, max}
     local rpg = remote.interfaces.RPG
     if rpg and rpg.gift_levels then
@@ -330,6 +327,25 @@ local function apply(player, key)
     if spec.biofarm then pods.schedule_biofarm(player.index) end
 end
 
+-- Water for the start fires, ready in hand: the water kit (and the water of a profession's kit, the
+-- biologist's) at once, also during the multiplayer probation, but only while a start wreck burns;
+-- nothing to put out, no barrels. Once per player.
+function M.give_water(player, key)
+    local s = state()
+    local kit = cfg.water_kit
+    if not (s and kit and util.item_exists(kit[1])) or (s.watered and s.watered[player.index]) then return end
+    if fire.burning_count() <= 0 then return end
+    s.watered = s.watered or {}
+    s.watered[player.index] = true
+    local count = kit[2]
+    local spec = key and cfg.list[key]
+    for _, entry in ipairs(spec and spec.items or {}) do
+        if entry[1] == kit[1] then count = count + entry[2] end
+    end
+    give(player, {{kit[1], count}})
+    if player.get_quick_bar_slot(1) == nil then player.set_quick_bar_slot(1, kit[1]) end
+end
+
 function M.choose(player, key)
     local s = state()
     if not (s and cfg.list[key]) or s.chosen[player.index] then return end
@@ -337,7 +353,19 @@ function M.choose(player, key)
     s.open[player.index] = nil
     local frame = player.gui.screen[FRAME]
     if frame then frame.destroy() end
-    apply(player, key)
+    -- multiplayer: the first player to choose gets everything at once, the later ones after the
+    -- probation (an extra quick login must not bring another kit and more research)
+    M.give_water(player, key)
+    s.first = s.first or player.index
+    local wait = s.first ~= player.index and util.probation_left(player) or 0
+    if wait > 0 then
+        s.pending = s.pending or {}
+        s.pending[player.index] = key
+        scheduler.after(math.max(60, wait), "profession-probation", {player = player.index})
+        player.print({"bnl.probation-profession", math.ceil(wait / 3600)}, {color = util.CHAT_COLOR})
+    else
+        apply(player, key)
+    end
     if s.paused and not next(s.open) then
         s.paused = nil
         game.tick_paused = false
@@ -347,6 +375,26 @@ function M.choose(player, key)
     share_if_all_chose()
     goals.brief(player)
 end
+
+scheduler.handler("profession-probation", function(job)
+    local s = state()
+    local key = s and s.pending and s.pending[job.player]
+    if not key then return end
+    local player = game.get_player(job.player)
+    if not (player and player.valid) or util.since_landing() > config.probation.give_up then
+        s.pending[job.player] = nil
+        return
+    end
+    local wait = player.connected and util.probation_left(player) or config.probation.check
+    if wait > 0 then
+        scheduler.after(math.max(wait, config.probation.check), "profession-probation", job)
+        return
+    end
+    s.pending[job.player] = nil
+    apply(player, key)
+    player.print({"bnl.probation-done"}, {color = util.CHAT_COLOR})
+    share_if_all_chose()
+end)
 
 local function on_click(event)
     local element = event.element

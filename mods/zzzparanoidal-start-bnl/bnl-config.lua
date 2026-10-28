@@ -248,23 +248,16 @@ config.fire = {
         max_spots = 64, -- the oldest wet spot dries first beyond this
         hiss_interval = 30, -- a wet thing set alight steams at most this often
     },
-    -- Fuel poured on a fire from the hand (scripts/douse.lua): fuel and gas barrels, oxygen, the
+    -- Fuel thrown into a fire from the hand (scripts/douse.lua): fuel and gas barrels, oxygen, the
     -- high-tech fuel of the wrecks and every chemical fuel of at least min_fuel_value (solid fuel 12 MJ).
+    -- It flares up as ordinary ground fires around the spot that go out by themselves (and can light
+    -- what is next to them by the usual rules of fire).
     misuse = {
         min_fuel_value = 12000000,
-        fireball_radius = 7,
-        blasts = 10,
-        building_radius = 10, -- every building and wreck within it catches fire
-        max_buildings = 80,
-        -- A burning character: a harmless sticker with flames (prototypes/bnl-water.lua) and a scripted
-        -- fire damage of player_burn_share of its max health every player_burn_interval (resistances
-        -- apply); a new fire sets the time back to player_burn_ticks, water poured near puts it out.
-        player_burn_ticks = 10 * 60,
-        player_burn_share = 0.03,
-        player_burn_interval = 60,
-        -- the cursor of the player who poured the fuel burns while that player's character burns
-        cursor_interval = 10,
-        sound_interval = 200, -- the 3.5 s flamethrower roar repeats
+        fires = {5, 7},
+        radius = {1, 6},
+        seconds = {5, 10},
+        flames = 6, -- initial ground flames of each fire (it is removed at its time anyway)
     },
 }
 
@@ -488,6 +481,12 @@ config.safe = {
         }},
     },
 }
+
+-- 13b. Multiplayer probation: a player who joins later (not the first one to choose a profession)
+-- gets the profession kit and bonuses, the escape pod kit only after this much time connected to
+-- the game (LuaPlayer.online_time, all sessions); a quick extra login gets nothing. Checked every
+-- `check` ticks; a player who has not served it give_up after the landing gets nothing more.
+config.probation = {online = 5 * MINUTE, check = 30 * 60, give_up = 2 * 60 * MINUTE}
 
 -- 13. Multiplayer escape pods.
 config.capsules = {

@@ -1,4 +1,4 @@
--- BnL insurance: the first radar catches a BnL broadcast, then supply pods (iron chests with one
+-- BnL insurance: the first radar that scans a sector catches a BnL broadcast, then supply pods (iron chests with one
 -- kind of items, sometimes advertising) fall near the radar at growing intervals, sometimes far off.
 -- After the last pod, or once the end technology is researched, the insurance is cancelled by letter
 -- and nothing is scheduled any more. The biologist gets a big bio farm the same way.
@@ -106,6 +106,7 @@ local function finish(key)
     if s.ended then return end
     s.ended = true
     scheduler.cancel("pod")
+    events.refresh()
     if s.started then journal.add(key) end
 end
 
@@ -141,15 +142,23 @@ end
 local RADARS = {}
 for _, name in ipairs(config.radars) do RADARS[name] = true end
 
-local function on_built(event)
-    local entity = event.entity
+-- The first radar sector scanned by a player radar starts the insurance: a radar only placed (no
+-- power, taken apart at once) does not count. By name: the distress beacon (a radar that only
+-- transmits, scripts/distress.lua) does not count either. Listened to only until the insurance has
+-- started or ended.
+local function on_scanned(event)
+    local radar = event.radar
     local s = state()
-    -- by name: the build events share one filter with the distress beacon (a radar that only
-    -- transmits, scripts/distress.lua), which must not count as the first radar
-    if not (s and entity and entity.valid and RADARS[entity.name]) then return end
-    if s.started or s.ended or entity.force.name ~= "player" or not util.enabled("bnl-start-supply-pods") then return end
-    start(entity.surface, entity.position, "insurance-start")
+    if not (s and radar and radar.valid and RADARS[radar.name]) then return end
+    if s.started or s.ended or radar.force.name ~= "player" or not util.enabled("bnl-start-supply-pods") then return end
+    start(radar.surface, radar.position, "insurance-start")
+    events.refresh()
 end
+
+events.dynamic(defines.events.on_sector_scanned, on_scanned, function()
+    local s = storage.bnl and storage.bnl.pods
+    return s ~= nil and not s.started and not s.ended
+end)
 
 -- The SOS reached BnL (scripts/distress.lua): the crash becomes an insurance case without a radar,
 -- or an insurance already running owes `bonus` more pods. Nothing once the insurance has ended.
@@ -158,16 +167,11 @@ function M.sos(surface, position, bonus)
     if not s or s.ended or not util.enabled("bnl-start-supply-pods") then return end
     if not s.started then
         start(surface, position, "insurance-sos")
+        events.refresh()
         return
     end
     s.bonus = (s.bonus or 0) + bonus
     util.say({"bnl.insurance-bonus", bonus})
-end
-
-local radar_filter = {}
-for _, name in ipairs(config.radars) do radar_filter[#radar_filter + 1] = {filter = "name", name = name} end
-for _, id in ipairs({"on_built_entity", "on_robot_built_entity", "script_raised_built", "script_raised_revive"}) do
-    events.on(defines.events[id], on_built, radar_filter)
 end
 
 events.on(defines.events.on_research_finished, function(event)
