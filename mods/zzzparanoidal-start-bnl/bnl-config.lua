@@ -88,7 +88,7 @@ config.fire = {
     tick_interval = 60,
     -- The cargo loses no quality step (nor a stack) before this time after the landing: the vanilla
     -- crash cutscene runs on game time.
-    cargo_grace = 25 * 60,
+    cargo_grace = 60 * 60,
     -- A burning wreck burns down to a random floor of its max health, then the fire goes out.
     burn_floor = {0.02, 0.10},
     -- Time to burn from full health to the floor, seconds, by wreck size (cook-offs make it faster).
@@ -100,7 +100,7 @@ config.fire = {
     splash_radius = 3,
     splash_damage = 8, -- per cook-off to characters around
     building_radius = 6, -- big blasts (fuel barrels, explosives, the last blast) also hit player buildings
-    step_interval = {14 * 60, 27 * 60}, -- a burning wreck lowers the quality of its cargo (and may lose a stack) this often
+    step_interval = {40 * 60, 70 * 60}, -- a burning wreck lowers the quality of its cargo (and may lose a stack) this often
     lose_chance = 0.2, -- each 'cargo burnt -1' destroys one whole cargo stack with this chance
     scatter_chance = 0.12, -- a cook-off throws part of a stack out of the wreck (saved from the fire)
     spark_chance = 0.2, -- a cook-off sets the ground around on fire

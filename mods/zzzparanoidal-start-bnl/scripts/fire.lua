@@ -12,7 +12,7 @@
 -- be destroyed by anything else;
 -- it loses health steadily until it reaches a random floor of 2-10% of its max health, then the fire
 -- goes out and a share of the hazardous cargo left goes off in a last blast; the rest of it is loot.
--- The cargo whose quality can change loses one quality step every 14-27 s of fire (config.fire.
+-- The cargo whose quality can change loses one quality step every 40-70 s of fire (config.fire.
 -- step_interval, counted from config.fire.cargo_grace after the landing at the earliest; down to
 -- defect -5 at most, materials not below normal), each step may burn a whole stack away;
 -- mining loot follows the same steps. Fires from bursts reach player buildings nearby.
