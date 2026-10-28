@@ -13,6 +13,7 @@ require("prototypes.entity.battery-electric-train")
 require("prototypes.entity.flame-car")
 require("prototypes.entity.concrete-brick")
 require("prototypes.entity.artillery-prototype")
+require("prototypes.armoured-train-mk3") -- бронепоезда Mk3 (до MU-копий в data-updates)
 
 -- new items
 require("prototypes.item.storage-migration")
