@@ -116,13 +116,9 @@ local function set_button_sprite(button, spritepath)
 end
 
 -- Paranoidal: inserter-throughput creates its button with the grey mod_gui_button style and auto_toggle.
--- Show it like the other unified buttons: own style, "_selected" when enabled, the same icon in every
+-- Show it like the other unified buttons: the plain unified style in both states (never "_selected":
+-- the on/off state is only the switch drawn on the icon, green when enabled), the same icon in every
 -- mouse state. The mod only writes `toggled`, it never reads it, so toggling is disabled here.
-local selected_styles = {
-	slot_button_notext = true,
-	slot_sized_button_notext = true,
-	slot_button_notext_transparent = true,
-}
 
 local function update_inserter_throughput_button(player, button_flow, player_settings)
 	if not script.active_mods["inserter-throughput"] then return end
@@ -131,7 +127,6 @@ local function update_inserter_throughput_button(player, button_flow, player_set
 	if not (button and button.valid and button.type == "sprite-button" and setting) then return end
 	local enabled = setting.value
 	local style = player_settings["gu_button_style_setting"].value or "slot_button_notext"
-	if enabled and selected_styles[style] then style = style .. "_selected" end
 	local sprite = enabled and "inserterthroughput_on_button" or "inserterthroughput_off_button"
 	gui_properties.set(button, "auto_toggle", false)
 	gui_properties.set(button, "toggled", false)
