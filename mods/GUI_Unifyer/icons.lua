@@ -249,7 +249,11 @@ local icons = {
     {"left", "gui_signal_display"}),
     -- Paranoidal: the button and its sprite are created by paranoidal-autofill; highlighted while its window is open.
     create_icon_entry("paranoidal-autofill", "paranoidal-autofill-button", "paranoidal_autofill_button", {'paranoidal-autofill.button-tooltip'}, nil, nil,
-        {"screen", "paranoidal_autofill_frame"})
+        {"screen", "paranoidal_autofill_frame"}),
+    -- Paranoidal: the BnL journal button and its sprite (the round logo) are created by zzzparanoidal-start-bnl;
+    -- its own tooltip is kept; highlighted while the journal is open.
+    create_icon_entry("zzzparanoidal-start-bnl", "bnl-journal", "bnl_journal_button", nil, nil, nil,
+        {"screen", "bnl_journal"})
 
 }
 

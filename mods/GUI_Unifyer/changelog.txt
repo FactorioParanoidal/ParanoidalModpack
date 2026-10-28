@@ -2,6 +2,7 @@
 Version: 9.0.5
 Date: 2026-10-14
   Changes:
+    - Local Paranoidal patch: the BnL journal button (created and handled by zzzparanoidal-start-bnl, the round BnL logo) gets the unified style and is highlighted while the journal is open; its own tooltip is kept; per-player visibility setting.
     - Version number starts with 9 (Paranoidal fork): the Mod Portal never offers an "update" over local changes.
     - Local Paranoidal patch: Paranoidal Autofill button (created and handled by paranoidal-autofill) gets the unified style and is highlighted while the Autofill window is open; per-player visibility setting.
     - Local Paranoidal patch: adds a Merging Chests (WideChests) button that puts the chest merger in the cursor; the click is handled by WideChests. Icon: the build's steel chest (128 px, full resolution, scale 0.25) on a transparent background, without a frame, like the other buttons.

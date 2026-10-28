@@ -21,11 +21,23 @@ local function clock(tick)
     return string.format("%d:%02d:%02d", math.floor(s / 3600), math.floor(s / 60) % 60, s % 60)
 end
 
+-- The style of GUI Unifier when it is present (it restyles the button itself as well and highlights
+-- it while the journal is open).
+local function button_style(player)
+    local setting = settings.get_player_settings(player)["gu_button_style_setting"]
+    if setting and type(setting.value) == "string" and setting.value ~= "" then return setting.value end
+    return mod_gui.button_style
+end
+
 local function button(player)
     local flow = mod_gui.get_button_flow(player)
-    local b = flow[BUTTON] or flow.add({type = "sprite-button", name = BUTTON, sprite = "bnl-journal",
-        style = mod_gui.button_style, tooltip = {"bnl.journal-button"}})
-    b.style.padding = 0 -- the logo on its dark plate fills the whole button
+    if flow[BUTTON] then return end
+    local spec = {type = "sprite-button", name = BUTTON, sprite = "bnl-journal", tooltip = {"bnl.journal-button"}}
+    spec.style = button_style(player)
+    if not pcall(flow.add, spec) then
+        spec.style = mod_gui.button_style
+        flow.add(spec)
+    end
 end
 
 -- Entries written by the company carry its seal.

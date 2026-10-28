@@ -241,10 +241,13 @@ data:extend({
     {
         type = "sprite",
         name = "bnl-journal",
-        filename = "__zzzparanoidal-start-bnl__/graphics/gui/journal-button.png",
+        -- the round logo without a plate, same size as the GUI Unifier buttons (64 px at scale 0.5)
+        filename = "__zzzparanoidal-start-bnl__/graphics/gui/journal-logo.png",
         width = 64,
         height = 64,
+        scale = 0.5,
         flags = {"gui-icon"},
+        priority = "extra-high-no-scale",
     },
     -- Buy n Large logo (redrawn, review/start-bnl-graphics/logo): chat prefix and journal title (small),
     -- the decal on the crashed starliner (weathered), the corporate seal of the BnL letters.
