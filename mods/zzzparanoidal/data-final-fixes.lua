@@ -10,6 +10,7 @@ require("tweaks.entity.beacons") -- по маякам можно ходить
 require("tweaks.entity.offshore-pumps")
 require("tweaks.entity.assemblers")
 require("tweaks.entity.furnaces")
+require("tweaks.entity.recyclers") -- переработчики: энергия x10, recycler-1 1 слот модуля
 require("tweaks.entity.fuel")
 require("tweaks.entity.trains")
 require("tweaks.entity.drills")
