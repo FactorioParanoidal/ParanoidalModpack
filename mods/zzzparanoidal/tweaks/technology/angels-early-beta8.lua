@@ -198,7 +198,8 @@ local definitions = {
 		["prerequisites"] = { "steel-processing" },
 	},
 	["angels-gardens-2"] = {
-		["prerequisites"] = { "angels-bio-farm-1", "angels-bio-paper-1", "logistic-science-pack" },
+		-- stone-smelting-1: глиняный кирпич для экстрактора семян 2 (раньше приходил через фосфор у ферм 1).
+		["prerequisites"] = { "angels-bio-farm-1", "angels-bio-paper-1", "logistic-science-pack", "angels-stone-smelting-1" },
 	},
 	["angels-bio-farm-1"] = {
 		["unit"] = {
@@ -206,10 +207,12 @@ local definitions = {
 			["ingredients"] = { { "automation-science-pack", 1 } },
 			["time"] = 30,
 		},
-		["prerequisites"] = { "angels-gardens", "angels-water-washing-1", "phosphorus-processing-1" },
+		-- Фосфор отвязан по решению пользователя (2026-10-28): фермам 1 он не нужен.
+		["prerequisites"] = { "angels-gardens", "angels-water-washing-1" },
 	},
 	["angels-bio-farm-2"] = {
-		["prerequisites"] = { "angels-bio-farm-1", "angels-nitrogen-processing-2", "angels-stone-smelting-2", "angels-glass-smelting-1" },
+		-- phosphorus-processing-1: фосфорная кислота для удобрения DAP (раньше приходила через фермы 1).
+		["prerequisites"] = { "angels-bio-farm-1", "angels-nitrogen-processing-2", "angels-stone-smelting-2", "angels-glass-smelting-1", "phosphorus-processing-1" },
 	},
 	["angels-bio-farm-alien"] = {
 		["prerequisites"] = { "angels-bio-farm-2", "angels-bio-processing-alien-1", "angels-bio-refugium-butchery-1", "angels-gardens-2" },
