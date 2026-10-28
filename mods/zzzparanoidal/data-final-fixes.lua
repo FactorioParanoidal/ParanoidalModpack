@@ -359,6 +359,8 @@ require("removals.steam-inserter-recipe")
 require("tweaks.technology.redundant-recipe-unlocks") -- Только избыточные открытия, после восстановления дерева.
 -- Смешивание расплавов: новые двойники, тиры и открытия в технологиях смесителя (issue #401).
 require("tweaks.recipe.alloy-mixing-molten")
+-- «Изготовление сплавов» перед «Улучшенным сплавлением бронзы 1»: после всех правок связей дерева.
+require("tweaks.technology.alloy-bronze-swap")
 require("tweaks.entity.character-light-beta8") -- Фонарь персонажа из Beta 8, после AAI.
 require("tweaks.entity.beta8-visual-models") -- Модели сундука и малых автоматов IV-V, после Reskins/Miles.
 require("tweaks.entity.comb-beta8") -- Графика комбинаторов BiusArt (comb) из Beta 8, до icon-markers.

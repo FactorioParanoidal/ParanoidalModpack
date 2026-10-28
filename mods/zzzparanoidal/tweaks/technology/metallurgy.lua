@@ -1,7 +1,7 @@
 require("__zzzparanoidal__.paralib")
 
--- from KaoExtended
-paralib.bobmods.lib.tech.add_recipe_unlock("angels-bronze-smelting-1", "bronze-alloy-x")
+-- from KaoExtended; примитивная бронза — в «Изготовлении сплавов» вместе с трубами из пластин
+paralib.bobmods.lib.tech.add_recipe_unlock("bob-alloy-processing", "bronze-alloy-x")
 paralib.bobmods.lib.tech.add_recipe_unlock("angels-brass-smelting-1", "bob-brass-alloy-x")
 paralib.bobmods.lib.tech.add_recipe_unlock("angels-tungsten-smelting-1", "copper-tungsten-alloy-x")
 paralib.bobmods.lib.tech.add_recipe_unlock("bob-tungsten-processing", "bob-tungsten-carbide-x")
