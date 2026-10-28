@@ -1,0 +1,6 @@
+---------------------------------------------------------------------------------------------------
+Version: 2.0.0
+Date: 2026-10-28
+  Features:
+    - When a player dies within 1 chunk of their saved respawn point and enemies are within 2 chunks of it, a dialog offers to move the point by 2 chunks in one of eight directions before respawning.
+    - The dialog sits below the engine's death notice and shows a minimap centred on the selected point; without an answer the point stays unchanged.
