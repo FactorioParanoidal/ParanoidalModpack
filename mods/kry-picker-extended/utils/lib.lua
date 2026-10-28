@@ -163,7 +163,7 @@ function lib.satisfy_requests(player, proxy)
 				pinv.remove{name = plan.id.name, quality = plan.id.quality, count = insert}
 
 				player.create_local_flying_text{
-					text = {'', '-', insert, ' ', {'item-name.' .. plan.id.name}},
+					text = {'', '-', insert, ' ', prototypes.item[plan.id.name].localised_name},
 					position = pos(),
 					color = color.white
 				}

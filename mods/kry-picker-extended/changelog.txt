@@ -11,6 +11,7 @@ Date: May 26, 2026
   Bugfixes:
     - Paranoidal: chest contents mover (Shift+C / Shift+V) works only when both chests are within the character's reach (not from remote view or across the map), except in cheat mode.
     - Paranoidal: ghost revival with "ignore quality" spends only items of the ghost's quality or better (defects count below normal); a worse item no longer builds a better entity.
+    - Paranoidal: the "-N <module>" flying text when ghosts get modules from the inventory uses the item prototype's localised name, so items with an overridden name no longer show "Unknown key".
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.19
 Date: January 4, 2026
