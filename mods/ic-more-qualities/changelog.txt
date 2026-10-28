@@ -2,7 +2,6 @@
 Version: 9.1.5
 Date: 2026. 10. 14
   Changes:
-    - "Quality for all production" no longer opens quality modules for machines of the crafting category angels-petrochem-electrolyser (Angels electrolysers): one electrode of any quality made items of its quality from fluids forever (Paranoidal decision 2026-10-29; zzzparanoidal removes the effect). List: M.quality_closed_categories in prototypes/defects-final.lua.
     - Relics of the legendary ruins (AbandonedRuins-paranoidal, entities "pd-relic-*") are not tracked by the defect scheduler: the Daedalus workshop and the Forge of Hephaestus never add defects (a craft from defective ingredients keeps their grade, as in the engine).
     - Normal quality upgrades on the same chance curve as the positive tiers, one step before uncommon (default 20.4% instead of the vanilla 10%): the chance ladder now decreases from the very first tier (normal -> uncommon is no longer half as likely as uncommon -> rare). Defect grades keep 10%.
     - README: the chance ladder is described (section 1); materials and drills get positive quality from modules while "Quality for all production" is on (the old text said they always stay white). New mock test tests/quality-chance-curve.lua; tests/expansion-gui.lua uses normal next_probability 0.204.

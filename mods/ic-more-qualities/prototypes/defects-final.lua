@@ -182,22 +182,9 @@ function M.without_quality(effects)
     return result
 end
 
--- Crafting categories whose machines never take quality modules (Paranoidal decision 2026-10-29):
--- Angels electrolysers - one electrode of any quality made items of its quality from fluids forever.
--- zzzparanoidal (anti-exploit.lua) removes the quality effect; "quality everywhere" must not add it back.
-M.quality_closed_categories = {["angels-petrochem-electrolyser"] = true}
-
-local function quality_closed(machine)
-    for _, category in pairs(machine.crafting_categories or {}) do
-        if M.quality_closed_categories[category] then return true end
-    end
-    return false
-end
-
 -- "Quality everywhere" mode: modules with quality fit every crafting machine and drill with slots.
 function M.with_quality(machine, drill)
     if (machine.module_slots or 0) <= 0 then return false end
-    if not drill and quality_closed(machine) then return false end
     local effects = machine.allowed_effects
     if effects == nil then
         if drill then return false end -- drills: nil allows every effect
