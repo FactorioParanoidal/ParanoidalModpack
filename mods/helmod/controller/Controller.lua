@@ -228,6 +228,15 @@ function Controller:bindController(player)
 
     local flow = lua_gui_element.mod_gui_button_flow or (lua_gui_element.mod_gui_top_frame and lua_gui_element.mod_gui_top_frame.mod_gui_inner_frame)
 
+    -- Paranoidal: the panel button is created once and kept (not destroyed and recreated on every
+    -- bind): a recreated button showed its own dark style for a moment before GUI Unifier restyled it.
+    -- It is removed only when display_main_icon is off.
+    local keep = User.getModSetting("display_main_icon")
+    if keep and flow and flow["helmod_planner-command"] then
+      User.update()
+      return
+    end
+
     if flow and flow["helmod_planner-command"] then
       flow["helmod_planner-command"].destroy()
       -- Remove empty frame if we're the only thing there, remove the parent frame if we just removed the only child

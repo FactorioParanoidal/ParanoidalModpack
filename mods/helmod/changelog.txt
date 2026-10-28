@@ -4,6 +4,8 @@ Date: 2026-06-19
   Features:
     - Added pipette tool to create combinator from input or ouput items
   Bugfixes:
+    - Paranoidal: the top panel button is created once and kept instead of being destroyed and recreated on every bind (player join, setting change): the recreated button flashed in its own dark style before GUI Unifier restyled it. It is removed only when "Display main icon" is off.
+    - Paranoidal: only Helmod's own settings (helmod_*) rebind the button and reopen the Helmod window; a runtime setting of another mod (e.g. the Inserter Throughput toggle) no longer does.
     - Paranoidal: Quality panel rewritten: fixed-size window, one row per input quality (stays / +1 / +2 / +3 and more), vertical scroll only, percents with up to 4 decimals and "<0.0001%" for tiny values (was a matrix several screens wide with values like 1e-10%).
     - Paranoidal: Quality panel upgrade chance uses the input quality's next_probability (engine rule) instead of a hard-coded /10; ic-more-qualities tiers above normal have 0.2 and less, so chances from uncommon and above were understated.
     - Paranoidal: Quality panel lists no god modules.

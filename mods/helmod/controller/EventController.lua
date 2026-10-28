@@ -254,7 +254,9 @@ end
 ---On runtime mod settings
 ---@param event LuaEvent
 function EventController.onRuntimeModSettingChanged(event)
-  if event ~= nil and event.player_index ~= nil then
+  -- Paranoidal: only Helmod's own settings (helmod_*); a setting of another mod no longer rebinds the
+  -- button and reopens the Helmod window
+  if event ~= nil and event.player_index ~= nil and type(event.setting) == "string" and event.setting:sub(1, 7) == "helmod_" then
     Player.load(event)
     Dispatcher:send("on_gui_setting", event, Controller.classname)
   end
