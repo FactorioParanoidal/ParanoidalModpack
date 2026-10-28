@@ -282,6 +282,7 @@ require("tweaks.technology.scattergun-prerequisite-beta8")
 require("tweaks.technology.boiler-inserter-prerequisites-beta8")
 require("prototypes.seafloor-pumps.integration")
 require("removals.angels-sea-pump")
+require("removals.angels-ground-water-pump") -- выведенная из игры скважина: скрыть предмет и здание
 -- После всех копий насосов и скрытия морского насоса Angels.
 require("tweaks.entity.landfill-pumps")
 require("tweaks.recipe.nickel-ammo-beta8-port")
