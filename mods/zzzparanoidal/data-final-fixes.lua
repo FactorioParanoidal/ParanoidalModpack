@@ -375,6 +375,7 @@ require("tweaks.entity.pumps-stats-1_1")
 require("tweaks.entity.machinery-stats-1_1")
 require("tweaks.entity.pumpjack-colors-1_1")
 require("removals.area-mining-drill")
+require("removals.uranium-mining") -- «Продвинутая добыча» убрана: mining-with-fluid даёт burner-mechanics
 require("tweaks.technology.icon-markers") -- Уровни и значки веток на иконках технологий, после всех правок иконок.
 -- Цена исследований Beta 8 (циклы, наука, время) после всех правок дерева; эффект эволюции считается ниже.
 require("tweaks.technology.research-beta8")
