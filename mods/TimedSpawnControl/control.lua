@@ -13,6 +13,7 @@ local SHIFT_TAG = "timed_spawn_control_shift"
 local SHIFT_TILES = 64 -- 2 chunks
 local DANGER_RADIUS = 64 -- 2 chunks around the saved point
 local DEATH_RADIUS = 32 -- a death within 1 chunk of the saved point counts as "on the point"
+local SHIFT_COOLDOWN_TICKS = 2 * 60 * 60 -- after a confirmed shift the dialog is replaced by a chat notice
 local MINIMAP_SIZE = 200
 local DIRECTION_BUTTON_SIZE = 56
 -- The engine's centred "You died" notice must stay readable: place the dialog
@@ -215,6 +216,8 @@ local function set_player_spawn(player)
     surface_index = surface.index,
     surface_name = surface.name,
     last_set_tick = game.tick,
+    -- Setting the point manually does not reset the shift cooldown.
+    last_shift_tick = existing and existing.last_shift_tick or nil,
   }
   print_message(player, {"timed-spawn-control.spawn-set"})
 end
@@ -462,6 +465,7 @@ local function confirm_shift(player, prompt)
   local surface = saved and resolve_saved_surface(saved)
   if direction and surface and surface.index == prompt.surface_index then
     saved.position = shifted_position(saved, direction)
+    saved.last_shift_tick = game.tick
     print_message(player, {"timed-spawn-control.shift-done", {"timed-spawn-control.direction-" .. direction.key}})
   else
     print_message(player, {"timed-spawn-control.shift-failed"})
@@ -523,9 +527,18 @@ local function check_overrun_on_death(event)
     max_distance = DANGER_RADIUS,
     force = player.force,
   }
-  if enemy then
-    storage.shift_prompts[event.player_index] = {surface_index = surface.index, step = 1}
+  if not enemy then
+    return
   end
+
+  if saved.last_shift_tick then
+    local remaining = SHIFT_COOLDOWN_TICKS - (game.tick - saved.last_shift_tick)
+    if remaining > 0 then
+      print_message(player, {"timed-spawn-control.shift-cooldown", math.ceil(remaining / 60)})
+      return
+    end
+  end
+  storage.shift_prompts[event.player_index] = {surface_index = surface.index, step = 1}
 end
 
 local function open_shift_prompt_after_death(event)
