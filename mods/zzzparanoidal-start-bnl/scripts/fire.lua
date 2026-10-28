@@ -958,10 +958,26 @@ function M.item_count(entity, name)
     return n
 end
 
--- A water barrel poured from the hand (scripts/douse.lua): the fire goes out at once.
-function M.quench_by_hand(entity)
-    local rec = storage.bnl.fire.wrecks[reg_of(entity)]
-    if rec and rec.burning then quench(rec, entity) end
+-- A water barrel poured anywhere (scripts/douse.lua): every burning wreck reaching into `radius`
+-- around the spot (its box, not only its centre) goes out, and so do the ordinary fires there; the
+-- spot stays wet. Returns the number of wrecks put out.
+function M.quench_area(surface, position, radius)
+    local s = storage.bnl and storage.bnl.fire
+    local n = 0
+    for _, rec in pairs(s and s.wrecks or {}) do
+        local entity = rec.entity
+        if rec.burning and entity and entity.valid and entity.surface == surface then
+            local box = entity.bounding_box
+            local dx = math.max(box.left_top.x - position.x, 0, position.x - box.right_bottom.x)
+            local dy = math.max(box.left_top.y - position.y, 0, position.y - box.right_bottom.y)
+            if dx * dx + dy * dy <= radius * radius then
+                quench(rec, entity)
+                n = n + 1
+            end
+        end
+    end
+    M.wet(surface, position, radius)
+    return n
 end
 
 local function burn(rec, entity, tick)

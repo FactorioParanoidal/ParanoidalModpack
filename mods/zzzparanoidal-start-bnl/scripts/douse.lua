@@ -2,12 +2,11 @@
 -- the "too hot" guard of opened GUIs) exists only during the start fires: while the fire watch runs
 -- or anything burns (scripts/fire.lua refreshes the events when both end); after that nothing of
 -- this listens any more.
--- * Water barrel: on a burning start wreck (or the starliner) under the cursor the fire goes out at
---   once with a big steam cloud; anywhere else the water spills over the ground and puts out
---   ordinary fires (grass, trees, fuel pools) around the click, the scripted wreck fires keep
---   burning. What was put out stays wet for config.fire.water.calm (scripts/fire.lua): it does not
---   catch fire again, setting it alight only makes white steam.
---   One barrel per click within reach; the empty barrel goes back into the inventory.
+-- * Water barrel: a click anywhere within reach puts out everything within config.fire.water.radius
+--   of the spot: every burning start wreck (or the starliner) reaching into it (big steam cloud) and
+--   the ordinary fires (grass, trees, fuel pools). What was put out stays wet for
+--   config.fire.water.calm (scripts/fire.lua): it does not catch fire again, setting it alight only
+--   makes white steam. One barrel per click; the empty barrel goes back into the inventory.
 -- * Empty barrel on a water tile within reach: every empty barrel in the inventory is filled.
 -- * Fuel (a fuel or gas barrel, oxygen, solid fuel and better) thrown on a burning wreck or burning
 --   ground: it flares up as config.fire.misuse.fires ordinary ground fires around the spot; each goes
@@ -149,16 +148,11 @@ local function on_click(event)
         return
     end
     if WATER[name] then
-        if target and target.valid and fire.is_burning(target) then
-            if not player.can_reach_entity(target) then return end
-            drop_empty(player, take_one(player))
-            fire.quench_by_hand(target)
-            if player.opened == target then player.opened = nil end -- the click also opened the wreck
-            return
-        end
         if not in_reach then return end
         drop_empty(player, take_one(player))
-        fire.wet(surface, position, cfg.spill_radius)
+        if fire.quench_area(surface, position, cfg.radius) > 0 then
+            if target and player.opened == target then player.opened = nil end -- the click also opened the wreck
+        end
         fire.steam(surface, position, 1, 4, "bnl-steam-small")
         return
     end

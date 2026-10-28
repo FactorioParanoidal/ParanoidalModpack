@@ -241,7 +241,8 @@ config.fire = {
     -- catch fire, a fire started in a wet spot (scripted or spread by the engine) dies in steam.
     water = {
         items = {"water-barrel", "angels-water-purified-barrel"},
-        spill_radius = 2.5, -- a barrel poured on the ground puts out fires and characters this far (also: "burning ground")
+        radius = 4, -- a barrel poured anywhere puts out the burning wrecks and the ordinary fires this far
+        spill_radius = 2.5, -- fuel thrown counts as thrown into a fire with a ground fire this far
         calm = 5 * MINUTE,
         wet_margin = 2.5, -- a quenched wreck: the wet spot reaches this far beyond its radius
         wet_check = 60, -- fires inside wet spots are put out this often
