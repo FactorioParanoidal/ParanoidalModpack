@@ -418,6 +418,8 @@ require("tweaks.custom.hero-shortcut")
 require("tweaks.recipe.sand-merge")
 -- Очистка Факториопедии: после всех правок, создающих и копирующих прототипы.
 require("removals.factoriopedia-cleanup")
+-- Все видимые получаемые жидкости — тематическими рядами во вкладку «Жидкости»; после скрытий очистки.
+require("tweaks.custom.fluids-tab").apply(data.raw, log)
 -- Временно: из «Советов и подсказок» остаётся только категория PARANOIDAL.
 require("removals.tips-and-tricks")
 -- Иконки и цвет в трубах расплавов олова и хрома как в Beta 8.
