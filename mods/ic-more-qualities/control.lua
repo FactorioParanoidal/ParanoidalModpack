@@ -328,4 +328,10 @@ events.on(defines.events.on_tick, function(event)
     if tick % 60 == 0 then memory.cleanup() end
 end)
 
+-- Read-only counters of the quality-control panel (workshop attempts and so on) for other mods:
+-- the base journal of paranoidal-CodexRPG shows them on its "Quality" page.
+remote.add_interface("ic-more-qualities", {
+    get_counters = function(force_index) return stats.get(force_index) end,
+})
+
 events.bind()
