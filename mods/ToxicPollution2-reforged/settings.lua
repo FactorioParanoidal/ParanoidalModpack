@@ -9,14 +9,6 @@ data:extend({
 		order = "a",
 	},
 	{
-		type = "string-setting",
-		name = "tpr-hud",
-		setting_type = "runtime-per-user",
-		default_value = "auto",
-		allowed_values = { "auto", "always", "never" },
-		order = "a",
-	},
-	{
 		type = "bool-setting",
 		name = "tpr-auto-equip",
 		setting_type = "runtime-per-user",

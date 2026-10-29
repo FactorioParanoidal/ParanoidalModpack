@@ -24,6 +24,7 @@ prototypes = {
 		["power-armor-mk2"] = item_prototype("power-armor-mk2", 70, 20000),
 		["heavy-armor"] = item_prototype("heavy-armor", 30, 5000),
 		["hazmat-plain"] = item_prototype("hazmat-plain", nil, 15),
+		["creative-armor"] = item_prototype("creative-armor", nil, nil),
 		["CW-air-filter"] = { type = "item" },
 		["CW-used-air-filter"] = { type = "item" },
 	},
@@ -103,15 +104,24 @@ local function near(a, b, message)
 	assert(math.abs(a - b) < 1e-6, (message or "") .. ": " .. tostring(a) .. " ~= " .. tostring(b))
 end
 
--- Respirator in P=500: filtration 50 %, wear (500-150)*0.5/50 = 3.5 per second ---------------------------
+-- Respirator in P=500: protects fully, wear (500-150)*(1-0.5)/100 = 1.75 per second ------------------
 do
 	local s = stack("respirator", 600)
 	local ch = character(s)
 	local state = P.evaluate(player(), ch, {}, 500, 150, 0, 1, true)
-	near(state.filtration, 0.5, "respirator filtration")
-	near(state.inhaled, 250, "inhaled")
-	near(s.durability, 600 - 3.5, "respirator wear")
+	assert(state.protected, "a worn respirator protects")
+	near(state.inhaled, 0, "nothing reaches the body")
+	near(state.filtration, 0, "no cabin/module filtration")
+	near(s.durability, 600 - 1.75, "respirator wear")
+	near(state.armor.wear, 1.75, "wear per second for the forecast")
 	assert(state.filters == nil, "disposable: no refill counter")
+end
+
+-- No protection: the body breathes everything -------------------------------------------------------
+do
+	local state = P.evaluate(player(), character(stack(nil)), {}, 500, 150, 0, 1, true)
+	assert(not state.protected and state.armor == nil)
+	near(state.inhaled, 500, "inhaled unprotected")
 end
 
 -- No wear at or below the tolerance ---------------------------------------------------------------------
@@ -121,12 +131,16 @@ do
 	near(s.durability, 3000, "no wear in tolerable air")
 end
 
--- A non-filtering armor never wears (hazmat without toxin resistance, old bug: any armor drained) -------
+-- Any armor protects (toxicPollution2): without toxin resistance it wears fastest ----------------------
 do
 	local s = stack("hazmat-plain", 15)
-	local state = P.evaluate(player(), character(s), {}, 5000, 150, 0, 1, true)
-	near(s.durability, 15, "hazmat untouched")
-	assert(state.unprotected_armor == "hazmat-plain" and state.filtration == 0)
+	local state = P.evaluate(player(), character(s), {}, 650, 150, 0, 1, true)
+	assert(state.protected and state.inhaled == 0, "armor without resistance still protects")
+	near(s.durability, 15 - 5, "full wear (650-150)/100")
+	-- an armor without a resource (creative) protects and never wears
+	local c = stack("creative-armor", nil)
+	local state2 = P.evaluate(player(), character(c), {}, 5000, 150, 0, 1, true)
+	assert(state2.protected and state2.armor.infinite and c.valid_for_read)
 end
 
 -- Worn-out mask is destroyed and the BEST spare is put on (old bug: the worst one) --------------------
@@ -138,9 +152,24 @@ do
 	local spare_heavy = stack("heavy-armor", 5000)
 	local ch = character(s, { spare_resp, spare_heavy, spare_mask })
 	P.evaluate(player(), ch, {}, 1000, 150, 0, 1, true)
-	assert(ch.armor[1].valid_for_read and ch.armor[1].name == "tpr-gas-mask", "best filtration first: " .. tostring(ch.armor[1].name))
-	assert(not spare_mask.valid_for_read, "the spare moved")
+	-- endurance = resource / (1 - share): respirator 1200, gas mask 500, heavy 7143 → heavy lasts longest
+	assert(ch.armor[1].valid_for_read and ch.armor[1].name == "heavy-armor", "longest-lasting first: " .. tostring(ch.armor[1].name))
+	assert(not spare_heavy.valid_for_read, "the spare moved")
 	assert(#printed == 2, "worn-out + equipped messages")
+end
+
+-- Worn out with no spare: lost, the body is unprotected from this second on ------------------------
+do
+	local s = stack("respirator", 1)
+	local state = P.evaluate(player(), character(s), {}, 1000, 150, 0, 1, true)
+	assert(state.armor.lost and not state.protected and state.inhaled == 1000)
+end
+
+-- Worn out and replaced: the state describes the new item -----------------------------------------
+do
+	local s = stack("respirator", 1)
+	local state = P.evaluate(player(), character(s, { stack("tpr-gas-mask", 3000) }), {}, 1000, 150, 0, 1, true)
+	assert(state.armor.replaced and state.armor.name == "tpr-gas-mask" and state.protected)
 end
 
 -- Grid armor is never destroyed: the resource stops below `exhausted`, filtration becomes 0 ------------
@@ -154,7 +183,7 @@ do
 	assert(s.valid_for_read and s.name == "power-armor-mk2", "grid armor kept")
 	assert(s.durability > 0 and s.durability < 1, "stopped at the floor: " .. s.durability)
 	local state = P.evaluate(player(), ch, data, 2000, 150, 0, 1, true)
-	assert(state.armor.exhausted and state.filtration == 0, "exhausted armor does not filter")
+	assert(state.armor.exhausted and not state.protected and state.inhaled == 2000, "exhausted armor does not protect")
 	assert(#printed == 1, "one exhausted notice")
 end
 
@@ -165,7 +194,7 @@ do
 	local ch = character(s)
 	ch.main.items["CW-air-filter"] = 2
 	local state = P.evaluate(player(), ch, {}, 500, 150, 0, 1, true)
-	near(s.durability, 1000 + 1500 - 350 * 0.8 / 50, "refilled then worn")
+	near(s.durability, 1000 + 1500 - 350 * 0.2 / 100, "refilled then worn")
 	assert(ch.main.items["CW-air-filter"] == 1 and ch.main.items["CW-used-air-filter"] == 1)
 	assert(state.filters == 1, "HUD counter")
 	local r = stack("respirator", 10)
@@ -191,13 +220,15 @@ do
 	assert(state.module.name == "tpr-closed-breathing" and state.module.status == "empty")
 	near(state.vehicle.share, 0.85)
 	local reaching = 4000 * 0.15
-	near(state.inhaled, reaching * 0.3, "inhaled through the armor")
-	near(s.durability, 20000 - (reaching - 150) * 0.7 / 50, "armor wear after the vehicle")
+	near(state.reaching, reaching, "air reaching the armor")
+	assert(state.protected and state.inhaled == 0)
+	near(s.durability, 20000 - (reaching - 150) * 0.3 / 100, "armor wear after the vehicle")
 
 	grid.equipment[2].energy = 1e6
 	local s2 = stack("power-armor-mk2", 20000, grid)
 	local state2 = P.evaluate(player(), character(s2, {}, nil), {}, 4000, 150, 0, 1, true)
 	near(state2.filtration, 1, "closed breathing with charge filters everything")
+	assert(state2.armor.wear == 0)
 	near(grid.equipment[2].energy, 1e6 - 200000, "200 kW for one second")
 	near(s2.durability, 20000, "the armor behind a closed module does not wear")
 

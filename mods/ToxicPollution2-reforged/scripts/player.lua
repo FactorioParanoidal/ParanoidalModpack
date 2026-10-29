@@ -1,12 +1,11 @@
--- Once per second per connected player with a character: protection → intoxication → damage,
--- alert and panel. Players are spread over 6 slots of 10 ticks.
+-- Once per second per connected player with a character: protection → intoxication → damage → alert.
+-- Players are spread over 6 slots of 10 ticks.
 local C = require("shared.config")
 local M = require("scripts.model")
 local Protection = require("scripts.protection")
 local Zones = require("scripts.zones")
 local Research = require("scripts.research")
 local Alerts = require("scripts.alerts")
-local Hud = require("scripts.hud")
 
 local U = {}
 
@@ -25,17 +24,10 @@ function U.data(index)
 	return data
 end
 
-local function play(player, path)
-	if player.mod_settings["tpr-sounds"].value then
-		player.play_sound({ path = path })
-	end
-end
-
 local function killed(player, data)
 	storage.kills[player.index] = (storage.kills[player.index] or 0) + 1
 	data.x = 0
-	data.alert = nil
-	data.damaging = nil
+	Alerts.reset(player, data)
 	player.force.print({ "tpr-message.killed", player.name })
 end
 
@@ -59,7 +51,6 @@ function U.update(player)
 	local data = U.data(player.index)
 	local character = player.character
 	if not (character and character.valid) then
-		Hud.hide(player, data)
 		return
 	end
 	local state
@@ -68,21 +59,13 @@ function U.update(player)
 	data.x = M.step(data.x, state.rate, SECONDS)
 	state.damage = M.damage(data.x, character.max_health, state.inhaled, state.tolerance)
 	if state.damage > 0 then
-		if not data.damaging then
-			data.damaging = true
-			play(player, "utility/alert_destroyed")
-		end
 		character.damage(state.damage * SECONDS, "neutral", C.DAMAGE_TYPE)
 		if not character.valid then
 			killed(player, data)
-			Hud.hide(player, data)
 			return
 		end
-	else
-		data.damaging = nil
 	end
 	Alerts.update(player, character, data, state, data.x)
-	Hud.update(player, data, state, data.x)
 end
 
 function U.tick(tick)
@@ -97,9 +80,7 @@ end
 function U.on_died(player)
 	local data = U.data(player.index)
 	data.x = 0
-	data.damaging = nil
-	Alerts.clear(player, data)
-	Hud.hide(player, data)
+	Alerts.reset(player, data)
 end
 
 function U.on_respawned(player)

@@ -53,12 +53,18 @@ function M.damage(intoxication, max_health, inhaled, tolerance)
 	return max_health * P.damage_share * (intoxication - P.damage_from) / (100 - P.damage_from)
 end
 
--- Filter resource spent per second by a layer that filters `share` of the air reaching it.
--- Nothing is spent at or below the tolerance.
+-- Filter resource spent per second by the worn item that takes the harm of the air reaching it.
+-- Nothing is spent at or below the tolerance; the toxin share slows the wear (1 = never wears).
 function M.wear(reaching, tolerance, share, level)
 	local harmful = reaching - tolerance
-	if harmful <= 0 or share <= 0 then return 0 end
-	return harmful * share / P.wear_div / (1 + P.resource_per_level * level)
+	if harmful <= 0 then return 0 end
+	return harmful * (1 - clamp(share, 0, 1)) / P.wear_div / (1 + P.resource_per_level * level)
+end
+
+-- Seconds the resource lasts at the given wear; nil when it does not wear.
+function M.lasts(resource, wear)
+	if wear <= 0 then return nil end
+	return resource / wear
 end
 
 -- 0 norm, 1 poisoning, 2 heavy, 3 critical.

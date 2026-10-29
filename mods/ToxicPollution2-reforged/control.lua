@@ -1,7 +1,6 @@
 local Player = require("scripts.player")
 local Research = require("scripts.research")
 local Sensor = require("scripts.sensor")
-local Hud = require("scripts.hud")
 local Alerts = require("scripts.alerts")
 local Interface = require("scripts.interface")
 local Protection = require("scripts.protection")
@@ -36,8 +35,14 @@ script.on_configuration_changed(function()
 	init_storage()
 	Research.compute_all()
 	log_filtration()
-	-- The panel layout may differ between versions: rebuild it on the next update.
-	Hud.reset_all()
+	-- 9.0.0 test builds had a panel; it is gone.
+	for _, player in pairs(game.players) do
+		local frame = player.gui.left.tpr_hud
+		if frame then frame.destroy() end
+	end
+	for _, data in pairs(storage.players) do
+		data.hud = nil
+	end
 end)
 
 Interface.register()
@@ -78,20 +83,9 @@ script.on_event(defines.events.on_player_removed, function(event)
 	storage.players[event.player_index] = nil
 	storage.kills[event.player_index] = nil
 end)
-script.on_event(defines.events.on_runtime_mod_setting_changed, function(event)
-	if event.setting ~= "tpr-hud" or not event.player_index then return end
-	local player = game.get_player(event.player_index)
-	if player then
-		local data = Player.data(player.index)
-		Hud.destroy(player, data)
-		if player.character and player.character.valid then
-			Player.update(player)
-		end
-	end
-end)
 script.on_event(defines.events.on_player_changed_surface, function(event)
 	local player = game.get_player(event.player_index)
-	if player then Alerts.clear(player, Player.data(player.index)) end
+	if player then Alerts.reset(player, Player.data(player.index)) end
 end)
 
 -- Poison clouds on a character wearing a mask.

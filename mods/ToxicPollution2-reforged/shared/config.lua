@@ -6,7 +6,7 @@ C.PATH = "__ToxicPollution2-reforged__"
 
 -- Kept from toxicPollution2: other mods of the build use these names.
 C.RESPIRATOR = "respirator"
-C.RESIST_TYPE = "toxin" -- the toxin resistance of an armor is its filtration share
+C.RESIST_TYPE = "toxin" -- the toxin resistance of an armor slows the wear of its filter resource
 
 C.GAS_MASK = "tpr-gas-mask"
 C.FILTER_MODULE = "tpr-filter-module"
@@ -23,13 +23,16 @@ C.REFILL_ITEM = "CW-air-filter"
 C.REFILL_RETURN = "CW-used-air-filter"
 C.REFILL_AMOUNT = 1500 -- filter resource restored by one filter
 
--- Armor-slot items: filtration share and resource (durability). Missing names are skipped.
--- Light/heavy armor keep stack 10 as in toxicPollution2; heavy-armor-2/3 (ПР-045) and Yuoki (derived
--- from the power armor of its tier) are not listed: they get their values from their own owners.
+-- Armor-slot items (toxicPollution2 behaviour): ANY worn item takes the whole harm of the smog on
+-- its filter resource (durability) while the resource lasts; the body is not poisoned meanwhile.
+-- `filtration` = toxin resistance = how much slower the resource wears (wear × (1 − share)).
+-- Missing names are skipped. Light/heavy armor keep stack 10 as in toxicPollution2; heavy-armor-2/3
+-- (ПР-045) and Yuoki (derived from the power armor of its tier) get their values from their owners.
+-- Light armor is crafted from a respirator, so it never protects shorter than the respirator.
 C.ARMORS = {
-	[C.RESPIRATOR] = { filtration = 50, durability = 600 },
-	[C.GAS_MASK] = { filtration = 80, durability = 3000 },
-	["light-armor"] = { filtration = 10, durability = 1000, stack_size = 10 },
+	[C.RESPIRATOR] = { filtration = 50, durability = 650 },
+	[C.GAS_MASK] = { filtration = 80, durability = 1300 },
+	["light-armor"] = { filtration = 50, durability = 1000, stack_size = 10 },
 	["heavy-armor"] = { filtration = 30, durability = 5000, stack_size = 10 },
 	["modular-armor"] = { filtration = 40, durability = 10000 },
 	["power-armor"] = { filtration = 60, durability = 15000 },
@@ -37,9 +40,9 @@ C.ARMORS = {
 	["bob-power-armor-mk3"] = { filtration = 75, durability = 30000 },
 	["bob-power-armor-mk4"] = { filtration = 80, durability = 40000 },
 	["bob-power-armor-mk5"] = { filtration = 85, durability = 50000 },
-	["hazmat-suit"] = { filtration = 85, durability = 6000 },
+	["hazmat-suit"] = { filtration = 85, durability = 3000 },
 }
-C.DEFAULT_DURABILITY = 10000 -- for other armors with toxin resistance but without durability
+C.DEFAULT_DURABILITY = 10000 -- for other armors without durability (any armor protects, so any wears)
 C.DISPOSABLE = { [C.RESPIRATOR] = true } -- never refilled
 C.POISON_FILTERS = { [C.RESPIRATOR] = true, [C.GAS_MASK] = true } -- poison 90 %, paid with the resource
 C.POISON_SHARE = 0.9
@@ -59,7 +62,10 @@ C.MODEL = {
 	zone_radius = 10,
 	damage_from = 50, -- % of intoxication where damage starts (only while inhaling over tolerance)
 	damage_share = 0.08, -- share of max health per second at 100 %
-	wear_div = 50, -- resource per second = harmful pollution × filtration / wear_div
+	-- Resource per second of the worn item = harmful pollution × (1 − toxin share) / wear_div.
+	-- At pollution 500 without research: respirator ≈ 6 min, light armor ≈ 9.5 min, gas mask ≈ 31 min,
+	-- heavy armor ≈ 34 min, modular ≈ 79 min, power ≈ 3 h, power MK2 ≈ 5.3 h.
+	wear_div = 100,
 	tolerance_per_level = 0.10,
 	resource_per_level = 0.10,
 	exhausted = 1, -- resource below this: the item no longer filters (grid items stop here)

@@ -1,4 +1,4 @@
--- control.lua wiring on mocks: event registration, the per-player loop, panel, alerts, death, commands.
+-- control.lua wiring on mocks: event registration, the per-player loop, alerts, death, commands.
 -- Not Factorio: checks that the modules fit together and react as specified.
 local directory = assert(arg[0]:match("^(.*[/\\])"))
 package.path = directory .. "../?.lua;" .. package.path
@@ -50,6 +50,14 @@ prototypes = {
 prototypes.get_item_filtered = function() return { respirator = prototypes.item.respirator } end
 local logged = {}
 log = function(message) logged[#logged + 1] = message end
+-- serpent.line stub: a stable string of a localised-string tree (enough for change detection)
+local function flat(value)
+	if type(value) ~= "table" then return tostring(value) end
+	local parts = {}
+	for _, v in ipairs(value) do parts[#parts + 1] = flat(v) end
+	return "{" .. table.concat(parts, ",") .. "}"
+end
+serpent = { line = flat }
 
 -- GUI mock ------------------------------------------------------------------------------------------
 local element_index = 0
@@ -72,14 +80,16 @@ local function make_player(index)
 	local p = {
 		index = index, name = "P" .. index, connected = true,
 		gui = { left = element() },
-		mod_settings = { ["tpr-hud"] = { value = "auto" }, ["tpr-sounds"] = { value = true },
+		mod_settings = { ["tpr-sounds"] = { value = true },
 			["tpr-auto-equip"] = { value = true }, ["tpr-respawn-respirator"] = { value = true } },
 		force = { index = 1, technologies = {}, print = function(m) force_prints[#force_prints + 1] = m end },
 	}
 	p.print = function(m) prints[#prints + 1] = m end
 	p.play_sound = function(spec) sounds[#sounds + 1] = spec.path end
 	p.create_local_flying_text = function() end
-	p.add_custom_alert = function(entity, icon, message) alerts[#alerts + 1] = { icon = icon.name, op = "add" } end
+	p.add_custom_alert = function(entity, icon, message)
+		alerts[#alerts + 1] = { icon = icon.name, op = "add", message = message, text = flat(message) }
+	end
 	p.remove_alert = function(filter) alerts[#alerts + 1] = { icon = filter.icon.name, op = "remove" } end
 	p.get_alerts = function() return {} end
 	return p
@@ -126,7 +136,7 @@ assert(commands_registered.toxic and interfaces.toxic_pollution, "command and re
 for _, name in ipairs({ "on_research_finished", "on_research_reversed", "on_player_died", "on_player_respawned",
 	"on_entity_damaged", "on_built_entity", "on_robot_built_entity", "script_raised_built", "script_raised_revive",
 	"on_entity_cloned", "on_entity_settings_pasted", "on_gui_closed", "on_object_destroyed", "on_player_removed",
-	"on_runtime_mod_setting_changed", "on_force_reset", "on_technology_effects_reset" }) do
+	"on_force_reset", "on_technology_effects_reset", "on_player_changed_surface" }) do
 	assert(handlers[events[name]], "handler " .. name)
 end
 
@@ -141,22 +151,57 @@ local function second()
 	end
 end
 
+local function last_add()
+	for index = #alerts, 1, -1 do
+		if alerts[index].op == "add" then return alerts[index] end
+	end
+end
+local function count_adds(icon)
+	local n = 0
+	for _, a in ipairs(alerts) do if a.op == "add" and (not icon or a.icon == icon) then n = n + 1 end end
+	return n
+end
+
 -- Clean air: nothing shown --------------------------------------------------------------------------
 pollution = 50
 second()
 assert(storage.players[6].x == 0)
-assert(not player.gui.left.tpr_hud, "no panel in clean air (auto)")
+assert(#alerts == 0, "no alert in clean air")
 
--- Smog without protection: panel, alert, intoxication grows, damage after ~44 s at P=250 -----------
+-- Smog without protection: one smog alert with the full status, gone after ~10 s -------------------
 pollution = 250
 second()
-local hud = player.gui.left.tpr_hud
-assert(hud and hud.visible, "panel shown in smog")
-assert(alerts[#alerts].icon == "tpr-alert-smog" and alerts[#alerts].op == "add")
-for _ = 1, 50 do second() end
-assert(storage.players[6].x > 50 and player.character.health < 250, "damage after 50 s")
-assert(sounds[1] == "utility/alert_destroyed", "alarm when the damage starts")
-assert(alerts[#alerts].icon == "tpr-alert-danger" and alerts[#alerts - 1].op == "remove", "old alert removed")
+local a = last_add()
+assert(a and a.icon == "tpr-alert-smog", "alert on entering the smog")
+assert(a.text:find("tpr-alert.smog,250", 1, true), a.text)
+assert(a.text:find("tpr-status.intoxication", 1, true) and a.text:find("tpr-status.no-armor", 1, true)
+	and a.text:find("tpr-status.rising", 1, true), "status lines in the alert: " .. a.text)
+assert(sounds[1] == "utility/console_message", "sound on the new alert")
+for _ = 1, 11 do second() end
+assert(alerts[#alerts].op == "remove" and storage.players[6].alert == nil, "the alert expires")
+local adds = count_adds()
+for _ = 1, 10 do second() end
+assert(count_adds() == adds, "steady smog: no new alert")
+
+-- Sharp change: the smog twice as harmful (excess 100 → 450) — but within the 30 s cooldown nothing;
+-- after the cooldown a "thicker" alert
+pollution = 600
+second()
+assert(count_adds() == adds, "cooldown")
+for _ = 1, 10 do second() end
+assert(count_adds("tpr-alert-smog") > 1 or count_adds("tpr-alert-danger") > 0, "sharp change noticed")
+
+-- Damage: the danger alert stays while the damage lasts -----------------------------------------------
+pollution = 250
+storage.players[6].x = 60
+second()
+assert(player.character.health < 250, "damage")
+assert(last_add().icon == "tpr-alert-danger", "danger alert")
+local found_sound = false
+for _, path in ipairs(sounds) do if path == "utility/alert_destroyed" then found_sound = true end end
+assert(found_sound, "alarm when the damage starts")
+for _ = 1, 12 do second() end
+assert(storage.players[6].alert == "danger", "danger alert stays while damaged")
 
 -- Leave the smog: damage stops at once ----------------------------------------------------------------
 pollution = 100
@@ -181,24 +226,39 @@ player.character = make_character(player)
 handlers[events.on_player_respawned]({ player_index = 6 })
 assert(player.character.get_inventory(1)[1].name == "respirator", "respirator in the armor slot")
 
--- Respirator in P=250 keeps the air tolerable (inhaled 125 < 150) ------------------------------------
+-- A worn respirator takes the hit: no intoxication, the resource wears (250-150)*(1-0.5)/100 per second
 pollution = 250
-for _ = 1, 30 do second() end
-assert(storage.players[6].x == 0, "protected: no intoxication")
+alerts = {}
+storage.players[6].x = 30
+second()
+assert(last_add().text:find("tpr-alert.smog-protected", 1, true), "protected entering alert")
+assert(last_add().text:find("tpr-status.armor", 1, true) and last_add().text:find("tpr-status.lasts", 1, true))
+for _ = 1, 29 do second() end
+local worn = player.character.get_inventory(1)[1]
+assert(storage.players[6].x == 0, "protected: intoxication falls to zero")
+assert(math.abs(worn.durability - (600 - 30 * 0.5)) < 1e-6, "resource worn: " .. worn.durability)
+assert(player.character.health == 250, "no damage in protection")
+
+-- Resource marks: below 25 % → a filters alert ---------------------------------------------------------
+worn.durability = 140
+second()
+assert(last_add().icon == "tpr-alert-filters" and last_add().text:find("tpr-alert.low", 1, true), "low resource alert")
 
 -- Command and remote ----------------------------------------------------------------------------------
 prints = {}
 commands_registered.toxic({ player_index = 6, parameter = nil })
-assert(#prints == 1 and prints[1][1] == "tpr-command.status")
+assert(#prints == 1 and prints[1][2][1] == "tpr-command.status" and flat(prints[1]):find("tpr-status.armor", 1, true))
 commands_registered.toxic({ player_index = 6, parameter = "kills" })
 assert(prints[2][1] == "tpr-command.kills-title")
 interfaces.toxic_pollution.set_intoxication(6, 42)
 assert(interfaces.toxic_pollution.get_intoxication(6) == 42)
 local state = interfaces.toxic_pollution.get_state(6)
-assert(state and math.abs(state.filtration - 0.5) < 1e-9)
+assert(state and state.protected and state.inhaled == 0 and state.filtration == 0)
 
--- Configuration change resets the panel ------------------------------------------------------------
+-- Configuration change removes a panel left by a 9.0.0 test build -----------------------------------
+local old_panel = player.gui.left.add({ type = "frame", name = "tpr_hud" })
+storage.players[6].hud = {}
 handlers.config()
-assert(storage.players[6].hud == nil)
+assert(not old_panel.valid and storage.players[6].hud == nil)
 
 print("control: OK")

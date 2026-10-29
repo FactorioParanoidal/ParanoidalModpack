@@ -37,10 +37,11 @@ for name, spec in pairs(C.ARMORS) do
 		applied[#applied + 1] = name .. " " .. spec.filtration .. "%/" .. spec.durability
 	end
 end
--- Every armor that filters must have a resource; in this build armor durability means nothing else,
--- so it is shown as the filter resource on all non-infinite armors.
+-- Any worn armor protects from the smog by spending its resource, so every armor gets one (creative
+-- armors stay infinite: they protect forever). In this build armor durability means nothing else, so it
+-- is shown as the filter resource on all non-infinite armors.
 for name, armor in pairs(armors) do
-	if toxin_percent(armor) > 0 and (armor.infinite or not armor.durability) then
+	if (armor.infinite or not armor.durability) and not name:find("^creative%-mod") then
 		armor.infinite = false
 		armor.durability = C.DEFAULT_DURABILITY
 		applied[#applied + 1] = name .. " " .. toxin_percent(armor) .. "%/" .. C.DEFAULT_DURABILITY .. " (default)"

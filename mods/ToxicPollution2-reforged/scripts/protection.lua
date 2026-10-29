@@ -1,6 +1,8 @@
 -- Protection layers of a character: vehicle cabin → grid module → armor-slot item.
--- Spends module energy and the filter resource, refills it with air filters, replaces a worn-out
--- item without a grid by the best protection from the inventory.
+-- Cabin and module filter a share of the air; any worn armor-slot item then takes the rest of the harm
+-- on its filter resource (toxicPollution2 behaviour): the body is not poisoned while it lasts.
+-- Spends module energy and the resource, refills it with air filters, replaces a worn-out item without
+-- a grid by the longest-lasting protection from the inventory.
 local C = require("shared.config")
 local V = require("shared.vehicles")
 local M = require("scripts.model")
@@ -117,7 +119,16 @@ local function try_refill(player, character, stack, data)
 	return true
 end
 
--- Best protection in the main and trash inventories: highest filtration, then most resource left.
+-- How long a stack protects, in "resource at zero toxin share" (comparable between items).
+function P.endurance(stack)
+	local share = P.armor_share(stack.name)
+	local max = P.max_resource(stack)
+	if max <= 0 or share >= 1 then return math.huge end
+	if stack.grid and stack.durability < EXHAUSTED then return 0 end
+	return stack.durability / (1 - share)
+end
+
+-- Best protection in the main and trash inventories: the one that lasts longest.
 local function best_protection(character)
 	local best, best_score
 	for _, id in ipairs({ defines.inventory.character_main, defines.inventory.character_trash }) do
@@ -126,13 +137,9 @@ local function best_protection(character)
 			for index = 1, #inventory do
 				local stack = inventory[index]
 				if stack.valid_for_read and stack.type == "armor" then
-					local share = P.armor_share(stack.name)
-					if share > 0 then
-						local max = P.max_resource(stack)
-						local score = share * 1000 + (max > 0 and stack.durability / max or 0)
-						if not best_score or score > best_score then
-							best, best_score = stack, score
-						end
+					local score = P.endurance(stack)
+					if score > 0 and (not best_score or score > best_score) then
+						best, best_score = stack, score
 					end
 				end
 			end
@@ -226,36 +233,52 @@ function P.evaluate(player, character, data, pollution, tolerance, level, second
 	end
 	reaching = reaching * (1 - module_share)
 
-	local armor_share = 0
+	state.reaching = reaching
+	local protecting = false
 	if stack then
-		local base = P.armor_share(stack.name)
-		local max = base > 0 and P.max_resource(stack) or 0
-		if base > 0 and max <= 0 then
-			-- Filters without a resource (an infinite armor added after data-final-fixes): never wear.
-			armor_share = base
-			state.armor = { name = stack.name, share = base, base = base, exhausted = false, resource = 1, max = 1,
-				disposable = true }
-		elseif base > 0 then
+		local share = P.armor_share(stack.name)
+		local max = P.max_resource(stack)
+		if max <= 0 then
+			-- Without a resource (an infinite armor added after data-final-fixes): protects, never wears.
+			protecting = true
+			state.armor = { name = stack.name, share = share, exhausted = false, infinite = true, wear = 0,
+				resource = 1, max = 1, disposable = true }
+		else
 			local exhausted = stack.grid ~= nil and stack.durability < EXHAUSTED
-			armor_share = exhausted and 0 or base
+			protecting = not exhausted
+			local wear = protecting and M.wear(reaching, tolerance, share, level) or 0
 			state.armor = {
-				name = stack.name, share = armor_share, base = base, exhausted = exhausted,
+				name = stack.name, share = share, exhausted = exhausted, wear = wear,
 				resource = stack.durability, max = max, disposable = C.DISPOSABLE[stack.name] or false,
 			}
-			if apply then
-				local wear = M.wear(reaching, tolerance, armor_share, level) * seconds
-				if wear > 0 then
-					P.spend(player, character, stack, wear, data, slot)
+			if apply and wear > 0 then
+				P.spend(player, character, stack, wear * seconds, data, slot)
+				local now = stack.valid_for_read and stack or nil
+				local armor = state.armor
+				if not now then
+					armor.resource, armor.lost = 0, true
+					protecting = false
+				elseif now.name ~= armor.name then
+					-- Worn out and replaced by a spare (the same slot stack).
+					armor.name, armor.share, armor.replaced = now.name, P.armor_share(now.name), true
+					armor.max = P.max_resource(now)
+					armor.resource = armor.max > 0 and now.durability or 1
+					armor.disposable = C.DISPOSABLE[now.name] or armor.max <= 0
+					armor.exhausted = now.grid ~= nil and armor.max > 0 and now.durability < EXHAUSTED
+					protecting = not armor.exhausted
+				else
+					armor.resource = now.durability
+					armor.exhausted = now.grid ~= nil and now.durability < EXHAUSTED
+					protecting = not armor.exhausted
 				end
-				state.armor.resource = stack.valid_for_read and stack.durability or 0
 			end
-		else
-			state.unprotected_armor = stack.name
 		end
 	end
 
-	state.inhaled = reaching * (1 - armor_share)
-	state.filtration = M.total_filtration({ vehicle_share, module_share, armor_share })
+	state.protected = protecting
+	-- While protected the body breathes nothing harmful: intoxication falls as in clean air.
+	state.inhaled = protecting and 0 or reaching
+	state.filtration = M.total_filtration({ vehicle_share, module_share })
 	state.filters = state.armor and not state.armor.disposable and P.count_filters(character.get_main_inventory()) or nil
 	return state
 end

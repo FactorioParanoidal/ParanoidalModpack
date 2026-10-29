@@ -6,9 +6,9 @@ Polluted air poisons the player. Rewrite of Toxic Pollution (Likos, ArtMares, Vi
 
 - The body tolerates the pollution of a chunk up to **150** (startup setting `tpr-tolerance`; +10 % per level of the research *Smog protection*). Breathing more raises **intoxication** (0–100 %), breathing less lowers it.
 - From **50 %** intoxication the smog damages health (up to 8 % of max health per second at 100 %) — only while the player breathes smog. Leaving it stops the damage at once.
-- Protection **filters** a share of the smog, in layers: vehicle cabin → breathing module in the armor grid (uses energy) → item in the armor slot (its `toxin` resistance). Safe level = tolerance ÷ (1 − filtration).
+- **Anything worn in the armor slot protects** (toxicPollution2 behaviour): the smog harms its resource instead of the body; the `toxin` resistance slows the wear (× (1 − resistance)). Vehicle cabin and the breathing module in the armor grid (uses energy) clean the air before the armor. Without protection: intoxication 0–100 %, damage from 50 % only while breathing smog.
 - Filters wear only in harmful air, in proportion to what they filter. Items with an equipment grid are never destroyed; others are, and the best spare is put on. `CW-air-filter` (Carbon Capture) in the inventory refills worn protection and returns a used filter; the respirator is disposable.
-- Panel on the left (per-player setting), one alert at a time, sounds, tips and tricks, command `/toxic`.
+- No panel: one alert on sharp changes only; its message holds the whole status (text bars). Sounds, tips and tricks, command `/toxic`.
 - Pollution sensor: the signal *Pollution sensor* in a constant combinator outputs the chunk pollution once per second.
 
 Formulas, numbers and the reference timings: `scripts/model.lua`, `shared/config.lua`, tests in `tests/` (`lua tests/<name>.lua`, Lua 5.1/5.2, mocks only).
@@ -17,7 +17,7 @@ Formulas, numbers and the reference timings: `scripts/model.lua`, `shared/config
 
 - `get_intoxication(player_index)` → 0..100
 - `set_intoxication(player_index, value)`
-- `get_state(player_index)` → `{pollution, tolerance, inhaled, filtration, rate, intoxication}` or nil
+- `get_state(player_index)` → `{pollution, tolerance, inhaled, protected, filtration, rate, intoxication}` or nil (`inhaled` is 0 while protected; `filtration` = cabin and module)
 
 ## Credits of the graphics
 

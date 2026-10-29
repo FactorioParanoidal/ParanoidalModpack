@@ -14,7 +14,7 @@ end
 local function mask(name, order, refillable)
 	local spec = C.ARMORS[name]
 	local fields = {
-		field("filtration", { "tpr-tooltip.percent", tostring(spec.filtration) }, 1),
+		field("resist", { "tpr-tooltip.percent", tostring(spec.filtration) }, 1),
 		field("poison", { "tpr-tooltip.percent", tostring(math.floor(C.POISON_SHARE * 100 + 0.5)) }, 3),
 	}
 	if refillable then

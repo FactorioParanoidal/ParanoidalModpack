@@ -39,9 +39,25 @@ near(M.damage(75, 250, 1000, 150), 10)
 
 -- Wear ------------------------------------------------------------------------------------------------
 assert(M.wear(150, 150, 0.8, 0) == 0, "nothing wears at the tolerance")
-assert(M.wear(1000, 150, 0, 0) == 0, "a non-filtering item never wears")
-near(M.wear(1000, 150, 0.8, 0), 850 * 0.8 / 50)
-near(M.wear(1000, 150, 0.8, 10), 850 * 0.8 / 50 / 2)
+near(M.wear(1000, 150, 0, 0), 850 / 100) -- an item without toxin resistance wears fastest
+near(M.wear(1000, 150, 0.8, 0), 850 * 0.2 / 100)
+near(M.wear(1000, 150, 0.8, 10), 850 * 0.2 / 100 / 2)
+assert(M.wear(1000, 150, 1, 0) == 0, "full resistance never wears")
+near(M.lasts(100, 2), 50)
+assert(M.lasts(100, 0) == nil)
+
+-- Lifetime at pollution 500, level 0 (user targets ×2: respirator 6 min, gas mask 30, heavy 40, MK2 4 h)
+local function minutes(name)
+	local spec = C.ARMORS[name]
+	return M.lasts(spec.durability, M.wear(500, 150, spec.filtration / 100, 0)) / 60
+end
+for name, range in pairs({ respirator = { 5.5, 7 }, ["light-armor"] = { 8, 11 }, ["tpr-gas-mask"] = { 28, 34 },
+	["heavy-armor"] = { 30, 42 }, ["power-armor-mk2"] = { 240, 340 } }) do
+	local value = minutes(name)
+	assert(value >= range[1] and value <= range[2], name .. ": " .. value .. " min")
+	print(string.format("%s lasts %.1f min at P=500", name, value))
+end
+assert(minutes("light-armor") > minutes("respirator"), "light armor (made of a respirator) lasts longer")
 
 -- Tiers and ETA ---------------------------------------------------------------------------------------
 assert(M.tier(0) == 0 and M.tier(24.9) == 0 and M.tier(25) == 1 and M.tier(50) == 2 and M.tier(75) == 3 and M.tier(100) == 3)
@@ -73,9 +89,7 @@ check(250, 38, 50, 65, 90)
 check(1150, 8, 13, 20, 35)
 check(5150, 6, 10, 15, 28)
 local first = simulate(250, 0.5, 600)
-assert(first == nil, "a respirator makes P=250 harmless")
-local _, death = simulate(500, 0.5, 600)
-assert(death, "respirator at P=500: inhaled 250, still harmful")
+assert(first == nil, "a cabin filtering 50 % makes P=250 harmless")
 
 -- Leaving the smog: no damage at all afterwards, intoxication falls to zero ---------------------------
 do
