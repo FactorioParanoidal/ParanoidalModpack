@@ -192,6 +192,9 @@ local function discover(player, ruin)
   local key = ruin.size .. "/" .. ruin.name
   local first = found[force.index][key] == nil
   found[force.index][key] = (found[force.index][key] or 0) + 1
+  -- tick of the first ruin this force found (journal statistics for other mods)
+  storage.first_found = storage.first_found or {}
+  storage.first_found[force.index] = storage.first_found[force.index] or game.tick
 
   if setting("pd-ruins-discovery-messages") then
     local caption = ruin_caption(ruin.size, ruin.name)
@@ -395,6 +398,39 @@ remote.add_interface("AbandonedRuins-paranoidal", {
     local found = {}
     for force_index, list in pairs(storage.found or {}) do found[force_index] = count_found(list) end
     return { pending = pending, types = totals, found = found }
+  end,
+  -- Discovery summary of a force for the base journal of paranoidal-CodexRPG. As in /ruins, legendary
+  -- ruins are counted only after the first one is found (no spoilers).
+  get_force_summary = function(force_index)
+    local mine = (storage.found or {})[force_index] or {}
+    local visits = 0
+    for key, n in pairs(mine) do
+      if key:sub(1, 10) ~= "legendary/" then visits = visits + n end
+    end
+    local sizes = {}
+    for _, size in ipairs({ "small", "medium", "large" }) do
+      sizes[size] = { found = count_found(mine, size), total = totals[size] or 0 }
+    end
+    local legendary_found = legendary.found(mine)
+    local solved, first_legend, first_won = 0, nil, nil
+    if legendary_found > 0 and storage.legend then
+      for _, site in pairs(storage.legend.sites or {}) do
+        local t = site.found and site.found[force_index]
+        if type(t) == "number" and (not first_legend or t < first_legend) then first_legend = t end
+        if site.state == "solved" and t then
+          solved = solved + 1
+          if type(site.solved) == "number" and (not first_won or site.solved < first_won) then first_won = site.solved end
+        end
+      end
+    end
+    return {
+      found_types = count_found(mine), total_types = total_types(), found_total = visits, sizes = sizes,
+      legendary_found = legendary_found, legendary_solved = solved,
+      legendary_total = legendary_found > 0 and legendary.total() or nil,
+      -- ticks; nil when unknown (finds made before the version that records them)
+      first_found = (storage.first_found or {})[force_index],
+      legendary_first_found = first_legend, legendary_first_solved = first_won,
+    }
   end,
   -- Used by OreRadar: marks a random undiscovered ruin on the surface with a "?" chart tag for the
   -- force (once the chunk is charted) and returns its center. The tag is removed on discovery.
