@@ -4,6 +4,7 @@ Date: 2025-05-02
   Bugfixes:
     - Fixed an error when a player was deleted from the game.
   Optimizations:
+    - Paranoidal: a player's repair pack is found with one inventory read (get_contents) instead of one search per repair tool and quality (with the 47 qualities of ic-more-qualities up to 235 searches per player every interval). The same pack is chosen as before.
     - Paranoidal: the repair interval setting is cached instead of being read from settings.global every tick.
     - Paranoidal: the check is registered with on_nth_tick(interval) (re-registered on load and when the setting changes) instead of running every tick behind a modulo gate.
 ---------------------------------------------------------------------------------------------------

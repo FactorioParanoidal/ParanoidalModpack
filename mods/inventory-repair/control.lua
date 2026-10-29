@@ -17,7 +17,11 @@ local function sort_repair_tool (tool1, tool2)
 	return tool1Prototype.speed > tool2Prototype.speed
 end
 
+-- Names of the repair tools in storage.repair_tools (rebuilt from it after a load).
+local tool_names
+
 local function index_tools()
+	tool_names = nil
 	local direction = settings.global["inventory-repair-order"].value
 	local qualities = {}
 	if direction == "ignore" then
@@ -117,10 +121,26 @@ local function check_inventory_for_repairs(player, time)
 	local playerInventory = player.get_main_inventory()
 	if playerInventory then -- spectators and ghosts don't have inventories
 		local repairPack, damagedItem = nil, nil
-		for _,itemName in pairs(storage.repair_tools) do
-			repairPack = playerInventory.find_item_stack(itemName)
-			if repairPack then
-				break
+		-- Paranoidal: one get_contents() instead of one find_item_stack per tool and quality (with the 47
+		-- qualities of ic-more-qualities up to 5 x 47 inventory searches per player every interval). The
+		-- first tool of storage.repair_tools that is present is used, as before.
+		if not tool_names then
+			tool_names = {}
+			for _, tool in ipairs(storage.repair_tools) do tool_names[tool.name] = true end
+		end
+		local present
+		for _, entry in pairs(playerInventory.get_contents()) do
+			if tool_names[entry.name] then
+				present = present or {}
+				present[entry.name .. "/" .. entry.quality] = true
+			end
+		end
+		if present then
+			for _, tool in ipairs(storage.repair_tools) do
+				if present[tool.name .. "/" .. tool.quality] then
+					repairPack = playerInventory.find_item_stack(tool)
+					if repairPack then break end
+				end
 			end
 		end
 		
