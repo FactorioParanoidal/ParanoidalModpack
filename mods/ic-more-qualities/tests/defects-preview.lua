@@ -252,8 +252,8 @@ _G.prototypes = {mod_data = {}, recipe = {}, get_entity_filtered = function() re
     get_recipe_filtered = function() return {} end}
 settings = {startup = {["ic-more-qualities-defects-preview"] = {value = false}}}
 dofile(root .. "control.lua")
-for _, name in ipairs({"on_player_crafted_item", "on_player_mined_entity", "on_robot_mined_entity",
-    "on_built_entity", "on_entity_cloned", "on_chunk_generated", "on_tick"}) do
+for _, name in ipairs({"on_player_crafted_item", "on_built_entity", "on_entity_cloned", "on_chunk_generated",
+    "on_tick"}) do
     assert(callbacks[events[name]], "Missing handler " .. name)
 end
 callbacks.init()

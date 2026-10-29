@@ -17,9 +17,11 @@ local S = names.signals
 M.routes = {"good", "refine", "other"}
 M.TARGET_TTL = 300  -- a found output target is trusted this long (a building moved by a script)
 M.TARGET_RETRY = 30 -- no target in front of an output: search again after this many ticks
-M.EMPTY_LOOK = 5    -- an active but empty post looks for new items this often
+M.EMPTY_LOOK = 10   -- an active but empty post looks for new items this often
 M.BLOCKED_LOOK = 4  -- items inside but no output took anything: look again after this many ticks
-M.IDLE_LOOK = 15    -- an idle or paused post
+M.IDLE_LOOK = 15    -- an idle or paused post with circuit control (a start command may come)
+-- An idle, paused or finished post without circuit control and without items sleeps: it is not looked at
+-- until start, pause, cancel, a new order or new settings wake it.
 
 local belt_types = {
     ["transport-belt"] = true, ["underground-belt"] = true, splitter = true,
@@ -95,6 +97,7 @@ function M.rotate(record, step)
     record.facing = (record.facing + step) % 4
     record.blocked = nil
     M.draw_arrows(record)
+    M.wake(record)
 end
 
 ---------------------------------------------------------------------------------------------------
@@ -119,6 +122,7 @@ function M.set_order(record, order)
     -- Changing the order restarts its count; nothing in the post is destroyed.
     record.accepted = 0
     if not current.item and record.state ~= "idle" then record.state = "idle" end
+    M.wake(record)
 end
 
 function M.export_settings(record)
@@ -136,6 +140,7 @@ function M.set_circuit(record, enabled)
         emitter.destroy(record.emitter)
         record.emitter, record.emitted = nil, nil
     end
+    M.wake(record)
 end
 
 function M.apply_settings(record, settings)
@@ -185,6 +190,7 @@ function M.rescan()
             local record = M.track(entity)
             if record then
                 M.draw_arrows(record)
+                M.wake(record)
                 if record.circuit and not (record.emitter and record.emitter.valid) then
                     record.emitter = emitter.create(entity)
                 end
@@ -249,8 +255,18 @@ end
 -- Routing
 ---------------------------------------------------------------------------------------------------
 -- Routing view of a quality, kept per name (prototype data, the same on every peer).
-local quality_infos = {}
-function M.reset_cache() quality_infos = {} end
+local quality_infos, refinable = {}, {}
+function M.reset_cache() quality_infos, refinable = {}, {} end
+
+-- The workshop takes only items with a refinement recipe (finished products).
+local function is_refinable(item)
+    local result = refinable[item]
+    if result == nil then
+        result = prototypes.recipe[names.refine_recipe_prefix .. item] ~= nil
+        refinable[item] = result
+    end
+    return result
+end
 
 function M.quality_info(quality)
     local name = quality.name
@@ -353,7 +369,9 @@ local function route_items(record, inventory, tick)
         local stack = inventory[index]
         if stack.valid_for_read then
             local remaining = M.remaining(record)
-            local route = rules.route(record.order, stack.name, M.quality_info(stack.quality), remaining)
+            local name = stack.name
+            local route = rules.route(record.order, name, M.quality_info(stack.quality), remaining,
+                name == record.order.item and is_refinable(name))
             local direction = rules.output_direction(record.facing, route)
             local moved = 0
             if not blocked[direction] then
@@ -418,10 +436,11 @@ function M.step(record, tick)
     publish(record)
     -- Moving items: every tick (a belt takes one item per tick and output). Items left but every output
     -- blocked: a short pause instead of walking the slots every tick.
-    local look = M.IDLE_LOOK
+    local look
     if busy then look = moved > 0 and 1 or M.BLOCKED_LOOK
-    elseif open then look = M.EMPTY_LOOK end
-    record.next_tick = tick + look
+    elseif open then look = M.EMPTY_LOOK
+    elseif record.circuit then look = M.IDLE_LOOK end
+    record.next_tick = look and tick + look or nil
 end
 
 function M.on_tick(tick)
@@ -438,7 +457,13 @@ function M.on_tick(tick)
                 M.forget(id)
             else
                 M.step(record, tick)
-                if s.records[id] == record then wheel.add(s.buckets, record, math.max(tick + 1, record.next_tick)) end
+                if s.records[id] == record then
+                    if record.next_tick then
+                        wheel.add(s.buckets, record, math.max(tick + 1, record.next_tick))
+                    else
+                        record.due = nil -- asleep until M.wake
+                    end
+                end
             end
         end
     end

@@ -1,4 +1,4 @@
--- Chance ladder of the positive qualities (prototypes/quality-base.lua + full/quality.lua):
+-- Chance ladder of the positive qualities (prototypes/quality-base.lua + qualities.lua):
 -- normal is one dynamic step before uncommon, so next_probability strictly decreases from normal.
 -- Run from the mod root: lua ./tests/quality-chance-curve.lua
 package.path = "./prototypes/?.lua;./?.lua;" .. package.path
@@ -11,8 +11,6 @@ local function run(chance, bonus)
         ["ic-more-qualities-chance-to-upgrade"] = {value = chance},
         ["ic-more-qualities-chance-dynamic-bonus"] = {value = bonus},
         ["ic-more-qualities-multiplier"] = {value = 1},
-        ["ic-more-qualities-mode"] = {value = "full"},
-        ["ic-more-qualities-localization-full"] = {value = ""},
     }}
     data = {raw = {quality = {
         normal = {name = "normal", next = "uncommon", next_probability = 0.1},
@@ -29,7 +27,7 @@ local function run(chance, bonus)
         for _, prototype in ipairs(list) do self.raw[prototype.type][prototype.name] = prototype end
     end
     dofile("./prototypes/quality-base.lua")
-    dofile("./prototypes/full/quality.lua")
+    dofile("./prototypes/qualities.lua")
     local chain, quality = {}, data.raw.quality.normal
     while quality do
         chain[#chain + 1] = quality

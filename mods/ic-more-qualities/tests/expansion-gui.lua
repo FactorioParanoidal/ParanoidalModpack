@@ -384,10 +384,10 @@ for level = 4, 10 do force.technologies["ic-defect-control-" .. level] = nil end
 local dynamic = {}
 for _, key in ipairs({"workshop-state-working", "workshop-state-no-resource", "workshop-state-low-power",
     "workshop-state-paused", "workshop-state-output-full", "workshop-state-waiting", "workshop-state-idle",
-    "workshop-state-reset", "workshop-state-passing", "workshop-status-working", "workshop-status-no-resource",
+    "workshop-state-reset", "workshop-state-passing", "workshop-state-not-refinable", "workshop-status-not-refinable", "workshop-status-working", "workshop-status-no-resource",
     "workshop-status-low-power", "workshop-status-paused", "workshop-status-output-full", "workshop-status-waiting",
     "workshop-status-idle", "workshop-status-reset", "workshop-status-passing", "grade-0", "grade-1", "grade-2",
-    "grade-3", "grade-4", "grade-5", "kind-refine", "kind-reset", "kind-pass", "mode-normal", "mode-careful",
+    "grade-3", "grade-4", "grade-5", "mode-normal", "mode-careful",
     "mode-precise", "mode-normal-tooltip", "mode-careful-tooltip", "mode-precise-tooltip", "order-state-idle",
     "order-state-active", "order-state-paused", "order-state-done", "reason-raw", "reason-parameter",
     "reason-material-tile", "reason-material-rail", "reason-material-pipe", "reason-ingredient",

@@ -1,7 +1,7 @@
 -- Quality-control expansion, data-final-fixes. Runs after defects-final.lua: the classification of
 -- finished products and the white intermediate recipes already exist, every item is defined.
--- Builds: machine statistics from assembling machine 1, the refinement recipe of every item with
--- its cost (science kinds x health), repair packs as the workshop's resource, unlocks in quality
+-- Builds: machine statistics from assembling machine 1, the refinement recipe of every finished product
+-- with its cost (science kinds x health), repair packs as the workshop's resource, unlocks in quality
 -- control 1, the hidden power interfaces of production modes and the runtime mod-data.
 local names = require("scripts.expansion.names")
 local rules = require("scripts.expansion.rules")
@@ -160,14 +160,16 @@ local function science_kinds(raw)
     return by_item
 end
 
-local function refinement(raw)
+-- Finished products only (user decision 2026-10-29): materials are never defective, so their recipes only
+-- served the optional reset of positive quality (1170 of 2901 recipes in Paranoidal).
+local function refinement(raw, finished)
     local kinds_of = science_kinds(raw)
     local costs, recipes, count = {}, {}, 0
     for type_name in pairs(defines.prototypes.item) do
         if not names.not_refinable_types[type_name] then
             for name, item in pairs(raw[type_name] or {}) do
                 local recipe_name = names.refine_recipe_prefix .. name
-                if not item.parameter and not item.hidden and name ~= names.drive and #recipe_name <= 200
+                if finished[name] and not item.parameter and not item.hidden and name ~= names.drive and #recipe_name <= 200
                     and not item.equipment_grid and not raw.recipe[recipe_name] then
                     local entity = item.place_result and find_entity(item.place_result)
                     local health = entity and entity.max_health or nil
@@ -294,7 +296,7 @@ function M.apply(raw, finished, reasons)
     entity_cache = {}
     finish_machines(raw)
     repair_resource(raw)
-    local costs, recipes, count = refinement(raw)
+    local costs, recipes, count = refinement(raw, finished or {})
     local prototypes = recipes
     for _, power in ipairs(mode_power(raw)) do prototypes[#prototypes + 1] = power end
     local no_quality = {}

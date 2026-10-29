@@ -50,9 +50,9 @@ assert(not wide.inserter and wide["assembling-machine-1"])
 -- Runtime view reads the mod-data written at data stage.
 prototypes = {mod_data = {["ic-defects-classification"] = {data = {finished = finished}}}}
 eligibility.reset()
-assert(eligibility.is_finished("assembling-machine-1") and not eligibility.is_finished("iron-plate"))
+assert(eligibility.finished()["assembling-machine-1"] and not eligibility.finished()["iron-plate"])
 prototypes = {mod_data = {}}
 eligibility.reset()
-assert(not eligibility.is_finished("assembling-machine-1"), "missing mod-data means no finished products")
+assert(not eligibility.finished()["assembling-machine-1"], "missing mod-data means no finished products")
 print("PASS: buildings, equipment, consumables and lab inputs are finished; resources, wood, plates,")
 print("gears, circuits, pipes, tiles, rails, parameters and non-science tools are materials. Mocks only.")

@@ -1,4 +1,5 @@
--- nahradi puvodni kvality
+-- Positive qualities (the "full" set of the original mod; its other sets and settings were removed for
+-- Paranoidal on 2026-10-29). Replaces the 4 standard positive qualities and adds about 40 tiers.
 
 local color_uncomon = ic.quality_uncommon.color
 local color_rare = ic.quality_rare.color
@@ -97,47 +98,3 @@ do
     quality.range_multiplier = math.min(1 + 2 * math.sqrt(tier / #positive), 3)
   end
 end
-
--- upravi technologie
-
--- module 1
-ic.unlock_quality(ic.quality_module_1, "epic")        -- uncommon-t3
-ic.unlock_quality(ic.quality_module_1, "legendary")   -- uncommon-t4
-ic.unlock_quality(ic.quality_module_1, "uncommon-t5")
-ic.unlock_quality(ic.quality_module_1, "rare-t1")
-ic.unlock_quality(ic.quality_module_1, "rare-t2")
-ic.unlock_quality(ic.quality_module_1, "rare-t3")
-ic.unlock_quality(ic.quality_module_1, "rare-t4")
-ic.unlock_quality(ic.quality_module_1, "rare-t5")
--- module 2
-ic.unlock_quality(ic.quality_module_2, "epic-t1")
-ic.unlock_quality(ic.quality_module_2, "epic-t2")
-ic.unlock_quality(ic.quality_module_2, "epic-t3")
-ic.unlock_quality(ic.quality_module_2, "epic-t4")
-ic.unlock_quality(ic.quality_module_2, "epic-t5")
-ic.unlock_quality(ic.quality_module_2, "legendary-t1")
-ic.unlock_quality(ic.quality_module_2, "legendary-t2")
-ic.unlock_quality(ic.quality_module_2, "legendary-t3")
-ic.unlock_quality(ic.quality_module_2, "legendary-t4")
-ic.unlock_quality(ic.quality_module_2, "legendary-t5")
-ic.unlock_quality(ic.quality_module_2, "unique-t1")
-ic.unlock_quality(ic.quality_module_2, "unique-t2")
-ic.unlock_quality(ic.quality_module_2, "unique-t3")
-ic.unlock_quality(ic.quality_module_2, "unique-t4")
-ic.unlock_quality(ic.quality_module_2, "unique-t5")
--- module 3
-ic.unlock_quality(ic.quality_module_3, "astral-t1")
-ic.unlock_quality(ic.quality_module_3, "astral-t2")
-ic.unlock_quality(ic.quality_module_3, "astral-t3")
-ic.unlock_quality(ic.quality_module_3, "astral-t4")
-ic.unlock_quality(ic.quality_module_3, "astral-t5")
-ic.unlock_quality(ic.quality_module_3, "quantum-t1")
-ic.unlock_quality(ic.quality_module_3, "quantum-t2")
-ic.unlock_quality(ic.quality_module_3, "quantum-t3")
-ic.unlock_quality(ic.quality_module_3, "quantum-t4")
-ic.unlock_quality(ic.quality_module_3, "quantum-t5")
-ic.unlock_quality(ic.quality_module_3, "infernal-t1")
-ic.unlock_quality(ic.quality_module_3, "infernal-t2")
-ic.unlock_quality(ic.quality_module_3, "unbreakable")
-ic.unlock_quality(ic.quality_module_3, "godly")
-ic.unlock_quality(ic.quality_module_3, "extreme")

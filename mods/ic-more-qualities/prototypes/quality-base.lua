@@ -4,7 +4,7 @@ require("utils")
 -- nahradi puvodni kvality
 
 ic.quality_normal = data.raw.quality["normal"]
-ic.update_quality_name(ic.quality_normal, { "default-quality-name.normal" })
+ic.quality_normal.localised_name = { "default-quality-name.normal" }
 -- Paranoidal: normal is the first step of the same chance curve as the positive tiers
 -- (one dynamic step before uncommon), not the vanilla 0.1. Defaults: 0.204 -> 0.2 -> 0.196 ...
 -- so the first upgrade is the easiest one. Defect grades keep their own 0.1.
@@ -41,9 +41,3 @@ ic.quality_legendary.next_probability = ic.get_chance()
 ic.quality_legendary.beacon_power_usage_multiplier = 0.70
 ic.quality_legendary.mining_drill_resource_drain_multiplier = 0.70
 ic.quality_legendary.science_pack_drain_multiplier = 0.96
-
--- moduly kvality
-
-ic.quality_module_1 = data.raw.technology["quality-module"].effects
-ic.quality_module_2 = data.raw.technology["quality-module-2"].effects
-ic.quality_module_3 = data.raw.technology["quality-module-3"].effects

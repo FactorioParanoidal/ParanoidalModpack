@@ -140,15 +140,4 @@ function M.draw(research_level, sample)
     return 0 -- Standard, also the floating-point accumulation at the final boundary.
 end
 
--- A confirmed native module upgrade wins over the defect draw, including before
--- research 10. Do not infer this flag from an item's existing quality: that would
--- incorrectly exempt carried-in quality ingredients and reroll old inventory.
--- Returning nil delegates the positive result to the native quality adapter.
-function M.draw_unless_upgraded(research_level, sample, module_upgraded)
-    assert(type(module_upgraded) == "boolean", "Expected confirmed module upgrade flag")
-    local grade = M.draw(research_level, sample)
-    if module_upgraded then return nil end
-    return grade
-end
-
 return M

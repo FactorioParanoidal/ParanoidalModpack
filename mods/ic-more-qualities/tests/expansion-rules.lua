@@ -55,9 +55,6 @@ end
 assert(rules.expected_attempts(0) == 0)
 
 -- Prepayment keeps the paid share two ticks ahead and never above one attempt.
-near(rules.prepay(1500, 0, 0, .02), 30)
-near(rules.prepay(1500, .5, .49, .02), 15)
-assert(rules.prepay(1500, 1, .99, .02) == 0)
 
 -- Modes: agreed costs and the derived extra power (machine itself runs `time` times longer).
 local m = rules.modes
@@ -92,6 +89,12 @@ assert(rules.route(at_least, "gear", q.uncommon, 1) == "other")
 assert(rules.route(at_least, "gear", q.normal, 1) == "other")
 assert(rules.route(at_least, "gear", q.defect, 1) == "refine")
 assert(rules.route(nil, "gear", q.normal, 1) == "other")
+-- An item the workshop does not take (a material): what would go to refinement goes to "other".
+assert(rules.route(strict, "gear", q.defect, 5, false) == "other")
+assert(rules.route(strict, "gear", q.rare, 5, false) == "other")
+assert(rules.route(strict, "gear", q.normal, 5, false) == "good")
+assert(rules.route(at_least, "gear", q.defect, 1, false) == "other")
+assert(rules.route(strict, "gear", q.defect, 5, true) == "refine")
 -- Outputs: forward / left / right relative to the facing.
 assert(rules.output_direction(0, "good") == 0 and rules.output_direction(0, "refine") == 3 and rules.output_direction(0, "other") == 1)
 assert(rules.output_direction(1, "good") == 1 and rules.output_direction(1, "refine") == 0 and rules.output_direction(3, "other") == 0)
@@ -107,5 +110,5 @@ assert(math.abs(rules.mode_attempts(-1, wm.normal) - rules.expected_attempts(-1)
 assert(rules.workshop_mode("bogus") == wm.normal and wm.careful.time == 5 and wm.precise.time == 20)
 
 print("PASS: refinement cost (science x sqrt health, agreed examples), 90%+10% chain distribution,")
-print("expected attempts, prepayment, mode costs/extra power/levels, boost identity, post routing.")
+print("expected attempts, mode costs/extra power/levels, boost identity, post routing.")
 print("Pure Lua rules only; not a Factorio test.")

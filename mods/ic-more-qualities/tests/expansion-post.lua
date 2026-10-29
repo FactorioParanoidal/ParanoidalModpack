@@ -14,9 +14,10 @@ rendering = {
     get_object_by_id = function() return nil end,
 }
 local quality_levels = {normal = 0, uncommon = 2, rare = 3, ["ic-defect-3"] = 0}
-prototypes = {item = {gear = {}, plate = {}}, quality = {}}
+prototypes = {item = {gear = {}, plate = {}}, quality = {}, recipe = {["ic-refine-item-gear"] = {}}}
 for name, level in pairs(quality_levels) do prototypes.quality[name] = {name = name, level = level} end
 local post = require("scripts.expansion.post")
+local rules = require("scripts.expansion.rules")
 
 local function stack(name, quality, count)
     local s = {valid_for_read = true, name = name, count = count, health = 1, is_tool = false, is_ammo = false,
@@ -194,7 +195,35 @@ assert(post.state().buckets[1001][1] == record.id)
 local settings = post.export_settings(record)
 assert(settings.facing == 1 and settings.order.item == "gear" and settings.order.condition == "at-least")
 assert(len(settings.order) == 5)
+
+-- Sleeping (2026-10-29): an idle post without circuit control and without items is not looked at again
+-- until a new order, start, pause or cancel wakes it.
+s = post.state()
+post.cancel(record)
+slots = {}
+s.buckets = {}
+wheel.add(s.buckets, record, 2000)
+post.on_tick(2000)
+assert(record.next_tick == nil and record.due == nil and next(s.buckets) == nil, "asleep")
+game.tick = 2100
+post.set_order(record, {item = "plate", condition = "strict", required = 5})
+assert(record.due == 2101 and s.buckets[2101][1] == record.id, "a new order wakes it")
+-- An order of a material: the workshop does not take it, so positive quality goes right, not left.
+post.start(record)
+for direction = 0, 3 do place(direction, chest(100)) end
+slots = {stack("plate", "rare", 2), stack("plate", "normal", 1)}
+post.step(record, 2101)
+local other = targets[rules.output_direction(record.facing, "other")]
+local good = targets[rules.output_direction(record.facing, "good")]
+local refine = targets[rules.output_direction(record.facing, "refine")]
+assert(other.stored == 2 and other.received[1].quality == "rare", "positive material goes right")
+assert(good.stored == 1 and refine.stored == 0)
+-- An active empty post looks every EMPTY_LOOK ticks.
+post.step(record, 2102)
+assert(record.next_tick == 2102 + post.EMPTY_LOOK)
+
 print("PASS: order validation, strict / at-least routing, counting with surplus to other, batch")
 print("completion and repeat, closed inventory when not active, blocked output waits alone, belt")
-print("far lane one item per tick, blocked outputs back off, timer wheel, rotation of outputs, exported settings.")
+print("far lane one item per tick, blocked outputs back off, timer wheel, sleeping idle post, material orders,")
+print("rotation of outputs, exported settings.")
 print("Mocks only.")

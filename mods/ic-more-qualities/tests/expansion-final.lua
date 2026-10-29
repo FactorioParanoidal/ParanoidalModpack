@@ -91,7 +91,12 @@ local raw = {
 }
 
 local final = require("prototypes.expansion-final")
-local prototypes, report = final.apply(raw, {["assembling-machine-1"] = true}, {["iron-gear-wheel"] = "ingredient"})
+-- Finished products of the classification; iron-gear-wheel is a material (no refinement recipe since 2026-10-29).
+local finished = {}
+for _, name in ipairs({"assembling-machine-1", "inserter", "reactor", "automation-science-pack", "ic-refine-workshop",
+    "ic-control-post", "light-armor", "heavy-armor", "repair-pack", "bob-repair-pack-5", "power-armor", "locomotive",
+    "bag", "tagged", "secret"}) do finished[name] = true end
+local prototypes, report = final.apply(raw, finished, {["iron-gear-wheel"] = "ingredient"})
 
 -- Machines copy assembling machine 1 of the modpack.
 local workshop = raw.furnace["ic-refine-workshop"]
@@ -120,7 +125,7 @@ for _, prototype in ipairs(prototypes) do
     elseif prototype.type == "electric-energy-interface" then interfaces[prototype.name] = prototype
     elseif prototype.type == "mod-data" then data = prototype.data end
 end
-for _, name in ipairs({"assembling-machine-1", "inserter", "iron-gear-wheel", "reactor", "automation-science-pack",
+for _, name in ipairs({"assembling-machine-1", "inserter", "reactor", "automation-science-pack",
     "ic-refine-workshop", "ic-control-post", "light-armor", "heavy-armor"}) do
     local recipe = assert(recipes["ic-refine-item-" .. name], name)
     assert(recipe.category == "ic-refine" and recipe.hidden and recipe.hide_from_stats and recipe.allow_quality)
@@ -130,9 +135,10 @@ end
 -- Armor without equipment slots is refinable; a grid-bearing armor remains excluded even when empty.
 -- Other items that can carry contents are not refinable: a recipe would recreate them empty.
 for _, name in ipairs({"repair-pack", "bob-repair-pack-5", "blueprint", "ic-refine-workshop-drive", "secret", "parameter-1",
-    "power-armor", "locomotive", "bag", "tagged"}) do
+    "power-armor", "locomotive", "bag", "tagged", "iron-gear-wheel"}) do
     assert(not recipes["ic-refine-item-" .. name], name)
 end
+assert(not data.costs["iron-gear-wheel"], "materials have no refinement")
 local costs = data.costs
 assert(costs["assembling-machine-1"].kinds == 1 and costs["assembling-machine-1"].cost == 150)
 near(recipes["ic-refine-item-assembling-machine-1"].energy_required, 2)
@@ -140,11 +146,10 @@ assert(costs.reactor.kinds == 3 and costs.reactor.health == 500)
 near(costs.reactor.cost / 300, 9.68, 0.01)
 assert(costs.inserter.kinds == 0, "enabled from the start; the hidden technology is ignored")
 near(costs.inserter.cost / 300, 0.3535, 0.01)
-assert(costs["iron-gear-wheel"].kinds == 0 and costs["iron-gear-wheel"].cost == 150)
 -- No researchable recipe: average item.
 assert(costs["automation-science-pack"].kinds == nil and costs["automation-science-pack"].cost == 750)
 -- Runtime data: reasons and recipes without quality.
-assert(data.reasons["iron-gear-wheel"] == "ingredient" and data.no_quality.white and data.finished_count == 1)
+assert(data.reasons["iron-gear-wheel"] == "ingredient" and data.no_quality.white and data.finished_count == 15)
 -- Machines without production modes: never an item result, or a construction site.
 local expected = {lamp = true, separator = true, empty = true, flare = true, wide = true, ["rsc-silo-stage1"] = true,
     ["CW-air-filter-machine-1"] = true, ["ground-telescope"] = true}
@@ -157,8 +162,8 @@ assert(report[2]:find("production modes", 1, true) and report[2]:find(": 8: ", 1
 assert(interfaces["ic-mode-power-3x3"] and interfaces["ic-mode-power-5x3"] and interfaces["ic-mode-power-3x5"])
 assert(not interfaces["ic-mode-power-2x2"])
 assert(#interfaces["ic-mode-power-5x3"].collision_mask.layers == 0)
-assert(report[1]:find("refinement recipes 9", 1, true))
+assert(report[1]:find("refinement recipes 8", 1, true), report[1])
 print("PASS: workshop/post stats from assembling machine 1, x4 speed cap, unlocks in control 1,")
-print("repair packs as resource, refinement recipe of every item with science x health cost,")
-print("exclusions (packs, planners, hidden, parameters), mode power interfaces, runtime mod-data.")
+print("repair packs as resource, refinement recipe of every finished product with science x health cost,")
+print("exclusions (materials, packs, planners, hidden, parameters), mode power interfaces, runtime mod-data.")
 print("Mocks only: not a Factorio data-stage load.")

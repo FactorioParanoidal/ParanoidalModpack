@@ -194,15 +194,6 @@ local building_filters = {
     {filter = "type", type = "assembling-machine"},
 }
 
--- An interrupted refinement returns the reached grade when the workshop is mined.
-for _, id in ipairs({defines.events.on_player_mined_entity, defines.events.on_robot_mined_entity}) do
-    events.on(id, function(event)
-        if enabled() and event.entity and event.entity.valid and event.entity.name == names.workshop then
-            workshop.on_mined(event.entity, event.buffer)
-        end
-    end, {{filter = "name", name = names.workshop}})
-end
-
 automation.register(enabled, automation_context, events)
 
 ---------------------------------------------------------------------------------------------------

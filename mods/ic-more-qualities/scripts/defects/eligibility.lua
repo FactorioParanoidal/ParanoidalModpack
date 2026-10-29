@@ -29,8 +29,4 @@ function M.reset()
     no_defect_cache = nil
 end
 
-function M.is_finished(name)
-    return M.finished()[name] == true
-end
-
 return M

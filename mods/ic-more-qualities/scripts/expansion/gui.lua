@@ -278,6 +278,10 @@ local function forecast(parent, value)
         label(parent, {"ic-quality.forecast-empty"}).style.single_line = false
         return
     end
+    if not workshop.refinable(value.name) then
+        label(parent, {"ic-quality.forecast-not-refinable", "[item=" .. value.name .. "]"}).style.single_line = false
+        return
+    end
     local grade = model.grade_of(value.quality or "normal")
     local cost, seconds = workshop.cost_of(value.name)
     local tbl = key_value_table(parent)
@@ -589,7 +593,7 @@ local function workshop_refresh(frame, entity)
     local show = sc ~= nil
     if box.visible ~= show then box.visible = show end
     if not show then return end
-    local value = math.max(0, math.min(1, sc.progress or 0))
+    local value = workshop.progress(record)
     local bar = box.ic_ws_bar
     if bar.value ~= value then bar.value = value end
     local text = math.floor(value * 100) .. "%"

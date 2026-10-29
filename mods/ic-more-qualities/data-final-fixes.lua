@@ -5,12 +5,6 @@ if not switches.quality() then return end
 require("prototypes.utils")
 require("prototypes.remove-tech-final")
 
-local conf_early_quality = settings.startup["ic-more-qualities-early-quality"].value
-
-if conf_early_quality then
-    require("prototypes.early-quality-final")
-end
-
 -- zzzparanoidal hides modules outside its Beta 8 set: quality modules stay visible with quality,
 -- with or without defects.
 if mods["zzzparanoidal"] then

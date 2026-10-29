@@ -40,8 +40,6 @@ for level = 0, 10 do
     near(total, 1)
     for grade = minimum + 1, -1 do near(distribution[grade] / distribution[grade + 1], 10) end
     previous = distribution
-    assert(model.draw_unless_upgraded(level, .5, true) == nil)
-    assert(model.draw_unless_upgraded(level, .5, false) == model.draw(level, .5))
 end
 assert(model.distribution(10)[0] == 1)
 for _, sample in ipairs({0, .1, .5, .9, .999999999999}) do assert(model.draw(10, sample) == 0) end
@@ -73,7 +71,6 @@ rejects(function() model.draw(0, 0/0) end)
 rejects(function() model.multiplier(-6) end)
 rejects(function() model.multiplier(1) end)
 rejects(function() model.research(0) end)
-rejects(function() model.draw_unless_upgraded(0, .5, nil) end)
 
 print("PASS: multipliers, 11 normalized distributions, monotonic progression, 10:1 tails,")
 print("research cost 550 red science, force isolation, module precedence, RNG boundaries.")

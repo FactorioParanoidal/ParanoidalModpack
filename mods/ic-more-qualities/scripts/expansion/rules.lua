@@ -114,14 +114,6 @@ function M.expected_attempts(grade)
     return expected[grade]
 end
 
--- Resource that still has to be paid so that the paid share stays ahead of the progress by
--- `lead` (fraction of the attempt). Returns the durability units to drain now.
-function M.prepay(cost, paid_share, progress, lead)
-    local target = math.min(1, progress + lead)
-    if paid_share >= target then return 0 end
-    return (target - paid_share) * cost
-end
-
 ---------------------------------------------------------------------------------------------------
 -- Production modes
 ---------------------------------------------------------------------------------------------------
@@ -166,14 +158,17 @@ end
 M.conditions = {"strict", "at-least"}
 
 -- quality: {grade = -5..0 (defect grades negative), rank = level of non-defect quality, normal = bool}
+-- refinable: false when the workshop does not take the item (materials, since 2026-10-29): what would
+-- go to refinement goes to "other" instead of blocking the refinement output.
 -- Returns "good", "refine" or "other".
-function M.route(order, item, quality, remaining)
+function M.route(order, item, quality, remaining, refinable)
     if not order or not order.item or item ~= order.item then return "other" end
+    local refine = refinable == false and "other" or "refine"
     local target
     if quality.grade < 0 then
-        return "refine"
+        return refine
     elseif order.condition == "strict" then
-        if not quality.normal then return "refine" end
+        if not quality.normal then return refine end
         target = "good"
     else
         target = quality.rank >= (order.rank or 0) and "good" or "other"

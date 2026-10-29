@@ -192,14 +192,14 @@ local moded = {
 }
 rendering = {draw_sprite = function() return {id = 1} end, get_object_by_id = function() return nil end}
 assert(modes.set(moded, "precise"))
-assert(modes.definition(moded) == rules.modes.precise and modes.mode_name(moded) == "precise")
+assert(modes.mode_name(moded) == "precise")
 assert(modes.draw_power(moded, rules.modes.precise, true, 1) == 1)
 near(interface.power_usage, 19000)
 modes.draw_power(moded, rules.modes.careful, true, 2)
 near(interface.power_usage, 4000)
 modes.draw_power(moded, nil, false, 3)
 near(interface.power_usage, 0)
-assert(modes.set(moded, "normal") and modes.definition(moded) == nil and interface.valid == false)
+assert(modes.set(moded, "normal") and modes.mode_name(moded) == "normal" and interface.valid == false)
 assert(storage.ic_modes.records[11] == nil, "idle machine: normal drops the record at once")
 
 -- Bug report: maximum selected, craft started, then normal selected. The running craft keeps its
@@ -244,7 +244,7 @@ assert(switched.crafting and sw_record.craft.progress > 0.4 and sw_record.craft.
 assert(sw.crafting_progress < 1)
 near(sw_interface.power_usage, 19000)
 assert(modes.set(sw, "normal"))
-assert(modes.mode_name(sw) == "normal" and modes.definition(sw) == nil, "the GUI shows normal at once")
+assert(modes.mode_name(sw) == "normal", "the GUI shows normal at once")
 assert(sw_interface.valid and storage.ic_modes.records[21], "the running craft keeps its consumer")
 local paid_after_switch = 0
 run_switched(100000, function()
@@ -412,7 +412,7 @@ assert(modes.eligible(moded), "an assembler keeps its modes")
 modes.rescan()
 assert(storage.ic_modes.records[52] == nil and not kept.valid, "saved mode and extra power dropped")
 assert(storage.ic_defects.records[52].craft.mode == nil, "running craft continues without the mode")
-assert(modes.definition(old) == nil)
+assert(modes.mode_name(old) == "normal")
 storage.ic_defects = nil
 print("PASS: careful x5 / precise x20 time through the real crafter, defects")
 print("+4 levels and none, boosted module roll equals n independent rolls, extra power +1x/+4x;")

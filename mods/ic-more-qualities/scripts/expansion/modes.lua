@@ -56,12 +56,6 @@ function M.mode_name(entity)
     return record and record.mode or "normal"
 end
 
--- Mode definition for a new craft, nil for normal.
-function M.definition(entity)
-    local name = M.mode_name(entity)
-    return name ~= "normal" and rules.modes[name] or nil
-end
-
 local function power_name(entity)
     local w, h = shared.box_tiles(entity.prototype.collision_box)
     local direction = entity.direction

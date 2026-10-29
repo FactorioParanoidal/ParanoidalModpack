@@ -22,8 +22,4 @@ function M.get(force_index)
     return root and root[force_index] or {}
 end
 
-function M.reset(force_index)
-    if storage and storage.ic_stats then storage.ic_stats[force_index] = nil end
-end
-
 return M
