@@ -1,14 +1,11 @@
 {
   "name": "PMRPGsystem",
-  "author": "ProjectMakers",
-  "version": "9.0.4",
-  "title": "PM RPG System — Paranoidal Beta 8",
-  "homepage": "https://projectmakers.de",
-  "contact": "",
+  "author": "FactorioParanoidal",
+  "version": "9.0.5",
+  "title": "PM RPG System — migration bridge",
   "factorio_version": "2.0",
   "dependencies": [
-    "base >= 2.0.77",
-    "RPGsystem >= 2.0.9"
+    "base >= 2.0.77"
   ],
-  "description": "Local Factorio 2.0 port of ProjectMakers PM RPG System 9.0.1 from the user Beta 8. Original progression and gameplay preserved. Based on MFerrari RPGsystem."
+  "description": "Compatibility bridge: keeps the experience, levels, skills and statistics that PMRPGsystem 9.0.4 and earlier saved in old saves and hands them over to paranoidal-CodexRPG once. It adds no gameplay or prototypes."
 }

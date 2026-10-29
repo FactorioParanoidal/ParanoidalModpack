@@ -43,7 +43,7 @@ if mods["AbandonedRuins_updated_fork"] then
     set_settings_default_value("double-setting", "ruins-large-ruin-chance", 0.001875)
 end
 -- Blueprint Sandboxes: отдельная сила песочницы, как в 1.x. При "none" производство и убийства
--- в песочнице идут в статистику, Milestones, достижения и XP PMRPGsystem основной силы.
+-- в песочнице идут в статистику, Milestones, достижения и XP paranoidal-CodexRPG основной силы.
 if mods["blueprint-sandboxes"] then
     set_settings_default_value("string-setting", "bpsb-isolation-level", "full")
 end
@@ -212,7 +212,7 @@ if mods["Fill4Me"] then
     }
     set_settings_default_value("string-setting", "fill4me-blacklist-fuel", table.concat(fuel_blacklist, ","))
 end
-if mods["PMRPGsystem"] then
+if mods["paranoidal-CodexRPG"] then
     set_settings_default_value("bool-setting", "charxpmod_print_xp_user", true)
     set_settings_default_value("bool-setting", "charxpmod_hide_xp_panel", true)
 end

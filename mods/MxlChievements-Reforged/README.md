@@ -319,8 +319,8 @@
 | Пилот | `mxlr-pilot-1…2` | Пролетите на самолёте 100 тыс. / 1 млн м. *(скрипт: fly)* — нужен `Aircraft-space-age` |
 | Шумахер | `mxlr-schumacher` | Разгонитесь на машине до 200 км/ч. *(скрипт: speed)* |
 | Бесконечность — не предел | `mxlr-infinity` | Изучите бесконечную технологию до 100-го уровня. *(скрипт: infinite-research)* |
-| Путь героя | `mxlr-rpg-level-1…4` | Достигните 10 / 50 / 100 / 200-го уровня персонажа. *(скрипт: rpg-level)* — нужен `PMRPGsystem` |
-| Узкий специалист | `mxlr-specialist` | Вложите 50 очков в один навык персонажа. *(скрипт: rpg-attribute)* — нужен `PMRPGsystem` |
+| Путь героя | `mxlr-rpg-level-1…4` | Достигните 10 / 50 / 100 / 200-го уровня персонажа. *(скрипт: rpg-level)* — нужен `paranoidal-CodexRPG` |
+| Узкий специалист | `mxlr-specialist` | Вложите 50 очков в один навык персонажа. *(скрипт: rpg-attribute)* — нужен `paranoidal-CodexRPG` |
 | Крёстный отец | `mxlr-godfather` | Переименуйте 100 станций, локомотивов или других объектов. *(скрипт: rename)* |
 | Малевич | `mxlr-malevich` | Перекрасьте поезда 50 раз. *(скрипт: paint)* |
 | Задом наперёд | `mxlr-reverse-gear` | Разверните ленту целиком 100 раз. *(скрипт: belt-reverse)* — нужен `belt-reverser-space-age` |
@@ -444,7 +444,7 @@
     факт (найдена, пройдена, погибла, подвиг, реликвия, святилище), трекер `legendary` сверяет его с
     параметрами записей `prototypes/legendary-ruins.lua` и ведёт счётчики. Опроса нет.
   - Сезоны — `get_state` из NightBrightness.
-  - RPG — события `get_on_player_level_up` и `get_on_player_updated_status` из PMRPGsystem.
+  - RPG — события `get_on_player_level_up` и `get_on_player_updated_status` из paranoidal-CodexRPG.
   - Груз ракеты — содержимое капсулы (`attached_cargo_pod`) в момент приказа на запуск.
 
 ## Что пропускается в текущей сборке

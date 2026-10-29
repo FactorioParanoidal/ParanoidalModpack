@@ -3,6 +3,7 @@ Version: 1.26.0
   Graphics:
     - Added thumbnail.png (144x144): the picture of the mod in the mod list, made from the mod and base game graphics.
   Changes:
+    - PMRPGsystem.config.cfg is renamed to paranoidal-CodexRPG.config.cfg after the mod and has the same texts as the RPG mod's own ru locale (window title "Журнал базы", skill names in sentence case, short skill hints with the current bonus, the pick-up option, the I key name; the broken robot hint and the typos "Мусорныые", "Отображаать", "Включчить" fixed). This file loads after the mod and used to hide those changes.
     - zzzz-user-overrides.cfg: Russian descriptions in the mod list ("Mods" menu) for every mod of the build except creative-mod and local-speed-toggle: what the mod adds and how to use it in Paranoidal, with keys, defaults and features changed or disabled by the build. All [mod-description] keys are kept in this file; the [mod-description] sections of BottleneckLite, Shield-FX, deep-storage-unit, extendedangels, factorissimo-2-notnotmelon, fluid-memory-storage, reskins-bobs and reskins-library are removed from their files.
     - zzzz-user-overrides.cfg: [mod-name] in the format "English title (Russian translation)" for flamethrower-wagon-reforged, MultipleUnitTrainControl-reforged, robotarmy-citadel, robotarmy-reforged, Yuoki, creative-mod and defence-tower-reforged; Todo-List is named without the check mark so it sorts under T; removed the [mod-name] keys of mods that are not in the build (Bio_Industries, InserterFuelLeech, jinx, luotianyi, nailong, nailong-enemy, tiga, wukong, yasuo).
     - Optional dependencies on MultipleUnitTrainControl-reforged, defence-tower-reforged, flamethrower-wagon-reforged, paranoidal-autofill and robotarmy-citadel, so these descriptions load after the mods' own ru locale.
@@ -30,3 +31,4 @@ Version: 1.26.0
     - OverloadedTrainsSimple was renamed to OverloadedTrainsSimple-reforged: its [mod-name] key follows the new name.
     - zzzz-user-overrides.cfg: Russian mod list description of creative-mod.
     - ToxicPollution2-reforged replaces toxicPollution2: its [mod-name] and [mod-description] in zzzz-user-overrides.cfg instead of the old ones; zzzparanoidal.tips-radiation-pollution.cfg removed, the smog tips moved into the mod with their own ru locale.
+    - PMRPGsystem is renamed to paranoidal-CodexRPG: the optional dependency follows it; zzzz-user-overrides.cfg has the name and description of paranoidal-CodexRPG, and PMRPGsystem and RPGsystem are described as migration bridges.

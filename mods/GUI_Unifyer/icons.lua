@@ -175,8 +175,8 @@ local icons = {
         {"center", "usage_detector_center"}),
     create_icon_entry("RPG", "rpg_button", "104", {'guiu.rpg_button'}, nil, nil,
         {"screen", "105"}),
-    -- Paranoidal: PMRPGsystem adds btcharxp with mod_gui_button; its own tooltip with the player name is kept.
-    create_icon_entry("PMRPGsystem", "rpg_button", "btcharxp", nil, nil, nil,
+    -- Paranoidal: paranoidal-CodexRPG (formerly PMRPGsystem) adds btcharxp with mod_gui_button; its own tooltip is kept.
+    create_icon_entry("paranoidal-CodexRPG", "rpg_button", "btcharxp", nil, nil, nil,
         {"screen", "char-panel"}),
     create_icon_entry("SpawnControl", "spawncontrol_button", "spawn", {'guiu.spawncontrol_button'}, nil, nil, nil),
     create_icon_entry("TimedSpawnControl", "spawncontrol_button", "spawn", {'guiu.spawncontrol_button'}, nil, nil, nil),

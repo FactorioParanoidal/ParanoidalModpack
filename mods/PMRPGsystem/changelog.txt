@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 9.0.5
+Date: 2026-10-29
+  Changes:
+    - The mod is now a migration bridge: the RPG system and the base journal moved to paranoidal-CodexRPG 9.1.0. On old saves PMRPGsystem keeps the progress it saved (Factorio keeps a mod's storage only under the mod's name) and hands it over to paranoidal-CodexRPG once, through the remote interface "PMRPGsystemMigration"; the windows and buttons of the old version are removed. No gameplay, prototypes, settings or locale are left.
+---------------------------------------------------------------------------------------------------
 Version: 9.0.4
   Features:
     - Remote interface RPG.gift_levels(player_index, attribute, levels): other mods gift attribute levels that cost no skill points and survive /rpg-reset-points (Start with BnL professions).

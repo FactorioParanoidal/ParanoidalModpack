@@ -1,7 +1,7 @@
 --local mod_gui = require("mod-gui")
 --local playercolor = game.players[event.player_index].color
 
-ICONPATH = "__PMRPGsystem__/graphics/"
+ICONPATH = "__paranoidal-CodexRPG__/graphics/"
 
 local attributesList = {
   "LV_Health_Bonus",
@@ -37,7 +37,7 @@ data:extend({
   {
     type = "sprite",
     name = "info11",
-    filename = "__PMRPGsystem__/graphics/LV_Info_icon1.png",
+    filename = "__paranoidal-CodexRPG__/graphics/LV_Info_icon1.png",
     width = 110,
     height = 110,
     scale = 0.5,

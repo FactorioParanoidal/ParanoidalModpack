@@ -284,7 +284,7 @@ local function apply(player, key)
         if entry[1] ~= water and not (entry[2] == 1 and put_armor(player, entry[1])) then items[#items + 1] = entry end
     end
     give(player, items)
-    -- RPG attribute levels (PMRPGsystem gift_levels: no skill points spent): {attribute, min, max}
+    -- RPG attribute levels (paranoidal-CodexRPG gift_levels: no skill points spent): {attribute, min, max}
     local rpg = remote.interfaces.RPG
     if rpg and rpg.gift_levels then
         for _, entry in ipairs(spec.rpg or {}) do

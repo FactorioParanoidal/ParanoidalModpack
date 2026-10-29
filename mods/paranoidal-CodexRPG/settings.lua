@@ -14,6 +14,14 @@ data:extend({
   
    {
     type = "bool-setting",
+    name = "charxpmod_milestone_messages",
+    setting_type = "runtime-per-user",
+    default_value = true,
+	order = "bb"
+  },
+
+   {
+    type = "bool-setting",
     name = "charxpmod_hide_xp_panel",
     setting_type = "runtime-per-user",
     default_value = false,

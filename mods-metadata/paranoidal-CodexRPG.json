@@ -1,0 +1,5 @@
+{
+  "mod": "paranoidal-CodexRPG",
+  "source": "local",
+  "changeReason": "Переименованный PMRPGsystem: форк PM RPG System от ProjectMakers на основе RPGsystem MFerrari, перенесённый из Beta 8 на Factorio 2.0.77 с сохранением формул прокачки. 9.1.0: новое имя по задаче пользователя, журнал базы во весь экран со статистикой, вехами, паспортом базы и кодексом; один раз забирает прогресс старых сейвов у моста PMRPGsystem 9.0.5"
+}

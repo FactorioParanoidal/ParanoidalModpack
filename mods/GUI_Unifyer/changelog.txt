@@ -12,6 +12,7 @@ Date: 2026-10-14
     - Local Paranoidal patch: Module Inserter integration targets ModuleInserterEx instead of ModuleInserter. The panel button opens the ModuleInserterEx window through its remote interface toggle_gui and is highlighted while the window is open.
     - Local Paranoidal patch: the EvoGUI integration targets EvoUi (root element EvoUi_root), which replaces EvoGUI in 2.0.
     - Local Paranoidal patch: Factorissimo factory dispatcher button (created and handled by Factorissimo) gets the unified style and the Factorissimo icon, and is highlighted while the dispatcher window is open. Its own tooltip is kept; it can be hidden with the per-player button setting.
+    - The RPG button entry follows the rename of PMRPGsystem to paranoidal-CodexRPG.
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.4
 Date: 2026-10-10

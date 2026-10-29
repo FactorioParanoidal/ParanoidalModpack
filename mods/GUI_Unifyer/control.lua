@@ -692,7 +692,7 @@ local PANEL_ORDER = {
 	"WideChests_merge-chest-button",        -- WideChests
 	"ptt_toolbar_toggle",                   -- paranoidal-tech-tree
 	"bpsb-toggle-gui-sb-toggle-shortcut",   -- blueprint-sandboxes
-	"btcharxp",                             -- PMRPGsystem
+	"btcharxp",                             -- paranoidal-CodexRPG
 	"module_inserter_config_button",        -- ModuleInserterEx
 	"fp_button_toggle_interface",           -- factoryplanner
 	"helmod_planner-command",               -- helmod

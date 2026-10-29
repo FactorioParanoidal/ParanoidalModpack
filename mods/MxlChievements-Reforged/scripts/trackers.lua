@@ -811,7 +811,7 @@ trackers["infinite-research"] = {
 }
 
 ---------------------------------------------------------------------------------------------------
--- PM RPG System: custom events from its remote interface "RPG".
+-- paranoidal-CodexRPG (formerly PMRPGsystem): custom events from its remote interface "RPG".
 
 trackers["rpg-level"] = {
   custom = function()

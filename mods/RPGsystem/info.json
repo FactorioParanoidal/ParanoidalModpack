@@ -7,5 +7,5 @@
   "dependencies": [
     "base >= 2.0.77"
   ],
-  "description": "Compatibility bridge that exposes XP saved by RPGsystem 2.0.8 to PMRPGsystem. It adds no gameplay or prototypes."
+  "description": "Compatibility bridge that exposes XP saved by RPGsystem 2.0.8 to paranoidal-CodexRPG (formerly PMRPGsystem). It adds no gameplay or prototypes."
 }

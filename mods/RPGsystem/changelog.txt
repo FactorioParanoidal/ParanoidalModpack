@@ -2,3 +2,5 @@
 Version: 2.0.9
   Graphics:
     - Added thumbnail.png (144x144): the picture of the mod in the mod list, made from the mod and base game graphics.
+  Changes:
+    - The description names paranoidal-CodexRPG (formerly PMRPGsystem) as the mod that takes the XP over.
