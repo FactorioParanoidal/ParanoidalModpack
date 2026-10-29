@@ -1,0 +1,15 @@
+{
+  "mod": "paranoidal-autofill",
+  "source": "local",
+  "original": {
+    "name": "Fill4Me",
+    "authors": [
+      "Kovus"
+    ],
+    "portal": {
+      "name": "Fill4Me",
+      "url": "https://mods.factorio.com/mod/Fill4Me"
+    }
+  },
+  "changeReason": "Собственный мод Paranoidal на основе Fill4Me: автозакладка топлива и патронов по правилам игрока, дозаправка построек рядом."
+}

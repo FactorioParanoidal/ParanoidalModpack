@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 2.2.0
 Date: 14.01.2026
+  Locale:
+    - ru: the mod name and the mod list description are the same as in ParanoidalLocale (format "English title (Russian translation)"), so the mod reads the same with or without it.
   Changes:
     - Split of generic valve functionality into separate library mod called Valves Library.
 ---------------------------------------------------------------------------------------------------

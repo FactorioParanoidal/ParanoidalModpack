@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 9.4.8
 Date: 2026-10-13
+  Locale:
+    - ru: the mod name and the mod list description are the same as in ParanoidalLocale (format "English title (Russian translation)"), so the mod reads the same with or without it.
   Changes:
     - Version number starts with 9 (Paranoidal fork): the Mod Portal never offers an "update" over local changes.
     - Paranoidal: removed the chat messages about the auto-detected preset and loaded preset addons at game start. Error messages are kept.

@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.50
 Date: 19. 04. 2026
+  Locale:
+    - ru: the mod name and the mod list description are the same as in ParanoidalLocale (format "English title (Russian translation)"), so the mod reads the same with or without it.
   Bugfixes:
     - Fixed that the matrix solver would not work properly with high energy consumption recipes (#720) (Thanks scottmsul!)
 

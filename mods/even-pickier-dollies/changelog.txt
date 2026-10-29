@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 2.7.5
 Date: 2026-07-24
+  Locale:
+    - ru: the mod name and the mod list description are the same as in ParanoidalLocale (format "English title (Russian translation)"), so the mod reads the same with or without it.
   Bugfixes:
     - Fix rotating entities with the regular rotate key (reported by @LividLipid, @Roy192, @MiG53 on the forum)
 ---------------------------------------------------------------------------------------------------

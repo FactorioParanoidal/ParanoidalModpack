@@ -1,0 +1,6 @@
+{
+  "mod": "Kruise_Kontrol_Updated",
+  "source": "portal",
+  "upstreamVersion": "0.3.0",
+  "changeReason": "Оптимизация пакетных заданий (рубка, добыча, стройка, ремонт, заправка): поиск сначала рядом с расширением радиуса, без регистрации объектов без unit_number в register_on_object_destroyed. Добавлена картинка thumbnail.png для списка модов."
+}

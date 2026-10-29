@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.3.4
 Date: 2025-06-06
+  Locale:
+    - ru: the mod name and the mod list description are the same as in ParanoidalLocale (format "English title (Russian translation)"), so the mod reads the same with or without it.
   Features:
     - Added "tiny" indicator size setting. (#20)
 ---------------------------------------------------------------------------------------------------

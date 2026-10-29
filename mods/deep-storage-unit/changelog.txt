@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 9.8.0
 Date: 2026-10-22
+  Locale:
+    - ru: the mod name and the mod list description are the same as in ParanoidalLocale (format "English title (Russian translation)"), so the mod reads the same with or without it.
   Features:
     - Logistic memory units: passive provider, storage, buffer and requester variants of the memory unit (logic after "Logistic Memory Units" by restjack, MIT). The chest is what the logistic network sees, the counter sits behind it; the update keeps the chest at 90% (provider), 10% (storage), 50% (buffer) or 25% (requester) of its 300 slots. No active provider: with endless contents it would push into storage forever.
     - Logistic units are told apart by their dome rings painted in the colour of the vanilla logistic chest of the same mode (an overlay cut from the original sprite); the rest of the building is the original sprite.

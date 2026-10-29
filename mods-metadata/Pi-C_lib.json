@@ -1,0 +1,6 @@
+{
+  "mod": "Pi-C_lib",
+  "source": "portal",
+  "upstreamVersion": "2.0.4",
+  "changeReason": "Добавлена картинка thumbnail.png для списка модов."
+}

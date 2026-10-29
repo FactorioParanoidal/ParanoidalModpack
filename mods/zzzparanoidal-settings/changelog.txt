@@ -1,0 +1,6 @@
+---------------------------------------------------------------------------------------------------
+Version: 0.4.0
+  Locale:
+    - ru: the mod name and the mod list description are the same as in ParanoidalLocale (format "English title (Russian translation)"), so the mod reads the same with or without it.
+  Changes:
+    - ToxicPollution2-reforged replaces toxicPollution2: its startup setting tpr-tolerance is hidden instead of armor-absorb-multiplier and min-pollution-to-damage.

@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 9.113.0
 Date: 2026-10-21
+  Locale:
+    - ru: the mod name and the mod list description are the same as in ParanoidalLocale (format "English title (Russian translation)"), so the mod reads the same with or without it.
   Optimizations:
     - Reading tower squares (towers built or moved, range research, the shield switched off) is split into strips of 16 tiles and queued: at most 8 strips per tick for the repair side and 8 searches per tick for the shield. Many towers built at once or a research with hundreds of towers no longer stop the game for one long tick.
     - A range research reads only the ring between the old and the new square. When the square shrinks, the shield drops the links outside it without any search; turrets inside keep their shield records and their look schedule.

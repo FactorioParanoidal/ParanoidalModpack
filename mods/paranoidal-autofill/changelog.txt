@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.1.0
 Date: 2026-10-25
+  Locale:
+    - ru: the mod name and the mod list description are the same as in ParanoidalLocale (format "English title (Russian translation)"), so the mod reads the same with or without it.
   Features:
     - "Show" switch in the window: Researched (default) or All. Researched offers buildings with a researched recipe and fuel/ammo with a researched recipe, raw resources (coal, wood) and items without a recipe. Hidden recipes, recycling and recipes that give back their own ingredient do not count. Items already chosen in a rule stay visible in both modes.
   Changes:

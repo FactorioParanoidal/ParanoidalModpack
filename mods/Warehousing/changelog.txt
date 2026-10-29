@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.3
 Date: 2024-12-10
+  Locale:
+    - ru: the mod name and the mod list description are the same as in ParanoidalLocale (format "English title (Russian translation)"), so the mod reads the same with or without it.
 
   Changed:
     - Buffer and Requester buildings now have logistic trash slots to match vanilla chests

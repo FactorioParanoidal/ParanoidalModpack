@@ -1,0 +1,6 @@
+{
+  "mod": "factoryplanner",
+  "source": "portal",
+  "upstreamVersion": "2.0.50",
+  "changeReason": "Русское название и описание мода в locale/ru совпадают с ParanoidalLocale (название в виде «English (Русский)»)."
+}

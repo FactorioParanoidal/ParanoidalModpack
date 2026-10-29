@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 0.16.5
 Date: 2025-11-05
+  Locale:
+    - ru: the mod name and the mod list description are the same as in ParanoidalLocale (format "English title (Russian translation)"), so the mod reads the same with or without it.
   Bugfixes:
     - Fixed that `flib_table.binary_search` would fail to find the last element in the list. (#81)
 ---------------------------------------------------------------------------------------------------

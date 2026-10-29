@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 9.0.0
 Date: 2026-10-29
+  Locale:
+    - ru: the mod name and the mod list description are the same as in ParanoidalLocale (format "English title (Russian translation)"), so the mod reads the same with or without it.
   Major Features:
     - Rewrite of Multiple Unit Train Control 1.0.5 (robot256) for Paranoidal. Replaces MultipleUnitTrainControl and Robot256Lib: the locomotive replacement is built in, the library is no longer needed.
   Features:

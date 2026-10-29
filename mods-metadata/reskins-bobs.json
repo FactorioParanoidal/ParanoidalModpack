@@ -1,0 +1,6 @@
+{
+  "mod": "reskins-bobs",
+  "source": "portal",
+  "upstreamVersion": "2.3.8",
+  "changeReason": "Русское название и описание мода в locale/ru совпадают с ParanoidalLocale (название в виде «English (Русский)»)."
+}

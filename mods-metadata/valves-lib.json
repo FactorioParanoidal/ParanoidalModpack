@@ -1,0 +1,6 @@
+{
+  "mod": "valves-lib",
+  "source": "portal",
+  "upstreamVersion": "1.0.0",
+  "changeReason": "Русское название и описание мода в locale/ru совпадают с ParanoidalLocale (название в виде «English (Русский)»)."
+}

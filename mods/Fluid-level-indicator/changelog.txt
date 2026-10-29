@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 0.9.9
 Date: 09 May 2025
+  Locale:
+    - ru: the mod name and the mod list description are the same as in ParanoidalLocale (format "English title (Russian translation)"), so the mod reads the same with or without it.
   Minor Changes:
     - Added Krastorio 2 compatibility back for steel pipes.
   Optimizations:

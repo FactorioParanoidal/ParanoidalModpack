@@ -1,0 +1,6 @@
+{
+  "mod": "flib",
+  "source": "portal",
+  "upstreamVersion": "0.16.5",
+  "changeReason": "Русское название и описание мода в locale/ru совпадают с ParanoidalLocale (название в виде «English (Русский)»)."
+}

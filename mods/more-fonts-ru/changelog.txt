@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 0.1.0
 Date: 2026-10-17
+  Locale:
+    - ru: the mod name and the mod list description are the same as in ParanoidalLocale (format "English title (Russian translation)"), so the mod reads the same with or without it.
   Changes:
     - Fork of More Fonts 0.0.4 by asher_sky (CC BY-NC-SA 4.0) under the name more-fonts-ru.
     - Every font family has a fallback chain to the game fonts: missing characters (Cyrillic, CJK and others) are drawn by Noto Sans instead of being lost.

@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 9.0.0
 Date: 2026-10-27
+  Locale:
+    - ru: the mod name and the mod list description are the same as in ParanoidalLocale (format "English title (Russian translation)"), so the mod reads the same with or without it.
   Major Features:
     - Paranoidal fork of Flamethrower Wagon 2.1.0 (fgardt) for Factorio 2.0, renamed to flamethrower-wagon-reforged. Prototype names are unchanged; the original mod is marked incompatible.
   Optimizations:

@@ -2,10 +2,12 @@
   "mod": "blueprint-sandboxes",
   "source": "portal",
   "upstreamVersion": "3.2.2",
-  "changeReason": "Для совместимости с Paranoidal запрещено строительство телепортеров мода Teleporters в песочницах, как и исследовательских лабораторий. Проверка построенных сущностей внутри фабрик Factorissimo использует лёгкий remote-вызов get_surrounding_factory_exit вместо копирования всей таблицы фабрики.",
+  "changeReason": "Для совместимости с Paranoidal запрещено строительство телепортеров мода Teleporters в песочницах, как и исследовательских лабораторий. Проверка построенных сущностей внутри фабрик Factorissimo использует лёгкий remote-вызов get_surrounding_factory_exit вместо копирования всей таблицы фабрики. Русское название и описание мода в locale/ru совпадают с ParanoidalLocale (название в виде «English (Русский)»).",
   "original": {
     "name": "Blueprint Sandboxes",
-    "authors": ["somethingtohide"],
+    "authors": [
+      "somethingtohide"
+    ],
     "portal": {
       "name": "blueprint-sandboxes",
       "url": "https://mods.factorio.com/mod/blueprint-sandboxes"

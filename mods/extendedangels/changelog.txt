@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 0.6.9
 Date: 2026-06-14
+  Locale:
+    - ru: the mod name and the mod list description are the same as in ParanoidalLocale (format "English title (Russian translation)"), so the mod reads the same with or without it.
   Changes:
     - Support for Bob's Mods 2.1+
     - Tier 4 warehouses now require titanium bearings, instead of the now-removed ceramic bearings

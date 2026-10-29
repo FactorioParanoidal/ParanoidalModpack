@@ -21,6 +21,7 @@ Date: 2026-10-19
     - Paranoidal: reinforced hull technologies showed "Unknown key" as their name: the engine drops a trailing "-<number>" of a technology name for its locale key, so the name is technology-name.factory-hull ("Reinforced hull 2"); the numbered keys are removed.
   Locale:
     - Paranoidal: Russian names of factory buildings: "Фабрика 1-4" instead of "Заводское строение 1-4", and "фабрика" / "фабричное здание" instead of "заводское строение" / "завод" in every Russian text of the mod (entities, tiles, technologies, descriptions, settings, messages, dispatcher, tips and tricks). The same texts in ParanoidalLocale are changed too, because it overrides this locale.
+    - ru: the mod name and the mod list description are the same as in ParanoidalLocale (format "English title (Russian translation)"), so the mod reads the same with or without it.
 ---------------------------------------------------------------------------------------------------
 Version: 9.11.19
 Date: 2026-10-16
