@@ -119,17 +119,29 @@ local function try_refill(player, character, stack, data)
 	return true
 end
 
+-- Wear divisor of an item: masks wear at the base rate, everything else ARMOR_ENDURANCE times slower.
+function P.endurance_factor(name)
+	return C.POISON_FILTERS[name] and 1 or C.ARMOR_ENDURANCE
+end
+
 -- How long a stack protects, in "resource at zero toxin share" (comparable between items).
 function P.endurance(stack)
 	local share = P.armor_share(stack.name)
 	local max = P.max_resource(stack)
 	if max <= 0 or share >= 1 then return math.huge end
 	if stack.grid and stack.durability < EXHAUSTED then return 0 end
-	return stack.durability / (1 - share)
+	return (stack.durability + (stack.count - 1) * max) * P.endurance_factor(stack.name) / (1 - share)
+end
+
+-- Will something take over when the worn stack is spent (more items in the stack or a spare)?
+function P.has_successor(player, character, stack)
+	if stack.count > 1 then return true end
+	if stack.grid then return false end
+	return player.mod_settings["tpr-auto-equip"].value and P.best_protection(character) ~= nil
 end
 
 -- Best protection in the main and trash inventories: the one that lasts longest.
-local function best_protection(character)
+function P.best_protection(character)
 	local best, best_score
 	for _, id in ipairs({ defines.inventory.character_main, defines.inventory.character_trash }) do
 		local inventory = character.get_inventory(id)
@@ -148,21 +160,24 @@ local function best_protection(character)
 	return best
 end
 
-local function worn_out(player, character, stack, slot)
+-- A spent item: the next one of the stack, else the best spare (quietly: no damage follows), else
+-- a message that the protection is gone.
+local function worn_out(player, character, stack, slot, left)
 	local name = stack.name
-	stack.clear()
-	player.print({ "tpr-message.worn-out", name, item_name(name) })
-	if not player.mod_settings["tpr-auto-equip"].value then
-		play(player, "utility/armor_remove")
+	if stack.count > 1 then
+		stack.count = stack.count - 1
+		stack.durability = math.max(1, P.max_resource(stack) + left)
+		play(player, "utility/armor_insert")
 		return
 	end
-	local spare = best_protection(character)
+	stack.clear()
+	local spare = player.mod_settings["tpr-auto-equip"].value and P.best_protection(character)
 	if spare and slot and slot[1].transfer_stack(spare) and slot[1].valid_for_read then
-		player.print({ "tpr-message.equipped", slot[1].name, item_name(slot[1].name) })
 		play(player, "utility/armor_insert")
-	else
-		play(player, "utility/armor_remove")
+		return
 	end
+	player.print({ "tpr-message.worn-out", name, item_name(name) })
+	play(player, "utility/armor_remove")
 end
 
 -- Spends `amount` of the filter resource of the worn item (smog or poison gas).
@@ -186,7 +201,7 @@ function P.spend(player, character, stack, amount, data, slot)
 		stack.durability = left
 		return
 	end
-	worn_out(player, character, stack, slot)
+	worn_out(player, character, stack, slot, left)
 end
 
 function P.armor_slot(character)
@@ -246,7 +261,7 @@ function P.evaluate(player, character, data, pollution, tolerance, level, second
 		else
 			local exhausted = stack.grid ~= nil and stack.durability < EXHAUSTED
 			protecting = not exhausted
-			local wear = protecting and M.wear(reaching, tolerance, share, level) or 0
+			local wear = protecting and M.wear(reaching, tolerance, share, level) / P.endurance_factor(stack.name) or 0
 			state.armor = {
 				name = stack.name, share = share, exhausted = exhausted, wear = wear,
 				resource = stack.durability, max = max, disposable = C.DISPOSABLE[stack.name] or false,
@@ -270,6 +285,14 @@ function P.evaluate(player, character, data, pollution, tolerance, level, second
 					armor.resource = now.durability
 					armor.exhausted = now.grid ~= nil and now.durability < EXHAUSTED
 					protecting = not armor.exhausted
+				end
+			end
+			-- The last protection running out: checked only near the end (inventory scan).
+			local armor = state.armor
+			if protecting and armor.max > 0 and stack.valid_for_read and armor.wear > 0 then
+				local lasts = armor.resource / armor.wear
+				if armor.resource / armor.max <= C.LAST_SHARE or lasts < C.LAST_SECONDS * 3 then
+					armor.successor = P.has_successor(player, character, stack)
 				end
 			end
 		end

@@ -46,6 +46,11 @@ C.DEFAULT_DURABILITY = 10000 -- for other armors without durability (any armor p
 C.DISPOSABLE = { [C.RESPIRATOR] = true } -- never refilled
 C.POISON_FILTERS = { [C.RESPIRATOR] = true, [C.GAS_MASK] = true } -- poison 90 %, paid with the resource
 C.POISON_SHARE = 0.9
+-- Every armor-slot item except the masks (respirator, gas mask) wears this many times slower.
+C.ARMOR_ENDURANCE = 3
+-- Warning about the last protection: resource share left or seconds until health damage.
+C.LAST_SHARE = 0.05
+C.LAST_SECONDS = 60
 
 -- Grid modules, best first. power: watts drawn while the air reaching the module is harmful.
 C.MODULES = {
@@ -62,9 +67,10 @@ C.MODEL = {
 	zone_radius = 10,
 	damage_from = 50, -- % of intoxication where damage starts (only while inhaling over tolerance)
 	damage_share = 0.08, -- share of max health per second at 100 %
-	-- Resource per second of the worn item = harmful pollution × (1 − toxin share) / wear_div.
-	-- At pollution 500 without research: respirator ≈ 6 min, light armor ≈ 9.5 min, gas mask ≈ 31 min,
-	-- heavy armor ≈ 34 min, modular ≈ 79 min, power ≈ 3 h, power MK2 ≈ 5.3 h.
+	-- Resource per second of the worn item = harmful pollution × (1 − toxin share) / wear_div
+	-- (÷ ARMOR_ENDURANCE for everything but the masks). At pollution 500 without research:
+	-- respirator ≈ 6 min, gas mask ≈ 31 min, light armor ≈ 29 min, heavy ≈ 1.7 h, modular ≈ 4 h,
+	-- power ≈ 9 h, power MK2 ≈ 16 h.
 	wear_div = 100,
 	tolerance_per_level = 0.10,
 	resource_per_level = 0.10,

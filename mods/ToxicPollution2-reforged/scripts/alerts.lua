@@ -1,9 +1,10 @@
--- One custom alert per player, shown only when the course of events changes sharply:
--- entering harmful air, the smog getting at least twice as harmful, the protection resource falling
--- below 25 % / 10 %, the protection worn out / exhausted / replaced, health damage starting.
--- The alert message carries the whole status (former panel): intoxication bar, air, layers, resource
--- bar, spare filters and forecast. It stays SHOW ticks (refreshed every update meanwhile); the damage
--- alert stays while the damage lasts. No alert on leaving the smog.
+-- One custom alert per player.
+-- Lasting while the condition holds: health damage; harmful air without protection ("put on a
+-- respirator!", no forecast).
+-- Short (SHOW ticks) on a sharp change: entering harmful air in protection, the smog twice as harmful,
+-- the LAST protection (no item left in the stack, no spare) at 5 % or less than a minute before health
+-- damage (once, with a short danger sound). A spent item replaced by the next one is not announced.
+-- The message carries the whole status: intoxication bar, air, layers, resource bar, spare filters.
 local C = require("shared.config")
 local M = require("scripts.model")
 
@@ -15,12 +16,14 @@ local WORSE_FACTOR = 2 -- harmful excess this many times the last alerted one = 
 local WORSE_MIN = 50 -- ... and at least this much higher
 local RESEND = 300 -- ticks: re-add an unchanged alert in case the game dropped it
 local BAR_CELLS = 20
-local PRIORITY = { smog = 1, filters = 2, danger = 3 }
-local SOUNDS = { smog = "utility/console_message", danger = "utility/alert_destroyed" } -- filters: protection plays it
+local PRIORITY = { smog = 1, last = 2, bare = 2, danger = 3 }
+local SOUNDS = { smog = "utility/console_message", last = "utility/alert_destroyed", bare = "utility/alert_destroyed",
+	danger = "utility/alert_destroyed" }
+local ICONS = { smog = "smog", last = "filters", bare = "filters", danger = "danger" }
 
 local SIGNALS = {}
-for key, name in pairs(C.ALERT) do
-	SIGNALS[key] = { type = "virtual", name = name }
+for kind, key in pairs(ICONS) do
+	SIGNALS[kind] = { type = "virtual", name = C.ALERT[key] }
 end
 
 local TIER_COLORS = { [0] = "140,230,140", [1] = "255,210,80", [2] = "255,150,50", [3] = "255,80,80" }
@@ -57,8 +60,8 @@ local function resource_color(share)
 	return TIER_COLORS[0]
 end
 
--- Status lines (also printed by /toxic).
-function A.describe(state, intoxication)
+-- Status lines (also printed by /toxic). `brief`: without the trend line.
+function A.describe(state, intoxication, brief)
 	local tier = M.tier(intoxication)
 	local lines = { "" }
 	lines[#lines + 1] = { "tpr-status.intoxication", A.bar(intoxication / 100, TIER_COLORS[tier]), int(intoxication),
@@ -106,6 +109,9 @@ function A.describe(state, intoxication)
 		lines[#lines + 1] = { "", "\n", { "tpr-status.filters", C.REFILL_ITEM, tostring(state.filters) } }
 	end
 
+	if brief then
+		return lines
+	end
 	if state.damage > 0 then
 		lines[#lines + 1] = { "", "\n", { "tpr-status.damage", one(state.damage) } }
 	elseif state.rate > 0 then
@@ -119,51 +125,59 @@ function A.describe(state, intoxication)
 	return lines
 end
 
--- Event of this update, or nil. Updates the memo in `data`.
-function A.detect(state, data, tick)
+-- Seconds until health damage if the worn protection ends now and the air stays the same.
+local function damage_eta(state, intoxication)
+	local armor = state.armor
+	local lasts = M.lasts(armor.resource, armor.wear or 0)
+	if not lasts then return nil end
+	local rate = M.rate(state.reaching, state.tolerance, false)
+	if rate <= 0 then return nil end
+	return lasts + math.max(0, C.MODEL.damage_from - intoxication) / rate
+end
+
+-- Lasting condition of this update, or nil.
+function A.lasting(state)
+	if state.damage > 0 then
+		return { kind = "danger", title = { "tpr-alert.danger", one(state.damage) } }
+	end
+	if not state.protected and state.reaching > state.tolerance then
+		return { kind = "bare", title = { "tpr-alert.unprotected" }, brief = true }
+	end
+	return nil
+end
+
+-- Short event of this update, or nil. Updates the memo in `data`.
+function A.detect(state, data, tick, intoxication)
 	local harmful = state.reaching - state.tolerance
 	local armor = state.armor
 	local event
 
-	if state.damage > 0 then
-		event = { kind = "danger", title = { "tpr-alert.danger", one(state.damage) } }
-	end
-
-	if armor and armor.replaced then
-		event = event or { kind = "filters", title = { "tpr-alert.replaced", data.armor_name or armor.name, armor.name } }
-	elseif armor and armor.lost then
-		event = event or { kind = "filters", title = { "tpr-alert.lost", data.armor_name or armor.name } }
-	elseif armor and armor.exhausted and data.was_protected then
-		event = event or { kind = "filters", title = { "tpr-alert.exhausted", armor.name } }
-	end
-
-	-- Resource marks: 1 below 25 %, 2 below 10 % (per item; reset by a refill or another item).
-	if armor and state.protected and not armor.infinite then
+	-- The last protection running out: once per item, again only after it recovered (refill, new item).
+	if armor and state.protected and not armor.infinite and armor.successor == false and harmful > 0 then
+		local eta = damage_eta(state, intoxication)
 		local share = resource_share(armor)
-		local mark = share < 0.1 and 2 or (share < 0.25 and 1 or 0)
-		if armor.name ~= data.armor_name then
-			data.mark = mark
-		elseif mark > (data.mark or 0) then
-			data.mark = mark
-			event = event or { kind = "filters", title = { "tpr-alert.low", armor.name, int(share * 100) } }
+		if share <= C.LAST_SHARE or (eta and eta < C.LAST_SECONDS) then
+			if data.warned ~= armor.name then
+				data.warned = armor.name
+				event = { kind = "last", title = { "tpr-alert.last", armor.name, A.duration(eta or 0) } }
+			end
 		else
-			data.mark = mark
+			data.warned = nil
 		end
+	elseif armor and armor.successor ~= false then
+		data.warned = nil
 	end
 
 	if harmful > 0 then
 		local ref = data.harm_ref
 		local sharp = not ref or (harmful >= ref * WORSE_FACTOR and harmful - ref >= WORSE_MIN)
 		if sharp and tick >= (data.smog_ready or 0) then
-			local title
-			if not ref then
-				title = state.protected and { "tpr-alert.smog-protected", int(state.pollution), armor.name }
-					or { "tpr-alert.smog", int(state.pollution) }
-			else
-				title = { "tpr-alert.smog-worse", int(state.pollution) }
+			if state.protected then
+				local title = ref and { "tpr-alert.smog-worse", int(state.pollution) }
+					or { "tpr-alert.smog-protected", int(state.pollution), armor.name }
+				event = event or { kind = "smog", title = title }
+				data.smog_ready = tick + SMOG_COOLDOWN
 			end
-			event = event or { kind = "smog", title = title }
-			data.smog_ready = tick + SMOG_COOLDOWN
 			data.harm_ref = harmful
 		elseif ref and harmful < ref then
 			data.harm_ref = harmful -- the reference follows the air down, so a new rise is noticed
@@ -171,9 +185,6 @@ function A.detect(state, data, tick)
 	else
 		data.harm_ref = nil
 	end
-
-	data.armor_name = armor and armor.name or nil
-	data.was_protected = state.protected
 	return event
 end
 
@@ -194,39 +205,49 @@ function A.clear(player, data)
 	if data.alert then
 		remove(player, player.character, data.alert)
 	end
-	data.alert, data.alert_until, data.alert_title, data.alert_key, data.alert_sent = nil, nil, nil, nil, nil
+	data.alert, data.alert_until, data.alert_title, data.alert_key, data.alert_sent, data.alert_brief =
+		nil, nil, nil, nil, nil, nil
 end
 
 -- Forget the trend memo (death, surface change): the next harmful air is a new event.
 function A.reset(player, data)
 	A.clear(player, data)
-	data.harm_ref, data.smog_ready, data.mark, data.armor_name, data.was_protected = nil, nil, nil, nil, nil
+	data.harm_ref, data.smog_ready, data.warned = nil, nil, nil
+end
+
+local function show(player, character, data, kind, item, tick)
+	if data.alert ~= kind then
+		play(player, kind)
+		if data.alert then
+			remove(player, character, data.alert)
+		end
+	end
+	data.alert, data.alert_title, data.alert_brief = kind, item.title, item.brief
+	data.alert_until = item.lasting and nil or tick + A.SHOW
 end
 
 function A.update(player, character, data, state, intoxication)
 	local tick = game.tick
-	local event = A.detect(state, data, tick)
+	local event = A.detect(state, data, tick, intoxication)
+	local lasting = A.lasting(state)
 	local kind = data.alert
-	if kind and data.alert_until and tick >= data.alert_until and not (kind == "danger" and state.damage > 0) then
+	-- A lasting alert ends with its condition; a short one after SHOW ticks.
+	if kind and ((not data.alert_until and not (lasting and lasting.kind == kind))
+		or (data.alert_until and tick >= data.alert_until)) then
 		A.clear(player, data)
 		kind = nil
 	end
-	if event and (not kind or PRIORITY[event.kind] >= PRIORITY[kind]) then
-		if kind ~= event.kind or event.kind ~= "danger" then
-			play(player, event.kind)
-		end
-		if kind and kind ~= event.kind then
-			remove(player, character, kind)
-		end
-		kind = event.kind
-		data.alert, data.alert_title, data.alert_until = kind, event.title, tick + A.SHOW
-	elseif kind == "danger" and state.damage > 0 then
-		data.alert_title = { "tpr-alert.danger", one(state.damage) }
-		data.alert_until = tick + A.SHOW
+	if lasting and (not event or PRIORITY[lasting.kind] >= PRIORITY[event.kind]) then
+		lasting.lasting = true
+		show(player, character, data, lasting.kind, lasting, tick)
+	elseif event and (not kind or PRIORITY[event.kind] >= PRIORITY[kind]) then
+		show(player, character, data, event.kind, event, tick)
 	end
+	kind = data.alert
 	if not kind then return end
 
-	local message = { "", "[font=default-bold]", data.alert_title, "[/font]\n", A.describe(state, intoxication) }
+	local message = { "", "[font=default-bold]", data.alert_title, "[/font]\n",
+		A.describe(state, intoxication, data.alert_brief) }
 	local key = serpent.line(message)
 	if key ~= data.alert_key or tick - (data.alert_sent or 0) >= RESEND then
 		remove(player, character, kind)

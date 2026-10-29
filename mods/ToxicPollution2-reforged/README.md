@@ -8,7 +8,7 @@ Polluted air poisons the player. Rewrite of Toxic Pollution (Likos, ArtMares, Vi
 - From **50 %** intoxication the smog damages health (up to 8 % of max health per second at 100 %) — only while the player breathes smog. Leaving it stops the damage at once.
 - **Anything worn in the armor slot protects** (toxicPollution2 behaviour): the smog harms its resource instead of the body; the `toxin` resistance slows the wear (× (1 − resistance)). Vehicle cabin and the breathing module in the armor grid (uses energy) clean the air before the armor. Without protection: intoxication 0–100 %, damage from 50 % only while breathing smog.
 - Filters wear only in harmful air, in proportion to what they filter. Items with an equipment grid are never destroyed; others are, and the best spare is put on. `CW-air-filter` (Carbon Capture) in the inventory refills worn protection and returns a used filter; the respirator is disposable.
-- No panel: one alert on sharp changes only; its message holds the whole status (text bars). Sounds, tips and tricks, command `/toxic`.
+- No panel: one alert — lasting while unprotected in smog or damaged, once for the last protection running out (5 % or < 1 min), briefly on sharp changes; its message holds the whole status (text bars). Sounds, tips and tricks, command `/toxic`.
 - Pollution sensor: the signal *Pollution sensor* in a constant combinator outputs the chunk pollution once per second.
 
 Formulas, numbers and the reference timings: `scripts/model.lua`, `shared/config.lua`, tests in `tests/` (`lua tests/<name>.lua`, Lua 5.1/5.2, mocks only).
