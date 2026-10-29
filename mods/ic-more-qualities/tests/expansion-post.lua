@@ -6,6 +6,7 @@ local mock = dofile(directory .. "mock.lua")
 
 defines = mock.defines()
 storage = {}
+game = {tick = 0}
 script = {register_on_object_destroyed = function() end}
 local drawn = 0
 rendering = {
@@ -157,10 +158,43 @@ assert(targets[2].stored == 1, "a new building is found after the retry delay")
 -- An active post without items looks again after EMPTY_LOOK ticks, a busy one every tick.
 assert(record.state == "active" and record.next_tick == 8 + post.TARGET_RETRY + post.EMPTY_LOOK)
 
+-- Items inside, but no output takes anything: a short pause instead of a look every tick.
+place(2, chest(0))
+slots = {stack("plate", "normal", 3)}
+post.step(record, 500)
+assert(slots[1].count == 3 and record.next_tick == 500 + post.BLOCKED_LOOK, "blocked: " .. record.next_tick)
+place(2, chest(100))
+slots = {}
+
+-- Looks come from the timer wheel (scripts/wheel.lua): nothing is walked before the due tick; start, pause
+-- and cancel bring the look forward to the next tick.
+local s = storage.ic_posts
+local wheel = require("scripts.wheel")
+local calls, original_step = 0, post.step
+post.step = function(r, tick) calls = calls + 1; r.next_tick = tick + 7 end
+s.buckets = {}
+wheel.add(s.buckets, record, 900)
+post.on_tick(899)
+assert(calls == 0)
+post.on_tick(900)
+assert(calls == 1 and record.due == 907 and s.buckets[907] and s.buckets[900] == nil)
+game.tick = 901
+post.cancel(record)
+assert(record.due == 902 and s.buckets[902][1] == record.id)
+post.on_tick(902)
+post.on_tick(907) -- the stale entry of the earlier schedule is skipped
+assert(calls == 2 and record.due == 909)
+post.step = original_step
+-- An older storage without buckets: every post is scheduled on the next tick.
+s.buckets = nil
+game.tick = 1000
+assert(post.state().buckets[1001][1] == record.id)
+
 -- Exported settings restore order, facing and circuit flag.
 local settings = post.export_settings(record)
 assert(settings.facing == 1 and settings.order.item == "gear" and settings.order.condition == "at-least")
 assert(len(settings.order) == 5)
 print("PASS: order validation, strict / at-least routing, counting with surplus to other, batch")
 print("completion and repeat, closed inventory when not active, blocked output waits alone, belt")
-print("far lane one item per tick, rotation of outputs, exported settings. Mocks only.")
+print("far lane one item per tick, blocked outputs back off, timer wheel, rotation of outputs, exported settings.")
+print("Mocks only.")

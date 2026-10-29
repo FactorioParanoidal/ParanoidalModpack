@@ -51,7 +51,8 @@ assert(drill.remove(target, 5, {random = rng()}) == "drained" and target.amount 
 assert(drill.remove(target, 5, {random = rng()}) == "not-drained" and target.amount == 60000)
 
 -- step() --------------------------------------------------------------------------------------------
--- A drill first seen at 99% of a 1 s cycle (0.5 speed: 120 ticks), decided in this look.
+-- A drill first seen at 99% of a 1 s cycle (0.5 speed: 120 ticks): the slowed rest fits into the cycle,
+-- so the cycle is committed in this look (extra drain) and the engine progress set to 1 - 0.01 / m.
 local function drill_entity(quality, amount, percent)
     return {
         valid = true, name = "drill-" .. (percent or 100), quality = {name = quality}, speed_bonus = 0,
@@ -60,8 +61,8 @@ local function drill_entity(quality, amount, percent)
         mining_target = ore(amount),
     }
 end
-local function context(random, loss)
-    return {random = random or rng(), initial_loss_percent = loss or 0}
+local function context(random)
+    return {random = random or rng()}
 end
 
 for tier = 1, 5 do
@@ -69,17 +70,17 @@ for tier = 1, 5 do
         local entity = drill_entity("ic-defect-" .. tier, 1000)
         local record = {entity = entity}
         drill.step(record, level, context())
-        assert(record.cycle.decided and record.drain == tier + 1, "decided")
+        assert(record.cycle.committed and record.drain == tier + 1, "committed")
         assert(entity.mining_target.amount == 1000 - tier,
             "defect -" .. tier .. " level " .. level .. ": extra " .. (1000 - entity.mining_target.amount))
-        assert(entity.mining_progress == 0.99, "a successful cycle keeps its progress")
+        mock.near(entity.mining_progress, 1 - 0.01 / model.quality_multiplier("ic-defect-" .. tier))
     end
 end
 for _, quality in ipairs({"normal", "legendary"}) do
     local entity = drill_entity(quality, 1000)
     local record = {entity = entity}
-    drill.step(record, 0, context())
-    assert(record.cycle.decided and entity.mining_target.amount == 1000, quality .. ": no extra drain")
+    assert(drill.step(record, 0, context()) == false, quality .. ": not tracked")
+    assert(record.cycle == nil and entity.mining_target.amount == 1000, quality .. ": no extra drain")
 end
 -- Drill with 50% drain: defect -5 removes 2.5 more units on average (2 + one unit with chance 0.5).
 local half = drill_entity("ic-defect-5", 1000, 50)
@@ -88,33 +89,26 @@ assert(half.mining_target.amount == 997, "50%: 2 + 1 by chance, got " .. half.mi
 half = drill_entity("ic-defect-5", 1000, 50)
 drill.step({entity = half}, 10, context(rng(0.51)))
 assert(half.mining_target.amount == 998, "50%: 2, got " .. half.mining_target.amount)
--- Failed cycle (loss 100% at level 0): the whole defect drain, progress reset.
-local failed = drill_entity("ic-defect-3", 1000)
-local failed_record = {entity = failed}
-drill.step(failed_record, 0, context(rng(0), 100))
-assert(failed.mining_target.amount == 996 and failed.mining_progress == 0 and failed_record.failures == 1,
-    "failed defect -3 cycle drains x4, got " .. failed.mining_target.amount)
-local failed_normal = drill_entity("normal", 1000)
-drill.step({entity = failed_normal}, 0, context(rng(0), 100))
-assert(failed_normal.mining_target.amount == 999, "failed standard cycle drains one unit")
 -- The tail of a finite resource stays for the engine's own last cycle.
 local tail = drill_entity("ic-defect-5", 3)
 drill.step({entity = tail}, 10, context())
 assert(tail.mining_target.amount == 1 and tail.mining_target.valid, "tail kept")
--- A cycle completed between two looks still pays its extra drain.
+-- A cycle completed between two looks while the engine progress was positive still pays its extra drain.
 local missed = drill_entity("ic-defect-2", 1000)
-local missed_record = {entity = missed, drain = 3, multiplier = 1, -- multiplier 1: no slowdown/pollution mocks
-    cycle = {source = missed.mining_target, progress = 0.5, bonus = 0, bonus_start = 0}}
+local missed_record = {entity = missed,
+    cycle = {source = missed.mining_target, time = 1, engine = 0.5, virtual = 0.8, bonus = 0}}
 missed.mining_progress = 0.1
 local _, warning = drill.step(missed_record, 0, context())
 assert(warning == "missed-cycle" and missed.mining_target.amount == 998, "missed cycle: extra x2 drained")
-assert(not missed_record.cycle.decided, "new cycle is not decided yet")
--- A record of an older version (no drain field) gets it from the quality.
+assert(not missed_record.cycle.committed, "new cycle is not committed yet")
+mock.near(missed_record.cycle.virtual, 0.1 * model.quality_multiplier("ic-defect-2"))
+assert(missed.mining_progress == 0, "new cycle: engine progress rewound to 0")
+-- A record without the drain field gets it from the quality.
 local old = {entity = drill_entity("ic-defect-4", 1000), multiplier = model.quality_multiplier("ic-defect-4")}
 drill.step(old, 10, context())
 assert(old.drain == 5 and old.entity.mining_target.amount == 996, "old record")
 
 print("PASS: defect drain x2...x6 (scale -1...-5), independent of research 0/5/10; standard/positive: none;")
-print("drain rate percent with a chance for the fraction; failed cycle drains xN; last unit left to the engine;")
+print("drain rate percent with a chance for the fraction; last unit left to the engine;")
 print("missed cycle pays its extra drain; infinite resources use the depletion amount and stop at the minimum.")
 print("Mocks only, not Factorio.")

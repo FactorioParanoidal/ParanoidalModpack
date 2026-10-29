@@ -70,7 +70,7 @@ local function make_player(index, level, inventory, queue_size)
     for i = 1, level do technologies["ic-defect-control-" .. i] = {researched = true} end
     local spilled = {}
     return {index = index, valid = true, character = {}, crafting_queue_size = queue_size or 1,
-        force = {technologies = technologies}, position = {x = 0, y = 0}, spilled = spilled,
+        force = {index = 1, valid = true, technologies = technologies}, position = {x = 0, y = 0}, spilled = spilled,
         surface = {spill_item_stack = function(params) spilled[#spilled + 1] = params.stack end},
         get_main_inventory = function() return inventory end}
 end
@@ -181,9 +181,7 @@ defines = mock.defines({on_force_created = 1, on_force_reset = 2, on_player_craf
     on_player_cancelled_crafting = 5, on_pre_player_crafted_item = 6})
 script = {on_init = function() end, on_configuration_changed = function() end,
     on_event = function(id, fn) callbacks[id] = fn end}
-settings = {startup = {["ic-more-qualities-defects-preview"] = {value = true}},
-    global = {["ic-more-qualities-loss-exclude-finished"] = {value = true},
-        ["ic-more-qualities-initial-loss-percent"] = {value = 0}}}
+settings = {startup = {["ic-more-qualities-defects-preview"] = {value = true}}}
 prototypes = {entity = {}, recipe = {
         ["burner-mining-drill"] = {ingredients = {{type = "item", name = "stone-furnace", amount = 1}}}},
     mod_data = {["ic-defects-classification"] = {data = {finished = finished, no_defect = no_defect}}}}
@@ -191,7 +189,7 @@ local wired_main = make_inventory(4, {})
 local wired = make_player(1, 0, wired_main, 2)
 wired.crafting_queue = {{recipe = "stone-furnace", count = 1, prerequisite = true},
     {recipe = "burner-mining-drill", count = 1}}
-game = {get_player = function() return wired end, tick = 0}
+game = {get_player = function() return wired end, tick = 0, forces = {[1] = wired.force}, connected_players = {}}
 dofile(root .. "control.lua")
 local furnace = make_stack({name = "stone-furnace", count = 1})
 callbacks[3]({player_index = 1, item_stack = furnace, recipe = {name = "stone-furnace"}})

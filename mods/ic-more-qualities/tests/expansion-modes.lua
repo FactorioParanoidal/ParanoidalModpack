@@ -1,5 +1,5 @@
 -- Production modes through the real crafter handler, simulated tick by tick on mocks:
--- slowdown, loss factor, defect level shift, "no defects" of precise mode, boosted quality roll,
+-- slowdown, defect level shift, "no defects" of precise mode, boosted quality roll,
 -- extra power demand. The machine model is a mock, not Factorio.
 local directory = assert(arg[0]:match("^(.*[/\\])"))
 package.path = directory .. "../?.lua;" .. package.path
@@ -14,21 +14,19 @@ local crafter = require("scripts.defects.crafter")
 
 local function make_machine(full_ticks)
     local machine = {outputs = {}, crafting = true}
-    local removed = 0
     local entity = {
-        valid = true, crafting_speed = 1, crafting_progress = 0, bonus_progress = 0, productivity_bonus = 0,
-        products_finished = 0, result_quality = {name = "normal"}, force = {index = 1, technologies = {}},
-        fluidbox = {},
+        valid = true, unit_number = 1, name = "assembler", crafting_speed = 1, crafting_progress = 0,
+        bonus_progress = 0, productivity_bonus = 0, products_finished = 0, result_quality = {name = "normal"},
+        force = {index = 1, technologies = {}}, fluidbox = {},
     }
-    machine.recipe = {name = "widget", energy = full_ticks / 60, products = {{type = "item", name = "widget"}},
-        ingredients = {{type = "item", name = "plate", amount = 1}}}
+    machine.recipe = {name = "widget"}
+    -- Compiled recipe data (scripts/defects/compiled.lua) of a finished, defect-capable product.
+    machine.info = {energy = full_ticks / 60, any_item = true, all_finished = true, roll = true, exempt = false,
+        recycling = false, watched = true}
     entity.get_recipe = function()
         if machine.crafting then return machine.recipe, machine.recipe_quality or {name = "normal"} end
     end
     entity.is_crafting = function() return machine.crafting end
-    entity.get_inventory = function()
-        return {remove = function(spec) removed = removed + spec.count; return spec.count end}
-    end
     machine.rate = 1 -- native speed multiplier (beacons, modules)
     function machine.update()
         if not machine.crafting or machine.stopped then return end
@@ -42,25 +40,28 @@ local function make_machine(full_ticks)
         end
     end
     machine.entity = entity
-    machine.removed = function() return removed end
     return machine
 end
 
-local function context(mode, random, counters)
+-- Scheduler context of scripts/defects/crafter.lua. mode: definition of the machine's selected mode.
+local function context(machine, mode, random, counters)
     return {
-        random = random, finished = {widget = true}, exclude_finished = false, initial_loss_percent = 33,
-        min_energy = function() return 1 end,
+        machine = function() return {relevant = true, recycler = machine.recycler, min_energy = 1, watched_min = 1} end,
+        recipe = function() return machine.info end,
+        random = random, quality_everywhere = false, no_quality = {},
         stat = function(_, key) counters[key] = (counters[key] or 0) + 1 end,
-        mode_definition = function() return mode end,
+        modes = mode and {[machine.entity.unit_number] = {mode = mode.name}} or nil,
         mode_power = function() return 1 end,
+        release_power = function() end,
     }
 end
+local function record_of(entity) return {id = entity.unit_number, entity = entity, name = entity.name, force_index = 1} end
 
 local function craft(mode, level, random, full_ticks)
     local machine = make_machine(full_ticks or 100)
-    local record = {entity = machine.entity}
+    local record = record_of(machine.entity)
     local counters = {}
-    local ctx = context(mode, random, counters)
+    local ctx = context(machine, mode, random, counters)
     local tick, next_look = 0, 1
     while machine.crafting and tick < 100000 do
         tick = tick + 1
@@ -73,37 +74,34 @@ local function craft(mode, level, random, full_ticks)
     return machine, tick, counters
 end
 
--- Normal: about 100 ticks, defect draw at level 0 with r=0 -> -5 (the existing behaviour).
-local machine, ticks, counters = craft(nil, 0, mock.sequence({.9, 0}))
+-- Normal: about 100 ticks, defect draw at level 0 with r=0 -> -5.
+local machine, ticks, counters = craft(nil, 0, mock.sequence({0}))
 assert(machine.outputs[1] == "ic-defect-5" and ticks <= 102, ticks)
-assert(counters["machine.ops"] == 1 and counters["grade.-5"] == 1)
+assert(counters["grade.-5"] == 1)
 
--- Careful: 5x slower; loss chance 33% / 10 = 3.3%; defects as with +4 levels (worst -3 at level 0).
-machine, ticks = craft(rules.modes.careful, 0, mock.sequence({.04, 0}))
+-- Careful: 5x slower; defects as with +4 levels (worst -3 at level 0).
+machine, ticks = craft(rules.modes.careful, 0, mock.sequence({0}))
 assert(machine.outputs[1] == "ic-defect-3", tostring(machine.outputs[1]))
 assert(ticks > 480 and ticks < 520, ticks)
-machine, ticks, counters = craft(rules.modes.careful, 0, mock.sequence({.03, .9, 0}))
-assert(counters["machine.loss"] == 1 and machine.removed() == 1, "3% < 3.3%: one failed attempt, one extra ingredient set")
-assert(#machine.outputs == 1)
 
--- Precise: 20x slower, never a loss (RNG 0 would lose), never a defect even from a defect roll.
+-- Precise: 20x slower, never a defect even from a defect roll.
 machine, ticks, counters = craft(rules.modes.precise, 0, mock.sequence({0}))
-assert(machine.outputs[1] == "normal" and not counters["machine.loss"])
+assert(machine.outputs[1] == "normal")
 assert(ticks > 1950 and ticks < 2050, ticks)
 assert(counters["grade.0"] == 1)
--- Research 10 + careful: standard, no loss roll needed.
+-- Research 10 + careful: standard.
 machine = craft(rules.modes.careful, 10, mock.sequence({0}))
 assert(machine.outputs[1] == "normal")
 
 -- Paranoidal decision 2026-10-14: never better than the ingredients. The recipe quality is the quality
 -- of all item ingredients (the engine result starts there); a worse roll still wins.
-local function craft_from(quality_name, mode, levels, random, no_defect)
+local function craft_from(quality_name, mode, levels, random, exempt)
     local m = make_machine(100)
     m.recipe_quality = {name = quality_name}
     m.entity.result_quality = {name = quality_name}
-    local record, counters = {entity = m.entity}, {}
-    local ctx = context(mode, random, counters)
-    ctx.no_defect = no_defect
+    if exempt then m.info.exempt, m.info.roll = true, false end
+    local record, counters = record_of(m.entity), {}
+    local ctx = context(m, mode, random, counters)
     local tick, next_look = 0, 1
     while m.crafting and tick < 100000 do
         tick = tick + 1
@@ -117,28 +115,28 @@ local function craft_from(quality_name, mode, levels, random, no_defect)
 end
 assert(craft_from("ic-defect-3", nil, 10, mock.sequence({0})) == "ic-defect-3", "research 10 does not repair")
 assert(craft_from("ic-defect-3", rules.modes.precise, 0, mock.sequence({0})) == "ic-defect-3", "maximum mode does not repair")
-assert(craft_from("ic-defect-3", nil, 0, mock.sequence({.9, 0})) == "ic-defect-5", "a worse roll wins")
-assert(craft_from("ic-defect-3", nil, 9, mock.sequence({.9, .99})) == "ic-defect-3", "a standard roll is capped")
-assert(craft_from("ic-defect-3", nil, 0, mock.sequence({.9}), {widget = true}) == "normal", "exempt products")
+assert(craft_from("ic-defect-3", nil, 0, mock.sequence({0})) == "ic-defect-5", "a worse roll wins")
+assert(craft_from("ic-defect-3", nil, 9, mock.sequence({.99})) == "ic-defect-3", "a standard roll is capped")
+assert(craft_from("ic-defect-3", nil, 0, mock.sequence({.9}), true) == "normal", "exempt products")
 assert(craft_from("normal", nil, 10, mock.sequence({0})) == "normal")
--- A defect rolled below the ingredients is lifted to their grade (not to standard) by research 10
--- finished during the craft. Careful: +4 levels -> worst -3 at level 0, below -2 ingredients.
+-- The result is decided at the first look of a craft (the engine keeps it to the end): research 10 finished
+-- during the craft does not change a grade rolled before (careful at level 0 rolls -3, below -2 ingredients).
 local output = craft_from("ic-defect-2", rules.modes.careful, function(record)
-    -- The engine reads back a written QualityID as a prototype with .name; the mock keeps the string.
-    local written = record.entity.result_quality
-    if type(written) == "string" then record.entity.result_quality = {name = written} end
-    return record.craft and record.craft.decided and 10 or 0
-end, mock.sequence({.9, 0}))
-assert(output == "ic-defect-2", tostring(output))
+    return record.craft and 10 or 0
+end, mock.sequence({0}))
+assert(output == "ic-defect-3", tostring(output))
 
 -- Recycling keeps the native result quality (input quality or a module upgrade); no defect draw,
--- only defect results become standard. RNG .9 survives the loss roll, then 0 would draw -5.
+-- only defect results become standard. RNG 0 would draw -5.
 for _, case in ipairs({{"rare", "rare"}, {"normal", "normal"}, {"ic-defect-3", "normal"}}) do
     local recycler = make_machine(100)
-    recycler.recipe.category = "recycling"
+    recycler.recycler = true
+    recycler.info = {energy = 100 / 60, any_item = true, all_finished = false, roll = false, exempt = false,
+        recycling = true, watched = true}
+    recycler.recipe_quality = {name = case[1]}
     recycler.entity.result_quality = {name = case[1]}
-    local record, counters = {entity = recycler.entity}, {}
-    local ctx = context(nil, mock.sequence({.9, 0}), counters)
+    local record, counters = record_of(recycler.entity), {}
+    local ctx = context(recycler, nil, mock.sequence({0}), counters)
     local tick, next_look = 0, 1
     while recycler.crafting and tick < 1000 do
         tick = tick + 1
@@ -219,17 +217,21 @@ sw.quality, sw.consumption_bonus = {name = "normal"}, 0
 sw.surface = {index = 1, create_entity = function() return sw_interface end}
 sw.prototype = moded.prototype
 assert(modes.set(sw, "precise"))
-local sw_record, sw_counters = {entity = sw}, {}
-local sw_ctx = context(nil, mock.sequence({.9}), sw_counters)
+local sw_record, sw_counters = record_of(sw), {}
+local sw_ctx = context(switched, nil, mock.sequence({.9}), sw_counters)
 local sw_tick, sw_look = 0, 1
-sw_ctx.mode_definition = modes.definition
-sw_ctx.mode_power = function(entity, definition, working)
-    return modes.draw_power(entity, definition, working, sw_tick)
+-- As control.lua: the mode records of storage, the real extra power and its release.
+local function live(ctx, tick_of)
+    ctx.modes = storage.ic_modes and next(storage.ic_modes.records) and storage.ic_modes.records or nil
+    ctx.mode_power = function(entity, definition, working) return modes.draw_power(entity, definition, working, tick_of()) end
+    ctx.release_power = function(entity) modes.draw_power(entity, nil, false, tick_of()) end
+    return ctx
 end
 local function run_switched(limit, stop)
     while switched.crafting and sw_tick < limit do
         sw_tick = sw_tick + 1
         if sw_tick >= sw_look then
+            live(sw_ctx, function() return sw_tick end)
             sw_look = sw_tick + math.max(1, math.floor(crafter.step(sw_record, 0, sw_ctx) or 30))
         end
         switched.update()
@@ -237,8 +239,9 @@ local function run_switched(limit, stop)
     end
 end
 run_switched(1000) -- half of the 20x craft
--- Raw mock progress also holds the not yet scaled gain since the last look.
-assert(switched.crafting and sw.crafting_progress > 0.4 and sw.crafting_progress < 0.8, sw.crafting_progress)
+-- The slowed progress (the raw mock progress also holds the full-speed gain since the last look).
+assert(switched.crafting and sw_record.craft.progress > 0.4 and sw_record.craft.progress < 0.6, sw_record.craft.progress)
+assert(sw.crafting_progress < 1)
 near(sw_interface.power_usage, 19000)
 assert(modes.set(sw, "normal"))
 assert(modes.mode_name(sw) == "normal" and modes.definition(sw) == nil, "the GUI shows normal at once")
@@ -252,7 +255,7 @@ assert(paid_after_switch > 950, "extra power is drawn until the moded craft ends
 assert(switched.outputs[1] == "normal" and sw_counters["mode.precise"] == 1)
 -- Idle look after the craft: the record and its consumer are gone; the next craft is normal.
 sw_tick = sw_tick + 1
-crafter.step(sw_record, 0, sw_ctx)
+crafter.step(sw_record, 0, live(sw_ctx, function() return sw_tick end))
 assert(storage.ic_modes.records[21] == nil and not sw_interface.valid)
 switched.crafting = true
 local second_start = sw_tick
@@ -265,42 +268,39 @@ switched.crafting, sw.crafting_progress = true, 0
 sw_interface = power_interface()
 assert(modes.set(sw, "careful"))
 sw_record.craft = nil
-crafter.step(sw_record, 0, sw_ctx)
+crafter.step(sw_record, 0, live(sw_ctx, function() return sw_tick end))
 assert(modes.set(sw, "normal") and storage.ic_modes.records[21])
 assert(modes.set(sw, "precise") and modes.mode_name(sw) == "precise")
 modes.forget(21)
 
--- Mode boost at the decision, once per craft; a craft completed unobserved after a sharp speed-up
--- gets none (it used to be rolled at the start of the craft).
+-- Mode boost at the decision, once per craft, at its first look (the engine keeps the written result to the
+-- end, test-runs/ic-h1b-20261029); a sharp speed-up during the craft changes nothing.
 local function boosted_craft(speed_up_at)
     local m = make_machine(100)
-    local boosts, decided_at_boost = 0, true
-    local record = {entity = m.entity}
-    local ctx = context(rules.modes.precise, mock.sequence({.9}), {})
+    local boosts, progress_at_boost = 0, nil
+    local record = record_of(m.entity)
+    local ctx = context(m, rules.modes.precise, mock.sequence({.9}), {})
     ctx.quality_everywhere = true
     ctx.mode_boost = function()
         boosts = boosts + 1
-        decided_at_boost = record.craft.decided == true and m.entity.crafting_progress > 0.9
+        progress_at_boost = m.entity.crafting_progress
     end
-    local tick, next_look, warning = 0, 1, nil
+    local tick, next_look = 0, 1
     while m.crafting and tick < 100000 do
         tick = tick + 1
         if speed_up_at and tick == speed_up_at then m.rate = 10 end
         if tick >= next_look then
-            local delay, code = crafter.step(record, 0, ctx)
-            warning = warning or code
+            local delay = crafter.step(record, 0, ctx)
             next_look = tick + math.max(1, math.floor(delay or 30))
         end
         m.update()
     end
-    m.crafting = true -- the next craft starts: the missed one is reported
-    local _, code = crafter.step(record, 0, ctx)
-    return boosts, decided_at_boost, warning or code
+    return boosts, progress_at_boost
 end
-local boosts, at_decision = boosted_craft(nil)
-assert(boosts == 1 and at_decision, "one boost, shortly before completion")
-local missed_boosts, _, missed = boosted_craft(2)
-assert(missed_boosts == 0 and missed == "missed-craft", "no boost for a craft completed between looks")
+local boosts, at = boosted_craft(nil)
+assert(boosts == 1 and at < 0.05, "one boost, at the first look")
+boosts = boosted_craft(2)
+assert(boosts == 1, "a speed-up does not cost the boost")
 
 -- A stopped moded machine (circuit) demands no extra power; after it resumes the progress made
 -- before the next look is not counted, then the extra power is demanded again.
@@ -312,17 +312,14 @@ ht.quality, ht.consumption_bonus = {name = "normal"}, 0
 ht.surface = {index = 1, create_entity = function() return ht_interface end}
 ht.prototype = moded.prototype
 assert(modes.set(ht, "precise"))
-local ht_record = {entity = ht}
-local ht_ctx = context(nil, mock.sequence({.9}), {})
+local ht_record = record_of(ht)
+local ht_ctx = context(halted, nil, mock.sequence({.9}), {})
 local ht_tick, ht_look = 0, 1
-ht_ctx.mode_definition = modes.definition
-ht_ctx.mode_power = function(entity, definition, working)
-    return modes.draw_power(entity, definition, working, ht_tick)
-end
 local function run_halted(limit)
     while halted.crafting and ht_tick < limit do
         ht_tick = ht_tick + 1
         if ht_tick >= ht_look then
+            live(ht_ctx, function() return ht_tick end)
             ht_look = ht_tick + math.max(1, math.floor(crafter.step(ht_record, 0, ht_ctx) or 30))
         end
         halted.update()
@@ -417,7 +414,7 @@ assert(storage.ic_modes.records[52] == nil and not kept.valid, "saved mode and e
 assert(storage.ic_defects.records[52].craft.mode == nil, "running craft continues without the mode")
 assert(modes.definition(old) == nil)
 storage.ic_defects = nil
-print("PASS: careful x5 / precise x20 time through the real crafter, loss /10 and none, defects")
+print("PASS: careful x5 / precise x20 time through the real crafter, defects")
 print("+4 levels and none, boosted module roll equals n independent rolls, extra power +1x/+4x;")
 print("normal during a moded craft keeps its time and extra power until it ends, then drops the record;")
 print("burner extra energy from burning fuel and whole fuel items with change, effectivity, low fuel;")

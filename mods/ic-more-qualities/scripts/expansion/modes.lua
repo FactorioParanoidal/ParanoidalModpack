@@ -1,6 +1,6 @@
 -- Production modes of assembling machines and furnaces: normal / careful / precise.
 -- The defect handler (scripts/defects/crafter.lua) applies the mode of each craft: slower
--- progress, fewer losses, better defect distribution and a stronger quality-module roll.
+-- progress, better defect distribution and a stronger quality-module roll.
 -- This module stores the selected mode, draws the alt-mode indicator, draws the extra power and
 -- performs the boosted quality roll. A selected mode applies from the next operation on; the running
 -- operation keeps the mode it started with and keeps paying its extra power, also after a switch to
@@ -135,6 +135,7 @@ function M.rescan()
     local s = storage.ic_modes
     if not s then return end
     for id, record in pairs(s.records) do
+        record.max_power, record.electric = nil, nil -- prototypes may have changed
         if not record.entity.valid then
             M.forget(id)
         elseif not M.eligible(record.entity) then
@@ -205,14 +206,21 @@ function M.draw_power(entity, definition, working, tick)
     local record = id and s.records[id]
     if not record then return 1 end
     local extra = 0
+    local prototype
+    -- Prototype data of the machine (its quality never changes), kept on the record; reset by rescan.
+    local max_power = record.max_power
+    if not max_power then
+        prototype = entity.prototype
+        max_power = prototype.get_max_energy_usage(entity.quality)
+        record.max_power = max_power
+        record.electric = prototype.electric_energy_source_prototype ~= nil
+    end
     if working and definition then
-        local base = entity.prototype.get_max_energy_usage(entity.quality) * math.max(0.2, 1 + entity.consumption_bonus)
-        extra = base * rules.extra_power(definition)
+        extra = max_power * math.max(0.2, 1 + entity.consumption_bonus) * rules.extra_power(definition)
     end
     local previous = record.demand -- nil: record from an older version
     local supply = 1
-    local prototype = entity.prototype
-    if prototype.electric_energy_source_prototype then
+    if record.electric then
         supply = power.satisfaction(record.interface)
         if extra > 0 and not (record.interface and record.interface.valid) then
             local name = power_name(entity)
@@ -224,7 +232,7 @@ function M.draw_power(entity, definition, working, tick)
         local elapsed = tick - (record.last_tick or tick)
         local demand = previous or 0
         if burner and demand > 0 and elapsed > 0 then
-            local burner_prototype = prototype.burner_prototype
+            local burner_prototype = (prototype or entity.prototype).burner_prototype
             local effectivity = burner_prototype and burner_prototype.effectivity or 1
             if effectivity <= 0 then effectivity = 1 end
             supply = burn(record, burner, demand * elapsed / effectivity)

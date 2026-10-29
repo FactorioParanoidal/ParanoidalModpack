@@ -110,6 +110,38 @@ assert(handle(positive_gear,0)=='changed' and positive_gear.quality.name=='norma
 -- All temporary inventories are released; no count is removed from player inventory.
 assert(destroyed==created)
 assert(adapter.handle({item_stack=make_stack(nil)},player(0),inventory,math.random)=='ignored')
+-- Handcraft queue (moved from the removed production-loss module 2026-10-29): only auto-crafted
+-- prerequisites are protected, not a manual batch followed by a consumer (exploit: 50 inserters + 1 fast
+-- inserter queued after them skipped all defects).
+local recipes = {
+    ["fast-inserter"] = {ingredients = {{type = "item", name = "inserter", amount = 1}}},
+    ["assembler-2"] = {ingredients = {{type = "item", name = "assembler-1", amount = 1},
+        {type = "item", name = "gear", amount = 5}}},
+    inserter = {ingredients = {{type = "item", name = "gear", amount = 1}}},
+    gear = {ingredients = {{type = "item", name = "plate", amount = 2}}},
+}
+local function protected(queue, recipe, item)
+    return adapter.queued_prerequisite(queue, recipe, item or recipe, recipes)
+end
+assert(not protected({{recipe = "inserter", count = 50}, {recipe = "fast-inserter", count = 1}}, "inserter"),
+    "a manual batch is not protected by a consumer queued after it")
+assert(not protected({{recipe = "inserter", count = 50}, {recipe = "inserter", count = 1, prerequisite = true},
+    {recipe = "fast-inserter", count = 1}}, "inserter"), "the manual entry comes first")
+assert(protected({{recipe = "inserter", count = 1, prerequisite = true}, {recipe = "fast-inserter", count = 1},
+    {recipe = "inserter", count = 5}}, "inserter"), "auto prerequisite")
+assert(protected({{recipe = "fast-inserter", count = 1}, {recipe = "inserter", count = 5}}, "inserter"),
+    "own entry already removed: the waiting parent protects its last prerequisite")
+assert(protected({{recipe = "gear", count = 4, prerequisite = true}, {recipe = "assembler-2", count = 1}},
+    "assembler-1"), "another prerequisite first, then the parent that uses the item")
+assert(not protected({{recipe = "inserter", count = 5}}, "inserter") and not protected({}, "inserter")
+    and not protected(nil, "inserter"))
+-- The level passed by the caller is used instead of counting the force's research again.
+local passed = make_stack(fresh({name = 'assembling-machine-1'}))
+local no_research = {index = 1, valid = true, force = {technologies = setmetatable({}, {__index = function()
+    error('research counted although the level was passed') end})}}
+assert(adapter.handle({item_stack = passed}, no_research, inventory, function() return 0 end, catalog, true, {}, 10)
+    == 'unchanged' and passed.quality.name == 'normal')
+
 print('PASS: real handcraft adapter with mocks: defect at level 0, standard at 10, force research,')
 print('count/health/spoilage/ammo/durability preservation, protected-data skip, atomic failure paths.')
-print('NOT tested: Factorio load, handcraft queues, machine production or mining.')
+print('handcraft queue prerequisites. NOT tested: Factorio load, real handcraft queues, machine production.')

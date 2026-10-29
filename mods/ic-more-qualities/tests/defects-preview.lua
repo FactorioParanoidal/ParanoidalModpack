@@ -248,9 +248,9 @@ local scanned = 0
 game = {tick = 0, forces = {player = force}, surfaces = {{find_entities_filtered = function()
     scanned = scanned + 1; return {} end}}}
 storage = {ic_defect_machines = {entries = {}}}
-prototypes = {mod_data = {}, recipe = {}}
-settings = {startup = {["ic-more-qualities-defects-preview"] = {value = false}},
-    global = {["ic-more-qualities-loss-exclude-finished"] = {value = false}}}
+_G.prototypes = {mod_data = {}, recipe = {}, get_entity_filtered = function() return {} end,
+    get_recipe_filtered = function() return {} end}
+settings = {startup = {["ic-more-qualities-defects-preview"] = {value = false}}}
 dofile(root .. "control.lua")
 for _, name in ipairs({"on_player_crafted_item", "on_player_mined_entity", "on_robot_mined_entity",
     "on_built_entity", "on_entity_cloned", "on_chunk_generated", "on_tick"}) do
@@ -268,8 +268,9 @@ for level = 1, 10 do
     local technology = force.technologies["ic-defect-control-" .. level]
     assert(technology.enabled and technology.researched == (level == 1))
 end
--- Each configuration scans every surface twice: machines (defects, workshops) and control posts.
-assert(scanned == 4 and storage.ic_defects and storage.ic_defect_machines == nil)
+-- Each configuration scans every surface three times: workshops, control posts and drills (no crafting
+-- machine prototype can need handling in this mock, so they are not searched).
+assert(scanned == 6 and storage.ic_defects and storage.ic_defect_machines == nil, "scanned " .. scanned)
 callbacks[events.on_tick]({tick = 1})
 
 local modules = {module = {["quality-module"] = {hidden = true, effect = {quality = .01}},

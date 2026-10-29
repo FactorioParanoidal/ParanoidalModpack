@@ -230,7 +230,7 @@ local function mode_power(raw)
 end
 
 -- Machines without production modes (no mode panel, no saved mode). A mode changes only item
--- results (defects, quality-module boost) and the loss chance, so it is withheld from machines that can
+-- results (defects, quality-module boost), so it is withheld from machines that can
 -- never produce an item: no recipe at all (copper lamp of LargerLamps: fixed recipe without results),
 -- fluid-only recipes, voiding (Angels flare stack/clarifier: void item with probability 0). Plus, by name
 -- (user decisions 2026-10-15): construction sites driven by another mod's script (Rocket Silo

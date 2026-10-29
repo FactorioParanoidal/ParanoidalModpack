@@ -10,6 +10,7 @@ local rules = require("scripts.expansion.rules")
 local model = require("scripts.defects.model")
 local emitter = require("scripts.expansion.emitter")
 local stats = require("scripts.stats")
+local wheel = require("scripts.wheel")
 
 local M = {}
 local S = names.signals
@@ -17,6 +18,8 @@ M.routes = {"good", "refine", "other"}
 M.TARGET_TTL = 300  -- a found output target is trusted this long (a building moved by a script)
 M.TARGET_RETRY = 30 -- no target in front of an output: search again after this many ticks
 M.EMPTY_LOOK = 5    -- an active but empty post looks for new items this often
+M.BLOCKED_LOOK = 4  -- items inside but no output took anything: look again after this many ticks
+M.IDLE_LOOK = 15    -- an idle or paused post
 
 local belt_types = {
     ["transport-belt"] = true, ["underground-belt"] = true, splitter = true,
@@ -28,13 +31,25 @@ M.target_types = {
     "assembling-machine", "furnace", "lab", "car", "spider-vehicle", "roboport", "ammo-turret",
 }
 
+-- buckets: timer wheel of the looks (scripts/wheel.lua); record.next_tick is the tick of the next look.
 function M.state()
     local s = storage.ic_posts
     if not s then
-        s = {records = {}}
+        s = {records = {}, buckets = {}}
         storage.ic_posts = s
+    elseif not s.buckets then
+        -- Older layout (every record walked every tick): every post is looked at on the next tick.
+        s.buckets = {}
+        for _, record in pairs(s.records) do wheel.add(s.buckets, record, game.tick + 1) end
     end
     return s
+end
+
+-- Brings the next look of a post forward to the next tick (order or settings changed).
+function M.wake(record)
+    record.next_tick = game.tick + 1
+    local s = M.state()
+    if s.records[record.id] == record then wheel.advance(s.buckets, record, record.next_tick) end
 end
 
 function M.new_order()
@@ -144,6 +159,7 @@ function M.track(entity, settings, facing)
     }
     record.order.rank = 0
     s.records[record.id] = record
+    wheel.add(s.buckets, record, game.tick + 1)
     script.register_on_object_destroyed(entity)
     M.draw_arrows(record)
     M.apply_settings(record, settings)
@@ -184,18 +200,20 @@ function M.start(record)
     if not record.order.item then return false end
     record.accepted = 0
     record.state = "active"
-    record.next_tick = 0
+    M.wake(record)
     return true
 end
 
 function M.pause(record)
     if record.state == "active" then record.state = "paused"
     elseif record.state == "paused" then record.state = "active" end
+    M.wake(record)
 end
 
 function M.cancel(record)
     record.state = "idle"
     record.accepted = 0
+    M.wake(record)
 end
 
 local function notify(record)
@@ -230,10 +248,19 @@ end
 ---------------------------------------------------------------------------------------------------
 -- Routing
 ---------------------------------------------------------------------------------------------------
+-- Routing view of a quality, kept per name (prototype data, the same on every peer).
+local quality_infos = {}
+function M.reset_cache() quality_infos = {} end
+
 function M.quality_info(quality)
     local name = quality.name
-    local grade = model.grade_of(name)
-    return {grade = grade, rank = grade < 0 and -1 or quality.level, normal = name == "normal"}
+    local info = quality_infos[name]
+    if not info then
+        local grade = model.grade_of(name)
+        info = {grade = grade, rank = grade < 0 and -1 or quality.level, normal = name == "normal"}
+        quality_infos[name] = info
+    end
+    return info
 end
 
 function M.remaining(record)
@@ -318,9 +345,10 @@ local function deliver(record, direction, stack, limit, tick)
     return inserted
 end
 
+-- Returns the number of items moved.
 local function route_items(record, inventory, tick)
     local blocked = {}
-    local waiting = 0
+    local waiting, total = 0, 0
     for index = 1, #inventory do
         local stack = inventory[index]
         if stack.valid_for_read then
@@ -334,6 +362,7 @@ local function route_items(record, inventory, tick)
                 if moved == 0 then blocked[direction] = true end
             end
             if moved > 0 then
+                total = total + moved
                 record.sent[route] = (record.sent[route] or 0) + moved
                 if route == "good" then accept(record, moved, tick) end
             end
@@ -342,6 +371,7 @@ local function route_items(record, inventory, tick)
     end
     record.blocked = blocked
     record.waiting_refine = waiting
+    return total
 end
 
 local function publish(record)
@@ -378,27 +408,41 @@ function M.step(record, tick)
         record.open = open
         if open then inventory.set_bar() else inventory.set_bar(1) end
     end
-    local busy = false
+    local busy, moved = false, 0
     if record.state ~= "paused" and not record.paused_by_circuit and not inventory.is_empty() then
-        route_items(record, inventory, tick)
+        moved = route_items(record, inventory, tick)
         busy = not inventory.is_empty()
     else
         record.waiting_refine = 0
     end
     publish(record)
-    record.next_tick = tick + (busy and 1 or open and M.EMPTY_LOOK or 15)
+    -- Moving items: every tick (a belt takes one item per tick and output). Items left but every output
+    -- blocked: a short pause instead of walking the slots every tick.
+    local look = M.IDLE_LOOK
+    if busy then look = moved > 0 and 1 or M.BLOCKED_LOOK
+    elseif open then look = M.EMPTY_LOOK end
+    record.next_tick = tick + look
 end
 
 function M.on_tick(tick)
     local s = storage.ic_posts
     if not s then return end
-    for id, record in pairs(s.records) do
-        if not record.entity.valid then
-            M.forget(id)
-        elseif record.next_tick <= tick then
-            M.step(record, tick)
+    if not s.buckets then s = M.state() end
+    local bucket = wheel.take(s.buckets, tick)
+    if not bucket then return end
+    for index = 1, #bucket do
+        local id = bucket[index]
+        local record = s.records[id]
+        if record and record.due == tick then
+            if not record.entity.valid then
+                M.forget(id)
+            else
+                M.step(record, tick)
+                if s.records[id] == record then wheel.add(s.buckets, record, math.max(tick + 1, record.next_tick)) end
+            end
         end
     end
+    wheel.release(bucket)
 end
 
 return M

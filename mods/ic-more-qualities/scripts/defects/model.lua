@@ -12,53 +12,29 @@ local function integer(value, minimum, maximum, label)
     return value
 end
 
--- Independent production failure, configurable in percent. Not a quality roll.
--- Default: 33%, 29.7%, ... 3.3%, 0%. Level ten always has exactly zero loss.
-M.default_loss_percent = 33
-
-function M.loss_probability(research_level, initial_percent)
-    integer(research_level, 0, 10, "research level")
-    if initial_percent == nil then initial_percent = M.default_loss_percent end
-    assert(type(initial_percent) == "number" and initial_percent >= 0 and initial_percent <= 100,
-        "Invalid initial loss percent")
-    return initial_percent * (10 - research_level) / 1000
-end
-
-function M.production_failed(research_level, sample, initial_percent)
-    assert(type(sample) == "number" and sample >= 0 and sample < 1, "Invalid RNG sample")
-    return sample < M.loss_probability(research_level, initial_percent)
-end
-
--- factor: production-mode multiplier of the loss chance (careful 0.1, precise 0). Default 1.
-function M.roll_loss(research_level, random, initial_percent, factor)
-    local probability = M.loss_probability(research_level, initial_percent) * (factor or 1)
-    if probability <= 0 then return false end
-    if factor == nil or factor == 1 then
-        return M.production_failed(research_level, random(), initial_percent)
-    end
-    local sample = random()
-    assert(type(sample) == "number" and sample >= 0 and sample < 1, "Invalid RNG sample")
-    return sample < probability
-end
-
 function M.multiplier(grade)
     integer(grade, -5, 0, "defect grade")
     return 1 / 3 + (grade + 5) * (2 / 15)
 end
 
+-- Lookup tables instead of string matching: these run on every look of the scheduler.
+local GRADES = {["ic-defect-1"] = -1, ["ic-defect-2"] = -2, ["ic-defect-3"] = -3, ["ic-defect-4"] = -4, ["ic-defect-5"] = -5}
+local NAMES = {[0] = "normal", [-1] = "ic-defect-1", [-2] = "ic-defect-2", [-3] = "ic-defect-3", [-4] = "ic-defect-4",
+    [-5] = "ic-defect-5"}
+
 function M.quality_name(grade)
-    integer(grade, -5, 0, "defect grade")
-    return grade == 0 and "normal" or ("ic-defect-" .. -grade)
+    local name = NAMES[grade]
+    if not name then integer(grade, -5, 0, "defect grade") end
+    return name
 end
 
 function M.is_defect(name)
-    return type(name) == "string" and name:match("^ic%-defect%-[1-5]$") ~= nil
+    return GRADES[name] ~= nil
 end
 
 -- Grade of a quality name; standard, positive and foreign qualities are 0.
 function M.grade_of(name)
-    local tier = type(name) == "string" and name:match("^ic%-defect%-([1-5])$")
-    return tier and -tonumber(tier) or 0
+    return GRADES[name] or 0
 end
 
 -- Useful-statistic multiplier of an entity/item quality (1 for non-defects).
@@ -120,8 +96,7 @@ end
 -- All grades ABOVE the shifting leading pair retain the 10:1 rarity ratio.
 -- Level 0: normalized 1 : .1 : .01 : .001 : .0001 : .00001.
 -- Level 10: exactly 100% standard, not a rounded approximation.
-function M.distribution(research_level)
-    integer(research_level, 0, 10, "research level")
+local function build_distribution(research_level)
     local minimum = -5 + math.floor(research_level / 2)
     local lower = geometric(minimum)
     if research_level % 2 == 0 then return lower end
@@ -130,17 +105,39 @@ function M.distribution(research_level)
     return lower
 end
 
+-- The eleven distributions and their cumulative sums are pure functions of the level: built once.
+local distributions, cumulative = {}, {}
+
+-- Returns a shared table: callers must not modify it.
+function M.distribution(research_level)
+    local result = distributions[research_level]
+    if not result then
+        integer(research_level, 0, 10, "research level")
+        result = build_distribution(research_level)
+        distributions[research_level] = result
+    end
+    return result
+end
+
 -- Inject the RNG sample: caller must use Factorio's deterministic RNG.
 -- One draw represents one newly produced item, never an existing inventory stack.
 function M.draw(research_level, sample)
-    assert(type(sample) == "number" and sample >= 0 and sample < 1, "Invalid RNG sample")
-    local distribution = M.distribution(research_level)
-    local sum = 0
-    for grade = -5, 0 do
-        sum = sum + distribution[grade]
-        if sample < sum then return grade end
+    local sums = cumulative[research_level]
+    if not sums then
+        local distribution = M.distribution(research_level)
+        sums = {}
+        local sum = 0
+        for grade = -5, 0 do
+            sum = sum + distribution[grade]
+            sums[grade] = sum
+        end
+        cumulative[research_level] = sums
     end
-    return 0 -- Floating-point accumulation at the final boundary only.
+    assert(type(sample) == "number" and sample >= 0 and sample < 1, "Invalid RNG sample")
+    for grade = -5, -1 do
+        if sample < sums[grade] then return grade end
+    end
+    return 0 -- Standard, also the floating-point accumulation at the final boundary.
 end
 
 -- A confirmed native module upgrade wins over the defect draw, including before

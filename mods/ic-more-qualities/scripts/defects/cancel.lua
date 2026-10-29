@@ -1,5 +1,5 @@
 -- Cancelled handcraft (Paranoidal fix 2026-10-19). A prerequisite the game queued itself is crafted
--- without a defect roll (production-loss.queued_prerequisite): its consumer expects it. Cancelling the
+-- without a defect roll (handcraft.queued_prerequisite): its consumer expects it. Cancelling the
 -- consumer returned that item at standard quality, so a defect-capable product could be farmed by
 -- queueing its consumer and cancelling it (e.g. stone furnaces from burner drills).
 --

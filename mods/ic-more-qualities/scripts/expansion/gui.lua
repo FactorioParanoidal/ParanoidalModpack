@@ -163,7 +163,7 @@ local function warnings_of(force)
     return result
 end
 
--- After quality control 10 no new defects and losses appear: texts about them are hidden.
+-- After quality control 10 no new defects appear: texts about them are hidden.
 local function defects_over(force)
     return model.completed_level(force.technologies) >= 10
 end
@@ -204,7 +204,6 @@ end
 local function production_dynamic(parent, player)
     local force = player.force
     local level = model.completed_level(force.technologies)
-    local percent_setting = settings.global["ic-more-qualities-initial-loss-percent"].value
     local top = parent.add({type = "flow", direction = "horizontal"})
     top.style.vertical_align = "center"
     label(top, {"ic-quality.control-level", level}, "caption_label")
@@ -218,33 +217,12 @@ local function production_dynamic(parent, player)
         return
     end
 
-    -- Losses are off by default (map setting 0%): then nothing about them is shown.
-    local losses_on = percent_setting > 0
-    if losses_on then
-        local tbl = key_value_table(parent)
-        row(tbl, {"ic-quality.loss-now"}, percent(model.loss_probability(level, percent_setting)))
-        row(tbl, {"ic-quality.loss-next"}, level < 10 and percent(model.loss_probability(level + 1, percent_setting)) or "—")
-        row(tbl, {"ic-quality.loss-careful"}, percent(model.loss_probability(level, percent_setting) * rules.modes.careful.loss))
-        row(tbl, {"ic-quality.loss-precise"}, percent(0))
-    end
-
     heading(parent, {"ic-quality.distribution"})
     distribution_rows(parent, level)
 
-    heading(parent, {"ic-quality.counted"})
-    local ctbl = parent.add({type = "table", column_count = losses_on and 3 or 2, style = "bordered_table"})
-    label(ctbl, {"ic-quality.col-source"}, "bold_label")
-    label(ctbl, {"ic-quality.col-operations"}, "bold_label")
-    if losses_on then label(ctbl, {"ic-quality.col-losses"}, "bold_label") end
-    for _, source in ipairs({"hand", "machine", "drill", "mining"}) do
-        local ops, losses = counters[source .. ".ops"] or 0, counters[source .. ".loss"] or 0
-        label(ctbl, {"ic-quality.source-" .. source})
-        label(ctbl, tostring(ops))
-        if losses_on then
-            label(ctbl, ops > 0 and {"", tostring(losses), " (", percent(losses / ops), ")"} or tostring(losses))
-        end
-    end
+    -- Grades the mechanics gave to new finished products (handcraft and machines).
     local grades = parent.add({type = "flow", direction = "horizontal"})
+    grades.style.top_margin = 6
     label(grades, {"ic-quality.assigned"})
     for grade = -5, 0 do
         label(grades, {"", quality_rich(model.quality_name(grade)), " ", tostring(counters["grade." .. grade] or 0)})

@@ -8,6 +8,7 @@ local near = mock.near
 
 defines = mock.defines()
 storage = {}
+game = {tick = 0}
 script = {register_on_object_destroyed = function() end}
 prototypes = {
     mod_data = {["ic-quality-expansion"] = {data = {costs = {gear = {cost = 1500, seconds = 10}}}}},
@@ -42,13 +43,14 @@ local function make_machine()
     entity.is_crafting = function() return machine.crafting end
     entity.get_recipe = function()
         if not machine.crafting then return nil end
-        return {name = "ic-refine-item-" .. machine.item, products = {{name = machine.item}}}, {name = machine.input}
+        return {name = "ic-refine-item-" .. machine.item, products = {{name = machine.item}}, energy = machine.seconds},
+            {name = machine.input}
     end
     machine.entity = entity
     -- Insert an item: the furnace starts a craft with recipe quality = item quality.
     function machine.start(item, quality, seconds)
         machine.crafting, machine.item, machine.input = true, item, quality
-        machine.rate = 1 / (seconds * 60)
+        machine.rate, machine.seconds = 1 / (seconds * 60), seconds
         entity.crafting_progress = 0
         entity.result_quality = {name = quality}
     end
@@ -487,10 +489,39 @@ tick = run(machine, record, 700, mock.sequence({.5, .5}), tick)
 assert(machine.taken == 1 and machine.outputs[1] == "ic-defect-2" and #machine.result == 0)
 near(packs_before - workshop.available(machine.entity), (workshop.cost_of("automation-science-pack")), 1e-6)
 
+-- Timer wheel (scripts/wheel.lua): a workshop is looked at only on its tick; a settings change brings the
+-- look forward; an older storage without buckets schedules every workshop on the next tick.
+do
+    local wheel = require("scripts.wheel")
+    local s = storage.ic_workshops
+    local calls, original_step = 0, workshop.step
+    workshop.step = function(r, ctx) calls = calls + 1; r.next_tick = ctx.tick + 5 end
+    s.buckets = {}
+    wheel.add(s.buckets, record, 5000)
+    workshop.on_tick({tick = 4999})
+    assert(calls == 0)
+    workshop.on_tick({tick = 5000})
+    assert(calls == 1 and record.due == 5005 and s.buckets[5000] == nil)
+    game.tick = 5001
+    workshop.set_circuit(record, false)
+    assert(record.due == 5002 and s.buckets[5002][1] == record.id)
+    workshop.on_tick({tick = 5002})
+    workshop.on_tick({tick = 5005}) -- stale entry skipped
+    assert(calls == 2 and record.due == 5007)
+    workshop.step = original_step
+    s.buckets = nil
+    game.tick = 6000
+    local bucket, found = workshop.state().buckets[6001], 0
+    for _, id in ipairs(bucket) do if id == record.id then found = found + 1 end end
+    local count = 0
+    for _ in pairs(s.records) do count = count + 1 end
+    assert(found == 1 and #bucket == count, "every workshop scheduled once")
+end
+
 print("PASS: used science packs and magazines are refined by script with the share of durability / rounds")
 print("kept, the furnace never takes them; whole ones go through the furnace; same cost and time; blocked")
 print("output and missing packs wait.")
 print("PASS: workshop streams pack durability (partial packs), waits without packs or power,")
 print("makes one attempt per item (90% + 10% chain, capped at standard) and always releases it, passes standard,")
 print("resets positive quality on request, returns the reached grade when mined; modes take 5x/20x the")
-print("time for the same packs and give +2 grades / standard. Mocks only.")
+print("time for the same packs and give +2 grades / standard; timer wheel. Mocks only.")

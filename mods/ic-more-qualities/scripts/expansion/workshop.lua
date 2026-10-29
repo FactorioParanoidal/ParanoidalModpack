@@ -27,6 +27,7 @@ local model = require("scripts.defects.model")
 local power = require("scripts.expansion.power")
 local emitter = require("scripts.expansion.emitter")
 local stats = require("scripts.stats")
+local wheel = require("scripts.wheel")
 
 local M = {}
 local S = names.signals
@@ -43,13 +44,24 @@ local NO_POWER = 1e-3
 M.LOOK = 3
 M.IDLE_LOOK = 6
 
+-- buckets: timer wheel of the looks (scripts/wheel.lua); record.next_tick is the tick of the next look.
 function M.state()
     local s = storage.ic_workshops
     if not s then
-        s = {records = {}}
+        s = {records = {}, buckets = {}}
         storage.ic_workshops = s
+    elseif not s.buckets then
+        -- Older layout (every record walked every tick): every workshop is looked at on the next tick.
+        s.buckets = {}
+        for _, record in pairs(s.records) do wheel.add(s.buckets, record, game.tick + 1) end
     end
     return s
+end
+
+-- Brings the next look of a workshop forward to the next tick (settings changed).
+function M.wake(record)
+    record.next_tick = game.tick + 1
+    wheel.advance(M.state().buckets, record, record.next_tick)
 end
 
 local costs_cache
@@ -190,7 +202,7 @@ function M.set_circuit(record, enabled)
         record.emitter, record.emitted = nil, nil
         -- The building keeps its state; the next tick's look decides whether it may run (a workshop held
         -- without packs, idle with an empty slot or refining a pack by script stays stopped).
-        record.next_tick = 0
+        if storage.ic_workshops and storage.ic_workshops.records[record.id] == record then M.wake(record) end
     end
 end
 
@@ -205,6 +217,7 @@ function M.track(entity, settings)
         surface_index = entity.surface.index, position = {x = entity.position.x, y = entity.position.y},
     }
     s.records[record.id] = record
+    wheel.add(s.buckets, record, game.tick + 1)
     ensure_drive(entity)
     record.interface = power.create(entity, names.workshop_power)
     script.register_on_object_destroyed(entity)
@@ -237,6 +250,8 @@ function M.rescan(entities)
             local record = M.track(entity)
             if record then
                 record.idle_look = nil -- attempt durations may have changed with the configuration
+                record.max_power = nil
+                M.wake(record)
                 ensure_drive(entity)
                 if not (record.interface and record.interface.valid) then
                     record.interface = power.create(entity, names.workshop_power)
@@ -252,8 +267,15 @@ end
 ---------------------------------------------------------------------------------------------------
 -- Work cycle
 ---------------------------------------------------------------------------------------------------
-local function machine_power(entity)
-    return entity.prototype.get_max_energy_usage(entity.quality)
+-- Full power of the building (its quality never changes; reset by rescan after a configuration change).
+local function machine_power(record)
+    local value = record.max_power
+    if not value then
+        local entity = record.entity
+        value = entity.prototype.get_max_energy_usage(entity.quality)
+        record.max_power = value
+    end
+    return value
 end
 
 local function grade_text(grade)
@@ -410,7 +432,7 @@ local function refine_step(record, entity, craft, progress, ctx)
     -- refills as soon as the network has power again and the next look releases the furnace.
     local unpowered = supply < NO_POWER
     record.held = (starved or unpowered) or nil
-    power.set(record.interface, starved and machine_power(entity) / 30 or machine_power(entity))
+    power.set(record.interface, starved and machine_power(record) / 30 or machine_power(record))
 
     if starved then
         set_status(record, "no-resource", "red")
@@ -540,7 +562,7 @@ local function script_step(record, entity, ctx, stack, paused, stop)
     end
     -- The furnace never takes these items; an attempt of the furnace itself waits meanwhile.
     if not entity.disabled_by_script then entity.disabled_by_script = true end
-    local idle_power = machine_power(entity) / 30
+    local idle_power = machine_power(record) / 30
     if not sc and (paused or stop) then
         set_status(record, "paused", "yellow")
         power.set(record.interface, idle_power)
@@ -605,7 +627,7 @@ local function script_step(record, entity, ctx, stack, paused, stop)
         return
     end
 
-    power.set(record.interface, starved and idle_power or machine_power(entity))
+    power.set(record.interface, starved and idle_power or machine_power(record))
     if starved then
         set_status(record, "no-resource", "red")
         record.starved_since = record.starved_since or tick
@@ -675,7 +697,7 @@ function M.step(record, ctx)
         alert(record, record.starved_since ~= nil and tick - record.starved_since >= NO_RESOURCE_ALERT_TICKS)
         -- Read before the demand changes (a new consumer demands nothing yet and counts as supplied).
         local unpowered = power.satisfaction(record.interface) < NO_POWER
-        power.set(record.interface, machine_power(entity) / 30)
+        power.set(record.interface, machine_power(record) / 30)
         if disable then
             set_status(record, "paused", "yellow")
         elseif item_waits then
@@ -705,7 +727,7 @@ function M.step(record, ctx)
     local look = craft.kind == "refine" and record.look or M.LOOK
     if disable then
         set_status(record, "paused", "yellow")
-        power.set(record.interface, machine_power(entity) / 30)
+        power.set(record.interface, machine_power(record) / 30)
     elseif craft.kind == "refine" then
         refine_step(record, entity, craft, progress, ctx)
         look = record.look
@@ -713,16 +735,19 @@ function M.step(record, ctx)
         -- A quality reset takes time and stops without electricity like a refinement; passing is instant.
         local unpowered = craft.kind == "reset" and power.satisfaction(record.interface) < NO_POWER
         record.held = unpowered or nil
-        power.set(record.interface, machine_power(entity))
+        power.set(record.interface, machine_power(record))
         if unpowered then
             set_status(record, "no-power", "red")
         else
             set_status(record, craft.kind == "reset" and "reset" or "passing", "green")
         end
     end
-    -- Close to completion the furnace takes the next item from the input slot by itself: look every
-    -- tick so that a pack put there is seen (and handled by script) before that.
-    if craft.kind ~= "refine" or craft.final then look = 1 end
+    -- Close to completion the furnace takes the next item from the input slot by itself: the last look
+    -- comes one tick before the end, so that a pack put there is seen (and handled by script) before that.
+    if craft.kind ~= "refine" or craft.final then
+        local left = (1 - entity.crafting_progress) * recipe.energy * 60 / math.max(entity.crafting_speed, 0.01)
+        look = math.min(M.LOOK, math.max(1, math.floor(left) - 1))
+    end
     local stopped = disable or record.held == true
     if entity.disabled_by_script ~= stopped then entity.disabled_by_script = stopped end
     publish(record, true)
@@ -744,13 +769,23 @@ end
 function M.on_tick(ctx)
     local s = storage.ic_workshops
     if not s then return end
-    for id, record in pairs(s.records) do
-        if not record.entity.valid then
-            M.forget(id)
-        elseif record.next_tick <= ctx.tick then
-            M.step(record, ctx)
+    if not s.buckets then s = M.state() end
+    local tick = ctx.tick
+    local bucket = wheel.take(s.buckets, tick)
+    if not bucket then return end
+    for index = 1, #bucket do
+        local id = bucket[index]
+        local record = s.records[id]
+        if record and record.due == tick then
+            if not record.entity.valid then
+                M.forget(id)
+            else
+                M.step(record, ctx)
+                if s.records[id] == record then wheel.add(s.buckets, record, math.max(tick + 1, record.next_tick)) end
+            end
         end
     end
+    wheel.release(bucket)
 end
 
 -- Summary for the GUI: current craft, probabilities and resource.

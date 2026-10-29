@@ -130,7 +130,8 @@ end
 
 function M.consume(entity, hooks)
     local replaced = storage.ic_replaced
-    if not replaced then return end
+    -- Called for every built furnace, container and assembler: no key string without a remembered spot.
+    if not replaced or next(replaced) == nil then return end
     local key = key_of(entity.surface.index, entity.position)
     local entry = replaced[key]
     if not entry then return end

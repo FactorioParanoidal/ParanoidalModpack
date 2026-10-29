@@ -4,10 +4,9 @@ if not switches.quality() then return end
 
 local model = require("scripts.defects.model")
 local handcraft = require("scripts.defects.handcraft")
-local production_loss = require("scripts.defects.production-loss")
 local cancel = require("scripts.defects.cancel")
 local eligibility = require("scripts.defects.eligibility")
-local mining = require("scripts.defects.mining")
+local compiled = require("scripts.defects.compiled")
 local automation = require("scripts.defects.automation")
 local events = require("scripts.events")
 local stats = require("scripts.stats")
@@ -17,12 +16,10 @@ local post = require("scripts.expansion.post")
 local modes = require("scripts.expansion.modes")
 local memory = require("scripts.expansion.memory")
 local gui = require("scripts.expansion.gui")
-local classify = require("scripts.defects.classify")
 
--- Setting caches (read on every tick otherwise). Startup settings change only together with a
--- configuration change, map settings raise on_runtime_mod_setting_changed. Not kept in storage:
--- after a load they are read again from the synchronised settings, so every peer agrees.
-local enabled_cache, exclude_cache, loss_cache
+-- Startup settings change only together with a configuration change. Not kept in storage: after a load
+-- they are read again from the synchronised settings, so every peer agrees.
+local enabled_cache
 
 local function enabled()
     -- Keep the original setting ID so existing saved startup choices are respected.
@@ -30,87 +27,10 @@ local function enabled()
     return enabled_cache
 end
 
-local function exclude_finished()
-    if exclude_cache == nil then exclude_cache = settings.global["ic-more-qualities-loss-exclude-finished"].value end
-    return exclude_cache
-end
-
-local function initial_loss_percent()
-    if loss_cache == nil then loss_cache = settings.global["ic-more-qualities-initial-loss-percent"].value end
-    return loss_cache
-end
-
-local function reset_settings()
-    enabled_cache, exclude_cache, loss_cache = nil, nil, nil
-end
-
--- Deterministic caches derived from prototypes only (identical on all peers).
-local category_min, min_energy_cache, emissions_cache, no_quality_cache = nil, {}, {}, nil
--- Recycling only: fastest recipe per category whose item can be defective, and the per-machine caches.
-local watched_min, watched_cache, recycler_cache = nil, {}, {}
-
-local function lower(map, category, energy)
-    if not map[category] or energy < map[category] then map[category] = energy end
-end
-
--- watched: only recycling recipes of items that can be defective (classify.watched_recycling).
-local function min_energy(entity, watched)
-    local name = entity.name
-    local cache = watched and watched_cache or min_energy_cache
-    local cached = cache[name]
-    if cached == nil then
-        if not category_min then
-            category_min, watched_min = {}, {}
-            local finished, no_defect = eligibility.finished(), eligibility.no_defect()
-            for _, recipe in pairs(prototypes.recipe) do
-                local energy, category = recipe.energy, recipe.category
-                if energy > 0 then
-                    lower(category_min, category, energy)
-                    if classify.watched_recycling(recipe, finished, no_defect) then
-                        lower(watched_min, category, energy)
-                    end
-                end
-            end
-        end
-        local by_category = watched and watched_min or category_min
-        cached = false
-        for category in pairs(entity.prototype.crafting_categories or {}) do
-            local energy = by_category[category]
-            if energy and (not cached or energy < cached) then cached = energy end
-        end
-        cache[name] = cached
-    end
-    return cached or nil
-end
-
-local function is_recycler(entity)
-    local name = entity.name
-    local cached = recycler_cache[name]
-    if cached == nil then
-        cached = false
-        for category in pairs(entity.prototype.crafting_categories or {}) do
-            if classify.recycling[category] then cached = true end
-        end
-        recycler_cache[name] = cached
-    end
-    return cached
-end
-
-local function emissions(entity)
-    local name = entity.name
-    local cached = emissions_cache[name]
-    if cached == nil then
-        local prototype = entity.prototype
-        local source = prototype.electric_energy_source_prototype or prototype.burner_prototype
-        cached = source and source.emissions_per_joule or false
-        emissions_cache[name] = cached
-    end
-    return cached or nil
-end
-
 local everywhere_setting = settings.startup["ic-more-qualities-quality-everywhere"]
 local quality_everywhere = everywhere_setting ~= nil and everywhere_setting.value == true
 
+local no_quality_cache
 local function no_quality()
     if not no_quality_cache then
         local mod_data = prototypes.mod_data[names.mod_data]
@@ -119,15 +39,17 @@ local function no_quality()
     return no_quality_cache
 end
 
--- One context table for the scheduler: its functions are created once, the data fields are
--- refreshed on every tick that has work (the getters only return caches).
+local function machine_of(record, entity) return compiled.machine(entity, record.name) end
+local function release_power(entity) modes.draw_power(entity, nil, false, game.tick) end
+
+-- One context table for the scheduler: its functions are created once, the data fields are refreshed on
+-- every tick that has work (the getters only return caches).
 local context = {
-    min_energy = min_energy,
-    is_recycler = is_recycler,
-    emissions = emissions,
+    machine = machine_of,
+    recipe = compiled.recipe,
     stat = stats.add,
     quality_everywhere = quality_everywhere,
-    mode_definition = modes.definition,
+    release_power = release_power,
     mode_power = function(entity, definition, working)
         return modes.draw_power(entity, definition, working, game.tick)
     end,
@@ -138,11 +60,9 @@ local context = {
 
 local function automation_context()
     context.random = math.random
-    context.finished = eligibility.finished()
-    context.no_defect = eligibility.no_defect()
-    context.exclude_finished = exclude_finished()
-    context.initial_loss_percent = initial_loss_percent()
     context.no_quality = no_quality()
+    local mode_state = storage.ic_modes
+    context.modes = mode_state and next(mode_state.records) and mode_state.records or nil
     return context
 end
 
@@ -170,24 +90,34 @@ local function configure_force(force)
     end
 end
 
+-- Panel counters of the removed production losses and of the operation counts (2026-10-29).
+local OBSOLETE_STATS = {"hand.ops", "hand.loss", "machine.ops", "machine.loss", "drill.ops", "drill.loss",
+    "mining.ops", "mining.loss"}
+
 local function configure_all()
-    reset_settings()
+    enabled_cache, no_quality_cache = nil, nil
     eligibility.reset()
-    category_min, min_energy_cache, emissions_cache, no_quality_cache = nil, {}, {}, nil
-    watched_min, watched_cache, recycler_cache = nil, {}, {}
+    automation.reset_cache()
+    handcraft.reset_cache()
     workshop.reset_cache()
+    post.reset_cache()
     modes.reset_cache()
     -- Registry of the abandoned per-tick machine prototype of this branch.
     storage.ic_defect_machines = nil
+    for _, counters in pairs(storage.ic_stats or {}) do
+        for _, key in ipairs(OBSOLETE_STATS) do counters[key] = nil end
+    end
     for _, force in pairs(game.forces) do configure_force(force) end
     if enabled() then
         local found = {}
-        automation.rescan(function(entity)
-            if entity.name == names.workshop then found[#found + 1] = entity end
-        end)
+        for _, surface in pairs(game.surfaces) do
+            for _, entity in pairs(surface.find_entities_filtered({name = names.workshop})) do found[#found + 1] = entity end
+        end
         workshop.rescan(found)
         post.rescan()
         modes.rescan()
+        -- After modes.rescan: machines that keep a production mode are tracked whatever their prototype.
+        automation.rescan()
     else
         automation.clear()
     end
@@ -220,10 +150,11 @@ events.on(defines.events.on_player_crafted_item, function(event)
     local player = game.get_player(event.player_index)
     local stack = event.item_stack
     if not player or not player.valid or not stack or not stack.valid_for_read then return end
-    -- Research 10 (required for green science): no loss and no new roll. Only a defective result (from
-    -- defective ingredients) or, with "quality everywhere" off, a positive material needs handling; skip
-    -- the queue scan and the handlers for everything else.
-    if model.completed_level(player.force.technologies) == 10 then
+    local level = automation.level(player.force)
+    -- Research 10 (required for green science): no new roll. Only a defective result (from defective
+    -- ingredients) or, with "quality everywhere" off, a positive material needs handling; skip the queue
+    -- scan and the handler for everything else.
+    if level == 10 then
         local quality = stack.quality.name
         if not model.is_defect(quality)
             and (quality == "normal" or quality_everywhere or eligibility.finished()[stack.name]) then
@@ -231,8 +162,8 @@ events.on(defines.events.on_player_crafted_item, function(event)
         end
     end
     local recipe_name = event.recipe and event.recipe.name
-    local queue = player.character and player.crafting_queue
-    if production_loss.queued_prerequisite(queue, recipe_name, stack.name, prototypes.recipe) then
+    local queue = player.character and player.crafting_queue_size > 0 and player.crafting_queue
+    if queue and handcraft.queued_prerequisite(queue, recipe_name, stack.name, prototypes.recipe) then
         -- A cancelled consumer returns it: it gets its roll then (scripts/defects/cancel.lua).
         if stack.quality.name == "normal" then
             cancel.remember(player.index, stack.name, eligibility.finished(), eligibility.no_defect())
@@ -240,14 +171,8 @@ events.on(defines.events.on_player_crafted_item, function(event)
         return
     end
     cancel.forget_if_idle(player)
-    local finished = eligibility.finished()
-    local loss = production_loss.handle(event, player, math.random, finished, exclude_finished(), initial_loss_percent())
-    if loss ~= "ignored" then
-        stats.add(player.force.index, "hand.ops")
-        if loss == "empty-result" then stats.add(player.force.index, "hand.loss") end
-    end
-    if loss == "empty-result" or loss == "ignored" then return end
-    local status, detail = handcraft.handle(event, player, game.create_inventory, math.random, finished, quality_everywhere, eligibility.no_defect())
+    local status, detail = handcraft.handle(event, player, game.create_inventory, math.random, eligibility.finished(),
+        quality_everywhere, eligibility.no_defect(), level)
     if status == "changed" and type(detail) == "string" then
         stats.add(player.force.index, "grade." .. model.grade_of(detail))
     end
@@ -263,38 +188,19 @@ events.on(defines.events.on_player_cancelled_crafting, function(event)
     if enabled() then cancel.on_cancelled(event, eligibility.finished(), eligibility.no_defect()) end
 end)
 
--- Mining: natural objects (loss) and the workshop (an interrupted series returns its grade).
-local mined_filters = {}
-for _, kind in ipairs(mining.event_types) do mined_filters[#mined_filters + 1] = {filter = "type", type = kind} end
+-- Buildings of the expansion: workshop, control post and machines with production modes.
 local building_filters = {
     {filter = "type", type = "furnace"}, {filter = "type", type = "container"},
     {filter = "type", type = "assembling-machine"},
 }
 
-local function mined_natural(entity, buffer, force)
-    local status = mining.handle(entity, buffer, force, math.random, initial_loss_percent())
-    if status == "lost" or status == "survived" or status == "loss-free" then
-        stats.add(force.index, "mining.ops")
-        if status == "lost" then stats.add(force.index, "mining.loss") end
-    end
-end
-
-events.on(defines.events.on_player_mined_entity, function(event)
-    if not enabled() then return end
-    local player = game.get_player(event.player_index)
-    if player and player.valid then mined_natural(event.entity, event.buffer, player.force) end
-end, mined_filters)
-events.on(defines.events.on_robot_mined_entity, function(event)
-    if not enabled() then return end
-    local robot = event.robot
-    if robot and robot.valid then mined_natural(event.entity, event.buffer, robot.force) end
-end, mined_filters)
+-- An interrupted refinement returns the reached grade when the workshop is mined.
 for _, id in ipairs({defines.events.on_player_mined_entity, defines.events.on_robot_mined_entity}) do
     events.on(id, function(event)
         if enabled() and event.entity and event.entity.valid and event.entity.name == names.workshop then
             workshop.on_mined(event.entity, event.buffer)
         end
-    end, building_filters)
+    end, {{filter = "name", name = names.workshop}})
 end
 
 automation.register(enabled, automation_context, events)
@@ -416,8 +322,6 @@ events.on(defines.events.on_player_removed, function(event)
     if storage.ic_players then storage.ic_players[event.player_index] = nil end
     cancel.remove_player(event.player_index)
 end)
-
-events.on(defines.events.on_runtime_mod_setting_changed, function() reset_settings() end)
 
 local workshop_context = {}
 events.on(defines.events.on_tick, function(event)

@@ -64,8 +64,8 @@ local m = rules.modes
 assert(m.careful.time == 5 and m.careful.energy == 25 and m.precise.time == 20 and m.precise.energy == 400)
 near(rules.extra_power(m.normal), 0); near(rules.extra_power(m.careful), 4); near(rules.extra_power(m.precise), 19)
 assert(rules.effective_level(3, m.careful) == 7 and rules.effective_level(8, m.careful) == 10)
-assert(rules.effective_level(3, nil) == 3 and m.precise.no_defect and m.precise.loss == 0)
-near(m.careful.loss, .1)
+assert(rules.effective_level(3, nil) == 3 and m.precise.no_defect and not m.careful.no_defect)
+for _, name in ipairs(rules.mode_order) do assert(m[name].loss == nil, "no loss factor any more") end
 
 -- Boost: native p plus the conditional extra chance equals 1 - (1-p)^n.
 for _, chance in ipairs({.01, .05, .1, .2, .5}) do

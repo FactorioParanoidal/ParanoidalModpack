@@ -108,7 +108,7 @@ defines = mock.defines()
 defines.relative_gui_type = {furnace_gui = 1, assembling_machine_gui = 2, container_gui = 3}
 storage = {}
 script = {register_on_object_destroyed = function() end}
-settings = {global = {["ic-more-qualities-initial-loss-percent"] = {value = 33}}}
+settings = {global = {}}
 rendering = {draw_sprite = function() return {id = 1} end, get_object_by_id = function() return nil end}
 prototypes = {
     quality = {
@@ -307,7 +307,7 @@ end
 gui.close_entity(player)
 assert(not player.gui.relative.ic_quality_relative)
 
--- After quality control 10 the panel and the mode window say nothing about defects and losses.
+-- After quality control 10 the panel and the mode window say nothing about defects.
 local function keys_in(element, found)
     found = found or {}
     for _, field in ipairs({"caption", "tooltip"}) do
@@ -341,25 +341,18 @@ do
     assert(row_found)
 end
 gui.close_entity(player)
--- Losses off (map setting 0%, the default): the production tab says nothing about them.
-settings.global["ic-more-qualities-initial-loss-percent"].value = 0
+-- The production tab: distribution, assigned grades, mode counters and skipped machines; nothing about
+-- losses or operation counts (both removed 2026-10-29).
 gui.player_settings(1).tab = "production"
 gui.open_panel(player)
 gui.refresh_panel(player)
 do
     local found = keys_in(player.gui.screen.ic_quality_panel)
-    for _, key in ipairs({"loss-now", "loss-next", "loss-careful", "loss-precise", "col-losses"}) do
+    for _, key in ipairs({"loss-now", "loss-next", "loss-careful", "loss-precise", "col-losses", "col-operations",
+        "counted", "source-hand"}) do
         assert(not found["ic-quality." .. key], key)
     end
-    assert(found["ic-quality.col-operations"] and found["ic-quality.distribution"])
-end
-gui.toggle_panel(player)
-settings.global["ic-more-qualities-initial-loss-percent"].value = 33
-gui.open_panel(player)
-gui.refresh_panel(player)
-do
-    local found = keys_in(player.gui.screen.ic_quality_panel)
-    assert(found["ic-quality.loss-now"] and found["ic-quality.loss-precise"] and found["ic-quality.col-losses"])
+    assert(found["ic-quality.distribution"] and found["ic-quality.assigned"] and found["ic-quality.mode-boosts"])
 end
 gui.toggle_panel(player)
 for level = 4, 10 do force.technologies["ic-defect-control-" .. level] = {researched = true} end
@@ -371,7 +364,7 @@ for item, expected in pairs({["assembling-machine-1"] = "lookup-finished-clean",
     gui.refresh_panel(player)
     local found = keys_in(player.gui.screen.ic_quality_panel)
     assert(found["ic-quality." .. expected], item)
-    for _, key in ipairs({"loss-now", "distribution", "counted", "assigned", "skipped", "lookup-finished",
+    for _, key in ipairs({"distribution", "assigned", "skipped", "lookup-finished",
         "lookup-no-defect", "lookup-material"}) do
         assert(not found["ic-quality." .. key], key)
     end
@@ -399,8 +392,7 @@ for _, key in ipairs({"workshop-state-working", "workshop-state-no-resource", "w
     "order-state-active", "order-state-paused", "order-state-done", "reason-raw", "reason-parameter",
     "reason-material-tile", "reason-material-rail", "reason-material-pipe", "reason-ingredient",
     "route-good", "route-refine", "route-other", "route-good-legend", "route-refine-legend", "route-other-legend",
-    "skip-reason-unsupported-speed", "skip-reason-missed-craft", "skip-reason-missed-cycle", "source-hand",
-    "source-machine", "source-drill", "source-mining", "post-facing-0", "post-facing-1", "post-facing-2",
+    "skip-reason-unsupported-speed", "skip-reason-missed-cycle", "post-facing-0", "post-facing-1", "post-facing-2",
     "post-facing-3", "alert-no-resource", "order-done", "status-no-resource", "repair-slot",
     "repair-slot-description", "workshop-cant-refine", "workshop-cant-refine_until", "workshop-input-slot",
     "lookup-no-defect", "lookup-finished", "lookup-material", "lookup-empty-clean", "lookup-finished-clean",
