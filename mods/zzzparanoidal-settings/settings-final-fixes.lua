@@ -59,9 +59,6 @@ hide("bool-setting", "aai-wide-drill")
 hide("int-setting", "aai-burner-turbine-efficiency")
 hide("int-setting", "aai-fuel-processor-efficiency")
 hide("bool-setting", "aai-stone-path")
--- aai-loaders
-hide("string-setting", "aai-loaders-mode")
-hide("string-setting", "aai-loaders-belt-stacking-mode")
 -- AbandonedRuins_updated_fork
 hide("bool-setting", "ruins-enable-spawn-ruins-all-planets")
 hide("bool-setting", "ruins-expensive-sanity-checks")

@@ -1,4 +1,4 @@
--- Beta 8 normal: обычные боевые платформы, лаборатория II и шесть тиров miniloader → AAI.
+-- Beta 8 normal: обычные боевые платформы, лаборатория II и шесть тиров miniloader → погрузчики.
 -- После ПР-033 обе старые цены каждого loader-тиpa совпадают; отдельной наценки здесь нет.
 -- После Bob/Angels/OV.execute. Категории, свойства и оформление остаются 2.0.
 local function item(name, amount)
@@ -29,24 +29,24 @@ local ingredients = {
 		item("efficiency-module-2", 25), item("speed-module-2", 25), item("processing-unit", 60),
 		item("electric-engine-unit", 40), item("low-density-structure", 30), item("power-armor", 1),
 	},
-	["aai-basic-loader"] = {
+	["bob-basic-loader"] = {
 		-- У базового miniloader в Beta 8 не было отдельного фильтрующего рецепта.
 		item("bob-basic-underground-belt", 1), item("burner-inserter", 12),
 	},
-	["aai-loader"] = {
-		item("aai-basic-loader", 1), item("underground-belt", 1), item("steel-plate", 8), item("inserter", 8),
+	["loader"] = {
+		item("bob-basic-loader", 1), item("underground-belt", 1), item("steel-plate", 8), item("inserter", 8),
 	},
-	["aai-fast-loader"] = {
-		item("aai-loader", 1), item("fast-underground-belt", 1), item("long-handed-inserter", 8),
+	["fast-loader"] = {
+		item("loader", 1), item("fast-underground-belt", 1), item("long-handed-inserter", 8),
 	},
-	["aai-express-loader"] = {
-		item("aai-fast-loader", 1), item("express-underground-belt", 1), item("fast-inserter", 6),
+	["express-loader"] = {
+		item("fast-loader", 1), item("express-underground-belt", 1), item("fast-inserter", 6),
 	},
-	["aai-turbo-loader"] = {
-		item("aai-express-loader", 1), item("turbo-underground-belt", 1), item("bob-turbo-inserter", 6),
+	["bob-turbo-loader"] = {
+		item("express-loader", 1), item("turbo-underground-belt", 1), item("bob-turbo-inserter", 6),
 	},
-	["aai-ultimate-loader"] = {
-		item("aai-turbo-loader", 1), item("bob-ultimate-underground-belt", 1), item("bob-express-inserter", 6),
+	["bob-ultimate-loader"] = {
+		item("bob-turbo-loader", 1), item("bob-ultimate-underground-belt", 1), item("bob-express-inserter", 6),
 	},
 	["bob-lab-2"] = {
 		-- Финальная цена Oberhaul/scienceoberhaul, не ранняя цена Bob.
@@ -95,6 +95,6 @@ for name, list in pairs(ingredients) do
 		recipe.ingredients = list
 	end
 end
-for _, name in ipairs({ "aai-basic-loader", "aai-loader", "aai-fast-loader", "aai-express-loader", "aai-turbo-loader", "aai-ultimate-loader" }) do
+for _, name in ipairs({ "bob-basic-loader", "loader", "fast-loader", "express-loader", "bob-turbo-loader", "bob-ultimate-loader" }) do
 	if data.raw.recipe[name] then data.raw.recipe[name].energy_required = 1 end
 end

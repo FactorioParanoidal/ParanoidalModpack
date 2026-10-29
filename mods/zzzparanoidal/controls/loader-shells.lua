@@ -7,7 +7,7 @@ local M = {}
 -- Same gate as the data stage, plus the prototypes it should have produced:
 -- never register handlers for a feature whose prototypes are absent.
 local function feature_present()
-    if not defs.enabled(script.active_mods, settings.startup) then return false end
+    if not defs.enabled(script.active_mods) then return false end
     for _, name in ipairs(defs.names) do
         if not (prototypes.entity[name] and prototypes.entity[defs.shell(name, "input")]
                 and prototypes.entity[defs.shell(name, "output")]) then
@@ -460,14 +460,7 @@ end
 
 function M.init()
     state()
-    -- Recipes moved to the item names: carry an already-unlocked AAI recipe over.
-    for _, force in pairs(game.forces) do
-        for i, old_name in ipairs(defs.old_recipes) do
-            local old, new = force.recipes[old_name], force.recipes[defs.names[i]]
-            if old and new and old.enabled then new.enabled = true; old.enabled = false end
-        end
-    end
-    -- Reconcile only this feature's native 1x2 loaders, never legacy AAI 1x1 entities.
+    -- Reconcile only this feature's native 1x2 loaders.
     -- Existing native machines are wrapped in place: contents, energy and filters survive.
     for _, surface in pairs(game.surfaces) do
         for _, shell in pairs(surface.find_entities_filtered { type = "constant-combinator" }) do

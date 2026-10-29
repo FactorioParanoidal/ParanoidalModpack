@@ -8,7 +8,6 @@
   "dependencies": [
     "base >= 1.1.0",
     "? aai-industry",
-    "? aai-loaders",
     "? AbandonedRuins_updated_fork",
     "? Aircraft-space-age",
     "? All-infinit-tech",

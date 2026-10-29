@@ -27,6 +27,7 @@ require("prototypes.item.flame-car")
 require("prototypes.item.artillery-prototype")
 require("prototypes.item.concrete-brick")
 require("prototypes.item.gear-dies")
+require("prototypes.loaders") -- погрузчики: предметы, рецепты, исследования (бывший AAI)
 
 -- new recipies
 require("prototypes.recipe.warehouses")

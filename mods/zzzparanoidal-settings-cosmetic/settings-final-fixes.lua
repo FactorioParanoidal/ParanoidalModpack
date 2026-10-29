@@ -70,8 +70,6 @@ hide("bool-setting", "paranoidal-bob-basic-belt-64-frames")
 hide("bool-setting", "wide-flashlight")
 hide("bool-setting", "enhanced-nightvision")
 hide("string-setting", "night-lut-set")
--- aai-loaders
-hide("bool-setting", "aai-loaders-fit-assemblers")
 -- Aircraft-space-age
 hide("bool-setting", "aircraft-sound-setting")
 -- angelspetrochem

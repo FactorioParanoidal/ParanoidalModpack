@@ -355,9 +355,6 @@ if mods["Lighted-Poles-Plus"] then
         "bi-power-to-rail-pole,bi-rail-hidden-power-pole,ee-super-electric-pole,ee-super-substation"
     )
 end
-if mods["aai-loaders"] then
-    set_settings_default_value("string-setting", "aai-loaders-mode", "expensive")
-end
 if mods["minime"] then
     set_settings_default_value("bool-setting", "minime_character-selector", false)
 end

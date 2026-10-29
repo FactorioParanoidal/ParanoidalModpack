@@ -1,7 +1,7 @@
 -- A non-electric presentation/circuit shell owns selection and placement.
 -- The native loader keeps its original speed, transport lines and per-item electricity.
 local defs = require("loader-definitions")
-if not defs.enabled(mods, settings.startup) then return end
+if not defs.enabled(mods) then return end
 local empty = { filename = "__core__/graphics/empty.png", width = 1, height = 1 }
 local directions = { "north", "east", "south", "west" }
 
