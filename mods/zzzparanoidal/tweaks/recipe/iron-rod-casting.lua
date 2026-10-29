@@ -46,7 +46,7 @@ local function patch(name, spec)
 	local recipe = data.raw.recipe[name]
 	recipe.hidden = nil
 	recipe.enabled = false
-	recipe.localised_name = nil
+	recipe.localised_name = { "item-name.angels-rod-stack-iron" }
 	recipe.subgroup = "paranoidal-casting-iron-gears"
 	for key, value in pairs(spec) do recipe[key] = value end
 end
