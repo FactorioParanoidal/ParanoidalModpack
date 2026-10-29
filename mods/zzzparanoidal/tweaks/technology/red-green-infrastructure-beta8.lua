@@ -97,9 +97,6 @@ local definitions = {
 		},
 		["prerequisites"] = { "bob-repair-pack-2", "advanced-circuit", "bob-brass-processing", "angels-invar-smelting-1" },
 	},
-	["armor-absorb-5"] = {
-		["prerequisites"] = { "armor-absorb-4", "logistic-science-pack" },
-	},
 	["radar"] = {
 		["unit"] = {
 			["count"] = 40,

@@ -1,0 +1,14 @@
+{
+  "name": "ToxicPollution2-reforged",
+  "version": "9.0.0",
+  "factorio_version": "2.0",
+  "title": "Toxic Pollution 2 Reforged",
+  "author": "Likos, ArtMares, ViridiVir, Paranoidal",
+  "homepage": "https://github.com/FactorioParanoidal/ParanoidalModpack",
+  "description": "Polluted air poisons the player. Protection filters the smog and wears out: respirator, gas mask, armor, filter modules, closed vehicles. Intoxication bar on screen, research, pollution signal for circuits. Rewrite of Toxic Pollution for the Paranoidal modpack.",
+  "dependencies": [
+    "base >= 2.0.77",
+    "! toxicPollution2",
+    "! toxicPollution"
+  ]
+}

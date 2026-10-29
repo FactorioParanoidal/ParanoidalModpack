@@ -28,3 +28,4 @@ Version: 1.26.0
     - beltbrush2 was renamed to beltbrush2-reforged: the optional dependency and the [mod-name] key follow the new name.
     - nanobots-refined was renamed to nanobots-refined-reforged: the optional dependency and the [mod-name] key follow the new name.
     - OverloadedTrainsSimple was renamed to OverloadedTrainsSimple-reforged: its [mod-name] key follows the new name.
+    - ToxicPollution2-reforged replaces toxicPollution2: its [mod-name] and [mod-description] in zzzz-user-overrides.cfg instead of the old ones; zzzparanoidal.tips-radiation-pollution.cfg removed, the smog tips moved into the mod with their own ru locale.

@@ -1,0 +1,17 @@
+{
+  "mod": "ToxicPollution2-reforged",
+  "source": "local",
+  "original": {
+    "name": "Toxic Pollution",
+    "authors": [
+      "Likos",
+      "ArtMares",
+      "ViridiVir"
+    ],
+    "portal": {
+      "name": "toxicPollution",
+      "url": "https://mods.factorio.com/mod/toxicPollution"
+    }
+  },
+  "changeReason": "Локальный мод Paranoidal: переписанный Toxic Pollution (toxicPollution2 1.0.0, порт на 2.0) вместо toxicPollution2. Интоксикация 0–100% вместо скрытого множителя, урон только в смоге, фильтрация слоями (респиратор, противогаз, броня, дыхательные модули, транспорт), износ и пополнение фильтров, броня с сеткой не разрушается, панель интоксикации, 10 уровней исследования, исправленный датчик загрязнения; новая графика из свободных источников."
+}

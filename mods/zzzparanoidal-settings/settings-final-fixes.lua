@@ -410,9 +410,8 @@ hide("string-setting", "sqt-blacklist-names")
 hide("bool-setting", "sqt-remove-collision")
 hide("string-setting", "sqt-remove-collision-types")
 hide("string-setting", "sqt-remove-collision-names")
--- toxicPollution2
-hide("int-setting", "armor-absorb-multiplier")
-hide("double-setting", "min-pollution-to-damage")
+-- ToxicPollution2-reforged
+hide("double-setting", "tpr-tolerance")
 -- valves-lib
 hide("int-setting", "valves-default-threshold-overflow")
 hide("int-setting", "valves-default-threshold-top_up")

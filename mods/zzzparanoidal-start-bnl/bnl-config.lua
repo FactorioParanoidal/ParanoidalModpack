@@ -389,7 +389,7 @@ config.professions = {
         },
         biologist = {
             sprite = "item/bi-seed",
-            researched = {"armor-absorb-1", "armor-absorb-2", "armor-absorb-3"},
+            researched = {"tpr-smog-protection-1", "tpr-smog-protection-2"},
             half = {"bi-tech-bio-farming", "bi-tech-timber", "lamp"},
             -- the respirator goes into the armor slot
             items = {{"respirator", 1}, {"bi-seed", 100, quality_steps = {1, 4}}, {"bi-bio-greenhouse", 2},

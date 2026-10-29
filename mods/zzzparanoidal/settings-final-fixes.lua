@@ -355,11 +355,6 @@ if mods["Lighted-Poles-Plus"] then
         "bi-power-to-rail-pole,bi-rail-hidden-power-pole,ee-super-electric-pole,ee-super-substation"
     )
 end
-if mods["toxicPollution2"] then
-    set_settings_default_value("double-setting", "min-pollution-to-damage", 150)
-    set_settings_default_value("int-setting", "armor-absorb-multiplier", 1000)
-    set_settings_default_value("bool-setting", "auto-equip-armor", true)
-end
 if mods["aai-loaders"] then
     set_settings_default_value("string-setting", "aai-loaders-mode", "expensive")
 end

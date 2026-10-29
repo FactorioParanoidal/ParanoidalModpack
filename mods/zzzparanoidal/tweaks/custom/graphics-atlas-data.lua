@@ -223,7 +223,6 @@ D.file_remap = {
 	["__reskins-library__/graphics/entity/common/pipe-patches/vertical-pipe-shadow-patch.png"] = { "__angelsrefininggraphics__/graphics/entity/clarifier/vertical-pipe-shadow-patch.png", "angelsrefininggraphics" },
 	["__reskins-library__/graphics/icons/base/oil-refinery/oil-refinery-icon-base.png"] = { "__base__/graphics/icons/oil-refinery.png", "base" },
 	["__reskins-library__/graphics/icons/shared/items/glass.png"] = { "__bobplates__/graphics/icons/glass.png", "bobplates" },
-	["__toxicPollution2__/graphics/pollution.png"] = { "__MIRV2__/tf_util/empty-sprite.png", "MIRV2" },
 }
 
 -- Иконки крупнее, чем их показывает игра (2x ожидаемого размера): путь|размер -> копия.

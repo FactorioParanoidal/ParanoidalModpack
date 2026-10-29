@@ -1,0 +1,40 @@
+data:extend({
+	{
+		type = "double-setting",
+		name = "tpr-tolerance",
+		setting_type = "startup",
+		default_value = 150,
+		minimum_value = 10,
+		maximum_value = 10000,
+		order = "a",
+	},
+	{
+		type = "string-setting",
+		name = "tpr-hud",
+		setting_type = "runtime-per-user",
+		default_value = "auto",
+		allowed_values = { "auto", "always", "never" },
+		order = "a",
+	},
+	{
+		type = "bool-setting",
+		name = "tpr-auto-equip",
+		setting_type = "runtime-per-user",
+		default_value = true,
+		order = "b",
+	},
+	{
+		type = "bool-setting",
+		name = "tpr-sounds",
+		setting_type = "runtime-per-user",
+		default_value = true,
+		order = "c",
+	},
+	{
+		type = "bool-setting",
+		name = "tpr-respawn-respirator",
+		setting_type = "runtime-per-user",
+		default_value = false,
+		order = "d",
+	},
+})

@@ -1,0 +1,7 @@
+require("prototypes.damage")
+require("prototypes.signals")
+require("prototypes.items")
+require("prototypes.equipment")
+require("prototypes.recipes")
+require("prototypes.technology")
+require("prototypes.tips")

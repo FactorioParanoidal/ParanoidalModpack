@@ -1,0 +1,24 @@
+---------------------------------------------------------------------------------------------------
+Version: 9.0.0
+Date: 2026-10-29
+  Major Features:
+    - Rewrite of toxicPollution2 1.0.0 (Toxic Pollution by Likos, ArtMares, ViridiVir) for Paranoidal. Replaces toxicPollution2; saves of the old mod are not migrated.
+    - Intoxication 0-100 % instead of the hidden x60 time multiplier: it grows while the inhaled pollution is above the tolerable level (150, +10 % per research level) and falls below it, faster in cleaner air and twice as fast near a working air filter, farm or greenhouse. Damage starts at 50 % and only while the player breathes smog: leaving the smog stops it at once (the old mod kept dealing the last damage after leaving, often lethal).
+    - Protection filters a share of the smog instead of making any armor an immunity: vehicle cabin, breathing module in the armor grid, armor-slot item (its toxin resistance). Layers add up; the safe pollution level is shown.
+  Features:
+    - Gas mask (80 %), filter module (50 %, 40 kW in smog) and closed-loop breathing module (100 %, 200 kW in smog). The respirator filters 50 % (was 5 %) and stays the start recipe.
+    - Filters wear only in harmful air, in proportion to what they filter. Armor with an equipment grid is never destroyed: with exhausted filters it stops filtering. An air filter (Carbon Capture) in the inventory refills the worn protection and returns a used filter.
+    - Worn-out protection without a grid is replaced by the best one from the inventory (the old mod chose the worst).
+    - Cabin filtration of vehicles: car 40 %, tank and aircraft 85 %, train 75 % (armoured 90 %), spidertron 95 %; shown in the vehicle tooltip.
+    - Intoxication panel (per-player setting auto/always/never): bar, inhaled against tolerable, safe level, filtration by layers, resource and air filters, trend with the time to damage or to clean.
+    - One alert at a time (smog, filters exhausted, damage), removed and replaced correctly; alarm and refill sounds (per-player setting).
+    - Smog protection research: 10 levels instead of 25, each +10 % tolerable pollution and +10 % filter resource; levels 2, 5 and 8 unlock the gas mask and the modules.
+    - Tips and tricks of the mod (moved from zzzparanoidal) with the real numbers. Command /toxic (status, kills) answers only the caller. Remote interface toxic_pollution.
+    - Death from smog is announced to the force; no killer entity and no extra force any more.
+  Changes:
+    - Armor filtration (toxin resistance): Bob's power armor MK3/MK4/MK5 75/80/85 % (were 30/40/50, below MK2); Yuoki armor derives from it. Hazmat suit 85 % with 6000 filter resource (had no protection and 15 durability). Armor durability is shown as "Filter resource".
+    - Pollution sensor: the signal "Pollution sensor" in a constant combinator. Only slots that hold the signal are written, only in manual sections, unchanged values are not rewritten; a combinator without the signal is forgotten (the old mod kept overwriting a slot the player had changed).
+  Graphics:
+    - New icons, equipment sprites, technology icon and thumbnail from free-licensed sources (see README): respirator, gas mask, GHS acute toxicity pictogram, Fluent Emoji. The biohazard sign is gone.
+  Optimizations:
+    - Players are updated once per second in 6 slots; the panel writes only changed texts; sensors in 12 buckets.

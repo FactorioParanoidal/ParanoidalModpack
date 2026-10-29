@@ -105,11 +105,9 @@ local prerequisites = {
     { "orbital-autonomous-fabricators", "effect-transmission-3" },
     { "orbital-autonomous-fabricators", "bob-electric-energy-accumulators-3" },
     { "orbital-autonomous-fabricators", "bob-solar-energy-3" },
-    -- Исследовательские пакеты: только согласованные 20 связей, без белой науки.
+    -- Исследовательские пакеты: только согласованные связи, без белой науки
+    -- (связи «Защиты от смога» заданы в ToxicPollution2-reforged).
     { "factory-interior-upgrade-display", "logistic-science-pack" },
-    { "armor-absorb-10", "military-science-pack" },
-    { "armor-absorb-15", "chemical-science-pack" },
-    { "armor-absorb-20", "utility-science-pack" },
     { "adv-multiple-unit-train-control", "chemical-science-pack" },
     { "artillery-prototype", "military-science-pack" },
     { "napalm", "chemical-science-pack" },

@@ -16,6 +16,9 @@ return {
         }},
         {group = "equipment", subgroup = "paranoidal-equipment-protective-clothing", order = "a-02", create = true, recipes = {
             {["name"] = "respirator", ["order"] = "02"},
+            {["name"] = "tpr-gas-mask", ["order"] = "03"},
+            {["name"] = "tpr-filter-module", ["order"] = "04"},
+            {["name"] = "tpr-closed-breathing", ["order"] = "05"},
         }},
         {group = "equipment", subgroup = "paranoidal-equipment-solar", order = "a-03", create = true, recipes = {
             {["name"] = "solar-panel-equipment", ["order"] = "01", ["icon"] = {["icons"] = {{["icon"] = "__zzzparanoidal__/graphics/gems-equipment-menu-beta8/5222a730daf1c8719bed.png", ["icon_size"] = 64}, {["icon"] = "__zzzparanoidal__/graphics/gems-equipment-menu-beta8/0498f6a0303ad6a18553.png", ["tint"] = {["r"] = 1, ["g"] = 0.7176470588235294, ["b"] = 0.14901960784313725}, ["icon_size"] = 64}, {["icon"] = "__zzzparanoidal__/graphics/gems-equipment-menu-beta8/e763a2fea02fa6ffb878.png", ["tint"] = {1, 1, 1, 0}, ["icon_size"] = 64}, {["icon"] = "__reskins-library__/graphics/icons/tiers/rounded-rectangle/1.png", ["icon_size"] = 64}, {["icon"] = "__reskins-library__/graphics/icons/tiers/rounded-rectangle/1.png", ["icon_size"] = 64, ["tint"] = {["r"] = 1, ["g"] = 0.7176470588235294, ["b"] = 0.14901960784313725, ["a"] = 0.75}}}}},
