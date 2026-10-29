@@ -1,4 +1,18 @@
-0.18.2 Fresh compatibility with Angels Petrochem
-0.18.1 Up to Date
-0.0.2 Graphical Changes
-0.0.1 Here Hell Begins
+---------------------------------------------------------------------------------------------------
+Version: 0.18.2
+  Graphics:
+    - thumbnail.png is redrawn at 144x144 after the old smaller picture: text and simple shapes are drawn again, the rest is resampled and sharpened.
+  Changes:
+    - Fresh compatibility with Angels Petrochem
+---------------------------------------------------------------------------------------------------
+Version: 0.18.1
+  Changes:
+    - Up to Date
+---------------------------------------------------------------------------------------------------
+Version: 0.0.2
+  Changes:
+    - Graphical Changes
+---------------------------------------------------------------------------------------------------
+Version: 0.0.1
+  Changes:
+    - Here Hell Begins

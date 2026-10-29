@@ -1,5 +1,7 @@
 ---------------------------------------------------------------------------------------------------
 Version: 0.6.6
+  Graphics:
+    - thumbnail.png is redrawn at 144x144 after the old smaller picture: text and simple shapes are drawn again, the rest is resampled and sharpened.
   Changes:
     - Paranoidal fork: CallFrenzyAttack hands the attack to RampantFixed (remote strikePosition_ExtCtrl) when it manages the surface: Rampant squads from the nests nearest to the target instead of up to 450 single units commanded one by one; no attack while the Rampant AI is peaceful. The old command stays without RampantFixed
     - Paranoidal fork: a dying reactor no longer creates a "nuke-explosion" (sight and sound without damage); real meltdowns come from the reactor prototypes

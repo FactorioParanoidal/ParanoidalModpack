@@ -1,3 +1,8 @@
--v 0.16.2
-
-Added Silo to Tab
+---------------------------------------------------------------------------------------------------
+Version: 0.17.0
+  Graphics:
+    - thumbnail.png is redrawn at 144x144 after the old smaller picture: text and simple shapes are drawn again, the rest is resampled and sharpened.
+---------------------------------------------------------------------------------------------------
+Version: 0.16.2
+  Changes:
+    - Added Silo to Tab

@@ -1,6 +1,10 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.0
 Date: 2026. 10. 15
+  Graphics:
+    - thumbnail.png is redrawn at 144x144 after the old smaller picture: text and simple shapes are drawn again, the rest is resampled and sharpened.
+  Locale:
+    - ru: the mod name and the mod list description are the same as in ParanoidalLocale (format "English title (Russian translation)"), so the mod reads the same with or without it.
   Info:
     - Port of Radioactive Damage 0.0.4 by DellAquila (Factorio 1.1, Paranoidal Beta 8) to Factorio 2.0 as a separate mod, Radioactive Damage Reforged.
     - Same damage as Beta 8: every 10 ticks 1 radioactive damage per carried kind of uranium ore, uranium-235, uranium-238, uranium fuel cell and depleted uranium fuel cell. Nuclear fuel is not radioactive.

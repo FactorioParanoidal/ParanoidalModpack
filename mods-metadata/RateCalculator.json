@@ -1,0 +1,6 @@
+{
+  "mod": "RateCalculator",
+  "source": "portal",
+  "upstreamVersion": "3.3.8",
+  "changeReason": "Русское название и описание мода в locale/ru совпадают с ParanoidalLocale (название в виде «English (Русский)»). Картинка thumbnail.png перерисована в 144×144 по образцу прежней."
+}

@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.08
 Date: 2026-02-07
+  Graphics:
+    - thumbnail.png is redrawn at 144x144 after the old smaller picture: text and simple shapes are drawn again, the rest is resampled and sharpened.
   Bugfixes:
     - Paranoidal: control.lua regenerate_entity uses prototypes.entity (game.entity_prototypes no longer exists in 2.0).
     - Fixed crash with Bob's mods

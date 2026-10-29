@@ -1,8 +1,11 @@
 ---------------------------------------------------------------------------------------------------
 Version: 3.3.8
 Date: 2026-01-18
+  Locale:
+    - ru: the mod name and the mod list description are the same as in ParanoidalLocale (format "English title (Russian translation)"), so the mod reads the same with or without it.
   Graphics:
     - Updated shortcut icon by Galdoc.
+    - thumbnail.png is redrawn at 144x144 after the old smaller picture: text and simple shapes are drawn again, the rest is resampled and sharpened.
   Bugfixes:
     - Fixed that fluid fuel consumption for crafting machines was using the wrong fluid. (#209)
     - Fixed incorrect rates on boilers with a fluid energy source.

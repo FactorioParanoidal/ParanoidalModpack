@@ -1,0 +1,6 @@
+{
+  "mod": "scattergun_turret",
+  "source": "portal",
+  "upstreamVersion": "8.0.9",
+  "changeReason": "Картинка thumbnail.png перерисована в 144×144 по образцу прежней."
+}

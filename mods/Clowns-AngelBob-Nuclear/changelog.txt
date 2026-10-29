@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.13
 Date: 2026-02-04
+  Graphics:
+    - thumbnail.png is redrawn at 144x144 after the old smaller picture: text and simple shapes are drawn again, the rest is resampled and sharpened.
   Bugfixes:
     - Recipe & Tech Tree fixes/updates
 ---------------------------------------------------------------------------------------------------

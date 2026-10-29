@@ -1,0 +1,6 @@
+{
+  "mod": "mferrari_lib",
+  "source": "portal",
+  "upstreamVersion": "0.6.6",
+  "changeReason": "Локальные правки Paranoidal, перечисленные в changelog.txt мода. Картинка thumbnail.png перерисована в 144×144 по образцу прежней."
+}

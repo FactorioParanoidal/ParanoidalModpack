@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 8.0.9
 Date: 10.01.2025
+  Graphics:
+    - thumbnail.png is redrawn at 144x144 after the old smaller picture: text and simple shapes are drawn again, the rest is resampled and sharpened.
   Fixes:
     - Restored 125% range modifier for Cannnon shells and Uranium cannon shells.
     - Space Age Without Space compat: added 'Tungsten carbide' tech requirement for Pulse lasers.

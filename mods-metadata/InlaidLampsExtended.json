@@ -1,0 +1,6 @@
+{
+  "mod": "InlaidLampsExtended",
+  "source": "portal",
+  "upstreamVersion": "2.0.0",
+  "changeReason": "Русское название и описание мода в locale/ru совпадают с ParanoidalLocale (название в виде «English (Русский)»). Картинка thumbnail.png перерисована в 144×144 по образцу прежней."
+}

@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.2
 Date: 2024-10-27:
+  Graphics:
+    - thumbnail.png is redrawn at 144x144 after the old smaller picture: text and simple shapes are drawn again, the rest is resampled and sharpened.
 Bugfixes:
     - update to 2.0
 ---------------------------------------------------------------------------------------------------

@@ -1,6 +1,10 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.11.0
 Date: 2026-10-10
+  Graphics:
+    - thumbnail.png is redrawn at 144x144 after the old smaller picture: text and simple shapes are drawn again, the rest is resampled and sharpened.
+  Locale:
+    - ru: the mod name and the mod list description are the same as in ParanoidalLocale (format "English title (Russian translation)"), so the mod reads the same with or without it.
   Changes:
     - Local Paranoidal port of upstream 1.10.61 (Factorio 1.1) to Factorio 2.0; not an upstream release.
     - 2.0 prototype format: recipe results/ingredients, boolean enabled, collision layers, drawing_box_vertical_extension.

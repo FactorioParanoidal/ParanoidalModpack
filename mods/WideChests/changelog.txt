@@ -1,6 +1,10 @@
 ﻿---------------------------------------------------------------------------------------------------
 Version: 6.2.4
 Date: 31.5.2025
+  Graphics:
+    - thumbnail.png is redrawn at 144x144 after the old smaller picture: text and simple shapes are drawn again, the rest is resampled and sharpened.
+  Locale:
+    - ru: the mod name and the mod list description are the same as in ParanoidalLocale (format "English title (Russian translation)"), so the mod reads the same with or without it.
   Changes:
     - Paranoidal: after 16 tiles each additional tile adds 5/12 of the usual capacity, so large merged chests differ in size instead of hitting the shared limit.
   Bugfixes:

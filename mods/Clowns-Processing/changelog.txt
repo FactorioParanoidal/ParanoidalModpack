@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.14
 Date: 2026-05-02
+  Graphics:
+    - thumbnail.png is redrawn at 144x144 after the old smaller picture: text and simple shapes are drawn again, the rest is resampled and sharpened.
   Bugfixes:
     - Reverted sulfuric acid to vanilla
     - Updated tech icon size

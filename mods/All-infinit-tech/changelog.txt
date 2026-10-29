@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 0.4.0
 Date: 12-02-2026
+  Graphics:
+    - thumbnail.png is redrawn at 144x144 after the old smaller picture: text and simple shapes are drawn again, the rest is resampled and sharpened.
   Features:
     - Added compatiblity with krastorio2 tech tree and science packs 
     - Remove compatiblity with space-exploration mod because of a weird bug
