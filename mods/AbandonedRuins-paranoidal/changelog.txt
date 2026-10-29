@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 9.1.0
 Date: 2026-10-24
+  Graphics:
+    - Added thumbnail.png (144x144): the picture of the mod in the mod list, made from the mod and base game graphics.
   Changes:
     - The small ruin "pd-stone-crusher" is removed and the Quarry has no BI stone crusher: Bio Industries no longer has the stone crusher.
   Features:

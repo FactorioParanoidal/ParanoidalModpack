@@ -1,0 +1,4 @@
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+  Graphics:
+    - Added thumbnail.png (144x144): the picture of the mod in the mod list, made from the mod and base game graphics.

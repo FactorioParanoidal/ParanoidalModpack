@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.0
 Date: 15. 10. 2026
+  Graphics:
+    - Added thumbnail.png (144x144): the picture of the mod in the mod list, made from the mod and base game graphics.
   Changes:
     - The vanilla rail that a scrap rail upgrades to gets the same fast_replaceable_group (upgrade planner scrap -> rail requires matching groups).
     - The MultipleUnitTrainControl copy of the Junk locomotive (yir_usl-mu) gets the same speed and fuel and double power after the final values are reasserted.

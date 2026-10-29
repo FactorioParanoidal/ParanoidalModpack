@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.0
 Date: 2026-10-26
+  Graphics:
+    - Added thumbnail.png (144x144): the picture of the mod in the mod list, made from the mod and base game graphics.
   Major Features:
     - Renamed from zzzparanoidal-shipwreck to zzzparanoidal-start-bnl ("PARANOIDAL: Start with BnL"): the whole start of the modpack is in this mod. The BnL landing message of zzzparanoidal moved here. Prototype names and the start level setting keep their names.
     - Falling debris: for about 10 minutes stragglers of the ship fall around the crash site from the west-south-west; a chat warning (no mark on the ground), the roar of a low pass (from 5 s before the impact; players within 40 tiles of the impact point hear an incoming shell whistle ending at the impact instead) and the shadow of the piece (20-32 times larger and at 15% opacity at first, shrinking to the real shadow at full opacity at the impact) come before the impact, which blows up across the impact area (heard by every player at full volume wherever it falls), damages the area, shakes the camera and leaves a burning wreck with cargo and ammo. Sometimes a piece aims at a player building. One big piece carries the flight recorder.

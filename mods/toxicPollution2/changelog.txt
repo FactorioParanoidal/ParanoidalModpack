@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.0
 Date: 2026-10-20
+  Graphics:
+    - Added thumbnail.png (144x144): the picture of the mod in the mod list, made from the mod and base game graphics.
   Changes:
     - The respirator filters poison clouds (poison capsules, battery fumes): 90% poison resistance, the absorbed damage drains its durability; a worn-out respirator is gone.
   Bugfixes:

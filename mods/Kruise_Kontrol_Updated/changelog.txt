@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 0.3.0
 Date: 2026-07-23
+  Graphics:
+    - Added thumbnail.png (144x144): the picture of the mod in the mod list, made from the mod and base game graphics.
   Changes:
     - Added the ability to change cancel command keybind.
     - Added a setting to apply a short brake input when canceling autopathing while in a vehicle 

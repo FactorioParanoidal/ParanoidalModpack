@@ -1,5 +1,7 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.26.0
+  Graphics:
+    - Added thumbnail.png (144x144): the picture of the mod in the mod list, made from the mod and base game graphics.
   Changes:
     - zzzz-user-overrides.cfg: Russian descriptions in the mod list ("Mods" menu) for every mod of the build except creative-mod and local-speed-toggle: what the mod adds and how to use it in Paranoidal, with keys, defaults and features changed or disabled by the build. All [mod-description] keys are kept in this file; the [mod-description] sections of BottleneckLite, Shield-FX, deep-storage-unit, extendedangels, factorissimo-2-notnotmelon, fluid-memory-storage, reskins-bobs and reskins-library are removed from their files.
     - zzzz-user-overrides.cfg: [mod-name] in the format "English title (Russian translation)" for flamethrower-wagon-reforged, MultipleUnitTrainControl-reforged, robotarmy-citadel, robotarmy-reforged, Yuoki, creative-mod and defence-tower-reforged; Todo-List is named without the check mark so it sorts under T; removed the [mod-name] keys of mods that are not in the build (Bio_Industries, InserterFuelLeech, jinx, luotianyi, nailong, nailong-enemy, tiga, wukong, yasuo).

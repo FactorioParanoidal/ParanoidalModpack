@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.0
 Date: 2026.10.26
+  Graphics:
+    - Added thumbnail.png (144x144): the picture of the mod in the mod list, made from the mod and base game graphics.
   Major Features:
     - The replicator citadel: when the biters reach 50 % evolution (map setting), a fortified city of replicator droids appears on Nauvis, 50 chunks beyond the edge of the player base (spawn point + base radius 10 chunks, random direction on land, never on player buildings). One citadel per game, at war with every player force, in truce with the biters.
     - The city grows by one module chunk every 10 minutes, next to the modules it has. Every module is a walled chunk of the "city of robots": floor plating, a road cross that runs on through the neighbours, a plaza with the hub pylon and lamps, corner towers, buildings in four quarters. Walls stand only on the outer edges, with gates where the roads leave; a new neighbour removes the shared wall; inner corners are closed.

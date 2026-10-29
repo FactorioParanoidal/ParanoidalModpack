@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.1.5
 Date: 2026. 10. 15
+  Graphics:
+    - Added thumbnail.png (144x144): the picture of the mod in the mod list, made from the mod and base game graphics.
   Bugfixes:
     - Science packs again raise evolution: research ingredients are read in the 2.0 form {name, amount}; before, only the constant 0.15% per technology was added, so the whole tree gave about 85% instead of nearly 100%.
     - Research by script or command counts like ordinary research (the by_script check never worked; now it is removed on purpose).

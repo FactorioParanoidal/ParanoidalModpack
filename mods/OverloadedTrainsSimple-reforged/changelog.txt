@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 9.1.0
 Date: 2026-10-27
+  Graphics:
+    - Added thumbnail.png (144x144): the picture of the mod in the mod list, made from the mod and base game graphics.
   Major Features:
     - Speed in curves: a train passes curved rails (including elevated and legacy curves) at no more than a share of its own current top speed (setting, 50% by default, 100% disables). It slows down smoothly before the curve with half of its own braking ability and keeps the limit until its last carriage has left the curve; afterwards it accelerates normally, a loaded train with its cargo inertia. Applies to automatic and manual trains.
     - Automatic trains read the curves ahead from their path, scanned incrementally only as far as their braking distance needs. Manual and path-less trains look ahead along the rails every 10 ticks.
