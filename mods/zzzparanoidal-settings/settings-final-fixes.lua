@@ -242,7 +242,6 @@ hide("bool-setting", "ERPCTbaAB2-use-heat-shield-tile")
 hide("bool-setting", "ERPCTbaAB2-use-petrochem-buildings")
 hide("bool-setting", "ERPCTbaAB2-use-titanium-concrete")
 -- ic-more-qualities
-hide("string-setting", "ic-more-qualities-mode")
 hide("double-setting", "ic-more-qualities-multiplier")
 hide("double-setting", "ic-more-qualities-chance-to-upgrade")
 hide("double-setting", "ic-more-qualities-chance-dynamic-bonus")
