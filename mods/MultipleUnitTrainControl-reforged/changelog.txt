@@ -1,0 +1,30 @@
+---------------------------------------------------------------------------------------------------
+Version: 9.0.0
+Date: 2026-10-29
+  Major Features:
+    - Rewrite of Multiple Unit Train Control 1.0.5 (robot256) for Paranoidal. Replaces MultipleUnitTrainControl and Robot256Lib: the locomotive replacement is built in, the library is no longer needed.
+  Features:
+    - Alt-mode labels over locomotives: "[MU icon] MU +100%" (ru "спарка +100%") over paired locomotives, a grey "no pair" over a locomotive of a two-way train that pulls in one direction only, with the reason when it is known: other quality, wagons between (basic mode), other type. Visible to the own force only; per-player setting.
+    - Shared fuel: in a train with an MU pair all linked locomotives (the run of locomotives in basic mode, the whole train in wireless mode) even out their fuel and burnt results (empty batteries), not just the two locomotives of a pair. Only locomotives with the same fuel categories share.
+    - Pairs of different quality: the quality of a locomotive does not change its power (checked in the engine), so quality no longer blocks a pair. The rule is computed from the prototypes and would turn back on by itself if quality ever changed power.
+    - Cybersyn: a train on a delivery (any Cybersyn status except "in depot") is not rebuilt; it waits until it stands in its depot, so research or coupling no longer fails deliveries.
+    - Elevated rails: a locomotive standing where ground rails and elevated rails or a ramp meet is not rebuilt (the engine would put the new one on the elevated rail); the train waits until it stands elsewhere.
+    - Technologies describe the rules and show what they unlock.
+    - Russian and English locale for everything.
+  Changes:
+    - MU twins are deep copies of the final locomotives made in data-final-fixes, after zzzparanoidal and JunkTrain3 (optional dependencies), so balance, reskin, fuel efficiency and grids always match. They have no item or recipe of their own and no catalogue technology: the pairs are stored in mod-data "mutc-reforged-locomotives", a twin is placed, pipetted, built by robots and mined as the normal locomotive.
+    - Twins are made for every non-hidden locomotive that some item places. Prototype names are kept ("<name>-mu", technology names), so saves of the old mod keep their locomotives.
+    - Settings reworked: "MU pairs" (by research / always / off), "Shared fuel in MU trains", "MU labels in alt mode" (per player). Debug messages, the fuel interval, the Yuoki steam option and the blacklist setting are removed.
+    - Trains are processed on the next ticks after an event (5 per tick) instead of inside other mods' events; the train is rebuilt once per batch and its schedule, interrupts, temporary stops, group, current stop and manual mode are restored once.
+    - Blueprints and copies always hold the normal locomotive names.
+    - Compatibility code for mods outside the modpack (RET, FARL, SE elevators, train tunnels, fluid trains, Degraine's and other electric trains, FuelTrainStop, Yuoki steam, X-12 tender) is removed.
+  Bugfixes:
+    - Replacing a locomotive no longer leaves two empty script inventories in the save for its fuel and burnt results.
+    - A failed replacement no longer crashes: the locomotive item (by its real item name, also JunkTrain) and all its fuel and equipment are dropped on the ground and the force gets a message with the position.
+    - A neighbour train that a rebuilt locomotive touched is processed too, so uncoupling an MU pair always turns both locomotives back to normal.
+    - Several unpaired MU locomotives of one train are reverted in one pass.
+    - Fuel balancing checks both inventories, moves only what the target accepts and keeps item quality.
+    - The fuel balancing interval is fixed (each linked train about every 5 seconds, spread over ticks) instead of a growing, possibly fractional value.
+    - Locomotives marked for deconstruction or upgrade are not rebuilt: an upgrade order was lost, and a locomotive about to be removed gains nothing from it.
+    - Technologies are hidden or shown for forces created later too.
+    - Equipment with burners keeps its fuel; equipment ghosts and removal orders are kept.

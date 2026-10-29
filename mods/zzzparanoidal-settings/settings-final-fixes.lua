@@ -273,9 +273,6 @@ hide("bool-setting", "minime_scale-tool-attack-distance")
 hide("bool-setting", "minime_small-character-collision-box")
 hide("bool-setting", "minime_character-selector")
 hide("bool-setting", "minime_debug_to_log")
--- MultipleUnitTrainControl
-hide("bool-setting", "multiple-unit-train-control-allow_yuoki_steam")
-hide("string-setting", "multiple-unit-train-control-blacklist")
 -- nanobots-refined-reforged
 hide("bool-setting", "nanobots-auto")
 hide("int-setting", "nanobots-manual-speed")

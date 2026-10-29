@@ -2,6 +2,7 @@
 Version: 9.1.0
 Date: 2026-10-24
   Changes:
+    - "Push-pull" (mxlr-push-pull) requires MultipleUnitTrainControl-reforged, which replaces MultipleUnitTrainControl; MU locomotives keep the "-mu" suffix the tracker looks for.
     - HeroTurretRedux ranks hidden for the research tooltips (laser and flamethrower ranks) still count as turrets of their base.
   Features:
     - Theme "Legendary ruins": 80 achievements for the legendary ruins of AbandonedRuins-paranoidal

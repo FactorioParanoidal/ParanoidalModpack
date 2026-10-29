@@ -31,6 +31,10 @@
   `localised_name`, `localised_description`), мощность = 2× мощности исходного, как в MU.
 - Затрагивает все 7 пар сборки: `locomotive`, `bob-locomotive-2/3`, `bob-armoured-locomotive(-2)`,
   `bet-locomotive`, `hiend_loco`. Уже стоящие MU-локомотивы получат новые параметры при загрузке.
+- **2026-10-29:** MultipleUnitTrainControl заменён на MultipleUnitTrainControl-reforged 9.0.0. Он сам
+  создаёт копии `-mu` в своём data-final-fixes из итоговых локомотивов (грузится после zzzparanoidal
+  и JunkTrain3 по необязательным зависимостям), поэтому `multiple-unit-sync.lua` удалён, а
+  `locomotive-fuel-efficiency.lua` больше не трогает `-mu`.
 
 ### 3. Одинаковая анимация и 6 лампочек на всех зарядниках
 - **Было:** BET отдаёт всем шести зарядникам одну таблицу `working_visualisations`.

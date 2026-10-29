@@ -1,6 +1,7 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.26.0
   Changes:
+    - MultipleUnitTrainControl and Robot256Lib are replaced by MultipleUnitTrainControl-reforged, which has its own ru locale: their keys are removed from zzzz-user-overrides.cfg and zzzz-missing-keys.cfg (en, ru), MultipleUnitTrainControl.locale.cfg is deleted, and so is the optional dependency on MultipleUnitTrainControl.
     - extendedangels.ext-ang-refining.cfg (ru): angels-washing-plant-3/4 are named "Промывочная установка МК3/МК4" like tiers 1-2 instead of "Гидрометаллургический завод 3/4".
     - zzzz-missing-keys.cfg (en, ru): names of the new RampantFixed scanners chunk-scanner-nest-small-rampant and chunk-scanner-turret-small-rampant.
     - RampantFixed.locale.cfg: the main safety switch is named "Безопасность: Ж/Д"; the big electric pole checkbox is replaced by the list "Безопасность: большие опоры ЛЭП" (all vulnerable / tiers 1-2 vulnerable, tiers 3-4 invulnerable / all invulnerable); the railway safety description says that wooden rails, primitive signals and train stops are always vulnerable; the big pole and lamp descriptions say that a pole or lamp right next to another one is not protected.

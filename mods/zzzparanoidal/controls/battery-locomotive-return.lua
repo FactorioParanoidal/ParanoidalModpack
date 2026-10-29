@@ -1,6 +1,6 @@
 -- Возврат аккумулятора BatteryElectricTrain при разборке локомотивов, которые сам BET не знает.
 -- BET (control.lua) возвращает недоразряженный аккумулятор только для "bet-locomotive". У других
--- локомотивов на топливе "bet-fuel-battery" (bet-locomotive-mu от MultipleUnitTrainControl,
+-- локомотивов на топливе "bet-fuel-battery" (bet-locomotive-mu от MultipleUnitTrainControl-reforged,
 -- hiend_loco и его MU-копия) горящий аккумулятор исчезал целиком. Здесь вместо него
 -- возвращается пустой аккумулятор (остаток заряда не сохраняется — как в BET).
 -- Подробности — tweaks/entity/BATTERY-ELECTRIC-TRAIN-FIXES.md.

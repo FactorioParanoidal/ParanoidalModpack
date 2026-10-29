@@ -1,6 +1,0 @@
-{
-  "mod": "MultipleUnitTrainControl",
-  "source": "portal",
-  "upstreamVersion": "1.0.5",
-  "changeReason": "Локальный portal-патч Paranoidal на upstream 1.0.5, версия не менялась. data/createMuLoco*.lua: предмет локомотива ищется по place_result/placeable_by, если его имя отличается от имени сущности (Junk Train: предмет JunkTrain ставит yir_usl), — у такого локомотива появляется MU-версия; control.lua: соответствие обычных и MU-локомотивов строится через place_result предметов (для остальных локомотивов результат тот же). При обновлении сверить с upstream."
-}

@@ -121,9 +121,6 @@ if mods["Noxys_Trees"] then
     set_settings_default_value("int-setting", "Noxys_Trees-maximum-trees-per-chunk", 256)
     set_settings_default_value("int-setting", "Noxys_Trees-ticks-between-operations", 61)
 end
-if mods["MultipleUnitTrainControl"] then
-    set_settings_default_value("string-setting", "multiple-unit-train-control-debug", "none") -- глушим лог-спам "registered upgrade mapping"
-end
 if mods["Picks-Inserter"] then
     set_settings_default_value("int-setting", "PI_clear_max", 1)
     set_settings_default_value("bool-setting", "PI_target_selection", false)

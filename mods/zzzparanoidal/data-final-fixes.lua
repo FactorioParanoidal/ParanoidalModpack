@@ -76,7 +76,6 @@ require("removals.clowns-steel-c2")
 require("removals.angels-valves") -- прячем Angels-flow-клапаны: заменены модом valves (inspector остаётся)
 
 require("graphics.train.train_reskin") -- рескин поездов
-require("tweaks.entity.multiple-unit-sync") -- копии «-mu» из итоговых локомотивов (после баланса и рескина)
 -------------------------------------------------------------------------------------------------
 require("final-fixes.technologies") -- Пожалуйста не добавляйте сюда новых записей. Поищите раздел в tweaks/technology или создайте там новый
 require("final-fixes.recipies")-- Пожалуйста не добавляйте сюда новых записей. Поищите раздел в tweaks/recipe или создайте там новый

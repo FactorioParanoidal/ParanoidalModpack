@@ -4,3 +4,4 @@ Date: 15. 10. 2026
   Changes:
     - The vanilla rail that a scrap rail upgrades to gets the same fast_replaceable_group (upgrade planner scrap -> rail requires matching groups).
     - The MultipleUnitTrainControl copy of the Junk locomotive (yir_usl-mu) gets the same speed and fuel and double power after the final values are reasserted.
+    - The yir_usl-mu block is removed again: MultipleUnitTrainControl-reforged copies its MU twins from the final locomotives after this file.

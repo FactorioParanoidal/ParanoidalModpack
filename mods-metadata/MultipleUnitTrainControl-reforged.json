@@ -1,0 +1,15 @@
+{
+  "mod": "MultipleUnitTrainControl-reforged",
+  "source": "local",
+  "original": {
+    "name": "Multiple Unit Train Control",
+    "authors": [
+      "robot256"
+    ],
+    "portal": {
+      "name": "MultipleUnitTrainControl",
+      "url": "https://mods.factorio.com/mod/MultipleUnitTrainControl"
+    }
+  },
+  "changeReason": "Локальный мод Paranoidal: переписанный Multiple Unit Train Control 1.0.5 (robot256, MIT) с встроенной заменой локомотива вместо библиотеки Robot256Lib 2.0.16. Заменяет MultipleUnitTrainControl и Robot256Lib: MU-копии строятся из итоговых локомотивов, без скрытых предметов и рецептов, спарки разного качества, общее топливо состава, метки в режиме Alt, отложенная замена у поездов Cybersyn в рейсе."
+}

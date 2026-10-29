@@ -1,0 +1,16 @@
+{
+  "name": "MultipleUnitTrainControl-reforged",
+  "version": "9.0.0",
+  "factorio_version": "2.0",
+  "title": "Multiple Unit Train Control Reforged",
+  "author": "robot256, Paranoidal",
+  "homepage": "https://github.com/FactorioParanoidal/ParanoidalModpack",
+  "description": "Opposite-facing locomotives of the same type pull together: each such pair gets double power. Rewrite of Multiple Unit Train Control by robot256 for the Paranoidal modpack.",
+  "dependencies": [
+    "base >= 2.0.77",
+    "? zzzparanoidal",
+    "? JunkTrain3",
+    "! MultipleUnitTrainControl",
+    "! Noxys_Multidirectional_Trains"
+  ]
+}

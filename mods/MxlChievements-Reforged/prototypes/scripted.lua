@@ -59,7 +59,7 @@ local list = {
     {entity = "lighted-medium-electric-pole"}),
 
   -- logistics
-  {id = "push-pull", kind = "script", theme = "logistics", tracker = "mu-train", mods = {"MultipleUnitTrainControl"},
+  {id = "push-pull", kind = "script", theme = "logistics", tracker = "mu-train", mods = {"MultipleUnitTrainControl-reforged"},
     icon = {entity = "locomotive"}},
   {id = "overload", kind = "script", theme = "logistics", tracker = "overload", amount = 20, icon = {entity = "cargo-wagon"}},
   {id = "tardis", kind = "script", theme = "logistics", tracker = "factory-floor", mods = {"factorissimo-2-notnotmelon"},

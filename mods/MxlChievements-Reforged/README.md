@@ -190,7 +190,7 @@
 | Нанотехнолог | `mxlr-nano-constructor` | произвести `ammo-nano-constructors`: 10 тыс. |
 | Нано-уравнитель | `mxlr-nano-leveler` | произвести `ammo-nano-levelers`: 10 тыс. |
 | Рой | `mxlr-swarm-1…2` | боевых роботов одновременно: 250 / 500 |
-| Тяни-толкай | `mxlr-push-pull` | Соберите состав, в котором локомотивы тянут в обе стороны. *(скрипт: mu-train)* — нужен `MultipleUnitTrainControl` |
+| Тяни-толкай | `mxlr-push-pull` | Соберите состав, в котором локомотивы тянут в обе стороны. *(скрипт: mu-train)* — нужен `MultipleUnitTrainControl-reforged` |
 | Перегруз | `mxlr-overload` | Отправьте в путь поезд из 20 гружёных вагонов. *(скрипт: overload)* |
 | ТАРДИС | `mxlr-tardis` | Зайдите внутрь здания-фабрики. *(скрипт: factory-floor)* — нужен `factorissimo-2-notnotmelon` |
 | Фабрика в фабрике | `mxlr-factory-in-factory` | Постройте здание-фабрику внутри другой фабрики. *(скрипт: factory-nest)* — нужен `factorissimo-2-notnotmelon` |
