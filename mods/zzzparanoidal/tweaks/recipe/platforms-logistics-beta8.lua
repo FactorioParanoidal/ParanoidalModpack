@@ -55,13 +55,14 @@ local ingredients = {
 	["bob-gun-turret-3"] = {
 		item("bob-gun-turret-2", 1), item("bob-steel-bearing", 10), item("bob-invar-alloy", 20), item("bob-brass-gear-wheel", 10),
 	},
+	-- Снайперские МК2–3: решение пользователя 2026-10-29 (МК1 — tweaks/entity/warfare.lua).
 	["bob-sniper-turret-2"] = {
-		item("bob-sniper-turret-1", 1), item("steel-plate", 20), item("bob-cobalt-steel-gear-wheel", 20),
-		item("bob-cobalt-steel-bearing", 20), item("bob-invar-alloy", 20),
+		item("bob-sniper-turret-1", 1), item("bob-cobalt-steel-gear-wheel", 10), item("bob-glass", 10),
+		item("bob-cobalt-steel-bearing", 10), item("bob-invar-alloy", 10),
 	},
 	["bob-sniper-turret-3"] = {
-		item("bob-sniper-turret-2", 1), item("bob-titanium-plate", 20), item("bob-titanium-gear-wheel", 20),
-		item("bob-nitinol-alloy", 20), item("bob-nitinol-bearing", 20),
+		item("bob-sniper-turret-2", 1), item("bob-titanium-gear-wheel", 20), item("bob-glass", 20),
+		item("bob-titanium-bearing", 20), item("bob-titanium-plate", 20),
 	},
 	["bob-robot-brain-combat"] = {
 		item("bob-basic-circuit-board", 1), item("bob-basic-electronic-components", 8), item("bob-solder", 5),

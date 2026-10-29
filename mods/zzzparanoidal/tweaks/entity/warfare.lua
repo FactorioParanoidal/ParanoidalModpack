@@ -58,10 +58,13 @@ data.raw["ammo-turret"]["bob-sniper-turret-2"].attack_parameters.min_range = 17
 data.raw["ammo-turret"]["bob-sniper-turret-2"].attack_parameters.cooldown = 240
 data.raw["ammo-turret"]["bob-sniper-turret-3"].attack_parameters.min_range = 20
 data.raw["ammo-turret"]["bob-sniper-turret-3"].attack_parameters.cooldown = 210
+-- Рецепт МК1 (решение пользователя 2026-10-29); МК2–3 — tweaks/recipe/platforms-logistics-beta8.lua.
 paralib.bobmods.lib.recipe.set_ingredients("bob-sniper-turret-1", {
-	{ type = "item", name = "bob-steel-gear-wheel", amount = 20 },
 	{ type = "item", name = "gun-turret", amount = 1 },
-	{ type = "item", name = "copper-plate", amount = 20 },
+	{ type = "item", name = "bob-steel-gear-wheel", amount = 5 },
+	{ type = "item", name = "bob-glass", amount = 5 },
+	{ type = "item", name = "bob-steel-bearing", amount = 5 },
+	{ type = "item", name = "steel-plate", amount = 5 },
 })
 --###############################################################################################
 --Фикс легкихтурелей

@@ -1,5 +1,7 @@
 -- Зенитные турели 1–3 (решение пользователя 2026-10-27): копии снайперских турелей Bob после всех правок
--- сборки (характеристики, рецепты, открытия, бонусы урона), отличия только:
+-- сборки (характеристики, открытия, бонусы урона), отличия только:
+--  * своя дальность и минимальный радиус (RANGES) и свой рецепт из снайперки того же тира (RECIPES),
+--    решение пользователя 2026-10-29;
 --  * стреляют втрое чаще (cooldown / 3), один выстрел = один патрон и одно попадание;
 --  * целятся только в летающих врагов: тип цели "pd-air-unit" есть только у летающих юнитов
 --    (RampantFixed flyers, включая чемпионов, и любые юниты со слоем отрисовки air-object);
@@ -23,6 +25,15 @@ local ICONS = {
 	["__reskins-bobs__/graphics/icons/warfare/sniper-turret/sniper-turret-icon-highlights.png"] = OWN .. "icon-highlights.png",
 }
 local SUBGROUP = "paranoidal-split-defense-anti-air-turrets"
+local RANGES = {{range = 25, min_range = 5}, {range = 30, min_range = 7}, {range = 35, min_range = 10}}
+local function item(name, amount)
+	return {type = "item", name = name, amount = amount}
+end
+local RECIPES = {
+	{item(SNIPER .. 1, 1), item("bob-steel-bearing", 10), item("steel-plate", 10)},
+	{item(SNIPER .. 2, 1), item("bob-cobalt-steel-bearing", 10), item("bob-invar-alloy", 10)},
+	{item(SNIPER .. 3, 1), item("bob-titanium-bearing", 10), item("bob-titanium-plate", 10)},
+}
 -- Стволы на листах спрайтов разнесены на 19 px исходника (scale 0.5) = 9.5 px игры поперёк ствола.
 local BARREL_OFFSETS = {{0, 0}, {9.5 / 32, 0}, {-9.5 / 32, 0}}
 
@@ -125,6 +136,9 @@ for tier = 1, TIERS do
 	turret.fast_replaceable_group = "pd-anti-air-turret"
 	turret.attack_target_mask = {AIR}
 	turret.attack_parameters.cooldown = sniper.attack_parameters.cooldown / 3
+	turret.attack_parameters.range = RANGES[tier].range
+	turret.attack_parameters.min_range = RANGES[tier].min_range
+	turret.prepare_range = RANGES[tier].range + 2
 	turret.attack_parameters.projectile_creation_offsets = table.deepcopy(BARREL_OFFSETS)
 	remap_sprites(turret, {})
 
@@ -146,10 +160,9 @@ for tier = 1, TIERS do
 	recipe.icons = icons
 	recipe.subgroup = SUBGROUP
 	recipe.order = string.format("%02d", tier)
-	for _, list in ipairs({recipe.ingredients or {}, recipe.results or {}}) do
-		for _, entry in pairs(list) do
-			if entry.name then entry.name = rename(entry.name) end
-		end
+	recipe.ingredients = table.deepcopy(RECIPES[tier])
+	for _, entry in pairs(recipe.results or {}) do
+		if entry.name then entry.name = rename(entry.name) end
 	end
 	if recipe.main_product then recipe.main_product = rename(recipe.main_product) end
 
