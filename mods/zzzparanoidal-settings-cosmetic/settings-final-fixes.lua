@@ -161,10 +161,6 @@ hide("double-setting", "laserfix-b")
 hide("double-setting", "laserfix-glow-r")
 hide("double-setting", "laserfix-glow-g")
 hide("double-setting", "laserfix-glow-b")
--- ic-more-qualities
-hide("string-setting", "ic-more-qualities-localization-full")
-hide("string-setting", "ic-more-qualities-localization-only-expand")
-hide("string-setting", "ic-more-qualities-localization-rework")
 -- Lighted-Poles-Plus
 hide("double-setting", "lepp_light_size_factor")
 hide("int-setting", "lepp_light_max_size")
