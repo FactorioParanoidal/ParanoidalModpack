@@ -332,33 +332,8 @@ function demolisherUtils.onSegmentedEntityDamaged(event)
 	demolisherTrigger.nextRevengeTick = game.tick + demolisherRevengeCooldown
 end
 
--- called each 30000 tick. 
--- cant just set evo by time in settings, becouse pollution can be turned on
-function demolisherUtils.vulcanusEvolution()
-	local universe = storage.universe
-	for _, map in pairs(universe.maps) do
-		local surface = map.surface
-		local planetAISetting = (universe.planetAISettings[surface.name] or universe.planetAISettings["others"])
-		if (planetAISetting.AI == 3) then
-			local demolishersCount = surface.count_entities_filtered({force = "enemy", type = "segmented-unit"})
-			if demolishersCount > 0 then
-				game.forces.enemy.get_evolution_factor_by_time(map.surface)
-				local evo = game.forces.enemy.get_evolution_factor(map.surface)
-				local lastEvo = map.lastEvo or 0
-				if lastEvo > 1 then
-					lastEvo = 0
-				end
-				local evoK = (1 - lastEvo)^2
-				local newEvo = lastEvo + 0.0075*evoK 
-				if (evo >= (map.lastEvo or 0)) and (evo < newEvo) then
-					game.forces.enemy.set_evolution_factor(newEvo, map.surface)
-				end
-				map.lastEvo = game.forces.enemy.get_evolution_factor(map.surface)
-				-- game.print(" demolisherUtils.vulcanusEvolution() "..game.forces.enemy.get_evolution_factor(surface)..", evo = ".. evo..", newEvo ="..newEvo)	-- debug
-			end
-		end	
-	end
-end
+-- Paranoidal: demolisherUtils.vulcanusEvolution() (Vulcanus evolution growth every 30000 ticks) is removed:
+-- in Paranoidal only player research raises evolution (research_evolution_factor).
 
 --------- prototypes
 function demolisherUtils.makeDemolisherFood()

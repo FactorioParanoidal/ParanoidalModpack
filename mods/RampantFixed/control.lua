@@ -1746,9 +1746,6 @@ script.on_nth_tick(30000,
 				game.print({"description.rampantFixed--JuggernautAlert"})
 			end
 			baseUtils.setRandomBaseToMutate(universe)
-			if hasSpaceAgeMod then
-				demolisherUtils.vulcanusEvolution()	-- if you change the call frequency, then change the function
-			end	
 		end	
 	end
 )
