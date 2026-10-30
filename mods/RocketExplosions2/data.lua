@@ -1,16 +1,13 @@
--- changed: darkfrei 2021-07-20
+require("prototypes.technologies")
+require("prototypes.effects")
 
-require('prototypes.technologies')
-
-
-local mod_name = "__RocketExplosions2__"
 data:extend({
-  {
-    type = "sound",
-    name = "rocket-win",
-    filename = mod_name .."/sounds/rocket-win.ogg",
-    category = "environment",
-    audible_distance_modifier = 9999999,
-    volume = 1
-  }
+	{
+		-- The first successful launch of a force.
+		type = "sound",
+		name = "rocket-win",
+		filename = "__RocketExplosions2__/sounds/rocket-win.ogg",
+		category = "alert",
+		volume = 1,
+	},
 })

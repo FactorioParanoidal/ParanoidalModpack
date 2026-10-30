@@ -1,4 +1,30 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.1.5
+Date: 2026-10-30
+  Features:
+    - Paranoidal: a launch failure is nuclear, a big explosion or an accident. The first failure of a force is always nuclear; with every failure nuclear explosions get rarer, big explosions more frequent at first, then accidents prevail.
+    - Paranoidal: after a nuclear or big explosion the silo is thrown back to stage 4 of Rocket-Silo-Construction (same quality); after an accident it stays. The site or silo keeps 2-15% of its health and cannot be damaged while the blast waves pass (4 s) and while any fire burns within 16 tiles (at most 10 minutes), so a ground fire cannot finish it.
+    - Paranoidal: the modules of a silo thrown back to a construction site are spilled on the ground around it, marked for deconstruction (the rocket, its cargo and rocket parts are lost).
+    - Paranoidal: big explosions and accidents throw burning rocket debris around the silo; it explodes where it lands and starts ground fires.
+    - Paranoidal: a failed launch adds 30% of a successful one to the experience of the force (setting).
+    - Paranoidal: every successful launch from a place multiplies the success chance there by 1.02 (setting); kept through a rollback and rebuilding in the same place.
+    - Paranoidal: +10 percentage points of success per quality step of the silo above normal (setting); the success chance can reach 100%.
+    - Paranoidal: launch reliability label over every rocket silo (optionally only in alt mode) and a panel next to the silo window with every part of the chance and the shares of the failure outcomes.
+    - Paranoidal: messages only to the own force, with a map position, the outcome and the risk; a map alert and a sound on failure; BnL lines for every outcome, successes, the first launch, 100% reliability and the rollback.
+    - Paranoidal: remote interface RocketExplosions2: get_reliability(silo), set_next_outcome(force_name, outcome) for scenarios and tests.
+    - Paranoidal: the technologies show what they do in the tooltip.
+  Bugfixes:
+    - The researched level was one too high from level 6 on (a level counted before it was researched, the infinite level 7 counted as researched one level early).
+    - The explosion is created as neutral explicitly.
+    - The rocket and cargo pod of a failed launch are always removed, so they never reach on_rocket_launched or leave the surface.
+    - Launches on Blueprint Sandboxes surfaces no longer explode.
+    - The first-launch sound is played once, to the own force, in the alert sound category (was environment, to every player of the surface).
+    - Levels 6 and 7 of the technology had the same order.
+  Changes:
+    - Removed the obsolete icon_mipmaps and commented-out code.
+  Graphics:
+    - Technology icons recompressed with pingo -s4 -quality=45 (already 8-bit palette; pixel-identical, 56.3 -> 54.2 KB); thumbnail.png unchanged.
+---------------------------------------------------------------------------------------------------
 Version: 1.1.4
 Date: 2021-04-06
   Changes:
