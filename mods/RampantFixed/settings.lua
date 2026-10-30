@@ -1163,7 +1163,7 @@ data:extend({
             name = "rampantFixed--showSquadAlert",
             description = "rampantFixed--showSquadAlert",
             setting_type = "runtime-per-user",
-            default_value = true,
+            default_value = false,
             order = "a3",
             per_user = true
         },
