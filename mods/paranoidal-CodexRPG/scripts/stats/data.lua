@@ -1144,6 +1144,14 @@ local function ruins_summary(force)
 	return ok and type(res) == "table" and res or nil
 end
 
+-- Crashed logistic robots of paranoidal-robot-attrition: {total, last_hour} or nil without the mod.
+local function robot_crashes(force)
+	local iface = remote.interfaces["paranoidal-robot-attrition"]
+	if not (iface and iface.get_force_summary) then return nil end
+	local ok, res = pcall(remote.call, "paranoidal-robot-attrition", "get_force_summary", force.index)
+	return ok and type(res) == "table" and res or nil
+end
+
 local function workshop_counters(force)
 	local iface = remote.interfaces["ic-more-qualities"]
 	if not (iface and iface.get_counters) then return nil end
@@ -1307,7 +1315,8 @@ function STEP.finish(job, force)
 			cr, cf = cr + net.all_construction_robots, cf + net.available_construction_robots
 		end
 	end
-	sn.robots = {logistic = lr, logistic_free = lf, construction = cr, construction_free = cf, networks = nets}
+	sn.robots = {logistic = lr, logistic_free = lf, construction = cr, construction_free = cf, networks = nets,
+		crashes = robot_crashes(force)}
 	local trains = game.train_manager.get_trains({force = force})
 	local locos, wagons = 0, 0
 	for _, train in pairs(trains) do

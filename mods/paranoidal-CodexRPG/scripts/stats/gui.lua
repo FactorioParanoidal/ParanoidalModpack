@@ -794,6 +794,10 @@ function R.base(player, lc, rc, sn)
 	row(t, L("robots-logistic"), L("of-free", fmt.int(r.logistic), fmt.int(r.logistic_free)))
 	row(t, L("robots-construction"), L("of-free", fmt.int(r.construction), fmt.int(r.construction_free)))
 	row(t, L("logistic-networks"), fmt.int(r.networks))
+	if r.crashes then
+		row(t, L("robots-crashed"), L("robots-crashed-value", fmt.int(r.crashes.total), fmt.int(r.crashes.last_hour)),
+			L("robots-crashed-tooltip"))
+	end
 	local tr = sn.trains
 	row(t, L("trains"), fmt.int(tr.trains))
 	row(t, L("locomotives-wagons"), {"", fmt.int(tr.locomotives), " / ", fmt.int(tr.wagons)})
