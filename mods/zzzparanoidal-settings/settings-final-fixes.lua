@@ -9,8 +9,6 @@ local function hide(setting_type, name)
 	end
 end
 
--- SchallPickupTower
-hide("int-setting", "Schall-PT-tier-max")
 -- InlaidLampsExtended
 hide("bool-setting", "inlaid_lamps_extended_change_energy_usage")
 -- valves
