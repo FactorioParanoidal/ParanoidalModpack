@@ -8,6 +8,20 @@ local PERIODS = { 2, 3, 5, 7, 11, 13, 17, 19, 23, 29 }
 local GUI = "twr-wind"
 local diode = defines.entity_status_diode
 
+-- Seasons of NightBrightness: the wind is stronger in winter and weaker in summer. The multiplier
+-- applies to the output share and the shown speed; output may exceed the nameplate power.
+-- It switches when NightBrightness announces the season (checked at every wind update).
+local SEASON_MULTIPLIERS = { summer = 0.9, fall = 1, winter = 1.33, spring = 1 }
+local MAX_MULTIPLIER = 1
+for _, value in pairs(SEASON_MULTIPLIERS) do MAX_MULTIPLIER = math.max(MAX_MULTIPLIER, value) end
+
+local function season_multiplier()
+    local api = remote.interfaces["NightBrightness"]
+    if not (api and api.get_season) then return 1 end
+    local ok, season = pcall(remote.call, "NightBrightness", "get_season")
+    return ok and SEASON_MULTIPLIERS[season] or 1
+end
+
 local turbine_names, owners = {}, {}
 for name, tier in pairs(tiers) do
     turbine_names[#turbine_names + 1] = name
@@ -28,14 +42,20 @@ local function step(wind)
     wind.share = math.min(math.max((temperature - 15) / 85, 0), 1)
     -- Display scale: 3 m/s starts the turbine, 12 m/s gives full power.
     wind.speed = math.max(0, 3 + (temperature - 15) * 9 / 85)
+    wind.multiplier = season_multiplier()
+    wind.output = wind.share * wind.multiplier
 end
 
 local function speed_text(wind)
-    return string.format("%.1f", wind.speed)
+    return string.format("%.1f", wind.speed * (wind.multiplier or 1))
+end
+
+local function output(wind)
+    return wind.output or wind.share
 end
 
 local function percent(wind)
-    return math.floor(wind.share * 100 + 0.5)
+    return math.floor(output(wind) * 100 + 0.5)
 end
 
 local function power_text(joules_per_tick)
@@ -50,9 +70,11 @@ local function attach(turbine)
     local surface, position = turbine.surface, turbine.position
     -- Quality multiplier of the engine: defects (ic-more-qualities) lower it, positive tiers raise it.
     local max = tier.kw * 1000 / 60 * turbine.quality.default_multiplier
-    turbine.electric_buffer_size = max
-    turbine.power_production = storage.wind.share * max
-    local record = { entity = turbine, name = turbine.name, surface = surface, position = position, max = max }
+    -- The buffer holds one tick of the strongest seasonal output, otherwise it would cut it.
+    turbine.electric_buffer_size = max * MAX_MULTIPLIER
+    turbine.power_production = output(storage.wind) * max
+    local record = { entity = turbine, name = turbine.name, surface = surface, position = position, max = max,
+        seasonal_buffer = true }
     for _, name in ipairs({ tier.pole, tier.base }) do
         local companion = surface.find_entity(name, position)
             or surface.create_entity({ name = name, position = position, force = turbine.force })
@@ -89,8 +111,12 @@ local function refresh(player_index)
     if not record then return close(player_index) end
     local wind = storage.wind
     gui.labels.wind.caption = { "twr.wind", speed_text(wind) }
-    gui.labels.output.caption = { "twr.output", percent(wind), power_text(wind.share * record.max) }
+    gui.labels.output.caption = { "twr.output", percent(wind), power_text(output(wind) * record.max) }
     gui.labels.max.caption = { "twr.max", power_text(record.max) }
+    local multiplier = wind.multiplier or 1
+    gui.labels.season.visible = multiplier ~= 1
+    local whole, fraction = string.format("%.2f", multiplier):match("^(%d+)%.(%d+)$")
+    gui.labels.season.caption = { "twr.season", whole, fraction }
 end
 
 local function open(player, turbine)
@@ -99,7 +125,7 @@ local function open(player, turbine)
     frame.auto_center = true
     local inner = frame.add({ type = "frame", style = "inside_shallow_frame_with_padding", direction = "vertical" })
     local labels = {}
-    for _, key in ipairs({ "wind", "output", "max" }) do labels[key] = inner.add({ type = "label" }) end
+    for _, key in ipairs({ "wind", "output", "max", "season" }) do labels[key] = inner.add({ type = "label" }) end
     storage.guis[player.index] = {
         frame = frame,
         entity = turbine,
@@ -114,13 +140,18 @@ local function update()
     local wind = storage.wind
     step(wind)
     local status = {
-        diode = wind.share >= 0.5 and diode.green or wind.share > 0 and diode.yellow or diode.red,
+        diode = output(wind) >= 0.5 and diode.green or wind.share > 0 and diode.yellow or diode.red,
         label = { "twr.status", speed_text(wind), percent(wind) },
     }
     for _, record in pairs(storage.turbines) do
         local turbine = record.entity
         if turbine.valid then
-            turbine.power_production = wind.share * record.max
+            if not record.seasonal_buffer then
+                -- Turbines registered before the seasons had a buffer of exactly one tick at full wind.
+                turbine.electric_buffer_size = record.max * MAX_MULTIPLIER
+                record.seasonal_buffer = true
+            end
+            turbine.power_production = output(wind) * record.max
             turbine.custom_status = status
             local pole = record.pole
             if not (pole and pole.valid) then
@@ -188,6 +219,17 @@ end)
 
 script.on_configuration_changed(reconcile)
 script.on_nth_tick(UPDATE_TICKS, update)
+
+-- Read-only API: EvoUI shows the seasonal wind multiplier on request;
+-- MxlChievements reads the share of the wind itself (calm and storm), before the season.
+remote.add_interface("Wind-Turbines-Reforged", {
+    get_season_multiplier = function(season) return SEASON_MULTIPLIERS[season] end,
+    get_wind = function()
+        local wind = storage.wind
+        if not wind then return nil end
+        return { share = wind.share, multiplier = wind.multiplier or 1, output = output(wind), speed = wind.speed }
+    end,
+})
 
 local filters = {}
 for _, name in ipairs(turbine_names) do filters[#filters + 1] = { filter = "name", name = name } end

@@ -1,6 +1,9 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.0
 Date: 2026-10-14
+  Features:
+    - Seasons of NightBrightness: the wind is x1.33 in winter and x0.9 in summer (x1 in spring and autumn). The step happens when NightBrightness announces the season. Output may exceed the nameplate power; the turbine buffer holds the strongest season. The window shows the seasonal multiplier.
+    - Remote interface "Wind-Turbines-Reforged": get_season_multiplier(season), get_wind() (share before the season, multiplier, output, speed).
   Changes:
     - Paranoidal fork of Wind Turbines (relaunched) 2.2.5 under a new name.
     - Wind from Paranoidal Beta 8 (Texugo_windgenerator 9.17.0): random, one for the whole game, with calms and gusts at full power.
