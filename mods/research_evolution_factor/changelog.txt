@@ -8,6 +8,7 @@ Date: 2026. 10. 15
     - Research by script or command counts like ordinary research (the by_script check never worked; now it is removed on purpose).
     - Removed the top-level reset of storage and the record of started infinite research; the cost of every finished level is computed from the technology itself.
   Changes:
+    - Paranoidal: Rocket failure revision 1-7 (RocketExplosions2) never raise evolution and have no evolution tooltip (prefix rocket-failure-revision in ignored_prefixes); evolution already counted for them is taken back once on load (ignore_revision 2).
     - Paranoidal: slower evolution from research: 0.12% per technology (was 0.15%) and 0.15% per 1000 science packs (was 0.35%). The whole tree up to chemical science now gives about 75% evolution instead of about 90%. Evolution already gained in a save is not changed.
     - Paranoidal: the upgrade chains of paranoidal-upgrade-tech (research-efficiency-*, worker-robot-battery-*) never raise evolution and have no evolution tooltip, whatever the settings. Set by name prefix in parameters.lua (ignored_prefixes); the path_increment estimate skips them too.
     - Paranoidal: also never raise evolution and have no evolution tooltip: Flight recorder decoding, Inserter capacity bonus 1-4, Bulk inserter capacity bonus 1-8, Inserter length 1-2, Inserter offset, Full inserter 1-2, Toolbelt 1-13, the six electric loaders and Braking force (all levels). Exact names are set in parameters.lua (ignored_names).

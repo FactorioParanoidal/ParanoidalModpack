@@ -23,6 +23,8 @@ local params = {
 		"inserter-capacity-bonus-",
 		"toolbelt-",
 		"braking-force-",
+		-- Rocket failure revision 1-7 of RocketExplosions2 (decision 2026-10-30).
+		"rocket-failure-revision",
 	},
 	-- Paranoidal: same as ignored_prefixes, by the exact technology name (decision 2026-10-30).
 	ignored_names = {
@@ -42,7 +44,7 @@ local params = {
 	},
 	-- Raise by one after changing ignored_prefixes or ignored_names: a save with an older value gets the
 	-- evolution already counted for newly ignored technologies taken back once (control.lua refund).
-	ignore_revision = 1,
+	ignore_revision = 2,
 }
 
 -- True when the technology name is in params.ignored_names or starts with one of params.ignored_prefixes.
