@@ -1,0 +1,16 @@
+{
+  "mod": "RuNames-reforged",
+  "source": "local",
+  "original": {
+    "name": "Russian Station Names",
+    "authors": [
+      "GotLag",
+      "nastyslave"
+    ],
+    "portal": {
+      "name": "RussianStations",
+      "url": "https://mods.factorio.com/mod/RussianStations"
+    }
+  },
+  "changeReason": "Собственный мод проекта: объединяет Name Lists 2.2.0 и Renamer 2.2.2 (GotLag) с портом Russian Station Names 9.2.0 и добавляет 11 наборов русских имён по типам построек."
+}

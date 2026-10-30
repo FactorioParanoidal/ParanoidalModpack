@@ -1,0 +1,11 @@
+---------------------------------------------------------------------------------------------------
+Version: 9.0.0
+Date: 2026-10-30
+  Major Features:
+    - One mod instead of Name Lists 2.2.0, Russian Station Names 9.2.0 (RussianStations2) and Renamer 2.2.2, which are now incompatible with it.
+    - New train stops, locomotives, labs, radars and roboports (the entity types with a backer name in Factorio 2.0) get a random Russian name. Ghosts get a name when placed with an empty name; names from blueprints and undo are kept. A built entity is renamed only if the engine gave it a backer name. Entities created by other mods' scripts (script_raised_built) are handled the same way.
+    - 11 name sets with separate lists for every entity type, each with its own map setting, all on by default: Russian stations and streets (the 12,543 names of RussianStations2), Map of Russia (cities of Russia and their former names from Wikipedia, rivers, peaks, lakes, science cities), Science, Space and sky, Depots and sidings, Wildlife, Fairy tales and byliny, Bookshelf, Made in the USSR, Buy n Large and Fire (crazy names built partly from word pools with matching grammar).
+    - Factorio backer names are a separate set, off by default.
+    - Every enabled set that has a list for the entity type is chosen with an equal chance; a name that was already given is rerolled up to 10 times.
+    - Ctrl+N gives the building under the cursor a new random name (former Name Lists hotkey).
+    - Ctrl+R opens the rename window with random name, reset and icon selector (former Renamer).

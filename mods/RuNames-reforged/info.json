@@ -1,0 +1,15 @@
+{
+  "name": "RuNames-reforged",
+  "version": "9.0.0",
+  "title": "RuNames Reforged",
+  "author": "FactorioParanoidal, GotLag, nastyslave",
+  "homepage": "https://github.com/FactorioParanoidal/ParanoidalModpack",
+  "factorio_version": "2.0",
+  "description": "Russian names for train stops, locomotives, labs, radars and roboports from 11 name sets, toggled in map settings. Ctrl+N gives the building under the cursor a random name, Ctrl+R opens the rename window. Replaces Name Lists, Russian Station Names and Renamer.",
+  "dependencies": [
+    "base >= 2.0",
+    "! Namelists",
+    "! RussianStations2",
+    "! Renamer"
+  ]
+}
