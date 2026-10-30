@@ -1,6 +1,15 @@
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.0
 Date: 2026-10-08
+  Bugfixes:
+    - The first day after the start or a settings change used the non-seasonal baseline; the current season is applied at once.
+    - Day parameters are written in one go (LuaSurface.daytime_parameters) instead of four assignments through temporary values.
+  Features:
+    - Calendar from the landing: a day starts at midnight on Nauvis, years have the length of the "Year length" setting (24 days in Paranoidal); a new length applies from the current year. "Reset to summer" restarts only the seasons, the calendar goes on. Saves without the calendar get the number of midnights since the start of the map.
+    - Season announcements in the chat for any year length (Beta 8 skipped them for years of 31 days or less, so Paranoidal never showed them); the message names only the season. A landing anniversary message every year.
+    - Per-player setting "Season names": plain (default), by the length of the day, or Buy n Large seasons; used by the chat, EvoUI and the RPG statistics.
+    - Setting "Cold winter nights" (on): in winter brightness keeps a little more blue (brightness_visual_weights 1/1/0.96), dusk and nights are slightly colder; daylight is unchanged.
+    - Remote interface: get_state gives the calendar (day, days passed, year, day of year), the season with its day, length and the next season, the solar factor and the daytime parameters; new get_season, get_season_name, get_season_color, clock.
   Locale:
     - ru: the mod name and the mod list description are the same as in ParanoidalLocale (format "English title (Russian translation)"), so the mod reads the same with or without it.
   Changes:
@@ -9,6 +18,8 @@ Date: 2026-10-08
     - Filter unrelated setting events; preserve persistent state on reload/configuration changes.
     - Compose seasonal solar output with the Paranoidal Visible Pollutants compatibility patch.
     - Replace Clockwork-2 and DarkNight; reset removed Clockwork timing on Nauvis.
+    - Seasons, light and the solar factor change together at midnight (the darkest moment of every season), checked every 5 seconds instead of 20; Beta 8 changed light at noon and solar output at midnight.
+    - The night LUT of all four darkness modes (the vanilla one too) now covers the short summer night (0.35-0.65) instead of 0.2-0.8, so it no longer tints a summer evening while the sun is still up; longer nights are darkened by brightness. Brightness also darkens the picture while the cycle is disabled.
 ---------------------------------------------------------------------------------------------------
 Version: 1.1.8
 Date: 2022-03-23

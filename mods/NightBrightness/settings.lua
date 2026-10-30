@@ -28,6 +28,21 @@ data:extend({
 	},
 	{
 		type = "bool-setting",
+		name = "nb_winter_tint",
+		setting_type = "runtime-global",
+		default_value = true,
+		order = "nb-e",
+	},
+	{
+		type = "string-setting",
+		name = "nb_season_names",
+		setting_type = "runtime-per-user",
+		default_value = "plain",
+		allowed_values = {"plain", "daylight", "bnl"},
+		order = "nb-f",
+	},
+	{
+		type = "bool-setting",
 		name = "nb_debug",
 		setting_type = "runtime-global",
 		default_value = false,
