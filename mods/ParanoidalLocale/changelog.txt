@@ -1,6 +1,7 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.26.0
   Locale:
+    - zzzz-user-overrides.cfg: Namelists, Renamer and RussianStations2 are replaced by RuNames-reforged: its mod name and description are added (same text as in the mod), the names and descriptions of the three old mods are removed, Namelists.locale.cfg and RussianStations2.locale.cfg are deleted and so is the optional dependency on Namelists.
     - zzzz-user-overrides.cfg: All-infinit-tech is replaced by paranoidal-upgrade-tech: its mod name and description are added (same text as in the mod), the All-infinit-tech name, description, the Infinite-Formula setting name and the technology names laboratory-productivity and worker-robots-battery are removed; the optional dependency follows the mod.
   Graphics:
     - Added thumbnail.png (144x144): the picture of the mod in the mod list, made from the mod and base game graphics.
