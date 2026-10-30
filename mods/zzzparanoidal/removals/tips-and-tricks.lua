@@ -11,6 +11,8 @@ local KEEP_CATEGORIES = {
     ["zzz-quality"] = true,
     -- Советы форка Yuoki (prototypes/paranoidal/tips.lua в моде Yuoki); без мода категории нет.
     ["yuoki"] = true,
+    -- Советы paranoidal-robot-attrition (только текст, без симуляций); без мода категории нет.
+    ["pra-robot-attrition"] = true,
 }
 
 local items = data.raw["tips-and-tricks-item"] or {}

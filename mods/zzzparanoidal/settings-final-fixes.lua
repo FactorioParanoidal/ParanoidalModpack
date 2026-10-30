@@ -136,10 +136,6 @@ if mods["RampantFixed"] then
     set_settings_default_value("bool-setting", "rampantFixed--safeBuildings-lamps", false)
     set_settings_default_value("bool-setting", "rampantFixed--safeBuildings-straightRail", true)
 end
--- Частота аварий как в Beta 8: 1.0 (там задуманные 0.4 не применялись из-за проверки с дефисом).
-if mods["robot_attrition"] then
-    set_settings_default_value("double-setting", "robot-attrition-factor", 1)
-end
 if mods["RSO-reforged"] then
     set_settings_default_value("double-setting", "rso-infinite-ore-threshold", 0.99)
     set_settings_default_value("bool-setting", "rso-remove-trees", true)

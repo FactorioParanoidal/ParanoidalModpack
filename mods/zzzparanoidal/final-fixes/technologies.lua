@@ -422,7 +422,6 @@ paralib.bobmods.lib.tech.add_prerequisite("personal-roboport-equipment", "proces
 paralib.bobmods.lib.tech.add_prerequisite("mining-productivity-3", "production-science-pack")
 paralib.bobmods.lib.tech.add_prerequisite("mining-productivity-3", "utility-science-pack")
 paralib.bobmods.lib.tech.add_prerequisite("autonomous-space-mining-drones", "bob-drills-5") -- буры IV Beta 8 = bob-drills-5 (пачка 01)
-paralib.bobmods.lib.tech.add_prerequisite("robot-attrition-explosion-safety", "utility-science-pack")
 paralib.bobmods.lib.tech.add_prerequisite("bob-nitinol-processing", "utility-science-pack")
 paralib.bobmods.lib.tech.add_prerequisite("bob-electronics-machine-2", "fast-inserter")
 paralib.bobmods.lib.tech.add_prerequisite("bob-power-armor-3", "space-science-pack")

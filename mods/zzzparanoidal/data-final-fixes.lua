@@ -1,6 +1,7 @@
 require("tweaks.entity.roboport")
 require("tweaks.entity.add-liquid-to-mine-ores")
 require("tweaks.entity.construction-robots")
+require("tweaks.entity.logistic-robots") -- скорость транспортных дронов как с Robot Attrition
 require("tweaks.entity.unminable-robots") -- роботов нельзя снять рукой (Beta 8 UnminableBots)
 require("tweaks.entity.alien-loot")
 require("tweaks.entity.increase-stack-size")
