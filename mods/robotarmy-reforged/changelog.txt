@@ -42,6 +42,7 @@ Date: 2026.10.25
     - Proximity searches use the cached squad position before reading the unit group position.
     - The always-on logger (an endlessly growing script-output/logs/robotarmy file) and the session statistics are removed; an optional debug setting writes to factorio-current.log.
   Bugfixes:
+    - Droid item tooltips showed health, attack, range, speed and ability twice: the item tooltip also shows the fields of its droid. The item copy is now shown only in Factoriopedia, the droid copy only in tooltips.
     - Adding the mod to a save no longer runs force.reset_recipes()/reset_technologies() for every force (it disabled recipes unlocked by scripts of other mods); the old migrations are removed.
     - Deployed droids keep the quality of the droid item, and quality modules in the droid assembler can no longer raise it (deploy recipes have no product); picked up droids return as items of their quality and health; refused duplicate buildings are returned with their quality.
     - Guard stations spawn on their own surface (surface 1 was hard-coded).

@@ -138,9 +138,15 @@ for _, d in pairs(shared.droids) do
   if base and (not d.external or data.raw.recipe[d.deploy]) then
     tool_filters[#tool_filters + 1] = d.unit
     if not d.external then
+      -- The item tooltip already shows the fields of its place_result: the unit copy is for tooltips
+      -- (item and selection), the item copy only for Factoriopedia, so every line is shown once.
       base.custom_tooltip_fields = tooltip(base, d.unit, 0)
       local item = data.raw.item[d.unit]
-      if item then item.custom_tooltip_fields = util.table.deepcopy(base.custom_tooltip_fields) end
+      if item then
+        item.custom_tooltip_fields = util.table.deepcopy(base.custom_tooltip_fields)
+        for _, field in ipairs(item.custom_tooltip_fields) do field.show_in_tooltip = false end
+        for _, field in ipairs(base.custom_tooltip_fields) do field.show_in_factoriopedia = false end
+      end
     end
     for r = 1, #shared.rank_kills do
       local u = util.table.deepcopy(base)
