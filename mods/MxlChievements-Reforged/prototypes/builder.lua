@@ -194,7 +194,7 @@ local function build_content_entry(entry, order, output)
     if entry.icon and entry.icon.picture then
       achievement.icons = {{icon = util.GRAPHICS .. string.format(entry.icon.picture, tier) .. ".png", icon_size = 128}}
     else
-      achievement.icons = util.framed(entry.frame or tier, inner)
+      achievement.icons = util.framed(entry.frames and entry.frames[tier] or entry.frame or tier, inner)
     end
     if entry.quality and entry.quality ~= "normal" then
       local badge = util.quality_badge(entry.quality)

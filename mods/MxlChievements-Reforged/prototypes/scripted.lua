@@ -97,6 +97,11 @@ local list = {
   {id = "all-seasons", kind = "script", theme = "nature", tracker = "season", params = {all = true},
     mods = {"NightBrightness"}, icon = {item = "solar-panel"}},
   {id = "owl", kind = "script", theme = "nature", tracker = "nights", amount = 100, icon = {item = "small-lamp"}},
+  -- Years since the landing (NightBrightness calendar): 1, 5, every 10 up to 100, every 100 up to 1000.
+  {id = "years", kind = "script", theme = "nature", tracker = "years",
+    amounts = {1, 5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000},
+    frames = {1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3},
+    mods = {"NightBrightness"}, icon = {item = "solar-panel"}},
 
   -- challenges
   {id = "archaeologist", kind = "script", theme = "challenges", tracker = "ruins", amounts = {10, 50},

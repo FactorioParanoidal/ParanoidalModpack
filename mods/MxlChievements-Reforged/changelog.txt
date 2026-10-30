@@ -8,6 +8,7 @@ Date: 2026-10-24
     - "Push-pull" (mxlr-push-pull) requires MultipleUnitTrainControl-reforged, which replaces MultipleUnitTrainControl; MU locomotives keep the "-mu" suffix the tracker looks for.
     - HeroTurretRedux ranks hidden for the research tooltips (laser and flamethrower ranks) still count as turrets of their base.
     - The RPG achievements (mxlr-rpg-level, mxlr-specialist) require paranoidal-CodexRPG, the new name of PMRPGsystem.
+    - "Dead Calm" and "Hurricane" read the wind of Wind-Turbines-Reforged before its seasonal multiplier (remote get_wind): the turbine buffer now also holds the winter wind.
   Features:
     - Theme "Legendary ruins": 80 achievements for the legendary ruins of AbandonedRuins-paranoidal
       9.1.0 - finding and beating each of the 22 ruins, 18 special feats of single ruins, the
@@ -18,6 +19,7 @@ Date: 2026-10-24
     - Tracker "legendary" listens to the ruins' custom event (remote get_on_legendary_event): no
       polling. Counters and sets are kept per force or player; ruins summoned by command count only for
       "The mountain came to you".
+    - "Old-Timer" (mxlr-years-1...21, theme nature, needs NightBrightness): years on the planet since the landing by the NightBrightness calendar - 1, 5, every 10 up to 100, every 100 up to 1000. Frames: bronze for 1 and 5, silver up to 90, gold from 100. A scripted entry may set frames per tier.
   Changes:
     - No spoilers before contact, with jokes instead: the achievements of the legendary ruins no longer name the ruins, their keepers and their solutions; the boss achievements no longer name the bosses (new names for hive-raider, face-to-face, volcanologist, overgrown-worm, evil-twin); the Rampant faction labels in the "Entomologist" names are nicknames. Icons unchanged. EN/RU.
     - Version number starts with 9 (Paranoidal mod).

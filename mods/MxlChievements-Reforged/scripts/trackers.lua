@@ -245,6 +245,11 @@ local function wind_share(core, names)
     world.turbine = turbine
   end
   if not turbine then return nil end
+  -- The wind itself, before the seasonal multiplier (the turbine buffer also holds the strongest season).
+  if has_remote("Wind-Turbines-Reforged", "get_wind") then
+    local ok, wind = pcall(remote.call, "Wind-Turbines-Reforged", "get_wind")
+    if ok and type(wind) == "table" and type(wind.share) == "number" then return wind.share end
+  end
   local buffer = turbine.electric_buffer_size
   if not buffer or buffer <= 0 then return nil end
   return turbine.power_production / buffer
@@ -562,6 +567,16 @@ trackers["season"] = {
         if all then core.unlock("world", entry) end
       end
     end
+  end},
+}
+
+-- Years since the landing, from the NightBrightness calendar (counted also while seasons are off).
+trackers["years"] = {
+  poll = {every = MINUTE, run = function(entries, core)
+    if not has_remote("NightBrightness", "get_state") then return end
+    local ok, state = pcall(remote.call, "NightBrightness", "get_state")
+    if not ok or type(state) ~= "table" or type(state.years_passed) ~= "number" then return end
+    each(entries, function(entry) core.progress("world", entry, state.years_passed) end)
   end},
 }
 
