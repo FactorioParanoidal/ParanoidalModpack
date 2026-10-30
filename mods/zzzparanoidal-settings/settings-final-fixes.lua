@@ -406,6 +406,6 @@ hide("string-setting", "sqt-remove-collision-types")
 hide("string-setting", "sqt-remove-collision-names")
 -- ToxicPollution2-reforged
 hide("double-setting", "tpr-tolerance")
--- valves-lib
+-- valves (default thresholds, formerly valves-lib)
 hide("int-setting", "valves-default-threshold-overflow")
 hide("int-setting", "valves-default-threshold-top_up")

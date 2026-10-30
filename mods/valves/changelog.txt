@@ -3,8 +3,19 @@ Version: 2.2.0
 Date: 14.01.2026
   Locale:
     - ru: the mod name and the mod list description are the same as in ParanoidalLocale (format "English title (Russian translation)"), so the mod reads the same with or without it.
+    - Valves Library locale merged in; zh-CN control names use the real hotkey keys valves-threshold-plus/minus.
   Changes:
     - Split of generic valve functionality into separate library mod called Valves Library.
+    - Paranoidal: Valves Library merged back into this mod (it had no other users); the valves-lib dependency is removed. Settings, hotkeys, locale keys and the command keep their names.
+    - Paranoidal: one shared config for settings, data and control; duplicated data-final-fixes, settings and the mod-valves mod-data registry removed.
+    - Paranoidal: valve recipes get their own copy of the pump ingredients instead of sharing the table.
+    - Paranoidal: the threshold label falls back to the prototype default, and labels are reset on configuration change.
+    - Paranoidal: removed the no-op "pin threshold on build" assignment; placed valves without an override keep following the default setting.
+    - Paranoidal: removed PyIndustry support (valves-disable-py-migration setting, migration 0001, Py valve recipe/technology reference).
+    - Paranoidal: removed the composite valves from before 2.0.8 (hidden *-legacy pumps), their migration 0008 and their replacement on build.
+  Graphics:
+    - Paranoidal: sprites, icons and thumbnail repacked with lossy palette compression.
+    - Paranoidal: startup setting "valves-graphics" (Valve look): "reskins" (default) draws the valves as the Angel's valves of Artisanal Reskins with a coloured mask, as in earlier Paranoidal versions; "classic" keeps the animated sprites of this mod. Without reskins-angels the setting is hidden and the classic look is used.
 ---------------------------------------------------------------------------------------------------
 Version: 2.1.1
 Date: 13.01.2026
