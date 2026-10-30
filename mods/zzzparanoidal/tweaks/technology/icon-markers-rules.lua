@@ -1,10 +1,6 @@
 -- Технология -> маркер (level: уровень, "inf" = ∞; corner = "left": уровень слева; badge: значок ветки, badge_type = "recipe": иконка рецепта).
 -- badge_from_unlocks: значок первого отличающегося открываемого продукта. Основа таблицы — отчёт v2 (Factorio 2.0.77, 029f07531f).
 return {
-    ["Schall-pickup-tower-1"] = { level = 1 },
-    ["Schall-pickup-tower-2"] = { level = 2 },
-    ["Schall-pickup-tower-3"] = { level = 3 },
-    ["Schall-pickup-tower-4"] = { level = 4 },
     ["Schall-tank-1"] = { level = 1, corner = "left" },
     ["Schall-tank-2"] = { level = 2, corner = "left" },
     ["Schall-tank-F-0"] = { level = 0, corner = "left" },
@@ -389,6 +385,10 @@ return {
     ["physical-projectile-damage-5"] = { level = 5 },
     ["physical-projectile-damage-6"] = { level = 6 },
     ["physical-projectile-damage-7"] = { level = "inf" },
+    ["pickup-tower-1"] = { level = 1 },
+    ["pickup-tower-2"] = { level = 2 },
+    ["pickup-tower-3"] = { level = 3 },
+    ["pickup-tower-4"] = { level = 4 },
     ["plastic-abs"] = { badge = "liquid-acrylonitrile", badge_type = "fluid" },
     ["plastic-pc"] = { badge = "solid-pc", badge_type = "item" },
     ["plastic-pmma"] = { badge = "solid-pmma", badge_type = "item" },

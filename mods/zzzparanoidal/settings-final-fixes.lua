@@ -362,9 +362,6 @@ if mods["PCPRedux"] then
         glass_sink.forced_value = false
     end
 end
-if mods["SchallPickupTower"] then
-    set_settings_default_value("int-setting", "Schall-PT-tier-max", 4)
-end
 if mods["RampantFixed"] then
     set_settings_default_value("bool-setting", "rampantFixed--allowLongRangeImmunity", false)
     set_settings_default_value("bool-setting", "rampantFixed--allowOneshotProtection", false)

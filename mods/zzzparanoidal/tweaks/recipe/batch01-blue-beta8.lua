@@ -57,7 +57,7 @@ local recipes = {
 		item("storehouse-basic", 1), item("passive-provider-chest", 1), item("iron-stick", 16) } },
 	["storehouse-storage"] = { ingredients = {
 		item("storehouse-basic", 1), item("storage-chest", 1), item("iron-stick", 16) } },
-	["Schall-pickup-tower-R32"] = { time = 30, ingredients = {
+	["pickup-tower-1"] = { time = 30, ingredients = {
 		item("radar", 10), item("steel-chest", 10), item("electronic-circuit", 10) } },
 	["bob-brass-gear-wheel"] = { ingredients = { item("bob-brass-alloy", 1) } },
 	["bob-insulated-cable"] = { time = 15,

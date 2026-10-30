@@ -247,9 +247,7 @@ paralib.bobmods.lib.tech.add_prerequisite("logistics-3", "angels-ironworks-3") -
 paralib.bobmods.lib.tech.add_prerequisite("angels-advanced-chemistry-5", "bob-advanced-processing-unit") --продв химия 5 под контроллеры
 paralib.bobmods.lib.tech.add_prerequisite("offshore-mk4-pump", "bob-advanced-processing-unit") --насос 4  под контроллеры 3
 paralib.bobmods.lib.tech.add_prerequisite("CW-air-filtering-4", "bob-advanced-processing-unit") --фильтры 4  под контроллеры 3
-paralib.bobmods.lib.tech.add_prerequisite("Schall-pickup-tower-4", "bob-advanced-processing-unit") --башня сбора 4  под контроллеры 3
 paralib.bobmods.lib.tech.add_prerequisite("bob-electric-energy-accumulators-3", "bob-advanced-processing-unit") --аккумуляторы 3  под контроллеры 3
-paralib.bobmods.lib.tech.add_prerequisite("Schall-pickup-tower-4", "utility-science-pack") --башня сбора 4  под утилити пакеты
 paralib.bobmods.lib.tech.add_prerequisite("railway", "concrete") --рельсы под БЕТОН наконец-то
 paralib.bobmods.lib.tech.add_prerequisite("bi-tech-organic-plastic", "production-science-pack") --биопластик под производственн пакеты
 paralib.bobmods.lib.tech.add_prerequisite("advanced-circuit", "angels-aluminium-smelting-1") --контроллер 2 под алюминий
