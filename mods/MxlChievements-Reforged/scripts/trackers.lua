@@ -678,22 +678,51 @@ local function silo_force(event)
   if event.rocket and event.rocket.valid then return event.rocket.force end
 end
 
+-- The cargo is read from the cargo pod when the launch is ordered (world.cargo_pods[pod unit number]) and
+-- counted when that pod has left the surface. A rocket destroyed before it flies (a launch failure of
+-- RocketExplosions2, a destroyed silo) never ascends: its cargo does not count. Records of pods that never
+-- left are dropped after CARGO_TTL.
+local CARGO_TTL = 60 * 60 * 60
+
 trackers["cargo"] = {
   events = {
     on_rocket_launch_ordered = function(event, entries, core)
       local rocket = event.rocket
       local pod = rocket and rocket.valid and rocket.attached_cargo_pod
-      if not (pod and pod.valid) then return end
+      if not (pod and pod.valid and pod.unit_number) then return end
       local inventory = pod.get_inventory(defines.inventory.cargo_unit)
       local force = silo_force(event)
       if not (inventory and force) then return end
+      local world = core.world()
+      local pending = world.cargo_pods or {}
+      world.cargo_pods = pending
+      for unit, record in pairs(pending) do
+        if record.tick < event.tick - CARGO_TTL then pending[unit] = nil end
+      end
+      local ids = {}
       for _, entry in ipairs(entries) do
         for _, item in ipairs(entry.params.items) do
           if prototypes.item[item] and inventory.get_item_count(item) > 0 then
-            core.unlock(force, entry)
+            ids[entry.id] = true
             break
           end
         end
+      end
+      if next(ids) then
+        pending[pod.unit_number] = {tick = event.tick, force = force.index, ids = ids}
+      end
+    end,
+    on_cargo_pod_finished_ascending = function(event, entries, core)
+      local pod = event.cargo_pod
+      local pending = core.world().cargo_pods
+      if not (event.launched_by_rocket and pending and pod and pod.valid and pod.unit_number) then return end
+      local record = pending[pod.unit_number]
+      if not record then return end
+      pending[pod.unit_number] = nil
+      local force = game.forces[record.force]
+      if not (force and force.valid) then return end
+      for _, entry in ipairs(entries) do
+        if record.ids[entry.id] then core.unlock(force, entry) end
       end
     end,
   },

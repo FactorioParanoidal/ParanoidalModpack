@@ -446,7 +446,9 @@
     параметрами записей `prototypes/legendary-ruins.lua` и ведёт счётчики. Опроса нет.
   - Сезоны — `get_state` из NightBrightness.
   - RPG — события `get_on_player_level_up` и `get_on_player_updated_status` из paranoidal-CodexRPG.
-  - Груз ракеты — содержимое капсулы (`attached_cargo_pod`) в момент приказа на запуск.
+  - Груз ракеты — содержимое капсулы (`attached_cargo_pod`) в момент приказа на запуск; засчитывается, когда
+    эта капсула покинула поверхность (`on_cargo_pod_finished_ascending`). Ракета, разрушенная до взлёта
+    (авария запуска RocketExplosions2, уничтоженная шахта), груз не засчитывает.
 
 ## Что пропускается в текущей сборке
 
