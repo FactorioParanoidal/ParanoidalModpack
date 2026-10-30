@@ -1259,6 +1259,23 @@ function G.on_snapshot(force_index)
 	end
 end
 
+-- The chat adds "[Item: name]" after every [item=...]-like tag; [img=type/name] shows the icon only.
+local CHAT_ICON_TYPES = {item = true, entity = true, technology = true, recipe = true, fluid = true,
+	["virtual-signal"] = true}
+
+local function chat_icons(value)
+	if type(value) == "string" then
+		return (value:gsub("%[([%a%-]+)=([^%],]+)%]", function(kind, name)
+			if CHAT_ICON_TYPES[kind] then return "[img=" .. kind .. "/" .. name .. "]" end
+		end))
+	elseif type(value) == "table" then
+		local copy = {}
+		for k, v in pairs(value) do copy[k] = chat_icons(v) end
+		return copy
+	end
+	return value
+end
+
 -- A milestone was reached: tell the force (each player can switch it off in the settings).
 function G.announce(force, id, rec)
 	for _, player in pairs(force.connected_players) do
@@ -1266,7 +1283,7 @@ function G.announce(force, id, rec)
 		if not setting or setting.value then
 			local text, time = milestone_text(id, rec), (ms_time(rec))
 			local msg = rec.player and L("announce-by", text, time, rec.player) or L("announce", text, time)
-			player.print({"", "[virtual-signal=signal-check] ", msg}, {color = ORANGE})
+			player.print(chat_icons({"", "[virtual-signal=signal-check] ", msg}), {color = ORANGE})
 		end
 	end
 end

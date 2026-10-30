@@ -20,6 +20,8 @@ Date: 2026-10-29
     - First products and ruins are checked every 10 minutes (a few dozen reads of the statistics); quality tiers only while the statistics are counted.
   Locale:
     - ru: skill names in sentence case, the broken robot hint and the "trash slots" typo fixed, shorter skill hints, the player tag tooltip translated.
+  Bugfixes:
+    - Milestone chat messages show icons only: their [item=...]-like tags are printed as [img=...], so the chat no longer adds "[Virtual signal: Check mark]"-style names after them.
 ---------------------------------------------------------------------------------------------------
 Version: 9.0.4
   Features:
