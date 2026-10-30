@@ -1,6 +1,0 @@
-{
-  "mod": "robot_attrition",
-  "source": "portal",
-  "upstreamVersion": "0.6.6",
-  "changeReason": "Локальный portal-патч Paranoidal на upstream 0.6.6, версия не менялась. prototypes/phase-3/repair.lua: исправлен приоритет операторов в проверке minable (not (minable and minable.result)); в режиме Repair75 загрузка падала бы на логистическом роботе без minable. При обновлении сверить с upstream и снять патч, если исправлено."
-}

@@ -1,0 +1,14 @@
+{
+	"name": "paranoidal-robot-attrition",
+	"version": "9.0.0",
+	"title": "Paranoidal Robot Attrition",
+	"author": "Factorio Paranoidal",
+	"homepage": "https://github.com/FactorioParanoidal/ParanoidalModpack",
+	"description": "Busy logistic networks occasionally lose a logistic robot: it crashes, its cargo stays on the ground in a crate that construction robots pick up. The more busy, fast and loaded the robots, the more crashes. Swarm safety research removes the crash explosion in smaller networks.",
+	"factorio_version": "2.0",
+	"dependencies": [
+		"base >= 2.0.0",
+		"? zzzparanoidal",
+		"! robot_attrition"
+	]
+}

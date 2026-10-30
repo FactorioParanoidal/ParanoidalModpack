@@ -1,0 +1,20 @@
+---------------------------------------------------------------------------------------------------
+Version: 9.0.0
+Date: 2026-10-30
+  Major Features:
+    - First version, written for Factorio Paranoidal from scratch; replaces Robot Attrition (robot_attrition), which is removed from the build. Only the idea of the mechanic is repeated: no code, graphics or texts of that mod.
+  Features:
+    - Logistic networks with more than 50 busy logistic robots lose robots now and then. Expected crashes per tick = (busy × 0.5 + robots waiting to charge × 5) × risk × map setting × multipliers × 1e-6, where the risk is the moving average of speed × (carried items + 0.5) of the robots picked so far (start 0.1). A robot waiting in a charging queue counts 10 times as much as a flying one; with 10% of the busy robots waiting the rate equals busy × risk. Construction robots never crash.
+    - Victims come from the charging queues (a queue drawn by its length, a random logistic robot in it) with the share the queues have in that load, otherwise from all flying logistic robots.
+    - Reliability: crash chance of a picked robot = min(1, health of the vanilla logistic robot / its health) × 10 / (10 + quality level). Bob tiers 2–4 crash 80% / 67% / 57% as often, legendary robots 67%.
+    - Swarm dispatch 1–5 (red+green after Logistic robotics up to five packs after Utility science pack): each level ×0.85 crash rate. Swarm safety (infinite, 100·L², four packs, after Logistic system and Utility science pack): no crash explosion and no fire in networks with up to 500 busy robots per level. Both show effect lines; robot speed research gets a line that the crash risk grows with speed.
+    - Storms of Wind-Turbines-Reforged: above 80% wind output the rate rises up to ×3 (output counted up to 120%).
+    - A crashed robot leaves an indestructible wreck marked for deconstruction with its cargo (moved as a whole stack: quality and item data stay) and a wreck item of its tier (normal quality). Repair recipe: wreck + 2 repair packs of the same tier → the robot with a 75% chance, 10 s, unlocked with the robot recipe.
+    - Dangerous cargo (map setting, on): explosive cargo (explosives, rockets, shells, grenades, atomic ammo, mines) always detonates (265 damage at the centre down to 10 at 5.5 tiles) and half of it, rounded up, is lost; flammable cargo (chemical fuel of 10 MJ and more, flamethrower ammo) sets the ground on fire unless Swarm safety covers the network.
+    - The crash explosion damages everything around it (75 at the centre down to 5 at 3.5 tiles). A crashed robot is counted as lost in the kill statistics of its force with its quality and raises no death alert.
+    - "Air traffic" panel next to the roboport window (player setting): busy robots, charging queue, expected crashes per hour from the same formula, dispatch and wind multipliers, Swarm safety coverage, crashes of the force in the last hour and in total.
+    - Crash alert at the wreck, at most once in 5 minutes per force and surface (player setting).
+    - Tips and tricks: five text tips unlocked with Logistic robotics.
+    - Remote interface "paranoidal-robot-attrition": get_event_ids (custom event on_robot_crashed before the robot dies: robot, force, surface_index, busy, wreck, detonated, ignited), get_crash_count, get_force_summary, set_surface_multiplier, get_surface_multiplier, set_force_enabled (check a force without players or skip one). Extension points in scripts/hooks.lua: rate multipliers, spare checks, victim selection.
+  Optimizations:
+    - One check per second (on_nth_tick) with a Poisson draw per busy network; no state per network or per surface name. Charging queues are read from cell counters; the list of all flying robots is fetched only when a victim must come from it.
