@@ -68,8 +68,20 @@ script.on_configuration_changed(on_configuration_changed)
 script.on_init(On_Init)
 
 
+-- Paranoidal: the silo and its construction stages are never defective (ic-more-qualities defects
+-- "ic-defect-N"); a defective quality is replaced by normal, positive qualities are kept.
+local function site_quality(quality)
+if quality == nil then return nil end
+local name = type(quality) == "string" and quality or quality.name
+if string.sub(name, 1, 10) == "ic-defect-" then return "normal" end
+return name
+end
+
+
 function validate_all_silos() 
-for k, silo_data in pairs (storage.rsc_silo_under_construction) do 
+local list = storage.rsc_silo_under_construction
+for k = #list, 1, -1 do
+	local silo_data = list[k]
 	local silo = silo_data.silo
 	if silo and silo.valid then 
 		if not silo_data.stage then 
@@ -83,7 +95,7 @@ for k, silo_data in pairs (storage.rsc_silo_under_construction) do
 			silo_data.stage = stage
 			end
 		else
-		table.remove (storage.rsc_silo_under_construction,k)
+		table.remove (list,k)
 		end
 	end
 end
@@ -129,7 +141,7 @@ local silo=silo_data.silo
 if silo and silo.valid then
 
 local stage=silo_data.stage
-local quality=silo.quality
+local quality=site_quality(silo.quality)
 local name=silo.name
 local upgrade_to
 local last_user = silo.last_user
@@ -168,7 +180,6 @@ if stage==6 then upgrade_to=final_building
 				if string.find(upgrade_to,"serlp") then FillWith(surface,position,6,'concrete') else FillWith(surface,position,5,'concrete') end
 			elseif next_stage==6 then
 				if string.find(upgrade_to,"serlp") then FillWith(surface,position,7,'concrete') FillWith(surface,position,6,'refined-hazard-concrete-left') else FillWith(surface,position,6,'concrete') FillWith(surface,position,5,'refined-hazard-concrete-left') end
-				FillWith(surface,position,6,'concrete') FillWith(surface,position,5,'refined-hazard-concrete-left') 
 			end 
 		end
 	stage=next_stage
@@ -262,13 +273,17 @@ if (entity.energy>0 or (not visible_to)) then
 	end
 end
 
+-- Paranoidal: walks the list backwards, so removing an invalid site does not skip the next one
+-- (sites added during the walk are appended and checked on the next pass).
 script.on_nth_tick(ticks_1_s, function (event)
-	for k, silo_data in pairs (storage.rsc_silo_under_construction) do 
-		local silo = silo_data.silo
+	local list = storage.rsc_silo_under_construction
+	for k = #list, 1, -1 do
+		local silo_data = list[k]
+		local silo = silo_data and silo_data.silo
 		if silo and silo.valid then 
 			check_construction_site(silo_data)
 			else
-			table.remove (storage.rsc_silo_under_construction,k)
+			table.remove (list,k)
 			end
 		end
 end)
@@ -283,7 +298,7 @@ if ent and ent.valid then
 if string.sub(ent.name,1,15) == 'rsc-silo-stage1' then
 	local surface = ent.surface
 	local position = ent.position
-	local quality=ent.quality
+	local quality=site_quality(ent.quality)
 	local force=ent.force
 	local player_index=event.player_index
 	local final_building = 'rocket-silo'
@@ -382,7 +397,7 @@ local force
 if force_name then force = game.forces[force_name] end
 
 	for k, silo_data in pairs (tabcopy) do 
-	if (not force_name) or (force and silo_data.silo.force == force) then 
+	if silo_data.silo and silo_data.silo.valid and ((not force_name) or (force and silo_data.silo.force == force)) then
 		upgrade_construction_site(silo_data)
 		end
 	end
@@ -484,6 +499,34 @@ end
 
 function interface.get_on_silo_stage_finished()
 return on_silo_stage_finished
+end
+
+-- Paranoidal: puts a construction site of the given stage (2-6) at a position and registers it, e.g. a
+-- rocket silo thrown back to stage 4 by a launch failure (RocketExplosions2). Nothing may stand there.
+-- args: surface (LuaSurface), position, force, stage, quality (name or prototype; a defect becomes
+-- normal), final_building (default 'rocket-silo'), last_user (LuaPlayer, optional).
+-- Returns the new site entity, or nil when it cannot be created.
+function interface.create_site(args)
+local stage = args.stage
+if type(stage) ~= 'number' or stage < 2 or stage > 6 then return nil end
+local final_building = args.final_building or 'rocket-silo'
+local sufix = ''
+if final_building == 'se-rocket-launch-pad' then sufix = '-serlp'
+elseif final_building == 'se-space-probe-rocket-silo' then sufix = '-sesprs' end
+local name = 'rsc-silo-stage' .. stage .. sufix
+if not prototypes.entity[name] then return nil end
+local surface = args.surface
+if not (surface and surface.valid) then return nil end
+local ent = surface.create_entity{name = name, position = args.position, force = args.force, raise_built = true, quality = site_quality(args.quality)}
+if not (ent and ent.valid) then return nil end
+if args.last_user and args.last_user.valid then ent.last_user = args.last_user end
+local work_value = storage.st_insert_material_work
+if stage == 3 then work_value = storage.st_remove_stone_work end
+local silo_data = {silo = ent, bar_back = nil, progress_bar = nil, work_value = work_value, final_building = final_building, stage = stage}
+table.insert (storage.rsc_silo_under_construction, silo_data)
+check_construction_site(silo_data)
+if storage.st_not_removable_site then ent.minable = false end
+return ent
 end
 		-- Returns :
 		-- event.created_entity = The new entity created (next stage building)
