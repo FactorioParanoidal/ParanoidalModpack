@@ -1,0 +1,7 @@
+---------------------------------------------------------------------------------------------------
+Version: 9.6.1
+  Bugfixes:
+    - Assembling machines 7-9 and electronics machines 4-5: pipe connections rewritten in the 2.0
+      format (flow_direction, mandatory direction, position on the machine edge); the old 1.1 entries
+      had no direction and lay outside the machine and loaded only because assembler-pipe-passthrough
+      replaced them.

@@ -38,7 +38,7 @@ data:extend(
         pipe_picture = assembler3pipepictures(),
         pipe_covers = pipecoverspictures(),
         volume = 1000,
-        pipe_connections = {{ type="input", position = {0.5, -1.5} }}
+        pipe_connections = {{ flow_direction = "input", direction = defines.direction.north, position = {0.5, -0.5} }}
       },
     },
     fluid_boxes_off_when_no_fluid_recipe = true,
@@ -271,7 +271,7 @@ data:extend(
         pipe_picture = assembler3pipepictures(),
         pipe_covers = pipecoverspictures(),
         volume = 1000,
-        pipe_connections = {{ type="input", position = {0.5, -1.5} }}
+        pipe_connections = {{ flow_direction = "input", direction = defines.direction.north, position = {0.5, -0.5} }}
       },
     },
     fluid_boxes_off_when_no_fluid_recipe = true,
