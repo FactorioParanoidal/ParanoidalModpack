@@ -11,7 +11,25 @@ local params = {
 	constant_scale = {
 		["ic-defect-control-"] = 0.1,
 	},
+	-- Paranoidal: technologies whose name starts with one of these prefixes never raise evolution and get
+	-- no tooltip, whatever the settings: the upgrade chains of paranoidal-upgrade-tech (decision 2026-10-30).
+	ignored_prefixes = {
+		"research-efficiency-",
+		"worker-robot-battery-",
+	},
 }
+
+-- True when the technology name starts with one of params.ignored_prefixes.
+function params.ignored_name(name)
+	if type(name) == "string" then
+		for _, prefix in ipairs(params.ignored_prefixes) do
+			if string.sub(name, 1, #prefix) == prefix then
+				return true
+			end
+		end
+	end
+	return false
+end
 
 -- Share of constant_factor for a technology name (1 when no prefix matches).
 function params.constant_share(name)

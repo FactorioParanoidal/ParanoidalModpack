@@ -31,6 +31,7 @@ end
 local function ignored(tech)
 	local proto = tech.prototype
 	return proto.hidden
+		or params.ignored_name(tech.name)
 		or (ignore_qol and string.sub(tech.name, 1, 4) == "qol-")
 		or (ignore_infinite and infinite(proto))
 end

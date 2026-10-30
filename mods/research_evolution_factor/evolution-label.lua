@@ -42,6 +42,7 @@ end
 
 function M.ignored(tech)
 	return tech.hidden
+		or params.ignored_name(tech.name)
 		or (ignore_qol and string.sub(tech.name, 1, 4) == "qol-")
 		or (ignore_infinite and M.is_infinite(tech))
 end
