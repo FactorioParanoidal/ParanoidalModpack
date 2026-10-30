@@ -1,0 +1,10 @@
+{
+  "mod": "PickupTower-reforged",
+  "source": "local",
+  "original": {
+    "name": "Schall Pickup Tower",
+    "authors": ["Schallfalke"],
+    "portal": {"name": "SchallPickupTower", "url": "https://mods.factorio.com/mod/SchallPickupTower"}
+  },
+  "changeReason": "Мод Paranoidal по решению пользователя: переписанный с нуля код Schall Pickup Tower 2.0.1 под новым именем, графика Schallfalke. Башни I–IV (pickup-tower-1…4) — пассивные поставщики, раз в интервал скрытой радарной части подбирают предметы с земли в квадрате радиуса, умноженного на множитель дальности качества; фильтр по проводу, улучшение на месте, рецепты и исследования II–IV на радарах Bob. Без миграций со SchallPickupTower."
+}

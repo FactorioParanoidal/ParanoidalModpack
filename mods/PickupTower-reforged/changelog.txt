@@ -1,4 +1,32 @@
 ---------------------------------------------------------------------------------------------------
+Version: 9.0.0
+Date: 2026-10-30
+  Info:
+    - Paranoidal rewrite of Schall Pickup Tower 2.0.1 (mod SchallPickupTower) under a new name; graphics by Schallfalke. No migration from SchallPickupTower: towers of the old mod are not converted.
+  Changes:
+    - Prototypes renamed: pickup-tower-1…4 (item, entity, recipe, research), hidden upper part pickup-tower-N-radar; the hidden "-upper" items are gone.
+    - The tower chest is a passive provider of the logistic network; tiers can be upgraded in place (upgrade planner, fast replace).
+    - The pickup radius is multiplied by the quality range multiplier of the tower (like turret range); tower quality also enlarges the chest as before.
+    - Recipes II–IV: previous tower + 2 Bob radars of tiers 3/4/5 + circuits (was 4 previous towers); research II–IV requires the matching Bob radar research, III and IV also production science.
+    - The upper part charts only its own chunk, joins no radar network and is always normal quality.
+    - Settings "highest tier", "force disable range rendering" and "range colour" removed; one per-player setting "Show pickup tower ranges" is left.
+    - Item icons use the tier labels of Artisanal Reskins.
+    - The pickup text is one line per pickup (up to six item kinds) shown only to players of the force on the same surface near the tower.
+  Graphics:
+    - PNG recompressed (pingo -s4 -quality=45): item and technology icons lossy, worst PSNR 41.0 dB; sprite sheets and thumbnail.png pixel-identical; the tinted range sprite is untouched.
+  Bugfixes:
+    - A partly inserted ground stack is reduced instead of deleted (items were lost when the chest filled up).
+    - A circuit limit no longer lets a whole stack through: at most the allowed amount is taken; signals of all qualities of an item are summed.
+    - Items with data (armor, blueprints, items with inventory) can go into the first chest slot and respect the chest bar.
+    - The pickup text no longer appears on other surfaces.
+    - A moved tower chest (Even Pickier Dollies, script teleport) takes its upper part along; a removed chest always removes its upper part, a lost upper part is restored.
+  Optimisations:
+    - Towers are kept in a registry: no search for the chest on every pickup, no radius parsing from names.
+    - The upper part did a nearby scan of up to 9×9 chunks up to 16 times per second; now one chunk once per interval.
+    - A full chest skips the pickup; a kind that did not fit is not retried in the same pickup; at most 1000 ground items are looked at per pickup.
+    - Build, mine, death, clone and teleport events are filtered by name.
+    - Range rendering keeps per-player objects: nothing is scanned unless a tower enters or leaves the cursor; destroyed towers lose their rectangle through the engine.
+---------------------------------------------------------------------------------------------------
 Version: 2.0.1
 Date: 2024.12.15
   Features:

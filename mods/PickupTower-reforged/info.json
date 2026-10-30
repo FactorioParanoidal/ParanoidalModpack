@@ -1,0 +1,16 @@
+{
+  "name": "PickupTower-reforged",
+  "version": "9.0.0",
+  "title": "Pickup Tower Reforged",
+  "author": "Schallfalke, Paranoidal",
+  "contact": "",
+  "homepage": "",
+  "factorio_version": "2.0",
+  "dependencies": [
+    "base >= 2.0",
+    "? bobwarfare",
+    "? reskins-library",
+    "? even-pickier-dollies"
+  ],
+  "description": "Paranoidal: pickup towers collect items lying on the ground around them into their chest, a passive provider of the logistic network. Rewritten from Schall Pickup Tower by Schallfalke; graphics by Schallfalke."
+}
