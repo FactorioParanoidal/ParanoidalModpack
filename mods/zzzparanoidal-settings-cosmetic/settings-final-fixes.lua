@@ -9,8 +9,6 @@ local function hide(setting_type, name)
 	end
 end
 
--- SchallPickupTower
-hide("color-setting", "Schall-PT-range-colour")
 -- InlaidLampsExtended
 hide("double-setting", "inlaid-lamps-extended-light_intensity")
 hide("int-setting", "inlaid-lamps-extended-light_size")
