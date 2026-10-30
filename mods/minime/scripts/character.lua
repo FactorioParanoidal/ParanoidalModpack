@@ -1464,11 +1464,30 @@ minime.show("flashlight", flashlight)
     end
   end
 
+  -- Paranoidal: the queue only has to be moved if the character entity is replaced or
+  -- detached below. When the same character is kept (e.g. returning from god mode of
+  -- Blueprint Sandboxes to the character with the same skin), cancelling and re-queueing
+  -- returned all ingredients at once: with a nearly full inventory they were spilled on
+  -- the ground ("Inventory full") and the re-queued crafts were lost. Mirrors the
+  -- branch conditions below: reused if restore mode, or the picked version is the
+  -- current one, or no version could be picked (no new character is created then).
+  local function keeps_old_character()
+    if not (old_char and old_char.valid) then return false end
+    if restore then return true end
+    if not player_data.last_character or player_data.last_character == "" then
+      return false
+    end
+    local version = minime_character.pick_character_version(player)
+    return not version or version == old_char.name
+  end
+
   -- Store and clear player's crafting queue
   minime.writeDebugNewBlock("Do we have to consider the crafting queue?")
 minime.show("in_editor()", in_editor())
   if in_editor() then
     minime.writeDebug("No: in editor mode!")
+  elseif keeps_old_character() then
+    minime.writeDebug("No: the character is kept, its crafting queue stays!")
   elseif not player.crafting_queue then
     minime.writeDebug("No: not crafting!")
   else

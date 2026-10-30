@@ -6,6 +6,7 @@ Date: 2026-03-03
 
   Bugfixes:
     - Removed dependency on character mod "Lea Character" to avoid circular dependency: "Lea Character" depends on "!skins" which optionally depends on "miniMAXIme" again. (https://mods.factorio.com/mod/minime/discussion/69a49aaa90345c592e4f818c)
+    - Paranoidal: the handcraft queue is no longer cancelled and re-queued when the player returns from god mode (e.g. leaving a Blueprint Sandbox) to the same character. All ingredients came back at once, so with a nearly full inventory they were spilled on the ground ("Inventory full") and crafts were lost. The queue is still moved when the character is actually replaced or detached.
 
   Changes:
     - Added optional dependency on new character mods:
