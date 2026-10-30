@@ -72,8 +72,6 @@ hide("bool-setting", "carbon-fiber-aircraft")
 hide("bool-setting", "disable-tank-controls")
 hide("double-setting", "fuel-consumption-multiplier")
 hide("bool-setting", "aircraft-change-vanilla-tech-tree")
--- All-infinit-tech
-hide("string-setting", "Infinite-Formula")
 -- angelsbioprocessing
 hide("double-setting", "angels-bio-tile-pollution-absorbtion-multiplier")
 -- angelsextended-remelting-fixed

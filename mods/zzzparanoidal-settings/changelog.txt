@@ -3,5 +3,6 @@ Version: 0.4.0
   Locale:
     - ru: the mod name and the mod list description are the same as in ParanoidalLocale (format "English title (Russian translation)"), so the mod reads the same with or without it.
   Changes:
+    - All-infinit-tech is removed from the build (replaced by paranoidal-upgrade-tech): its startup setting Infinite-Formula is no longer hidden.
     - ic-more-qualities no longer has the quality set setting ("ic-more-qualities-mode"): it is not hidden any more.
     - ToxicPollution2-reforged replaces toxicPollution2: its startup setting tpr-tolerance is hidden instead of armor-absorb-multiplier and min-pollution-to-damage.

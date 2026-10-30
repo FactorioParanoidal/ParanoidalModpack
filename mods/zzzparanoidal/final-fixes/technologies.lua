@@ -54,7 +54,6 @@ paralib.bobmods.lib.tech.add_prerequisite("nanobots-cliff", "logistic-science-pa
 --синие банки
 paralib.bobmods.lib.tech.add_prerequisite("remelting-alloy-mixer-2", "chemical-science-pack")
 paralib.bobmods.lib.tech.add_prerequisite("worker-robots-speed-1", "chemical-science-pack")
-paralib.bobmods.lib.tech.add_prerequisite("worker-robots-battery-1", "chemical-science-pack")
 paralib.bobmods.lib.tech.add_prerequisite("bet-tech", "chemical-science-pack")
 paralib.bobmods.lib.tech.add_prerequisite("roboport-interface", "chemical-science-pack")
 paralib.bobmods.lib.tech.add_prerequisite("toolbelt-2", "chemical-science-pack")

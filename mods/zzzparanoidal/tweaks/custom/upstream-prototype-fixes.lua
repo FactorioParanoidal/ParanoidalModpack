@@ -5,13 +5,6 @@ if pipes["bob-heat-pipe-4"] then
 	pipes["bob-heat-pipe-4"].next_upgrade = nil
 end
 
-local productivity = data.raw.technology["laboratory-productivity-8"]
-if productivity then
-	for _, effect in ipairs(productivity.effects or {}) do
-		if effect.type == "laboratory-productivity" then effect.modifier = 0.05 end
-	end
-end
-
 local projectile = data.raw["artillery-projectile"]["bob-atomic-artillery-projectile"]
 if projectile then
 	projectile.picture.width = 20

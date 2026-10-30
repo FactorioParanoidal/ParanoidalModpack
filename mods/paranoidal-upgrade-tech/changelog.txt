@@ -1,0 +1,11 @@
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 2026-10-29
+  Major Features:
+    - Replaces All-infinit-tech with the upgrade technologies of Beta 8 (efficient-research 0.0.3, InfiniteTech 1.0.2 with the zzzparanoidal prerequisites), same names, effects, costs and prerequisites.
+    - research-efficiency-1/4/7/10/13/17 "Directive 99-99: Frugal Research": 20 levels, research productivity +1% and lab speed -6...-12% per level; each stage needs its research-speed level.
+    - worker-robot-battery-1/4/8/12 "BnL LongCharge(TM) Batteries": worker robot battery +10% per level, levels 1-11 on 3-5 science packs, level 12+ infinite with space science, cost 2^(L-11)*1000.
+  Balancing:
+    - Infinite mining productivity costs 2^(L-3)*1000 instead of 2500*(L-3), infinite follower robot count 2^(L-4)*1000 for 60 s instead of 1000*(L-4) for 30 s, as in Beta 8.
+  Compatibility:
+    - Incompatible with All-infinit-tech, InfiniteTech and efficient-research (same technologies or the same bonuses).
