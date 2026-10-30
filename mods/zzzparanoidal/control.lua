@@ -137,3 +137,6 @@ script.on_event(defines.events.on_player_joined_game, disable_obsolete_basic_log
 
 -- Пресет вех Paranoidal для Milestones (remote-интерфейс paranoidal_milestones).
 require("controls.milestones-preset").install()
+
+-- Цветные пинги: кольцо и ник цветом игрока у GPS-ссылки в чате.
+require("controls.ping-color").install()
