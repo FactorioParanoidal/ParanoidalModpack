@@ -3,8 +3,10 @@ local params = {
 		["planetary-data"] = 1400,
 		["station-science"] = 3000,
 	},
-	constant_factor = 0.15, --percent of evolution per each researched technology
-	linear_factor = 0.35, --percent of evolution per 1000 total researched science packs
+	-- Paranoidal: 0.12 / 0.15 instead of 0.15 / 0.35 (decision 2026-10-30): about 75% evolution after the
+	-- whole tree up to chemical science instead of about 90%.
+	constant_factor = 0.12, --percent of evolution per each researched technology
+	linear_factor = 0.15, --percent of evolution per 1000 total researched science packs
 	max_finite_levels = 10, --count_formula technology with more levels is infinite for the "ignore infinite" setting
 	-- Paranoidal: share of constant_factor for technologies whose name starts with the prefix. The ten
 	-- "Quality control" levels of ic-more-qualities count as one technology together (decision 2026-10-19).
