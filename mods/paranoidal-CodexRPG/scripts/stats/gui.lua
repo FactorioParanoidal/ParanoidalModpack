@@ -848,7 +848,16 @@ function R.world(player, lc, rc, sn)
 	row(t, L("radars"), fmt.int(sn.radars))
 	if sn.day then
 		row(t, L("daytime"), sn.day.frozen and L("daytime-frozen", clock(sn.day.time)) or clock(sn.day.time))
-		row(t, L("days"), fmt.int(sn.day.days), L("days-tooltip"))
+		row(t, L("days"), fmt.int(sn.day.days), L(sn.day.calendar and "days-calendar-tooltip" or "days-tooltip"))
+		if sn.day.year then
+			row(t, L("year"), L("year-value", fmt.int(sn.day.year), fmt.int(sn.day.day_of_year), fmt.int(sn.day.period)),
+				L("year-tooltip"))
+		end
+		if sn.day.season then
+			local ok, name = pcall(remote.call, "NightBrightness", "get_season_name", sn.day.season, player.index)
+			row(t, L("season"), L("season-value", ok and name or sn.day.season, fmt.int(sn.day.season_day or 1),
+				fmt.int(sn.day.season_length or 1)))
+		end
 	end
 
 	minimap_card(player, lc, 420)

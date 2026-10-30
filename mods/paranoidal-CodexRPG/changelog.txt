@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 9.1.0
 Date: 2026-10-29
+  Changes:
+    - World: days passed come from the NightBrightness calendar (midnights since the landing, the same count as EvoUI and the achievements); new rows "Year on the planet" (with the day of the year) and "Season" (in the player's name style).
   Major Features:
     - PMRPGsystem is renamed to paranoidal-CodexRPG (Paranoidal Codex RPG). PMRPGsystem 9.0.5 stays in the modpack as a bridge: when this mod is added to an old save, it takes over the experience, levels, skills, team experience, kills and statistics once, and the windows and buttons of the old version are removed. Settings, keys and the remote interface "RPG" keep their names.
   Features:

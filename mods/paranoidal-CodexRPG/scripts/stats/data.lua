@@ -1354,6 +1354,17 @@ function STEP.finish(job, force)
 	if surface then
 		sn.day = {time = surface.daytime, days = math.floor(game.tick / math.max(1, surface.ticks_per_day)),
 			frozen = surface.freeze_daytime or nil}
+		-- The calendar of NightBrightness (midnights since the landing, years, season) is the one
+		-- count shared with EvoUI and the achievements; the tick estimate stays without it.
+		local api = remote.interfaces["NightBrightness"]
+		if api and api.get_state then
+			local ok, state = pcall(remote.call, "NightBrightness", "get_state")
+			if ok and type(state) == "table" and type(state.days_passed) == "number" then
+				sn.day.days, sn.day.calendar = state.days_passed, true
+				sn.day.year, sn.day.day_of_year, sn.day.period = state.year, state.day_of_year, state.period
+				sn.day.season, sn.day.season_day, sn.day.season_length = state.season, state.season_day, state.season_length
+			end
+		end
 	end
 
 	-- war
