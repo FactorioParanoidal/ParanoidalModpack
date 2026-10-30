@@ -4,6 +4,7 @@ Date: 2026-10-24
   Graphics:
     - thumbnail.png is redrawn at 144x144 after the old smaller picture: text and simple shapes are drawn again, the rest is resampled and sharpened.
   Changes:
+    - "Vacuum Cleaner" (mxlr-vacuum) counts the towers of PickupTower-reforged (pickup-tower-1…4), which replaces SchallPickupTower.
     - "Push-pull" (mxlr-push-pull) requires MultipleUnitTrainControl-reforged, which replaces MultipleUnitTrainControl; MU locomotives keep the "-mu" suffix the tracker looks for.
     - HeroTurretRedux ranks hidden for the research tooltips (laser and flamethrower ranks) still count as turrets of their base.
     - The RPG achievements (mxlr-rpg-level, mxlr-specialist) require paranoidal-CodexRPG, the new name of PMRPGsystem.

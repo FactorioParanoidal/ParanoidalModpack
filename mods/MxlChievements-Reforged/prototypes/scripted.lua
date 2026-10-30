@@ -78,7 +78,7 @@ local list = {
   count("crane-operator", "logistics", {100}, {patterns = {"^nco%-.*crane$"}, types = {"inserter"}}, {entity = "nco-crane"}),
   count("modesty", "logistics", {100}, {patterns = {"^mini%-"}, types = {"container", "logistic-container"}},
     {entity = "mini-steel-chest"}, {"osha_mini_containers"}),
-  count("vacuum", "logistics", {10}, {patterns = {"^Schall%-pickup%-tower%-R%d+$"}}, {entity = "Schall-pickup-tower-R32"}),
+  count("vacuum", "logistics", {10}, {patterns = {"^pickup%-tower%-%d+$"}}, {entity = "pickup-tower-1"}),
   count("centipede", "logistics", {1}, {patterns = {"^WideChests_"}, min_area = 20}, {entity = "steel-chest"}),
   {id = "plane-crash", kind = "script", theme = "logistics", tracker = "robot-crash", amount = 100,
     mods = {"robot_attrition"}, icon = {entity = "logistic-robot"}},
