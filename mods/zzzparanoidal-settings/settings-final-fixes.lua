@@ -360,8 +360,6 @@ hide("double-setting", "rampantFixed--unitHiveRespawnScaler")
 -- research_evolution_factor
 hide("bool-setting", "research-evolution-factor-ignore-inf")
 hide("bool-setting", "research-evolution-factor-ignore-qol")
--- robot_attrition
-hide("string-setting", "robot-attrition-repair")
 -- Rocket-Silo-Construction
 hide("double-setting", "rsc-st-cost-mp")
 hide("bool-setting", "rsc-st-not-removable-silo")
