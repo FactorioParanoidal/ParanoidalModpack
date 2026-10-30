@@ -4,6 +4,22 @@ Date: 2025-09-15
   Changes:
     - Added fluidbox nudging to resolve long outstanding icon placement issues; thanks for the
       inspiration watdafawx
+    - Removed the 1.1 fluid box fields base_level, height and base_area, the unreachable bounding box
+      fallback and clamping, the global string.starts and blacklist entries of mods absent from
+      Paranoidal (P-U-M-P-S, RealisticFusionPower, FluidicPower, 248k, escape pod)
+    - Machines are changed in place with one copy of their fluid boxes instead of a copy of the whole
+      prototype; empty fluid box lists are no longer re-registered
+    - Log: one line per skipped machine with the reason and one summary line instead of a line per
+      machine
+    - Setting descriptions state that only the vanilla machines are covered by the settings
+  Bugfixes:
+    - Connections without flow_direction count as input-output (the 2.0 default), so such machines are
+      no longer rewritten
+    - Connection layouts that left the face (even sizes, 9x9 with four boxes) are centred instead of
+      being clamped onto other connections; layouts that fit are unchanged
+    - Machines with fluid boxes other than input/output, connections other than normal, no collision
+      box or an off-centre collision box are skipped instead of crashing or getting misplaced pipes
+    - An enabled setting no longer removes a blacklist entry added by another mod
 ---------------------------------------------------------------------------------------------------
 Version: 2025.06.20
 Date: 2025-06-20
