@@ -104,16 +104,6 @@ end
 if mods["ModuleInserterEx"] then
     set_settings_default_value("int-setting", "module-inserter-ex-proxies-per-tick", 10)
 end
--- Namelists: станции получают русские названия RussianStations2 без примеси имён спонсоров (как в Beta 8).
--- Настройка скрыта и принудительно выключена, чтобы сохранённое значение в mod-settings.dat её не включало.
-if mods["Namelists"] and mods["RussianStations2"] then
-    local backer_stations = data.raw["bool-setting"]["namelists-backer-stations"]
-    if backer_stations then
-        backer_stations.default_value = false
-        backer_stations.hidden = true
-        backer_stations.forced_value = false
-    end
-end
 if mods["NightBrightness"] then
     set_settings_default_value("int-setting", "night_brightness_period_days", 24)
 end
