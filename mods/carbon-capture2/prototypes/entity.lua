@@ -34,8 +34,6 @@ for _, t in ipairs(tiers) do
 	m.minable = { mining_time = 0.2, results = { { type = "item", name = name, amount = 1 } } }
 	m.crafting_categories = { "CW-air-filter" }
 	m.fixed_recipe = "CW-filter-air"
-	m.source_inventory_size = 1
-	m.result_inventory_size = 1
 	m.crafting_speed = t.speed
 	m.energy_usage = t.energy
 	m.energy_source.emissions_per_minute = { pollution = t.emissions }
@@ -44,7 +42,6 @@ for _, t in ipairs(tiers) do
 	m.module_slots = t.slots
 	m.allowed_effects = { "consumption", "speed" }
 	m.effect_receiver = nil
-	m.animation = nil
 	m.graphics_set = {
 		animation = {
 			filename = "__carbon-capture2__/graphics/entity/air-filter-machine-" .. t.n .. ".png",

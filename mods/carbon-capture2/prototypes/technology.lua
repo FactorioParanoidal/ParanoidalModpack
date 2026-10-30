@@ -1,274 +1,61 @@
-data:extend({
-	{
-		type = "technology",
-		name = "CW-air-filtering-1",
-		icon = "__carbon-capture2__/graphics/technology/air-filtering-1.png",
-		icon_size = 64,
-		prerequisites = {"steel-processing", "electronics", "automation"},
-		effects =
-	{
-		{
-			type = "unlock-recipe",
-			recipe = "CW-air-filter-machine-1",
-		},
-		{
-			type = "unlock-recipe",
-			recipe = "CW-empty-air-filter",
-		},
-		{
-			type = "unlock-recipe",
-			recipe = "CW-air-filter",
-		},
+local ICON = "__carbon-capture2__/graphics/technology/"
 
-	},
-	unit ={
-			count = 100,
-			ingredients = 
-			{
-				{"automation-science-pack", 1},
-			},
-		time = 30
-		},
-		order = "d-a-a",
-	},
-	{
-		type = "technology",
-		name = "CW-air-filtering-2",
-		icon = "__carbon-capture2__/graphics/technology/air-filtering-2.png",
-		icon_size = 64,
-		prerequisites = {"CW-air-filtering-1","automation-2"},
-		effects =
-		{
-			{
-				type = "unlock-recipe",
-				recipe = "CW-air-filter-machine-2"
-			},
-		},
-		unit =
-		{
-			count = 250,
-			ingredients = 
-			{
-				{"automation-science-pack", 1},
-				{"logistic-science-pack", 1},
-				
-			},
-			time = 30
-		},
-		order = "d-a-a"
-	},
-	{
-		type = "technology",
-		name = "CW-air-filtering-3",
-		icon = "__carbon-capture2__/graphics/technology/air-filtering-3.png",
-		icon_size = 64,
-		prerequisites = {"CW-air-filtering-2","automation-3"},
-		effects =
-		{
-			{
-				type = "unlock-recipe",
-				recipe = "CW-air-filter-machine-3"
-			},
-		},
-		unit =
-		{
-			count = 500,
-			ingredients = 
-			{
-				{"automation-science-pack", 1},
-				{"logistic-science-pack", 1},
-				{"chemical-science-pack", 1},
-			},
-			time = 60
-		},
-		order = "d-a-a"
-	},
-		{
-		type = "technology",
-		name = "CW-air-filtering-4",
-		icon = "__carbon-capture2__/graphics/technology/air-filtering-4.png",
-		icon_size = 64,
-		prerequisites = {"CW-air-filtering-3"},
-		effects =
-		{
-			{
-				type = "unlock-recipe",
-				recipe = "CW-air-filter-machine-4"
-			},
-		},
-		unit =
-		{
-			count = 500,
-			ingredients = 
-			{
-				{"automation-science-pack", 1},
-				{"logistic-science-pack", 1},
-				{"chemical-science-pack", 1},
-				{"production-science-pack", 2}
-			},
-			time = 75
-		},
-		order = "d-a-a"
-	},
-		{
-		type = "technology",
-		name = "CW-air-filtering-5",
-		icon = "__carbon-capture2__/graphics/technology/air-filtering-5.png",
-		icon_size = 64,
-		prerequisites = {"CW-air-filtering-4"},
-		effects =
-		{
-			{
-				type = "unlock-recipe",
-				recipe = "CW-air-filter-machine-5"
-			},
-		},
-		unit =
-		{
-			count = 2000,
-			ingredients = 
-			{
-				{"automation-science-pack", 2},
-				{"logistic-science-pack", 2},
-				{"chemical-science-pack", 2},
-				{"production-science-pack", 2},
-				{"utility-science-pack", 1}
-			},
-			time = 90
-		},
-		order = "d-a-a"
-	},
-		{
-		type = "technology",
-		name = "CW-air-filtering-6",
-		icon = "__carbon-capture2__/graphics/technology/air-filtering-6.png",
-		icon_size = 64,
-		prerequisites = {"CW-air-filtering-5"},
-		effects =
-		{
-			{
-				type = "unlock-recipe",
-				recipe = "CW-air-filter-machine-6"
-			},
-		},
-		unit =
-		{
-			count = 2500,
-			ingredients = 
-			{
-        {"automation-science-pack", 5},
-        {"logistic-science-pack", 5},
-        {"chemical-science-pack", 5},
-        {"production-science-pack", 3},
-		{"utility-science-pack", 2},
-		{"space-science-pack", 1}
-			},
-			time = 180
-		},
-		order = "d-a-a"
-	},
-	
-	{
-		type = "technology",
-		name = "CW-air-filter-cleaning-1",
-		icon = "__carbon-capture2__/graphics/technology/air-filter-cleaning-1.png",
-		icon_size = 64,
-		prerequisites = {"CW-air-filtering-1"},
-		effects =
-		{
-			{
-				type = "unlock-recipe",
-				recipe = "CW-air-filter-cleaning-1"
-			},
-		},
-		unit =
-		{
-			count = 400,
-			ingredients = 
-			{
-				{"automation-science-pack", 1}
-			},
-			time = 30
-		},
-		order = "d-a-a"
-	},
-	{
-		type = "technology",
-		name = "CW-air-filter-cleaning-2",
-		icon = "__carbon-capture2__/graphics/technology/air-filter-cleaning-2.png",
-		icon_size = 64,
-		prerequisites = {"CW-air-filter-cleaning-1"},
-		effects =
-		{
-			{
-				type = "unlock-recipe",
-				recipe = "CW-air-filter-cleaning-2"
-			},
-		},
-		unit =
-		{
-			count = 500,
-			ingredients = 
-			{
-				{"automation-science-pack", 1},
-				{"logistic-science-pack", 1}
-			},
-			time = 60
-		},
-		order = "d-a-a"
-	},
-	{
-		type = "technology",
-		name = "CW-air-filter-cleaning-3",
-		icon = "__carbon-capture2__/graphics/technology/air-filter-cleaning-3.png",
-		icon_size = 64,
-		prerequisites = {"CW-air-filter-cleaning-2"},
-		effects =
-		{
-			{
-				type = "unlock-recipe",
-				recipe = "CW-air-filter-cleaning-3"
-			},
-		},
-		unit =
-		{
-			count = 500,
-			ingredients = 
-			{
-				{"automation-science-pack", 2},
-				{"logistic-science-pack", 2},
-				{"chemical-science-pack", 1},
-			},
-			time = 90
-		},
-		order = "d-a-a"
-	},
-	{
-		type = "technology",
-		name = "CW-air-filter-cleaning-4",
-		icon = "__carbon-capture2__/graphics/technology/air-filter-cleaning-4.png",
-		icon_size = 64,
-		prerequisites = {"CW-air-filter-cleaning-3"},
-		effects =
-		{
-			{
-				type = "unlock-recipe",
-				recipe = "CW-air-filter-cleaning-4"
-			},
-		},
-		unit =
-		{
-			count = 750,
-			ingredients = 
-			{
-				{"automation-science-pack", 2},
-				{"logistic-science-pack", 2},
-				{"chemical-science-pack", 1},
-				{"production-science-pack", 1}
-			},
-			time = 90
-		},
-		order = "d-a-a"
-	},
+local function unlocks(...)
+	local effects = {}
+	for i, recipe in ipairs({ ... }) do effects[i] = { type = "unlock-recipe", recipe = recipe } end
+	return effects
+end
 
-})
+local function packs(red, green, blue, purple, yellow, white)
+	local list = {}
+	for i, pack in ipairs({
+		{ "automation-science-pack", red }, { "logistic-science-pack", green },
+		{ "chemical-science-pack", blue }, { "production-science-pack", purple },
+		{ "utility-science-pack", yellow }, { "space-science-pack", white },
+	}) do
+		if pack[2] then list[i] = pack end
+	end
+	return list
+end
+
+-- name, prerequisites, unlocked recipes, count, packs, time; order sorts the tiers in their line.
+local techs = {
+	{ "CW-air-filtering-1", { "steel-processing", "electronics", "automation" },
+		unlocks("CW-air-filter-machine-1", "CW-empty-air-filter", "CW-air-filter"), 100, packs(1), 30 },
+	{ "CW-air-filtering-2", { "CW-air-filtering-1", "automation-2" },
+		unlocks("CW-air-filter-machine-2"), 250, packs(1, 1), 30 },
+	{ "CW-air-filtering-3", { "CW-air-filtering-2", "automation-3" },
+		unlocks("CW-air-filter-machine-3"), 500, packs(1, 1, 1), 60 },
+	{ "CW-air-filtering-4", { "CW-air-filtering-3" },
+		unlocks("CW-air-filter-machine-4"), 500, packs(1, 1, 1, 2), 75 },
+	{ "CW-air-filtering-5", { "CW-air-filtering-4" },
+		unlocks("CW-air-filter-machine-5"), 2000, packs(2, 2, 2, 2, 1), 90 },
+	{ "CW-air-filtering-6", { "CW-air-filtering-5" },
+		unlocks("CW-air-filter-machine-6"), 2500, packs(5, 5, 5, 3, 2, 1), 180 },
+	{ "CW-air-filter-cleaning-1", { "CW-air-filtering-1" },
+		unlocks("CW-air-filter-cleaning-1"), 400, packs(1), 30 },
+	{ "CW-air-filter-cleaning-2", { "CW-air-filter-cleaning-1" },
+		unlocks("CW-air-filter-cleaning-2"), 500, packs(1, 1), 60 },
+	{ "CW-air-filter-cleaning-3", { "CW-air-filter-cleaning-2" },
+		unlocks("CW-air-filter-cleaning-3"), 500, packs(2, 2, 1), 90 },
+	{ "CW-air-filter-cleaning-4", { "CW-air-filter-cleaning-3" },
+		unlocks("CW-air-filter-cleaning-4"), 750, packs(2, 2, 1, 1), 90 },
+}
+
+local list = {}
+for _, t in ipairs(techs) do
+	local name = t[1]
+	local line, tier = name:match("^CW%-(.-)%-(%d+)$")
+	list[#list + 1] = {
+		type = "technology",
+		name = name,
+		icon = ICON .. line .. "-" .. tier .. ".png",
+		icon_size = 64,
+		prerequisites = t[2],
+		effects = t[3],
+		unit = { count = t[4], ingredients = t[5], time = t[6] },
+		order = "d-a-" .. (line == "air-filtering" and "a" or "b") .. "-" .. tier,
+	}
+end
+
+data:extend(list)

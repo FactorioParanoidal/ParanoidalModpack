@@ -2,3 +2,17 @@
 Version: 9.1.4
   Graphics:
     - thumbnail.png is redrawn at 144x144 after the old smaller picture: text and simple shapes are drawn again, the rest is resampled and sharpened.
+    - All PNGs are recompressed (pingo -s4 -quality=45): 30 of 31 are pixel-identical, thumbnail.png 23104 -> 12919 bytes (PSNR 38.5 dB).
+    - Removed the unused icons air-filter-32, pellets, sludge and sludge-treatment.
+  Changes:
+    - The clean-air shut-off is rewritten for speed: machines are grouped by chunk (pollution is stored per chunk), one pollution query per chunk instead of five API calls per machine, and machines are written only when their chunk changes state.
+    - Hysteresis: a stopped machine starts when the chunk pollution rises above 10 and stops at 1 or below, so it no longer switches every second near the threshold.
+    - Chunks are checked in 6 parts every 10 ticks (each chunk once per second, as before) instead of all machines on one tick; the tick handler is registered only while a machine exists.
+    - A stopped machine shows the status "Clean air: waiting for pollution" instead of "Disabled by script".
+    - Uses disabled_by_script instead of the deprecated write to active.
+    - The registry is rebuilt on init and on configuration change, so machines placed before the mod was added or created without a build event are tracked; cloned machines are tracked too.
+    - Removal is tracked with register_on_object_destroyed (any way of destruction, including fast replace and destroy() without an event) instead of four removal events.
+    - Neutral ruins machines are not tracked until the AbandonedRuins claim tool gives them to a player.
+    - Removed the dead prototype fields source_inventory_size, result_inventory_size, animation and icon_mipmaps; items and technologies are generated in loops; technologies get distinct order strings.
+  Locale:
+    - Russian names of MK1 and MK4 used Cyrillic "МК": now Latin "MK" as in the other tiers.

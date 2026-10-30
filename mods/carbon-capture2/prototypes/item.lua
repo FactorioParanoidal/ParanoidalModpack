@@ -1,101 +1,36 @@
-data:extend({
-	{
+local ICON = "__carbon-capture2__/graphics/icons/"
+
+local items = {}
+
+for tier = 1, 6 do
+	local name = "CW-air-filter-machine-" .. tier
+	items[#items + 1] = {
 		type = "item",
-		name = "CW-air-filter-machine-1",
-		icon = "__carbon-capture2__/graphics/icons/air-filter-machine-1.png",
+		name = name,
+		icon = ICON .. "air-filter-machine-" .. tier .. ".png",
 		icon_size = 64,
-		flags = {},
 		subgroup = "production-machine",
-		order = "e[air-filter-machine-1]",
-		place_result = "CW-air-filter-machine-1",
-		stack_size = 10
-	},
-	{
+		order = "e[air-filter-machine-" .. tier .. "]",
+		place_result = name,
+		stack_size = 10,
+	}
+end
+
+-- Icons 120×64: 64 px with mipmaps (2.0 detects them from the picture width).
+for _, filter in ipairs({
+	{ name = "CW-empty-air-filter", icon = "empty-air-filter", order = "h[air-filter]-a[empty-air-filter]" },
+	{ name = "CW-air-filter", icon = "air-filter", order = "h[air-filter]-b[air-filter]" },
+	{ name = "CW-used-air-filter", icon = "used-air-filter", order = "h[air-filter]-i[used-air-filter]" },
+}) do
+	items[#items + 1] = {
 		type = "item",
-		name = "CW-air-filter-machine-2",
-		icon = "__carbon-capture2__/graphics/icons/air-filter-machine-2.png",
+		name = filter.name,
+		icon = ICON .. filter.icon .. ".png",
 		icon_size = 64,
-		flags = {},
-		subgroup = "production-machine",
-		order = "e[air-filter-machine-2]",
-		place_result = "CW-air-filter-machine-2",
-		stack_size = 10
-	},
-	{
-		type = "item",
-		name = "CW-air-filter-machine-3",
-		icon = "__carbon-capture2__/graphics/icons/air-filter-machine-3.png",
-		icon_size = 64,
-		flags = {},
-		subgroup = "production-machine",
-		order = "e[air-filter-machine-3]",
-		place_result = "CW-air-filter-machine-3",
-		stack_size = 10
-	},
-	{
-		type = "item",
-		name = "CW-air-filter-machine-4",
-		icon = "__carbon-capture2__/graphics/icons/air-filter-machine-4.png",
-		icon_size = 64,
-		flags = {},
-		subgroup = "production-machine",
-		order = "e[air-filter-machine-4]",
-		place_result = "CW-air-filter-machine-4",
-		stack_size = 10
-	},
-	{
-		type = "item",
-		name = "CW-air-filter-machine-5",
-		icon = "__carbon-capture2__/graphics/icons/air-filter-machine-5.png",
-		icon_size = 64,
-		flags = {},
-		subgroup = "production-machine",
-		order = "e[air-filter-machine-5]",
-		place_result = "CW-air-filter-machine-5",
-		stack_size = 10
-	},
-	{
-		type = "item",
-		name = "CW-air-filter-machine-6",
-		icon = "__carbon-capture2__/graphics/icons/air-filter-machine-6.png",
-		icon_size = 64,
-		flags = {},
-		subgroup = "production-machine",
-		order = "e[air-filter-machine-6]",
-		place_result = "CW-air-filter-machine-6",
-		stack_size = 10
-	},
-	{
-		type = "item",
-		name = "CW-empty-air-filter",
-		icon = "__carbon-capture2__/graphics/icons/empty-air-filter.png",
-		icon_size = 64,
-		icon_mipmaps = 4,
-		flags = {},
 		subgroup = "raw-material",
-		order = "h[air-filter]-a[empty-air-filter]",
-		stack_size = 200
-	},
-	{
-		type = "item",
-		name = "CW-air-filter",
-		icon = "__carbon-capture2__/graphics/icons/air-filter.png",
-		icon_size = 64,
-		icon_mipmaps = 4,
-		flags = {},
-		subgroup = "raw-material",
-		order = "h[air-filter]-b[air-filter]",
-		stack_size = 200
-	},
-	{
-		type = "item",
-		name = "CW-used-air-filter",
-		icon = "__carbon-capture2__/graphics/icons/used-air-filter.png",
-		icon_size = 64,
-		icon_mipmaps = 4,
-		flags = {},
-		subgroup = "raw-material",
-		order = "h[air-filter]-i[used-air-filter]",
-		stack_size = 200
-	},
-})
+		order = filter.order,
+		stack_size = 200,
+	}
+end
+
+data:extend(items)
