@@ -27,7 +27,15 @@ function sensor:get_line(player)
     local brightness = math.floor((1 - player.surface.darkness) * 100)
 
     if self.settings.show_day_number then
-        local day_number = 1 + ((game.tick + 12500) / 25000)
+        -- Paranoidal: the calendar day of NightBrightness (midnights since the landing, day 1 is the
+        -- landing day) is the one count shared with the season sensor and the RPG statistics.
+        local day_number
+        local api = remote.interfaces["NightBrightness"]
+        if api and api.get_state then
+            local ok, state = pcall(remote.call, "NightBrightness", "get_state")
+            if ok and type(state) == "table" then day_number = state.day end
+        end
+        day_number = day_number or math.floor(1 + (game.tick + 12500) / 25000)
         return {"sensor.day_time.day_format",
                 string.format("%d:%02d", day_time_hours, display_minutes % 60),
                 string.format("%d", day_number),

@@ -1,12 +1,15 @@
 ---------------------------------------------------------------------------------------------------
 Version: 0.5.1
 Date: 2026-10-12
+  Features:
+    - Paranoidal: sensor "Season and year (NightBrightness)": season (in the player's NightBrightness name style and colour), day of the season, next season, year since landing and day of the year, seasonal sun, full daylight hours, seasonal wind and wire losses; each part is a checkbox. Shown by default, also in existing saves. Registered only with NightBrightness.
   Changes:
     - Paranoidal: the tick handler returns before its two pcalls on every tick that is not an update tick (update_delay); a persistent error is printed once instead of every update to every player.
     - Paranoidal: while evolution is below the RampantFixed truce threshold, the evolution line adds "Peaceful mode. Attacks start at N% evolution." N is read from RampantFixed (remote getTruceInfo); nothing is added without RampantFixed or when its AI is off on the surface.
     - Paranoidal: chunk pollution level is shown by default for new players.
     - Paranoidal: the kill count sensor no longer fails with "LuaGameScript doesn't contain key entity_prototypes" when enabled (uses prototypes.entity in 2.0).
     - Paranoidal: Russian name of the kill count sensor is "Убийства вашей команды".
+    - Paranoidal: the day number of the time of day sensor is the NightBrightness calendar day (the same count as the season sensor and the RPG statistics) instead of game.tick / 25000; Russian text "Время 12:00, день 3".
 ---------------------------------------------------------------------------------------------------
 Version: 0.5.0
 Date: 2025.09.05

@@ -1,5 +1,6 @@
 require "value_sensors.day_time"
 require "value_sensors.evolution_factor"
+require "value_sensors.season"
 require "value_sensors.kill_count"
 require "value_sensors.play_time"
 require "value_sensors.player_locations"
@@ -115,8 +116,14 @@ function EvoUi.update_gui(event)
         if not player_settings then
             EvoUi.new_player({player_index = player_index})
             player_settings = storage.EvoUi[player.name]
-        elseif not player.gui.top.EvoUi_root then
-            EvoUi.create_sensor_display(player)
+        else
+            if not (player_settings.sensor_settings and player_settings.sensor_settings.season) then
+                -- Saves made before the season sensor: add its defaults without a version change.
+                EvoUi.create_player_globals(player)
+            end
+            if not player.gui.top.EvoUi_root then
+                EvoUi.create_sensor_display(player)
+            end
         end
 
         local sensor_flow = player.gui.top.EvoUi_root.sensor_flow
@@ -173,6 +180,19 @@ function EvoUi.create_player_globals(player)
             ['show_day_number'] = false,
             ['minute_rounding'] = true,
         }
+    end
+
+    -- Paranoidal: the season sensor (NightBrightness) is shown by default, once, also in older saves.
+    if not player_settings.sensor_settings['season'] then
+        player_settings.sensor_settings['season'] = {
+            ['show_season_day'] = true,
+            ['show_next'] = false,
+            ['show_year'] = true,
+            ['show_solar'] = true,
+            ['show_light'] = false,
+            ['show_effects'] = false,
+        }
+        player_settings.always_visible['season'] = true
     end
 
     if not player_settings.sensor_settings['evolution_factor'] then
