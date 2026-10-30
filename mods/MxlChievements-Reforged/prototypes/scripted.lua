@@ -81,7 +81,9 @@ local list = {
   count("vacuum", "logistics", {10}, {patterns = {"^pickup%-tower%-%d+$"}}, {entity = "pickup-tower-1"}),
   count("centipede", "logistics", {1}, {patterns = {"^WideChests_"}, min_area = 20}, {entity = "steel-chest"}),
   {id = "plane-crash", kind = "script", theme = "logistics", tracker = "robot-crash", amount = 100,
-    mods = {"robot_attrition"}, icon = {entity = "logistic-robot"}},
+    mods = {"paranoidal-robot-attrition"}, icon = {entity = "logistic-robot"}},
+  {id = "quiet-sky", kind = "script", theme = "logistics", tracker = "quiet-sky", amount = 60, params = {busy = 500},
+    mods = {"paranoidal-robot-attrition"}, icon = {entity = "roboport"}},
 
   -- combat
   {id = "bounty-hunter", kind = "script", theme = "combat", tracker = "bosses", fight = true, mods = {"Big-Monsters"},

@@ -505,6 +505,35 @@ trackers["robot-crash"] = {
   end},
 }
 
+-- At least params.busy busy logistic robots in one network of the force for `amount` minutes in a row without a
+-- crash (crash count of paranoidal-robot-attrition).
+trackers["quiet-sky"] = {
+  poll = {every = 600, run = function(entries, core)
+    local api = remote.interfaces["paranoidal-robot-attrition"]
+    if not (api and api.get_crash_count) then return end
+    for _, force in ipairs(core.player_forces()) do
+      local data = core.force_data(force.index)
+      local crashes = remote.call("paranoidal-robot-attrition", "get_crash_count", force.index)
+      local busiest = 0
+      for _, networks in pairs(force.logistic_networks) do
+        for _, network in pairs(networks) do
+          local busy = network.all_logistic_robots - network.available_logistic_robots
+          if busy > busiest then busiest = busy end
+        end
+      end
+      each(entries, function(entry)
+        if busiest >= entry.params.busy and data.quiet_crashes == crashes then
+          data.quiet_ticks = (data.quiet_ticks or 0) + 600
+        else
+          data.quiet_ticks = 0
+        end
+        if data.quiet_ticks >= entry.amounts[1] * MINUTE then core.unlock(force, entry) end
+      end)
+      data.quiet_crashes = crashes
+    end
+  end},
+}
+
 local gas_list
 local function gases()
   if gas_list then return gas_list end

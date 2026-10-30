@@ -4,6 +4,9 @@ Date: 2026-10-24
   Graphics:
     - thumbnail.png is redrawn at 144x144 after the old smaller picture: text and simple shapes are drawn again, the rest is resampled and sharpened.
   Changes:
+    - README: achievement counts brought up to date from a data dump (2026-10-30): 1014 achievements, 999 new prototypes and 15 changed base ones; catalog 312, own content 298 data + 99 scripted, 47 trackers. The 1.1.0 history keeps its numbers.
+    - New achievement "Quiet Sky" (mxlr-quiet-sky, tracker quiet-sky): at least 500 busy logistic robots in one network for 60 minutes in a row without a crash; needs paranoidal-robot-attrition.
+    - "Air Crash" (mxlr-plane-crash) needs paranoidal-robot-attrition, which replaces robot_attrition; it counts the same deaths (logistic robots of force neutral killed without a cause).
     - The rocket cargo achievements (Liftoff, Orbital tank and others of the cargo tracker) count the cargo only when its cargo pod has left the surface, not when the launch is ordered: a rocket that explodes on the launch pad (RocketExplosions2) no longer counts.
     - "Vacuum Cleaner" (mxlr-vacuum) counts the towers of PickupTower-reforged (pickup-tower-1…4), which replaces SchallPickupTower.
     - "Push-pull" (mxlr-push-pull) requires MultipleUnitTrainControl-reforged, which replaces MultipleUnitTrainControl; MU locomotives keep the "-mu" suffix the tracker looks for.
