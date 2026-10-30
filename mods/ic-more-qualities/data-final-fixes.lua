@@ -71,8 +71,9 @@ if switches.defects() then
     end
     -- Resource drain with defects (x2...x6, drained by scripts/defects/drill.lua): the engine line shows
     -- only the prototype rate times QualityPrototype::mining_drill_resource_drain_multiplier (<= 1), so
-    -- every placeable drill/pumpjack gets a field with the actual percent per quality. Item: tooltip and
-    -- Factoriopedia; entity: tooltip only (one Factoriopedia block, as zzzparanoidal loaders).
+    -- every placeable drill/pumpjack gets a field with the actual percent per quality. Item: Factoriopedia
+    -- only; entity: tooltips only. The item tooltip already shows the fields of its place_result, so an
+    -- item copy in tooltips printed the line twice (as zzzparanoidal loaders).
     local model = require("scripts.defects.model")
     local function drain_text(percent, quality)
         local value = percent * (quality.mining_drill_resource_drain_multiplier or 1)
@@ -80,6 +81,7 @@ if switches.defects() then
         return string.format("%.4g", value) .. "%"
     end
     local function drain_field(drill, factoriopedia)
+        -- factoriopedia: the item copy (Factoriopedia only); otherwise the entity copy (tooltips only)
         local percent = drill.resource_drain_rate_percent or 100
         local values = {}
         for name, quality in pairs(data.raw.quality) do
@@ -91,6 +93,7 @@ if switches.defects() then
             quality_header = "ic-defects.drill-drain-quality",
             quality_values = values,
             show_in_factoriopedia = factoriopedia,
+            show_in_tooltip = not factoriopedia,
         }
     end
     local function add_field(prototype, field)
