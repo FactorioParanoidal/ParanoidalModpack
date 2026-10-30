@@ -10,6 +10,7 @@ Date: 14.01.2026
     - Paranoidal: one shared config for settings, data and control; duplicated data-final-fixes, settings and the mod-valves mod-data registry removed.
     - Paranoidal: valve recipes get their own copy of the pump ingredients instead of sharing the table.
     - Paranoidal: the threshold label falls back to the prototype default, and labels are reset on configuration change.
+    - Paranoidal: on configuration change the labels of valves-lib are cleared only while that mod is active; clearing them after valves-lib was removed crashed the load ("valves-lib" is not an active and valid mod).
     - Paranoidal: removed the no-op "pin threshold on build" assignment; placed valves without an override keep following the default setting.
     - Paranoidal: removed PyIndustry support (valves-disable-py-migration setting, migration 0001, Py valve recipe/technology reference).
     - Paranoidal: removed the composite valves from before 2.0.8 (hidden *-legacy pumps), their migration 0008 and their replacement on build.

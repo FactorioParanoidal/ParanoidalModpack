@@ -207,10 +207,10 @@ script.on_init(function()
 end)
 
 script.on_configuration_changed(function(data)
-    -- Fresh label state. Labels of the merged valves-lib: it is not documented that the engine
-    -- removes render objects of a removed mod, so clear them explicitly.
+    -- Fresh label state. rendering.clear() raises an error for a mod that is not active
+    -- (a removed valves-lib), so clear the merged library's labels only while it is still loaded.
     rendering.clear(script.mod_name)
-    if data.mod_changes["valves-lib"] then rendering.clear("valves-lib") end
+    if script.active_mods["valves-lib"] then rendering.clear("valves-lib") end
     storage.labels = {}
 
     for _, force in pairs(game.forces) do
