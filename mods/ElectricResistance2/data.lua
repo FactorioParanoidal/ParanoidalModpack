@@ -2,6 +2,10 @@ local util = require("util")
 
 local name = "hidden-electric-resistance"
 local consumption = settings.startup["electric-resistance-power-consumption"].value
+-- control.lua changes the draw at runtime (power_usage) with the seasons; the input limit and the
+-- buffer must fit the largest seasonal value as well as the setting.
+local limit = consumption
+for _, kw in pairs(require("seasons")) do limit = math.max(limit, kw) end
 
 -- Невидимый потребитель, который скрипт ставит на каждый электростолб.
 -- Тянет `consumption` кВт из той электросети, где стоит столб (UPS-free — считает движок).
@@ -30,8 +34,8 @@ data:extend({
       type = "electric",
       -- буфер должен покрывать расход за тик (N кВт / 60 ≈ 16.7·N Дж), иначе
       -- interface тянет лишь buffer·60 Вт вместо N кВт (баг «столбов много, кВт мало»)
-      buffer_capacity = (17 * consumption) .. "J",
-      input_flow_limit = consumption .. "kW",
+      buffer_capacity = (17 * limit) .. "J",
+      input_flow_limit = limit .. "kW",
       output_flow_limit = "0kW",
       usage_priority = "primary-input",
       render_no_power_icon = false,
