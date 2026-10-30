@@ -150,7 +150,7 @@ local list = {
   {id = "reverse-gear", kind = "script", theme = "character", tracker = "belt-reverse", amount = 100,
     mods = {"belt-reverser-space-age"}, icon = {item = "transport-belt"}},
   {id = "world-eraser", kind = "script", theme = "character", tracker = "chunks", amount = 100,
-    mods = {"Delete-Chunk-Tool"}, icon = {item = "landfill"}},
+    mods = {"Delete-Chunk-Tool-reforged"}, icon = {item = "landfill"}},
   {id = "oops", kind = "script", theme = "character", tracker = "auto-deconstruct", amount = 100,
     mods = {"AutoDeconstruct"}, icon = {item = "deconstruction-planner"}},
   {id = "night-shift", kind = "script", theme = "character", tracker = "night-build", amount = 1000,

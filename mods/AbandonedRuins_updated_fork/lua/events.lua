@@ -172,6 +172,10 @@ script.on_event(defines.events.on_chunk_generated, function (event)
   elseif utils.str_contains_any_from_table(event.surface.name, surfaces.get_all_excluded()) then
     if debug_log then log(string.format("[on_chunk_generated]: event.surface.name='%s' is excluded - EXIT!", event.surface.name)) end
     return
+  elseif remote.interfaces["Delete-Chunk-Tool-reforged"] and remote.call("Delete-Chunk-Tool-reforged", "is_regenerated", event.surface.index, event.position) then
+    -- Paranoidal: a deleted chunk generated again gets no new ruin (no loot from deleting chunks)
+    if debug_log then log("[on_chunk_generated]: Chunk was deleted before - EXIT!") end
+    return
   end
 
   local center       = utils.get_center_of_chunk(event.position)

@@ -4,6 +4,7 @@ Date: 2026-10-24
   Graphics:
     - thumbnail.png is redrawn at 144x144 after the old smaller picture: text and simple shapes are drawn again, the rest is resampled and sharpened.
   Changes:
+    - "World Eraser" needs Delete-Chunk-Tool-reforged (the renamed Delete-Chunk-Tool) and counts only chunks deleted with its tool: chunks of a map trim are left out (remote "count_trimmed").
     - README: achievement counts brought up to date from a data dump (2026-10-30): 1014 achievements, 999 new prototypes and 15 changed base ones; catalog 312, own content 298 data + 99 scripted, 47 trackers. The 1.1.0 history keeps its numbers.
     - New achievement "Quiet Sky" (mxlr-quiet-sky, tracker quiet-sky): at least 500 busy logistic robots in one network for 60 minutes in a row without a crash; needs paranoidal-robot-attrition.
     - "Air Crash" (mxlr-plane-crash) needs paranoidal-robot-attrition, which replaces robot_attrition; it counts the same deaths (logistic robots of force neutral killed without a cause).

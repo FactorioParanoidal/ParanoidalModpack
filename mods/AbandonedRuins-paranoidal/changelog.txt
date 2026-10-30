@@ -6,6 +6,7 @@ Date: 2026-10-24
   Graphics:
     - Added thumbnail.png (144x144): the picture of the mod in the mod list, made from the mod and base game graphics.
   Changes:
+    - A chunk deleted with Delete-Chunk-Tool-reforged and generated again plans no new legendary ruin (remote "is_regenerated"); remote function legendary_chunks(surface_index) gives the chunk rectangles of the legendary ruins that are not lost, so the chunk tool keeps them or warns before deleting them.
     - The small ruin "pd-stone-crusher" is removed and the Quarry has no BI stone crusher: Bio Industries no longer has the stone crusher.
   Features:
     - Remote function get_force_summary(force_index): kinds of ruins found by size, finds in total, legendary ruins found and beaten (counted only after the first one is found) and the ticks of the first finds. The journal now records the tick of the first ruin a force finds. Used by the base journal of paranoidal-CodexRPG.

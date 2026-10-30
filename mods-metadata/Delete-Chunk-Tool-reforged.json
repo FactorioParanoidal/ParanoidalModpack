@@ -1,0 +1,10 @@
+{
+  "mod": "Delete-Chunk-Tool-reforged",
+  "source": "local",
+  "original": {
+    "name": "Chunk Delete Tool",
+    "authors": ["NotRexButCaesar"],
+    "portal": {"name": "Delete-Chunk-Tool", "url": "https://mods.factorio.com/mod/Delete-Chunk-Tool"}
+  },
+  "changeReason": "Локальный форк Paranoidal на основе Delete-Chunk-Tool 1.0.2 (GPL-3.0) под новым именем: показ выбранных чанков и подтверждение, защита построек, руин и легендарных руин, обрезка карты вдали от построек и радаров, память об удалённых чанках (без новых руин, руды не больше прежнего, без баз врагов после инструмента), обработка порциями по тикам. Заменяет Delete-Chunk-Tool."
+}

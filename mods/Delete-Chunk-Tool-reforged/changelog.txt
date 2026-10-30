@@ -1,0 +1,36 @@
+---------------------------------------------------------------------------------------------------
+Version: 9.0.0
+Date: 2026-10-31
+  Major Features:
+    - Renamed to Delete-Chunk-Tool-reforged (Paranoidal fork). The item and shortcut keep the name "chunk-eraser"; the old mod kept nothing in its storage, so nothing is migrated.
+    - Preview and confirmation: the selected chunks are highlighted on the map and in the world (green - deleted, orange - deleted with buildings or ruins, red - kept) and a dialog lists what is deleted and what is kept; nothing is deleted before "Delete". One summary message instead of an error line for every chunk.
+    - Map trimming: shortcut "Trim the map" and the command /chunk-trim [distance] find every chunk of a planet surface farther than the "dct-trim-distance" setting (5 chunks by default) from buildings and characters of player forces, outside the charting range of radars, not visible to any player force and without pollution; they are deleted after the same preview and confirmation and are uncharted.
+    - Regenerated chunks: every deleted chunk is remembered. When it is generated again, its ore is cut down to the amount it had before deletion (mined ore does not grow back, mined-out ore does not come back) and AbandonedRuins_updated_fork, RSO-reforged and AbandonedRuins-paranoidal spawn no ruins, old mines or legendary ruins there (remote "is_regenerated"). Chunks deleted with the tool come back without enemy spawners, worms and units (destroyed with script_raised_destroy); trimmed chunks keep the enemies of the map generator.
+  Changes:
+    - A normal selection also keeps chunks with ruins (neutral buildings, items on the ground, ruin forces) and legendary ruins of AbandonedRuins-paranoidal; an alternative selection (Shift) deletes them and warns that legendary ruins are lost for good. Chunks with a character are never deleted, in any mode.
+    - Remote "count_trimmed": MxlChievements-Reforged counts only chunks deleted with the tool for "World Eraser".
+    - Deleted chunks are uncharted for every force.
+    - Single player: the tool works without the administrator flag.
+    - Russian locale.
+  Graphics:
+    - The icon is renamed to graphics/chunk-eraser.png; it and thumbnail.png are recompressed (pingo -s4 -quality=45, lossy, same dimensions): 59.9 -> 33.5 KB, worst PSNR 34.4 dB.
+  Optimizations:
+    - Chunks are checked by entity counts with a limit instead of building entity lists; classification and deletion run a batch per tick (128 checked, 64 deleted), so large areas do not freeze the game; on_tick is registered only while a job runs.
+    - Removed prototype fields that Factorio 2.0 does not read (stackable, show_in_library, toggleable).
+
+---------------------------------------------------------------------------------------------------
+Version: 1.0.2
+Date: 2024-10-27:
+  Graphics:
+    - thumbnail.png is redrawn at 144x144 after the old smaller picture: text and simple shapes are drawn again, the rest is resampled and sharpened.
+Bugfixes:
+    - update to 2.0
+---------------------------------------------------------------------------------------------------
+Version: 1.0.1
+Date: 2021-11-24:
+Bugfixes:
+    - Fixed incorrect name
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 2021-11-24:
+    - Release

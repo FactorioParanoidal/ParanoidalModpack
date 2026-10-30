@@ -134,6 +134,12 @@ function S.on_chunk_generated(event)
   if not C.enabled() then return end
   local surface = event.surface
   if not (surface and surface.valid and C.SURFACES[surface.name]) then return end
+  -- a chunk deleted with Delete-Chunk-Tool-reforged and generated again plans no new site
+  local eraser = remote.interfaces["Delete-Chunk-Tool-reforged"]
+  if eraser and eraser.is_regenerated
+    and remote.call("Delete-Chunk-Tool-reforged", "is_regenerated", surface.index, event.position) then
+    return
+  end
   local chance = C.setting("pd-legendary-chance") or 0
   if chance <= 0 or math.random() >= chance then return end
   if not core_allows() then return end
@@ -673,6 +679,20 @@ function S.on_chunk_deleted(event)
       end
     end
   end
+end
+
+---Chunk rectangles {x1, y1, x2, y2} of the sites of the surface that are not lost.
+function S.chunk_rects(surface_index)
+  local out = {}
+  local L = storage.legend
+  if not L then return out end
+  for _, site in pairs(L.sites) do
+    if site.surface == surface_index and site.state ~= "lost" and site.chunks then
+      local c = site.chunks
+      out[#out + 1] = { c[1], c[2], c[3], c[4] }
+    end
+  end
+  return out
 end
 
 function S.on_surface_removed(surface_index)

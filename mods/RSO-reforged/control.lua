@@ -32,6 +32,7 @@ local CHUNK_SIZE = 32
 local NEGATIVE_MODIFICATOR = 9973
 local REGION_TILE_SIZE = CHUNK_SIZE * settings.startup["rso-region-size"].value
 local RUINS = "AbandonedRuins-paranoidal"
+local ERASER = "Delete-Chunk-Tool-reforged"
 local RUIN_HALF = {small = 4, medium = 8, large = 16}
 local FORECAST_CELLS = 5 -- forecasts look this many cells around the radar
 -- Sites are read in blocks of BLOCK x BLOCK cells: every calculate_tile_properties call compiles
@@ -283,11 +284,18 @@ local function generate_chunk(surface, c_x, c_y)
 	local surfaceData = storage.surfaces[surface.index]
 	local info = surfaceData and planet_info(surface)
 	if not info then return end
-	local G = cell_size(surface, info)
-	for _, site in ipairs(sites_in(surface, info, G, floor(c_x / G), floor(c_y / G),
-		floor((c_x + CHUNK_SIZE - 1) / G), floor((c_y + CHUNK_SIZE - 1) / G))) do
-		if site.x >= c_x and site.y >= c_y and site.x < c_x + CHUNK_SIZE and site.y < c_y + CHUNK_SIZE then
-			field_extras(surface, surfaceData, site)
+	-- a chunk deleted with Delete-Chunk-Tool-reforged and generated again: its fields were counted
+	-- already and get no new mine ruin
+	local eraser = remote.interfaces[ERASER]
+	local regenerated = eraser and eraser.is_regenerated and remote.call(ERASER, "is_regenerated",
+		surface.index, {x = floor(c_x / CHUNK_SIZE), y = floor(c_y / CHUNK_SIZE)})
+	if not regenerated then
+		local G = cell_size(surface, info)
+		for _, site in ipairs(sites_in(surface, info, G, floor(c_x / G), floor(c_y / G),
+			floor((c_x + CHUNK_SIZE - 1) / G), floor((c_y + CHUNK_SIZE - 1) / G))) do
+			if site.x >= c_x and site.y >= c_y and site.x < c_x + CHUNK_SIZE and site.y < c_y + CHUNK_SIZE then
+				field_extras(surface, surfaceData, site)
+			end
 		end
 	end
 

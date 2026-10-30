@@ -1,0 +1,14 @@
+{
+    "name": "Delete-Chunk-Tool-reforged",
+    "version": "9.0.0",
+    "title": "Chunk Delete Tool Reforged",
+    "author": "NotRexButCaesar, FactorioParanoidal",
+    "homepage": "https://github.com/FactorioParanoidal/ParanoidalModpack",
+    "factorio_version": "2.0",
+    "dependencies": [
+        "base >= 2.0.77",
+        "(?) bobenemies",
+        "(?) zzzparanoidal"
+    ],
+    "description": "Administrators delete chunks with a selection tool: the chosen chunks are highlighted and deleted only after confirmation. A normal selection keeps chunks with player buildings, ruins and legendary ruins; Shift deletes them too (never chunks with a character). Map trimming deletes in one go all chunks far from buildings, outside radar range and without pollution, to make the save smaller. A deleted chunk comes back without new ruins and with no more ore than it had; chunks deleted with the tool come back without enemy bases. Fork of Chunk Delete Tool by NotRexButCaesar."
+}

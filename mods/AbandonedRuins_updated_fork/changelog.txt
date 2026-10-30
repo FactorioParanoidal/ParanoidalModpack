@@ -4,6 +4,8 @@ Date: 2026-09-07
   Features:
     - Paranoidal: remote function "spawn_ruin" places a given ruin at a position (global switch, excluded
       surfaces and the ruin's surface list respected, "ruin spawned" event raised); used by RSO Reforged.
+    - Paranoidal: no ruin spawns in a chunk that was deleted and is generated again (remote "is_regenerated" of
+      Delete-Chunk-Tool-reforged), so deleting chunks does not bring new ruins and loot.
   Fixes:
     - ops, `spawn_ruin()` need to allow debug world to spawn ruins, too (thanks to @MoSII2710)
 ---------------------------------------------------------------------------------------------------

@@ -1004,7 +1004,14 @@ trackers["belt-reverse"] = {
 trackers["chunks"] = {
   events = {
     on_chunk_deleted = function(event, entries, core)
-      local total = add(core.world(), "deleted_chunks", #event.positions)
+      -- only chunks deleted with the tool: a map trim of Delete-Chunk-Tool-reforged deletes hundreds
+      local n = #event.positions
+      local eraser = remote.interfaces["Delete-Chunk-Tool-reforged"]
+      if eraser and eraser.count_trimmed then
+        n = n - remote.call("Delete-Chunk-Tool-reforged", "count_trimmed", event.surface_index, event.positions)
+      end
+      if n <= 0 then return end
+      local total = add(core.world(), "deleted_chunks", n)
       each(entries, function(entry) core.progress("world", entry, total) end)
     end,
   },

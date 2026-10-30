@@ -445,6 +445,11 @@ remote.add_interface("AbandonedRuins-paranoidal", {
   legendary_reserved = function(surface_index, position, margin)
     return legendary.reserved(surface_index, position, margin)
   end,
+  -- Legendary ruins: chunk rectangles {x1, y1, x2, y2} (inclusive) of the sites of the surface that
+  -- are not lost; deleting any of these chunks loses the site. Used by Delete-Chunk-Tool-reforged.
+  legendary_chunks = function(surface_index)
+    return legendary.site.chunk_rects(surface_index)
+  end,
   -- Legendary ruins: plans the named legendary ruin around the position (distance rules ignored).
   -- Returns the site center or nil.
   spawn_legendary = function(surface_index, position, name)
