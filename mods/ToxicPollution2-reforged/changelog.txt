@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 9.0.0
 Date: 2026-10-29
+  Bugfixes:
+    - The tooltip of the filter module and the closed-loop breathing module showed "Smog filtration" and "Power in smog" three times: the fields were set on both the item and the equipment, and the item tooltip also shows the fields of its equipment. They are now on the item only.
   Major Features:
     - Rewrite of toxicPollution2 1.0.0 (Toxic Pollution by Likos, ArtMares, ViridiVir) for Paranoidal. Replaces toxicPollution2; saves of the old mod are not migrated.
     - As in toxicPollution2, anything worn in the armor slot (respirator, gas mask, any armor) takes the whole harm of the smog on its resource: a protected player cannot die of smog until the resource is spent. The toxin resistance slows the wear (wear x (1 - resistance)); every armor except the respirator and the gas mask wears three times slower. At pollution 500 without research a respirator lasts about 6 min, gas mask 30 min, light armor 30 min, heavy armor 1.7 h, modular 4 h, power 9 h, power armor MK2 16 h. A stack in the armor slot is spent item by item.

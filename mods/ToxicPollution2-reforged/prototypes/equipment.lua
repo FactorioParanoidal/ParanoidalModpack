@@ -42,7 +42,8 @@ for _, module in ipairs(C.MODULES) do
 				usage_priority = "tertiary",
 			},
 			categories = { "armor" },
-			custom_tooltip_fields = fields,
+			-- No custom_tooltip_fields here: the item tooltip already shows the fields of
+			-- place_as_equipment_result, so a second copy printed every line several times.
 		},
 		{
 			type = "item",
