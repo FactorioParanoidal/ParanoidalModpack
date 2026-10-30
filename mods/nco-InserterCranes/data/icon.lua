@@ -4,7 +4,6 @@ local function make_icon_layer(base,icon_size)
 		icon_size = base.icon_size or icon_size,
 		scale = base.scale,
 		shift = base.shift,
-		icon_mipmaps = base.icon_mipmaps,
 		tint = base.tint,
 	}
 	return layer
@@ -30,7 +29,6 @@ local function make_layered_icon(base, wide)
 	end
 	base.icon = nil
 	base.icon_size = nil
-	base.icon_mipmaps = nil
 	base.icons = icon_layers
 end
 

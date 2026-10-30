@@ -47,10 +47,3 @@ script.on_configuration_changed(
 		end
 	end
 )
--------------------------------------------------------------------------------
-script.on_event(
-	defines.events.on_force_created,
-	function()
-		reload_tech_unlock.reload_tech_unlock()
-	end
-)

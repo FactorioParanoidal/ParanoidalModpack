@@ -1,35 +1,16 @@
 local util = require("util")
 
+-- Energy fields of inserters are joules; any SI magnitude (k, M, ...) is accepted.
 local function scale_energy(energy, factor)
-  local value = tonumber(energy:match("[%d\\.]+"))
-  local suffix = energy:match("[%l%u]+")
-  if value and type(value) == "number" then
-    if suffix == "kJ" then
-       suffix = "J"
-       factor = factor * 1000
-    end
-    if suffix == "kW" then
-       suffix = "W"
-       factor = factor * 1000
-    end
-    value = math.ceil(value * factor / 5) * 5
-    energy = string.format("%d" .. suffix, value)
-  end
-  return energy
+  local joules = util.parse_energy(energy)
+  return string.format("%dJ", math.ceil(joules * factor / 5) * 5)
 end
 --
 local function change_sprite_scale(sprite, scale)
   if not sprite then
     return
   end
-  if sprite.scale then
-    sprite.scale = sprite.scale * scale
-  else
-    sprite.scale = scale
-  end
-  if sprite.hr_version then
-    return change_sprite_scale(sprite.hr_version, scale)
-  end
+  sprite.scale = (sprite.scale or 1) * scale
   return sprite
 end
 --
@@ -41,8 +22,9 @@ local function calculate_performance(entity, wide, forced_ips)
     energy_per_movement = entity.energy_per_movement,
     energy_per_rotation = entity.energy_per_rotation
   }
+  -- Researched hand size of the source: bulk inserters get up to +11, others +2.
   local old_stack_size = 1 + (entity.stack_size_bonus or 0)
-  if entity.stack then
+  if entity.bulk then
     old_stack_size = old_stack_size + 11
   else
     old_stack_size = old_stack_size + 2
@@ -84,7 +66,8 @@ local function make_crane_entity(entityName, newName, wide, forced_ips)
     entity.selection_box = {{-3, -1}, {3, 1}}
   end
   local entity_performance = calculate_performance(entity, wide, forced_ips)
-  entity.stack = false
+  -- Cranes have their own hand size and take only the ordinary inserter capacity research.
+  entity.bulk = false
   entity.next_upgrade = nil
   entity.extension_speed = entity_performance.extension_speed
   entity.rotation_speed = entity_performance.rotation_speed

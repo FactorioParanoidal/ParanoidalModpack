@@ -4,6 +4,14 @@ Date: 2026-09-11
   Bugfixes:
     - Restored the non-wide express crane footprint and recipe scale
     - Namespaced the startup setting and removed leftover debug output
+    - Crane technologies no longer copy the name of their parent technology; locale keys follow the 2.0 technology names
+    - Performance calculation uses the 2.0 bulk flag and makes cranes non-bulk (the 1.1 stack field no longer exists)
+    - Energy scaling accepts any SI magnitude; fluid ingredients keep their type in crane recipes
+    - Krastorio 2 crushing recipes use the 2.0 ingredient format and the crushing category that exists
+    - Removed 1.1 leftovers: hr_version sprites, icon_mipmaps, normal/expensive recipes
+  Optimizations:
+    - Recipe unlock sync on configuration change looks only at crane technologies, collected once from prototypes
+    - Removed the redundant on_force_created handler: a new force has nothing researched
   Changes:
     - Cranes are no longer blacklisted in Bob's Adjustable Inserters: pickup/drop range and near/far offset are set with the same grid as inserters
 ---------------------------------------------------------------------------------------------------

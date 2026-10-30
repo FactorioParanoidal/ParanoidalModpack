@@ -26,9 +26,14 @@ local function setup_crane_tech(itemName, newName)
 		if not technology then
 			technology = util.table.deepcopy(data.raw["technology"][parent_tech_name])
 			technology.name = tech_name
+			-- The parent's own name would make both technologies look the same.
+			technology.localised_name = nil
+			technology.localised_description = nil
 			make_layered_icon(technology,true)
 			technology.effects = {}
-			technology.unit.count = technology.unit.count * 2
+			if technology.unit and technology.unit.count then
+				technology.unit.count = technology.unit.count * 2
+			end
 			technology.prerequisites = {
 				"railway",
 				parent_tech_name
