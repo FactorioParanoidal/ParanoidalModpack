@@ -57,7 +57,8 @@ return {
     ["nco-wide-turbo-crane"] = {["stack_size_bonus"] = 197, ["rotation_speed"] = 0.0768, ["extension_speed"] = 0.0768, ["energy_per_movement"] = "656250J", ["energy_per_rotation"] = "656250J", ["bulk"] = false, ["drain"] = "1.4kW"},
     ["nco-turbo-crane"] = {["stack_size_bonus"] = 197, ["rotation_speed"] = 0.0216, ["extension_speed"] = 0.0216, ["energy_per_movement"] = "656250J", ["energy_per_rotation"] = "656250J", ["bulk"] = false, ["drain"] = "1.4kW"},
     ["nco-wide-express-crane"] = {["stack_size_bonus"] = 197, ["rotation_speed"] = 0.096, ["extension_speed"] = 0.096, ["energy_per_movement"] = "729170J", ["energy_per_rotation"] = "729170J", ["bulk"] = false, ["drain"] = "1.6kW"},
-    ["nco-express-crane"] = {["stack_size_bonus"] = 197, ["rotation_speed"] = 0.096, ["extension_speed"] = 0.096, ["energy_per_movement"] = "729170J", ["energy_per_rotation"] = "729170J", ["bulk"] = false, ["drain"] = "1.6kW"},
+    -- Narrow express: x1.25 the narrow turbo speed (user decision 2026-10-31), not the Beta 8 wide values.
+    ["nco-express-crane"] = {["stack_size_bonus"] = 197, ["rotation_speed"] = 0.027, ["extension_speed"] = 0.027, ["energy_per_movement"] = "729170J", ["energy_per_rotation"] = "729170J", ["bulk"] = false, ["drain"] = "1.6kW"},
   },
   fluids = {
     -- 2026-10-25 user decision: corrected Beta 8 (KS_Power) table at Beta 8 scale. Ladder: well products

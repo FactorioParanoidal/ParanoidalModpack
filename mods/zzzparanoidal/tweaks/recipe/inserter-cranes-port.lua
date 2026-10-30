@@ -33,13 +33,13 @@ local crane_ingredients = {
 		{ type = "item", name = "bob-cobalt-steel-bearing", amount = 96 },
 	},
 	["nco-express-crane"] = {
-		-- Старый вариант без wide тоже создавался 6x2; цена обычного рецепта та же, что у широкого.
-		-- Нынешнюю геометрию 2x2 и производительность этой ценовой правкой не меняем.
-		{ type = "item", name = "bob-turbo-bulk-inserter", amount = 16 },
-		{ type = "item", name = "bob-nitinol-alloy", amount = 64 },
-		{ type = "item", name = "bob-nitinol-bearing", amount = 96 },
-		{ type = "item", name = "bob-nitinol-gear-wheel", amount = 96 },
-		{ type = "item", name = "bob-advanced-processing-unit", amount = 16 },
+		-- В Beta 8 был 6x2 по цене широкого; теперь 2x2, цена широкого экспресса по шкале 5.5/16
+		-- (решение пользователя 2026-10-31, как у узкого турбо).
+		{ type = "item", name = "bob-turbo-bulk-inserter", amount = 6 },
+		{ type = "item", name = "bob-nitinol-alloy", amount = 22 },
+		{ type = "item", name = "bob-nitinol-bearing", amount = 33 },
+		{ type = "item", name = "bob-nitinol-gear-wheel", amount = 33 },
+		{ type = "item", name = "bob-advanced-processing-unit", amount = 6 },
 	},
 }
 
@@ -47,6 +47,5 @@ for recipe_name, ingredients in pairs(crane_ingredients) do
 	local recipe = data.raw.recipe[recipe_name]
 	if recipe then
 		recipe.ingredients = ingredients
-		if recipe_name == "nco-express-crane" then recipe.energy_required = 16 end
 	end
 end

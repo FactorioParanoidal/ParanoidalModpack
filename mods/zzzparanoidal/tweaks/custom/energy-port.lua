@@ -26,9 +26,8 @@ for name, fields in pairs(port.cranes) do
     for key, value in pairs(fields) do
         if key == "drain" then crane.energy_source.drain = value else crane[key] = value end
     end
-    -- Beta 8 deliberately made cranes non-stack inserters, with their own capacity.
-    -- In 2.0 bulk is the corresponding research-bonus flag; geometry/filters stay 2.0.
-    crane.stack = nil
+    -- Beta 8 cranes were non-stack inserters with their own capacity: in 2.0 that is bulk = false
+    -- (set by the data above); geometry/filters stay 2.0.
 end
 
 local prerequisites = data.raw.technology["bob-steam-turbine-1"].prerequisites
