@@ -13,15 +13,42 @@ local params = {
 	},
 	-- Paranoidal: technologies whose name starts with one of these prefixes never raise evolution and get
 	-- no tooltip, whatever the settings: the upgrade chains of paranoidal-upgrade-tech (decision 2026-10-30).
+	-- Inserter, toolbelt and braking chains (decision 2026-10-30).
 	ignored_prefixes = {
 		"research-efficiency-",
 		"worker-robot-battery-",
+		"inserter-stack-size-bonus-",
+		"inserter-capacity-bonus-",
+		"toolbelt-",
+		"braking-force-",
 	},
+	-- Paranoidal: same as ignored_prefixes, by the exact technology name (decision 2026-10-30).
+	ignored_names = {
+		["bnl-flight-recorder-decoding"] = true,
+		["bob-long-inserters-1"] = true,
+		["bob-long-inserters-2"] = true,
+		["bob-near-inserters"] = true,
+		["bob-more-inserters-1"] = true,
+		["bob-more-inserters-2"] = true,
+		["toolbelt"] = true,
+		["aai-basic-loader"] = true,
+		["aai-loader"] = true,
+		["aai-fast-loader"] = true,
+		["aai-express-loader"] = true,
+		["aai-turbo-loader"] = true,
+		["aai-ultimate-loader"] = true,
+	},
+	-- Raise by one after changing ignored_prefixes or ignored_names: a save with an older value gets the
+	-- evolution already counted for newly ignored technologies taken back once (control.lua refund).
+	ignore_revision = 1,
 }
 
--- True when the technology name starts with one of params.ignored_prefixes.
+-- True when the technology name is in params.ignored_names or starts with one of params.ignored_prefixes.
 function params.ignored_name(name)
 	if type(name) == "string" then
+		if params.ignored_names[name] then
+			return true
+		end
 		for _, prefix in ipairs(params.ignored_prefixes) do
 			if string.sub(name, 1, #prefix) == prefix then
 				return true

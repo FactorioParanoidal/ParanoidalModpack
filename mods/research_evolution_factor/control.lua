@@ -14,6 +14,12 @@
 -- storage.schema: SCHEMA marks a save with this accounting. A save without it (made with the
 -- version that did not count science packs) gets its evolution recalculated once, from the
 -- researched technologies only: evolution = 1 - exp(-sum of all counted exponents).
+--
+-- Refund: a technology that is ignored now but has counted levels (storage.counted) gets its exponent x
+-- taken back: evolution = max(0, 1 - (1 - evolution) * exp(x)) on every surface for every enemy force,
+-- storage.total - x, and its record is removed (counted again if it stops being ignored). Runs on every
+-- configuration change and once when storage.ignore_revision differs from params.ignore_revision. The
+-- exponent uses the current cost and price multiplier, not the one at research time.
 local params = require("parameters")
 
 local SCHEMA = 2
@@ -140,6 +146,54 @@ local function raise(exponent)
 	apply(exponent)
 end
 
+local function percent_text(value)
+	return string.format("%.2f", value * 100)
+end
+
+-- Takes back the evolution counted for technologies that are ignored now (see the header).
+local function refund()
+	storage.ignore_revision = params.ignore_revision
+	local force = game.forces[RESEARCH_FORCE]
+	if not force or not storage.counted then
+		return
+	end
+	local sum = 0
+	local names = {}
+	for name, last in pairs(storage.counted) do
+		local tech = force.technologies[name]
+		if tech and ignored(tech) then
+			for level = tech.prototype.level, last do
+				sum = sum + level_exponent(tech, level)
+			end
+			names[#names + 1] = name
+		end
+	end
+	for _, name in ipairs(names) do
+		storage.counted[name] = nil
+	end
+	if sum <= 0 then
+		return
+	end
+	local enemy = game.forces["enemy"]
+	local surface = game.surfaces[1]
+	local before = enemy and surface and enemy.get_evolution_factor(surface)
+	local factor = math.exp(sum)
+	for _, enemy_force in pairs(enemy_forces()) do
+		for _, each in pairs(game.surfaces) do
+			local evolution = 1 - (1 - enemy_force.get_evolution_factor(each)) * factor
+			enemy_force.set_evolution_factor(math.max(0, evolution), each)
+		end
+	end
+	storage.total = math.max(0, storage.total - sum)
+	table.sort(names)
+	log(string.format("research_evolution_factor: refund exponent %.6f for %d ignored technologies: %s",
+		sum, #names, table.concat(names, ", ")))
+	if before then
+		game.print({ "research-evolution-factor-refund", percent_text(before),
+			percent_text(enemy.get_evolution_factor(surface)), #names })
+	end
+end
+
 -- Counts every finished level not counted yet (all technologies of the research force).
 local function sweep()
 	local force = game.forces[RESEARCH_FORCE]
@@ -166,6 +220,7 @@ local function recalculate()
 		end
 	end
 	storage.schema = SCHEMA
+	storage.ignore_revision = params.ignore_revision -- ignored technologies were not counted
 	storage.infinite_research_units = nil -- record of version 1.1.5 and older
 	log(string.format("research_evolution_factor: evolution recalculated from research: %.6f (exponent %.6f)",
 		evolution, storage.total))
@@ -174,6 +229,8 @@ end
 local function migrate_if_needed()
 	if storage.schema ~= SCHEMA then
 		recalculate()
+	elseif storage.ignore_revision ~= params.ignore_revision then
+		refund()
 	end
 end
 
@@ -186,12 +243,13 @@ script.on_init(function()
 	storage.counted = {}
 	storage.total = 0
 	storage.schema = SCHEMA
+	storage.ignore_revision = params.ignore_revision
 	raise(sweep())
 end)
 
 script.on_load(function()
 	-- An old save whose mods did not change gets no on_configuration_changed: migrate on the first tick.
-	if storage.schema ~= SCHEMA then
+	if storage.schema ~= SCHEMA or storage.ignore_revision ~= params.ignore_revision then
 		script.on_event(defines.events.on_tick, on_first_tick)
 	end
 end)
@@ -200,6 +258,8 @@ script.on_configuration_changed(function()
 	if storage.schema ~= SCHEMA then
 		recalculate()
 	else
+		-- technologies ignored since the last load (settings, prototypes or this mod's lists)
+		refund()
 		-- technologies researched by migrations or added already researched
 		raise(sweep())
 	end
