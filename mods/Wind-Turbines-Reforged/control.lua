@@ -113,10 +113,16 @@ local function refresh(player_index)
     gui.labels.wind.caption = { "twr.wind", speed_text(wind) }
     gui.labels.output.caption = { "twr.output", percent(wind), power_text(output(wind) * record.max) }
     gui.labels.max.caption = { "twr.max", power_text(record.max) }
+    local season = gui.labels.season
+    if not (season and season.valid) then
+        -- A window saved open by a version without the season line: add the line under the others.
+        season = gui.labels.max.parent.add({ type = "label" })
+        gui.labels.season = season
+    end
     local multiplier = wind.multiplier or 1
-    gui.labels.season.visible = multiplier ~= 1
+    season.visible = multiplier ~= 1
     local whole, fraction = string.format("%.2f", multiplier):match("^(%d+)%.(%d+)$")
-    gui.labels.season.caption = { "twr.season", whole, fraction }
+    season.caption = { "twr.season", whole, fraction }
 end
 
 local function open(player, turbine)

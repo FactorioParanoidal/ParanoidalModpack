@@ -15,5 +15,6 @@ Date: 2026-10-14
     - Collision boxes as in Beta 8 (4.2, 8 and 14 tiles): turbines need free space around them.
     - Turbines cannot be built inside Factorissimo buildings (no wind indoors); the item goes back to the builder.
   Bugfixes:
+    - A save with the turbine window open, made before the seasons, no longer crashes on load ("attempt to index field 'season'"): the missing season line is added to that window.
     - Turbines placed by scripts (ruins) and turbines from older saves now follow the wind and get their base.
     - Removed the damage handler that ran for every simple-entity-with-owner in the game; the base is indestructible, vehicles cannot destroy turbines (as in Beta 8).
