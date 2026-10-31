@@ -194,6 +194,29 @@ assert(targets[0].stored == 1 and record.accepted == 1 and count("gear", "rare")
 post.step(record, 200, always_up)
 assert(targets[0].stored == 2 and record.state == "done", "order complete")
 
+-- Output blocked: finished copies wait inside and no new operation runs.
+post.set_order(record, {item = "gear", quality = "rare", required = 5})
+post.start(record)
+local saved = targets[0]
+targets[0] = {valid = true, type = "container", can_insert = function() return false end, insert = function() return 0 end}
+record.targets = nil
+fill({{"gear", "rare", 1}, {"gear", "normal", 20}})
+local before_ops = record.processed.operations
+post.step(record, 150, always_up)
+assert(record.blocked and record.processed.operations == before_ops and count("gear", "normal") == 20, "blocked: no work")
+-- Nothing in front of the arrow: the same, with its own warning.
+targets[0] = nil
+record.targets = nil
+post.step(record, 160, always_up)
+assert(record.blocked and record.no_target and record.processed.operations == before_ops)
+targets[0] = saved
+record.targets = nil
+local stored = saved.stored
+post.step(record, 170, always_up)
+assert(not record.blocked and saved.stored == stored + 1 and record.processed.operations == before_ops + 1,
+    "free output: the waiting copy goes out, work again")
+post.cancel(record)
+
 -- After completion leftovers stay inside and nothing is processed; the only output is forward.
 fill({{"gear", "normal", 3}})
 post.step(record, 300, always_up)
@@ -207,16 +230,17 @@ post.start(record)
 local full = {}
 for i = 1, SLOTS do full[i] = {"gear", "normal", 50} end
 fill(full)
+local ops0, raised0 = record.processed.operations, record.processed.raised
 post.step(record, 400, always_up)
 assert(count("gear", "normal") == 50 * SLOTS and record.no_room == "uncommon" and #spilled == 0, "waits, drops nothing")
-assert(record.processed.operations == 3)
+assert(record.processed.operations == ops0)
 -- A free slot appears: the operation runs.
 inventory[SLOTS].clear()
 post.step(record, 420, always_up)
-assert(count("gear", "uncommon") == 1 and record.no_room == nil and record.processed.operations == 4)
+assert(count("gear", "uncommon") == 1 and record.no_room == nil and record.processed.operations == ops0 + 1)
 fill({{"gear", "normal", 5}})
 post.step(record, 440, sequence({0.999}))
-assert(count("gear", "uncommon") == 1 and record.processed.raised == 5 and record.processed.operations == 5)
+assert(count("gear", "uncommon") == 1 and record.processed.raised == raised0 + 2 and record.processed.operations == ops0 + 2)
 
 -- Items it does not take: such an order does not start.
 post.set_order(record, {item = "fish", quality = "rare", required = 10})
@@ -229,7 +253,7 @@ local before = targets[0].stored
 fill({{"fish", "normal", 6}, {"gear", "ic-defect-3", 2}, {"gear", "rare", 1}})
 post.step(record, 500, always_up)
 assert(record.stray == 8 and count("fish", "normal") == 6 and count("gear", "ic-defect-3") == 2)
-assert(targets[0].stored == before + 1 and record.processed.operations == 5)
+assert(targets[0].stored == before + 1 and record.processed.operations == ops0 + 2)
 -- Orders of the routing post: "at least X" becomes "up to X", "strictly standard" an empty order.
 record.order = {item = "gear", condition = "at-least", quality = "rare", required = 7, repeating = false, rank = 3}
 post.migrate(record)
@@ -247,7 +271,7 @@ post.start(record)
 post.pause(record)
 fill({{"gear", "normal", 5}})
 post.step(record, 600, always_up)
-assert(count("gear", "normal") == 5 and record.processed.operations == 5)
+assert(count("gear", "normal") == 5 and record.processed.operations == ops0 + 2)
 assert(#spilled == 0)
 
 -- Payment: with the small alien artifact in the game, one artifact pays for the operations of the map setting

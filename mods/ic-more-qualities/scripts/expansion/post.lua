@@ -493,7 +493,7 @@ end
 -- Moves up to `limit` items of the stack out of the post. Returns the moved count.
 local function deliver(record, direction, stack, limit, tick)
     local target, vector = find_target(record, direction, tick)
-    if not target then return 0 end
+    if not target then return 0, true end
     if belt_types[target.type] then
         local line = target.get_transport_line(belt_lane(target, vector))
         if not (line and line.can_insert_at_back()) then return 0 end
@@ -518,7 +518,7 @@ local function sort_items(record, inventory, tick)
     local direction = rules.output_direction(record.facing, "good")
     local takes = M.is_processable(order.item or "")
     local moved, left, waiting, stray = 0, 0, 0, 0
-    local blocked = false
+    local blocked, no_target = false, nil
     for index = 1, #inventory do
         local stack = inventory[index]
         if stack.valid_for_read then
@@ -530,8 +530,8 @@ local function sort_items(record, inventory, tick)
             elseif info.rank >= (order.rank or 0) then
                 local remaining = M.remaining(record)
                 if remaining > 0 and not blocked then
-                    local n = deliver(record, direction, stack, remaining, tick)
-                    if n == 0 then blocked = true end
+                    local n, missing = deliver(record, direction, stack, remaining, tick)
+                    if n == 0 then blocked, no_target = true, missing end
                     if n > 0 then
                         moved = moved + n
                         record.sent.good = (record.sent.good or 0) + n
@@ -547,6 +547,7 @@ local function sort_items(record, inventory, tick)
         end
     end
     record.blocked = blocked and {[direction] = true} or nil
+    record.no_target = blocked and no_target or nil
     record.waiting_process = waiting
     record.stray = stray
     return moved, left
@@ -680,7 +681,10 @@ function M.step(record, tick, random)
     local moved, left, processed = 0, 0, false
     if record.state ~= "paused" and not record.paused_by_circuit and not inventory.is_empty() then
         moved, left = sort_items(record, inventory, tick)
+        -- No new operations while finished copies wait inside: the output is blocked or enough of them for
+        -- the rest of the order are already made (like a machine with a full output).
         if open and record.state == "active" and (record.waiting_process or 0) > 0
+            and not record.blocked and left < M.remaining(record)
             and tick >= (record.process_tick or 0) then
             processed = process_once(record, inventory, random)
             if processed then record.process_tick = tick + rules.PROCESS_TICKS end

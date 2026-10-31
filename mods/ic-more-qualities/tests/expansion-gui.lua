@@ -27,7 +27,13 @@ for _, name in ipairs({"frame", "inside_shallow_frame_with_padding", "inside_dee
     "draggable_space_header", "close_button", "caption_label", "bold_label", "naked_scroll_pane", "bordered_table",
     "tool_button", "green_button", "red_button",
     -- tool_button_blue: data/core/prototypes/style.lua of 2.0.77 (also used by Even Distribution).
-    "tool_button_blue"}) do styles[name] = true end
+    "tool_button_blue",
+    -- item_and_count_select_confirm: data/core/prototypes/style.lua of 2.0.77 (the green confirm button).
+    "item_and_count_select_confirm",
+    -- tool_button_green, tool_button_red: data/core/prototypes/style.lua of 2.0.77.
+    "tool_button_green", "tool_button_red",
+    -- subheader_frame: data/core/prototypes/style.lua of 2.0.77 (the strip under a window title).
+    "subheader_frame"}) do styles[name] = true end
 local sprites = {}
 for _, name in ipairs({"utility/close", "utility/status_working", "utility/status_not_working", "utility/status_yellow",
     "utility/gps_map_icon", "utility/left_arrow", "utility/right_arrow", "ic-post-arrow-good", "ic-post-arrow-refine",
@@ -35,7 +41,11 @@ for _, name in ipairs({"utility/close", "utility/status_working", "utility/statu
     -- Sprite prototype "info" in data/core/prototypes/utility-sprites.lua of 2.0.77 (the blue tooltip icon).
     "info",
     -- Quality icon path (SpritePath type "quality") and the mod's own mode sprites (expansion-data.lua).
-    "quality/normal", "ic-mode-careful", "ic-mode-precise"}) do sprites[name] = true end
+    "quality/normal", "ic-mode-careful", "ic-mode-precise",
+    -- utility/check_mark: data/core/prototypes/utility-sprites.lua of 2.0.77.
+    "utility/check_mark",
+    -- utility/play, utility/pause, utility/stop: data/core/prototypes/utility-sprites.lua of 2.0.77.
+    "utility/play", "utility/pause", "utility/stop"}) do sprites[name] = true end
 
 local function load_locale(language)
     local keys, section = {}, nil

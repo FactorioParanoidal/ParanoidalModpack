@@ -508,14 +508,15 @@ local function relative_frame(player, entity, gui_type, caption, help, kind)
     })
     frame.style.maximal_width = 420
     if help or kind then
-        local bar = frame.add({type = "flow", direction = "horizontal"})
+        local bar = frame.add({type = "flow", name = "ic_header", direction = "horizontal"})
         bar.style.vertical_align = "center"
         bar.style.horizontal_spacing = 6
         label(bar, caption, "frame_title")
-        if help then bar.add({type = "sprite", sprite = "info", tooltip = help}) end
+        -- Like the game: the info icon and the collapse button on the right of the title.
+        local filler = bar.add({type = "empty-widget"})
+        filler.style.horizontally_stretchable = true
+        if help then bar.add({type = "sprite", name = "ic_help", sprite = "info", tooltip = help}) end
         if kind then
-            local filler = bar.add({type = "empty-widget"})
-            filler.style.horizontally_stretchable = true
             bar.add({type = "sprite-button", style = "close_button", sprite = "utility/close",
                 tooltip = {"ic-quality.collapse"}, tags = {ic = "rel-collapse", kind = kind}})
         end
@@ -746,44 +747,67 @@ local function quality_caption(quality, tier)
     return {"", quality_rich(quality.name), " ", quality.localised_name, " (", tier, ")"}
 end
 
-local function post_dynamic(parent, record)
-    local tbl = key_value_table(parent)
-    row(tbl, {"ic-quality.col-state"}, {"ic-quality.order-state-" .. record.state})
-    local required = record.order.required or 1
-    -- The count is a separate label: a caption inside the thin bar is drawn off-centre.
-    local accepted = parent.add({type = "flow", direction = "horizontal"})
-    accepted.style.vertical_align = "center"
-    accepted.style.horizontal_spacing = 8
-    label(accepted, {"", {"ic-quality.accepted"}, " ", record.accepted, " / ", required}, "bold_label")
-    local bar = accepted.add({type = "progressbar", value = math.max(0, math.min(1, record.accepted / required))})
-    bar.style.horizontally_stretchable = true
-    bar.style.minimal_width = 120
+-- Secondary counters of a post: the tooltip of the info icon in the window header.
+local function post_stats(record)
     local counters = record.processed or {}
-    local stbl = key_value_table(parent)
-    row(stbl, {"ic-quality.process-waiting"}, tostring(record.waiting_process or 0))
-    row(stbl, {"ic-quality.process-operations"}, tostring(counters.operations or 0))
-    row(stbl, {"ic-quality.process-raised"}, tostring(counters.raised or 0))
-    row(stbl, {"ic-quality.sent-good"}, tostring(record.sent and record.sent.good or 0))
-    row(stbl, {"ic-quality.batches"}, tostring(record.batches or 0))
+    return {"ic-quality.post-stats-tooltip", counters.operations or 0, counters.raised or 0,
+        record.sent and record.sent.good or 0, record.batches or 0, counters.material or 0}
+end
+
+-- Expected cost of one product of the goal from standard: products, artifacts (nil without the item in the
+-- game), the cost of every tier and the tier by quality name. nil without an order above standard.
+local function post_costs(order)
+    local chain, tiers = quality_chain()
+    local target = order.item and tiers[order.quality] or 0
+    if target == 0 then return nil end
+    local costs = rules.process_costs(chain, target + 1)
+    local products = costs[1]
+    local artifacts = post.material() and (products - 1) / (rules.PROCESS_TAKE - 1) / post.operations_per_material()
+    return products, artifacts, costs, tiers
+end
+
+-- Expected share of the next finished product in the copies already improved (the standard stock is not
+-- counted): the sum of count / cost over the tiers between standard and the goal, at most 1.
+local function post_next_share(record)
+    local products, _, costs, tiers = post_costs(record.order)
+    if not products then return 0 end
+    local entity = record.entity
+    local inventory = entity.valid and entity.get_inventory(defines.inventory.chest)
+    local share = 0
+    for _, entry in pairs(inventory and inventory.get_contents() or {}) do
+        local tier = entry.name == record.order.item and tiers[entry.quality or "normal"]
+        if tier and tier > 0 and costs[tier + 1] then share = share + entry.count / costs[tier + 1] end
+    end
+    return math.min(1, share)
+end
+
+local function progress_row(parent, caption, value_caption, value, tooltip)
+    local head = parent.add({type = "flow", direction = "horizontal"})
+    label(head, caption, nil, tooltip)
+    local filler = head.add({type = "empty-widget"})
+    filler.style.horizontally_stretchable = true
+    label(head, value_caption, "bold_label", tooltip)
+    local bar = parent.add({type = "progressbar", value = math.max(0, math.min(1, value)), tooltip = tooltip})
+    bar.style.horizontally_stretchable = true
+end
+
+-- Progress of the order (rebuilt on every refresh). The state is in the status strip.
+local function post_dynamic(parent, record)
+    if not record.order.item then return end
+    local required = record.order.required or 1
+    progress_row(parent, {"ic-quality.accepted"}, {"", record.accepted, " / ", required}, record.accepted / required)
+    local share = post_next_share(record)
+    progress_row(parent, {"ic-quality.post-next"}, "≈ " .. math.floor(share * 100 + 0.5) .. " %", share,
+        {"ic-quality.post-next-tooltip"})
+    local counters = record.processed or {}
+    local line = {"ic-quality.post-work-line", record.waiting_process or 0, counters.used or 0}
     local count, charge = post.material_stock(record)
     if count then
-        row(stbl, {"ic-quality.post-material", "[item=" .. post.MATERIAL .. "]"},
-            {"ic-quality.post-material-value", count, charge, post.operations_per_material()})
-        row(stbl, {"ic-quality.post-material-used"}, tostring(counters.material or 0))
+        line = {"", line, "  ·  [item=" .. post.MATERIAL .. "] ", count}
     end
-    if record.no_material then
-        wrapped(parent, {"ic-quality.post-no-material", "[item=" .. post.MATERIAL .. "]"}).style.font_color = {1, 0.45, 0.35}
-    end
+    label(parent, line, nil, count and {"ic-quality.post-material-value", count, charge} or nil)
     if (record.stray or 0) > 0 then
         wrapped(parent, {"ic-quality.post-stray", record.stray}).style.font_color = {1, 0.75, 0.3}
-    end
-    if record.blocked then
-        wrapped(parent, {"ic-quality.post-output-blocked"}).style.font_color = {1, 0.75, 0.3}
-    end
-    local no_room = record.no_room and prototypes.quality[record.no_room]
-    if no_room then
-        wrapped(parent, {"ic-quality.post-no-room", quality_rich(no_room.name), no_room.localised_name})
-            .style.font_color = {1, 0.75, 0.3}
     end
 end
 
@@ -852,20 +876,113 @@ local function refresh_chances(player, record)
     if frame and frame.tags.unit == record.id then chances_window(player, record) end
 end
 
+-- Status strip like the game windows: an LED and a short state; the details in the tooltip.
+local function post_status(parent, record)
+    local state, sprite, caption, tooltip = record.state, "utility/status_working", nil, nil
+    local material = "[item=" .. post.MATERIAL .. "]"
+    if not record.order.item then
+        sprite, caption = "utility/status_not_working", {"ic-quality.post-status-empty"}
+    elseif state == "idle" then
+        sprite, caption = "utility/status_not_working", {"ic-quality.post-status-stopped"}
+    elseif state == "done" then
+        caption = {"ic-quality.post-status-done"}
+    elseif state == "paused" then
+        sprite, caption = "utility/status_yellow", {"ic-quality.post-status-paused"}
+    elseif record.no_material then
+        sprite, caption, tooltip = "utility/status_not_working", {"ic-quality.post-status-no-material", material},
+            {"ic-quality.post-no-material", material}
+    elseif record.no_room and prototypes.quality[record.no_room] then
+        local quality = prototypes.quality[record.no_room]
+        sprite, caption, tooltip = "utility/status_not_working", {"ic-quality.post-status-no-room", quality_rich(quality.name)},
+            {"ic-quality.post-no-room", quality_rich(quality.name), quality.localised_name}
+    elseif record.blocked then
+        sprite = "utility/status_yellow"
+        caption = {record.no_target and "ic-quality.post-status-missing" or "ic-quality.post-status-blocked"}
+        tooltip = {record.no_target and "ic-quality.post-output-missing" or "ic-quality.post-output-blocked"}
+    elseif record.paused_by_circuit then
+        sprite, caption = "utility/status_yellow", {"ic-quality.post-status-circuit"}
+    else
+        caption = {"ic-quality.post-status-working"}
+    end
+    parent.add({type = "sprite", sprite = sprite, tooltip = tooltip})
+    label(parent, caption, "bold_label", tooltip)
+end
+
+-- Three buttons: start (green; also resume or a new batch), pause (blue, pressed while paused), stop (red).
+-- Updated on every refresh, so circuit commands are shown too.
+local function post_controls_state(controls, state)
+    local start, pause, stop = controls.ic_start, controls.ic_pause, controls.ic_stop
+    if start then
+        start.enabled = state ~= "active"
+        start.tooltip = state == "paused" and {"ic-quality.order-resume"}
+            or state == "done" and {"ic-quality.post-start-again"} or {"ic-quality.order-start"}
+    end
+    if pause then
+        pause.enabled = state == "active" or state == "paused"
+        pause.toggled = state == "paused"
+    end
+    if stop then stop.enabled = state ~= "idle" end
+end
+
+-- A small count: one decimal below 10 (artifacts per product are often fractions).
+local function small_amount(value)
+    if value < 10 then return string.format("%.1f", value) end
+    return amount(value)
+end
+
+-- Window of the post: title with the info icon; a status strip with the controls; the order as a recipe
+-- (standard item -> the item at the goal quality x quantity) with its cost; progress; rare settings.
 local function post_panel(player, entity)
     local record = post.track(entity)
     if not record then return end
-    local inside = relative_frame(player, entity, defines.relative_gui_type.container_gui, {"ic-quality.post-title"})
+    local inside = relative_frame(player, entity, defines.relative_gui_type.container_gui, {"ic-quality.post-title"},
+        post_stats(record))
+    inside.style.padding = 0
     local order = record.order
 
-    local item_flow = inside.add({type = "flow", direction = "horizontal"})
-    item_flow.style.vertical_align = "center"
-    label(item_flow, {"ic-quality.order-item"})
-    local chooser = item_flow.add({type = "choose-elem-button", elem_type = "item", tags = {ic = "post-item"}})
-    chooser.elem_value = order.item
+    local strip = inside.add({type = "frame", name = "ic_strip", style = "subheader_frame", direction = "horizontal"})
+    strip.style.horizontally_stretchable = true
+    local row = strip.add({type = "flow", name = "ic_row", direction = "horizontal"})
+    row.style.vertical_align = "center"
+    row.style.horizontally_stretchable = true
+    local status = row.add({type = "flow", name = "ic_status", direction = "horizontal"})
+    status.style.vertical_align = "center"
+    post_status(status, record)
+    local strip_filler = row.add({type = "empty-widget"})
+    strip_filler.style.horizontally_stretchable = true
+    local controls = row.add({type = "flow", name = "ic_controls", direction = "horizontal"})
+    controls.add({type = "sprite-button", name = "ic_start", style = "tool_button_green", sprite = "utility/play",
+        tags = {ic = "post-start"}})
+    controls.add({type = "sprite-button", name = "ic_pause", style = "tool_button_blue", sprite = "utility/pause",
+        tooltip = {"ic-quality.order-pause"}, tags = {ic = "post-pause"}})
+    controls.add({type = "sprite-button", name = "ic_stop", style = "tool_button_red", sprite = "utility/stop",
+        tooltip = {"ic-quality.post-stop-tooltip"}, tags = {ic = "post-cancel"}})
+    post_controls_state(controls, record.state)
 
-    -- Target quality: every quality above standard, with its tier number.
-    local quality_flow = inside.add({type = "flow", direction = "horizontal"})
+    local body = inside.add({type = "flow", name = "ic_body", direction = "vertical"})
+    body.style.padding = 12
+    body.style.vertical_spacing = 8
+
+    -- The order as a recipe: [standard item] 5 in 1 -> [item at the goal quality] x [quantity] [ok].
+    local recipe = body.add({type = "flow", direction = "horizontal"})
+    recipe.style.vertical_align = "center"
+    recipe.style.horizontal_spacing = 8
+    local chooser = recipe.add({type = "choose-elem-button", elem_type = "item", tooltip = {"ic-quality.post-item-tooltip"},
+        tags = {ic = "post-item"}})
+    chooser.elem_value = order.item
+    label(recipe, {"ic-quality.post-recipe-rule", rules.PROCESS_TAKE})
+    local result = recipe.add({type = "choose-elem-button", elem_type = "item-with-quality", locked = true,
+        tooltip = {"ic-quality.post-result-tooltip"}, tags = {ic = "post-result"}})
+    if order.item then result.elem_value = {name = order.item, quality = order.quality} end
+    label(recipe, "×")
+    local field = recipe.add({type = "textfield", name = "ic_post_required", text = tostring(order.required),
+        numeric = true, allow_decimal = false, allow_negative = false, tooltip = {"ic-quality.order-required-tooltip"},
+        tags = {ic = "post-required"}})
+    field.style.width = 60
+    recipe.add({type = "sprite-button", style = "item_and_count_select_confirm", sprite = "utility/check_mark",
+        tooltip = {"ic-quality.order-required-confirm"}, tags = {ic = "post-required-ok"}})
+
+    local quality_flow = body.add({type = "flow", direction = "horizontal"})
     quality_flow.style.vertical_align = "center"
     label(quality_flow, {"ic-quality.order-quality"})
     local chain = quality_chain()
@@ -875,46 +992,56 @@ local function post_panel(player, entity)
         if chain[index].name == order.quality then selected = index - 1 end
     end
     quality_flow.add({type = "drop-down", items = items, selected_index = selected,
-        tooltip = {"ic-quality.order-quality-tooltip"}, tags = {ic = "post-quality"}}).style.width = 230
-    quality_flow.add({type = "sprite-button", style = "tool_button", sprite = "info",
-        tooltip = {"ic-quality.process-window-open"}, tags = {ic = "post-chances"}})
+        tooltip = {"ic-quality.order-quality-tooltip"}, tags = {ic = "post-quality"}}).style.width = 250
 
-    local amount_flow = inside.add({type = "flow", direction = "horizontal"})
-    amount_flow.style.vertical_align = "center"
-    label(amount_flow, {"ic-quality.order-required"})
-    local field = amount_flow.add({type = "textfield", text = tostring(order.required), numeric = true,
-        allow_decimal = false, allow_negative = false, tags = {ic = "post-required"}})
-    field.style.width = 90
-    amount_flow.add({type = "checkbox", caption = {"ic-quality.order-repeat"}, state = order.repeating,
-        tags = {ic = "post-repeat"}})
-
-    if order.item and not post.is_processable(order.item) then
-        wrapped(inside, {"ic-quality.process-not-processable"}).style.font_color = {1, 0.75, 0.3}
+    -- Cost of one product before the start; the empty state explains what to do.
+    if not order.item then
+        wrapped(body, {"ic-quality.post-empty-hint", rules.PROCESS_TAKE}, nil, 380)
+    elseif not post.is_processable(order.item) then
+        wrapped(body, {"ic-quality.process-not-processable"}, nil, 380).style.font_color = {1, 0.75, 0.3}
+    else
+        local products, artifacts = post_costs(order)
+        local cost = body.add({type = "flow", direction = "horizontal"})
+        cost.style.vertical_align = "center"
+        if products then
+            local item = "[item=" .. order.item .. "]"
+            local caption = artifacts
+                and {"ic-quality.post-cost-material", amount(products), item, small_amount(artifacts),
+                    "[item=" .. post.MATERIAL .. "]"}
+                or {"ic-quality.post-cost", amount(products), item}
+            label(cost, caption, "bold_label", {"ic-quality.post-cost-tooltip"})
+        else
+            label(cost, {"ic-quality.process-pick-quality"}).style.font_color = {1, 0.75, 0.3}
+        end
+        local cost_filler = cost.add({type = "empty-widget"})
+        cost_filler.style.horizontally_stretchable = true
+        cost.add({type = "button", caption = {"ic-quality.process-window-open-short"},
+            tooltip = {"ic-quality.process-window-open"}, tags = {ic = "post-chances"}}).style.minimal_width = 70
     end
 
-    local buttons = inside.add({type = "flow", direction = "horizontal"})
-    buttons.add({type = "button", style = "green_button", caption = {"ic-quality.order-start"}, tags = {ic = "post-start"}})
-    buttons.add({type = "button", caption = record.state == "paused" and {"ic-quality.order-resume"} or {"ic-quality.order-pause"},
-        tags = {ic = "post-pause"}})
-    buttons.add({type = "button", style = "red_button", caption = {"ic-quality.order-cancel"}, tags = {ic = "post-cancel"}})
-
-    inside.add({type = "line"}).style.top_margin = 4
-    local dynamic = inside.add({type = "flow", name = "dyn", direction = "vertical"})
+    body.add({type = "line"})
+    local dynamic = body.add({type = "flow", name = "dyn", direction = "vertical"})
+    dynamic.style.vertical_spacing = 4
     post_dynamic(dynamic, record)
 
-    inside.add({type = "line"}).style.top_margin = 4
-    local rotate = inside.add({type = "flow", direction = "horizontal"})
-    rotate.style.vertical_align = "center"
-    local arrow = rotate.add({type = "sprite", sprite = "ic-post-arrow-good"})
+    -- Rare settings at the bottom.
+    body.add({type = "line"})
+    local settings_row = body.add({type = "flow", direction = "horizontal"})
+    settings_row.style.vertical_align = "center"
+    local arrow = settings_row.add({type = "sprite", sprite = "ic-post-arrow-good"})
     arrow.resize_to_sprite = false
     arrow.style.size = 20
     arrow.style.stretch_image_to_widget_size = true
-    label(rotate, {"ic-quality.rotate-outputs"}, nil, {"ic-quality.post-output-tooltip"})
-    rotate.add({type = "sprite-button", sprite = "utility/left_arrow", style = "tool_button",
+    label(settings_row, {"ic-quality.post-output"}, nil, {"ic-quality.post-output-tooltip"})
+    settings_row.add({type = "sprite-button", sprite = "utility/left_arrow", style = "tool_button",
         tooltip = {"ic-quality.rotate-left"}, tags = {ic = "post-rotate", step = 3}})
-    rotate.add({type = "sprite-button", sprite = "utility/right_arrow", style = "tool_button",
+    settings_row.add({type = "sprite-button", sprite = "utility/right_arrow", style = "tool_button",
         tooltip = {"ic-quality.rotate-right"}, tags = {ic = "post-rotate", step = 1}})
-    inside.add({type = "checkbox", caption = {"ic-quality.circuit-control"}, tooltip = {"ic-quality.post-circuit-tooltip"},
+    local settings_filler = settings_row.add({type = "empty-widget"})
+    settings_filler.style.horizontally_stretchable = true
+    settings_row.add({type = "checkbox", caption = {"ic-quality.order-repeat"}, state = order.repeating,
+        tags = {ic = "post-repeat"}})
+    body.add({type = "checkbox", caption = {"ic-quality.circuit-control"}, tooltip = {"ic-quality.post-circuit-tooltip"},
         state = record.circuit, tags = {ic = "post-circuit"}})
 end
 
@@ -949,13 +1076,23 @@ function M.refresh_entity(player)
         mode_refresh(player, frame, entity)
         return
     end
-    local dynamic = frame.children[1] and frame.children[1].dyn
+    local inside = frame.ic_inside
+    local body = inside and (inside.ic_body or inside)
+    local dynamic = body and body.dyn
     if not dynamic then return end
     if entity.name == names.post then
         local record = post.get(entity)
         if record then
             dynamic.clear()
             post_dynamic(dynamic, record)
+            local row = inside.ic_strip and inside.ic_strip.ic_row
+            if row then
+                post_controls_state(row.ic_controls, record.state)
+                row.ic_status.clear()
+                post_status(row.ic_status, record)
+            end
+            local help = frame.ic_header and frame.ic_header.ic_help
+            if help then help.tooltip = post_stats(record) end
         end
     end
 end
@@ -991,6 +1128,7 @@ function M.on_click(event, hooks)
         local entity = opened_entity(player)
         local record = entity and post.get(entity)
         if not record then return end
+        if action == "post-start" and record.state == "paused" then action = "post-pause" end
         if action == "post-chances" then
             chances_window(player, record)
             return
@@ -1007,6 +1145,10 @@ function M.on_click(event, hooks)
             post.cancel(record)
         elseif action == "post-rotate" then
             post.rotate(record, tags.step or 1)
+        elseif action == "post-required-ok" then
+            local field = element.parent and element.parent.ic_post_required
+            local value = field and tonumber(field.text)
+            if value and value >= 1 then post.set_order(record, {required = value}) end
         else
             return
         end
@@ -1095,7 +1237,8 @@ function M.on_selection(event)
         -- The list holds the qualities above standard in chain order: index i is tier i.
         local quality = quality_chain()[element.selected_index + 1]
         if quality then post.set_order(record, {quality = quality.name}) end
-        M.refresh_entity(player)
+        -- The result slot and the cost depend on the quality: rebuild the window.
+        reopen(player)
         refresh_chances(player, record)
     end
 end
@@ -1104,13 +1247,15 @@ function M.on_text(event)
     local element = event.element
     local tags = element and element.valid and element.tags
     if not (tags and tags.ic == "post-required") then return end
+    -- Applied by Enter (on_gui_confirmed) or the confirm button: every change restarts the count.
+    if event.name ~= nil and event.name == defines.events.on_gui_text_changed then return end
     local player = game.get_player(event.player_index)
     local entity = player and opened_entity(player)
     local record = entity and post.get(entity)
     local value = tonumber(element.text)
     if record and value and value >= 1 then
         post.set_order(record, {required = value})
-        M.refresh_entity(player)
+        reopen(player)
     end
 end
 
