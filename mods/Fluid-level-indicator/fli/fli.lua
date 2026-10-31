@@ -24,15 +24,13 @@ local sprite_font = font_setting == "sprite"
 local capacity_by_name = {}
 
 local function players_present()
+  return #game.connected_players > 0
+end
 
-    local players_present = false
-  for _, player in pairs(game.players) do
-    if player.connected then
-      players_present = true
-      break
-    end
-   end
-   return players_present
+-- Update interval for on_nth_tick (control.lua registers the handler with it).
+function fli_update_interval()
+  if not update_interval then fli_refresh_settings() end
+  return update_interval
 end
 
 
@@ -48,8 +46,9 @@ end
 
 local function calc_color(fluid_count, fli_type)
 
-  b = 0
-  a = 1
+  local r, g
+  local b = 0
+  local a = 1
   if fli_type == 1 then
     -- normal color
     r=0.8*math.max(0, fluid_count < 50 and 1 or (100 - fluid_count) / 50)
@@ -86,6 +85,7 @@ function removedfli(removed_entity)
       local unit_number = removed_entity.unit_number
       storage.flis[unit_number] = nil
       storage.flitype[unit_number] = nil
+      if storage.flishown then storage.flishown[unit_number] = nil end
       -- A cleared key must not stay the `next` cursor of the update loop.
       if storage.fliindex == unit_number then
         storage.fliindex = nil
@@ -186,51 +186,71 @@ local function fli_update()
   local flis = storage.flis
   if not next(flis) then return end
   local flitype = storage.flitype
+  -- Last shown "<digits>:<type>" per indicator: render objects are written only when it changes.
+  -- In storage, not a module local: render writes are game state and must match on every client.
+  local shown = storage.flishown
+  if not shown then
+    shown = {}
+    storage.flishown = shown
+  end
 
-  for _ = 0, units_per_update do
+  for _ = 1, units_per_update do
     local index, fli = next(flis, storage.fliindex)
     storage.fliindex = index
     if not fli then return end
 
     if fli.valid then
-      local fli_type = flitype[index] or 1
-      flitype[index] = fli_type
+      local fli_type = flitype[index]
+      if not fli_type then
+        fli_type = 1
+        flitype[index] = 1
+      end
       local fluid_count = 0
-      local fluidbox = fli.fluidbox[1]
+      -- The indicator is a storage tank with one fluidbox: the entity amount is that fluidbox amount.
+      local amount = fli.get_fluid_count()
 
-      if fluidbox~=nil and fluidbox.amount > 0 then
+      if amount > 0 then
         local capacity = capacity_by_name[fli.name]
         if not capacity then
           capacity = fli.fluidbox.get_prototype(1).volume
           capacity_by_name[fli.name] = capacity
         end
-        fluid_count = (fluidbox.amount / capacity) * 100
+        fluid_count = (amount / capacity) * 100
       end
 
-      local color = calc_color(fluid_count, fli_type)
       local digits = string.format("%.f", fluid_count)
+      local key = digits .. ":" .. fli_type
       if sprite_font then
         local dig1 = storage.flidig1[index]
         if not (dig1 and dig1.valid) then
           create_textbox(fli, fli.surface)
           dig1 = storage.flidig1[index]
+          shown[index] = nil
         end
-        local dig10, dig100, digpc = storage.flidig10[index], storage.flidig100[index], storage.flidigpc[index]
-        dig1.sprite = get_digit(digits, 1)
-        dig10.sprite = get_digit(digits, 2)
-        dig100.sprite = get_digit(digits, 3)
-        dig1.color = color
-        dig10.color = color
-        dig100.color = color
-        digpc.color = color
+        if shown[index] ~= key then
+          shown[index] = key
+          local color = calc_color(fluid_count, fli_type)
+          local dig10, dig100, digpc = storage.flidig10[index], storage.flidig100[index], storage.flidigpc[index]
+          dig1.sprite = get_digit(digits, 1)
+          dig10.sprite = get_digit(digits, 2)
+          dig100.sprite = get_digit(digits, 3)
+          dig1.color = color
+          dig10.color = color
+          dig100.color = color
+          digpc.color = color
+        end
       else
         local text = storage.flitexts[index]
         if not (text and text.valid) then
           create_textbox(fli, fli.surface)
           text = storage.flitexts[index]
+          shown[index] = nil
         end
-        text.text = digits.."%"
-        text.color = color
+        if shown[index] ~= key then
+          shown[index] = key
+          text.text = digits.."%"
+          text.color = calc_color(fluid_count, fli_type)
+        end
       end
     else
       -- Entity gone without an event: drop the record and restart the cursor safely.
@@ -248,6 +268,7 @@ local function fli_update()
         storage.flitexts[index] = nil
       end
       flitype[index] = nil
+      shown[index] = nil
       flis[index] = nil
       storage.fliindex = nil
     end
@@ -255,10 +276,10 @@ local function fli_update()
 end
 
 
+-- Registered with script.on_nth_tick(update interval) in control.lua.
 function flion_tick(event)
 
   if not update_interval then fli_refresh_settings() end
-  if event.tick % update_interval ~= 0 then return end
   if not storage.fli_attached_targets then
     -- Older saves: render objects were placed by position and moved on every update.
     register_flis()
@@ -275,6 +296,7 @@ function placedfli(placed_entity)
   for _, entityname in ipairs(flientities) do
     if placed_entity.name == entityname then
       storage.flis[placed_entity.unit_number] = placed_entity
+      if storage.flishown then storage.flishown[placed_entity.unit_number] = nil end
       create_textbox(placed_entity, surface)
       storage.fliindex = placed_entity.unit_number
       storage.flitype[placed_entity.unit_number] = 1
@@ -285,6 +307,8 @@ end
 
 function register_flis()
   rendering.clear("Fluid-level-indicator")
+  -- New render objects show the initial "0": every indicator is written on its next update.
+  storage.flishown = {}
   for _,surface in pairs(game.surfaces) do
     for _, name in pairs(flientities) do
       for _,found in pairs(surface.find_entities_filtered{name = name}) do

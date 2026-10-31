@@ -10,19 +10,16 @@ script.on_event(defines.events.on_built_entity, function(event) placedfli(event.
 script.on_event(defines.events.on_robot_built_entity, function(event) placedfli(event.entity) end, fli_filter)
 script.on_event(defines.events.script_raised_built, function(event) placedfli(event.entity) end, fli_filter)
 script.on_event(defines.events.script_raised_revive, function(event) placedfli(event.entity) end, fli_filter)
-script.on_event(defines.events.on_entity_cloned, function(event) placedfli(event.destination) end)
-script.on_event(defines.events.on_space_platform_built_entity, function(event) placedfli(event.entity) end)
+-- Clone filter applies to the source entity; the clone of an indicator is an indicator.
+script.on_event(defines.events.on_entity_cloned, function(event) placedfli(event.destination) end, fli_filter)
+script.on_event(defines.events.on_space_platform_built_entity, function(event) placedfli(event.entity) end, fli_filter)
 
-script.on_event(defines.events.on_pre_player_mined_item, function(event) removedfli(event.entity) end)
-script.on_event(defines.events.on_robot_pre_mined, function(event) removedfli(event.entity) end)
 -- flientities already includes names added by compatibility/com_control.
-local death_filters = {}
-for _, name in ipairs(flientities) do
-    death_filters[#death_filters + 1] = {filter = "name", name = name}
-end
-script.on_event(defines.events.on_entity_died, function(event) removedfli(event.entity) end, death_filters)
-script.on_event(defines.events.script_raised_destroy, function(event) removedfli(event.entity) end)
-script.on_event(defines.events.on_space_platform_mined_entity, function(event) removedfli(event.entity) end)
+script.on_event(defines.events.on_pre_player_mined_item, function(event) removedfli(event.entity) end, fli_filter)
+script.on_event(defines.events.on_robot_pre_mined, function(event) removedfli(event.entity) end, fli_filter)
+script.on_event(defines.events.on_entity_died, function(event) removedfli(event.entity) end, fli_filter)
+script.on_event(defines.events.script_raised_destroy, function(event) removedfli(event.entity) end, fli_filter)
+script.on_event(defines.events.on_space_platform_mined_entity, function(event) removedfli(event.entity) end, fli_filter)
 
 script.on_event(defines.events.on_pre_chunk_deleted, function(event)
     local surface = game.surfaces[event.surface_index]
@@ -62,7 +59,8 @@ script.on_configuration_changed(function(data)
         -- to keep settings
         storage.flitype = {}
     end
-    storage.currentfliunitnumber = nil
+    storage.currentfliunitnumber = nil -- replaced by per-player storage.fli_open
+    storage.fli_open = {}
     register_flis()
 end)
 
@@ -75,15 +73,23 @@ script.on_init(function()
     storage.flidigpc = {}
     storage.fliindex = 1
     storage.flitype = {}
-    storage.currentfliunitnumber = nil
+    storage.flishown = {}
+    storage.fli_open = {}
     end)
 
 
-script.on_event(defines.events.on_tick, flion_tick)
+-- Runs only on update ticks. The interval comes from a runtime-global setting, so the
+-- registration is the same on every client and after every load.
+local function register_update_handler()
+    script.on_nth_tick(nil)
+    script.on_nth_tick(fli_update_interval(), flion_tick)
+end
+register_update_handler()
 
 script.on_event(defines.events.on_runtime_mod_setting_changed, function(event)
     if event.setting == "update_every_x_tick" or event.setting == "number_of_units_to_check_per_update" then
         fli_refresh_settings()
+        register_update_handler()
     end
 end)
 
@@ -106,7 +112,7 @@ end
 script.on_event(defines.events.on_gui_opened, function(event)
     local player = game.players[event.player_index]
     local ent = event.entity
-    if (event.gui_type == defines.gui_type.entity) and is_fli_entity(ent.name) then
+    if (event.gui_type == defines.gui_type.entity) and ent and is_fli_entity(ent.name) then
         open_fli_gui(player, ent)
     end
 end)
@@ -114,7 +120,8 @@ end)
 script.on_event(defines.events.on_gui_closed, function(event)
     local player = game.players[event.player_index]
     local ent = event.entity
-    if (event.gui_type == defines.gui_type.entity) and is_fli_entity(ent.name) then
+    -- An indicator removed while its window is open arrives here without a valid entity.
+    if (event.gui_type == defines.gui_type.entity) and (not (ent and ent.valid) or is_fli_entity(ent.name)) then
         close_fli_gui(player, ent)
     end
 end)

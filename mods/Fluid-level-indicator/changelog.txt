@@ -11,10 +11,22 @@ Date: 09 May 2025
       read both runtime settings every tick and re-targeted every render object on every update (4 writes per
       indicator). Settings are cached, digits/text are attached to the indicator entity (no moves, removed with it),
       fluidbox volume is cached per prototype. Existing indicators are rebuilt once on the first update after load.
+    - Paranoidal: render objects are written only when the shown percentage or the indicator type changes; before, every
+      checked indicator got 3 digit sprites and 4 colours (text and colour with a font) on every update even when
+      nothing changed. The colour now follows the shown percentage and no longer drifts inside one percent.
+    - Paranoidal: the update runs from on_nth_tick at the update interval instead of on_tick returning on 9 of 10 ticks;
+      the level is read with get_fluid_count instead of a fluidbox table; one update checks exactly the set number of
+      indicators (it checked one more); "players present" uses connected_players.
+    - Paranoidal: mining, robot mining, script destroy, clone and platform events are filtered by the indicator names
+      (before, every mined or script-removed entity of any kind ran the handler).
   Bugfixes:
     - Paranoidal: an indicator removed without an event or mid-iteration no longer breaks the update cursor;
       missing render objects are recreated instead of erroring.
     - Paranoidal: removed the unused set_color helper that called the removed rendering.set_color API.
+    - Paranoidal: the opened indicator is remembered per player; with two players at different indicators, one player's
+      drop-down changed the type of the other player's indicator.
+    - Paranoidal: the colour calculation no longer writes the global variables r, g, b, a; the window open/close handlers
+      skip a missing or removed entity instead of indexing it.
 ---------------------------------------------------------------------------------------------------
 Version: 0.9.8
 Date: 03 April 2025

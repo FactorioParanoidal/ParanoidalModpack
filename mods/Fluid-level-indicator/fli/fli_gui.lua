@@ -1,17 +1,24 @@
+-- The opened indicator is remembered per player (storage.fli_open[player_index]): with one shared
+-- value, two players with open indicators changed each other's indicator type.
+local function open_table()
+  local t = storage.fli_open
+  if not t then
+    t = {}
+    storage.fli_open = t
+  end
+  return t
+end
+
 function open_fli_gui(player, ent)
-  if not ent or not ent.valid then
-    for _, entityname in ipairs(flientities) do
-      if ent.name ~= entityname then
-        return
-      end
-    end
+  if not (ent and ent.valid) then
+    return
   end
 
   if not player then
     return
   end
   
-  storage.currentfliunitnumber = ent.unit_number
+  open_table()[player.index] = ent.unit_number
   local frame_flow = player.gui
   if frame_flow.relative.fli_picker then
     frame_flow.relative.fli_picker.destroy()
@@ -51,7 +58,7 @@ function close_fli_gui(player, ent)
   if frame_flow.fli_picker then
     frame_flow.fli_picker.destroy()
   end
-  storage.currentfliunitnumber = nil
+  open_table()[player.index] = nil
 end
 
 
@@ -61,8 +68,9 @@ function set_fli_type(event)
   if not player then
     return
   end
-  if storage.currentfliunitnumber == nil then
+  local unit_number = open_table()[event.player_index]
+  if unit_number == nil or not storage.flis[unit_number] then
     return
   end
-  storage.flitype[storage.currentfliunitnumber] = event.element.selected_index
+  storage.flitype[unit_number] = event.element.selected_index
 end

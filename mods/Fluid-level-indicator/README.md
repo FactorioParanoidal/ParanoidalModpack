@@ -22,3 +22,14 @@ Install from Factorio directly or copy these files under the mod directory.
 <img src="https://assets-mod.factorio.com/assets/4a43cbb38504d61f3d9e567c467a9c8bb43c6432.png" alt="Fluid level mode" width="450" />
 <img src="https://assets-mod.factorio.com/assets/d0ae91816f7cfbe3d094e275ab1a1fe8005b935a.png" alt="Fluid level mode" width="450" />
 <img src="https://assets-mod.factorio.com/assets/bd6e59b7c806c975a0b1fb523a127f13d72237c5.png" alt="Fluid level mode" width="450" />
+
+## Paranoidal (локальный форк)
+
+Изменения сборки Paranoidal по отношению к исходному моду; подробности — `changelog.txt`, версия 0.9.9.
+
+- Обновление индикаторов идёт через `on_nth_tick` с интервалом из настройки «Количество тиков между обновлениями» и за раз проверяет ровно заданное число индикаторов.
+- Цифры и цвет переписываются только при изменении показанного процента или типа индикатора. Неизменный уровень не стоит записей в объекты отрисовки. Последнее показанное значение хранится в `storage.flishown`.
+- Уровень читается через `get_fluid_count()`, объём — один раз на прототип.
+- События сноса, клонирования и платформ отфильтрованы по именам индикаторов.
+- Открытый индикатор запоминается для каждого игрока (`storage.fli_open`): в мультиплеере выпадающий список меняет только свой индикатор.
+- Сохранения совместимы, миграция не нужна: новые таблицы создаются при первом обновлении.
