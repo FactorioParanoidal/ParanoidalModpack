@@ -406,6 +406,8 @@ require("prototypes.anti-air-turret")
 require("prototypes.fire-safety-turret")
 -- Ветка качества: ранний модуль качества и тиры из двух предыдущих (до пересборки переработки).
 require("tweaks.recipe.quality-modules")
+-- Пластина из слитка в печи (лестница качества): до anti-exploit и пересборки переработки.
+require("tweaks.recipe.ingot-plate-smelting")
 -- Закрытие схем бесплатных ресурсов и энергии: после всех правок рецептов и машин, до пересборки переработки.
 require("tweaks.custom.anti-exploit")
 -- После всех правок рецептов: полная пересборка переработки Quality (один рецепт на предмет, без мусора).
