@@ -1,5 +1,5 @@
 -- Post-processing of the control post on mocks: chance and outcome rules, 5 -> 1 operations, the
--- fallback of a full post, completion, items it does not take, settings and timing. Not Factorio.
+-- result without a slot (waits, never drops), completion, items it does not take, settings and timing. Not Factorio.
 local directory = assert(arg[0]:match("^(.*[/\\])"))
 package.path = directory .. "../?.lua;" .. package.path
 local mock = dofile(directory .. "mock.lua")
@@ -41,16 +41,16 @@ assert(rules.process_outcome(Q.normal, sequence({0.5, 0.9})) == Q.uncommon, "one
 assert(rules.process_outcome(Q.normal, sequence({0.5, 0.1, 0.05})) == Q.epic, "several steps, stops at the end")
 assert(rules.process_outcome(Q.epic, sequence({0})) == Q.epic)
 
--- Routing: below the order stays ("process"), the order quality and better is accepted, defects go left,
--- items it does not take go right, nothing stays once the order is complete.
-local order = {item = "gear", condition = "process", rank = 3}
-local info = function(name) return {grade = name:find("ic%-defect") and -3 or 0, rank = Q[name].level, normal = name == "normal"} end
-assert(rules.route(order, "gear", info("uncommon"), 5, true, true) == "process")
-assert(rules.route(order, "gear", info("rare"), 5, true, true) == "good")
-assert(rules.route(order, "gear", info("ic-defect-3"), 5, true, true) == "refine")
-assert(rules.route(order, "gear", info("normal"), 5, true, false) == "other")
-assert(rules.route(order, "gear", info("normal"), 0, true, true) == "other")
-assert(rules.route(order, "plate", info("normal"), 5, true, true) == "other")
+-- Costs per product of the target: one sure step costs 5; from standard the step is sure and lands on
+-- uncommon (80%, worth 1/5) or jumps straight to rare (20%): 5 / (0.8 / 5 + 0.2) = 13.9. On the Paranoidal curve
+-- (41 tiers, next probability 0.204 - 0.004 per tier) the same numbers as review/quality-loops-step0-20261031.
+local costs = rules.process_costs({Q.normal, Q.uncommon, Q.rare, Q.epic}, 3)
+assert(math.abs(costs[2] - 5) < 1e-9 and math.abs(costs[1] - 5 / (0.8 / 5 + 0.2)) < 1e-9, costs[1])
+local curve = {}
+for k = 0, 40 do curve[k + 1] = {next_probability = k < 40 and 0.204 - 0.004 * k or 0} end
+for k = 1, 40 do curve[k].next = curve[k + 1] end
+local c15 = rules.process_costs(curve, 16)
+assert(c15[1] > 2.1e7 and c15[1] < 2.3e7 and c15[11] > 500 and c15[11] < 560, c15[1] .. " " .. c15[11])
 
 -- Inventory of 8 slots.
 local SLOTS = 8
@@ -132,6 +132,14 @@ function inventory.insert(item)
     return 0
 end
 
+function inventory.can_insert(item)
+    for i = 1, SLOTS do
+        local s = inventory[i]
+        if not s.valid_for_read or (s.name == item.name and s.quality.name == item.quality) then return true end
+    end
+    return false
+end
+
 local spilled = {}
 local entity = {
     valid = true, name = "ic-control-post", unit_number = 7, position = {x = 0.5, y = 0.5},
@@ -160,9 +168,8 @@ entity.surface.find_entities_filtered = function(filter)
 end
 
 local record = post.track(entity)
-post.set_order(record, {item = "gear", condition = "process", quality = "rare", required = 2})
-assert(record.order.condition == "process" and record.order.rank == 3)
-assert(post.export_settings(record).order.condition == "process", "blueprints keep the mode")
+post.set_order(record, {item = "gear", quality = "rare", required = 2})
+assert(record.order.rank == 3 and post.export_settings(record).order.quality == "rare", "blueprints keep the target")
 post.start(record)
 
 -- 12 standard gears: one operation per PROCESS_TICKS; a sure step up from standard (chance 1).
@@ -187,42 +194,100 @@ assert(targets[0].stored == 1 and record.accepted == 1 and count("gear", "rare")
 post.step(record, 200, always_up)
 assert(targets[0].stored == 2 and record.state == "done", "order complete")
 
--- After completion the copies below the order are not kept: they go right.
+-- After completion leftovers stay inside and nothing is processed; the only output is forward.
 fill({{"gear", "normal", 3}})
 post.step(record, 300, always_up)
-assert(targets[1].stored == 3 and count("gear", "normal") == 0)
+assert(count("gear", "normal") == 3 and targets[1].stored == 0 and targets[3].stored == 0)
+assert(record.next_tick == nil, "a finished post without circuit control sleeps")
 
--- A full post with single copies of different qualities: the 5 lowest are taken, the result starts
--- from the worst of them.
-post.set_order(record, {item = "gear", condition = "process", quality = "epic", required = 10})
+-- Every slot full of standard copies (inserters filled the post): the uncommon result has no slot, so nothing
+-- is taken, nothing is dropped and the window names the missing tier.
+post.set_order(record, {item = "gear", quality = "epic", required = 10})
 post.start(record)
-fill({{"gear", "normal", 2}, {"gear", "uncommon", 2}, {"gear", "rare", 1}, {"gear", "normal", 1},
-    {"gear", "uncommon", 1}, {"gear", "rare", 1}, {"gear", "rare", 1}, {"gear", "rare", 1}})
--- The chance from standard is 1, so the result is uncommon.
-post.step(record, 400, sequence({0.999}))
-assert(count("gear", "normal") == 0 and count("gear", "uncommon") == 2 and count("gear", "rare") == 4,
-    "3 standard + 2 uncommon -> 1 uncommon")
-assert(record.processed.raised == 4 and record.processed.operations == 4)
+local full = {}
+for i = 1, SLOTS do full[i] = {"gear", "normal", 50} end
+fill(full)
+post.step(record, 400, always_up)
+assert(count("gear", "normal") == 50 * SLOTS and record.no_room == "uncommon" and #spilled == 0, "waits, drops nothing")
+assert(record.processed.operations == 3)
+-- A free slot appears: the operation runs.
+inventory[SLOTS].clear()
+post.step(record, 420, always_up)
+assert(count("gear", "uncommon") == 1 and record.no_room == nil and record.processed.operations == 4)
+fill({{"gear", "normal", 5}})
+post.step(record, 440, sequence({0.999}))
+assert(count("gear", "uncommon") == 1 and record.processed.raised == 5 and record.processed.operations == 5)
 
--- Items it does not take: below the order they go right; a different item always goes right.
-post.set_order(record, {item = "fish", condition = "process", quality = "rare", required = 10})
-post.start(record)
-local before = targets[1].stored
-fill({{"fish", "normal", 6}, {"gear", "normal", 1}})
-post.step(record, 500, always_up)
-assert(targets[1].stored == before + 7 and record.processed.operations == 4, "spoiling items are not processed")
+-- Items it does not take: such an order does not start.
+post.set_order(record, {item = "fish", quality = "rare", required = 10})
+assert(not post.start(record) and record.state == "idle", "spoiling items are not processed")
 assert(post.is_processable("gear") and not post.is_processable("fish") and not post.is_processable("box"))
+-- Strays (another item, defects) stay inside, are counted and block nothing.
+post.set_order(record, {item = "gear", quality = "rare", required = 10})
+post.start(record)
+local before = targets[0].stored
+fill({{"fish", "normal", 6}, {"gear", "ic-defect-3", 2}, {"gear", "rare", 1}})
+post.step(record, 500, always_up)
+assert(record.stray == 8 and count("fish", "normal") == 6 and count("gear", "ic-defect-3") == 2)
+assert(targets[0].stored == before + 1 and record.processed.operations == 5)
+-- Orders of the routing post: "at least X" becomes "up to X", "strictly standard" an empty order.
+record.order = {item = "gear", condition = "at-least", quality = "rare", required = 7, repeating = false, rank = 3}
+post.migrate(record)
+assert(record.order.condition == nil and record.order.item == "gear" and record.order.quality == "rare")
+record.order = {item = "gear", condition = "strict", quality = "normal", required = 7, repeating = false, rank = 0}
+record.sent = {good = 4, refine = 2, other = 1}
+post.migrate(record)
+assert(record.order.item == nil and record.state == "idle" and record.sent.good == 4 and record.sent.refine == nil)
+post.apply_settings(record, {order = {item = "gear", condition = "strict", quality = "normal"}})
+assert(record.order.item == nil, "an old strict blueprint gives an empty order")
 
 -- Paused: nothing is processed.
-post.set_order(record, {item = "gear", condition = "process", quality = "rare", required = 10})
+post.set_order(record, {item = "gear", quality = "rare", required = 10})
 post.start(record)
 post.pause(record)
 fill({{"gear", "normal", 5}})
 post.step(record, 600, always_up)
-assert(count("gear", "normal") == 5 and record.processed.operations == 4)
+assert(count("gear", "normal") == 5 and record.processed.operations == 5)
 assert(#spilled == 0)
 
-print("PASS: post-processing chance (6 x next probability, capped) and outcome, routing, 5 -> 1 operations")
-print("one per PROCESS_TICKS, waiting for copies, accepted copies counted, completion sends the rest right,")
-print("full post takes the 5 lowest, items with spoil timers or inventories are not taken, pause, settings.")
+-- Slot layout: input row of standard copies, one slot per tier below the goal, the rest for the goal and
+-- better; a comparator filter the engine refuses falls back to the item name; no order clears them.
+local filters = {}
+inventory.supports_filters = function() return true end
+inventory.set_filter = function(index, filter)
+    if type(filter) == "table" and refuse_comparator then error("comparator refused") end
+    filters[index] = filter
+    return true
+end
+post.INPUT_SLOTS = 3
+post.set_order(record, {item = "gear", quality = "epic"})
+assert(filters[1].quality == "normal" and filters[1].comparator == "=" and filters[3].quality == "normal")
+assert(filters[4].quality == "uncommon" and filters[4].comparator == "=" and filters[5].quality == "rare")
+assert(filters[6].quality == "epic" and filters[6].comparator == ">=" and filters[SLOTS].quality == "epic")
+assert(record.layout_pending == nil)
+-- A slot that refuses its filter (copies of another quality inside) is set again later.
+inventory.set_filter = function(index, filter) filters[index] = filter return index ~= 4 end
+post.set_order(record, {item = "gear", quality = "epic"})
+assert(record.layout_pending)
+inventory.set_filter = function(index, filter) filters[index] = filter return true end
+post.step(record, 700, always_up)
+assert(record.layout_pending == nil)
+refuse_comparator = true
+inventory.set_filter = function(index, filter)
+    if type(filter) == "table" then error("comparator refused") end
+    filters[index] = filter
+    return true
+end
+post.set_order(record, {item = "gear"})
+assert(filters[1] == "gear" and filters[SLOTS] == "gear")
+post.set_order(record, {item = false})
+assert(filters[1] == nil and filters[SLOTS] == nil)
+-- Items with a stack smaller than one operation are not taken.
+prototypes.item.anchor = {type = "item", stack_size = 1, get_spoil_ticks = function() return 0 end}
+assert(not post.is_processable("anchor"))
+
+print("PASS: post-processing chance (6 x next probability, capped), outcome and costs, 5 -> 1 operations")
+print("one per PROCESS_TICKS, waiting for copies, accepted copies counted, leftovers stay after completion,")
+print("no slot for the result: waits and drops nothing, strays counted, items it does not take refused, old orders converted,")
+print("pause, settings, slot layout per tier with fallback and retry, small stacks refused.")
 print("Mocks only.")

@@ -155,10 +155,8 @@ end
 ---------------------------------------------------------------------------------------------------
 -- Control post
 ---------------------------------------------------------------------------------------------------
-M.conditions = {"strict", "at-least", "process"}
-
--- Post-processing (condition "process", user decision 2026-10-31): copies of the order item below the
--- ordered quality stay in the post; every TAKE of one quality become one item rolled with the quality
+-- Post-processing (the only work of the post since 2026-10-31, user decisions): copies of the order item
+-- below the ordered quality stay in the post; every TAKE of one quality become one item rolled with the quality
 -- effect EFFECT (chance to go up = EFFECT x next_probability of the quality, at most 1; after a step up
 -- every further tier with its own next_probability, like the engine roll). One operation per TICKS.
 -- Deliberately worse than recycling with good quality modules: the post is the convenient, not the best way.
@@ -182,33 +180,35 @@ function M.process_outcome(quality, random)
     return result
 end
 
--- quality: {grade = -5..0 (defect grades negative), rank = level of non-defect quality, normal = bool}
--- refinable: false when the workshop does not take the item (materials, since 2026-10-29): what would
--- go to refinement goes to "other" instead of blocking the refinement output.
--- processable: false when post-processing cannot take the item (items with inventories, data or spoiling).
--- Returns "good", "refine", "other" or "process" (stays in the post for post-processing).
-function M.route(order, item, quality, remaining, refinable, processable)
-    if not order or not order.item or item ~= order.item then return "other" end
-    local refine = refinable == false and "other" or "refine"
-    local target
-    if quality.grade < 0 then
-        return refine
-    elseif order.condition == "strict" then
-        if not quality.normal then return refine end
-        target = "good"
-    elseif quality.rank >= (order.rank or 0) then
-        target = "good"
-    elseif order.condition == "process" and processable ~= false and (remaining or 0) > 0 then
-        return "process"
-    else
-        target = "other"
+-- Expected number of products of each quality needed for one product of quality `target` or better.
+-- chain: qualities from normal by `next` (prototype-like {next, next_probability}); target: index in chain.
+-- Every operation keeps the result in the post until it reaches the target (the fallback for a full
+-- post is ignored). Returns {[index] = count} for index < target (math.huge when unreachable).
+function M.process_costs(chain, target)
+    local value = {}
+    for index = target, #chain do value[index] = 1 end
+    local costs = {}
+    for index = target - 1, 1, -1 do
+        local chance = M.process_chance(chain[index])
+        local gained, carried, next_index = 0, chance, index + 1
+        while carried > 0 and chain[next_index] do
+            if next_index >= target then
+                gained = gained + carried
+                break
+            end
+            local further = chain[next_index + 1] and chain[next_index].next_probability or 0
+            gained = gained + carried * (1 - further) * value[next_index]
+            carried = carried * further
+            next_index = next_index + 1
+        end
+        value[index] = gained / (M.PROCESS_TAKE - (1 - chance))
+        costs[index] = value[index] > 0 and 1 / value[index] or math.huge
     end
-    if target == "good" and (remaining or 0) <= 0 then return "other" end
-    return target
+    return costs
 end
 
--- Output side for a route relative to the facing direction (0 north .. 3 west).
--- Forward: accepted; left: refinement; right: everything else.
+-- Output side for a route relative to the facing direction (0 north .. 3 west). The post has only the
+-- forward output ("good") since 2026-10-31; the other turns are kept for the arrow sprites.
 function M.output_direction(facing, route)
     local turn = route == "good" and 0 or route == "refine" and 3 or 1
     return (facing + turn) % 4

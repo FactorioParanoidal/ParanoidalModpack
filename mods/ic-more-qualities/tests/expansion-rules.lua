@@ -74,27 +74,6 @@ end
 near(rules.boosted_chance(.1, 3), .271); near(rules.boosted_chance(.2, 10), 0.8926258176)
 assert(rules.extra_chance(0, 10) == 0 and rules.extra_chance(.3, 1) == 0)
 
--- Control post routing.
-local q = {normal = {grade = 0, rank = 0, normal = true}, defect = {grade = -3, rank = -1, normal = false},
-    rare = {grade = 0, rank = 3, normal = false}, uncommon = {grade = 0, rank = 2, normal = false}}
-local strict = {item = "gear", condition = "strict"}
-assert(rules.route(strict, "gear", q.normal, 5) == "good")
-assert(rules.route(strict, "gear", q.normal, 0) == "other")
-assert(rules.route(strict, "gear", q.defect, 5) == "refine")
-assert(rules.route(strict, "gear", q.rare, 5) == "refine")
-assert(rules.route(strict, "plate", q.normal, 5) == "other")
-local at_least = {item = "gear", condition = "at-least", rank = 3}
-assert(rules.route(at_least, "gear", q.rare, 1) == "good")
-assert(rules.route(at_least, "gear", q.uncommon, 1) == "other")
-assert(rules.route(at_least, "gear", q.normal, 1) == "other")
-assert(rules.route(at_least, "gear", q.defect, 1) == "refine")
-assert(rules.route(nil, "gear", q.normal, 1) == "other")
--- An item the workshop does not take (a material): what would go to refinement goes to "other".
-assert(rules.route(strict, "gear", q.defect, 5, false) == "other")
-assert(rules.route(strict, "gear", q.rare, 5, false) == "other")
-assert(rules.route(strict, "gear", q.normal, 5, false) == "good")
-assert(rules.route(at_least, "gear", q.defect, 1, false) == "other")
-assert(rules.route(strict, "gear", q.defect, 5, true) == "refine")
 -- Outputs: forward / left / right relative to the facing.
 assert(rules.output_direction(0, "good") == 0 and rules.output_direction(0, "refine") == 3 and rules.output_direction(0, "other") == 1)
 assert(rules.output_direction(1, "good") == 1 and rules.output_direction(1, "refine") == 0 and rules.output_direction(3, "other") == 0)
@@ -110,5 +89,5 @@ assert(math.abs(rules.mode_attempts(-1, wm.normal) - rules.expected_attempts(-1)
 assert(rules.workshop_mode("bogus") == wm.normal and wm.careful.time == 5 and wm.precise.time == 20)
 
 print("PASS: refinement cost (science x sqrt health, agreed examples), 90%+10% chain distribution,")
-print("expected attempts, mode costs/extra power/levels, boost identity, post routing.")
+print("expected attempts, mode costs/extra power/levels, boost identity, post output sides.")
 print("Pure Lua rules only; not a Factorio test.")

@@ -381,9 +381,7 @@ end
 ---------------------------------------------------------------------------------------------------
 local function order_caption(order)
     if not order.item then return {"ic-quality.order-none"} end
-    local condition = order.condition == "strict" and {"ic-quality.condition-strict"}
-        or {"", {"ic-quality.condition-" .. order.condition}, " ", quality_rich(order.quality)}
-    return {"", "[item=" .. order.item .. "] ", condition}
+    return {"", "[item=" .. order.item .. "] ", {"ic-quality.order-up-to"}, " ", quality_rich(order.quality)}
 end
 
 local function orders_dynamic(parent, player)
@@ -712,6 +710,42 @@ local function mode_refresh(player, frame, entity)
     end
 end
 
+-- Positive quality chain from normal by `next`: list (index 1 = normal, tier 0) and tier by name.
+local function quality_chain()
+    local list, tiers = {}, {}
+    local quality = prototypes.quality.normal
+    while quality and not tiers[quality.name] do
+        list[#list + 1] = quality
+        tiers[quality.name] = #list - 1
+        quality = quality.next
+    end
+    return list, tiers
+end
+
+-- A large count in words: 340, 12 thousand, 3.4 million ...
+local function amount(value)
+    if value ~= value or value >= 1e15 then return {"ic-quality.amount-huge"} end
+    if value < 1000 then return tostring(math.floor(value + 0.5)) end
+    for _, step in ipairs({{1e12, "t"}, {1e9, "b"}, {1e6, "m"}, {1e3, "k"}}) do
+        if value >= step[1] then
+            local short = value / step[1]
+            return {"ic-quality.amount-" .. step[2], short < 10 and string.format("%.1f", short)
+                or tostring(math.floor(short + 0.5))}
+        end
+    end
+end
+
+local function wrapped(parent, caption, style, width)
+    local element = label(parent, caption, style)
+    element.style.single_line = false
+    element.style.maximal_width = width or 360
+    return element
+end
+
+local function quality_caption(quality, tier)
+    return {"", quality_rich(quality.name), " ", quality.localised_name, " (", tier, ")"}
+end
+
 local function post_dynamic(parent, record)
     local tbl = key_value_table(parent)
     row(tbl, {"ic-quality.col-state"}, {"ic-quality.order-state-" .. record.state})
@@ -724,50 +758,74 @@ local function post_dynamic(parent, record)
     local bar = accepted.add({type = "progressbar", value = math.max(0, math.min(1, record.accepted / required))})
     bar.style.horizontally_stretchable = true
     bar.style.minimal_width = 120
+    local counters = record.processed or {}
     local stbl = key_value_table(parent)
+    row(stbl, {"ic-quality.process-waiting"}, tostring(record.waiting_process or 0))
+    row(stbl, {"ic-quality.process-operations"}, tostring(counters.operations or 0))
+    row(stbl, {"ic-quality.process-raised"}, tostring(counters.raised or 0))
+    row(stbl, {"ic-quality.sent-good"}, tostring(record.sent and record.sent.good or 0))
     row(stbl, {"ic-quality.batches"}, tostring(record.batches or 0))
-    row(stbl, {"ic-quality.sent-good"}, tostring(record.sent.good or 0))
-    row(stbl, {"ic-quality.sent-refine"}, tostring(record.sent.refine or 0))
-    row(stbl, {"ic-quality.sent-other"}, tostring(record.sent.other or 0))
-    if record.order.condition == "process" then
-        local counters = record.processed or {}
-        row(stbl, {"ic-quality.process-waiting"}, tostring(record.waiting_process or 0))
-        row(stbl, {"ic-quality.process-operations"}, tostring(counters.operations or 0))
-        row(stbl, {"ic-quality.process-used"}, tostring(counters.used or 0))
-        row(stbl, {"ic-quality.process-raised"}, tostring(counters.raised or 0))
+    if (record.stray or 0) > 0 then
+        wrapped(parent, {"ic-quality.post-stray", record.stray}).style.font_color = {1, 0.75, 0.3}
     end
-    local blocked = {}
-    for _, route in ipairs(post.routes) do
-        local direction = rules.output_direction(record.facing, route)
-        if record.blocked and record.blocked[direction] then blocked[#blocked + 1] = route end
+    if record.blocked then
+        wrapped(parent, {"ic-quality.post-output-blocked"}).style.font_color = {1, 0.75, 0.3}
     end
-    if #blocked > 0 then
-        local caption = {""}
-        for _, route in ipairs(blocked) do caption[#caption + 1] = {"ic-quality.route-" .. route}; caption[#caption + 1] = " " end
-        local warning = label(parent, {"ic-quality.outputs-blocked", caption})
-        warning.style.font_color = {1, 0.75, 0.3}
+    local no_room = record.no_room and prototypes.quality[record.no_room]
+    if no_room then
+        wrapped(parent, {"ic-quality.post-no-room", quality_rich(no_room.name), no_room.localised_name})
+            .style.font_color = {1, 0.75, 0.3}
     end
 end
 
--- Post-processing rule with the real numbers of this build: the last quality lifted with certainty.
-local function process_hint(parent, order)
-    local sure, quality = nil, prototypes.quality.normal
-    while quality and rules.process_chance(quality) >= 1 do
-        sure = quality
-        quality = quality.next
+-- Separate window: goal, rule and the cost table of the order of one post.
+local CHANCES = "ic_post_chances"
+function M.close_chances(player)
+    local frame = player.gui.screen[CHANCES]
+    if frame then frame.destroy() end
+end
+
+local function chances_window(player, record)
+    M.close_chances(player)
+    local order = record.order
+    local frame = player.gui.screen.add({type = "frame", name = CHANCES, direction = "vertical",
+        tags = {unit = record.id}})
+    titlebar(frame, {"ic-quality.process-window-title"}, "post-chances-close")
+    local inside = frame.add({type = "frame", style = "inside_shallow_frame_with_padding", direction = "vertical"})
+    local chain, tiers = quality_chain()
+    local target = tiers[order.quality] or 0
+    if order.item and target > 0 then
+        wrapped(inside, {"ic-quality.process-goal", "[item=" .. order.item .. "]", quality_rich(order.quality),
+            prototypes.quality[order.quality].localised_name, target, #chain - 1}, "bold_label", 480)
     end
-    local text = label(parent, {"ic-quality.process-hint", rules.PROCESS_TAKE, rules.PROCESS_EFFECT * 100,
-        sure and quality_rich(sure.name) or "-", quality and quality_rich(quality.name) or "-",
-        percent(quality and rules.process_chance(quality) or 0, 0),
-        string.format("%.2f", rules.PROCESS_TICKS / 60)})
-    text.style.single_line = false
-    text.style.maximal_width = 360
-    if order.item and not post.is_processable(order.item) then
-        local warning = label(parent, {"ic-quality.process-not-processable"})
-        warning.style.single_line = false
-        warning.style.maximal_width = 360
-        warning.style.font_color = {1, 0.75, 0.3}
+    wrapped(inside, {"ic-quality.process-rule", rules.PROCESS_TAKE, string.format("%.2f", rules.PROCESS_TICKS / 60)},
+        nil, 480)
+    if target == 0 then
+        wrapped(inside, {"ic-quality.process-pick-quality"}, nil, 480).style.font_color = {1, 0.75, 0.3}
+    else
+        local costs = rules.process_costs(chain, target + 1)
+        local scroll = inside.add({type = "scroll-pane", style = "naked_scroll_pane"})
+        scroll.style.top_margin = 8
+        scroll.style.maximal_height = 520
+        local tbl = scroll.add({type = "table", column_count = 3, style = "bordered_table"})
+        label(tbl, {"ic-quality.process-col-from"}, "bold_label")
+        label(tbl, {"ic-quality.process-col-chance"}, "bold_label", {"ic-quality.process-col-chance-tooltip"})
+        label(tbl, {"ic-quality.process-col-cost", quality_rich(order.quality)}, "bold_label",
+            {"ic-quality.process-col-cost-tooltip"})
+        for index = 1, target do
+            local quality = chain[index]
+            label(tbl, quality_caption(quality, index - 1))
+            label(tbl, percent(rules.process_chance(quality), 0))
+            label(tbl, amount(costs[index]))
+        end
     end
+    frame.force_auto_center()
+end
+
+-- Rebuilds an open chances window of this post (the order changed).
+local function refresh_chances(player, record)
+    local frame = player.gui.screen[CHANCES]
+    if frame and frame.tags.unit == record.id then chances_window(player, record) end
 end
 
 local function post_panel(player, entity)
@@ -782,27 +840,20 @@ local function post_panel(player, entity)
     local chooser = item_flow.add({type = "choose-elem-button", elem_type = "item", tags = {ic = "post-item"}})
     chooser.elem_value = order.item
 
-    local condition_flow = inside.add({type = "flow", direction = "horizontal"})
-    condition_flow.style.vertical_align = "center"
-    label(condition_flow, {"ic-quality.order-condition"})
-    local condition_items, condition_index = {}, 1
-    for index, condition in ipairs(rules.conditions) do
-        condition_items[index] = {"ic-quality.condition-" .. condition}
-        if condition == order.condition then condition_index = index end
+    -- Target quality: every quality above standard, with its tier number.
+    local quality_flow = inside.add({type = "flow", direction = "horizontal"})
+    quality_flow.style.vertical_align = "center"
+    label(quality_flow, {"ic-quality.order-quality"})
+    local chain = quality_chain()
+    local items, selected = {}, 0
+    for index = 2, #chain do
+        items[index - 1] = quality_caption(chain[index], index - 1)
+        if chain[index].name == order.quality then selected = index - 1 end
     end
-    condition_flow.add({type = "drop-down", items = condition_items, selected_index = condition_index,
-        tooltip = {"ic-quality.condition-tooltip"}, tags = {ic = "post-condition"}}).style.width = 170
-    local qualities = sorted_qualities(false)
-    local items, selected = {}, 1
-    for index, quality in ipairs(qualities) do
-        items[index] = {"", quality_rich(quality.name), " ", quality.localised_name}
-        if quality.name == order.quality then selected = index end
-    end
-    local quality_dropdown = condition_flow.add({type = "drop-down", items = items, selected_index = selected,
-        tags = {ic = "post-quality"}})
-    quality_dropdown.style.width = 140
-    quality_dropdown.enabled = order.condition ~= "strict"
-    if order.condition == "process" then process_hint(inside, order) end
+    quality_flow.add({type = "drop-down", items = items, selected_index = selected,
+        tooltip = {"ic-quality.order-quality-tooltip"}, tags = {ic = "post-quality"}}).style.width = 230
+    quality_flow.add({type = "sprite-button", style = "tool_button", sprite = "info",
+        tooltip = {"ic-quality.process-window-open"}, tags = {ic = "post-chances"}})
 
     local amount_flow = inside.add({type = "flow", direction = "horizontal"})
     amount_flow.style.vertical_align = "center"
@@ -812,6 +863,10 @@ local function post_panel(player, entity)
     field.style.width = 90
     amount_flow.add({type = "checkbox", caption = {"ic-quality.order-repeat"}, state = order.repeating,
         tags = {ic = "post-repeat"}})
+
+    if order.item and not post.is_processable(order.item) then
+        wrapped(inside, {"ic-quality.process-not-processable"}).style.font_color = {1, 0.75, 0.3}
+    end
 
     local buttons = inside.add({type = "flow", direction = "horizontal"})
     buttons.add({type = "button", style = "green_button", caption = {"ic-quality.order-start"}, tags = {ic = "post-start"}})
@@ -824,22 +879,13 @@ local function post_panel(player, entity)
     post_dynamic(dynamic, record)
 
     inside.add({type = "line"}).style.top_margin = 4
-    local legend = inside.add({type = "table", column_count = 2})
-    legend.style.horizontal_spacing = 6
-    legend.style.vertical_spacing = 4
-    for _, route in ipairs(post.routes) do
-        -- Without stretching the 64 px arrow is drawn at full size over the text.
-        local arrow = legend.add({type = "sprite", sprite = "ic-post-arrow-" .. route})
-        arrow.resize_to_sprite = false
-        arrow.style.size = 20
-        arrow.style.stretch_image_to_widget_size = true
-        local text = label(legend, {"ic-quality.route-" .. route .. "-legend"})
-        text.style.single_line = false
-        text.style.maximal_width = 340
-    end
     local rotate = inside.add({type = "flow", direction = "horizontal"})
     rotate.style.vertical_align = "center"
-    label(rotate, {"ic-quality.rotate-outputs"})
+    local arrow = rotate.add({type = "sprite", sprite = "ic-post-arrow-good"})
+    arrow.resize_to_sprite = false
+    arrow.style.size = 20
+    arrow.style.stretch_image_to_widget_size = true
+    label(rotate, {"ic-quality.rotate-outputs"}, nil, {"ic-quality.post-output-tooltip"})
     rotate.add({type = "sprite-button", sprite = "utility/left_arrow", style = "tool_button",
         tooltip = {"ic-quality.rotate-left"}, tags = {ic = "post-rotate", step = 3}})
     rotate.add({type = "sprite-button", sprite = "utility/right_arrow", style = "tool_button",
@@ -915,12 +961,22 @@ function M.on_click(event, hooks)
     elseif action == "show" then
         local entity = find_entity_by_unit(tags.unit)
         if entity then player.centered_on = entity end
+    elseif action == "post-chances-close" then
+        M.close_chances(player)
     elseif action:find("^post%-") then
         local entity = opened_entity(player)
         local record = entity and post.get(entity)
         if not record then return end
-        if action == "post-start" then
-            if not post.start(record) then player.print({"ic-quality.order-need-item"}) end
+        if action == "post-chances" then
+            chances_window(player, record)
+            return
+        elseif action == "post-start" then
+            if not post.start(record) then
+                local order = record.order
+                player.print(not order.item and {"ic-quality.order-need-item"}
+                    or (order.rank or 0) <= 0 and {"ic-quality.order-need-quality"}
+                    or {"ic-quality.process-not-processable"})
+            end
         elseif action == "post-pause" then
             post.pause(record)
         elseif action == "post-cancel" then
@@ -995,8 +1051,9 @@ function M.on_elem_changed(event)
         if record then
             post.set_order(record, {item = element.elem_value or false})
             if not element.elem_value then record.order.item = nil end
-            -- The post-processing hint warns about items it cannot take: rebuild the whole window.
-            if record.order.condition == "process" then reopen(player) else M.refresh_entity(player) end
+            -- The window warns about items it cannot take: rebuild it.
+            reopen(player)
+            refresh_chances(player, record)
         end
     end
 end
@@ -1010,13 +1067,12 @@ function M.on_selection(event)
     local entity = player and opened_entity(player)
     local record = entity and post.get(entity)
     if not record then return end
-    if action == "post-condition" then
-        post.set_order(record, {condition = rules.conditions[element.selected_index] or "strict"})
-        reopen(player)
-    elseif action == "post-quality" then
-        local quality = sorted_qualities(false)[element.selected_index]
+    if action == "post-quality" then
+        -- The list holds the qualities above standard in chain order: index i is tier i.
+        local quality = quality_chain()[element.selected_index + 1]
         if quality then post.set_order(record, {quality = quality.name}) end
         M.refresh_entity(player)
+        refresh_chances(player, record)
     end
 end
 

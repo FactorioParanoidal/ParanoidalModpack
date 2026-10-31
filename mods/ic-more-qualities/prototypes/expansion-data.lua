@@ -176,8 +176,9 @@ data:extend({
         resistances = {{type = "fire", percent = 70}},
         collision_box = {{-1.2, -1.2}, {1.2, 1.2}},
         selection_box = {{-1.5, -1.5}, {1.5, 1.5}},
-        inventory_size = 8,
-        inventory_type = "with_bar",
+        -- 5 rows: input row, one slot per tier up to the goal, the rest for accepted copies (post.layout).
+        inventory_size = 50,
+        inventory_type = "with_filters_and_bar",
         quality_affects_inventory_size = false,
         picture = {layers = machine_layers(G .. "entity/control-post/control-post.png", false)},
         circuit_wire_max_distance = 9,

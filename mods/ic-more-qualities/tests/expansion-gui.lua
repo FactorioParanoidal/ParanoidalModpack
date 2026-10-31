@@ -238,13 +238,27 @@ gui.open_entity(player, po)
 local precord = post.get(po)
 post.set_order(precord, {item = "gear", required = 10})
 gui.on_click({player_index = 1, element = {valid = true, tags = {ic = "post-start"}}}, {})
-assert(precord.state == "active")
+assert(precord.state == "idle", "no quality above standard yet: the order does not start")
 gui.on_click({player_index = 1, element = {valid = true, tags = {ic = "post-rotate", step = 1}}}, {})
 assert(precord.facing == 1)
-gui.on_selection({player_index = 1, element = {valid = true, tags = {ic = "post-condition"}, selected_index = 2}})
-assert(precord.order.condition == "at-least")
-gui.on_selection({player_index = 1, element = {valid = true, tags = {ic = "post-quality"}, selected_index = 2}})
+-- Quality list: qualities above standard in chain order (normal -> rare in the mock), index 1 = tier 1.
+prototypes.quality.normal.next = prototypes.quality.rare
+gui.open_entity(player, po)
+gui.on_selection({player_index = 1, element = {valid = true, tags = {ic = "post-quality"}, selected_index = 1}})
 assert(precord.order.quality == "rare")
+gui.on_click({player_index = 1, element = {valid = true, tags = {ic = "post-start"}}}, {})
+assert(precord.state == "active")
+-- Chances window: goal, rule and the cost table; closed by its button.
+gui.on_click({player_index = 1, element = {valid = true, tags = {ic = "post-chances"}}}, {})
+assert(player.gui.screen.ic_post_chances)
+gui.on_selection({player_index = 1, element = {valid = true, tags = {ic = "post-quality"}, selected_index = 1}})
+assert(player.gui.screen.ic_post_chances, "rebuilt after a change")
+gui.on_click({player_index = 1, element = {valid = true, tags = {ic = "post-chances-close"}}}, {})
+assert(not player.gui.screen.ic_post_chances)
+precord.stray, precord.blocked = 3, {[1] = true}
+gui.refresh_entity(player)
+precord.stray, precord.blocked = 0, nil
+prototypes.quality.normal.next = nil
 gui.on_text({player_index = 1, element = {valid = true, tags = {ic = "post-required"}, text = "25"}})
 assert(precord.order.required == 25)
 gui.refresh_entity(player)
@@ -391,7 +405,6 @@ for _, key in ipairs({"workshop-state-working", "workshop-state-no-resource", "w
     "mode-precise", "mode-normal-tooltip", "mode-careful-tooltip", "mode-precise-tooltip", "order-state-idle",
     "order-state-active", "order-state-paused", "order-state-done", "reason-raw", "reason-parameter",
     "reason-material-tile", "reason-material-rail", "reason-material-pipe", "reason-ingredient",
-    "route-good", "route-refine", "route-other", "route-good-legend", "route-refine-legend", "route-other-legend",
     "skip-reason-unsupported-speed", "skip-reason-missed-cycle", "post-facing-0", "post-facing-1", "post-facing-2",
     "post-facing-3", "alert-no-resource", "order-done", "status-no-resource", "repair-slot",
     "repair-slot-description", "workshop-cant-refine", "workshop-cant-refine_until", "workshop-input-slot",
