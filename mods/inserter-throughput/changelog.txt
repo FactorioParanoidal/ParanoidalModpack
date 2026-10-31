@@ -5,6 +5,10 @@ Date: 21. 10. 2024
     - Updated for Factorio 2.0. This is a transitory update to make the mod functional. There will be another update to account for the changed inserter mechanics. Meanwhile, as always, the stopwatch command remains the ultimate arbiter on inserter throughput and will report the correct number.
   Gui:
     - Changed the toggle button to use the built-in toggle capability of buttons.
+  Optimizations:
+    - Paranoidal: on_tick is registered only while an /it-stopwatch measurement runs; before, it ran every tick for nothing.
+  Bugfixes:
+    - Paranoidal: on_configuration_changed is no longer a leaked global function.
 ---------------------------------------------------------------------------------------------------
 Version: 0.1.5
 Date: 17. 05. 2024

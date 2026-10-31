@@ -228,6 +228,8 @@ end
 
 -- COMMANDS
 
+local update_tick_handler -- defined after on_tick
+
 local function stopwatch_command(event)
     -- event.player_index   player who ran the command, if any
     -- event.parameter      the rest of the command string
@@ -257,6 +259,7 @@ local function stopwatch_command(event)
     else
         table.insert(storage.stopwatch, entry)
     end
+    update_tick_handler()
 end
 
 commands.add_command(
@@ -347,10 +350,21 @@ local function on_tick(event)
     end
     if n == 0 then
         storage.stopwatch = nil
+        update_tick_handler()
     end
 end
 
-function on_configuration_changed(event)
+-- Paranoidal: on_tick is registered only while a stopwatch runs (storage.stopwatch is not nil).
+-- The registration follows storage, so it is the same on every client and is restored in on_load.
+update_tick_handler = function()
+    if storage.stopwatch then
+        script.on_event(defines.events.on_tick, on_tick)
+    else
+        script.on_event(defines.events.on_tick, nil)
+    end
+end
+
+local function on_configuration_changed(event)
     -- event.old_version            old map version
     -- event.new_version            new map version
     -- event.mod_changes[mod_name]  only the ones that changed
@@ -372,6 +386,6 @@ script.on_event(defines.events.on_selected_entity_changed, on_entity_selected)
 script.on_event(defines.events.on_runtime_mod_setting_changed, on_setting_changed)
 script.on_event(defines.events.on_gui_click, on_gui_clicked)
 script.on_event('inserter-throughput-toggle', on_toggle)
-script.on_event(defines.events.on_tick, on_tick)
 script.on_init(init)
+script.on_load(update_tick_handler)
 script.on_configuration_changed(on_configuration_changed)
