@@ -23,10 +23,22 @@ function M.no_defect()
     return no_defect_cache
 end
 
+-- Recipes whose result is always normal (mod-data "ic-normal-result", see data.lua): {name = true}.
+M.normal_result_name = "ic-normal-result"
+local normal_result_cache
+function M.normal_result()
+    if not normal_result_cache then
+        local mod_data = prototypes.mod_data[M.normal_result_name]
+        normal_result_cache = mod_data and mod_data.data.recipes or {}
+    end
+    return normal_result_cache
+end
+
 -- Deterministic prototype-derived cache; rebuilt after load/configuration.
 function M.reset()
     cache = nil
     no_defect_cache = nil
+    normal_result_cache = nil
 end
 
 return M

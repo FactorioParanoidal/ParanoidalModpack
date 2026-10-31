@@ -142,6 +142,22 @@ local no_research = {index = 1, valid = true, force = {technologies = setmetatab
 assert(adapter.handle({item_stack = passed}, no_research, inventory, function() return 0 end, catalog, true, {}, 10)
     == 'unchanged' and passed.quality.name == 'normal')
 
+-- Registry "ic-normal-result": a positive result becomes standard (material and finished product), no roll;
+-- a standard or defective result keeps the usual path.
+local material = make_stack(fresh({name = 'sign', quality = 'rare'}))
+assert(adapter.handle({item_stack = material}, player(0), inventory, function() error('roll') end, catalog, true, {},
+    10, true) == 'changed' and material.quality.name == 'normal' and material.count == 7)
+local kept = make_stack(fresh({name = 'sign', quality = 'rare'}))
+assert(adapter.handle({item_stack = kept}, player(0), inventory, function() error('roll') end, catalog, true, {},
+    10, false) == 'excluded-intermediate' and kept.quality.name == 'rare', 'other recipes keep quality')
+local product = make_stack(fresh({quality = 'epic'}))
+assert(adapter.handle({item_stack = product}, player(0), inventory, function() error('roll') end, catalog, true, {},
+    0, true) == 'changed' and product.quality.name == 'normal')
+local standard = make_stack(fresh({name = 'sign'}))
+assert(adapter.handle({item_stack = standard}, player(0), inventory, function() return 0 end, catalog, true, {},
+    0, true) == 'excluded-intermediate')
+
 print('PASS: real handcraft adapter with mocks: defect at level 0, standard at 10, force research,')
+print('registry ic-normal-result (positive result reset, no roll),')
 print('count/health/spoilage/ammo/durability preservation, protected-data skip, atomic failure paths.')
 print('handcraft queue prerequisites. NOT tested: Factorio load, real handcraft queues, machine production.')

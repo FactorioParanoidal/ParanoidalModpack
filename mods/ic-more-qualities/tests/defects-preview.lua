@@ -235,6 +235,8 @@ for i, name in ipairs({"on_force_created", "on_force_reset", "on_player_crafted_
     "on_robot_mined_entity", "on_built_entity", "on_robot_built_entity", "script_raised_built",
     "script_raised_revive", "on_entity_cloned", "on_chunk_generated", "on_tick"}) do events[name] = i end
 defines = dofile(directory .. "mock.lua").defines(events)
+-- control.lua registers a read-only remote interface (2a71d6eb63).
+remote = {add_interface = function() end}
 script = {
     on_init = function(fn) callbacks.init = fn end,
     on_configuration_changed = function(fn) callbacks.configuration = fn end,

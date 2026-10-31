@@ -8,6 +8,7 @@
 --   * a finished product (before quality control 10): a defect roll, capped at the ingredients' grade;
 --   * a defective recipe (defective ingredients): result capped at their grade, exempt products and
 --     materials become standard, recycling gives standard results;
+--   * a recipe of the registry "ic-normal-result" at a positive quality: the result becomes standard;
 --   * production modes (scripts/expansion/modes.lua): progress is slowed on every look, extra power is
 --     drawn, the quality-module roll is boosted at the decision.
 -- A machine whose current recipe needs none of this sleeps (DORMANT ticks); opening its window, pasting
@@ -66,6 +67,7 @@ local function needs(recipe, quality, level)
     if not recipe.any_item then return false end
     if recipe.recycling then return is_defect(quality) end
     if is_defect(quality) then return true end
+    if recipe.normal_result and quality ~= "normal" then return true end
     return level < 10 and recipe.roll and quality == "normal"
 end
 
@@ -78,6 +80,12 @@ local function decide(entity, record, recipe_name, recipe, quality, quality_name
     if recipe.recycling then
         -- Recycling keeps the native result (input quality or better); only defects become standard.
         if is_defect(quality_name_) and is_defect(entity.result_quality.name) then entity.result_quality = "normal" end
+        return
+    end
+    -- Registry "ic-normal-result": ingredient quality does not carry over (no mode boost either). Defective
+    -- ingredients take the usual path below (no repair route).
+    if recipe.normal_result and quality_name_ ~= "normal" and not is_defect(quality_name_) then
+        if entity.result_quality.name ~= "normal" then entity.result_quality = "normal" end
         return
     end
     local current = entity.result_quality.name

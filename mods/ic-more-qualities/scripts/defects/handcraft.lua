@@ -8,22 +8,26 @@ local rebuildable = {
 }
 
 -- finished: {name = true} from the data-stage classification. level: completed quality-control level of
--- the player's force (nil: counted here).
-function M.handle(event, player, create_inventory, random, finished, everywhere, no_defect, level)
+-- the player's force (nil: counted here). normal_result: the recipe is in the registry "ic-normal-result".
+function M.handle(event, player, create_inventory, random, finished, everywhere, no_defect, level, normal_result)
     local stack = event.item_stack
     if not player or not player.valid or not stack or not stack.valid_for_read then
         return "ignored"
     end
     local old_quality = stack.quality.name
     local is_finished = finished[stack.name] == true
-    -- Finished products keep positive/foreign quality (e.g. quality ingredients).
-    if is_finished and old_quality ~= "normal" and not model.is_defect(old_quality) then
-        return "preserved-quality"
+    -- Registry "ic-normal-result": a positive result becomes standard (defects take the usual path).
+    local forced = normal_result and old_quality ~= "normal" and not model.is_defect(old_quality)
+    if not forced then
+        -- Finished products keep positive/foreign quality (e.g. quality ingredients).
+        if is_finished and old_quality ~= "normal" and not model.is_defect(old_quality) then
+            return "preserved-quality"
+        end
+        -- Intermediates and raw materials are always white, including positive quality.
+        if not is_finished and old_quality == "normal" then return "excluded-intermediate" end
+        -- "Quality everywhere": materials keep positive quality (only defects are reset).
+        if not is_finished and everywhere and not model.is_defect(old_quality) then return "excluded-intermediate" end
     end
-    -- Intermediates and raw materials are always white, including positive quality.
-    if not is_finished and old_quality == "normal" then return "excluded-intermediate" end
-    -- "Quality everywhere": materials keep positive quality (only defects are reset).
-    if not is_finished and everywhere and not model.is_defect(old_quality) then return "excluded-intermediate" end
 
     local prototype = stack.prototype
     local kind = prototype.type
@@ -37,7 +41,7 @@ function M.handle(event, player, create_inventory, random, finished, everywhere,
     end
 
     local quality = "normal"
-    if is_finished and not (no_defect and no_defect[stack.name]) then
+    if not forced and is_finished and not (no_defect and no_defect[stack.name]) then
         level = level or model.completed_level(player.force.technologies)
         -- One crafting completion gets one roll; no extra inventory slots required.
         local grade = level == 10 and 0 or model.draw(level, random())

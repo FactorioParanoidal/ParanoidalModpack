@@ -7,7 +7,8 @@
 --                  before quality control 10);
 --   * defect in  - a recipe with a finished item ingredient: its recipe quality can be a defect (ruins,
 --                  start items, older crafts), the result is capped or reset to standard;
---   * recycling  - a recycler: its recipe follows the inserted item, defective results become standard.
+--   * recycling  - a recycler: its recipe follows the inserted item, defective results become standard;
+--   * normal result - a recipe of the registry "ic-normal-result": a positive result becomes standard.
 -- A machine prototype whose crafting categories (or fixed recipe) contain none of these is never
 -- tracked, unless a production mode is set on it.
 local eligibility = require("scripts.defects.eligibility")
@@ -20,7 +21,8 @@ function M.reset()
     recipes, categories, machines = {}, {}, {}
 end
 
--- Per recipe name: {energy, recycling, any_item, all_finished, exempt, roll, defect_input, watched}.
+-- Per recipe name: {energy, recycling, any_item, all_finished, exempt, roll, defect_input, normal_result,
+-- watched}.
 -- watched: the recipe can ever need a decision (see the header).
 local function build_recipe(prototype)
     local finished, no_defect = eligibility.finished(), eligibility.no_defect()
@@ -47,7 +49,8 @@ local function build_recipe(prototype)
     info.defect_input = defect_input and not info.recycling
     -- Recycling of an item that can be defective: the result must become standard (idle look minimum).
     info.watched_recycling = info.recycling and classify.watched_recycling(prototype, finished, no_defect)
-    info.watched = info.recycling or (any_item and (info.roll or info.defect_input))
+    info.normal_result = any_item and not info.recycling and eligibility.normal_result()[prototype.name] == true
+    info.watched = info.recycling or (any_item and (info.roll or info.defect_input or info.normal_result))
     return info
 end
 

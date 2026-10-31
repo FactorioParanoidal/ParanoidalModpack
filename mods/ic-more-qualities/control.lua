@@ -151,17 +151,18 @@ events.on(defines.events.on_player_crafted_item, function(event)
     local stack = event.item_stack
     if not player or not player.valid or not stack or not stack.valid_for_read then return end
     local level = automation.level(player.force)
+    local recipe_name = event.recipe and event.recipe.name
+    local normal_result = recipe_name ~= nil and eligibility.normal_result()[recipe_name] == true
     -- Research 10 (required for green science): no new roll. Only a defective result (from defective
-    -- ingredients) or, with "quality everywhere" off, a positive material needs handling; skip the queue
-    -- scan and the handler for everything else.
+    -- ingredients), a positive result of a registry "ic-normal-result" recipe or, with "quality everywhere"
+    -- off, a positive material needs handling; skip the queue scan and the handler for everything else.
     if level == 10 then
         local quality = stack.quality.name
-        if not model.is_defect(quality)
+        if not model.is_defect(quality) and not (normal_result and quality ~= "normal")
             and (quality == "normal" or quality_everywhere or eligibility.finished()[stack.name]) then
             return
         end
     end
-    local recipe_name = event.recipe and event.recipe.name
     local queue = player.character and player.crafting_queue_size > 0 and player.crafting_queue
     if queue and handcraft.queued_prerequisite(queue, recipe_name, stack.name, prototypes.recipe) then
         -- A cancelled consumer returns it: it gets its roll then (scripts/defects/cancel.lua).
@@ -172,7 +173,7 @@ events.on(defines.events.on_player_crafted_item, function(event)
     end
     cancel.forget_if_idle(player)
     local status, detail = handcraft.handle(event, player, game.create_inventory, math.random, eligibility.finished(),
-        quality_everywhere, eligibility.no_defect(), level)
+        quality_everywhere, eligibility.no_defect(), level, normal_result)
     if status == "changed" and type(detail) == "string" then
         stats.add(player.force.index, "grade." .. model.grade_of(detail))
     end

@@ -117,6 +117,23 @@ if switches.defects() then
     for _, drill in pairs(data.raw["mining-drill"]) do drill.ic_defects_described = nil end
     log("IC defects: drill items with the defect speed line and drain field: " .. described)
 
+    -- Recipes whose result is always normal (registry of data.lua): unknown names are dropped, quality modules
+    -- never roll on them (allow_quality = false), so a craft at normal quality stays normal without a look.
+    -- Before expansion-final, which lists recipes without quality for the production modes.
+    local registry = data.raw["mod-data"][require("scripts.expansion.names").normal_result]
+    local normal_result = {}
+    for name in pairs(registry.data.recipes) do
+        local recipe = data.raw.recipe[name]
+        if recipe then
+            recipe.allow_quality = false
+            normal_result[#normal_result + 1] = name
+        else
+            registry.data.recipes[name] = nil
+        end
+    end
+    table.sort(normal_result)
+    log("IC: recipes whose result is always normal (" .. #normal_result .. "): " .. table.concat(normal_result, ", "))
+
     -- Workshop, control post and production modes: after the classification above, so that the
     -- refinement recipes keep allow_quality and every item already exists.
     local expansion, expansion_report = require("prototypes.expansion-final").apply(data.raw, finished, reasons)

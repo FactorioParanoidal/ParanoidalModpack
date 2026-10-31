@@ -179,6 +179,8 @@ storage = {}
 local callbacks = {}
 defines = mock.defines({on_force_created = 1, on_force_reset = 2, on_player_crafted_item = 3, on_tick = 4,
     on_player_cancelled_crafting = 5, on_pre_player_crafted_item = 6})
+-- control.lua registers a read-only remote interface (2a71d6eb63).
+remote = {add_interface = function() end}
 script = {on_init = function() end, on_configuration_changed = function() end,
     on_event = function(id, fn) callbacks[id] = fn end}
 settings = {startup = {["ic-more-qualities-defects-preview"] = {value = true}}}

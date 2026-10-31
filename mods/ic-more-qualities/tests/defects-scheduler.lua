@@ -32,10 +32,18 @@ local recipe_prototypes = {
         products = {{type = "item", name = "plate"}}, ingredients = {{type = "item", name = "chest", amount = 1}}},
     ["ammo-recycling"] = {name = "ammo-recycling", energy = 0.00625, category = "recycling",
         products = {{type = "item", name = "plate"}}, ingredients = {{type = "item", name = "ammo", amount = 1}}},
+    -- Registry "ic-normal-result": a currency (material of materials) and a copier in its own category.
+    currency = {name = "currency", energy = 1, category = "crafting", products = {{type = "item", name = "sign"}},
+        ingredients = {{type = "item", name = "corn", amount = 10}}},
+    copy = {name = "copy", energy = 2, category = "copying", products = {{type = "item", name = "ingot", amount = 4}},
+        ingredients = {{type = "item", name = "ingot", amount = 1}}},
+    copy_plain = {name = "copy_plain", energy = 2, category = "plain-copying",
+        products = {{type = "item", name = "ingot", amount = 4}}, ingredients = {{type = "item", name = "ingot", amount = 1}}},
 }
 prototypes = {
     recipe = recipe_prototypes,
-    mod_data = {["ic-defects-classification"] = {data = {finished = finished, no_defect = no_defect}}},
+    mod_data = {["ic-defects-classification"] = {data = {finished = finished, no_defect = no_defect}},
+        ["ic-normal-result"] = {data = {recipes = {currency = true, copy = true}}}},
     get_recipe_filtered = function(filters)
         local result = {}
         for name, recipe in pairs(recipe_prototypes) do
@@ -61,6 +69,9 @@ assert(compiled.recipe("lamp_frame").defect_input and compiled.recipe("lamp_fram
 assert(not compiled.recipe("acid").watched, "fluid-only product: nothing to decide")
 assert(compiled.recipe("chest-recycling").watched_recycling and not compiled.recipe("ammo-recycling").watched_recycling)
 assert(compiled.recipe("unknown") == nil)
+assert(compiled.recipe("currency").normal_result and compiled.recipe("currency").watched, "registry recipe watched")
+assert(compiled.recipe("copy").normal_result and not compiled.recipe("copy_plain").normal_result
+    and not compiled.recipe("copy_plain").watched and not compiled.recipe("gear").normal_result)
 local function machine_prototype(categories, extra)
     local result = {crafting_categories = categories, items_to_place_this = {{name = "x"}}}
     for key, value in pairs(extra or {}) do result[key] = value end
@@ -71,6 +82,9 @@ assert(assembler_info.relevant and not assembler_info.recycler and assembler_inf
 local furnace_info = compiled.machine({prototype = machine_prototype({smelting = true})}, "stone-furnace")
 assert(not furnace_info.relevant, "smelting never needs a look")
 assert(not compiled.machine({prototype = machine_prototype({chemistry = true})}, "chemical-plant").relevant)
+local copier_info = compiled.machine({prototype = machine_prototype({copying = true})}, "copier")
+assert(copier_info.relevant, "a category with a registry recipe makes the machine relevant")
+assert(not compiled.machine({prototype = machine_prototype({["plain-copying"] = true})}, "plain-copier").relevant)
 local recycler_info = compiled.machine({prototype = machine_prototype({recycling = true})}, "recycler-1")
 assert(recycler_info.relevant and recycler_info.recycler and recycler_info.watched_min == 0.0625
     and recycler_info.min_energy == 0.00625)
@@ -197,6 +211,45 @@ draws = 0
 entity = machine({recipe = "chest", result = "uncommon", progress = 0.1})
 crafter.step(record_of(entity), 0, context())
 assert(entity.result_quality.name == "uncommon" and draws == 0)
+
+-- Registry "ic-normal-result": a positive recipe quality (ingredient quality) gives a standard result, at
+-- every level and with "quality everywhere"; no roll; a craft at normal quality needs nothing.
+for _, level in ipairs({0, 10}) do
+    draws = 0
+    entity = machine({recipe = "currency", quality = "epic", progress = 0.1})
+    record = record_of(entity)
+    delay = crafter.step(record, level, context())
+    assert(entity.result_quality.name == "normal" and entity.writes == 1 and draws == 0 and record.craft, level)
+    assert(delay == math.ceil(0.9 * 60) + 1, "next look right after the end: " .. delay)
+    -- The same craft is not written again; the next craft is reset again.
+    entity.crafting_progress = 0.5
+    crafter.step(record, level, context())
+    assert(entity.writes == 1)
+    entity.products_finished, entity.crafting_progress = 1, 0.05
+    engine_result(entity, "epic")
+    crafter.step(record, level, context())
+    assert(entity.result_quality.name == "normal" and entity.writes == 3)
+end
+entity = machine({recipe = "currency", quality = "normal", progress = 0.1})
+record = record_of(entity)
+assert(crafter.step(record, 10, context()) == crafter.DORMANT and entity.writes == 0 and record.craft == nil)
+-- Waiting at a positive quality (no ingredients): short look, the next craft is caught.
+entity = machine({recipe = "currency", quality = "uncommon", crafting = false})
+assert(crafter.step(record_of(entity), 10, context()) == 30, "half of the recipe")
+-- A copier in its own machine.
+entity = machine({recipe = "copy", quality = "rare", progress = 0.2, name = "copier"})
+crafter.step(record_of(entity), 10, context({infos = {copier = copier_info}}))
+assert(entity.result_quality.name == "normal")
+-- A production mode does not boost it.
+local boosted = false
+entity = machine({recipe = "currency", quality = "uncommon", progress = 0.1})
+crafter.step(record_of(entity), 10, context({mode_boost = function() boosted = true return true end,
+    modes = {[1] = {mode = "maximum"}}}))
+assert(entity.result_quality.name == "normal" and not boosted)
+-- Defective ingredients keep the usual path (a material becomes standard, never a repair beyond it).
+entity = machine({recipe = "currency", quality = "ic-defect-2", progress = 0.1})
+crafter.step(record_of(entity), 3, context())
+assert(entity.result_quality.name == "normal")
 
 -- Waiting, sleeping, irrelevant -----------------------------------------------------------------------------
 -- Waiting with a roll recipe: half of that recipe at the current speed (0.5 s, speed 0.5 -> 30 ticks).
@@ -475,5 +528,6 @@ print("PASS: relevance of machines (finished products, finished ingredients, rec
 print("never), one roll per craft at its first look (simulated: one roll and one look per craft; starved")
 print("machine), caps of defective ingredients, exempt/material results, sleeping and circuit recipes, modes")
 print("(slowed, released), recyclers catch every defective item, defective drills slowed by rewinding ahead")
-print("(cycle time, extra drain, looks per cycle), tracking filter, wake, level cache, on_tick, layout migration.")
+print("(cycle time, extra drain, looks per cycle), tracking filter, wake, level cache, on_tick, layout migration,")
+print("registry ic-normal-result (relevance, positive result reset per craft, no boost, normal sleeps).")
 print("Mocks only, not Factorio.")
