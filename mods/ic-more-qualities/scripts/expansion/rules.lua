@@ -155,13 +155,39 @@ end
 ---------------------------------------------------------------------------------------------------
 -- Control post
 ---------------------------------------------------------------------------------------------------
-M.conditions = {"strict", "at-least"}
+M.conditions = {"strict", "at-least", "process"}
+
+-- Post-processing (condition "process", user decision 2026-10-31): copies of the order item below the
+-- ordered quality stay in the post; every TAKE of one quality become one item rolled with the quality
+-- effect EFFECT (chance to go up = EFFECT x next_probability of the quality, at most 1; after a step up
+-- every further tier with its own next_probability, like the engine roll). One operation per TICKS.
+-- Deliberately worse than recycling with good quality modules: the post is the convenient, not the best way.
+M.PROCESS_TAKE = 5
+M.PROCESS_EFFECT = 6
+M.PROCESS_TICKS = 15
+
+-- Chance that one operation lifts the quality (quality: a prototype-like {next, next_probability}).
+function M.process_chance(quality)
+    if not (quality and quality.next) then return 0 end
+    return math.min(1, M.PROCESS_EFFECT * (quality.next_probability or 0))
+end
+
+-- Quality of the item made by one operation from TAKE items of `quality`. random() as in Factorio.
+function M.process_outcome(quality, random)
+    if random() >= M.process_chance(quality) then return quality end
+    local result = quality.next
+    while result.next and (result.next_probability or 0) > 0 and random() < result.next_probability do
+        result = result.next
+    end
+    return result
+end
 
 -- quality: {grade = -5..0 (defect grades negative), rank = level of non-defect quality, normal = bool}
 -- refinable: false when the workshop does not take the item (materials, since 2026-10-29): what would
 -- go to refinement goes to "other" instead of blocking the refinement output.
--- Returns "good", "refine" or "other".
-function M.route(order, item, quality, remaining, refinable)
+-- processable: false when post-processing cannot take the item (items with inventories, data or spoiling).
+-- Returns "good", "refine", "other" or "process" (stays in the post for post-processing).
+function M.route(order, item, quality, remaining, refinable, processable)
     if not order or not order.item or item ~= order.item then return "other" end
     local refine = refinable == false and "other" or "refine"
     local target
@@ -170,8 +196,12 @@ function M.route(order, item, quality, remaining, refinable)
     elseif order.condition == "strict" then
         if not quality.normal then return refine end
         target = "good"
+    elseif quality.rank >= (order.rank or 0) then
+        target = "good"
+    elseif order.condition == "process" and processable ~= false and (remaining or 0) > 0 then
+        return "process"
     else
-        target = quality.rank >= (order.rank or 0) and "good" or "other"
+        target = "other"
     end
     if target == "good" and (remaining or 0) <= 0 then return "other" end
     return target

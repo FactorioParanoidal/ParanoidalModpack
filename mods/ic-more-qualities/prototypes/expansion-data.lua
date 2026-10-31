@@ -223,6 +223,7 @@ data:extend({
     signal(S.order_accepted, "post", BASE_SIGNAL .. "signal-checked-green.png", 64, "b[order]-c"),
     signal(S.order_remaining, "post", BASE_SIGNAL .. "signal-hourglass.png", 64, "b[order]-d"),
     signal(S.order_to_refine, "post", REPAIR, 64, "b[order]-e"),
+    signal(S.order_to_process, "post", BASE_SIGNAL .. "signal-recycle.png", 64, "b[order]-e2"),
     signal(S.order_done, "post", BASE_SIGNAL .. "signal-white-flag.png", 64, "b[order]-f"),
     signal(S.order_batches, "post", BASE_SIGNAL .. "signal-stack-size.png", 64, "b[order]-g"),
     command_signal(S.cmd_start, "start", "c[command]-a"),

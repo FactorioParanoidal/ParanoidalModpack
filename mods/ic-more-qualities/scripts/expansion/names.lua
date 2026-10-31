@@ -38,6 +38,7 @@ M.signals = {
     order_accepted = "ic-order-accepted",
     order_remaining = "ic-order-remaining",
     order_to_refine = "ic-order-to-refine",
+    order_to_process = "ic-order-to-process",
     order_done = "ic-order-done",
     order_batches = "ic-order-batches",
     -- Commands (read from the circuit network when network control is enabled).

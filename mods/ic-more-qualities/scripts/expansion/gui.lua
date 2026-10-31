@@ -382,7 +382,7 @@ end
 local function order_caption(order)
     if not order.item then return {"ic-quality.order-none"} end
     local condition = order.condition == "strict" and {"ic-quality.condition-strict"}
-        or {"", {"ic-quality.condition-at-least"}, " ", quality_rich(order.quality)}
+        or {"", {"ic-quality.condition-" .. order.condition}, " ", quality_rich(order.quality)}
     return {"", "[item=" .. order.item .. "] ", condition}
 end
 
@@ -729,6 +729,13 @@ local function post_dynamic(parent, record)
     row(stbl, {"ic-quality.sent-good"}, tostring(record.sent.good or 0))
     row(stbl, {"ic-quality.sent-refine"}, tostring(record.sent.refine or 0))
     row(stbl, {"ic-quality.sent-other"}, tostring(record.sent.other or 0))
+    if record.order.condition == "process" then
+        local counters = record.processed or {}
+        row(stbl, {"ic-quality.process-waiting"}, tostring(record.waiting_process or 0))
+        row(stbl, {"ic-quality.process-operations"}, tostring(counters.operations or 0))
+        row(stbl, {"ic-quality.process-used"}, tostring(counters.used or 0))
+        row(stbl, {"ic-quality.process-raised"}, tostring(counters.raised or 0))
+    end
     local blocked = {}
     for _, route in ipairs(post.routes) do
         local direction = rules.output_direction(record.facing, route)
@@ -738,6 +745,27 @@ local function post_dynamic(parent, record)
         local caption = {""}
         for _, route in ipairs(blocked) do caption[#caption + 1] = {"ic-quality.route-" .. route}; caption[#caption + 1] = " " end
         local warning = label(parent, {"ic-quality.outputs-blocked", caption})
+        warning.style.font_color = {1, 0.75, 0.3}
+    end
+end
+
+-- Post-processing rule with the real numbers of this build: the last quality lifted with certainty.
+local function process_hint(parent, order)
+    local sure, quality = nil, prototypes.quality.normal
+    while quality and rules.process_chance(quality) >= 1 do
+        sure = quality
+        quality = quality.next
+    end
+    local text = label(parent, {"ic-quality.process-hint", rules.PROCESS_TAKE, rules.PROCESS_EFFECT * 100,
+        sure and quality_rich(sure.name) or "-", quality and quality_rich(quality.name) or "-",
+        percent(quality and rules.process_chance(quality) or 0, 0),
+        string.format("%.2f", rules.PROCESS_TICKS / 60)})
+    text.style.single_line = false
+    text.style.maximal_width = 360
+    if order.item and not post.is_processable(order.item) then
+        local warning = label(parent, {"ic-quality.process-not-processable"})
+        warning.style.single_line = false
+        warning.style.maximal_width = 360
         warning.style.font_color = {1, 0.75, 0.3}
     end
 end
@@ -757,8 +785,13 @@ local function post_panel(player, entity)
     local condition_flow = inside.add({type = "flow", direction = "horizontal"})
     condition_flow.style.vertical_align = "center"
     label(condition_flow, {"ic-quality.order-condition"})
-    condition_flow.add({type = "drop-down", items = {{"ic-quality.condition-strict"}, {"ic-quality.condition-at-least"}},
-        selected_index = order.condition == "strict" and 1 or 2, tags = {ic = "post-condition"}}).style.width = 150
+    local condition_items, condition_index = {}, 1
+    for index, condition in ipairs(rules.conditions) do
+        condition_items[index] = {"ic-quality.condition-" .. condition}
+        if condition == order.condition then condition_index = index end
+    end
+    condition_flow.add({type = "drop-down", items = condition_items, selected_index = condition_index,
+        tooltip = {"ic-quality.condition-tooltip"}, tags = {ic = "post-condition"}}).style.width = 170
     local qualities = sorted_qualities(false)
     local items, selected = {}, 1
     for index, quality in ipairs(qualities) do
@@ -769,6 +802,7 @@ local function post_panel(player, entity)
         tags = {ic = "post-quality"}})
     quality_dropdown.style.width = 140
     quality_dropdown.enabled = order.condition ~= "strict"
+    if order.condition == "process" then process_hint(inside, order) end
 
     local amount_flow = inside.add({type = "flow", direction = "horizontal"})
     amount_flow.style.vertical_align = "center"
@@ -961,7 +995,8 @@ function M.on_elem_changed(event)
         if record then
             post.set_order(record, {item = element.elem_value or false})
             if not element.elem_value then record.order.item = nil end
-            M.refresh_entity(player)
+            -- The post-processing hint warns about items it cannot take: rebuild the whole window.
+            if record.order.condition == "process" then reopen(player) else M.refresh_entity(player) end
         end
     end
 end
@@ -976,7 +1011,7 @@ function M.on_selection(event)
     local record = entity and post.get(entity)
     if not record then return end
     if action == "post-condition" then
-        post.set_order(record, {condition = element.selected_index == 1 and "strict" or "at-least"})
+        post.set_order(record, {condition = rules.conditions[element.selected_index] or "strict"})
         reopen(player)
     elseif action == "post-quality" then
         local quality = sorted_qualities(false)[element.selected_index]

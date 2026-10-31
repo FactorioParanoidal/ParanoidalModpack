@@ -3,6 +3,8 @@
 --   forward - accepted products of the order (counted),
 --   left    - products that need the refinement workshop (defects; positive for "strict"),
 --   right   - everything else (other items, too low quality, surplus after completion).
+-- Post-processing (condition "process"): copies below the ordered quality stay inside and every 5 of one
+-- quality are turned into one rolled item (rules.process_outcome) until the order is complete.
 -- The post writes into the belt / building in front of each output like an inserter and waits
 -- when that output is blocked. Only the arrows rotate; the picture of the building stays.
 local names = require("scripts.expansion.names")
@@ -114,7 +116,9 @@ function M.set_order(record, order)
         if order[key] ~= nil then current[key] = order[key] end
     end
     if current.item and not prototypes.item[current.item] then current.item = nil end
-    if current.condition ~= "strict" and current.condition ~= "at-least" then current.condition = "strict" end
+    local known = false
+    for _, condition in ipairs(rules.conditions) do known = known or current.condition == condition end
+    if not known then current.condition = "strict" end
     if not prototypes.quality[current.quality or ""] or model.is_defect(current.quality) then current.quality = "normal" end
     current.rank = quality_rank(current.quality)
     current.required = math.max(1, math.min(1000000, math.floor(tonumber(current.required) or 1)))
@@ -159,6 +163,7 @@ function M.track(entity, settings, facing)
     record = {
         id = entity.unit_number, entity = entity, facing = facing or 0, order = M.new_order(),
         state = "idle", accepted = 0, batches = 0, sent = {good = 0, refine = 0, other = 0},
+        processed = {operations = 0, used = 0, raised = 0},
         circuit = false, next_tick = 0, arrows = {},
         surface_index = entity.surface.index, position = {x = entity.position.x, y = entity.position.y},
     }
@@ -255,8 +260,28 @@ end
 -- Routing
 ---------------------------------------------------------------------------------------------------
 -- Routing view of a quality, kept per name (prototype data, the same on every peer).
-local quality_infos, refinable = {}, {}
-function M.reset_cache() quality_infos, refinable = {}, {} end
+local quality_infos, refinable, processable = {}, {}, {}
+function M.reset_cache() quality_infos, refinable, processable = {}, {}, {} end
+
+-- Post-processing removes and creates items by script: items that carry an inventory, an equipment grid,
+-- tags, entity data or a spoil timer are not taken (their contents or freshness would be lost or reset).
+local unprocessable_types = {
+    ["item-with-inventory"] = true, ["item-with-tags"] = true, ["item-with-label"] = true,
+    ["item-with-entity-data"] = true, blueprint = true, ["blueprint-book"] = true,
+    ["deconstruction-item"] = true, ["upgrade-item"] = true, ["selection-tool"] = true,
+    ["copy-paste-tool"] = true, ["spidertron-remote"] = true,
+}
+function M.is_processable(item)
+    local result = processable[item]
+    if result == nil then
+        local prototype = prototypes.item[item]
+        result = prototype ~= nil and not unprocessable_types[prototype.type]
+            and not (prototype.type == "armor" and prototype.equipment_grid)
+            and not (prototype.get_spoil_ticks and prototype.get_spoil_ticks() > 0)
+        processable[item] = result
+    end
+    return result
+end
 
 -- The workshop takes only items with a refinement recipe (finished products).
 local function is_refinable(item)
@@ -364,17 +389,20 @@ end
 -- Returns the number of items moved.
 local function route_items(record, inventory, tick)
     local blocked = {}
-    local waiting, total = 0, 0
+    local waiting, total, processing, outgoing = 0, 0, 0, 0
     for index = 1, #inventory do
         local stack = inventory[index]
         if stack.valid_for_read then
             local remaining = M.remaining(record)
             local name = stack.name
+            local own = name == record.order.item
             local route = rules.route(record.order, name, M.quality_info(stack.quality), remaining,
-                name == record.order.item and is_refinable(name))
-            local direction = rules.output_direction(record.facing, route)
+                own and is_refinable(name), own and M.is_processable(name))
+            local direction = route ~= "process" and rules.output_direction(record.facing, route)
             local moved = 0
-            if not blocked[direction] then
+            if route == "process" then
+                processing = processing + stack.count
+            elseif not blocked[direction] then
                 local limit = route == "good" and remaining or stack.count
                 moved = deliver(record, direction, stack, limit, tick)
                 if moved == 0 then blocked[direction] = true end
@@ -385,11 +413,78 @@ local function route_items(record, inventory, tick)
                 if route == "good" then accept(record, moved, tick) end
             end
             if route == "refine" and stack.valid_for_read then waiting = waiting + stack.count end
+            if route ~= "process" and stack.valid_for_read then outgoing = outgoing + stack.count end
         end
     end
     record.blocked = blocked
     record.waiting_refine = waiting
-    return total
+    record.waiting_process = processing
+    return total, outgoing
+end
+
+---------------------------------------------------------------------------------------------------
+-- Post-processing
+---------------------------------------------------------------------------------------------------
+-- Picks the items of one operation: the highest quality below the order with TAKE copies; when the
+-- inventory is full and no quality has TAKE copies, the TAKE lowest copies (the result starts from the
+-- lowest of them), so that a post filled with single copies of many qualities does not stall.
+-- Returns {quality name = count} and the starting quality prototype, or nil.
+local function pick_operation(record, inventory)
+    local order = record.order
+    local list = {}
+    for _, entry in pairs(inventory.get_contents()) do
+        if entry.name == order.item then
+            local quality = prototypes.quality[entry.quality or "normal"]
+            local info = quality and M.quality_info(quality)
+            if info and info.grade >= 0 and info.rank < (order.rank or 0) then
+                list[#list + 1] = {quality = quality, rank = info.rank, count = entry.count}
+            end
+        end
+    end
+    if #list == 0 then return nil end
+    table.sort(list, function(a, b) return a.rank > b.rank end)
+    local take = rules.PROCESS_TAKE
+    for _, entry in ipairs(list) do
+        if entry.count >= take then return {[entry.quality.name] = take}, entry.quality end
+    end
+    if inventory.count_empty_stacks(false, false) > 0 then return nil end
+    local parts, left, lowest = {}, take, nil
+    for index = #list, 1, -1 do
+        local entry = list[index]
+        local n = math.min(left, entry.count)
+        parts[entry.quality.name] = n
+        lowest = lowest or entry.quality
+        left = left - n
+        if left == 0 then return parts, lowest end
+    end
+    return nil
+end
+
+-- One operation. Returns true when items were turned.
+local function process_once(record, inventory, random)
+    local parts, start = pick_operation(record, inventory)
+    if not parts then return false end
+    local item = record.order.item
+    for quality, count in pairs(parts) do
+        inventory.remove({name = item, quality = quality, count = count})
+    end
+    local result = rules.process_outcome(start, random or math.random)
+    local made = {name = item, quality = result.name, count = 1}
+    if inventory.insert(made) == 0 then
+        local entity = record.entity
+        entity.surface.spill_item_stack({position = entity.position, stack = made, force = entity.force,
+            allow_belts = false})
+    end
+    local counters = record.processed
+    if not counters then
+        counters = {operations = 0, used = 0, raised = 0}
+        record.processed = counters
+    end
+    counters.operations = counters.operations + 1
+    counters.used = counters.used + rules.PROCESS_TAKE
+    if result ~= start then counters.raised = counters.raised + 1 end
+    stats.add(record.entity.force.index, "post.processed")
+    return true
 end
 
 local function publish(record)
@@ -403,12 +498,13 @@ local function publish(record)
         {S.order_accepted, record.accepted},
         {S.order_remaining, record.order.item and math.max(0, record.order.required - record.accepted) or 0},
         {S.order_to_refine, record.waiting_refine or 0},
+        {S.order_to_process, record.waiting_process or 0},
         {S.order_done, (record.state == "done" or done_pulse) and 1 or 0},
         {S.order_batches, record.batches},
     })
 end
 
-function M.step(record, tick)
+function M.step(record, tick, random)
     local entity = record.entity
     record.last_tick = tick
     if record.circuit then
@@ -426,18 +522,25 @@ function M.step(record, tick)
         record.open = open
         if open then inventory.set_bar() else inventory.set_bar(1) end
     end
-    local busy, moved = false, 0
+    local moved, outgoing, processed, busy = 0, 0, false, false
     if record.state ~= "paused" and not record.paused_by_circuit and not inventory.is_empty() then
-        moved = route_items(record, inventory, tick)
+        moved, outgoing = route_items(record, inventory, tick)
+        if (record.waiting_process or 0) > 0 and open and tick >= (record.process_tick or 0) then
+            processed = process_once(record, inventory, random)
+            if processed then record.process_tick = tick + rules.PROCESS_TICKS end
+        end
         busy = not inventory.is_empty()
     else
-        record.waiting_refine = 0
+        record.waiting_refine, record.waiting_process = 0, 0
     end
     publish(record)
     -- Moving items: every tick (a belt takes one item per tick and output). Items left but every output
-    -- blocked: a short pause instead of walking the slots every tick.
+    -- blocked: a short pause instead of walking the slots every tick. Post-processing: the next operation
+    -- after PROCESS_TICKS; copies waiting for more of their quality are looked at like an empty post.
     local look
-    if busy then look = moved > 0 and 1 or M.BLOCKED_LOOK
+    if busy and moved > 0 then look = 1
+    elseif busy and outgoing > 0 then look = M.BLOCKED_LOOK
+    elseif processed then look = math.max(1, record.process_tick - tick)
     elseif open then look = M.EMPTY_LOOK
     elseif record.circuit then look = M.IDLE_LOOK end
     record.next_tick = look and tick + look or nil
