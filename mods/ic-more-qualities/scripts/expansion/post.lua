@@ -145,6 +145,37 @@ end
 -- the output is blocked). Every slot is filtered, so inserters can put only standard copies into the input row.
 M.INPUT_SLOTS = 10
 
+-- Payment (user decision 2026-10-31): the post works only with the small alien artifact; one artifact pays
+-- for the number of operations of the map setting (default 4). Its slot is the last one of the input row.
+-- Without the item in the game (another mod set) the post works for free.
+M.MATERIAL = "bob-small-alien-artifact"
+M.OPERATIONS_SETTING = "ic-more-qualities-post-operations-per-material"
+M.DEFAULT_OPERATIONS = 4
+
+function M.material()
+    return prototypes.item[M.MATERIAL] and M.MATERIAL or nil
+end
+
+function M.operations_per_material()
+    local setting = settings and settings.global and settings.global[M.OPERATIONS_SETTING]
+    local value = setting and tonumber(setting.value)
+    return value and value >= 1 and math.floor(value) or M.DEFAULT_OPERATIONS
+end
+
+-- Artifacts inside (any quality) and the operations still paid.
+function M.material_stock(record, inventory)
+    local material = M.material()
+    if not material then return nil end
+    inventory = inventory or (record.entity.valid and record.entity.get_inventory(defines.inventory.chest))
+    local count = 0
+    if inventory then
+        for _, entry in pairs(inventory.get_contents()) do
+            if entry.name == material then count = count + entry.count end
+        end
+    end
+    return count, record.charge or 0
+end
+
 local function inventory_of(record)
     local entity = record.entity
     return entity and entity.valid and entity.get_inventory and entity.get_inventory(defines.inventory.chest)
@@ -177,8 +208,11 @@ function M.layout(order, size)
     end
     local input = math.min(M.INPUT_SLOTS, size - 1)
     local middle = math.max(0, math.min(target - 1, size - input - 1))
+    local material = M.material()
     for index = 1, size do
-        if index <= input then
+        if material and index == input then
+            slots[index] = {name = material, quality = "normal", comparator = ">="}
+        elseif index <= input then
             slots[index] = {name = item, quality = "normal", comparator = "="}
         elseif index <= input + middle then
             slots[index] = {name = item, quality = chain[index - input + 1].name, comparator = "="}
@@ -489,7 +523,9 @@ local function sort_items(record, inventory, tick)
         local stack = inventory[index]
         if stack.valid_for_read then
             local info = stack.name == order.item and M.quality_info(stack.quality)
-            if not info or info.grade < 0 then
+            if stack.name == M.MATERIAL then
+                -- payment, not a stray
+            elseif not info or info.grade < 0 then
                 stray = stray + stack.count
             elseif info.rank >= (order.rank or 0) then
                 local remaining = M.remaining(record)
@@ -549,9 +585,20 @@ end
 local function process_once(record, inventory, random)
     local parts, start = pick_operation(record, inventory)
     if not parts then
-        record.no_room = nil
+        record.no_room, record.no_material = nil, nil
         return false
     end
+    -- Payment: an operation needs one paid operation or an artifact to pay the next ones.
+    local material = M.material()
+    local stock
+    if material and (record.charge or 0) < 1 then
+        stock = M.material_stock(record, inventory)
+        if stock < 1 then
+            record.no_material = true
+            return false
+        end
+    end
+    record.no_material = nil
     local item = record.order.item
     local result = rules.process_outcome(start, random or math.random)
     local made = {name = item, quality = result.name, count = 1}
@@ -568,6 +615,19 @@ local function process_once(record, inventory, random)
         for quality, count in pairs(parts) do inventory.insert({name = item, quality = quality, count = count}) end
         record.no_room = result.name
         return false
+    end
+    if material then
+        if (record.charge or 0) < 1 then
+            for _, entry in pairs(inventory.get_contents()) do
+                if entry.name == material then
+                    inventory.remove({name = material, quality = entry.quality, count = 1})
+                    break
+                end
+            end
+            record.charge = (record.charge or 0) + M.operations_per_material()
+            record.processed.material = (record.processed.material or 0) + 1
+        end
+        record.charge = record.charge - 1
     end
     local counters = record.processed
     counters.operations = counters.operations + 1

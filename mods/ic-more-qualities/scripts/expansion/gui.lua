@@ -765,6 +765,15 @@ local function post_dynamic(parent, record)
     row(stbl, {"ic-quality.process-raised"}, tostring(counters.raised or 0))
     row(stbl, {"ic-quality.sent-good"}, tostring(record.sent and record.sent.good or 0))
     row(stbl, {"ic-quality.batches"}, tostring(record.batches or 0))
+    local count, charge = post.material_stock(record)
+    if count then
+        row(stbl, {"ic-quality.post-material", "[item=" .. post.MATERIAL .. "]"},
+            {"ic-quality.post-material-value", count, charge, post.operations_per_material()})
+        row(stbl, {"ic-quality.post-material-used"}, tostring(counters.material or 0))
+    end
+    if record.no_material then
+        wrapped(parent, {"ic-quality.post-no-material", "[item=" .. post.MATERIAL .. "]"}).style.font_color = {1, 0.45, 0.35}
+    end
     if (record.stray or 0) > 0 then
         wrapped(parent, {"ic-quality.post-stray", record.stray}).style.font_color = {1, 0.75, 0.3}
     end
@@ -800,6 +809,10 @@ local function chances_window(player, record)
     end
     wrapped(inside, {"ic-quality.process-rule", rules.PROCESS_TAKE, string.format("%.2f", rules.PROCESS_TICKS / 60)},
         nil, 480)
+    if post.material() then
+        wrapped(inside, {"ic-quality.process-payment", "[item=" .. post.MATERIAL .. "]", post.operations_per_material()},
+            nil, 480)
+    end
     if target == 0 then
         wrapped(inside, {"ic-quality.process-pick-quality"}, nil, 480).style.font_color = {1, 0.75, 0.3}
     else
@@ -807,16 +820,27 @@ local function chances_window(player, record)
         local scroll = inside.add({type = "scroll-pane", style = "naked_scroll_pane"})
         scroll.style.top_margin = 8
         scroll.style.maximal_height = 520
-        local tbl = scroll.add({type = "table", column_count = 3, style = "bordered_table"})
+        local material = post.material()
+        local per = post.operations_per_material()
+        local tbl = scroll.add({type = "table", column_count = material and 4 or 3, style = "bordered_table"})
         label(tbl, {"ic-quality.process-col-from"}, "bold_label")
         label(tbl, {"ic-quality.process-col-chance"}, "bold_label", {"ic-quality.process-col-chance-tooltip"})
         label(tbl, {"ic-quality.process-col-cost", quality_rich(order.quality)}, "bold_label",
             {"ic-quality.process-col-cost-tooltip"})
+        if material then
+            label(tbl, {"ic-quality.process-col-material", "[item=" .. material .. "]"}, "bold_label",
+                {"ic-quality.process-col-material-tooltip", per})
+        end
         for index = 1, target do
             local quality = chain[index]
             label(tbl, quality_caption(quality, index - 1))
             label(tbl, percent(rules.process_chance(quality), 0))
             label(tbl, amount(costs[index]))
+            -- Every operation turns 5 into 1: (products - 1) / 4 operations per accepted product.
+            if material then
+                local operations = (costs[index] - 1) / (rules.PROCESS_TAKE - 1)
+                label(tbl, amount(math.max(operations / per, 0)))
+            end
         end
     end
     frame.force_auto_center()

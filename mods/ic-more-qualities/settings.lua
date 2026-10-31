@@ -81,5 +81,15 @@ data:extend(
 			minimum_value = -1,
 			maximum_value = 1
 		},
+		-- Control post: operations paid by one small alien artifact (user decision 2026-10-31).
+		{
+			type = "int-setting",
+			name = "ic-more-qualities-post-operations-per-material",
+			order = "g",
+			setting_type = "runtime-global",
+			default_value = 4,
+			minimum_value = 1,
+			maximum_value = 1000
+		},
 	}
 )

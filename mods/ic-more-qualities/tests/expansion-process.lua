@@ -250,6 +250,38 @@ post.step(record, 600, always_up)
 assert(count("gear", "normal") == 5 and record.processed.operations == 5)
 assert(#spilled == 0)
 
+-- Payment: with the small alien artifact in the game, one artifact pays for the operations of the map setting
+-- (4 by default); without it the post waits and takes nothing.
+local A = "bob-small-alien-artifact"
+prototypes.item[A] = {type = "item", stack_size = 500, get_spoil_ticks = function() return 0 end}
+settings = nil
+assert(post.operations_per_material() == 4, "default without settings")
+settings = {global = {[post.OPERATIONS_SETTING] = {value = 4}}}
+post.set_order(record, {item = "gear", quality = "rare", required = 100})
+post.start(record)
+record.charge = 0
+local ops = record.processed.operations
+fill({{"gear", "normal", 25}})
+post.step(record, 1000, always_up)
+assert(record.no_material and record.processed.operations == ops and count("gear", "normal") == 25, "no artifact, no work")
+fill({{"gear", "normal", 25}, {A, "normal", 2}})
+for i = 0, 3 do post.step(record, 1100 + 15 * i, always_up) end
+assert(record.processed.operations == ops + 4 and count(A, "normal") == 1 and record.charge == 0, "4 operations per artifact")
+assert(record.stray == 0 and record.processed.material == 1, "the artifact is payment, not a stray")
+post.step(record, 1160, always_up)
+assert(count(A, "normal") == 0 and record.charge == 3 and record.processed.material == 2)
+local stock, charge = post.material_stock(record, inventory)
+assert(stock == 0 and charge == 3)
+settings.global[post.OPERATIONS_SETTING].value = 1
+record.charge = 0
+post.step(record, 1200, always_up)
+assert(record.no_material, "setting 1: every operation needs an artifact")
+-- Layout: the last slot of the input row takes the artifact.
+local with_material = post.layout({item = "gear", quality = "epic"}, 20)
+assert(with_material[post.INPUT_SLOTS].name == A and with_material[post.INPUT_SLOTS - 1].name == "gear")
+prototypes.item[A] = nil
+settings = nil
+
 -- Slot layout: input row of standard copies, one slot per tier below the goal, the rest for the goal and
 -- better; a comparator filter the engine refuses falls back to the item name; no order clears them.
 local filters = {}
@@ -289,5 +321,6 @@ assert(not post.is_processable("anchor"))
 print("PASS: post-processing chance (6 x next probability, capped), outcome and costs, 5 -> 1 operations")
 print("one per PROCESS_TICKS, waiting for copies, accepted copies counted, leftovers stay after completion,")
 print("no slot for the result: waits and drops nothing, strays counted, items it does not take refused, old orders converted,")
-print("pause, settings, slot layout per tier with fallback and retry, small stacks refused.")
+print("pause, settings, slot layout per tier with fallback and retry, small stacks refused,")
+print("payment by small alien artifacts per the map setting, waits without them.")
 print("Mocks only.")

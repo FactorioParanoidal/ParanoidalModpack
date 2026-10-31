@@ -153,7 +153,8 @@ local function entity(name, kind, unit)
             selection_box = {left_top = {x = -1.5, y = -1.5}, right_bottom = {x = 1.5, y = 1.5}}},
         localised_name = {"entity-name." .. name}}
     e.get_fuel_inventory = function() return {} end
-    e.get_inventory = function() return {is_empty = function() return true end, set_bar = function() end} end
+    e.get_inventory = function() return {is_empty = function() return true end, set_bar = function() end,
+        get_contents = function() return {{name = "bob-small-alien-artifact", quality = "normal", count = 7}} end} end
     e.is_crafting = function() return true end
     e.get_recipe = function() return {name = "ic-refine-item-gear", products = {{name = "gear"}}}, {name = "ic-defect-3"} end
     e.get_wire_connector = function() return {connect_to = function() return true end} end
@@ -248,12 +249,18 @@ gui.on_selection({player_index = 1, element = {valid = true, tags = {ic = "post-
 assert(precord.order.quality == "rare")
 gui.on_click({player_index = 1, element = {valid = true, tags = {ic = "post-start"}}}, {})
 assert(precord.state == "active")
+-- With the small alien artifact: material row, payment line and material column.
+prototypes.item["bob-small-alien-artifact"] = {}
+precord.no_material = true
+gui.refresh_entity(player)
+precord.no_material = nil
 -- Chances window: goal, rule and the cost table; closed by its button.
 gui.on_click({player_index = 1, element = {valid = true, tags = {ic = "post-chances"}}}, {})
 assert(player.gui.screen.ic_post_chances)
 gui.on_selection({player_index = 1, element = {valid = true, tags = {ic = "post-quality"}, selected_index = 1}})
 assert(player.gui.screen.ic_post_chances, "rebuilt after a change")
 gui.on_click({player_index = 1, element = {valid = true, tags = {ic = "post-chances-close"}}}, {})
+prototypes.item["bob-small-alien-artifact"] = nil
 assert(not player.gui.screen.ic_post_chances)
 precord.stray, precord.blocked = 3, {[1] = true}
 gui.refresh_entity(player)
