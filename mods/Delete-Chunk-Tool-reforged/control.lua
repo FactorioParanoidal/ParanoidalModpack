@@ -319,7 +319,7 @@ local function trim_keeps(job, surface, c)
         if math.abs(c.x - r[1]) <= r[3] and math.abs(c.y - r[2]) <= r[3] then return true end
     end
     for _, force in ipairs(job.visible) do
-        if force.valid and force.is_chunk_visible(c, surface) then return true end
+        if force.valid and force.is_chunk_visible(surface, c) then return true end
     end
     return false
 end

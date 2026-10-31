@@ -17,6 +17,8 @@ Date: 2026-10-31
   Optimizations:
     - Chunks are checked by entity counts with a limit instead of building entity lists; classification and deletion run a batch per tick (128 checked, 64 deleted), so large areas do not freeze the game; on_tick is registered only while a job runs.
     - Removed prototype fields that Factorio 2.0 does not read (stackable, show_in_library, toggleable).
+  Bugfixes:
+    - Map trimming no longer crashes with "Invalid SurfaceIdentification" in on_tick: LuaForce.is_chunk_visible takes the surface first, then the chunk position.
 
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.2
