@@ -723,11 +723,12 @@ local function quality_chain()
     return list, tiers
 end
 
--- A large count in words: 340, 12 thousand, 3.4 million ...
+-- A large count in words: 340, 12 thousand, 3.4 million ...; from a trillion on just "> 1 trillion" (the
+-- exact number means nothing there and made the window too wide).
 local function amount(value)
-    if value ~= value or value >= 1e15 then return {"ic-quality.amount-huge"} end
+    if value ~= value or value >= 1e12 then return {"ic-quality.amount-huge"} end
     if value < 1000 then return tostring(math.floor(value + 0.5)) end
-    for _, step in ipairs({{1e12, "t"}, {1e9, "b"}, {1e6, "m"}, {1e3, "k"}}) do
+    for _, step in ipairs({{1e9, "b"}, {1e6, "m"}, {1e3, "k"}}) do
         if value >= step[1] then
             local short = value / step[1]
             return {"ic-quality.amount-" .. step[2], short < 10 and string.format("%.1f", short)
@@ -766,19 +767,20 @@ local function post_costs(order)
     return products, artifacts, costs, tiers
 end
 
--- Expected share of the next finished product in the copies already improved (the standard stock is not
--- counted): the sum of count / cost over the tiers between standard and the goal, at most 1.
-local function post_next_share(record)
-    local products, _, costs, tiers = post_costs(record.order)
-    if not products then return 0 end
+-- Highest tier of the order item inside the post (0 = only standard copies) and the goal tier: shows how far
+-- the post got on the way to the goal. Not a share of the cost: every tier costs several times the previous one.
+local function post_best_tier(record)
+    local chain, tiers = quality_chain()
+    local target = tiers[record.order.quality] or 0
     local entity = record.entity
     local inventory = entity.valid and entity.get_inventory(defines.inventory.chest)
-    local share = 0
+    local best = 0
     for _, entry in pairs(inventory and inventory.get_contents() or {}) do
         local tier = entry.name == record.order.item and tiers[entry.quality or "normal"]
-        if tier and tier > 0 and costs[tier + 1] then share = share + entry.count / costs[tier + 1] end
+        if tier and tier > best then best = tier end
     end
-    return math.min(1, share)
+    best = math.min(best, target)
+    return best, target, chain[best + 1]
 end
 
 local function progress_row(parent, caption, value_caption, value, tooltip)
@@ -796,9 +798,12 @@ local function post_dynamic(parent, record)
     if not record.order.item then return end
     local required = record.order.required or 1
     progress_row(parent, {"ic-quality.accepted"}, {"", record.accepted, " / ", required}, record.accepted / required)
-    local share = post_next_share(record)
-    progress_row(parent, {"ic-quality.post-next"}, "≈ " .. math.floor(share * 100 + 0.5) .. " %", share,
-        {"ic-quality.post-next-tooltip"})
+    local best, target, quality = post_best_tier(record)
+    if target > 0 and quality then
+        progress_row(parent, {"ic-quality.post-best"},
+            {"ic-quality.post-best-value", quality_rich(quality.name), quality.localised_name, best, target},
+            best / target, {"ic-quality.post-best-tooltip"})
+    end
     local counters = record.processed or {}
     local line = {"ic-quality.post-work-line", record.waiting_process or 0, counters.used or 0}
     local count, charge = post.material_stock(record)
@@ -992,7 +997,10 @@ local function post_panel(player, entity)
         if chain[index].name == order.quality then selected = index - 1 end
     end
     quality_flow.add({type = "drop-down", items = items, selected_index = selected,
-        tooltip = {"ic-quality.order-quality-tooltip"}, tags = {ic = "post-quality"}}).style.width = 250
+        tooltip = {"ic-quality.order-quality-tooltip"}, tags = {ic = "post-quality"}}).style.width = 210
+    -- In the quality row: a long cost line can no longer push it out of the window.
+    quality_flow.add({type = "button", caption = {"ic-quality.process-window-open-short"},
+        tooltip = {"ic-quality.process-window-open"}, tags = {ic = "post-chances"}}).style.minimal_width = 70
 
     -- Cost of one product before the start; the empty state explains what to do.
     if not order.item then
@@ -1013,10 +1021,6 @@ local function post_panel(player, entity)
         else
             label(cost, {"ic-quality.process-pick-quality"}).style.font_color = {1, 0.75, 0.3}
         end
-        local cost_filler = cost.add({type = "empty-widget"})
-        cost_filler.style.horizontally_stretchable = true
-        cost.add({type = "button", caption = {"ic-quality.process-window-open-short"},
-            tooltip = {"ic-quality.process-window-open"}, tags = {ic = "post-chances"}}).style.minimal_width = 70
     end
 
     body.add({type = "line"})
