@@ -1,0 +1,18 @@
+{
+  "mod": "paranoidal-ruins",
+  "source": "local",
+  "original": {
+    "name": "Abandoned Ruins - Updated",
+    "authors": [
+      "roland77",
+      "Keysivi",
+      "Gangsir",
+      "Bilka"
+    ],
+    "portal": {
+      "name": "AbandonedRuins_updated_fork",
+      "url": "https://mods.factorio.com/mod/AbandonedRuins_updated_fork"
+    }
+  },
+  "changeReason": "Собственный мод проекта: объединяет форк ядра Abandoned Ruins - Updated 1.5.7 (спавн руин переписан, исправления Paranoidal сохранены), ванильный набор руин Abandoned Ruins - Base 0.1.8 и набор AbandonedRuins-paranoidal 9.1.0 (руины Paranoidal, журнал находок, легендарные руины). Набор собирается один раз за загрузку без копирования между модами, один обработчик генерации чанков, очередь спавна обрабатывается только пока не пуста, без remote-вызовов между частями; API сторонних наборов руин и отладочные настройки удалены. Имена руин, предметов, сил, настроек и remote-интерфейсов AbandonedRuins и AbandonedRuins-paranoidal прежние; графика пережата."
+}

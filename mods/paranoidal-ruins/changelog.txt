@@ -1,0 +1,23 @@
+---------------------------------------------------------------------------------------------------
+Version: 9.0.0
+Date: 2026-11-01
+  Major Features:
+    - One mod instead of AbandonedRuins_updated_fork 1.5.7 (Abandoned Ruins - Updated, Paranoidal fork of the core by roland77, Keysivi, Gangsir, Bilka), AbandonedRuins-base 0.1.8 (its vanilla "base" ruin set) and AbandonedRuins-paranoidal 9.1.0 (the Paranoidal ruin set, discovery journal and legendary ruins). Ruins, item, entity, force, setting, command and locale key names are unchanged; the remote interfaces "AbandonedRuins" and "AbandonedRuins-paranoidal" keep their names for the other mods.
+  Optimizations:
+    - The ruin set is built once per load from local tables; before, the "base" set was copied into the core, copied back out and the whole Paranoidal set copied into the core again on every save load (up to four copies of the "base" set in memory).
+    - One chunk-generation handler instead of two; the dice are rolled first and Delete-Chunk-Tool-reforged is asked "was this chunk deleted?" at most once per chunk and only when a ruin or a legendary site would be placed (before: twice for every generated chunk).
+    - The spawn-queue handler is registered only while ruins wait in the queue (before: every 10 ticks all game long). The ruins are still built at the next multiple of the spawn interval.
+    - No remote calls between the parts: spawning, the journal, the old mines for RSO Reforged and the legendary ruins call each other directly.
+    - The settings are read once per load and when they change, not for every chunk; the debug logging and the "expensive sanity checks" are removed from the spawning code.
+    - Graphics recompressed (lossy palette).
+  Changes:
+    - Removed the API for third-party ruin sets of the core (add_ruin_sets, get_ruin_set(s), get_current_ruin_set, register_ruin_size, spawn_exclusively_on, no_spawning_on, spawn_ruin, enable_spawning_ruins, is_spawning_ruins_enabled) and utils.register_ruin_set; nothing in the build used them. Kept: get_on_entity_force_changed_event, get_on_ruin_spawned_event, exclude_surface, reinclude_surface.
+    - Removed the settings ruins-enable-debug-log, ruins-enable-debug-utils, ruins-enable-debug-on-tick, ruins-expensive-sanity-checks and ruins-enable-spawn-ruins-all-planets (ruins are allowed on every planet, as with its default) and the "debug" scenario.
+    - The defaults of the ruin-free zone (400) and the three ruin chances (0.01875 / 0.0075 / 0.001875) are now set by the mod itself, not by zzzparanoidal.
+    - The "current-ruin-set" choice is "None" or "Paranoidal" (default); the "base" ruins are part of "Paranoidal" through "pd-ruins-include-base", as before.
+    - Locales: English and Russian only (the core's German, Finnish, Korean and Polish files covered only its own settings).
+    - Saves: the storage of the three old mods cannot move to a new mod name and is lost (agreed): the discovery journal, the radar ruin signals, the legendary sites, relics and their facts, the anti-repeat cycles and surfaces excluded by other mods (the default list stays). Ruins already standing in the world, their buildings and both forces stay; legendary sites of an old save are no longer protected or played.
+  Bugfixes:
+    - Clearing a ruin area could call destroy on an entity removed a moment earlier by cliff correction (error "LuaEntity was invalid").
+    - With all three ruin chances at 0 the threshold was NaN (0/0).
+    - The ruins force was set up hostile first and switched to the cease-fire setting only later; it now follows the setting when it is created.

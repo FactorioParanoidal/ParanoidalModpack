@@ -306,8 +306,8 @@
 | Огни большого города | `mxlr-city-lights` | построить `flat-lamp`: 1 тыс. |
 | Золотая жила | `mxlr-prospector-1…2` | Найдите 1 / 10 богатых рудных жил. *(скрипт: rso)* — нужен `RSO-reforged` |
 | Охрана снята | `mxlr-guard-breaker-1…2` | Уничтожьте 1 / 10 гнёзд, охраняющих богатые месторождения. *(скрипт: rso)* — нужен `RSO-reforged` ⚔ |
-| Археолог | `mxlr-archaeologist-1…2` | Найдите 10 / 50 разных руин. *(скрипт: ruins)* — нужен `AbandonedRuins-paranoidal` |
-| Археолог: все руины | `mxlr-archaeologist-all` | Найдите руины всех видов. *(скрипт: ruins)* — нужен `AbandonedRuins-paranoidal` |
+| Археолог | `mxlr-archaeologist-1…2` | Найдите 10 / 50 разных руин. *(скрипт: ruins)* — нужен `paranoidal-ruins` |
+| Археолог: все руины | `mxlr-archaeologist-all` | Найдите руины всех видов. *(скрипт: ruins)* — нужен `paranoidal-ruins` |
 
 ### Персонаж и забавные события
 
@@ -333,7 +333,7 @@
 
 ### Легендарные руины
 
-Нужен `AbandonedRuins-paranoidal` 9.1.0 или новее. Руины, вызванные командой `/legendary-spawn` или через remote, засчитываются только в «Гору к Магомету».
+Нужен `paranoidal-ruins` (до 2026-11-01 — `AbandonedRuins-paranoidal` 9.1.0 или новее). Руины, вызванные командой `/legendary-spawn` или через remote, засчитываются только в «Гору к Магомету».
 
 | Название | Прототип | Условие |
 |---|---|---|

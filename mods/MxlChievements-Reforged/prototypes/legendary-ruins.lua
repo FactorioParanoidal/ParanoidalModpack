@@ -51,7 +51,7 @@ local function add(id, params, frame, relic, amount)
   list[#list + 1] = {
     id = "legend-" .. id, kind = "script", theme = "legendary", tracker = "legendary",
     params = params, amount = amount, frame = frame,
-    mods = {"AbandonedRuins-paranoidal"}, needs = {items = {relic}}, icon = {item = relic},
+    mods = {"paranoidal-ruins"}, needs = {items = {relic}}, icon = {item = relic},
   }
 end
 

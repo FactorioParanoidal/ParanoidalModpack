@@ -107,9 +107,9 @@ local list = {
 
   -- challenges
   {id = "archaeologist", kind = "script", theme = "challenges", tracker = "ruins", amounts = {10, 50},
-    mods = {"AbandonedRuins-paranoidal"}, icon = {item = "stone-brick"}},
+    mods = {"paranoidal-ruins"}, icon = {item = "stone-brick"}},
   {id = "archaeologist-all", kind = "script", theme = "challenges", tracker = "ruins", params = {all = true},
-    mods = {"AbandonedRuins-paranoidal"}, icon = {item = "stone-brick"}, frame = 3},
+    mods = {"paranoidal-ruins"}, icon = {item = "stone-brick"}, frame = 3},
 
   -- space
   {id = "houston", kind = "script", theme = "space", tracker = "silo-lost", needs = {entities = {"rocket-silo"}},
