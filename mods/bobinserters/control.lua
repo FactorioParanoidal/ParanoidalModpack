@@ -545,14 +545,15 @@ script.on_event(defines.events.on_gui_checked_state_changed, function(event)
     elseif string.sub(event.element.name, 1, 6) == "button" then
       local i = string.gsub(event.element.name, "button", "") + 0
 
+      -- Paranoidal: own functions are called directly, not through remote.call into this same mod.
       if event.element.parent.name == "bob_logistics_pickup" then
-        remote.call("bobinserters", "draw_button_position_check", { gui = event.element.parent, position = i })
+        bobmods.inserters.draw_button_position_check(event.element.parent, bobmods.inserters.positions[i])
         storage.bobmods.logistics[event.player_index].pickup = i
       elseif event.element.parent.name == "bob_logistics_drop" then
-        remote.call("bobinserters", "draw_button_position_check", { gui = event.element.parent, position = i })
+        bobmods.inserters.draw_button_position_check(event.element.parent, bobmods.inserters.positions[i])
         storage.bobmods.logistics[event.player_index].drop = i
       elseif event.element.parent.name == "bob_logistics_offset" then
-        remote.call("bobinserters", "draw_button_offset_check", { gui = event.element.parent, position = i })
+        bobmods.inserters.draw_button_offset_check(event.element.parent, bobmods.inserters.offset_positions[i])
         storage.bobmods.logistics[event.player_index].offset = i
       elseif entity and entity.valid and player.can_reach_entity(entity) then
         if event.element.parent.name == "bob_inserter_gui_pickup" then
@@ -689,7 +690,8 @@ script.on_event(defines.events.on_built_entity, function(event)
     bobmods.logistics.set_positions(entity, event.player_index)
   end
   bobmods.inserters.enforce_and_track(entity)
-end)
+end, { { filter = "type", type = "inserter" }, { filter = "ghost_type", type = "inserter" } })
+-- Paranoidal: the filter above; before, every entity and ghost a player built ran this handler.
 
 -- Paranoidal: positions from blueprints and pasted settings are limited by the force's research,
 -- like the position GUI. Unresearched range/diagonals/near offset are reduced to the nearest allowed.
@@ -737,12 +739,19 @@ local function _enforce_clamp(pos, t, vertical)
 end
 
 local function _enforce_research_table(force)
+  local techs = force.technologies
+  local function researched(name)
+    local tech = techs[name]
+    if tech then
+      return tech.researched
+    end
+  end
   local t = {
-    long = tech_unlocked(force, bobmods.inserters.long_technology),
-    long2 = tech_unlocked(force, bobmods.inserters.long2_technology),
-    more = tech_unlocked(force, bobmods.inserters.more_technology),
-    more2 = tech_unlocked(force, bobmods.inserters.more2_technology),
-    near = tech_unlocked(force, bobmods.inserters.near_technology),
+    long = researched(bobmods.inserters.long_technology),
+    long2 = researched(bobmods.inserters.long2_technology),
+    more = researched(bobmods.inserters.more_technology),
+    more2 = researched(bobmods.inserters.more2_technology),
+    near = researched(bobmods.inserters.near_technology),
   }
   t.full = t.long and t.long2 and t.more and t.more2 and t.near and true or false
   return t
@@ -752,29 +761,40 @@ end
 -- Returns false when the inserter is checked against an incomplete research set (worth re-checking later),
 -- true when its force has everything researched, nil when the entity is not subject to the check.
 -- dry: only report; the second return value tells whether the positions exceed the research.
+-- Paranoidal: whether an inserter prototype is subject to the check, cached per name. Prototypes are fixed
+-- for the session, so the cache is the same on every client. Slim inserters have their own default
+-- geometry and are skipped; larger ones (nco-InserterCranes) use the normal form.
+local _enforce_eligible_cache = {}
+local function _enforce_eligible(name)
+  local ok = _enforce_eligible_cache[name]
+  if ok == nil then
+    local proto = prototypes.entity[name]
+    ok = proto and proto.allow_custom_vectors and proto.tile_width ~= 0 and proto.tile_height ~= 0 or false
+    _enforce_eligible_cache[name] = ok
+  end
+  return ok
+end
+
 function bobmods.inserters.enforce_research(entity, cache, dry)
   if not (entity and entity.valid) then
     return
   end
-  local proto
-  if entity.type == "entity-ghost" then
+  local etype = entity.type
+  local name
+  if etype == "entity-ghost" then
     if entity.ghost_type ~= "inserter" then
       return
     end
-    proto = entity.ghost_prototype
-  elseif entity.type == "inserter" then
-    proto = entity.prototype
+    name = entity.ghost_name
+  elseif etype == "inserter" then
+    name = entity.name
   else
     return
   end
-  if not proto.allow_custom_vectors then
+  if not _enforce_eligible(name) then
     return
   end
-  if storage.bobmods and storage.bobmods.inserters and storage.bobmods.inserters.blacklist[proto.name] then
-    return
-  end
-  -- Slim inserters have their own default geometry; larger ones (nco-InserterCranes) use the normal form.
-  if proto.tile_width == 0 or proto.tile_height == 0 then
+  if storage.bobmods and storage.bobmods.inserters and storage.bobmods.inserters.blacklist[name] then
     return
   end
 
@@ -990,6 +1010,28 @@ local function _blueprint_reach(bp)
   return reach
 end
 
+-- Paranoidal: _blueprint_reach copies the whole blueprint (entities and tiles). It is cached per player and
+-- keyed by the blueprint identity and entity count, and dropped when the cursor changes; dragging a
+-- blueprint raises on_pre_build for every placement. In storage: the area decides which inserters get
+-- adjusted, so every client must use the same value.
+local function _cached_blueprint_reach(player, bp)
+  local s = _enforce_state()
+  local caches = s.reach
+  if not caches then
+    caches = {}
+    s.reach = caches
+  end
+  local id = bp.object_name == "LuaItemStack" and bp.item_number or 0
+  local key = id .. ":" .. bp.get_blueprint_entity_count()
+  local c = caches[player.index]
+  if c and c.key == key then
+    return c.reach
+  end
+  local reach = _blueprint_reach(bp)
+  caches[player.index] = { key = key, reach = reach }
+  return reach
+end
+
 local function _enforce_pre_build(event)
   local player = game.get_player(event.player_index)
   if not (player and player.valid and player.is_cursor_blueprint()) then
@@ -999,7 +1041,12 @@ local function _enforce_pre_build(event)
     return
   end
   local bp = _cursor_blueprint(player)
-  local reach = bp and _blueprint_reach(bp) or (not bp and ENFORCE_AREA_FALLBACK) or nil
+  local reach
+  if bp then
+    reach = _cached_blueprint_reach(player, bp)
+  else
+    reach = ENFORCE_AREA_FALLBACK
+  end
   if not reach then
     return
   end
@@ -1100,6 +1147,12 @@ script.on_event(defines.events.on_entity_settings_pasted, function(event)
   _enforce_and_track(dst)
 end)
 script.on_event(defines.events.on_pre_build, _enforce_pre_build)
+script.on_event(defines.events.on_player_cursor_stack_changed, function(event)
+  local s = storage.bob_enforce
+  if s and s.reach then
+    s.reach[event.player_index] = nil
+  end
+end)
 
 script.on_event(defines.events.on_runtime_mod_setting_changed, function(event)
   if event.setting == "bobmods-inserters-button-enable" then
@@ -1108,8 +1161,9 @@ script.on_event(defines.events.on_runtime_mod_setting_changed, function(event)
 end)
 
 function tech_unlocked(force, tech)
-  if force.technologies[tech] then
-    return force.technologies[tech].researched
+  local technology = force.technologies[tech]
+  if technology then
+    return technology.researched
   end
 end
 
@@ -1437,14 +1491,14 @@ function bobmods.logistics.set_positions(entity, player_index)
   if
     not game.players[player_index].is_cursor_blueprint()
     and storage.bobmods.logistics[player_index].enabled2
-    and remote.interfaces.bobinserters
   then
-    local pickup_position =
-      remote.call("bobinserters", "get_position", { position = storage.bobmods.logistics[player_index].pickup })
-    local drop_position =
-      remote.call("bobinserters", "get_position", { position = storage.bobmods.logistics[player_index].drop })
-    local drop_offset =
-      remote.call("bobinserters", "get_offset", { position = storage.bobmods.logistics[player_index].offset })
+    -- Paranoidal: read directly instead of remote.call into this same mod; copies as remote.call returned.
+    local function copy(p)
+      return p and { x = p.x, y = p.y }
+    end
+    local pickup_position = copy(bobmods.inserters.positions[storage.bobmods.logistics[player_index].pickup])
+    local drop_position = copy(bobmods.inserters.positions[storage.bobmods.logistics[player_index].drop])
+    local drop_offset = copy(bobmods.inserters.offset_positions[storage.bobmods.logistics[player_index].offset])
 
     -- treat south as up, because inserters are backwards.
     if entity.direction == defines.direction.south then
@@ -1841,7 +1895,7 @@ function bobmods.logistics.create_gui(player_index)
     end
   end
 
-  if remote.interfaces.bobinserters then
+  do -- Paranoidal: was "if remote.interfaces.bobinserters", the own interface (always present)
     gui.table.add({
       type = "checkbox",
       name = "bob_logistics_inserter_enabled2",
@@ -1849,7 +1903,7 @@ function bobmods.logistics.create_gui(player_index)
       caption = { "gui.bob-logistics-enabled2" },
     })
     if storage.bobmods.logistics[player_index].enabled2 then
-      remote.call("bobinserters", "draw_gui", {
+      bobmods.inserters.remote_interface.draw_gui({
         player_index = player_index,
         gui = gui,
         name = "bob_logistics",
@@ -2429,7 +2483,7 @@ function bobmods.inserters.refresh_position_checkboxes(entity, player)
   end
 end
 
-remote.add_interface("bobinserters", {
+bobmods.inserters.remote_interface = {
   --[[
 This function will draw the inserters grid GUI as used in the GUI added by this mod in any GUI you choose. This mod will not respond to those buttons being pressed.
 This function takes the following variables:
@@ -2533,4 +2587,5 @@ Triggered event returns the following table: {entity = entity, new_positions = {
   get_changed_position_event_id = function()
     return changed_position_event
   end,
-})
+}
+remote.add_interface("bobinserters", bobmods.inserters.remote_interface)

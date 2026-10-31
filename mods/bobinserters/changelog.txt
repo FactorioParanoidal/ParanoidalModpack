@@ -10,6 +10,11 @@ Date: 15. 01. 2026
     - Paranoidal: Inserter length 1-2, Inserter offset and Full inserter 1-2 show in their result an effect with the technology icon and a short text of what they unlock (en, ru)
   Bugfixes:
     - Paranoidal: fixed a crash in on_tick (control.lua:853, field 'grand') on saves that already had the position check data from an earlier build
+  Optimizations:
+    - Paranoidal: on_built_entity is filtered to inserters and inserter ghosts; before, every entity and ghost a player built ran the handler
+    - Paranoidal: the check after a blueprint placement reads the blueprint once per blueprint in the cursor (kept per player, dropped when the cursor changes) instead of copying all its entities and tiles on every placement while dragging
+    - Paranoidal: the position check caches per inserter name whether the prototype is checked, and reads each force's technologies once instead of twice per technology
+    - Paranoidal: the mod's own GUI and build code call its functions directly instead of remote.call into the same mod (the bobinserters remote interface is unchanged)
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.2
 Date: 02. 01. 2026
