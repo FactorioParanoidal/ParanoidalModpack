@@ -591,12 +591,63 @@ local function update_ui(player_global, check_items)
     end
 end
 
+-- Paranoidal: on_tick runs only while a player has an entity with a filter updater open.
+-- storage.fh_open[player_index] = true marks such players; the registration follows storage,
+-- so it is the same on every client and is restored in on_load.
+local on_tick
+
+local function update_tick_handler()
+    if storage.fh_open and next(storage.fh_open) then
+        script.on_event(defines.events.on_tick, on_tick)
+    else
+        script.on_event(defines.events.on_tick, nil)
+    end
+end
+
+on_tick = function(event)
+    local open = storage.fh_open
+    local check_items = event.tick % 60 == 0
+    for player_index in pairs(open) do
+        local player_global = get_player_global(player_index)
+        -- Only connected players can have an open filter GUI.
+        if player_global and player_global.player.connected and player_global.entity and player_global.entity.valid then
+            update_ui(player_global, check_items)
+        else
+            open[player_index] = nil
+        end
+    end
+    if not next(open) then
+        update_tick_handler()
+    end
+end
+
+-- rebuilds storage.fh_open from the players' open entities (older saves, mod changes)
+local function rebuild_open()
+    storage.fh_open = {}
+    for player_index, player_global in pairs(storage.players or {}) do
+        local entity = player_global.entity
+        if entity and entity.valid and get_filter_updater(entity) then
+            storage.fh_open[player_index] = true
+        end
+    end
+    update_tick_handler()
+end
+
 script.on_init(function()
     ---@type table<number, PlayerTable>
     storage.players = {}
+    storage.fh_open = {}
     for _, player in pairs(game.players) do
         init_global(player)
     end
+end)
+
+script.on_load(function()
+    update_tick_handler()
+end)
+
+script.on_configuration_changed(function()
+    rebuild_open()
 end)
 
 script.on_event(defines.events.on_player_created, function(event)
@@ -605,6 +656,9 @@ end)
 
 script.on_event(defines.events.on_pre_player_removed, function(event)
     storage.players[event.player_index] = nil
+    if storage.fh_open then
+        storage.fh_open[event.player_index] = nil
+    end
 end)
 
 -- EVENT on_gui_opened
@@ -614,18 +668,30 @@ script.on_event(defines.events.on_gui_opened, function(event)
     if player_global and event.entity and fh_util.get_effective_type(event.entity) ~= "proxy-container" then
         player_global.entity = event.entity
         update_ui(player_global, true)
+        if get_filter_updater(event.entity) then
+            storage.fh_open = storage.fh_open or {}
+            storage.fh_open[event.player_index] = true
+            update_tick_handler()
+        end
     end
 end)
 
 --EVENT on_gui_closed
 script.on_event(defines.events.on_gui_closed, function(event)
     local player_global = get_player_global(event.player_index)
+    if not player_global then
+        return
+    end
     if player_global.elements.main_frame then
         player_global.elements.main_frame.destroy()
     end
     player_global.entity = nil
     player_global.items = {}
     player_global.active_items = {}
+    if storage.fh_open then
+        storage.fh_open[event.player_index] = nil
+    end
+    -- on_tick unregisters itself when the set is empty
 end)
 
 --EVENT on_gui_click
@@ -661,15 +727,7 @@ script.on_event(defines.events.on_gui_click, function(event)
     end
 end)
 
-script.on_event(defines.events.on_tick, function(event)
-    -- Only connected players can have an open filter GUI.
-    for _, player in pairs(game.connected_players) do
-        local player_global = get_player_global(player.index)
-        if player_global then
-            update_ui(player_global, event.tick % 60 == 0)
-        end
-    end
-end)
+-- on_tick: see update_tick_handler (registered only while storage.fh_open is not empty)
 
 -- TODO options for what things are considered. Chests, transport lines, etc
 -- TODO recently used section
