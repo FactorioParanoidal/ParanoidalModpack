@@ -1,0 +1,185 @@
+---------------------------------------------------------------------------------------------------
+Version: 9.0.0
+Date: 2026-10-31
+  Major Features:
+    - Paranoidal fork of Pipe Visualizer 2.0 2.4.4 under a new name; the runtime is rewritten for speed. Key bindings, shortcuts, setting names and the PipeVisualizer remote interface are kept.
+    - The drawing follows building, removal, rotation and flipping of fluid entities: new entities join a shown network or the overlay, removed ones disappear, neighbours update their connections.
+  Features:
+    - Setting "Show on the map" (per player, on by default): without it nothing is drawn in chart mode, half the render objects.
+    - Mouse-over keeps the shown systems while the cursor is over their entities or over entities without fluid; they are removed on empty ground or on another fluid system, not on every selection change.
+    - Pumps and other entities whose fluidbox has no fluid segment of its own show arrows for the networks they connect, and Y on them shows those networks.
+    - Toggling colour by fluid/system recolours the shown systems as well, not only the overlay.
+  Optimizations:
+    - Underground connections are two dashed lines per pair (world and map) instead of two sprites per tile.
+    - Every render object is created once with its final sprite and colour; the hidden object pool is removed.
+    - The overlay scans chunk by chunk within the per-tick budget, nearest chunks first; opening it is no longer one long tick. Chunks that leave the view are removed over the next ticks.
+    - The overlay searches only entities with fluidboxes or a fluid energy source (names from prototypes) instead of all inserters, labs and loaders.
+    - Removing a system touches only its own entities; settings are read once per player instead of per entity.
+    - The save keeps only render objects, system ids and chunk lists, no fluidbox or pipe connection data.
+    - on_tick, selection, position and building events are subscribed only while they are needed.
+    - Fluid colours and order are computed from prototypes in every Lua state instead of being stored.
+  Bugfixes:
+    - Removing one system (mouse-over leaving, Y on a shown system) no longer erases every other shown system.
+    - Colour by fluid uses the contents of the whole fluid segment, not the fluidbox the walk started from.
+    - Y and mouse-over on an already shown system no longer walk it again.
+    - Entities still queued when their system was removed are no longer drawn as grey boxes.
+    - Hovering a part of a network that is still being drawn no longer breaks the drawing.
+    - The overlay no longer turns into a network walk beyond the screen after Y or mouse-over, and no longer loses its background when the last mouse-over system is removed.
+    - The overlay follows the player to another surface (Factorissimo buildings, remote view); render objects are no longer lost between surfaces.
+    - Valves are shown in the overlay.
+    - Input arrows point into the entity; they were turned by a quarter turn on two sides.
+    - "Ultrawide support" doubles the overlay range instead of replacing the range scale; the scale is limited to 8.
+    - Colours by system no longer repeat the first hue and cycle after 72 systems instead of turning grey.
+    - Pumps are coloured by their own networks, not all by the fluid of the first pump.
+    - A failed entity no longer cancels the rest of the tick's drawing.
+    - The remote interface is available from other mods' on_init, and its lists survive configuration changes.
+    - Overlay settings apply at once; data of removed players and deleted surfaces is cleared.
+  Graphics:
+    - pv-fluid-arrow and pv-fluid-arrow-input-output use the pixel-identical files of the core mod; the underground connection sprite is no longer needed.
+    - PNG files recompressed with pingo -s4 -quality=45: the graphics stay pixel-identical (19.0 -> 6.2 KB), thumbnail.png is lossy at 35.1 dB PSNR (20.4 -> 11.1 KB).
+  Changes:
+    - flib is no longer a dependency.
+---------------------------------------------------------------------------------------------------
+Version: 2.4.4
+Date: 2025-11-15
+  Changes:
+    - Added rendering to the map view! It can be hard to see at times due to the limitations of the 
+      rendering system used in the mod. But seen with the overlay and pollution off it's easier to see.
+    - Added player option to scale up the overlay view range.
+      - This was added specifically to increase the utility via map view. Untested with large numbers
+        and so it might cause lag. I haven't yet seen any lag at 8x however.
+---------------------------------------------------------------------------------------------------
+Version: 2.4.3
+Date: 2025-09-28
+  Changes:
+    - Added setting to enabled ultra-wide support.
+      - This increases the max overlay size and could potentially cause lag or long delays when enabling and disabling the overlay
+---------------------------------------------------------------------------------------------------
+Version: 2.4.2
+Date: 2025-09-26
+  Changes:
+    - Removed .git and screenshots.
+---------------------------------------------------------------------------------------------------
+Version: 2.4.1
+Date: 2025-09-24
+  Bugfixes:
+    - Fixed crash when FluidsMustFlow was not enabled
+---------------------------------------------------------------------------------------------------
+Version: 2.4.0
+Date: 2025-09-23
+  Features:
+    - Added an option in the player options to enable colored pumps (and buildings with singular fluidboxes) when using the Shift+Y overlay feature.
+    - Added compatibility for Fluids Must Flow. Future compatibility can be added easily for oother mods that don't show as expected. 
+      - Submit a request on the mod portal with information or a PR/Issue on github for compatibility additions
+  Bugfixes:
+    - Fixed boxes not showing for pumps and other complex fluid boxes
+---------------------------------------------------------------------------------------------------
+Version: 2.3.3
+Date: 2025-01-16
+  Bugfixes:
+    - Changed default keybind for "Color By System" to CTRL + SHIFT + Y so it doesn't conflict with the redo function
+---------------------------------------------------------------------------------------------------
+Version: 2.3.2
+Date: 2025-01-16
+  Bugfixes:
+    - Fix to rendering displaying incorrect rotations for arrows and underground pipes
+---------------------------------------------------------------------------------------------------
+Version: 2.3.1
+Date: 2025-01-15
+  Bugfixes:
+    - Fixed crash on start up
+---------------------------------------------------------------------------------------------------
+Version: 2.3.0
+Date: 2025-01-14
+  Bugfixes:
+    - Updated to Factorio 2.0 and changed default keybind to "Y" to not conflict with the default "H" being flipping horizontally. Does not modify existing 2.0 pipe visualization.
+    - Developer changed to AmberAtelier (amberatelier on Discord)
+---------------------------------------------------------------------------------------------------
+Version: 2.2.2
+Date: ????
+  Bugfixes:
+    - Fixed a crash when the overlay background is (somehow) destroyed. (#35)
+---------------------------------------------------------------------------------------------------
+Version: 2.2.1
+Date: 2024-03-29
+  Bugfixes:
+    - Fixed a crash when a cached render object is destroyed. (#28)
+  Compatibility:
+    - Added a remote interface to blacklist entities from being visualized. (#26)
+---------------------------------------------------------------------------------------------------
+Version: 2.2.0
+Date: 2023-11-24
+  Features:
+    - Added a map setting to adjust the number of entities visualized per tick. (#24)
+    - Re-added mouse-over visualization, toggled with Alt+H or the shortcut button. (#20)
+      - Pressing H while hovering will make that entity's fluid systems persist.
+  Bugfixes:
+    - Fixed a crash when an entity is invalidated while in the queue to be visualized. (#21)
+---------------------------------------------------------------------------------------------------
+Version: 2.1.0
+Date: 2023-10-15
+  Features:
+    - Added a per-player setting to adjust overlay opacity. (#19)
+  Changes:
+    - Box colors are more consistent, being decided by prototype order instead of fluid system ID.
+  Bugfixes:
+    - Fixed that underground connections would cause entity rendering to end prematurely.
+    - Fixed that the default pipe color was semitransparent.
+---------------------------------------------------------------------------------------------------
+Version: 2.0.1
+Date: 2023-10-14
+  Bugfixes:
+    - Fixed a crash when visualizing a fluid wagon.
+    - Fixed that the color mode GUI from 1.0.x would be left behind when migrating (#17).
+    - Fixed offshore pump boxes being off-center.
+---------------------------------------------------------------------------------------------------
+Version: 2.0.0
+Date: 2023-10-14
+  Features:
+    - Added a hotkey to visualize an individual system without needing to remain hovered over it (default: H).
+    - Pipe connections on each entity are visualized individually.
+  Changes:
+    - Changed color mode selection from a GUI toggle to a hotkey (default: Control + H).
+    - Changed overlay hotkey from Control + P to Shift + H.
+    - Removed hover-over visualizer in favor of the individual system visualization hotkey.
+    - Visualization is performed over multiple ticks.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.6
+Date: 2023-03-26
+  Bugfixes:
+    - Fixed that the visualizer would show two output-only fluidboxes as connected (#11)
+---------------------------------------------------------------------------------------------------
+Version: 1.0.5
+Date: 2023-03-09
+  Changes:
+    - Pumps are now drawn with a diode shape (by nekizalb)
+  Bugfixes:
+    - Fixed blue fluid colors being distorted to similar shades of cyan
+    - Fixed that fluid-burning labs would not be visualized
+---------------------------------------------------------------------------------------------------
+Version: 1.0.4
+Date: 2022-03-18
+  Changes:
+    - Improved shortcut icons
+  Bugfixes:
+    - Fixed a crash when hovering over a flamethrower (#9)
+---------------------------------------------------------------------------------------------------
+Version: 1.0.3
+Date: 2022-03-16
+  Bugfixes:
+    - Fixed a crash when hovering a reactor with a fluid energy source (#8)
+---------------------------------------------------------------------------------------------------
+Version: 1.0.2
+Date: 2022-03-14
+  Bugfixes:
+    - Fixed a crash when iterating a reactor with a fluid energy source (#8)
+---------------------------------------------------------------------------------------------------
+Version: 1.0.1
+Date: 2022-02-27
+  Bugfixes:
+    - Fixed a crash when starting a new freeplay game (#5)
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 2022-02-24
+  Features:
+    - Initial release

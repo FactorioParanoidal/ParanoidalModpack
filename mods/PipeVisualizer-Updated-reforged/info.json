@@ -1,0 +1,10 @@
+{
+  "name": "PipeVisualizer-Updated-reforged",
+  "version": "9.0.0",
+  "title": "Pipe Visualizer Reforged",
+  "author": "raiguard, ashier, Paranoidal",
+  "homepage": "https://github.com/FactorioParanoidal/ParanoidalModpack",
+  "factorio_version": "2.0",
+  "dependencies": [ "base >= 2.0" ],
+  "description": "Visualize the layout and contents of pipe networks. Y draws the fluid systems of the selected entity, Shift + Y draws every fluid system around you, Alt + Y draws systems under the mouse cursor, Control + Shift + Y switches between colour by fluid and colour by system. The drawing follows building, removal and rotation. Rewritten for speed from Pipe Visualizer 2.0 by ashier (AtelierAmber), based on Pipe Visualizer by raiguard."
+}
