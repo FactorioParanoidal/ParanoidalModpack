@@ -1,0 +1,26 @@
+---------------------------------------------------------------------------------------------------
+Version: 9.0.0
+Date: 2026-11-01
+  Major Features:
+    - One mod instead of Vehicle Physics 2.0.4 (OwnlyMe), VehicleSnap 2.0.3 (Zaflis) and Shield FX 2.0.1 (OwnlyMe), with one rewritten control script. Drift, tire marks, dust, sounds, angle snapping and shield effects behave as before.
+    - Prototype, setting, hotkey and shortcut names are unchanged (hover-smoke, drifting-tire-marks, vehphy-*, shield-effect*, VehicleSnap-toggle, VehicleSnap-shortcut, vehphy-tiremarks-duration, VehicleSnap_amount, SFX_alternate_effect), so saved setting values carry over.
+  Optimizations:
+    - The tick handler runs only while someone drives a car or a shield effect is shown; the three mods used to run every tick or every second tick permanently.
+    - The hard-surface check under a moving car is one tile count with a name filter instead of reading every tile in a 1.5-tile radius.
+    - The flying-car check is cached per prototype; vehicle_physics cleared its cache on every call and read the collision mask every tick for every driven car.
+    - The shield setting is read when it changes, not every tick.
+    - Unused Shield FX graphics (research icons, squares, combinator pictures) are not shipped.
+    - Graphics and thumbnail recompressed (pingo -s4 -quality=45): 501 -> 243 KB, sprites worst 45.9 dB, thumbnail 33.8 dB, names and dimensions unchanged.
+  Bugfixes:
+    - A car no longer stores a Lua function in storage for its one-tick start delay (vehicle_physics); a save made in that tick could fail.
+    - A car whose driver leaves during that delay no longer stays in the physics without a driver.
+    - The squeal and dirt sound volume no longer becomes NaN when reversing (it fell back to the loudest value).
+    - Tank dust in reverse uses the same interval as forward driving (the negative speed gave a negative modulus).
+    - Per-vehicle sound timers are removed with the vehicle instead of piling up.
+    - Snapping turns the car only for its driver: a passenger with snapping on no longer turns a car driven by someone else.
+    - A newly created player gets the snapping shortcut shown as toggled on (it showed off while snapping was on).
+    - An alternate shield effect is removed when its owner dies or is mined instead of floating until it expires.
+    - A player who is already driving when the mod is added to a save gets drift physics and snapping without re-entering the vehicle.
+  Info:
+    - Saves: the storage of the three old mods is not taken over. Personal snapping on/off returns to on; everything else is rebuilt from the game.
+    - Reverse driving keeps the old behaviour: the drift slowdown is applied to forward speed only.

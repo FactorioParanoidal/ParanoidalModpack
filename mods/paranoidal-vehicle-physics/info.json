@@ -1,0 +1,15 @@
+{
+  "name": "paranoidal-vehicle-physics",
+  "version": "9.0.0",
+  "title": "Paranoidal Vehicle Physics",
+  "author": "OwnlyMe (Vehicle Physics, Shield FX), Zaflis (VehicleSnap); Paranoidal (merge and rewrite)",
+  "description": "Paranoidal: one rewritten mod instead of Vehicle Physics 2.0.4, VehicleSnap 2.0.3 and Shield FX 2.0.1. Cars and tanks drift, leave tire marks and raise dust; the driving angle snaps to fixed angles (Shift+V); shields flash when they absorb damage. Script work runs only while someone drives or a shield effect is shown.",
+  "factorio_version": "2.0",
+  "dependencies": [
+    "base >= 2.0.77",
+    "! cardinal",
+    "! vehicle_physics",
+    "! VehicleSnap",
+    "! Shield-FX"
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "mod": "paranoidal-vehicle-physics",
+  "source": "local",
+  "original": {
+    "name": "Vehicle Physics",
+    "authors": [
+      "OwnlyMe"
+    ],
+    "portal": {
+      "name": "vehicle_physics",
+      "url": "https://mods.factorio.com/mod/vehicle_physics"
+    }
+  },
+  "changeReason": "Собственный мод проекта: объединяет Vehicle Physics 2.0.4 и Shield FX 2.0.1 (OwnlyMe) с VehicleSnap 2.0.3 (Zaflis) и переписывает их скрипт в один обработчик, который работает только пока кто-то едет или виден эффект щита; исправлены ошибки исходных модов, графика пережата."
+}

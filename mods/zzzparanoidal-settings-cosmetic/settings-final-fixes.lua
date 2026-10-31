@@ -207,7 +207,7 @@ hide("bool-setting", "show-max-underground-distance-on-hover")
 hide("bool-setting", "unpollock-avoid-resources")
 hide("double-setting", "unpollock-decorative-rate")
 hide("string-setting", "unpollock-fake-rocks")
--- vehicle_physics
+-- paranoidal-vehicle-physics (formerly vehicle_physics)
 hide("double-setting", "vehphy-tiremarks-duration")
 -- Vibrant_paint
 hide("bool-setting", "vibPaint-paintActives")
