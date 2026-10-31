@@ -408,6 +408,8 @@ require("prototypes.fire-safety-turret")
 require("tweaks.recipe.quality-modules")
 -- Пластина из слитка в печи (лестница качества): до anti-exploit и пересборки переработки.
 require("tweaks.recipe.ingot-plate-smelting")
+-- Слоты модулей АМ7–9 и электронных сборщиков 4–5 (лестница качества).
+require("tweaks.entity.quality-ladder-module-slots")
 -- Закрытие схем бесплатных ресурсов и энергии: после всех правок рецептов и машин, до пересборки переработки.
 require("tweaks.custom.anti-exploit")
 -- После всех правок рецептов: полная пересборка переработки Quality (один рецепт на предмет, без мусора).
