@@ -98,6 +98,8 @@ for _, metal in ipairs(metals) do
 		data:extend({{
 			type = "recipe",
 			name = name,
+			-- Имя пластины: движок не подставил имя продукта (рецепт с другим именем показывал Unknown key).
+			localised_name = table.deepcopy(plate.localised_name) or {"item-name." .. metal.plate},
 			category = "smelting",
 			subgroup = plate.subgroup,
 			order = (plate.order or "") .. "-z",
