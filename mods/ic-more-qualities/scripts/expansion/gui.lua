@@ -940,6 +940,7 @@ end
 local function post_panel(player, entity)
     local record = post.track(entity)
     if not record then return end
+    post.ensure_arrow(record)
     local inside = relative_frame(player, entity, defines.relative_gui_type.container_gui, {"ic-quality.post-title"},
         post_stats(record))
     inside.style.padding = 0
@@ -1028,25 +1029,12 @@ local function post_panel(player, entity)
     dynamic.style.vertical_spacing = 4
     post_dynamic(dynamic, record)
 
-    -- Rare settings at the bottom.
+    -- Rare settings at the bottom, one column. The output side is turned by the rotate key on the building.
     body.add({type = "line"})
-    local settings_row = body.add({type = "flow", direction = "horizontal"})
-    settings_row.style.vertical_align = "center"
-    local arrow = settings_row.add({type = "sprite", sprite = "ic-post-arrow-good"})
-    arrow.resize_to_sprite = false
-    arrow.style.size = 20
-    arrow.style.stretch_image_to_widget_size = true
-    label(settings_row, {"ic-quality.post-output"}, nil, {"ic-quality.post-output-tooltip"})
-    settings_row.add({type = "sprite-button", sprite = "utility/left_arrow", style = "tool_button",
-        tooltip = {"ic-quality.rotate-left"}, tags = {ic = "post-rotate", step = 3}})
-    settings_row.add({type = "sprite-button", sprite = "utility/right_arrow", style = "tool_button",
-        tooltip = {"ic-quality.rotate-right"}, tags = {ic = "post-rotate", step = 1}})
-    local settings_filler = settings_row.add({type = "empty-widget"})
-    settings_filler.style.horizontally_stretchable = true
-    settings_row.add({type = "checkbox", caption = {"ic-quality.order-repeat"}, state = order.repeating,
-        tags = {ic = "post-repeat"}})
     body.add({type = "checkbox", caption = {"ic-quality.circuit-control"}, tooltip = {"ic-quality.post-circuit-tooltip"},
         state = record.circuit, tags = {ic = "post-circuit"}})
+    body.add({type = "checkbox", caption = {"ic-quality.order-repeat"}, state = order.repeating,
+        tags = {ic = "post-repeat"}})
 end
 
 function M.open_entity(player, entity)

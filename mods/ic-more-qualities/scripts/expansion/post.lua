@@ -76,20 +76,30 @@ local function destroy_arrows(record)
     record.arrows = {}
 end
 
+-- The output arrow: the yellow indication arrow of the game (inserters, drills), always visible, on the edge
+-- of the building on the output side.
+M.ARROW_SPRITE = "utility/indication_arrow"
+
 function M.draw_arrows(record)
     destroy_arrows(record)
     local entity = record.entity
     local direction = rules.output_direction(record.facing, "good")
     local vector = rules.direction_vectors[direction]
     local object = rendering.draw_sprite({
-        sprite = "ic-post-arrow-good",
-        target = {entity = entity, offset = {vector[1] * 1.08, vector[2] * 1.08}},
+        sprite = M.ARROW_SPRITE,
+        target = {entity = entity, offset = {vector[1] * 1.1, vector[2] * 1.1}},
         surface = entity.surface,
         orientation = direction / 4,
-        x_scale = 0.55, y_scale = 0.55,
+        x_scale = 1.2, y_scale = 1.2,
         render_layer = "higher-object-under",
     })
     if object then record.arrows.good = object.id end
+    record.arrow_sprite = M.ARROW_SPRITE
+end
+
+-- Posts of older versions keep their old green arrow until it is drawn again.
+function M.ensure_arrow(record)
+    if record.arrow_sprite ~= M.ARROW_SPRITE and record.entity.valid then M.draw_arrows(record) end
 end
 
 function M.rotate(record, step)
@@ -657,6 +667,7 @@ end
 function M.step(record, tick, random)
     local entity = record.entity
     record.last_tick = tick
+    M.ensure_arrow(record)
     if record.order.condition ~= nil or not record.processed then M.migrate(record) end
     if record.circuit then
         local start = emitter.read(entity, S.cmd_start) > 0
