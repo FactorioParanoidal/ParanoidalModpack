@@ -67,3 +67,12 @@ table.sort(stripped)
 log("Yuoki (Paranoidal): currency by-products removed from finished-product recipes (" .. #stripped .. "): "
 	.. table.concat(stripped, ", "))
 log("Yuoki (Paranoidal): recipes without quality (" .. #locked .. ")")
+-- allow_quality = false only stops quality modules: the engine still gives the result the quality of the
+-- ingredients, which a player sets by circuit, blueprint or pasted settings (engine checks 2026-10-31).
+-- ic-more-qualities resets a positive result of these recipes to normal (registry of its data.lua).
+local normal_result = data.raw["mod-data"] and data.raw["mod-data"]["ic-normal-result"]
+if normal_result then
+	for _, name in ipairs(locked) do
+		normal_result.data.recipes[name] = true
+	end
+end

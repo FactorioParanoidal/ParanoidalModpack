@@ -544,7 +544,6 @@ data:extend({
 		module_slots = 3,
 		allowed_effects = { "consumption", "speed", "pollution", "productivity" },
 		fast_replaceable_group = "j-washer",
-		quality_affects_module_slots = true,
 		quality_affects_energy_usage = true,
 		energy_usage_quality_multiplier = yi_energy_usage_quality_multiplier,
 	},

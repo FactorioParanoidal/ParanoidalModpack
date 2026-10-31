@@ -99,7 +99,6 @@ data:extend({
 
 		module_slots = 2,
 		allowed_effects = { "consumption", "speed", "productivity", "pollution" },
-		quality_affects_module_slots = true,
 		quality_affects_energy_usage = true,
 		energy_usage_quality_multiplier = yi_energy_usage_quality_multiplier,
 	},
@@ -204,7 +203,6 @@ data:extend({
 
 		module_slots = 2,
 		allowed_effects = { "consumption", "speed", "productivity", "pollution" },
-		quality_affects_module_slots = true,
 		quality_affects_energy_usage = true,
 		energy_usage_quality_multiplier = yi_energy_usage_quality_multiplier,
 	},
