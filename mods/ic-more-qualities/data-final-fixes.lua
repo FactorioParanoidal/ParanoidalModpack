@@ -177,3 +177,10 @@ for _, technology in pairs(data.raw.technology) do
         end
     end
 end
+
+-- Fuel speed and chest slots: at most x8 at the highest quality.
+do
+    local caps = require("prototypes.quality-caps")
+    log("IC: fuels with capped quality speed bonus: " .. caps.fuel(data.raw))
+    log("IC: qualities with capped chest slots: " .. caps.inventory(data.raw))
+end
