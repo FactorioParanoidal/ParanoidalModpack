@@ -202,7 +202,7 @@ if mods["paranoidal-CodexRPG"] then
     set_settings_default_value("bool-setting", "charxpmod_print_xp_user", true)
     set_settings_default_value("bool-setting", "charxpmod_hide_xp_panel", true)
 end
-if mods["PipeVisualizer-Updated"] then
+if mods["PipeVisualizer-Updated-reforged"] then
     set_settings_default_value("double-setting", "pv-overlay-opacity", 0.6)
 end
 if mods["reskins-library"] then
