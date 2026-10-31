@@ -1,18 +1,11 @@
 {
   "name": "deep-storage-unit",
-  "version": "9.8.0",
-  "title": "Memory Storage",
-  "author": "notnotmelon",
-  "homepage": "https://github.com/notnotmelon/deep-storage-unit",
-  "description": "An alternative to warehouses. The Memory Unit can store an infinite amount of a single item type. The more items you store, the more power it will require!",
+  "version": "9.9.0",
+  "title": "Memory Storage — migration bridge",
+  "author": "FactorioParanoidal",
   "factorio_version": "2.0",
   "dependencies": [
-    "base >= 2.0.12",
-    "(?) Krastorio2",
-    "(?) PickerDollies",
-    "! logistic-memory-units",
-    "! logistic-memory-unit",
-    "! logistic-memory-units-fixed",
-    "! space-exploration"
-  ]
+    "base >= 2.0.12"
+  ],
+  "description": "Compatibility bridge: keeps the contents of the item memory units that deep-storage-unit 9.8.0 and earlier saved in old saves and hands them over to paranoidal-deep-storage once. It adds no gameplay or prototypes."
 }

@@ -1,0 +1,15 @@
+{
+  "mod": "paranoidal-deep-storage",
+  "source": "local",
+  "original": {
+    "name": "Memory Storage",
+    "authors": [
+      "notnotmelon"
+    ],
+    "portal": {
+      "name": "deep-storage-unit",
+      "url": "https://mods.factorio.com/mod/deep-storage-unit"
+    }
+  },
+  "changeReason": "Собственный мод проекта: объединяет форки Paranoidal Memory Storage 1.6.8 и Fluid Memory Storage 1.7.9 (notnotmelon) с логистическими хранилищами по Logistic Memory Units (restjack, MIT). Один планировщик и один набор обработчиков для хранилищ предметов и ёмкостей жидкостей, окно обновляется только пока открыто; имена прототипов прежние, графика пережата."
+}

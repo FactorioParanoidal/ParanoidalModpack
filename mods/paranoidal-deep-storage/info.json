@@ -1,0 +1,17 @@
+{
+  "name": "paranoidal-deep-storage",
+  "version": "9.0.0",
+  "title": "Paranoidal Deep Storage",
+  "author": "notnotmelon (Memory Storage, Fluid Memory Storage), restjack (Logistic Memory Units); Paranoidal (merge and rewrite)",
+  "description": "Paranoidal: one mod instead of Memory Storage and Fluid Memory Storage. Memory units store an endless amount of one item (plain and logistic variants) or one fluid; the more is stored, the more power they need. One scheduler drives both kinds.",
+  "factorio_version": "2.0",
+  "dependencies": [
+    "base >= 2.0.12",
+    "(?) deep-storage-unit >= 9.9.0",
+    "! fluid-memory-storage",
+    "! logistic-memory-units",
+    "! logistic-memory-unit",
+    "! logistic-memory-units-fixed",
+    "! space-exploration"
+  ]
+}
