@@ -1,3 +1,14 @@
+-- Machines without quality modules; "quality everywhere" skips them:
+--   data.raw["mod-data"]["ic-quality-closed"].data.machines[name] = true
+if require("scripts.switches").quality() then
+    data:extend({{
+        type = "mod-data",
+        name = require("scripts.expansion.names").quality_closed,
+        data_type = "ic-more-qualities.quality-closed",
+        data = {machines = {}},
+    }})
+end
+
 -- Paranoidal quality control: workshop, control post, signals, panel. Everything belongs to the
 -- defect system and is created only together with it.
 if require("scripts.switches").defects() then

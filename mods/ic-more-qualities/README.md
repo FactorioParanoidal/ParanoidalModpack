@@ -52,8 +52,19 @@ if registry then registry.data.recipes["recipe-name"] = true end
 
 - `data-final-fixes` убирает отсутствующие имена, ставит рецептам `allow_quality = false` и пишет в лог строку `IC: recipes whose result is always normal (N)`.
 - Планировщик брака следит за машинами с такими рецептами и сбрасывает положительный результат крафта в обычное качество; ручной крафт тоже. Качество ингредиентов при этом теряется. Бракованные ингредиенты идут прежним путём (раздел 3).
-- В сборке Paranoidal: валюты, торговля и трансмутация Yuoki (решение 2026-10-24) и копирующие рецепты из `zzzparanoidal/tweaks/custom/anti-exploit.lua` (кремний 6 → 24, рыба 3, бактерии PCPRedux).
+- В сборке Paranoidal: валюты, торговля и трансмутация Yuoki (решение 2026-10-24) и копирующие рецепты из `zzzparanoidal/tweaks/custom/anti-exploit.lua` (кремний 6 → 24, бактерии PCPRedux, семена и саженцы BI, электрод и металлическая форма, рыба, пуфферы и кусаки с яйцами, разделение сульфата натрия, обмен кукурузы Angels → Yuoki).
 - Работает только с системой брака. Ограничения — раздел 10.
+
+### Здания без модулей качества
+
+Реестр `mod-data` «ic-quality-closed» (создаётся в `data.lua`, если качество включено): здания, в которые модули качества не вставляются. Мод-владелец сам убирает у здания эффект `quality` и добавляет его имя до `data-final-fixes`:
+
+```lua
+local registry = data.raw["mod-data"] and data.raw["mod-data"]["ic-quality-closed"]
+if registry then registry.data.machines["machine-name"] = true end
+```
+
+Режим «качество для всего производства» такие здания не открывает. `data-final-fixes` убирает отсутствующие имена и пишет в лог строку `IC: machines without quality modules (N)`. В сборке Paranoidal: вся биоиндустрия Angels, BI и Yuoki, электролизёры и фильтрационные установки Angels (`zzzparanoidal/tweaks/custom/anti-exploit.lua`).
 
 ---
 

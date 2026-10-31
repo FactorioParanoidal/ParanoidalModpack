@@ -5,6 +5,21 @@ if not switches.quality() then return end
 require("prototypes.utils")
 require("prototypes.remove-tech-final")
 
+-- Registry "ic-quality-closed": drop unknown names.
+do
+    local registry = data.raw["mod-data"][require("scripts.expansion.names").quality_closed]
+    local closed = {}
+    for name in pairs(registry.data.machines) do
+        if data.raw["assembling-machine"][name] or data.raw["furnace"][name] then
+            closed[#closed + 1] = name
+        else
+            registry.data.machines[name] = nil
+        end
+    end
+    table.sort(closed)
+    log("IC: machines without quality modules (" .. #closed .. "): " .. table.concat(closed, ", "))
+end
+
 -- zzzparanoidal hides modules outside its Beta 8 set: quality modules stay visible with quality,
 -- with or without defects.
 if mods["zzzparanoidal"] then

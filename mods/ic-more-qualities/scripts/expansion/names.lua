@@ -14,6 +14,8 @@ local M = {
     mod_data = "ic-quality-expansion",
     -- Registry of recipes whose result is always normal (data.lua, filled by other mods).
     normal_result = "ic-normal-result",
+    -- Machines without quality modules (data.lua).
+    quality_closed = "ic-quality-closed",
     panel_shortcut = "ic-quality-panel",
     panel_hotkey = "ic-quality-panel",
     rotate = "ic-control-post-rotate",

@@ -294,9 +294,11 @@ function M.positive_quality(raw, finished, everywhere)
     end
     local opened = 0
     if everywhere then
+        local registry = raw["mod-data"] and raw["mod-data"][require("scripts.expansion.names").quality_closed]
+        local closed = registry and registry.data.machines or {}
         for _, kind in ipairs({"assembling-machine", "furnace"}) do
             for _, machine in pairs(raw[kind] or {}) do
-                if M.with_quality(machine, false) then opened = opened + 1 end
+                if not closed[machine.name] and M.with_quality(machine, false) then opened = opened + 1 end
             end
         end
     end
