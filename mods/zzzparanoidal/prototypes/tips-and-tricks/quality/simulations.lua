@@ -636,54 +636,52 @@ end)
 -- и обратно на пост, излишек и чужое — вправо.
 simulations.defects_post = simulation([=[
 Z.start(function()
+  Z.unlock_all()
+  -- Post-processing: every 5 of one tier become 1 of the next tier; tier 2 and better go forward.
+  local tiers = Z.positive(3)
   Z.create("ic-control-post", {0, 0})
-  Z.workshop({-7, 0})
   Z.create("wooden-chest", {0.5, -4.5})
-  Z.create("wooden-chest", {7.5, 0.5})
   Z.line({0, 5}, {0, 1.6}, {0.8, 0.8, 0.8, 0.6}, 4)
   Z.line({0, -1.6}, {0, -3.8}, {0.3, 0.9, 0.3, 0.8}, 5)
-  Z.line({-1.6, 0}, {-5.4, 0}, {1, 0.8, 0.2, 0.8}, 5)
-  Z.line({-7, 1.6}, {-7, 4}, {1, 0.8, 0.2, 0.5}, 3)
-  Z.line({-7, 4}, {0, 4}, {1, 0.8, 0.2, 0.5}, 3)
-  Z.line({1.6, 0}, {6.8, 0}, {0.6, 0.6, 0.6, 0.8}, 5)
   Z.text({1.4, -3}, {"zzz-tips-sim.post-good"}, {align = "left", scale = 0.85, color = {0.5, 1, 0.5}})
-  Z.text({-3.5, -0.6}, {"zzz-tips-sim.post-refine"}, {scale = 0.85, color = {1, 0.85, 0.3}})
-  Z.text({4.2, -0.6}, {"zzz-tips-sim.post-other"}, {scale = 0.85, color = {0.8, 0.8, 0.8}})
   Z.text({0.6, 5.2}, {"zzz-tips-sim.post-input"}, {align = "left", scale = 0.85, font = "default"})
   local order = Z.text({-10.5, -4.5}, "", {align = "left", scale = 0.95})
-  local accepted, spawned, hold = 0, 0, 0
-  local goal = 10
-  local function refresh() order.text = {"zzz-tips-sim.post-order", accepted, goal} end
-  refresh()
-  local route
-  local function to_post(token)
-    Z.move(token, {0, 0}, 20, route)
+  local inside = Z.text({2, 0}, "", {align = "left", scale = 0.85})
+  local stock = {0, 0}
+  local accepted, spawned, hold, goal = 0, 0, 0, 4
+  local function refresh()
+    order.text = {"zzz-tips-sim.post-order", accepted, goal}
+    inside.text = {"zzz-tips-sim.post-inside", Z.qicon(tiers[1].name), stock[1], Z.qicon(tiers[2].name), stock[2]}
   end
-  route = function(token)
-    if token.item ~= "burner-mining-drill" or (accepted >= goal and token.quality == "normal") then
-      Z.move(token, {7, 0}, 45, function(t) Z.destroy(t) end)
-    elseif token.quality == "normal" then
-      accepted = accepted + 1
-      refresh()
-      Z.move(token, {0, -4}, 30, function(t) Z.destroy(t) end)
-    else
-      Z.move(token, {-7, 0}, 45, function(t)
-        local after = Z.refine(Z.grade_of(t.quality))
-        Z.set_quality(t, Z.grades[after])
-        Z.path(t, {{-7, 4}, {0, 4}}, 30, to_post)
-      end)
+  refresh()
+  local function arrive(token)
+    local tier = token.tier
+    Z.destroy(token)
+    stock[tier] = stock[tier] + 1
+    while stock[tier] >= 5 do
+      stock[tier] = stock[tier] - 5
+      if tier + 1 >= 3 then
+        local made = Z.token("burner-mining-drill", tiers[3].name, {0, 0})
+        accepted = accepted + 1
+        Z.move(made, {0, -4}, 30, function(t) Z.destroy(t) end)
+      else
+        stock[tier + 1] = stock[tier + 1] + 1
+      end
+      tier = math.min(tier + 1, 2)
     end
+    refresh()
   end
   Z.on_tick(function(t)
     if accepted >= goal then
       hold = hold + 1
-      if hold > 240 then accepted, hold = 0, 0 refresh() end
+      if hold > 240 then accepted, hold, stock = 0, 0, {0, 0} refresh() end
+      return
     end
-    if t % 45 == 0 then
+    if t % 12 == 0 then
       spawned = spawned + 1
-      local item = spawned % 7 == 0 and "iron-chest" or "burner-mining-drill"
-      local token = Z.token(item, Z.grades[Z.draw(7)], {0, 5.5})
-      Z.move(token, {0, 1.4}, 40, to_post)
+      local token = Z.token("burner-mining-drill", tiers[1].name, {0, 5.5})
+      token.tier = 1
+      Z.move(token, {0, 1.4}, 30, arrive)
     end
   end)
 end)
