@@ -194,8 +194,7 @@ hide("string-setting", "ick-tags")
 -- show-max-underground-distance
 hide("string-setting", "show-max-underground-distance-icon")
 hide("bool-setting", "show-max-underground-distance-on-hover")
--- UnPollock
-hide("bool-setting", "unpollock-avoid-resources")
+-- paranoidal-decoration-cleanup (formerly UnPollock)
 hide("double-setting", "unpollock-decorative-rate")
 hide("string-setting", "unpollock-fake-rocks")
 -- paranoidal-vehicle-physics (formerly vehicle_physics)

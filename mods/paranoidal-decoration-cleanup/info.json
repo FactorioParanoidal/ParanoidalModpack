@@ -1,0 +1,16 @@
+{
+  "name": "paranoidal-decoration-cleanup",
+  "version": "9.0.0",
+  "title": "Paranoidal Decoration Cleanup",
+  "author": "FactorioParanoidal; after Clean Floor by David Skrundz, Realistic Decoration Cleanup by someone1337, UnPollock by Loren1350",
+  "homepage": "https://github.com/FactorioParanoidal/ParanoidalModpack",
+  "factorio_version": "2.0",
+  "description": "Decorations for Paranoidal: placing any floor tile that removes decorations removes all of them, building an entity removes the decorations under it, and the map generator places fewer decorations (startup multiplier) and no decorative rocks. Replaces Clean Floor, Realistic Decoration Cleanup and UnPollock.",
+  "dependencies": [
+    "base >= 2.0.77",
+    "? Alien-biomes-Reforged",
+    "! CleanFloor",
+    "! RealisticDecorationCleanup",
+    "! UnPollock"
+  ]
+}

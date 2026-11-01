@@ -1,6 +1,7 @@
 ---------------------------------------------------------------------------------------------------
 Version: 0.1.0
   Changes:
+    - UnPollock is replaced by paranoidal-decoration-cleanup: unpollock-decorative-rate and unpollock-fake-rocks stay hidden; unpollock-avoid-resources no longer exists and is no longer hidden.
     - BigLight, InlaidLampsExtended and Lighted-Poles-Plus are replaced by paranoidal-lighting: its six settings (ritnmods-bl-01..04, lepp_light_size_factor, inlaid-lamps-extended-light_size) are hidden in one block; ritnmods-bl-05, lepp_light_max_size and the five other inlaid-lamps-extended light settings no longer exist and are no longer hidden.
     - ic-more-qualities no longer has the custom quality name settings ("ic-more-qualities-localization-*"): they are not hidden any more.
   Locale:

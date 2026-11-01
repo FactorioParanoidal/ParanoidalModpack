@@ -1,0 +1,15 @@
+{
+  "mod": "paranoidal-decoration-cleanup",
+  "source": "local",
+  "original": {
+    "name": "Realistic Decoration Cleanup",
+    "authors": [
+      "someone1337"
+    ],
+    "portal": {
+      "name": "RealisticDecorationCleanup",
+      "url": "https://mods.factorio.com/mod/RealisticDecorationCleanup"
+    }
+  },
+  "changeReason": "Собственный мод проекта: объединяет Realistic Decoration Cleanup 2.0.2 (someone1337, MIT), Clean Floor 2.0.0 (David Skrundz) и UnPollock 2.0.1 (Loren1350). Покрытие убирает все декорации (общее правило Clean Floor заменяет список плиток Realistic Decoration Cleanup), постройка убирает декорации под собой, генератор карты ставит меньше декораций и без декоративных камней. Имена настроек unpollock-decorative-rate и unpollock-fake-rocks прежние; настройка unpollock-avoid-resources удалена (RSO Reforged и так не ставит декорации на руду). Код UnPollock переписан, миниатюра пережата."
+}

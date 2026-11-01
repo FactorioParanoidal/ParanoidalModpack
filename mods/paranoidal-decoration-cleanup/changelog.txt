@@ -1,0 +1,17 @@
+---------------------------------------------------------------------------------------------------
+Version: 9.0.0
+Date: 2026-11-01
+  Major Features:
+    - One mod instead of CleanFloor 2.0.0 (Clean Floor by David Skrundz), RealisticDecorationCleanup 2.0.2 (Realistic Decoration Cleanup by someone1337) and UnPollock 2.0.1 (UnPollock by Loren1350). The setting names unpollock-decorative-rate and unpollock-fake-rocks are unchanged.
+  Changes:
+    - Floor tiles: every tile whose decorative_removal_probability is above 0 gets 1 (Clean Floor). The fixed list of Realistic Decoration Cleanup (stone path, concrete, refined concrete and their hazard variants) is no longer needed: these tiles have 0.15-0.25 in the base game and AAI Industry and are covered by the same rule.
+    - Entities: building an entity removes the decorations under its selection box plus 0.6 tiles (Realistic Decoration Cleanup with the Paranoidal build event filters: no resources, no ghosts).
+    - Map generation: the decorative rate multiplier and the fake rock removal of UnPollock, rewritten. The rate is applied only when it is below 1 (UnPollock multiplied by 1 when only rocks were removed).
+    - Removed the startup setting unpollock-avoid-resources (off in the build): RSO Reforged already keeps decoratives off and around ore (rso_free_decor).
+    - Thumbnail: the Realistic Decoration Cleanup picture scaled to 144x144 and recompressed (45 -> 21 KB; the old three thumbnails were 382 KB).
+    - Locales: English and Russian only; the default of the decorative rate is given as 0.7 (the descriptions said 0.4).
+  Bugfixes:
+    - "by-control" rock detection matched expression names as Lua patterns, so a name with "-" or other magic characters could be missed; names are matched as plain text now.
+    - A decorative autoplace without a probability expression no longer breaks loading; no global variables.
+  Saves:
+    - Nothing is lost: none of the three mods kept data in storage. Decorations already on the map stay; only new map areas use the settings. The value of unpollock-avoid-resources in mod-settings.dat is ignored.
