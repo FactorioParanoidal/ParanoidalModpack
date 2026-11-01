@@ -1,5 +1,6 @@
 -- Пожарные турели (prototypes/fire-safety-turret.lua). Параметры и списки целей — mod-data "pd-fire-safety".
--- Каждая турель обслуживается раз в 2 с (турели разнесены по 12 слотам, чтобы не было пика в один тик).
+-- Каждая турель обслуживается раз в 2 с (турели разнесены по 12 слотам, чтобы не было пика в один тик;
+-- storage.fire_safety.slots — номера турелей по слотам, обход только своего слота).
 -- Нет целей в зоне: дежурный расход воды (idle); если воды хватило, турель «активна» и
 -- Flammable_Oils_QUICKFIX через remote "paranoidal_fire_safety" ничего не поджигает и не взрывает в зоне.
 -- Есть цели: расход combat, до MAX_SHOTS струй воды. Огонь (в т. ч. кислота на земле) и вражеские облака
@@ -11,7 +12,8 @@
 -- ванильному циклу огнемётной турели: сложен → выдвигается (цель ближе prepare_range) → наводится по
 -- 64 положениям со скоростью rotation_speed → струя из дула, ствол держит прицел, пока течёт струя →
 -- складывается, когда целей в prepare_range нет или кончилась вода. Каждый тик обрабатываются только
--- турели в движении (storage.fire_safety.moving). Состояние — только в storage.fire_safety.
+-- турели в движении (storage.fire_safety.moving); обработчик on_nth_tick(1) зарегистрирован, только пока
+-- этот список не пуст (восстанавливается в on_load). Состояние — только в storage.fire_safety.
 local M = {}
 
 local DATA = "pd-fire-safety"
@@ -106,6 +108,35 @@ local function state()
 	return s
 end
 
+-- Слоты обслуживания: slots[id % SLOTS + 1][id] = true. В старых сохранениях их нет — строятся по turrets.
+local function slots(s)
+	local b = s.slots
+	if not b then
+		b = {}
+		for i = 1, SLOTS do b[i] = {} end
+		for id in pairs(s.turrets) do b[id % SLOTS + 1][id] = true end
+		s.slots = b
+	end
+	return b
+end
+
+-- Тик движения стволов: зарегистрирован, только пока есть турели в движении.
+local ticking = false
+local on_tick
+
+local function tick_sync()
+	local s = storage.fire_safety
+	local want = s ~= nil and s.moving ~= nil and next(s.moving) ~= nil
+	if want == ticking then return end
+	ticking = want
+	script.on_nth_tick(1, want and on_tick or nil)
+end
+
+local function set_moving(s, id, rec)
+	s.moving[id] = rec
+	tick_sync()
+end
+
 -- Ствол ----------------------------------------------------------------------------------------------
 
 local function direction_name(entity)
@@ -171,7 +202,7 @@ local function wake(s, id, rec)
 	if rec.state == "folded" or rec.state == "folding" then
 		play(rec.entity, ACTIVATE)
 		rec.state = "preparing"
-		s.moving[id] = rec
+		set_moving(s, id, rec)
 	end
 end
 
@@ -182,7 +213,7 @@ local function sleep(s, id, rec)
 	if rec.state == "prepared" or rec.state == "preparing" then
 		play(rec.entity, DEACTIVATE)
 		rec.state = "folding"
-		s.moving[id] = rec
+		set_moving(s, id, rec)
 	end
 end
 
@@ -191,14 +222,24 @@ local function new_record(entity)
 		queue = {}, hold = 0}
 end
 
+local function forget(s, id)
+	local rec = s.turrets[id]
+	if type(rec) == "table" and rec.render and rec.render.valid then rec.render.destroy() end
+	s.turrets[id] = nil
+	s.active[id] = nil
+	slots(s)[id % SLOTS + 1][id] = nil
+	if s.moving[id] then
+		s.moving[id] = nil
+		tick_sync()
+	end
+end
+
 -- До стволов на rendering в storage.fire_safety.turrets хранилась сама сущность.
 local function record(s, id)
 	local rec = s.turrets[id]
 	if rec and rec.object_name then
 		if not rec.valid then
-			s.turrets[id] = nil
-			s.active[id] = nil
-			s.moving[id] = nil
+			forget(s, id)
 			return nil
 		end
 		rec = new_record(rec)
@@ -207,24 +248,18 @@ local function record(s, id)
 	return rec
 end
 
-local function forget(s, id)
-	local rec = s.turrets[id]
-	if type(rec) == "table" and rec.render and rec.render.valid then rec.render.destroy() end
-	s.turrets[id] = nil
-	s.active[id] = nil
-	s.moving[id] = nil
-end
-
 local function add(entity)
 	local c = cfg()
 	local tier = entity and entity.valid and c.tiers[entity.name]
 	if not (tier and entity.unit_number) then return end
 	local s = state()
-	local rec = record(s, entity.unit_number)
+	local id = entity.unit_number
+	local rec = record(s, id)
 	if not rec then
 		rec = new_record(entity)
-		s.turrets[entity.unit_number] = rec
+		s.turrets[id] = rec
 	end
+	slots(s)[id % SLOTS + 1][id] = true
 	draw(rec, tier, c)
 end
 
@@ -233,9 +268,12 @@ function M.sync()
 	local c = cfg()
 	if #c.names == 0 then
 		storage.fire_safety = nil
+		tick_sync()
 		return
 	end
 	local s = state()
+	s.slots = nil -- пересобрать по turrets
+	slots(s)
 	for id in pairs(s.turrets) do
 		local rec = record(s, id)
 		if rec and not (rec.entity.valid and c.tiers[rec.entity.name]) then forget(s, id) end
@@ -243,6 +281,12 @@ function M.sync()
 	for _, surface in pairs(game.surfaces) do
 		for _, entity in pairs(surface.find_entities_filtered({name = c.names})) do add(entity) end
 	end
+	tick_sync()
+end
+
+-- on_load: восстановить регистрацию тика движения по storage (storage только читается).
+function M.on_load()
+	tick_sync()
 end
 
 -- Тушение ---------------------------------------------------------------------------------------------
@@ -355,7 +399,7 @@ local function service(id, rec, tier, s, c)
 	wake(s, id, rec)
 	local used = turret.remove_fluid({name = "water", amount = tier.combat})
 	rec.queue = plan(turret, tier, targets, used / tier.combat)
-	if #rec.queue > 0 then s.moving[id] = rec end
+	if #rec.queue > 0 then set_moving(s, id, rec) end
 end
 
 local function update(event)
@@ -364,17 +408,18 @@ local function update(event)
 	s.moving = s.moving or {}
 	local c = cfg()
 	local slot = math.floor(event.tick / STEP) % SLOTS
-	for id in pairs(s.turrets) do
-		if id % SLOTS == slot then
-			local rec = record(s, id)
-			if rec then
-				local tier = rec.entity.valid and c.tiers[rec.entity.name]
-				if tier then
-					service(id, rec, tier, s, c)
-				else
-					forget(s, id)
-				end
+	-- forget() снимает номер со слота во время обхода: присваивание nil существующему ключу в pairs допустимо.
+	for id in pairs(slots(s)[slot + 1]) do
+		local rec = record(s, id)
+		if rec then
+			local tier = rec.entity.valid and c.tiers[rec.entity.name]
+			if tier then
+				service(id, rec, tier, s, c)
+			else
+				forget(s, id)
 			end
+		else
+			slots(s)[slot + 1][id] = nil -- номера нет в turrets
 		end
 	end
 end
@@ -422,20 +467,22 @@ local function step(rec, tier, c)
 	return true
 end
 
-local function on_tick()
+on_tick = function()
 	local s = storage.fire_safety
-	if not (s and s.moving and next(s.moving)) then return end
-	local c = cfg()
-	for id, rec in pairs(s.moving) do
-		local entity = rec.entity
-		local tier = entity.valid and c.tiers[entity.name]
-		if not tier then
-			forget(s, id)
-		else
-			ensure_drawn(rec, tier, c)
-			if not step(rec, tier, c) then s.moving[id] = nil end
+	if s and s.moving then
+		local c = cfg()
+		for id, rec in pairs(s.moving) do
+			local entity = rec.entity
+			local tier = entity.valid and c.tiers[entity.name]
+			if not tier then
+				forget(s, id)
+			else
+				ensure_drawn(rec, tier, c)
+				if not step(rec, tier, c) then s.moving[id] = nil end
+			end
 		end
 	end
+	tick_sync()
 end
 
 -- Корпус повернули/отразили: ствол сдвигается вместе с ним.
@@ -503,7 +550,6 @@ function M.install()
 	on(defines.events.on_player_rotated_entity, on_reoriented)
 	on(defines.events.on_player_flipped_entity, on_reoriented)
 	on(defines.events.on_script_trigger_effect, on_hit)
-	on(defines.events.on_tick, on_tick)
 	script.on_nth_tick(STEP, update)
 end
 

@@ -117,6 +117,7 @@ script.on_init(function() --наш любимый init, запрещаем дв�
 end)
 
 script.on_load(function() --без дропа эволюции потому что game недоступен
+	fire_safety.on_load() -- тик стволов пожарных турелей зарегистрирован, только пока они движутся
 	-- configure_picker_dollies()
 end)
 
