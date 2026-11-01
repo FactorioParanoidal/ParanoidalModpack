@@ -44,13 +44,13 @@ for _, character in pairs(data.raw.character or {}) do
     end
 end
 
--- Even Pickier Dollies moves entities of the player's force by teleport: the start wrecks, the
+-- The dollies of paranoidal-picker-tools (from Even Pickier Dollies) move entities of the player's force by teleport: the start wrecks, the
 -- starliner, the reactor compartment (a portable atomic bomb), the safe and the other start objects
--- stay where they fell (its mod-data blacklist, read by that mod at runtime).
+-- stay where they fell (the mod-data blacklist, still named even-pickier-dollies, read at runtime).
 local dollies = data.raw["mod-data"] and data.raw["mod-data"]["even-pickier-dollies"]
 if dollies and dollies.data then
     dollies.data.blacklist_names = dollies.data.blacklist_names or {}
-    local list = dollies.data.blacklist_names -- a set: name -> true (scripts/tools.lua of that mod)
+    local list = dollies.data.blacklist_names -- a set: name -> true (scripts/dollies/tools.lua of that mod)
     local function add(name) list[name] = true end
     for name in pairs(names) do add(name) end
     for _, spec in ipairs(config.trail.compartments) do add(spec.name) end

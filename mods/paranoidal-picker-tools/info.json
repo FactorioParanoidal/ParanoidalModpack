@@ -1,0 +1,18 @@
+{
+	"name": "paranoidal-picker-tools",
+	"version": "9.0.0",
+	"title": "Paranoidal Picker Tools",
+	"author": "Kryzeth, Nexela, hgschmie, Yemto, Cornbread, superspeeder101; FactorioParanoidal",
+	"description": "Building and inventory tools in one mod: Picker Extended Reborn (planner menu, planner zapper, tape measure, chest tools, quality scrolling, ghost revival, searchlight), Yemto's Item Count, Belt Reverser, Belt Brush and Even Pickier Dollies.",
+	"factorio_version": "2.0",
+	"dependencies": [
+		"base >= 2.0.58",
+		"? ModuleInserterSimplified",
+		"! PickerDollies",
+		"! kry-picker-extended",
+		"! even-pickier-dollies",
+		"! yemtositemcount",
+		"! belt-reverser-space-age",
+		"! beltbrush2-reforged"
+	]
+}

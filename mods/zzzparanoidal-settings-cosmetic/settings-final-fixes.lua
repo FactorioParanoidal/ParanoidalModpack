@@ -159,7 +159,7 @@ hide("bool-setting", "fluid-cleanup")
 hide("int-setting", "minime_character-size")
 hide("bool-setting", "minime_remove-armor-animations")
 hide("string-setting", "minime_icon-scheme")
--- kry-picker-extended
+-- paranoidal-picker-tools (Picker Extended Reborn part)
 hide("bool-setting", "picker-planner-sorter")
 -- visible-pollutants
 hide("bool-setting", "visible-pollutants-update-chart-colors")

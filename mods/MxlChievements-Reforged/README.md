@@ -325,7 +325,7 @@
 | Узкий специалист | `mxlr-specialist` | Вложите 50 очков в один навык персонажа. *(скрипт: rpg-attribute)* — нужен `paranoidal-CodexRPG` |
 | Крёстный отец | `mxlr-godfather` | Переименуйте 100 станций, локомотивов или других объектов. *(скрипт: rename)* |
 | Малевич | `mxlr-malevich` | Перекрасьте поезда 50 раз. *(скрипт: paint)* |
-| Задом наперёд | `mxlr-reverse-gear` | Разверните ленту целиком 100 раз. *(скрипт: belt-reverse)* — нужен `belt-reverser-space-age` |
+| Задом наперёд | `mxlr-reverse-gear` | Разверните ленту целиком 100 раз. *(скрипт: belt-reverse)* — нужен `paranoidal-picker-tools` |
 | Стиратель миров | `mxlr-world-eraser` | Удалите 100 чанков инструментом (обрезка карты не считается). *(скрипт: chunks)* — нужен `Delete-Chunk-Tool-reforged` |
 | Ой | `mxlr-oops` | Буры 100 раз отправлены на разборку после выработки месторождения. *(скрипт: auto-deconstruct)* — нужен `AutoDeconstruct` |
 | Ночная смена | `mxlr-night-shift` | Постройте 1 тыс. объектов глубокой ночью. *(скрипт: night-build)* |

@@ -148,7 +148,7 @@ local list = {
   {id = "godfather", kind = "script", theme = "character", tracker = "rename", amount = 100, icon = {item = "train-stop"}},
   {id = "malevich", kind = "script", theme = "character", tracker = "paint", amount = 50, icon = {entity = "locomotive"}},
   {id = "reverse-gear", kind = "script", theme = "character", tracker = "belt-reverse", amount = 100,
-    mods = {"belt-reverser-space-age"}, icon = {item = "transport-belt"}},
+    mods = {"paranoidal-picker-tools"}, icon = {item = "transport-belt"}},
   {id = "world-eraser", kind = "script", theme = "character", tracker = "chunks", amount = 100,
     mods = {"Delete-Chunk-Tool-reforged"}, icon = {item = "landfill"}},
   {id = "oops", kind = "script", theme = "character", tracker = "auto-deconstruct", amount = 100,

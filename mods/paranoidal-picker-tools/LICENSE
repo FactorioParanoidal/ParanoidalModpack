@@ -1,0 +1,30 @@
+MIT License
+
+Paranoidal Picker Tools merges code of these mods:
+- Picker Extended Reborn (kry-picker-extended) by Kryzeth, based on Picker Extended by Nexela (Nicholas Dunn); the original mod ships no license file, its mod portal license applies to its code
+- Even Pickier Dollies: Copyright (c) 2024 - hgschmie (Henning Schmiedehausen); original Picker Dollies code Copyright (c) 2018 Nexela (Nicholas Dunn)
+- Belt Brush (beltbrush2): Copyright (c) 2025 Andy Newton (superspeeder101)
+- Belt Reverser 2.0 (belt-reverser-space-age): Cornbread, https://github.com/Cogito/belt-reverser, MIT
+- Yemto's Item Count: Yemto (no license file in the original mod)
+- Factorio standard library (stdlib) parts: Copyright (c) 2016, Afforess (Cameron McAvoy)
+- Paranoidal changes: Copyright (c) FactorioParanoidal
+
+The MIT license text below applies to the MIT-licensed parts and to the Paranoidal changes.
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.

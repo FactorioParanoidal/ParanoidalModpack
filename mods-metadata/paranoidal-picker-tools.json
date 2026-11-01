@@ -1,0 +1,16 @@
+{
+  "mod": "paranoidal-picker-tools",
+  "source": "local",
+  "original": {
+    "name": "Picker Extended Reborn",
+    "authors": [
+      "Kryzeth",
+      "Nexela"
+    ],
+    "portal": {
+      "name": "kry-picker-extended",
+      "url": "https://mods.factorio.com/mod/kry-picker-extended"
+    }
+  },
+  "changeReason": "Собственный мод проекта: объединяет Picker Extended Reborn 1.1.0 (Kryzeth, Nexela; локальная переработка без kry_stdlib), Yemto's Item Count 0.7.2 (Yemto), Belt Reverser 2.0 2.0.1 (Cornbread, MIT), Belt Brush (Reforged) 0.2.1 (форк beltbrush2 от superspeeder101, MIT) и Even Pickier Dollies 2.7.5 (hgschmie, MIT). Имена клавиш, настроек, ярлыков, предметов, ключей локали и mod-data прежние; удалённый интерфейс PickerDollies и событие dolly_moved_entity_id сохранены для модов сборки. Один регистратор событий на весь мод без pcall вокруг обработчиков. Клавиши кисти по умолчанию перенесены на Alt+C и Alt+B (Ctrl+R и Ctrl+B были заняты другими модами и меню планировщиков). Разворот конвейера трогает только конвейеры своей силы и сообщает о поворотах другим модам. Список запрета dollies при запуске дополняется, а не заменяется. Данные storage старых модов не переносятся."
+}

@@ -220,7 +220,7 @@ hide("bool-setting", "bobmods-warfare-spidertron-overhaul")
 hide("bool-setting", "bobmods-warfare-vehicleflamethrowerstartsfires")
 -- ElectricResistance2
 hide("int-setting", "electric-resistance-power-consumption")
--- even-pickier-dollies
+-- paranoidal-picker-tools (dollies part)
 hide("bool-setting", "dolly-remote-move")
 hide("bool-setting", "dolly-biter-move")
 hide("bool-setting", "dolly-transporter-mode")

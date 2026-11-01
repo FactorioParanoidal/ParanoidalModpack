@@ -8,7 +8,7 @@
   "factorio_version": "2.0",
   "dependencies": [
     "base >= 2.0",
-    "? even-pickier-dollies"
+    "? paranoidal-picker-tools"
   ],
   "description": "Paranoidal: the defense tower repairs friendly buildings with repair packs and, after the shield research, protects the turrets in its square with an energy shield. Built from Repair Turret by Klonan and King's Turret Shields by Kingdud (fork of Turret-Shields by OwnlyMe)."
 }

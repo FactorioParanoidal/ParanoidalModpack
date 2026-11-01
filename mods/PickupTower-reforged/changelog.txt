@@ -4,6 +4,7 @@ Date: 2026-10-30
   Info:
     - Paranoidal rewrite of Schall Pickup Tower 2.0.1 (mod SchallPickupTower) under a new name; graphics by Schallfalke. No migration from SchallPickupTower: towers of the old mod are not converted.
   Changes:
+    - Optional dependency on paranoidal-picker-tools instead of even-pickier-dollies: the dollies are part of that mod now, with the same PickerDollies interface.
     - Prototypes renamed: pickup-tower-1…4 (item, entity, recipe, research), hidden upper part pickup-tower-N-radar; the hidden "-upper" items are gone.
     - The tower chest is a passive provider of the logistic network; tiers can be upgraded in place (upgrade planner, fast replace).
     - The pickup radius is multiplied by the quality range multiplier of the tower (like turret range); tower quality also enlarges the chest as before.
