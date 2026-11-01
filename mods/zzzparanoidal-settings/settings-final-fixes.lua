@@ -9,8 +9,6 @@ local function hide(setting_type, name)
 	end
 end
 
--- InlaidLampsExtended
-hide("bool-setting", "inlaid_lamps_extended_change_energy_usage")
 -- valves
 hide("int-setting", "valves-pump-speed")
 -- WideChests
@@ -243,12 +241,6 @@ hide("double-setting", "ic-more-qualities-defects-pole-supply-reduction")
 hide("double-setting", "ic-more-qualities-defects-pole-wire-reduction")
 -- nco-InserterCranes
 hide("string-setting", "nco-inserter-cranes-max-stack-size-bonus")
--- Lighted-Poles-Plus
-hide("string-setting", "lepp_pole_whitelist")
-hide("string-setting", "lepp_pole_blacklist")
-hide("string-setting", "lepp_tech_blacklist")
-hide("string-setting", "lepp_tech_fallback")
-hide("string-setting", "lepp_tech_pole_weight")
 -- MIRV2
 hide("bool-setting", "mirv-auto-launch")
 hide("bool-setting", "mirv-pollution-on-detonation")

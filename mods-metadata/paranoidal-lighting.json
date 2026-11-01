@@ -1,0 +1,18 @@
+{
+  "mod": "paranoidal-lighting",
+  "source": "local",
+  "original": {
+    "name": "Larger Lamps 2.0",
+    "authors": [
+      "Deadlock989",
+      "Goakiller900",
+      "MasterBuilder",
+      "NullHarp"
+    ],
+    "portal": {
+      "name": "LargerLamps-2_0",
+      "url": "https://mods.factorio.com/mod/LargerLamps-2_0"
+    }
+  },
+  "changeReason": "Собственный мод проекта: объединяет Larger Lamps 2.0 0.2.3, Inlaid Lamps Extended 2.0.0 (Mathematician, CobaltTiger, Pi-C), Lighted Electric Poles + 2.0.4 (Optera, MIT) и BIG LIGHT 0.3.0 (Ritn). Имена ламп, столбов, предметов, рецептов, технологий и оставшихся настроек прежние. Исправления 2.0 из zzzparanoidal (HR-графика медной лампы, огни остановок, категория рецептов, улучшение медной лампы) перенесены в мод; скрытая лампа освещённого столба удаляется при любом удалении столба. Удалены 13 настроек (значения стали константами), мёртвый код, ветки для модов не из сборки и неиспользуемая графика; графика пережата."
+}

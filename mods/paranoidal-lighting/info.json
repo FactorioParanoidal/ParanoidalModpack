@@ -1,0 +1,22 @@
+{
+  "name": "paranoidal-lighting",
+  "version": "9.0.0",
+  "title": "Paranoidal Lighting",
+  "author": "FactorioParanoidal; lamps after Larger Lamps 2.0 by Deadlock989, Goakiller900, MasterBuilder, NullHarp, Inlaid Lamps Extended by Mathematician, CobaltTiger, Pi-C, Lighted Electric Poles + by Optera, BIG LIGHT by Ritn",
+  "homepage": "https://github.com/FactorioParanoidal/ParanoidalModpack",
+  "factorio_version": "2.0",
+  "description": "Lighting for Paranoidal: 2x2 large, copper, electric copper and floor lamps, inlaid lamps (1x1 and 2x2) you can walk and drive over, lighted copies of every electric pole with a lamp inside, and larger status lights on mining drills, train stops and power switches. Replaces Larger Lamps 2.0, Inlaid Lamps Extended, Lighted Electric Poles + and BIG LIGHT.",
+  "dependencies": [
+    "base >= 2.0.77",
+    "? aai-industry",
+    "? bobmining",
+    "? Bio_Industries_2",
+    "? bobpower",
+    "? Yuoki",
+    "? reskins-bobs",
+    "! BigLight",
+    "! LargerLamps-2_0",
+    "! InlaidLampsExtended",
+    "! Lighted-Poles-Plus"
+  ]
+}

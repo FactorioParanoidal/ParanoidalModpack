@@ -9,13 +9,13 @@ local function hide(setting_type, name)
 	end
 end
 
--- InlaidLampsExtended
-hide("double-setting", "inlaid-lamps-extended-light_intensity")
+-- paranoidal-lighting
 hide("int-setting", "inlaid-lamps-extended-light_size")
-hide("double-setting", "inlaid-lamps-extended-light_colored_intensity")
-hide("int-setting", "inlaid-lamps-extended-light_colored_size")
-hide("double-setting", "inlaid-lamps-extended-loc_glow_color_intensity")
-hide("int-setting", "inlaid-lamps-extended-loc_glow_size")
+hide("int-setting", "ritnmods-bl-01")
+hide("bool-setting", "ritnmods-bl-02")
+hide("int-setting", "ritnmods-bl-03")
+hide("int-setting", "ritnmods-bl-04")
+hide("double-setting", "lepp_light_size_factor")
 -- BottleneckLite
 hide("bool-setting", "bnl-enable")
 hide("bool-setting", "bnl-glow")
@@ -132,12 +132,6 @@ hide("bool-setting", "reskins-bobs-do-custom-furnace-variants")
 hide("color-setting", "reskins-bobs-standard-furnace-color")
 hide("color-setting", "reskins-bobs-mixing-furnace-color")
 hide("color-setting", "reskins-bobs-chemical-furnace-color")
--- BigLight
-hide("int-setting", "ritnmods-bl-01")
-hide("bool-setting", "ritnmods-bl-02")
-hide("int-setting", "ritnmods-bl-03")
-hide("int-setting", "ritnmods-bl-04")
-hide("int-setting", "ritnmods-bl-05")
 -- Bio_Industries_2
 hide("bool-setting", "BI_Show_musk_floor_in_mapview")
 -- bobenemies
@@ -159,9 +153,6 @@ hide("double-setting", "laserfix-b")
 hide("double-setting", "laserfix-glow-r")
 hide("double-setting", "laserfix-glow-g")
 hide("double-setting", "laserfix-glow-b")
--- Lighted-Poles-Plus
-hide("double-setting", "lepp_light_size_factor")
-hide("int-setting", "lepp_light_max_size")
 -- Clowns-Processing
 hide("bool-setting", "fluid-cleanup")
 -- minime

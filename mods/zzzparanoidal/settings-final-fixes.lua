@@ -326,13 +326,6 @@ if mods["HeroTurretRedux"] then
     set_settings_default_value("int-setting", "heroturrets-setting-level-up-modifier", 100)
     set_settings_default_value("bool-setting", "heroturrets-use-csv", true)
 end
-if mods["Lighted-Poles-Plus"] then
-    set_settings_default_value(
-        "string-setting",
-        "lepp_pole_blacklist",
-        "bi-power-to-rail-pole,bi-rail-hidden-power-pole,ee-super-electric-pole,ee-super-substation"
-    )
-end
 if mods["minime"] then
     set_settings_default_value("bool-setting", "minime_character-selector", false)
 end

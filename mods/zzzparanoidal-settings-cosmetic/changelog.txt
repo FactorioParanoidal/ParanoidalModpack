@@ -1,6 +1,7 @@
 ---------------------------------------------------------------------------------------------------
 Version: 0.1.0
   Changes:
+    - BigLight, InlaidLampsExtended and Lighted-Poles-Plus are replaced by paranoidal-lighting: its six settings (ritnmods-bl-01..04, lepp_light_size_factor, inlaid-lamps-extended-light_size) are hidden in one block; ritnmods-bl-05, lepp_light_max_size and the five other inlaid-lamps-extended light settings no longer exist and are no longer hidden.
     - ic-more-qualities no longer has the custom quality name settings ("ic-more-qualities-localization-*"): they are not hidden any more.
   Locale:
     - ru: the mod name and the mod list description are the same as in ParanoidalLocale (format "English title (Russian translation)"), so the mod reads the same with or without it.

@@ -118,13 +118,6 @@ for _, name in ipairs({ "pistol", "copper-nickel-firearm-magazine", "small-elect
 	local recipe = data.raw.recipe[name]
 	if recipe then recipe.enabled = true; recipe.hidden = false end
 end
--- Beta 8 used ordinary crafting. LargerLamps' AAI fallback assigns basic-crafting,
--- which the pack's character cannot use; fix these recipes, not all character categories.
-for _, name in ipairs({ "deadlock-copper-lamp", "deadlock-electric-copper-lamp" }) do
-	local lamp = data.raw.recipe[name]
-	if lamp then lamp.category = "crafting" end
-end
-
 -- Keep the existing electric-lab/lamp unlocks; do not hide their recipes permanently.
 for _, name in ipairs({ "big-lab", "deadlock-electric-copper-lamp" }) do
 	if data.raw.recipe[name] then data.raw.recipe[name].enabled = false end

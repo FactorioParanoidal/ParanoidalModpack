@@ -101,7 +101,8 @@ Lua-файле: остатки деревянных рельсов Bio Industrie
 проверить автоматически нельзя.
 
 Настройки, при смене которых сборка не загружается (найдено при проверке, не исправлялось): выключение
-буров Bob's (`bobmods-mining-miningdrills`, `bobmods-mining-areadrills` — падает BigLight), переделки
+буров Bob's (`bobmods-mining-miningdrills`, `bobmods-mining-areadrills` — падал BigLight; в paranoidal-lighting
+это место исправлено, загрузка с выключенными бурами заново не проверялась), переделки
 манипуляторов Bob's (`bobmods-logistics-inserteroverhaul` — nco-InserterCranes), биотоплива BI
 (`BI_Bio_Fuel`), плавной интеграции переплавки (`remelting-smooth-integration`); включение технологий и
 компонентов Angels (`angels-enable-tech`, `angels-enable-components`), отключение робопортов Bob's,

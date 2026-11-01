@@ -420,7 +420,6 @@ require("tweaks.custom.fish-santa-only")
 require("tweaks.custom.fuel-emissions-beta8")
 -- Compatibility fixes kept outside the original Bob/utility mod packages.
 require("tweaks.custom.upstream-prototype-fixes")
-require("tweaks.custom.upstream-light-fixes")
 require("tweaks.custom.hero-shortcut")
 -- Единый песок: aai sand → angels-solid-sand (до очистки Факториопедии).
 require("tweaks.recipe.sand-merge")

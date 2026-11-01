@@ -1,11 +1,10 @@
 -- One lighting badge for menu, inventory and entity icons, after all menu overrides.
-if not mods["Lighted-Poles-Plus"] then return end
+if not mods["paranoidal-lighting"] then return end
 
 local badge_icon = "__zzzparanoidal__/graphics/logistics-menu-beta8/1790a2d6cd5fc871fd86.png"
 local old_badges = {
     [badge_icon] = true,
-    ["__Lighted-Poles-Plus__/graphics/icons/lighted.png"] = true,
-    ["__Lighted-Poles-Plus__/graphics/icons/lighted_2.png"] = true,
+    ["__paranoidal-lighting__/graphics/icons/lighted-pole-badge.png"] = true,
 }
 
 -- Keep the approved Beta 8 artwork of the lighted wooden pole.

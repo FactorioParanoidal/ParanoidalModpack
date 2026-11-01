@@ -3,6 +3,7 @@ Version: 0.4.0
   Locale:
     - ru: the mod name and the mod list description are the same as in ParanoidalLocale (format "English title (Russian translation)"), so the mod reads the same with or without it.
   Changes:
+    - InlaidLampsExtended and Lighted-Poles-Plus are removed from the build (replaced by paranoidal-lighting, which no longer has the startup settings inlaid_lamps_extended_change_energy_usage, lepp_pole_whitelist, lepp_pole_blacklist, lepp_tech_blacklist, lepp_tech_fallback and lepp_tech_pole_weight): they are no longer hidden here.
     - AbandonedRuins_updated_fork is removed from the build (replaced by paranoidal-ruins, which no longer has the startup settings ruins-enable-spawn-ruins-all-planets and ruins-expensive-sanity-checks): they are no longer hidden here.
     - robot_attrition is removed from the build (replaced by paranoidal-robot-attrition): its startup setting robot-attrition-repair is no longer hidden.
     - All-infinit-tech is removed from the build (replaced by paranoidal-upgrade-tech): its startup setting Infinite-Formula is no longer hidden.

@@ -23,7 +23,7 @@ end
 
 -- ============================================================
 -- Электрические столбы (issue #189).
--- В 2.0 lighted-варианты (Lighted-Poles-Plus), bob's small-iron-electric-pole,
+-- В 2.0 lighted-варианты (paranoidal-lighting), bob's small-iron-electric-pole,
 -- bi-wooden-pole-*, bi-large-substation остались в ванильной energy-pipe-distribution,
 -- из-за чего «голые» столбы оказывались далеко от своих тиров. В 1.1 решал блок
 -- в prototypes/micro-final-fix.lua — восстанавливаем для 2.0.

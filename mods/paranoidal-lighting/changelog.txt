@@ -1,0 +1,25 @@
+---------------------------------------------------------------------------------------------------
+Version: 9.0.0
+Date: 2026-11-01
+  Major Features:
+    - One mod instead of LargerLamps-2_0 0.2.3 (Larger Lamps 2.0 by Deadlock989, Goakiller900, MasterBuilder, NullHarp), InlaidLampsExtended 2.0.0 (Inlaid Lamps Extended by Mathematician, CobaltTiger, Pi-C), Lighted-Poles-Plus 2.0.4 (Lighted Electric Poles + by Optera) and BigLight 0.3.0 (BIG LIGHT by Ritn). Entity, item, recipe, technology, recipe category, kept setting and locale key names are unchanged, so buildings, recipes and research of existing saves stay.
+  Optimizations:
+    - Lighted poles: the pole is registered with register_on_object_destroyed and its hidden lamp is kept in storage; the lamp is removed when the pole disappears in any way (mined, killed, upgraded, destroyed by a script without an event) instead of four removal events with a search at the pole position. Dolly moves teleport the stored lamp without a search.
+    - Lighted poles: the pole/lamp name lookup is cached per load; no global functions.
+    - Train stop lights are built once with their final 2.0 geometry; zzzparanoidal no longer rebuilds them, and the copper lamp no longer carries the 1.1 "hr_version" sprites that zzzparanoidal had to promote.
+    - No load-time logging of whole prototype tables (Inlaid Lamps logged the vanilla lamp, both inlaid lamps, both recipes and all collision layers on every start).
+    - Graphics recompressed (lossy palette for sprites and icons, lossless for light and tinted glow layers): about 0.74 MB -> 0.37 MB; the copper lamp and the electric copper lamp share one set of pictures (they were byte-identical copies).
+  Changes:
+    - Removed the startup settings ritnmods-bl-05 (rail signal lights; its code was disabled), lepp_light_max_size (75), lepp_pole_whitelist and lepp_pole_blacklist (none of the listed poles exist in the build), lepp_tech_blacklist (empty), lepp_tech_fallback ("lamp"), lepp_tech_pole_weight ("realistic", 40 kg), inlaid_lamps_extended_change_energy_usage (off) and the inlaid lamp light intensity, coloured light and glow settings (0.9, 1, 6, 0.235, 6). Their values of the build are constants now. Kept: ritnmods-bl-01..04, lepp_light_size_factor, inlaid-lamps-extended-light_size.
+    - Removed: the dead control.lua of Larger Lamps (it waited for the mod "DeadlockLargerLamp" and used the 1.1 API), its AAI recipe branch (it checked the misspelled "aai-industries" and never ran) and the unused "aai-production" recipe category it created, the Krastorio 2, Cursed Filter Mining Drill, Hiladdar Mining, ritnmods, Train Stop Nostalgia, LTN, train-scaling, Dectorio, Schall Lamp Contrast, PickerExtended, ShinyBob and nullius branches (mods not in the build), the BIG LIGHT rail signal and "addon-entity" code and graphics, LR sprites, backups and editor files.
+    - Recipes of all four lamps are in the "crafting" category (the fallback "basic-crafting" was fixed by zzzparanoidal before); the copper lamp upgrades to the large lamp (was set by zzzparanoidal).
+    - Mining drill status lights are found by their vanilla sprite instead of a fixed layer index; Bob's drills switched off by their settings no longer break loading.
+    - Lighted poles of a pole whose next upgrade gets no lighted copy no longer point to a missing prototype; the fallback technology always gets an effects list.
+    - Lighted poles: researched lighted pole recipes are re-enabled at configuration change (only these recipes, not every recipe of every researched technology as before).
+    - The signal colours of the vanilla lamp are copied in data-final-fixes to all five electric lamps (before: the large lamp and the two inlaid lamps).
+    - Locales: English and Russian only.
+  Bugfixes:
+    - Lighted poles: a mod added to a save with lighted poles placed their hidden lamps only at configuration change; on_init now places them too. Cloned lighted poles get a lamp and cloned hidden lamps are removed.
+    - Lighted poles: the fallback technology received a single effect table instead of a list when it had no effects.
+  Saves:
+    - Nothing is lost: the old mods kept no state that matters (Lighted Electric Poles + stored only name lists). At the first load the hidden lamps of all lighted poles are rebuilt. Values of the removed settings in mod-settings.dat are ignored.
