@@ -2884,30 +2884,6 @@
       "target": "__zzzparanoidal__/graphics/bobicons-beta8/bobicons/graphics/icons/plate/nitinol-alloy-128.png",
       "reused_module_asset": false
     },
-    "__bobicons__/graphics/icons/bobplates/nitinol-bearing-64.png": {
-      "source_mod": "bobicons",
-      "source_version": "1.1.2",
-      "source_path": "graphics/icons/bobplates/nitinol-bearing-64.png",
-      "sha256": "d172b3e62270ba212e9ee0131cc0035d9af369228534be8d8890d45d55ef875b",
-      "dimensions": [
-        120,
-        64
-      ],
-      "target": "__zzzparanoidal__/graphics/bobicons-beta8/bobicons/graphics/icons/bobplates/nitinol-bearing-64.png",
-      "reused_module_asset": false
-    },
-    "__bobicons__/graphics/icons/bobplates/nitinol-bearing-ball-64.png": {
-      "source_mod": "bobicons",
-      "source_version": "1.1.2",
-      "source_path": "graphics/icons/bobplates/nitinol-bearing-ball-64.png",
-      "sha256": "f4419e6336db628ecf7e2e926ec8798f4e4fd1b27cfd3499732b5319ab92aa2c",
-      "dimensions": [
-        120,
-        64
-      ],
-      "target": "__zzzparanoidal__/graphics/bobicons-beta8/bobicons/graphics/icons/bobplates/nitinol-bearing-ball-64.png",
-      "reused_module_asset": false
-    },
     "__bobicons__/graphics/icons/bobplates/nitinol-gear-wheel-64.png": {
       "source_mod": "bobicons",
       "source_version": "1.1.2",
@@ -3434,18 +3410,6 @@
         64
       ],
       "target": "__zzzparanoidal__/graphics/bobicons-beta8/bobicons/graphics/icons/ores/zinc-ore-64.png",
-      "reused_module_asset": false
-    },
-    "__bobicons__/graphics/icons/plate/zinc-plate-128.png": {
-      "source_mod": "bobicons",
-      "source_version": "1.1.2",
-      "source_path": "graphics/icons/plate/zinc-plate-128.png",
-      "sha256": "cbfee80d0538fa78a9ba09f0844a899dc1eac881263f6f79705d8686f51e4c18",
-      "dimensions": [
-        240,
-        128
-      ],
-      "target": "__zzzparanoidal__/graphics/bobicons-beta8/bobicons/graphics/icons/plate/zinc-plate-128.png",
       "reused_module_asset": false
     },
     "__bobicons__/graphics/icons/base/burner-inserter-128.png": {
@@ -3998,18 +3962,6 @@
         128
       ],
       "target": "__zzzparanoidal__/graphics/bobicons-beta8/bobicons/graphics/icons/base/iron-plate-128.png",
-      "reused_module_asset": false
-    },
-    "__bobicons__/graphics/icons/angelssmelting/rod-iron-64.png": {
-      "source_mod": "bobicons",
-      "source_version": "1.1.2",
-      "source_path": "graphics/icons/angelssmelting/rod-iron-64.png",
-      "sha256": "3f966b79b5c67b46d0f8ba897d6a4c502d4770326a22923e4b272e847cd52c5f",
-      "dimensions": [
-        120,
-        64
-      ],
-      "target": "__zzzparanoidal__/graphics/bobicons-beta8/bobicons/graphics/icons/angelssmelting/rod-iron-64.png",
       "reused_module_asset": false
     },
     "__bobicons__/graphics/icons/base/lab-128.png": {

@@ -7,7 +7,7 @@
 local tint = angelsmods.functions.get_fluid_recipe_tint("angels-liquid-molten-iron")
 -- Итоговая иконка предмета iron-stick (bobicons-beta8 ставит её позже этого файла).
 local stick_layers = {
-	{ icon = "__zzzparanoidal__/graphics/bobicons-beta8/bobicons/graphics/icons/angelssmelting/rod-iron-64.png", icon_size = 64, scale = 0.5 },
+	{ icon = "__base__/graphics/icons/iron-stick.png", icon_size = 64, scale = 0.5 },
 }
 -- Иконка прута + наложение (по образцу рецептов шестерён).
 local function stick_with(overlay)

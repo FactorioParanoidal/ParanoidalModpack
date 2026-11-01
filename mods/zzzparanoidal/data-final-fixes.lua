@@ -430,6 +430,8 @@ require("removals.tips-and-tricks")
 require("tweaks.custom.molten-tin-chrome-beta8")
 -- Локальные иконки Reskins Library, включая слои рецептов и копии прототипов.
 require("tweaks.custom.reskins-library-icons")
+-- Картинка на конвейере/земле = итоговая иконка у согласованных сплавов и деталей; после всех замен иконок.
+require("tweaks.item.pictures-follow-icon")
 -- Оптимизация атласов графики: после всех правок, создающих и копирующих прототипы и иконки.
 require("tweaks.custom.graphics-atlas")
 -- Собственные изображения поверх оригинальных пакетов Reskins; после сравнения путей атласа.

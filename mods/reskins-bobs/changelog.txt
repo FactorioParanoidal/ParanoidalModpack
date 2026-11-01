@@ -5,6 +5,7 @@ Date: 2026-06-01
     - ru: the mod name and the mod list description are the same as in ParanoidalLocale (format "English title (Russian translation)"), so the mod reads the same with or without it.
   Changes:
     - Revised how heat pipe sprites are handled to avoid issues related to modified base-mod global functions
+    - Paranoidal: the belt/ground pictures of lithium, the copper-tungsten, alien blue and alien orange alloys and the brass and steel gear wheels repeat the Beta 8 interface icons used by the pack.
 ---------------------------------------------------------------------------------------------------
 Version: 2.3.7
 Date: 2026-05-31

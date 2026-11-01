@@ -14,6 +14,7 @@ return {
     ["__reskins-angels__/graphics/icons/smelting/gears/nitinol-gear-wheel.png"] = "__zzzparanoidal__/graphics/reskins-overrides/reskins-angels/icons/smelting/gears/nitinol-gear-wheel.png",
     ["__reskins-angels__/graphics/icons/smelting/gears/titanium-gear-wheel.png"] = "__zzzparanoidal__/graphics/reskins-overrides/reskins-angels/icons/smelting/gears/titanium-gear-wheel.png",
     ["__reskins-angels__/graphics/icons/smelting/gears/tungsten-gear-wheel.png"] = "__zzzparanoidal__/graphics/reskins-overrides/reskins-angels/icons/smelting/gears/tungsten-gear-wheel.png",
+    ["__reskins-angels__/graphics/icons/smelting/ingots/chrome/ingot-chrome.png"] = "__zzzparanoidal__/graphics/reskins-overrides/reskins-angels/icons/smelting/ingots/chrome/ingot-chrome.png",
     ["__reskins-angels__/graphics/icons/smelting/ingots/chrome/ingot-chrome-1.png"] = "__zzzparanoidal__/graphics/reskins-overrides/reskins-angels/icons/smelting/ingots/chrome/ingot-chrome-1.png",
     ["__reskins-angels__/graphics/icons/smelting/ingots/chrome/ingot-chrome-2.png"] = "__zzzparanoidal__/graphics/reskins-overrides/reskins-angels/icons/smelting/ingots/chrome/ingot-chrome-2.png",
     ["__reskins-angels__/graphics/icons/smelting/ingots/chrome/ingot-chrome-3.png"] = "__zzzparanoidal__/graphics/reskins-overrides/reskins-angels/icons/smelting/ingots/chrome/ingot-chrome-3.png",
