@@ -98,13 +98,21 @@ function M.tank_smoke(entity, ticks_left)
     gps(entity.surface, entity.position) })
 end
 
-function M.tank_saved(entity)
+local function tank_out(entity, key)
   if not enabled() then return end
   local players = players_of(entity.force)
   for _, player in pairs(players) do
     player.remove_alert { entity = entity }
   end
-  say(players, { "", { "flo-alert.tank-saved", entity.localised_name }, " ", gps(entity.surface, entity.position) })
+  say(players, { "", { key, entity.localised_name }, " ", gps(entity.surface, entity.position) })
+end
+
+function M.tank_saved(entity)
+  tank_out(entity, "flo-alert.tank-saved")
+end
+
+function M.tank_extinguished(entity)
+  tank_out(entity, "flo-alert.tank-extinguished")
 end
 
 function M.cookoff(entity)

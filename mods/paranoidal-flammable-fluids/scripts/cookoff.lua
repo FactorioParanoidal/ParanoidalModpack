@@ -103,9 +103,9 @@ function M.start(entity)
   local id = entity.unit_number
   if not id or (storage.cook and storage.cook[id]) then return end
   if not FO.core.check_cooldown(id) then return end
-  if FO.protection.entity(entity) then return end
   local _, total = scan(entity)
   if total < 1 then return end
+  if FO.protection.entity(entity) then return end
   storage.cook = storage.cook or {}
   storage.cook[id] = { entity = entity, pops = 0, interval = C.COOK_START_INTERVAL }
   FO.alerts.cookoff(entity)

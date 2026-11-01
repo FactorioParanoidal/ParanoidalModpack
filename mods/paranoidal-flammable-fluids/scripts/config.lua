@@ -15,6 +15,7 @@ C.VOLATILE = {
   ["bob-hydrogen"] = 4,
   ["angels-gas-deuterium"] = 4,
   ["bob-deuterium"] = 4,
+  ["y_hydrogen"] = 4, -- Yuoki
 }
 C.VOLATILE_MIN_FRACTION = 0.025   -- emptier fluid boxes do not explode (Beta 8 threshold)
 C.MAX_EXPLOSIONS_PER_TICK = 20
@@ -68,9 +69,10 @@ C.TOXIC_POLLUTION = 500
 
 C.HAZARD_MARGIN = 4               -- tanks/ammo within explosion radius + margin react
 C.CHECK_COOLDOWN = 120            -- per-entity cooldown for damage-event checks
+C.CHECKED_PURGE = 256             -- drop expired cooldown entries after this many new ones
 C.ALERT_COOLDOWN = 600            -- per chunk and alert kind
 
--- Ruin traps (AbandonedRuins-paranoidal).
+-- Ruin traps (paranoidal-ruins).
 C.TRAP_PREFIX = "pd-flo-trap-"
 C.TRAP_INTERVAL = 60
 C.TRAP_MARGIN = 6

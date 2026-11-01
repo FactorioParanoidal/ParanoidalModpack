@@ -8,6 +8,7 @@ local M = {}
 FO.core = M
 
 local processing = false -- true while our own explosion/fuse damages entities
+local silenced = nil      -- unit number of an entity we kill ourselves after its explosion (die())
 
 ---Run fn with chain reactions queued instead of recursing.
 function M.guarded(fn, ...)
@@ -27,17 +28,44 @@ function M.settings()
   }
 end
 
----Per-entity cooldown for repeated damage events (fire damages every tick).
+---Kill an entity whose explosion was already handled: its on_entity_died must not explode it again
+---(volatile contents would otherwise trigger a second explosion).
+function M.die_silently(entity)
+  if not entity.valid then return end
+  silenced = entity.unit_number
+  entity.die()
+  silenced = nil
+end
+
+---Per-entity cooldown for repeated damage events (fire damages every tick). Expired entries are
+---dropped every C.CHECKED_PURGE new entries, so damage that starts nothing does not grow storage.
 function M.check_cooldown(id)
   if not id then return true end
   local checked = storage.checked
   if not checked then
     checked = {}
     storage.checked = checked
+    storage.checked_n = 0
   end
   local tick = game.tick
   local last = checked[id]
   if last and tick - last < C.CHECK_COOLDOWN then return false end
+  if not last then
+    local n = (storage.checked_n or 0) + 1
+    if n > C.CHECKED_PURGE then
+      local kept = {}
+      n = 1
+      for key, t in pairs(checked) do
+        if tick - t < C.CHECK_COOLDOWN then
+          kept[key] = t
+          n = n + 1
+        end
+      end
+      checked = kept
+      storage.checked = kept
+    end
+    storage.checked_n = n
+  end
   checked[id] = tick
   return true
 end
@@ -187,7 +215,8 @@ FO.sched.register("explode", function(task)
 end)
 
 ---Fire or toxic leak from a destroyed machine whose recipe handles dangerous fluids.
-local function accident(entity, content, exploded, event)
+---no_fire: the machine already exploded or stands in a fire safety zone (toxic leaks still happen).
+local function accident(entity, content, no_fire, event)
   local recipe = entity.get_recipe()
   if not recipe and entity.type == "furnace" then
     local previous = entity.previous_recipe
@@ -200,7 +229,7 @@ local function accident(entity, content, exploded, event)
   local box = entity.bounding_box
   local size = math.max(1, (box.right_bottom.x - box.left_top.x) * (box.right_bottom.y - box.left_top.y) / 9)
 
-  if flam and not exploded then
+  if flam and not no_fire then
     local rec = M.record(entity, {
       energy = C.ACCIDENT_ENERGY * size + (content and content.energy or 0),
       amount = C.ACCIDENT_AMOUNT * size + (content and content.amount or 0),
@@ -224,6 +253,7 @@ end
 
 function M.on_entity_died(event)
   local entity = event.entity
+  if silenced and entity.unit_number == silenced then return end
   local entity_type = entity.type
 
   -- a burning tank always ends in a catastrophe, whatever killed it
@@ -248,11 +278,10 @@ function M.on_entity_died(event)
     content = FO.fluids.measure(entity)
     if not (content and content.volatile) then return end
   end
-  if FO.protection.entity(entity) then return end -- fire safety turret nearby
-
   content = content or FO.fluids.measure(entity)
+  local protected = FO.protection.entity(entity) -- fire safety turret nearby: no fire, no explosion
   local exploded = false
-  if content and (content.volatile or content.energy > C.MIN_ENERGY) then
+  if not protected and content and (content.volatile or content.energy > C.MIN_ENERGY) then
     local catastrophe = entity_type == "storage-tank" and content.energy >= C.CATASTROPHE_ENERGY
         and FO.tanks.is_tank(entity)
     local rec = M.record(entity, content, catastrophe)
@@ -261,7 +290,7 @@ function M.on_entity_died(event)
     exploded = true
   end
   if ignited and (entity_type == "assembling-machine" or entity_type == "furnace") then
-    accident(entity, content, exploded, event)
+    accident(entity, content, exploded or protected, event)
   end
 end
 

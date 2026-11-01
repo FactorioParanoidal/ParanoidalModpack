@@ -1,4 +1,24 @@
 ---------------------------------------------------------------------------------------------------
+Version: 9.0.0
+Date: 2026-11-01
+  Major Features:
+    - One mod instead of Flammable_Oils_QUICKFIX 0.2.22 (Paranoidal fork of Flammable Oils) and the fire safety turret script of zzzparanoidal (controls/fire-safety.lua). Setting, entity, achievement, locale key and remote interface "flammable_oils" names are unchanged; the turret prototypes are still created from zzzparanoidal/data-final-fixes.lua at the same place (before the quality recycling rebuild), from this mod's prototypes/fire-safety-turret.lua.
+  Optimizations:
+    - The fire safety check is a direct function call instead of remote.call("paranoidal_fire_safety", "is_protected") with a surface search for every check; active turrets are indexed by surface and 32x32 cell, so a check looks only at the cells within the largest turret range and costs nothing while no turret is active.
+    - Cook-off asks for fire safety only after it found ammunition in the store (before: for every store damaged by fire or explosion).
+    - The fire tick handler is registered and unregistered only when the task list becomes non-empty or empty (before: re-registered every tick while something burned).
+    - Turret build events are filtered by the turret names; a removed turret is forgotten through on_object_destroyed (before: at its next 2-second service).
+  Changes:
+    - A burning storage tank inside the zone of an active fire safety turret is reported as put out by the turret, without the "Fire brigade" achievement (it stays for draining the tank in time).
+    - A destroyed chemical machine inside a fire safety zone still leaks its toxic gases (poison cloud, pollution, alert); the turret only prevents fire and explosions.
+    - Yuoki hydrogen (y_hydrogen) is volatile like Angels and Bob hydrogen.
+    - Removed the flammability override list (names of Angels 1.1 and absent mods; flammable means a fuel value above zero) and the remote functions add_flammable_type / remove_flammable_type; nothing in the build used them.
+    - Removed the remote interface "paranoidal_fire_safety" (only this mod used it), the French locale and the optional dependencies on mods absent from the build.
+    - Saves: the storage of Flammable_Oils_QUICKFIX cannot move to a new mod name and is lost (agreed): oil ruin traps not yet triggered stay as plain ruins, and a fire burning at save time stops. Fire safety turrets are picked up again from the map on the first load; their barrels start folded.
+  Bugfixes:
+    - A storage tank with hydrogen or deuterium no longer explodes twice in a catastrophe (its own die() call raised a second, volatile explosion).
+    - The per-entity damage cooldown table no longer grows forever when fire or explosions hit stores and tanks that start nothing.
+---------------------------------------------------------------------------------------------------
 Version: 0.2.22
 Date: 2025-04-26
   Info:

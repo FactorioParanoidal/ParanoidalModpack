@@ -45,7 +45,7 @@ local function catastrophe(id, st, content)
   local rec = FO.core.record(entity, content, true)
   rec.cause = { "flo-cause.overheat" }
   FO.core.run(rec, entity)
-  if entity.valid then entity.die() end -- no damage type: our death handler ignores it
+  FO.core.die_silently(entity) -- the explosion is done: its death must not explode volatile contents again
 end
 
 ---Killed while burning: the catastrophe happens right now.
@@ -73,11 +73,17 @@ local function update(task)
 
   local content = FO.fluids.measure(entity)
   local energy = content and content.energy or 0
-  if energy < math.max(C.TANK_MIN_ENERGY, st.initial * C.TANK_SAVED_FRACTION) or FO.protection.entity(entity) then
+  if energy < math.max(C.TANK_MIN_ENERGY, st.initial * C.TANK_SAVED_FRACTION) then -- drained in time
     tanks[task.id] = nil
     if next(tanks) == nil then storage.tanks = nil end
     FO.alerts.tank_saved(entity)
     FO.ach.near("flo-tank-saved", entity.surface, entity.position, 100)
+    return
+  end
+  if FO.protection.entity(entity) then -- put out by a fire safety turret: no achievement
+    tanks[task.id] = nil
+    if next(tanks) == nil then storage.tanks = nil end
+    FO.alerts.tank_extinguished(entity)
     return
   end
 

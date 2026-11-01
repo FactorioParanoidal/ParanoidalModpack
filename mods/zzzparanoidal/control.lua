@@ -9,8 +9,6 @@ rail_support_power.install() -- Кабель в опорах эстакадны�
 require("controls.battery-locomotive-return").install() -- Аккумулятор BET при разборке MU-и hiend-локомотивов.
 require("controls.torch-no-loot") -- Разобранный факел пропадает целиком.
 require("controls.spacex-button-force") -- Кнопка SpaceX не остаётся после выхода из Песочницы.
-local fire_safety = require("controls.fire-safety")
-fire_safety.install() -- Пожарная турель: вода, гасит огонь, защита от Flammable Oils в радиусе.
 local turret_deploy = require("controls.turret-deploy")
 turret_deploy.install() -- Построенная турель включается через несколько секунд (настройки карты).
 -- Install after loader-shells chains the SpilledItems handler; neither consumer
@@ -112,14 +110,23 @@ script.on_init(function() --наш любимый init, запрещаем дв�
 	burner_pump_status.init()
 	loader_shells.init()
 	rail_support_power.sync()
-	fire_safety.sync()
 	turret_deploy.sync()
 end)
 
 script.on_load(function() --без дропа эволюции потому что game недоступен
-	fire_safety.on_load() -- тик стволов пожарных турелей зарегистрирован, только пока они движутся
 	-- configure_picker_dollies()
 end)
+
+-- Пожарные турели переехали в paranoidal-flammable-fluids (он рисует свои стволы): убрать старые стволы
+-- и состояние модуля controls/fire-safety.lua из сохранений.
+local function drop_old_fire_safety()
+	local old = storage.fire_safety
+	if not old then return end
+	for _, rec in pairs(old.turrets or {}) do
+		if type(rec) == "table" and rec.render and rec.render.valid then rec.render.destroy() end
+	end
+	storage.fire_safety = nil
+end
 
 script.on_configuration_changed(function() --фикс эволюции при загрузке игры, если галочка была убрана и поставлена вновь
 	evo_and_dolly()
@@ -128,7 +135,7 @@ script.on_configuration_changed(function() --фикс эволюции при з
 	burner_pump_status.init()
 	loader_shells.init()
 	rail_support_power.sync()
-	fire_safety.sync()
+	drop_old_fire_safety()
 	turret_deploy.sync()
 end)
 

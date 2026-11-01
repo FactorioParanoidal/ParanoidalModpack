@@ -1,59 +1,11 @@
 -- Fluid classification (flammable / gas / toxic) and measuring of entity contents.
--- Tables are derived from prototypes (identical on every peer) plus saved remote overrides.
+-- Tables are derived from prototypes only (identical on every peer): flammable = fuel value above zero
+-- (the explosion energy is computed from the fuel value, so nothing else can burn).
 local FO = require("scripts.registry")
 local C = require("scripts.config")
 
 local M = {}
 FO.fluids = M
-
-local FLAMMABLE_OVERRIDE = {
-  ["crude-oil"] = true,
-  ["heavy-oil"] = true,
-  ["light-oil"] = true,
-  ["lubricant"] = false,
-  ["gas-hydrogen"] = true,
-  ["gas-methane"] = true,
-  ["gas-ethane"] = true,
-  ["gas-butane"] = true,
-  ["gas-propene"] = true,
-  ["liquid-naphtha"] = true,
-  ["liquid-mineral-oil"] = true,
-  ["liquid-fuel-oil"] = true,
-  ["gas-methanol"] = true,
-  ["gas-ethylene"] = true,
-  ["gas-benzene"] = true,
-  ["gas-synthesis"] = true,
-  ["gas-butadiene"] = true,
-  ["gas-phenol"] = true,
-  ["gas-ethylbenzene"] = true,
-  ["gas-styrene"] = true,
-  ["gas-formaldehyde"] = true,
-  ["gas-polyethylene"] = true,
-  ["gas-glycerol"] = true,
-  ["gas-natural-1"] = true,
-  ["liquid-multi-phase-oil"] = true,
-  ["gas-raw-1"] = true,
-  ["liquid-condensates"] = true,
-  ["liquid-ngl"] = true,
-  ["gas-chlor-methane"] = true,
-  ["hydrogen"] = true,
-  ["liquid-fuel"] = true,
-  ["diesel-fuel"] = true,
-  ["petroleum-gas"] = true,
-  ["water"] = false,
-  ["sulfuric-acid"] = false,
-  ["molten-tiberium"] = true,
-  ["tiberium-waste"] = false,
-  ["tiberium-sludge"] = false,
-  ["tiberium-slurry"] = false,
-  ["liquid-tiberium"] = true,
-  ["tiberium-slurry-blue"] = false,
-  ["cubeine-solution"] = false,
-}
-
-local GAS_OVERRIDE = {
-  ["liquid-cubonium"] = true,
-}
 
 -- Toxic gases and vapours of the build (Angels, Bob, Clowns, petrochem): released as a poison cloud.
 local TOXIC_PATTERNS = {
@@ -88,10 +40,6 @@ local function build()
 
     toxic[name] = has_any(name, TOXIC_PATTERNS) and not has_any(name, TOXIC_EXCLUDE)
   end
-
-  for name, value in pairs(FLAMMABLE_OVERRIDE) do flammable[name] = value end
-  for name, value in pairs(GAS_OVERRIDE) do gas[name] = value end
-  for name, value in pairs(storage.remote_overrides or {}) do flammable[name] = value end
 end
 
 function M.reset()
@@ -102,12 +50,6 @@ end
 function M.flammable_types()
   if not flammable then build() end
   return flammable
-end
-
-function M.set_override(name, value)
-  storage.remote_overrides = storage.remote_overrides or {}
-  storage.remote_overrides[name] = value
-  M.flammable_types()[name] = value
 end
 
 ---Flammable and toxic contents of an entity, or nil when there is nothing dangerous inside.
@@ -178,7 +120,7 @@ function M.recipe_hazards(recipe)
     local function scan(list)
       for _, f in pairs(list or {}) do
         if f.type == "fluid" then
-          if flammable[f.name] and prototypes.fluid[f.name] and prototypes.fluid[f.name].fuel_value > 0 then flam = true end
+          if flammable[f.name] then flam = true end
           if toxic[f.name] then tox = true end
         end
       end

@@ -397,8 +397,10 @@ require("tweaks.recipe.iron-pole-upgrade")
 require("tweaks.custom.locale-overrides")
 -- Зенитные турели 1–3: копии снайперских после всех правок характеристик, рецептов и дерева; до переработки.
 require("prototypes.anti-air-turret")
--- Пожарная турель (вода, защита от Flammable Oils): до пересборки переработки.
-require("prototypes.fire-safety-turret")
+-- Пожарная турель (вода, защита от пожаров; код и прототипы — paranoidal-flammable-fluids): до пересборки переработки.
+if mods["paranoidal-flammable-fluids"] then
+	require("__paranoidal-flammable-fluids__/prototypes/fire-safety-turret")
+end
 -- Ветка качества: ранний модуль качества и тиры из двух предыдущих (до пересборки переработки).
 require("tweaks.recipe.quality-modules")
 -- Пластина из слитка в печи (лестница качества): до anti-exploit и пересборки переработки.

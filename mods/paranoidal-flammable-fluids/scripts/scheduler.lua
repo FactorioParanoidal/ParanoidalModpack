@@ -26,14 +26,14 @@ function M.take_explosion_budget()
 end
 
 local on_tick
+local ticking = false -- registration state of on_tick in this Lua state (set again in on_load)
 
 function M.sync()
   local sched = storage.sched
-  if sched and next(sched) ~= nil then
-    script.on_event(defines.events.on_tick, on_tick)
-  else
-    script.on_event(defines.events.on_tick, nil)
-  end
+  local want = sched ~= nil and next(sched) ~= nil
+  if want == ticking then return end
+  ticking = want
+  script.on_event(defines.events.on_tick, want and on_tick or nil)
 end
 
 function M.schedule(delay, task)
@@ -62,6 +62,7 @@ local function idle_cleanup()
   storage.sched = nil
   storage.fuse_seen = nil
   storage.checked = nil
+  storage.checked_n = nil
 end
 
 on_tick = function(event)
@@ -110,23 +111,6 @@ on_tick = function(event)
     idle_cleanup()
   end
   M.sync()
-end
-
--- The previous fork version kept chain explosions in storage.queue.
-function M.migrate()
-  local q = storage.queue
-  if not q then return end
-  storage.queue = nil
-  for i = q.head or 1, q.tail or 0 do
-    local e = q[i]
-    if e and e.surface then
-      M.schedule(1, { kind = "explode", rec = {
-        surface = e.surface, position = e.position, radius = e.radius or 0.5, force = e.force,
-        energy = e.energy or 0, amount = 0, fraction = e.fraction or 0,
-        damage_type = e.damage_type or "fire", neighbours = e.neighbour and { e.neighbour } or nil,
-      } })
-    end
-  end
 end
 
 return M

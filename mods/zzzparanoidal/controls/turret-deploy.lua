@@ -6,7 +6,7 @@
 -- движок по time_to_live (и вместе с турелью), скрипт их не обновляет.
 local M = {}
 
-local STEP = 15 -- шаг корзин включения, тиков; 10 и 60 заняты fire-safety и burner-pump-status
+local STEP = 15 -- шаг корзин включения, тиков; 60 занят burner-pump-status
 local SEGMENTS = 8
 local GAP = 0.1 -- радиан между дугами
 local START = 1.5 * math.pi -- первая дуга начинается сверху, кольцо гаснет по часовой стрелке

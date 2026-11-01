@@ -1,0 +1,16 @@
+{
+  "name": "paranoidal-flammable-fluids",
+  "version": "9.0.0",
+  "title": "Paranoidal Flammable Fluids",
+  "author": "FactorioParanoidal; Flammable Oils by Klonan, OwnlyMe, Fr_Dae, Pi-c, Kannagimoe, Klogan, lily",
+  "homepage": "https://github.com/FactorioParanoidal/ParanoidalModpack",
+  "factorio_version": "2.0",
+  "description": "Pipes, storage tanks, machines and wagons with flammable fluids catch fire and explode: the fire crawls through pipes, burning tanks overheat and blow up unless drained, ammunition cooks off, chemical plants leak fire or poison, oil ruins hide traps. Fire safety turrets fed with water put out fires, enemy acid and clouds and keep everything in their circle from catching fire. Replaces Flammable_Oils_QUICKFIX and the fire safety turret code of zzzparanoidal.",
+  "dependencies": [
+    "base >= 2.0.77",
+    "? KS_Power",
+    "? paranoidal-ruins",
+    "! Flammable_Oils_QUICKFIX",
+    "! Flammable_Oils"
+  ]
+}
