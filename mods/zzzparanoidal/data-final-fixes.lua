@@ -69,6 +69,7 @@ require("tweaks.custom.shortcut-icons")
 require("tweaks.custom.selections")
 
 
+require("removals.bio-modules") -- агромодули Angels вырезаны из сборки
 require("removals.fishes")
 require("removals.aai-medium-electric-pole")
 require("removals.aai-basic-logistics")
