@@ -4,8 +4,6 @@ require('nanobots-common')
 
 NanobotsAuto = {}
 
-local Position = require('__stdlib2__/stdlib/area/position')
-local table = require('__stdlib2__/stdlib/utils/table')
 local Queue = require('scripts/hash_queue')
 
 local max = math.max
@@ -244,9 +242,13 @@ nano_network_check = function(character)
         local pnetwork = cell and cell.mobile and cell.logistic_network
         local has_pbots = cell and cell.construction_radius > 0 and cell.logistic_network and
                               cell.logistic_network.all_construction_robots > 0
-        local has_nbots = table.any(networks, function(network)
-            return network ~= pnetwork and network.all_construction_robots > 0
-        end)
+        local has_nbots = false
+        for _, network in pairs(networks) do
+            if network ~= pnetwork and network.all_construction_robots > 0 then
+                has_nbots = true
+                break
+            end
+        end
         return not (has_pbots or has_nbots)
     end
 end
@@ -274,7 +276,8 @@ end
 --- @param state NanoState
 --- @return boolean
 local function within_radius(position, state)
-    return Position.distance(position, state.position) <= state.radius
+    local dx, dy = position.x - state.position.x, position.y - state.position.y
+    return (dx * dx + dy * dy) ^ 0.5 <= state.radius
 end
 
 --- within_radius, and on the character's surface (a queued target may be on the surface the

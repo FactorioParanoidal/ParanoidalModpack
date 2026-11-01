@@ -7,7 +7,6 @@
   "description": "Early automated construction bots.  Use a special emitter gun to manually or automatically fire consumable nanobots that perform construction tasks. Also adds items which add new features to construction bots. Thanks to Nexela for creating the original mod and Regi_Mahler for updating it to 2.0.",
   "dependencies": [
     "base >= 2.0.39",
-    "stdlib2 >= 2.0.0",
     "? bobelectronics", "? aai-industry",
     "! Nanobots", "! Nanobots2", "! nanobots-refined"
   ],

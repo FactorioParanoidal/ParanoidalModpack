@@ -2,6 +2,8 @@
 Version: 9.0.7
 Date: 2026-10-21
   Changes:
+    - No longer needs stdlib2: event handling, player and force data, the remote interface, the console command and the prototype helpers are part of the mod. Storage keeps the same layout (storage.players, storage.forces, pending action keys) (Paranoidal local change)
+    - Removed dead code: the reprogramming pad (needed the absent PickerAtheneum mod), the disabled-chip shortcuts for PickerInventoryTools (absent), the 1.8.x migrations (the fork starts with fresh storage) and the stdlib remote functions write_global, dump_all and merge_interfaces (1.1 API) (Paranoidal local change)
     - Renamed to nanobots-refined-reforged, the Paranoidal fork of nanobots-refined (title "Nanobots: Early Bots Refined (Reforged)"); version 9 against portal auto-updates. Prototype, setting and key names are unchanged. An existing save keeps the entities and items but starts with fresh mod storage (custom ranges, queues).
   Features:
     - Firing speeds (for both manual and auto modes) are now configurable.
@@ -13,8 +15,10 @@ Date: 2026-10-21
     - Fixed bug preventing Bob's mods recipe replacements from working.
     - Fixed error "attempt to call global 'set_stack'" when fillers handle an insert request in cheat mode; a missing request count no longer errors either (Paranoidal local fix).
   Graphics:
+    - PNG files recompressed (pingo -s4 -quality=45; the equipment chips and the projectile -quality=75; the roboport light glow, the combinator LED and the tinted cloud animation lossless): 1.88 MB -> 1.14 MB, names and sizes unchanged, worst 33.2 dB. Removed the unused file 'nano-projectile - Copy.png' (Paranoidal local change)
     - Roboport interface uses its HR sprites directly (2.0 ignores hr_version) (Paranoidal local fix)
   Optimizations:
+    - Events reach the handlers directly instead of through the stdlib2 dispatcher (a metatable and an event field scan per handler, every tick for the two tick handlers). A handler error is still caught, logged and printed as before (Paranoidal local optimization)
     - Auto mode asks the engine for the targets instead of fetching every entity in reach (trees, ore, belts) each second: marked for deconstruction, the force's upgrades, ghosts and item requests, then its damaged entities. Every target is still classified as before; only the queueing order follows these groups (Paranoidal local fix)
     - The queue limit of 100 tasks works again: Queue.count read undefined globals and always reported 0, so the queue grew without bound and every refill re-checked all queued targets. Refills skip already queued targets first and don't scan at all while the queue is full (Paranoidal local fix)
     - The player checks (character, emitter and ammo, construction network, radius) are made once per player and tick instead of for every task and target; the per-target network check repeated the same search at the character's position (Paranoidal local fix)

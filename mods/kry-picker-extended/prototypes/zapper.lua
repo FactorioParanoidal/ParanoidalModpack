@@ -1,8 +1,6 @@
 -------------------------------------------------------------------------------
 --[[Sounds]] --
 -------------------------------------------------------------------------------
-local Entity = require('__kry_stdlib__/stdlib/data/entity')
-
 local setup_animation = function(entity)
     for _, animation in pairs(entity.animations) do
         animation.scale = .5
@@ -13,11 +11,14 @@ local setup_animation = function(entity)
     end
 end
 
-Entity('explosion', 'explosion'):krycopy('drop-planner'):execute(setup_animation)
+local drop_planner = table.deepcopy(data.raw['explosion']['explosion'])
+drop_planner.name = 'drop-planner'
+setup_animation(drop_planner)
+data:extend {drop_planner}
 
 -- item zapper is currently disabled
 --[[
-Entity {
+data:extend {
     type = 'custom-input',
     name = 'picker-zapper',
     key_sequence = 'ALT + Z'

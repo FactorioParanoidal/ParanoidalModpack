@@ -2,27 +2,26 @@
 --[Adjustment Pad]--
 -------------------------------------------------------------------------------
 local Pad = {}
-local Event = require('__kry_stdlib__/stdlib/event/event')
-local Gui = require('__kry_stdlib__/stdlib/event/gui')
+local events = require('utils/events')
 local lib = require('utils/lib')
 
-function Pad.register_events(pad_name, func, events)
-    Gui.on_click(pad_name .. '_btn_reset', func)
-    Gui.on_confirmed(
+function Pad.register_events(pad_name, func, extra_events)
+    events.on_click(pad_name .. '_btn_reset', func)
+    events.on_confirmed(
         pad_name .. '_text_box',
         function(event)
             event.change = true
             func(event)
         end
     )
-    Gui.on_click(
+    events.on_click(
         pad_name .. '_btn_up',
         function(event)
             event.change = 1
             func(event)
         end
     )
-    Gui.on_click(
+    events.on_click(
         pad_name .. '_btn_dn',
         function(event)
             event.change = -1
@@ -39,10 +38,10 @@ function Pad.register_events(pad_name, func, events)
             func(event)
         end
     end
-    Event.on_event({'adjustment-pad-increase', 'adjustment-pad-decrease'}, keybind_event)
+    events.on({'adjustment-pad-increase', 'adjustment-pad-decrease'}, keybind_event)
 
-    for _, event in pairs(events or {}) do
-        Event.register(event, func)
+    for _, event in pairs(extra_events or {}) do
+        events.on(event, func)
     end
 end
 

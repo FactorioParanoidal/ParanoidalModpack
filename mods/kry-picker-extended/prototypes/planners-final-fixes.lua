@@ -1,4 +1,3 @@
-local Data = require('__kry_stdlib__/stdlib/data/data')
 
 if mods["tile-upgrade-planner-muluna"] then
 	table.insert(data.raw["selection-tool"]["tile-upgrade-planner"].flags,"only-in-cursor")
@@ -66,9 +65,9 @@ if settings.startup["picker-planner-sorter"].value then
 			if item.name == "mis-insert-remove-modules" then goto continue end
 			-- grab the name of the original module from the planner
 			local module_name = item.name:sub(#"mis-insert-" + 1)
-			local orig_module = Data(module_name,"module")
+			local orig_module = data.raw["module"] and data.raw["module"][module_name]
 			-- then attempt to apply the original sort order to the planner
-			if orig_module:is_valid() and orig_module.order then
+			if orig_module and orig_module.order then
 				planners[item.name] = "z[module-inserter]-" .. orig_module.order
 			else	-- otherwise fallback to the item name at the end of the menu
 				planners[item.name] ="z[module-inserter]-z[" .. item.name .. "]"
@@ -79,8 +78,9 @@ if settings.startup["picker-planner-sorter"].value then
 
     for planner, order in pairs(planners) do
         for _, plannerType in pairs(plannerTypes) do
-            if Data(planner,plannerType):is_valid() then
-                Data(planner,plannerType):set_field("order",order)
+            local prototype = data.raw[plannerType] and data.raw[plannerType][planner]
+            if prototype then
+                prototype.order = order
             end
         end
     end

@@ -1,8 +1,8 @@
 -------------------------------------------------------------------------------
 --[Chest Limiter]--
 -------------------------------------------------------------------------------
-local Event = require('__kry_stdlib__/stdlib/event/event')
-local Player = require('__kry_stdlib__/stdlib/event/player')
+local events = require('utils/events')
+local lib = require('utils/lib')
 local Pad = require('utils/adjustmentpad')
 
 local containers = {
@@ -19,7 +19,7 @@ local function get_match(stack)
 end
 
 local function increase_decrease_reprogrammer(event)
-    local player, pdata = Player.get(event.player_index)
+    local player, pdata = lib.get_player(event.player_index)
     local stack = player.cursor_stack
     if get_match(stack) then
         if not player.mod_settings['picker-use-bar-limit'].value then
@@ -47,13 +47,12 @@ local function increase_decrease_reprogrammer(event)
         Pad.remove_gui(player, 'chestlimit_frame_main')
     end
 end
-local events = {defines.events.on_player_cursor_stack_changed}
-Pad.register_events('chestlimit', increase_decrease_reprogrammer, events)
+Pad.register_events('chestlimit', increase_decrease_reprogrammer, {defines.events.on_player_cursor_stack_changed})
 
 --Set the limit when chests are built and data is saved.
 local function on_chest_built(event)
     if containers[event.entity.type] then
-        local player, pdata = Player.get(event.player_index)
+        local player, pdata = lib.get_player(event.player_index)
         if not player.mod_settings['picker-use-bar-limit'].value then
             return
         end
@@ -66,4 +65,4 @@ local function on_chest_built(event)
         end
     end
 end
-Event.register(defines.events.on_built_entity, on_chest_built)
+events.on(defines.events.on_built_entity, on_chest_built)

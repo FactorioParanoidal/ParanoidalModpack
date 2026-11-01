@@ -1,11 +1,8 @@
 -------------------------------------------------------------------------------
 --[Reviver] -- Revives the selected entity
 -------------------------------------------------------------------------------
-local Event = require('__kry_stdlib__/stdlib/event/event')
-local Area = require('__kry_stdlib__/stdlib/area/area')
-local Player = require('__kry_stdlib__/stdlib/event/player')
+local events = require('utils/events')
 local lib = require('utils/lib')
-debugger = true
 
 --as of 08/30 this is mostly incorporated into base.
 --Modules are still not revived -- this is fixed in utils/lib
@@ -57,16 +54,16 @@ local ghost_revive_preferred = {
 
 local function revive_it(event)
     local placed = event.entity
-    if not lib.ghosts[placed.name] and Area(placed.selection_box):size() > 0 then
+    if not lib.ghosts[placed.name] and lib.box_size(placed.selection_box) > 0 then
         local player = game.get_player(event.player_index)
         lib.satisfy_requests(player, placed)
     else
         -- Auto reviver hack, stops autobuilding when placing a ghost item from an item (alt mode)
-        local _, pdata = Player.get(event.player_index)
+        local _, pdata = lib.get_player(event.player_index)
         pdata.next_revive_tick = event.tick + 1
     end
 end
-Event.register(defines.events.on_built_entity, revive_it)
+events.on(defines.events.on_built_entity, revive_it)
 
 local function picker_revive_selected(event)
     local player = game.players[event.player_index]
@@ -79,7 +76,7 @@ local function picker_revive_selected(event)
         end
     end
 end
-Event.register('picker-select', picker_revive_selected)
+events.on('picker-select', picker_revive_selected)
 
 -- handles the actual ghost revival logic
 local function revive_object(player,selected,name)
@@ -395,16 +392,18 @@ end
 
 --- Automatically revive ghosts when hovering over them with the item in hand.
 local function picker_revive_selected_ghosts(event)
-    local player, pdata = Player.get(event.player_index)
+    local player, pdata = lib.get_player(event.player_index)
     local selected = player.selected
-	-- shorthand for settings
-	local revive_ghost_entity = player.mod_settings['picker-revive-selected-ghosts-entity'].value
-	local revive_ghost_tile = player.mod_settings['picker-revive-selected-ghosts-tile'].value
-	local revive_ghost_upgrade = player.mod_settings['picker-revive-selected-ghosts-upgrade'].value
-	local ignore_quality = player.mod_settings['picker-revive-ignore-quality'].value
 	-- if cursor is not empty, not a blueprint, player is not a ghost, is hovered over an entity, has any ghost revival setting enabled, and is holding a valid item in the cursor
-    if not player.is_cursor_empty() and not player.is_cursor_blueprint() and player.controller_type ~= defines.controllers.ghost and selected and pdata.ghost_revive and player.cursor_stack and player.cursor_stack.valid_for_read then
+	-- (Paranoidal: checked before the four settings are read; this runs on every hover)
+    if selected and pdata.ghost_revive and not player.is_cursor_empty() and not player.is_cursor_blueprint() and player.controller_type ~= defines.controllers.ghost and player.cursor_stack and player.cursor_stack.valid_for_read then
         local stack = player.cursor_stack
+		-- shorthand for settings
+		local mod_settings = player.mod_settings
+		local revive_ghost_entity = mod_settings['picker-revive-selected-ghosts-entity'].value
+		local revive_ghost_tile = mod_settings['picker-revive-selected-ghosts-tile'].value
+		local revive_ghost_upgrade = mod_settings['picker-revive-selected-ghosts-upgrade'].value
+		local ignore_quality = mod_settings['picker-revive-ignore-quality'].value
 		-- check if hovering over ghost entity, then try to place
 		if selected.type == 'entity-ghost' and revive_ghost_entity and pdata.next_revive_tick ~= event.tick then
 			if quality_matches(stack, selected, ignore_quality) then
@@ -465,7 +464,7 @@ local function picker_revive_selected_ghosts(event)
 		::continue::
     end
 end
-Event.register(defines.events.on_selected_entity_changed, picker_revive_selected_ghosts)
+events.on(defines.events.on_selected_entity_changed, picker_revive_selected_ghosts)
 
 --- Toggles the variable to that enables automatic ghost reviver function.
 local function toggle_ghost_revive(event)
@@ -473,7 +472,7 @@ local function toggle_ghost_revive(event)
 	-- event.input_name is used when the custom-input hotkey was fired
 	local event_name = event.prototype_name or event.input_name
 	if event_name == "toggle-ghost-revive" then
-		local player, pdata = Player.get(event.player_index)
+		local player, pdata = lib.get_player(event.player_index)
 		local setting = player.mod_settings['picker-revive-selected-ghosts-entity'].value or player.mod_settings['picker-revive-selected-ghosts-tile'].value or player.mod_settings['picker-revive-selected-ghosts-upgrade'].value
 		-- check if revive functionality is enabled in settings first
 		if setting then
@@ -491,38 +490,36 @@ local function toggle_ghost_revive(event)
 		end
 	end
 end
-Event.register('toggle-ghost-revive', toggle_ghost_revive)
-Event.register(defines.events.on_lua_shortcut, toggle_ghost_revive)
+events.on('toggle-ghost-revive', toggle_ghost_revive)
+events.on(defines.events.on_lua_shortcut, toggle_ghost_revive)
 
 -- Enable auto ghost revive on first load or when joining multiplayer game
 local function init_ghost_revive_settings(event)
-	local player, pdata = Player.get(event.player_index)
+	local player, pdata = lib.get_player(event.player_index)
 	local setting = player.mod_settings['picker-revive-selected-ghosts-entity'].value or player.mod_settings['picker-revive-selected-ghosts-tile'].value
     player.set_shortcut_toggled("toggle-ghost-revive", setting)
 	pdata.ghost_revive = setting
 end
-Event.register(defines.events.on_player_joined_game, init_ghost_revive_settings)
-Event.register(defines.events.on_cutscene_cancelled, init_ghost_revive_settings)
+events.on(defines.events.on_player_joined_game, init_ghost_revive_settings)
+events.on(defines.events.on_cutscene_cancelled, init_ghost_revive_settings)
 
 -- Update ghost revive shortcut toggle when relevant mod setting is changed (during runtime)
 local function update_ghost_revive_settings(event)
 	if event.setting == "picker-revive-selected-ghosts-entity" or event.setting == "picker-revive-selected-ghosts-tile" then
-		local player, pdata = Player.get(event.player_index)
+		local player, pdata = lib.get_player(event.player_index)
 		local setting = player.mod_settings['picker-revive-selected-ghosts-entity'].value or player.mod_settings['picker-revive-selected-ghosts-tile'].value
 		player.set_shortcut_toggled("toggle-ghost-revive", setting)
 		pdata.ghost_revive = setting
 	end
 end
-Event.register(defines.events.on_runtime_mod_setting_changed, update_ghost_revive_settings)
+events.on(defines.events.on_runtime_mod_setting_changed, update_ghost_revive_settings)
 
 local function on_first_load(data)
 	if game.players then if game.players[1] then
-		local player = game.players[1]
-		player, pdata = Player.get(player.index)
+		local player, pdata = lib.get_player(game.players[1].index)
 		local setting = player.mod_settings['picker-revive-selected-ghosts-entity'].value or player.mod_settings['picker-revive-selected-ghosts-tile'].value
 		player.set_shortcut_toggled("toggle-ghost-revive", setting)
 		pdata.ghost_revive = setting
 	end end
 end
---Event.register(Event.core_events.init_and_config, init_and_config_ghost_revive)
-Event.on_configuration_changed(on_first_load)
+events.on('on_configuration_changed', on_first_load)

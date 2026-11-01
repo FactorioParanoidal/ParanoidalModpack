@@ -1,4 +1,3 @@
-local table = require('__stdlib2__/stdlib/utils/table')
 
 local function NtoZ_c(x, y)
     return (x >= 0 and x or (-0.5 - x)), (y >= 0 and y or (-0.5 - y))
@@ -46,7 +45,7 @@ local function length(t)
 end
 
 function Queue.count(t)
-    return length(t), table.size(t._hash)
+    return length(t), table_size(t._hash)
 end
 
 function Queue.get_hash(t, entity)
@@ -95,7 +94,7 @@ function Queue.execute(t, event)
                 Queue[data.action](data)
             end
             t._hash[index][data.action] = nil
-            if table.size(t._hash[index]) <= 0 then
+            if table_size(t._hash[index]) <= 0 then
                 t._hash[index] = nil
             end
         end

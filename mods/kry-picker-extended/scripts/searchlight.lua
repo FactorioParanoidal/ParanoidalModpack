@@ -2,12 +2,12 @@
 --[Player Searchlight]--
 -------------------------------------------------------------------------------
 --Code originally modified from Searching-flashlights, by RK84
-local Player = require('__kry_stdlib__/stdlib/event/player')
-local Event = require('__kry_stdlib__/stdlib/event/event')
+local events = require('utils/events')
+local lib = require('utils/lib')
 local atan2, pi, floor = math.atan2, math.pi, math.floor
 
 local function orient_players(event)
-    local player, pdata = Player.get(event.player_index)
+    local player, pdata = lib.get_player(event.player_index)
     local character = player.character
     if character and (pdata.last_sel_tick or 0) <= (game.tick - 10) and player.selected and not player.vehicle and not player.walking_state.walking then
         if player.mod_settings['picker-search-light'].value then
@@ -21,4 +21,4 @@ local function orient_players(event)
         end
     end
 end
-Event.register(defines.events.on_selected_entity_changed, orient_players)
+events.on(defines.events.on_selected_entity_changed, orient_players)

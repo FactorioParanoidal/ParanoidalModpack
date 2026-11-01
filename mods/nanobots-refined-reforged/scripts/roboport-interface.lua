@@ -1,13 +1,25 @@
 -------------------------------------------------------------------------------
 --[[roboport-interface]]
 -------------------------------------------------------------------------------
-local Event = require('__stdlib2__/stdlib/event/event')
-local Position = require('__stdlib2__/stdlib/area/position')
-local table = require('__stdlib2__/stdlib/utils/table')
+local events = require('scripts/events')
+local interface = require('interface')
 local Queue = require('scripts/hash_queue-old')
 local queue
 
 local floor = math.floor
+
+local function expand_to_area(pos, radius)
+    return {left_top = {x = pos.x - radius, y = pos.y - radius}, right_bottom = {x = pos.x + radius, y = pos.y + radius}}
+end
+
+-- First value for which func(value, key) is true.
+local function find(tbl, func)
+    for k, v in pairs(tbl) do
+        if func(v, k) then
+            return v, k
+        end
+    end
+end
 
 local params_to_check = {
     ['nano-signal-chop-trees'] = {
@@ -99,7 +111,7 @@ Queue.mark_items_or_trees =
         end
         if not surface.find_nearest_enemy {position = position, max_distance = data.logistic_cell.construction_radius * 1.5 + 40, force = force} then
             local filter = {
-                area = Position.expand_to_area(position, data.logistic_cell.construction_radius),
+                area = expand_to_area(position, data.logistic_cell.construction_radius),
                 name = data.find_name,
                 type = data.find_type,
                 limit = 300
@@ -130,11 +142,11 @@ local function has_resources(miner)
     local _find = function(v, _)
         return v.prototype.resource_category == 'basic-solid' and (v.amount > 0 or v.prototype.infinite_resource)
     end
-    local filter = {area = Position.expand_to_area(miner.position, miner.prototype.mining_drill_radius), type = 'resource'}
+    local filter = {area = expand_to_area(miner.position, miner.prototype.mining_drill_radius), type = 'resource'}
     if miner.mining_target then
         return (miner.mining_target.amount or 0) > 0
     else
-        return table.find(miner.surface.find_entities_filtered(filter), _find)
+        return find(miner.surface.find_entities_filtered(filter), _find)
     end
 end
 
@@ -142,7 +154,7 @@ Queue.deconstruct_finished_miners = function(data)
     if not script.active_mods['AutoDeconstruct'] then
         if data.logistic_cell.valid and data.logistic_cell.construction_radius > 0 and data.logistic_cell.logistic_network then
             local surface, force, position = get_entity_info(data.logistic_cell.owner)
-            local filter = {area = Position.expand_to_area(position, data.logistic_cell.construction_radius), type = data.find_type or 'error', force = force}
+            local filter = {area = expand_to_area(position, data.logistic_cell.construction_radius), type = data.find_type or 'error', force = force}
             for _, miner in pairs(surface.find_entities_filtered(filter)) do
                 if not miner.to_be_deconstructed(force) and miner.minable and not miner.has_flag('not-deconstructable') and not has_resources(miner) then
                     miner.order_deconstruction(force)
@@ -157,7 +169,7 @@ local function find_network_and_cell(interface)
     if port and port.valid then
         local network = port.logistic_network
         local cell =
-            table.find(
+            find(
             port.logistic_cell.neighbours,
             function(v)
                 return v.construction_radius > 0
@@ -210,7 +222,7 @@ end
 local function execute_interface_queue(event)
     queue:execute(event)
 end
-Event.register(defines.events.on_tick, execute_interface_queue)
+events.on(defines.events.on_tick, execute_interface_queue)
 
 --[Roboport Interface Scanner]--
  local function kill_or_remove_interface_parts(event, destroy)
@@ -224,9 +236,9 @@ Event.register(defines.events.on_tick, execute_interface_queue)
         end
     end
 end
-Event.register(defines.events.on_entity_died, kill_or_remove_interface_parts)
-Event.register(
-    Event.mined_events,
+events.on(defines.events.on_entity_died, kill_or_remove_interface_parts)
+events.on(
+    events.mined_events,
     function(event)
         kill_or_remove_interface_parts(event, true)
     end
@@ -234,7 +246,7 @@ Event.register(
 
 --Build the interface, after built check the area around it for interface components to revive or create.
 local function build_roboport_interface(event)
-    local interface = event.created_entity or event.entity
+    local interface = event.entity or event.destination -- on_entity_cloned carries the copy as destination
     if interface and interface.name == 'roboport-interface-main' then
         local pos, force = interface.position, interface.force
         local cc, ra = {}, {} -- Don't listen the masses.... a little gc churn later is two less type() calls now.
@@ -271,7 +283,7 @@ local function build_roboport_interface(event)
         ra.destructible = false
     end
 end
-Event.register(Event.build_events, build_roboport_interface)
+events.on(events.build_events, build_roboport_interface)
 
 local function on_sector_scanned(event)
     if event.radar.name == 'roboport-interface-scanner' then
@@ -282,18 +294,18 @@ local function on_sector_scanned(event)
         end
     end
 end
-Event.register(defines.events.on_sector_scanned, on_sector_scanned)
+events.on(defines.events.on_sector_scanned, on_sector_scanned)
 
 local function on_init()
     storage.cell_queue = Queue()
     queue = storage.cell_queue
 end
-Event.register(Event.core_events.init, on_init)
+events.on('on_init', on_init)
 
 local function on_load()
     queue = Queue(storage.cell_queue)
 end
-Event.register(Event.core_events.load, on_load)
+events.on('on_load', on_load)
 
 local function reset_cell_queue()
     storage.cell_queue = nil
@@ -304,4 +316,4 @@ local function reset_cell_queue()
         fdata._next_cell_tick = game and game.tick or 0
     end
 end
-Event.register(Event.generate_event_name('reset_cell_queue'), reset_cell_queue)
+interface.queue_resets.cell_queue = reset_cell_queue

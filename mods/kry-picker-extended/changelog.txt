@@ -1,6 +1,14 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.1.0
 Date: May 26, 2026
+  Changes:
+    - Paranoidal: no longer needs kry_stdlib. Event handling, player data, colors and the prototype helpers are part of the mod; storage keeps the same layout and the color setting values are unchanged.
+    - Paranoidal: removed the built-in Item Count, Belt Reverser and Belt Brush copies (they switched themselves off next to yemtositemcount, belt-reverser-space-age and beltbrush2-reforged, which the modpack ships) and the unused old reviver and picker scripts.
+    - Paranoidal: the remote interface keeps set_blacklisted_chests and get_blacklisted_chests only (the stdlib write_global and dump_all used the 1.1 API).
+  Optimizations:
+    - Paranoidal: events reach the handlers directly instead of through the kry_stdlib dispatcher; a handler error is still caught, logged and printed. Ghost revival on hover reads its four player settings only when a revival is possible.
+  Graphics:
+    - Paranoidal: removed 20 images no prototype used (left over from Picker Extended tools this mod does not have); the remaining PNG files and the thumbnail recompressed with pingo, pixel-identical (60 KB -> 8 KB).
   Major Features:
     - Auto Ghost Revival: Improved compatibility with entities that have a different placeable_by item
       This allows compatibility with mods such as Flow Configuration and Mini/Micro Machines

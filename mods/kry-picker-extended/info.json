@@ -6,6 +6,6 @@
 	"description": "It's Back! An attempt to recover most Picker Extended functionality. Includes Planner Menu, Planner Zapper, Held Item Count, Belt Reverser, Auto Ghost Reviver, Auto Inventory Sort, Player Searchlight, Quality Item Scrolling, and more!",
 	"factorio_version": "2.0",
 	"dependencies": [
-		"base >= 2.0.0", "kry_stdlib >= 2.1.0", "? ModuleInserterSimplified"
+		"base >= 2.0.0", "? ModuleInserterSimplified"
 	]
 }

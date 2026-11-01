@@ -37,6 +37,7 @@ Date: 24.02.2026
     - The build handler no longer serialises every build event with serpent outside debug mode: the debug text was built before the debug check, on every entity built by hand, robot or script (Paranoidal local fix)
     - Build, mining, script destroy and radar scan events are filtered by name in the engine, like death and damage already were: only Bio Industries buildings, seedlings and growing trees reach the script. Before, every entity built or mined anywhere (also every natural tree cut) ran the handlers; mining ran them twice (before and after) (Paranoidal local optimization)
     - Events are registered directly; the kry_stdlib dispatcher (a new table, a metatable and a scan of the event fields per event) is no longer used. The dependency stays for the load order (Paranoidal local optimization)
+    - The kry_stdlib dependency is removed: the mod no longer uses the library, and its load order does not change (the dependency chain through angelspetrochem is longer) (Paranoidal local change)
     - Growing trees are processed every 60 ticks instead of every tick (at most 1 s later, in the same order); nothing is done while no tree grows (Paranoidal local optimization)
     - Debug output costs nothing outside debug mode; hot paths no longer build debug arguments (Paranoidal local optimization)
     - Tiles: placing or mining tiles only checks the old tile names; fertilizer on fertile ground no longer calls set_tiles with an empty list (which raised script_raised_set_tiles for all mods) (Paranoidal local optimization)

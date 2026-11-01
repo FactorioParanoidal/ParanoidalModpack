@@ -10,7 +10,6 @@
   "dependencies": [
     "base >= 2.0.55",
     "? space-age",
-    "kry_stdlib >= 2.0.6",
     "? Alien-biomes-Reforged",
     "? Krastorio2",
     "? Krastorio2-spaced-out",

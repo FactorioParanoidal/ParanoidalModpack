@@ -1,7 +1,7 @@
 -------------------------------------------------------------------------------
 --[Auto Circuit Power Poles]--
 -------------------------------------------------------------------------------
-local Event = require('__kry_stdlib__/stdlib/event/event')
+local events = require('utils/events')
 
 local function shortcut(event)
     if event.prototype_name == 'picker-auto-circuit' then
@@ -11,7 +11,7 @@ local function shortcut(event)
         end
     end
 end
-Event.register(defines.events.on_lua_shortcut, shortcut)
+events.on(defines.events.on_lua_shortcut, shortcut)
 
 local function pole_check(entity)
     if entity.type == 'electric-pole' then
@@ -51,5 +51,5 @@ local function on_built_entity(event)
         end
     end
 end
-local events = {defines.events.on_robot_built_entity, defines.events.on_built_entity}
-Event.register(events, on_built_entity)
+local built_events = {defines.events.on_robot_built_entity, defines.events.on_built_entity}
+events.on(built_events, on_built_entity)

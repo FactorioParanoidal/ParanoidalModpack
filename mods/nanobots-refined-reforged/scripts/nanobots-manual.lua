@@ -4,7 +4,6 @@ require('nanobots-common')
 
 local config = require('config')
 
-local Position = require('__stdlib2__/stdlib/area/position')
 
 local consecutive_lack_of_targets = 0
 
@@ -204,7 +203,7 @@ sort_by_proximity = function(position, tables, leave_wrapper)
     
     local wrapper_array  = {}
     for _, k in pairs(tables) do
-        table.insert(wrapper_array, { dist = Position.manhattan_distance(position, k.position), 
+        table.insert(wrapper_array, { dist = math.abs(k.position.x - position.x) + math.abs(k.position.y - position.y),
                                       table = k})
     end
     

@@ -2,7 +2,6 @@
 --[[armormods]] -- Power Armor module code.
 -------------------------------------------------------------------------------
 ArmorMods = {}
-local table = require('__stdlib2__/stdlib/utils/table')
 
 local config = require('config')
 
@@ -11,7 +10,6 @@ local config = require('config')
 local combat_robots = config.COMBAT_ROBOTS
 local healer_capsules = config.FOOD
 
-local Position = require('__stdlib2__/stdlib/area/position')
 local max, abs, ceil, floor = math.max, math.abs, math.ceil, math.floor
 
 local HEAL_TEXT_COLOR = {r = 0, g = 1, b = 0}
@@ -108,12 +106,9 @@ local function get_bot_counts(entity, mobile_only, stationed_only)
             end
         else
             local bots = 0
-            table.each(
-                entity.surface.find_logistic_networks_by_construction_area(entity.position, entity.force),
-                function(network)
-                    bots = bots + network.available_construction_robots
-                end
-            )
+            for _, network in pairs(entity.surface.find_logistic_networks_by_construction_area(entity.position, entity.force)) do
+                bots = bots + network.available_construction_robots
+            end
             return bots
         end
     else
@@ -153,7 +148,8 @@ end
 --At this point player is valid, not afk and has a character
 local function get_chip_results(player, equipment, eq_name, search_type, bot_counter)
     local radius = get_chip_radius(player, eq_name)
-    local area = Position.expand_to_area(player.character.position, radius)
+    local pos = player.character.position
+    local area = {left_top = {x = pos.x - radius, y = pos.y - radius}, right_bottom = {x = pos.x + radius, y = pos.y + radius}}
     local item_entities = equipment and bot_counter(0) > 0 and player.character.surface.find_entities_filtered {area = area, type = search_type, limit = 200}
     local num_items = item_entities and #item_entities or 0
     local num_chips = item_entities and #equipment or 0

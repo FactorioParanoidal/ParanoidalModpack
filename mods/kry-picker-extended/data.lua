@@ -18,6 +18,5 @@ require('prototypes/copychest')
 require('prototypes/inventorysort')
 
 -- taken from Picker Belt Tools
---require('prototypes/beltbrush')   -- no longer needed, use standalone Belt Brush mod
-require('prototypes/beltreverser')
+-- Belt Brush and Belt Reverser: the standalone beltbrush2-reforged and belt-reverser-space-age mods
 require('prototypes/autocircuit')   -- why was this part of Picker Belt Tools?

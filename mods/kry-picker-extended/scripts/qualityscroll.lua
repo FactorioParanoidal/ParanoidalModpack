@@ -1,9 +1,7 @@
 -------------------------------------------------------------------------------
 --[Quality Scrolling]--
 -------------------------------------------------------------------------------
-local Event = require('__kry_stdlib__/stdlib/event/event')
-local Player = require('__kry_stdlib__/stdlib/event/player')
-local Table = require('__kry_stdlib__/stdlib/utils/table')
+local events = require('utils/events')
 local lib = require('utils/lib')
 
 local function previous_quality(quality)
@@ -66,29 +64,29 @@ end
 
 -- Register the next quality hotkey,  which simply invokes get_next_quality_item() function
 local function quality_scroll_up(event)
-    local player, pdata = Player.get(event.player_index)
+    local player = lib.get_player(event.player_index)
     local stack = player.cursor_stack and player.cursor_stack.valid_for_read and player.cursor_stack
     if stack and stack.quality and stack.quality.level and script.active_mods["quality"] then
-        new_item = get_next_quality_item(player, stack)
+        local new_item = get_next_quality_item(player, stack)
         if new_item then
             player.cursor_stack.swap_stack(new_item)
         end
     end
 end
-Event.register('picker-quality-cycle-next', quality_scroll_up)
+events.on('picker-quality-cycle-next', quality_scroll_up)
 
 -- Register the previous quality hotkey, which simply invokes get_prevous_quality_item() function
 local function quality_scroll_down(event)
-    local player, pdata = Player.get(event.player_index)
+    local player = lib.get_player(event.player_index)
     local stack = player.cursor_stack and player.cursor_stack.valid_for_read and player.cursor_stack
     if stack and stack.quality and stack.quality.level and script.active_mods["quality"] then
-        new_item = get_previous_quality_item(player, stack)
+        local new_item = get_previous_quality_item(player, stack)
         if new_item then
             player.cursor_stack.swap_stack(new_item)
         end
     end
 end
-Event.register('picker-quality-cycle-previous', quality_scroll_down)
+events.on('picker-quality-cycle-previous', quality_scroll_down)
 
 -- This runs on first init and when mod configuration is changed, I think
 local function setup_quality()
@@ -117,7 +115,7 @@ local function setup_quality()
             return temporary_table[a] > temporary_table[b]
         end)
         -- then store the table for later use
-        storage.quality = Table.deepcopy(sorted_table)
+        storage.quality = sorted_table
     end
 end
-Event.register(Event.core_events.init_and_config, setup_quality)
+events.on({'on_init', 'on_configuration_changed'}, setup_quality)

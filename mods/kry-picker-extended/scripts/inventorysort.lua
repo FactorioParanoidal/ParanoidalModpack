@@ -1,7 +1,7 @@
 -------------------------------------------------------------------------------
 --[Auto Sort Containers]--
 -------------------------------------------------------------------------------
-local Event = require('__kry_stdlib__/stdlib/event/event')
+local events = require('utils/events')
 
 local types = {
     ['car'] = defines.inventory.car_trunk,
@@ -22,4 +22,4 @@ local function sort_inventory(event)
         end
     end
 end
-Event.register({'picker-manual-inventory-sort', defines.events.on_gui_opened}, sort_inventory)
+events.on({'picker-manual-inventory-sort', defines.events.on_gui_opened}, sort_inventory)

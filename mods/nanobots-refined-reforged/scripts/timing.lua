@@ -1,4 +1,4 @@
-local Event = require('__stdlib2__/stdlib/event/event').set_protected_mode(true)
+local events = require('scripts/events')
 local config = require('config')
 
 local nanobots_auto_mode = settings.startup["nanobots-auto"].value
@@ -37,13 +37,13 @@ local function poll_players(event)
     end
     
 end
-Event.register(defines.events.on_tick, poll_players)
+events.on(defines.events.on_tick, poll_players)
 
 -- Reset last player when players join or leave
 local function players_changed()
     storage._last_player = nil
 end
-Event.register({ defines.events.on_player_joined_game, defines.events.on_player_left_game }, players_changed)
+events.on({ defines.events.on_player_joined_game, defines.events.on_player_left_game }, players_changed)
 
 -- ----Local functions---- --
 

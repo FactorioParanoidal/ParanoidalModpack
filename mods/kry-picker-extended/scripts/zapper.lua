@@ -1,9 +1,7 @@
 -------------------------------------------------------------------------------
 --[Item Zapper]--
 -------------------------------------------------------------------------------
-local Event = require('__kry_stdlib__/stdlib/event/event')
-local Player = require('__kry_stdlib__/stdlib/event/player')
-local Position = require('__kry_stdlib__/stdlib/area/position')
+local events = require('utils/events')
 
 local trash_types = {
     ['blueprint'] = true,
@@ -51,7 +49,7 @@ local function on_player_dropped_item(event)
         event.entity.destroy()
     end
 end
-Event.register(defines.events.on_player_dropped_item, on_player_dropped_item)
+events.on(defines.events.on_player_dropped_item, on_player_dropped_item)
 
 -- Planners aren't automatically placed in inventory anymore, no longer need to clean inventory
 --[[

@@ -1,24 +1,22 @@
-local Data = require('__kry_stdlib__/stdlib/data/data')
-
 -- custom input for the planner menu
-Data {
+data:extend{{
     type = 'custom-input',
     name = 'picker-planner-menu',
     key_sequence = 'CONTROL + B',
     consuming = 'none'
-}
+}}
 
 -- custom input for the planner cycler
-Data {
+data:extend{{
     type = 'custom-input',
     name = 'picker-next-planner',
     key_sequence = 'ALT + Q',
     consuming = 'none'
-}
+}}
 
 -- Tape Measure -- Quick way to get bounding box sizes and distances.
 if settings.startup['picker-tool-tape-measure'].value then
-    Data {
+    data:extend{{
         type = 'selection-tool',
         name = 'picker-tape-measure',
         icon = '__kry-picker-extended__/graphics/tape-measure-2.png',
@@ -41,5 +39,5 @@ if settings.startup['picker-tool-tape-measure'].value then
 		  mode = {"any-tile"},
 		  cursor_box_type = "copy",
 		},
-    }
+    }}
 end

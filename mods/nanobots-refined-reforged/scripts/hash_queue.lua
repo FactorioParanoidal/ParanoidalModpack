@@ -1,4 +1,3 @@
-local table = require('__stdlib2__/stdlib/utils/table')
 
 local function NtoZ_c(x, y)
     return (x >= 0 and x or (-0.5 - x)), (y >= 0 and y or (-0.5 - y))
@@ -43,7 +42,7 @@ function Queue.length(t)
 end
 
 function Queue.count(t)
-    return Queue.length(t), table.size(t._hash)
+    return Queue.length(t), table_size(t._hash)
 end
 
 function Queue.get_hash(t, entity)

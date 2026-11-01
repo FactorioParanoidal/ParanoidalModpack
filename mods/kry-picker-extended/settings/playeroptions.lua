@@ -1,8 +1,8 @@
 -- Import color options to use in settings
-local color = require('__kry_stdlib__/stdlib/utils/defines/color')
+local color = require('utils/color')
 
 local allowed_values = {'default'}
-for name in pairs(color) do
+for _, name in ipairs(color.names()) do
     allowed_values[#allowed_values + 1] = name
 end
 

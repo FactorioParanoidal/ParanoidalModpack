@@ -3,7 +3,6 @@
 require('settings/playeroptions')
 require('settings/searchlight')
 require('settings/reviver')
-require('settings/itemcount')
 require('settings/planners')
 
 -- taken from Picker Inventory Tools

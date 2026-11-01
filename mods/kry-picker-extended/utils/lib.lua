@@ -2,9 +2,26 @@
 -- Currently mostly picker specific with plans to flesh out and add to appropriate places
 
 local lib = {}
-local Area = require('__kry_stdlib__/stdlib/area/area')
-local Position = require('__kry_stdlib__/stdlib/area/position')
-local color = require('__kry_stdlib__/stdlib/utils/defines/color')
+
+--- The player and its storage.players record, created when missing (the layout the kry_stdlib
+--- Player module used: index, name, force).
+function lib.get_player(player_index)
+    local player = game.get_player(player_index)
+    storage.players = storage.players or {}
+    local pdata = storage.players[player.index]
+    if not pdata then
+        pdata = {index = player.index, name = player.name, force = player.force.name}
+        storage.players[player.index] = pdata
+    end
+    return player, pdata
+end
+
+--- Area of a BoundingBox (named or array form).
+local function box_size(box)
+    local lt, rb = box.left_top or box[1], box.right_bottom or box[2]
+    return math.abs((lt.x or lt[1]) - (rb.x or rb[1])) * math.abs((lt.y or lt[2]) - (rb.y or rb[2]))
+end
+lib.box_size = box_size
 
 function lib.get_or_create_main_left_flow(player, flow_name)
     local main_flow = player.gui.left[flow_name .. '_main_flow']
@@ -58,7 +75,8 @@ end
 
 function lib.find_resources(entity)
     if entity.type == 'mining-drill' then
-        local area = Position.expand_to_area(entity.position, prototypes.entity[entity.name].mining_drill_radius)
+        local pos, radius = entity.position, prototypes.entity[entity.name].mining_drill_radius
+        local area = {left_top = {x = pos.x - radius, y = pos.y - radius}, right_bottom = {x = pos.x + radius, y = pos.y + radius}}
         local name = entity.mining_target and entity.mining_target.name or nil
         return entity.surface.count_entities_filtered {area = area, type = 'resource', name = name}
     end
@@ -129,7 +147,7 @@ function lib.satisfy_requests(player, proxy)
 
     if proxy.name == 'item-request-proxy' then
         entity = proxy.proxy_target
-    elseif Area(proxy.selection_box):size() > 0 then
+    elseif box_size(proxy.selection_box) > 0 then
         proxy =
             proxy.surface.find_entities_filtered {
             name = 'item-request-proxy',
@@ -149,7 +167,12 @@ function lib.satisfy_requests(player, proxy)
 	
 	local new_requests = {}
 	local total_requests = 0
-	local pos = Position.increment(entity.position, 0, -0.35)
+	-- flying texts stack upwards: the first at the entity, each next 0.35 higher
+	local text_x, text_y = entity.position.x, entity.position.y + 0.35
+	local function pos()
+		text_y = text_y - 0.35
+		return {x = text_x, y = text_y}
+	end
 	
 	-- First attempt to fulfill the module requests from the player's inventory
 	for _, plan in pairs(proxy.insert_plan or {}) do
@@ -165,7 +188,7 @@ function lib.satisfy_requests(player, proxy)
 				player.create_local_flying_text{
 					text = {'', '-', insert, ' ', prototypes.item[plan.id.name].localised_name},
 					position = pos(),
-					color = color.white
+					color = {r = 1, g = 1, b = 1, a = 1}
 				}
 			end
 		end

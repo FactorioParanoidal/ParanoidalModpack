@@ -2,9 +2,22 @@
 
 NanobotsCommon = {}
 
-local Event = require('__stdlib2__/stdlib/event/event').set_protected_mode(true)
-local Area = require('__stdlib2__/stdlib/area/area')
-local Position = require('__stdlib2__/stdlib/area/position')
+local events = require('scripts/events')
+
+-- A prototype box (array or named form) moved to `position`.
+local function offset_area(box, position)
+    local lt, rb = box.left_top or box[1], box.right_bottom or box[2]
+    local px, py = position.x or position[1], position.y or position[2]
+    return {
+        left_top = {x = (lt.x or lt[1]) + px, y = (lt.y or lt[2]) + py},
+        right_bottom = {x = (rb.x or rb[1]) + px, y = (rb.y or rb[2]) + py}
+    }
+end
+
+-- Key of a pending action; the same "x,y" form stdlib2 Position.to_key wrote into storage.
+local function position_key(position)
+    return position.x .. ',' .. position.y
+end
 
 local moveable_types = { train = true, car = true, spidertron = true } ---@type { [string]: true }
 local blockable_types = {['straight-rail'] = true, ['curved-rail'] = true} ---@type { [string]: true }
@@ -22,7 +35,7 @@ local function update_settings()
         fill_water = setting['nanobots-levelers-place-landfill'].value
     }
 end
-Event.register(defines.events.on_runtime_mod_setting_changed, update_settings)
+events.on(defines.events.on_runtime_mod_setting_changed, update_settings)
 update_settings()
 --]]
 
@@ -122,7 +135,7 @@ local function script_event_triggered(event)
         complete_automatic_action(player, target)
     end
 end
-Event.register(defines.events.on_script_trigger_effect, script_event_triggered)
+events.on(defines.events.on_script_trigger_effect, script_event_triggered)
 
 -- ----Public functions---- --
 
@@ -500,7 +513,7 @@ end
 are_items_under_ghost = function(entity)
     local item_stacks = {}
     local surface, position, bounding_box = entity.surface, entity.position, entity.ghost_prototype.selection_box
-    local area = Area.offset(bounding_box, position)
+    local area = offset_area(bounding_box, position)
     local ground_items = surface.count_entities_filtered({ name = 'item-on-ground', area = area })
     if ground_items ~= 0 then
         return true
@@ -515,7 +528,7 @@ end
 get_all_items_under_ghost = function(entity)
     local item_stacks = {}
     local surface, position, bounding_box = entity.surface, entity.position, entity.ghost_prototype.selection_box
-    local area = Area.offset(bounding_box, position)
+    local area = offset_area(bounding_box, position)
     for _, item_on_ground in pairs(surface.find_entities_filtered { name = 'item-on-ground', area = area }) do
         if not is_pending(item_on_ground.position) then
             table.insert(item_stacks, clone_item_stack(item_on_ground.stack))
@@ -535,7 +548,7 @@ are_non_pending_items_under_ghost = function(entity)
     
     local item_stacks = {}
     local surface, position, bounding_box = entity.surface, entity.position, entity.ghost_prototype.selection_box
-    local area = Area.offset(bounding_box, position)
+    local area = offset_area(bounding_box, position)
     local ground_items = surface.find_entities_filtered({ name = 'item-on-ground', area = area })
     
     for _, item in pairs(ground_items) do
@@ -898,7 +911,7 @@ function NanobotActions.clear_ground(ghost, player)
     end
     
     local surface, position, bounding_box = ghost.surface, ghost.position, ghost.ghost_prototype.selection_box
-    local area = Area.offset(bounding_box, position)
+    local area = offset_area(bounding_box, position)
     local target_item = nil
     for _, item_on_ground in pairs(surface.find_entities_filtered { name = 'item-on-ground', area = area }) do
         local stack = clone_item_stack(item_on_ground.stack)
@@ -1913,7 +1926,7 @@ insert_pending_action = function(position, data)
         storage.pending_actions = {}
     end
     
-    local serialized = Position.to_key(position)
+    local serialized = position_key(position)
     if storage.pending_actions[serialized] then
         return false
     end
@@ -1929,7 +1942,7 @@ remove_pending_action = function(position)
         return nil
     end
     
-    local serialized = Position.to_key(position)
+    local serialized = position_key(position)
     
     local data = storage.pending_actions[serialized]
     if not data then
@@ -1947,7 +1960,7 @@ is_pending = function(position)
         return false
     end
     
-    local serialized = Position.to_key(position)
+    local serialized = position_key(position)
     return storage.pending_actions[serialized] and true or false
     --a totally sane statement that isn't confusing at all
 end

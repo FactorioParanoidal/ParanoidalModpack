@@ -1,9 +1,9 @@
 -------------------------------------------------------------------------------
 --[Copy Chest]--
 -------------------------------------------------------------------------------
-local Event = require('__kry_stdlib__/stdlib/event/event')
-local Player = require('__kry_stdlib__/stdlib/event/player')
-local interface = require('__kry_stdlib__/stdlib/scripts/interface')
+local events = require('utils/events')
+local lib = require('utils/lib')
+local interface = require('utils/interface')
 
 local chest_types = {
     ['container'] = true,
@@ -23,7 +23,7 @@ end
 -- Should allow stacking keybinds
 
 local function copy_chest(event)
-    local player, pdata = Player.get(event.player_index)
+    local player, pdata = lib.get_player(event.player_index)
     local chest = player.selected
 
     if not chest then
@@ -57,10 +57,10 @@ local function copy_chest(event)
         return flying_text(player, {'chest.empty-src'}, chest.position)
     end
 end
-Event.register('picker-copy-chest', copy_chest)
+events.on('picker-copy-chest', copy_chest)
 
 local function paste_chest(event)
-    local player, pdata = Player.get(event.player_index)
+    local player, pdata = lib.get_player(event.player_index)
     local chest = player.selected
 
     if not chest then
@@ -141,12 +141,12 @@ local function paste_chest(event)
         return flying_text(player, {'chest.some-moved'}, chest.position)
     end
 end
-Event.register('picker-paste-chest', paste_chest)
+events.on('picker-paste-chest', paste_chest)
 
 local function update_storage()
     storage.blacklisted_chests = storage.blacklisted_chests or {}
 end
-Event.register(Event.core_events.init_and_config, update_storage)
+events.on({'on_init', 'on_configuration_changed'}, update_storage)
 
 function interface.set_blacklisted_chests(names, remove)
     storage.blacklisted_chests = storage.blacklisted_chests or {}

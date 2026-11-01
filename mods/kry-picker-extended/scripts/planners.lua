@@ -3,12 +3,47 @@
 -------------------------------------------------------------------------------
 -- TODO Remote API for registering/removing planners ?
 
-local Table = require('__kry_stdlib__/stdlib/utils/table')
-local Event = require('__kry_stdlib__/stdlib/event/event')
-local Gui = require('__kry_stdlib__/stdlib/event/gui')
-local Player = require('__kry_stdlib__/stdlib/event/player')
-local Area = require('__kry_stdlib__/stdlib/area/area')
-local Math = require('__kry_stdlib__/stdlib/utils/math')
+local events = require('utils/events')
+local lib = require('utils/lib')
+
+-- Rounding to p decimal places, as the kry_stdlib Math helpers did.
+local Math = {}
+function Math.round_to(x, p)
+    local e = 10 ^ (p or 0)
+    return math.floor(x * e + 0.5) / e
+end
+function Math.floor_to(x, p)
+    if (p or 0) == 0 then return math.floor(x) end
+    local e = 10 ^ p
+    return math.floor(x * e) / e
+end
+function Math.ceil_to(x, p)
+    local e = 10 ^ (p or 0)
+    return math.ceil(x * e + 0.5) / e
+end
+
+-- The selected area in named form; ceil = true widens it to whole tiles.
+local function make_area(box, ceil)
+    local lt, rb = box.left_top or box[1], box.right_bottom or box[2]
+    local x1, y1, x2, y2 = lt.x or lt[1] or 0, lt.y or lt[2] or 0, rb.x or rb[1] or 0, rb.y or rb[2] or 0
+    if ceil then
+        x1, y1, x2, y2 = math.floor(x1), math.floor(y1), math.ceil(x2), math.ceil(y2)
+    end
+    return {left_top = {x = x1, y = y1}, right_bottom = {x = x2, y = y2}}
+end
+
+local function area_size(area)
+    local width = math.abs(area.left_top.x - area.right_bottom.x)
+    local height = math.abs(area.left_top.y - area.right_bottom.y)
+    return width * height, width, height
+end
+
+local function area_center(area)
+    return {
+        x = area.left_top.x + (area.right_bottom.x - area.left_top.x) / 2,
+        y = area.left_top.y + (area.right_bottom.y - area.left_top.y) / 2
+    }
+end
 -------------------------------------------------------------------------------
 --[Tape Measure]--
 -------------------------------------------------------------------------------
@@ -83,18 +118,15 @@ local function measure_area(event)
         local player = game.players[event.player_index]
 		local set = player.mod_settings
 		local num_digits = set["picker-tape-measure-clamp"].value
-        local area = Area(event.area)
-        if event.name == defines.events.on_player_alt_selected_area then
-            area = area:ceil()
-        end
-        local size, width, height = area:size()
+        local area = make_area(event.area, event.name == defines.events.on_player_alt_selected_area)
+        local size, width, height = area_size(area)
 		-- if clamp value is 10, just print the raw values
 		if num_digits == 10 then
-			player.print(format_area(area) .. format_point(area:center(),"Center"))
+			player.print(format_area(area) .. format_point(area_center(area),"Center"))
 			player.print('Size = ' .. size .. ' Width = ' .. width .. ' Height = ' .. height)
 		elseif num_digits == 0 then
 			local new_area = clamp_area(area, num_digits)
-			local new_center = clamp_point(area:center(), num_digits)
+			local new_center = clamp_point(area_center(area), num_digits)
 			player.print(format_area(new_area) .. ", " .. format_point(new_center,"Center"))
 			player.print(format_number(clamp_number(size,num_digits,"ceil"),"Size")..", "..
 				format_number(clamp_number(width,num_digits,"ceil"),"Width")..", "..
@@ -102,7 +134,7 @@ local function measure_area(event)
 			)
 		else
 			local new_area = clamp_area(area, num_digits)
-			local new_center = clamp_point(area:center(), num_digits)
+			local new_center = clamp_point(area_center(area), num_digits)
 			player.print(format_area(new_area) .. ", " .. format_point(new_center,"Center"))
 			player.print(format_number(clamp_number(size,num_digits),"Size")..", "..
 				format_number(clamp_number(width,num_digits),"Width")..", "..
@@ -111,7 +143,7 @@ local function measure_area(event)
 		end
     end
 end
-Event.register({defines.events.on_player_selected_area, defines.events.on_player_alt_selected_area}, measure_area)
+events.on({defines.events.on_player_selected_area, defines.events.on_player_alt_selected_area}, measure_area)
 
 -------------------------------------------------------------------------------
 --[Tree Killer Compatibility]--
@@ -220,10 +252,10 @@ local function planner_settings_changed(event)
     local player = game.players[event.player_index]
     get_or_create_planner_flow(player, true)
 end
-Event.register(defines.events.on_runtime_mod_setting_changed, planner_settings_changed)
+events.on(defines.events.on_runtime_mod_setting_changed, planner_settings_changed)
 
 local function planner_clicked(event)
-    local player, pdata = Player.get(event.player_index)
+    local player, pdata = lib.get_player(event.player_index)
     local item = prototypes.item[event.match]
 
     if item then
@@ -247,14 +279,14 @@ local function planner_clicked(event)
         end
     end
 end
-Gui.on_click('picker_planner_table_sprite_(.*)', planner_clicked)
+events.on_click('picker_planner_table_sprite_(.*)', planner_clicked)
 
 local function close_planner_menu(event)
     if event.element and event.element.name == 'picker_planner_flow' then
         event.element.visible = false
     end
 end
-Event.register(defines.events.on_gui_closed, close_planner_menu)
+events.on(defines.events.on_gui_closed, close_planner_menu)
 
 local function open_or_close_planner_menu(event)
     local player = game.players[event.player_index]
@@ -262,7 +294,7 @@ local function open_or_close_planner_menu(event)
     flow.visible = not flow.visible
     player.opened = flow.visible and flow or nil
 end
-Event.register('picker-planner-menu', open_or_close_planner_menu)
+events.on('picker-planner-menu', open_or_close_planner_menu)
 
 -------------------------------------------------------------------------------
 --[Next Planner]--
@@ -329,12 +361,12 @@ end
 -- Register the cycle planners hotkey, which activates the get_next_planner subscript
 local function cycle_planners(event)
     --game.print(serpent.block(storage.plan_order))
-    local player, pdata = Player.get(event.player_index)
+    local player, pdata = lib.get_player(event.player_index)
     if player.controller_type == defines.controllers.character or
        player.controller_type == defines.controllers.remote then
         -- create pdata.planners if it didn't already exist
         if not pdata.planners then
-            --pdata.planners = Table.deepcopy(storage.planners)
+            --pdata.planners = table.deepcopy(storage.planners)
         end
         -- if all planners are disabled, don't do anything.
         if string.find(serpent.line(pdata.planners),"true") then
@@ -342,7 +374,7 @@ local function cycle_planners(event)
         end
     end
 end
-Event.register('picker-next-planner', cycle_planners)
+events.on('picker-next-planner', cycle_planners)
 
 -- this may be a little inefficient, but probably won't have more than 10, maybe 20 planners to check
 local function sort_planner_storage()
@@ -355,7 +387,7 @@ local function sort_planner_storage()
         return storage.plan_order[a] < storage.plan_order[b]
     end)
 
-    storage.plan_order = Table.deepcopy(sorted_keys)
+    storage.plan_order = sorted_keys
 end
 
 -- This runs on first init and when mod configuration is changed, I think
@@ -392,7 +424,7 @@ local function planners_changed()
 	-- for each player in the game, update planner menu entries to current modlist
     for player_index, _ in pairs(game.players) do
 		-- get player data and check if each planner still exists
-		local player, pdata = Player.get(player_index)
+		local player, pdata = lib.get_player(player_index)
 		-- only check if pdata.planners exists
 		if pdata.planners then
 			for planner_name, enabled in pairs(pdata.planners) do
@@ -415,4 +447,4 @@ local function planners_changed()
         end
     end
 end
-Event.register(Event.core_events.init_and_config, planners_changed)
+events.on({'on_init', 'on_configuration_changed'}, planners_changed)

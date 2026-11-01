@@ -1,12 +1,15 @@
-local Event = require('__stdlib2__/stdlib/event/event')
+local events = require('scripts/events')
 local Queue = require('scripts/hash_queue')
 local interface = {}
+
+-- Queue resets, run by reset_queue(name); scripts/roboport-interface.lua adds 'cell_queue'.
+interface.queue_resets = {}
 
 function interface.reset_mod(are_you_sure)
     local player_name = game.player and game.player.name or 'script'
     if are_you_sure then
         storage = {}
-        Event.dispatch({name = Event.core_events.init})
+        events.dispatch('on_init')
         game.print('Full Reset Completed by ' .. player_name)
     else
         game.print('Full reset attempted but ' .. player_name .. ' was not sure')
@@ -15,11 +18,10 @@ end
 
 function interface.reset_queue(queue)
     queue = queue or 'nano_queue'
-    local name = 'reset_' .. queue
-    local id = Event.get_event_name(name)
-    if storage[queue] and id then
+    local reset = interface.queue_resets[queue]
+    if storage[queue] and reset then
         game.print('Resetting ' .. queue)
-        Event.dispatch({name = id})
+        reset()
     end
 end
 
