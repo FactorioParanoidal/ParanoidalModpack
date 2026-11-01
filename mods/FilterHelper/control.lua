@@ -123,8 +123,9 @@ local buttons_per_column = 7 -- the maximum number of sprite-buttons per column 
 local max_columns = 10 -- the maximum number of columns to use for the gui
 
 local function build_interface(player_global)
-    if player_global.elements.main_frame then
-        player_global.elements.main_frame.destroy()
+    local old_frame = player_global.elements.main_frame
+    if old_frame and old_frame.valid then
+        old_frame.destroy()
     end
 
     local guis_table = {
@@ -229,37 +230,62 @@ function FilterHelper.add_items_belt_inventory(entity, items)
     end
 end
 
+local belt_types = {
+    ["transport-belt"] = true,
+    ["splitter"] = true,
+    ["lane-splitter"] = true,
+    ["underground-belt"] = true,
+    ["loader"] = true,
+    ["loader-1x1"] = true,
+}
+
 ---@param entity LuaEntity
 ---@param items table<string, ItemWithQuality>
 ---@param upstream uint?
 ---@param downstream uint?
+---@param seen table?
 ---Adds to the filter item list for a transport belt
-function FilterHelper.add_items_belt(entity, items, upstream, downstream)
+-- Paranoidal: one walk remembers the belts it has read (seen.read) and the largest remaining upstream/downstream
+-- budget each belt was walked with (seen.up/seen.down), so belts reached again through splitters are not walked
+-- again unless with a larger budget (same reach, no exponential growth); underground belts are read once.
+function FilterHelper.add_items_belt(entity, items, upstream, downstream, seen)
     --TODO user config for this
     upstream = upstream or 10 -- number of belts upstream (inputs) of this belt to check for filter items
     downstream = downstream or 10 -- number of belts downstream (outputs) of this belt to check for filter items
+    seen = seen or { read = {}, up = {}, down = {} }
 
     local effective_type = fh_util.get_effective_type(entity)
-    if contains({ "transport-belt", "splitter", "lane-splitter", "underground-belt", "loader", "loader-1x1" }, effective_type) then
-        FilterHelper.add_items_belt_inventory(entity, items)
-        if upstream > 0 then
-            for _, belt in pairs(entity.belt_neighbours.inputs) do
-                FilterHelper.add_items_belt(belt, items, upstream - 1, 0)
-            end
+    if not belt_types[effective_type] then
+        return
+    end
+    local id = entity.unit_number
+    if not id or not seen.read[id] then
+        if id then
+            seen.read[id] = true
         end
-        if downstream > 0 then
-            for _, belt in pairs(entity.belt_neighbours.outputs) do
-                FilterHelper.add_items_belt(belt, items, 0, downstream - 1)
-            end
+        FilterHelper.add_items_belt_inventory(entity, items)
+    end
+    local is_underground = effective_type == "underground-belt"
+    if upstream > 0 and not (id and (seen.up[id] or -1) >= upstream) then
+        if id then
+            seen.up[id] = upstream
+        end
+        for _, belt in pairs(entity.belt_neighbours.inputs) do
+            FilterHelper.add_items_belt(belt, items, upstream - 1, 0, seen)
+        end
+        if is_underground and entity.belt_to_ground_type == "output" and entity.neighbours then
+            FilterHelper.add_items_belt(entity.neighbours, items, upstream - 1, 0, seen)
         end
     end
-    if effective_type == "underground-belt" then
-        FilterHelper.add_items_belt_inventory(entity, items)
-        if upstream > 0 and entity.belt_to_ground_type == "output" and entity.neighbours then
-            FilterHelper.add_items_belt(entity.neighbours, items, upstream - 1, 0)
+    if downstream > 0 and not (id and (seen.down[id] or -1) >= downstream) then
+        if id then
+            seen.down[id] = downstream
         end
-        if downstream > 0 and entity.belt_to_ground_type == "input" and entity.neighbours then
-            FilterHelper.add_items_belt(entity.neighbours, items, 0, downstream - 1)
+        for _, belt in pairs(entity.belt_neighbours.outputs) do
+            FilterHelper.add_items_belt(belt, items, 0, downstream - 1, seen)
+        end
+        if is_underground and entity.belt_to_ground_type == "input" and entity.neighbours then
+            FilterHelper.add_items_belt(entity.neighbours, items, 0, downstream - 1, seen)
         end
     end
 end
@@ -550,11 +576,25 @@ function FilterHelper.add_items(entity, items)
     return items
 end
 
-local function update_ui(player_global, check_items)
+-- Paranoidal: the periodic refresh reuses the filter updater of the open entity (updater_cache[player_index] =
+-- {entity, updater}); it is derived from the entity alone, so a client with an empty cache after loading gets the same one.
+local updater_cache = {}
+
+local function get_cached_updater(player_index, entity)
+    local cached = updater_cache[player_index]
+    if cached and cached.entity == entity then
+        return cached.updater
+    end
+    local updater = get_filter_updater(entity)
+    updater_cache[player_index] = { entity = entity, updater = updater }
+    return updater
+end
+
+local function update_ui(player_global, check_items, updater)
     if not player_global.entity or not player_global.entity.valid then
         return
     end
-    local updater = get_filter_updater(player_global.entity)
+    updater = updater or get_filter_updater(player_global.entity)
     if not updater then
         return
     end
@@ -591,29 +631,34 @@ local function update_ui(player_global, check_items)
     end
 end
 
--- Paranoidal: on_tick runs only while a player has an entity with a filter updater open.
+-- Paranoidal: the refresh runs only while a player has an entity with a filter updater open.
 -- storage.fh_open[player_index] = true marks such players; the registration follows storage,
 -- so it is the same on every client and is restored in on_load.
-local on_tick
+-- It runs every REFRESH_TICKS ticks (was every tick): active filters are compared 10 times a second,
+-- the item suggestions are collected every 60 ticks as before (60 is a multiple of REFRESH_TICKS).
+local REFRESH_TICKS = 6
+local on_refresh
 
 local function update_tick_handler()
     if storage.fh_open and next(storage.fh_open) then
-        script.on_event(defines.events.on_tick, on_tick)
+        script.on_nth_tick(REFRESH_TICKS, on_refresh)
     else
-        script.on_event(defines.events.on_tick, nil)
+        script.on_nth_tick(REFRESH_TICKS, nil)
     end
 end
 
-on_tick = function(event)
+on_refresh = function(event)
     local open = storage.fh_open
     local check_items = event.tick % 60 == 0
     for player_index in pairs(open) do
         local player_global = get_player_global(player_index)
         -- Only connected players can have an open filter GUI.
-        if player_global and player_global.player.connected and player_global.entity and player_global.entity.valid then
-            update_ui(player_global, check_items)
+        local entity = player_global and player_global.entity
+        if player_global and player_global.player.connected and entity and entity.valid then
+            update_ui(player_global, check_items, get_cached_updater(player_index, entity))
         else
             open[player_index] = nil
+            updater_cache[player_index] = nil
         end
     end
     if not next(open) then
@@ -656,6 +701,7 @@ end)
 
 script.on_event(defines.events.on_pre_player_removed, function(event)
     storage.players[event.player_index] = nil
+    updater_cache[event.player_index] = nil
     if storage.fh_open then
         storage.fh_open[event.player_index] = nil
     end
@@ -682,16 +728,19 @@ script.on_event(defines.events.on_gui_closed, function(event)
     if not player_global then
         return
     end
-    if player_global.elements.main_frame then
-        player_global.elements.main_frame.destroy()
+    local main_frame = player_global.elements.main_frame
+    if main_frame and main_frame.valid then
+        main_frame.destroy()
     end
+    player_global.elements.main_frame = nil
     player_global.entity = nil
+    updater_cache[event.player_index] = nil
     player_global.items = {}
     player_global.active_items = {}
     if storage.fh_open then
         storage.fh_open[event.player_index] = nil
     end
-    -- on_tick unregisters itself when the set is empty
+    -- the refresh unregisters itself when the set is empty
 end)
 
 --EVENT on_gui_click
@@ -727,7 +776,7 @@ script.on_event(defines.events.on_gui_click, function(event)
     end
 end)
 
--- on_tick: see update_tick_handler (registered only while storage.fh_open is not empty)
+-- refresh: see update_tick_handler (on_nth_tick, registered only while storage.fh_open is not empty)
 
 -- TODO options for what things are considered. Chests, transport lines, etc
 -- TODO recently used section

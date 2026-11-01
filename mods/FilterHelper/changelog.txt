@@ -7,8 +7,11 @@ Date: 2026-02-20
     - Added option to not show result item qualities beyond unlocked qualities
   Optimizations:
     - Paranoidal: on_tick is registered only while a player has a filterable entity open (inserter with filters, splitter, filtered or requester/buffer container, ...); before, it ran every tick, and with any other machine window open it looked up a filter updater every tick.
+    - Paranoidal: while such a window is open the refresh runs every 6 ticks (on_nth_tick) instead of every tick and reuses the filter updater of the open entity instead of rebuilding it; item suggestions are still collected every 60 ticks.
+    - Paranoidal: the belt scan for suggestions remembers the belts it has walked, so belts reached again through splitters are not walked again (the walk could grow up to 2^10 belts per direction); underground belts are read once instead of twice. The reach is unchanged.
   Bugfixes:
     - Paranoidal: closing a GUI no longer errors for a player without Filter Helper data.
+    - Paranoidal: closing a GUI or rebuilding the panel no longer errors when the panel was already destroyed from outside.
 ---------------------------------------------------------------------------------------------------
 Version: 0.2.23
 Date: 2026-02-06
