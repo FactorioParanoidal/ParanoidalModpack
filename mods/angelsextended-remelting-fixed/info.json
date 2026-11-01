@@ -11,7 +11,7 @@
     "angelssmelting >= 0.4.0",
     "reskins-angels",
     "? bobplates >= 0.15.0",
-    "? Clowns-Processing >= 1.3.2",
+    "? paranoidal-clowns",
     "? ShinyAngelGFX >= 0.15.10",
     "! Better_Strand_Casting"
   ],

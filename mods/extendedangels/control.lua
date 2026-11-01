@@ -12,7 +12,7 @@ script.on_configuration_changed(function(config)
     recipes["angels-gas-argon"].enabled = technologies["angels-nitrogen-processing-1"].researched
     recipes["angels-air-filter-4"].enabled = technologies["angels-advanced-chemistry-4"].researched
 
-    if script.active_mods["Clowns-Processing"] then
+    if script.active_mods["paranoidal-clowns"] then
       if technologies["phosphorus-processing-2"].researched then
         recipes["angels-solid-disodium-phosphate"].enabled = true
         recipes["angels-solid-tetrasodium-pyrophosphate"].enabled = true

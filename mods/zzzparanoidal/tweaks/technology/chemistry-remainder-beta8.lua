@@ -1,6 +1,6 @@
 -- Beta 8 normal: отдельная PCP-химия, полимеры и оставшиеся открытия advanced chemistry.
 -- После OV.execute. Эффекты существующих технологий и топливные ворота не выравниваем.
-if not mods["angelspetrochem"] or not mods["PCPRedux"] then return end
+if not mods["angelspetrochem"] or not mods["paranoidal-petrochem"] then return end
 local technologies = data.raw.technology
 local pcp = "k-angels-advanced-chemistry-5"
 if not technologies[pcp] and technologies["angels-advanced-chemistry-5"] then

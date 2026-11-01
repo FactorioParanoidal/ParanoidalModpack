@@ -223,8 +223,8 @@ D.file_remap = {
 
 -- Иконки крупнее, чем их показывает игра (2x ожидаемого размера): путь|размер -> копия.
 D.icons = {
-	["__Clowns-Processing__/graphics/icons/fluorine.png|216"] = { "__zzzparanoidal__/graphics/atlas-icons/Clowns-Processing/icons/fluorine-128.png", 128 },
-	["__Clowns-Processing__/graphics/icons/phosphoric-acid.png|512"] = { "__zzzparanoidal__/graphics/atlas-icons/Clowns-Processing/icons/phosphoric-acid-128.png", 128 },
+	["__paranoidal-clowns__/graphics/icons/fluorine.png|216"] = { "__zzzparanoidal__/graphics/atlas-icons/Clowns-Processing/icons/fluorine-128.png", 128 },
+	["__paranoidal-clowns__/graphics/icons/phosphoric-acid.png|512"] = { "__zzzparanoidal__/graphics/atlas-icons/Clowns-Processing/icons/phosphoric-acid-128.png", 128 },
 	["__angelsrefininggraphics__/graphics/icons/angels-gas/gas-item-base.png|596"] = { "__zzzparanoidal__/graphics/atlas-icons/angelsrefininggraphics/icons/angels-gas/gas-item-base-256.png", 256 },
 	["__angelsrefininggraphics__/graphics/icons/angels-gas/gas-item-bot.png|596"] = { "__zzzparanoidal__/graphics/atlas-icons/angelsrefininggraphics/icons/angels-gas/gas-item-bot-256.png", 256 },
 	["__angelsrefininggraphics__/graphics/icons/angels-gas/gas-item-mid.png|596"] = { "__zzzparanoidal__/graphics/atlas-icons/angelsrefininggraphics/icons/angels-gas/gas-item-mid-256.png", 256 },

@@ -38,7 +38,7 @@ if not mods["Clowns-Extended-Minerals"] then
   end
 end
 
-if not mods["Clowns-Processing"] then
+if not mods["paranoidal-clowns"] then
   local prerequisite = data.raw.technology["angels-water-treatment-4"]
   if prerequisite then
     data:extend({

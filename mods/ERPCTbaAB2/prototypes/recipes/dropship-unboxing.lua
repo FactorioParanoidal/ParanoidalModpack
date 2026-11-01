@@ -27,7 +27,7 @@ if mods["angelssmelting"] then
   results[#results + 1] = { type = "item", name = "angels-platinum-ore", amount_min = 500, amount_max = 2500, probability = 0.08 }
 end
 
-if mods["Clowns-Processing"] then
+if mods["paranoidal-clowns"] then
   local results = data.raw.recipe["random-dropship-unboxing"].results
   results[#results + 1] = { type = "item", name = "clowns-osmium-ore", amount = 5, probability = 0.15 }
   results[#results + 1] = { type = "item", name = "clowns-magnesium-ore", amount = 10, probability = 0.20 }

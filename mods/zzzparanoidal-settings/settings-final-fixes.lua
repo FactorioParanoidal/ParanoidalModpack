@@ -244,10 +244,6 @@ hide("string-setting", "nco-inserter-cranes-max-stack-size-bonus")
 -- MIRV2
 hide("bool-setting", "mirv-auto-launch")
 hide("bool-setting", "mirv-pollution-on-detonation")
--- Clowns-Processing
-hide("bool-setting", "MCP_enable_centrifuges")
--- Clowns-Nuclear
-hide("bool-setting", "artillery-shells")
 -- minime
 hide("bool-setting", "minime_scale-reach_resource_distance")
 hide("bool-setting", "minime_scale-tool-attack-distance")
@@ -265,8 +261,6 @@ hide("double-setting", "Noxys_Trees-tree_dying_factor")
 hide("double-setting", "Noxys_Trees-tree_fire_spread_speed_factor")
 hide("double-setting", "Noxys_Trees-emission_multiplier")
 hide("double-setting", "Noxys_Trees-collision_multiplier")
--- PCPRedux
-hide("bool-setting", "pcp-replace-phenol-oxygen")
 -- visible-pollutants
 hide("string-setting", "visible-pollutants-add-to-planets")
 -- qol_research

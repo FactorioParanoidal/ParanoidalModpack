@@ -57,7 +57,7 @@ else
   OV.add_prereq("angels-water-washing-4", "angels-titanium-smelting-1")
   OV.add_prereq("angels-water-treatment-5", "angels-tungsten-smelting-1")
 end
-if mods["Clowns-Processing"] then
+if mods["paranoidal-clowns"] then
   OV.add_unlock("phosphorus-processing-2", "angels-solid-disodium-phosphate")
   OV.add_unlock("phosphorus-processing-2", "angels-solid-tetrasodium-pyrophosphate")
   OV.add_unlock("angels-water-treatment-5", "angels-salination-plant-3")

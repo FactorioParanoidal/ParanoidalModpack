@@ -73,7 +73,7 @@ triggers.storage = {
 
 -- Mad Clown's Compatibility
 triggers.mad_clowns = {
-	is_active = mods["Clowns-AngelBob-Nuclear"] and true or mods["Clowns-Extended-Minerals"] and true or mods["Clowns-Nuclear"] and true or mods["Clowns-Processing"] and true or mods["Clowns-Science"] and true or false,
+	is_active = mods["paranoidal-clowns"] and true or mods["Clowns-AngelBob-Nuclear"] and true or mods["Clowns-Extended-Minerals"] and true or mods["Clowns-Nuclear"] and true or mods["Clowns-Processing"] and true or mods["Clowns-Science"] and true or false,
 }
 
 -- Angel components

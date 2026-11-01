@@ -8,6 +8,6 @@ if angelsmods and angelsmods.smelting then
     require("prototypes.remelting-override-angelssmelting")
 end
 
-if mods["Clowns-Processing"] then
+if mods["paranoidal-clowns"] then
     require("prototypes.remelting-override-clowns")
 end

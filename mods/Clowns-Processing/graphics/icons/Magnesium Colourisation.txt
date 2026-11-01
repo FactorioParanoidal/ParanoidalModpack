@@ -1,5 +1,0 @@
-From platinum
-
-h=290
-s=30
-l=-5

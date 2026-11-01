@@ -1,0 +1,19 @@
+---------------------------------------------------------------------------------------------------
+Version: 9.0.0
+Date: 2026-11-01
+  Major Features:
+    - One mod instead of PCPRedux 1.1.0 (PetrochemPlus by Pezzawinkle) and more-petrochem-hell2 0.18.2 (More Petrochem Hell by Claviduck). Item, fluid, recipe, technology, entity and locale key names are unchanged, so buildings, items and research of existing saves stay.
+  Changes:
+    - Removed the startup settings pcp-glass-sink (forced off by zzzparanoidal) and pcp-replace-phenol-oxygen (on): phenol is always made from benzene and nitrous oxide. The glass flask (item, recipe, technology and graphics) is gone with its setting; zzzparanoidal no longer has to delete it.
+    - The high octane enriched fuel recipe is in the angels-advanced-chemistry category in the mod itself (was moved by zzzparanoidal).
+    - Removed: the duplicate unlock and rubber block of data-final-fixes.lua (same calls as in data.lua), the colour library and fallback fluid colour function used only without Angel's Refining, the apm, ScienceCostTweakerM, MomoTweak, omnimatter and ap-bullet branches (mods not in the build), the branches for builds without Bob's rubber or resin, the dead liquid-rubber-1 patch (no such recipe in Angel's 2.0), commented-out prototypes, unused graphics and the second copy of the Russian locale (the texts of ParanoidalLocale are used).
+    - Locales: English and Russian only.
+  Graphics:
+    - Only the 36 pictures the game uses are kept (of 51 in the two mods); they are recompressed (lossy palette, the plastic wall sprites at a higher quality): 0.62 MB -> 0.35 MB of kept graphics, the whole mod 1.0 MB -> 0.55 MB.
+  Bugfixes:
+    - PetrochemPlus declared its own item "solid-sodium-nitrate" (the Angel's 1.1 name) next to angels-solid-sodium-nitrate; its recipes use angels-solid-sodium-nitrate now, and zzzparanoidal no longer has to merge the two items.
+    - Vinyl acetylene showed the formula C4H6O2 (vinyl acetate); it is C4H4. Lactic acid colour used C2H6O3 instead of C3H6O3; methyl methacrylate used its base colour as flow colour.
+    - The PMMA and PC glass recipes looked up the missing fluid "liquid-molten-glass", and the PC glass tint was placed outside its recipe; both use angels-liquid-molten-glass now. The sodium nitrate synthesis and the second bacteria cultivation recipe looked up items as fluids for their tint.
+    - Global variables of the plastic wall and the "special vanilla" block are local now.
+  Saves:
+    - Nothing is lost: the old mods kept no script state. Values of the removed settings in mod-settings.dat are ignored.

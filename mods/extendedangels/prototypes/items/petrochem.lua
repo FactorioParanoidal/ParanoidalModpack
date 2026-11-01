@@ -23,7 +23,7 @@ data:extend({
   },
 })
 
-if mods["Clowns-Processing"] then
+if mods["paranoidal-clowns"] then
   data:extend({
     -- Disodium phosphate
     {
@@ -31,7 +31,7 @@ if mods["Clowns-Processing"] then
       name = "angels-solid-disodium-phosphate",
       icons = {
         {
-          icon = "__Clowns-Processing__/graphics/icons/solid-white-phosphorus.png",
+          icon = "__paranoidal-clowns__/graphics/icons/solid-white-phosphorus.png",
           icon_size = 32,
         },
       },
@@ -45,7 +45,7 @@ if mods["Clowns-Processing"] then
       type = "item",
       name = "angels-solid-tetrasodium-pyrophosphate",
       icons = { {
-        icon = "__Clowns-Processing__/graphics/icons/solid-white-phosphorus.png",
+        icon = "__paranoidal-clowns__/graphics/icons/solid-white-phosphorus.png",
         icon_size = 32,
       } },
       subgroup = "angels-petrochem-sodium",

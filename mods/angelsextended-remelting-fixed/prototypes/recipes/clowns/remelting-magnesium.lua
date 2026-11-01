@@ -13,7 +13,7 @@ data:extend({
 
 		icons = {
 			{
-				icon = "__Clowns-Processing__/graphics/icons/molten-magnesium.png",
+				icon = "__paranoidal-clowns__/graphics/icons/molten-magnesium.png",
 			},
 			{
 				icon = "__angelsextended-remelting-fixed__/graphics/icons/remelting.png",

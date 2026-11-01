@@ -290,7 +290,7 @@ data:extend({
 })
 end
 
-if mods["Clowns-Processing"] then
+if mods["paranoidal-clowns"] then
 OV.patch_recipes({
     {
       name = "angels-pellet-tungsten-smelting-2",

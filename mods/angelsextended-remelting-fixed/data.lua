@@ -49,7 +49,7 @@ if bobmods and bobmods.plates then
     require("prototypes.recipes.bobplates.remelting-nitinol")
 end
 
-if mods["Clowns-Processing"] then
+if mods["paranoidal-clowns"] then
     require("prototypes.recipes.clowns.remelting-magnesium")
 end
 

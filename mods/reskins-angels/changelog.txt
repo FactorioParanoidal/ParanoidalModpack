@@ -5,6 +5,8 @@ Date: 2026-06-01
     - ru: the mod name and the mod list description are the same as in ParanoidalLocale (format "English title (Russian translation)"), so the mod reads the same with or without it.
   Bugfixes:
     - Fixed that nuclear fuel, fuel cells and isotopes were not reskinned
+  Changes:
+    - The Mad Clown's compatibility trigger also recognises paranoidal-clowns (the merged Clowns-Processing, Clowns-Nuclear and Clowns-AngelBob-Nuclear).
 ---------------------------------------------------------------------------------------------------
 Version: 2.3.4
 Date: 2026-05-31

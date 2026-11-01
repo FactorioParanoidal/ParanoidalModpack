@@ -1,0 +1,20 @@
+{
+  "name": "paranoidal-petrochem",
+  "version": "9.0.0",
+  "title": "Paranoidal Petrochem",
+  "author": "FactorioParanoidal; chemistry after PetrochemPlus by Pezzawinkle and More Petrochem Hell by Claviduck",
+  "homepage": "https://github.com/FactorioParanoidal/ParanoidalModpack",
+  "factorio_version": "2.0",
+  "description": "More chemistry on top of Angel's Petrochem: nitrogen oxides, hydrogen cyanide, phosgene, acetylene and vinyl chloride, PMMA, polycarbonate, ABS and PVC plastics, multi-stage rubber, bioplastic, metal catalysts, a plastic wall and the tetraethyllead fuel additive for high octane enriched fuel. Replaces PetrochemPlus (PCPRedux) and More Petrochem Hell.",
+  "dependencies": [
+    "base >= 2.0",
+    "angelsrefining",
+    "angelspetrochem",
+    "angelssmelting",
+    "bobplates",
+    "? angelsbioprocessing",
+    "? angelsindustries",
+    "! PCPRedux",
+    "! more-petrochem-hell2"
+  ]
+}

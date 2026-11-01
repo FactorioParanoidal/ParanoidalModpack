@@ -153,8 +153,6 @@ hide("double-setting", "laserfix-b")
 hide("double-setting", "laserfix-glow-r")
 hide("double-setting", "laserfix-glow-g")
 hide("double-setting", "laserfix-glow-b")
--- Clowns-Processing
-hide("bool-setting", "fluid-cleanup")
 -- minime
 hide("int-setting", "minime_character-size")
 hide("bool-setting", "minime_remove-armor-animations")

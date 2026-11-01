@@ -344,10 +344,6 @@ paralib.bobmods.lib.tech.remove_recipe_unlock("angels-ore-floatation", "bob-silv
 if data.raw["recipe"]["bacterial-growth-seed-cultivation-2"] then
 	data.raw["recipe"]["bacterial-growth-seed-cultivation-2"].category = "angels-advanced-chemistry"
 end
---high-octane-enriched-fuel (more-petrochem-hell2): крафт в angels-advanced-chemistry вместо базовой chemistry
-if mods["more-petrochem-hell2"] then
-	data.raw["recipe"]["high-octane-enriched-fuel"].category = "angels-advanced-chemistry"
-end
 
 paralib.bobmods.lib.tech.add_recipe_unlock("angels-sodium-processing-2", "Calcium-chloride-Calcium-carbonate")
 paralib.bobmods.lib.tech.add_recipe_unlock("angels-bio-processing-red", "Calcium-carbonate-Calcium-sulfate")

@@ -230,9 +230,6 @@ end
 if mods["BatteryElectricTrain"] then
     set_settings_default_value("bool-setting", "bet-cheatsy-wagons", true)
 end
-if mods["Clowns-Nuclear"] then
-    set_settings_default_value("bool-setting", "artillery-shells", true)
-end
 if mods["BottleneckLite"] then
     set_settings_default_value("bool-setting", "bnl-include-mining-drills", false)
 end
@@ -334,14 +331,6 @@ if mods["Noxys_Trees"] then
 end
 if mods["P-U-M-P-S"] then
     set_settings_default_value("bool-setting", "osm-pumps-burner-offshore-pump", true)
-end
-if mods["PCPRedux"] then
-    local glass_sink = data.raw["bool-setting"]["pcp-glass-sink"]
-    if glass_sink then
-        glass_sink.default_value = false
-        glass_sink.hidden = true
-        glass_sink.forced_value = false
-    end
 end
 if mods["RampantFixed"] then
     set_settings_default_value("bool-setting", "rampantFixed--allowLongRangeImmunity", false)

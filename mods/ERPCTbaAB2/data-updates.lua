@@ -278,7 +278,7 @@ else
   table.insert(recipe["telescope-components"].ingredients, { type = "item", name = "radar", amount = 2000 })
 end
 
-if mods["Clowns-AngelBob-Nuclear"] then
+if mods["paranoidal-clowns"] then
   local thorium = util.table.deepcopy(recipe["radioisotope-thermoelectric-generator"])
   thorium.name = "radioisotope-thermoelectric-generator-thorium"
   thorium.ingredients = {
@@ -294,7 +294,7 @@ if mods["Clowns-AngelBob-Nuclear"] then
   end
 end
 
-if mods["Clowns-Processing"] then
+if mods["paranoidal-clowns"] then
   table.insert(recipe["orbital-fabricator-component"].ingredients, { type = "item", name = "bob-centrifuge-3", amount = 250 })
 else
   table.insert(recipe["orbital-fabricator-component"].ingredients, { type = "item", name = "centrifuge", amount = 250 })

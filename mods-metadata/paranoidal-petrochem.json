@@ -1,0 +1,15 @@
+{
+  "mod": "paranoidal-petrochem",
+  "source": "local",
+  "original": {
+    "name": "PetrochemPlus",
+    "authors": [
+      "Pezzawinkle"
+    ],
+    "portal": {
+      "name": "PCPRedux",
+      "url": "https://mods.factorio.com/mod/PCPRedux"
+    }
+  },
+  "changeReason": "Собственный мод проекта: объединяет PetrochemPlus 1.1.0 (Pezzawinkle) и More Petrochem Hell 0.18.2 (Claviduck, порт на 2.0 сборки). Имена предметов, жидкостей, рецептов, технологий и ключей локали прежние. Удалены настройки pcp-glass-sink и pcp-replace-phenol-oxygen (значения сборки стали константами) вместе со стеклянной колбой, мёртвый код и ветки для модов не из сборки. Рецепты используют angels-solid-sodium-nitrate вместо собственного дубля, категория высокооктанового топлива задана в моде; обе правки раньше делал zzzparanoidal. Исправлены формулы и цвета жидкостей и оттенки рецептов стекла."
+}

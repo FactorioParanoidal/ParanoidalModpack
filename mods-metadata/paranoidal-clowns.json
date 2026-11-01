@@ -1,0 +1,16 @@
+{
+  "mod": "paranoidal-clowns",
+  "source": "local",
+  "original": {
+    "name": "MadClown01's Processing",
+    "authors": [
+      "MadClown01",
+      "Pezzawinkle"
+    ],
+    "portal": {
+      "name": "Clowns-Processing",
+      "url": "https://mods.factorio.com/mod/Clowns-Processing"
+    }
+  },
+  "changeReason": "Собственный мод проекта: объединяет MadClown01's Processing 2.0.14, MadClown01's Vanilla Nuclear 2.0.08 и MadClown01's AngelBob Nuclear 2.0.13 (MadClown01, Pezzawinkle). Имена предметов, жидкостей, рецептов, технологий и ключей локали прежние. Удалены настройки MCP_enable_centrifuges, fluid-cleanup и artillery-shells (значения сборки стали константами), мёртвый код, ветки для модов не из сборки, дубли и неиспользуемая графика. Исправлены двойные ингредиенты термоядерной бомбы и лишний рецепт molten-steel-smelting-c2 (обе правки раньше делал zzzparanoidal) и несуществующий plutonium-239 в переработке ядерного топлива."
+}

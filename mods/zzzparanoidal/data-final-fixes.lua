@@ -72,7 +72,6 @@ require("tweaks.custom.selections")
 require("removals.fishes")
 require("removals.aai-medium-electric-pole")
 require("removals.aai-basic-logistics")
-require("removals.clowns-steel-c2")
 require("removals.angels-valves") -- прячем Angels-flow-клапаны: заменены модом valves (inspector остаётся)
 
 require("graphics.train.train_reskin") -- рескин поездов
@@ -238,9 +237,6 @@ for _, recipe in pairs(data.raw.recipe) do
 	end
 end
 
--- PCPRedux: дубль sodium nitrate (старое ангеловское имя) → angels-solid-sodium-nitrate
-require("removals.pcp-sodium-nitrate-duplicate")
-
 -- Beta 8 start, after late overrides; preserve current machinery and agreed exceptions.
 require("prototypes.torch-beta8")
 require("tweaks.recipe.start-menu-beta8")
@@ -390,7 +386,6 @@ require("prototypes.electrowinning-cell-3-beta8")
 require("tweaks.entity.building-speed-slots-1_1")
 require("tweaks.entity.building-module-compatibility-1_1")
 require("tweaks.entity.big-lab")
-require("removals.pcp-flask")
 -- Эстакадные рельсы (только при включённом elevated-rails): тиры опор и кабель в опорах.
 require("tweaks.custom.elevated-rail-supports")
 -- Пачка 01 «До синей науки» (решение пользователя): после flowfix, меню и правок дерева.

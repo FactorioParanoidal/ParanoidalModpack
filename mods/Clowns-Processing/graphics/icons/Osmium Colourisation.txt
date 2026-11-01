@@ -1,5 +1,0 @@
-From tungsten
-
-h=330
-s=25
-l=-25

@@ -100,7 +100,7 @@ data:extend({
   },
 })
 
-if mods["Clowns-Processing"] then
+if mods["paranoidal-clowns"] then
   data:extend({
     -- Disodium phosphate
     {
@@ -117,7 +117,7 @@ if mods["Clowns-Processing"] then
       results = {
         { type = "item", name = "angels-solid-disodium-phosphate", amount = 5 },
       },
-      icon = "__Clowns-Processing__/graphics/icons/solid-white-phosphorus.png",
+      icon = "__paranoidal-clowns__/graphics/icons/solid-white-phosphorus.png",
       icon_size = 32,
       order = "m",
     },

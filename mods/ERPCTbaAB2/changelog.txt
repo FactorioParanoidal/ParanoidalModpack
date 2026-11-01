@@ -1,0 +1,4 @@
+---------------------------------------------------------------------------------------------------
+Version: 2.0.0
+  Changes:
+    - Clowns-Processing and Clowns-AngelBob-Nuclear are now paranoidal-clowns: the optional dependencies and the thorium RTG, centrifuge and dropship ore checks look for paranoidal-clowns.

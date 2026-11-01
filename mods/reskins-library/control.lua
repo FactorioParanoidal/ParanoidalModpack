@@ -63,7 +63,7 @@ local function check_for_missing_reskin(player)
 			"mini-machines",
 			"CircuitProcessing",
 			"angels-smelting-extended",
-			"Clowns-Processing",
+			"paranoidal-clowns",
 			"extendedangels",
 			"RealisticReactorGlow",
 			"P-U-M-P-S",
