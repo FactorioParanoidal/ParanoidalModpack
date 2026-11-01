@@ -9,6 +9,9 @@ Date: 21. 10. 2024
     - Paranoidal: on_tick is registered only while an /it-stopwatch measurement runs; before, it ran every tick for nothing.
   Bugfixes:
     - Paranoidal: on_configuration_changed is no longer a leaked global function.
+    - Paranoidal: the throughput text is recomputed when the hovered inserter is rotated, gets pasted settings or has its positions changed by bobinserters; before, it showed the value from the moment of hovering.
+    - Paranoidal: a removed player's text record is dropped.
+    - Paranoidal: removed a dead branch of /it-stopwatch that called the undefined populate_name_blacklist.
 ---------------------------------------------------------------------------------------------------
 Version: 0.1.5
 Date: 17. 05. 2024

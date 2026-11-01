@@ -241,9 +241,6 @@ local function stopwatch_command(event)
     end
     local player = game.get_player(event.player_index)
     local inserter = player.selected
-    if not name_blacklist then
-        populate_name_blacklist()
-    end
     if not inserter or inserter.type ~= 'inserter' or name_blacklist[inserter.name] then
         player.print{'inserter-throughput.stopwatch-help'}
         return
@@ -307,6 +304,47 @@ end
 local function on_player_joined_game(event)
     -- event.player_index   current player
     init_toggle_button(game.get_player(event.player_index))
+end
+
+-- Paranoidal: a removed player's text record is dropped (its render object is destroyed first).
+local function on_player_removed(event)
+    local data = storage.player_data and storage.player_data[event.player_index]
+    if data then
+        if data.text_object then
+            data.text_object.destroy() -- does not error when already invalid
+        end
+        storage.player_data[event.player_index] = nil
+    end
+end
+
+-- Paranoidal: the throughput text is recomputed when the hovered inserter or its targets change while it is
+-- hovered: rotation, pasted settings, positions changed by bobinserters. Only players that show a text
+-- for this very entity are refreshed.
+local function refresh_entity(entity)
+    if not (entity and entity.valid) then
+        return
+    end
+    local player_data = storage.player_data
+    if not player_data then
+        return
+    end
+    for player_index, data in pairs(player_data) do
+        local text_object = data.text_object
+        if text_object and text_object.valid then
+            local player = game.get_player(player_index)
+            if player and player.selected == entity then
+                on_entity_selected({player_index = player_index})
+            end
+        end
+    end
+end
+
+local function on_entity_rotated(event)
+    refresh_entity(event.entity)
+end
+
+local function on_settings_pasted(event)
+    refresh_entity(event.destination)
 end
 
 local function on_tick(event)
@@ -382,6 +420,13 @@ local function on_configuration_changed(event)
 end
 
 script.on_event(defines.events.on_player_joined_game, on_player_joined_game)
+script.on_event(defines.events.on_player_removed, on_player_removed)
+script.on_event(defines.events.on_player_rotated_entity, on_entity_rotated)
+script.on_event(defines.events.on_entity_settings_pasted, on_settings_pasted)
+-- custom event of bobinserters (present only with that mod)
+if defines.events.on_bobs_inserter_adjusted then
+    script.on_event(defines.events.on_bobs_inserter_adjusted, on_entity_rotated)
+end
 script.on_event(defines.events.on_selected_entity_changed, on_entity_selected)
 script.on_event(defines.events.on_runtime_mod_setting_changed, on_setting_changed)
 script.on_event(defines.events.on_gui_click, on_gui_clicked)
