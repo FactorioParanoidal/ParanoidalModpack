@@ -56,23 +56,17 @@ assert(rules.expected_attempts(0) == 0)
 
 -- Prepayment keeps the paid share two ticks ahead and never above one attempt.
 
--- Modes: agreed costs and the derived extra power (machine itself runs `time` times longer).
+-- Modes: agreed costs (the twin machine runs `time` times longer at `time` times the power: energy = time^2).
 local m = rules.modes
 assert(m.careful.time == 5 and m.careful.energy == 25 and m.precise.time == 20 and m.precise.energy == 400)
-near(rules.extra_power(m.normal), 0); near(rules.extra_power(m.careful), 4); near(rules.extra_power(m.precise), 19)
+for _, name in ipairs(rules.mode_order) do assert(m[name].energy == m[name].time ^ 2) end
 assert(rules.effective_level(3, m.careful) == 7 and rules.effective_level(8, m.careful) == 10)
 assert(rules.effective_level(3, nil) == 3 and m.precise.no_defect and not m.careful.no_defect)
 for _, name in ipairs(rules.mode_order) do assert(m[name].loss == nil, "no loss factor any more") end
 
--- Boost: native p plus the conditional extra chance equals 1 - (1-p)^n.
-for _, chance in ipairs({.01, .05, .1, .2, .5}) do
-    for _, n in ipairs({3, 10}) do
-        local extra = rules.extra_chance(chance, n)
-        near(chance + (1 - chance) * extra, rules.boosted_chance(chance, n))
-    end
-end
+-- Boost: n independent rolls, 1 - (1-p)^n.
 near(rules.boosted_chance(.1, 3), .271); near(rules.boosted_chance(.2, 10), 0.8926258176)
-assert(rules.extra_chance(0, 10) == 0 and rules.extra_chance(.3, 1) == 0)
+assert(rules.boosted_chance(0, 10) == 0 and rules.boosted_chance(1, 3) == 1); near(rules.boosted_chance(.3, 1), .3)
 
 -- Outputs: forward / left / right relative to the facing.
 assert(rules.output_direction(0, "good") == 0 and rules.output_direction(0, "refine") == 3 and rules.output_direction(0, "other") == 1)
@@ -89,5 +83,5 @@ assert(math.abs(rules.mode_attempts(-1, wm.normal) - rules.expected_attempts(-1)
 assert(rules.workshop_mode("bogus") == wm.normal and wm.careful.time == 5 and wm.precise.time == 20)
 
 print("PASS: refinement cost (science x sqrt health, agreed examples), 90%+10% chain distribution,")
-print("expected attempts, mode costs/extra power/levels, boost identity, post output sides.")
+print("expected attempts, mode costs/levels, boost, post output sides.")
 print("Pure Lua rules only; not a Factorio test.")

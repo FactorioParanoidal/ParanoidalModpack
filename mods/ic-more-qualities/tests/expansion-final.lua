@@ -158,12 +158,10 @@ for name in pairs(data.no_mode) do assert(expected[name], "unexpected no mode: "
 assert(not data.no_mode["ic-refine-workshop"], "the workshop is handled by itself")
 assert(report[2]:find("production modes", 1, true) and report[2]:find(": 8: ", 1, true), report[2])
 
--- Production-mode power: one interface per electric footprint (and rotated), not for burners/workshop.
-assert(interfaces["ic-mode-power-3x3"] and interfaces["ic-mode-power-5x3"] and interfaces["ic-mode-power-3x5"])
-assert(not interfaces["ic-mode-power-2x2"])
-assert(#interfaces["ic-mode-power-5x3"].collision_mask.layers == 0)
+-- Production modes are twin machines (prototypes/mode-twins.lua): no hidden power interfaces any more.
+for name in pairs(interfaces) do assert(not name:find("^ic%-mode%-power"), name) end
 assert(report[1]:find("refinement recipes 8", 1, true), report[1])
 print("PASS: workshop/post stats from assembling machine 1, x4 speed cap, unlocks in control 1,")
 print("repair packs as resource, refinement recipe of every finished product with science x health cost,")
-print("exclusions (materials, packs, planners, hidden, parameters), mode power interfaces, runtime mod-data.")
+print("exclusions (materials, packs, planners, hidden, parameters), no mode power interfaces, runtime mod-data.")
 print("Mocks only: not a Factorio data-stage load.")

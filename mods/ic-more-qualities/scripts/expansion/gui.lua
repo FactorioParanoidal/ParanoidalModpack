@@ -213,7 +213,6 @@ local function production_dynamic(parent, player)
         local mtbl = key_value_table(parent)
         row(mtbl, {"ic-quality.mode-careful-ops"}, tostring(counters["mode.careful"] or 0))
         row(mtbl, {"ic-quality.mode-precise-ops"}, tostring(counters["mode.precise"] or 0))
-        row(mtbl, {"ic-quality.mode-boosts"}, tostring(counters["mode.boost"] or 0))
         return
     end
 
@@ -230,7 +229,6 @@ local function production_dynamic(parent, player)
     local mtbl = key_value_table(parent)
     row(mtbl, {"ic-quality.mode-careful-ops"}, tostring(counters["mode.careful"] or 0))
     row(mtbl, {"ic-quality.mode-precise-ops"}, tostring(counters["mode.precise"] or 0))
-    row(mtbl, {"ic-quality.mode-boosts"}, tostring(counters["mode.boost"] or 0))
 
     local skipped = warnings_of(force)
     heading(parent, {"ic-quality.skipped", #skipped})
@@ -643,10 +641,10 @@ local function workshop_panel(player, entity)
     workshop_refresh(inside.parent, entity)
 end
 
--- Quality-module chance of the machine in every mode, as text (standard ingredients).
+-- Quality-module chance of the machine in every mode, as text (standard ingredients). The quality effect of
+-- the machine without the beacon of its own mode.
 local function mode_quality_values(entity)
-    local effects = entity.effects
-    local quality_effect = effects and effects.quality or 0
+    local quality_effect = modes.native_quality_effect(entity)
     local chance = math.max(0, math.min(1, quality_effect * (prototypes.quality.normal.next_probability or 0.1)))
     local values = {}
     for index, name in ipairs(rules.mode_order) do
@@ -700,6 +698,8 @@ local function mode_refresh(player, frame, entity)
     local tbl = inside and inside.ic_mode_table
     local tags = tbl and tbl.tags
     if not (tags and tags.level) then return end -- the workshop table has nothing live
+    -- Modules or the recipe may change while the window is open: the mode beacon follows at once.
+    modes.wake(entity)
     local level = model.completed_level(entity.force.technologies)
     if level ~= tags.level then
         M.open_entity(player, entity)
@@ -1167,7 +1167,11 @@ function M.on_checked(event, hooks)
         else workshop.set_circuit(record, element.state) end
     elseif action == "mode" then
         if entity and element.state then
-            modes.set(entity, tags.mode, hooks and hooks.track_machine)
+            -- The machine is replaced by its mode twin; the window follows the replacement.
+            local result, reason = modes.set(entity, tags.mode, hooks and hooks.track_machine)
+            if not result and reason == "marked" then
+                player.create_local_flying_text({text = {"ic-quality.mode-marked"}, create_at_cursor = true})
+            end
             reopen(player)
         end
     elseif action == "ws-mode" then

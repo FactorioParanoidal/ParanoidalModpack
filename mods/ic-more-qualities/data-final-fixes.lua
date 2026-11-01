@@ -184,3 +184,11 @@ do
     log("IC: fuels with capped quality speed bonus: " .. caps.fuel(data.raw))
     log("IC: qualities with capped chest slots: " .. caps.inventory(data.raw))
 end
+
+-- Production mode twins and the quality beacon: last, after every change of the machines. Also with defects
+-- off, so that machines left in a mode are not removed from a save.
+do
+    local twins, report = require("prototypes.mode-twins").apply(data.raw)
+    data:extend(twins)
+    for _, line in ipairs(report) do log(line) end
+end

@@ -8,18 +8,18 @@
 --   * a finished product (before quality control 10): a defect roll, capped at the ingredients' grade;
 --   * a defective recipe (defective ingredients): result capped at their grade, exempt products and
 --     materials become standard, recycling gives standard results;
---   * a recipe of the registry "ic-normal-result" at a positive quality: the result becomes standard;
---   * production modes (scripts/expansion/modes.lua): progress is slowed on every look, extra power is
---     drawn, the quality-module roll is boosted at the decision.
+--   * a recipe of the registry "ic-normal-result" at a positive quality: the result becomes standard.
+-- A machine in a production mode is a twin prototype (scripts/expansion/modes.lua): the engine runs it slower
+-- and its beacon boosts quality; here the mode only changes the defect roll (careful: +4 control levels,
+-- precise: no defects), read from the machine name.
 -- A machine whose current recipe needs none of this sleeps (DORMANT ticks); opening its window, pasting
--- settings, a production mode or a lost quality-control level wake it (scripts/defects/automation.lua).
+-- settings, a mode switch or a lost quality-control level wake it (scripts/defects/automation.lua).
 -- Never touches output inventories, belts or chests.
 local model = require("scripts.defects.model")
 local rules = require("scripts.expansion.rules")
 local M = {}
 
 M.MIN_TICKS = 2    -- crafts this fast cannot be seen reliably
-M.STALL_LOOK = 15  -- a stopped moded craft is looked at this often (its extra power is off)
 M.MAX_IDLE = 60    -- longest idle look of a machine that can start a watched craft by itself
 M.DORMANT = 300    -- a machine with nothing to handle until its recipe changes
 
@@ -36,22 +36,18 @@ local function half_of(entity, energy, cap)
 end
 
 -- A recycler takes any item put in: within half of the shortest recycling of an item that can be defective
--- (data stage: at least defects-final.recycling_minimum). With a production mode every recycling craft is
--- slowed, so the shortest of all.
-local function recycler_idle(entity, machine, moded)
-    local energy = machine.min_energy
-    if not moded then
-        energy = machine.watched_min
-        if not energy then return M.DORMANT end
-    end
+-- (data stage: at least defects-final.recycling_minimum).
+local function recycler_idle(entity, machine)
+    local energy = machine.watched_min
+    if not energy then return M.DORMANT end
     return half_of(entity, energy, M.MAX_IDLE)
 end
 
 -- No recipe, or a recipe that needs nothing: a furnace picks its recipe by itself, an assembler only by
 -- the player (window, paste, blueprint), a script or the circuit network.
-local function sleep(entity, record, machine, ctx, moded)
-    if machine.recycler then return recycler_idle(entity, machine, moded) end
-    if not machine.relevant and not moded then return false end
+local function sleep(entity, record, machine)
+    if machine.recycler then return recycler_idle(entity, machine) end
+    if not machine.relevant then return false end
     local kind = record.type
     if kind == "furnace" then return half_of(entity, machine.min_energy, M.MAX_IDLE) end
     if kind == "assembling-machine" then
@@ -89,11 +85,6 @@ local function decide(entity, record, recipe_name, recipe, quality, quality_name
         return
     end
     local current = entity.result_quality.name
-    -- Mode boost of the quality-module roll: defective ingredients cap the result, no boost for them.
-    if definition and (recipe.all_finished or ctx.quality_everywhere) and ctx.mode_boost
-        and not (ctx.no_quality and ctx.no_quality[recipe_name]) and not is_defect(quality_name_) then
-        if ctx.mode_boost(entity, quality, definition) then current = entity.result_quality.name end
-    end
     if not recipe.all_finished then
         -- Materials are never defective; positive quality is kept in the "quality everywhere" mode.
         if current ~= "normal" and (not ctx.quality_everywhere or is_defect(current)) then
@@ -122,53 +113,16 @@ local function decide(entity, record, recipe_name, recipe, quality, quality_name
     stat(ctx, record, GRADE_KEYS[grade_of(target)])
 end
 
--- Scales the progress gained since the last look down to the mode's speed (and by the supply of its
--- extra power). Productivity progress is scaled the same way.
-local function slow_down(entity, craft, definition, progress, ctx)
-    local gained = progress - craft.progress
-    -- Working: progress since the last look, or a craft seen for the first time. A stopped machine
-    -- (circuit, no power) pays no extra power; progress made before the next look after it resumes is
-    -- not paid and does not count (modes.draw_power returns 0 for it).
-    local working = gained > 1e-9 or not craft.seen
-    craft.seen = true
-    craft.stalled = not working or nil
-    local supply = ctx.mode_power and ctx.mode_power(entity, definition, working) or 1
-    if gained > 1e-9 then
-        progress = craft.progress + gained * supply / definition.time
-        entity.crafting_progress = progress
-    end
-    local bonus = entity.bonus_progress
-    if craft.bonus and bonus > craft.bonus + 1e-9 then
-        bonus = craft.bonus + (bonus - craft.bonus) * supply / definition.time
-        entity.bonus_progress = bonus
-    end
-    craft.bonus = bonus
-    craft.progress = progress
-    return progress
-end
-
--- Next look of a slowed craft: one full-speed tick before the engine would complete it (the engine runs at
--- full speed between looks); a stopped one is looked at often, so its extra power comes back soon.
-local function slowed_delay(craft, left)
-    local delay = math.max(1, math.floor(left) - 1)
-    if craft.stalled then delay = math.min(delay, M.STALL_LOOK) end
-    return delay
-end
-
 -- Returns the delay in ticks until the next look (false: stop tracking), and an optional warning code.
--- ctx: {machine(record, entity), recipe(name), modes (storage records or nil), mode_power, mode_boost,
--- release_power, random, quality_everywhere, no_quality, stat}.
+-- ctx: {machine(record, entity), recipe(name), mode_definition(machine name), random, quality_everywhere, stat}.
 function M.step(record, level, ctx)
     local entity = record.entity
     local machine = ctx.machine(record, entity)
-    local mode_records = ctx.modes
-    local mode_record = mode_records and mode_records[record.id]
     local recipe_object, quality = entity.get_recipe()
     local craft = record.craft
     if not recipe_object then
         record.craft = nil
-        if mode_record then ctx.release_power(entity) end
-        return sleep(entity, record, machine, ctx, mode_record ~= nil)
+        return sleep(entity, record, machine)
     end
     local recipe_name = recipe_object.name
     local recipe = ctx.recipe(recipe_name)
@@ -176,12 +130,9 @@ function M.step(record, level, ctx)
     if not (recipe and entity.is_crafting()) then
         -- Waiting with a recipe (ingredients, output space): the next craft can start right after this look.
         record.craft = nil
-        if mode_record then ctx.release_power(entity) end
-        if machine.recycler then return recycler_idle(entity, machine, mode_record ~= nil) end
-        if recipe and (needs(recipe, quality_name_, level) or (mode_record and mode_record.mode ~= "normal")) then
-            return half_of(entity, recipe.energy, M.DORMANT)
-        end
-        return sleep(entity, record, machine, ctx, mode_record ~= nil)
+        if machine.recycler then return recycler_idle(entity, machine) end
+        if recipe and needs(recipe, quality_name_, level) then return half_of(entity, recipe.energy, M.DORMANT) end
+        return sleep(entity, record, machine)
     end
 
     local speed = entity.crafting_speed
@@ -190,39 +141,26 @@ function M.step(record, level, ctx)
     local full = energy * 60 / speed
     if full <= M.MIN_TICKS then
         record.craft = nil
-        if mode_record then ctx.release_power(entity) end
         return 30, "unsupported-speed"
     end
     local finished = entity.products_finished
     local progress = entity.crafting_progress
     if not craft or craft.finished ~= finished or craft.recipe ~= recipe_name or craft.quality ~= quality_name_
         or progress + 1e-6 < craft.progress then
-        -- A new craft: its mode is the one selected now; it keeps it to its end.
-        local mode = mode_record and mode_record.mode
-        local definition = mode and mode ~= "normal" and rules.modes[mode] or nil
-        if not (definition or needs(recipe, quality_name_, level)) then
+        -- A new craft (or the running one after a switch to a weaker production mode).
+        if not needs(recipe, quality_name_, level) then
             record.craft = nil
-            if mode_record then ctx.release_power(entity) end
             if machine.recycler then
-                return math.min(recycler_idle(entity, machine, false), math.ceil((1 - progress) * full) + 1)
+                return math.min(recycler_idle(entity, machine), math.ceil((1 - progress) * full) + 1)
             end
-            return sleep(entity, record, machine, ctx, mode_record ~= nil)
+            return sleep(entity, record, machine)
         end
         craft = craft or {}
         craft.finished, craft.recipe, craft.quality, craft.progress = finished, recipe_name, quality_name_, progress
-        craft.mode, craft.seen, craft.stalled = definition and mode or nil, nil, nil
-        craft.bonus = definition and entity.bonus_progress or nil
         record.craft = craft
-        if definition then stat(ctx, record, "mode." .. mode) end
+        local definition = ctx.mode_definition and ctx.mode_definition(record.name) or nil
         decide(entity, record, recipe_name, recipe, quality, quality_name_, level, definition, ctx)
     end
-    local definition = craft.mode and rules.modes[craft.mode]
-    if definition then
-        progress = slow_down(entity, craft, definition, progress, ctx)
-        return slowed_delay(craft, (1 - progress) * full)
-    end
-    -- A normal craft: release the extra power of a moded craft that has just ended.
-    if mode_record then ctx.release_power(entity) end
     craft.progress = progress
     local left = (1 - progress) * full
     -- Completed but held (output blocked): poll well inside the next craft's duration.

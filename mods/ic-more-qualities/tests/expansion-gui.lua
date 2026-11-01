@@ -128,8 +128,10 @@ prototypes = {
         ["ic-defect-3"] = {name = "ic-defect-3", level = 0, order = "0", localised_name = {"quality-name.ic-defect-3"}},
     },
     item = {gear = {}, ["assembling-machine-1"] = {}, belt = {}},
-    entity = {["assembling-machine-1"] = {localised_name = {"entity-name.assembling-machine-1"}},
-        ["ic-refine-workshop-power"] = {}, ["ic-mode-power-3x3"] = {}},
+    entity = {["assembling-machine-1"] = {localised_name = {"entity-name.assembling-machine-1"},
+            items_to_place_this = {{name = "assembling-machine-1"}}},
+        ["assembling-machine-1-ic-mode-careful"] = {}, ["assembling-machine-1-ic-mode-precise"] = {},
+        ["ic-refine-workshop-power"] = {}, ["ic-mode-beacon"] = {}},
     mod_data = {
         ["ic-defects-classification"] = {data = {finished = {["assembling-machine-1"] = true, belt = true},
             no_defect = {belt = true}}},
@@ -145,16 +147,28 @@ local model = require("scripts.defects.model")
 
 local force = {index = 1, technologies = {}, players = {}}
 for level = 1, 3 do force.technologies["ic-defect-control-" .. level] = {researched = true} end
+-- Machines by position: a fast replace (production mode twin) replaces the machine at its place.
+local placed, next_unit, entity = {}, 1000, nil
 local function surface()
-    return {index = 1, name = "nauvis", create_entity = function()
-        local e = {valid = true, power_usage = 0, electric_buffer_size = 1, energy = 0}
+    return {index = 1, name = "nauvis", create_entity = function(spec)
+        local old = spec.fast_replace and placed[spec.position.x .. ":" .. spec.position.y]
+        if old and old.valid then
+            next_unit = next_unit + 1
+            local new = entity(spec.name, old.type, next_unit)
+            new.effects, new.crafting_progress = old.effects, old.crafting_progress
+            old.valid = false
+            return new
+        end
+        local e = {valid = true, power_usage = 0, electric_buffer_size = 1, energy = 0, effects = {quality = 0},
+            position = spec.position}
         function e.destroy() e.valid = false end
+        function e.get_module_inventory() return {clear = function() end, insert = function() return 1 end} end
         function e.get_wire_connector() return {connect_to = function() return true end} end
         function e.get_or_create_control_behavior() return {get_section = function() return {filters = {}} end} end
         return e
     end, find_entities_filtered = function() return {} end}
 end
-local function entity(name, kind, unit)
+entity = function(name, kind, unit)
     local e = {valid = true, object_name = "LuaEntity", name = name, type = kind, unit_number = unit,
         position = {x = 0.5, y = 0.5}, direction = 0, force = force, surface = surface(), quality = {name = "normal"},
         effects = {quality = 0.2}, burner = {}, crafting_speed = 1, crafting_progress = 0.3, products_finished = 0,
@@ -168,11 +182,14 @@ local function entity(name, kind, unit)
     e.is_crafting = function() return true end
     e.get_recipe = function() return {name = "ic-refine-item-gear", products = {{name = "gear"}}}, {name = "ic-defect-3"} end
     e.get_wire_connector = function() return {connect_to = function() return true end} end
+    e.to_be_deconstructed = function() return false end
+    e.to_be_upgraded = function() return false end
+    placed[e.position.x .. ":" .. e.position.y] = e
     return e
 end
 
 local function new_player(index)
-    local player = {index = index, force = force, connected = true, toggled = {}}
+    local player = {index = index, valid = true, force = force, connected = true, toggled = {}}
     player.gui = {screen = new_element({}), relative = new_element({})}
     function player.set_shortcut_toggled(name, value) player.toggled[name] = value end
     function player.print() end
@@ -287,7 +304,10 @@ gui.open_entity(player, am)
 local tracked
 gui.on_checked({player_index = 1, element = {valid = true, state = true, tags = {ic = "mode", mode = "careful"}}},
     {track_machine = function(e) tracked = e end})
-assert(modes.mode_name(am) == "careful" and tracked == am)
+-- The machine is replaced by its twin; the open window follows it.
+assert(not am.valid and tracked and tracked.name == "assembling-machine-1-ic-mode-careful" and player.opened == tracked)
+am = tracked
+assert(modes.mode_name(am) == "careful")
 -- Roman numbers on the radiobuttons and in the header; the selected column is bold; no note label.
 do
     local frame = player.gui.relative.ic_quality_relative
@@ -324,7 +344,7 @@ do
     local button = player.gui.relative.ic_quality_relative
     assert(button.type == "sprite-button" and button.sprite == "ic-mode-careful")
     gui.refresh_entity(player)
-    modes.set(am, "normal")
+    am = modes.set(am, "normal")
     gui.open_entity(player, am)
     assert(player.gui.relative.ic_quality_relative.sprite == "quality/normal")
     player.opened = ws
@@ -333,7 +353,7 @@ do
     player.opened = am
     gui.on_click({player_index = 1, element = {valid = true, tags = {ic = "rel-expand", kind = "mode"}}}, {})
     assert(player.gui.relative.ic_quality_relative.type == "frame")
-    modes.set(am, "careful")
+    am = modes.set(am, "careful")
 end
 gui.close_entity(player)
 assert(not player.gui.relative.ic_quality_relative)
@@ -383,7 +403,7 @@ do
         "counted", "source-hand"}) do
         assert(not found["ic-quality." .. key], key)
     end
-    assert(found["ic-quality.distribution"] and found["ic-quality.assigned"] and found["ic-quality.mode-boosts"])
+    assert(found["ic-quality.distribution"] and found["ic-quality.assigned"] and found["ic-quality.mode-precise-ops"])
 end
 gui.toggle_panel(player)
 for level = 4, 10 do force.technologies["ic-defect-control-" .. level] = {researched = true} end
@@ -399,7 +419,7 @@ for item, expected in pairs({["assembling-machine-1"] = "lookup-finished-clean",
         "lookup-no-defect", "lookup-material"}) do
         assert(not found["ic-quality." .. key], key)
     end
-    assert(found["ic-quality.control-level"] and found["ic-quality.mode-boosts"])
+    assert(found["ic-quality.control-level"] and found["ic-quality.mode-precise-ops"])
     gui.toggle_panel(player)
 end
 player.opened = am

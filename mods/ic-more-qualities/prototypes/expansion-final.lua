@@ -2,12 +2,11 @@
 -- finished products and the white intermediate recipes already exist, every item is defined.
 -- Builds: machine statistics from assembling machine 1, the refinement recipe of every finished product
 -- with its cost (science kinds x health), repair packs as the workshop's resource, unlocks in quality
--- control 1, the hidden power interfaces of production modes and the runtime mod-data.
+-- control 1 and the runtime mod-data (production mode twins: prototypes/mode-twins.lua).
 local names = require("scripts.expansion.names")
 local rules = require("scripts.expansion.rules")
 local model = require("scripts.defects.model")
 local classify = require("scripts.defects.classify")
-local shared = require("prototypes.expansion-shared")
 
 local M = {}
 local RAW -- data.raw being processed (passed to apply)
@@ -207,30 +206,6 @@ local function refinement(raw, finished)
     return costs, recipes, count
 end
 
--- One hidden interface per machine footprint (and its rotated variant) for the extra power of
--- careful/precise modes. Only electric assemblers and furnaces can draw it.
-local function mode_power(raw)
-    local sizes, list = {}, {}
-    for _, kind in ipairs({"assembling-machine", "furnace"}) do
-        for name, machine in pairs(raw[kind] or {}) do
-            local source = machine.energy_source
-            if name ~= names.workshop and source and source.type == "electric" and machine.collision_box then
-                local w, h = shared.box_tiles(machine.collision_box)
-                for _, size in ipairs({{w, h}, {h, w}}) do
-                    local key = size[1] .. "x" .. size[2]
-                    if not sizes[key] then
-                        sizes[key] = true
-                        local power = shared.hidden_power(names.mode_power_prefix .. key, size[1], size[2])
-                        power.localised_name = {"entity-name.ic-mode-power"}
-                        list[#list + 1] = power
-                    end
-                end
-            end
-        end
-    end
-    return list
-end
-
 -- Machines without production modes (no mode panel, no saved mode). A mode changes only item
 -- results (defects, quality-module boost), so it is withheld from machines that can
 -- never produce an item: no recipe at all (copper lamp of LargerLamps: fixed recipe without results),
@@ -298,7 +273,6 @@ function M.apply(raw, finished, reasons)
     repair_resource(raw)
     local costs, recipes, count = refinement(raw, finished or {})
     local prototypes = recipes
-    for _, power in ipairs(mode_power(raw)) do prototypes[#prototypes + 1] = power end
     local no_quality = {}
     for name, recipe in pairs(raw.recipe) do
         if recipe.allow_quality == false then no_quality[name] = true end
@@ -313,7 +287,7 @@ function M.apply(raw, finished, reasons)
         data = {costs = costs, reasons = reasons or {}, no_quality = no_quality, finished_count = finished_count,
             no_mode = no_mode},
     }
-    return prototypes, {"IC expansion: refinement recipes " .. count .. ", repair resource and production modes ready",
+    return prototypes, {"IC expansion: refinement recipes " .. count .. ", repair resource ready",
         "IC expansion: machines without production modes (no item results / by name): " .. #no_mode_list
             .. (#no_mode_list > 0 and (": " .. table.concat(no_mode_list, ", ")) or "")}
 end

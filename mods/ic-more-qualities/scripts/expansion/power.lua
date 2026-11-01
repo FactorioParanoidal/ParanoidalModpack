@@ -1,6 +1,6 @@
--- Hidden electric consumers that follow a host entity: the electricity of the refinement workshop
--- and the extra power of careful/precise production modes. Consumption is native (smooth for the
--- electric network); the buffer level tells how well the consumer is supplied.
+-- Hidden electric consumer that follows a host entity: the electricity of the refinement workshop.
+-- Consumption is native (smooth for the electric network); the buffer level tells how well the consumer
+-- is supplied.
 local M = {}
 
 function M.create(host, name)

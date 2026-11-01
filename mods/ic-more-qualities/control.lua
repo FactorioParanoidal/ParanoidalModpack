@@ -40,7 +40,6 @@ local function no_quality()
 end
 
 local function machine_of(record, entity) return compiled.machine(entity, record.name) end
-local function release_power(entity) modes.draw_power(entity, nil, false, game.tick) end
 
 -- One context table for the scheduler: its functions are created once, the data fields are refreshed on
 -- every tick that has work (the getters only return caches).
@@ -49,26 +48,23 @@ local context = {
     recipe = compiled.recipe,
     stat = stats.add,
     quality_everywhere = quality_everywhere,
-    release_power = release_power,
-    mode_power = function(entity, definition, working)
-        return modes.draw_power(entity, definition, working, game.tick)
-    end,
-    mode_boost = function(entity, quality, definition)
-        return modes.boost(entity, quality, definition, math.random)
-    end,
+    mode_definition = modes.definition_of_name,
 }
 
 local function automation_context()
     context.random = math.random
-    context.no_quality = no_quality()
-    local mode_state = storage.ic_modes
-    context.modes = mode_state and next(mode_state.records) and mode_state.records or nil
     return context
 end
 
--- Production modes need the defect scheduler to watch the machine.
-local hooks = {track_machine = function(entity) automation.track(entity) end}
+-- The quality beacon of production modes follows the same recipe rules as the defect scheduler.
+modes.context = {recipe = compiled.recipe, no_quality = no_quality, quality_everywhere = quality_everywhere}
+
+-- A machine replaced by a mode switch: the defect scheduler follows the replacement.
+local hooks = {track_machine = function(entity, old_id, keep)
+    if old_id then automation.track_replaced(entity, old_id, keep) else automation.track(entity) end
+end}
 memory.hooks = hooks
+modes.on_tracked = hooks.track_machine
 
 -- Paranoidal: every quality is available from the start (e.g. a quality module found in ruins).
 local function unlock_all_qualities(force)
@@ -115,10 +111,12 @@ local function configure_all()
         end
         workshop.rescan(found)
         post.rescan()
+        -- Before automation.rescan: older machines in a mode become twins, which the scheduler then finds.
         modes.rescan()
-        -- After modes.rescan: machines that keep a production mode are tracked whatever their prototype.
         automation.rescan()
     else
+        -- Without defects there are no production modes: every machine goes back to its original.
+        modes.revert_all()
         automation.clear()
     end
 end
@@ -205,7 +203,11 @@ local function on_built(event)
     local entity = event.entity
     if not (entity and entity.valid) then return end
     local settings = memory.tags_of(event)
-    if settings then memory.import(entity, settings, hooks) else memory.consume(entity, hooks) end
+    -- A mode from tags or a replaced machine swaps the machine: continue with the replacement.
+    if settings then entity = memory.import(entity, settings, hooks) else entity = memory.consume(entity, hooks) end
+    if not (entity and entity.valid) then return end
+    -- A twin built from its ghost (a destroyed machine in a mode) or by a script.
+    if modes.split(entity.name) then modes.adopt(entity) end
     if entity.name == names.workshop then
         workshop.track(entity)
     elseif entity.name == names.post and not post.get(entity) then
@@ -222,10 +224,21 @@ events.on(defines.events.on_entity_cloned, function(event)
     local source, destination = event.source, event.destination
     if not (destination and destination.valid) then return end
     local settings = memory.export(source)
-    if settings then memory.import(destination, settings, hooks) end
+    if settings then destination = memory.import(destination, settings, hooks) end
+    if not (destination and destination.valid) then return end
+    if modes.split(destination.name) then modes.adopt(destination) end
     if destination.name == names.workshop then workshop.track(destination)
     elseif destination.name == names.post then post.track(destination) end
 end, building_filters)
+-- A cloned mode beacon belongs to no machine: the cloned twin gets its own.
+events.on(defines.events.on_entity_cloned, function(event)
+    local destination = event.destination
+    if destination and destination.valid and destination.name == names.mode_beacon then destination.destroy() end
+end, {{filter = "name", name = names.mode_beacon}})
+-- Moved by a script (dollies): the mode beacon follows.
+events.on(defines.events.script_raised_teleported, function(event)
+    if enabled() then modes.wake(event.entity) end
+end, {{filter = "type", type = "assembling-machine"}, {filter = "type", type = "furnace"}})
 
 events.on(defines.events.on_object_destroyed, function(event)
     local id = event.useful_id
@@ -248,9 +261,12 @@ events.on(defines.events.on_post_entity_died, function(event)
 end)
 events.on(defines.events.on_entity_settings_pasted, function(event)
     if not enabled() then return end
-    memory.on_settings_pasted(event, hooks)
+    -- A pasted mode may replace the destination (an open window follows it).
+    local destination = memory.on_settings_pasted(event, hooks)
+    if not (destination and destination.valid) then return end
+    modes.wake(destination)
     local player = game.get_player(event.player_index)
-    if player and player.opened == event.destination then gui.open_entity(player, event.destination) end
+    if player and player.opened == destination then gui.open_entity(player, destination) end
 end)
 events.on(defines.events.on_player_setup_blueprint, function(event)
     if enabled() then memory.on_setup_blueprint(event) end
@@ -300,7 +316,10 @@ end)
 events.on(defines.events.on_gui_closed, function(event)
     local player = game.get_player(event.player_index)
     if not player then return end
-    if event.entity then gui.close_entity(player) end
+    if event.entity then
+        gui.close_entity(player)
+        if enabled() then modes.wake(event.entity) end
+    end
     if event.element and event.element.valid and event.element.name == "ic_quality_panel" then gui.close_panel(player) end
 end)
 events.on(defines.events.on_gui_click, function(event) gui.on_click(event, hooks) end)
@@ -322,6 +341,7 @@ events.on(defines.events.on_tick, function(event)
     workshop_context.tick, workshop_context.random = tick, math.random
     workshop.on_tick(workshop_context)
     post.on_tick(tick)
+    modes.on_tick(tick)
     if cancel.has_pending() then
         cancel.process(tick, game.get_player, math.random, eligibility.finished(), eligibility.no_defect())
     end

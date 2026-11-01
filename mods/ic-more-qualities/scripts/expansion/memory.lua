@@ -1,5 +1,7 @@
 -- Settings follow the buildings: Shift+right/left click copy, blueprints (entity tags) and
 -- replacing a building by another one at the same place (fast replace, upgrade planner).
+-- A machine in a production mode is a hidden twin prototype: blueprints get the original machine with the mode
+-- in its tags, and applying a mode replaces the machine (the functions return the machine to continue with).
 local names = require("scripts.expansion.names")
 local workshop = require("scripts.expansion.workshop")
 local post = require("scripts.expansion.post")
@@ -39,9 +41,10 @@ function M.export(entity)
     end
 end
 
--- Applies exported settings; hooks.track_machine lets the defect scheduler watch moded machines.
+-- Applies exported settings; hooks.track_machine lets the defect scheduler follow a replaced machine.
+-- Returns the building to continue with (a mode may replace it).
 function M.import(entity, settings, hooks)
-    if not (entity and entity.valid and type(settings) == "table") then return end
+    if not (entity and entity.valid and type(settings) == "table") then return entity end
     if entity.name == names.workshop and settings.workshop then
         local record = workshop.track(entity)
         if record then workshop.apply_settings(record, settings.workshop) end
@@ -49,8 +52,9 @@ function M.import(entity, settings, hooks)
         local record = post.track(entity)
         if record then post.apply_settings(record, settings.post) end
     elseif settings.mode and modes.eligible(entity) then
-        modes.set(entity, settings.mode, hooks and hooks.track_machine)
+        return modes.set(entity, settings.mode, hooks and hooks.track_machine) or entity
     end
+    return entity
 end
 
 -- Settings of whatever building had this unit number (entity may already be invalid).
@@ -72,9 +76,10 @@ function M.on_post_died(event)
     ghost.tags = tags
 end
 
+-- Returns the destination to continue with (a pasted mode may replace it).
 function M.on_settings_pasted(event, hooks)
     local source, destination = event.source, event.destination
-    if not (source and source.valid and destination and destination.valid) then return end
+    if not (source and source.valid and destination and destination.valid) then return destination end
     if source.name == names.workshop and destination.name == names.workshop then
         local from, to = workshop.get(source), workshop.track(destination)
         if from and to then workshop.apply_settings(to, workshop.export_settings(from)) end
@@ -82,8 +87,9 @@ function M.on_settings_pasted(event, hooks)
         local from, to = post.get(source), post.track(destination)
         if from and to then post.apply_settings(to, post.export_settings(from)) end
     elseif modes.eligible(source) and modes.eligible(destination) then
-        modes.set(destination, modes.mode_name(source), hooks and hooks.track_machine)
+        return modes.set(destination, modes.mode_name(source), hooks and hooks.track_machine) or destination
     end
+    return destination
 end
 
 local function blueprint_target(event, player)
@@ -100,10 +106,32 @@ function M.on_setup_blueprint(event)
     if not target then return end
     local mapping = event.mapping and event.mapping.get()
     if not mapping then return end
+    local twins = false
     for index, entity in pairs(mapping) do
         local settings = M.export(entity)
         if settings then target.set_blueprint_entity_tag(index, TAG, settings) end
+        if entity.valid and modes.split(entity.name) then twins = true end
     end
+    if twins then M.untwin(target) end
+end
+
+-- Blueprint entities of production mode twins become their original machine (the mode stays in the tags):
+-- the blueprint works without this mod and a ghost is built as the original, then switched.
+function M.untwin(target)
+    local entities = target.get_blueprint_entities()
+    if not entities then return end
+    local changed = false
+    for _, entity in ipairs(entities) do
+        local split = modes.split(entity.name)
+        if split then
+            entity.name = split.base
+            local tags = entity.tags or {}
+            tags[TAG] = tags[TAG] or {mode = split.mode}
+            entity.tags = tags
+            changed = true
+        end
+    end
+    if changed then target.set_blueprint_entities(entities) end
 end
 
 function M.tags_of(event)
@@ -128,16 +156,17 @@ function M.remember(kind, record)
     end
 end
 
+-- Returns the building to continue with (a remembered mode may replace it).
 function M.consume(entity, hooks)
     local replaced = storage.ic_replaced
     -- Called for every built furnace, container and assembler: no key string without a remembered spot.
-    if not replaced or next(replaced) == nil then return end
+    if not replaced or next(replaced) == nil then return entity end
     local key = key_of(entity.surface.index, entity.position)
     local entry = replaced[key]
-    if not entry then return end
+    if not entry then return entity end
     replaced[key] = nil
-    if game.tick - entry.tick > REPLACE_TICKS then return end
-    M.import(entity, entry.settings, hooks)
+    if game.tick - entry.tick > REPLACE_TICKS then return entity end
+    return M.import(entity, entry.settings, hooks)
 end
 
 function M.cleanup()

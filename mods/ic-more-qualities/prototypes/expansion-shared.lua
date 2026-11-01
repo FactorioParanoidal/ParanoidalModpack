@@ -9,10 +9,9 @@ M.hidden_flags = {
     "not-repairable", "no-automated-item-insertion", "no-automated-item-removal",
 }
 
--- Hidden electric consumer: the workshop's electricity and the extra power of production modes.
--- show_icons: the engine draws its "no power" / "no network" icons. Only for the workshop: its building is
--- a burner with an endless drive and has no electric icons of its own; machines in production modes
--- already show their own.
+-- Hidden electric consumer: the workshop's electricity.
+-- show_icons: the engine draws its "no power" / "no network" icons (the workshop building is a burner with an
+-- endless drive and has no electric icons of its own).
 function M.hidden_power(name, width, height, show_icons)
     local util = require("util")
     return {
@@ -40,15 +39,6 @@ function M.hidden_power(name, width, height, show_icons)
         allow_copy_paste = false,
         picture = util.empty_sprite(),
     }
-end
-
--- Width and height in whole tiles of a data-stage or runtime bounding box.
-function M.box_tiles(box)
-    local lt = box.left_top or box[1]
-    local rb = box.right_bottom or box[2]
-    local x1, y1 = lt.x or lt[1], lt.y or lt[2]
-    local x2, y2 = rb.x or rb[1], rb.y or rb[2]
-    return math.max(1, math.ceil(x2 - x1 - 0.01)), math.max(1, math.ceil(y2 - y1 - 0.01))
 end
 
 return M

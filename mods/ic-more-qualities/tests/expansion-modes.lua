@@ -1,6 +1,9 @@
--- Production modes through the real crafter handler, simulated tick by tick on mocks:
--- slowdown, defect level shift, "no defects" of precise mode, boosted quality roll,
--- extra power demand. The machine model is a mock, not Factorio.
+-- Production modes as twin machines (scripts/expansion/modes.lua, prototypes/mode-twins.lua): names, eligibility,
+-- the swap (state copied, open windows follow, failure undone), the quality beacon (effect equal to n independent
+-- rolls, follows modules, recipe quality and position, off for recycling and the other excluded recipes),
+-- operation counters, a weaker mode deciding the running operation again, the layout migration of older saves,
+-- reverting every twin. The engine fast replace and beacon are mocks, not Factorio (engine checks:
+-- test-runs/ic-twin1-20261102, ic-beacon1-20261102).
 local directory = assert(arg[0]:match("^(.*[/\\])"))
 package.path = directory .. "../?.lua;" .. package.path
 local mock = dofile(directory .. "mock.lua")
@@ -9,414 +12,347 @@ local near = mock.near
 defines = mock.defines()
 storage = {}
 script = {register_on_object_destroyed = function() end}
+game = {tick = 0, connected_players = {}, surfaces = {}}
+local renders = {}
+rendering = {
+    draw_sprite = function(spec)
+        local id = #renders + 1
+        local object = {id = id, valid = true, sprite = spec.sprite}
+        object.destroy = function() object.valid = false end
+        renders[id] = object
+        return object
+    end,
+    get_object_by_id = function(id) return renders[id] end,
+}
+
+-- Qualities and machine prototypes ------------------------------------------------------------------------------
+local Q = {}
+Q.rare = {name = "rare", level = 3, next_probability = 0.15}
+Q.uncommon = {name = "uncommon", level = 2, next = Q.rare, next_probability = 0.18}
+Q.normal = {name = "normal", level = 0, next = Q.uncommon, next_probability = 0.204}
+Q["ic-defect-2"] = {name = "ic-defect-2", level = 0, next = Q.normal, next_probability = 0.1}
+local box = {left_top = {x = -1.5, y = -1.5}, right_bottom = {x = 1.5, y = 1.5}}
+local function machine_prototype(name, extra)
+    local p = {name = name, items_to_place_this = {{name = name}}, allowed_effects = {quality = true, speed = true},
+        selection_box = box}
+    for k, v in pairs(extra or {}) do p[k] = v end
+    return p
+end
+local entity_prototypes = {}
+for _, base in ipairs({"assembler", "furnace", "lamp", "workshop-like", "loner"}) do
+    entity_prototypes[base] = machine_prototype(base)
+end
+for _, base in ipairs({"assembler", "furnace", "lamp"}) do
+    entity_prototypes[base .. "-ic-mode-careful"] = machine_prototype(base .. "-ic-mode-careful")
+    entity_prototypes[base .. "-ic-mode-precise"] = machine_prototype(base .. "-ic-mode-precise")
+end
+entity_prototypes["loner-ic-mode-careful"] = machine_prototype("loner-ic-mode-careful") -- no precise twin
+entity_prototypes["ic-mode-beacon"] = {name = "ic-mode-beacon"}
+prototypes = {
+    entity = entity_prototypes,
+    quality = Q,
+    recipe = {chest = {name = "chest", category = "crafting"}, plate = {name = "plate", category = "smelting"}},
+    mod_data = {["ic-quality-expansion"] = {data = {no_mode = {lamp = true}}}},
+    get_entity_filtered = function()
+        local result = {}
+        for name, p in pairs(entity_prototypes) do if name ~= "ic-mode-beacon" then result[name] = p end end
+        return result
+    end,
+}
+
+-- Engine mock: machines and beacons on one surface ----------------------------------------------------------------
+local surface = {index = 1, machines = {}, beacons = {}, no_group = {}}
+game.surfaces = {surface}
+local next_unit = 100
+local function key(position) return position.x .. ":" .. position.y end
+local function beacon_effect(position)
+    local b = surface.beacons[key(position)]
+    return b and b.valid and b.effects.quality or 0
+end
+local function new_machine(name, position, state)
+    next_unit = next_unit + 1
+    local kind = name:find("^furnace") and "furnace" or "assembling-machine"
+    local e = {valid = true, name = name, type = kind, unit_number = next_unit, position = position, direction = 0,
+        quality = {name = "normal"}, force = {index = 1}, surface = surface, health = 350, max_health = 350,
+        products_finished = 0, destructible = true, minable_flag = true, operable = true, rotatable = true,
+        disabled_by_script = false, mirroring = false, prototype = entity_prototypes[name], native = 0,
+        crafting = false, crafting_progress = 0, recipe = nil, recipe_quality = Q.normal, result_quality = nil,
+        deconstruct = false}
+    for k, v in pairs(state or {}) do e[k] = v end
+    e.get_recipe = function()
+        if not e.recipe then return nil end
+        return {name = e.recipe, category = prototypes.recipe[e.recipe] and prototypes.recipe[e.recipe].category}, e.recipe_quality
+    end
+    e.is_crafting = function() return e.crafting end
+    e.to_be_deconstructed = function() return e.deconstruct end
+    e.to_be_upgraded = function() return false end
+    e.destroy = function()
+        e.valid = false
+        if surface.machines[key(e.position)] == e then surface.machines[key(e.position)] = nil end
+    end
+    setmetatable(e, {__index = function(t, k)
+        if k == "effects" then return {quality = rawget(t, "native") + beacon_effect(rawget(t, "position"))} end
+    end})
+    return e
+end
+local function place(name, x, state)
+    local e = new_machine(name, {x = x, y = 0}, state)
+    surface.machines[key(e.position)] = e
+    return e
+end
+local function group(name) return (name:gsub("%-ic%-mode%-%a+$", "")) end
+local MODULE = {}
+for i = 1, 12 do MODULE["ic-mode-quality-" .. i] = 2 ^ (i - 1) / 100 end
+surface.create_entity = function(spec)
+    if spec.name == "ic-mode-beacon" then
+        local b = {valid = true, name = spec.name, position = spec.position, force = spec.force, surface = surface,
+            unit_number = 0, effects = {quality = 0}, modules = {}}
+        next_unit = next_unit + 1
+        b.unit_number = next_unit
+        local inventory = {}
+        inventory.clear = function()
+            b.modules = {}
+            b.effects.quality = 0
+        end
+        inventory.insert = function(stack)
+            b.modules[#b.modules + 1] = stack.name
+            b.effects.quality = b.effects.quality + MODULE[stack.name]
+            return 1
+        end
+        b.get_module_inventory = function() return inventory end
+        b.destroy = function()
+            b.valid = false
+            if surface.beacons[key(b.position)] == b then surface.beacons[key(b.position)] = nil end
+        end
+        b.teleport = function(position)
+            surface.beacons[key(b.position)] = nil
+            b.position = position
+            surface.beacons[key(position)] = b
+            return true
+        end
+        surface.beacons[key(spec.position)] = b
+        return b
+    end
+    local old = surface.machines[key(spec.position)]
+    local replaced = spec.fast_replace and old and old.valid and group(old.name) == group(spec.name)
+        and not surface.no_group[group(spec.name)]
+    -- The engine keeps recipe, running craft, result quality and modules; health comes back full and the
+    -- finished counter starts at 0 (test-runs/ic-twin1-20261102).
+    local state = {}
+    if replaced then
+        for _, k in ipairs({"recipe", "recipe_quality", "crafting", "crafting_progress", "result_quality", "native"}) do
+            state[k] = old[k]
+        end
+        old.valid = false
+    end
+    local e = new_machine(spec.name, spec.position, state)
+    if replaced or not old then surface.machines[key(spec.position)] = e end
+    return e
+end
+surface.find_entities_filtered = function(filter)
+    local wanted = {}
+    for _, name in ipairs(type(filter.name) == "table" and filter.name or {filter.name}) do wanted[name] = true end
+    local list = {}
+    for _, e in pairs(surface.machines) do if e.valid and wanted[e.name] then list[#list + 1] = e end end
+    for _, b in pairs(surface.beacons) do if b.valid and wanted[b.name] then list[#list + 1] = b end end
+    table.sort(list, function(a, b) return a.unit_number < b.unit_number end)
+    return list
+end
+
 local rules = require("scripts.expansion.rules")
-local crafter = require("scripts.defects.crafter")
-
-local function make_machine(full_ticks)
-    local machine = {outputs = {}, crafting = true}
-    local entity = {
-        valid = true, unit_number = 1, name = "assembler", crafting_speed = 1, crafting_progress = 0,
-        bonus_progress = 0, productivity_bonus = 0, products_finished = 0, result_quality = {name = "normal"},
-        force = {index = 1, technologies = {}}, fluidbox = {},
-    }
-    machine.recipe = {name = "widget"}
-    -- Compiled recipe data (scripts/defects/compiled.lua) of a finished, defect-capable product.
-    machine.info = {energy = full_ticks / 60, any_item = true, all_finished = true, roll = true, exempt = false,
-        recycling = false, watched = true}
-    entity.get_recipe = function()
-        if machine.crafting then return machine.recipe, machine.recipe_quality or {name = "normal"} end
-    end
-    entity.is_crafting = function() return machine.crafting end
-    machine.rate = 1 -- native speed multiplier (beacons, modules)
-    function machine.update()
-        if not machine.crafting or machine.stopped then return end
-        entity.crafting_progress = entity.crafting_progress + machine.rate / full_ticks
-        if entity.crafting_progress >= 1 - 1e-12 then
-            machine.outputs[#machine.outputs + 1] = entity.result_quality.name or entity.result_quality
-            entity.products_finished = entity.products_finished + 1
-            entity.crafting_progress = 0
-            entity.result_quality = {name = "normal"}
-            machine.crafting = false
-        end
-    end
-    machine.entity = entity
-    return machine
-end
-
--- Scheduler context of scripts/defects/crafter.lua. mode: definition of the machine's selected mode.
-local function context(machine, mode, random, counters)
-    return {
-        machine = function() return {relevant = true, recycler = machine.recycler, min_energy = 1, watched_min = 1} end,
-        recipe = function() return machine.info end,
-        random = random, quality_everywhere = false, no_quality = {},
-        stat = function(_, key) counters[key] = (counters[key] or 0) + 1 end,
-        modes = mode and {[machine.entity.unit_number] = {mode = mode.name}} or nil,
-        mode_power = function() return 1 end,
-        release_power = function() end,
-    }
-end
-local function record_of(entity) return {id = entity.unit_number, entity = entity, name = entity.name, force_index = 1} end
-
-local function craft(mode, level, random, full_ticks)
-    local machine = make_machine(full_ticks or 100)
-    local record = record_of(machine.entity)
-    local counters = {}
-    local ctx = context(machine, mode, random, counters)
-    local tick, next_look = 0, 1
-    while machine.crafting and tick < 100000 do
-        tick = tick + 1
-        if tick >= next_look then
-            local delay = crafter.step(record, level, ctx)
-            next_look = tick + math.max(1, math.floor(delay or 30))
-        end
-        machine.update()
-    end
-    return machine, tick, counters
-end
-
--- Normal: about 100 ticks, defect draw at level 0 with r=0 -> -5.
-local machine, ticks, counters = craft(nil, 0, mock.sequence({0}))
-assert(machine.outputs[1] == "ic-defect-5" and ticks <= 102, ticks)
-assert(counters["grade.-5"] == 1)
-
--- Careful: 5x slower; defects as with +4 levels (worst -3 at level 0).
-machine, ticks = craft(rules.modes.careful, 0, mock.sequence({0}))
-assert(machine.outputs[1] == "ic-defect-3", tostring(machine.outputs[1]))
-assert(ticks > 480 and ticks < 520, ticks)
-
--- Precise: 20x slower, never a defect even from a defect roll.
-machine, ticks, counters = craft(rules.modes.precise, 0, mock.sequence({0}))
-assert(machine.outputs[1] == "normal")
-assert(ticks > 1950 and ticks < 2050, ticks)
-assert(counters["grade.0"] == 1)
--- Research 10 + careful: standard.
-machine = craft(rules.modes.careful, 10, mock.sequence({0}))
-assert(machine.outputs[1] == "normal")
-
--- Paranoidal decision 2026-10-14: never better than the ingredients. The recipe quality is the quality
--- of all item ingredients (the engine result starts there); a worse roll still wins.
-local function craft_from(quality_name, mode, levels, random, exempt)
-    local m = make_machine(100)
-    m.recipe_quality = {name = quality_name}
-    m.entity.result_quality = {name = quality_name}
-    if exempt then m.info.exempt, m.info.roll = true, false end
-    local record, counters = record_of(m.entity), {}
-    local ctx = context(m, mode, random, counters)
-    local tick, next_look = 0, 1
-    while m.crafting and tick < 100000 do
-        tick = tick + 1
-        if tick >= next_look then
-            local level = type(levels) == "function" and levels(record) or levels
-            next_look = tick + math.max(1, math.floor(crafter.step(record, level, ctx) or 30))
-        end
-        m.update()
-    end
-    return m.outputs[1], counters
-end
-assert(craft_from("ic-defect-3", nil, 10, mock.sequence({0})) == "ic-defect-3", "research 10 does not repair")
-assert(craft_from("ic-defect-3", rules.modes.precise, 0, mock.sequence({0})) == "ic-defect-3", "maximum mode does not repair")
-assert(craft_from("ic-defect-3", nil, 0, mock.sequence({0})) == "ic-defect-5", "a worse roll wins")
-assert(craft_from("ic-defect-3", nil, 9, mock.sequence({.99})) == "ic-defect-3", "a standard roll is capped")
-assert(craft_from("ic-defect-3", nil, 0, mock.sequence({.9}), true) == "normal", "exempt products")
-assert(craft_from("normal", nil, 10, mock.sequence({0})) == "normal")
--- The result is decided at the first look of a craft (the engine keeps it to the end): research 10 finished
--- during the craft does not change a grade rolled before (careful at level 0 rolls -3, below -2 ingredients).
-local output = craft_from("ic-defect-2", rules.modes.careful, function(record)
-    return record.craft and 10 or 0
-end, mock.sequence({0}))
-assert(output == "ic-defect-3", tostring(output))
-
--- Recycling keeps the native result quality (input quality or a module upgrade); no defect draw,
--- only defect results become standard. RNG 0 would draw -5.
-for _, case in ipairs({{"rare", "rare"}, {"normal", "normal"}, {"ic-defect-3", "normal"}}) do
-    local recycler = make_machine(100)
-    recycler.recycler = true
-    recycler.info = {energy = 100 / 60, any_item = true, all_finished = false, roll = false, exempt = false,
-        recycling = true, watched = true}
-    recycler.recipe_quality = {name = case[1]}
-    recycler.entity.result_quality = {name = case[1]}
-    local record, counters = record_of(recycler.entity), {}
-    local ctx = context(recycler, nil, mock.sequence({0}), counters)
-    local tick, next_look = 0, 1
-    while recycler.crafting and tick < 1000 do
-        tick = tick + 1
-        if tick >= next_look then next_look = tick + math.max(1, math.floor(crafter.step(record, 0, ctx) or 30)) end
-        recycler.update()
-    end
-    assert(recycler.outputs[1] == case[2], case[1] .. " -> " .. tostring(recycler.outputs[1]))
-    assert(not counters["grade.-5"], "no defect draw for recycling")
-end
-
--- Boosted quality-module roll (precise = 10 rolls): p = 0.2 * 0.1 = 2%, extra = 1 - 0.98^9.
 local modes = require("scripts.expansion.modes")
-local qualities = {}
-qualities.rare = {name = "rare", next_probability = 0.1}
-qualities.uncommon = {name = "uncommon", next = qualities.rare, next_probability = 0.1}
-qualities.normal = {name = "normal", next = qualities.uncommon, next_probability = 0.1}
-local function module_machine()
-    return {effects = {quality = 0.2}, result_quality = qualities.normal,
-        force = {index = 1, is_quality_unlocked = function() return true end}}
-end
-local extra = rules.extra_chance(0.02, 10)
-near(extra, 1 - 0.98 ^ 9)
-local entity = module_machine()
-assert(modes.boost(entity, qualities.normal, rules.modes.precise, mock.sequence({extra - 1e-6, .5})))
-assert(entity.result_quality == qualities.uncommon)
-entity = module_machine()
-assert(not modes.boost(entity, qualities.normal, rules.modes.precise, mock.sequence({extra + 1e-6})))
-entity = module_machine()
-assert(modes.boost(entity, qualities.normal, rules.modes.careful, mock.sequence({0, .05, .5})))
-assert(entity.result_quality == qualities.rare, "chain continues with next_probability")
-entity = module_machine()
-entity.result_quality = qualities.uncommon -- native roll already upgraded: nothing extra
-assert(not modes.boost(entity, qualities.normal, rules.modes.precise, mock.sequence({0})))
-entity = module_machine()
-entity.effects = {quality = 0}
-assert(not modes.boost(entity, qualities.normal, rules.modes.precise, mock.sequence({0})), "no module, no quality")
-entity = module_machine()
-entity.force.is_quality_unlocked = function() return false end
-assert(not modes.boost(entity, qualities.normal, rules.modes.precise, mock.sequence({0})), "locked qualities stay locked")
+local infos = {
+    chest = {all_finished = true, recycling = false},
+    plate = {all_finished = false, recycling = false},
+    ["chest-recycling"] = {all_finished = false, recycling = true},
+    sign = {all_finished = true, recycling = false},
+}
+local everywhere = true
+modes.context = {
+    recipe = function(name) return infos[name] end,
+    no_quality = function() return {sign = true} end,
+}
+setmetatable(modes.context, {__index = function(_, k) if k == "quality_everywhere" then return everywhere end end})
 
--- Extra power: careful draws +1x, precise +4x the machine power through a hidden interface.
-local interface = {valid = true, power_usage = 0, electric_buffer_size = 1, energy = 1e9}
+-- Names and eligibility --------------------------------------------------------------------------------------------
+assert(modes.split("assembler-ic-mode-precise").base == "assembler" and modes.split("assembler-ic-mode-precise").mode == "precise")
+assert(modes.split("assembler") == nil and modes.split("ghost-ic-mode-precise") == nil, "a twin needs both prototypes")
+assert(modes.base_name("furnace-ic-mode-careful") == "furnace" and modes.mode_of_name("furnace-ic-mode-careful") == "careful")
+assert(modes.definition_of_name("assembler-ic-mode-precise") == rules.modes.precise and modes.definition_of_name("assembler") == nil)
+assert(modes.twin_name("assembler", "careful") == "assembler-ic-mode-careful" and modes.twin_name("assembler", "normal") == "assembler")
+assert(#modes.twin_names() == 7)
+assert(modes.eligible(place("assembler", 0)) and modes.eligible(place("assembler-ic-mode-careful", 10)))
+assert(not modes.eligible(place("lamp", 20)), "a machine without modes (mod-data no_mode)")
+assert(not modes.eligible(place("loner", 30)), "a machine without both twins")
+surface.machines = {}
+
+-- The beacon effect equals n independent rolls ------------------------------------------------------------------------
+local function wanted_bits(native, probability, boost)
+    local p = math.min(1, native * probability)
+    return math.floor(((1 - (1 - p) ^ boost) / probability - native) * 100 + 0.5)
+end
+local tracked = {}
+local function on_tracked(entity, old_id, keep) tracked[#tracked + 1] = {entity = entity, old = old_id, keep = keep} end
+local player = {valid = true, connected = true}
+game.connected_players = {player}
+local base = place("assembler", 0, {recipe = "chest", crafting = true, crafting_progress = 0.4, result_quality = Q.normal,
+    native = 1.32, health = 120, products_finished = 7, last_user = player, disabled_by_script = true})
+player.opened = base
+local twin = modes.set(base, "precise", on_tracked)
+assert(twin and twin.name == "assembler-ic-mode-precise" and not base.valid)
+assert(twin.health == 120 and twin.products_finished == 7 and twin.last_user == player and twin.disabled_by_script == true,
+    "health, finished counter, last user and script flags copied")
+assert(twin.crafting_progress == 0.4 and twin.result_quality == Q.normal, "running craft kept by the engine")
+assert(player.opened == twin, "an open window follows the machine")
+assert(tracked[1].entity == twin and tracked[1].old == base.unit_number and tracked[1].keep == true)
+local record = storage.ic_modes.records[twin.unit_number]
+local bits = wanted_bits(1.32, 0.204, 10)
+assert(record and record.mode == "precise" and record.bits == bits, "bits " .. tostring(record and record.bits) .. " vs " .. bits)
+near(twin.effects.quality, 1.32 + bits / 100, 1e-9)
+near(modes.native_quality_effect(twin), 1.32)
+near((1.32 + bits / 100) * 0.204, 1 - (1 - 1.32 * 0.204) ^ 10, 0.002)
+assert(renders[record.render].sprite == "ic-mode-precise")
+assert(modes.set(twin, "precise") == twin, "the same mode changes nothing")
+
+-- The beacon follows modules, recipe quality and position; off where no boost applies.
+twin.native = 0
+modes.refresh(record)
+assert(record.bits == 0 and record.beacon == nil, "no quality modules: no beacon")
+twin.native = 0.2
+modes.refresh(record)
+assert(record.bits == wanted_bits(0.2, 0.204, 10) and record.beacon.valid)
+twin.recipe_quality = Q.uncommon
+modes.refresh(record)
+assert(record.bits == wanted_bits(0.2, 0.18, 10), "chance of the recipe quality")
+twin.recipe_quality = Q["ic-defect-2"]
+modes.refresh(record)
+assert(record.bits == 0, "defective ingredients: no boost")
+twin.recipe_quality = Q.normal
+for _, case in ipairs({{"chest-recycling", 0}, {"sign", 0}, {"plate", nil}}) do
+    twin.recipe = case[1]
+    modes.refresh(record)
+    if case[2] then assert(record.bits == case[2], case[1]) end
+end
+assert(record.bits == wanted_bits(0.2, 0.204, 10), "a material with quality everywhere")
+everywhere = false
+modes.refresh(record)
+assert(record.bits == 0, "a material without quality everywhere stays standard")
+everywhere = true
+twin.recipe = "chest"
+twin.native = 6
+modes.refresh(record)
+assert(record.bits == 0, "a native chance of 100% needs nothing")
+twin.native = 1.32
+modes.refresh(record)
+local beacon = record.beacon
+twin.position = {x = 3, y = 0}
+surface.machines["0:0"], surface.machines["3:0"] = nil, twin
+modes.refresh(record)
+assert(beacon.valid and beacon.position.x == 3 and record.beacon == beacon, "moved with the machine")
+twin.position = {x = 0, y = 0}
+surface.machines["3:0"], surface.machines["0:0"] = nil, twin
+modes.refresh(record)
+-- Operation counters: the finished counter since the last look.
+storage.ic_stats = nil
+twin.products_finished = twin.products_finished + 5
+modes.refresh(record)
+assert(storage.ic_stats[1]["mode.precise"] == 5)
+
+-- A weaker mode during an upgraded operation decides it again: kept with the share of the weaker chance.
+local keep = (1 - (1 - 1.32 * 0.204) ^ 3) / (1 - (1 - 1.32 * 0.204) ^ 10)
+twin.result_quality = Q.uncommon
+local random = math.random
+math.random = function() return keep - 1e-6 end
+local careful = modes.set(twin, "careful", on_tracked)
+assert(careful.name == "assembler-ic-mode-careful" and careful.result_quality == Q.uncommon and tracked[2].keep == false)
+local careful_record = storage.ic_modes.records[careful.unit_number]
+assert(careful_record.bits == wanted_bits(1.32, 0.204, 3) and storage.ic_modes.records[twin.unit_number] == nil)
+assert(storage.ic_stats[1]["mode.precise"] == 5, "counted before the swap, not twice")
+math.random = function() return 0.999 end
+local normal = modes.set(careful, "normal", on_tracked)
+assert(normal.name == "assembler" and normal.result_quality == "normal", "not kept: the recipe quality (written by name)")
+assert(storage.ic_modes.records[careful.unit_number] == nil and not careful_record.beacon, "beacon gone with the mode")
+-- A stronger mode keeps the decision of the running operation.
+normal.result_quality = Q.uncommon
+local strong = modes.set(normal, "precise", on_tracked)
+assert(strong.result_quality == Q.uncommon and tracked[4].keep == true)
+math.random = random
+
+-- Refused and failed switches ---------------------------------------------------------------------------------------
+strong.deconstruct = true
+local result, reason = modes.set(strong, "normal", on_tracked)
+assert(result == nil and reason == "marked" and strong.valid)
+strong.deconstruct = false
+surface.no_group.furnace = true
+local lone = place("furnace", 50, {})
+result, reason = modes.set(lone, "careful")
+assert(result == nil and reason == "failed" and lone.valid and surface.machines["50:0"] == lone, "no fast replace: undone")
+surface.no_group.furnace = nil
+local lamp = place("lamp", 60, {})
+assert(modes.set(lamp, "precise") == nil, "no modes")
+
+-- on_tick: due records are looked at again -------------------------------------------------------------------------
+local strong_record = storage.ic_modes.records[strong.unit_number]
+strong.products_finished = strong.products_finished + 2
+game.tick = strong_record.due
+modes.on_tick(game.tick)
+assert(strong_record.due == game.tick + modes.REFRESH and storage.ic_stats[1]["mode.precise"] == 7)
+strong.valid = false
+game.tick = strong_record.due
+modes.on_tick(game.tick)
+assert(storage.ic_modes.records[strong.unit_number] == nil and not strong_record.beacon, "invalid machine forgotten")
+surface.machines["0:0"] = nil
+
+-- Configuration change: layout 1 (machine slowed by script, power interface) becomes twins; a twin whose machine
+-- lost its modes goes back; stray beacons go; every twin gets a record.
+local interface = {valid = true}
 interface.destroy = function() interface.valid = false end
-prototypes = {entity = {["ic-mode-power-3x3"] = {}}}
-local moded = {
-    valid = true, type = "assembling-machine", name = "assembler", unit_number = 11, position = {x = 0, y = 0},
-    direction = 0, quality = {name = "normal"}, consumption_bonus = 0, force = {index = 1},
-    is_crafting = function() return false end,
-    surface = {index = 1, create_entity = function() return interface end},
-    prototype = {items_to_place_this = {{name = "assembler"}}, get_max_energy_usage = function() return 1000 end,
-        electric_energy_source_prototype = {}, collision_box = {left_top = {x = -1.2, y = -1.2}, right_bottom = {x = 1.2, y = 1.2}},
-        selection_box = {left_top = {x = -1.5, y = -1.5}, right_bottom = {x = 1.5, y = 1.5}}},
-}
-rendering = {draw_sprite = function() return {id = 1} end, get_object_by_id = function() return nil end}
-assert(modes.set(moded, "precise"))
-assert(modes.mode_name(moded) == "precise")
-assert(modes.draw_power(moded, rules.modes.precise, true, 1) == 1)
-near(interface.power_usage, 19000)
-modes.draw_power(moded, rules.modes.careful, true, 2)
-near(interface.power_usage, 4000)
-modes.draw_power(moded, nil, false, 3)
-near(interface.power_usage, 0)
-assert(modes.set(moded, "normal") and modes.mode_name(moded) == "normal" and interface.valid == false)
-assert(storage.ic_modes.records[11] == nil, "idle machine: normal drops the record at once")
-
--- Bug report: maximum selected, craft started, then normal selected. The running craft keeps its
--- mode (20x time) and must keep paying the extra power until it ends; the next craft is normal.
-local function power_interface()
-    local object = {valid = true, power_usage = 0, electric_buffer_size = 1, energy = 1e9}
-    object.destroy = function() object.valid = false end
-    return object
-end
-local switched = make_machine(100)
-local sw = switched.entity
-local sw_interface = power_interface()
-sw.type, sw.name, sw.unit_number, sw.position, sw.direction = "assembling-machine", "assembler", 21, {x = 0, y = 0}, 0
-sw.quality, sw.consumption_bonus = {name = "normal"}, 0
-sw.surface = {index = 1, create_entity = function() return sw_interface end}
-sw.prototype = moded.prototype
-assert(modes.set(sw, "precise"))
-local sw_record, sw_counters = record_of(sw), {}
-local sw_ctx = context(switched, nil, mock.sequence({.9}), sw_counters)
-local sw_tick, sw_look = 0, 1
--- As control.lua: the mode records of storage, the real extra power and its release.
-local function live(ctx, tick_of)
-    ctx.modes = storage.ic_modes and next(storage.ic_modes.records) and storage.ic_modes.records or nil
-    ctx.mode_power = function(entity, definition, working) return modes.draw_power(entity, definition, working, tick_of()) end
-    ctx.release_power = function(entity) modes.draw_power(entity, nil, false, tick_of()) end
-    return ctx
-end
-local function run_switched(limit, stop)
-    while switched.crafting and sw_tick < limit do
-        sw_tick = sw_tick + 1
-        if sw_tick >= sw_look then
-            live(sw_ctx, function() return sw_tick end)
-            sw_look = sw_tick + math.max(1, math.floor(crafter.step(sw_record, 0, sw_ctx) or 30))
-        end
-        switched.update()
-        if stop and stop() then return end
-    end
-end
-run_switched(1000) -- half of the 20x craft
--- The slowed progress (the raw mock progress also holds the full-speed gain since the last look).
-assert(switched.crafting and sw_record.craft.progress > 0.4 and sw_record.craft.progress < 0.6, sw_record.craft.progress)
-assert(sw.crafting_progress < 1)
-near(sw_interface.power_usage, 19000)
-assert(modes.set(sw, "normal"))
-assert(modes.mode_name(sw) == "normal", "the GUI shows normal at once")
-assert(sw_interface.valid and storage.ic_modes.records[21], "the running craft keeps its consumer")
-local paid_after_switch = 0
-run_switched(100000, function()
-    if sw_interface.valid and sw_interface.power_usage > 0 then paid_after_switch = paid_after_switch + 1 end
-end)
-assert(sw_tick > 1950 and sw_tick < 2050, "the moded craft keeps 20x time: " .. sw_tick)
-assert(paid_after_switch > 950, "extra power is drawn until the moded craft ends: " .. paid_after_switch)
-assert(switched.outputs[1] == "normal" and sw_counters["mode.precise"] == 1)
--- Idle look after the craft: the record and its consumer are gone; the next craft is normal.
-sw_tick = sw_tick + 1
-crafter.step(sw_record, 0, live(sw_ctx, function() return sw_tick end))
-assert(storage.ic_modes.records[21] == nil and not sw_interface.valid)
-switched.crafting = true
-local second_start = sw_tick
-sw_look = sw_tick + 1
-run_switched(100000)
-assert(sw_tick - second_start <= 102, "next craft at normal speed: " .. (sw_tick - second_start))
-
--- Switching back to a mode during the pending craft keeps one record and restores the indicator.
-switched.crafting, sw.crafting_progress = true, 0
-sw_interface = power_interface()
-assert(modes.set(sw, "careful"))
-sw_record.craft = nil
-crafter.step(sw_record, 0, live(sw_ctx, function() return sw_tick end))
-assert(modes.set(sw, "normal") and storage.ic_modes.records[21])
-assert(modes.set(sw, "precise") and modes.mode_name(sw) == "precise")
-modes.forget(21)
-
--- Mode boost at the decision, once per craft, at its first look (the engine keeps the written result to the
--- end, test-runs/ic-h1b-20261029); a sharp speed-up during the craft changes nothing.
-local function boosted_craft(speed_up_at)
-    local m = make_machine(100)
-    local boosts, progress_at_boost = 0, nil
-    local record = record_of(m.entity)
-    local ctx = context(m, rules.modes.precise, mock.sequence({.9}), {})
-    ctx.quality_everywhere = true
-    ctx.mode_boost = function()
-        boosts = boosts + 1
-        progress_at_boost = m.entity.crafting_progress
-    end
-    local tick, next_look = 0, 1
-    while m.crafting and tick < 100000 do
-        tick = tick + 1
-        if speed_up_at and tick == speed_up_at then m.rate = 10 end
-        if tick >= next_look then
-            local delay = crafter.step(record, 0, ctx)
-            next_look = tick + math.max(1, math.floor(delay or 30))
-        end
-        m.update()
-    end
-    return boosts, progress_at_boost
-end
-local boosts, at = boosted_craft(nil)
-assert(boosts == 1 and at < 0.05, "one boost, at the first look")
-boosts = boosted_craft(2)
-assert(boosts == 1, "a speed-up does not cost the boost")
-
--- A stopped moded machine (circuit) demands no extra power; after it resumes the progress made
--- before the next look is not counted, then the extra power is demanded again.
-local halted = make_machine(100)
-local ht = halted.entity
-local ht_interface = power_interface()
-ht.type, ht.name, ht.unit_number, ht.position, ht.direction = "assembling-machine", "assembler", 41, {x = 0, y = 0}, 0
-ht.quality, ht.consumption_bonus = {name = "normal"}, 0
-ht.surface = {index = 1, create_entity = function() return ht_interface end}
-ht.prototype = moded.prototype
-assert(modes.set(ht, "precise"))
-local ht_record = record_of(ht)
-local ht_ctx = context(halted, nil, mock.sequence({.9}), {})
-local ht_tick, ht_look = 0, 1
-local function run_halted(limit)
-    while halted.crafting and ht_tick < limit do
-        ht_tick = ht_tick + 1
-        if ht_tick >= ht_look then
-            live(ht_ctx, function() return ht_tick end)
-            ht_look = ht_tick + math.max(1, math.floor(crafter.step(ht_record, 0, ht_ctx) or 30))
-        end
-        halted.update()
-    end
-end
-run_halted(500)
-near(ht_interface.power_usage, 19000)
-halted.stopped = true
-run_halted(800)
-assert(ht_interface.power_usage == 0, "stopped: no extra power")
-assert(ht_look - ht_tick <= crafter.STALL_LOOK, "stopped: looked at often")
-halted.stopped = false
-run_halted(800 + crafter.STALL_LOOK + 1)
-near(ht_interface.power_usage, 19000)
-run_halted(100000)
-assert(not halted.crafting)
-local _, plain_ticks = craft(rules.modes.precise, 0, mock.sequence({.9}))
-local extra_ticks = ht_tick - plain_ticks
-assert(extra_ticks >= 295 and extra_ticks <= 300 + crafter.STALL_LOOK + 5,
-    "300 stopped ticks + at most one uncounted look: " .. extra_ticks)
-modes.forget(41)
-
--- Burner machine: the extra energy of the past interval is burnt from the burning fuel, then from
--- whole fuel items (their change is kept); without fuel the supply drops.
-local function fuel_stack(count, value)
-    local stack = {valid_for_read = count > 0, count = count, name = "coal", quality = {name = "normal"},
-        prototype = {fuel_value = value}}
-    stack.clear = function() stack.count = 0; stack.valid_for_read = false end
-    return stack
-end
-local coal = fuel_stack(2, 4e6)
-local burner = {currently_burning = {name = "coal"}, remaining_burning_fuel = 1e6, inventory = {coal}}
-local furnace = {
-    valid = true, type = "furnace", name = "stone-furnace", unit_number = 31, position = {x = 0, y = 0},
-    direction = 0, quality = {name = "normal"}, consumption_bonus = 0, force = {index = 1}, burner = burner,
-    is_crafting = function() return true end,
-    prototype = {items_to_place_this = {{name = "stone-furnace"}}, get_max_energy_usage = function() return 1000 end,
-        burner_prototype = {effectivity = 1},
-        collision_box = {left_top = {x = -0.7, y = -0.7}, right_bottom = {x = 0.7, y = 0.7}},
-        selection_box = {left_top = {x = -1, y = -1}, right_bottom = {x = 1, y = 1}}},
-}
-furnace.surface = {index = 1}
-assert(modes.set(furnace, "precise"))
-assert(modes.draw_power(furnace, rules.modes.precise, true, 0) == 1, "no demand before the first look")
--- 100 ticks at 19 kJ/tick = 1.9 MJ: 1 MJ from the burning coal, one whole coal item (2.1 MJ change).
-near(modes.draw_power(furnace, rules.modes.precise, true, 100), 1)
-near(burner.remaining_burning_fuel, 0)
-assert(coal.count == 1)
-near(storage.ic_modes.records[31].fuel_change, 3.1e6, 1e-3)
--- Next 300 ticks = 5.7 MJ: 3.1 MJ change + the last coal item (1.4 MJ change left).
-near(modes.draw_power(furnace, rules.modes.precise, true, 400), 1)
-assert(coal.count == 0 and not coal.valid_for_read)
-near(storage.ic_modes.records[31].fuel_change, 1.4e6, 1e-3)
--- Next 100 ticks = 1.9 MJ, only 1.4 MJ left: the craft progress of that interval is scaled.
-near(modes.draw_power(furnace, rules.modes.precise, true, 500), 1.4 / 1.9, 1e-9)
--- Effectivity 0.5: the same interval costs twice the fuel.
-furnace.prototype.burner_prototype.effectivity = 0.5
-burner.remaining_burning_fuel = 1e6
-near(modes.draw_power(furnace, rules.modes.precise, true, 550), 1e6 / 1.9e6, 1e-9)
--- Normal selected during the craft: it keeps paying; the end of the moded craft drops the record.
-assert(modes.set(furnace, "normal") and storage.ic_modes.records[31])
-burner.remaining_burning_fuel = 1e7
-modes.draw_power(furnace, rules.modes.precise, true, 560)
-near(burner.remaining_burning_fuel, 1e7 - 19000 * 10 / 0.5, 1e-3)
-modes.draw_power(furnace, nil, false, 570)
-assert(storage.ic_modes.records[31] == nil)
-
--- Machines without item results (copper lamp, fluid-only, voiding) and construction sites have no modes
--- (mod-data no_mode). A mode saved before the update is dropped by rescan, the running craft too.
-local kept = {valid = true, power_usage = 0, electric_buffer_size = 1, energy = 1e9}
-kept.destroy = function() kept.valid = false end
-local function placed(name, id)
-    return {valid = true, type = "assembling-machine", name = name, unit_number = id, position = {x = 0, y = 0},
-        direction = 0, quality = {name = "normal"}, consumption_bonus = 0, force = {index = 1},
-        is_crafting = function() return true end,
-        surface = {index = 1, create_entity = function() return kept end},
-        prototype = moded.prototype}
-end
-local lamp, old = placed("deadlock-copper-lamp", 51), placed("angels-separator", 52)
-assert(modes.eligible(old), "no mod-data yet: eligible")
-assert(modes.set(old, "precise") and storage.ic_modes.records[52])
-modes.draw_power(old, rules.modes.precise, true, 600)
-assert(kept.valid and kept.power_usage > 0)
-storage.ic_defects = {records = {[52] = {id = 52, craft = {key = "x", mode = rules.modes.precise}}}}
-prototypes = {entity = prototypes.entity, mod_data = {["ic-quality-expansion"] = {data = {no_mode = {
-    ["deadlock-copper-lamp"] = true, ["angels-separator"] = true}}}}}
-modes.reset_cache()
-assert(not modes.eligible(lamp) and not modes.set(lamp, "careful") and not storage.ic_modes.records[51], "lamp: no mode")
-assert(modes.eligible(moded), "an assembler keeps its modes")
+local old_moded = place("assembler", 100, {recipe = "chest", crafting = true, crafting_progress = 0.7, result_quality = Q.normal})
+local old_normal = place("assembler", 110, {})
+local lamp_twin = place("lamp-ic-mode-precise", 120, {})
+local orphan = place("furnace-ic-mode-careful", 130, {})
+local stray = surface.create_entity({name = "ic-mode-beacon", position = {x = 140, y = 0}})
+storage.ic_modes = {records = {
+    [old_moded.unit_number] = {id = old_moded.unit_number, entity = old_moded, mode = "precise", interface = interface,
+        render = rendering.draw_sprite({sprite = "ic-mode-precise"}).id},
+    [old_normal.unit_number] = {id = old_normal.unit_number, entity = old_normal, mode = "normal"},
+}}
+game.tick = 5000
 modes.rescan()
-assert(storage.ic_modes.records[52] == nil and not kept.valid, "saved mode and extra power dropped")
-assert(storage.ic_defects.records[52].craft.mode == nil, "running craft continues without the mode")
-assert(modes.mode_name(old) == "normal")
-storage.ic_defects = nil
-print("PASS: careful x5 / precise x20 time through the real crafter, defects")
-print("+4 levels and none, boosted module roll equals n independent rolls, extra power +1x/+4x;")
-print("normal during a moded craft keeps its time and extra power until it ends, then drops the record;")
-print("burner extra energy from burning fuel and whole fuel items with change, effectivity, low fuel;")
-print("machines in mod-data no_mode get no mode, a saved one is dropped with its extra power and craft mode.")
-print("Mocks only: no engine timing, power network or GUI verification.")
+local s = storage.ic_modes
+assert(s.version == modes.VERSION and not interface.valid)
+local migrated = surface.machines["100:0"]
+assert(migrated.name == "assembler-ic-mode-precise" and migrated.crafting_progress == 0.7 and s.records[migrated.unit_number])
+assert(surface.machines["110:0"] == old_normal and old_normal.valid and not s.records[old_normal.unit_number])
+assert(surface.machines["120:0"].name == "lamp" and not lamp_twin.valid, "a twin without modes goes back")
+assert(s.records[orphan.unit_number] and s.records[orphan.unit_number].mode == "careful", "a twin found on the map")
+assert(not stray.valid, "stray beacon removed")
+for _, r in pairs(s.records) do assert(r.due > 5000 and r.due <= 5000 + 1 + modes.REFRESH) end
+
+-- Defects switched off: every twin goes back to its machine, beacons and records go.
+migrated.native = 1
+modes.refresh(s.records[migrated.unit_number])
+assert(s.records[migrated.unit_number].beacon.valid)
+local its_beacon = s.records[migrated.unit_number].beacon
+modes.revert_all()
+assert(surface.machines["100:0"].name == "assembler" and surface.machines["130:0"].name == "furnace")
+assert(storage.ic_modes == nil and not its_beacon.valid)
+
+-- An older save loaded without a configuration change (same mod version): migrated at the first tick, the
+-- scheduler follows the replaced machine.
+local lazy = place("assembler", 200, {recipe = "chest", crafting = true, crafting_progress = 0.3})
+storage.ic_modes = {records = {[lazy.unit_number] = {id = lazy.unit_number, entity = lazy, mode = "careful"}}}
+local followed
+modes.on_tracked = function(entity, old_id, keep) followed = {entity = entity, old = old_id, keep = keep} end
+modes.on_tick(6000)
+local lazy_twin = surface.machines["200:0"]
+assert(lazy_twin.name == "assembler-ic-mode-careful" and storage.ic_modes.version == modes.VERSION)
+assert(followed and followed.entity == lazy_twin and followed.old == lazy.unit_number and followed.keep == true)
+modes.on_tracked = nil
+
+print("PASS: twin names and eligibility, swap (health, counter, last user, flags, open window, scheduler hook),")
+print("quality beacon = n independent rolls (modules, recipe quality, defects, recycling, no-quality recipes,")
+print("materials, 100% native, position), operation counters, weaker mode re-decides the running operation,")
+print("stronger keeps it, refused/failed switches, on_tick, layout 1 migration (configuration change and lazy),")
+print("stray beacons, revert_all.")
+print("Mocks only, not Factorio.")

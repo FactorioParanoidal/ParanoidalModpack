@@ -5,7 +5,12 @@ local M = {
     workshop_power = "ic-refine-workshop-power",
     drive = "ic-refine-workshop-drive",
     emitter = "ic-signal-emitter",
-    mode_power_prefix = "ic-mode-power-",
+    -- Production modes: hidden twins of a machine (name .. suffix) and the hidden quality beacon with its
+    -- weighted modules (prototypes/mode-twins.lua).
+    mode_twin_suffix = {careful = "-ic-mode-careful", precise = "-ic-mode-precise"},
+    mode_beacon = "ic-mode-beacon",
+    mode_module_prefix = "ic-mode-quality-",
+    mode_module_count = 12,
     refine_recipe_prefix = "ic-refine-item-",
     refine_category = "ic-refine",
     repair_fuel = "ic-repair-resource",

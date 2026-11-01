@@ -1,10 +1,10 @@
 -- Registry and tick scheduler for crafting machines and drills (storage.ic_defects). Rewritten 2026-10-29
 -- for performance (review/ic-perf-audit-20261029/REPORT.md):
 --   * only entities that can ever need handling are tracked: crafting machines whose recipes can make a
---     defect-capable product, take a finished ingredient or recycle (scripts/defects/compiled.lua), machines
---     with a production mode and defective drills;
+--     defect-capable product, take a finished ingredient or recycle (scripts/defects/compiled.lua; a machine
+--     in a production mode is a twin prototype with the same recipes) and defective drills;
 --   * one timer wheel (scripts/wheel.lua): an entity is looked at only on its tick;
---   * a machine with nothing to handle sleeps; a player looking at it, pasted settings, a production mode
+--   * a machine with nothing to handle sleeps; a player looking at it, pasted settings, a mode switch
 --     or a lost quality-control level wake it.
 -- No surface scans per tick. No on_load mutations: an older storage layout is migrated on first access.
 local crafter = require("scripts.defects.crafter")
@@ -74,9 +74,11 @@ function M.trackable(entity)
     return result
 end
 
-local function moded(id)
-    local modes = storage.ic_modes
-    return modes ~= nil and modes.records[id] ~= nil
+local function copy(value)
+    if type(value) ~= "table" or value.object_name then return value end
+    local result = {}
+    for key, item in pairs(value) do result[key] = copy(item) end
+    return result
 end
 
 -- Starts tracking an entity that can need handling, or moves the next look of a tracked one forward.
@@ -94,7 +96,7 @@ function M.track(entity, source, delay)
     local kind = M.kinds[entity.type]
     if kind == "drill" then
         if not model.is_defect(entity.quality.name) then return end
-    elseif not (compiled.machine(entity).relevant or moded(id)) then
+    elseif not compiled.machine(entity).relevant then
         return
     end
     local record = {id = id, entity = entity, kind = kind, name = entity.name, type = entity.type,
@@ -102,18 +104,24 @@ function M.track(entity, source, delay)
     -- A clone copies the machine state: keep the decision of its running craft or cycle.
     local previous = source and source.valid and source.unit_number and s.records[source.unit_number]
     if previous then
-        local function copy(value)
-            if type(value) ~= "table" or value.object_name then return value end
-            local result = {}
-            for key, item in pairs(value) do result[key] = copy(item) end
-            return result
-        end
         record.craft = copy(previous.craft)
         record.cycle = copy(previous.cycle)
         if record.cycle then record.cycle.source = nil end
     end
     s.records[id] = record
     wheel.add(s.buckets, record, tick)
+end
+
+-- A machine replaced by its production mode twin (or back) keeps its running craft (scripts/expansion/modes.lua):
+-- keep: the decision of that craft stays (a switch to a stronger mode helps only from the next craft on);
+-- otherwise the craft is decided again by the new mode at the first look.
+function M.track_replaced(entity, old_id, keep)
+    local s = state()
+    local previous = old_id and s.records[old_id]
+    if previous then s.records[old_id] = nil end
+    M.track(entity)
+    local record = entity.valid and s.records[entity.unit_number]
+    if record and keep and previous and previous.craft then record.craft = copy(previous.craft) end
 end
 
 -- A machine may have a new recipe (window, paste): look at it soon; an untracked one is tracked if it
@@ -150,11 +158,6 @@ function M.rescan()
         end
     end
     surface_search(function(entity) M.track(entity) end)
-    -- Moded machines are tracked whatever their prototype.
-    local modes = storage.ic_modes
-    for _, mode_record in pairs(modes and modes.records or {}) do
-        if mode_record.entity.valid then M.track(mode_record.entity) end
-    end
     s.buckets = wheel.spread(s.records, game.tick, M.SPREAD)
 end
 

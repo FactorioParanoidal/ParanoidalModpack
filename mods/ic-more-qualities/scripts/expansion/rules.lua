@@ -117,21 +117,16 @@ end
 ---------------------------------------------------------------------------------------------------
 -- Production modes
 ---------------------------------------------------------------------------------------------------
--- time: duration multiplier; energy: energy per operation multiplier; level_bonus: extra
+-- time: duration multiplier (the twin machine crafts this many times slower and draws this many times the
+-- power, prototypes/mode-twins.lua); energy: energy per operation multiplier (= time^2); level_bonus: extra
 -- quality-control levels for the defect distribution; no_defect: new results are never below
--- standard; boost: equivalent independent quality rolls.
+-- standard; boost: equivalent independent quality rolls (the mode beacon, scripts/expansion/modes.lua).
 M.modes = {
     normal = {name = "normal", time = 1, energy = 1, level_bonus = 0, no_defect = false, boost = 1},
     careful = {name = "careful", time = 5, energy = 25, level_bonus = 4, no_defect = false, boost = 3},
     precise = {name = "precise", time = 20, energy = 400, level_bonus = 0, no_defect = true, boost = 10},
 }
 M.mode_order = {"normal", "careful", "precise"}
-
--- The slowed machine keeps drawing its own power for `time` times longer; the remainder of the
--- energy is drawn additionally: extra power in multiples of the machine's own power.
-function M.extra_power(mode)
-    return mode.energy / mode.time - 1
-end
 
 -- Defect-control level used for the defect distribution of a mode (capped at 10).
 function M.effective_level(level, mode)
@@ -143,13 +138,6 @@ function M.boosted_chance(p, n)
     if p <= 0 then return 0 end
     if p >= 1 then return 1 end
     return 1 - (1 - p) ^ n
-end
-
--- Conditional chance to upgrade after the native roll (chance p) has already failed, so that the
--- total chance equals boosted_chance(p, n).
-function M.extra_chance(p, n)
-    if p <= 0 or p >= 1 or n <= 1 then return 0 end
-    return 1 - (1 - p) ^ (n - 1)
 end
 
 ---------------------------------------------------------------------------------------------------

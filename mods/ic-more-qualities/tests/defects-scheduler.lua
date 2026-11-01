@@ -58,6 +58,7 @@ local drill = require("scripts.defects.drill")
 local automation = require("scripts.defects.automation")
 local model = require("scripts.defects.model")
 local wheel = require("scripts.wheel")
+local rules = require("scripts.expansion.rules")
 
 -- compiled ---------------------------------------------------------------------------------------------
 local chest = compiled.recipe("chest")
@@ -137,11 +138,7 @@ local function context(options)
         recipe = compiled.recipe,
         random = options.random or function() draws = draws + 1 return 0 end,
         quality_everywhere = options.everywhere ~= false,
-        no_quality = {},
-        modes = options.modes,
-        release_power = options.release_power or function() end,
-        mode_power = options.mode_power or function() return 1 end,
-        mode_boost = options.mode_boost,
+        mode_definition = options.mode_definition,
         stat = options.stat,
     }
 end
@@ -240,12 +237,10 @@ assert(crafter.step(record_of(entity), 10, context()) == 30, "half of the recipe
 entity = machine({recipe = "copy", quality = "rare", progress = 0.2, name = "copier"})
 crafter.step(record_of(entity), 10, context({infos = {copier = copier_info}}))
 assert(entity.result_quality.name == "normal")
--- A production mode does not boost it.
-local boosted = false
-entity = machine({recipe = "currency", quality = "uncommon", progress = 0.1})
-crafter.step(record_of(entity), 10, context({mode_boost = function() boosted = true return true end,
-    modes = {[1] = {mode = "maximum"}}}))
-assert(entity.result_quality.name == "normal" and not boosted)
+-- A machine in a production mode (its twin) keeps the rule.
+entity = machine({recipe = "currency", quality = "uncommon", progress = 0.1, result = "rare"})
+crafter.step(record_of(entity), 10, context({mode_definition = function() return rules.modes.precise end}))
+assert(entity.result_quality.name == "normal")
 -- Defective ingredients keep the usual path (a material becomes standard, never a repair beyond it).
 entity = machine({recipe = "currency", quality = "ic-defect-2", progress = 0.1})
 crafter.step(record_of(entity), 3, context())
@@ -263,7 +258,7 @@ entity = machine({})
 assert(crafter.step(record_of(entity), 0, context()) == crafter.DORMANT)
 entity.behavior = {circuit_set_recipe = true}
 assert(crafter.step(record_of(entity), 0, context()) == 15, "circuit recipe: half of the fastest recipe")
--- A machine that can never need anything is dropped (it was tracked for a mode that is gone).
+-- A machine that can never need anything is dropped.
 entity = machine({name = "stone-furnace", type = "furnace", recipe = "plate"})
 assert(crafter.step(record_of(entity), 0, context()) == false)
 -- Unsupported speed.
@@ -272,51 +267,29 @@ local _, warning = crafter.step(record_of(entity), 0, context())
 assert(warning == "unsupported-speed")
 
 -- Production modes ------------------------------------------------------------------------------------------
--- A flawless craft (no_defect, time 20): never defective, progress slowed on every look, power drawn.
-local power_calls, released, boosts = 0, 0, 0
-local modes_state = {[1] = {mode = "precise"}}
-local function mode_context(options)
-    options = options or {}
-    options.modes = modes_state
-    options.mode_power = function(_, definition, working) power_calls = power_calls + 1 return 1 end
-    options.release_power = function() released = released + 1 end
-    options.mode_boost = function() boosts = boosts + 1 return false end
-    return context(options)
+-- The machine is a twin (scripts/expansion/modes.lua): the engine runs it slower, the scheduler only reads the
+-- mode from the machine name for the defect roll and never touches the progress.
+local function mode_context(mode)
+    return context({mode_definition = function(name)
+        assert(name == "assembler-1", name)
+        return rules.modes[mode]
+    end})
 end
 draws = 0
 entity = machine({recipe = "chest", progress = 0})
 record = record_of(entity)
-delay = crafter.step(record, 0, mode_context())
-assert(record.craft.mode == "precise" and entity.result_quality.name == "normal" and draws == 0 and boosts == 1)
-assert(delay == 29, "one full-speed tick before the engine would complete: " .. delay)
-entity.crafting_progress = 0.5 -- the engine made 0.5 at full speed
-crafter.step(record, 0, mode_context())
-mock.near(entity.crafting_progress, 0.5 / 20)
-assert(power_calls == 2)
--- The mode is switched to normal during the craft: the craft keeps it; the next craft is normal and the
--- extra power is released.
-modes_state[1].mode = "normal"
-entity.crafting_progress = entity.crafting_progress + 0.1
-crafter.step(record, 0, mode_context())
-assert(record.craft.mode == "precise")
-entity.products_finished, entity.crafting_progress = 1, 0.05
-crafter.step(record, 0, mode_context())
-assert(record.craft.mode == nil and released >= 1)
-modes_state[1].mode = "precise"
--- A slowed craft simulated tick by tick takes about 20 times as long and needs far fewer looks than ticks.
+delay = crafter.step(record, 0, mode_context("precise"))
+assert(entity.result_quality.name == "normal" and draws == 0, "precise: no defect roll at all")
+assert(delay == 31 and entity.crafting_progress == 0, "next look right after the end, progress untouched: " .. delay)
+-- Careful: the roll of control level 0 + 4 (random 0: worst grade of that level, -3).
+draws = 0
 entity = machine({recipe = "chest", progress = 0})
-record = record_of(entity)
-local looks, next_look, done_tick = 0, 1, nil
-for tick = 1, 2000 do
-    if tick >= next_look then
-        looks = looks + 1
-        next_look = tick + crafter.step(record, 0, mode_context())
-    end
-    entity.crafting_progress = entity.crafting_progress + 1 / 30
-    if entity.crafting_progress >= 1 then done_tick = tick break end
-end
-assert(done_tick and done_tick >= 560 and done_tick <= 640, "slowed craft: " .. tostring(done_tick))
-assert(looks < 120, "looks for a flawless craft of 600 ticks: " .. looks)
+crafter.step(record_of(entity), 0, mode_context("careful"))
+assert(entity.result_quality.name == "ic-defect-3" and draws == 1, entity.result_quality.name)
+-- A quality-module result is never touched by a mode (the beacon boost belongs to the engine roll).
+entity = machine({recipe = "chest", progress = 0, result = "uncommon"})
+crafter.step(record_of(entity), 0, mode_context("precise"))
+assert(entity.result_quality.name == "uncommon" and entity.writes == 0)
 
 -- Simulation: a fed assembler of a finished product gets one look and one roll per craft ---------------------
 local function simulate(level, ticks, speed, insert_gap)
@@ -369,8 +342,6 @@ assert(draws == 0 and sim_looks <= 3000 / crafter.DORMANT + 1, "looks at researc
 entity = machine({name = "recycler-1", type = "furnace", speed = 0.125})
 assert(crafter.step(record_of(entity), 10, context()) == 15)
 assert(crafter.step(record_of(entity), 3, context()) == 15)
--- With a production mode every recycling counts (ammo: 3 ticks at speed 0.125 -> 1).
-assert(crafter.step(record_of(entity), 3, mode_context()) == 1)
 -- A defective item: the result becomes standard at the first look.
 entity = machine({name = "recycler-1", type = "furnace", speed = 0.125, recipe = "chest-recycling",
     quality = "ic-defect-3", progress = 0.1})
@@ -467,12 +438,21 @@ local s = storage.ic_defects
 assert(s.records[1] and not s.records[2] and not s.records[3] and s.records[4] and not s.records[5],
     "only an assembler of finished products and the defective drill are tracked")
 assert(s.records[1].due == 101 and s.records[1].name == "assembler-1" and s.records[1].force_index == 1)
--- A production mode makes any eligible machine tracked.
+-- A machine in a production mode is its twin with the same recipes: tracked by the same rule (a smelting twin
+-- is not), and a replacement keeps the decided craft only for a switch to a stronger mode.
 storage.ic_modes = {records = {[2] = {mode = "careful", entity = smelter}}}
 automation.track(smelter)
-assert(s.records[2], "moded furnace tracked")
+assert(not s.records[2], "a furnace in a mode is not tracked for its mode")
 storage.ic_modes = nil
-s.records[2] = nil
+s.records[1].craft = {finished = 3, recipe = "chest", quality = "normal", progress = 0.4}
+local twin = placed({id = 11, name = "assembler-1-ic-mode-precise", type = "assembling-machine", categories = {crafting = true}})
+automation.track_replaced(twin, 1, true)
+assert(s.records[1] == nil and s.records[11] and s.records[11].craft.progress == 0.4 and s.records[11].craft ~= nil)
+local back = placed({id = 12, name = "assembler-1", type = "assembling-machine", categories = {crafting = true}})
+automation.track_replaced(back, 11, false)
+assert(s.records[11] == nil and s.records[12] and s.records[12].craft == nil, "a weaker mode decides again")
+s.records[12] = nil
+automation.track(assembler)
 -- Waking moves a far look forward; the old bucket entry is skipped.
 s.buckets = {}
 wheel.add(s.buckets, s.records[1], 700)
@@ -527,7 +507,8 @@ assert(s.levels == nil, "levels counted again")
 print("PASS: relevance of machines (finished products, finished ingredients, recycling; smelting/chemistry")
 print("never), one roll per craft at its first look (simulated: one roll and one look per craft; starved")
 print("machine), caps of defective ingredients, exempt/material results, sleeping and circuit recipes, modes")
-print("(slowed, released), recyclers catch every defective item, defective drills slowed by rewinding ahead")
-print("(cycle time, extra drain, looks per cycle), tracking filter, wake, level cache, on_tick, layout migration,")
+print("(defect roll by the machine name, progress untouched, replaced machines), recyclers catch every defective")
+print("item, defective drills slowed by rewinding ahead (cycle time, extra drain, looks per cycle), tracking")
+print("filter, wake, level cache, on_tick, layout migration,")
 print("registry ic-normal-result (relevance, positive result reset per craft, no boost, normal sleeps).")
 print("Mocks only, not Factorio.")
