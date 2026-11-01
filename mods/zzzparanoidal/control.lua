@@ -143,7 +143,7 @@ script.on_event(defines.events.on_player_joined_game, disable_obsolete_basic_log
 
 -- Стартовое сообщение бортового компьютера показывает zzzparanoidal-start-bnl (весь старт в одном моде).
 
--- Пресет вех Paranoidal для Milestones (remote-интерфейс paranoidal_milestones).
+-- Пресет вех Paranoidal для paranoidal-achievements (бывший Milestones; remote-интерфейс paranoidal_milestones).
 require("controls.milestones-preset").install()
 
 -- Цветные пинги: кольцо и ник цветом игрока у GPS-ссылки в чате.

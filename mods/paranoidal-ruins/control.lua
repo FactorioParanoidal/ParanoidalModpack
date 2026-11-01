@@ -489,7 +489,7 @@ remote.add_interface("AbandonedRuins-paranoidal", {
   -- centered at the position. Returns true if it was spawned (the journal records it as usual).
   spawn_mine = spawn_mine,
   -- Legendary ruins: custom event with facts about them (found, solved, feats, relics...), see
-  -- legendary/feats.lua. MxlChievements-Reforged builds its achievements on it.
+  -- legendary/feats.lua. paranoidal-achievements builds its achievements on it.
   get_on_legendary_event = function() return legendary.feats_event end,
   -- Legendary ruins: is the position inside (or within `margin` tiles of) a legendary site?
   legendary_reserved = function(surface_index, position, margin)

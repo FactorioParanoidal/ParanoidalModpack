@@ -40,4 +40,4 @@ The documented Paranoidal patch for visible-pollutants 1.4.4 composes solar outp
 - `get_season()` — `"summer"`, `"fall"`, `"winter"`, `"spring"` or nil while disabled.
 - `get_season_name(season, player_index)` — LocalisedString in the player's style; `get_season_color(season)`; `clock(daytime)` — "7:12" as the EvoUI clock.
 
-Consumers: EvoUi (season sensor, day number), paranoidal-CodexRPG (world statistics), MxlChievements-Reforged (seasons, years), Wind-Turbines-Reforged and ElectricResistance2 (season steps), visible-pollutants (solar factor). No remote mutation/debug setters are shipped.
+Consumers: EvoUi (season sensor, day number), paranoidal-CodexRPG (world statistics), paranoidal-achievements (seasons, years), Wind-Turbines-Reforged and ElectricResistance2 (season steps), visible-pollutants (solar factor). No remote mutation/debug setters are shipped.

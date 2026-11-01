@@ -35,13 +35,14 @@ end
 --runtime.global влияют на всю карту
 -- руины: значения по умолчанию задаёт сам paranoidal-ruins (зона 400, шансы 0.01875 / 0.0075 / 0.001875)
 -- Blueprint Sandboxes: отдельная сила песочницы, как в 1.x. При "none" производство и убийства
--- в песочнице идут в статистику, Milestones, достижения и XP paranoidal-CodexRPG основной силы.
+-- в песочнице идут в статистику, вехи, достижения и XP paranoidal-CodexRPG основной силы.
 if mods["blueprint-sandboxes"] then
     set_settings_default_value("string-setting", "bpsb-isolation-level", "full")
 end
--- Milestones: проверка вех раз в 10 секунд вместо 1 (решение пользователя, нагрузка в простое).
--- Веха обнаруживается с задержкой до ~11 с; в начатой игре может остаться сохранённое значение.
-if mods["Milestones"] then
+-- Вехи (paranoidal-achievements, бывший Milestones): проверка раз в 10 секунд вместо 1 (решение
+-- пользователя, нагрузка в простое). Веха обнаруживается с задержкой до ~11 с; в начатой игре может
+-- остаться сохранённое значение. Тот же цикл читает статистику для скриптовых достижений.
+if mods["paranoidal-achievements"] then
     set_settings_default_value("int-setting", "milestones_check_frequency", 600)
 end
 -- MIRV: автозапуск ракет по умолчанию выключен (решение пользователя).

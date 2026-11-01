@@ -1,0 +1,15 @@
+---------------------------------------------------------------------------------------------------
+Version: 9.0.0
+Date: 2026-11-01
+  Major Features:
+    - One mod instead of MxlChievements-Reforged 9.1.0 (achievements: MxlChievements by Mxlppxl, More Achievements by LuziferSenpai and the Paranoidal content) and Milestones 9.4.8 (Paranoidal fork of Milestones 1.4.7 by Wiwiweb). Achievement, setting, hotkey, shortcut, sprite, style, command and locale key names are unchanged; the remote interface "milestones" keeps its name.
+  Optimizations:
+    - Every event is registered once for the milestones and the achievements together; one on_tick handler replaces the on_tick of Milestones, the on_nth_tick(60) of the achievement polls and the on_nth_tick(240) of the delayed milestone messages.
+    - The production statistics are read only by the milestones cycle. The "Chemist" achievement (every Angels gas) asks that cycle for the gases it has not seen yet, at most once per 10 minutes, instead of reading every surface itself.
+    - One Blueprint Sandboxes check (sandbox forces and lab surfaces) for both parts.
+    - Graphics recompressed: 131 of 134 PNG pixel-identical and smaller, the thumbnail, the spidertron picture and the milestone type icons lossy (1.49 -> 1.30 MB).
+  Changes:
+    - The setting "Ticks between each check" (milestones_check_frequency) also sets how often the statistics are read for the achievements; its description says so.
+    - The Milestones version migrations are removed: the storage of the new mod name is always created by on_init.
+    - Locales: English and Russian only (the other Milestones translations covered only the milestone window).
+    - Saves: the storage of the two old mods cannot move to a new mod name and is lost (agreed). Scripted achievement counters start again; milestones are found again on the first load (items already made get an estimated time from the production graphs, research times are unknown, manual edits of the milestone list and times are lost).

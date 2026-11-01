@@ -1,4 +1,4 @@
--- Facts about the legendary ruins for other mods (MxlChievements-Reforged builds its achievements on
+-- Facts about the legendary ruins for other mods (paranoidal-achievements builds its achievements on
 -- them). One custom event, id from remote get_on_legendary_event; raised only when something happens.
 -- Data: fact, force_index, player_index (when a player did it), kind (ruin), tier ("trial"/"citadel"),
 -- feat (special feat of a ruin), member (relic name), amount (how many), ferocity (map setting).

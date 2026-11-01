@@ -1,0 +1,15 @@
+{
+  "mod": "paranoidal-achievements",
+  "source": "local",
+  "original": {
+    "name": "Milestones",
+    "authors": [
+      "Wiwiweb"
+    ],
+    "portal": {
+      "name": "Milestones",
+      "url": "https://mods.factorio.com/mod/Milestones"
+    }
+  },
+  "changeReason": "Собственный мод проекта: объединяет MxlChievements-Reforged 9.1.0 (достижения Paranoidal на основе MxlChievements 3.0.1 от Mxlppxl, GPL-3.0, и More Achievements 0.0.2 от LuziferSenpai) и Milestones 9.4.8 (форк Paranoidal на основе Milestones 1.4.7 от Wiwiweb, GPL-3.0). Имена достижений, настроек, горячих клавиш, ярлыка, ключей локали и remote-интерфейса milestones прежние. Каждое событие регистрируется один раз, один обработчик on_tick; статистику производства читает только цикл вех, скриптовые достижения получают из него свои суммы; одна проверка Blueprint Sandboxes. Удалены миграции версий Milestones и переводы, кроме английского и русского; графика пережата. Прогресс старых сохранений не переносится (согласовано)."
+}

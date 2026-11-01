@@ -18,7 +18,7 @@ keeps what was cleared away from coming back:
   to it (mined ore does not grow back, ore mined out does not come back);
 * enemies: in chunks deleted with the tool the regenerated enemy bases are removed; trimmed chunks
   keep them, as generated.
-Remote "count_trimmed" lets MxlChievements-Reforged count only chunks deleted with the tool.
+Remote "count_trimmed" lets paranoidal-achievements count only chunks deleted with the tool.
 ]]
 
 local MOD = "Delete-Chunk-Tool-reforged"

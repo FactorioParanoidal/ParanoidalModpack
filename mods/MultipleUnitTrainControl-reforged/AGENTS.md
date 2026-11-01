@@ -86,7 +86,7 @@ Rules that keep it correct:
 
 - `zzzparanoidal/controls/battery-locomotive-return.lua` returns BET batteries for any locomotive burning
   `bet-fuel-battery`, twins included.
-- `MxlChievements-Reforged` "push-pull" requires this mod and looks for locomotive names ending in `-mu`.
+- `paranoidal-achievements` (formerly `MxlChievements-Reforged`) "push-pull" requires this mod and looks for locomotive names ending in `-mu`.
 - `ParanoidalLocale` holds no keys of this mod; the locale lives here (en, ru only).
 - `zzzparanoidal/tweaks/technology/early-material-prerequisites.lua` also adds `chemical-science-pack` to the wireless technology.
 
