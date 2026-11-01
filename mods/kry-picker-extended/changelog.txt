@@ -17,6 +17,7 @@ Date: May 26, 2026
       rails/signals, belts/splitters/underground, pipes/underground, and all inserters.
       This allows holding any member of the family in the cursor to revive any other member, if the matching item(s) are in theh player inventory, and should respect quality.
   Bugfixes:
+    - Paranoidal: automatic circuit wires work again (2.0 wire API; the 1.1 check matched no pole and the 1.1 calls do not exist in 2.0). With the shortcut on, every pole a player builds gets a red/green wire to a copper-connected pole when, for that colour, those poles carry exactly one network and the new pole has none; two networks are never joined; hidden poles of other buildings are ignored. The robot setting is renamed to picker-auto-circuit-robots and is off by default (the old picker-auto-circuit-bots was on).
     - Paranoidal: chest contents mover (Shift+C / Shift+V) works only when both chests are within the character's reach (not from remote view or across the map), except in cheat mode.
     - Paranoidal: ghost revival with "ignore quality" spends only items of the ghost's quality or better (defects count below normal); a worse item no longer builds a better entity.
     - Paranoidal: the "-N <module>" flying text when ghosts get modules from the inventory uses the item prototype's localised name, so items with an overridden name no longer show "Unknown key".

@@ -1,7 +1,12 @@
 -------------------------------------------------------------------------------
 --[Auto Circuit Power Poles]--
 -------------------------------------------------------------------------------
+-- Paranoidal: rewritten for the 2.0 wire API. A newly built pole gets a red/green wire to a pole it
+-- is copper-connected to when, for that colour, those poles carry exactly one circuit network and
+-- the new pole has none yet. Two different networks are never joined.
 local events = require('utils/events')
+
+local wire_ids = {defines.wire_connector_id.circuit_red, defines.wire_connector_id.circuit_green}
 
 local function shortcut(event)
     if event.prototype_name == 'picker-auto-circuit' then
@@ -13,43 +18,57 @@ local function shortcut(event)
 end
 events.on(defines.events.on_lua_shortcut, shortcut)
 
-local function pole_check(entity)
-    if entity.type == 'electric-pole' then
-        local prototype = entity.prototype
-        return prototype.get_max_circuit_wire_distance() <= 2 and prototype.max_wire_distance >= 15
-    end
-end
+local function connect_wires(pole)
+    local copper = pole.get_wire_connector(defines.wire_connector_id.pole_copper, false)
+    if not copper then return end
 
-local function connect_wires(entity)
-    local copper = entity.neighbours['copper']
-    for _, pole in pairs(copper) do
-        if pole_check(pole) then
-            local green, red = pole.neighbours['green'], pole.neighbours['red']
-            if #green > 0 then
-                entity.connect_neighbour {
-                    wire = defines.wire_type.green,
-                    target_entity = pole
-                }
+    -- visible poles of the same force joined to the new pole by a copper wire
+    local neighbours = {}
+    for _, connection in pairs(copper.connections) do
+        local other = connection.target.owner
+        if other ~= pole and other.valid and other.type == 'electric-pole' and other.force == pole.force
+            and not other.prototype.hidden then
+            neighbours[#neighbours + 1] = other
+        end
+    end
+    if not neighbours[1] then return end
+
+    for _, wire_id in pairs(wire_ids) do
+        if not pole.get_circuit_network(wire_id) then
+            local network_id, target, single = nil, nil, true
+            for _, other in pairs(neighbours) do
+                local network = other.get_circuit_network(wire_id)
+                if network then
+                    if not network_id then
+                        network_id, target = network.network_id, other
+                    elseif network.network_id ~= network_id then
+                        single = false
+                        break
+                    end
+                end
             end
-            if #red > 0 then
-                entity.connect_neighbour {
-                    wire = defines.wire_type.red,
-                    target_entity = pole
-                }
+            if target and single then
+                local source = pole.get_wire_connector(wire_id, true)
+                local destination = target.get_wire_connector(wire_id, true)
+                if source and destination then
+                    source.connect_to(destination)
+                end
             end
         end
     end
 end
 
 local function on_built_entity(event)
-    if pole_check(event.entity) then
+    local entity = event.entity
+    if entity.valid and entity.type == 'electric-pole' and not entity.prototype.hidden then
         if event.name == defines.events.on_built_entity then
             local player = game.get_player(event.player_index)
-            return player.is_shortcut_toggled('picker-auto-circuit') and connect_wires(event.entity)
-        elseif settings.global['picker-auto-circuit-bots'].value then
-            return connect_wires(event.entity)
+            if player and player.is_shortcut_toggled('picker-auto-circuit') then
+                connect_wires(entity)
+            end
+        elseif settings.global['picker-auto-circuit-robots'].value then
+            connect_wires(entity)
         end
     end
 end
-local built_events = {defines.events.on_robot_built_entity, defines.events.on_built_entity}
-events.on(built_events, on_built_entity)
+events.on({defines.events.on_robot_built_entity, defines.events.on_built_entity}, on_built_entity)
