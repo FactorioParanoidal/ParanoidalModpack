@@ -425,6 +425,8 @@ require("tweaks.recipe.sand-merge")
 require("removals.factoriopedia-cleanup")
 -- Все видимые получаемые жидкости — тематическими рядами во вкладку «Жидкости»; после скрытий очистки.
 require("tweaks.custom.fluids-tab").apply(data.raw, log)
+-- Компактное окно «Создание»: слияние однотипных строк и скрытие бочек; после всех раскладок меню.
+require("tweaks.custom.crafting-menu-compaction")
 -- Временно: из «Советов и подсказок» остаётся только категория PARANOIDAL.
 require("removals.tips-and-tricks")
 -- Иконки и цвет в трубах расплавов олова и хрома как в Beta 8.
