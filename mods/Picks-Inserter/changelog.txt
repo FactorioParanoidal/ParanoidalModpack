@@ -12,8 +12,15 @@ Date: 31.01.2026
     - Paranoidal: "General: Unblock locked chest slots" (PI_temp_unlock) never lifted the bar of a cargo wagon (wagons were handled by the mining-drill branch first); inventories without a bar are no longer touched.
     - Paranoidal: a listed inserter that is mined, destroyed or removed by a script leaves the list with its mark at once; before, the mark stayed until the list cursor reached it.
     - Paranoidal: removed the leaked global variables stack, myBeltLine and PI_inserters.
+    - Paranoidal: with "General: Delete items" on, the hand is no longer destroyed for pickup entities the mod did not know: underground belts, splitters, loaders and linked belts get the stack back on any of their transport lines; infinity, linked and proxy containers like chests; spider vehicles into the trunk; items on the ground are spilled back (plain items only); any other entity into its output inventory or the burnt result inventory of its burner. Items are destroyed only when nothing could take them, as before. Inventory numbers replaced by defines.inventory.
+    - Paranoidal: putting a stack back on a belt one item at a time created fresh items; an item with health, spoilage, durability, ammo or other data is now put back only as the whole held stack, so partly used magazines and tools are not refilled.
+    - Paranoidal: a train that leaves a station empty also gets its unloading inserters cleaned (upstream skipped trains without cargo).
+    - Paranoidal: a listed inserter moved with the dollies (paranoidal-picker-tools, interface PickerDollies) takes its mark along; moved as a clone, the clone takes its place in the list.
+    - Paranoidal: listed inserters are registered with register_on_object_destroyed, so upgrades and removal without an event also drop the entry and its mark at once (replaces the mined/died/script_raised_destroy handlers); entries of older saves are registered on configuration change or by the list cycle.
+    - Paranoidal: removed the leaked global variables print_debug, PI_checkInserterIsStuck, PI_db_inserters and PI_db_internal.
   Optimizations:
     - Paranoidal: on_tick is registered only while the inserter list has entries (in Paranoidal the selector is off by default, so it ran every tick for nothing); the list is no longer read from and written back to storage every tick.
+    - Paranoidal: on_train_changed_state is registered only while "Train: Clean up inserters at train stops" is on (off in Paranoidal); before, every state change of every train called the mod.
     - Paranoidal: selecting checks duplicates by unit number instead of walking the whole list for every inserter; deselecting removes all selected inserters in one pass; a removed entry is replaced by the last one instead of shifting the list.
     - Paranoidal: a train leaving a station is checked with get_item_count instead of building its full contents table; the stuck check reads status, held stack and positions once.
     - Paranoidal: saves keep their inserter list; the unit-number index is built from it on first use, no migration needed.

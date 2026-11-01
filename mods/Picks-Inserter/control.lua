@@ -22,8 +22,8 @@
 		}
 	
 	--databases
-		PI_db_inserters = {}
-		PI_db_internal ={
+		local PI_db_inserters = {}
+		local PI_db_internal ={
 			index=0,
 			cpt=6 		--purges per tick
 		}
@@ -70,7 +70,7 @@
 	
 --functions
 	--debugging information
-		function print_debug(msg)
+		local function print_debug(msg)
 			if PI_debug then
 				--if PI_print then game.print("["..PI_general.name.." V" ..PI_general.version.. "]: "..msg) end
 				if PI_print then
@@ -201,10 +201,14 @@
 					quality = myStack.quality,
 					count = 1
 				}	
+				--Paranoidal: a fresh single item is inserted only for plain items; for an item with health,
+				--spoilage, durability, ammo or other data only the whole held stack (with its data) is inserted.
+				local bolPlain = myStack.health == 1 and myStack.spoil_percent == 0 and not myStack.item
+					and not myStack.is_tool and not myStack.is_ammo
 				for i = 0,1,.28125 do
 					local intItemBevore = myBeltLine.get_item_count()
 					--if PI_debug then print_debug("pi_ibd_put_stack_to_belt: intItemBevore = "..tostring(intItemBevore)) end
-					if not myBeltLine.insert_at(i, myStack) then
+					if not myBeltLine.insert_at(i, myStack) and bolPlain then
 						myBeltLine.insert_at(i, myItem)
 					end
 					local intItemAfter = myBeltLine.get_item_count()
@@ -217,57 +221,82 @@
 			return myStack
 		end
 		
+	--Paranoidal: pickup types that are returned to like a chest (main inventory, optional bar unlock)
+		local PI_containers = {
+			["container"] = true,
+			["logistic-container"] = true,
+			["infinity-container"] = true,
+			["linked-container"] = true,
+			["proxy-container"] = true,
+			["cargo-wagon"] = true
+		}
+	--Paranoidal: belt connectables; the stack is put back on any of their transport lines
+		local PI_beltlike = {
+			["transport-belt"] = true,
+			["underground-belt"] = true,
+			["splitter"] = true,
+			["lane-splitter"] = true,
+			["loader"] = true,
+			["loader-1x1"] = true,
+			["linked-belt"] = true
+		}
+	--Paranoidal: fixed inventories of the types that have no output inventory or a different one
+		local PI_fixed_inventory = {
+			["assembling-machine"] = defines.inventory.crafter_output,
+			["furnace"] = defines.inventory.furnace_result,
+			["mining-drill"] = defines.inventory.fuel,
+			["car"] = defines.inventory.car_trunk,
+			["lab"] = defines.inventory.lab_input,
+			["spider-vehicle"] = defines.inventory.spider_trunk
+		}
+
+	--insert into the main inventory, lifting its bar for the time of the insert when PI_temp_unlock is on
+		local function PI_insert_unlocked(myEntity, stack)
+			if PI_temp_unlock then
+				local entityInv = myEntity.get_inventory(1)
+				if entityInv and entityInv.supports_bar() then
+					local entityInvBar = entityInv.get_bar()
+					entityInv.set_bar()
+					local intInserted = myEntity.insert(stack)
+					entityInv.set_bar(entityInvBar)
+					return intInserted
+				end
+			end
+			return myEntity.insert(stack)
+		end
+
 	--put item stack into entity
 		local function PI_PutStackBack(myInserter, myEntity)
 			--if PI_debug then print_debug("function started: PI_PutStackBack") end
 			local stack = myInserter.held_stack
 			if myEntity ~= nil then
-				if myEntity.type == PI_type.chest or myEntity.type == PI_type.log_chest then
-					--if PI_debug then print_debug("entity.type: container or logistic-container") end
-					if PI_temp_unlock then
-						--if PI_debug then print_debug("settings: PI_temp_unlock enabled") end
-						local entityInv = myEntity.get_inventory(1)
-						if entityInv and entityInv.supports_bar() then
-							local entityInvBar = entityInv.get_bar()
-							entityInv.set_bar()
-							stack.count = stack.count - myEntity.insert(stack)
-							entityInv.set_bar(entityInvBar)
-						else
-							stack.count = stack.count - myEntity.insert(stack)
-						end
-					else
-						stack.count = stack.count - myEntity.insert(stack)
+				local myType = myEntity.type
+				if PI_containers[myType] then
+					stack.count = stack.count - PI_insert_unlocked(myEntity, stack)
+				elseif PI_beltlike[myType] then
+					for intLine = 1, myEntity.get_max_transport_line_index() do
+						if not stack.valid_for_read then break end
+						stack = pi_ibd_put_stack_to_belt(myEntity, stack, intLine)
 					end
-				elseif myEntity.type == PI_type.assembler or myEntity.type == PI_type.furnace then
-					--if PI_debug then print_debug("entity.type: assembling-machine or furnance") end
-					stack.count = stack.count - myEntity.get_inventory(3).insert(stack)
-				elseif myEntity.type == PI_type.miner then
-					--if PI_debug then print_debug("entity.type: mining-drill") end
-					stack.count = stack.count - myEntity.get_inventory(1).insert(stack)
-				elseif myEntity.type == PI_type.car or myEntity.type == PI_type.lab then
-					--if PI_debug then print_debug("entity.type: car or lab") end
-					stack.count = stack.count - myEntity.get_inventory(2).insert(stack)
-				elseif myEntity.type == PI_type.cargo then
-					--Paranoidal: this branch was unreachable (the miner branch took cargo wagons), so PI_temp_unlock never lifted a wagon's bar
-					--if PI_debug then print_debug("entity.type: cargo-wagon") end
-					if PI_temp_unlock then
-						--if PI_debug then print_debug("settings: PI_temp_unlock enabled") end
-						local entityInv = myEntity.get_inventory(1)
-						if entityInv and entityInv.supports_bar() then
-							local entityInvBar = entityInv.get_bar()
-							entityInv.set_bar()
-							stack.count = stack.count - myEntity.insert(stack)
-							entityInv.set_bar(entityInvBar)
-						else
-							stack.count = stack.count - myEntity.insert(stack)
-						end
-					else
-						stack.count = stack.count - myEntity.insert(stack)
+				elseif myType == PI_type.item then
+					--item on the ground: spilled back only when it is a plain item (spilling may not keep item data)
+					if stack.health == 1 and stack.spoil_percent == 0 and not stack.item and not stack.is_tool and not stack.is_ammo then
+						myEntity.surface.spill_item_stack{position = myEntity.position, stack = stack, allow_belts = false}
+						stack.clear()
 					end
-				elseif myEntity.type == PI_type.belt then
-					--if PI_debug then print_debug("entity.type: transport-belt") end
-					stack = pi_ibd_put_stack_to_belt (myEntity, stack, 1)
-					if stack.count > 0 then stack = pi_ibd_put_stack_to_belt (myEntity, stack, 2) end
+				else
+					local myInv
+					local intFixed = PI_fixed_inventory[myType]
+					if intFixed then
+						myInv = myEntity.get_inventory(intFixed)
+					else
+						--any other entity: its output inventory, else the burnt result inventory of its burner
+						myInv = myEntity.get_output_inventory()
+						if not myInv and myEntity.burner then myInv = myEntity.burner.burnt_result_inventory end
+					end
+					if myInv then
+						stack.count = stack.count - myInv.insert(stack)
+					end
 				end
 			end
 			--if PI_debug then print_debug("PI_PutStackBack - stack.count: " ..tostring(stack.count)) end
@@ -275,20 +304,16 @@
 				--if PI_debug then print_debug("Stack could not be set back complete: " ..stack.count.. " " ..stack.name) end
 				if PI_clear_inserter then
 					--Delete items in hand of inserter
-					--if myEntity.type == PI_type.cargo then return end --exclude pickup entity "cargo-wagon"
 					if myEntity ~= nil and myEntity.type == PI_type.cargo then return end --exclude pickup entity "cargo-wagon"
 					--if PI_debug then print_debug("settings: PI_clear_inserter enabled") end
 					stack.clear()
 					--if PI_debug then print_debug("Items in hand of inserter deleted") end
 				end
-			else
-				--if PI_debug then print_debug("Stack was cleared succsessful") end
 			end
-			
 		end
 
 	--check inserter to be struck
-		function PI_checkInserterIsStuck(myInserter)
+		local function PI_checkInserterIsStuck(myInserter)
 			--if PI_debug then print_debug("function started: PI_checkInserterIsStuck") end   
 			local myPickupTarget = myInserter.pickup_target
 			local myStatus = myInserter.status
@@ -342,7 +367,9 @@
 			local myMark = nil
 			--set mark
 			if PI_set_mark then myMark = PI_set_inserter_mark(myInserter) end
-			db[#db + 1] = {inserter = myInserter, mark = myMark, tick = 1, unit = unit}
+			--Paranoidal: on_object_destroyed removes the entry for any kind of removal (upgrade, destroy() without event, ...)
+			script.register_on_object_destroyed(myInserter)
+			db[#db + 1] = {inserter = myInserter, mark = myMark, tick = 1, unit = unit, reg = true}
 			set[unit] = true
 			PI_db_inserters = db
 		end
@@ -414,6 +441,11 @@
 				local rec = db[i]
 				local ins = rec and rec.inserter
 				if ins and ins.valid then
+					if not rec.reg then
+						--entries of older saves get their destruction registration here
+						script.register_on_object_destroyed(ins)
+						rec.reg = true
+					end
 					if myTick > (rec.tick + 120) then
 						PI_checkInserterIsStuck(ins)
 						if PI_keep_selected then
@@ -528,7 +560,84 @@
 				end
 			end
 		end
-	
+
+	--train state: clean the inserters around the cargo wagons of a train leaving a station
+		-- 0 = defines.train_state.on_the_path	= Normal state -- following the path.
+		-- 1 = defines.train_state.no_schedule	= Doesn't have anywhere to go.
+		-- 2 = defines.train_state.no_path = Has no path and is stopped.
+		-- 3 = defines.train_state.arrive_signal = Braking before a rail signal.
+		-- 4 = defines.train_state.wait_signal = Waiting at a signal.
+		-- 5 = defines.train_state.arrive_station = Braking before a station.
+		-- 6 = defines.train_state.manual_control_stop = Switched to manual control and has to stop.
+		-- 7 = defines.train_state.manual_control = Can move if user explicitly sits in and rides the train.
+		-- 8 = defines.train_state.wait_station = Waiting at a station.
+		-- 9 = defines.train_state.destination_full = Same as no_path but all candidate train stops are full
+		local function PI_on_train_changed_state(event)
+			if event.old_state ~= defines.train_state.wait_station then return end
+			local myState = event.train.state
+			if myState == defines.train_state.on_the_path or myState == defines.train_state.no_path or myState == defines.train_state.wait_signal or myState == defines.train_state.destination_full then
+				--Paranoidal: an empty train is checked too (upstream skipped it), so the unloaders of a train
+				--that leaves empty also give their held items back
+				for i, myWagon in pairs(event.train.cargo_wagons) do
+					PI_getInsertersAroundWagon(myWagon)
+				end
+			end
+		end
+
+	--Paranoidal: the train handler is registered only while PI_target_train_stop is on (off in Paranoidal);
+	--before, every state change of every train called it. The setting is map-global, so all clients agree.
+		local function PI_update_train_handler()
+			script.on_event(defines.events.on_train_changed_state, PI_target_train_stop and PI_on_train_changed_state or nil)
+		end
+
+	--Paranoidal: a listed inserter destroyed in any way (mined, died, upgraded, destroy() without event) leaves the list
+	--with its mark. The event is global: it also comes for objects registered by other mods (early exit).
+		local function PI_on_object_destroyed(event)
+			if event.type ~= defines.target_type.entity then return end
+			local db = storage.PI_db_inserters
+			if not (db and db[1]) then return end
+			local unit = event.useful_id
+			if unit and PI_get_db_set()[unit] then
+				PI_remInsertersFromDB({[unit] = true})
+				PI_update_tick_handler()
+			end
+		end
+
+	--Paranoidal: an inserter moved by the dollies (paranoidal-picker-tools, interface PickerDollies) takes its mark along;
+	--when it was moved as a clone (new unit number), the clone takes the place of the old entry.
+		local function PI_on_dolly_moved(event)
+			local db = storage.PI_db_inserters
+			if not (db and db[1]) then return end
+			local unit = event.start_unit_number
+			if not (unit and PI_get_db_set()[unit]) then return end
+			local myEntity = event.moved_entity
+			if myEntity and myEntity.valid and myEntity.unit_number == unit then
+				for i = 1, #db do
+					local rec = db[i]
+					if rec.unit == unit then
+						if rec.mark and rec.mark.valid then
+							local myPos = PI_get_Iserter_Position(myEntity)
+							if not rec.mark.teleport(myPos) then
+								PI_remove_inserter_mark(rec.mark)
+								rec.mark = PI_set_inserter_mark(myEntity)
+							end
+						end
+						break
+					end
+				end
+			else
+				PI_remInsertersFromDB({[unit] = true})
+				if myEntity and myEntity.valid and myEntity.type == PI_type.inserter then PI_addInserterToDB(myEntity) end
+				PI_update_tick_handler()
+			end
+		end
+
+		local function PI_register_dolly()
+			local myInterface = remote.interfaces["PickerDollies"]
+			if myInterface and myInterface["dolly_moved_entity_id"] then
+				script.on_event(remote.call("PickerDollies", "dolly_moved_entity_id"), PI_on_dolly_moved)
+			end
+		end
 		
 -- handler
 
@@ -538,11 +647,13 @@
 			PI_remove_all_inserter_mark()
 			PI_set_controls_all()
 			PI_update_tick_handler()
+			PI_register_dolly()
 		end)
 
 		script.on_load(function ()
 			PI_load ("on_load")
 			PI_update_tick_handler()
+			PI_register_dolly()
 		end)
 	
 	--CHeck if Mod-Settings or Mod-Version were changed since last load
@@ -576,7 +687,15 @@
 			PI_modify_all_marks (false)
 			storage.PI_db_set = nil
 			PI_get_db_set()
+			--Paranoidal: listed inserters of older saves get their destruction registration (the parse loop also does it)
+			for _, rec in pairs(storage.PI_db_inserters or {}) do
+				if not rec.reg and rec.inserter and rec.inserter.valid then
+					script.register_on_object_destroyed(rec.inserter)
+					rec.reg = true
+				end
+			end
 			PI_update_tick_handler()
+			PI_update_train_handler()
 		end)
 
 	--mod setting
@@ -599,7 +718,10 @@
 			--PI_clear_max
 			if event.setting == PI_set.clear_max then PI_clear_max = settings.global[PI_set.clear_max].value end
 			--PI_target_train_stop
-			if event.setting == PI_set.train_stop then PI_target_train_stop = settings.global[PI_set.train_stop].value end
+			if event.setting == PI_set.train_stop then
+				PI_target_train_stop = settings.global[PI_set.train_stop].value
+				PI_update_train_handler()
+			end
 			--PI_temp_unlock
 			if event.setting == PI_set.width then PI_lines_to_check = settings.global[PI_set.width].value end
 			--PI_extend_length
@@ -622,41 +744,6 @@
 			PI_general.isAdmin = game.players[event.player_index].admin
 			--if PI_debug then print_debug("raised event: on_player_joined_game") end
 			PI_set_controls(game.players[event.player_index])
-		end)
-
-	--train state
-		-- 0 = defines.train_state.on_the_path	= Normal state -- following the path. 
-		-- 1 = defines.train_state.no_schedule	= Doesn't have anywhere to go.
-		-- 2 = defines.train_state.no_path = Has no path and is stopped.
-		-- 3 = defines.train_state.arrive_signal = Braking before a rail signal.
-		-- 4 = defines.train_state.wait_signal = Waiting at a signal.
-		-- 5 = defines.train_state.arrive_station = Braking before a station.
-		-- 6 = defines.train_state.manual_control_stop = Switched to manual control and has to stop.
-		-- 7 = defines.train_state.manual_control = Can move if user explicitly sits in and rides the train.
-		-- 8 = defines.train_state.wait_station = Waiting at a station.
-		-- 9 = defines.train_state.destination_full = Same as no_path but all candidate train stops are full
-		script.on_event(defines.events.on_train_changed_state, function(event, old_state)
-			--if PI_debug then 
-			--	print_debug("raised event: on_train_changed_state fired by train " ..tostring(event.train.id))
-			--	print_debug("train.state: " ..tostring(event.train.state))
-			--	print_debug("old_state: " ..tostring(event.old_state))
-			--end
-			if PI_target_train_stop then
-				--if PI_debug then print_debug("settings: PI_target_train_stop enabled") end
-				--if event.train.state == 0 or event.train.state == 3 or event.train.state == 5 or event.train.state == 10 then
-				if event.train.state == defines.train_state.on_the_path or event.train.state == defines.train_state.no_path or event.train.state == defines.train_state.wait_signal or event.train.state == defines.train_state.destination_full then
-					--if event.old_state == 7 then
-					if event.old_state == defines.train_state.wait_station then
-						if event.train.get_item_count() > 0 then --Paranoidal: was next(get_contents()), a full contents table per departure
-							--if PI_debug then print_debug("Detect cargo_wagons connected to train") end
-							for i, myWagon in pairs(event.train.cargo_wagons) do
-								--if PI_debug then print_debug("Detected: " ..myWagon.name.. "(" ..myWagon.type.. "/" ..myWagon.position.x.."/" ..myWagon.position.y..")") end
-								PI_getInsertersAroundWagon(myWagon)
-							end
-						end
-					end
-				end
-			end
 		end)
 
 	--select inserter
@@ -720,23 +807,9 @@
 			end
 		end)
 		
-	--Remove entity
-		--Paranoidal: a removed listed inserter leaves the list (and its mark) at once; filtered to inserters.
-		local function PI_on_inserter_removed(event)
-			local myEntity = event.entity
-			local db = storage.PI_db_inserters
-			if not (db and db[1] and myEntity and myEntity.valid) then return end
-			local unit = myEntity.unit_number
-			if unit and PI_get_db_set()[unit] then
-				PI_remInsertersFromDB({[unit] = true})
-				PI_update_tick_handler()
-			end
-		end
-		local PI_inserter_filter = {{filter = "type", type = PI_type.inserter}}
-		script.on_event(defines.events.on_player_mined_entity, PI_on_inserter_removed, PI_inserter_filter)
-		script.on_event(defines.events.on_robot_mined_entity, PI_on_inserter_removed, PI_inserter_filter)
-		script.on_event(defines.events.on_entity_died, PI_on_inserter_removed, PI_inserter_filter)
-		script.on_event(defines.events.script_raised_destroy, PI_on_inserter_removed, PI_inserter_filter)
+	--Remove entity: see PI_on_object_destroyed (covers mining, death, upgrades and script removal)
+		script.on_event(defines.events.on_object_destroyed, PI_on_object_destroyed)
+		PI_update_train_handler()
 		--local e=defines.events
 		--local remove_events = {e.on_player_mined_entity, e.on_robot_pre_mined, e.on_entity_died, e.script_raised_destroy}
 		--script.on_event(remove_events, function(event)
