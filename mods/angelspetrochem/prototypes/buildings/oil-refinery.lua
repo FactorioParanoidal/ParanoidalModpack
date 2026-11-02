@@ -46,7 +46,8 @@ data:extend({
     icon_draw_specification = { scale = 2, shift = { 0, -0.3 } },
     circuit_wire_max_distance = assembling_machine_circuit_wire_max_distance,
     circuit_connector = circuit_connector_definitions["oil-refinery"],
-    collision_box = { { -2.4, -2.4 }, { 2.4, 2.4 } },
+    -- Factorio 2.1: upgrades must have the same box as the base-game refinery (2.1 shrank it to 2.2).
+    collision_box = table.deepcopy(oilrefinery.collision_box),
     -- Base-game oil refinery has a custom collision_mask, which all upgrades need to match.
     collision_mask = oilrefinery.collision_mask,
     selection_box = { { -2.5, -2.5 }, { 2.5, 2.5 } },
@@ -265,7 +266,8 @@ data:extend({
     icon_draw_specification = { scale = 2, shift = { 0, -0.3 } },
     circuit_wire_max_distance = assembling_machine_circuit_wire_max_distance,
     circuit_connector = circuit_connector_definitions["oil-refinery"],
-    collision_box = { { -2.4, -2.4 }, { 2.4, 2.4 } },
+    -- Factorio 2.1: upgrades must have the same box as the base-game refinery (2.1 shrank it to 2.2).
+    collision_box = table.deepcopy(oilrefinery.collision_box),
     -- Base-game oil refinery has a custom collision_mask, which all upgrades need to match.
     collision_mask = oilrefinery.collision_mask,
     selection_box = { { -2.5, -2.5 }, { 2.5, 2.5 } },
@@ -483,7 +485,8 @@ data:extend({
     icon_draw_specification = { scale = 2, shift = { 0, -0.3 } },
     circuit_wire_max_distance = assembling_machine_circuit_wire_max_distance,
     circuit_connector = circuit_connector_definitions["oil-refinery"],
-    collision_box = { { -2.4, -2.4 }, { 2.4, 2.4 } },
+    -- Factorio 2.1: upgrades must have the same box as the base-game refinery (2.1 shrank it to 2.2).
+    collision_box = table.deepcopy(oilrefinery.collision_box),
     -- Base-game oil refinery has a custom collision_mask, which all upgrades need to match.
     collision_mask = oilrefinery.collision_mask,
     selection_box = { { -2.5, -2.5 }, { 2.5, 2.5 } },
