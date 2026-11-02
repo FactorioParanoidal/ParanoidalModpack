@@ -16,6 +16,8 @@ Date: 2026-10-21
     - Optional dependency on paranoidal-picker-tools instead of even-pickier-dollies: the dollies are part of that mod now, with the same PickerDollies interface.
     - Shortened the Russian tower description; numbers and mechanics are unchanged.
     - First damage of a building outside a fight is noticed after up to about 3 s (was 1 s); inside hot chunks after up to 15 ticks.
+  Compatibility:
+    - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
 ---------------------------------------------------------------------------------------------------
 Version: 9.112.0
 Date: 2026-10-21
