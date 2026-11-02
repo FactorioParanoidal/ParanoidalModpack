@@ -8,6 +8,8 @@ Date: 04.06.2026
     - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
     - Paranoidal port to Factorio 2.1: oil refinery tiers 2-4 take the collision box of the base-game oil refinery (2.1 shrank it), so next_upgrade stays valid.
     - Paranoidal port to Factorio 2.1: recipes use categories (RecipePrototype::category and additional_categories were merged into categories; the first entry keeps the meaning of the former main category, a changed main category keeps the other entries).
+    - Paranoidal port to Factorio 2.1: product probability renamed to independent_probability (recipe results, minable results, generated products).
+    - Paranoidal port to Factorio 2.1: items use fuel_categories (ItemPrototype::fuel_category was removed).
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.2
 Date: 01.06.2026

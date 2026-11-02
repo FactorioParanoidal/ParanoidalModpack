@@ -19,7 +19,7 @@ OV.patch_recipes({
     name = "uranium-processing",
     hide_from_signal_gui = true,
     results = {
-      { type = "item", name = "angels-uranium-234", amount = 1, probability = 0.000055 },
+      { type = "item", name = "angels-uranium-234", amount = 1, independent_probability = 0.000055 },
     },
     crafting_machine_tint = {
       primary = tint_colors.green,
@@ -332,13 +332,13 @@ if mods["bobplates"] then
 
   OV.disable_recipe("bob-thorium-fuel-cell")
   if data.raw.reactor["bob-nuclear-reactor-2"] then
-    data.raw.item["angels-thorium-fuel-cell"].fuel_category = "bob-thorium"
+    data.raw.item["angels-thorium-fuel-cell"].fuel_categories = {"bob-thorium"}
     OV.add_unlock("angels-thorium-power", "bob-nuclear-reactor-2")
     OV.add_prereq("angels-thorium-power", "bob-heat-pipe-3")
   end
 
   if data.raw.reactor["bob-nuclear-reactor-3"] then
-    data.raw.item["angels-deuterium-fuel-cell"].fuel_category = "bob-deuterium"
+    data.raw.item["angels-deuterium-fuel-cell"].fuel_categories = {"bob-deuterium"}
     OV.add_unlock("angels-fusion-power-1", "bob-nuclear-reactor-3")
     OV.add_prereq("angels-fusion-power-1", "bob-heat-pipe-4")
   end
