@@ -8,6 +8,8 @@ Date: 2026-02-04
     - Removed "Clear All" button (was causing a crash)
   Bugfixes:
     - Fix crash when another mod makes all machines have the same number of module slots
+  Compatibility:
+    - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
 ---------------------------------------------------------------------------------------------------
 Version: 7.4.0
 Date: 2026-01-25
