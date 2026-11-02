@@ -1,3 +1,7 @@
+-- Factorio 2.1: base assembler pipe pictures are tables in assembler-pictures.lua (assemblerpipes.lua was removed).
+local base_assembler_pictures = require("__base__.prototypes.entity.assembler-pictures")
+local function assembler2pipepictures() return table.deepcopy(base_assembler_pictures.assembler2pipepictures) end
+local function assembler3pipepictures() return table.deepcopy(base_assembler_pictures.assembler3pipepictures) end
 data:extend({
   {
     type = "item-subgroup",
@@ -13,6 +17,18 @@ data:extend({
 --        tint = {r = 0.7, g = 0.1, b = 0.7},
 --        tint = {r = 0.1, g = 0.7, b = 0.1},
 
+-- Factorio 2.1: the vanilla assembling machine 2/3 animation has 64 frames (32 in 2.0); the tier mask
+-- repeats its single frame as often as the machine animation runs.
+local function animation_frames(animation)
+  for _, layer in pairs(animation.layers or { animation }) do
+    local frames = layer.frame_count or layer.repeat_count
+    if frames and frames > 1 then
+      return frames
+    end
+  end
+  return 1
+end
+
 data.raw.item["assembling-machine-1"].weight = 20000
 
 data.raw.item["assembling-machine-2"].icon = "__bobassembly__/graphics/icons/assembling-machine-2.png"
@@ -25,7 +41,7 @@ table.insert(data.raw["assembling-machine"]["assembling-machine-2"].graphics_set
   priority = "high",
   width = 214,
   height = 237,
-  repeat_count = 32,
+  repeat_count = animation_frames(data.raw["assembling-machine"]["assembling-machine-2"].graphics_set.animation),
   shift = util.by_pixel(0, -0.75),
   scale = 0.5,
   tint = { r = 0.7, g = 0.7, b = 0.1 },
@@ -41,7 +57,7 @@ table.insert(data.raw["assembling-machine"]["assembling-machine-3"].graphics_set
   priority = "high",
   width = 214,
   height = 237,
-  repeat_count = 32,
+  repeat_count = animation_frames(data.raw["assembling-machine"]["assembling-machine-3"].graphics_set.animation),
   shift = util.by_pixel(0, -0.75),
   scale = 0.5,
   tint = { r = 0.7, g = 0.2, b = 0.1 },
@@ -362,7 +378,7 @@ data:extend({
     module_slots = 5,
     icons_positioning = {
       {
-        inventory_index = defines.inventory.assembling_machine_modules,
+        inventory_index = defines.inventory.crafter_modules,
         shift = { 0, 0.8 },
         multi_row_initial_height_modifier = -0.3,
         max_icons_per_row = 3,
@@ -550,7 +566,7 @@ data:extend({
     module_slots = 6,
     icons_positioning = {
       {
-        inventory_index = defines.inventory.assembling_machine_modules,
+        inventory_index = defines.inventory.crafter_modules,
         shift = { 0, 0.8 },
         multi_row_initial_height_modifier = -0.3,
         max_icons_per_row = 3,

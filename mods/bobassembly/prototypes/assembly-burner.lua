@@ -1,3 +1,6 @@
+-- Factorio 2.1: base assembler pipe pictures are tables in assembler-pictures.lua (assemblerpipes.lua was removed).
+local base_assembler_pictures = require("__base__.prototypes.entity.assembler-pictures")
+local function assembler2pipepictures() return table.deepcopy(base_assembler_pictures.assembler2pipepictures) end
 if not mods["aai-industry"] and settings.startup["bobmods-assembly-burner"].value == true then
   circuit_connector_definitions["small-assembling-machine"] =
     circuit_connector_definitions.create_vector(universal_connector_template, {

@@ -1,3 +1,6 @@
+-- Factorio 2.1: base assembler pipe pictures are tables in assembler-pictures.lua (assemblerpipes.lua was removed).
+local base_assembler_pictures = require("__base__.prototypes.entity.assembler-pictures")
+local function assembler3pipepictures() return table.deepcopy(base_assembler_pictures.assembler3pipepictures) end
 if
   settings.startup["bobmods-assembly-multipurposefurnaces"].value
   and data.raw["item-subgroup"]["bob-smelting-machine"]
@@ -174,7 +177,7 @@ then
       module_slots = 4,
       icons_positioning = {
         {
-          inventory_index = defines.inventory.assembling_machine_modules,
+          inventory_index = defines.inventory.crafter_modules,
           shift = { 0, 0.8 },
         },
       },
@@ -277,7 +280,7 @@ then
       module_slots = 6,
       icons_positioning = {
         {
-          inventory_index = defines.inventory.assembling_machine_modules,
+          inventory_index = defines.inventory.crafter_modules,
           shift = { 0, 0.8 },
           multi_row_initial_height_modifier = -0.3,
           max_icons_per_row = 3,

@@ -1,3 +1,6 @@
+-- Factorio 2.1: base assembler pipe pictures are tables in assembler-pictures.lua (assemblerpipes.lua was removed).
+local base_assembler_pictures = require("__base__.prototypes.entity.assembler-pictures")
+local function assembler3pipepictures() return table.deepcopy(base_assembler_pictures.assembler3pipepictures) end
 if settings.startup["bobmods-assembly-electronicmachines"].value == true then
   circuit_connector_definitions["small-assembling-machine"] =
     circuit_connector_definitions.create_vector(universal_connector_template, {
@@ -163,7 +166,7 @@ if settings.startup["bobmods-assembly-electronicmachines"].value == true then
       module_slots = 2,
       icons_positioning = {
         {
-          inventory_index = defines.inventory.assembling_machine_modules,
+          inventory_index = defines.inventory.crafter_modules,
           shift = { 0, 0.5 },
           scale = 0.4,
           multi_row_initial_height_modifier = -0.3,
@@ -338,7 +341,7 @@ if settings.startup["bobmods-assembly-electronicmachines"].value == true then
       module_slots = 4,
       icons_positioning = {
         {
-          inventory_index = defines.inventory.assembling_machine_modules,
+          inventory_index = defines.inventory.crafter_modules,
           shift = { 0, 0.7 },
           scale = 0.4,
           multi_row_initial_height_modifier = -0.3,
@@ -519,7 +522,7 @@ if settings.startup["bobmods-assembly-electronicmachines"].value == true then
       module_slots = 6,
       icons_positioning = {
         {
-          inventory_index = defines.inventory.assembling_machine_modules,
+          inventory_index = defines.inventory.crafter_modules,
           shift = { 0, 0.7 },
           scale = 0.4,
           multi_row_initial_height_modifier = -0.3,
