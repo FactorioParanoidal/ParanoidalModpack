@@ -9,6 +9,7 @@ Date: 2024-12-17
     - If hovering a resource entity, the item in cursor will take precedence for quick-crafting. (#28)
   Compatibility:
     - [Just Go!] Auto-ghost-cursor is disabled for vehicles when this mod is installed. (#36)
+    - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
 ---------------------------------------------------------------------------------------------------
 Version: 2.2.1
 Date: 2024-10-29

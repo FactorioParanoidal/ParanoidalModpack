@@ -6,7 +6,7 @@
   "author": "raiguard",
   "contact": "https://github.com/raiguard/CursorEnhancements",
   "homepage": "https://github.com/raiguard/CursorEnhancements",
-  "factorio_version": "2.0",
+  "factorio_version": "2.1",
   "dependencies": [ "base >= 2.0.0", "flib >= 0.15.0", "(?) space-exploration" ],
   "package": {
     "git_publish_branch": "master",
