@@ -161,7 +161,9 @@ common.show("item_types", item_types)
     item.catalyst_amount = inputs.catalyst_amount
 
     -- Results:
-    item.probability = inputs.probability
+    -- Factorio 2.1: product probability -> independent_probability (the 2.0 name is accepted as input)
+    item.independent_probability = inputs.independent_probability or inputs.probability
+    item.shared_probability = inputs.shared_probability
     item.show_details_in_recipe_tooltip = inputs.show_details_in_recipe_tooltip
 
     -- Fluids only!
@@ -220,12 +222,13 @@ common.show("item_types", item_types)
       end
     end
 
-    if item1.probability and item2.probability then
-      item.probability = (item1.probability + item2.probability) / 2
-    elseif item1.probability then
-      item.probability = (item1.probability + 1) / 2
-    elseif item2.probability then
-      item.probability = (item2.probability + 1) / 2
+    local p1, p2 = item1.independent_probability, item2.independent_probability -- Factorio 2.1
+    if p1 and p2 then
+      item.independent_probability = (p1 + p2) / 2
+    elseif p1 then
+      item.independent_probability = (p1 + 1) / 2
+    elseif p2 then
+      item.independent_probability = (p2 + 1) / 2
     end
 
     common.entered_function("leave")

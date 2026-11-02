@@ -746,7 +746,7 @@ return function(mod_args)
           result.amount_min = new.amount_min
           result.amount_max = new.amount_max
           result.catalyst_amount = new.catalyst_amount
-          result.probability = new.probability
+          result.independent_probability = new.independent_probability or new.probability -- Factorio 2.1
           result.temperature = new.temperature
           result.fluidbox_index = new.fluidbox_index
         end
@@ -980,7 +980,7 @@ return function(mod_args)
             amount_min                    = 0,
             amount_max                    = 0,
             catalyst_amount               = 0,
-            probability                   = 0,
+            independent_probability                   = 0,
 
             -- We'll need this to calculate average values
             cnt                   = 0,
@@ -1013,7 +1013,8 @@ return function(mod_args)
             end
           end
           ret[name].catalyst_amount   = ret[name].catalyst_amount + (tonumber(result.catalyst_amount) or 0)
-          ret[name].probability       = ret[name].probability + (tonumber(result.probability) or 1)
+          ret[name].independent_probability = ret[name].independent_probability +
+                                        (tonumber(result.independent_probability or result.probability) or 1)
 
           -- We only need this if it differs from the default value
           if result.show_details_in_recipe_tooltip == false then
@@ -1044,8 +1045,8 @@ return function(mod_args)
 
         result.catalyst_amount    = result.catalyst_amount > 0 and
                                       math.floor(0.5 + (result.catalyst_amount * result.cnt)) or nil
-        result.probability        = result.probability > 0 and result.probability ~= 1 and
-                                      math.floor(0.5 + (result.probability * result.cnt)) or nil
+        result.independent_probability = result.independent_probability > 0 and result.independent_probability ~= 1 and
+                                      math.floor(0.5 + (result.independent_probability * result.cnt)) or nil
 
         result.min_max_cnt = nil
         result.cnt = nil

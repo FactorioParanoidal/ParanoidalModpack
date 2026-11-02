@@ -16,6 +16,7 @@ Uploaded by:
     - Add more functions for dealing with prototypes in the data stage. This will happen gradually as I'm updating my other mods.
   Compatibility:
     - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
+    - Paranoidal port to Factorio 2.1: result helpers write independent_probability (probability is still accepted as input).
 
 
 ---------------------------------------------------------------------------------------------------
