@@ -1143,31 +1143,31 @@ function biterFunctions.makeWormAlienLootTable(name)
 		local itemname = "bob-alien-artifact-" .. name
 		if data.raw["item"][itemname] then
 			biterLoot = {
-				[1] = {  item = itemname,  count_min = 1,  count_max = 1,  probability = 0.5 },
-				[2] = {  item = itemname,  count_min = 1,  count_max = 2,  probability = 0.5 },
-				[3] = {  item = itemname,  count_min = 1,  count_max = 3,  probability = 0.5 },
-				[4] = {  item = itemname,  count_min = 2,  count_max = 3,  probability = 0.5 },
-				[5] = {  item = itemname,  count_min = 2,  count_max = 3,  probability = 0.5 },
-				[6] = {  item = itemname,  count_min = 2,  count_max = 3,  probability = 0.5 },
-				[7] = {  item = itemname,  count_min = 2,  count_max = 4,  probability = 0.75 },
-				[8] = {  item = itemname,  count_min = 2,  count_max = 4,  probability = 0.75 },
-				[9] = {  item = itemname,  count_min = 2,  count_max = 4,  probability = 0.75 },
-				[10] = {  item = itemname,  count_min = 2,  count_max = 4,  probability = 0.75 }
+				[1] = {  type = "item", name = itemname,  amount_min = 1,  amount_max = 1,  independent_probability = 0.5 },
+				[2] = {  type = "item", name = itemname,  amount_min = 1,  amount_max = 2,  independent_probability = 0.5 },
+				[3] = {  type = "item", name = itemname,  amount_min = 1,  amount_max = 3,  independent_probability = 0.5 },
+				[4] = {  type = "item", name = itemname,  amount_min = 2,  amount_max = 3,  independent_probability = 0.5 },
+				[5] = {  type = "item", name = itemname,  amount_min = 2,  amount_max = 3,  independent_probability = 0.5 },
+				[6] = {  type = "item", name = itemname,  amount_min = 2,  amount_max = 3,  independent_probability = 0.5 },
+				[7] = {  type = "item", name = itemname,  amount_min = 2,  amount_max = 4,  independent_probability = 0.75 },
+				[8] = {  type = "item", name = itemname,  amount_min = 2,  amount_max = 4,  independent_probability = 0.75 },
+				[9] = {  type = "item", name = itemname,  amount_min = 2,  amount_max = 4,  independent_probability = 0.75 },
+				[10] = {  type = "item", name = itemname,  amount_min = 2,  amount_max = 4,  independent_probability = 0.75 }
 			}
 		end	
     elseif artifacts then
 		local itemname = "bob-alien-artifact"
         biterLoot = {
-            [1] = {  item = itemname,  count_min = 1,  count_max = 1,  probability = 0.5 },
-            [2] = {  item = itemname,  count_min = 1,  count_max = 2,  probability = 0.5 },
-            [3] = {  item = itemname,  count_min = 1,  count_max = 3,  probability = 0.5 },
-            [4] = {  item = itemname,  count_min = 2,  count_max = 3,  probability = 0.5 },
-            [5] = {  item = itemname,  count_min = 2,  count_max = 3,  probability = 0.5 },
-            [6] = {  item = itemname,  count_min = 2,  count_max = 3,  probability = 0.5 },
-            [7] = {  item = itemname,  count_min = 2,  count_max = 4,  probability = 0.75 },
-            [8] = {  item = itemname,  count_min = 2,  count_max = 4,  probability = 0.75 },
-            [9] = {  item = itemname,  count_min = 2,  count_max = 4,  probability = 0.75 },
-            [10] = {  item = itemname,  count_min = 3,  count_max = 4,  probability = 0.75 }
+            [1] = {  type = "item", name = itemname,  amount_min = 1,  amount_max = 1,  independent_probability = 0.5 },
+            [2] = {  type = "item", name = itemname,  amount_min = 1,  amount_max = 2,  independent_probability = 0.5 },
+            [3] = {  type = "item", name = itemname,  amount_min = 1,  amount_max = 3,  independent_probability = 0.5 },
+            [4] = {  type = "item", name = itemname,  amount_min = 2,  amount_max = 3,  independent_probability = 0.5 },
+            [5] = {  type = "item", name = itemname,  amount_min = 2,  amount_max = 3,  independent_probability = 0.5 },
+            [6] = {  type = "item", name = itemname,  amount_min = 2,  amount_max = 3,  independent_probability = 0.5 },
+            [7] = {  type = "item", name = itemname,  amount_min = 2,  amount_max = 4,  independent_probability = 0.75 },
+            [8] = {  type = "item", name = itemname,  amount_min = 2,  amount_max = 4,  independent_probability = 0.75 },
+            [9] = {  type = "item", name = itemname,  amount_min = 2,  amount_max = 4,  independent_probability = 0.75 },
+            [10] = {  type = "item", name = itemname,  amount_min = 3,  amount_max = 4,  independent_probability = 0.75 }
         }
     end
 
@@ -1187,31 +1187,31 @@ function biterFunctions.makeSpawnerAlienLootTable(name)
 		local itemname = "bob-alien-artifact-" .. name
 		if data.raw["item"][itemname] then
         biterLoot = {
-            [1] = {  item = itemname,  count_min = 1,  count_max = 1,  probability = 0.5 },
-            [2] = {  item = itemname,  count_min = 1,  count_max = 2,  probability = 0.5 },
-            [3] = {  item = itemname,  count_min = 1,  count_max = 3,  probability = 0.5 },
-            [4] = {  item = itemname,  count_min = 2,  count_max = 4,  probability = 0.5 },
-            [5] = {  item = itemname,  count_min = 2,  count_max = 5,  probability = 0.5 },
-            [6] = {  item = itemname,  count_min = 2,  count_max = 5,  probability = 0.5 },
-            [7] = {  item = itemname,  count_min = 2,  count_max = 6,  probability = 0.75 },
-            [8] = {  item = itemname,  count_min = 2,  count_max = 6,  probability = 0.75 },
-            [9] = {  item = itemname,  count_min = 3,  count_max = 7,  probability = 0.75 },
-            [10] = {  item = itemname,  count_min = 3,  count_max = 7,  probability = 0.75 }
+            [1] = {  type = "item", name = itemname,  amount_min = 1,  amount_max = 1,  independent_probability = 0.5 },
+            [2] = {  type = "item", name = itemname,  amount_min = 1,  amount_max = 2,  independent_probability = 0.5 },
+            [3] = {  type = "item", name = itemname,  amount_min = 1,  amount_max = 3,  independent_probability = 0.5 },
+            [4] = {  type = "item", name = itemname,  amount_min = 2,  amount_max = 4,  independent_probability = 0.5 },
+            [5] = {  type = "item", name = itemname,  amount_min = 2,  amount_max = 5,  independent_probability = 0.5 },
+            [6] = {  type = "item", name = itemname,  amount_min = 2,  amount_max = 5,  independent_probability = 0.5 },
+            [7] = {  type = "item", name = itemname,  amount_min = 2,  amount_max = 6,  independent_probability = 0.75 },
+            [8] = {  type = "item", name = itemname,  amount_min = 2,  amount_max = 6,  independent_probability = 0.75 },
+            [9] = {  type = "item", name = itemname,  amount_min = 3,  amount_max = 7,  independent_probability = 0.75 },
+            [10] = {  type = "item", name = itemname,  amount_min = 3,  amount_max = 7,  independent_probability = 0.75 }
         }
 		end
     elseif artifacts then
 		local itemname = "bob-alien-artifact"
         biterLoot = {
-            [1] = {  item = itemname,  count_min = 1,  count_max = 1,  probability = 0.5 },
-            [2] = {  item = itemname,  count_min = 1,  count_max = 2,  probability = 0.5 },
-            [3] = {  item = itemname,  count_min = 1,  count_max = 3,  probability = 0.5 },
-            [4] = {  item = itemname,  count_min = 2,  count_max = 4,  probability = 0.5 },
-            [5] = {  item = itemname,  count_min = 2,  count_max = 5,  probability = 0.5 },
-            [6] = {  item = itemname,  count_min = 1,  count_max = 3,  probability = 0.5 },
-            [7] = {  item = itemname,  count_min = 2,  count_max = 5,  probability = 0.75 },
-            [8] = {  item = itemname,  count_min = 3,  count_max = 6,  probability = 0.75 },
-            [9] = {  item = itemname,  count_min = 3,  count_max = 6,  probability = 0.75 },
-            [10] = {  item = itemname,  count_min = 3,  count_max = 7,  probability = 0.75 }
+            [1] = {  type = "item", name = itemname,  amount_min = 1,  amount_max = 1,  independent_probability = 0.5 },
+            [2] = {  type = "item", name = itemname,  amount_min = 1,  amount_max = 2,  independent_probability = 0.5 },
+            [3] = {  type = "item", name = itemname,  amount_min = 1,  amount_max = 3,  independent_probability = 0.5 },
+            [4] = {  type = "item", name = itemname,  amount_min = 2,  amount_max = 4,  independent_probability = 0.5 },
+            [5] = {  type = "item", name = itemname,  amount_min = 2,  amount_max = 5,  independent_probability = 0.5 },
+            [6] = {  type = "item", name = itemname,  amount_min = 1,  amount_max = 3,  independent_probability = 0.5 },
+            [7] = {  type = "item", name = itemname,  amount_min = 2,  amount_max = 5,  independent_probability = 0.75 },
+            [8] = {  type = "item", name = itemname,  amount_min = 3,  amount_max = 6,  independent_probability = 0.75 },
+            [9] = {  type = "item", name = itemname,  amount_min = 3,  amount_max = 6,  independent_probability = 0.75 },
+            [10] = {  type = "item", name = itemname,  amount_min = 3,  amount_max = 7,  independent_probability = 0.75 }
         }
     end
 
@@ -1232,31 +1232,31 @@ function biterFunctions.makeUnitAlienLootTable(name)
 		local itemname = "bob-small-alien-artifact-" .. name
 		if data.raw["item"][itemname] then
         biterLoot = {
-            [1] = {  item = itemname,  count_min = 1,  count_max = 1,  probability = 0.25 },
-            [2] = {  item = itemname,  count_min = 1,  count_max = 2,  probability = 0.25 },
-            [3] = {  item = itemname,  count_min = 1,  count_max = 3,  probability = 0.25 },
-            [4] = {  item = itemname,  count_min = 2,  count_max = 4,  probability = 0.5 },
-            [5] = {  item = itemname,  count_min = 2,  count_max = 5,  probability = 0.5 },
-            [6] = {  item = itemname,  count_min = 2,  count_max = 5,  probability = 0.5 },
-            [7] = {  item = itemname,  count_min = 2,  count_max = 6,  probability = 0.75 },
-            [8] = {  item = itemname,  count_min = 2,  count_max = 6,  probability = 0.75 },
-            [9] = {  item = itemname,  count_min = 3,  count_max = 7,  probability = 0.75 },
-            [10] = {  item = itemname,  count_min = 3,  count_max = 7,  probability = 0.75 }
+            [1] = {  type = "item", name = itemname,  amount_min = 1,  amount_max = 1,  independent_probability = 0.25 },
+            [2] = {  type = "item", name = itemname,  amount_min = 1,  amount_max = 2,  independent_probability = 0.25 },
+            [3] = {  type = "item", name = itemname,  amount_min = 1,  amount_max = 3,  independent_probability = 0.25 },
+            [4] = {  type = "item", name = itemname,  amount_min = 2,  amount_max = 4,  independent_probability = 0.5 },
+            [5] = {  type = "item", name = itemname,  amount_min = 2,  amount_max = 5,  independent_probability = 0.5 },
+            [6] = {  type = "item", name = itemname,  amount_min = 2,  amount_max = 5,  independent_probability = 0.5 },
+            [7] = {  type = "item", name = itemname,  amount_min = 2,  amount_max = 6,  independent_probability = 0.75 },
+            [8] = {  type = "item", name = itemname,  amount_min = 2,  amount_max = 6,  independent_probability = 0.75 },
+            [9] = {  type = "item", name = itemname,  amount_min = 3,  amount_max = 7,  independent_probability = 0.75 },
+            [10] = {  type = "item", name = itemname,  amount_min = 3,  amount_max = 7,  independent_probability = 0.75 }
         }
 		end
     elseif smallArtifacts then
 		local itemname = "bob-small-alien-artifact"
         biterLoot = {
-            [1] = {  item = itemname,  count_min = 1,  count_max = 1,  probability = 0.25 },
-            [2] = {  item = itemname,  count_min = 1,  count_max = 2,  probability = 0.25 },
-            [3] = {  item = itemname,  count_min = 1,  count_max = 3,  probability = 0.25 },
-            [4] = {  item = itemname,  count_min = 2,  count_max = 4,  probability = 0.5 },
-            [5] = {  item = itemname,  count_min = 2,  count_max = 5,  probability = 0.5 },
-            [6] = {  item = itemname,  count_min = 2,  count_max = 5,  probability = 0.5 },
-            [7] = {  item = itemname,  count_min = 2,  count_max = 6,  probability = 0.75 },
-            [8] = {  item = itemname,  count_min = 2,  count_max = 6,  probability = 0.75 },
-            [9] = {  item = itemname,  count_min = 3,  count_max = 7,  probability = 0.75 },
-            [10] = {  item = itemname,  count_min = 3,  count_max = 7,  probability = 0.75 }
+            [1] = {  type = "item", name = itemname,  amount_min = 1,  amount_max = 1,  independent_probability = 0.25 },
+            [2] = {  type = "item", name = itemname,  amount_min = 1,  amount_max = 2,  independent_probability = 0.25 },
+            [3] = {  type = "item", name = itemname,  amount_min = 1,  amount_max = 3,  independent_probability = 0.25 },
+            [4] = {  type = "item", name = itemname,  amount_min = 2,  amount_max = 4,  independent_probability = 0.5 },
+            [5] = {  type = "item", name = itemname,  amount_min = 2,  amount_max = 5,  independent_probability = 0.5 },
+            [6] = {  type = "item", name = itemname,  amount_min = 2,  amount_max = 5,  independent_probability = 0.5 },
+            [7] = {  type = "item", name = itemname,  amount_min = 2,  amount_max = 6,  independent_probability = 0.75 },
+            [8] = {  type = "item", name = itemname,  amount_min = 2,  amount_max = 6,  independent_probability = 0.75 },
+            [9] = {  type = "item", name = itemname,  amount_min = 3,  amount_max = 7,  independent_probability = 0.75 },
+            [10] = {  type = "item", name = itemname,  amount_min = 3,  amount_max = 7,  independent_probability = 0.75 }
         }
     elseif artifacts then
 		local itemname = "bob-alien-artifact"
@@ -1266,11 +1266,11 @@ function biterFunctions.makeUnitAlienLootTable(name)
             [3] = nil,
             [4] = nil,
             [5] = nil,
-            [6] = {  item = itemname,  count_min = 1,  count_max = 3,  probability = 0.5 },
-            [7] = {  item = itemname,  count_min = 2,  count_max = 5,  probability = 0.75 },
-            [8] = {  item = itemname,  count_min = 3,  count_max = 6,  probability = 0.75 },
-            [9] = {  item = itemname,  count_min = 3,  count_max = 6,  probability = 0.75 },
-            [10] = {  item = itemname,  count_min = 3,  count_max = 7,  probability = 0.75 }
+            [6] = {  type = "item", name = itemname,  amount_min = 1,  amount_max = 3,  independent_probability = 0.5 },
+            [7] = {  type = "item", name = itemname,  amount_min = 2,  amount_max = 5,  independent_probability = 0.75 },
+            [8] = {  type = "item", name = itemname,  amount_min = 3,  amount_max = 6,  independent_probability = 0.75 },
+            [9] = {  type = "item", name = itemname,  amount_min = 3,  amount_max = 6,  independent_probability = 0.75 },
+            [10] = {  type = "item", name = itemname,  amount_min = 3,  amount_max = 7,  independent_probability = 0.75 }
         }
     end
 
@@ -1318,44 +1318,44 @@ function biterFunctions.makeSchallAlienLootTables()
 	
 	if artifact_table[artifactDrop].mover then
         lootTables.biterLoot = {
-            [1] = {{ item = alienOre1,  count_min = 1,  count_max = count_max,  probability = 0.5 }},
-            [2] = {{ item = alienOre1,  count_min = 1,  count_max = count_max,  probability = 1}},
-            [3] = {{ item = alienOre1,  count_min = 1,  count_max = count_max,  probability = 1}, 	{ item = alienOre2,  count_min = 1,  count_max = count_max,  probability = 0.25}},
-            [4] = {{ item = alienOre1,  count_min = 1,  count_max = count_max,  probability = 1}, 	{ item = alienOre2,  count_min = 1,  count_max = count_max,  probability = 0.5}},
-            [5] = {{ item = alienOre1,  count_min = 1,  count_max = count_max,  probability = 0.5}, { item = alienOre2,  count_min = 1,  count_max = count_max,  probability = 1}},
-            [6] = {{ item = alienOre2,  count_min = 1,  count_max = count_max,  probability = 1}, 	{ item = alienOre3,  count_min = 1,  count_max = count_max,  probability = 0.25}},
-            [7] = {{ item = alienOre2,  count_min = 1,  count_max = count_max,  probability = 0.5}, { item = alienOre3,  count_min = 1,  count_max = count_max,  probability = 0.5}},
-            [8] = {{ item = alienOre3,  count_min = 1,  count_max = count_max,  probability = 1}, 	{ item = alienArtifact,  count_min = 1,  count_max = count_max,  probability = 0.25}},
-            [9] = {{ item = alienOre3,  count_min = 1,  count_max = count_max,  probability = 0.5}, { item = alienArtifact,  count_min = 1,  count_max = count_max,  probability = 0.5}},
-            [10] ={{ item = alienOre3,  count_min = 1,  count_max = count_max,  probability = 0.5},{ item = alienArtifact,  count_min = 1,  count_max = count_max,  probability = 1}},
+            [1] = {{ type = "item", name = alienOre1,  amount_min = 1,  amount_max = count_max,  independent_probability = 0.5 }},
+            [2] = {{ type = "item", name = alienOre1,  amount_min = 1,  amount_max = count_max,  independent_probability = 1}},
+            [3] = {{ type = "item", name = alienOre1,  amount_min = 1,  amount_max = count_max,  independent_probability = 1}, 	{ type = "item", name = alienOre2,  amount_min = 1,  amount_max = count_max,  independent_probability = 0.25}},
+            [4] = {{ type = "item", name = alienOre1,  amount_min = 1,  amount_max = count_max,  independent_probability = 1}, 	{ type = "item", name = alienOre2,  amount_min = 1,  amount_max = count_max,  independent_probability = 0.5}},
+            [5] = {{ type = "item", name = alienOre1,  amount_min = 1,  amount_max = count_max,  independent_probability = 0.5}, { type = "item", name = alienOre2,  amount_min = 1,  amount_max = count_max,  independent_probability = 1}},
+            [6] = {{ type = "item", name = alienOre2,  amount_min = 1,  amount_max = count_max,  independent_probability = 1}, 	{ type = "item", name = alienOre3,  amount_min = 1,  amount_max = count_max,  independent_probability = 0.25}},
+            [7] = {{ type = "item", name = alienOre2,  amount_min = 1,  amount_max = count_max,  independent_probability = 0.5}, { type = "item", name = alienOre3,  amount_min = 1,  amount_max = count_max,  independent_probability = 0.5}},
+            [8] = {{ type = "item", name = alienOre3,  amount_min = 1,  amount_max = count_max,  independent_probability = 1}, 	{ type = "item", name = alienArtifact,  amount_min = 1,  amount_max = count_max,  independent_probability = 0.25}},
+            [9] = {{ type = "item", name = alienOre3,  amount_min = 1,  amount_max = count_max,  independent_probability = 0.5}, { type = "item", name = alienArtifact,  amount_min = 1,  amount_max = count_max,  independent_probability = 0.5}},
+            [10] ={{ type = "item", name = alienOre3,  amount_min = 1,  amount_max = count_max,  independent_probability = 0.5},{ type = "item", name = alienArtifact,  amount_min = 1,  amount_max = count_max,  independent_probability = 1}},
        }
 	end	
 	if artifact_table[artifactDrop].worm then
         lootTables.wormLoot = {
-            [1] = {{   item = alienArtifact,  count_min = 1,  count_max = count_max,  probability = 0.25 }},
-            [2] = {{   item = alienArtifact,  count_min = 1,  count_max = count_max,  probability = 0.30 }},
-            [3] = {{   item = alienArtifact,  count_min = 1,  count_max = count_max,  probability = 0.35 }},
-            [4] = {{   item = alienArtifact,  count_min = 1,  count_max = count_max * tierMultipliers[2],  probability = 0.40 }},
-            [5] = {{   item = alienArtifact,  count_min = 1,  count_max = count_max * tierMultipliers[2],  probability = 0.45 }},
-            [6] = {{   item = alienArtifact,  count_min = 1,  count_max = count_max * tierMultipliers[2],  probability = 0.50 }},
-            [7] = {{   item = alienArtifact,  count_min = 1,  count_max = count_max * tierMultipliers[3],  probability = 0.55 }},
-            [8] = {{   item = alienArtifact,  count_min = 1,  count_max = count_max * tierMultipliers[3],  probability = 0.60 }},
-            [9] = {{   item = alienArtifact,  count_min = 1,  count_max = count_max * tierMultipliers[3],  probability = 0.65 }},
-            [10] = {{  item = alienArtifact,  count_min = 1,  count_max = count_max * tierMultipliers[4],  probability = 0.70 }}
+            [1] = {{   type = "item", name = alienArtifact,  amount_min = 1,  amount_max = count_max,  independent_probability = 0.25 }},
+            [2] = {{   type = "item", name = alienArtifact,  amount_min = 1,  amount_max = count_max,  independent_probability = 0.30 }},
+            [3] = {{   type = "item", name = alienArtifact,  amount_min = 1,  amount_max = count_max,  independent_probability = 0.35 }},
+            [4] = {{   type = "item", name = alienArtifact,  amount_min = 1,  amount_max = count_max * tierMultipliers[2],  independent_probability = 0.40 }},
+            [5] = {{   type = "item", name = alienArtifact,  amount_min = 1,  amount_max = count_max * tierMultipliers[2],  independent_probability = 0.45 }},
+            [6] = {{   type = "item", name = alienArtifact,  amount_min = 1,  amount_max = count_max * tierMultipliers[2],  independent_probability = 0.50 }},
+            [7] = {{   type = "item", name = alienArtifact,  amount_min = 1,  amount_max = count_max * tierMultipliers[3],  independent_probability = 0.55 }},
+            [8] = {{   type = "item", name = alienArtifact,  amount_min = 1,  amount_max = count_max * tierMultipliers[3],  independent_probability = 0.60 }},
+            [9] = {{   type = "item", name = alienArtifact,  amount_min = 1,  amount_max = count_max * tierMultipliers[3],  independent_probability = 0.65 }},
+            [10] = {{  type = "item", name = alienArtifact,  amount_min = 1,  amount_max = count_max * tierMultipliers[4],  independent_probability = 0.70 }}
         }
 	end	
 	if artifact_table[artifactDrop].spawner then
         lootTables.spawnerLoot = {
-            [1] = {{  item = alienArtifact,  count_min = 1,  count_max = artifactAmountSpawner,  probability = 0.65 }},
-            [2] = {{  item = alienArtifact,  count_min = 1,  count_max = artifactAmountSpawner,  probability = 0.70 }},
-            [3] = {{  item = alienArtifact,  count_min = 1,  count_max = artifactAmountSpawner,  probability = 0.75 }},
-            [4] = {{  item = alienArtifact,  count_min = 1,  count_max = artifactAmountSpawner * tierMultipliers[2],  probability = 0.80 }},
-            [5] = {{  item = alienArtifact,  count_min = 1,  count_max = artifactAmountSpawner * tierMultipliers[2],  probability = 0.85 }},
-            [6] = {{  item = alienArtifact,  count_min = 1,  count_max = artifactAmountSpawner * tierMultipliers[2],  probability = 0.90 }},
-            [7] = {{  item = alienArtifact,  count_min = 1,  count_max = artifactAmountSpawner * tierMultipliers[3],  probability = 0.95 }},
-            [8] = {{ item = alienArtifact,  count_min = 1,  count_max = artifactAmountSpawner * tierMultipliers[3],  probability = 1.00 }},
-            [9] = {{  item = alienArtifact,  count_min = 1,  count_max = artifactAmountSpawner * tierMultipliers[3],  probability = 1.00 }},
-            [10] = {{ item = alienArtifact,  count_min = 1,  count_max = artifactAmountSpawner * tierMultipliers[4],  probability = 1.00 }}
+            [1] = {{  type = "item", name = alienArtifact,  amount_min = 1,  amount_max = artifactAmountSpawner,  independent_probability = 0.65 }},
+            [2] = {{  type = "item", name = alienArtifact,  amount_min = 1,  amount_max = artifactAmountSpawner,  independent_probability = 0.70 }},
+            [3] = {{  type = "item", name = alienArtifact,  amount_min = 1,  amount_max = artifactAmountSpawner,  independent_probability = 0.75 }},
+            [4] = {{  type = "item", name = alienArtifact,  amount_min = 1,  amount_max = artifactAmountSpawner * tierMultipliers[2],  independent_probability = 0.80 }},
+            [5] = {{  type = "item", name = alienArtifact,  amount_min = 1,  amount_max = artifactAmountSpawner * tierMultipliers[2],  independent_probability = 0.85 }},
+            [6] = {{  type = "item", name = alienArtifact,  amount_min = 1,  amount_max = artifactAmountSpawner * tierMultipliers[2],  independent_probability = 0.90 }},
+            [7] = {{  type = "item", name = alienArtifact,  amount_min = 1,  amount_max = artifactAmountSpawner * tierMultipliers[3],  independent_probability = 0.95 }},
+            [8] = {{ type = "item", name = alienArtifact,  amount_min = 1,  amount_max = artifactAmountSpawner * tierMultipliers[3],  independent_probability = 1.00 }},
+            [9] = {{  type = "item", name = alienArtifact,  amount_min = 1,  amount_max = artifactAmountSpawner * tierMultipliers[3],  independent_probability = 1.00 }},
+            [10] = {{ type = "item", name = alienArtifact,  amount_min = 1,  amount_max = artifactAmountSpawner * tierMultipliers[4],  independent_probability = 1.00 }}
         }
 	end	
 	return lootTables	
@@ -1372,40 +1372,40 @@ function biterFunctions.makeAlienLootEconomyTables()
 	local alienOre = "artifact-ore"
 	
 	lootTables.biterLoot = {
-		[1] = {{ item = alienOre,   count_min = kf,  count_max = kf,  probability = 0.2}},
-		[2] = {{ item = alienOre,   count_min = kf,  count_max = kf,  probability = 0.3}},
-		[3] = {{ item = alienOre,   count_min = kf,  count_max = kf,  probability = 0.4}},
-		[4] = {{ item = alienOre,   count_min = kf,  count_max = kf,  probability = 0.5}},
-		[5] = {{ item = alienOre,   count_min = kf,  count_max = kf,  probability = 0.6}},
-		[6] = {{ item = alienOre,   count_min = kf,  count_max = kf,  probability = 0.7}},
-		[7] = {{ item = alienOre,   count_min = kf,  count_max = kf,  probability = 0.8}},
-		[8] = {{ item = alienOre,   count_min = kf,  count_max = kf,  probability = 0.9}},
-		[9] = {{ item = alienOre,  count_min = kf,  count_max = kf,  probability = 1}},
-		[10] ={{ item = alienOre,  count_min = kf,  count_max = 2*kf,  probability = 1}},
+		[1] = {{ type = "item", name = alienOre,   amount_min = kf,  amount_max = kf,  independent_probability = 0.2}},
+		[2] = {{ type = "item", name = alienOre,   amount_min = kf,  amount_max = kf,  independent_probability = 0.3}},
+		[3] = {{ type = "item", name = alienOre,   amount_min = kf,  amount_max = kf,  independent_probability = 0.4}},
+		[4] = {{ type = "item", name = alienOre,   amount_min = kf,  amount_max = kf,  independent_probability = 0.5}},
+		[5] = {{ type = "item", name = alienOre,   amount_min = kf,  amount_max = kf,  independent_probability = 0.6}},
+		[6] = {{ type = "item", name = alienOre,   amount_min = kf,  amount_max = kf,  independent_probability = 0.7}},
+		[7] = {{ type = "item", name = alienOre,   amount_min = kf,  amount_max = kf,  independent_probability = 0.8}},
+		[8] = {{ type = "item", name = alienOre,   amount_min = kf,  amount_max = kf,  independent_probability = 0.9}},
+		[9] = {{ type = "item", name = alienOre,  amount_min = kf,  amount_max = kf,  independent_probability = 1}},
+		[10] ={{ type = "item", name = alienOre,  amount_min = kf,  amount_max = 2*kf,  independent_probability = 1}},
    }
 	lootTables.wormLoot = {
-		[1] = {{ item = alienOre,  count_min = kf,  count_max = 2*kf,  probability = 0.2}},
-		[2] = {{ item = alienOre,  count_min = kf,  count_max = 2*kf,  probability = 0.3}},
-		[3] = {{ item = alienOre,  count_min = kf,  count_max = 2*kf,  probability = 0.4}},
-		[4] = {{ item = alienOre,  count_min = kf,  count_max = 2*kf,  probability = 0.5}},
-		[5] = {{ item = alienOre,  count_min = kf,  count_max = 2*kf,  probability = 0.6}},
-		[6] = {{ item = alienOre,  count_min = kf,  count_max = 2*kf,  probability = 0.7}},
-		[7] = {{ item = alienOre,  count_min = kf,  count_max = 2*kf,  probability = 0.8}},
-		[8] = {{ item = alienOre,  count_min = kf,  count_max = 2*kf,  probability = 0.9}},
-		[9] = {{ item = alienOre,  count_min = kf,  count_max = 2*kf,  probability = 1}},
-		[10] ={{ item = alienOre,  count_min = 2*kf,  count_max = 3*kf,  probability = 1}},
+		[1] = {{ type = "item", name = alienOre,  amount_min = kf,  amount_max = 2*kf,  independent_probability = 0.2}},
+		[2] = {{ type = "item", name = alienOre,  amount_min = kf,  amount_max = 2*kf,  independent_probability = 0.3}},
+		[3] = {{ type = "item", name = alienOre,  amount_min = kf,  amount_max = 2*kf,  independent_probability = 0.4}},
+		[4] = {{ type = "item", name = alienOre,  amount_min = kf,  amount_max = 2*kf,  independent_probability = 0.5}},
+		[5] = {{ type = "item", name = alienOre,  amount_min = kf,  amount_max = 2*kf,  independent_probability = 0.6}},
+		[6] = {{ type = "item", name = alienOre,  amount_min = kf,  amount_max = 2*kf,  independent_probability = 0.7}},
+		[7] = {{ type = "item", name = alienOre,  amount_min = kf,  amount_max = 2*kf,  independent_probability = 0.8}},
+		[8] = {{ type = "item", name = alienOre,  amount_min = kf,  amount_max = 2*kf,  independent_probability = 0.9}},
+		[9] = {{ type = "item", name = alienOre,  amount_min = kf,  amount_max = 2*kf,  independent_probability = 1}},
+		[10] ={{ type = "item", name = alienOre,  amount_min = 2*kf,  amount_max = 3*kf,  independent_probability = 1}},
 	}
 	lootTables.spawnerLoot = {
-		[1] = {{ item = alienOre,  count_min = 2*kf,  count_max = 3*kf,  probability = 1}},
-		[2] = {{ item = alienOre,  count_min = 3*kf,  count_max = 4*kf,  probability = 1}},
-		[3] = {{ item = alienOre,  count_min = 4*kf,  count_max = 5*kf,  probability = 1}},
-		[4] = {{ item = alienOre,  count_min = 5*kf,  count_max = 6*kf,  probability = 1}},
-		[5] = {{ item = alienOre,  count_min = 6*kf,  count_max = 7*kf,  probability = 1}},
-		[6] = {{ item = alienOre,  count_min = 7*kf,  count_max = 8*kf,  probability = 1}},
-		[7] = {{ item = alienOre,  count_min = 8*kf,  count_max = 9*kf,  probability = 1}},
-		[8] = {{ item = alienOre,  count_min = 9*kf,  count_max = 10*kf,  probability = 1}},
-		[9] = {{ item = alienOre,  count_min = 10*kf,  count_max = 12*kf,  probability = 1}},
-		[10] ={{ item = alienOre,  count_min = 12*kf,  count_max = 15*kf,  probability = 1}},
+		[1] = {{ type = "item", name = alienOre,  amount_min = 2*kf,  amount_max = 3*kf,  independent_probability = 1}},
+		[2] = {{ type = "item", name = alienOre,  amount_min = 3*kf,  amount_max = 4*kf,  independent_probability = 1}},
+		[3] = {{ type = "item", name = alienOre,  amount_min = 4*kf,  amount_max = 5*kf,  independent_probability = 1}},
+		[4] = {{ type = "item", name = alienOre,  amount_min = 5*kf,  amount_max = 6*kf,  independent_probability = 1}},
+		[5] = {{ type = "item", name = alienOre,  amount_min = 6*kf,  amount_max = 7*kf,  independent_probability = 1}},
+		[6] = {{ type = "item", name = alienOre,  amount_min = 7*kf,  amount_max = 8*kf,  independent_probability = 1}},
+		[7] = {{ type = "item", name = alienOre,  amount_min = 8*kf,  amount_max = 9*kf,  independent_probability = 1}},
+		[8] = {{ type = "item", name = alienOre,  amount_min = 9*kf,  amount_max = 10*kf,  independent_probability = 1}},
+		[9] = {{ type = "item", name = alienOre,  amount_min = 10*kf,  amount_max = 12*kf,  independent_probability = 1}},
+		[10] ={{ type = "item", name = alienOre,  amount_min = 12*kf,  amount_max = 15*kf,  independent_probability = 1}},
 	}
 	return lootTables	
 end

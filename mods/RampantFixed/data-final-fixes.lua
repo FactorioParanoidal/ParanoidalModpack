@@ -254,12 +254,12 @@ do
             tier = tonumber(tier)
             local loot = spawner.loot or {}
             if items["bob-alien-artifact"] then
-                loot[#loot + 1] = {item = "bob-alien-artifact", count_min = 2 * tier, count_max = 4 * tier, probability = 1}
+                loot[#loot + 1] = {type = "item", name = "bob-alien-artifact", amount_min = 2 * tier, amount_max = 4 * tier, independent_probability = 1}
             end
             for _, colour in pairs(colours) do
                 local item = "bob-alien-artifact-" .. colour
                 if items[item] then
-                    loot[#loot + 1] = {item = item, count_min = 1, count_max = 1 + math.floor(tier / 3), probability = 0.3}
+                    loot[#loot + 1] = {type = "item", name = item, amount_min = 1, amount_max = 1 + math.floor(tier / 3), independent_probability = 0.3}
                 end
             end
             if #loot > 0 then
