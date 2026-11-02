@@ -196,15 +196,24 @@ end
 
 
 
+-- Factorio 2.1: LuaEntityPrototype::build_base_evolution_requirement and the "build-base-evolution-requirement"
+-- filter were removed; the 2.0 values of the worms are in mod-data "mferrari-worm-evolution" (data-final-fixes.lua).
+-- A turret without a value had the 2.0 default 0.
+local function worm_evolutions()
+	local registry = prototypes.mod_data["mferrari-worm-evolution"]
+	return registry and registry.data or {}
+end
+
 -- from the worm list, returns those that are valid for the current evolution
 function What_worms_are_for_evolution(evolution, extra_evo, worms_list)
 local worms = {}
 local strong_worms = {}
+local evolutions = worm_evolutions()
 
 for _,name in pairs (worms_list) do 
 	local proto = prototypes.entity[name]
 	if proto and proto.type=="turret" then 
-		local p_evo = proto.build_base_evolution_requirement
+		local p_evo = evolutions[name] or 0
 		if p_evo then
 			if p_evo<=evolution then table.insert(worms,name) end
 			if extra_evo and evolution+extra_evo<=p_evo and p_evo>=evolution then table.insert(strong_worms,name) end
@@ -238,14 +247,15 @@ if surface and position then
 
 
 if not evolution then evolution = get_evo_here(surface) end
-local filter = {{filter = "type",type = "turret"},{filter = "build-base-evolution-requirement", comparison = "≤", value = evolution, mode = "and"}} 
-local worms_p = prototypes.get_entity_filtered(filter)
+-- Factorio 2.1: the evolution requirement comes from mod-data (see worm_evolutions), not from a prototype filter.
+local evolutions = worm_evolutions()
+local turrets = prototypes.get_entity_filtered({{filter = "type",type = "turret"}})
 local worms = {}
 
 
-for name,proto in pairs (worms_p) do 
+for name,proto in pairs (turrets) do
 	if (not string.find(name, "boss")) and (not string.find(name, "mother"))  then 
-		if proto.build_base_evolution_requirement ~= nil then
+		if (evolutions[name] or 0) <= evolution then
 			if is_valid_worm(name) then table.insert(worms,name) end
 			end 
 		end
@@ -253,12 +263,10 @@ for name,proto in pairs (worms_p) do
 
 local strong_worms = {}
 if extra_evo then 
-	local filter = {{filter = "type",type = "turret"},{filter = "build-base-evolution-requirement", comparison = "≤", value = evolution+extra_evo, mode = "and"},
-		{filter = "build-base-evolution-requirement", comparison = "≥", value = evolution, mode = "and"}}
-	local worms_p = prototypes.get_entity_filtered(filter)
-	for name,proto in pairs (worms_p) do 
+	for name,proto in pairs (turrets) do
 		if not string.find(name, "boss") then 
-		if proto.build_base_evolution_requirement ~= nil then 
+		local p_evo = evolutions[name] or 0
+		if p_evo <= evolution+extra_evo and p_evo >= evolution then
 			if is_valid_worm(name) then table.insert(strong_worms,name) end
 			end 
 		end

@@ -13,6 +13,7 @@ Version: 0.6.6
     - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
     - Paranoidal port to Factorio 2.1: science pack checks accept every item type (2.1 vanilla science packs are plain items, mod packs may stay tools).
     - Paranoidal port to Factorio 2.1: loot entries use the 2.1 format (type, name, amount_min, amount_max, independent_probability instead of item, count_min, count_max, probability).
+    - Factorio 2.1 (Paranoidal decision D14 A): build_base_evolution_requirement was removed with its runtime read and the build-base-evolution-requirement prototype filter, so CallWormAttack (Big-Monsters) would fail; the evolution values of the worms are kept in mod-data mferrari-worm-evolution (data-final-fixes.lua, 2.0 default 0) and the worm choice reads them; the dead field is removed from every prototype.
 ---------------------------------------------------------------------------------------------------
 Version: 0.6.4
   Changes:
