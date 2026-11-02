@@ -30,6 +30,7 @@ data:extend({
   double("prain-dry-mean-minutes", 60, 1, 6000),
   int("prain-first-dry-minutes", 30, 0, 600),
   bool("prain-storm-stages", true),
+  bool("prain-seasons", true),
   double("prain-monsoon-chance", 0.08, 0, 1),
 
   -- Look and sound
@@ -60,7 +61,11 @@ data:extend({
   int("prain-enemy-fire-acid-damage", 0, 0, 100),
   int("prain-player-fire-damage", 50, 0, 100),
   double("prain-hazard-slowdown", 2.5, 1, 5),
+  int("prain-enemy-day-percent", 15, 0, 200),
+  int("prain-enemy-night-percent", 25, 0, 200),
+  bool("prain-enemy-more-attacks", true),
 
   -- Per player
   bool("prain-show-rain", true, "runtime-per-user"),
+  bool("prain-screen-flash", true, "runtime-per-user"),
 })

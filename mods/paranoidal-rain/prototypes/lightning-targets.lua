@@ -22,6 +22,7 @@ for type_name, bonus in pairs({
   ["storage-tank"] = 20, ["radar"] = 320, ["roboport"] = 319, ["elevated-straight-rail"] = 301,
   ["elevated-curved-rail-a"] = 301, ["elevated-curved-rail-b"] = 301, ["rail-support"] = 301,
   ["unit-spawner"] = 20, ["unit"] = 15, ["construction-robot"] = 10, ["logistic-robot"] = 10,
+  ["ammo-turret"] = 15, ["artillery-turret"] = 30, -- their ammunition may cook off (paranoidal-flammable-fluids)
 }) do
   types[type_name] = bonus
   wanted[type_name] = true

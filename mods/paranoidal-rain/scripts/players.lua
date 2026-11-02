@@ -1,5 +1,6 @@
 -- Connected players grouped by surface, rebuilt at most once per tick (Dynamic Rain player-cache), and the
--- per-player setting prain-show-rain mirrored into storage.hide (reading player settings every tick is costly).
+-- per-player settings prain-show-rain and prain-screen-flash mirrored into storage.hide / storage.no_flash (reading
+-- player settings every tick is costly).
 local R = require("scripts.registry")
 
 local M = {}
@@ -38,14 +39,20 @@ function M.refresh_hide(player_index)
   local player = game.get_player(player_index)
   if not player then
     storage.hide[player_index] = nil
+    if storage.no_flash then storage.no_flash[player_index] = nil end
     return
   end
-  local setting = settings.get_player_settings(player)["prain-show-rain"]
+  local player_settings = settings.get_player_settings(player)
+  local setting = player_settings["prain-show-rain"]
   storage.hide[player_index] = (setting and setting.value == false) or nil
+  storage.no_flash = storage.no_flash or {}
+  local flash = player_settings["prain-screen-flash"]
+  storage.no_flash[player_index] = (flash and flash.value == false) or nil
 end
 
 function M.refresh_all_hide()
   storage.hide = {}
+  storage.no_flash = {}
   for _, player in pairs(game.players) do M.refresh_hide(player.index) end
 end
 

@@ -7,8 +7,9 @@ local EMPTY = "__core__/graphics/empty.png"
 
 local empty_animation = { filename = EMPTY, width = 1, height = 1, frame_count = 1, line_length = 1, animation_speed = 1 }
 
-local function smoke(name, file, frame, duration, fade, start_scale, end_scale)
+local function smoke(name, file, frame, duration, fade, start_scale, end_scale, color)
   return {
+    color = color,
     type = "trivial-smoke",
     name = name,
     animation = {
@@ -65,7 +66,10 @@ for frame = 0, 3 do
   list[#list + 1] = smoke("prain-front-" .. n, "rain-streaks.png", frame, 26, 4, 0.62, 0.62)
   list[#list + 1] = smoke("prain-mid-" .. n, "rain-streaks.png", frame, 36, 6, 0.42, 0.42)
   list[#list + 1] = smoke("prain-mist-" .. n, "rain-mist.png", frame, 48, 8, 0.54, 0.54)
-  list[#list + 1] = smoke("prain-splash-" .. n, "rain-splash.png", frame, 28, 5, 0.35, 0.55)
+  list[#list + 1] = smoke("prain-splash-" .. n, "rain-splash.png", frame, 28, 5, 0.35, 0.55,
+    { 0.46, 0.47, 0.5, 0.46 }) -- paved ground: lighter and bigger (premultiplied colour)
+  list[#list + 1] = smoke("prain-splash-soil-" .. n, "rain-splash.png", frame, 22, 4, 0.24, 0.38,
+    { 0.2, 0.19, 0.16, 0.34 }) -- soil and grass: small and dark
   list[#list + 1] = smoke("prain-ripple-" .. n, "rain-ripple.png", frame, 34, 6, 0.42, 0.9)
   list[#list + 1] = smoke("prain-puddle-" .. n, "rain-ripple.png", frame, 54, 9, 0.34, 0.75)
 end
@@ -79,6 +83,7 @@ for n = 1, 4 do
     list[#list + 1] = spawner("prain-drop-mist-" .. n .. "-" .. wind, "prain-mist-" .. n, x * 0.45, 0.26, 1.0, 1.05, 0.035)
   end
   list[#list + 1] = spawner("prain-drop-splash-" .. n, "prain-splash-" .. n, 0, 0.02, 0.05, 0.15, 0.08)
+  list[#list + 1] = spawner("prain-drop-splash-soil-" .. n, "prain-splash-soil-" .. n, 0, 0.02, 0.04, 0.1, 0.06)
   list[#list + 1] = spawner("prain-drop-ripple-" .. n, "prain-ripple-" .. n, 0, 0, 0.03, 0.08, 0.04)
   list[#list + 1] = spawner("prain-drop-puddle-" .. n, "prain-puddle-" .. n, 0, 0, 0.03, 0.05, 0.03)
 end

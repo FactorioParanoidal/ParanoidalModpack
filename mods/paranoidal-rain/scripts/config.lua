@@ -35,6 +35,7 @@ function M.load()
   c.dry_mean = get("dry-mean-minutes")
   c.first_dry = get("first-dry-minutes")
   c.storm_stages = get("storm-stages")
+  c.seasons = get("seasons")
   c.monsoon_chance = get("monsoon-chance")
 
   c.intensity = get("intensity")
@@ -62,6 +63,9 @@ function M.load()
   c.enemy_damage = get("enemy-fire-acid-damage") / 100
   c.player_fire_damage = get("player-fire-damage") / 100
   c.hazard_slowdown = get("hazard-slowdown")
+  c.enemy_day = get("enemy-day-percent") / 100
+  c.enemy_night = get("enemy-night-percent") / 100
+  c.enemy_attacks = get("enemy-more-attacks")
   return c
 end
 

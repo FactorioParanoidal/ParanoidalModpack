@@ -61,6 +61,40 @@ table.sort(acid)
 -- Dynamic Rain (tall buildings and poles attract strikes, then trees, pipes and creatures).
 local lightning = require("prototypes.lightning-targets")
 
+-- Lightning attractors of other mods (prototypes/attractors.lua): only existing entities, fields checked.
+local attractors = {}
+local registered = data.raw["mod-data"]["paranoidal-rain-attractors"]
+local function entity_exists(name)
+  local entity_types = defines and defines.prototypes and defines.prototypes.entity
+  if entity_types then
+    for type_name in pairs(entity_types) do
+      local list = data.raw[type_name]
+      if list and list[name] then return true end
+    end
+    return false
+  end
+  for _, list in pairs(data.raw) do -- no defines.prototypes: anything with a health or a collision box
+    local proto = list[name]
+    if proto and (proto.max_health or proto.collision_box) then return true end
+  end
+  return false
+end
+local function number(value, default, min, max)
+  if type(value) ~= "number" then return default end
+  return math.max(min, math.min(max, value))
+end
+for name, spec in pairs(registered and registered.data.attractors or {}) do
+  if type(name) == "string" and type(spec) == "table" and entity_exists(name) then
+    attractors[name] = {
+      range = number(spec.range, 10, 1, 64),
+      priority = number(spec.priority, 1000, 0, 100000),
+      mode = spec.mode == "attract" and "attract" or "absorb",
+      self_damage = number(spec.self_damage, 0, 0, 1),
+      energy_share = number(spec.energy_share, 0, 0, 1),
+    }
+  end
+end
+
 data:extend({
   {
     type = "mod-data",
@@ -69,6 +103,7 @@ data:extend({
       fire_exempt = exempt,
       fire_acid = acid,
       lightning = lightning,
+      attractors = attractors,
     },
   },
 })

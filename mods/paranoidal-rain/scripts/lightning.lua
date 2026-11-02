@@ -7,10 +7,15 @@
 --     (50 %) or left with 10 % health; trees are scorched; fish are killed and dropped as raw fish;
 --   * combustible targets (trees, wooden things, pipes with flammable fluid) catch fire: prain-lightning-fire, which
 --     rain does not put out;
---   * storage tanks and ammunition stores get a spark of fire damage: paranoidal-flammable-fluids decides whether the
---     tank overheats or the ammunition cooks off (no second copy of that logic here);
+--   * storage tanks and ammunition stores (chests, wagons, vehicles, gun and artillery turrets) are handed to
+--     paranoidal-flammable-fluids (remote "flammable_oils": ignite_tank, cook_off), which decides whether the tank
+--     overheats or the ammunition cooks off (no second copy of that logic here); without that mod a tank only gets a
+--     spark of fire damage;
 --   * a discharge jumps on through nearby robots, creatures and poles (prain-lightning-chain).
+-- A lightning attractor of another mod (scripts/rods.lua) in range takes the strike instead of all that.
+-- Every strike raises on_lightning_strike {surface_index, position, target, attractor, energy} (remote get_events).
 local R = require("scripts.registry")
+local events = require("scripts.events")
 
 local M = {}
 R.lightning = M
@@ -24,14 +29,15 @@ local CHAIN_RANGE = 12
 local CHAIN_JUMPS = 10
 local CHAIN_DELAY = 3
 local CHAIN_FORK = 0.3
+local ROD_CHAIN_JUMPS = 3
 local BOLT_HEIGHT = 28
 local RADAR_STATUS = "prain-gui.radar-struck"
 
 local CHAIN_TYPES = { "construction-robot", "logistic-robot", "character", "unit", "unit-spawner", "turret",
   "electric-pole" }
--- paranoidal-flammable-fluids listens to fire damage of these (tanks overheat, ammunition cooks off)
-local HEAT_TYPES = { ["storage-tank"] = true, ["container"] = true, ["logistic-container"] = true,
-  ["cargo-wagon"] = true, ["car"] = true, ["spider-vehicle"] = true, ["artillery-wagon"] = true }
+-- ammunition stores of paranoidal-flammable-fluids (its C.CONTAINER_INVENTORIES)
+local COOK_TYPES = { ["container"] = true, ["logistic-container"] = true, ["cargo-wagon"] = true, ["car"] = true,
+  ["spider-vehicle"] = true, ["artillery-wagon"] = true, ["ammo-turret"] = true, ["artillery-turret"] = true }
 local FIRE_OFFSETS = { { 1, 0 }, { 0, 1 }, { -1, 0 }, { 0, -1 } }
 local FLAMMABLE_FLUIDS = { ["crude-oil"] = true, ["heavy-oil"] = true, ["light-oil"] = true,
   ["petroleum-gas"] = true, ["lubricant"] = true }
@@ -241,6 +247,20 @@ local function shock_fish(surface, target)
   if #drops > 0 then target.die("neutral") end
 end
 
+local function heat(target)
+  local oils = remote.interfaces["flammable_oils"]
+  local kind = target.type
+  if kind == "storage-tank" then
+    if oils and oils.ignite_tank then
+      remote.call("flammable_oils", "ignite_tank", target, { "flo-cause.lightning" })
+    else
+      target.damage(1, "neutral", "fire")
+    end
+  elseif COOK_TYPES[kind] and oils and oils.cook_off then
+    remote.call("flammable_oils", "cook_off", target)
+  end
+end
+
 local function apply(surface, position, target)
   if not (target and target.valid) then return end
   local kind = target.type
@@ -257,7 +277,7 @@ local function apply(surface, position, target)
   else
     shock(target, surface.index)
   end
-  if target.valid and HEAT_TYPES[kind] then target.damage(1, "neutral", "fire") end
+  if target.valid then heat(target) end
   if ignite then strike_fire(surface, position) end
 end
 
@@ -300,7 +320,8 @@ end)
 -- [2.0] A scripted strike. opts.visible: draw it and play it to the players (opts.players); otherwise only effects.
 function M.strike(surface, position, opts)
   opts = opts or {}
-  local target = find_target(surface, position)
+  local rod, spec = R.rods.find(surface, position)
+  local target = rod or find_target(surface, position)
   local ground = position
   local hit = { x = position.x, y = position.y }
   if target then
@@ -312,15 +333,30 @@ function M.strike(surface, position, opts)
     draw_bolt(surface, ground, hit)
     R.thunder.notify(surface, hit, true, opts.players or R.players.on_surface(surface.index))
   end
-  apply(surface, ground, target)
-  if target == nil and not surface.get_tile(ground.x, ground.y).collides_with("water_tile") and random() < 0.15 then
-    strike_fire(surface, ground) -- dry grass near the point
+  local energy = 0
+  if rod then
+    stat("rod_hits")
+    energy = R.rods.hit(rod, spec)
+    if spec.mode == "attract" and storage.cfg.chain then
+      local visited = {}
+      if rod.valid and rod.unit_number then visited[rod.unit_number] = true end
+      chain_from(surface, hit, ROD_CHAIN_JUMPS, visited, opts.visible)
+    end
+  else
+    apply(surface, ground, target)
+    if target == nil and not surface.get_tile(ground.x, ground.y).collides_with("water_tile") and random() < 0.15 then
+      strike_fire(surface, ground) -- dry grass near the point
+    end
+    if storage.cfg.chain then
+      local visited = {}
+      if target and target.valid and target.unit_number then visited[target.unit_number] = true end
+      chain_from(surface, hit, CHAIN_JUMPS, visited, opts.visible)
+    end
   end
-  if storage.cfg.chain then
-    local visited = {}
-    if target and target.valid and target.unit_number then visited[target.unit_number] = true end
-    chain_from(surface, hit, CHAIN_JUMPS, visited, opts.visible)
-  end
+  script.raise_event(events.on_lightning_strike, {
+    surface_index = surface.index, position = { x = ground.x, y = ground.y },
+    target = target and target.valid and target or nil, attractor = rod and rod.valid and rod or nil, energy = energy,
+  })
 end
 
 --[[ [2.1] Engine strike of Dynamic Rain (needs "prain-lightning" from the [2.1] block of data-final-fixes.lua):

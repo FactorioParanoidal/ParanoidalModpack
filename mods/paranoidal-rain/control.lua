@@ -7,6 +7,8 @@
 --   fire       rain slowly puts fires out              combat    fire/acid damage weakened in the rain
 --   solar      solar power in the rain                 pollution rain washes pollution out
 --   chunks     chunk counts for the thunder rate       jobs      delayed jobs by tick
+--   dark       darker sky in the rain, screen flashes  enemies   enemies bolder in the rain (damage, attacks)
+--   rods       lightning attractors of other mods      forecast  weather forecast of the radar network
 -- All game state lives in storage.
 local R = require("scripts.registry")
 local events = require("scripts.events")
@@ -24,9 +26,11 @@ require("scripts.combat")
 require("scripts.solar")
 require("scripts.pollution")
 require("scripts.chunks")
+require("scripts.dark")
+require("scripts.enemies")
+require("scripts.rods")
+require("scripts.forecast")
 local commands_module = require("scripts.commands")
-
-local E = defines.events
 
 -- Rebuild everything that depends on settings and the surface list.
 local function reconcile()
@@ -49,27 +53,50 @@ local function reconcile()
     end
   end
   R.combat.sync()
+  R.enemies.sync()
+  R.dark.cleanup()
+  if not storage.cfg.enabled then R.dark.clear_all() end
 end
 
 -- Called by the weather model on every phase change.
 function R.on_phase(index, old_phase, phase)
   if phase == "wet" then R.fire.on_rain_start(index) end
   R.combat.sync()
+  R.enemies.sync()
+end
+
+local E = defines.events
+local ROD_EVENTS = { E.on_built_entity, E.on_robot_built_entity, E.script_raised_built, E.script_raised_revive,
+  E.on_entity_cloned }
+
+-- Rod build events, only for registered rods (filters come from prototypes: same in on_init and on_load).
+local function register_rods()
+  local names = R.rods.names()
+  if #names == 0 then return end
+  local filters = {}
+  for _, name in ipairs(names) do filters[#filters + 1] = { filter = "name", name = name, mode = "or" } end
+  for _, event in ipairs(ROD_EVENTS) do script.on_event(event, R.rods.on_built, filters) end
 end
 
 script.on_init(function()
   reconcile()
   R.players.refresh_all_hide()
+  R.forecast.reconcile()
+  R.rods.rescan()
+  register_rods()
 end)
 
 script.on_configuration_changed(function()
   reconcile()
   R.players.refresh_all_hide()
   R.sound.queue_all()
+  R.forecast.reconcile()
+  R.rods.rescan()
 end)
 
 script.on_load(function()
   R.combat.on_load()
+  register_rods()
 end)
 
 script.on_event(E.on_runtime_mod_setting_changed, function(event)
@@ -89,8 +116,11 @@ end)
 local function on_tick(event)
   local tick = event.tick
   R.jobs.run(tick)
+  if storage.flashes then R.dark.process_flashes(tick) end
   local c = storage.cfg
   if not c.enabled then return end
+  local dark_tick = tick % R.dark.UPDATE == 0
+  if dark_tick then R.dark.cleanup() end
   R.thunder.process_sounds(tick)
   R.weather.on_tick()
   R.sound.process_restarts()
@@ -109,7 +139,11 @@ local function on_tick(event)
 
       R.solar.sync(index, surface, raining)
       if raining then R.pollution.on_tick(index, surface) end
-      if raining or w.tLeft < R.cfg.THUNDER_LEAD_TICKS then R.thunder.update(index, surface, players) end
+      if raining or R.weather.rain_soon(index) then R.thunder.update(index, surface, players) end
+      if dark_tick and #players > 0 then
+        local darkness = raining and (R.dark_level(R.weather.stage(index)) * strength) or 0
+        R.dark.update(index, players, darkness)
+      end
 
       local volume = c.rain_volume * math.sqrt(strength) * math.min(1, R.weather.stage_data(index).sound)
       R.sound.sync(index, surface, players, volume)
@@ -146,9 +180,13 @@ script.on_event(E.on_player_left_game, function(event)
 end)
 script.on_event(E.on_player_removed, function(event)
   if storage.hide then storage.hide[event.player_index] = nil end
+  if storage.no_flash then storage.no_flash[event.player_index] = nil end
   R.visual.forget_player(event.player_index)
 end)
-script.on_event(E.on_forces_merged, function() R.sound.queue_all() end)
+script.on_event(E.on_forces_merged, function()
+  R.sound.queue_all()
+  R.forecast.reconcile()
+end)
 -- the rain note is not saved: restart the speakers when a game is loaded
 script.on_event(E.on_singleplayer_init, function() R.sound.queue_all() end)
 script.on_event(E.on_multiplayer_init, function() R.sound.queue_all() end)
@@ -176,6 +214,7 @@ script.on_event(E.on_surface_deleted, function(event)
   R.solar.forget(index)
   R.pollution.forget(index)
   R.chunks.forget(index)
+  R.rods.forget(index)
   R.jobs.purge(index)
   if storage.wind then storage.wind[index] = nil end
   R.surfaces.rebuild()
@@ -190,6 +229,12 @@ script.on_event(E.on_chunk_generated, function(event)
 end)
 
 script.on_event(E.on_trigger_created_entity, R.fire.on_marker)
+
+script.on_nth_tick(R.forecast.CHECK, function() R.forecast.check() end)
+script.on_nth_tick(R.enemies.CHECK, function() R.enemies.sync() end)
+script.on_event(E.on_research_finished, function(event) R.forecast.on_research(event, true) end)
+script.on_event(E.on_research_reversed, function(event) R.forecast.on_research(event, false) end)
+script.on_event(E.on_force_created, function() R.forecast.reconcile() end)
 
 commands_module.register()
 
@@ -228,6 +273,7 @@ remote.add_interface("paranoidal-rain", {
     return true
   end,
   get_events = function()
-    return { on_phase_changed = events.on_phase_changed, on_rain_pollution_cleaned = events.on_rain_pollution_cleaned }
+    return { on_phase_changed = events.on_phase_changed, on_rain_pollution_cleaned = events.on_rain_pollution_cleaned,
+      on_lightning_strike = events.on_lightning_strike }
   end,
 })

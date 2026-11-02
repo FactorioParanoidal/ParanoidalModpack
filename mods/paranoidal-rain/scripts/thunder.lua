@@ -62,7 +62,7 @@ end
 -- Flash and thunder for the players of a surface. strike: a bolt hit the ground (loud crack up close).
 function M.notify(surface, position, strike, players)
   local c = storage.cfg
-  if not c.thunder_sound and not c.lightning_flash then return end
+
   local surface_index = surface.index
   local light = false
   for i = 1, #players do
@@ -71,7 +71,16 @@ function M.notify(surface, position, strike, players)
       local p = player.position
       local dx, dy = p.x - position.x, p.y - position.y
       local d2 = dx * dx + dy * dy
-      if d2 < CLOSE_SOUND_RADIUS * CLOSE_SOUND_RADIUS then light = true end
+      if d2 < CLOSE_SOUND_RADIUS * CLOSE_SOUND_RADIUS then
+        light = true
+        -- the screen whitens (scripts/dark.lua): a strike close by strongly, a close thunder slightly
+        local ratio = sqrt(d2) / CLOSE_SOUND_RADIUS
+        if strike and d2 < CRACK_RADIUS * CRACK_RADIUS then
+          R.dark.flash(player, 0.2 + 0.55 * (1 - sqrt(d2) / CRACK_RADIUS))
+        else
+          R.dark.flash(player, 0.18 * (1 - ratio))
+        end
+      end
       if c.thunder_sound and d2 < MAX_SOUND_RADIUS * MAX_SOUND_RADIUS then
         local distance = sqrt(d2)
         local close = distance <= CLOSE_SOUND_RADIUS

@@ -12,6 +12,12 @@ local render_game = defines.render_mode.game
 local render_zoomed_chart = defines.render_mode.chart_zoomed_in
 
 local SPLASH_CHANCE = 0.05     -- per drop at stage factor 1
+-- Splash kind by ground, without reading a tile per splash: every GRID_REFRESH ticks (or after the view moved by a
+-- cell) GRID_COLS x GRID_ROWS tiles of the player's view are read (one per cell, its centre) and classed by tile
+-- name once per name: water -> ripple, a minable tile (laid by players: concrete, bricks, ...) -> light splash,
+-- other ground -> small dark splash. The grid lives in storage (same on every peer).
+local GRID_COLS, GRID_ROWS = 10, 6
+local GRID_REFRESH = 90
 local POST_DENSITY = 0.00036   -- puddles per visible tile per tick at the start of the post-rain tail
 
 local function player_rect(player)
@@ -39,6 +45,7 @@ local function rects_of(players)
     if not R.players.hidden(player) then
       local rect = player_rect(player)
       if rect then
+        rect.player = player.index
         rects[#rects + 1] = rect
         total = total + rect.s
       end
@@ -89,9 +96,51 @@ local function wind_bucket(index, raining)
   return st.bucket
 end
 
-local function splash(surface, x, y, frame)
-  local tile = surface.get_tile(x, y)
-  local kind = tile.collides_with("water_tile") and "ripple" or "splash"
+local tile_kinds = {} -- tile name -> "ripple" | "splash" | "splash-soil" (from prototypes: same on every peer)
+local function tile_kind(name)
+  local kind = tile_kinds[name]
+  if kind then return kind end
+  local proto = prototypes.tile[name]
+  kind = "splash-soil"
+  if proto then
+    local layers = proto.collision_mask and proto.collision_mask.layers
+    if layers and layers["water_tile"] then
+      kind = "ripple"
+    elseif proto.mineable_properties and proto.mineable_properties.minable then
+      kind = "splash"
+    end
+  end
+  tile_kinds[name] = kind
+  return kind
+end
+
+local function grid_of(surface, rect)
+  storage.splash_grid = storage.splash_grid or {}
+  local g = storage.splash_grid[rect.player]
+  local tick = game.tick
+  local cw, ch = rect.w / GRID_COLS, rect.h / GRID_ROWS
+  if g and g.surface == surface.index and tick < g.next and math.abs(g.x - rect.x) < g.cw
+      and math.abs(g.y - rect.y) < g.ch and math.abs(g.cw - cw) < g.cw * 0.25 then
+    return g
+  end
+  g = { surface = surface.index, x = rect.x, y = rect.y, cw = cw, ch = ch, next = tick + GRID_REFRESH, cells = {} }
+  local cells = g.cells
+  for row = 0, GRID_ROWS - 1 do
+    for col = 0, GRID_COLS - 1 do
+      local tile = surface.get_tile(rect.x + (col + 0.5) * cw, rect.y + (row + 0.5) * ch)
+      cells[row * GRID_COLS + col + 1] = tile.valid and tile_kind(tile.name) or "splash-soil"
+    end
+  end
+  storage.splash_grid[rect.player] = g
+  return g
+end
+
+local function splash(surface, g, x, y, frame)
+  local col, row = floor((x - g.x) / g.cw), floor((y - g.y) / g.ch)
+  local kind = "splash-soil"
+  if col >= 0 and col < GRID_COLS and row >= 0 and row < GRID_ROWS then
+    kind = g.cells[row * GRID_COLS + col + 1] or kind
+  end
   surface.create_entity { name = "prain-drop-" .. kind .. "-" .. frame, position = { x, y } }
 end
 
@@ -111,6 +160,7 @@ end
 
 function M.forget_player(player_index)
   if storage.gust_next then storage.gust_next[player_index] = nil end
+  if storage.splash_grid then storage.splash_grid[player_index] = nil end
 end
 
 -- Budget shared by all surfaces within one tick.
@@ -146,6 +196,7 @@ function M.rain(index, surface, players, strength)
     else
       count = floor(count)
     end
+    local grid = splash_chance > 0 and count > 0 and grid_of(surface, r) or nil
     for _ = 1, count do
       local x = r.x + random() * r.w
       local y = r.y + random() * r.h
@@ -155,8 +206,8 @@ function M.rain(index, surface, players, strength)
         local roll = random()
         local layer = roll < 0.38 and "front" or (roll < 0.82 and "mid" or "mist")
         surface.create_entity { name = "prain-drop-" .. layer .. "-" .. frame .. "-" .. wind, position = { x, y } }
-        if splash_chance > 0 and random() < splash_chance then
-          splash(surface, x + random() * 1.4 - 0.7, y + random() * 1.4 - 0.7, frame)
+        if grid and random() < splash_chance then
+          splash(surface, grid, x + random() * 1.4 - 0.7, y + random() * 1.4 - 0.7, frame)
         end
       end
     end
