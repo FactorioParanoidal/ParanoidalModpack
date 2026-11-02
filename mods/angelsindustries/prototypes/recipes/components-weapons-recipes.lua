@@ -8,7 +8,7 @@ if angelsmods.industries.components then
       name = "body-1",
       localised_name = { "item-name.body-1" },
       enabled = false,
-      category = "crafting",
+      categories = {"crafting"},
       energy_required = 0.5,
       ingredients = {
         { type = "item", name = "iron-plate", amount = 2 },
@@ -24,7 +24,7 @@ if angelsmods.industries.components then
       name = "body-2",
       localised_name = { "item-name.body-2" },
       enabled = false,
-      category = "advanced-crafting",
+      categories = {"advanced-crafting"},
       energy_required = 1,
       ingredients = {
         { type = "item", name = "steel-plate", amount = 2 },
@@ -39,7 +39,7 @@ if angelsmods.industries.components then
       name = "body-3",
       localised_name = { "item-name.body-3" },
       enabled = false,
-      category = "advanced-crafting",
+      categories = {"advanced-crafting"},
       energy_required = 1.5,
       ingredients = {
         { type = "item", name = "angels-plate-aluminium", amount = 2 },
@@ -54,7 +54,7 @@ if angelsmods.industries.components then
       name = "body-4",
       localised_name = { "item-name.body-4" },
       enabled = false,
-      category = "advanced-crafting",
+      categories = {"advanced-crafting"},
       energy_required = 2,
       ingredients = {
         { type = "item", name = "angels-plate-titanium", amount = 2 },
@@ -69,7 +69,7 @@ if angelsmods.industries.components then
       name = "body-5",
       localised_name = { "item-name.body-5" },
       enabled = false,
-      category = "advanced-crafting",
+      categories = {"advanced-crafting"},
       energy_required = 3,
       ingredients = {
         { type = "item", name = "angels-plate-tungsten", amount = 2 },
@@ -87,7 +87,7 @@ if angelsmods.industries.components then
       name = "weapon-1",
       localised_name = { "item-name.weapon-1" },
       energy_required = 1 * angelsmods.industries.component_crafting_time_multiplier, -- 1:2 ratio with body
-      category = "crafting",
+      categories = {"crafting"},
       enabled = false,
       ingredients = {
         { type = "item", name = "body-1", amount = 1 },
@@ -104,7 +104,7 @@ if angelsmods.industries.components then
       name = "weapon-2",
       localised_name = { "item-name.weapon-2" },
       energy_required = 1.5 * angelsmods.industries.component_crafting_time_multiplier, -- 2:3 ratio with body
-      category = "advanced-crafting",
+      categories = {"advanced-crafting"},
       enabled = false,
       ingredients = {
         { type = "item", name = "body-2", amount = 1 },
@@ -121,7 +121,7 @@ if angelsmods.industries.components then
       name = "weapon-3",
       localised_name = { "item-name.weapon-3" },
       energy_required = 2 * angelsmods.industries.component_crafting_time_multiplier, -- 3:4 ratio with body
-      category = "advanced-crafting",
+      categories = {"advanced-crafting"},
       enabled = false,
       ingredients = {
         { type = "item", name = "body-3", amount = 1 },
@@ -139,7 +139,7 @@ if angelsmods.industries.components then
       name = "weapon-4",
       localised_name = { "item-name.weapon-4" },
       energy_required = 3.5 * angelsmods.industries.component_crafting_time_multiplier, -- 4:7 ratio with body
-      category = "advanced-crafting",
+      categories = {"advanced-crafting"},
       enabled = false,
       ingredients = {
         { type = "item", name = "body-4", amount = 1 },
@@ -158,7 +158,7 @@ if angelsmods.industries.components then
       name = "weapon-5",
       localised_name = { "item-name.weapon-5" },
       energy_required = 5 * angelsmods.industries.component_crafting_time_multiplier, -- 3:5 ratio with body
-      category = "advanced-crafting",
+      categories = {"advanced-crafting"},
       enabled = false,
       ingredients = {
         { type = "item", name = "body-5", amount = 1 },
@@ -183,7 +183,7 @@ if angelsmods.industries.components then
       subgroup = "angels-weapons-body",
       order = "f",
       energy_required = 0.5,
-      category = "crafting",
+      categories = {"crafting"},
       enabled = false,
       ingredients = {
         { type = "item", name = "iron-plate", amount = 1 },
@@ -199,7 +199,7 @@ if angelsmods.industries.components then
       subgroup = "angels-weapons-body",
       order = "g",
       energy_required = 1,
-      category = "advanced-crafting",
+      categories = {"advanced-crafting"},
       enabled = false,
       ingredients = {
         { type = "item", name = "steel-plate", amount = 1 },
@@ -214,7 +214,7 @@ if angelsmods.industries.components then
       subgroup = "angels-weapons-body",
       order = "h",
       energy_required = 1.5,
-      category = "advanced-crafting",
+      categories = {"advanced-crafting"},
       enabled = false,
       ingredients = {
         { type = "item", name = "angels-plate-aluminium", amount = 1 },
@@ -229,7 +229,7 @@ if angelsmods.industries.components then
       subgroup = "angels-weapons-body",
       order = "i",
       energy_required = 2,
-      category = "advanced-crafting",
+      categories = {"advanced-crafting"},
       enabled = false,
       ingredients = {
         { type = "item", name = "angels-plate-titanium", amount = 1 },
@@ -244,7 +244,7 @@ if angelsmods.industries.components then
       subgroup = "angels-weapons-body",
       order = "j",
       energy_required = 2.5,
-      category = "advanced-crafting",
+      categories = {"advanced-crafting"},
       enabled = false,
       ingredients = {
         { type = "item", name = "angels-plate-tungsten", amount = 1 },
@@ -264,7 +264,7 @@ if angelsmods.industries.components then
       subgroup = "angels-weapons",
       order = "f",
       energy_required = 3,
-      category = "advanced-crafting",
+      categories = {"advanced-crafting"},
       enabled = false,
       ingredients = {
         { type = "item", name = "angels-trigger", amount = 4 },
@@ -293,7 +293,7 @@ if angelsmods.industries.components then
       subgroup = "angels-weapons",
       order = "g",
       energy_required = 3,
-      category = "advanced-crafting",
+      categories = {"advanced-crafting"},
       enabled = false,
       ingredients = {
         { type = "item", name = "angels-explosionchamber", amount = 4 },
@@ -322,7 +322,7 @@ if angelsmods.industries.components then
       subgroup = "angels-weapons",
       order = "h",
       energy_required = 3,
-      category = "advanced-crafting",
+      categories = {"advanced-crafting"},
       enabled = false,
       ingredients = {
         { type = "item", name = "angels-fluidchamber", amount = 4 },
@@ -351,7 +351,7 @@ if angelsmods.industries.components then
       subgroup = "angels-weapons",
       order = "i",
       energy_required = 3,
-      category = "advanced-crafting",
+      categories = {"advanced-crafting"},
       enabled = false,
       ingredients = {
         { type = "item", name = "angels-energycrystal", amount = 4 },
@@ -380,7 +380,7 @@ if angelsmods.industries.components then
       subgroup = "angels-weapons",
       order = "j",
       energy_required = 3,
-      category = "advanced-crafting",
+      categories = {"advanced-crafting"},
       enabled = false,
       ingredients = {
         { type = "item", name = "angels-acceleratorcoil", amount = 4 },

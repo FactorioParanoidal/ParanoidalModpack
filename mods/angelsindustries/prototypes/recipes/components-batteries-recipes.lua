@@ -8,7 +8,7 @@ if angelsmods.industries.components then
       name = "battery-1",
       localised_name = { "item-name.battery-1" },
       enabled = false,
-      category = "crafting-with-fluid",
+      categories = {"crafting-with-fluid"},
       energy_required = 1 * angelsmods.industries.component_crafting_time_multiplier,
       ingredients = {
         { type = "item", name = "battery-casing", amount = 1 },
@@ -28,7 +28,7 @@ if angelsmods.industries.components then
       name = "battery-2",
       localised_name = { "item-name.battery-2" },
       enabled = false,
-      category = "crafting-with-fluid",
+      categories = {"crafting-with-fluid"},
       energy_required = 2 * angelsmods.industries.component_crafting_time_multiplier,
       ingredients = {
         { type = "item", name = "battery-casing", amount = 1 },
@@ -48,7 +48,7 @@ if angelsmods.industries.components then
       name = "battery-3",
       localised_name = { "item-name.battery-3" },
       enabled = false,
-      category = "crafting-with-fluid",
+      categories = {"crafting-with-fluid"},
       energy_required = 3 * angelsmods.industries.component_crafting_time_multiplier,
       ingredients = {
         { type = "item", name = "battery-casing", amount = 1 },
@@ -68,7 +68,7 @@ if angelsmods.industries.components then
       name = "battery-4",
       localised_name = { "item-name.battery-4" },
       enabled = false,
-      category = "crafting-with-fluid",
+      categories = {"crafting-with-fluid"},
       energy_required = 4 * angelsmods.industries.component_crafting_time_multiplier,
       ingredients = {
         { type = "item", name = "battery-casing", amount = 1 },
@@ -88,7 +88,7 @@ if angelsmods.industries.components then
       name = "battery-5",
       localised_name = { "item-name.battery-5" },
       enabled = false,
-      category = "crafting-with-fluid",
+      categories = {"crafting-with-fluid"},
       energy_required = 6 * angelsmods.industries.component_crafting_time_multiplier,
       ingredients = {
         { type = "item", name = "battery-casing", amount = 1 },
@@ -108,7 +108,7 @@ if angelsmods.industries.components then
       name = "battery-6",
       localised_name = { "item-name.battery-6" },
       enabled = false,
-      category = "crafting-with-fluid",
+      categories = {"crafting-with-fluid"},
       energy_required = 10 * angelsmods.industries.component_crafting_time_multiplier,
       ingredients = {
         { type = "item", name = "battery-casing", amount = 1 },
@@ -138,7 +138,7 @@ if angelsmods.industries.components then
       subgroup = "angels-anodes",
       order = "g",
       enabled = false,
-      category = "crafting",
+      categories = {"crafting"},
       energy_required = 5,
       ingredients = {
         { type = "item", name = "battery-frame-1", amount = 3 },
@@ -167,7 +167,7 @@ if angelsmods.industries.components then
       subgroup = "angels-batteries",
       order = "g",
       enabled = false,
-      category = "crafting",
+      categories = {"crafting"},
       energy_required = 0.5,
       ingredients = {
         { type = "item", name = "angels-solid-paper", amount = 2 },
@@ -184,7 +184,7 @@ if angelsmods.industries.components then
       name = "battery-anode-1",
       localised_name = { "item-name.battery-anode-1" },
       enabled = false,
-      category = "crafting",
+      categories = {"crafting"},
       energy_required = 1,
       ingredients = {
         { type = "item", name = "copper-cable", amount = 2 },
@@ -201,7 +201,7 @@ if angelsmods.industries.components then
       name = "battery-cathode-1",
       localised_name = { "item-name.battery-cathode-1" },
       enabled = false,
-      category = "crafting",
+      categories = {"crafting"},
       energy_required = 1,
       ingredients = {
         { type = "item", name = "copper-cable", amount = 2 },
@@ -218,7 +218,7 @@ if angelsmods.industries.components then
       name = "battery-electrolyte-1",
       localised_name = { "fluid-name.battery-electrolyte-1" },
       enabled = false,
-      category = "chemistry",
+      categories = {"chemistry"},
       energy_required = 2.5,
       ingredients = {
         { type = "fluid", name = "sulfuric-acid", amount = 20 },
@@ -251,7 +251,7 @@ if angelsmods.industries.components then
       subgroup = "angels-anodes",
       order = "h",
       enabled = false,
-      category = "crafting",
+      categories = {"crafting"},
       energy_required = 5,
       ingredients = {
         { type = "item", name = "battery-frame-2", amount = 3 },
@@ -280,7 +280,7 @@ if angelsmods.industries.components then
       subgroup = "angels-batteries",
       order = "h",
       enabled = false,
-      category = "crafting-with-fluid",
+      categories = {"crafting-with-fluid"},
       energy_required = 1,
       ingredients = {
         { type = "fluid", name = "angels-liquid-molten-glass", amount = 10 },
@@ -296,7 +296,7 @@ if angelsmods.industries.components then
       name = "battery-anode-2",
       localised_name = { "item-name.battery-anode-2" },
       enabled = false,
-      category = "advanced-crafting",
+      categories = {"advanced-crafting"},
       energy_required = 1.5,
       ingredients = {
         { type = "item", name = "angels-wire-tin", amount = 2 },
@@ -313,7 +313,7 @@ if angelsmods.industries.components then
       name = "battery-cathode-2",
       localised_name = { "item-name.battery-cathode-2" },
       enabled = false,
-      category = "advanced-crafting",
+      categories = {"advanced-crafting"},
       energy_required = 1.5,
       ingredients = {
         { type = "item", name = "angels-wire-tin", amount = 2 },
@@ -330,7 +330,7 @@ if angelsmods.industries.components then
       name = "battery-electrolyte-2",
       localised_name = { "fluid-name.battery-electrolyte-2" },
       enabled = false,
-      category = "chemistry",
+      categories = {"chemistry"},
       energy_required = 2.5,
       ingredients = {
         { type = "fluid", name = "angels-water-purified", amount = 10 },
@@ -406,7 +406,7 @@ if angelsmods.industries.components then
       subgroup = "angels-anodes",
       order = "i",
       enabled = false,
-      category = "crafting",
+      categories = {"crafting"},
       energy_required = 5,
       ingredients = {
         { type = "item", name = "battery-frame-3", amount = 3 },
@@ -435,7 +435,7 @@ if angelsmods.industries.components then
       subgroup = "angels-batteries",
       order = "i",
       enabled = false,
-      category = "crafting-with-fluid",
+      categories = {"crafting-with-fluid"},
       energy_required = 1.5,
       ingredients = {
         { type = "fluid", name = "angels-liquid-molten-aluminium", amount = 10 },
@@ -451,7 +451,7 @@ if angelsmods.industries.components then
       name = "battery-anode-3",
       localised_name = { "item-name.battery-anode-3" },
       enabled = false,
-      category = "advanced-crafting",
+      categories = {"advanced-crafting"},
       energy_required = 2,
       ingredients = {
         { type = "item", name = "angels-wire-silver", amount = 2 },
@@ -468,7 +468,7 @@ if angelsmods.industries.components then
       name = "battery-cathode-3",
       localised_name = { "item-name.battery-cathode-3" },
       enabled = false,
-      category = "advanced-crafting",
+      categories = {"advanced-crafting"},
       energy_required = 2,
       ingredients = {
         { type = "item", name = "angels-wire-silver", amount = 2 },
@@ -486,7 +486,7 @@ if angelsmods.industries.components then
       name = "battery-electrolyte-3",
       localised_name = { "fluid-name.battery-electrolyte-3" },
       enabled = false,
-      category = "chemistry",
+      categories = {"chemistry"},
       energy_required = 2.5,
       ingredients = { --lithia-water/ethylene carbonate
         { type = "fluid", name = "angels-thermal-water", amount = 10 }, --prefer lithia water if active
@@ -520,7 +520,7 @@ if angelsmods.industries.components then
       subgroup = "angels-electrolytes",
       order = "j",
       enabled = false,
-      category = "crafting",
+      categories = {"crafting"},
       energy_required = 5,
       ingredients = {
         { type = "item", name = "battery-frame-4", amount = 3 },
@@ -550,7 +550,7 @@ if angelsmods.industries.components then
       subgroup = "angels-cathodes",
       order = "j",
       enabled = false,
-      category = "advanced-crafting",
+      categories = {"advanced-crafting"},
       energy_required = 2,
       ingredients = {
         { type = "item", name = "plastic-bar", amount = 1 },
@@ -566,7 +566,7 @@ if angelsmods.industries.components then
       name = "battery-anode-4",
       localised_name = { "item-name.battery-anode-4" },
       enabled = false,
-      category = "advanced-crafting",
+      categories = {"advanced-crafting"},
       energy_required = 3.5,
       ingredients = {
         { type = "item", name = "angels-wire-gold", amount = 2 },
@@ -583,7 +583,7 @@ if angelsmods.industries.components then
       name = "battery-cathode-4",
       localised_name = { "item-name.battery-cathode-4" },
       enabled = false,
-      category = "advanced-crafting",
+      categories = {"advanced-crafting"},
       energy_required = 3.5,
       ingredients = {
         { type = "item", name = "angels-wire-gold", amount = 2 },
@@ -601,7 +601,7 @@ if angelsmods.industries.components then
       name = "battery-electrolyte-4",
       localised_name = { "fluid-name.battery-electrolyte-4" },
       enabled = false,
-      category = "chemistry",
+      categories = {"chemistry"},
       energy_required = 2.5,
       ingredients = {
         { type = "fluid", name = "angels-liquid-rubber", amount = 15 }, --realistically, should be PEO, PAN, PMMA or PVdF
@@ -636,7 +636,7 @@ if angelsmods.industries.components then
       subgroup = "angels-electrolytes",
       order = "k",
       enabled = false,
-      category = "crafting",
+      categories = {"crafting"},
       energy_required = 5,
       ingredients = {
         { type = "item", name = "battery-frame-5", amount = 3 },
@@ -665,7 +665,7 @@ if angelsmods.industries.components then
       subgroup = "angels-cathodes",
       order = "k",
       enabled = false,
-      category = "crafting-with-fluid",
+      categories = {"crafting-with-fluid"},
       energy_required = 3,
       ingredients = {
         { type = "fluid", name = "angels-liquid-molten-nickel", amount = 10 },
@@ -681,7 +681,7 @@ if angelsmods.industries.components then
       name = "battery-anode-5",
       localised_name = { "item-name.battery-anode-5" },
       enabled = false,
-      category = "advanced-crafting",
+      categories = {"advanced-crafting"},
       energy_required = 5,
       ingredients = {
         { type = "item", name = "angels-wire-platinum", amount = 3 },
@@ -700,7 +700,7 @@ if angelsmods.industries.components then
       name = "battery-cathode-5",
       localised_name = { "item-name.battery-cathode-5" },
       enabled = false,
-      category = "advanced-crafting",
+      categories = {"advanced-crafting"},
       energy_required = 5,
       ingredients = {
         { type = "item", name = "angels-wire-platinum", amount = 3 },
@@ -719,7 +719,7 @@ if angelsmods.industries.components then
       name = "battery-electrolyte-5",
       localised_name = { "fluid-name.battery-electrolyte-5" },
       enabled = false,
-      category = "chemistry",
+      categories = {"chemistry"},
       energy_required = 2.5,
       ingredients = { --liquid-molten-glass/lithium-chloride
         { type = "fluid", name = "angels-liquid-molten-glass", amount = 10 },
@@ -752,7 +752,7 @@ if angelsmods.industries.components then
       subgroup = "angels-electrolytes",
       order = "l",
       enabled = false,
-      category = "crafting",
+      categories = {"crafting"},
       energy_required = 5,
       ingredients = {
         { type = "item", name = "battery-frame-6", amount = 3 },
@@ -781,7 +781,7 @@ if angelsmods.industries.components then
       subgroup = "angels-cathodes",
       order = "l",
       enabled = false,
-      category = "angels-sintering-5",
+      categories = {"angels-sintering-5"},
       energy_required = 5,
       ingredients = {
         { type = "item", name = "angels-casting-powder-tungsten", amount = 1 },
@@ -797,7 +797,7 @@ if angelsmods.industries.components then
       name = "battery-anode-6",
       localised_name = { "item-name.battery-anode-6" },
       enabled = false,
-      category = "advanced-crafting",
+      categories = {"advanced-crafting"},
       energy_required = 7,
       ingredients = {
         { type = "item", name = "angels-wire-platinum", amount = 2 },
@@ -814,7 +814,7 @@ if angelsmods.industries.components then
       name = "battery-cathode-6",
       localised_name = { "item-name.battery-cathode-6" },
       enabled = false,
-      category = "advanced-crafting",
+      categories = {"advanced-crafting"},
       energy_required = 7,
       ingredients = {
         { type = "item", name = "angels-wire-platinum", amount = 2 },
@@ -831,7 +831,7 @@ if angelsmods.industries.components then
       name = "battery-electrolyte-6",
       localised_name = { "fluid-name.battery-electrolyte-6" },
       enabled = false,
-      category = "chemistry",
+      categories = {"chemistry"},
       energy_required = 2.5,
       ingredients = {
         { type = "fluid", name = "angels-liquid-aqueous-sodium-hydroxide", amount = 20 },

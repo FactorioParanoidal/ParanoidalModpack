@@ -10,7 +10,7 @@ if angelsmods.industries.components then
       subgroup = "angels-circuit-board",
       order = "f",
       energy_required = 0.5,
-      category = "crafting", --to allow hand crafting
+      categories = {"crafting"}, --to allow hand crafting
       enabled = false,
       ingredients = {
         { type = "item", name = "angels-solid-paper", amount = 1 },
@@ -45,7 +45,7 @@ if angelsmods.industries.components then
       subgroup = "angels-circuit-board",
       order = "g",
       energy_required = 1,
-      category = "advanced-crafting",
+      categories = {"advanced-crafting"},
       enabled = false,
       ingredients = {
         { type = "item", name = "iron-plate", amount = 1 },
@@ -61,7 +61,7 @@ if angelsmods.industries.components then
       subgroup = "angels-circuit-board",
       order = "h",
       energy_required = 1.5,
-      category = "advanced-crafting",
+      categories = {"advanced-crafting"},
       enabled = false,
       ingredients = {
         { type = "item", name = "angels-silicon-wafer", amount = 1 },
@@ -78,7 +78,7 @@ if angelsmods.industries.components then
       subgroup = "angels-circuit-board",
       order = "i",
       energy_required = 2,
-      category = "advanced-crafting",
+      categories = {"advanced-crafting"},
       enabled = false,
       ingredients = {
         { type = "item", name = "iron-plate", amount = 1 },
@@ -94,7 +94,7 @@ if angelsmods.industries.components then
       subgroup = "angels-circuit-board",
       order = "j",
       energy_required = 2.5,
-      category = "advanced-crafting",
+      categories = {"advanced-crafting"},
       enabled = false,
       ingredients = {
         { type = "item", name = "angels-silicon-wafer", amount = 1 },
@@ -114,7 +114,7 @@ if angelsmods.industries.components then
       subgroup = "angels-loaded-circuit-board",
       order = "f",
       energy_required = 1.5,
-      category = "advanced-crafting",
+      categories = {"advanced-crafting"},
       enabled = false,
       ingredients = {
         { type = "item", name = "circuit-resistor", amount = 5 },
@@ -143,7 +143,7 @@ if angelsmods.industries.components then
       subgroup = "angels-loaded-circuit-board",
       order = "g",
       energy_required = 1.5,
-      category = "advanced-crafting",
+      categories = {"advanced-crafting"},
       enabled = false,
       ingredients = {
         { type = "item", name = "circuit-transistor", amount = 5 },
@@ -172,7 +172,7 @@ if angelsmods.industries.components then
       subgroup = "angels-loaded-circuit-board",
       order = "h",
       energy_required = 1.5,
-      category = "advanced-crafting",
+      categories = {"advanced-crafting"},
       enabled = false,
       ingredients = {
         { type = "item", name = "circuit-microchip", amount = 5 },
@@ -201,7 +201,7 @@ if angelsmods.industries.components then
       subgroup = "angels-loaded-circuit-board",
       order = "i",
       energy_required = 1.5,
-      category = "advanced-crafting",
+      categories = {"advanced-crafting"},
       enabled = false,
       ingredients = {
         { type = "item", name = "circuit-transformer", amount = 5 },
@@ -230,7 +230,7 @@ if angelsmods.industries.components then
       subgroup = "angels-loaded-circuit-board",
       order = "j",
       energy_required = 1.5,
-      category = "advanced-crafting",
+      categories = {"advanced-crafting"},
       enabled = false,
       ingredients = {
         { type = "item", name = "circuit-cpu", amount = 5 },
@@ -260,7 +260,7 @@ if angelsmods.industries.components then
       name = "circuit-grey-board",
       localised_name = { "item-name.circuit-grey-board" },
       energy_required = 0.25,
-      category = "crafting",
+      categories = {"crafting"},
       enabled = true,
       ingredients = {
         { type = "item", name = "wood", amount = 1 },
@@ -274,7 +274,7 @@ if angelsmods.industries.components then
       name = "circuit-grey-board-alternative",
       localised_name = { "item-name.circuit-grey-board" },
       energy_required = 0.5,
-      category = "crafting",
+      categories = {"crafting"},
       subgroup = "angels-board",
       enabled = false,
       ingredients = {
@@ -293,7 +293,7 @@ if angelsmods.industries.components then
       name = "circuit-red-board",
       localised_name = { "item-name.circuit-red-board" },
       energy_required = 0.5,
-      category = "crafting",
+      categories = {"crafting"},
       enabled = false,
       ingredients = {
         { type = "item", name = "angels-solid-paper", amount = 1 },
@@ -307,7 +307,7 @@ if angelsmods.industries.components then
       name = "circuit-green-board",
       localised_name = { "item-name.circuit-green-board" },
       energy_required = 1,
-      category = "advanced-crafting",
+      categories = {"advanced-crafting"},
       enabled = false,
       ingredients = {
         { type = "item", name = "angels-solid-paper", amount = 1 },
@@ -321,7 +321,7 @@ if angelsmods.industries.components then
       name = "circuit-orange-board",
       localised_name = { "item-name.circuit-orange-board" },
       energy_required = 1.5,
-      category = "advanced-crafting",
+      categories = {"advanced-crafting"},
       enabled = false,
       ingredients = {
         { type = "item", name = "angels-cellulose-fiber", amount = 1 },
@@ -335,7 +335,7 @@ if angelsmods.industries.components then
       name = "circuit-blue-board",
       localised_name = { "item-name.circuit-blue-board" },
       energy_required = 2,
-      category = "advanced-crafting",
+      categories = {"advanced-crafting"},
       enabled = false,
       ingredients = {
         { type = "item", name = "angels-coil-glass-fiber", amount = 2 },
@@ -349,7 +349,7 @@ if angelsmods.industries.components then
       name = "circuit-yellow-board",
       localised_name = { "item-name.circuit-yellow-board" },
       energy_required = 3,
-      category = "chemistry",
+      categories = {"chemistry"},
       enabled = false,
       ingredients = {
         { type = "item", name = "angels-coil-glass-fiber", amount = 2 },
@@ -370,7 +370,7 @@ if angelsmods.industries.components then
       subgroup = "angels-board",
       order = "h",
       energy_required = 0.25, -- 1:1 ratio to boards
-      category = "crafting",
+      categories = {"crafting"},
       enabled = true,
       ingredients = {
         { type = "item", name = "circuit-grey-board", amount = 1 },
@@ -387,7 +387,7 @@ if angelsmods.industries.components then
       name = "circuit-red",
       localised_name = { "item-name.circuit-red" },
       energy_required = 1, --1:2 ratio to boards
-      category = "crafting",
+      categories = {"crafting"},
       enabled = false,
       ingredients = {
         { type = "item", name = "circuit-red-board", amount = 1 },
@@ -404,7 +404,7 @@ if angelsmods.industries.components then
       name = "circuit-green",
       localised_name = { "item-name.circuit-green" },
       energy_required = 1.5, --2:3 ratio to boards
-      category = "advanced-crafting",
+      categories = {"advanced-crafting"},
       enabled = false,
       ingredients = {
         { type = "item", name = "circuit-green-board", amount = 1 },
@@ -420,7 +420,7 @@ if angelsmods.industries.components then
       name = "circuit-orange",
       localised_name = { "item-name.circuit-orange" },
       energy_required = 2, -- 3:4 ratio to boards
-      category = "advanced-crafting",
+      categories = {"advanced-crafting"},
       enabled = false,
       ingredients = {
         { type = "item", name = "circuit-orange-board", amount = 1 },
@@ -437,7 +437,7 @@ if angelsmods.industries.components then
       name = "circuit-blue",
       localised_name = { "item-name.circuit-blue" },
       energy_required = 3.5, -- 4:7 ratio to boards
-      category = "advanced-crafting",
+      categories = {"advanced-crafting"},
       enabled = false,
       ingredients = {
         { type = "item", name = "circuit-blue-board", amount = 1 },
@@ -454,7 +454,7 @@ if angelsmods.industries.components then
       name = "circuit-yellow",
       localised_name = { "item-name.circuit-yellow" },
       energy_required = 5, -- 3:5 ratio to boards
-      category = "advanced-crafting",
+      categories = {"advanced-crafting"},
       enabled = false,
       ingredients = {
         { type = "item", name = "circuit-yellow-board", amount = 1 },
@@ -474,7 +474,7 @@ if angelsmods.industries.components then
       name = "circuit-red-loaded",
       localised_name = { "item-name.circuit-red-loaded" },
       energy_required = 1 * angelsmods.industries.component_crafting_time_multiplier,
-      category = "crafting",
+      categories = {"crafting"},
       enabled = false,
       ingredients = {
         { type = "item", name = "circuit-red", amount = 1 },
@@ -492,7 +492,7 @@ if angelsmods.industries.components then
       name = "circuit-green-loaded",
       localised_name = { "item-name.circuit-green-loaded" },
       energy_required = 1.5 * angelsmods.industries.component_crafting_time_multiplier,
-      category = "advanced-crafting",
+      categories = {"advanced-crafting"},
       enabled = false,
       ingredients = {
         { type = "item", name = "circuit-green", amount = 1 },
@@ -514,7 +514,7 @@ if angelsmods.industries.components then
       name = "circuit-orange-loaded",
       localised_name = { "item-name.circuit-orange-loaded" },
       energy_required = 2 * angelsmods.industries.component_crafting_time_multiplier,
-      category = "advanced-crafting",
+      categories = {"advanced-crafting"},
       enabled = false,
       ingredients = {
         { type = "item", name = "circuit-orange", amount = 1 },
@@ -537,7 +537,7 @@ if angelsmods.industries.components then
       name = "circuit-blue-loaded",
       localised_name = { "item-name.circuit-blue-loaded" },
       energy_required = 3.5 * angelsmods.industries.component_crafting_time_multiplier,
-      category = "advanced-crafting",
+      categories = {"advanced-crafting"},
       enabled = false,
       ingredients = {
         { type = "item", name = "circuit-blue", amount = 1 },
@@ -557,7 +557,7 @@ if angelsmods.industries.components then
       name = "circuit-yellow-loaded",
       localised_name = { "item-name.circuit-yellow-loaded" },
       energy_required = 5 * angelsmods.industries.component_crafting_time_multiplier,
-      category = "advanced-crafting",
+      categories = {"advanced-crafting"},
       enabled = false,
       ingredients = {
         { type = "item", name = "circuit-yellow", amount = 1 },
