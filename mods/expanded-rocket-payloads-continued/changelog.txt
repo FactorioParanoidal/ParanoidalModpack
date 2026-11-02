@@ -3,6 +3,9 @@ Version: 2.0.5
 Date: 29.06.2025
   Bugfixes:
     - Fix recycling of copper and iron ore
+  Compatibility:
+    - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
+    - Paranoidal port to Factorio 2.1: assembler pipe pictures are taken from __base__/prototypes/entity/assembler-pictures.lua (2.1 removed the global assembler2pipepictures/assembler3pipepictures and assemblerpipes.lua).
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.4
 Date: 08.02.2025
