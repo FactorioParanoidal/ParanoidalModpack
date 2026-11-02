@@ -439,6 +439,7 @@ require("tweaks.item.pictures-follow-icon")
 require("tweaks.custom.graphics-atlas")
 -- Собственные изображения поверх оригинальных пакетов Reskins; после сравнения путей атласа.
 require("tweaks.custom.reskins-overrides")
+require("tweaks.technology.inserter-capacity-cost") -- цена бонуса грузоподъёмности II–IV
 -- Этот require ВСЕГДА ПОСЛЕДНИЙ: не переносить и не добавлять код ниже.
 -- Все новые правки размещать выше: здесь фиксируются иконка и последнее место эффекта эволюции.
 require("tweaks.technology.research-evolution-icon")
