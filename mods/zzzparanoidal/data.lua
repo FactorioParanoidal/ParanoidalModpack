@@ -65,6 +65,7 @@ require("prototypes.subgroups.angels-subgroups")
 
 -- new recipe categories
 require("prototypes.recipe-category.alloy-mixing-tiers")
+require("prototypes.recipe-category.basic-crafting")
 
 -- tweaks
 require("tweaks.custom.angelsmods")

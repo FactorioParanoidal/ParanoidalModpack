@@ -26,7 +26,7 @@ for _, prototypes in pairs(data.raw) do
 			if prototype.minable.result == old_name then prototype.minable.result = new_name end
 		end
 		for _, loot in pairs(prototype.loot or {}) do
-			if loot.item == old_name then loot.item = new_name end
+			if loot.name == old_name then loot.name = new_name end -- Factorio 2.1: loot is ItemProductPrototype
 		end
 	end
 end

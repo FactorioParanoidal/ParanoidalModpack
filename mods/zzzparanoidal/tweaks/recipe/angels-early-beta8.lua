@@ -11,42 +11,42 @@ local definitions = {
 		["results"] = {
 			{ type = "item", name = "angels-ore1-chunk", amount = 2 },
 			{ type = "fluid", name = "angels-water-yellow-waste", amount = 50 },
-			{ type = "item", name = "angels-geode-blue", amount = 1, probability = 0.5 },
+			{ type = "item", name = "angels-geode-blue", amount = 1, independent_probability = 0.5 },
 		},
 	},
 	["angels-ore2-chunk"] = {
 		["results"] = {
 			{ type = "item", name = "angels-ore2-chunk", amount = 2 },
 			{ type = "fluid", name = "angels-water-greenyellow-waste", amount = 50 },
-			{ type = "item", name = "angels-geode-purple", amount = 1, probability = 0.5 },
+			{ type = "item", name = "angels-geode-purple", amount = 1, independent_probability = 0.5 },
 		},
 	},
 	["angels-ore3-chunk"] = {
 		["results"] = {
 			{ type = "item", name = "angels-ore3-chunk", amount = 2 },
 			{ type = "fluid", name = "angels-water-yellow-waste", amount = 50 },
-			{ type = "item", name = "angels-geode-yellow", amount = 1, probability = 0.5 },
+			{ type = "item", name = "angels-geode-yellow", amount = 1, independent_probability = 0.5 },
 		},
 	},
 	["angels-ore4-chunk"] = {
 		["results"] = {
 			{ type = "item", name = "angels-ore4-chunk", amount = 2 },
 			{ type = "fluid", name = "angels-water-green-waste", amount = 50 },
-			{ type = "item", name = "angels-geode-lightgreen", amount = 1, probability = 0.5 },
+			{ type = "item", name = "angels-geode-lightgreen", amount = 1, independent_probability = 0.5 },
 		},
 	},
 	["angels-ore5-chunk"] = {
 		["results"] = {
 			{ type = "item", name = "angels-ore5-chunk", amount = 2 },
 			{ type = "fluid", name = "angels-water-red-waste", amount = 50 },
-			{ type = "item", name = "angels-geode-cyan", amount = 1, probability = 0.5 },
+			{ type = "item", name = "angels-geode-cyan", amount = 1, independent_probability = 0.5 },
 		},
 	},
 	["angels-ore6-chunk"] = {
 		["results"] = {
 			{ type = "item", name = "angels-ore6-chunk", amount = 2 },
 			{ type = "fluid", name = "angels-water-yellow-waste", amount = 50 },
-			{ type = "item", name = "angels-geode-red", amount = 1, probability = 0.5 },
+			{ type = "item", name = "angels-geode-red", amount = 1, independent_probability = 0.5 },
 		},
 	},
 	["angels-ore-crusher"] = {

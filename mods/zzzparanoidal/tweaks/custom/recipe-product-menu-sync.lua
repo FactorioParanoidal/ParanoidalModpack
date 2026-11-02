@@ -67,7 +67,7 @@ function M.apply(raw, types, emit)
             recipe.order or (prototype and prototype.order) or ""
     end
     local function positive_output(recipe, result)
-        if result.probability == 0 then return false end
+        if result.independent_probability == 0 then return false end -- Factorio 2.1: was probability
         local amount = result.amount or result.amount_max or 0
         for _, ingredient in ipairs(recipe.ingredients or {}) do
             if ingredient.name == result.name and (ingredient.type or "item") == (result.type or "item") then

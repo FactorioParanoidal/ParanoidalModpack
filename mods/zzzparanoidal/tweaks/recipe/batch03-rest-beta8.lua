@@ -61,7 +61,7 @@ if base and tech then
 		data:extend({ recipe })
 		paralib.bobmods.lib.tech.add_recipe_unlock("angels-slag-processing-3", recipe.name)
 	end
-	local function ore(name, probability) return { type = "item", name = name, amount = 1, probability = probability } end
+	local function ore(name, probability) return { type = "item", name = name, amount = 1, independent_probability = probability } end
 	slag(8, { ore("bob-cobalt-ore", 0.4), ore("tungsten-ore", 0.4) })
 	slag(9, { ore("uranium-ore", 0.4), ore("angels-fluorite-ore", 0.2), ore("bob-thorium-ore", 0.005) })
 else

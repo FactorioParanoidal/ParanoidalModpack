@@ -6,7 +6,7 @@ if recipe and data.raw.capsule["angels-alien-fish-3-raw"] then
 	recipe.results = {
 		{ type = "item", name = "angels-alien-fish-3-raw", amount = 3, ignored_by_productivity = 3, ignored_by_stats = 3 },
 		{
-			type = "item", name = "angels-alien-fish-3-raw", amount = 1, probability = 0.85,
+			type = "item", name = "angels-alien-fish-3-raw", amount = 1, independent_probability = 0.85,
 			ignored_by_productivity = 1, ignored_by_stats = 1, show_details_in_recipe_tooltip = false,
 		},
 		{ type = "fluid", name = "angels-liquid-polluted-fish-atmosphere", amount = 100 },

@@ -39,11 +39,11 @@ local recipes = {
 		ingredients = { item("angels-ore8-crushed", 2), item("angels-ore5-crushed", 2), item("angels-catalysator-brown", 1) },
 		results = { item("angels-manganese-ore", 4) } },
 	["angels-slag-processing-1"] = { time = 2, ingredients = { fluid("angels-mineral-sludge", 50) },
-		results = { { type = "item", name = "angels-ore1", amount = 3, probability = 0.9 } } },
+		results = { { type = "item", name = "angels-ore1", amount = 3, independent_probability = 0.9 } } },
 	["angels-slag-processing-2"] = { time = 2, ingredients = { fluid("angels-mineral-sludge", 50) },
-		results = { { type = "item", name = "angels-ore2", amount = 3, probability = 0.9 } } },
+		results = { { type = "item", name = "angels-ore2", amount = 3, independent_probability = 0.9 } } },
 	["angels-slag-processing-3"] = { time = 2, ingredients = { fluid("angels-mineral-sludge", 50) },
-		results = { { type = "item", name = "angels-ore3", amount = 3, probability = 0.9 } } },
+		results = { { type = "item", name = "angels-ore3", amount = 3, independent_probability = 0.9 } } },
 	["angels-ore-sorting-facility-2"] = { ingredients = {
 		item("steel-plate", 36), item("electronic-circuit", 12), item("angels-clay-brick", 60),
 		item("bob-steel-gear-wheel", 24), item("basic-structure-components", 2), item("angels-ore-sorting-facility", 2) } },
@@ -160,7 +160,7 @@ if slag_base then
 				bobmods.lib.recipe.set_main_category(recipe, "angels-crystallizing-2")
 				recipe.energy_required = 2
 				recipe.ingredients = { fluid("angels-mineral-sludge", 50) }
-				recipe.results = { { type = "item", name = ore, amount = 3, probability = 0.9 } }
+				recipe.results = { { type = "item", name = ore, amount = 3, independent_probability = 0.9 } }
 				recipe.main_product = nil
 				recipe.hidden = false
 				recipe.enabled = false

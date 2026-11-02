@@ -211,7 +211,7 @@ data:extend({ -- Greenhouse
 			{ type = "fluid", name = "water", amount = 50 },
 			{ type = "item", name = "fertilizer", amount = 1 },
 		},
-		results = { { type = "item", name = "bi-purified-air", amount = 1, probability = 0 } },
+		results = { { type = "item", name = "bi-purified-air", amount = 1, independent_probability = 0 } },
 		crafting_machine_tint = {
 			primary = { r = 0.43, g = 0.73, b = 0.37, a = 0.60 },
 			secondary = { r = 0, g = 0, b = 0, a = 0 },
@@ -259,7 +259,7 @@ data:extend({ -- Greenhouse
 			{ type = "fluid", name = "water", amount = 50 },
 			{ type = "item", name = "bi-adv-fertilizer", amount = 1 },
 		},
-		results = { { type = "item", name = "bi-purified-air", amount = 1, probability = 0 } },
+		results = { { type = "item", name = "bi-purified-air", amount = 1, independent_probability = 0 } },
 		crafting_machine_tint = {
 			primary = { r = 0.73, g = 0.37, b = 0.52, a = 0.60 },
 			secondary = { r = 0, g = 0, b = 0, a = 0 },
@@ -300,7 +300,7 @@ data:extend({ -- Greenhouse
 			{ type = "fluid", name = "water", amount = 50 },
 			--{type = "item", name = "fertilizer", amount = 1}
 		},
-		results = { { type = "item", name = "bi-purified-air", amount = 1, probability = 0 } },
+		results = { { type = "item", name = "bi-purified-air", amount = 1, independent_probability = 0 } },
 		crafting_machine_tint = {
 			primary = { r = 255, g = 255, b = 255, a = 0.60 },
 			secondary = { r = 0, g = 0, b = 0, a = 0 },

@@ -80,8 +80,15 @@ for _, tech in pairs(data.raw.technology) do
     add_from_item_array(tech.unit.ingredients, RS["science-pack"], "science-pack")
   end
 end
+-- Factorio 2.1: ItemPrototype::fuel_category -> fuel_categories (list)
+local function has_fuel_category(item, category)
+  for _, c in pairs(item.fuel_categories or {}) do
+    if c == category then return true end
+  end
+  return false
+end
 for _, item in pairs(data.raw.item) do
-  if item.fuel_category == "nuclear" then
+  if has_fuel_category(item, "nuclear") then
     ReStack_Items[item.name] = { stack_size = RS["fuel-category-nuclear"], type = "fuel-category-nuclear" }
     if item.burnt_result then
       ReStack_Items[item.burnt_result] = { stack_size = RS["fuel-category-nuclear"], type = "fuel-category-nuclear" }
@@ -231,7 +238,7 @@ for _, r in pairs(data.raw.recipe) do
         if fl and fl.fuel_value then
           local ev = energy_to_j(fl.fuel_value)
           if ev and ev > 0 then
-            bi.fuel_category = bi.fuel_category or "chemical"
+            bi.fuel_categories = bi.fuel_categories or {"chemical"} -- Factorio 2.1
             bi.fuel_value = (ev * ra(in_f) / ra(out_b)) .. "J"
           end
         end

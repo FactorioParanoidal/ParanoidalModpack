@@ -51,7 +51,7 @@ for _, b in ipairs(slag_byproducts) do
 			type = "item",
 			name = "angels-slag",
 			amount = 1,
-			probability = b.probability,
+			independent_probability = b.probability,
 		})
 		data.raw.recipe[recipe_name].main_product = main_item
 	end

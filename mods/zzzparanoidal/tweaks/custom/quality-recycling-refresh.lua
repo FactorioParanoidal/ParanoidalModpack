@@ -23,6 +23,16 @@ local function is_recycling(recipe)
 	end
 	return false
 end
+-- Пересобираются только чистые рецепты переработки (все категории — recycling), как в 2.0 удалялись
+-- только рецепты с category = "recycling". Рецепт, который можно делать и в другом месте (переработка
+-- лома из zzzparanoidal-start-bnl: {"recycling", "hand-crafting"}, в 2.0 — recycling-or-hand-crafting),
+-- остаётся.
+local function is_pure_recycling(recipe)
+	for _, category in pairs(categories_of(recipe)) do
+		if category ~= "recycling" then return false end
+	end
+	return true
+end
 
 -- Из рецептов этих категорий предмет разбирается на ингредиенты (сборочные автоматы и руки).
 local assembly = {
@@ -128,7 +138,7 @@ end
 -- Удаляем все прежние рецепты переработки: дальше каждый строится заново.
 local removed = 0
 for _, name in ipairs(sorted_keys(recipes)) do
-	if is_recycling(recipes[name]) then
+	if is_pure_recycling(recipes[name]) then
 		recipes[name] = nil
 		removed = removed + 1
 	end

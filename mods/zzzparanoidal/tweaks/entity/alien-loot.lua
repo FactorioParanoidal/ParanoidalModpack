@@ -21,10 +21,10 @@ if data.raw.item["bob-small-alien-artifact"] then
 				local probability = (tier * tier) / 100 -- smooth growth from 0.01 for 1 tier(small) to 0.5 to 7 tier(leviathan)
 				for _, color in ipairs(elementToColor) do
 					table.insert(data.raw.unit[enemyFullName].loot, {
-						item = "bob-small-alien-artifact" .. color,
-						count_min = 0,
-						count_max = 3,
-						probability = probability,
+						type = "item", name = "bob-small-alien-artifact" .. color,
+						amount_min = 0,
+						amount_max = 3,
+						independent_probability = probability,
 					})
 				end
 			end
@@ -33,36 +33,36 @@ if data.raw.item["bob-small-alien-artifact"] then
 	-- common enemy loot
 	table.insert(
 		data.raw.unit["small-biter"].loot,
-		{ item = "bob-small-alien-artifact", count_min = 0, count_max = 1, probability = 0.01 }
+		{ type = "item", name = "bob-small-alien-artifact", amount_min = 0, amount_max = 1, independent_probability = 0.01 }
 	) --DrD all enemy count_min
 	table.insert(
 		data.raw.unit["small-spitter"].loot,
-		{ item = "bob-small-alien-artifact", count_min = 0, count_max = 1, probability = 0.01 }
+		{ type = "item", name = "bob-small-alien-artifact", amount_min = 0, amount_max = 1, independent_probability = 0.01 }
 	)
 	table.insert(
 		data.raw.unit["medium-biter"].loot,
-		{ item = "bob-small-alien-artifact", count_min = 0, count_max = 3, probability = 0.01 }
+		{ type = "item", name = "bob-small-alien-artifact", amount_min = 0, amount_max = 3, independent_probability = 0.01 }
 	)
 	table.insert(
 		data.raw.unit["medium-spitter"].loot,
-		{ item = "bob-small-alien-artifact", count_min = 0, count_max = 3, probability = 0.01 }
+		{ type = "item", name = "bob-small-alien-artifact", amount_min = 0, amount_max = 3, independent_probability = 0.01 }
 	)
 	table.insert(
 		data.raw.unit["big-biter"].loot,
-		{ item = "bob-small-alien-artifact", count_min = 0, count_max = 4, probability = 0.01 }
+		{ type = "item", name = "bob-small-alien-artifact", amount_min = 0, amount_max = 4, independent_probability = 0.01 }
 	)
 	table.insert(
 		data.raw.unit["big-spitter"].loot,
-		{ item = "bob-small-alien-artifact", count_min = 0, count_max = 4, probability = 0.01 }
+		{ type = "item", name = "bob-small-alien-artifact", amount_min = 0, amount_max = 4, independent_probability = 0.01 }
 	)
 
 	table.insert(
 		data.raw.unit["behemoth-biter"].loot,
-		{ item = "bob-small-alien-artifact", count_min = 0, count_max = 12, probability = 0.01 }
+		{ type = "item", name = "bob-small-alien-artifact", amount_min = 0, amount_max = 12, independent_probability = 0.01 }
 	)
 	table.insert(
 		data.raw.unit["behemoth-spitter"].loot,
-		{ item = "bob-small-alien-artifact", count_min = 0, count_max = 12, probability = 0.01 }
+		{ type = "item", name = "bob-small-alien-artifact", amount_min = 0, amount_max = 12, independent_probability = 0.01 }
 	)
 end
 

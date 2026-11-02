@@ -13,7 +13,7 @@ local function merge(list)
     if entry.name == OLD and (entry.type or "item") == "item" then entry.name = NEW end
     local key = (entry.type or "item") .. "/" .. tostring(entry.name)
     local prev = (entry.type or "item") == "item" and seen[key]
-    if prev and prev.amount and entry.amount and not prev.probability and not entry.probability
+    if prev and prev.amount and entry.amount and not prev.independent_probability and not entry.independent_probability
       and not prev.amount_min and not entry.amount_min then
       prev.amount = prev.amount + entry.amount
     else

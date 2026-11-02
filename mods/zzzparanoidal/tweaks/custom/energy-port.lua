@@ -101,7 +101,7 @@ for _, recipe in pairs(data.raw.recipe) do
         if fluid and fluid.fuel_value and other.type == "item" and barrel
             and emptied[barrel.name .. "|" .. fluid.name] then
             local per_item = fluid_in.amount / results[1].amount
-            barrel.fuel_category = barrel.fuel_category or "chemical"
+            barrel.fuel_categories = barrel.fuel_categories or {"chemical"} -- Factorio 2.1
             barrel.fuel_value = tostring(util.parse_energy(fluid.fuel_value) * per_item) .. "J"
             barrel.fuel_emissions_multiplier = fluid.emissions_multiplier or 1
         end
