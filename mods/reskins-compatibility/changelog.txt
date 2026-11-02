@@ -9,6 +9,8 @@ Date: 2026-01-31
   Locale:
     - Minor update to Korean localization
     - ru: the mod name and the mod list description are the same as in ParanoidalLocale (format "English title (Russian translation)"), so the mod reads the same with or without it.
+  Compatibility:
+    - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
 ---------------------------------------------------------------------------------------------------
 Version: 2.3.9
 Date: 2026-01-10
