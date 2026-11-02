@@ -13,7 +13,7 @@ data:extend({
   {
     type = "recipe",
     name = "angels-coke-purification-3",
-    category = "angels-liquifying",
+    categories = {"angels-liquifying"},
     subgroup = "angels-petrochem-coal",
     energy_required = 2,
     enabled = false,
@@ -28,7 +28,7 @@ data:extend({
   {
     type = "recipe",
     name = "angels-gas-nitrogen-monoxide-2",
-    category = "chemistry",
+    categories = {"chemistry"},
     subgroup = "angels-petrochem-nitrogen",
     energy_required = 2,
     enabled = false,
@@ -50,7 +50,7 @@ paralib.bobmods.lib.tech.add_recipe_unlock("angels-coal-processing-3", "angels-c
 -- resin: только ручной крафт, 1 дерево
 local resin_wood = data.raw.recipe["bob-resin-wood"]
 if resin_wood then
-  resin_wood.category = "crafting-handonly"
+  bobmods.lib.recipe.set_main_category(resin_wood, "crafting-handonly") -- Factorio 2.1: categories[1]
   resin_wood.ingredients = { { type = "item", name = "wood", amount = 1 } }
   resin_wood.energy_required = 4
 end

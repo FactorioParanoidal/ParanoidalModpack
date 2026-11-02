@@ -68,10 +68,10 @@ end
 -- INTERMEDIATE
 SelectItemByEntity("resource", RS.ores, "ore", false)
 for _, recipe in pairs(data.raw.recipe) do
-  if recipe.category == "smelting" then
+  if bobmods.lib.recipe.get_category(recipe) == "smelting" then -- Factorio 2.1: categories[1]
     SelectItemsByRecipeResult(recipe, RS.plates, "smelting")
   end
-  if recipe.category == "rocket-building" then
+  if bobmods.lib.recipe.get_category(recipe) == "rocket-building" then
     SelectItemsByRecipeInput(recipe, RS["rocket-parts"], "rocket-part")
   end
 end

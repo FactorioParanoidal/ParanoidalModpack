@@ -82,7 +82,7 @@ data:extend({
 	{
 		type = "recipe",
 		name = "dpa-water",
-		category = "dpa",
+		categories = {"dpa"},
 		enabled = true,
 		hidden = true,
 		energy_required = 1,

@@ -388,7 +388,7 @@ end
 -- Наполнение и опустошение бочек делает только насос для бочек; в базовой 2.0 они скрыты из ручного крафта.
 local barrels = 0
 for _, recipe in pairs(raw.recipe) do
-	if recipe.category == "angels-barreling-pump" and not recipe.hidden and not recipe.hide_from_player_crafting then
+	if bobmods.lib.recipe.get_category(recipe) == "angels-barreling-pump" and not recipe.hidden and not recipe.hide_from_player_crafting then
 		recipe.hide_from_player_crafting = true
 		barrels = barrels + 1
 	end

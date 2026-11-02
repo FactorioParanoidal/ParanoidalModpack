@@ -28,7 +28,7 @@ data:extend({
 		type = "recipe",
 		name = "paranoidal-iron-stick-casting",
 		localised_name = { "item-name.iron-stick" },
-		category = "angels-casting",
+		categories = {"angels-casting"},
 		subgroup = "paranoidal-casting-iron-gears",
 		order = "10",
 		energy_required = 2,

@@ -24,7 +24,7 @@ end
 -- ПР-041: старые три жидких входа помещаются в существующих усовершенствованных химзаводах.
 local paper = data.raw.recipe["angels-solid-paper-3"]
 if paper then
-	paper.category = "angels-advanced-chemistry"
+	bobmods.lib.recipe.set_main_category(paper, "angels-advanced-chemistry") -- Factorio 2.1: categories[1]
 	paper.energy_required = 4
 	local ingredients = {}
 	for _, ingredient in ipairs(paper.ingredients or {}) do

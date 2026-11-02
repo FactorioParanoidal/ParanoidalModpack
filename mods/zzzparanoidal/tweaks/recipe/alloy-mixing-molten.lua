@@ -130,7 +130,7 @@ for index, spec in ipairs(new_recipes) do
 			type = "recipe",
 			name = name,
 			localised_name = { "fluid-name." .. result },
-			category = CATEGORY[tier],
+			categories = {CATEGORY[tier]},
 			subgroup = subgroup,
 			order = last_order(subgroup) .. "-" .. string.format("%02d", index),
 			enabled = false,
@@ -145,7 +145,7 @@ for index, spec in ipairs(new_recipes) do
 end
 if #added > 0 then data:extend(added) end
 for _, recipe in ipairs(added) do
-	unlock_in_mixer(recipe.name, tonumber(recipe.category:match("%-(%d)$")) or 1)
+	unlock_in_mixer(recipe.name, tonumber(bobmods.lib.recipe.get_category(recipe):match("%-(%d)$")) or 1)
 end
 
 for _, spec in ipairs(old_recipes) do
@@ -153,7 +153,7 @@ for _, spec in ipairs(old_recipes) do
 	local recipe = data.raw.recipe[name]
 	if recipe then
 		if tier then
-			recipe.category = CATEGORY[tier]
+			bobmods.lib.recipe.set_main_category(recipe, CATEGORY[tier]) -- Factorio 2.1: categories[1]
 			unlock_in_mixer(name, tier)
 		end
 		local twin = twin_name and data.raw.recipe[twin_name]

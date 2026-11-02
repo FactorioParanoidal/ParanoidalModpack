@@ -342,7 +342,7 @@ paralib.bobmods.lib.tech.remove_recipe_unlock("angels-ore-floatation", "bob-silv
 
 --ремонт рецепта материнской бактерии (AKMF)
 if data.raw["recipe"]["bacterial-growth-seed-cultivation-2"] then
-	data.raw["recipe"]["bacterial-growth-seed-cultivation-2"].category = "angels-advanced-chemistry"
+	bobmods.lib.recipe.set_category("bacterial-growth-seed-cultivation-2", "angels-advanced-chemistry") -- Factorio 2.1: categories[1]
 end
 
 paralib.bobmods.lib.tech.add_recipe_unlock("angels-sodium-processing-2", "Calcium-chloride-Calcium-carbonate")

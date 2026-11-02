@@ -108,7 +108,7 @@ table.insert(recipes, {
 	-- Категорию ставим здесь, а не через recipe_tier_overrides ниже: рецепт
 	-- добавляется в data.raw через data:extend(recipes) в конце файла —
 	-- override-loop его не догонит.
-	category = "molten-alloy-mixing-2",
+	categories = {"molten-alloy-mixing-2"},
 	subgroup = "angels-steel-casting",
 	order = "z[alloy-mixing]-3-cobalt",
 	enabled = false,
@@ -173,7 +173,7 @@ for name, recipe in pairs(data.raw.recipe) do
 	if name:match("^molten%-.*%-alloy%-mixing") then
 		local tier = tier_special[name] or tonumber(name:match("-(%d+)$"))
 		if tier and tier >= 2 and tier <= 4 then
-			recipe.category = "molten-alloy-mixing-" .. tier
+			bobmods.lib.recipe.set_main_category(recipe, "molten-alloy-mixing-" .. tier) -- Factorio 2.1: categories[1]
 		end
 	end
 end
@@ -237,7 +237,7 @@ for _, m in ipairs(pipe_metals) do
 		type = "recipe",
 		name = "angels-" .. metal .. "-pipe-casting",
 		localised_name = { "item-name." .. pipe_item },
-		category = "angels-casting",
+		categories = {"angels-casting"},
 		subgroup = subgroup,
 		energy_required = 4,
 		enabled = false,
@@ -252,7 +252,7 @@ for _, m in ipairs(pipe_metals) do
 		type = "recipe",
 		name = "angels-" .. metal .. "-pipe-to-ground-casting",
 		localised_name = { "item-name." .. ug_item },
-		category = "angels-casting",
+		categories = {"angels-casting"},
 		subgroup = subgroup,
 		energy_required = 2,
 		enabled = false,
@@ -298,7 +298,7 @@ for _, r in ipairs(special_pipe_recipes) do
 		type = "recipe",
 		name = r.name,
 		localised_name = { "item-name." .. r.pipe_item },
-		category = r.category,
+		categories = {r.category},
 		subgroup = "angels-alloys-casting",
 		energy_required = r.energy_required or 4,
 		enabled = false,
@@ -443,7 +443,7 @@ for metal, p in pairs(roll_alloys) do
 		type = "recipe",
 		name = roll .. "-casting",
 		localised_name = { "item-name." .. roll },
-		category = "angels-strand-casting",
+		categories = {"angels-strand-casting"},
 		subgroup = p.subgroup,
 		energy_required = 4,
 		enabled = false,
@@ -463,7 +463,7 @@ for metal, p in pairs(roll_alloys) do
 		type = "recipe",
 		name = roll .. "-converting",
 		localised_name = { "item-name." .. p.plate },
-		category = "advanced-crafting",
+		categories = {"advanced-crafting"},
 		subgroup = p.subgroup,
 		energy_required = 0.5,
 		enabled = false,
@@ -479,7 +479,7 @@ for metal, p in pairs(roll_alloys) do
 		type = "recipe",
 		name = roll .. "-casting-fast",
 		localised_name = { "item-name." .. roll },
-		category = "angels-strand-casting-2",
+		categories = {"angels-strand-casting-2"},
 		subgroup = p.subgroup,
 		energy_required = 2,
 		enabled = false,

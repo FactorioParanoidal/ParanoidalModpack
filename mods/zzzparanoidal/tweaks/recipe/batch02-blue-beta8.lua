@@ -45,7 +45,7 @@ local recipes = {
 for name, spec in pairs(recipes) do
 	local recipe = data.raw.recipe[name]
 	if recipe then
-		if spec.category then recipe.category = spec.category end
+		if spec.category then bobmods.lib.recipe.set_main_category(recipe, spec.category) end -- Factorio 2.1: categories[1]
 		if spec.time then recipe.energy_required = spec.time end
 		if spec.ingredients then recipe.ingredients = spec.ingredients end
 		if spec.results then recipe.results = spec.results end

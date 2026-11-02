@@ -4,7 +4,7 @@ for _, name in ipairs({
     "bronze-alloy-x", "bob-brass-alloy-x", "bob-invar-alloy-x", "bob-cobalt-steel-alloy-x",
 }) do
     local recipe = data.raw.recipe[name]
-    if recipe then recipe.category = "bob-mixing-furnace" end
+    if recipe then bobmods.lib.recipe.set_main_category(recipe, "bob-mixing-furnace") end -- Factorio 2.1: categories[1]
 end
 
 -- Beta 8 frames were machine-only. A dedicated category avoids changing other
@@ -22,7 +22,7 @@ for _, machine in pairs(data.raw["assembling-machine"]) do
 end
 for _, name in ipairs({"basic", "intermediate", "advanced", "anotherworld"}) do
     local recipe = data.raw.recipe[name .. "-structure-components"]
-    if recipe then recipe.category = category end
+    if recipe then bobmods.lib.recipe.set_main_category(recipe, category) end
 end
 
 -- The tier-III bootstrap used ordinary concrete, not the new Angels bricks.

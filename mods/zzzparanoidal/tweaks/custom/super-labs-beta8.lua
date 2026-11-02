@@ -9,7 +9,7 @@ for _, source in ipairs(require("prototypes.super-labs-beta8")) do
     end
     if source.icon then target.icons = nil end
     if source.type == "recipe" then
-        target.category = "crafting"
+        target.categories = {"crafting"} -- Factorio 2.1: category -> categories
         target.hidden = false
         target.hide_from_player_crafting = false
     elseif source.type == "technology" then

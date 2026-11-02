@@ -3,7 +3,7 @@ local function newRecipe(item, time)
 	local rec = {
 		type = "recipe",
 		name = item .. "-structure-components",
-		category = "crafting",
+		categories = {"crafting"},
 		enabled = false,
 		energy_required = time,
 		ingredients = {},

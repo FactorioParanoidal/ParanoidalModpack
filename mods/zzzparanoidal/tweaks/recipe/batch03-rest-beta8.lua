@@ -50,7 +50,7 @@ if base and tech then
 		end
 		local recipe = table.deepcopy(base)
 		recipe.name = "angels-slag-processing-" .. index
-		recipe.category = "angels-crystallizing-2"
+		bobmods.lib.recipe.set_main_category(recipe, "angels-crystallizing-2") -- Factorio 2.1: categories[1]
 		recipe.energy_required = 8
 		recipe.order = "0" .. index
 		recipe.main_product = nil

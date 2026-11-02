@@ -51,7 +51,7 @@ local function add_upgrade(name, source_name, target_name, order, extra_ingredie
         type = "recipe",
         name = name,
         localised_name = {"recipe-name." .. name},
-        category = "crafting",
+        categories = {"crafting"},
         enabled = ordinary.enabled == true,
         energy_required = ordinary.energy_required or 0.5,
         allow_productivity = false,

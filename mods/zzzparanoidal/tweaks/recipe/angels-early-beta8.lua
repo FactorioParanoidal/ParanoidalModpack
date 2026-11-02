@@ -298,7 +298,7 @@ if not data.raw.recipe["wooden-board-paper"] and data.raw.item["bob-wooden-board
 	and data.raw.item["angels-solid-paper"] and data.raw.technology["angels-bio-paper-1"] then
 	data:extend({ {
 		["name"] = "wooden-board-paper",
-		["category"] = "advanced-crafting",
+		["categories"]={"advanced-crafting"},
 		["energy_required"] = 4,
 		["ingredients"] = {
 			{ type = "item", name = "angels-solid-paper", amount = 2 },

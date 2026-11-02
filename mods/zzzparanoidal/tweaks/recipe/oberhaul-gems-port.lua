@@ -52,7 +52,7 @@ if dust then
 				type = "recipe",
 				name = "ober-liquify-" .. g,
 				-- 1.1 ore-sorting; в 2.0 здесь живёт geode→crystal-dust
-				category = "angels-ore-refining-t1",
+				categories = {"angels-ore-refining-t1"},
 				energy_required = 1,
 				enabled = false,
 				ingredients = { { type = "item", name = ore.name, amount = 1 } },

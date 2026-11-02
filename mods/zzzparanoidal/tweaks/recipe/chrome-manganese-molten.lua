@@ -29,7 +29,7 @@ for _, metal in ipairs(metals) do
 	local fluid = data.raw.fluid[fluid_name]
 	local technology = data.raw.technology[metal.unlock]
 	if recipe and fluid and technology and data.raw.item["angels-ingot-" .. metal.name] then
-		recipe.category = metal.category
+		bobmods.lib.recipe.set_main_category(recipe, metal.category) -- Factorio 2.1: categories[1]
 		recipe.energy_required = 4
 		recipe.ingredients = { { type = "item", name = "angels-ingot-" .. metal.name, amount = 12 } }
 		recipe.results = { { type = "fluid", name = fluid_name, amount = 120 } }

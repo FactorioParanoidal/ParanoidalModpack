@@ -47,7 +47,7 @@ if not data.raw.item["rocket-control-unit"] and not data.raw.item["rocket-contro
 		{
 			type = "recipe",
 			name = "rocket-control-unit",
-			category = "electronics",
+			categories = {"electronics"},
 			enabled = false,
 			energy_required = 30,
 			ingredients = {
@@ -70,7 +70,7 @@ if not data.raw.item["rocket-control-unit"] and not data.raw.item["rocket-contro
 		{
 			type = "recipe",
 			name = "rocket-control-circuit",
-			category = "electronics",
+			categories = {"electronics"},
 			enabled = false,
 			energy_required = 150,
 			ingredients = {

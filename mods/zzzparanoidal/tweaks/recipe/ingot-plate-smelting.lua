@@ -60,7 +60,7 @@ local function unlocking_technology(ingot)
 	local producers = {}
 	for name, recipe in pairs(raw.recipe) do
 		for _, result in pairs(recipe.results or {}) do
-			if result.name == ingot and recipe.category ~= "recycling" then producers[name] = true end
+			if result.name == ingot and bobmods.lib.recipe.get_category(recipe) ~= "recycling" then producers[name] = true end
 		end
 	end
 	local found
@@ -100,7 +100,7 @@ for _, metal in ipairs(metals) do
 			name = name,
 			-- Имя пластины: движок не подставил имя продукта (рецепт с другим именем показывал Unknown key).
 			localised_name = table.deepcopy(plate.localised_name) or {"item-name." .. metal.plate},
-			category = "smelting",
+			categories = {"smelting"},
 			subgroup = plate.subgroup,
 			order = (plate.order or "") .. "-z",
 			enabled = false,

@@ -35,7 +35,7 @@ for index, definition in ipairs(definitions) do
             type = "recipe", name = definition.name, icon = graphics .. "icons/" .. definition.icon, icon_size = 32,
             localised_name = { "item-name." .. definition.name },
             subgroup = "paranoidal-platinum-components", order = tostring(index), enabled = false,
-            category = definition.category, energy_required = definition.time, allow_productivity = false,
+            categories = {definition.category}, energy_required = definition.time, allow_productivity = false,
             ingredients = definition.ingredients, results = { { type = "item", name = definition.name, amount = 1 } },
         },
     })

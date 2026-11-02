@@ -3,7 +3,7 @@ data:extend({
 	{
 		type = "recipe",
 		name = "Calcium-chloride-Calcium-carbonate",
-		category = "chemistry",
+		categories = {"chemistry"},
 		subgroup = "angels-petrochem-sulfur",
 		energy_required = 4,
 		enabled = false,
@@ -23,7 +23,7 @@ data:extend({
 	{
 		type = "recipe",
 		name = "Calcium-carbonate-Calcium-sulfate",
-		category = "chemistry",
+		categories = {"chemistry"},
 		subgroup = "angels-petrochem-sulfur",
 		energy_required = 4,
 		enabled = false,

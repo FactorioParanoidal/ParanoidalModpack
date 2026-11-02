@@ -9,7 +9,7 @@ if not data.raw.recipe["bi-production-science-pack"] then
 		{
 			type = "recipe",
 			name = "bi-production-science-pack",
-			category = "crafting",
+			categories = {"crafting"},
 			enabled = false,
 			energy_required = 21,
 			ingredients = {

@@ -4,7 +4,7 @@ data:extend({
 		name = "bronze-alloy-x",
 		enabled = false,
 		hidden = false,
-		category = "bob-mixing-furnace",
+		categories = {"bob-mixing-furnace"},
 		energy_required = 32,
 		ingredients = {
 			{ type = "item", name = "copper-plate", amount = 3 },
@@ -21,7 +21,7 @@ data:extend({
 		name = "angel-solder-alloy-x",
 		enabled = false,
 		hidden = false,
-		category = "bob-mixing-furnace",
+		categories = {"bob-mixing-furnace"},
 		energy_required = 32,
 		ingredients = {
 			{ type = "item", name = "bob-tin-plate", amount = 5 },
@@ -38,7 +38,7 @@ data:extend({
 		name = "bob-brass-alloy-x",
 		enabled = false,
 		hidden = false,
-		category = "bob-mixing-furnace",
+		categories = {"bob-mixing-furnace"},
 		energy_required = 32,
 		ingredients = {
 			{ type = "item", name = "copper-plate", amount = 3 },
@@ -55,7 +55,7 @@ data:extend({
 		name = "copper-tungsten-alloy-x",
 		enabled = false,
 		hidden = false,
-		category = "bob-mixing-furnace",
+		categories = {"bob-mixing-furnace"},
 		energy_required = 32,
 		ingredients = {
 			{ type = "item", name = "copper-plate", amount = 2 },
@@ -72,7 +72,7 @@ data:extend({
 		name = "bob-tungsten-carbide-x",
 		enabled = false,
 		hidden = false,
-		category = "bob-mixing-furnace",
+		categories = {"bob-mixing-furnace"},
 		energy_required = 25.6,
 		ingredients = {
 			{ type = "item", name = "carbon", amount = 1 },
@@ -89,7 +89,7 @@ data:extend({
 		name = "bob-tungsten-carbide-2x",
 		enabled = false,
 		hidden = false,
-		category = "bob-mixing-furnace",
+		categories = {"bob-mixing-furnace"},
 		energy_required = 25.6,
 		ingredients = {
 			{ type = "item", name = "carbon", amount = 1 },
@@ -106,7 +106,7 @@ data:extend({
 		name = "gunmetal-alloy-x",
 		enabled = false,
 		hidden = false,
-		category = "bob-mixing-furnace",
+		categories = {"bob-mixing-furnace"},
 		energy_required = 32,
 		ingredients = {
 			{ type = "item", name = "copper-plate", amount = 8 },
@@ -124,7 +124,7 @@ data:extend({
 		name = "bob-invar-alloy-x",
 		enabled = false,
 		hidden = false,
-		category = "bob-mixing-furnace",
+		categories = {"bob-mixing-furnace"},
 		energy_required = 32,
 		ingredients = {
 			{ type = "item", name = "steel-plate", amount = 4 },
@@ -141,7 +141,7 @@ data:extend({
 		name = "nitinol-alloy-x",
 		enabled = false,
 		hidden = false,
-		category = "bob-mixing-furnace",
+		categories = {"bob-mixing-furnace"},
 		energy_required = 32,
 		ingredients = {
 			{ type = "item", name = "bob-nickel-plate", amount = 3 },
@@ -158,7 +158,7 @@ data:extend({
 		name = "bob-cobalt-steel-alloy-x",
 		enabled = false,
 		hidden = false,
-		category = "bob-mixing-furnace",
+		categories = {"bob-mixing-furnace"},
 		energy_required = 32,
 		ingredients = {
 			{ type = "item", name = "iron-plate", amount = 14 },
@@ -173,7 +173,7 @@ data:extend({
 		name = "bob-cobalt-steel-alloy-x",
 		enabled = false,
 		hidden = false,
-		category = "bob-mixing-furnace",
+		categories = {"bob-mixing-furnace"},
 		energy_required = 32,
 		ingredients = {
 			{ type = "item", name = "iron-plate", amount = 14 },
@@ -203,7 +203,7 @@ data:extend({
 		},
 		subgroup = "angels-smelting",
 		order = "f[ingot-nickel]-d",
-		category = "angels-petrochem-electrolyser",
+		categories = {"angels-petrochem-electrolyser"},
 		enabled = false,
 		energy_required = 12,
 		ingredients = {
@@ -238,7 +238,7 @@ data:extend({
 		},
 		subgroup = "angels-smelting",
 		order = "f[ingot-zinc]-d",
-		category = "angels-petrochem-electrolyser",
+		categories = {"angels-petrochem-electrolyser"},
 		enabled = false,
 		energy_required = 14,
 		ingredients = {
@@ -273,7 +273,7 @@ data:extend({
 		},
 		subgroup = "angels-smelting",
 		order = "f[ingot-cobalt]-d",
-		category = "angels-petrochem-electrolyser",
+		categories = {"angels-petrochem-electrolyser"},
 		enabled = false,
 		energy_required = 17,
 		ingredients = {
@@ -312,7 +312,7 @@ data:extend({
 		},
 		subgroup = "angels-smelting",
 		order = "f[ingot-titanium]-d",
-		category = "angels-petrochem-electrolyser",
+		categories = {"angels-petrochem-electrolyser"},
 		enabled = false,
 		energy_required = 22,
 		ingredients = {
@@ -338,7 +338,7 @@ data:extend(
   {
     type = "recipe",
     name = "angels-ore5-crushed-smelting",
-    category = "smelting",
+    categories = {"smelting"},
     subgroup = "bob-material-smelting",
     energy_required = 3.2,
     enabled = true,
@@ -356,7 +356,7 @@ data:extend(
   {
     type = "recipe",
     name = "angels-ore5-smelting",
-    category = "smelting",
+    categories = {"smelting"},
     subgroup = "bob-material-smelting",
     energy_required = 3.2,
     enabled = true,
@@ -380,7 +380,7 @@ data:extend(
   {
     type = "recipe",
     name = "angels-ore6-crushed-smelting",
-    category = "smelting",
+    categories = {"smelting"},
     subgroup = "bob-material-smelting",
     energy_required = 3.2,
     enabled = true,
@@ -398,7 +398,7 @@ data:extend(
   {
     type = "recipe",
     name = "angels-ore6-smelting",
-    category = "smelting",
+    categories = {"smelting"},
     subgroup = "bob-material-smelting",
     energy_required = 3.2,
     enabled = true,

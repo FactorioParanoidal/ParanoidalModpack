@@ -771,7 +771,7 @@ paralib.bobmods.lib.recipe.set_result(
 	{ name = "angels-crystal-slurry", type = "fluid", amount = 10 }
 )
 --19.08 починка рецепта взрывчатки 3
-data.raw["recipe"]["angels-solid-trinitrotoluene"].category = "angels-advanced-chemistry"
+bobmods.lib.recipe.set_category("angels-solid-trinitrotoluene", "angels-advanced-chemistry") -- Factorio 2.1: categories[1]
 
 --добавление табличек holographic_signs в технологию (AKMF)
 if data.raw.recipe["hs_holo_sign"] then

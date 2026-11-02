@@ -20,5 +20,5 @@ local handcraft = {
 }
 for _, name in ipairs(handcraft) do
 	local recipe = data.raw.recipe[name]
-	if recipe then recipe.category = "crafting" end
+	if recipe then bobmods.lib.recipe.set_main_category(recipe, "crafting") end -- Factorio 2.1: categories[1]
 end

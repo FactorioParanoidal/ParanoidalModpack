@@ -3,7 +3,7 @@ data:extend({
 	{
 		type = "recipe",
 		name = "hazard-concrete-brick",
-		category = "crafting",
+		categories = {"crafting"},
 		group = "angels-casting",
 		subgroup = "angels-stone-casting",
 		order = "ia",

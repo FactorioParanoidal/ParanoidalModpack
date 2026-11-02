@@ -3,7 +3,18 @@ local util = require("util")
 local port = require("tweaks.custom.energy-port-data")
 local function apply(prototype, fields)
     assert(prototype, "Energy port: missing prototype")
-    for key, value in pairs(fields) do prototype[key] = table.deepcopy(value) end
+    for key, value in pairs(fields) do
+        -- Factorio 2.1: the Beta 8 data keeps the 2.0 names; recipe category is categories[1] (the other
+        -- categories kept), item fuel_category is the list fuel_categories.
+        if key == "category" and prototype.type == "recipe" then
+            bobmods.lib.recipe.set_main_category(prototype, value)
+        elseif key == "fuel_category" then
+            prototype.fuel_categories = {value}
+            prototype.fuel_category = nil
+        else
+            prototype[key] = table.deepcopy(value)
+        end
+    end
 end
 -- JSON recipe rename directly to the new recipe discards incompatible buffered ingredients
 -- before Lua can recover them. Preserve the old layouts until the one-time Lua migration.
@@ -39,7 +50,7 @@ for name, fields in pairs(port.fluids) do
     apply(data.raw.fluid[name], fields)
     for _, barrel_name in ipairs(port.barrels[name] or {}) do
         local barrel = assert(data.raw.item[barrel_name])
-        barrel.fuel_category = "chemical"
+        barrel.fuel_categories = {"chemical"} -- Factorio 2.1: fuel_category -> fuel_categories
         barrel.fuel_value = tostring(util.parse_energy(fields.fuel_value) * 100) .. "J"
         barrel.fuel_emissions_multiplier = fields.emissions_multiplier
         -- Keep the 2.0 container lifecycle; burning does not introduce a new return-container rule.
@@ -106,7 +117,7 @@ for category, names in pairs(port.voids) do
     for _, name in ipairs(names) do
         local exists = false
         for _, recipe in pairs(data.raw.recipe) do
-            if recipe.category == category then
+            if bobmods.lib.recipe.get_category(recipe) == category then -- Factorio 2.1: categories[1]
                 for _, ingredient in pairs(recipe.ingredients or {}) do
                     if ingredient.type == "fluid" and ingredient.name == name then exists = true end
                 end

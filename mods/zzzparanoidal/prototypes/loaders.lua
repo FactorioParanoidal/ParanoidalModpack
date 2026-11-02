@@ -39,7 +39,7 @@ for _, tier in ipairs(tiers) do
         },
         {
             -- Ingredients and time are set by platforms-logistics-beta8.lua.
-            type = "recipe", name = tier.name, category = tier.category, enabled = false,
+            type = "recipe", name = tier.name, categories = {tier.category}, enabled = false,
             energy_required = 1, ingredients = {}, order = order,
             results = { { type = "item", name = tier.name, amount = 1 } },
         },

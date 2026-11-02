@@ -3,7 +3,7 @@ local function newRecipe(item, time)
 	local rec = {
 		type = "recipe",
 		name = "mining-drill-bit-" .. item,
-		category = "crafting",
+		categories = {"crafting"},
 		enabled = false,
 		energy_required = time,
 		ingredients = {},
@@ -17,7 +17,7 @@ newRecipe("mk0", 2).ingredients = {
 	{ type = "item", name = "iron-stick", amount = 3},
 }
 data.raw.recipe["mining-drill-bit-mk0"].enabled = true
-data.raw.recipe["mining-drill-bit-mk0"].category = "crafting"
+bobmods.lib.recipe.set_category("mining-drill-bit-mk0", "crafting") -- Factorio 2.1: categories[1]
 
 newRecipe("mk1", 5).ingredients = {
 	{ type = "item", name = "mining-drill-bit-mk0", amount = 2},
@@ -54,7 +54,6 @@ paralib.bobmods.lib.tech.add_recipe_unlock("bob-drills-5", "mining-drill-bit-mk5
 -- Насадки I–V только в автоматах, без ручной сборки, как в Beta 8 (I–II — пачка 01, III–IV — 02, V — 03).
 for _, tier in ipairs({ "mk1", "mk2", "mk3", "mk4", "mk5" }) do
 	local recipe = data.raw.recipe["mining-drill-bit-" .. tier]
-	recipe.category = "basic-crafting"
-	recipe.additional_categories = { "advanced-crafting" }
+	recipe.categories = { "basic-crafting", "advanced-crafting" } -- Factorio 2.1: category + additional_categories
 end
 

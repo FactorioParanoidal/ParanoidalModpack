@@ -3,7 +3,7 @@ data:extend({
 	{
 		type = "recipe",
 		name = "sci-component-1",
-		category = "crafting",
+		categories = {"crafting"},
 		enabled = true,
 		energy_required = 5,
 		ingredients = {
@@ -15,7 +15,7 @@ data:extend({
 	{
 		type = "recipe",
 		name = "sci-component-2",
-		category = "crafting",
+		categories = {"crafting"},
 		enabled = false,
 		energy_required = 7.5,
 		ingredients = {
@@ -29,7 +29,7 @@ data:extend({
 	{
 		type = "recipe",
 		name = "sci-component-3",
-		category = "crafting",
+		categories = {"crafting"},
 		enabled = false,
 		energy_required = 15,
 		ingredients = {
@@ -44,7 +44,7 @@ data:extend({
 	{
 		type = "recipe",
 		name = "sci-component-4",
-		category = "crafting",
+		categories = {"crafting"},
 		enabled = false,
 		energy_required = 22,
 		ingredients = {
@@ -63,7 +63,7 @@ data:extend({
 	{
 		type = "recipe",
 		name = "sci-component-m",
-		category = "crafting",
+		categories = {"crafting"},
 		enabled = false,
 		energy_required = 12,
 		ingredients = {
@@ -76,7 +76,7 @@ data:extend({
 	{
 		type = "recipe",
 		name = "sci-component-l",
-		category = "crafting",
+		categories = {"crafting"},
 		enabled = false,
 		energy_required = 12,
 		ingredients = {
@@ -91,7 +91,7 @@ data:extend({
 	{
 		type = "recipe",
 		name = "sci-component-5",
-		category = "crafting",
+		categories = {"crafting"},
 		enabled = false,
 		energy_required = 12,
 		ingredients = {
@@ -105,7 +105,7 @@ data:extend({
 	{
 		type = "recipe",
 		name = "advsci-component-3",
-		category = "crafting",
+		categories = {"crafting"},
 		enabled = false,
 		energy_required = 10,
 		ingredients = {
@@ -120,7 +120,7 @@ data:extend({
 		type = "recipe",
 		name = "advsci-component-4",
 		energy_required = 22,
-		category = "crafting",
+		categories = {"crafting"},
 		enabled = false,
 		ingredients = {
 			{ type = "item", name = "bob-zinc-plate", amount = 7 },
@@ -132,7 +132,7 @@ data:extend({
 	{
 		type = "recipe",
 		name = "simple-io",
-		category = "electronics",
+		categories = {"electronics"},
 		enabled = false,
 		energy_required = 15,
 		ingredients = {
@@ -147,7 +147,7 @@ data:extend({
 	{
 		type = "recipe",
 		name = "standart-io",
-		category = "crafting",
+		categories = {"crafting"},
 		enabled = false,
 		energy_required = 30,
 		ingredients = {
@@ -164,7 +164,7 @@ data:extend({
 	{
 		type = "recipe",
 		name = "advanced-io",
-		category = "crafting",
+		categories = {"crafting"},
 		enabled = false,
 		energy_required = 45,
 		ingredients = {
@@ -182,7 +182,7 @@ data:extend({
 	{
 		type = "recipe",
 		name = "predictive-io",
-		category = "electronics-machine", -- только автоматы, как standart/advanced-io
+		categories = {"electronics-machine"}, -- только автоматы, как standart/advanced-io
 		enabled = false,
 		energy_required = 60,
 		ingredients = {
@@ -203,7 +203,7 @@ data:extend({
 	{
 		type = "recipe",
 		name = "intelligent-io",
-		category = "electronics-machine", -- только автоматы, как standart/advanced-io
+		categories = {"electronics-machine"}, -- только автоматы, как standart/advanced-io
 		enabled = false,
 		energy_required = 75,
 		ingredients = {
@@ -228,7 +228,7 @@ data:extend({
 	{
 		type = "recipe",
 		name = "condensator",
-		category = "electronics",
+		categories = {"electronics"},
 		enabled = true,
 		energy_required = 3,
 		ingredients = {
@@ -240,7 +240,7 @@ data:extend({
 	{
 		type = "recipe",
 		name = "condensator2",
-		category = "electronics-with-fluid",
+		categories = {"electronics-with-fluid"},
 		enabled = false,
 		energy_required = 6,
 		ingredients = {
@@ -253,7 +253,7 @@ data:extend({
 	{
 		type = "recipe",
 		name = "condensator3",
-		category = "electronics-with-fluid",
+		categories = {"electronics-with-fluid"},
 		enabled = false,
 		energy_required = 6,
 		ingredients = {
@@ -269,7 +269,7 @@ data:extend({
 	{
 		type = "recipe",
 		name = "barrel-recycling",
-		category = "smelting",
+		categories = {"smelting"},
 		enabled = true,
 		hidden = true,
 		energy_required = 5,
@@ -292,7 +292,7 @@ then
 		{
 			type = "recipe",
 			name = "sci-component-o",
-			category = "crafting",
+			categories = {"crafting"},
 			enabled = false,
 			energy_required = 15,
 			ingredients = {
@@ -315,7 +315,7 @@ else
 		{
 			type = "recipe",
 			name = "sci-component-o",
-			category = "crafting",
+			categories = {"crafting"},
 			enabled = false,
 			energy_required = 12,
 			ingredients = {
@@ -332,7 +332,7 @@ data:extend({
 	{
 		type = "recipe",
 		name = "angels-iron-gear-wheel-stack-casting",
-		category = "angels-strand-casting",
+		categories = {"angels-strand-casting"},
 		subgroup = "angels-iron-casting",
 		enabled = false,
 		energy_required = 4,
@@ -360,7 +360,7 @@ data:extend({
 	{
 		type = "recipe",
 		name = "angels-iron-gear-wheel-stack-casting-fast",
-		category = "angels-strand-casting",
+		categories = {"angels-strand-casting"},
 		subgroup = "angels-iron-casting",
 		enabled = false,
 		energy_required = 2,
@@ -393,7 +393,7 @@ data:extend({
 	{
 		type = "recipe",
 		name = "angels-steel-gear-wheel-stack-casting",
-		category = "angels-strand-casting",
+		categories = {"angels-strand-casting"},
 		subgroup = "angels-steel-casting",
 		enabled = false,
 		energy_required = 4,
@@ -421,7 +421,7 @@ data:extend({
 	{
 		type = "recipe",
 		name = "angels-steel-gear-wheel-stack-casting-fast",
-		category = "angels-strand-casting",
+		categories = {"angels-strand-casting"},
 		subgroup = "angels-steel-casting",
 		enabled = false,
 		energy_required = 2,
@@ -455,7 +455,7 @@ data:extend({
 	{
 		type = "recipe",
 		name = "angels-iron-gear-wheel-stack-converting",
-		category = "advanced-crafting",
+		categories = {"advanced-crafting"},
 		subgroup = "angels-iron-casting",
 		energy_required = 0.5,
 		allow_decomposition = false,
@@ -484,7 +484,7 @@ data:extend({
 	{
 		type = "recipe",
 		name = "angels-steel-gear-wheel-stack-converting",
-		category = "advanced-crafting",
+		categories = {"advanced-crafting"},
 		subgroup = "angels-steel-casting",
 		energy_required = 0.5,
 		enabled = false,

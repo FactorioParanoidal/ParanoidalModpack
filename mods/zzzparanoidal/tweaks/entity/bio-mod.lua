@@ -6,12 +6,12 @@ paralib.bobmods.lib.tech.add_recipe_unlock("bi-tech-fertilizer", "bi-bio-greenho
 paralib.bobmods.lib.tech.add_recipe_unlock("bi-tech-advanced-biotechnology", "bi-bio-farm-3") --открываем рецепт биофермы 3
 paralib.bobmods.lib.tech.add_recipe_unlock("bi-tech-advanced-biotechnology", "bi-bio-greenhouse-3") --открываем рецепт теплицы 3
 
-data.raw["recipe"]["bi-logs-3"].category = "biofarm-mod-farm-2" -- Прячем рецепты под новую ферму 2
-data.raw["recipe"]["bi-logs-4"].category = "biofarm-mod-farm-3" -- Прячем рецепты под новую ферму 3
-data.raw["recipe"]["bi-seed-3"].category = "biofarm-mod-greenhouse-2" -- Прячем рецепты под новую теплицу 2
-data.raw["recipe"]["bi-seedling-3"].category = "biofarm-mod-greenhouse-2" -- Прячем рецепты под новую теплицу 2
-data.raw["recipe"]["bi-seed-4"].category = "biofarm-mod-greenhouse-3" -- Прячем рецепты под новую теплицу 3
-data.raw["recipe"]["bi-seedling-4"].category = "biofarm-mod-greenhouse-3" -- Прячем рецепты под новую теплицу 3
+bobmods.lib.recipe.set_category("bi-logs-3", "biofarm-mod-farm-2") -- Прячем рецепты под новую ферму 2
+bobmods.lib.recipe.set_category("bi-logs-4", "biofarm-mod-farm-3") -- Прячем рецепты под новую ферму 3
+bobmods.lib.recipe.set_category("bi-seed-3", "biofarm-mod-greenhouse-2") -- Прячем рецепты под новую теплицу 2
+bobmods.lib.recipe.set_category("bi-seedling-3", "biofarm-mod-greenhouse-2") -- Прячем рецепты под новую теплицу 2
+bobmods.lib.recipe.set_category("bi-seed-4", "biofarm-mod-greenhouse-3") -- Прячем рецепты под новую теплицу 3
+bobmods.lib.recipe.set_category("bi-seedling-4", "biofarm-mod-greenhouse-3") -- Прячем рецепты под новую теплицу 3
 
 data.raw["assembling-machine"]["bi-bio-reactor"].energy_usage = "200kW" --увеличиваем потребление биореактора мк 1
 data.raw["assembling-machine"]["bi-bio-reactor"].module_slots = 1 -- 1 слот модулей для мк1
@@ -26,8 +26,8 @@ paralib.bobmods.lib.tech.add_recipe_unlock("bi-tech-advanced-biotechnology", "bi
 paralib.bobmods.lib.tech.remove_recipe_unlock("bi-tech-advanced-biotechnology", "bi-cellulose-2")
 paralib.bobmods.lib.tech.remove_recipe_unlock("bi-tech-advanced-biotechnology", "bi-battery")
 paralib.bobmods.lib.tech.remove_recipe_unlock("bi-tech-advanced-biotechnology", "bi-biomass-3")
-data.raw["recipe"]["bi-biomass-2"].category = "biofarm-mod-bioreactor-2" -- Прячем рецепты под новый биореактор 2
-data.raw["recipe"]["bi-biomass-3"].category = "biofarm-mod-bioreactor-3" -- Прячем рецепты под новый биореактор 3
+bobmods.lib.recipe.set_category("bi-biomass-2", "biofarm-mod-bioreactor-2") -- Прячем рецепты под новый биореактор 2
+bobmods.lib.recipe.set_category("bi-biomass-3", "biofarm-mod-bioreactor-3") -- Прячем рецепты под новый биореактор 3
 
 paralib.bobmods.lib.recipe.remove_ingredient("bi-bio-greenhouse", "glass")
 data.raw.item["bi-bio-greenhouse"].subgroup = "bio-bio-farm-fluid-entity"
