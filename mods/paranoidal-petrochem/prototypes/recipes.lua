@@ -332,7 +332,6 @@ data:extend({
 		results = {
 			{ type = "fluid", name = "gas-phosgene", amount = 100 },
 		},
-		always_show_products = true,
 		icons = angelsmods.functions.create_gas_recipe_icon({
 			{ "__angelspetrochemgraphics__/graphics/icons/molecules/phosgene.png", 72 },
 		}, "CClC"),
