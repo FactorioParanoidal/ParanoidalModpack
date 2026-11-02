@@ -57,6 +57,8 @@ Date: 24.02.2026
     - Paranoidal port to Factorio 2.1: science pack checks accept every item type (2.1 vanilla science packs are plain items, mod packs may stay tools).
     - Paranoidal port to Factorio 2.1: defines.inventory.assembling_machine_*, furnace_* and rocket_silo_input/output/modules replaced by defines.inventory.crafter_input/output/modules/trash.
     - Paranoidal port to Factorio 2.1: hidden entities clear corpse and next_upgrade (nil) instead of setting an empty ID, which 2.1 rejects.
+    - Paranoidal port to Factorio 2.1: recipes use categories (RecipePrototype::category and additional_categories were merged into categories; the first entry keeps the meaning of the former main category, a changed main category keeps the other entries).
+    - Paranoidal port to Factorio 2.1: the bundled copy of Bob's library (thxbob.lib) got the same category and result changes as boblibrary (set_main_category, get_category, independent_probability).
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.33
 Date: 24.02.2026

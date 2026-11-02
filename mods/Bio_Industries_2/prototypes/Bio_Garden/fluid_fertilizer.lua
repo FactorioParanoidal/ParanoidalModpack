@@ -99,7 +99,7 @@ data:extend({
         icon_size = 64,
       }
     },
-    category = "chemistry",
+    categories = {"chemistry"},
     energy_required = 5,
     ingredients = {
       {type = "item", name = "fertilizer", amount = 3},
@@ -137,7 +137,7 @@ data:extend({
         icon_size = 64,
       }
     },
-    category = "chemistry",
+    categories = {"chemistry"},
     energy_required = 5,
     ingredients = {
       {type = "item", name = "bi-adv-fertilizer", amount = 3},

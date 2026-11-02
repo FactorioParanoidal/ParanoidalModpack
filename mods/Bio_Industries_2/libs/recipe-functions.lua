@@ -322,11 +322,28 @@ function thxbob.lib.recipe.set_subgroup(recipe_name, subgroup)
   end
 end
 
+-- Factorio 2.1: RecipePrototype::category and additional_categories were merged into categories
+-- (default {"crafting"}). categories[1] keeps the meaning of the 2.0 main category, the other entries
+-- are the 2.0 additional categories.
+function thxbob.lib.recipe.get_category(recipe) -- recipe table; the main category
+  return recipe.categories and recipe.categories[1] or "crafting"
+end
+
+function thxbob.lib.recipe.set_main_category(recipe, category) -- recipe table; keeps the additional categories
+  local list = { category }
+  for i, other in ipairs(recipe.categories or {}) do
+    if i > 1 and other ~= category then
+      table.insert(list, other)
+    end
+  end
+  recipe.categories = list
+end
+
 function thxbob.lib.recipe.set_category(recipe_name, category)
   if type(recipe_name) == "string" and type(category) == "string" then
     local recipe = data.raw.recipe[recipe_name]
     if recipe then
-      recipe.category = category
+      thxbob.lib.recipe.set_main_category(recipe, category)
     end
   else
     log(debug.traceback())
@@ -362,8 +379,8 @@ function thxbob.lib.recipe.add_additional_category(recipe_name, category_name)
   local recipe = data.raw.recipe[recipe_name]
   local category = data.raw["recipe-category"][category_name]
   if recipe and category then
-    recipe.additional_categories = recipe.additional_categories or {}
-    thxbob.lib.safe_insert(recipe.additional_categories, category_name)
+    recipe.categories = recipe.categories or { "crafting" }
+    thxbob.lib.safe_insert(recipe.categories, category_name)
   end
 end
 

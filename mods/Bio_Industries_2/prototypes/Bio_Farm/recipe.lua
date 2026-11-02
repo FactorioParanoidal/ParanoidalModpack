@@ -19,7 +19,7 @@ data:extend({
                 icon_size = 64,
             }
         },
-        category = "biofarm-mod-greenhouse",
+        categories = {"biofarm-mod-greenhouse"},
         energy_required = 200,
         ingredients = {
             { type = "fluid", name = "water", amount = 100 },
@@ -53,7 +53,7 @@ data:extend({
                 icon_size = 64,
             }
         },
-        category = "biofarm-mod-greenhouse",
+        categories = {"biofarm-mod-greenhouse"},
         energy_required = 150,
         ingredients = {
             { type = "fluid", name = "water",  amount = 40 },
@@ -88,7 +88,7 @@ data:extend({
                 icon_size = 64,
             }
         },
-        category = "biofarm-mod-greenhouse",
+        categories = {"biofarm-mod-greenhouse"},
         energy_required = 100,
         ingredients = {
             { type = "fluid", name = "water",      amount = 40 },
@@ -123,7 +123,7 @@ data:extend({
                 icon_size = 64,
             }
         },
-        category = "biofarm-mod-greenhouse",
+        categories = {"biofarm-mod-greenhouse"},
         energy_required = 50,
         ingredients = {
             { type = "item",  name = "wood",              amount = 20 },
@@ -158,7 +158,7 @@ data:extend({
                 icon_size = 64,
             }
         },
-        category = "biofarm-mod-greenhouse",
+        categories = {"biofarm-mod-greenhouse"},
         energy_required = 400,
         ingredients = {
             { type = "item",  name = "bi-seed", amount = 20 },
@@ -192,7 +192,7 @@ data:extend({
                 icon_size = 64,
             }
         },
-        category = "biofarm-mod-greenhouse",
+        categories = {"biofarm-mod-greenhouse"},
         energy_required = 300,
         ingredients = {
             { type = "item",  name = "bi-seed", amount = 25 },
@@ -227,7 +227,7 @@ data:extend({
                 icon_size = 64,
             }
         },
-        category = "biofarm-mod-greenhouse",
+        categories = {"biofarm-mod-greenhouse"},
         energy_required = 200,
         ingredients = {
             { type = "item",  name = "bi-seed",    amount = 30 },
@@ -261,7 +261,7 @@ data:extend({
                 icon_size = 64,
             }
         },
-        category = "biofarm-mod-greenhouse",
+        categories = {"biofarm-mod-greenhouse"},
         energy_required = 100,
         ingredients = {
             { type = "item",  name = "bi-seed",           amount = 40 },
@@ -296,7 +296,7 @@ data:extend({
                 icon_size = 64,
             }
         },
-        category = "biofarm-mod-farm",
+        categories = {"biofarm-mod-farm"},
         enabled = false,
 		allow_productivity = true,
         always_show_made_in = true,
@@ -331,7 +331,7 @@ data:extend({
                 icon_size = 64,
             }
         },
-        category = "biofarm-mod-farm",
+        categories = {"biofarm-mod-farm"},
         enabled = false,
 		allow_productivity = true,
         always_show_made_in = true,
@@ -367,7 +367,7 @@ data:extend({
                 icon_size = 64,
             }
         },
-        category = "biofarm-mod-farm",
+        categories = {"biofarm-mod-farm"},
         enabled = false,
 		allow_productivity = true,
         always_show_made_in = true,
@@ -403,7 +403,7 @@ data:extend({
                 icon_size = 64,
             }
         },
-        category = "biofarm-mod-farm",
+        categories = {"biofarm-mod-farm"},
         enabled = false,
 		allow_productivity = true,
         always_show_made_in = true,
@@ -625,7 +625,7 @@ data:extend({
                 icon_size = 64,
             }
         },
-        category = "biofarm-mod-smelting",
+        categories = {"biofarm-mod-smelting"},
         subgroup = "bio-bio-farm-raw",
         order = "a[bi]-a-cb[bi-5-ash-1]",
         enabled = false,
@@ -655,7 +655,7 @@ data:extend({
                 icon_size = 64,
             }
         },
-        category = "biofarm-mod-smelting",
+        categories = {"biofarm-mod-smelting"},
         subgroup = "bio-bio-farm-raw",
         order = "a[bi]-a-ca[bi-5-ash-2]",
         enabled = false,
@@ -685,7 +685,7 @@ data:extend({
                 icon_size = 64,
             }
         },
-        category = "biofarm-mod-smelting",
+        categories = {"biofarm-mod-smelting"},
         subgroup = "bio-bio-farm-raw",
         order = "a[bi]-a-d[bi-6-charcoal-1]",
         energy_required = 15,
@@ -717,7 +717,7 @@ data:extend({
         },
         subgroup = "bio-bio-farm-raw",
         order = "a[bi]-a-d[bi-6-charcoal-2]",
-        category = "biofarm-mod-smelting",
+        categories = {"biofarm-mod-smelting"},
         energy_required = 20,
         ingredients = { { type = "item", name = "wood", amount = 20 } },
         results = { { type = "item", name = "wood-charcoal", amount = 8 } },
@@ -745,7 +745,7 @@ data:extend({
                 icon_size = 64,
             }
         },
-        category = "biofarm-mod-smelting",
+        categories = {"biofarm-mod-smelting"},
         subgroup = "bio-bio-farm-raw",
         order = "a[bi]-a-ea[bi-6-coal-1]",
         energy_required = 20,
@@ -772,7 +772,7 @@ data:extend({
                 icon_size = 64,
             }
         },
-        category = "biofarm-mod-smelting",
+        categories = {"biofarm-mod-smelting"},
         subgroup = "bio-bio-farm-raw",
         order = "a[bi]-a-eb[bi-6-coal-2]",
         energy_required = 20,
@@ -801,7 +801,7 @@ data:extend({
         },
         subgroup = "bio-bio-farm-raw",
         order = "a[bi]-a-fa[bi-7-solid_fuel]",
-        category = "chemistry",
+        categories = {"chemistry"},
         energy_required = 2,
         ingredients = { { type = "item", name = "wood-bricks", amount = 3 } },
         results = { { type = "item", name = "solid-fuel", amount = 2 } },
@@ -826,7 +826,7 @@ data:extend({
                 icon_size = 64,
             }
         },
-        category = "biofarm-mod-smelting",
+        categories = {"biofarm-mod-smelting"},
         subgroup = "bio-bio-farm-raw",
         order = "a[bi]-a-g[bi-8-coke-coal]-1",
         energy_required = 20,
@@ -853,7 +853,7 @@ data:extend({
                 icon_size = 64,
             }
         },
-        category = "biofarm-mod-smelting",
+        categories = {"biofarm-mod-smelting"},
         subgroup = "bio-bio-farm-raw",
         order = "a[bi]-a-g[bi-8-coke-coal]-3",
         energy_required = 6,
@@ -880,7 +880,7 @@ data:extend({
             }
         },
         --category = "smelting",
-        category = "chemistry",
+        categories = {"chemistry"},
         subgroup = "bio-bio-farm-raw",
         order = "a[bi]-a-z2[bi-9-stone-brick]",
         energy_required = 5,
@@ -941,7 +941,7 @@ data:extend({
                 icon_size = 64,
             }
         },
-        category = "chemistry",
+        categories = {"chemistry"},
         energy_required = 1,
         ingredients = {},
         results = {
@@ -968,7 +968,7 @@ data:extend({
                 icon_size = 64,
             }
         },
-        category = "chemistry",
+        categories = {"chemistry"},
         energy_required = 10,
         ingredients = {
             { type = "fluid", name = "liquid-air", amount = 20 }
@@ -1002,7 +1002,7 @@ data:extend({
                 icon_size = 64,
             }
         },
-        category = "chemistry",
+        categories = {"chemistry"},
         energy_required = 5,
         ingredients = {
             { type = "item",  name = "sulfur",   amount = 1 },
@@ -1035,7 +1035,7 @@ data:extend({
                 icon_size = 64,
             }
         },
-        category = "chemistry",
+        categories = {"chemistry"},
         energy_required = 50,
         ingredients = {
             { type = "item",  name = "fertilizer", amount = 25 },
@@ -1068,7 +1068,7 @@ data:extend({
                 icon_size = 64,
             }
         },
-        category = "chemistry",
+        categories = {"chemistry"},
         energy_required = 50,
         ingredients = {
             { type = "item",  name = "fertilizer",  amount = 20 },
@@ -1221,7 +1221,7 @@ data:extend({
                 icon_size = 64,
             }
         },
-        category = "bi-arboretum",
+        categories = {"bi-arboretum"},
         energy_required = 10000,
         ingredients = {
             { type = "item",  name = "seedling", amount = 1 },
@@ -1252,7 +1252,7 @@ data:extend({
                 icon_size = 64,
             }
         },
-        category = "bi-arboretum",
+        categories = {"bi-arboretum"},
         energy_required = 10000,
         ingredients = {
             { type = "item",  name = "fertilizer", amount = 1 },
@@ -1283,7 +1283,7 @@ data:extend({
                 icon_size = 64,
             }
         },
-        category = "bi-arboretum",
+        categories = {"bi-arboretum"},
         energy_required = 10000,
         ingredients = {
             { type = "item",  name = "bi-adv-fertilizer", amount = 1 },
@@ -1314,7 +1314,7 @@ data:extend({
                 icon_size = 64,
             }
         },
-        category = "bi-arboretum",
+        categories = {"bi-arboretum"},
         energy_required = 10000,
         ingredients = {
             { type = "item",  name = "seedling",   amount = 1 },
@@ -1346,7 +1346,7 @@ data:extend({
                 icon_size = 64,
             }
         },
-        category = "bi-arboretum",
+        categories = {"bi-arboretum"},
         energy_required = 10000,
         ingredients = {
             { type = "item",  name = "seedling",          amount = 1 },
