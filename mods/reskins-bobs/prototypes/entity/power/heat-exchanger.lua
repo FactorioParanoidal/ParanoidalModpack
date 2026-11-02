@@ -50,13 +50,14 @@ for name, map in pairs(tier_map) do
 	-- Reskin remnants
 	remnant.animation = {
 		layers = {
-			-- Base
+			-- Base (Factorio 2.1: the vanilla remnants were redrawn, 280x256 frames)
 			{
 				filename = "__base__/graphics/entity/heat-exchanger/remnants/heat-exchanger-remnants.png",
-				width = 272,
-				height = 262,
+				line_length = 1,
+				width = 280,
+				height = 256,
 				direction_count = 4,
-				shift = util.by_pixel(0.5, 8),
+				shift = util.by_pixel(-0.5, 4.5),
 				scale = 0.5,
 			},
 			-- Mask
@@ -94,15 +95,8 @@ for name, map in pairs(tier_map) do
 	-- Reskin entities
 	entity.pictures.north.structure = {
 		layers = {
-			-- Base
-			{
-				filename = "__base__/graphics/entity/heat-exchanger/heatex-N-idle.png",
-				priority = "extra-high",
-				width = 269,
-				height = 221,
-				shift = util.by_pixel(-1.25, 5.25),
-				scale = 0.5,
-			},
+			-- Base (Factorio 2.1: the vanilla art was redrawn; size and shift from its .lua description)
+			util.sprite_load("__base__/graphics/entity/heat-exchanger/heatex-N-idle", { priority = "extra-high", scale = 0.5 }),
 			-- Mask
 			{
 				filename = "__reskins-bobs__/graphics/entity/power/heat-exchanger/heatex-N-idle-mask.png",
@@ -147,15 +141,8 @@ for name, map in pairs(tier_map) do
 
 	entity.pictures.east.structure = {
 		layers = {
-			-- Base
-			{
-				filename = "__base__/graphics/entity/heat-exchanger/heatex-E-idle.png",
-				priority = "extra-high",
-				width = 211,
-				height = 301,
-				shift = util.by_pixel(-1.75, 1.25),
-				scale = 0.5,
-			},
+			-- Base (Factorio 2.1: the vanilla art was redrawn; size and shift from its .lua description)
+			util.sprite_load("__base__/graphics/entity/heat-exchanger/heatex-E-idle", { priority = "extra-high", scale = 0.5 }),
 			-- Mask
 			{
 				filename = "__reskins-bobs__/graphics/entity/power/heat-exchanger/heatex-E-idle-mask.png",
@@ -200,15 +187,8 @@ for name, map in pairs(tier_map) do
 
 	entity.pictures.south.structure = {
 		layers = {
-			-- Base
-			{
-				filename = "__base__/graphics/entity/heat-exchanger/heatex-S-idle.png",
-				priority = "extra-high",
-				width = 260,
-				height = 201,
-				shift = util.by_pixel(4, 10.75),
-				scale = 0.5,
-			},
+			-- Base (Factorio 2.1: the vanilla art was redrawn; size and shift from its .lua description)
+			util.sprite_load("__base__/graphics/entity/heat-exchanger/heatex-S-idle", { priority = "extra-high", scale = 0.5 }),
 			-- Mask
 			{
 				filename = "__reskins-bobs__/graphics/entity/power/heat-exchanger/heatex-S-idle-mask.png",
@@ -253,15 +233,8 @@ for name, map in pairs(tier_map) do
 
 	entity.pictures.west.structure = {
 		layers = {
-			-- Base
-			{
-				filename = "__base__/graphics/entity/heat-exchanger/heatex-W-idle.png",
-				priority = "extra-high",
-				width = 196,
-				height = 273,
-				shift = util.by_pixel(1.5, 7.75),
-				scale = 0.5,
-			},
+			-- Base (Factorio 2.1: the vanilla art was redrawn; size and shift from its .lua description)
+			util.sprite_load("__base__/graphics/entity/heat-exchanger/heatex-W-idle", { priority = "extra-high", scale = 0.5 }),
 			-- Mask
 			{
 				filename = "__reskins-bobs__/graphics/entity/power/heat-exchanger/heatex-W-idle-mask.png",

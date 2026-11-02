@@ -139,33 +139,26 @@ for name, map in pairs(tier_map) do
 	remnant.animation = make_rotated_animation_variations_from_sheet(2, remnant_animation)
 
 	-- Reskin entities
-	entity.base_picture = {
-		sheets = {
-			-- Base
-			{
-				filename = map.is_water_miner and "__reskins-bobs__/graphics/entity/mining/pumpjack/water-pumpjack-base.png" or "__base__/graphics/entity/pumpjack/pumpjack-base.png",
-				priority = "extra-high",
-				width = 261,
-				height = 273,
-				shift = util.by_pixel(-2.25, -4.75),
-				scale = 0.5,
-			},
-			-- Shadow
-			{
-				filename = "__base__/graphics/entity/pumpjack/pumpjack-base-shadow.png",
-				width = 220,
-				height = 220,
-				scale = 0.5,
-				draw_as_shadow = true,
-				shift = util.by_pixel(6, 0.5),
-			},
-		},
-	}
+	-- Factorio 2.1: the pumpjack base is an always drawn working visualisation (base_picture was removed, Bob's pumpjacks
+	-- copy the 2.1 vanilla graphics). Only the water miners get their own base, in place of Bob's water miner base.
+	if map.is_water_miner then
+		local visualisations = entity.graphics_set and entity.graphics_set.working_visualisations
+		local base = visualisations and visualisations[1]
+		if base and base.always_draw then
+			for _, direction in pairs({ "north", "east", "south", "west" }) do
+				local animation = base[direction .. "_animation"]
+				local layer = animation and animation.layers and animation.layers[1]
+				if layer then
+					layer.filename = "__reskins-bobs__/graphics/entity/mining/pumpjack/water-pumpjack-base.png"
+				end
+			end
+		end
+	end
 
 	entity.graphics_set.animation = {
 		north = {
 			layers = {
-				-- Base
+				-- Base (Factorio 2.1: the vanilla horsehead was redrawn with 206x172 frames; the water miner art keeps 2.0 frames)
 				{
 					priority = "high",
 					filename = map.is_water_miner and "__reskins-bobs__/graphics/entity/mining/pumpjack/water-pumpjack-horsehead.png" or "__base__/graphics/entity/pumpjack/pumpjack-horsehead.png",
@@ -174,9 +167,9 @@ for name, map in pairs(tier_map) do
 					scale = 0.5,
 					line_length = 8,
 					width = 206,
-					height = 202,
+					height = map.is_water_miner and 202 or 172,
 					frame_count = 40,
-					shift = util.by_pixel(-4, -24),
+					shift = map.is_water_miner and util.by_pixel(-4, -24) or util.by_pixel(-4.5, -29),
 				},
 				-- Mask
 				{
@@ -206,7 +199,7 @@ for name, map in pairs(tier_map) do
 					shift = util.by_pixel(-4, -24),
 					blend_mode = reskins.lib.settings.blend_mode, -- "additive",
 				},
-				-- Shadow
+				-- Shadow (Factorio 2.1 vanilla frames 292x78)
 				{
 					priority = "high",
 					filename = "__base__/graphics/entity/pumpjack/pumpjack-horsehead-shadow.png",
@@ -214,8 +207,8 @@ for name, map in pairs(tier_map) do
 					repeat_count = 6,
 					draw_as_shadow = true,
 					line_length = 8,
-					width = 309,
-					height = 82,
+					width = 292,
+					height = 78,
 					frame_count = 40,
 					scale = 0.5,
 					shift = util.by_pixel(17.75, 14.5),
@@ -223,6 +216,10 @@ for name, map in pairs(tier_map) do
 			},
 		},
 	}
+	-- Factorio 2.1: a flipped pumpjack draws graphics_set_flipped (its own flipped base); the head is the same.
+	if entity.graphics_set_flipped then
+		entity.graphics_set_flipped.animation = util.copy(entity.graphics_set.animation)
+	end
 
 	::continue::
 end
