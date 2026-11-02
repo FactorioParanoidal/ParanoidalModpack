@@ -68,7 +68,7 @@ local function FullFuel(infuel, output)
 		icon		= graphics_path..output.."-full-icon.png",
 		icon_size	= 64,
 		burnt_result	= output.."-empty",
-		fuel_category	= name_cat_fuel_battery,
+		fuel_categories	= {name_cat_fuel_battery},
 		fuel_value	= (settings.startup[setting_capacity_multiplier].value * vanilla_stacks * infuel.stack_size * util.parse_energy(infuel.fuel_value)).."J",
 		fuel_acceleration_multiplier = infuel.fuel_acceleration_multiplier,
 		fuel_top_speed_multiplier    = infuel.fuel_top_speed_multiplier,
