@@ -12,6 +12,8 @@ Version: 9.5.3
     - Never kill the growing trees of Bio Industries (bio-tree-<tree>-<stage>), for any reason: Bio Industries decides their survival by the soil, while Noxys killed them next to the player's own seedlings and buildings. Grown trees are treated as before.
   Bug Fixes:
     - Growing trees of Bio Industries (bio-tree-<tree>-<stage>) no longer spread: the copies were not in its grow tables, so they never grew up and gave seedlings when cut.
+  Compatibility:
+    - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
 ---------------------------------------------------------------------------------------------------
 Version: 0.3.1
 Date: 15. 09. 2020
