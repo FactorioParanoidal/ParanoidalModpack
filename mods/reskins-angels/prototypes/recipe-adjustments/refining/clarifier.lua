@@ -82,7 +82,7 @@ end
 
 -- Setup clarifier recipes
 for _, recipe_data in pairs(data.raw.recipe) do
-	if recipe_data.category == "angels-water-void" then
+	if (recipe_data.categories or {})[1] == "angels-water-void" then -- Factorio 2.1: main category = categories[1]
 		local ingredient = data.raw.fluid[(recipe_data.ingredients and recipe_data.ingredients[1]) and recipe_data.ingredients[1].name]
 
 		if ingredient then

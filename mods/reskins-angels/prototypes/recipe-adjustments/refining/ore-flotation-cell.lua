@@ -5,7 +5,7 @@
 
 -- Setup ore flotation cell recipes
 for _, recipe_data in pairs(data.raw.recipe) do
-	if recipe_data.category == "ore-refining-t2" then
+	if (recipe_data.categories or {})[1] == "ore-refining-t2" then -- Factorio 2.1: main category = categories[1]
 		local primary, secondary = util.color("0"), util.color("0")
 
 		-- Extract the ingredient fluid color
