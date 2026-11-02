@@ -243,7 +243,7 @@
 	--Paranoidal: fixed inventories of the types that have no output inventory or a different one
 		local PI_fixed_inventory = {
 			["assembling-machine"] = defines.inventory.crafter_output,
-			["furnace"] = defines.inventory.furnace_result,
+			["furnace"] = defines.inventory.crafter_output,
 			["mining-drill"] = defines.inventory.fuel,
 			["car"] = defines.inventory.car_trunk,
 			["lab"] = defines.inventory.lab_input,
