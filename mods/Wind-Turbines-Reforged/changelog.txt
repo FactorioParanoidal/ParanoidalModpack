@@ -18,3 +18,5 @@ Date: 2026-10-14
     - A save with the turbine window open, made before the seasons, no longer crashes on load ("attempt to index field 'season'"): the missing season line is added to that window.
     - Turbines placed by scripts (ruins) and turbines from older saves now follow the wind and get their base.
     - Removed the damage handler that ran for every simple-entity-with-owner in the game; the base is indestructible, vehicles cannot destroy turbines (as in Beta 8).
+  Compatibility:
+    - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
