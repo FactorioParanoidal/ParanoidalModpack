@@ -5,7 +5,7 @@
 	"description": "Forces mod buttons to look uniform and aligned, harminizes icons, and adds visual options for buttons. Now updated for Factorio 2.0, with support for over 117 mod buttons.",
 	"author": "Snouz & Solus Caelum",
 	"homepage": "https://github.com/snouz/GUI_Unifier",
-	"factorio_version": "2.0",
+	"factorio_version": "2.1",
 	"dependencies": [
 		"base >= 2.0.0",
 		"?Bluegistics",
