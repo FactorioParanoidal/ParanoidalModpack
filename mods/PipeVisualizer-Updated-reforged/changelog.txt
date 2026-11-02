@@ -39,6 +39,8 @@ Date: 2026-10-31
     - PNG files recompressed with pingo -s4 -quality=45: the graphics stay pixel-identical (19.0 -> 6.2 KB), thumbnail.png is lossy at 35.1 dB PSNR (20.4 -> 11.1 KB).
   Changes:
     - flib is no longer a dependency.
+  Compatibility:
+    - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
 ---------------------------------------------------------------------------------------------------
 Version: 2.4.4
 Date: 2025-11-15
