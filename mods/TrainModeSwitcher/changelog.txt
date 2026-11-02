@@ -3,6 +3,8 @@ Version: 1.0.7
 Date: 2024-11-15
   Changes:
     - Change default keybinding to ctrl-shift-x, away from default of redo
+  Compatibility:
+    - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.6
 Date: 2024-11-15
