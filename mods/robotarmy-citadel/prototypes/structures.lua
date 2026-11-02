@@ -135,7 +135,9 @@ end
 -- Module buildings.
 ---------------------------------------------------------------------------------------------------
 add(building(E.assembler, first(am3.graphics_set.animation), 1, DARK, 1500, {icon = am3}))
-add(building(E.turbine, turbine.horizontal_animation, 1, STEEL, 1500, {icon = turbine}))
+-- Factorio 2.1: the generator animation is pictures.east.animation (horizontal_animation was removed)
+add(building(E.turbine, turbine.pictures and turbine.pictures.east and turbine.pictures.east.animation
+  or turbine.horizontal_animation, 1, STEEL, 1500, {icon = turbine}))
 add(building(E.depot, first(refinery.graphics_set.animation), 1, STEEL, 5000, {military = true, icon = refinery}))
 add(building(E.repair_bay, first(chem.graphics_set.animation), 1, {r = 0.6, g = 0.9, b = 0.6}, 4000,
   {military = true, icon = chem}))
