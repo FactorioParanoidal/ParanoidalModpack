@@ -2,7 +2,7 @@ data:extend({
   {
     type = "recipe",
     name = "bob-advanced-processing-unit",
-    category = "crafting-with-fluid",
+    categories = {"crafting-with-fluid"},
     enabled = false,
     energy_required = 15,
     ingredients = {

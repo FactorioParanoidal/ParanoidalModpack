@@ -76,7 +76,7 @@ if settings.startup["bobmods-plates-cheapersteel"].value == true then
     {
       type = "recipe",
       name = "steel-plate",
-      category = "bob-chemical-furnace",
+      categories = {"bob-chemical-furnace"},
       enabled = false,
       energy_required = 3.2,
       ingredients = {
@@ -93,7 +93,7 @@ else
     {
       type = "recipe",
       name = "steel-plate",
-      category = "bob-chemical-furnace",
+      categories = {"bob-chemical-furnace"},
       enabled = false,
       energy_required = 16,
       ingredients = {
@@ -116,7 +116,7 @@ if settings.startup["bobmods-plates-batteryupdate"].value == true then
   bobmods.lib.recipe.add_ingredient("battery", { type = "item", name = "steel-plate", amount = 1 })
 end
 
-data.raw.recipe["steel-plate"].category = "bob-chemical-furnace"
+bobmods.lib.recipe.set_category("steel-plate", "bob-chemical-furnace")
 bobmods.lib.tech.add_prerequisite("steel-processing", "bob-electrolysis-1")
 bobmods.lib.tech.add_prerequisite("steel-processing", "bob-chemical-processing-1")
 
@@ -279,8 +279,8 @@ bobmods.lib.create_fluid_canister(data.raw.fluid["bob-alien-fire"])
 bobmods.lib.create_fluid_canister(data.raw.fluid["bob-tungstic-acid"])
 
 for i, recipe in pairs(data.raw.recipe) do
-  if string.sub(recipe.name, -7) == "-barrel" and recipe.category == "crafting-with-fluid" then
-    data.raw.recipe[recipe.name].category = "barrelling"
+  if string.sub(recipe.name, -7) == "-barrel" and bobmods.lib.recipe.get_category(recipe) == "crafting-with-fluid" then
+    bobmods.lib.recipe.set_main_category(recipe, "barrelling")
     if bobmods.lib.tech.has_recipe_unlock("fluid-handling", recipe.name) then
       bobmods.lib.tech.remove_recipe_unlock("fluid-handling", recipe.name)
       bobmods.lib.tech.add_recipe_unlock("bob-fluid-barrel-processing", recipe.name)
