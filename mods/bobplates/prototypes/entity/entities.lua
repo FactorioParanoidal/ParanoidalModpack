@@ -1,3 +1,6 @@
+-- Factorio 2.1: base assembler pipe pictures are tables in assembler-pictures.lua (assemblerpipes.lua was removed).
+local base_assembler_pictures = require("__base__.prototypes.entity.assembler-pictures")
+local function assembler3pipepictures() return table.deepcopy(base_assembler_pictures.assembler3pipepictures) end
 local function bob_electrolyser_animation_facing(directory, tier, tint, facing)
   return {
     layers = {
@@ -208,7 +211,7 @@ data:extend({
     module_slots = 1,
     icons_positioning = {
       {
-        inventory_index = defines.inventory.assembling_machine_modules,
+        inventory_index = defines.inventory.crafter_modules,
         shift = { 0, 0.8 },
       },
     },
@@ -541,7 +544,7 @@ data:extend({
     module_slots = 2,
     icons_positioning = {
       {
-        inventory_index = defines.inventory.assembling_machine_modules,
+        inventory_index = defines.inventory.crafter_modules,
         shift = { 0, 0.8 },
       },
     },
@@ -809,7 +812,7 @@ data:extend({
     module_slots = 2,
     icons_positioning = {
       {
-        inventory_index = defines.inventory.assembling_machine_modules,
+        inventory_index = defines.inventory.crafter_modules,
         shift = { 0, 0.8 },
       },
     },
