@@ -140,7 +140,7 @@ for _, robot_name in ipairs(robot_names) do
       {type = "item", name = wreck_name, amount = 1},
       {type = "item", name = pack, amount = shared.repair_packs},
     },
-    results = {{type = "item", name = item.name, amount = 1, probability = shared.repair_success}},
+    results = {{type = "item", name = item.name, amount = 1, independent_probability = shared.repair_success}},
     main_product = item.name,
     allow_productivity = false,
     allow_decomposition = false,
@@ -177,7 +177,10 @@ for item_type in pairs(item_types) do
     local cargo = item_type ~= "gun" and (not place or mine) and not name:find("seed", 1, true)
     local is_explosive = cargo and (mine or name:find("explosive", 1, true) or name:find("grenade", 1, true)
       or name:find("atomic", 1, true) or (item_type == "ammo" and explosive_category(category)))
-    local is_flammable = cargo and ((item.fuel_category == "chemical" and item.fuel_value
+    -- Factorio 2.1: fuel_categories (list) instead of fuel_category
+    local chemical = false
+    for _, c in pairs(item.fuel_categories or {}) do if c == "chemical" then chemical = true end end
+    local is_flammable = cargo and ((chemical and item.fuel_value
         and util.parse_energy(item.fuel_value) >= shared.flammable_fuel_value)
       or (item_type == "ammo" and category == "flamethrower")
       or name:find("napalm", 1, true) or name:find("incendiary", 1, true))
