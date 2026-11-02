@@ -3,7 +3,7 @@
   "author": "FactorioParanoidal",
   "version": "9.0.5",
   "title": "PM RPG System — migration bridge",
-  "factorio_version": "2.0",
+  "factorio_version": "2.1",
   "dependencies": [
     "base >= 2.0.77"
   ],
