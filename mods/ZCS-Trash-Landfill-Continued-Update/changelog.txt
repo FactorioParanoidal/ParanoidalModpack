@@ -42,6 +42,7 @@ Date: 26.08.2025
   Compatibility:
     - Sin dependencias duras: funciona en vanilla, con Quality, con Space Age, o con ambos.
     - Entidad `container` estándar; `surface.pollute` y eventos 2.0.
+    - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
 ---------------------------------------------------------------------------------------------------
 Version: 1.2.6
 Date: 04.04.2025
