@@ -4,3 +4,5 @@ Version: 1.0.0
     - ru: the mod name and the mod list description are the same as in ParanoidalLocale (format "English title (Russian translation)"), so the mod reads the same with or without it.
   Graphics:
     - Added thumbnail.png (144x144): the picture of the mod in the mod list, made from the mod and base game graphics.
+  Compatibility:
+    - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
