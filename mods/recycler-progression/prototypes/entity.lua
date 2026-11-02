@@ -143,7 +143,7 @@ data:extend({
     resistances = recycler_resistances,
     collision_box = collision_box,
     selection_box = selection_box,
-    crafting_categories = {"recycling", "recycling-or-hand-crafting"},
+    crafting_categories = {"recycling"}, -- Factorio 2.1: recycling-or-hand-crafting was removed
     result_inventory_size = 12,
     energy_usage = "45kW",
     crafting_speed = 0.125,
@@ -188,7 +188,7 @@ data:extend({
     resistances = recycler_resistances,
     collision_box = collision_box,
     selection_box = selection_box,
-    crafting_categories = {"recycling", "recycling-or-hand-crafting"},
+    crafting_categories = {"recycling"}, -- Factorio 2.1: recycling-or-hand-crafting was removed
     result_inventory_size = 12,
     energy_usage = "90kW",
     crafting_speed = 0.25,
@@ -237,7 +237,7 @@ data:extend({
     resistances = recycler_resistances,
     collision_box = collision_box,
     selection_box = selection_box,
-    crafting_categories = {"recycling", "recycling-or-hand-crafting"},
+    crafting_categories = {"recycling"}, -- Factorio 2.1: recycling-or-hand-crafting was removed
     result_inventory_size = 12,
     energy_usage = "135kW",
     crafting_speed = 0.375,
