@@ -5,10 +5,11 @@ local OV = angelsmods.functions.OV
 -------------------------------------------------------------------------------
 if mods["bobplates"] then
   for k, v in pairs(data.raw.recipe) do
-    if v.category == "bob-mixing-furnace" then --alien-blue-alloy, alien-orange-alloy
-      data.raw.recipe[v.name].category = "angels-blast-smelting"
-    elseif v.category == "bob-chemical-furnace" then -- silicon-nitride, silicon-carbide, lithium-cobalt-oxide
-      data.raw.recipe[v.name].category = "angels-chemical-smelting"
+    local category = angelsmods.functions.get_recipe_category(v) -- Factorio 2.1: main category = categories[1]
+    if category == "bob-mixing-furnace" then --alien-blue-alloy, alien-orange-alloy
+      angelsmods.functions.set_recipe_category(v, "angels-blast-smelting")
+    elseif category == "bob-chemical-furnace" then -- silicon-nitride, silicon-carbide, lithium-cobalt-oxide
+      angelsmods.functions.set_recipe_category(v, "angels-chemical-smelting")
     end
   end
 
