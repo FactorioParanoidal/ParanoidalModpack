@@ -28,7 +28,7 @@ data:extend({
   {
     type = "recipe",
     name = "express-subterranean-belt",
-    category = "crafting-with-fluid",
+    categories = {"crafting-with-fluid"},
     enabled = false,
     energy_required = 10,
     ingredients = {
