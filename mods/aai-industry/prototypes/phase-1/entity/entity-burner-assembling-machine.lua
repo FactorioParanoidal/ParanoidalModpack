@@ -1,3 +1,8 @@
+-- Factorio 2.1 removed the recipe category "basic-crafting" (2.0 base: assemblers only, never by hand);
+-- the Paranoidal build keeps it. Created by the first mod that needs it.
+if not data.raw["recipe-category"]["basic-crafting"] then
+  data:extend({{ type = "recipe-category", name = "basic-crafting" }})
+end
 local burner_assembling_machine = table.deepcopy(data.raw["assembling-machine"]["assembling-machine-1"])
 burner_assembling_machine.name = "burner-assembling-machine"
 burner_assembling_machine.icon = "__aai-industry__/graphics/icons/burner-assembling-machine.png"

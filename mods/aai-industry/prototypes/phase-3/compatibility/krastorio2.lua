@@ -29,8 +29,9 @@ end
 
 if mods["Krastorio2"] then
   data.raw.technology["basic-logistics"].prerequisites = {}
-  data.raw.recipe["automation-science-pack"].category = "basic-crafting"
-  data.raw.recipe["kr-blank-tech-card"].category = "basic-crafting"
+  -- Factorio 2.1: category -> categories (the first entry is the main category)
+  data.raw.recipe["automation-science-pack"].categories = {"basic-crafting"}
+  data.raw.recipe["kr-blank-tech-card"].categories = {"basic-crafting"}
 
   merge_ingredients("repair-pack")
   data_util.replace_or_add_ingredient("repair-pack","iron-plate","iron-plate",3)
@@ -119,7 +120,7 @@ if mods["Krastorio2"] then
   if fuel then
     fuel.fuel_acceleration_multiplier = 1.2
     fuel.fuel_top_speed_multiplier = 1.05
-    fuel.fuel_category = "kr-vehicle-fuel"
+    fuel.fuel_categories = {"kr-vehicle-fuel"}
   end
 
   -- Compensate for the processed fuel exploit. Alternative could be to reduce wood flue value.
@@ -176,8 +177,9 @@ if mods["Krastorio2"] then
   for _, recipe_name in pairs(recipes) do
     local recipe = data.raw.recipe[recipe_name]
     if recipe then
-      if recipe.category == "crafting" or recipe.category == nil then
-        recipe.category = "basic-crafting"
+      if (recipe.categories or {"crafting"})[1] == "crafting" then -- Factorio 2.1: main category = categories[1]
+        recipe.categories = table.deepcopy(recipe.categories or {"crafting"})
+        recipe.categories[1] = "basic-crafting"
       end
       recipe.always_show_made_in = true
     end

@@ -63,7 +63,7 @@ data:extend({
       subgroup = "fuel-processing",
       order = "m[rocket-fuel]-b[processed-fuel]",
       stack_size = 100, --(1000MJ) rocket is 10 (2250MJ), solid is 50(1250MK),
-      fuel_category = "processed-chemical",
+      fuel_categories = {"processed-chemical"},
       fuel_acceleration_multiplier = 1.75,
       fuel_top_speed_multiplier = 1.125,
       hidden = (not include_fuel_processor),
