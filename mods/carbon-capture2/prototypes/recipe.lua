@@ -116,7 +116,7 @@ data:extend({
 			{ type = "item", name = "CW-used-air-filter", amount = 1 },
 			{ type = "item", name = "coal", amount = 5 },
 		},
-		results = { { type = "item", name = "CW-air-filter", amount = 1, probability = 0.9 } },
+		results = { { type = "item", name = "CW-air-filter", amount = 1, independent_probability = 0.9 } },
 	},
 	{
 		type = "recipe", name = "CW-air-filter-cleaning-2",
@@ -127,7 +127,7 @@ data:extend({
 			{ type = "item", name = "CW-used-air-filter", amount = 5 },
 			{ type = "item", name = "coal", amount = 20 },
 		},
-		results = { { type = "item", name = "CW-air-filter", amount = 5, probability = 0.95 } },
+		results = { { type = "item", name = "CW-air-filter", amount = 5, independent_probability = 0.95 } },
 	},
 	{
 		type = "recipe", name = "CW-air-filter-cleaning-3",
@@ -139,7 +139,7 @@ data:extend({
 			{ type = "fluid", name = "angels-water-purified", amount = 100 },
 		},
 		results = {
-			{ type = "item", name = "CW-air-filter", amount = 5, probability = 0.98 },
+			{ type = "item", name = "CW-air-filter", amount = 5, independent_probability = 0.98 },
 			{ type = "fluid", name = "angels-water-yellow-waste", amount = 80 },
 		},
 	},
@@ -153,7 +153,7 @@ data:extend({
 			{ type = "fluid", name = "steam", amount = 150 },
 		},
 		results = {
-			{ type = "item", name = "CW-air-filter", amount = 5, probability = 0.99 },
+			{ type = "item", name = "CW-air-filter", amount = 5, independent_probability = 0.99 },
 			{ type = "fluid", name = "angels-water-yellow-waste", amount = 80 },
 			{ type = "fluid", name = "angels-thermal-water", amount = 20 },
 		},
