@@ -9,6 +9,19 @@ end)
 
 Product.classname = "HMProduct"
 
+---Factorio 2.1: a product has independent_probability (was probability) and a shared_probability range;
+---the chance shown by the game is independent_probability * (shared_probability.max - shared_probability.min).
+---Tables built by Helmod itself may still carry probability.
+---@return number|nil
+local function probability_of(element)
+  local probability = element.independent_probability or element.probability
+  local shared = element.shared_probability
+  if shared ~= nil and shared.max ~= nil and shared.min ~= nil then
+    probability = (probability or 1) * (shared.max - shared.min)
+  end
+  return probability
+end
+
 -------------------------------------------------------------------------------
 ---Return localised name of Prototype
 ---@return string
@@ -115,12 +128,14 @@ function Product:getElementAmount()
   if amount ~= nil then
     ---In 0.17, it seems probability can be used with just 'amount' and it
     ---doesn't need to use amount_min/amount_max
-    if element.probability ~= nil then
-      amount = amount * element.probability
+    local probability = probability_of(element)
+    if probability ~= nil then
+      amount = amount * probability
     end
   else
-    if element.probability ~= nil and element.amount_min ~= nil and  element.amount_max ~= nil then
-      amount = ((element.amount_min + element.amount_max) * element.probability / 2)
+    local probability = probability_of(element)
+    if probability ~= nil and element.amount_min ~= nil and  element.amount_max ~= nil then
+      amount = ((element.amount_min + element.amount_max) * probability / 2)
     end
   end
 
@@ -140,12 +155,12 @@ function Product:getBonusAmount()
   if element == nil then return 0 end
 
   local catalyst_amount = element.catalyst_amount or 0
-  local probability = element.probability or 1
+  local probability = probability_of(element) or 1
   local amount = 0
   ---If amount not specified, amount_min, amount_max and probability must all be specified.
   ---Minimal amount of the item or fluid to give. Has no effect when amount is specified.
   ---Maximum amount of the item or fluid to give. Has no effect when amount is specified.
-  if element.probability ~= nil and element.amount_min ~= nil and  element.amount_max ~= nil then
+  if probability_of(element) ~= nil and element.amount_min ~= nil and  element.amount_max ~= nil then
     amount = (element.amount_min + element.amount_max) / 2
   end
 

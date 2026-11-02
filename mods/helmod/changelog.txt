@@ -38,6 +38,7 @@ Date: 2026-06-19
     - Paranoidal port to Factorio 2.1: recipe categories are read from LuaRecipePrototype::categories (category/additional_categories were removed; the first category is the main one).
     - Paranoidal port to Factorio 2.1: LuaEntityPrototype::fixed_recipe is read as a LuaRecipePrototype (it was a name in 2.0).
     - Paranoidal port to Factorio 2.1: burnt and rocket pseudo-recipes take the main category from LuaRecipePrototype::categories.
+    - Paranoidal port to Factorio 2.1: product chances are read from independent_probability and the shared_probability range (Product::probability was removed in 2.1).
 ---------------------------------------------------------------------------------------------------
 Version: 2.2.13
 Date: 2026-03-20
