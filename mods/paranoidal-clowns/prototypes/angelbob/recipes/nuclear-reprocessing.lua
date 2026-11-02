@@ -92,8 +92,8 @@ data:extend(
 			{type="item", name="angels-thorium-232", amount=3},
 			{type="item", name="angels-plutonium-239", amount=1},
 			{type="item", name="angels-solid-aluminium-oxide", amount = 5, ignored_by_productivity = 5},
-			{type="item", name="angels-thorium-232", amount=1, probability=0.05},
-			{type="item", name="angels-plutonium-239", amount=1, probability=0.1},
+			{type="item", name="angels-thorium-232", amount=1, independent_probability=0.05},
+			{type="item", name="angels-plutonium-239", amount=1, independent_probability=0.1},
 		},
 	},
 	{

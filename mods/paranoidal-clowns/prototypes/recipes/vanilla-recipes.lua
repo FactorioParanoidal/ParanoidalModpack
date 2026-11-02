@@ -626,8 +626,8 @@ data:extend(
       {type = "item", name = "clowns-solid-uranium-hexafluoride", amount = 8} --20% less ingredients than vanilla
     },
     results = {
-      {type = "item", name = "uranium-235", probability = 0.007, amount = 1},
-      {type = "item", name = "uranium-238", probability = 0.993, amount = 1}
+      {type = "item", name = "uranium-235", independent_probability = 0.007, amount = 1},
+      {type = "item", name = "uranium-238", independent_probability = 0.993, amount = 1}
     },
     icons = {
       {icon = "__paranoidal-clowns__/graphics/icons/advanced-uranium-processing.png", icon_size = 32,}
