@@ -13,7 +13,7 @@
     "(?) bobelectronics"
   ],
   "description": "The industry part of Advanced Autonomous Industries. Adds burner machines, some new intermediate ingredients, powered offshore pumps, and more. Alters tech and recipes.",
-  "factorio_version": "2.0",
+  "factorio_version": "2.1",
   "homepage": "https://factorio.miraheze.org",
   "package": {
     "git_publish_branch": "master",

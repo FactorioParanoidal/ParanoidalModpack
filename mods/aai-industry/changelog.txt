@@ -6,6 +6,8 @@ Date: 27. 02. 2026
     - Renamed the big mining drill to area mining drill to match the internal prototype name.
   Compatibility:
     - [Space Age] the area mining drill is no longer hidden in favor of the big mining drill.
+    - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
+    - Paranoidal port to Factorio 2.1: assembler pipe pictures are taken from __base__/prototypes/entity/assembler-pictures.lua (2.1 removed the global assembler2pipepictures/assembler3pipepictures and assemblerpipes.lua).
   Locale:
     - Updated Spanish translation, thanks to Spiderlove.
     - Added Ukrainian translation, thanks to Генріх Мхітарян.

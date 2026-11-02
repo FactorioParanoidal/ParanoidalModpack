@@ -1,6 +1,8 @@
+-- Factorio 2.1: base assembler pipe pictures are tables in assembler-pictures.lua (assemblerpipes.lua was removed).
+local base_assembler_pictures = require("__base__.prototypes.entity.assembler-pictures")
+local function assembler2pipepictures() return table.deepcopy(base_assembler_pictures.assembler2pipepictures) end
 local data_util = require("data-util")
 require("__base__.prototypes.entity.pipecovers")
-require("__base__.prototypes.entity.assemblerpipes")
 local hit_effects = require("__base__.prototypes.entity.hit-effects")
 local sounds = require("__base__.prototypes.entity.sounds")
 local item_sounds = require("__base__.prototypes.item_sounds")
