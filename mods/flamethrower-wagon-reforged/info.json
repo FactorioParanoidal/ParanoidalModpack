@@ -5,7 +5,7 @@
   "author": "fgardt, Paranoidal",
   "contact": "",
   "homepage": "https://github.com/fgardt/factorio-flamethrower-wagon",
-  "factorio_version": "2.0",
+  "factorio_version": "2.1",
   "dependencies": [
     "base >= 2.0",
     "! flamethrower-wagon"

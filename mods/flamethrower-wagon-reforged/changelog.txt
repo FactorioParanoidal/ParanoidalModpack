@@ -30,6 +30,8 @@ Date: 2026-10-27
     - Item and entity icons no longer inherit icons or item pictures of a reskinned fluid wagon. Recipe and technology are defined directly instead of being copied from the fluid wagon recipe and the flamethrower technology.
     - Russian locale added; mod name and description locale keys fixed.
     - Remote interface flamethrower-wagon-reforged.stats for diagnostics: number of wagons, number of polled wagons and their unit numbers, whether the dynamic handlers are on.
+  Compatibility:
+    - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
 ---------------------------------------------------------------------------------------------------
 Version: 2.1.0
 Date: 2026-06-23
