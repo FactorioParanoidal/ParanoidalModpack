@@ -160,8 +160,8 @@ local function inventories(record)
     local inv = record.inventories
     if not inv then
         local entity = record.entity
-        inv = {source = entity.get_inventory(defines.inventory.furnace_source),
-            result = entity.get_inventory(defines.inventory.furnace_result), fuel = entity.get_fuel_inventory()}
+        inv = {source = entity.get_inventory(defines.inventory.crafter_input),
+            result = entity.get_inventory(defines.inventory.crafter_output), fuel = entity.get_fuel_inventory()}
         record.inventories = inv
     end
     return inv

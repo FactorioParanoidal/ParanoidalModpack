@@ -4,7 +4,7 @@
 	"title": "IndustrialCraft - More Qualities",
 	"author": "mimic",
 	"description": "Adds 40 new qualities. Paranoidal extension: five defect qualities that early handcrafted and machine-made products and drills may get, and ten quality-control research levels that phase them out; a refinement workshop that repairs defects with repair packs, production modes for assembling machines and furnaces, a control post for production orders, circuit signals and a quality-control panel. See README.md.",
-	"factorio_version": "2.0",
+	"factorio_version": "2.1",
 	"dependencies": [
 		"base >= 2.0",
 		"quality >= 2.0",

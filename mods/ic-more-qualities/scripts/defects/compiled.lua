@@ -113,7 +113,9 @@ function M.machine(entity, name)
             end
         end
         local kind = prototype.type
+        -- Factorio 2.1: fixed_recipe is a LuaRecipePrototype, not a name
         local fixed = (kind == "assembling-machine" or kind == "rocket-silo") and prototype.fixed_recipe
+        fixed = fixed and fixed.name
         if fixed then
             local recipe = M.recipe(fixed)
             info.relevant = recipe ~= nil and recipe.watched

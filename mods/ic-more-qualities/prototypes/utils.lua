@@ -21,7 +21,8 @@ function ic.create_quality(in_name, in_icon_name, in_level, in_order, in_next_qu
     next_probability = ic.get_chance(),
     subgroup = "qualities",
     icon = "__ic-more-qualities__/graphics/icons/quality-" .. in_icon_name .. ".png",
-    beacon_power_usage_multiplier = in_beacon_power_usage_multiplier,
+    -- Factorio 2.1 requires >= 0.01 (0.01 itself fails the float check), so the top tiers no longer go lower.
+    beacon_power_usage_multiplier = math.max(in_beacon_power_usage_multiplier, 0.0100001),
     mining_drill_resource_drain_multiplier = in_mining_drill_resource_drain_multiplier,
     science_pack_drain_multiplier = in_science_pack_drain_multiplier
   }

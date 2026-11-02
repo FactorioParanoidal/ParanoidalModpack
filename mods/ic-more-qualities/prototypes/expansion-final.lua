@@ -103,8 +103,8 @@ local function finish_machines(raw)
     end
 
     -- Quality built their recycling in data-updates from the placeholder recipes: rebuild it now.
-    if mods and mods["quality"] and data and raw == data.raw then
-        local recycling = require("__quality__.prototypes.recycling")
+    if mods and mods["recycler"] and data and raw == data.raw then
+        local recycling = require("__recycler__.recycling")
         for _, name in ipairs({names.workshop, names.post}) do
             local key = name .. "-recycling"
             if raw.recipe[key] then
@@ -112,6 +112,14 @@ local function finish_machines(raw)
                 raw.recipe[key] = nil
                 recycling.generate_recycling_recipe(raw.recipe[name])
                 if not raw.recipe[key] then raw.recipe[key] = old end
+                -- Factorio 2.1: the generator locks the recipe behind the recycling technology; recycling
+                -- is available from the start in this build (as in 2.0, see zzzparanoidal).
+                raw.recipe[key].enabled = true
+                local technology = raw.technology["recycling"]
+                for i = #(technology and technology.effects or {}), 1, -1 do
+                    local effect = technology.effects[i]
+                    if effect.type == "unlock-recipe" and effect.recipe == key then table.remove(technology.effects, i) end
+                end
             end
         end
     end

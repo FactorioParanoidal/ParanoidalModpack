@@ -418,7 +418,7 @@ local function make_pack_machine(unit)
         return item.count
     end
     entity.get_inventory = function(index)
-        if index == defines.inventory.furnace_result then return result_inventory end
+        if index == defines.inventory.crafter_output then return result_inventory end
         return source_inventory
     end
     local update = machine.update
