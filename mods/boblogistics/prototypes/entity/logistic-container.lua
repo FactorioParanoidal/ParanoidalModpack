@@ -24,7 +24,7 @@ function bobmods.logistics.logistic_container(inputs)
     close_sound = { filename = "__base__/sound/metallic-chest-close.ogg", volume = 0.7 },
     impact_category = "metal",
     picture = inputs.picture,
-    animation = inputs.animation,
+    robot_door = inputs.animation and { animation = inputs.animation } or nil,
     circuit_connector = circuit_connector_definitions["chest"],
     circuit_wire_max_distance = inputs.circuit_wire_max_distance or 7.5,
   }
