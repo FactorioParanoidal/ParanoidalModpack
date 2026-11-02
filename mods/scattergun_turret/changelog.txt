@@ -11,6 +11,8 @@ Date: 10.01.2025
     - Physical Projectile Damage 2: increased Heavy scattergun damage modifier: +10% -> +20%
     - Physical Projectile Damage 6: Heavy scattergun damage modifier: +40% -> +20% IF Space Age active
     - Physical Projectile Damage 7: Heavy scattergun damage modifier: +70% -> +20% IF Space Age active
+  Compatibility:
+    - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
 ---------------------------------------------------------------------------------------------------
 Version: 8.0.8
 Date: 22.12.2024
