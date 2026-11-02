@@ -24,3 +24,5 @@ Date: 2026-10-29
     - New icons, equipment sprites, technology icon and thumbnail from free-licensed sources (see README): respirator, gas mask, GHS acute toxicity pictogram, Fluent Emoji. The biohazard sign is gone.
   Optimizations:
     - Players are updated once per second in 6 slots; an alert is re-sent only when its text changes; sensors in 12 buckets.
+  Compatibility:
+    - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
