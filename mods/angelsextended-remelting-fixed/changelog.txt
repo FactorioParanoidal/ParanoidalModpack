@@ -2,6 +2,8 @@
 Version: 9.1.3
   Changes:
     - Clowns-Processing is now part of paranoidal-clowns: the optional dependency, the magnesium remelting checks and the molten magnesium icon path follow the new mod.
+  Compatibility:
+    - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
 ---------------------------------------------------------------------------------------------------
 Version: 0.17.10
 Date: 29.09.2019
