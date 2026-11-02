@@ -13,8 +13,12 @@ local get_category_items = function(category)
 
     local unsorted = {}
     for item_name, item in pairs(prototypes.item) do
-        if item.fuel_category and item.fuel_category == category then
-            table.insert(unsorted, { name = item_name, value = item.fuel_value })
+        -- Factorio 2.1: an item lists its fuel categories (fuel_categories, nil when empty).
+        for _, item_category in pairs(item.fuel_categories or {}) do
+            if item_category == category then
+                table.insert(unsorted, { name = item_name, value = item.fuel_value })
+                break
+            end
         end
     end
 

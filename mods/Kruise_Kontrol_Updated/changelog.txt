@@ -13,6 +13,9 @@ Date: 2026-07-23
     - Mining caches the prototype minability check and writes the entity selection view setting only when it changes.
   Bugfixes:
     - Fixed on_object_destroyed using the removed unit_number field, so destroyed characters were never dropped from storage.
+  Compatibility:
+    - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
+    - Paranoidal port to Factorio 2.1: item fuel categories are read from fuel_categories (a list; LuaItemPrototype::fuel_category was removed).
 ---------------------------------------------------------------------------------------------------
 Version: 0.2.6
 Date: 2024-11-10
