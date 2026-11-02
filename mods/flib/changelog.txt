@@ -5,6 +5,8 @@ Date: 2025-11-05
     - ru: the mod name and the mod list description are the same as in ParanoidalLocale (format "English title (Russian translation)"), so the mod reads the same with or without it.
   Bugfixes:
     - Fixed that `flib_table.binary_search` would fail to find the last element in the list. (#81)
+  Compatibility:
+    - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
 ---------------------------------------------------------------------------------------------------
 Version: 0.16.4
 Date: 2025-10-31

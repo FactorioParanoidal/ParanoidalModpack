@@ -6,7 +6,7 @@
   "contact": "https://codeberg.org/raiguard/flib",
   "homepage": "https://codeberg.org/raiguard/flib",
   "description": "A set of high-quality, commonly-used utilities for creating Factorio mods.",
-  "factorio_version": "2.0",
+  "factorio_version": "2.1",
   "dependencies": [ "base >= 2.0.0" ],
   "package": {
     "git_publish_branch": "trunk",
