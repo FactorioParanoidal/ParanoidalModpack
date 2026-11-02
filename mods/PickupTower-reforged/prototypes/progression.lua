@@ -1,3 +1,11 @@
+-- Factorio 2.1: a science pack can be of any item type (vanilla packs are plain items, mod packs may stay tools).
+local function is_science_pack(name)
+  for item_type in pairs(defines.prototypes.item) do
+    if data.raw[item_type] and data.raw[item_type][name] then return true end
+  end
+  return false
+end
+
 -- Recipes and research. Each tier is the previous tower plus Bob's radars of the matching tier
 -- (vanilla radars without bobwarfare); research follows the same radar research.
 local S = require("shared")
@@ -43,7 +51,7 @@ for tier, r in ipairs(recipes) do
   end
   local packs = {}
   for _, p in ipairs(t.packs) do
-    if data.raw.tool[p] then packs[#packs + 1] = {p, 1} end
+    if is_science_pack(p) then packs[#packs + 1] = {p, 1} end
   end
   list[#list + 1] = {
     type = "technology",

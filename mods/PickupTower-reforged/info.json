@@ -5,7 +5,7 @@
   "author": "Schallfalke, Paranoidal",
   "contact": "",
   "homepage": "",
-  "factorio_version": "2.0",
+  "factorio_version": "2.1",
   "dependencies": [
     "base >= 2.0",
     "? bobwarfare",

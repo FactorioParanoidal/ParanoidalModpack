@@ -27,6 +27,10 @@ Date: 2026-10-30
     - A full chest skips the pickup; a kind that did not fit is not retried in the same pickup; at most 1000 ground items are looked at per pickup.
     - Build, mine, death, clone and teleport events are filtered by name.
     - Range rendering keeps per-player objects: nothing is scanned unless a tower enters or leaves the cursor; destroyed towers lose their rectangle through the engine.
+  Compatibility:
+    - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
+    - Paranoidal port to Factorio 2.1: logistic chest door animation, sound, opened duration and landing offset moved into robot_door (2.1 LogisticContainerPrototype).
+    - Paranoidal port to Factorio 2.1: science pack checks accept every item type (2.1 vanilla science packs are plain items, mod packs may stay tools).
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.1
 Date: 2024.12.15

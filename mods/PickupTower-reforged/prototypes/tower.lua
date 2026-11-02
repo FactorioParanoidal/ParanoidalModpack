@@ -38,7 +38,7 @@ end
 -- Passive provider chest under the tower; the overlay repeats for each lid frame.
 local function chest_animation()
   local source = data.raw["logistic-container"]["passive-provider-chest"]
-  local layers = table.deepcopy(source.animation.layers)
+  local layers = table.deepcopy(source.robot_door.animation.layers)
   local frames = layers[1].frame_count or 1
   layers[#layers + 1] = {
     filename = G .. "entity/pickup-tower-base.png",
@@ -99,9 +99,11 @@ for tier, spec in ipairs(S.tiers) do
     impact_category = "metal",
     open_sound = {filename = "__base__/sound/metallic-chest-open.ogg", volume = 0.65},
     close_sound = {filename = "__base__/sound/metallic-chest-close.ogg", volume = 0.7},
-    animation = animation,
-    animation_sound = provider.animation_sound,
-    opened_duration = provider.opened_duration,
+    robot_door = {
+      animation = animation,
+      animation_sound = provider.robot_door.animation_sound,
+      opened_duration = provider.robot_door.opened_duration,
+    },
     radius_visualisation_specification = {
       sprite = {
         filename = G .. "entity/pickup-tower-radius.png",
