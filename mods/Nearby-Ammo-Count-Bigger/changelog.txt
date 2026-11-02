@@ -16,3 +16,5 @@ Date: 2026-10-18
     - The icon render layer used a Factorio 1.1 number that maps under elevated rails in 2.0; icons now use "entity-info-icon-above".
     - Changing any mod's runtime setting re-registered the update handler; only this mod's settings are handled now.
     - Removed the leaked global variable, the unused "target_offset" draw parameter (not supported in 2.0) and other dead code.
+  Compatibility:
+    - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
