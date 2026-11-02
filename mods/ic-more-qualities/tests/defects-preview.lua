@@ -17,7 +17,7 @@ log = function(line) logged[#logged + 1] = line end
 local raw = {
     quality = {
         normal = {name = "normal", level = 0, next = "uncommon", next_probability = 1},
-        uncommon = {name = "uncommon", level = 2, next = "legendary", next_probability = .2},
+        uncommon = {name = "uncommon", level = 2, next = "legendary", next_probability = 2},
         legendary = {name = "legendary", level = 6, default_multiplier = 2, electric_pole_wire_reach_bonus = 3},
         ["quality-unknown"] = {name = "quality-unknown", level = 0},
     },
@@ -126,6 +126,8 @@ for _, prototype in ipairs(prototypes) do
         assert(prototype.range_multiplier == 1 and prototype.beacon_power_usage_multiplier == 1)
         assert(prototype.mining_drill_resource_drain_multiplier == 1 and prototype.science_pack_drain_multiplier == 1)
         assert(prototype.next == (tier > 1 and ("ic-defect-" .. (tier - 1)) or "normal"))
+        -- Factorio 2.1: the 2.0 next_probability 0.1 is first step 1 and further steps 0.1.
+        assert(prototype.next_probability == 1 and prototype.chain_probability == .1)
     else
         local level = tonumber(prototype.name:match("(%d+)$"))
         assert(prototype.enabled == true and prototype.localised_name[2] == tostring(level))

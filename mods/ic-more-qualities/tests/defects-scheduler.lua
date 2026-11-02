@@ -110,7 +110,7 @@ local function machine(options)
     }
     entity.get_recipe = function()
         if not entity.recipe then return nil end
-        return {name = entity.recipe}, {name = entity.recipe_quality, next = {name = "uncommon"}, next_probability = 0.1}
+        return {name = entity.recipe}, {name = entity.recipe_quality, next = {name = "uncommon"}, next_probability = 1}
     end
     entity.is_crafting = function() return entity.crafting end
     entity.get_control_behavior = function() return entity.behavior end

@@ -170,7 +170,8 @@ local function destroy_beacon(record)
     record.beacon, record.bits = nil, 0
 end
 
--- Quality effect of the machine without its mode beacon (modules, player beacons), to two decimals.
+-- Quality effect of the machine without its mode beacon (modules, player beacons), to four decimals (the
+-- resolution of effects in Factorio 2.1).
 function M.native_quality_effect(entity)
     local effects = entity and entity.valid and entity.effects
     local total = effects and effects.quality or 0
@@ -181,7 +182,7 @@ function M.native_quality_effect(entity)
         local own = beacon.effects
         total = total - (own and own.quality or 0)
     end
-    return math.floor(total * 100 + 0.5) / 100
+    return math.floor(total * 10000 + 0.5) / 10000
 end
 
 -- The recipe and its quality the machine works on now (a furnace: also the previous one).
@@ -220,15 +221,15 @@ local function native_chance(entity)
     return math.min(1, effect * probability), probability, effect
 end
 
--- Beacon effect in hundredths for a mode: the engine chance (native effect + beacon) x next_probability equals
--- rules.boosted_chance(native chance, boost).
+-- Beacon effect in thousandths (the weights of the mode modules, prototypes/mode-twins.lua) for a mode: the
+-- engine chance (native effect + beacon) x next_probability equals rules.boosted_chance(native chance, boost).
 local function target_bits(entity, mode)
     local definition = rules.modes[mode]
     if not (definition and definition.boost > 1) then return 0 end
     local chance, probability, effect = native_chance(entity)
     if not chance or chance >= 1 then return 0 end
     local wanted = rules.boosted_chance(chance, definition.boost) / probability - effect
-    return math.max(0, math.min(2 ^ names.mode_module_count - 1, math.floor(wanted * 100 + 0.5)))
+    return math.max(0, math.min(2 ^ names.mode_module_count - 1, math.floor(wanted * 1000 + 0.5)))
 end
 
 local function set_bits(record, bits)

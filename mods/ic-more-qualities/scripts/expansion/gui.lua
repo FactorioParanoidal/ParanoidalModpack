@@ -645,7 +645,7 @@ end
 -- the machine without the beacon of its own mode.
 local function mode_quality_values(entity)
     local quality_effect = modes.native_quality_effect(entity)
-    local chance = math.max(0, math.min(1, quality_effect * (prototypes.quality.normal.next_probability or 0.1)))
+    local chance = math.max(0, math.min(1, quality_effect * (prototypes.quality.normal.next_probability or 0)))
     local values = {}
     for index, name in ipairs(rules.mode_order) do
         values[index] = percent(rules.boosted_chance(chance, rules.modes[name].boost), 2)

@@ -11,6 +11,7 @@ function ic.create_quality(in_name, in_icon_name, in_level, in_order, in_next_qu
     in_icon_name = in_name
   end
 
+  local chance = ic.get_chance()
   local entity = {
     type = "quality",
     name = in_name,
@@ -18,7 +19,9 @@ function ic.create_quality(in_name, in_icon_name, in_level, in_order, in_next_qu
     color = in_color,
     order = in_order,
     next = in_next_quality_name,
-    next_probability = ic.get_chance(),
+    -- Factorio 2.1: first step 10 x the 2.0 chance, further steps the 2.0 chance (ic.set_chance).
+    next_probability = chance * 10,
+    chain_probability = chance,
     subgroup = "qualities",
     icon = "__ic-more-qualities__/graphics/icons/quality-" .. in_icon_name .. ".png",
     -- Factorio 2.1 requires >= 0.01 (0.01 itself fails the float check), so the top tiers no longer go lower.

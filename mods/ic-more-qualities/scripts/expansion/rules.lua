@@ -146,13 +146,23 @@ end
 -- Post-processing (the only work of the post since 2026-10-31, user decisions): copies of the order item
 -- below the ordered quality stay in the post; every TAKE of one quality become one item rolled with the quality
 -- effect EFFECT (chance to go up = EFFECT x next_probability of the quality, at most 1; after a step up
--- every further tier with its own next_probability, like the engine roll). One operation per TICKS.
+-- every further tier with chain_probability of the tier reached, like the engine roll). One operation per TICKS.
 -- Deliberately worse than recycling with good quality modules: the post is the convenient, not the best way.
+-- Factorio 2.1 units: quality effects are 10 times smaller than in 2.0 and next_probability 10 times larger, so
+-- 0.6 here is the 2.0 effect 6 (the same chances).
 M.PROCESS_TAKE = 5
-M.PROCESS_EFFECT = 6
+M.PROCESS_EFFECT = 0.6
 M.PROCESS_TICKS = 15
 
--- Chance that one operation lifts the quality (quality: a prototype-like {next, next_probability}).
+-- Chance of every further step after an upgrade reached `quality` (Factorio 2.1 chain_probability; a
+-- prototype-like table without it gets the engine default clamp(next_probability x 0.1, 0, 1)).
+function M.chain_probability(quality)
+    local chain = quality.chain_probability
+    if chain == nil then chain = math.max(0, math.min(1, (quality.next_probability or 0) * 0.1)) end
+    return chain
+end
+
+-- Chance that one operation lifts the quality (quality: a prototype-like {next, next_probability, chain_probability}).
 function M.process_chance(quality)
     if not (quality and quality.next) then return 0 end
     return math.min(1, M.PROCESS_EFFECT * (quality.next_probability or 0))
@@ -162,14 +172,15 @@ end
 function M.process_outcome(quality, random)
     if random() >= M.process_chance(quality) then return quality end
     local result = quality.next
-    while result.next and (result.next_probability or 0) > 0 and random() < result.next_probability do
+    while result.next and M.chain_probability(result) > 0 and random() < M.chain_probability(result) do
         result = result.next
     end
     return result
 end
 
 -- Expected number of products of each quality needed for one product of quality `target` or better.
--- chain: qualities from normal by `next` (prototype-like {next, next_probability}); target: index in chain.
+-- chain: qualities from normal by `next` (prototype-like {next, next_probability, chain_probability}); target:
+-- index in chain.
 -- Every operation keeps the result in the post until it reaches the target (the fallback for a full
 -- post is ignored). Returns {[index] = count} for index < target (math.huge when unreachable).
 function M.process_costs(chain, target)
@@ -184,7 +195,7 @@ function M.process_costs(chain, target)
                 gained = gained + carried
                 break
             end
-            local further = chain[next_index + 1] and chain[next_index].next_probability or 0
+            local further = chain[next_index + 1] and M.chain_probability(chain[next_index]) or 0
             gained = gained + carried * (1 - further) * value[next_index]
             carried = carried * further
             next_index = next_index + 1

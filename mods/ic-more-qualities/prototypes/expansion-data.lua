@@ -12,13 +12,15 @@ local function machine_layers(filename, animated)
         filename = filename, priority = "high", width = 214, height = 226,
         shift = util.by_pixel(0, 2), scale = 0.5,
     }
-    local shadow = {
-        filename = AM1 .. "assembling-machine-1-shadow.png", priority = "high", width = 190, height = 165,
-        shift = util.by_pixel(8.5, 5), scale = 0.5, draw_as_shadow = true,
-    }
+    -- Factorio 2.1: the assembling machine 1 shadow was redrawn as a trimmed strip described by its .lua file (2.0:
+    -- a 190x165 frame), so it is loaded like the 2.1 vanilla machine.
+    local shadow = util.sprite_load(AM1 .. "assembling-machine-1-shadow",
+        {priority = "high", scale = 0.5, draw_as_shadow = true})
     if animated then
         main.frame_count, main.line_length = 32, 8
-        shadow.line_length, shadow.repeat_count = 1, 32
+        shadow.repeat_count = 32
+    else
+        shadow.line_length = nil
     end
     return {main, shadow}
 end

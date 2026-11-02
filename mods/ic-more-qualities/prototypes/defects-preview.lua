@@ -24,7 +24,9 @@ function M.defect(tier)
             tint = {r = 0, g = 0, b = 0, a = 1},
         }},
         next = tier > 1 and ("ic-defect-" .. (tier - 1)) or "normal",
-        next_probability = .1,
+        -- Factorio 2.1: 2.0 next_probability 0.1 = first step 1 (x effect) and further steps 0.1 (ic.set_chance).
+        next_probability = 1,
+        chain_probability = .1,
         default_multiplier = multiplier,
         accumulator_capacity_multiplier = multiplier,
         crafting_machine_speed_multiplier = multiplier,

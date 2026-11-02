@@ -122,8 +122,8 @@ settings = {global = {}}
 rendering = {draw_sprite = function() return {id = 1} end, get_object_by_id = function() return nil end}
 prototypes = {
     quality = {
-        -- 0.204: normal is the first step of the chance curve (prototypes/quality-base.lua).
-        normal = {name = "normal", level = 0, order = "a", next_probability = 0.204, localised_name = {"quality-name.normal"}},
+        -- 2.04: normal is the first step of the chance curve (prototypes/quality-base.lua), Factorio 2.1 units (10 x 0.204).
+        normal = {name = "normal", level = 0, order = "a", next_probability = 2.04, localised_name = {"quality-name.normal"}},
         rare = {name = "rare", level = 3, order = "b", localised_name = {"quality-name.rare"}},
         ["ic-defect-3"] = {name = "ic-defect-3", level = 0, order = "0", localised_name = {"quality-name.ic-defect-3"}},
     },
@@ -174,7 +174,7 @@ end
 entity = function(name, kind, unit)
     local e = {valid = true, object_name = "LuaEntity", name = name, type = kind, unit_number = unit,
         position = {x = 0.5, y = 0.5}, direction = 0, force = force, surface = surface(), quality = {name = "normal"},
-        effects = {quality = 0.2}, burner = {}, crafting_speed = 1, crafting_progress = 0.3, products_finished = 0,
+        effects = {quality = 0.02}, burner = {}, crafting_speed = 1, crafting_progress = 0.3, products_finished = 0,
         prototype = {items_to_place_this = {{name = name}}, get_max_energy_usage = function() return 1000 end,
             collision_box = {left_top = {x = -1.2, y = -1.2}, right_bottom = {x = 1.2, y = 1.2}},
             selection_box = {left_top = {x = -1.5, y = -1.5}, right_bottom = {x = 1.5, y = 1.5}}},
@@ -329,7 +329,7 @@ do
     -- Live refresh: the quality chance follows the machine effects without reopening.
     local tbl = inside.ic_mode_table
     assert(tbl.quality_1.caption == "4.08%" and tbl.quality_2.caption == "11.75%" and tbl.quality_3.caption == "34.07%", tbl.quality_3.caption)
-    am.effects = {quality = 0.5}
+    am.effects = {quality = 0.05}
     gui.refresh_entity(player)
     assert(player.gui.relative.ic_quality_relative == frame and frame.valid)
     assert(tbl.quality_1.caption == "10.20%" and tbl.quality_2.caption == "27.58%" and tbl.quality_3.caption == "65.90%")
@@ -373,7 +373,7 @@ do
     gui.refresh_entity(player)
     assert(not frame.valid and player.gui.relative.ic_quality_relative.ic_inside.ic_mode_table.tags.level == 4)
     force.technologies["ic-defect-control-4"] = nil
-    am.effects = {quality = 0.2}
+    am.effects = {quality = 0.02}
     -- Collapsed mode panel: square button with the mode icon; the workshop state is separate.
     gui.on_click({player_index = 1, element = {valid = true, tags = {ic = "rel-collapse", kind = "mode"}}}, {})
     local button = player.gui.relative.ic_quality_relative

@@ -53,4 +53,21 @@ function M.inventory(raw)
     return changed
 end
 
+-- Factorio 2.1 (user decision D29 "A", 2026-11-03): keep the 2.0 rolling stock. 2.1 added quality multipliers for
+-- locomotive power and rolling stock top speed (default 1 + 0.01 x level; vanilla tiers 1.2 ... 2.0 and 1.03 ... 1.15;
+-- the vanilla locomotive and its copies set quality_affects_max_speed) and a separate cargo wagon inventory multiplier
+-- (vanilla tiers 1.25 ... 2.5). In 2.0 quality changed neither locomotive power nor speed, and cargo wagons used
+-- inventory_size_multiplier: so every quality gets 1 / 1 and the cargo wagon multiplier is removed (the engine then
+-- takes inventory_size_multiplier).
+function M.rolling_stock(raw)
+    local changed = 0
+    for _, quality in pairs(raw.quality) do
+        quality.locomotive_power_multiplier = 1
+        quality.rolling_stock_max_speed_multiplier = 1
+        quality.cargo_wagon_inventory_size_multiplier = nil
+        changed = changed + 1
+    end
+    return changed
+end
+
 return M

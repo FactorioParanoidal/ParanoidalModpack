@@ -183,6 +183,7 @@ do
     local caps = require("prototypes.quality-caps")
     log("IC: fuels with capped quality speed bonus: " .. caps.fuel(data.raw))
     log("IC: qualities with capped chest slots: " .. caps.inventory(data.raw))
+    log("IC: qualities with 2.0 rolling stock (no locomotive power/speed bonus): " .. caps.rolling_stock(data.raw))
 end
 
 -- Production mode twins and the quality beacon: last, after every change of the machines. Also with defects

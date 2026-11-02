@@ -129,8 +129,9 @@ function M.beacon()
     }
 end
 
--- Hidden modules of the beacon: module i has quality effect 2^(i-1) hundredths, so any effect from 0.01 to
--- (2^count - 1) / 100 is one set of modules (the engine keeps effects to two decimals). Category "quality":
+-- Hidden modules of the beacon: module i has quality effect 2^(i-1) thousandths, so any effect from 0.001 to
+-- (2^count - 1) / 1000 is one set of modules. Factorio 2.1 divides quality effects by 10 (and keeps four
+-- decimals), so these are the 2.0 weights 0.01 ... 20.48 in 2.1 units with the same step. Category "quality":
 -- the engine drops beacon modules of a category that the recipe (4035 recipes of the Beta 8 module port) or
 -- the machine does not allow (test-runs/ic-beacon1-20261102), and "quality" is allowed wherever quality is.
 function M.modules()
@@ -146,7 +147,7 @@ function M.modules()
             hidden_in_factoriopedia = true,
             category = "quality",
             tier = 1,
-            effect = {quality = 2 ^ (index - 1) / 100},
+            effect = {quality = 2 ^ (index - 1) / 1000},
             stack_size = 1,
             subgroup = "module",
             order = "z[ic-mode]-" .. string.format("%02d", index),

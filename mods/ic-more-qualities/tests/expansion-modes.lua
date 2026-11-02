@@ -27,10 +27,12 @@ rendering = {
 
 -- Qualities and machine prototypes ------------------------------------------------------------------------------
 local Q = {}
-Q.rare = {name = "rare", level = 3, next_probability = 0.15}
-Q.uncommon = {name = "uncommon", level = 2, next = Q.rare, next_probability = 0.18}
-Q.normal = {name = "normal", level = 0, next = Q.uncommon, next_probability = 0.204}
-Q["ic-defect-2"] = {name = "ic-defect-2", level = 0, next = Q.normal, next_probability = 0.1}
+-- Factorio 2.1 units: next_probability 10 times the 2.0 value, quality effects 10 times smaller (the 2.0 test
+-- used 0.204 / 1.32; the chances are the same).
+Q.rare = {name = "rare", level = 3, next_probability = 1.5}
+Q.uncommon = {name = "uncommon", level = 2, next = Q.rare, next_probability = 1.8}
+Q.normal = {name = "normal", level = 0, next = Q.uncommon, next_probability = 2.04}
+Q["ic-defect-2"] = {name = "ic-defect-2", level = 0, next = Q.normal, next_probability = 1}
 local box = {left_top = {x = -1.5, y = -1.5}, right_bottom = {x = 1.5, y = 1.5}}
 local function machine_prototype(name, extra)
     local p = {name = name, items_to_place_this = {{name = name}}, allowed_effects = {quality = true, speed = true},
@@ -102,7 +104,7 @@ local function place(name, x, state)
 end
 local function group(name) return (name:gsub("%-ic%-mode%-%a+$", "")) end
 local MODULE = {}
-for i = 1, 12 do MODULE["ic-mode-quality-" .. i] = 2 ^ (i - 1) / 100 end
+for i = 1, 12 do MODULE["ic-mode-quality-" .. i] = 2 ^ (i - 1) / 1000 end
 surface.create_entity = function(spec)
     if spec.name == "ic-mode-beacon" then
         local b = {valid = true, name = spec.name, position = spec.position, force = spec.force, surface = surface,
@@ -189,14 +191,14 @@ surface.machines = {}
 -- The beacon effect equals n independent rolls ------------------------------------------------------------------------
 local function wanted_bits(native, probability, boost)
     local p = math.min(1, native * probability)
-    return math.floor(((1 - (1 - p) ^ boost) / probability - native) * 100 + 0.5)
+    return math.floor(((1 - (1 - p) ^ boost) / probability - native) * 1000 + 0.5)
 end
 local tracked = {}
 local function on_tracked(entity, old_id, keep) tracked[#tracked + 1] = {entity = entity, old = old_id, keep = keep} end
 local player = {valid = true, connected = true}
 game.connected_players = {player}
 local base = place("assembler", 0, {recipe = "chest", crafting = true, crafting_progress = 0.4, result_quality = Q.normal,
-    native = 1.32, health = 120, products_finished = 7, last_user = player, disabled_by_script = true})
+    native = 0.132, health = 120, products_finished = 7, last_user = player, disabled_by_script = true})
 player.opened = base
 local twin = modes.set(base, "precise", on_tracked)
 assert(twin and twin.name == "assembler-ic-mode-precise" and not base.valid)
@@ -206,11 +208,11 @@ assert(twin.crafting_progress == 0.4 and twin.result_quality == Q.normal, "runni
 assert(player.opened == twin, "an open window follows the machine")
 assert(tracked[1].entity == twin and tracked[1].old == base.unit_number and tracked[1].keep == true)
 local record = storage.ic_modes.records[twin.unit_number]
-local bits = wanted_bits(1.32, 0.204, 10)
+local bits = wanted_bits(0.132, 2.04, 10)
 assert(record and record.mode == "precise" and record.bits == bits, "bits " .. tostring(record and record.bits) .. " vs " .. bits)
-near(twin.effects.quality, 1.32 + bits / 100, 1e-9)
-near(modes.native_quality_effect(twin), 1.32)
-near((1.32 + bits / 100) * 0.204, 1 - (1 - 1.32 * 0.204) ^ 10, 0.002)
+near(twin.effects.quality, 0.132 + bits / 1000, 1e-9)
+near(modes.native_quality_effect(twin), 0.132)
+near((0.132 + bits / 1000) * 2.04, 1 - (1 - 0.132 * 2.04) ^ 10, 0.002)
 assert(renders[record.render].sprite == "ic-mode-precise")
 assert(modes.set(twin, "precise") == twin, "the same mode changes nothing")
 
@@ -218,12 +220,12 @@ assert(modes.set(twin, "precise") == twin, "the same mode changes nothing")
 twin.native = 0
 modes.refresh(record)
 assert(record.bits == 0 and record.beacon == nil, "no quality modules: no beacon")
-twin.native = 0.2
+twin.native = 0.02
 modes.refresh(record)
-assert(record.bits == wanted_bits(0.2, 0.204, 10) and record.beacon.valid)
+assert(record.bits == wanted_bits(0.02, 2.04, 10) and record.beacon.valid)
 twin.recipe_quality = Q.uncommon
 modes.refresh(record)
-assert(record.bits == wanted_bits(0.2, 0.18, 10), "chance of the recipe quality")
+assert(record.bits == wanted_bits(0.02, 1.8, 10), "chance of the recipe quality")
 twin.recipe_quality = Q["ic-defect-2"]
 modes.refresh(record)
 assert(record.bits == 0, "defective ingredients: no boost")
@@ -233,16 +235,16 @@ for _, case in ipairs({{"chest-recycling", 0}, {"sign", 0}, {"plate", nil}}) do
     modes.refresh(record)
     if case[2] then assert(record.bits == case[2], case[1]) end
 end
-assert(record.bits == wanted_bits(0.2, 0.204, 10), "a material with quality everywhere")
+assert(record.bits == wanted_bits(0.02, 2.04, 10), "a material with quality everywhere")
 everywhere = false
 modes.refresh(record)
 assert(record.bits == 0, "a material without quality everywhere stays standard")
 everywhere = true
 twin.recipe = "chest"
-twin.native = 6
+twin.native = 0.6
 modes.refresh(record)
 assert(record.bits == 0, "a native chance of 100% needs nothing")
-twin.native = 1.32
+twin.native = 0.132
 modes.refresh(record)
 local beacon = record.beacon
 twin.position = {x = 3, y = 0}
@@ -259,14 +261,14 @@ modes.refresh(record)
 assert(storage.ic_stats[1]["mode.precise"] == 5)
 
 -- A weaker mode during an upgraded operation decides it again: kept with the share of the weaker chance.
-local keep = (1 - (1 - 1.32 * 0.204) ^ 3) / (1 - (1 - 1.32 * 0.204) ^ 10)
+local keep = (1 - (1 - 0.132 * 2.04) ^ 3) / (1 - (1 - 0.132 * 2.04) ^ 10)
 twin.result_quality = Q.uncommon
 local random = math.random
 math.random = function() return keep - 1e-6 end
 local careful = modes.set(twin, "careful", on_tracked)
 assert(careful.name == "assembler-ic-mode-careful" and careful.result_quality == Q.uncommon and tracked[2].keep == false)
 local careful_record = storage.ic_modes.records[careful.unit_number]
-assert(careful_record.bits == wanted_bits(1.32, 0.204, 3) and storage.ic_modes.records[twin.unit_number] == nil)
+assert(careful_record.bits == wanted_bits(0.132, 2.04, 3) and storage.ic_modes.records[twin.unit_number] == nil)
 assert(storage.ic_stats[1]["mode.precise"] == 5, "counted before the swap, not twice")
 math.random = function() return 0.999 end
 local normal = modes.set(careful, "normal", on_tracked)
@@ -330,7 +332,7 @@ assert(not stray.valid, "stray beacon removed")
 for _, r in pairs(s.records) do assert(r.due > 5000 and r.due <= 5000 + 1 + modes.REFRESH) end
 
 -- Defects switched off: every twin goes back to its machine, beacons and records go.
-migrated.native = 1
+migrated.native = 0.1
 modes.refresh(s.records[migrated.unit_number])
 assert(s.records[migrated.unit_number].beacon.valid)
 local its_beacon = s.records[migrated.unit_number].beacon

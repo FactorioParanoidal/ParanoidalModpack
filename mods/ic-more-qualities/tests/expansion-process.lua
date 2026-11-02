@@ -10,8 +10,9 @@ game = {tick = 0}
 script = {register_on_object_destroyed = function() end}
 rendering = {draw_sprite = function() return {id = 1} end, get_object_by_id = function() return nil end}
 
--- Quality chain: normal -> uncommon -> rare -> epic (probabilities as in Paranoidal, epic the last).
-local chain = {{"normal", 0, 0.204}, {"uncommon", 2, 0.2}, {"rare", 3, 0.1}, {"epic", 4, 0}}
+-- Quality chain: normal -> uncommon -> rare -> epic (probabilities as in Paranoidal, epic the last). Factorio 2.1:
+-- next_probability is 10 times the 2.0 value, chain_probability the 2.0 value.
+local chain = {{"normal", 0, 2.04, 0.204}, {"uncommon", 2, 2, 0.2}, {"rare", 3, 1, 0.1}, {"epic", 4, 0, 0}}
 prototypes = {quality = {["ic-defect-3"] = {name = "ic-defect-3", level = 0}}, recipe = {}, item = {
     gear = {type = "item", get_spoil_ticks = function() return 0 end},
     fish = {type = "item", get_spoil_ticks = function() return 600 end},
@@ -19,7 +20,7 @@ prototypes = {quality = {["ic-defect-3"] = {name = "ic-defect-3", level = 0}}, r
 }}
 local previous
 for _, q in ipairs(chain) do
-    local quality = {name = q[1], level = q[2], next_probability = q[3]}
+    local quality = {name = q[1], level = q[2], next_probability = q[3], chain_probability = q[4]}
     prototypes.quality[q[1]] = quality
     if previous then previous.next = quality end
     previous = quality
@@ -27,9 +28,10 @@ end
 local rules = require("scripts.expansion.rules")
 local post = require("scripts.expansion.post")
 
--- Rules: chance = 6 x next_probability, at most 1; the last quality cannot go up.
+-- Rules: chance = 0.6 x next_probability (the 2.0 effect 6), at most 1; the last quality cannot go up; further
+-- steps with chain_probability of the tier reached.
 local Q = prototypes.quality
-assert(rules.PROCESS_TAKE == 5 and rules.PROCESS_EFFECT == 6)
+assert(rules.PROCESS_TAKE == 5 and rules.PROCESS_EFFECT == 0.6)
 assert(rules.process_chance(Q.normal) == 1 and rules.process_chance(Q.uncommon) == 1)
 assert(math.abs(rules.process_chance(Q.rare) - 0.6) < 1e-9 and rules.process_chance(Q.epic) == 0)
 local function sequence(values)
@@ -47,7 +49,8 @@ assert(rules.process_outcome(Q.epic, sequence({0})) == Q.epic)
 local costs = rules.process_costs({Q.normal, Q.uncommon, Q.rare, Q.epic}, 3)
 assert(math.abs(costs[2] - 5) < 1e-9 and math.abs(costs[1] - 5 / (0.8 / 5 + 0.2)) < 1e-9, costs[1])
 local curve = {}
-for k = 0, 40 do curve[k + 1] = {next_probability = k < 40 and 0.204 - 0.004 * k or 0} end
+-- next_probability only: chain_probability is the engine default (next_probability x 0.1 = the 2.0 value).
+for k = 0, 40 do curve[k + 1] = {next_probability = k < 40 and 10 * (0.204 - 0.004 * k) or 0} end
 for k = 1, 40 do curve[k].next = curve[k + 1] end
 local c15 = rules.process_costs(curve, 16)
 assert(c15[1] > 2.1e7 and c15[1] < 2.3e7 and c15[11] > 500 and c15[11] < 560, c15[1] .. " " .. c15[11])
@@ -342,7 +345,8 @@ assert(filters[1] == nil and filters[SLOTS] == nil)
 prototypes.item.anchor = {type = "item", stack_size = 1, get_spoil_ticks = function() return 0 end}
 assert(not post.is_processable("anchor"))
 
-print("PASS: post-processing chance (6 x next probability, capped), outcome and costs, 5 -> 1 operations")
+print("PASS: post-processing chance (0.6 x next probability, capped; chain probability after a step), outcome")
+print("and costs, 5 -> 1 operations")
 print("one per PROCESS_TICKS, waiting for copies, accepted copies counted, leftovers stay after completion,")
 print("no slot for the result: waits and drops nothing, strays counted, items it does not take refused, old orders converted,")
 print("pause, settings, slot layout per tier with fallback and retry, small stacks refused,")
