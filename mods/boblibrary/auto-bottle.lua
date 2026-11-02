@@ -113,7 +113,7 @@ local function create_fill_gas_bottle_recipe(fluid)
     type = "recipe",
     name = "fill-" .. fluid.name .. "-barrel",
     localised_name = { "recipe-name.fill-gas-canister", fluid.localised_name or { "fluid-name." .. fluid.name } },
-    category = "bob-air-pump",
+    categories = {"bob-air-pump"},
     subgroup = "bob-gas-bottle",
     energy_required = 0.2,
     order = "b[fill-" .. fluid.name .. "-barrel" .. "]",
@@ -140,7 +140,7 @@ local function create_fill_fluid_canister_recipe(fluid)
     type = "recipe",
     name = "fill-" .. fluid.name .. "-barrel",
     localised_name = { "recipe-name.fill-canister", fluid.localised_name or { "fluid-name." .. fluid.name } },
-    category = "bob-air-pump",
+    categories = {"bob-air-pump"},
     subgroup = "bob-canister",
     energy_required = 0.2,
     order = "b[fill-" .. fluid.name .. "-barrel" .. "]",
@@ -170,7 +170,7 @@ local function create_empty_gas_bottle_recipe(fluid)
       "recipe-name.empty-filled-gas-canister",
       fluid.localised_name or { "fluid-name." .. fluid.name },
     },
-    category = "bob-air-pump",
+    categories = {"bob-air-pump"},
     subgroup = "bob-empty-gas-bottle",
     energy_required = 0.2,
     order = "c[empty-" .. fluid.name .. "-barrel" .. "]",
@@ -197,7 +197,7 @@ local function create_empty_fluid_canister_recipe(fluid)
     type = "recipe",
     name = "empty-" .. fluid.name .. "-barrel",
     localised_name = { "recipe-name.empty-filled-canister", fluid.localised_name or { "fluid-name." .. fluid.name } },
-    category = "bob-air-pump",
+    categories = {"bob-air-pump"},
     subgroup = "bob-empty-canister",
     energy_required = 0.2,
     order = "c[empty-" .. fluid.name .. "-barrel" .. "]",
@@ -242,7 +242,7 @@ function bobmods.lib.create_gas_bottle(fluid)
     if fill_recipe then
       fill_recipe.localised_name =
         { "recipe-name.fill-gas-canister", fluid.localised_name or { "fluid-name." .. fluid.name } }
-      fill_recipe.category = "bob-air-pump"
+      bobmods.lib.recipe.set_main_category(fill_recipe, "bob-air-pump")
       fill_recipe.subgroup = "bob-gas-bottle"
       fill_recipe.icons = generate_fill_gas_bottle_icons(fluid)
 
@@ -256,7 +256,7 @@ function bobmods.lib.create_gas_bottle(fluid)
     if empty_recipe then
       empty_recipe.localised_name =
         { "recipe-name.empty-filled-gas-canister", fluid.localised_name or { "fluid-name." .. fluid.name } }
-      empty_recipe.category = "bob-air-pump"
+      bobmods.lib.recipe.set_main_category(empty_recipe, "bob-air-pump")
       empty_recipe.subgroup = "bob-empty-gas-bottle"
       empty_recipe.icons = generate_empty_gas_bottle_icons(fluid)
 

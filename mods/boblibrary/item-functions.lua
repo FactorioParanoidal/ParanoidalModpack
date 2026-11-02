@@ -126,9 +126,12 @@ function bobmods.lib.item.result_simple(inputs)
       return nil
     end
 
-    if inputs.probability then
-      item.probability = inputs.probability
+    -- Factorio 2.1: product probability was renamed to independent_probability (2.0 name still accepted
+    -- as input), shared_probability added.
+    if inputs.independent_probability or inputs.probability then
+      item.independent_probability = inputs.independent_probability or inputs.probability
     end
+    item.shared_probability = inputs.shared_probability
 
     if inputs.type then
       item.type = inputs.type
@@ -162,9 +165,18 @@ function bobmods.lib.item.result_simple(inputs)
     if item.type == "fluid" then
       item.fluidbox_index = inputs.fluidbox_index
       item.temperature = inputs.temperature
+      item.fluidbox_multiplier = inputs.fluidbox_multiplier
+      item.optional_fluidbox_indexes = inputs.optional_fluidbox_indexes
     else
       item.extra_count_fraction = inputs.extra_count_fraction
       item.percent_spoiled = inputs.percent_spoiled
+      -- Factorio 2.1 item product fields
+      item.always_fresh = inputs.always_fresh
+      item.reset_freshness_on_craft = inputs.reset_freshness_on_craft
+      item.affected_by_quality = inputs.affected_by_quality
+      item.quality_change = inputs.quality_change
+      item.quality_min = inputs.quality_min
+      item.quality_max = inputs.quality_max
     end
 
     item.ignored_by_stats = inputs.ignored_by_stats
@@ -175,7 +187,7 @@ function bobmods.lib.item.result_simple(inputs)
   if
     type(item.name) == "string"
     and (type(item.amount) == "number" or (type(item.amount_min) == "number" and type(item.amount_max) == "number"))
-    and (item.probability == nil or type(item.probability) == "number")
+    and (item.independent_probability == nil or type(item.independent_probability) == "number")
     and (item.type == "item" or item.type == "fluid")
   then
     return item
@@ -222,12 +234,13 @@ function bobmods.lib.item.combine(item1_in, item2_in)
       item.amount_max = item1.amount + item2.amount_max
     end
 
-    if item1.probability and item2.probability then
-      item.probability = (item1.probability + item2.probability) / 2
-    elseif item1.probability then
-      item.probability = (item1.probability + 1) / 2
-    elseif item2.probability then
-      item.probability = (item2.probability + 1) / 2
+    local p1, p2 = item1.independent_probability, item2.independent_probability
+    if p1 and p2 then
+      item.independent_probability = (p1 + p2) / 2
+    elseif p1 then
+      item.independent_probability = (p1 + 1) / 2
+    elseif p2 then
+      item.independent_probability = (p2 + 1) / 2
     end
 
     if item1.ignored_by_productivity and item2.ignored_by_productivity then

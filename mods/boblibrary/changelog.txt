@@ -10,6 +10,9 @@ Date: 01. 06. 2026
     - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
     - Paranoidal port to Factorio 2.1: recycling recipe generation and recycling icons are taken from the built-in recycler mod (__recycler__/recycling.lua, __recycler__/graphics/icons/); recycling code checks mods["recycler"] instead of mods["quality"].
     - Paranoidal port to Factorio 2.1: science pack checks accept every item type (2.1 vanilla science packs are plain items, mod packs may stay tools).
+    - Paranoidal port to Factorio 2.1: recipes use categories (RecipePrototype::category and additional_categories were merged into categories; the first entry keeps the meaning of the former main category, a changed main category keeps the other entries).
+    - Paranoidal port to Factorio 2.1: bobmods.lib.recipe.set_category replaces only the main category (categories[1]); add_additional_category appends to categories; new helpers bobmods.lib.recipe.get_category(recipe) and set_main_category(recipe, category).
+    - Paranoidal port to Factorio 2.1: recipe results use independent_probability (probability is still accepted as input) and keep shared_probability and the new 2.1 product fields (always_fresh, reset_freshness_on_craft, affected_by_quality, quality_change/min/max, fluidbox_multiplier, optional_fluidbox_indexes).
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.3
 Date: 15. 01. 2026
