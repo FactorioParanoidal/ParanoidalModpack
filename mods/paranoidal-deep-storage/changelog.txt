@@ -15,3 +15,4 @@ Date: 2026-11-01
     - Old migrations of both mods are dropped (they only fixed 1.x saves of the old mods).
   Compatibility:
     - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
+    - Factorio 2.1: hide_connection_info moved from the fluid box to every pipe connection (FluidBox::hide_connection_info was removed, PipeConnectionDefinition::hide_connection_info added; without it 2.1 draws connection arrows and fluid icons on these entities).

@@ -99,12 +99,11 @@ data:extend {
 			volume = 120000,
 			pipe_covers = pipecoverspictures(),
 			pipe_connections = {
-				{position = {0, 1},  direction = defines.direction.south},
-				{position = {0, -1}, direction = defines.direction.north},
-				{position = {1, 0},  direction = defines.direction.east},
-				{position = {-1, 0}, direction = defines.direction.west}
+				{position = {0, 1},  direction = defines.direction.south, hide_connection_info = true},
+				{position = {0, -1}, direction = defines.direction.north, hide_connection_info = true},
+				{position = {1, 0},  direction = defines.direction.east, hide_connection_info = true},
+				{position = {-1, 0}, direction = defines.direction.west, hide_connection_info = true}
 			},
-			hide_connection_info = true,
 			base_level = -1
 		},
 		two_direction_only = true,
