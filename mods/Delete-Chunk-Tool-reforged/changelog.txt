@@ -19,6 +19,8 @@ Date: 2026-10-31
     - Removed prototype fields that Factorio 2.0 does not read (stackable, show_in_library, toggleable).
   Bugfixes:
     - Map trimming no longer crashes with "Invalid SurfaceIdentification" in on_tick: LuaForce.is_chunk_visible takes the surface first, then the chunk position.
+  Compatibility:
+    - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
 
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.2

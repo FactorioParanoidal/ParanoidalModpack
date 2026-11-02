@@ -4,7 +4,7 @@
     "title": "Chunk Delete Tool Reforged",
     "author": "NotRexButCaesar, FactorioParanoidal",
     "homepage": "https://github.com/FactorioParanoidal/ParanoidalModpack",
-    "factorio_version": "2.0",
+    "factorio_version": "2.1",
     "dependencies": [
         "base >= 2.0.77",
         "(?) bobenemies",
