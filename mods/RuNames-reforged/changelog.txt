@@ -9,3 +9,5 @@ Date: 2026-10-30
     - Every enabled set that has a list for the entity type is chosen with an equal chance; a name that was already given is rerolled up to 10 times.
     - Ctrl+N gives the building under the cursor a new random name (former Name Lists hotkey).
     - Ctrl+R opens the rename window with random name, reset and icon selector (former Renamer).
+  Compatibility:
+    - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
