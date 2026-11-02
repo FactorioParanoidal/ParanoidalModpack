@@ -20,7 +20,8 @@ function M.ignite(entity, chain, cause)
     if seen[id] then return end
     seen[id] = game.tick
   end
-  FO.sched.schedule(C.FUSE_DELAY, { kind = "fuse", entity = entity, chain = chain or 0, cause = cause })
+  FO.sched.schedule(C.FUSE_DELAY * FO.weather.slowdown(entity.surface),
+    { kind = "fuse", entity = entity, chain = chain or 0, cause = cause })
 end
 
 local function scorch(entity, damage, damage_type)

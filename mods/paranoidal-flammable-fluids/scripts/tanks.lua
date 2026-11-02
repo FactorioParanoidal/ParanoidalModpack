@@ -88,6 +88,13 @@ local function update(task)
   end
 
   local tick = game.tick
+  -- rain (paranoidal-rain): the tank heats up slower, the countdown moves on 1/slowdown of the time
+  local slowdown = FO.weather.slowdown(entity.surface)
+  if slowdown > 1 then
+    local delay = math.floor(C.TANK_UPDATE * (1 - 1 / slowdown) + 0.5)
+    st.start = st.start + delay
+    st.finish = st.finish + delay
+  end
   if tick >= st.finish then
     catastrophe(task.id, st, content)
     return

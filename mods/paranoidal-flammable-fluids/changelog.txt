@@ -9,6 +9,7 @@ Date: 2026-11-01
     - The fire tick handler is registered and unregistered only when the task list becomes non-empty or empty (before: re-registered every tick while something burned).
     - Turret build events are filtered by the turret names; a removed turret is forgotten through on_object_destroyed (before: at its next 2-second service).
   Changes:
+    - Rain of paranoidal-rain slows the hazards down (remote "paranoidal-rain" hazard_slowdown, 2.5 by default): while it rains on the surface a burning storage tank counts down slower, the fire runs through pipes slower and ammunition cooks off with longer pauses. Rain does not put them out; fire safety turrets still do.
     - A burning storage tank inside the zone of an active fire safety turret is reported as put out by the turret, without the "Fire brigade" achievement (it stays for draining the tank in time).
     - A destroyed chemical machine inside a fire safety zone still leaks its toxic gases (poison cloud, pollution, alert); the turret only prevents fire and explosions.
     - Yuoki hydrogen (y_hydrogen) is volatile like Angels and Bob hydrogen.

@@ -11,12 +11,14 @@ util = require("util")
 --   alerts       map alerts and chat messages (setting flo-map-alerts)
 --   traps        oil ruin traps of paranoidal-ruins
 --   fire-safety  water turrets: put out fires, protect their zone (protection = direct check)
+--   weather      rain of paranoidal-rain slows tanks, fuses and cook-off down (remote hazard_slowdown)
 --   demo         test scene: /c remote.call("flammable_oils", "demo", game.player)
 -- All game state lives in storage; module tables only cache prototype-derived data.
 
 local FO = require("scripts.registry")
 local C = require("scripts.config")
 require("scripts.scheduler")
+require("scripts.weather")
 require("scripts.fire-safety")
 require("scripts.protection")
 require("scripts.fluids")

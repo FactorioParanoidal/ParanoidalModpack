@@ -109,7 +109,7 @@ function M.start(entity)
   storage.cook = storage.cook or {}
   storage.cook[id] = { entity = entity, pops = 0, interval = C.COOK_START_INTERVAL }
   FO.alerts.cookoff(entity)
-  FO.sched.schedule(C.COOK_START_INTERVAL, { kind = "cook", id = id })
+  FO.sched.schedule(C.COOK_START_INTERVAL * FO.weather.slowdown(entity.surface), { kind = "cook", id = id })
 end
 
 local function shrapnel(surface, pos, radius, damage, damage_type, entity)
@@ -165,7 +165,7 @@ local function pop(task)
 
   if st.pops == C.COOK_ACHIEVEMENT then FO.ach.near("flo-cookoff", surface, pos, 100) end
   st.interval = math.max(C.COOK_MIN_INTERVAL, math.floor(st.interval * C.COOK_ACCEL))
-  FO.sched.schedule(st.interval, task)
+  FO.sched.schedule(st.interval * FO.weather.slowdown(surface), task) -- rain (paranoidal-rain): slower
 end
 
 FO.sched.register("cook", pop)
