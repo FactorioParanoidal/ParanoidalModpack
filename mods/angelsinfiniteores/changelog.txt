@@ -7,6 +7,8 @@ Date: 04.06.2026
     - Prevented resources being removed from planets other than Nauvis (1289)
   Bugfixes:
     - Fixed crash with Bob's Ores and without Angel's Refining (1304)
+  Compatibility:
+    - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.2
 Date: 01.06.2026
