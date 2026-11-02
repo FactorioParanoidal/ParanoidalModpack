@@ -20,3 +20,5 @@ Date: 2026. 10. 15
     - A connected player without a character (god mode, editor, waiting for respawn) no longer stops the check for all other players.
     - The uranium ore proximity check is done only when a "uranium-ore" resource exists (it never matched in Paranoidal, where uranium comes from Angels ores).
     - Used-up uranium fuel cell renamed to depleted uranium fuel cell (Factorio 2.0), lead plate to bob-lead-plate (Bob's 2.0).
+  Compatibility:
+    - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
