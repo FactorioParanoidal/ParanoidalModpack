@@ -238,13 +238,18 @@ function createLogisticContainer(name, logistic_type)
 	p.icon = ICONPATH..p.name..".png"
 	p.type = "logistic-container"
 	p.logistic_mode = logistic_type
-	p.animation_sound = sounds.logistics_chest_open
-	p.opened_duration = 7
+	-- Factorio 2.1: the robot door animation, sound, duration and landing offset live in robot_door.
+	p.robot_door = {
+		animation_sound = sounds.logistics_chest_open,
+		opened_duration = 7,
+		location_offset = p.landing_location_offset,
+	}
+	p.landing_location_offset = nil
 	if name == "warehouse" then
-		p.animation = chestAnim(img, shadow, {1, 0}, 520, 480, chestanim, {1, -44/32}, 44)
+		p.robot_door.animation = chestAnim(img, shadow, {1, 0}, 520, 480, chestanim, {1, -44/32}, 44)
 	end
 	if name == "storehouse" then
-		p.animation = chestAnim(img, shadow, {0, 0}, 256, 256, chestanim, {0, 3/32}, 74)
+		p.robot_door.animation = chestAnim(img, shadow, {0, 0}, 256, 256, chestanim, {0, 3/32}, 74)
 	end
 	if logistic_type == "storage" then
 		p.max_logistic_slots = 1

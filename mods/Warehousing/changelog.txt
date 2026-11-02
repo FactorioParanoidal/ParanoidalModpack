@@ -6,6 +6,9 @@ Date: 2024-12-10
 
   Changed:
     - Buffer and Requester buildings now have logistic trash slots to match vanilla chests
+  Compatibility:
+    - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
+    - Paranoidal port to Factorio 2.1: logistic chest door animation, sound, opened duration and landing offset moved into robot_door (2.1 LogisticContainerPrototype).
 
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.2
