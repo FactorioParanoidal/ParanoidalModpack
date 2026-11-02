@@ -29,6 +29,7 @@ Date: 2026.10.26
     - Kills of replicator droids by Robot Army droids count for the droid ranks (remote function credit_kill of Robot Army Reforged); Robot Army droids attack the citadel like any enemy.
     - Truce (cease-fire both ways) with the "enemy" force and every AI controlled force; RampantFixed ignores forces in cease-fire with the biters.
     - The citadel force is AI controllable (needed to create unit groups by script); it has no unit spawners, so it neither expands nor sends pollution attacks by itself.
+    - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
   Optimizations:
     - No unit spawners, no on_tick: one heartbeat every 60 ticks with bounded portions of work (a few foundries, one look at each squad every two seconds, a few radar, repair and validation looks), a build queue registered only while something is built (3 buildings per 4 ticks), the death event filtered to the citadel's own droids and buildings. One command per squad, never per droid; marches in segments with low-priority cached paths.
     - A squad is given its next step only when its command is over or it stands still while not fighting, gathering or waiting for a path (so slow path requests are not restarted).
