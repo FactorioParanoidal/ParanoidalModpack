@@ -31,6 +31,8 @@ Date: 2026-09-08
       the meltable path that may need to restore it
     - storage is no longer written from the main chunk; on_init and
       on_configuration_changed create it
+  Compatibility:
+    - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.14
 Date: 2026-09-05
