@@ -43,7 +43,7 @@ data:extend({
   {
     type = "recipe",
     name = "catalyst-steam-cracking-butane-2",
-    category = "angels-steam-cracking",
+    categories = {"angels-steam-cracking"},
     subgroup = "angels-petrochem-cracking",
     energy_required = 4,
     enabled = false,
@@ -66,7 +66,7 @@ data:extend({
   {
     type = "recipe",
     name = "butadiene-chlorination",
-    category = "chemistry",
+    categories = {"chemistry"},
     subgroup = "angels-petrochem-chlorine-2",
     energy_required = 4,
     enabled = false,
@@ -86,7 +86,7 @@ data:extend({
   {
     type = "recipe",
     name = "dichlorobutene-dechlorination",
-    category = "chemistry",
+    categories = {"chemistry"},
     subgroup = "angels-petrochem-chlorine-2",
     energy_required = 4,
     enabled = false,
@@ -107,7 +107,7 @@ data:extend({
   {
     type = "recipe",
     name = "liquid-rubber-2",
-    category = "chemistry",
+    categories = {"chemistry"},
     subgroup = "angels-petrochem-solids-2",
     energy_required = 2,
     enabled = false,
@@ -137,7 +137,7 @@ data:extend({
   {
     type = "recipe",
     name = "catalyst-steam-cracking-acetylene",
-    category = "angels-steam-cracking",
+    categories = {"angels-steam-cracking"},
     subgroup = "angels-petrochem-cracking",
     energy_required = 4,
     enabled = false,
@@ -160,7 +160,7 @@ data:extend({
   {
     type = "recipe",
     name = "acetylene-diomerisation",
-    category = "chemistry",
+    categories = {"chemistry"},
     subgroup = "angels-petrochem-chemistry",
     energy_required = 4,
     enabled = false,
@@ -179,7 +179,7 @@ data:extend({
   {
     type = "recipe",
     name = "vinyl-acetlyene-chlorination",
-    category = "chemistry",
+    categories = {"chemistry"},
     subgroup = "angels-petrochem-chlorine-2",
     energy_required = 4,
     enabled = false,
@@ -215,7 +215,7 @@ data:extend({
   {
     type = "recipe",
     name = "rubber-additive-1",
-    category = "chemistry",
+    categories = {"chemistry"},
     subgroup = "angels-petrochem-solids",
     energy_required = 0.5,
     enabled = false,
@@ -243,7 +243,7 @@ data:extend({
   {
     type = "recipe",
     name = "rubber-additive-2",
-    category = "chemistry",
+    categories = {"chemistry"},
     subgroup = "angels-petrochem-solids",
     energy_required = 0.5,
     enabled = false,
@@ -271,7 +271,7 @@ data:extend({
   {
     type = "recipe",
     name = "angels-roll-rubber-converting",
-    category = "crafting",
+    categories = {"crafting"},
     subgroup = "angels-petrochem-solids",
     energy_required = 0.5,
     enabled = false,
@@ -301,7 +301,7 @@ data:extend({
   {
     type = "recipe",
     name = "angels-roll-rubber-casting",
-    category = "advanced-crafting",
+    categories = {"advanced-crafting"},
     subgroup = "angels-petrochem-solids",
     energy_required = 0.5,
     enabled = false,
@@ -319,7 +319,7 @@ data:extend({
   {
     type = "recipe",
     name = "vulcanised-rubber-reforming",
-    category = "angels-steam-cracking",
+    categories = {"angels-steam-cracking"},
     subgroup = "angels-petrochem-feedstock",
     energy_required = 0.5,
     enabled = false,
@@ -337,7 +337,7 @@ data:extend({
   {
     type = "recipe",
     name = "rubber-powderisation",
-    category = "crafting",
+    categories = {"crafting"},
     subgroup = "angels-petrochem-solids",
     energy_required = 1,
     enabled = false,
@@ -354,7 +354,7 @@ data:extend({
   {
     type = "recipe",
     name = "rubber-pelletisation",
-    category = "crafting",
+    categories = {"crafting"},
     subgroup = "angels-petrochem-solids",
     energy_required = 0.25,
     enabled = false,
@@ -373,7 +373,7 @@ data:extend({
   {
     type = "recipe",
     name = "rubber-slabbing",
-    category = "crafting",
+    categories = {"crafting"},
     subgroup = "angels-petrochem-solids",
     energy_required = 0.5,
     enabled = false,
@@ -391,7 +391,7 @@ data:extend({
   {
     type = "recipe",
     name = "rubber-block-molding",
-    category = "chemistry",
+    categories = {"chemistry"},
     subgroup = "angels-petrochem-solids",
     energy_required = 1,
     enabled = false,
@@ -410,7 +410,7 @@ data:extend({
   {
     type = "recipe",
     name = "rubber-masterbatching",
-    category = "chemistry",
+    categories = {"chemistry"},
     subgroup = "angels-petrochem-solids",
     energy_required = 1,
     enabled = false,
@@ -429,7 +429,7 @@ data:extend({
   {
     type = "recipe",
     name = "pre-rubber-mixing",
-    category = "chemistry",
+    categories = {"chemistry"},
     subgroup = "angels-petrochem-solids",
     energy_required = 1,
     enabled = false,

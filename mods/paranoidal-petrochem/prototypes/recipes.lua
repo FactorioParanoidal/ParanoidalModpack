@@ -6,7 +6,7 @@ data:extend({
 	{ --
 		type = "recipe",
 		name = "liquid-plastic-pvc",
-		category = "chemistry",
+		categories = {"chemistry"},
 		subgroup = "angels-petrochem-solids",
 		energy_required = 2,
 		enabled = false,
@@ -37,7 +37,7 @@ data:extend({
 	{ --
 		type = "recipe",
 		name = "pmma-synthesis",
-		category = "chemistry",
+		categories = {"chemistry"},
 		subgroup = "angels-petrochem-solids",
 		energy_required = 1,
 		enabled = false,
@@ -56,7 +56,7 @@ data:extend({
 	{ --
 		type = "recipe",
 		name = "acrylonitrile-synthesis",
-		category = "chemistry",
+		categories = {"chemistry"},
 		subgroup = "angels-petrochem-nitrogen",
 		energy_required = 2,
 		enabled = false,
@@ -78,7 +78,7 @@ data:extend({
 	{ --
 		type = "recipe",
 		name = "vinyl-chloride-synthesis",
-		category = "chemistry",
+		categories = {"chemistry"},
 		subgroup = "angels-petrochem-chlorine",
 		energy_required = 2,
 		enabled = false,
@@ -101,7 +101,7 @@ data:extend({
 	{ --
 		type = "recipe",
 		name = "acetone-cyanohydrin-synthesis",
-		category = "chemistry",
+		categories = {"chemistry"},
 		subgroup = "angels-petrochem-nitrogen",
 		energy_required = 2,
 		enabled = false,
@@ -121,7 +121,7 @@ data:extend({
 	{ --
 		type = "recipe",
 		name = "methyl-methacrylate-synthesis",
-		category = "angels-advanced-chemistry",
+		categories = {"angels-advanced-chemistry"},
 		subgroup = "angels-petrochem-chemistry",
 		energy_required = 2,
 		enabled = false,
@@ -143,7 +143,7 @@ data:extend({
 	{ --alt already exists
 		type = "recipe",
 		name = "phosgene-synthesis",
-		category = "chemistry",
+		categories = {"chemistry"},
 		subgroup = "angels-petrochem-chlorine",
 		energy_required = 2,
 		enabled = false,
@@ -163,7 +163,7 @@ data:extend({
 	{ --
 		type = "recipe",
 		name = "nitrous-oxide-synthesis-1",
-		category = "angels-advanced-chemistry",
+		categories = {"angels-advanced-chemistry"},
 		subgroup = "angels-petrochem-nitrogen",
 		energy_required = 2,
 		enabled = false,
@@ -188,7 +188,7 @@ data:extend({
 	{ --
 		type = "recipe",
 		name = "nitrous-oxide-synthesis-2",
-		category = "chemistry",
+		categories = {"chemistry"},
 		subgroup = "angels-petrochem-nitrogen",
 		energy_required = 2,
 		enabled = false,
@@ -208,7 +208,7 @@ data:extend({
 	{ --
 		type = "recipe",
 		name = "sodium-nitrate-synthesis",
-		category = "angels-liquifying",
+		categories = {"angels-liquifying"},
 		subgroup = "angels-petrochem-basics",
 		energy_required = 2,
 		enabled = false,
@@ -226,7 +226,7 @@ data:extend({
 	{ --
 		type = "recipe",
 		name = "hydrogen-cyanide-synthesis",
-		category = "angels-advanced-chemistry",
+		categories = {"angels-advanced-chemistry"},
 		subgroup = "angels-petrochem-nitrogen",
 		energy_required = 1,
 		enabled = false,
@@ -248,7 +248,7 @@ data:extend({
 	{ --
 		type = "recipe",
 		name = "liquid-plastic-pmma",
-		category = "chemistry",
+		categories = {"chemistry"},
 		subgroup = "angels-petrochem-solids",
 		energy_required = 2,
 		enabled = false,
@@ -278,7 +278,7 @@ data:extend({
 	{ --
 		type = "recipe",
 		name = "catalyst-metal-cyan",
-		category = "crafting",
+		categories = {"crafting"},
 		subgroup = "angels-petrochem-catalysts",
 		energy_required = 2,
 		enabled = false,
@@ -297,7 +297,7 @@ data:extend({
 	{ --
 		type = "recipe",
 		name = "liquid-fuel-oil-catalyst",
-		category = "angels-advanced-chemistry",
+		categories = {"angels-advanced-chemistry"},
 		subgroup = "angels-petrochem-carbon-oil-feed",
 		energy_required = 6,
 		enabled = false,
@@ -320,7 +320,7 @@ data:extend({
 	{
 		type = "recipe",
 		name = "gas-phosgene",
-		category = "chemistry",
+		categories = {"chemistry"},
 		subgroup = "angels-petrochem-chlorine-2",
 		energy_required = 2,
 		enabled = false,
@@ -347,7 +347,7 @@ data:extend({
 	{ --
 		type = "recipe",
 		name = "pc-synthesis",
-		category = "chemistry",
+		categories = {"chemistry"},
 		subgroup = "angels-petrochem-solids",
 		energy_required = 1,
 		enabled = false,
@@ -367,7 +367,7 @@ data:extend({
 	{ --
 		type = "recipe",
 		name = "liquid-plastic-pc",
-		category = "chemistry",
+		categories = {"chemistry"},
 		subgroup = "angels-petrochem-solids",
 		energy_required = 2,
 		enabled = false,
@@ -391,7 +391,7 @@ data:extend({
 	{ --
 		type = "recipe",
 		name = "liquid-plastic-abs",
-		category = "angels-advanced-chemistry",
+		categories = {"angels-advanced-chemistry"},
 		subgroup = "angels-petrochem-solids",
 		energy_required = 3,
 		enabled = false,
@@ -425,7 +425,7 @@ data:extend({
 	{
 		type = "recipe",
 		name = "PF-resin",
-		category = "chemistry",
+		categories = {"chemistry"},
 		subgroup = "angels-petrochem-solids",
 		energy_required = 3,
 		enabled = false,

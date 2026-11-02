@@ -4,7 +4,7 @@ if data.raw.item["bob-glass"] then
       {
         type = "recipe",
         name = "pmma-glass",
-        category = "chemistry",
+        categories = {"chemistry"},
         subgroup = "angels-petrochem-solids",
         energy_required = 2,
         enabled = false,
@@ -20,7 +20,7 @@ if data.raw.item["bob-glass"] then
       {
         type = "recipe",
         name = "pc-glass",
-        category = "chemistry",
+        categories = {"chemistry"},
         subgroup = "angels-petrochem-solids",
         energy_required = 2,
         enabled = false,

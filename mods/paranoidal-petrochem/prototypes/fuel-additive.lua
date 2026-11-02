@@ -55,7 +55,7 @@ data:extend({
     {
         type = "recipe",
         name = "sodium-lead-alloy",
-        category = "angels-chemical-smelting",
+        categories = {"angels-chemical-smelting"},
         subgroup = "angels-lead",
         enabled = false,
         energy_required = 8,
@@ -73,7 +73,7 @@ data:extend({
     {
         type = "recipe",
         name = "gas-chloroethane",
-        category = "chemistry",
+        categories = {"chemistry"},
         subgroup = "angels-petrochem-chlorine",
         energy_required = 4,
         enabled = false,
@@ -91,7 +91,7 @@ data:extend({
     {
         type = "recipe",
         name = "fluid-tetraethyllead",
-        category = "angels-chemical-smelting",
+        categories = {"angels-chemical-smelting"},
         subgroup = "angels-lead",
         energy_required = 6,
         enabled = false,
@@ -111,7 +111,7 @@ data:extend({
     {
         type = "recipe",
         name = "high-octane-enriched-fuel",
-        category = "angels-advanced-chemistry",
+        categories = {"angels-advanced-chemistry"},
         subgroup = "angels-petrochem-fuel",
         energy_required = 4,
         enabled = false,

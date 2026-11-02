@@ -24,7 +24,7 @@ if data.raw.item["angels-temperate-garden"] then
       {
         type = "recipe",
         name = "Bacterial-Anerobic-Fermentation",
-        category = "chemistry",
+        categories = {"chemistry"},
         subgroup = "angels-bio-processor-fermentation",
         enabled = false,
         energy_required = 4,
@@ -44,7 +44,7 @@ if data.raw.item["angels-temperate-garden"] then
       {
         type = "recipe",
         name = "lactic-acid-esterification",
-        category = "chemistry",
+        categories = {"chemistry"},
         subgroup = "angels-bio-plastic",
         enabled = false,
         energy_required = 3,
@@ -68,7 +68,7 @@ if data.raw.item["angels-temperate-garden"] then
       {
         type = "recipe",
         name = "bacterial-growth-seed-cultivation",
-        category = "chemistry",
+        categories = {"chemistry"},
         subgroup = "angels-bio-processor-fermentation",
         enabled = false,
         energy_required = 100,
@@ -92,7 +92,7 @@ if data.raw.item["angels-temperate-garden"] then
       {
         type = "recipe",
         name = "bacterial-growth-seed-cultivation-2",
-        category = "chemistry",
+        categories = {"chemistry"},
         subgroup = "angels-bio-processor-fermentation",
         enabled = false,
         energy_required = 20,
