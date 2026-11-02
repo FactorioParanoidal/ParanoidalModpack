@@ -12,7 +12,7 @@ data:extend({
 	{
 		type = "recipe", name = "CW-air-filter-machine-1",
 		icon = ICON .. "air-filter-machine-1.png", icon_size = 64,
-		category = "crafting", energy_required = 5, enabled = false,
+		categories = {"crafting"}, energy_required = 5, enabled = false,
 		ingredients = {
 			{ type = "item", name = "assembling-machine-2", amount = 1 },
 			{ type = "item", name = "electronic-circuit", amount = 5 },
@@ -24,7 +24,7 @@ data:extend({
 	{
 		type = "recipe", name = "CW-air-filter-machine-2",
 		icon = ICON .. "air-filter-machine-2.png", icon_size = 64,
-		category = "crafting", energy_required = 10, enabled = false,
+		categories = {"crafting"}, energy_required = 10, enabled = false,
 		ingredients = {
 			{ type = "item", name = "CW-air-filter-machine-1", amount = 2 },
 			{ type = "item", name = "advanced-circuit", amount = 10 },
@@ -35,7 +35,7 @@ data:extend({
 	{
 		type = "recipe", name = "CW-air-filter-machine-3",
 		icon = ICON .. "air-filter-machine-3.png", icon_size = 64,
-		category = "crafting", energy_required = 10, enabled = false,
+		categories = {"crafting"}, energy_required = 10, enabled = false,
 		ingredients = {
 			{ type = "item", name = "CW-air-filter-machine-2", amount = 2 },
 			{ type = "item", name = "advanced-circuit", amount = 25 },
@@ -47,7 +47,7 @@ data:extend({
 	{
 		type = "recipe", name = "CW-air-filter-machine-4",
 		icon = ICON .. "air-filter-machine-4.png", icon_size = 64,
-		category = "crafting", energy_required = 10, enabled = false,
+		categories = {"crafting"}, energy_required = 10, enabled = false,
 		ingredients = {
 			{ type = "item", name = "CW-air-filter-machine-3", amount = 2 },
 			{ type = "item", name = "processing-unit", amount = 10 },
@@ -58,7 +58,7 @@ data:extend({
 	{
 		type = "recipe", name = "CW-air-filter-machine-5",
 		icon = ICON .. "air-filter-machine-5.png", icon_size = 64,
-		category = "crafting", energy_required = 10, enabled = false,
+		categories = {"crafting"}, energy_required = 10, enabled = false,
 		ingredients = {
 			{ type = "item", name = "CW-air-filter-machine-4", amount = 2 },
 			{ type = "item", name = "processing-unit", amount = 50 },
@@ -70,7 +70,7 @@ data:extend({
 	{
 		type = "recipe", name = "CW-air-filter-machine-6",
 		icon = ICON .. "air-filter-machine-6.png", icon_size = 64,
-		category = "crafting", energy_required = 15, enabled = false,
+		categories = {"crafting"}, energy_required = 15, enabled = false,
 		ingredients = {
 			{ type = "item", name = "CW-air-filter-machine-5", amount = 2 },
 			{ type = "item", name = "processing-unit", amount = 200 },
@@ -84,14 +84,14 @@ data:extend({
 	{
 		type = "recipe", name = "CW-empty-air-filter",
 		icon = ICON .. "empty-air-filter.png", icon_size = 64,
-		category = "crafting", energy_required = 2, enabled = false,
+		categories = {"crafting"}, energy_required = 2, enabled = false,
 		ingredients = { { type = "item", name = "steel-plate", amount = 5 } },
 		results = { { type = "item", name = "CW-empty-air-filter", amount = 1 } },
 	},
 	{
 		type = "recipe", name = "CW-air-filter",
 		icon = ICON .. "air-filter.png", icon_size = 64,
-		category = "crafting", energy_required = 3, enabled = false,
+		categories = {"crafting"}, energy_required = 3, enabled = false,
 		ingredients = {
 			{ type = "item", name = "coal", amount = 10 },
 			{ type = "item", name = "CW-empty-air-filter", amount = 1 },
@@ -101,7 +101,7 @@ data:extend({
 	{
 		type = "recipe", name = "CW-filter-air",
 		icon = ICON .. "filter-air.png", icon_size = 64,
-		category = "CW-air-filter", energy_required = 100, enabled = true, hidden = true,
+		categories = {"CW-air-filter"}, energy_required = 100, enabled = true, hidden = true,
 		ingredients = { { type = "item", name = "CW-air-filter", amount = 1 } },
 		results = { { type = "item", name = "CW-used-air-filter", amount = 1 } },
 	},
@@ -110,7 +110,7 @@ data:extend({
 	{
 		type = "recipe", name = "CW-air-filter-cleaning-1",
 		icon = ICON .. "air-filter-cleaning.png", icon_size = 32,
-		category = "crafting", energy_required = 5, enabled = false,
+		categories = {"crafting"}, energy_required = 5, enabled = false,
 		main_product = "CW-air-filter",
 		ingredients = {
 			{ type = "item", name = "CW-used-air-filter", amount = 1 },
@@ -121,7 +121,7 @@ data:extend({
 	{
 		type = "recipe", name = "CW-air-filter-cleaning-2",
 		icon = ICON .. "air-filter-cleaning-2.png", icon_size = 32,
-		category = "crafting", energy_required = 20, enabled = false,
+		categories = {"crafting"}, energy_required = 20, enabled = false,
 		main_product = "CW-air-filter",
 		ingredients = {
 			{ type = "item", name = "CW-used-air-filter", amount = 5 },
@@ -132,7 +132,7 @@ data:extend({
 	{
 		type = "recipe", name = "CW-air-filter-cleaning-3",
 		icon = ICON .. "air-filter-cleaning-3.png", icon_size = 32,
-		category = "chemistry", energy_required = 15, enabled = false,
+		categories = {"chemistry"}, energy_required = 15, enabled = false,
 		main_product = "CW-air-filter",
 		ingredients = {
 			{ type = "item", name = "CW-used-air-filter", amount = 5 },
@@ -146,7 +146,7 @@ data:extend({
 	{
 		type = "recipe", name = "CW-air-filter-cleaning-4",
 		icon = ICON .. "air-filter-cleaning-4.png", icon_size = 32,
-		category = "chemistry", energy_required = 12, enabled = false,
+		categories = {"chemistry"}, energy_required = 12, enabled = false,
 		main_product = "CW-air-filter",
 		ingredients = {
 			{ type = "item", name = "CW-used-air-filter", amount = 5 },
