@@ -64,7 +64,7 @@ end
 -- Recipes (not recycling) that make an item, and the technologies that unlock each recipe.
 local makers = {}
 for recipe_name, recipe in pairs(data.raw.recipe) do
-  if recipe.category ~= "recycling" and type(recipe.results) == "table" then
+  if (recipe.categories or {"crafting"})[1] ~= "recycling" and type(recipe.results) == "table" then -- Factorio 2.1
     for _, product in pairs(recipe.results) do
       if product.name and (product.type or "item") == "item" then
         makers[product.name] = makers[product.name] or {}
@@ -131,7 +131,7 @@ for _, robot_name in ipairs(robot_names) do
     localised_description = {"recipe-description.pra-repair",
       tostring(math.floor(shared.repair_success * 100 + 0.5))},
     icons = repair_icons,
-    category = "crafting",
+    categories = {"crafting"},
     subgroup = item.subgroup,
     order = (item.order or robot_name) .. "-x",
     enabled = enabled,

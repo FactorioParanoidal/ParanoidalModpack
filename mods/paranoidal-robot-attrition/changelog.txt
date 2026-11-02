@@ -20,3 +20,4 @@ Date: 2026-10-30
     - One check per second (on_nth_tick) with a Poisson draw per busy network; no state per network or per surface name. Charging queues are read from cell counters; the list of all flying robots is fetched only when a victim must come from it.
   Compatibility:
     - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
+    - Paranoidal port to Factorio 2.1: recipes use categories (RecipePrototype::category and additional_categories were merged into categories; the first entry keeps the meaning of the former main category, a changed main category keeps the other entries).
