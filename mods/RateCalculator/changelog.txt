@@ -10,6 +10,8 @@ Date: 2026-01-18
     - Fixed that fluid fuel consumption for crafting machines was using the wrong fluid. (#209)
     - Fixed incorrect rates on boilers with a fluid energy source.
     - Fixed a crash that could occur during mod configuration changes. (#212)
+  Compatibility:
+    - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
 ---------------------------------------------------------------------------------------------------
 Version: 3.3.7
 Date: 2025-03-26

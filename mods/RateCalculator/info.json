@@ -6,7 +6,7 @@
   "author": "raiguard",
   "contact": "https://codeberg.org/raiguard/RateCalculator",
   "homepage": "https://codeberg.org/raiguard/RateCalculator",
-  "factorio_version": "2.0",
+  "factorio_version": "2.1",
   "dependencies": ["base >= 2.0.32", "flib >= 0.15.0"],
   "package": {
     "git_publish_branch": "trunk",
