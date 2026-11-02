@@ -4,6 +4,6 @@
     "title": "Carbon Capture",
     "author": "CyberWizard2261, nastyslave",
     "description": "Снижение загрязнения + регенерация фильтров (6 тиров). 2.0-порт для ParanoidalModpack; оригинал CyberWizard2261, доработка nastyslave.",
-    "factorio_version": "2.0",
+    "factorio_version": "2.1",
     "dependencies": ["base >= 2.0", "bobplates", "boblogistics", "bobelectronics", "angelsrefining"]
 }

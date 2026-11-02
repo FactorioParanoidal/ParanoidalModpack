@@ -16,3 +16,5 @@ Version: 9.1.4
     - Removed the dead prototype fields source_inventory_size, result_inventory_size, animation and icon_mipmaps; items and technologies are generated in loops; technologies get distinct order strings.
   Locale:
     - Russian names of MK1 and MK4 used Cyrillic "МК": now Latin "MK" as in the other tiers.
+  Compatibility:
+    - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
