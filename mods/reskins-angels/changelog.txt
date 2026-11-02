@@ -9,6 +9,8 @@ Date: 2026-06-01
     - The Mad Clown's compatibility trigger also recognises paranoidal-clowns (the merged Clowns-Processing, Clowns-Nuclear and Clowns-AngelBob-Nuclear).
     - Paranoidal: the belt/ground pictures of the bronze, brass, gunmetal, invar, nitinol and cobalt steel alloys, the titanium, nitinol and tungsten gear wheels and the titanium bearing and bearing ball repeat the Beta 8 interface icons used by the pack.
     - Paranoidal: the nitinol bearing and bearing ball are recoloured black.
+  Compatibility:
+    - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
 ---------------------------------------------------------------------------------------------------
 Version: 2.3.4
 Date: 2026-05-31
