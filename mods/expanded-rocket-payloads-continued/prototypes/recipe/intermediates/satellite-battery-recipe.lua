@@ -18,6 +18,6 @@ data:extend({
                     { type = "item", name = modutils.superconductor,    amount = 100 },
                 }),
         results = { { type = "item", name = "satellite-battery", amount = 1 } },
-        category = "satellite-crafting",
+        categories = {"satellite-crafting"},
     }
 })

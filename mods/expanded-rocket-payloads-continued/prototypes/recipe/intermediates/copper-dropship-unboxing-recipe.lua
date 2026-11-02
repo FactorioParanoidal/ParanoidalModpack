@@ -2,7 +2,7 @@ data:extend({
     {
         type = "recipe",
         name = "copper-dropship-unboxing",
-        category = "satellite-crafting",
+        categories = {"satellite-crafting"},
         energy_required = 5,
         enabled = false,
         auto_recycle = false,

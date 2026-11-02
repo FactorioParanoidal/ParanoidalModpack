@@ -12,7 +12,7 @@ data:extend({
     },
     results = { { type = "item", name = "space-science-pack", amount = 2000 } },
     energy_required = 120,
-    category = "satellite-crafting",
+    categories = {"satellite-crafting"},
     subgroup = "satellite-data",
   },
 })

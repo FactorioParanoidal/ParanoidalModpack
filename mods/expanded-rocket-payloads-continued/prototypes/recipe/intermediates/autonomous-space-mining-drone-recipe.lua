@@ -25,6 +25,6 @@ data:extend({
             }),
 
         results = { { type = "item", name = "autonomous-space-mining-drone", amount = 1 } },
-        category = "satellite-crafting",
+        categories = {"satellite-crafting"},
     }
 })

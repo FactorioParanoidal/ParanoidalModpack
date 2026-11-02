@@ -4,7 +4,7 @@ data:extend({
     {
         type = "recipe",
         name = "telescope-components",
-        category = "satellite-crafting",
+        categories = {"satellite-crafting"},
         energy_required = 100,
         enabled = false,
         auto_recycle = false,

@@ -4,7 +4,7 @@ data:extend({
     {
         type = "recipe",
         name = "satellite-radar",
-        category = "satellite-crafting",
+        categories = {"satellite-crafting"},
         energy_required = 100,
         enabled = false,
         ingredients =

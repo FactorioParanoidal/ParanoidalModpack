@@ -4,7 +4,7 @@ data:extend({
   {
     type = "recipe",
     name = "space-shuttle",
-    category = "satellite-crafting",
+    categories = {"satellite-crafting"},
     energy_required = 480,
     subgroup = "Space-Shuttles",
     enabled = false,
@@ -19,7 +19,7 @@ data:extend({
   {
     type = "recipe",
     name = "spy-shuttle",
-    category = "satellite-crafting",
+    categories = {"satellite-crafting"},
     energy_required = 480,
     enabled = false,
     subgroup = "Space-Shuttles",
@@ -34,7 +34,7 @@ data:extend({
   {
     type = "recipe",
     name = "mining-shuttle",
-    category = "satellite-crafting",
+    categories = {"satellite-crafting"},
     energy_required = 480,
     enabled = false,
     subgroup = "Space-Shuttles",

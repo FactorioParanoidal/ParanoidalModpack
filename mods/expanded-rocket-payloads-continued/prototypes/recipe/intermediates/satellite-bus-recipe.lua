@@ -6,7 +6,7 @@ data:extend({
         name = "satellite-bus",
         energy_required = 100,
         enabled = false,
-        category = "satellite-crafting",
+        categories = {"satellite-crafting"},
         ingredients =
             modutils.select(
                 {

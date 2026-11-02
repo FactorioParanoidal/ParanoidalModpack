@@ -18,7 +18,7 @@ data:extend({
     icon_size = 32,
     subgroup = "shuttle-processies",
     order = "c",
-    category = "satellite-crafting",
+    categories = {"satellite-crafting"},
   },
   {
     type = "recipe",
@@ -39,7 +39,7 @@ data:extend({
     icon_size = 32,
     subgroup = "shuttle-processies",
     order = "c",
-    category = "satellite-crafting",
+    categories = {"satellite-crafting"},
   },
   {
     type = "recipe",
@@ -60,7 +60,7 @@ data:extend({
     icon_size = 32,
     subgroup = "shuttle-processies",
     order = "c",
-    category = "satellite-crafting",
+    categories = {"satellite-crafting"},
   },
   {
     type = "recipe",
@@ -81,6 +81,6 @@ data:extend({
     icon_size = 32,
     subgroup = "shuttle-processies",
     order = "c",
-    category = "satellite-crafting",
+    categories = {"satellite-crafting"},
   },
 })

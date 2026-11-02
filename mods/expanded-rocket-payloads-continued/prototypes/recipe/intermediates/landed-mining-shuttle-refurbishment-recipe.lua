@@ -32,6 +32,6 @@ data:extend({
     icon_size = 32,
     subgroup = "shuttle-processies",
     order = "b",
-    category = "satellite-crafting",
+    categories = {"satellite-crafting"},
   },
 })

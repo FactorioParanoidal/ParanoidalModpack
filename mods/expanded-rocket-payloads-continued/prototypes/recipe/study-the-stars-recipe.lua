@@ -18,7 +18,7 @@ data:extend({
     ingredients = {},
     results = { { type = "item", name = "space-science-pack", amount = 5 } },
     energy_required = 60,
-    category = "ground-telescope",
+    categories = {"ground-telescope"},
     subgroup = "building-recipies",
   },
   {
@@ -30,7 +30,7 @@ data:extend({
     ingredients = {},
     results = { { type = "item", name = "space-science-pack", amount = 50 } },
     energy_required = 60,
-    category = "space-telescope",
+    categories = {"space-telescope"},
     subgroup = "building-recipies",
   },
   {
@@ -42,7 +42,7 @@ data:extend({
     ingredients = {},
     results = { { type = "item", name = "planetary-data", amount = 1 } },
     energy_required = 240,
-    category = "space-telescope",
+    categories = {"space-telescope"},
     subgroup = "building-recipies",
   },
 })

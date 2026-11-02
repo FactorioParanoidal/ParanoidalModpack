@@ -20,6 +20,6 @@ data:extend({
             { type = "item", name = modutils.quantum_processor,   amount = 50 },
         }),
         results = { { type = "item", name = "radioisotope-thermoelectric-generator", amount = 1 } },
-        category = "satellite-crafting",
+        categories = {"satellite-crafting"},
     }
 })

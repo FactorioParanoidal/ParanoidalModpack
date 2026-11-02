@@ -2,7 +2,7 @@ data:extend({
     {
         type = "recipe",
         name = "multiore-dropship-unboxing",
-        category = "satellite-crafting",
+        categories = {"satellite-crafting"},
         energy_required = 5,
         enabled = false,
         icon = "__expanded-rocket-payloads-continued__/graphic/multiore-dropship-unboxing.png",

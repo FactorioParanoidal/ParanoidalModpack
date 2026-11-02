@@ -4,7 +4,7 @@ data:extend({
     {
         type = "recipe",
         name = "shuttle-hull-recipe",
-        category = "satellite-crafting",
+        categories = {"satellite-crafting"},
         energy_required = 480,
         enabled = false,
         auto_recycle = false,

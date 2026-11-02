@@ -2,7 +2,7 @@ data:extend({
     {
         type = "recipe",
         name = "space-telescope",
-        category = "satellite-crafting",
+        categories = {"satellite-crafting"},
         energy_required = 200,
         enabled = false,
         ingredients =

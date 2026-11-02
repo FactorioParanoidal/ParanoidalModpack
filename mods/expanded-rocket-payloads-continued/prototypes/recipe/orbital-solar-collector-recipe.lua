@@ -2,7 +2,7 @@ data:extend({
     {
         type = "recipe",
         name = "orbital-solar-collector",
-        category = "satellite-crafting",
+        categories = {"satellite-crafting"},
         energy_required = 100,
         enabled = false,
         ingredients =

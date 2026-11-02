@@ -15,7 +15,7 @@ data:extend({
     ingredients = {},
     results = { { type = "item", name = "iron-plate", amount = 100 } },
     energy_required = 2,
-    category = "auto-fabricator",
+    categories = {"auto-fabricator"},
     subgroup = "building-recipies",
   },
   {
@@ -26,7 +26,7 @@ data:extend({
     auto_recycle = false,
     results = { { type = "item", name = "copper-plate", amount = 100 } },
     energy_required = 2,
-    category = "auto-fabricator",
+    categories = {"auto-fabricator"},
     subgroup = "building-recipies",
   },
   {
@@ -37,7 +37,7 @@ data:extend({
     auto_recycle = false,
     results = { { type = "item", name = "steel-plate", amount = 100 } },
     energy_required = 4,
-    category = "auto-fabricator",
+    categories = {"auto-fabricator"},
     subgroup = "building-recipies",
   },
   {
@@ -48,7 +48,7 @@ data:extend({
     ingredients = {},
     results = { { type = "item", name = "stone-brick", amount = 100 } },
     energy_required = 2,
-    category = "auto-fabricator",
+    categories = {"auto-fabricator"},
     subgroup = "building-recipies",
   },
   {
@@ -59,7 +59,7 @@ data:extend({
     ingredients = {},
     results = { { type = "item", name = "uranium-ore", amount = 50 } },
     energy_required = 2,
-    category = "auto-fabricator",
+    categories = {"auto-fabricator"},
     subgroup = "building-recipies",
   },
   {
@@ -70,7 +70,7 @@ data:extend({
     ingredients = {},
     results = { { type = "item", name = "coal", amount = 50 } },
     energy_required = 2,
-    category = "auto-fabricator",
+    categories = {"auto-fabricator"},
     subgroup = "building-recipies",
   },
   {
@@ -87,7 +87,7 @@ data:extend({
     icon = "__expanded-rocket-payloads-continued__/graphic/auto-fabricator-32.png",
     icon_size = 32,
     subgroup = "buildings",
-    category = "satellite-crafting",
+    categories = {"satellite-crafting"},
     order = "a"
   },
   {
@@ -117,14 +117,14 @@ data:extend({
             { type = "item", name = modutils.foundry,               amount = 200 },
           }),
     results = { { type = "item", name = "orbital-fabricator-component", amount = 1 } },
-    category = "satellite-crafting",
+    categories = {"satellite-crafting"},
     subgroup = "space-mining",
   },
   {
     type = "recipe",
     name = "fabricator-shuttle",
     auto_recycle = false,
-    category = "satellite-crafting",
+    categories = {"satellite-crafting"},
     energy_required = 800,
     enabled = false,
     subgroup = "Space-Shuttles",
@@ -159,7 +159,7 @@ data:extend({
     icon_size = 32,
     subgroup = "shuttle-processies",
     order = "b",
-    category = "satellite-crafting",
+    categories = {"satellite-crafting"},
   },
 })
 
@@ -174,7 +174,7 @@ if mods["space-age"] then
       ingredients = {},
       results = { { type = "item", name = "tungsten-plate", amount = 100 } },
       energy_required = 2,
-      category = "auto-fabricator",
+      categories = {"auto-fabricator"},
       subgroup = "building-recipies",
     },
 
@@ -186,7 +186,7 @@ if mods["space-age"] then
       ingredients = {},
       results = { { type = "item", name = "tungsten-carbide", amount = 100 } },
       energy_required = 2,
-      category = "auto-fabricator",
+      categories = {"auto-fabricator"},
       subgroup = "building-recipies",
     },
 
@@ -198,7 +198,7 @@ if mods["space-age"] then
       ingredients = {},
       results = { { type = "item", name = "calcite", amount = 50 } },
       energy_required = 2,
-      category = "auto-fabricator",
+      categories = {"auto-fabricator"},
       subgroup = "building-recipies",
     },
 
@@ -210,7 +210,7 @@ if mods["space-age"] then
       ingredients = {},
       results = { { type = "item", name = "holmium-ore", amount = 100 } },
       energy_required = 2,
-      category = "auto-fabricator",
+      categories = {"auto-fabricator"},
       subgroup = "building-recipies",
     },
 
@@ -222,7 +222,7 @@ if mods["space-age"] then
       ingredients = {},
       results = { { type = "item", name = "carbon-fiber", amount = 100 } },
       energy_required = 2,
-      category = "auto-fabricator",
+      categories = {"auto-fabricator"},
       subgroup = "building-recipies",
     },
 
@@ -234,7 +234,7 @@ if mods["space-age"] then
       ingredients = {},
       results = { { type = "item", name = "lithium-plate", amount = 100 } },
       energy_required = 2,
-      category = "auto-fabricator",
+      categories = {"auto-fabricator"},
       subgroup = "building-recipies",
     },
 

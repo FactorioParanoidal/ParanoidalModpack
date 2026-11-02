@@ -4,7 +4,7 @@ data:extend({
   {
     type = "recipe",
     name = "ground-telescope",
-    category = "satellite-crafting",
+    categories = {"satellite-crafting"},
     enabled = false,
     ingredients =
         modutils.select(
