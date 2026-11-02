@@ -5,7 +5,7 @@ data:extend({
   {
     type = "recipe",
     name = "angels-solid-tungsten-trioxide-smelting",
-    category = "angels-chemical-smelting",
+    categories = {"angels-chemical-smelting"},
     subgroup = "angels-tungsten",
     energy_required = 4,
     enabled = false,
@@ -24,7 +24,7 @@ data:extend({
   {
     type = "recipe",
     name = "angels-pellet-tungsten-smelting-2",
-    category = "angels-chemical-smelting",
+    categories = {"angels-chemical-smelting"},
     subgroup = "angels-tungsten",
     energy_required = 8,
     enabled = false,
@@ -44,7 +44,7 @@ data:extend({
   {
     type = "recipe",
     name = "angels-solid-sodium-tungstate-smelting",
-    category = "angels-blast-smelting",
+    categories = {"angels-blast-smelting"},
     subgroup = "angels-tungsten",
     energy_required = 4,
     enabled = false,
@@ -67,7 +67,7 @@ data:extend({
   {
     type = "recipe",
     name = "angels-casting-powder-tungsten-3",
-    category = "angels-powder-mixing",
+    categories = {"angels-powder-mixing"},
     subgroup = "angels-tungsten-casting",
     energy_required = 4,
     enabled = false,
@@ -90,7 +90,7 @@ data:extend({
   {
     type = "recipe",
     name = "angels-solid-tungsten-oxide-smelting-2",
-    category = "angels-liquifying",
+    categories = {"angels-liquifying"},
     subgroup = "angels-tungsten-carbide",
     energy_required = 6,
     enabled = false,
@@ -109,7 +109,7 @@ data:extend({
   {
     type = "recipe",
     name = "angels-titanium-concrete-brick",
-    category = "crafting-with-fluid",
+    categories = {"crafting-with-fluid"},
     subgroup = "angels-stone-casting",
     energy_required = 4,
     enabled = false,
@@ -133,7 +133,7 @@ data:extend({
   {
     type = "recipe",
     name = "angels-tungsten-carbide-smelting-1",
-    category = "angels-chemical-smelting-3",
+    categories = {"angels-chemical-smelting-3"},
     subgroup = "angels-alloys-casting",
     energy_required = 8,
     enabled = false,
@@ -157,7 +157,7 @@ data:extend({
   {
     type = "recipe",
     name = "angels-tungsten-carbide-smelting-2",
-    category = "angels-chemical-smelting-4",
+    categories = {"angels-chemical-smelting-4"},
     subgroup = "angels-alloys-casting",
     energy_required = 16,
     enabled = false,
@@ -183,7 +183,7 @@ data:extend({
   {
     type = "recipe",
     name = "angels-tungsten-carbide-smelting-3",
-    category = "angels-chemical-smelting-4",
+    categories = {"angels-chemical-smelting-4"},
     subgroup = "angels-alloys-casting",
     energy_required = 8,
     enabled = false,
@@ -208,7 +208,7 @@ data:extend({
   {
     type = "recipe",
     name = "angels-plate-tungsten-carbide",
-    category = "angels-sintering",
+    categories = {"angels-sintering"},
     subgroup = "angels-alloys-casting",
     enabled = false,
     auto_recycle = false,
@@ -225,7 +225,7 @@ data:extend({
   {
     type = "recipe",
     name = "angels-copper-tungsten-smelting-1",
-    category = "angels-chemical-smelting-3",
+    categories = {"angels-chemical-smelting-3"},
     subgroup = "angels-alloys-casting",
     energy_required = 8,
     enabled = false,
@@ -249,7 +249,7 @@ data:extend({
   {
     type = "recipe",
     name = "angels-copper-tungsten-smelting-2",
-    category = "angels-chemical-smelting-4",
+    categories = {"angels-chemical-smelting-4"},
     subgroup = "angels-alloys-casting",
     energy_required = 8,
     enabled = false,
@@ -274,7 +274,7 @@ data:extend({
   {
     type = "recipe",
     name = "angels-molten-copper-tungsten-smelting-1",
-    category = "angels-sintering",
+    categories = {"angels-sintering"},
     subgroup = "angels-alloys-casting",
     energy_required = 8,
     enabled = false,

@@ -7,7 +7,7 @@ data:extend({
     type = "recipe",
     name = "block-construction-0",
     enabled = true,
-    category = "crafting",
+    categories = {"crafting"},
     energy_required = 5,
     ingredients = {
       { type = "item", name = "construction-frame-1", amount = 1 },

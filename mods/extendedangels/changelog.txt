@@ -9,6 +9,7 @@ Date: 2026-06-14
     - Clowns-Processing is now part of paranoidal-clowns: the optional dependency and the integration checks (data stage and the recipe re-enabling in control.lua) look for paranoidal-clowns; the white phosphorus icon path follows the mod.
   Compatibility:
     - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
+    - Paranoidal port to Factorio 2.1: recipes use categories (RecipePrototype::category and additional_categories were merged into categories; the first entry keeps the meaning of the former main category, a changed main category keeps the other entries).
 ---------------------------------------------------------------------------------------------------
 Version: 0.6.8
 Date: 2026-05-08

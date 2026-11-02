@@ -39,7 +39,7 @@ data:extend({
   {
     type = "recipe",
     name = "angels-solid-sodium-fluoride-1",
-    category = "chemistry",
+    categories = {"chemistry"},
     subgroup = "angels-petrochem-sodium",
     energy_required = 2,
     enabled = false,
@@ -61,7 +61,7 @@ data:extend({
   {
     type = "recipe",
     name = "angels-solid-sodium-fluoride-2",
-    category = "chemistry",
+    categories = {"chemistry"},
     subgroup = "angels-petrochem-sodium",
     energy_required = 2,
     enabled = false,
@@ -83,7 +83,7 @@ data:extend({
   {
     type = "recipe",
     name = "angels-gas-argon",
-    category = "chemistry",
+    categories = {"chemistry"},
     subgroup = "angels-petrochem-argon",
     energy_required = 2,
     enabled = false,
@@ -106,7 +106,7 @@ if mods["paranoidal-clowns"] then
     {
       type = "recipe",
       name = "angels-solid-disodium-phosphate",
-      category = "chemistry",
+      categories = {"chemistry"},
       subgroup = "angels-petrochem-sodium",
       energy_required = 2,
       enabled = false,
@@ -126,7 +126,7 @@ if mods["paranoidal-clowns"] then
     {
       type = "recipe",
       name = "angels-solid-tetrasodium-pyrophosphate",
-      category = "smelting",
+      categories = {"smelting"},
       subgroup = "angels-petrochem-sodium",
       energy_required = 3.5,
       enabled = false,
