@@ -3,6 +3,8 @@ Version: 0.0.5
   Changes:
     - Updated to Factorio 2.0
     - Updated changelog to use proper syntax.
+  Compatibility:
+    - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
 
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.4
