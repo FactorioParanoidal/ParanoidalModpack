@@ -20,6 +20,8 @@ Date: 2025-09-15
     - Machines with fluid boxes other than input/output, connections other than normal, no collision
       box or an off-centre collision box are skipped instead of crashing or getting misplaced pipes
     - An enabled setting no longer removes a blacklist entry added by another mod
+  Compatibility:
+    - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
 ---------------------------------------------------------------------------------------------------
 Version: 2025.06.20
 Date: 2025-06-20

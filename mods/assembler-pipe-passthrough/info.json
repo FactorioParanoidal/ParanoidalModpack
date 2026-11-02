@@ -9,5 +9,5 @@
     "!omnimatter_fluid >= 3.0.0"
   ],
   "description": "Adds more pipe connections to allow assemblers, chemical plants and refineries to pass through fluids, like electric miners do.",
-  "factorio_version": "2.0"
+  "factorio_version": "2.1"
 }
