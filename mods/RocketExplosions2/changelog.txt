@@ -24,6 +24,8 @@ Date: 2026-10-30
     - Removed the obsolete icon_mipmaps and commented-out code.
   Graphics:
     - Technology icons recompressed with pingo -s4 -quality=45 (already 8-bit palette; pixel-identical, 56.3 -> 54.2 KB); thumbnail.png unchanged.
+  Compatibility:
+    - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
 ---------------------------------------------------------------------------------------------------
 Version: 1.1.4
 Date: 2021-04-06
