@@ -18,6 +18,8 @@ Date: 2026-11-01
   Bugfixes:
     - A storage tank with hydrogen or deuterium no longer explodes twice in a catastrophe (its own die() call raised a second, volatile explosion).
     - The per-entity damage cooldown table no longer grows forever when fire or explosions hit stores and tanks that start nothing.
+  Compatibility:
+    - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
 ---------------------------------------------------------------------------------------------------
 Version: 0.2.22
 Date: 2025-04-26
