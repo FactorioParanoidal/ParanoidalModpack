@@ -560,4 +560,10 @@ if settings.startup["bobmods-mining-waterminers"].value == true and data.raw["re
       },
     },
   })
+
+  -- Factorio 2.1: base_picture moved to graphics_set.working_visualisations
+  local move_base_picture = require("prototypes.base-picture-21")
+  for _, name in pairs({ "bob-water-miner-1", "bob-water-miner-2", "bob-water-miner-3", "bob-water-miner-4" }) do
+    move_base_picture(data.raw["mining-drill"][name])
+  end
 end

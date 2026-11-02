@@ -172,57 +172,7 @@ if settings.startup["bobmods-mining-pumpjacks"].value == true then
         height = 12,
       },
       monitor_visualization_tint = { r = 78, g = 173, b = 255 },
-      base_picture = {
-        sheets = {
-          {
-            filename = "__base__/graphics/entity/pumpjack/pumpjack-base.png",
-            priority = "extra-high",
-            width = 261,
-            height = 273,
-            shift = util.by_pixel(-2.25, -4.75),
-            scale = 0.5,
-          },
-          {
-            filename = "__base__/graphics/entity/pumpjack/pumpjack-base-shadow.png",
-            width = 220,
-            height = 220,
-            scale = 0.5,
-            draw_as_shadow = true,
-            shift = util.by_pixel(6, 0.5),
-          },
-        },
-      },
-      graphics_set = {
-        animation = {
-          north = {
-            layers = {
-              {
-                priority = "extra-high",
-                filename = "__base__/graphics/entity/pumpjack/pumpjack-horsehead.png",
-                animation_speed = 0.5,
-                scale = 0.5,
-                line_length = 8,
-                width = 206,
-                height = 202,
-                frame_count = 40,
-                shift = util.by_pixel(-4, -24),
-              },
-              {
-                priority = "extra-high",
-                filename = "__base__/graphics/entity/pumpjack/pumpjack-horsehead-shadow.png",
-                animation_speed = 0.5,
-                draw_as_shadow = true,
-                line_length = 8,
-                width = 309,
-                height = 82,
-                frame_count = 40,
-                scale = 0.5,
-                shift = util.by_pixel(17.75, 14.5),
-              },
-            },
-          },
-        },
-      },
+      -- Factorio 2.1: graphics, output positions and flipping are taken from the vanilla pumpjack below.
       working_sound = {
         sound = { filename = "__base__/sound/pumpjack.ogg" },
       },
@@ -279,57 +229,7 @@ if settings.startup["bobmods-mining-pumpjacks"].value == true then
         height = 12,
       },
       monitor_visualization_tint = { r = 78, g = 173, b = 255 },
-      base_picture = {
-        sheets = {
-          {
-            filename = "__base__/graphics/entity/pumpjack/pumpjack-base.png",
-            priority = "extra-high",
-            width = 261,
-            height = 273,
-            shift = util.by_pixel(-2.25, -4.75),
-            scale = 0.5,
-          },
-          {
-            filename = "__base__/graphics/entity/pumpjack/pumpjack-base-shadow.png",
-            width = 220,
-            height = 220,
-            scale = 0.5,
-            draw_as_shadow = true,
-            shift = util.by_pixel(6, 0.5),
-          },
-        },
-      },
-      graphics_set = {
-        animation = {
-          north = {
-            layers = {
-              {
-                priority = "extra-high",
-                filename = "__base__/graphics/entity/pumpjack/pumpjack-horsehead.png",
-                animation_speed = 0.5,
-                scale = 0.5,
-                line_length = 8,
-                width = 206,
-                height = 202,
-                frame_count = 40,
-                shift = util.by_pixel(-4, -24),
-              },
-              {
-                priority = "extra-high",
-                filename = "__base__/graphics/entity/pumpjack/pumpjack-horsehead-shadow.png",
-                animation_speed = 0.5,
-                draw_as_shadow = true,
-                line_length = 8,
-                width = 309,
-                height = 82,
-                frame_count = 40,
-                scale = 0.5,
-                shift = util.by_pixel(17.75, 14.5),
-              },
-            },
-          },
-        },
-      },
+      -- Factorio 2.1: graphics, output positions and flipping are taken from the vanilla pumpjack below.
       working_sound = {
         sound = { filename = "__base__/sound/pumpjack.ogg" },
       },
@@ -387,57 +287,7 @@ if settings.startup["bobmods-mining-pumpjacks"].value == true then
         height = 12,
       },
       monitor_visualization_tint = { r = 78, g = 173, b = 255 },
-      base_picture = {
-        sheets = {
-          {
-            filename = "__base__/graphics/entity/pumpjack/pumpjack-base.png",
-            priority = "extra-high",
-            width = 261,
-            height = 273,
-            shift = util.by_pixel(-2.25, -4.75),
-            scale = 0.5,
-          },
-          {
-            filename = "__base__/graphics/entity/pumpjack/pumpjack-base-shadow.png",
-            width = 220,
-            height = 220,
-            scale = 0.5,
-            draw_as_shadow = true,
-            shift = util.by_pixel(6, 0.5),
-          },
-        },
-      },
-      graphics_set = {
-        animation = {
-          north = {
-            layers = {
-              {
-                priority = "extra-high",
-                filename = "__base__/graphics/entity/pumpjack/pumpjack-horsehead.png",
-                animation_speed = 0.5,
-                scale = 0.5,
-                line_length = 8,
-                width = 206,
-                height = 202,
-                frame_count = 40,
-                shift = util.by_pixel(-4, -24),
-              },
-              {
-                priority = "extra-high",
-                filename = "__base__/graphics/entity/pumpjack/pumpjack-horsehead-shadow.png",
-                animation_speed = 0.5,
-                draw_as_shadow = true,
-                line_length = 8,
-                width = 309,
-                height = 82,
-                frame_count = 40,
-                scale = 0.5,
-                shift = util.by_pixel(17.75, 14.5),
-              },
-            },
-          },
-        },
-      },
+      -- Factorio 2.1: graphics, output positions and flipping are taken from the vanilla pumpjack below.
       working_sound = {
         sound = { filename = "__base__/sound/pumpjack.ogg" },
       },
@@ -445,6 +295,25 @@ if settings.startup["bobmods-mining-pumpjacks"].value == true then
       circuit_wire_max_distance = 15,
     },
   })
+
+  -- Factorio 2.1: the vanilla pumpjack was redrawn (other frame sizes; its base moved from base_picture to
+  -- graphics_set.working_visualisations), its output moved per direction and it can be flipped; 2.0 saves get
+  -- east/west pumpjacks flipped (migrate_horizontal_mirroring), which keeps their 2.0 output. The Bob pumpjacks
+  -- take the same graphics, output positions, flipping and migration as the 2.1 vanilla pumpjack.
+  do
+    local vanilla = data.raw["mining-drill"]["pumpjack"]
+    for _, name in pairs({ "bob-pumpjack-1", "bob-pumpjack-2", "bob-pumpjack-3" }) do
+      local drill = data.raw["mining-drill"][name]
+      drill.graphics_set = util.table.deepcopy(vanilla.graphics_set)
+      drill.graphics_set_flipped = util.table.deepcopy(vanilla.graphics_set_flipped)
+      drill.use_mirroring = vanilla.use_mirroring
+      drill.migrate_horizontal_mirroring = vanilla.migrate_horizontal_mirroring
+      for index, connection in pairs(vanilla.output_fluid_box.pipe_connections) do
+        local own = drill.output_fluid_box.pipe_connections[index]
+        own.positions, own.position, own.direction = util.table.deepcopy(connection.positions), connection.position, connection.direction
+      end
+    end
+  end
 
   if feature_flags["freezing"] then
     data.raw["mining-drill"]["bob-pumpjack-1"].heating_energy = "50kW"
