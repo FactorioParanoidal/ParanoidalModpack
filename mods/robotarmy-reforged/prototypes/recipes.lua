@@ -61,7 +61,7 @@ local function recipe(name, time, list, category)
     type = "recipe",
     name = name,
     enabled = false,
-    category = category,
+    categories = {category or "crafting"},  -- Factorio 2.1: no category = crafting
     energy_required = time,
     ingredients = ingredients(name, list),
     results = {{type = "item", name = name, amount = 1}},
@@ -93,7 +93,7 @@ local function deploy(name, deploy_time, extra)
     enabled = false,
     hide_from_player_crafting = true,
     auto_recycle = false,
-    category = "droids",
+    categories = {"droids"},
     energy_required = deploy_time,
     ingredients = list,
     results = {},
