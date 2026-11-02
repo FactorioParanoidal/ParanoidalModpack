@@ -73,10 +73,12 @@ turret.preparing_speed = 0.06
 turret.rotation_speed = 0.0225
 
 -- The script fills each turret from the wagon tank; the turrets have no pipe neighbours.
-turret.fluid_box.hide_connection_info = true
+-- Factorio 2.1: hide_connection_info moved from the fluid box to its pipe connections.
 turret.fluid_box.production_type = "input-output"
 turret.fluid_box.pipe_covers = nil
-turret.fluid_box.pipe_connections = { { position = { 0, 0 }, connection_type = "linked", linked_connection_id = 0 } }
+turret.fluid_box.pipe_connections = {
+  { position = { 0, 0 }, connection_type = "linked", linked_connection_id = 0, hide_connection_info = true },
+}
 turret.fluid_box.volume = 25
 turret.fluid_buffer_size = 25
 turret.fluid_buffer_input_flow = 1
