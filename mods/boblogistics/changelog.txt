@@ -11,6 +11,7 @@ Date: 01. 06. 2026
     - Paranoidal port to Factorio 2.1: logistic chest door animation, sound, opened duration and landing offset moved into robot_door (2.1 LogisticContainerPrototype).
     - Paranoidal port to Factorio 2.1: recipes use categories (RecipePrototype::category and additional_categories were merged into categories; the first entry keeps the meaning of the former main category, a changed main category keeps the other entries).
     - Paranoidal port to Factorio 2.1: Space Age only: crafting-with-fluid-or-metallurgy (removed in 2.1) became categories crafting-with-fluid + metallurgy.
+    - Factorio 2.1: hide_connection_info moved from the fluid box to every pipe connection (FluidBox::hide_connection_info was removed, PipeConnectionDefinition::hide_connection_info added; without it 2.1 draws connection arrows and fluid icons on these entities).
 ---------------------------------------------------------------------------------------------------
 Version: 2.1.0
 Date: 01. 06. 2026
