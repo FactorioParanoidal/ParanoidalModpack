@@ -44,8 +44,9 @@ type_of["small-worm-turret"], type_of["wooden-chest"], type_of["item-on-ground"]
 type_of["droid-rifle"], type_of["droid-smg"], type_of["small-biter"] = "unit", "unit", "unit"
 F.type_of = type_of
 
-local LOOT = {{item = "iron-gear-wheel", probability = 1, count_min = 1, count_max = 2}}
-local CORE_LOOT = {{item = S.core_item, probability = 1, count_min = 1, count_max = 2}}
+-- Factorio 2.1: loot entries are ItemProductPrototype tables
+local LOOT = {{type = "item", name = "iron-gear-wheel", independent_probability = 1, amount_min = 1, amount_max = 2}}
+local CORE_LOOT = {{type = "item", name = S.core_item, independent_probability = 1, amount_min = 1, amount_max = 2}}
 prototypes = {entity = {}, item = {["repair-pack"] = {}}, ammo_category = {},
   tile = {[S.tile_floor] = {}, [S.tile_road] = {}}}
 for n, t in pairs(type_of) do
@@ -216,7 +217,7 @@ local function new_entity(p)
     remove(e)
     if loot then
       local it = new_entity({name = "item-on-ground", position = e.position, force = "neutral"})
-      it.stack = {name = loot[1].item, count = 1}
+      it.stack = {name = loot[1].name, count = 1}
     end
     return true
   end

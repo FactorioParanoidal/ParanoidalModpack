@@ -307,7 +307,7 @@ add({
   -- More parts are added in data-final-fixes from the items of the build (prototypes/loot.lua).
   results = {
     {type = "item", name = "advanced-circuit", amount = 3},
-    {type = "item", name = "processing-unit", amount = 1, probability = 0.5},
+    {type = "item", name = "processing-unit", amount = 1, independent_probability = 0.5},
     {type = "item", name = "steel-plate", amount = 5},
   },
   icons = {

@@ -51,7 +51,7 @@ local function loot_of(class, mark)
   local k = 1 + 0.25 * mark
   for _, e in pairs(CLASSES[class] or {}) do
     if usable(e[1]) then
-      out[#out + 1] = {item = e[1], probability = math.min(1, e[2]), count_min = e[3], count_max = math.ceil(e[4] * k)}
+      out[#out + 1] = {type = "item", name = e[1], independent_probability = math.min(1, e[2]), amount_min = e[3], amount_max = math.ceil(e[4] * k)}
     end
   end
   return out
@@ -80,7 +80,7 @@ for _, f in pairs(S.foundries) do CORES[E["foundry_" .. f]] = {1, 3} end
 for name, n in pairs(CORES) do
   for _, t in pairs({"simple-entity-with-owner", "electric-energy-interface", "radar"}) do
     local p = raw[t][name]
-    if p then p.loot = {{item = S.core_item, probability = 1, count_min = n[1], count_max = n[2]}} end
+    if p then p.loot = {{type = "item", name = S.core_item, independent_probability = 1, amount_min = n[1], amount_max = n[2]}} end
   end
 end
 
@@ -92,7 +92,7 @@ if recipe then
     {"bob-titanium-gear-wheel", 2, 1}, {"electric-engine-unit", 1, 0.5},
   }) do
     if usable(e[1]) then
-      recipe.results[#recipe.results + 1] = {type = "item", name = e[1], amount = e[2], probability = e[3] < 1 and e[3] or nil}
+      recipe.results[#recipe.results + 1] = {type = "item", name = e[1], amount = e[2], independent_probability = e[3] < 1 and e[3] or nil}
     end
   end
 end

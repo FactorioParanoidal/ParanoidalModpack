@@ -127,7 +127,7 @@ for name in pairs(S.size) do
 end
 local recipe = raw.recipe[S.decrypt_recipe]
 check(recipe and #recipe.results >= 4, "decryption results")
-check(raw["simple-entity-with-owner"][S.entity.core].loot[1].item == S.core_item, "core loot")
+check(raw["simple-entity-with-owner"][S.entity.core].loot[1].name == S.core_item, "core loot")
 
 -- optional: the new prototypes as JSON (arg[2]) for the property check against prototype-api.json
 if arg[2] then

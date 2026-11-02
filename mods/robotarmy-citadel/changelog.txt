@@ -31,6 +31,9 @@ Date: 2026.10.26
     - The citadel force is AI controllable (needed to create unit groups by script); it has no unit spawners, so it neither expands nor sends pollution attacks by itself.
     - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
     - Paranoidal port to Factorio 2.1: recipes use categories (RecipePrototype::category and additional_categories were merged into categories; the first entry keeps the meaning of the former main category, a changed main category keeps the other entries).
+    - Paranoidal port to Factorio 2.1: product probability renamed to independent_probability (recipe results, minable results, generated products).
+    - Paranoidal port to Factorio 2.1: loot entries use the 2.1 format (type, name, amount_min, amount_max, independent_probability instead of item, count_min, count_max, probability).
+    - Paranoidal port to Factorio 2.1: Lua mocks (tests/) use the 2.1 loot format.
   Optimizations:
     - No unit spawners, no on_tick: one heartbeat every 60 ticks with bounded portions of work (a few foundries, one look at each squad every two seconds, a few radar, repair and validation looks), a build queue registered only while something is built (3 buildings per 4 ticks), the death event filtered to the citadel's own droids and buildings. One command per squad, never per droid; marches in segments with low-priority cached paths.
     - A squad is given its next step only when its command is over or it stands still while not fighting, gathering or waiting for a path (so slow path requests are not restarted).
