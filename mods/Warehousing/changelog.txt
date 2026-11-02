@@ -9,6 +9,7 @@ Date: 2024-12-10
   Compatibility:
     - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
     - Paranoidal port to Factorio 2.1: logistic chest door animation, sound, opened duration and landing offset moved into robot_door (2.1 LogisticContainerPrototype).
+    - Paranoidal port to Factorio 2.1: container circuit_connector is an array of definitions (ContainerPrototype in 2.1); linked containers keep a single definition.
 
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.2

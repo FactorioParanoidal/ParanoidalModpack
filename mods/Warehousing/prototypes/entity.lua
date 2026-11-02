@@ -118,7 +118,8 @@ data:extend({
 			},
 		},
 		circuit_wire_max_distance = default_circuit_wire_max_distance,
-		circuit_connector = {
+		-- Factorio 2.1: ContainerPrototype::circuit_connector is an array (direction_count entries)
+		circuit_connector = { {
 			sprites = connectorSprite({58/32, 6/32}, {135/32, 79/32}),
 			points = {
 				shadow =
@@ -132,7 +133,7 @@ data:extend({
 					green = {49/32, 6/32}
 				}
 			},
-		}
+		} }
 	},
 	{
 		type = "container",
@@ -279,6 +280,8 @@ function createLinkedContainer(name)
 	p.type = "linked-container"
 	p.name = "linked-"..name
 	p.minable.result = p.name
+	-- Factorio 2.1: LinkedContainerPrototype::circuit_connector stays a single definition
+	p.circuit_connector = p.circuit_connector and p.circuit_connector[1]
 	p.circuit_wire_connection_point = nil
 	p.circuit_connector_sprites = nil
 	p.circuit_wire_max_distance = nil
