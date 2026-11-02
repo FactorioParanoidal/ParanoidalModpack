@@ -3,6 +3,8 @@ Version: 1.2.2
 Date: 25. 01. 2025
   Changes:
     - Rewrote control script to better support modded underground pipes with multiple connections
+  Compatibility:
+    - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
 ---------------------------------------------------------------------------------------------------
 Version: 1.2.1
 Date: 24. 01. 2025
