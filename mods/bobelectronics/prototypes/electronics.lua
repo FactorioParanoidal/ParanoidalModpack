@@ -34,7 +34,7 @@ if data.raw.item["bob-tin-plate"] then
     {
       type = "recipe",
       name = "bob-tinned-copper-cable",
-      category = "crafting",
+      categories = {"crafting"},
       enabled = false,
       ingredients = {
         { type = "item", name = "copper-cable", amount = 3 },
@@ -64,7 +64,7 @@ data:extend({
   {
     type = "recipe",
     name = "bob-insulated-cable",
-    category = "crafting",
+    categories = {"crafting"},
     enabled = false,
     ingredients = {
       { type = "item", name = "copper-cable", amount = 2 },
@@ -94,7 +94,7 @@ if data.raw.item["bob-gold-plate"] then
     {
       type = "recipe",
       name = "bob-gilded-copper-cable",
-      category = "advanced-crafting",
+      categories = {"advanced-crafting"},
       enabled = false,
       ingredients = {
         { type = "item", name = "copper-cable", amount = 3 },
@@ -126,7 +126,7 @@ if data.raw.item["bob-solder-alloy"] then
     {
       type = "recipe",
       name = "bob-solder",
-      category = "crafting",
+      categories = {"crafting"},
       energy_required = 2,
       enabled = false,
       auto_recycle = false,
@@ -159,7 +159,7 @@ data:extend({
   {
     type = "recipe",
     name = "bob-basic-electronic-components",
-    category = "advanced-crafting",
+    categories = {"advanced-crafting"},
     energy_required = 2,
     enabled = false,
     ingredients = {
@@ -190,7 +190,7 @@ data:extend({
   {
     type = "recipe",
     name = "bob-electronic-components",
-    category = "advanced-crafting",
+    categories = {"advanced-crafting"},
     energy_required = 3.5,
     enabled = false,
     ingredients = {
@@ -221,7 +221,7 @@ data:extend({
   {
     type = "recipe",
     name = "bob-integrated-electronics",
-    category = "crafting-with-fluid",
+    categories = {"crafting-with-fluid"},
     energy_required = 5,
     enabled = false,
     ingredients = {
@@ -253,7 +253,7 @@ data:extend({
   {
     type = "recipe",
     name = "bob-processing-electronics",
-    category = "crafting-with-fluid",
+    categories = {"crafting-with-fluid"},
     energy_required = 7,
     enabled = false,
     ingredients = {
@@ -294,7 +294,7 @@ data:extend({
   {
     type = "recipe",
     name = "bob-wooden-board",
-    category = "crafting",
+    categories = {"crafting"},
     enabled = false,
     auto_recycle = false,
     ingredients = {
@@ -335,7 +335,7 @@ data:extend({
   {
     type = "recipe",
     name = "bob-phenolic-board",
-    category = "advanced-crafting",
+    categories = {"advanced-crafting"},
     enabled = false,
     auto_recycle = false,
     ingredients = {
@@ -377,7 +377,7 @@ data:extend({
   {
     type = "recipe",
     name = "bob-fibreglass-board",
-    category = "advanced-crafting",
+    categories = {"advanced-crafting"},
     enabled = false,
     auto_recycle = false,
     ingredients = {
@@ -415,7 +415,7 @@ data:extend({
   {
     type = "recipe",
     name = "bob-basic-circuit-board",
-    category = "crafting",
+    categories = {"crafting"},
     enabled = false,
     energy_required = 1,
     ingredients = {
@@ -457,7 +457,7 @@ data:extend({
   {
     type = "recipe",
     name = "bob-circuit-board",
-    category = "crafting-with-fluid",
+    categories = {"crafting-with-fluid"},
     energy_required = 5,
     enabled = false,
     ingredients = {
@@ -501,7 +501,7 @@ data:extend({
   {
     type = "recipe",
     name = "bob-superior-circuit-board",
-    category = "crafting-with-fluid",
+    categories = {"crafting-with-fluid"},
     energy_required = 10,
     enabled = false,
     ingredients = {
@@ -545,7 +545,7 @@ data:extend({
   {
     type = "recipe",
     name = "bob-multi-layer-circuit-board",
-    category = "crafting-with-fluid",
+    categories = {"crafting-with-fluid"},
     energy_required = 15,
     enabled = false,
     ingredients = {
@@ -577,7 +577,7 @@ data:extend({
   {
     type = "recipe",
     name = "electronic-circuit",
-    category = "crafting",
+    categories = {"crafting"},
     energy_required = 1,
     enabled = false,
     ingredients = {
@@ -607,7 +607,7 @@ data:extend({
   {
     type = "recipe",
     name = "advanced-circuit",
-    category = "crafting",
+    categories = {"crafting"},
     energy_required = 5,
     enabled = false,
     ingredients = {
@@ -638,7 +638,7 @@ data:extend({
   {
     type = "recipe",
     name = "processing-unit",
-    category = "advanced-crafting",
+    categories = {"advanced-crafting"},
     energy_required = 10,
     enabled = false,
     ingredients = {
@@ -670,7 +670,7 @@ data:extend({
   {
     type = "recipe",
     name = "bob-advanced-processing-unit",
-    category = "advanced-crafting",
+    categories = {"advanced-crafting"},
     energy_required = 15,
     enabled = false,
     ingredients = {

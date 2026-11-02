@@ -7,10 +7,10 @@ data.raw.item["copper-cable"].order = "0-a1"
 
 if data.raw["recipe-category"]["bob-mixing-furnace"] then
   if data.raw.recipe["bob-solder-alloy"] then
-    data.raw.recipe["bob-solder-alloy"].category = "bob-mixing-furnace"
+    bobmods.lib.recipe.set_category("bob-solder-alloy", "bob-mixing-furnace")
   end
   if data.raw.recipe["bob-solder-alloy-lead"] then
-    data.raw.recipe["bob-solder-alloy-lead"].category = "bob-mixing-furnace"
+    bobmods.lib.recipe.set_category("bob-solder-alloy-lead", "bob-mixing-furnace")
   end
 end
 

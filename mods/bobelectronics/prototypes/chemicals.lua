@@ -20,7 +20,7 @@ data:extend({
     icon_size = 32,
     subgroup = "fluid-recipes",
     order = "b[fluid-chemistry]-a[bob-ferric-chloride-solution]",
-    category = "chemistry",
+    categories = {"chemistry"},
     enabled = false,
     energy_required = 2.5,
     ingredients = {
@@ -47,7 +47,7 @@ data:extend({
     icon_size = 32,
     subgroup = "fluid-recipes",
     order = "a[oil-processing]-c[coal-cracking]",
-    category = "chemistry",
+    categories = {"chemistry"},
     enabled = false,
     energy_required = 3,
     ingredients = {
@@ -75,7 +75,7 @@ data:extend({
     icon_size = 64,
     subgroup = "fluid-recipes",
     order = "a[oil-processing]-c[bob-oil-processing]",
-    category = "oil-processing",
+    categories = {"oil-processing"},
     enabled = false,
     energy_required = 5,
     ingredients = {
