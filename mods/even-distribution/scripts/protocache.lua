@@ -134,17 +134,20 @@ function this.fuelList(category)
 		fuelLists = {}
 		local data = {}
 		for name, item in pairs(prototypes.get_item_filtered{{ filter = "fuel" }}) do
-			local cat = item.fuel_category
-			if cat then
+			-- Factorio 2.1: an item lists its fuel categories (fuel_categories, nil when empty).
+			local cats = item.fuel_categories
+			if cats then
 				data[name] = {
 					item.fuel_value,
 					item.fuel_acceleration_multiplier,
 					item.fuel_top_speed_multiplier,
 					item.fuel_emissions_multiplier,
 				}
-				local list = fuelLists[cat]
-				if not list then list = {}; fuelLists[cat] = list end
-				list[#list + 1] = name
+				for _, cat in pairs(cats) do
+					local list = fuelLists[cat]
+					if not list then list = {}; fuelLists[cat] = list end
+					list[#list + 1] = name
+				end
 			end
 		end
 		-- strict lexicographic order (the original or-chain was not a valid sort order)

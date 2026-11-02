@@ -176,8 +176,14 @@ function this.isTarget(rec, item, prototype, dropToChests, dropToOutput, quality
 	quality = quality or "normal"
 	local id = { name = item, quality = quality }
 
-	local fuelCats = prototype.fuel_category and burnerCategories(rec)
-	local fuelMatch = fuelCats and fuelCats[prototype.fuel_category]
+	-- Factorio 2.1: an item can have several fuel categories (fuel_categories, nil when empty).
+	local fuelCats = prototype.fuel_categories and burnerCategories(rec)
+	local fuelMatch = false
+	if fuelCats then
+		for _, cat in pairs(prototype.fuel_categories) do
+			if fuelCats[cat] then fuelMatch = true; break end
+		end
+	end
 	local crafting = CRAFTING[entityType]
 	local ingredient = crafting and recipeSets(rec)[item]
 	local requester = REQUESTER_TYPES[entityType] and isRequester(rec)

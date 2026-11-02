@@ -91,10 +91,10 @@ function control:inventory(name)
                (self.type == "rocket-silo" and self.get_inventory(defines.inventory.rocket_silo_rocket))
 
     elseif name == "input" then
-        return (self.type == "furnace" and self.get_inventory(defines.inventory.furnace_source)) or
-               (self.type == "assembling-machine" and self.get_inventory(defines.inventory.assembling_machine_input)) or
+        return (self.type == "furnace" and self.get_inventory(defines.inventory.crafter_input)) or
+               (self.type == "assembling-machine" and self.get_inventory(defines.inventory.crafter_input)) or
                (self.type == "lab" and self.get_inventory(defines.inventory.lab_input)) or
-               (self.type == "rocket-silo" and self.get_inventory(defines.inventory.assembling_machine_input))
+               (self.type == "rocket-silo" and self.get_inventory(defines.inventory.crafter_input))
     
     elseif name == "output" then
         return self.get_output_inventory()
@@ -238,7 +238,7 @@ function control:customInsert(player, item, amount, takenFromCar, takenFromTrash
     local prototype = prototypes.item[item]
     local allowMain = allowed.main ~= false
 
-    if allowed.fuel ~= false and prototype.fuel_category ~= nil then
+    if allowed.fuel ~= false and prototype.fuel_categories ~= nil then
         local inv = self:inventory("fuel")
         if inv then
             local limit = useFuelLimit and math.min(amount, math.max(0, player:itemLimit(prototype, config.fuelLimitProfiles) - countAllQualities(inv, item))) or amount
@@ -248,7 +248,7 @@ function control:customInsert(player, item, amount, takenFromCar, takenFromTrash
 
             -- no space left --> replace inferior items
             if replaceItems and limit > 0 then
-                insertedHere = insertedHere + replaceInferior(self, inv, protocache.fuelList(prototype.fuel_category), item, limit, player, takenFromCar, takenFromTrash, quality)
+                insertedHere = insertedHere + replaceInferior(self, inv, protocache.fuelList(prototype.fuel_categories[1]), item, limit, player, takenFromCar, takenFromTrash, quality)
             end
 
             inserted = inserted + insertedHere

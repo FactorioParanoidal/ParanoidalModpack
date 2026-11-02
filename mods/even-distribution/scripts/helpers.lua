@@ -60,7 +60,11 @@ local conditions = {
 
     -- Custom type conditions
     ["crafting machine"] = util.isCraftingMachine,
-    ["fuel"] = function(obj) return obj.object_name == "LuaItemStack" and obj.prototype.fuel_category ~= nil or obj.fuel_category ~= nil end,
+    -- Factorio 2.1: fuel_categories (nil when empty) replaces fuel_category on item prototypes.
+    ["fuel"] = function(obj)
+        if obj.object_name == "LuaItemStack" then return obj.prototype.fuel_categories ~= nil end
+        return obj.object_name == "LuaItemPrototype" and obj.fuel_categories ~= nil
+    end,
     ["ammo"] = function(obj) return obj.type == "ammo" end,
 }
 

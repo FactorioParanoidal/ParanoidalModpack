@@ -8,6 +8,10 @@ Date: 2026-10-21
     - Inventory cleanup (Shift+C) handles items of any quality: trash slots, main inventory and cursor are read per item and quality. A personal logistic slot takes the qualities its quality and comparator match (first matching slot; defect qualities rank below normal); its maximum (or the request with "request overflow") applies to their total and the surplus is taken worst quality first. Qualities without a logistic slot use the default trash list, the same amount for every quality. Requests of requester chests and spidertrons, chest contents, insertion and returns use the quality of the item.
     - Partly used science packs, repair packs and magazines keep their durability / rounds when distributed, balanced, replaced, returned or cleaned up: name/count transfers took the used top item and created whole ones (endless science, free rounds).
     - Inventory cleanup (Shift+C) again treats ores, crushed ores, slag, stone, coal, crushed coal, coke, Angels bio-processing and water treatment items as trash by default, as in Factorio 1.1: added the 2.0 Angels item group names (angels-resource-refining, angels-petrochem-refining, angels-water-treatment, angels-bio-processing-nauvis/-vegetables/-alien) and item names (angels-coal-crushed, angels-wood-pellets, angels-wood-bricks) to the default trash list.
+  Compatibility:
+    - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
+    - Paranoidal port to Factorio 2.1: defines.inventory.assembling_machine_*, furnace_* and rocket_silo_input/output/modules replaced by defines.inventory.crafter_input/output/modules/trash.
+    - Paranoidal port to Factorio 2.1: item fuel categories are read from fuel_categories (a list; LuaItemPrototype::fuel_category was removed).
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.2
 Date: 2024-10-22
