@@ -153,8 +153,8 @@ if data.raw.item["y-res1"] then
         { type = "fluid", name = "angels-mineral-sludge", amount = 50 },
       },
       results = {
-        { type = "item", name = "y-res1", amount = 1, probability = 0.5 },
-        { type = "item", name = "y-res2", amount = 1, probability = 0.5 },
+        { type = "item", name = "y-res1", amount = 1, independent_probability = 0.5 },
+        { type = "item", name = "y-res2", amount = 1, independent_probability = 0.5 },
       },
       icons = angelsmods.functions.create_liquid_recipe_icon({
         "y-res1",
@@ -292,8 +292,8 @@ if data.raw.item["uraninite"] then
         { type = "fluid", name = "angels-mineral-sludge", amount = 50 },
       },
       results = {
-        { type = "item", name = "uraninite", amount_min = 1, amount_max = 5, probability = 0.05 },
-        { type = "item", name = "fluorite", amount_min = 1, amount_max = 1, probability = 0.05 },
+        { type = "item", name = "uraninite", amount_min = 1, amount_max = 5, independent_probability = 0.05 },
+        { type = "item", name = "fluorite", amount_min = 1, amount_max = 1, independent_probability = 0.05 },
       },
       icon = "__angelsrefininggraphics__/graphics/icons/slag-processing-up.png",
       icon_size = 32,
@@ -313,7 +313,7 @@ if data.raw.item["uraninite"] then
         { type = "item", name = "angels-catalysator-brown", amount = 1 },
       },
       results = {
-        { type = "item", name = "uraninite", amount_min = 1, amount_max = 1, probability = 0.46 },
+        { type = "item", name = "uraninite", amount_min = 1, amount_max = 1, independent_probability = 0.46 },
       },
       icon = "__angelsrefininggraphics__/graphics/icons/angels-ore-mix-up1-sorting.png",
       icon_size = 32,
@@ -333,7 +333,7 @@ if data.raw.item["uraninite"] then
         { type = "item", name = "angels-catalysator-brown", amount = 1 },
       },
       results = {
-        { type = "item", name = "fluorite", amount_min = 1, amount_max = 1, probability = 0.1 },
+        { type = "item", name = "fluorite", amount_min = 1, amount_max = 1, independent_probability = 0.1 },
       },
       icon = "__angelsrefininggraphics__/graphics/icons/angels-ore-mix-up2-sorting.png",
       icon_size = 32,
