@@ -30,3 +30,5 @@ Date: 2026-10-29
     - Locomotives marked for deconstruction or upgrade are not rebuilt: an upgrade order was lost, and a locomotive about to be removed gains nothing from it.
     - Technologies are hidden or shown for forces created later too.
     - Equipment with burners keeps its fuel; equipment ghosts and removal orders are kept.
+  Compatibility:
+    - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
