@@ -9,6 +9,8 @@ Date: 2025-10-22
     - Napalm fire: spread_delay 5 -> 60, smoke frequency 0.4 -> 0.15, light size 25 -> 12, fade_out_duration 300 -> 60. Damage and fire count are unchanged.
     - Aircraft shadow sheets are stored at half resolution (224 px frames at scale 1, same on-screen size), including the AircraftRealism shadow sprites.
     - Flying Fortress uses the Jet light and shadow sheets; its pixel-identical copies were removed.
+  Compatibility:
+    - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
 ---------------------------------------------------------------------------------------------------
 Version: 2.3.3
 Date: 2025-10-22
