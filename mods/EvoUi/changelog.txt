@@ -10,6 +10,8 @@ Date: 2026-10-12
     - Paranoidal: the kill count sensor no longer fails with "LuaGameScript doesn't contain key entity_prototypes" when enabled (uses prototypes.entity in 2.0).
     - Paranoidal: Russian name of the kill count sensor is "Убийства вашей команды".
     - Paranoidal: the day number of the time of day sensor is the NightBrightness calendar day (the same count as the season sensor and the RPG statistics) instead of game.tick / 25000; Russian text "Время 12:00, день 3".
+  Compatibility:
+    - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
 ---------------------------------------------------------------------------------------------------
 Version: 0.5.0
 Date: 2025.09.05
