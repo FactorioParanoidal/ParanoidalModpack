@@ -12,6 +12,8 @@ Date: 21. 10. 2024
     - Paranoidal: the throughput text is recomputed when the hovered inserter is rotated, gets pasted settings or has its positions changed by bobinserters; before, it showed the value from the moment of hovering.
     - Paranoidal: a removed player's text record is dropped.
     - Paranoidal: removed a dead branch of /it-stopwatch that called the undefined populate_name_blacklist.
+  Compatibility:
+    - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
 ---------------------------------------------------------------------------------------------------
 Version: 0.1.5
 Date: 17. 05. 2024
