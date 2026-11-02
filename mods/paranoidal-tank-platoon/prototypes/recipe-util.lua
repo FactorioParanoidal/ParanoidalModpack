@@ -7,7 +7,7 @@ return function(spec)
   return {
     type = "recipe",
     name = spec.name,
-    category = spec.category,
+    categories = {spec.category or "crafting"},  -- Factorio 2.1: no category = crafting
     enabled = false,
     energy_required = spec.time,
     ingredients = ingredients,
