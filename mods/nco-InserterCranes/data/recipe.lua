@@ -55,7 +55,7 @@ local function make_crane_recipe(recipeName, newName, wide)
 		}
 		for _, v in pairs(ingredients) do
 			if v.type == "item" then
-				table.insert(crushing_recipe.results, {type = "item", name = v.name, amount = v.amount, probability = 0.65})
+				table.insert(crushing_recipe.results, {type = "item", name = v.name, amount = v.amount, independent_probability = 0.65})
 			end
 		end
 		data:extend({crushing_recipe})
