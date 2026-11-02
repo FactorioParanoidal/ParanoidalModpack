@@ -4,6 +4,8 @@ Date: 2024-10-28
 	Changes:
 		-fixed an issue that made the mod unable to run without Space Age enabled
 		-painted the Capture Robot PROJECTILE, previously only the capture animation was painted
+  Compatibility:
+    - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
 ---------------------------------------------------------------------------------------------------
 Version: 1.1.2
 Date: 2024-10-28
