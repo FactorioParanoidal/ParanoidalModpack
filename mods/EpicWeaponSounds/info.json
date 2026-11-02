@@ -5,5 +5,5 @@
 	"title":"SoundPack: Epic Weapon Sounds",
 	"description":"This mod replaces the vanilla weapon sounds in the game, making your battles sound epic! \n\nMore weapons will be added soon!",
   	"dependencies": ["base"],
-	"factorio_version": "2.0"
+	"factorio_version": "2.1"
 }
