@@ -40,7 +40,7 @@ data:extend({
         percent = 30,
       },
     },
-    forced_symmetry = "horizontal",
+    use_mirroring = true, -- Factorio 2.1: replaces the removed forced_symmetry = "horizontal" (flippable, as in 2.0)
     fluid_boxes = {
       {
         production_type = "input",
