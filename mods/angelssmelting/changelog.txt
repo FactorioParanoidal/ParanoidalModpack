@@ -5,6 +5,8 @@ Date: 04.06.2026
     - Paranoidal: angelssmeltinggraphics is now a plain required dependency instead of "~" (load order is unchanged): Factorio 2.0 never reuses the data stage cache (cache-prototype-data) while any enabled mod has a "~" dependency.
   Changes:
     - Removed Metallurgic science pack as a prerequisite for Bob's Tungsten Processing technology (1303)
+  Compatibility:
+    - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.4
 Date: 01.06.2026
