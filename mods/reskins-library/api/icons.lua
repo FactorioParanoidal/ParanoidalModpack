@@ -223,7 +223,7 @@ function _icons.add_missing_icon_defaults(icon_datum, is_technology_icon)
 	assert(icon_datum.icon:match("%.([%a%d]+)$"), "Invalid filename: 'icon' must have a valid file extension, but was '" .. icon_datum.icon .. "'.")
 
 	-- Validate icon size, which is now optional.
-	local icon_size = icon_datum.icon_size or defines.default_icon_size
+	local icon_size = icon_datum.icon_size or defines.constant.default_icon_size
 
 	assert(type(icon_size) == "number", "Invalid type: 'icon_size' must be a number, but was a '" .. type(icon_size) .. "'.")
 	assert(icon_size > 0 and icon_size % 1 == 0, "Invalid value: 'icon_size' must be an integer greater than zero, but was '" .. icon_size .. "'.")
@@ -413,7 +413,7 @@ function _icons.get_icon_from_prototype_by_reference(prototype)
 
 		-- Ensure icon_size is set for all elements before adding defaults.
 		for n = 1, #icons do
-			icons[n].icon_size = icons[n].icon_size or prototype.icon_size or defines.default_icon_size
+			icons[n].icon_size = icons[n].icon_size or prototype.icon_size or defines.constant.default_icon_size
 		end
 	else
 		---@type data.IconData[]

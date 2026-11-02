@@ -8,6 +8,9 @@ Date: 2026-01-03
     - Fixed that the missing mod notification was not correctly resolving the pluralization locale string
   Changes:
     - The list of mods supported by Artisanal Reskins: Compatibility names paranoidal-clowns instead of Clowns-Processing (control.lua and the reskins-supported-mods locale key).
+  Compatibility:
+    - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
+    - Paranoidal port to Factorio 2.1: defines.default_icon_size renamed to defines.constant.default_icon_size.
 ---------------------------------------------------------------------------------------------------
 Version: 2.3.2
 Date: 2025-07-03
