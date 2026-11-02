@@ -12,6 +12,8 @@ Date: 2026-10-21
     - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
     - Paranoidal port to Factorio 2.1: defines.inventory.assembling_machine_*, furnace_* and rocket_silo_input/output/modules replaced by defines.inventory.crafter_input/output/modules/trash.
     - Paranoidal port to Factorio 2.1: item fuel categories are read from fuel_categories (a list; LuaItemPrototype::fuel_category was removed).
+    - Paranoidal port to Factorio 2.1: product chances are read from independent_probability and the shared_probability range (Product::probability was removed in 2.1).
+    - Paranoidal port to Factorio 2.1: the burner check of drag-and-drop reads the item's fuel_categories (LuaItemPrototype::fuel_category was removed in 2.1).
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.2
 Date: 2024-10-22

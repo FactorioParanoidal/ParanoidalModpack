@@ -391,13 +391,22 @@ function this.onStackTransferred(entity, player, cache) -- handle vanilla drag s
 	player.clear_local_flying_texts()
 end
 
+-- Factorio 2.1: LuaItemPrototype::fuel_category was removed; fuel_categories is a list (nil when empty).
+local function burnerAccepts(burner, prototype)
+	local accepted = burner.fuel_categories
+	for _, category in pairs(prototype.fuel_categories or {}) do
+		if accepted[category] then return true end
+	end
+	return false
+end
+
 function this.isEntityEligible(entity, item, quality)
 	local prototype = prototypes.item[item]
 	entity = _(entity)
 	
 	if entity.can_insert({ name = item, quality = quality or "normal" }) then
 		return true
-	elseif entity.burner and entity.burner.fuel_categories[prototype.fuel_category] then
+	elseif entity.burner and burnerAccepts(entity.burner, prototype) then
 		return true
 	elseif entity:is("crafting machine") and entity:recipe():hasIngredient(item) then
 		return true

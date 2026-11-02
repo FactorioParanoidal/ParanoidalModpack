@@ -85,7 +85,7 @@ local function recipeSets(rec)
 			if recipe and recipe.valid then
 				for __,ingredient in pairs(recipe.ingredients) do ingredients[ingredient.name] = true end
 				for __,product in pairs(recipe.products) do
-					if (product.amount or product.amount_min or product.amount_max or product.probability or 1) > 0 then
+					if (product.amount or product.amount_min or product.amount_max or product.independent_probability or 1) > 0 then
 						products[product.name] = true
 					end
 				end
