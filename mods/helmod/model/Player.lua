@@ -2031,7 +2031,7 @@ function Player.getRocketPartRecipe(factory)
     local rocket_part_recipes = {}
     for _, silo_prototype in pairs(silos) do
         if silo_prototype.fixed_recipe then
-            table.insert(rocket_part_recipes, prototypes.recipe[silo_prototype.fixed_recipe])
+            table.insert(rocket_part_recipes, silo_prototype.fixed_recipe) -- Factorio 2.1: a LuaRecipePrototype
         end
     end
 
@@ -2048,7 +2048,7 @@ function Player.buildRocketRecipe(prototype)
     local ingredients = {}
     table.insert(ingredients, { name = prototype.name, type = "item", amount = 1, constant = true })
     local recipe = {}
-    recipe.category = Player.getRocketPartRecipe().category
+    recipe.category = (Player.getRocketPartRecipe().categories or { "crafting" })[1] -- Factorio 2.1: categories
     recipe.enabled = true
     recipe.energy = 1
     recipe.force = {}
@@ -2102,7 +2102,7 @@ end
 function Player.getBurntRecipe(name)
     local recipe_prototype = Player.getRecipe(name)
     local recipe = {}
-    recipe.category = recipe_prototype.category
+    recipe.category = (recipe_prototype.categories or { "crafting" })[1] -- Factorio 2.1: categories
     recipe.enabled = true
     recipe.energy = recipe_prototype.energy
     recipe.force = {}

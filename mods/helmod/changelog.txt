@@ -33,6 +33,11 @@ Date: 2026-06-19
     - Quality support of a game recipe is cached per recipe instead of reading its ingredients
     - Removed a boiler scan in RecipePrototype:getHidden that always returned false
     - Production rows read the row move step setting once per row
+  Compatibility:
+    - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
+    - Paranoidal port to Factorio 2.1: recipe categories are read from LuaRecipePrototype::categories (category/additional_categories were removed; the first category is the main one).
+    - Paranoidal port to Factorio 2.1: LuaEntityPrototype::fixed_recipe is read as a LuaRecipePrototype (it was a name in 2.0).
+    - Paranoidal port to Factorio 2.1: burnt and rocket pseudo-recipes take the main category from LuaRecipePrototype::categories.
 ---------------------------------------------------------------------------------------------------
 Version: 2.2.13
 Date: 2026-03-20

@@ -281,7 +281,9 @@ function RecipePrototype:getCategory()
         return defines.mod.recipes[self.lua_type].category
     end
     if self.lua_prototype ~= nil then
-        return self.lua_prototype.category or "crafting"
+        -- Factorio 2.1: recipes list their categories; the first one is the main category.
+        local categories = self.lua_prototype.categories
+        return categories and categories[1] or "crafting"
     end
     return nil
 end
@@ -294,7 +296,11 @@ function RecipePrototype:getAdditionnalCategories()
         return {}
     end
     if self.lua_prototype ~= nil then
-        return self.lua_prototype.additional_categories or {}
+        -- Factorio 2.1: additional_categories were merged into categories (after the main one).
+        local categories = self.lua_prototype.categories or {}
+        local additional = {}
+        for i = 2, #categories do additional[#additional + 1] = categories[i] end
+        return additional
     end
     return {}
 end
@@ -686,7 +692,7 @@ end
 function RecipePrototype:getRocketPenalty(factory)
     local factory_prototype = EntityPrototype(factory)
     local rocket_prototype = factory_prototype:native()
-    local recipe_part_name = rocket_prototype.fixed_recipe
+    local recipe_part_name = rocket_prototype.fixed_recipe and rocket_prototype.fixed_recipe.name -- Factorio 2.1: a LuaRecipePrototype
     local rocket_part_prototype = RecipePrototype(recipe_part_name):native()
     local factory_speed = factory.speed_total
     local cycles_time = rocket_part_prototype.energy * rocket_prototype.rocket_parts_required / factory_speed
@@ -699,7 +705,7 @@ end
 function RecipePrototype:getRocketEnergy(factory)
     local factory_prototype = EntityPrototype(factory)
     local rocket_prototype = factory_prototype:native()
-    local recipe_part_name = rocket_prototype.fixed_recipe
+    local recipe_part_name = rocket_prototype.fixed_recipe and rocket_prototype.fixed_recipe.name -- Factorio 2.1: a LuaRecipePrototype
     local rocket_part_prototype = RecipePrototype(recipe_part_name):native()
     local rocket_energy = rocket_part_prototype.energy * rocket_prototype.rocket_parts_required
     return rocket_energy
@@ -738,7 +744,7 @@ function RecipePrototype:getIngredients(factory)
             -- if allready added, skip
             if self.is_appended == nil then
                 local rocket_prototype = factory_prototype:native()
-                local recipe_part_name = rocket_prototype.fixed_recipe
+                local recipe_part_name = rocket_prototype.fixed_recipe and rocket_prototype.fixed_recipe.name -- Factorio 2.1: a LuaRecipePrototype
                 --local rocket_part_prototype = RecipePrototype(recipe_part_name):native()
                 local rocket_part_prototype = Player.getRecipe(recipe_part_name)
                 local ingredients = rocket_part_prototype.ingredients
