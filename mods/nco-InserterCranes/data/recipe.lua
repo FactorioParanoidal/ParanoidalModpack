@@ -39,7 +39,7 @@ local function make_crane_recipe(recipeName, newName, wide)
 			name = newName .. "-to-parts",
 			icon = "__base__/graphics/icons/inserter.png",
 			icon_size = 64,
-			category = category,
+			categories = {category},
 			subgroup = "inserter-cranes",
 			hide_from_player_crafting = true,
 			always_show_made_in = true,
