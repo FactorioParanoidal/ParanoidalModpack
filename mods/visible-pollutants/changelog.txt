@@ -4,6 +4,8 @@ Date: 2026-10-12
   Changes:
     - Version number starts with 9 (Paranoidal fork): the Mod Portal never offers an "update" over local changes.
     - Paranoidal: smog becomes visible above 60 pollution per chunk (was 2); maximum thickness at 1000 (was 900). Both stay adjustable in map settings.
+  Compatibility:
+    - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
 ---------------------------------------------------------------------------------------------------
 Version: 1.4.5
 Date: 2026-10-08
