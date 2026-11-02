@@ -17,3 +17,5 @@ Date: 2026-11-01
     - Global variables of the AngelBob ordering table, the osmium bullet and the nuclear action property list are local now.
   Saves:
     - Nothing is lost: the old mods kept no script state. The hidden recipe molten-steel-smelting-c2 disappears. Values of the removed settings in mod-settings.dat are ignored.
+  Compatibility:
+    - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.

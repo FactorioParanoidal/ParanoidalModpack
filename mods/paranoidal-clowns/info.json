@@ -4,7 +4,7 @@
   "title": "Paranoidal Clowns",
   "author": "FactorioParanoidal; after MadClown01's Processing, Vanilla Nuclear and AngelBob Nuclear by MadClown01 and Pezzawinkle",
   "homepage": "https://github.com/FactorioParanoidal/ParanoidalModpack",
-  "factorio_version": "2.0",
+  "factorio_version": "2.1",
   "description": "MadClown01's mods on top of Angel's in one: sand sluicing, osmium, magnesium, mercury, fluorine and phosphorus chains, uranium processing through fluorides and oxides, catalytic electrolysis, neurotoxin and garden mutation; plutonium and thorium fuel cycles, stepwise uranium enrichment instead of Kovarex, isotopes and radiothermal fuels, thermonuclear bomb and nuclear artillery shells. Replaces Clowns-Processing, Clowns-Nuclear and Clowns-AngelBob-Nuclear.",
   "dependencies": [
     "base >= 2.0",
