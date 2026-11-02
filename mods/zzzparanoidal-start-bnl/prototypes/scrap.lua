@@ -78,7 +78,7 @@ data:extend({
             {icon = icons .. "scrap.png", scale = 0.4},
             {icon = "__recycler__/graphics/icons/recycling-top.png"},
         },
-        category = "recycling-or-hand-crafting",
+        categories = {"recycling-or-hand-crafting"},
         subgroup = "bnl-start",
         order = "g[scrap-recycling]",
         enabled = true,
