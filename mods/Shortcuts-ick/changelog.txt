@@ -7,6 +7,7 @@ Date: 15.11.2024
     - Fixed an error when closing a GUI of an entity with grid when the "Vehicle: Enable logistics while moving" setting was disabled (thanks to Factory077 and Hellpest).
   Compatibility:
     - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
+    - Paranoidal port to Factorio 2.1: selection modes with blueprint/deconstruct also list any-entity and any-tile, which 2.0 implied and 2.1 no longer does.
 
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.6
