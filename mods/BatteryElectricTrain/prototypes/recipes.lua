@@ -54,7 +54,7 @@ local function MakeChargingRecipe(name)
 	return {
 		type = "recipe",
 		name = item_name,
-		category = name_cat_recipe_chg,
+		categories = {name_cat_recipe_chg},
 		enabled = false,
 		energy_required = math.floor(get_fuel_value(name) / charging_power / settings.startup[setting_charging_efficiency].value + 0.99),
 		ingredients = {{type = "item", name = name.."-empty", amount = 1}},
@@ -160,7 +160,7 @@ if settings.startup[setting_recycling].value then
 			icon_size = 64,
 			subgroup = name_group_batteries,
 			order = "c",
-			category = "advanced-crafting",
+			categories = {"advanced-crafting"},
 			enabled = false,
 			energy_required = 5*level,
 			ingredients = {{type = "item", name = name.."-empty", amount = 1}},
