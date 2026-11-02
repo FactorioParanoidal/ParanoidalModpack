@@ -30,6 +30,8 @@ Version: 2.1.2
     - Paranoidal fork: the boss kind is resolved once instead of string searches every second
     - Paranoidal fork: brood limits use count_entities_filtered with a limit
     - Paranoidal fork: invalid entities are pruned from the tracked enemy list; unused gleba invasion queue is cleared
+  Compatibility:
+    - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
 ---------------------------------------------------------------------------------------------------
 Version: 2.1.1
   Bugfixes:

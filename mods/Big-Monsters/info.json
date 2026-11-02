@@ -6,7 +6,7 @@
 	"description":"Be prepared for the big monsters from this planet!",
 	"homepage":"https://discord.gg/vDfm5tNEqK",
 	"contact": "Discord: MFerrari#6561",
-	"factorio_version":"2.0",
+	"factorio_version":"2.1",
 	"dependencies": ["base >= 2.0.0", "mferrari_lib >= 0.5.5", "? space-age", 
 			"? mferrari-mod-sounds",
 			"? RPGsystem", 
