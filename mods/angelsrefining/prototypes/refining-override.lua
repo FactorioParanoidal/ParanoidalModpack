@@ -145,7 +145,7 @@ if data.raw.item["y-res1"] then
     {
       type = "recipe",
       name = "angels-slag-processing-yi",
-      category = "angels-crystallizing",
+      categories = {"angels-crystallizing"},
       subgroup = "angels-slag-processing-1",
       energy_required = 8,
       enabled = false,
@@ -166,7 +166,7 @@ if data.raw.item["y-res1"] then
     {
       type = "recipe",
       name = "angels-ore-chunk-mix-yi1-processing",
-      category = "angels-ore-sorting",
+      categories = {"angels-ore-sorting"},
       subgroup = "angels-ore-sorting-advanced",
       energy_required = 1.5,
       enabled = false,
@@ -187,7 +187,7 @@ if data.raw.item["y-res1"] then
     {
       type = "recipe",
       name = "angels-ore-chunk-mix-yi2-processing",
-      category = "angels-ore-sorting",
+      categories = {"angels-ore-sorting"},
       subgroup = "angels-ore-sorting-advanced",
       energy_required = 1.5,
       enabled = false,
@@ -209,7 +209,7 @@ if data.raw.item["y-res1"] then
     {
       type = "recipe",
       name = "angels-yellow-waste-water-purification-yi",
-      category = "angels-water-treatment",
+      categories = {"angels-water-treatment"},
       subgroup = "angels-water-treatment",
       energy_required = 1,
       enabled = false,
@@ -284,7 +284,7 @@ if data.raw.item["uraninite"] then
     {
       type = "recipe",
       name = "angels-slag-processing-up",
-      category = "angels-crystallizing",
+      categories = {"angels-crystallizing"},
       subgroup = "angels-slag-processing-1",
       energy_required = 8,
       enabled = false,
@@ -302,7 +302,7 @@ if data.raw.item["uraninite"] then
     {
       type = "recipe",
       name = "angels-ore-crystal-mix-up1-processing",
-      category = "angels-ore-sorting",
+      categories = {"angels-ore-sorting"},
       subgroup = "angels-ore-sorting-advanced",
       energy_required = 1.5,
       enabled = false,
@@ -322,7 +322,7 @@ if data.raw.item["uraninite"] then
     {
       type = "recipe",
       name = "angels-ore-crystal-mix-up2-processing",
-      category = "angels-ore-sorting",
+      categories = {"angels-ore-sorting"},
       subgroup = "angels-ore-sorting-advanced",
       energy_required = 1.5,
       enabled = false,

@@ -15,6 +15,8 @@ Date: 04.06.2026
   Compatibility:
     - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
     - Paranoidal port to Factorio 2.1: recycling recipe generation and recycling icons are taken from the built-in recycler mod (__recycler__/recycling.lua, __recycler__/graphics/icons/); recycling code checks mods["recycler"] instead of mods["quality"].
+    - Paranoidal port to Factorio 2.1: recipes use categories (RecipePrototype::category and additional_categories were merged into categories; the first entry keeps the meaning of the former main category, a changed main category keeps the other entries).
+    - Paranoidal port to Factorio 2.1: OV.add/remove_additional_category work on categories (never the first entry); recipe patches may still give category (the main category, the other categories are kept) or categories (whole list); new helpers angelsmods.functions.get_recipe_category and set_recipe_category; void recipes use independent_probability; removed always_show_products/show_amount_in_title on void recipes (no longer in 2.1).
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.3
 Date: 01.06.2026

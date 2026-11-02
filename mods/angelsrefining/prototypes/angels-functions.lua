@@ -1592,6 +1592,23 @@ function angelsmods.functions.modify_barreling_icon()
   end
 end
 
+-- Factorio 2.1: RecipePrototype::category and additional_categories were merged into categories
+-- (default {"crafting"}). categories[1] keeps the meaning of the 2.0 main category, the other entries
+-- are the 2.0 additional categories.
+function angelsmods.functions.get_recipe_category(recipe) -- recipe table; the main category
+  return recipe.categories and recipe.categories[1] or "crafting"
+end
+
+function angelsmods.functions.set_recipe_category(recipe, category) -- recipe table; keeps the additional ones
+  local list = { category }
+  for i, other in ipairs(recipe.categories or {}) do
+    if i > 1 and other ~= category then
+      table.insert(list, other)
+    end
+  end
+  recipe.categories = list
+end
+
 function angelsmods.functions.modify_barreling_recipes()
   angelsmods.functions.modify_barreling_icon()
 
@@ -1603,11 +1620,11 @@ function angelsmods.functions.modify_barreling_recipes()
       if angelsmods.trigger.enable_auto_barreling then
         if recipes[fn .. "-barrel"] then
           recipes[fn .. "-barrel"].hidden = true
-          recipes[fn .. "-barrel"].category = "angels-barreling-pump"
+          angelsmods.functions.set_recipe_category(recipes[fn .. "-barrel"], "angels-barreling-pump")
         end
         if recipes["empty-" .. fn .. "-barrel"] then
           recipes["empty-" .. fn .. "-barrel"].hidden = true
-          recipes["empty-" .. fn .. "-barrel"].category = "angels-barreling-pump"
+          angelsmods.functions.set_recipe_category(recipes["empty-" .. fn .. "-barrel"], "angels-barreling-pump")
         end
       end
       if
@@ -1744,7 +1761,7 @@ function angelsmods.functions.make_void(fluid_name, void_category, void_amount) 
     recipe.name = "angels-" .. void_category .. "-void-" .. fluid_name
     recipe.localised_name =
       { "recipe-name.angels-" .. void_category .. "-void", { void_input_type .. "-name." .. fluid_name } }
-    recipe.category = "angels-" .. void_category .. "-void"
+    recipe.categories = { "angels-" .. void_category .. "-void" }
     recipe.enabled = true
     recipe.hide_from_signal_gui = true
     recipe.hide_from_player_crafting = angelsmods.trigger.enable_hide_void
@@ -1761,12 +1778,10 @@ function angelsmods.functions.make_void(fluid_name, void_category, void_amount) 
         type = "item",
         name = void_output_item,
         amount = void_output_amount,
-        probability = void_output_probability ~= 1 and void_output_probability or nil,
+        independent_probability = void_output_probability ~= 1 and void_output_probability or nil,
       },
     }
     recipe.main_product = void_output_item
-    recipe.show_amount_in_title = false
-    recipe.always_show_products = void_output_amount * void_output_probability > 0
     recipe.always_show_made_in = true
     recipe.allow_decomposition = false
     recipe.allow_as_intermediate = false

@@ -760,13 +760,14 @@ local function adjust_recipe(recipe) -- check a recipe for basic adjustments bas
         if flag then
           local category = data.raw["recipe-category"][category_name]
           if category then
-            guarantee_subtable(recipe, "additional_categories")
-            safe_insert(recipe.additional_categories, category_name)
+            -- Factorio 2.1: the additional categories are the entries after categories[1] (main)
+            recipe.categories = recipe.categories or { "crafting" }
+            safe_insert(recipe.categories, category_name)
           end
-        elseif recipe.additional_categories then
-          for i, category in pairs(recipe.additional_categories) do
-            if category == category_name then
-              table.remove(recipe.additional_categories, i)
+        elseif recipe.categories then
+          for i, category in ipairs(recipe.categories) do
+            if i > 1 and category == category_name then
+              table.remove(recipe.categories, i)
               break
             end
           end

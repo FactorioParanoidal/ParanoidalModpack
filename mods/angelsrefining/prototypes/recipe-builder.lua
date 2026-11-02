@@ -469,6 +469,10 @@ local function p_copy(patch)
       name = name,
     }
     p_result_merge(result, base, patch)
+    -- Factorio 2.1: recipes only have categories. A patch may still give `category` (Angels API, 2.0
+    -- meaning: the main category, categories[1]; the additional ones are kept) or `categories` (whole list).
+    local main_category = patch.category
+    patch.category = nil
     for k, v in pairs(base) do
       if not p_blocked[k] then
         result[k] = p_merge(base[k], patch[k], k)
@@ -479,6 +483,15 @@ local function p_copy(patch)
       if not p_blocked[k] then
         result[k] = patch[k]
       end
+    end
+    if main_category then
+      local list = { main_category }
+      for i, other in ipairs(result.categories or {}) do
+        if i > 1 and other ~= main_category then
+          table.insert(list, other)
+        end
+      end
+      result.categories = list
     end
   end
   return result
