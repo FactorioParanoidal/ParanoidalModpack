@@ -1,3 +1,11 @@
+-- Factorio 2.1: a science pack can be of any item type (vanilla packs are plain items, mod packs may stay tools).
+local function is_science_pack(name)
+  for item_type in pairs(defines.prototypes.item) do
+    if data.raw[item_type] and data.raw[item_type][name] then return true end
+  end
+  return false
+end
+
 -- Technologies (loaded from data-updates.lua). The tree starts in the chemical (blue) science
 -- era and uses military science packs throughout:
 --
@@ -49,7 +57,7 @@ local function science(own, prerequisites)
   end
   local packs = {}
   for _, pack in pairs(PACK_ORDER) do
-    if wanted[pack] and data.raw.tool[pack] then
+    if wanted[pack] and is_science_pack(pack) then
       packs[#packs + 1] = {pack, 1}
       wanted[pack] = nil
     end
@@ -58,7 +66,7 @@ local function science(own, prerequisites)
   for pack in pairs(wanted) do rest[#rest + 1] = pack end
   table.sort(rest)
   for _, pack in pairs(rest) do
-    if data.raw.tool[pack] then packs[#packs + 1] = {pack, 1} end
+    if is_science_pack(pack) then packs[#packs + 1] = {pack, 1} end
   end
   return packs
 end

@@ -89,6 +89,10 @@ Date: 2026.10.25
     - Removed the unused stdlib, 30log, robolib, config, migrations, WARP.md, QRF_Testing_Commands.txt, .gitignore, unused images (low resolution sprites, patrol pole, settings module, deployable item icons, settings signals, pick-up tool), and prototype fields that 2.0 does not read (destroy_action, idle, icon_mipmaps, is_deployer, item_slot_count, base_area/base_level, stackable, hr_version, ammo_type category).
     - ai_settings use the 2.0 field destroy_when_commands_fail.
     - Remote function credit_kill(droid): another mod reports a kill by a droid that the death filter of this mod does not see (units of other hostile forces, such as the replicator droids of Robot Army: Replicator Citadel); the kill counts for the ranks.
+  Compatibility:
+    - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
+    - Paranoidal port to Factorio 2.1: assembler pipe pictures are taken from __base__/prototypes/entity/assembler-pictures.lua (2.1 removed the global assembler2pipepictures/assembler3pipepictures and assemblerpipes.lua).
+    - Paranoidal port to Factorio 2.1: science pack checks accept every item type (2.1 vanilla science packs are plain items, mod packs may stay tools).
 ---------------------------------------------------------------------------------------------------
 Version: 2.4.27
 Date: 2025.10.06
