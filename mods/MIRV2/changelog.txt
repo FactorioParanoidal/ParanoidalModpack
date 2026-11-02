@@ -8,3 +8,4 @@ Date: 15. 10. 2026
     - thumbnail.png is redrawn at 144x144 after the old smaller picture: text and simple shapes are drawn again, the rest is resampled and sharpened.
   Compatibility:
     - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
+    - Paranoidal port to Factorio 2.1: recipes use categories (RecipePrototype::category and additional_categories were merged into categories; the first entry keeps the meaning of the former main category, a changed main category keeps the other entries).

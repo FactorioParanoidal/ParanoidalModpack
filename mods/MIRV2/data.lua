@@ -26,7 +26,7 @@ data:extend({
     name = "mirv-rocket",
     energy_required = 10,
     enabled = false,
-    category = "crafting",
+    categories = {"crafting"},
     ingredients =
     {
       {type = "item", name = "atomic-bomb", amount = 20},
