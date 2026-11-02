@@ -11,12 +11,11 @@ local pump_pictures = {
 -- they used to depend on load order (the Bob pump at data-updates time and only the vanilla qualities).
 -- These are the values the modpack had: 100 units per tick for a normal factory port, and fluid flow
 -- raised from 100 to 250 units per tick (a legendary port). Higher qualities are capped by max_fluid_flow.
+-- Factorio 2.1 removed the utility constant max_fluid_flow (2.0: this mod raised it to 250 for the whole game);
+-- the limit is derived from the fluid box volume, which is 250 for the port pumps below.
 local fluid_port = require("prototypes.fluid-port")
 local pumping_speed = fluid_port.pumping_speed
 local pumping_speed_with_quality = fluid_port.max_fluid_flow
-
--- Multiply the max fluid flow to allow factorissimo pumps to transfer at high speed.
-data.raw["utility-constants"]["default"].max_fluid_flow = math.max(data.raw["utility-constants"]["default"].max_fluid_flow or 0, pumping_speed_with_quality)
 
 data:extend {{
     type = "pump",
@@ -30,10 +29,9 @@ data:extend {{
     hidden = true,
     fluid_box = {
         volume = pumping_speed_with_quality,
-        hide_connection_info = true,
         pipe_connections = {
-            {position = {0, 0}, direction = defines.direction.north, flow_direction = "input",  connection_type = "normal"},
-            {position = {0, 0}, direction = defines.direction.south, flow_direction = "output", connection_type = "linked", linked_connection_id = 0},
+            {position = {0, 0}, direction = defines.direction.north, flow_direction = "input",  connection_type = "normal", hide_connection_info = true},
+            {position = {0, 0}, direction = defines.direction.south, flow_direction = "output", connection_type = "linked", linked_connection_id = 0, hide_connection_info = true},
         },
     },
     energy_source = {
@@ -61,10 +59,9 @@ data:extend {{
     hidden = true,
     fluid_box = {
         volume = pumping_speed_with_quality,
-        hide_connection_info = true,
         pipe_connections = {
-            {position = {0, 0}, direction = defines.direction.north, flow_direction = "output", connection_type = "normal"},
-            {position = {0, 0}, direction = defines.direction.south, flow_direction = "input",  connection_type = "linked", linked_connection_id = 0},
+            {position = {0, 0}, direction = defines.direction.north, flow_direction = "output", connection_type = "normal", hide_connection_info = true},
+            {position = {0, 0}, direction = defines.direction.south, flow_direction = "input",  connection_type = "linked", linked_connection_id = 0, hide_connection_info = true},
         },
     },
     integration_patch = table.deepcopy(pump_pictures),
