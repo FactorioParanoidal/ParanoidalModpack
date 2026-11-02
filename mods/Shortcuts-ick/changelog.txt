@@ -5,6 +5,8 @@ Date: 15.11.2024
     - Fixed breaking changes from base game version 2.0.18 related to new shortcut icons (thanks to hankthesnake and yavis1231).
     - Fixed that it was possible to set "zoom out of world limit" to very low values that didn't actually work anymore.
     - Fixed an error when closing a GUI of an entity with grid when the "Vehicle: Enable logistics while moving" setting was disabled (thanks to Factory077 and Hellpest).
+  Compatibility:
+    - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
 
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.6
