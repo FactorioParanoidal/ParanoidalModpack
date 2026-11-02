@@ -4,6 +4,6 @@
 	"version":"1.5.10",
 	"title":"Enhanced Map Colors 2.0 Reupload",
 	"description":"Changes the map/minimap color of Belts, Power sources, Pipes, Power Poles, Radar, Roboports and more for better contrast. Aids map readability. Mod originally by osldgoth. Reuploaded for 2.0.",
-	"factorio_version": "2.0",
+	"factorio_version": "2.1",
 	"dependencies": ["base >= 0.13.00", "? space-age"]
 }

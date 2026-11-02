@@ -3,6 +3,8 @@ Version: 1.5.10
 Date: 23/6/2026
   Changes:
     - fix map colors not updating on addition to saves without this mod
+  Compatibility:
+    - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
 ---------------------------------------------------------------------------------------------------
 Version: 1.5.9
 Date: 18/11/2024
