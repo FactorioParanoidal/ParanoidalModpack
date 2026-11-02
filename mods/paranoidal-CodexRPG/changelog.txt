@@ -25,6 +25,7 @@ Date: 2026-10-29
     - ru: skill names in sentence case, the broken robot hint and the "trash slots" typo fixed, shorter skill hints, the player tag tooltip translated.
   Bugfixes:
     - Milestone chat messages show icons only: their [item=...]-like tags are printed as [img=...], so the chat no longer adds "[Virtual signal: Check mark]"-style names after them.
+    - Milestone chat messages omit the player separator when the player's name is empty.
 ---------------------------------------------------------------------------------------------------
 Version: 9.0.4
   Features:

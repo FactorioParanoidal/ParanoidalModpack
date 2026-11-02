@@ -1295,7 +1295,8 @@ function G.announce(force, id, rec)
 		local setting = settings.get_player_settings(player)["charxpmod_milestone_messages"]
 		if not setting or setting.value then
 			local text, time = milestone_text(id, rec), (ms_time(rec))
-			local msg = rec.player and L("announce-by", text, time, rec.player) or L("announce", text, time)
+			local msg = L("announce", text, time)
+			if rec.player and rec.player ~= "" then msg = L("announce-by", text, time, rec.player) end
 			player.print(chat_icons({"", "[virtual-signal=signal-check] ", msg}), {color = ORANGE})
 		end
 	end
