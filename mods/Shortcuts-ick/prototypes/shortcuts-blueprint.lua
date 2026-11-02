@@ -29,7 +29,7 @@ if settings.startup["tree-killer"].value then
 		tree_killer.localised_name = {"", {"item-group-name.environment"}, " ", {"item-name.deconstruction-planner"}}
 		tree_killer.flags = {"only-in-cursor", "spawnable"}
 		tree_killer.hidden = true
-		tree_killer.entity_filter_count = 255
+		-- Factorio 2.1: deconstruction planners have dynamic filter counts (entity_filter_count was removed)
 
 	data:extend({
 		tree_killer,

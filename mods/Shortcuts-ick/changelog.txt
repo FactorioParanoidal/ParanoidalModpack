@@ -8,6 +8,7 @@ Date: 15.11.2024
   Compatibility:
     - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
     - Paranoidal port to Factorio 2.1: selection modes with blueprint/deconstruct also list any-entity and any-tile, which 2.0 implied and 2.1 no longer does.
+    - Factorio 2.1: the environment deconstruction planner no longer sets entity_filter_count (removed in 2.1, filter counts are dynamic).
 
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.6
