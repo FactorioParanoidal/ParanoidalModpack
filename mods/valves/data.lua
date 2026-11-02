@@ -127,10 +127,9 @@ for _, valve in ipairs(require("config")) do
             volume = 400,
             pipe_covers = pipecoverspictures(),
             pipe_connections = {
-                { direction = defines.direction.south, position = { 0, 0 }, flow_direction = "output" },
-                { direction = defines.direction.north, position = { 0, 0 }, flow_direction = "input-output" },
+                { direction = defines.direction.south, position = { 0, 0 }, flow_direction = "output", hide_connection_info = true },
+                { direction = defines.direction.north, position = { 0, 0 }, flow_direction = "input-output", hide_connection_info = true },
             },
-            hide_connection_info = true,
         },
         flow_rate = flow_rate, -- capped in data-final-fixes
         impact_category = "metal",
