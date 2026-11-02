@@ -38,7 +38,7 @@ end
 if not classicMode then
 	local recipe = data.raw["recipe"]["space-oxygen-barrel"]
 	if recipe then
-		recipe.category = "crafting-with-fluid"
+		recipe.categories = {"crafting-with-fluid"} -- Factorio 2.1: category -> categories
 		for _, diff in pairs({ recipe }) do
 			if diff then
 				if diff.ingredients then

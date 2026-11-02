@@ -31,7 +31,7 @@ local SpaceXRecipes = {
 for _, r in pairs(SpaceXRecipes) do
 	local recipe = data.raw["recipe"][r]
 	if recipe then
-		recipe.category = "research"
+		recipe.categories = {"research"} -- Factorio 2.1: category -> categories
 	end
 end
 
