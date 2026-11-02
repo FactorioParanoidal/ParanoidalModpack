@@ -1,6 +1,7 @@
 local shared = require("prototypes.shared")
 local recipe = require("prototypes.recipe-util")
 local specs = require("prototypes.tank-specs")
+local util = require("util")
 
 -- Graphics, sounds and triggers come from the 2.0 tank; all gameplay fields are set explicitly below.
 local base_tank = data.raw.car["tank"]
@@ -50,7 +51,8 @@ local function entity(spec, tier, values)
     tank.drawing_box_vertical_extension = base_tank.drawing_box_vertical_extension * spec.scale
   end
   tank.effectivity = values.effectivity
-  tank.braking_power = values.braking_power
+  -- Factorio 2.1: VehiclePrototype::braking_power -> braking_force (power in W / 60, util.parse_energy of "kW")
+  tank.braking_force = util.parse_energy(values.braking_power)
   tank.consumption = values.consumption
   tank.energy_source = {
     type = "burner",
@@ -60,7 +62,7 @@ local function entity(spec, tier, values)
     smoke = table.deepcopy(base_tank.energy_source.smoke)
   }
   tank.terrain_friction_modifier = spec.terrain_friction_modifier
-  tank.friction = 0.002
+  tank.friction_force = 0.002 -- Factorio 2.1: VehiclePrototype::friction -> friction_force
   tank.weight = values.weight
   tank.turret_rotation_speed = spec.turret_rotation_speed
   tank.rotation_speed = spec.rotation_speed

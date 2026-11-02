@@ -7,3 +7,4 @@ Version: 1.0.0
   Compatibility:
     - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
     - Paranoidal port to Factorio 2.1: recipes use categories (RecipePrototype::category and additional_categories were merged into categories; the first entry keeps the meaning of the former main category, a changed main category keeps the other entries).
+    - Paranoidal port to Factorio 2.1: each tank has braking_force from its own braking power (W / 60) and friction_force (VehiclePrototype::braking_power and friction were removed; the copies of the 2.1 tank kept its braking_force, so every tank braked like the vanilla tank).
