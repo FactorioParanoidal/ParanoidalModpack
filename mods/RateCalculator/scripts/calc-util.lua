@@ -258,7 +258,8 @@ function calc_util.process_crafter(set, entity, invert, emissions_per_second)
     local extra_count_fraction_contribution = product.extra_count_fraction or 0
     local max_amount = product.amount_max or product.amount
     local min_amount = product.amount_min or product.amount
-    local expected_amount = (product.probability or 1) * 0.5 * (max_amount + min_amount) + extra_count_fraction_contribution
+    -- Factorio 2.1: independent_probability (was probability) times the shared_probability range
+    local expected_amount = ((product.independent_probability or product.probability or 1) * (product.shared_probability and (product.shared_probability.max - product.shared_probability.min) or 1)) * 0.5 * (max_amount + min_amount) + extra_count_fraction_contribution
     local productivity_base_complement = math.min(expected_amount, product.ignored_by_productivity or 0)
     local productivity_base = expected_amount - productivity_base_complement
     -- stylua: ignore end
@@ -539,7 +540,7 @@ function calc_util.process_mining_drill(set, entity, invert)
         type = "fluid",
         name = required_fluid,
         amount = mineable_properties.fluid_amount / 10, -- Ten mining operations per fluid consumed
-        probability = 1,
+        independent_probability = 1,
       }
     end
 
@@ -585,7 +586,7 @@ function calc_util.process_mining_drill(set, entity, invert)
       end
 
       -- Account for probability
-      local adjusted_product_per_second = product_per_second * (product.probability or 1)
+      local adjusted_product_per_second = product_per_second * ((product.independent_probability or product.probability or 1) * (product.shared_probability and (product.shared_probability.max - product.shared_probability.min) or 1)) -- Factorio 2.1
 
       -- Add to outputs table
       calc_util.add_rate(
