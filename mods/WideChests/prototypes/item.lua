@@ -14,13 +14,13 @@ data:extend({
 		select = {
 			border_color = {0, 0, 1},
 			cursor_box_type = 'entity',
-			mode = 'deconstruct',
+			mode = { 'deconstruct', 'any-entity', 'any-tile' }, -- Factorio 2.1: blueprint/deconstruct no longer imply any-entity/any-tile (2.0 behaviour kept)
 			entity_filters = {}
 		},
 		alt_select = {
 			border_color = {1, 0, 0},
 			cursor_box_type = 'entity',
-			mode = 'deconstruct',
+			mode = { 'deconstruct', 'any-entity', 'any-tile' }, -- Factorio 2.1: blueprint/deconstruct no longer imply any-entity/any-tile (2.0 behaviour kept)
 			entity_filters = {}
 		}
 	}

@@ -131,7 +131,7 @@ local function create_entity(entity_data, loc_name, subgroup, width, height, seg
 			collision_box = { { -width / 2 + 0.15, -height / 2 + 0.15 }, { width / 2 - 0.15, height / 2 - 0.15 } },
 			selection_box = { { -width / 2, -height / 2 }, { width / 2, height / 2 } },
 			subgroup = subgroup,
-			circuit_connector = connector,
+			circuit_connector = { connector }, -- Factorio 2.1: ContainerPrototype::circuit_connector is an array
 			circuit_wire_max_distance = default_circuit_wire_max_distance + math.min(width, height) - 1,
 			hidden_in_factoriopedia = true,
 			surface_conditions = base_chest.surface_conditions
