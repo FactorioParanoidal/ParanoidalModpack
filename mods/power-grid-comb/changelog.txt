@@ -11,6 +11,8 @@ Date: 25. 02. 2025
     - Improved algorithm for horiztonal and vertical matches
   Info:
     - Updated by @AckEmma, Optimizations by @CodeGreen
+  Compatibility:
+    - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
 ---------------------------------------------------------------------------------------------------
 Version: 1.1.0
 Date: 13. 12. 2020
