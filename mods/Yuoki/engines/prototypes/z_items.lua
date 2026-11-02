@@ -1103,7 +1103,7 @@ data:extend({
 		stack_size = 150,
 		default_request_amount = 25,
 		fuel_value = "80MJ",
-		fuel_category = "chemical",
+		fuel_categories = {"chemical"},
 	},
 	--ID:144 cellulose
 	{
@@ -1129,7 +1129,7 @@ data:extend({
 		stack_size = 800,
 		default_request_amount = 100,
 		fuel_value = "2MJ",
-		fuel_category = "chemical",
+		fuel_categories = {"chemical"},
 	},
 	--ID:142 sugar
 	{

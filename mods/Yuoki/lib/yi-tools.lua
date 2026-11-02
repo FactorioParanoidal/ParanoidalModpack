@@ -181,8 +181,9 @@ function yi.lib.item.result_simple(inputs)
 			return nil
 		end
 
-		if inputs.probability then
-			item.probability = inputs.probability
+		-- Factorio 2.1: product probability -> independent_probability (the 2.0 name is accepted as input)
+		if inputs.independent_probability or inputs.probability then
+			item.independent_probability = inputs.independent_probability or inputs.probability
 		end
 
 		if inputs.type then
@@ -271,8 +272,8 @@ function yi.lib.item.combine(item1_in, item2_in)
 			item.amount_max = item1.amount_max + item2.amount_max
 		end
 
-		if item1.probability and item2.probability then
-			item.probability = (item1.probability + item2.probability) / 2
+		if item1.independent_probability and item2.independent_probability then
+			item.independent_probability = (item1.independent_probability + item2.independent_probability) / 2
 		end
 
 		item.ignored_by_productivity = item1.ignored_by_productivity or item2.ignored_by_productivity

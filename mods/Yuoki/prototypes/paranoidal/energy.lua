@@ -161,7 +161,7 @@ scrubber.energy_source.emissions_per_minute = { pollution = -150 }
 scrubber.fast_replaceable_group = nil
 P.ingredients("y-rmvpol", { { "water", 60, "fluid" }, { "y-mechanical-force", 0.4, "fluid" } })
 local mixed_fuel = P.entity("item", "y-mixed-fuel")
-mixed_fuel.fuel_category, mixed_fuel.fuel_value = "chemical", "4MJ"
+mixed_fuel.fuel_categories, mixed_fuel.fuel_value = { "chemical" }, "4MJ" -- Factorio 2.1: fuel_categories
 -- H-Metal forged with MF in an assembler: less steel and coal per H-Metal than the plain recipe.
 local forged = table.deepcopy(P.recipe("yie_hard_metals"))
 forged.name = "yie_hard_metals_mf"

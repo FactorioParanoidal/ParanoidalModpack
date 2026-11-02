@@ -82,7 +82,7 @@ data:extend({
 		order = "9",
 		stack_size = 200,
 		fuel_value = "600MJ",
-		fuel_category = "chemical",
+		fuel_categories = {"chemical"},
 	},
 	--ID:402
 	{
@@ -95,7 +95,7 @@ data:extend({
 		order = "1",
 		stack_size = 150,
 		fuel_value = "16MJ",
-		fuel_category = "chemical",
+		fuel_categories = {"chemical"},
 		place_result = "y_wood_wall",
 	},
 	--ID:400
@@ -109,7 +109,7 @@ data:extend({
 		order = "8",
 		stack_size = 200,
 		fuel_value = "7GJ",
-		fuel_category = "yfusion",
+		fuel_categories = {"yfusion"},
 	},
 	--ID:399
 	{
@@ -144,7 +144,7 @@ data:extend({
 		order = "8",
 		stack_size = 400,
 		fuel_value = "1GJ",
-		fuel_category = "yfusion",
+		fuel_categories = {"yfusion"},
 	},
 	--ID:396
 	{
@@ -815,7 +815,7 @@ data:extend({
 		order = "a",
 		stack_size = 100,
 		fuel_value = "3MJ",
-		fuel_category = "chemical",
+		fuel_categories = {"chemical"},
 	},
 	--ID:162
 	{
@@ -876,6 +876,6 @@ data:extend({
 		order = "a",
 		stack_size = 50,
 		fuel_value = "3GJ",
-		fuel_category = "chemical",
+		fuel_categories = {"chemical"},
 	},
 })

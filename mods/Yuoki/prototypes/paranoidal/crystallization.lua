@@ -90,7 +90,7 @@ if mods["angelsrefining"] then
 				type = "item",
 				name = "y-crystal-cnd",
 				amount = 1,
-				probability = 0.9,
+				independent_probability = 0.9,
 				ignored_by_productivity = 1,
 				ignored_by_stats = 1,
 			},

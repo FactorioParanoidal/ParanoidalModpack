@@ -91,7 +91,7 @@ data:extend({
 		icon = "__Yuoki__/graphics/icons/reactor-fuel.png",
 		subgroup = "y-fuel",
 		stack_size = 335,
-		fuel_category = "yfusion",
+		fuel_categories = {"yfusion"},
 		fuel_value = "300MJ",
 	},
 	-- infused dry-mud
@@ -102,7 +102,7 @@ data:extend({
 		icon = "__Yuoki__/graphics/icons/fuel_cell_d_icon.png",
 		subgroup = "y-fuel",
 		stack_size = 625,
-		fuel_category = "chemical",
+		fuel_categories = {"chemical"},
 		fuel_value = "80MJ",
 	},
 })

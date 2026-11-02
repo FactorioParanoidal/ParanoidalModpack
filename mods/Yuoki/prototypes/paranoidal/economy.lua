@@ -5,8 +5,8 @@ local P = require("prototypes.paranoidal.lib")
 --    1 UC-A2 -> 3 GJ (30 MJ per ore). The split MOX fuel (10 x 600 MJ from one 7 GJ MOX cell) burned in any boiler,
 --    furnace or vehicle; now it is reactor fuel like the other MOX cells.
 local infused = P.entity("item", "y-infused-uca2")
-infused.fuel_value, infused.fuel_category, infused.burnt_result = nil, nil, nil
-P.entity("item", "y_mox2fuelsplited").fuel_category = "yfusion"
+infused.fuel_value, infused.fuel_categories, infused.burnt_result = nil, nil, nil -- Factorio 2.1: fuel_categories
+P.entity("item", "y_mox2fuelsplited").fuel_categories = {"yfusion"}
 
 -- 2. Quantrinum is not bought for one meat package in 3 s (it bypassed the alien quantrinum chain): 20 packages, 30 s.
 P.ingredients("ye_trademeat2", { { "ye_package_c_meat", 20 } })
