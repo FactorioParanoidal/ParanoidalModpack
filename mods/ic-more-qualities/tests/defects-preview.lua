@@ -55,7 +55,7 @@ local raw = {
     lab = {lab = {inputs = {"automation-science-pack"}}},
     resource = {["iron-ore"] = {minable = {results = {{type = "item", name = "iron-ore"}}}}},
     recipe = {
-        gear = {category = "crafting", ingredients = {{type = "item", name = "iron-plate", amount = 2}},
+        gear = {categories = {"crafting"}, ingredients = {{type = "item", name = "iron-plate", amount = 2}},
             results = {{type = "item", name = "iron-gear-wheel", amount = 1}}},
         assembler = {ingredients = {{type = "item", name = "iron-gear-wheel", amount = 5}},
             results = {{type = "item", name = "assembling-machine-1", amount = 1}}},
@@ -63,7 +63,7 @@ local raw = {
             {type = "item", name = "iron-gear-wheel", amount = 1}}},
         sorting = {results = {{type = "item", name = "iron-ore", amount = 1}}},
         fluid = {results = {{type = "fluid", name = "water", amount = 10}}},
-        ["gear-recycling"] = {category = "recycling", results = {{type = "item", name = "iron-plate", amount = 1}}},
+        ["gear-recycling"] = {categories = {"recycling"}, results = {{type = "item", name = "iron-plate", amount = 1}}},
         science = {results = {{type = "item", name = "automation-science-pack", amount = 1}}, allow_quality = true},
         -- Green-science gate (2026-10-18): unlocked only behind logistic-science-pack -> no defects; an item
         -- with a recipe available from the start keeps them; a hidden technology unlocks nothing.
@@ -71,16 +71,16 @@ local raw = {
         ["green-building-old"] = {enabled = false, results = {{type = "item", name = "green-building", amount = 1}}},
         ["both-building"] = {enabled = false, results = {{type = "item", name = "both-building", amount = 1}}},
         ["both-building-early"] = {results = {{type = "item", name = "both-building", amount = 1}}},
-        ["green-building-recycling"] = {category = "recycling", results = {{type = "item", name = "both-building", amount = 1}}},
+        ["green-building-recycling"] = {categories = {"recycling"}, results = {{type = "item", name = "both-building", amount = 1}}},
         -- Recycling floor (2026-10-19): only recycling of an item that can be defective is slowed.
-        ["assembler-recycling"] = {category = "recycling", energy_required = 0.03125,
+        ["assembler-recycling"] = {categories = {"recycling"}, energy_required = 0.03125,
             ingredients = {{type = "item", name = "assembling-machine-1", amount = 1}},
             results = {{type = "item", name = "iron-gear-wheel", amount = 1}}},
-        ["pole-recycling"] = {category = "recycling", energy_required = 0.5,
+        ["pole-recycling"] = {categories = {"recycling"}, energy_required = 0.5,
             ingredients = {{type = "item", name = "small-electric-pole", amount = 1}}, results = {}},
-        ["green-recycling"] = {category = "recycling", energy_required = 0.00625,
+        ["green-recycling"] = {categories = {"recycling"}, energy_required = 0.00625,
             ingredients = {{type = "item", name = "green-building", amount = 1}}, results = {}},
-        ["plate-recycling"] = {category = "recycling",
+        ["plate-recycling"] = {categories = {"recycling"},
             ingredients = {{type = "item", name = "iron-plate", amount = 1}}, results = {}},
     },
     ["mining-drill"] = {

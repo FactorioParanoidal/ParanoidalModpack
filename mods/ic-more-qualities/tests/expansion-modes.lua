@@ -51,7 +51,7 @@ entity_prototypes["ic-mode-beacon"] = {name = "ic-mode-beacon"}
 prototypes = {
     entity = entity_prototypes,
     quality = Q,
-    recipe = {chest = {name = "chest", category = "crafting"}, plate = {name = "plate", category = "smelting"}},
+    recipe = {chest = {name = "chest", categories = {"crafting"}}, plate = {name = "plate", categories = {"smelting"}}},
     mod_data = {["ic-quality-expansion"] = {data = {no_mode = {lamp = true}}}},
     get_entity_filtered = function()
         local result = {}
@@ -81,7 +81,7 @@ local function new_machine(name, position, state)
     for k, v in pairs(state or {}) do e[k] = v end
     e.get_recipe = function()
         if not e.recipe then return nil end
-        return {name = e.recipe, category = prototypes.recipe[e.recipe] and prototypes.recipe[e.recipe].category}, e.recipe_quality
+        return {name = e.recipe, categories = prototypes.recipe[e.recipe] and prototypes.recipe[e.recipe].categories}, e.recipe_quality
     end
     e.is_crafting = function() return e.crafting end
     e.to_be_deconstructed = function() return e.deconstruct end

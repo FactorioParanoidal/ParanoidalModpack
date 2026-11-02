@@ -42,16 +42,16 @@ local raw = {
         reactor = {enabled = false, results = {{type = "item", name = "reactor", amount = 1}}},
         inserter = {results = {{type = "item", name = "inserter", amount = 1}}},
         gear = {results = {{type = "item", name = "iron-gear-wheel", amount = 1}}},
-        ["gear-recycling"] = {category = "recycling", results = {{type = "item", name = "iron-gear-wheel", amount = 1}}},
+        ["gear-recycling"] = {categories = {"recycling"}, results = {{type = "item", name = "iron-gear-wheel", amount = 1}}},
         white = {allow_quality = false, results = {{type = "item", name = "iron-gear-wheel", amount = 1}}},
         ["ic-refine-workshop"] = {enabled = false, ingredients = {}, results = {}},
         ["ic-control-post"] = {enabled = false, ingredients = {}, results = {}},
-        ["lamp-burning"] = {category = "lamp-burning", hidden = true, ingredients = {}, results = {}},
-        separation = {category = "separation", results = {{type = "fluid", name = "gas", amount = 10}}},
-        ["void-gas"] = {category = "void", results = {{type = "item", name = "void", amount = 1, probability = 0}}},
-        barrel = {category = "pump", additional_categories = {"mixed"},
+        ["lamp-burning"] = {categories = {"lamp-burning"}, hidden = true, ingredients = {}, results = {}},
+        separation = {categories = {"separation"}, results = {{type = "fluid", name = "gas", amount = 10}}},
+        ["void-gas"] = {categories = {"void"}, results = {{type = "item", name = "void", amount = 1, independent_probability = 0}}},
+        barrel = {categories = {"pump", "mixed"},
             results = {{type = "fluid", name = "water", amount = 50}, {type = "item", name = "barrel", amount_min = 0, amount_max = 1}}},
-        stage = {category = "stage", results = {{type = "item", name = "sand", amount = 100}}},
+        stage = {categories = {"stage"}, results = {{type = "item", name = "sand", amount = 100}}},
     },
     item = {
         ["assembling-machine-1"] = {place_result = "assembling-machine-1", subgroup = "production-machine", order = "a"},
@@ -120,7 +120,7 @@ assert(ingredients["assembling-machine-1"] == 1 and ingredients["repair-pack"] =
 local effects = raw.technology["ic-defect-control-1"].effects
 assert(effects[1].recipe == "ic-refine-workshop" and effects[2].recipe == "ic-control-post" and effects[3].type == "nothing")
 -- Repair packs are the workshop's resource.
-assert(raw["repair-tool"]["repair-pack"].fuel_category == "ic-repair-resource")
+assert(raw["repair-tool"]["repair-pack"].fuel_categories[1] == "ic-repair-resource")
 assert(raw["repair-tool"]["repair-pack"].fuel_value == "300kJ" and raw["repair-tool"]["bob-repair-pack-5"].fuel_value == "5000kJ")
 
 -- Refinement recipes and costs.
@@ -133,7 +133,7 @@ end
 for _, name in ipairs({"assembling-machine-1", "inserter", "reactor", "automation-science-pack",
     "ic-refine-workshop", "ic-control-post", "light-armor", "heavy-armor"}) do
     local recipe = assert(recipes["ic-refine-item-" .. name], name)
-    assert(recipe.category == "ic-refine" and recipe.hidden and recipe.hide_from_stats and recipe.allow_quality)
+    assert(recipe.categories[1] == "ic-refine" and #recipe.categories == 1 and recipe.hidden and recipe.hide_from_stats and recipe.allow_quality)
     assert(recipe.ingredients[1].name == name and recipe.results[1].name == name and recipe.results[1].amount == 1)
     assert(not recipe.allow_productivity and recipe.enabled)
 end

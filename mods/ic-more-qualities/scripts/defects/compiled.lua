@@ -16,9 +16,31 @@ local classify = require("scripts.defects.classify")
 local M = {}
 
 local recipes, categories, machines = {}, {}, {}
+-- Factorio 2.1: recipe names per crafting category, built once from LuaRecipePrototype::categories (a
+-- recipe may have several categories; the 2.0 code used the "category" recipe filter on the single
+-- main category).
+local by_category = nil
 
 function M.reset()
     recipes, categories, machines = {}, {}, {}
+    by_category = nil
+end
+
+local function recipes_of(name)
+    if not by_category then
+        by_category = {}
+        for recipe_name, prototype in pairs(prototypes.recipe) do
+            for _, category_name in pairs(prototype.categories) do
+                local list = by_category[category_name]
+                if not list then
+                    list = {}
+                    by_category[category_name] = list
+                end
+                list[recipe_name] = prototype
+            end
+        end
+    end
+    return by_category[name] or {}
 end
 
 -- Per recipe name: {energy, recycling, any_item, all_finished, exempt, roll, defect_input, normal_result,
@@ -26,8 +48,7 @@ end
 -- watched: the recipe can ever need a decision (see the header).
 local function build_recipe(prototype)
     local finished, no_defect = eligibility.finished(), eligibility.no_defect()
-    local category = prototype.category
-    local info = {energy = prototype.energy, category = category, recycling = classify.recycling[category] == true}
+    local info = {energy = prototype.energy, recycling = classify.is_recycling(prototype)}
     local any_item, all_finished, exempt = false, true, false
     for _, product in pairs(prototype.products) do
         if product.type == "item" then
@@ -70,8 +91,7 @@ local function category(name)
     local info = categories[name]
     if not info then
         info = {watched = false}
-        local found = prototypes.get_recipe_filtered({{filter = "category", category = name}})
-        for recipe_name, prototype in pairs(found) do
+        for recipe_name, prototype in pairs(recipes_of(name)) do
             local recipe = recipes[recipe_name]
             if recipe == nil then
                 recipe = build_recipe(prototype)

@@ -11,10 +11,34 @@ M.item_types = {
 M.modes = {materials = true, ["intermediate-ingredients"] = true, ["all-ingredients"] = true}
 M.recycling = {recycling = true, ["recycling-or-hand-crafting"] = true}
 
+-- Factorio 2.1: a recipe has a list of categories (`categories`, default {"crafting"}); the 2.0
+-- `category`/`additional_categories` were removed. Data stage (prototype table) and runtime
+-- (LuaRecipePrototype) alike.
+local default_categories = {"crafting"}
+function M.categories(recipe)
+    return recipe.categories or default_categories
+end
+
+-- True when any category of the recipe is a recycling category (exact names of M.recycling).
+function M.is_recycling(recipe)
+    for _, category in pairs(M.categories(recipe)) do
+        if M.recycling[category] then return true end
+    end
+    return false
+end
+
+-- True when any category of the recipe is in `set` or contains the plain text `fragment`.
+function M.has_category(recipe, set, fragment)
+    for _, category in pairs(M.categories(recipe)) do
+        if (set and set[category]) or (fragment and category:find(fragment, 1, true)) then return true end
+    end
+    return false
+end
+
 -- True for a recycling recipe with an item ingredient that can be defective (finished, not exempt).
 -- Data stage (prototype table) and runtime (LuaRecipePrototype) alike.
 function M.watched_recycling(recipe, finished, no_defect)
-    if not M.recycling[recipe.category or "crafting"] then return false end
+    if not M.is_recycling(recipe) then return false end
     for _, ingredient in pairs(recipe.ingredients or {}) do
         local name = type(ingredient) == "table" and (ingredient.name or ingredient[1])
         if name and (ingredient.type or "item") == "item" and finished[name] and not no_defect[name] then
@@ -101,7 +125,7 @@ function M.classify(raw, mode)
     while changed do
         changed = false
         for _, recipe in pairs(raw.recipe or {}) do
-            if not M.recycling[recipe.category or "crafting"] then
+            if not M.is_recycling(recipe) then
                 local consumer = mode == "all-ingredients"
                 if not consumer then
                     for _, product in ipairs(M.products(recipe)) do

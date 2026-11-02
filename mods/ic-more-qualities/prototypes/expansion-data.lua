@@ -106,7 +106,7 @@ data:extend({
             {icon = G .. "icons/signal-background-workshop.png", icon_size = 64},
             {icon = BASE_SIGNAL .. "signal-lightning.png", icon_size = 64, scale = 0.32},
         },
-        fuel_category = names.repair_fuel, fuel_value = "1EJ", stack_size = 1,
+        fuel_categories = {names.repair_fuel}, fuel_value = "1EJ", stack_size = 1,
         flags = {"not-stackable", "hide-from-fuel-tooltip"},
     },
     {
@@ -182,7 +182,8 @@ data:extend({
         quality_affects_inventory_size = false,
         picture = {layers = machine_layers(G .. "entity/control-post/control-post.png", false)},
         circuit_wire_max_distance = 9,
-        circuit_connector = connector() and connector()[1],
+        -- Factorio 2.1: a container takes an array of direction_count (1) definitions.
+        circuit_connector = connector() and {connector()[1]},
     },
 
     -- Hidden emitter of the status signals, wired to the workshop/post by script.

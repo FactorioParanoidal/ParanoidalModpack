@@ -16,28 +16,28 @@ log = function() end
 local finished = {chest = true, belt = true, assembler = true, pack = true}
 local no_defect = {belt = true}
 local recipe_prototypes = {
-    chest = {name = "chest", energy = 0.5, category = "crafting", products = {{type = "item", name = "chest"}},
+    chest = {name = "chest", energy = 0.5, categories = {"crafting"}, products = {{type = "item", name = "chest"}},
         ingredients = {{type = "item", name = "plate", amount = 8}}},
-    belt = {name = "belt", energy = 0.5, category = "crafting", products = {{type = "item", name = "belt"}},
+    belt = {name = "belt", energy = 0.5, categories = {"crafting"}, products = {{type = "item", name = "belt"}},
         ingredients = {{type = "item", name = "plate", amount = 1}}},
-    gear = {name = "gear", energy = 0.5, category = "crafting", products = {{type = "item", name = "gear"}},
+    gear = {name = "gear", energy = 0.5, categories = {"crafting"}, products = {{type = "item", name = "gear"}},
         ingredients = {{type = "item", name = "plate", amount = 2}}},
-    lamp_frame = {name = "lamp_frame", energy = 1, category = "crafting", products = {{type = "item", name = "frame"}},
+    lamp_frame = {name = "lamp_frame", energy = 1, categories = {"crafting"}, products = {{type = "item", name = "frame"}},
         ingredients = {{type = "item", name = "chest", amount = 1}}},
-    plate = {name = "plate", energy = 3.2, category = "smelting", products = {{type = "item", name = "plate"}},
+    plate = {name = "plate", energy = 3.2, categories = {"smelting"}, products = {{type = "item", name = "plate"}},
         ingredients = {{type = "item", name = "ore", amount = 1}}},
-    acid = {name = "acid", energy = 1, category = "chemistry", products = {{type = "fluid", name = "acid"}},
+    acid = {name = "acid", energy = 1, categories = {"chemistry"}, products = {{type = "fluid", name = "acid"}},
         ingredients = {{type = "item", name = "chest", amount = 1}}},
-    ["chest-recycling"] = {name = "chest-recycling", energy = 0.0625, category = "recycling",
+    ["chest-recycling"] = {name = "chest-recycling", energy = 0.0625, categories = {"recycling"},
         products = {{type = "item", name = "plate"}}, ingredients = {{type = "item", name = "chest", amount = 1}}},
-    ["ammo-recycling"] = {name = "ammo-recycling", energy = 0.00625, category = "recycling",
+    ["ammo-recycling"] = {name = "ammo-recycling", energy = 0.00625, categories = {"recycling"},
         products = {{type = "item", name = "plate"}}, ingredients = {{type = "item", name = "ammo", amount = 1}}},
     -- Registry "ic-normal-result": a currency (material of materials) and a copier in its own category.
-    currency = {name = "currency", energy = 1, category = "crafting", products = {{type = "item", name = "sign"}},
+    currency = {name = "currency", energy = 1, categories = {"crafting"}, products = {{type = "item", name = "sign"}},
         ingredients = {{type = "item", name = "corn", amount = 10}}},
-    copy = {name = "copy", energy = 2, category = "copying", products = {{type = "item", name = "ingot", amount = 4}},
+    copy = {name = "copy", energy = 2, categories = {"copying"}, products = {{type = "item", name = "ingot", amount = 4}},
         ingredients = {{type = "item", name = "ingot", amount = 1}}},
-    copy_plain = {name = "copy_plain", energy = 2, category = "plain-copying",
+    copy_plain = {name = "copy_plain", energy = 2, categories = {"plain-copying"},
         products = {{type = "item", name = "ingot", amount = 4}}, ingredients = {{type = "item", name = "ingot", amount = 1}}},
 }
 prototypes = {
@@ -47,7 +47,9 @@ prototypes = {
     get_recipe_filtered = function(filters)
         local result = {}
         for name, recipe in pairs(recipe_prototypes) do
-            if recipe.category == filters[1].category then result[name] = recipe end
+            for _, category in pairs(recipe.categories) do
+                if category == filters[1].category then result[name] = recipe end
+            end
         end
         return result
     end,
@@ -90,9 +92,9 @@ local recycler_info = compiled.machine({prototype = machine_prototype({recycling
 assert(recycler_info.relevant and recycler_info.recycler and recycler_info.watched_min == 0.0625
     and recycler_info.min_energy == 0.00625)
 assert(compiled.machine({prototype = machine_prototype({smelting = true},
-    {type = "assembling-machine", fixed_recipe = "chest"})}, "fixed").relevant, "a fixed recipe decides")
+    {type = "assembling-machine", fixed_recipe = recipe_prototypes.chest})}, "fixed").relevant, "a fixed recipe decides")
 assert(not compiled.machine({prototype = machine_prototype({smelting = true},
-    {type = "furnace", fixed_recipe = "chest"})}, "furnace-without-fixed").relevant, "furnaces have no fixed recipe")
+    {type = "furnace", fixed_recipe = recipe_prototypes.chest})}, "furnace-without-fixed").relevant, "furnaces have no fixed recipe")
 
 -- Machine mock: result_quality accepts a name (as the engine does) and counts writes.
 local function machine(options)

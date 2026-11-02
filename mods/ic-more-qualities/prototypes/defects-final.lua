@@ -131,8 +131,7 @@ function M.after_gate_items(raw, gate)
     end
     local early, late = {}, {}
     for name, recipe in pairs(raw.recipe or {}) do
-        local category = recipe.category or "crafting"
-        if not classify.recycling[category] and not category:find("recycling", 1, true) then
+        if not classify.has_category(recipe, classify.recycling, "recycling") then
             local era
             if recipe.enabled ~= false then
                 era = early
@@ -277,7 +276,7 @@ function M.positive_quality(raw, finished, everywhere)
             if product.type == "item" then has_item = true break end
         end
         -- Recycling keeps native quality: results at least the input quality, modules may raise it.
-        if has_item and not everywhere and not classify.recycling[recipe.category or "crafting"]
+        if has_item and not everywhere and not classify.is_recycling(recipe)
             and not classify.quality_allowed(recipe, finished) and recipe.allow_quality ~= false then
             recipe.allow_quality = false
             white = white + 1

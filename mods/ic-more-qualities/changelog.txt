@@ -107,6 +107,8 @@ Date: 2026. 10. 14
     - Paranoidal port to Factorio 2.1: beacon power usage multiplier of a quality is at least 0.01 (engine limit in 2.1); infernal-t2, unbreakable, godly and extreme were 0.01/0.005/0.001/0.0005.
     - Paranoidal port to Factorio 2.1: generated recycling recipes stay available from the start as in 2.0 (the 2.1 generator locks them behind the recycling technology).
     - Paranoidal port to Factorio 2.1: LuaEntityPrototype::fixed_recipe is read as a LuaRecipePrototype (it was a name in 2.0).
+    - Paranoidal port to Factorio 2.1: recipe categories are read from the categories list (data stage and LuaRecipePrototype::categories); a recipe is recycling when any of its categories is; the defect scheduler indexes recipes per category itself (the 2.0 code used the single main category). Refinement recipes use categories = {"ic-refine"}.
+    - Paranoidal port to Factorio 2.1: repair packs and the workshop drive use fuel_categories (ItemPrototype::fuel_category was removed); the control post gives circuit_connector as an array; production-mode exclusion reads independent_probability/shared_probability of results. Lua mocks updated to the 2.1 recipe format.
 ---------------------------------------------------------------------------------------------------
 Version: 1.1.4
 Date: 2026. 10. 14

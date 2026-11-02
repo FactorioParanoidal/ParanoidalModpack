@@ -129,8 +129,9 @@ end
 -- in tooltips: the workshop drains durability by script and nothing else accepts this category.
 local function repair_resource(raw)
     for _, tool in pairs(raw["repair-tool"] or {}) do
-        if tool.durability and (tool.fuel_category == nil or tool.fuel_category == "") then
-            tool.fuel_category = names.repair_fuel
+        -- Factorio 2.1: ItemPrototype::fuel_category was replaced by the list fuel_categories.
+        if tool.durability and (tool.fuel_categories == nil or next(tool.fuel_categories) == nil) then
+            tool.fuel_categories = {names.repair_fuel}
             tool.fuel_value = tostring(tool.durability) .. "kJ"
         end
     end
@@ -151,8 +152,8 @@ local function science_kinds(raw)
     end
     local by_item = {}
     for name, recipe in pairs(raw.recipe) do
-        local category = recipe.category or "crafting"
-        if recipe.hidden ~= true and category ~= names.refine_category and not category:find("recycling", 1, true) then
+        if recipe.hidden ~= true
+            and not classify.has_category(recipe, {[names.refine_category] = true}, "recycling") then
             local kinds = 0
             if recipe.enabled == false then kinds = by_recipe[name] end
             if kinds then
@@ -186,7 +187,7 @@ local function refinement(raw, finished)
                     recipes[#recipes + 1] = {
                         type = "recipe",
                         name = recipe_name,
-                        category = names.refine_category,
+                        categories = {names.refine_category},
                         enabled = true,
                         hidden = true,
                         hidden_in_factoriopedia = true,
@@ -232,7 +233,10 @@ M.no_mode_patterns = {
 local function yields_item(recipe)
     for _, result in ipairs(recipe.results or {}) do
         if (result.type or "item") == "item" and (result.amount or result.amount_max or 0) > 0
-            and (result.probability == nil or result.probability > 0) then
+            -- Factorio 2.1: product probability is independent_probability (+ shared_probability range).
+            and (result.independent_probability == nil or result.independent_probability > 0)
+            and (result.shared_probability == nil
+                or (result.shared_probability.max or 1) > (result.shared_probability.min or 0)) then
             return true
         end
     end
@@ -265,8 +269,7 @@ function M.no_mode_machines(raw)
     local categories = {}
     for name, recipe in pairs(raw.recipe or {}) do
         if yields_item(recipe) then
-            categories[recipe.category or "crafting"] = true
-            for _, category in ipairs(recipe.additional_categories or {}) do categories[category] = true end
+            for _, category in pairs(classify.categories(recipe)) do categories[category] = true end
         end
     end
     local result, list = {}, {}
