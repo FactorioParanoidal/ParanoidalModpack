@@ -7,6 +7,8 @@ Date: 01. 06. 2026
     - Prevented duplicate Personal battery MK3 with Space Age mod #572
     - Adjust ingredients for some T4 and T5 recipes #583
     - Reworked equipment recipe ingredients #585
+  Compatibility:
+    - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.3
 Date: 15. 01. 2026
