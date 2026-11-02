@@ -12,6 +12,9 @@ Date: 04.06.2026
     - Fixed migration function to check if a logistics slot is manual before attempting to migrate it (1306)
   Changes:
     - Prevented resources being removed from planets other than Nauvis (1289)
+  Compatibility:
+    - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
+    - Paranoidal port to Factorio 2.1: recycling recipe generation and recycling icons are taken from the built-in recycler mod (__recycler__/recycling.lua, __recycler__/graphics/icons/); recycling code checks mods["recycler"] instead of mods["quality"].
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.3
 Date: 01.06.2026

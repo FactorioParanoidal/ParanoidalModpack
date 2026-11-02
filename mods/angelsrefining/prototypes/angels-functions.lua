@@ -2122,8 +2122,8 @@ end
 -- PATCH RECYCLING RECIPES IF QUALITY IS ENABLED ------------------------------
 -------------------------------------------------------------------------------
 function angelsmods.functions.patch_recycling_recipes(updated_recipes)
-  if mods["quality"] then
-    local recycling = require("__quality__/prototypes/recycling")
+  if mods["recycler"] then
+    local recycling = require("__recycler__.recycling")
     for _, recipe_name in pairs(updated_recipes) do
       local recipe = data.raw.recipe[recipe_name]
       if recipe then
@@ -2134,8 +2134,8 @@ function angelsmods.functions.patch_recycling_recipes(updated_recipes)
 end
 
 function angelsmods.functions.patch_self_recycling_recipes(updated_items)
-  if mods["quality"] then
-    local recycling = require("__quality__/prototypes/recycling")
+  if mods["recycler"] then
+    local recycling = require("__recycler__.recycling")
     for _, item_name in pairs(updated_items) do
       local item = data.raw.item[item_name]
       if item then
