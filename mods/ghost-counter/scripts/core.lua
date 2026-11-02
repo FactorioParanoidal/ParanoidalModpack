@@ -595,7 +595,8 @@ function get_yield_per_craft(item_name, recipe)
 
     for _, product in pairs(recipe.products) do
         if product.name == item_name then
-            local probability = product.probability or 1
+            -- Factorio 2.1: independent_probability (was probability) times the shared_probability range
+            local probability = ((product.independent_probability or product.probability or 1) * (product.shared_probability and (product.shared_probability.max - product.shared_probability.min) or 1))
             yield = (product.amount) and (product.amount * probability) or
                 ((product.amount_min + product.amount_max) * 0.5 * probability)
             yield = yield + (product.extra_count_fraction or 0)
