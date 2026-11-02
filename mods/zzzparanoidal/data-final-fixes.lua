@@ -97,7 +97,6 @@ require("tweaks.recipe.holographic-signs-port") -- gate hs_holo_sign behind circ
 require("prototypes.map-gen-presets")
 require("removals.decoratives") -- «Без декораций»: после пресетов, чтобы вычистить и их ссылки
 
-require("tweaks.custom.uniform-recipies")
 require("prototypes.entity.storage-migration")
 
 -- final aplying of override functions
@@ -435,6 +434,8 @@ require("tweaks.custom.molten-tin-chrome-beta8")
 require("tweaks.custom.reskins-library-icons")
 -- Картинка на конвейере/земле = итоговая иконка у согласованных сплавов и деталей; после всех замен иконок.
 require("tweaks.item.pictures-follow-icon")
+-- Factorio 2.1: отражение (F/V) всех машин с трубами, как в 2.0 (решение D30 «А»).
+require("tweaks.entity.crafting-machine-mirroring")
 -- Оптимизация атласов графики: после всех правок, создающих и копирующих прототипы и иконки.
 require("tweaks.custom.graphics-atlas")
 -- Собственные изображения поверх оригинальных пакетов Reskins; после сравнения путей атласа.

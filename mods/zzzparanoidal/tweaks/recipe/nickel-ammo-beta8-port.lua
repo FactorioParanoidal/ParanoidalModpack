@@ -20,8 +20,6 @@ if not data.raw.recipe[name] then
 				{ type = "item", name = "bob-bronze-alloy", amount = 3 },
 			},
 			results = { { type = "item", name = "piercing-rounds-magazine", amount = 1 } },
-			always_show_products = true,
-			show_amount_in_title = false,
 		},
 	})
 end

@@ -8,7 +8,6 @@ data:extend({
 		group = "angels-casting",
 		subgroup = "angels-glass-casting",
 		order = "az",
-		always_show_products = true,
 		icons = {
 			{
 				icon = "__reskins-library__/graphics/icons/shared/items/glass.png",
@@ -38,7 +37,6 @@ data:extend({
 		group = "angels-casting",
 		subgroup = "angels-glass-casting",
 		order = "ay",
-		always_show_products = true,
 		icons = {
 			{
 				icon = "__reskins-library__/graphics/icons/shared/items/glass.png",

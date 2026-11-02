@@ -20,8 +20,6 @@ if not data.raw.recipe["bi-production-science-pack"] then
 			},
 			results = { { type = "item", name = "production-science-pack", amount = 2 } },
 			allow_productivity = true,
-			always_show_products = true,
-			show_amount_in_title = false,
 		},
 	})
 end

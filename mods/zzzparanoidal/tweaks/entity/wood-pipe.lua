@@ -27,7 +27,8 @@ for key, sprite in pairs(wooden.pictures) do
     end
 end
 
-pipe.fluid_box.hide_connection_info = true
+-- Factorio 2.1: hide_connection_info is a property of each pipe connection (the fluid box field was removed).
+for _, connection in pairs(pipe.fluid_box.pipe_connections) do connection.hide_connection_info = true end
 pipe.icon_draw_specification = table.deepcopy(ordinary.icon_draw_specification)
 pipe.tile_width = 1
 pipe.tile_height = 1

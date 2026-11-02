@@ -70,7 +70,6 @@ for _, spec in ipairs(definitions) do
         ingredients = spec.ingredients,
         results = {{type = "item", name = name, amount = 1}},
         allow_productivity = false,
-        show_amount_in_title = false, always_show_products = true,
         always_show_made_in = false, allow_decomposition = true,
     }
     prototypes[#prototypes + 1] = {

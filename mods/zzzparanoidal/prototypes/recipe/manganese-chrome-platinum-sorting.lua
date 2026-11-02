@@ -12,7 +12,6 @@ data:extend({
     enabled = false,
     allow_decomposition = false,
 		allow_productivity = true,
-    always_show_products = true,
     ingredients =
         {
             {type="item", name="angels-ore1-pure", amount=2},
@@ -61,7 +60,6 @@ data:extend({
     enabled = false,
     allow_decomposition = false,
     allow_productivity = true,
-    always_show_products=true,
     ingredients =
         {
             {type="item", name="angels-ore8-crushed", amount=4},
@@ -107,7 +105,6 @@ data:extend({
     enabled = false,
     allow_decomposition = false,
     allow_productivity = true,
-    always_show_products=true,
     ingredients =
         {
             {type="item", name="angels-ore8-crystal", amount=2},

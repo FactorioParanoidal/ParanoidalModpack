@@ -64,8 +64,6 @@ if not data.raw.item["rocket-control-unit"] and not data.raw.item["rocket-contro
 			},
 			allow_productivity = false,
 			allow_decomposition = false,
-			always_show_products = true,
-			show_amount_in_title = false,
 		},
 		{
 			type = "recipe",
@@ -82,8 +80,6 @@ if not data.raw.item["rocket-control-unit"] and not data.raw.item["rocket-contro
 			},
 			allow_productivity = false,
 			allow_decomposition = false,
-			always_show_products = true,
-			show_amount_in_title = false,
 		},
 		{
 			type = "technology",

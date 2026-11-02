@@ -131,13 +131,15 @@ function Z.refine(grade)
   return result
 end
 
--- Engine quality roll: effect x next_probability of the input quality, then the chain
+-- Engine quality roll: effect x next_probability of the input quality, then the chain with chain_probability of
+-- the tier reached (Factorio 2.1; the build keeps the 2.0 chances: next_probability = 10 x the 2.0 value,
+-- chain_probability = the 2.0 value, quality effects 10 times smaller)
 function Z.upgrade(quality, effect, rolls)
   local chance = math.min(1, effect * (quality.next_probability or 0))
   if rolls and rolls > 1 then chance = 1 - (1 - chance) ^ rolls end
   if not quality.next or math.random() >= chance then return quality end
   local result = quality.next
-  while result.next and math.random() < (result.next_probability or 0) do result = result.next end
+  while result.next and math.random() < (result.chain_probability or 0) do result = result.next end
   return result
 end
 
@@ -758,13 +760,13 @@ Z.start(function()
   -- expected share: stay / +1 / +2 / +3 and more from normal ingredients
   local n, u, r = tiers[1], tiers[2], tiers[3]
   local reach1 = math.min(1, effect * n.next_probability)
-  local reach2 = reach1 * (u.next_probability or 0)
-  local reach3 = reach2 * (r.next_probability or 0)
+  local reach2 = reach1 * (u.chain_probability or 0)
+  local reach3 = reach2 * (r.chain_probability or 0)
   local expected = {1 - reach1, reach1 - reach2, reach2 - reach3, reach3}
   for i, q in ipairs(names) do
     Z.text({7.9, hist.rows[q].y + 0.45}, {"zzz-tips-sim.expected", Z.pct(expected[i])}, {align = "left", scale = 0.7, font = "default", color = {1, 0.85, 0.4}})
   end
-  Z.text({0, -4.6}, {"zzz-tips-sim.modules-title", slots, "[item=" .. module .. "]", Z.pct(effect / 10), Z.pct(reach1)}, {scale = 1})
+  Z.text({0, -4.6}, {"zzz-tips-sim.modules-title", slots, "[item=" .. module .. "]", Z.pct(effect), Z.pct(reach1)}, {scale = 1})
   Z.on_tick(function(t)
     if t % 30 ~= 0 then return end
     for _, m in ipairs(machines) do
@@ -802,17 +804,18 @@ Z.start(function()
     frame = player.gui.screen.add{type = "frame", caption = {"zzz-tips-sim.ladder-title"}, direction = "vertical"}
     frame.auto_center = true
     local inner = frame.add{type = "frame", style = "inside_shallow_frame_with_padding", direction = "vertical"}
-    inner.add{type = "label", caption = {"zzz-tips-sim.ladder-modules", set[2], "[item=" .. set[1] .. "]", Z.pct(effect / 10)}, style = "bold_label"}
+    inner.add{type = "label", caption = {"zzz-tips-sim.ladder-modules", set[2], "[item=" .. set[1] .. "]", Z.pct(effect)}, style = "bold_label"}
     local grid = inner.add{type = "table", column_count = 6, style = "bordered_table"}
     for _, key in ipairs({"input", "step", "stay", "plus1", "plus2", "plus3"}) do
       grid.add{type = "label", caption = {"zzz-tips-sim.ladder-" .. key}, style = "bold_label"}
     end
     for _, q in ipairs(tiers) do
       local a = q.next and math.min(1, effect * q.next_probability) or 0
-      local b = q.next and q.next.next and a * q.next.next_probability or 0
-      local c = q.next and q.next.next and q.next.next.next and b * q.next.next.next_probability or 0
+      local b = q.next and q.next.next and a * q.next.chain_probability or 0
+      local c = q.next and q.next.next and q.next.next.next and b * q.next.next.chain_probability or 0
       grid.add{type = "label", caption = Z.qname(q.name)}
-      grid.add{type = "label", caption = string.format("%.3f", q.next_probability or 0)}
+      -- "Upgrade chance" of the tips text: the 2.0 next_probability, in 2.1 chain_probability (next_probability / 10)
+      grid.add{type = "label", caption = string.format("%.3f", q.chain_probability or 0)}
       grid.add{type = "label", caption = Z.pct(1 - a)}
       grid.add{type = "label", caption = Z.pct(a - b)}
       grid.add{type = "label", caption = Z.pct(b - c)}

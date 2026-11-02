@@ -201,10 +201,8 @@ data:extend({ -- Greenhouse
 		order = "bi-purified-air-1",
 		enabled = false,
 		hide_from_player_crafting = true,
-		always_show_products = false,
 		always_show_made_in = true,
 		allow_decomposition = false,
-		show_amount_in_title = false,
 		emissions_multiplier = 0.5,
 		energy_required = 40,
 		ingredients = {
@@ -249,10 +247,8 @@ data:extend({ -- Greenhouse
 		order = "bi-purified-air-2",
 		enabled = false,
 		hide_from_player_crafting = true,
-		always_show_products = false,
 		always_show_made_in = true,
 		allow_decomposition = false,
-		show_amount_in_title = false,
 		emissions_multiplier = 1.0,
 		energy_required = 100,
 		ingredients = {
@@ -290,10 +286,8 @@ data:extend({ -- Greenhouse
 		order = "bi-purified-air-0",
 		enabled = false,
 		hide_from_player_crafting = true,
-		always_show_products = false,
 		always_show_made_in = true,
 		allow_decomposition = false,
-		show_amount_in_title = false,
 		energy_required = 10,
 		emissions_multiplier = 0.25,
 		ingredients = {

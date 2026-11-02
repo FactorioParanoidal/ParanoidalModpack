@@ -61,14 +61,16 @@ local function extend_deconstruction_planner(planner)
             end
         end
     end
+    -- Factorio 2.1: the filter count is dynamic (the highest used index, 0 when empty) and a filter past it is
+    -- appended (engine probe test-runs/port21-decon-20261102), so the holes are filled first and then the list
+    -- grows; 2.0 had a fixed number of slots and stopped when they were full.
     local index, added = 1, 0
     for _, filter in ipairs(additions) do
-        while index <= count and planner.get_entity_filter(index) do index = index + 1 end
-        if index > count then
+        while index <= planner.entity_filter_count and planner.get_entity_filter(index) do index = index + 1 end
+        if not pcall(planner.set_entity_filter, index, filter) then
             log("Paranoidal loader: deconstruction planner is full, counterpart filter not added")
             break
         end
-        planner.set_entity_filter(index, filter)
         index, added = index + 1, added + 1
     end
     return added

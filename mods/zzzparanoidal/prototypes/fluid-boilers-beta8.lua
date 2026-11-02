@@ -99,7 +99,6 @@ for tier, spec in ipairs(tiers) do
             subgroup = subgroup, order = string.format("%02d", tier),
             enabled = false, energy_required = spec.time, ingredients = ingredients,
             results = {{type = "item", name = name, amount = 1}},
-            always_show_products = true, show_amount_in_title = false,
             always_show_made_in = false, allow_decomposition = true, allow_productivity = false,
         },
         {
