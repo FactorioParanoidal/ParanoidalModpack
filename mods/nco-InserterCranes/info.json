@@ -6,7 +6,7 @@
 	"contact": "",
 	"homepage": "https://github.com/nicolas-lang/factorio.InserterCranes",
 	"description": "Local Paranoidal fork for Factorio 2.0 without redundant filter crane variants. This fork is not published on the Mod Portal.",
-	"factorio_version": "2.0",
+	"factorio_version": "2.1",
 	"dependencies": [
 		"base >= 2.0.77",
 		"?Krastorio2",

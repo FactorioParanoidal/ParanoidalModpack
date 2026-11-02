@@ -14,6 +14,8 @@ Date: 2026-09-11
     - Removed the redundant on_force_created handler: a new force has nothing researched
   Changes:
     - Cranes are no longer blacklisted in Bob's Adjustable Inserters: pickup/drop range and near/far offset are set with the same grid as inserters
+  Compatibility:
+    - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.8
 Date: 2026-09-10
