@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "title": "PARANOIDAL: Upgrade Tech",
   "author": "Paranoidal",
-  "factorio_version": "2.0",
+  "factorio_version": "2.1",
   "description": "Upgrade technologies of Paranoidal ported from Beta 8 (efficient-research, InfiniteTech) instead of All-infinit-tech: Directive 99-99 frugal research (research productivity for lab speed), BnL LongCharge(TM) worker robot batteries and the exponential cost of infinite mining productivity and follower robot count.",
   "dependencies": [
     "base >= 2.0.77",

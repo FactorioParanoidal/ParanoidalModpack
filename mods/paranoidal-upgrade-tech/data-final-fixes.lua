@@ -18,7 +18,13 @@ end
 
 -- 2. Own chains must survive all other mods: same name, prerequisites and packs that exist.
 -- Failing here names the broken reference instead of a generic engine error.
-local tools = data.raw.tool
+-- Factorio 2.1: a science pack can be of any item type (vanilla packs are plain items).
+local function is_science_pack(name)
+    for item_type in pairs(defines.prototypes.item) do
+        if data.raw[item_type] and data.raw[item_type][name] then return true end
+    end
+    return false
+end
 for _, name in ipairs(chain.names(require("prototypes.chains"))) do
     local technology = technologies[name]
     if not technology then error("paranoidal-upgrade-tech: technology '" .. name .. "' was removed by another mod") end
@@ -29,7 +35,7 @@ for _, name in ipairs(chain.names(require("prototypes.chains"))) do
     end
     for _, ingredient in ipairs(technology.unit and technology.unit.ingredients or {}) do
         local pack = ingredient[1] or ingredient.name
-        if not tools[pack] then
+        if not is_science_pack(pack) then
             error("paranoidal-upgrade-tech: '" .. name .. "' uses missing science pack '" .. tostring(pack) .. "'")
         end
     end

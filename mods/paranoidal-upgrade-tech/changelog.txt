@@ -9,3 +9,5 @@ Date: 2026-10-29
     - Infinite mining productivity costs 2^(L-3)*1000 instead of 2500*(L-3), infinite follower robot count 2^(L-4)*1000 for 60 s instead of 1000*(L-4) for 30 s, as in Beta 8.
   Compatibility:
     - Incompatible with All-infinit-tech, InfiniteTech and efficient-research (same technologies or the same bonuses).
+    - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
+    - Paranoidal port to Factorio 2.1: science pack checks accept every item type (2.1 vanilla science packs are plain items, mod packs may stay tools).
