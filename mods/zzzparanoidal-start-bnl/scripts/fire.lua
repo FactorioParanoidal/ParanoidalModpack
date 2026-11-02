@@ -344,6 +344,8 @@ local function put_out(surface, position, radius, steam)
 end
 
 -- Water poured here: the fires within radius go out and the spot stays wet for water.calm.
+M.put_out = put_out
+
 function M.wet(surface, position, radius)
     put_out(surface, position, radius)
     local s = storage.bnl and storage.bnl.fire
