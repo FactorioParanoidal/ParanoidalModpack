@@ -3,6 +3,8 @@ Version: 0.7.1
 Date: 18. 10. 2024
   Bugfixes:
     - Bullet trail entities are now hidden from Factoriopedia (could cause crash when reading Factoriopedia).
+  Compatibility:
+    - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
 
 ---------------------------------------------------------------------------------------------------
 Version: 0.7.0
