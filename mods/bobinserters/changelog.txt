@@ -15,6 +15,8 @@ Date: 15. 01. 2026
     - Paranoidal: the check after a blueprint placement reads the blueprint once per blueprint in the cursor (kept per player, dropped when the cursor changes) instead of copying all its entities and tiles on every placement while dragging
     - Paranoidal: the position check caches per inserter name whether the prototype is checked, and reads each force's technologies once instead of twice per technology
     - Paranoidal: the mod's own GUI and build code call its functions directly instead of remote.call into the same mod (the bobinserters remote interface is unchanged)
+  Compatibility:
+    - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.2
 Date: 02. 01. 2026
