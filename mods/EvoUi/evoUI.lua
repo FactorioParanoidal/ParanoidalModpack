@@ -182,7 +182,8 @@ function EvoUi.create_player_globals(player)
         }
     end
 
-    -- Paranoidal: the season sensor (NightBrightness) is shown by default, once, also in older saves.
+    -- Paranoidal: the season sensor (NightBrightness) gets its options once, also in older saves;
+    -- it is hidden by default (the player enables it in the EvoUI settings).
     if not player_settings.sensor_settings['season'] then
         player_settings.sensor_settings['season'] = {
             ['show_season_day'] = true,
@@ -192,7 +193,6 @@ function EvoUi.create_player_globals(player)
             ['show_light'] = false,
             ['show_effects'] = false,
         }
-        player_settings.always_visible['season'] = true
     end
 
     if not player_settings.sensor_settings['evolution_factor'] then
