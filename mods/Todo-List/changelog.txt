@@ -6,6 +6,8 @@ Date: 2026-05-20
     - Ghost tasks/subtasks now disappear immediately from all players' UI when the stale interaction is detected.
     - Added player notifications when a subtask could not be saved or edited because the parent task or subtask no longer exists.
     - Export dialog now notifies the player when selected tasks were excluded because they no longer exist.
+  Compatibility:
+    - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
 ---------------------------------------------------------------------------------------------------
 Version: 19.15.1
 Date: 2026-05-20
