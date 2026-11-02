@@ -36,6 +36,14 @@ for _, kind in ipairs({"barrel", "gas", "fuel", "oxygen"}) do
     local spec = config.fire.hazards[kind]
     for _, entry in ipairs(spec and spec.items or {}) do listed[entry[1]] = true end
 end
+-- Factorio 2.1: item prototypes list their fuel categories (fuel_categories, nil when empty).
+local function is_nuclear_fuel(item)
+    for _, category in pairs(item.fuel_categories or {}) do
+        if category == "nuclear" then return true end
+    end
+    return false
+end
+
 local function is_fuel(name)
     local known = fuel_cache[name]
     if known ~= nil then return known end
@@ -44,7 +52,7 @@ local function is_fuel(name)
     if item and not WATER[name] then
         if listed[name] then
             result = true
-        elseif item.fuel_value >= misuse.min_fuel_value and item.fuel_category ~= "nuclear" then
+        elseif item.fuel_value >= misuse.min_fuel_value and not is_nuclear_fuel(item) then
             result = true
         elseif name:sub(-7) == "-barrel" then
             local fluid = prototypes.fluid[name:sub(1, -8)]
