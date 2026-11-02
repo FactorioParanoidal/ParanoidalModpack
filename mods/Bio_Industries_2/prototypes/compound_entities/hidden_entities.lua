@@ -84,7 +84,6 @@ BI.hidden_entities.sounds = {
 BI.hidden_entities.misc = {
   active_picture = BI.hidden_entities.picture,
   circuit_wire_max_distance = 0,
-  corpse = "",
   created_effect = nil,
   created_smoke = nil,
   damaged_trigger_effect = nil,
@@ -94,7 +93,6 @@ BI.hidden_entities.misc = {
   },
   fast_replaceable_group = "",
   light = nil,
-  next_upgrade = "",
   remove_decoratives = "false",
   water_reflection = {pictures = BI.hidden_entities.picture},
 }
@@ -111,6 +109,9 @@ BI.set_common_properties = function(h_entity)
   for s, setting in pairs(BI.hidden_entities.misc) do
     h_entity[s] = setting
   end
+  -- Factorio 2.1 rejects an empty entity ID: clear the inherited corpse and upgrade instead of setting "".
+  h_entity.corpse = nil
+  h_entity.next_upgrade = nil
 
   h_entity.icon = BI.hidden_entities.icon
   h_entity.icon_size = BI.hidden_entities.icon_size

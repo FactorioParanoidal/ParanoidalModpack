@@ -423,63 +423,9 @@ end
 -- We only want to create nitrogen if it doesn't exist yet. We then also need to create
 -- liquid air.
 
-if not data.raw.fluid["nitrogen"] and not data.raw.fluid["kr-nitrogen"] then
-    data:extend({
-        {
-            type = "fluid",
-            name = "nitrogen",
-            icon = ICONPATH .. "nitrogen.png",
-            icon_size = 64,
-            icons = {
-                {
-                    icon = ICONPATH .. "nitrogen.png",
-                    icon_size = 64,
-                    icon_mipmaps = 1,
-                }
-            },
-            default_temperature = 25,
-            gas_temperature = -210,
-            max_temperature = 100,
-            heat_capacity = "1kJ",
-            base_color = { r = 0.0, g = 0.0, b = 1.0 },
-            flow_color = { r = 0.0, g = 0.0, b = 1.0 },
-            pressure_to_speed_ratio = 0.4,
-            flow_to_energy_ratio = 0.59,
-            subgroup = "bio-bio-farm-intermediate-product",
-            order = "ab"
-        },
-    })
-    BioInd.writeDebug("Made recipe for \"nitrogen\".")
-
-    if not data.raw.fluid["liquid-air"] then
-        data:extend({
-            {
-                type = "fluid",
-                name = "liquid-air",
-                icon = ICONPATH .. "liquid-air.png",
-                icon_size = 64,
-                icons = {
-                    {
-                        icon = ICONPATH .. "liquid-air.png",
-                        icon_size = 64,
-                        icon_mipmaps = 1,
-                    }
-                },
-                default_temperature = 25,
-                gas_temperature = -100,
-                max_temperature = 100,
-                heat_capacity = "1kJ",
-                base_color = { r = 0, g = 0, b = 0 },
-                flow_color = { r = 0.5, g = 1.0, b = 1.0 },
-                pressure_to_speed_ratio = 0.4,
-                flow_to_energy_ratio = 0.59,
-                subgroup = "bio-bio-farm-intermediate-product",
-                order = "aa"
-            },
-        })
-        BioInd.writeDebug("Made recipe for \"liquid-air\".")
-    end
-
+-- Factorio 2.1: nitrogen and liquid air are created in the data stage (prototypes/Bio_Farm/liquids.lua),
+-- because the recycler generates recycling recipes before this file and needs every fluid ingredient to exist.
+if bi_industries_own_air_fluids then
     -- Recipes for "bi-liquid-air" and "bi-nitrogen" aren't needed!
 else
     local oxygen = data.raw.fluid["kr-oxygen"] and "kr-oxygen" or "oxygen"

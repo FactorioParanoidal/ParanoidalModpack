@@ -49,6 +49,14 @@ Date: 24.02.2026
     - Item pictures from graphics/icons/mips no longer declare mipmap_count: the files have no mip chain (25 load warnings); the engine generates icon mipmaps itself (Paranoidal local fix)
     - Big wooden poles: removed the 1.1 copper/green/red/shadow wire pictures (2.0 has no per-pole wire sprites; the files did not exist) and fixed double slashes in base paths (Paranoidal local fix)
     - Removed 58 leftover images of the 1.1 wooden rails (graphics/entities/wood_products/rails): the 2.0 mod has no rail prototypes (Paranoidal local cleanup)
+  Compatibility:
+    - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
+    - Paranoidal port to Factorio 2.1: assembler pipe pictures are taken from __base__/prototypes/entity/assembler-pictures.lua (2.1 removed the global assembler2pipepictures/assembler3pipepictures and assemblerpipes.lua).
+    - Paranoidal port to Factorio 2.1: the nitrogen and liquid-air fluids are created in the data stage (prototypes/Bio_Farm/liquids.lua) instead of data-updates.lua, because the 2.1 recycler builds recycling recipes earlier and needs every fluid ingredient to exist.
+    - Paranoidal port to Factorio 2.1: recycling recipe generation and recycling icons are taken from the built-in recycler mod (__recycler__/recycling.lua, __recycler__/graphics/icons/); recycling code checks mods["recycler"] instead of mods["quality"].
+    - Paranoidal port to Factorio 2.1: science pack checks accept every item type (2.1 vanilla science packs are plain items, mod packs may stay tools).
+    - Paranoidal port to Factorio 2.1: defines.inventory.assembling_machine_*, furnace_* and rocket_silo_input/output/modules replaced by defines.inventory.crafter_input/output/modules/trash.
+    - Paranoidal port to Factorio 2.1: hidden entities clear corpse and next_upgrade (nil) instead of setting an empty ID, which 2.1 rejects.
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.33
 Date: 24.02.2026

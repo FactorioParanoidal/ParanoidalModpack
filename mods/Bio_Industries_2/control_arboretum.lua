@@ -71,7 +71,7 @@ local function check_ingredients(arboretum)
     if not need then
         return
     end
-    local inventory = arboretum.get_inventory(defines.inventory.assembling_machine_input)
+    local inventory = arboretum.get_inventory(defines.inventory.crafter_input)
     if not inventory then
         return
     end

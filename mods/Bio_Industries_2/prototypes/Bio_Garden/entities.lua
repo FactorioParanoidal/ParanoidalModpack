@@ -1,3 +1,6 @@
+-- Factorio 2.1: base assembler pipe pictures are tables in assembler-pictures.lua (assemblerpipes.lua was removed).
+local base_assembler_pictures = require("__base__.prototypes.entity.assembler-pictures")
+local function assembler3pipepictures() return table.deepcopy(base_assembler_pictures.assembler3pipepictures) end
 local BioInd = require('common')('Bio_Industries_2')
 local ICONPATH_E = BioInd.modRoot .. "/graphics/icons/entity/"
 local ENTITYPATH_BIO = BioInd.modRoot .. "/graphics/entities/"
