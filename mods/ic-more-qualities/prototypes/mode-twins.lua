@@ -156,7 +156,11 @@ function M.modules()
 end
 
 function M.apply(raw)
-    local no_mode = require("prototypes.expansion-final").no_mode_machines(raw)
+    local final = require("prototypes.expansion-final")
+    local no_mode = final.no_mode_machines(raw)
+    -- Recyclers lost their modes on 2026-11-02 but keep their twins: a save with a recycler in a mode must not
+    -- lose it at load; the runtime switches such a twin back to the recycler (scripts/expansion/modes.lua).
+    for name in pairs(final.recyclers(raw)) do no_mode[name] = nil end
     local items = placing_items(raw)
     local prototypes, count, grouped = {}, 0, 0
     for _, machine in ipairs(M.machines(raw, no_mode, items)) do

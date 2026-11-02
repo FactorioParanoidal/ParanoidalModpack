@@ -56,6 +56,7 @@ local raw = {
     item = {
         ["assembling-machine-1"] = {place_result = "assembling-machine-1", subgroup = "production-machine", order = "a"},
         inserter = {place_result = "inserter"}, ["iron-gear-wheel"] = {}, reactor = {place_result = "nuclear-reactor"},
+        recycler = {place_result = "recycler"},
         ["ic-refine-workshop"] = {place_result = "ic-refine-workshop"}, ["ic-control-post"] = {place_result = "ic-control-post"},
         ["ic-refine-workshop-drive"] = {hidden = true}, secret = {hidden = true}, ["parameter-1"] = {parameter = true},
     },
@@ -83,7 +84,11 @@ local raw = {
         ["ground-telescope"] = {fixed_recipe = "stage", crafting_categories = {"stage"}},
         pump = {crafting_categories = {"pump"}},
     },
-    furnace = {flare = {crafting_categories = {"void"}}, ["ic-refine-workshop"] = {crafting_speed = 1, energy_usage = "75kW", collision_box = {{-1.2, -1.2}, {1.2, 1.2}},
+    furnace = {flare = {crafting_categories = {"void"}},
+        -- Recyclers have no production modes since 2026-11-02 (every category a recycling one).
+        recycler = {crafting_speed = 0.5, energy_usage = "180kW", energy_source = (electric()),
+            crafting_categories = {"recycling", "recycling-or-hand-crafting"}},
+        ["ic-refine-workshop"] = {crafting_speed = 1, energy_usage = "75kW", collision_box = {{-1.2, -1.2}, {1.2, 1.2}},
         energy_source = {type = "burner", emissions_per_minute = {pollution = 1}}}},
     container = {["ic-control-post"] = {max_health = 10}},
     reactor = {["nuclear-reactor"] = {max_health = 500}},
@@ -152,16 +157,34 @@ assert(costs["automation-science-pack"].kinds == nil and costs["automation-scien
 assert(data.reasons["iron-gear-wheel"] == "ingredient" and data.no_quality.white and data.finished_count == 15)
 -- Machines without production modes: never an item result, or a construction site.
 local expected = {lamp = true, separator = true, empty = true, flare = true, wide = true, ["rsc-silo-stage1"] = true,
-    ["CW-air-filter-machine-1"] = true, ["ground-telescope"] = true}
+    ["CW-air-filter-machine-1"] = true, ["ground-telescope"] = true, recycler = true}
 for name in pairs(expected) do assert(data.no_mode[name], "no mode: " .. name) end
 for name in pairs(data.no_mode) do assert(expected[name], "unexpected no mode: " .. name) end
 assert(not data.no_mode["ic-refine-workshop"], "the workshop is handled by itself")
-assert(report[2]:find("production modes", 1, true) and report[2]:find(": 8: ", 1, true), report[2])
+assert(report[2]:find("production modes", 1, true) and report[2]:find(": 9: ", 1, true), report[2])
 
 -- Production modes are twin machines (prototypes/mode-twins.lua): no hidden power interfaces any more.
 for name in pairs(interfaces) do assert(not name:find("^ic%-mode%-power"), name) end
 assert(report[1]:find("refinement recipes 8", 1, true), report[1])
+assert(final.recyclers(raw).recycler and not final.recyclers(raw)["assembling-machine-1"])
+
+-- Twins: a recycler keeps its twins (saves with a recycler in a mode load), machines without modes get none.
+require("util").parse_energy = function(text)
+    local number, prefix, unit = text:match("^([%d%.e%-]+)(%a?)([WJ])$")
+    local scale = ({[""] = 1, k = 1e3, M = 1e6, G = 1e9})[prefix]
+    return tonumber(number) * scale / (unit == "W" and 60 or 1)
+end
+for _, kind in ipairs({"assembling-machine", "furnace"}) do
+    for name, machine in pairs(raw[kind]) do machine.name, machine.crafting_speed = name, machine.crafting_speed or 1 end
+end
+local twins = require("prototypes.mode-twins").apply(raw)
+local twin_names = {}
+for _, prototype in ipairs(twins) do twin_names[prototype.name] = prototype end
+assert(twin_names["recycler-ic-mode-careful"] and twin_names["recycler-ic-mode-precise"], "recycler twins kept")
+assert(twin_names["assembling-machine-1-ic-mode-precise"] and not twin_names["lamp-ic-mode-careful"]
+    and not twin_names["separator-ic-mode-careful"])
 print("PASS: workshop/post stats from assembling machine 1, x4 speed cap, unlocks in control 1,")
 print("repair packs as resource, refinement recipe of every finished product with science x health cost,")
-print("exclusions (materials, packs, planners, hidden, parameters), no mode power interfaces, runtime mod-data.")
+print("exclusions (materials, packs, planners, hidden, parameters), no mode power interfaces, runtime mod-data,")
+print("recyclers without modes but with their twins.")
 print("Mocks only: not a Factorio data-stage load.")

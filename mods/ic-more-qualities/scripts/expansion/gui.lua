@@ -572,7 +572,7 @@ local function mode_selector(inside, current, action, tooltip_suffix, rows, tags
         if rules.mode_order[index] == current then header.style.font_color = SELECTED_COLOR end
     end
     for _, line in ipairs(rows) do
-        label(tbl, line[1])
+        label(tbl, line[1], nil, line[5])
         for index, value in ipairs(line[2]) do
             cell(index, value, line[3] and (line[3] .. index), line[4] and line[4][index])
         end
@@ -653,6 +653,79 @@ local function mode_quality_values(entity)
     return values
 end
 
+-- Number for a time or power caption: about three significant digits, no trailing zeros.
+local function short_number(value)
+    local digits = value >= 100 and 0 or value >= 10 and 1 or value >= 1 and 2 or 3
+    local text = string.format("%." .. digits .. "f", value)
+    if digits > 0 then text = text:gsub("0+$", ""):gsub("%.$", "") end
+    return text
+end
+
+local POWER_PREFIXES = {{1e12, "si-prefix-symbol-tera"}, {1e9, "si-prefix-symbol-giga"},
+    {1e6, "si-prefix-symbol-mega"}, {1e3, "si-prefix-symbol-kilo"}}
+
+-- {key, caption}: the key compares captions without reading a localised string back.
+local function seconds_caption(value)
+    local text = short_number(value)
+    return {"s" .. text, {"time-symbol-seconds", text}}
+end
+
+local function power_caption(watts)
+    for _, prefix in ipairs(POWER_PREFIXES) do
+        if watts >= prefix[1] then
+            local text = short_number(watts / prefix[1])
+            return {prefix[2] .. text, {"", text, " ", {prefix[2]}, {"si-unit-symbol-watt"}}}
+        end
+    end
+    local text = short_number(watts)
+    return {"w" .. text, {"", text, " ", {"si-unit-symbol-watt"}}}
+end
+
+-- Operation time and power of the machine in every mode (user request 2026-11-02), {key, caption} per mode.
+-- Time: the current recipe (a furnace: also the last one) at the machine speed with its quality, modules and
+-- beacons. A twin crafts mode.time times slower than its machine, so the speed in normal mode is the current
+-- speed x the time factor of the current mode. Power: draw while working = max energy usage of the original
+-- for the machine quality x mode time x (1 + consumption bonus, the engine keeps it at -80% or more) + electric
+-- drain (twins keep the drain of the original). Engine checks test-runs/ic-power1-20261102, ic-panel1-20261102:
+-- the shown time and power equal the measured ones for twins, qualities, a defect grade, speed and efficiency
+-- modules. A machine without a recipe draws nothing, not even the drain.
+-- Without a recipe both rows show the mode multipliers; power also when the machine uses no energy.
+local function mode_live_values(entity)
+    local definitions = rules.modes
+    local times, powers = {}, {}
+    for index, name in ipairs(rules.mode_order) do
+        local multiplier = "×" .. definitions[name].time
+        times[index], powers[index] = {multiplier, multiplier}, {multiplier, multiplier}
+    end
+    local recipe_name = modes.current_recipe(entity)
+    local recipe = recipe_name and prototypes.recipe[recipe_name]
+    if not recipe then return times, powers end
+    local current = definitions[modes.mode_name(entity)] or definitions.normal
+    local speed = entity.crafting_speed
+    if speed and speed > 0 then
+        local normal_speed = speed * current.time
+        for index, name in ipairs(rules.mode_order) do
+            times[index] = seconds_caption(recipe.energy * definitions[name].time / normal_speed)
+        end
+    end
+    local base = prototypes.entity[modes.base_name(entity.name)]
+    local usage = base and not base.void_energy_source_prototype and base.get_max_energy_usage(entity.quality) or 0
+    if usage > 0 then
+        local factor = 1 + (entity.consumption_bonus or 0)
+        local drain = entity.electric_drain or 0
+        for index, name in ipairs(rules.mode_order) do
+            powers[index] = power_caption((usage * definitions[name].time * factor + drain) * 60)
+        end
+    end
+    return times, powers
+end
+
+local function captions_of(pairs_list)
+    local list = {}
+    for index, pair in ipairs(pairs_list) do list[index] = pair[2] end
+    return list
+end
+
 local function mode_panel(player, entity, gui_type)
     local current = modes.mode_name(entity)
     if collapsed(player, "mode") then
@@ -678,9 +751,12 @@ local function mode_panel(player, entity, gui_type)
         return percent(1 - model.distribution(rules.effective_level(level, mode))[0], 2)
     end
     local m = rules.modes
+    local times, powers = mode_live_values(entity)
+    local multipliers = {}
+    for index, name in ipairs(rules.mode_order) do multipliers[index] = "×" .. m[name].time end
     local rows = {
-        {{"ic-quality.row-time"}, {"×" .. m.normal.time, "×" .. m.careful.time, "×" .. m.precise.time}},
-        {{"ic-quality.row-power"}, {"×1", "×" .. (m.careful.energy / m.careful.time), "×" .. (m.precise.energy / m.precise.time)}},
+        {{"ic-quality.row-time"}, captions_of(times), "time_", multipliers, {"ic-quality.row-time-tooltip"}},
+        {{"ic-quality.row-power"}, captions_of(powers), "power_", multipliers, {"ic-quality.row-power-tooltip"}},
     }
     if not over then
         rows[#rows + 1] = {{"ic-quality.row-worst"}, {worst(m.normal), worst(m.careful), worst(m.precise)}}
@@ -688,7 +764,11 @@ local function mode_panel(player, entity, gui_type)
     end
     rows[#rows + 1] = {{"ic-quality.row-quality"}, mode_quality_values(entity), "quality_"}
     -- tags.level: the live refresh rebuilds the panel when the control level changes.
-    mode_selector(inside, current, "mode", suffix, rows, {level = level})
+    local tbl = mode_selector(inside, current, "mode", suffix, rows, {level = level})
+    for index in ipairs(rules.mode_order) do
+        tbl["time_" .. index].tags = {key = times[index][1]}
+        tbl["power_" .. index].tags = {key = powers[index][1]}
+    end
 end
 
 -- Live part of the mode panel: the quality-module chance follows modules and beacons; a changed
@@ -708,6 +788,17 @@ local function mode_refresh(player, frame, entity)
     for index, value in ipairs(mode_quality_values(entity)) do
         local element = tbl["quality_" .. index]
         if element and element.caption ~= value then element.caption = value end
+    end
+    -- Time and power follow the recipe, modules and beacons; a caption is written only when its key changed.
+    local times, powers = mode_live_values(entity)
+    for _, row in ipairs({{"time_", times}, {"power_", powers}}) do
+        for index, pair in ipairs(row[2]) do
+            local element = tbl[row[1] .. index]
+            if element and element.tags.key ~= pair[1] then
+                element.caption = pair[2]
+                element.tags = {key = pair[1]}
+            end
+        end
     end
 end
 

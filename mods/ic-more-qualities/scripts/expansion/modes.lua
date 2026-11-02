@@ -199,6 +199,7 @@ local function current_recipe(entity)
         end
     end
 end
+M.current_recipe = current_recipe
 
 -- Native upgrade chance of the machine's next operation and whether the mode boost applies to it.
 local function native_chance(entity)
@@ -417,9 +418,28 @@ function M.on_tick(tick)
     local records = s.records
     for index = 1, #bucket do
         local record = records[bucket[index]]
-        if record and record.due == tick and M.refresh(record) then wheel.add(buckets, record, tick + M.REFRESH) end
+        if record and record.due == tick then
+            if record.entity.valid and not M.eligible(record.entity) then
+                M.revert(record)
+            elseif M.refresh(record) then
+                wheel.add(buckets, record, tick + M.REFRESH)
+            end
+        end
     end
     wheel.release(bucket)
+end
+
+-- A twin of a machine that lost its modes (recyclers since 2026-11-02, a save loaded without a configuration
+-- change, or a twin built from an older ghost) goes back to the original machine; the defect scheduler follows.
+function M.revert(record)
+    local entity = record.entity
+    local new, old_id, keep = swap(entity, M.base_name(entity.name), record.mode, "normal")
+    if new then
+        if M.on_tracked then M.on_tracked(new, old_id, keep) end
+    else
+        M.forget(record.id)
+    end
+    return new
 end
 
 -- Configuration change with defects on. Layout 1 (until 2026-11-02: the machine slowed by script with a hidden

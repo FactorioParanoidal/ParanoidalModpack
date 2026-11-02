@@ -348,11 +348,24 @@ modes.on_tick(6000)
 local lazy_twin = surface.machines["200:0"]
 assert(lazy_twin.name == "assembler-ic-mode-careful" and storage.ic_modes.version == modes.VERSION)
 assert(followed and followed.entity == lazy_twin and followed.old == lazy.unit_number and followed.keep == true)
+
+-- A twin of a machine that lost its modes (recyclers since 2026-11-02) with a record, without a configuration
+-- change: back to the original at its next look, the scheduler follows; a revive of its ghost likewise.
+local lost = place("lamp-ic-mode-precise", 210, {recipe = "chest", crafting = true, crafting_progress = 0.5})
+local lost_record = modes.adopt(lost)
+assert(lost_record and storage.ic_modes.records[lost.unit_number])
+followed = nil
+game.tick = lost_record.due
+modes.on_tick(game.tick)
+local back = surface.machines["210:0"]
+assert(back.name == "lamp" and back.crafting_progress == 0.5 and not lost.valid)
+assert(storage.ic_modes.records[lost.unit_number] == nil and storage.ic_modes.records[back.unit_number] == nil)
+assert(followed and followed.entity == back and followed.old == lost.unit_number)
 modes.on_tracked = nil
 
 print("PASS: twin names and eligibility, swap (health, counter, last user, flags, open window, scheduler hook),")
 print("quality beacon = n independent rolls (modules, recipe quality, defects, recycling, no-quality recipes,")
 print("materials, 100% native, position), operation counters, weaker mode re-decides the running operation,")
 print("stronger keeps it, refused/failed switches, on_tick, layout 1 migration (configuration change and lazy),")
-print("stray beacons, revert_all.")
+print("stray beacons, revert_all, a twin of a machine without modes reverted at its look (recyclers).")
 print("Mocks only, not Factorio.")

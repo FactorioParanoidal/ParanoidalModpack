@@ -128,8 +128,11 @@ prototypes = {
         ["ic-defect-3"] = {name = "ic-defect-3", level = 0, order = "0", localised_name = {"quality-name.ic-defect-3"}},
     },
     item = {gear = {}, ["assembling-machine-1"] = {}, belt = {}},
+    -- 1250 J/tick = 75 kW (energy per tick, as the runtime API reports it; test-runs/ic-power1-20261102).
+    recipe = {["ic-refine-item-gear"] = {name = "ic-refine-item-gear", energy = 1.5}},
     entity = {["assembling-machine-1"] = {localised_name = {"entity-name.assembling-machine-1"},
-            items_to_place_this = {{name = "assembling-machine-1"}}},
+            items_to_place_this = {{name = "assembling-machine-1"}},
+            get_max_energy_usage = function(quality) return quality.name == "normal" and 1250 or 2500 end},
         ["assembling-machine-1-ic-mode-careful"] = {}, ["assembling-machine-1-ic-mode-precise"] = {},
         ["ic-refine-workshop-power"] = {}, ["ic-mode-beacon"] = {}},
     mod_data = {
@@ -333,6 +336,38 @@ do
     am.effects = {quality = 0}
     gui.refresh_entity(player)
     assert(tbl.quality_3.caption == "0.00%")
+    -- Time and power: the careful twin crafts at 0.1 = 0.5 / 5; consumption +50%, drain 2.5 kW.
+    local function caption(element)
+        local value = element.caption
+        if type(value) ~= "table" then return value end
+        if value[1] == "time-symbol-seconds" then return value[2] .. " s" end
+        if value[5] then return value[2] .. " " .. value[4][1]:gsub("si%-prefix%-symbol%-", "") .. "W" end
+        return value[2] .. " W"
+    end
+    am.crafting_speed, am.consumption_bonus, am.electric_drain = 0.1, 0.5, 2500 / 60
+    gui.refresh_entity(player)
+    assert(caption(tbl.time_1) == "3 s" and caption(tbl.time_2) == "15 s" and caption(tbl.time_3) == "60 s",
+        caption(tbl.time_1) .. " " .. caption(tbl.time_2) .. " " .. caption(tbl.time_3))
+    assert(caption(tbl.power_1) == "115 kiloW" and caption(tbl.power_2) == "565 kiloW" and caption(tbl.power_3) == "2.25 megaW",
+        caption(tbl.power_1) .. " " .. caption(tbl.power_2) .. " " .. caption(tbl.power_3))
+    assert(tbl.time_2.tooltip == "×5" and tbl.power_3.tooltip == "×20")
+    -- The cell is written only when its value changes.
+    local written = tbl.time_1.caption
+    gui.refresh_entity(player)
+    assert(tbl.time_1.caption == written)
+    -- Speed modules: shorter; uncommon machine: the original's energy for that quality; burner: no drain.
+    am.crafting_speed, am.quality, am.electric_drain, am.consumption_bonus = 0.3, {name = "rare"}, nil, -0.8
+    gui.refresh_entity(player)
+    assert(caption(tbl.time_1) == "1 s" and caption(tbl.time_3) == "20 s", caption(tbl.time_1))
+    assert(caption(tbl.power_1) == "30 kiloW" and caption(tbl.power_3) == "600 kiloW", caption(tbl.power_1))
+    -- Without a recipe: the mode multipliers.
+    local get_recipe = am.get_recipe
+    am.get_recipe = function() return nil end
+    gui.refresh_entity(player)
+    assert(tbl.time_1.caption == "×1" and tbl.time_2.caption == "×5" and tbl.power_3.caption == "×20")
+    am.get_recipe = get_recipe
+    am.crafting_speed, am.quality, am.consumption_bonus = 1, {name = "normal"}, nil
+    gui.refresh_entity(player)
     -- A changed control level rebuilds the panel.
     force.technologies["ic-defect-control-4"] = {researched = true}
     gui.refresh_entity(player)
@@ -448,7 +483,7 @@ for _, key in ipairs({"workshop-state-working", "workshop-state-no-resource", "w
     "lookup-no-defect", "lookup-finished", "lookup-material", "lookup-empty-clean", "lookup-finished-clean",
     "lookup-material-clean", "mode-normal-tooltip-clean", "mode-careful-tooltip-clean", "mode-precise-tooltip-clean", "mode-help",
     "mode-help-clean", "ws-mode-normal-tooltip", "ws-mode-careful-tooltip", "ws-mode-precise-tooltip", "collapse",
-    "mode-collapsed", "workshop-collapsed", "ws-mode-attempts"}) do
+    "mode-collapsed", "workshop-collapsed", "ws-mode-attempts", "row-time-tooltip", "row-power-tooltip"}) do
     dynamic["ic-quality." .. key] = true
 end
 for key in pairs(dynamic) do used_keys[key] = true end

@@ -213,6 +213,7 @@ end
 -- (user decisions 2026-10-15): construction sites driven by another mod's script (Rocket Silo
 -- Construction stages), carbon-capture air filters (one way of working only) and the telescopes of
 -- Expanded Rocket Payloads (reached long after quality control 10: no defects left to handle).
+-- Recyclers (user decision 2026-11-02): every machine whose crafting categories are all recycling categories.
 M.no_mode_patterns = {
     "^rsc%-silo%-stage%d+$",
     "^CW%-air%-filter%-machine%-%d+$",
@@ -230,6 +231,28 @@ local function yields_item(recipe)
     return false
 end
 
+-- Recyclers: a machine without a fixed recipe whose every crafting category is a recycling category (vanilla
+-- recycler, Recycler 1-3 of recycler-progression). They had production modes until 2026-11-02.
+function M.is_recycler(machine)
+    if machine.fixed_recipe then return false end
+    local list = machine.crafting_categories or {}
+    if #list == 0 then return false end
+    for _, category in ipairs(list) do
+        if not category:find("recycling", 1, true) then return false end
+    end
+    return true
+end
+
+function M.recyclers(raw)
+    local result = {}
+    for _, kind in ipairs({"assembling-machine", "furnace"}) do
+        for name, machine in pairs(raw[kind] or {}) do
+            if M.is_recycler(machine) then result[name] = true end
+        end
+    end
+    return result
+end
+
 function M.no_mode_machines(raw)
     local categories = {}
     for name, recipe in pairs(raw.recipe or {}) do
@@ -245,6 +268,7 @@ function M.no_mode_machines(raw)
             for _, pattern in ipairs(M.no_mode_patterns) do
                 if name:find(pattern) then excluded = true end
             end
+            if M.is_recycler(machine) then excluded = true end
             if not excluded then
                 local fixed = machine.fixed_recipe and raw.recipe[machine.fixed_recipe]
                 if machine.fixed_recipe then
