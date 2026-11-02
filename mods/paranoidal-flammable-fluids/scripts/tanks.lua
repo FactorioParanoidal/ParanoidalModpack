@@ -88,6 +88,13 @@ local function update(task)
   end
 
   local tick = game.tick
+  -- rain (paranoidal-rain): the tank heats up slower, the countdown moves on 1/slowdown of the time
+  local slowdown = FO.weather.slowdown(entity.surface)
+  if slowdown > 1 then
+    local delay = math.floor(C.TANK_UPDATE * (1 - 1 / slowdown) + 0.5)
+    st.start = st.start + delay
+    st.finish = st.finish + delay
+  end
   if tick >= st.finish then
     catastrophe(task.id, st, content)
     return
@@ -120,5 +127,34 @@ local function update(task)
 end
 
 FO.sched.register("tank", update)
+
+---Put a burning tank out (water): the overheating stops, the fluid stays.
+function M.extinguish(entity)
+  local tanks = storage.tanks
+  local id = entity.unit_number
+  if not (tanks and id and tanks[id]) then return false end
+  tanks[id] = nil
+  if next(tanks) == nil then storage.tanks = nil end
+  FO.alerts.tank_extinguished(entity)
+  return true
+end
+
+---Burning tanks reaching into radius of a spot; puts them out, returns their number.
+function M.extinguish_area(surface_index, position, radius)
+  local tanks = storage.tanks
+  if not tanks then return 0 end
+  local found = {}
+  for _, st in pairs(tanks) do
+    local entity = st.entity
+    if entity.valid and entity.surface_index == surface_index then
+      local p = entity.position
+      local dx, dy = p.x - position.x, p.y - position.y
+      local reach = radius + entity.get_radius()
+      if dx * dx + dy * dy <= reach * reach then found[#found + 1] = entity end
+    end
+  end
+  for i = 1, #found do M.extinguish(found[i]) end
+  return #found
+end
 
 return M

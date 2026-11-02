@@ -3,12 +3,15 @@ Version: 9.0.0
 Date: 2026-11-01
   Major Features:
     - One mod instead of Flammable_Oils_QUICKFIX 0.2.22 (Paranoidal fork of Flammable Oils) and the fire safety turret script of zzzparanoidal (controls/fire-safety.lua). Setting, entity, achievement, locale key and remote interface "flammable_oils" names are unchanged; the turret prototypes are still created from zzzparanoidal/data-final-fixes.lua at the same place (before the quality recycling rebuild), from this mod's prototypes/fire-safety-turret.lua.
+  Features:
+    - Remote interface "flammable_oils": cook_off(entity) starts the cook-off of a store with ammunition (also gun and artillery turrets) as a fire next to it would; extinguish(entity) and extinguish_area(surface_index, position, radius) stop the overheating of burning tanks and cook-offs (water barrel of zzzparanoidal-start-bnl); ignite_tank takes an optional cause. Cause "lightning" (paranoidal-rain).
   Optimizations:
     - The fire safety check is a direct function call instead of remote.call("paranoidal_fire_safety", "is_protected") with a surface search for every check; active turrets are indexed by surface and 32x32 cell, so a check looks only at the cells within the largest turret range and costs nothing while no turret is active.
     - Cook-off asks for fire safety only after it found ammunition in the store (before: for every store damaged by fire or explosion).
     - The fire tick handler is registered and unregistered only when the task list becomes non-empty or empty (before: re-registered every tick while something burned).
     - Turret build events are filtered by the turret names; a removed turret is forgotten through on_object_destroyed (before: at its next 2-second service).
   Changes:
+    - Rain of paranoidal-rain slows the hazards down (remote "paranoidal-rain" hazard_slowdown, 2.5 by default): while it rains on the surface a burning storage tank counts down slower, the fire runs through pipes slower and ammunition cooks off with longer pauses. Rain does not put them out; fire safety turrets still do.
     - A burning storage tank inside the zone of an active fire safety turret is reported as put out by the turret, without the "Fire brigade" achievement (it stays for draining the tank in time).
     - A destroyed chemical machine inside a fire safety zone still leaks its toxic gases (poison cloud, pollution, alert); the turret only prevents fire and explosions.
     - Yuoki hydrogen (y_hydrogen) is volatile like Angels and Bob hydrogen.

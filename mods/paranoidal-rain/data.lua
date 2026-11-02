@@ -1,0 +1,5 @@
+require("prototypes.rain")
+require("prototypes.effects")
+require("prototypes.lightning")
+require("prototypes.attractors")
+require("prototypes.forecast")

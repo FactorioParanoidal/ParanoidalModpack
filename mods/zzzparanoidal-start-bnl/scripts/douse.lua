@@ -1,14 +1,17 @@
--- Left click with a barrel or fuel in the cursor (custom input "bnl-douse"). The click handler (and
--- the "too hot" guard of opened GUIs) exists only during the start fires: while the fire watch runs
--- or anything burns (scripts/fire.lua refreshes the events when both end); after that nothing of
--- this listens any more.
+-- Left click with a barrel or fuel in the cursor (custom input "bnl-douse"). The click handler works
+-- all game long (it costs nothing between clicks); the "too hot" guard of opened GUIs exists only
+-- during the start fires: while the fire watch runs or anything burns (scripts/fire.lua refreshes
+-- the events when both end).
 -- * Water barrel: a click anywhere within reach puts out everything within config.fire.water.radius
---   of the spot: every burning start wreck (or the starliner) reaching into it (big steam cloud) and
---   the ordinary fires (grass, trees, fuel pools). What was put out stays wet for
+--   of the spot: every burning start wreck (or the starliner) reaching into it (big steam cloud),
+--   every fire entity (grass, trees, fuel pools, flammable fluids, lightning fires of paranoidal-rain)
+--   with steam, and through the remote "flammable_oils" the overheating tanks and the ammunition
+--   cook-offs of paranoidal-flammable-fluids. During the start fires what was put out stays wet for
 --   config.fire.water.calm (scripts/fire.lua): it does not catch fire again, setting it alight only
---   makes white steam. One barrel per click; the empty barrel goes back into the inventory.
+--   makes white steam; after the start nothing stays wet. One barrel per click; the empty barrel
+--   goes back into the inventory.
 -- * Empty barrel on a water tile within reach: every empty barrel in the inventory is filled.
--- * Fuel (a fuel or gas barrel, oxygen, solid fuel and better) thrown on a burning wreck or burning
+-- * Fuel (only during the start fires; a fuel or gas barrel, oxygen, solid fuel and better) thrown on a burning wreck or burning
 --   ground: it flares up as config.fire.misuse.fires ordinary ground fires around the spot; each goes
 --   out by itself after misuse.seconds and meanwhile burns and lights what is next to it by the usual
 --   rules of fire.
@@ -158,13 +161,20 @@ local function on_click(event)
     if WATER[name] then
         if not in_reach then return end
         drop_empty(player, take_one(player))
-        if fire.quench_area(surface, position, cfg.radius) > 0 then
-            if target and player.opened == target then player.opened = nil end -- the click also opened the wreck
+        if M.start_fires() then
+            if fire.quench_area(surface, position, cfg.radius) > 0 then
+                if target and player.opened == target then player.opened = nil end -- the click also opened the wreck
+            end
+        end
+        fire.put_out(surface, position, cfg.radius, true)
+        local oils = remote.interfaces["flammable_oils"]
+        if oils and oils.extinguish_area then
+            remote.call("flammable_oils", "extinguish_area", surface.index, position, cfg.radius)
         end
         fire.steam(surface, position, 1, 4, "bnl-steam-small")
         return
     end
-    if is_fuel(name) and in_reach and burning_here(surface, target, position) then
+    if is_fuel(name) and in_reach and M.start_fires() and burning_here(surface, target, position) then
         drop_empty(player, take_one(player))
         if player.opened == target then player.opened = nil end
         flare_up(player, surface, target and target.valid and target.position or position)
@@ -174,12 +184,12 @@ local function on_click(event)
 end
 
 -- The start fires are on: the fire watch runs or something burns (storage only, see events.lua).
-local function start_fires()
+function M.start_fires()
     local s = storage.bnl and storage.bnl.fire
     return s ~= nil and (s.watching == true or s.ticking == true)
 end
 
-events.dynamic("bnl-douse", on_click, start_fires)
-events.dynamic(defines.events.on_gui_opened, fire.on_gui_opened, start_fires)
+events.on("bnl-douse", on_click)
+events.dynamic(defines.events.on_gui_opened, fire.on_gui_opened, M.start_fires)
 
 return M
