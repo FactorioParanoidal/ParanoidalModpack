@@ -153,7 +153,7 @@ storage_chest.icon_size = 64
 storage_chest.inventory_size = 100
 storage_chest.hidden = true
 storage_chest.flags = {"player-creation", "placeable-player", "no-automated-item-removal", "no-automated-item-insertion", "not-on-map"}
-storage_chest.animation.layers[1].filename = "__factorissimo-2-notnotmelon__/graphics/entity/construction-chest.png"
+storage_chest.robot_door.animation.layers[1].filename = "__factorissimo-2-notnotmelon__/graphics/entity/construction-chest.png"
 entities_to_extend[#entities_to_extend + 1] = storage_chest
 
 for _, factory_name in pairs {"factory-1", "factory-2", "factory-3", "factory-4"} do

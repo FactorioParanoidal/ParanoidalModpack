@@ -22,6 +22,10 @@ Date: 2026-10-19
   Locale:
     - Paranoidal: Russian names of factory buildings: "Фабрика 1-4" instead of "Заводское строение 1-4", and "фабрика" / "фабричное здание" instead of "заводское строение" / "завод" in every Russian text of the mod (entities, tiles, technologies, descriptions, settings, messages, dispatcher, tips and tricks). The same texts in ParanoidalLocale are changed too, because it overrides this locale.
     - ru: the mod name and the mod list description are the same as in ParanoidalLocale (format "English title (Russian translation)"), so the mod reads the same with or without it.
+  Compatibility:
+    - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
+    - Paranoidal port to Factorio 2.1: logistic chest door animation, sound, opened duration and landing offset moved into robot_door (2.1 LogisticContainerPrototype).
+    - Paranoidal port to Factorio 2.1: defines.inventory.assembling_machine_*, furnace_* and rocket_silo_input/output/modules replaced by defines.inventory.crafter_input/output/modules/trash.
 ---------------------------------------------------------------------------------------------------
 Version: 9.11.19
 Date: 2026-10-16

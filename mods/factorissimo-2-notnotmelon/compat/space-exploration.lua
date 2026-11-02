@@ -73,12 +73,12 @@ function EntitySwap.swap_structure(entity, prototype_name)
     for _, inv_type in pairs {
         defines.inventory.fuel,
         defines.inventory.burnt_result,
-        defines.inventory.furnace_source,
-        defines.inventory.furnace_result,
-        defines.inventory.furnace_modules,
-        defines.inventory.assembling_machine_input,
-        defines.inventory.assembling_machine_output,
-        defines.inventory.assembling_machine_modules
+        defines.inventory.crafter_input,
+        defines.inventory.crafter_output,
+        defines.inventory.crafter_modules,
+        defines.inventory.crafter_input,
+        defines.inventory.crafter_output,
+        defines.inventory.crafter_modules
     } do
         inventories[inv_type] = inv_type -- no duplicate indexes
     end

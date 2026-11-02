@@ -5,7 +5,7 @@
   "author": "MagmaMcFry, notnotmelon",
   "homepage": "https://github.com/notnotmelon/factorissimo-2-notnotmelon",
   "description": "Factorissimo adds factory buildings to Factorio. Place them down, walk in, build your factories inside! Now updated for space age!",
-  "factorio_version": "2.0",
+  "factorio_version": "2.1",
   "dependencies": [
     "base >= 2.0.64",
     "? space-age",
