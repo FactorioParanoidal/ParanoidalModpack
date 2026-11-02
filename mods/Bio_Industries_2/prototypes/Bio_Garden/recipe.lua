@@ -99,7 +99,7 @@ data:extend({
       {type = "item", name = "fertilizer", amount = 1}
     },
     results = {
-      {type = "item", name = "bi-purified-air", amount = 1, probability = 0},
+      {type = "item", name = "bi-purified-air", amount = 1, independent_probability = 0},
     },
     main_product = "",
   },
@@ -123,7 +123,7 @@ data:extend({
       {type = "item", name = "bi-adv-fertilizer", amount = 1},
     },
     results = {
-      {type = "item", name = "bi-purified-air", amount = 1, probability = 0},
+      {type = "item", name = "bi-purified-air", amount = 1, independent_probability = 0},
     },
     main_product = "",
   },

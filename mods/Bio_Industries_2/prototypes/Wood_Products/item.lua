@@ -42,7 +42,7 @@ data:extend({
     order = "a-a[stone-wall]-a[wooden-fence]",
     place_result = "bi-wooden-fence",
     fuel_value = "4MJ",
-    fuel_category = "chemical",
+    fuel_categories = {"chemical"},
     stack_size = 50
   },
 
@@ -57,7 +57,7 @@ data:extend({
     order = "a[pipe]-1a[pipe]",
     place_result = "bi-wood-pipe",
     fuel_value = "4MJ",
-    fuel_category = "chemical",
+    fuel_categories = {"chemical"},
     stack_size = 100
   },
 
@@ -72,7 +72,7 @@ data:extend({
     order = "a[pipe]-1b[pipe-to-ground]",
     place_result = "bi-wood-pipe-to-ground",
     fuel_value = "20MJ",
-    fuel_category = "chemical",
+    fuel_categories = {"chemical"},
     stack_size = 50
   },
   

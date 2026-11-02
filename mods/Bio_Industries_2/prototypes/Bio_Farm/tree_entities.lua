@@ -85,7 +85,7 @@ for id, prototype in pairs(data.raw.tree) do
         {
           type = "item",
           name = (i < TREE_LEVELS) and "seedling" or "wood",
-          probability = i/TREE_LEVELS,
+          independent_probability = i/TREE_LEVELS,
           amount = 1,
         }
       }

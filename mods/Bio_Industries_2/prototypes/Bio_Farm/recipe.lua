@@ -1228,7 +1228,7 @@ data:extend({
             { type = "fluid", name = "water",    amount = 100 },
         },
         results = {
-            { type = "item", name = "bi-arboretum-r1", amount = 1, probability = 0 },
+            { type = "item", name = "bi-arboretum-r1", amount = 1, independent_probability = 0 },
         },
         main_product = "",
         enabled = false,
@@ -1259,7 +1259,7 @@ data:extend({
             { type = "fluid", name = "water",      amount = 100 },
         },
         results = {
-            { type = "item", name = "bi-arboretum-r2", amount = 1, probability = 0 },
+            { type = "item", name = "bi-arboretum-r2", amount = 1, independent_probability = 0 },
         },
         main_product = "",
         enabled = false,
@@ -1290,7 +1290,7 @@ data:extend({
             { type = "fluid", name = "water",             amount = 100 },
         },
         results = {
-            { type = "item", name = "bi-arboretum-r3", amount = 1, probability = 0 },
+            { type = "item", name = "bi-arboretum-r3", amount = 1, independent_probability = 0 },
         },
         main_product = "",
         enabled = false,
@@ -1322,7 +1322,7 @@ data:extend({
             { type = "fluid", name = "water",      amount = 100 },
         },
         results = {
-            { type = "item", name = "bi-arboretum-r4", amount = 1, probability = 0 },
+            { type = "item", name = "bi-arboretum-r4", amount = 1, independent_probability = 0 },
         },
         main_product = "",
         enabled = false,
@@ -1354,7 +1354,7 @@ data:extend({
             { type = "fluid", name = "water",             amount = 100 },
         },
         results = {
-            { type = "item", name = "bi-arboretum-r5", amount = 1, probability = 0 },
+            { type = "item", name = "bi-arboretum-r5", amount = 1, independent_probability = 0 },
         },
         main_product = "",
         enabled = false,
