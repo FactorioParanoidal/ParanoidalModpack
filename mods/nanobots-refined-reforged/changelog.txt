@@ -32,6 +32,8 @@ Date: 2026-10-21
     - Clearing items under a ghost is validated again (the check was spelled 'clear-ground' and never ran), so all-pending items no longer print "No clearable stacks found" (Paranoidal local fix)
     - Levelers search trees and cliffs only within their 120-target limit, so an ore patch in reach no longer hides the trees (Paranoidal local fix)
     - The roboport interface wood and fish limits work: get_contents() is an array in 2.0, and the items are now wood and raw-fish (Paranoidal local fix)
+  Compatibility:
+    - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
 ---------------------------------------------------------------------------------------------------
 Version: 4.0.6
 Date: 2025-08-21
