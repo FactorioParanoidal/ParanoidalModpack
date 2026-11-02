@@ -8,6 +8,8 @@ Date: 01. 06. 2026
     - Adjusted modules tech costs #545
     - Set item weights #553
     - Reworked beacon recipe ingredients #585
+  Compatibility:
+    - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.6
 Date: 18. 01. 2026
