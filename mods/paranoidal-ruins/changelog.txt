@@ -21,3 +21,5 @@ Date: 2026-11-01
     - Clearing a ruin area could call destroy on an entity removed a moment earlier by cliff correction (error "LuaEntity was invalid").
     - With all three ruin chances at 0 the threshold was NaN (0/0).
     - The ruins force was set up hostile first and switched to the cease-fire setting only later; it now follows the setting when it is created.
+  Compatibility:
+    - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
