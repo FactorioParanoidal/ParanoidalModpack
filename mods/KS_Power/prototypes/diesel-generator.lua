@@ -195,7 +195,7 @@ data:extend(
     {
       type = "recipe",
       name = "diesel-fuel",
-      category = "chemistry",
+      categories = {"chemistry"},
       enabled = false,
       energy_required = 5,
       ingredients = {
