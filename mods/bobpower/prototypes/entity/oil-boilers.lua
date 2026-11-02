@@ -1,3 +1,6 @@
+-- Factorio 2.1: base assembler pipe pictures are tables in assembler-pictures.lua (assemblerpipes.lua was removed).
+local base_assembler_pictures = require("__base__.prototypes.entity.assembler-pictures")
+local function assembler2pipepictures() return table.deepcopy(base_assembler_pictures.assembler2pipepictures) end
 if settings.startup["bobmods-power-steam"].value == true then
   data:extend({
     util.merge({

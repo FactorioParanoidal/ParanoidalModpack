@@ -54,3 +54,9 @@ require("prototypes.technology.heat-exchangers")
 require("prototypes.technology.steam-turbines")
 require("prototypes.technology.fluid-generator")
 require("prototypes.technology.nuclear")
+
+-- Factorio 2.1 lowered the steam temperature limit from 5000 to 500, below the targets of the higher
+-- boilers and heat exchangers (up to 765) and of the turbines; keep the 2.0 limit.
+if data.raw.fluid["steam"] and (data.raw.fluid["steam"].max_temperature or 0) < 5000 then
+  data.raw.fluid["steam"].max_temperature = 5000
+end
