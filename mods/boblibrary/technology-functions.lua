@@ -1,3 +1,9 @@
+-- Factorio 2.1: a science pack can be of any item type (vanilla packs are plain items, mod packs may stay tools).
+local function is_science_pack(name)
+  local item_type = bobmods.lib.item.get_type(name)
+  return item_type ~= nil and item_type ~= "fluid"
+end
+
 if not bobmods.lib.tech then
   bobmods.lib.tech = {}
 end
@@ -65,7 +71,7 @@ function bobmods.lib.tech.replace_science_pack(technology, old, new)
     and type(new) == "string"
     and data.raw.technology[technology]
     --    data.raw.tool[old] and
-    and data.raw.tool[new]
+    and is_science_pack(new)
   then
     if data.raw.technology[technology].unit then
       replace_science_pack(data.raw.technology[technology], old, new)
@@ -73,8 +79,8 @@ function bobmods.lib.tech.replace_science_pack(technology, old, new)
   else
     log(debug.traceback())
     bobmods.lib.error.technology(technology)
-    bobmods.lib.error.item_of_type(old, "tool", "Old science pack")
-    bobmods.lib.error.item_of_type(new, "tool", "New science pack")
+    bobmods.lib.error.item(old, "Old science pack")
+    bobmods.lib.error.item(new, "New science pack")
   end
 end
 
@@ -84,7 +90,7 @@ function bobmods.lib.tech.add_new_science_pack(technology, pack, amount)
     and type(pack) == "string"
     and type(amount) == "number"
     and data.raw.technology[technology]
-    and data.raw.tool[pack]
+    and is_science_pack(pack)
   then
     if data.raw.technology[technology].unit then
       add_new_science_pack(data.raw.technology[technology], pack, amount)
@@ -92,7 +98,7 @@ function bobmods.lib.tech.add_new_science_pack(technology, pack, amount)
   else
     log(debug.traceback())
     bobmods.lib.error.technology(technology)
-    bobmods.lib.error.item_of_type(pack, "tool", "Science pack")
+    bobmods.lib.error.item(pack, "Science pack")
   end
 end
 
@@ -102,7 +108,7 @@ function bobmods.lib.tech.add_science_pack(technology, pack, amount)
     and type(pack) == "string"
     and type(amount) == "number"
     and data.raw.technology[technology]
-    and data.raw.tool[pack]
+    and is_science_pack(pack)
   then
     if data.raw.technology[technology].unit then
       add_science_pack(data.raw.technology[technology], pack, amount)
@@ -110,7 +116,7 @@ function bobmods.lib.tech.add_science_pack(technology, pack, amount)
   else
     log(debug.traceback())
     bobmods.lib.error.technology(technology)
-    bobmods.lib.error.item_of_type(pack, "tool", "Science pack")
+    bobmods.lib.error.item(pack, "Science pack")
   end
 end
 
@@ -120,7 +126,7 @@ function bobmods.lib.tech.add_science_packs(technology, science_packs)
       if
         type(science_pack) == "table"
         and type(science_pack[1]) == "string"
-        and data.raw.tool[science_pack[1]]
+        and is_science_pack(science_pack[1])
         and type(science_pack[2]) == "number"
       then
         bobmods.lib.tech.add_science_pack(technology, science_pack[1], science_pack[2])

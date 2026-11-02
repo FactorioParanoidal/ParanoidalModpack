@@ -6,6 +6,10 @@ Date: 01. 06. 2026
     - Added function bobmods.lib.tech.global_replace_prerequisite #569
   Bugfixes:
     - Changed table_merge function to check values not just keys #544
+  Compatibility:
+    - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
+    - Paranoidal port to Factorio 2.1: recycling recipe generation and recycling icons are taken from the built-in recycler mod (__recycler__/recycling.lua, __recycler__/graphics/icons/); recycling code checks mods["recycler"] instead of mods["quality"].
+    - Paranoidal port to Factorio 2.1: science pack checks accept every item type (2.1 vanilla science packs are plain items, mod packs may stay tools).
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.3
 Date: 15. 01. 2026
