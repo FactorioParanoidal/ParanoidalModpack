@@ -110,6 +110,10 @@ Date: 2026-10-26
     - Paranoidal port to Factorio 2.1: recycling recipe generation and recycling icons are taken from the built-in recycler mod (__recycler__/recycling.lua, __recycler__/graphics/icons/); recycling code checks mods["recycler"] instead of mods["quality"].
     - Paranoidal port to Factorio 2.1: item fuel categories are read from fuel_categories (a list; LuaItemPrototype::fuel_category was removed).
     - Paranoidal port to Factorio 2.1: recipes use categories (RecipePrototype::category and additional_categories were merged into categories; the first entry keeps the meaning of the former main category, a changed main category keeps the other entries).
+    - Paranoidal port to Factorio 2.1: the recipe category basic-crafting (removed from the 2.1 base game) is created when it is missing, so the machines and recipes of the mod that use it keep working (assembling machines only, never by hand, as in 2.0).
+    - Paranoidal port to Factorio 2.1: scrap recycling has the categories recycling and hand-crafting (recycling-or-hand-crafting was removed in 2.1); characters get hand-crafting instead of the removed category.
+    - Paranoidal port to Factorio 2.1: product probability renamed to independent_probability (recipe results, minable results, generated products).
+    - Paranoidal port to Factorio 2.1: items use fuel_categories (ItemPrototype::fuel_category was removed).
 
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.0

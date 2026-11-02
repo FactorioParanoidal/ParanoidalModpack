@@ -4,7 +4,8 @@
 --   for the ammo that cooks off in a fire, scripts/fire.lua); the ship x1.25 (config.ship_health_multiplier);
 -- * only the salvaged lab from the starliner takes the flight recorder (no other lab, also when an
 --   earlier stage copied the lab inputs; this is the last data-final-fixes of the modset);
--- * characters can hand-craft "recycling-or-hand-crafting" recipes (scrap recycling).
+-- * characters can hand-craft "hand-crafting" recipes (scrap recycling; Factorio 2.1 replaced the 2.0 category
+--   "recycling-or-hand-crafting" by the categories "recycling" and "hand-crafting").
 local config = require("bnl-config")
 local shipwreck = require("shipwreck-config")
 
@@ -36,10 +37,10 @@ for _, character in pairs(data.raw.character or {}) do
     local categories = character.crafting_categories or {}
     local present = false
     for _, category in ipairs(categories) do
-        if category == "recycling-or-hand-crafting" then present = true end
+        if category == "hand-crafting" then present = true end
     end
     if not present then
-        categories[#categories + 1] = "recycling-or-hand-crafting"
+        categories[#categories + 1] = "hand-crafting"
         character.crafting_categories = categories
     end
 end

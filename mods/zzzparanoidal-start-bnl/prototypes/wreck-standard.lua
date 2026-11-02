@@ -24,7 +24,7 @@ local function results(owner, loot)
     for _, entry in ipairs(loot) do
         local name, low, high = entry[1], entry[2], entry[3] or entry[2]
         if item_exists(name) then
-            local product = {type = "item", name = name, probability = entry.p}
+            local product = {type = "item", name = name, independent_probability = entry.p} -- Factorio 2.1
             if low == high then
                 product.amount = low
             else

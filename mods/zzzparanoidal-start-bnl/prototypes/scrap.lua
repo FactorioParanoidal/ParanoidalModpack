@@ -18,7 +18,7 @@ end
 local results = {}
 for _, entry in ipairs(config.scrap.results) do
     if item_exists(entry[1]) then
-        results[#results + 1] = {type = "item", name = entry[1], amount = 1, probability = entry[2],
+        results[#results + 1] = {type = "item", name = entry[1], amount = 1, independent_probability = entry[2],
             show_details_in_recipe_tooltip = false}
     else
         log("zzzparanoidal-start-bnl: scrap result unavailable: " .. entry[1])
@@ -78,7 +78,8 @@ data:extend({
             {icon = icons .. "scrap.png", scale = 0.4},
             {icon = "__recycler__/graphics/icons/recycling-top.png"},
         },
-        categories = {"recycling-or-hand-crafting"},
+        -- Factorio 2.1: recycling-or-hand-crafting was removed; a recipe may have several categories.
+        categories = {"recycling", "hand-crafting"},
         subgroup = "bnl-start",
         order = "g[scrap-recycling]",
         enabled = true,

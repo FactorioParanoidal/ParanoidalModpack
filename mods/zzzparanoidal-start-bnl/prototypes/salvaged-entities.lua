@@ -1,3 +1,8 @@
+-- Factorio 2.1 removed the recipe category "basic-crafting" (2.0 base: assemblers only, never by hand);
+-- the Paranoidal build keeps it. Created by the first mod that needs it.
+if not data.raw["recipe-category"]["basic-crafting"] then
+  data:extend({{ type = "recipe-category", name = "basic-crafting" }})
+end
 local animations = require("prototypes.salvaged-animations")
 local icons = "__zzzparanoidal-start-bnl__/graphics/icons/"
 local impact_sound = {

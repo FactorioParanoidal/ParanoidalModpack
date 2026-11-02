@@ -95,7 +95,7 @@ data:extend({
         subgroup = "bnl-start",
         order = "e[advertising-flyer]",
         stack_size = 200,
-        fuel_category = "chemical",
+        fuel_categories = {"chemical"},
         fuel_value = "300kJ",
         auto_recycle = false,
     },
