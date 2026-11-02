@@ -33,32 +33,25 @@ if mods["quality"] then
         local frame = game.players[1].gui.screen.add{type = "frame", caption = {"tips-and-tricks-simulation.quality-calculation"}, direction = "vertical"}
         frame.auto_center = true
         local inner = frame.add{type = "frame", style = "inside_shallow_frame_with_padding", direction = "vertical"}
-        local quality_table = inner.add{type = "table", column_count = table_size(quality_levels), style = "bordered_table"}
+        -- Factorio 2.1: chances from the engine roll (LuaQualityPrototype::get_roll_chances), as in the 2.1 vanilla
+        -- simulation; the 2.0 code multiplied the module effect by next_probability of every tier.
+        local quality_table = inner.add{type = "table", column_count = table_size(quality_levels) + 1, style = "bordered_table"}
         quality_table.add{type = "label", caption = {"tips-and-tricks-simulation.input"}, style = "bold_label"}
 
         for k, quality in pairs (quality_levels) do
-          if quality.name ~= "normal" then
-            quality_table.add{type = "label", caption = {"tips-and-tricks-simulation.chance", "[item=iron-gear-wheel,quality=" .. quality.name .. "]"}, style = "bold_label"}
-          end
+          quality_table.add{type = "label", caption = {"tips-and-tricks-simulation.chance", "[item=iron-gear-wheel,quality=" .. quality.name .. "]"}, style = "bold_label"}
         end
 
-        local module_chance = prototypes.item["bob-quality-module-5"].module_effects["quality"] * 6;
+        local quality_effect = prototypes.item["bob-quality-module-5"].get_module_effects("normal").quality * 6
         local row_header = string.rep("[item=bob-quality-module-5]", 6)
-        for k, quality in pairs (quality_levels) do
-          if quality.name ~= "legendary" then
-            quality_table.add{type = "label", caption = row_header.. " [item=iron-plate,quality="..quality.name.."]"}
-            local cumulative_chance = module_chance;
-            for j, quality in pairs(quality_levels) do
-              if quality.name ~= "normal" then
-                  if k >= j then
-                    quality_table.add{type = "label", caption = ""}
-                  else
-                    quality_table.add{type = "label", caption = string.format("%.2f%%", cumulative_chance * 100)}
-                  end
-              end
-              if k <= j then
-                cumulative_chance = cumulative_chance * quality.next_probability
-              end
+        for k, base_quality in pairs (quality_levels) do
+          quality_table.add{type = "label", caption = row_header.. " [item=iron-plate,quality="..base_quality.name.."]"}
+          local chances = base_quality.get_roll_chances(quality_effect)
+          for j, output_quality in pairs(quality_levels) do
+            if chances[output_quality.name] and chances[output_quality.name] > 0 then
+              quality_table.add{type = "label", caption = string.format("%.2f%%", chances[output_quality.name] * 100)}
+            else
+              quality_table.add{type = "label", caption = ""}
             end
           end
         end

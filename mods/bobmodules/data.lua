@@ -13,8 +13,10 @@ bobmods.modules.PollutionCreatePerLevel = settings.startup["bobmods-modules-perl
 bobmods.modules.SpeedPenaltyPerLevel = settings.startup["bobmods-modules-perlevel-penalty-speed"].value
 bobmods.modules.PollutionPenaltyPerLevel = settings.startup["bobmods-modules-perlevel-penalty-pollution"].value
 bobmods.modules.ConsumptionPenaltyPerLevel = settings.startup["bobmods-modules-perlevel-penalty-consumption"].value
-bobmods.modules.QualityPerLevel = 10
-  * (
+-- Factorio 2.1: quality effect values are no longer multiplied by next_probability (prototype values were divided
+-- by 10 and next_probability multiplied by 10), so the setting (shown as a percent) is the effect itself; in 2.0
+-- it was multiplied by 10 here.
+bobmods.modules.QualityPerLevel = (
     settings.startup["bobmods-modules-perlevel-bonus-quality"]
       and settings.startup["bobmods-modules-perlevel-bonus-quality"].value
     or 0.01
@@ -28,8 +30,7 @@ bobmods.modules.PollutionCreateBonus = settings.startup["bobmods-modules-start-b
 bobmods.modules.SpeedPenalty = settings.startup["bobmods-modules-start-penalty-speed"].value
 bobmods.modules.PollutionPenalty = settings.startup["bobmods-modules-start-penalty-pollution"].value
 bobmods.modules.ConsumptionPenalty = settings.startup["bobmods-modules-start-penalty-consumption"].value
-bobmods.modules.QualityBonus = 10
-  * (
+bobmods.modules.QualityBonus = (
     settings.startup["bobmods-modules-start-bonus-quality"]
       and settings.startup["bobmods-modules-start-bonus-quality"].value
     or 0.01
