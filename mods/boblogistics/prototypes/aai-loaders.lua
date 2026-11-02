@@ -147,7 +147,7 @@ then
 
     --Add space-age crafting category
     if mods["space-age"] then
-      data.raw.recipe["aai-basic-loader"].category = "pressing"
+      bobmods.lib.recipe.set_category("aai-basic-loader", "pressing")
     end
 
     data.raw.item["aai-basic-loader"].weight = 20000
@@ -308,8 +308,10 @@ then
 
   --Add space-age crafting category
   if mods["space-age"] then
-    data.raw.recipe["aai-turbo-loader"].category = "crafting-with-fluid-or-metallurgy"
-    data.raw.recipe["aai-ultimate-loader"].category = "crafting-with-fluid-or-metallurgy"
+    bobmods.lib.recipe.set_category("aai-turbo-loader", "crafting-with-fluid") -- Factorio 2.1: crafting-with-fluid-or-metallurgy -> categories {"crafting-with-fluid", "metallurgy"}
+    bobmods.lib.recipe.add_additional_category("aai-turbo-loader", "metallurgy")
+    bobmods.lib.recipe.set_category("aai-ultimate-loader", "crafting-with-fluid") -- Factorio 2.1: crafting-with-fluid-or-metallurgy -> categories {"crafting-with-fluid", "metallurgy"}
+    bobmods.lib.recipe.add_additional_category("aai-ultimate-loader", "metallurgy")
   end
 
   data.raw.item["aai-loader"].weight = 20000

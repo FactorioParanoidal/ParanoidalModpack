@@ -264,16 +264,16 @@ if settings.startup["bobmods-logistics-beltoverhaul"].value == true then
   end
 
   if mods["space-age"] then
-    data.raw.recipe["bob-basic-transport-belt"].category = "pressing"
-    data.raw.recipe["bob-basic-underground-belt"].category = "pressing"
-    data.raw.recipe["bob-basic-splitter"].category = "pressing"
-    data.raw.recipe["express-transport-belt"].category = "pressing"
-    data.raw.recipe["express-underground-belt"].category = "pressing"
-    data.raw.recipe["express-splitter"].category = "pressing"
+    bobmods.lib.recipe.set_category("bob-basic-transport-belt", "pressing")
+    bobmods.lib.recipe.set_category("bob-basic-underground-belt", "pressing")
+    bobmods.lib.recipe.set_category("bob-basic-splitter", "pressing")
+    bobmods.lib.recipe.set_category("express-transport-belt", "pressing")
+    bobmods.lib.recipe.set_category("express-underground-belt", "pressing")
+    bobmods.lib.recipe.set_category("express-splitter", "pressing")
   else
-    data.raw.recipe["express-transport-belt"].category = "crafting"
-    data.raw.recipe["express-underground-belt"].category = "crafting"
-    data.raw.recipe["express-splitter"].category = "crafting"
+    bobmods.lib.recipe.set_category("express-transport-belt", "crafting")
+    bobmods.lib.recipe.set_category("express-underground-belt", "crafting")
+    bobmods.lib.recipe.set_category("express-splitter", "crafting")
   end
 else
   data:extend({
@@ -346,10 +346,10 @@ else
 end
 
 if mods["space-age"] then
-  data.raw.recipe["turbo-transport-belt"].category = "pressing"
-  data.raw.recipe["turbo-underground-belt"].category = "pressing"
-  data.raw.recipe["turbo-splitter"].category = "pressing"
-  data.raw.recipe["bob-ultimate-transport-belt"].category = "pressing"
-  data.raw.recipe["bob-ultimate-underground-belt"].category = "pressing"
-  data.raw.recipe["bob-ultimate-splitter"].category = "pressing"
+  bobmods.lib.recipe.set_category("turbo-transport-belt", "pressing")
+  bobmods.lib.recipe.set_category("turbo-underground-belt", "pressing")
+  bobmods.lib.recipe.set_category("turbo-splitter", "pressing")
+  bobmods.lib.recipe.set_category("bob-ultimate-transport-belt", "pressing")
+  bobmods.lib.recipe.set_category("bob-ultimate-underground-belt", "pressing")
+  bobmods.lib.recipe.set_category("bob-ultimate-splitter", "pressing")
 end
