@@ -35,6 +35,7 @@ IonShield (MsBinaryLily); изменения 9.0.0 — `changelog.txt`.
 | `fire-safety` | Пожарные турели: тушение, ствол на rendering, индекс зон защиты |
 | `protection` | Проверка зоны защиты перед поджогом, детонацией и взрывом |
 | `weather` | Дождь `paranoidal-rain` замедляет опасности: перегрев резервуара, огонь по трубам и детонацию (remote `hazard_slowdown`, по умолчанию в 2,5 раза); не тушит их |
+| remote `flammable_oils` | `cook_off(entity)` — детонация боезапаса склада, вагона, машины, турели или артиллерии (молния `paranoidal-rain`); `extinguish(entity)` и `extinguish_area(surface_index, position, radius)` — вода гасит перегрев резервуаров и детонацию (бочка `zzzparanoidal-start-bnl`); `ignite_tank(entity, cause)` |
 
 Всё состояние игры — в `storage`; таблицы модулей кэшируют только данные прототипов
 (одинаковые у всех участников мультиплеера).

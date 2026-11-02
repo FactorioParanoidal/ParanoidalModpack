@@ -3,6 +3,8 @@ Version: 9.0.0
 Date: 2026-11-01
   Major Features:
     - One mod instead of Flammable_Oils_QUICKFIX 0.2.22 (Paranoidal fork of Flammable Oils) and the fire safety turret script of zzzparanoidal (controls/fire-safety.lua). Setting, entity, achievement, locale key and remote interface "flammable_oils" names are unchanged; the turret prototypes are still created from zzzparanoidal/data-final-fixes.lua at the same place (before the quality recycling rebuild), from this mod's prototypes/fire-safety-turret.lua.
+  Features:
+    - Remote interface "flammable_oils": cook_off(entity) starts the cook-off of a store with ammunition (also gun and artillery turrets) as a fire next to it would; extinguish(entity) and extinguish_area(surface_index, position, radius) stop the overheating of burning tanks and cook-offs (water barrel of zzzparanoidal-start-bnl); ignite_tank takes an optional cause. Cause "lightning" (paranoidal-rain).
   Optimizations:
     - The fire safety check is a direct function call instead of remote.call("paranoidal_fire_safety", "is_protected") with a surface search for every check; active turrets are indexed by surface and 32x32 cell, so a check looks only at the cells within the largest turret range and costs nothing while no turret is active.
     - Cook-off asks for fire safety only after it found ammunition in the store (before: for every store damaged by fire or explosion).

@@ -121,8 +121,26 @@ remote.add_interface("flammable_oils", {
     return util.table.deepcopy(FO.fluids.flammable_types())
   end,
   -- Start the overheating of a storage tank (e.g. scenarios, other mods).
-  ignite_tank = function(entity)
-    if entity and entity.valid then FO.tanks.ignite(entity, { "flo-cause.unknown" }) end
+  ignite_tank = function(entity, cause)
+    if entity and entity.valid then FO.tanks.ignite(entity, cause or { "flo-cause.unknown" }) end
+  end,
+  -- Start the cook-off of a store with ammunition as fire next to it would (chests, wagons, vehicles, gun and
+  -- artillery turrets); e.g. a lightning strike (paranoidal-rain).
+  cook_off = function(entity)
+    if entity and entity.valid then FO.cook.start(entity) end
+  end,
+  -- Water (zzzparanoidal-start-bnl barrel): stop the overheating of a tank or the cook-off of a store.
+  extinguish = function(entity)
+    if not (entity and entity.valid) then return false end
+    local tank = FO.tanks.extinguish(entity)
+    local cook = FO.cook.stop(entity)
+    return tank or cook
+  end,
+  -- Water poured on a spot: every burning tank and cooking store reaching into radius; returns their number.
+  extinguish_area = function(surface_index, position, radius)
+    if type(surface_index) ~= "number" or not position or type(radius) ~= "number" then return 0 end
+    local p = { x = position.x or position[1], y = position.y or position[2] }
+    return FO.tanks.extinguish_area(surface_index, p, radius) + FO.cook.stop_area(surface_index, p, radius)
   end,
   -- Test scene east of the player.
   demo = function(player)
