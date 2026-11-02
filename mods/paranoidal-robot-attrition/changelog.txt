@@ -16,5 +16,6 @@ Date: 2026-10-30
     - Crash alert at the wreck, at most once in 5 minutes per force and surface (player setting).
     - Tips and tricks: five text tips unlocked with Logistic robotics.
     - Remote interface "paranoidal-robot-attrition": get_event_ids (custom event on_robot_crashed before the robot dies: robot, force, surface_index, busy, wreck, detonated, ignited), get_crash_count, get_force_summary, set_surface_multiplier, get_surface_multiplier, set_force_enabled (check a force without players or skip one). Extension points in scripts/hooks.lua: rate multipliers, spare checks, victim selection.
+    - The repair recipes are hidden from the signal selection window unless the zzzparanoidal setting "Show recipes in signal selection" is on.
   Optimizations:
     - One check per second (on_nth_tick) with a Poisson draw per busy network; no state per network or per surface name. Charging queues are read from cell counters; the list of all flying robots is fetched only when a victim must come from it.
