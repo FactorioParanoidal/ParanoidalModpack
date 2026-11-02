@@ -32,7 +32,7 @@ local recipe_categories = -- a list of all crafting categories for which (petroc
 for _, recipe in pairs(data.raw.recipe) do
   if
     not recipe.crafting_machine_tint -- only recipes which do not have a crafting machine tint set
-    and recipe_categories[recipe.category] -- only recipes that can be crafting in machines that support recipe tints
+    and recipe_categories[angelsmods.functions.get_recipe_category(recipe)] -- only recipes that can be crafting in machines that support recipe tints
     and recipe.hidden ~= true -- only recipes which are not hidden (explicitly set to false, or default=nil)
   then
     if unit_test_functions then -- only log when unit testing is in progress
