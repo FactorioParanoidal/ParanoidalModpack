@@ -191,7 +191,7 @@ for _, definition in ipairs(upgrade_recipes) do
   recipes[#recipes + 1] = {
     type = "recipe",
     name = definition.name,
-    category = "crafting",
+    categories = {"crafting"},
     subgroup = definition.subgroup,
     order = definition.order,
     icons = definition.icons,
