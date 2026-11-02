@@ -17,6 +17,8 @@ Date: 14.01.2026
   Graphics:
     - Paranoidal: sprites, icons and thumbnail repacked with lossy palette compression.
     - Paranoidal: startup setting "valves-graphics" (Valve look): "reskins" (default) draws the valves as the Angel's valves of Artisanal Reskins with a coloured mask, as in earlier Paranoidal versions; "classic" keeps the animated sprites of this mod. Without reskins-angels the setting is hidden and the classic look is used.
+  Compatibility:
+    - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
 ---------------------------------------------------------------------------------------------------
 Version: 2.1.1
 Date: 13.01.2026
