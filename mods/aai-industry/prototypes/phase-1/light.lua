@@ -16,16 +16,7 @@ if settings.startup["night-lut-set"].value == "Dark" or settings.startup["night-
     {0.80, "identity"},
     {0.85, "identity"}
   }
-  def.zoom_to_world_daytime_color_lookup =
-  {
-    {0.00, "identity"},
-    {0.20, "identity"},
-    {0.35, data_util.mod_path.."/graphics/color_luts/lut-sunset"..night_suffix..".png"},
-    {0.45, data_util.mod_path.."/graphics/color_luts/lut-night"..night_suffix..".png"},
-    {0.55, data_util.mod_path.."/graphics/color_luts/lut-night"..night_suffix..".png"},
-    {0.75, "identity"},
-    {0.85, "identity"}
-  }
+  -- Factorio 2.1 removed the utility constant zoom_to_world_daytime_color_lookup (no zoom-to-world view since 2.0).
 end
 
 if settings.startup["enhanced-nightvision"].value then

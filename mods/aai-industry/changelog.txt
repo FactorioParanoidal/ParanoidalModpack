@@ -11,6 +11,7 @@ Date: 27. 02. 2026
     - Paranoidal port to Factorio 2.1: recipes use categories (RecipePrototype::category and additional_categories were merged into categories; the first entry keeps the meaning of the former main category, a changed main category keeps the other entries).
     - Paranoidal port to Factorio 2.1: the recipe category basic-crafting (removed from the 2.1 base game) is created when it is missing, so the machines and recipes of the mod that use it keep working (assembling machines only, never by hand, as in 2.0).
     - Paranoidal port to Factorio 2.1: items use fuel_categories (ItemPrototype::fuel_category was removed).
+    - Factorio 2.1: no zoom_to_world_daytime_color_lookup (utility constant removed in 2.1).
   Locale:
     - Updated Spanish translation, thanks to Spiderlove.
     - Added Ukrainian translation, thanks to Генріх Мхітарян.
