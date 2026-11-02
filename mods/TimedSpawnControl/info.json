@@ -1,7 +1,7 @@
 {
   "name": "TimedSpawnControl",
   "version": "2.0.0",
-  "factorio_version": "2.0",
+  "factorio_version": "2.1",
   "title": "Spawn Control with cooldown",
   "author": "Maxikaaz",
   "contact": "",
