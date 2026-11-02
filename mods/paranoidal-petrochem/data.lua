@@ -23,7 +23,7 @@ if data.raw.item["angels-solid-saw"] then
   table.insert(data.raw.recipe["rubber-slabbing"].ingredients,
     { type = "item", name = "angels-solid-saw", amount = 1 })
   table.insert(data.raw.recipe["rubber-slabbing"].results,
-    { type = "item", name = "angels-solid-saw", amount = 1, probability = 0.95, amount_min = 0, amount_max = 1 })
+    { type = "item", name = "angels-solid-saw", amount = 1, independent_probability = 0.95, amount_min = 0, amount_max = 1 })
 end
 angelsmods.functions.set_recipe_category(data.raw.recipe["rubber-powderisation"], "angels-powder-mixing")
 angelsmods.functions.set_recipe_category(data.raw.recipe["rubber-pelletisation"], "angels-pellet-pressing")

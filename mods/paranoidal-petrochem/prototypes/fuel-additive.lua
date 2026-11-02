@@ -40,7 +40,7 @@ data:extend(
     name = "high-octane-enriched-fuel",
     icon = "__paranoidal-petrochem__/graphics/fuel-additive/high-octane-enriched-fuel.png",
     icon_size = 32,
-    fuel_category = "chemical",
+    fuel_categories = {"chemical"},
     fuel_value = "40MJ",
     fuel_acceleration_multiplier = 1.9,
     fuel_top_speed_multiplier = 1.3,
