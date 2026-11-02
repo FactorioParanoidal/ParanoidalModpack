@@ -53,7 +53,8 @@ function Module:summarize_effects()
     for name, effect in pairs(self.proto.effects) do
         if util.effects.is_positive(name, effect) then
             local e = effect * self.quality_proto.default_multiplier  -- needs truncating towards zero
-            effect = (e < 0) and math.ceil(e - 1e-4) or math.floor(e + 1e-4)
+            -- Factorio 2.1: effects keep 0.01% (0.01 here); 2.0 truncated to whole percents
+            effect = ((e < 0) and math.ceil(e * 100 - 1e-4) or math.floor(e * 100 + 1e-4)) / 100
         end
         effects[name] = effect * self.amount  -- doesn't create decimals
     end

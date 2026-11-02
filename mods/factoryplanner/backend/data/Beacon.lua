@@ -72,7 +72,8 @@ function Beacon:summarize_effects()
 
     for name, effect in pairs(effects) do
         local e = effect * effect_multiplier  -- needs truncating towards zero
-        effects[name] = (e < 0) and math.ceil(e - 1e-4) or math.floor(e + 1e-4)
+        -- Factorio 2.1: effects keep 0.01% (0.01 here); 2.0 truncated to whole percents
+        effects[name] = ((e < 0) and math.ceil(e * 100 - 1e-4) or math.floor(e * 100 + 1e-4)) / 100
     end
 
     self.total_effects = effects

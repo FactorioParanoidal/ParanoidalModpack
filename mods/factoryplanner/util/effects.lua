@@ -71,10 +71,13 @@ local quality_effect_factor = 1
 local function format_effect(value, color, effect_name)
     if value == nil then return "" end
     value = (effect_name == "quality") and value * quality_effect_factor or value
-    local format_string = (effect_name == "quality") and "%+.1f" or "%+d"
+    -- Factorio 2.1: quality effects are small (+1% per module 1), so they keep up to two decimals
+    local format_string = (effect_name == "quality") and "%+.2f" or "%+d"
     local epsilon = (value < 0) and -1e-4 or 1e-4
     -- Force display of either a '+' or '-', also round the result
-    return {"fp.effect_value", color, format_string:format(value + epsilon)}
+    local text = format_string:format(value + epsilon)
+    if effect_name == "quality" then text = (text:gsub("%.?0+$", "")) end
+    return {"fp.effect_value", color, text}
 end
 
 ---@class FormatModuleEffectsOptions
