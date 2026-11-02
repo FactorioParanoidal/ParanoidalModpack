@@ -15,6 +15,7 @@ Date: 01. 06. 2026
     - Paranoidal port to Factorio 2.1: defines.inventory.assembling_machine_*, furnace_* and rocket_silo_input/output/modules replaced by defines.inventory.crafter_input/output/modules/trash.
     - Paranoidal port to Factorio 2.1: the tier mask of the vanilla assembling machines 2 and 3 repeats as many times as their new 64-frame animation (was fixed at 32).
     - Paranoidal port to Factorio 2.1: the recipe category basic-crafting (removed from the 2.1 base game) is created when it is missing, so the machines and recipes of the mod that use it keep working (assembling machines only, never by hand, as in 2.0).
+    - Factorio 2.1: electronics machines use_mirroring = true instead of the removed forced_symmetry (flippable as in 2.0).
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.5
 Date: 18. 01. 2026

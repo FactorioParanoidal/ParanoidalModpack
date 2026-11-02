@@ -97,7 +97,7 @@ if settings.startup["bobmods-assembly-electronicmachines"].value == true then
         },
       },
       fluid_boxes_off_when_no_fluid_recipe = true,
-      forced_symmetry = "vertical",
+      use_mirroring = true, -- Factorio 2.1: replaces the removed forced_symmetry = "vertical" (flippable, as in 2.0)
       collision_box = { { -0.7, -0.7 }, { 0.7, 0.7 } },
       selection_box = { { -1, -1 }, { 1, 1 } },
       fast_replaceable_group = "assembling-machine",
@@ -273,7 +273,7 @@ if settings.startup["bobmods-assembly-electronicmachines"].value == true then
         },
       },
       fluid_boxes_off_when_no_fluid_recipe = true,
-      forced_symmetry = "vertical",
+      use_mirroring = true, -- Factorio 2.1: replaces the removed forced_symmetry = "vertical" (flippable, as in 2.0)
       collision_box = { { -0.7, -0.7 }, { 0.7, 0.7 } },
       selection_box = { { -1, -1 }, { 1, 1 } },
       fast_replaceable_group = "assembling-machine",
@@ -455,7 +455,7 @@ if settings.startup["bobmods-assembly-electronicmachines"].value == true then
         },
       },
       fluid_boxes_off_when_no_fluid_recipe = true,
-      forced_symmetry = "vertical",
+      use_mirroring = true, -- Factorio 2.1: replaces the removed forced_symmetry = "vertical" (flippable, as in 2.0)
       collision_box = { { -0.7, -0.7 }, { 0.7, 0.7 } },
       selection_box = { { -1, -1 }, { 1, 1 } },
       fast_replaceable_group = "assembling-machine",
