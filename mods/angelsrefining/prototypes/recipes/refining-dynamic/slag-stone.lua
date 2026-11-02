@@ -10,8 +10,6 @@ data:extend({
     enabled = false,
     hidden = true,
     allow_decomposition = false,
-    show_amount_in_title = false,
-    always_show_products = true,
     hide_from_signal_gui = false,
     allow_productivity = true,
     ingredients = {
@@ -33,8 +31,6 @@ data:extend({
     enabled = false,
     hidden = true,
     allow_decomposition = false,
-    show_amount_in_title = false,
-    always_show_products = true,
     hide_from_signal_gui = false,
     allow_productivity = true,
     ingredients = {
@@ -56,8 +52,6 @@ data:extend({
     enabled = false,
     hidden = true,
     allow_decomposition = false,
-    show_amount_in_title = false,
-    always_show_products = true,
     hide_from_signal_gui = false,
     allow_productivity = true,
     ingredients = {
@@ -79,8 +73,6 @@ data:extend({
     enabled = false,
     hidden = true,
     allow_decomposition = false,
-    show_amount_in_title = false,
-    always_show_products = true,
     hide_from_signal_gui = false,
     allow_productivity = true,
     ingredients = {
@@ -102,8 +94,6 @@ data:extend({
     enabled = false,
     hidden = true,
     allow_decomposition = false,
-    show_amount_in_title = false,
-    always_show_products = true,
     hide_from_signal_gui = false,
     allow_productivity = true,
     ingredients = {
@@ -125,8 +115,6 @@ data:extend({
     enabled = false,
     hidden = true,
     allow_decomposition = false,
-    show_amount_in_title = false,
-    always_show_products = true,
     hide_from_signal_gui = false,
     allow_productivity = true,
     ingredients = {

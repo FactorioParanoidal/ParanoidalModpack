@@ -105,7 +105,7 @@ data:extend({
       sound = { filename = "__angelsrefininggraphics__/sound/ore-leaching-plant.ogg", volume = 0.8 },
       idle_sound = { filename = "__base__/sound/idle1.ogg", volume = 0.6 },
     },
-    forced_symmetry = "horizontal",
+    use_mirroring = true, -- Factorio 2.1: replaces the removed forced_symmetry = "horizontal" (flippable, as in 2.0)
     fluid_boxes = {
       {
         production_type = "input",
@@ -204,7 +204,7 @@ data:extend({
       sound = { filename = "__angelsrefininggraphics__/sound/ore-leaching-plant.ogg", volume = 0.8 },
       idle_sound = { filename = "__base__/sound/idle1.ogg", volume = 0.6 },
     },
-    forced_symmetry = "horizontal",
+    use_mirroring = true, -- Factorio 2.1: replaces the removed forced_symmetry = "horizontal" (flippable, as in 2.0)
     fluid_boxes = {
       {
         production_type = "input",

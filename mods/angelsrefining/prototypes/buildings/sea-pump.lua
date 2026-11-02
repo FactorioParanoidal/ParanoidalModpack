@@ -313,3 +313,6 @@ data:extend({
     circuit_wire_max_distance = default_circuit_wire_max_distance,
   },
 })
+
+-- Factorio 2.1: base_picture moved to graphics_set.working_visualisations (the sea pump drill has no other graphics)
+require("prototypes.buildings.base-picture-21")(data.raw["mining-drill"]["angels-sea-pump"])

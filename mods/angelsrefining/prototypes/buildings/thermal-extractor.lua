@@ -190,3 +190,9 @@ data:extend({
     fast_replaceable_group = "angels-thermal-extractor",
   },
 })
+
+-- Factorio 2.1: base_picture moved to graphics_set.working_visualisations
+local move_base_picture = require("prototypes.buildings.base-picture-21")
+for _, name in pairs({ "angels-thermal-bore", "angels-thermal-extractor" }) do
+  move_base_picture(data.raw["mining-drill"][name])
+end
