@@ -17,3 +17,5 @@ Date: 2026-11-01
     - Global variables of the plastic wall and the "special vanilla" block are local now.
   Saves:
     - Nothing is lost: the old mods kept no script state. Values of the removed settings in mod-settings.dat are ignored.
+  Compatibility:
+    - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
