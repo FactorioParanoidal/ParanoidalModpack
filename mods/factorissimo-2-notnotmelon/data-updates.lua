@@ -74,7 +74,7 @@ if data.raw["assembling-machine"]["borehole-pump"] then
             energy_required = 4,
             allow_productivity = true,
             hide_from_player_crafting = true,
-            category = "borehole-pump",
+            categories = {"borehole-pump"},
             subgroup = "borehole-pump",
             results = {
                 {type = "fluid", name = fluid_name, amount = 600}
