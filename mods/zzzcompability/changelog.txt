@@ -4,3 +4,4 @@ Version: 0.0.1
     - Added thumbnail.png (144x144): the picture of the mod in the mod list, made from the mod and base game graphics.
   Compatibility:
     - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
+    - Paranoidal port to Factorio 2.1: items with a fuel value but no fuel category get fuel_categories = {"chemical"} (ItemPrototype::fuel_category was removed).

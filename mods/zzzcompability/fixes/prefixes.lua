@@ -48,8 +48,8 @@ for _, tech in pairs(data.raw.technology) do
 end
 
 for _, item in pairs(data.raw.item) do
-	if item.fuel_value and not item.fuel_category then
+	if item.fuel_value and not item.fuel_categories then -- Factorio 2.1: fuel_categories (list)
 		log("WARN: FUEL CATEGORY not set in item: " .. item.name .. " set default to chemical")
-		item.fuel_category = "chemical"
+		item.fuel_categories = {"chemical"}
 	end
 end
