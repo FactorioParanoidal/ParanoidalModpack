@@ -12,6 +12,9 @@ Date: 2026-02-20
   Bugfixes:
     - Paranoidal: closing a GUI no longer errors for a player without Filter Helper data.
     - Paranoidal: closing a GUI or rebuilding the panel no longer errors when the panel was already destroyed from outside.
+  Compatibility:
+    - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
+    - Paranoidal port to Factorio 2.1: item fuel categories are read from fuel_categories (a list; LuaItemPrototype::fuel_category was removed).
 ---------------------------------------------------------------------------------------------------
 Version: 0.2.23
 Date: 2026-02-06

@@ -49,8 +49,8 @@ local function get_items_by_fuel_category(fuel_category)
     if not fuel_category_to_items_cache then
         fuel_category_to_items_cache = {}
         for _, item_prototype in pairs(prototypes.item) do
-            local item_fuel_category = item_prototype.fuel_category
-            if item_fuel_category then
+            -- Factorio 2.1: an item lists its fuel categories (fuel_categories, nil when empty).
+            for _, item_fuel_category in pairs(item_prototype.fuel_categories or {}) do
                 if not fuel_category_to_items_cache[item_fuel_category] then
                     fuel_category_to_items_cache[item_fuel_category] = {}
                 end
