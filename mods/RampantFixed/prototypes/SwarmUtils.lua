@@ -1146,7 +1146,9 @@ local function buildCaptiveBiterSpawner(faction)
         }
 	
 	recipe_biterEgg.name = faction.type.."-"..recipe_biterEgg.name.."-rampant" 
-	recipe_biterEgg.category = faction.type.."-"..recipe_biterEgg.category.."-rampant" 
+	-- Factorio 2.1: recipe category -> categories (main category = categories[1])
+	local biterEggCategory = faction.type.."-"..(recipe_biterEgg.categories or {"crafting"})[1].."-rampant"
+	recipe_biterEgg.categories = {biterEggCategory}
 	recipe_biterEgg.icons = {{icon = recipe_biterEgg.icon, tint = faction.tint}}
 	recipe_biterEgg.results[1].name = item_biterEgg.name
 	recipe_biterEgg.order = recipe_biterEgg.order.."_"..faction.type
@@ -1156,7 +1158,7 @@ local function buildCaptiveBiterSpawner(faction)
 	data:extend({
 	  {
 		type = "recipe-category",
-		name = recipe_biterEgg.category
+		name = biterEggCategory
 	  }	
 	})	
 	local eggsKf = 1
@@ -1204,7 +1206,7 @@ local function buildCaptiveBiterSpawner(faction)
             {"rampant."..faction.type},
             {"rampant.captive-biter-spawner"}
         }
-	captiveBiterSpawner.crafting_categories = {recipe_biterEgg.category}
+	captiveBiterSpawner.crafting_categories = {biterEggCategory}
 	captiveBiterSpawner.name = faction.type.."-"..captiveBiterSpawner.name.."-rampant"
 	captiveBiterSpawner.icons = {{icon = captiveBiterSpawner.icon, tint = faction.tint}}
 	captiveBiterSpawner.graphics_set.animation.layers[1].tint = faction.tint

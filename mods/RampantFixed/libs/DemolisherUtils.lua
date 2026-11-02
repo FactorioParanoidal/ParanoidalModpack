@@ -405,7 +405,7 @@ function demolisherUtils.makeDemolisherFood()
 	local newRecipe =
 		   {
 			  type = "recipe",
-			  category = "metallurgy",
+			  categories = {"metallurgy"},
 			  name = "demolisher-food-rocket-rampant",
 			  energy_required = 10,
 			  ingredients =
@@ -1027,7 +1027,7 @@ function demolisherUtils.makeUnstableReactor()
 		,
 	   {
 		  type = "recipe",
-		  category = "metallurgy",
+		  categories = {"metallurgy"},
 		  name = "unstable-feeding-reactor-rampant",
 		  energy_required = 10,
 		  ingredients =
