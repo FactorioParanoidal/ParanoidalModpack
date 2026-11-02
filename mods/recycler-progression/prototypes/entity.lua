@@ -1,20 +1,20 @@
 local util = require("util")
 local sounds = require("__base__.prototypes.entity.sounds")
-local recycler_pictures = require("__quality__.prototypes.entity.recycler-pictures")
+local recycler_pictures = require("__recycler__.recycler-pictures")
 require("__core__.lualib.circuit-connector-sprites")
 require("__core__.lualib.circuit-connector-generated-definitions")
 
 -- Reusable working sound referencing vanilla recycler audio assets
 local function recycler_working_sound()
   return {
-    sound = {filename = "__quality__/sound/recycler/recycler-loop.ogg", volume = 0.7},
+    sound = {filename = "__recycler__/sound/recycler/recycler-loop.ogg", volume = 0.7},
     sound_accents = {
-      {sound = {variations = sound_variations("__quality__/sound/recycler/recycler-jaw-move", 5, 0.45), audible_distance_modifier = 0.2}, frame = 14},
-      {sound = {variations = sound_variations("__quality__/sound/recycler/recycler-vox", 5, 0.2), audible_distance_modifier = 0.3}, frame = 20},
-      {sound = {variations = sound_variations("__quality__/sound/recycler/recycler-mechanic", 3, 0.3), audible_distance_modifier = 0.3}, frame = 45},
-      {sound = {variations = sound_variations("__quality__/sound/recycler/recycler-jaw-move", 5, 0.45), audible_distance_modifier = 0.2}, frame = 60},
-      {sound = {variations = sound_variations("__quality__/sound/recycler/recycler-trash", 5, 0.6), audible_distance_modifier = 0.3}, frame = 61},
-      {sound = {variations = sound_variations("__quality__/sound/recycler/recycler-jaw-shut", 6, 0.3), audible_distance_modifier = 0.6}, frame = 63},
+      {sound = {variations = sound_variations("__recycler__/sound/recycler/recycler-jaw-move", 5, 0.45), audible_distance_modifier = 0.2}, frame = 14},
+      {sound = {variations = sound_variations("__recycler__/sound/recycler/recycler-vox", 5, 0.2), audible_distance_modifier = 0.3}, frame = 20},
+      {sound = {variations = sound_variations("__recycler__/sound/recycler/recycler-mechanic", 3, 0.3), audible_distance_modifier = 0.3}, frame = 45},
+      {sound = {variations = sound_variations("__recycler__/sound/recycler/recycler-jaw-move", 5, 0.45), audible_distance_modifier = 0.2}, frame = 60},
+      {sound = {variations = sound_variations("__recycler__/sound/recycler/recycler-trash", 5, 0.6), audible_distance_modifier = 0.3}, frame = 61},
+      {sound = {variations = sound_variations("__recycler__/sound/recycler/recycler-jaw-shut", 6, 0.3), audible_distance_modifier = 0.6}, frame = 63},
     },
     max_sounds_per_prototype = 2,
     fade_in_ticks = 4,
@@ -203,7 +203,7 @@ data:extend({
     allowed_effects = {"consumption", "speed", "pollution", "quality"},
     icon_draw_specification = {shift = {0, -0.55}},
     icons_positioning = {
-      {inventory_index = defines.inventory.furnace_modules, shift = {0, 0.2}}
+      {inventory_index = defines.inventory.crafter_modules, shift = {0, 0.2}}
     },
     cant_insert_at_source_message_key = "inventory-restriction.cant-be-recycled",
     use_mirroring        = true,
@@ -252,7 +252,7 @@ data:extend({
     allowed_effects = {"consumption", "speed", "pollution", "quality"},
     icon_draw_specification = {shift = {0, -0.55}},
     icons_positioning = {
-      {inventory_index = defines.inventory.furnace_modules, shift = {0, 0.2}}
+      {inventory_index = defines.inventory.crafter_modules, shift = {0, 0.2}}
     },
     cant_insert_at_source_message_key = "inventory-restriction.cant-be-recycled",
     use_mirroring        = true,

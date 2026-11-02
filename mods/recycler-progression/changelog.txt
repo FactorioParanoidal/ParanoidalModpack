@@ -4,6 +4,10 @@ Date: 12.10.2026
   Bugfixes:
     - Version number starts with 9 (Paranoidal fork): the Mod Portal never offers an "update" over local changes.
     - Recycler 2/3 technologies use their own names (were shown as an unknown key "technology-name.recycler").
+  Compatibility:
+    - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
+    - Paranoidal port to Factorio 2.1: recycler pictures and sounds are taken from the new built-in recycler mod (__recycler__); dependencies base/quality >= 2.1.0 and recycler >= 2.1.0.
+    - Paranoidal port to Factorio 2.1: defines.inventory.assembling_machine_*, furnace_* and rocket_silo_input/output/modules replaced by defines.inventory.crafter_input/output/modules/trash.
 ---------------------------------------------------------------------------------------------------
 Version: 1.1.2
 Date: 10.10.2026
