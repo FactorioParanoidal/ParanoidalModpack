@@ -1,3 +1,11 @@
+-- Factorio 2.1: a science pack can be of any item type (vanilla packs are plain items, mod packs may stay tools).
+local function is_science_pack(name)
+  for item_type in pairs(defines.prototypes.item) do
+    if data.raw[item_type] and data.raw[item_type][name] then return true end
+  end
+  return false
+end
+
 require ("__mferrari_lib__.logic")
 colors = require ("__mferrari_lib__.colors")
 
@@ -132,7 +140,7 @@ function remove_recipe_ingredient(recipe_name, ingredient)
     
     
     function add_new_science_pack(technology, pack, amount)
-      if data.raw.technology[technology] and data.raw.tool[pack] then
+      if data.raw.technology[technology] and is_science_pack(pack) then
         local addit = true
         for i, ingredient in pairs(data.raw.technology[technology].unit.ingredients) do
           if ingredient[1] == pack or ingredient.name == pack then addit = false end
@@ -142,14 +150,14 @@ function remove_recipe_ingredient(recipe_name, ingredient)
         if not data.raw.technology[technology] then
           log("Technology " .. technology .. " does not exist.")
         end
-        if not data.raw.tool[pack] then
-          log("Science pack " .. new .. " does not exist.")
+        if not is_science_pack(pack) then
+          log("Science pack " .. pack .. " does not exist.")
         end
       end
     end
     
     function remove_science_pack(technology, pack)
-      if data.raw.technology[technology] and data.raw.technology[technology].unit and data.raw.technology[technology].unit.ingredients and data.raw.tool[pack] then
+      if data.raw.technology[technology] and data.raw.technology[technology].unit and data.raw.technology[technology].unit.ingredients and is_science_pack(pack) then
         local ingredients = table.deepcopy(data.raw.technology[technology].unit.ingredients)
         for i=#ingredients,1,-1 do
             local ingredient = ingredients[i]

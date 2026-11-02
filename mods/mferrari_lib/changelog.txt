@@ -8,6 +8,10 @@ Version: 0.6.6
   Bugfixes:
     - Paranoidal fork: CallFrenzyAttack no longer reads an invalid target entity
     - Paranoidal fork: get_pos_near_from_aproach returns the point at the given distance on the straight line to the approaching position (used pos.x for y and offset both axes, a diagonal 1.41 times longer, out of the boss spidertron and flying saucer weapon range)
+    - Fixed the missing-science-pack log message (it used an undefined variable).
+  Compatibility:
+    - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
+    - Paranoidal port to Factorio 2.1: science pack checks accept every item type (2.1 vanilla science packs are plain items, mod packs may stay tools).
 ---------------------------------------------------------------------------------------------------
 Version: 0.6.4
   Changes:
