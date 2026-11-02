@@ -24,3 +24,5 @@ Date: 2026-11-01
   Info:
     - Saves: the storage of the three old mods is not taken over. Personal snapping on/off returns to on; everything else is rebuilt from the game.
     - Reverse driving keeps the old behaviour: the drift slowdown is applied to forward speed only.
+  Compatibility:
+    - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
