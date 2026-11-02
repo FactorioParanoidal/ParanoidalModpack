@@ -64,6 +64,8 @@ Date: 2026-10-24
     - Paranoidal port to Factorio 2.1: product probability renamed to independent_probability (recipe results, minable results, generated products).
     - Paranoidal port to Factorio 2.1: items use fuel_categories (ItemPrototype::fuel_category was removed).
     - Paranoidal port to Factorio 2.1: result helpers write independent_probability (probability is still accepted as input).
+    - Factorio 2.1: Yuoki generators (turbines, mechanical force and emergency generators) move their animations to GeneratorPrototype::pictures (horizontal_animation/vertical_animation are silently ignored in 2.1, the generators were invisible).
+    - Factorio 2.1: hide_connection_info moved from the fluid box to every pipe connection (FluidBox::hide_connection_info was removed, PipeConnectionDefinition::hide_connection_info added; without it 2.1 draws connection arrows and fluid icons on these entities).
 ---------------------------------------------------------------------------------------------------
 Version: 1.2.23
 Date: 4. 7. 2026
