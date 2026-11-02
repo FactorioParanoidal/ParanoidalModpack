@@ -10,6 +10,8 @@ Date: 01.06.2026
     - Moved Sodium carbonate from Brown alge recipe later in the tech tree (1264)
     - Adjusted which tiles each type of tree and garden can swawn on (1265)
     - Changed Agriculture module 3 ingredients (with Bob's MCI / Bob's Electronics but without Bob's Modules) (1273)
+  Compatibility:
+    - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.2
 Date: 18.01.2026
