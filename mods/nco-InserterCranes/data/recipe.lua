@@ -45,7 +45,6 @@ local function make_crane_recipe(recipeName, newName, wide)
 			always_show_made_in = true,
 			allow_as_intermediate = false,
 			allow_intermediates = false,
-			always_show_products = true,
 			energy_required = 1,
 			enabled = true,
 			ingredients = {
