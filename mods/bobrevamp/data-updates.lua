@@ -96,7 +96,7 @@ if settings.startup["bobmods-revamp-oil"].value == true then
   end
 
   for i, recipe in pairs(data.raw.recipe) do
-    if recipe.category == "oil-processing" then
+    if bobmods.lib.recipe.get_category(recipe) == "oil-processing" then
       if recipe.results then
         change_pg_to_sg(recipe.results)
       end

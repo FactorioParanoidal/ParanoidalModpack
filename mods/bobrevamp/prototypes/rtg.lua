@@ -99,7 +99,7 @@ if bobmods.plates and settings.startup["bobmods-revamp-rtg"].value == true then
         name = "bob-brine",
         subgroup = "fluid-recipes",
         order = "f[brine]",
-        category = "chemistry",
+        categories = {"chemistry"},
         energy_required = 0.5,
         enabled = false,
         ingredients = {
@@ -121,7 +121,7 @@ if bobmods.plates and settings.startup["bobmods-revamp-rtg"].value == true then
         name = "bob-ammoniated-brine",
         subgroup = "fluid-recipes",
         order = "f[ammoniated-brine]",
-        category = "chemistry",
+        categories = {"chemistry"},
         energy_required = 1,
         enabled = false,
         ingredients = {
@@ -145,7 +145,7 @@ if bobmods.plates and settings.startup["bobmods-revamp-rtg"].value == true then
         icon_size = 32,
         subgroup = "bob-resource-chemical",
         order = "f[sodium-bicarbonate]",
-        category = "chemistry",
+        categories = {"chemistry"},
         energy_required = 1,
         enabled = false,
         ingredients = {
@@ -170,7 +170,7 @@ if bobmods.plates and settings.startup["bobmods-revamp-rtg"].value == true then
         icon_size = 32,
         subgroup = "bob-resource-chemical",
         order = "f[sodium-carbonate]",
-        category = "chemistry",
+        categories = {"chemistry"},
         energy_required = 1,
         enabled = false,
         ingredients = {
@@ -195,7 +195,7 @@ if bobmods.plates and settings.startup["bobmods-revamp-rtg"].value == true then
         icon_size = 64,
         subgroup = "bob-resource-chemical",
         order = "f[ammonium-chloride-reprocessing]",
-        category = "chemistry",
+        categories = {"chemistry"},
         energy_required = 2,
         enabled = false,
         ingredients = {
@@ -221,7 +221,7 @@ if bobmods.plates and settings.startup["bobmods-revamp-rtg"].value == true then
         icon_size = 64,
         subgroup = "bob-fluid-electrolysis",
         order = "b[fluid-chemistry]-b[brine-electrolysis]",
-        category = "bob-electrolysis",
+        categories = {"bob-electrolysis"},
         enabled = false,
         energy_required = 1.5,
         ingredients = {
@@ -244,7 +244,7 @@ if bobmods.plates and settings.startup["bobmods-revamp-rtg"].value == true then
         icon_size = 32,
         subgroup = "bob-resource-chemical",
         order = "f[sodium-carbonate]",
-        category = "chemistry",
+        categories = {"chemistry"},
         energy_required = 5,
         enabled = false,
         ingredients = {
@@ -308,7 +308,7 @@ if bobmods.plates and settings.startup["bobmods-revamp-rtg"].value == true then
       icon_size = 32,
       subgroup = "bob-resource-chemical",
       order = "f[sodium-cobaltate]",
-      category = "chemistry",
+      categories = {"chemistry"},
       energy_required = 12,
       enabled = false,
       ingredients = {
@@ -329,7 +329,7 @@ if bobmods.plates and settings.startup["bobmods-revamp-rtg"].value == true then
     {
       type = "recipe",
       name = "bob-rtg",
-      category = "advanced-crafting",
+      categories = {"advanced-crafting"},
       energy_required = 20,
       enabled = false,
       ingredients = {

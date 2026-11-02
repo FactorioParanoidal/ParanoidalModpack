@@ -90,7 +90,7 @@ if data.raw.fluid["bob-hydrogen"] and data.raw.fluid["bob-oxygen"] and data.raw.
       icon_size = 64,
       order = "b[fluid-chemistry]-b[ammonia]",
       energy_required = 1,
-      category = "chemistry",
+      categories = {"chemistry"},
       subgroup = "fluid-recipes",
       enabled = false,
       ingredients = {
@@ -115,7 +115,7 @@ if data.raw.fluid["bob-hydrogen"] and data.raw.fluid["bob-oxygen"] and data.raw.
       icon_size = 64,
       order = "b[fluid-chemistry]-b[hydrogen-peroxide]",
       energy_required = 1,
-      category = "chemistry",
+      categories = {"chemistry"},
       subgroup = "fluid-recipes",
       enabled = false,
       ingredients = {
@@ -140,7 +140,7 @@ if data.raw.fluid["bob-hydrogen"] and data.raw.fluid["bob-oxygen"] and data.raw.
       icon_size = 64,
       order = "b[fluid-chemistry]-b[hydrazine]",
       energy_required = 1,
-      category = "chemistry",
+      categories = {"chemistry"},
       subgroup = "fluid-recipes",
       enabled = false,
       ingredients = {
@@ -166,7 +166,7 @@ if data.raw.fluid["bob-hydrogen"] and data.raw.fluid["bob-oxygen"] and data.raw.
       icon_size = 64,
       order = "b[fluid-chemistry]-b[bob-nitrogen-dioxide]",
       energy_required = 1,
-      category = "chemistry",
+      categories = {"chemistry"},
       subgroup = "fluid-recipes",
       enabled = false,
       ingredients = {
@@ -191,7 +191,7 @@ if data.raw.fluid["bob-hydrogen"] and data.raw.fluid["bob-oxygen"] and data.raw.
       icon_size = 64,
       order = "b[fluid-chemistry]-b[dinitrogen-tetroxide]",
       energy_required = 1,
-      category = "chemistry",
+      categories = {"chemistry"},
       subgroup = "fluid-recipes",
       enabled = false,
       ingredients = {
@@ -237,7 +237,7 @@ if data.raw.fluid["bob-hydrogen"] and data.raw.fluid["bob-oxygen"] and data.raw.
         icon_size = 64,
         order = "b[fluid-chemistry]-b[nitric-oxide]",
         energy_required = 1,
-        category = "chemistry",
+        categories = {"chemistry"},
         subgroup = "fluid-recipes",
         enabled = false,
         ingredients = {
@@ -263,7 +263,7 @@ if data.raw.fluid["bob-hydrogen"] and data.raw.fluid["bob-oxygen"] and data.raw.
         icon_size = 64,
         order = "b[fluid-chemistry]-b[bob-nitrogen-dioxide]",
         energy_required = 1,
-        category = "chemistry",
+        categories = {"chemistry"},
         subgroup = "fluid-recipes",
         enabled = false,
         ingredients = {
@@ -288,7 +288,7 @@ if data.raw.fluid["bob-hydrogen"] and data.raw.fluid["bob-oxygen"] and data.raw.
       {
         type = "recipe",
         name = "bob-enriched-fuel-from-hydrazine",
-        category = "chemistry",
+        categories = {"chemistry"},
         enabled = false,
         energy_required = 12,
         ingredients = {
