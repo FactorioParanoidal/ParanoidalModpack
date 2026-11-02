@@ -4,7 +4,7 @@ data:extend({
     name = "random-dropship-unboxing",
     icon = "__ERPCTbaAB2__/graphics/icons/random-dropship.png",
     icon_size = 32,
-    category = mods["angelssmelting"] and "angels-ore-sorting" or "satellite-crafting",
+    categories = {mods["angelssmelting"] and "angels-ore-sorting" or "satellite-crafting"},
     energy_required = 10,
     enabled = false,
     subgroup = "space-mining",
