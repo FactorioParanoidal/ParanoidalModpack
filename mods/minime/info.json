@@ -4,7 +4,7 @@
   "title": "miniMAXIme: Character scaler and selector",
   "author": "DellAquila; Pi-C",
   "description": "Adjust the size of your character -- and change your appearance at any time if you've other mods that provide extra characters!",
-  "factorio_version": "2.0",
+  "factorio_version": "2.1",
   "homepage": "https://forums.factorio.com/viewtopic.php?f=190&t=101538",
   "dependencies": [
     "base >= 2.0.12",

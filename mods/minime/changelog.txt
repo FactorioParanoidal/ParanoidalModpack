@@ -18,6 +18,8 @@ Date: 2026-03-03
     - Revert blacklisting surfaces with RSO (last version checked: 7.0.22) when the bug reported in <https://mods.factorio.com/mod/rso-mod/discussion/67d2a535c57b94e615028ec0> is fixed! Our surfaces should be auto-ignored by RSO because they are too small, but this will cause a crash in RSO (trying to access uninitialized tables).
     - Add dependency on "mimikyu Character" when it calls CharModHelper.check_my_prototypes() from data-final-fixes (last version checked: 0.1.0).
     - Add dependency on "spearmaster Character" when it calls CharModHelper.check_my_prototypes() from data-final-fixes (last version checked: 0.1.0).
+  Compatibility:
+    - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.18
 Date: 2026-01-27
