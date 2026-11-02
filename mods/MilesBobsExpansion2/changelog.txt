@@ -5,3 +5,6 @@ Version: 9.6.1
       format (flow_direction, mandatory direction, position on the machine edge); the old 1.1 entries
       had no direction and lay outside the machine and loaded only because assembler-pipe-passthrough
       replaced them.
+  Compatibility:
+    - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
+    - Paranoidal port to Factorio 2.1: assembler pipe pictures are taken from __base__/prototypes/entity/assembler-pictures.lua (2.1 removed the global assembler2pipepictures/assembler3pipepictures and assemblerpipes.lua).
