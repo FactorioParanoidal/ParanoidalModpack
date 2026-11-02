@@ -1,0 +1,4 @@
+---------------------------------------------------------------------------------------------------
+Version: 2.0.1
+  Compatibility:
+    - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
