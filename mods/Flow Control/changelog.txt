@@ -3,6 +3,8 @@ Version: 3.2.3
 Date: 08. 02. 2025
   Changes:
     - Valve dependency changed to optional
+  Compatibility:
+    - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
 ---------------------------------------------------------------------------------------------------
 Version: 3.2.2
 Date: 12. 11. 2024
