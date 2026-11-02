@@ -67,7 +67,7 @@ function processors.wagons_per_timescale(metadata, raw_amount, item_proto, _)
     return number, tooltip
 end
 
-local lift_capactity = prototypes.utility_constants.rocket_lift_weight
+local lift_capactity = prototypes.utility_constants.default_rocket_lift_weight  -- renamed in Factorio 2.1
 function processors.rockets_per_timescale(metadata, raw_amount, item_proto, _)
     if item_proto.type == "fluid" then return nil, {"fp.fluid_item"} end
     if item_proto.weight > lift_capactity then return nil, {"fp.item_too_heavy"} end
@@ -196,7 +196,7 @@ function item_views.rebuild_data(player)
         adjusted_margin_of_error = MAGIC_NUMBERS.margin_of_error / preferences.timescale,
         belt_or_lane = belts_or_lanes:sub(1, -2),
         throughput_multiplier = 1 / throughput_divisor,
-        pumping_speed = pump_proto.get_pumping_speed(default_pump.quality.name) * 60,
+        pumping_speed = (pump_proto.get_pumping_speed(default_pump.quality.name) or 0) * 60,
         cargo_wagon_capactiy = cargo_wagon_proto.get_inventory_size(defines.inventory.cargo_wagon,
             default_cargo_wagon.quality.name),
         fluid_wagon_capacity = fluid_wagon_proto.get_fluid_capacity(default_fluid_wagon.quality.name),

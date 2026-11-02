@@ -131,9 +131,9 @@ function generator.recipes.generate()
     local recipe_filter = {{filter="energy", comparison=">", value=0},
         {filter="energy", comparison="<", value=1e+21, mode="and"}}
     for recipe_name, proto in pairs(prototypes.get_recipe_filtered(recipe_filter)) do
-        if not proto.is_parameter then
-            local categories = {[proto.category] = true}
-            for _, cat in pairs(proto.additional_categories) do categories[cat] = true end
+        if not proto.parameter then  -- Factorio 2.1: is_parameter -> LuaPrototypeBase::parameter
+            local categories = {}  -- Factorio 2.1: category + additional_categories -> categories
+            for _, cat in pairs(proto.categories) do categories[cat] = true end
 
             local recipe = {
                 name = proto.name,
@@ -332,7 +332,8 @@ function generator.recipes.generate()
                 boiler_recipe.energy = 0  -- treated separately by solver
 
                 local ingredients = {{type="fluid", name=fluid_proto.name, amount=1,
-                    minimum_temperature=input.minimum_temperature, maximum_temperature=input.maximum_temperature}}
+                    -- Factorio 2.1: input temperature limits moved from the fluid box to the boiler
+                    minimum_temperature=proto.minimum_input_temperature, maximum_temperature=proto.maximum_input_temperature}}
 
                 local product_name, product_amount = fluid_proto.name, 1
                 if output ~= nil and output.filter ~= nil then
@@ -1106,7 +1107,7 @@ function generator.pumps.generate()
                 sprite = sprite,
                 elem_type = "entity",
                 rich_text = "[entity=" .. proto.name .. "]",
-                pumping_speed = generator_util.get_base_value(proto.get_pumping_speed()) * 60
+                pumping_speed = (generator_util.get_base_value(proto.get_pumping_speed()) or 0) * 60
             }
             insert_prototype(pumps, pump, nil)
         end

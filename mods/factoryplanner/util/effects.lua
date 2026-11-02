@@ -60,9 +60,9 @@ function _effects.limit(effects, maximum_productivity)
     return effects, indications
 end
 
--- It's weird that this is the value used to determine the factor that the quality effect is
---   multiplied by, but this is how the game does it, so here we are
-local quality_effect_factor = prototypes.quality["normal"].next_probability
+-- Factorio 2.1: quality effect values are no longer multiplied by next_probability in the GUI
+--   (prototype values were divided by 10 instead), so they are shown as they are
+local quality_effect_factor = 1
 
 ---@param value EffectValue
 ---@param color string
