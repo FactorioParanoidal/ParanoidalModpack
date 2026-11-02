@@ -33,22 +33,22 @@ local stone = CheckItem({'sand','solid-sand','stone'})
 
 local res_stone1,res_stone2
 if stone=='stone' then
-	res_stone1 = {{type="item", name="rsc-building-stage1", amount=1,probability=0}, {type="item", name="stone", amount=50} }
-	res_stone2 = {{type="item", name="rsc-building-stage3", amount=1,probability=0},
+	res_stone1 = {{type="item", name="rsc-building-stage1", amount=1,independent_probability=0}, {type="item", name="stone", amount=50} }
+	res_stone2 = {{type="item", name="rsc-building-stage3", amount=1,independent_probability=0},
 		  {type="item", name="stone", amount=50}, 
-		  {type="item", name="coal", amount=5,probability=0.15},
-		  {type="item", name="iron-ore", amount=5,probability=0.15},
-		  {type="item", name="copper-ore", amount=5,probability=0.15}}
+		  {type="item", name="coal", amount=5,independent_probability=0.15},
+		  {type="item", name="iron-ore", amount=5,independent_probability=0.15},
+		  {type="item", name="copper-ore", amount=5,independent_probability=0.15}}
 	else
-	res_stone1 = {{type="item", name="rsc-building-stage1", amount=1,probability=0}, {type="item", name="stone", amount=20,probability=0.15}, 
+	res_stone1 = {{type="item", name="rsc-building-stage1", amount=1,independent_probability=0}, {type="item", name="stone", amount=20,independent_probability=0.15},
 					{type="item", name=stone, amount=100}}
-	res_stone2 =  {{type="item", name="rsc-building-stage3", amount=1,probability=0}, {type="item", name="stone", amount=20,probability=0.10}, 
+	res_stone2 =  {{type="item", name="rsc-building-stage3", amount=1,independent_probability=0}, {type="item", name="stone", amount=20,independent_probability=0.10},
 					{type="item", name=stone, amount=100}}
 	end
 	
 
-local build_result2 = {{type="item", name="rsc-building-stage2", amount=1,probability=0}}
-local build_result4 = {{type="item", name="rsc-building-stage4", amount=1,probability=0}}
+local build_result2 = {{type="item", name="rsc-building-stage2", amount=1,independent_probability=0}}
+local build_result4 = {{type="item", name="rsc-building-stage4", amount=1,independent_probability=0}}
 
 	
 if data.raw.item['stone-crushed'] then 
@@ -59,16 +59,16 @@ if data.raw.item['stone-crushed'] then
 if data.raw.item['slag'] then 
 	table.insert(res_stone1,{type="item", name="slag", amount=40})
 	table.insert(res_stone2,{type="item", name="slag", amount=60})
-	table.insert(build_result2,{type="item", name="slag", amount=40, probability=0.25})
-	table.insert(build_result4,{type="item", name="slag", amount=40, probability=0.25})
+	table.insert(build_result2,{type="item", name="slag", amount=40, independent_probability=0.25})
+	table.insert(build_result4,{type="item", name="slag", amount=40, independent_probability=0.25})
 elseif data.raw.item['ei_slag'] then 
 	table.insert(res_stone1,{type="item", name="ei_slag", amount=40})
 	table.insert(res_stone2,{type="item", name="ei_slag", amount=60})
-	table.insert(build_result2,{type="item", name="ei_slag", amount=40, probability=0.25})
-	table.insert(build_result4,{type="item", name="ei_slag", amount=40, probability=0.25})
+	table.insert(build_result2,{type="item", name="ei_slag", amount=40, independent_probability=0.25})
+	table.insert(build_result4,{type="item", name="ei_slag", amount=40, independent_probability=0.25})
 	else
-	table.insert(build_result2,{type="item", name="stone", amount=40, probability=0.25})
-	table.insert(build_result4,{type="item", name="stone", amount=40, probability=0.25})
+	table.insert(build_result2,{type="item", name="stone", amount=40, independent_probability=0.25})
+	table.insert(build_result4,{type="item", name="stone", amount=40, independent_probability=0.25})
 	end 
 	
 
@@ -244,7 +244,7 @@ data:extend({
 		ingredients = ing_stage5,
 		results=
 		{
-		  {type="item", name="rsc-building-stage5", amount=1,probability=0},
+		  {type="item", name="rsc-building-stage5", amount=1,independent_probability=0},
 		},     
 	},
 	
@@ -275,7 +275,7 @@ data:extend({
 		},
 		results=
 		{
-		  {type="item", name="rsc-building-stage6", amount=1,probability=0},
+		  {type="item", name="rsc-building-stage6", amount=1,independent_probability=0},
 		},     
 	},
 	
@@ -380,7 +380,7 @@ if enable_se_probe then
 		},
 		results=
 		{
-		  {type="item", name="rsc-building-stage2", amount=1,probability=0},
+		  {type="item", name="rsc-building-stage2", amount=1,independent_probability=0},
 		},     
 	},
 	
@@ -409,7 +409,7 @@ if enable_se_probe then
 		},
 		results=
 		{
-		  {type="item", name="rsc-building-stage2", amount=1,probability=0},
+		  {type="item", name="rsc-building-stage2", amount=1,independent_probability=0},
 		},     
 	},
 	})
