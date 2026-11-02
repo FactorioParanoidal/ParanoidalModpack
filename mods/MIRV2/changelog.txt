@@ -6,3 +6,5 @@ Date: 15. 10. 2026
   Graphics:
     - Removed the unused 1.1 hr-bigass-explosion-36f.png filename next to the stripes of the nuke explosion (the file does not exist in 2.0)
     - thumbnail.png is redrawn at 144x144 after the old smaller picture: text and simple shapes are drawn again, the rest is resampled and sharpened.
+  Compatibility:
+    - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
