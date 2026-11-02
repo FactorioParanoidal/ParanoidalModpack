@@ -168,10 +168,12 @@ function generator.recipes.generate()
     local entity_filter = {{filter="hidden", invert=true}}
     for _, proto in pairs(prototypes.get_entity_filtered(entity_filter)) do
         -- Recipes fixed to machines are duplicated with a special category
-        if proto.crafting_categories and proto.energy_usage and proto.fixed_recipe then
-            local recipe = recipes[proto.fixed_recipe]
+        -- Factorio 2.1: fixed_recipe is a LuaRecipePrototype, not a name
+        local fixed_recipe = proto.fixed_recipe and proto.fixed_recipe.name
+        if proto.crafting_categories and proto.energy_usage and fixed_recipe then
+            local recipe = recipes[fixed_recipe]
             if recipe ~= nil then
-                local category = proto.name .. "-using-" .. proto.fixed_recipe
+                local category = proto.name .. "-using-" .. fixed_recipe
                 local recipe_copy = ftable.deep_copy(recipe)
                 recipe_copy.name = recipe.name .. "-for-" .. proto.name
                 recipe_copy.categories = {[category] = true}
@@ -831,9 +833,10 @@ function generator.machines.generate()
                 end
             end  -- silos are also added as normal machines to produce rocket parts
 
-            if proto.fixed_recipe then  -- fixed recipe machines get their own category
-                if recipe_prototypes[proto.fixed_recipe] ~= nil then
-                    local category = proto.name .. "-using-" .. proto.fixed_recipe
+            local fixed_recipe = proto.fixed_recipe and proto.fixed_recipe.name  -- Factorio 2.1: a LuaRecipePrototype
+            if fixed_recipe then  -- fixed recipe machines get their own category
+                if recipe_prototypes[fixed_recipe] ~= nil then
+                    local category = proto.name .. "-using-" .. fixed_recipe
                     local prototype_category = proto.type:gsub("-", "_")
                     local machine = generate_category_entry(category, proto, prototype_category)
                     if machine then insert_machine(machine) end
@@ -964,7 +967,7 @@ function generator.fuels.generate()
                 sprite = "item/" .. proto.name,
                 type = "item",
                 elem_type = "item",
-                category = proto.fuel_category,
+                category = proto.fuel_categories and proto.fuel_categories[1],  -- Factorio 2.1: fuel_categories
                 combined_category = nil,  -- set below
                 fuel_value = proto.fuel_value,
                 minimum_temperature = nil,  -- fluid-only
