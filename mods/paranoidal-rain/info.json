@@ -1,0 +1,23 @@
+{
+  "name": "paranoidal-rain",
+  "version": "9.0.0",
+  "title": "Paranoidal Rain",
+  "author": "FactorioParanoidal; Dynamic Rain by valertron; Real Rain by Squishy1870",
+  "homepage": "https://github.com/FactorioParanoidal/ParanoidalModpack",
+  "factorio_version": "2.0",
+  "description": "Weather for Nauvis: rain in stages from drizzle to monsoon with layered drops, splashes and puddles, a seamless rain sound, thunder that travels at the speed of sound and lightning strikes (scripted on 2.0 with the Space Age lightning graphics). Rain dims solar power, washes pollution out, slowly puts fires out, takes the bite out of enemy fire and acid, halves flamethrowers and slows burning fluids and ammunition cook-off down.",
+  "dependencies": [
+    "base >= 2.0.77",
+    "? paranoidal-flammable-fluids",
+    "? RampantFixed",
+    "? Big-Monsters",
+    "? mferrari_lib",
+    "? Aircraft-space-age",
+    "? flamethrower-wagon-reforged",
+    "? zzzparanoidal",
+    "! dynamic-rain",
+    "! real-rain",
+    "! nauvis_rain",
+    "! sen-weather"
+  ]
+}

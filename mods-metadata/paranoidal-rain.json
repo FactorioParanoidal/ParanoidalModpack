@@ -1,0 +1,15 @@
+{
+  "mod": "paranoidal-rain",
+  "source": "local",
+  "original": {
+    "name": "Dynamic Rain",
+    "authors": [
+      "valertron"
+    ],
+    "portal": {
+      "name": "dynamic-rain",
+      "url": "https://mods.factorio.com/mod/dynamic-rain"
+    }
+  },
+  "changeReason": "Собственный мод проекта: форк Dynamic Rain 1.2.0 (valertron, MIT) под Factorio 2.0 с находками Real Rain 1.2.15 (Squishy1870, https://mods.factorio.com/mod/real-rain): стадии непогоды, слои капель, ветер, брызги, лужи, раскаты грома и его звуки Mixkit. Молнии в 2.0 — скриптом на графике и звуках Space Age (движковая молния требует флага Space Age; вариант 2.1 закомментирован). Дождь постепенно тушит обычный огонь, обнуляет урон огнём и кислотой врагов, вдвое ослабляет огнемёты, снижает солнечную энергию до 75 % и замедляет опасности paranoidal-flammable-fluids. Настройки переименованы с префиксом prain-; удалены окно статистики со скрытой силой, отладка и поддержка Jetpack/планет Space Age; графика пережата."
+}

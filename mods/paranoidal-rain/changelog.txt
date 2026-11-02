@@ -1,0 +1,17 @@
+---------------------------------------------------------------------------------------------------
+Version: 9.0.0
+Date: 2026-11-02
+  Major Features:
+    - New mod of the build: a fork of Dynamic Rain 1.2.0 (valertron, MIT) for Factorio 2.0 with parts of Real Rain 1.2.15 (Squishy1870): storm stages drizzle - rain - heavy - storm - monsoon, three drop layers with wind buckets and gusts, splashes and water ripples, puddles after the rain, rolling thunder and its Mixkit sounds.
+    - Lightning strikes on 2.0 without Space Age: the engine lightning needs the Space Age feature flag, so a strike is scripted (target priorities of Dynamic Rain, effects on poles, radars, robots, creatures, trees, fish and flammable things, a discharge chain) and drawn with the Space Age impact flash, ground streamers and sounds copied into the mod. The engine variant of Dynamic Rain is kept commented out for 2.1.
+    - Rain slowly puts ordinary fires out in waves from the edges with steam (a big fire within 30 s) and washes enemy acid away; lightning fires and burning flammable fluids stay.
+    - In the rain enemy fire and acid deal no damage and fire damage of flamethrowers, flamethrower turrets and wagons is halved (settings).
+    - Rain slows paranoidal-flammable-fluids hazards down 2.5 times (remote hazard_slowdown): burning tanks, fire through pipes, ammunition cook-off. Lightning sets storage tanks and ammunition stores off through that mod.
+  Changes:
+    - Settings renamed with the prefix "prain-"; solar power in the rain 75 % by default; weather only on Nauvis by default; no rain during the first 30-60 minutes of a map.
+    - Removed: the weather statistics window and its hidden force (a desync risk on save load in multiplayer, and force switching of players), the debug overlay, Jetpack and Space Age planet support, the test hooks. Counters are shown by /prain status.
+    - A radar struck by lightning is disabled by script for 20 s instead of being moved to the neutral force.
+  Optimizations:
+    - A shared drop limit per tick (prain-max-drops-per-tick, 300): far zoom and many players thin the rain instead of slowing the game.
+    - Only own settings and surface events rebuild the state; chunk counts are not recounted for every new surface.
+    - The fire/acid damage handler is registered only while it rains.
