@@ -9,6 +9,9 @@ Date: 31.5.2025
     - Paranoidal: after 16 tiles each additional tile adds 5/12 of the usual capacity, so large merged chests differ in size instead of hitting the shared limit.
   Bugfixes:
     - Fixed inventory bar being set to higher than game limit during merging AGAIN.
+  Compatibility:
+    - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
+    - Paranoidal port to Factorio 2.1: logistic chest door animation, sound, opened duration and landing offset moved into robot_door (2.1 LogisticContainerPrototype).
 
 ---------------------------------------------------------------------------------------------------
 Version: 6.2.3
