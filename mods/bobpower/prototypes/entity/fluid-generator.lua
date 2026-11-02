@@ -1,4 +1,15 @@
 if settings.startup["bobmods-power-fluidgenerator"].value == true then
+  -- Factorio 2.1: GeneratorPrototype::horizontal_animation/vertical_animation were moved to pictures; the fluid
+  -- generator looks the same in every direction.
+  function bobmods.power.fluid_generator_pictures()
+    return {
+      north = { animation = bobmods.power.fluid_generator_structure() },
+      east = { animation = bobmods.power.fluid_generator_structure() },
+      south = { animation = bobmods.power.fluid_generator_structure() },
+      west = { animation = bobmods.power.fluid_generator_structure() },
+    }
+  end
+
   function bobmods.power.fluid_generator_structure()
     return {
       layers = {
@@ -100,8 +111,8 @@ if settings.startup["bobmods-power-fluidgenerator"].value == true then
         usage_priority = "secondary-output",
         emissions_per_minute = { pollution = 20 },
       },
-      horizontal_animation = bobmods.power.fluid_generator_structure(),
-      vertical_animation = bobmods.power.fluid_generator_structure(),
+      -- Factorio 2.1: horizontal_animation/vertical_animation moved to pictures
+      pictures = bobmods.power.fluid_generator_pictures(),
       smoke = {
         {
           name = "smoke",
@@ -177,8 +188,8 @@ if settings.startup["bobmods-power-fluidgenerator"].value == true then
         usage_priority = "secondary-output",
         emissions_per_minute = { pollution = 15 },
       },
-      horizontal_animation = bobmods.power.fluid_generator_structure(),
-      vertical_animation = bobmods.power.fluid_generator_structure(),
+      -- Factorio 2.1: horizontal_animation/vertical_animation moved to pictures
+      pictures = bobmods.power.fluid_generator_pictures(),
       smoke = {
         {
           name = "smoke",
@@ -253,8 +264,8 @@ if settings.startup["bobmods-power-fluidgenerator"].value == true then
         usage_priority = "secondary-output",
         emissions_per_minute = { pollution = 10 },
       },
-      horizontal_animation = bobmods.power.fluid_generator_structure(),
-      vertical_animation = bobmods.power.fluid_generator_structure(),
+      -- Factorio 2.1: horizontal_animation/vertical_animation moved to pictures
+      pictures = bobmods.power.fluid_generator_pictures(),
       smoke = {
         {
           name = "smoke",
@@ -336,8 +347,8 @@ if settings.startup["bobmods-power-fluidgenerator"].value == true then
           usage_priority = "secondary-output",
           emissions_per_minute = { pollution = 1 },
         },
-        horizontal_animation = bobmods.power.fluid_generator_structure(),
-        vertical_animation = bobmods.power.fluid_generator_structure(),
+        -- Factorio 2.1: horizontal_animation/vertical_animation moved to pictures
+        pictures = bobmods.power.fluid_generator_pictures(),
         smoke = {
           {
             name = "light-smoke",
