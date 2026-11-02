@@ -3,6 +3,8 @@ Version: 1.14.3
 Date: 8 June 2026
   Bugfixes:
     - Fixed crash when searching on Gleba in 'Module' search mode
+  Compatibility:
+    - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
 ---------------------------------------------------------------------------------------------------
 Version: 1.14.2
 Date: 4 June 2026
