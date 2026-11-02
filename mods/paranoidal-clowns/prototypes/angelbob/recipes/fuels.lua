@@ -5,7 +5,7 @@ data:extend(
 		name = "clowns-hypernuclear-fuel",
 		energy_required = 60,
 		enabled = false,
-		category = "centrifuging",
+		categories = {"centrifuging"},
 		ingredients =
 		{
 			{type="item", name="clowns-strontium-90", amount=1},
@@ -25,7 +25,7 @@ data:extend(
 		name = "clowns-turbonuclear-fuel",
 		energy_required = 60,
 		enabled = false,
-		category = "centrifuging",
+		categories = {"centrifuging"},
 		ingredients =
 		{
 			{type="item", name="clowns-protactinium-231", amount=1},
@@ -46,7 +46,7 @@ data:extend(
 		name = "clowns-radiothermal-fuel",
 		energy_required = 60,
 		enabled = false,
-		category = "centrifuging",
+		categories = {"centrifuging"},
 		ingredients =
 		{
 			{type="item", name="iron-plate", amount=10},
@@ -67,7 +67,7 @@ data:extend(
 		name = "clowns-superradiothermal-fuel",
 		energy_required = 60,
 		enabled = false,
-		category = "centrifuging",
+		categories = {"centrifuging"},
 		ingredients =
 		{
 			{type="item", name="clowns-polonium-210", amount=1},
@@ -87,7 +87,7 @@ data:extend(
 		name = "clowns-ultraradiothermal-fuel",
 		energy_required = 60,
 		enabled = false,
-		category = "centrifuging",
+		categories = {"centrifuging"},
 		ingredients =
 		{
 			{type="item", name="clowns-caesium-137", amount=1},

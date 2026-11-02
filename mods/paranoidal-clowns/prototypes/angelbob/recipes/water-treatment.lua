@@ -3,7 +3,7 @@ data:extend(
 	{
 		type = "recipe",
 		name = "radioactive-waste-water-purification",
-		category = "angels-water-treatment",
+		categories = {"angels-water-treatment"},
 		subgroup = "angels-water-cleaning",
 		energy_required = 10,
 		enabled = false,

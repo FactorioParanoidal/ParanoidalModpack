@@ -5,7 +5,7 @@
       name = "thorium-processing",
       energy_required = 10,
       enabled = false,
-      category = "centrifuging",
+      categories = {"centrifuging"},
       ingredients = {
         {type="item",name="angels-thorium-ore", amount=10}
       },
@@ -64,7 +64,7 @@
     {
       type = "recipe",
       name = "clowns-thorium-ore-processing",
-      category = "angels-ore-refining-t3-5",
+      categories = {"angels-ore-refining-t3-5"},
       energy_required = 30,
       enabled = false,
       ingredients = {
@@ -82,7 +82,7 @@
       type = "recipe",
       name = "thorium-crystallisation",
       energy_required = 60,
-      category = "chemistry",
+      categories = {"chemistry"},
       enabled = false,
       ingredients = {
         {type="fluid",name="clowns-liquid-thorium-solution",amount=26},
@@ -98,7 +98,7 @@
       type = "recipe",
       name = "clowns-thorium-purification",
       energy_required = 18,
-      category = "angels-washing-plant",
+      categories = {"angels-washing-plant"},
       enabled = false,
       ingredients = {
         {type="item", name="clowns-solid-thorium-salt",amount=13},

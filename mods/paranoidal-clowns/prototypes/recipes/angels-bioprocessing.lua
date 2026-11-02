@@ -29,7 +29,7 @@ if mods["angelsbioprocessing"] then
 	{
 		type = "recipe",
 		name = "clowns-algae-violet",
-		category = "angels-bio-processing-4",
+		categories = {"angels-bio-processing-4"},
 		subgroup = "bio-processing-violet",
 		enabled = false,
 		energy_required = 20,
@@ -48,7 +48,7 @@ if mods["angelsbioprocessing"] then
 	{
 		type = "recipe",
 		name = "clowns-methylmercury-algae",
-		category = "angels-liquifying",
+		categories = {"angels-liquifying"},
 		subgroup = "bio-processing-violet",
 		enabled = false,
 		energy_required = 3,
@@ -75,7 +75,7 @@ if mods["angelsbioprocessing"] then
 		name = "swamp-garden-generation",
 		icon = "__angelsbioprocessinggraphics__/graphics/icons/swamp-garden.png",
     	icon_size = 32,
-    	category = "angels-swamp-farming",
+		categories = {"angels-swamp-farming"},
     	subgroup = "angels-farming-swamp-seed",
 		order = "g[temperate-garden-generation]-c",
 		energy_required = 600,
@@ -97,7 +97,7 @@ if mods["angelsbioprocessing"] then
 	{
 		type = "recipe",
 		name = "temperate-garden-generation",
-		category = "angels-temperate-farming",
+		categories = {"angels-temperate-farming"},
 		subgroup = "angels-farming-temperate-seed",
 		enabled = false,
 		energy_required = 1000,
@@ -120,7 +120,7 @@ if mods["angelsbioprocessing"] then
 	{
 		type = "recipe",
 		name = "desert-garden-generation",
-		category = "angels-desert-farming",
+		categories = {"angels-desert-farming"},
 		subgroup = "angels-farming-desert-seed",
 		enabled = false,
 		energy_required = 1000,
@@ -143,7 +143,7 @@ if mods["angelsbioprocessing"] then
 	{
 		type = "recipe",
 		name = "temperate-garden-mutation",
-		category = "angels-seed-extractor",
+		categories = {"angels-seed-extractor"},
 		subgroup = "angels-farming-temperate-seed",
 		enabled = false,
 		energy_required = 600,
@@ -165,7 +165,7 @@ if mods["angelsbioprocessing"] then
 	{
 		type = "recipe",
 		name = "desert-garden-mutation",
-		category = "angels-seed-extractor",
+		categories = {"angels-seed-extractor"},
 		subgroup = "angels-farming-desert-seed",
 		enabled = false,
 		energy_required = 600,
@@ -187,7 +187,7 @@ if mods["angelsbioprocessing"] then
 	{
 		type = "recipe",
 		name = "swamp-garden-mutation",
-		category = "angels-seed-extractor",
+		categories = {"angels-seed-extractor"},
 		subgroup = "angels-farming-swamp-seed",
 		enabled = false,
 		energy_required = 600,
@@ -219,7 +219,7 @@ if mods["angelsbioprocessing"] then
 				icon_size = 32, icon_mipmaps = 1
 			},
 		},
-		category = "chemistry",
+		categories = {"chemistry"},
 		subgroup = "clowns-phosphorus",
 		order = "c",
 		energy_required = 10,

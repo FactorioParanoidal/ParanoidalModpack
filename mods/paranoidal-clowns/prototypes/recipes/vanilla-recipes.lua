@@ -32,7 +32,7 @@ data:extend(
   {
     type = "recipe",
     name = "clowns-neurotoxin-capsule",
-    category = "chemistry",
+    categories = {"chemistry"},
     enabled = false,
     energy_required = 4,
     ingredients =
@@ -56,7 +56,7 @@ data:extend(
   {
     type = "recipe",
     name = "clowns-depleted-uranium-ore-processing",
-    category = "angels-ore-processing-3",
+    categories = {"angels-ore-processing-3"},
     subgroup = "clowns-depleted-uranium",
     localised_name = {"item-name.clowns-processed-depleted-uranium"},
     energy_required = 2,
@@ -76,7 +76,7 @@ data:extend(
   {
     type = "recipe",
     name = "clowns-depleted-uranium-processed-processing",
-    category = "angels-pellet-pressing-2",
+    categories = {"angels-pellet-pressing-2"},
     localised_name = {"item-name.clowns-pellet-depleted-uranium"},
     subgroup = "clowns-depleted-uranium",
     energy_required = 2,
@@ -96,7 +96,7 @@ data:extend(
   {
     type = "recipe",
     name = "clowns-depleted-uranium-pellet-smelting",
-    category = "angels-blast-smelting-4",
+    categories = {"angels-blast-smelting-4"},
     subgroup = "clowns-depleted-uranium",
     localised_name = {"item-name.clowns-powder-depleted-uranium"},
     energy_required = 4,
@@ -116,7 +116,7 @@ data:extend(
   {
     type = "recipe",
     name = "clowns-casting-powder-depleted-uranium-1",
-    category = "angels-powder-mixing-3",
+    categories = {"angels-powder-mixing-3"},
     subgroup = "clowns-depleted-uranium-casting",
     localised_name = {"item-name.clowns-casting-powder-depleted-uranium"},
     energy_required = 4,
@@ -136,7 +136,7 @@ data:extend(
   {
     type = "recipe",
     name = "clowns-casting-powder-depleted-uranium-2",
-    category = "angels-powder-mixing-4",
+    categories = {"angels-powder-mixing-4"},
     subgroup = "clowns-depleted-uranium-casting",
     localised_name = {"item-name.clowns-casting-powder-depleted-uranium"},
     energy_required = 4,
@@ -156,7 +156,7 @@ data:extend(
   {
     type = "recipe",
     name = "clowns-casting-powder-depleted-uranium-3",
-    category = "angels-powder-mixing-4",
+    categories = {"angels-powder-mixing-4"},
     subgroup = "clowns-depleted-uranium-casting",
     localised_name = {"item-name.clowns-casting-powder-depleted-uranium"},
     energy_required = 4,
@@ -176,7 +176,7 @@ data:extend(
   {
     type = "recipe",
     name = "clowns-casting-powder-depleted-uranium-4",
-    category = "angels-powder-mixing-4",
+    categories = {"angels-powder-mixing-4"},
     subgroup = "clowns-depleted-uranium-casting",
     localised_name = {"item-name.clowns-casting-powder-depleted-uranium"},
     energy_required = 4,
@@ -198,7 +198,7 @@ data:extend(
   {
     type = "recipe",
     name = "clowns-plate-depleted-uranium",
-    category = "angels-sintering-4",
+    categories = {"angels-sintering-4"},
     subgroup = "clowns-depleted-uranium-casting",
     enabled = false,
     energy_required = 4,
@@ -220,7 +220,7 @@ data:extend(
 	{
 		type = "recipe",
 		name = "clowns-magnesium-ore-processing",
-		category = "angels-ore-processing-3",
+		categories = {"angels-ore-processing-3"},
 		subgroup = "clowns-magnesium",
     localised_name = {"item-name.clowns-processed-magnesium"},
 		energy_required = 2,
@@ -240,7 +240,7 @@ data:extend(
   {
 		type = "recipe",
 		name = "clowns-magnesium-processed-processing",
-		category = "angels-pellet-pressing-2",
+		categories = {"angels-pellet-pressing-2"},
 		subgroup = "clowns-magnesium",
     localised_name = {"item-name.clowns-pellet-magnesium"},
 		energy_required = 2,
@@ -260,7 +260,7 @@ data:extend(
 	{
 		type = "recipe",
 		name = "clowns-magnesium-pellet-smelting",
-		category = "angels-blast-smelting-4",
+		categories = {"angels-blast-smelting-4"},
 		subgroup = "clowns-magnesium",
     localised_name = {"item-name.clowns-ingot-magnesium"},
 		energy_required = 4,
@@ -284,7 +284,7 @@ data:extend(
 	{
 		type = "recipe",
 		name = "clowns-molten-magnesium-smelting",
-		category = "angels-induction-smelting-4",
+		categories = {"angels-induction-smelting-4"},
 		subgroup = "clowns-magnesium-casting",
     localised_name = {"fluid-name.clowns-liquid-molten-magnesium"},
 		energy_required = 4,
@@ -303,7 +303,7 @@ data:extend(
 	{
 		type = "recipe",
 		name = "clowns-plate-magnesium",
-		category = "angels-casting-4",
+		categories = {"angels-casting-4"},
 		subgroup = "clowns-magnesium-casting",
     enabled = false,
     energy_required = 4,
@@ -324,7 +324,7 @@ data:extend(
   {
     type = "recipe",
     name = "clowns-thermal-filtering-mercury",
-    category = "angels-water-treatment",
+    categories = {"angels-water-treatment"},
     subgroup = "angels-water-treatment",
     enabled = false,
     energy_required = 1,
@@ -347,7 +347,7 @@ data:extend(
   {
     type = "recipe",
     name = "clowns-dimethylmercury-synthesis",
-    category = "chemistry",
+    categories = {"chemistry"},
     subgroup = "angels-petrochem-chlorine",
     enabled = false,
     energy_required = 10,
@@ -374,7 +374,7 @@ data:extend(
 	{
 		type = "recipe",
 		name = "clowns-osmium-ore-processing",
-		category = "angels-ore-processing",
+		categories = {"angels-ore-processing"},
 		subgroup = "clowns-osmium",
     localised_name = {"item-name.clowns-processed-osmium"},
 		energy_required = 2,
@@ -395,7 +395,7 @@ data:extend(
   {
 		type = "recipe",
 		name = "clowns-osmium-processed-processing",
-		category = "angels-pellet-pressing",
+		categories = {"angels-pellet-pressing"},
 		subgroup = "clowns-osmium",
     localised_name = {"item-name.clowns-pellet-osmium"},
 		energy_required = 2,
@@ -416,7 +416,7 @@ data:extend(
 	{
 		type = "recipe",
 		name = "clowns-osmium-pellet-smelting",
-		category = "angels-blast-smelting",
+		categories = {"angels-blast-smelting"},
 		subgroup = "clowns-osmium",
 		energy_required = 4,
     localised_name = {"item-name.clowns-powder-osmium"},
@@ -437,7 +437,7 @@ data:extend(
 	{
 		type = "recipe",
 		name = "clowns-casting-powder-osmium",
-		category = "angels-powder-mixing",
+		categories = {"angels-powder-mixing"},
 		subgroup = "clowns-osmium-casting",
 		energy_required = 4,
 		enabled = false,
@@ -457,7 +457,7 @@ data:extend(
 	{
 		type = "recipe",
 		name = "clowns-plate-osmium",
-		category = "angels-sintering-4",
+		categories = {"angels-sintering-4"},
 		subgroup = "clowns-osmium-casting",
     enabled = false,
     energy_required = 4,
@@ -479,7 +479,7 @@ data:extend(
   {
     type = "recipe",
     name = "crushed-stone-sorting",
-    category = "angels-ore-sorting",
+    categories = {"angels-ore-sorting"},
     subgroup = "angels-ore-sorting-t1",
     order = "i",
     energy_required = 1,
@@ -509,7 +509,7 @@ data:extend(
   {
     type = "recipe",
     name = "clowns-white-phosphorus-smelting",
-    category = "angels-chemical-smelting",
+    categories = {"angels-chemical-smelting"},
     subgroup = "clowns-phosphorus",
     order = "a",
     energy_required = 10,
@@ -532,7 +532,7 @@ data:extend(
   {
     type = "recipe",
     name = "clowns-phosphoric-acid-1",
-    category = "chemistry",
+    categories = {"chemistry"},
     subgroup = "clowns-phosphorus",
     order = "b",
     energy_required = 10,
@@ -554,7 +554,7 @@ data:extend(
   {
     type = "recipe",
     name = "clowns-white-phosphorus-smelting-2",
-    category = "angels-chemical-smelting-2",
+    categories = {"angels-chemical-smelting-2"},
     subgroup = "clowns-phosphorus",
     order = "a",
     energy_required = 10,
@@ -578,7 +578,7 @@ data:extend(
   {
 		type = "recipe",
 		name = "intermediate-salination",
-		category = "angels-salination-plant",
+		categories = {"angels-salination-plant"},
 		subgroup = "angels-water-salination",
 		energy_required = 5,
 		enabled = false,
@@ -597,7 +597,7 @@ data:extend(
 	{
 		type = "recipe",
 		name = "advanced-salination",
-		category = "angels-salination-plant",
+		categories = {"angels-salination-plant"},
 		subgroup = "angels-water-salination",
 		energy_required = 5,
 		enabled = false,
@@ -621,7 +621,7 @@ data:extend(
     name = "advanced-uranium-processing",
     energy_required = 5,--50% faster than vanilla
     enabled = false,
-    category = "centrifuging",
+    categories = {"centrifuging"},
     ingredients = {
       {type = "item", name = "clowns-solid-uranium-hexafluoride", amount = 8} --20% less ingredients than vanilla
     },
@@ -639,7 +639,7 @@ data:extend(
 	{
 		type = "recipe",
 		name = "clowns-solid-uranium-hexafluoride",
-		category = "chemistry",
+		categories = {"chemistry"},
 		subgroup = "clowns-uranium",
 		order = "f",
 		energy_required = 5,
@@ -660,7 +660,7 @@ data:extend(
 	{
 		type = "recipe",
 		name = "clowns-solid-uranium-tetrafluoride",
-		category = "chemistry",
+		categories = {"chemistry"},
 		subgroup = "clowns-uranium",
 		order = "e",
 		energy_required = 5,
@@ -681,7 +681,7 @@ data:extend(
 	{
 		type = "recipe",
 		name = "clowns-solid-uranium-oxide-1",
-		category = "angels-chemical-smelting-3",
+		categories = {"angels-chemical-smelting-3"},
     localised_name = {"item-name.clowns-solid-uranium-oxide"},
 		subgroup = "clowns-uranium",
 		order = "c",
@@ -704,7 +704,7 @@ data:extend(
 	{
 		type = "recipe",
 		name = "clowns-solid-uranium-oxide-2",
-		category = "angels-chemical-smelting-4",
+		categories = {"angels-chemical-smelting-4"},
 		subgroup = "clowns-uranium",
 		order = "d",
 		energy_required = 10,
@@ -728,7 +728,7 @@ data:extend(
 	{
 		type = "recipe",
 		name = "clowns-solid-ammonium-diuranate",
-		category = "chemistry",
+		categories = {"chemistry"},
 		subgroup = "clowns-uranium",
 		order = "b",
 		energy_required = 5,
@@ -749,7 +749,7 @@ data:extend(
 	{
 		type = "recipe",
 		name = "clowns-solid-uranyl-nitrate",
-		category = "chemistry",
+		categories = {"chemistry"},
 		subgroup = "clowns-uranium",
 		order = "a",
 		energy_required = 5,
@@ -770,7 +770,7 @@ data:extend(
   {
     type = "recipe",
     name = "clowns-osmium-rounds-magazine",
-    category = "advanced-crafting",
+    categories = {"advanced-crafting"},
     subgroup = "ammo",
     energy_required = 10,
     enabled = false,

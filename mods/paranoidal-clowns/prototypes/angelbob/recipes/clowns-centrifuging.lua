@@ -7,7 +7,7 @@ data:extend(
 		name = "clowns-centrifuging-20pc-hexafluoride",
 		energy_required = energy,
 		enabled = false,
-		category = "centrifuging",
+		categories = {"centrifuging"},
 		ingredients = {
 			{type = "item", name = "clowns-solid-uranium-hexafluoride", amount = 48}
 		},--decent saving yo

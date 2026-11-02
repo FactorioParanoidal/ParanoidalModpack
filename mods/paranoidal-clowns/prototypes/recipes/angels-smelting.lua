@@ -8,7 +8,7 @@ angelsmods.trigger.smelting_products["iron"].ingot = true
   {
     type = "recipe",
     name = "molten-iron-smelting-6",
-    category = "angels-induction-smelting",
+    categories = {"angels-induction-smelting"},
     subgroup = "angels-iron-casting",
     localised_name = {"fluid-name.angels-liquid-molten-iron"},
     energy_required = 4,
@@ -35,7 +35,7 @@ if not (mods["bobplates"] or (mods["angelsindustries"] and angelsmods.industries
   {
     type = "recipe",
     name = "molten-steel-smelting-c2",
-    category = "angels-induction-smelting-2",
+    categories = {"angels-induction-smelting-2"},
     subgroup = "angels-steel-casting",
     localised_name = {"fluid-name.angels-liquid-molten-steel"},
     energy_required = 4,
@@ -63,7 +63,7 @@ if angelsmods.trigger.smelting_products["aluminium"].plate then
   {
     type = "recipe",
     name = "molten-aluminium-smelting-4",
-    category = "angels-induction-smelting",
+    categories = {"angels-induction-smelting"},
     subgroup = "angels-aluminium-casting",
     localised_name = {"fluid-name.angels-liquid-molten-aluminium"},
     energy_required = 4,
@@ -88,7 +88,7 @@ if angelsmods.trigger.smelting_products["aluminium"].plate then
     {
       type = "recipe",
       name = "molten-aluminium-smelting-5",
-      category = "angels-induction-smelting",
+      categories = {"angels-induction-smelting"},
       subgroup = "angels-aluminium-casting",
       localised_name = {"fluid-name.angels-liquid-molten-aluminium"},
       energy_required = 4,
@@ -117,7 +117,7 @@ if angelsmods.trigger.smelting_products["brass"].plate then
     {
       type = "recipe",
       name = "angels-brass-smelting-4",
-      category = "angels-induction-smelting",
+      categories = {"angels-induction-smelting"},
       subgroup = "angels-alloys-casting",
       localised_name = {"fluid-name.angels-liquid-molten-brass"},
       energy_required = 4,
@@ -145,7 +145,7 @@ if angelsmods.trigger.smelting_products["titanium"].plate then
   {
 		type = "recipe",
 		name = "angels-sponge-magnesium-titanium-smelting",
-		category = "angels-chemical-smelting",
+		categories = {"angels-chemical-smelting"},
 		subgroup = "angels-titanium",
     localised_name = {"item-name.angels-sponge-titanium"},
 		energy_required = 6,
@@ -168,7 +168,7 @@ if angelsmods.trigger.smelting_products["titanium"].plate then
   {
 		type = "recipe",
 		name = "angels-pellet-magnesium-titanium-smelting",
-		category = "angels-chemical-smelting",
+		categories = {"angels-chemical-smelting"},
 		subgroup = "angels-titanium",
     localised_name = {"item-name.angels-ingot-titanium"},
 		energy_required = 6,

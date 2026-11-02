@@ -26,7 +26,7 @@ end
     {
       type = "recipe",
       name = "sand-sluicing",
-      category = "sluicing",
+      categories = {"sluicing"},
       enabled = false,
       icon = "__angelsrefininggraphics__/graphics/icons/solid-sand.png",
       icon_size = 32,

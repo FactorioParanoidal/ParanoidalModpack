@@ -3,7 +3,7 @@ data:extend(
 	{
 		type = "recipe",
 		name = "catalytic-water-separation-oxygen",
-		category = "angels-petrochem-electrolyser",
+		categories = {"angels-petrochem-electrolyser"},
 		subgroup = "clowns-electrolysis",
 		order = "a",
 		energy_required = 2,
@@ -29,7 +29,7 @@ data:extend(
 	{
 		type = "recipe",
 		name = "catalytic-water-separation-hydrogen",
-		category = "angels-petrochem-electrolyser",
+		categories = {"angels-petrochem-electrolyser"},
 		subgroup = "clowns-electrolysis",
 		order = "b",
 		energy_required = 2,
@@ -56,7 +56,7 @@ data:extend(
 	{
 		type = "recipe",
 		name = "catalytic-air-separation-nitrogen",
-		category = "chemistry",
+		categories = {"chemistry"},
 		subgroup = "clowns-electrolysis",
 		order = "d",
 		energy_required = 2,
@@ -76,7 +76,7 @@ data:extend(
 	{
 		type = "recipe",
 		name = "catalytic-air-separation-oxygen",
-		category = "chemistry",
+		categories = {"chemistry"},
 		subgroup = "clowns-electrolysis",
 		order = "c",
 		energy_required = 2,
@@ -96,7 +96,7 @@ data:extend(
 	{
 		type = "recipe",
 		name = "hydrochloric-acid-separation",
-		category = "angels-petrochem-electrolyser",
+		categories = {"angels-petrochem-electrolyser"},
 		subgroup = "clowns-electrolysis",
 		order = "e",
 		energy_required = 2,
@@ -115,7 +115,7 @@ data:extend(
 	{
 		type = "recipe",
 		name = "hydrofluoric-acid-separation",
-		category = "angels-petrochem-electrolyser",
+		categories = {"angels-petrochem-electrolyser"},
 		subgroup = "clowns-electrolysis",
 		order = "f",
 		energy_required = 2,
@@ -134,7 +134,7 @@ data:extend(
 	{
 		type = "recipe",
 		name = "clowns-catalyst-metal-violet",
-		category = "crafting-with-fluid",
+		categories = {"crafting-with-fluid"},
 		subgroup = "angels-petrochem-catalysts",
 		energy_required = 2,
 		enabled = false,
