@@ -300,7 +300,7 @@ add({
 add({
   type = "recipe",
   name = S.decrypt_recipe,
-  category = "crafting",
+  categories = {"crafting"},
   enabled = false,
   energy_required = 8,
   ingredients = {{type = "item", name = S.core_item, amount = 1}},
