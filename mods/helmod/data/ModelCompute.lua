@@ -1157,10 +1157,10 @@ function ModelCompute.computeQualityProbability(lua_quality, quality_effect)
     local results = {}
     local next_probability = lua_quality.next_probability or 0
     local current_probability = 1
-    -- Paranoidal: quality_effect is the displayed effect (engine value / 10). The engine's first upgrade
-    -- chance is engine value x next_probability of the input quality; the old code used quality_effect
-    -- directly, which is right only for next_probability = 0.1 (vanilla).
-    local upgrade_probability = math.min(1, quality_effect * 10 * next_probability)
+    -- Paranoidal: the engine's first upgrade chance is quality effect x next_probability of the input quality.
+    -- Factorio 2.1: quality_effect is the engine value as shown (2.0 showed engine value / 10 and this was
+    -- quality_effect x 10 x next_probability); every further tier uses chain_probability of the tier reached.
+    local upgrade_probability = math.min(1, quality_effect * next_probability)
     if next_probability > 0 and upgrade_probability > 0  then
         local next_result = ModelCompute.computeNextQualityProbability(lua_quality.next, upgrade_probability)
         if next_result ~= nil then
@@ -1187,7 +1187,9 @@ function ModelCompute.computeNextQualityProbability(lua_quality, quality_effect)
     end
     local results = {}
     local previous_probability = 0
-    local next_probability = lua_quality.next_probability
+    -- Paranoidal, Factorio 2.1: after an upgrade reached this quality, the next step has its chain_probability
+    -- (2.0: next_probability of the tier reached).
+    local next_probability = lua_quality.chain_probability or 0
     if next_probability > 0 and quality_effect > 0  then
         local next_result = ModelCompute.computeNextQualityProbability(lua_quality.next, quality_effect * next_probability)
         if next_result ~= nil then

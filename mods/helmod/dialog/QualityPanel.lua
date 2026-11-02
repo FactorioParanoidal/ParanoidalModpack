@@ -167,9 +167,9 @@ end
 -------------------------------------------------------------------------------
 ---Paranoidal: output distribution for one input quality, as the engine rolls it:
 ---first upgrade = quality effect x next_probability of the input quality,
----every further tier = next_probability of the tier reached.
+---every further tier = chain_probability of the tier reached (Factorio 2.1; 2.0: its next_probability).
 ---@param lua_quality LuaQualityPrototype
----@param quality_effect number --raw effect (tooltip % / 10)
+---@param quality_effect number --raw effect (tooltip % / 100)
 ---@param boost number|nil --equivalent independent rolls of the machine mode (default 1)
 ---@return table --{[0]=stay, [1]=+1, [2]=+2, [3]=+3 and above}
 function QualityPanel.computeDistribution(lua_quality, quality_effect, boost)
@@ -185,8 +185,8 @@ function QualityPanel.computeDistribution(lua_quality, quality_effect, boost)
     reach[1] = chance
     local current = next_quality
     for step = 2, 3 do
-        if current ~= nil and current.next ~= nil and (current.next_probability or 0) > 0 then
-            reach[step] = reach[step - 1] * current.next_probability
+        if current ~= nil and current.next ~= nil and (current.chain_probability or 0) > 0 then
+            reach[step] = reach[step - 1] * current.chain_probability
             current = current.next
         else
             reach[step] = 0
@@ -220,8 +220,8 @@ function QualityPanel:updateQualityCalculation(event)
     local analyze_bonus_probability = tonumber(User.getParameter("analyze_bonus_probability")) or 0
 
     local module_effects = prototypes.item[analyze_module_name].get_module_effects(analyze_module_quality) or {}
-    -- Raw engine value: the tooltip shows it x10 as "%" (raw 0.5 = "+5%").
-    local quality_effect = (module_effects.quality or 0) * analyze_module_amount + analyze_bonus_probability / 10
+    -- Raw engine value: the tooltip shows it as "%" (Factorio 2.1: raw 0.05 = "+5%"; 2.0 showed raw x10).
+    local quality_effect = (module_effects.quality or 0) * analyze_module_amount + analyze_bonus_probability / 100
     if quality_effect < 0 then quality_effect = 0 end
 
     local machine_mode = QualityPanel.getMachineMode()
@@ -229,7 +229,7 @@ function QualityPanel:updateQualityCalculation(event)
     if QualityPanel.hasMachineModes() then
         mode_note = {"helmod_quality-panel.mode-note", {"", machine_mode.roman, ". ", {"ic-quality.mode-" .. machine_mode.name}}}
     end
-    local header = GuiElement.add(calculation_panel, GuiLabel("label-module"):caption({"helmod_quality-panel.chance-header", QualityPanel.formatPercent(quality_effect / 10), mode_note}))
+    local header = GuiElement.add(calculation_panel, GuiLabel("label-module"):caption({"helmod_quality-panel.chance-header", QualityPanel.formatPercent(quality_effect), mode_note}))
     header.style.single_line = false
     header.style.bottom_margin = 4
 

@@ -165,7 +165,7 @@ function PrototypeFilters.initialization()
   entity_flag["not-selectable-in-game"]=true
   entity_flag["not-upgradable"]=true
   PrototypeFilterEntity:addFilter("flag", entity_flag)
-  PrototypeFilterEntity:addFilter("build-base-evolution-requirement", "comparison")
+  -- Factorio 2.1: the "build-base-evolution-requirement" filter was removed with the prototype property.
   PrototypeFilterEntity:addFilter("selection-priority", "comparison")
   PrototypeFilterEntity:addFilter("emissions", "comparison")
   PrototypeFilterEntity:addFilter("crafting-category", prototypes.recipe_category)

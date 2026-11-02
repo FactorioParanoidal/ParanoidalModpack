@@ -1492,14 +1492,12 @@ function Player.getModuleEffects(module)
     for effect_name, effect_value in pairs(module:getModuleEffects()) do
         local final_value = effect_value
         -- arround the % value
+        -- Paranoidal, Factorio 2.1: effects have four decimals (0.01%), and the quality value is shown as it is
+        -- (2.0 showed it divided by 10; 2.1 divided the prototype values by 10 instead).
         if final_value >= 0  then
-            final_value = math.floor(final_value*100 + 0.05)/100
+            final_value = math.floor(final_value*10000 + 0.05)/10000
         else 
-            final_value = math.ceil(final_value*100 - 0.05)/100
-        end
-        if effect_name == "quality" then
-            -- fix quality value, in game is divide by 10
-            final_value = final_value / 10
+            final_value = math.ceil(final_value*10000 - 0.05)/10000
         end
         module_effects[effect_name] = final_value
     end
