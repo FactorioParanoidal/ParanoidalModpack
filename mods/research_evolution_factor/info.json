@@ -4,7 +4,7 @@
   "title": "Research is evolution factor(forked for 2.73 factorio)",
   "author": "Tias",
   "contact": "timur.buchkin@mail.ru",
-  "factorio_version": "2.0",
+  "factorio_version": "2.1",
   "dependencies": [ "base", 
         "? angelsindustries", 
         "? SpaceMod",

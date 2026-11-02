@@ -27,3 +27,5 @@ Date: 2026. 10. 15
     - Evolution is raised on every surface for every AI controllable force; a new surface starts with the evolution gained from research.
     - Old saves: on the first load the evolution of enemy forces on every surface is recalculated once from the researched technologies only (time, pollution and other sources are dropped).
     - paranoidal-tech-tree estimate (path_increment) uses the same per-level rule, all remaining levels of finite multi-level technologies.
+  Compatibility:
+    - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
