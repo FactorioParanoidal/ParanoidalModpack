@@ -4,7 +4,7 @@
   "title": "Subterranean — Paranoidal Beta 8 port",
   "author": "Gangsir, Bilka, RealVictorPRM; Paranoidal maintainers (2.0 port)",
   "homepage": "https://forums.factorio.com/55740",
-  "factorio_version": "2.0",
+  "factorio_version": "2.1",
   "dependencies": [
     "base >= 2.0.77",
     "boblogistics >= 2.1.1",
