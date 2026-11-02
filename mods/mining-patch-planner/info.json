@@ -3,7 +3,7 @@
 	"version": "1.7.19",
 	"title": "Mining Patch Planner",
 	"author": "Rimbas",
-	"factorio_version": "2.0",
+	"factorio_version": "2.1",
 	"dependencies": ["base >= 2.0.77"],
 	"description": "Adds a planner that designs a miner layout for a resource patch."
 }

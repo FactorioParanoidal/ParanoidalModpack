@@ -6,6 +6,8 @@ Date: 2026-06-02
     - Minimum required Factorio version bumped up to 2.0.77 due to Lua API requirement for above change.
   Translation:
     - Updated Chinese translation. (thanks to Lexcellent)
+  Compatibility:
+    - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
 ---------------------------------------------------------------------------------------------------
 Version: 1.7.18
 Date: 2026-03-18
