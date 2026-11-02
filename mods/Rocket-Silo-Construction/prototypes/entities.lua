@@ -1,4 +1,3 @@
-require ("__base__/prototypes/entity/assemblerpipes")
 local sounds = require("__base__/prototypes/entity/sounds.lua")
 
 local allowed_effects = {"speed"} -- {"consumption", "speed", "productivity", "pollution"}

@@ -11,6 +11,8 @@ Date: 26. 09. 2025
     - Paranoidal: construction sites and the finished silo are never defective (ic-more-qualities defect qualities become normal); positive qualities are kept through all stages.
   Compatibility:
     - Fixed recipe for Space Exploration
+    - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
+    - Paranoidal port to Factorio 2.1: removed the unused require of __base__/prototypes/entity/assemblerpipes (the file no longer exists in 2.1).
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.6
 Date: 26. 09. 2025

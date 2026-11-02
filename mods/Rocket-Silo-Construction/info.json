@@ -6,7 +6,7 @@
 	"description":"Building a Rocket Silo is now a 6 stages construction progress. Each silo needs to be excavated, filled and built, while requiring a lot of power, materials and generating pollution.\n\nSpace Exploration compatible.",
 	"homepage":"Discord: MFerrari#6561",
 	"contact": "Discord: MFerrari#6561",
-	"factorio_version":"2.0",
+	"factorio_version":"2.1",
 	"dependencies": ["base >= 2.0.0", "mferrari_lib >= 0.5.5",
 				"? space-exploration >= 0.7.0",
 				"(?) IndustrialRevolution3",
