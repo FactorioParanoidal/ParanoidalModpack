@@ -98,7 +98,7 @@ data:extend({
     enabled = false,
     icon = "__Aircraft-space-age__/graphics/icons/aircraft_afterburner_icon.png",
     icon_size = 64,
-    category = "crafting-with-fluid",
+    categories = {"crafting-with-fluid"},
     
     energy_required = 3,
     ingredients = {
