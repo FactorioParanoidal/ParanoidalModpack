@@ -3,6 +3,8 @@ Version: 2.0.0
 Date: 2024-11-03
   Bugfixes:
     - 2.0 update.
+  Compatibility:
+    - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
 ---------------------------------------------------------------------------------------------------
 Version: 0.5.1
 Date: 2021-11-21
