@@ -88,14 +88,17 @@ end
 
 local function build()
 	local fuel_items, ammo_items = {}, {}   -- category -> list of item names
-	local item_fuel, item_ammo = {}, {}     -- item name -> category
+	local item_fuel, item_ammo = {}, {}     -- item name -> fuel categories (list) / ammo category
 	for name, item in pairs(prototypes.item) do
 		if not item.hidden then
-			local fc = item.fuel_category
-			if type(fc) == "string" then
-				item_fuel[name] = fc
-				fuel_items[fc] = fuel_items[fc] or {}
-				table.insert(fuel_items[fc], name)
+			-- Factorio 2.1: an item lists its fuel categories (fuel_categories, nil when empty).
+			local fcs = item.fuel_categories
+			if fcs then
+				item_fuel[name] = fcs
+				for _, fc in pairs(fcs) do
+					fuel_items[fc] = fuel_items[fc] or {}
+					table.insert(fuel_items[fc], name)
+				end
 			end
 			local ac = item.ammo_category
 			if ac and ac.name then
@@ -247,8 +250,10 @@ end
 function M.fits(comp, item_name)
 	local c = M.get()
 	if comp.kind == "fuel" then
-		local cat = c.item_fuel[item_name]
-		return cat ~= nil and comp.cats[cat] == true
+		for _, cat in pairs(c.item_fuel[item_name] or {}) do
+			if comp.cats[cat] == true then return true end
+		end
+		return false
 	end
 	local cat = c.item_ammo[item_name]
 	return cat ~= nil and comp.cats[cat] == true

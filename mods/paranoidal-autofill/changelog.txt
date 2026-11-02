@@ -8,6 +8,9 @@ Date: 2026-10-25
   Changes:
     - Script copies of buildings are no longer offered and use the rule of their main building: HeroTurretRedux ranked turrets (hero-turret-N-for-<base>) and copies without an own item (Cursed-FMD per-ore drills). Top up nearby also fills them.
     - Rules saved for such a copy by 1.0.0 are moved to the main building on load.
+  Compatibility:
+    - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
+    - Paranoidal port to Factorio 2.1: item fuel categories are read from fuel_categories (a list; LuaItemPrototype::fuel_category was removed).
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.0
 Date: 2026-10-25
