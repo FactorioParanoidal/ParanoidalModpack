@@ -4,7 +4,7 @@ data:extend({
 	{
 		type = "recipe",
 		name = "molten-gunmetal-remelting",
-		category = "angels-induction-smelting",
+		categories = {"angels-induction-smelting"},
 		subgroup = "angels-alloys-casting",
 		enabled = false,
 		energy_required = 6,
@@ -30,7 +30,7 @@ data:extend({
 	{
 		type = "recipe",
 		name = "molten-gunmetal-alloy-mixing-1",
-		category = "molten-alloy-mixing",
+		categories = {"molten-alloy-mixing"},
 		subgroup = "aragas-gunmetal-alloy-mixing",
 		enabled = false,
 		energy_required = 4,

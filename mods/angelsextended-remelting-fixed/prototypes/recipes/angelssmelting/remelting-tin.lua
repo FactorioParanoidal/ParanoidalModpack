@@ -4,7 +4,7 @@ data:extend({
 	{
 		type = "recipe",
 		name = "molten-tin-remelting",
-		category = "angels-induction-smelting",
+		categories = {"angels-induction-smelting"},
 		subgroup = "angels-tin-casting",
 		enabled = false,
 		energy_required = 6,

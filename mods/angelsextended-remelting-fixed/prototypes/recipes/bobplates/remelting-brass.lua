@@ -4,7 +4,7 @@ data:extend({
 	{
 		type = "recipe",
 		name = "molten-brass-remelting",
-		category = "angels-induction-smelting",
+		categories = {"angels-induction-smelting"},
 		subgroup = "angels-alloys-casting",
 		enabled = false,
 		energy_required = 6,
@@ -30,7 +30,7 @@ data:extend({
 	{
 		type = "recipe",
 		name = "molten-brass-alloy-mixing-1",
-		category = "molten-alloy-mixing",
+		categories = {"molten-alloy-mixing"},
 		subgroup = "aragas-brass-alloy-mixing",
 		enabled = false,
 		energy_required = 4,
@@ -56,7 +56,7 @@ data:extend({
 	{
 		type = "recipe",
 		name = "molten-brass-alloy-mixing-2",
-		category = "molten-alloy-mixing",
+		categories = {"molten-alloy-mixing"},
 		subgroup = "aragas-brass-alloy-mixing",
 		enabled = false,
 		energy_required = 4,
@@ -83,7 +83,7 @@ data:extend({
 	{
 		type = "recipe",
 		name = "molten-brass-alloy-mixing-3",
-		category = "molten-alloy-mixing",
+		categories = {"molten-alloy-mixing"},
 		subgroup = "aragas-brass-alloy-mixing",
 		enabled = false,
 		energy_required = 4,

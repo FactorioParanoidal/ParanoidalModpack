@@ -4,7 +4,7 @@ data:extend({
 	{
 		type = "recipe",
 		name = "molten-nitinol-remelting",
-		category = "angels-induction-smelting",
+		categories = {"angels-induction-smelting"},
 		subgroup = "angels-alloys-casting",
 		enabled = false,
 		energy_required = 6,
@@ -30,7 +30,7 @@ data:extend({
 	{
 		type = "recipe",
 		name = "molten-nitinol-alloy-mixing-1",
-		category = "molten-alloy-mixing",
+		categories = {"molten-alloy-mixing"},
 		subgroup = "aragas-nitinol-alloy-mixing",
 		enabled = false,
 		energy_required = 4,
