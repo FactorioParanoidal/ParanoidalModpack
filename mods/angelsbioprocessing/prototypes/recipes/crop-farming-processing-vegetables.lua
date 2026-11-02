@@ -3,7 +3,6 @@ data:extend({
   {
     type = "recipe",
     name = "angels-sorting-temperate-1",
-    show_amount_in_title = false,
     categories = {"angels-bio-processor"},
     subgroup = "angels-farming-temperate",
     enabled = false,
@@ -16,7 +15,6 @@ data:extend({
     results = {
       { type = "item", name = "angels-solid-corn", amount = 10 },
     },
-    always_show_products = true,
     main_product = "angels-solid-corn",
     order = "ba",
     crafting_machine_tint = {
@@ -40,7 +38,6 @@ data:extend({
   {
     type = "recipe",
     name = "angels-sorting-temperate-2",
-    show_amount_in_title = false,
     categories = {"angels-bio-processor"},
     subgroup = "angels-farming-temperate",
     enabled = false,
@@ -53,7 +50,6 @@ data:extend({
     results = {
       { type = "item", name = "angels-cellulose-fiber", amount = 22 },
     },
-    always_show_products = true,
     order = "bb",
     crafting_machine_tint = {
       --primary = {r = 190 / 255, g = 190 / 255, b = 190 / 255, a = 1},  -- Tianaton
@@ -184,7 +180,6 @@ data:extend({
   {
     type = "recipe",
     name = "angels-sorting-desert-1",
-    show_amount_in_title = false,
     categories = {"angels-bio-processor"},
     subgroup = "angels-farming-desert",
     enabled = false,
@@ -197,7 +192,6 @@ data:extend({
     results = {
       { type = "item", name = "angels-solid-beans", amount = 12 },
     },
-    always_show_products = true,
     order = "ba",
     crafting_machine_tint = {
       --primary = {r = 240 / 255, g = 157 / 255, b = 14 / 255, a = 1}, -- Binafran
@@ -221,7 +215,6 @@ data:extend({
   {
     type = "recipe",
     name = "angels-sorting-desert-2",
-    show_amount_in_title = false,
     categories = {"angels-bio-processor"},
     subgroup = "angels-farming-desert",
     enabled = false,
@@ -234,7 +227,6 @@ data:extend({
     results = {
       { type = "item", name = "angels-solid-corn", amount = 12 },
     },
-    always_show_products = true,
     order = "bb",
     crafting_machine_tint = {
       --primary = {r = 79 / 255, g = 39 / 255, b = 34 / 255, a = 1}, --Primedeadelion
@@ -367,7 +359,6 @@ data:extend({
   {
     type = "recipe",
     name = "angels-sorting-swamp-1",
-    show_amount_in_title = false,
     categories = {"angels-bio-processor"},
     subgroup = "angels-farming-swamp",
     enabled = false,
@@ -380,7 +371,6 @@ data:extend({
     results = {
       { type = "item", name = "angels-solid-nuts", amount = 16 },
     },
-    always_show_products = true,
     order = "ba",
     crafting_machine_tint = {
       primary = { r = 106 / 255, g = 45 / 255, b = 36 / 255, a = 1 }, -- Elendilomone
@@ -403,7 +393,6 @@ data:extend({
   {
     type = "recipe",
     name = "angels-sorting-swamp-2",
-    show_amount_in_title = false,
     categories = {"angels-bio-processor"},
     subgroup = "angels-farming-swamp",
     enabled = false,
@@ -416,7 +405,6 @@ data:extend({
     results = {
       { type = "item", name = "angels-solid-beans", amount = 14 },
     },
-    always_show_products = true,
     order = "bb",
     crafting_machine_tint = {
       --primary = {r = 53 / 255, g = 71 / 255, b = 19 / 255, a = 1}, -- Zombieecalyptus
