@@ -8,6 +8,8 @@ Date: 2026-03-15
     - Paranoidal: on_gui_closed is registered once and dispatches to both the combinator/entity GUI handler and the manager; the manager registration used to replace the first one, so the copied combinator-close code in the manager was the only thing keeping that window closable.
     - Fix crash related to broken trains not registering correctly on depot update
     - Fix crash during economy sanitasation when there is nil type data in economy
+  Compatibility:
+    - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.52
 Date: 2026-03-13
