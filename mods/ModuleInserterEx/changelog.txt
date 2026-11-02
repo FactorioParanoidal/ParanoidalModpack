@@ -10,6 +10,7 @@ Date: 2026-02-04
     - Fix crash when another mod makes all machines have the same number of module slots
   Compatibility:
     - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
+    - Paranoidal port to Factorio 2.1: selection modes with blueprint/deconstruct also list any-entity and any-tile, which 2.0 implied and 2.1 no longer does.
 ---------------------------------------------------------------------------------------------------
 Version: 7.4.0
 Date: 2026-01-25
