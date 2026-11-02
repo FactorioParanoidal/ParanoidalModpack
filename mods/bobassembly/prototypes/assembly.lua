@@ -2,6 +2,11 @@
 local base_assembler_pictures = require("__base__.prototypes.entity.assembler-pictures")
 local function assembler2pipepictures() return table.deepcopy(base_assembler_pictures.assembler2pipepictures) end
 local function assembler3pipepictures() return table.deepcopy(base_assembler_pictures.assembler3pipepictures) end
+-- Factorio 2.1 removed the recipe category "basic-crafting" (2.0 base: assemblers only, never by hand);
+-- the Paranoidal build keeps it. Created by the first mod that needs it.
+if not data.raw["recipe-category"]["basic-crafting"] then
+  data:extend({{ type = "recipe-category", name = "basic-crafting" }})
+end
 data:extend({
   {
     type = "item-subgroup",
