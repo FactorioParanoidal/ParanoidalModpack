@@ -2,7 +2,7 @@
 -- Согласованная адаптация: нынешние модули I тира, без изменения самих модулей.
 if not mods["Bio_Industries_2"] then return end
 local technology = data.raw.technology["production-science-pack"]
-if not technology or not data.raw.tool["production-science-pack"] then return end
+if not technology or not data.raw.item["production-science-pack"] then return end -- Factorio 2.1: vanilla packs are items
 
 if not data.raw.recipe["bi-production-science-pack"] then
 	data:extend({

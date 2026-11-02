@@ -8,11 +8,21 @@
 --   * Сырьё, плавка, литьё, сплавы, химия, переработка руды, фермы, побочные продукты, скрытые
 --     предметы, предметы из рецептов с продуктивностью — самопереработка Quality: 25% того же предмета.
 -- Все прежние рецепты переработки удаляются; старые исключения не сохраняются.
-if not mods["quality"] then return end
+if not mods["recycler"] then return end
 
-local recycling = require("__quality__.prototypes.recycling")
+local recycling = require("__recycler__.recycling")
 local raw = data.raw
 local recipes = raw.recipe
+
+-- Factorio 2.1: категории рецепта — список; первая — прежняя основная категория (category в 2.0).
+local function categories_of(recipe) return recipe.categories or {"crafting"} end
+local function main_category(recipe) return categories_of(recipe)[1] end
+local function is_recycling(recipe)
+	for _, category in pairs(categories_of(recipe)) do
+		if category == "recycling" then return true end
+	end
+	return false
+end
 
 -- Из рецептов этих категорий предмет разбирается на ингредиенты (сборочные автоматы и руки).
 local assembly = {
@@ -106,7 +116,7 @@ end
 local productive = {}
 for name, recipe in pairs(recipes) do
 	if recipe.allow_productivity and not recipe.hidden and (recipe.enabled ~= false or unlocked[name])
-		and recipe.category ~= "recycling" then
+		and not is_recycling(recipe) then
 		for _, product in pairs(type(recipe.results) == "table" and recipe.results or {}) do
 			if type(product) == "table" and (product.type or "item") == "item" then
 				productive[product.name or product[1]] = true
@@ -118,7 +128,7 @@ end
 -- Удаляем все прежние рецепты переработки: дальше каждый строится заново.
 local removed = 0
 for _, name in ipairs(sorted_keys(recipes)) do
-	if recipes[name].category == "recycling" then
+	if is_recycling(recipes[name]) then
 		recipes[name] = nil
 		removed = removed + 1
 	end
@@ -138,7 +148,7 @@ local function single_item(recipe)
 		count = product.amount or product[2]
 		if not count and product.amount_min and product.amount_min == product.amount_max then count = product.amount_min end
 		if not count or count <= 0 then return nil end
-		if product.probability and product.probability ~= 1 then return nil end
+		if product.independent_probability and product.independent_probability ~= 1 then return nil end
 		if product.extra_count_fraction and product.extra_count_fraction ~= 0 then return nil end
 	end
 	return found, count
@@ -167,7 +177,7 @@ local candidates, processed, obtainable = {}, {}, {}
 for name in pairs(natural) do obtainable[name] = true end
 for _, name in ipairs(sorted_keys(recipes)) do
 	local recipe = recipes[name]
-	local category = recipe.category or "crafting"
+	local category = main_category(recipe)
 	if not recipe.hidden then
 		for _, product in pairs(type(recipe.results) == "table" and recipe.results or {}) do
 			if type(product) == "table" and (product.type or "item") == "item" then obtainable[product.name or product[1]] = true end
@@ -277,5 +287,25 @@ for _, name in ipairs(sorted_keys(items)) do
 		if recipes[key] then recipes[key].localised_name = {"recipe-name.recycling", display_name(item)} end
 	end
 end
+-- Factorio 2.1: генератор Recycler создаёт рецепты выключенными и открывает их скрытыми эффектами
+-- исследования «recycling». В 2.0 переработка была доступна с начала (на этом стоят переработчики 1–3),
+-- поэтому рецепты включены, а скрытые открытия рецептов переработки (и висящие — на удалённые
+-- рецепты переработки) убраны из всех исследований.
+local unlocks_dropped = 0
+for _, recipe in pairs(recipes) do
+	if is_recycling(recipe) then recipe.enabled = true end
+end
+for _, technology in pairs(raw.technology or {}) do
+	if technology.effects then
+		local kept = {}
+		for _, effect in ipairs(technology.effects) do
+			local target = effect.type == "unlock-recipe" and effect.recipe
+			local drop = target and ((recipes[target] and is_recycling(recipes[target]))
+				or (not recipes[target] and string.sub(target, -10) == "-recycling"))
+			if drop then unlocks_dropped = unlocks_dropped + 1 else kept[#kept + 1] = effect end
+		end
+		technology.effects = kept
+	end
+end
 log("Paranoidal: recycling rebuilt: removed " .. removed .. ", decomposed " .. decomposed
-	.. ", self-recycling " .. self_made .. ", skipped " .. skipped)
+	.. ", self-recycling " .. self_made .. ", skipped " .. skipped .. ", recycling unlocks dropped " .. unlocks_dropped)

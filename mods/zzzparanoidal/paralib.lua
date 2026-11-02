@@ -46,6 +46,15 @@ end
 ---Check that data.raw[section][name] exists
 ---@param section string
 ---@param name string
+---Factorio 2.1: a science pack can be of any item type (vanilla packs are plain items, mod packs may stay tools)
+---@param name string
+function paralib.EnsureScienceExists(name)
+	for item_type in pairs(defines.prototypes.item) do
+		if data.raw[item_type] and data.raw[item_type][name] then return end
+	end
+	paralib.ProcessError("science pack " .. tostring(name) .. " does not exist!")
+end
+
 function paralib.EnsureExists(section, name)
 	if not data.raw[section] then
 		paralib.ProcessError("data.raw[" .. section .. "] does not exists!")
@@ -195,8 +204,7 @@ end
 
 function paralib.bobmods.lib.tech.remove_science_pack(tech, pack)
 	paralib.EnsureExists("technology", tech)
-	--пакеты науки в 2.0 — прототипы tool
-	paralib.EnsureExists("tool", pack)
+	paralib.EnsureScienceExists(pack)
 	bobmods.lib.tech.remove_science_pack(tech, pack)
 end
 
@@ -207,8 +215,8 @@ end
 
 function paralib.bobmods.lib.tech.replace_science_pack(tech, packOld, packNew)
 	paralib.EnsureExists("technology", tech)
-	paralib.EnsureExists("tool", packOld)
-	paralib.EnsureExists("tool", packNew)
+	paralib.EnsureScienceExists(packOld)
+	paralib.EnsureScienceExists(packNew)
 	bobmods.lib.tech.replace_science_pack(tech, packOld, packNew)
 end
 

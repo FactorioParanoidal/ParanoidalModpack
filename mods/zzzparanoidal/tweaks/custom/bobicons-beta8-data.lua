@@ -1141,21 +1141,21 @@ return {
     -- technology/utility-science-pack
     {type = "technology", name = "utility-science-pack", before = {["icons"] = {{["icon"] = "__base__/graphics/technology/utility-science-pack.png", ["icon_size"] = 256, ["scale"] = 1}}}, after = {["icons"] = {{["icon"] = "__zzzparanoidal__/graphics/bobicons-beta8/bobicons/graphics/icons/base/utility-science-pack-128.png", ["icon_size"] = 128}}}},
     -- tool/automation-science-pack
-    {type = "tool", name = "automation-science-pack", before = {["icon"] = "__base__/graphics/icons/automation-science-pack.png", ["icon_size"] = 64}, after = {["icon"] = "__zzzparanoidal__/graphics/bobicons-beta8/bobicons/graphics/icons/base/automation-science-pack-128.png", ["icon_size"] = 128}},
+    {type = "item", name = "automation-science-pack", before = {["icon"] = "__base__/graphics/icons/automation-science-pack.png", ["icon_size"] = 64}, after = {["icon"] = "__zzzparanoidal__/graphics/bobicons-beta8/bobicons/graphics/icons/base/automation-science-pack-128.png", ["icon_size"] = 128}},
     -- tool/advanced-logistic-science-pack
     {type = "tool", name = "bob-advanced-logistic-science-pack", before = {["icons"] = {{["icon"] = "__reskins-bobs__/graphics/icons/technology/science-pack/bob-advanced-logistic-science-pack.png", ["icon_size"] = 64, ["scale"] = 0.5}}}, after = {["icons"] = {{["icon"] = "__zzzparanoidal__/graphics/bobicons-beta8/bobicons/graphics/icons/science/logistic-science-pack-2-128.png", ["icon_size"] = 128}}}},
     -- tool/chemical-science-pack
-    {type = "tool", name = "chemical-science-pack", before = {["icon"] = "__base__/graphics/icons/chemical-science-pack.png", ["icon_size"] = 64}, after = {["icon"] = "__zzzparanoidal__/graphics/bobicons-beta8/bobicons/graphics/icons/base/chemical-science-pack-128.png", ["icon_size"] = 128}},
+    {type = "item", name = "chemical-science-pack", before = {["icon"] = "__base__/graphics/icons/chemical-science-pack.png", ["icon_size"] = 64}, after = {["icon"] = "__zzzparanoidal__/graphics/bobicons-beta8/bobicons/graphics/icons/base/chemical-science-pack-128.png", ["icon_size"] = 128}},
     -- tool/logistic-science-pack
-    {type = "tool", name = "logistic-science-pack", before = {["icon"] = "__base__/graphics/icons/logistic-science-pack.png", ["icon_size"] = 64}, after = {["icon"] = "__zzzparanoidal__/graphics/bobicons-beta8/bobicons/graphics/icons/base/logistic-science-pack-128.png", ["icon_size"] = 128}},
+    {type = "item", name = "logistic-science-pack", before = {["icon"] = "__base__/graphics/icons/logistic-science-pack.png", ["icon_size"] = 64}, after = {["icon"] = "__zzzparanoidal__/graphics/bobicons-beta8/bobicons/graphics/icons/base/logistic-science-pack-128.png", ["icon_size"] = 128}},
     -- tool/military-science-pack
-    {type = "tool", name = "military-science-pack", before = {["icon"] = "__base__/graphics/icons/military-science-pack.png", ["icon_size"] = 64}, after = {["icon"] = "__zzzparanoidal__/graphics/bobicons-beta8/bobicons/graphics/icons/base/military-science-pack-128.png", ["icon_size"] = 128}},
+    {type = "item", name = "military-science-pack", before = {["icon"] = "__base__/graphics/icons/military-science-pack.png", ["icon_size"] = 64}, after = {["icon"] = "__zzzparanoidal__/graphics/bobicons-beta8/bobicons/graphics/icons/base/military-science-pack-128.png", ["icon_size"] = 128}},
     -- tool/production-science-pack
-    {type = "tool", name = "production-science-pack", before = {["icon"] = "__base__/graphics/icons/production-science-pack.png", ["icon_size"] = 64}, after = {["icon"] = "__zzzparanoidal__/graphics/bobicons-beta8/bobicons/graphics/icons/base/production-science-pack-128.png", ["icon_size"] = 128}},
+    {type = "item", name = "production-science-pack", before = {["icon"] = "__base__/graphics/icons/production-science-pack.png", ["icon_size"] = 64}, after = {["icon"] = "__zzzparanoidal__/graphics/bobicons-beta8/bobicons/graphics/icons/base/production-science-pack-128.png", ["icon_size"] = 128}},
     -- tool/space-science-pack
-    {type = "tool", name = "space-science-pack", before = {["icon"] = "__base__/graphics/icons/space-science-pack.png", ["icon_size"] = 64}, after = {["icon"] = "__zzzparanoidal__/graphics/bobicons-beta8/bobicons/graphics/icons/base/space-science-pack-128.png", ["icon_size"] = 128}},
+    {type = "item", name = "space-science-pack", before = {["icon"] = "__base__/graphics/icons/space-science-pack.png", ["icon_size"] = 64}, after = {["icon"] = "__zzzparanoidal__/graphics/bobicons-beta8/bobicons/graphics/icons/base/space-science-pack-128.png", ["icon_size"] = 128}},
     -- tool/utility-science-pack
-    {type = "tool", name = "utility-science-pack", before = {["icon"] = "__base__/graphics/icons/utility-science-pack.png", ["icon_size"] = 64}, after = {["icon"] = "__zzzparanoidal__/graphics/bobicons-beta8/bobicons/graphics/icons/base/utility-science-pack-128.png", ["icon_size"] = 128}},
+    {type = "item", name = "utility-science-pack", before = {["icon"] = "__base__/graphics/icons/utility-science-pack.png", ["icon_size"] = 64}, after = {["icon"] = "__zzzparanoidal__/graphics/bobicons-beta8/bobicons/graphics/icons/base/utility-science-pack-128.png", ["icon_size"] = 128}},
     -- virtual-signal/signal-black
     {type = "virtual-signal", name = "signal-black", before = {["icon"] = "__base__/graphics/icons/signal/signal_black.png", ["icon_size"] = 64}, after = {["icon"] = "__zzzparanoidal__/graphics/bobicons-beta8/bobicons/graphics/icons/signals/signal_black.png", ["icon_size"] = 64}},
     -- virtual-signal/signal-blue

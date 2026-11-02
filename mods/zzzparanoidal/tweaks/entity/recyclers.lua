@@ -22,6 +22,6 @@ if recycler1 then
   recycler1.module_slots = 1
   recycler1.allowed_effects = recycler1.allowed_effects or {"consumption", "speed", "pollution", "quality"}
   recycler1.icons_positioning = recycler1.icons_positioning or {
-    {inventory_index = defines.inventory.furnace_modules, shift = {0, 0.2}}
+    {inventory_index = defines.inventory.crafter_modules, shift = {0, 0.2}}
   }
 end
