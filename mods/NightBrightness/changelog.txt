@@ -22,6 +22,7 @@ Date: 2026-10-08
     - The night LUT of all four darkness modes (the vanilla one too) now covers the short summer night (0.35-0.65) instead of 0.2-0.8, so it no longer tints a summer evening while the sun is still up; longer nights are darkened by brightness. Brightness also darkens the picture while the cycle is disabled.
   Compatibility:
     - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
+    - Factorio 2.1: no zoom_to_world_daytime_color_lookup (utility constant removed in 2.1).
 ---------------------------------------------------------------------------------------------------
 Version: 1.1.8
 Date: 2022-03-23

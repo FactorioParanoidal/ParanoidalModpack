@@ -24,6 +24,5 @@ constants.daytime_color_lookup = {
   {0, "identity"}, {0.35, "identity"},
   {0.45, lut}, {0.55, lut}, {0.65, "identity"}, {0.85, "identity"},
 }
-constants.zoom_to_world_daytime_color_lookup = {
-  {0.35, "identity"}, {0.45, night}, {0.55, night}, {0.65, "identity"},
-}
+-- Factorio 2.1 removed the utility constant zoom_to_world_daytime_color_lookup (no zoom-to-world view since 2.0);
+-- `night` is no longer used.
