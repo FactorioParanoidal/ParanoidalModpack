@@ -9,6 +9,8 @@ Date: 01. 06. 2026
     - Paranoidal: removed settings-updates.lua: it only forced the enemy settings of rso-mod, which is now RSO-reforged and places all enemy bases itself.
     - Make Ground Radar adjust with quality #564
     - Allowed Alien artifact from small recipes to be selected as signals #592
+  Compatibility:
+    - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.4
 Date: 15. 01. 2026
