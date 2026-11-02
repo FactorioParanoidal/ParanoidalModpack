@@ -20,5 +20,5 @@ data.raw["assembling-machine"]["burner-assembling-machine"].surface_conditions =
 if mods["space-age"] then
     table.insert(data.raw["assembling-machine"]["burner-assembling-machine"].crafting_categories, "pressing")
     table.insert(data.raw["assembling-machine"]["burner-assembling-machine"].crafting_categories, "electronics")
-    data.raw.recipe["small-iron-electric-pole"].category = "electronics"
+    data.raw.recipe["small-iron-electric-pole"].categories = {"electronics"} -- Factorio 2.1: category -> categories
 end

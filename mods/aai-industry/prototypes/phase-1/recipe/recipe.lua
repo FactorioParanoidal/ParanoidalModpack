@@ -19,7 +19,7 @@ data:extend({
 
 data:extend({
   {
-    category = "smelting",
+    categories = {"smelting"},
     enabled = true,
     energy_required = 4,
     ingredients = {
@@ -37,7 +37,7 @@ data:extend({
 data:extend({{
     type = "recipe",
     name = "stone-tablet",
-    category = "crafting",
+    categories = {"crafting"},
     energy_required = 0.5,
     allow_productivity = true,
     ingredients =
@@ -50,7 +50,7 @@ data:extend({{
 data:extend({{
     type = "recipe",
     name = "motor",
-    category = "crafting",
+    categories = {"crafting"},
     allow_productivity = true,
     energy_required = settings.startup["aai-fast-motor-crafting"].value and 0.3 or 0.6,
     ingredients = {
@@ -63,7 +63,7 @@ data:extend({{
 data:extend({{
     type = "recipe",
     name = "electric-motor",
-    category = "crafting",
+    categories = {"crafting"},
     allow_productivity = true,
     enabled = false,
     energy_required = settings.startup["aai-fast-motor-crafting"].value and 0.4 or 0.8,
@@ -78,7 +78,7 @@ data:extend({{
 data:extend({{
     type = "recipe",
     name = "small-iron-electric-pole",
-    category = "crafting",
+    categories = {"crafting"},
     energy_required = 0.25,
     enabled = false,
     ingredients =
@@ -92,7 +92,7 @@ data:extend({{
 data:extend({{
     type = "recipe",
     name = "concrete-wall",
-    category = "crafting",
+    categories = {"crafting"},
     enabled = false,
     energy_required = 0.25,
     ingredients =
@@ -106,7 +106,7 @@ data:extend({{
 data:extend({{
     type = "recipe",
     name = "steel-wall",
-    category = "crafting",
+    categories = {"crafting"},
     enabled = false,
     energy_required = 1,
     ingredients =
@@ -120,7 +120,7 @@ data:extend({{
 data:extend({{
     type = "recipe",
     name = "concrete-gate",
-    category = "crafting",
+    categories = {"crafting"},
     enabled = false,
     energy_required = 0.25,
     ingredients =
@@ -135,7 +135,7 @@ data:extend({{
 data:extend({{
     type = "recipe",
     name = "steel-gate",
-    category = "crafting",
+    categories = {"crafting"},
     enabled = false,
     energy_required = 1,
     ingredients =
@@ -150,7 +150,7 @@ data:extend({{
 data:extend({{
     type = "recipe",
     name = "burner-lab",
-    category = "crafting",
+    categories = {"crafting"},
     enabled = true,
     energy_required = 0.5,
     ingredients =
@@ -165,7 +165,7 @@ data:extend({{
 data:extend({{
     type = "recipe",
     name = "burner-turbine",
-    category = "crafting",
+    categories = {"crafting"},
     enabled = false,
     energy_required = 1,
     ingredients =
@@ -180,7 +180,7 @@ data:extend({{
 data:extend({{
     type = "recipe",
     name = "burner-assembling-machine",
-    category = "crafting",
+    categories = {"crafting"},
     energy_required = 0.5,
     ingredients = {
       {type="item", name="iron-plate", amount=8},

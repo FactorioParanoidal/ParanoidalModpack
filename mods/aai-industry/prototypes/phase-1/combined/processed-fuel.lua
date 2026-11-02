@@ -108,7 +108,7 @@ data:extend({
       ingredients =
       {
       },
-      category = "fuel-processing",
+      categories = {"fuel-processing"},
       results = {{type = "item", name = "processed-fuel", amount = 1}},
       hidden = (not include_fuel_processor)
   },

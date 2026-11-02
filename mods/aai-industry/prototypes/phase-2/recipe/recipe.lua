@@ -15,7 +15,7 @@ if data.raw.item["solid-sand"] then -- angels sand
   data:extend({{
       type = "recipe",
       name = "sand-to-solid-sand",
-      category = "washing-plant",
+      categories = {"washing-plant"},
       subgroup = data.raw.item["solid-sand"].subgroup or "raw-material",
       energy_required = 0.5,
       enabled = false,

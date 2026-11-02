@@ -6,7 +6,7 @@ require("prototypes/phase-3/recipe/recipe")
 data.raw.lab["burner-lab"].inputs = data.raw.lab["lab"].inputs
 
 if data.raw.item["electronics-machine-1"] and data.raw.recipe["electronic-circuit-wood"] then
-  data.raw.recipe["electronic-circuit-wood"].category = "electronics"
+  data.raw.recipe["electronic-circuit-wood"].categories = {"electronics"} -- Factorio 2.1: category -> categories
 end
 
 --log( serpent.block( data.raw.wall, {comment = false, numformat = '%1.8g' } ) )
@@ -59,8 +59,11 @@ else -- scrub all techs from having it as a prereq
 end
 
 for _, recipe in pairs(data.raw.recipe) do
-  if (recipe.category == "crafting" or recipe.category == nil) and string.find(recipe.name, "science-pack", 1, true) and (not recipe.allow_hand_crafting) then
-    recipe.category = "basic-crafting"
+  -- Factorio 2.1: main category = categories[1] (default {"crafting"}); the other categories are kept
+  local categories = recipe.categories or {"crafting"}
+  if categories[1] == "crafting" and string.find(recipe.name, "science-pack", 1, true) and (not recipe.allow_hand_crafting) then
+    recipe.categories = table.deepcopy(categories)
+    recipe.categories[1] = "basic-crafting"
   end
 end
 

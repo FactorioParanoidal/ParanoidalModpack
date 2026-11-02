@@ -62,7 +62,7 @@ data:extend({
   {
     type = "recipe",
     name = "industrial-furnace",
-    category = "crafting",
+    categories = {"crafting"},
     enabled = false,
     energy_required = 7,
     ingredients = {

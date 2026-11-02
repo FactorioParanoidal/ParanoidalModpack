@@ -82,37 +82,37 @@ end
 util.conditional_modify({
   type = "recipe",
   name = "automation-science-pack",
-  category = "basic-crafting", -- not hand crafted
+  categories = {"basic-crafting"}, -- not hand crafted
 })
 util.conditional_modify({
   type = "recipe",
   name = "logistic-science-pack",
-  category = "advanced-crafting", -- not hand crafted, electric only
+  categories = {"advanced-crafting"}, -- not hand crafted, electric only
 })
 util.conditional_modify({
   type = "recipe",
   name = "military-science-pack",
-  category = "advanced-crafting", -- not hand crafted, electric only
+  categories = {"advanced-crafting"}, -- not hand crafted, electric only
 })
 util.conditional_modify({
   type = "recipe",
   name = "chemical-science-pack",
-  category = "advanced-crafting", -- not hand crafted, electric only
+  categories = {"advanced-crafting"}, -- not hand crafted, electric only
 })
 util.conditional_modify({
   type = "recipe",
   name = "utility-science-pack",
-  category = "advanced-crafting", -- not hand crafted, electric only
+  categories = {"advanced-crafting"}, -- not hand crafted, electric only
 })
 util.conditional_modify({
   type = "recipe",
   name = "production-science-pack",
-  category = "advanced-crafting", -- not hand crafted, electric only
+  categories = {"advanced-crafting"}, -- not hand crafted, electric only
 })
 util.conditional_modify({
   type = "recipe",
   name = "space-science-pack",
-  category = "advanced-crafting", -- not hand crafted, electric only
+  categories = {"advanced-crafting"}, -- not hand crafted, electric only
 })
 
 
@@ -141,7 +141,7 @@ util.conditional_modify({
 util.conditional_modify({
   type = "recipe",
   name = "engine-unit",
-  category = "crafting", -- engine can be hand crafted
+  categories = {"crafting"}, -- engine can be hand crafted
   ingredients = {
     {type="item", name="steel-plate", amount=2},
     {type="item", name="iron-gear-wheel", amount=2},
@@ -506,7 +506,7 @@ data:extend({
   {
     type = "recipe",
     name = "oil-processing-heavy",
-    category = "oil-processing",
+    categories = {"oil-processing"},
     enabled = false,
     energy_required = 2,
     ingredients =
