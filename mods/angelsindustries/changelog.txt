@@ -23,6 +23,9 @@ Date: ???
   Bugfixes:
     - Paranoidal: angelsindustriesgraphics is now a plain required dependency instead of "~" (load order is unchanged): Factorio 2.0 never reuses the data stage cache (cache-prototype-data) while any enabled mod has a "~" dependency.
     - Fixed potential softlock with Tech Overhaul and Bob's Technology mod (986)
+  Compatibility:
+    - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
+    - Paranoidal port to Factorio 2.1: assembler pipe pictures are taken from __base__/prototypes/entity/assembler-pictures.lua (2.1 removed the global assembler2pipepictures/assembler3pipepictures and assemblerpipes.lua).
 ---------------------------------------------------------------------------------------------------
 Version: 0.4.21
 Date: 21.02.2024
