@@ -109,12 +109,11 @@ fluid_level_indicator.fluid_box =
   pipe_covers = pipecoverspictures(),
   pipe_connections =
   {
-    { flow_direction = "input-output", direction = defines.direction.north, position = {0, -0.0001} },
-    { flow_direction = "input-output", direction = defines.direction.east, position = {0.001, 0} },
-    { flow_direction = "input-output", direction = defines.direction.south, position = {0, 0.001} },
-    { flow_direction = "input-output", direction = defines.direction.west, position = {-0.001, 0} }
+    { flow_direction = "input-output", direction = defines.direction.north, position = {0, -0.0001}, hide_connection_info = true },
+    { flow_direction = "input-output", direction = defines.direction.east, position = {0.001, 0}, hide_connection_info = true },
+    { flow_direction = "input-output", direction = defines.direction.south, position = {0, 0.001}, hide_connection_info = true },
+    { flow_direction = "input-output", direction = defines.direction.west, position = {-0.001, 0}, hide_connection_info = true }
   },
-  hide_connection_info = true
 }
 fluid_level_indicator.pictures = 
 {
@@ -181,10 +180,9 @@ fluid_level_indicator_straight.fluid_box =
   pipe_covers = pipecoverspictures(),
   pipe_connections =
   {
-    { flow_direction = "input-output", direction = defines.direction.south, position = {0, -0.0001} },
-    { flow_direction = "input-output", direction = defines.direction.north, position = {0, 0.0001} }
+    { flow_direction = "input-output", direction = defines.direction.south, position = {0, -0.0001}, hide_connection_info = true },
+    { flow_direction = "input-output", direction = defines.direction.north, position = {0, 0.0001}, hide_connection_info = true }
   },
-  hide_connection_info = true
 }
 fluid_level_indicator_straight.pictures = 
 {

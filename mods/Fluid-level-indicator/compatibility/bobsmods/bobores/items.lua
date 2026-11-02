@@ -40,10 +40,9 @@ fluid_level_indicator_bobtungsten.fluid_box =
       pipe_covers = pipecoverspictures(),
       pipe_connections =
       {
-        { position = {0, -1} },
-        { position = {0, 1} }
+        { position = {0, -1}, hide_connection_info = true },
+        { position = {0, 1}, hide_connection_info = true }
       },
-      hide_connection_info = true
 }
 fluid_level_indicator_bobtungsten.pictures = 
 {
@@ -139,10 +138,9 @@ fluid_level_indicator_bobcoppertungsten.fluid_box =
       pipe_covers = pipecoverspictures(),
       pipe_connections =
       {
-        { position = {0, -1} },
-        { position = {0, 1} }
+        { position = {0, -1}, hide_connection_info = true },
+        { position = {0, 1}, hide_connection_info = true }
       },
-      hide_connection_info = true
 }
 fluid_level_indicator_bobcoppertungsten.pictures = 
 {

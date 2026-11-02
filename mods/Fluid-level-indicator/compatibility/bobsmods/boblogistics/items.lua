@@ -42,10 +42,9 @@ fluid_level_indicator_bobsteel.fluid_box =
   pipe_covers = pipecoverspictures(),
   pipe_connections =
   {
-    { flow_direction = "input-output", direction = defines.direction.south, position = {0, -0.0001} },
-    { flow_direction = "input-output", direction = defines.direction.north, position = {0, 0.0001} }
+    { flow_direction = "input-output", direction = defines.direction.south, position = {0, -0.0001}, hide_connection_info = true },
+    { flow_direction = "input-output", direction = defines.direction.north, position = {0, 0.0001}, hide_connection_info = true }
   },
-      hide_connection_info = true
 }
 fluid_level_indicator_bobsteel.pictures = 
 {
@@ -123,10 +122,9 @@ fluid_level_indicator_bobplastic.fluid_box =
   pipe_covers = pipecoverspictures(),
   pipe_connections =
     {
-      { flow_direction = "input-output", direction = defines.direction.south, position = {0, -0.0001} },
-      { flow_direction = "input-output", direction = defines.direction.north, position = {0, 0.0001} }
+      { flow_direction = "input-output", direction = defines.direction.south, position = {0, -0.0001}, hide_connection_info = true },
+      { flow_direction = "input-output", direction = defines.direction.north, position = {0, 0.0001}, hide_connection_info = true }
     },
-    hide_connection_info = true
 }
 fluid_level_indicator_bobplastic.pictures = 
 {

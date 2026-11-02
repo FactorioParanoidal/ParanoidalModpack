@@ -44,12 +44,11 @@ fluid_level_indicator_k2.fluid_box =
   pipe_covers = pipecoverspictures(),
   pipe_connections =
   {
-    { flow_direction = "input-output", direction = defines.direction.north, position = {0, -0.0001}, connection_category = "kr-steel-pipe" },
-    { flow_direction = "input-output", direction = defines.direction.east, position = {0.001, 0}, connection_category = "kr-steel-pipe" },
-    { flow_direction = "input-output", direction = defines.direction.south, position = {0, 0.001}, connection_category = "kr-steel-pipe" },
-    { flow_direction = "input-output", direction = defines.direction.west, position = {-0.001, 0}, connection_category = "kr-steel-pipe" }
+    { flow_direction = "input-output", direction = defines.direction.north, position = {0, -0.0001}, connection_category = "kr-steel-pipe", hide_connection_info = true },
+    { flow_direction = "input-output", direction = defines.direction.east, position = {0.001, 0}, connection_category = "kr-steel-pipe", hide_connection_info = true },
+    { flow_direction = "input-output", direction = defines.direction.south, position = {0, 0.001}, connection_category = "kr-steel-pipe", hide_connection_info = true },
+    { flow_direction = "input-output", direction = defines.direction.west, position = {-0.001, 0}, connection_category = "kr-steel-pipe", hide_connection_info = true }
   },
-  hide_connection_info = true
 }
 fluid_level_indicator_k2.pictures = 
 {
@@ -126,10 +125,9 @@ fluid_level_indicator_straight_k2.fluid_box =
   pipe_covers = pipecoverspictures(),
   pipe_connections =
   {
-    { flow_direction = "input-output", direction = defines.direction.south, position = {0, -0.0001}, connection_category = "kr-steel-pipe" },
-    { flow_direction = "input-output", direction = defines.direction.north, position = {0, 0.0001}, connection_category = "kr-steel-pipe" }
+    { flow_direction = "input-output", direction = defines.direction.south, position = {0, -0.0001}, connection_category = "kr-steel-pipe", hide_connection_info = true },
+    { flow_direction = "input-output", direction = defines.direction.north, position = {0, 0.0001}, connection_category = "kr-steel-pipe", hide_connection_info = true }
   },
-  hide_connection_info = true
 }
 fluid_level_indicator_straight_k2.pictures = 
 {
