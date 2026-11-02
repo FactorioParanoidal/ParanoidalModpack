@@ -1,4 +1,6 @@
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.1
+  Changes:
+    - Bob's burner phase (bobmods-burnerphase) is forced off and hidden: the Bob's "Electricity" and "Burner lab" technologies no longer appear.
   Graphics:
     - Added thumbnail.png (144x144): the picture of the mod in the mod list, made from the mod and base game graphics.
