@@ -35,13 +35,13 @@ local default_icon_sizes = {
 ---@return data.IconData
 ---
 ---### Parameters
----@param icon_type? IconDefaultsType # The name of the type-specific icon defaults to generate, as per https://lua-api.factorio.com/latest/types/IconData.html#scale. Unrecognized names resolve to `defines.default_icon_size`.
+---@param icon_type? IconDefaultsType # The name of the type-specific icon defaults to generate, as per https://lua-api.factorio.com/latest/types/IconData.html#scale. Unrecognized names resolve to `defines.constant.default_icon_size`.
 function _icons.empty_icon(icon_type)
 	local expected_icon_size
 	if icon_type and type(icon_type) == "string" then
-		expected_icon_size = default_icon_sizes[icon_type] or defines.default_icon_size
+		expected_icon_size = default_icon_sizes[icon_type] or defines.constant.default_icon_size
 	else
-		expected_icon_size = defines.default_icon_size
+		expected_icon_size = defines.constant.default_icon_size
 	end
 
 	return {
@@ -81,7 +81,7 @@ end
 ---### Parameters
 ---@param icon_data data.IconData[] # An array of `IconData` objects to scale.
 ---@param scalar double # The scalar to rescale the icon by.
----@param defaults_type? IconDefaultsType # The name of the type-specific icon defaults to generate, as per https://lua-api.factorio.com/latest/types/IconData.html#scale. Unrecognized names resolve to `defines.default_icon_size`.
+---@param defaults_type? IconDefaultsType # The name of the type-specific icon defaults to generate, as per https://lua-api.factorio.com/latest/types/IconData.html#scale. Unrecognized names resolve to `defines.constant.default_icon_size`.
 function _icons.scale_icon(icon_data, scalar, defaults_type)
 	local icon_data_copy = _icons.add_missing_icons_defaults(icon_data, defaults_type)
 
@@ -156,7 +156,7 @@ end
 ---
 ---### Parameters
 ---@param icon_datum data.IconData # An `IconData` object.
----@param defaults_type? IconDefaultsType # The name of the type-specific icon defaults to generate, as per https://lua-api.factorio.com/latest/types/IconData.html#scale. Unrecognized names resolve to `defines.default_icon_size`.
+---@param defaults_type? IconDefaultsType # The name of the type-specific icon defaults to generate, as per https://lua-api.factorio.com/latest/types/IconData.html#scale. Unrecognized names resolve to `defines.constant.default_icon_size`.
 ---
 ---### Exceptions
 ---*@throws* `string` — Thrown when `icon_dataum` is `nil`<br/>
@@ -175,7 +175,7 @@ function _icons.add_missing_icon_defaults(icon_datum, defaults_type)
 	assert(icon_datum.icon:match("%.([%a%d]+)$"), "Invalid filename: 'icon' must have a valid file extension, but was '" .. icon_datum.icon .. "'.")
 
 	-- Set icon_size to default for the type, if not explicitly provided.
-	local expected_icon_size = default_icon_sizes[defaults_type or ""] or defines.default_icon_size
+	local expected_icon_size = default_icon_sizes[defaults_type or ""] or defines.constant.default_icon_size
 	local icon_size = icon_datum.icon_size or expected_icon_size
 
 	assert(type(icon_size) == "number", "Invalid type: 'icon_size' must be a number, but was a '" .. type(icon_size) .. "'.")
@@ -223,7 +223,7 @@ end
 ---
 ---### Parameters
 ---@param icon_data data.IconData[] # An icon represented by an array of `IconData` objects.
----@param defaults_type? IconDefaultsType # The name of the type-specific icon defaults to generate, as per https://lua-api.factorio.com/latest/types/IconData.html#scale. Unrecognized names resolve to `defines.default_icon_size`.
+---@param defaults_type? IconDefaultsType # The name of the type-specific icon defaults to generate, as per https://lua-api.factorio.com/latest/types/IconData.html#scale. Unrecognized names resolve to `defines.constant.default_icon_size`.
 ---
 ---### Exceptions
 ---*@throws* `string` — Thrown when `icon_data` is `nil`.<br/>
@@ -368,7 +368,7 @@ function _icons.get_icon_from_prototype(prototype)
 	local icons
 
 	-- Give precedence to an existing icons field.
-	local default_icon_size = default_icon_sizes[prototype.type] or defines.default_icon_size
+	local default_icon_size = default_icon_sizes[prototype.type] or defines.constant.default_icon_size
 	if prototype.icons then
 		---@type data.IconData[]
 		icons = util.copy(prototype.icons)
@@ -456,14 +456,14 @@ function _icons.get_dark_background_icon_from_prototype(item_prototype)
 
 		-- Ensure icon_size is set for all elements before adding defaults.
 		for n = 1, #icons do
-			icons[n].icon_size = icons[n].icon_size or item_prototype.icon_size or defines.default_icon_size
+			icons[n].icon_size = icons[n].icon_size or item_prototype.icon_size or defines.constant.default_icon_size
 		end
 	else
 		---@type data.IconData[]
 		icons = {
 			{
 				icon = item_prototype.dark_background_icon,
-				icon_size = item_prototype.dark_background_icon_size or defines.default_icon_size,
+				icon_size = item_prototype.dark_background_icon_size or defines.constant.default_icon_size,
 			},
 		}
 	end
@@ -886,7 +886,7 @@ end
 ---- Inputs are not modified.
 ---
 ---### Parameters
----@param defaults_type IconDefaultsType # The name of the type-specific icon defaults to generate, as per https://lua-api.factorio.com/latest/types/IconData.html#scale. Unrecognized names resolve to `defines.default_icon_size`.
+---@param defaults_type IconDefaultsType # The name of the type-specific icon defaults to generate, as per https://lua-api.factorio.com/latest/types/IconData.html#scale. Unrecognized names resolve to `defines.constant.default_icon_size`.
 ---@param ... data.IconData|data.IconData[] # An variable set of `IconData` or `IconData` arrays to combine.
 ---
 ---### See Also
@@ -1156,7 +1156,7 @@ end
 ---@param scale? double # The scale to apply to the sourced icon. Default `nil`.
 ---@param shift? data.Vector # The shift to apply to the sourced icon. Default `nil`.
 ---@param tint? data.Color # The tint to apply to the sourced icon. Default `nil`.
----@param defaults_type? IconDefaultsType # The name of the type-specific icon defaults to generate, as per https://lua-api.factorio.com/latest/types/IconData.html#scale. Unrecognized names resolve to `defines.default_icon_size`.
+---@param defaults_type? IconDefaultsType # The name of the type-specific icon defaults to generate, as per https://lua-api.factorio.com/latest/types/IconData.html#scale. Unrecognized names resolve to `defines.constant.default_icon_size`.
 ---
 ---### Exceptions
 ---*@throws* `string` — Thrown when `icon_data` is `nil`.<br/>
@@ -1213,7 +1213,7 @@ end
 ---
 ---### Parameters
 ---@param source? IconSource # A source of `icon_data`.
----@param defaults_type? IconDefaultsType # The name of the type-specific icon defaults to generate, as per https://lua-api.factorio.com/latest/types/IconData.html#scale. Unrecognized names resolve to `defines.default_icon_size`.
+---@param defaults_type? IconDefaultsType # The name of the type-specific icon defaults to generate, as per https://lua-api.factorio.com/latest/types/IconData.html#scale. Unrecognized names resolve to `defines.constant.default_icon_size`.
 ---@nodiscard
 local function get_icons_from_source(source, defaults_type)
 	---@type data.IconData[]
@@ -1255,7 +1255,7 @@ end
 ---### Parameters
 ---@param icon_data data.IconData[] # An `IconData` object to be combined with the sourced icons from `sources`.
 ---@param sources IconSources # An array of `IconData` sources to layer on `icon_data`.
----@param defaults_type? IconDefaultsType # The name of the type-specific icon defaults to generate, as per https://lua-api.factorio.com/latest/types/IconData.html#scale. Unrecognized names resolve to `defines.default_icon_size`. Individual source types take precedence over this value.
+---@param defaults_type? IconDefaultsType # The name of the type-specific icon defaults to generate, as per https://lua-api.factorio.com/latest/types/IconData.html#scale. Unrecognized names resolve to `defines.constant.default_icon_size`. Individual source types take precedence over this value.
 ---
 ---### Exceptions
 ---*@throws* `string` — Thrown when `icon_data` is `nil`.<br/>

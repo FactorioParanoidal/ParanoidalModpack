@@ -3,6 +3,9 @@ Version: 0.1.1
 Date: 2026-06-07
   Changes:
     - Revised `icons.assign_icons_to_prototype_and_related_prototypes` to pattern match for explosion/remnant related entities, as well as retrieve the first configured explosion and corpse for updates, if available on the prototype.
+  Compatibility:
+    - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
+    - Paranoidal port to Factorio 2.1: defines.default_icon_size renamed to defines.constant.default_icon_size.
 ---------------------------------------------------------------------------------------------------
 Version: 0.1.0
 Date: 2026-06-06

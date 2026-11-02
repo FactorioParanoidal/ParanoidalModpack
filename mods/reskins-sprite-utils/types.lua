@@ -54,7 +54,7 @@
 ---The icon data to be used for the icon.
 ---@field icon_datum data.IconData
 ---The name of the type-specific icon defaults to generate, as per https://lua-api.factorio.com/latest/types/IconData.html#scale.
----Unrecognized names resolve to `defines.default_icon_size`.
+---Unrecognized names resolve to `defines.constant.default_icon_size`.
 ---@field defaults_type IconDefaultsType?
 ---The scale to apply to the sourced icon. Default `nil`.
 ---@field scale double?
@@ -68,7 +68,7 @@
 ---The icon data to be used for the icon.
 ---@field icon_data data.IconData[]
 ---The name of the type-specific icon defaults to generate, as per https://lua-api.factorio.com/latest/types/IconData.html#scale.
----Unrecognized names resolve to `defines.default_icon_size`.
+---Unrecognized names resolve to `defines.constant.default_icon_size`.
 ---@field defaults_type IconDefaultsType?
 ---The scale to apply to the sourced icon. Default `nil`.
 ---@field scale double?
