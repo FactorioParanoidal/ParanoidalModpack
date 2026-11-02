@@ -217,7 +217,7 @@ local gunship = { -- Gunship with Car sound
     equipment_grid = "gunship-equipment-grid",
         --MOVEMENT
     effectivity = 0.7,
-    braking_power = "450kW",
+    braking_force = (450 * 1000) / 60, -- Factorio 2.1: was braking_power = "450kW"
     energy_source = {
       type = "burner",
       fuel_inventory_size = 4,
@@ -225,7 +225,7 @@ local gunship = { -- Gunship with Car sound
     },
     consumption = "650kW",
     --consumption = "45MW",
-    friction = 0.003,
+    friction_force = 0.003, -- Factorio 2.1: was friction
     stop_trigger_speed = 0.2,
     acceleration_per_energy = 0.35,
     breaking_speed = 0.09,
@@ -268,7 +268,7 @@ local cargo_plane = { -- Cargo Plane with Car sound
     guns = { "cargo-plane-machine-gun"},
         --MOVEMENT
     effectivity = 1,
-    braking_power = "650kW",
+    braking_force = (650 * 1000) / 60, -- Factorio 2.1: was braking_power = "650kW"
     energy_source = {
       type = "burner",
       fuel_inventory_size = 10,
@@ -276,7 +276,7 @@ local cargo_plane = { -- Cargo Plane with Car sound
     },
     consumption = "1250kW",
     --consumption = "85MW",
-    friction = 0.01,
+    friction_force = 0.01, -- Factorio 2.1: was friction
     stop_trigger_speed = 0.2,
     acceleration_per_energy = 0.15,
     breaking_speed = 0.15,
@@ -316,7 +316,7 @@ local jet = { -- Jet with Car sound
     equipment_grid = "jet-equipment-grid",
         --MOVEMENT
     effectivity = 0.9,
-    braking_power = "2000kW",
+    braking_force = (2000 * 1000) / 60, -- Factorio 2.1: was braking_power = "2000kW"
     energy_source = {
       type = "burner",
       fuel_inventory_size = 8,
@@ -324,7 +324,7 @@ local jet = { -- Jet with Car sound
     },
     consumption = "850kW",
     --consumption= "65MW", --All aircraft will have consumption multiplied by 100.
-    friction = 0.001,
+    friction_force = 0.001, -- Factorio 2.1: was friction
     stop_trigger_speed = 0.2,
     acceleration_per_energy = 0.80,
     breaking_speed = 0.03,
@@ -371,7 +371,7 @@ local flying_fortress = { -- Flying Fortress with Car sound
     equipment_grid = "flying-fortress-equipment-grid",
         --MOVEMENT
     effectivity = 2.3,
-    braking_power = "850kW",
+    braking_force = (850 * 1000) / 60, -- Factorio 2.1: was braking_power = "850kW"
 	energy_source = {
       type = "burner",
       fuel_inventory_size = 8,
@@ -379,7 +379,7 @@ local flying_fortress = { -- Flying Fortress with Car sound
     },
     consumption = "1850kW",
     --consumption = "130MW",
-    friction = 0.015,
+    friction_force = 0.015, -- Factorio 2.1: was friction
     stop_trigger_speed = 0.1,
     acceleration_per_energy = 0.30,
     breaking_speed = 0.001,
@@ -435,11 +435,11 @@ local arapi=require("__AircraftRealism__.api")
     aircraft_grounded["render_layer"] = "object"
     aircraft_flying.animation.layers[2]=nil --Shadows managed dynamically by AircraftRealism when in flight
     aircraft_flying.collision_mask = { layers = {} } 
-    aircraft_grounded.friction=aircraft_grounded.friction*0.5
+    -- Factorio 2.1: friction -> friction_force, braking_power -> braking_force (W / 60)
+    aircraft_grounded.friction_force=aircraft_grounded.friction_force*0.5
     aircraft_flying.effectivity=aircraft_flying.effectivity/4
-    aircraft_flying.friction=aircraft_flying.friction/6
-    local braking_power_val,prefix=flib_data_util.get_energy_value(aircraft_flying.braking_power)
-    aircraft_flying.braking_power=tostring(braking_power_val/10) .. prefix
+    aircraft_flying.friction_force=aircraft_flying.friction_force/6
+    aircraft_flying.braking_force=aircraft_flying.braking_force/10
     data:extend{aircraft_flying}
 
     --Shadow sprites, copied from https://github.com/jaihysc/Factorio-AircraftRealism/blob/2.0.0/Docs/Api.md
