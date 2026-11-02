@@ -38,7 +38,8 @@ local function generate_formatted_product(product)
         proddable_amount = math.max(base_amount - catalyst_amount, 0)
     end
 
-    local probability = (product.probability or 1)
+    -- Factorio 2.1: independent_probability (was probability) times the shared_probability range
+    local probability = ((product.independent_probability or product.probability or 1) * (product.shared_probability and (product.shared_probability.max - product.shared_probability.min) or 1))
     local formatted_product = {
         name = product.name,
         type = product.type,

@@ -12,6 +12,7 @@ Date: 19. 04. 2026
     - Paranoidal port to Factorio 2.1: recipe categories are read from LuaRecipePrototype::categories and parameter recipes are skipped by LuaPrototypeBase::parameter (category, additional_categories and is_parameter were removed).
     - Paranoidal port to Factorio 2.1: boiler input temperature limits are read from the boiler prototype (minimum/maximum_input_temperature), the rocket lift weight from UtilityConstants::default_rocket_lift_weight, and quality effects are shown without the next_probability factor (2.1 GUI rule).
     - Paranoidal port to Factorio 2.1: a missing pumping speed (get_pumping_speed may return nil in 2.1) no longer stops the generator.
+    - Paranoidal port to Factorio 2.1: product chances are read from independent_probability and the shared_probability range (Product::probability was removed in 2.1).
 
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.49
