@@ -14,6 +14,8 @@ Date: 2026-10-17
     - Added Russian locale; fonts without Cyrillic are marked in the setting.
     - Removed the unused wingdings/1_wingdings.ttf and the commented-out jurassic-park entry.
     - Incompatible with the original more-fonts.
+  Compatibility:
+    - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.4
 Date: 2024-10-23
