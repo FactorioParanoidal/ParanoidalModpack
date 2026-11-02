@@ -25,3 +25,4 @@ Date: 2026-11-01
     - Nothing is lost: the old mods kept no state that matters (Lighted Electric Poles + stored only name lists). At the first load the hidden lamps of all lighted poles are rebuilt. Values of the removed settings in mod-settings.dat are ignored.
   Compatibility:
     - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
+    - Paranoidal port to Factorio 2.1: recipes use categories (RecipePrototype::category and additional_categories were merged into categories; the first entry keeps the meaning of the former main category, a changed main category keeps the other entries).
