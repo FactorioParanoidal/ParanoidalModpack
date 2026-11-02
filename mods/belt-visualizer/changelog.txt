@@ -27,6 +27,8 @@ Date: 2026-10-14
     - Switching hover mode off removes the current highlight
   Locale:
     - Added Russian translation for container passthrough and clarified ghost keybind names
+  Compatibility:
+    - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.2
 Date: 2024-10-22
