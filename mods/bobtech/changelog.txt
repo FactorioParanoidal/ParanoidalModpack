@@ -7,6 +7,8 @@ Date: 01. 06. 2026
     - Made it easier to upgrade labs #541
   Changes:
     - Disallowed certain entities in space #551
+  Compatibility:
+    - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.5
 Date: 18. 01. 2026
