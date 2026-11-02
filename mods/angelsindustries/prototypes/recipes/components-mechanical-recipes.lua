@@ -189,7 +189,7 @@ if angelsmods.industries.components then
       },
       results = {
         { type = "item", name = "angels-motor-casing-5-green", amount = 1 },
-        { type = "item", name = "angels-spent-mold-non-expendable", amount = 1, probability = 0.90 },
+        { type = "item", name = "angels-spent-mold-non-expendable", amount = 1, independent_probability = 0.90 },
       },
       main_product = "angels-motor-casing-5-green",
       icons = {
