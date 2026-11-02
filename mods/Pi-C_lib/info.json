@@ -6,6 +6,6 @@
  "contact": "",
  "homepage": "",
  "description": "Just some stuff I use in my mods: assertions, debugging, etc.",
- "factorio_version": "2.0",
+ "factorio_version": "2.1",
  "dependencies": ["base >= 2.0.55"]
 }
