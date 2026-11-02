@@ -80,7 +80,7 @@ recipe["refurbish-fabricator-shuttle"].ingredients = {
   { type = "item", name = "rocket-fuel", amount = 2000 },
 }
 recipe["refurbish-fabricator-shuttle"].results = {
-  { type = "item", name = "fabricator-shuttle", amount = 1, probability = refurbish_probability },
+  { type = "item", name = "fabricator-shuttle", amount = 1, independent_probability = refurbish_probability },
   { type = "item", name = "ground-fabricator-component", amount = 1 },
 }
 
@@ -90,7 +90,7 @@ recipe["refurbish-mining-shuttle"].ingredients = {
   { type = "item", name = "rocket-fuel", amount = 2000 },
 }
 recipe["refurbish-mining-shuttle"].results = {
-  { type = "item", name = "mining-shuttle", amount = 1, probability = refurbish_probability },
+  { type = "item", name = "mining-shuttle", amount = 1, independent_probability = refurbish_probability },
   { type = "item", name = "random-dropship", amount = 20000 },
 }
 
@@ -102,7 +102,7 @@ recipe["refurbish-space-shuttle"].ingredients = {
 }
 recipe["refurbish-space-shuttle"].results = {
   { type = "item", name = "station-science", amount = 2 },
-  { type = "item", name = "space-shuttle", amount = 1, probability = refurbish_probability },
+  { type = "item", name = "space-shuttle", amount = 1, independent_probability = refurbish_probability },
 }
 
 recipe["refurbish-spy-shuttle"].ingredients = {
@@ -111,7 +111,7 @@ recipe["refurbish-spy-shuttle"].ingredients = {
   { type = "item", name = "rocket-fuel", amount = 1000 },
 }
 recipe["refurbish-spy-shuttle"].results = {
-  { type = "item", name = "spy-shuttle", amount = 1, probability = refurbish_probability },
+  { type = "item", name = "spy-shuttle", amount = 1, independent_probability = refurbish_probability },
   { type = "item", name = "planetary-data", amount = 2 },
 }
 
@@ -217,16 +217,16 @@ end
 
 if mods["angelsrefining"] and settings.startup["ERPCTbaAB2-give-refining-ores"].value then
   recipe["random-dropship-unboxing"].results = {
-    { type = "item", name = "angels-ore1", amount_min = 10, amount_max = 50, probability = 0.65 },
-    { type = "item", name = "angels-ore3", amount_min = 20, amount_max = 50, probability = 0.30 },
-    { type = "item", name = "angels-ore6", amount_min = 30, amount_max = 50, probability = 0.22 },
-    { type = "item", name = "angels-ore5", amount_min = 20, amount_max = 40, probability = 0.25 },
-    { type = "item", name = "angels-ore4", amount_min = 10, amount_max = 30, probability = 0.12 },
-    { type = "item", name = "angels-ore2", amount_min = 15, amount_max = 30, probability = 0.13 },
+    { type = "item", name = "angels-ore1", amount_min = 10, amount_max = 50, independent_probability = 0.65 },
+    { type = "item", name = "angels-ore3", amount_min = 20, amount_max = 50, independent_probability = 0.30 },
+    { type = "item", name = "angels-ore6", amount_min = 30, amount_max = 50, independent_probability = 0.22 },
+    { type = "item", name = "angels-ore5", amount_min = 20, amount_max = 40, independent_probability = 0.25 },
+    { type = "item", name = "angels-ore4", amount_min = 10, amount_max = 30, independent_probability = 0.12 },
+    { type = "item", name = "angels-ore2", amount_min = 15, amount_max = 30, independent_probability = 0.13 },
   }
   if mods["angelssmelting"] then
     local results = recipe["random-dropship-unboxing"].results
-    results[#results + 1] = { type = "item", name = "angels-platinum-ore", amount_min = 1, amount_max = 5, probability = 0.01 }
+    results[#results + 1] = { type = "item", name = "angels-platinum-ore", amount_min = 1, amount_max = 5, independent_probability = 0.01 }
   end
 end
 
