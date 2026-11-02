@@ -1186,11 +1186,20 @@ if data ~= nil and (data_final_fixes == true or data_updates == true) then
    local_create_turrets()
    -- zzzparanoidal rebuilds recycling before this mod creates the ranks (? zzzparanoidal), so ranked
    -- items get theirs here. No crafting recipe: Quality self-recycling, 25% of the same item.
-   if mods["quality"] then
-      local recycling = require("__quality__.prototypes.recycling")
+   if mods["recycler"] then
+      local recycling = require("__recycler__.recycling")
       for _, item in ipairs(created_items) do
          if not item.hidden and not data.raw.recipe[item.name .. "-recycling"] then
             recycling.generate_self_recycling_recipe(item)
+            -- Factorio 2.1: the generator locks the recipe behind the recycling technology; in this
+            -- build recycling is available from the start (as in 2.0, see zzzparanoidal).
+            local key = item.name .. "-recycling"
+            if data.raw.recipe[key] then data.raw.recipe[key].enabled = true end
+            local technology = data.raw.technology["recycling"]
+            for i = #(technology and technology.effects or {}), 1, -1 do
+               local effect = technology.effects[i]
+               if effect.type == "unlock-recipe" and effect.recipe == key then table.remove(technology.effects, i) end
+            end
          end
       end
    end
