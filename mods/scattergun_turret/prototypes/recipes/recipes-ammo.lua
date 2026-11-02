@@ -2,7 +2,7 @@ data:extend({
 	{
 		type = "recipe",
 		name = "w93-slowdown-magazine",
-		category = "crafting",
+		categories = {"crafting"},
 		enabled = false,
 		energy_required = 8,
 		ingredients = {{type="item", name="piercing-rounds-magazine", amount=9},
@@ -15,7 +15,7 @@ data:extend({
 	{
 		type = "recipe",
 		name = "w93-uranium-shotgun-shell",
-		category = "crafting",
+		categories = {"crafting"},
 		enabled = false,
 		energy_required = 12,
 		ingredients = {{type="item", name="piercing-shotgun-shell", amount=1},
@@ -28,7 +28,7 @@ data:extend({
 	{
 		type = "recipe",
 		name = "w93-fragmentation-cannon-shell",
-		category = "crafting",
+		categories = {"crafting"},
 		enabled = false,
 		energy_required = 8,
 		ingredients = {{type="item", name="iron-stick", amount=8},
@@ -42,7 +42,7 @@ data:extend({
 	{
 		type = "recipe",
 		name = "w93-turret-slowdown-rocket",
-		category = "crafting",
+		categories = {"crafting"},
 		enabled = false,
 		energy_required = 32,
 		ingredients = {{type="item", name="rocket", amount=8},

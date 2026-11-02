@@ -31,7 +31,7 @@ function W93_UpdateRecipesIR3()
 								{type="item", name="steel-rivet", amount=12},
 								{type="item", name="processing-unit", amount=4},
 								{type="item", name="computer-mk3", amount=1}}
-	data.raw["recipe"]["w93-modular-gun-hcannon"].category = "crafting"
+	data.raw["recipe"]["w93-modular-gun-hcannon"].categories = {"crafting"} -- Factorio 2.1
 	data.raw["recipe"]["w93-modular-gun-rocket"].ingredients = {{type="item", name="rocket-launcher", amount=2},
 								{type="item", name="steel-rivet", amount=8},
 								{type="item", name="computer-mk2", amout=1}}

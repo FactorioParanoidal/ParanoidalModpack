@@ -1,7 +1,7 @@
 data:extend({{
 		type = "recipe",
 		name = "w93-scattergun-turret",
-		category = "crafting",
+		categories = {"crafting"},
 		enabled = false,
 		energy_required = 20,
 		ingredients = {{type="item", name="stone-brick", amount=10},
@@ -15,7 +15,7 @@ data:extend({{
 	{
 		type = "recipe",
 		name = "w93-hmg-turret",
-		category = "crafting",
+		categories = {"crafting"},
 		enabled = false,
 		energy_required = 5,
 		ingredients = {{type="item", name="w93-modular-turret-base", amount=1},
@@ -27,7 +27,7 @@ data:extend({{
 	{
 		type = "recipe",
 		name = "w93-hmg-turret2",
-		category = "crafting",
+		categories = {"crafting"},
 		enabled = false,
 		energy_required = 5,
 		ingredients = {{type="item", name="w93-modular-turret2-base", amount=1},
@@ -39,7 +39,7 @@ data:extend({{
 	{
 		type = "recipe",
 		name = "w93-gatling-turret",
-		category = "crafting",
+		categories = {"crafting"},
 		enabled = false,
 		energy_required = 5,
 		ingredients = {{type="item", name="w93-modular-turret-base", amount=1},
@@ -51,7 +51,7 @@ data:extend({{
 	{
 		type = "recipe",
 		name = "w93-gatling-turret2",
-		category = "crafting",
+		categories = {"crafting"},
 		enabled = false,
 		energy_required = 5,
 		ingredients = {{type="item", name="w93-modular-turret2-base", amount=1},
@@ -63,7 +63,7 @@ data:extend({{
 	{
 		type = "recipe",
 		name = "w93-lcannon-turret",
-		category = "crafting",
+		categories = {"crafting"},
 		enabled = false,
 		energy_required = 5,
 		ingredients = {{type="item", name="w93-modular-turret-base", amount=1},
@@ -75,7 +75,7 @@ data:extend({{
 	{
 		type = "recipe",
 		name = "w93-lcannon-turret2",
-		category = "crafting",
+		categories = {"crafting"},
 		enabled = false,
 		energy_required = 5,
 		ingredients = {{type="item", name="w93-modular-turret2-base", amount=1},
@@ -87,7 +87,7 @@ data:extend({{
 	{
 		type = "recipe",
 		name = "w93-dcannon-turret",
-		category = "crafting",
+		categories = {"crafting"},
 		enabled = false,
 		energy_required = 5,
 		ingredients = {{type="item", name="w93-modular-turret-base", amount=1},
@@ -99,7 +99,7 @@ data:extend({{
 	{
 		type = "recipe",
 		name = "w93-dcannon-turret2",
-		category = "crafting",
+		categories = {"crafting"},
 		enabled = false,
 		energy_required = 5,
 		ingredients = {{type="item", name="w93-modular-turret2-base", amount=1},
@@ -111,7 +111,7 @@ data:extend({{
 	{
 		type = "recipe",
 		name = "w93-hcannon-turret",
-		category = "crafting",
+		categories = {"crafting"},
 		enabled = false,
 		energy_required = 5,
 		ingredients = {{type="item", name="w93-modular-turret-base", amount=1},
@@ -123,7 +123,7 @@ data:extend({{
 	{
 		type = "recipe",
 		name = "w93-hcannon-turret2",
-		category = "crafting",
+		categories = {"crafting"},
 		enabled = false,
 		energy_required = 5,
 		ingredients = {{type="item", name="w93-modular-turret2-base", amount=1},
@@ -135,7 +135,7 @@ data:extend({{
 	{
 		type = "recipe",
 		name = "w93-rocket-turret",
-		category = "crafting",
+		categories = {"crafting"},
 		enabled = false,
 		energy_required = 5,
 		ingredients = {{type="item", name="w93-modular-turret-base", amount=1},
@@ -147,7 +147,7 @@ data:extend({{
 	{
 		type = "recipe",
 		name = "w93-rocket-turret2",
-		category = "crafting",
+		categories = {"crafting"},
 		enabled = false,
 		energy_required = 5,
 		ingredients = {{type="item", name="w93-modular-turret2-base", amount=1},
@@ -159,7 +159,7 @@ data:extend({{
 	{
 		type = "recipe",
 		name = "w93-plaser-turret",
-		category = "crafting",
+		categories = {"crafting"},
 		enabled = false,
 		energy_required = 5,
 		ingredients = {{type="item", name="w93-modular-turret-base", amount=1},
@@ -171,7 +171,7 @@ data:extend({{
 	{
 		type = "recipe",
 		name = "w93-plaser-turret2",
-		category = "crafting",
+		categories = {"crafting"},
 		enabled = false,
 		energy_required = 5,
 		ingredients = {{type="item", name="w93-modular-turret2-base", amount=1},
@@ -183,7 +183,7 @@ data:extend({{
 	{
 		type = "recipe",
 		name = "w93-tlaser-turret",
-		category = "crafting",
+		categories = {"crafting"},
 		enabled = false,
 		energy_required = 5,
 		ingredients = {{type="item", name="w93-modular-turret-base", amount=1},
@@ -195,7 +195,7 @@ data:extend({{
 	{
 		type = "recipe",
 		name = "w93-tlaser-turret2",
-		category = "crafting",
+		categories = {"crafting"},
 		enabled = false,
 		energy_required = 5,
 		ingredients = {{type="item", name="w93-modular-turret2-base", amount=1},
@@ -207,7 +207,7 @@ data:extend({{
 	{
 		type = "recipe",
 		name = "w93-beam-turret",
-		category = "crafting",
+		categories = {"crafting"},
 		enabled = false,
 		energy_required = 5,
 		ingredients = {{type="item", name="w93-modular-turret-base", amount=1},
@@ -219,7 +219,7 @@ data:extend({{
 	{
 		type = "recipe",
 		name = "w93-beam-turret2",
-		category = "crafting",
+		categories = {"crafting"},
 		enabled = false,
 		energy_required = 5,
 		ingredients = {{type="item", name="w93-modular-turret2-base", amount=1},
@@ -231,7 +231,7 @@ data:extend({{
 	{
 		type = "recipe",
 		name = "w93-radar-turret",
-		category = "crafting",
+		categories = {"crafting"},
 		enabled = false,
 		energy_required = 5,
 		ingredients = {{type="item", name="w93-modular-turret2-base", amount=1},
@@ -243,7 +243,7 @@ data:extend({{
 	{
 		type = "recipe",
 		name = "w93-radar-turret2",
-		category = "crafting",
+		categories = {"crafting"},
 		enabled = false,
 		energy_required = 5,
 		ingredients = {{type="item", name="w93-modular-turret2-base", amount=1},
@@ -256,7 +256,7 @@ data:extend({{
 	{
 		type = "recipe",
 		name = "w93-modular-turret-base",
-		category = "crafting",
+		categories = {"crafting"},
 		enabled = false,
 		energy_required = 10,
 		ingredients = {{type="item", name="concrete", amount=20},
@@ -269,7 +269,7 @@ data:extend({{
 	{
 		type = "recipe",
 		name = "w93-modular-turret2-base",
-		category = "crafting",
+		categories = {"crafting"},
 		enabled = false,
 		energy_required = 10,
 		ingredients = {{type="item", name="low-density-structure", amount=2},
@@ -283,7 +283,7 @@ data:extend({{
 	{
 		type = "recipe",
 		name = "w93-modular-gun-hmg",
-		category = "crafting",
+		categories = {"crafting"},
 		enabled = false,
 		energy_required = 10,
 		ingredients = {{type="item", name="iron-plate", amount=6},
@@ -296,7 +296,7 @@ data:extend({{
 	{
 		type = "recipe",
 		name = "w93-modular-gun-gatling",
-		category = "crafting",
+		categories = {"crafting"},
 		enabled = false,
 		energy_required = 10,
 		ingredients = {{type="item", name="iron-stick", amount=12},
@@ -310,7 +310,7 @@ data:extend({{
 	{
 		type = "recipe",
 		name = "w93-modular-gun-lcannon",
-		category = "crafting",
+		categories = {"crafting"},
 		enabled = false,
 		energy_required = 10,
 		ingredients = {{type="item", name="copper-plate", amount=5},
@@ -324,7 +324,7 @@ data:extend({{
 	{
 		type = "recipe",
 		name = "w93-modular-gun-dcannon",
-		category = "crafting",
+		categories = {"crafting"},
 		enabled = false,
 		energy_required = 10,
 		ingredients = {{type="item", name="w93-modular-gun-lcannon", amount=2},
@@ -336,7 +336,7 @@ data:extend({{
 	{
 		type = "recipe",
 		name = "w93-modular-gun-hcannon",
-		category = "crafting-with-fluid",
+		categories = {"crafting-with-fluid"},
 		enabled = false,
 		energy_required = 10,
 		ingredients = {{type="item", name="low-density-structure", amount=2},
@@ -351,7 +351,7 @@ data:extend({{
 	{
 		type = "recipe",
 		name = "w93-modular-gun-rocket",
-		category = "crafting",
+		categories = {"crafting"},
 		enabled = false,
 		energy_required = 10,
 		ingredients = {{type="item", name="steel-plate", amount=5},
@@ -364,7 +364,7 @@ data:extend({{
 	{
 		type = "recipe",
 		name = "w93-modular-gun-plaser",
-		category = "crafting",
+		categories = {"crafting"},
 		enabled = false,
 		energy_required = 10,
 		ingredients = {{type="item", name="plastic-bar", amount=10},
@@ -378,7 +378,7 @@ data:extend({{
 	{
 		type = "recipe",
 		name = "w93-modular-gun-tlaser",
-		category = "crafting",
+		categories = {"crafting"},
 		enabled = false,
 		energy_required = 10,
 		ingredients = {{type="item", name="plastic-bar", amount=10},
@@ -391,7 +391,7 @@ data:extend({{
 	{
 		type = "recipe",
 		name = "w93-modular-gun-beam",
-		category = "crafting",
+		categories = {"crafting"},
 		enabled = false,
 		energy_required = 10,
 		ingredients = {{type="item", name="plastic-bar", amount=10},
@@ -405,7 +405,7 @@ data:extend({{
 	{
 		type = "recipe",
 		name = "w93-modular-gun-radar",
-		category = "crafting",
+		categories = {"crafting"},
 		enabled = false,
 		energy_required = 10,
 		ingredients = {{type="item", name="copper-plate", amount=10},
@@ -418,7 +418,7 @@ data:extend({{
 	{
 		type = "recipe",
 		name = "w93-modular-gun-radar2",
-		category = "crafting",
+		categories = {"crafting"},
 		enabled = false,
 		energy_required = 10,
 		ingredients = {{type="item", name="copper-plate", amount=15},
@@ -432,7 +432,7 @@ data:extend({{
 	{
 		type = "recipe",
 		name = "w93-hardened-inserter",
-		category = "crafting",
+		categories = {"crafting"},
 		enabled = false,
 		energy_required = 0.5,
 		ingredients = {{type="item", name="long-handed-inserter", amount=1},
