@@ -6,7 +6,7 @@
 	"author": "YuokiTani; 2.0 port by jatmn; Paranoidal fork",
 	"contact": "",
 	"homepage": "https://github.com/jatmn/Yuoki-Factorio-2.0",
-	"factorio_version": "2.0",
+	"factorio_version": "2.1",
 	"dependencies": [
 	 "base >= 2.0.42",
 	 "? quality",

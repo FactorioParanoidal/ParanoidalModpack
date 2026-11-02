@@ -55,6 +55,10 @@ Date: 2026-10-24
     - Technologies use their own 256x256 icons (graphics/technology/, the same neural upscale of the item icon) instead of the 32-96 px item icons.
   Locale:
     - Complete en/ru for all remaining content (888 keys each); Engines locale merged into locale/*/yi_engines.cfg; additions in locale/*/paranoidal.cfg; keys of removed content pruned; languages other than en and ru dropped.
+  Compatibility:
+    - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
+    - Paranoidal port to Factorio 2.1: assembler pipe pictures are taken from __base__/prototypes/entity/assembler-pictures.lua (2.1 removed the global assembler2pipepictures/assembler3pipepictures and assemblerpipes.lua).
+    - Paranoidal port to Factorio 2.1: defines.inventory.assembling_machine_*, furnace_* and rocket_silo_input/output/modules replaced by defines.inventory.crafter_input/output/modules/trash.
 ---------------------------------------------------------------------------------------------------
 Version: 1.2.23
 Date: 4. 7. 2026

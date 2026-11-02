@@ -1,3 +1,6 @@
+-- Factorio 2.1: base assembler pipe pictures are tables in assembler-pictures.lua (assemblerpipes.lua was removed).
+local base_assembler_pictures = require("__base__.prototypes.entity.assembler-pictures")
+local function assembler2pipepictures() return table.deepcopy(base_assembler_pictures.assembler2pipepictures) end
 local ye_fassembly1_module_slots = 3
 local ye_fassembly2_module_slots = 3
 local ye_fassembly_sp_module_slots = 2
@@ -125,7 +128,7 @@ data:extend({
 		ingredient_count = 6,
 		module_slots = ye_fassembly1_module_slots,
 		icons_positioning = {
-			{ inventory_index = defines.inventory.assembling_machine_modules, max_icons_per_row = 5, scale = 0.5 },
+			{ inventory_index = defines.inventory.crafter_modules, max_icons_per_row = 5, scale = 0.5 },
 		},
 		allowed_effects = { "consumption", "speed", "productivity", "pollution" },
 
@@ -202,7 +205,7 @@ data:extend({
 		ingredient_count = 6,
 		module_slots = ye_fassembly2_module_slots,
 		icons_positioning = {
-			{ inventory_index = defines.inventory.assembling_machine_modules, max_icons_per_row = 5, scale = 0.5 },
+			{ inventory_index = defines.inventory.crafter_modules, max_icons_per_row = 5, scale = 0.5 },
 		},
 		allowed_effects = { "consumption", "speed", "productivity", "pollution" },
 
@@ -266,7 +269,7 @@ data:extend({
 		ingredient_count = 6,
 		module_slots = ye_fassembly_sp_module_slots,
 		icons_positioning = {
-			{ inventory_index = defines.inventory.assembling_machine_modules, max_icons_per_row = 5, scale = 0.5 },
+			{ inventory_index = defines.inventory.crafter_modules, max_icons_per_row = 5, scale = 0.5 },
 		},
 
 		allowed_effects = { "consumption", "speed", "productivity", "pollution" },
