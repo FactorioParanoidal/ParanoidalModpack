@@ -5,6 +5,8 @@ Date: 2026-11-01
     - The mod is a migration bridge now. The item and fluid memory units moved to the mod paranoidal-deep-storage (same prototype names), which replaces deep-storage-unit and fluid-memory-storage.
     - Factorio keeps the storage of a mod under the mod's own name, so the contents of the item memory units in old saves stay here. paranoidal-deep-storage takes them over once (item, quality and count of every unit) through the remote interface deep-storage-unit-migration; the bridge then drops its records, render objects, GUI inventories and windows of the old version.
     - Prototypes, settings, locale, graphics and the old migrations are removed. Keep the bridge enabled while old saves with memory units are loaded.
+  Compatibility:
+    - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
 ---------------------------------------------------------------------------------------------------
 Version: 9.8.0
 Date: 2026-10-22
