@@ -3,6 +3,8 @@ Version: 2.0.3
 Date: 2023.11.24
   Changes:
     - If queue to front enabled and only one item is in the queue then dont do anything
+  Compatibility:
+    - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.2
 Date: 2023.10.28
