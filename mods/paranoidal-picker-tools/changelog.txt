@@ -15,6 +15,8 @@ Date: 2026-11-01
     - Item count: setting lookups and the ignored item set are no longer rebuilt on each inventory change; no global functions.
   Info:
     - Saves: storage of the old mods is not carried over. Lost: per-player picker data, planner menu order, quality scroll state, the dollies saved entity and names other mods added to the dollies lists (the mods of the modpack that add names do it again on load or on a configuration change). Entities, settings and keybindings are kept.
+  Compatibility:
+    - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
 ---------------------------------------------------------------------------------------------------
 Version: 1.1.0
 Date: May 26, 2026

@@ -4,7 +4,7 @@
 	"title": "Paranoidal Picker Tools",
 	"author": "Kryzeth, Nexela, hgschmie, Yemto, Cornbread, superspeeder101; FactorioParanoidal",
 	"description": "Building and inventory tools in one mod: Picker Extended Reborn (planner menu, planner zapper, tape measure, chest tools, quality scrolling, ghost revival, searchlight), Yemto's Item Count, Belt Reverser, Belt Brush and Even Pickier Dollies.",
-	"factorio_version": "2.0",
+	"factorio_version": "2.1",
 	"dependencies": [
 		"base >= 2.0.58",
 		"? ModuleInserterSimplified",
