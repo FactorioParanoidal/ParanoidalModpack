@@ -12,7 +12,7 @@ for name in pairs(owned) do
 		local fluid = r.type == "fluid" and data.raw.fluid[r.name]
 		if fluid and (r.name == "steam" or (r.name == "y-mechanical-force"
 				and (r.temperature or fluid.default_temperature) > fluid.default_temperature)) then
-			hot[recipe.category or "crafting"] = true
+			hot[(recipe.categories or {"crafting"})[1]] = true -- Factorio 2.1: main category
 		end
 	end
 end

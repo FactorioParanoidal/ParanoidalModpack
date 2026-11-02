@@ -7,7 +7,7 @@ if data.raw.item["ye_blood-barrel"] then
 		{
 			type = "recipe",
 			name = "ye-export-blood",
-			category = "yuoki-stargate",
+			categories = {"yuoki-stargate"},
 			energy_required = 5,
 			enabled = false,
 			ingredients = { { type = "item", name = "ye_blood-barrel", amount = 10 } },

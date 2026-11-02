@@ -26,7 +26,8 @@ end
 -- product -> producing recipes; products available from the start
 local producers, start = {}, {}
 for name, recipe in pairs(data.raw.recipe) do
-	if not recipe.hidden and recipe.category ~= "recycling" and not name:find("^empty%-.+%-barrel$") then
+	-- Factorio 2.1: main category = categories[1]
+	if not recipe.hidden and (recipe.categories or {"crafting"})[1] ~= "recycling" and not name:find("^empty%-.+%-barrel$") then
 		local at_start = recipe.enabled ~= false and not unlocked_by[name]
 		for _, r in pairs(recipe.results or {}) do
 			producers[r.name] = producers[r.name] or {}
@@ -191,7 +192,7 @@ for pass = 1, 30 do
 					changed = true
 				end
 			end
-			local category = recipe.category or "crafting"
+			local category = (recipe.categories or {"crafting"})[1] -- Factorio 2.1: main category
 			if not handcraft[category] then
 				local need = {}
 				for _, item in pairs(machine_items[category] or {}) do

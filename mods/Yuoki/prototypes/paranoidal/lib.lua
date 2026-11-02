@@ -42,13 +42,32 @@ end
 function P.set(name, fields)
 	local recipe = P.recipe(name)
 	for k, v in pairs(fields) do
-		recipe[k] = v
+		if k == "category" then -- Factorio 2.1: the main category is categories[1]
+			P.set_main_category(recipe, v)
+		else
+			recipe[k] = v
+		end
 	end
+end
+
+-- Factorio 2.1: recipe category/additional_categories -> categories; categories[1] is the main category.
+function P.main_category(recipe)
+	return recipe.categories and recipe.categories[1] or "crafting"
+end
+
+function P.set_main_category(recipe, category) -- keeps the other (2.0 additional) categories
+	local list = { category }
+	for i, other in ipairs(recipe.categories or {}) do
+		if i > 1 and other ~= category then
+			list[#list + 1] = other
+		end
+	end
+	recipe.categories = list
 end
 
 function P.category(names, category)
 	for _, name in ipairs(names) do
-		P.recipe(name).category = category
+		P.set_main_category(P.recipe(name), category)
 	end
 end
 

@@ -90,7 +90,7 @@ data:extend({
 	{
 		type = "recipe",
 		name = "ye_rheins_HT",
-		category = "yrcat_rheinsberg", -- rheinsberg
+		categories = {"yrcat_rheinsberg"}, -- rheinsberg
 		enabled = true,
 		energy_required = 1.00,
 		ingredients = {
@@ -109,7 +109,7 @@ data:extend({
 	{
 		type = "recipe",
 		name = "ye_rheins_MT",
-		category = "yrcat_rheinsberg", -- rheinsberg
+		categories = {"yrcat_rheinsberg"}, -- rheinsberg
 		enabled = true,
 		energy_required = 1.00,
 		ingredients = {
@@ -128,7 +128,7 @@ data:extend({
 	{
 		type = "recipe",
 		name = "ye_rheins_LT",
-		category = "yrcat_rheinsberg", -- rheinsberg
+		categories = {"yrcat_rheinsberg"}, -- rheinsberg
 		enabled = true,
 		energy_required = 1.00,
 		ingredients = {

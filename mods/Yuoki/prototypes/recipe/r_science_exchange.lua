@@ -3,7 +3,7 @@ data:extend({
 	{
 		type = "recipe",
 		name = "y_military_science",
-		category = "yuoki-atomics",
+		categories = {"yuoki-atomics"},
 		enabled = true,
 		energy_required = 3.00,
 		ingredients = {
@@ -25,7 +25,7 @@ data:extend({
 	{
 		type = "recipe",
 		name = "y_chemical_science",
-		category = "yuoki-atomics",
+		categories = {"yuoki-atomics"},
 		enabled = true,
 		energy_required = 3.00,
 		ingredients = {
@@ -48,7 +48,7 @@ data:extend({
 	{
 		type = "recipe",
 		name = "y_production_science",
-		category = "yuoki-atomics",
+		categories = {"yuoki-atomics"},
 		enabled = true,
 		energy_required = 4.00,
 		ingredients = {
@@ -72,7 +72,7 @@ data:extend({
 	{
 		type = "recipe",
 		name = "y_high-tech_science",
-		category = "yuoki-atomics",
+		categories = {"yuoki-atomics"},
 		enabled = true,
 		energy_required = 6.00,
 		ingredients = {
@@ -96,7 +96,7 @@ data:extend({
 	{
 		type = "recipe",
 		name = "y_space_science",
-		category = "yuoki-atomics",
+		categories = {"yuoki-atomics"},
 		enabled = true,
 		energy_required = 10.00,
 		ingredients = {

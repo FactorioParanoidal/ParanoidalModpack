@@ -16,7 +16,7 @@ data:extend({
 		},
 		main_product = "y-infused-uca2",
 		subgroup = "y-fuel",
-		category = "yuoki-alien",
+		categories = {"yuoki-alien"},
 	},
 	{
 		type = "recipe",
@@ -34,14 +34,14 @@ data:extend({
 		},
 		main_product = "y-infused-mud",
 		subgroup = "y-fuel",
-		category = "yuoki-alien",
+		categories = {"yuoki-alien"},
 	},
 
 	-- first step, crushing unicomp, rawfuel
 	{
 		type = "recipe",
 		name = "y-crush-unicomp-raw",
-		category = "y-crushing",
+		categories = {"y-crushing"},
 		energy_required = 6,
 		ingredients = {
 			{ type = "item", name = "y-res1", amount = 3 },
@@ -58,7 +58,7 @@ data:extend({
 	{
 		type = "recipe",
 		name = "y-crush-fuel-raw",
-		category = "y-crushing",
+		categories = {"y-crushing"},
 		energy_required = 6,
 		ingredients = {
 			{ type = "item", name = "y-res2", amount = 3 },
@@ -79,7 +79,7 @@ data:extend({
 		name = "y-crush-blue_whead",
 		icon_size = 64,
 		icon = "__Yuoki__/graphics/icons/dust_blue_whead.png",
-		category = "y-crushing",
+		categories = {"y-crushing"},
 		energy_required = 7,
 		ingredients = {
 			{ type = "item", name = "y-res1", amount = 6 },
@@ -106,7 +106,7 @@ data:extend({
 		name = "y-crush-green_whead",
 		icon_size = 64,
 		icon = "__Yuoki__/graphics/icons/dust_green_whead.png",
-		category = "y-crushing",
+		categories = {"y-crushing"},
 		energy_required = 7,
 		ingredients = {
 			{ type = "item", name = "y-res2", amount = 6 },
@@ -151,7 +151,7 @@ data:extend({
 	{
 		type = "recipe",
 		name = "y-press-richdust",
-		category = "yuoki-formpress",
+		categories = {"yuoki-formpress"},
 		icon_size = 64,
 		icon = "__Yuoki__/graphics/icons/unicomp_icon.png",
 		enabled = true,
@@ -170,7 +170,7 @@ data:extend({
 	{
 		type = "recipe",
 		name = "y-smelt-crush-res1",
-		category = "yuoki-formpress",
+		categories = {"yuoki-formpress"},
 		icon_size = 64,
 		icon = "__Yuoki__/graphics/icons/n4pellets64_icon.png",
 		enabled = true,
@@ -189,7 +189,7 @@ data:extend({
 	{
 		type = "recipe",
 		name = "y-unicomp-raw",
-		category = "yuoki-formpress",
+		categories = {"yuoki-formpress"},
 		enabled = true,
 		energy_required = 6,
 		ingredients = {
@@ -205,7 +205,7 @@ data:extend({
 	{
 		type = "recipe",
 		name = "y-smelt-crush-res2",
-		category = "yuoki-formpress",
+		categories = {"yuoki-formpress"},
 		icon_size = 64,
 		icon = "__Yuoki__/graphics/icons/f7pellets64_icon.png",
 		enabled = true,
@@ -224,7 +224,7 @@ data:extend({
 	{
 		type = "recipe",
 		name = "y-raw-fuelnium",
-		category = "yuoki-formpress",
+		categories = {"yuoki-formpress"},
 		enabled = true,
 		energy_required = 9.0,
 		ingredients = {
@@ -261,7 +261,7 @@ data:extend({
 	{
 		type = "recipe",
 		name = "y-quantrinum",
-		category = "yuoki-wonder",
+		categories = {"yuoki-wonder"},
 		energy_required = 20,
 		enabled = true,
 		ingredients = {
@@ -284,7 +284,7 @@ data:extend({
 	{
 		type = "recipe",
 		name = "y-crystal-cnd",
-		category = "yuoki-wonder",
+		categories = {"yuoki-wonder"},
 		energy_required = 30,
 		enabled = true,
 		ingredients = {
@@ -307,7 +307,7 @@ data:extend({
 	{
 		type = "recipe",
 		name = "y-pure-copper",
-		category = "yuoki-archaeology-wash",
+		categories = {"yuoki-archaeology-wash"},
 		energy_required = 3,
 		ingredients = {
 			{ type = "item", name = "copper-ore", amount = 5 },
@@ -329,7 +329,7 @@ data:extend({
 	{
 		type = "recipe",
 		name = "y-pure-iron",
-		category = "yuoki-archaeology-wash",
+		categories = {"yuoki-archaeology-wash"},
 		energy_required = 3,
 		ingredients = {
 			{ type = "item", name = "iron-ore", amount = 5 },
@@ -352,7 +352,7 @@ data:extend({
 	{
 		type = "recipe",
 		name = "y_pure_copper_wtool",
-		category = "yuoki-archaeology-wash",
+		categories = {"yuoki-archaeology-wash"},
 		energy_required = 6,
 		ingredients = {
 			{ type = "item", name = "copper-ore", amount = 15 },
@@ -382,7 +382,7 @@ data:extend({
 	{
 		type = "recipe",
 		name = "y_pure_iron_wtool",
-		category = "yuoki-archaeology-wash",
+		categories = {"yuoki-archaeology-wash"},
 		energy_required = 6,
 		ingredients = {
 			{ type = "item", name = "iron-ore", amount = 15 },
@@ -413,7 +413,7 @@ data:extend({
 	{
 		type = "recipe",
 		name = "y-refined-copper",
-		category = "smelting",
+		categories = {"smelting"},
 		energy_required = 1.5,
 		enabled = true,
 		ingredients = {
@@ -430,7 +430,7 @@ data:extend({
 	{
 		type = "recipe",
 		name = "y-refined-iron",
-		category = "smelting",
+		categories = {"smelting"},
 		energy_required = 1.5,
 		enabled = true,
 		ingredients = {

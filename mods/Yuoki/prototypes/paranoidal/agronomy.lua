@@ -27,7 +27,7 @@ data:extend({
 	{
 		type = "recipe",
 		name = "ye_dna_import",
-		category = "yuoki-stargate",
+		categories = {"yuoki-stargate"},
 		energy_required = 10,
 		enabled = false,
 		ingredients = { { type = "item", name = "ypfw_trader_sign", amount = 2000 } },
@@ -63,7 +63,7 @@ data:extend({
 	{
 		type = "recipe",
 		name = "ye_grow_plant1_waste",
-		category = "yrcat-farm",
+		categories = {"yrcat-farm"},
 		energy_required = 450,
 		enabled = false,
 		ingredients = {
@@ -81,7 +81,7 @@ data:extend({
 	{
 		type = "recipe",
 		name = "y-yellow-waste-purification",
-		category = "angels-water-treatment",
+		categories = {"angels-water-treatment"},
 		energy_required = 1,
 		enabled = false,
 		ingredients = { { type = "fluid", name = "angels-water-yellow-waste", amount = 100 } },
@@ -103,7 +103,7 @@ local function export(name, item, amount, signs, order)
 		{
 			type = "recipe",
 			name = name,
-			category = "yuoki-stargate",
+			categories = {"yuoki-stargate"},
 			energy_required = 5,
 			enabled = false,
 			ingredients = { { type = "item", name = item, amount = amount } },

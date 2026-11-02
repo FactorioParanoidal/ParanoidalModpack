@@ -7,7 +7,7 @@ data:extend({
 	{
 		type = "recipe",
 		name = "y-bullet-case",
-		category = "yuoki-formpress",
+		categories = {"yuoki-formpress"},
 		enabled = true,
 		energy_required = 2,
 		ingredients = {
@@ -25,7 +25,7 @@ data:extend({
 	{
 		type = "recipe",
 		name = "y-ammo-acid-2",
-		category = "crafting-with-fluid",
+		categories = {"crafting-with-fluid"},
 		enabled = true,
 		energy_required = 17.5,
 		ingredients = {
@@ -138,7 +138,7 @@ data:extend({
 	{
 		type = "recipe",
 		name = "y_ammo_case",
-		category = "yuoki-formpress",
+		categories = {"yuoki-formpress"},
 		enabled = true,
 		energy_required = 2,
 		ingredients = {

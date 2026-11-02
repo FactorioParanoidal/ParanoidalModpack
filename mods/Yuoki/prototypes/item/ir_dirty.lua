@@ -33,7 +33,7 @@ data:extend({
 		},
 		main_product = "y_drillhead",
 		subgroup = "yuoki-formpress",
-		category = "yuoki-repair",
+		categories = {"yuoki-repair"},
 		icon_size = 64,
 		icon = "__Yuoki__/graphics/icons/drillhead_repair.png",
 		order = "1A",
@@ -92,7 +92,7 @@ data:extend({
 		},
 		main_product = "y_toolhead",
 		subgroup = "yuoki-formpress",
-		category = "yuoki-repair",
+		categories = {"yuoki-repair"},
 		icon_size = 64,
 		icon = "__Yuoki__/graphics/icons/toolhead_repair.png",
 		order = "1B",
@@ -129,7 +129,7 @@ data:extend({
 		},
 		main_product = "y-dirt",
 		subgroup = "y_line2",
-		category = "yuoki-raw-material",
+		categories = {"yuoki-raw-material"},
 		order = "dfd1",
 	},
 
@@ -148,7 +148,7 @@ data:extend({
 		main_product = "y-dirt",
 		allow_productivity = true,
 		subgroup = "y_line2",
-		category = "yuoki-raw-material",
+		categories = {"yuoki-raw-material"},
 		icon_size = 64,
 		icon = "__Yuoki__/graphics/icons/dirt_whead.png",
 		order = "dfd2",
@@ -158,7 +158,7 @@ data:extend({
 	{
 		type = "recipe",
 		name = "y-wash-dirt",
-		category = "yuoki-archaeology-wash",
+		categories = {"yuoki-archaeology-wash"},
 		energy_required = 4,
 		ingredients = {
 			{ type = "item", name = "y-dirt", amount = 10 },
@@ -180,7 +180,7 @@ data:extend({
 	{
 		type = "recipe",
 		name = "y-wash-special",
-		category = "yuoki-archaeology-wash",
+		categories = {"yuoki-archaeology-wash"},
 		enabled = true,
 		energy_required = 4,
 		ingredients = {

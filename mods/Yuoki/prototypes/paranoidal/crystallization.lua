@@ -34,7 +34,7 @@ local function seed_recipe(name, ingredients, order)
 		{
 			type = "recipe",
 			name = name,
-			category = "yrcat_crystalize",
+			categories = {"yrcat_crystalize"},
 			energy_required = 8,
 			enabled = false,
 			ingredients = P.list(ingredients),
@@ -71,7 +71,7 @@ if mods["angelsrefining"] then
 				{
 					type = "recipe",
 					name = "y-centrifuge-" .. key .. suffix,
-					category = category,
+					categories = {category},
 					energy_required = time,
 					enabled = false,
 					ingredients = P.list(ingredients),

@@ -7,7 +7,7 @@ data:extend({
 	{
 		type = "recipe",
 		name = "y_reactor_mf1",
-		category = "yuoki_mf", -- mechanical force -obninsk
+		categories = {"yuoki_mf"}, -- mechanical force -obninsk
 		enabled = true,
 		energy_required = 1.00,
 		ingredients = {
@@ -27,7 +27,7 @@ data:extend({
 	{
 		type = "recipe",
 		name = "y_reactor_mox1",
-		category = "yuoki_mf", -- mechanical force -obninsk
+		categories = {"yuoki_mf"}, -- mechanical force -obninsk
 		enabled = true,
 		energy_required = 15.00,
 		ingredients = {
@@ -49,7 +49,7 @@ data:extend({
 	{
 		type = "recipe",
 		name = "y_reactor_mox2",
-		category = "yuoki_mf", -- mechanical force -obninsk
+		categories = {"yuoki_mf"}, -- mechanical force -obninsk
 		enabled = true,
 		energy_required = 20.00,
 		ingredients = {

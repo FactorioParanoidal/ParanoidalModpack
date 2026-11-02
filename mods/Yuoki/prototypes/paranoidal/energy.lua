@@ -165,7 +165,7 @@ mixed_fuel.fuel_category, mixed_fuel.fuel_value = "chemical", "4MJ"
 -- H-Metal forged with MF in an assembler: less steel and coal per H-Metal than the plain recipe.
 local forged = table.deepcopy(P.recipe("yie_hard_metals"))
 forged.name = "yie_hard_metals_mf"
-forged.category = "crafting-with-fluid"
+forged.categories = { "crafting-with-fluid" } -- Factorio 2.1: category -> categories
 forged.ingredients = P.list({ { "steel-plate", 3 }, { "coal", 2 }, { "y-mechanical-force", 2, "fluid" } })
 forged.results = { { type = "item", name = "yie_hard_metals", amount = 2 } }
 forged.main_product = "yie_hard_metals"

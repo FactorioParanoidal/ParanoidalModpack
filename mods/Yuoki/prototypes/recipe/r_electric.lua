@@ -333,7 +333,7 @@ data:extend({
 	{
 		type = "recipe",
 		name = "y-accumulator-b-tx",
-		category = "yuoki-wonder",
+		categories = {"yuoki-wonder"},
 		energy_required = 12.0,
 		enabled = true,
 		ingredients = {
@@ -357,7 +357,7 @@ data:extend({
 	{
 		type = "recipe",
 		name = "y-accumulator-crystal-m",
-		category = "yuoki-wonder",
+		categories = {"yuoki-wonder"},
 		energy_required = 20.0,
 		enabled = true,
 		ingredients = {

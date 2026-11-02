@@ -6,7 +6,7 @@ data:extend({
 	{
 		type = "recipe",
 		name = "y_chunks1",
-		category = "yrcat_crystalize",
+		categories = {"yrcat_crystalize"},
 		enabled = true,
 		energy_required = 8.00,
 		ingredients = {
@@ -27,7 +27,7 @@ data:extend({
 	{
 		type = "recipe",
 		name = "y_chunks2",
-		category = "yrcat_crystalize",
+		categories = {"yrcat_crystalize"},
 		enabled = true,
 		energy_required = 8.00,
 		ingredients = {

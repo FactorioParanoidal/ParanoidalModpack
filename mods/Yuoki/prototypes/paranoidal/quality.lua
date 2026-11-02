@@ -57,7 +57,7 @@ for name in pairs(YUOKI_PARANOIDAL.owned_recipes) do
 				yields_currency = true
 			end
 		end
-		if yields_currency or no_quality_categories[recipe.category or "crafting"] then
+		if yields_currency or no_quality_categories[(recipe.categories or {"crafting"})[1]] then -- Factorio 2.1
 			recipe.allow_quality = false
 			locked[#locked + 1] = name
 		end

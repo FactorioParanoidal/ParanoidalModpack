@@ -4,7 +4,7 @@ data:extend({
 	{
 		type = "recipe",
 		name = "ye_mf_mfheatmotor_m",
-		category = "yrcat_mfheatmotor_m",
+		categories = {"yrcat_mfheatmotor_m"},
 		enabled = true,
 		energy_required = 1.00,
 		ingredients = {
@@ -24,7 +24,7 @@ data:extend({
 	{
 		type = "recipe",
 		name = "ye_water2mf",
-		category = "yrcat_transform",
+		categories = {"yrcat_transform"},
 		enabled = true,
 		energy_required = 1.00,
 		ingredients = {
@@ -44,7 +44,7 @@ data:extend({
 	{
 		type = "recipe",
 		name = "ye_makesteam",
-		category = "yrcat-heater", -- overheater for steam
+		categories = {"yrcat-heater"}, -- overheater for steam
 		enabled = true,
 		energy_required = 1.00,
 		ingredients = {
@@ -64,7 +64,7 @@ data:extend({
 	{
 		type = "recipe",
 		name = "y-mf2b",
-		category = "yrcat-mf2", -- gearbox
+		categories = {"yrcat-mf2"}, -- gearbox
 		enabled = true,
 		energy_required = 0.50,
 		ingredients = {
@@ -85,7 +85,7 @@ data:extend({
 	{
 		type = "recipe",
 		name = "ye_steam2mf",
-		category = "yrcat_turbine", -- steam to mechanical power
+		categories = {"yrcat_turbine"}, -- steam to mechanical power
 		enabled = true,
 		energy_required = 1.00,
 		ingredients = {
@@ -106,7 +106,7 @@ data:extend({
 	{
 		type = "recipe",
 		name = "ye_steam3mf",
-		category = "yrcat_turbine", -- steam to mechanical power
+		categories = {"yrcat_turbine"}, -- steam to mechanical power
 		enabled = true,
 		energy_required = 1.0,
 		ingredients = {
@@ -127,7 +127,7 @@ data:extend({
 	{
 		type = "recipe",
 		name = "y-mf1-q1",
-		category = "yrcat-mf1q", -- mechanical force quantrinum-reactor
+		categories = {"yrcat-mf1q"}, -- mechanical force quantrinum-reactor
 		enabled = true,
 		energy_required = 2.00,
 		ingredients = {
@@ -147,7 +147,7 @@ data:extend({
 	{
 		type = "recipe",
 		name = "y-mf1-q2",
-		category = "yrcat-mf1q", -- mechanical force quantrinum-reactor
+		categories = {"yrcat-mf1q"}, -- mechanical force quantrinum-reactor
 		enabled = true,
 		energy_required = 2.00,
 		ingredients = {
@@ -167,7 +167,7 @@ data:extend({
 	{
 		type = "recipe",
 		name = "y-mf1-q3",
-		category = "yrcat-mf1q", -- mechanical force quantrinum-reactor
+		categories = {"yrcat-mf1q"}, -- mechanical force quantrinum-reactor
 		enabled = true,
 		energy_required = 2.00,
 		ingredients = {
@@ -187,7 +187,7 @@ data:extend({
 	{
 		type = "recipe",
 		name = "y-mf2a",
-		category = "yrcat-mf2", -- gearbox
+		categories = {"yrcat-mf2"}, -- gearbox
 		enabled = true,
 		energy_required = 0.25,
 		ingredients = {
@@ -247,7 +247,7 @@ data:extend({
 	{
 		type = "recipe",
 		name = "y-mf1a1",
-		category = "yrcat-mf1a", -- mechanical force primary - sfe
+		categories = {"yrcat-mf1a"}, -- mechanical force primary - sfe
 		enabled = true,
 		energy_required = 1.00,
 		ingredients = {
@@ -266,7 +266,7 @@ data:extend({
 	{
 		type = "recipe",
 		name = "y-mf1a",
-		category = "yrcat-mf1a", -- mechanical force primary - sfe
+		categories = {"yrcat-mf1a"}, -- mechanical force primary - sfe
 		enabled = true,
 		energy_required = 1.00,
 		ingredients = {
@@ -287,7 +287,7 @@ data:extend({
 	{
 		type = "recipe",
 		name = "y-mf1f",
-		category = "yrcat-mf1a", -- mechanical force primary - sfe
+		categories = {"yrcat-mf1a"}, -- mechanical force primary - sfe
 		enabled = true,
 		energy_required = 1.00,
 		ingredients = {},
@@ -305,7 +305,7 @@ data:extend({
 	{
 		type = "recipe",
 		name = "y-mf2a",
-		category = "yrcat-mf1b", -- mechanical force primary - ffe
+		categories = {"yrcat-mf1b"}, -- mechanical force primary - ffe
 		enabled = true,
 		energy_required = 1.00,
 		ingredients = {
@@ -327,7 +327,7 @@ data:extend({
 	{
 		type = "recipe",
 		name = "y-mf2b",
-		category = "yrcat-mf1b", -- mechanical force primary - ffe
+		categories = {"yrcat-mf1b"}, -- mechanical force primary - ffe
 		enabled = true,
 		energy_required = 1.00,
 		ingredients = {
@@ -349,7 +349,7 @@ data:extend({
 	{
 		type = "recipe",
 		name = "y-mf2e",
-		category = "yrcat-mf1b", -- mechanical force primary - ffe
+		categories = {"yrcat-mf1b"}, -- mechanical force primary - ffe
 		enabled = true,
 		energy_required = 1.00,
 		ingredients = {
@@ -371,7 +371,7 @@ data:extend({
 	{
 		type = "recipe",
 		name = "y-mf2c",
-		category = "yrcat-mf1gm", -- mechanical force primary
+		categories = {"yrcat-mf1gm"}, -- mechanical force primary
 		enabled = true,
 		energy_required = 1.00,
 		ingredients = {
@@ -393,7 +393,7 @@ data:extend({
 	{
 		type = "recipe",
 		name = "y-mf2d",
-		category = "yrcat-mf1gm", -- mechanical force primary
+		categories = {"yrcat-mf1gm"}, -- mechanical force primary
 		enabled = true,
 		energy_required = 1.00,
 		ingredients = {
@@ -415,7 +415,7 @@ data:extend({
 	{
 		type = "recipe",
 		name = "y_mpump_mf",
-		category = "yrcat_pump_2", -- Medium Pump
+		categories = {"yrcat_pump_2"}, -- Medium Pump
 		enabled = true,
 		energy_required = 1.00,
 		ingredients = {
