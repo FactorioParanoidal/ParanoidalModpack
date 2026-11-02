@@ -56,18 +56,28 @@ end
 ---Energy of volatile gases is multiplied by C.VOLATILE; volatile = such a gas fills a box above
 ---C.VOLATILE_MIN_FRACTION.
 ---@return {energy: number, amount: number, toxic: number, fluid: string?, fraction: number, damage_type: string, volatile: boolean}?
+-- Factorio 2.1: LuaEntity::fluidbox was removed; fluid storages are read by index (get_fluid, get_fluid_capacity).
+-- fluids_count also covers storages without a fluid box (a fluid turret's buffer, a fluid wagon); like 2.0, only the
+-- storages of fluid boxes are counted.
+local function box_indices(entity)
+  local list = {}
+  for k = 1, entity.fluids_count do
+    if entity.get_fluid_box_prototype(k) then list[#list + 1] = k end
+  end
+  return list
+end
+
 function M.measure(entity)
-  local boxes = entity.fluidbox
-  local n = #boxes
-  if n == 0 then return nil end
+  local indices = box_indices(entity)
+  if #indices == 0 then return nil end
   if not flammable then build() end
 
   local fluids = prototypes.fluid
   local energy, amount, toxic_amount = 0, 0, 0
   local volatile = false
   local best, best_energy, best_index, best_amount = nil, 0, 1, 0
-  for k = 1, n do
-    local pot = boxes[k]
+  for _, k in ipairs(indices) do
+    local pot = entity.get_fluid(k)
     if pot then
       local name, a = pot.name, pot.amount
       if flammable[name] then
@@ -78,7 +88,7 @@ function M.measure(entity)
           amount = amount + a
           if e > best_energy then best, best_energy, best_index, best_amount = name, e, k, a end
           if mult and not volatile then
-            local capacity = boxes.get_capacity(k)
+            local capacity = entity.get_fluid_capacity(k)
             volatile = capacity > 0 and a / capacity > C.VOLATILE_MIN_FRACTION
           end
         end
@@ -90,7 +100,7 @@ function M.measure(entity)
 
   local fraction = 0
   if best then
-    local capacity = boxes.get_capacity(best_index)
+    local capacity = entity.get_fluid_capacity(best_index)
     if capacity > 0 then fraction = math.min(1, best_amount / capacity) end
   end
   return {
@@ -106,9 +116,9 @@ end
 
 ---Capacity of the first fluid box (0 without fluid boxes).
 function M.capacity(entity)
-  local boxes = entity.fluidbox
-  if #boxes == 0 then return 0 end
-  return boxes.get_capacity(1)
+  local indices = box_indices(entity)
+  if #indices == 0 then return 0 end
+  return entity.get_fluid_capacity(indices[1])
 end
 
 ---Does a recipe (LuaRecipe or LuaRecipePrototype) handle flammable / toxic fluids?

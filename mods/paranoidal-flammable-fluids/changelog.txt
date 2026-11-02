@@ -20,6 +20,7 @@ Date: 2026-11-01
     - The per-entity damage cooldown table no longer grows forever when fire or explosions hit stores and tanks that start nothing.
   Compatibility:
     - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
+    - Factorio 2.1: flammable and toxic contents are read with LuaEntity::get_fluid/get_fluid_capacity of the fluid box storages (LuaEntity::fluidbox was removed; the death of any entity with fluid boxes raised an error in on_entity_died).
 ---------------------------------------------------------------------------------------------------
 Version: 0.2.22
 Date: 2025-04-26
