@@ -198,7 +198,6 @@ for _, definition in ipairs(upgrade_recipes) do
     energy_required = 0.5,
     enabled = false,
     allow_decomposition = false,
-    always_show_products = true,
     ingredients = definition.ingredients,
     results = {{type = "item", name = definition.result, amount = definition.amount}},
   }

@@ -10,3 +10,4 @@ Date: 15. 10. 2026
   Compatibility:
     - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
     - Paranoidal port to Factorio 2.1: recipes use categories (RecipePrototype::category and additional_categories were merged into categories; the first entry keeps the meaning of the former main category, a changed main category keeps the other entries).
+    - Factorio 2.1: removed the recipe fields always_show_products and show_amount_in_title (removed in 2.1, silently ignored).
