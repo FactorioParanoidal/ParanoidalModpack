@@ -259,13 +259,13 @@ data:extend({
   { type = "recipe-category", name = "pd-relic-xeno" },
   { type = "recipe-category", name = "pd-relic-sprout" },
   {
-    type = "recipe", name = "pd-relic-xeno-culture", category = "pd-relic-xeno", enabled = true,
+    type = "recipe", name = "pd-relic-xeno-culture", categories = {"pd-relic-xeno"}, enabled = true,
     energy_required = 30, hide_from_player_crafting = true, allow_productivity = false, auto_recycle = false,
     ingredients = { { type = "item", name = "raw-fish", amount = 10 } },
     results = { { type = "item", name = ARTIFACT, amount = ARTIFACT == "raw-fish" and 12 or 1 } },
   },
   {
-    type = "recipe", name = "pd-relic-sprout-growth", category = "pd-relic-sprout", enabled = true,
+    type = "recipe", name = "pd-relic-sprout-growth", categories = {"pd-relic-sprout"}, enabled = true,
     energy_required = 10, hide_from_player_crafting = true, allow_productivity = false, auto_recycle = false,
     ingredients = {},
     results = { { type = "item", name = "wood", amount = 4 } },
