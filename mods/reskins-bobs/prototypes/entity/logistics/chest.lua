@@ -94,7 +94,8 @@ for name, map in pairs(logistic_map) do
 	}
 
 	-- Reskin entities
-	entity.animation = {
+	entity.robot_door = entity.robot_door or {}
+	entity.robot_door.animation = {
 		layers = {
 			-- Base
 			{

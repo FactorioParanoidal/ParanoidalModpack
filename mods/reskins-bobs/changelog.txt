@@ -6,6 +6,9 @@ Date: 2026-06-01
   Changes:
     - Revised how heat pipe sprites are handled to avoid issues related to modified base-mod global functions
     - Paranoidal: the belt/ground pictures of lithium, the copper-tungsten, alien blue and alien orange alloys and the brass and steel gear wheels repeat the Beta 8 interface icons used by the pack.
+  Compatibility:
+    - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
+    - Paranoidal port to Factorio 2.1: logistic chest door animation, sound, opened duration and landing offset moved into robot_door (2.1 LogisticContainerPrototype).
 ---------------------------------------------------------------------------------------------------
 Version: 2.3.7
 Date: 2026-05-31
