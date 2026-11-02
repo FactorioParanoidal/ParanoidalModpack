@@ -9,5 +9,5 @@
   "license": "MIT",
   
   "dependencies": ["base >= 2.0.0", "? PlutoniumEnergy >= 1.7.3", "? Nuclear Fuel", "? PlutoniumBreeding"],
-  "factorio_version": "2.0"
+  "factorio_version": "2.1"
 }

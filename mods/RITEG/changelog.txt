@@ -5,6 +5,8 @@ Date: 2026-09-10
     - darkfrei
   Info:
     - Build for Factorio 2.0, the code is the same as in version 2.1.2.
+  Compatibility:
+    - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
 ---------------------------------------------------------------------------------------------------
 Version: 2.1.2
 Date: 2026-09-10
