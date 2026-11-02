@@ -3,6 +3,8 @@ Version: 2.0.3
 Date: 2025-11-21
   Locale:
     - Brazilian Portuguese locale added, provided by Slondo (https://mods.factorio.com/user/Slondo).
+  Compatibility:
+    - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.2
 Date: 2025-11-07
