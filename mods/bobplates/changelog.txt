@@ -11,6 +11,8 @@ Date: 04. 06. 2026
     - Paranoidal port to Factorio 2.1: Space Age only: chemistry-or-cryogenics (removed in 2.1) became categories chemistry + cryogenics.
     - Paranoidal port to Factorio 2.1: product probability renamed to independent_probability (recipe results, minable results, generated products).
     - Paranoidal port to Factorio 2.1: items use fuel_categories (ItemPrototype::fuel_category was removed).
+    - Factorio 2.1: chemical furnaces use_mirroring = true instead of the removed forced_symmetry (flippable as in 2.0).
+    - Factorio 2.1: removed the recipe fields always_show_products and show_amount_in_title (removed in 2.1, silently ignored).
 ---------------------------------------------------------------------------------------------------
 Version: 2.1.0
 Date: 01. 06. 2026

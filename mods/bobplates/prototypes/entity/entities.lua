@@ -302,7 +302,7 @@ data:extend({
         volume = 1000,
       },
     },
-    forced_symmetry = "vertical",
+    use_mirroring = true, -- Factorio 2.1: replaces the removed forced_symmetry = "vertical" (flippable, as in 2.0)
     collision_box = { { -0.7, -0.7 }, { 0.7, 0.7 } },
     selection_box = { { -1, -1 }, { 1, 1 } },
     icon_draw_specification = {
@@ -480,7 +480,7 @@ data:extend({
       },
     },
     fluid_boxes_off_when_no_fluid_recipe = true,
-    forced_symmetry = "vertical",
+    use_mirroring = true, -- Factorio 2.1: replaces the removed forced_symmetry = "vertical" (flippable, as in 2.0)
     collision_box = { { -0.7, -0.7 }, { 0.7, 0.7 } },
     selection_box = { { -1, -1 }, { 1, 1 } },
     icon_draw_specification = {
