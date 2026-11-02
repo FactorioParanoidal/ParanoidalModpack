@@ -12,3 +12,5 @@ Date: 2026-10-10
   Bugfixes:
     - Entities use the board icons instead of icons inherited from base poles.
     - Russian locale: the long distance board is named "Опорный подземный электрощит" (long-distance link board).
+  Compatibility:
+    - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
