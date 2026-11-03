@@ -436,6 +436,8 @@ require("tweaks.custom.reskins-library-icons")
 require("tweaks.item.pictures-follow-icon")
 -- Factorio 2.1: отражение (F/V) всех машин с трубами, как в 2.0 (решение D30 «А»).
 require("tweaks.entity.crafting-machine-mirroring")
+-- Factorio 2.1: спаунеры как в 2.0 — радиус и шаг появления ванили 2.0, без кислотного облака (решение G2 «А»).
+require("tweaks.entity.spawners-2-0")
 -- Оптимизация атласов графики: после всех правок, создающих и копирующих прототипы и иконки.
 require("tweaks.custom.graphics-atlas")
 -- Собственные изображения поверх оригинальных пакетов Reskins; после сравнения путей атласа.

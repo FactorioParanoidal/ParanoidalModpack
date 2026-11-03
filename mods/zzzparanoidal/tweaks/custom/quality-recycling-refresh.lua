@@ -235,6 +235,18 @@ end
 
 local function any_recipe() return true end
 
+-- Factorio 2.1 (решение пользователя G20 «А», 2026-11-03): время переработки как в 2.0. Генератор 2.1
+-- (__recycler__/recycling.lua, changelog 2.1.13) делит время на число предметов результата исходного рецепта (самопереработка —
+-- рецепта с именем предмета), берёт время у recycle_to_ingredients_of и не опускает его ниже 0,0011 с; 2.0
+-- (__quality__/prototypes/recycling.lua) брал время самого исходного рецепта (самопереработка — рецепта с именем
+-- предмета, без него 0,5 с) / 16. Результаты и выход не меняются.
+local function restore_time_2_0(key, recipe)
+	local result = recipes[key]
+	local seconds = ((recipe and recipe.energy_required) or 0.5) / 16
+	-- RecipePrototype::energy_required должно быть > 0.001: с меньшим значением не загрузился бы и 2.0, остаётся время 2.1.
+	if result and seconds > 0.001 then result.energy_required = seconds end
+end
+
 local function generate_from(recipe, item_name)
 	local key = item_name .. "-recycling"
 	recipes[key] = nil
@@ -251,6 +263,7 @@ local function generate_from(recipe, item_name)
 			return false
 		end
 	end
+	restore_time_2_0(key, recipe)
 	return true
 end
 
@@ -292,6 +305,7 @@ for _, name in ipairs(sorted_keys(items)) do
 		else
 			recipes[key] = nil
 			recycling.generate_self_recycling_recipe(item)
+			restore_time_2_0(key, recipes[name])
 			self_made = self_made + 1
 		end
 		if recipes[key] then recipes[key].localised_name = {"recipe-name.recycling", display_name(item)} end

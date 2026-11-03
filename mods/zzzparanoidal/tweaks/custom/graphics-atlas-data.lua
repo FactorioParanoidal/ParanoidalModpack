@@ -4,6 +4,8 @@
 local D = {}
 
 -- Пиксельно одинаковые файлы: копия -> канонический файл (мод канонического файла).
+-- Factorio 2.1: убраны две пары, у которых файл __base__ в 2.1.24 перерисован и уже не совпадает с копией (иконка
+-- основы нефтезавода Reskins и иконка signal-science-pack; проверка test-runs/_port21-work/s5/atlas_check21.py).
 D.file_remap = {
 	["__Bio_Industries_2__/graphics/entities/remnants/wooden_fence_remnant.png"] = { "__Bio_Industries_2__/graphics/entities/remnants/woodpipe_remnant.png", "Bio_Industries_2" },
 	["__Bio_Industries_2__/graphics/icons/Seedling1.png"] = { "__Bio_Industries_2__/graphics/icons/Seedling.png", "Bio_Industries_2" },
@@ -120,7 +122,6 @@ D.file_remap = {
 	["__base__/graphics/icons/electric-mining-drill.png"] = { "__core__/graphics/icons/technology/effect/electric-mining-drill.png", "core" },
 	["__base__/graphics/icons/fluid/barreling/barrel-fill-side-mask.png"] = { "__base__/graphics/icons/fluid/barreling/barrel-side-mask.png", "base" },
 	["__base__/graphics/icons/inserter.png"] = { "__core__/graphics/icons/technology/effect/inserter.png", "core" },
-	["__base__/graphics/icons/signal/signal-science-pack.png"] = { "__base__/graphics/icons/science.png", "base" },
 	["__base__/graphics/icons/transport-belt.png"] = { "__core__/graphics/icons/technology/effect/transport-belt.png", "core" },
 	["__base__/graphics/particle/leaf-particle/new-leaf-particle.png"] = { "__base__/graphics/particle/leaf-particle/leaf-particle.png", "base" },
 	["__bobenemies__/graphics/entity/invisible.png"] = { "__MIRV2__/tf_util/empty-sprite.png", "MIRV2" },
@@ -217,7 +218,6 @@ D.file_remap = {
 	["__reskins-bobs__/graphics/technology/plates/processing-steps/bob-gem-processing-2.png"] = { "__reskins-bobs__/graphics/technology/plates/processing-steps/bob-gem-processing-1.png", "reskins-bobs" },
 	["__reskins-library__/graphics/entity/common/pipe-covers/shadows/pipe-cover-south-shadow.png"] = { "__base__/graphics/entity/pipe-covers/pipe-cover-south-shadow.png", "base" },
 	["__reskins-library__/graphics/entity/common/pipe-patches/vertical-pipe-shadow-patch.png"] = { "__angelsrefininggraphics__/graphics/entity/clarifier/vertical-pipe-shadow-patch.png", "angelsrefininggraphics" },
-	["__reskins-library__/graphics/icons/base/oil-refinery/oil-refinery-icon-base.png"] = { "__base__/graphics/icons/oil-refinery.png", "base" },
 	["__reskins-library__/graphics/icons/shared/items/glass.png"] = { "__bobplates__/graphics/icons/glass.png", "bobplates" },
 }
 
