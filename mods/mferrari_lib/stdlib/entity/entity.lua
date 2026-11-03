@@ -116,7 +116,7 @@ end
 function Entity.set_frozen(entity, mode)
     fail_if_missing(entity, "missing entity argument")
     mode = mode == false and true or false
-    entity.active    = mode
+    entity.disabled_by_script = not mode -- Factorio 2.1: LuaEntity::active is read-only
     entity.operable  = mode
     entity.rotatable = mode
     return entity
@@ -129,7 +129,7 @@ end
 function Entity.set_indestructible(entity, mode)
     fail_if_missing(entity, "missing entity argument")
     mode = mode == false and true or false
-    entity.minable       = mode
+    entity.minable_flag  = mode -- Factorio 2.1: LuaEntity::minable is read-only
     entity.destructible  = mode
     return entity
 end

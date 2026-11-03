@@ -243,9 +243,9 @@ for n,a in pairs (fluids_b) do
 	end
 local transfered=0
 if name and amt and ((not name_b) or name==name_b) then
-	entity_b.remove_fluid{name=name,amount=transfered}
+	if transfered > 0 then entity_b.extract_fluid{name=name,amount=transfered} end -- Factorio 2.1: remove_fluid{} renamed (0 here: no-op as before)
 	transfered = entity_b.insert_fluid({name=name,amount=amt})
-	entity_a.remove_fluid{name=name,amount=transfered}
+	if transfered > 0 then entity_a.extract_fluid{name=name,amount=transfered} end
 	end
 
 return name, transfered	
@@ -776,7 +776,7 @@ for t=1,2 do
 						else
 						table.insert (all_ents, en)
 						end
-					if about_entity.non_minable_all or (about_entity.non_minables and about_entity.non_minables[en.name]) then en.minable=false end
+					if about_entity.non_minable_all or (about_entity.non_minables and about_entity.non_minables[en.name]) then en.minable_flag=false end -- Factorio 2.1: LuaEntity::minable is read-only
 					if about_entity.indestructible_all or (about_entity.indestructibles and about_entity.indestructibles[en.name]) then en.destructible=false end
 					end				
 				
