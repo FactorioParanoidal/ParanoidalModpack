@@ -54,6 +54,11 @@ local decomposed_processing = {
 -- Источник разбора, хотя автор мода выключил его для Quality (auto_recycle = false): основной
 -- рецепт скрыт в Paranoidal, этот остался единственным (решение 2026-10-13).
 local auto_recycle_override = {["electronic-circuit-wood"] = true, ["bob-phenolic-board"] = true}
+-- Factorio 2.1 (решение пользователя G23 «А», 2026-11-03): ваниль 2.1 скрыла рецепт пистолета и выключила ему
+-- переработку (auto_recycle = false); в сборке он доступен, и пистолет разбирается на ингредиенты, как в 2.0.
+-- Остальные рецепты, которым ваниль 2.1 выключила переработку (сталь, кирпич, взрывчатка, огнемётные
+-- боеприпасы, крекинг, бочки), в сборке не сборочные: их предметы и в 2.0 шли в самопереработку.
+auto_recycle_override["pistol"] = true
 -- Сплавы (решение 2026-10-13) и прочие материалы: всегда самопереработка, даже при сборочном рецепте.
 local always_self = {
 	["bob-brass-alloy"] = true, ["bob-bronze-alloy"] = true, ["bob-cobalt-steel-alloy"] = true,
@@ -132,6 +137,17 @@ for name, recipe in pairs(recipes) do
 				productive[product.name or product[1]] = true
 			end
 		end
+	end
+end
+
+-- Factorio 2.1 (G23 «А»): RecipePrototype::recycle_to_ingredients_of (новое в 2.1; ваниль ставит его опасному
+-- и укреплённому опасному бетону) разбирает предмет на ингредиенты другого рецепта (__recycler__/recycling.lua). В 2.0
+-- поля не было: предмет разбирался на ингредиенты своего рецепта. Поле убирается у всех рецептов до пересборки.
+local reverse_of_dropped = 0
+for _, recipe in pairs(recipes) do
+	if recipe.recycle_to_ingredients_of ~= nil then
+		recipe.recycle_to_ingredients_of = nil
+		reverse_of_dropped = reverse_of_dropped + 1
 	end
 end
 
@@ -332,4 +348,5 @@ for _, technology in pairs(raw.technology or {}) do
 	end
 end
 log("Paranoidal: recycling rebuilt: removed " .. removed .. ", decomposed " .. decomposed
-	.. ", self-recycling " .. self_made .. ", skipped " .. skipped .. ", recycling unlocks dropped " .. unlocks_dropped)
+	.. ", self-recycling " .. self_made .. ", skipped " .. skipped .. ", recycling unlocks dropped " .. unlocks_dropped
+	.. ", recycle_to_ingredients_of dropped " .. reverse_of_dropped)

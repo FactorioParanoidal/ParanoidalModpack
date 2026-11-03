@@ -438,6 +438,8 @@ require("tweaks.item.pictures-follow-icon")
 require("tweaks.entity.crafting-machine-mirroring")
 -- Factorio 2.1: спаунеры как в 2.0 — радиус и шаг появления ванили 2.0, без кислотного облака (решение G2 «А»).
 require("tweaks.entity.spawners-2-0")
+-- Factorio 2.1: у вагонов нет max_speed — поезд идёт со скоростью своих локомотивов (решение G22 «А»).
+require("tweaks.entity.wagon-max-speed-2-1")
 -- Оптимизация атласов графики: после всех правок, создающих и копирующих прототипы и иконки.
 require("tweaks.custom.graphics-atlas")
 -- Собственные изображения поверх оригинальных пакетов Reskins; после сравнения путей атласа.

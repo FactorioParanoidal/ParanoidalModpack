@@ -451,6 +451,10 @@ data:extend({
 		joint_distance = 4,
 		energy_per_hit_point = 5,
 		capacity = 50000,
+		-- Factorio 2.1: положение клапанов для руки насоса — как у ванильного вагона-цистерны того же
+		-- размера (остальные смещения клапанов по умолчанию 2.1 равны ванильным; высота по умолчанию -1,375/-0,65).
+		base_valve_z_offset_projected_when_horizontal = -1.4,
+		base_valve_z_offset_projected_when_vertical = -1.55,
 		resistances = {
 			{ type = "fire", decrease = 15, percent = 90 },
 			{ type = "physical", decrease = 15, percent = 20 },
