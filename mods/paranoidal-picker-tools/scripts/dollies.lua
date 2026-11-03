@@ -115,7 +115,8 @@ function epd:move_entity(move_event)
 
     -- process move
     if direction then
-        local distance = move_event.distance * entity.prototype.building_grid_bit_shift -- Distance to move the source, defaults to 1
+        -- Factorio 2.1: building_grid_bit_shift was replaced by build_grid_size (2.0.77 values 1 and 2 = the 2.1 sizes)
+        local distance = move_event.distance * entity.prototype.build_grid_size -- Distance to move the source, defaults to 1
         target_pos = tools.position_translate(start_pos, direction, distance)           -- Where we want to go too
         target_box = tools.area_translate(target_box, direction, distance)              -- Target collision box location
     end

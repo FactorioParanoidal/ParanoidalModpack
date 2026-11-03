@@ -17,6 +17,7 @@ Date: 2026-11-01
     - Saves: storage of the old mods is not carried over. Lost: per-player picker data, planner menu order, quality scroll state, the dollies saved entity and names other mods added to the dollies lists (the mods of the modpack that add names do it again on load or on a configuration change). Entities, settings and keybindings are kept.
   Compatibility:
     - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
+    - Factorio 2.1 runtime API: dollies move by build_grid_size (building_grid_bit_shift was removed; its 2.0 values equal the 2.1 grid sizes) and the belt reverser follows underground belts through underground_belt_neighbour (LuaEntity::neighbours was removed).
 ---------------------------------------------------------------------------------------------------
 Version: 1.1.0
 Date: May 26, 2026

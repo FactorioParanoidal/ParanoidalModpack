@@ -85,7 +85,7 @@ end
 local function getNextBeltDownstream(belt)
     local distance = 1
     if belt.type == 'underground-belt' and belt.belt_to_ground_type == 'input' then
-        return belt.neighbours
+        return belt.underground_belt_neighbour -- Factorio 2.1: LuaEntity::neighbours was removed
     end
 
     if LOADER[belt.type] then
@@ -114,7 +114,7 @@ end
 
 local function getNextBeltUpstream(belt)
     if belt.type == 'underground-belt' and belt.belt_to_ground_type == 'output' then
-        return belt.neighbours
+        return belt.underground_belt_neighbour
     end
 
     if LOADER[belt.type] then
