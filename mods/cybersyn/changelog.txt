@@ -11,6 +11,7 @@ Date: 2026-03-15
   Compatibility:
     - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
     - Paranoidal port to Factorio 2.1: recipes use categories (RecipePrototype::category and additional_categories were merged into categories; the first entry keeps the meaning of the former main category, a changed main category keeps the other entries).
+    - Factorio 2.1 runtime API: pumps are found next to station rails through pump_input_rail_targets and pump_output_rail_targets (pump_rail_target was removed); the fluid wagon capacity measurement empties the wagon with clear_fluid (set_fluid no longer takes nil).
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.52
 Date: 2026-03-13

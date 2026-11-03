@@ -13,6 +13,13 @@ local search_type = { "straight-rail", "curved-rail" }
 
 ---@param layout_pattern (0|1|2|3)[]
 ---@param layout (0|1|2)[]
+---Factorio 2.1: LuaEntity::pump_rail_target was removed; a pump can have rail targets on its input and output.
+---@param pump LuaEntity
+---@return boolean
+function pump_has_rail_target(pump)
+	return next(pump.pump_input_rail_targets) ~= nil or next(pump.pump_output_rail_targets) ~= nil
+end
+
 function is_refuel_layout_accepted(layout_pattern, layout)
 	local valid = true
 	for i, v in ipairs(layout) do
@@ -139,10 +146,10 @@ function set_train_layout(map_data, train)
 				if not map_data.perf_cache.size_fluidwagon_cache[carriage.prototype.name].quality_size[carriage.quality.level] then
 					--This is absolutely the only way of knowing how big a fluid wagon is with quality right now
 					local oldfluid = carriage.get_fluid(1)
-					carriage.set_fluid(1, nil)
+					carriage.clear_fluid(1) -- Factorio 2.1: set_fluid needs a fluid, clear_fluid empties
 					--fluid-unknown should always exist in factorio
 					fluidsize = carriage.insert_fluid({name=map_data.perf_cache.fluid_name_test, amount=1e10})
-					carriage.set_fluid(1, oldfluid)
+					if oldfluid then carriage.set_fluid(1, oldfluid) else carriage.clear_fluid(1) end
 					map_data.perf_cache.size_fluidwagon_cache[carriage.prototype.name].quality_size[carriage.quality.level] = fluidsize
 				else
 					fluidsize = map_data.perf_cache.size_fluidwagon_cache[carriage.prototype.name].quality_size[carriage.quality.level]
@@ -657,7 +664,7 @@ function reset_stop_layout(map_data, stop, is_station_or_refueler, forbidden_ent
 							end
 						end
 					elseif entity.type == "pump" then
-						if not supports_fluid and entity.pump_rail_target then
+						if not supports_fluid and pump_has_rail_target(entity) then
 							local direction = entity.direction
 							if is_ver then
 								if direction == defines.direction.east or direction == defines.direction.west then
@@ -765,8 +772,12 @@ end
 ---@param pump LuaEntity
 ---@param forbidden_entity LuaEntity?
 function update_stop_from_pump(map_data, pump, forbidden_entity)
-	if pump.pump_rail_target then
-		update_stop_from_rail(map_data, pump.pump_rail_target, forbidden_entity)
+	-- Factorio 2.1: pump_rail_target was replaced by the rail targets of the pump's input and output
+	-- (a pump can connect to wagons on both ends)
+	for _, rails in pairs({pump.pump_input_rail_targets, pump.pump_output_rail_targets}) do
+		for _, rail in pairs(rails) do
+			update_stop_from_rail(map_data, rail, forbidden_entity)
+		end
 	end
 end
 ---@param map_data MapData
