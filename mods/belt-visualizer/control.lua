@@ -69,7 +69,8 @@ end
 ---@return LuaEntity?
 local function step_belt(belt, belt_type, belt_neighbours, forward)
     if belt_type == "underground-belt" then
-        if (belt.belt_to_ground_type == "input") == forward then return belt.neighbours end
+        -- Factorio 2.1: LuaEntity::neighbours was removed (underground_belt_neighbour works on ghosts too)
+        if (belt.belt_to_ground_type == "input") == forward then return belt.underground_belt_neighbour end
     elseif belt_type == "linked-belt" then
         if (belt.linked_belt_type == "input") == forward then return belt.linked_belt_neighbour end
     elseif belt_type ~= "transport-belt" then
@@ -350,7 +351,7 @@ local function highlightable(data, entity)
     end
     local belt_type = get_belt_type(entity)
     if belt_type == "underground-belt" then
-        local neighbour = entity.neighbours
+        local neighbour = entity.underground_belt_neighbour -- Factorio 2.1: LuaEntity::neighbours was removed
         if neighbour and checked[neighbour.unit_number] then return true end
     elseif belt_type == "linked-belt" then
         local neighbour = entity.linked_belt_neighbour
@@ -403,7 +404,7 @@ local function on_entity_reoriented(event)
     local belt_type = get_belt_type(entity)
     local neighbour
     if belt_type == "underground-belt" then
-        neighbour = entity.neighbours
+        neighbour = entity.underground_belt_neighbour -- Factorio 2.1: LuaEntity::neighbours was removed
     elseif belt_type == "linked-belt" then
         neighbour = entity.linked_belt_neighbour
     end

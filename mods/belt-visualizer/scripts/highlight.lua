@@ -217,7 +217,7 @@ highlight_entity["underground-belt"] = function(data, entity, lanes, path)
             if prev_lanes then add_to_queue(data, input, prev_lanes, path, entity) end
         end
     end
-    local neighbour = entity.neighbours
+    local neighbour = entity.underground_belt_neighbour -- Factorio 2.1: LuaEntity::neighbours was removed
     if forward == is_input and neighbour then
         local input_end = is_input and entity or neighbour
         local output_end = is_input and neighbour or entity
