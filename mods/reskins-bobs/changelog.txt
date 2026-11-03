@@ -10,6 +10,7 @@ Date: 2026-06-01
     - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
     - Paranoidal port to Factorio 2.1: logistic chest door animation, sound, opened duration and landing offset moved into robot_door (2.1 LogisticContainerPrototype).
     - Factorio 2.1 graphics: steam engines, steam turbines and fluid generators write their animations to GeneratorPrototype::pictures (horizontal_animation/vertical_animation are silently ignored in 2.1, the tier masks were not drawn); heat exchangers and their remnants take the base art of the redrawn 2.1 vanilla heat exchanger (size and shift from its .lua descriptions; the 2.0 frames do not fit the new files), pumpjacks the 2.1 horsehead and shadow frames (206x172, 292x78) and the same head when flipped, water miners their own base in the 2.1 base visualisation; the tier masks keep their 2.0 placement.
+    - Factorio 2.1 graphics (Paranoidal decision G19 A): the centrifuge skin (centrifuge, centrifuges 2 and 3) keeps the 2.0 look with the tier colours - the three 2.0 centrifuge parts and their shadows are copies of the Factorio 2.0.77 files in graphics/entity/assembly/centrifuge/base-2.0/ (2.1 replaced them with one redrawn sheet that the masks do not fit).
 ---------------------------------------------------------------------------------------------------
 Version: 2.3.7
 Date: 2026-05-31

@@ -76,12 +76,14 @@ for name, map in pairs(tier_map) do
 		},
 	})
 
-	-- Reskin entities
+	-- Reskin entities. Factorio 2.1 replaced the three 2.0 centrifuge parts with one redrawn sheet; the masks below are
+	-- drawn for the 2.0 parts, so they are kept as copies of the Factorio 2.0.77 files in
+	-- graphics/entity/assembly/centrifuge/base-2.0/ (Paranoidal decision G19 "A": the 2.0 look with the tier colours).
 	entity.graphics_set.idle_animation = {
 		layers = {
 			-- Centrifuge C
 			{
-				filename = "__base__/graphics/entity/centrifuge/centrifuge-C.png",
+				filename = "__reskins-bobs__/graphics/entity/assembly/centrifuge/base-2.0/centrifuge-C.png",
 				priority = "high",
 				scale = 0.5,
 				line_length = 8,
@@ -91,7 +93,7 @@ for name, map in pairs(tier_map) do
 				shift = util.by_pixel(-0.25, -26.5),
 			},
 			{
-				filename = "__base__/graphics/entity/centrifuge/centrifuge-C-shadow.png",
+				filename = "__reskins-bobs__/graphics/entity/assembly/centrifuge/base-2.0/centrifuge-C-shadow.png",
 				draw_as_shadow = true,
 				priority = "high",
 				scale = 0.5,
@@ -103,7 +105,7 @@ for name, map in pairs(tier_map) do
 			},
 			-- Centrifuge B
 			{
-				filename = "__base__/graphics/entity/centrifuge/centrifuge-B.png",
+				filename = "__reskins-bobs__/graphics/entity/assembly/centrifuge/base-2.0/centrifuge-B.png",
 				priority = "high",
 				scale = 0.5,
 				line_length = 8,
@@ -135,7 +137,7 @@ for name, map in pairs(tier_map) do
 				shift = util.by_pixel(23, 6.5),
 			},
 			{
-				filename = "__base__/graphics/entity/centrifuge/centrifuge-B-shadow.png",
+				filename = "__reskins-bobs__/graphics/entity/assembly/centrifuge/base-2.0/centrifuge-B-shadow.png",
 				draw_as_shadow = true,
 				priority = "high",
 				scale = 0.5,
@@ -147,7 +149,7 @@ for name, map in pairs(tier_map) do
 			},
 			-- Centrifuge A
 			{
-				filename = "__base__/graphics/entity/centrifuge/centrifuge-A.png",
+				filename = "__reskins-bobs__/graphics/entity/assembly/centrifuge/base-2.0/centrifuge-A.png",
 				priority = "high",
 				scale = 0.5,
 				line_length = 8,
@@ -179,7 +181,7 @@ for name, map in pairs(tier_map) do
 				shift = util.by_pixel(-26.25, 3.5),
 			},
 			{
-				filename = "__base__/graphics/entity/centrifuge/centrifuge-A-shadow.png",
+				filename = "__reskins-bobs__/graphics/entity/assembly/centrifuge/base-2.0/centrifuge-A-shadow.png",
 				priority = "high",
 				draw_as_shadow = true,
 				scale = 0.5,
