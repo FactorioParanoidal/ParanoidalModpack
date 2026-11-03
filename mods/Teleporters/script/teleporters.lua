@@ -116,11 +116,12 @@ local add_recent = function(player, teleporter)
 end
 
 local unlink_teleporter = function(player)
-  if player.character then player.character.active = true end
+  -- Factorio 2.1: LuaEntity::active is read-only, disabled_by_script is what 2.0 wrote
+  if player.character then player.character.disabled_by_script = false end
   close_gui(get_teleporter_frame(player))
   local source = script_data.player_linked_teleporter[player.index]
   if source and source.valid then
-    source.active = true
+    source.disabled_by_script = false
     add_recent(player, source)
   end
   script_data.player_linked_teleporter[player.index] = nil
@@ -505,9 +506,9 @@ local teleporter_triggered = function(entity, character)
   local player = character.player
   if not player then return end
   player.teleport(entity.position)
-  entity.active = false
+  entity.disabled_by_script = true
   entity.timeout = entity.prototype.timeout
-  character.active = false
+  character.disabled_by_script = true
   script_data.player_linked_teleporter[player.index] = entity
   make_teleporter_gui(player, entity)
 end
