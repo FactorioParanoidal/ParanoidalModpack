@@ -95,17 +95,17 @@ Confirmed by the engine (2026-11-03, `test-runs/beast-smoke6-20261103`): a train
 
 ## Porting to 2.1
 
-Only in the branch `pre_release_2.1` and its worktree (AGENTS.md, ПР-069). Every place in the code is marked `-- 2.1:`; `rg -n "2\.1:" .` lists them. API diff 2.0.77 → 2.1.24 from the two engines' `doc-html/*-api.json`, checked 2026-11-03 for every member this mod uses:
+**Done 2026-11-04 in `pre_release_2.1`** (this copy of the mod): the actions below are applied; the 2.0 branch keeps the 2.0 forms. Only in the branch `pre_release_2.1` and its worktree (AGENTS.md, ПР-069). Every place in the code is marked `-- 2.1:`; `rg -n "2\.1:" .` lists them. API diff 2.0.77 → 2.1.24 from the two engines' `doc-html/*-api.json`, checked 2026-11-03 for every member this mod uses:
 
 | Where | 2.0.77 | 2.1.24 | Action |
 |---|---|---|---|
-| `info.json` | `factorio_version` "2.0", `base >= 2.0.0` | — | "2.1", `base >= 2.1.0` |
-| `script/infection.lua` underground belts | `LuaEntity.neighbours` | gone; `underground_belt_neighbour` | switch to the commented line |
-| `script/infection.lua` piping | `LuaEntity.neighbours` | gone; `fluidbox_neighbours` (array of arrays) | switch to the commented line |
+| `info.json` | `factorio_version` "2.0", `base >= 2.0.0` | — | done: "2.1", `base >= 2.1.0` |
+| `script/infection.lua` underground belts | `LuaEntity.neighbours` | gone; `underground_belt_neighbour` | done |
+| `script/infection.lua` piping | `LuaEntity.neighbours` | gone; `fluidbox_neighbours` (array of arrays) | done |
 | `script/infection.lua` drain | `clear_fluid_inside` | same (`LuaEntity.fluidbox` is gone, unused) | none |
-| `prototypes/beasts.lua` generator | `vertical_animation`, `horizontal_animation` | `pictures` (GeneratorPictureSet) | already read as a fallback |
+| `prototypes/beasts.lua` generator | `vertical_animation`, `horizontal_animation` | `pictures` (GeneratorPictureSet) | done: reads `pictures` only |
 | `prototypes/beasts.lua` container | `picture` Sprite | Sprite4Way; logistic container `animation` gone | already read through `north()` |
-| `prototypes/beasts.lua` pumpjack | `base_picture` | gone | nil, harmless; frame missing on a lifted pumpjack — look in its `graphics_set` |
+| `prototypes/beasts.lua` pumpjack | `base_picture` | gone | done: the frame is the always-drawn working visualisation with `secondary_draw_order` < 0, put under the animation |
 | `prototypes/arrival.lua` core look | `unit-spawner` `graphics_set.animations` | `EnemySpawnerPrototype`, still type `unit-spawner`, same field | none |
 | Rendering | `draw_sprite`, `draw_light` | new optional `tall`, `light_mode` | none |
 | Rails | `get_rail_end`, `move_natural`, `LuaRailEnd`, `get_rail_extensions`, schedule records with `rail` | same | none (storage keeps rail + direction) |

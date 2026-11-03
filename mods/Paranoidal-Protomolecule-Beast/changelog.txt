@@ -50,6 +50,8 @@ Date: 2026-11-03
     - Clinical texts for the landing, research stages and the end of the outbreak; new mod title and description; names of the power, artillery and vehicle creatures; the rail junction message; the alert for a train at a raid.
   Info:
     - AGENT-NOTES.md: how the mod works, its storage, remote interface and build links, and what to change for Factorio 2.1 (every place marked "-- 2.1:" in the code).
+  Compatibility:
+    - Ported to Factorio 2.1: factorio_version 2.1, base >= 2.1.0; underground belts and piping spread through underground_belt_neighbour and fluidbox_neighbours (LuaEntity.neighbours is gone); generator creatures read the 2.1 pictures; a pumpjack creature takes its frame from the always-drawn working visualisation drawn below the animation (MiningDrillPrototype.base_picture is gone).
 ---------------------------------------------------------------------------------------------------
 Version: 2.1.0
 Date: 2026-10-31

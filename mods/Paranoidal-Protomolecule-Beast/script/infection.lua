@@ -443,19 +443,16 @@ local function spread_targets(entity)
     add_neighbours(result, entity.surface.find_entities_filtered{position = entity.position, radius = entity.get_radius() + 2, type = belt_types})
   elseif type == "transport-belt" or type == "underground-belt" or type == "splitter" then
     add_neighbours(result, entity.belt_neighbours)
-    -- The other end of an underground, which is all that neighbours is for one.
-    if type == "underground-belt" then add_neighbours(result, entity.neighbours) end
-    -- 2.1: LuaEntity.neighbours is gone; the other end of an underground is underground_belt_neighbour:
-    -- if type == "underground-belt" then add_neighbours(result, entity.underground_belt_neighbour) end
+    -- The other end of an underground (2.1: underground_belt_neighbour; LuaEntity.neighbours is gone).
+    if type == "underground-belt" then add_neighbours(result, entity.underground_belt_neighbour) end
     connected_inserters(entity, result)
   elseif type == "inserter" then
     things_at(entity, entity.pickup_position, result)
     things_at(entity, entity.drop_position, result)
   elseif piping[type] then
-    -- For anything with pipe connections, what each of its fluidboxes is connected to.
-    add_neighbours(result, entity.neighbours)
-    -- 2.1: LuaEntity.neighbours is gone; what each fluidbox connects to is fluidbox_neighbours (array of arrays):
-    -- add_neighbours(result, entity.fluidbox_neighbours)
+    -- For anything with pipe connections, what each of its fluidboxes is connected to
+    -- (2.1: fluidbox_neighbours, an array per fluidbox; LuaEntity.neighbours is gone).
+    add_neighbours(result, entity.fluidbox_neighbours)
     connected_inserters(entity, result)
   elseif type == "electric-pole" then
     if infection.wire_filter and infection.wire_filter() then

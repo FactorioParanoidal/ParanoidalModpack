@@ -145,14 +145,19 @@ local function body_sprite(entity)
   local graphics = entity.graphics_set or {}
   if entity.type == "mining-drill" then
     if not graphics.animation then return nil end
-    -- A pumpjack's frame, under its moving head.
-    -- 2.1: MiningDrillPrototype has no base_picture; it is nil there, and a pumpjack's frame is in its graphics_set.
-    local layers = {north(entity.base_picture), north(graphics.animation)}
-    if not layers[1] then table.remove(layers, 1) end
+    -- A pumpjack's frame, under its moving head. 2.1: MiningDrillPrototype has no base_picture; the frame is a
+    -- working visualisation drawn always and below the animation (secondary_draw_order < 0), so those go first.
+    local below, above = {}, {}
     for _, visualisation in pairs(graphics.working_visualisations or {}) do
       local animation = north(visualisation.north_animation or visualisation.animation)
-      if animation and not visualisation.apply_tint and not visualisation.light then layers[#layers + 1] = animation end
+      if animation and not visualisation.apply_tint and not visualisation.light then
+        local list = (visualisation.secondary_draw_order or 0) < 0 and below or above
+        list[#list + 1] = animation
+      end
     end
+    local layers = below
+    layers[#layers + 1] = north(graphics.animation)
+    for _, animation in pairs(above) do layers[#layers + 1] = animation end
     return {layers = layers}
   end
   if entity.type == "furnace" then
@@ -191,7 +196,7 @@ local function body_sprite(entity)
   end
   if entity.type == "electric-pole" then return entity.pictures end
   -- 2.1: GeneratorPrototype has pictures (GeneratorPictureSet: north/east/south/west) instead of the two animations.
-  if entity.type == "generator" then return north(entity.vertical_animation or entity.horizontal_animation or entity.pictures) end
+  if entity.type == "generator" then return north(entity.pictures) end
   if entity.type == "boiler" then
     local pictures = entity.pictures and entity.pictures.north
     if not (pictures and pictures.structure) then return nil end
