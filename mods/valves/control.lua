@@ -17,15 +17,16 @@ end
 -- the valve (engine limitation, confirmed by raiguard). Only warn: 87% of
 -- 134 votes on the Py Discord wanted a warning instead of destroying the valve.
 
----@param fluidbox LuaFluidBox
+---@param entity LuaEntity
 ---@param flow_direction "input"|"output"
 ---@param matches fun(owner: LuaEntity): boolean
----@return LuaFluidBox? target fluidbox reached through a connection of this direction
-local function connected(fluidbox, flow_direction, matches)
+---@return LuaEntity? target entity reached through a connection of this direction
+local function connected(entity, flow_direction, matches)
     -- Both valves and pumps have exactly one fluidbox.
-    for _, connection in pairs(fluidbox.get_pipe_connections(1)) do
+    -- Factorio 2.1: LuaEntity::fluidbox was removed; PipeConnection::target is the connected entity.
+    for _, connection in pairs(entity.get_fluid_box_pipe_connections(1) or {}) do
         local target = connection.target
-        if target and connection.flow_direction == flow_direction and matches(target.owner) then return target end
+        if target and connection.flow_direction == flow_direction and matches(target) then return target end
     end
 end
 
@@ -34,7 +35,7 @@ end
 ---@param is_b fun(owner: LuaEntity): boolean
 ---@param in_dir "input"|"output" direction of `b` back towards `a`
 local function linked(a, out_dir, is_b, in_dir)
-    local target = connected(a.fluidbox, out_dir, is_b)
+    local target = connected(a, out_dir, is_b)
     return target ~= nil and connected(target, in_dir, function(owner) return owner == a end) ~= nil
 end
 
