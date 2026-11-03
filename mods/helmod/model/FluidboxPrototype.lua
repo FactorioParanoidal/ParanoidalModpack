@@ -48,18 +48,20 @@ function FluidboxPrototype:toData()
   data.index = self.lua_prototype.index
   data.pipe_connections = self.lua_prototype.pipe_connections
   data.production_type = self.lua_prototype.production_type
-  data.base_area = self.lua_prototype.base_area
-  data.base_level = self.lua_prototype.base_level
-  data.height = self.lua_prototype.height
-  data.volume = self.lua_prototype.volume
+  -- Factorio 2.1: volume became get_volume(); base_area, base_level and height do not exist since 2.0
+  data.volume = self.lua_prototype.get_volume()
   local filter = self.lua_prototype.filter
   if filter == nil then 
     data.filter = "nil"
   else
     data.filter = {name=filter.name, type="fluid"}
   end
-  data.minimum_temperature = self.lua_prototype.minimum_temperature
-  data.maximum_temperature = self.lua_prototype.maximum_temperature
+  -- Factorio 2.1: fluid boxes no longer have temperature limits (they are on the entity prototype)
+  local entity_prototype = self.lua_prototype.entity
+  if entity_prototype ~= nil then
+    data.minimum_temperature = entity_prototype.minimum_input_temperature
+    data.maximum_temperature = entity_prototype.maximum_input_temperature
+  end
   data.secondary_draw_orders = self.lua_prototype.secondary_draw_orders
   data.render_layer = self.lua_prototype.render_layer
   data.valid = self.lua_prototype.valid
@@ -70,5 +72,5 @@ end
 ---Return string
 ---@return string
 function FluidboxPrototype:toString()
-  return game.table_to_json(self:toData())
+  return helpers.table_to_json(self:toData())
 end

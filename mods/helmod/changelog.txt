@@ -41,6 +41,7 @@ Date: 2026-06-19
     - Paranoidal port to Factorio 2.1: product chances are read from independent_probability and the shared_probability range (Product::probability was removed in 2.1).
     - Factorio 2.1 quality: module and machine quality effects are shown as they are (2.0 divided them by 10) and module effects keep four decimals; the quality planner and the quality panel use quality effect x next_probability for the first step and chain_probability of the tier reached for further steps; the bonus probability of the quality panel is a percent of the 2.1 effect.
     - Factorio 2.1: the entity filter build-base-evolution-requirement is no longer offered (removed in 2.1).
+    - Factorio 2.1 runtime API: the profiler comes from helpers.create_profiler (game.create_profiler was removed), the pipette from LuaPlayer::pipette (pipette_entity was removed); fluid box volume through get_volume() and input temperature limits from the entity prototype (LuaFluidBoxPrototype lost volume and its temperatures).
 ---------------------------------------------------------------------------------------------------
 Version: 2.2.13
 Date: 2026-03-20

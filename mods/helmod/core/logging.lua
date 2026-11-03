@@ -17,7 +17,7 @@ end
 
 function Logging:profilerStart()
   if self.profiler == false then return end
-  if global_profiler == nil then global_profiler = game.create_profiler() end
+  if global_profiler == nil then global_profiler = helpers.create_profiler() end -- Factorio 2.1: game.create_profiler removed
   global_profiler.reset()
   log({"", "[PROFILER]", " | ", "GLOBAL", " | ", "*** Profiler begin ***", " | ", global_profiler})
 end
@@ -25,7 +25,7 @@ end
 function Logging:profilerStep(name, ...)
   if self.profiler == false then return end
   if profiler == nil then profiler = {} end
-  if profiler[name] == nil then profiler[name] = game.create_profiler() end
+  if profiler[name] == nil then profiler[name] = helpers.create_profiler() end
   local message = {...}
   log({"", "[PROFILER]", " | ", name, " | ", table.concat({...}," "), " | ", profiler[name]})
   profiler[name].reset()

@@ -131,7 +131,15 @@ end
 ---@return any
 function Player.setPipette(entity)
     if Lua_player == nil then return nil end
-    return Lua_player.pipette_entity(entity)
+    -- Factorio 2.1: pipette_entity was removed; pipette takes the prototype and the quality
+    local prototype, quality = entity, nil
+    if type(entity) == "string" then
+        prototype = prototypes.entity[entity]
+    elseif entity.object_name == "LuaEntity" then
+        prototype, quality = entity.prototype, entity.quality
+    end
+    if prototype == nil then return false end
+    return Lua_player.pipette(prototype, quality)
 end
 
 -------------------------------------------------------------------------------
