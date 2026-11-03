@@ -11,6 +11,7 @@ Date: 2026-10-25
   Compatibility:
     - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
     - Paranoidal port to Factorio 2.1: item fuel categories are read from fuel_categories (a list; LuaItemPrototype::fuel_category was removed).
+    - Factorio 2.1 runtime API: recycling recipes are recognised by any of their categories (LuaRecipePrototype::category was removed).
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.0
 Date: 2026-10-25

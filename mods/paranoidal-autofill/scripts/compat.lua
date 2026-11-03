@@ -86,6 +86,14 @@ local function own_items(proto)
 	return list
 end
 
+-- Factorio 2.1: LuaRecipePrototype::category was removed; a recipe has several categories.
+local function is_recycling(recipe)
+	for _, category in pairs(recipe.categories) do
+		if string.find(category, "recycling", 1, true) then return true end
+	end
+	return false
+end
+
 local function build()
 	local fuel_items, ammo_items = {}, {}   -- category -> list of item names
 	local item_fuel, item_ammo = {}, {}     -- item name -> fuel categories (list) / ammo category
@@ -186,7 +194,7 @@ local function build()
 	end
 	local item_recipes = {}
 	for rname, recipe in pairs(prototypes.recipe) do
-		if not recipe.hidden and not string.find(recipe.category or "", "recycling", 1, true) then
+		if not recipe.hidden and not is_recycling(recipe) then
 			local inputs = {}
 			for _, ing in pairs(recipe.ingredients or {}) do
 				if ing.type == "item" then inputs[ing.name] = true end
