@@ -248,6 +248,14 @@ local belt_types = {
 -- Paranoidal: one walk remembers the belts it has read (seen.read) and the largest remaining upstream/downstream
 -- budget each belt was walked with (seen.up/seen.down), so belts reached again through splitters are not walked
 -- again unless with a larger budget (same reach, no exponential growth); underground belts are read once.
+--- Factorio 2.1: LuaEntity::neighbours was removed; the other end of an underground belt (or of its ghost)
+--- is underground_belt_neighbour, which errors on any other entity.
+local function underground_neighbour(entity)
+    local kind = entity.type == "entity-ghost" and entity.ghost_type or entity.type
+    if kind ~= "underground-belt" then return nil end
+    return entity.underground_belt_neighbour
+end
+
 function FilterHelper.add_items_belt(entity, items, upstream, downstream, seen)
     --TODO user config for this
     upstream = upstream or 10 -- number of belts upstream (inputs) of this belt to check for filter items
@@ -273,8 +281,9 @@ function FilterHelper.add_items_belt(entity, items, upstream, downstream, seen)
         for _, belt in pairs(entity.belt_neighbours.inputs) do
             FilterHelper.add_items_belt(belt, items, upstream - 1, 0, seen)
         end
-        if is_underground and entity.belt_to_ground_type == "output" and entity.neighbours then
-            FilterHelper.add_items_belt(entity.neighbours, items, upstream - 1, 0, seen)
+        local other_end = is_underground and entity.belt_to_ground_type == "output" and underground_neighbour(entity)
+        if other_end then
+            FilterHelper.add_items_belt(other_end, items, upstream - 1, 0, seen)
         end
     end
     if downstream > 0 and not (id and (seen.down[id] or -1) >= downstream) then
@@ -284,8 +293,9 @@ function FilterHelper.add_items_belt(entity, items, upstream, downstream, seen)
         for _, belt in pairs(entity.belt_neighbours.outputs) do
             FilterHelper.add_items_belt(belt, items, 0, downstream - 1, seen)
         end
-        if is_underground and entity.belt_to_ground_type == "input" and entity.neighbours then
-            FilterHelper.add_items_belt(entity.neighbours, items, 0, downstream - 1, seen)
+        local other_end = is_underground and entity.belt_to_ground_type == "input" and underground_neighbour(entity)
+        if other_end then
+            FilterHelper.add_items_belt(other_end, items, 0, downstream - 1, seen)
         end
     end
 end

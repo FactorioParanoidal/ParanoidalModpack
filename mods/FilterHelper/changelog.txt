@@ -15,6 +15,7 @@ Date: 2026-02-20
   Compatibility:
     - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
     - Paranoidal port to Factorio 2.1: item fuel categories are read from fuel_categories (a list; LuaItemPrototype::fuel_category was removed).
+    - Factorio 2.1 runtime API: belt item scan follows underground belts through underground_belt_neighbour (LuaEntity::neighbours was removed).
 ---------------------------------------------------------------------------------------------------
 Version: 0.2.23
 Date: 2026-02-06
