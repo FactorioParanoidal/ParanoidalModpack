@@ -571,7 +571,7 @@ local function order_deconstruction(drill)
   local has_fluid = false
   local pipeType = nil
   local pipesToBuild = nil
-  if drill.fluidbox and #drill.fluidbox > 0 then
+  if drill.fluids_count > 0 then -- Factorio 2.1: LuaEntity::fluidbox removed
     has_fluid = true
     if not settings.global['autodeconstruct-remove-fluid-drills'].value then
       debug_message_with_position(drill, "has a fluidbox and fluid deconstruction is not enabled, skipping")

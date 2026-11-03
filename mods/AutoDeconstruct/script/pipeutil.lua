@@ -187,11 +187,12 @@ function pipeutil.find_pipes_to_build(drill)
 
   -- With the new API, only one check is needed to get the coordinates of each fluidbox that is connected to any fluidbox (including ghosts and undergrounds!)
   local pipes_to_build = {}
-  for k, connection in pairs(drill.fluidbox.get_pipe_connections(1)) do
+  -- Factorio 2.1: LuaEntity::fluidbox removed; PipeConnection::target is the connected LuaEntity.
+  for k, connection in pairs(drill.get_fluid_box_pipe_connections(1) or {}) do
     if connection.connection_type == "normal" and connection.target then
       -- Determine the connection categories of the other pipe connection
       -- Find which pipe_connection prototype in the connected entity is connected to this one.
-      local target_fluidbox_prototypes = connection.target.get_prototype(connection.target_fluidbox_index)
+      local target_fluidbox_prototypes = connection.target.get_fluid_box_prototype(connection.target_fluidbox_index) or {}
       local merged_connection_definition_list = {}
       if target_fluidbox_prototypes.object_name then
         merged_connection_definition_list = target_fluidbox_prototypes.pipe_connections
@@ -204,7 +205,7 @@ function pipeutil.find_pipes_to_build(drill)
         end
       end
       local target_connection_definition = merged_connection_definition_list[connection.target_pipe_connection_index]
-      local target_pipe_categories = target_connection_definition.connection_category
+      local target_pipe_categories = target_connection_definition and target_connection_definition.connection_category or {"default"}
       --log(string.format("Connection between %s and %s has category %s", drill.name, connection.target.owner.name, serpent.line(target_pipe_categories)))
       table.insert(pipes_to_build, {offset=vectorSub(connection.position, drill.position), categories=target_pipe_categories})
     end

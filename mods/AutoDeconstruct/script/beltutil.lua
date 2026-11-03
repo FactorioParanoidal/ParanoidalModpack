@@ -13,7 +13,7 @@ function beltutil.get_belt_outputs(belt, exclude)
     end
   end
   if belt.type == "underground-belt" and belt.belt_to_ground_type == "input" then
-    local neighbor = belt.neighbours
+    local neighbor = belt.underground_belt_neighbour -- Factorio 2.1: LuaEntity::neighbours removed
     if neighbor and not (exclude and exclude[neighbor.unit_number]) then
       table.insert(outputs,neighbor)  -- insert the output undie for this input undie, since that is downstream
     end
@@ -29,7 +29,7 @@ function beltutil.get_belt_inputs(belt, exclude)
     end
   end
   if belt.type == "underground-belt" and belt.belt_to_ground_type == "output" then
-    local neighbor = belt.neighbours
+    local neighbor = belt.underground_belt_neighbour -- Factorio 2.1: LuaEntity::neighbours removed
     if neighbor and not (exclude and exclude[neighbor.unit_number]) then
       table.insert(inputs,neighbor)  -- insert the input undie for this output undie, since that is upstream
     end
