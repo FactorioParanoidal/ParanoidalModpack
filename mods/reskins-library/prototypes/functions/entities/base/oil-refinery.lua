@@ -3,6 +3,10 @@
 --
 -- See LICENSE.md in the project directory for license information.
 
+-- Factorio 2.1 removed the 2.0 oil refinery art (the base game draws a new model per direction) that the masks
+-- below are drawn for. Paranoidal decision G18 "A" (2026-11-03): the refinery family keeps the 2.0 look with the
+-- tier colours, so the 2.0 files are kept as copies (Factorio 2.0.77, unchanged) in graphics/entity/base/oil-refinery/base-2.0/.
+
 ---Provides vanilla-style sprite definition for oil refinery `animation` field. See [Prototype/AssemblingMachine](https://wiki.factorio.com/Prototype/AssemblingMachine).
 ---@param tint data.Color
 ---@return table animation # [Types/Animation4Way](https://wiki.factorio.com/Types/Animation4Way)
@@ -11,7 +15,7 @@ local function entity_animation(tint)
 		layers = {
 			-- Base
 			{
-				filename = "__base__/graphics/entity/oil-refinery/oil-refinery.png",
+				filename = "__reskins-library__/graphics/entity/base/oil-refinery/base-2.0/oil-refinery.png",
 				width = 386,
 				height = 430,
 				shift = util.by_pixel(0, -7.5),
@@ -37,7 +41,7 @@ local function entity_animation(tint)
 			},
 			-- Shadow
 			{
-				filename = "__base__/graphics/entity/oil-refinery/oil-refinery-shadow.png",
+				filename = "__reskins-library__/graphics/entity/base/oil-refinery/base-2.0/oil-refinery-shadow.png",
 				width = 674,
 				height = 426,
 				shift = util.by_pixel(82.5, 26.5),
@@ -57,7 +61,7 @@ local function corpse_animation(tint)
 		layers = {
 			-- Base
 			{
-				filename = "__base__/graphics/entity/oil-refinery/remnants/refinery-remnants.png",
+				filename = "__reskins-library__/graphics/entity/base/oil-refinery/base-2.0/remnants/refinery-remnants.png",
 				width = 467,
 				height = 415,
 				direction_count = 1,
@@ -88,6 +92,83 @@ local function corpse_animation(tint)
 	}
 
 	return make_rotated_animation_variations_from_sheet(1, animation)
+end
+
+-- Factorio 2.1: the working visualisations, the water reflection and the circuit connector of the base-game refinery
+-- belong to its new model; under the 2.0 art they are set back to the Factorio 2.0.77 definitions (flame and light,
+-- reflection, connector placement and the default position of the module icons).
+
+---@param direction_x integer # column of the light sheet (north 0, east 1, south 2, west 3)
+local function light_2_0(direction_x)
+	return {
+		filename = "__reskins-library__/graphics/entity/base/oil-refinery/base-2.0/oil-refinery-light.png",
+		width = 321,
+		x = 321 * direction_x,
+		height = 205,
+		blend_mode = "additive",
+		draw_as_glow = true,
+		shift = util.by_pixel(-1, -50),
+		scale = 0.5,
+	}
+end
+
+---@return data.WorkingVisualisation[]
+local function working_visualisations_2_0()
+	return {
+		{
+			fadeout = true,
+			constant_speed = true,
+			north_position = util.by_pixel(34, -65),
+			east_position = util.by_pixel(-52, -61),
+			south_position = util.by_pixel(-59, -82),
+			west_position = util.by_pixel(57, -58),
+			animation = {
+				filename = "__reskins-library__/graphics/entity/base/oil-refinery/base-2.0/oil-refinery-fire.png",
+				line_length = 10,
+				width = 40,
+				height = 81,
+				frame_count = 60,
+				animation_speed = 0.75,
+				scale = 0.5,
+				draw_as_glow = true,
+				shift = util.by_pixel(0, -14.25),
+			},
+		},
+		{
+			fadeout = true,
+			north_animation = light_2_0(0),
+			east_animation = light_2_0(1),
+			south_animation = light_2_0(2),
+			west_animation = light_2_0(3),
+		},
+	}
+end
+
+---@return data.WaterReflectionDefinition
+local function water_reflection_2_0()
+	return {
+		pictures = {
+			filename = "__reskins-library__/graphics/entity/base/oil-refinery/base-2.0/oil-refinery-reflection.png",
+			priority = "extra-high",
+			width = 40,
+			height = 48,
+			shift = util.by_pixel(5, 95),
+			variation_count = 4,
+			scale = 5,
+		},
+		rotate = false,
+		orientation_to_variation = true,
+	}
+end
+
+---@return data.CircuitConnectorDefinition[]
+local function circuit_connector_2_0()
+	return circuit_connector_definitions.create_vector(universal_connector_template, {
+		{ variation = 17, main_offset = util.by_pixel(-45, -29.5), shadow_offset = util.by_pixel(48.5, 11), show_shadow = true },
+		{ variation = 19, main_offset = util.by_pixel(29.5, -24), shadow_offset = util.by_pixel(81, 53), show_shadow = true },
+		{ variation = 19, main_offset = util.by_pixel(29.5, -24), shadow_offset = util.by_pixel(82.5, 65.5), show_shadow = true },
+		{ variation = 17, main_offset = util.by_pixel(-8, -35.5), shadow_offset = util.by_pixel(86.5, 77.5), show_shadow = true },
+	})
 end
 
 ---Reskins the named assembling machine with vanilla-style oil refinery sprites and color masking, and sets up appropriate corpse, explosion, and particle prototypes
@@ -126,4 +207,8 @@ function reskins.lib.apply_skin.oil_refinery(name, tier, tint, make_tier_labels)
 
 	-- Reskin entity
 	entity.graphics_set.animation = entity_animation(inputs.tint)
+	entity.graphics_set.working_visualisations = working_visualisations_2_0()
+	entity.water_reflection = water_reflection_2_0()
+	entity.circuit_connector = circuit_connector_2_0()
+	entity.icons_positioning = nil
 end

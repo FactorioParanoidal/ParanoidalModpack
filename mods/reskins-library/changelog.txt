@@ -11,6 +11,7 @@ Date: 2026-01-03
   Compatibility:
     - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
     - Paranoidal port to Factorio 2.1: defines.default_icon_size renamed to defines.constant.default_icon_size.
+    - Factorio 2.1 graphics (Paranoidal decision G18 A): the oil refinery skin keeps the 2.0 look with the tier colours - the base, shadow and remnants art, the flame and light working visualisations, the water reflection and the circuit connector placement of the Factorio 2.0.77 refinery, with copies of its files in graphics/entity/base/oil-refinery/base-2.0/ (2.1 removed them and draws a new model that the masks do not fit); the module icons keep their default position.
 ---------------------------------------------------------------------------------------------------
 Version: 2.3.2
 Date: 2025-07-03
