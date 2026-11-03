@@ -154,6 +154,11 @@ if switches.defects() then
     local expansion, expansion_report = require("prototypes.expansion-final").apply(data.raw, finished, reasons)
     data:extend(expansion)
     for _, line in ipairs(expansion_report) do log(line) end
+
+    -- Look of defective buildings: darker silhouettes, soot and dark smoke (scripts/defects/look.lua).
+    local look, look_report = require("prototypes.defect-look").apply(data.raw, finished, no_defect)
+    data:extend(look)
+    for _, line in ipairs(look_report) do log(line) end
 end
 
 -- Paranoidal: all qualities are unlocked at the start by control.lua, so researches no longer list

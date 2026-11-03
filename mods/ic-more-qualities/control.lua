@@ -16,6 +16,8 @@ local post = require("scripts.expansion.post")
 local modes = require("scripts.expansion.modes")
 local memory = require("scripts.expansion.memory")
 local gui = require("scripts.expansion.gui")
+local look = require("scripts.defects.look")
+local look_rules = require("scripts.defects.look-rules")
 
 -- Startup settings change only together with a configuration change. Not kept in storage: after a load
 -- they are read again from the synchronised settings, so every peer agrees.
@@ -65,6 +67,9 @@ local hooks = {track_machine = function(entity, old_id, keep)
 end}
 memory.hooks = hooks
 modes.on_tracked = hooks.track_machine
+-- Look of defective buildings: a twin uses the silhouette of its original and is drawn after a mode switch.
+look.base_name = modes.base_name
+modes.on_swapped = look.draw
 
 -- Paranoidal: every quality is available from the start (e.g. a quality module found in ruins).
 local function unlock_all_qualities(force)
@@ -98,6 +103,7 @@ local function configure_all()
     workshop.reset_cache()
     post.reset_cache()
     modes.reset_cache()
+    look.reset_cache()
     -- Registry of the abandoned per-tick machine prototype of this branch.
     storage.ic_defect_machines = nil
     for _, counters in pairs(storage.ic_stats or {}) do
@@ -114,10 +120,12 @@ local function configure_all()
         -- Before automation.rescan: older machines in a mode become twins, which the scheduler then finds.
         modes.rescan()
         automation.rescan()
+        look.redraw_all()
     else
         -- Without defects there are no production modes: every machine goes back to its original.
         modes.revert_all()
         automation.clear()
+        look.clear_all()
     end
 end
 
@@ -192,6 +200,9 @@ local building_filters = {
     {filter = "type", type = "furnace"}, {filter = "type", type = "container"},
     {filter = "type", type = "assembling-machine"},
 }
+-- The dispatcher merges the filters of one event: the look handlers below widen them, so these handlers
+-- check the type themselves.
+local building_types = {furnace = true, container = true, ["assembling-machine"] = true}
 
 automation.register(enabled, automation_context, events)
 
@@ -201,7 +212,7 @@ automation.register(enabled, automation_context, events)
 local function on_built(event)
     if not enabled() then return end
     local entity = event.entity
-    if not (entity and entity.valid) then return end
+    if not (entity and entity.valid and building_types[entity.type]) then return end
     local settings = memory.tags_of(event)
     -- A mode from tags or a replaced machine swaps the machine: continue with the replacement.
     if settings then entity = memory.import(entity, settings, hooks) else entity = memory.consume(entity, hooks) end
@@ -222,7 +233,7 @@ end
 events.on(defines.events.on_entity_cloned, function(event)
     if not enabled() then return end
     local source, destination = event.source, event.destination
-    if not (destination and destination.valid) then return end
+    if not (destination and destination.valid and building_types[destination.type]) then return end
     local settings = memory.export(source)
     if settings then destination = memory.import(destination, settings, hooks) end
     if not (destination and destination.valid) then return end
@@ -240,9 +251,34 @@ events.on(defines.events.script_raised_teleported, function(event)
     if enabled() then modes.wake(event.entity) end
 end, {{filter = "type", type = "assembling-machine"}, {filter = "type", type = "furnace"}})
 
+-- Look of defective buildings (scripts/defects/look.lua): after the expansion handlers, so that a machine
+-- replaced by its mode twin is drawn by the swap hook.
+local look_filters = {}
+for _, kind in ipairs(look_rules.types) do look_filters[#look_filters + 1] = {filter = "type", type = kind} end
+local function look_built(event)
+    if enabled() then look.draw(event.entity) end
+end
+for _, id in ipairs({defines.events.on_built_entity, defines.events.on_robot_built_entity,
+    defines.events.script_raised_built, defines.events.script_raised_revive}) do
+    events.on(id, look_built, look_filters)
+end
+events.on(defines.events.on_entity_cloned, function(event)
+    if enabled() then look.draw(event.destination) end
+end, look_filters)
+events.on(defines.events.on_player_rotated_entity, function(event)
+    if enabled() then look.draw(event.entity) end
+end)
+events.on(defines.events.on_player_flipped_entity, function(event)
+    if enabled() then look.draw(event.entity) end
+end)
+events.on(defines.events.on_runtime_mod_setting_changed, function(event)
+    if enabled() and look.is_setting(event.setting) then look.redraw_all() end
+end)
+
 events.on(defines.events.on_object_destroyed, function(event)
     local id = event.useful_id
     if event.type ~= defines.target_type.entity or not id or id == 0 then return end
+    look.forget(id)
     local kinds = {
         {"workshop", storage.ic_workshops, workshop},
         {"post", storage.ic_posts, post},
@@ -342,6 +378,7 @@ events.on(defines.events.on_tick, function(event)
     workshop.on_tick(workshop_context)
     post.on_tick(tick)
     modes.on_tick(tick)
+    look.on_tick()
     if cancel.has_pending() then
         cancel.process(tick, game.get_player, math.random, eligibility.finished(), eligibility.no_defect())
     end

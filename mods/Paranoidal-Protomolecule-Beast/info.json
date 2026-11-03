@@ -1,0 +1,19 @@
+{
+  "name": "Paranoidal-Protomolecule-Beast",
+  "version": "9.0.0",
+  "title": "Paranoidal-Protomolecule-Beast",
+  "author": "Klaudia",
+  "description": "An alien protomolecule lands on your far mining outpost, takes what it can without a fight and withdraws to a lair further out. There it takes apart what it carried off, researches and builds up, quietly joins its own track to your railway, then raids your base for more, on foot and by train.\n\nParanoidal fork of The Beast 2.1.0 by Klaudia for Factorio 2.0.",
+  "factorio_version": "2.0",
+  "dependencies": [
+    "base >= 2.0.0",
+    "? space-age",
+    "? reskins-library",
+    "? reskins-bobs",
+    "? reskins-angels",
+    "? reskins-compatibility",
+    "? paranoidal-lighting",
+    "? HeroTurretRedux",
+    "? zzzparanoidal"
+  ]
+}
