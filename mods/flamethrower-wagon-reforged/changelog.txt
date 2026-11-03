@@ -33,6 +33,7 @@ Date: 2026-10-27
   Compatibility:
     - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
     - Factorio 2.1: hide_connection_info moved from the fluid box to every pipe connection (FluidBox::hide_connection_info was removed, PipeConnectionDefinition::hide_connection_info added; without it 2.1 draws connection arrows and fluid icons on these entities).
+    - Factorio 2.1 runtime API: turret fuel is read and written through get_fluid/set_fluid/clear_fluid (LuaEntity::fluidbox was removed), taken from the wagon through extract_fluid (remove_fluid{} was renamed), the turret capacity through get_volume().
 ---------------------------------------------------------------------------------------------------
 Version: 2.1.0
 Date: 2026-06-23

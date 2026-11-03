@@ -74,7 +74,7 @@ local fuels, capacity
 local function load_prototypes()
     local md = prototypes.mod_data[MOD_DATA]
     fuels = md and md.data.fuels or {}
-    capacity = prototypes.entity[TURRET].fluidbox_prototypes[1].volume
+    capacity = prototypes.entity[TURRET].fluidbox_prototypes[1].get_volume() -- Factorio 2.1: volume became get_volume()
 end
 
 local function init_storage()
@@ -275,8 +275,8 @@ local function service(rec)
     if not rec.mi and wagon.speed ~= 0 then activate(rec) end -- moved without a state change
 
     if not capacity then load_prototypes() end
-    local box_a, box_b = a.fluidbox, b.fluidbox
-    local fa, fb = box_a[1], box_b[1]
+    -- Factorio 2.1: LuaEntity::fluidbox was removed; storage 1 of a turret is its fluid box (2 is the internal buffer)
+    local fa, fb = a.get_fluid(1), b.get_fluid(1)
     if fa and fb and capacity - fa.amount < MIN_TRANSFER and capacity - fb.amount < MIN_TRANSFER then
         return true
     end
@@ -293,13 +293,13 @@ local function service(rec)
     local want = need_a + need_b
     if want == 0 then return true end
 
-    local got = wagon.remove_fluid({ name = name, amount = min(want, src.amount) })
+    local got = wagon.extract_fluid({ name = name, amount = min(want, src.amount) }) -- Factorio 2.1: remove_fluid{} renamed
     if got <= 0 then return true end
     local give_a = got * need_a / want
     local give_b = got - give_a
     local temperature = src.temperature
-    if give_a > 0 then box_a[1] = mix(keep_a, name, give_a, temperature) end
-    if give_b > 0 then box_b[1] = mix(keep_b, name, give_b, temperature) end
+    if give_a > 0 then a.set_fluid(1, mix(keep_a, name, give_a, temperature)) end
+    if give_b > 0 then b.set_fluid(1, mix(keep_b, name, give_b, temperature)) end
     return true
 end
 
@@ -406,6 +406,12 @@ local function on_train_created(event)
     end
 end
 
+--- Factorio 2.1: LuaEntity::fluidbox was removed; copies the fluid box (storage 1) of one turret to another.
+local function copy_fluid(from, to)
+    local fluid = from.get_fluid(1)
+    if fluid then to.set_fluid(1, fluid) else to.clear_fluid(1) end
+end
+
 local function on_cloned(event)
     local dst = event.destination
     if not (dst and dst.valid) then return end
@@ -419,8 +425,8 @@ local function on_cloned(event)
     local src = event.source
     local old = src and src.valid and storage.units[src.unit_number]
     if old and old ~= rec and old.a.valid and old.b.valid then
-        rec.a.fluidbox[1] = old.a.fluidbox[1]
-        rec.b.fluidbox[1] = old.b.fluidbox[1]
+        copy_fluid(old.a, rec.a)
+        copy_fluid(old.b, rec.b)
         rec.a.health = old.a.health
         rec.b.health = old.b.health
     end
