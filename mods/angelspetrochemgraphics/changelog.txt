@@ -2,3 +2,4 @@
 Version: 2.0.1
   Compatibility:
     - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
+    - Factorio 2.1 removed __base__/graphics/entity/oil-refinery/oil-refinery-fire.png: a copy of the Factorio 2.0.77 file is kept in graphics/entity/oil-refinery-fire-2.0/ for the flames of the Angels buildings and of other mods of the build (same frames as in 2.0).
