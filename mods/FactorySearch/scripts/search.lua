@@ -375,7 +375,8 @@ function Search.process_found_entities(entities, state, surface_data, surface_st
             end
           elseif entity_type == "logistic-container" and target_is_item then
             ---@cast control_behavior LuaLogisticContainerControlBehavior
-            if control_behavior.circuit_exclusive_mode_of_operation == defines.control_behavior.logistic_container.exclusive_mode.send_contents then
+            -- Factorio 2.1: the exclusive mode was replaced by read_contents / set_requests (both can be on)
+            if control_behavior.read_contents then
               local signal_count = entity.get_item_count(target_item_filter)
               if signal_count > 0 then
                 SearchResults.add_entity(entity, surface_data.signals)
@@ -393,7 +394,9 @@ function Search.process_found_entities(entities, state, surface_data, surface_st
               end
             end
           elseif entity_type == "storage-tank" and target_is_fluid then
-            if control_behavior.read_contents then
+            -- Factorio 2.1: storage tanks have a single fluid box control behavior with an exclusive mode instead of read_contents
+            ---@cast control_behavior LuaSingleFluidBoxControlBehavior
+            if control_behavior.circuit_exclusive_mode_of_operation ~= defines.control_behavior.single_fluid_box.exclusive_mode.none then
               local signal_count = entity.get_fluid_count(target_name)
               if signal_count > 0 then
                 SearchResults.add_entity(entity, surface_data.signals)

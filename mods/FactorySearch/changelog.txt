@@ -5,6 +5,7 @@ Date: 8 June 2026
     - Fixed crash when searching on Gleba in 'Module' search mode
   Compatibility:
     - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
+    - Factorio 2.1 runtime API: signal search reads logistic chests through read_contents (the exclusive mode of operation was removed) and storage tanks through the exclusive mode of the single fluid box control behavior (storage tanks no longer have read_contents).
 ---------------------------------------------------------------------------------------------------
 Version: 1.14.2
 Date: 4 June 2026
