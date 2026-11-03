@@ -16,6 +16,7 @@ Date: 2026-07-23
   Compatibility:
     - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
     - Paranoidal port to Factorio 2.1: item fuel categories are read from fuel_categories (a list; LuaItemPrototype::fuel_category was removed).
+    - Factorio 2.1 runtime API: a recipe is craftable by the character when any of its categories (LuaRecipe::categories, category was removed) is a character crafting category.
 ---------------------------------------------------------------------------------------------------
 Version: 0.2.6
 Date: 2024-11-10

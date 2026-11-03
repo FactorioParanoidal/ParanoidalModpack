@@ -475,7 +475,16 @@ end
 function Character:can_craft_recipe(recipe)
     if not recipe.enabled then return end
 
-    if not self.entity.prototype.crafting_categories[recipe.category] then return end
+    -- Factorio 2.1: recipe category became categories (several per recipe); any of them the character has will do
+    local crafting_categories = self.entity.prototype.crafting_categories
+    local craftable = false
+    for _, category in pairs(recipe.categories) do
+        if crafting_categories[category] then
+            craftable = true
+            break
+        end
+    end
+    if not craftable then return end
 
     for k, ingredient in pairs(recipe.ingredients) do
         if ingredient.type == "fluid" then return end
