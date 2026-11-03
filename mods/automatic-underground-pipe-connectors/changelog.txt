@@ -33,6 +33,7 @@ Date: 2026-09-08
       on_configuration_changed create it
   Compatibility:
     - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
+    - Factorio 2.1 runtime API: neighbour fluid connections are read through fluids_count and get_fluid_box_pipe_connections (LuaEntity::fluidbox was removed).
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.14
 Date: 2026-09-05

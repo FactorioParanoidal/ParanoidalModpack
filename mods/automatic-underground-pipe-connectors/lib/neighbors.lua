@@ -37,9 +37,10 @@ end
 ---@param position MapPosition
 ---@return boolean place
 local function should_place_based_on_neighbor_fluidbox_prototypes(entity, position)
-    local fluidbox = entity.fluidbox
-    for i = 1, #fluidbox do
-        for _, pipe_connection in pairs( fluidbox.get_pipe_connections(i) ) do
+    -- Factorio 2.1: LuaEntity::fluidbox was removed; fluid storages are read on the entity
+    -- (storages without a fluid box, like a fluid turret's buffer, have no pipe connections)
+    for i = 1, entity.fluids_count do
+        for _, pipe_connection in pairs( entity.get_fluid_box_pipe_connections(i) or {} ) do
             -- floor operation rounds to nearest 0.5 to mimic pipe connection snapping behavior
             if position[1] == math.floor( ( pipe_connection.target_position.x + 0.25 ) * 2 ) / 2 and
                position[2] == math.floor( ( pipe_connection.target_position.y + 0.25 ) * 2 ) / 2 then
@@ -60,8 +61,7 @@ local function is_fluidbox_neighbor(candidate_entity, entity_type, pipe_position
     if entity_type == "pipe" or entity_type == "pipe-to-ground" or entity_type == "fluid-wagon" then
         return false
     end
-    local fluidbox = candidate_entity.fluidbox
-    return fluidbox ~= nil and #fluidbox > 0
+    return candidate_entity.fluids_count > 0
         and should_place_based_on_neighbor_fluidbox_prototypes(candidate_entity, pipe_position)
 end
 
