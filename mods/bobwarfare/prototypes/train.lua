@@ -53,8 +53,6 @@ data.raw["artillery-wagon"]["artillery-wagon"].resistances = {
 
 local wagon = util.table.deepcopy(data.raw["artillery-wagon"]["artillery-wagon"])
 wagon.name = "bob-artillery-wagon-2"
--- Factorio 2.1: the base artillery wagon has no max_speed any more (2.0: 1.5, which this copy inherited); kept as in 2.0.
-wagon.max_speed = wagon.max_speed or 1.5
 wagon.inventory_size = 2
 wagon.minable = { mining_time = 1, result = "bob-artillery-wagon-2" }
 wagon.max_health = 800
