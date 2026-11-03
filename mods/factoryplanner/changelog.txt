@@ -14,6 +14,7 @@ Date: 19. 04. 2026
     - Paranoidal port to Factorio 2.1: a missing pumping speed (get_pumping_speed may return nil in 2.1) no longer stops the generator.
     - Paranoidal port to Factorio 2.1: product chances are read from independent_probability and the shared_probability range (Product::probability was removed in 2.1).
     - Factorio 2.1: module and beacon effects scaled by quality are truncated to 0.01% like the 2.1 engine (2.0: whole percents), so the small 2.1 quality effects (+1% per quality module 1) keep their decimals; quality effects are shown with up to two decimals.
+    - Factorio 2.1: the default key of the confirm dialog hotkey is RETURN (2.1 removed the undocumented key name ENTER; the hotkey had no default key).
 
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.49
