@@ -22,6 +22,7 @@ Date: 04.06.2026
     - Paranoidal port to Factorio 2.1: OV substitutions compare independent_probability of results (was probability).
     - Factorio 2.1: hydro, salination and ore leaching plants use_mirroring = true instead of the removed forced_symmetry (flippable as in 2.0); thermal bore, thermal extractor and sea pump move base_picture into an always drawn working visualisation on the 2.0 layer (prototypes/buildings/base-picture-21.lua; the sea pump drill was invisible).
     - Factorio 2.1: removed the recipe fields always_show_products and show_amount_in_title (removed in 2.1, silently ignored).
+    - Factorio 2.1 graphics: the blank pipe pictures of the salination plants (salination-plant/blank.png, a transparent 1x1 image) are declared 1x1 instead of 128x128 - Factorio 2.1 refuses a sprite rectangle larger than its image at the graphical start (2.0 skipped fully transparent images), so the game did not start.
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.3
 Date: 01.06.2026

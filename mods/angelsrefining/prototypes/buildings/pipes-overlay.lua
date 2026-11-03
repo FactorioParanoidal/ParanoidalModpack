@@ -169,37 +169,38 @@ function angelsmods.refining.filtrationpipepictures2()
   }
 end
 
+-- Paranoidal port to Factorio 2.1: blank.png is a transparent 1x1 image; 2.1 refuses a sprite rectangle larger than its image at the graphical start, so the blank pipe pictures are 1x1 (they were 128x128).
 function angelsmods.refining.salinationplantpipepictures1()
   return {
     north = {
       filename = "__angelsrefininggraphics__/graphics/entity/salination-plant/blank.png",
       priority = "extra-high",
-      width = 128,
-      height = 128,
+      width = 1,
+      height = 1,
       scale = 0.5,
       shift = { 0, 0 },
     },
     east = {
       filename = "__angelsrefininggraphics__/graphics/entity/salination-plant/blank.png",
       priority = "extra-high",
-      width = 128,
-      height = 128,
+      width = 1,
+      height = 1,
       scale = 0.5,
       shift = { 0, 0 },
     },
     south = {
       filename = "__angelsrefininggraphics__/graphics/entity/salination-plant/blank.png",
       priority = "extra-high",
-      width = 128,
-      height = 128,
+      width = 1,
+      height = 1,
       scale = 0.5,
       shift = { 0, 0 },
     },
     west = {
       filename = "__angelsrefininggraphics__/graphics/entity/salination-plant/blank.png",
       priority = "extra-high",
-      width = 128,
-      height = 128,
+      width = 1,
+      height = 1,
       scale = 0.5,
       shift = { 0, 0 },
     },
@@ -211,8 +212,8 @@ function angelsmods.refining.salinationplantpipepictures2()
     north = {
       filename = "__angelsrefininggraphics__/graphics/entity/salination-plant/blank.png",
       priority = "extra-high",
-      width = 128,
-      height = 128,
+      width = 1,
+      height = 1,
       scale = 0.5,
       shift = { 0, 0 },
     },
@@ -227,16 +228,16 @@ function angelsmods.refining.salinationplantpipepictures2()
     south = {
       filename = "__angelsrefininggraphics__/graphics/entity/salination-plant/blank.png",
       priority = "extra-high",
-      width = 128,
-      height = 128,
+      width = 1,
+      height = 1,
       scale = 0.5,
       shift = { 0, 0 },
     },
     west = {
       filename = "__angelsrefininggraphics__/graphics/entity/salination-plant/blank.png",
       priority = "extra-high",
-      width = 128,
-      height = 128,
+      width = 1,
+      height = 1,
       scale = 0.5,
       shift = { 0, 0 },
     },
