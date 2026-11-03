@@ -63,13 +63,19 @@ for i, tier in ipairs(tiers) do
     -- Idle drain is 10x the former value (user decision).
     local drain = belt.speed * 32 * multiplier * 10
     local per_item = power / throughput
+    -- The engine takes energy_per_item at the moment an item passes, so without a
+    -- flow limit a loader pulls item-sized bursts from the network (1.2 MW ticks for a
+    -- 150 kW loader). Items are paid from a one-second buffer instead, and the network
+    -- refills it at a capped rate: full-belt use plus idle drain, with 10% headroom.
+    local flow_limit = (power + drain) * 1.1
+    local buffer = math.max(power, per_item * 2)
     -- The shell has no energy source, so the engine's electricity block is absent.
     -- Shown instead as tooltip fields; values are the native loader's real figures.
     local description = { "" }
     local fields = {
         { name = { "paranoidal-loader-tooltip.speed" },
           value = { "paranoidal-loader-tooltip.items-per-second", string.format("%.6g", throughput) } },
-        { name = { "paranoidal-loader-tooltip.max-consumption" }, value = power_text(power) },
+        { name = { "paranoidal-loader-tooltip.max-consumption" }, value = power_text(flow_limit) },
         { name = { "paranoidal-loader-tooltip.min-consumption" }, value = power_text(drain) },
     }
 
@@ -105,8 +111,8 @@ for i, tier in ipairs(tiers) do
     entity.energy_source = {
         type = "electric", usage_priority = "secondary-input",
         drain = string.format("%.12gkW", drain),
-        -- Agreed starting buffer formula, NOT a verified half-second reserve.
-        buffer_capacity = string.format("%.12gkJ", per_item * belt.speed * 0.16),
+        buffer_capacity = string.format("%.12gkJ", buffer),
+        input_flow_limit = string.format("%.12gkW", flow_limit),
     }
     data:extend({ entity })
 
