@@ -509,8 +509,8 @@ ov_functions.set_research_difficulty = function(technology, unit_time, unit_amou
       fluid = unit_time,
       type = "craft-fluid",
     },
-    ["mine-entity"] = {
-      entity = unit_time,
+    ["mine-entity"] = { -- Factorio 2.1: MineEntityTechnologyTrigger::entity became the list entities
+      entities = { unit_time },
       type = "mine-entity",
     },
     ["send-item-to-orbit"] = {
@@ -957,10 +957,12 @@ local function replace_technology_items(tech)
   elseif tech.research_trigger then
     local trigger = tech.research_trigger
     if trigger.type == "mine-entity" then
-      local old = trigger.entity
-      local new = substitution_table.recipe_items[old]
-      if new then
-        trigger.entity = new
+      -- Factorio 2.1: MineEntityTechnologyTrigger::entity became the list entities
+      for i, old in pairs(trigger.entities or {}) do
+        local new = substitution_table.recipe_items[old]
+        if new then
+          trigger.entities[i] = new
+        end
       end
     elseif trigger.type == "craft-item" then
       local old = trigger.item
