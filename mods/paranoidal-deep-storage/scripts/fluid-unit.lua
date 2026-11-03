@@ -37,16 +37,16 @@ local function attach_parts(unit_data)
 	shared.attach_combinator(unit_data, M.combinator_name, M.combinator_position(unit_data.entity.position))
 end
 
--- Half of the tank's own volume (get_capacity alone may report a whole connected segment).
+-- Half of the tank's own volume (the capacity alone may report a whole connected segment).
+-- Factorio 2.1: LuaEntity::fluidbox was removed; the fluid box is read on the entity, its volume through get_volume().
 function M.comfortable(entity)
-	local fluidbox = entity.fluidbox
-	local volume = fluidbox.get_prototype(1).volume
-	return 0.5 * math.min(volume, fluidbox.get_capacity(1))
+	local volume = entity.get_fluid_box_prototype(1).get_volume()
+	return 0.5 * math.min(volume, entity.get_fluid_capacity(1))
 end
 
 -- Amount and temperature of the locked fluid in the tank.
 function M.buffer(unit_data)
-	local fluid = unit_data.entity.fluidbox[1]
+	local fluid = unit_data.entity.get_fluid(1)
 	if fluid and fluid.name == unit_data.item then return fluid.amount, fluid.temperature end
 	return 0, nil
 end
@@ -91,7 +91,8 @@ function M.lock(unit_data, fluid, temperature)
 	unit_data.item = fluid
 	unit_data.temperature = temperature or prototypes.fluid[fluid].default_temperature
 	unit_data.previous_total = nil
-	unit_data.entity.fluidbox.set_filter(1, {name = fluid, force = true})
+	-- Factorio 2.1: the filter is set on the entity and is a fluid name (no force flag)
+	unit_data.entity.set_fluid_filter(1, fluid)
 	M.render_animation(unit_data)
 end
 
@@ -102,7 +103,7 @@ function M.reset(unit_data)
 	unit_data.temperature = nil
 	unit_data.count = 0
 	unit_data.previous_total = nil
-	unit_data.entity.fluidbox.set_filter(1, nil)
+	unit_data.entity.set_fluid_filter(1, nil)
 	M.render_animation(unit_data)
 	shared.clear_display_text(unit_data)
 	shared.clear_combinator(unit_data.combinator)
@@ -110,7 +111,7 @@ function M.reset(unit_data)
 end
 
 function M.detect_item(unit_data)
-	local fluid = unit_data.entity.fluidbox[1]
+	local fluid = unit_data.entity.get_fluid(1)
 	if not fluid then return false end
 	M.lock(unit_data, fluid.name, fluid.temperature)
 	return true
@@ -171,7 +172,7 @@ function M.update(unit_data, unit_number, force)
 	if amount > EPSILON then M.mix_temperature(unit_data, buffer_temperature) end
 
 	if amount > comfortable then
-		local removed = entity.remove_fluid {name = item, amount = amount - comfortable}
+		local removed = entity.extract_fluid {name = item, amount = amount - comfortable} -- Factorio 2.1: remove_fluid{} renamed
 		unit_data.count = unit_data.count + removed
 		amount = amount - removed
 	elseif amount < comfortable and unit_data.count > EPSILON then
@@ -196,7 +197,7 @@ function M.pre_mined(unit_data)
 	local amount, temperature = M.buffer(unit_data)
 	if amount <= 0 then return end
 	M.mix_temperature(unit_data, temperature)
-	unit_data.count = unit_data.count + unit_data.entity.remove_fluid {name = unit_data.item, amount = amount}
+	unit_data.count = unit_data.count + unit_data.entity.extract_fluid {name = unit_data.item, amount = amount}
 end
 
 -- Contents of a packed unit. Renamed fluids follow recorded migrations.

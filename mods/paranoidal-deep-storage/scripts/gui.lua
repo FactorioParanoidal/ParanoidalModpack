@@ -345,7 +345,7 @@ local function update_fluid_gui(player, gui)
 	local locked = item ~= nil and prototypes.fluid[item] ~= nil
 	local amount = locked and fluid_unit.buffer(unit_data) or 0
 	local total = locked and (unit_data.count + amount) or 0
-	local tank_empty = (entity.fluidbox[1] == nil)
+	local tank_empty = (entity.get_fluid(1) == nil) -- Factorio 2.1: LuaEntity::fluidbox was removed
 
 	content_flow.storage_flow.visible = locked
 	content_flow.temperature.visible = locked
@@ -413,7 +413,7 @@ local function reset_fluid(player, element)
 	if not (unit_data and unit_data.item and unit_data.count <= EPSILON) then return end
 	local amount = fluid_unit.buffer(unit_data)
 	if amount > EPSILON then return end
-	if amount > 0 then unit_data.entity.remove_fluid {name = unit_data.item, amount = amount} end
+	if amount > 0 then unit_data.entity.extract_fluid {name = unit_data.item, amount = amount} end -- Factorio 2.1: remove_fluid{} renamed
 	fluid_unit.reset(unit_data)
 end
 
@@ -494,7 +494,7 @@ function M.on_gui_elem_changed(event)
 	local player = game.get_player(event.player_index)
 	local fluid = element.elem_value
 	local unit_data, unit_number = get_fluid_unit(player, element)
-	if fluid and unit_data and not unit_data.item and unit_data.entity.fluidbox[1] == nil and prototypes.fluid[fluid] then
+	if fluid and unit_data and not unit_data.item and unit_data.entity.get_fluid(1) == nil and prototypes.fluid[fluid] then
 		fluid_unit.lock(unit_data, fluid)
 		fluid_unit.update(unit_data, unit_number, true)
 	end

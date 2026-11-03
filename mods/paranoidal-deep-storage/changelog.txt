@@ -16,3 +16,4 @@ Date: 2026-11-01
   Compatibility:
     - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
     - Factorio 2.1: hide_connection_info moved from the fluid box to every pipe connection (FluidBox::hide_connection_info was removed, PipeConnectionDefinition::hide_connection_info added; without it 2.1 draws connection arrows and fluid icons on these entities).
+    - Factorio 2.1 runtime API: the fluid memory unit reads and filters its tank on the entity (get_fluid, set_fluid_filter, get_fluid_capacity, get_fluid_box_prototype with get_volume) and moves fluid with extract_fluid (LuaEntity::fluidbox was removed, remove_fluid{} was renamed).
