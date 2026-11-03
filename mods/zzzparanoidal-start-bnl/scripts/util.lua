@@ -197,4 +197,27 @@ function M.enabled(name)
     return setting == nil or setting.value ~= false
 end
 
+-- Whole minutes (at least 1) the falling debris still comes down, nil when none is coming: before
+-- the landing the planned window (config.falling.last_tick), after it until the last planned impact
+-- (storage.bnl.falling.ends, scripts/falling.lua; maps planned before it have none).
+function M.falling_minutes()
+    if not M.enabled("bnl-start-falling-debris") then return nil end
+    local s = storage.bnl
+    local f = s and s.falling
+    local left
+    if f and f.ends then
+        left = f.ends - game.tick
+    elseif not (s and s.landing_tick) then
+        left = config.falling.last_tick
+    end
+    if not left or left <= 0 then return nil end
+    return math.max(1, math.ceil(left / 3600))
+end
+
+-- Farthest impact distance from the starliner, tiles.
+function M.falling_radius()
+    local d = config.falling.distance
+    return type(d) == "number" and d or d[2]
+end
+
 return M

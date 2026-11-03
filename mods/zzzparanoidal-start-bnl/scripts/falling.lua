@@ -246,7 +246,19 @@ function M.plan(surface)
     end
     -- a minute after its planned impact: if the recorder has not landed, it is put into the starliner
     scheduler.at(times[recorder] + 60 * 60, "falling-recorder-check", {surface = surface.index})
+    -- the last planned impact: the countdown of the objectives window (util.falling_minutes) and
+    -- the AUTO all-clear a few seconds after it
+    local ends = 0
+    for _, t in ipairs(times) do
+        if t > ends then ends = t end
+    end
+    storage.bnl.falling.ends = ends
+    scheduler.at(ends + cfg.all_clear_delay, "falling-over")
 end
+
+scheduler.handler("falling-over", function()
+    util.say({"bnl.falling-over"})
+end)
 
 scheduler.handler("falling-warn", function(job, tick)
     local surface = game.get_surface(job.surface)

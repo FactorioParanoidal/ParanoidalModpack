@@ -64,6 +64,15 @@ function M.show(player)
     local intro = frame.add({type = "label", caption = {"bnl.profession-intro"}})
     intro.style.single_line = false
     intro.style.maximal_width = 1100
+    -- the landing goes on: falling debris (scripts/falling.lua), shown while any is still coming
+    local minutes = util.falling_minutes()
+    if minutes then
+        local warning = frame.add({type = "label", caption = {"bnl.profession-falling", minutes, util.falling_radius()}})
+        warning.style.single_line = false
+        warning.style.maximal_width = 1100
+        warning.style.font = "default-bold"
+        warning.style.font_color = {1, 0.55, 0.25}
+    end
     local row = frame.add({type = "flow", direction = "horizontal"})
     row.style.horizontal_spacing = 8
     for _, key in ipairs(cfg.order) do card(row, key) end

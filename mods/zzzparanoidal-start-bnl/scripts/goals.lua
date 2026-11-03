@@ -73,6 +73,14 @@ end
 
 -- Lines: each returns stage, locale base (without the variant number), parameters; nil: not shown --
 
+-- Falling debris: the countdown until the last planned impact (the all-clear: scripts/falling.lua).
+local function falling_line()
+    if not (storage.bnl.falling and storage.bnl.falling.ends) then return nil end
+    local minutes = util.falling_minutes()
+    if not minutes then return nil end
+    return "falling", "goal-falling", {minutes}
+end
+
 local function fires_line()
     local n = fire.burning_count()
     if n <= 0 then return nil end
@@ -240,6 +248,7 @@ local function lines_now(s)
         end
         lines[#lines + 1] = caption
     end
+    add("falling", falling_line())
     add("fires", fires_line())
     add("recorder", recorder_line(s, force))
     add("antenna", antenna_line(s))
@@ -343,6 +352,7 @@ end
 -- Something can still change by itself.
 local function busy(s)
     if fire.active() or fire.burning_count() > 0 then return true end
+    if falling_line() then return true end
     if not s.retired then
         local tech = util.player_force().technologies[TECH]
         if storage.bnl.falling and not (tech and tech.researched) then return true end
@@ -416,6 +426,9 @@ function M.on_landing(professions_enabled)
     if not s then return end
     if not professions_enabled then
         for _, player in pairs(game.players) do M.brief(player) end
+        -- without the profession window its debris warning comes in the chat
+        local minutes = util.falling_minutes()
+        if minutes then util.say({"bnl.falling-ahead", minutes, util.falling_radius()}) end
     end
     M.refresh(true)
     M.wake()
