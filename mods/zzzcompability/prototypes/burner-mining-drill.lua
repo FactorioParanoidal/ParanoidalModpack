@@ -64,9 +64,10 @@ local function UnlockMiningWithFluidWithTech(techName)
 	assert(tech, "Given tech not found!")
 
 	tech.unit = nil
+	-- Factorio 2.1: MineEntityTechnologyTrigger::entity became the list entities
 	tech.research_trigger = {
 		type = "mine-entity",
-		entity = "coal",
+		entities = { "coal" },
 	}
 	table.insert(tech.effects, { type = "mining-with-fluid", modifier = true })
 end
