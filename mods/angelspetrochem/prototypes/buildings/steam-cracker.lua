@@ -100,7 +100,7 @@ data:extend({
       working_visualisations = {
         {
           animation = {
-            filename = "__base__/graphics/entity/oil-refinery/oil-refinery-fire.png",
+            filename = "__angelspetrochemgraphics__/graphics/entity/oil-refinery-fire-2.0/oil-refinery-fire.png",
             line_length = 10,
             width = 40,
             height = 81,
@@ -118,7 +118,7 @@ data:extend({
     -- {
     -- animation =
     -- {
-    -- filename = "__base__/graphics/entity/oil-refinery/oil-refinery-fire.png",
+    -- filename = "__angelspetrochemgraphics__/graphics/entity/oil-refinery-fire-2.0/oil-refinery-fire.png",
     -- frame_count = 29,
     -- width = 16,
     -- height = 35,
@@ -250,7 +250,7 @@ data:extend({
       working_visualisations = {
         {
           animation = {
-            filename = "__base__/graphics/entity/oil-refinery/oil-refinery-fire.png",
+            filename = "__angelspetrochemgraphics__/graphics/entity/oil-refinery-fire-2.0/oil-refinery-fire.png",
             line_length = 10,
             width = 40,
             height = 81,
@@ -384,7 +384,7 @@ data:extend({
       working_visualisations = {
         {
           animation = {
-            filename = "__base__/graphics/entity/oil-refinery/oil-refinery-fire.png",
+            filename = "__angelspetrochemgraphics__/graphics/entity/oil-refinery-fire-2.0/oil-refinery-fire.png",
             line_length = 10,
             width = 40,
             height = 81,
@@ -517,7 +517,7 @@ data:extend({
       working_visualisations = {
         {
           animation = {
-            filename = "__base__/graphics/entity/oil-refinery/oil-refinery-fire.png",
+            filename = "__angelspetrochemgraphics__/graphics/entity/oil-refinery-fire-2.0/oil-refinery-fire.png",
             line_length = 10,
             width = 40,
             height = 81,
