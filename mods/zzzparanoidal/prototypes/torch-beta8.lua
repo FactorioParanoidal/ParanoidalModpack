@@ -14,7 +14,7 @@ local shadow = table.deepcopy(body)
 shadow.filename = path .. "torch-shadow.png"
 shadow.draw_as_shadow = true
 local flame = {
-	filename = "__base__/graphics/entity/oil-refinery/oil-refinery-fire.png",
+	filename = "__angelspetrochemgraphics__/graphics/entity/oil-refinery-fire-2.0/oil-refinery-fire.png",
 	line_length = 10, width = 40, height = 81, frame_count = 60,
 	animation_speed = 0.1, draw_as_glow = true, shift = { -0.025, -1.1 },
 	-- Base 2.0 uses the double-resolution sheet (40x81 instead of 20x40).
