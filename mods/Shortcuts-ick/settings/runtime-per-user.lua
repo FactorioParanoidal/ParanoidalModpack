@@ -88,7 +88,8 @@ data:extend(
 	{
 		setting_type = "runtime-per-user",
 		name = "zoom-level",
-		localised_name = {"", "[color=orange]", {"controls.alt-zoom-out"}, ":[/color] ", {"description.module-bonus-limit"}},
+		-- Factorio 2.1 removed the engine key description.module-bonus-limit ("limit"); the word is in this mod's locale now.
+		localised_name = {"", "[color=orange]", {"controls.alt-zoom-out"}, ":[/color] ", {"Shortcuts-ick.zoom-limit"}},
 		order = "b[zoom]",
 		type = "double-setting",
 		default_value = 0.1,

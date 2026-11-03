@@ -9,6 +9,7 @@ Date: 15.11.2024
     - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
     - Paranoidal port to Factorio 2.1: selection modes with blueprint/deconstruct also list any-entity and any-tile, which 2.0 implied and 2.1 no longer does.
     - Factorio 2.1: the environment deconstruction planner no longer sets entity_filter_count (removed in 2.1, filter counts are dynamic).
+    - Paranoidal port to Factorio 2.1: the name of the zoom-level setting takes the word "limit" from this mod's locale (Shortcuts-ick.zoom-limit, with the 2.0 engine translations); 2.1 removed the engine key description.module-bonus-limit, so the setting name showed an unknown key.
 
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.6
