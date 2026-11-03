@@ -123,7 +123,7 @@ minime.show("preview_entity", preview_entity)
       if preview_entity and preview_entity.valid then
         -- We want active entities for their idle animation, which is only visible
         -- when the GUI is visible.
-        preview_entity.active = active
+        preview_entity.disabled_by_script = not active -- Factorio 2.1: LuaEntity::active is read-only
 
         element = minime.character_preview_prefix..char
 minime.show("element", element)
@@ -215,7 +215,7 @@ selector.toggle_character_page_entities = function(player, page, state)
                               chars[char].preview.entities[player.index]
 
     if preview and preview.valid then
-      preview.active = state
+      preview.disabled_by_script = not state
       minime.writeDebug("%sctivated preview %s.",
                         {preview.active and "A" or "Dea", minime.argprint(preview)})
     end
@@ -1323,7 +1323,7 @@ minime.show("p_data.show_character_list", p_data.show_character_list)
     end
 
     if entity then
-      entity.active = active
+      entity.disabled_by_script = not active
       minime.writeDebug("Turned preview %s %s.",
                         {minime.argprint(entity), active and "on" or "off"})
 -- TODO: Destroy camera for inactive previews!

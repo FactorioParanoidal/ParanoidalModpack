@@ -88,7 +88,7 @@ minime.show("chars[p]", chars[p])
           end
 
           if chars[p] and chars[p].valid and chars[p].active then
-            chars[p].active = false
+            chars[p].disabled_by_script = true -- Factorio 2.1: LuaEntity::active is read-only
             minime.writeDebug("Made %s inactive!", {minime.argprint(chars[p])})
           end
 

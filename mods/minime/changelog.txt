@@ -20,6 +20,7 @@ Date: 2026-03-03
     - Add dependency on "spearmaster Character" when it calls CharModHelper.check_my_prototypes() from data-final-fixes (last version checked: 0.1.0).
   Compatibility:
     - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
+    - Factorio 2.1 runtime API: inactive characters and the selector previews are switched through disabled_by_script (LuaEntity::active became read-only).
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.18
 Date: 2026-01-27
