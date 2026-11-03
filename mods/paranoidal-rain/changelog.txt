@@ -24,3 +24,5 @@ Date: 2026-11-02
     - A shared drop limit per tick (prain-max-drops-per-tick, 300): far zoom and many players thin the rain instead of slowing the game.
     - Only own settings and surface events rebuild the state; chunk counts are not recounted for every new surface.
     - The fire/acid damage handler is registered only while it rains.
+  Compatibility:
+    - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
