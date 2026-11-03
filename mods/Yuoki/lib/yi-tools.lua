@@ -966,20 +966,21 @@ function yi.lib.migration.global_replace_fluid(old_name, new_name)
 		})
 
 		for _, entity in ipairs(entities) do
-			-- Loop through all fluidboxes in the entity
-			for i = 1, #entity.fluidbox do
-				local box = entity.fluidbox[i]
+			-- Loop through all fluid storages in the entity
+			-- (Factorio 2.1: LuaEntity::fluidbox was removed, fluids are read and written on the entity)
+			for i = 1, entity.fluids_count do
+				local box = entity.get_fluid(i)
 				if box and box.name == old_name then
 					-- Store the amount and temperature
 					local amount = box.amount
 					local temp = box.temperature
 
 					-- Replace the fluid
-					entity.fluidbox[i] = {
+					entity.set_fluid(i, {
 						name = new_name,
 						amount = amount,
 						temperature = temp,
-					}
+					})
 				end
 			end
 		end
