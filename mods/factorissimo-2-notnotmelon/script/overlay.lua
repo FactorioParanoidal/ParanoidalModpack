@@ -13,7 +13,7 @@ local function build_display_upgrade(factory)
         force = factory.force,
         quality = factory.quality
     }
-    controller.minable = false
+    controller.minable_flag = false -- Factorio 2.1: LuaEntity::minable is read-only
     controller.destructible = false
     controller.rotatable = false
     factory.inside_overlay_controller = controller

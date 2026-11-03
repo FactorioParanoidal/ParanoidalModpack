@@ -110,10 +110,19 @@ end
 
 local function add_music(planet, factory_floor)
     for _, music in pairs(data.raw["ambient-sound"]) do
-        if music.planet == planet.name or (music.track_type == "hero-track" and music.name:find(planet.name)) then
+        -- Factorio 2.1: AmbientSound::planet became planets (an array); 2.0 used planet
+        local on_planet = music.planet == planet.name
+        for _, name in pairs(music.planets or {}) do
+            if name == planet.name then on_planet = true end
+        end
+        if on_planet or (music.track_type == "hero-track" and music.name:find(planet.name)) then
             local new_music = table.deepcopy(music)
             new_music.name = music.name .. "-" .. factory_floor.name
-            new_music.planet = factory_floor.name
+            if music.planets then
+                new_music.planets = {factory_floor.name}
+            else
+                new_music.planet = factory_floor.name
+            end
             if new_music.track_type == "hero-track" then
                 new_music.track_type = "main-track"
                 new_music.weight = 10

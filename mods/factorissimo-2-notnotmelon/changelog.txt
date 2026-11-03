@@ -28,6 +28,8 @@ Date: 2026-10-19
     - Paranoidal port to Factorio 2.1: defines.inventory.assembling_machine_*, furnace_* and rocket_silo_input/output/modules replaced by defines.inventory.crafter_input/output/modules/trash.
     - Paranoidal port to Factorio 2.1: recipes use categories (RecipePrototype::category and additional_categories were merged into categories; the first entry keeps the meaning of the former main category, a changed main category keeps the other entries).
     - Factorio 2.1: hide_connection_info moved from the fluid box to every pipe connection (FluidBox::hide_connection_info was removed, PipeConnectionDefinition::hide_connection_info added; without it 2.1 draws connection arrows and fluid icons on these entities). The utility constant max_fluid_flow is no longer raised (removed in 2.1; the flow limit is derived from the fluid box volume, 250 for the port pumps).
+    - Factorio 2.1 runtime API: fluid ports are linked through add_fluid_box_linked_connection (LuaEntity::fluidbox was removed); the other end of an underground belt is read through underground_belt_neighbour (LuaEntity::neighbours was removed); hidden heat connectors and radars use disabled_by_script and hidden entities minable_flag (LuaEntity::active and minable became read-only); the same for the Maraxsis and Space Exploration compatibility code.
+    - Factorio 2.1: the music of the factory floors is copied from ambient sounds by their planets array (AmbientSound::planet became planets); without it no music played inside factories.
 ---------------------------------------------------------------------------------------------------
 Version: 9.11.19
 Date: 2026-10-16

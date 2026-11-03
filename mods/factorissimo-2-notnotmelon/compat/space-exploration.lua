@@ -66,7 +66,7 @@ function EntitySwap.swap_structure(entity, prototype_name)
         entity.crafting_progress = 0
     end
     clone.operable = entity.operable
-    clone.active = entity.active
+    clone.disabled_by_script = not entity.active -- Factorio 2.1: LuaEntity::active is read-only (2.0 wrote disabled_by_script)
     clone.destructible = entity.destructible
     clone.rotatable = entity.rotatable
     local inventories = {}
@@ -89,12 +89,10 @@ function EntitySwap.swap_structure(entity, prototype_name)
             move_inventory_items(inv_a, inv_b)
         end
     end
-    if #entity.fluidbox > 0 then
-        local entity_fluidbox = entity.fluidbox
-        local clone_fluidbox = clone.fluidbox
-        for i = 1, math.min(#entity_fluidbox, #clone_fluidbox) do
-            clone_fluidbox[i] = entity_fluidbox[i]
-        end
+    -- Factorio 2.1: LuaEntity::fluidbox was removed, fluids are read and written on the entity
+    for i = 1, math.min(entity.fluids_count, clone.fluids_count) do
+        local fluid = entity.get_fluid(i)
+        if fluid then clone.set_fluid(i, fluid) else clone.clear_fluid(i) end
     end
     if crafting_progress then
         clone.crafting_progress = crafting_progress

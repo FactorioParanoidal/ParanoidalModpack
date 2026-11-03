@@ -13,7 +13,7 @@ Heat.connect = function(factory, cid, cpos, outside_entity, inside_entity)
         force = inside_entity.force
     }
     inside_link.destructible = false
-    inside_link.active = false
+    inside_link.disabled_by_script = true -- Factorio 2.1: LuaEntity::active is read-only
 
     local outside_link = outside_entity.surface.create_entity {
         name = "factory-heat-dummy-connector",
@@ -23,7 +23,7 @@ Heat.connect = function(factory, cid, cpos, outside_entity, inside_entity)
         force = outside_entity.force
     }
     outside_link.destructible = false
-    outside_link.active = false
+    outside_link.disabled_by_script = true
 
     return {
         outside = outside_entity,

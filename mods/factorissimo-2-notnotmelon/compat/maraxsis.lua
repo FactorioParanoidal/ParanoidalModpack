@@ -7,7 +7,7 @@ local function spawn_maraxsis_water_shader(surface, chunk_position)
         position = {x, y},
         create_build_effect_smoke = false
     }
-    fancy_water.active = false
+    fancy_water.disabled_by_script = true -- Factorio 2.1: LuaEntity::active is read-only
     fancy_water.destructible = false
     fancy_water.minable_flag = false
 end

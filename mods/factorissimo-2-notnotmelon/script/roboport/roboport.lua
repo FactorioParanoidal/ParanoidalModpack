@@ -332,7 +332,7 @@ factorissimo.build_roboport_upgrade = function(factory)
 
     for _, entity in pairs {roboport, storage, requester, ejector, hidden_roboport} do
         entity.destructible = false
-        entity.minable = false
+        entity.minable_flag = false -- Factorio 2.1: LuaEntity::minable is read-only
         entity.rotatable = false
     end
 
