@@ -27,7 +27,7 @@ data:extend({
 		ingredients = { { type = "item", name = "angels-ore4-crushed", amount = 7 } },
 		results = {
 			{ type = "item", name = "bob-glass", amount = 4 },
-			{ name = "angels-slag", type = "item", amount = 1 },
+			{ name = "angels-slag", type = "item", amount = 3 },
 		},
 	},
 	{
@@ -54,9 +54,11 @@ data:extend({
 			},
 		},
 		energy_required = 4,
-		ingredients = { { type = "item", name = "bob-quartz", amount = 4 } },
+		ingredients = { { type = "item", name = "bob-quartz", amount = 8 } },
+		main_product = "bob-glass",
 		results = {
-			{ type = "item", name = "bob-glass", amount = 3 },
+			{ type = "item", name = "bob-glass", amount = 7 },
+			{ type = "item", name = "angels-slag", amount = 1 },
 		},
 	}
 })

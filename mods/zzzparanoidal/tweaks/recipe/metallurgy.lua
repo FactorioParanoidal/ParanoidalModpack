@@ -15,17 +15,17 @@ paralib.bobmods.lib.recipe.hide("bob-nickel-plate")
 paralib.bobmods.lib.recipe.hide("bob-invar-alloy")
 paralib.bobmods.lib.recipe.hide("bob-brass-alloy")
 
---нерфим плавку дробленки в печах
+--нерфим плавку дробленки в печах: 7 -> 4 пластины + 3 шлака (руда не пропадает)
 --сапфирит
 paralib.bobmods.lib.recipe.set_energy_required("iron-plate", 20)
 paralib.bobmods.lib.recipe.set_ingredient("iron-plate", { type = "item", name = "angels-ore1-crushed", amount = 7})
 paralib.bobmods.lib.recipe.set_result("iron-plate", { type = "item", name = "iron-plate", amount = 4 })
-paralib.bobmods.lib.recipe.add_result("iron-plate", { type = "item", name = "angels-slag", amount = 1})
+paralib.bobmods.lib.recipe.add_result("iron-plate", { type = "item", name = "angels-slag", amount = 3})
 --стиратит
 paralib.bobmods.lib.recipe.set_energy_required("copper-plate", 20)
 paralib.bobmods.lib.recipe.set_ingredient("copper-plate", { type = "item", name = "angels-ore3-crushed", amount = 7})
 paralib.bobmods.lib.recipe.set_result("copper-plate", { type = "item", name = "copper-plate", amount = 4 })
-paralib.bobmods.lib.recipe.add_result("copper-plate", { type = "item", name = "angels-slag", amount = 1})
+paralib.bobmods.lib.recipe.add_result("copper-plate", { type = "item", name = "angels-slag", amount = 3})
 --рубит (переноємо в data-final-fixes.lua після OV.execute)
 -- paralib: bob-lead-plate → пряме присвоєння після OV.execute
 --бобмониум (переносимо в data-final-fixes.lua)

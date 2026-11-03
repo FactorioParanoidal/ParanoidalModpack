@@ -1,12 +1,17 @@
 -- Beta 8 normal: Angels_RBOS раскрывал чисторудную плавку, отдельную от дроблёной руды.
 -- Нынешние iron-plate/copper-plate уже заняты дроблёной цепью: используем существующие аналоги.
 -- ПР-027: вместо служебной angels-void используем нынешние названия плит; иконки и печи не меняем.
+-- Баланс: 8 руды -> 7 пластин + 1 шлак, между дроблёной плавкой и расплавом; руда не пропадает.
 for _, definition in ipairs({ { "iron", "l[angels-plate-iron]-b" }, { "copper", "j[angels-plate-copper]-b" } }) do
 	local metal = definition[1]
 	local recipe = data.raw.recipe["angels-" .. metal .. "-ore-smelting"]
 	if recipe then
-		recipe.ingredients = { { type = "item", name = metal .. "-ore", amount = 7 } }
-		recipe.results = { { type = "item", name = metal .. "-plate", amount = 4 } }
+		recipe.ingredients = { { type = "item", name = metal .. "-ore", amount = 8 } }
+		recipe.results = {
+			{ type = "item", name = metal .. "-plate", amount = 7 },
+			{ type = "item", name = "angels-slag", amount = 1 },
+		}
+		recipe.main_product = metal .. "-plate"
 		recipe.energy_required = 10.5
 		recipe.enabled = false
 		recipe.hidden = false

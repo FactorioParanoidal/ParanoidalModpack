@@ -127,7 +127,7 @@ local function patch_crushed_smelting(recipe_name, crushed_name, plate_name)
     r.ingredients = { { type = "item", name = crushed_name, amount = 7 } }
     r.results = {
         { type = "item", name = plate_name, amount = 4 },
-        { type = "item", name = "angels-slag", amount = 1 },
+        { type = "item", name = "angels-slag", amount = 3 },
     }
     r.main_product = plate_name
     r.localised_name = { "item-name." .. plate_name }
