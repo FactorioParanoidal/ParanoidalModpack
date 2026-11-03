@@ -47,7 +47,7 @@ local function place_lamp(pole)
   local lamp = pole.surface.create_entity({name = name, position = pole.position, force = pole.force})
   if lamp then
     lamp.destructible = false
-    lamp.minable = false
+    lamp.minable_flag = false -- Factorio 2.1: LuaEntity::minable is read-only
     storage.lamps[registration] = lamp
   end
 end
