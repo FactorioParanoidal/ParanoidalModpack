@@ -67,6 +67,16 @@ local function box_indices(entity)
   return list
 end
 
+-- The 2.0 capacity read: LuaFluidBox::get_capacity(k) was the capacity of the box's fluid segment (a pipe of a
+-- 20-pipe line: 2000), while LuaFluidBox[k] was the box's own share. 2.1 split the capacity into
+-- get_fluid_capacity (the storage itself: 100) and get_fluid_segment_capacity (2000; probe
+-- test-runs/_port21-probe-src/segment, both engines). The segment capacity keeps the 2.0 fill fractions, the
+-- volatile threshold and the tank check; a fluid box without a segment (a machine's box) has its own capacity.
+local function capacity_of(entity, k)
+  if entity.has_fluid_segment(k) then return entity.get_fluid_segment_capacity(k) end
+  return entity.get_fluid_capacity(k)
+end
+
 function M.measure(entity)
   local indices = box_indices(entity)
   if #indices == 0 then return nil end
@@ -88,7 +98,7 @@ function M.measure(entity)
           amount = amount + a
           if e > best_energy then best, best_energy, best_index, best_amount = name, e, k, a end
           if mult and not volatile then
-            local capacity = entity.get_fluid_capacity(k)
+            local capacity = capacity_of(entity, k)
             volatile = capacity > 0 and a / capacity > C.VOLATILE_MIN_FRACTION
           end
         end
@@ -100,7 +110,7 @@ function M.measure(entity)
 
   local fraction = 0
   if best then
-    local capacity = entity.get_fluid_capacity(best_index)
+    local capacity = capacity_of(entity, best_index)
     if capacity > 0 then fraction = math.min(1, best_amount / capacity) end
   end
   return {
@@ -114,11 +124,11 @@ function M.measure(entity)
   }
 end
 
----Capacity of the first fluid box (0 without fluid boxes).
+---Capacity of the first fluid box as 2.0 read it (its segment's capacity; 0 without fluid boxes).
 function M.capacity(entity)
   local indices = box_indices(entity)
   if #indices == 0 then return 0 end
-  return entity.get_fluid_capacity(indices[1])
+  return capacity_of(entity, indices[1])
 end
 
 ---Does a recipe (LuaRecipe or LuaRecipePrototype) handle flammable / toxic fluids?

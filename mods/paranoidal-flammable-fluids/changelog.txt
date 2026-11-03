@@ -25,6 +25,7 @@ Date: 2026-11-01
     - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
     - Factorio 2.1: flammable and toxic contents are read with LuaEntity::get_fluid/get_fluid_capacity of the fluid box storages (LuaEntity::fluidbox was removed; the death of any entity with fluid boxes raised an error in on_entity_died).
     - Factorio 2.1 runtime API: fire runs on through pipes again: connected entities are read through fluidbox_neighbours (LuaEntity::neighbours was removed, the guarded read found nothing); fire safety turrets take water through extract_fluid (remove_fluid{} was renamed); the demo picks recipes by any of their categories.
+    - Factorio 2.1: the fill fraction of a fluid box (volatile gases, flame bursts, the tank check) divides by the capacity of its fluid segment again, as 2.0 did with LuaFluidBox::get_capacity (2.1: get_fluid_segment_capacity; a box without a segment keeps its own capacity). The first 2.1 conversion divided by the box's own capacity, so a pipe in a long line of a volatile gas counted as full and exploded on any death.
 ---------------------------------------------------------------------------------------------------
 Version: 0.2.22
 Date: 2025-04-26
