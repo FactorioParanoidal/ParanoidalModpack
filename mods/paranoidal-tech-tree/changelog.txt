@@ -9,3 +9,4 @@ Version: 0.2.2
     - Removed the per-player setting "Open this tree instead of the native research window" (ptt-replace-native). It never worked in 2.0: the handler compared the opened GUI with defines.gui_type.research, which does not exist, so the native window was never replaced. The tree still opens with its toolbar button and Ctrl+T.
   Compatibility:
     - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
+    - Factorio 2.1: the unlock condition of a mine-entity trigger technology (oil processing) names its entities again - the 2.1 trigger has a list entities instead of entity, so the text showed no entity.

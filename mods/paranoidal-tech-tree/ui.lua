@@ -107,7 +107,16 @@ local function trigger_text(name)
   if not kind then return nil end
   if kind == "craft-item" then return {"ptt.trigger-craft-item", tr.count or 1, thing("item", tr.item)} end
   if kind == "craft-fluid" then return {"ptt.trigger-craft-fluid", tr.amount or 1, thing("fluid", tr.fluid)} end
-  if kind == "mine-entity" or kind == "build-entity" then return {"ptt.trigger-"..kind, thing("entity", tr.entity)} end
+  if kind == "mine-entity" then
+    -- Factorio 2.1: the mine-entity trigger names a list of entities (ResearchTrigger entities; 2.0: entity)
+    local list, text = tr.entities or {tr.entity}, {""}
+    for i = 1, math.min(#list, 5) do
+      if i > 1 then text[#text + 1] = ", " end
+      text[#text + 1] = thing("entity", list[i])
+    end
+    return {"ptt.trigger-mine-entity", text}
+  end
+  if kind == "build-entity" then return {"ptt.trigger-build-entity", thing("entity", tr.entity)} end
   if kind == "send-item-to-orbit" then return {"ptt.trigger-send-item-to-orbit", thing("item", tr.item)} end
   if kind == "scripted" and tr.trigger_description then return tr.trigger_description end
   return {"ptt.trigger-"..kind}
