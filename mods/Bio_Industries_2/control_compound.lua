@@ -135,7 +135,7 @@ local function create_hidden(base, key, hidden)
     if not entity then
         return
     end
-    entity.minable = false
+    entity.minable_flag = false -- Factorio 2.1: LuaEntity::minable is read-only
     entity.destructible = false
     attach(base, key, entity)
     -- Other mods learn about the new entity as before (base_entity is extra data).

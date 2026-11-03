@@ -98,7 +98,7 @@ local function consume_ingredients(arboretum, inventory, need, quality)
         inventory.remove({ name = item, count = amount, quality = quality })
     end
     for fluid, amount in pairs(need.fluids) do
-        arboretum.remove_fluid({ name = fluid, amount = amount })
+        arboretum.extract_fluid({ name = fluid, amount = amount }) -- Factorio 2.1: remove_fluid{} renamed
     end
 end
 

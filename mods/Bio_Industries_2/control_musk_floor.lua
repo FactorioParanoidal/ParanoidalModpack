@@ -75,7 +75,7 @@ local function place(surface, x, y, force)
         if not have[name] then
             local created = surface.create_entity({ name = name, position = position, force = force })
             if created then
-                created.minable = false
+                created.minable_flag = false -- Factorio 2.1: LuaEntity::minable is read-only
                 created.destructible = false
             end
         end

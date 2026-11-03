@@ -36,6 +36,9 @@ if not data.raw.fluid["nitrogen"] and not data.raw.fluid["kr-nitrogen"] then
         {
             type = "fluid",
             name = "nitrogen",
+            -- Factorio 2.1: created in data.lua now, before the base game makes barrels; 2.0 made it in
+            -- data-updates, after them, so it had no barrel. Kept so.
+            auto_barrel = false,
             icon = ICONPATH .. "nitrogen.png",
             icon_size = 64,
             icons = {
@@ -64,6 +67,7 @@ if not data.raw.fluid["nitrogen"] and not data.raw.fluid["kr-nitrogen"] then
             {
                 type = "fluid",
                 name = "liquid-air",
+                auto_barrel = false, -- no barrel, as in 2.0 (see nitrogen above)
                 icon = ICONPATH .. "liquid-air.png",
                 icon_size = 64,
                 icons = {

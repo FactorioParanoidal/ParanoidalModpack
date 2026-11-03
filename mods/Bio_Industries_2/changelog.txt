@@ -61,6 +61,8 @@ Date: 24.02.2026
     - Paranoidal port to Factorio 2.1: the bundled copy of Bob's library (thxbob.lib) got the same category and result changes as boblibrary (set_main_category, get_category, independent_probability).
     - Paranoidal port to Factorio 2.1: product probability renamed to independent_probability (recipe results, minable results, generated products).
     - Paranoidal port to Factorio 2.1: items use fuel_categories (ItemPrototype::fuel_category was removed).
+    - Factorio 2.1 runtime API: the arboretum takes its fluid through extract_fluid (remove_fluid{} was renamed); hidden entities of the compound buildings, musk floor and farm connectors are made unminable through minable_flag (LuaEntity::minable became read-only).
+    - Factorio 2.1: nitrogen and liquid air are made in data.lua now, before the base game makes barrels; auto_barrel = false keeps them without barrels, as in 2.0.
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.33
 Date: 24.02.2026

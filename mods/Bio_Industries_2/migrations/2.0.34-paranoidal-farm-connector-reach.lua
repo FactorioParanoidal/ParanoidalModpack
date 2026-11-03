@@ -19,7 +19,7 @@ for _, entry in pairs(storage.bi_bio_farm_table or {}) do
       force = base.force,
     })
     if pole then
-      pole.minable = false
+      pole.minable_flag = false -- Factorio 2.1: LuaEntity::minable is read-only
       pole.destructible = false
       recreated = recreated + 1
     end
