@@ -440,7 +440,7 @@ require("tweaks.custom.graphics-atlas")
 -- Собственные изображения поверх оригинальных пакетов Reskins; после сравнения путей атласа.
 require("tweaks.custom.reskins-overrides")
 require("tweaks.technology.inserter-capacity-cost") -- цена бонуса грузоподъёмности II–IV
--- Рецепты не показываются в окне выбора сигнала (настройка paranoidal-show-recipe-signals); после всех созданий рецептов.
+-- Рецепты не показываются в окне выбора сигнала (настройка paranoidal-recipe-signals-visible); после всех созданий рецептов.
 require("tweaks.custom.recipe-signals-hidden")
 -- Этот require ВСЕГДА ПОСЛЕДНИЙ: не переносить и не добавлять код ниже.
 -- Все новые правки размещать выше: здесь фиксируются иконка и последнее место эффекта эволюции.
