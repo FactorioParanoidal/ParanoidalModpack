@@ -18,6 +18,7 @@ Date: 2026.10.27
     - Paranoidal port to Factorio 2.1: faction biter egg recipe category built from categories[1] of the base egg recipe.
     - Paranoidal port to Factorio 2.1: loot entries use the 2.1 format (type, name, amount_min, amount_max, independent_probability instead of item, count_min, count_max, probability).
     - Factorio 2.1 runs a module required under two relative names once (2.0 ran FireUtils twice, the second time after bobenemies changed fire-flame): the safe fires get the fire-flame lifetime and damage multiplier in data-updates again, as in 2.0 (300 and 20 with bobenemies).
+    - Factorio 2.1 (Paranoidal decision G24): the safe tree fire (safe-fire-flame-on-tree-rampant) gets the tree_dying_factor of fire-flame-on-tree in data-updates, as the second run of FireUtils gave it in 2.0 (0.98 with Noxys Trees).
 ---------------------------------------------------------------------------------------------------
 Version: 9.02.14
 Date: 2026.10.13

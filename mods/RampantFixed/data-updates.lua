@@ -13,6 +13,13 @@ do
             fire.maximum_damage_multiplier = flame.maximum_damage_multiplier
         end
     end
+    -- The tree fire of the safe fires came from that second run too: a copy of fire-flame-on-tree after Noxys Trees
+    -- data-updates (tree_dying_factor 0.98 in the 2.0 build; the first run copies the vanilla 0.8). Paranoidal decision G24.
+    local tree_flame = data.raw.fire["fire-flame-on-tree"]
+    local safe_tree = data.raw.fire["safe-fire-flame-on-tree-rampant"]
+    if tree_flame and safe_tree then
+        safe_tree.tree_dying_factor = tree_flame.tree_dying_factor
+    end
 end
 
 for _, robot in pairs(data.raw["logistic-robot"]) do
