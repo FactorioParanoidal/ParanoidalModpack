@@ -341,7 +341,8 @@ function M.give_water(player, key)
         if entry[1] == kit[1] then count = count + entry[2] end
     end
     give(player, {{kit[1], count}})
-    if player.get_quick_bar_slot(1) == nil then player.set_quick_bar_slot(1, kit[1]) end
+    -- Factorio 2.1: quick bar slots are addressed by page and slot (2.0 slot 1 = page 1, slot 1)
+    if player.get_quick_bar_slot(1, 1) == nil then player.set_quick_bar_slot(1, 1, kit[1]) end
 end
 
 function M.choose(player, key)

@@ -115,6 +115,8 @@ Date: 2026-10-26
     - Paranoidal port to Factorio 2.1: scrap recycling has the categories recycling and hand-crafting (recycling-or-hand-crafting was removed in 2.1); characters get hand-crafting instead of the removed category.
     - Paranoidal port to Factorio 2.1: product probability renamed to independent_probability (recipe results, minable results, generated products).
     - Paranoidal port to Factorio 2.1: items use fuel_categories (ItemPrototype::fuel_category was removed).
+    - Factorio 2.1 runtime API: the water kit goes to quick bar page 1, slot 1 through the 2.1 page/slot signature of get_quick_bar_slot and set_quick_bar_slot.
+    - Factorio 2.1 graphics: the refinery torch over burning wrecks uses the 2.0 refinery fire kept in angelspetrochemgraphics, without that mod the 2.1 refinery flame light (the base file was removed in 2.1).
 
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.0

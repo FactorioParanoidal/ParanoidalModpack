@@ -127,11 +127,13 @@ data:extend(pieces)
 
 -- Torches over burning wrecks with fuel inside (scripts/fire.lua draws them): the flame of the oil
 -- refinery stacks (also the flame of the Angels flare stack) and the vanilla fire flame.
-data:extend({
-    {
-        type = "animation",
-        name = "bnl-torch-refinery",
-        filename = "__base__/graphics/entity/oil-refinery/oil-refinery-fire.png",
+-- Factorio 2.1 removed __base__/graphics/entity/oil-refinery/oil-refinery-fire.png: the 2.0 sheet is kept as a copy in
+-- angelspetrochemgraphics (same frames, so bnl-config refinery_tiles stays right); without that mod the 2.1 refinery
+-- flame light is used instead (other frames and height).
+local refinery_fire
+if mods["angelspetrochemgraphics"] then
+    refinery_fire = {
+        filename = "__angelspetrochemgraphics__/graphics/entity/oil-refinery-fire-2.0/oil-refinery-fire.png",
         line_length = 10,
         width = 40,
         height = 81,
@@ -139,7 +141,16 @@ data:extend({
         animation_speed = 0.75,
         scale = 0.5,
         draw_as_glow = true,
-    },
+    }
+else
+    refinery_fire = util.sprite_load("__base__/graphics/entity/oil-refinery/oil-refinery-fire-light",
+        {scale = 0.5, frame_count = 20, animation_speed = 0.75, draw_as_glow = true, blend_mode = "additive"})
+end
+refinery_fire.type = "animation"
+refinery_fire.name = "bnl-torch-refinery"
+
+data:extend({
+    refinery_fire,
     {
         type = "animation",
         name = "bnl-torch-blaze",
