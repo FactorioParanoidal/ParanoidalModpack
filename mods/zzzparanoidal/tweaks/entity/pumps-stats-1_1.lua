@@ -1,11 +1,14 @@
 -- Значения Beta 8: zzzparanoidal/prototypes/offshore-pump и angelsrefining/prototypes/buildings/seafloor-pump.lua (1.1).
+-- Исключение (решение пользователя 2026-11-03): offshore-mk0-pump качает 200/с вместо 300/с,
+-- offshore-pump качает 10/тик (600/с) вместо 20 (1200/с),
+-- offshore-mk2-pump — 20/тик (1200/с) вместо 40, offshore-mk3-pump — 40/тик (2400/с) вместо 60.
 local pumps = data.raw["offshore-pump"]
 
 local offshore = {
-	{ name = "offshore-mk0-pump", speed = 5, energy = "900kW", pollution = 9, mining_time = 1 },
-	{ name = "offshore-pump", speed = 20, energy = "1200kW", pollution = 1, mining_time = 0.1 },
-	{ name = "offshore-mk2-pump", speed = 40, energy = "2000kW", pollution = 1, mining_time = 1 },
-	{ name = "offshore-mk3-pump", speed = 60, energy = "2800kW", pollution = 1, mining_time = 1 },
+	{ name = "offshore-mk0-pump", speed = 200 / 60, energy = "900kW", pollution = 9, mining_time = 1 },
+	{ name = "offshore-pump", speed = 10, energy = "1200kW", pollution = 1, mining_time = 0.1 },
+	{ name = "offshore-mk2-pump", speed = 20, energy = "2000kW", pollution = 1, mining_time = 1 },
+	{ name = "offshore-mk3-pump", speed = 40, energy = "2800kW", pollution = 1, mining_time = 1 },
 	{ name = "offshore-mk4-pump", speed = 80, energy = "3700kW", pollution = 1, mining_time = 1 },
 }
 
