@@ -70,9 +70,11 @@ local function description(mode)
     return factoriopedia, { "", { "entity-description." .. mode .. "-valve" }, " ", { "valves.more-in-factoriopedia" } }
 end
 
+-- Factorio 2.1 removed the undocumented key names "PAD -" / "PAD +"; the documented names of the same keys are
+-- "KP_MINUS" / "KP_PLUS".
 local prototypes = {
-    { type = "custom-input", name = "valves-threshold-minus", key_sequence = "PAD -", consuming = "none" },
-    { type = "custom-input", name = "valves-threshold-plus", key_sequence = "PAD +", consuming = "none" },
+    { type = "custom-input", name = "valves-threshold-minus", key_sequence = "KP_MINUS", consuming = "none" },
+    { type = "custom-input", name = "valves-threshold-plus", key_sequence = "KP_PLUS", consuming = "none" },
 }
 
 for _, valve in ipairs(require("config")) do
