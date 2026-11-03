@@ -91,5 +91,14 @@ data:extend(
 			minimum_value = 1,
 			maximum_value = 1000
 		},
+		-- Look of defective buildings (variant chosen 2026-11-04): where the darkening is drawn, kept for the visual check.
+		{
+			type = "string-setting",
+			name = "ic-more-qualities-defects-look-layer",
+			order = "h-d",
+			setting_type = "runtime-global",
+			default_value = "object",
+			allowed_values = { "object", "above" }
+		},
 	}
 )

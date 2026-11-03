@@ -377,6 +377,8 @@ local function swap(entity, target, from_mode, to_mode)
     for _, player in ipairs(viewers) do
         if player.valid and player.connected then player.opened = new end
     end
+    -- control.lua: the look of a defective building (the replacement raises no built event).
+    if M.on_swapped then M.on_swapped(new) end
     return new, old_id, not weaker
 end
 
