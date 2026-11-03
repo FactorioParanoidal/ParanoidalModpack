@@ -6,17 +6,19 @@
 -- script-only: if this is the first *custom* input to get this key sequence then no other *custom* inputs listening for this sequence are fired.
 ----Normal game inputs will still be fired even if they match this sequence.
 -- game-only: The opposite of script-only: blocks game inputs using the same key sequence but lets other custom inputs using the same key sequence fire.
+-- Factorio 2.1 removed the undocumented key names 'PAD +' / 'PAD -'; the documented names of the same keys are
+-- 'KP_PLUS' / 'KP_MINUS'.
 data:extend {
     {
         type = 'custom-input',
         name = 'adjustment-pad-increase',
-        key_sequence = 'PAD +',
+        key_sequence = 'KP_PLUS',
         linked_game_control = 'larger-terrain-building-area'
     },
     {
         type = 'custom-input',
         name = 'adjustment-pad-decrease',
-        key_sequence = 'PAD -',
+        key_sequence = 'KP_MINUS',
         linked_game_control = 'smaller-terrain-building-area'
     }
 }
