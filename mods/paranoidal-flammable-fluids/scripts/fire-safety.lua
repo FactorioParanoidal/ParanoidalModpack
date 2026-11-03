@@ -471,7 +471,7 @@ local function service(id, rec, tier, s, c)
     end
   end
   if #targets == 0 then
-    turret.remove_fluid({ name = "water", amount = tier.idle })
+    turret.extract_fluid({ name = "water", amount = tier.idle }) -- Factorio 2.1: remove_fluid{} renamed
     if near then
       wake(s, id, rec)
       rec.queue = {}
@@ -481,7 +481,7 @@ local function service(id, rec, tier, s, c)
     return
   end
   wake(s, id, rec)
-  local used = turret.remove_fluid({ name = "water", amount = tier.combat })
+  local used = turret.extract_fluid({ name = "water", amount = tier.combat })
   rec.queue = plan(turret, tier, targets, used / tier.combat)
   if #rec.queue > 0 then set_moving(s, id, rec) end
 end

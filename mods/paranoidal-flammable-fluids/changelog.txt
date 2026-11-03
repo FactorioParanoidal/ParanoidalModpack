@@ -24,6 +24,7 @@ Date: 2026-11-01
   Compatibility:
     - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
     - Factorio 2.1: flammable and toxic contents are read with LuaEntity::get_fluid/get_fluid_capacity of the fluid box storages (LuaEntity::fluidbox was removed; the death of any entity with fluid boxes raised an error in on_entity_died).
+    - Factorio 2.1 runtime API: fire runs on through pipes again: connected entities are read through fluidbox_neighbours (LuaEntity::neighbours was removed, the guarded read found nothing); fire safety turrets take water through extract_fluid (remove_fluid{} was renamed); the demo picks recipes by any of their categories.
 ---------------------------------------------------------------------------------------------------
 Version: 0.2.22
 Date: 2025-04-26

@@ -54,12 +54,20 @@ local function stock(entity, items)
   end
 end
 
+-- Factorio 2.1: LuaRecipePrototype::category was removed; a recipe has several categories.
+local function any_category(categories, recipe)
+  for _, category in pairs(recipe.categories) do
+    if categories[category] then return true end
+  end
+  return false
+end
+
 -- First chemistry recipe (by name) of the machine whose fluids are toxic / flammable.
 local function find_recipe(machine, want_toxic)
   local categories = machine.prototype.crafting_categories or {}
   local names = {}
   for name, recipe in pairs(prototypes.recipe) do
-    if categories[recipe.category] then
+    if any_category(categories, recipe) then
       local flam, tox = FO.fluids.recipe_hazards(recipe)
       if (want_toxic and tox) or (not want_toxic and flam and not tox) then names[#names + 1] = name end
     end

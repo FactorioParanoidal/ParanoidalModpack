@@ -73,7 +73,8 @@ end
 ---Entities connected through pipes (pipe-connectable entities only).
 function M.fluid_neighbours(entity)
   local out = {}
-  local ok, neighbours = pcall(function() return entity.neighbours end)
+  -- Factorio 2.1: LuaEntity::neighbours was removed; fluidbox_neighbours has the same shape (per fluid box a list)
+  local ok, neighbours = pcall(function() return entity.fluidbox_neighbours end)
   if ok and type(neighbours) == "table" then
     for _, list in pairs(neighbours) do
       if type(list) == "table" then
