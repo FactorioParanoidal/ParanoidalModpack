@@ -189,7 +189,8 @@ wagon.collision_box = {{-0.6, -1.5}, {0.6, 1.1}}
 wagon.selection_box = {{-0.7, -1.6}, {1, 1.2}}
 wagon.vertical_selection_shift = -0.5
 wagon.weight = 500
-wagon.max_speed = 0.5
+-- Factorio 2.1 (Paranoidal decision G22): no max_speed on wagons (2.0: 0.5, which capped the train at the minimum).
+wagon.max_speed = nil
 wagon.braking_force = 2
 wagon.friction_force = 0.0015
 wagon.air_resistance = 0.002
