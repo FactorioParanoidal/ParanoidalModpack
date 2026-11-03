@@ -30,6 +30,7 @@ Date: 09 May 2025
   Compatibility:
     - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
     - Factorio 2.1: hide_connection_info moved from the fluid box to every pipe connection (FluidBox::hide_connection_info was removed, PipeConnectionDefinition::hide_connection_info added; without it 2.1 draws connection arrows and fluid icons on these entities).
+    - Factorio 2.1 runtime API: the indicator capacity is read through get_fluid_capacity (LuaEntity::fluidbox was removed); the type picker is anchored to the pipe GUI, which storage tanks open in 2.1 (relative_gui_type.storage_tank_gui was removed).
 ---------------------------------------------------------------------------------------------------
 Version: 0.9.8
 Date: 03 April 2025

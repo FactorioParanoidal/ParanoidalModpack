@@ -212,7 +212,7 @@ local function fli_update()
       if amount > 0 then
         local capacity = capacity_by_name[fli.name]
         if not capacity then
-          capacity = fli.fluidbox.get_prototype(1).volume
+          capacity = fli.get_fluid_capacity(1) -- Factorio 2.1: LuaEntity::fluidbox was removed
           capacity_by_name[fli.name] = capacity
         end
         fluid_count = (amount / capacity) * 100

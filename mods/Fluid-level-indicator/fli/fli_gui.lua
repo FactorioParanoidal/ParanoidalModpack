@@ -29,7 +29,8 @@ function open_fli_gui(player, ent)
     type = "frame",
     name = "fli_picker",
     direction = "vertical",
-    anchor = { gui = defines.relative_gui_type.storage_tank_gui, position = defines.relative_gui_position.bottom  },
+    -- Factorio 2.1: storage tanks open the pipe GUI (relative_gui_type.storage_tank_gui was removed)
+    anchor = { gui = defines.relative_gui_type.pipe_gui, position = defines.relative_gui_position.bottom  },
   })
   
   local fli_title = fli_picker.add(
