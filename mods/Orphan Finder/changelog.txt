@@ -5,6 +5,7 @@ Date: 25. 01. 2025
     - Rewrote control script to better support modded underground pipes with multiple connections
   Compatibility:
     - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
+    - Factorio 2.1 runtime API: underground belt ends are read through underground_belt_neighbour, underground pipe connections through get_fluid_box_pipe_connections and fluidbox_neighbours (LuaEntity::neighbours and fluidbox were removed).
 ---------------------------------------------------------------------------------------------------
 Version: 1.2.1
 Date: 24. 01. 2025

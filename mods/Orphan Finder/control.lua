@@ -36,14 +36,17 @@ function clear_arrows(player_index)
 end
 
 -- Belt is orphan if it has no neighbour or neighbour is still ghost
+-- Factorio 2.1: LuaEntity::neighbours was removed; the other end of an underground belt is underground_belt_neighbour
 function belt_is_orphan(entity)
-  return not (entity.neighbours and entity.neighbours.type == "underground-belt")
+  local neighbour = entity.underground_belt_neighbour
+  return not (neighbour and neighbour.type == "underground-belt")
 end
 
 -- Check neighbour of underground belt and remove marker if present
 function update_belt_neighbour(entity)
-  if entity.neighbours and entity.neighbours.type == "underground-belt" then
-    delete_arrow(entity.neighbours)
+  local neighbour = entity.underground_belt_neighbour
+  if neighbour and neighbour.type == "underground-belt" then
+    delete_arrow(neighbour)
   end
 end
 
@@ -63,7 +66,8 @@ end
 -- Rerturns how many underground pipes are actually connected to this entity
 function count_pipe_connections(entity)
   local count = 0
-  for i,pipe in pairs(entity.fluidbox.get_pipe_connections(1)) do
+  -- Factorio 2.1: LuaEntity::fluidbox was removed, pipe connections are read on the entity
+  for i,pipe in pairs(entity.get_fluid_box_pipe_connections(1) or {}) do
     -- Only counting underground connections, we do not care about the surface world
     if pipe.target and pipe.connection_type == "underground" then
       count = count + 1
@@ -92,7 +96,8 @@ end
 
 -- Check neighbours of underground pipe and remove arrow if they are no longer orphans
 function update_pipe_neighbours(entity)
-  for i,neighbour in pairs(entity.neighbours[1]) do
+  -- Factorio 2.1: LuaEntity::neighbours was removed; fluidbox_neighbours groups them by fluid box
+  for i,neighbour in pairs(entity.fluidbox_neighbours[1] or {}) do
     if not pipe_is_orphan(neighbour) then
       delete_arrow(neighbour)
     end
