@@ -175,13 +175,14 @@ end
 --- @param entity LuaEntity
 --- @param out LuaEntity[]
 local function connected_neighbours(entity, out)
-  local fb = entity.fluidbox
-  for i = 1, #fb do
-    local conns = fb.get_pipe_connections(i)
+  -- Factorio 2.1: LuaEntity::fluidbox was removed; fluid storages are read on the entity and
+  -- PipeConnection::target is the connected entity
+  for i = 1, entity.fluids_count do
+    local conns = entity.get_fluid_box_pipe_connections(i) or {}
     for c = 1, #conns do
       local target = conns[c].target
       if target then
-        out[#out + 1] = target.owner
+        out[#out + 1] = target
       end
     end
   end

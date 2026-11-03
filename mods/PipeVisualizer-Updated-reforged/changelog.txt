@@ -41,6 +41,7 @@ Date: 2026-10-31
     - flib is no longer a dependency.
   Compatibility:
     - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
+    - Factorio 2.1 runtime API: fluid segments, pipe connections and segment fluids are read on the entity (LuaEntity::fluidbox and LuaFluidBox were removed; PipeConnection::target is the connected entity; fluid boxes outside a segment are checked with has_fluid_segment).
 ---------------------------------------------------------------------------------------------------
 Version: 2.4.4
 Date: 2025-11-15

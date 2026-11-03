@@ -284,9 +284,20 @@ function core.forget_all(V)
   reset_queue(V)
 end
 
+--- Factorio 2.1: get_fluid_segment_id errors for a fluid box outside any segment (pumps); 2.0 returned nil.
+--- @param entity LuaEntity
+--- @param index uint
+--- @return uint?
+local function segment_id(entity, index)
+  if entity.has_fluid_segment(index) then
+    return entity.get_fluid_segment_id(index)
+  end
+  return nil
+end
+
 --- @param V PvViewer
 --- @param seg uint
---- @param fb LuaFluidBox A fluidbox of the segment.
+--- @param fb LuaEntity An entity with a fluid box of the segment (Factorio 2.1: LuaFluidBox was removed).
 --- @param index uint
 --- @param hover boolean?
 --- @return PvSystem
@@ -297,8 +308,8 @@ local function new_system(V, seg, fb, index, hover)
     V.next_color = n
     color, order = palette[(n - 1) % #palette + 1], n
   else
-    local contents = fb.get_fluid_segment_contents(index)
-    local name = contents and next(contents)
+    local fluid = fb.get_fluid_segment_fluid(index)
+    local name = fluid and fluid.name
     if name then
       color, order = fluid_color[name] or DEFAULT_COLOR, fluid_order[name] or MAX_ORDER
     end
@@ -314,26 +325,27 @@ end
 --- Collects the fluid segments an entity touches: the segments of its fluidboxes and, for fluidboxes
 --- outside any segment (pumps), the segments on the other side of their connections.
 --- @param entity LuaEntity
---- @param fbs table<uint, LuaFluidBox> Out: segment -> a fluidbox of it.
+--- @param fbs table<uint, LuaEntity> Out: segment -> an entity with a fluidbox of it.
 --- @param idxs table<uint, uint> Out: segment -> that fluidbox index.
 --- @return boolean found
 local function collect_segments(entity, fbs, idxs)
-  local fb = entity.fluidbox
+  -- Factorio 2.1: LuaEntity::fluidbox was removed; get_fluid_segment_id errors outside a segment
+  local fb = entity
   local found = false
-  for i = 1, #fb do
-    local seg = fb.get_fluid_segment_id(i)
+  for i = 1, fb.fluids_count do
+    local seg = segment_id(fb, i)
     if seg then
       if not fbs[seg] then
         fbs[seg], idxs[seg], found = fb, i, true
       end
     else
-      local conns = fb.get_pipe_connections(i)
+      local conns = fb.get_fluid_box_pipe_connections(i) or {}
       for c = 1, #conns do
         local conn = conns[c]
         local target = conn.target
         if target then
           local ti = conn.target_fluidbox_index
-          local tseg = target.get_fluid_segment_id(ti)
+          local tseg = segment_id(target, ti)
           if tseg and not fbs[tseg] then
             fbs[tseg], idxs[tseg], found = target, ti, true
           end
@@ -392,8 +404,8 @@ local function process(V, entity, unit, force, chunk)
   if not info or info.black then
     return
   end
-  local fb = entity.fluidbox
-  local n = #fb
+  local fb = entity -- Factorio 2.1: LuaEntity::fluidbox was removed, fluid storages are read on the entity
+  local n = fb.fluids_count
   if n == 0 then
     return
   end
@@ -412,7 +424,7 @@ local function process(V, entity, unit, force, chunk)
   local own_segment = false
 
   for i = 1, n do
-    local seg = fb.get_fluid_segment_id(i)
+    local seg = segment_id(fb, i)
     local conns = nil
     if seg then
       own_segment = true
@@ -424,11 +436,11 @@ local function process(V, entity, unit, force, chunk)
         if sys then
           added = added or {}
           added[seg] = sys
-          conns = fb.get_pipe_connections(i)
+          conns = fb.get_fluid_box_pipe_connections(i)
         end
       end
     else
-      conns = fb.get_pipe_connections(i)
+      conns = fb.get_fluid_box_pipe_connections(i)
     end
 
     if conns then
@@ -441,7 +453,7 @@ local function process(V, entity, unit, force, chunk)
             sys = added[s]
           else
             local ti = conn.target_fluidbox_index
-            s = target.get_fluid_segment_id(ti)
+            s = segment_id(target, ti)
             if s and not (old and old[s]) then
               sys = systems[s]
               if not sys and overlay then
@@ -477,7 +489,7 @@ local function process(V, entity, unit, force, chunk)
                 local flow = conn.flow_direction
                 local sprite = ARROW_SPRITE[flow]
                 if flow ~= "input-output" then
-                  owner = target.owner
+                  owner = target
                   local oinfo = info_of(owner.name)
                   if not (oinfo and oinfo.pipe) then
                     sprite = "pv-fluid-arrow"
@@ -500,11 +512,12 @@ local function process(V, entity, unit, force, chunk)
 
               if kind == "underground" then
                 -- Drawn once per pair, by the end that is drawn second.
-                owner = owner or target.owner
+                owner = owner or target
                 local ounit = owner.unit_number
                 local orec = ounit and entities[ounit]
                 if orec and (overlay or orec.segs[s]) and not (orec.ug and orec.ug[unit]) then
-                  local pc = target.get_pipe_connections(conn.target_fluidbox_index)[conn.target_pipe_connection_index]
+                  local pcs = target.get_fluid_box_pipe_connections(conn.target_fluidbox_index)
+                  local pc = pcs and pcs[conn.target_pipe_connection_index]
                   local q = pc and pc.position
                   if q then
                     local dx, dy = q.x - px, q.y - py
@@ -531,7 +544,7 @@ local function process(V, entity, unit, force, chunk)
             end
 
             if not overlay then
-              owner = owner or target.owner
+              owner = owner or target
               local ounit = owner.unit_number
               if ounit and not queued[ounit] then
                 local orec = entities[ounit]
@@ -650,7 +663,7 @@ end
 --- @param V PvViewer
 --- @param entity LuaEntity
 --- @param hover boolean
---- @param fbs table<uint, LuaFluidBox>? Precomputed collect_segments result.
+--- @param fbs table<uint, LuaEntity>? Precomputed collect_segments result.
 --- @param idxs table<uint, uint>?
 --- @param only uint? Show only this segment.
 --- @return boolean added
