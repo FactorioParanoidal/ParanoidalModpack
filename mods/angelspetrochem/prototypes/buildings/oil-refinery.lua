@@ -10,6 +10,19 @@ if not oilrefinery.next_upgrade then
   oilrefinery.next_upgrade = "angels-oil-refinery-2"
 end
 
+-- Factorio 2.1 removed the 2.0 oil refinery art: tiers 2-4 keep the 2.0 look (Paranoidal decision G18 "A") with copies
+-- of the Factorio 2.0.77 files in angelspetrochemgraphics (graphics/entity/oil-refinery-2.0/, the flame in
+-- oil-refinery-fire-2.0/), and their circuit connector sits where it was on the 2.0 refinery (2.1 moved
+-- circuit_connector_definitions["oil-refinery"] to its new model).
+local function circuit_connector_2_0()
+  return circuit_connector_definitions.create_vector(universal_connector_template, {
+    { variation = 17, main_offset = util.by_pixel(-45, -29.5), shadow_offset = util.by_pixel(48.5, 11), show_shadow = true },
+    { variation = 19, main_offset = util.by_pixel(29.5, -24), shadow_offset = util.by_pixel(81, 53), show_shadow = true },
+    { variation = 19, main_offset = util.by_pixel(29.5, -24), shadow_offset = util.by_pixel(82.5, 65.5), show_shadow = true },
+    { variation = 17, main_offset = util.by_pixel(-8, -35.5), shadow_offset = util.by_pixel(86.5, 77.5), show_shadow = true },
+  })
+end
+
 data:extend({
   {
     type = "item",
@@ -45,7 +58,7 @@ data:extend({
     dying_explosion = "oil-refinery-explosion",
     icon_draw_specification = { scale = 2, shift = { 0, -0.3 } },
     circuit_wire_max_distance = assembling_machine_circuit_wire_max_distance,
-    circuit_connector = circuit_connector_definitions["oil-refinery"],
+    circuit_connector = circuit_connector_2_0(),
     -- Factorio 2.1: upgrades must have the same box as the base-game refinery (2.1 shrank it to 2.2).
     collision_box = table.deepcopy(oilrefinery.collision_box),
     -- Base-game oil refinery has a custom collision_mask, which all upgrades need to match.
@@ -67,14 +80,14 @@ data:extend({
       animation = make_4way_animation_from_spritesheet({
         layers = {
           {
-            filename = "__base__/graphics/entity/oil-refinery/oil-refinery.png",
+            filename = "__angelspetrochemgraphics__/graphics/entity/oil-refinery-2.0/oil-refinery.png",
             width = 386,
             height = 430,
             shift = util.by_pixel(0, -7.5),
             scale = 0.5,
           },
           {
-            filename = "__base__/graphics/entity/oil-refinery/oil-refinery-shadow.png",
+            filename = "__angelspetrochemgraphics__/graphics/entity/oil-refinery-2.0/oil-refinery-shadow.png",
             width = 674,
             height = 426,
             shift = util.by_pixel(82.5, 26.5),
@@ -92,7 +105,7 @@ data:extend({
           south_position = util.by_pixel(-59, -82),
           west_position = util.by_pixel(57, -58),
           animation = {
-            filename = "__base__/graphics/entity/oil-refinery/oil-refinery-fire.png",
+            filename = "__angelspetrochemgraphics__/graphics/entity/oil-refinery-fire-2.0/oil-refinery-fire.png",
             line_length = 10,
             width = 40,
             height = 81,
@@ -106,7 +119,7 @@ data:extend({
         {
           fadeout = true,
           north_animation = {
-            filename = "__base__/graphics/entity/oil-refinery/oil-refinery-light.png",
+            filename = "__angelspetrochemgraphics__/graphics/entity/oil-refinery-2.0/oil-refinery-light.png",
             width = 321,
             height = 205,
             blend_mode = "additive",
@@ -115,7 +128,7 @@ data:extend({
             scale = 0.5,
           },
           east_animation = {
-            filename = "__base__/graphics/entity/oil-refinery/oil-refinery-light.png",
+            filename = "__angelspetrochemgraphics__/graphics/entity/oil-refinery-2.0/oil-refinery-light.png",
             width = 321,
             x = 321,
             height = 205,
@@ -125,7 +138,7 @@ data:extend({
             scale = 0.5,
           },
           south_animation = {
-            filename = "__base__/graphics/entity/oil-refinery/oil-refinery-light.png",
+            filename = "__angelspetrochemgraphics__/graphics/entity/oil-refinery-2.0/oil-refinery-light.png",
             width = 321,
             x = 321 * 2,
             height = 205,
@@ -135,7 +148,7 @@ data:extend({
             scale = 0.5,
           },
           west_animation = {
-            filename = "__base__/graphics/entity/oil-refinery/oil-refinery-light.png",
+            filename = "__angelspetrochemgraphics__/graphics/entity/oil-refinery-2.0/oil-refinery-light.png",
             width = 321,
             x = 321 * 3,
             height = 205,
@@ -219,7 +232,7 @@ data:extend({
     },
     water_reflection = {
       pictures = {
-        filename = "__base__/graphics/entity/oil-refinery/oil-refinery-reflection.png",
+        filename = "__angelspetrochemgraphics__/graphics/entity/oil-refinery-2.0/oil-refinery-reflection.png",
         priority = "extra-high",
         width = 40,
         height = 48,
@@ -265,7 +278,7 @@ data:extend({
     dying_explosion = "oil-refinery-explosion",
     icon_draw_specification = { scale = 2, shift = { 0, -0.3 } },
     circuit_wire_max_distance = assembling_machine_circuit_wire_max_distance,
-    circuit_connector = circuit_connector_definitions["oil-refinery"],
+    circuit_connector = circuit_connector_2_0(),
     -- Factorio 2.1: upgrades must have the same box as the base-game refinery (2.1 shrank it to 2.2).
     collision_box = table.deepcopy(oilrefinery.collision_box),
     -- Base-game oil refinery has a custom collision_mask, which all upgrades need to match.
@@ -287,14 +300,14 @@ data:extend({
       animation = make_4way_animation_from_spritesheet({
         layers = {
           {
-            filename = "__base__/graphics/entity/oil-refinery/oil-refinery.png",
+            filename = "__angelspetrochemgraphics__/graphics/entity/oil-refinery-2.0/oil-refinery.png",
             width = 386,
             height = 430,
             shift = util.by_pixel(0, -7.5),
             scale = 0.5,
           },
           {
-            filename = "__base__/graphics/entity/oil-refinery/oil-refinery-shadow.png",
+            filename = "__angelspetrochemgraphics__/graphics/entity/oil-refinery-2.0/oil-refinery-shadow.png",
             width = 674,
             height = 426,
             shift = util.by_pixel(82.5, 26.5),
@@ -312,7 +325,7 @@ data:extend({
           south_position = util.by_pixel(-59, -82),
           west_position = util.by_pixel(57, -58),
           animation = {
-            filename = "__base__/graphics/entity/oil-refinery/oil-refinery-fire.png",
+            filename = "__angelspetrochemgraphics__/graphics/entity/oil-refinery-fire-2.0/oil-refinery-fire.png",
             line_length = 10,
             width = 40,
             height = 81,
@@ -326,7 +339,7 @@ data:extend({
         {
           fadeout = true,
           north_animation = {
-            filename = "__base__/graphics/entity/oil-refinery/oil-refinery-light.png",
+            filename = "__angelspetrochemgraphics__/graphics/entity/oil-refinery-2.0/oil-refinery-light.png",
             width = 321,
             height = 205,
             blend_mode = "additive",
@@ -335,7 +348,7 @@ data:extend({
             scale = 0.5,
           },
           east_animation = {
-            filename = "__base__/graphics/entity/oil-refinery/oil-refinery-light.png",
+            filename = "__angelspetrochemgraphics__/graphics/entity/oil-refinery-2.0/oil-refinery-light.png",
             width = 321,
             x = 321,
             height = 205,
@@ -345,7 +358,7 @@ data:extend({
             scale = 0.5,
           },
           south_animation = {
-            filename = "__base__/graphics/entity/oil-refinery/oil-refinery-light.png",
+            filename = "__angelspetrochemgraphics__/graphics/entity/oil-refinery-2.0/oil-refinery-light.png",
             width = 321,
             x = 321 * 2,
             height = 205,
@@ -355,7 +368,7 @@ data:extend({
             scale = 0.5,
           },
           west_animation = {
-            filename = "__base__/graphics/entity/oil-refinery/oil-refinery-light.png",
+            filename = "__angelspetrochemgraphics__/graphics/entity/oil-refinery-2.0/oil-refinery-light.png",
             width = 321,
             x = 321 * 3,
             height = 205,
@@ -439,7 +452,7 @@ data:extend({
     },
     water_reflection = {
       pictures = {
-        filename = "__base__/graphics/entity/oil-refinery/oil-refinery-reflection.png",
+        filename = "__angelspetrochemgraphics__/graphics/entity/oil-refinery-2.0/oil-refinery-reflection.png",
         priority = "extra-high",
         width = 40,
         height = 48,
@@ -484,7 +497,7 @@ data:extend({
     dying_explosion = "oil-refinery-explosion",
     icon_draw_specification = { scale = 2, shift = { 0, -0.3 } },
     circuit_wire_max_distance = assembling_machine_circuit_wire_max_distance,
-    circuit_connector = circuit_connector_definitions["oil-refinery"],
+    circuit_connector = circuit_connector_2_0(),
     -- Factorio 2.1: upgrades must have the same box as the base-game refinery (2.1 shrank it to 2.2).
     collision_box = table.deepcopy(oilrefinery.collision_box),
     -- Base-game oil refinery has a custom collision_mask, which all upgrades need to match.
@@ -506,14 +519,14 @@ data:extend({
       animation = make_4way_animation_from_spritesheet({
         layers = {
           {
-            filename = "__base__/graphics/entity/oil-refinery/oil-refinery.png",
+            filename = "__angelspetrochemgraphics__/graphics/entity/oil-refinery-2.0/oil-refinery.png",
             width = 386,
             height = 430,
             shift = util.by_pixel(0, -7.5),
             scale = 0.5,
           },
           {
-            filename = "__base__/graphics/entity/oil-refinery/oil-refinery-shadow.png",
+            filename = "__angelspetrochemgraphics__/graphics/entity/oil-refinery-2.0/oil-refinery-shadow.png",
             width = 674,
             height = 426,
             shift = util.by_pixel(82.5, 26.5),
@@ -531,7 +544,7 @@ data:extend({
           south_position = util.by_pixel(-59, -82),
           west_position = util.by_pixel(57, -58),
           animation = {
-            filename = "__base__/graphics/entity/oil-refinery/oil-refinery-fire.png",
+            filename = "__angelspetrochemgraphics__/graphics/entity/oil-refinery-fire-2.0/oil-refinery-fire.png",
             line_length = 10,
             width = 40,
             height = 81,
@@ -545,7 +558,7 @@ data:extend({
         {
           fadeout = true,
           north_animation = {
-            filename = "__base__/graphics/entity/oil-refinery/oil-refinery-light.png",
+            filename = "__angelspetrochemgraphics__/graphics/entity/oil-refinery-2.0/oil-refinery-light.png",
             width = 321,
             height = 205,
             blend_mode = "additive",
@@ -554,7 +567,7 @@ data:extend({
             scale = 0.5,
           },
           east_animation = {
-            filename = "__base__/graphics/entity/oil-refinery/oil-refinery-light.png",
+            filename = "__angelspetrochemgraphics__/graphics/entity/oil-refinery-2.0/oil-refinery-light.png",
             width = 321,
             x = 321,
             height = 205,
@@ -564,7 +577,7 @@ data:extend({
             scale = 0.5,
           },
           south_animation = {
-            filename = "__base__/graphics/entity/oil-refinery/oil-refinery-light.png",
+            filename = "__angelspetrochemgraphics__/graphics/entity/oil-refinery-2.0/oil-refinery-light.png",
             width = 321,
             x = 321 * 2,
             height = 205,
@@ -574,7 +587,7 @@ data:extend({
             scale = 0.5,
           },
           west_animation = {
-            filename = "__base__/graphics/entity/oil-refinery/oil-refinery-light.png",
+            filename = "__angelspetrochemgraphics__/graphics/entity/oil-refinery-2.0/oil-refinery-light.png",
             width = 321,
             x = 321 * 3,
             height = 205,
@@ -658,7 +671,7 @@ data:extend({
     },
     water_reflection = {
       pictures = {
-        filename = "__base__/graphics/entity/oil-refinery/oil-refinery-reflection.png",
+        filename = "__angelspetrochemgraphics__/graphics/entity/oil-refinery-2.0/oil-refinery-reflection.png",
         priority = "extra-high",
         width = 40,
         height = 48,

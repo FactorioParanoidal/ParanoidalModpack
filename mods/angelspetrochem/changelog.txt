@@ -13,6 +13,7 @@ Date: 04.06.2026
     - Factorio 2.1: the flare stack uses use_mirroring = true instead of the removed forced_symmetry (flippable as in 2.0).
     - Factorio 2.1: removed the recipe fields always_show_products and show_amount_in_title (removed in 2.1, silently ignored). (also the three assignments in the Bob overrides)
     - Factorio 2.1 graphics: the flames of gas refineries, steam crackers and the flare stack use the 2.0 refinery fire kept in angelspetrochemgraphics (the base file was removed in 2.1).
+    - Factorio 2.1 graphics (Paranoidal decision G18 A): oil refineries 2-4 take the 2.0 refinery art, flame, light and water reflection from the copies in angelspetrochemgraphics (2.1 removed the base-game files) and keep the circuit connector placement of the 2.0 refinery.
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.2
 Date: 01.06.2026
