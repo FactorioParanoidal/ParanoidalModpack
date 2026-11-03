@@ -15,6 +15,7 @@ Date: 26. 09. 2025
     - Paranoidal port to Factorio 2.1: removed the unused require of __base__/prototypes/entity/assemblerpipes (the file no longer exists in 2.1).
     - Paranoidal port to Factorio 2.1: recipes use categories (RecipePrototype::category and additional_categories were merged into categories; the first entry keeps the meaning of the former main category, a changed main category keeps the other entries).
     - Paranoidal port to Factorio 2.1: product probability renamed to independent_probability (recipe results, minable results, generated products).
+    - Factorio 2.1 runtime API: a finished construction stage is stopped through disabled_by_script and unremovable sites and silos use minable_flag (LuaEntity::active and minable became read-only).
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.6
 Date: 26. 09. 2025

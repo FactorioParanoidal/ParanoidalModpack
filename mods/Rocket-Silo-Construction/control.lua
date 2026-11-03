@@ -196,9 +196,9 @@ if new_stage and new_stage.valid then
 		local silo_data = {silo=new_stage,bar_back=nil,progress_bar=nil,work_value=work,final_building=final_building, stage=stage}
 		table.insert (storage.rsc_silo_under_construction,silo_data)
 		check_construction_site(silo_data)
-		if storage.st_not_removable_site then new_stage.minable=false end
+		if storage.st_not_removable_site then new_stage.minable_flag=false end -- Factorio 2.1: LuaEntity::minable is read-only
 		else
-		if storage.st_not_removable_silo then new_stage.minable=false end
+		if storage.st_not_removable_silo then new_stage.minable_flag=false end
 		end
 		
 	script.raise_event(on_silo_stage_finished, {created_entity = new_stage})
@@ -215,7 +215,7 @@ local progress=entity.products_finished
 local max_progress=silo_data.work_value
 
 if progress>=max_progress then 
-	entity.active = false
+	entity.disabled_by_script = true -- Factorio 2.1: LuaEntity::active is read-only
 	if entity.get_output_inventory().get_item_count()<1 or in_list(storage.automated_forces,entity.force.name) then
 		upgrade_construction_site(silo_data) 
 		return 
@@ -359,7 +359,7 @@ if string.sub(ent.name,1,15) == 'rsc-silo-stage1' then
 			}
 		table.insert (storage.rsc_silo_under_construction,silo_data)
 		check_construction_site(silo_data)
-		if storage.st_not_removable_site then ent.minable=false end
+		if storage.st_not_removable_site then ent.minable_flag=false end
 		end
 	end
 end
@@ -525,7 +525,7 @@ if stage == 3 then work_value = storage.st_remove_stone_work end
 local silo_data = {silo = ent, bar_back = nil, progress_bar = nil, work_value = work_value, final_building = final_building, stage = stage}
 table.insert (storage.rsc_silo_under_construction, silo_data)
 check_construction_site(silo_data)
-if storage.st_not_removable_site then ent.minable = false end
+if storage.st_not_removable_site then ent.minable_flag = false end
 return ent
 end
 		-- Returns :
