@@ -212,3 +212,11 @@ for _, technology in pairs(data.raw.technology) do
       effect_description = {"modifier-description.pra-speed-risk"}})
   end
 end
+
+-- Paranoidal: recipes stay out of the signal selection window (setting paranoidal-recipe-signals-visible of zzzparanoidal).
+local show_recipe_signals = settings.startup["paranoidal-recipe-signals-visible"]
+if show_recipe_signals and not show_recipe_signals.value then
+	for _, recipe in pairs(data.raw.recipe) do
+		recipe.hide_from_signal_gui = true
+	end
+end

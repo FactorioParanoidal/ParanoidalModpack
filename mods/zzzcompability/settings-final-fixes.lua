@@ -1,9 +1,11 @@
 local setting = data.raw["bool-setting"]["bobmods-burnerphase"]
 
--- The setting was previously hidden and bypassed by bobtech itself if aai-industry was active.
--- We removed that hardcode in bobtech, so we can now safely define its properties here.
+-- Bob's burner phase stays off, as bobtech and angelsrefining intend with aai-industry:
+-- with it on, bobtech adds the "bob-electricity" and "bob-burner-lab" trigger technologies
+-- and rebuilds the early electronics/lab progression that the modpack is not balanced for.
+-- forced_value applies only to a hidden setting.
 if setting then
-	setting.hidden = false
-	setting.forced_value = false -- Allow user to toggle it
-	setting.default_value = true
+	setting.hidden = true
+	setting.forced_value = false
+	setting.default_value = false
 end

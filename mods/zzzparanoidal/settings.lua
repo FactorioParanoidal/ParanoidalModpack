@@ -102,6 +102,9 @@ data:extend({
      setting_type = "startup",
      default_value = "FF9F1C"
    },
+   -- Рецепты в окне выбора сигнала (по умолчанию показаны: сигнал рецепта нужен заводу в режиме «Задать рецепт»,
+   -- сигнал предмета не выбирает конкретный альтернативный рецепт).
+ {type = "bool-setting", name = "paranoidal-recipe-signals-visible", setting_type = "startup", default_value = true, order = "e"},
    --Рассказываем как показать тонкие настройки
  {type = "bool-setting", name = "zzz-settings", setting_type = "startup", default_value = true, order = "f"}
  })
