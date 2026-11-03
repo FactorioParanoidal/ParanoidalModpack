@@ -1,6 +1,20 @@
 local attackBall = require("prototypes/utils/AttackBall")
 local constants = require("libs/Constants")
 
+-- Factorio 2.1 runs a module required under two different relative names once; 2.0 ran prototypes/utils/FireUtils
+-- twice (data.lua through SwarmUtils, data-updates through AttackBall), and the second run made the safe fires
+-- again from the fire-flame of that moment (bobenemies: lifetime 300, damage multiplier 20). Keep the 2.0 values.
+do
+    local flame = data.raw.fire["fire-flame"]
+    for _, name in pairs({"safe-fire-flame-rampant", "biters-safe-fire-rampant"}) do
+        local fire = data.raw.fire[name]
+        if flame and fire then
+            fire.initial_lifetime = flame.initial_lifetime
+            fire.maximum_damage_multiplier = flame.maximum_damage_multiplier
+        end
+    end
+end
+
 for _, robot in pairs(data.raw["logistic-robot"]) do
     -- if not robot.collision_mask then
     --     robot.collision_mask = {}
