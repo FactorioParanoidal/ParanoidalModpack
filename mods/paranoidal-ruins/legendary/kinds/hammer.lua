@@ -110,7 +110,7 @@ function KIND.tick(site, ctx, K)
         d.shells[#d.shells + 1] = { at = ctx.tick + 110 + n * 8, pos = at }
       end
       local mortar = K.get(site, "mortar-" .. i)
-      if mortar then K.effect(site, "explosion-gunshot", mortar.position) end
+      if mortar then K.effect(site, "explosion-gunshot", mortar.position, lead) end
     end
   end
   for _, p in ipairs(ctx.players) do d.last[p.player.index] = { x = p.pos.x, y = p.pos.y } end

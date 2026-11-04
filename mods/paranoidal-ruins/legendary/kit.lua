@@ -93,10 +93,10 @@ function K.hurt(site, pos, radius, amount, kind)
   end
 end
 
-function K.effect(site, name, pos)
+function K.effect(site, name, pos, target)
   local surface = K.surface(site)
   if surface and prototypes.entity[name] then
-    surface.create_entity({ name = name, position = pos, force = C.FORCE })
+    surface.create_entity({ name = name, position = pos, target = target, force = C.FORCE })
   end
 end
 
