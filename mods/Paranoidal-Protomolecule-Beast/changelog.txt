@@ -47,6 +47,7 @@ Date: 2026-11-03
     - Remote interface: outbreak (status, with power, energy, mass, clones, artillery, spidertrons and the track), configure (setting overrides for one save), set_tier, hurry (landing, found, raid, analyse, clone, rails, ride, fire), catalogue, lair_place (a building set down at the lair with its sample); infect is on purpose, so it works outside the zones. /beast-arrive does nothing while an outbreak is going on.
   Bugfixes:
     - A creature keeps the icon_size of the building it is made from, so the game no longer refuses to load with mods whose icons are not 64 px (creative-mod).
+    - A creature made from a building whose animation is cut into stripes keeps only the first stripe, as a plain sheet of frames: in a creature's turning animation a stripe's rows are directions, and the game refused to load (Wind-Turbines-Reforged).
   Locale:
     - Russian locale. Mod settings and the unknown technology message in English.
     - Clinical texts for the landing, research stages and the end of the outbreak; new mod title and description; names of the power, artillery and vehicle creatures; the rail junction message; the alert for a train at a raid.

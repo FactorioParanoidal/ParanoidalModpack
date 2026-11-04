@@ -31,6 +31,18 @@ local function clean_layer(layer, directions, mask_color)
     copy.direction_count = copy.direction_count * 2
   end
   copy.frame_count = layer.frame_count or 1
+  -- A torso is a RotatedAnimation, where a stripe's rows are directions, not more frames as in a building's Animation
+  -- (Wind-Turbines-Reforged: 44 frames in three 4x5 stripes, the last file only 2 rows high). So from a building that
+  -- doesn't turn, only the first stripe is kept, as a plain sheet of frames read row by row.
+  if directions == 1 and copy.stripes then
+    local stripe = copy.stripes[1]
+    copy.stripes = nil
+    copy.filename = stripe.filename
+    copy.x, copy.y = stripe.x, stripe.y
+    copy.line_length = stripe.width_in_frames
+    copy.lines_per_file = nil
+    copy.frame_count = math.min(copy.frame_count, stripe.width_in_frames * (stripe.height_in_frames or 1))
+  end
   copy.repeat_count = nil
   copy.frame_sequence = nil
   if layer.apply_runtime_tint then
