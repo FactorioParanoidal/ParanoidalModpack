@@ -116,6 +116,7 @@ Date: 2026. 10. 14
     - Production mode beacon: the 12 hidden quality modules weigh 0.001 ... 2.048 (the 2.0 weights 0.01 ... 20.48 divided by 10, same step); the native quality effect is read to four decimals (2.1 resolution). Control post: post-processing effect 0.6 (the 2.0 effect 6), further steps with chain_probability. Mocks quality-chance-curve, expansion-process, expansion-modes, expansion-gui, defects-preview and defects-scheduler in 2.1 units; README updated.
     - Factorio 2.1: the shadow of the refining workshop and the control post is the 2.1 assembling machine 1 shadow loaded from its .lua description (the 2.0 190x165 frame does not fit the redrawn 50x166 file).
     - Factorio 2.1 (Paranoidal decision D29 A): rolling stock as in 2.0: every quality has locomotive_power_multiplier and rolling_stock_max_speed_multiplier 1 and no cargo_wagon_inventory_size_multiplier (cargo wagons follow inventory_size_multiplier, as in 2.0).
+    - Factorio 2.1: the look of defective buildings takes generator graphics from pictures (the animation of each direction; 2.0 vertical_animation / horizontal_animation are gone), so defective steam engines are darkened again as in 2.0; drills no longer read the removed base_picture; logistic chests use robot_door.animation.
 ---------------------------------------------------------------------------------------------------
 Version: 1.1.4
 Date: 2026. 10. 14

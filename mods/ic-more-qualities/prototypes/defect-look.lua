@@ -125,7 +125,8 @@ local function graphics_of(entity)
     if kind == "assembling-machine" or kind == "furnace" then
         return crafter_graphics(entity.graphics_set), crafter_graphics(entity.graphics_set_flipped)
     elseif kind == "mining-drill" then
-        return merge(four_way(entity.base_picture), crafter_graphics(entity.graphics_set))
+        -- Factorio 2.1: MiningDrillPrototype has no base_picture any more; the body is in graphics_set.
+        return crafter_graphics(entity.graphics_set)
     elseif kind == "offshore-pump" then
         local set = entity.graphics_set
         return set and merge(four_way(set.base_pictures), four_way(set.animation))
@@ -142,10 +143,20 @@ local function graphics_of(entity)
         end
         return result
     elseif kind == "generator" then
-        local vertical, horizontal = {}, {}
-        collect(entity.vertical_animation, vertical)
-        collect(entity.horizontal_animation, horizontal)
-        return {vertical, horizontal, vertical, horizontal}
+        -- Factorio 2.1: GeneratorPrototype::pictures (GeneratorPictureSet) has the animation of each direction instead
+        -- of 2.0's vertical_animation / horizontal_animation. A missing south repeats north and a missing west repeats
+        -- east, as vanilla 2.1 copies them for the burner generator (the steam engine is two_direction_only).
+        local pictures = entity.pictures
+        if not pictures then return nil end
+        local east = pictures.east or pictures.north
+        local by_direction = {pictures.north, east, pictures.south or pictures.north, pictures.west or east}
+        local result = {}
+        for index = 1, 4 do
+            local layers = {}
+            collect(by_direction[index] and by_direction[index].animation, layers)
+            result[index] = layers
+        end
+        return result
     elseif kind == "burner-generator" then
         return merge(four_way(entity.idle_animation), four_way(entity.animation))
     elseif kind == "lab" then
@@ -153,7 +164,8 @@ local function graphics_of(entity)
     elseif kind == "lamp" then
         return four_way(entity.picture_off)
     elseif CONTAINERS[kind] then
-        return four_way(entity.picture or entity.animation)
+        -- Factorio 2.1: a logistic chest keeps its body in robot_door.animation (2.0: animation).
+        return four_way(entity.picture or entity.animation or entity.robot_door and entity.robot_door.animation)
     elseif kind == "electric-pole" then
         return four_way(entity.pictures)
     elseif kind == "electric-energy-interface" then
