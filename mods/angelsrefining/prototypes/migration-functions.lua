@@ -325,12 +325,23 @@ function angelsmods.migration.replace_quick_bar_slot(items_to_replace)
 
   items_to_replace = items_to_replace or {}
 
+  -- Factorio 2.1: get/set_quick_bar_slot take (page_index, slot_index) and the slot is a QuickBarSlot
+  -- ({type = "filter", filter = {name, quality}}) instead of (index 1-100) and an item filter.
+  -- 10 pages of 10 slots are the 100 slots of 2.0.
   for _, player in pairs(game.players) do
-    for i = 1, 100 do
-      for _, item_to_replace in pairs(items_to_replace) do
-        local slot = player.get_quick_bar_slot(i)
-        if slot and (slot.name == item_to_replace[1]) then
-          player.set_quick_bar_slot(i, item_to_replace[2])
+    for page = 1, 10 do
+      for index = 1, 10 do
+        for _, item_to_replace in pairs(items_to_replace) do
+          local slot = player.get_quick_bar_slot(page, index)
+          local filter = slot and slot.type == "filter" and slot.filter
+          if filter and filter.name == item_to_replace[1] then
+            local new_name = item_to_replace[2]
+            -- A table is read as a QuickBarSlot (its type is required), so the new filter keeps the old quality.
+            player.set_quick_bar_slot(page, index, new_name and {
+              type = "filter",
+              filter = { name = new_name, quality = filter.quality, comparator = filter.comparator },
+            } or nil)
+          end
         end
       end
     end

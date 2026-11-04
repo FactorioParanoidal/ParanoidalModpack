@@ -24,6 +24,7 @@ Date: 04.06.2026
     - Factorio 2.1: removed the recipe fields always_show_products and show_amount_in_title (removed in 2.1, silently ignored).
     - Factorio 2.1 graphics: the blank pipe pictures of the salination plants (salination-plant/blank.png, a transparent 1x1 image) are declared 1x1 instead of 128x128 - Factorio 2.1 refuses a sprite rectangle larger than its image at the graphical start, so the game did not start (Factorio 2.0.77 started with the same definition).
     - Factorio 2.1: MineEntityTechnologyTrigger::entity became the list entities - OV.set_research_difficulty builds mine-entity triggers with entities, and the item substitution of the overrides replaces names in that list (it read the removed entity field; no technology of Paranoidal used it).
+    - Factorio 2.1: migration-functions replace_quick_bar_slot uses get/set_quick_bar_slot(page_index, slot_index) and the QuickBarSlot filter (was one index 1-100 and an item filter, an error in 2.1); used by the angelssmelting 0.6.20 migration, which runs when Angels are added to a save.
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.3
 Date: 01.06.2026
