@@ -1,13 +1,13 @@
 # Paranoidal-Protomolecule-Beast — notes for agents
 
-Working notes for whoever changes this mod. The player-facing description is `info.json` and `locale/`; the history is `changelog.txt`. Last updated 2026-11-03 (stage 4: train raids, depot, quiet junction, contents kept; review), version 9.0.0, Factorio 2.0.77 (Quality and Elevated Rails, no Space Age).
+Working notes for whoever changes this mod. The player-facing description is `info.json` and `locale/`; the history is `changelog.txt`. Last updated 2026-11-04 (audit: creature sprites rebuilt, sprite check, runtime guards), version 9.0.0, Factorio 2.0.77 (Quality and Elevated Rails, no Space Age).
 
 ## Identity
 
 - Paranoidal fork of *The Beast* 2.1.0 by Klaudia (upstream copy: `NEW MOD/The_Beast_2.1.0`, audit in its `_audit/`). Mod name `Paranoidal-Protomolecule-Beast` by user decision of 2026-11-03; it was `The_Beast` before it was in any build or save.
 - **Internal names stay** for saves and other mods' calls: prototypes `beast-*`, settings `the-beast-*`, force `the-beast`, remote interface `the_beast`, command `/beast-arrive`, mod-data `the-beast-compounds`. Renaming any of them needs a save assessment and a user decision.
 - Lore: the invader is the protomolecule from *The Expanse*, in a grim, clinical voice. The lore base is local agent memory in `agent-context/lore-protomolecule/` (workspace root), **never in this folder**. Read it only for player-visible texts, names or graphics (AGENTS.md route row "The Beast mod"). User decisions on behaviour are in its `adaptation.md`, decision log.
-- Location: `NEW MOD/Paranoidal-Protomolecule-Beast` now, later `ParanoidalModpack-master/mods/`. Nothing here depends on the folder. Integration then also needs `ParanoidalLocale` overrides and `mods-metadata/!descriptions.json` (build rules).
+- Location: `ParanoidalModpack-master/mods/Paranoidal-Protomolecule-Beast` since 3622400eb9 (2026-11-04). Nothing here depends on the folder. Still missing from the build rules: its `[mod-name]`/`[mod-description]` in `ParanoidalLocale` and `mods-metadata/!descriptions.json` (the Russian title needs the user's decision).
 
 ## Files
 
@@ -36,8 +36,10 @@ Working notes for whoever changes this mod. The player-facing description is `in
 - A building becomes a creature by its type (`shared.group_for_type`), its own picture (`body_sprite` in `beasts.lua`) and its size: up to `shared.max_lifted_size` (5) tiles; at 4–5 tiles two more legs; rolling stock at any size. Base game buildings (`shared.compounds[].sources`) get a creature per inserter type, others one set of legs plus a walled one. A building with no readable picture is logged and is never lifted.
 - Never infected (`shared.is_excluded`): Factorissimo, `pd-relic-*`, `bnl-distress-beacon`, `ic-control-post`, `roboport-interface-*`, `bi-arboretum-area`, `*-rampant`. Aliases (`shared.alias_of`): HeroTurretRedux ranks are lifted as their base turret; lit poles as `small-lamp`, with the pole as a second sample.
 - Result for the control stage: mod-data `the-beast-compounds` = `sources[building] = {group, legs, as, samples?}`, `creatures[name] = {group, source, legs}`.
+- **Sprites (rewritten 2026-11-04).** A torso is a RotatedAnimation; the building's sprites are Sprites, Animations, RotatedSprites, 4-way sets and variations, and the engine lays out frames differently per type, so nothing is copied across as it is. `north()` picks one sprite out of any set; `leaves()` flattens layers; then per creature kind (`body_of`): still bodies use `still_layer` (one file, the first frame's corner; frames only from one plain grid: a plain `filename` grid, the first stripe of an Animation, the frames 1..m a `frame_sequence` shows when it shows all of them; `filenames` give their first file's first frame only; RotatedSprite `frames` give the first cell's own rectangle) and `breathe` (at most 128 frames: an animation is at most 255 shown frames); car bodies and turret heads use `rotated_animation_layer` (the source's own RotatedAnimation, unchanged, no breathing); rolling stock uses `rotated_sprite_layer` (RotatedSprite → RotatedAnimation with `slice` = `line_length`, `frame_count` 1, `back_equals_front` emulated by listing the files twice when they hold exactly the half circle). Engine layouts the checker relies on, confirmed from vanilla data: RotatedAnimation `filenames` frames run direction by direction, `slice` per row, `lines_per_file` rows per file (small worm: F 10, slice 4, 10 files; small spitter: F 14, slice 6, 3 files); RotatedAnimation `stripes` are a cursor over frames then directions, and every cell of a stripe is read (car, tank; the Wind-Turbines-Reforged error of 2026-11-04 was row 2 of a 5-row stripe of a 2-row file).
+- **Sprite check.** Headless runs never load sprites, so a broken rectangle only shows at the graphical start. `review/beast-audit-20261104/_tools/beast_sprites.py DUMP ENGINE_DATA MODS_DIR` checks every frame of every prototype of this mod against the PNG sizes (icons too); `mock_export.lua` runs the data stage in Lua 5.1 against `make_raw2.py` output for a quick check without the engine. On 2026-11-04: 0 problems of 97 418 rectangles (engine dump with creative-mod); it finds both errors of the user's logs on 3622400 and 190 more (rolling stock without `slice`) on 509ba1499e.
 - Artillery turret → `howitzer` (base, cannon base and barrel in their first direction, without dice); car/tank → `crawler` (`vehicle = true`: keeps every direction of the car's own animation and turns, no walled version, stays a creature at the lair); artillery wagon → `doom-wagon`. Spidertrons get no creature. `beast-spore-shell` is the base `artillery-projectile` tinted, its action a script trigger `beast-spore-hit`.
-- On the build (dump 2026-11-01): 1107 sources, 1257 creature prototypes, 18 419 sprite paths, all present.
+- On the build (dump 2026-11-04, creative-mod on): 1284 creature prototypes, 55 legs; bi-dart-turret and creative-mod's two energy voids have no picture.
 
 ## Control stage
 
@@ -91,7 +93,7 @@ Confirmed by the engine (2026-11-03, `test-runs/beast-smoke6-20261103`): a train
 
 ## Tests (outside the mod)
 
-`test-runs/_beast-src/`: `data_mock2.lua` + `make_raw2.py` (data stage in Lua 5.1 against a dump), `run_smoke2.py RUN DRIVER` (whole build in an isolated copy, own config, working mod-list and settings untouched; `BEAST_LIMIT` seconds), drivers `zz-beast-smoke*`, patch helpers in `patches/`. Reports: `review/the-beast-adaptation/`.
+`test-runs/_beast-src/`: `data_mock2.lua` + `make_raw2.py` (data stage in Lua 5.1 against a dump), `run_smoke2.py RUN DRIVER` (whole build in an isolated copy, own config, working mod-list and settings untouched; `BEAST_LIMIT` seconds; copies the mod from its old `NEW MOD` folder), drivers `zz-beast-smoke*`, patch helpers in `patches/`. Since the mod is in the working mods: `review/beast-audit-20261104/_tools/run_smoke3.py RUN DRIVER` (same isolation, the mod copied with the working mods) and driver `zz-beast-smoke8` there (spread along belts, pipes and copper wires, inserters waking, a tripod, corrupted robots, clones armed, a raid on foot, the end with defects and no stacked buildings). Reports: `review/the-beast-adaptation/`, the 2026-11-04 audit `review/beast-audit-20261104/REPORT.md`.
 
 ## Porting to 2.1
 

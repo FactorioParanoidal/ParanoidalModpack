@@ -184,6 +184,7 @@ local function impact(surface, position)
   local away = replicators(surface)
   outbreak.begin(surface, position, type(away) == "table" and away or nil)
   local force = storage.arrival.target_force
+  if not (force and force.valid) then force = game.forces[target_force] end
   local drills = surface.find_entities_filtered{position = position, radius = impact_radius, type = "mining-drill", force = force}
   table.sort(drills, function(a, b) return util.distance(a.position, position) < util.distance(b.position, position) end)
   for i = 1, math.min(#drills, config.get("first-infected-drills")) do
