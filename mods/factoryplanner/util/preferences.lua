@@ -1,0 +1,291 @@
+if helpers.stage ~= "runtime" then return {} end
+
+local _preferences = {}
+
+_preferences.main_dimension_percentages = {50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100}
+_preferences.compact_width_percentages = {10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40}
+
+_preferences.belt_stack_options = {}
+for i = 1, prototypes.utility_constants.max_belt_stack_size do
+    _preferences.belt_stack_options[i] = i
+end
+
+---@alias Timescale 1 | 60
+---@alias BeltsOrLanes "belts" | "lanes"
+
+---@class PreferencesTable
+---@field timescale Timescale
+---@field pause_on_interface boolean
+---@field utility_scopes { components: "Factory" | "Floor" }
+---@field recipe_filters { disabled: boolean, hidden: boolean }
+---@field show_unresearched_items boolean
+---@field compact_ingredients boolean
+---@field fold_out_subfloors boolean
+---@field highlight_items boolean
+---@field main_width_percentage integer
+---@field main_height_percentage integer
+---@field compact_width_percentage integer
+---@field show_gui_button boolean
+---@field attach_factory_products boolean
+---@field skip_factory_naming boolean
+---@field calculate_emissions boolean
+---@field ignore_barreling_recipes boolean
+---@field ignore_recycling_recipes boolean
+---@field default_solver SolverName
+---@field per_floor_solver boolean
+---@field done_column boolean
+---@field line_comment_column boolean
+---@field item_views ItemViewPreferences
+---@field belts_or_lanes BeltsOrLanes
+---@field belt_stack integer
+---@field default_prototypes DefaultPrototypesTable
+---@field default_temperatures TemperatureDefaultMap
+
+---@class DefaultPrototypesTable
+---@field machines PrototypeDefaultWithCategory
+---@field fuels PrototypeDefaultWithCategory
+---@field beacons DefaultPrototype
+---@field belts DefaultPrototype
+---@field pumps DefaultPrototype
+---@field silos DefaultPrototype
+---@field wagons PrototypeDefaultWithCategory
+
+---@param player_table PlayerTable
+function _preferences.reload(player_table)
+    -- Reloads the user preferences, incorporating previous preferences if possible
+    local player_preferences = player_table.preferences or {}
+    local updated_prefs = {}
+
+    ---@param name string
+    ---@param default any
+    local function reload(name, default)
+        -- Needs to be longform-if because true is a valid default
+        if player_preferences[name] == nil then
+            updated_prefs[name] = default
+        else
+            updated_prefs[name] = player_preferences[name]
+        end
+    end
+
+    reload("timescale", 60)
+    reload("pause_on_interface", false)
+    reload("utility_scopes", {components = "Factory"})
+    reload("recipe_filters", {disabled = false, hidden = false})
+    reload("show_unresearched_items", true)
+    reload("compact_ingredients", false)
+    reload("fold_out_subfloors", false)
+    reload("highlight_items", false)
+
+    reload("main_width_percentage", 70)
+    reload("main_height_percentage", 90)
+    reload("compact_width_percentage", 24)
+
+    reload("show_gui_button", true)
+    reload("skip_factory_naming", true)
+    reload("attach_factory_products", false)
+    reload("calculate_emissions", false)
+    reload("ignore_barreling_recipes", false)
+    reload("ignore_recycling_recipes", false)
+    reload("default_solver", "sequential")
+    reload("per_floor_solver", false)
+
+    reload("done_column", false)
+    reload("line_comment_column", false)
+
+    reload("item_views", item_views.default_preferences())
+
+    reload("belts_or_lanes", "belts")
+    reload("belt_stack", 1)
+    local max_stack = prototypes.utility_constants.max_belt_stack_size
+    updated_prefs["belt_stack"] = math.min(updated_prefs["belt_stack"], max_stack)
+
+    updated_prefs.default_prototypes = defaults.refresh_preferences(player_preferences.default_prototypes)
+
+    reload("default_temperatures", lib.temperature.get_fallback())
+
+    player_table.preferences = updated_prefs
+end
+
+
+-- Version, incremented each time the format of exported preferences changes in any way
+-- The mod prevents importing non-matching preferences versions to avoid needing migrations
+_preferences.current_version = 6
+
+---@class PreferencesExportTable
+---@field version integer
+---@field timescale Timescale
+---@field pause_on_interface boolean
+---@field compact_ingredients boolean
+---@field fold_out_subfloors boolean
+---@field highlight_items boolean
+---@field main_width_percentage integer
+---@field main_height_percentage integer
+---@field compact_width_percentage integer
+---@field show_gui_button boolean
+---@field attach_factory_products boolean
+---@field skip_factory_naming boolean
+---@field calculate_emissions boolean
+---@field ignore_barreling_recipes boolean
+---@field ignore_recycling_recipes boolean
+---@field default_solver SolverName
+---@field per_floor_solver boolean
+---@field done_column boolean
+---@field line_comment_column boolean
+---@field belts_or_lanes BeltsOrLanes
+---@field belt_stack integer
+
+---@param player LuaPlayer
+---@return ExportString
+function _preferences.export(player)
+    local prefs = lib.globals.preferences(player)
+
+    local export_table = {
+        version = _preferences.current_version,
+
+        timescale = prefs.timescale,
+        pause_on_interface = prefs.pause_on_interface,
+        compact_ingredients = prefs.compact_ingredients,
+        fold_out_subfloors = prefs.fold_out_subfloors,
+        highlight_items = prefs.highlight_items,
+        main_width_percentage = prefs.main_width_percentage,
+        main_height_percentage = prefs.main_height_percentage,
+        compact_width_percentage = prefs.compact_width_percentage,
+        show_gui_button = prefs.show_gui_button,
+        attach_factory_products = prefs.attach_factory_products,
+        skip_factory_naming = prefs.skip_factory_naming,
+        calculate_emissions = prefs.calculate_emissions,
+        ignore_barreling_recipes = prefs.ignore_barreling_recipes,
+        ignore_recycling_recipes = prefs.ignore_recycling_recipes,
+        default_solver = prefs.default_solver,
+        per_floor_solver = prefs.per_floor_solver,
+        done_column = prefs.done_column,
+        line_comment_column = prefs.line_comment_column,
+        belts_or_lanes = prefs.belts_or_lanes,
+        belt_stack = prefs.belt_stack
+    }
+
+    return lib.porter.pack_export_string(export_table)
+end
+
+---@param value any
+---@param options any[]
+---@return boolean
+local function verify_option(value, options)
+    for _, option in pairs(options) do
+        if option == value then return true end
+    end
+    return false
+end
+
+---@param value integer
+---@param options integer[]
+---@return boolean
+local function verify_range(value, options)
+    if type(value) ~= "number" or value % 1 ~= 0 then return false end
+    return verify_option(value, options)
+end
+
+---@param player LuaPlayer
+---@param export_string ExportString
+---@return string?
+function _preferences.import(player, export_string)
+    local export_table = nil
+
+    if not pcall(function()
+        export_table = lib.porter.unpack_export_string(export_string)
+        assert(type(export_table) == "table")
+    end) then return "decoding_failure" end
+    ---@cast export_table PreferencesExportTable
+
+    if export_table.version ~= _preferences.current_version then return "version_mismatch" end
+
+    if not pcall(function()
+        local et = export_table
+        assert(verify_option(et.timescale, {1, 60}))
+        assert(type(et.pause_on_interface) == "boolean")
+        assert(type(et.compact_ingredients) == "boolean")
+        assert(type(et.fold_out_subfloors) == "boolean")
+        assert(type(et.highlight_items) == "boolean")
+        assert(verify_range(et.main_width_percentage, _preferences.main_dimension_percentages))
+        assert(verify_range(et.main_height_percentage, _preferences.main_dimension_percentages))
+        assert(verify_range(et.compact_width_percentage, _preferences.compact_width_percentages))
+        assert(type(et.show_gui_button) == "boolean")
+        assert(type(et.attach_factory_products) == "boolean")
+        assert(type(et.skip_factory_naming) == "boolean")
+        assert(verify_option(et.default_solver, solver.choices))
+        assert(type(et.per_floor_solver) == "boolean")
+        assert(type(et.calculate_emissions) == "boolean")
+        assert(type(et.ignore_barreling_recipes) == "boolean")
+        assert(type(et.ignore_recycling_recipes) == "boolean")
+        assert(type(et.done_column) == "boolean")
+        assert(type(et.line_comment_column) == "boolean")
+        assert(verify_option(et.belts_or_lanes, {"belts", "lanes"}))
+        assert(verify_range(et.belt_stack, _preferences.belt_stack_options))
+    end) then return "unpacking_failure" end
+
+    -- All good, overwrite preferences
+    local prefs = lib.globals.preferences(player)
+    export_table.version = nil
+    for name, value in pairs(export_table) do
+        prefs[name] = value
+    end
+
+    -- No return indicates success
+end
+
+
+---@alias PreferencesChangeType "all" | "main_dimensions" | "compact_dimensions" | "solver_config" | "mod_gui" | "edit_views" | "belt_config" | "prototype_default"
+
+---@param player LuaPlayer
+---@param change_type PreferencesChangeType
+function _preferences.refresh_after_change(player, change_type)
+    local rebuild_views_data, rebuild_views_interface = false, false
+    local run_solver, run_solver_all = false, false
+    local toggle_mod_gui = false
+    local refresh_scope = nil  ---@type RefreshGUITrigger?
+    local rebuild_main, rebuild_compact = false, false
+
+    if change_type == "all" then  -- import, reset, etc
+        rebuild_views_data = true
+        run_solver_all = true
+        run_solver = true  -- update current factory right away
+        rebuild_main = true
+        rebuild_compact = true
+    elseif change_type == "main_dimensions" then
+        rebuild_main = true
+    elseif change_type == "compact_dimensions" then
+        rebuild_compact = true
+    elseif change_type == "solver_config" then
+        run_solver_all = true
+        run_solver = true  -- update current factory right away
+        refresh_scope = "production"
+    elseif change_type == "mod_gui" then
+        toggle_mod_gui = true
+    elseif change_type == "edit_views" then
+        rebuild_views_interface = true
+        refresh_scope = "factory"
+    elseif change_type == "belt_config" then
+        rebuild_views_data = true
+        rebuild_views_interface = true
+        run_solver = true
+        refresh_scope = "factory"
+    elseif change_type == "prototype_default" then
+        rebuild_views_data = true
+        rebuild_views_interface = true
+        refresh_scope = "factory"
+    end
+
+    if rebuild_views_data then item_views.rebuild_data(player) end
+    if rebuild_views_interface then item_views.rebuild_interface(player) end
+    if run_solver_all then
+        local realm = lib.globals.player_table(player).realm
+        realm:schedule_solver_updates(game.tick, player)
+    end
+    if run_solver then solver.update(player) end
+    if toggle_mod_gui then lib.gui.toggle_mod_gui(player) end
+    if refresh_scope then lib.gui.run_refresh(player, refresh_scope) end
+    if rebuild_main then main_dialog.rebuild(player, true) end
+    if rebuild_compact then compact_dialog.rebuild(player, false) end
+end
+
+return _preferences

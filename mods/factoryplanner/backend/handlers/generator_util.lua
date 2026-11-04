@@ -1,23 +1,22 @@
-local generator_util = {}
+local _util = {}
 
 -- ** LOCAL UTIL **
 ---@alias RecipeItem FormattedProduct | Ingredient
----@alias IndexedItemList { [ItemType]: { [ItemName]: { index: number, item: RecipeItem } } }
----@alias ItemList { [ItemType]: { [ItemName]: RecipeItem } }
+---@alias ItemList table<ItemType, table<ItemName, RecipeItem>>
 ---@alias ItemTypeCounts { items: number, fluids: number }
 
 ---@class FormattedProduct
 ---@field name string
 ---@field type string
 ---@field amount number
+---@field proddable_amount number
 ---@field temperature float?
 ---@field base_name string?
----@field proddable_amount number?
 
 ---@param product Product
 ---@return FormattedProduct
 local function generate_formatted_product(product)
-    local base_amount, proddable_amount = 0, 0
+    local base_amount, proddable_amount = 0, 0  ---@type number, number
     local catalyst_amount = product.ignored_by_productivity or 0
 
     if product.amount_min ~= nil and product.amount_max ~= nil then
@@ -33,13 +32,16 @@ local function generate_formatted_product(product)
         -- If the catalyst is at least the minimum amount, the prod part must be multiplied by
         -- the probability that it rolls at least the catalyst amount
         if cat_min == 0 then proddable_amount = proddable_amount * (cat_max + 1) / (max - min + 1) end
-    else
+    else  ---@cast product.amount -nil
         base_amount = product.amount + (product.extra_count_fraction or 0)
         proddable_amount = math.max(base_amount - catalyst_amount, 0)
     end
 
-    -- Factorio 2.1: independent_probability (was probability) times the shared_probability range
-    local probability = ((product.independent_probability or product.probability or 1) * (product.shared_probability and (product.shared_probability.max - product.shared_probability.min) or 1))
+    -- These need defaults for products that are manually defined by FP
+    local shared_probability = product.shared_probability or {min = 0, max = 1}
+    local independent_probability = product.independent_probability or 1
+    local probability = independent_probability * (shared_probability.max - shared_probability.min)
+
     local formatted_product = {
         name = product.name,
         type = product.type,
@@ -50,7 +52,7 @@ local function generate_formatted_product(product)
     if product.type == "fluid" then
         local fluid = prototypes.fluid[product.name]
         formatted_product.temperature = product.temperature or fluid.default_temperature
-        formatted_product.name = product.name .. "-" .. formatted_product.temperature
+        formatted_product.name = lib.temperature.name_with(product.name, formatted_product.temperature)
         formatted_product.base_name = product.name
     end
 
@@ -67,7 +69,7 @@ local function combine_identical_products(item_list)
         local touched_item = touched_items[item.type][item.name]
         if touched_item ~= nil then
             touched_item.amount = touched_item.amount + item.amount
-            if touched_item.proddable_amount then
+            if touched_item.proddable_amount then  ---@cast item FormattedProduct
                 touched_item.proddable_amount = touched_item.proddable_amount + item.proddable_amount
             end
 
@@ -80,24 +82,16 @@ local function combine_identical_products(item_list)
 end
 
 ---@param item_list RecipeItem[]
----@return IndexedItemList
-local function create_type_indexed_list(item_list)
-    local indexed_list = {item = {}, fluid = {}, entity = {}}  ---@type IndexedItemList
+---@return ItemTypeCounts
+local function determine_item_type_counts(item_list)
+    local counts = {items = 0, fluids = 0}  ---@type ItemTypeCounts
 
-    for index, item in pairs(item_list) do
-        indexed_list[item.type][item.name] = {index = index, item = ftable.shallow_copy(item)}
+    for _, item in pairs(item_list) do
+        if item.type == "item" then counts.items = counts.items + 1
+        elseif item.type == "fluid" then counts.fluids = counts.fluids + 1 end
     end
 
-    return indexed_list
-end
-
----@param indexed_items IndexedItemList
----@return ItemTypeCounts
-local function determine_item_type_counts(indexed_items)
-    return {
-        items = table_size(indexed_items.item),
-        fluids = table_size(indexed_items.fluid)
-    }
+    return counts
 end
 
 
@@ -107,7 +101,7 @@ end
 ---@param products Product[]
 ---@param main_product Product?
 ---@param ingredients Ingredient[]
-function generator_util.format_recipe(recipe_proto, products, main_product, ingredients)
+function _util.format_recipe(recipe_proto, products, main_product, ingredients)
     local temperature_limit = 3.4e+38
 
     for _, base_ingredient in pairs(ingredients) do
@@ -125,9 +119,6 @@ function generator_util.format_recipe(recipe_proto, products, main_product, ingr
         end
     end
 
-    local indexed_ingredients = create_type_indexed_list(ingredients)
-    recipe_proto.type_counts.ingredients = determine_item_type_counts(indexed_ingredients)
-
 
     local formatted_products = {}  ---@type FormattedProduct[]
     for _, base_product in pairs(products) do
@@ -144,146 +135,141 @@ function generator_util.format_recipe(recipe_proto, products, main_product, ingr
             end
         end
     end
-
     combine_identical_products(formatted_products)
-    local indexed_products = create_type_indexed_list(formatted_products)
-    recipe_proto.type_counts.products = determine_item_type_counts(indexed_products)
 
 
-    -- Reduce item amounts for items that are both an ingredient and a product
-    for _, items_of_type in pairs(indexed_ingredients) do
-        for _, ingredient in pairs(items_of_type) do
-            local peer_product = indexed_products[ingredient.item.type][ingredient.item.name]
+    -- Items that are both an ingredient and a product are reduced by the solver, since a fluid
+    -- ingredient's temperature is only picked per-line, and it decides whether they cancel at all
 
-            if peer_product then
-                local difference = ingredient.item.amount - peer_product.item.amount
-
-                if difference < 0 then
-                    local item = ftable.shallow_copy(ingredient.item)
-                    item.amount = peer_product.item.amount + difference
-                    recipe_proto.catalysts.ingredients[item.name] = item
-
-                    ingredients[ingredient.index].amount = nil
-                    formatted_products[peer_product.index].amount = -difference
-                elseif difference > 0 then
-                    local item = ftable.shallow_copy(peer_product.item)
-                    item.amount = ingredient.item.amount - difference
-                    recipe_proto.catalysts.products[item.name] = item
-
-                    ingredients[ingredient.index].amount = difference
-                    formatted_products[peer_product.index].amount = nil
-                else
-                    -- Nilled-out items are just shown as ingredient catalysts
-                    local item = ftable.shallow_copy(ingredient.item)
-                    recipe_proto.catalysts.ingredients[item.name] = item
-
-                    ingredients[ingredient.index].amount = nil
-                    formatted_products[peer_product.index].amount = nil
-                end
-            end
-        end
-    end
-
-    -- Remove items after the fact so the iteration above doesn't break
-    for _, item_table in pairs{ingredients, formatted_products} do
-        for i = #item_table, 1, -1 do
-            if item_table[i].amount == nil then table.remove(item_table, i) end
-        end
-    end
+    recipe_proto.type_counts = {
+        products = determine_item_type_counts(formatted_products),
+        ingredients = determine_item_type_counts(ingredients)
+    }
 
     recipe_proto.ingredients = ingredients
     recipe_proto.products = formatted_products
 end
 
 
--- Active mods table needed for the funtions below
-local active_mods = script.active_mods
+-- Sorts items the way the game lists them, which for research recipes is the order
+-- technology costs are shown in
+---@param items RecipeItem[]
+function _util.sort_by_item_order(items)
+    table.sort(items, function(a, b)
+        local order_a, order_b = prototypes.item[a.name].order, prototypes.item[b.name].order
+        if order_a ~= order_b then return order_a < order_b end
+        return a.name < b.name
+    end)
+end
 
--- Determines whether this recipe is a recycling one or not
-local recycling_recipe_mods = {
-    ["base"] = {".*%-recycling$"},
-    --[[ ["IndustrialRevolution"] = {"^scrap%-.*"},
-    ["space-exploration"] = {"^se%-recycle%-.*"},
-    ["angelspetrochem"] = {"^converter%-.*"},
-    ["reverse-factory"] = {"^rf%-.*"},
-    ["ZRecycling"] = {"^dry411srev%-.*"} ]]
-}
+-- Kept in sync with time_label(), which badges the same duration onto the icons
+---@param ticks double
+---@return number|string value
+---@return LocalisedString unit
+function _util.research_time(ticks)
+    local seconds = ticks / 60
+    if seconds >= 120 then
+        local minutes = seconds / 60
+        if minutes % 1 == 0 then return minutes, {"fp.unit_minute"} end
+        if (minutes * 10) % 1 == 0 then return string.format("%.1f", minutes), {"fp.unit_minute"} end
+    end
+    return seconds, {"fp.unit_second"}
+end
 
-local active_recycling_recipe_mods = {}  ---@type string[]
-for modname, patterns in pairs(recycling_recipe_mods) do
-    for _, pattern in pairs(patterns) do
-        if active_mods[modname] then
-            table.insert(active_recycling_recipe_mods, pattern)
-        end
+-- The cost a research recipe models, or nil if the technology isn't researched in a
+-- lab with science packs. Its key merges costs unless an amount above 1 differs,
+-- which is what would tell them apart once padded with 1s across a lab's inputs.
+---@param tech_proto LuaTechnologyPrototype
+---@return { key: string, ticks: double, suffix: string, amounts: table<string, uint> }?
+function _util.research_cost(tech_proto)
+    local ingredients = tech_proto.research_unit_ingredients
+    local ticks = tech_proto.research_unit_energy
+    if tech_proto.research_trigger ~= nil or #ingredients == 0 or ticks <= 0 then return nil end
+
+    local amounts, above_one = {}, {}
+    for _, ingredient in pairs(ingredients) do
+        amounts[ingredient.name] = ingredient.amount
+        if ingredient.amount ~= 1 then table.insert(above_one, ingredient.name) end
+    end
+
+    table.sort(above_one)
+    local suffix = ""
+    for _, pack_name in ipairs(above_one) do
+        suffix = suffix .. "-" .. pack_name .. "-" .. amounts[pack_name]
+    end
+    return {key = ticks .. suffix, ticks = ticks, suffix = suffix, amounts = amounts}
+end
+
+---@param normal_quality_value number?
+---@param normal_multiplier number?
+---@return number? base_value
+function _util.get_base_value(normal_quality_value, normal_multiplier)
+    if normal_quality_value == nil then return nil end
+    return normal_quality_value / (normal_multiplier or prototypes.quality["normal"].default_multiplier)
+end
+
+---@param proto LuaEntityPrototype
+---@return uint16
+function _util.get_base_module_limit(proto)
+    local limit = proto.module_inventory_size or 0
+    local normal_quality = prototypes.quality.normal
+
+    if not proto.quality_affects_module_slots then
+        return limit
+    elseif proto.type == "mining-drill" then
+        return limit - normal_quality.mining_drill_module_slots_bonus
+    elseif proto.type == "lab" then
+        return limit - normal_quality.lab_module_slots_bonus
+    elseif proto.type == "beacon" then
+        return limit - normal_quality.beacon_module_slots_bonus
+    else  -- crafting machines
+        return limit - proto.module_slots_quality_bonus--[[@cast -nil]].normal
     end
 end
 
----@param proto LuaRecipePrototype
----@return boolean
-function generator_util.is_recycling_recipe(proto)
-    for _, pattern in pairs(active_recycling_recipe_mods) do
-        if string.match(proto.name, pattern) and proto.hidden then return true end
-    end
-    return false
+-- Items are still name-keyed at this point in generation, before the final conversion to id-keyed storage,
+-- so storage.prototypes.items can't be used with its regular (post-conversion) type here
+---@param item_type "item" | "fluid"
+---@return table<string, FPItemPrototype> members
+function _util.get_item_members(item_type)
+    local named_items = storage.prototypes.items  ---@as NamedPrototypesWithCategory<FPItemPrototype>
+    return named_items[item_type].members
 end
 
+-- Determines the recipes that the given silo can build its rocket parts with
+---@param silo_proto LuaEntityPrototype
+---@param recipes NamedPrototypes<FPRecipePrototype>
+---@return FPRecipePrototype[]
+function _util.silo_parts_recipes(silo_proto, recipes)
+    if silo_proto.fixed_recipe then
+        local recipe = recipes[silo_proto.fixed_recipe.name]
+        return (recipe and recipe.main_product) and {recipe} or {}
+    end
 
--- Determines whether the given recipe is a barreling or stacking one
-local compacting_recipe_mods = {
-    ["base"] = {patterns = {"^fill%-.*", "^empty%-.*"}, item = "barrel"},
-    ["pycoalprocessing"] = {patterns = {"^fill%-.*%-canister$", "^empty%-.*%-canister$"}}
-    --[[ ["deadlock-beltboxes-loaders"] = {"^deadlock%-stacks%-.*", "^deadlock%-packrecipe%-.*",
-                                      "^deadlock%-unpackrecipe%-.*"},
-    ["DeadlockCrating"] = {"^deadlock%-packrecipe%-.*", "^deadlock%-unpackrecipe%-.*"},
-    ["IntermodalContainers"] = {"^ic%-load%-.*", "^ic%-unload%-.*"},
-    ["space-exploration"] = {"^se%-delivery%-cannon%-pack%-.*"},
-    ["Satisfactorio"] = {"^packaged%-.*", "^unpack%-.*"} ]]
-}
-
----@param proto LuaRecipePrototype
----@return boolean
-function generator_util.is_compacting_recipe(proto)
-    for mod, filter_data in pairs(compacting_recipe_mods) do
-        if active_mods[mod] then
-            for _, pattern in pairs(filter_data.patterns) do
-                if string.match(proto.name, pattern) then
-                    if not filter_data.item then
-                        return true
-                    else
-                        for _, product in pairs(proto.products) do
-                            if product.name == filter_data.item then return true end
-                        end
-                        for _, ingredient in pairs(proto.ingredients) do
-                            if ingredient.name == filter_data.item then return true end
-                        end
-                    end
-                end
+    local categories = silo_proto.crafting_categories  ---@cast categories -nil
+    local parts_recipes = {}  ---@type FPRecipePrototype[]
+    for _, recipe in pairs(recipes) do
+        if recipe.main_product then
+            for category, _ in pairs(recipe.categories) do
+                if categories[category] then table.insert(parts_recipes, recipe); break end
             end
         end
     end
-    return false
-end
-
-
----@param normal_quality_value number
----@return number base_value
-function generator_util.get_base_value(normal_quality_value)
-    if normal_quality_value == nil then return nil end
-    return normal_quality_value / prototypes.quality["normal"].default_multiplier
+    return parts_recipes
 end
 
 -- Finds a sprite for the given entity prototype
 ---@param proto LuaEntityPrototype
----@return SpritePath | nil
-function generator_util.determine_entity_sprite(proto)
-    local entity_sprite = "entity/" .. proto.name  ---@type SpritePath
+---@return SpritePath?
+function _util.determine_entity_sprite(proto)
+    local entity_sprite = "entity/" .. proto.name
     if helpers.is_valid_sprite_path(entity_sprite) then
         return entity_sprite
     end
 
     local items_to_place_this = proto.items_to_place_this
     if items_to_place_this and next(items_to_place_this) then
-        local item_sprite = "item/" .. items_to_place_this[1].name  ---@type SpritePath
+        local item_sprite = "item/" .. items_to_place_this[1]--[[@cast -nil]].name
         if helpers.is_valid_sprite_path(item_sprite) then
             return item_sprite
         end
@@ -293,140 +279,183 @@ function generator_util.determine_entity_sprite(proto)
 end
 
 
--- Determines the tick count and energy consumption of launching a rocket for the given silo
--- This does not take into account the full launch cycle, but instead calculates the fastest
--- possible one, using the quick follow-up rocket mechanic, as that's the limiting case.
--- The tick results are seemingly off by a handful of ticks, but it's close enough.
--- Power consumption results might be low by 10% or so from light empirical testing.
----@param silo_proto LuaEntityPrototype
----@return number launch_time
----@return number energy_usage
-function generator_util.determine_launch_data(silo_proto)
-    local power = silo_proto.active_energy_usage
-    local rocket_proto = silo_proto.rocket_entity_prototype
-
-    -- These values are not accessible in the API
-    local frame_count, inverse_speed = 32, 1 / 0.3
-    local arm_move_offset = rocket_proto.rising_speed * frame_count * inverse_speed
-    local rocket_quick_relaunch_start_offset = -0.625
-    local rocket_flight_threshold = 0.1  -- hardcoded in the game files
-
-    -- Cycle starts here
-    local launch_ticks, energy_usage = 0, 0
-
-    local doors_opened = 1
-    launch_ticks = launch_ticks + doors_opened
-
-    local rocket_rising_threshold = 1 - rocket_quick_relaunch_start_offset - arm_move_offset
-    local rocket_rising = rocket_rising_threshold / rocket_proto.rising_speed
-    launch_ticks = launch_ticks + rocket_rising
-    energy_usage = energy_usage + (rocket_rising * power)
-
-    local arms_advance = arm_move_offset / rocket_proto.rising_speed
-    launch_ticks = launch_ticks + arms_advance
-    energy_usage = energy_usage + (arms_advance * power)
-
-    local launch_starting = 1
-    launch_ticks = launch_ticks + launch_starting
-
-    local launch_started = silo_proto.launch_wait_time
-    launch_ticks = launch_ticks + launch_started
-
-    local engine_starting = 1 / rocket_proto.engine_starting_speed
-    launch_ticks = launch_ticks + engine_starting
-    energy_usage = energy_usage + (engine_starting * power)
-
-    local arms_retract = arm_move_offset / rocket_proto.rising_speed
-    launch_ticks = launch_ticks + arms_retract
-    energy_usage = energy_usage + (arms_retract * power)
-
-    -- I'm not exactly sure why this behaves as the game code does, *but it do*
-    local rocket_flying = math.log(1 + rocket_flight_threshold * rocket_proto.flying_acceleration
-        / rocket_proto.flying_speed) / math.log(1 + rocket_proto.flying_acceleration)
-    launch_ticks = launch_ticks + rocket_flying - arms_retract
-
-    return (launch_ticks / 60), (energy_usage / launch_ticks)
-end
-
-
----@param effects ModuleEffects?
+---@param effects Effect?
 ---@return IntegerModuleEffects
-function generator_util.formatted_effects(effects)
+function _util.formatted_effects(effects)
     if effects == nil then return {} end
 
-    -- This turns effects into an integer, multiplying by 100 as the values are allowed two decimals
-    -- The values need to be  divided by 100 and floored for calculation
+    -- This turns effects into an integer, multiplying by effect_precision for 0.01% precision
+    -- The values need to then be divided by effect_precision and floored for calculation
     for name, value in pairs(effects) do
         -- The API provides effects as values with only two decimals already
         effects[name] = value * MAGIC_NUMBERS.effect_precision
     end
 
-    return effects
+    return effects  ---@as IntegerModuleEffects
 end
 
-
 ---@param proto LuaEntityPrototype
----@return EffectReceiver effect_receiver
-function generator_util.format_effect_receiver(proto)
-    local effect_receiver = proto.effect_receiver or {
-        uses_module_effects = false,
-        uses_beacon_effects = false,
-        uses_surface_effects = false
-    }
-    local base_effect = effect_receiver.base_effect  -- can be nil
-    effect_receiver.base_effect = generator_util.formatted_effects(base_effect)
-
-    local any_positives = false
-    for _, effect in pairs(proto.allowed_effects or {}) do
-        if effect == true then any_positives = true; break end
+---@return boolean
+function _util.is_any_effect_viable(proto)
+    local allowed_categories = proto.allowed_module_categories
+    if allowed_categories ~= nil and table_size(allowed_categories) == 0 then
+        return false
     end
 
-    if not any_positives then
-        if proto.module_inventory_size ~= nil then
-            effect_receiver.uses_module_effects = false
-        end
+    local allowed_effects = proto.allowed_effects
+    if allowed_effects == nil then return false end
+
+    for _, effect in pairs(allowed_effects or {}) do
+        if effect == true then return true end
+    end
+
+    return false
+end
+
+---@class FormattedEffectReceiver
+---@field base_effect IntegerModuleEffects
+---@field uses_module_effects boolean
+---@field uses_beacon_effects boolean
+---@field uses_surface_effects boolean
+---@field limits table<ModuleEffectName, IntegerEffectValueRange>
+
+---@param proto LuaEntityPrototype?
+---@return FormattedEffectReceiver effect_receiver
+function _util.format_effect_receiver(proto)
+    local effect_receiver = (proto) and proto.effect_receiver or nil
+
+    if effect_receiver == nil then
+        effect_receiver = {
+            base_effect = {},
+            uses_module_effects = false,
+            uses_beacon_effects = false,
+            uses_surface_effects = false,
+            uses_local_effects = false,
+            consumption_limits = {low = -0.8, high = 1000},
+            speed_limits = {low = -0.8, high = 1000},
+            productivity_limits = {low = -0.8, high = 1000},
+            pollution_limits = {low = -0.8, high = 1000},
+            quality_limits = {low = 0, high = 1000}
+        }
+    else
+        local base_effect = effect_receiver.base_effect  -- can be nil
+        effect_receiver.base_effect = _util.formatted_effects(base_effect)  ---@as Effect
+    end
+
+    local module_limit = (proto) and proto.module_inventory_size or 0
+    if module_limit == nil or module_limit == 0 then
+        effect_receiver.uses_module_effects = false
+        -- Beacons can still be used even if the machine can't have modules
+    end
+
+    if not proto or not _util.is_any_effect_viable(proto) then
+        effect_receiver.uses_module_effects = false
         effect_receiver.uses_beacon_effects = false
     end
 
-    return effect_receiver
+    -- Adjust limits format to be more convenient
+    local formatted = effect_receiver  ---@as FormattedEffectReceiver
+    formatted.limits = {}
+    for name, _ in pairs(lib.effects.blank) do
+        local limits = effect_receiver[name .. "_limits"]
+        formatted.limits[name] = {
+            low = math.floor(limits.low * MAGIC_NUMBERS.effect_precision),
+            high = math.floor(limits.high * MAGIC_NUMBERS.effect_precision)
+        }
+        effect_receiver[name .. "_limits"] = nil
+    end
+
+    return formatted
 end
 
 
+---@param fluid_box LuaFluidBoxPrototype
+---@return boolean
+local function connects_to_pipes(fluid_box)
+    for _, connection in pairs(fluid_box.pipe_connections) do
+        for _, category in pairs(connection.connection_category) do
+            -- This avoids catching internal-only connection for multi-part machines
+            -- It could drop legit pipe categories, but I don't know of any such cases
+            if category == "default" then return true end
+        end
+    end
+    return false
+end
+
+---@class BoilerConversion
+---@field input LuaFluidPrototype
+---@field output LuaFluidPrototype
+---@field minimum_temperature double
+---@field maximum_temperature double
+---@field goal_temperature double
+
+-- Determines every fluid conversion a boiler can actually carry out
 ---@param proto LuaEntityPrototype
----@return string? category
----@return LuaFluidBoxPrototype? input
----@return LuaFluidBoxPrototype? output
-function generator_util.get_boiler_data(proto)
-    local input, output = nil, nil  -- need to find these manually
+---@return BoilerConversion[]
+function _util.get_boiler_conversions(proto)
+    local source = proto.fluid_energy_source_prototype
+    local input, output  ---@type LuaFluidBoxPrototype, LuaFluidBoxPrototype
+
     for _, fluid_box in pairs(proto.fluidbox_prototypes) do
-        if fluid_box.production_type == "input-output" or fluid_box.production_type == "input" then
-            input = fluid_box
-        elseif fluid_box.production_type == "output" then
-            output = fluid_box
+        -- A fluid energy source puts its own boxes in this list, where they could pass for the input
+        if source == nil or (fluid_box ~= source.fluid_box and fluid_box ~= source.output_fluid_box) then
+            if fluid_box.production_type == "input-output" or fluid_box.production_type == "input" then
+                -- An input nothing can be piped into makes the boiler unusable
+                if connects_to_pipes(fluid_box) then input = fluid_box end
+            elseif fluid_box.production_type == "output" then
+                output = fluid_box
+            end
+        end
+    end
+    if input == nil then return {} end  -- without an input it can't do anything
+
+    -- Only this mode has a target temperature, and only it uses the output fluidbox at all
+    -- The other one tops the fluid out at its own maximum, where it stays the same fluid
+    local separate_pipe = (proto.boiler_mode == "output-to-separate-pipe")
+    local conversions = {}  ---@type BoilerConversion[]
+
+    ---@param fluid_proto LuaFluidPrototype
+    local function add_conversion(fluid_proto)
+        local output_proto, goal_temperature = fluid_proto, 0.0  ---@type LuaFluidPrototype, double
+
+        if separate_pipe then
+            output_proto = (output ~= nil and output.filter) or fluid_proto
+            goal_temperature = math.min(proto.target_temperature--[[@as double]], output_proto.max_temperature)
+        else
+            goal_temperature = math.min(fluid_proto.max_temperature, proto.maximum_input_temperature or math.huge)
+        end
+
+        -- A goal not above the default temperature can't be achieved
+        if goal_temperature <= fluid_proto.default_temperature then return end
+
+        table.insert(conversions, {
+            input = fluid_proto,
+            output = output_proto,
+            minimum_temperature = math.max(proto.minimum_input_temperature or -math.huge,
+                fluid_proto.default_temperature),
+            maximum_temperature = math.min(proto.maximum_input_temperature or math.huge,
+                fluid_proto.max_temperature, goal_temperature),
+            goal_temperature = goal_temperature
+        })
+    end
+
+    if input.filter then
+        add_conversion(input.filter)
+    else  -- an unfiltered boiler takes in any fluid that can actually be put into it
+        for _, fluid_proto in pairs(prototypes.fluid) do
+            -- Parameters are blueprint placeholders, and hidden fluids aren't offered anywhere
+            if not fluid_proto.parameter and not fluid_proto.hidden then add_conversion(fluid_proto) end
         end
     end
 
-    if input == nil then return nil, nil, nil end
-
-    local category = "boiler"
-    if proto.boiler_mode == "output-to-separate-pipe" then
-        category = category .. "-target-" .. proto.target_temperature
-    end
-    if output.filter ~= nil then
-        category = category .. "-output-" .. output.filter.name
-    end
-    if input.filter ~= nil then
-        category = category .. "-filter-" .. input.filter.name
-    end
-
-    return category, input, output
+    return conversions
 end
 
 
 ---@param proto FPRecipePrototype | MachineBurner
----@param combined_list { string: string[] }
----@param used_categories { string: [FPMachinePrototype | FPFuelPrototype] }
-function generator_util.format_category_data(proto, combined_list, used_categories)
+---@param combined_list table<string, string[]>
+---@param used_categories table<string, (FPMachinePrototype | FPFuelPrototype)[]>
+function _util.format_category_data(proto, combined_list, used_categories)
     local list = {}
 
     for category, _ in pairs(proto.categories) do
@@ -443,15 +472,15 @@ function generator_util.format_category_data(proto, combined_list, used_categori
     combined_list[proto.combined_category] = list
 end
 
----@param combined_list { string: string[] }
----@param used_categories { string: [FPMachinePrototype | FPFuelPrototype] }
+---@param combined_list table<string, string[]>
+---@param used_categories table<string, (FPMachinePrototype | FPFuelPrototype)[]>
 ---@param final_list NamedPrototypesWithCategory<FPMachinePrototype | FPFuelPrototype>
 ---@param insert_function function
-function generator_util.fill_categories(combined_list, used_categories, final_list, insert_function)
+function _util.fill_categories(combined_list, used_categories, final_list, insert_function)
     for combined_category, list in pairs(combined_list) do
         for _, category in pairs(list) do
             for _, proto in pairs(used_categories[category]) do
-                local copy = ftable.deep_copy(proto)
+                local copy = lib.flib.deep_copy(proto)
                 copy.combined_category = combined_category
                 insert_function(final_list, copy, combined_category)
             end
@@ -463,28 +492,28 @@ end
 -- Adds the tooltip for the given recipe
 ---@param recipe FPRecipePrototype
 ---@return LocalisedString
-function generator_util.recipe_tooltip(recipe)
+function _util.recipe_tooltip(recipe)
     local tooltip = {"", {"fp.recipe_title", recipe.sprite, recipe.localised_name}}  ---@type LocalisedString
     local current_table, next_index = tooltip, 3
 
     if recipe.energy ~= nil then
         local energy_line = {"fp.recipe_crafting_time", recipe.energy}
-        current_table, next_index = util.build_localised_string(energy_line, current_table, next_index)
+        current_table, next_index = lib.format.build_localised_string(energy_line, current_table, next_index)
     end
 
     local item_protos = storage.prototypes.items
     for _, item_type in ipairs{"ingredients", "products"} do
         local locale_key = (item_type == "ingredients") and "fp.pu_ingredient" or "fp.pu_product"
         local header_line = {"fp.recipe_header", {locale_key, 2}}
-        current_table, next_index = util.build_localised_string(header_line, current_table, next_index)
+        current_table, next_index = lib.format.build_localised_string(header_line, current_table, next_index)
         if not next(recipe[item_type]) then
-            current_table, next_index = util.build_localised_string({"fp.recipe_none"}, current_table, next_index)
+            current_table, next_index = lib.format.build_localised_string({"fp.recipe_none"}, current_table, next_index)
         else
             local items = recipe[item_type]
             for _, item in ipairs(items) do
                 local proto = item_protos[item.type].members[item.name]
                 local item_line = {"fp.recipe_item", proto.sprite, item.amount, proto.localised_name}
-                current_table, next_index = util.build_localised_string(item_line, current_table, next_index)
+                current_table, next_index = lib.format.build_localised_string(item_line, current_table, next_index)
             end
         end
     end
@@ -498,25 +527,68 @@ end
 ---@field order string
 ---@field valid boolean
 
--- Generates a table imitating LuaGroup to avoid lua-cpp bridging
----@param group LuaGroup
+-- Generates a table imitating the group to avoid lua-cpp bridging
+---@param group LuaItemGroup | LuaItemSubGroup | ItemGroup
 ---@return ItemGroup group_table
-function generator_util.generate_group_table(group)
+function _util.generate_group_table(group)
     return {name=group.name, localised_name=group.localised_name, order=group.order, valid=true}
 end
 
----@param proto FPItemPrototype | FPRecipePrototype
-function generator_util.add_default_groups(proto)
-    proto.group = generator_util.generate_group_table(prototypes.item_group["other"])
-    proto.subgroup = generator_util.generate_group_table(prototypes.item_subgroup["other"])
+---@param proto CustomItemDetails | FPRecipePrototype
+function _util.add_default_groups(proto)
+    proto.group = _util.generate_group_table(prototypes.item_group["other"])
+    proto.subgroup = _util.generate_group_table(prototypes.item_subgroup["other"])
 end
 
+-- Puts the prototype in the groups of the item that places the given entity, so that custom
+-- ones can sit with the machines they relate to instead of in a group of their own
+---@param proto CustomItemDetails | FPRecipePrototype
+---@param entity_name string?
+function _util.add_entity_groups(proto, entity_name)
+    local entity = (entity_name) and prototypes.entity[entity_name] or nil
+    local items_to_place_this = (entity) and entity.items_to_place_this or nil
+    local first_item = (items_to_place_this) and items_to_place_this[1] or nil
+    local placing_item = (first_item) and prototypes.item[first_item.name] or nil
+
+    if placing_item == nil then
+        _util.add_default_groups(proto)
+    else
+        proto.group = _util.generate_group_table(placing_item.group)
+        proto.subgroup = _util.generate_group_table(placing_item.subgroup)
+    end
+end
+
+---@param proto FPRecipePrototype | FPMachinePrototype
+---@param conditions SurfaceCondition[]?
+function _util.compile_surface_conditions(proto, conditions)
+    if not next(proto.compatible_locations) then
+        for _, location in pairs(storage.prototypes.locations) do
+            local properties = location.surface_properties
+            -- No surface properties or conditions means that the location/recipe/machine prototype is universal
+            if not properties or not conditions then
+                proto.compatible_locations[location.name] = true
+                goto continue
+            end
+
+            for _, condition in pairs(conditions) do
+                local property = properties[condition.property]
+                if property and (property < condition.min or property > condition.max) then
+                    proto.compatible_locations[location.name] = false
+                    goto continue
+                end
+            end
+
+            proto.compatible_locations[location.name] = true
+            ::continue::
+        end
+    end
+end
 
 ---@param text LocalisedString
 ---@param color Color
 ---@return LocalisedString
-function generator_util.colored_rich_text(text, color)
-    return {"", "[color=", color.r, ",", color.g, ",", color.b, "]", text, "[/color]"}
+function _util.colored_rich_text(text, color)
+    return {"", "[color=", color.r, ",", color.g, ",", color.b, "]", text, "[/color]"}  ---@as LocalisedString
 end
 
-return generator_util
+return _util

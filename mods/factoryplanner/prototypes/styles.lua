@@ -2,11 +2,41 @@
 
 local styles = data.raw["gui-style"].default
 
+data:extend{{
+    type = "font",
+    name = "fp_district_heading",
+    from = "default-semibold",
+    size = 16
+}}
+
+styles["fp_label_district_count"] = {
+    type = "label_style",
+    parent = "label",
+    font = "default-listbox",
+    font_color = {0.65, 0.65, 0.65},
+    parent_hovered_font_color = {0.35, 0.35, 0.35}
+}
+
 styles["fp_naked_frame"] = {
     type = "frame_style",
     parent = "frame",
     padding = 0,
     graphical_set = {}
+}
+
+-- Use the standard footer graphics without its fixed 36px height
+styles["fp_frame_subfooter"] = {
+    type = "frame_style",
+    parent = "frame",
+    graphical_set = styles["subfooter_frame"].graphical_set
+}
+
+styles["fp_label_solver"] = {
+    type = "label_style",
+    parent = "bold_label",
+    height = 36,
+    vertical_align = "center",
+    bottom_padding = 4
 }
 
 local function light_slots(size)
@@ -26,23 +56,6 @@ styles["fp_frame_light_slots"] = {
     type = "frame_style",
     parent = "fp_naked_frame",
     background_graphical_set = light_slots(40)
-}
-
--- normal slots table is called filter_slot_table
-
-styles["fp_frame_light_slots_small"] = {
-    type = "frame_style",
-    parent = "fp_naked_frame",
-    background_graphical_set = light_slots(36)
-}
-
-styles["fp_table_slots_small"] = {
-    type = "table_style",
-    parent = "slot_table",
-    wide_as_column_count = true,
-    column_widths = {
-        width = 36
-    }
 }
 
 styles["fp_frame_bordered_stretch"] = {
@@ -119,6 +132,21 @@ styles["fp_sprite-button_group_tab"] = {
     padding = 1
 }
 
+styles["fp_scroll-pane_group_tabs"] = {
+    type = "scroll_pane_style",
+    parent = "naked_scroll_pane",
+    background_graphical_set = deep_slot_background_tiling(71, 76),
+    scrollbars_go_outside = true,  -- so the tabs don't need to squish to make room
+    vertically_squashable = "off",  -- so the dialog can't collapse the tabs when it runs out of height
+    padding = 0
+}
+
+styles["fp_scroll-pane_group_tabs_scrolling"] = {
+    type = "scroll_pane_style",
+    parent = "fp_scroll-pane_group_tabs",
+    background_graphical_set = deep_slot_background_tiling(69, 76)
+}
+
 -- frame_action_button but correct
 styles["fp_button_frame"] = {
     type = "button_style",
@@ -180,6 +208,7 @@ styles["fp_sprite-button_move_small"] = {
 styles["fp_button_green"] = {
     type = "button_style",
     parent = "button",
+    minimal_width = 0,
     default_graphical_set = {
         base = {position = {68, 17}, corner_size = 8},
         shadow = default_dirt
@@ -200,41 +229,34 @@ styles["fp_button_green"] = {
     left_click_sound = "__core__/sound/gui-green-confirm.ogg"
 }
 
--- Generate smaller versions of flib's slot buttons (size 36)
+styles["fp_sprite-button_item_weight"] = {
+    type = "button_style",
+    parent = "fflib_slot_button_default",
+    font = "count-font",
+    horizontal_align = "right",
+    vertical_align = "bottom",
+    default_font_color = {1, 1, 1},
+    hovered_font_color = {1, 1, 1},
+    clicked_font_color = {1, 1, 1}
+}
+
+-- Generate grayscale versions of flib's slot buttons
 for _, color in pairs{"default", "grey", "red", "orange", "yellow", "green", "cyan", "blue", "purple", "pink"} do
-    styles["flib_slot_button_" .. color .. "_small"] = {
+    styles["fflib_slot_button_" .. color .. "_grayscale"] = {
         type = "button_style",
-        parent = "flib_slot_button_" .. color,
-        size = 36
+        parent = "fflib_slot_button_" .. color,
+        draw_grayscale_picture = true
     }
 end
 
-styles["flib_slot_button_disabled"] = {
+styles["fflib_slot_button_disabled"] = {
     type = "button_style",
-    parent = "flib_slot_button_default",
+    parent = "fflib_slot_button_default",
     default_graphical_set = {},
     hovered_graphical_set = {},
     clicked_graphical_set = {},
     disabled_graphical_set = {},
     padding = 4
-}
-
-styles["flib_slot_button_disabled_small"] = {
-    type = "button_style",
-    parent = "flib_slot_button_disabled",
-    size = 36
-}
-
-styles["flib_slot_button_grayscale_small"] = {
-    type = "button_style",
-    parent = "flib_slot_button_default_small",
-    draw_grayscale_picture = true
-}
-
-styles["flib_slot_button_disabled_grayscale_small"] = {
-    type = "button_style",
-    parent = "flib_slot_button_disabled_small",
-    draw_grayscale_picture = true
 }
 
 

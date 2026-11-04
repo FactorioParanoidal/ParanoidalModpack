@@ -1,5 +1,23 @@
+---@class UtilityDialogModalData: ModalData
+---@field recalculate boolean
+---@field missing_items MissingItem[]
+---@field factory_index ObjectID[]
+
+---@alias MissingItem {name: string, quality: string, required_amount: integer, missing_amount: number}
+
 -- ** LOCAL UTIL **
+---@alias UtilityBoxType "components" | "blueprints" | "notes" | "productivity_boni"
+
 -- Adds a box with title and optional scope switch for the given type of utility
+---@param player LuaPlayer
+---@param modal_elements table
+---@param parent_name "content_frame" | "secondary_frame"
+---@param type UtilityBoxType
+---@param show_tooltip boolean
+---@param show_switch boolean
+---@return LuaGuiElement bordered_frame
+---@return LuaGuiElement flow_custom
+---@return LuaGuiElement? scope_switch
 local function add_utility_box(player, modal_elements, parent_name, type, show_tooltip, show_switch)
     local bordered_frame = modal_elements[parent_name].add{type="frame", direction="vertical",
         style="fp_frame_bordered_stretch"}
@@ -16,17 +34,20 @@ local function add_utility_box(player, modal_elements, parent_name, type, show_t
     label_title.style.top_margin = -2
 
     -- Empty flow for custom controls
-    flow_title_bar.add{type="empty-widget", style="flib_horizontal_pusher"}
+    flow_title_bar.add{type="empty-widget", style="fflib_horizontal_pusher"}
     local flow_custom = flow_title_bar.add{type="flow"}
     flow_custom.style.right_margin = 12
 
     -- Scope switch
-    local scope_switch = nil
+    local scope_switch  ---@type LuaGuiElement?
     if show_switch then
-        local utility_scope = util.globals.preferences(player).utility_scopes[type]
+        local utility_scope = lib.globals.preferences(player).utility_scopes[type--[[@cast -nil]]]
         local switch_state = (utility_scope == "Factory") and "left" or "right"
-        scope_switch = flow_title_bar.add{type="switch", switch_state=switch_state,
-            tags={mod="fp", on_gui_switch_state_changed="utility_change_scope", utility_type=type},
+
+        ---@class UtilityChangeScopeTags
+        ---@field utility_type UtilityBoxType
+        local tags = {mod="fp", on_gui_switch_state_changed="utility_change_scope", utility_type=type}
+        scope_switch = flow_title_bar.add{type="switch", tags=tags, switch_state=switch_state,
             left_label_caption={"fp.pu_factory", 1}, right_label_caption={"fp.pu_floor", 1}}
     end
 
@@ -34,20 +55,44 @@ local function add_utility_box(player, modal_elements, parent_name, type, show_t
 end
 
 
+-- Sums up what the crafting queue will still add to the inventory
+---@param player LuaPlayer
+---@return table<string, integer>
+local function queued_craft_amounts(player)
+    local amounts = {}  ---@type table<string, integer>
+    if player.physical_controller_type ~= defines.controllers.character then return {} end
+    for _, entry in pairs(player.crafting_queue or {}) do
+        if not entry.prerequisite then  -- prerequisites are transitory, so ignore
+            for _, product in pairs(prototypes.recipe[entry.recipe].products) do
+                -- Products without a fixed amount are random, so they can't be counted on
+                local amount = (product.type == "item") and (product.amount or 0) * entry.count--[[@as integer]] or 0
+                if amount > 0 then amounts[product.name] = (amounts[product.name] or 0) + amount end
+            end
+        end
+    end
+    return amounts
+end
+
+
 local utility_structures = {}
 
+---@param player LuaPlayer
+---@param modal_data UtilityDialogModalData
 function utility_structures.components(player, modal_data)
-    local preferences = util.globals.preferences(player)
+    local preferences = lib.globals.preferences(player)
     local scope = preferences.utility_scopes.components
     local skip_done = (preferences.done_column == true)
     local modal_elements = modal_data.modal_elements
 
     if modal_elements.components_box == nil then
-        local components_box, custom_flow, scope_switch = add_utility_box(player, modal_data.modal_elements,
+        local components_box, custom_flow, scope_switch = add_utility_box(player, modal_elements,
             "content_frame", "components", true, true)
         modal_elements.components_box = components_box
         modal_elements.scope_switch = scope_switch
 
+        ---@param sprite SpritePath
+        ---@param action "utility_item_combinator" | "utility_request_items"
+        ---@return LuaGuiElement
         local function action_button(sprite, action)
             local button = custom_flow.add{type="sprite-button", sprite=sprite, tags={mod="fp", on_gui_click=action},
                 style="fp_sprite-button_rounded_sprite", mouse_button_filter={"left"}}
@@ -62,6 +107,7 @@ function utility_structures.components(player, modal_data)
         table_components.style.horizontal_spacing = 24
         table_components.style.vertical_spacing = 8
 
+        ---@param type "machine" | "module"
         local function add_component_row(type)
             table_components.add{type="label", caption={"fp.pu_" .. type, 2}, style="semibold_label"}
 
@@ -73,24 +119,31 @@ function utility_structures.components(player, modal_data)
         add_component_row("module")
     end
 
-    local relevant_object = util.context.get(player, scope)
+    local relevant_object = lib.context.get(player, scope)
     if scope == "Factory" then relevant_object = relevant_object--[[@as Factory]].top_floor end
     local component_data = relevant_object--[[@as Floor]]:get_component_data(skip_done, nil)
 
+    ---@param type "machine" | "module"
     local function refresh_component_flow(type)
         local component_row = modal_elements["components_" .. type .. "_flow"]
         component_row.clear()
 
-        local main_inventory = (player.character) and player.character.get_main_inventory() or nil
+        local main_inventory = player.get_main_inventory()
+        local queued_amounts = queued_craft_amounts(player)
         local frame_components = component_row.add{type="frame", direction="horizontal", style="fp_frame_light_slots"}
-        local table_components = frame_components.add{type="table", column_count=10, style="filter_slot_table"}
+        local table_components = frame_components.add{type="table", column_count=8, style="filter_slot_table"}
 
-        for _, component in pairs(component_data[type .. "s"]) do
+        for _, component in pairs(component_data[type .. "s"]) do  ---@cast component ComponentDataSet
             if component.amount > 0 then
                 local proto, quality_proto, required_amount = component.proto, component.quality_proto, component.amount
-                local item_id = {name = proto.name, quality = quality_proto.name}
+                ---@type ItemIDAndQualityIDPair
+                local item_id = {name = proto.name--[[@as string]], quality = quality_proto.name}
                 local amount_in_inventory = (main_inventory) and main_inventory.get_item_count(item_id) or 0
                 local missing_amount = required_amount - amount_in_inventory
+
+                -- Handcrafting always produces normal quality, so it can't satisfy any other one
+                local normal_quality = (quality_proto.name == "normal")
+                local amount_queued = (normal_quality) and queued_amounts[proto.name] or 0
 
                 if missing_amount > 0 then
                     table.insert(modal_data.missing_items, {
@@ -101,22 +154,29 @@ function utility_structures.components(player, modal_data)
                     })
                 end
 
+                -- Queued crafts count towards the demand, since they'll arrive on their own
+                local amount_covered = amount_in_inventory + amount_queued
                 local button_style = nil
-                if amount_in_inventory == 0 then button_style = "flib_slot_button_red"
-                elseif missing_amount > 0 then button_style = "flib_slot_button_yellow"
-                else button_style = "flib_slot_button_green" end
+                if amount_covered == 0 then button_style = "fflib_slot_button_red"
+                elseif amount_covered < required_amount then button_style = "fflib_slot_button_yellow"
+                else button_style = "fflib_slot_button_green" end
 
-                local title_line = (not quality_proto.always_show) and {"fp.tt_title",proto.localised_name}
+                local title_line = (not quality_proto.always_show) and {"fp.tt_title", proto.localised_name}
                     or {"fp.tt_title_with_note", proto.localised_name, quality_proto.rich_text}
-                local tooltip = {"fp.components_needed_tt", title_line, amount_in_inventory, required_amount}
+                local queued_line = (amount_queued > 0) and {"fp.components_queued_tt", amount_queued} or ""
+                local handcraft_line = (normal_quality) and {"fp.components_handcraft_tt"} or ""
+                local tooltip = {"", {"fp.components_needed_tt", title_line, amount_in_inventory, required_amount},
+                    queued_line, handcraft_line}
 
-                local category_id = (proto.data_type == "items") and proto.category_id
-                    or prototyper.util.find("items", nil, "item").id
-                local proto_id = (proto.data_type == "items") and proto.id
-                    or prototyper.util.find("items", proto.name, "item").id
-                table_components.add{type="sprite-button", sprite=proto.sprite, number=required_amount, tooltip=tooltip,
-                    tags={mod="fp", on_gui_click="utility_craft_items", category_id=category_id, item_id=proto_id,
-                    missing_amount=missing_amount}, quality=quality_proto.name, style=button_style,
+                ---@class UtilityCraftItemsTags
+                ---@field item_name string
+                ---@field quality string
+                ---@field required_amount integer
+                local tags = {mod="fp", on_gui_click="utility_craft_items", item_name=proto.name,
+                    quality=quality_proto.name, required_amount=required_amount}
+                table_components.add{type="sprite-button", tags=tags, sprite=("item/" .. proto.name),
+                    number=required_amount, secondary_number=amount_in_inventory,
+                    tooltip=tooltip, quality=quality_proto.name, style=button_style,
                     mouse_button_filter={"left-and-right"}}
             end
         end
@@ -134,6 +194,8 @@ function utility_structures.components(player, modal_data)
 
     local any_missing_items = (next(modal_data.missing_items) ~= nil)
     local no_items_necessary = {"fp.utility_no_items_necessary", {"fp.pl_" .. scope:lower(), 1}}
+
+    ---@param name "combinator" | "request"
     local function configure_button(name)
         local button = modal_elements[name .. "_button"]
         button.enabled = any_missing_items
@@ -143,90 +205,47 @@ function utility_structures.components(player, modal_data)
     configure_button("request")
 end
 
+---@param player LuaPlayer
+---@param modal_data UtilityDialogModalData
 function utility_structures.blueprints(player, modal_data)
     local modal_elements = modal_data.modal_elements
-    local blueprints = util.context.get(player, "Factory").blueprints
-    local blueprint_limit = MAGIC_NUMBERS.blueprint_limit
+    local blueprints_box = add_utility_box(player, modal_elements, "content_frame", "blueprints", true, false)
+    blueprints_box.style.margin = {4, 0}
+    local flow_blueprints = blueprints_box.add{type="flow", direction="horizontal"}
 
-    if modal_elements.blueprints_box == nil then
-        local blueprints_box = add_utility_box(player, modal_elements, "content_frame", "blueprints", true, false)
-        blueprints_box.style.margin = {4, 0}
-        modal_elements["blueprints_box"] = blueprints_box
+    -- Disable all actions besides transfer (trash is disabled by default)
+    local inventory_blueprints = flow_blueprints.add{type="inventory", slots_per_row=MAGIC_NUMBERS.blueprint_limit,
+        tags={mod="fp", on_gui_inventory_action="utility_blueprints"}, handle_cursor_split=false,
+        handle_open_item=false, handle_open_mod_item=false}
 
-        local frame_blueprints = blueprints_box.add{type="frame", direction="horizontal", style="fp_frame_light_slots"}
-        local table_blueprints = frame_blueprints.add{type="table", column_count=blueprint_limit,
-            style="filter_slot_table"}
-        table_blueprints.style.width = blueprint_limit * 40
-        modal_elements["blueprints_table"] = table_blueprints
-    end
+    local factory = lib.context.get(player, "Factory")  ---@as Factory
+    inventory_blueprints.inventory = factory.blueprints_inventory
 
-    local table_blueprints =  modal_elements["blueprints_table"]
-    table_blueprints.clear()
-
-    local function format_signal(signal)
-        -- signal.type is nil if it's really "item", plus we need to translate the virtual type
-        local type = (signal.type == "virtual") and "virtual-signal" or "item"
-        return (type .. "/" .. signal.name)
-    end
-
-    local blueprint = modal_data.utility_inventory[1]  -- re-usable inventory slot
-    for index, blueprint_string in pairs(blueprints) do
-        blueprint.import_stack(blueprint_string)
-        local blueprint_book = blueprint.is_blueprint_book
-
-        local tooltip = {"", (blueprint.label or "Blueprint"), "\n", MODIFIER_ACTIONS["act_on_blueprint"].tooltip}
-        local sprite = (blueprint_book) and "item/blueprint-book" or "item/blueprint"
-        local button = table_blueprints.add{type="sprite-button", sprite=sprite, tooltip=tooltip,
-            tags={mod="fp", on_gui_click="act_on_blueprint", index=index}, mouse_button_filter={"left-and-right"}}
-
-        local icons = (not blueprint_book) and blueprint.preview_icons
-            or blueprint.get_inventory(defines.inventory.item_main)[1].preview_icons
-        if icons then  -- this is jank-hell
-            local icon_count = #icons
-            local flow = button.add{type="flow", direction="horizontal", ignored_by_interaction=true}
-            local top_margin = (blueprint_book) and 4 or 7
-
-            if icon_count == 1 then
-                local sprite_icon = flow.add{type="sprite", sprite=format_signal(icons[1].signal)}
-                sprite_icon.style.margin = {top_margin, 0, 0, 7}
-            else
-                flow.style.padding = {4, 0, 0, 3}
-                local table = flow.add{type="table", column_count=2}
-                table.style.cell_padding = -3
-                if icon_count == 2 then table.style.top_margin = top_margin end
-                for _, icon in pairs(icons) do
-                    table.add{type="sprite", sprite=format_signal(icon.signal)}
-                end
-            end
-        end
-
-        blueprint.clear()
-    end
-
-    if #blueprints < blueprint_limit then
-        local button_add = table_blueprints.add{type="sprite-button", sprite="utility/add",
-            tags={mod="fp", on_gui_click="utility_store_blueprint"}, style="fp_sprite-button_inset",
-            mouse_button_filter={"left"}}
-        button_add.style.padding = 4
-        button_add.style.margin = 4
-    end
+    local button_blueprints = flow_blueprints.add{type="sprite-button", sprite="item/blueprint",
+        style="slot_button", tags={mod="fp", on_gui_click="utility_item_combinator", blueprint=true},
+        tooltip={"fp.utility_create_blueprint"}, enabled=factory.valid, mouse_button_filter={"left"}}
+    button_blueprints.style.padding = 3
 end
 
+---@param player LuaPlayer
+---@param modal_data UtilityDialogModalData
 function utility_structures.notes(player, modal_data)
     local utility_box = add_utility_box(player, modal_data.modal_elements, "content_frame", "notes", false, false)
 
-    local notes = util.context.get(player, "Factory").notes
+    local notes = lib.context.get(player, "Factory")--[[@as Factory]].notes
     local text_box = utility_box.add{type="text-box", text=notes,
         tags={mod="fp", on_gui_text_changed="factory_notes"}}
     text_box.style.vertically_stretchable = true
     text_box.style.minimal_height = 320
-    text_box.style.width = 480
+    text_box.style.width = 400
     text_box.word_wrap = true
 end
 
+---@param player LuaPlayer
+---@param modal_data UtilityDialogModalData
 function utility_structures.productivity_boni(player, modal_data)
-    local current_factory = util.context.get(player, "Factory")  --[[@as Factory]]
-    local attach_factory_products = util.globals.preferences(player).attach_factory_products
+    local current_factory = lib.context.get(player, "Factory")  ---@as Factory
+    local attach_factory_products = lib.globals.preferences(player).attach_factory_products
 
     if not modal_data.modal_elements["productivity_boni_table"] then
         local boni_box = add_utility_box(player, modal_data.modal_elements, "secondary_frame",
@@ -236,7 +255,7 @@ function utility_structures.productivity_boni(player, modal_data)
         flow_import.style.vertical_align = "center"
         flow_import.style.bottom_margin = 8
         flow_import.add{type="label", caption={"fp.import_from"}, style="bold_label"}
-        flow_import.add{type="empty-widget", style="flib_horizontal_pusher"}
+        flow_import.add{type="empty-widget", style="fflib_horizontal_pusher"}
 
         local factory_names = {}
         modal_data.factory_index = {}  -- used to find the factory later
@@ -253,16 +272,16 @@ function utility_structures.productivity_boni(player, modal_data)
         modal_data.modal_elements["factory_dropdown"] = dropdown_factory
 
         flow_import.add{type="sprite-button", tags={mod="fp", on_gui_click="import_productivity_boni"},
-            style="flib_tool_button_light_green", tooltip={"fp.import_from_tt"}, enabled=enabled,
+            style="fflib_tool_button_light_green", tooltip={"fp.import_from_tt"}, enabled=enabled,
             sprite="utility/check_mark", mouse_button_filter={"left"}}
 
         local table = boni_box.add{type="table", column_count=3}
-        table.style.column_alignments[2] = "center"
-        table.style.column_alignments[3] = "center"
+        table.style.column_alignments--[[@cast -nil]][2] = "center"
+        table.style.column_alignments--[[@cast -nil]][3] = "center"
         table.style.horizontal_spacing = 16
         modal_data.modal_elements["productivity_boni_table"] = table
 
-        boni_box.add{type="empty-widget", style="flib_vertical_pusher"}
+        boni_box.add{type="empty-widget", style="fflib_vertical_pusher"}
     end
     local table = modal_data.modal_elements["productivity_boni_table"]
     table.clear()
@@ -271,43 +290,62 @@ function utility_structures.productivity_boni(player, modal_data)
     table.add{type="label", caption={"fp.current"}, style="bold_label"}
     table.add{type="label", caption={"fp.custom"}, style="bold_label"}
 
+    ---@cast player.force LuaForce
     local force_recipes = player.force.recipes
-    for recipe_name in pairs(PRODUCTIVITY_RECIPES) do
+    for recipe_name, _ in pairs(PRODUCTIVITY_RECIPES) do
         if not force_recipes[recipe_name] or force_recipes[recipe_name].enabled then
-            local recipe_proto = prototyper.util.find("recipes", recipe_name, nil)  --[[@as FPRecipePrototype]]
-            local caption = (recipe_name == "custom-mining")
-                and {"", "[img=utility/mining_drill_productivity_bonus_modifier_icon]  ", {"fp.mining_recipes"}}
-                or {"", "[recipe=" .. recipe_name .. "]  ", recipe_proto.localised_name}
+            local caption
+            if recipe_name == "custom-mining" then
+                caption = {"", "[img=fp_mining_productivity]  ", {"fp.mining_recipes"}}
+            elseif recipe_name == "custom-research" then
+                caption = {"", "[img=fp_research_productivity]  ", {"fp.research_recipes"}}
+            else
+                caption = {"", "[recipe=" .. recipe_name .. "]  ", prototypes.recipe[recipe_name].localised_name}
+            end
             table.add{type="label", caption=caption}.style.width = 250
 
-            local productivity = util.get_recipe_productivity(player.force, recipe_name)
-            local percentage = math.floor(productivity + 1e-4)
+            local recipe_productivity = lib.effects.get_recipe_productivity(player.force, recipe_name)
+            local percentage = recipe_productivity * 100 / MAGIC_NUMBERS.effect_precision
             table.add{type="label", caption=(("%+d"):format(percentage) .. "%")}
 
-            local current_bonus = current_factory.productivity_boni[recipe_name]
-            local textfield_bonus = table.add{type="textfield", text=current_bonus,
-                tags={mod="fp", on_gui_text_changed="productivity_bonus", recipe_name=recipe_name}}
-            util.gui.setup_numeric_textfield(textfield_bonus, false, false)
-            textfield_bonus.style.width = 52
+            local current_bonus = current_factory.productivity_boni[recipe_name]  ---@as number
+            if current_bonus then current_bonus = current_bonus * 100 / MAGIC_NUMBERS.effect_precision end
+
+            ---@class ProductivityBonusTags
+            ---@field recipe_name string
+            local tags = {mod="fp", on_gui_text_changed="productivity_bonus", recipe_name=recipe_name}
+            local textfield_bonus = table.add{type="textfield", tags=tags, text=current_bonus}
+            lib.gui.setup_numeric_textfield(textfield_bonus, true, false)
+            textfield_bonus.style.width = 68
+            textfield_bonus.style.horizontal_align = "center"
         end
     end
 end
 
 
+---@param player LuaPlayer
+---@param tags UtilityChangeScopeTags
+---@param event EventData.on_gui_switch_state_changed
 local function handle_scope_change(player, tags, event)
     local utility_scope = (event.element.switch_state == "left") and "Factory" or "Floor"
-    util.globals.preferences(player).utility_scopes[tags.utility_type] = utility_scope
+    lib.globals.preferences(player).utility_scopes[tags.utility_type--[[@cast -nil]]] = utility_scope
 
-    local modal_data = util.globals.modal_data(player)
+    local modal_data = lib.globals.modal_data(player)  ---@as UtilityDialogModalData
     utility_structures.components(player, modal_data)
 end
 
 
-local function handle_item_combinator(player, _, event)
-    local missing_items = util.globals.modal_data(player).missing_items
+---@class UtilityItemCombinatorTags
+---@field blueprint boolean?
+
+---@param player LuaPlayer
+---@param tags UtilityItemCombinatorTags
+---@param event EventData.on_gui_click
+local function handle_item_combinator(player, tags, event)
+    local modal_data = lib.globals.modal_data(player)  ---@as UtilityDialogModalData
     local item_filters = {}
 
-    for _, item in pairs(missing_items) do
+    for _, item in pairs(modal_data.missing_items) do
         table.insert(item_filters, {
             type = "item",
             name = item.name,
@@ -316,25 +354,79 @@ local function handle_item_combinator(player, _, event)
             count = (event.shift) and item.missing_amount or item.required_amount
         })
     end
-    util.cursor.set_item_combinator(player, item_filters)
 
-    util.gui.close_dialog(player, "cancel")
+    local metadata
+    if tags.blueprint then
+        local factory = lib.context.get(player, "Factory")  ---@as Factory
+        local timescale = lib.globals.preferences(player).timescale
+        local description = {}
+
+        ---@param direction string
+        ---@param proto FPItemPrototype
+        ---@param amount number
+        local function describe_item(direction, proto, amount)
+            local unit = (timescale == 1) and "/s" or "/m"
+            if proto.special then
+                unit = lib.is_special_power_item(proto.name) and " W" or "/m"
+            elseif proto.fixed_unit then
+                unit = ""
+            else
+                amount = amount * timescale
+            end
+            local icon = (proto.type == "entity") and "[img=" .. proto.sprite .. "]"
+                or "[" .. proto.type .. "=" .. (proto.base_name or proto.name) .. "]"
+            local temperature = proto.temperature and " (" .. proto.temperature .. "°C)" or ""
+            table.insert(description, direction .. " " .. icon .. temperature .. " "
+                .. lib.format.number(amount, MAGIC_NUMBERS.formatting_precision) .. unit)
+        end
+
+        local icons = {}  ---@type BlueprintSignalIcon[]
+        local described_ingredients = {}  ---@type table<FPItemPrototype, boolean>
+        for item in factory:iterator() do
+            local proto = item.proto  ---@as FPItemPrototype
+            local ingredient = (item.category == "ingredient")
+            describe_item(ingredient and "←" or "→", proto, item.amount)
+            if ingredient then described_ingredients[proto] = true end
+            if #icons < 4 and proto.type ~= "entity" then
+                table.insert(icons, {index=#icons + 1, signal={type=proto.type, name=proto.base_name or proto.name}})
+            end
+        end
+        local separate_ingredients = (#description > 0)
+        for _, ingredient in ipairs(factory.top_floor.ingredients) do
+            if not described_ingredients[ingredient.proto] then
+                if separate_ingredients then
+                    table.insert(description, "")
+                    separate_ingredients = false
+                end
+                describe_item("←", ingredient.proto--[[@as FPItemPrototype]], ingredient.amount)
+            end
+        end
+        if factory.notes ~= "" then
+            if next(description) then table.insert(description, "") end
+            table.insert(description, factory.notes)
+        end
+        metadata = {label=factory.name, icons=icons, description=table.concat(description, "\n")}
+    end
+    lib.cursor.set_item_combinator(player, item_filters, metadata)
+
+    lib.gui.close_dialog(player, "cancel")
     main_dialog.toggle(player)
 end
 
+---@param player LuaPlayer
 local function handle_item_request(player, _, _)
-    local fly_text = util.cursor.create_flying_text
+    local fly_text = lib.cursor.create_flying_text
 
     if not player.force.character_logistic_requests then
         fly_text(player, {"fp.utility_logistics_not_researched"})
     elseif player.character == nil then  -- happens when the editor is active for example
         fly_text(player, {"fp.utility_logistics_no_character"})
     else
-        local requester_point = player.character.get_requester_point()  -- will exist at this point
-        local new_section = requester_point.add_section()
+        local requester_point = player.character.get_requester_point()  ---@cast requester_point -nil
+        local new_section = requester_point.add_section()  ---@cast new_section -nil
 
-        local missing_items = util.globals.modal_data(player).missing_items
-        for index, item in pairs(missing_items) do
+        local modal_data = lib.globals.modal_data(player)  ---@as UtilityDialogModalData
+        for index, item in pairs(modal_data.missing_items) do
             new_section.set_slot(index, {
                 value = {
                     name = item.name,
@@ -349,110 +441,134 @@ local function handle_item_request(player, _, _)
     end
 end
 
+-- Collects the recipes producing the given item that the player could craft by hand, in a stable order
+---@param player LuaPlayer
+---@param item FPItemPrototype
+---@return FPRecipePrototype[]
+local function handcraftable_recipes(player, item)
+    local candidates = {}  ---@type FPRecipePrototype[]
+    local force_recipes = player.force--[[@as LuaForce]].recipes
+
+    for recipe_id, _ in pairs(RECIPE_MAPS["produce"][item.category_id][item.id] or {}) do
+        local recipe = prototyper.util.find("recipes", recipe_id, nil)  ---@as FPRecipePrototype
+        local force_recipe = (not recipe.custom) and force_recipes[recipe.name] or nil
+        -- Custom recipes have no actual prototype, so they can't be crafted at all
+        if force_recipe and force_recipe.enabled and not force_recipe.prototype.hidden_from_player_crafting then
+            table.insert(candidates, recipe)
+        end
+    end
+
+    table.sort(candidates, function(a, b)
+        local a_main = (a.main_product ~= nil and a.main_product.name == item.name)
+        local b_main = (b.main_product ~= nil and b.main_product.name == item.name)
+        if a_main ~= b_main then return a_main end
+        return a.order < b.order
+    end)
+
+    return candidates
+end
+
+---@param player LuaPlayer
+---@param tags UtilityCraftItemsTags
+---@param event EventData.on_gui_click
 local function handle_item_handcraft(player, tags, event)
-    local fly_text = util.cursor.create_flying_text
-    if not player.character then fly_text(player, {"fp.utility_crafting_no_character"}); return end
+    local fly_text = lib.cursor.create_flying_text
+    local main_inventory = player.get_main_inventory()
+    if not main_inventory then fly_text(player, {"fp.utility_crafting_no_inventory"}); return end
 
     local permissions = player.permission_group
     local forbidden = (permissions and not permissions.allows_action(defines.input_action.craft))
     if forbidden then fly_text(player, {"fp.utility_no_crafting"}); return end
 
-    local desired_amount = (event.button == defines.mouse_button_type.right) and 5 or 1
-    local amount_to_craft = math.min(desired_amount, tags.missing_amount)
+    -- Handcrafting can only ever produce normal quality
+    if tags.quality ~= "normal" then fly_text(player, {"fp.utility_no_quality_crafting"}); return end
 
-    if amount_to_craft <= 0 then fly_text(player, {"fp.utility_no_demand"}); return end
+    -- Determine the demand at click-time, since both inventory and queue move around
+    local item_id = {name=tags.item_name, quality="normal"}  ---@type ItemIDAndQualityIDPair
+    local outstanding = tags.required_amount - main_inventory.get_item_count(item_id)
+        - (queued_craft_amounts(player)[tags.item_name] or 0)
+    if outstanding <= 0 then fly_text(player, {"fp.utility_no_demand"}); return end
 
-    local recipes = RECIPE_MAPS["produce"][tags.category_id][tags.item_id]
-    if not recipes then fly_text(player, {"fp.utility_no_recipe"}); return end
+    -- Mirror the vanilla crafting controls of craft (1), craft-5 and craft-all
+    local amount_to_craft = outstanding  ---@type integer
+    if event.button == defines.mouse_button_type.right then amount_to_craft = math.min(5, outstanding)
+    elseif not event.shift then amount_to_craft = math.min(1, outstanding) end
+    amount_to_craft = math.min(amount_to_craft, 2^31 - 1)  -- amounts can get arbitrarily large
 
-    local success = false
-    for recipe_id, _ in pairs(recipes) do
-        local recipe_name = prototyper.util.find("recipes", recipe_id, nil).name
-        local craftable_amount = player.get_craftable_count(recipe_name)
+    local item = prototyper.util.find("items", tags.item_name, "item")  ---@as FPItemPrototype
+    if not item then fly_text(player, {"fp.utility_no_recipes"}); return end
+    local candidates = handcraftable_recipes(player, item)
+    if not next(candidates) then fly_text(player, {"fp.utility_no_recipes"}); return end
 
-        if craftable_amount > 0 then
-            success = true
-            local crafted_amount = math.min(amount_to_craft, craftable_amount)
-            player.begin_crafting{count=crafted_amount, recipe=recipe_name, silent=true}
-            amount_to_craft = amount_to_craft - crafted_amount
-            break
-        end
+    -- Let the game figure out whether a recipe can actually be crafted, so intermediates work like vanilla
+    local crafted_amount = 0
+    for _, recipe in ipairs(candidates) do  -- ipairs to actually respect the order they were sorted into
+        local started = player.begin_crafting{count=amount_to_craft,
+            recipe=recipe.name--[[@as RecipeID]], silent=true}
+        crafted_amount, amount_to_craft = crafted_amount + started, amount_to_craft - started
+        if amount_to_craft <= 0 then break end
     end
-    if not success then fly_text(player, {"fp.utility_no_resources"}); end
+
+    if crafted_amount == 0 then fly_text(player, {"fp.utility_no_resources"}) end
 end
 
+---@param player LuaPlayer
 local function handle_inventory_change(player)
-    local ui_state = util.globals.ui_state(player)
+    local ui_state = lib.globals.ui_state(player)
 
     if ui_state.modal_dialog_type == "utility" then
-        utility_structures.components(player, ui_state.modal_data)
+        utility_structures.components(player, ui_state.modal_data--[[@as UtilityDialogModalData]])
     end
 end
 
 
-local function store_blueprint(player, _, _)
-    local fly_text = util.cursor.create_flying_text
+---@param player LuaPlayer
+---@param event EventData.on_gui_inventory_action
+local function handle_blueprint_inventory_change(player, _, event)
+    -- Most actions are disabled, leaving only transfer actions, which are fine
+    -- Just need to make sure only blueprints and blueprint books are stored
+    local item = event.element.inventory--[[@cast -nil]][event.slot]  ---@as LuaItemStack
+    if not item.valid_for_read then return end
 
-    if player.is_cursor_empty() then
-        fly_text(player, {"fp.utility_cursor_empty"}); return
-    end
-    local cursor = player.cursor_stack
-    if not (cursor.is_blueprint or cursor.is_blueprint_book) then
-        if cursor.valid_for_read then
-            fly_text(player, {"fp.utility_no_blueprint"}); return
-        else
-            fly_text(player, {"fp.utility_blueprint_from_library"}); return
-        end
-    end
-    if cursor.is_blueprint then
-        if not cursor.is_blueprint_setup() then fly_text(player, {"fp.utility_blueprint_not_setup"}); return end
-    else -- blueprint book
-        local inventory = cursor.get_inventory(defines.inventory.item_main)
-        if inventory.is_empty() then fly_text(player, {"fp.utility_blueprint_book_empty"}); return end
-    end
-
-    local factory = util.context.get(player, "Factory")  --[[@as Factory]]
-    table.insert(factory.blueprints, cursor.export_stack())
-    fly_text(player, {"fp.utility_blueprint_stored"});
-    player.clear_cursor()  -- doesn't delete blueprint, but puts it back in the inventory
-
-    utility_structures.blueprints(player, util.globals.modal_data(player))
-end
-
-local function handle_blueprint_click(player, tags, action)
-    local blueprints = util.context.get(player, "Factory").blueprints
-
-    if action == "pick_up" then
-        player.cursor_stack.import_stack(blueprints[tags.index])
-        util.gui.close_dialog(player, "cancel")
-        main_dialog.toggle(player)
-
-    elseif action == "delete" then
-        table.remove(blueprints, tags.index)
-        utility_structures.blueprints(player, util.globals.modal_data(player))
+    if not item.is_blueprint and not item.is_blueprint_book then
+        player.cursor_stack--[[@cast -nil]].swap_stack(item)
+        lib.cursor.create_flying_text(player, {"fp.utility_not_blueprint"})
     end
 end
 
 
-local function import_productivity_boni(player, _, event)
-    local modal_data = util.globals.modal_data(player)  --[[@as table]]
+---@param player LuaPlayer
+local function import_productivity_boni(player, _, _)
+    local modal_data = lib.globals.modal_data(player)  ---@as UtilityDialogModalData
     local selected_index = modal_data.modal_elements.factory_dropdown.selected_index
-    local export_factory = OBJECT_INDEX[modal_data.factory_index[selected_index]]  --[[@as Factory]]
+    local factory_id = modal_data.factory_index[selected_index]  ---@as ObjectID
+    local export_factory = OBJECT_INDEX[factory_id]  ---@as Factory
     if not export_factory then return end  -- dropdown starts blank
 
-    local import_factory = util.context.get(player, "Factory")  --[[@as Factory]]
-    import_factory.productivity_boni = ftable.deep_copy(export_factory.productivity_boni)
+    local import_factory = lib.context.get(player, "Factory")  ---@as Factory
+    import_factory.productivity_boni = lib.flib.deep_copy(export_factory.productivity_boni)
 
     utility_structures.productivity_boni(player, modal_data)
     modal_data.recalculate = true
 
-    util.cursor.create_flying_text(player, {"fp.utility_productivity_imported"})
+    lib.cursor.create_flying_text(player, {"fp.utility_productivity_imported"})
+end
+
+---@param player LuaPlayer
+---@param tags ProductivityBonusTags
+---@param event EventData.on_gui_text_changed
+local function handle_productivity_bonus_change(player, tags, event)
+    local factory = lib.context.get(player, "Factory")  ---@as Factory
+    local bonus = tonumber(event.element.text)  -- nil if invalid or empty
+    if bonus then bonus = math.floor(bonus / 100 * MAGIC_NUMBERS.effect_precision + 1e-4) end
+    factory.productivity_boni[tags.recipe_name] = bonus
+    lib.globals.modal_data(player)--[[@as UtilityDialogModalData]].recalculate = true
 end
 
 
+---@param player LuaPlayer
+---@param modal_data UtilityDialogModalData
 local function open_utility_dialog(player, modal_data)
-    modal_data.utility_inventory = game.create_inventory(1)  -- used for blueprint decoding
-
     -- Left side
     utility_structures.components(player, modal_data)
     utility_structures.blueprints(player, modal_data)
@@ -462,19 +578,18 @@ local function open_utility_dialog(player, modal_data)
     utility_structures.productivity_boni(player, modal_data)
 end
 
+---@param player LuaPlayer
 local function close_utility_dialog(player, _)
-    local modal_data = util.globals.modal_data(player)  --[[@as table]]
+    local modal_data = lib.globals.modal_data(player)  ---@as UtilityDialogModalData
     if modal_data.recalculate then
-        local factory = util.context.get(player, "Factory")  --[[@as Factory]]
-        solver.update(player, factory)
-        util.gui.run_refresh(player, "factory")
+        solver.update(player)
+        lib.gui.run_refresh(player, "production")
     end
-    modal_data.utility_inventory.destroy()
 end
 
 
 -- ** EVENTS **
-local listeners = {}
+local listeners = {}  ---@type ListenerDefinitions
 
 listeners.gui = {
     on_gui_click = {
@@ -493,18 +608,6 @@ listeners.gui = {
             handler = handle_item_handcraft
         },
         {
-            name = "utility_store_blueprint",
-            handler = store_blueprint
-        },
-        {
-            name = "act_on_blueprint",
-            actions_table = {
-                pick_up = {shortcut="left", show=true},
-                delete = {shortcut="control-right", show=true}
-            },
-            handler = handle_blueprint_click
-        },
-        {
             name = "import_productivity_boni",
             handler = import_productivity_boni
         }
@@ -518,34 +621,40 @@ listeners.gui = {
     on_gui_text_changed = {
         {
             name = "factory_notes",
-            handler = (function(player, _, event)
-                util.context.get(player, "Factory").notes = event.element.text
-            end)
+            handler = function(player, _, event)
+                ---@cast event EventData.on_gui_text_changed
+                local factory = lib.context.get(player, "Factory")  ---@as Factory
+                factory.notes = event.element.text
+            end
         },
         {
             name = "productivity_bonus",
-            handler = (function(player, tags, event)
-                local factory = util.context.get(player, "Factory")  --[[@as Factory]]
-                local bonus = tonumber(event.element.text)  -- nil if invalid or empty
-                factory.productivity_boni[tags.recipe_name] = bonus  -- textfield disallow decimals
-                util.globals.modal_data(player).recalculate = true
-            end)
+            handler = handle_productivity_bonus_change
+        }
+    },
+    on_gui_inventory_action = {
+        {
+            name = "utility_blueprints",
+            handler = handle_blueprint_inventory_change
         }
     }
+}  ---@as GUIListenerDefinition
+
+listeners.player = {
+    on_player_main_inventory_changed = handle_inventory_change
 }
 
 listeners.dialog = {
     dialog = "utility",
-    metadata = (function(_) return {
-        caption = {"fp.utilities"},
-        secondary_frame = true
-    } end),
+    metadata = function(_)
+        return {
+            caption = {"fp.utilities"},
+            secondary_frame = true
+        }  ---@as ModalDialogSettings
+    end,
     open = open_utility_dialog,
     close = close_utility_dialog
 }
 
-listeners.misc = {
-    on_player_main_inventory_changed = handle_inventory_change
-}
 
 return { listeners }

@@ -1,112 +1,142 @@
-local structures = {
+local _structures = {
     aggregate = {},
-    class = {}
+    map = {}
 }
-
----@class SolverAgggregate
----@field player_index integer
----@field floor_id integer
----@field machine_count number
----@field production_ratio number?
----@field Product SolverClass
----@field Byproduct SolverClass
----@field Ingredient SolverClass
-
----@param player_index integer
----@param floor_id integer
----@return SolverAgggregate
-function structures.aggregate.init(player_index, floor_id)
-    return {
-        player_index = player_index,
-        floor_id = floor_id,
-        machine_count = 0,
-        production_ratio = nil,
-        Product = structures.class.init(),
-        Byproduct = structures.class.init(),
-        Ingredient = structures.class.init()
-    }
-end
-
-
----@alias SolverClass { item: SolverMap, fluid: SolverMap, entity: SolverMap }
----@alias SolverMap { [string]: number }
-
----@return SolverClass
-function structures.class.init()
-    return {
-        item = {},
-        fluid = {},
-        entity = {}
-    }
-end
-
----@alias SolverInputItem SolverItem | FPItemPrototype | SimpleItem | Ingredient | FormattedProduct
-
----@param class SolverClass
----@param item SolverInputItem
----@param amount number?
-function structures.class.add(class, item, amount)
-    local type = (item.proto ~= nil) and item.proto.type or item.type
-    local name = (item.proto ~= nil) and item.proto.name or item.name
-    local amount_to_add = amount or item.amount
-
-    local type_table = class[type]
-    type_table[name] = (type_table[name] or 0) + amount_to_add
-    if type_table[name] == 0 then type_table[name] = nil end
-end
-
----@param class SolverClass
----@param item SolverInputItem
----@param amount number?
-function structures.class.subtract(class, item, amount)
-    structures.class.add(class, item, -(amount or item.amount))
-end
-
-
---- Puts the items into their destination class in the given aggregate,
----   stopping for balancing at the depot-class
----@param class SolverClass
----@param depot SolverClass
----@param destination SolverClass
-function structures.class.balance_items(class, depot, destination)
-    for _, item in pairs(structures.class.list(class)) do
-        local depot_amount = depot[item.type][item.name]
-
-        if depot_amount ~= nil then  -- Use up depot items, if available
-            if depot_amount >= item.amount then
-                structures.class.subtract(depot, item)
-            else
-                structures.class.subtract(depot, item, depot_amount)
-                structures.class.add(destination, item, (item.amount - depot_amount))
-            end
-
-        else  -- add to destination if this item is not present in the depot
-            structures.class.add(destination, item)
-        end
-    end
-end
-
 
 ---@class SolverItem
 ---@field type string
 ---@field name string
 ---@field amount number
+---@field temperature float?
 
----@param class SolverClass
----@param copy boolean?
----@return SolverItem[]
-function structures.class.list(class)
-    local list = {}
-    for type, items_of_type in pairs(class) do
-        for name, amount in pairs(items_of_type) do
-            table.insert(list, {
-                name = name,
-                type = type,
-                amount = amount
-            })
+---@alias SolverInputItem SolverItem | FPItemPrototype | SimpleItem | Ingredient | FormattedProduct | FactoryItem | Fuel
+---@alias SolverItemKey string `<item.proto.type>/<item.proto.name>`
+---@alias SolverMap table<SolverItemKey, number>
+---@alias SolverSet table<SolverItemKey, true>
+
+local SEPARATOR = "/"
+
+---@param item SolverInputItem
+---@return SolverItemKey
+function _structures.pack_item(item)
+    local type = item.proto and item.proto.type or item.type
+    local name = item.proto and item.proto.name or item.name
+    return type .. SEPARATOR .. name
+end
+
+---@param item_key SolverItemKey
+---@param amount number?
+---@return SolverItem
+function _structures.unpack_item(item_key, amount)
+    local separator_index = string.find(item_key, SEPARATOR, 1, true)  ---@as integer
+    local type = string.sub(item_key, 1, separator_index - 1)
+    local name = string.sub(item_key, separator_index + 1)
+    local _, temperature = lib.temperature.name_split(name)
+    return {
+        type = type,
+        name = name,
+        temperature = temperature,
+        amount = amount or 0
+    }  ---@type SolverItem
+end
+
+---@class SolverAggregate
+---@field floor_id ObjectID
+---@field machine_amount number
+---@field crafts_per_second number?
+---@field products SolverMap
+---@field ingredients SolverMap
+
+---@param floor_id ObjectID
+---@return SolverAggregate
+function _structures.aggregate.init(floor_id)
+    return {
+        floor_id = floor_id,
+        machine_amount = 0,
+        crafts_per_second = nil,
+        products = {},
+        ingredients = {},
+    }  ---@type SolverAggregate
+end
+
+---@param map SolverMap
+---@param item SolverInputItem
+---@param amount number?
+---@param round_errors boolean?
+function _structures.map.add(map, item, amount, round_errors)
+    local key = _structures.pack_item(item)
+    local amount_to_add = amount or item.amount or 0
+
+    map[key] = (map[key] or 0) + amount_to_add
+    if map[key] == 0 then
+        map[key] = nil
+    elseif round_errors then
+        local threshold = math.abs(amount_to_add * MAGIC_NUMBERS.margin_of_error)
+        if map[key] < threshold and map[key] > -threshold then map[key] = nil end
+    end
+end
+
+---@param map SolverMap
+---@param item SolverInputItem
+---@param amount number?
+---@param round_errors boolean?
+function _structures.map.subtract(map, item, amount, round_errors)
+    _structures.map.add(map, item, -(amount or item.amount), round_errors)
+end
+
+--- If the 2 maps contain the same item, cancel out the lowest portion of the item from both maps.
+--- If a map contains negative values, remove it and add it as positive to the other map
+---@param map1 SolverMap
+---@param map2 SolverMap
+---@param round_errors boolean?
+function _structures.map.reduce_items(map1, map2, round_errors)
+    for item_key, value1 in pairs(map1) do
+        local item = _structures.unpack_item(item_key)
+        local value2 = map2[item_key]
+
+        if value2 and value1 == value2 then
+            map1[item_key] = nil
+            map2[item_key] = nil
+        elseif value2 and value1 > value2 then
+            _structures.map.subtract(map1, item, value2, round_errors)
+            map2[item_key] = nil
+        elseif value2 and value1 < value2 or value1 < 0 then
+            _structures.map.subtract(map2, item, value1, round_errors)
+            map1[item_key] = nil
         end
+    end
+
+    for item_key, value2 in pairs(map2) do
+        local item = _structures.unpack_item(item_key)
+        if value2 < 0 then
+            _structures.map.subtract(map1, item, value2, round_errors)
+            map2[item_key] = nil
+        end
+    end
+end
+
+--- Puts the items into their destination class in the given aggregate,
+---   stopping for balancing at the depot-class
+---@param map SolverMap
+---@param depot SolverMap
+---@param destination SolverMap
+---@param round_errors boolean?
+function _structures.map.balance_items(map, depot, destination, round_errors)
+    local map_copy = lib.flib.shallow_copy(map)
+    _structures.map.reduce_items(map_copy, depot, round_errors)
+    for _, item in pairs(_structures.map.list(map_copy)) do
+        _structures.map.add(destination, item, item.amount, round_errors)
+    end
+end
+
+---@param map SolverMap
+---@return SolverItem[]
+function _structures.map.list(map)
+    local list = {}
+    for item_key, amount in pairs(map) do
+        table.insert(list, _structures.unpack_item(item_key, amount))
     end
     return list
 end
 
-return structures
+return _structures

@@ -1,33 +1,51 @@
 local Factory = require("backend.data.Factory")
 
+local DELETION_DELAY = 15 * 60 * 60  -- Ticks to deletion after factory trashing
+
 -- Delete factory for good and refresh interface if necessary
+---@param metadata DeleteFactoryForGoodMetadata
 local function delete_factory_for_good(metadata)
     local player = game.get_player(metadata.player_index)  ---@cast player -nil
-    local factory = OBJECT_INDEX[metadata.factory_id]  --[[@as Factory]]
-    local adjacent_factory = util.context.remove(player, factory)
+    local factory = OBJECT_INDEX[metadata.factory_id]  ---@as Factory
+    local adjacent_factory = lib.context.remove(player, factory)
 
-    local selected_factory = util.context.get(player, "Factory")  --[[@as Factory?]]
+    local selected_factory = lib.context.get(player, "Factory")  ---@as Factory?
     if selected_factory and selected_factory.id == factory.id then
-        util.context.set(player, adjacent_factory or factory.parent)
+        lib.context.set(player, adjacent_factory or factory.parent)
     end
     factory.parent:remove(factory)
 
     if not main_dialog.is_in_focus(player) then return end
     -- Refresh all if the archive is currently open
     if selected_factory and selected_factory.archived == true then
-        util.gui.run_refresh(player, "all")
+        lib.gui.run_refresh(player, "all")
     else  -- only need to refresh the archive button enabled state really
-        util.gui.run_refresh(player, "factory_list")
+        lib.gui.run_refresh(player, "factory_list")
     end
 end
 
 
+---@param player LuaPlayer
+local function toggle_archive(player, _, _)
+    local factory = lib.context.get(player, "Factory")  ---@as Factory
+    local archive_open = (factory) and factory.archived or false
+    local district = (factory) and factory.parent or lib.context.get(player, "District")
+    local filter = {archived=not archive_open}
+    local new_factory = district:find(filter)
+
+    main_dialog.toggle_districts_view(player, true)
+    lib.context.set(player, new_factory or district, true)
+    lib.gui.run_refresh(player, "all")
+end
+
+---@param player LuaPlayer
+---@param to_archive boolean
 local function change_factory_archived(player, to_archive)
-    local factory = util.context.get(player, "Factory")  --[[@as Factory]]
+    local factory = lib.context.get(player, "Factory")  ---@as Factory
 
     if to_archive or factory.parent:count({archived=true}) > 1 then
-        local adjacent_factory = util.context.remove(player, factory)
-        util.context.set(player, adjacent_factory or factory.parent, true)
+        local adjacent_factory = lib.context.remove(player, factory)
+        lib.context.set(player, adjacent_factory or factory.parent, true)
     end  -- if it's pulling the last factory from the archive, keep the context on it
 
     factory.archived = to_archive
@@ -36,88 +54,98 @@ local function change_factory_archived(player, to_archive)
 
     -- Reset deletion if a deleted factory is un-archived
     if not to_archive and factory.tick_of_deletion then
-        util.nth_tick.cancel(factory.tick_of_deletion)
+        lib.nth_tick.cancel(factory.tick_of_deletion)
         factory.tick_of_deletion = nil
     end
 
-    util.gui.run_refresh(player, "all")
+    lib.gui.run_refresh(player, "all")
 end
 
+---@param player LuaPlayer
+---@param event EventData.on_gui_click
 local function add_factory(player, _, event)
-    local skip_factory_naming = util.globals.preferences(player).skip_factory_naming
+    local skip_factory_naming = lib.globals.preferences(player).skip_factory_naming
 
-    if util.xor(event.shift, skip_factory_naming) then  -- go right to the item picker with automatic factory naming
-        util.gui.open_dialog(player, {dialog="picker", modal_data={item_id=nil, item_category="product",
+    -- Go right to item picker if either shift is pressed or the preference is enabled
+    if not event.shift ~= not skip_factory_naming then  -- will set factory name automatically
+        lib.gui.open_dialog(player, {dialog="picker", modal_data={item_id=nil, item_category="product",
             create_factory=true}})
     else  -- otherwise, have the user pick a factory name first
-        util.gui.open_dialog(player, {dialog="factory", modal_data={factory_id=nil}})
+        lib.gui.open_dialog(player, {dialog="factory", modal_data={factory_id=nil}})
     end
 end
 
-local function duplicate_factory(player, _, event)
+---@param player LuaPlayer
+---@param factory Factory
+local function duplicate_factory(player, factory)
     -- Move out of empty floors to avoid orphaned subfloors in the clone
-    local current_floor = util.context.get(player, "Floor")  --[[@as Floor]]
-    if current_floor:count() == 1 then util.context.ascend_floors(player, "up") end
+    if lib.context.get(player, "Factory") == factory then
+        local current_floor = lib.context.get(player, "Floor")  ---@as Floor
+        if current_floor:count() == 1 then lib.context.ascend_floors(player, "up") end
+    end
 
-    local factory = util.context.get(player, "Factory")  --[[@as Factory]]
-    local clone = factory:clone()
+    local clone = factory:clone(player)
     clone.archived = false  -- always clone as unarchived
-    local pivot = (event.shift and not factory.archived) and factory or nil
+    local pivot = (not factory.archived) and factory or nil
     factory.parent:insert(clone, pivot, "next")
 
     solver.update(player, clone)
     main_dialog.toggle_districts_view(player, true)
-    util.context.set(player, clone)
-    util.gui.run_refresh(player, "all")
+    lib.context.set(player, clone)
+    lib.gui.run_refresh(player, "all")
 end
 
 
-local function handle_move_factory_click(player, tags, event)
-    local factory = OBJECT_INDEX[tags.factory_id]  --[[@as Factory]]
-    local spots_to_shift = (event.control) and 5 or ((not event.shift) and 1 or nil)
-    factory.parent:shift(factory, tags.direction, spots_to_shift)
+---@param player LuaPlayer
+---@param tags PlaceFactoryTags
+local function place_factory(player, tags, _)
+    local ui_state = lib.globals.ui_state(player)
+    local held_factory = OBJECT_INDEX[ui_state.held_object_id]  ---@as Factory
+    local relative_factory = OBJECT_INDEX[tags.factory_id]  ---@as Factory
 
-    util.gui.run_refresh(player, "factory_list")
+    relative_factory.parent:move(held_factory, relative_factory, tags.direction)
+    ui_state.held_object_id = nil  -- consume the held object
+
+    lib.gui.run_refresh(player, "factory_list")
 end
 
+---@param player LuaPlayer
+---@param tags ActOnFactoryTags
+---@param action string
 local function handle_factory_click(player, tags, action)
-    local selected_factory = OBJECT_INDEX[tags.factory_id]  --[[@as Factory]]
+    local selected_factory = OBJECT_INDEX[tags.factory_id]  ---@as Factory
 
     if action == "select" then
-        local ui_state = util.globals.ui_state(player)
-        if ui_state.recalculate_on_factory_change then
-            -- This flag is set when a textfield is changed but not confirmed
-            ui_state.recalculate_on_factory_change = false
-            local previous_factory = util.context.get(player, "Factory")
-            solver.update(player, previous_factory)
-        end
-
         main_dialog.toggle_districts_view(player, true)
-        util.context.set(player, selected_factory)
-        util.gui.run_refresh(player, "all")  -- refresh to update the selected factory
+        lib.context.set(player, selected_factory)
+        lib.gui.run_refresh(player, "all")
 
     elseif action == "edit" then
-        util.context.set(player, selected_factory)
-        util.gui.run_refresh(player, "all")  -- refresh to update the selected factory
+        lib.context.set(player, selected_factory)
+        lib.gui.run_refresh(player, "all")
 
-        util.gui.open_dialog(player, {dialog="factory", modal_data={factory_id=selected_factory.id}})
+        lib.gui.open_dialog(player, {dialog="factory", modal_data={factory_id=selected_factory.id}})
+
+    elseif action == "duplicate" then
+        duplicate_factory(player, selected_factory)
 
     elseif action == "delete" then
-        util.context.set(player, selected_factory)
+        lib.context.set(player, selected_factory)
         factory_list.delete_factory(player)
     end
 end
 
 
+---@param player LuaPlayer
 local function refresh_factory_list(player)
-    local player_table = util.globals.player_table(player)
+    local player_table = lib.globals.player_table(player)
     local tooltips = player_table.ui_state.tooltips
     tooltips.factory_list = {}
 
     local main_elements = player_table.ui_state.main_elements
     if main_elements.main_frame == nil then return end
 
-    local selected_factory = util.context.get(player, "Factory")  --[[@as Factory?]]
+    local selected_factory = lib.context.get(player, "Factory")  ---@as Factory?
     local archived = (selected_factory) and selected_factory.archived or false
 
     local factory_list_elements = main_elements.factory_list
@@ -127,48 +155,58 @@ local function refresh_factory_list(player)
     if selected_factory ~= nil then  -- only need to run this if any factory exists
         local search_term = helpers.multilingual_to_lower(main_elements.factory_list["search_textfield"].text)
         local attach_factory_products = player_table.preferences.attach_factory_products
-        local filter = {archived = archived}
-        local move_button_width = 20
-
-        local function create_move_button(flow, direction, factory)
-            local enabled = (search_term == "" and factory.parent:find(filter, factory[direction], direction) ~= nil)
-            local endpoint = (direction == "next") and {"fp.bottom"} or {"fp.top"}
-            local up_down = (direction == "next") and "down" or "up"
-            local move_tooltip = (enabled) and {"", {"fp.move_object", {"fp.pl_factory", 1}, {"fp." .. up_down}},
-                {"fp.move_object_instructions", endpoint}} or ""
-
-            local move_button = flow.add{type="sprite-button", enabled=enabled, sprite="fp_arrow_" .. up_down,
-                tags={mod="fp", on_gui_click="move_factory", direction=direction, factory_id=factory.id,
-                on_gui_hover="set_tooltip", context="factory_list"}, mouse_button_filter={"left"},
-                raise_hover_events=true, style="fp_sprite-button_move"}
-            move_button.style.size = {move_button_width, 12}
-            move_button.style.padding = -2
-            tooltips.factory_list[move_button.index] = move_tooltip
-        end
+        local held_factory = lib.gui.held_object(player, "factory_list")  ---@as Factory?
+        local passed_held = false
+        local filter = {archived = archived}  ---@type ObjectFilter
+        local button_width = 20
 
         for factory in selected_factory.parent:iterator(filter) do
+            if factory == held_factory then passed_held = true end
             local selected = (selected_factory.id == factory.id)
             local matched = (string.find(helpers.multilingual_to_lower(factory.name), search_term, 1, true) ~= nil)
 
             if matched or selected then  -- always show selected factory
-                local caption, info_tooltip = factory:tostring(attach_factory_products, false)
-                local tooltip = {"", info_tooltip, "\n", MODIFIER_ACTIONS["act_on_factory"].tooltip}
-
                 local button_flow = listbox.add{type="flow", direction="horizontal"}
                 button_flow.style.horizontal_spacing = 0
 
-                local move_flow = button_flow.add{type="flow", direction="vertical"}
-                move_flow.style.vertical_spacing = 0
-                move_flow.style.padding = {2, 0}
-                create_move_button(move_flow, "previous", factory)
-                create_move_button(move_flow, "next", factory)
+                local placeable = (held_factory ~= nil and held_factory ~= factory)
+                local move_button  ---@type LuaGuiElement
 
-                local factory_button = button_flow.add{type="button", caption=caption, toggled=selected,
-                    tags={mod="fp", on_gui_click="act_on_factory", factory_id=factory.id, on_gui_hover="set_tooltip",
-                    context="factory_list"}, style="list_box_item", mouse_button_filter={"left-and-right"},
-                    raise_hover_events=true}
+                if placeable then
+                    -- Buttons above the held factory place it above their row, ones below place below
+                    ---@class PlaceFactoryTags
+                    ---@field direction "previous" | "next"
+                    ---@field factory_id ObjectID
+                    local tags = {mod="fp", on_gui_click="place_factory",
+                        direction=(passed_held) and "next" or "previous", factory_id=factory.id}
+                    move_button = button_flow.add{type="sprite-button", tags=tags,
+                        tooltip={"fp.place_object_" .. ((passed_held) and "below" or "above"), {"fp.pl_factory", 1}},
+                        sprite=(passed_held) and "fp_arrow_down" or "fp_arrow_up",
+                        mouse_button_filter={"left"}, style="fp_sprite-button_move"}
+                    move_button.style.padding = 2
+                else
+                    ---@class PickUpFactoryTags
+                    ---@field factory_id ObjectID
+                    local tags = {mod="fp", on_gui_click="pick_up_factory", factory_id=factory.id}
+                    move_button = button_flow.add{type="sprite-button", tags=tags,
+                        tooltip={"fp.pick_up_object", {"fp.pl_factory", 1}}, toggled=(held_factory == factory),
+                        sprite="fp_pick_up", mouse_button_filter={"left"}, style="fp_sprite-button_move"}
+                    move_button.style.padding = 0
+                end
+
+                move_button.style.size = {button_width, 28}
+
+                local flags = {valid=factory.valid, archived=factory.archived}
+                ---@class ActOnFactoryTags
+                ---@field factory_id ObjectID
+                ---@field context "factory_list"
+                local tags = {mod="fp", on_gui_click="act_on_factory", factory_id=factory.id,
+                    on_gui_hover="set_tooltip", context="factory_list", flags=flags}
+                local caption, tooltip = factory:tostring(attach_factory_products, false)
+                local factory_button = button_flow.add{type="button", tags=tags, caption=caption, toggled=selected,
+                    style="list_box_item", mouse_button_filter={"left-and-right"}, raise_hover_events=true}
                 factory_button.style.padding = {0, 12, 0, 4}
-                factory_button.style.width = MAGIC_NUMBERS.list_width - move_button_width
+                factory_button.style.width = MAGIC_NUMBERS.list_width - button_width
                 tooltips.factory_list[factory_button.index] = tooltip
             end
         end
@@ -176,12 +214,12 @@ local function refresh_factory_list(player)
 
     -- Set all the button states and styles appropriately
     local factory_exists = (selected_factory ~= nil)
-    local district = util.context.get(player, "District")  --[[@as District]]
+    local district = lib.context.get(player, "District")  ---@as District
     local archived_factory_count = district:count({archived=true})
 
     factory_list_elements.toggle_archive_button.enabled = (archived_factory_count > 0)
     factory_list_elements.toggle_archive_button.style = (archived)
-        and "flib_selected_tool_button" or "tool_button"
+        and "fflib_selected_tool_button" or "tool_button"
 
     if not archived then
         local factory_plural = {"fp.pl_factory", archived_factory_count}
@@ -201,31 +239,63 @@ local function refresh_factory_list(player)
     factory_list_elements.import_button.enabled = (not archived)
     factory_list_elements.export_button.enabled = (factory_exists)
 
-    local skip_factory_naming = util.globals.preferences(player).skip_factory_naming
+    local skip_factory_naming = lib.globals.preferences(player).skip_factory_naming
     factory_list_elements.add_button.enabled = (not archived)
     factory_list_elements.add_button.tooltip = (skip_factory_naming)
         and {"fp.action_add_factory_by_product"} or {"fp.action_add_factory_by_name"}
 
     factory_list_elements.edit_button.enabled = (factory_exists)
-    factory_list_elements.duplicate_button.enabled = (selected_factory ~= nil and selected_factory.valid)
 
     factory_list_elements.delete_button.enabled = (factory_exists)
-    local delay_in_minutes = math.floor(MAGIC_NUMBERS.factory_deletion_delay / 3600)
+    local delay_in_minutes = math.floor(DELETION_DELAY / 3600)
     factory_list_elements.delete_button.tooltip = (archived)
         and {"fp.action_delete_factory"} or {"fp.action_trash_factory", delay_in_minutes}
+
+    factory_list_elements.search_button.enabled = (factory_exists)
+    if not factory_exists then  -- close a search that has nothing left to filter
+        factory_list_elements.search_button.toggled = false
+        factory_list_elements.search_flow.visible = false
+        factory_list_elements.search_textfield.text = ""
+    end
 end
 
+---@param player LuaPlayer
+local function toggle_factory_search(player)
+    -- Guards against the hotkey being used while the search button is disabled
+    if lib.context.get(player, "Factory") == nil then return end
+
+    local factory_list_elements = lib.globals.ui_state(player).main_elements.factory_list
+    local search_flow = factory_list_elements.search_flow
+    local textfield_search = factory_list_elements.search_textfield
+
+    local search_open = not search_flow.visible
+    search_flow.visible = search_open
+    factory_list_elements.search_button.toggled = search_open
+
+    if search_open then
+        textfield_search.focus()
+    elseif textfield_search.text ~= "" then  -- reset the filter when closing
+        textfield_search.text = ""
+        refresh_factory_list(player)
+    end
+end
+
+---@param player LuaPlayer
 local function build_factory_list(player)
-    local main_elements = util.globals.main_elements(player)
+    local main_elements = lib.globals.main_elements(player)
     main_elements.factory_list = {}
 
     local parent_flow = main_elements.flows.left_vertical
     local frame_vertical = parent_flow.add{type="frame", direction="vertical", style="inside_deep_frame"}
-    local row_count = util.globals.preferences(player).factory_list_rows
-    frame_vertical.style.height = (row_count * MAGIC_NUMBERS.list_element_height) +
-        MAGIC_NUMBERS.subheader_height + MAGIC_NUMBERS.search_footer_height
+    frame_vertical.style.vertically_stretchable = true
 
-    local subheader = frame_vertical.add{type="frame", direction="horizontal", style="subheader_frame"}
+    local toolbar = frame_vertical.add{type="frame", direction="vertical", style="subheader_frame"}
+    toolbar.style.bottom_padding = 3
+    toolbar.style.maximal_height = MAGIC_NUMBERS.subheader_height + 28 + 4
+    local toolbar_flow = toolbar.add{type="flow", direction="vertical", style="packed_vertical_flow"}
+    local subheader = toolbar_flow.add{type="flow", direction="horizontal"}
+    subheader.style.vertical_align = "center"
+    subheader.style.horizontally_stretchable = true
 
     local button_toggle_archive = subheader.add{type="sprite-button", tags={mod="fp", on_gui_click="toggle_archive"},
         sprite="fp_archive", mouse_button_filter={"left"}}
@@ -235,7 +305,7 @@ local function build_factory_list(player)
         style="tool_button", mouse_button_filter={"left"}}
     main_elements.factory_list["archive_button"] = button_archive
 
-    subheader.add{type="empty-widget", style="flib_horizontal_pusher"}
+    subheader.add{type="empty-widget", style="fflib_horizontal_pusher"}
 
     local button_import = subheader.add{type="sprite-button", sprite="utility/import",
         tooltip={"fp.action_import_factory"}, style="tool_button", mouse_button_filter={"left"},
@@ -247,10 +317,10 @@ local function build_factory_list(player)
         tags={mod="fp", on_gui_click="factory_list_open_dialog", type="export"}}
     main_elements.factory_list["export_button"] = button_export
 
-    subheader.add{type="empty-widget", style="flib_horizontal_pusher"}
+    subheader.add{type="empty-widget", style="fflib_horizontal_pusher"}
 
     local button_add = subheader.add{type="sprite-button", tags={mod="fp", on_gui_click="add_factory"},
-        sprite="utility/add", style="flib_tool_button_light_green", mouse_button_filter={"left"}}
+        sprite="utility/add", style="fflib_tool_button_light_green", mouse_button_filter={"left"}}
     button_add.style.padding = 1
     main_elements.factory_list["add_button"] = button_add
 
@@ -259,35 +329,43 @@ local function build_factory_list(player)
         mouse_button_filter={"left"}}
     main_elements.factory_list["edit_button"] = button_edit
 
-    local button_duplicate = subheader.add{type="sprite-button", tags={mod="fp", on_gui_click="duplicate_factory"},
-        sprite="utility/clone", tooltip={"fp.action_duplicate_factory"}, style="tool_button",
-        mouse_button_filter={"left"}}
-    main_elements.factory_list["duplicate_button"] = button_duplicate
-
     local button_delete = subheader.add{type="sprite-button", tags={mod="fp", on_gui_click="delete_factory"},
         sprite="utility/trash", style="tool_button_red", mouse_button_filter={"left"}}
     main_elements.factory_list["delete_button"] = button_delete
 
+    subheader.add{type="empty-widget", style="fflib_horizontal_pusher"}
+
+    local button_search = subheader.add{type="sprite-button", tags={mod="fp", on_gui_click="toggle_factory_search"},
+        sprite="utility/search_icon", tooltip={"fp.action_search_factories"}, style="tool_button",
+        mouse_button_filter={"left"}}
+    main_elements.factory_list["search_button"] = button_search
+
+
+    local flow_search = toolbar_flow.add{type="flow", direction="horizontal", visible=false}
+    flow_search.style.top_margin = 2
+    flow_search.style.height = 28
+    flow_search.style.vertical_align = "center"
+    flow_search.style.horizontally_stretchable = true
+    main_elements.factory_list["search_flow"] = flow_search
+
+    local label_search = flow_search.add{type="label", caption={"fp.search"}}
+    label_search.style.padding = {0, 4}
+    local textfield_search = flow_search.add{type="textfield", style="search_popup_textfield",
+        tags={mod="fp", on_gui_text_changed="factory_searchfield"}}
+    textfield_search.style.size = {0, 24}
+    textfield_search.style.horizontally_stretchable = true
+    main_elements.factory_list["search_textfield"] = textfield_search
+
+
     -- This is not really a list-box, but it imitates one and allows additional features
     local listbox_factories = frame_vertical.add{type="scroll-pane", style="list_box_under_subheader_scroll_pane"}
+    listbox_factories.style.top_margin = -4  -- overlap the toolbar's bottom border with the list's inset edge
     listbox_factories.style.vertically_stretchable = true
+    listbox_factories.style.horizontally_stretchable = true
     listbox_factories.horizontal_scroll_policy = "never"
-    listbox_factories.style.extra_right_padding_when_activated = -12
     local flow_factories = listbox_factories.add{type="flow", direction="vertical"}
     flow_factories.style.vertical_spacing = 0
     main_elements.factory_list["factory_listbox"] = flow_factories
-
-    local flow_search = frame_vertical.add{type="flow", direction="horizontal"}
-    flow_search.style.height = MAGIC_NUMBERS.search_footer_height
-    flow_search.style.padding = {0, 12}
-    flow_search.style.vertical_align = "center"
-
-    flow_search.add{type="label", caption={"fp.search"}, tooltip={"fp.factory_search_tt"}}
-    flow_search.add{type="empty-widget", style="flib_horizontal_pusher"}
-    local textfield_search = flow_search.add{type="textfield", style="search_popup_textfield",
-        tags={mod="fp", on_gui_text_changed="factory_searchfield"}}
-    textfield_search.style.width = 225
-    main_elements.factory_list["search_textfield"] = textfield_search
 
     refresh_factory_list(player)
 end
@@ -297,8 +375,12 @@ end
 factory_list = {}  -- try to move elsewhere or smth to get rid of global variable
 
 -- Utility function to centralize factory creation behavior
+---@param player LuaPlayer
+---@param name string?
+---@param item_proto FPItemPrototype?
+---@return Factory
 function factory_list.add_factory(player, name, item_proto)
-    local player_table = util.globals.player_table(player)
+    local player_table = lib.globals.player_table(player)
     local preferences = player_table.preferences
 
     if not name and item_proto then
@@ -308,31 +390,37 @@ function factory_list.add_factory(player, name, item_proto)
         name = icon .. translated_name
     end
 
-    local factory = Factory.init(name, preferences.prefer_matrix_solver)
+    local factory = Factory.init(name, preferences.default_solver)
 
-    local district = util.context.get(player, "District")  --[[@as District]]
+    local district = lib.context.get(player, "District")  ---@as District
     district:insert(factory)
-    util.context.set(player, factory)
+    lib.context.set(player, factory)
 
     return factory
 end
 
 -- Utility function to centralize factory deletion behavior
+---@param player LuaPlayer
 function factory_list.delete_factory(player)
-    local factory = util.context.get(player, "Factory")  --[[@as Factory]]
+    local factory = lib.context.get(player, "Factory")  ---@as Factory
     if not factory then return end  -- latency protection
 
     if factory.archived then
-        local adjacent_factory = util.context.remove(player, factory)
+        local adjacent_factory = lib.context.remove(player, factory)
         local district = factory.parent
         factory.parent:remove(factory)
 
-        util.context.set(player, adjacent_factory or district)
-        util.gui.run_refresh(player, "all")
+        lib.context.set(player, adjacent_factory or district)
+        lib.gui.run_refresh(player, "all")
     else
-        local desired_tick_of_deletion = game.tick + MAGIC_NUMBERS.factory_deletion_delay
-        local actual_tick_of_deletion = util.nth_tick.register(desired_tick_of_deletion,
-            "delete_factory_for_good", {player_index=player.index, factory_id=factory.id})
+        local desired_tick_of_deletion = game.tick + DELETION_DELAY
+
+        ---@class DeleteFactoryForGoodMetadata
+        ---@field player_index PlayerIndex
+        ---@field factory_id ObjectID
+        local metadata = {player_index=player.index, factory_id=factory.id}
+        local actual_tick_of_deletion = lib.nth_tick.register(desired_tick_of_deletion,
+            "delete_factory_for_good", metadata)
         factory.tick_of_deletion = actual_tick_of_deletion
 
         change_factory_archived(player, true)
@@ -340,36 +428,44 @@ function factory_list.delete_factory(player)
 end
 
 
-local listeners = {}
+-- ** EVENTS **
+local listeners = {}  ---@type ListenerDefinitions
+
+---@param flags GUIActionFlags
+---@return boolean
+---@return LocalisedString? warning
+local function can_duplicate_factory(flags)
+    if not flags.valid then
+        return false, {"fp.factory_invalid_duplicate"}
+    elseif flags.archived then
+        return false, {"fp.factory_archived_duplicate"}
+    end
+    return true
+end
 
 listeners.gui = {
     on_gui_click = {
         {
             name = "toggle_archive",
-            handler = (function(player, _, _)
-                local factory = util.context.get(player, "Factory")  --[[@as Factory]]
-                local archive_open = (factory) and factory.archived or false
-                local district = (factory) and factory.parent or util.context.get(player, "District")
-                local new_factory = district:find({archived=not archive_open})  --[[@as Factory]]
-
-                main_dialog.toggle_districts_view(player, true)
-                util.context.set(player, new_factory or district, true)
-                util.gui.run_refresh(player, "all")
-            end)
+            handler = toggle_archive
+        },
+        {
+            name = "toggle_factory_search",
+            handler = toggle_factory_search
         },
         {
             name = "archive_factory",
             timeout = 10,
-            handler = (function(player, _, _)
-                local factory = util.context.get(player, "Factory")  --[[@as Factory]]
+            handler = function(player, _, _)
+                local factory = lib.context.get(player, "Factory")  ---@as Factory
                 change_factory_archived(player, (not factory.archived))
-            end)
+            end
         },
         {  -- import/export buttons
             name = "factory_list_open_dialog",
-            handler = (function(player, tags, _)
-                util.gui.open_dialog(player, {dialog=tags.type})
-            end)
+            handler = function(player, tags, _)
+                lib.gui.open_dialog(player, {dialog=tags.type})
+            end
         },
         {
             name = "add_factory",
@@ -377,14 +473,10 @@ listeners.gui = {
         },
         {
             name = "edit_factory",
-            handler = (function(player, _, _)
-                local factory = util.context.get(player, "Factory")  --[[@as Factory]]
-                util.gui.open_dialog(player, {dialog="factory", modal_data={factory_id=factory.id}})
-            end)
-        },
-        {
-            name = "duplicate_factory",
-            handler = duplicate_factory
+            handler = function(player, _, _)
+                local factory = lib.context.get(player, "Factory")  ---@as Factory
+                lib.gui.open_dialog(player, {dialog="factory", modal_data={factory_id=factory.id}})
+            end
         },
         {
             name = "delete_factory",
@@ -392,16 +484,27 @@ listeners.gui = {
             handler = factory_list.delete_factory
         },
         {
-            name = "move_factory",
+            name = "place_factory",
             timeout = 10,
-            handler = handle_move_factory_click
+            handler = place_factory
+        },
+        {
+            name = "pick_up_factory",
+            handler = function(player, tags, _)
+                ---@cast tags PickUpFactoryTags
+                local ui_state = lib.globals.ui_state(player)
+                ui_state.held_object_id = (tags.factory_id ~= ui_state.held_object_id)
+                    and tags.factory_id or nil
+                lib.gui.run_refresh(player, "factory_list")
+            end
         },
         {
             name = "act_on_factory",
             actions_table = {
-                select = {shortcut="left", limitations={}},
+                select = {shortcut="left", core=true},
                 edit = {shortcut="control-left"},
-                delete = {shortcut="control-right"}
+                duplicate = {shortcut="shift-left", enable=can_duplicate_factory},
+                delete = {input="delete"}
             },
             handler = handle_factory_click
         }
@@ -411,19 +514,24 @@ listeners.gui = {
             name = "factory_searchfield",
             handler = refresh_factory_list
         }
-    },
-}
+    }
+}  ---@as GUIListenerDefinition
 
-listeners.misc = {
-    build_gui_element = (function(player, event)
+listeners.player = {
+    fp_focus_searchfield = function(player, _)
+        if main_dialog.is_in_focus(player) then toggle_factory_search(player) end
+    end,
+    build_gui_element = function(player, event)
+        ---@cast event BuildGUIElementEventData
         if event.trigger == "main_dialog" then
             build_factory_list(player)
         end
-    end),
-    refresh_gui_element = (function(player, event)
+    end,
+    refresh_gui_element = function(player, event)
+        ---@cast event RefreshGUIElementEventData
         local triggers = {factory_list=true, all=true}
         if triggers[event.trigger] then refresh_factory_list(player) end
-    end)
+    end
 }
 
 listeners.global = {

@@ -1,21 +1,16 @@
 -- The loader contains the code that runs on_load, pre-caching some data structures that are needed later
 local loader = {}
 
----@alias RecipeMap { [ItemCategoryID]: { [ItemID]: { [RecipeID]: true } } }
----@alias ItemCategoryID integer
----@alias ItemID integer
----@alias RecipeID integer
-
----@alias TemperatureMap { [string]: FPItemPrototype[] }
-
----@alias ModuleMap { [string]: FPModulePrototype }
+---@alias RecipeMap table<integer, table<integer, table<integer, true>>>
+---@alias TemperatureMap table<string, FPItemPrototype[]>
+---@alias ModuleMap table<string, FPModulePrototype>
 
 -- ** LOCAL UTIL **
 -- Returns a list of recipe groups in their proper order
 ---@return ItemGroup[]
 local function ordered_recipe_groups()
     -- Make a dict with all recipe groups
-    local group_dict = {}  ---@type { [string]: ItemGroup }
+    local group_dict = {}  ---@type table<string, ItemGroup>
     for _, recipe in pairs(storage.prototypes.recipes) do
         if group_dict[recipe.group.name] == nil then
             group_dict[recipe.group.name] = recipe.group
@@ -42,17 +37,68 @@ local function ordered_recipe_groups()
     return groups
 end
 
--- Maps all items to the recipes that produce or consume them ([item_type][item_name] = {[recipe_id] = true}
+---@alias RecipeProductionType "produce" | "consume"
+
+---@param items (Ingredient | FormattedProduct)[]
+---@param type string
+---@param name string
+---@return number? amount
+local function peer_amount(items, type, name)
+    for _, item in pairs(items) do
+        if item.type == type and item.name == name then return item.amount end
+    end
+    return nil
+end
+
+---@param recipe FPRecipePrototype
+---@param proto FPItemPrototype
+---@param production_type RecipeProductionType
+---@return boolean
+local function recipe_nets_item(recipe, proto, production_type)
+    -- Products carry their temperature in their name, ingredients are keyed by the base fluid
+    local ingredient_name = proto.base_name or proto.name
+    local ingredient_amount = peer_amount(recipe.ingredients, proto.type, ingredient_name)
+    local product_amount = peer_amount(recipe.products, proto.type, proto.name)
+
+    if production_type == "consume" then
+        -- Consuming pins the ingredient to the temperature of the item in question, unlike
+        -- producing, so a product at that same temperature is certain to cancel it out
+        if ingredient_amount == nil then return false end
+        return (product_amount == nil) or (ingredient_amount > product_amount)
+
+    else  -- production_type == "produce"
+        if product_amount == nil then return false end
+        if ingredient_amount == nil or product_amount > ingredient_amount then return true end
+
+        -- The ingredient only cancels the product out when set to its temperature, so the recipe is
+        -- still worth offering as long as there is any other temperature to pick instead
+        for _, ingredient in pairs(recipe.ingredients) do
+            if ingredient.type == "fluid" and ingredient.name == ingredient_name then
+                local temperature_data = lib.temperature.generate_data(ingredient--[[@as Ingredient.fluid]])
+                for _, value in pairs(temperature_data.applicable_values) do
+                    if value ~= proto.temperature then return true end
+                end
+            end
+        end
+        return false
+    end
+end
+
+-- Maps items to recipes that net-produce or net-consume them
 ---@param item_type "products" | "ingredients"
 ---@return RecipeMap
 local function recipe_map_from(item_type)
+    local direction = (item_type == "products") and "produce" or "consume"
     -- There is always only 3 categories (item, fluid, entity)
     local map = {[1] = {}, [2] = {}, [3] = {}}  ---@type RecipeMap
 
-    local function add(item_proto, recipe_id)
+    ---@param item_proto FPItemPrototype
+    ---@param recipe FPRecipePrototype
+    local function add(item_proto, recipe)
+        if not recipe_nets_item(recipe, item_proto, direction) then return end
         local category = map[item_proto.category_id]
         category[item_proto.id] = category[item_proto.id] or {}
-        category[item_proto.id][recipe_id] = true
+        category[item_proto.id][recipe.id] = true
     end
 
     for _, recipe in pairs(storage.prototypes.recipes) do
@@ -63,12 +109,12 @@ local function recipe_map_from(item_type)
                 for _, fluid_proto in pairs(TEMPERATURE_MAP[item.name] or {}) do
                     if (not min_temp or min_temp <= fluid_proto.temperature) and
                             (not max_temp or max_temp >= fluid_proto.temperature) then
-                        add(fluid_proto, recipe.id)
+                        add(fluid_proto, recipe)
                     end
                 end
             else
-                local item_proto = prototyper.util.find("items", item.name, item.type)  ---@cast item_proto -nil
-                add(item_proto, recipe.id)
+                local item_proto = prototyper.util.find("items", item.name, item.type)
+                add(item_proto--[[@as FPItemPrototype]], recipe)
             end
         end
     end
@@ -77,14 +123,19 @@ local function recipe_map_from(item_type)
 end
 
 
--- Generates a list of all items, sorted for display in the picker
----@return FPItemPrototype[]
+-- Generates eligible product and ingredient lists, sorted for display in the picker
+---@return table<ItemCategory, FPItemPrototype[]>
 local function sorted_items()
-    local items = {}
+    local items = {product={}, ingredient={}}  ---@type table<ItemCategory, FPItemPrototype[]>
 
     for _, type in pairs{"item", "fluid", "entity"} do
-        for _, item in pairs(prototyper.util.find("items", nil, type).members) do
-            table.insert(items, item)
+        local category = prototyper.util.find("items", nil, type)  ---@as NamedCategory<FPItemPrototype>
+        for _, item in pairs(category.members--[[@cast -nil]]) do
+            for item_category, list in pairs(items) do
+                if lib.availability.can_define_factory_item(item, item_category) then
+                    table.insert(list, item)
+                end
+            end
         end
     end
 
@@ -104,7 +155,7 @@ local function sorted_items()
         return false
     end
 
-    table.sort(items, sorting_function)
+    for _, list in pairs(items) do table.sort(list, sorting_function) end
     return items
 end
 
@@ -138,45 +189,44 @@ local function temperature_map()
 end
 
 
----@alias MappedPrototypes<T> { [string]: T }
----@alias MappedPrototypesWithCategory<T> { [string]: { id: integer, name: string, members: { [string]: T } } }
----@alias MappedCategory { id: integer, name: string, members: { [string]: table } }
+---@alias MappedPrototypes<T> table<string, T>
+---@alias MappedPrototypesWithCategory<T> table<string, MappedCategory<T>>
+---@alias MappedCategory<T> { id: integer, name: string, members: MappedPrototypes<T> }
 
----@class PrototypeMaps: { [DataType]: table }
+---@class PrototypeMaps
 ---@field recipes MappedPrototypes<FPRecipePrototype>
 ---@field items MappedPrototypesWithCategory<FPItemPrototype>
 ---@field machines MappedPrototypesWithCategory<FPMachinePrototype>
 ---@field fuels MappedPrototypesWithCategory<FPFuelPrototype>
 ---@field belts MappedPrototypes<FPBeltPrototype>
 ---@field pumps MappedPrototypes<FPPumpPrototype>
+---@field silos MappedPrototypes<FPSiloPrototype>
 ---@field wagons MappedPrototypesWithCategory<FPWagonPrototype>
 ---@field modules MappedPrototypesWithCategory<FPModulePrototype>
 ---@field beacons MappedPrototypes<FPBeaconPrototype>
 ---@field locations MappedPrototypes<FPLocationPrototype>
 ---@field qualities MappedPrototypes<FPQualityPrototype>
 
----@param data_types { [DataType]: boolean }
+---@param data_types table<DataType, boolean>
 ---@return PrototypeMaps
 local function prototype_maps(data_types)
-    local maps = {}  ---@type PrototypeMaps
+    local maps = {}  ---@type table<DataType, table>
 
     for data_type, has_categories in pairs(data_types) do
         local map = {}
 
+        local prototypes = storage.prototypes[data_type]  ---@type AnyIndexedPrototypes
+
         if not has_categories then
             ---@cast map MappedPrototypes<FPPrototype>
-
-            ---@type IndexedPrototypes<FPPrototype>
-            local prototypes = storage.prototypes[data_type]
+            ---@cast prototypes IndexedPrototypes<FPPrototype>
 
             for _, prototype in pairs(prototypes) do
                 map[prototype.name] = prototype
             end
         else
             ---@cast map MappedPrototypesWithCategory<FPPrototypeWithCategory>
-
-            ---@type IndexedPrototypesWithCategory<FPPrototypeWithCategory>
-            local prototypes = storage.prototypes[data_type]
+            ---@cast prototypes IndexedPrototypesWithCategory<FPPrototypeWithCategory>
 
             for _, category in pairs(prototypes) do
                 map[category.name] = { name=category.name, id=category.id, members={} }
@@ -189,7 +239,7 @@ local function prototype_maps(data_types)
         maps[data_type] = map
     end
 
-    return maps
+    return maps  ---@as PrototypeMaps
 end
 
 
@@ -208,31 +258,105 @@ local function module_name_map()
 end
 
 
----@return { [string]: boolean }
+---@return table<string, boolean>
 local function generate_productivity_recipes()
     local productivity_recipes = {}
-    for _, technology in pairs(prototypes.technology) do
-        for _, effect in pairs(technology.effects or {}) do
-            if effect.type == "mining-drill-productivity-bonus" then
-                productivity_recipes["custom-mining"] = true
-            elseif effect.type == "change-recipe-productivity" then
-                if PROTOTYPE_MAPS.recipes[effect.recipe] then
-                    productivity_recipes[effect.recipe] = true
-                end
-            end
+    for _, recipe in pairs(storage.prototypes.recipes) do
+        if recipe.productivity_recipe then
+            productivity_recipes[recipe.productivity_recipe] = true
         end
     end
     return productivity_recipes
 end
 
 
+-- Determines the tick count and energy consumption of launching a rocket for the given silo
+-- This does not take into account the full launch cycle, but instead calculates the fastest
+-- possible one, using the quick follow-up rocket mechanic, as that's the limiting case.
+-- The tick results are seemingly off by a handful of ticks, but it's close enough.
+-- Power consumption results might be low by 10% or so from light empirical testing.
+---@param silo_proto LuaEntityPrototype
+---@param quality_level integer
+---@return LauncherDataSet
+local function determine_launch_data(silo_proto, quality_level)
+    local power = silo_proto.active_energy_usage  ---@as double
+    local rocket_proto = silo_proto.rocket_entity_prototype  ---@as LuaEntityPrototype
+
+    local rising_speed = rocket_proto.rising_speed--[[@cast -nil]] * (1 +
+        silo_proto.rocket_rising_speed_modifier_per_quality_level--[[@cast -nil]] * quality_level)
+    local engine_starting_speed = rocket_proto.engine_starting_speed--[[@cast -nil]] * (1 +
+        silo_proto.rocket_engine_starting_speed_modifier_per_quality_level--[[@cast -nil]] * quality_level)
+    -- Arms speed not accessible in the API, so we have to use what vanilla does: 0.3
+    local arms_speed = 0.3 * (1 + silo_proto.arms_speed_modifier_per_quality_level--[[@cast -nil]] * quality_level)
+
+    local frame_count = 32  -- not accessible in the API, use vanilla value
+    local arm_move_offset = rising_speed * frame_count * (1 / arms_speed)
+
+    -- Cycle starts here
+    local launch_ticks, energy_usage = 0, 0  ---@type number, number
+
+    local doors_opened = 1
+    launch_ticks = launch_ticks + doors_opened
+
+    local rocket_rising_threshold = 1 - silo_proto.rocket_quick_relaunch_start_offset--[[@as double]] - arm_move_offset
+    local rocket_rising = rocket_rising_threshold / rising_speed
+    launch_ticks = launch_ticks + rocket_rising
+    energy_usage = energy_usage + (rocket_rising * power)
+
+    local arms_advance = arm_move_offset / rising_speed
+    launch_ticks = launch_ticks + arms_advance
+    energy_usage = energy_usage + (arms_advance * power)
+
+    local launch_starting = 1
+    launch_ticks = launch_ticks + launch_starting
+
+    local launch_started = silo_proto.launch_wait_time--[[@as uint8]]
+    launch_ticks = launch_ticks + launch_started
+
+    local engine_starting = 1 / engine_starting_speed
+    launch_ticks = launch_ticks + engine_starting
+    energy_usage = energy_usage + (engine_starting * power)
+
+    local arms_retract = arm_move_offset / rising_speed
+    launch_ticks = launch_ticks + arms_retract
+    energy_usage = energy_usage + (arms_retract * power)
+
+    local rocket_flight_threshold = 0.1  -- hardcoded in the game files
+    -- I'm not exactly sure why this behaves as the game code does, *but it do*
+    local rocket_flying = math.log(1 + rocket_flight_threshold * rocket_proto.flying_acceleration--[[@as double]]
+        / rocket_proto.flying_speed--[[@as double]]) / math.log(1 + rocket_proto.flying_acceleration--[[@as double]])
+    launch_ticks = launch_ticks + rocket_flying - arms_retract
+
+    return {speed = 1 / (launch_ticks / 60), energy_usage = energy_usage / launch_ticks}
+end
+
+---@alias LauncherData table<string, table<string, LauncherDataSet>>
+---@alias LauncherDataSet {speed: number, energy_usage: number}
+
+-- Pre-calculates all silo-quality combination speeds and energy usages
+---@return LauncherData
+local function generate_launcher_data()
+    local data = {}  ---@type LauncherData
+
+    local silo_filter = {{filter="type", type="rocket-silo"},
+        {filter="hidden", invert=true, mode="and"}}
+    for silo_name, silo_proto in pairs(prototypes.get_entity_filtered(silo_filter)) do
+        data[silo_name] = {}
+        for _, quality_proto in pairs(storage.prototypes.qualities) do
+            local dataset = determine_launch_data(silo_proto, quality_proto.level)
+            data[silo_name][quality_proto.name] = dataset
+        end
+    end
+
+    return data
+end
+
+
 -- ** TOP LEVEL **
----@param skip_check boolean Whether the mod version check is skipped
-function loader.run(skip_check)
+function loader.run()
     PROTOTYPE_MAPS = prototype_maps(prototyper.data_types)
     MODULE_NAME_MAP = module_name_map()
 
-    SORTED_ITEMS = sorted_items()
     TEMPERATURE_MAP = temperature_map()
 
     ORDERED_RECIPE_GROUPS = ordered_recipe_groups()
@@ -240,11 +364,12 @@ function loader.run(skip_check)
         produce = recipe_map_from("products"),
         consume = recipe_map_from("ingredients")
     }
+    SORTED_ITEMS = sorted_items()
 
     PRODUCTIVITY_RECIPES = generate_productivity_recipes()
+    LAUNCHER_DATA = generate_launcher_data()
 
     MULTIPLE_PLANETS = #storage.prototypes.locations > 1
-    MULTIPLE_QUALITIES = #storage.prototypes.qualities > 1
 end
 
 return loader

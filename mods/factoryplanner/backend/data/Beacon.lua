@@ -5,9 +5,9 @@ local ModuleSet = require("backend.data.ModuleSet")
 ---@field class "Beacon"
 ---@field parent Line
 ---@field proto FPBeaconPrototype | FPPackedPrototype
----@field quality_proto FPQualityPrototype
+---@field quality_proto FPQualityPrototype | FPPackedPrototype
 ---@field amount integer
----@field total_amount number?
+---@field amount_per_machine number?
 ---@field module_set ModuleSet
 ---@field total_effects IntegerModuleEffects
 ---@field effects_tooltip LocalisedString
@@ -15,22 +15,27 @@ local Beacon = Object.methods()
 Beacon.__index = Beacon
 script.register_metatable("Beacon", Beacon)
 
----@param proto FPBeaconPrototype
 ---@param parent Line
+---@param proto (FPBeaconPrototype | FPPackedPrototype)?
 ---@return Beacon
-local function init(proto, parent)
+local function init(parent, proto)
+    local this_proto = proto or {
+        name = "",
+        data_type = "beacons",
+        simplified = true
+    }
     local object = Object.init({
-        proto = proto,
+        proto = this_proto,
         quality_proto = defaults.get_fallback("qualities").proto,
         amount = 0,
-        total_amount = nil,
+        amount_per_machine = nil,
         module_set = nil,
 
         total_effects = nil,
         effects_tooltip = "",
 
         parent = parent
-    }, "Beacon", Beacon)  --[[@as Beacon]]
+    }, "Beacon", Beacon)  ---@as Beacon
     object.module_set = ModuleSet.init(object)
     return object
 end
@@ -48,19 +53,28 @@ function Beacon:elem_value()
 end
 
 
+---@return boolean
+function Beacon:is_mono_beacon()
+    ---@cast self.proto FPBeaconPrototype
+    return (#self.proto.profile == 2 and self.proto.profile[2] == 0)
+end
+
 ---@return double profile_multiplier
 function Beacon:profile_multiplier()
     if self.amount == 0 then
         return 0
     else
+        ---@cast self.proto FPBeaconPrototype
         local profile_count = #self.proto.profile
         local index = (self.amount > profile_count) and profile_count or self.amount
-        return self.proto.profile[index]
+        return self.proto.profile[index]  ---@as double
     end
 end
 
 ---@return double effectivity
 function Beacon:overall_effectivity()
+    ---@cast self.proto FPBeaconPrototype
+    ---@cast self.quality_proto FPQualityPrototype
     local profile_mulitplier = self:profile_multiplier()
     local effectivity_bonus = self.proto.distribution_effectivity_bonus_per_quality_level * self.quality_proto.level
     return self.amount * profile_mulitplier * (self.proto.effectivity + effectivity_bonus)
@@ -72,43 +86,54 @@ function Beacon:summarize_effects()
 
     for name, effect in pairs(effects) do
         local e = effect * effect_multiplier  -- needs truncating towards zero
-        -- Factorio 2.1: effects keep 0.01% (0.01 here); 2.0 truncated to whole percents
-        effects[name] = ((e < 0) and math.ceil(e * 100 - 1e-4) or math.floor(e * 100 + 1e-4)) / 100
+        effects[name] = (e < 0) and math.ceil(e - 1e-4) or math.floor(e + 1e-4)
     end
 
     self.total_effects = effects
-    self.effects_tooltip = util.effects.format(effects)
+    self.effects_tooltip = lib.effects.format(effects)
 
     self.parent:summarize_effects()
 end
 
-
----@return boolean uses_effects
+---@return boolean
 function Beacon:uses_effects()
-    -- This method is here for ModuleSet to use generically
     return self.parent:uses_beacon_effects()
 end
 
+---@param proto FPModulePrototype | FPPackedPrototype
 ---@return boolean
-function Beacon:is_mono_beacon()
-    return (#self.proto.profile == 2 and self.proto.profile[2] == 0)
+function Beacon:allows_module(proto)
+    if self.proto.simplified or proto.simplified then return false end
+    local module_proto = proto  ---@as FPModulePrototype
+
+    return lib.effects.is_compatible(self.proto--[[@as FPBeaconPrototype]], module_proto) and
+           self.parent.machine:allows_module(module_proto)
 end
 
 
+---@return number?
+function Beacon:get_total_amount()
+    return self.amount_per_machine and self.amount_per_machine * self.parent.machine.amount
+end
+
 ---@return double
-function Beacon:get_total_consumption()
-    return self.total_amount * self.proto.energy_usage * 60
+function Beacon:get_power_per_machine()
+    ---@cast self.proto FPBeaconPrototype
+    ---@cast self.quality_proto FPQualityPrototype
+    return (self.amount_per_machine or 0) * self.proto.energy_usage * 60
         * self.quality_proto.beacon_power_usage_multiplier
 end
 
 ---@return uint16
 function Beacon:get_module_limit()
+    ---@cast self.proto FPBeaconPrototype
+    ---@cast self.quality_proto FPQualityPrototype
     local limit = self.proto.module_limit
 
-    if self.proto.quality_affects_module_slots then
-        return limit + self.quality_proto.beacon_module_slots_bonus
-    else
+    if not self.proto.quality_affects_module_slots then
         return limit
+    else
+        return limit + self.quality_proto.beacon_module_slots_bonus
     end
 end
 
@@ -117,7 +142,7 @@ end
 function Beacon:reset(player)
     local beacon_default = defaults.get(player, "beacons", nil)
 
-    self.proto = beacon_default.proto  --[[@as FPBeaconPrototype]]
+    self.proto = beacon_default.proto  ---@as FPBeaconPrototype
     self.quality_proto = beacon_default.quality
     if beacon_default.beacon_amount then self.amount = beacon_default.beacon_amount end
 
@@ -131,6 +156,7 @@ end
 ---@return string? error
 function Beacon:paste(object)
     if object.class == "Beacon" then
+        ---@cast object Beacon
         self.parent:set_beacon(object)
         if not object.module_set.first then
             self.parent:set_beacon(nil)
@@ -138,7 +164,8 @@ function Beacon:paste(object)
         else
             return true, nil
         end
-    elseif object.class == "Module" and self.module_set ~= nil then
+    elseif object.class == "Module" and self.module_set ~= nil and not self.proto.simplified then
+        ---@cast object Module
         -- Only allow modules to be pasted if this is a non-fake beacon
        return self.module_set:paste(object)
     else
@@ -149,21 +176,22 @@ end
 
 ---@class PackedBeacon: PackedObject
 ---@field class "Beacon"
----@field proto FPBeaconPrototype
----@field quality_proto FPQualityPrototype
----@field amount number
----@field total_amount number?
+---@field proto FPPackedPrototype
+---@field quality_proto FPPackedPrototype
+---@field amount integer
+---@field amount_per_machine number?
 ---@field module_set PackedModuleSet
 
+---@param full boolean
 ---@return PackedBeacon packed_self
-function Beacon:pack()
+function Beacon:pack(full)
     return {
         class = self.class,
         proto = prototyper.util.simplify_prototype(self.proto, nil),
         quality_proto = prototyper.util.simplify_prototype(self.quality_proto, nil),
         amount = self.amount,
-        total_amount = self.total_amount,
-        module_set = self.module_set:pack()
+        amount_per_machine = self.amount_per_machine,
+        module_set = self.module_set:pack(full)
     }
 end
 
@@ -171,29 +199,33 @@ end
 ---@param parent Line
 ---@return Beacon machine
 local function unpack(packed_self, parent)
-    local unpacked_self = init(packed_self.proto, parent)
+    -- Prototypes are unpacked at validate
+    local unpacked_self = init(parent, packed_self.proto)
     unpacked_self.quality_proto = packed_self.quality_proto
+
     unpacked_self.amount = packed_self.amount
-    unpacked_self.total_amount = packed_self.total_amount
+    unpacked_self.amount_per_machine = packed_self.amount_per_machine
     unpacked_self.module_set = ModuleSet.unpack(packed_self.module_set, unpacked_self)
 
     return unpacked_self
 end
 
+---@param player LuaPlayer
 ---@return Beacon clone
-function Beacon:clone()
-    local clone = unpack(self:pack(), self.parent)
-    clone:validate()
+function Beacon:clone(player)
+    local clone = unpack(self:pack(false), self.parent)
+    clone:validate(player)
     return clone
 end
 
 
+---@param player LuaPlayer
 ---@return boolean valid
-function Beacon:validate()
-    self.proto = prototyper.util.validate_prototype_object(self.proto, nil)
+function Beacon:validate(player)
+    self.proto = prototyper.util.validate_prototype_object(self.proto, nil)  ---@as FPBeaconPrototype | FPPackedPrototype
     self.valid = (not self.proto.simplified)
 
-    self.quality_proto = prototyper.util.validate_prototype_object(self.quality_proto, nil)
+    self.quality_proto = prototyper.util.validate_prototype_object(self.quality_proto, nil)  ---@as FPQualityPrototype | FPPackedPrototype
     self.valid = (not self.quality_proto.simplified) and self.valid
 
     -- Can't be valid with an invalid parent
@@ -201,7 +233,7 @@ function Beacon:validate()
 
     if self.valid then
         self.valid = self.parent:uses_beacon_effects() and self.valid
-        self.valid = self.module_set:validate() and self.valid
+        self.valid = self.module_set:validate(player) and self.valid
     end
 
     if self.valid and self:is_mono_beacon() then self.amount = 1 end
@@ -220,7 +252,7 @@ function Beacon:repair(player)
     end
 
     if self.valid and self.quality_proto.simplified then
-        self.quality_proto = defaults.get_fallback("qualities").proto
+        self.quality_proto = defaults.get_fallback("qualities").proto  ---@as FPQualityPrototype
     end
 
     if self.valid then

@@ -1,0 +1,152 @@
+local SimplexTableau = require("backend.calculation.SimplexTableau")
+local structures = require("backend.calculation.structures")
+
+--- Matrix solver based on the simplex method
+local simplex_engine = {}
+
+
+-- The objective function is maximized, so positive values indicate a score,
+-- and negative values indicate a cost
+local objective_vector = {
+    target_product = 1e9,
+    target_machine = 1e9,
+    limited_ingredient = 1e9,
+    product = 0,
+    ingredient = -0.001,
+    intermediate_out = -1,
+    intermediate_in = -1000,
+    floor_transfer_out = 0,
+    floor_transfer_in = 0,
+
+    machine_limit = 0,
+    fluid_modifier = 0.01,
+    energy_modifier = 1e-9,
+    resource_modifier = 0,
+    weight_modifier = 0.01,
+}
+
+---@param factory_data FactoryData
+---@param floor_id ObjectID
+---@return FloorResult?
+function simplex_engine.solve_floor(factory_data, floor_id)
+    local relevant_line_data = {}  ---@type LineData[]
+    local products = {}  ---@type SolverSet
+    local ingredients = {}  ---@type SolverSet
+    local floor_data = factory_data.floor_data_map[floor_id]
+
+    ---@param key SolverItemKey
+    ---@param direction FlowDirection
+    ---@return number
+    local function item_cost(key, direction)
+        local item = structures.unpack_item(key)
+        local cost = 1.0 * objective_vector.weight_modifier ^ (floor_data.simplex_item_weights[key] or 0)
+
+        if item.type == "fluid" then
+            cost = cost * objective_vector.fluid_modifier
+        end
+        if item.type == "entity" then
+            if lib.is_special_power_item(item.name) then
+                cost = cost * objective_vector.energy_modifier
+            elseif direction == "in" then  -- assume ingredient entity is a resource
+                cost = cost * objective_vector.resource_modifier
+            end
+        end
+
+        return cost
+    end
+
+    -- Consider only lines on this floor
+    for _, line_object_id in ipairs(floor_data.line_ids) do
+        table.insert(relevant_line_data, factory_data.line_data_map[line_object_id])
+    end
+
+    -- Do not continue if the floor is empty
+    if not next(relevant_line_data) then return end
+
+    -- Populate the item sets based on the line data
+    for _, line_data in pairs(relevant_line_data) do
+        for item_key, _ in pairs(line_data.products) do
+            products[item_key] = true
+        end
+        for item_key, _ in pairs(line_data.ingredients) do
+            ingredients[item_key] = true
+        end
+    end
+
+    local intermediates = solver.util.set.intersection(products, ingredients)  ---@type SolverSet
+
+    -- Create the simplex tableau
+    local tableau = SimplexTableau:init()
+
+    -- Add line variables to the tableau
+    for _, line_data in pairs(relevant_line_data) do
+        tableau:add_line_variable(line_data)
+    end
+
+    -- Add slack variables for products
+    for item_key, _ in pairs(products) do
+        if not intermediates[item_key] then
+            local objective = item_cost(item_key, "out") * objective_vector.product
+            tableau:add_item_variable(item_key, "export", objective)
+        end
+    end
+
+    -- Add export slack variables for intermediates
+    for item_key, _ in pairs(intermediates) do
+        local objective = item_cost(item_key, "out") * objective_vector.intermediate_out
+        tableau:add_item_variable(item_key, "export", objective)
+    end
+
+    -- Add import slack variables for intermediates
+    for item_key, _ in pairs(intermediates) do
+        local objective = item_cost(item_key, "in") * objective_vector.intermediate_in
+        tableau:add_item_variable(item_key, "import", objective)
+    end
+
+    -- Add slack variables for ingredients
+    for item_key, _ in pairs(ingredients) do
+        if not intermediates[item_key] then
+            local objective = item_cost(item_key, "in") * objective_vector.ingredient
+            tableau:add_item_variable(item_key, "import", objective)
+        end
+    end
+
+    if floor_data.level == 1 then
+        -- Add additional variable and constraint to target products, so we get a bounded solution
+        for _, item in pairs(factory_data.products) do  ---@cast item SolverItem
+            local item_key = structures.pack_item(item)
+            if products[item_key] then
+                local objective = item_cost(item_key, "out") * objective_vector.target_product
+                tableau:add_item_variable(item_key, "output", objective)
+                tableau:add_item_constraint(item_key, "output", "<=", item.amount, objective)
+            end
+        end
+
+        -- Add additional variable and constraint for limited ingredients
+        for _, item in pairs(factory_data.ingredients) do  ---@cast item SolverItem
+            local item_key = structures.pack_item(item)
+            if ingredients[item_key] then
+                local objective = item_cost(item_key, "in") * objective_vector.limited_ingredient
+                tableau:add_item_variable(item_key, "input", objective)
+                tableau:add_item_constraint(item_key, "input", "<=", item.amount, objective)
+            end
+        end
+    
+        -- Add aditional constraint for machine requirements
+        for _, line_data in pairs(relevant_line_data) do
+            if line_data.machine_requirement then
+                local limit = line_data.machine_requirement.count
+                tableau:add_line_constraint(line_data.id, "==", limit, objective_vector.machine_limit)
+            end
+        end
+    else
+        -- Artificially limit the top line to one machine so we get a solution for this subfloor
+        local _, line_data = next(relevant_line_data)  ---@cast line_data -nil
+        tableau:add_line_constraint(line_data.id, "==", 1, objective_vector.target_machine)
+    end
+
+    -- Solve the tableau
+    return tableau:solve(floor_id, floor_data.simplex_basis)
+end
+
+return simplex_engine

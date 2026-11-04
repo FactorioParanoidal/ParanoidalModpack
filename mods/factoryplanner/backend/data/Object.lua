@@ -7,6 +7,9 @@
 ---@field parent Object?
 ---@field next Object?
 ---@field previous Object?
+---@field pack fun(self, full: boolean): PackedObject
+---@field validate fun(self, player: LuaPlayer): boolean
+---@field repair fun(self, player: LuaPlayer): boolean
 
 ---@class ObjectMethods
 local methods = {}
@@ -18,37 +21,46 @@ local Object = {}  -- class annotation purposefully not attached
 ---@param metatable table
 ---@return Object
 function Object.init(data, class, metatable)
-    local object = ftable.shallow_merge{
-        {
-            id = storage.next_object_ID,
-            class = class,
-            valid = true,
-            parent = nil,
-            next = nil,
-            previous = nil
-        },
-        data
+    local object = {
+        id = storage.next_object_ID,
+        class = class,
+        valid = true,
+        parent = nil,
+        next = nil,
+        previous = nil
     }
-    storage.next_object_ID = storage.next_object_ID + 1
+    for key, value in pairs(data) do object[key] = value end
 
     setmetatable(object, metatable)
+    storage.next_object_ID = storage.next_object_ID + 1
 
     -- If the index doesn't exist yet, it will be filled in later
     if OBJECT_INDEX then OBJECT_INDEX[object.id] = object end
 
-    return object
+    return object  ---@as Object
 end
 
 ---@return ObjectMethods
 function Object.methods()
-    return ftable.shallow_copy(methods)
+    local output = {}
+    for k, v in pairs(methods) do
+        output[k] = v
+    end
+    return output  ---@as ObjectMethods
 end
 
 
 ---@alias NeighbourDirection "next" | "previous"
 
----@alias ObjectFilter {id: integer, archived: boolean}
-local filter_options = {"id", "archived", "valid", "proto", "quality_proto"}
+---@class ObjectFilter
+---@field id integer?
+---@field archived boolean?
+---@field valid boolean?
+---@field proto FPPrototype?
+---@field quality_proto FPQualityPrototype?
+---@field category ItemCategory?
+
+local filter_options = {"id", "archived", "valid", "proto", "quality_proto", "category"}
 
 ---@param object Object
 ---@param filter ObjectFilter?
@@ -135,13 +147,13 @@ end
 ---@param spots integer?
 ---@param filter ObjectFilter?
 function methods:_shift(object, direction, spots, filter)
-    spots = spots or math.huge  -- no spots means shift to end
+    spots = spots or 2^53  -- no spots means shift to end
     local spots_moved = 0
 
     local next_object = object
     while spots_moved < spots and next_object[direction] ~= nil do
         next_object = next_object[direction]
-        local matched = match(next_object, filter)
+        local matched = match(next_object--[[@cast -nil]], filter)
         if matched then spots_moved = spots_moved + 1 end
     end
 
@@ -225,7 +237,7 @@ end
 ---@protected
 ---@param comparator function
 function methods:_sort(comparator)
-    local next_object = self.first
+    local next_object = self.first  ---@type Object?
     self.first = nil  -- clear to re-insert into below
 
     while next_object ~= nil do
@@ -233,7 +245,7 @@ function methods:_sort(comparator)
         next_object = next_object.next
 
         local inserted = false
-        for object in self:iterator() do
+        for object in self:_iterator() do
             if comparator(object, current_object) then
                 self:_insert(current_object, object, "previous")
                 inserted = true
@@ -251,21 +263,24 @@ end
 ---@field class string
 
 ---@protected
+---@param full boolean
 ---@return PackedObject[] packed_objects
-function methods:_pack()
+function methods:_pack(full)
     local packed_objects = {}
     for object in self:_iterator() do
-        table.insert(packed_objects, object:pack())
+        table.insert(packed_objects, object:pack(full))
     end
     return packed_objects
 end
 
----@protected
 ---@param packed_objects PackedObject[]
 ---@param unpacker fun(item: PackedObject): Object
+---@param parent Object?
 ---@return Object? first_object
 function Object.unpack(packed_objects, unpacker, parent)
-    local first_object, latest_object = nil, nil
+    local first_object = nil ---@type Object?
+    local latest_object = nil ---@type Object?
+
     for _, packed_object in pairs(packed_objects) do
         local object = unpacker(packed_object)
         object.parent = parent
@@ -273,7 +288,7 @@ function Object.unpack(packed_objects, unpacker, parent)
         if not first_object then
             first_object = object
         else
-            latest_object.next = object
+            latest_object--[[@cast -nil]].next = object
             object.previous = latest_object
         end
         latest_object = object
@@ -283,12 +298,13 @@ end
 
 
 ---@protected
+---@param player LuaPlayer
 ---@return boolean valid
-function methods:_validate()
+function methods:_validate(player)
     local valid = true
     for object in self:_iterator() do
         -- Stays true until a single dataset is invalid, then stays false
-        valid = object:validate() and valid
+        valid = object:validate(player) and valid
     end
     return valid
 end
@@ -299,7 +315,9 @@ end
 function methods:_repair(player, pivot)
     for object in self:_iterator(nil, pivot) do
         if not object.valid and not object:repair(player) then
-            object.parent:_remove(object)
+            local parent = object.parent  ---@as Object & ObjectMethods
+            parent:_remove(object)
+            object.parent = nil
         end
     end
 end

@@ -1,24 +1,38 @@
--- ** LOCAL UTIL **
-local function add_defaults_section(modal_elements, identifier, info_caption)
-    local label_info = modal_elements.defaults_flow.add{type="label", caption=info_caption, style="semibold_label"}
-    label_info.style.margin = {0, 8, 0, 24}
-    modal_elements[identifier .. "_title"] = label_info
+---@class MachineDialogModalData: ModuleConfiguratorModalData
+---@field machine_id ObjectID
+---@field object Machine
+---@field machine_backup Machine
+---@field beacon_backup Beacon
 
-    local button = modal_elements.defaults_flow.add{type="sprite-button", sprite="fp_default",
-        tags={mod="fp", on_gui_click="set_machine_default", action=identifier},
+-- ** LOCAL UTIL **
+---@param parent_flow LuaGuiElement
+---@param modal_elements table
+---@param identifier "machine" | "fuel"
+local function add_defaults_buttons(parent_flow, modal_elements, identifier)
+    parent_flow.add{type="empty-widget", style="fflib_horizontal_pusher"}
+
+    ---@class SetMachineDefaultTags
+    ---@field action "machine" | "fuel" | "machine_all" | "fuel_all"
+
+    ---@type SetMachineDefaultTags
+    local tags_machine = {mod="fp", on_gui_click="set_machine_default", action=identifier}
+    local button = parent_flow.add{type="sprite-button", tags=tags_machine, sprite="fp_default",
         tooltip={"fp.save_as_default_" .. identifier}, style="tool_button"}
     modal_elements[identifier] = button
 
-    local button_all = modal_elements.defaults_flow.add{type="sprite-button", sprite="fp_default_all",
-        tags={mod="fp", on_gui_click="set_machine_default", action=(identifier .. "_all")},
+    local action = (identifier .. "_all")  ---@as "machine_all" | "fuel_all"
+    ---@type SetMachineDefaultTags
+    local tags_all = {mod="fp", on_gui_click="set_machine_default", action=action}
+    local button_all = parent_flow.add{type="sprite-button", tags=tags_all, sprite="fp_default_all",
         tooltip={"fp.save_for_all_" .. identifier}, style="tool_button"}
-    modal_elements[identifier .. "_all"] = button_all
+    modal_elements[action] = button_all
 end
 
-local function refresh_defaults_frame(player)
-    local modal_data = util.globals.modal_data(player)  --[[@as table]]
+---@param player LuaPlayer
+local function refresh_defaults_buttons(player)
+    local modal_data = lib.globals.modal_data(player)  ---@as MachineDialogModalData
     local modal_elements = modal_data.modal_elements
-    local machine = modal_data.object  --[[@as Machine]]
+    local machine = modal_data.object  ---@as Machine
 
     -- Machine
     local machine_category = machine.proto.combined_category
@@ -26,48 +40,33 @@ local function refresh_defaults_frame(player)
     local equals_machine = defaults.equals_default(player, "machines", machine, machine_category)
     local equals_all_machines = defaults.equals_all_defaults(player, "machines", machine)
 
-    modal_elements.machine_title.tooltip = machine_tooltip
+    modal_elements.machine.tooltip = {"", {"fp.save_as_default_machine"}, "\n\n", machine_tooltip}
     modal_elements.machine.enabled = not equals_machine
     modal_elements.machine_all.enabled = not equals_all_machines
 
     -- Fuel
-    local fuel_required = (machine.proto.energy_type == "burner")
+    local fuel_required = (machine.proto.energy_type == "burner")  ---@cast machine.proto.burner -nil
     local fuel_tooltip = {"fp.machine_no_fuel_required"}  ---@type LocalisedString
     local equals_fuel, equals_all_fuels = false, false
-    if fuel_required then
+    if fuel_required then  ---@cast machine.fuel -nil
         local category = machine.proto.burner.combined_category
         fuel_tooltip = defaults.generate_tooltip(player, "fuels", category)
         equals_fuel = defaults.equals_default(player, "fuels", machine.fuel, category)
         equals_all_fuels = defaults.equals_all_defaults(player, "fuels", machine.fuel)
     end
 
-    modal_elements.fuel_title.tooltip = fuel_tooltip
+    modal_elements.fuel.tooltip = {"", {"fp.save_as_default_fuel"}, "\n\n", fuel_tooltip}
+    modal_elements.fuel.visible = fuel_required
+    modal_elements.fuel_all.visible = fuel_required
     modal_elements.fuel.enabled = fuel_required and not equals_fuel
     modal_elements.fuel_all.enabled = fuel_required and not equals_all_fuels
 end
 
-local function add_defaults_frame(parent_frame, player)
-    local modal_elements = util.globals.modal_elements(player)
-
-    local frame_defaults = parent_frame.add{type="frame", direction="horizontal", style="fp_frame_bordered_stretch"}
-    frame_defaults.style.top_padding = 7
-    local flow_defaults = frame_defaults.add{type="flow", direction="horizontal"}
-    flow_defaults.style.vertical_align = "center"
-    modal_elements["defaults_flow"] = flow_defaults
-
-    flow_defaults.add{type="label", caption={"fp.defaults"}, style="semibold_label"}
-
-    local machine_info = {"fp.info_label", {"", {"fp.pu_machine", 1}, " & ", {"fp.pu_module", 2}}}
-    add_defaults_section(modal_elements, "machine", machine_info)
-
-    local fuel_info = {"fp.info_label", {"fp.pu_fuel", 1}}
-    add_defaults_section(modal_elements, "fuel", fuel_info)
-
-    refresh_defaults_frame(player)
-end
-
+---@param player LuaPlayer
+---@param tags SetMachineDefaultTags
 local function set_defaults(player, tags, _)
-    local machine = util.globals.modal_data(player).object
+    local modal_data = lib.globals.modal_data(player)  ---@as MachineDialogModalData
+    local machine = modal_data.object
 
     local machine_data = {
         prototype = machine.proto.name,
@@ -81,18 +80,19 @@ local function set_defaults(player, tags, _)
         defaults.set(player, "machines", machine_data, machine.proto.combined_category)
 
     elseif tags.action == "fuel_all" then
-        defaults.set_all(player, "fuels", {prototype=machine.fuel.proto.name})
+        defaults.set_all(player, "fuels", {prototype=machine.fuel--[[@cast -nil]].proto.name})
     elseif tags.action == "fuel" then
-        local category = machine.proto.burner.combined_category
-        defaults.set(player, "fuels", {prototype=machine.fuel.proto.name}, category)
+        local category = machine.proto.burner--[[@cast -nil]].combined_category
+        defaults.set(player, "fuels", {prototype=machine.fuel--[[@cast -nil]].proto.name}, category)
     end
 
-    refresh_defaults_frame(player)
+    refresh_defaults_buttons(player)
 end
 
 
+---@param player LuaPlayer
 local function refresh_fuel_frame(player)
-    local modal_data = util.globals.modal_data(player)  --[[@as table]]
+    local modal_data = lib.globals.modal_data(player)  ---@as MachineDialogModalData
     local modal_elements = modal_data.modal_elements
     local machine = modal_data.object
 
@@ -100,64 +100,68 @@ local function refresh_fuel_frame(player)
     modal_elements.fuel_label.visible = (not burns_fuel)
     modal_elements.fuel_button_flow.clear()
 
-    if not burns_fuel then return end
+    if not burns_fuel then return end  ---@cast machine.fuel -nil
 
-    local burner = machine.proto.burner
-    local elem_type = (burner and burner.categories["fluid-fuel"]) and "fluid" or "item"
+    local elem_type = machine.fuel.proto.elem_type
 
-    modal_elements.fuel_button_flow.add{type="choose-elem-button", elem_type=elem_type,
+    local button_fuel = modal_elements.fuel_button_flow.add{type="choose-elem-button", elem_type=elem_type,
         [elem_type]=machine.fuel.proto.name, elem_filters=machine:compile_fuel_filter(),
         tags={mod="fp", on_gui_elem_changed="choose_fuel"}, style="fp_sprite-button_inset"}
+    button_fuel.style.size = 40
 end
 
 
+---@param player LuaPlayer
 local function reset_machine(player)
-    local machine = util.globals.modal_data(player).object  --[[@as Machine]]
+    local modal_data = lib.globals.modal_data(player)  ---@as MachineDialogModalData
+    local machine = modal_data.object
     machine:reset(player)
 
     -- Some manual refreshing which don't have their own method
-    local modal_elements = util.globals.modal_elements(player)  --[[@as table]]
+    local modal_elements = lib.globals.modal_elements(player)
     modal_elements["machine_button"].elem_value = machine:elem_value()
-
-    local limit_switch = modal_elements.force_limit_switch
-    if limit_switch.enabled then
-        modal_elements["limit_textfield"].text = machine.limit or ""
-        limit_switch.switch_state = util.gui.switch.convert_to_state(machine.force_limit)
-    end
 
     refresh_fuel_frame(player)
     module_configurator.refresh_modules_flow(player, false)
-    refresh_defaults_frame(player)
+    refresh_defaults_buttons(player)
 end
 
 
-local function create_choice_frame(parent_frame, label_caption)
-    local frame_choices = parent_frame.add{type="frame", direction="horizontal", style="fp_frame_bordered_stretch"}
+---@param parent_frame LuaGuiElement
+---@return LuaGuiElement flow_choices
+local function create_choice_frame(parent_frame)
+    local frame_choices = parent_frame.add{type="frame", direction="horizontal", style="fp_frame_module"}
     frame_choices.style.width = (MAGIC_NUMBERS.module_dialog_element_width / 2) - 2
-
     local flow_choices = frame_choices.add{type="flow", direction="horizontal"}
+    flow_choices.style.horizontally_stretchable = true
+    flow_choices.style.horizontal_spacing = 4
     flow_choices.style.vertical_align = "center"
-
-    flow_choices.add{type="label", caption=label_caption, style="semibold_label"}
-    flow_choices.add{type="empty-widget", style="flib_horizontal_pusher"}
+    flow_choices.style.height = 40
 
     return flow_choices
 end
 
+---@param parent_frame LuaGuiElement
+---@param player LuaPlayer
+---@param line Line
 local function add_machine_frame(parent_frame, player, line)
-    local modal_elements = util.globals.modal_data(player).modal_elements
-    local flow_choices = create_choice_frame(parent_frame, {"fp.pu_machine", 1})
+    local modal_elements = lib.globals.modal_data(player)--[[@cast -nil]].modal_elements
+    local flow_choices = create_choice_frame(parent_frame)
 
     local button_machine = flow_choices.add{type="choose-elem-button", elem_type="entity-with-quality",
         tags={mod="fp", on_gui_elem_changed="choose_machine"}, style="fp_sprite-button_inset",
-        elem_filters=line:compile_machine_filter()}
+        elem_filters=line:compile_machine_filter(player.force--[[@as LuaForce]])}
     button_machine.elem_value = line.machine:elem_value()
+    button_machine.style.size = 40
     modal_elements["machine_button"] = button_machine
+    add_defaults_buttons(flow_choices, modal_elements, "machine")
 end
 
-local function add_fuel_frame(parent_frame, player, line)
-    local modal_elements = util.globals.modal_data(player).modal_elements
-    local flow_choices = create_choice_frame(parent_frame, {"fp.pu_fuel", 1})
+---@param parent_frame LuaGuiElement
+---@param player LuaPlayer
+local function add_fuel_frame(parent_frame, player)
+    local modal_elements = lib.globals.modal_data(player)--[[@cast -nil]].modal_elements
+    local flow_choices = create_choice_frame(parent_frame)
 
     local label_fuel = flow_choices.add{type="label", caption={"fp.machine_no_fuel_required"}}
     label_fuel.style.padding = {6, 4}
@@ -166,49 +170,22 @@ local function add_fuel_frame(parent_frame, player, line)
     local flow_fuel_button = flow_choices.add{type="flow", direction="horizontal"}
     modal_elements["fuel_button_flow"] = flow_fuel_button
     -- Button recreated on refresh because its type can change
+    add_defaults_buttons(flow_choices, modal_elements, "fuel")
 
     refresh_fuel_frame(player)
 end
 
 
-local function add_limit_frame(parent_frame, player, enabled)
-    local modal_data = util.globals.modal_data(player)  --[[@as table]]
-    local machine = modal_data.object
-
-    local frame_limit = parent_frame.add{type="frame", direction="horizontal", style="fp_frame_module"}
-    frame_limit.add{type="label", caption={"fp.info_label", {"fp.machine_limit"}},
-        tooltip={"fp.machine_limit_tt"}, style="semibold_label"}
-
-    local textfield_width = 45
-    local textfield_limit = frame_limit.add{type="textfield", tags={mod="fp", on_gui_text_changed="machine_limit",
-        on_gui_confirmed="confirm_machine", width=textfield_width}, tooltip={"fp.expression_textfield"},
-        text=machine.limit, enabled=enabled}
-    textfield_limit.style.width = textfield_width
-    modal_data.modal_elements["limit_textfield"] = textfield_limit
-
-    local label_force = frame_limit.add{type="label", caption={"fp.info_label", {"fp.machine_force_limit"}},
-        tooltip={"fp.machine_force_limit_tt"}, style="semibold_label"}
-    label_force.style.left_margin = 12
-
-    local state = util.gui.switch.convert_to_state(machine.force_limit)
-    local switch_force_limit = util.gui.switch.add_on_off(frame_limit, nil, {}, state)
-    switch_force_limit.enabled = enabled
-    modal_data.modal_elements["force_limit_switch"] = switch_force_limit
-
-    if not enabled then
-        frame_limit.add{type="label", caption={"fp.machine_limit_unavailable"},
-            tooltip={"fp.machine_limit_unavailable_tt"}}
-    end
-end
-
-
+---@param player LuaPlayer
+---@param event EventData.on_gui_elem_changed
 local function handle_machine_choice(player, _, event)
-    local machine = util.globals.modal_data(player).object  --[[@as Machine]]
-    local elem_value = event.element.elem_value
+    local modal_data = lib.globals.modal_data(player)  ---@as MachineDialogModalData
+    local machine = modal_data.object
+    local elem_value = event.element.elem_value  ---@as PrototypeWithQuality
 
     if not elem_value then
         event.element.elem_value = machine:elem_value()  -- reset the machine so it can't be nil
-        util.cursor.create_flying_text(player, {"fp.no_removal", {"fp.pu_machine", 1}})
+        lib.cursor.create_flying_text(player, {"fp.no_removal", {"fp.pu_machine", 1}})
         return  -- nothing changed
     end
 
@@ -218,7 +195,6 @@ local function handle_machine_choice(player, _, event)
     -- Can't use Line:change_machine_to_proto() as that modifies the line, which we can't do
     machine.proto = new_machine_proto
     machine.quality_proto = new_quality_proto
-    machine.parent.surface_compatibility = nil  -- reset since the machine changed
     machine:normalize_fuel(player)
     machine.module_set:normalize({compatibility=true, trim=true, effects=true})
 
@@ -227,85 +203,76 @@ local function handle_machine_choice(player, _, event)
 
     refresh_fuel_frame(player)
     module_configurator.refresh_modules_flow(player, false)
-    refresh_defaults_frame(player)
+    refresh_defaults_buttons(player)
 end
 
+---@param player LuaPlayer
+---@param event EventData.on_gui_elem_changed
 local function handle_fuel_choice(player, _, event)
-    local machine = util.globals.modal_data(player).object
-    local elem_value = event.element.elem_value
+    local modal_data = lib.globals.modal_data(player)  ---@as MachineDialogModalData
+    local machine = modal_data.object  ---@cast machine.fuel -nil
+    local elem_value = event.element.elem_value  ---@as string
 
     if not elem_value then
         event.element.elem_value = machine.fuel.proto.name  -- reset the fuel so it can't be nil
-        util.cursor.create_flying_text(player, {"fp.no_removal", {"fp.pu_fuel", 1}})
+        lib.cursor.create_flying_text(player, {"fp.no_removal", {"fp.pu_fuel", 1}})
         return  -- nothing changed
     end
 
-    local combined_category = machine.proto.burner.combined_category
-    local proto = prototyper.util.find("fuels", elem_value, combined_category)
+    local combined_category = machine.proto.burner--[[@cast -nil]].combined_category
+    local proto = prototyper.util.find("fuels", elem_value, combined_category)  ---@as FPFuelPrototype
     machine.fuel:set_proto(proto, player)
 
-    refresh_defaults_frame(player)
+    refresh_defaults_buttons(player)
 end
 
 
+---@param player LuaPlayer
+---@param modal_data MachineDialogModalData
 local function open_machine_dialog(player, modal_data)
-    modal_data.object = OBJECT_INDEX[modal_data.machine_id]  --[[@as Machine]]
-    modal_data.line = modal_data.object.parent  --[[@as Line]]
+    modal_data.object = OBJECT_INDEX[modal_data.machine_id]  ---@as Machine
+    modal_data.line = modal_data.object.parent
 
-    modal_data.machine_backup = modal_data.object:clone()
-    modal_data.beacon_backup = modal_data.line.beacon and modal_data.line.beacon:clone()
     modal_data.module_set = modal_data.object.module_set
+    modal_data.machine_backup = modal_data.object:clone(player)
+    modal_data.beacon_backup = modal_data.line.beacon and modal_data.line.beacon:clone(player)
 
     local content_frame = modal_data.modal_elements.content_frame
 
     -- Machine & Fuel
     local flow_machine = content_frame.add{type="flow", direction="horizontal"}
     add_machine_frame(flow_machine, player, modal_data.line)
-    add_fuel_frame(flow_machine, player, modal_data.line)
-
-    -- Limit
-    local factory = util.context.get(player, "Factory")
-    -- Unavailable with matrix solver or special recipes
-    local limit_enabled = (not factory.matrix_solver_active and modal_data.line.recipe.proto.energy > 0)
-    add_limit_frame(content_frame, player, limit_enabled)
+    add_fuel_frame(flow_machine, player)
 
     -- Modules
+    modal_data.defaults_refresher = "machine_defaults_refresher"
     module_configurator.add_modules_flow(content_frame, modal_data)
     module_configurator.refresh_modules_flow(player, false)
-
-    -- Defaults
-    modal_data.defaults_refresher = "machine_defaults_refresher"
-    add_defaults_frame(content_frame, player)
 end
 
+---@param player LuaPlayer
+---@param action GUICloseAction
 local function close_machine_dialog(player, action)
-    local modal_data = util.globals.modal_data(player)  --[[@as table]]
+    local modal_data = lib.globals.modal_data(player)  ---@as MachineDialogModalData
     local machine, line = modal_data.object, modal_data.line
 
     if action == "submit" then
         machine.module_set:normalize({sort=true})
 
-        local limit_switch = modal_data.modal_elements.force_limit_switch
-        if limit_switch.enabled then
-            machine.limit = util.gui.parse_expression_field(modal_data.modal_elements.limit_textfield, true)
-            machine.force_limit = util.gui.switch.convert_to_boolean(limit_switch.switch_state)
-        end
-
         solver.update(player)
-        util.gui.run_refresh(player, "factory")
+        lib.gui.run_refresh(player, "production")
 
     else  -- action == "cancel"
         line.machine = modal_data.machine_backup
         line.machine.module_set:normalize({effects=true})
         line:set_beacon(modal_data.beacon_backup)
         -- Need to refresh so the buttons have the 'new' backup machine for further actions
-        util.gui.run_refresh(player, "production_detail")
+        lib.gui.run_refresh(player, "production")
     end
 end
 
-
 -- ** EVENTS **
-local listeners = {}
+local listeners = {}  ---@type ListenerDefinitions
 
 listeners.gui = {
     on_gui_elem_changed = {
@@ -318,24 +285,6 @@ listeners.gui = {
             handler = handle_fuel_choice
         }
     },
-    on_gui_text_changed = {
-        {
-            name = "machine_limit",
-            handler = (function(_, _, event)
-                local limit = util.gui.parse_expression_field(event.element, true)
-                util.gui.update_expression_field(event.element, limit ~= nil)
-            end)
-        }
-    },
-    on_gui_confirmed = {
-        {
-            name = "confirm_machine",
-            handler = (function(player, _, event)
-                local confirmed = util.gui.confirm_expression_field(event.element, true)
-                if confirmed then util.gui.close_dialog(player, "submit") end
-            end)
-        }
-    },
     on_gui_click = {
         {
             name = "set_machine_default",
@@ -345,29 +294,30 @@ listeners.gui = {
     on_gui_checked_state_changed = {
         {
             name = "machine_checkbox_all",
-            handler = refresh_defaults_frame
+            handler = refresh_defaults_buttons
         }
     }
-}
+}  ---@as GUIListenerDefinition
 
 listeners.dialog = {
     dialog = "machine",
-    metadata = (function(modal_data)
-        local machine = OBJECT_INDEX[modal_data.machine_id]  --[[@as Machine]]
+    metadata = function(modal_data)
+        ---@cast modal_data MachineDialogModalData
+        local machine = OBJECT_INDEX[modal_data.machine_id]  ---@as Machine
         local recipe_name = machine.parent.recipe.proto.localised_name
         return {
             caption = {"", {"fp.edit"}, " ", {"fp.pl_machine", 1}},
             subheader_text = {"fp.machine_dialog_description", recipe_name},
             show_submit_button = true,
             reset_handler_name = "reset_machine"
-        }
-    end),
+        }  ---@as ModalDialogSettings
+    end,
     open = open_machine_dialog,
     close = close_machine_dialog
 }
 
 listeners.global = {
-    machine_defaults_refresher = refresh_defaults_frame,
+    machine_defaults_refresher = refresh_defaults_buttons,
     reset_machine = reset_machine
 }
 

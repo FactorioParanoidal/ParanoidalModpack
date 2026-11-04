@@ -27,7 +27,7 @@ local function init(parent)
         empty_slots = module_limit,
 
         parent = parent
-    }, "ModuleSet", ModuleSet)  --[[@as ModuleSet]]
+    }, "ModuleSet", ModuleSet)  ---@as ModuleSet
     return object
 end
 
@@ -57,6 +57,7 @@ end
 ---@param module Module
 ---@param new_module Module
 function ModuleSet:replace(module, new_module)
+    module.parent = nil
     new_module.parent = self
     self:_replace(module, new_module)
     self:count_modules()
@@ -68,12 +69,12 @@ end
 ---@param direction NeighbourDirection?
 ---@return Module? module
 function ModuleSet:find(filter, pivot, direction)
-    return self:_find(filter, pivot, direction)  --[[@as Module?]]
+    return self:_find(filter, pivot, direction)  ---@as Module?
 end
 
 ---@return Module?
 function ModuleSet:find_last()
-    return self:_find_last()  --[[@as Module?]]
+    return self:_find_last()  ---@as Module?
 end
 
 ---@param filter ObjectFilter?
@@ -123,7 +124,7 @@ end
 function ModuleSet:verify_compatibility()
     local modules_to_remove = {}
     for module in self:iterator() do
-        if not self:check_compatibility(module.proto) then
+        if not self:check_compatibility(module.proto--[[@as FPModulePrototype]]) then
             table.insert(modules_to_remove, module)
         end
     end
@@ -156,6 +157,9 @@ function ModuleSet:trim()
 end
 
 
+---@param a Module
+---@param b Module
+---@return boolean
 local function module_comparator(a, b)
     local a_module, b_module = a.proto.id, b.proto.id  -- IDs are ordered sensibly
     local a_quality, b_quality = a.quality_proto.level, b.quality_proto.level
@@ -174,7 +178,7 @@ end
 
 ---@return IntegerModuleEffects
 function ModuleSet:get_effects()
-    local effects = ftable.shallow_copy(BLANK_EFFECTS)
+    local effects = lib.flib.shallow_copy(lib.effects.blank)
     for module in self:iterator() do
         for name, effect in pairs(module.total_effects) do
             effects[name] = effects[name] + effect  -- doesn't create decimals
@@ -187,36 +191,7 @@ end
 ---@param module_proto FPModulePrototype
 ---@return boolean compatible
 function ModuleSet:check_compatibility(module_proto)
-    if not self.parent:uses_effects() then
-        return false
-    else
-        local compatible = true
-        local entity, recipe = self.parent.proto, self.parent.parent.recipe.proto
-        -- Any non-existing allowed list means all modules are allowed
-
-        local function check_effect_compatibility(allowed_effects)
-            if allowed_effects == nil then return end
-            for name, value in pairs(module_proto.effects) do
-                -- Effects only need to be in the allowed list if they are considered positive
-                if not allowed_effects[name] and util.effects.is_positive(name, value) then
-                    compatible = false
-                end
-            end
-        end
-        check_effect_compatibility(entity.allowed_effects)
-        check_effect_compatibility(recipe.allowed_effects)
-
-        local function check_category_compatibility(allowed_categories)
-            if allowed_categories == nil then return end
-            if not allowed_categories[module_proto.category] then
-                compatible = false
-            end
-        end
-        check_category_compatibility(entity.allowed_module_categories)
-        check_category_compatibility(recipe.allowed_module_categories)
-
-        return compatible
-    end
+    return self.parent:uses_effects() and self.parent:allows_module(module_proto)
 end
 
 ---@return ItemPrototypeFilter[]
@@ -286,14 +261,19 @@ end
 ---@return boolean success
 ---@return string? error
 function ModuleSet:paste(module)
-    if not self:check_compatibility(module.proto) then
+    if module.proto.simplified or not self:check_compatibility(module.proto--[[@as FPModulePrototype]]) then
         return false, "incompatible"
     elseif self.empty_slots == 0 then
         return false, "no_empty_slots"
     end
 
     local desired_amount = math.min(module.amount, self.empty_slots)
-    local existing_module = self:find({proto=module.proto, quality_proto=module.quality_proto})
+    local filter = {
+        proto = module.proto--[[@as FPModulePrototype]],
+        quality_proto = module.quality_proto--[[@as FPQualityPrototype]]
+    }  ---@type ObjectFilter
+    local existing_module = self:find(filter)
+
     if existing_module then
         existing_module:set_amount(existing_module.amount + desired_amount)
     else
@@ -308,13 +288,14 @@ end
 
 ---@class PackedModuleSet: PackedObject
 ---@field class "ModuleSet"
----@field modules PackedModule[]?
+---@field modules PackedModule[]
 
+---@param full boolean
 ---@return PackedModuleSet packed_self
-function ModuleSet:pack()
+function ModuleSet:pack(full)
     return {
         class = self.class,
-        modules = self:_pack()
+        modules = self:_pack(full)
     }
 end
 
@@ -324,16 +305,17 @@ end
 local function unpack(packed_self, parent)
     local unpacked_self = init(parent)
 
-    unpacked_self.first = Object.unpack(packed_self.modules, Module.unpack, unpacked_self)  --[[@as Module]]
+    unpacked_self.first = Object.unpack(packed_self.modules, Module.unpack, unpacked_self)  ---@as Module
     unpacked_self:count_modules()
 
     return unpacked_self
 end
 
 
+---@param player LuaPlayer
 ---@return boolean valid
-function ModuleSet:validate()
-    self.valid = self:_validate()
+function ModuleSet:validate(player)
+    self.valid = self:_validate(player)
 
     -- Can't be valid with an invalid parent
     self.valid = self.parent.valid and self.valid

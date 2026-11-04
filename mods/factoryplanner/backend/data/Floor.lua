@@ -1,8 +1,13 @@
 local Object = require("backend.data.Object")
 local Line = require("backend.data.Line")
+local SimpleItem = require("backend.data.SimpleItem")
 
 ---@alias LineObject Line | Floor
 ---@alias LineParent Factory | Floor
+
+---@class ItemWeight
+---@field proto FPItemPrototype | FPPackedPrototype
+---@field weight integer
 
 ---@class Floor: Object, ObjectMethods
 ---@field class "Floor"
@@ -12,25 +17,39 @@ local Line = require("backend.data.Line")
 ---@field level integer
 ---@field first LineObject?
 ---@field products SimpleItem[]
----@field byproducts SimpleItem[]
 ---@field ingredients SimpleItem[]
----@field machine_count integer
+---@field machine_amount integer
+---@field solver SolverName
+---@field solver_error SolverStatus?
+---@field is_linearly_dependent boolean?
+---@field gaussian_free_items (FPItemPrototype | FPPackedPrototype)[]
+---@field linear_dependence_data LinearDependanceData?
+---@field simplex_item_weights ItemWeight[]
+---@field simplex_basis_cache SimplexBasisCache?
+---@field current_location FPLocationPrototype?
 local Floor = Object.methods()
 Floor.__index = Floor
 script.register_metatable("Floor", Floor)
 
 ---@param level integer
+---@param solver_name SolverName
 ---@return Floor
-local function init(level)
+local function init(level, solver_name)
     local object = Object.init({
         level = level,
+        solver = solver_name,
         first = nil,
 
         products = {},
-        byproducts = {},
         ingredients = {},
-        machine_count = 0
-    }, "Floor", Floor)  --[[@as Floor]]
+        machine_amount = 0,
+
+        linear_dependence_data = nil,
+        gaussian_free_items = {},
+        simplex_item_weights = {},
+        simplex_basis_cache = nil,
+        current_location = nil,  -- determined on demand
+    }, "Floor", Floor)  ---@as Floor
     return object
 end
 
@@ -55,32 +74,34 @@ function Floor:remove(line, preserve)
     line.parent = nil
     self:_remove(line)
 
-    if preserve then return end
+    if preserve or self.level == 1 then return end
+    ---@cast self.first -nil
+
     -- Convert floor to line in parent if only defining line remains
-    if self.level > 1 and self.first.next == nil then
-        self.parent:replace(self, self.first)
-    end
+    if self.first.next == nil then self.parent:replace(self, self.first) end
 end
 
 ---@param line LineObject
 ---@param new_line LineObject
 function Floor:replace(line, new_line)
+    line.parent = nil
     new_line.parent = self
     self:_replace(line, new_line)
 end
 
 
 ---@param line LineObject
+---@param relative_object LineObject
 ---@param direction NeighbourDirection
----@param spots integer?
-function Floor:shift(line, direction, spots)
-    self:_shift(line, direction, spots)
+function Floor:move(line, relative_object, direction)
+    self:_remove(line)
+    self:_insert(line, relative_object, direction)
 end
 
 
 ---@return LineObject?
 function Floor:find_last()
-    return self:_find_last()  --[[@as LineObject?]]
+    return self:_find_last()  ---@as LineObject?
 end
 
 ---@param filter ObjectFilter?
@@ -100,11 +121,11 @@ function Floor:count(filter, pivot, direction)
 end
 
 
----@alias ComponentDataSet { proto: FPPrototype, amount: number }
+---@alias ComponentDataSet { proto: LuaItemPrototype, quality_proto: FPQualityPrototype, amount: integer }
 
 ---@class ComponentData
----@field machines { [string]: ComponentDataSet }
----@field modules { [string]: ComponentDataSet }
+---@field machines table<string, ComponentDataSet>
+---@field modules table<string, ComponentDataSet>
 
 -- Returns the machines and modules needed to actually build this floor
 ---@param skip_done boolean
@@ -113,8 +134,16 @@ end
 function Floor:get_component_data(skip_done, component_table)
     local components = component_table or {machines={}, modules={}}
 
-    local function add_component(table, proto, quality_proto, amount)
-        local combined_name = proto.name .. "-" .. quality_proto.name
+    ---@param table table<string,ComponentDataSet>
+    ---@param item_name string?
+    ---@param quality_proto FPQualityPrototype
+    ---@param amount integer
+    local function add_component(table, item_name, quality_proto, amount)
+        if item_name == nil then return end  -- built_by_item_name can be nil
+        local proto = prototypes.item[item_name]
+        if proto == nil then return end
+
+        local combined_name = item_name .. "-" .. quality_proto.name
         local component = table[combined_name]
         if component == nil then
             table[combined_name] = {proto = proto, quality_proto = quality_proto, amount = amount}
@@ -123,13 +152,16 @@ function Floor:get_component_data(skip_done, component_table)
         end
     end
 
+    ---@param object Machine | Beacon
+    ---@param amount integer
     local function add_machine(object, amount)
-        if object.proto.built_by_item then
-            add_component(components.machines, object.proto.built_by_item, object.quality_proto, amount)
-        end
+        ---@cast object.quality_proto FPQualityPrototype
+        add_component(components.machines, object.proto.built_by_item_name, object.quality_proto, amount)
 
         for module in object.module_set:iterator() do
-            add_component(components.modules, module.proto, module.quality_proto, amount * module.amount)
+            ---@cast module.proto FPModulePrototype
+            ---@cast module.quality_proto FPQualityPrototype
+            add_component(components.modules, module.proto.name, module.quality_proto, amount * module.amount)
         end
     end
 
@@ -139,13 +171,15 @@ function Floor:get_component_data(skip_done, component_table)
 
         elseif not skip_done or not line.done then
             local machine = line.machine
-            local ceil_machine_count = math.ceil(machine.amount - 1e-6)
-            add_machine(machine, ceil_machine_count)
+            local ceil_machine_amount = math.ceil(machine.amount - MAGIC_NUMBERS.margin_of_error)
+            add_machine(machine, ceil_machine_amount)
 
-            local beacon = line.beacon
-            if beacon and beacon.total_amount then
-                local ceil_total_amount = math.ceil(beacon.total_amount - 1e-6)
-                add_machine(beacon, ceil_total_amount)
+            if line.beacon then
+                local total_amount = line.beacon:get_total_amount()
+                if total_amount then
+                    local ceil_total_amount = math.ceil(total_amount - MAGIC_NUMBERS.margin_of_error)
+                    add_machine(line.beacon, ceil_total_amount)
+                end
             end
         end
     end
@@ -154,32 +188,95 @@ function Floor:get_component_data(skip_done, component_table)
 end
 
 
----@param object LineObject
----@return boolean compatible
-function Floor:check_product_compatibility(object)
-    if self.level == 1 then return true end
-
-    local relevant_line = (object.class == "Floor") and object.first or object
-    -- The triple loop is crappy, but it's the simplest way to check
-    for _, product in pairs(relevant_line.recipe.proto.products) do
-        for line in self:iterator() do
-            for _, ingredient in pairs(line.ingredients) do
-                if ingredient.proto.type == product.type and ingredient.proto.name == product.name then
-                    return true
-                end
-            end
+---@return boolean any_found
+function Floor:any_lines_not_marked_done()
+    for line in self:iterator() do
+        if line.class == "Floor" then  ---@cast line Floor
+            local result = line:any_lines_not_marked_done()
+            if result then return true end
+        else
+            if not line.done then return true end
         end
     end
     return false
 end
 
-function Floor:reset_surface_compatibility()
+
+---@param player LuaPlayer
+---@return boolean changed
+function Floor:refresh_lines(player)
+    local changed = false
     for line in self:iterator() do
         if line.class == "Floor" then  ---@cast line Floor
-            line:reset_surface_compatibility()
-        else
-            line.surface_compatibility = nil
+            changed = line:refresh_lines(player) or changed
+        else  ---@cast line Line
+            changed = line:refresh_line(player) or changed
         end
+    end
+    return changed
+end
+
+function Floor:reset_location()
+    self.current_location = nil
+    for line in self:iterator() do
+        if line.class == "Floor" then  ---@cast line Floor
+            line:reset_location()
+        end
+    end
+end
+
+---@return FPLocationPrototype
+function Floor:get_current_location()
+    if not self.current_location then
+        local district = lib.get_ancestor(self, "District")  ---@as District
+        self.current_location = district.location_proto  ---@as FPLocationPrototype
+    end
+    ---@cast self.current_location -nil
+    return self.current_location
+end
+
+---@alias FloorStatus "disabled" | "linearly_dependent" | "solver_error"
+
+--- Returns why this floor doesn't produce anything, or nil if it does
+---@return FloorStatus?
+function Floor:get_status()
+    if self.first--[[@cast -nil]]:get_status() == "disabled" then return "disabled" end
+
+    for line_object in self:iterator() do
+        if line_object.class == "Floor" and line_object:get_status() == "solver_error" then return "solver_error" end
+    end
+
+    if self.solver_error then return "solver_error" end
+    if self.is_linearly_dependent then return "linearly_dependent" end
+
+    return nil
+end
+
+---@param solver_name SolverName
+---@param recursive boolean?
+---@return boolean changed
+function Floor:set_solver(solver_name, recursive)
+    local changed = self.solver ~= solver_name
+    self.solver = solver_name
+    if not recursive then return changed end
+
+    for line in self:iterator() do
+        if line.class == "Floor" and line:set_solver(solver_name, true) then
+            changed = true
+        end
+    end
+
+    return changed
+end
+
+---@param self_only boolean?
+function Floor:clear_solver_cache(self_only)
+    self.linear_dependence_data = nil
+    self.simplex_basis_cache = nil
+
+    if self_only then return end
+    for line_object in self:iterator() do
+        if line_object.class == "Floor" then line_object:clear_solver_cache() end
     end
 end
 
@@ -188,12 +285,7 @@ end
 ---@return string? error
 function Floor:paste(object)
     if object.class == "Line" or object.class == "Floor" then
-        ---@cast object LineObject
-        if not self:check_product_compatibility(object) then
-            return false, "recipe_irrelevant"  -- found no use for the recipe's products
-        end
-
-        self.parent:replace(self, object)
+        self:insert(object--[[@as LineObject]])
         return true, nil
     else
         return false, "incompatible_class"
@@ -203,35 +295,84 @@ end
 
 ---@alias PackedLineObject PackedLine | PackedFloor
 
+---@class PackedItemWeight
+---@field proto FPPackedPrototype
+---@field weight integer
+
 ---@class PackedFloor: PackedObject
 ---@field class "Floor"
 ---@field level integer
----@field lines PackedLineObject[]?
+---@field lines PackedLineObject[]
+---@field solver SolverName
+---@field products PackedSimpleItem[]?
+---@field ingredients PackedSimpleItem[]?
+---@field gaussian_free_items FPPackedPrototype[]
+---@field simplex_item_weights PackedItemWeight[]
 
+---@param full boolean
 ---@return PackedFloor packed_self
-function Floor:pack()
+function Floor:pack(full)
+    local weights = {}  ---@type PackedItemWeight[]
+    for _, entry in ipairs(self.simplex_item_weights) do
+        table.insert(weights, {
+            proto = entry.proto.simplified and entry.proto--[[@as FPPackedPrototype]]
+                or prototyper.util.simplify_prototype(entry.proto, "type"),
+            weight = entry.weight
+        })
+    end
+
     return {
         class = self.class,
         level = self.level,
-        lines = self:_pack()
+        solver = self.solver,
+        lines = self:_pack(full),
+
+        products = (full) and SimpleItem.pack_items(self.products) or nil,
+        ingredients = (full) and SimpleItem.pack_items(self.ingredients) or nil,
+
+        gaussian_free_items = prototyper.util.simplify_prototypes(self.gaussian_free_items, "type") or nil,
+        simplex_item_weights = weights,
     }
 end
 
 ---@param packed_self PackedFloor
 ---@return Floor floor
 local function unpack(packed_self)
-    local unpacked_self = init(packed_self.level)
+    local unpacked_self = init(packed_self.level, packed_self.solver)
 
-    local function unpacker(line) return (line.class == "Floor") and unpack(line) or Line.unpack(line) end
-    unpacked_self.first = Object.unpack(packed_self.lines, unpacker, unpacked_self)  --[[@as LineObject]]
+    ---@param line PackedLineObject
+    ---@return LineObject line
+    local function unpacker(line)
+        return (line.class == "Floor") and unpack(line--[[@as PackedFloor]]) or Line.unpack(line--[[@as PackedLine]])
+    end
+    unpacked_self.first = Object.unpack(packed_self.lines, unpacker, unpacked_self)  ---@as LineObject
+
+    -- Matrix free items will be automatically unpacked by the validation process
+    unpacked_self.gaussian_free_items = packed_self.gaussian_free_items
+    for _, entry in ipairs(packed_self.simplex_item_weights) do
+        table.insert(unpacked_self.simplex_item_weights, {proto=entry.proto, weight=entry.weight})
+    end
 
     return unpacked_self
 end
 
 
+---@param player LuaPlayer
 ---@return boolean valid
-function Floor:validate()
-    self.valid = self:_validate()
+function Floor:validate(player)
+    self.valid = self:_validate(player)
+
+    local free_items, valid = prototyper.util.validate_prototype_objects(self.gaussian_free_items, "type")
+    self.valid = valid and self.valid
+
+    self.gaussian_free_items = free_items
+    self.current_location = nil  -- reset cached value
+
+    for _, entry in ipairs(self.simplex_item_weights) do
+        entry.proto = prototyper.util.validate_prototype_object(entry.proto, "type")  ---@as FPItemPrototype | FPPackedPrototype
+        self.valid = (not entry.proto.simplified) and self.valid
+    end
+
     return self.valid
 end
 
@@ -244,6 +385,19 @@ function Floor:repair(player)
         -- If the defining line can't be repaired, the floor is dead
         if not line_valid then return false end
         pivot = self.first.next
+    end
+
+    -- Remove any unrepairable free items so the factory remains valid
+    local free_items = self.gaussian_free_items
+    for index = #free_items, 1, -1 do
+        if free_items[index].simplified then
+            table.remove(free_items, index)
+        end
+    end
+
+    local weights = self.simplex_item_weights
+    for index = #weights, 1, -1 do
+        if weights[index].proto.simplified then table.remove(weights, index) end
     end
 
     if pivot then self:_repair(player, pivot) end

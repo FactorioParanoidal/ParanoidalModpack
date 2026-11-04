@@ -13,7 +13,7 @@ function _globals.preferences(player) return storage.players[player.index].prefe
 function _globals.ui_state(player) return storage.players[player.index].ui_state end
 
 ---@param player LuaPlayer
----@return table?
+---@return ModalData?
 function _globals.modal_data(player) return storage.players[player.index].ui_state.modal_data end
 
 ---@param player LuaPlayer
@@ -22,6 +22,8 @@ function _globals.main_elements(player) return storage.players[player.index].ui_
 
 ---@param player LuaPlayer
 ---@return table
-function _globals.modal_elements(player) return storage.players[player.index].ui_state.modal_data.modal_elements end
+function _globals.modal_elements(player)
+    return storage.players[player.index].ui_state.modal_data--[[@cast -nil]].modal_elements
+end
 
 return _globals

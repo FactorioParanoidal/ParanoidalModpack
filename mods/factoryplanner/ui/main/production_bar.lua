@@ -1,25 +1,28 @@
 local District = require("backend.data.District")
 
 -- ** LOCAL UTIL **
+---@param player LuaPlayer
 local function refresh_production(player, _, _)
-    local ui_state = util.globals.ui_state(player)
+    local ui_state = lib.globals.ui_state(player)
     if ui_state.districts_view then
-        local realm = util.globals.player_table(player).realm
+        local realm = lib.globals.player_table(player).realm
         for district in realm:iterator() do district:refresh() end
-        util.gui.run_refresh(player, "districts_box")
+        lib.gui.run_refresh(player, "districts_box")
     else
-        local factory = util.context.get(player, "Factory")
+        local factory = lib.context.get(player, "Factory")  ---@as Factory?
         if factory and factory.valid then
+            factory:clear_solver_cache()
             solver.update(player, factory)
-            util.gui.run_refresh(player, "factory")
+            lib.gui.run_refresh(player, "production")
         end
     end
 end
 
 
+---@param player LuaPlayer
 local function refresh_production_bar(player)
-    local ui_state = util.globals.ui_state(player)
-    local factory = util.context.get(player, "Factory")  --[[@as Factory?]]
+    local ui_state = lib.globals.ui_state(player)
+    local factory = lib.context.get(player, "Factory")  ---@as Factory?
 
     if ui_state.main_elements.main_frame == nil then return end
     local production_bar_elements = ui_state.main_elements.production_bar
@@ -27,20 +30,20 @@ local function refresh_production_bar(player)
     local districts_view = ui_state.districts_view
     production_bar_elements.factory_flow.visible = (not districts_view)
     production_bar_elements.district_flow.visible = districts_view
+    local invalid_factory_selected = factory and not factory.valid or false
 
     if not districts_view then
-        local invalid_factory_selected = (factory and not factory.valid) or false
         production_bar_elements.validity_label.visible = invalid_factory_selected
     end
 
-    local factory_valid = factory ~= nil and factory.valid
-    production_bar_elements.timescale_switch.visible = factory_valid
-    ui_state.main_elements.views_flow.visible = factory_valid
+    production_bar_elements.timescale_switch.visible = not invalid_factory_selected
+    ui_state.main_elements.views_flow.visible = not invalid_factory_selected
 end
 
 
+---@param player LuaPlayer
 local function build_production_bar(player)
-    local ui_state = util.globals.ui_state(player)
+    local ui_state = lib.globals.ui_state(player)
     local main_elements = ui_state.main_elements
     main_elements.production_bar = {}
 
@@ -77,15 +80,14 @@ local function build_production_bar(player)
         tags={mod="fp", on_gui_click="add_district"}, mouse_button_filter={"left"}}
     button_add.style.height = 26
     button_add.style.left_margin = 12
-    button_add.style.minimal_width = 0
 
     -- Shared bar
-    subheader.add{type="empty-widget", style="flib_horizontal_pusher"}
+    subheader.add{type="empty-widget", style="fflib_horizontal_pusher"}
 
     local flow_timescale = subheader.add{type="flow", direction="horizontal"}
     flow_timescale.style.margin = {4, 16, 0, 0}
 
-    local switch_state = (util.globals.preferences(player).timescale == 1) and "left" or "right"
+    local switch_state = (lib.globals.preferences(player).timescale == 1) and "left" or "right"
     local switch_timescale = flow_timescale.add{type="switch", tooltip={"fp.timescale_tt"}, switch_state=switch_state,
         left_label_caption={"", "/", {"fp.second"}}, right_label_caption={"", "/", {"fp.minute"}},
         tags={mod="fp", on_gui_switch_state_changed="toggle_timescale"}}
@@ -100,73 +102,88 @@ end
 
 
 -- ** EVENTS **
-local listeners = {}
+local listeners = {}  ---@type ListenerDefinitions
 
 listeners.gui = {
     on_gui_click = {
         {
             name = "refresh_production",
             timeout = 20,
-            handler = (function(player, _, event)
-                if DEBUGGER_ACTIVE and not event.shift then  -- implicit mod reload for easier development
-                    util.gui.reset_player(player)  -- destroys all FP GUIs
-                    util.gui.toggle_mod_gui(player)  -- fixes the mod gui button after its been destroyed
+            handler = function(player, _, event)
+                ---@cast event EventData.on_gui_click
+                if DEVELOPER_MODE and not event.shift then  -- implicit mod reload for easier development
+                    lib.gui.reset_player(player)  -- destroys all FP GUIs
+                    lib.gui.toggle_mod_gui(player)  -- fixes the mod gui button after its been destroyed
                     game.reload_mods()  -- toggle needs to be delayed by a tick since the reload is not instant
                     game.print("Mods reloaded")
-                    util.nth_tick.register((game.tick + 1), "interface_toggle", {player_index=player.index})
-                    util.nth_tick.register((game.tick + 2), "refresh_production", {player_index=player.index})
+
+                    ---@class InterfaceToggleMetadata
+                    ---@field player_index PlayerIndex
+                    lib.nth_tick.register((game.tick + 1), "interface_toggle", {player_index=player.index})
+                    ---@class RefreshProductionMetadata
+                    ---@field player_index PlayerIndex
+                    lib.nth_tick.register((game.tick + 2), "refresh_production", {player_index=player.index})
                 else
                     refresh_production(player, nil, nil)
                 end
-            end)
+            end
         },
         {
             name = "add_district",
-            handler = (function(player, _, _)
-                local realm = util.globals.player_table(player).realm
-                local new_district = District.init()
+            handler = function(player, _, _)
+                local realm = lib.globals.player_table(player).realm
+                local names = {}
+                for district in realm:iterator() do names[district.name] = true end
+                local number = realm:count() + 1
+                while names["District " .. number] do number = number + 1 end
+
+                local new_district = District.init("District " .. number)
                 realm:insert(new_district)
-                util.context.set(player, new_district)
-                util.gui.run_refresh(player, "all")
-            end)
+                lib.context.set(player, new_district)
+                lib.gui.run_refresh(player, "all")
+            end
         }
     },
     on_gui_switch_state_changed = {
         {
             name = "toggle_timescale",
-            handler = (function(player, _, event)
+            handler = function(player, _, event)
+                ---@cast event EventData.on_gui_switch_state_changed
                 local new_timescale = (event.element.switch_state == "left") and 1 or 60
-                util.globals.preferences(player).timescale = new_timescale
+                lib.globals.preferences(player).timescale = new_timescale
 
                 item_views.rebuild_data(player)
                 item_views.rebuild_interface(player)
-                util.gui.run_refresh(player, "factory")
-            end)
+                lib.gui.run_refresh(player, "production")
+            end
         }
     }
-}
+}  ---@as GUIListenerDefinition
 
-listeners.misc = {
-    fp_refresh_production = (function(player, _, _)
+listeners.player = {
+    fp_refresh_production = function(player, _)
         if main_dialog.is_in_focus(player) then refresh_production(player, nil, nil) end
-    end),
+    end,
 
-    build_gui_element = (function(player, event)
+    build_gui_element = function(player, event)
+        ---@cast event BuildGUIElementEventData
         if event.trigger == "main_dialog" then
             build_production_bar(player)
         end
-    end),
-    refresh_gui_element = (function(player, event)
-        local triggers = {production_bar=true, production=true, factory=true, all=true}
+    end,
+    refresh_gui_element = function(player, event)
+        ---@cast event RefreshGUIElementEventData
+        local triggers = {production_bar=true, factory=true, all=true}
         if triggers[event.trigger] then refresh_production_bar(player) end
-    end)
+    end
 }
 
 listeners.global = {
-    refresh_production = (function(metadata)
-        local player = game.get_player(metadata.player_index)
+    refresh_production = function(metadata)
+        ---@cast metadata RefreshProductionMetadata
+        local player = game.get_player(metadata.player_index)  ---@as LuaPlayer
         refresh_production(player, nil, nil)
-    end)
+    end
 }
 
 return { listeners }

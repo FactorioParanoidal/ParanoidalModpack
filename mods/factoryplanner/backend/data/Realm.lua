@@ -13,7 +13,7 @@ script.register_metatable("Realm", Realm)
 local function init(district)
     local object = Object.init({
         first = nil
-    }, "Realm", Realm)  --[[@as Realm]]
+    }, "Realm", Realm)  ---@as Realm
     object:insert(district or District.init())  -- one always exists
     return object
 end
@@ -42,10 +42,11 @@ function Realm:remove(district)
 end
 
 ---@param district District
+---@param relative_object District
 ---@param direction NeighbourDirection
----@param spots integer?
-function Realm:shift(district, direction, spots)
-    self:_shift(district, direction, spots)
+function Realm:move(district, relative_object, direction)
+    self:_remove(district)
+    self:_insert(district, relative_object, direction)
 end
 
 
@@ -54,7 +55,7 @@ end
 ---@param direction NeighbourDirection?
 ---@return District? district
 function Realm:find(filter, pivot, direction)
-    return self:_find(filter, pivot, direction)  --[[@as District?]]
+    return self:_find(filter, pivot, direction)  ---@as District?
 end
 
 
@@ -75,9 +76,35 @@ function Realm:count(filter, pivot, direction)
 end
 
 
---- The realm can't be invalid, this just cleanly validates Districts
-function Realm:validate()
-    self:_validate()
+---@param starting_tick MapTick
+---@param player LuaPlayer
+function Realm:schedule_solver_updates(starting_tick, player)
+    local running_tick = starting_tick
+    for district in self:iterator() do
+        -- District returns the last tick it registered for
+        running_tick = district:schedule_solver_updates(running_tick, player)
+        running_tick = running_tick + MAGIC_NUMBERS.factory_solver_update_delay
+    end
+end
+
+
+---@param player LuaPlayer
+---@param starting_tick MapTick?
+---@return MapTick? running_tick
+function Realm:refresh_lines(player, starting_tick)
+    local running_tick = starting_tick
+    for district in self:iterator() do
+        running_tick = district:refresh_lines(player, running_tick)
+    end
+    return running_tick
+end
+
+
+---@param player LuaPlayer
+---@return boolean valid
+function Realm:validate(player)
+    self:_validate(player)
+    return true  -- Realm can't be invalid
 end
 
 return {init = init}

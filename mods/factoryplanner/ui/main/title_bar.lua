@@ -1,40 +1,54 @@
 -- ** LOCAL UTIL **
+---@param player LuaPlayer
 local function toggle_paused_state(player, _, _)
     if not game.is_multiplayer() then
-        local preferences = util.globals.preferences(player)
+        local preferences = lib.globals.preferences(player)
         preferences.pause_on_interface = not preferences.pause_on_interface
 
-        local main_elements = util.globals.main_elements(player)
+        local main_elements = lib.globals.main_elements(player)
         main_dialog.set_pause_state(player, main_elements.main_frame)
     end
 end
 
+---@param player LuaPlayer
+---@param direction NavigationDirection
+local function navigate(player, direction)
+    if lib.context.navigate(player, direction) then
+        lib.gui.run_refresh(player, "all")
+    end
+end
 
+---@param player LuaPlayer
 local function refresh_title_bar(player)
-    local ui_state = util.globals.ui_state(player)
+    local ui_state = lib.globals.ui_state(player)
     if ui_state.main_elements.main_frame == nil then return end
 
-    local factory = util.context.get(player, "Factory")   --[[@as Factory?]]
+    local factory = lib.context.get(player, "Factory")   ---@as Factory?
     local title_bar_elements = ui_state.main_elements.title_bar
 
     title_bar_elements.compact_button.enabled = factory ~= nil and factory.valid
     title_bar_elements.pause_button.enabled = (not game.is_multiplayer())
+
+    title_bar_elements.back_button.enabled = lib.context.can_navigate(player, "back")
+    title_bar_elements.forward_button.enabled = lib.context.can_navigate(player, "forward")
 end
 
 
+---@param player LuaPlayer
+---@return number
 local function determine_left_handle_width(player)
-    local ui_state = util.globals.ui_state(player)
-    local half_total_width = ui_state.main_dialog_dimensions.width / 2
+    local half_total_width = main_dialog.get_dimensions(player).width / 2
 
-    local half_label_width = MAGIC_NUMBERS.titlebar_label_width / 2
+    local half_label_width = 130 / 2
     local left_margins = 3 * 8 + 2 * 4  -- horizontal spacing + drag handle margin
     local left_buttons_width = 3 * 24 + 2 * 8  -- button width + spacing
 
     return half_total_width - half_label_width - left_margins - left_buttons_width
 end
 
+---@param player LuaPlayer
 local function build_title_bar(player)
-    local main_elements = util.globals.main_elements(player)
+    local main_elements = lib.globals.main_elements(player)
     main_elements.title_bar = {}
 
     local parent_flow = main_elements.flows.top_horizontal
@@ -47,7 +61,7 @@ local function build_title_bar(player)
         sprite="fp_pin", mouse_button_filter={"left"}}
     main_elements.title_bar["compact_button"] = button_compact
 
-    local preferences = util.globals.preferences(player)
+    local preferences = lib.globals.preferences(player)
     local button_pause = flow_title_bar.add{type="sprite-button", sprite="fp_play", tooltip={"fp.pause_on_interface"},
         tags={mod="fp", on_gui_click="toggle_pause_game"}, auto_toggle=true, style="fp_button_frame",
         toggled=(not preferences.pause_on_interface), mouse_button_filter={"left"}}
@@ -59,19 +73,28 @@ local function build_title_bar(player)
         tags={mod="fp", on_gui_click="open_calculator_dialog"}}
     button_calculator.style.padding = -3
 
-    local left_handle = flow_title_bar.add{type="empty-widget", style="flib_titlebar_drag_handle",
+    local left_handle = flow_title_bar.add{type="empty-widget", style="fflib_titlebar_drag_handle",
         ignored_by_interaction=true}
     left_handle.style.horizontally_stretchable = false  -- necessary so the other side stretches properly
     left_handle.style.width = determine_left_handle_width(player)
     flow_title_bar.add{type="label", caption="Factory Planner", style="fp_label_frame_title",
         ignored_by_interaction=true}
-    flow_title_bar.add{type="empty-widget", style="flib_titlebar_drag_handle", ignored_by_interaction=true}
+    flow_title_bar.add{type="empty-widget", style="fflib_titlebar_drag_handle", ignored_by_interaction=true}
 
     flow_title_bar.add{type="button", caption={"fp.preferences"}, style="fp_button_frame_tool",
         tags={mod="fp", on_gui_click="title_bar_open_preferences"}, mouse_button_filter={"left"}}
 
-    local separation = flow_title_bar.add{type="line", direction="vertical"}
-    separation.style.height = MAGIC_NUMBERS.title_bar_height - 4
+    local navigation_flow = flow_title_bar.add{type="flow", direction="horizontal"}
+    navigation_flow.style.horizontal_spacing = 0
+
+    local button_back = navigation_flow.add{type="sprite-button", sprite="utility/backward_arrow",
+        tags={mod="fp", on_gui_click="navigate_back"}, tooltip={"fp.navigate_back"},
+        style="fp_button_frame", mouse_button_filter={"left"}}
+    main_elements.title_bar["back_button"] = button_back
+    local button_forward = navigation_flow.add{type="sprite-button", sprite="utility/forward_arrow",
+        tags={mod="fp", on_gui_click="navigate_forward"}, tooltip={"fp.navigate_forward"},
+        style="fp_button_frame", mouse_button_filter={"left"}}
+    main_elements.title_bar["forward_button"] = button_forward
 
     local button_close = flow_title_bar.add{type="sprite-button", tags={mod="fp", on_gui_click="exit_main_dialog"},
         sprite="utility/close", tooltip={"fp.close_interface"}, style="fp_button_frame",
@@ -83,38 +106,33 @@ end
 
 
 -- ** EVENTS **
-local listeners = {}
+local listeners = {}  ---@type ListenerDefinitions
 
 listeners.gui = {
     on_gui_click = {
         {
             name = "re-center_main_dialog",
-            handler = (function(player, _, event)
+            handler = function(player, _, event)
+                ---@cast event EventData.on_gui_click
                 if event.button == defines.mouse_button_type.middle then
                     main_dialog.center(player)
                 end
-            end)
+            end
         },
         {
             name = "switch_to_compact_view",
-            handler = (function(player, _, _)
-                local floor = util.context.get(player, "Floor")
+            handler = function(player, _, _)
+                local floor = lib.context.get(player, "Floor")
                 if floor and floor.level > 1 and floor:count() == 1 then
-                    util.context.ascend_floors(player, "up")
+                    lib.context.ascend_floors(player, "up")
                 end
                 main_dialog.toggle_districts_view(player, true)
 
                 main_dialog.toggle(player)
-                util.globals.ui_state(player).compact_view = true
+                lib.globals.ui_state(player).compact_view = true
 
                 compact_dialog.toggle(player)
-            end)
-        },
-        {
-            name = "exit_main_dialog",
-            handler = (function(player, _, _)
-                main_dialog.toggle(player)
-            end)
+            end
         },
         {
             name = "toggle_pause_game",
@@ -122,27 +140,53 @@ listeners.gui = {
         },
         {
             name = "title_bar_open_preferences",
-            handler = (function(player, _, _)
-                util.gui.open_dialog(player, {dialog="preferences"})
-            end)
-        }
+            handler = function(player, _, _)
+                lib.gui.open_dialog(player, {dialog="preferences"})
+            end
+        },
+        {
+            name = "navigate_back",
+            handler = function(player, _, _)
+                navigate(player, "back")
+            end
+        },
+        {
+            name = "navigate_forward",
+            handler = function(player, _, _)
+                navigate(player, "forward")
+            end
+        },
+        {
+            name = "exit_main_dialog",
+            handler = function(player, _, _)
+                main_dialog.toggle(player)
+            end
+        },
     }
-}
+}  ---@as GUIListenerDefinition
 
-listeners.misc = {
-    fp_toggle_pause = (function(player, _)
+listeners.player = {
+    fp_toggle_pause = function(player, _)
         if main_dialog.is_in_focus(player) then toggle_paused_state(player) end
-    end),
+    end,
+    fp_navigate_back = function(player, _)
+        if main_dialog.is_in_focus(player) then navigate(player, "back") end
+    end,
+    fp_navigate_forward = function(player, _)
+        if main_dialog.is_in_focus(player) then navigate(player, "forward") end
+    end,
 
-    build_gui_element = (function(player, event)
+    build_gui_element = function(player, event)
+        ---@cast event BuildGUIElementEventData
         if event.trigger == "main_dialog" then
             build_title_bar(player)
         end
-    end),
-    refresh_gui_element = (function(player, event)
-        local triggers = {title_bar=true, factory=true, all=true}
+    end,
+    refresh_gui_element = function(player, event)
+        ---@cast event RefreshGUIElementEventData
+        local triggers = {title_bar=true, all=true}
         if triggers[event.trigger] then refresh_title_bar(player) end
-    end)
+    end
 }
 
 return { listeners }

@@ -1,13 +1,45 @@
 local _effects = {}
 
----@alias EffectValue integer
+_effects.blank = {speed = 0, productivity = 0, quality = 0, consumption = 0, pollution = 0}
+
+---@alias IntegerEffectValue integer
 ---@alias ModuleEffectName "speed" | "productivity" | "quality" | "consumption" | "pollution"
----@alias IntegerModuleEffects { [ModuleEffectName]: EffectValue }
+---@alias IntegerModuleEffects table<ModuleEffectName, IntegerEffectValue>
+---@alias IntegerEffectValueRange {low: integer, high: integer}
+
+local is_effect_positive = {speed=true, productivity=true, quality=true,
+                            consumption=false, pollution=false}
+
+---@param proto FPMachinePrototype | FPBeaconPrototype | FPRecipePrototype
+---@param module FPModulePrototype
+---@return boolean
+function _effects.is_compatible(proto, module)
+    local allowed_categories = proto.allowed_module_categories
+    -- No allowed categories means everything is compatible
+    if allowed_categories ~= nil and not allowed_categories[module.category] then
+        return false
+    end
+
+    local allowed_effects = proto.allowed_effects
+    -- No allowed effects means nothing is compatible
+    if allowed_effects == nil then return false end
+    for name, value in pairs(module.effects) do
+        -- Effects only need to be in the allowed list if they are considered positive
+        -- Effects are considered positive if their effect is actually in the
+        -- 'desirable' direction, ie. positive speed, or negative pollution
+        if not allowed_effects[name] and (value > 0) == is_effect_positive[name] then
+            return false
+        end
+    end
+
+    return true
+end
+
 
 ---@param effect_tables IntegerModuleEffects[]
 ---@return IntegerModuleEffects
 function _effects.merge(effect_tables)
-    local effects = ftable.shallow_copy(BLANK_EFFECTS)
+    local effects = lib.flib.shallow_copy(lib.effects.blank)
     for _, effect_table in pairs(effect_tables) do
         for name, effect in pairs(effect_table) do
             effects[name] = effects[name] + effect  -- doesn't create decimals
@@ -16,72 +48,66 @@ function _effects.merge(effect_tables)
     return effects
 end
 
-
-local is_effect_positive = {speed=true, productivity=true, quality=true,
-                            consumption=false, pollution=false}
-
----@param name string
----@param value EffectValue
----@return boolean is_positive_effect
-function _effects.is_positive(name, value)
-    -- Effects are considered positive if their effect is actually in the 'desirable'
-    -- direction, ie. positive speed, or negative pollution
-    return (value > 0) == is_effect_positive[name]
+-- Merges without filling in the effects that none of the given tables contain
+---@param effect_tables IntegerModuleEffects[]
+---@return IntegerModuleEffects
+function _effects.sparse_merge(effect_tables)
+    local effects = {}
+    for _, effect_table in pairs(effect_tables) do
+        for name, effect in pairs(effect_table) do
+            effects[name] = (effects[name] or 0) + effect  -- doesn't create decimals
+        end
+    end
+    return effects
 end
 
 
-local upper_bound = 32767
+---@param effect IntegerEffectValue
+---@param bounds IntegerEffectValueRange
+---@return IntegerEffectValue
+---@return string?
+function _effects.limit_value(effect, bounds)
+    if effect < bounds.low then
+        return bounds.low, "[img=fp_limited_down]"
+    elseif effect > bounds.high then
+        return bounds.high, "[img=fp_limited_up]"
+    else
+        return effect, nil
+    end
+end
 
 ---@param effects IntegerModuleEffects
----@param maximum_productivity EffectValue
+---@param effect_receiver FormattedEffectReceiver
 ---@return IntegerModuleEffects
----@return { ModuleEffectName: string }
-function _effects.limit(effects, maximum_productivity)
-    local bounds = {
-        speed = {lower = -80, upper = upper_bound},
-        productivity = {lower = 0, upper = maximum_productivity or upper_bound},
-        quality = {lower = 0, upper = upper_bound},
-        consumption = {lower = -80, upper = upper_bound},
-        pollution = {lower = -80, upper = upper_bound}
-    }
-
+---@return table<ModuleEffectName, string>
+function _effects.limit(effects, effect_receiver)
     local indications = {}
+
     -- Bound effects and note the indication if relevant
     for name, effect in pairs(effects) do
-        if effect < bounds[name].lower then
-            effects[name] = bounds[name].lower
-            indications[name] = "[img=fp_limited_down]"
-        elseif effect > bounds[name].upper then
-            effects[name] = bounds[name].upper
-            indications[name] = "[img=fp_limited_up]"
-        end
+        local bounds = effect_receiver.limits[name]
+        effects[name], indications[name] = _effects.limit_value(effect, bounds)
     end
 
     return effects, indications
 end
 
--- Factorio 2.1: quality effect values are no longer multiplied by next_probability in the GUI
---   (prototype values were divided by 10 instead), so they are shown as they are
-local quality_effect_factor = 1
 
----@param value EffectValue
+---@param value IntegerEffectValue
 ---@param color string
----@param effect_name ModuleEffectName
 ---@return LocalisedString
-local function format_effect(value, color, effect_name)
+local function format_effect(value, color)
     if value == nil then return "" end
-    value = (effect_name == "quality") and value * quality_effect_factor or value
-    -- Factorio 2.1: quality effects are small (+1% per module 1), so they keep up to two decimals
-    local format_string = (effect_name == "quality") and "%+.2f" or "%+d"
     local epsilon = (value < 0) and -1e-4 or 1e-4
-    -- Force display of either a '+' or '-', also round the result
-    local text = format_string:format(value + epsilon)
-    if effect_name == "quality" then text = (text:gsub("%.?0+$", "")) end
-    return {"fp.effect_value", color, text}
+    -- Turn value into percentage, and divide out precision multiplier
+    local percentage = value * 100 / MAGIC_NUMBERS.effect_precision + epsilon
+    -- Show leading sign, two decimals, and remove trailing zeros
+    local effect = ("%+.2f"):format(percentage):gsub("%.?0+$", "")
+    return {"fp.effect_value", color, effect}
 end
 
 ---@class FormatModuleEffectsOptions
----@field indications { ModuleEffectName: string }?
+---@field indications table<ModuleEffectName, string>?
 ---@field machine_effects IntegerModuleEffects?
 ---@field recipe_effects IntegerModuleEffects?
 
@@ -96,7 +122,7 @@ function _effects.format(module_effects, options)
     options.recipe_effects = options.recipe_effects or {}
 
     local tooltip_lines = {""}
-    for effect_name, _ in pairs(BLANK_EFFECTS) do
+    for effect_name, _ in pairs(lib.effects.blank) do
         local module_effect = module_effects[effect_name]
         local machine_effect = options.machine_effects[effect_name]
         local recipe_effect = options.recipe_effects[effect_name]
@@ -104,9 +130,9 @@ function _effects.format(module_effects, options)
         if options.indications[effect_name] ~= nil or module_effect ~= 0
                 or (machine_effect ~= nil and machine_effect ~= 0)
                 or (recipe_effect ~= nil and recipe_effect ~= 0) then
-            local module_percentage = format_effect(module_effect, "#FFE6C0", effect_name)
-            local machine_percentage = format_effect(machine_effect, "#7CFF01", effect_name)
-            local recipe_percentage = format_effect(recipe_effect, "#01FFF4", effect_name)
+            local module_percentage = format_effect(module_effect, "#FFE6C0")
+            local machine_percentage = format_effect(machine_effect, "#7CFF01")
+            local recipe_percentage = format_effect(recipe_effect, "#01FFF4")
 
             if #tooltip_lines > 1 then table.insert(tooltip_lines, "\n") end
             table.insert(tooltip_lines, {"fp.effect_line", {"fp." .. effect_name}, module_percentage,
@@ -117,5 +143,21 @@ function _effects.format(module_effects, options)
     if #tooltip_lines > 1 then return tooltip_lines
     else return {"fp.none"} end
 end
+
+---@param force LuaForce
+---@param recipe_name string
+---@return IntegerEffectValue productivity_bonus
+function _effects.get_recipe_productivity(force, recipe_name)
+    local bonus = nil
+    if recipe_name == "custom-mining" then
+        bonus = force.mining_drill_productivity_bonus
+    elseif recipe_name == "custom-research" then
+        bonus = force.laboratory_productivity_bonus
+    else
+        bonus = force.recipes[recipe_name].productivity_bonus
+    end
+    return math.floor(bonus * MAGIC_NUMBERS.effect_precision + 1e-4)
+end
+
 
 return _effects

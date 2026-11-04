@@ -2,7 +2,6 @@ local mod_gui = require("mod-gui")
 
 local _gui = { switch = {}, mod = {} }
 
-
 -- Adds an on/off-switch including a label with tooltip to the given flow
 -- Automatically converts boolean state to the appropriate switch_state
 ---@param parent_flow LuaGuiElement
@@ -14,7 +13,7 @@ local _gui = { switch = {}, mod = {} }
 ---@param label_first boolean?
 ---@return LuaGuiElement created_switch
 function _gui.switch.add_on_off(parent_flow, action, additional_tags, state, caption, tooltip, label_first)
-    if type(state) == "boolean" then state = util.gui.switch.convert_to_state(state) end
+    if type(state) == "boolean" then state = lib.gui.switch.convert_to_state(state) end
 
     local flow = parent_flow.add{type="flow", direction="horizontal"}
     flow.style.vertical_align = "center"
@@ -27,7 +26,7 @@ function _gui.switch.add_on_off(parent_flow, action, additional_tags, state, cap
     end
 
     local function add_label()
-        caption = (tooltip ~= nil) and {"", caption, " [img=info]"} or caption
+        caption = (tooltip ~= nil) and {"", caption, " [img=info]"}--[[@as LocalisedString]] or caption
         label = flow.add{type="label", caption=caption, tooltip=tooltip}
     end
 
@@ -50,11 +49,12 @@ function _gui.switch.convert_to_state(boolean)
 end
 
 
+---@param player LuaPlayer
 local function check_empty_flow(player)
     local button_flow = mod_gui.get_button_flow(player)
     -- parent.parent is to check that I'm not deleting a top level element. Now, I have no idea how that
     -- could ever be a top level element, but oh well, can't know everything now can we?
-    if #button_flow.children_names == 0 and button_flow.parent.parent then
+    if #button_flow.children_names == 0 and button_flow.parent and button_flow.parent.parent then
         button_flow.parent.destroy()
     end
 end
@@ -70,7 +70,7 @@ end
 -- Toggles the visibility of the toggle-main-dialog-button
 ---@param player LuaPlayer
 function _gui.toggle_mod_gui(player)
-    local enable = util.globals.preferences(player).show_gui_button
+    local enable = lib.globals.preferences(player).show_gui_button
 
     local frame_flow = mod_gui.get_button_flow(player)
     local mod_gui_button = frame_flow["fp_button_toggle_interface"]
@@ -97,14 +97,23 @@ function _gui.open_dialog(player, metadata)
 end
 
 ---@param player LuaPlayer
----@param action "submit" | "cancel" | "delete"
+---@param action GUICloseAction
 ---@param skip_opened boolean?
 function _gui.close_dialog(player, action, skip_opened)
     GLOBAL_HANDLERS["close_modal_dialog"](player, action, skip_opened)
 end
 
+---@class BuildGUIElementEventData
+---@field name "build_gui_element"
+---@field tick MapTick
+---@field player_index PlayerIndex
+---@field trigger BuildGUITrigger
+---@field parent LuaGuiElement?
+
+---@alias BuildGUITrigger "main_dialog" | "compact_factory"
+
 ---@param player LuaPlayer
----@param trigger "main_dialog" | "compact_factory"
+---@param trigger BuildGUITrigger
 ---@param parent LuaGuiElement?
 function _gui.run_build(player, trigger, parent)
     local event_data = {
@@ -113,20 +122,47 @@ function _gui.run_build(player, trigger, parent)
         player_index = player.index,
         trigger = trigger,
         parent = parent
-    }
+    }  ---@type BuildGUIElementEventData
     GLOBAL_HANDLERS["run_gui_build"](event_data)
 end
 
+---@class RefreshGUIElementEventData
+---@field name "refresh_gui_element"
+---@field tick MapTick
+---@field player_index PlayerIndex
+---@field trigger RefreshGUITrigger
+
+---@alias RefreshGUITrigger "all" | "factory" | "production" | "title_bar" | "district_list" | "factory_list" | "districts_box" | "production_bar" | "item_boxes" | "production_box" | "production_table" | "solver_bar" | "compact_factory" | "paste_button"
+
+--- "factory" includes districts_box, production_bar, item_boxes, production_box, production_table, solver_bar
+--- "production" includes item_boxes, production_box, production_table, solver_bar
 ---@param player LuaPlayer
----@param trigger "all" | "factory" | "production" | "production_detail" | "title_bar" | "district_info" | "factory_list" | "production_bar" | "districts_box" | "item_boxes" | "production_box" | "production_table" | "compact_factory" | "paste_button"
+---@param trigger RefreshGUITrigger
 function _gui.run_refresh(player, trigger)
     local event_data = {
         name = "refresh_gui_element",
         tick = game.tick,
         player_index = player.index,
         trigger = trigger
-    }
+    }  ---@type RefreshGUIElementEventData
     GLOBAL_HANDLERS["run_gui_refresh"](event_data)
+end
+
+
+_gui.held_object_triggers = {
+    District = "districts_box",
+    Factory = "factory_list",
+    Floor = "production_table",
+    Line = "production_table"
+}
+
+-- Returns the object the player is currently holding, if the given list is the one displaying it
+---@param player LuaPlayer
+---@param trigger RefreshGUITrigger
+---@return Object? held_object
+function _gui.held_object(player, trigger)
+    local held_object = OBJECT_INDEX[lib.globals.ui_state(player).held_object_id]  ---@as Object?
+    return (held_object and _gui.held_object_triggers[held_object.class] == trigger) and held_object or nil
 end
 
 
@@ -167,14 +203,6 @@ function _gui.reset_player(player)
 end
 
 
-function _gui.calculate_satisfaction(satisfied_amount, actual_amount)
-    local satisfied_percentage = (satisfied_amount / actual_amount) * 100
-    local percentage_string = util.format.number(satisfied_percentage, 3)
-    local satisfaction_line = {"", "\n", {"fp.bold_label", (percentage_string .. "%")}, " ", {"fp.satisfied"}}
-    return satisfaction_line, percentage_string
-end
-
-
 local expression_variables = {k=1000, K=1000, m=1000000, M=1000000, g=1000000000, G=1000000000}
 
 ---@param textfield LuaGuiElement
@@ -183,19 +211,24 @@ local expression_variables = {k=1000, K=1000, m=1000000, M=1000000, g=1000000000
 function _gui.parse_expression_field(textfield, positive)
     local expression = nil
     pcall(function() expression = helpers.evaluate_expression(textfield.text, expression_variables) end)
-    if expression == nil then return nil
-    elseif positive and expression <= 0 then return nil
-    else return expression end
+    ---@cast expression double?
+
+    -- Avoid NaN, infinity, and negative values if requested
+    if expression == nil or expression ~= expression or math.abs(expression) == math.huge
+            or (positive and expression <= 0) then return nil end
+    return expression
 end
 
 ---@param textfield LuaGuiElement
 ---@param valid boolean
 function _gui.update_expression_field(textfield, valid)
     textfield.style = (textfield.text ~= "" and not valid) and "invalid_value_textfield" or "textbox"
-    textfield.style.width = textfield.tags.width  --[[@as number]]  -- this is stupid but styles work out that way
+    -- This is stupid but styles work out that way
+    textfield.style--[[@as LuaStyle]].width = textfield.tags.width  ---@as int32
 end
 
 ---@param textfield LuaGuiElement
+---@param positive boolean
 ---@return boolean confirmed
 function _gui.confirm_expression_field(textfield, positive)
     local expression = _gui.parse_expression_field(textfield, positive)
@@ -212,29 +245,23 @@ function _gui.confirm_expression_field(textfield, positive)
 end
 
 
----@param parent_flow LuaGuiElement
----@param selected_index integer
----@param tags Tags
-function _gui.add_quality_dropdown(parent_flow, selected_index, tags)
-    local items = {}
-    for _, quality in pairs(storage.prototypes.qualities) do
-        local label = {"", "[quality=" .. quality.name .. "] ", quality.localised_name}
-        table.insert(items, label)
-    end
-
-    parent_flow.add{type="drop-down", items=items, selected_index=selected_index,
-        style="fp_drop-down_slim", tags=tags}
-end
-
-
 ---@param data_type DataType
----@return ElemFilter[] elem_filter
+---@return PrototypeFilter elem_filter
 function _gui.compile_elem_filter(data_type)
     local names = {}
     for _, proto in pairs(storage.prototypes[data_type]) do
         table.insert(names, proto.name)
     end
     return {{filter="name", name=names}}
+end
+
+
+local timescale_map = {[1] = "second", [60] = "minute"}
+
+---@param timescale Timescale
+---@return string
+function _gui.timescale_as_string(timescale)
+    return timescale_map[timescale]
 end
 
 return _gui

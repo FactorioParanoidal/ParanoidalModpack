@@ -9,7 +9,6 @@ local function add_sprite(name, filename, size, mipmaps)
 end
 
 add_sprite("mod_gui", "shortcut_open_x56.png", 56, nil)
-add_sprite("zone_selection", nil, 32, nil)
 add_sprite("generic_assembler", nil, 64, 2)
 add_sprite("white_square", nil, 8, 2)
 add_sprite("warning_red", nil, 32, 2)
@@ -21,11 +20,13 @@ add_sprite("arrow_down", nil, 32, 2)
 add_sprite("arrow_left", nil, 32, 2)
 add_sprite("arrow_line_up", nil, 32, 2)
 add_sprite("arrow_line_bar_up", nil, 32, 2)
+add_sprite("pick_up", nil, 32, 1)
 add_sprite("pin", nil, 32, 2)
 add_sprite("silo_rocket", nil, 120, 1)
 add_sprite("agriculture_square", nil, 120, 1)
 add_sprite("electric_power", nil, 120, 1)
 add_sprite("heat_power", nil, 120, 1)
+add_sprite("heating_power", nil, 120, 1)
 add_sprite("emissions", nil, 120, 1)
 add_sprite("play", nil, 32, 2)
 add_sprite("limited_up", nil, 20, 1)
@@ -45,6 +46,7 @@ add_sprite("fold_out_subfloors", nil, 32, 1)
 add_sprite("universal_planet", nil, 64, 1)
 add_sprite("collapse", nil, 32, 1)
 add_sprite("expand", nil, 32, 1)
+add_sprite("export", nil, 64, 1)
 
 
 -- Base game sprites
@@ -52,4 +54,21 @@ data:extend{{
     type = "sprite", name = "fp_panel",
     filename = "__core__/graphics/icons/mip/expand-panel-black.png",
     size = 64, flags = {"gui-icon"}
+}}
+
+-- Technology effects draw their productivity badge over the base icon
+local utility_sprites = data.raw["utility-sprites"].default
+data:extend{{
+    type = "sprite", name = "fp_mining_productivity",
+    layers = {
+        table.deepcopy(utility_sprites.mining_drill_productivity_bonus_modifier_icon),
+        table.deepcopy(utility_sprites.mining_drill_productivity_bonus_modifier_constant)
+    }
+}, {
+    type = "sprite", name = "fp_research_productivity",
+    layers = {
+        {filename = "__base__/graphics/icons/lab.png", size = 64,
+            mipmap_count = 4, flags = {"gui-icon"}},
+        table.deepcopy(utility_sprites.laboratory_productivity_modifier_constant)
+    }
 }}
