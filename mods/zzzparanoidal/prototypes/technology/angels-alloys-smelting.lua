@@ -7,6 +7,8 @@ data:extend({
 	{
 		type = "technology",
 		name = "angels-alloys-smelting-1",
+		-- No recipes of its own: only a gate to levels 2 and 3, the description says so.
+		localised_description = { "technology-description.angels-alloys-smelting-1" },
 		icon = "__zzzparanoidal__/graphics/technology/casting-bronze-tech.png",
 		icon_size = 256,
 		upgrade = true,
