@@ -1,13 +1,11 @@
 -- Look of defective buildings (user request 2026-11-03, variant chosen 2026-11-04): the worse the defect, the
--- darker the building, with a rust cast, soot on the building and on the ground and dark smoke while working.
+-- darker the building, with a rust cast and dark smoke while working (soot stains removed 2026-11-04).
 -- Shared by data-final-fixes (prototypes/defect-look.lua) and control (scripts/defects/look.lua).
 local M = {}
 
 M.mod_data = "ic-defect-look"
 -- Silhouettes: prefix .. entity [.. "-" .. direction 1-4 | "-m" .. direction 1-4 for a flipped machine].
 M.prefix = "ic-defect-look-"
-M.soot_prefix = "ic-defect-look-soot-"
-M.soot_variants = 4
 M.smoke_prefix = "ic-defect-look-smoke-"
 
 -- Brightness per defect grade (user decision 2026-11-04): -1 = 75%, -2 = 65%, -3 = 55%, -4 = 45%, -5 = 35%.
@@ -43,9 +41,6 @@ function M.tint(grade)
     local r, g, b = f * (1 + 0.15 * s), f * (1 - 0.02 * s), f * (1 - 0.30 * s)
     return {r = r - b, g = g - b, b = 0, a = 1 - b}
 end
-
--- Opacity of the black soot sprites: 0.18 per grade (the texture itself is mostly half transparent).
-function M.soot_alpha(grade) return 0.18 * grade end
 
 -- Dark smoke (user decision 2026-11-04: blacker; -5 exactly the train smoke). Share of the train smoke in the
 -- smoke of each grade: color and timing are blended from the base "smoke" (0) to "train-smoke" (1); -5 is a

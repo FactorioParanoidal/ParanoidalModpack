@@ -32,6 +32,8 @@ local heal_interval = 120
 local home_radius = 30
 local found_radius = 24
 local found_timeout = 20 * minute
+-- How long an outbreak with nothing that can give it a creature waits after the landing before it ends (see update).
+local barren_grace = 1 * minute
 local landing_zone_extra = 16
 local raid_travel_timeout = 15 * minute
 local raid_arrive_extra = 8
@@ -800,6 +802,7 @@ outbreak.on_end = {}
 -- creatures break down and it is gone.
 local function end_outbreak(state, key)
   state.phase = "over"
+  state.ended = key
   for _, hook in pairs(outbreak.on_end) do hook(state) end
   for _, clone in pairs(state.raid and state.raid.clones or {}) do give_back(clone, target_force) end
   state.raid = nil
@@ -1100,6 +1103,27 @@ local function update()
     return
   end
   if state.phase == "landing" and game.tick >= state.landing_until then state.phase = "founding" end
+  -- Nothing of it is left before a core formed: no creature and no infected building (the player's turrets shot off every
+  -- infection at the outpost, or every carrier is dead). It ends at once instead of waiting out the founding time; a
+  -- building cured with nothing infected next to it is never infected again, so this is final. Repelled if it never had
+  -- a creature, otherwise it didn't take hold. After the landing, with no creature and nothing infected that can still
+  -- give one (the landing zone has closed, so nothing spreads), it can't found a lair either: it ends a minute later, so
+  -- that turrets still shooting at what's infected get to clear it first (cured buildings get no defect).
+  if state.phase == "landing" or state.phase == "founding" then
+    local alive = #creatures(state)
+    if alive > 0 then state.had_creatures = true end
+    if alive == 0 and not infection.any() then
+      return end_outbreak(state, state.had_creatures and "the-beast.extinct" or "the-beast.repelled")
+    end
+    if alive == 0 and state.phase == "founding" and not infection.can_breed() then
+      state.barren_since = state.barren_since or game.tick
+      if game.tick >= state.barren_since + barren_grace then
+        return end_outbreak(state, state.had_creatures and "the-beast.extinct" or "the-beast.no-carriers")
+      end
+    else
+      state.barren_since = nil
+    end
+  end
   if state.phase == "founding" then update_founding(state) end
   if state.phase ~= "lair" then return end
   if not (state.core and state.core.valid) then return end_outbreak(state, "the-beast.core-destroyed") end
@@ -1203,7 +1227,7 @@ function outbreak.status()
     raids = state.raids, ruin_raids = state.ruin_raids or 0, catalogued = catalogued, analysed = analysed, queued = #state.queue, zones = zones,
     buildings = state.count or 0, clones = clones, clones_made = state.clones_made or 0, creatures = #creatures(state),
     power = state.power, energy = state.energy, capacity = state.capacity, mass = state.mass, research_speed = research_speed(state),
-    spore_hits = state.spore_hits or 0
+    spore_hits = state.spore_hits or 0, ended = state.ended
   }
   for _, hook in pairs(outbreak.status_hooks) do hook(state, status) end
   return status
