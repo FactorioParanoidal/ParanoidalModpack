@@ -155,7 +155,7 @@ if switches.defects() then
     data:extend(expansion)
     for _, line in ipairs(expansion_report) do log(line) end
 
-    -- Look of defective buildings: darker silhouettes, soot and dark smoke (scripts/defects/look.lua).
+    -- Look of defective buildings: darker silhouettes and dark smoke (scripts/defects/look.lua).
     local look, look_report = require("prototypes.defect-look").apply(data.raw, finished, no_defect)
     data:extend(look)
     for _, line in ipairs(look_report) do log(line) end

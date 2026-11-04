@@ -326,6 +326,12 @@ function infection.infect(entity, forced)
   return true
 end
 
+-- Who it goes back to: whoever it was taken from, or the player if that force has gone since (ruins' forces).
+local function owner_of(record)
+  local force = record.previous_force
+  return force and force.valid and force or game.forces[target_force]
+end
+
 function infection.cure(entity)
   local state = data()
   local record = state.by_unit_number[entity.unit_number]
@@ -335,7 +341,7 @@ function infection.cure(entity)
   remove_visuals(record)
   entity.custom_status = nil
   if seized[entity.type] then set_active(entity, true) end
-  if record.previous_force then entity.force = record.previous_force end
+  entity.force = owner_of(record)
 end
 
 -- The force it belonged to before it was infected, or nil if it isn't.
@@ -364,6 +370,12 @@ function infection.degrade(entity)
   if entity.type == "underground-belt" then spec.type = entity.belt_to_ground_type end
   local replaced = entity.surface.create_entity(spec)
   if not (replaced and replaced.valid) then return entity end
+  -- create_entity doesn't check what's there: if the old one is still standing it wasn't a replacement but a second
+  -- building on top of it, which goes again (raised, as it was raised as built).
+  if entity.valid then
+    replaced.destroy{raise_destroy = true}
+    return entity
+  end
   if health and replaced.is_entity_with_health then replaced.health = replaced.max_health * health end
   return replaced
 end
@@ -386,10 +398,28 @@ function infection.release_all()
     if entity.valid then
       entity.custom_status = nil
       if seized[entity.type] then set_active(entity, true) end
-      if record.previous_force and record.previous_force.valid then entity.force = record.previous_force end
+      entity.force = owner_of(record)
       infection.degrade(entity)
     end
   end
+end
+
+-- Whether anything at all is infected now (the outbreak ends at once when nothing is left before a core formed).
+function infection.any()
+  for _, record in pairs(data().by_unit_number) do
+    if record.entity.valid then return true end
+  end
+  return false
+end
+
+-- Whether something infected can still give it a creature: an inserter that hasn't come alive yet, or a roboport, which
+-- launches corrupted robots. Without that and without a creature, an outbreak whose zones have closed can't found a lair.
+function infection.can_breed()
+  for _, record in pairs(data().by_unit_number) do
+    local entity = record.entity
+    if entity.valid and (record.convert_tick or entity.type == "roboport") then return true end
+  end
+  return false
 end
 
 function infection.stats()
@@ -493,7 +523,7 @@ end
 
 local function spread(entity)
   local record = data().by_unit_number[entity.unit_number]
-  local targets = targets_seen_as(entity, record.previous_force or entity.force)
+  local targets = targets_seen_as(entity, owner_of(record))
   if entity.type == "mining-drill" then
     local choices = {}
     for _, target in pairs(targets) do

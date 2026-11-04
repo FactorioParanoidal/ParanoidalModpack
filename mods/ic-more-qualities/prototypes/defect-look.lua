@@ -1,7 +1,7 @@
 -- Look of defective buildings (user request 2026-11-03), data stage. For every building whose item can be
 -- defective: a sprite per direction from the first frame of its main graphics (no shadows, lights, glows,
 -- other blend modes or working visualisations); control.lua draws it over the building with a dark tint.
--- Also the soot sprites, five dark smoke prototypes and mod-data for control (scripts/defects/look.lua).
+-- Also five dark smoke prototypes and mod-data for control (scripts/defects/look.lua).
 local rules = require("scripts.defects.look-rules")
 
 local M = {}
@@ -194,7 +194,7 @@ local function smoke_offsets(entity)
     return result
 end
 
--- Selection box per direction as {center x, center y, width, height} (soot and smoke of non-smoking machines).
+-- Selection box per direction as {center x, center y, width, height} (smoke of non-smoking machines).
 local function boxes(entity)
     local box = entity.selection_box or entity.collision_box
     if not box then return nil end
@@ -315,18 +315,6 @@ function M.apply(raw, finished, no_defect)
         if not entry then entries[name] = nil end
     end
     local silhouettes = #prototypes
-
-    for variant = 1, rules.soot_variants do
-        prototypes[#prototypes + 1] = {
-            type = "sprite",
-            name = rules.soot_prefix .. variant,
-            filename = "__ic-more-qualities__/graphics/defects/soot-" .. variant .. ".png",
-            size = 256,
-            -- 256 px = one tile at scale 1; control.lua scales it to the building.
-            scale = 1 / 8,
-            priority = "medium",
-        }
-    end
     -- Dark smoke: the base smoke blended into the train smoke by rules.smoke_mix (color in premultiplied form and
     -- the numeric timing fields present in both); -5 is a copy of the train smoke of the build.
     local smokes = raw["trivial-smoke"] or {}
