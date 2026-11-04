@@ -10,6 +10,10 @@ data.raw["furnace"]["bob-electric-furnace-3"].result_inventory_size = 2
 data.raw["furnace"]["angels-clarifier"].energy_source.emissions_per_minute = { pollution = 75 }
 data.raw["furnace"]["angels-flare-stack"].energy_source.emissions_per_minute = { pollution = 75 }
 
+-- Factorio 2.1 требует выходной слот даже для служебного результата с вероятностью 0.
+data.raw["furnace"]["angels-clarifier"].result_inventory_size = 1
+data.raw["furnace"]["angels-flare-stack"].result_inventory_size = 1
+
 -- Иконки и графика зарядников BET 1–3 — tweaks/entity/battery-electric-train-chargers.lua (data-updates).
 
 -- super_charger стоит как "4" сразу за bet-charger-3 (order "b"); низкоприоритетные — после него
