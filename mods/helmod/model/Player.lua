@@ -782,8 +782,20 @@ function Player.checkRules(check, rules, category, lua_entity, included)
             check = included
         elseif rules[category]["entity-subgroup"] and (rules[category]["entity-subgroup"]["all"] or rules[category]["entity-subgroup"][lua_entity.subgroup.name]) then
             check = included
-        elseif rules[category]["entity-category"] and (rules[category]["entity-category"]["all"] or rules[category]["entity-category"][lua_entity.category]) then
-            check = included
+        elseif rules[category]["entity-category"] then
+            local category_rules = rules[category]["entity-category"]
+            if category_rules["all"] then
+                check = included
+            elseif lua_entity.object_name == "LuaRecipePrototype" or lua_entity.object_name == "LuaRecipe" then
+                for _, recipe_category in pairs(lua_entity.categories) do
+                    if category_rules[recipe_category] then
+                        check = included
+                        break
+                    end
+                end
+            elseif category_rules[lua_entity.category] then
+                check = included
+            end
         end
     end
     return check
