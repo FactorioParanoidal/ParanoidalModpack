@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 9.0.0
 Date: 2026-11-03
+  Bugfixes:
+    - Generator creatures read the animation inside each direction of the Factorio 2.1 picture set; passing its wrapper as a sprite caused a missing-width error on startup.
   Major Features:
     - The protomolecule replaces the biomechanical virus. Mod name Paranoidal-Protomolecule-Beast; prototype, setting and remote interface names stay as they were.
     - The outbreak: it lands once per map, weak, on a far outpost, takes what it can there without a fight for a few minutes, and withdraws to a lair 150-300 tiles further out, where the first creature to get there founds its core. After 30-60 minutes of build-up it raids the base: a party walks to the edge of the base nearest the lair, infects its target and a little around it, and goes home with whatever is lifted. Infection only spreads inside the landing site and a raid's target while they last; what's left infected elsewhere lies dormant until a zone covers it again.

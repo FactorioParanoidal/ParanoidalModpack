@@ -195,8 +195,11 @@ local function body_sprite(entity)
     return {layers = {entity.picture_off, lit}}
   end
   if entity.type == "electric-pole" then return entity.pictures end
-  -- 2.1: GeneratorPrototype has pictures (GeneratorPictureSet: north/east/south/west) instead of the two animations.
-  if entity.type == "generator" then return north(entity.pictures) end
+  -- 2.1: each direction in GeneratorPictureSet wraps its animation and optional frozen patch.
+  if entity.type == "generator" then
+    local pictures = north(entity.pictures)
+    return pictures and pictures.animation
+  end
   if entity.type == "boiler" then
     local pictures = entity.pictures and entity.pictures.north
     if not (pictures and pictures.structure) then return nil end

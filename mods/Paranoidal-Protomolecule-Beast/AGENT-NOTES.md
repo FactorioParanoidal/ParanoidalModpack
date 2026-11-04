@@ -103,7 +103,7 @@ Confirmed by the engine (2026-11-03, `test-runs/beast-smoke6-20261103`): a train
 | `script/infection.lua` underground belts | `LuaEntity.neighbours` | gone; `underground_belt_neighbour` | done |
 | `script/infection.lua` piping | `LuaEntity.neighbours` | gone; `fluidbox_neighbours` (array of arrays) | done |
 | `script/infection.lua` drain | `clear_fluid_inside` | same (`LuaEntity.fluidbox` is gone, unused) | none |
-| `prototypes/beasts.lua` generator | `vertical_animation`, `horizontal_animation` | `pictures` (GeneratorPictureSet) | done: reads `pictures` only |
+| `prototypes/beasts.lua` generator | `vertical_animation`, `horizontal_animation` | `pictures` (GeneratorPictureSet) | done: reads `pictures.north.animation`; each direction is a GeneratorPictures wrapper |
 | `prototypes/beasts.lua` container | `picture` Sprite | Sprite4Way; logistic container `animation` gone | already read through `north()` |
 | `prototypes/beasts.lua` pumpjack | `base_picture` | gone | done: the frame is the always-drawn working visualisation with `secondary_draw_order` < 0, put under the animation |
 | `prototypes/arrival.lua` core look | `unit-spawner` `graphics_set.animations` | `EnemySpawnerPrototype`, still type `unit-spawner`, same field | none |
