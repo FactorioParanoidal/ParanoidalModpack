@@ -1,4 +1,13 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.0.1
+Date: 2026-11-03
+  Features:
+    - Added a short riveted MK0 fluid wagon: one 5,000-unit tank, with capacity independent of quality.
+    - Added an early electric MK0 station pump (300 fluid/s at normal quality), unlocked with the wagon by red-science Basic fluid wagons.
+    - Station pumps only load and unload fluid wagons; they cannot transfer fluids between two ground networks.
+    - Added original 128-direction 3D-rendered wagon sprites, icons, transport-menu placement and Russian/English locale.
+
+---------------------------------------------------------------------------------------------------
 Version: 2.0.0
 Date: 15. 10. 2026
   Graphics:

@@ -1,11 +1,11 @@
 {
   "name": "JunkTrain3",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "factorio_version": "2.1",
   "title": "Junk Train — Paranoidal port",
   "author": "Goldsword44, d3x0r and SqFKYo; Factorio 2.0 port by FactorioParanoidal",
   "homepage": "https://forums.factorio.com/viewtopic.php?f=93&t=51611",
-  "description": "Restores the weak tier-0 trains and primitive railway infrastructure from Paranoidal Beta 8 on Factorio 2.0 rails.",
+  "description": "Restores weak tier-0 trains and primitive railways from Paranoidal Beta 8, with a new 5,000-unit MK0 fluid wagon and early electric station pump for red-science wagon loading and unloading; the station pump cannot transfer between pipelines.",
   "dependencies": [
     "base >= 2.0.77",
     "zzzparanoidal >= 8.1.10"

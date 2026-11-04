@@ -10,3 +10,12 @@ locomotive.localised_description = {"entity-description.yir_usl"}
 local wagon = data.raw["cargo-wagon"].yir_us_cargo
 wagon.max_speed = nil
 wagon.localised_description = {"entity-description.yir_us_cargo"}
+
+local fluid_wagon = data.raw["fluid-wagon"].yir_us_fluid
+fluid_wagon.max_speed = wagon.max_speed
+fluid_wagon.friction_force = wagon.friction_force
+fluid_wagon.air_resistance = wagon.air_resistance
+fluid_wagon.weight = wagon.weight
+fluid_wagon.quality_affects_capacity = false
+fluid_wagon.localised_description = {"entity-description.yir_us_fluid"}
+data.raw.pump["scrap-fluid-pump"].pumping_speed = 5

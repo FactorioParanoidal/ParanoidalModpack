@@ -1,3 +1,11 @@
+local station_pumps = require("scripts.station-pumps")
+script.on_init(station_pumps.rebuild)
+script.on_configuration_changed(station_pumps.rebuild)
+script.on_event(defines.events.on_tick, station_pumps.on_tick)
+script.on_event({defines.events.on_built_entity, defines.events.script_raised_built,
+  defines.events.script_raised_revive, defines.events.on_entity_cloned,
+  defines.events.on_player_rotated_entity, defines.events.on_player_flipped_entity}, station_pumps.on_built)
+
 local primitive_rails = {
   ["straight-scrap-rail"] = true,
   ["half-diagonal-scrap-rail"] = true,
@@ -95,6 +103,7 @@ local function infrastructure_has_primitive_rail(entity)
 end
 
 script.on_event(defines.events.on_robot_built_entity, function(event)
+  station_pumps.on_built(event)
   local entity = event.entity
   if not (entity and entity.valid and primitive_infrastructure[entity.name]) then
     return
