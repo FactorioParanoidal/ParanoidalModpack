@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 9.1.1
+Date: 2026-11-04
+  Bugfixes:
+    - Fixed a crash when building base statistics on Factorio 2.1: recipe parameters are checked through LuaPrototypeBase::parameter instead of the removed LuaRecipePrototype::is_parameter.
+---------------------------------------------------------------------------------------------------
 Version: 9.1.0
 Date: 2026-10-29
   Changes:

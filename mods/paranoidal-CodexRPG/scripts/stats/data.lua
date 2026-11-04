@@ -147,7 +147,7 @@ end
 
 local function recipe_names()
 	P.recipes = P.recipes or sorted_names(prototypes.recipe, function(r)
-		return not r.hidden and not r.is_parameter
+		return not r.hidden and not r.parameter
 	end)
 	return P.recipes
 end
