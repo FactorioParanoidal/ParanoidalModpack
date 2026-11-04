@@ -5,6 +5,7 @@ Date: 2026-06-19
     - Added pipette tool to create combinator from input or ouput items
   Bugfixes:
     - Paranoidal: recipe selector category rules use all Factorio 2.1 recipe categories instead of the removed category field; the rule editor reads the main category through RecipePrototype.
+    - Paranoidal: Helmod's own recipe tables (boiler, customized recipes) keep their category field in Factorio 2.1; they were read through the game recipe categories, fell back to "crafting", and a default factory saved for crafting (an assembler) was put on boiler recipes.
     - Paranoidal: the top panel button is created once and kept instead of being destroyed and recreated on every bind (player join, setting change): the recreated button flashed in its own dark style before GUI Unifier restyled it. It is removed only when "Display main icon" is off.
     - Paranoidal: only Helmod's own settings (helmod_*) rebind the button and reopen the Helmod window; a runtime setting of another mod (e.g. the Inserter Throughput toggle) no longer does.
     - Paranoidal: Quality panel rewritten: fixed-size window, one row per input quality (stays / +1 / +2 / +3 and more), vertical scroll only, percents with up to 4 decimals and "<0.0001%" for tiny values (was a matrix several screens wide with values like 1e-10%).

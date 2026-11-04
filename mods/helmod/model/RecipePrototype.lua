@@ -280,10 +280,15 @@ function RecipePrototype:getCategory()
     if defines.mod.recipes[self.lua_type] ~= nil and defines.mod.recipes[self.lua_type].category ~= nil then
         return defines.mod.recipes[self.lua_type].category
     end
-    if self.lua_prototype ~= nil then
-        -- Factorio 2.1: recipes list their categories; the first one is the main category.
-        local categories = self.lua_prototype.categories
-        return categories and categories[1] or "crafting"
+    local lua_prototype = self.lua_prototype
+    if lua_prototype ~= nil then
+        if lua_prototype.object_name ~= nil then
+            -- Factorio 2.1: game recipes list their categories; the first one is the main category.
+            local categories = lua_prototype.categories
+            return categories and categories[1] or "crafting"
+        end
+        -- Helmod's own recipe tables (boiler, customized, ...) keep a single category field.
+        return lua_prototype.category or "crafting"
     end
     return nil
 end
