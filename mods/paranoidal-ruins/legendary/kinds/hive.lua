@@ -114,7 +114,10 @@ end
 function KIND.destroyed(site, tag, _, K)
   if tag ~= "queen" then return end
   for _, list in ipairs({ "egg", "worm", "nest", "brood" }) do
-    for _, e in ipairs(K.list(site, list)) do e.die() end
+    for _, e in ipairs(K.list(site, list)) do
+      -- Death handlers may have removed other members since K.list took its snapshot.
+      if e.valid then e.die() end
+    end
   end
   K.say(site, { "pd-legendary-hive.dead" })
   K.solve(site, nil)
