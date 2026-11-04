@@ -20,6 +20,8 @@ Date: 2026-10-14
     - Declares the optional dependency on Bob's Electronics used by the recipe.
   Compatibility:
     - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
+    - Factorio 2.1 radars have their own window, which hid the mode window opened on a click: the mode
+      choice is now a panel on the right of the ore radar's window, and the click control ore-radar-open is removed.
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.0
 Date: 2026-10-10
