@@ -225,7 +225,7 @@ local function waiting_for_locomotive(body, group)
 end
 
 local function reach_of(group)
-  return group.train and train_join_distance or join_distance
+  return group and group.train and train_join_distance or join_distance
 end
 
 -- Walks over to just outside the body on its own side, as there's no path onto a train, or it stays put if close enough.
@@ -338,7 +338,7 @@ local function form_compound(gathering)
   local orientation = (group.train or group.vehicle) and body.orientation
   local carriers, spare = {}, {}
   for _, helper in pairs(gathering.inserters) do
-    for _, carrier in pairs(carriers_of(helper, data().by_unit_number[helper.unit_number])) do
+    for _, carrier in pairs(carriers_of(helper, data().by_unit_number[helper.unit_number] or {})) do
       local names = #carriers < legs and carriers or spare
       names[#names + 1] = carrier
     end
@@ -354,7 +354,13 @@ local function form_compound(gathering)
   body.destroy{raise_destroy = true}
   let_go(surface, spare, position)
   local compound = units.spawn(surface, name, position, carriers, cargo)
-  if compound and orientation then compound.orientation = orientation end
+  if not compound then
+    -- Nowhere for it: what was in it falls out and its inserters carry on alone.
+    contents.spill(surface, position, cargo.contents)
+    let_go(surface, carriers, position)
+    return nil
+  end
+  if orientation then compound.orientation = orientation end
   return compound
 end
 
@@ -385,7 +391,7 @@ local function check_gatherings()
         if dx * dx + dy * dy <= reach * reach then arrived = arrived + 1 end
       end
     end
-    if not alive or game.tick > gathering.timeout then
+    if not alive or game.tick > gathering.timeout or not group_by_name(gathering.group) then
       release(gathering)
       state.gatherings[key] = nil
     elseif arrived == #gathering.inserters then
@@ -768,6 +774,7 @@ end
 local function set_down(surface, name, position, force, quality, pack)
   local prototype = prototypes.entity[name]
   if not prototype then return contents.spill(surface, position, pack) end
+  if not game.forces[force] then force = "player" end
   quality = quality and prototypes.quality[quality] and quality or nil
   local spot = surface.find_non_colliding_position(name, position, 8, 0.5)
   local built = spot and surface.create_entity{name = name, position = spot, force = force, quality = quality, raise_built = true, create_build_effect_smoke = false}

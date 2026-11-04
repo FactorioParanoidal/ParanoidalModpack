@@ -784,7 +784,11 @@ local function give_back(entity, owner)
   if not entity.valid then return end
   entity.disabled_by_script = false
   entity.custom_status = nil
-  entity.force = owner
+  -- A force that has gone since (ruins' forces come and go) gives it to the player.
+  local force = owner
+  if type(force) == "string" then force = game.forces[force] end
+  if not (force and force.valid) then force = target_force end
+  entity.force = force
   local replaced = infection.degrade(entity)
   if replaced == entity and entity.valid then script.raise_script_built{entity = entity} end
 end
