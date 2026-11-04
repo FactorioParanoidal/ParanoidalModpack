@@ -1,5 +1,6 @@
 -- Look of defective buildings (user request 2026-11-03, variant chosen 2026-11-04): a darker silhouette with a rust
--- cast per defect grade, soot on the building and on the ground, dark smoke while working.
+-- cast per defect grade, dark smoke while working. The soot stains were removed 2026-11-04 (user: a static spot
+-- stays next to an idle machine); VERSION 2 removes them from older saves once.
 -- Data: prototypes/defect-look.lua; constants: scripts/defects/look-rules.lua.
 -- The render objects are attached to their building, so the engine destroys them together with it; storage
 -- keeps their ids only to redraw after a rotation, a flip or a change of the layer setting. No work per tick
@@ -12,6 +13,8 @@ local M = {}
 M.base_name = function(name) return name end
 
 local SMOKE_PERIOD = 20
+-- Layout of storage.ic_look: 2 = no soot objects (1, without the field, drew two soot stains per building).
+local VERSION = 2
 local GRADE = {}
 for grade = 1, 5 do GRADE["ic-defect-" .. grade] = grade end
 local TINTS = {}
@@ -31,7 +34,7 @@ local function entries()
     return entries_cache
 end
 
--- Render layer of the silhouette and of the soot on the building (map setting for the visual check).
+-- Render layer of the silhouette (map setting for the visual check).
 local function layer()
     if not layer_cache then
         local setting = settings.global[rules.layer_setting]
@@ -45,7 +48,7 @@ function M.is_setting(name) return name == rules.layer_setting end
 local function state()
     local s = storage.ic_look
     if not s then
-        s = {objects = {}, smoke = {}, smoke_index = {}, cursor = 1}
+        s = {version = VERSION, objects = {}, smoke = {}, smoke_index = {}, cursor = 1}
         storage.ic_look = s
     end
     return s
@@ -77,21 +80,6 @@ function M.forget(unit)
     forget_smoke(s, unit)
 end
 
--- Soot stain: on the ground under and around the building, or smaller on its upper part.
-local function soot(entity, box, variant, grade, over, render_layer)
-    local scale = over and 0.8 or 1
-    local margin = over and 0 or 2
-    return rendering.draw_sprite({
-        sprite = rules.soot_prefix .. variant,
-        target = {entity = entity, offset = {box[1], box[2] - (over and 0.25 * box[4] or 0)}},
-        surface = entity.surface,
-        x_scale = box[3] * scale + margin,
-        y_scale = box[4] * scale + margin,
-        tint = {r = 0, g = 0, b = 0, a = rules.soot_alpha(grade)},
-        render_layer = render_layer,
-    }).id
-end
-
 -- Draws (or redraws) the look of a building; a building that is not defective loses its look.
 function M.draw(entity)
     if not (entity and entity.valid) then return end
@@ -105,22 +93,15 @@ function M.draw(entity)
     if not entry then return end
     local s = state()
     local direction = math.floor((entity.direction or 0) / 4) % 4 + 1
-    local render_layer = layer()
     local box = entry.b and entry.b[direction]
-    local position = entity.position
-    local variant = math.floor(position.x * 7 + position.y * 13) % rules.soot_variants + 1
-    local ids = {}
-    if box then ids[#ids + 1] = soot(entity, box, variant, grade, false, "ground-patch-higher2") end
     local sprites = entry.f and entity.mirroring and entry.f or entry.s
-    ids[#ids + 1] = rendering.draw_sprite({
+    s.objects[unit] = {rendering.draw_sprite({
         sprite = sprites[#sprites == 1 and 1 or direction],
         target = entity,
         surface = entity.surface,
         tint = TINTS[grade],
-        render_layer = render_layer,
-    }).id
-    if box then ids[#ids + 1] = soot(entity, box, variant % rules.soot_variants + 1, grade, true, render_layer) end
-    s.objects[unit] = ids
+        render_layer = layer(),
+    }).id}
     script.register_on_object_destroyed(entity)
 
     -- Smoke: a building with its own smoke source adds dark smoke while working; other working machines puff
@@ -139,6 +120,11 @@ end
 function M.on_tick()
     local s = storage.ic_look
     if not s then return end
+    -- An older save (soot stains): everything is drawn again once, without them.
+    if s.version ~= VERSION then
+        M.redraw_all()
+        return
+    end
     local list = s.smoke
     local total = #list
     if total == 0 then return end
