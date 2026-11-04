@@ -61,6 +61,7 @@ Date: 2026-11-03
     - AGENT-NOTES.md: how the mod works, its storage, remote interface and build links, and what to change for Factorio 2.1 (every place marked "-- 2.1:" in the code).
   Compatibility:
     - Ported to Factorio 2.1: factorio_version 2.1, base >= 2.1.0; underground belts and piping spread through underground_belt_neighbour and fluidbox_neighbours (LuaEntity.neighbours is gone); generator creatures read the 2.1 pictures; a pumpjack creature takes its frame from the always-drawn working visualisation drawn below the animation (MiningDrillPrototype.base_picture is gone).
+    - Generators and logistic chests can be lifted on Factorio 2.1 again: a generator creature reads the animation of the 2.1 GeneratorPictures (the north one first), a logistic chest creature the animation of its robot door, as 2.1 logistic containers have neither picture nor animation.
 ---------------------------------------------------------------------------------------------------
 Version: 2.1.0
 Date: 2026-10-31

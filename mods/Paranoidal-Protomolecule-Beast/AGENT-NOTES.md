@@ -105,8 +105,8 @@ Confirmed by the engine (2026-11-03, `test-runs/beast-smoke6-20261103`): a train
 | `script/infection.lua` underground belts | `LuaEntity.neighbours` | gone; `underground_belt_neighbour` | done |
 | `script/infection.lua` piping | `LuaEntity.neighbours` | gone; `fluidbox_neighbours` (array of arrays) | done |
 | `script/infection.lua` drain | `clear_fluid_inside` | same (`LuaEntity.fluidbox` is gone, unused) | none |
-| `prototypes/beasts.lua` generator | `vertical_animation`, `horizontal_animation` | `pictures` (GeneratorPictureSet) | done: reads `pictures` only |
-| `prototypes/beasts.lua` container | `picture` Sprite | Sprite4Way; logistic container `animation` gone | already read through `north()` |
+| `prototypes/beasts.lua` generator | `vertical_animation`, `horizontal_animation` | `pictures` (GeneratorPictureSet of GeneratorPictures `{animation, frozen_patch}`) | done 2026-11-04: `pictures.north.animation` (else east, south, west); the first port passed the GeneratorPictures itself on as a sprite and 2.1.24 stopped loading at `beast-dynamo-steam-engine` |
+| `prototypes/beasts.lua` container | `picture` Sprite; logistic container `animation` | Sprite4Way; a logistic container has neither, its look is `robot_door.animation` (the base game copies it as a chest picture, `entities.lua`) | done 2026-11-04: read after `picture` and `animation` |
 | `prototypes/beasts.lua` pumpjack | `base_picture` | gone | done: the frame is the always-drawn working visualisation with `secondary_draw_order` < 0, put under the animation |
 | `prototypes/arrival.lua` core look | `unit-spawner` `graphics_set.animations` | `EnemySpawnerPrototype`, still type `unit-spawner`, same field | none |
 | Rendering | `draw_sprite`, `draw_light` | new optional `tall`, `light_mode` | none |

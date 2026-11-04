@@ -332,8 +332,11 @@ local function body_sprite(entity)
   end
   -- Its head, which turns: a RotatedAnimation.
   if entity.type == "ammo-turret" or entity.type == "electric-turret" then return entity.prepared_animation end
-  -- 2.1: picture is a Sprite4Way for both, and a logistic container has no animation; north() reads either.
-  if entity.type == "container" or entity.type == "logistic-container" then return north(entity.picture) or north(entity.animation) end
+  -- 2.1: picture is a Sprite4Way for both; a logistic container has neither picture nor animation, its look is its robot
+  -- door's animation (shut in the first frame), which the base game also copies as a chest's picture. north() reads either.
+  if entity.type == "container" or entity.type == "logistic-container" then
+    return north(entity.picture) or north(entity.animation) or north(entity.robot_door and entity.robot_door.animation)
+  end
   if entity.type == "radar" then return north(entity.pictures) end
   if entity.type == "lamp" then
     local off, on = north(entity.picture_off), north(entity.picture_on)
@@ -349,8 +352,13 @@ local function body_sprite(entity)
     return {layers = {off, lit}}
   end
   if entity.type == "electric-pole" then return north(entity.pictures) end
-  -- 2.1: GeneratorPrototype has pictures (GeneratorPictureSet: north/east/south/west) instead of the two animations.
-  if entity.type == "generator" then return north(entity.pictures) end
+  -- 2.1: GeneratorPrototype has pictures (GeneratorPictureSet: north/east/south/west, each GeneratorPictures with an
+  -- animation and a frozen patch) instead of the two animations; the north one first, as the vertical one was in 2.0.
+  if entity.type == "generator" then
+    local set = type(entity.pictures) == "table" and entity.pictures or {}
+    local view = set.north or set.east or set.south or set.west
+    return view and north(view.animation)
+  end
   if entity.type == "boiler" then
     local pictures = entity.pictures and entity.pictures.north
     local structure = pictures and north(pictures.structure)
