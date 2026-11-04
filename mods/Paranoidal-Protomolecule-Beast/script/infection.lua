@@ -404,6 +404,24 @@ function infection.release_all()
   end
 end
 
+-- Whether anything at all is infected now (the outbreak ends at once when nothing is left before a core formed).
+function infection.any()
+  for _, record in pairs(data().by_unit_number) do
+    if record.entity.valid then return true end
+  end
+  return false
+end
+
+-- Whether something infected can still give it a creature: an inserter that hasn't come alive yet, or a roboport, which
+-- launches corrupted robots. Without that and without a creature, an outbreak whose zones have closed can't found a lair.
+function infection.can_breed()
+  for _, record in pairs(data().by_unit_number) do
+    local entity = record.entity
+    if entity.valid and (record.convert_tick or entity.type == "roboport") then return true end
+  end
+  return false
+end
+
 function infection.stats()
   local counts = {}
   for _, record in pairs(data().by_unit_number) do
