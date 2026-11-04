@@ -124,7 +124,7 @@ function RuleEdition:analyseRuleValue(element_name)
             rule_value = prototype:native().subgroup.name
         end
         if rule_type == "entity-category" then
-            rule_value = prototype:getCategory()
+            rule_value = prototype:native().category
         end
     else
         rule_value = "all"
