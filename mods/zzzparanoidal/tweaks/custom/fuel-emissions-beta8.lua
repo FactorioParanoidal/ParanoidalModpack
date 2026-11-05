@@ -8,8 +8,11 @@ local multipliers = {
   ["angels-solid-carbon"] = 0.9,
   ["solid-fuel"] = 1.2,
   ["rocket-fuel"] = 2,
-  ["wood"] = 1.75,
-  ["angels-cellulose-fiber"] = 1.4,
+  -- Sawdust balance (user decision 2026-11-05): wood 2.5 (Beta 8 1.75), sawdust 2 (Beta 8 1.4), wood pellets 1.5 (Beta 8 1.1), cellulose fiber 1.85 (Beta 8 1.4).
+  ["wood"] = 2.5,
+  ["bi-woodpulp"] = 2,
+  ["angels-cellulose-fiber"] = 1.85,
+  ["angels-wood-pellets"] = 1.5,
 }
 
 for name, multiplier in pairs(multipliers) do
