@@ -118,8 +118,18 @@ local function quality_rank(name)
 end
 
 -- Items that post-processing cannot take: they carry an inventory, an equipment grid, tags, entity data
--- or a spoil timer (their contents or freshness would be lost or reset when 5 become 1).
+-- or a spoil timer (their contents or freshness would be lost or reset when 5 become 1), or they are always
+-- standard: every recipe except recycling is in the registry "ic-normal-result" (seeds, fish, Yuoki currencies,
+-- vehicle power equipment; user decision 2026-11-05; list built in data-final-fixes).
 local processable = {}
+local always_normal_items
+local function always_normal(item)
+    if always_normal_items == nil then
+        local mod_data = prototypes.mod_data and prototypes.mod_data[names.normal_result]
+        always_normal_items = mod_data and mod_data.data.items or {}
+    end
+    return always_normal_items[item] == true
+end
 local unprocessable_types = {
     ["item-with-inventory"] = true, ["item-with-tags"] = true, ["item-with-label"] = true,
     ["item-with-entity-data"] = true, blueprint = true, ["blueprint-book"] = true,
@@ -135,6 +145,7 @@ function M.is_processable(item)
             and not (prototype.get_spoil_ticks and prototype.get_spoil_ticks() > 0)
             -- One slot per tier must hold the copies of one operation.
             and (prototype.stack_size or rules.PROCESS_TAKE) >= rules.PROCESS_TAKE
+            and not always_normal(item)
         processable[item] = result
     end
     return result
@@ -426,7 +437,7 @@ end
 ---------------------------------------------------------------------------------------------------
 -- Quality view kept per name (prototype data, the same on every peer).
 local quality_infos = {}
-function M.reset_cache() quality_infos, processable, chain_cache = {}, {}, nil end
+function M.reset_cache() quality_infos, processable, chain_cache, always_normal_items = {}, {}, nil, nil end
 
 function M.quality_info(quality)
     local name = quality.name

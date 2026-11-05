@@ -27,6 +27,28 @@ function M.is_recycling(recipe)
     return false
 end
 
+-- Items whose every recipe except recycling is in `recipes` (the registry "ic-normal-result"): {name = true}.
+-- Such an item is always standard by design; the control post does not upgrade it either (user decision
+-- 2026-11-05). An item with any other producing recipe is left out.
+function M.always_normal_items(raw, recipes)
+    local all_normal = {}
+    for name, recipe in pairs(raw.recipe or {}) do
+        if not M.is_recycling(recipe) then
+            local normal = recipes[name] == true
+            for _, result in pairs(recipe.results or {}) do
+                if (result.type or "item") == "item" and result.name then
+                    all_normal[result.name] = normal and all_normal[result.name] ~= false
+                end
+            end
+        end
+    end
+    local items = {}
+    for name, value in pairs(all_normal) do
+        if value then items[name] = true end
+    end
+    return items
+end
+
 -- True when any category of the recipe is in `set` or contains the plain text `fragment`.
 function M.has_category(recipe, set, fragment)
     for _, category in pairs(M.categories(recipe)) do

@@ -1,6 +1,7 @@
 ---------------------------------------------------------------------------------------------------
 Version: 8.1.28
   Changes:
+    - Vehicle power equipment and engines are always standard quality (user decision 2026-11-05): every recipe of vehicle solar panels 1-5, vehicle fission cells 1-6, vehicle fuel cells 2x2/3x3/4x4, vehicle fission reactors 1-6, vehicle nuclear reactor, vehicle batteries 1-6 and 1-2, both vehicle engines and vehicle belt immunity equipment is in the registry "ic-normal-result" of ic-more-qualities, like seeds: no quality modules, a positive result becomes standard, the control post does not take them. Equipment already made at a quality keeps it.
     - Sawdust balance: the sawdust fuel brick recipe now makes wood pellets (8 sawdust -> 1 pellet, 2 s, same technology); charcoal from sawdust: 50 sawdust -> 11 charcoal, 33 s (was 24 -> 5, 15 s); charcoal from wood pellets: 4 -> 7, 4 s (was 2 -> 3, 2 s); wood pellets from cellulose fiber take 16 fiber instead of 12 (no energy gain). Fuel pollution: sawdust 200% (was 140%), wood 250% (was 175%), wood pellets 150% (Beta 8 110%, was 100% after the ID rename), cellulose fiber 185% (was 140%).
     - Solid fuel: vehicle acceleration 110% (was 105%) and top speed 105% (was 100%). Coke pellets stay better (110% / 120%).
     - Diesel fuel recipe: 25 liquid fuel instead of 20 (with 20 methane and 1 mineral catalyst -> 25 diesel fuel). The step multiplied fuel energy by 1.66, now by 1.42; diesel fuel keeps 2.25 MJ.

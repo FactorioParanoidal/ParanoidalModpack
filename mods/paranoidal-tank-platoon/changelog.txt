@@ -1,5 +1,7 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.0
+  Balancing:
+    - Vehicle nuclear reactor: 10 MW instead of 20 MW (Paranoidal decision 2026-11-05); it burns nuclear fuel half as fast.
   Locale:
     - ru: the mod name and the mod list description are the same as in ParanoidalLocale (format "English title (Russian translation)"), so the mod reads the same with or without it.
   Graphics:
