@@ -60,6 +60,7 @@ require("tweaks.technology.concrete")
 require("tweaks.technology.fuel")
 require("tweaks.technology.oberhaul-inserter-cost") -- 1.1 Oberhaul: дороже near/long/more-инсертер техи
 require("tweaks.technology.factorissimo-recursion-clean") -- убираем пустой "+" эффект у factory-recursion-t1/t2
+require("tweaks.technology.list-visible-levels") -- уровни с новыми зданиями/предметами видны в списке технологий и в поиске
 
 require("tweaks.custom.main-menu-background")
 require("tweaks.custom.terrain-graphics") -- белый бетон/дорожка, кирпичное покрытие дорожки, облака
