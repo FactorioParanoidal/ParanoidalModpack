@@ -344,6 +344,17 @@ assert(filters[1] == nil and filters[SLOTS] == nil)
 -- Items with a stack smaller than one operation are not taken.
 prototypes.item.anchor = {type = "item", stack_size = 1, get_spoil_ticks = function() return 0 end}
 assert(not post.is_processable("anchor"))
+-- Items always normal (registry "ic-normal-result", data.items): not taken; others with the same stack are.
+prototypes.item.sapling = {type = "item", stack_size = 50, get_spoil_ticks = function() return 0 end}
+prototypes.item.bolt = {type = "item", stack_size = 50, get_spoil_ticks = function() return 0 end}
+prototypes.mod_data = {["ic-normal-result"] = {data = {recipes = {}, items = {sapling = true}}}}
+post.reset_cache()
+assert(not post.is_processable("sapling") and post.is_processable("bolt") and post.is_processable("gear"))
+post.set_order(record, {item = "sapling", quality = "rare", required = 10})
+assert(not post.start(record) and record.state == "idle", "always normal items are not processed")
+prototypes.mod_data = nil
+post.reset_cache()
+assert(post.is_processable("sapling"), "no registry: no extra limit")
 
 print("PASS: post-processing chance (0.6 x next probability, capped; chain probability after a step), outcome")
 print("and costs, 5 -> 1 operations")

@@ -51,6 +51,21 @@ assert(not wide.inserter and wide["assembling-machine-1"])
 prototypes = {mod_data = {["ic-defects-classification"] = {data = {finished = finished}}}}
 eligibility.reset()
 assert(eligibility.finished()["assembling-machine-1"] and not eligibility.finished()["iron-plate"])
+-- Items always normal: every recipe except recycling in the registry; recycling does not count, any other
+-- producing recipe keeps the item out; fluids are ignored.
+do
+    local items = classify.always_normal_items({recipe = {
+        seed = {results = {{type = "item", name = "seed"}, {type = "fluid", name = "water"}}},
+        ["seed-recycling"] = {categories = {"recycling"}, results = {{type = "item", name = "seed"}}},
+        reactor = {results = {{name = "reactor", amount = 1}}},
+        ["ore-normal"] = {results = {{type = "item", name = "ore"}}},
+        ["ore-copy"] = {results = {{type = "item", name = "ore"}}},
+        plate = {results = {{type = "item", name = "plate"}}},
+    }}, {seed = true, reactor = true, ["ore-copy"] = true})
+    assert(items.seed and items.reactor and not items.ore and not items.plate and not items.water)
+    assert(next(classify.always_normal_items({}, {})) == nil)
+end
+
 prototypes = {mod_data = {}}
 eligibility.reset()
 assert(not eligibility.finished()["assembling-machine-1"], "missing mod-data means no finished products")

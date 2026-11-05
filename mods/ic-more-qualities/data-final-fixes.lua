@@ -148,6 +148,14 @@ if switches.defects() then
     end
     table.sort(normal_result)
     log("IC: recipes whose result is always normal (" .. #normal_result .. "): " .. table.concat(normal_result, ", "))
+    -- Items made only by these recipes (recycling not counted): the control post does not take them
+    -- (registry.data.items, read by scripts/expansion/post.lua).
+    registry.data.items = require("scripts.defects.classify").always_normal_items(data.raw, registry.data.recipes)
+    local always_normal = {}
+    for name in pairs(registry.data.items) do always_normal[#always_normal + 1] = name end
+    table.sort(always_normal)
+    log("IC: items always normal, not taken by the control post (" .. #always_normal .. "): "
+        .. table.concat(always_normal, ", "))
 
     -- Workshop, control post and production modes: after the classification above, so that the
     -- refinement recipes keep allow_quality and every item already exists.
