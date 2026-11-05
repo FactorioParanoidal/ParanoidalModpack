@@ -474,7 +474,11 @@ function calc_util.process_lab(set, entity, invert)
 
   for _, ingredient in ipairs(research_data.ingredients) do
     -- TODO: Select quality
-    local amount = (ingredient.amount * lab_multiplier) / prototypes.item[ingredient.name].get_durability()
+    -- Factorio 2.1: science packs may be plain items (the vanilla packs are); a lab takes science_capacity research
+    -- units from such an item and durability only from a tool. get_durability() is nil for an item that is no tool.
+    local pack = prototypes.item[ingredient.name]
+    local capacity = pack.type == "tool" and pack.get_durability() or pack.science_capacity
+    local amount = (ingredient.amount * lab_multiplier) / capacity
     calc_util.add_rate(set, "input", "item", ingredient.name, "normal", amount, invert, entity.name)
   end
 end
