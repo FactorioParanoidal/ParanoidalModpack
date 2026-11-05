@@ -1,6 +1,6 @@
 -- Paranoidal (2026-10-31): at the highest quality fuel acceleration, fuel top speed and chest slots are at
 -- most x8 of normal, growing linearly with the quality level. 2026-11-05: module effects at most x5 (M.modules),
--- robot battery at most x10 (M.robots).
+-- robot battery at most x10 (M.robots), locomotive power x5 and rolling stock top speed x2 (M.rolling_stock).
 local M = {}
 M.factor = 8
 -- Module effects (user decision 2026-11-05, variant B): the engine default 1 + 0.3 x level gave x40.9 at the
@@ -11,6 +11,10 @@ M.module_fields = {"module_speed_multiplier", "module_productivity_multiplier", 
 -- Robot battery (user decision 2026-11-05, variant V): the engine default 1 + level gave x134 at the top quality,
 -- a logistic robot flew about 33 000 tiles on one charge instead of about 250.
 M.robot_factor = 10
+-- Locomotives (user decision 2026-11-05, variant G; supersedes D29 "A" for power and speed): power (acceleration) at
+-- most x5 like the modules, top speed at most x2.
+M.locomotive_power_factor = 5
+M.rolling_stock_speed_factor = 2
 
 -- Positive qualities sorted by level, then name: index = tier number (1 ... 40 in the Paranoidal build).
 local function positive_tiers(raw)
@@ -100,21 +104,26 @@ function M.robots(raw)
     return #positive
 end
 
--- Factorio 2.1 (user decision D29 "A", 2026-11-03): keep the 2.0 rolling stock. 2.1 added quality multipliers for
--- locomotive power and rolling stock top speed (default 1 + 0.01 x level; vanilla tiers 1.2 ... 2.0 and 1.03 ... 1.15;
--- the vanilla locomotive and its copies set quality_affects_max_speed) and a separate cargo wagon inventory multiplier
--- (vanilla tiers 1.25 ... 2.5). In 2.0 quality changed neither locomotive power nor speed, and cargo wagons used
--- inventory_size_multiplier: so every quality gets 1 / 1 and the cargo wagon multiplier is removed (the engine then
--- takes inventory_size_multiplier).
+-- Rolling stock. Factorio 2.1 added quality multipliers for locomotive power and rolling stock top speed (default
+-- 1 + 0.01 x level; vanilla tiers 1.2 ... 2.0 and 1.03 ... 1.15; speed only for rolling stock with
+-- quality_affects_max_speed: every locomotive of the build, zzzparanoidal sets it on the battery electric and maglev
+-- locomotives) and a separate cargo wagon inventory multiplier (vanilla tiers 1.25 ... 2.5).
+-- Power and speed (user decision 2026-11-05, variant G; D29 "A" of 2026-11-03 kept the 2.0 x1 for every quality):
+-- positive qualities linear over the tier number like the modules, power 1 + 4 x tier / tiers, speed
+-- 1 + tier / tiers; normal and defects x1. Cargo wagons (D29 "A" kept): the cargo wagon multiplier is removed, the
+-- engine then takes inventory_size_multiplier as in 2.0. Returns the number of positive qualities with a bonus.
 function M.rolling_stock(raw)
-    local changed = 0
-    for _, quality in pairs(raw.quality) do
+    for _, quality in pairs(raw.quality or {}) do
         quality.locomotive_power_multiplier = 1
         quality.rolling_stock_max_speed_multiplier = 1
         quality.cargo_wagon_inventory_size_multiplier = nil
-        changed = changed + 1
     end
-    return changed
+    local positive = positive_tiers(raw)
+    for tier, quality in ipairs(positive) do
+        quality.locomotive_power_multiplier = 1 + (M.locomotive_power_factor - 1) * tier / #positive
+        quality.rolling_stock_max_speed_multiplier = 1 + (M.rolling_stock_speed_factor - 1) * tier / #positive
+    end
+    return #positive
 end
 
 return M

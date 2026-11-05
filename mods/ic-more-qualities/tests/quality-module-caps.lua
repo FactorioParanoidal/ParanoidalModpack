@@ -88,5 +88,35 @@ end
 assert(near(real.quality.q133.module_speed_multiplier, 5))
 assert(caps.robots({}) == 0)
 
-print("Module caps: 40 tiers x1.1 ... x5, 5 fields; robot battery x1.225 ... x10; linear over the tier, "
+-- Rolling stock (variant G): power 1 + 4 x tier / tiers, speed 1 + tier / tiers; normal and defects x1; the cargo
+-- wagon multiplier removed everywhere.
+raw.quality["ic-defect-3"].cargo_wagon_inventory_size_multiplier = 0.6
+by_level[5].cargo_wagon_inventory_size_multiplier = 2.5
+assert(caps.rolling_stock(raw) == 42)
+for _, name in ipairs({"normal", "ic-defect-3", "quality-unknown"}) do
+    local quality = raw.quality[name]
+    assert(quality.locomotive_power_multiplier == 1 and quality.rolling_stock_max_speed_multiplier == 1, name)
+end
+for _, quality in pairs(raw.quality) do assert(quality.cargo_wagon_inventory_size_multiplier == nil, quality.name) end
+assert(near(raw.quality.a_twin.locomotive_power_multiplier, 1 + 4 * 4 / 42))
+assert(near(raw.quality.a_twin.rolling_stock_max_speed_multiplier, 1 + 4 / 42))
+assert(caps.rolling_stock(real) == 40)
+assert(real.quality.normal.locomotive_power_multiplier == 1 and real.quality.normal.rolling_stock_max_speed_multiplier == 1)
+for level, expected in pairs({[2] = {1.1, 1.025}, [5] = {1.4, 1.1}, [12] = {2, 1.25}, [24] = {3, 1.5},
+    [49] = {4, 1.75}, [133] = {5, 2}}) do
+    local quality = real.quality["q" .. level]
+    assert(near(quality.locomotive_power_multiplier, expected[1]), level)
+    assert(near(quality.rolling_stock_max_speed_multiplier, expected[2]), level)
+end
+previous = 1
+local previous_speed = 1
+for _, level in ipairs(levels) do
+    local quality = real.quality["q" .. level]
+    assert(quality.locomotive_power_multiplier > previous and quality.rolling_stock_max_speed_multiplier > previous_speed)
+    previous, previous_speed = quality.locomotive_power_multiplier, quality.rolling_stock_max_speed_multiplier
+end
+assert(caps.rolling_stock({}) == 0)
+
+print("Module caps: 40 tiers x1.1 ... x5, 5 fields; robot battery x1.225 ... x10; locomotive power x5, speed x2; "
+    .. "linear over the tier, "
     .. "normal and defects untouched. Mocks only.")
