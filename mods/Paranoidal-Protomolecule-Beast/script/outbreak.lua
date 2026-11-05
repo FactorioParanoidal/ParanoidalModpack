@@ -15,6 +15,9 @@
 -- lasts, and where a spore shell lands. What's left infected outside one lies dormant until a zone covers it again. When
 -- the core dies, everything it took or made is put back with a random Paranoidal defect, and the protomolecule is gone.
 --
+-- Until a carrier reaches the lair's site it lives as a seed in what it infected (seed.lua, on_every_update): it never
+-- dies there of itself, only when the player cures the last of it (the user's decision of 2026-11-05).
+--
 -- 2.1: nothing here needs changing as far as the 2.1.24 API goes (see AGENT-NOTES.md, "Porting to 2.1").
 local shared = require("shared")
 local config = require("script.config")
@@ -31,9 +34,8 @@ local update_interval = 60
 local heal_interval = 120
 local home_radius = 30
 local found_radius = 24
+-- How long its carriers have to get to the lair's site before it's founded wherever the nearest of them got to.
 local found_timeout = 20 * minute
--- How long an outbreak with nothing that can give it a creature waits after the landing before it ends (see update).
-local barren_grace = 1 * minute
 local landing_zone_extra = 16
 local raid_travel_timeout = 15 * minute
 local raid_arrive_extra = 8
@@ -355,15 +357,9 @@ local function message(key, ...)
 end
 outbreak.message = message
 
--- A zone where the infection spreads for a while. Rails in it give it a sample of them, which is how it learns to lay its
--- own, and a train stop one of those, for its lure (lair_rails.lua).
-local function open_zone(state, surface, position, radius, ticks)
-  local zones = {}
-  for _, zone in pairs(state.zones) do
-    if game.tick < zone.until_tick then zones[#zones + 1] = zone end
-  end
-  zones[#zones + 1] = {surface = surface.index, x = position.x, y = position.y, radius = radius, until_tick = game.tick + ticks}
-  state.zones = zones
+-- Rails in a zone give it a sample of them, which is how it learns to lay its own, and a train stop one of those, for its
+-- lure (lair_rails.lua).
+local function learn_from(state, surface, position, radius)
   for sample, types in pairs(zone_samples) do
     if not state.catalogue[sample] and prototypes.entity[sample]
       and surface.count_entities_filtered{position = position, radius = radius, type = types, limit = 1} > 0 then
@@ -372,9 +368,50 @@ local function open_zone(state, surface, position, radius, ticks)
   end
 end
 
+-- A zone where the infection spreads for a while. key: one that's kept up from one update to the next (the seed's,
+-- seed.lua) rather than opened anew.
+local function open_zone(state, surface, position, radius, ticks, key)
+  local zones = {}
+  for _, zone in pairs(state.zones) do
+    if game.tick < zone.until_tick then zones[#zones + 1] = zone end
+  end
+  zones[#zones + 1] = {surface = surface.index, x = position.x, y = position.y, radius = radius, until_tick = game.tick + ticks, key = key, learned = radius}
+  state.zones = zones
+  learn_from(state, surface, position, radius)
+end
+
 function outbreak.open_zone(surface, position, radius, ticks)
   local state = data()
   if outbreak.active() then open_zone(state, surface, position, radius, ticks) end
+end
+
+-- The zone by this key moved, grown or kept open, or opened. What's in it is looked at again for samples only when it has
+-- moved or grown by a few tiles.
+function outbreak.keep_zone(key, surface, position, radius, ticks)
+  local state = data()
+  if not outbreak.active() then return end
+  for _, zone in pairs(state.zones) do
+    if zone.key == key and game.tick < zone.until_tick then
+      local moved = zone.surface ~= surface.index or distance_squared(zone, position) > 16
+      zone.surface, zone.x, zone.y, zone.radius, zone.until_tick = surface.index, position.x, position.y, radius, game.tick + ticks
+      if moved or radius >= (zone.learned or 0) + 4 then
+        zone.learned = radius
+        learn_from(state, surface, position, radius)
+      end
+      return
+    end
+  end
+  open_zone(state, surface, position, radius, ticks, key)
+end
+
+function outbreak.close_zone(key)
+  local state = data()
+  if not state then return end
+  local zones = {}
+  for _, zone in pairs(state.zones or {}) do
+    if zone.key ~= key then zones[#zones + 1] = zone end
+  end
+  state.zones = zones
 end
 
 local function analyse(state)
@@ -501,8 +538,9 @@ function outbreak.spend_energy(amount)
   return true
 end
 
+-- What it draws from the player's network (seed.lua, leech_power) counts as stolen power too.
 local function research_speed(state)
-  local extra = math.max(0, (state.power or base_power) - base_power)
+  local extra = math.max(0, (state.power or base_power) - base_power) + (state.leech_power or 0)
   return 1 + (max_research_speed - 1) * extra / (extra + half_power)
 end
 
@@ -736,7 +774,7 @@ function outbreak.begin(surface, position, away)
   state.site = pick_site(surface, position, away)
 end
 
-local function creatures(state)
+function outbreak.creatures(state)
   local result = {}
   local units = storage.units
   if not units then return result end
@@ -747,6 +785,7 @@ local function creatures(state)
   end
   return result
 end
+local creatures = outbreak.creatures
 
 local function draw_lair(core)
   local surface = core.surface
@@ -826,6 +865,8 @@ local function end_outbreak(state, key)
   message(key)
 end
 
+-- Once a carrier gets to the site. Without one it lives on as a seed (seed.lua) in what it infected, however long that
+-- takes, and a carrier it grows later has its own time to get there.
 local function update_founding(state)
   local home = state.site
   local nearest, nearest_distance
@@ -833,11 +874,16 @@ local function update_founding(state)
     local distance = distance_squared(record.entity.position, home)
     if not nearest or distance < nearest_distance then nearest, nearest_distance = record, distance end
   end
-  if nearest and nearest_distance <= found_radius * found_radius then
+  if not nearest then
+    state.carriers_since = nil
+    return
+  end
+  state.carriers_since = state.carriers_since or game.tick
+  if nearest_distance <= found_radius * found_radius then
     found(state, home)
-  elseif game.tick >= state.landing_until + found_timeout then
-    -- Wherever the nearest of them got to. With none left at all it never took hold.
-    if nearest then found(state, nearest.entity.position) else end_outbreak(state, "the-beast.extinct") end
+  elseif game.tick >= math.max(state.landing_until, state.carriers_since) + found_timeout then
+    -- Wherever the nearest of them got to.
+    found(state, nearest.entity.position)
   end
 end
 
@@ -1094,6 +1140,8 @@ end
 
 -- Called every update in the lair phase by the libraries on top of this one: function(state).
 outbreak.on_update = {}
+-- And these every update of an outbreak in any phase, before the phase's own (seed.lua): function(state).
+outbreak.on_every_update = {}
 
 local function update()
   local state = data()
@@ -1104,26 +1152,21 @@ local function update()
   end
   if state.phase == "landing" and game.tick >= state.landing_until then state.phase = "founding" end
   -- Nothing of it is left before a core formed: no creature and no infected building (the player's turrets shot off every
-  -- infection at the outpost, or every carrier is dead). It ends at once instead of waiting out the founding time; a
-  -- building cured with nothing infected next to it is never infected again, so this is final. Repelled if it never had
-  -- a creature, otherwise it didn't take hold. After the landing, with no creature and nothing infected that can still
-  -- give one (the landing zone has closed, so nothing spreads), it can't found a lair either: it ends a minute later, so
-  -- that turrets still shooting at what's infected get to clear it first (cured buildings get no defect).
+  -- infection at the outpost, or the player cured or destroyed the last of it). It ends at once; a building cured with
+  -- nothing infected next to it is never infected again, so this is final. Repelled if it never had a creature,
+  -- otherwise it didn't take hold. That is the only way it ends before a core: with something infected left and no
+  -- carrier, it lives on as a seed in it (seed.lua) and grows one of its own.
   if state.phase == "landing" or state.phase == "founding" then
     local alive = #creatures(state)
     if alive > 0 then state.had_creatures = true end
     if alive == 0 and not infection.any() then
       return end_outbreak(state, state.had_creatures and "the-beast.extinct" or "the-beast.repelled")
     end
-    if alive == 0 and state.phase == "founding" and not infection.can_breed() then
-      state.barren_since = state.barren_since or game.tick
-      if game.tick >= state.barren_since + barren_grace then
-        return end_outbreak(state, state.had_creatures and "the-beast.extinct" or "the-beast.no-carriers")
-      end
-    else
-      state.barren_since = nil
-    end
   end
+  for _, hook in pairs(outbreak.on_every_update) do
+    if outbreak.active() then hook(state) end
+  end
+  if not outbreak.active() then return end
   if state.phase == "founding" then update_founding(state) end
   if state.phase ~= "lair" then return end
   if not (state.core and state.core.valid) then return end_outbreak(state, "the-beast.core-destroyed") end
@@ -1283,6 +1326,8 @@ local function setup()
   if not (state and state.phase) then return end
   state.effects = effects_of(state.tier)
   state.ruin_ok = state.ruin_ok or {}
+  -- From before the seed (2026-11-05): an outbreak with nothing that could give a carrier ended a minute after landing.
+  state.barren_since = nil
   state.mass = state.mass or 0
   state.energy = state.energy or 0
   state.templates = nil

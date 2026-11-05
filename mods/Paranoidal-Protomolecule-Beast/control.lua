@@ -6,6 +6,7 @@ handler.add_libraries
   require("script.the_beast"),
   require("script.infection"),
   require("script.outbreak"),
+  require("script.seed"),
   require("script.lair_rails"),
   require("script.lair_arms"),
   require("script.arrival"),

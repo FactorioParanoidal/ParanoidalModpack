@@ -412,14 +412,17 @@ function infection.any()
   return false
 end
 
--- Whether something infected can still give it a creature: an inserter that hasn't come alive yet, or a roboport, which
--- launches corrupted robots. Without that and without a creature, an outbreak whose zones have closed can't found a lair.
-function infection.can_breed()
+-- What's infected on a surface, at most limit of them, for the seed (seed.lua), which lives in them.
+function infection.infected_on(surface_index, limit)
+  local result = {}
   for _, record in pairs(data().by_unit_number) do
     local entity = record.entity
-    if entity.valid and (record.convert_tick or entity.type == "roboport") then return true end
+    if entity.valid and entity.surface.index == surface_index then
+      result[#result + 1] = entity
+      if #result >= limit then break end
+    end
   end
-  return false
+  return result
 end
 
 function infection.stats()
@@ -519,6 +522,44 @@ local function targets_seen_as(entity, force)
   local targets = spread_targets(entity)
   entity.force = own_force
   return targets
+end
+
+-- The poles on its own network whose supply area it stands in.
+local pole_reach = 20
+local function powering_poles(entity, network, result)
+  local box = entity.bounding_box
+  for _, pole in pairs(entity.surface.find_entities_filtered{position = entity.position, radius = entity.get_radius() + pole_reach, type = "electric-pole"}) do
+    if pole.electric_network_id == network then
+      local reach, at = pole.prototype.get_supply_area_distance(pole.quality), pole.position
+      if reach and reach > 0 and at.x + reach > box.left_top.x and at.x - reach < box.right_bottom.x
+        and at.y + reach > box.left_top.y and at.y - reach < box.right_bottom.y then
+        result[#result + 1] = pole
+      end
+    end
+  end
+end
+
+-- What an infected entity is in contact with, for the seed (seed.lua), which picks for itself where it creeps next rather
+-- than spreading inside a zone: whatever it would spread to, and through the current, which is contact too: for a pole,
+-- the poles it's wired to and whatever on its network stands in its supply area; for anything else on a network, the
+-- poles that power it.
+function infection.contacts(entity)
+  local record = data().by_unit_number[entity.unit_number]
+  local result = targets_seen_as(entity, record and owner_of(record) or game.forces[target_force])
+  if entity.type ~= "electric-pole" then
+    local network = entity.electric_network_id
+    if network then powering_poles(entity, network, result) end
+    return result
+  end
+  copper_neighbours(entity, result)
+  local reach = entity.prototype.get_supply_area_distance(entity.quality)
+  local network = entity.electric_network_id
+  if not (reach and reach > 0 and network) then return result end
+  local at = entity.position
+  for _, found in pairs(entity.surface.find_entities_filtered{area = {{at.x - reach, at.y - reach}, {at.x + reach, at.y + reach}}, type = infection.infectable_types, force = infection.target_forces()}) do
+    if found.type ~= "electric-pole" and found.electric_network_id == network then result[#result + 1] = found end
+  end
+  return result
 end
 
 local function spread(entity)

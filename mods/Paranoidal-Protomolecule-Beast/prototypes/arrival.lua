@@ -114,6 +114,40 @@ data:extend
   }
 }
 
+-- What the seed (seed.lua) draws the player's power through: a consumer nobody can see or select, placed by script in a
+-- pole's supply area on the player's force, which the network's statistics list as "Wire resistance" with the copper
+-- cable's icon. Its draw (power_usage, electric_buffer_size) is set by script; it has no item, so it is never infected
+-- or lifted itself. Shaped like the base game's hidden-electric-energy-interface, as a consumer.
+data:extend
+{
+  {
+    type = "electric-energy-interface",
+    name = "beast-wire-resistance",
+    localised_name = {"entity-name.beast-wire-resistance"},
+    icon = "__base__/graphics/icons/copper-cable.png",
+    flags = {"placeable-off-grid", "not-on-map", "not-blueprintable", "not-deconstructable", "not-repairable", "not-flammable", "no-copy-paste", "not-upgradable", "not-in-kill-statistics", "hide-alt-info"},
+    hidden_in_factoriopedia = true,
+    max_health = 1,
+    collision_box = {{0, 0}, {0, 0}},
+    collision_mask = {layers = {}},
+    selection_box = {{0, 0}, {0, 0}},
+    selectable_in_game = false,
+    allow_copy_paste = false,
+    energy_source =
+    {
+      type = "electric",
+      usage_priority = "secondary-input",
+      buffer_capacity = "1kJ",
+      input_flow_limit = "100GW",
+      output_flow_limit = "0W",
+      drain = "0W"
+    },
+    energy_production = "0W",
+    energy_usage = "0W",
+    picture = {filename = "__core__/graphics/empty.png", priority = "extra-high", width = 1, height = 1}
+  }
+}
+
 data:extend
 {
   -- What's actually infecting a thing, which turrets can shoot off without hitting what's underneath. What you see of it is

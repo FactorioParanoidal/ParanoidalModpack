@@ -50,6 +50,7 @@ data:extend
 
   -- Map: the outbreak.
   int("landing-minutes", "runtime-global", "d-a", 5, 1, 120),
+  int("seed-minutes", "runtime-global", "d-a2", 60, 5, 1000),
   int("lair-min-distance", "runtime-global", "d-b", 150, 50, 2000),
   int("lair-max-distance", "runtime-global", "d-c", 300, 50, 2000),
   int("buildup-min-minutes", "runtime-global", "d-d", 30, 0, 1000),
@@ -69,5 +70,7 @@ data:extend
   bool("lair-rails", "runtime-global", "d-r", true),
   bool("lure-station", "runtime-global", "d-s", true),
   bool("rail-raids", "runtime-global", "d-t", true),
-  bool("junction-warning", "runtime-global", "d-u", false)
+  bool("junction-warning", "runtime-global", "d-u", false),
+  bool("power-leech", "runtime-global", "d-v", true),
+  int("leech-max-mw", "runtime-global", "d-w", 50, 1, 100000)
 }
