@@ -183,11 +183,12 @@ for _, technology in pairs(data.raw.technology) do
     end
 end
 
--- Fuel speed and chest slots: at most x8 at the highest quality.
+-- Fuel speed and chest slots: at most x8 at the highest quality; module effects at most x5.
 do
     local caps = require("prototypes.quality-caps")
     log("IC: fuels with capped quality speed bonus: " .. caps.fuel(data.raw))
     log("IC: qualities with capped chest slots: " .. caps.inventory(data.raw))
+    log("IC: qualities with capped module effects: " .. caps.modules(data.raw))
     log("IC: qualities with 2.0 rolling stock (no locomotive power/speed bonus): " .. caps.rolling_stock(data.raw))
 end
 

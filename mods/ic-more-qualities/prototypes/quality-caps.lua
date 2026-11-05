@@ -1,7 +1,12 @@
 -- Paranoidal (2026-10-31): at the highest quality fuel acceleration, fuel top speed and chest slots are at
--- most x8 of normal, growing linearly with the quality level.
+-- most x8 of normal, growing linearly with the quality level. 2026-11-05: module effects at most x5 (M.modules).
 local M = {}
 M.factor = 8
+-- Module effects (user decision 2026-11-05, variant B): the engine default 1 + 0.3 x level gave x40.9 at the
+-- top quality (level 133), e.g. speed module 5 +2045% speed with its +87% power unchanged.
+M.module_factor = 5
+M.module_fields = {"module_speed_multiplier", "module_productivity_multiplier", "module_quality_multiplier",
+    "module_consumption_multiplier", "module_pollution_multiplier"}
 
 local function top_level(raw)
     local top = 0
@@ -51,6 +56,27 @@ function M.inventory(raw)
         end
     end
     return changed
+end
+
+-- Module effects of positive qualities: at most x5 at the highest quality, growing linearly over the tier number
+-- (like the attack range): 1 + 4 x tier / tiers, tiers sorted by level, then name. By level almost all of the growth
+-- would go to the last tiers, whose levels jump by 8 ... 24. Every module effect the engine scales by quality
+-- (QualityPrototype::module_*_multiplier, default default_multiplier) gets the same value; defects keep theirs
+-- (modules are never defective).
+function M.modules(raw)
+    local positive = {}
+    for _, quality in pairs(raw.quality or {}) do
+        if (quality.level or 0) > 0 then positive[#positive + 1] = quality end
+    end
+    table.sort(positive, function(a, b)
+        if a.level ~= b.level then return a.level < b.level end
+        return a.name < b.name
+    end)
+    for tier, quality in ipairs(positive) do
+        local multiplier = 1 + (M.module_factor - 1) * tier / #positive
+        for _, field in ipairs(M.module_fields) do quality[field] = multiplier end
+    end
+    return #positive
 end
 
 -- Factorio 2.1 (user decision D29 "A", 2026-11-03): keep the 2.0 rolling stock. 2.1 added quality multipliers for
