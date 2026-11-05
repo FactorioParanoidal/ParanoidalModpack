@@ -64,4 +64,29 @@ for _, level in ipairs(levels) do
 end
 assert(caps.modules({}) == 0)
 
-print("Module caps: 40 tiers x1.1 ... x5, linear over the tier, 5 fields, normal and defects untouched. Mocks only.")
+-- Robot battery (variant V): 1 + 9 x tier / tiers, x10 at the top; normal and defects untouched.
+raw.quality["ic-defect-3"].flying_robot_max_energy_multiplier = 0.6
+assert(caps.robots(raw) == 42)
+assert(near(by_level[2].flying_robot_max_energy_multiplier, 1 + 9 * 1 / 42))
+assert(near(raw.quality.a_twin.flying_robot_max_energy_multiplier, 1 + 9 * 4 / 42))
+assert(near(by_level[133].flying_robot_max_energy_multiplier, 10))
+assert(raw.quality.normal.flying_robot_max_energy_multiplier == nil)
+assert(raw.quality["ic-defect-3"].flying_robot_max_energy_multiplier == 0.6)
+assert(raw.quality["quality-unknown"].flying_robot_max_energy_multiplier == nil)
+assert(caps.robots(real) == 40)
+for level, expected in pairs({[2] = 1.225, [5] = 1.9, [12] = 3.25, [24] = 5.5, [34] = 6.625, [49] = 7.75,
+    [69] = 8.875, [109] = 9.775, [133] = 10}) do
+    assert(near(real.quality["q" .. level].flying_robot_max_energy_multiplier, expected), level)
+end
+previous = 1
+for _, level in ipairs(levels) do
+    local value = real.quality["q" .. level].flying_robot_max_energy_multiplier
+    assert(value > previous)
+    previous = value
+end
+-- The robot cap does not touch the module values.
+assert(near(real.quality.q133.module_speed_multiplier, 5))
+assert(caps.robots({}) == 0)
+
+print("Module caps: 40 tiers x1.1 ... x5, 5 fields; robot battery x1.225 ... x10; linear over the tier, "
+    .. "normal and defects untouched. Mocks only.")
