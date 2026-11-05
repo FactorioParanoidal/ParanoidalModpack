@@ -42,11 +42,10 @@ function ModelBuilder.addRecipeIntoProductionBlock(model, block, recipe_name, re
                 local default_factory = User.getDefaultFactory(ModelRecipe)
                 local is_match = false
                 if default_factory ~= nil then
-                    local factory_prototype = EntityPrototype(default_factory.name)
-                    local factory_categories = factory_prototype:getCraftingCategories()
-                    local recipe_categories = recipe_prototype:getAllCategories()
-                    for _, recipe_category in pairs(recipe_categories) do
-                        if factory_categories[recipe_category] then
+                    -- Paranoidal: match against the machines allowed for this recipe; crafting_categories
+                    -- exist only on crafting machines, so drills/pumps never matched and fell back to the slowest machine.
+                    for _, allowed_machine in pairs(recipe_prototype:getAllowedMachines()) do
+                        if allowed_machine.name == default_factory.name then
                             is_match = true
                             break
                         end
@@ -520,23 +519,18 @@ end
 function ModelBuilder.setFactoryBlock(block, current_recipe)
     if current_recipe ~= nil then
         local default_factory_mode = User.getParameter("default_factory_mode")
-        local factory_prototype = EntityPrototype(current_recipe.factory.name)
-        local factory_categories = factory_prototype:getCraftingCategories()
-        local factory_ingredient_count = factory_prototype:getIngredientCount()
+        local factory_name = current_recipe.factory.name
         for _, child in pairs(block.children) do
             if child.children == nil then -- not a block
                 local recipe = child
                 if recipe ~= current_recipe then
                     local prototype_recipe = RecipePrototype(recipe)
-                    local recipe_categories = prototype_recipe:getAllCategories()
-                    local recipe_ingredient_count = prototype_recipe:getIngredientCount()
-                    --- check ingredient limitation
-                    if factory_ingredient_count < recipe_ingredient_count then
-                        -- Skip
-                    elseif default_factory_mode ~= "category" or prototype_recipe:getCategory() == RecipePrototype(current_recipe):getCategory() then
+                    if default_factory_mode ~= "category" or prototype_recipe:getCategory() == RecipePrototype(current_recipe):getCategory() then
+                        -- Paranoidal: match against the machines allowed for this recipe (they already pass the
+                        -- ingredient limit); crafting_categories exist only on crafting machines, so drills/pumps never matched.
                         local is_match = false
-                        for _, recipe_category in pairs(recipe_categories) do
-                            if factory_categories[recipe_category] then
+                        for _, allowed_machine in pairs(prototype_recipe:getAllowedMachines()) do
+                            if allowed_machine.name == factory_name then
                                 is_match = true
                                 break
                             end
