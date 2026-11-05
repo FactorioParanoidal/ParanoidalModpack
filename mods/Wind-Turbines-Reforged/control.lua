@@ -64,17 +64,26 @@ local function power_text(joules_per_tick)
     return { "twr.kw", string.format("%.1f", kw) }
 end
 
+-- Quality bonus (user decision 2026-11-05): +1/12 of the power per quality level, x2 at the quality
+-- "Rare" (rare-t5, level 12 in ic-more-qualities) instead of the engine's +30% per level (x4.6 there).
+-- Level 0 keeps the engine multiplier: standard x1, defects of ic-more-qualities below it.
+local QUALITY_RULE = 2
+local function max_power(turbine)
+    local quality = turbine.quality
+    local multiplier = quality.level > 0 and 1 + quality.level / 12 or quality.default_multiplier
+    return tiers[turbine.name].kw * 1000 / 60 * multiplier
+end
+
 -- Registers the turbine and makes sure its hidden pole and base exist. Safe to call again.
 local function attach(turbine)
     local tier = tiers[turbine.name]
     local surface, position = turbine.surface, turbine.position
-    -- Quality multiplier of the engine: defects (ic-more-qualities) lower it, positive tiers raise it.
-    local max = tier.kw * 1000 / 60 * turbine.quality.default_multiplier
+    local max = max_power(turbine)
     -- The buffer holds one tick of the strongest seasonal output, otherwise it would cut it.
     turbine.electric_buffer_size = max * MAX_MULTIPLIER
     turbine.power_production = output(storage.wind) * max
     local record = { entity = turbine, name = turbine.name, surface = surface, position = position, max = max,
-        seasonal_buffer = true }
+        seasonal_buffer = true, quality_rule = QUALITY_RULE }
     for _, name in ipairs({ tier.pole, tier.base }) do
         local companion = surface.find_entity(name, position)
             or surface.create_entity({ name = name, position = position, force = turbine.force })
@@ -156,6 +165,12 @@ local function update()
                 -- Turbines registered before the seasons had a buffer of exactly one tick at full wind.
                 turbine.electric_buffer_size = record.max * MAX_MULTIPLIER
                 record.seasonal_buffer = true
+            end
+            if record.quality_rule ~= QUALITY_RULE then
+                -- Turbines registered under the engine quality multiplier get the current rule.
+                record.max = max_power(turbine)
+                turbine.electric_buffer_size = record.max * MAX_MULTIPLIER
+                record.quality_rule = QUALITY_RULE
             end
             turbine.power_production = output(wind) * record.max
             turbine.custom_status = status

@@ -2,6 +2,7 @@
 Version: 1.0.0
 Date: 2026-10-14
   Features:
+    - Quality raises the power by 1/12 per quality level (x2 at the quality "Rare V" / "Редкое", rare-t5) instead of the engine's +30% per level (x4.6 there, x40.9 at the highest quality); standard and defects unchanged. Turbines already built get the new power at the next wind update. The descriptions name the quality multipliers.
     - Seasons of NightBrightness: the wind is x1.33 in winter and x0.9 in summer (x1 in spring and autumn). The step happens when NightBrightness announces the season. Output may exceed the nameplate power; the turbine buffer holds the strongest season. The window shows the seasonal multiplier.
     - Remote interface "Wind-Turbines-Reforged": get_season_multiplier(season), get_wind() (share before the season, multiplier, output, speed).
   Changes:
