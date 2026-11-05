@@ -1,6 +1,11 @@
 ---------------------------------------------------------------------------------------------------
 Version: 8.1.28
   Changes:
+    - Sawdust balance: the sawdust fuel brick recipe now makes wood pellets (8 sawdust -> 1 pellet, 2 s, same technology); charcoal from sawdust: 50 sawdust -> 11 charcoal, 33 s (was 24 -> 5, 15 s); charcoal from wood pellets: 4 -> 7, 4 s (was 2 -> 3, 2 s); wood pellets from cellulose fiber take 16 fiber instead of 12 (no energy gain). Fuel pollution: sawdust 200% (was 140%), wood 250% (was 175%), wood pellets 150% (Beta 8 110%, was 100% after the ID rename), cellulose fiber 185% (was 140%).
+    - Solid fuel: vehicle acceleration 110% (was 105%) and top speed 105% (was 100%). Coke pellets stay better (110% / 120%).
+    - Diesel fuel recipe: 25 liquid fuel instead of 20 (with 20 methane and 1 mineral catalyst -> 25 diesel fuel). The step multiplied fuel energy by 1.66, now by 1.42; diesel fuel keeps 2.25 MJ.
+    - Diesel generator: burns only diesel fuel (was any fuel fluid) at 85% efficiency (was 100%); full 4 MW takes about 2.1 diesel fuel per second.
+    - Battery electric locomotive and maglev locomotive: quality may change their top speed (quality_affects_max_speed), like every other locomotive of the build. The battery electric locomotive copied the vanilla one before the quality DLC set the flag, the maglev locomotive is defined from scratch without it. Their hidden multiple-unit twins get it too. Used by the locomotive quality bonus of ic-more-qualities (top speed up to x2 at the highest quality).
     - MIRV2 ballistic missile silo: price between MIRV 2.1.0 and the rocket silo of the build (200 concrete, 75 electric engines, 50 processing units, 50 titanium pipes, 250 nitinol, 100 advanced processing units, 25 low density structures, 50 heat shield tiles, 50 assembling machines 6); in the combat menu next to the M.I.R.V.
   Compatibility:
     - Factorio 2.1: the flare stack and clarifier get one output slot so the engine accepts their void recipes with a zero-probability item result. Restores automatic gas and water disposal; the recipes still produce no items.

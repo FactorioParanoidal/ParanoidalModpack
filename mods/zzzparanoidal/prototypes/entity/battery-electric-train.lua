@@ -103,6 +103,8 @@ data:extend({
 		max_speed = 2,
 		5,
 		max_power = "1800kW",
+		-- Like every other locomotive of the build (copies of the vanilla one): quality may change the top speed.
+		quality_affects_max_speed = true,
 		reversing_power_modifier = 1,
 		braking_force = 40,
 		friction_force = 0.50,
@@ -557,3 +559,10 @@ data:extend({
 		equipment_grid = "large-equipment-grid",
 	},
 })
+
+-- BatteryElectricTrain loads before the quality DLC and copies the vanilla locomotive before quality's data.lua sets
+-- quality_affects_max_speed on it, so its locomotive alone was left without the flag. Set here, in the data stage,
+-- so that the hidden MultipleUnitTrainControl twins (deep copies in its data-final-fixes) get it too.
+if data.raw.locomotive["bet-locomotive"] then
+	data.raw.locomotive["bet-locomotive"].quality_affects_max_speed = true
+end

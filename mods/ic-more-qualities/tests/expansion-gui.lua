@@ -80,6 +80,8 @@ local function find_child(self, key)
 end
 new_element = function(params, parent)
     local element = {style = {}, valid = true, parent = parent, children = {}}
+    -- LuaStyle.column_alignments of a table: read-only, changed by index (runtime API 2.1.24).
+    if params.type == "table" then element.style.column_alignments = {} end
     for key, value in pairs(params) do if key ~= "style" then element[key] = value end end
     element.add = function(child_params)
         local kind = child_params.type
@@ -236,6 +238,9 @@ do
     local radios = 0
     for _, child in ipairs(rawget(inside, "children")) do if child.type == "radiobutton" then radios = radios + 1 end end
     assert(radios == 3 and inside.ic_mode_table)
+    -- The workshop window keeps its width cap and the plain table.
+    assert(player.gui.relative.ic_quality_relative.style.maximal_width == 420)
+    assert(next(inside.ic_mode_table.style.column_alignments) == nil)
     gui.on_checked({player_index = 1, element = {valid = true, state = true, tags = {ic = "ws-mode", mode = "precise"}}}, {})
     assert(workshop.mode_name(record) == "precise")
     local cells = rawget(player.gui.relative.ic_quality_relative.ic_inside.ic_mode_table, "children")
@@ -326,6 +331,12 @@ do
     assert(cells[2].caption == "I" and cells[3].caption == "II" and cells[4].caption == "III")
     assert(cells[3].style.font_color and not cells[2].style.font_color and not cells[4].style.font_color)
     assert(rawget(frame, "caption") == nil)
+    -- No width cap (live values did not fit into 420); mode columns right-aligned with a minimal width.
+    assert(frame.style.maximal_width == nil, "mode panel has a width cap")
+    local alignments = inside.ic_mode_table.style.column_alignments
+    assert(alignments[1] == nil and alignments[2] == "right" and alignments[4] == "right")
+    assert(cells[2].style.minimal_width == 64 and cells[2].style.horizontal_align == "right")
+    assert(cells[1].style.minimal_width == nil, "row name column has a minimal width")
     -- Live refresh: the quality chance follows the machine effects without reopening.
     local tbl = inside.ic_mode_table
     assert(tbl.quality_1.caption == "4.08%" and tbl.quality_2.caption == "11.75%" and tbl.quality_3.caption == "34.07%", tbl.quality_3.caption)

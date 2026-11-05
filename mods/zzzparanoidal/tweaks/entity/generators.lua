@@ -1,6 +1,10 @@
 --увеличиваем максимальное потребление топлива дизель-генератором, так как уменьшена его энергоёмкость
 if mods.KS_Power then
-  data.raw.generator["petroleum-generator"].fluid_usage_per_tick = 5.1613 / 60
+  local generator = data.raw.generator["petroleum-generator"]
+  generator.fluid_usage_per_tick = 5.1613 / 60
+  -- 2026-11-05 user decision: diesel fuel only, 85% efficiency (was any fuel fluid at 100%).
+  generator.effectivity = 0.85
+  generator.fluid_box.filter = "diesel-fuel"
 end
 --Увеличиваем выработку энергии орбитальным приёмником, так как иначе он получается очень дорогим и невыгодным
 local entity = data.raw["electric-energy-interface"]["orbital-power-reciver"]

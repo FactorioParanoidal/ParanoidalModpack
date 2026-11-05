@@ -1,6 +1,7 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.26.0
   Locale:
+    - Solid fuel description (zzzz-user-overrides.cfg, Bio_Industries.item-description.cfg, en zzzz-beta8-existing-pairs.cfg) is shortened to "Немного ускоряет транспорт." / "Slightly speeds up vehicles.": the old text claimed less pollution than wood bricks and referred to the item wood-bricks, which no longer exists. Bio_Industries.recipe-name.cfg: bi-solid-fuel is spelled "Твёрдое".
     - zzzz-user-overrides.cfg: MIRV2 ballistic missile silo: description of the silo, of the РГЧ ИН missile and of its technology, and the MIRV2 mod description (same text as in mods-metadata/!descriptions.json) describe the silo instead of the launch on an ordinary rocket.
     - zzzz-user-overrides.cfg: angels-alloys-smelting-1 gets its own description: the technology unlocks no recipes, it only leads to levels 2 and 3 with the gunmetal, invar and cobalt-steel coils.
     - zzzz-user-overrides.cfg: Flammable_Oils_QUICKFIX and the fire safety turrets of zzzparanoidal are replaced by paranoidal-flammable-fluids: its mod name and description are added (same text as in the mod), the Flammable_Oils_QUICKFIX name and description are removed; the flo-* setting keys are unchanged.
