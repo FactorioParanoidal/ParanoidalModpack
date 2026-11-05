@@ -1,4 +1,14 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.1.0
+Date: 05. 11. 2026
+  Features:
+    - Ballistic missile silo ported from MIRV 2.1.0 (Klonan), without its space platform part: a 3x3 building that builds one M.I.R.V at a time (fixed recipe, 60 s); when the missile is ready an invisible launcher with one shot stands on the silo, the targeting remote fires it, the missile rises out of the silo and the warheads fall on the target. Unlocked by the M.I.R.V technology; old saves with the technology researched get the recipe at the configuration change.
+  Changes:
+    - The M.I.R.V recipe is made only in the ballistic missile silo (category ballistic-missile), one strike per missile. A M.I.R.V built earlier can still be sent up in a rocket and leaves a launcher with five shots as before.
+    - Graphics helpers scale_vector and scale_graphics taken from the tf_util of MIRV 2.1.0.
+  Locale:
+    - en/ru: ballistic missile silo name and description; M.I.R.V and technology descriptions follow the silo.
+---------------------------------------------------------------------------------------------------
 Version: 1.0.0
 Date: 15. 10. 2026
   Locale:

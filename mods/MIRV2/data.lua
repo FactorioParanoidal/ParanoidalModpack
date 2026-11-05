@@ -24,9 +24,10 @@ data:extend({
   {
     type = "recipe",
     name = "mirv-rocket",
-    energy_required = 10,
+    -- Built only in the ballistic missile silo (silo.lua), one missile per strike, as in MIRV 2.1.0
+    energy_required = 60,
     enabled = false,
-    categories = {"crafting"},
+    categories = {"ballistic-missile"},
     ingredients =
     {
       {type = "item", name = "atomic-bomb", amount = 20},
@@ -153,6 +154,10 @@ data:extend({
     icon_size = 128,
     effects =
     {
+      {
+        type = "unlock-recipe",
+        recipe = "ballistic-missile-silo"
+      },
       {
         type = "unlock-recipe",
         recipe = "mirv-rocket"
@@ -728,3 +733,5 @@ local artillery_flare = data.raw["artillery-flare"]["artillery-flare"]
 if artillery_flare then
   artillery_flare.shot_category = artillery_flare.shot_category or "artillery-shell"
 end
+
+require("silo")
