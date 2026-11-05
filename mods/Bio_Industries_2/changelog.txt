@@ -3,6 +3,7 @@ Version: 2.0.34
 Date: 24.02.2026
   Changes:
     - Add glass to the bio nursery if it exists
+    - ru/en: the solid fuel description is shortened to "Немного ускоряет транспорт." / "Slightly speeds up vehicles."; ru recipe name bi-solid-fuel is spelled "Твёрдое" (Paranoidal local change)
     - Alien Biomes integration (optional dependency, removing AB tiles from blueprints) follows the merged Alien-biomes-Reforged mod instead of alien-biomes (Paranoidal local fix)
     - Bio farm MK2/MK3 (zzzparanoidal) are compound entities like MK1: they have the hidden connector pole, solar panel and lamp of the farm, so an upgraded farm keeps its roof panel, light and pole connection. A migration gives existing MK2/MK3 farms these entities (Paranoidal local change)
     - Runtime script split into modules (control_compound, control_tree, control_arboretum, control_musk_floor); the unused libs/util_ext.lua and the never called settings_changed.bio_garden are removed (Paranoidal local cleanup)
