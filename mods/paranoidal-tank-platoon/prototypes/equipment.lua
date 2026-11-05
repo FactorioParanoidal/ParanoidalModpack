@@ -138,7 +138,7 @@ if shared.setting("vehicle-nuclear-reactor-enable") then
     item(name, {{icon = base_icon .. "nuclear-reactor.png", tint = {r = 0.7, g = 0.7, b = 0.7, a = 1}}, overlay},
       "equipment", "a[energy-source]-v[vehicle]-e[nuclear-reactor]", 10),
     burner_generator({
-      name = name, size = 4, power = "20MW",
+      name = name, size = 4, power = "10MW", -- Paranoidal balance 2026-11-05 (was 20MW)
       sprite = {filename = "__base__/graphics/entity/nuclear-reactor/reactor.png", width = 302, height = 318, priority = "medium"},
       burner = {type = "burner", fuel_categories = {"nuclear"}, effectivity = 0.5, fuel_inventory_size = 1, burnt_inventory_size = 1}
     }),
