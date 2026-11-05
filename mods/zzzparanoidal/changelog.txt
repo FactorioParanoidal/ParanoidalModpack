@@ -1,5 +1,7 @@
 ---------------------------------------------------------------------------------------------------
 Version: 8.1.28
+  Changes:
+    - MIRV2 ballistic missile silo: price between MIRV 2.1.0 and the rocket silo of the build (200 concrete, 75 electric engines, 50 processing units, 50 titanium pipes, 250 nitinol, 100 advanced processing units, 25 low density structures, 50 heat shield tiles, 50 assembling machines 6); in the combat menu next to the M.I.R.V.
   Compatibility:
     - Factorio 2.1: the flare stack and clarifier get one output slot so the engine accepts their void recipes with a zero-probability item result. Restores automatic gas and water disposal; the recipes still produce no items.
     - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.

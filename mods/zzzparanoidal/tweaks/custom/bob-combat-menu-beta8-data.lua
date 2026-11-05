@@ -281,6 +281,7 @@ return {
             {["name"] = "bob-laser-robot", ["order"] = "08", ["icon"] = {["icon"] = "__zzzparanoidal__/graphics/bob-combat-menu-beta8/117198f25cb902788f66.png", ["icon_size"] = 64}},
         }},
         {group = "combat", subgroup = "paranoidal-split-combat-mirv", order = "a-23", recipes = {
+            {["name"] = "ballistic-missile-silo", ["order"] = "00"}, -- MIRV2 silo, 2026-11-05 (not in Beta 8)
             {["name"] = "mirv-rocket", ["order"] = "01"},
             {["name"] = "mirv-targeting-remote", ["order"] = "02"},
         }},
