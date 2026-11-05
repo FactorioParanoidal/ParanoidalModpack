@@ -107,6 +107,7 @@ Date: 2026-10-26
     - Trail compartments and the previous expedition are no longer wiped out by ruins: AbandonedRuins clears the whole area of a ruin of every entity on the tick after the chunk generation, and plain ruins start 400 tiles from the spawn (the hydroponics, the engineering bay and the Axiom-6 lie there). Trail objects are now placed one scheduler pass after their chunks are ready, when the ruins are already there. A trail object that is gone leaves a log line with the tick and the cause (died with its killer, or taken apart / removed by a script).
     - The crater pond of the engineering bay no longer removes entities in its way (another compartment, a wreck): its water tiles skip anything that is not a tree, rock, resource or item on the ground.
     - The captain's safe chest has a bar (it had a plain inventory, so its lock did not keep inserters from its contents).
+    - Biologist: the kit seeds are normal quality (they were one random step +1..+4 better). Seeds and seedlings are always normal since the zzzparanoidal anti-exploit rules of 2026-10-31; the kit put them straight into the inventory and bypassed that. Nothing is given instead; the profession text no longer mentions it.
   Compatibility:
     - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
     - Paranoidal port to Factorio 2.1: recycling recipe generation and recycling icons are taken from the built-in recycler mod (__recycler__/recycling.lua, __recycler__/graphics/icons/); recycling code checks mods["recycler"] instead of mods["quality"].

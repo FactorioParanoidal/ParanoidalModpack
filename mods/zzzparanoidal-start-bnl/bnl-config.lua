@@ -393,7 +393,7 @@ config.professions = {
             researched = {"tpr-smog-protection-1", "tpr-smog-protection-2"},
             half = {"bi-tech-bio-farming", "bi-tech-timber", "lamp"},
             -- the respirator goes into the armor slot
-            items = {{"respirator", 1}, {"bi-seed", 100, quality_steps = {1, 4}}, {"bi-bio-greenhouse", 2},
+            items = {{"respirator", 1}, {"bi-seed", 100}, {"bi-bio-greenhouse", 2},
                 {"water-barrel", 20}},
             recipes = {"bi-seedling-1", "bi-seed-1"},
             biofarm = true,
