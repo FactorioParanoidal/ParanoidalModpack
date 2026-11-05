@@ -538,7 +538,27 @@ end
 -- BIG ZOOM
 local function big_zoom(player)
 	if settings.global["disable-zoom"].value then
-		player.zoom = settings.get_player_settings(player)["zoom-level"].value
+		local zoom = settings.get_player_settings(player)["zoom-level"].value
+		-- Paranoidal: Factorio 2.x clamps player.zoom to the controller's zoom limits (read values are clamped), so the
+		-- far zoom of 1.1 stopped at the normal limit. For the character controller the shortcut first returns the
+		-- furthest limit and the furthest game view to the engine defaults, then, if the setting is further, widens both
+		-- to the setting (no switch to chart view). The engine remembers these limits per controller, so the mouse wheel
+		-- reaches exactly the zoom of the last shortcut use, never further.
+		if player.controller_type == defines.controllers.character then
+			local limits = player.zoom_limits
+			limits.furthest = nil
+			limits.furthest_game_view = nil
+			player.zoom_limits = limits
+			player.zoom = zoom
+			if player.zoom > zoom * 1.001 then
+				limits.furthest = {zoom = zoom}
+				limits.furthest_game_view = {zoom = zoom}
+				player.zoom_limits = limits
+				player.zoom = zoom
+			end
+		else
+			player.zoom = zoom
+		end
 	else
 		player.print({"", {"error.error-message-box-title"}, ": ", {"controls.alt-zoom-out"}, " ", {"gui-mod-info.status-disabled"}})
 	end

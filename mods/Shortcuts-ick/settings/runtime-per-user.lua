@@ -92,7 +92,7 @@ data:extend(
 		localised_name = {"", "[color=orange]", {"controls.alt-zoom-out"}, ":[/color] ", {"Shortcuts-ick.zoom-limit"}},
 		order = "b[zoom]",
 		type = "double-setting",
-		default_value = 0.1,
+		default_value = 0.2, -- Paranoidal: 0.1 in the original mod
 		minimum_value = 0.032, -- actual lower limit must be somewhere between 0.031250 and 0.031251
 		maximum_value = 20.0
 	},

@@ -10,6 +10,8 @@ Date: 15.11.2024
     - Paranoidal port to Factorio 2.1: selection modes with blueprint/deconstruct also list any-entity and any-tile, which 2.0 implied and 2.1 no longer does.
     - Factorio 2.1: the environment deconstruction planner no longer sets entity_filter_count (removed in 2.1, filter counts are dynamic).
     - Paranoidal port to Factorio 2.1: the name of the zoom-level setting takes the word "limit" from this mod's locale (Shortcuts-ick.zoom-limit, with the 2.0 engine translations); 2.1 removed the engine key description.module-bonus-limit, so the setting name showed an unknown key.
+    - Paranoidal: "Zoom out of world" reaches its limit setting again (default 0.1, as in 1.1). Factorio 2.x clamps the zoom to the controller's zoom limits, so for the character controller the shortcut returns the furthest zoom and the furthest game view to the engine defaults and widens both to the setting when it is further; the engine remembers them, so the mouse wheel reaches exactly the zoom of the last shortcut use.
+    - Paranoidal: the default of the "Zoom out of world" limit setting is 0.2 (was 0.1).
 
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.6
