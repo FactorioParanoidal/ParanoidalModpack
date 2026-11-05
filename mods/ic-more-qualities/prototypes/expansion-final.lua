@@ -32,6 +32,33 @@ local function find_entity(name)
     entity_cache[name] = false
 end
 
+local function find_equipment(name)
+    for type_name in pairs(defines.prototypes.equipment) do
+        local prototypes = RAW[type_name]
+        if prototypes and prototypes[name] then return prototypes[name] end
+    end
+end
+
+-- Display name of an item as the engine resolves it: own localised_name, item-name key, then the name of
+-- what it places (entity, equipment, tile).
+local function item_localised_name(name, item)
+    if item.localised_name then return item.localised_name end
+    local chain = {"?", {"item-name." .. name}}
+    local entity = item.place_result and find_entity(item.place_result)
+    if entity then chain[#chain + 1] = entity.localised_name or {"entity-name." .. item.place_result} end
+    local equipment_name = item.place_as_equipment_result
+    if equipment_name then
+        local equipment = find_equipment(equipment_name)
+        chain[#chain + 1] = equipment and equipment.localised_name or {"equipment-name." .. equipment_name}
+    end
+    local tile_name = item.place_as_tile and item.place_as_tile.result
+    if tile_name then
+        local tile = RAW.tile and RAW.tile[tile_name]
+        chain[#chain + 1] = tile and tile.localised_name or {"tile-name." .. tile_name}
+    end
+    return chain
+end
+
 -- Workshop and post copy the (possibly rebalanced) assembling machine 1 of the modpack.
 local function copy_stats(target, source, keys)
     if not (target and source) then return end
@@ -187,6 +214,9 @@ local function refinement(raw, finished)
                     recipes[#recipes + 1] = {
                         type = "recipe",
                         name = recipe_name,
+                        -- The engine does not name these recipes after main_product ("Unknown key
+                        -- recipe-name.ic-refine-item-..." in the workshop, user screenshot 2026-11-05).
+                        localised_name = {"recipe-name.ic-refine-item", item_localised_name(name, item)},
                         categories = {names.refine_category},
                         enabled = true,
                         hidden = true,
