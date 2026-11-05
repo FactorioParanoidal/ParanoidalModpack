@@ -22,6 +22,7 @@ Date: 2026-10-30
     - Levels 6 and 7 of the technology had the same order.
   Changes:
     - Removed the obsolete icon_mipmaps and commented-out code.
+    - Paranoidal (decision 2026-11-05): the MIRV2 ballistic missile silo is no space rocket silo and is left alone: its launches never fail and count nothing (no roll; an outcome set by set_next_outcome waits for the next rocket silo launch), no reliability label over it (a label drawn before is removed), no panel next to its window, get_reliability returns nil for it.
   Graphics:
     - Technology icons recompressed with pingo -s4 -quality=45 (already 8-bit palette; pixel-identical, 56.3 -> 54.2 KB); thumbnail.png unchanged.
   Compatibility:

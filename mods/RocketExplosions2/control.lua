@@ -20,6 +20,7 @@
 -- no fire burns within 16 tiles (at most 10 minutes): a burning ground fire would otherwise finish it, and
 -- a lost site or silo leaves a ghost nothing can build.
 -- Launches on Blueprint Sandboxes surfaces never fail and count nothing.
+-- Silos of EXEMPT_SILOS (the MIRV2 ballistic missile silo) are left alone: no roll, no label, no panel, no counts.
 --
 -- storage.forces[force index] = {failures, nuclear, blast, accident, won, forced}
 -- storage.sites["surface:x:y"] = {launches, perfect}
@@ -41,6 +42,13 @@ local QUIPS = {
 	nuclear = 8, blast = 8, accident = 8, success = 10, first = 4, perfect = 4, rollback = 5,
 }
 local DEBRIS = 6
+-- Rocket-silo type entities that are no space rockets (Paranoidal decision 2026-11-05): a ballistic missile flies to a
+-- target on the map, its launch never fails and counts for nothing here. The type filter of the events still sees them.
+local EXEMPT_SILOS = {["ballistic-missile-silo"] = true}
+
+local function exempt(silo)
+	return EXEMPT_SILOS[silo.name] == true
+end
 
 local function setting(name)
 	return settings.global[name].value
@@ -228,8 +236,20 @@ local function update_label(record)
 	return true
 end
 
+local function forget(unit_number)
+	local record = storage.silos[unit_number]
+	if record and record.label and record.label.valid then
+		record.label.destroy()
+	end
+	storage.silos[unit_number] = nil
+end
+
 local function track(silo)
 	if not (silo and silo.valid and silo.type == "rocket-silo" and silo.unit_number) then
+		return
+	end
+	if exempt(silo) then
+		forget(silo.unit_number) -- a label drawn before the exemption
 		return
 	end
 	local record = storage.silos[silo.unit_number]
@@ -246,6 +266,8 @@ local function update_labels(force)
 		local silo = record.entity
 		if not (silo and silo.valid) then
 			storage.silos[unit_number] = nil
+		elseif exempt(silo) then
+			forget(unit_number)
 		elseif not force or silo.force == force then
 			update_label(record)
 		end
@@ -264,7 +286,7 @@ local function build_panel(player, silo)
 	if relative[GUI] then
 		relative[GUI].destroy()
 	end
-	if in_sandbox(silo) then
+	if in_sandbox(silo) or exempt(silo) then
 		return
 	end
 	local r = reliability(silo)
@@ -568,7 +590,8 @@ end
 
 script.on_event(defines.events.on_rocket_launch_ordered, function(event)
 	local silo = event.rocket_silo
-	if not (silo and silo.valid) or in_sandbox(silo) then
+	-- before the forced outcome is taken: it waits for the next launch of a real rocket silo
+	if not (silo and silo.valid) or in_sandbox(silo) or exempt(silo) then
 		return
 	end
 	local force = silo.force
@@ -703,7 +726,7 @@ end)
 remote.add_interface("RocketExplosions2", {
 	-- Table of the success chance parts for a rocket silo (see reliability()).
 	get_reliability = function(silo)
-		if silo and silo.valid and silo.type == "rocket-silo" then
+		if silo and silo.valid and silo.type == "rocket-silo" and not exempt(silo) then
 			return reliability(silo)
 		end
 	end,
