@@ -10,7 +10,7 @@ function migration.packed_factory(packed_subfactory)
             elseif packed_line.beacon and packed_line.beacon.module then
                 local beacon = packed_line.beacon
                 beacon.Module = {objects={beacon.module}, class="Collection"}
-                beacon.module_count = module.amount
+                beacon.module_count = beacon.module.amount
             end
         end
     end

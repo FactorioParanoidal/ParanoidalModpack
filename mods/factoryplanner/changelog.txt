@@ -5,6 +5,8 @@ Date: 23. 10. 2026
     - ru: the mod name and the mod list description are the same as in ParanoidalLocale (format "English title (Russian translation)"), so the mod reads the same with or without it.
   Bugfixes:
     - Fixed a crash when loading a save after a mod change removed items (#931) (Thanks GreenTech-Solutions!)
+    - Paranoidal: the 1.1.27 export string migration read the undefined global module instead of the beacon's module,
+      so importing an export string from a version before 1.1.27 with beacon modules failed with "migration failure".
 
 ---------------------------------------------------------------------------------------------------
 Version: 2.1.20
