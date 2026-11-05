@@ -31,4 +31,5 @@ data:extend(
     {
       {type = "item", name = "fluid-level-indicator-st-bobs-plastic", amount = 1}
     }
-  })
+  }
+})
