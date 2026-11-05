@@ -1,6 +1,7 @@
 ---------------------------------------------------------------------------------------------------
 Version: 8.1.28
   Changes:
+    - Solid fuel: vehicle acceleration 110% (was 105%) and top speed 105% (was 100%). Coke pellets stay better (110% / 120%).
     - Diesel fuel recipe: 25 liquid fuel instead of 20 (with 20 methane and 1 mineral catalyst -> 25 diesel fuel). The step multiplied fuel energy by 1.66, now by 1.42; diesel fuel keeps 2.25 MJ.
     - Diesel generator: burns only diesel fuel (was any fuel fluid) at 85% efficiency (was 100%); full 4 MW takes about 2.1 diesel fuel per second.
     - Battery electric locomotive and maglev locomotive: quality may change their top speed (quality_affects_max_speed), like every other locomotive of the build. The battery electric locomotive copied the vanilla one before the quality DLC set the flag, the maglev locomotive is defined from scratch without it. Their hidden multiple-unit twins get it too. Used by the locomotive quality bonus of ic-more-qualities (top speed up to x2 at the highest quality).
