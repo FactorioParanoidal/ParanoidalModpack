@@ -496,15 +496,16 @@ local function anchor_of(entity, gui_type)
 end
 
 -- help: tooltip of a native info icon next to the title; kind: the panel can be collapsed with a
--- close button (the title is then drawn by the panel itself).
-local function relative_frame(player, entity, gui_type, caption, help, kind)
+-- close button (the title is then drawn by the panel itself). wide: no width cap, the frame follows
+-- its content (the mode table with live values and Russian row names did not fit into 420).
+local function relative_frame(player, entity, gui_type, caption, help, kind, wide)
     local old = player.gui.relative[RELATIVE]
     if old then old.destroy() end
     local frame = player.gui.relative.add({
         type = "frame", name = RELATIVE, direction = "vertical", caption = not (help or kind) and caption or nil,
         anchor = anchor_of(entity, gui_type), tags = {unit = entity.unit_number},
     })
-    frame.style.maximal_width = 420
+    if not wide then frame.style.maximal_width = 420 end
     if help or kind then
         local bar = frame.add({type = "flow", name = "ic_header", direction = "horizontal"})
         bar.style.vertical_align = "center"
@@ -553,7 +554,9 @@ end
 
 -- Radiobuttons I-III and a table with a column per mode; the column of the selected mode is bold,
 -- its header coloured. rows: {caption, values, prefix (names cells prefix..index), tooltips}.
-local function mode_selector(inside, current, action, tooltip_suffix, rows, tags)
+-- value_width: the mode columns get at least this width and right-aligned values, so that live
+-- values stand under each other and the columns do not jump when the values change.
+local function mode_selector(inside, current, action, tooltip_suffix, rows, tags, value_width)
     for index, name in ipairs(rules.mode_order) do
         inside.add({type = "radiobutton", caption = mode_caption(index, name),
             tooltip = {"ic-quality." .. action .. "-" .. name .. "-tooltip" .. (tooltip_suffix or "")},
@@ -562,9 +565,17 @@ local function mode_selector(inside, current, action, tooltip_suffix, rows, tags
     local tbl = inside.add({type = "table", name = "ic_mode_table", column_count = 4, style = "bordered_table",
         tags = tags})
     tbl.style.top_margin = 6
+    if value_width then
+        for column = 2, 4 do tbl.style.column_alignments[column] = "right" end
+    end
     local function cell(index, caption, name, tooltip)
-        return tbl.add({type = "label", name = name, caption = caption, tooltip = tooltip,
+        local element = tbl.add({type = "label", name = name, caption = caption, tooltip = tooltip,
             style = rules.mode_order[index] == current and "bold_label" or nil})
+        if value_width then
+            element.style.minimal_width = value_width
+            element.style.horizontal_align = "right"
+        end
+        return element
     end
     label(tbl, "")
     for index in ipairs(rules.mode_order) do
@@ -737,7 +748,8 @@ local function mode_panel(player, entity, gui_type)
     local level = model.completed_level(force.technologies)
     local over = level >= 10
     local suffix = over and "-clean" or ""
-    local inside = relative_frame(player, entity, gui_type, {"ic-quality.mode-title"}, {"ic-quality.mode-help" .. suffix}, "mode")
+    local inside = relative_frame(player, entity, gui_type, {"ic-quality.mode-title"}, {"ic-quality.mode-help" .. suffix}, "mode",
+        true)
 
     -- Worst grade as a number: 0 standard, −1…−5 defects.
     local function worst(mode)
@@ -764,7 +776,8 @@ local function mode_panel(player, entity, gui_type)
     end
     rows[#rows + 1] = {{"ic-quality.row-quality"}, mode_quality_values(entity), "quality_"}
     -- tags.level: the live refresh rebuilds the panel when the control level changes.
-    local tbl = mode_selector(inside, current, "mode", suffix, rows, {level = level})
+    -- 64: room for a bold Russian "28.6 sec" / "9.62 MW"; longer values widen their column.
+    local tbl = mode_selector(inside, current, "mode", suffix, rows, {level = level}, 64)
     for index in ipairs(rules.mode_order) do
         tbl["time_" .. index].tags = {key = times[index][1]}
         tbl["power_" .. index].tags = {key = powers[index][1]}
