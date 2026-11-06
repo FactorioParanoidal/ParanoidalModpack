@@ -11,6 +11,8 @@
 local myMark = {
     type = "simple-entity-with-force",
     name = "PI_mark",
+    -- Paranoidal: a marker drawn over changed inserters, not selectable; hidden from the entity lists (turret priority targets)
+    hidden = true,
     flags = {"not-blueprintable", "not-deconstructable", "not-on-map", "placeable-off-grid"},
     icon = myModName.."/graphics/mark/PI_mark_32.png",
     icon_size = 32,
