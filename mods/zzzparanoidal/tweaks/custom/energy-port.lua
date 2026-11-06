@@ -32,15 +32,6 @@ for name, fields in pairs(port.recipes) do apply(data.raw.recipe[name], fields) 
 for _, entry in ipairs(port.entities) do apply(data.raw[entry.type][entry.name], entry.fields) end
 data.raw.boiler["bi-bio-boiler"].energy_source.effectivity = port.bio_effectivity
 
-for name, fields in pairs(port.cranes) do
-    local crane = assert(data.raw.inserter[name])
-    for key, value in pairs(fields) do
-        if key == "drain" then crane.energy_source.drain = value else crane[key] = value end
-    end
-    -- Beta 8 cranes were non-stack inserters with their own capacity: in 2.0 that is bulk = false
-    -- (set by the data above); geometry/filters stay 2.0.
-end
-
 local prerequisites = data.raw.technology["bob-steam-turbine-1"].prerequisites
 local found = false
 for _, name in ipairs(prerequisites) do if name == "bob-cobalt-processing" then found = true end end

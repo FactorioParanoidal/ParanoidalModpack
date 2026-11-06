@@ -382,6 +382,8 @@ require("tweaks.technology.research-beta8")
 require("tweaks.technology.missing-science-packs") -- недостающие основные пакеты после предшественников
 -- Согласованная энергетика: после OV, restack, flowfix, меню и всех поздних замен.
 require("tweaks.custom.energy-port")
+-- Погрузочные краны по пакетным манипуляторам своего цвета (решение 2026-11-06).
+require("tweaks.entity.inserter-cranes")
 -- Отдельный MK3 с собственным предметом и открытием на существующей технологии IV.
 require("prototypes.electrowinning-cell-3-beta8")
 -- Согласованный аудит зданий: итоговые скорости и слоты, после всех правок сборки.

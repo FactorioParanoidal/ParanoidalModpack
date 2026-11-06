@@ -55,17 +55,6 @@ return {
     {["type"] = "lab", ["name"] = "erp-lab", ["fields"] = {["energy_usage"] = "10000kW"}},
     {["type"] = "roboport", ["name"] = "roboport", ["fields"] = {["charging_energy"] = "1000kW"}},
   },
-  cranes = {
-    ["nco-wide-crane"] = {["stack_size_bonus"] = 197, ["rotation_speed"] = 0.05750000000000001, ["extension_speed"] = 0.05750000000000001, ["energy_per_movement"] = "584350J", ["energy_per_rotation"] = "584350J", ["bulk"] = false, ["drain"] = "1.2kW"},
-    ["nco-crane"] = {["stack_size_bonus"] = 197, ["rotation_speed"] = 0.0161, ["extension_speed"] = 0.0161, ["energy_per_movement"] = "586960J", ["energy_per_rotation"] = "586960J", ["bulk"] = false, ["drain"] = "1.2kW"},
-    ["nco-red-wide-crane"] = {["stack_size_bonus"] = 197, ["rotation_speed"] = 0.0384, ["extension_speed"] = 0.0384, ["energy_per_movement"] = "510420J", ["energy_per_rotation"] = "510420J", ["bulk"] = false, ["drain"] = "1kW"},
-    ["nco-red-crane"] = {["stack_size_bonus"] = 122, ["rotation_speed"] = 0.017199999999999997, ["extension_speed"] = 0.017199999999999997, ["energy_per_movement"] = "200310J", ["energy_per_rotation"] = "200310J", ["bulk"] = false, ["drain"] = "1kW"},
-    ["nco-wide-turbo-crane"] = {["stack_size_bonus"] = 197, ["rotation_speed"] = 0.0768, ["extension_speed"] = 0.0768, ["energy_per_movement"] = "656250J", ["energy_per_rotation"] = "656250J", ["bulk"] = false, ["drain"] = "1.4kW"},
-    ["nco-turbo-crane"] = {["stack_size_bonus"] = 197, ["rotation_speed"] = 0.0216, ["extension_speed"] = 0.0216, ["energy_per_movement"] = "656250J", ["energy_per_rotation"] = "656250J", ["bulk"] = false, ["drain"] = "1.4kW"},
-    ["nco-wide-express-crane"] = {["stack_size_bonus"] = 197, ["rotation_speed"] = 0.096, ["extension_speed"] = 0.096, ["energy_per_movement"] = "729170J", ["energy_per_rotation"] = "729170J", ["bulk"] = false, ["drain"] = "1.6kW"},
-    -- Narrow express: x1.25 the narrow turbo speed (user decision 2026-10-31), not the Beta 8 wide values.
-    ["nco-express-crane"] = {["stack_size_bonus"] = 197, ["rotation_speed"] = 0.027, ["extension_speed"] = 0.027, ["energy_per_movement"] = "729170J", ["energy_per_rotation"] = "729170J", ["bulk"] = false, ["drain"] = "1.6kW"},
-  },
   fluids = {
     -- 2026-10-25 user decision: corrected Beta 8 (KS_Power) table at Beta 8 scale. Ladder: well products
     -- weak and dirty, each refining step gains energy and loses emissions. No fluid has exactly 100%
