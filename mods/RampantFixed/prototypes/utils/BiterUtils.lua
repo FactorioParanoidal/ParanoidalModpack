@@ -591,6 +591,18 @@ function biterFunctions.makeUnitSpawner(attributes)
 		shift = {5, -10}
 	  }	
 	setIcons(o, attributes)
+	-- Paranoidal: the four nest kinds of a faction shared one picture. In the entity lists (turret priority targets) the
+	-- spitter nest shows the vanilla spitter nest, a hive one star and a super-hive two stars in the lower left corner.
+	local kind = attributes.unitName
+	if kind == "spitter-spawner" then
+		o.icon = "__base__/graphics/icons/spitter-spawner.png"
+		o.icons[1].icon = o.icon
+	elseif (kind == "hive") or (kind == "super-hive") then
+		for i = 1, ((kind == "hive") and 1 or 2) do
+			o.icons[#o.icons + 1] = {icon = "__base__/graphics/icons/signal/signal-star.png", icon_size = 64,
+				scale = 0.18, shift = {-10 + (i - 1) * 9, 10}}
+		end
+	end
     return o
 end
 

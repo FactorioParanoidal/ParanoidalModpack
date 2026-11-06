@@ -85,6 +85,18 @@ function thiefUtils.makeDrainCrystal(attributes)
                 radius_minimap_visualisation_color = { r = 0.059, g = 0.092, b = 0.8, a = 0.275 }
             }
     })
+    -- Paranoidal: the ten crystals differ by size and drain only; the tier on the icon (as on the Rampant units) and
+    -- in the name tells them apart in the entity lists (turret priority targets)
+    local tier = attributes.tier
+    if tier then
+        local crystal = data.raw["radar"][name]
+        crystal.icons = {
+            {icon = crystal.icon, icon_size = crystal.icon_size},
+            {icon = "__RampantFixed__/graphics/icons/signal/signal_" .. ((tier < 10) and tier or "A") .. ".png",
+             icon_size = 64, scale = 0.25, shift = {5, -10}}
+        }
+        crystal.localised_name = {"", {"entity-name." .. name}, " ", {"rampant.t" .. tier}}
+    end
     return
 end
 

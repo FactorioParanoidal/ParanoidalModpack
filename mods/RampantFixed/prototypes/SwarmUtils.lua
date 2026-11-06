@@ -2192,6 +2192,8 @@ local function generateSpawnerProxyTemplate(name, health, result_units)
     return {
         type = "unit-spawner",
         name = name,
+        -- Paranoidal: an invisible helper (no graphics, no boxes); hidden from the entity lists (turret priority targets)
+        hidden = true,
         icon = "__base__/graphics/icons/biter-spawner.png",
         icon_size = 64,
         icon_mipmaps = 4,

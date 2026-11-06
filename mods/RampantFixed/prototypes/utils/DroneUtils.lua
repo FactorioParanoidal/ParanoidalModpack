@@ -136,6 +136,22 @@ function droneUtils.makeDrone(attributes)
 	
 	drone.collision_mask =  {layers={trigger_target=true}, not_colliding_with_itself=true}
 	drone.collision_box = {{0, 0}, {0, 0}}
+	-- Paranoidal: every wasp and egg had the same defender icon, cut to its upper left quarter (icon_size 32 of a 64 px
+	-- icon). The full icon in the colour of the sprite with the tier number (as on the units) tells them apart in the
+	-- entity lists (turret priority targets); eggs (egg, worm-egg) show the defender capsule, the drones of worms
+	-- (worm-wasp, worm-egg) a small worm in the lower left corner.
+	local unitName = attributes.unitName or ""
+	drone.icon = string.find(unitName, "egg", 1, true) and "__base__/graphics/icons/defender-capsule.png"
+		or "__base__/graphics/icons/defender.png"
+	drone.icon_size = 64
+	drone.icons = {
+		{icon = drone.icon, icon_size = 64, tint = attributes.tint2},
+		{icon = "__RampantFixed__/graphics/icons/signal/signal_" .. ((attributes.tier < 10) and attributes.tier or "A") .. ".png",
+			tint = attributes.labelTint, scale = 0.25, icon_size = 64, shift = {5, -10}}
+	}
+	if string.sub(unitName, 1, 5) == "worm-" then
+		drone.icons[3] = {icon = "__base__/graphics/icons/small-worm.png", icon_size = 64, scale = 0.2, shift = {-9, 9}}
+	end
     return drone
 end
 

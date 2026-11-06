@@ -136,6 +136,9 @@ function targetDummy.addDummySetters()
 	local scale = small_biter_scale * 0.8
     local DummySetter = util.table.deepcopy(data.raw["unit"]["small-biter"])
 	DummySetter.name = "plasmaDummySetter-rampant"
+	-- Paranoidal: the setters are never spawned; hidden from the entity lists (turret priority targets). The setters
+	-- below are copies of this one and inherit it. The crystals they would make (target dummies) stay visible.
+	DummySetter.hidden = true
     DummySetter.collision_box = {{-0.2*scale, -0.2*scale}, {0.2*scale, 0.2*scale}}
     DummySetter.selection_box = {{-0.4*scale, -0.7*scale}, {0.4*scale, 0.4*scale}}
     DummySetter.attack_parameters["animation"] = biterattackanimation(scale, small_biter_tint1, small_biter_tint2)
