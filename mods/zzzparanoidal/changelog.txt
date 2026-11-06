@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 8.1.28
   Changes:
+    - Technology "Диспетчерская сеть поездов" (cybersyn-train-network) gets its own icon: a train, a station controller and a hologram of the route (graphics/technology/approved-icons/cybersyn-train-network.png, 256x256, lossy pingo -s4 -quality=45, PSNR 35.4 dB).
+    - ru: the recipe signals setting names station controllers instead of Cybersyn.
     - Circuit menu: the Cybersyn constant combinator of the new cybersyn-combinator mod stands in the combinator row right after the Cybersyn combinator (recipe order only).
     - Technology list and its search show every level of chains whose levels unlock new buildings or items (upgrade = false): automation 7-9, electronics assembling machines 4-5, electric steel furnace, Schall tanks, battery electric train chargers and fuel, pickup towers, smog protection, Angels ironworks and alloy smelting. Before, the list showed only the current level of such a chain, so automation 7-9 could not be found until automation 6 was researched. Bonus chains stay collapsed.
     - Vehicle power equipment and engines are always standard quality (user decision 2026-11-05): every recipe of vehicle solar panels 1-5, vehicle fission cells 1-6, vehicle fuel cells 2x2/3x3/4x4, vehicle fission reactors 1-6, vehicle nuclear reactor, vehicle batteries 1-6 and 1-2, both vehicle engines and vehicle belt immunity equipment is in the registry "ic-normal-result" of ic-more-qualities, like seeds: no quality modules, a positive result becomes standard, the control post does not take them. Equipment already made at a quality keeps it.
