@@ -183,6 +183,21 @@ local function in_area(x, y, area)
     return x >= area.left_top.x and x <= area.right_bottom.x and y >= area.left_top.y and y <= area.right_bottom.y
 end
 
+local function covers_port(entity, surface, x, y, force)
+    return entity and entity.valid and entity.surface == surface and entity.force == force
+        and in_area(x, y, entity.bounding_box)
+end
+
+local function ends_at_ports(factory, cpos, conn)
+    local outside, inside = conn.outside or conn.outside_entity, conn.inside or conn.inside_entity
+    if conn._type == "belt" then
+        local input = conn.facing == cpos.direction_in
+        outside, inside = input and conn.from or conn.to, input and conn.to or conn.from
+    end
+    return covers_port(outside, factory.outside_surface, factory.outside_x + cpos.outside_x, factory.outside_y + cpos.outside_y, factory.force)
+        and covers_port(inside, factory.inside_surface, factory.inside_x + cpos.inside_x, factory.inside_y + cpos.inside_y, factory.force)
+end
+
 local function recheck_factory_connections(factory, outside_area, inside_area, silent) -- Areas are optional
     if not factory.built then return end
     local outside_x, outside_y, inside_x, inside_y = factory.outside_x, factory.outside_y, factory.inside_x, factory.inside_y
@@ -191,7 +206,7 @@ local function recheck_factory_connections(factory, outside_area, inside_area, s
             and (not inside_area or in_area(cpos.inside_x + inside_x, cpos.inside_y + inside_y, inside_area)) then
             local conn = factory.connections[cid]
             if conn then
-                if not c_recheck[conn._type](conn) then
+                if not ends_at_ports(factory, cpos, conn) or not c_recheck[conn._type](conn) then
                     destroy_connection(conn)
                     init_connection(factory, cid, cpos, silent)
                 end
@@ -235,12 +250,21 @@ function factorissimo.disconnect_factory_connections(factory)
 end
 
 -- When a connection piece is placed or destroyed, check if can be connected to a factory building
-local function recheck_nearby_connections(entity, delayed)
-    local surface = entity.surface
+local function recheck_nearby_connections(entity, delayed, old_position, old_surface)
+    local surface = old_surface or entity.surface
+    if not (surface and surface.valid) then return end
     -- The entity's bounding box already respects its direction; expand it to whole tiles,
     -- plus a margin that reaches the factory buildings (their collision box ends 0.2 tiles inside the tile).
     local box = entity.bounding_box
     local left_top, right_bottom = box.left_top, box.right_bottom
+    if old_position then
+        -- A move can rotate a rectangle too; the enclosing square covers both orientations at the old place.
+        local position = entity.position
+        local radius = max(position.x - left_top.x, right_bottom.x - position.x,
+            position.y - left_top.y, right_bottom.y - position.y)
+        left_top = {x = old_position.x - radius, y = old_position.y - radius}
+        right_bottom = {x = old_position.x + radius, y = old_position.y + radius}
+    end
     local area = {
         left_top = {x = floor(left_top.x) - 0.3, y = floor(left_top.y) - 0.3},
         right_bottom = {x = ceil(right_bottom.x) + 0.3, y = ceil(right_bottom.y) + 0.3}
@@ -258,7 +282,7 @@ local function recheck_nearby_connections(entity, delayed)
         end
     end
 
-    local factory = find_surrounding_factory(surface, entity.position)
+    local factory = find_surrounding_factory(surface, old_position or entity.position)
     if factory then
         if delayed then
             recheck_factory_connections_delayed(factory, nil, area)
@@ -266,6 +290,12 @@ local function recheck_nearby_connections(entity, delayed)
             recheck_factory_connections(factory, nil, area)
         end
     end
+end
+
+function factorissimo.connection_entity_moved(entity, old_position, old_surface)
+    if not (entity and entity.valid and is_connectable(entity)) then return end
+    recheck_nearby_connections(entity, false, old_position, old_surface)
+    recheck_nearby_connections(entity)
 end
 
 -- Entity types (and the circuit connector name) handled by connections, for event filters.
@@ -374,6 +404,10 @@ register_connection_type("circuit", require("circuit"))
 register_connection_type("heat", require("heat"))
 
 local connection_filters = connection_entity_filters()
+
+factorissimo.on_event(defines.events.script_raised_teleported, function(event)
+    factorissimo.connection_entity_moved(event.entity, event.old_position, game.get_surface(event.old_surface_index))
+end, connection_filters)
 
 factorissimo.on_event(factorissimo.events.on_destroyed(), function(event)
     local entity = event.entity

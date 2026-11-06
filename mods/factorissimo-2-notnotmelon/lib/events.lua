@@ -3,6 +3,7 @@
 local events = {}     -- event id or custom input name -> {handlers = {}, filters = {}, unfiltered = bool}
 local nth_ticks = {}  -- tick interval -> handlers
 local ON_INIT = "ON INIT EVENT"
+local ON_LOAD = "ON LOAD EVENT"
 
 local function filter_key(filter)
     return tostring(filter.filter) .. "|" .. tostring(filter.type) .. "|" .. tostring(filter.name) .. "|" .. tostring(filter.mode) .. "|" .. tostring(filter.invert)
@@ -147,6 +148,9 @@ factorissimo.finalize_events = function()
             script.on_init(f)
             script.on_configuration_changed(f)
             i = i + 1
+        elseif event == ON_LOAD then
+            script.on_load(f)
+            i = i + 1
         elseif entry.unfiltered then
             script.on_event(event, prefiltered_function(entry))
             i = i + 1
@@ -287,6 +291,10 @@ factorissimo.events = {
             defines.events.on_robot_mined_tile,
             defines.events.on_space_platform_mined_tile,
         }
+    end,
+    --- Called on load (read-only storage; restore local state and subscriptions only).
+    on_load = function()
+        return ON_LOAD
     end,
     --- Called for on_init and on_configuration_changed
     on_init = function()

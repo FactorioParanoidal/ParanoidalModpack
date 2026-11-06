@@ -417,7 +417,7 @@ local function build_toolbar(toolbar, state, counts, total)
     dropdown.style.width = 150
 end
 
-local function build_list(frame, player, state)
+local function build_list(frame, player, state, keep_unchanged_rows)
     local left = frame.body.left
     local list, counts, total = collect(player, state)
     local pages = math.max(1, math.ceil(#list / PAGE_SIZE))
@@ -433,7 +433,19 @@ local function build_list(frame, player, state)
         bar.tags = {signature = signature}
     end
 
+    local footer = left.footer.bar
+    footer.page.caption = {"factorissimo-dispatch.page", tostring(state.page), tostring(pages)}
+    footer[P .. "prev"].enabled = state.page > 1
+    footer[P .. "next"].enabled = state.page < pages
+    footer.summary.caption = {"factorissimo-dispatch.summary", tostring(#list), tostring(total)}
+
+    local first = (state.page - 1) * PAGE_SIZE + 1
+    local ids = {tostring(state.selected or "")}
+    for i = first, math.min(#list, first + PAGE_SIZE - 1) do ids[#ids + 1] = tostring(list[i].id) end
+    local signature = table.concat(ids, ";")
     local scroll = left.scroll
+    if keep_unchanged_rows and scroll.tags.rows_signature == signature then return end
+    scroll.tags = {rows_signature = signature}
     scroll.clear()
     local list_flow = scroll.add {type = "flow", name = "rows", direction = "vertical"}
     list_flow.style.vertical_spacing = 0
@@ -442,7 +454,6 @@ local function build_list(frame, player, state)
         label.style.padding = 12
         label.style.font_color = {r = 0.7, g = 0.7, b = 0.7}
     end
-    local first = (state.page - 1) * PAGE_SIZE + 1
     for i = first, math.min(#list, first + PAGE_SIZE - 1) do
         if i > first then list_flow.add {type = "line", direction = "horizontal"} end
         add_row(list_flow, list[i], list[i].id == state.selected)
@@ -451,11 +462,6 @@ local function build_list(frame, player, state)
     local selected_row = state.selected and list_flow[tostring(state.selected)]
     if selected_row then scroll.scroll_to_element(selected_row, "in-view") end
 
-    local footer = left.footer.bar
-    footer.page.caption = {"factorissimo-dispatch.page", tostring(state.page), tostring(pages)}
-    footer[P .. "prev"].enabled = state.page > 1
-    footer[P .. "next"].enabled = state.page < pages
-    footer.summary.caption = {"factorissimo-dispatch.summary", tostring(#list), tostring(total)}
 end
 
 local function add_info(info, key, value, tooltip)
@@ -549,7 +555,7 @@ local function build_details(frame, player, state)
 
     -- The interior of the selected factory is scanned at most every LIGHT_REFRESH ticks (machines, power).
     local tick = game.tick
-    if not factory.active_tick or tick - factory.active_tick >= LIGHT_REFRESH then factorissimo.scan_factory(factory, tick) end
+    factory = factorissimo.preview_factory(factory, tick, LIGHT_REFRESH)
 
     if details.tags.id == factory.id and details.info then
         fill_info(details.info, factory)
@@ -617,7 +623,9 @@ local function refresh(player, light)
     if not frame then return end
     local state = player_state(player)
     if light then
-        -- Only the states of the shown rows and the details panel change by themselves.
+        -- Membership and order depend on live state too, not just on building/renaming factories.
+        if state.problems or state.sort == "power" then build_list(frame, player, state, true) end
+        -- Keep existing row widgets when membership and order have not changed.
         local rows = frame.body.left.scroll.rows
         if rows then
             for _, row in pairs(rows.children) do

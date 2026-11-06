@@ -46,7 +46,7 @@ factorissimo.factory_interior_area = interior_area
 -- Factory floors have the surface property "solar-power" = 0: solar panels there (also the hidden panels of
 -- Bio Industries buildings) give nothing and are not counted as generators at all.
 -- Factories built inside add their last values. One pass once a minute per factory (sample_factory) and every
--- 2 seconds for the factory selected in an open dispatcher.
+-- 2 seconds for the factory selected in an open dispatcher (a separate, GUI-only snapshot).
 
 local MACHINE_TYPES = {["assembling-machine"] = true, furnace = true, ["mining-drill"] = true, lab = true}
 local BONUS_TYPES = {["assembling-machine"] = true, furnace = true, ["mining-drill"] = true, lab = true, ["rocket-silo"] = true}
@@ -96,18 +96,40 @@ local function kind_of(name)
     return info
 end
 
---- Scans the interior: factory.active, machines, machines_working, children, power_use, power_gen (J per tick),
---- generators, generators_working; active_tick = tick.
-function factorissimo.scan_factory(factory, tick)
-    factory.active_tick = tick
-    local surface = factory.inside_surface
-    if not (surface and surface.valid and factory.layout) then
-        factory.active = false
-        factory.power_use, factory.power_gen = nil, nil
-        return
+-- Add each descendant's own last measurement once. Never sum already aggregated totals:
+-- packed factories can form cycles, and a cached total would count the same machines repeatedly.
+local function nested_power(factory, child_ids)
+    local use, gen = 0, 0
+    local seen = {[factory.id] = true}
+    local pending = {{parent = factory, ids = child_ids}}
+    local i = 1
+    while pending[i] do
+        local entry = pending[i]
+        for _, id in ipairs(entry.ids) do
+            local child = storage.factories[id]
+            if child and not seen[id] and child.built and child.layout
+                and child.building and child.building.valid
+                and child.outside_surface == entry.parent.inside_surface
+                and remote_api.find_surrounding_factory(child.outside_surface, child.building.position) == entry.parent then
+                seen[id] = true
+                use = use + (child.own_power_use or 0)
+                gen = gen + (child.own_power_gen or 0)
+                pending[#pending + 1] = {parent = child, ids = child.child_factory_ids or {}}
+            end
+        end
+        i = i + 1
     end
+    return use, gen
+end
+
+-- A scan returns values, without changing the gameplay sampling clock or records.
+local function scan_factory(factory, tick)
+    local result = {active_tick = tick, active = false}
+    local surface = factory.inside_surface
+    if not (surface and surface.valid and factory.layout) then return result end
     local use, gen, generators, generators_working = 0, 0, 0, 0
     local machines, machines_working, children = 0, 0, 0
+    local child_ids = {}
     local solar -- nil: not read yet; false: the floor gives no solar power; else the share of full output
     local by_entity = storage.factories_by_entity
     for _, entity in pairs(surface.find_entities_filtered {area = interior_area(factory), type = SCAN_TYPES}) do
@@ -164,16 +186,37 @@ function factorissimo.scan_factory(factory, tick)
                 local child = by_entity[entity.unit_number]
                 if child and child ~= factory then
                     children = children + 1
-                    use = use + (child.power_use or 0)
-                    gen = gen + (child.power_gen or 0)
+                    child_ids[#child_ids + 1] = child.id
                 end
             end
         end
     end
-    factory.machines, factory.machines_working, factory.children = machines, machines_working, children
-    factory.power_use, factory.power_gen = use, gen
-    factory.generators, factory.generators_working = generators, generators_working
-    factory.active = machines_working > 0 or gen > 0
+    result.own_power_use, result.own_power_gen, result.child_factory_ids = use, gen, child_ids
+    local nested_use, nested_gen = nested_power(factory, child_ids)
+    result.machines, result.machines_working, result.children = machines, machines_working, children
+    result.power_use, result.power_gen = use + nested_use, gen + nested_gen
+    result.generators, result.generators_working = generators, generators_working
+    result.active = machines_working > 0 or result.power_gen > 0
+    return result
+end
+
+function factorissimo.scan_factory(factory, tick)
+    local result = scan_factory(factory, tick)
+    factory.power_use, factory.power_gen = result.power_use, result.power_gen
+    for key, value in pairs(result) do factory[key] = value end
+end
+
+-- GUI-only snapshot. Looking at a factory must not change its record/achievement sampling.
+function factorissimo.preview_factory(factory, tick, interval)
+    local sample = factory.preview_stats
+    if not sample or tick - sample.active_tick >= interval then
+        sample = scan_factory(factory, tick)
+        factory.preview_stats = sample
+    end
+    local view = {}
+    for key, value in pairs(factory) do view[key] = value end
+    for key, value in pairs(sample) do view[key] = value end
+    return view
 end
 
 --- Whether the factory has a copper wire to a power network.
@@ -182,7 +225,12 @@ function factorissimo.is_factory_wired(factory)
     if not (pole and pole.valid) then return false end
     -- The connector is allocated lazily: without wires it may not exist (nil), which means "not wired".
     local connector = pole.get_wire_connector(defines.wire_connector_id.pole_copper, false)
-    return connector ~= nil and connector.connection_count > 0
+    if not connector then return false end
+    local distributor = factory._distribution_power_pole
+    for _, connection in pairs(connector.connections) do
+        if connection.target.owner ~= distributor then return true end
+    end
+    return false
 end
 
 -- The buffer size and flow limits of an electric energy interface are saved per entity: sensors of buildings
@@ -229,6 +277,8 @@ function factorissimo.reset_factory_stats(factory)
     factory.uptime_since, factory.clean_since = nil, nil
     factory.pollution_rate = nil
     factory.in_sandbox = nil
+    factory.preview_stats = nil
+    factory.own_power_use, factory.own_power_gen, factory.child_factory_ids = nil, nil, nil
 end
 
 -- RECORDS, MILESTONES, EXPERIENCE --

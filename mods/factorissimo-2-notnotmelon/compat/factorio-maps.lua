@@ -43,4 +43,4 @@ local function register_factoriomaps_event()
 end
 
 factorissimo.on_event(factorissimo.events.on_init(), register_factoriomaps_event)
-script.on_load(register_factoriomaps_event)
+factorissimo.on_event(factorissimo.events.on_load(), register_factoriomaps_event)

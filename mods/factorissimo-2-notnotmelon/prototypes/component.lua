@@ -154,6 +154,22 @@ data:extend {{
     connection_points = {cwc0c(), cwc0c(), cwc0c(), cwc0c()},
 }}
 
+-- MK4 is too deep for the monitor at the gate (pole supply radius is capped at 64).
+-- A hidden central pole distributes the same network; the visible monitor stays at the gate.
+local distribution_pole = table.deepcopy(data.raw["electric-pole"]["factory-power-pole"])
+distribution_pole.name = "factory-distribution-power-pole"
+distribution_pole.flags = {"not-on-map", "not-blueprintable", "not-deconstructable", "hide-alt-info"}
+distribution_pole.hidden_in_factoriopedia = true
+distribution_pole.selectable_in_game = false
+distribution_pole.collision_box = {{0, 0}, {0, 0}}
+distribution_pole.selection_box = {{0, 0}, {0, 0}}
+distribution_pole.pictures = {filename = "__core__/graphics/empty.png", width = 1, height = 1, direction_count = 1}
+distribution_pole.connection_points = {cwc0c()}
+distribution_pole.draw_copper_wires = false
+distribution_pole.draw_circuit_wires = false
+distribution_pole.localised_name = {"entity-name.factory-power-pole"}
+data:extend {distribution_pole}
+
 -- https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/239
 data:extend {{
     type = "electric-pole",

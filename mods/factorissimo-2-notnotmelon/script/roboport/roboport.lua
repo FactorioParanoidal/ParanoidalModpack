@@ -480,8 +480,8 @@ end
 -- Every factory is handled once per 256 ticks: a quarter of them every 64 ticks, split by id.
 factorissimo.on_nth_tick(64, function(event)
     local group = (event.tick / 64) % 4
-    for id, factory in pairs(storage.factories) do
-        if id % 4 == group then update_construction_requests(factory) end
+    for _, factory in pairs(factorissimo.factory_group(group)) do
+        update_construction_requests(factory)
     end
 end)
 

@@ -45,8 +45,28 @@ local function draw_planet_icon_on_inside_power_pole(factory)
     rendering.draw_sprite(sprite_data)
 end
 
+local function ensure_distribution_pole(factory, monitor)
+    if factory.layout.inside_size <= 60 then return end
+    local pole = factory._distribution_power_pole
+    if not (pole and pole.valid) then
+        pole = factory.inside_surface.create_entity {
+            name = "factory-distribution-power-pole",
+            position = {factory.inside_x, factory.inside_y},
+            force = factory.force,
+            quality = "normal", -- factory infrastructure is quality-independent
+        }
+        if not pole then return end
+        pole.destructible = false
+        pole.minable_flag = false
+        factory._distribution_power_pole = pole
+    end
+    monitor.get_wire_connector(defines.wire_connector_id.pole_copper, true).connect_to(
+        pole.get_wire_connector(defines.wire_connector_id.pole_copper, true), false, defines.wire_origin.script)
+end
+
 local function get_or_create_inside_power_pole(factory)
     if factory._inside_power_pole and factory._inside_power_pole.valid then
+        ensure_distribution_pole(factory, factory._inside_power_pole)
         return factory._inside_power_pole
     end
 
@@ -61,6 +81,7 @@ local function get_or_create_inside_power_pole(factory)
     factory._inside_power_pole = power_pole
 
     draw_planet_icon_on_inside_power_pole(factory)
+    ensure_distribution_pole(factory, power_pole)
     return factory._inside_power_pole
 end
 factorissimo.get_or_create_inside_power_pole = get_or_create_inside_power_pole
@@ -68,8 +89,8 @@ factorissimo.get_or_create_inside_power_pole = get_or_create_inside_power_pole
 local function connect_power(factory, outside_power_pole)
     if not (factory.inside_surface and factory.inside_surface.valid and outside_power_pole.valid) then return end
     local inside_power_pole = get_or_create_inside_power_pole(factory)
-    local outside_power_pole_wire_connector = outside_power_pole.get_wire_connector(defines.wire_connector_id.pole_copper)
-    local inside_power_pole_wire_connector = inside_power_pole.get_wire_connector(defines.wire_connector_id.pole_copper)
+    local outside_power_pole_wire_connector = outside_power_pole.get_wire_connector(defines.wire_connector_id.pole_copper, true)
+    local inside_power_pole_wire_connector = inside_power_pole.get_wire_connector(defines.wire_connector_id.pole_copper, true)
     inside_power_pole_wire_connector.connect_to(outside_power_pole_wire_connector, false, defines.wire_origin.script)
 end
 
@@ -190,7 +211,7 @@ factorissimo.on_event(factorissimo.events.on_destroyed(), function(event)
     local pole = event.entity
     if not pole.valid or pole.type ~= "electric-pole" then return end
 
-    local wire_connector = pole.get_wire_connector(defines.wire_connector_id.pole_copper)
+    local wire_connector = pole.get_wire_connector(defines.wire_connector_id.pole_copper, true)
 
     local old_connections = wire_connector.connections
     factorissimo.disconnect_all_copper_connections(pole)
@@ -227,6 +248,7 @@ function factorissimo.cleanup_outside_energy_receiver(factory)
     if factory.inside_surface and factory.inside_surface.valid then
         local pole = factorissimo.get_or_create_inside_power_pole(factory)
         factorissimo.disconnect_all_copper_connections(pole)
+        ensure_distribution_pole(factory, pole)
     end
 
     local genp = factory.global_electric_network_pole
@@ -253,7 +275,16 @@ function factorissimo.cleanup_outside_energy_receiver(factory)
 end
 
 function factorissimo.disconnect_all_copper_connections(pole)
-    local wire_connector = pole.get_wire_connector(defines.wire_connector_id.pole_copper)
+    local wire_connector = pole.get_wire_connector(defines.wire_connector_id.pole_copper, true)
     wire_connector.disconnect_all(defines.wire_origin.player)
     wire_connector.disconnect_all(defines.wire_origin.script)
 end
+
+-- Existing and packed MK4 interiors receive the distributor on configuration change, not just on placement.
+factorissimo.on_event(factorissimo.events.on_init(), function()
+    for _, factory in pairs(storage.factories) do
+        if factory.layout and factory.layout.inside_size > 60 and factory.inside_surface and factory.inside_surface.valid then
+            get_or_create_inside_power_pole(factory)
+        end
+    end
+end)

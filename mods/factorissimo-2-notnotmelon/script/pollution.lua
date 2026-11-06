@@ -21,7 +21,7 @@ local function chunk_offsets(inside_size)
     return offsets
 end
 
---- Moves the pollution of the interior outside. Returns the pollution taken from the interior (nil when unknown).
+--- Moves pollution outside, including pollution stored while packed. Returns the actual release (nil when unknown).
 local function update_pollution(factory)
     local inside_surface = factory.inside_surface
     if not (inside_surface and inside_surface.valid) or not inside_surface.pollutant_type then return nil end
@@ -38,34 +38,35 @@ local function update_pollution(factory)
         end
     end
 
-    if pollution == 0 then return 0 end
+    local total = pollution + (factory.stored_pollution or 0)
+    if total == 0 then return 0 end
 
     local outside_surface = factory.outside_surface
     if factory.built and outside_surface and outside_surface.valid then
         local pollutant_type = outside_surface.pollutant_type
-        if not pollutant_type then return pollution end
+        if not pollutant_type then
+            factory.stored_pollution = 0 -- there is no pollution on the receiving surface
+            return 0
+        end
 
         local multiplier = pollution_multipliers[pollutant_type.name] or 1
-
-        local pollution_to_release = (pollution + (factory.stored_pollution or 0)) * multiplier
+        local pollution_to_release = total * multiplier
         outside_surface.pollute({factory.outside_x, factory.outside_y}, pollution_to_release)
         factory.stored_pollution = 0
-    else
-        factory.stored_pollution = (factory.stored_pollution or 0) + pollution
+        return pollution_to_release
     end
-    return pollution
+    factory.stored_pollution = total
+    return 0
 end
 
 -- Every factory is handled once per 60 ticks: a quarter of them every 15 ticks, split by id.
--- storage.factories has holes (ids are not reused), so it is walked with pairs, never with #.
+-- IDs have holes and are not reused; the derived quarter index keeps the same sampling phase.
 -- The same pass samples the state of the factory (script/stats.lua).
 factorissimo.on_nth_tick(15, function(event)
     local tick = event.tick
     local group = (tick / 15) % 4
     local sample_factory = factorissimo.sample_factory
-    for id, factory in pairs(storage.factories) do
-        if id % 4 == group then
-            sample_factory(factory, update_pollution(factory), tick)
-        end
+    for _, factory in pairs(factorissimo.factory_group(group)) do
+        sample_factory(factory, update_pollution(factory), tick)
     end
 end)

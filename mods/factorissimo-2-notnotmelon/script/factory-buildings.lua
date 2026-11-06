@@ -21,6 +21,18 @@ end
 
 -- INITIALIZATION --
 
+-- Derived index, not saved. The two quarter-rate jobs visit only their quarter instead of scanning all IDs.
+local factory_groups = {{}, {}, {}, {}}
+function factorissimo.factory_group(group)
+    return factory_groups[group + 1]
+end
+local function index_factory_groups()
+    factory_groups = {{}, {}, {}, {}}
+    for id, factory in pairs(storage.factories or {}) do factory_groups[id % 4 + 1][id] = factory end
+end
+factorissimo.index_factory_groups = index_factory_groups
+factorissimo.on_event(factorissimo.events.on_load(), index_factory_groups)
+
 local function highest_factory_id()
     local highest = storage.last_factory_id or 0
     for id in pairs(storage.factories) do
@@ -45,6 +57,7 @@ factorissimo.on_event(factorissimo.events.on_init(), function()
     storage.was_deleted = storage.was_deleted or {}
     -- Factory ids are never reused: blueprints and stale items may still carry the id of a deleted factory.
     storage.last_factory_id = highest_factory_id()
+    index_factory_groups()
 
     -- Live buildings are registered so that their binding is dropped in on_object_destroyed;
     -- bindings of buildings that no longer exist are removed here.
@@ -420,6 +433,7 @@ local function create_factory_position(layout, building)
 
     factory.id = next_factory_id()
     storage.factories[factory.id] = factory
+    factory_groups[factory.id % 4 + 1][factory.id] = factory
 
     return factory
 end
@@ -680,10 +694,34 @@ local function is_completely_empty(factory)
     local surface = factory.inside_surface
     local area = interior_area(factory)
 
+    -- Only our own empty infrastructure may be discarded. Collision masks do not tell ownership:
+    -- character corpses and flying robots have no collisions, but can hold the player's items.
+    local infrastructure = {}
+    local function ignore(entity)
+        if entity and entity.valid then infrastructure[entity.unit_number] = true end
+    end
+    ignore(factory.radar)
+    ignore(factory._inside_power_pole)
+    ignore(factory._distribution_power_pole)
+    ignore(factory.inside_overlay_controller)
+    if roboport_upgrade then
+        ignore(roboport_upgrade.storage)
+        ignore(roboport_upgrade.roboport)
+        local hidden = roboport_upgrade.hidden_roboport
+        if hidden and hidden.valid then
+            for i = 1, hidden.get_max_inventory_index() do
+                local inventory = hidden.get_inventory(i)
+                if inventory then
+                    for _, item in pairs(inventory.get_contents()) do
+                        if item.name ~= "factory-hidden-construction-robot" then return false end
+                    end
+                end
+            end
+            ignore(hidden)
+        end
+    end
     for _, entity in pairs(surface.find_entities_filtered {area = area}) do
-        local layers = entity.prototype.collision_mask.layers
-        local is_hidden_entity = (not layers) or next(layers) == nil
-        if not is_hidden_entity then return false end
+        if not (entity.unit_number and infrastructure[entity.unit_number]) then return false end
     end
 
     -- Tiles placed by players (concrete etc.) would be lost together with the interior.
@@ -695,6 +733,7 @@ end
 
 --- Removes every reference to the factory, remembers its id as deleted and clears the table.
 local function forget_factory(factory)
+    if factory.id then factory_groups[factory.id % 4 + 1][factory.id] = nil end
     local factory_lists = {storage.factories, storage.saved_factories, storage.factories_by_entity}
     for _, factory_list in pairs(storage.surface_factories) do
         factory_lists[#factory_lists + 1] = factory_list
@@ -1276,6 +1315,7 @@ local clone_forbidden_prefixes = {
     "factory-power-input-",
     "factory-connection-indicator-",
     "factory-power-pole",
+    "factory-distribution-power-pole",
     "factory-overlay-controller",
     "factory-port-marker",
     "factory-blueprint-anchor",

@@ -58,6 +58,7 @@ remote_api.set_global = function(path, v)
     end
     g[path[#path]] = v
     factorissimo.clear_layout_cache()
+    if path[1] == "factories" and #path <= 2 then factorissimo.index_factory_groups() end
 end
 
 remote_api.get_factory_by_entity = function(entity)

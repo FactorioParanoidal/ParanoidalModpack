@@ -146,8 +146,8 @@ local function raise_alarm(factory)
             local surface_index = surface.index
             local D = affected.layout.inside_size / 2 + 2
             for _, player in pairs(affected.force.connected_players) do
-                if not heard[player.index] and player.surface_index == surface_index
-                    and inside(player.position, affected.inside_x, affected.inside_y, D) then
+                if not heard[player.index] and player.physical_surface.index == surface_index
+                    and inside(player.physical_position, affected.inside_x, affected.inside_y, D) then
                     heard[player.index] = true
                     listeners[#listeners + 1] = player.index
                 end

@@ -70,7 +70,21 @@ Fluid.direction = function(conn)
     end
 end
 
+local function pump_contents(pump)
+    local contents = {}
+    if pump and pump.valid then
+        for i = 1, pump.fluids_count do contents[i] = pump.get_fluid(i) end
+    end
+    return contents
+end
+
+local function restore_contents(pump, contents)
+    for i, fluid in pairs(contents) do pump.set_fluid(i, fluid) end
+end
+
 Fluid.rotate = function(conn)
+    local inside_contents = pump_contents(conn.inside_connector)
+    local outside_contents = pump_contents(conn.outside_connector)
     conn._settings.input_mode = not conn._settings.input_mode
 
     if conn.inside_connector and conn.inside_connector.valid then
@@ -82,6 +96,8 @@ Fluid.rotate = function(conn)
 
     local cpos = conn._factory.layout.connections[conn._id]
     conn.inside_connector, conn.outside_connector = create_linked_connections(conn._factory, cpos, conn._settings)
+    restore_contents(conn.inside_connector, inside_contents)
+    restore_contents(conn.outside_connector, outside_contents)
 
     if conn._settings.input_mode then
         return {"factory-connection-text.input-mode"}
