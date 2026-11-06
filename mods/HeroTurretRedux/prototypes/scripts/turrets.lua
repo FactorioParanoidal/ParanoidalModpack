@@ -115,13 +115,16 @@ end
 ---------------------------------------------------------------------------------------------------
 -- Turret replacement
 ---------------------------------------------------------------------------------------------------
--- Priority targets of a turret or a turret ghost, by index.
+-- Priority targets of a turret or a turret ghost, by index. No upper bound: the zzzparanoidal panel "Priority by
+-- groups" fills lists of a few thousand entries (was cut at 1000).
 local function priority_targets(entity)
 	local targets = {}
-	for index = 1, 1000 do
+	local index = 1
+	while true do
 		local ok, target = pcall(entity.get_priority_target, index)
 		if not ok or not target then break end
 		targets[index] = target
+		index = index + 1
 	end
 	return targets
 end

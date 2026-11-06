@@ -640,6 +640,23 @@ data:extend({spider_droid})
 end
 for x=1,5 do add_big_monsters(x) end
 
+-- Paranoidal: the five levels of every giant had one icon and one name (the spidertrons one icon, the player's one);
+-- the level on the icon (mferrari_lib level-icon) and in the name tells them apart in the entity lists (turret
+-- priority targets)
+local level_icons = require("__mferrari_lib__/prototypes/level-icon")
+for L = 1, 5 do
+	for _, base in pairs({"maf-giant-fire-spitter", "maf-giant-acid-spitter", "biterzilla1", "biterzilla2", "biterzilla3",
+		"bm-motherbiterzilla"}) do
+		local unit = data.raw.unit[base .. L]
+		if unit then
+			unit.localised_name = {"", unit.localised_name or {"entity-name." .. base}, " " .. L}
+			level_icons(unit, L)
+		end
+	end
+	local spider = data.raw["spider-vehicle"]["bm-spidertron_" .. L]
+	if spider then level_icons(spider, L) end
+end
+
 
 		
 data:extend(

@@ -1,6 +1,7 @@
 local path = "__mferrari_lib__/"
 local colors = require("__mferrari_lib__/colors")
 require("__mferrari_lib__/prototypes/flying_saucer_animation")
+local level_icons = require("__mferrari_lib__/prototypes/level-icon")
 
 
 local sprite_fields = {
@@ -52,7 +53,9 @@ flyind_saucer.name="maf_flying_saucer_"..k
 flyind_saucer.icon= path .."graphics/entity/flying_saucer/flying_saucer_ico.png"
 flyind_saucer.icon_size=64
 flyind_saucer.max_health = (20000 * k^boss_hp_variant) * boss_hp_multiplier/boss_hp_variant
-flyind_saucer.localised_name = {"entity-name.maf_flying_saucer"}
+-- Paranoidal: the ten saucers had one icon and one name; the level on both tells them apart in the entity lists
+-- (turret priority targets)
+flyind_saucer.localised_name = {"", {"entity-name.maf_flying_saucer"}, " ", tostring(k)}
 flyind_saucer.allow_passengers = false
 flyind_saucer.automatic_weapon_cycling = true
 flyind_saucer.inventory_size = 10 + 5*k
@@ -94,6 +97,7 @@ flyind_saucer.graphics_set.eye_light= nil
 flyind_saucer.guns = {"spidertron-rocket-launcher-1", "spidertron-rocket-launcher-2","flying-saucer-laser-cannon" } -- "tank-flamethrower"
 flyind_saucer.working_sound = {sound = {{filename = path.."sounds/ufo.ogg",volume = 1.0}}}
 
+level_icons(flyind_saucer, k)
 data:extend({flyind_saucer})
 end
 for x=1,10 do add_flying_saucer(x) end

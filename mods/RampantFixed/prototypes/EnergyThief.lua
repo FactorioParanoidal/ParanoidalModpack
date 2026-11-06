@@ -74,6 +74,8 @@ function energyThief.addFactionAddon()
                 icon_size = 32,
                 icon_mipmaps = 1,
                 -- flags = {"not-in-made-in"},
+                -- Paranoidal: never placed (its item is hidden); hidden from the entity lists (turret priority targets)
+                hidden = true,
                 selectable_in_game = false,
                 minable = {hardness = 0.2, mining_time = 0.5, result = "big-electric-pole"},
                 max_health = 750,
@@ -189,6 +191,8 @@ function energyThief.addFactionAddon()
     chest.icon_size = 32
     chest.icon_mipmaps = 1
     chest.flags = {"not-repairable", "not-on-map"}	-- , "not-in-made-in"
+    -- Paranoidal: an invisible target (empty picture); hidden from the entity lists (turret priority targets)
+    chest.hidden = true
     chest.subgroup = "enemies"
     chest.next_upgrade = nil
     chest.backer_name = false
@@ -260,6 +264,7 @@ function energyThief.addFactionAddon()
     for i=1,10 do
         local drainCrystalAttributes = {
             name = "crystal-v" .. i,
+            tier = i,
             drain = i * 1.3 .. "MW",
             scale = (i * 0.1) + 0.5,
             health = 400 * i

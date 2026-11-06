@@ -3,6 +3,7 @@ Version: 0.6.6
   Graphics:
     - thumbnail.png is redrawn at 144x144 after the old smaller picture: text and simple shapes are drawn again, the rest is resampled and sharpened.
   Changes:
+    - Paranoidal fork: enemies that come in levels with one picture show the level on the icon (upper right, 1-9 and A = 10, as on the RampantFixed units), so the list of turret priority targets tells them apart: fake humans (the boss kinds also get a skull in the lower left corner), boss biters and boss spitters 1-10, flying saucers 1-10. The flying saucers also show the level in the name. Helper prototypes/level-icon.lua, also used by Big Monsters.
     - Paranoidal fork: CallFrenzyAttack hands the attack to RampantFixed (remote strikePosition_ExtCtrl) when it manages the surface: Rampant squads from the nests nearest to the target instead of up to 450 single units commanded one by one; no attack while the Rampant AI is peaceful. The old command stays without RampantFixed
     - Paranoidal fork: a dying reactor no longer creates a "nuke-explosion" (sight and sound without damage); real meltdowns come from the reactor prototypes
   Bugfixes:

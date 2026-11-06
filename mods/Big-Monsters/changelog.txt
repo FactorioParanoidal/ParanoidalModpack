@@ -1,6 +1,7 @@
 ---------------------------------------------------------------------------------------------------
 Version: 2.1.2
   Changes:
+    - Paranoidal fork: the five levels of the giant fire and acid spitters, the three biterzillas and the mother biterzilla had one icon and one name, the enemy spidertrons the icon of the player's spidertron. The level is shown on the icon (mferrari_lib level-icon) and, for the giants, in the name, so the list of turret priority targets tells them apart.
     - Paranoidal fork: saves whose map was generated before the autoplace of the behemoth worm and the acid boss worm was removed lose these worms once (all surfaces); the worms of the events stay. The migration 2.1.2-paranoidal-autoplaced-worms only raises the configuration change, the worms are destroyed in on_configuration_changed.
     - Paranoidal fork: the event alerts no longer name the enemy before it is seen: the spidertron, the UFO and the ultimate boss are hinted at (seismic steps, a radar blip, "something big is leading them"); the soldiers alert speaks of saboteurs on the radio. EN/RU (the RU soldiers and UFO texts are in ParanoidalLocale).
     - Paranoidal fork: the behemoth worm and the acid boss worm have no map autoplace any more; RSO-reforged switches off the autoplace of all other enemies, so these two took every vanilla worm spot from a moderate distance at 0% evolution. They appear only in the late events.

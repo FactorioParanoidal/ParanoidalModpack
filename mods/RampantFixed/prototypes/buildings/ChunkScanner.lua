@@ -5,8 +5,11 @@ chunkScannerCorpse.name = "chunk-scanner-corpse"
 chunkScannerCorpse.time_before_removed = 1
 data:extend({chunkScannerCorpse})
 
+-- Paranoidal: the scanners live for one placement check; hidden, so the entity lists (turret priority targets) do not
+-- show them (the small scanners below are copies and inherit it).
 local chunkScannerSquad = util.table.deepcopy(data.raw["unit"]["small-biter"])
 chunkScannerSquad.name = "chunk-scanner-squad-rampant"
+chunkScannerSquad.hidden = true
 chunkScannerSquad.health = 1
 chunkScannerSquad.collision_box = {{-6, -6}, {6, 6}}
 chunkScannerSquad.healing_per_tick = -1
@@ -15,6 +18,7 @@ data:extend({chunkScannerSquad})
 
 local chunkScannerNest = util.table.deepcopy(data.raw["unit"]["small-biter"])
 chunkScannerNest.name = "chunk-scanner-nest-rampant"
+chunkScannerNest.hidden = true
 chunkScannerNest.health = 1
 chunkScannerNest.collision_box = {{-6, -6}, {6, 6}}
 chunkScannerNest.collision_mask = {layers={object=true, water_tile=true, elevated_rail=true}}
@@ -24,6 +28,7 @@ data:extend({chunkScannerNest})
 
 local chunkScannerTurret = util.table.deepcopy(data.raw["turret"]["behemoth-worm-turret"])
 chunkScannerTurret.name = "chunk-scanner-turret-rampant"
+chunkScannerTurret.hidden = true
 chunkScannerTurret.health = 1
 chunkScannerTurret.collision_box = {{-3, -3}, {3, 3}}
 chunkScannerTurret.collision_mask = {layers={object=true, water_tile=true, elevated_rail=true}}
@@ -50,6 +55,7 @@ data:extend({chunkScannerTurretSmall})
 
 local chunkScannerSquadMovement = util.table.deepcopy(data.raw["unit"]["small-biter"])
 chunkScannerSquadMovement.name = "chunk-scanner-squad-movement-rampant"
+chunkScannerSquadMovement.hidden = true
 chunkScannerSquadMovement.health = 1
 chunkScannerSquadMovement.collision_box = {{-1, -1}, {1, 1}}
 chunkScannerSquadMovement.healing_per_tick = -1

@@ -28,6 +28,8 @@ list[7].keep_extra = true -- rocket-control-unit: значок ракетной 
 -- Исходные иконки исследований ShinyBob_Techs из Beta 8, без изменения предметов.
 list[#list + 1] = single("engine", "engine-beta8", 128)
 list[#list + 1] = single("electric-engine", "electric-engine-beta8", 128)
+-- Диспетчерская сеть поездов (Project Cybersyn): поезд, станционный контроллер и голограмма маршрута.
+list[#list + 1] = single("cybersyn-train-network", "cybersyn-train-network")
 
 for i = 1, 6 do list[#list + 1] = single("CW-air-filtering-" .. i, "CW-air-filtering") end
 for i = 1, 4 do list[#list + 1] = single("CW-air-filter-cleaning-" .. i, "CW-air-filter-cleaning-" .. i) end

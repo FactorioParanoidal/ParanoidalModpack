@@ -10,7 +10,8 @@
 --  * units of the other nests (vanilla, Bob), except Big Monsters and mferrari nests: the next stronger unit of the
 --    same kind among the nest's units (hour boss: the one after it);
 -- and never for units whose attack damages themselves (suicide and nuclear biters).
--- Copies are not spawned by nests, have no loot (the champion drops one artifact) and are hidden in Factoriopedia.
+-- Copies are not spawned by nests, have no loot (the champion drops one artifact) and are hidden: they carry the icon
+-- and the name of their unit, so the entity lists (turret priority targets) showed every unit two or three times.
 -- They are bigger than their unit (constants.CHAMPION_KINDS sizeK: sprites and selection box; collisionK: collision).
 -- Runs at the end of data-final-fixes, after the resistance updates of this mod. If a copy is missing, the runtime
 -- spawns the ordinary unit with a script health pool as before.
@@ -203,6 +204,7 @@ for _, copyName in ipairs(names) do
         enlarge(copy, KINDS[pair.kind])
         copy.healing_per_tick = 0
         copy.loot = nil
+        copy.hidden = true
         copy.hidden_in_factoriopedia = true
         copies[#copies + 1] = copy
     end
