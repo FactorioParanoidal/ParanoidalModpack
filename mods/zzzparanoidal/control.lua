@@ -11,6 +11,8 @@ require("controls.torch-no-loot") -- Разобранный факел проп�
 require("controls.spacex-button-force") -- Кнопка SpaceX не остаётся после выхода из Песочницы.
 local turret_deploy = require("controls.turret-deploy")
 turret_deploy.install() -- Построенная турель включается через несколько секунд (настройки карты).
+local turret_priority_groups = require("controls.turret-priority-groups")
+turret_priority_groups.install() -- Панель «Приоритет по группам» у окна турели (ПР-072).
 -- Install after loader-shells chains the SpilledItems handler; neither consumer
 -- handles these inventory/grid-less types. Keep every other type, including modded containers.
 if script.get_event_handler(defines.events.on_entity_died) then
@@ -137,6 +139,7 @@ script.on_configuration_changed(function() --фикс эволюции при з
 	rail_support_power.sync()
 	drop_old_fire_safety()
 	turret_deploy.sync()
+	turret_priority_groups.on_configuration_changed()
 end)
 
 script.on_event(defines.events.on_player_joined_game, disable_obsolete_basic_logistics)
