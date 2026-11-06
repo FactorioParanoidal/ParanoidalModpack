@@ -55,6 +55,9 @@ local magazines = {
 for name, stats in pairs(magazines) do
 	apply_numbers("ammo", name, stats)
 end
+-- Решение пользователя 2026-11-06: стандартные дротики бьют слабее физически (2 вместо 3),
+-- пробивная часть 2 сохраняется. Улучшенные и ядовитые остаются из эталона 1.1.
+apply_numbers("ammo", "bi-dart-magazine-standard", { direct = { physical = 2 } })
 
 -- Дробь: число дробинок и дальность полёта из финальной 1.1.
 local shotgun = {

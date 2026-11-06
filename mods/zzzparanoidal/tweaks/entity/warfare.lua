@@ -79,11 +79,12 @@ paralib.bobmods.lib.recipe.set_ingredients("w93-scattergun-turret", {
 })
 --###############################################################################################
 --Фикс простых турелей
-data.raw["ammo-turret"]["gun-turret"].attack_parameters.damage_modifier = 1.5
+-- Баланс урона первых турелей (решение пользователя 2026-11-06): базовая ×2.0, тиры Боба выше.
+data.raw["ammo-turret"]["gun-turret"].attack_parameters.damage_modifier = 2.0
 data.raw["ammo-turret"]["bob-gun-turret-2"].attack_parameters.damage_modifier = 2.0
-data.raw["ammo-turret"]["bob-gun-turret-3"].attack_parameters.damage_modifier = 3.0
-data.raw["ammo-turret"]["bob-gun-turret-4"].attack_parameters.damage_modifier = 4.0
-data.raw["ammo-turret"]["bob-gun-turret-5"].attack_parameters.damage_modifier = 5.0
+data.raw["ammo-turret"]["bob-gun-turret-3"].attack_parameters.damage_modifier = 3.5
+data.raw["ammo-turret"]["bob-gun-turret-4"].attack_parameters.damage_modifier = 5.0
+data.raw["ammo-turret"]["bob-gun-turret-5"].attack_parameters.damage_modifier = 6.5
 --###############################################################################################
 --Фикс модульных турелей
 data.raw["ammo-turret"]["w93-hmg-turret"].attack_parameters.turn_range = 1
