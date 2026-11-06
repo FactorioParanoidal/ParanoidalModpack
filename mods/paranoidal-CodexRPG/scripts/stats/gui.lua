@@ -5,6 +5,7 @@
 -- is ready and, on the character pages, when the experience changes.
 local mod_gui = require("mod-gui")
 local data = require("scripts.stats.data")
+local premium = require("scripts.premium.premium")
 local fmt = data.fmt
 
 local G = {}
@@ -30,6 +31,7 @@ local TABS = {
 	{id = "quality", icon = "[virtual-signal=signal-star]"},
 	{id = "milestones", icon = "[virtual-signal=signal-check]"},
 	{id = "codex", icon = "[virtual-signal=signal-info]"},
+	{id = "premium", icon = premium.ICON},
 }
 local NEEDS_SNAPSHOT = {passport = true, base = true, world = true, war = true, quality = true}
 local ARTICLES = {"defects", "quality", "ruins", "rpg", "stats"}
@@ -1124,6 +1126,16 @@ function R.codex(player, lc, rc)
 	label(c, L("codex-" .. id .. "-text"), {wrap = LY.inner_w}).style.top_margin = 6
 end
 
+-- Premium BnL ----------------------------------------------------------------------------------
+
+function R.premium(player, lc, rc)
+	premium.render(player, lc, rc)
+end
+
+-- The page helpers, for the Premium BnL module.
+G.ui = {label = label, muted = muted, card = card, bar = bar, rows = rows, row = row, bigs = bigs,
+	layout = function() return LY end}
+
 ---------------------------------------------------------------------------------------------
 -- rendering
 
@@ -1254,7 +1266,7 @@ function G.on_snapshot(force_index)
 		local frame = window(player)
 		local st = storage.rpg_stats.players[player.index]
 		if frame and frame.rpgst_body and st then
-			if st.tab ~= "char" then
+			if st.tab ~= "char" and st.tab ~= "premium" then
 				G.render(player)
 			else
 				LY = measure(player)
@@ -1342,4 +1354,5 @@ function G.on_closed(event, player)
 end
 
 G.FRAME = FRAME
+premium.set_journal(G)
 return G

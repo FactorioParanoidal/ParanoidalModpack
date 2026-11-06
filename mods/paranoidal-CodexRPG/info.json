@@ -1,7 +1,7 @@
 {
   "name": "paranoidal-CodexRPG",
   "author": "ProjectMakers, FactorioParanoidal",
-  "version": "9.1.1",
+  "version": "9.2.0",
   "title": "Paranoidal Codex RPG",
   "homepage": "https://github.com/FactorioParanoidal/ParanoidalModpack",
   "contact": "",
@@ -11,5 +11,5 @@
     "RPGsystem >= 2.0.9",
     "PMRPGsystem >= 9.0.5"
   ],
-  "description": "RPG system and base journal of the Paranoidal modpack. Experience, levels and skills from PM RPG System by ProjectMakers (based on MFerrari's RPGsystem), plus a full-screen journal: base passport, statistics of the base, world, war and quality, milestones and a short codex. Formerly PMRPGsystem: progress from old saves is taken over automatically."
+  "description": "RPG system and base journal of the Paranoidal modpack. Experience, levels and skills from PM RPG System by ProjectMakers (based on MFerrari's RPGsystem), plus a full-screen journal: base passport, statistics of the base, world, war and quality, milestones, a short codex and BnL Premium: wishes of players with the features made for them, the first one a calendar and an alarm clock. Formerly PMRPGsystem: progress from old saves is taken over automatically."
 }

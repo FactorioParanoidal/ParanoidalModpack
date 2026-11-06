@@ -1,5 +1,6 @@
 require("prototypes.fonts")
 require("prototypes.sprites")
+require("prototypes.premium")
 require("controls")
 
 

@@ -5,6 +5,7 @@ require "util"
 -- Base statistics in the RPG window (side menu, snapshot job, milestones).
 local stats = require("scripts.stats.data")
 local stats_gui = require("scripts.stats.gui")
+local premium = require("scripts.premium.premium")
 stats.set_announcer(stats_gui.announce)
 stats.set_done_handler(stats_gui.on_snapshot)
 require "particles"
@@ -978,6 +979,7 @@ end
 function Cria_Player(event) 
 local player = game.players[event.player_index]
 SetupPlayer(player,true)
+premium.on_player_joined(player)
 end
 
 
@@ -991,6 +993,7 @@ function onPlayerJoin(event)
 local player = game.players[event.player_index]
 CheckPlayer(player)
 InitPlayerGui(player)
+premium.on_player_joined(player)
 end
 
 
@@ -1027,11 +1030,13 @@ function On_Init()
 ImportPMRPGsystem()
 stats.on_init()
 XPModSetup()
+premium.on_init()
 end
 
 
 function on_configuration_changed(data)
 XPModSetup()
+premium.on_configuration_changed()
 end
 
 script.on_event(defines.events.on_player_created, Cria_Player)
@@ -1079,7 +1084,21 @@ script.on_event(defines.events.on_player_crafted_item, stats.on_crafted)
 script.on_event(defines.events.on_chunk_generated, stats.on_chunk_generated)
 script.on_event(defines.events.on_resource_depleted, stats.on_resource_depleted)
 script.on_event(defines.events.on_surface_cleared, function(event) stats.on_surface_cleared(event.surface_index) end)
-script.on_event(defines.events.on_player_removed, function(event) stats.on_player_removed(event.player_index) end)
+script.on_event(defines.events.on_player_removed, function(event)
+	stats.on_player_removed(event.player_index)
+	premium.on_player_removed(event.player_index)
+end)
+
+-- Premium BnL: calendar, alarms, the rest reminder and the pinned window.
+script.on_nth_tick(60, premium.on_nth_tick)
+script.on_event(defines.events.on_singleplayer_init, premium.on_game_loaded)
+script.on_event(defines.events.on_multiplayer_init, premium.on_game_loaded)
+script.on_event(defines.events.on_gui_text_changed, premium.on_text_changed)
+script.on_event(defines.events.on_gui_confirmed, premium.on_confirmed)
+script.on_event(defines.events.on_gui_selection_state_changed, premium.on_selection_changed)
+script.on_event(defines.events.on_gui_value_changed, premium.on_value_changed)
+script.on_event(defines.events.on_gui_checked_state_changed, premium.on_checked_changed)
+script.on_event(defines.events.on_gui_location_changed, premium.on_location_changed)
 
 
 -- closes panel when player open inventory E
@@ -1099,6 +1118,7 @@ local player = game.players[event.element.player_index]
 local element = event.element
 if element and element.valid then 
 local name = element.name
+if premium.on_click(event, player) then return end
 if stats_gui.on_click(event, player) then return end
 
     if (name == "btcharxp") then open_close_char_gui(player)

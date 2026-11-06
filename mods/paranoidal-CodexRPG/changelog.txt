@@ -1,4 +1,15 @@
 ---------------------------------------------------------------------------------------------------
+Version: 9.2.0
+Date: 2026-11-06
+  Features:
+    - New last bookmark of the base journal, BnL Premium: wishes of players and the features made for them. Each entry shows the player, a quote from the request, its date and the release; "Open" shows the feature on the right page.
+    - First entry, the calendar and alarm clock asked for by Silkor (Серега). Calendar: 365 days, 366 in leap years by the Gregorian rule, 1 January of year 1 is the landing day and every midnight on Nauvis is the next date (the NightBrightness count of midnights since the landing; map time in planet days without it). Month view with weekdays, today, past days and weekends, year view with twelve small months. Days show BnL holidays and the team's base milestones, with details on hover or click.
+    - Alarm clock: in N hours and minutes of game time, quick buttons, a note and the last four notes, a programmable speaker sound with preview and volume. A ringing alarm opens a window in the middle of the screen and repeats its sound until "I'm up" or a 5/10 minute snooze. Up to 10 alarms per player; only the owner hears them.
+    - Session counter (game time since the save was loaded or the player joined) and an optional reminder to get up every 1, 1.5, 2 or 3 hours of the session (off by default).
+    - A small window with the date, the time and the next alarm can be pinned over the game: draggable, compact or detailed.
+  Optimizations:
+    - One handler every 60 ticks. It records the calendar day every 10 seconds and otherwise visits only players with alarms, the reminder, the pinned window or the journal open on BnL Premium.
+---------------------------------------------------------------------------------------------------
 Version: 9.1.1
 Date: 2026-11-04
   Bugfixes:
