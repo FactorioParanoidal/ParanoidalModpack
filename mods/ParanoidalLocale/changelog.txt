@@ -1,6 +1,7 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.26.0
   Locale:
+    - zzzz-user-overrides.cfg: the paranoidal-CodexRPG mod description (same text as in mods-metadata/!descriptions.json) names the BnL Premium bookmark as the Gold Card holders who support the modpack and the features made at their request: the codex with the statistics, the calendar and the alarm clock.
     - zzzz-user-overrides.cfg: the paranoidal-CodexRPG mod description (same text as in mods-metadata/!descriptions.json) names the new journal bookmark BnL Premium with the calendar and the alarm clock.
     - zzzz-user-overrides.cfg: MIRV2 ballistic missile silo (entity and item), technology and mod description (same text as in mods-metadata/!descriptions.json): the launcher fires by itself (zzzparanoidal keeps automatic firing on, decision 2026-11-05), so a ready missile strikes an enemy nest or worm within 1000 tiles on its own; the remote is optional. The mod description no longer says that automatic launch is off.
     - zzzz-user-overrides.cfg: the RocketExplosions2 mod description (same text as in mods-metadata/!descriptions.json) says that the ballistic missile silo of M.I.R.V does not explode.
