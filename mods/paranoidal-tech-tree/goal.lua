@@ -1,7 +1,15 @@
 -- Research goal shared by a force. Only fills free slots at the back of the normal
 -- Factorio queue through force.add_research; never grants research or reorders player items.
 local G = require("graph")
+local Prefs = require("prefs")
 local M = {}
+
+-- Goal messages go to the force's players who keep "goal messages in chat" on (window settings).
+function M.announce(force, message)
+  for _, p in pairs(force.connected_players) do
+    if Prefs.peek(p.index, "chat_goal") then p.print(message) end
+  end
+end
 
 local function goals()
   storage.ptt_goals = storage.ptt_goals or {}
@@ -19,6 +27,9 @@ function M.graph(force)
       local proto = prototypes.item[item]
       return proto and proto.subgroup and proto.subgroup.name == "science-pack" or false
     end)
+    -- Serial of this build: background translation restarts its walk when the graph is replaced.
+    storage.ptt_graph_serial = (storage.ptt_graph_serial or 0) + 1
+    g.serial = storage.ptt_graph_serial
     storage.native_graphs[force.index] = g
   end
   return g
@@ -39,7 +50,7 @@ function M.clear(force, reason)
   local goal = M.get(force)
   if not goal then return end
   goals()[force.index] = nil
-  if reason then force.print({ reason, name_of(force, goal.tech) }) end
+  if reason then M.announce(force, { reason, name_of(force, goal.tech) }) end
 end
 
 -- Fill free queue slots with path technologies. Candidates whose path prerequisites are
@@ -99,7 +110,7 @@ function M.set(force, tech, player)
   local t = force.technologies[tech]
   if not t or t.researched then return false end
   goals()[force.index] = { tech = tech, by = player and player.name or nil, ours = {} }
-  force.print({ "ptt.goal-set", player and player.name or "?", t.localised_name })
+  M.announce(force, { "ptt.goal-set", player and player.name or "?", t.localised_name })
   M.fill(force)
   return true
 end
@@ -108,7 +119,7 @@ function M.pause(force, tech)
   local goal = M.get(force)
   if not goal or goal.paused then return end
   goal.paused = tech
-  force.print({ "ptt.goal-paused", name_of(force, goal.tech), name_of(force, tech) })
+  M.announce(force, { "ptt.goal-paused", name_of(force, goal.tech), name_of(force, tech) })
 end
 
 function M.resume(force)

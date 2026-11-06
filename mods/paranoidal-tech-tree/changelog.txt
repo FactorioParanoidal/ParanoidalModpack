@@ -1,4 +1,31 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.3.0
+  Major Features:
+    - Window rebuilt in the vanilla window style: a titlebar to drag the window by (the position is remembered), a top pane with the toolbar, filters, queue and goal, then three panes - eras, technologies, the selected technology - with even 12 px gaps. The window takes 85% of the screen by default instead of the whole screen.
+    - Settings window (button on the toolbar), remembered per player and kept over mod updates: window size (70, 85, 100% of the screen), card size, cards or list, which technology is selected on open, show researched inside eras, show disabled technologies, show technologies unlocked by an action, put the cursor into the search on open, mark new technologies, the game's detailed tooltip on icons, enemy evolution of the path, goal messages in chat; "Restore defaults".
+    - List view: compact rows with the icon, name, status, cost and goal/new mark; switched with the toolbar buttons or in the settings.
+    - Filters: by status (can be researched now, waiting for a game action, queued, still locked, researched, disabled) and by science pack; the "Filters" button shows how many are active.
+    - Quick actions on cards: Shift+click adds the technology to the queue, Ctrl+click sets it as the goal; the result is shown at the cursor.
+  Features:
+    - Search keeps its results when a found technology is selected; Enter selects the first match; the game's "focus search" key (Ctrl+F) puts the cursor into the search field; results are one grid with the science pack icon at the name and "Unlocks: <name>" when a technology was found by what it unlocks.
+    - Search translations (technology names, then what they unlock) are requested in the background from joining the game, not only while the window is open; already translated names are kept when the technology graph is rebuilt. While the translation is incomplete, "Search is getting ready: N%" is shown on the toolbar.
+    - Selected technology panel: description, level, cost with the research time of one lab (with the research speed bonus), what it gives - unlocked recipes and bonuses with the game's own texts and icons (for example "Character inventory slots: +10") - and the time of the whole path.
+    - "New" mark on technologies that became available after a research finished, until the player selects them.
+    - Card tooltip with the cost and the quick actions; the icon shows the game's technology tooltip.
+    - Eras have a progress bar; the navigator shows the progress of each era.
+    - "How to use" window with the next step and the colour legend (toolbar "?" button) instead of the permanent help block.
+    - Per-player mod setting "Tech tree button on the panel".
+    - Remote interface "paranoidal-tech-tree": open (optionally at a technology), close, is_open, search, show (settings, help, filters, chain, all, none), set_option, set_filter, set_goal.
+  Changes:
+    - Selecting a technology no longer switches the full tree to the chain view and no longer rebuilds the tree; cards update in place. Toggling an era rebuilds only that era.
+    - "Start / add to queue" is now "Add to queue"; prerequisites and next technologies are always titled, with a line when there are none.
+    - The "View" menu is replaced by the toolbar buttons and the settings window.
+    - Goal messages go only to players who keep "Goal messages in chat" on.
+  Bugfixes:
+    - Localised search took minutes to show results: every translation answer postponed the result refresh by another half second, so it waited for the whole translation. Now an answer refreshes the results only when it matches the query and never postpones an already scheduled refresh.
+    - Technologies that only give bonuses showed an empty "Unlocked recipes" block; the bonuses are listed now.
+    - Number agreement of research units in Russian ("1 цикл", "5 циклов").
+---------------------------------------------------------------------------------------------------
 Version: 0.2.2
   Locale:
     - ru: the mod name and the mod list description are the same as in ParanoidalLocale (format "English title (Russian translation)"), so the mod reads the same with or without it.

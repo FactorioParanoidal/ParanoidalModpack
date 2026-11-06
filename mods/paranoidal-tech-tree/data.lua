@@ -1,5 +1,8 @@
 data:extend({
   { type = "custom-input", name = "ptt-toggle", key_sequence = "CONTROL + T", action = "lua" },
+  -- Fires with the game's own "focus search" key; not listed separately in the controls settings.
+  { type = "custom-input", name = "ptt-focus-search", key_sequence = "", linked_game_control = "focus-search",
+    action = "lua" },
   -- Toolbar button: a flask with layers of science pack colors, 64 px at scale 0.5 like the GUI Unifier icons.
   { type = "sprite", name = "ptt-toolbar-button", filename = "__paranoidal-tech-tree__/graphics/toolbar-flask.png",
     width = 64, height = 64, scale = 0.5, flags = {"gui-icon"}, priority = "extra-high-no-scale" },

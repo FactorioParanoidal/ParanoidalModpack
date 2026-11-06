@@ -7,7 +7,8 @@ script.on_init(function()
 end)
 script.on_event({defines.events.on_player_created, defines.events.on_player_joined_game}, Toolbar.player)
 script.on_event(defines.events.on_runtime_mod_setting_changed, function(e)
-  if e.setting == "gu_button_style_setting" or e.setting == "gu_mod_enabled_perplayer" then
+  if e.setting == "gu_button_style_setting" or e.setting == "gu_mod_enabled_perplayer"
+      or e.setting == "ptt-toolbar-button" then
     Toolbar.player(e)
   end
 end)
@@ -22,10 +23,19 @@ script.on_event("ptt-toggle",function(e)
   local p=game.get_player(e.player_index)
   if UI.root(p) then UI.close(p) else UI.open(p) end
 end)
+-- The game's "focus search" key (Ctrl+F by default) puts the cursor into the tree's search field.
+script.on_event("ptt-focus-search",function(e)
+  local p=game.get_player(e.player_index)
+  if p and UI.root(p) then UI.focus_search(p) end
+end)
 script.on_event(defines.events.on_gui_click,UI.click)
 script.on_event(defines.events.on_gui_text_changed,UI.changed)
-script.on_event(defines.events.on_gui_checked_state_changed,UI.changed)
+script.on_event(defines.events.on_gui_checked_state_changed,UI.checked)
+script.on_event(defines.events.on_gui_selection_state_changed,UI.selection)
+script.on_event(defines.events.on_gui_confirmed,UI.confirmed)
+script.on_event(defines.events.on_gui_location_changed,UI.location)
 script.on_event(defines.events.on_string_translated,UI.translated)
+script.on_event(defines.events.on_player_locale_changed,UI.locale_changed)
 script.on_event(defines.events.on_gui_closed,function(e)
   if e.element and e.element.valid and e.element.name=="ptt_native" then UI.close(game.get_player(e.player_index)) end
 end)
@@ -51,6 +61,7 @@ local function refresh(force, full_panel)
   end
 end
 script.on_event(defines.events.on_research_finished,function(e)
+  UI.research_finished(e.research)
   Goal.on_finished(e)
   refresh(e.research.force, true)
 end)
@@ -75,3 +86,4 @@ script.on_nth_tick(15,function()
   end
 end)
 script.on_event(defines.events.on_player_left_game,function(e) UI.close(game.get_player(e.player_index)) end)
+remote.add_interface("paranoidal-tech-tree", UI.remote)
