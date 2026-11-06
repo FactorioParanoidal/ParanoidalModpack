@@ -7,6 +7,7 @@ Date: 2026-02-04
     - Local Paranoidal patch: remote function toggle_gui(player_index) opens or closes the configuration window; used by the GUI Unifyer button.
     - Removed "Clear All" button (was causing a crash)
   Bugfixes:
+    - Paranoidal: validate saved module qualities without discarding the current-format value; safely replace missing qualities in both current and legacy presets.
     - Fix crash when another mod makes all machines have the same number of module slots
   Compatibility:
     - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.

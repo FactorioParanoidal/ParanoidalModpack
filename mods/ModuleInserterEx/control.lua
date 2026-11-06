@@ -291,13 +291,14 @@ local function remove_invalid_items()
                     name = name or m and m.name -- For the older module list format
                     local quality = m and m.module and m.module.quality
                     ---@diagnostic disable-next-line
-                    quality = m and m.quality
+                    quality = quality or m and m.quality
                     if name and not prototypes.item[name] then
                         removed_modules[name] = true
                         table.remove(mc.module_list, i)
                     elseif quality and not prototypes.quality[quality] then
                         removed_qualities[quality] = true
-                        mc.module_list[i].module.quality = replacement_quality
+                        local module = m.module or m
+                        module.quality = replacement_quality
                     end
                 end
             end
