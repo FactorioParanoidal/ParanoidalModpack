@@ -7,6 +7,7 @@ Date: 03/11/2026
     - Paranoidal: ranks with built-in ammo (electric and fluid turrets: laser, flamethrower) are hidden prototypes, so the laser and refined flammables research tooltips list only the base turrets; the ammo category bonuses still apply. Item-fed ranks stay visible.
     - Paranoidal: a rank change or demotion of a working turret does not restart the zzzparanoidal turret deployment delay (remote "paranoidal_turret_deploy".skip_next); a turret that is still deploying gets the full delay again.
   Fixes:
+    - Paranoidal: a rank change, a demotion and a dying ranked turret keep the whole priority target list; it was cut at 1000 entries (the zzzparanoidal panel "Priority by groups" fills lists of a few thousand).
     - Paranoidal: turrets of the legendary ruins (AbandonedRuins-paranoidal: relics "pd-relic-*", guardians "pd-legend-*") get no ranks; a ranked copy would lose the relic.
     - Fixed bug with prio targets 
     - Paranoidal: removed the UTF-8 byte-order mark from the Lua files (data*.lua, settings.lua, migrations/heroturrets_0.1.21.lua); external Lua tools refused to parse them.
