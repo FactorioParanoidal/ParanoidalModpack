@@ -4,6 +4,7 @@ Date: 2026-06-28
   Changes:
     - Update to support Factorio 2.1.
   Locale:
+    - ru: the mod name and description name the Cybersyn constant combinator "Комбинатор заявок" (request combinator) and the train network "диспетчерская сеть" (user decision 2026-11-06), the same as in ParanoidalLocale; the full Russian translation of the build lives in ParanoidalLocale (cybersyn-combinator.mod.cfg).
     - ru: the mod name and the mod list description are the same as in ParanoidalLocale (format "English title (Russian translation)"), so the mod reads the same with or without it.
   Compatibility:
     - Paranoidal: the dependencies are lowered to the versions in the modpack, cybersyn >= 2.0.53 (Paranoidal port of Project Cybersyn to Factorio 2.1) and flib >= 0.16.5. The mod uses only the Cybersyn signals and the flib functions and styles these versions already have (cybersyn-priority, cybersyn-request-threshold, cybersyn-fluid-request-threshold, cybersyn-locked-slots, cybersyn-reserved-fluid-capacity, cybersyn-network-flag; flib data-util.copy_prototype, gui.add, gui.add_handlers, gui.handle_events, slot button and drag handle styles).
