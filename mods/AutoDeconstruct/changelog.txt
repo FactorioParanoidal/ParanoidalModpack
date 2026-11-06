@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.14
 Date: 2026-07-29
+  Locale:
+    - ru: corrected the tile deconstruction setting to refer to paving under entities, not an interface section.
   Changes:
     - Moved the autodeconstruct surface blacklist to a mod-data entry so other mods can add to it. (thanks to PizzaPlanner)
   Bugfixes:
