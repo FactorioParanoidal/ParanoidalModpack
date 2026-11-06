@@ -15,6 +15,7 @@ return {
             {["name"] = "constant-combinator", ["order"] = "03"},
             {["name"] = "selector-combinator", ["order"] = "04"},
             {["name"] = "cybersyn-combinator", ["order"] = "05"},
+            {["name"] = "cybersyn-constant-combinator", ["order"] = "06"},
         }},
         {subgroup = "paranoidal-circuit-visual", order = "a-04", recipes = {
             {["name"] = "deadlock-copper-lamp", ["order"] = "01", ["icon"] = {["icon"] = "__zzzparanoidal__/graphics/circuit-menu-beta8/f41f2849f5b20941d729.png", ["icon_size"] = 64}},
