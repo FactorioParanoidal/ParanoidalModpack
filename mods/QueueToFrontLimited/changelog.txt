@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.3
 Date: 2023.11.24
+  Bugfixes:
+    - Paranoidal: bracket queue reordering with optional ic-more-qualities return accounting, including queue-limit exits, so restored crafts do not cause defects in spare items.
   Changes:
     - If queue to front enabled and only one item is in the queue then dont do anything
   Compatibility:

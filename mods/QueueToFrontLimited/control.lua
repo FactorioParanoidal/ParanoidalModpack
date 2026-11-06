@@ -23,6 +23,18 @@ local function on_pre_player_crafted_item(e)
             crafting_queue_progress = player.crafting_queue_progress
         end
 
+        -- Account only for cancelled ingredients that remain outside the restored queue.
+        local quality_interface = remote.interfaces["ic-more-qualities"]
+        local quality_transaction = quality_interface and quality_interface.begin_queue_reorder
+            and quality_interface.end_queue_reorder
+            and remote.call("ic-more-qualities", "begin_queue_reorder", player.index)
+        local function finish_reorder()
+            if quality_transaction then
+                remote.call("ic-more-qualities", "end_queue_reorder", player.index)
+            end
+            player.character_inventory_slots_bonus = old_size
+        end
+
         -- remove everything from queue
         local first = true
         while player.crafting_queue do
@@ -34,14 +46,14 @@ local function on_pre_player_crafted_item(e)
             if queue_length > settings.global["qtfl_queue_limit"].value then
                 player.print({ 'qtf-message.queue-too-large' }, { r = 0.8, g = 0.1, b = 0.1 })
                 player.cancel_crafting({ index = ind, count = cou })
-                player.character_inventory_slots_bonus = old_size
+                finish_reorder()
                 return
             end
 
             -- errout if queue is too large (we have to do this because the API restricts index to 65535)
             if ind > 65535 or cou > 65535 then
                 player.print({ 'qtf-message.queue-too-large' }, { r = 1.0, g = 0.1, b = 0.1 })
-                player.character_inventory_slots_bonus = old_size
+                finish_reorder()
                 return
             end
 
@@ -69,8 +81,8 @@ local function on_pre_player_crafted_item(e)
             player.begin_crafting { count = v.count, recipe = v.recipe }
         end
 
-        -- revert inventory size
-        player.character_inventory_slots_bonus = old_size
+        -- Finalize before shrinking the inventory, while returned leftovers are still visible.
+        finish_reorder()
 
         storage.busy_queueing = false
     end
