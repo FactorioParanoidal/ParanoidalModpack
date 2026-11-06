@@ -9,6 +9,8 @@ local TINT = {r = 1.0, g = 0.42, b = 0.38}
 local MAP = {r = 0.85, g = 0.15, b = 0.15}
 local RESIST_TYPES = {"physical", "explosion", "fire", "laser", "electric", "acid", "poison"}
 local MAX_RESIST = 85
+-- Base signal icon of a resistance focus on the unit icon (lower left); balanced has none.
+local FOCUS_SIGN = {kinetic = "signal-explosion", energy = "signal-lightning", chemical = "signal-liquid"}
 
 local function in_focus(focus, damage_type)
   return focus ~= "balanced" and S.focus_of_damage[damage_type] == focus
@@ -63,6 +65,16 @@ local function replicator(base, kind, mark, focus)
   u.can_open_gates = true
   u.radar_range = 0 -- the citadel force charts nothing
   u.icons = G.icons(base, TINT)
+  -- The armour mark (upper right, like the tier of the Rampant units) and the focus sign (lower left) tell the 13
+  -- copies of a droid apart in the entity lists (turret priority targets).
+  if mark > 0 then
+    u.icons[#u.icons + 1] = {icon = "__base__/graphics/icons/signal/signal_" .. mark .. ".png", icon_size = 64,
+      scale = 0.25, shift = {5, -10}}
+    if FOCUS_SIGN[focus] then
+      u.icons[#u.icons + 1] = {icon = "__base__/graphics/icons/signal/" .. FOCUS_SIGN[focus] .. ".png", icon_size = 64,
+        scale = 0.2, shift = {-9, 9}}
+    end
+  end
   u.icon = nil
   u.icon_size = nil
   local seen = {}
