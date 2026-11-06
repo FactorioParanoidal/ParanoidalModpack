@@ -1,4 +1,10 @@
 ---------------------------------------------------------------------------------------------------
+Version: 9.2.1
+Date: 2026-11-06
+  Changes:
+    - BnL Premium: entries are one line (player, feature, version) until expanded with the arrow button; the quote and the request date are in the tooltip of the line. Expanded entries are remembered per player.
+    - Calendar: 1 January after the first year is "BnL New Year: year N begins" instead of the landing anniversary with years on the planet, which disagreed with the NightBrightness year count.
+---------------------------------------------------------------------------------------------------
 Version: 9.2.0
 Date: 2026-11-06
   Features:

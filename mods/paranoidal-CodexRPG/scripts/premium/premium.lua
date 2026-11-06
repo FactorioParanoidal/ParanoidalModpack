@@ -200,7 +200,7 @@ local REVIEW_DAYS = review_days()
 local function holiday_name(id, y)
 	if id == "landing" then
 		if y <= 1 then return L("holiday-landing-first") end
-		return L("holiday-landing", y - 1)
+		return L("holiday-landing", y)
 	end
 	return L("holiday-" .. id)
 end
@@ -921,20 +921,39 @@ function P.render(player, lc, rc)
 	})
 	ui.muted(c, L("card-fine"))
 
+	-- Entries are one line each until the player expands them (the quote is in the tooltip).
 	for _, e in ipairs(ENTRIES) do
-		local ec = ui.card(lc, "[virtual-signal=signal-star]", e.player)
-		ui.label(ec, L(e.id .. "-title"), {font = "default-large-bold", wrap = LY.inner_w})
-		local q = ui.label(ec, L("quote", L(e.id .. "-quote")), {wrap = LY.inner_w, color = TEXT})
-		q.style.top_margin = 4
-		ui.muted(ec, L("entry-asked", real_date(e.asked)))
-		local d = ui.label(ec, L(e.id .. "-text"), {wrap = LY.inner_w})
-		d.style.top_margin = 6
-		local row = ec.add{type = "flow", direction = "horizontal"}
+		local expanded = p.expanded and p.expanded[e.id]
+		local quote = L("quote", L(e.id .. "-quote"))
+		local ec
+		local row
+		if expanded then
+			ec = ui.card(lc, "[virtual-signal=signal-star]", e.player)
+			ui.label(ec, L(e.id .. "-title"), {font = "default-large-bold", wrap = LY.inner_w})
+			local q = ui.label(ec, quote, {name = "rpgpm_quote_" .. e.id, wrap = LY.inner_w, color = TEXT})
+			q.style.top_margin = 4
+			ui.muted(ec, L("entry-asked", real_date(e.asked)))
+			local d = ui.label(ec, L(e.id .. "-text"), {wrap = LY.inner_w})
+			d.style.top_margin = 6
+			row = ec.add{type = "flow", direction = "horizontal"}
+			row.style.top_margin = 8
+			ui.label(row, L("entry-done", e.version, real_date(e.done)), {font = "default-bold", color = GREEN})
+		else
+			ec = ui.card(lc)
+			row = ec.add{type = "flow", direction = "horizontal"}
+			local tip = {"", quote, "\n", L("entry-asked", real_date(e.asked))}
+			local line = ui.label(row, {"", "[virtual-signal=signal-star] [color=1,0.84,0.3]", e.player, "[/color]  ",
+				L(e.id .. "-title")}, {font = "default-bold", wrap = math.max(120, LY.inner_w - 300), tooltip = tip})
+			line.style.horizontally_squashable = true
+			ui.label(row, L("entry-short", e.version), {font = "default-bold", color = GREEN,
+				tooltip = L("entry-done", e.version, real_date(e.done))})
+		end
 		row.style.vertical_align = "center"
-		row.style.top_margin = 8
+		row.style.horizontal_spacing = 8
 		row.style.width = LY.inner_w
-		ui.label(row, L("entry-done", e.version, real_date(e.done)), {font = "default-bold", color = GREEN})
 		filler(row)
+		row.add{type = "sprite-button", name = "rpgpm_exp_" .. e.id, tags = {entry = e.id}, style = "frame_action_button",
+			sprite = expanded and "utility/collapse" or "utility/expand", tooltip = L(expanded and "collapse" or "expand")}
 		local open = p.open == e.id
 		local b = row.add{type = "button", name = "rpgpm_open_" .. e.id, tags = {entry = e.id},
 			caption = L(open and "close" or "open"), tooltip = L(open and "close-tooltip" or "open-tooltip")}
@@ -1072,6 +1091,10 @@ function P.on_click(event, player)
 	local tags = element.tags or {}
 	if name:sub(1, 11) == "rpgpm_open_" then
 		p.open = (p.open ~= tags.entry) and tags.entry or nil
+		rerender(player)
+	elseif name:sub(1, 10) == "rpgpm_exp_" then
+		p.expanded = p.expanded or {}
+		p.expanded[tags.entry] = (not p.expanded[tags.entry]) or nil
 		rerender(player)
 	elseif name == "rpgpm_pin_toggle" then
 		p.pin = not p.pin
