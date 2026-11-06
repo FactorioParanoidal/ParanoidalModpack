@@ -35,11 +35,47 @@ local RED = {0.88, 0.3, 0.22}
 local SOUND = {}
 for i, s in ipairs(SOUNDS) do SOUND[s.id] = {index = i, every = s.every} end
 
--- The wishes. Dates are real dates (year, month, day) of the request and of the release.
-local ENTRIES = {
-	{id = "silkor", player = "Silkor (Серега)", asked = {2026, 11, 3}, done = {2026, 11, 6}, version = "9.2.0",
-		feature = "calendar"},
+-- Gold Card holders: the supporters of the modpack, by their display name (data, not translated). The
+-- list is kept in alphabetical order and shown as is; card is the order of addition (the first holders
+-- are numbered alphabetically, a new holder gets the next number). wishes: ids in WISHES.
+local DONORS = {
+	{card = 1, name = "3vaL"},
+	{card = 2, name = "Alehandro"},
+	{card = 3, name = "CoolzeT", wishes = {"coolzet"}},
+	{card = 4, name = "DarkMays"},
+	{card = 5, name = "Denni"},
+	{card = 6, name = "FreeSiberian"},
+	{card = 7, name = "GeForce RTX 4090 Aorus Elite"},
+	{card = 8, name = "nomoreplay"},
+	{card = 9, name = "Psyhe"},
+	{card = 10, name = "Sheiny"},
+	{card = 11, name = "Silkor (Серега)", wishes = {"silkor"}},
+	{card = 12, name = "Svarshick_Ivan"},
+	{card = 13, name = "TheWolfOW"},
+	{card = 14, name = "yadergame"},
+	{card = 15, name = "ИгрокСталинграда"},
+	{card = 16, name = "ТРЯМ"},
 }
+
+-- Fulfilled wishes. Dates are real dates (year, month, day) of the request and of the release. feature: opened on
+-- the right page by "Open" (FEATURES); without it the wish only expands to its quote and description.
+-- Texts: rpg-premium.<id>-title/-quote/-text.
+local WISHES = {
+	coolzet = {asked = {2026, 10, 28}, done = {2026, 10, 29}, version = "9.1.0"}, -- the Codex is its own bookmark
+	silkor = {asked = {2026, 11, 3}, done = {2026, 11, 6}, version = "9.2.0", feature = "calendar"},
+}
+
+local BY_CARD, DONOR_OF, WISH_IDS = {}, {}, {}
+for _, d in ipairs(DONORS) do
+	BY_CARD[d.card] = d
+	d.wishes = d.wishes or {}
+	for _, id in ipairs(d.wishes) do
+		DONOR_OF[id] = d
+		WISH_IDS[#WISH_IDS + 1] = id
+	end
+end
+
+local LAYOUT = 2 -- 9.3.0: holders and profiles instead of a flat list; the bookmark starts closed once
 
 local journal -- the window module, set by P.set_journal: render, open, ui helpers
 
@@ -64,18 +100,17 @@ local function pstate(index)
 	local s = root()
 	local p = s.players[index]
 	if not p then
-		p = {open = ENTRIES[1].id, view = "month", alarms = {}, notes = {}, sound = SOUNDS[1].id, volume = 80,
+		p = {view = "month", alarms = {}, notes = {}, sound = SOUNDS[1].id, volume = 80,
 			hours = 0, minutes = 30, note = "", session = game.tick, rest = false, rest_every = 120,
 			pin = false, pin_full = false}
 		s.players[index] = p
 	end
-	return p
-end
-
-local function entry(id)
-	for _, e in ipairs(ENTRIES) do
-		if e.id == id then return e end
+	-- The bookmark starts closed (no holder selected, no wish opened); afterwards it is remembered.
+	if p.layout ~= LAYOUT then
+		p.open, p.donor, p.expanded, p.sel = nil, nil, nil, nil
+		p.layout = LAYOUT
 	end
+	return p
 end
 
 ---------------------------------------------------------------------------------------------
@@ -162,20 +197,41 @@ local function hours_minutes(ticks)
 	return L("hm", math.floor(m / 60), string.format("%02d", m % 60))
 end
 
+-- Ticks -> "1 мин 07 с" / "45 с" (a game day lasts a few minutes).
+local function min_sec(ticks)
+	local s = math.max(0, math.ceil(ticks / 60))
+	if s >= 3600 then return hours_minutes(s * 60) end
+	if s >= 60 then return L("dur-ms", math.floor(s / 60), string.format("%02d", s % 60)) end
+	return L("dur-s", s)
+end
+
+-- Day or night on the planet: night?, daytime of the next change, ticks to it, share of the phase passed.
+-- Night runs from dusk to morning, the day from morning to dusk. nil while the time is frozen.
+local function phase()
+	local surface = planet()
+	if not surface or surface.freeze_daytime then return nil end
+	local t = surface.daytime
+	local dp = surface.daytime_parameters
+	local night = t >= dp.dusk and t < dp.morning
+	local from, to = dp.morning, dp.dusk
+	if night then from, to = dp.dusk, dp.morning end
+	local length = (to - from) % 1
+	return night, to, ((to - t) % 1) * surface.ticks_per_day, length > 0 and ((t - from) % 1) / length or 0
+end
+
+local NIGHT_BLUE = {0.55, 0.7, 1}
+
 local function daylight()
 	local surface = planet()
 	if not surface then return "" end
-	if surface.freeze_daytime then return L("frozen") end
-	local t = surface.daytime
-	local dp = surface.daytime_parameters
-	local key, target = "sunset", dp.dusk
-	if t >= dp.dusk and t < dp.morning then key, target = "sunrise", dp.morning end
-	return L(key, clock(target), countdown(((target - t) % 1) * surface.ticks_per_day))
+	local night, to, left = phase()
+	if night == nil then return L("frozen") end
+	return L(night and "phase-night" or "phase-day", clock(to), min_sec(left))
 end
 
 local function now_line()
 	local surface = planet()
-	return L("now-line", clock(surface and surface.daytime or 0), daylight())
+	return L("now-line", clock(surface and surface.daytime or 0))
 end
 
 local function date_text(n)
@@ -187,15 +243,27 @@ local function real_date(t)
 	return string.format("%02d.%02d.%d", t[3], t[2], t[1])
 end
 
--- Average days between a wish and its release.
-local function review_days()
-	local sum = 0
-	for _, e in ipairs(ENTRIES) do
-		sum = sum + calendar.index(e.done[1], e.done[2], e.done[3]) - calendar.index(e.asked[1], e.asked[2], e.asked[3])
-	end
-	return math.floor(sum / math.max(1, #ENTRIES) + 0.5)
+-- Days between a wish and its release.
+local function review_days(w)
+	return calendar.index(w.done[1], w.done[2], w.done[3]) - calendar.index(w.asked[1], w.asked[2], w.asked[3])
 end
-local REVIEW_DAYS = review_days()
+
+local REVIEW_DAYS -- average over all wishes
+do
+	local sum = 0
+	for _, id in ipairs(WISH_IDS) do sum = sum + review_days(WISHES[id]) end
+	REVIEW_DAYS = math.floor(sum / math.max(1, #WISH_IDS) + 0.5)
+end
+
+local NORM_DAYS = 700 * 365 -- the BnL review standard
+
+-- "Fulfilled in 1 day, 699 years and 364 days faster than the BnL standard".
+local function done_tooltip(w)
+	local days = review_days(w)
+	local faster = NORM_DAYS - days
+	return {"", L("entry-done", w.version, real_date(w.done)), "\n", L("done-joke", days, math.floor(faster / 365),
+		faster % 365)}
+end
 
 local function holiday_name(id, y)
 	if id == "landing" then
@@ -327,6 +395,16 @@ local function alarm_note(a)
 	return a.note
 end
 
+-- "Rings in 1 min, at 0:04 planet time" for the time in the alarm fields.
+local function preview(p)
+	local minutes = duration_minutes(p)
+	if minutes <= 0 then return L("preview-zero") end
+	local surface = planet()
+	if not surface or surface.freeze_daytime then return L("preview", hours_minutes(minutes * MINUTE)) end
+	return L("preview-at", hours_minutes(minutes * MINUTE),
+		clock(surface.daytime + minutes * MINUTE / math.max(1, surface.ticks_per_day)))
+end
+
 local function bar_color(left)
 	if left <= MINUTE then return RED end
 	if left <= 5 * MINUTE then return ORANGE end
@@ -405,14 +483,13 @@ local function update_pin(player, p)
 	end
 	if not frame or (frame.tags or {}).sig ~= pin_signature(p) then frame = build_pin(player, p) end
 	local n = today()
-	local surface = planet()
 	local head = frame.head
-	head.date.caption = {"", date_text(n), "  ", clock(surface and surface.daytime or 0)}
+	head.date.caption = date_text(n)
 	local a = next_alarm(p)
 	if p.pin_full then
 		head.mini.caption = ""
 		local body = frame.body
-		body.now.caption = {"", L("wd-" .. calendar.weekday(n)), " · ", daylight()}
+		body.now.caption = {"", L("wd-" .. calendar.weekday(n)), " · ", n == 0 and L("landing-day") or L("since-landing", n + 1)}
 		body.session.caption = L("session", hours_minutes(game.tick - p.session))
 		for _, al in ipairs(p.alarms) do
 			local left = body["left_" .. al.id]
@@ -524,15 +601,31 @@ local function refresh_journal(player, p)
 		end
 	end
 	local now = cards.rpgpm_now
-	if not now then return end
-	if (now.tags or {}).day ~= today() then
-		journal.render(player)
-		return
+	local e
+	if now then
+		if (now.tags or {}).day ~= today() then
+			journal.render(player)
+			return
+		end
+		e = find(now, "rpgpm_clock")
+		if e then e.caption = now_line() end
+		local night, _, _, share = phase()
+		e = find(now, "rpgpm_phase")
+		if e then
+			e.caption = daylight()
+			e.style.font_color = night and NIGHT_BLUE or GOLD
+		end
+		e = find(now, "rpgpm_daybar")
+		if e then
+			e.visible = share ~= nil
+			e.value = share or 0
+			e.style.color = night and BLUE or GOLD
+		end
 	end
-	local e = find(now, "rpgpm_clock")
-	if e then e.caption = now_line() end
 	local alarms = cards.rpgpm_alarms
 	if alarms then
+		e = find(alarms, "rpgpm_preview")
+		if e then e.caption = preview(p) end
 		for _, a in ipairs(p.alarms) do
 			local left = find(alarms, "rpgpm_left_" .. a.id)
 			if left then left.caption = a.ringing and L("ringing") or L("left", countdown(a.at - game.tick)) end
@@ -629,7 +722,7 @@ local function month_grid(player, p, c, ui, LY, vy, vm, today_n)
 	local hol = calendar.holidays(vy, vm)
 	local ms = milestones_by_day(player, first, first + days - 1)
 	local gap = 4
-	local cell = math.max(36, math.min(64, math.floor((LY.inner_w - 6 * gap) / 7)))
+	local cell = math.max(36, math.min(110, math.floor((LY.inner_w - 6 * gap) / 7))) -- the cells fill the card
 	local t = c.add{type = "table", column_count = 7}
 	t.style.horizontal_spacing = gap
 	t.style.vertical_spacing = gap
@@ -651,9 +744,12 @@ local function month_grid(player, p, c, ui, LY, vy, vm, today_n)
 		if n == today_n then style = "rpgpm_day_today"
 		elseif n < today_n then style = wd >= 6 and "rpgpm_day_past_weekend" or "rpgpm_day_past"
 		elseif wd >= 6 then style = "rpgpm_day_weekend" end
+		-- holidays gold, days with milestones green (dimmer when past); the number stays centred
 		local caption = tostring(d)
-		if hol[d] then caption = caption .. "[color=1,0.84,0.3]★[/color]" end
-		if ms[n] then caption = caption .. "[color=0.36,0.78,0.24]✓[/color]" end
+		local mark
+		if hol[d] then mark = n < today_n and "0.75,0.62,0.3" or "1,0.84,0.3"
+		elseif ms[n] then mark = n < today_n and "0.32,0.6,0.24" or "0.45,0.88,0.3" end
+		if mark and n ~= today_n then caption = "[color=" .. mark .. "]" .. caption .. "[/color]" end
 		local b = t.add{type = "button", name = "rpgpm_day_" .. d, style = style, caption = caption,
 			tags = {n = n}, tooltip = day_tooltip(n, today_n, hol[d], vy, ms[n])}
 		b.style.width = cell
@@ -721,12 +817,20 @@ local function render_now(player, p, page, ui, LY)
 	top.style.width = LY.inner_w
 	ui.label(top, date_text(n), {font = "charxpmod_font_30", color = ORANGE})
 	filler(top)
-	local pin = top.add{type = "sprite-button", name = "rpgpm_pin_toggle", sprite = "utility/track_button",
-		style = "tool_button", tooltip = L(p.pin and "unpin-tooltip" or "pin-tooltip")}
+	local pin = top.add{type = "button", name = "rpgpm_pin_toggle", caption = L(p.pin and "unpin" or "pin"),
+		tooltip = L(p.pin and "unpin-tooltip" or "pin-tooltip")}
 	pin.toggled = p.pin
 	ui.label(c, {"", L("wd-" .. calendar.weekday(n)), " · ", n == 0 and L("landing-day") or L("since-landing", n + 1)},
 		{font = "default-bold", wrap = LY.inner_w})
 	ui.label(c, now_line(), {name = "rpgpm_clock", wrap = LY.inner_w})
+	local night, _, _, share = phase()
+	local ph = ui.label(c, daylight(), {name = "rpgpm_phase", color = night and NIGHT_BLUE or GOLD, wrap = LY.inner_w})
+	ph.style.top_margin = 4
+	local daybar = c.add{type = "progressbar", name = "rpgpm_daybar", value = share or 0,
+		tooltip = L("daybar-tooltip")}
+	daybar.style.width = LY.inner_w
+	daybar.style.color = night and BLUE or GOLD
+	daybar.visible = share ~= nil
 	if state and state.season and not state.disabled then
 		local api = remote.interfaces["NightBrightness"] or {}
 		local name, color = state.season, nil
@@ -781,13 +885,32 @@ local function render_calendar_card(player, p, page, ui, LY)
 	end
 end
 
+local LABEL_W = 96 -- the label column of the alarm form
+
+-- One row of the alarm form: the caption in a fixed column, the controls in a flow after it.
+local function form_row(t, caption)
+	local l = t.add{type = "label", caption = caption or ""}
+	l.style.width = LABEL_W
+	l.style.height = 28
+	l.style.vertical_align = "center"
+	l.style.font_color = TEXT
+	local f = t.add{type = "flow", direction = "horizontal"}
+	f.style.vertical_align = "center"
+	f.style.horizontal_spacing = 6
+	f.style.minimal_height = 28
+	return f
+end
+
 local function render_alarm_card(player, p, page, ui, LY)
-	local c = ui.card(page, "[img=utility/clock]", L("card-alarm"), L("card-alarm-tooltip"))
+	local c = ui.card(page, "[img=utility/clock]", {"", L("card-alarm"), "  [virtual-signal=signal-info]"},
+		{"", L("card-alarm-tooltip"), "\n\n", L("game-time")})
 	c.name = "rpgpm_alarms"
-	local row = c.add{type = "flow", direction = "horizontal"}
-	row.style.vertical_align = "center"
-	row.style.horizontal_spacing = 6
-	ui.label(row, L("in"))
+	local field_w = LY.inner_w - LABEL_W - 8
+	local t = c.add{type = "table", column_count = 2}
+	t.style.horizontal_spacing = 8
+	t.style.vertical_spacing = 6
+
+	local row = form_row(t, L("in"))
 	local h = row.add{type = "textfield", name = "rpgpm_hours", text = tostring(p.hours), numeric = true,
 		allow_decimal = false, allow_negative = false, lose_focus_on_confirm = true}
 	h.style.width = 50
@@ -796,65 +919,62 @@ local function render_alarm_card(player, p, page, ui, LY)
 		allow_decimal = false, allow_negative = false, lose_focus_on_confirm = true}
 	m.style.width = 60
 	ui.label(row, L("min"))
-	local presets = c.add{type = "flow", direction = "horizontal"}
-	presets.style.horizontal_spacing = 4
-	presets.style.top_margin = 4
+
+	row = form_row(t)
+	row.style.horizontal_spacing = 4
+	local preset_w = math.max(56, math.min(80, math.floor((field_w - 4 * #PRESETS) / (#PRESETS + 1))))
 	for _, minutes in ipairs(PRESETS) do
 		local caption = minutes < 60 and L("m", minutes) or L("h-only", minutes / 60)
-		presets.add{type = "button", name = "rpgpm_preset_" .. minutes, tags = {m = minutes}, caption = caption}.style.minimal_width = 64
+		row.add{type = "button", name = "rpgpm_preset_" .. minutes, tags = {m = minutes}, caption = caption}.style.width = preset_w
 	end
-	presets.add{type = "button", name = "rpgpm_plus5", caption = L("plus", 5), tooltip = L("plus-tooltip", 5)}.style.minimal_width = 64
+	row.add{type = "button", name = "rpgpm_plus5", caption = L("plus", 5), tooltip = L("plus-tooltip", 5)}.style.width = preset_w
 
-	local nrow = c.add{type = "flow", direction = "horizontal"}
-	nrow.style.vertical_align = "center"
-	nrow.style.horizontal_spacing = 6
-	nrow.style.top_margin = 6
-	ui.label(nrow, L("note"))
-	local note = nrow.add{type = "textfield", name = "rpgpm_note", text = p.note or "", tooltip = L("note-tooltip"),
+	row = form_row(t, L("note"))
+	local note = row.add{type = "textfield", name = "rpgpm_note", text = p.note or "", tooltip = L("note-tooltip"),
 		lose_focus_on_confirm = true}
-	note.style.width = math.max(160, LY.inner_w - 90)
+	note.style.width = math.max(160, field_w)
 	if #p.notes > 0 then
-		local tf = c.add{type = "flow", direction = "horizontal"}
-		tf.style.horizontal_spacing = 4
-		tf.style.vertical_align = "center"
-		ui.label(tf, L("recent"), {color = MUTED, font = "default-small"})
-		local w = math.floor((LY.inner_w - 90) / math.min(#p.notes, RECENT))
+		row = form_row(t, L("recent"))
+		row.style.horizontal_spacing = 4
+		local w = math.floor((field_w - 4 * (RECENT - 1)) / RECENT)
 		for i, text in ipairs(p.notes) do
-			local b = tf.add{type = "button", name = "rpgpm_tpl_" .. i, tags = {i = i}, caption = text, tooltip = text}
-			b.style.maximal_width = math.max(60, w - 4)
+			local b = row.add{type = "button", name = "rpgpm_tpl_" .. i, tags = {i = i}, caption = text, tooltip = text}
+			b.style.maximal_width = math.max(60, w)
 			b.style.font = "default-small"
 		end
 	end
 
-	local srow = c.add{type = "flow", direction = "horizontal"}
-	srow.style.vertical_align = "center"
-	srow.style.horizontal_spacing = 6
-	srow.style.top_margin = 6
-	ui.label(srow, L("sound"))
+	row = form_row(t, L("sound"))
 	local items = {}
 	for i, s in ipairs(SOUNDS) do items[i] = {"programmable-speaker-note." .. s.id} end
-	local dd = srow.add{type = "drop-down", name = "rpgpm_sound", items = items,
+	local dd = row.add{type = "drop-down", name = "rpgpm_sound", items = items,
 		selected_index = SOUND[p.sound] and SOUND[p.sound].index or 1}
-	dd.style.width = 210
-	srow.add{type = "sprite-button", name = "rpgpm_play", sprite = "utility/play", style = "tool_button",
+	dd.style.width = math.min(240, math.max(160, field_w - 40))
+	row.add{type = "sprite-button", name = "rpgpm_play", sprite = "utility/play", style = "tool_button",
 		tooltip = L("play-tooltip")}
-	local vrow = c.add{type = "flow", direction = "horizontal"}
-	vrow.style.vertical_align = "center"
-	vrow.style.horizontal_spacing = 8
-	ui.label(vrow, L("volume", p.volume), {name = "rpgpm_volume_text", width = 130})
-	local slider = vrow.add{type = "slider", name = "rpgpm_volume", minimum_value = 10, maximum_value = 100,
-		value = p.volume, value_step = 10, discrete_values = true}
-	slider.style.width = math.max(120, math.min(300, LY.inner_w - 150))
 
-	local set = c.add{type = "button", name = "rpgpm_set", style = "green_button", caption = L("set"),
+	row = form_row(t, L("volume-label"))
+	row.style.horizontal_spacing = 10
+	local slider = row.add{type = "slider", name = "rpgpm_volume", minimum_value = 10, maximum_value = 100,
+		value = p.volume, value_step = 10, discrete_values = true}
+	slider.style.width = math.max(120, math.min(240, field_w - 60))
+	ui.label(row, L("volume", p.volume), {name = "rpgpm_volume_text", font = "default-bold"})
+
+	local act = c.add{type = "flow", direction = "horizontal"}
+	act.style.vertical_align = "center"
+	act.style.horizontal_spacing = 10
+	act.style.top_margin = 10
+	act.style.left_margin = LABEL_W + 8 -- under the fields
+	local set = act.add{type = "button", name = "rpgpm_set", style = "green_button", caption = L("set"),
 		tooltip = L("set-tooltip")}
-	set.style.top_margin = 8
 	set.style.minimal_width = 160
 	set.enabled = #p.alarms < MAX_ALARMS
-	ui.muted(c, #p.alarms < MAX_ALARMS and L("game-time") or L("limit", MAX_ALARMS)).style.top_margin = 4
+	local pv = ui.label(act, preview(p), {name = "rpgpm_preview", color = MUTED, wrap = math.max(120, field_w - 180)})
+	pv.style.horizontally_squashable = true
+	if #p.alarms >= MAX_ALARMS then ui.muted(c, L("limit", MAX_ALARMS)).style.top_margin = 4 end
 
 	local head = ui.label(c, L("active", #p.alarms), {font = "default-bold", color = ORANGE})
-	head.style.top_margin = 10
+	head.style.top_margin = 12
 	if #p.alarms == 0 then ui.muted(c, L("none")) end
 	for _, a in ipairs(p.alarms) do
 		local r = c.add{type = "flow", direction = "horizontal"}
@@ -874,15 +994,15 @@ local function render_alarm_card(player, p, page, ui, LY)
 	end
 end
 
+-- The session in one line; the reminder time only while the reminder is on.
 local function render_session_card(player, p, page, ui, LY)
-	local c = ui.card(page, "[entity=character]", L("card-session"), L("card-session-tooltip"))
+	local c = ui.card(page, "[entity=character]", L("card-session"), {"", L("card-session-tooltip"), "\n\n", L("rest-hint")})
 	c.name = "rpgpm_session"
-	ui.label(c, L("session", hours_minutes(game.tick - p.session)), {name = "rpgpm_session_time",
-		font = "default-large-bold", tooltip = L("card-session-tooltip")})
 	local row = c.add{type = "flow", direction = "horizontal"}
 	row.style.vertical_align = "center"
-	row.style.horizontal_spacing = 8
-	row.style.top_margin = 6
+	row.style.horizontal_spacing = 12
+	ui.label(row, L("session", hours_minutes(game.tick - p.session)), {name = "rpgpm_session_time",
+		font = "default-bold", tooltip = L("card-session-tooltip")})
 	row.add{type = "checkbox", name = "rpgpm_rest", state = p.rest, caption = L("rest"), tooltip = L("rest-tooltip")}
 	local items, sel = {}, 1
 	for i, minutes in ipairs(REST_EVERY) do
@@ -890,82 +1010,142 @@ local function render_session_card(player, p, page, ui, LY)
 		if minutes == p.rest_every then sel = i end
 	end
 	row.add{type = "drop-down", name = "rpgpm_rest_every", items = items, selected_index = sel}
-	ui.label(c, p.rest_next and L("rest-next", countdown(p.rest_next - game.tick)) or "",
-		{name = "rpgpm_rest_next", color = MUTED, font = "default-small"})
-	ui.muted(c, L("rest-hint"))
+	if p.rest and p.rest_next then
+		ui.label(c, L("rest-next", countdown(p.rest_next - game.tick)), {name = "rpgpm_rest_next", color = MUTED,
+			font = "default-small"}).style.top_margin = 4
+	end
 end
 
-local function render_calendar_feature(player, p, page, ui, LY)
-	render_now(player, p, page, ui, LY)
-	render_calendar_card(player, p, page, ui, LY)
-	render_alarm_card(player, p, page, ui, LY)
-	render_session_card(player, p, page, ui, LY)
-end
+-- Features render on the right page (on one-page screens: after the list), under the back line.
+local FEATURES = {
+	calendar = function(player, p, page, ui, LY)
+		render_now(player, p, page, ui, LY)
+		render_calendar_card(player, p, page, ui, LY)
+		render_alarm_card(player, p, page, ui, LY)
+		render_session_card(player, p, page, ui, LY)
+	end,
+}
 
-local FEATURES = {calendar = render_calendar_feature}
-
--- The bookmark: wishes on the left, the opened feature on the right (below on one-page screens).
-function P.render(player, lc, rc)
-	local ui = journal.ui
-	local LY = ui.layout()
-	local p = pstate(player.index)
-	root().watch[player.index] = true
-
-	local c = ui.card(lc, P.ICON, L("card-title"), L("card-title-tooltip"))
-	ui.label(c, player.name, {font = "charxpmod_font_20", color = GOLD, wrap = LY.inner_w})
-	ui.label(c, L("tariff"), {wrap = LY.inner_w})
+-- Left page: the club card and the holders, alphabetically.
+local function render_list(player, p, page, ui, LY)
+	local c = ui.card(page, P.ICON, L("card-title"), L("card-title-tooltip"))
 	ui.bigs(c, {
-		{L("done-count"), tostring(#ENTRIES), GREEN},
+		{L("donors-count"), tostring(#DONORS), GOLD},
+		{L("done-count"), tostring(#WISH_IDS), GREEN},
 		{L("review"), L("review-value", REVIEW_DAYS), ORANGE, L("review-tooltip")},
 		{L("review-norm"), L("review-norm-value"), nil},
 	})
 	ui.muted(c, L("card-fine"))
 
-	-- Entries are one line each until the player expands them (the quote is in the tooltip).
-	for _, e in ipairs(ENTRIES) do
-		local expanded = p.expanded and p.expanded[e.id]
-		local quote = L("quote", L(e.id .. "-quote"))
-		local ec
-		local row
-		if expanded then
-			ec = ui.card(lc, "[virtual-signal=signal-star]", e.player)
-			ui.label(ec, L(e.id .. "-title"), {font = "default-large-bold", wrap = LY.inner_w})
-			local q = ui.label(ec, quote, {name = "rpgpm_quote_" .. e.id, wrap = LY.inner_w, color = TEXT})
-			q.style.top_margin = 4
-			ui.muted(ec, L("entry-asked", real_date(e.asked)))
-			local d = ui.label(ec, L(e.id .. "-text"), {wrap = LY.inner_w})
-			d.style.top_margin = 6
-			row = ec.add{type = "flow", direction = "horizontal"}
-			row.style.top_margin = 8
-			ui.label(row, L("entry-done", e.version, real_date(e.done)), {font = "default-bold", color = GREEN})
-		else
-			ec = ui.card(lc)
-			row = ec.add{type = "flow", direction = "horizontal"}
-			local tip = {"", quote, "\n", L("entry-asked", real_date(e.asked))}
-			local line = ui.label(row, {"", "[virtual-signal=signal-star] [color=1,0.84,0.3]", e.player, "[/color]  ",
-				L(e.id .. "-title")}, {font = "default-bold", wrap = math.max(120, LY.inner_w - 300), tooltip = tip})
-			line.style.horizontally_squashable = true
-			ui.label(row, L("entry-short", e.version), {font = "default-bold", color = GREEN,
-				tooltip = L("entry-done", e.version, real_date(e.done))})
-		end
-		row.style.vertical_align = "center"
-		row.style.horizontal_spacing = 8
-		row.style.width = LY.inner_w
-		filler(row)
-		row.add{type = "sprite-button", name = "rpgpm_exp_" .. e.id, tags = {entry = e.id}, style = "frame_action_button",
-			sprite = expanded and "utility/collapse" or "utility/expand", tooltip = L(expanded and "collapse" or "expand")}
-		local open = p.open == e.id
-		local b = row.add{type = "button", name = "rpgpm_open_" .. e.id, tags = {entry = e.id},
-			caption = L(open and "close" or "open"), tooltip = L(open and "close-tooltip" or "open-tooltip")}
-		b.toggled = open
+	c = ui.card(page, "[virtual-signal=signal-star]", L("card-donors"), L("card-donors-tooltip"))
+	for _, d in ipairs(DONORS) do
+		local n = #d.wishes
+		local caption = {"", "[color=1,0.84,0.3]★[/color]  ", d.name}
+		if n > 0 then caption[#caption + 1] = "    [color=0.45,0.88,0.3]✓ " .. n .. "[/color]" end
+		local b = c.add{type = "button", name = "rpgpm_donor_" .. d.card, tags = {card = d.card}, caption = caption,
+			tooltip = L("donor-tooltip")}
+		b.style.width = LY.inner_w
+		b.style.horizontal_align = "left"
+		b.toggled = p.donor == d.card
 	end
+end
 
-	local e = entry(p.open)
-	if not e then
-		ui.muted(ui.card(rc), L("pick-hint"))
+-- One wish in a profile: a line with the version, expand and open; the quote and the text when expanded.
+local function render_wish_row(p, c, id, ui, LY)
+	local w = WISHES[id]
+	local expanded = p.expanded and p.expanded[id]
+	local quote = L("quote", L(id .. "-quote"))
+	local row = c.add{type = "flow", direction = "horizontal"}
+	row.style.vertical_align = "center"
+	row.style.horizontal_spacing = 8
+	row.style.width = LY.inner_w
+	local line = ui.label(row, L(id .. "-title"), {font = "default-bold", wrap = math.max(120, LY.inner_w - 300),
+		tooltip = {"", quote, "\n", L("entry-asked", real_date(w.asked))}})
+	line.style.horizontally_squashable = true
+	ui.label(row, L("entry-short", w.version), {font = "default-bold", color = GREEN, tooltip = done_tooltip(w)})
+	filler(row)
+	row.add{type = "sprite-button", name = "rpgpm_exp_" .. id, tags = {wish = id}, style = "frame_action_button",
+		sprite = expanded and "utility/collapse" or "utility/expand", tooltip = L(expanded and "collapse" or "expand")}
+	if w.feature then
+		row.add{type = "button", name = "rpgpm_open_" .. id, tags = {wish = id}, caption = L("open"),
+			tooltip = L("open-tooltip")}
+	end
+	if not expanded then return end
+	local q = ui.label(c, quote, {name = "rpgpm_quote_" .. id, wrap = LY.inner_w, color = TEXT})
+	q.style.top_margin = 6
+	ui.muted(c, L("entry-asked", real_date(w.asked)))
+	ui.label(c, L(id .. "-text"), {wrap = LY.inner_w}).style.top_margin = 6
+	ui.label(c, L("entry-done", w.version, real_date(w.done)), {font = "default-bold", color = GREEN,
+		tooltip = done_tooltip(w)}).style.top_margin = 4
+end
+
+-- Right page: the card of a holder and the wishes.
+local function render_profile(p, d, page, ui, LY)
+	local c = ui.card(page, P.ICON, L("profile-card"))
+	c.name = "rpgpm_profile"
+	local top = c.add{type = "flow", direction = "horizontal"}
+	top.style.vertical_align = "center"
+	top.style.width = LY.inner_w
+	ui.label(top, d.name, {font = "charxpmod_font_30", color = GOLD, wrap = math.max(160, LY.inner_w - 110)})
+	filler(top)
+	ui.label(top, L("card-number", string.format("%04d", d.card)), {font = "default-large-bold", color = MUTED,
+		tooltip = L("card-number-tooltip")})
+	ui.label(c, L("valid-until"), {wrap = LY.inner_w})
+	local n = #d.wishes
+	-- every holder has the same status
+	ui.label(c, L("status", L("status-name")), {font = "default-bold", color = ORANGE, wrap = LY.inner_w,
+		tooltip = L("status-tooltip")}).style.top_margin = 4
+
+	c = ui.card(page, "[virtual-signal=signal-check]", L("card-wishes"))
+	if n == 0 then
+		ui.muted(c, L("empty-" .. ((d.card - 1) % 5 + 1)))
 		return
 	end
-	FEATURES[e.feature](player, p, rc, ui, LY)
+	for i, id in ipairs(d.wishes) do
+		if i > 1 then
+			local sep = c.add{type = "line"}
+			sep.style.top_margin = 6
+			sep.style.bottom_margin = 6
+		end
+		render_wish_row(p, c, id, ui, LY)
+	end
+end
+
+-- Right page: an opened wish under a line back to its holder.
+local function render_wish(player, p, id, page, ui, LY)
+	local w, d = WISHES[id], DONOR_OF[id]
+	local bar = page.add{type = "flow", name = "rpgpm_backbar", direction = "horizontal"}
+	bar.style.vertical_align = "center"
+	bar.style.horizontal_spacing = 12
+	bar.style.width = LY.card_w
+	bar.add{type = "button", name = "rpgpm_back", style = "back_button", caption = d.name, tooltip = L("back-tooltip")}
+	ui.label(bar, L(id .. "-title"), {font = "default-large-bold", color = ORANGE})
+	FEATURES[w.feature](player, p, page, ui, LY)
+end
+
+-- The bookmark: the holders on the left; on the right a hint, a profile or an opened wish.
+function P.render(player, lc, rc)
+	local ui = journal.ui
+	local LY = ui.layout()
+	local p = pstate(player.index)
+	root().watch[player.index] = true
+	render_list(player, p, lc, ui, LY)
+	local w = p.open and WISHES[p.open]
+	if w and w.feature and FEATURES[w.feature] then
+		p.donor = DONOR_OF[p.open].card
+		render_wish(player, p, p.open, rc, ui, LY)
+		return
+	end
+	p.open = nil
+	local d = p.donor and BY_CARD[p.donor]
+	if not d then
+		p.donor = nil
+		local c = ui.card(rc)
+		c.name = "rpgpm_hint"
+		ui.muted(c, L("pick-hint"))
+		return
+	end
+	render_profile(p, d, rc, ui, LY)
 end
 
 ---------------------------------------------------------------------------------------------
@@ -1082,6 +1262,15 @@ local function set_field(player, name, text)
 	if e then e.text = text end
 end
 
+-- The alarm time changed: the hours and minutes fields and the "rings at" line.
+local function set_duration(player, p)
+	set_field(player, "rpgpm_hours", tostring(p.hours))
+	set_field(player, "rpgpm_minutes", tostring(p.minutes))
+	local frame = player.gui.screen[JOURNAL]
+	local e = frame and find(frame, "rpgpm_preview")
+	if e then e.caption = preview(p) end
+end
+
 -- Returns true when the click belonged to Premium BnL.
 function P.on_click(event, player)
 	local element = event.element
@@ -1089,12 +1278,23 @@ function P.on_click(event, player)
 	if name:sub(1, 6) ~= "rpgpm_" then return false end
 	local p = pstate(player.index)
 	local tags = element.tags or {}
-	if name:sub(1, 11) == "rpgpm_open_" then
-		p.open = (p.open ~= tags.entry) and tags.entry or nil
+	if name:sub(1, 12) == "rpgpm_donor_" then
+		-- the selected holder again closes the profile; from an opened wish it goes back to the profile
+		if p.donor == tags.card and not p.open then p.donor = nil else p.donor = tags.card end
+		p.open = nil
+		rerender(player)
+	elseif name:sub(1, 11) == "rpgpm_open_" then
+		local w = WISHES[tags.wish]
+		if w and w.feature then
+			p.open = tags.wish
+			rerender(player)
+		end
+	elseif name == "rpgpm_back" then
+		p.open = nil
 		rerender(player)
 	elseif name:sub(1, 10) == "rpgpm_exp_" then
 		p.expanded = p.expanded or {}
-		p.expanded[tags.entry] = (not p.expanded[tags.entry]) or nil
+		p.expanded[tags.wish] = (not p.expanded[tags.wish]) or nil
 		rerender(player)
 	elseif name == "rpgpm_pin_toggle" then
 		p.pin = not p.pin
@@ -1105,6 +1305,10 @@ function P.on_click(event, player)
 		p.pin_full = not p.pin_full
 		update_pin(player, p)
 	elseif name == "rpgpm_pin_open" then
+		-- the wish with the calendar and the alarm
+		for _, id in ipairs(WISH_IDS) do
+			if WISHES[id].feature == "calendar" then p.open, p.donor = id, DONOR_OF[id].card break end
+		end
 		journal.open(player, "premium")
 	elseif name == "rpgpm_pin_close" then
 		p.pin = false
@@ -1136,13 +1340,11 @@ function P.on_click(event, player)
 		rerender(player)
 	elseif name:sub(1, 13) == "rpgpm_preset_" then
 		p.hours, p.minutes = math.floor(tags.m / 60), tags.m % 60
-		set_field(player, "rpgpm_hours", tostring(p.hours))
-		set_field(player, "rpgpm_minutes", tostring(p.minutes))
+		set_duration(player, p)
 	elseif name == "rpgpm_plus5" then
 		local total = duration_minutes(p) + 5
 		p.hours, p.minutes = math.floor(total / 60), total % 60
-		set_field(player, "rpgpm_hours", tostring(p.hours))
-		set_field(player, "rpgpm_minutes", tostring(p.minutes))
+		set_duration(player, p)
 	elseif name:sub(1, 10) == "rpgpm_tpl_" then
 		local text = p.notes[tags.i]
 		if text then
@@ -1191,6 +1393,9 @@ function P.on_text_changed(event)
 	else
 		local v = math.max(0, math.min(name == "rpgpm_hours" and 99 or 999, math.floor(tonumber(element.text) or 0)))
 		if name == "rpgpm_hours" then p.hours = v else p.minutes = v end
+		local card = element.parent.parent.parent -- field < form row < form table < alarm card
+		local e = card and card.valid and find(card, "rpgpm_preview")
+		if e then e.caption = preview(p) end
 	end
 end
 
@@ -1237,7 +1442,7 @@ function P.on_checked_changed(event)
 	p.rest = element.state
 	rest_schedule(p)
 	update_watch(player, p)
-	refresh_journal(player, p)
+	rerender(player)
 end
 
 function P.on_location_changed(event)
@@ -1291,6 +1496,12 @@ if script.active_mods["pd-port21-diag"] then
 			P.on_checked_changed({element = e, player_index = index})
 			return true
 		end,
+		close = function(index) journal.close(game.get_player(index)) end,
+		-- a player state of 9.2.x: the old wish open, no layout mark
+		legacy = function(index)
+			local p = pstate(index)
+			p.layout, p.open, p.donor = nil, "silkor-calendar", 3
+		end,
 		state = function(index)
 			local s = root()
 			local p = pstate(index)
@@ -1303,10 +1514,10 @@ if script.active_mods["pd-port21-diag"] then
 			return {alarms = #p.alarms, ids = ids, ringing = #ringing(p), watch = s.watch[index] == true,
 				days = #s.days, today = today(), rest = p.rest, rest_next = p.rest_next, sound = p.sound,
 				volume = p.volume, note = p.note, notes = #p.notes, pin = p.pin, valid_sounds = sounds,
-				total_sounds = #SOUNDS, view = p.view, vy = p.vy, vm = p.vm, sel = p.sel}
+				total_sounds = #SOUNDS, open = p.open, donor = p.donor, tab = stats.player(index).tab, view = p.view, vy = p.vy, vm = p.vm, sel = p.sel}
 		end,
 	})
 end
 
-P.ENTRIES = ENTRIES
+P.DONORS, P.WISHES = DONORS, WISHES
 return P

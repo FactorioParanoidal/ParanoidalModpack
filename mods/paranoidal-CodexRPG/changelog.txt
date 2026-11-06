@@ -1,4 +1,18 @@
 ---------------------------------------------------------------------------------------------------
+Version: 9.3.0
+Date: 2026-11-06
+  Features:
+    - BnL Premium lists the Gold Card holders, the supporters of the modpack (16, alphabetically, by display name). The club card shows the number of holders, fulfilled wishes and the average review time. A holder opens a profile on the right page: card number, the status Platinum passenger (the same for every holder) and the wishes, each with its version, quote and description (expandable) and an "Open" button. Holders without wishes get a BnL joke instead of an empty list.
+    - CoolzeT's wish: the Codex and the base statistics (paranoidal-CodexRPG 9.1.0, asked on 28.10.2026, made on 29.10.2026). It has no "Open" button, the Codex is its own bookmark; the wish expands to the quote and the description.
+    - Silkor's calendar and alarm clock are one wish again. It opens on the right page under a back button to the profile: the date, the calendar, the alarm and the session one under another; the page scrolls when it does not fit.
+    - The bookmark starts closed (no holder selected, nothing opened) and remembers the place afterwards, also when the journal is opened again. A save of 9.2.x is closed once. The journal button of the pinned window opens the calendar and the alarm directly.
+  Changes:
+    - Calendar: today is the brightest cell (yellow, dark digits) and a clicked day gets an orange outer glow instead of the orange fill; holidays and days with milestones are gold and green numbers instead of a star and a check mark after the number, so the numbers stay centred; the cells stretch to the width of the card.
+    - Date card: "Day. Sunset at …, in 1 min 07 s" / "Night. Sunrise at …" instead of "in 1:07", with a bar of the current day or night; the pin is a "Pin" / "Unpin" button.
+    - Alarm: the captions are one column and the fields line up, "Set" is under the fields; next to it a line says when the alarm will ring ("Rings in 1 min, at 0:04 planet time"); the note about pause and UPS moved to the tooltip of the info icon in the title; the empty list says what to press.
+    - Session: one line with the time, the reminder checkbox and its interval; the next reminder time is shown only while the reminder is on.
+    - Pinned window: no ticking time of day; the detailed mode shows the weekday and the day since the landing instead of the time to sunrise or sunset.
+---------------------------------------------------------------------------------------------------
 Version: 9.2.1
 Date: 2026-11-06
   Changes:
