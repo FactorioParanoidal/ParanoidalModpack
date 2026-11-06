@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 9.0.0
 Date: 2026-11-01
+  Locale:
+    - ru: the "Old-School Dispatcher" achievement names the station controller instead of the Cybersyn combinator.
   Major Features:
     - One mod instead of MxlChievements-Reforged 9.1.0 (achievements: MxlChievements by Mxlppxl, More Achievements by LuziferSenpai and the Paranoidal content) and Milestones 9.4.8 (Paranoidal fork of Milestones 1.4.7 by Wiwiweb). Achievement, setting, hotkey, shortcut, sprite, style, command and locale key names are unchanged; the remote interface "milestones" keeps its name.
   Optimizations:
