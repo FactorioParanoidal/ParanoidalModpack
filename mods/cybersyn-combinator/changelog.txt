@@ -1,0 +1,343 @@
+---------------------------------------------------------------------------------------------------
+Version: 2.8.3
+Date: 2026-06-28
+  Changes:
+    - Update to support Factorio 2.1.
+  Locale:
+    - ru: the mod name and the mod list description are the same as in ParanoidalLocale (format "English title (Russian translation)"), so the mod reads the same with or without it.
+  Compatibility:
+    - Paranoidal: the dependencies are lowered to the versions in the modpack, cybersyn >= 2.0.53 (Paranoidal port of Project Cybersyn to Factorio 2.1) and flib >= 0.16.5. The mod uses only the Cybersyn signals and the flib functions and styles these versions already have (cybersyn-priority, cybersyn-request-threshold, cybersyn-fluid-request-threshold, cybersyn-locked-slots, cybersyn-reserved-fluid-capacity, cybersyn-network-flag; flib data-util.copy_prototype, gui.add, gui.add_handlers, gui.handle_events, slot button and drag handle styles).
+---------------------------------------------------------------------------------------------------
+Version: 2.8.2
+Date: 2026-02-01
+  Changes:
+    - Fix issue with build process on GitHub.
+---------------------------------------------------------------------------------------------------
+Version: 2.8.1
+Date: 2026-02-01
+  Bugfixes:
+    - Fix sections not being darkened to indicate being disabled when the entire combinator is disabled.
+---------------------------------------------------------------------------------------------------
+Version: 2.8.0
+Date: 2026-02-01
+  Features:
+    - Implement a working logistic group editor using newly available APIs in Factorio 2.0.57.
+  Bugfixes:
+    - When updating a signal section, other signal sections using the same group will now also properly reflect
+      the update.
+---------------------------------------------------------------------------------------------------
+Version: 2.7.3
+Date: 2025-05-06
+  Bugfixes:
+    - Fix dupe check for signals not working properly for item signals.
+---------------------------------------------------------------------------------------------------
+Version: 2.7.2
+Date: 2025-03-29
+  Bugfixes:
+    - Fix ghost description migration issue when ghost does not have any tags.
+---------------------------------------------------------------------------------------------------
+Version: 2.7.1
+Date: 2025-03-26
+  Minor Features:
+    - Ghosts will now properly store and show their descriptions in the tooltip (previously only visible inside the
+      combinator GUI window until they were constructed).
+  Bugfixes:
+    - Fix issue where UI would enter into a soft-locked state if attempting to close the logistic group edit dialog
+      while the search field was active/showing.
+---------------------------------------------------------------------------------------------------
+Version: 2.7.0
+Date: 2025-03-23
+  Features:
+    - Add support for new fluid request threshold signal in Cybersyn.
+  Bugfixes:
+    - Fix issue where signals of different types were considered duplicate if
+      sharing the same name.
+---------------------------------------------------------------------------------------------------
+Version: 2.6.0
+Date: 2025-02-07
+  Features:
+    - Add support for new reserved fluid capacity signal in Cybersyn.
+---------------------------------------------------------------------------------------------------
+Version: 2.5.0
+Date: 2025-02-01
+  Minor Features:
+    - Add support for suffixes when using expression input (e.g. "1k" for 1 000 and "1M" for 1 000 000).
+      Following suffixes are supported: "k", "M", "G", "B" (all suffixes are case insensitive).
+  Bugfixes:
+    - Fix crash when trying to modify fields in the GUI of a ghost after the entity was constructed and is no longer
+      a ghost.
+---------------------------------------------------------------------------------------------------
+Version: 2.4.5
+Date: 2024-12-16
+  Changes:
+    - Expressions in input fields will now be default enabled to match base game behaviour.
+  Bugfixes:
+    - Fix issue where setting a value larger than the max value in a shared filter would cause a crash.
+      (This happened when sharing logistic sections with requester entities that are able to set a max amount.)
+    - Fix issues where trying to set some signals and/or values could cause errors depending on existing signals in
+      other slots (it will now show an error message for the player instead).
+    - Fix issue where game would crash if trying to edit a signal slot after deleting a section that contained
+      a signal being edited.
+  Graphics:
+    - Improve display of non-constant signals in output signals.
+---------------------------------------------------------------------------------------------------
+Version: 2.4.4
+Date: 2024-12-12
+  Bugfixes:
+    - Fix section not always updating its display properly when changing group.
+---------------------------------------------------------------------------------------------------
+Version: 2.4.3
+Date: 2024-12-11
+  Graphics:
+    - Fix entity using wrong image for icon.
+---------------------------------------------------------------------------------------------------
+Version: 2.4.2
+Date: 2024-12-09
+  Bugfixes:
+    - Fix crash when clearing signal while editing it, followed by trying to set a new signal afterwards.
+---------------------------------------------------------------------------------------------------
+Version: 2.4.1
+Date: 2024-12-08
+  Bugfixes:
+    - Fix crash when selecting a new signal slot while already editing a different slot.
+  Gui:
+    - Fix caption for signal count not always showing a value under certain circumstances.
+---------------------------------------------------------------------------------------------------
+Version: 2.4.0
+Date: 2024-12-07
+  Major Features:
+    - Support for logistic sections and groups.
+  Features:
+    - Show circuit network connection info in GUI.
+  Optimizations:
+    - Better detection of existing signals/sections when copy-pasting.
+  Bugfixes:
+    - Fix pressing confirm button (default "E") while signal picker dialog is open causing a crash
+      under certain circumstances.
+  Gui:
+    - Make UI more consistent with base game UI by only allowing left click on some UI elements.
+---------------------------------------------------------------------------------------------------
+Version: 2.3.4
+Date: 2024-12-02
+  Bugfixes:
+    - Fix another case where pasting settings to/from ghost combinators could cause hidden signals to be set.
+---------------------------------------------------------------------------------------------------
+Version: 2.3.3
+Date: 2024-12-02
+  Bugfixes:
+    - Fix ghosts still having some issues in entity settings copy/paste.
+---------------------------------------------------------------------------------------------------
+Version: 2.3.2
+Date: 2024-12-02
+  Bugfixes:
+    - Fix ghost entities not being handled in some events.
+    - Fix some data in storage not being cleaned up.
+---------------------------------------------------------------------------------------------------
+Version: 2.3.1
+Date: 2024-12-01
+  Bugfixes:
+    - Fix issues when pasting entity settings on the same combinator it was copied from.
+      (Copy-pasting onto the same entity is disabled completely to match base game behaviour.)
+---------------------------------------------------------------------------------------------------
+Version: 2.3.0
+Date: 2024-11-23
+  Features:
+    - Can now paste recipes from assembling machines into combinators
+      (uses same logic as requester chests except also supports fluids).
+  Bugfixes:
+    - Fix an issue where duplicate network signals could cause a crash when building a blueprint containing
+      combinator entitites.
+---------------------------------------------------------------------------------------------------
+Version: 2.2.3
+Date: 2024-11-13
+  Optimizations:
+    - Improve sorting and detection logic for existing signals when upgrading from regular constant combinators.
+  Bugfixes:
+    - Fix pasting settings between combinators not always behaving as expected.
+    - Fix issue where duplicate CS signals would sometimes get stored and be impossible to manipulate.
+    - Fix issue with duplicate signals sometimes appearing in blueprints.
+  Gui:
+    - Improve display of description scroll pane (for long descriptions).
+    - Improve error feedback when selecting invalid or duplicate signals.
+    - Improve styling of main combinator window.
+---------------------------------------------------------------------------------------------------
+Version: 2.2.2
+Date: 2024-11-06
+  Bugfixes:
+    - Fix description not working on combinator ghosts.
+---------------------------------------------------------------------------------------------------
+Version: 2.2.1
+Date: 2024-11-06
+  Bugfixes:
+    - Fix negative inputs not possible when expressions are disabled.
+---------------------------------------------------------------------------------------------------
+Version: 2.2.0
+Date: 2024-11-06
+  Features:
+    - Can now set description of the combinator.
+    - Can now confirm signal value input with confirm key (default "E") in some situations.
+      (Only works when expression input is not enabled, as otherwise "E" will be interpreted as part of the expression.)
+  Bugfixes:
+    - Fix some possibly inconsistent escape key behaviour.
+  Gui:
+    - Can now confirm encoder dialog with confirm key binding (default "E").
+    - Improved display of encoder dialog, now shows on top of main window instead of hiding it.
+    - Close button now has proper tooltip.
+---------------------------------------------------------------------------------------------------
+Version: 2.1.4
+Date: 2024-11-02
+  Bugfixes:
+    - Fix game crash when trying to set a duplicate signal.
+---------------------------------------------------------------------------------------------------
+Version: 2.1.3
+Date: 2024-10-26
+  Graphics:
+    - Fix old low-res graphics being used instead of high-res.
+  Bugfixes:
+    - Fix custom GUI not working for entity ghosts.
+---------------------------------------------------------------------------------------------------
+Version: 2.1.2
+Date: 2024-10-23
+  Bugfixes:
+    - Fix quality interactions not working properly.
+---------------------------------------------------------------------------------------------------
+Version: 2.1.1
+Date: 2024-10-23
+  Info:
+    - Update changelog.
+---------------------------------------------------------------------------------------------------
+Version: 2.1.0
+Date: 2024-10-23
+  Features:
+    - New migration to fix combinators from pre-2.0 saves.
+    - New commands to fix combinators (/cc_sort and /cc_sort_all).
+---------------------------------------------------------------------------------------------------
+Version: 2.0.0
+Date: 2024-10-23
+  Major Features:
+    - Support for Factorio 2.0. Migrating from 1.1 to 2.0 might not work due to API changes in Factorio.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 2024-09-03
+  Major Features:
+    - Added new GUI for encoding network signals.
+  Bugfixes:
+    - Add possible fix for obscure issue with stack sizes.
+      (For more context, see issue #32 in the repository.)
+---------------------------------------------------------------------------------------------------
+Version: 0.6.1
+Date: 2023-08-06
+  Bugfixes:
+    - Fix multiple signal slots being marked as active under certain conditions.
+---------------------------------------------------------------------------------------------------
+Version: 0.6.0
+Date: 2023-08-05
+  Features:
+    - Now shows the total amount of requested items and fluids (thanks to @Eldrinn-Elantey on GitHub for the suggestion!).
+    - Now shows which signal is currently being edited.
+  Changes:
+    - Item name has been updated to "Cybersyn Constant Combinator" to be more explicit and more different from the Cybernetic Combinator (thanks to user sadris for the suggestion!).
+  Translation:
+    - Updated translations for Russian (ru) thanks to @Eldrinn-Elantey on GitHub.
+  Info:
+    - Fixed typo in mod homepage link (thanks to @sparr on GitHub).
+---------------------------------------------------------------------------------------------------
+Version: 0.5.0
+Date: 2023-05-28
+  Features:
+    - New option to convert all item and fluid signals to negative values.
+  Translation:
+    - Fix minor typo in Swedish (sv-SE) translation.
+---------------------------------------------------------------------------------------------------
+Version: 0.4.5
+Date: 2023-04-16
+  Bugfixes:
+    - Fix issue entering numbers starting with a negative sign with new expression evaluator.
+---------------------------------------------------------------------------------------------------
+Version: 0.4.4
+Date: 2023-04-16
+  Changes:
+    - Switch to using built-in expression evaluator in Factorio.
+    - Now falls back to previous valid value if invalid signal count is entered.
+---------------------------------------------------------------------------------------------------
+Version: 0.4.3
+Date: 2023-04-15
+  Bugfixes:
+    - Fix missing parameter for math expression parsing causing potential issues.
+---------------------------------------------------------------------------------------------------
+Version: 0.4.2
+Date: 2023-04-11
+  Bugfixes:
+    - Fix game crash when selecting unknown signals in the combinator.
+---------------------------------------------------------------------------------------------------
+Version: 0.4.1
+Date: 2023-04-02
+  Gui:
+    - Improve display of negative item signal counts.
+  Translation:
+    - Swedish (sv-SE) translations added.
+    - Russian (ru) translations added (thanks to @Eldrinn-Elantey and @iassasin on GitHub).
+    - Simplified Chinese (zh-CN) translations added (thanks to @luaotix on GitHub).
+---------------------------------------------------------------------------------------------------
+Version: 0.4.0
+Date: 2023-03-29
+  Major Features:
+    - New option to enable expressions in stack, item, and Cybersyn signal fields.
+  Features:
+    - New option to use the default network mask when entering new network masks.
+  Changes:
+    - Support for Nullius has been added.
+  Bugfixes:
+    - Fix add button for network mask sometimes being enabled when it shouldn't.
+    - Fix textfield focusing not working in "prefer stacks" mode.
+  Gui:
+    - Improve display of item signal counts.
+    - Widen textfields for stack and item inputs.
+---------------------------------------------------------------------------------------------------
+Version: 0.3.3
+Date: 2023-03-28
+  Bugfixes:
+    - Use correct style definition for signal counts.
+---------------------------------------------------------------------------------------------------
+Version: 0.3.2
+Date: 2023-03-28
+  Bugfixes:
+    - Add missing style definition.
+---------------------------------------------------------------------------------------------------
+Version: 0.3.1
+Date: 2023-03-28
+  Bugfixes:
+    - Fix signals being placed in wrong slots when pasted from regular constant combinator.
+---------------------------------------------------------------------------------------------------
+Version: 0.3.0
+Date: 2023-03-28
+  Major Features:
+    - Added an interface on the combinator for managing (sub-)network masks.
+  Features:
+    - Buttons added to reset Cybersyn signals to default values on combinator.
+  Changes:
+    - Increased default network mask slot setting to 100.
+    - Increased max network mask slotting to 500.
+  Bugfixes:
+    - Combinator will no longer allow the input of invalid signals, some of which crashed the game.
+    - Fix combinator recipe not unlocking when mod added to save where Cybersyn tech was already researched.
+    - Fix signals from regular constant combinators not transferring properly to Cybersyn constant combinator.
+    - Fix "emit default" settings having no effect.
+---------------------------------------------------------------------------------------------------
+Version: 0.2.0
+Date: 2023-03-27
+  Changes:
+    - Combinator will no longer automatically sort signals.
+    - The confirm button for editing signal values will now enable immediately upon starting editing.
+  Bugfixes:
+    - Fix GUI window not having a connection to its entity in some cases.
+    - Fix combinator window not closing when its associated entity was mined/destroyed.
+    - Fix handling of construction/destruction events causing crashes in some circumstances.
+    - Fix an issue with game crash when signal slot was right clicked before editing finished of another slot.
+  Info:
+    - Improve some setting descriptions.
+---------------------------------------------------------------------------------------------------
+Version: 0.1.0
+Date: 2023-03-26
+  Major Features:
+    - Initial release

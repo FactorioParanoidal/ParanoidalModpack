@@ -1,0 +1,26 @@
+{
+  "name": "cybersyn-combinator",
+  "version": "2.8.3",
+  "title": "Cybersyn Combinator",
+  "author": "Sharparam",
+  "contact": "sharparam@sharparam.com",
+  "homepage": "https://github.com/Sharparam/cybersyn-combinator",
+  "description": "A specialized combinator for the Project Cybersyn mod",
+  "factorio_version": "2.1",
+  "dependencies": [
+    "base >= 2.1.8",
+    "cybersyn >= 2.0.53",
+    "flib >= 0.16.5"
+  ],
+  "package": {
+    "readme": "information.md",
+    "faq": "faq.md",
+    "gallery": [
+      "../gallery/combinator_window.png",
+      "../gallery/hex_network_masks.png",
+      "../gallery/binary_network_masks.png",
+      "../gallery/prefixed_network_masks.png",
+      "../gallery/encoder.png"
+    ]
+  }
+}

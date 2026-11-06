@@ -1,0 +1,6 @@
+{
+  "mod": "cybersyn-combinator",
+  "source": "portal",
+  "upstreamVersion": "2.8.3",
+  "changeReason": "Зависимости снижены до версий сборки: cybersyn >= 2.0.53 (порт Project Cybersyn на Factorio 2.1 в Paranoidal) и flib >= 0.16.5; мод использует только сигналы Cybersyn и функции и стили flib, которые в этих версиях есть. Русское название и описание мода в locale/ru совпадают с ParanoidalLocale (название в виде «English (Русский)»)."
+}
