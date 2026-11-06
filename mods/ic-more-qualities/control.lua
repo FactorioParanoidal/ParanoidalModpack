@@ -386,10 +386,15 @@ events.on(defines.events.on_tick, function(event)
     if tick % 60 == 0 then memory.cleanup() end
 end)
 
--- Read-only counters of the quality-control panel (workshop attempts and so on) for other mods:
--- the base journal of paranoidal-CodexRPG shows them on its "Quality" page.
+-- Quality counters for CodexRPG; synchronous queue-reordering accounting for crafting helpers.
 remote.add_interface("ic-more-qualities", {
     get_counters = function(force_index) return stats.get(force_index) end,
+    begin_queue_reorder = function(player_index)
+        return enabled() and cancel.begin_queue_reorder(game.get_player(player_index))
+    end,
+    end_queue_reorder = function(player_index)
+        return cancel.end_queue_reorder(game.get_player(player_index))
+    end,
 })
 
 events.bind()

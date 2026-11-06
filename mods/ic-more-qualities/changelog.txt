@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 9.1.5
 Date: 2026. 10. 14
+  Bugfixes:
+    - QueueToFrontLimited integration: exclude reconsumed cancellation returns from deferred defect rolls, without damaging spare items; actual leftovers and ordinary cancellations retain their rolls. Added same-tick begin/end_queue_reorder remote functions.
   Features:
     - Look of defective buildings: a defective building is always darker than a standard one, brightness 75% / 65% / 55% / 45% / 35% at -1 ... -5, with a warm rust cast growing with the grade (luminance kept), and dark smoke while working: buildings with their own smoke (furnaces, burner drills, boilers, steam engines) add it at their chimney, other machines, labs and generators puff from the top with a chance of grade/5; the smoke is blended from the base smoke into the train smoke (50 / 70 / 85 / 94%), -5 is an exact copy of train-smoke; 1-3 smokes per look, one look per building every 20 ticks. Standard and positive quality are unchanged.
     - Look of defective buildings: no soot stains (they stayed as a static dark spot next to an idle building, user observation 2026-11-04). A save with the stains redraws its defective buildings once without them.

@@ -12,6 +12,45 @@
 local model = require("scripts.defects.model")
 local M = {}
 
+-- Synchronous, same-tick transactions only; ordinary cancellation records remain protected.
+local reorders = {}
+
+function M.begin_queue_reorder(player)
+    if not (player and player.valid) then return false end
+    local previous = reorders[player.index]
+    if previous and previous.tick == game.tick then return false end
+    local inventory = player.get_main_inventory()
+    if not inventory then return false end
+    local before = {}
+    local names = storage.ic_cancel and storage.ic_cancel.skipped[player.index] or {}
+    for name in pairs(names) do
+        before[name] = inventory.get_item_count({name = name, quality = "normal"})
+    end
+    reorders[player.index] = {tick = game.tick, before = before, entries = {}}
+    return true
+end
+
+function M.end_queue_reorder(player)
+    if not (player and player.valid) then return false end
+    local transaction = reorders[player.index]
+    reorders[player.index] = nil
+    if not transaction or transaction.tick ~= game.tick then return false end
+    local inventory = player.get_main_inventory()
+    if not inventory then return false end -- Keep all cancellation rolls if accounting is unavailable.
+    local remaining = {}
+    for _, entry in ipairs(transaction.entries) do
+        local name = entry.name
+        if remaining[name] == nil then
+            remaining[name] = math.max(0, inventory.get_item_count({name = name, quality = "normal"})
+                - (transaction.before[name] or 0))
+        end
+        -- Only the net returned surplus is still outside the restored crafting queue.
+        entry.count = math.min(entry.count, remaining[name])
+        remaining[name] = remaining[name] - entry.count
+    end
+    return true
+end
+
 -- Same item kinds as the handcraft adapter; other kinds keep their returned quality.
 local rebuildable = {
     item = true, module = true, capsule = true, gun = true, ammo = true, tool = true,
@@ -71,8 +110,13 @@ function M.on_cancelled(event, finished, no_defect)
         if stack.valid_for_read and names[stack.name] and stack.quality.name == "normal"
             and M.can_roll(stack.name, finished, no_defect) then
             local pending = root.pending
-            pending[#pending + 1] = {player = event.player_index, name = stack.name, count = stack.count,
+            local entry = {player = event.player_index, name = stack.name, count = stack.count,
                 tick = event.tick}
+            pending[#pending + 1] = entry
+            local transaction = reorders[event.player_index]
+            if transaction and transaction.tick == event.tick then
+                transaction.entries[#transaction.entries + 1] = entry
+            end
             queued = queued + stack.count
         end
     end

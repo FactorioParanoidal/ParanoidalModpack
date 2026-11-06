@@ -214,6 +214,37 @@ storage.ic_cancel.skipped[1] = {["stone-furnace"] = true}
 callbacks[6]({player_index = 1})
 assert(storage.ic_cancel.skipped[1] == nil)
 
+-- 11. Queue transactions trim only their own pending entries; partial/aborted returns still roll.
+for _, leftover in ipairs({0, 2, 3}) do
+    storage = {}
+    cancel.remember(1, "stone-furnace", finished, no_defect)
+    local count = 10
+    local inventory = {get_item_count = function(item)
+        assert(item.name == "stone-furnace" and item.quality == "normal")
+        return count
+    end}
+    local p = make_player(1, 0, inventory, 1)
+    game.tick = 1000 + leftover
+    local prior = {player = 1, name = "stone-furnace", count = 1, tick = game.tick}
+    storage.ic_cancel.pending = {prior}
+    assert(cancel.begin_queue_reorder(p))
+    assert(not cancel.begin_queue_reorder(p), "nested begin must not replace the snapshot")
+    cancel.on_cancelled({player_index = 1, items = returned, tick = game.tick}, finished, no_defect)
+    count = count + leftover
+    assert(cancel.end_queue_reorder(p))
+    assert(not cancel.end_queue_reorder(p))
+    assert(prior.count == 1, "earlier ordinary cancellation must not be suppressed")
+    assert(storage.ic_cancel.pending[2].count == leftover)
+    -- A stale/missing end fails closed: cancellation keeps all rolls.
+    game.tick = game.tick + 10
+    assert(cancel.begin_queue_reorder(p))
+    cancel.on_cancelled({player_index = 1, items = returned, tick = game.tick}, finished, no_defect)
+    game.tick = game.tick + 1
+    assert(not cancel.end_queue_reorder(p))
+    assert(storage.ic_cancel.pending[3].count == 3)
+end
+
+print("PASS: queue transactions preserve ordinary pending rolls; full/partial/aborted restoration; nested/stale guards.")
 print("PASS: cancelled prerequisites roll one defect per returned standard item one tick later;")
 print("materials, raw, exempt, defective/positive returned items and level 10 untouched; forget on empty queue;")
 print("durability share, protected grids, in-place/spill conversion; control wiring of the 4 events.")
