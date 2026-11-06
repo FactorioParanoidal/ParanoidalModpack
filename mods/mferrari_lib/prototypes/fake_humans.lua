@@ -18,6 +18,7 @@ require ("__mferrari_lib__/prototypes/fake_humans-turrets")
 require ("__mferrari_lib__/prototypes/flying_saucer_animation")
 local colors = require("__mferrari_lib__/colors")
 local tile_sounds = require("__base__/prototypes/tile/tile-sounds")
+local level_icons = require("__mferrari_lib__/prototypes/level-icon")
 
 --settings - a mod calling should set these constants
 local base_health    = 180
@@ -615,6 +616,9 @@ local lname = {"",{"entity-name."..name},' '..tostring(level)}
 	else
 	fake_human.run_animation = table.deepcopy(character.animations[armor].running)
 	end
+  -- Paranoidal: every kind and level had one icon; the level and a skull on the bosses tell them apart in the
+  -- entity lists (turret priority targets)
+  level_icons(fake_human, level, string.find(surname, "boss", 1, true) and "signal-skull" or nil)
 	
   fake_human.absorptions_to_join_attack = { pollution = 10 + level * 10}
   fake_human.movement_speed = 0.04 + level/30

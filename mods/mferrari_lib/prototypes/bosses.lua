@@ -8,6 +8,7 @@ local sounds = require("__base__/prototypes/entity/sounds")
 require("__base__/prototypes/entity/spawner-animation")
 
 local resistances = require("__mferrari_lib__/prototypes/resistances")
+local level_icons = require("__mferrari_lib__/prototypes/level-icon")
 require ("__mferrari_lib__/prototypes/bosses_projectiles")
 require ("__mferrari_lib__/prototypes/unit_functions")
 require ("__mferrari_lib__/prototypes/loot")
@@ -417,6 +418,9 @@ x=x+1
 if x>#weakness then x=1 end
 JB_Functions.Add_ALL_Damage_Resists_to_Unit_type(data.raw.unit['maf-boss-biter-'..k], 10+k*2,weakness[x])
 JB_Functions.Add_ALL_Damage_Resists_to_Unit_type(data.raw.unit['maf-boss-acid-spitter-'..k], 10+k*2,weakness[#weakness+1-x])
+-- Paranoidal: the ten levels had one icon; the level tells them apart in the entity lists (turret priority targets)
+level_icons(data.raw.unit['maf-boss-biter-'..k], k)
+level_icons(data.raw.unit['maf-boss-acid-spitter-'..k], k)
 end
 end
 
