@@ -464,18 +464,35 @@ local function build_list(frame, player, state, keep_unchanged_rows)
 
 end
 
+local function same_caption(a, b)
+    if type(a) ~= "table" or type(b) ~= "table" then return a == b end
+    if #a ~= #b then return false end
+    for i = 1, #a do if not same_caption(a[i], b[i]) then return false end end
+    return true
+end
+
 local function add_info(info, key, value, tooltip)
-    local label = info.add {type = "label", caption = {"factorissimo-dispatch." .. key}, style = "bold_label"}
-    label.style.minimal_width = 100
-    local value_label = info.add {type = "label", caption = value, tooltip = tooltip}
-    value_label.style.single_line = false
-    value_label.style.maximal_width = 170
+    local label, value_label = info[key .. "-label"], info[key .. "-value"]
+    if not label then
+        label = info.add {type = "label", name = key .. "-label", caption = {"factorissimo-dispatch." .. key}, style = "bold_label"}
+        label.style.minimal_width = 100
+        value_label = info.add {type = "label", name = key .. "-value"}
+        value_label.style.single_line = false
+        value_label.style.maximal_width = 170
+    end
+    local visible = value ~= nil
+    if label.visible ~= visible then label.visible = visible; value_label.visible = visible end
+    if not visible then return end
+    if not same_caption(value_label.caption, value) then value_label.caption = value end
+    tooltip = tooltip or ""
+    if not same_caption(value_label.tooltip, tooltip) then value_label.tooltip = tooltip end
 end
 
 local CONNECTION_TYPES = {"belt", "chest", "fluid", "heat", "circuit"}
 
 local function fill_info(info, factory)
-    info.clear()
+    -- Replace the old unnamed rows once when loading a window saved by an earlier version.
+    if not info["info-state-value"] then info.clear() end
     local layout = factory.layout
     local status_sprite, status_caption = status_of(factory)
     add_info(info, "info-state", {"", "[img=" .. status_sprite .. "] ", status_caption})
@@ -495,13 +512,13 @@ local function fill_info(info, factory)
     local use, gen = factory.power_use, factory.power_gen or 0
     add_info(info, "info-consumption", use and {"factorissimo-dispatch.approx", format_power(use)} or {"factorissimo-dispatch.measuring"})
     local generators = factory.generators or 0
-    if use and generators > 0 then
-        add_info(info, "info-production", format_power(gen),
-            {"factorissimo-dispatch.generators", tostring(factory.generators_working or 0), tostring(generators)})
-        local net = gen - use
-        add_info(info, "info-balance", net >= 0 and {"", "[color=#80e080]+", format_power(net), "[/color]"}
-            or {"", "[color=#ff8080]−", format_power(net), "[/color]"}, {"factorissimo-dispatch.balance-tooltip"})
-    end
+    local producing = use and generators > 0
+    add_info(info, "info-production", producing and format_power(gen) or nil,
+        {"factorissimo-dispatch.generators", tostring(factory.generators_working or 0), tostring(generators)})
+    local net = gen - (use or 0)
+    local balance = producing and (net >= 0 and {"", "[color=#80e080]+", format_power(net), "[/color]"}
+        or {"", "[color=#ff8080]−", format_power(net), "[/color]"}) or nil
+    add_info(info, "info-balance", balance, {"factorissimo-dispatch.balance-tooltip"})
 
     local used, by_type = 0, {}
     for _, conn in pairs(factory.connections or {}) do
@@ -520,7 +537,7 @@ local function fill_info(info, factory)
     add_info(info, "info-machines", {"factorissimo-dispatch.machines", tostring(factory.machines_working or 0), tostring(factory.machines or 0)})
 
     local children = factory.children or 0
-    if children > 0 then add_info(info, "info-children", tostring(children)) end
+    add_info(info, "info-children", children > 0 and tostring(children) or nil)
     add_info(info, "info-depth", tostring(depth_of(factory)))
 
     add_info(info, "info-pollution", {"factorissimo-dispatch.per-minute", string.format("%.1f", (factory.pollution_rate or 0) * 60)})
@@ -544,9 +561,10 @@ local function build_details(frame, player, state)
     local factory = state.selected and storage.factories[state.selected]
     if not (factory and is_standing(factory, player.force.index)) then
         state.selected = nil
+        if details.select_hint then return end
         details.clear()
         details.tags = {}
-        local label = details.add {type = "label", caption = {"factorissimo-dispatch.select-hint"}}
+        local label = details.add {type = "label", name = "select_hint", caption = {"factorissimo-dispatch.select-hint"}}
         label.style.single_line = false
         label.style.padding = 12
         label.style.font_color = {r = 0.7, g = 0.7, b = 0.7}
@@ -559,7 +577,9 @@ local function build_details(frame, player, state)
 
     if details.tags.id == factory.id and details.info then
         fill_info(details.info, factory)
-        details.header.titles.title.caption = factorissimo.factory_caption(factory)
+        local title = details.header.titles.title
+        local caption = factorissimo.factory_caption(factory)
+        if not same_caption(title.caption, caption) then title.caption = caption end
         return
     end
 
@@ -746,6 +766,16 @@ end)
 
 factorissimo.on_event(defines.events.on_player_created, function(event)
     update_button(game.get_player(event.player_index))
+end)
+
+factorissimo.on_event(defines.events.on_player_joined_game, function(event)
+    local player = game.get_player(event.player_index)
+    update_button(player)
+    if player and get_frame(player) then
+        -- Offline windows are removed from the refresh list, but survive in the player's GUI.
+        storage.dispatch.open[player.index] = true
+        storage.dispatch.dirty = true
+    end
 end)
 
 factorissimo.on_event(defines.events.on_player_changed_force, function(event)

@@ -29,6 +29,7 @@ end
 local function index_factory_groups()
     factory_groups = {{}, {}, {}, {}}
     for id, factory in pairs(storage.factories or {}) do factory_groups[id % 4 + 1][id] = factory end
+    factorissimo.index_roboport_factories()
 end
 factorissimo.index_factory_groups = index_factory_groups
 factorissimo.on_event(factorissimo.events.on_load(), index_factory_groups)
@@ -732,17 +733,21 @@ local function is_completely_empty(factory)
 end
 
 --- Removes every reference to the factory, remembers its id as deleted and clears the table.
-local function forget_factory(factory)
+local function forget_factory(factory, context)
     if factory.id then factory_groups[factory.id % 4 + 1][factory.id] = nil end
-    local factory_lists = {storage.factories, storage.saved_factories, storage.factories_by_entity}
-    for _, factory_list in pairs(storage.surface_factories) do
-        factory_lists[#factory_lists + 1] = factory_list
-    end
-
-    for _, factory_list in pairs(factory_lists) do
-        for k, f in pairs(factory_list) do
-            if f == factory then
-                factory_list[k] = nil
+    factorissimo.index_roboport_factory(factory, true)
+    if context then
+        -- One reverse index for the whole removal batch, including legacy aliases.
+        for _, reference in ipairs(context.references[factory] or {}) do
+            if reference.list[reference.key] == factory then reference.list[reference.key] = nil end
+        end
+        context.references[factory] = nil
+    else
+        local factory_lists = {storage.factories, storage.saved_factories, storage.factories_by_entity}
+        for _, factory_list in pairs(storage.surface_factories) do factory_lists[#factory_lists + 1] = factory_list end
+        for _, factory_list in pairs(factory_lists) do
+            for k, f in pairs(factory_list) do
+                if f == factory then factory_list[k] = nil end
             end
         end
     end
@@ -756,7 +761,7 @@ local function forget_factory(factory)
     for k in pairs(factory) do factory[k] = nil end
 end
 
-local function cleanup_factory_interior(factory)
+local function cleanup_factory_interior(factory, context)
     local surface = factory.inside_surface
     if surface and surface.valid then
         local area, x, y, D = interior_area(factory)
@@ -784,7 +789,7 @@ local function cleanup_factory_interior(factory)
         end
     end
 
-    forget_factory(factory)
+    forget_factory(factory, context)
 end
 
 --- Drops the packed factory item on the ground. Returns the spill result of the item.
@@ -1010,38 +1015,45 @@ local function packed_factory_ids(surface, area)
     return ids
 end
 
-local function factories_snapshot()
-    local list = {}
-    for _, factory in pairs(storage.factories) do list[#list + 1] = factory end
-    return list
-end
-
 local function same_surface(surface, index)
     return surface and surface.valid and surface.index == index
 end
 
---- Factories whose buildings stand inside the interior of `factory`.
-local function child_factories(factory)
-    local children = {}
-    local inside_surface = factory.inside_surface
-    if not (inside_surface and inside_surface.valid) then return children end
-    local inside_index = inside_surface.index
-    for _, child in pairs(storage.factories) do
-        if child ~= factory and child.built and same_surface(child.outside_surface, inside_index)
-            and find_surrounding_factory(inside_surface, {x = child.outside_x, y = child.outside_y}) == factory then
-            children[#children + 1] = child
+-- A short-lived index for one synchronous bulk deletion. No saved nesting graph to keep in sync.
+local function removal_context()
+    local context = {factories = {}, children = {}, references = {}}
+    local lists = {storage.factories, storage.saved_factories, storage.factories_by_entity}
+    for _, list in pairs(storage.surface_factories) do lists[#lists + 1] = list end
+    for _, list in ipairs(lists) do
+        for key, factory in pairs(list) do
+            local refs = context.references[factory] or {}
+            context.references[factory] = refs
+            refs[#refs + 1] = {list = list, key = key}
         end
     end
-    return children
+    for _, child in pairs(storage.factories) do
+        context.factories[#context.factories + 1] = child
+        local surface = child.outside_surface
+        if child.built and surface and surface.valid then
+            local parent = find_surrounding_factory(surface, {x = child.outside_x, y = child.outside_y})
+            if parent and parent ~= child and parent.inside_surface == surface then
+                local children = context.children[parent] or {}
+                context.children[parent] = children
+                children[#children + 1] = child
+            end
+        end
+    end
+    return context
 end
 
 --- The building of the factory is gone for good: wipe its interior, including factories built inside.
 --- With `purge_packed` packed factories whose items lie inside are deleted too (sandboxes).
-function destroy_factory_with_interior(factory, purge_packed)
+function destroy_factory_with_interior(factory, purge_packed, context)
     if factory.removing or not factory.layout then return end
+    context = context or removal_context()
     factory.removing = true
-    for _, child in pairs(child_factories(factory)) do
-        destroy_factory_with_interior(child, purge_packed)
+    for _, child in ipairs(context.children[factory] or {}) do
+        destroy_factory_with_interior(child, purge_packed, context)
     end
     local packed = {}
     local inside_surface = factory.inside_surface
@@ -1049,10 +1061,10 @@ function destroy_factory_with_interior(factory, purge_packed)
         packed = packed_factory_ids(inside_surface, (interior_area(factory)))
     end
     if factory.built then cleanup_factory_exterior(factory) end
-    cleanup_factory_interior(factory)
+    cleanup_factory_interior(factory, context)
     for _, id in pairs(packed) do
         local saved = storage.saved_factories[id]
-        if saved then destroy_factory_with_interior(saved, true) end
+        if saved then destroy_factory_with_interior(saved, true, context) end
     end
 end
 
@@ -1061,18 +1073,19 @@ local function on_surface_removal(surface)
     if not storage.factories then return end
     local index = surface.index
     local sandbox = is_sandbox_surface(surface)
+    local context = removal_context()
 
     -- Packed factories left on the floor of a sandbox lab are deleted with it.
     if sandbox then
         for _, id in pairs(packed_factory_ids(surface)) do
             local saved = storage.saved_factories[id]
-            if saved then destroy_factory_with_interior(saved, true) end
+            if saved then destroy_factory_with_interior(saved, true, context) end
         end
     end
 
     -- Interiors on this surface are lost. Buildings elsewhere become plain factory items again.
     if storage.surface_factories[index] then
-        for _, factory in pairs(factories_snapshot()) do
+        for _, factory in ipairs(context.factories) do
             if factory.layout and same_surface(factory.inside_surface, index) then
                 local building = factory.building
                 local outside_surface = factory.outside_surface
@@ -1090,7 +1103,7 @@ local function on_surface_removal(surface)
                         }
                     end
                 end
-                forget_factory(factory)
+                forget_factory(factory, context)
             end
         end
         storage.surface_factories[index] = nil
@@ -1099,11 +1112,11 @@ local function on_surface_removal(surface)
     -- Buildings standing on this surface vanish with it, and so do their interiors. Outside sandboxes packed
     -- factories are kept (their items may be anywhere; /give-lost-factory-buildings returns lost ones).
     local touched_floors = {}
-    for _, factory in pairs(factories_snapshot()) do
+    for _, factory in ipairs(context.factories) do
         if factory.layout and factory.built and same_surface(factory.outside_surface, index) then
             local inside_surface = factory.inside_surface
             if inside_surface and inside_surface.valid then touched_floors[inside_surface.index] = inside_surface end
-            destroy_factory_with_interior(factory, sandbox)
+            destroy_factory_with_interior(factory, sandbox, context)
         end
     end
 

@@ -5,6 +5,22 @@ local STACK_SIZE_MULTIPLIER = 50
 local FACTORY_HIDDEN_CONSTRUCTION_ROBOT = "factory-hidden-construction-robot"
 local TARGET_NUMBER_OF_ROBOTS_IN_NETWORK = 200
 
+-- Derived lists: idle factories without this upgrade never enter the three roboport jobs.
+local roboports, requesters, request_groups = {}, {}, {{}, {}, {}, {}}
+function factorissimo.index_roboport_factory(factory, remove)
+    local id = factory.id
+    if not id then return end
+    local upgrade = not remove and factory.roboport_upgrade
+    roboports[id] = upgrade and factory or nil
+    local exterior = upgrade and factory.built and upgrade.requester
+    requesters[id] = exterior and factory or nil
+    request_groups[id % 4 + 1][id] = exterior and factory or nil
+end
+function factorissimo.index_roboport_factories()
+    roboports, requesters, request_groups = {}, {}, {{}, {}, {}, {}}
+    for _, factory in pairs(storage.factories or {}) do factorissimo.index_roboport_factory(factory) end
+end
+
 local function get_tilebox(bounding_box)
     local left_top = bounding_box.left_top
     local right_bottom = bounding_box.right_bottom
@@ -264,15 +280,16 @@ local function ensure_target_number_of_robots(factory)
     local missing = TARGET_NUMBER_OF_ROBOTS_IN_NETWORK - all_construction_robots
     if missing == 0 then return end
 
-    missing = missing + robot_inventory.get_item_count(FACTORY_HIDDEN_CONSTRUCTION_ROBOT)
-    robot_inventory.clear()
     if missing > 0 then
         robot_inventory.insert {name = FACTORY_HIDDEN_CONSTRUCTION_ROBOT, count = missing}
+    else
+        -- Do not clear the inventory: ordinary robots placed here by another script are not ours.
+        robot_inventory.remove {name = FACTORY_HIDDEN_CONSTRUCTION_ROBOT, count = -missing}
     end
 end
 
 factorissimo.on_nth_tick(367, function()
-    for _, factory in pairs(storage.factories) do
+    for _, factory in pairs(roboports) do
         ensure_target_number_of_robots(factory)
     end
 end)
@@ -321,7 +338,6 @@ factorissimo.build_roboport_upgrade = function(factory)
         force = factory.force,
     }
     hidden_roboport.backer_name = ""
-    ensure_target_number_of_robots(factory)
 
     storage = storage or factory.inside_surface.create_entity {
         name = "factory-construction-chest",
@@ -344,10 +360,15 @@ factorissimo.build_roboport_upgrade = function(factory)
         hidden_roboport = hidden_roboport,
         item_request_proxies = (factory.roboport_upgrade and factory.roboport_upgrade.item_request_proxies) or {}
     }
+    ensure_target_number_of_robots(factory)
+    factorissimo.index_roboport_factory(factory)
 end
 
 factorissimo.cleanup_factory_roboport_exterior_chest = function(factory)
     if not factory.roboport_upgrade then return end
+    requesters[factory.id] = nil
+    request_groups[factory.id % 4 + 1][factory.id] = nil
+    factory.roboport_upgrade.request_job = nil
     factory.roboport_upgrade.item_request_proxies = {}
 
     local requester = factory.roboport_upgrade and factory.roboport_upgrade.requester and factory.roboport_upgrade.requester.valid and factory.roboport_upgrade.requester
@@ -423,15 +444,6 @@ local function get_construction_requests(factory)
         end
     end
 
-    for _, entity in pairs(surface.find_entities_filtered {area = area, to_be_upgraded = true, force = force}) do
-        if entity.is_registered_for_upgrade() then
-            local upgrade_target, quality = entity.get_upgrade_target()
-            if upgrade_target then
-                add_items(requests_by_itemname, upgrade_target.items_to_place_this or {}, quality and quality.name or "normal")
-            end
-        end
-    end
-
     if prototypes.item[REPAIR_PACK] then
         local by_quality = requests_by_itemname[REPAIR_PACK] or {}
         requests_by_itemname[REPAIR_PACK] = by_quality
@@ -458,31 +470,114 @@ local function destroy_all_item_request_proxies(roboport_upgrade)
     roboport_upgrade.item_request_proxies = {}
 end
 
-local function update_construction_requests(factory)
-    local roboport_upgrade = factory.roboport_upgrade
-    if factory.inactive or not factory.built or not factory.layout then return end
-    if not (factory.building and factory.building.valid) then return end
-    local inside_surface, outside_surface = factory.inside_surface, factory.outside_surface
-    if not (inside_surface and inside_surface.valid and outside_surface and outside_surface.valid) then return end
-    if not roboport_upgrade then return end
+local function can_request(factory)
+    if factory.inactive or not factory.built or not factory.layout then return false end
+    if not (factory.building and factory.building.valid and factory.roboport_upgrade) then return false end
+    local inside, outside = factory.inside_surface, factory.outside_surface
+    if not (inside and inside.valid and outside and outside.valid) then return false end
     local force = factory.force
-    if not (force and force.valid and force.technologies["factory-interior-upgrade-roboport"].researched) then return end
-
-    local requests_by_itemname = get_construction_requests(factory)
-    eject_unneeded_items(factory, requests_by_itemname)
-    if next(requests_by_itemname) then
-        create_or_remove_item_request_proxies(factory, requests_by_itemname)
-    elseif next(roboport_upgrade.item_request_proxies or {}) then
-        destroy_all_item_request_proxies(roboport_upgrade)
-    end
+    return force and force.valid and force.technologies["factory-interior-upgrade-roboport"].researched
 end
 
--- Every factory is handled once per 256 ticks: a quarter of them every 64 ticks, split by id.
+local function cancel_requests(upgrade)
+    upgrade.request_job = nil
+    if next(upgrade.item_request_proxies or {}) then destroy_all_item_request_proxies(upgrade) end
+end
+
+local function publish_requests(factory, upgrades)
+    local requests = get_construction_requests(factory)
+    -- Orders may have been cancelled, retargeted or moved while the queue was being sampled.
+    for _, entry in ipairs(upgrades) do
+        local entity = entry.entity
+        if entity.valid and entity.force == factory.force and entity.surface == factory.inside_surface
+            and remote_api.find_surrounding_factory(entity.surface, entity.position) == factory then
+            local target, quality = entity.get_upgrade_target()
+            if target and target.name == entry.name and quality.name == entry.quality then
+                add_items(requests, target.items_to_place_this or {}, entry.quality)
+            end
+        end
+    end
+    eject_unneeded_items(factory, requests)
+    create_or_remove_item_request_proxies(factory, requests)
+end
+
+-- is_registered_for_upgrade is O(the force's upgrade queue), not an O(1) flag.
+-- Keep its dispatched-robot semantics, but do at most 32 checks per tick across ALL factories.
+-- A complete snapshot is published at once: rotating partial requests would cancel slow deliveries.
+local UPGRADE_CHECKS_PER_TICK = 32
+local JOBS_PER_TICK = 8
+local function enqueue(queue, job)
+    queue.tail = queue.tail + 1
+    queue.entries[queue.tail] = job
+end
+factorissimo.register_delayed_function("factory_construction_requests", function()
+    local queue = storage.factory_construction_queue
+    if not queue then return end
+    local remaining = UPGRADE_CHECKS_PER_TICK
+    for _ = 1, JOBS_PER_TICK do
+        if remaining == 0 or queue.head > queue.tail then break end
+        local job = queue.entries[queue.head]
+        queue.entries[queue.head] = nil
+        queue.head = queue.head + 1
+        local factory = storage.factories[job.id]
+        local upgrade = factory and factory.roboport_upgrade
+        if upgrade and upgrade.request_job == job then
+            if can_request(factory) then
+                while remaining > 0 and job.cursor <= #job.entities do
+                    local entity = job.entities[job.cursor]
+                    job.cursor = job.cursor + 1
+                    remaining = remaining - 1
+                    if entity.valid then
+                        local target, quality = entity.get_upgrade_target()
+                        if target and entity.is_registered_for_upgrade() then
+                            job.waiting[#job.waiting + 1] = {entity = entity, name = target.name, quality = quality.name}
+                        end
+                    end
+                end
+                if job.cursor > #job.entities then
+                    upgrade.request_job = nil
+                    publish_requests(factory, job.waiting)
+                else
+                    enqueue(queue, job)
+                end
+            else
+                cancel_requests(upgrade)
+            end
+        end
+    end
+    if queue.head <= queue.tail then
+        factorissimo.execute_later("factory_construction_requests", 1)
+    else
+        storage.factory_construction_queue = nil
+    end
+end)
+
+local function update_construction_requests(factory)
+    local upgrade = factory.roboport_upgrade
+    if not can_request(factory) then
+        if upgrade then cancel_requests(upgrade) end
+        return
+    end
+    if upgrade.request_job then return end
+    local entities = factory.inside_surface.find_entities_filtered {
+        area = factorissimo.factory_interior_area(factory), to_be_upgraded = true, force = factory.force
+    }
+    if #entities == 0 then publish_requests(factory, {}); return end
+    local job = {id = factory.id, entities = entities, cursor = 1, waiting = {}}
+    upgrade.request_job = job
+    local queue = storage.factory_construction_queue
+    if not queue then
+        queue = {head = 1, tail = 0, entries = {}}
+        storage.factory_construction_queue = queue
+        factorissimo.execute_later("factory_construction_requests", 1)
+    end
+    enqueue(queue, job)
+end
+
+-- Every equipped, placed factory is handled once per 256 ticks, with the same phases as before.
 factorissimo.on_nth_tick(64, function(event)
     local group = (event.tick / 64) % 4
-    for _, factory in pairs(factorissimo.factory_group(group)) do
-        update_construction_requests(factory)
-    end
+    for _, factory in pairs(request_groups[group + 1]) do update_construction_requests(factory) end
 end)
 
 create_or_remove_item_request_proxies = function(factory, requests_by_itemname)
@@ -515,6 +610,7 @@ create_or_remove_item_request_proxies = function(factory, requests_by_itemname)
     -- forget delivered proxies, destroy the ones that are no longer needed, remember the slots of the rest
     local already_occupied_inventory_indexes = {}
     local proxy_slots = {} -- "item/quality" -> requester slot already used by the existing proxy
+    local proxy_counts = {}
     for item_name, by_quality in pairs(item_request_proxies) do
         if type(by_quality) ~= "table" then
             if by_quality.valid then by_quality.destroy() end -- a proxy stored by a very old version
@@ -533,6 +629,7 @@ create_or_remove_item_request_proxies = function(factory, requests_by_itemname)
                             local slot = inventory_locator.stack + 1
                             already_occupied_inventory_indexes[slot] = true
                             proxy_slots[item_name .. "/" .. quality] = slot
+                            proxy_counts[item_name .. "/" .. quality] = inventory_locator.count
                         end
                     end
                 end
@@ -567,7 +664,7 @@ create_or_remove_item_request_proxies = function(factory, requests_by_itemname)
             }}
 
             if proxy and proxy.valid then
-                proxy.insert_plan = insert_plan
+                if proxy_counts[item_name .. "/" .. quality] ~= count then proxy.insert_plan = insert_plan end
             else
                 item_request_proxies[item_name][quality] = requester.surface.create_entity {
                     name = "item-request-proxy",
@@ -583,7 +680,7 @@ end
 
 -- smaller update function to transfer items from the requester chest to the construction chest
 factorissimo.on_nth_tick(43, function()
-    for _, factory in pairs(storage.factories) do
+    for _, factory in pairs(requesters) do
         local roboport_upgrade = factory.roboport_upgrade
         if not roboport_upgrade then goto continue end
         local requester = roboport_upgrade.requester
@@ -595,11 +692,15 @@ factorissimo.on_nth_tick(43, function()
         local requester_inventory = requester.get_inventory(defines.inventory.chest)
         if requester_inventory.is_empty() then goto continue end
         local storage_inventory = storage.get_inventory(defines.inventory.chest)
+        if storage_inventory.is_full() then goto continue end
 
         for i = 1, #requester_inventory do
             local stack = requester_inventory[i]
             if stack.valid_for_read then
-                stack.count = stack.count - storage_inventory.insert(stack)
+                local count = stack.count
+                local inserted = storage_inventory.insert(stack)
+                stack.count = count - inserted
+                if inserted < count and storage_inventory.is_full() then break end
             end
         end
 

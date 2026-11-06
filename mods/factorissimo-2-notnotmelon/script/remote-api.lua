@@ -58,7 +58,13 @@ remote_api.set_global = function(path, v)
     end
     g[path[#path]] = v
     factorissimo.clear_layout_cache()
-    if path[1] == "factories" and #path <= 2 then factorissimo.index_factory_groups() end
+    if path[1] == "factories" then
+        if #path <= 2 then
+            factorissimo.index_factory_groups()
+        elseif path[3] == "roboport_upgrade" or path[3] == "built" then
+            factorissimo.index_roboport_factory(storage.factories[path[2]])
+        end
+    end
 end
 
 remote_api.get_factory_by_entity = function(entity)
