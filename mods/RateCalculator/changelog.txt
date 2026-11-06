@@ -2,6 +2,8 @@
 Version: 3.3.8
 Date: 2026-01-18
   Locale:
+    - ru: removed the extra multiplication sign from the net machine count and restored the information icon in the no-power warning.
+    - en/ru: removed the outdated claim that power consumption display is disabled by default; Paranoidal enables it by default.
     - ru: the mod name and the mod list description are the same as in ParanoidalLocale (format "English title (Russian translation)"), so the mod reads the same with or without it.
   Graphics:
     - Updated shortcut icon by Galdoc.
