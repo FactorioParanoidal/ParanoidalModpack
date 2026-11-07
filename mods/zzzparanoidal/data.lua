@@ -1,3 +1,4 @@
+require("prototypes.subgroups.space-exploration") -- Former SpaceXGAR2; before menu consumers.
 require("prototypes.tips-and-tricks.tips-and-tricks") -- подсказки
 
 -- Register early so research/evolution and compatibility mods see both labs.
