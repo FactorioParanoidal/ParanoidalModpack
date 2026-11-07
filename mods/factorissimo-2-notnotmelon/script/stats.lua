@@ -30,6 +30,20 @@ local WORKING = {
     [defines.entity_status.working] = true,
     [defines.entity_status.low_power] = true,
 }
+-- Only non-working MACHINE_TYPES enter these groups. Unknown/modded statuses stay explicit;
+-- low_power still counts as working, exactly as in the gameplay statistics above.
+local WAITING = {}
+for group, statuses in pairs {
+    inputs = {"no_ingredients", "item_ingredient_shortage", "fluid_ingredient_shortage", "missing_science_packs", "missing_required_fluid"},
+    output = {"full_output", "full_burnt_result_output", "waiting_for_space_in_destination"},
+    energy = {"no_power", "no_fuel", "no_input_fluid"},
+    disabled = {"disabled", "disabled_by_control_behavior", "disabled_by_script", "marked_for_deconstruction"},
+    task = {"no_recipe", "no_research_in_progress", "recipe_is_parameter", "recipe_not_researched"},
+    resources = {"no_minable_resources"},
+    temperature = {"low_temperature", "input_fluid_too_cold", "input_fluid_too_hot", "frozen"},
+} do
+    for _, status in ipairs(statuses) do WAITING[defines.entity_status[status]] = group end
+end
 local MIN_CONSUMPTION = 0.2 -- modules cannot lower the consumption below 20 %
 
 local function interior_area(factory)
@@ -129,7 +143,7 @@ local function scan_factory(factory, tick)
     if not (surface and surface.valid and factory.layout) then return result end
     local use, gen, generators, generators_working = 0, 0, 0, 0
     local machines, machines_working, children = 0, 0, 0
-    local child_ids = {}
+    local child_ids, waiting = {}, {}
     local solar -- nil: not read yet; false: the floor gives no solar power; else the share of full output
     local by_entity = storage.factories_by_entity
     for _, entity in pairs(surface.find_entities_filtered {area = interior_area(factory), type = SCAN_TYPES}) do
@@ -137,10 +151,16 @@ local function scan_factory(factory, tick)
         if info then
             local kind = info.kind
             if kind == "consumer" or kind == "machine" then
-                local working = WORKING[entity.status]
+                local status = entity.status
+                local working = WORKING[status]
                 if info.machine then
                     machines = machines + 1
-                    if working then machines_working = machines_working + 1 end
+                    if working then
+                        machines_working = machines_working + 1
+                    else
+                        local reason = WAITING[status] or "other"
+                        waiting[reason] = (waiting[reason] or 0) + 1
+                    end
                 end
                 if kind == "consumer" then
                     if working then
@@ -194,6 +214,7 @@ local function scan_factory(factory, tick)
     result.own_power_use, result.own_power_gen, result.child_factory_ids = use, gen, child_ids
     local nested_use, nested_gen = nested_power(factory, child_ids)
     result.machines, result.machines_working, result.children = machines, machines_working, children
+    result.machine_waiting, result.machine_waiting_tick = waiting, tick
     result.power_use, result.power_gen = use + nested_use, gen + nested_gen
     result.generators, result.generators_working = generators, generators_working
     result.active = machines_working > 0 or result.power_gen > 0
@@ -273,6 +294,7 @@ function factorissimo.reset_factory_stats(factory)
     factory.active, factory.active_tick = nil, nil
     factory.power_use, factory.power_gen, factory.generators, factory.generators_working = nil, nil, nil, nil
     factory.machines, factory.machines_working, factory.children = nil, nil, nil
+    factory.machine_waiting, factory.machine_waiting_tick = nil, nil
     factory.sensor_checked = nil
     factory.uptime_since, factory.clean_since = nil, nil
     factory.pollution_rate = nil

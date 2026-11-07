@@ -135,11 +135,20 @@ end
 
 local function raise_alarm(factory)
     local tick = game.tick
-    if (factory.alarm_until or 0) > tick then return end
+    -- A direct hit must not disappear behind an inherited alarm. Record it before the
+    -- existing early return, but do not restart/extend effects or walk descendants again.
+    local running = (factory.alarm_until or 0) > tick
+    factory.alarm_own_until = running and factory.alarm_until or tick + ALARM_TICKS
+    factory.alarm_own_force = factory.force.index
+    if running then return end
 
     local listeners, heard = {}, {}
     for _, affected in pairs(factory_with_children(factory)) do
         affected.alarm_until = tick + ALARM_TICKS
+        -- One latest propagated signal, not an unbounded source/history list. Each room
+        -- keeps its own record; later overlaps cannot extend an earlier direct-hit marker.
+        affected.alarm_signal = {source_id = factory.id, source_force = factory.force.index,
+            recipient_force = affected.force.index, until_tick = tick + ALARM_TICKS}
         local surface = affected.inside_surface
         if surface and surface.valid then
             draw_alarm(affected)

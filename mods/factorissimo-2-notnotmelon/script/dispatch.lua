@@ -607,6 +607,61 @@ local function add_info(info, key, value, tooltip)
 end
 
 local CONNECTION_TYPES = {"belt", "chest", "fluid", "heat", "circuit"}
+local WAITING_GROUPS = {"inputs", "output", "energy", "disabled", "task", "resources", "temperature", "other"}
+
+local function waiting_caption(factory)
+    local counts = factory.machine_waiting
+    if not counts or factory.machine_waiting_tick ~= factory.active_tick then
+        return {"factorissimo-dispatch.waiting-unmeasured"}
+    end
+    local text = {""}
+    for _, group in ipairs(WAITING_GROUPS) do
+        local count = counts[group] or 0
+        if count > 0 then
+            if #text > 1 then text[#text + 1] = "\n" end
+            text[#text + 1] = {"factorissimo-dispatch.waiting-" .. group, tostring(count)}
+        end
+    end
+    return #text > 1 and text or {"factorissimo-dispatch.waiting-none"}
+end
+
+-- Constant work for the selected card, independent of the GUI catalog and nesting depth.
+-- Source IDs describe the signal at the time of the event, not today's parent relationship.
+local function alarm_state(factory)
+    local tick, force_index = game.tick, factory.force.index
+    if (factory.alarm_until or 0) <= tick then return "none" end
+    local own = (factory.alarm_own_until or 0) > tick and factory.alarm_own_force == force_index
+    local signal = factory.alarm_signal
+    if signal and signal.until_tick > tick and signal.recipient_force == force_index
+        and signal.source_id ~= factory.id then
+        local source = storage.factories[signal.source_id]
+        if not (signal.source_force == force_index and source and is_standing(source, force_index)
+            and source.building.force.index == force_index) then source = nil end
+        return own and "own-inherited" or "inherited", source, signal.source_id
+    end
+    return own and "own" or "unknown"
+end
+
+local function fill_alarm(summary, factory)
+    local state, source, source_id = alarm_state(factory)
+    add_info(summary, "info-alarm", {"factorissimo-dispatch.alarm-" .. state}, {"factorissimo-dispatch.alarm-tooltip"})
+    local label, button = summary.alarm_source_label, summary[P .. "alarm_source"]
+    if not label then
+        label = summary.add {type = "label", name = "alarm_source_label", style = "bold_label",
+            caption = {"factorissimo-dispatch.alarm-source"}}
+        button = summary.add {type = "button", name = P .. "alarm_source"}
+        button.style.minimal_width = 0
+        button.style.maximal_width = 170
+        button.style.font = "default-small-semibold"
+    end
+    label.visible, button.visible = source_id ~= nil, source_id ~= nil
+    button.enabled = source ~= nil
+    button.tags = {id = factory.id}
+    button.caption = source and {"factorissimo-dispatch.alarm-source-id", tostring(source.id)}
+        or {"factorissimo-dispatch.alarm-source-unavailable"}
+    button.tooltip = source and {"factorissimo-dispatch.alarm-source-tooltip", factorissimo.factory_caption(source)}
+        or {"factorissimo-dispatch.alarm-source-missing"}
+end
 
 local function fill_info(info, factory, summary)
     summary = summary or info
@@ -624,6 +679,7 @@ local function fill_info(info, factory, summary)
         power = {"factorissimo-dispatch.measuring"}
     end
     add_info(summary, "info-power", power)
+    fill_alarm(summary, factory)
 
     local use, gen = factory.power_use, factory.power_gen or 0
     add_info(info, "info-consumption", use and {"factorissimo-dispatch.approx", format_power(use)} or {"factorissimo-dispatch.measuring"},
@@ -654,6 +710,7 @@ local function fill_info(info, factory, summary)
     add_info(info, "info-machines", factory.active_tick and
         {"factorissimo-dispatch.machines", tostring(factory.machines_working or 0), tostring(factory.machines or 0)}
         or {"factorissimo-dispatch.measuring"}, {"factorissimo-dispatch.own-room"})
+    add_info(info, "info-waiting", waiting_caption(factory), {"factorissimo-dispatch.waiting-tooltip"})
     add_info(info, "info-sample", factory.active_tick and
         {"factorissimo-dispatch.sample-age", tostring(math.max(0, floor((game.tick - factory.active_tick) / 60)))}
         or {"factorissimo-dispatch.measuring"}, {"factorissimo-dispatch.sample-tooltip"})
@@ -672,6 +729,10 @@ local function fill_info(info, factory, summary)
     add_info(info, "info-hull", hull and hull.reduction > 0
         and {"factorissimo-dispatch.hull", tostring(floor(hull.reduction * 100 + 0.5))}
         or {"factorissimo-dispatch.hull-none"})
+    local building = factory.building
+    add_info(info, "info-health", building and building.valid and building.health and
+        {"factorissimo-dispatch.health", tostring(math.ceil(building.health)), tostring(math.ceil(building.max_health))} or nil,
+        {"factorissimo-dispatch.health-tooltip"})
 end
 
 local function camera_zoom(player, layout)
@@ -1103,6 +1164,13 @@ local click_actions = {
     select = function(player, element)
         local factory = factory_of(element, player)
         if factory then select_factory(player, factory.id) end
+    end,
+    alarm_source = function(player, element)
+        local factory = factory_of(element, player)
+        if not factory then return end
+        -- Recheck expiration, ownership and placement at click time, not just at refresh.
+        local _, source = alarm_state(factory)
+        if source then select_factory(player, source.id) else refresh(player) end
     end,
     rename = function(player, element)
         local factory = factory_of(element, player)
