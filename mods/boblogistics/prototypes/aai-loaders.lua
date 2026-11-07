@@ -147,7 +147,7 @@ then
 
     --Add space-age crafting category
     if mods["space-age"] then
-      bobmods.lib.recipe.set_category("aai-basic-loader", "pressing")
+      bobmods.lib.recipe.add_additional_category("aai-basic-loader", "metallurgy") -- 2.1: "pressing" removed
     end
 
     data.raw.item["aai-basic-loader"].weight = 20000

@@ -264,12 +264,16 @@ if settings.startup["bobmods-logistics-beltoverhaul"].value == true then
   end
 
   if mods["space-age"] then
-    bobmods.lib.recipe.set_category("bob-basic-transport-belt", "pressing")
-    bobmods.lib.recipe.set_category("bob-basic-underground-belt", "pressing")
-    bobmods.lib.recipe.set_category("bob-basic-splitter", "pressing")
-    bobmods.lib.recipe.set_category("express-transport-belt", "pressing")
-    bobmods.lib.recipe.set_category("express-underground-belt", "pressing")
-    bobmods.lib.recipe.set_category("express-splitter", "pressing")
+    -- Factorio 2.1 removed "pressing": a belt the foundry can also make keeps its category and adds "metallurgy".
+    bobmods.lib.recipe.set_category("express-transport-belt", "crafting")
+    bobmods.lib.recipe.set_category("express-underground-belt", "crafting")
+    bobmods.lib.recipe.set_category("express-splitter", "crafting")
+    for _, name in pairs({
+      "bob-basic-transport-belt", "bob-basic-underground-belt", "bob-basic-splitter",
+      "express-transport-belt", "express-underground-belt", "express-splitter",
+    }) do
+      bobmods.lib.recipe.add_additional_category(name, "metallurgy")
+    end
   else
     bobmods.lib.recipe.set_category("express-transport-belt", "crafting")
     bobmods.lib.recipe.set_category("express-underground-belt", "crafting")
@@ -346,10 +350,11 @@ else
 end
 
 if mods["space-age"] then
-  bobmods.lib.recipe.set_category("turbo-transport-belt", "pressing")
-  bobmods.lib.recipe.set_category("turbo-underground-belt", "pressing")
-  bobmods.lib.recipe.set_category("turbo-splitter", "pressing")
-  bobmods.lib.recipe.set_category("bob-ultimate-transport-belt", "pressing")
-  bobmods.lib.recipe.set_category("bob-ultimate-underground-belt", "pressing")
-  bobmods.lib.recipe.set_category("bob-ultimate-splitter", "pressing")
+  -- Factorio 2.1 removed "pressing" (see above).
+  for _, name in pairs({
+    "turbo-transport-belt", "turbo-underground-belt", "turbo-splitter",
+    "bob-ultimate-transport-belt", "bob-ultimate-underground-belt", "bob-ultimate-splitter",
+  }) do
+    bobmods.lib.recipe.add_additional_category(name, "metallurgy")
+  end
 end
