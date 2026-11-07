@@ -9,6 +9,7 @@ Date: 2026-11-01
     - Removed: the empty control.lua of Clowns-Nuclear, the Clowns-Processing 1.3.19 migration (an old 1.1 reset that would run again under the new name), the Industrial Revolution 3, Early Nuclear Power, pyrawores, SpaceMod and Bob's bullet branches (mods not in the build), the branches for builds without Angel's Petrochem, commented-out code, todo files, unused and duplicate graphics (the AngelBob part shared 31 pictures byte for byte with the nuclear part) and the German locales.
     - Locales: English and Russian only.
   Graphics:
+    - Paranoidal: superseded thorium, phosphorus and advanced uranium technology images are archived outside the build and removed; zzzparanoidal owns the final C2 assignments. Item images and shared resources remain.
     - Only the 34 pictures the game uses are kept, plus the magnesium plate icon that only Artisanal Reskins replaces (of 162 graphics files in the three mods); they are recompressed (lossy palette; the sluicer sprites and the tinted thorium salt icon lossless): 0.76 MB -> 0.63 MB of kept graphics, the whole mod 2.2 MB -> 1.0 MB.
   Bugfixes:
     - The thermonuclear bomb no longer gets its module and reactor ingredients twice (the AngelBob part repeated them, the last one with the invalid type "name"); zzzparanoidal no longer has to remove them.
