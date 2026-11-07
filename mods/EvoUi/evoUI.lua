@@ -109,7 +109,8 @@ end
 function EvoUi.update_gui(event)
     if (event.tick % storage.settings.update_delay) ~= 0 then return end
 
-    for player_index, player in pairs(game.players) do
+    for _, player in pairs(game.connected_players) do
+        local player_index = player.index
         local player_settings = storage.EvoUi[player.name]
         -- saves converted from SP with no username to MP won't raise EvoUi.new_player
         -- so we have to check here, as well.

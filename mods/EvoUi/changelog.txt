@@ -1,6 +1,9 @@
 ---------------------------------------------------------------------------------------------------
 Version: 0.5.1
 Date: 2026-10-12
+  Optimizations:
+    - Paranoidal: schedule positive exact integer update intervals with on_nth_tick; restore subscriptions on load and retain the legacy modulo path for fractional or out-of-range values without rewriting settings.
+    - Paranoidal: periodically update GUI recipients only while connected, using player.index; keep saved offline settings and the player-locations sensor's show_offline data source.
   Features:
     - Paranoidal: sensor "Season and year (NightBrightness)": season (in the player's NightBrightness name style and colour), day of the season, next season, year since landing and day of the year, seasonal sun, full daylight hours, seasonal wind and wire losses; each part is a checkbox. Hidden by default ("Показ. всегда" is off); enabled in the EvoUI settings. Registered only with NightBrightness.
   Changes:

@@ -141,6 +141,7 @@ function EvoUi.EvoUi_settings_close(event)
     local new_update_freq = tonumber(player.gui.center.EvoUi_settingsGUI.core_settings.update_freq_flow.textfield.text)
     if new_update_freq ~= nil then
         storage.settings.update_delay = new_update_freq
+        EvoUi.update_interval()
     end
 
     if player.gui.center.EvoUi_settingsGUI ~= nil then

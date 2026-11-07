@@ -42,9 +42,6 @@ function EvoUi.get_octant_name(vector)
 end
 
 
-script.on_init(EvoUi.mod_init)
-script.on_configuration_changed(EvoUi.mod_update)
-
 script.on_event(defines.events.on_player_created, function(event)
     local status, err = pcall(EvoUi.new_player, event)
     if err then EvoUi.log({"err_generic", "on_player_created", err}) end
@@ -59,8 +56,8 @@ local function report(context, err)
     EvoUi.log({"err_generic", context, err})
 end
 
-script.on_event(defines.events.on_tick, function(event)
-    -- update_gui is gated by update_delay anyway; skip the two pcalls on the other ticks.
+local function update(event)
+    -- Also retain the legacy modulo contract for fractional/out-of-range delays.
     local settings_table = storage.settings
     local delay = settings_table and settings_table.update_delay or 60
     if delay < 1 or (event.tick % delay) ~= 0 then return end
@@ -68,7 +65,32 @@ script.on_event(defines.events.on_tick, function(event)
     if not status then report("on_tick:remote_initialize", err) end
     status, err = pcall(EvoUi.update_gui, event)
     if not status then report("on_tick:update_gui", err) end
+end
+
+local registered_interval
+function EvoUi.update_interval()
+    if registered_interval then script.on_nth_tick(registered_interval, nil) end
+    registered_interval = nil
+    script.on_event(defines.events.on_tick, nil)
+    local delay = storage.settings and storage.settings.update_delay or 60
+    -- Exact positive integers only; do not round or rewrite saved/user-entered delays.
+    if type(delay) == "number" and delay >= 1 and delay <= 9007199254740991 and delay == math.floor(delay) then
+        registered_interval = delay
+        script.on_nth_tick(delay, update)
+    elseif type(delay) ~= "number" or not (delay < 1) then
+        script.on_event(defines.events.on_tick, update)
+    end
+end
+
+script.on_init(function()
+    EvoUi.mod_init()
+    EvoUi.update_interval()
 end)
+script.on_configuration_changed(function(event)
+    EvoUi.mod_update(event)
+    EvoUi.update_interval()
+end)
+script.on_load(EvoUi.update_interval)
 
 local last_clicked = nil
 local last_checked = nil
