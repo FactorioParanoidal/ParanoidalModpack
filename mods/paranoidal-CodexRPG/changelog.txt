@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 9.3.0
 Date: 2026-11-06
+  Compatibility:
+    - Removed the required dependencies on the PMRPGsystem and RPGsystem migration bridges, which are no longer shipped after completed migrations. Migrated saves keep their progress in this mod. Importing unmigrated old saves requires the old bridges; the guarded import receivers and the RPG remote interface are unchanged.
   Features:
     - BnL Premium lists the Gold Card holders, the supporters of the modpack (16, alphabetically, by display name). The club card shows the number of holders, fulfilled wishes and the average review time. A holder opens a profile on the right page: card number, the status Platinum passenger (the same for every holder) and the wishes, each with its version, quote and description (expandable) and an "Open" button. Holders without wishes get a BnL joke instead of an empty list.
     - CoolzeT's wish: the Codex and the base statistics (paranoidal-CodexRPG 9.1.0, asked on 28.10.2026, made on 29.10.2026). It has no "Open" button, the Codex is its own bookmark; the wish expands to the quote and the description.
