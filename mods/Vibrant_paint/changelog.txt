@@ -5,6 +5,7 @@ Date: 2024-10-28
 		-fixed an issue that made the mod unable to run without Space Age enabled
 		-painted the Capture Robot PROJECTILE, previously only the capture animation was painted
   Compatibility:
+    - Paranoidal Space Age branch: no optional dependency on space-age, so with Space Age enabled the mod loads in the same order as without it; paranoidal-space-age-filter hides the expansion from it in any case.
     - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
 ---------------------------------------------------------------------------------------------------
 Version: 1.1.2

@@ -8,8 +8,7 @@
     "dependencies": [
     	"base >= 2.0.0",
 		"(?) factoriohd_base",
-		"(?) IRobot",
-		"(?) space-age >= 0.2.0"
+		"(?) IRobot"
     ],
 	"package":{
 		"ignore": [
