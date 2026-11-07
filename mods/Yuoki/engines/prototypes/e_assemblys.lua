@@ -10,6 +10,7 @@ local ye_fassembly1_crafting_categories = { "crafting", "advanced-crafting" }
 local ye_fassembly2_crafting_categories = { "crafting", "advanced-crafting", "crafting-with-fluid" }
 local ye_fassembly_sp_crafting_categories = { "crafting", "advanced-crafting", "crafting-with-fluid" }
 
+-- Factorio 2.1 removed the Space Age 2.0 mixed categories ("pressing", "metallurgy-or-assembling" and others).
 if mods["space-age"] then
 	ye_fassembly1_crafting_categories = {
 		"basic-crafting",
@@ -18,13 +19,6 @@ if mods["space-age"] then
 		"crafting-with-fluid",
 		"electronics",
 		"electronics-with-fluid",
-		"pressing",
-		"metallurgy-or-assembling",
-		"organic-or-hand-crafting",
-		"organic-or-assembling",
-		"electronics-or-assembling",
-		"cryogenics-or-assembling",
-		"crafting-with-fluid-or-metallurgy",
 	}
 	ye_fassembly2_crafting_categories = {
 		"basic-crafting",
@@ -33,13 +27,6 @@ if mods["space-age"] then
 		"crafting-with-fluid",
 		"electronics",
 		"electronics-with-fluid",
-		"pressing",
-		"metallurgy-or-assembling",
-		"organic-or-hand-crafting",
-		"organic-or-assembling",
-		"electronics-or-assembling",
-		"cryogenics-or-assembling",
-		"crafting-with-fluid-or-metallurgy",
 	}
 	ye_fassembly_sp_crafting_categories = {
 		"basic-crafting",
@@ -48,13 +35,6 @@ if mods["space-age"] then
 		"crafting-with-fluid",
 		"electronics",
 		"electronics-with-fluid",
-		"pressing",
-		"metallurgy-or-assembling",
-		"organic-or-hand-crafting",
-		"organic-or-assembling",
-		"electronics-or-assembling",
-		"cryogenics-or-assembling",
-		"crafting-with-fluid-or-metallurgy",
 	}
 end
 

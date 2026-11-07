@@ -28,6 +28,7 @@ Date: 2026-10-24
     - MF cannot be barrelled (a barrel keeps no temperature): no MF barrel.
     - Removed: the 3M6/4 boiler, the MS-1.8-S turbine and the mastercrafted boilers and turbines T25, T50, MS (265-500 °C, weaker than Bob's boilers and turbines of the same stage).
   Bugfixes:
+    - Paranoidal port to Factorio 2.1 (Space Age only): the factories no longer list the Space Age 2.0 mixed recipe categories that 2.1 removed ("pressing", "metallurgy-or-assembling", "organic-or-hand-crafting", "organic-or-assembling", "electronics-or-assembling", "cryogenics-or-assembling", "crafting-with-fluid-or-metallurgy"); loading with Space Age no longer fails.
     - Perpetual-motion chains fixed: Yuoki generators at most 100 % effectivity (the eco and tech mastercrafted turbines and the small turbine had 114-120 %), burner generator 50 %, water -> MF at 10 °C, MF heat generator 6 MF, steam -> MF turbine 22 and 60 MF, overheater 280 steam, Rheinsberg MT/HT 770/380 steam, solid-fuel engine 4 / 3.5 / 3 MF, liquid and gas fuel engines below the fuel value of fuel oil and methane.
     - Mixed fuel -> rocket fuel shows the product icon (its own icon replaced the build's rocket fuel icon through recipe icon sync).
     - Yuoki recipes that make MF or steam ignore consumption, speed and productivity effects (efficiency modules in beacons pushed every MF chain above 100 %).
