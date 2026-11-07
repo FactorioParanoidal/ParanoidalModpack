@@ -45,8 +45,8 @@ factorissimo.factory_interior_area = interior_area
 -- power while working, solar panels by the solar power of the floor, electric energy interfaces by their settings.
 -- Factory floors have the surface property "solar-power" = 0: solar panels there (also the hidden panels of
 -- Bio Industries buildings) give nothing and are not counted as generators at all.
--- Factories built inside add their last values. One pass once a minute per factory (sample_factory) and every
--- 2 seconds for the factory selected in an open dispatcher (a separate, GUI-only snapshot).
+-- Factories built inside add their last values. One pass once a minute per factory (sample_factory).
+-- The dispatcher reads this snapshot; preview_factory remains a separate, explicitly requested snapshot.
 
 local MACHINE_TYPES = {["assembling-machine"] = true, furnace = true, ["mining-drill"] = true, lab = true}
 local BONUS_TYPES = {["assembling-machine"] = true, furnace = true, ["mining-drill"] = true, lab = true, ["rocket-silo"] = true}
@@ -379,6 +379,8 @@ function factorissimo.sample_factory(factory, released, tick)
     else
         factory.clean_since = nil
     end
+
+    if storage.dispatch and next(storage.dispatch.open) then factorissimo.dispatch_sampled(factory, tick) end
 
     local force = factory.force
     if not (force and force.valid) or in_sandbox(factory) then return end
