@@ -2,120 +2,80 @@
 --[Quality Scrolling]--
 -------------------------------------------------------------------------------
 local events = require('utils/events')
-local lib = require('utils/lib')
 
-local function previous_quality(quality)
-    local previous
-    for key, qualityName in pairs(storage.quality) do
-        if qualityName == quality.name then
-            previous = prototypes.quality[storage.quality[key+1]]
-            --game.print("Name: "..previous.name.."\nLevel: "..previous.level)
+-- Derived from prototypes, not saved state: an old descending storage.quality list is ignored.
+-- Build lazily after reload; configuration changes invalidate the local cache.
+local quality_names, quality_indices
+local function build_quality_order()
+    local names, incoming, following = {}, {}, {}
+    for name in pairs(prototypes.quality) do
+        names[#names + 1] = name
+        incoming[name] = 0
+    end
+    table.sort(names)
+    for _, name in ipairs(names) do
+        local next_quality = prototypes.quality[name].next
+        if next_quality and incoming[next_quality.name] ~= nil then
+            following[name] = next_quality.name
+            incoming[next_quality.name] = incoming[next_quality.name] + 1
         end
     end
-    if previous.level == 0 and quality.level == 0 then
-        previous = prototypes.quality[storage.quality[1]]
-    end
-    return previous
-end
 
--- this loops until it finds the previous valid quality, looping back to maximum if necessary
-local function get_previous_quality_item(player, stack)
-    local quality = stack.quality
-    local new_item
-    local looped = false
-    ::backToStart::
-    repeat
-        quality=previous_quality(quality)
-        new_item = lib.find_item_in_inventory(stack.name,player.get_main_inventory(), quality)
-    until new_item or quality.level == storage.minQuality.level
-    -- if we hit the minimum quality, try grabbing maxQuality before looping back down from the top
-    if not new_item and not looped then
-        quality = storage.maxQuality
-        new_item = lib.find_item_in_inventory(stack.name,player.get_main_inventory(), quality)
-        if not new_item then
-            looped = true  -- this variable prevents infinite loops
-            goto backToStart
-        end
-    end
-    return new_item
-end
-
--- this loops until it finds the next valid quality, looping back to minimum if neceessary
-local function get_next_quality_item(player, stack)
-    local quality = stack.quality
-    local new_item
-    local looped = false
-    ::backToStart::
-    repeat
-        quality=quality.next or storage.minQuality -- quality.next becomes nil with modded qualities
-        new_item = lib.find_item_in_inventory(stack.name,player.get_main_inventory(), quality)
-    until new_item or quality.level == storage.maxQuality.level
-    -- if we hit the maximum quality, try grabbing minQuality before looping back up from the bottom
-    if not new_item and not looped then
-        quality = storage.minQuality
-        new_item = lib.find_item_in_inventory(stack.name,player.get_main_inventory(), quality)
-        if not new_item then
-            looped = true  -- this variable prevents infinite loops
-            goto backToStart
-        end
-    end
-    return new_item
-end
-
--- Register the next quality hotkey,  which simply invokes get_next_quality_item() function
-local function quality_scroll_up(event)
-    local player = lib.get_player(event.player_index)
-    local stack = player.cursor_stack and player.cursor_stack.valid_for_read and player.cursor_stack
-    if stack and stack.quality and stack.quality.level and script.active_mods["quality"] then
-        local new_item = get_next_quality_item(player, stack)
-        if new_item then
-            player.cursor_stack.swap_stack(new_item)
-        end
-    end
-end
-events.on('picker-quality-cycle-next', quality_scroll_up)
-
--- Register the previous quality hotkey, which simply invokes get_prevous_quality_item() function
-local function quality_scroll_down(event)
-    local player = lib.get_player(event.player_index)
-    local stack = player.cursor_stack and player.cursor_stack.valid_for_read and player.cursor_stack
-    if stack and stack.quality and stack.quality.level and script.active_mods["quality"] then
-        local new_item = get_previous_quality_item(player, stack)
-        if new_item then
-            player.cursor_stack.swap_stack(new_item)
-        end
-    end
-end
-events.on('picker-quality-cycle-previous', quality_scroll_down)
-
--- This runs on first init and when mod configuration is changed, I think
-local function setup_quality()
-    if script.active_mods["quality"] then
-        storage.quality = {}
-        local temporary_table = {}
-        local minQuality
-        local maxQuality
-        for _, quality in pairs(prototypes.quality) do
-            temporary_table[quality.name] = quality.level
-            if not maxQuality or quality.level > maxQuality.level then
-                maxQuality = quality
-            end
-            if not minQuality or quality.level < minQuality.level then
-                minQuality = quality
+    -- Topological order keeps every next link, including all level-0 defect tiers.
+    -- Name order breaks ties between disconnected chains deterministically.
+    quality_names, quality_indices = {}, {}
+    while #quality_names < #names do
+        local candidate
+        for _, name in ipairs(names) do
+            if not quality_indices[name] and incoming[name] == 0 then
+                candidate = name
+                break
             end
         end
-        storage.maxQuality = maxQuality
-        storage.minQuality = minQuality
-        -- Takes the quality names and sort them by their values, in reverse order
-        local sorted_table = {}
-        for name, _ in pairs(temporary_table) do
-            table.insert(sorted_table, name)
+        -- Defensive fallback for a cyclic graph: still visit each quality only once.
+        if not candidate then
+            for _, name in ipairs(names) do
+                if not quality_indices[name] then candidate = name; break end
+            end
         end
-        table.sort(sorted_table, function(a, b)
-            return temporary_table[a] > temporary_table[b]
-        end)
-        -- then store the table for later use
-        storage.quality = sorted_table
+        quality_names[#quality_names + 1] = candidate
+        quality_indices[candidate] = #quality_names
+        local next_name = following[candidate]
+        if next_name then incoming[next_name] = incoming[next_name] - 1 end
     end
 end
-events.on({'on_init', 'on_configuration_changed'}, setup_quality)
+
+local function cycle_quality(event, direction)
+    if not script.active_mods['quality'] then return end
+    local player = game.get_player(event.player_index)
+    if not (player and player.valid) then return end
+    local stack = player.cursor_stack
+    local inventory = player.get_main_inventory()
+    if not (stack and stack.valid_for_read and inventory and inventory.valid) then return end
+    if not quality_names then build_quality_order() end
+    local current = quality_indices[stack.quality.name]
+    if not current then return end
+
+    -- Scan the inventory once; swap the real stack so quality and item state stay intact.
+    local available = {}
+    for i = 1, #inventory do
+        local slot = inventory[i]
+        if slot.valid_for_read and slot.name == stack.name and not available[slot.quality.name] then
+            available[slot.quality.name] = slot
+        end
+    end
+    for step = 1, #quality_names do
+        local index = (current - 1 + direction * step) % #quality_names + 1
+        local target = available[quality_names[index]]
+        if target then
+            stack.swap_stack(target)
+            return
+        end
+    end
+end
+
+events.on('picker-quality-cycle-next', function(event) cycle_quality(event, 1) end)
+events.on('picker-quality-cycle-previous', function(event) cycle_quality(event, -1) end)
+events.on({'on_init', 'on_configuration_changed'}, function()
+    quality_names, quality_indices = nil, nil
+end)
