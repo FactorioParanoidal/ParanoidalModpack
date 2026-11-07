@@ -1,0 +1,10 @@
+{
+  "name": "paranoidal-space-age-filter",
+  "version": "9.0.0",
+  "title": "Paranoidal Space Age Filter",
+  "author": "FactorioParanoidal",
+  "homepage": "https://github.com/FactorioParanoidal/ParanoidalModpack",
+  "factorio_version": "2.1",
+  "description": "Space Age only for the space platforms of Paranoidal: the other mods do not see the expansion, its changes to the base game are undone (technologies, recipes, items as without it), the platforms stay (the rocket silo sends cargo to them, space science is made on a platform, no satellite), the planets are hidden. Does nothing without Space Age.",
+  "dependencies": []
+}
