@@ -11,6 +11,11 @@ local RTG_prop =
 
 -- everything is local, writing into the top scope of control.lua is not allowed
 
+local on_tick
+local function update_tick_listener()
+  script.on_event(defines.events.on_tick, (storage.total_rtgs or 0) > 0 and on_tick or nil)
+end
+
 local function is_rtg_name(name)
   for _, rtg_name in pairs(rtg_names_list) do
     if name == rtg_name then return true end
@@ -143,12 +148,14 @@ local function remove_rtg(tick_id)
   if rtg then drop_rtg_extras(rtg) end
   table.remove(storage.rtgs, tick_id)
   storage.total_rtgs = storage.total_rtgs - 1
+  if storage.total_rtgs == 0 then update_tick_listener() end
 end
 
 local function onBuildHandler(event)
   local entity = event.entity
   table.insert(storage.rtgs, make_rtg_prototype { name = entity.name, tick = game.tick, entity = entity })
   storage.total_rtgs = storage.total_rtgs + 1
+  if storage.total_rtgs == 1 then update_tick_listener() end
 end
 
 local function onMinedHandler(event)
@@ -174,13 +181,17 @@ script.on_init(function()
   try_init()
   update_settings()
   update_recipes()
+  update_tick_listener()
 end)
 
 script.on_configuration_changed(function()
   try_init()
   update_settings()
   rebuild_rtg_table()
+  update_tick_listener()
 end)
+
+script.on_load(update_tick_listener)
 
 script.on_event(defines.events.on_runtime_mod_setting_changed, function()
   update_settings()
@@ -204,7 +215,7 @@ if defines.events.on_space_platform_mined_entity then
   script.on_event(defines.events.on_space_platform_mined_entity, onMinedHandler, build_filter)
 end
 
-script.on_event(defines.events.on_tick, function()
+on_tick = function()
   if storage.total_rtgs == 0 then return end
   local tick_id = storage.tick_id
   if tick_id > storage.total_rtgs then
@@ -255,4 +266,4 @@ script.on_event(defines.events.on_tick, function()
   end
 
   storage.tick_id = tick_id + 1
-end)
+end
