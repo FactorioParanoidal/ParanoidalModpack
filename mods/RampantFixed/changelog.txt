@@ -4,6 +4,7 @@ Date: 2026.10.27
   Locale:
     - ru: the mod name and the mod list description are the same as in ParanoidalLocale (format "English title (Russian translation)"), so the mod reads the same with or without it.
   Changes:
+    - Peaceful map: on a map whose Nauvis was generated without enemy bases (enemy-base size "none", e.g. the preset "Paranoidal: no enemies") Rampant shows no "truce over", flyer, juggernaut or underground attack messages, and getTruceInfo returns nil (EvoUI shows no truce countdown). New libs/PeacefulMap.lua.
     - The per-player setting "Show Rampant AI squads alert" (rampantFixed--showSquadAlert) is off by default and is marked "(debug)" in its name and description. Players who already set it keep their value.
     - Rampant no longer raises evolution: the Space Age growth of Vulcanus evolution (+0.75% every 30000 ticks while demolishers live there) is removed. In Paranoidal only player research raises evolution.
     - Turning off mini-bosses also kills living champions and hour bosses. Saves with the setting already off are cleaned up on the configuration update; only tracked bosses are visited, with no map scans or extra tick checks.

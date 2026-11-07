@@ -9,6 +9,7 @@ local constants = require("Constants")
 local mathUtils = require("MathUtils")
 local config = require("__RampantFixed__/config")
 local aiBrain = require("AIBrain")
+local peacefulMap = require("PeacefulMap")
 
 -- local aiPredicates = require("AIPredicates")
 
@@ -293,7 +294,10 @@ local function endTruce(map, siegeAIToggle, raidAIToggle)
 	else
 		map.state = AI_STATE_GROWING
 	end
-	game.print({"description.rampantFixed--peacefullModeEndNotification", map.surface.name})
+	-- Paranoidal: no "truce over" on a peaceful map (no enemy bases, nobody to attack).
+	if not peacefulMap.active() then
+		game.print({"description.rampantFixed--peacefullModeEndNotification", map.surface.name})
+	end
 end
 
 local function planningMap(map, tick)

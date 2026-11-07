@@ -10,6 +10,7 @@ local scoreChunks = require("ScoreChunks")
 local unitGroupUtils = require("libs/UnitGroupUtils")
 local unitUtils = require("UnitUtils")
 local foreignEnemies = require("ForeignEnemies")
+local peacefulMap = require("PeacefulMap")
 
 local positionToChunkXY = mapUtils.positionToChunkXY
 local getChunkListInRange = mapUtils.getChunkListInRange
@@ -613,7 +614,8 @@ function undergroundAttack.updateUndergroundAttackProbability(map)
 	end
 	if map.undergroundAttackProbability == 0 then
 		map.undergroundAttackProbability = newUndergroundAttackProbability
-		if (newUndergroundAttackProbability > 0) and not map.universe.firtstUndergroundAlertShown then	-- firtstUndergroundAlertShown - sometimes 1st attack occurs early (exmpl: long range squadkilling), so do not warn again
+		-- Paranoidal: no warning on a peaceful map (libs/PeacefulMap), there is nobody to dig
+		if (newUndergroundAttackProbability > 0) and not map.universe.firtstUndergroundAlertShown and not peacefulMap.active() then	-- firtstUndergroundAlertShown - sometimes 1st attack occurs early (exmpl: long range squadkilling), so do not warn again
 			game.print({"description.rampantFixed--undergroundAttackWarning", map.surface.name})
 			game.print({"description.rampantFixed--undergroundAttackWarning2"})
 		end
