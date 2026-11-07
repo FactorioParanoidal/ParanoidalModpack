@@ -7,8 +7,7 @@
     "description": "Search your factory for items, fluids, entities, signals, tags and more with Shift + F. Displays a list of matching buildings: clicking on a result opens it in the map. Can search all planets/surfaces (Space Age, Space Exploration, etc).\nAlt + Shift + Click on anything (e.g. built entity, inventory item, recipe) to open the search with that item selected.",
     "factorio_version": "2.1",
     "dependencies": [
-      "base >= 2.0.56",
-      "? space-age"
+      "base >= 2.0.56"
     ],
     "package": {
       "ignore": ["resources/*", "scenarios/*"]
