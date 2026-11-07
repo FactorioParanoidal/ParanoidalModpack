@@ -1,6 +1,14 @@
 -- Curated Beta 8 interface icons, after Reskins/OV and the pack's local overrides.
 -- Never create prototypes or guess renamed IDs. Gameplay stays intact; ore ground pictures follow Beta 8.
 local entries = require("tweaks.custom.bobicons-beta8-data")
+local chemical = require("tweaks.technology.chemical-elements-data")
+-- Эти назначения выведены из старого каталога: у C2 один поздний владелец.
+-- Удаляем из самой таблицы, чтобы повторное require тоже не вернуло старые назначения.
+for i = #entries, 1, -1 do
+    if entries[i].type == "technology" and chemical[entries[i].name] then
+        table.remove(entries, i)
+    end
+end
 
 local function current_icon(prototype)
     if prototype.icons and next(prototype.icons) then

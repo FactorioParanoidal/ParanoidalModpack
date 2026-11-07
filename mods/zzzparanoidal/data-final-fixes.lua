@@ -453,6 +453,8 @@ require("tweaks.custom.reskins-overrides")
 require("tweaks.technology.inserter-capacity-cost") -- цена бонуса грузоподъёмности II–IV
 -- Рецепты не показываются в окне выбора сигнала (настройка paranoidal-recipe-signals-visible); после всех созданий рецептов.
 require("tweaks.custom.recipe-signals-hidden")
+-- Карточки элементов C2: окончательный владелец после Reskins, атласа и прежних замен.
+require("tweaks.technology.chemical-elements")
 -- Этот require ВСЕГДА ПОСЛЕДНИЙ: не переносить и не добавлять код ниже.
 -- Все новые правки размещать выше: здесь фиксируются иконка и последнее место эффекта эволюции.
 require("tweaks.technology.research-evolution-icon")

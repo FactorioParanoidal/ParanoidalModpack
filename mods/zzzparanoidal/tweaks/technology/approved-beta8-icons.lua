@@ -23,8 +23,6 @@ local icons = {
     { "steel-processing", "steel-processing", 128 },
     { "bob-long-inserters-1", "long-inserters-1", 128 },
     { "bob-long-inserters-2", "long-inserters", 128 },
-    { "mercury-processing-1", "mercury-tech", 128 },
-    { "mercury-processing-2", "mercury-tech", 128 },
     -- Ниже — согласованный выбор ресурсов Beta 8, не прежние назначения из дампа.
     { "effect-transmission", "effect-transmission-1", 128 },
     { "effect-transmission-2", "effect-transmission-2", 128 },
