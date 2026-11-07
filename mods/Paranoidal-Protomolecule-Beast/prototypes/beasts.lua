@@ -330,8 +330,13 @@ local function body_sprite(entity)
     -- Some mods' machines are drawn only by what they show while working.
     return working_parts({}, function(_, part) return part end)[1]
   end
-  -- Its head, which turns: a RotatedAnimation.
-  if entity.type == "ammo-turret" or entity.type == "electric-turret" then return entity.prepared_animation end
+  -- Its head, which turns: a RotatedAnimation. A head drawn as eight sectors of a turn (RotatedAnimation8Way, Space
+  -- Age's railgun turret) is not one, so that turret is not lifted.
+  if entity.type == "ammo-turret" or entity.type == "electric-turret" then
+    local head = entity.prepared_animation
+    if type(head) == "table" and (head.layers or head.filename or head.filenames or head.stripes) then return head end
+    return nil
+  end
   -- 2.1: picture is a Sprite4Way for both; a logistic container has neither picture nor animation, its look is its robot
   -- door's animation (shut in the first frame), which the base game also copies as a chest's picture. north() reads either.
   if entity.type == "container" or entity.type == "logistic-container" then

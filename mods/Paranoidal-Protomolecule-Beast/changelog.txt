@@ -2,6 +2,7 @@
 Version: 9.0.0
 Date: 2026-11-03
   Bugfixes:
+    - Space Age: a turret whose head is drawn as eight sectors of a turn (the railgun turret) is not lifted, like any building with a picture the Beast cannot read; before, the whole set was copied as one layer and loading failed with a missing-width error.
     - Generator creatures read the animation inside each direction of the Factorio 2.1 picture set; passing its wrapper as a sprite caused a missing-width error on startup.
   Major Features:
     - The protomolecule replaces the biomechanical virus. Mod name Paranoidal-Protomolecule-Beast; prototype, setting and remote interface names stay as they were.
@@ -66,6 +67,7 @@ Date: 2026-11-03
   Info:
     - AGENT-NOTES.md: how the mod works, its storage, remote interface and build links, and what to change for Factorio 2.1 (every place marked "-- 2.1:" in the code).
   Compatibility:
+    - Paranoidal Space Age branch: no optional dependency on space-age, so with Space Age enabled the mod loads in the same order as without it; paranoidal-space-age-filter hides the expansion from it in any case.
     - Ported to Factorio 2.1: factorio_version 2.1, base >= 2.1.0; underground belts and piping spread through underground_belt_neighbour and fluidbox_neighbours (LuaEntity.neighbours is gone); generator creatures read the 2.1 pictures; a pumpjack creature takes its frame from the always-drawn working visualisation drawn below the animation (MiningDrillPrototype.base_picture is gone).
     - Generators and logistic chests can be lifted on Factorio 2.1 again: a generator creature reads the animation of the 2.1 GeneratorPictures (the north one first), a logistic chest creature the animation of its robot door, as 2.1 logistic containers have neither picture nor animation.
 ---------------------------------------------------------------------------------------------------
