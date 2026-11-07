@@ -1,11 +1,13 @@
 -- Warp drive, jumps between the sector gates and home orbit, the window next to the drive, the BnL logo on every
 -- platform hub (Space Age branch, ПР-077 stage 2); the comfort field, demons, void shield and red alert are in
--- scripts/ship.lua (stage 3). Without Space Age nothing runs.
+-- scripts/ship.lua (stage 3); warp years and BnL bills in scripts/years.lua (stage 4); the rift at the first rocket in
+-- scripts/rift.lua (stage 5). Without Space Age nothing runs.
 if not script.active_mods["space-age"] then return end
 
 local shared = require("shared")
 local ship = require("scripts.ship")
 local years = require("scripts.years")
+local rift = require("scripts.rift")
 
 local SLOW = 10 -- ticks between countdown/window updates
 local HUBS = 300 -- ticks between hub logo checks
@@ -423,7 +425,11 @@ for _, name in ipairs({"on_built_entity", "on_robot_built_entity", "on_space_pla
 	script.on_event(defines.events[name], on_built, filter)
 end
 
-script.on_event(defines.events.on_tick, check_spinning)
+script.on_event(defines.events.on_tick, function()
+	check_spinning()
+	rift.tick()
+end)
+script.on_event(defines.events.on_rocket_launched, rift.on_rocket_launched)
 script.on_nth_tick(SLOW, function()
 	update_countdowns()
 	refresh_open_windows()
@@ -512,6 +518,10 @@ remote.add_interface("paranoidal-warp", {
 			end
 		end
 		return platform and years.status(platform) or nil
+	end,
+	-- Stage 5: the rift scene of a force (done, running, what it left).
+	rift_status = function(force_index)
+		return rift.status(force_index)
 	end,
 	expire_bills = function(platform_index)
 		for _, force in pairs(game.forces) do

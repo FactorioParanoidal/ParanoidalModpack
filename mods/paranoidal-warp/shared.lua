@@ -16,6 +16,11 @@ M.shield = "paranoidal-warp-void-shield"
 M.shield_technology = "paranoidal-warp-void-shield"
 M.alert_sound = "paranoidal-warp-red-alert"
 M.demon_prefix = "paranoidal-warp-demon-"
+-- Stage 5: the rift at the first rocket.
+M.fragment = "paranoidal-warp-bridge-fragment"
+M.rift_sound_open = "paranoidal-warp-rift-open"
+M.rift_sound_thunder = "paranoidal-warp-rift-thunder"
+M.rift_sound_impact = "paranoidal-warp-rift-impact"
 
 -- The four sins of consumption (user 2026-11-07: all four at once). base: vanilla unit line for sizes 1-3; tint1/2: mask
 -- colours; health/speed: multipliers of the size's base values; group: wave size multiplier.

@@ -1,4 +1,12 @@
 ---------------------------------------------------------------------------------------------------
+Version: 9.3.0
+Date: 2026-11-07
+  Major Features:
+    - Stage 5 of the warp odyssey: the rift at the first rocket. When the first rocket of a force has gone up (on_rocket_launched), a violet rift tears open 14 tiles north of the silo: it grows for 2 s, flickers, throws lightning bolts, thunders and glows (also at night), AUTO speaks about directive A113. After 5 s a fragment of the bridge of the Axiom-7 (a recoloured crash site wreck) falls out of the rift and lands 22-34 tiles from the silo with an explosion that damages nothing; it holds a space platform starter pack and gives 20-40 steel when mined. The rift closes after 10 s, the scene ends after about 13 s. Connected players with a character within 500 tiles of the silo watch it in a cutscene (they may skip it); the others hear it and read the chat. Once per force; in a save from before this version the next launch plays it. No demons at home and no victory screen (user decisions).
+  Info:
+    - Remote interface paranoidal-warp: rift_status(force index) for automated tests.
+
+---------------------------------------------------------------------------------------------------
 Version: 9.2.0
 Date: 2026-11-07
   Major Features:
