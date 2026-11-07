@@ -6,6 +6,7 @@ local recycling_tech = data.raw.technology["recycling"]
 recycling_tech.prerequisites = recycling_tech.prerequisites or {}
 table.insert(recycling_tech.prerequisites, "recycler-3")
 -- Paranoidal decision: original mod cost (500) instead of Quality's 5000.
-recycling_tech.unit.count = 500
+-- Space Age replaces the cost with a Fulgora research trigger (no unit): leave it to the build.
+if recycling_tech.unit then recycling_tech.unit.count = 500 end
 recycling_tech.localised_name = {"technology-name.recycler-4"}
 recycling_tech.localised_description = {"technology-description.recycler-4"}

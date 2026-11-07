@@ -2,6 +2,7 @@
 Version: 9.1.3
 Date: 12.10.2026
   Bugfixes:
+    - Space Age: the Recycler 4 technology (recycling) is opened by a Fulgora research trigger and has no cost; the cost of 500 is set only when the technology has one, so loading with Space Age no longer fails. Without Space Age nothing changes.
     - Version number starts with 9 (Paranoidal fork): the Mod Portal never offers an "update" over local changes.
     - Recycler 2/3 technologies use their own names (were shown as an unknown key "technology-name.recycler").
   Compatibility:
