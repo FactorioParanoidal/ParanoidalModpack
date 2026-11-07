@@ -317,10 +317,22 @@ R.jobs.handler("chain", function(job)
   if surface then chain_from(surface, { x = job.x, y = job.y }, job.left, job.visited, job.draw) end
 end)
 
+-- A map whose main surface was generated without enemy bases (enemy-base size "none", e.g. the preset "Paranoidal: no
+-- enemies") is a peaceful map: lightning there is only the flash and the thunder.
+local function peaceful_map()
+  local main = game.surfaces["nauvis"] or game.get_surface(1)
+  local controls = main and main.map_gen_settings.autoplace_controls
+  local enemy_base = controls and controls["enemy-base"]
+  return enemy_base ~= nil and enemy_base.size == 0
+end
+
 -- [2.0] A scripted strike. opts.visible: draw it and play it to the players (opts.players); otherwise only effects.
+-- On a peaceful map no effects: no damage, fire, brownout, drained buffers, chain or lightning rod charge.
 function M.strike(surface, position, opts)
   opts = opts or {}
-  local rod, spec = R.rods.find(surface, position)
+  local harmless = peaceful_map()
+  local rod, spec
+  if not harmless then rod, spec = R.rods.find(surface, position) end
   local target = rod or find_target(surface, position)
   local ground = position
   local hit = { x = position.x, y = position.y }
@@ -334,7 +346,9 @@ function M.strike(surface, position, opts)
     R.thunder.notify(surface, hit, true, opts.players or R.players.on_surface(surface.index))
   end
   local energy = 0
-  if rod then
+  if harmless then
+    -- peaceful map: the flash and the thunder only
+  elseif rod then
     stat("rod_hits")
     energy = R.rods.hit(rod, spec)
     if spec.mode == "attract" and storage.cfg.chain then
