@@ -10,6 +10,8 @@ local SPACE_AGE = "space-age"
 -- Mods that still see Space Age, by internal name.
 local visible_to = {
 	core = true, base = true, quality = true, recycler = true, ["elevated-rails"] = true, ["space-age"] = true,
+	-- Own Space Age content of the branch: the warp sectors, drive and hub (stage 2 of ПР-077).
+	["paranoidal-warp"] = true,
 }
 
 return function(stage)

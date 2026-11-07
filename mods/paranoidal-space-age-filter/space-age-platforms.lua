@@ -296,7 +296,8 @@ function M.install()
 		end
 		return state.extend(self, otherdata)
 	end
-	data.paranoidal_space_age_filter = {check = check, finish = finish, hide_recipes = M.hide_recipes}
+	data.paranoidal_space_age_filter = {check = check, finish = finish, hide_recipes = M.hide_recipes,
+		payload_weight = M.payload_weight}
 end
 
 local function visible_unlocks()
@@ -316,6 +317,26 @@ local function fluids_of(list, into)
 		if part.type == "fluid" then into[part.name] = true end
 	end
 	return into
+end
+
+-- Rocket payloads that return something to the ground (Expanded Rocket Payloads shuttles, satellites, the space lab,
+-- the orbital solar collector) weigh 500 kg (user, 2026-11-07): without Space Age the rocket holds one item, with it any
+-- items up to 1 t, and at 1 kg (their own weight) one rocket took ten. Now two fit, platform cargo is unchanged.
+local PAYLOAD_WEIGHT = 500000 -- 500 kg; weight is in grams (the base satellite: 1 t = 1000000)
+
+function M.payload_weight()
+	local names = {}
+	for kind in pairs(defines.prototypes.item) do
+		for name, item in pairs(data.raw[kind] or {}) do
+			if item.rocket_launch_products and next(item.rocket_launch_products)
+				and (item.send_to_orbit_mode == "manual" or item.send_to_orbit_mode == "automated") then
+				item.weight = PAYLOAD_WEIGHT
+				names[#names + 1] = name
+			end
+		end
+	end
+	table.sort(names)
+	log("paranoidal-space-age-filter: rocket payloads weigh 500 kg: " .. table.concat(names, ", "))
 end
 
 -- data-final-fixes.lua of this mod: Space Age recipes that no visible technology unlocks are hidden too, and so are
