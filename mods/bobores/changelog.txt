@@ -4,6 +4,7 @@ Date: 09. 06. 2026
   Bugfixes:
     - Fixed tungsten ore localization #598
   Compatibility:
+    - Paranoidal Space Age branch: the 2.1.0 migration keeps tungsten ore on the home planet when paranoidal-space-age-filter is active (the filter hides Space Age from bobores, which then places that ore at home). Without the filter nothing changes.
     - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
     - Paranoidal port to Factorio 2.1: product probability renamed to independent_probability (recipe results, minable results, generated products).
 ---------------------------------------------------------------------------------------------------
