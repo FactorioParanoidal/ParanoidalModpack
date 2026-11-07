@@ -1,8 +1,10 @@
 -- Warp drive, jumps between the sector gates and home orbit, the window next to the drive, the BnL logo on every
--- platform hub (Space Age branch, ПР-077 stage 2). Without Space Age nothing runs.
+-- platform hub (Space Age branch, ПР-077 stage 2); the comfort field, demons, void shield and red alert are in
+-- scripts/ship.lua (stage 3). Without Space Age nothing runs.
 if not script.active_mods["space-age"] then return end
 
 local shared = require("shared")
+local ship = require("scripts.ship")
 
 local SLOW = 10 -- ticks between countdown/window updates
 local HUBS = 300 -- ticks between hub logo checks
@@ -66,26 +68,34 @@ end
 
 -- Drives ---------------------------------------------------------------------------------------------------------
 
-local function register(entity, player)
-	if not (entity and entity.valid and entity.name == shared.drive) then return end
-	local s = state()
+-- One drive and one comfort field generator per platform (user 2026-11-07): a second one goes back where it came
+-- from. Returns true when the entity was removed.
+local function refuse_second(entity, player)
 	local surface = entity.surface
 	local platform = surface.platform
-	if platform then
-		for _, other in pairs(surface.find_entities_filtered({name = shared.drive})) do
-			if other ~= entity then
-				-- One drive per platform (user 2026-11-07): the second one goes back where it came from.
-				local hub = platform.hub
-				local inventory = (player and player.get_main_inventory())
-					or (hub and hub.valid and hub.get_inventory(defines.inventory.hub_main)) or nil
-				if player then player.print({"paranoidal-warp.one-per-platform"}, {color = COLOR_BAD}) end
-				entity.mine({inventory = inventory, force = true, raise_destroyed = true})
-				return
-			end
+	if not platform then return false end
+	for _, other in pairs(surface.find_entities_filtered({name = entity.name})) do
+		if other ~= entity then
+			local hub = platform.hub
+			local inventory = (player and player.get_main_inventory())
+				or (hub and hub.valid and hub.get_inventory(defines.inventory.hub_main)) or nil
+			if player then player.print({"paranoidal-warp.one-per-platform", entity.localised_name}, {color = COLOR_BAD}) end
+			entity.mine({inventory = inventory, force = true, raise_destroyed = true})
+			return true
 		end
 	end
+	return false
+end
+
+local function register(entity, player)
+	if not (entity and entity.valid) then return end
+	if entity.name == shared.field then
+		refuse_second(entity, player)
+		return
+	end
+	if entity.name ~= shared.drive or refuse_second(entity, player) then return end
 	entity.disabled_by_script = true -- an idle drive never crafts by itself
-	s.drives[entity.unit_number] = {entity = entity, state = "idle"}
+	state().drives[entity.unit_number] = {entity = entity, state = "idle"}
 end
 
 local function on_built(event)
@@ -126,6 +136,9 @@ local function start(record, player)
 		color = COLOR_AUTO, scale = 3, alignment = "center", vertical_alignment = "middle"})
 	storage.spinning[entity.unit_number] = true
 	say(entity.force, {"paranoidal-warp.auto-start", location_name(record.target), seconds_left(entity)})
+	if record.target ~= shared.home and not ship.has_field(platform) then
+		say(entity.force, {"paranoidal-warp.auto-no-field"}, COLOR_BAD)
+	end
 	entity.surface.play_sound({path = "utility/new_objective", position = entity.position})
 end
 
@@ -392,7 +405,7 @@ script.on_configuration_changed(function()
 	decorate_hubs()
 end)
 
-local filter = {{filter = "name", name = shared.drive}}
+local filter = {{filter = "name", name = shared.drive}, {filter = "name", name = shared.field}}
 for _, name in ipairs({"on_built_entity", "on_robot_built_entity", "on_space_platform_built_entity",
 	"script_raised_built", "script_raised_revive", "on_entity_cloned"}) do
 	script.on_event(defines.events[name], on_built, filter)
@@ -402,7 +415,14 @@ script.on_event(defines.events.on_tick, check_spinning)
 script.on_nth_tick(SLOW, function()
 	update_countdowns()
 	refresh_open_windows()
+	ship.animate()
 end)
+script.on_nth_tick(60, ship.update)
+script.on_nth_tick(5, ship.shield_scan)
+script.on_event(defines.events.on_entity_damaged, ship.on_damaged, {{filter = "damage-type", type = "impact"}})
+for _, name in ipairs({"on_player_mined_tile", "on_robot_mined_tile", "on_space_platform_mined_tile"}) do
+	script.on_event(defines.events[name], ship.on_tile_mined)
+end
 script.on_nth_tick(HUBS, decorate_hubs)
 
 script.on_event(defines.events.on_gui_opened, function(event)
@@ -466,5 +486,9 @@ remote.add_interface("paranoidal-warp", {
 	problem = function(unit_number)
 		local record = storage.drives[unit_number]
 		return record and problem(record) or nil
+	end,
+	-- Stage 3: field strength, demons, alert reasons, shield energy of a platform (by index).
+	status = function(platform_index)
+		return ship.status(platform_index)
 	end,
 })

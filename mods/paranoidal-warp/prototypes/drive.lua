@@ -3,33 +3,13 @@
 -- recipe has no results, so the defect system gives it no production modes; control.lua starts the machine only on
 -- the player's command and moves the platform when a craft finishes.
 local shared = require("shared")
+local warp_util = require("prototypes.util")
 
 local TINT = {r = 0.75, g = 0.55, b = 1}
 local base = data.raw["assembling-machine"]["electromagnetic-plant"]
 local thruster_item = data.raw.item.thruster
 
-local drive = table.deepcopy(base)
-drive.name = shared.drive
-drive.icon = nil
-drive.icons = {{icon = "__space-age__/graphics/icons/electromagnetic-plant.png", icon_size = 64, tint = TINT}}
-drive.minable = {mining_time = 1, result = shared.drive}
-drive.placeable_by = nil
-drive.crafting_categories = {shared.jump_recipe}
-drive.fixed_recipe = shared.jump_recipe
-drive.crafting_speed = 1
-drive.energy_usage = "10MW" -- 300 MJ per jump at full speed
-drive.module_slots = 0
-drive.allowed_effects = {}
-drive.allowed_module_categories = nil
-drive.effect_receiver = nil
-drive.fluid_boxes = nil
-drive.fluid_boxes_off_when_no_fluid_recipe = nil
-drive.fast_replaceable_group = nil
-drive.next_upgrade = nil
-drive.additional_pastable_entities = nil
-drive.show_recipe_icon = false
--- Only on a space platform (gravity 0).
-drive.surface_conditions = {{property = "gravity", min = 0, max = 0}}
+local drive = warp_util.machine(base, shared.drive, shared.jump_recipe, "10MW", TINT) -- 300 MJ per jump at full speed
 
 data:extend({
 	{type = "recipe-category", name = shared.jump_recipe},
@@ -115,9 +95,6 @@ data:extend({{
 	unit = {
 		count = 1000,
 		time = 60,
-		ingredients = {
-			{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"chemical-science-pack", 1},
-			{"production-science-pack", 1}, {"utility-science-pack", 1}, {"space-science-pack", 1},
-		},
+		ingredients = warp_util.science,
 	},
 }})

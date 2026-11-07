@@ -2,3 +2,5 @@
 if not mods["space-age"] then return end
 require("prototypes.sectors")
 require("prototypes.drive")
+require("prototypes.field")
+require("prototypes.demons")

@@ -1,4 +1,16 @@
 ---------------------------------------------------------------------------------------------------
+Version: 9.1.0
+Date: 2026-11-07
+  Major Features:
+    - Stage 3 of the warp odyssey (user decisions 2026-11-07). Comfort field generator (a recoloured cryogenic plant, one per platform, platform only, 5 MW): its hidden recipe needs and makes nothing, its craft rate is the field strength; a shimmering dome over the ship in a warp sector, a crack for every 8 % of missing strength; outside the warp sectors it switches itself off.
+    - Demons of the four sins of consumption (Sale Rage: fast melee; Fine Print: spitters; Garbage: slow and tough; Eternal Excess: frail, very fast, twice as many), three sizes each, recoloured vanilla biters and spitters without loot. Only in warp sectors and only while the field is weak: pressure grows by (1 - strength) x sector danger (0.6 / 1 / 1.5) per second, a wave every 30; waves grow, bigger demons from the 3rd and 6th wave; at most 40 aboard. They appear on the foundation away from the player, attack the ship's buildings and stay until killed.
+    - Void shield (a recoloured accumulator, platform only, 100 MJ, charges at 5 MW, gives nothing back; several add up): an asteroid within 4 tiles of the foundation bursts on it for 25 kJ per health point (medium 10 MJ, big 50 MJ); asteroid hits on buildings are healed for 50 kJ per point. Empty, it lets asteroids through. Chunks pass.
+    - Red alert: a red pulsing light over the ship, the silo alarm every 5 s and AUTO messages while demons are aboard, for 30 s after a hull breach (foundation lost without mining) or after an unshielded asteroid hit.
+    - Technologies Comfort field (500, after the warp drive) and Void shield (1000, after the field); the drive warns when it jumps into a sector without a field. The warp drive is recoloured violet now, not only its icon.
+  Info:
+    - Remote interface paranoidal-warp: status(platform index) for automated tests.
+
+---------------------------------------------------------------------------------------------------
 Version: 9.0.0
 Date: 2026-11-07
   Major Features:
