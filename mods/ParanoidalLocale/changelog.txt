@@ -1,6 +1,7 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.26.0
   Locale:
+    - zzzz-user-overrides.cfg (Space Age branch): the new paranoidal-space-age-filter mod gets its mod name and description (same text as in the mod and in mods-metadata/!descriptions.json).
     - expanded-rocket-payloads-continued.config.cfg: typos fixed ("в вринципе" -> "в принципе" in the space mining study, "на панету", "прицизионной", "новвейших", "сделаннные", "ценые").
     - zzzz-user-overrides.cfg (Space Age branch, the build without SpaceX): the SpaceModFeorasFork and SpaceXGAR2 mod names and descriptions are removed with the mods; the Expanded Rocket Payloads and ERPCTbaAB2 descriptions no longer mention SpaceX and the hidden branches, ERP names the orbital solar collector among the kept content (same text as in mods-metadata/!descriptions.json).
     - zzzz-user-overrides.cfg and en zzzz-untranslated-gaps.cfg: the first crane technology is "Погрузочные краны 1" / "Loading cranes 1" (the cranes are named by colour, user decision 2026-11-06); the nco-InserterCranes mod description (same text as in mods-metadata/!descriptions.json) lists the four crane levels: быстрый, экспресс, турбо, гипер.
