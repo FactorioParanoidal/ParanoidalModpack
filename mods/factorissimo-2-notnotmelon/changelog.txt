@@ -20,6 +20,7 @@ Date: 2026-10-19
     - Paranoidal: one interior pass once a minute per factory (and every 2 seconds for the factory selected in an open dispatcher) gives the activity, machines, nested factories and power; it replaces the separate activity check and the searches of the details panel. A factory whose generators produce counts as active (streaks, records).
     - Paranoidal: factory names are no longer shown on the map and the minimap (a script label cannot be shown on the big map only), only on the building and inside above the gate in alt mode. Existing map labels are removed once by the sampling, without a migration.
   Bugfixes:
+    - Paranoidal port to Factorio 2.1 (Space Age only): the borehole pump uses the entity flag no-logistic-connection instead of enable_logistic_control_behavior, which 2.1 removed; loading with Space Age no longer fails. Without Space Age the pump does not exist.
     - Paranoidal: fill the hidden robot inventory only after the new roboport is registered; replenishment no longer clears unrelated robot items. Inactive factories and revoked roboport research cancel outstanding exterior requests.
     - Paranoidal: an open dispatcher resumes automatic refresh after the player reconnects.
     - Paranoidal: mining a factory no longer treats a character corpse, a flying robot or another collisionless player entity as disposable infrastructure. Contents and quality are retained in the packed factory.
@@ -41,6 +42,7 @@ Date: 2026-10-19
     - Paranoidal: Russian names of factory buildings: "Фабрика 1-4" instead of "Заводское строение 1-4", and "фабрика" / "фабричное здание" instead of "заводское строение" / "завод" in every Russian text of the mod (entities, tiles, technologies, descriptions, settings, messages, dispatcher, tips and tricks). The same texts in ParanoidalLocale are changed too, because it overrides this locale.
     - ru: the mod name and the mod list description are the same as in ParanoidalLocale (format "English title (Russian translation)"), so the mod reads the same with or without it.
   Compatibility:
+    - Paranoidal Space Age branch: no optional dependency on space-age, so with Space Age enabled the mod loads in the same order as without it; paranoidal-space-age-filter hides the expansion from it in any case.
     - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
     - Paranoidal port to Factorio 2.1: logistic chest door animation, sound, opened duration and landing offset moved into robot_door (2.1 LogisticContainerPrototype).
     - Paranoidal port to Factorio 2.1: defines.inventory.assembling_machine_*, furnace_* and rocket_silo_input/output/modules replaced by defines.inventory.crafter_input/output/modules/trash.

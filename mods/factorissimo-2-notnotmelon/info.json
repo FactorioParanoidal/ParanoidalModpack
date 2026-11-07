@@ -8,7 +8,6 @@
   "factorio_version": "2.1",
   "dependencies": [
     "base >= 2.0.64",
-    "? space-age",
     "? space-exploration",
     "! Factorissimo2",
     "! Factorissimo2-Space-Age-Port",
