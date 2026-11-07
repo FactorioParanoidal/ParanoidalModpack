@@ -24,7 +24,8 @@ local raw = {
     technology = {["quality-module"] = {name = "quality-module", prerequisites = {"modules"}},
         ["logistic-science-pack"] = {name = "logistic-science-pack", prerequisites = {"electronics"}},
         ["green-tech"] = {name = "green-tech", prerequisites = {"logistic-science-pack"},
-            effects = {{type = "unlock-recipe", recipe = "green-building"}, {type = "unlock-recipe", recipe = "both-building"}}},
+            effects = {{type = "unlock-recipe", recipe = "green-building"}, {type = "unlock-recipe", recipe = "both-building"},
+                {type = "unlock-recipe", recipe = "green-cargo"}}},
         ["hidden-tech"] = {name = "hidden-tech", hidden = true,
             effects = {{type = "unlock-recipe", recipe = "green-building-old"}}}},
     item = {
@@ -41,6 +42,11 @@ local raw = {
         ["some-equipment"] = {name = "some-equipment", place_as_equipment_result = "some-equipment"},
         ["green-building"] = {name = "green-building", place_result = "green-building"},
         ["both-building"] = {name = "both-building", place_result = "both-building"},
+        -- Rocket launch products (2026-11-07) follow the launched item: after the gate or before it.
+        ["green-cargo"] = {name = "green-cargo", rocket_launch_products = {{type = "item", name = "orbit-building", amount = 1}}},
+        ["early-cargo"] = {name = "early-cargo", rocket_launch_products = {{type = "item", name = "early-orbit-building", amount = 1}}},
+        ["orbit-building"] = {name = "orbit-building", place_result = "orbit-building"},
+        ["early-orbit-building"] = {name = "early-orbit-building", place_result = "early-orbit-building"},
     },
     module = {["some-module"] = {name = "some-module"}},
     valve = {["some-valve"] = {name = "some-valve"}},
@@ -71,6 +77,8 @@ local raw = {
         ["green-building-old"] = {enabled = false, results = {{type = "item", name = "green-building", amount = 1}}},
         ["both-building"] = {enabled = false, results = {{type = "item", name = "both-building", amount = 1}}},
         ["both-building-early"] = {results = {{type = "item", name = "both-building", amount = 1}}},
+        ["green-cargo"] = {enabled = false, results = {{type = "item", name = "green-cargo", amount = 1}}},
+        ["early-cargo"] = {results = {{type = "item", name = "early-cargo", amount = 1}}},
         ["green-building-recycling"] = {categories = {"recycling"}, results = {{type = "item", name = "both-building", amount = 1}}},
         -- Recycling floor (2026-10-19): only recycling of an item that can be defective is slowed.
         ["assembler-recycling"] = {categories = {"recycling"}, energy_required = 0.03125,
@@ -172,6 +180,8 @@ end
 assert(finished["storage-tank"] and not no_defect["storage-tank"])
 assert(finished["green-building"] and no_defect["green-building"], "made only after green science")
 assert(finished["both-building"] and not no_defect["both-building"], "also available before green science")
+assert(finished["orbit-building"] and no_defect["orbit-building"], "launched by an item made only after green science")
+assert(finished["early-orbit-building"] and not no_defect["early-orbit-building"], "launched by an early item")
 assert(returned_no_defect == no_defect, "apply returns the no-defect set (drill tooltips)")
 assert(raw.recipe["assembler-recycling"].energy_required == final.recycling_minimum, "defect-capable recycling slowed")
 assert(raw.recipe["pole-recycling"].energy_required == 0.5, "longer recycling kept")
@@ -224,7 +234,7 @@ near(poles.small.supply_area_distance + q["ic-defect-5"].electric_pole_supply_ar
 local joined = table.concat(report, "\n")
 assert(joined:find("upgrade chains without defects (tanks, fuel cells, chargers, memory units, hazmat suit, factory buildings, Flow Control pipes): 3", 1, true))
 assert(joined:find("groups without defects (5): valves and small fluid tanks 2,", 1, true))
-assert(joined:find("made only after logistic-science-pack without defects: 1; finished products that can still get defects:", 1, true))
+assert(joined:find("made only after logistic-science-pack without defects: 2; finished products that can still get defects:", 1, true))
 assert(joined:find("modules 1, module parts 0, equipment 1,", 1, true) and joined:find("roboports 1", 1, true))
 -- "hidden" (wire 1, reduction 1) ends exactly at 0: reduced, not clamped.
 assert(joined:find("clamped poles: connector", 1, true) and not joined:find("hidden (", 1, true))
