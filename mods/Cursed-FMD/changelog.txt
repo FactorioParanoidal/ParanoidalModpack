@@ -7,6 +7,7 @@ Date: 2020-12-6
     - Paranoidal: build/mine/death handlers are filtered to mining drills (they ran for every entity death, e.g. each biter).
     - Paranoidal: the per-resource filter copies of drills are hidden, so the resource tooltip lists only the real drills.
   Compatibility:
+    - Paranoidal Space Age branch: no optional dependency on space-age, so with Space Age enabled the mod loads in the same order as without it; paranoidal-space-age-filter hides the expansion from it in any case.
     - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
 ---------------------------------------------------------------------------------------------------
 Version: 0.1.8

@@ -6,7 +6,7 @@
     "author": "L0771",
     "contact": "https://discord.gg/PnQwT8W",
     "homepage": "https://discord.gg/PnQwT8W",
-    "dependencies": ["base", "?space-age", "?bobmining"],
+    "dependencies": ["base", "?bobmining"],
     "description": "Can filter resource with any mining drill",
     "factorio_version": "2.1"
 }
