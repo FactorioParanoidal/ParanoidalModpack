@@ -256,19 +256,28 @@ local function pickup(rec)
           local count = stack.count
           local want = (left and left < count) and left or count
           local moved = 0
+          local native_transfer = false
           if carries_data[name] then
             if want == count then
               local slot, slot_index = inv.find_empty_stack()
               if slot and slot_index < bar and slot.set_stack(stack) then moved = count end
             end
+          elseif want == count then
+            native_transfer = true
+            moved = inv.transfer_from_stack(stack)
           else
-            if want < count then stack.count = want end
+            stack.count = want
             moved = inv.insert(stack)
-            if want < count then stack.count = count end
+            stack.count = count
           end
 
           if moved > 0 then
-            if moved >= count then ent.destroy() else stack.count = count - moved end
+            -- A full native move may already invalidate the ground entity/stack.
+            if moved >= count then
+              if ent.valid then ent.destroy() end
+            elseif not native_transfer then
+              stack.count = count - moved
+            end
             if allow then allow[name] = left - moved end
             local key = name .. "|" .. quality
             local g = index[key]

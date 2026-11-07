@@ -22,6 +22,7 @@ Date: 2026-10-30
     - The pickup text no longer appears on other surfaces.
     - A moved tower chest (Even Pickier Dollies, script teleport) takes its upper part along; a removed chest always removes its upper part, a lost upper part is restored.
   Optimisations:
+    - Use native stack transfer for ordinary ground stacks when the circuit allows the whole stack; keep capped/data-bearing paths and avoid subtracting transferred items twice.
     - Towers are kept in a registry: no search for the chest on every pickup, no radius parsing from names.
     - The upper part did a nearby scan of up to 9×9 chunks up to 16 times per second; now one chunk once per interval.
     - A full chest skips the pickup; a kind that did not fit is not retried in the same pickup; at most 1000 ground items are looked at per pickup.
