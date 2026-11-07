@@ -1,10 +1,13 @@
 ---------------------------------------------------------------------------------------------------
 Version: 0.6.16
 Date: 27. 02. 2026
+  Bugfixes:
+    - Paranoidal port to Factorio 2.1 (Space Age only): the burner assembling machine no longer gets the recipe category "pressing", which 2.1 removed (belts keep "crafting" and add "metallurgy"); loading with Space Age no longer fails.
   Changes:
     - Paranoidal: the on_tick handler (starting science on tick 1) is registered only until tick 1 has run; the done flag is saved so every peer derives the same registration on load.
     - Renamed the big mining drill to area mining drill to match the internal prototype name.
   Compatibility:
+    - Paranoidal Space Age branch: no optional dependency on space-age, so with Space Age enabled the mod loads in the same order as without it; paranoidal-space-age-filter hides the expansion from it in any case.
     - [Space Age] the area mining drill is no longer hidden in favor of the big mining drill.
     - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
     - Paranoidal port to Factorio 2.1: assembler pipe pictures are taken from __base__/prototypes/entity/assembler-pictures.lua (2.1 removed the global assembler2pipepictures/assembler3pipepictures and assemblerpipes.lua).

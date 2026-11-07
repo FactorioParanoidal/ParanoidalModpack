@@ -18,7 +18,7 @@ data.raw["burner-generator"]["burner-turbine"].surface_conditions = boiler_surfa
 data.raw["assembling-machine"]["fuel-processor"].surface_conditions = boiler_surface_conditions
 data.raw["assembling-machine"]["burner-assembling-machine"].surface_conditions = boiler_surface_conditions
 if mods["space-age"] then
-    table.insert(data.raw["assembling-machine"]["burner-assembling-machine"].crafting_categories, "pressing")
+    -- Factorio 2.1 removed "pressing": belts keep "crafting" and list "metallurgy" for the foundry, so nothing to add.
     table.insert(data.raw["assembling-machine"]["burner-assembling-machine"].crafting_categories, "electronics")
     data.raw.recipe["small-iron-electric-pole"].categories = {"electronics"} -- Factorio 2.1: category -> categories
 end

@@ -5,7 +5,6 @@
   "author": "Earendel",
   "dependencies": [
     "base >= 2.0.0",
-    "? space-age >= 2.0.0",
     "? aai-containers >= 0.1.1",
     "? InserterFuelLeech >= 0.2.6",
     "(?) Krastorio2 >= 2.0.6",
