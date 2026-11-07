@@ -5,6 +5,7 @@ if not script.active_mods["space-age"] then return end
 
 local shared = require("shared")
 local ship = require("scripts.ship")
+local years = require("scripts.years")
 
 local SLOW = 10 -- ticks between countdown/window updates
 local HUBS = 300 -- ticks between hub logo checks
@@ -184,6 +185,7 @@ local function jump(record)
 	else
 		say(entity.force, {"paranoidal-warp.auto-arrived", location_name(target)})
 	end
+	years.on_jump(platform, target) -- warp years and the BnL bill (stage 4)
 end
 
 -- Every tick, only spinning drives: the jump right after the craft finishes (before the next charge goes far).
@@ -285,6 +287,10 @@ local function build_window(player, data)
 		direction = "vertical"})
 	inner.style.width = 300
 	inner.add({type = "label", name = "here", style = "caption_label"})
+	inner.add({type = "label", name = "years"})
+	local bill = inner.add({type = "label", name = "bill"})
+	bill.style.single_line = false
+	bill.style.maximal_width = 276
 	local caption = inner.add({type = "label", caption = {"paranoidal-warp.targets"}})
 	caption.style.top_margin = 8
 	local targets = inner.add({type = "flow", name = "targets", direction = "vertical"})
@@ -316,6 +322,12 @@ local function refresh_window(player)
 	local platform = entity.surface.platform
 	local here = platform and platform.space_location
 	inner.here.caption = here and {"paranoidal-warp.here", location_name(here.name)} or {"paranoidal-warp.here-flight"}
+	if platform then
+		local chronometer, bill, overdue = years.window_lines(platform)
+		inner.years.caption = chronometer
+		inner.bill.caption = bill or {"paranoidal-warp.bill-none"}
+		inner.bill.style.font_color = overdue and COLOR_BAD or {r = 1, g = 1, b = 1}
+	end
 
 	-- Jump targets: home orbit and the open sector gates except where the ship is; rebuilt only when the set changes.
 	local list = {}
@@ -490,5 +502,22 @@ remote.add_interface("paranoidal-warp", {
 	-- Stage 3: field strength, demons, alert reasons, shield energy of a platform (by index).
 	status = function(platform_index)
 		return ship.status(platform_index)
+	end,
+	-- Stage 4: warp years, open bills and the field cap of a platform (by index); expire_bills makes them due now.
+	years_status = function(platform_index)
+		local platform
+		for _, force in pairs(game.forces) do
+			for _, p in pairs(force.platforms) do
+				if p.index == platform_index then platform = p end
+			end
+		end
+		return platform and years.status(platform) or nil
+	end,
+	expire_bills = function(platform_index)
+		for _, force in pairs(game.forces) do
+			for _, p in pairs(force.platforms) do
+				if p.index == platform_index then years.expire(p) end
+			end
+		end
 	end,
 })

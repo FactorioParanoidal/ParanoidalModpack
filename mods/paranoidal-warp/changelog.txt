@@ -1,4 +1,14 @@
 ---------------------------------------------------------------------------------------------------
+Version: 9.2.0
+Date: 2026-11-07
+  Major Features:
+    - Stage 4 of the warp odyssey: warp years instead of evolution (ПР-077). Every successful jump adds years to the force: home 5-10, BnL Coverage Zone 10-20, BnL Fleet Necropolis 20-35, Cut-off Zone 30-50. A chronometer "En route: N years" over every bridge (platform hub) once the first jump is made, and in the warp drive window.
+    - BnL bills the Comfort field subscription: a ship with a field generator gets a bill for the years of its jump, one good from a list (plastic, advanced circuits, batteries, engines, explosives; from 150 years also processing units, low-density structures, electric engines, robot frames, rocket fuel) times the years, due in 15 minutes. The bridge pays by itself from its storage, worst quality first (defects accepted). Every overdue bill takes 30 % off the field's maximum strength (70 / 40 / 10 %), so in a warp sector the field is weak and demons come; paying restores it. The open bill is shown under the chronometer and in the drive window.
+    - Letters from home at 40, 100, 200, 300, 500 and 700 warp years.
+  Info:
+    - Remote interface paranoidal-warp: years_status(platform index) and expire_bills(platform index) for automated tests.
+
+---------------------------------------------------------------------------------------------------
 Version: 9.1.0
 Date: 2026-11-07
   Major Features:

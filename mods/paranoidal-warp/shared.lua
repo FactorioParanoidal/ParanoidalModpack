@@ -36,6 +36,22 @@ M.demon_sizes = {
 	{source = "behemoth", health = 3000, speed = 0.26},
 }
 
+-- Stage 4: warp years of a jump home; goods BnL takes for the Comfort™ field subscription (per warp year of the jump;
+-- from: total years of the force before the good may be asked for).
+M.home_years = {5, 10}
+M.bill_goods = {
+	{name = "plastic-bar", per_year = 40, from = 0},
+	{name = "advanced-circuit", per_year = 20, from = 0},
+	{name = "battery", per_year = 5, from = 0},
+	{name = "engine-unit", per_year = 8, from = 0},
+	{name = "explosives", per_year = 10, from = 0},
+	{name = "processing-unit", per_year = 10, from = 150},
+	{name = "low-density-structure", per_year = 2, from = 150},
+	{name = "electric-engine-unit", per_year = 4, from = 150},
+	{name = "flying-robot-frame", per_year = 2, from = 150},
+	{name = "rocket-fuel", per_year = 2, from = 150},
+}
+
 function M.demon(sin, size)
 	return M.demon_prefix .. sin.id .. "-" .. size
 end
@@ -51,6 +67,7 @@ M.sectors = {
 		lut = nil,
 		asteroids = {chunk = 0.0125, small = 0.0015, ratios = {3, 2, 1, 0}},
 		danger = 0.6, -- how fast demons come while the comfort field is weak
+		years = {10, 20}, -- warp years a jump to the gate adds (stage 4)
 	},
 	{
 		id = "necropolis", -- «Некрополь флота BnL»: wrecks of other BnL liners, metal, medium and big asteroids
@@ -62,6 +79,7 @@ M.sectors = {
 		lut = "__core__/graphics/color_luts/lut-sunset.png",
 		asteroids = {chunk = 0.008, medium = 0.004, big = 0.0015, ratios = {6, 1, 1, 0}},
 		danger = 1,
+		years = {20, 35},
 	},
 	{
 		id = "cutoff", -- «Зона отключения за неуплату»: no sun (the subscription is not paid), carbon and oxide
@@ -73,6 +91,7 @@ M.sectors = {
 		lut = "__core__/graphics/color_luts/night.png",
 		asteroids = {chunk = 0.006, small = 0.003, medium = 0.002, ratios = {1, 4, 4, 0}},
 		danger = 1.5,
+		years = {30, 50},
 	},
 }
 

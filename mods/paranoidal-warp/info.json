@@ -1,11 +1,11 @@
 {
   "name": "paranoidal-warp",
-  "version": "9.1.0",
+  "version": "9.2.0",
   "title": "Paranoidal Warp",
   "author": "FactorioParanoidal",
   "homepage": "https://github.com/FactorioParanoidal/ParanoidalModpack",
   "factorio_version": "2.1",
-  "description": "The warp odyssey of the Paranoidal Space Age branch: three warp sectors with short routes for space platforms, own skies, sun and asteroids; a warp drive that jumps the platform between the sector gates and home orbit for a warp charge; the Comfort field generator, demons of the four sins of consumption on deck while it is weak, the void shield against asteroids and the red alert; the platform hub becomes the bridge of the Axiom-7. Does nothing without Space Age.",
+  "description": "The warp odyssey of the Paranoidal Space Age branch: three warp sectors with short routes for space platforms, own skies, sun and asteroids; a warp drive that jumps the platform between the sector gates and home orbit for a warp charge; warp years with a chronometer and letters from home; the Comfort field generator with a BnL subscription paid in goods, demons of the four sins of consumption on deck while it is weak, the void shield against asteroids and the red alert; the platform hub becomes the bridge of the Axiom-7. Does nothing without Space Age.",
   "dependencies": [
     "base >= 2.1.24",
     "? space-age",

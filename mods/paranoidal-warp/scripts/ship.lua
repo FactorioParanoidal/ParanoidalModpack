@@ -3,6 +3,7 @@
 -- storage.ships[platform index] = {platform, strength, field_state, progress, generator, pressure, wave, demons,
 -- dome, box, shields, tiles, breach, hit, shield_said, alert}; storage.mined_tiles[surface index] = true.
 local shared = require("shared")
+local years = require("scripts.years")
 
 local M = {}
 
@@ -164,6 +165,8 @@ end
 local function update_field(ship, platform, sector)
 	local warp = sector ~= nil
 	local strength = measure(ship, platform, warp)
+	-- An overdue BnL bill limits the field (stage 4); it matters only in the warp.
+	if warp and strength then strength = math.min(strength, years.cap(platform)) end
 	local state
 	if strength == nil then
 		strength = warp and 0 or 1
@@ -426,6 +429,7 @@ function M.update()
 					if shield_energy(ship) >= 0.5 * capacity then ship.shield_said = false end
 				end
 				local sector = shared.sector_of_platform(platform)
+				years.update(platform)
 				update_field(ship, platform, sector)
 				update_demons(ship, platform, sector)
 				update_breach(ship, platform)
@@ -441,6 +445,7 @@ function M.update()
 			end
 			if ship.alert then destroy_all({ship.alert.rect, ship.alert.light}) end
 			ships()[index] = nil
+			years.forget(index)
 		end
 	end
 end
