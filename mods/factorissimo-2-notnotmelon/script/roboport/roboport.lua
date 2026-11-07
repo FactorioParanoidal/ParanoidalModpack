@@ -215,8 +215,7 @@ local function eject_unneeded_items(factory, requests_by_itemname)
             elseif prototypes.item[item_name].type == "repair-tool" then
                 -- pass
             else
-                local ejected_count = ejector_inventory.insert(itemstack)
-                itemstack.count = itemstack.count - ejected_count
+                local ejected_count = ejector_inventory.transfer_from_stack(itemstack)
                 ejector.surface.create_entity {
                     name = "item-request-proxy",
                     position = ejector.position,
@@ -698,8 +697,8 @@ factorissimo.on_nth_tick(43, function()
             local stack = requester_inventory[i]
             if stack.valid_for_read then
                 local count = stack.count
-                local inserted = storage_inventory.insert(stack)
-                stack.count = count - inserted
+                -- Keep slot priority and the 50x requester stacks; the engine moves only what fits.
+                local inserted = storage_inventory.transfer_from_stack(stack)
                 if inserted < count and storage_inventory.is_full() then break end
             end
         end

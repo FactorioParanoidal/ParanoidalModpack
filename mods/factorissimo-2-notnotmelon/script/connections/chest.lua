@@ -201,18 +201,23 @@ local function balance_chests(outside_inv, inside_inv)
     end
 end
 
-local function move_items(from_inv, to_inv)
+local function move_items(from_inv, to_inv, native_transfer)
     if from_inv.is_empty() or to_inv.is_full() then return end
     local checked_full = true -- already checked; unchanged after a failed insertion
     for i = 1, #from_inv do
         local stack = from_inv[i]
         if stack.valid_for_read then
             local count = stack.count
-            local amount_moved = to_inv.insert(stack)
-            if amount_moved > 0 then
-                stack.count = count - amount_moved
-                checked_full = false
+            local amount_moved
+            if native_transfer then
+                -- Retain source-slot order when only some items fit.
+                amount_moved = to_inv.transfer_from_stack(stack)
+            else
+                -- Linked terminals may alias one inventory: native transfer forbids that.
+                amount_moved = to_inv.insert(stack)
+                if amount_moved > 0 then stack.count = count - amount_moved end
             end
+            if amount_moved > 0 then checked_full = false end
             -- Stop when a successful transfer filled the destination, but do not rescan its slots
             -- after every success or repeatedly for item/filter mismatches while it still has room.
             if amount_moved < count and not checked_full then
@@ -230,12 +235,14 @@ Chest.tick = function(conn)
         local outside_inv = outside.get_inventory(defines.inventory.chest)
         local inside_inv = inside.get_inventory(defines.inventory.chest)
         local mode = conn._settings.mode or 0
+        local native_transfer = outside ~= inside and outside.type ~= "linked-container"
+            and inside.type ~= "linked-container"
         if mode == 0 then
             balance_chests(outside_inv, inside_inv)
         elseif mode == 1 then
-            move_items(outside_inv, inside_inv)
+            move_items(outside_inv, inside_inv, native_transfer)
         else
-            move_items(inside_inv, outside_inv)
+            move_items(inside_inv, outside_inv, native_transfer)
         end
         return conn._settings.delay or DEFAULT_DELAY
     else
