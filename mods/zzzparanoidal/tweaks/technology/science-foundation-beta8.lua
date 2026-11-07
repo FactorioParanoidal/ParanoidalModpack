@@ -14,6 +14,11 @@ local prerequisites = {
 	["space-science-pack"] = { "rocket-silo", "bob-rtg", "bob-battery-3", "bob-radar-5" },
 }
 
+-- Space Age branch: space science is made on a space platform, so it comes after the platform (none without it).
+if data.raw.technology["space-platform"] then
+	table.insert(prerequisites["space-science-pack"], "space-platform")
+end
+
 if mods["qol_research"] then
 	for _, category in ipairs({ "crafting-speed", "inventory-size", "mining-speed", "movement-speed", "player-reach" }) do
 		prerequisites["qol-" .. category .. "-1-1"] = {}

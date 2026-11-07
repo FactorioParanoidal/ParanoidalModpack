@@ -28,7 +28,24 @@ local patch = {
 		prerequisites = { "military-4", "rocketry", "radar", "bob-rtg", "bob-tankotron", "rocket-control-unit" },
 	},
 }
+-- Space Age branch: what Space Age adds to these technologies for space platforms stays (none without it).
+local function platform_effects(technology)
+	local kept = {}
+	for _, effect in ipairs(technology.effects or {}) do
+		if effect.type == "unlock-space-platforms" or (effect.type == "unlock-recipe"
+			and (effect.recipe == "space-platform-starter-pack" or effect.recipe == "space-platform-foundation")) then
+			kept[#kept + 1] = effect
+		end
+	end
+	return kept
+end
 for name, fields in pairs(patch) do
 	local prototype = data.raw.technology[name]
-	if prototype then for field, value in pairs(fields) do prototype[field] = value end end
+	if prototype then
+		local kept = platform_effects(prototype)
+		for field, value in pairs(fields) do prototype[field] = value end
+		if fields.effects then
+			for _, effect in ipairs(kept) do table.insert(prototype.effects, effect) end
+		end
+	end
 end
