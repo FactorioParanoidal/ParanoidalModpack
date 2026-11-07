@@ -92,11 +92,17 @@ local function room(record, fd)
   end
   -- droids around the assembler, and around its rally point when that is elsewhere
   local h = config.NEARBY_DROIDS_HALF_SIZE
+  local threshold = floor(fd.thresholds.hunt_size * config.ASSEMBLER_SPAWN_LIMIT_FACTOR)
+  -- Counts above this threshold cannot permit a spawn. Keep the unlimited path
+  -- for out-of-range legacy values rather than passing an invalid uint32 limit.
+  local limit = threshold + 1
+  if not (limit >= 1 and limit <= 4294967295) then limit = nil end
   local function around(p)
     return entity.surface.count_entities_filtered({
       area = {{p.x - h, p.y - h}, {p.x + h, p.y + h}},
       name = unit_names,
       force = entity.force,
+      limit = limit,
     })
   end
   local nearby = around(entity.position)
@@ -104,7 +110,7 @@ local function room(record, fd)
   if rally and math.max(math.abs(rally.x - entity.position.x), math.abs(rally.y - entity.position.y)) >= 2 * h then
     nearby = nearby + around(rally)
   end
-  return floor(fd.thresholds.hunt_size * config.ASSEMBLER_SPAWN_LIMIT_FACTOR) - nearby + 1
+  return threshold - nearby + 1
 end
 
 local function deploy(record, unit_name, quality)

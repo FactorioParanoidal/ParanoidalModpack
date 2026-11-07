@@ -31,6 +31,7 @@ Date: 2026.10.25
     - Bob's gun, laser and flamethrower drones join the army after "Bob's drones in the army" (after Army robotics and Bob's drone research): deploy recipes for the droid assembler, drones placed by hand join squads, and they get ranks too.
     - The droid counter also outputs the squads hunting, fighting, gathering, recalled and patrolling, the droids waiting to deploy and an alarm signal (1 while squads respond to a destroyed building); a panel next to its window explains every signal and shows its value.
   Optimizations:
+    - Limit native nearby-droid counts to the assembler's current spawn threshold; preserve deployment allowance at the assembler and distant rally point.
     - The squad integrity check no longer reads the unit group member list once per member (was O(n^2) API calls per check); membership is read from each droid's parent group.
     - script.active_mods is no longer read every tick for every force and on every squad update (each read built a table of all active mods).
     - on_entity_died uses event filters (force and unit types) instead of handling every death in the game; QRF settings are cached.
