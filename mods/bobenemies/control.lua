@@ -1,5 +1,13 @@
 require("remote")
 
+local on_ground_radar_tick
+local function update_ground_radar_listener()
+  local queue = storage.bobmods and storage.bobmods.ground_radar_table_checks
+  script.on_event(defines.events.on_tick, queue and #queue > 0 and on_ground_radar_tick or nil)
+end
+
+script.on_load(update_ground_radar_listener)
+
 if not bobmods then
   bobmods = {}
 end
@@ -68,6 +76,7 @@ script.on_init(function()
   if not storage.bobmods.ground_radar_table_checks then
     storage.bobmods.ground_radar_table_checks = {}
   end
+  update_ground_radar_listener()
 
   if bobmods.enemies.stop_all ~= true then
     if game.tick > 600 then
@@ -122,6 +131,7 @@ script.on_configuration_changed(function()
   if not storage.bobmods.ground_radar_table_checks then
     storage.bobmods.ground_radar_table_checks = {}
   end
+  update_ground_radar_listener()
 
   --In case someone starts a game with a faction, then removes it, and then adds it again, do recount of all spawners.
   for factionname_for_verification1 in pairs(storage.bobmods.enemies.nauvis_faction_table) do
@@ -948,6 +958,7 @@ script.on_event(defines.events.on_sector_scanned, function(event)
     storage.bobmods.ground_radar_table_checks,
     { name = event.radar.surface.name, x1 = target_x, x2 = target_x_end, y1 = target_y }
   )
+  if #storage.bobmods.ground_radar_table_checks == 1 then update_ground_radar_listener() end
 
   --Update chunk index for next cycle
   if storage.bobmods.ground_radar_table[checking_radar] < row_size then
@@ -957,7 +968,7 @@ script.on_event(defines.events.on_sector_scanned, function(event)
   end
 end, { { filter = "name", name = "bob-artifact-radar" } })
 
-script.on_event(defines.events.on_tick, function(event)
+on_ground_radar_tick = function(event)
   --Speed up checking ground radar requests if there is a significant backlog
   local to_check = math.ceil(#storage.bobmods.ground_radar_table_checks / 10)
   local check_list = storage.ground_radar_check_list
@@ -980,7 +991,8 @@ script.on_event(defines.events.on_tick, function(event)
       table.remove(storage.bobmods.ground_radar_table_checks, 1)
     end
   end
-end)
+  if #storage.bobmods.ground_radar_table_checks == 0 then update_ground_radar_listener() end
+end
 
 commands.add_command("bob-enemies-unlocks-check", nil, function(command)
   game.print("Faction unlock order: ")
