@@ -5,7 +5,6 @@
   "author": "Earendel (Alien Biomes), Paranoidal (Reforged)",
   "dependencies": [
     "base >= 2.0.0",
-    "(?) space-age >= 2.0.0",
     "! alien-biomes",
     "! alien-biomes-graphics"
   ],

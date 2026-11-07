@@ -10,6 +10,7 @@ Date: 16. 10. 2026
     - tools/data/derived-graphics.json records the regenerated files and their upstream sources.
     - tools/test_geology.lua also checks the climate boxes and the noise expressions on sample climate points.
   Compatibility:
+    - Paranoidal Space Age branch: no optional dependency on space-age, so with Space Age enabled the mod loads in the same order as without it; paranoidal-space-age-filter hides the expansion from it in any case.
     - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
     - Paranoidal port to Factorio 2.1: loot entries use the 2.1 format (type, name, amount_min, amount_max, independent_probability instead of item, count_min, count_max, probability).
 
