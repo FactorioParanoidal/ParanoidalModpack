@@ -1,4 +1,6 @@
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.0
+  Graphics:
+    - Paranoidal: the superseded casting-iron technology image is archived outside the build and removed; zzzparanoidal assigns the final C2 iron card. Shared graphics are unchanged.
   Compatibility:
     - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
