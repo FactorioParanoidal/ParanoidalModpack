@@ -6,6 +6,6 @@
     "contact": "",
     "homepage": "https://forums.factorio.com/viewtopic.php?f=190&t=79205",
     "factorio_version": "2.1",
-    "dependencies": ["base >= 2.0", "? space-age >= 2.0"],
+    "dependencies": ["base >= 2.0"],
     "description": "This mod prevents inserters from getting stuck when holding items."
 }
