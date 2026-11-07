@@ -1,0 +1,13 @@
+{
+  "mod": "paranoidal-sound",
+  "source": "local",
+  "original": {
+    "name": "Boombastique Immersive Sound Pack",
+    "authors": ["Fooltaurus", "Flouterose"],
+    "portal": {
+      "name": "immersive-sounds",
+      "url": "https://mods.factorio.com/mod/immersive-sounds"
+    }
+  },
+  "changeReason": "Объединяет EpicWeaponSounds 0.1.0 (MrKalle, https://mods.factorio.com/mod/EpicWeaponSounds), immersive-sounds2 0.1.1 (Fooltaurus / Flouterose, https://mods.factorio.com/mod/immersive-sounds) и newtrainsfx2 1.2.2 (Artanis_Mattias, https://mods.factorio.com/mod/newtrainsfx) в Paranoidal Sound 9.0.0: независимый выбор пересекающихся звуков, закрытые библиотеки, общий событийный обработчик, исправление неработавших вариаций. Аудиоресурсы перенесены без перекодирования, полные титры и ссылки сохранены в README.md и SOUND-CREDITS.txt."
+}
