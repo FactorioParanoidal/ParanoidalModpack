@@ -4,6 +4,7 @@ Date: 2026.10.27
   Locale:
     - ru: the mod name and the mod list description are the same as in ParanoidalLocale (format "English title (Russian translation)"), so the mod reads the same with or without it.
   Changes:
+    - Paranoidal Space Age branch: with paranoidal-space-age-filter active the script treats Space Age as absent (no demolisher handling, biter suppression or Space Age planet AI settings), like the data stage, from which the filter hides it. Without the filter nothing changes.
     - The per-player setting "Show Rampant AI squads alert" (rampantFixed--showSquadAlert) is off by default and is marked "(debug)" in its name and description. Players who already set it keep their value.
     - Rampant no longer raises evolution: the Space Age growth of Vulcanus evolution (+0.75% every 30000 ticks while demolishers live there) is removed. In Paranoidal only player research raises evolution.
     - Turning off mini-bosses also kills living champions and hour bosses. Saves with the setting already off are cleaned up on the configuration update; only tracked bosses are visited, with no map scans or extra tick checks.
@@ -16,6 +17,7 @@ Date: 2026.10.27
     - Hidden from the entity lists (turret priority targets): the chunk scanners, the crystal setters (never spawned), the spawner proxies, the crystal drain pole (never placed) and the invisible pylon target. The unstable crystals stay in the lists.
     - Icons in the entity lists: a spitter nest shows the vanilla spitter nest, a hive one star and a super-hive two stars (lower left), so the four nests of a faction and tier differ. The ten power draining crystals show their tier on the icon and in the name. Wasps and eggs show the whole defender (eggs: defender capsule) icon in the colour of their sprite with the tier, the drones of worms also a small worm (lower left); all 50 had the same upper left quarter of the defender icon (icon_size 32 of a 64 px icon).
   Compatibility:
+    - Paranoidal Space Age branch: no optional dependency on space-age, so with Space Age enabled the mod loads in the same order as without it; paranoidal-space-age-filter hides the expansion from it in any case.
     - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
     - Paranoidal port to Factorio 2.1: recipes use categories (RecipePrototype::category and additional_categories were merged into categories; the first entry keeps the meaning of the former main category, a changed main category keeps the other entries).
     - Paranoidal port to Factorio 2.1: faction biter egg recipe category built from categories[1] of the base egg recipe.

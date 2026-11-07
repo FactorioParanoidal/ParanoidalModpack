@@ -47,7 +47,9 @@ local unitGroupUtils = require("libs/UnitGroupUtils")
 local unitUtils = require("libs/UnitUtils")
 local upgrade = require("Upgrade")
 
-local hasSpaceAgeMod = script.active_mods["space-age"]
+-- Paranoidal: paranoidal-space-age-filter hides Space Age from the data stage of this mod (no biter suppressors,
+-- demolisher food or captive spawners), so the script treats Space Age as absent too.
+local hasSpaceAgeMod = script.active_mods["space-age"] and not script.active_mods["paranoidal-space-age-filter"]
 
 require("remote_interface")
 
