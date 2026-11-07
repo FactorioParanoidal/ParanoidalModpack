@@ -31,6 +31,15 @@ function C.evolution(c)
   return enemy.get_evolution_factor(surface)
 end
 
+-- A map generated without enemy bases (enemy-base size "none", e.g. the preset "Paranoidal: no enemies") is a
+-- peaceful map: the citadel neither warns nor comes there.
+function C.peaceful(c)
+  local surface = state.surface(c)
+  local controls = surface and surface.map_gen_settings.autoplace_controls
+  local enemy_base = controls and controls["enemy-base"]
+  return enemy_base ~= nil and enemy_base.size == 0
+end
+
 ---------------------------------------------------------------------------------------------------
 -- Start.
 ---------------------------------------------------------------------------------------------------
@@ -39,7 +48,7 @@ function C.init()
   forces.ensure()
   state.read_settings()
   local cfg = state.cfg
-  if cfg.enabled and C.evolution(c) >= cfg.evolution then
+  if cfg.enabled and not C.peaceful(c) and C.evolution(c) >= cfg.evolution then
     c.phase = "warned"
     c.spawn_tick = game.tick + LATE_START
     c.late_message = true
@@ -48,6 +57,7 @@ function C.init()
 end
 
 local function check_evolution(c, cfg)
+  if C.peaceful(c) then return end
   if c.late_message then
     c.late_message = nil
     forces.print(cfg, {"replicator-message.late-start", math.ceil((c.spawn_tick - game.tick) / 3600)})
