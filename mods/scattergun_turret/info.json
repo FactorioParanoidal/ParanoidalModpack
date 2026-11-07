@@ -8,7 +8,6 @@
   "homepage": "https://forums.factorio.com/viewtopic.php?f=93&t=45061&p=259731",
   "description": "Adds 9(16) new turrets for dealing with alien menace. Good compliment to mods that add new biter types, like Rampant or Natural Evolution.",
   "dependencies": [
-	"base >= 2.0.30",
-	"? space-age >= 2.0.0"
+	"base >= 2.0.30"
 	]
 }
