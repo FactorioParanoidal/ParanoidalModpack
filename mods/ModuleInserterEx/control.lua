@@ -68,15 +68,13 @@ local function cycle_active_preset(e, cycleNext)
     end
 end
 
+local tick_registered = false
 local function update_on_tick_listener()
-    -- Unregister any previous listener
-    script.on_nth_tick(nil)
-    storage.nth_tick_registered = nil
-    if storage.delayed_work[1] then
-        -- Register the handler for the next tick if there is work remaining
-        -- Also keep track of this in storage, so we can restore it in on_load (which doesn't have access to the `game` object)
-        storage.nth_tick_registered = game.tick + 1
-        script.on_nth_tick(game.tick + 1, control.delayed_creation)
+    local needed = not not (storage.delayed_work and storage.delayed_work[1])
+    if needed ~= tick_registered then
+        -- Keep the next-tick/FIFO budget, without re-registering each active step.
+        script.on_nth_tick(1, needed and control.delayed_creation or nil)
+        tick_registered = needed
     end
 end
 
@@ -383,9 +381,9 @@ script.on_init(function()
 end)
 
 script.on_load(function()
-    if storage.nth_tick_registered then
-        script.on_nth_tick(storage.nth_tick_registered, control.delayed_creation)
-    end
+    -- Old saves may keep an absolute nth_tick_registered; the queue is authoritative.
+    -- Only rebuild local state and subscriptions here, never mutate storage.
+    update_on_tick_listener()
 end)
 
 
