@@ -81,36 +81,26 @@ local function twin_icons(twin)
 	return icons
 end
 
-local function remove_unlock_everywhere(recipe_name)
-	for _, technology in pairs(data.raw.technology) do
-		local effects = technology.effects
-		if effects then
-			for index = #effects, 1, -1 do
-				if effects[index].type == "unlock-recipe" and effects[index].recipe == recipe_name then
-					table.remove(effects, index)
-				end
-			end
-		end
-	end
-end
-
+local transfers = {}
 local function unlock_in_mixer(recipe_name, tier)
 	local technology = data.raw.technology[MIXER .. tier]
 	if not technology then
 		log("[alloy-mixing-molten] missing technology " .. MIXER .. tier)
 		return
 	end
-	remove_unlock_everywhere(recipe_name)
-	technology.effects = technology.effects or {}
-	table.insert(technology.effects, { type = "unlock-recipe", recipe = recipe_name })
+	transfers[#transfers + 1] = { recipe_name, { MIXER .. tier } }
 end
 
+-- The recipe set stays unchanged until data:extend(added). Do not include added recipes.
+-- false represents an absent subgroup (nil is not a Lua table key).
+local max_order = {}
+for _, recipe in pairs(data.raw.recipe) do
+	local key = recipe.subgroup or false
+	local order = recipe.order or ""
+	if order > (max_order[key] or "") then max_order[key] = order end
+end
 local function last_order(subgroup)
-	local last = ""
-	for _, recipe in pairs(data.raw.recipe) do
-		if recipe.subgroup == subgroup and (recipe.order or "") > last then last = recipe.order end
-	end
-	return last
+	return max_order[subgroup or false] or ""
 end
 
 local added = {}
@@ -165,3 +155,4 @@ for _, spec in ipairs(old_recipes) do
 		end
 	end
 end
+require("tweaks.technology.unlock-batch").apply(transfers, false)

@@ -71,25 +71,13 @@ local moves = {
 	{ "bi-tech-cellulose-2", { "bi-cellulose-2", "bi-plastic-2", "bi-battery" } },
 	{ "bi-tech-organic-plastic", { "bi-plastic-1" } },
 }
+local transfers = {}
 for _, move in ipairs(moves) do
-	local target = technologies[move[1]]
-	if target then
-		for _, recipe in ipairs(move[2]) do
-			if data.raw.recipe[recipe] then
-				for _, technology in pairs(technologies) do
-					if technology.max_level ~= "infinite" then
-						for index = #(technology.effects or {}), 1, -1 do
-							local effect = technology.effects[index]
-							if effect.type == "unlock-recipe" and effect.recipe == recipe then table.remove(technology.effects, index) end
-						end
-					end
-				end
-				target.effects = target.effects or {}
-				table.insert(target.effects, { type = "unlock-recipe", recipe = recipe })
-			end
-		end
+	for _, recipe in ipairs(move[2]) do
+		transfers[#transfers + 1] = { recipe, { move[1] } }
 	end
 end
+require("tweaks.technology.unlock-batch").apply(transfers, true)
 -- Прежний объединённый фиолетовый узел больше не имеет активных потребителей.
 -- Сохраняем прототип и non-unlock эффекты, не удаляем сторонний код.
 local obsolete = technologies["bi-tech-advanced-biotechnology-2"]

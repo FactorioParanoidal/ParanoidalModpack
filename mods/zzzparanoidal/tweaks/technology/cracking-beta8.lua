@@ -68,22 +68,4 @@ local moves = {
 	{ "vinyl-chloride-synthesis", { "angels-chlorine-processing-2" } },
 	{ "methyl-methacrylate-synthesis", { "angels-advanced-chemistry-2" } },
 }
-for _, move in ipairs(moves) do
-	local available = data.raw.recipe[move[1]] ~= nil
-	for _, name in ipairs(move[2]) do available = available and technologies[name] ~= nil end
-	if available then
-		for _, technology in pairs(technologies) do
-			if technology.max_level ~= "infinite" then
-				for index = #(technology.effects or {}), 1, -1 do
-					local effect = technology.effects[index]
-					if effect.type == "unlock-recipe" and effect.recipe == move[1] then table.remove(technology.effects, index) end
-				end
-			end
-		end
-		for _, name in ipairs(move[2]) do
-			local technology = technologies[name]
-			technology.effects = technology.effects or {}
-			table.insert(technology.effects, { type = "unlock-recipe", recipe = move[1] })
-		end
-	end
-end
+require("tweaks.technology.unlock-batch").apply(moves, true)
