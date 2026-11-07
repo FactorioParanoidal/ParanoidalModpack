@@ -117,10 +117,17 @@ local function on_built_or_rotated(event)
     end
 end
 
-for _, event in pairs{ "on_built_entity", "on_robot_built_entity", "on_space_platform_built_entity",
-    "script_raised_built", "script_raised_revive", "on_player_rotated_entity" } do
-    script.on_event(defines.events[event], on_built_or_rotated)
+local build_filters = {}
+for name in pairs(bad_connection_check) do
+    build_filters[#build_filters + 1] = {filter = "name", name = name}
+    build_filters[#build_filters + 1] = {filter = "ghost_name", name = name}
 end
+for _, event in pairs{ "on_built_entity", "on_robot_built_entity", "on_space_platform_built_entity",
+    "script_raised_built", "script_raised_revive" } do
+    script.on_event(defines.events[event], on_built_or_rotated, build_filters)
+end
+-- Rotation has no event-filter support in 2.1.24.
+script.on_event(defines.events.on_player_rotated_entity, on_built_or_rotated)
 
 --------------------------------------------------------------------------------
 -- Threshold label on the selected valve and hotkeys
@@ -135,12 +142,23 @@ local function format_threshold(threshold)
     return string.format("%d%%", math.floor(threshold * 100 + 0.5))
 end
 
+local on_label_tick
+local label_tick_registered = false
+local function update_label_listener()
+    local needed = not not (storage.labels and next(storage.labels))
+    if needed ~= label_tick_registered then
+        script.on_event(defines.events.on_tick, needed and on_label_tick or nil)
+        label_tick_registered = needed
+    end
+end
+
 ---@param player_index uint
 local function remove_label(player_index)
     local label = storage.labels[player_index]
     if not label then return end
     label.object.destroy() -- safe on invalid objects
     storage.labels[player_index] = nil
+    update_label_listener()
 end
 
 script.on_event(defines.events.on_selected_entity_changed, function(event)
@@ -166,10 +184,11 @@ script.on_event(defines.events.on_selected_entity_changed, function(event)
             players = { player },
         },
     }
+    update_label_listener()
 end)
 
--- Keeps labels in sync with hotkeys, copy-paste and other players' changes; trivial cost.
-script.on_event(defines.events.on_tick, function()
+-- Keep active labels in sync even when another script changes the threshold.
+on_label_tick = function()
     for player_index, label in pairs(storage.labels) do
         if label.object.valid and label.valve.valid then
             label.object.text = format_threshold(label.valve.valve_threshold_override or label.default)
@@ -177,7 +196,7 @@ script.on_event(defines.events.on_tick, function()
             remove_label(player_index)
         end
     end
-end)
+end
 
 ---@param event EventData.CustomInputEvent
 ---@param step number
@@ -205,7 +224,10 @@ script.on_event("valves-threshold-minus", function(event) change_threshold(event
 
 script.on_init(function()
     storage.labels = {}
+    update_label_listener()
 end)
+
+script.on_load(update_label_listener)
 
 script.on_configuration_changed(function(data)
     -- Fresh label state. rendering.clear() raises an error for a mod that is not active
@@ -213,6 +235,7 @@ script.on_configuration_changed(function(data)
     rendering.clear(script.mod_name)
     if script.active_mods["valves-lib"] then rendering.clear("valves-lib") end
     storage.labels = {}
+    update_label_listener()
 
     for _, force in pairs(game.forces) do
         local bad = find_bad_valves(force)
