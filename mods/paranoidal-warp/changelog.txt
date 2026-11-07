@@ -1,0 +1,11 @@
+---------------------------------------------------------------------------------------------------
+Version: 9.0.0
+Date: 2026-11-07
+  Major Features:
+    - First version (Space Age branch of Paranoidal, user decisions 2026-11-07, stage 2 of the warp odyssey). Three warp sectors as Space Age space locations: BnL Coverage Zone (sun as in home orbit, many chunks, a few small asteroids), BnL Fleet Necropolis (half the sun, metal, medium and big asteroids), Cut-off for Non-payment Zone (no sun, carbonic and oxide asteroids). Each has a gate and two points joined by routes of 12000 km, its own asteroids, sky (another planet behind the platform or none, a colour grade) and sun.
+    - Warp drive (built only on a space platform, one per platform): an assembling machine with one fixed recipe, 1 warp charge, 30 s at 10 MW. It starts only on the player's command in its window, from a sector gate or home orbit; the platform waits while it spins up (AUTO countdown), then jumps to the chosen gate or home and the screen flashes. Cancel or leaving the gate stops it; the spin-up progress is kept.
+    - Warp charge (made at home, 100 kg, ten per rocket) and the warp drive technology (after the platform thrusters) that unlocks the drive, the charge and every point of the sectors.
+    - The platform hub is named the bridge of the Axiom-7 and carries the weathered BnL logo of zzzparanoidal-start-bnl.
+  Info:
+    - Without Space Age nothing is defined and the control script does nothing. paranoidal-space-age-filter lets this mod see Space Age.
+    - Remote interface paranoidal-warp (select_target, jump, problem) does what the window does; for automated tests.
