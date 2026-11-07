@@ -584,8 +584,9 @@ if data.raw.item["bob-resin"] then
 end
 
 --- Update seeds to work with Space Age if present.
+-- Paranoidal: only when this mod sees Space Age; paranoidal-space-age-filter hides it, and the build keeps BI's seeds.
 
-if data.raw.item["tree-seed"] then
+if data.raw.item["tree-seed"] and mods["space-age"] then
 	 
 	--data.raw.item["bi-seed"] = nil -- We can remove BI's seed, since it won't be used.
 	data.raw.item["bi-seed"].plant_result = "tree-plant"

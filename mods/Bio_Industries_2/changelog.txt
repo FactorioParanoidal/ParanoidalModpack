@@ -51,6 +51,8 @@ Date: 24.02.2026
     - Big wooden poles: removed the 1.1 copper/green/red/shadow wire pictures (2.0 has no per-pole wire sprites; the files did not exist) and fixed double slashes in base paths (Paranoidal local fix)
     - Removed 58 leftover images of the 1.1 wooden rails (graphics/entities/wood_products/rails): the 2.0 mod has no rail prototypes (Paranoidal local cleanup)
   Compatibility:
+    - Paranoidal Space Age branch: the Space Age tree seed replaces the BI seed only when the mod sees Space Age; with paranoidal-space-age-filter it does not, so the seed recipes, seedlings and seed bombs keep the BI seed.
+    - Paranoidal Space Age branch: no optional dependency on space-age, so with Space Age enabled the mod loads in the same order as without it; paranoidal-space-age-filter hides the expansion from it in any case.
     - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
     - Paranoidal port to Factorio 2.1: assembler pipe pictures are taken from __base__/prototypes/entity/assembler-pictures.lua (2.1 removed the global assembler2pipepictures/assembler3pipepictures and assemblerpipes.lua).
     - Paranoidal port to Factorio 2.1: the nitrogen and liquid-air fluids are created in the data stage (prototypes/Bio_Farm/liquids.lua) instead of data-updates.lua, because the 2.1 recycler builds recycling recipes earlier and needs every fluid ingredient to exist.
