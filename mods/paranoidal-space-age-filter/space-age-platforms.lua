@@ -80,6 +80,32 @@ local function restore(target, copy)
 	for key, value in pairs(copy) do target[key] = value end
 end
 
+-- Space Age planets are never visited: their map settings keep only the tiles. No resources (a resource another planet
+-- uses is kept by Angels: stone, tungsten ore; RSO would place it at home), and no trees, rocks or decoratives: other
+-- mods do not see Space Age and may take the autoplace off its plants (Alien Biomes), which a planet that still lists
+-- them does not load with. Returns how many entity and decorative settings went.
+local function strip_planets(raw)
+	local entities, decoratives = 0, 0
+	for name, planet in pairs(raw.planet or {}) do
+		local settings = not state.before.planet[name] and planet.map_gen_settings
+		if settings then
+			local autoplace = settings.autoplace_settings or {}
+			for kind, counted in pairs({entity = "entities", decorative = "decoratives"}) do
+				local list = autoplace[kind] and autoplace[kind].settings
+				for key in pairs(list or {}) do
+					list[key] = nil
+					if counted == "entities" then entities = entities + 1 else decoratives = decoratives + 1 end
+				end
+			end
+			for control in pairs(settings.autoplace_controls or {}) do
+				local prototype = raw["autoplace-control"] and raw["autoplace-control"][control]
+				if prototype and prototype.category == "resource" then settings.autoplace_controls[control] = nil end
+			end
+		end
+	end
+	return entities, decoratives
+end
+
 local function finish(where)
 	if state.phase ~= "in" then return end
 	state.phase = "after"
@@ -133,25 +159,8 @@ local function finish(where)
 	local silo = raw["rocket-silo"] and raw["rocket-silo"]["rocket-silo"]
 	if silo and state.rocket_parts_required then silo.rocket_parts_required = state.rocket_parts_required end
 
-	-- Space Age planets keep no resources: they are never visited, and a resource another planet uses is kept by
-	-- Angels (stone, tungsten ore) and placed at home by RSO. Its own resources are not placed anywhere.
-	local stripped = 0
-	for name, planet in pairs(raw.planet or {}) do
-		local settings = not state.before.planet[name] and planet.map_gen_settings
-		if settings then
-			local entity = settings.autoplace_settings and settings.autoplace_settings.entity
-			for resource in pairs(entity and entity.settings or {}) do
-				if raw.resource[resource] then
-					entity.settings[resource] = nil
-					stripped = stripped + 1
-				end
-			end
-			for control in pairs(settings.autoplace_controls or {}) do
-				local prototype = raw["autoplace-control"] and raw["autoplace-control"][control]
-				if prototype and prototype.category == "resource" then settings.autoplace_controls[control] = nil end
-			end
-		end
-	end
+	-- Space Age planets keep only their tiles; its own resources are not placed anywhere.
+	local entities, decoratives = strip_planets(raw)
 	for name, resource in pairs(raw.resource or {}) do
 		if not state.before.resource[name] then resource.autoplace = nil end
 	end
@@ -244,7 +253,8 @@ local function finish(where)
 		.. "; kept from Space Age: technology space-science-pack, no satellite, platform effects of the rocket silo technology; "
 		.. "other mods' prototypes back (" .. #names .. "): " .. table.concat(names, ", ") .. "; Space Age technologies hidden "
 		.. hidden .. ", removed (after an infinite level): " .. table.concat(removed_names, ", ") .. ", left: "
-		.. table.concat(shown, ", ") .. "; resources taken off Space Age planets: " .. stripped)
+		.. table.concat(shown, ", ") .. "; taken off the map settings of Space Age planets: " .. entities
+		.. " entities (resources, trees, rocks), " .. decoratives .. " decoratives")
 end
 
 local function check()
@@ -312,6 +322,14 @@ end
 -- recipes of any mod that use a Space Age fluid no visible recipe makes (barrels of its planet fluids); visible
 -- technologies stop unlocking those.
 function M.hide_recipes()
+	-- What the data and data-updates stages of other mods put back on the Space Age planets goes too.
+	if state.before then
+		local entities, decoratives = strip_planets(data.raw)
+		if entities + decoratives > 0 then
+			log("paranoidal-space-age-filter: taken off the map settings of Space Age planets again: " .. entities
+				.. " entities, " .. decoratives .. " decoratives")
+		end
+	end
 	local unlocked = visible_unlocks()
 	local hidden = 0
 	for name in pairs(state.recipes or {}) do
