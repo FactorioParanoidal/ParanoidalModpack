@@ -1,3 +1,4 @@
+require("tweaks.custom.space-exploration-tab") -- без SpaceXGAR2: ракетные предметы на вкладку, до меню
 require("tweaks.entity.roboport")
 require("tweaks.entity.add-liquid-to-mine-ores")
 require("tweaks.entity.construction-robots")
@@ -170,6 +171,7 @@ require("tweaks.technology.spacemod-components-beta8")
 require("tweaks.recipe.spacemod-god-module-beta8")
 require("tweaks.recipe.spacemod-components-beta8")
 require("removals.spacemod-beta8")
+require("removals.erp-without-spacex") -- без SpaceX: от ERP остаются шаттлы, капсулы и фабрикатор
 require("tweaks.technology.science-foundation-beta8")
 require("tweaks.recipe.science-foundation-beta8")
 require("tweaks.technology.electronics-science-beta8")

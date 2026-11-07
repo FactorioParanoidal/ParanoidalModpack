@@ -645,21 +645,23 @@ data.raw["item"]["bob-alien-artifact-purple"].subgroup = "angels-bio-processing-
 
 --Фикс огромных аккумуляторов
 paralib.bobmods.lib.recipe.add_ingredient("bi-bio-accumulator", { type = "item", name = "accumulator", amount = 30 })
---Добавляем осмий в лейт гейм рецепты
-paralib.bobmods.lib.recipe.add_ingredient(
-	"hull-component",
-	{ type = "item", name = "clowns-plate-osmium", amount = 100 }
-)
-paralib.bobmods.lib.recipe.add_ingredient(
-	"space-thruster",
-	{ type = "item", name = "clowns-plate-osmium", amount = 100 }
-)
-paralib.bobmods.lib.recipe.add_ingredient("fuel-cell", { type = "item", name = "clowns-plate-osmium", amount = 100 })
-paralib.bobmods.lib.recipe.add_ingredient("habitation", { type = "item", name = "clowns-plate-osmium", amount = 100 })
-paralib.bobmods.lib.recipe.add_ingredient("life-support", { type = "item", name = "clowns-plate-osmium", amount = 100 })
-paralib.bobmods.lib.recipe.add_ingredient("command", { type = "item", name = "clowns-plate-osmium", amount = 100 })
-paralib.bobmods.lib.recipe.add_ingredient("astrometrics", { type = "item", name = "clowns-plate-osmium", amount = 100 })
-paralib.bobmods.lib.recipe.add_ingredient("ftl-drive", { type = "item", name = "clowns-plate-osmium", amount = 100 })
+--Добавляем осмий в лейт гейм рецепты (компоненты корабля SpaceX)
+if mods["SpaceModFeorasFork"] then
+	paralib.bobmods.lib.recipe.add_ingredient(
+		"hull-component",
+		{ type = "item", name = "clowns-plate-osmium", amount = 100 }
+	)
+	paralib.bobmods.lib.recipe.add_ingredient(
+		"space-thruster",
+		{ type = "item", name = "clowns-plate-osmium", amount = 100 }
+	)
+	paralib.bobmods.lib.recipe.add_ingredient("fuel-cell", { type = "item", name = "clowns-plate-osmium", amount = 100 })
+	paralib.bobmods.lib.recipe.add_ingredient("habitation", { type = "item", name = "clowns-plate-osmium", amount = 100 })
+	paralib.bobmods.lib.recipe.add_ingredient("life-support", { type = "item", name = "clowns-plate-osmium", amount = 100 })
+	paralib.bobmods.lib.recipe.add_ingredient("command", { type = "item", name = "clowns-plate-osmium", amount = 100 })
+	paralib.bobmods.lib.recipe.add_ingredient("astrometrics", { type = "item", name = "clowns-plate-osmium", amount = 100 })
+	paralib.bobmods.lib.recipe.add_ingredient("ftl-drive", { type = "item", name = "clowns-plate-osmium", amount = 100 })
+end
 
 --Фикс пластин вольфрама и дешевых труб
 paralib.bobmods.lib.recipe.set_ingredients("bob-tungsten-carbide-x", {

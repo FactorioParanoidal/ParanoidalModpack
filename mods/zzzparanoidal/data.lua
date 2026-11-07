@@ -1,4 +1,5 @@
 require("prototypes.tips-and-tricks.tips-and-tricks") -- подсказки
+require("prototypes.space-exploration-tab") -- вкладка «Покорение космоса» без SpaceXGAR2
 
 -- Register early so research/evolution and compatibility mods see both labs.
 data:extend(table.deepcopy(require("prototypes.super-labs-beta8")))
