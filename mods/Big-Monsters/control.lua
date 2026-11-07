@@ -1,5 +1,9 @@
 require("util")
 
+-- Paranoidal: paranoidal-space-age-filter hides Space Age from the data stage of this mod (no Gleba and Vulcanus
+-- variants), so its Space Age events stay off too.
+local space_age = script.active_mods["space-age"] and not script.active_mods["paranoidal-space-age-filter"]
+
 mf_mod_name = "Big-Monsters" -- used on cameras
 mf_camera_chart = true
 mf_Camera_Default_Icon="[img=utility/gps_map_icon]"
@@ -69,7 +73,7 @@ storage.allowed_planets = {"fulgora","gleba","vulcanus"}
 storage.spawn_on_sa_planets = settings.global["bm-spawn_on_sa_planets"].value 
 
 
-if not script.active_mods["space-age"] then 
+if not space_age then
 	storage.chances.gleba_invaders.chance=0
 	storage.chances.demolisher.chance=0
 	storage.allowed_planets = {}
@@ -335,7 +339,7 @@ for p=1,#storage.player_forces do
 						end
 
 
-				elseif the_event=='gleba_invaders' and script.active_mods["space-age"] then  
+				elseif the_event=='gleba_invaders' and space_age then
 					local attack1, player_chunks, spawn = FindTeamAttackCorner(surface, pforce, player_spawn,4)
 					local rchunk = player_chunks[math.random(#player_chunks)]
 					local attack2 = {x= rchunk.x*32+math.random(31), y= rchunk.y*32+math.random(31)}
@@ -371,7 +375,7 @@ for p=1,#storage.player_forces do
 						if storage.show_cameras then CreateCameraForForce(pforce,spider,surface,nil,nil,120,0.15) end
 						end
 
-				elseif the_event=='demolisher' and script.active_mods["space-age"] then
+				elseif the_event=='demolisher' and space_age then
 					local attack1, player_chunks, spawn = FindTeamAttackCorner(surface, pforce, player_spawn,15)
 					if spawn then
 						if storage.spawn_near_nests then spawn = get_pos_near_enemy_nest(surface,spawn,pforce) end 
@@ -486,7 +490,7 @@ local evo = get_evo_here(surface)
 						end
 
 						
-				elseif the_event=='gleba_invaders' and script.active_mods["space-age"] then  
+				elseif the_event=='gleba_invaders' and space_age then
 					local spawn = surface.find_nearest_enemy{position=position, max_distance=500, force=pforce}
 					if spawn then
 						spawn = get_random_pos_near(spawn.position,30)
@@ -516,7 +520,7 @@ local evo = get_evo_here(surface)
 						if storage.show_cameras then CreateCameraForForce(pforce,spider,surface,nil,nil,120,0.15) end
 						end
 
-				elseif the_event=='demolisher' and script.active_mods["space-age"] then
+				elseif the_event=='demolisher' and space_age then
 					local spawn=position
 					if spawn then
 						if storage.spawn_near_nests then spawn = get_pos_near_enemy_nest(surface,spawn,pforce) end 

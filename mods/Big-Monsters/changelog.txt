@@ -1,6 +1,7 @@
 ---------------------------------------------------------------------------------------------------
 Version: 2.1.2
   Changes:
+    - Paranoidal Space Age branch: with paranoidal-space-age-filter active the script treats Space Age as absent (no Gleba invaders, no demolisher events, no Space Age planets), like the data stage, from which the filter hides it. Without the filter nothing changes.
     - Paranoidal fork: the five levels of the giant fire and acid spitters, the three biterzillas and the mother biterzilla had one icon and one name, the enemy spidertrons the icon of the player's spidertron. The level is shown on the icon (mferrari_lib level-icon) and, for the giants, in the name, so the list of turret priority targets tells them apart.
     - Paranoidal fork: saves whose map was generated before the autoplace of the behemoth worm and the acid boss worm was removed lose these worms once (all surfaces); the worms of the events stay. The migration 2.1.2-paranoidal-autoplaced-worms only raises the configuration change, the worms are destroyed in on_configuration_changed.
     - Paranoidal fork: the event alerts no longer name the enemy before it is seen: the spidertron, the UFO and the ultimate boss are hinted at (seismic steps, a radar blip, "something big is leading them"); the soldiers alert speaks of saboteurs on the radio. EN/RU (the RU soldiers and UFO texts are in ParanoidalLocale).
@@ -32,6 +33,7 @@ Version: 2.1.2
     - Paranoidal fork: brood limits use count_entities_filtered with a limit
     - Paranoidal fork: invalid entities are pruned from the tracked enemy list; unused gleba invasion queue is cleared
   Compatibility:
+    - Paranoidal Space Age branch: no optional dependency on space-age, so with Space Age enabled the mod loads in the same order as without it; paranoidal-space-age-filter hides the expansion from it in any case.
     - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
 ---------------------------------------------------------------------------------------------------
 Version: 2.1.1
