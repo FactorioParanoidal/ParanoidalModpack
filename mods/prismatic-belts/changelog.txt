@@ -10,6 +10,7 @@ Date: 2026-06-26
   Changes:
     - Removed 6 unused hr-* images in graphics/entity/reskins: not referenced by the modset under any visible startup setting (12 data dumps with alternative setting values) and not named in any Lua file (Paranoidal local cleanup)
   Compatibility:
+    - Paranoidal Space Age branch: no optional dependency on space-age, so with Space Age enabled the mod loads in the same order as without it; paranoidal-space-age-filter hides the expansion from it in any case.
     - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
 ---------------------------------------------------------------------------------------------------
 Version: 3.0.3

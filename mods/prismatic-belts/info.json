@@ -12,7 +12,6 @@
         "base",
         "reskins-sprite-utils >= 0.0.3",
         "flib",
-        "? space-age",
         "? boblogistics",
         "? reskins-library >= 2.3.0",
         "(?) reskins-bobs",
