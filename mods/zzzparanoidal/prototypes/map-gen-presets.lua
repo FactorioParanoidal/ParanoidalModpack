@@ -8,8 +8,9 @@
 --     конфигу (mods/RSO-reforged/prototypes/noise.lua), настройки реально
 --     влияют на размер/частоту/богатство залежей.
 --   * "Paranoidal: без врагов" — peaceful_mode + enemy-base.size=none,
---     гнёзда не генерируются (Big-Monsters guard в этом случае тоже
---     отрабатывает, см. mods/Big-Monsters/control.lua: bm_peaceful_skip).
+--     гнёзда не генерируются, загрязнение выключено. Карту с enemy-base.size=0
+--     моды считают мирной: Big-Monsters (bm_peaceful_skip), Зверь, цитадель
+--     репликаторов и молнии paranoidal-rain там не угрожают.
 --
 -- Имена пресетов локализованы в locale/*/locale.cfg секциями
 -- [map-gen-preset-name] и [map-gen-preset-description].
@@ -57,6 +58,9 @@ if default then
             property_expression_names = {},
             peaceful_mode = true,
             autoplace_controls = no_enemies_controls,
+        },
+        advanced_settings = {
+            pollution = { enabled = false },
         },
     }
 end
