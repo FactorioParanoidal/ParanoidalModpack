@@ -169,7 +169,9 @@ local POD_GOODS = {
   { "coal", 50, 150 }, { "stone-brick", 50, 100 }, { "engine-unit", 2, 8 }, { "explosives", 10, 30 },
 }
 local function rescue(r)
-  if game.tick < (r.next_drop or 0) then return end
+  -- Older records may predate next_drop initialization; use their placement tick,
+  -- not zero, without resetting any timer already stored in the save.
+  if game.tick < (r.next_drop or (r.born + RESCUE_EVERY)) then return end
   r.next_drop = game.tick + RESCUE_EVERY
   local e = r.entity
   local surface = e.surface
