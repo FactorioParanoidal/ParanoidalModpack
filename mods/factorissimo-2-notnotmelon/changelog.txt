@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 9.12.0
 Date: 2026-10-19
+  Graphics:
+    - Paranoidal build: removed the entity-folder copy of the circuit connector image, already redirected to graphics/icon/factory-circuit-connector.png by zzzparanoidal's final graphics pass. Prototype and runtime code are unchanged.
   Optimizations:
     - Paranoidal: dispatcher registry, filtering, merge sorting and tree traversal use saved round-robin jobs (up to 256 steps per tick globally), sleeping when finished. Open players share the registry; live filters rebuild only when their inputs change. At most 20 row containers are retained per window. Opening the dispatcher no longer adds periodic interior scans; gameplay statistics and record sampling are unchanged.
     - Paranoidal: use native stack transfers for one-way chest connections and roboport supply/ejection, retaining source-slot priority, actual removal-proxy counts and partial-fill behavior. Balancing and linked-container connections retain their existing transfer path.
