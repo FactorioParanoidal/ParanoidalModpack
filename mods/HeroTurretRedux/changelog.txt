@@ -8,6 +8,7 @@ Date: 03/11/2026
     - Paranoidal: remote "HeroTurretRedux".turn(entity, direction) replaces a turret by the same turret in another direction, keeping kills, damage, ammo, wires, circuit settings and priority targets (zzzparanoidal turret rotation by R / Shift+R).
     - Paranoidal: a rank change or demotion of a working turret does not restart the zzzparanoidal turret deployment delay (remote "paranoidal_turret_deploy".skip_next); a turret that is still deploying gets the full delay again.
   Fixes:
+    - Paranoidal: turret replacement creates the candidate before destroying the original. A failed creation leaves the original turret and its ammo/state untouched; build events are raised only after successful replacement, following the original destroy event.
     - Paranoidal: a rank change, a demotion and a dying ranked turret keep the whole priority target list; it was cut at 1000 entries (the zzzparanoidal panel "Priority by groups" fills lists of a few thousand).
     - Paranoidal: turrets of the legendary ruins (AbandonedRuins-paranoidal: relics "pd-relic-*", guardians "pd-legend-*") get no ranks; a ranked copy would lose the relic.
     - Fixed bug with prio targets 
