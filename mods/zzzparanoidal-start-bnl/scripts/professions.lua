@@ -462,7 +462,8 @@ end
 -- levels added to the profession on 2026-11-08 (unless still on probation: apply gives them).
 function M.migrate()
     local s = state()
-    if not s or s.late_rules then return end
+    -- Disabled professions must leave the old state untouched, including the migration marker.
+    if not M.enabled() or s.late_rules then return end
     s.late_rules = true
     s.late = s.late or {}
     local late = util.since_landing() > cfg.window
@@ -484,9 +485,14 @@ function M.migrate()
         end
     end
     log("zzzparanoidal-start-bnl: professions reopened for " .. reopened .. " passengers, RPG levels to " .. mechanics .. " mechanics")
-    if not M.enabled() or not storage.bnl.landing_tick then return end
+    if not storage.bnl.landing_tick then return end
     for _, player in pairs(game.connected_players) do M.on_joined(player) end
 end
+
+-- Resume a deferred migration as soon as professions are enabled, without requiring a rejoin.
+events.on(defines.events.on_runtime_mod_setting_changed, function(event)
+    if event.setting == "bnl-start-professions" then M.migrate() end
+end)
 
 -- Hook of the local test mod (pd-port21-diag only): late choice, migration and the mechanic's RPG levels.
 if script.active_mods["pd-port21-diag"] then
@@ -517,6 +523,8 @@ if script.active_mods["pd-port21-diag"] then
         end,
         choose = function(index, key) M.choose(game.get_player(index), key) end,
         migrate = function() M.migrate() end,
+        -- Only this mod can change its own runtime setting (LuaSettings contract).
+        enabled = function(value) settings.global["bnl-start-professions"] = {value = value} end,
     })
 end
 
