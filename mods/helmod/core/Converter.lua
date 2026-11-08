@@ -1,6 +1,7 @@
 ---
 ---Description of the module.
 ---@class Converter
+local ImportReader = require("core.ImportReader")
 local Converter = {
   ---single-line comment
   classname = "HMConverter",
@@ -32,21 +33,14 @@ end
 ---@param data_string string
 ---@return table
 function Converter.read(data_string)
-  if data_string == nil then return nil end
+  if type(data_string) ~= "string" or #data_string > ImportReader.max_bytes then return nil end
   data_string = Converter.trim(data_string)
-  if (string.sub(data_string, 1, 8) ~= "do local") then
-    local ok , err = pcall(function()
-      data_string = helpers.decode_string(data_string)
-    end)
-    if not(ok) then
-      return nil
-    end
+  if string.sub(data_string, 1, 8) ~= "do local" then
+    local ok, decoded = pcall(helpers.decode_string, data_string)
+    if not ok or type(decoded) ~= "string" then return nil end
+    data_string = decoded
   end
-  local status, data_table = pcall(loadstring, data_string)
-  if (status) then
-    return data_table()
-  end
-  return nil
+  return ImportReader.read(data_string)
 end
 
 -------------------------------------------------------------------------------
