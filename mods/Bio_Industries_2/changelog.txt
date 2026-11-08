@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.34
 Date: 24.02.2026
+  Graphics:
+    - Paranoidal build: removed seven duplicate images already redirected to canonical files by zzzparanoidal's final graphics pass. Prototype and runtime code are unchanged; this trimmed copy targets the full modpack.
   Changes:
     - Add glass to the bio nursery if it exists
     - ru/en: the solid fuel description is shortened to "Немного ускоряет транспорт." / "Slightly speeds up vehicles."; ru recipe name bi-solid-fuel is spelled "Твёрдое" (Paranoidal local change)
