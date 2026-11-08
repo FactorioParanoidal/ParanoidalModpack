@@ -1,0 +1,280 @@
+---------------------------------------------------------------------------------------------------
+Version: 1.0.38
+Date: 10. 11. 2026
+  Major Features:
+    - fuel_category --> fuel_categories
+  Changes:
+    - Paranoidal (Space Age branch, the planets after the rocket): the recycler keeps the output inventory of the build (it is built at home before the rocket; was 40 slots).
+    - Paranoidal: the setting "Frozeta start" is hidden, the game starts at home.
+    - Paranoidal (Factorio 2.1 fix): the science pack productivity research skips recycling recipes also when they list their categories (2.1); before, recycling recipes of science packs got into it and the build did not load once the recycling rebuild of zzzparanoidal replaced them.
+    - Paranoidal: Frozeta's copies of the Vulcanus noise expressions mountain_volcano_spots, mountain_basis_noise, mountain_plasma, mountain_elevation and mountain_lava_spots are named frozeta_mountain_* (prototypes/planet/frozeta-expressions.lua): under the Vulcanus names they replaced the Space Age ones and Vulcanus built its mountains and volcanoes from the Frozeta noise. Frozeta generates as before.
+    - Paranoidal: the spaceship scrap item is not recycled itself (like the Space Age scrap), so the recycling rebuild of zzzparanoidal keeps the spaceship scrap recycling.
+    - Paranoidal: the gold of the mod is a material of its own, "aurite" (en/ru names of the ore, plate, science pack, modules 4, biter egg, heat pipe, railgun turret, asteroids, path, technologies), as the build has gold of its own; ru mod name and description as in ParanoidalLocale.
+  Info:
+    - Paranoidal: Space Age materials the mod uses (tungsten plate, lithium plate, scrap) are the planet materials of Vulcanus, Aquilo and Fulgora under their own names (paranoidal-space-age-filter); prices follow the rules of the build (zzzparanoidal).
+---------------------------------------------------------------------------------------------------
+Version: 1.0.37
+Date: 8. 13. 2026
+  Major Features:
+    - Fixed ambient-sounds.lua
+    - Science pack now an item instead of a tool
+    - Frozeta start recycling recipes now enabled as intended. (Wube broke)
+---------------------------------------------------------------------------------------------------
+Version: 1.0.36
+Date: 7. 28. 2026
+  Major Features:
+    - Remove migration file
+---------------------------------------------------------------------------------------------------
+Version: 1.0.35
+Date: 7. 4. 2026
+  Major Features:
+    - Quality 4 module is correctly at 30%. 
+    - 2.0 --> 2.1 the scaling factor of 0.1 --> 0.01 for quality 1 but both meant 10% in their respective versions
+    - Thanks Frontrider for bring this tomy attention
+---------------------------------------------------------------------------------------------------
+Version: 1.0.34
+Date: 6. 27. 2026
+  Major Features:
+    - update 2.1
+    - Added platform background for Frozeta
+---------------------------------------------------------------------------------------------------
+Version: 1.0.33
+Date: 8. 18. 2025
+  Major Features:
+    - Added compatibility with no quality
+---------------------------------------------------------------------------------------------------
+Version: 1.0.32
+Date: 7. 17. 2025
+  Major Features:
+    - Deleted another problematic track
+---------------------------------------------------------------------------------------------------
+Version: 1.0.31
+Date: 7. 11. 2025
+  Major Features:
+    - Fix needs more work. I don't have time, but I can disable to problematic soundtrack in all versions of Factorio. 
+---------------------------------------------------------------------------------------------------
+Version: 1.0.30
+Date: 7. 10. 2025
+  Major Features:
+    - Thanks Meteor swarm for a PR that fixes compatibility for 2.0.59 while not breaking current versions. Thanks so much!
+---------------------------------------------------------------------------------------------------
+Version: 1.0.29
+Date: 6. 6. 2025
+  Major Features:
+    - Moved recipes unlocked from planet discovery to the trigger tech steam recycler. This ensures you have to pland on the planet to get the technologies.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.28
+Date: 6. 5. 2025
+  Major Features:
+    - Hopefully fixed an issue with redrawn space connections and didn't explode everything
+---------------------------------------------------------------------------------------------------
+Version: 1.0.27
+Date: 6. 2. 2025
+  Major Features:
+    - Fixed typo in localization.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.26
+Date: 5. 1. 2025
+  Major Features:
+    - Ensure changes have actually been pushed to main. 
+    - Updated start scenario so oil-processing is not a trigger tech
+---------------------------------------------------------------------------------------------------
+Version: 1.0.25
+Date: 4. 24. 2025
+  Major Features:
+    - Frozeta start added concrete to starting item pool, enabled scrap recycling, relaxed biochamber crafting restriction,
+    - Armor given on init() 
+    - burner mining drill heat energy now zero for frozeta start.
+    - APS added as optional dependency. Thanks Code green for the death on platform escape fix. 
+    - Scenarios that start on surface that isn't nauvis should teleport the player during on_player_created() to ensure they don't respawn on nauvis when dying on a space platform.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.24
+Date: 4. 22. 2025
+  Major Features:
+    - Gold heat pipe added. Lower specific heat, increased heating_radius compared to standard heat-pipe
+    - Gold railgun turret. Available to make from materials found on Frozeta 
+    - Spaceship scrap map color now yellow
+    - Frozeta start with any planet start mod.
+    - New technology - breed pentapod eggs anywhere.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.23
+Date: 4. 19. 2025
+  Major Features:
+    - Spaceship-scrap recycling adjusted for Frozeta start experience. Increase Rocket 0.1 --> 0.2 Drop percentage. Even then, we are going to need a large amount of production to get the explosives from rockets to ship to arm railguns.
+    - Spoilage amount increase from 1 to 4, while propability decreased from 0.04 to 0.03. (Every 100 space scrap now gives 12 spoilage, from 3). I want to better incentivise connecting the scrap processing to the biochamber. (Final Frozeta start scenario will include 4 starting biochambers)
+    - Heatpipe drop rate decreased to 0.02, from 0.03. (Starting scenario will be given heatpipes to compensate). 
+    - Regular scrap drop rate increased to 0.11, from 0.10. Every 1000 Spaceship scrap --> 110 scrap --> 6.6 concrete. (From 6 concrete)
+---------------------------------------------------------------------------------------------------
+Version: 1.0.22
+Date: 4. 18. 2025
+  Major Features:
+    - Spaceship-scrap recycling. Ice changed to 0.07 (from 0.05), rocket down to 0.01 (0.02)
+    - I had estimated that 5% ice was enough to run things, but it isn't - at least with boilers. 500C steam would relieve the pressure on water, but that isn't easy on a Frozeta start.
+    - Fixed recycler south animation going haywire. 
+---------------------------------------------------------------------------------------------------
+Version: 1.0.21
+Date: 4. 16. 2025
+  Major Features:
+    - Removed gold-plate duplicate entry from factoriopedia, and migrated recipe name.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.20
+Date: 4. 4. 2025
+  Major Features:
+    - Data updates final fixes now ensures Maraxis science packs are excluded from science pack productivity, thanks Pthread-create
+    - Steam recycler crafting locked to Frozeta by default, this can be adjusted in the mod settings. Was informed this would make gameplay more fun,as now you have a building to automate on Frozeta
+    - Steam recycler fluid boxes adjusted. Original solution was to have pipes between each one, but it turns out reverse tiling them was broken. Now you can easily have steam pass through from one recycler to another without pipes inbetween
+    - Split module finale into its own technologies. This helps accomodate players who use technology science multipliers. This behavior can be reverted with a new mod setting, such that you don't have to adjust your saves.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.19
+Date: 3. 22. 2025
+  Major Features:
+    - Boilerplate code for dea-dia compatibility
+    - Cubium compatibility: Dream recipe for golden science. Cubic science pack recipes now buffed by science pack productivity
+    - Science pack productivity - golden science 0.005 to 0.01. Game was rounding 0.005 to 0
+    - Golden science now has its own trigger technology. Craft 20 golden plates.
+    - Mod setting to disable all compatibility code with dea-dia (except control code) even if dea-dia is installed. This is default to true until the integration and testing is complete.
+    - When integration is complete, I can just flip a switch. In the meantime, I can push out whatever patches I want and not worry about breaking dea-dia.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.18
+Date: 3. 3. 2025
+  Major Features:
+    - Added a mod setting to disable behavior that modifies loader prototypes.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.17
+Date: 3. 2. 2025
+  Major Features:
+    - Adjusted pressure and gravity of Frozeta to ensure robots with no speed buffs cannot be caught in a charging loop. Robot energy usage is gravity/pressure * 100. Currently now 3.5
+    - Secretas discovery technology uses nice image of the planet.
+    - Integrated  Pthread-Create's pull request regarding loaders.
+    - New technology - gold plate productivity
+    - Planet discovery secrets technology now requires cryogenic science pack research. No gameplay changes. Just consistency. 
+
+  Balancing:
+    - Spaceship scrap recycling.
+    - Less gears, more LDS. Now 3% chance of LDS, was 1%. Iron gears now 10% from 13%. Scrap now at 10% from 9%.
+    - Hyper inserters slightly more expensive. 10 electric engine units, and 40 iron gear wheels.
+    - Less spoilage (6% to 4%, to more rockets 1% to 3%)
+    - Less copper cable. (5%to 4% for gold ore (1%to 2%)
+    - Stone now 1% from 2%, uranium fuel cell now 3% from 2%
+    - Battery now at 1% from 3%. Plastic-bar at 2% from 1%. Processing unit now at 2%, from 1%. 
+    - Level 4 modules now take 7 red and blue circuits, from 4. 
+    - Level 4 modules now take 6 gold plates, from 4. 
+    - Secretas gravity pull now 40, from 10. (For realism) 
+    - Solid fuel liquefaction now costs 250 steam, from 200.
+    - Quality 4 modules now takes 4 supercapacitors, from 1
+    - Productivity 4 modules now take 4 golden biter eggs, from 1
+    - Efficiency 4 modules use 4 bio flux
+    - Steam recycler crafting: takes 10 processing from 6. 25 Copper plates, from 50.
+    - Steam recycler now has a crafting speed of 1.3, from 0.7.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.16
+Date: 2. 24. 2025
+  Major Features:
+    - Fixed typo on Golden biter egg. Thanks Kewlchicken
+    - Science pack productivity now only parses the default lab
+---------------------------------------------------------------------------------------------------
+Version: 1.0.15
+Date: 2. 18. 2025
+  Major Features:
+    - Updated how updating inserter belt stack sizes is handled, thanks Pthread-Create
+    - Robot worker storage capacity research 4+ added. (Not infinite)
+    - Hyper inserters now classified as bulk inserters, and default belt stack size is increased to 5 
+---------------------------------------------------------------------------------------------------
+Version: 1.0.14
+Date: 2. 17. 2025
+  Major Features:
+    - Fixed a bug to ensure that stack-inserters can actually use an additional level of belt capacity. Thanks Pthread-Create for bringing it to my attention.
+    - Rebalanced hyper inserter crafting recipe. It is much more expensive to balance its power. And to think twice before replacing every inserter with this beast.
+    - Hyper inserter has a lower rocket stack capacity. (Now 35 kg)
+    - Hyper inserter rotation speed lowered to 0.07 from 0.08
+    - Hyper inserter power consumption increased to 70kJ for movement. (Stack inserter is 40kJ for reference)
+    - Hyper inserter health increased to 170
+    - Hyper inserter stack_size_bonus reduced to 8 from 16. (Stack inserter is 4)
+    - Hyper inserter now has a max_belt_stack_size of 2
+---------------------------------------------------------------------------------------------------
+Version: 1.0.13
+Date: 2. 11. 2025
+  Major Features:
+    - Rebalanced Golden-Science pack recipe, such that you need to craft it on Frozeta.
+    - It is now crafting-with-fluid-or-metallurgy, and takes steam. So now you actually have to either conquer Frozeta to craft the science pack, or import everything, 
+---------------------------------------------------------------------------------------------------
+Version: 1.0.12
+Date: 2. 05. 2025
+  Bugfixes:
+    - Merged Talandar99's pull request, adding translations and recipe duplication
+    - Fixed order for modules. Thanks Pthread-Create
+---------------------------------------------------------------------------------------------------
+Version: 1.0.11
+Date: 2. 05. 2025
+  Bugfixes:
+    - Prevents Frozeta from stealing Aquino's music.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.10
+Date: 1. 02. 2025
+  Bugfixes:
+    - Removed quality effect from level 4 quality modules. Thanks nicklas-dohrn for the PR!
+---------------------------------------------------------------------------------------------------
+Version: 1.0.9
+Date: 30. 01. 2025
+  Major Features:
+    - France localization. Thanks Fr-Fae.
+    - integrated pull request. Thanks  Atraxi. PR fixes science-pack-productivity research. 
+    - Frontrider generated some images using AI. They are now integrated. Thanks!
+    - Should be able to be integrated into Kryzeth's all planet mod pack.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.8
+Date: 29. 01. 2025
+  Major Features:
+    - Added localization for achievements.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.7
+Date: 29. 01. 2025
+  Major Features:
+    - Added setting to disable behavior that handles adding all science packs to science-pack-productivity
+    - Golden biter egg recipe now enabled. My bad. Thanks nicklasDohrn for bringing it my attention.
+    - Renamed named transport-belt-capacity-3 to transport-belt-capacity-3_Secretas. I wrote a migration for this but I am not sure why it doesn't work. This should ensure compatibility for infinite belt stacking mod.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.6
+Date: 28. 01. 2025
+  Major Features:
+    - data-updates.lua now modified science-pack-productivity technology. It adds all science packs available as both an input requirement, and a change-recipe-productivity effect. This means no matter how many mods add new science, there will always be at least one research that uses all of them. One day, I might figure out settings so you could exclude any other mods science pack. But for now, it works.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.5
+Date: 28. 01. 2025
+  Major Features:
+    - Achievements for visiting Frozeta, gold production, making level 4 modules, and researching with gold
+    - Migrated level 4 modules to have an S. Ex productivity-module-4 --> productivity-module-4-S . This ensures I play nicely with whoever else adds level 4 modules. I won't change my -S postfix. 
+    - Adjusted how much solid fuel you get from space scrap. I'll update the GitHub, but this will be noted in patch notes next time, as I am tired and just resubmitted.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.4
+Date: 27. 01. 2025
+  Major Features:
+    - Gold textures now pretty
+---------------------------------------------------------------------------------------------------
+Version: 1.0.3
+Date: 25. 01. 2025
+  Major Features:
+    - Rebalanced scrap recycling to relieve pressure on solid fuel.
+    - Added solid fuel liquefaction recipe. Should now be possible to make heavy oil with a seed of heavy oil. Now possible to make rocket fuel. Not having a chain for rocket fuel production was a fupa on my end. Sorry!
+---------------------------------------------------------------------------------------------------
+Version: 1.0.2
+Date: 23. 01. 2025
+  Bugfixes:
+    - Not enough recycler slots to receive all potential scrap outputs. Didn't realize all those slots were necessary at first. Thanks to Semenanr for bringing this to my attention. Steam recycler and vanilla recycler now have 40 output slots, so you can now get all outputs from spaceship scrap!
+---------------------------------------------------------------------------------------------------
+Version: 1.0.1
+Date: 22. 01. 2025
+  Bugfixes:
+    - Fixed incorrect sprite on steam recycler recipe, thanks  cackling.fiend
+    - Fixed missing localizations, thanks  cackling.fiend
+    - Thinking about how to best approach interned compatibility for mods that add new science so they benefit from the research "Science pack productivity"
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 21. 1. 2025
+  Major Features:
+    - Initial release.
+
+
+
+
+

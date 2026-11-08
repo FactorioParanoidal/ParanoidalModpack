@@ -1,0 +1,14 @@
+{
+    "name": "secretas",
+    "version": "1.0.38",
+    "title": "Secretas&Frozeta",
+    "author": "ZDK, 2025",
+    "factorio_version": "2.1",
+    "dependencies": ["base >= 2.0",
+        "space-age >= 2.0",
+        "recycler >= 2.0",
+        "? any-planet-start >= 1.1.13"
+    ],
+    "space_travel_required": true,
+    "description": "○🌐This mod adds Secretas and Frotzeta. Secretas is a gas giant. Frozeta is one of its planet sized moon. Frozeta is challenge planet - recycle spaceship scrap - like an ugly love child of Fulgora and Aquilo"
+}
