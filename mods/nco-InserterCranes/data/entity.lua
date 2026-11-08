@@ -113,10 +113,10 @@ local function make_crane_entity(entityName, newName, wide, forced_ips)
         {
           filename = "__nco-InserterCranes__/graphics/ground_texture_4way.png",
           priority = "extra-high",
-          width = 768,
-          height = 768,
+          width = 384,
+          height = 384,
           shift = {0, 0},
-          scale = 0.25
+          scale = 0.5
         }
       )
     end

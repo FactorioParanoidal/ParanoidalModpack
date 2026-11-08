@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 0.0.9
 Date: 2026-09-11
+  Graphics:
+    - Halved the wide crane platform sheet and colour icon resolution; adjusted frame and icon sizes to preserve displayed dimensions. Resized PNGs compressed with pingo -s4 -lossless -noalpha; visual and compression-result checks skipped at the user's request.
   Locale:
     - Crane names follow the colour of the bulk inserter they are made from, as in the build: fast, express, turbo and ultimate loading crane (ru: быстрый, экспресс, турбо, гипер погрузочный кран) and their wide versions; the crane technologies are "Loading cranes 1-4" (ru: "Погрузочные краны 1–4").
   Bugfixes:
