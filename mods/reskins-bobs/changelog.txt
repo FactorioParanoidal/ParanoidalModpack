@@ -2,6 +2,7 @@
 Version: 2.3.8
 Date: 2026-06-01
   Graphics:
+    - Paranoidal build: removed 57 images for disabled higher-tier Bob electrolysers or the absent Mini Machines integration, plus two unused static burner-generator light sheets. Base electrolyser art, animated lighting and configurable skins are retained; this trimmed copy targets the full Paranoidal composition.
     - Paranoidal build: removed 16 ore sheets for Bob deposits suppressed by Angels Refining and four sprites from the unconnected lab module. Shared ore icons, active laboratories and configurable skins are unchanged; this trimmed copy targets the full modpack without additional resource planets.
     - Paranoidal build: removed 38 originals already redirected to canonical images or pack artwork by zzzparanoidal's final graphics pass. Replacement files and settings-dependent alternatives are unchanged; this trimmed copy targets the full modpack.
   Locale:
