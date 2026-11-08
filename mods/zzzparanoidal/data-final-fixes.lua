@@ -400,6 +400,7 @@ require("tweaks.recipe.batch02-blue-beta8")
 require("tweaks.recipe.batch03-rest-beta8")
 -- После синхронизаторов меню: иконка конвертации не заменяет иконку средней опоры.
 require("tweaks.recipe.iron-pole-upgrade")
+require("tweaks.recipe.space-age-prices") -- ветка Space Age: цены планет и космоса по правилам Paranoidal (ПР-078), до переработки
 require("tweaks.custom.locale-overrides")
 -- Зенитные турели 1–3: копии снайперских после всех правок характеристик, рецептов и дерева; до переработки.
 require("prototypes.anti-air-turret")
