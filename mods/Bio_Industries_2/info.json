@@ -10,7 +10,7 @@
   "dependencies": [
     "base >= 2.0.55",
     "? space-age",
-    "? Alien-biomes-Reforged",
+    "? Paranoidal-Alien-biomes",
     "? Krastorio2",
     "? Krastorio2-spaced-out",
     "(?) angelspetrochem",

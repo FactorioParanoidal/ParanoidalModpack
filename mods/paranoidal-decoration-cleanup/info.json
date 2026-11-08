@@ -8,7 +8,7 @@
   "description": "Decorations for Paranoidal: placing any floor tile that removes decorations removes all of them, building an entity removes the decorations under it, and the map generator places fewer decorations (startup multiplier) and no decorative rocks. Replaces Clean Floor, Realistic Decoration Cleanup and UnPollock.",
   "dependencies": [
     "base >= 2.0.77",
-    "? Alien-biomes-Reforged",
+    "? Paranoidal-Alien-biomes",
     "! CleanFloor",
     "! RealisticDecorationCleanup",
     "! UnPollock"
