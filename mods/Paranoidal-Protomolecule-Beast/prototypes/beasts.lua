@@ -107,6 +107,10 @@ local function still_layer(layer, mask_color)
     for frame = 1, last do every = every and shown[frame] == true end
     if every then
       frames = math.min(frames, last)
+      -- This atlas replacement packs 20 logical frames into 16 cells. Keep its timing when breathing.
+      if out.filename == "__zzzparanoidal__/graphics/atlas-sprites/Bio_Industries_2/entities/bio_garden/bio_garden_anim_trees.png" then
+        out.frame_sequence = table.deepcopy(sequence)
+      end
     else
       index = math.max(0, math.min(frames, sequence[1]) - 1)
       frames = 1
@@ -174,7 +178,9 @@ end
 -- back and forth so it looks like it's breathing. Only the longest-running layers move.
 local function breathe(layers)
   local frames = 1
-  for _, layer in pairs(layers) do frames = math.max(frames, layer.frame_count) end
+  for _, layer in pairs(layers) do
+    frames = math.max(frames, layer.frame_sequence and #layer.frame_sequence or layer.frame_count)
+  end
   frames = math.min(frames, max_breath_frames)
   if frames == 1 then
     for _, layer in pairs(layers) do layer.frame_count = 1 end
@@ -185,10 +191,16 @@ local function breathe(layers)
   for i = frames - 1, 2, -1 do there_and_back[#there_and_back + 1] = i end
   for i = 1, #there_and_back do still[i] = 1 end
   for _, layer in pairs(layers) do
-    local moves = layer.frame_count >= frames
-    layer.frame_count = moves and frames or 1
+    local source_sequence = layer.frame_sequence
+    local moves = (source_sequence and #source_sequence or layer.frame_count) >= frames
+    layer.frame_count = moves and (source_sequence and layer.frame_count or frames) or 1
     if not moves then layer.line_length = nil end
-    layer.frame_sequence = moves and there_and_back or still
+    if moves and source_sequence then
+      layer.frame_sequence = {}
+      for i, frame in ipairs(there_and_back) do layer.frame_sequence[i] = source_sequence[frame] end
+    else
+      layer.frame_sequence = moves and there_and_back or still
+    end
     layer.animation_speed = 0.4
   end
 end

@@ -2,6 +2,7 @@
 Version: 9.0.0
 Date: 2026-11-03
   Bugfixes:
+    - Preserve the original 20-step garden motion and its 38-step breathing cycle when zzzparanoidal packs the Bio Industries tree animation into 16 unique frames. Other source graphics keep their existing breathing rules.
     - Generator creatures read the animation inside each direction of the Factorio 2.1 picture set; passing its wrapper as a sprite caused a missing-width error on startup.
   Major Features:
     - The protomolecule replaces the biomechanical virus. Mod name Paranoidal-Protomolecule-Beast; prototype, setting and remote interface names stay as they were.
