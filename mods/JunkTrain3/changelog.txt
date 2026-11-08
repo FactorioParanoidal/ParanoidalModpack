@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.1
 Date: 2026-11-03
+  Graphics:
+    - Paranoidal build: removed graphics/nothing.png, already redirected to the canonical empty image by zzzparanoidal's final graphics pass. Train sprites, prototypes and runtime code are unchanged.
   Features:
     - Added a short riveted MK0 fluid wagon: one 5,000-unit tank, with capacity independent of quality.
     - Added an early electric MK0 station pump (300 fluid/s at normal quality), unlocked with the wagon by red-science Basic fluid wagons.
