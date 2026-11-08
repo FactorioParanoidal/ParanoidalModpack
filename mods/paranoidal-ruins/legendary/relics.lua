@@ -323,4 +323,20 @@ function R.on_player_respawned(player)
   end
 end
 
+-- Persisted legacy-record fixtures are available only in the isolated regression profile.
+if script.active_mods["pd-port21-diag"] then
+  remote.add_interface("paranoidal-relics-test", {
+    set = function(entity, values)
+      assert(entity and entity.valid and entity.name == "pd-relic-rescue-beacon")
+      local r = assert(state().relics[entity.unit_number], "beacon is not registered")
+      if values.born ~= nil then r.born = values.born end
+      if values.next_drop ~= nil then r.next_drop = values.next_drop or nil end
+    end,
+    get = function(entity)
+      local r = entity and entity.valid and storage.legend and storage.legend.relics[entity.unit_number]
+      return r and {born = r.born, next_drop = r.next_drop, entity = r.entity} or nil
+    end,
+  })
+end
+
 return R

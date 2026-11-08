@@ -164,8 +164,9 @@ def("pd-wind-farm", function(b)
 end)
 
 def("pd-wood-power", function(b)
-  b:put("bob-burner-generator", -6, -4, { dmg = DMG(40, 150) })
-  b:put("bob-burner-generator", -2, -4, { dead = 0.5 })
+  -- Keep the 3x3 reservations; the KS Power fallback occupies only 3x2.
+  b:put("bob-burner-generator", -6, -4, { fallback = "burner-generator", dmg = DMG(40, 150) })
+  b:put("bob-burner-generator", -2, -4, { fallback = "burner-generator", dead = 0.5 })
   b:put("bi-wooden-chest-large", 2, -4, { items = { wood = R(30, 100), ["angels-wood-pellets"] = R(0, 30) } })
   b:put("bi-wooden-pole-big", -1, 1, { dead = 0.3 })
   b:scatter_deco(lib.STUMPS, 10)

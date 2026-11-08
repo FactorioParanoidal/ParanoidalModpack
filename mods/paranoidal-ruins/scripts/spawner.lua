@@ -165,6 +165,10 @@ end
 
 local function spawn_entity(expression, offset, center, surface, opts, vars)
   local name = expressions.entity(expression, vars)
+  -- Explicit template fallback only; keep the original when its prototype is available.
+  if not prototypes.entity[name] and type(opts.fallback) == "string" and prototypes.entity[opts.fallback] then
+    name = opts.fallback
+  end
   if not prototypes.entity[name] then
     log("[paranoidal-ruins] entity '" .. name .. "' does not exist - skipped")
     return
