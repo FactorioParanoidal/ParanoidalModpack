@@ -1,4 +1,6 @@
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.0
+  Graphics:
+    - Paranoidal build: removed 20 obsolete low-resolution ore sheets and 16 duplicate images already redirected by zzzparanoidal's final graphics pass. Active HR sheets, their glow layers and alternate ore styles are unchanged.
   Compatibility:
     - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
