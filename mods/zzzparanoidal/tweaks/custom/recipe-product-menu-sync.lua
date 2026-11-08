@@ -77,6 +77,14 @@ function M.apply(raw, types, emit)
         return amount > 0
     end
 
+    -- Space Age branch: recipes of the planets (after the rocket) do not place the build's own items, which stay where
+    -- they are without Space Age (ПР-078; a spaceship scrap recycling of Frozeta took the depleted uranium fuel cell);
+    -- the planets' own items still follow their recipes. Nil without Space Age.
+    local filter = data.paranoidal_space_age_filter
+    local planet_recipes = filter and filter.space_age_recipes and filter.space_age_recipes() or {}
+    local function home_item(prototype)
+        return not (filter and filter.is_space_age and filter.is_space_age(prototype))
+    end
     for name, recipe in pairs(raw.recipe) do
         local subgroup, order = placement(recipe)
         local recipe_group = group_name(subgroup)
@@ -88,7 +96,8 @@ function M.apply(raw, types, emit)
                 local prototype = product and product.prototype
                 local original_group = prototype and group_name(prototype.subgroup)
                 local target_group = merged_groups[original_group] or original_group
-                if prototype and not prototype.hidden and not protected_groups[original_group] then
+                if prototype and not prototype.hidden and not protected_groups[original_group]
+                    and not (planet_recipes[name] and home_item(prototype)) then
                     local rank
                     if name == result.name then rank = 1
                     elseif recipe.main_product == result.name then rank = 2

@@ -59,8 +59,14 @@ end
 
 local restored = {}
 for _, name in ipairs(integration.items) do restored[name] = true end
+-- Space Age branch: modules of the planets (after the rocket: the aurite modules of Secretas) stay with their research
+-- (ПР-078). Nil without Space Age.
+local space_age_filter = data.paranoidal_space_age_filter
+local function planet_module(module)
+    return space_age_filter and space_age_filter.is_space_age and space_age_filter.is_space_age(module)
+end
 for name, module in pairs(data.raw.module) do
-    if not restored[name] and not name:find("^creative%-mod_") then
+    if not restored[name] and not name:find("^creative%-mod_") and not planet_module(module) then
         module.hidden = true
         local recipe = data.raw.recipe[name]
         if recipe then recipe.enabled = false; recipe.hidden = true end

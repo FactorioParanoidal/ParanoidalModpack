@@ -331,16 +331,20 @@ end
 -- исследования «recycling». В 2.0 переработка была доступна с начала (на этом стоят переработчики 1–3),
 -- поэтому рецепты включены, а скрытые открытия рецептов переработки (и висящие — на удалённые
 -- рецепты переработки) убраны из всех исследований.
+-- Ветка Space Age: рецепты планет с переработкой среди категорий (разбор древних обломков Фульгоры, обломков
+-- кораблей Фрозеты) открываются своими исследованиями после ракеты, а не с начала игры.
+local filter = data.paranoidal_space_age_filter
+local planet_recipes = filter and filter.space_age_recipes and filter.space_age_recipes() or {}
 local unlocks_dropped = 0
-for _, recipe in pairs(recipes) do
-	if is_recycling(recipe) then recipe.enabled = true end
+for name, recipe in pairs(recipes) do
+	if is_recycling(recipe) and not planet_recipes[name] then recipe.enabled = true end
 end
 for _, technology in pairs(raw.technology or {}) do
 	if technology.effects then
 		local kept = {}
 		for _, effect in ipairs(technology.effects) do
 			local target = effect.type == "unlock-recipe" and effect.recipe
-			local drop = target and ((recipes[target] and is_recycling(recipes[target]))
+			local drop = target and not planet_recipes[target] and ((recipes[target] and is_recycling(recipes[target]))
 				or (not recipes[target] and string.sub(target, -10) == "-recycling"))
 			if drop then unlocks_dropped = unlocks_dropped + 1 else kept[#kept + 1] = effect end
 		end
