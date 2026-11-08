@@ -67,8 +67,12 @@ local add_prerequisites = {["holmium-processing"] = {"planet-discovery-fulgora"}
 -- Space Age unlocks the scrap recycling with recycling (put back as it was): Fulgora's own debris comes with Fulgora.
 local add_unlocks = {["planet-discovery-fulgora"] = {"paranoidal-ancient-debris-salvage"}}
 local drop_prerequisites = {["captive-biter-spawner"] = {["kovarex-enrichment-process"] = true}}
+-- Mods of other planets (user 2026-11-08, ПР-078 item 8). They load after Space Age's data.lua; their prototypes count
+-- as Space Age's own: after the rocket, references to the renamed planet materials follow, RSO leaves their planets and
+-- resources to the game's generator, prices of the planets (zzzparanoidal).
+local planet_mods = {secretas = true}
 
-local state = {phase = "before", owner = {}, collisions = {}, space_age = {}}
+local state = {phase = "before", owner = {}, collisions = {}, space_age = {}, planet_content = {}}
 
 -- The mod whose data file runs: the outermost frame of a mod other than core.
 local function running_mod()
@@ -248,7 +252,6 @@ end
 local function finish(where)
 	if state.phase ~= "in" then return end
 	state.phase = "after"
-	data.extend = state.extend
 	local raw = data.raw
 	local technologies, recipes = state.snapshot.technology, state.snapshot.recipe
 
@@ -473,11 +476,19 @@ function M.install()
 					end
 				end
 			end
+			if state.phase == "after" and planet_mods[mod] and type(list) == "table" then
+				for _, prototype in ipairs(list) do
+					if type(prototype) == "table" and type(prototype.type) == "string" and type(prototype.name) == "string" then
+						state.space_age[prototype] = true
+						state.planet_content[#state.planet_content + 1] = prototype
+					end
+				end
+			end
 		end
 		return state.extend(self, otherdata)
 	end
 	data.paranoidal_space_age_filter = {check = check, finish = finish, hide_recipes = M.hide_recipes,
-		payload_weight = M.payload_weight, space_age_recipes = M.space_age_recipes}
+		payload_weight = M.payload_weight, space_age_recipes = M.space_age_recipes, is_space_age = M.is_space_age}
 end
 
 -- Names of the recipes that are Space Age's own prototypes or its planet materials under own names (zzzparanoidal: they
@@ -488,6 +499,12 @@ function M.space_age_recipes()
 		if state.space_age[recipe] or (state.copies or {})[recipe] then names[name] = true end
 	end
 	return names
+end
+
+-- Whether a prototype is Space Age's own (or of a planet mod, or a planet material under its own name), not a home one
+-- (zzzparanoidal: the planets' recipes do not place home items in the menu).
+function M.is_space_age(prototype)
+	return prototype ~= nil and (state.space_age[prototype] or (state.copies or {})[prototype]) == true
 end
 
 local function visible_unlocks()
@@ -558,6 +575,29 @@ end
 function M.hide_recipes()
 	local raw = data.raw
 	local copies = state.copies or {}
+
+	-- The planet mods' prototypes still in data.raw: references to the renamed planet materials follow (as in Space
+	-- Age's own prototypes), their planets list the renamed resources, RSO leaves their planets and resources to the
+	-- game's generator (read in its data-final-fixes, after this one), their fluids are planet fluids.
+	local seen, planet_content = {}, {}
+	for _, prototype in ipairs(state.planet_content) do
+		local list = raw[prototype.type]
+		if list and list[prototype.name] == prototype and not seen[prototype] then
+			seen[prototype] = true
+			repoint(prototype, seen, true)
+			if prototype.type == "planet" then
+				rekey_planet(prototype.name, prototype)
+				data.rso_ignore_planets[prototype.name] = true
+			elseif prototype.type == "resource" then
+				data.rso_ignore_resource_entities[prototype.name] = true
+				state.rso_resources[prototype.name] = true
+			elseif prototype.type == "fluid" then
+				state.fluids[prototype.name] = true
+			end
+			planet_content[#planet_content + 1] = prototype.type .. "/" .. prototype.name
+		end
+	end
+	table.sort(planet_content)
 	local function space_age(prototype) return prototype and (state.space_age[prototype] or copies[prototype]) end
 	-- Technologies of Space Age by prototype, not by name: a mod may define a technology of the same name after it
 	-- (Bob's battery mk3 equipment), which is a home one.
@@ -757,6 +797,8 @@ function M.hide_recipes()
 	end
 	table.sort(tied)
 	table.sort(early)
+	log("paranoidal-space-age-filter: planet mods' prototypes (" .. #planet_content .. "): "
+		.. table.concat(planet_content, ", "))
 	log("paranoidal-space-age-filter: Space Age technologies no longer unlocking home recipes: "
 		.. table.concat(dropped, ", ") .. "; hidden as empty: " .. table.concat(emptied_names, ", ")
 		.. "; home technologies' recipes with Space Age materials moved: " .. table.concat(moved, ", ")

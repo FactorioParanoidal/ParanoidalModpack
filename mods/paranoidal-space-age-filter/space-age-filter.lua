@@ -7,9 +7,11 @@
 -- Returns the Space Age version, or nil when Space Age is off.
 local SPACE_AGE = "space-age"
 
--- Mods that still see Space Age, by internal name.
+-- Mods that still see Space Age, by internal name: Factorio's own and the mods of other planets (after the rocket,
+-- ПР-078; their prototypes are taken by space-age-platforms.lua).
 local visible_to = {
 	core = true, base = true, quality = true, recycler = true, ["elevated-rails"] = true, ["space-age"] = true,
+	secretas = true,
 }
 
 return function(stage)
