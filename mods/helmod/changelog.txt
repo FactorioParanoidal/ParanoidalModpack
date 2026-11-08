@@ -4,6 +4,7 @@ Date: 2026-06-19
   Features:
     - Added pipette tool to create combinator from input or ouput items
   Bugfixes:
+    - Paranoidal: model import and block paste validate the tree, indexes, parameters, machines and module records before copying. Copying/calculation failures cancel the import without keeping a partial new model or changing the paste destination. EN/RU errors explain invalid text, unsupported structures and calculation failures. Existing export encoding and missing-prototype recipe handling are unchanged.
     - Paranoidal: imports no longer execute Lua chunks. A bounded data-only reader accepts the Serpent table literals and shared references used by model exports/copy-paste, rejects executable statements, cycles and non-finite numbers, and returns nil on malformed input. Export encoding is unchanged. Encoded/decoded input is limited to 8 MiB, nesting to 64 and parsed/expanded values to 200000; arbitrary Serpent code and table-valued keys are not supported.
     - Paranoidal: a default machine is applied to a new recipe when it is among the recipe's allowed machines; the check read crafting_categories, which drills and pumps lack, so a default electric drill was ignored and new ore recipes got the slowest (burner) drill. The same check in "apply factory to block / line" is fixed the same way.
     - Paranoidal: recipe selector category rules use all Factorio 2.1 recipe categories instead of the removed category field; the rule editor reads the main category through RecipePrototype.
