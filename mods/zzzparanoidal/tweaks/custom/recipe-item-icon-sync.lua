@@ -44,8 +44,12 @@ function M.apply(raw, item_types, emit)
         local item = items[item_name]
         return foreign(recipe.subgroup) and not (item and foreign(item.subgroup))
     end
+    -- Space Age branch: recipes of Space Age (planets, after the rocket) do not decide the icons of the build's items,
+    -- which stay as without Space Age (ПР-078). Nil without Space Age.
+    local filter = data.paranoidal_space_age_filter
+    local space_age = filter and filter.space_age_recipes and filter.space_age_recipes() or {}
     for name, recipe in pairs(raw.recipe or {}) do
-        if not recipe.hidden then
+        if not recipe.hidden and not space_age[name] then
             local results = recipe.results or {}
             local product = #results == 1 and results[1] or nil
             if product and (product.type or "item") == "item" and items[product.name]
