@@ -4,6 +4,7 @@ Date: 2026-10-15
   Bugfixes:
     - Fixed breaking change in experimental 2.1.22
   Changes:
+    - Paranoidal: the item group moshine-tech has a name (en "Moshine research", ru "Исследования Мошайна"); the game's translation check listed it without one.
     - Paranoidal (Space Age branch, the planets after the rocket): Moshine's own materials under new names, as the build has sand, silicon, silicon carbide and glass of its own (Angels, Bob, aai-industry): the sand item is moshine-quartz-sand "Silica" (the item sand was taken over by the build's sand merge and removed, the build did not load), the glass is always Moshine's own moshine-glass "Obsidian" with its smelting recipe (the build has a hidden glass item, so Moshine used it and made none), silicon "Crystallite" and silicon carbide "Carborundum" (en/ru names only); rich text and descriptions follow.
     - Paranoidal: the data extractor technology always needs Moshine's glass technology (the glass processing of aai-industry is removed in the build); the planet discovery no longer needs coal liquefaction (hidden in the build).
     - Paranoidal: the module category ai-speed of the AI cores is declared in data-final-fixes (Moshine loads after the other mods of the build): the build's data stages make module lists from every category of the game, and with ai-speed among them the home machines lost Bob's and Beta 8 modules and took the AI cores. Then module-category-defaults gives machines without a list every other category, and recipes made in machines that take AI cores allow them.
