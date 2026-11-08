@@ -5,6 +5,7 @@ local F = require("legendary.feats")
 local R = {}
 
 R.PREFIX = "pd-relic-"
+local RESCUE_EVERY = 60 * 60 * 30 -- rescue beacon: one supply pod per 30 minutes
 
 -- Relics with scripted effects: interval in ticks (0 = event driven only).
 R.SCRIPTED = {
@@ -41,6 +42,8 @@ function R.on_built(entity)
   local L = state()
   local id = entity.unit_number
   L.relics[id] = { entity = entity, name = entity.name, force = entity.force.index, born = game.tick }
+  -- the first supply pod 30 minutes after placing too: rebuilding the beacon gives no early pod
+  if entity.name == "pd-relic-rescue-beacon" then L.relics[id].next_drop = game.tick + RESCUE_EVERY end
   local reg = script.register_on_object_destroyed(entity)
   L.relic_reg[reg] = id
   if entity.name == "pd-relic-star-telescope" then R.telescope(entity, true) end
@@ -55,7 +58,6 @@ function R.on_died(entity)
   if entity and entity.valid and entity.name:sub(1, #R.PREFIX) == R.PREFIX then
     F.force(entity.force, "relic-died", { member = entity.name })
   end
-  if entity.name == "pd-relic-rescue-beacon" then L.relics[id].next_drop = game.tick + 60 * 60 * 30 end
 end
 
 function R.on_object_destroyed(event)
@@ -168,7 +170,7 @@ local POD_GOODS = {
 }
 local function rescue(r)
   if game.tick < (r.next_drop or 0) then return end
-  r.next_drop = game.tick + 60 * 60 * 30
+  r.next_drop = game.tick + RESCUE_EVERY
   local e = r.entity
   local surface = e.surface
   local pos = surface.find_non_colliding_position("crash-site-chest-1", {

@@ -23,6 +23,8 @@ Date: 2026-11-01
     - Clearing a ruin area could call destroy on an entity removed a moment earlier by cliff correction (error "LuaEntity was invalid").
     - With all three ruin chances at 0 the threshold was NaN (0/0).
     - The ruins force was set up hostile first and switched to the cease-fire setting only later; it now follows the setting when it is created.
+    - The death of a rescue beacon relic no longer stops the game with a script error (a leftover line used undefined variables).
+    - Rescue beacon relic: the first supply pod comes 30 minutes after placing, not after about a minute, so picking the beacon up and placing it again no longer gives a pod every minute. Beacons already placed keep their timer.
   Compatibility:
     - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
     - Paranoidal port to Factorio 2.1: recipes use categories (RecipePrototype::category and additional_categories were merged into categories; the first entry keeps the meaning of the former main category, a changed main category keeps the other entries).
