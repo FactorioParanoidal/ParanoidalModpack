@@ -6,6 +6,10 @@
 -- HeroTurretRedux (как при смене ранга: убийства, урон, патроны, провода, приоритеты, без повторного
 -- развёртывания); здоровье и заряд восстанавливаются здесь. Огнемётные турели движок поворачивает
 -- сам — их не трогаем.
+-- Турель, чья клеточная площадь по диагонали другой чётности (корпус 2,4 — 3×3 клетки, повёрнутый
+-- на 45° — 4×4), на диагонали стоит по другой сетке и при каждом шаге 1/8 съезжала бы на полклетки: такая
+-- поворачивается на 90° на месте. Модульные W93 для этого сужены до 2,1 (tweaks/entity/w93-modular-turrets.lua) и
+-- поворачиваются на 1/8; правило остаётся для других таких турелей.
 -- Нагрузка: только нажатия R; кэш по имени прототипа (одинаков у всех участников мультиплеера).
 local M = {}
 
@@ -24,6 +28,9 @@ local function step_of(entity)
 			and attack.turn_range < 1 then
 			local flags = prototype.flags or {}
 			step = flags["building-direction-16-way"] and 1 or flags["building-direction-8-way"] and 2 or 4
+			local box = prototype.collision_box
+			local size = math.max(box.right_bottom.x - box.left_top.x, box.right_bottom.y - box.left_top.y)
+			if step < 4 and math.ceil(size) % 2 ~= math.ceil(size * math.sqrt(2)) % 2 then step = 4 end
 		end
 		step_by_name[name] = step
 	end
