@@ -374,6 +374,7 @@ require("tweaks.technology.approved-icons") -- Согласованные ико
 require("tweaks.recipe.pumpjacks-1_1")
 require("tweaks.entity.mining-stats-1_1")
 require("tweaks.entity.pumps-stats-1_1")
+require("tweaks.entity.space-age-pumps") -- после фильтра «вода»: с Космической эпохой насос качает жидкость клетки
 require("tweaks.entity.machinery-stats-1_1")
 require("tweaks.entity.pumpjack-colors-1_1")
 require("removals.area-mining-drill")
