@@ -13,6 +13,7 @@ local turret_deploy = require("controls.turret-deploy")
 turret_deploy.install() -- Построенная турель включается через несколько секунд (настройки карты).
 local turret_priority_groups = require("controls.turret-priority-groups")
 turret_priority_groups.install() -- Панель «Приоритет по группам» у окна турели (ПР-072).
+require("controls.turret-rotate").install() -- R / Shift+R поворачивают стоящую турель с сектором обстрела.
 -- Install after loader-shells chains the SpilledItems handler; neither consumer
 -- handles these inventory/grid-less types. Keep every other type, including modded containers.
 if script.get_event_handler(defines.events.on_entity_died) then
