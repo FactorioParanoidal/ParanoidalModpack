@@ -1,4 +1,6 @@
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.0
+  Graphics:
+    - Paranoidal build: removed solid-tree.png, already redirected to tree.png by zzzparanoidal's final graphics pass. The canonical image is unchanged.
   Compatibility:
     - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
