@@ -357,7 +357,7 @@ config.pods = {
 -- 7. Professions. Half researched: saved progress 0.5.
 config.professions = {
     order = {"guard", "geologist", "mechanic", "biologist", "passenger"},
-    window = 30 * MINUTE, -- players created later start as passengers
+    window = 30 * MINUTE, -- players created later choose too, but get only the bonuses (no kits)
     ammo_share_wait = MINUTE, -- multiplayer: the wreck ammo is shared among the guards chosen by then
     -- every profession (the passenger too): water barrels straight into the inventory, pinned to the
     -- first quick bar slot when it is empty (the biologist has his own 20 more in his kit)
@@ -384,6 +384,7 @@ config.professions = {
             researched = {"ic-defect-control-1", "ic-defect-control-2", "ic-defect-control-3", "ic-defect-control-4",
                 "qol-crafting-speed-1-1", "qol-player-reach-1-1"},
             half = {"automation", "bob-repair-pack-2", "ic-defect-control-5"},
+            rpg = {{"LV_Craft_Speed", 4}, {"LV_Reach_Dist", 3}}, -- +5% crafting speed, +1 reach per level
             items = {{"ic-refine-workshop", 1}},
             repair_packs = 2, -- start repair packs x2 (the first mechanic)
             repair_packs_more = 100, -- every further mechanic: this many more

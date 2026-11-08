@@ -5,6 +5,9 @@
 -- later, a big bio farm by supply pod. The guards take all the ammo lying in the start wrecks and
 -- the ship: in single player at once, in multiplayer shared equally among the guards once every
 -- connected player has chosen or a minute after the first guard.
+-- Late players (created after config.professions.window) choose too, once, but get only the
+-- bonuses: technologies, recipes, RPG levels and the hand mining bonus; no kits, water, wreck ammo,
+-- repair packs, survey or bio farm (user decision 2026-11-08).
 local config = require("bnl-config")
 local util = require("scripts.util")
 local journal = require("scripts.journal")
@@ -25,7 +28,12 @@ local function state()
 end
 
 function M.init()
-    storage.bnl.professions = storage.bnl.professions or {chosen = {}, open = {}}
+    -- late_rules: the map knows late players (older maps get it once in M.migrate)
+    storage.bnl.professions = storage.bnl.professions or {chosen = {}, open = {}, late = {}, late_rules = true}
+end
+
+local function is_late(s, index)
+    return s.late ~= nil and s.late[index] == true
 end
 
 function M.enabled()
@@ -64,6 +72,13 @@ function M.show(player)
     local intro = frame.add({type = "label", caption = {"bnl.profession-intro"}})
     intro.style.single_line = false
     intro.style.maximal_width = 1100
+    local late = is_late(s, player.index)
+    if late then
+        local note = frame.add({type = "label", caption = {"bnl.profession-late"}})
+        note.style.single_line = false
+        note.style.maximal_width = 1100
+        note.style.font = "default-bold"
+    end
     -- the landing goes on: falling debris (scripts/falling.lua), shown while any is still coming
     local minutes = util.falling_minutes()
     if minutes then
@@ -77,7 +92,7 @@ function M.show(player)
     row.style.horizontal_spacing = 8
     for _, key in ipairs(cfg.order) do card(row, key) end
     s.open[player.index] = true
-    if not game.is_multiplayer() and util.enabled("bnl-start-pause") and not game.tick_paused then
+    if not late and not game.is_multiplayer() and util.enabled("bnl-start-pause") and not game.tick_paused then
         s.paused = true
         game.tick_paused = true
     end
@@ -274,7 +289,7 @@ function M.on_start_ready()
     if state() then collect_for_guards() end
 end
 
-local function apply(player, key)
+local function apply(player, key, late)
     local spec = cfg.list[key]
     local force = player.force
     for _, name in ipairs(spec.researched or {}) do
@@ -286,13 +301,6 @@ local function apply(player, key)
         local recipe = force.recipes[name]
         if recipe then recipe.enabled = true end
     end
-    local items = {}
-    local water = cfg.water_kit and cfg.water_kit[1]
-    for _, entry in ipairs(spec.items or {}) do
-        -- water goes by M.give_water (at once, also during the probation), not with the kit
-        if entry[1] ~= water and not (entry[2] == 1 and put_armor(player, entry[1])) then items[#items + 1] = entry end
-    end
-    give(player, items)
     -- RPG attribute levels (paranoidal-CodexRPG gift_levels: no skill points spent): {attribute, min, max}
     local rpg = remote.interfaces.RPG
     if rpg and rpg.gift_levels then
@@ -300,6 +308,14 @@ local function apply(player, key)
             remote.call("RPG", "gift_levels", player.index, entry[1], util.int({entry[2], entry[3] or entry[2]}))
         end
     end
+    if late then return end
+    local items = {}
+    local water = cfg.water_kit and cfg.water_kit[1]
+    for _, entry in ipairs(spec.items or {}) do
+        -- water goes by M.give_water (at once, also during the probation), not with the kit
+        if entry[1] ~= water and not (entry[2] == 1 and put_armor(player, entry[1])) then items[#items + 1] = entry end
+    end
+    give(player, items)
     if spec.wreck_ammo then
         local s = state()
         if not s.ammo_shared then
@@ -361,25 +377,31 @@ function M.choose(player, key)
     s.open[player.index] = nil
     local frame = player.gui.screen[FRAME]
     if frame then frame.destroy() end
+    local late = is_late(s, player.index)
     -- multiplayer: the first player to choose gets everything at once, the later ones after the
     -- probation (an extra quick login must not bring another kit and more research)
-    M.give_water(player, key)
+    if not late then M.give_water(player, key) end
     s.first = s.first or player.index
     local wait = s.first ~= player.index and util.probation_left(player) or 0
     if wait > 0 then
         s.pending = s.pending or {}
         s.pending[player.index] = key
         scheduler.after(math.max(60, wait), "profession-probation", {player = player.index})
-        player.print({"bnl.probation-profession", math.ceil(wait / 3600)}, {color = util.CHAT_COLOR})
+        player.print({late and "bnl.probation-profession-late" or "bnl.probation-profession", math.ceil(wait / 3600)},
+            {color = util.CHAT_COLOR})
     else
-        apply(player, key)
+        apply(player, key, late)
     end
     if s.paused and not next(s.open) then
         s.paused = nil
         game.tick_paused = false
     end
     util.say({"bnl.profession-chosen", player.name, {"bnl-profession." .. key}}, false)
-    journal.add("profession-" .. key, {player.name}, {silent = true})
+    if late then
+        journal.add("profession-late", {player.name, {"bnl-profession." .. key}}, {silent = true})
+    else
+        journal.add("profession-" .. key, {player.name}, {silent = true})
+    end
     share_if_all_chose()
     goals.brief(player)
 end
@@ -389,7 +411,8 @@ scheduler.handler("profession-probation", function(job)
     local key = s and s.pending and s.pending[job.player]
     if not key then return end
     local player = game.get_player(job.player)
-    if not (player and player.valid) or util.since_landing() > config.probation.give_up then
+    local late = is_late(s, job.player)
+    if not (player and player.valid) or (not late and util.since_landing() > config.probation.give_up) then
         s.pending[job.player] = nil
         return
     end
@@ -399,8 +422,8 @@ scheduler.handler("profession-probation", function(job)
         return
     end
     s.pending[job.player] = nil
-    apply(player, key)
-    player.print({"bnl.probation-done"}, {color = util.CHAT_COLOR})
+    apply(player, key, late)
+    player.print({late and "bnl.probation-done-late" or "bnl.probation-done"}, {color = util.CHAT_COLOR})
     share_if_all_chose()
 end)
 
@@ -413,15 +436,88 @@ end
 
 events.on(defines.events.on_gui_click, on_click)
 
--- Players created after the start window are passengers without a choice.
+-- Players created after the start window choose too, but get only the bonuses.
 function M.allowed(player)
     return M.enabled() and util.since_landing() <= cfg.window
 end
 
-function M.passenger(player)
+function M.mark_late(player)
     local s = state()
-    if s and not s.chosen[player.index] then s.chosen[player.index] = "passenger" end
-    M.give_water(player)
+    if not (s and M.enabled()) or s.chosen[player.index] then return end
+    s.late = s.late or {}
+    s.late[player.index] = true
+end
+
+-- A player without a choice (late, reopened by M.migrate, or who left without choosing) gets the
+-- window when joining. The migration also runs here, in case the map was loaded without a mod change.
+function M.on_joined(player)
+    M.migrate()
+    local s = state()
+    if not (s and M.enabled() and storage.bnl.landing_tick) or s.chosen[player.index] then return end
+    if not player.gui.screen[FRAME] then M.show(player) end
+end
+
+-- Once per older map (no late_rules): the passengers choose again (those made passengers
+-- automatically could not choose; the window is past, so they are late), the mechanics get the RPG
+-- levels added to the profession on 2026-11-08 (unless still on probation: apply gives them).
+function M.migrate()
+    local s = state()
+    if not s or s.late_rules then return end
+    s.late_rules = true
+    s.late = s.late or {}
+    local late = util.since_landing() > cfg.window
+    local reopened, mechanics = 0, 0
+    for index, key in pairs(s.chosen) do
+        if key == "passenger" then
+            s.chosen[index] = nil
+            if late then s.late[index] = true end
+            reopened = reopened + 1
+        end
+    end
+    local rpg = remote.interfaces.RPG
+    for index, key in pairs(s.chosen) do
+        if key == "mechanic" and not (s.pending and s.pending[index]) and rpg and rpg.gift_levels then
+            for _, entry in ipairs(cfg.list.mechanic.rpg or {}) do
+                remote.call("RPG", "gift_levels", index, entry[1], entry[2])
+            end
+            mechanics = mechanics + 1
+        end
+    end
+    log("zzzparanoidal-start-bnl: professions reopened for " .. reopened .. " passengers, RPG levels to " .. mechanics .. " mechanics")
+    if not M.enabled() or not storage.bnl.landing_tick then return end
+    for _, player in pairs(game.connected_players) do M.on_joined(player) end
+end
+
+-- Hook of the local test mod (pd-port21-diag only): late choice, migration and the mechanic's RPG levels.
+if script.active_mods["pd-port21-diag"] then
+    remote.add_interface("bnl-professions-test", {
+        -- set: {landing_shift = ticks to move the landing back, chosen = key or false, late = bool, migrated = bool}
+        set = function(index, set)
+            local s = state()
+            if not s then return false end
+            if set.landing_shift then storage.bnl.landing_tick = (storage.bnl.landing_tick or game.tick) - set.landing_shift end
+            if set.chosen ~= nil then s.chosen[index] = set.chosen or nil end
+            if set.late ~= nil then
+                s.late = s.late or {}
+                s.late[index] = set.late or nil
+            end
+            if set.migrated ~= nil then s.late_rules = set.migrated or nil end
+            if s.pending then s.pending[index] = nil end
+            return true
+        end,
+        get = function(index)
+            local s = state()
+            return s and {chosen = s.chosen[index], late = is_late(s, index), migrated = s.late_rules,
+                landing = storage.bnl.landing_tick, window = cfg.window} or nil
+        end,
+        created = function(index)
+            local player = game.get_player(index)
+            if not M.allowed(player) then M.mark_late(player) end
+            M.show(player)
+        end,
+        choose = function(index, key) M.choose(game.get_player(index), key) end,
+        migrate = function() M.migrate() end,
+    })
 end
 
 commands.add_command("bnl-profession", {"bnl.profession-command"}, function(command)

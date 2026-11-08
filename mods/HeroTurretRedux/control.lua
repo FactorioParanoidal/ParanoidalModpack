@@ -13,6 +13,8 @@ turrets.register()
 remote.add_interface("HeroTurretRedux", {
 	-- zzzparanoidal "hero_downgrade" tool: ranked turret -> base turret, kills reset.
 	demote = turrets.demote,
+	-- zzzparanoidal turret rotation: the same turret in another direction, counters kept.
+	turn = turrets.turn,
 	-- Base turret name of a ranked turret, nil for others.
 	base_of = function(name)
 		local info = turrets.ranked[name]

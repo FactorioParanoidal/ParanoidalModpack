@@ -1736,6 +1736,11 @@ function interface.gift_levels(player_index, attrib, levels)
 			character.character_trash_slot_count_bonus = character.character_trash_slot_count_bonus + bonus
 		elseif attrib == 'LV_Robot_Bonus' then
 			character.character_maximum_following_robot_count_bonus = character.character_maximum_following_robot_count_bonus + bonus
+		elseif attrib == 'LV_Reach_Dist' then
+			character.character_build_distance_bonus = character.character_build_distance_bonus + bonus
+			character.character_reach_distance_bonus = character.character_reach_distance_bonus + bonus
+			character.character_item_drop_distance_bonus = character.character_item_drop_distance_bonus + bonus
+			character.character_resource_reach_distance_bonus = character.character_resource_reach_distance_bonus + bonus
 		elseif attrib == 'LV_Craft_Speed' then
 			character.character_crafting_speed_modifier = character.character_crafting_speed_modifier + bonus / 100
 		elseif attrib == 'LV_Mining_Speed' then

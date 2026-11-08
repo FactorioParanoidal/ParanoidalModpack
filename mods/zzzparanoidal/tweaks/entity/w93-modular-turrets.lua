@@ -26,6 +26,19 @@ for _, pair in ipairs({
 	end
 end
 
+-- Корпус турелей 2,4 → 2,1 клетки, как у плазменной турели Bob: повёрнутый на 45° корпус 2,4 занимает 4×4 клетки
+-- вместо 3×3 и стоит на другой сетке (сдвиг на полклетки), поэтому поворот на 1/8 (controls/turret-rotate.lua)
+-- двигал турель. Все турели одной группы быстрой замены (MK1 → MK2) получают один размер; ранги HeroTurretRedux
+-- создаются позже из этих прототипов. Радары и дробовая турель не меняются.
+for _, prototype_type in ipairs({ "ammo-turret", "electric-turret" }) do
+	for name, turret in pairs(data.raw[prototype_type]) do
+		local box = turret.collision_box
+		if name:find("^w93%-") and box and box[2][1] == 1.2 and box[2][2] == 1.2 then
+			turret.collision_box = { { -1.05, -1.05 }, { 1.05, 1.05 } }
+		end
+	end
+end
+
 -- Лучевая турель MK2: разряд вокруг цели бил и замедлял свои стены, турели и игроков,
 -- а 25 искр на каждый объект в радиусе давали основную нагрузку на обсчёт частиц.
 local beam = data.raw.beam["w93-electric-beam"]

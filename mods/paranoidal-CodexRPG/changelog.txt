@@ -14,6 +14,8 @@ Date: 2026-11-06
     - Alarm: the captions are one column and the fields line up, "Set" is under the fields; next to it a line says when the alarm will ring ("Rings in 1 min, at 0:04 planet time"); the note about pause and UPS moved to the tooltip of the info icon in the title; the empty list says what to press.
     - Session: one line with the time, the reminder checkbox and its interval; the next reminder time is shown only while the reminder is on.
     - Pinned window: no ticking time of day; the detailed mode shows the weekday and the day since the landing instead of the time to sunrise or sunset.
+  Bugfixes:
+    - Attribute levels gifted by other mods (remote gift_levels) for Reach distance now apply to the character at once (build, reach, item drop and resource reach distance), not only after respawn.
 ---------------------------------------------------------------------------------------------------
 Version: 9.2.1
 Date: 2026-11-06

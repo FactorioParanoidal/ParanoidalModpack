@@ -132,6 +132,7 @@ script.on_configuration_changed(function()
     local s = state()
     util.ship_decal(s.ship) -- maps started before the logo (2.0.0) get it on the starliner too
     generator.refresh()
+    professions.migrate()
     events.refresh()
 end)
 
@@ -151,6 +152,11 @@ events.on(defines.events.on_player_created, function(event)
     -- without professions a player joining after the landing gets the water at once
     if storage.bnl.landing_tick and not professions.enabled() then professions.give_water(player) end
     intro.on_player_created(player)
+end)
+
+events.on(defines.events.on_player_joined_game, function(event)
+    local player = game.get_player(event.player_index)
+    if player then professions.on_joined(player) end
 end)
 
 -- Every 5 ticks: the start fill tolerates the delay and the wreck selection lag (83 ms) is invisible.

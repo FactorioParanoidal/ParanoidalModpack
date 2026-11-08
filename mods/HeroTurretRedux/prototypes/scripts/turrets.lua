@@ -193,10 +193,10 @@ end
 
 -- Replaces a turret by another prototype at the same place. Ammo stacks (with partial magazines and
 -- quality), health, wires, circuit settings and priority targets are kept. keep_counters = false
--- resets kills and damage (demotion).
-local function replace_turret(entity, new_name, keep_counters)
+-- resets kills and damage (demotion). new_direction (optional) turns the new turret (zzzparanoidal turret rotation).
+local function replace_turret(entity, new_name, keep_counters, new_direction)
 	local surface, position, force = entity.surface, entity.position, entity.force
-	local direction, orientation, quality = entity.direction, entity.orientation, entity.quality
+	local direction, orientation, quality = new_direction or entity.direction, entity.orientation, entity.quality
 	local health, max_health = entity.health, entity.max_health
 	local kills, damage = entity.kills, entity.damage_dealt
 	local last_user = entity.last_user
@@ -465,6 +465,13 @@ function M.demote(entity)
 	local info = ranked[entity.name]
 	if not info then return nil end
 	return replace_turret(entity, info.base, false)
+end
+
+-- Interface for zzzparanoidal's turret rotation: the same turret in another direction (all counters kept), for the
+-- directions the engine does not let a script set in place. Returns the new turret or nil.
+function M.turn(entity, direction)
+	if not (entity and entity.valid and kill_multiplier[entity.type]) then return nil end
+	return replace_turret(entity, entity.name, true, direction)
 end
 
 return M
