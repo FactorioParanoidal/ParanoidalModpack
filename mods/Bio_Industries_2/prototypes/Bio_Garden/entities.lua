@@ -299,9 +299,9 @@ data:extend({
         layers = {
           {
             filename = ENTITYPATH_BIO .. "bio_garden/bio_garden_huge.png",
-            width = 1792,
-            height = 1856,
-            scale = 0.5,
+            width = 896,
+            height = 928,
+            scale = 1,
             frame_count = 1,
             line_length = 1,
             repeat_count = 8,
