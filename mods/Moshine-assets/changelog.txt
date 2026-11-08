@@ -1,0 +1,213 @@
+---------------------------------------------------------------------------------------------------
+Version: 1.0.2
+Date: 2026-08-25
+  Info:
+    - See Moshine 1.2.2 readme
+  Changes:
+    - Paranoidal (Space Age branch): ru mod name and description as in ParanoidalLocale; the planet is "Мошайн" in every ru text (was "Мушайн" and "Муншайн", Moshine itself says "Мошайн"); the planet description names silica ("кремнезём", Moshine's own material) instead of silicon.
+    - Paranoidal: the item key sand is moshine-quartz-sand in every locale (Moshine's own sand, see Moshine); ru recipe names say silica ("кремнезём"), the sandy gas recipe gives methane in the build ("Синтез газа из кремнезёма").
+    - Paranoidal: all 370 PNG recompressed losslessly (pingo -s4 -lossless -noalpha): 86 390 323 -> 85 628 455 bytes (-0.9%, 317 files smaller), all 370 pixel-identical, dimensions unchanged.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.1
+Date: 2026-08-20
+  Info:
+    - See Moshine 1.2.1 readme
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 2026-08-14
+  Info:
+    - See Moshine 1.2.0 readme
+---------------------------------------------------------------------------------------------------
+Version: 0.5.0
+Date: 2026-06-24
+  Info:
+    - Moved building, tech, terrain, achievements graphics over to "Moshine-assets"
+---------------------------------------------------------------------------------------------------
+Version: 0.4.1
+Date: 2026-06-23
+  Info:
+    - Updated to 2.1
+---------------------------------------------------------------------------------------------------
+Version: 0.4.0
+Date: 2025-10-11
+  Info:
+    - This mod only contains assets, and no more prototypes, which have been moved to Moshine
+---------------------------------------------------------------------------------------------------
+Version: 0.3.19
+Date: 2025-09-28
+  Changes:
+    - Added 2 technologies to unlock the recipes that were previously unlocked by planet discovery
+    - Removed map settings for cliffs, hills and fulgoran data probes
+---------------------------------------------------------------------------------------------------
+Version: 0.3.18
+Date: 2025-08-30
+  Changes:
+    - Data displayed on a new line
+    - Mixed ore re-ordered
+  Locale:
+    - German locale by Schlumpf
+---------------------------------------------------------------------------------------------------
+Version: 0.3.17
+Date: 2025-08-14
+  Locale:
+    - RU locale by Kuaikuachu
+  UI:
+    - Removed "moshine exclusive", replaced with a strict pressure value
+    - Magnetic field: 1 -> 70
+---------------------------------------------------------------------------------------------------
+Version: 0.3.16
+Date: 2025-06-17
+  Compatibility:
+    - Added missing compat code from Indzasa
+  Graphics:
+    - Slightly retextured decals, cliffs, rocks and terrain (more colorful, warm and varied, cliffs less visible)
+  Locale:
+    - Spanish locale by marks20125
+---------------------------------------------------------------------------------------------------
+Version: 0.3.15
+Date: 2025-06-17
+  Compatibility:
+    - Added ores from other BZ mods - by Indzasa
+    - Made planet 98°C / 371°K with PlanetsLib
+  Changes:
+    - Raise sand and neodymium rocket capacity
+    - Reoganized moshine tiles in GUI
+---------------------------------------------------------------------------------------------------
+Version: 0.3.14
+Date: 2025-04-24
+  Bugfixes:
+    - Fixed crash
+---------------------------------------------------------------------------------------------------
+Version: 0.3.13
+Date: 2025-04-24
+  Bugfixes:
+    - Fixed not being able to put foundation of molten-iron
+---------------------------------------------------------------------------------------------------
+Version: 0.3.12
+Date: 2025-04-18
+  Bugfixes:
+    - Quick crash fix
+---------------------------------------------------------------------------------------------------
+Version: 0.3.11
+Date: 2025-04-18
+  Changes:
+    - Added surface condition: temperature-celcius, moshine-exclusive, removed solar flares
+    - Re-authorized reactors (but they're still useless)
+    - Made ring-teleporter compatible
+---------------------------------------------------------------------------------------------------
+Version: 0.3.10
+Date: 2025-03-17
+  Compatibility:
+    - Restored compatibility with VortiK's Deep core mining
+  Changes:
+    - Improved some text
+---------------------------------------------------------------------------------------------------
+Version: 0.3.9
+Date: 2025-03-16
+  Changes:
+    - Doubled copper output
+    - Raised sand output
+    - Raised (x10) data output
+  Graphics:
+    - Added diversity to sand texture
+    - Optimized images size
+    - Better geyser anim
+    - Made sand icon prioritized over Maraxsis'
+  Sounds:
+    - Improved music
+    - Custom geyser sound
+---------------------------------------------------------------------------------------------------
+Version: 0.3.8
+Date: 2025-03-02
+  Locale:
+    - French translation by Fr_Dae
+---------------------------------------------------------------------------------------------------
+Version: 0.3.7
+Date: 2025-03-01
+  Changes:
+    - Raised ground steam temperature to 500°C to ease power production
+    - Doubled Neodymium probability
+    - Made the planet locked behind electromagnetic plant
+    - Made foundations buildable on iron lava pools
+    - Improved starmap icon (thanks to DjKolekson's contribution)
+---------------------------------------------------------------------------------------------------
+Version: 0.3.6
+Date: 2025-02-19
+  Changes:
+    - Modified mixed-ores ratios (Neodymium*5, sand-, sulfur-, coal+, copper+)
+    - Petroleum custom recipe changed (coal required instead of carbon, and outputs carbon instad of coal)
+    - Prevented nuclear/fusion reactors from being built on the planet
+  Locale:
+    - Chinese translation by rlcyyg1108
+    - Russian translation by GafarovMaxim
+---------------------------------------------------------------------------------------------------
+Version: 0.3.5
+Date: 2025-02-10
+  Bugfixes:
+    - Fixed recycling coal would give sand/sulfur/carbon
+---------------------------------------------------------------------------------------------------
+Version: 0.3.4
+Date: 2025-02-09
+  Bugfixes:
+    - Fixed Moshine rock spawning on Nauvis
+---------------------------------------------------------------------------------------------------
+Version: 0.3.3
+Date: 2025-02-09
+  Changes:
+    - Made mixed ore non-infinite, and doesn't automatically appear at spawn
+  Graphics:
+    - Made Molten-iron lava much bluer and brighter to differenciate with normal one
+  Bugfixes:
+    - Made locale for solar flares surface condition (to restrict accumulators)
+---------------------------------------------------------------------------------------------------
+Version: 0.3.2
+Date: 2025-02-09
+  Changes:
+    - Restricted accumulators on Moshine
+    - Dramatically reduced the yield of mixed ore patches
+    - 10x less neodymium dropped (drop 273 at once but very rarely)
+    - Added a recipe for Petroleum (using sand, carbon, sulfur and steam)
+  Graphics:
+    - Lowered luminosity a bit, except at noon
+---------------------------------------------------------------------------------------------------
+Version: 0.3.1
+Date: 2025-02-07
+  Changes:
+    - Steam from steam geysers: 15 -> 175°C
+  Bugfixes:
+    - Compatibility with Factorio 2.0.28.
+    - Fixed potential crash with temperature not being set
+---------------------------------------------------------------------------------------------------
+Version: 0.3.0
+Date: 2025-02-06
+  Changes:
+    - Locked Moshine behind Vulcanus/coal liquefaction
+    - Removed carbon and stone from mixed ore
+    - Added a recipe to make concrete from molten iron, sand, and water
+    - Raised drop of coal from mixed ore (3->11%)
+    - Reduced yield of mixed ores
+    - Made sand 2kg (to align with Maraxsis)
+    - Made rocks drop calcite instead of copper (now you should be able to get stranded)
+  Graphics:
+    - Improved dust tile transitions
+---------------------------------------------------------------------------------------------------
+Version: 0.2.1
+Date: 2025-02-06
+  Bugfixes:
+    - Fixed crash when PlanetsLib is not installed
+---------------------------------------------------------------------------------------------------
+Version: 0.2.0
+Date: 2025-02-06
+  Changes:
+    - Removed molten copper and added copper to mixed ore
+  Bugfixes:
+    - Fixed steam geyser and copper source colliding with pumpjacks (!)
+    - Removed raw-data auto-barrel
+  Graphics:
+    - Made mixed ore more visible
+---------------------------------------------------------------------------------------------------
+Version: 0.1.1
+Date: 2025-02-05
+  Info:
+    - Initial release (Moshine split into this mod and the rest)
+    - Optimized most images size with fgardt spritter

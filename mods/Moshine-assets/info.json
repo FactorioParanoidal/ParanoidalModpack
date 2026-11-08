@@ -1,0 +1,14 @@
+{
+  "name": "Moshine-assets",
+  "title": "Moshine (assets)",
+  "description": "Necessary part to make Moshine work.",
+  "author": "snouz",
+  "homepage": "https://github.com/snouz/Moshine-assets",
+  "version": "1.0.2",
+  "factorio_version": "2.1",
+  "dependencies": [
+    "base",
+    "space-age"
+  ],
+  "space_travel_required": true
+}
