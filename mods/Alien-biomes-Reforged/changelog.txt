@@ -2,6 +2,7 @@
 Version: 0.8.5
 Date: 16. 10. 2026
   Changes:
+    - The Space Age trees (ashland lichen of Vulcanus, the Gleba trees) keep their autoplace whenever they exist, not only when the mod sees Space Age: in the Space Age branch of Paranoidal the expansion is hidden from this mod and its planets did not load. Without Space Age these trees do not exist, nothing changes.
     - Geology by soil colour for resource generators of the map generator: noise expressions alien-biomes-geology-<resource> are 2 where the climate (temperature, moisture, aux) gives a soil colour that suits the resource and 1 elsewhere; RSO Reforged 9.1.0 multiplies its resource weights by them. The colour table moved to scripts/geology-map.lua, shared with the remote interface geology_bias (kept for scripted generators).
   Optimizations:
     - Tree shadows and normal maps are stored at half resolution (tools/trees.py) and drawn at double scale; unused frames of their sheets are dropped. Trunks and leaves keep full resolution. Estimated atlas of the mod: normal 710 -> 579 MiB, economy 188 -> 162 MiB.

@@ -19,7 +19,9 @@ local trees_to_not_disable = {
   "rubber",
 }
 
-if mods["space-age"] then
+-- Space Age trees stay whenever they exist: in the Space Age branch of Paranoidal the expansion is hidden from this mod
+-- (paranoidal-space-age-filter), but its planets place these trees; without Space Age they do not exist.
+do
   local space_age_trees = {
     "ashland-lichen-tree", -- vulcanus
     "cuttlepop", -- gleba
