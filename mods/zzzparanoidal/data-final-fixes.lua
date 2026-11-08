@@ -1,3 +1,4 @@
+require("removals.bob-sand-glass-processing")
 require("tweaks.custom.spacex-menu-legacy") -- Initial placement; final menu passes below take precedence.
 require("tweaks.entity.roboport")
 require("tweaks.entity.add-liquid-to-mine-ores")

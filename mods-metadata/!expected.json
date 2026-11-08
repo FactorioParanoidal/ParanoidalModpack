@@ -1106,12 +1106,6 @@
       "metadataHash": null
     },
     {
-      "name": "zzzcompability",
-      "version": "0.0.1",
-      "contentHash": null,
-      "metadataHash": "830166c7fe66cb8efb02ee9affa76d18a7c23afc3428ce9c9d1a486e59373362"
-    },
-    {
       "name": "zzzparanoidal",
       "version": "8.1.28",
       "contentHash": null,
