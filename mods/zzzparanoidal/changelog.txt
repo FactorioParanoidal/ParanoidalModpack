@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 8.1.28
   Changes:
+    - Restored the insulated Angels wire coil input (one per craft) in the Yuoki conductive coil and magnetron recipes after the late coil port; RITEG had removed these inputs before the item existed. Other inputs and batch sizes are unchanged.
+    - Removed an obsolete prerequisite removal for angels-gas-processing; it only produced a debug warning and did not change the technology graph.
     - Reduced atlas resolution for 17 Angels icon layers, the spidertron achievement overlay, Beta 8 electronics sprites, Minime corpse sheets, two shield effects and all 16 high-end locomotive shadow sheets. World/UI dimensions and shifts are preserved; the odd-height electronics shadow is padded per frame before resizing. Original source PNGs stay untouched; final graphics references use 44 replacement PNGs in this mod.
     - Repacked repeated frames of the pellet press shadow (60 to 46), small bio garden trees (20 to 16), casting machine highlights (49 to 48) and alternate shield effect (9 to 8), preserving playback order, speed and duration. Later quality and protomolecule variants inherit the corrected graphics. All replacements processed with pingo -s4 -lossless -noalpha; only 32 pixel-identical results saving over 5% were adopted, and the other 12 retain their resized/repacked exports. Rails and Factorissimo 4 are unchanged.
     - Updated five crane menu icon layers to the reduced 128px colour icon from nco-InserterCranes, preserving their displayed size.
