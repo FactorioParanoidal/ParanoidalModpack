@@ -1,0 +1,30 @@
+{
+  "name": "Moshine",
+  "title": "Moshine",
+  "description": "Hot planet where you develop AI, 33 technologies, 2 new minerals, 7 buildings, many items, custom terrain, music, unique challenges... Doesn't break Space Age balance, integrates well to it",
+  "author": "snouz",
+  "homepage": "https://github.com/snouz/Moshine",
+  "version": "1.2.13",
+  "factorio_version": "2.1",
+  "dependencies": [
+    "base",
+    "space-age",
+    "Moshine-assets >= 1.0.2",
+    "module-category-defaults",
+    "+ sun_heat_and_cooling >= 1.3.0",
+    "+ snouz-big-accumulator >= 1.2.0",
+    "+ snouz-big-solar-panel >= 1.1.1",
+    "+ snouz_better_substation",
+    "+ minimalist-rails",
+    "+ se-space-trains",
+    "+ long_stack_inserter",
+    "(?) maraxsis",
+    "(?) bzsilicon",
+    "(?) Glass",
+    "(?) aai-industry",
+    "(?) omnimatter_compression",
+    "(?) canal-excavator"
+  ],
+  "space_travel_required": true,
+  "spoiling_required": true
+}

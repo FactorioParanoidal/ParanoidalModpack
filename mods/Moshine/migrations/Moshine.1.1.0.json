@@ -1,0 +1,40 @@
+{
+  "recipe":
+  [
+    ["hard-drive", "datacell-empty"],
+    ["processing-tile", "webbed_processor_tile"],
+    ["supercomputer", "neural_computer"],
+    ["datacell-add-raw-data", "datacell-raw-data"],
+    ["datacell-add-ai-model-data", "datacell-ai-model-data"],
+    ["datacell-add-equation", "datacell-equation"],
+    ["ai-tier-0", "ai-tier-1"],
+    ["ai-tier-1", "ai-tier-2"],
+    ["ai-tier-2", "ai-tier-3"],
+    ["ai-tier-3", "ai-tier-4"],
+    ["ai-tier-4", "ai-tier-5"],
+    ["ai-tier-5", "ai-tier-6"],
+    ["ai-tier-6", "ai-tier-7"],
+    ["ai-tier-7", "ai-tier-8"],
+    ["ai-tier-8", "ai-tier-9"],
+    ["ai-tier-9", "ai-tier-10"]
+  ],
+  "item":
+  [
+    ["hard-drive", "datacell-empty"],
+    ["processing-tile", "webbed_processor_tile"],
+    ["supercomputer", "neural_computer"]
+  ],
+  "entity":
+  [
+    ["supercomputer", "neural_computer"]
+  ],
+  "tile":
+  [
+    ["processing-tile", "webbed_processor_tile"]
+  ],
+  "technology":
+  [
+    ["moshine-tech-hard-drive", "moshine-tech-datacell-empty"],
+    ["moshine-tech-supercomputer", "moshine-tech-neural_computer"]
+  ]
+}

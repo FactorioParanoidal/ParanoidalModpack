@@ -1,0 +1,774 @@
+---------------------------------------------------------------------------------------------------
+Version: 1.2.13
+Date: 2026-10-15
+  Bugfixes:
+    - Fixed breaking change in experimental 2.1.22
+  Changes:
+    - Paranoidal (Space Age branch, the planets after the rocket): Moshine's own materials under new names, as the build has sand, silicon, silicon carbide and glass of its own (Angels, Bob, aai-industry): the sand item is moshine-quartz-sand "Silica" (the item sand was taken over by the build's sand merge and removed, the build did not load), the glass is always Moshine's own moshine-glass "Obsidian" with its smelting recipe (the build has a hidden glass item, so Moshine used it and made none), silicon "Crystallite" and silicon carbide "Carborundum" (en/ru names only); rich text and descriptions follow.
+    - Paranoidal: the data extractor technology always needs Moshine's glass technology (the glass processing of aai-industry is removed in the build); the planet discovery no longer needs coal liquefaction (hidden in the build).
+    - Paranoidal: the module category ai-speed of the AI cores is declared in data-final-fixes (Moshine loads after the other mods of the build): the build's data stages make module lists from every category of the game, and with ai-speed among them the home machines lost Bob's and Beta 8 modules and took the AI cores. Then module-category-defaults gives machines without a list every other category, and recipes made in machines that take AI cores allow them.
+    - Paranoidal: the fulgoran data source has its own autoplace set (moshine), so the count of the home ore patch sets stays as it is.
+    - Paranoidal: ru/en mod name and description as in ParanoidalLocale; ru planet name Moshine is "Мошайн" everywhere.
+    - Paranoidal: ru locale completed (101 keys that showed English: the cosmic scanner and its construction, data server, data cells and data fluids, colourless variants, achievements, briefing, setting) in the style of the existing ru texts; the briefing (en/ru) names the build's way to gas on Moshine (methane from silica, sulfur and coal) instead of coal liquefaction, which is hidden in the build.
+---------------------------------------------------------------------------------------------------
+Version: 1.2.12
+Date: 2026-10-10
+  Bugfixes:
+    - Fixed cosmic scanner module slot positionning and electric wire positionning
+  Graphics:
+    - Planet backdrop reworked (thanks Hanodest for the great tool)
+  Compatibility:
+    - Added the line change to Maraxsis to Maraxsis classic
+  Optimization
+    - Optimized poor UPS in sun heat submod (x10 damage, /10 frequency)
+---------------------------------------------------------------------------------------------------
+Version: 1.2.11
+Date: 2026-09-22
+  Changes:
+    - Added data server frozen picture, can freeze (e.g. on aquilo)
+  Sound:
+    - Added welding sounds to cosmic scanner construction
+  Optimization:
+    - Optimized script for cosmic scanner (thanks MeteorSwarm!)
+    - Optimized script for coolers desctruction and creation (thanks MeteorSwarm!)
+---------------------------------------------------------------------------------------------------
+Version: 1.2.10
+Date: 2026-09-14
+  Balancing:
+    - Removed electricity from cooler 2 (in submod)
+    - Silicon carbide is lighter, you can put 400 in a rocket (previously 80)
+  Gui:
+    - Removed "default_cover_tile" from moshine-hot-swamp
+  Locale:
+    - Chinese locale update by ChuijkYahus
+    - German locale update by Schlumpf8
+---------------------------------------------------------------------------------------------------
+Version: 1.2.9
+Date: 2026-09-06
+  Bugfixes:
+    - Fixed Cosmic scanner getting stuck with "output is full" (by raising internal buffer to 100000)
+---------------------------------------------------------------------------------------------------
+Version: 1.2.8
+Date: 2026-09-02
+  Balancing:
+    - Quantum processor productivity cost scaled down a lot (700 to 35 for base cost) (forgot to apply to final stage)
+    - Removed inserters and belt splitters heat damage (in submod)
+  Bugfixes:
+    - Hypercell solar panels are not shown as under entities at the north of them anymore (in submod)
+---------------------------------------------------------------------------------------------------
+Version: 1.2.7
+Date: 2026-09-01
+  Balancing:
+    - Quantum processor productivity cost scaled down a lot (700 to 35 for base cost)
+    - out_signal.data recipe completely changed: ingredients: foreign-data 150->1500, solved_equation.data 40->100 (science packs stays at 1), resulting out_signal.data: 1->20 | craft time 0.5 -> 20
+    - Mining a Cosmic scanner or construction stages gives you an item of that stage instead of just scaffoldings
+    - Cosmic scanner speed is now fixed, so it won't slow down with prod modules
+    - Cosmic scanner tech locked behind hypercell solar panels (if installed)
+  Graphics:
+    - Changed rendering of space platform around Moshine
+  Compatibility:
+    - Fixed compatibility with QualityInsurance and possibly other mods which change technologies between data and data-final-fixes
+---------------------------------------------------------------------------------------------------
+Version: 1.2.6
+Date: 2026-08-30
+  Balancing:
+    - foreign.data decoder: allows AI cores now (and raised ouptut buffer from 100 to 10000)
+    - Made out_signal.data MUCH cheaper and faster (from 300 foreign, 90 solved_eq, 1 white sc -> to 150 foreign, 40 solved_eq, 1 white sc; and 2x faster)
+    - cosmos.data recipe output DOUBLED, also takes 170 sec instead of 220 sec
+  Gui:
+    - Moved data icon on the data server, so you can read the content on the graphics
+  Changes:
+    - Datacell loading/unloading are now ignored_by_stats (thanks stringweasel)
+    - "foreign.data decoder" rename "Decoder of foreign.data"
+---------------------------------------------------------------------------------------------------
+Version: 1.2.5
+Date: 2026-08-30
+  Balancing:
+    - Empty datacells are not a Neural computer research unit anymore, replaced by datacell with equation.data
+    - Moved recipe for datacell with equation.data to data processor tech, so that tech serves a progression purpose
+    - Added datacell with equation.data for some techs
+    - Moved techs for cosmic scanner construction 3 and data server to require neural computer and datacell with equation.data
+    - Changed price of moshine-tech-cosmicscanner-construction5
+  Compatibility:
+    - Fixed potential future problems with mods that add tech ingredients to all techs
+---------------------------------------------------------------------------------------------------
+Version: 1.2.4
+Date: 2026-08-28
+  Balancing:
+    - Data server capacity x20
+    - Mining a cosmic scanner (or construction stage) yields the previous stage's item, so you at least don't lose all your progress.
+    - Mining cosmic scanner (or construction stage) takes (stage number * 10 seconds)
+    - Increased data buffer for data processor
+  Graphics:
+    - Reworked both cooling device ground texture (in submod)
+    - Reworked small cooling device graphics (in submod)
+    - Prevented ground sprites from visually despawning when the camera wasn't seeing the center of it
+  Bugfixes:
+    - Fixed cosmic scanner recipes saying they need to be made 15 times - it's actually 40
+    - Prevented cooling devices ground sprites from visually despawning when the camera wasn't seeing the center of it (in submod)
+  Gui:
+    - Better factoriopedia simulations for cosmic scanner
+    - Distinct icons for construction stages of Cosmic scanner
+    - Hide and show different recipes
+---------------------------------------------------------------------------------------------------
+Version: 1.2.3
+Date: 2026-08-25
+  Bugfixes:
+    - Fixed optical fiber extend of 320 when connected to data server
+  Graphics:
+    - Reworked most data icons to have the same shape as the first one
+---------------------------------------------------------------------------------------------------
+Version: 1.2.2
+Date: 2026-08-25
+  Features:
+    - Added Data server (4x4) + technology
+  Balancing:
+    - Divided "datacell with equations" recipe time by 25 (100 -> 4)
+    - Divided "equation->solved-equation" time by 4 (4m -> 1m)
+    - Added one layer on the Compute farm grid (112 -> 162 squares)
+  Changes:
+    - Changes to Optical fiber: weight 0.5kg (from 20), stack: 200 (from 100), crafting time: 1 (from 3), removed Moshine-only recipe restriction
+    - Optical fiber unlocked by data processor tech (earlier), while foreign.data related recipes unlocked by foreign data extractor (later)
+    - AI-trainer now has weight of 100kg
+    - Change processing farm tech name to "Parallel processing"
+  Graphics:
+    - Reworked Compute farm animation (now lights turn off when machine is off, light is a separate layer)
+    - Changed Compute farm cursor graphics and movement speed
+    - Custom compute farm visualization squares
+    - Reworked 4 icons
+    - Edited Optical fiber graphics
+    - Sun warning icon edited, shifted and made more visible with "no power" also active (in submod)
+    - Reworked hypercell solar panels graphics, adding some variations too (in submod)
+  Gui:
+    - Re-ordered some items
+  Sound:
+    - Reworked compute farm's sounds
+---------------------------------------------------------------------------------------------------
+Version: 1.2.1
+Date: 2026-08-20
+  Gui:
+    - Added setting to remove data's colors
+    - cosmos.data color made more readable
+  Compatibility:
+    - Forced compatibility with K2SO
+  Balancing:
+    - Quintupled datacell stacks from 40 to 200
+    - Divided datacells weight by 10 (can put 2k in a rocket)
+    - Allowing productivity modules on the cosmic scanner
+    - Increased output by cosmos.data creation recipe by 20x, but increased time by 1.8x
+    - "Processing equation" doesn't take damage anymore (in submod)
+  Graphics:
+    - Reworked "foreign.data decoder" and crashed probe graphics
+    - Added steam and better ground pattern to heat cooler 1 (in submod)
+    - Added huge luminous ground pattern to heat cooler 2 (in submod)
+    - Added cosmic scanner fiber connectors
+    - Added correct fiber corpses
+  Info:
+    - Moved menu-simulations over to moshine-assets
+---------------------------------------------------------------------------------------------------
+Version: 1.2.0
+Date: 2026-08-14
+  Info:
+    - Beta version
+    - YOU CAN DISABLE DAMAGES IN STARTUP SETTINGS
+    - SOME OF THE CHANGES MIGHT BREAK SOME OF YOUR EXISTING BASE
+  Features:
+    - Added Sun heat and cooling as a recommended dependency (will download by default, can be disabled)
+    - This adds sun damage on moshine, sun visual effects, and 2 buildings that protects from it
+    - Added Cosmic scanner, a huge telescope buildable in 5 steps in space
+    - Added 6 technologies for the Cosmic scanner construction and data making
+    - Added out_signal.data (data processor, combines solved_equation.data and foreign.data) and cosmos.data (Cosmic scanner)
+    - Added achievement for building a Cosmic scanner
+    - Added achievement for building a Cryogenic cooling device
+    - You can load and unload solved equation data in/from datacells
+    - Added 2 menu simulations (cosmic scanner and platform getting destroyed)
+  Info:
+    - Sun heat and cooling comes with 2 settings to change damage and frequency. If you already installed it previously, new version of it comes nerfed, with new graphics
+    - Small heat protector is cheap, you can make it directly from your platform, only protects a small zone.
+    - Bigger heat protector is unlocked in Aquilo but protects a radius of about 50 tiles
+  Balancing:
+    - Nerfed accumulator space efficiency to 6x more space efficient (from 15x) (by default) (in submod)
+    - Nerfed solar panel space efficiency to 4x more space efficient (from 6.6x) (by default) (in submod)
+    - Added startup settings to let you change the efficiency value of accumulators and solar panels (in submod)
+    - Adjusted recipe cost to the new settings (in submod)
+    - Reduced health of custom solar panel and accumulator to lower than the original as a tradeoff for how powerful they are (in submod)
+    - Quantum processor prod tech now requires cosmic data
+    - Process indexing tech now earlier in the tech tree (after stable model), with cost adjusted
+    - Reduced data processor, data decoder and fiber's content buffer
+    - Added solved_equation.data requirement for techs ai-tier-5, ai-tier-6, ai-tier-7, ai-tier-8, ai-tier-9, ai-tier-10, long stack inserter and big accumulators
+    - Added out_signal.data requirement for techs ai-tier-7, ai-tier-8, ai-tier-9, ai-tier-10, long stack inserter and big accumulators
+    - Added cosmos.data requirement for techs ai-tier-9 and ai-tier-10
+  Graphics:
+    - Brand new optical fiber graphics, with proper connectors on data processor and 
+    - Reworked big accumulator sprite and animation (in submod)
+    - Added data extractor remnants
+    - Removed optical fiber connection arrows displaying
+    - Adjusted some icons (AI tiers)
+    - Reworked some icons (model-stable, datacells, data)
+    - Added 4 neodymium sprite variations (prev. 4)
+    - Added 5 datacells sprite variations (prev. 1)
+    - Added 4 sand sprite variations (prev. 9)
+    - Tweaked some icon variations
+    - Reworked ai trainer tech icon
+    - AI tiers tech icons recolored to look like their icons
+    - Updated some menu simulations to account for 2.1 and sun heat
+  Bugfixes:
+    - Fixed recycling recipe for hypercell substation, solar panel and accumulator
+    - Fixed ai-tier-2 recipe result probability
+    - Fixed some factoriopedia simulations
+  Changes:
+    - Removed settings that disabled some mods that are now simply optional
+    - Solar power on Moshine orbit increased from x60 to x600
+    - Data processor can be built in space
+  Gui:
+    - Hid datacell-remove-raw-data recipe
+    - Changed how data is stylized in datacells with colors, border and the format "---_----.data"
+    - Renamed Training data to foreign.dat (to avoid confusion in english between the action and the purpose)
+    - Renamed "Archeological data retriever" to "Foreign data decoder", tech Data archeology to foreign.data translation
+    - Added a descriptive icon/text of the Processing farm technology (changed name from Process indexer)
+    - Changed AI upgrade sub-icon
+    - Datacell is considered raw material for other recipes tooltips
+    - Changed data extractor name to foreign.dat decoder
+    - Added datacell-solved-equation description
+  Sounds:
+    - Reduced the probability and volume of some music tracks playing ("Forever" and "Remnant") since their pulsations can be irritating to some players
+---------------------------------------------------------------------------------------------------
+Version: 1.1.12
+Date: 2026-08-05
+  Bugfixes:
+    - Hotfix, but better
+---------------------------------------------------------------------------------------------------
+Version: 1.1.11
+Date: 2026-08-05
+  Bugfixes:
+    - Hotfix for compatibility with Factorio 2.1.13
+---------------------------------------------------------------------------------------------------
+Version: 1.1.10
+Date: 2026-07-04
+  Balancing:
+    - Removed fire resistance from AI trainer, Neural computer and Data processor (for sun heat mechanic)
+  Graphics:
+    - Added custom remnants for Compute farm, Neural computer and AI-trainer, and used a bigger explosion
+    - Removed a light effect from Compute farm
+---------------------------------------------------------------------------------------------------
+Version: 1.1.9
+Date: 2026-07-02
+  Changes:
+    - Added sun heat that affects electronics, and air conditionning unit (uses the lightning mechanic) (recommended submod, can be disabled)
+  Balancing:
+    - Doubled sand yield
+    - Prevent lightning collectors from being built on Moshine
+    - Removed fire resistance of compute farm
+---------------------------------------------------------------------------------------------------
+Version: 1.1.8
+Date: 2026-06-30
+  Changes:
+    - Hypercell accumulator, solar panel, substation, neodymium rails, long stack inserters and space trains are now "recommended" (activated by default but optional) (new in 2.1)
+    - Sorted recipe ingredients and results (new in 2.1)
+  Locale:
+    - Chinese update by ChuijkYahus
+---------------------------------------------------------------------------------------------------
+Version: 1.1.7
+Date: 2026-06-25
+  Bugfixes:
+    - Fixed lava not destroying items
+  Changes:
+    - Divided by 10 all data fluid quantities (recipe, mined) to solve the throughput problem
+    - Added 3 outputs to data miner
+---------------------------------------------------------------------------------------------------
+Version: 1.1.6
+Date: 2026-06-24
+  Graphics:
+    - Added planet backdrop
+  Changes:
+    - Moved building, tech, terrain, achievements graphics over to "Moshine-assets"
+    - Science (datacell etc.) are now items instead of tools (to follow vanilla change)
+    - Starmap icon normalized to 512px, since background planets work differently now
+  Bugfixes:
+    - Fix in synaptic assembler that would make items exclusive to it
+---------------------------------------------------------------------------------------------------
+Version: 1.1.5
+Date: 2026-06-23
+  Info:
+    - Updated to 2.1
+  Changes:
+    - AI training always has 1 output (new feature of 2.1)
+---------------------------------------------------------------------------------------------------
+Version: 1.1.4
+Date: 2026-06-14
+  Changes:
+    - Unstable cores: spoiling starts at the end of production
+    - Removed slowing terrain
+    - Default import location changed to Moshine for: maglev trains, neodymium rails and ramps, webbed processors, big accumulators and solar panels
+    - Made it clearer that you need to find neodymium to get magnetism, and the fact that neodymium is rare but abundant when you find it
+  Graphics:
+    - Created custom tech icon for elevated rails (in submod)
+  Compatibility:
+    - Added module-category-defaults by SimonBrodtmann
+    - Canal Excavator Compatibility by Jurgyy
+    - Made KrastorioSO's teleporter buildable on Moshine
+  Locale:
+    - Added Polish by S3BA
+    - Update to German by Schlumpf8
+    - Fixed achievement missing key
+---------------------------------------------------------------------------------------------------
+Version: 1.1.3
+Date: 2025-10-23
+  Bugfixes:
+    - Fixed menu simulations not being displayed due to incorrect version (they'll wait until you're in 2.0.71 and 72 to display them)
+---------------------------------------------------------------------------------------------------
+Version: 1.1.2
+Date: 2025-10-22
+  Changes:
+    - Replaced laggy menu simulations with 5 new ones
+    - Techs for silicon, magnets are now trigger techs
+    - Added tips-and-tricks moshine briefing
+    - Added recipe to reverse AI model datacell
+    - Fixed robot efficiency not being exactly 1
+  Sound:
+    - Core explosion can have 4 overlapping sounds and can be heard from further away
+  Bugfixes:
+    - Properly hid maglev train tech if it's disabled in settings
+    - Fixed neural computer shadow offset
+    - "Retrieve model from datacell" recipe ordered after AI model
+---------------------------------------------------------------------------------------------------
+Version: 1.1.1
+Date: 2025-10-11
+  Bugfixes:
+    - Fixed crash with German locale
+---------------------------------------------------------------------------------------------------
+Version: 1.1.0
+Date: 2025-10-11
+  Info:
+    - Prototypes from Moshine-assets were ported to this mod, Moshine-assets only contains assets
+  Changes:
+    - "se-space-trains" and long handed stack inserter are now mandatory again, but with a startup setting to disable them
+    - Added 4 menu simulations based on FalseIdenty's save
+    - Added colors to data processor recipes
+    - Made raw data fluid green
+    - Changed some internal names
+    - datacell [ai-model] recipe: added holographic storage to results
+    - 2 % more chance that an AI core will devolve instead of stagnate
+    - Split datacell and data processor techs into 2 techs
+  Graphics:
+    - Complete rework of the neural computer graphics
+  Gui:
+    - Made AI tier 9 yellow to avoid confusion with unstable core
+    - Reworked icons for ai core model
+    - Changed glass icon (based on artisanal reskins)
+    - Added icon variations for: glass, silicon, silicon carbide, magnets, training arrow and silicon cell
+    - Combined some icons in factoriopedia
+    - Fixed planet orientation in starmap
+  Locale:
+    - German locale update by Schlumpf
+---------------------------------------------------------------------------------------------------
+Version: 1.0.30
+Date: 2025-09-28
+  Changes:
+    - Added 2 technologies to unlock the recipes that were previously unlocked by planet discovery
+    - Removed map settings for cliffs, hills and fulgoran data probes
+  Bugfixes:
+    - Increased optical cable throughput
+---------------------------------------------------------------------------------------------------
+Version: 1.0.29
+Date: 2025-09-15
+  Bugfixes:
+    - Fixed datacell [AI] recipe not being available
+---------------------------------------------------------------------------------------------------
+Version: 1.0.28
+Date: 2025-09-15
+  Changes:
+    - Added datacell [AI] that can be crafted using stable model
+    - Technology now require datacell [AI] instead of stable model
+    - Neural computer and equation datacell can now get in rockets
+---------------------------------------------------------------------------------------------------
+Version: 1.0.27
+Date: 2025-09-14
+  Graphics:
+    - 4 different animations on the ai trainer depending on training stage
+  Locale:
+    - Update to RU locale by Erofitskiy
+---------------------------------------------------------------------------------------------------
+Version: 1.0.26
+Date: 2025-09-07
+  Graphics:
+    - New datacell icons
+---------------------------------------------------------------------------------------------------
+Version: 1.0.25
+Date: 2025-08-30
+  Changes:
+    - Incresed data fluid buffer quantity (some players reported some slow data transfers)
+  Compatibility:
+    - Fixed compatibility with Quality Seeds
+    - Fixed compatibility with boompuff-agriculture (for real now, I promise)
+  Locale:
+    - German locale by Schlumpf
+---------------------------------------------------------------------------------------------------
+Version: 1.0.24
+Date: 2025-08-28
+  Compatibility:
+    - Fixed boompuff-agriculture compatibility (Cannot insert Boompuff into Agricultural Tower)
+  Locale:
+    - Esperanto by trentmkelly
+---------------------------------------------------------------------------------------------------
+Version: 1.0.23
+Date: 2025-08-14
+  Changes:
+    - Made se-space-trains and long-handed-inserters optional dependencies (instead of forced)
+    - Processing farm can be moved out of the planet
+    - Hypercell substation/solar/accumulator default location -> Moshine
+  Bugfixes:
+    - Fixed missing mixed ore entity name
+    - Recipes with datacells don't have raw data in "total raw"
+    - Agricultural tower doesn't accept datacells anymore
+  Compatibility:
+    - (by SafTheLamb) Combine dataprocessor fluid boxes so they're all selected as a single output (making it easier for other mods to add separate fluid inputs)
+  Locale:
+    - Update to Russian locale by Kuaikuachu (also on submods)
+  UI:
+    - Removed "moshine exclusive", replaced with a strict pressure value
+---------------------------------------------------------------------------------------------------
+Version: 1.0.22
+Date: 2025-06-17
+  Graphics:
+    - Slightly retextured decals, cliffs, rocks and terrain (more colorful, warm and varied, cliffs less visible)
+  Bugfixes:
+    - Fixed progression being stuck if uninstalling AAI-industry (glass tech would not come back)
+  Locale:
+    - Second part of Spanish locale by marks20125
+---------------------------------------------------------------------------------------------------
+Version: 1.0.21
+Date: 2025-06-17
+  Changes:
+    - Rails also auto-connect red and green wires along the tracks
+    - Added Made rail ramp automatically replaceable
+    - Raise sand and neodymium rocket capacity
+    - Reoganized moshine tiles in GUI
+  Compatibility:
+    - Added ores from other BZ mods - by Indzasa
+    - Made planet 98°C / 371°K with PlanetsLib
+  Bugfixes:
+    - Fixed missing "Moshine island" map generation text
+    - Fixed invisible poles under elevated rails not being immune to thunder
+  Locale:
+    - New Spanish locale by marks20125
+    - Completed Chinese locale by rlcyyg1108
+  Info:
+    - Some changes are from the minimalist rails submod
+---------------------------------------------------------------------------------------------------
+Version: 1.0.20
+Date: 2025-06-07 rlcyyg1108
+  Bugfixes:
+    - Fixed fr locale
+    - Fixed the game not loading for some people (due to the rail submod)
+---------------------------------------------------------------------------------------------------
+Version: 1.0.19
+Date: 2025-06-06
+  Changes:
+    - Added neodymium elevated rails (with custom graphics)
+    - Moved hidden electric poles feature directly in the submod
+    - Improved visual feedback of connecting power poles to neodymium rails
+    - Made rail electric connectors immune to lightning (even on modded planets)
+    - Removed utility science packs requirement to all base technologies
+    - Restricted compute farm inputs to "Datacell [equation]"
+  Graphics:
+    - Improved neodymium rail graphics
+  Locale:
+    - Russian translation continued by Kuaikuachu
+    - Improved neural computer description
+---------------------------------------------------------------------------------------------------
+Version: 1.0.17
+Date: 2025-05-02
+  Graphics:
+    - Completely reworked the processing farm to differenciate from Krastorio2's Quantum Computer
+  Changes:
+    - Reduced data extractor creation time
+  Bugfixes:
+    - Fixed that several data extractors could be stacked on top of each other
+---------------------------------------------------------------------------------------------------
+Version: 1.0.16
+Date: 2025-04-26
+  Changes:
+    - Raised rocket capacity for many intermediate products (silicon, sand, neodymium, magnets, silicon cells, datacells...)
+    - Added 3 recipe descriptions
+  Bugfixes:
+    - Fixed compatibility with mods adding new module categories (e.g. Metal and Stars)
+---------------------------------------------------------------------------------------------------
+Version: 1.0.15
+Date: 2025-04-24
+  Changes:
+    - Added Hypercell substations (adapted for Moshine)
+    - Raised energy usage of all machines considerably
+  Graphics:
+    - Custom explosion for unstable models
+  Compatibility:
+    - Disabled AI cores for other mods buildings (like Age of Production)
+  Bugfixes:
+    - Fixed not being able to put foundation of molten-iron
+    - Fixed that you could research data processor and data archeo before automation-3 and other required techs
+---------------------------------------------------------------------------------------------------
+Version: 1.0.14
+Date: 2025-04-21
+  Changes:
+    - Hypercell accumulators and solar panels unlocked after AI cores, using Moshine research
+    - AI core research take half the time
+    - Can put 5 Hypercell accumulators or solar panels in a rocket (instead of 1)
+    - Fixed recycling recling results for MAGLEV trains
+---------------------------------------------------------------------------------------------------
+Version: 1.0.13
+Date: 2025-04-18
+  Changes:
+    - Added surface condition: temperature-celcius, removed solar flares, changed some physical lore to be more realistic
+    - Re-authorized reactors (they're still useless on Moshine)
+    - Buildings made to be built on Moshine only, and some made too heavy for a rocket
+    - Long stack inserter tech: *100 ingredients, /100 duration
+    - Changed name of "Indexer" to "Compute farm"
+    - Neural computer craft time: 120 -> 30s, webbed processor: 10 -> 2s
+  Sound:
+    - Increased sound of data extractor
+  Compatibility:
+    - Tech code made more robust to avoid crash with Research-Multiplier and potentially other mods
+    - Made ring-teleporter compatible
+  Bugfixes:
+    - optical-fiber shouldn't collide with the player diagonally
+---------------------------------------------------------------------------------------------------
+Version: 1.0.12
+Date: 2025-04-11
+  Graphics:
+    - Reworked AI core graphics again (closer to their first version, but less random colors)
+    - Reworked webbed processors graphics
+---------------------------------------------------------------------------------------------------
+Version: 1.0.11
+Date: 2025-04-10
+  Changes:
+    - Added 5 achievements
+    - Do away with "space platforms for ground" dependency
+    - Display ai training recipes with the rest of moshine's processes
+  Locale:
+    - Changed maraxsis glass' name to "reinforced glass"
+  Graphics:
+    - Reworked AI core icons (follows the colors of quality and look like a progression)
+    - Increased light of AI trainer
+    - Data processor tech adapted to latest changes
+    - Tweaked webbed processor graphics (color, decoratives, double-thick)
+---------------------------------------------------------------------------------------------------
+Version: 1.0.10
+Date: 2025-03-28
+  Changes:
+    - Data processor can be frozen
+    - Data processor +33% energy usage
+  Graphics:
+    - Heavily edited data processor + light to be more unique and computer-like
+  Bugfixes:
+    - Fixed switched curved/diagonal rails names
+---------------------------------------------------------------------------------------------------
+Version: 1.0.9
+Date: 2025-03-25
+  Changes:
+    - Data processor data output is in every corner
+    - Data processor can't transfer inputed data (consequence fo fiber length fix)
+  Bugfixes:
+    - Fixed fiber length not being infinite
+    - Fixed that datacells were recycling into datacells with data
+---------------------------------------------------------------------------------------------------
+Version: 1.0.8
+Date: 2025-03-24
+  Changes:
+    - Mining time neodymium rails proportional to health
+  Compatibility:
+    - Basic compatibility with Gotlag's Glass
+---------------------------------------------------------------------------------------------------
+Version: 1.0.7
+Date: 2025-03-22
+  Changes:
+    - First tier of AI training unlocks after you create an ai-trainer
+    - Changed name of big accumulator and big solar panel
+  Bugfixes:
+    - Neodymium rails recycle to the correct ingredients
+---------------------------------------------------------------------------------------------------
+Version: 1.0.6
+Date: 2025-03-21
+  Changes:
+    - Neodymium rails have a hidden power pole to connect power grids
+    - Neodymium rails have much more hitpoints than normal ones
+    - Neodymium rails are used as upgrade to normal rails
+---------------------------------------------------------------------------------------------------
+Version: 1.0.5
+Date: 2025-03-19
+  Graphics:
+    - Fixed circuit connectors position for data extractor, data processor, ai trainer and indexer
+---------------------------------------------------------------------------------------------------
+Version: 1.0.4
+Date: 2025-03-18
+  Changes:
+    - Silicon cells can be made in EM plants
+  Sound:
+    - Removed optical cable pipe sound
+  Locale:
+    - Chinese updated (rlcyyg1108)
+---------------------------------------------------------------------------------------------------
+Version: 1.0.3
+Date: 2025-03-17
+  Changes:
+    - Process indexer locked behind AI core T2 (to make sure the player understands AI core improvement before being stuck researching the indexer for hours)
+    - Indexer is 10x more energy hungry
+    - AI trainer recipes have 2% more chance to make a core less good
+  Compatibility:
+    - Removed glass tech redundancy with AAI Industry
+    - (planet) Fixed Vortik's deep core mining compatibility
+  Graphics:
+    - Changed indexer's pointer and process graphics
+    - Custom data processor's remnant
+    - Added subtle tints to core training
+---------------------------------------------------------------------------------------------------
+Version: 1.0.2
+Date: 2025-03-16
+  Bugfixes:
+    - Fixed some crashes happening to some people
+---------------------------------------------------------------------------------------------------
+Version: 1.0.1
+Date: 2025-03-16
+  Bugfixes:
+    - Potential crash fix
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 2025-03-16
+  Info:
+    - /!\ This update changes some recipes, so you'll have to adapt your existing setups /!\
+  Content:
+    - Added the AI trainer, and model training mechanic (gambling to improve models until they higher tiers, slot them into the neural computer)
+    - Added the Indexer and Webbed processors (a process farm for equations)
+    - Hard drives become "datacells", added recipes to load and unload data in them
+    - Added long-handed inserters as a reward
+    - Added glass, glass tech
+    - Tech tree reorganized
+    - Added space platform ground tiles
+    - Added minimalist rails (costs neodymium and silicon carbide)
+  Locale:
+    - French translation by Fr_Dae
+  Changes:
+    - (planet) Made the planet locked behind electromagnetic plant
+    - (planet) Made steam 500°C (instead of 175)
+    - (planet) Doubled Neodymium output
+    - (planet) Doubled copper output
+    - (planet) Raised sand output
+    - (planet) Raised (x10) data output
+    - (planet) Made foundations buildable on iron lava pools
+    - Heating sand gives glass instead of silicon (like aai-industry)
+    - Silicon is made in chem plants using additional coal and steam, made faster
+    - Changed some names and descriptions (3D-data-storage -> holographic core, supercomputer -> Neural computer, raw data -> training data... )
+    - Quantum-processor-productivity research 3.5* more expensive, and 100* slower (forces you to use AI cores as modules)
+    - Computers can use training data for research, added as ingredients
+    - Neural computer and data processor can use AI cores to speed up research/production, but unaffected by beacons
+    - Made magnets cheaper (5 -> 1 Neodymium)
+    - Silicon cell cheaper (10 -> 5 Silicon)
+    - Made hard-drives/datacells cheaper (5 -> 1 Magnets, 5 -> 1 Advanced-circuits)
+    - Optical fiber require glass
+    - Holographic core require glass, cheaper otherwise
+    - Made unstable models explosions ~5x more damaging
+  Graphics:
+    - (planet) Improved starmap icon (thanks to DjKolekson's contribution)
+    - Reworked some tech icons
+    - Neural computer: added animation graphics
+    - Reworked icons
+    - Added diversity to sand texture
+    - Optimized images size
+    - Better geyser anim
+    - Made sand icon prioritized over Maraxsis'
+  Sounds:
+    - Neural computer custom sound
+    - Data extractor custom sound
+    - Data processor custom sound
+    - (planet) Geyser custom sound
+    - (planet) Improved music
+  Bugfixes:
+    - Silicon isn't reasearch on planet discovery anymore
+    - Fixed compatibility with Omnicompression
+---------------------------------------------------------------------------------------------------
+Version: 0.2.3
+Date: 2025-02-19
+  Bugfixes:
+    - Fixed removal of placed optical fibers
+---------------------------------------------------------------------------------------------------
+Version: 0.2.2
+Date: 2025-02-19
+  Changes:
+    - (planet) Modified mixed-ores ratios (Neodymium*5, sand-, sulfur-, coal+, copper+)
+    - (planet) Petroleum custom recipe changed (coal required instead of carbon, and outputs carbon instad of coal)
+    - (planet) Prevented nuclear/fusion reactors from being built on the planet
+    - Made optical fiber length (almost) infinite
+    - Disallow productivity modules in supercomputers
+  Compatibility:
+    - Added compatibility with Silica & Silicon (thanks to Dh4mpyr)
+  Locale:
+    - Chinese translation by rlcyyg1108
+    - Russian translation by GafarovMaxim
+---------------------------------------------------------------------------------------------------
+Version: 0.2.1
+Date: 2025-02-11
+  Compatibility:
+    - Added compatibility with mods that add ingredients to ALL techs
+---------------------------------------------------------------------------------------------------
+Version: 0.2.0
+Date: 2025-02-11
+  Changes:
+    - Added Quantum-processor productivity infinite research (gives a reward at the end of the planet, makes the experience complete until more content is made in the future)
+    - Made supercomputer display after biolab in reseach
+    - Forced update of Moshine-assets (fixed recycling coal would give sand/sulfur/carbon, Molten-iron lava more blue, mixed ore non-infinite)
+---------------------------------------------------------------------------------------------------
+Version: 0.1.6
+Date: 2025-02-09
+  Changes:
+    - (Thank you to all the players who joined the beta and gave feedback)
+    - (planet) Removed the ability to build accumulators on the planet
+    - (planet) Dramatically reduced the yield of mixed ore patches
+    - (planet) 10x less neodymium dropped (drop 273 at once but very rarely)
+    - (planet) Added a recipe for Petroleum (using sand, carbon, sulfur and steam)
+    - Supercomputer sound changed to lab (instead of biolab)
+    - Supercomputer won't add science packs added by other mods when they add it to all labs
+    - Reduced crafting time for models (red/white cubes)
+    - Reduced health and data quantity on optical fiber
+    - Changed unstable model to 10s and stable to 40s
+    - Unstable model costs only 3D storage, but 3D storage costs 30 magnets
+    - Lowered luminosity a bit, except at noon
+  Bugfixes:
+    - Fixed unstable models never actually spawning
+    - Fixed Supercomputer's funky collision/selection box (made it 6x6 square)
+---------------------------------------------------------------------------------------------------
+Version: 0.1.5
+Date: 2025-02-07
+  Changes:
+    - (planet) Fixes
+    - Added Silicon carbide to the Data processor recipe
+  Bugfixes:
+    - Fixed crash when researching with hard drive or model in Supercomputer
+    - (planet) Fixed compatibility with AAI Industries (made silicon a normal crafting recipe in that case only)
+---------------------------------------------------------------------------------------------------
+Version: 0.1.4
+Date: 2025-02-07
+  Changes:
+    - (planet) Balance tweaks
+  Info:
+    - Changed description
+---------------------------------------------------------------------------------------------------
+Version: 0.1.3
+Date: 2025-02-06
+  Changes:
+    - (planet) Fixed crash if no PlanetsLib
+---------------------------------------------------------------------------------------------------
+Version: 0.1.2
+Date: 2025-02-06
+  Changes:
+    - (planet) Fixed geysers, removal of molten copper, removal of auto-barrel of data
+---------------------------------------------------------------------------------------------------
+Version: 0.1.1
+Date: 2025-02-05
+  Changes:
+    - Moved all planet assets to a separate mod (Moshine-assets)
+    - Magnet recipe use molten iron
+    - Added tech descriptions
+---------------------------------------------------------------------------------------------------
+Version: 0.1.0
+Date: 2025-02-05
+  Info:
+    - Initial release
