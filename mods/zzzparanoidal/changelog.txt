@@ -1,6 +1,7 @@
 ---------------------------------------------------------------------------------------------------
 Version: 8.1.28
   Changes:
+    - Space Age branch: the planet and space prices count as science packs also what research spends, not only what labs take (Moshine fills the inputs of its neural computer only in its own data-final-fixes): Moshine's data cells take 5 times their ingredients like the other planet packs.
     - Space Age branch: the Beta 8 module system no longer hides the modules of the planets (prototypes/modules-beta8.lua; the aurite modules of Secretas stay with their research after the rocket).
     - Space Age branch: the recipes of the planets no longer place the build's own items in the crafting menu (recipe-product-menu-sync.lua; the spaceship scrap recycling of Frozeta moved the depleted uranium fuel cell to the Fulgora processes), the planets' own items still follow their recipes.
     - Space Age branch: the recycling rebuild leaves the planet recipes that recycle (the ancient debris salvage of Fulgora, the spaceship scrap recycling of Frozeta) to their research after the rocket: they were enabled from the start (the salvage was in the hand crafting menu before the rocket) and their unlocks were dropped.

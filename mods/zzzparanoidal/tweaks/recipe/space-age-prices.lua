@@ -25,9 +25,17 @@ local loops = {["fluoroketone-cold"] = "fluoroketone-hot"}
 local MAX_AMOUNT = 65535
 
 local raw = data.raw
+-- Science packs: what labs take and what research spends (Moshine fills the inputs of its neural computer only in its
+-- own data-final-fixes, after this file; its technologies already list the data cells).
 local lab_inputs = {}
 for _, lab in pairs(raw.lab or {}) do
 	for _, name in pairs(lab.inputs or {}) do lab_inputs[name] = true end
+end
+for _, technology in pairs(raw.technology or {}) do
+	for _, ingredient in pairs(technology.unit and technology.unit.ingredients or {}) do
+		local name = ingredient[1] or ingredient.name
+		if name then lab_inputs[name] = true end
+	end
 end
 
 local function pure_recycling(recipe)

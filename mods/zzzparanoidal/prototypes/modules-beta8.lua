@@ -59,8 +59,8 @@ end
 
 local restored = {}
 for _, name in ipairs(integration.items) do restored[name] = true end
--- Space Age branch: modules of the planets (after the rocket: the aurite modules of Secretas) stay with their research
--- (ПР-078). Nil without Space Age.
+-- Space Age branch: modules of the planets (after the rocket: the aurite modules of Secretas, the AI cores of Moshine)
+-- stay with their research (ПР-078). Nil without Space Age.
 local space_age_filter = data.paranoidal_space_age_filter
 local function planet_module(module)
     return space_age_filter and space_age_filter.is_space_age and space_age_filter.is_space_age(module)
