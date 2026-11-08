@@ -5,6 +5,6 @@
   "author": "FactorioParanoidal",
   "homepage": "https://github.com/FactorioParanoidal/ParanoidalModpack",
   "factorio_version": "2.1",
-  "description": "Space Age only for the space platforms of Paranoidal: the other mods do not see the expansion, its changes to the base game are undone (technologies, recipes, items as without it), the platforms stay (the rocket silo sends cargo to them, space science is made on a platform, no satellite), the planets are hidden. Does nothing without Space Age.",
+  "description": "Space Age for Paranoidal: the classic build up to the rocket, the planets after it. The other mods do not see the expansion, its changes to the base game are undone; after the rocket the space platforms and the planets Vulcanus, Fulgora, Gleba and Aquilo, every planet with its own materials (not shared with the home tungsten, lithium, ammonia and scrap); victory at the solar system edge; space science made on a platform, no satellite. Does nothing without Space Age.",
   "dependencies": []
 }
