@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 9.02.15
 Date: 2026.10.27
+  Graphics:
+    - Paranoidal build: removed the duplicate purple acid projectile shadow already redirected to the base-game image by zzzparanoidal's final graphics pass. Enemy prototypes and runtime code are unchanged.
   Locale:
     - ru: the mod name and the mod list description are the same as in ParanoidalLocale (format "English title (Russian translation)"), so the mod reads the same with or without it.
   Changes:
