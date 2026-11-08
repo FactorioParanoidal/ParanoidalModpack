@@ -1,6 +1,7 @@
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.1
   Graphics:
+    - Paranoidal build: removed eight numbered polymerization overlays referenced only by unused local picture constructors. The separate polymerization-chamber sheet and all active petrochemical graphics are retained.
     - Paranoidal build: removed four duplicate empty/shadow images already redirected to canonical files by zzzparanoidal's final graphics pass. Active refinery and flame graphics are unchanged.
   Compatibility:
     - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
