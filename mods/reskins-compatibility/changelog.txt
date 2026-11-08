@@ -2,6 +2,7 @@
 Version: 2.3.10
 Date: 2026-01-31
   Graphics:
+    - Paranoidal build: removed 157 images for integrations not shipped in this modpack: classic/semi-classic mining drills, reactor glow, P-U-M-P-S, loaders, classic beacons, NauvisDay, Deadlock stacking and Mini Machines. Extended Angels and Mad Clown's artwork is retained; adding the absent addons requires restoring their images.
     - Paranoidal build: removed the osmium plate original already redirected to pack artwork by zzzparanoidal's final graphics pass. Replacement files and settings-dependent alternatives are unchanged.
     - Paranoidal: superseded depleted-uranium, magnesium and osmium casting technology images are archived outside the build and removed; final C2 assignments belong to zzzparanoidal. Item graphics remain.
   Changes:
