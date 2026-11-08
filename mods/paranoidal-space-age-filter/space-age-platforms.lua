@@ -70,7 +70,7 @@ local drop_prerequisites = {["captive-biter-spawner"] = {["kovarex-enrichment-pr
 -- Mods of other planets (user 2026-11-08, ПР-078 item 8). They load after Space Age's data.lua; their prototypes count
 -- as Space Age's own: after the rocket, references to the renamed planet materials follow, RSO leaves their planets and
 -- resources to the game's generator, prices of the planets (zzzparanoidal).
-local planet_mods = {secretas = true}
+local planet_mods = {secretas = true, Moshine = true}
 
 local state = {phase = "before", owner = {}, collisions = {}, space_age = {}, planet_content = {}}
 
@@ -704,7 +704,20 @@ function M.hide_recipes()
 
 	-- A fluid comes from a visible recipe (but not from emptying what was filled with it: barrels, canisters, such a
 	-- recipe takes an item that another recipe makes from that fluid), from a tile (offshore pumps: lava, oceans) or from
-	-- a resource (geysers, brine, vents).
+	-- a resource (geysers, brine, vents). Emptying counts when the filled item is also mined or harvested (Moshine's
+	-- processing grid grows filled data cells).
+	local grown = {}
+	for kind in pairs(defines.prototypes.entity) do
+		for _, entity in pairs(raw[kind] or {}) do
+			local minable = entity.minable
+			if type(minable) == "table" then
+				if type(minable.result) == "string" then grown[minable.result] = true end
+				for _, result in ipairs(minable.results or {}) do
+					if result.type ~= "fluid" and result.name then grown[result.name] = true end
+				end
+			end
+		end
+	end
 	local filled = {}
 	for _, recipe in pairs(raw.recipe) do
 		for fluid in pairs(fluids_of(recipe.ingredients, {})) do
@@ -720,7 +733,10 @@ function M.hide_recipes()
 			for fluid in pairs(fluids_of(recipe.results, {})) do
 				local emptying = false
 				for _, ingredient in ipairs(recipe.ingredients or {}) do
-					if ingredient.type ~= "fluid" and filled[fluid] and filled[fluid][ingredient.name] then emptying = true end
+					if ingredient.type ~= "fluid" and filled[fluid] and filled[fluid][ingredient.name]
+						and not grown[ingredient.name] then
+						emptying = true
+					end
 				end
 				if not emptying then made[fluid] = true end
 			end
