@@ -1,6 +1,7 @@
 ---------------------------------------------------------------------------------------------------
 Version: 8.1.28
   Changes:
+    - Removed 141 obsolete, unreferenced graphics copies (old BI entities, MK0 train, lab, concrete and menu-background images). Active sprites, reskins replacements, white-stone alternatives and the 64-frame basic belt option are retained byte-for-byte; no prototype, setting or runtime changes.
     - Reduced redundant work without changing prototypes: phase-local indexed unlock transfers in eight recipe/technology patches, one subgroup-order scan for molten alloys, and Reskins artwork substitutions in the existing atlas traversal (after remap/downscale). New ingot pictures still bypass the atlas; image files are unchanged.
     - Loader shells: recovery queries use exact own names; inspected pairs are deduplicated per update and unchanged custom status is not rewritten. Mode synchronization and the existing wire-history polling remain unchanged; no new persistent cache or migration.
     - Integrated SpaceXGAR2 0.17.0 (SpaceX Get a Room, Ober3550): the space-exploration group, seven legacy subgroups, icon and EN/RU names now belong to zzzparanoidal. The nineteen guarded item placements run before existing menu sorting; prototype IDs and final layout are preserved. Added optional ordering after SpaceModFeorasFork. Icon compression trial (pingo -s4 -quality=45) gave no saving; the original 64x64 PNG is retained byte-for-byte.
