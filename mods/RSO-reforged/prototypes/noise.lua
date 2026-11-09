@@ -14,7 +14,7 @@ Per planet with an RSO config (expression prefix p = "rso_<planet>_"):
   operations low (one cell id per site, lookups as short if-chains).
 * Resource of a site: RSO weights (allotment and frequency slider) times the distance
   composition, the dominant resource of the province (3x3 cells) and the soil geology of
-  Alien-biomes-Reforged (alien-biomes-geology-<resource>, evaluated at the site so that the whole
+  Paranoidal-Alien-biomes (alien-biomes-geology-<resource>, evaluated at the site so that the whole
   field has one resource). Guaranteed ring: every cell of a band around the first start holds a
   field, the cells of the ring points get one field of every resource.
 * Field: the coordinates are bent by noise, turned and stretched; the shape is one of

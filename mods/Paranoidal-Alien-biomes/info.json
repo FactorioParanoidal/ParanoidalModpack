@@ -1,0 +1,14 @@
+{
+  "name": "Paranoidal-Alien-biomes",
+  "version": "9.8.6",
+  "title": "Paranoidal Alien Biomes",
+  "author": "Earendel (Alien Biomes), Paranoidal",
+  "dependencies": [
+    "base >= 2.0.0",
+    "! alien-biomes",
+    "! alien-biomes-graphics",
+    "! Alien-biomes-Reforged"
+  ],
+  "description": "Alien Biomes and Alien Biomes Graphics merged into one mod. Colour variants of dirt, sand, grass, volcanic terrain, sand dunes and lava decals are drawn from shared tint matrices instead of one texture per colour, which greatly reduces the sprite atlas.",
+  "factorio_version": "2.1"
+}

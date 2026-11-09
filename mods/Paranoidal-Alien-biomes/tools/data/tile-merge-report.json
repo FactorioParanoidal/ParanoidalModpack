@@ -1,0 +1,2891 @@
+{
+ "environment": {
+  "Pillow": "13.0.0",
+  "numpy": "2.5.4",
+  "python": "3.12.9",
+  "scipy": "1.18.1"
+ },
+ "families": [
+  {
+   "best_existing_worst_psnr": 31.1229,
+   "candidates": [
+    {
+     "mean_mse": 378.12987,
+     "name": "existing-g1",
+     "worst_psnr": 15.1696
+    },
+    {
+     "mean_mse": 8.973928,
+     "name": "existing-g2",
+     "worst_psnr": 31.1229
+    },
+    {
+     "mean_mse": 11.499399,
+     "name": "minimax-start-0",
+     "worst_psnr": 35.0851
+    },
+    {
+     "mean_mse": 11.544864,
+     "name": "minimax-start-0.5",
+     "worst_psnr": 35.0748
+    },
+    {
+     "mean_mse": 11.537924,
+     "name": "minimax-start-1",
+     "worst_psnr": 35.0924
+    }
+   ],
+   "colors": {
+    "aubergine": {
+     "new_tint": [
+      0.2606,
+      0.2368,
+      0.3352
+     ],
+     "old_matrix": "mineral-dirt-1-g1.png",
+     "old_tint": [
+      0.4232,
+      0.5724,
+      0.4695
+     ],
+     "psnr": 38.7241,
+     "rmse": 2.953489
+    },
+    "beige": {
+     "new_tint": [
+      0.5887,
+      0.5325,
+      0.4076
+     ],
+     "old_matrix": "mineral-dirt-1-g2.png",
+     "old_tint": [
+      0.7245,
+      0.6891,
+      0.5501
+     ],
+     "psnr": 37.8346,
+     "rmse": 3.271961
+    },
+    "black": {
+     "new_tint": [
+      0.2322,
+      0.2429,
+      0.2249
+     ],
+     "old_matrix": "mineral-dirt-1-g2.png",
+     "old_tint": [
+      0.2857,
+      0.3144,
+      0.3035
+     ],
+     "psnr": 45.2777,
+     "rmse": 1.388844
+    },
+    "brown": {
+     "new_tint": [
+      0.4983,
+      0.3503,
+      0.252
+     ],
+     "old_matrix": "mineral-dirt-1-g2.png",
+     "old_tint": [
+      0.6132,
+      0.4533,
+      0.3402
+     ],
+     "psnr": 39.8129,
+     "rmse": 2.605512
+    },
+    "cream": {
+     "new_tint": [
+      0.8126,
+      0.767,
+      0.4857
+     ],
+     "old_matrix": "mineral-dirt-1-g2.png",
+     "old_tint": [
+      1.0,
+      0.9926,
+      0.6556
+     ],
+     "psnr": 35.0924,
+     "rmse": 4.486629
+    },
+    "dustyrose": {
+     "new_tint": [
+      0.4314,
+      0.3499,
+      0.3131
+     ],
+     "old_matrix": "mineral-dirt-1-g2.png",
+     "old_tint": [
+      0.5309,
+      0.4528,
+      0.4226
+     ],
+     "psnr": 40.628,
+     "rmse": 2.372141
+    },
+    "grey": {
+     "new_tint": [
+      0.5245,
+      0.5457,
+      0.5147
+     ],
+     "old_matrix": "mineral-dirt-1-g2.png",
+     "old_tint": [
+      0.6455,
+      0.7062,
+      0.6947
+     ],
+     "psnr": 38.1867,
+     "rmse": 3.141999
+    },
+    "purple": {
+     "new_tint": [
+      0.3178,
+      0.3306,
+      0.5711
+     ],
+     "old_matrix": "mineral-dirt-1-g1.png",
+     "old_tint": [
+      0.5161,
+      0.7993,
+      0.7999
+     ],
+     "psnr": 35.9742,
+     "rmse": 4.053493
+    },
+    "red": {
+     "new_tint": [
+      0.5453,
+      0.2691,
+      0.2047
+     ],
+     "old_matrix": "mineral-dirt-1-g2.png",
+     "old_tint": [
+      0.6711,
+      0.3483,
+      0.2763
+     ],
+     "psnr": 39.4178,
+     "rmse": 2.72678
+    },
+    "tan": {
+     "new_tint": [
+      0.623,
+      0.4676,
+      0.2727
+     ],
+     "old_matrix": "mineral-dirt-1-g2.png",
+     "old_tint": [
+      0.7666,
+      0.6052,
+      0.3681
+     ],
+     "psnr": 37.877,
+     "rmse": 3.256046
+    },
+    "violet": {
+     "new_tint": [
+      0.4924,
+      0.2977,
+      0.479
+     ],
+     "old_matrix": "mineral-dirt-1-g1.png",
+     "old_tint": [
+      0.7996,
+      0.7197,
+      0.6709
+     ],
+     "psnr": 35.0999,
+     "rmse": 4.482774
+    },
+    "white": {
+     "new_tint": [
+      0.7487,
+      0.7724,
+      0.7409
+     ],
+     "old_matrix": "mineral-dirt-1-g2.png",
+     "old_tint": [
+      0.9214,
+      0.9996,
+      1.0
+     ],
+     "psnr": 35.0953,
+     "rmse": 4.485131
+    }
+   },
+   "family": "mineral-dirt-1",
+   "mean_mse": 11.537924,
+   "output_png_sha256": "d723bc7e647524d1daddc1f68f7f537478c1dc9713a0800d014d0ddeee84dd3e",
+   "parameters": [
+    0.5637664515742964,
+    0.7484435798345132,
+    0.4905971756820062,
+    0.9433622612618228,
+    0.9324002856490844,
+    0.940906284729591
+   ],
+   "pixels_evaluated": 1376256,
+   "searches": [
+    {
+     "iterations": 14,
+     "message": "Optimization terminated successfully",
+     "start": 0.0,
+     "success": true
+    },
+    {
+     "iterations": 27,
+     "message": "Optimization terminated successfully",
+     "start": 0.5,
+     "success": true
+    },
+    {
+     "iterations": 19,
+     "message": "Optimization terminated successfully",
+     "start": 1.0,
+     "success": true
+    }
+   ],
+   "selected": "minimax-start-1",
+   "source_sha256": {
+    "mineral-dirt-1-g1.png": "ccddbeac951591aeb733d9d7b3d57e66fa2dd8dc57dcbc45f08f1575b6161cd8",
+    "mineral-dirt-1-g2.png": "c668bbdfb5126ea75fc13ea2c76c044e751f444380e8a9d7f9357465bcb89c10"
+   },
+   "unique_pixel_pairs": 1693,
+   "worst_color": "cream",
+   "worst_psnr": 35.0924
+  },
+  {
+   "best_existing_worst_psnr": 29.285,
+   "candidates": [
+    {
+     "mean_mse": 334.862875,
+     "name": "existing-g1",
+     "worst_psnr": 14.4853
+    },
+    {
+     "mean_mse": 25.59034,
+     "name": "existing-g2",
+     "worst_psnr": 29.285
+    },
+    {
+     "mean_mse": 18.65984,
+     "name": "minimax-start-0",
+     "worst_psnr": 33.1648
+    },
+    {
+     "mean_mse": 18.666606,
+     "name": "minimax-start-0.5",
+     "worst_psnr": 33.1795
+    },
+    {
+     "mean_mse": 18.665577,
+     "name": "minimax-start-1",
+     "worst_psnr": 33.1864
+    }
+   ],
+   "colors": {
+    "aubergine": {
+     "new_tint": [
+      0.2744,
+      0.2617,
+      0.3845
+     ],
+     "old_matrix": "mineral-dirt-2-g1.png",
+     "old_tint": [
+      0.43,
+      0.5277,
+      0.5711
+     ],
+     "psnr": 36.2753,
+     "rmse": 3.915409
+    },
+    "beige": {
+     "new_tint": [
+      0.59,
+      0.5546,
+      0.5
+     ],
+     "old_matrix": "mineral-dirt-2-g2.png",
+     "old_tint": [
+      0.7184,
+      0.6424,
+      0.5293
+     ],
+     "psnr": 38.2088,
+     "rmse": 3.134018
+    },
+    "black": {
+     "new_tint": [
+      0.2606,
+      0.2806,
+      0.3062
+     ],
+     "old_matrix": "mineral-dirt-2-g1.png",
+     "old_tint": [
+      0.4084,
+      0.5658,
+      0.4547
+     ],
+     "psnr": 37.0255,
+     "rmse": 3.59141
+    },
+    "brown": {
+     "new_tint": [
+      0.4688,
+      0.3475,
+      0.2916
+     ],
+     "old_matrix": "mineral-dirt-2-g1.png",
+     "old_tint": [
+      0.7346,
+      0.7008,
+      0.433
+     ],
+     "psnr": 34.8404,
+     "rmse": 4.618714
+    },
+    "cream": {
+     "new_tint": [
+      0.8182,
+      0.7886,
+      0.597
+     ],
+     "old_matrix": "mineral-dirt-2-g2.png",
+     "old_tint": [
+      0.9962,
+      0.9135,
+      0.6319
+     ],
+     "psnr": 36.2036,
+     "rmse": 3.947854
+    },
+    "dustyrose": {
+     "new_tint": [
+      0.4574,
+      0.3961,
+      0.4141
+     ],
+     "old_matrix": "mineral-dirt-2-g2.png",
+     "old_tint": [
+      0.5569,
+      0.4588,
+      0.4383
+     ],
+     "psnr": 40.1085,
+     "rmse": 2.518341
+    },
+    "grey": {
+     "new_tint": [
+      0.5736,
+      0.6121,
+      0.669
+     ],
+     "old_matrix": "mineral-dirt-2-g2.png",
+     "old_tint": [
+      0.6984,
+      0.709,
+      0.7081
+     ],
+     "psnr": 36.1944,
+     "rmse": 3.952027
+    },
+    "purple": {
+     "new_tint": [
+      0.3321,
+      0.344,
+      0.6011
+     ],
+     "old_matrix": "mineral-dirt-2-g1.png",
+     "old_tint": [
+      0.5203,
+      0.6937,
+      0.8927
+     ],
+     "psnr": 33.1864,
+     "rmse": 5.587537
+    },
+    "red": {
+     "new_tint": [
+      0.5448,
+      0.3071,
+      0.2783
+     ],
+     "old_matrix": "mineral-dirt-2-g2.png",
+     "old_tint": [
+      0.6634,
+      0.3557,
+      0.2946
+     ],
+     "psnr": 42.4633,
+     "rmse": 1.920335
+    },
+    "tan": {
+     "new_tint": [
+      0.5699,
+      0.4427,
+      0.3023
+     ],
+     "old_matrix": "mineral-dirt-2-g1.png",
+     "old_tint": [
+      0.893,
+      0.8927,
+      0.4489
+     ],
+     "psnr": 33.2295,
+     "rmse": 5.55986
+    },
+    "violet": {
+     "new_tint": [
+      0.4799,
+      0.32,
+      0.5171
+     ],
+     "old_matrix": "mineral-dirt-2-g1.png",
+     "old_tint": [
+      0.7519,
+      0.6453,
+      0.7679
+     ],
+     "psnr": 33.3544,
+     "rmse": 5.480488
+    },
+    "white": {
+     "new_tint": [
+      0.8213,
+      0.8632,
+      0.9447
+     ],
+     "old_matrix": "mineral-dirt-2-g2.png",
+     "old_tint": [
+      1.0,
+      0.9999,
+      1.0
+     ],
+     "psnr": 33.189,
+     "rmse": 5.585833
+    }
+   },
+   "family": "mineral-dirt-2",
+   "mean_mse": 18.665577,
+   "output_png_sha256": "8baaa30e47f511adfc984dc88701f9c909b75052176a01b8e4fffb0410c1664b",
+   "parameters": [
+    0.7484844100949386,
+    0.7274658599279493,
+    0.5129120088309246,
+    0.9611443795231752,
+    0.942093294954126,
+    0.9174150285671111
+   ],
+   "pixels_evaluated": 1376256,
+   "searches": [
+    {
+     "iterations": 45,
+     "message": "Optimization terminated successfully",
+     "start": 0.0,
+     "success": true
+    },
+    {
+     "iterations": 17,
+     "message": "Optimization terminated successfully",
+     "start": 0.5,
+     "success": true
+    },
+    {
+     "iterations": 17,
+     "message": "Optimization terminated successfully",
+     "start": 1.0,
+     "success": true
+    }
+   ],
+   "selected": "minimax-start-1",
+   "source_sha256": {
+    "mineral-dirt-2-g1.png": "82e24427d1a197f94cd358116e0361a0d0204c76b6a02054fb0b3cdd868617eb",
+    "mineral-dirt-2-g2.png": "cd45ed777df6ce9d636033ab5f2209757a29cf54b58b1b88b1b62d44b5ef1780"
+   },
+   "unique_pixel_pairs": 2031,
+   "worst_color": "purple",
+   "worst_psnr": 33.1864
+  },
+  {
+   "best_existing_worst_psnr": 35.1531,
+   "candidates": [
+    {
+     "mean_mse": 122.628781,
+     "name": "existing-g1",
+     "worst_psnr": 18.1065
+    },
+    {
+     "mean_mse": 5.636013,
+     "name": "existing-g2",
+     "worst_psnr": 35.1531
+    },
+    {
+     "mean_mse": 3.986579,
+     "name": "minimax-start-0",
+     "worst_psnr": 39.3677
+    },
+    {
+     "mean_mse": 3.986822,
+     "name": "minimax-start-0.5",
+     "worst_psnr": 39.3608
+    },
+    {
+     "mean_mse": 3.990356,
+     "name": "minimax-start-1",
+     "worst_psnr": 39.3559
+    }
+   ],
+   "colors": {
+    "aubergine": {
+     "new_tint": [
+      0.2893,
+      0.2665,
+      0.3599
+     ],
+     "old_matrix": "mineral-dirt-3-g1.png",
+     "old_tint": [
+      0.4395,
+      0.5185,
+      0.4691
+     ],
+     "psnr": 43.359,
+     "rmse": 1.732161
+    },
+    "beige": {
+     "new_tint": [
+      0.5525,
+      0.503,
+      0.4236
+     ],
+     "old_matrix": "mineral-dirt-3-g2.png",
+     "old_tint": [
+      0.5607,
+      0.4999,
+      0.4139
+     ],
+     "psnr": 44.1852,
+     "rmse": 1.575001
+    },
+    "black": {
+     "new_tint": [
+      0.236,
+      0.2483,
+      0.2469
+     ],
+     "old_matrix": "mineral-dirt-3-g1.png",
+     "old_tint": [
+      0.3585,
+      0.4831,
+      0.3218
+     ],
+     "psnr": 44.8153,
+     "rmse": 1.464792
+    },
+    "brown": {
+     "new_tint": [
+      0.429,
+      0.3096,
+      0.2444
+     ],
+     "old_matrix": "mineral-dirt-3-g1.png",
+     "old_tint": [
+      0.6517,
+      0.6023,
+      0.3186
+     ],
+     "psnr": 42.6625,
+     "rmse": 1.876798
+    },
+    "cream": {
+     "new_tint": [
+      0.7397,
+      0.6904,
+      0.4931
+     ],
+     "old_matrix": "mineral-dirt-3-g2.png",
+     "old_tint": [
+      0.7506,
+      0.6861,
+      0.4819
+     ],
+     "psnr": 42.053,
+     "rmse": 2.013214
+    },
+    "dustyrose": {
+     "new_tint": [
+      0.4315,
+      0.3666,
+      0.3546
+     ],
+     "old_matrix": "mineral-dirt-3-g2.png",
+     "old_tint": [
+      0.4379,
+      0.3643,
+      0.3465
+     ],
+     "psnr": 46.2815,
+     "rmse": 1.237268
+    },
+    "grey": {
+     "new_tint": [
+      0.5461,
+      0.5654,
+      0.5704
+     ],
+     "old_matrix": "mineral-dirt-3-g2.png",
+     "old_tint": [
+      0.5542,
+      0.5619,
+      0.5574
+     ],
+     "psnr": 42.4846,
+     "rmse": 1.915621
+    },
+    "purple": {
+     "new_tint": [
+      0.4123,
+      0.4112,
+      0.6137
+     ],
+     "old_matrix": "mineral-dirt-3-g1.png",
+     "old_tint": [
+      0.6264,
+      0.8001,
+      0.7999
+     ],
+     "psnr": 39.3713,
+     "rmse": 2.741412
+    },
+    "red": {
+     "new_tint": [
+      0.5348,
+      0.2987,
+      0.2565
+     ],
+     "old_matrix": "mineral-dirt-3-g2.png",
+     "old_tint": [
+      0.5427,
+      0.2969,
+      0.2507
+     ],
+     "psnr": 47.881,
+     "rmse": 1.029176
+    },
+    "tan": {
+     "new_tint": [
+      0.5094,
+      0.3813,
+      0.2399
+     ],
+     "old_matrix": "mineral-dirt-3-g1.png",
+     "old_tint": [
+      0.7739,
+      0.7418,
+      0.3127
+     ],
+     "psnr": 41.1341,
+     "rmse": 2.237868
+    },
+    "violet": {
+     "new_tint": [
+      0.5267,
+      0.3626,
+      0.5187
+     ],
+     "old_matrix": "mineral-dirt-3-g1.png",
+     "old_tint": [
+      0.8001,
+      0.7055,
+      0.6761
+     ],
+     "psnr": 40.1152,
+     "rmse": 2.516415
+    },
+    "white": {
+     "new_tint": [
+      0.7883,
+      0.8052,
+      0.8186
+     ],
+     "old_matrix": "mineral-dirt-3-g2.png",
+     "old_tint": [
+      0.7999,
+      0.8002,
+      0.7999
+     ],
+     "psnr": 39.3677,
+     "rmse": 2.742543
+    }
+   },
+   "family": "mineral-dirt-3",
+   "mean_mse": 3.986579,
+   "output_png_sha256": "9d3413af4ea0ee33034e34cb299d73650a715b80e4e0ee3b8b5c72bfa9dccfc7",
+   "parameters": [
+    0.6765713414716118,
+    0.6625653025642393,
+    0.4891716778709097,
+    0.9794435299182844,
+    0.9938316822072032,
+    0.9918114489921002
+   ],
+   "pixels_evaluated": 1376256,
+   "searches": [
+    {
+     "iterations": 19,
+     "message": "Optimization terminated successfully",
+     "start": 0.0,
+     "success": true
+    },
+    {
+     "iterations": 18,
+     "message": "Optimization terminated successfully",
+     "start": 0.5,
+     "success": true
+    },
+    {
+     "iterations": 17,
+     "message": "Optimization terminated successfully",
+     "start": 1.0,
+     "success": true
+    }
+   ],
+   "selected": "minimax-start-0",
+   "source_sha256": {
+    "mineral-dirt-3-g1.png": "a70f8e756bd7ab24987f02257642fadf884795a92c8512c76785b17ddfe566c0",
+    "mineral-dirt-3-g2.png": "d9fd93164467f9da8fe53892a278697915c8ab236c80d22594480ac794996463"
+   },
+   "unique_pixel_pairs": 2732,
+   "worst_color": "white",
+   "worst_psnr": 39.3677
+  },
+  {
+   "best_existing_worst_psnr": 33.4784,
+   "candidates": [
+    {
+     "mean_mse": 211.672301,
+     "name": "existing-g1",
+     "worst_psnr": 16.424
+    },
+    {
+     "mean_mse": 5.958291,
+     "name": "existing-g2",
+     "worst_psnr": 33.4784
+    },
+    {
+     "mean_mse": 5.992265,
+     "name": "minimax-start-0",
+     "worst_psnr": 37.2137
+    },
+    {
+     "mean_mse": 5.987155,
+     "name": "minimax-start-0.5",
+     "worst_psnr": 37.2124
+    },
+    {
+     "mean_mse": 5.998552,
+     "name": "minimax-start-1",
+     "worst_psnr": 37.2151
+    }
+   ],
+   "colors": {
+    "aubergine": {
+     "new_tint": [
+      0.2687,
+      0.2403,
+      0.3257
+     ],
+     "old_matrix": "mineral-dirt-4-g1.png",
+     "old_tint": [
+      0.4566,
+      0.5454,
+      0.4666
+     ],
+     "psnr": 40.5703,
+     "rmse": 2.387959
+    },
+    "beige": {
+     "new_tint": [
+      0.5172,
+      0.4599,
+      0.3739
+     ],
+     "old_matrix": "mineral-dirt-4-g2.png",
+     "old_tint": [
+      0.5402,
+      0.4801,
+      0.3923
+     ],
+     "psnr": 41.6185,
+     "rmse": 2.116494
+    },
+    "black": {
+     "new_tint": [
+      0.2244,
+      0.2303,
+      0.2224
+     ],
+     "old_matrix": "mineral-dirt-4-g2.png",
+     "old_tint": [
+      0.2344,
+      0.2404,
+      0.2334
+     ],
+     "psnr": 47.8283,
+     "rmse": 1.035441
+    },
+    "brown": {
+     "new_tint": [
+      0.3697,
+      0.2513,
+      0.1839
+     ],
+     "old_matrix": "mineral-dirt-4-g2.png",
+     "old_tint": [
+      0.3862,
+      0.2624,
+      0.193
+     ],
+     "psnr": 45.6185,
+     "rmse": 1.335406
+    },
+    "cream": {
+     "new_tint": [
+      0.7371,
+      0.6673,
+      0.4504
+     ],
+     "old_matrix": "mineral-dirt-4-g2.png",
+     "old_tint": [
+      0.7699,
+      0.6967,
+      0.4726
+     ],
+     "psnr": 38.7582,
+     "rmse": 2.941924
+    },
+    "dustyrose": {
+     "new_tint": [
+      0.382,
+      0.3169,
+      0.2992
+     ],
+     "old_matrix": "mineral-dirt-4-g2.png",
+     "old_tint": [
+      0.399,
+      0.3308,
+      0.3139
+     ],
+     "psnr": 44.2478,
+     "rmse": 1.563683
+    },
+    "grey": {
+     "new_tint": [
+      0.5294,
+      0.5365,
+      0.5275
+     ],
+     "old_matrix": "mineral-dirt-4-g2.png",
+     "old_tint": [
+      0.553,
+      0.5601,
+      0.5535
+     ],
+     "psnr": 40.3899,
+     "rmse": 2.438076
+    },
+    "purple": {
+     "new_tint": [
+      0.3618,
+      0.3527,
+      0.5586
+     ],
+     "old_matrix": "mineral-dirt-4-g1.png",
+     "old_tint": [
+      0.6149,
+      0.8006,
+      0.8002
+     ],
+     "psnr": 37.2151,
+     "rmse": 3.513847
+    },
+    "red": {
+     "new_tint": [
+      0.4142,
+      0.1898,
+      0.1487
+     ],
+     "old_matrix": "mineral-dirt-4-g2.png",
+     "old_tint": [
+      0.4326,
+      0.1982,
+      0.156
+     ],
+     "psnr": 45.4477,
+     "rmse": 1.361935
+    },
+    "tan": {
+     "new_tint": [
+      0.4841,
+      0.3463,
+      0.2035
+     ],
+     "old_matrix": "mineral-dirt-4-g2.png",
+     "old_tint": [
+      0.5056,
+      0.3615,
+      0.2135
+     ],
+     "psnr": 43.3397,
+     "rmse": 1.736029
+    },
+    "violet": {
+     "new_tint": [
+      0.4705,
+      0.3008,
+      0.4542
+     ],
+     "old_matrix": "mineral-dirt-4-g1.png",
+     "old_tint": [
+      0.7996,
+      0.6828,
+      0.6507
+     ],
+     "psnr": 37.2168,
+     "rmse": 3.513179
+    },
+    "white": {
+     "new_tint": [
+      0.7658,
+      0.7662,
+      0.7624
+     ],
+     "old_matrix": "mineral-dirt-4-g2.png",
+     "old_tint": [
+      0.7999,
+      0.7999,
+      0.7999
+     ],
+     "psnr": 37.2167,
+     "rmse": 3.513237
+    }
+   },
+   "family": "mineral-dirt-4",
+   "mean_mse": 5.998552,
+   "output_png_sha256": "17abee4caab512e5f39bb1246cb0812112842df174614a1853a13efec52f7bae",
+   "parameters": [
+    0.6054228135291759,
+    0.7022040987301794,
+    0.5146730692846503,
+    0.864405512483055,
+    0.8679989298782183,
+    0.848761310174869
+   ],
+   "pixels_evaluated": 1376256,
+   "searches": [
+    {
+     "iterations": 19,
+     "message": "Optimization terminated successfully",
+     "start": 0.0,
+     "success": true
+    },
+    {
+     "iterations": 21,
+     "message": "Optimization terminated successfully",
+     "start": 0.5,
+     "success": true
+    },
+    {
+     "iterations": 27,
+     "message": "Optimization terminated successfully",
+     "start": 1.0,
+     "success": true
+    }
+   ],
+   "selected": "minimax-start-1",
+   "source_sha256": {
+    "mineral-dirt-4-g1.png": "0e5170a53ec5b7b0f9dfe62f4dd74373306888f35ca515ecb1f8a6d864c6cdf0",
+    "mineral-dirt-4-g2.png": "b75af9a7caff7f81c3005fc46ee9dca5cb1a143a02cfb2b0bbc8a25f45090f3a"
+   },
+   "unique_pixel_pairs": 1501,
+   "worst_color": "purple",
+   "worst_psnr": 37.2151
+  },
+  {
+   "best_existing_worst_psnr": 35.3415,
+   "candidates": [
+    {
+     "mean_mse": 231.804762,
+     "name": "existing-g1",
+     "worst_psnr": 17.0709
+    },
+    {
+     "mean_mse": 4.292273,
+     "name": "existing-g2",
+     "worst_psnr": 35.3415
+    },
+    {
+     "mean_mse": 4.459665,
+     "name": "minimax-start-0",
+     "worst_psnr": 39.1757
+    },
+    {
+     "mean_mse": 4.460632,
+     "name": "minimax-start-0.5",
+     "worst_psnr": 39.1693
+    },
+    {
+     "mean_mse": 4.439847,
+     "name": "minimax-start-1",
+     "worst_psnr": 39.1869
+    }
+   ],
+   "colors": {
+    "aubergine": {
+     "new_tint": [
+      0.2836,
+      0.2906,
+      0.3678
+     ],
+     "old_matrix": "mineral-dirt-5-g1.png",
+     "old_tint": [
+      0.4195,
+      0.5246,
+      0.4787
+     ],
+     "psnr": 42.8643,
+     "rmse": 1.833679
+    },
+    "beige": {
+     "new_tint": [
+      0.6412,
+      0.6295,
+      0.4935
+     ],
+     "old_matrix": "mineral-dirt-5-g2.png",
+     "old_tint": [
+      0.5793,
+      0.5527,
+      0.4597
+     ],
+     "psnr": 42.4812,
+     "rmse": 1.916383
+    },
+    "black": {
+     "new_tint": [
+      0.2468,
+      0.2814,
+      0.263
+     ],
+     "old_matrix": "mineral-dirt-5-g1.png",
+     "old_tint": [
+      0.3651,
+      0.5079,
+      0.3423
+     ],
+     "psnr": 43.7865,
+     "rmse": 1.648987
+    },
+    "brown": {
+     "new_tint": [
+      0.5504,
+      0.4388,
+      0.3276
+     ],
+     "old_matrix": "mineral-dirt-5-g2.png",
+     "old_tint": [
+      0.4973,
+      0.3853,
+      0.3052
+     ],
+     "psnr": 44.843,
+     "rmse": 1.460132
+    },
+    "cream": {
+     "new_tint": [
+      0.8856,
+      0.8894,
+      0.5746
+     ],
+     "old_matrix": "mineral-dirt-5-g2.png",
+     "old_tint": [
+      0.8001,
+      0.7809,
+      0.5352
+     ],
+     "psnr": 39.8809,
+     "rmse": 2.585213
+    },
+    "dustyrose": {
+     "new_tint": [
+      0.4826,
+      0.4373,
+      0.3937
+     ],
+     "old_matrix": "mineral-dirt-5-g2.png",
+     "old_tint": [
+      0.436,
+      0.3839,
+      0.3667
+     ],
+     "psnr": 45.0704,
+     "rmse": 1.422399
+    },
+    "grey": {
+     "new_tint": [
+      0.5712,
+      0.6394,
+      0.6014
+     ],
+     "old_matrix": "mineral-dirt-5-g2.png",
+     "old_tint": [
+      0.5161,
+      0.5614,
+      0.5602
+     ],
+     "psnr": 42.3467,
+     "rmse": 1.946287
+    },
+    "purple": {
+     "new_tint": [
+      0.3862,
+      0.443,
+      0.6145
+     ],
+     "old_matrix": "mineral-dirt-5-g1.png",
+     "old_tint": [
+      0.5713,
+      0.7997,
+      0.7999
+     ],
+     "psnr": 39.189,
+     "rmse": 2.799554
+    },
+    "red": {
+     "new_tint": [
+      0.6488,
+      0.4106,
+      0.3313
+     ],
+     "old_matrix": "mineral-dirt-5-g2.png",
+     "old_tint": [
+      0.5862,
+      0.3605,
+      0.3086
+     ],
+     "psnr": 44.1569,
+     "rmse": 1.580132
+    },
+    "tan": {
+     "new_tint": [
+      0.6527,
+      0.5424,
+      0.3354
+     ],
+     "old_matrix": "mineral-dirt-5-g2.png",
+     "old_tint": [
+      0.5897,
+      0.4762,
+      0.3124
+     ],
+     "psnr": 43.4314,
+     "rmse": 1.717791
+    },
+    "violet": {
+     "new_tint": [
+      0.5408,
+      0.4046,
+      0.5428
+     ],
+     "old_matrix": "mineral-dirt-5-g1.png",
+     "old_tint": [
+      0.8,
+      0.7303,
+      0.7065
+     ],
+     "psnr": 39.1869,
+     "rmse": 2.800255
+    },
+    "white": {
+     "new_tint": [
+      0.8251,
+      0.9113,
+      0.8588
+     ],
+     "old_matrix": "mineral-dirt-5-g2.png",
+     "old_tint": [
+      0.7455,
+      0.8001,
+      0.8
+     ],
+     "psnr": 39.226,
+     "rmse": 2.787648
+    }
+   },
+   "family": "mineral-dirt-5",
+   "mean_mse": 4.439847,
+   "output_png_sha256": "fec404a7e478b8d332b4c4c134b034bf0ece8297903fe7076d55348c63f65d98",
+   "parameters": [
+    0.5788012864260951,
+    0.6806128337658609,
+    0.5331340741487344,
+    0.894744973200836,
+    0.8386466761614831,
+    0.8644208042990645
+   ],
+   "pixels_evaluated": 1376256,
+   "searches": [
+    {
+     "iterations": 15,
+     "message": "Optimization terminated successfully",
+     "start": 0.0,
+     "success": true
+    },
+    {
+     "iterations": 18,
+     "message": "Optimization terminated successfully",
+     "start": 0.5,
+     "success": true
+    },
+    {
+     "iterations": 15,
+     "message": "Optimization terminated successfully",
+     "start": 1.0,
+     "success": true
+    }
+   ],
+   "selected": "minimax-start-1",
+   "source_sha256": {
+    "mineral-dirt-5-g1.png": "1810b1f0b7827a4222757904a1b57ba8ad3eb8499fcfa87c5847c8ed79ebe268",
+    "mineral-dirt-5-g2.png": "3e202e9b4387c02219d948817671c542a199128ad633033dd8a4a40e32c33591"
+   },
+   "unique_pixel_pairs": 3431,
+   "worst_color": "violet",
+   "worst_psnr": 39.1869
+  },
+  {
+   "best_existing_worst_psnr": 29.3608,
+   "candidates": [
+    {
+     "mean_mse": 746.936286,
+     "name": "existing-g1",
+     "worst_psnr": 12.1489
+    },
+    {
+     "mean_mse": 14.655761,
+     "name": "existing-g2",
+     "worst_psnr": 29.3608
+    },
+    {
+     "mean_mse": 17.237622,
+     "name": "minimax-start-0",
+     "worst_psnr": 33.2431
+    },
+    {
+     "mean_mse": 17.203194,
+     "name": "minimax-start-0.5",
+     "worst_psnr": 33.239
+    },
+    {
+     "mean_mse": 17.220291,
+     "name": "minimax-start-1",
+     "worst_psnr": 33.2453
+    }
+   ],
+   "colors": {
+    "aubergine": {
+     "new_tint": [
+      0.3018,
+      0.2758,
+      0.3734
+     ],
+     "old_matrix": "mineral-dirt-6-g1.png",
+     "old_tint": [
+      0.5359,
+      0.7188,
+      0.5925
+     ],
+     "psnr": 36.3835,
+     "rmse": 3.866926
+    },
+    "beige": {
+     "new_tint": [
+      0.6654,
+      0.6072,
+      0.487
+     ],
+     "old_matrix": "mineral-dirt-6-g2.png",
+     "old_tint": [
+      0.6244,
+      0.555,
+      0.4563
+     ],
+     "psnr": 36.2224,
+     "rmse": 3.93929
+    },
+    "black": {
+     "new_tint": [
+      0.277,
+      0.2894,
+      0.275
+     ],
+     "old_matrix": "mineral-dirt-6-g2.png",
+     "old_tint": [
+      0.2599,
+      0.2645,
+      0.2577
+     ],
+     "psnr": 42.9905,
+     "rmse": 1.807245
+    },
+    "brown": {
+     "new_tint": [
+      0.5636,
+      0.4096,
+      0.3093
+     ],
+     "old_matrix": "mineral-dirt-6-g2.png",
+     "old_tint": [
+      0.5289,
+      0.3744,
+      0.2898
+     ],
+     "psnr": 38.3529,
+     "rmse": 3.082459
+    },
+    "cream": {
+     "new_tint": [
+      0.8525,
+      0.8081,
+      0.549
+     ],
+     "old_matrix": "mineral-dirt-6-g2.png",
+     "old_tint": [
+      0.8,
+      0.7386,
+      0.5144
+     ],
+     "psnr": 34.202,
+     "rmse": 4.970937
+    },
+    "dustyrose": {
+     "new_tint": [
+      0.4988,
+      0.4091,
+      0.3754
+     ],
+     "old_matrix": "mineral-dirt-6-g2.png",
+     "old_tint": [
+      0.4681,
+      0.3739,
+      0.3518
+     ],
+     "psnr": 38.8205,
+     "rmse": 2.920905
+    },
+    "grey": {
+     "new_tint": [
+      0.5999,
+      0.6227,
+      0.6006
+     ],
+     "old_matrix": "mineral-dirt-6-g2.png",
+     "old_tint": [
+      0.563,
+      0.5692,
+      0.5628
+     ],
+     "psnr": 36.2662,
+     "rmse": 3.919517
+    },
+    "purple": {
+     "new_tint": [
+      0.3661,
+      0.3687,
+      0.6061
+     ],
+     "old_matrix": "mineral-dirt-6-g1.png",
+     "old_tint": [
+      0.6501,
+      0.961,
+      0.9616
+     ],
+     "psnr": 33.5203,
+     "rmse": 5.376794
+    },
+    "red": {
+     "new_tint": [
+      0.6133,
+      0.3226,
+      0.2558
+     ],
+     "old_matrix": "mineral-dirt-6-g2.png",
+     "old_tint": [
+      0.5755,
+      0.2949,
+      0.2397
+     ],
+     "psnr": 38.1444,
+     "rmse": 3.157316
+    },
+    "tan": {
+     "new_tint": [
+      0.6946,
+      0.5393,
+      0.3411
+     ],
+     "old_matrix": "mineral-dirt-6-g2.png",
+     "old_tint": [
+      0.6518,
+      0.4929,
+      0.3196
+     ],
+     "psnr": 36.57,
+     "rmse": 3.784791
+    },
+    "violet": {
+     "new_tint": [
+      0.5414,
+      0.3417,
+      0.5152
+     ],
+     "old_matrix": "mineral-dirt-6-g1.png",
+     "old_tint": [
+      0.9613,
+      0.8907,
+      0.8174
+     ],
+     "psnr": 33.2457,
+     "rmse": 5.54949
+    },
+    "white": {
+     "new_tint": [
+      0.8498,
+      0.8752,
+      0.8537
+     ],
+     "old_matrix": "mineral-dirt-6-g2.png",
+     "old_tint": [
+      0.7975,
+      0.8,
+      0.7999
+     ],
+     "psnr": 33.2453,
+     "rmse": 5.549785
+    }
+   },
+   "family": "mineral-dirt-6",
+   "mean_mse": 17.220291,
+   "output_png_sha256": "82e08f3f198d62643f2553ba0c2d7de3a4ae5d195f435a57cb9291cd5efbd093",
+   "parameters": [
+    0.546151647852816,
+    0.7218486632004899,
+    0.561844986832098,
+    0.9360305016350724,
+    0.9221980056419269,
+    0.9142364380254262
+   ],
+   "pixels_evaluated": 1376256,
+   "searches": [
+    {
+     "iterations": 22,
+     "message": "Optimization terminated successfully",
+     "start": 0.0,
+     "success": true
+    },
+    {
+     "iterations": 34,
+     "message": "Optimization terminated successfully",
+     "start": 0.5,
+     "success": true
+    },
+    {
+     "iterations": 11,
+     "message": "Optimization terminated successfully",
+     "start": 1.0,
+     "success": true
+    }
+   ],
+   "selected": "minimax-start-1",
+   "source_sha256": {
+    "mineral-dirt-6-g1.png": "f43e63709510b7ca086965987c70df395843b37b103c599de0fc0ef081b25319",
+    "mineral-dirt-6-g2.png": "3798bc3b14498e717b86f112b441fde30b9513667f8ae55f2ce8e91bb10d827c"
+   },
+   "unique_pixel_pairs": 2005,
+   "worst_color": "white",
+   "worst_psnr": 33.2453
+  },
+  {
+   "best_existing_worst_psnr": 30.6595,
+   "candidates": [
+    {
+     "mean_mse": 322.232318,
+     "name": "existing-g1",
+     "worst_psnr": 15.0988
+    },
+    {
+     "mean_mse": 22.121064,
+     "name": "existing-g2",
+     "worst_psnr": 30.6595
+    },
+    {
+     "mean_mse": 16.299099,
+     "name": "minimax-start-0",
+     "worst_psnr": 34.581
+    },
+    {
+     "mean_mse": 16.325944,
+     "name": "minimax-start-0.5",
+     "worst_psnr": 34.5549
+    },
+    {
+     "mean_mse": 16.277251,
+     "name": "minimax-start-1",
+     "worst_psnr": 34.5837
+    }
+   ],
+   "colors": {
+    "aubergine": {
+     "new_tint": [
+      0.3119,
+      0.2733,
+      0.4148
+     ],
+     "old_matrix": "mineral-sand-2-g1.png",
+     "old_tint": [
+      0.3672,
+      0.4646,
+      0.4908
+     ],
+     "psnr": 37.7749,
+     "rmse": 3.294527
+    },
+    "beige": {
+     "new_tint": [
+      0.735,
+      0.6634,
+      0.5172
+     ],
+     "old_matrix": "mineral-sand-2-g2.png",
+     "old_tint": [
+      0.7427,
+      0.6622,
+      0.5401
+     ],
+     "psnr": 37.3705,
+     "rmse": 3.451548
+    },
+    "black": {
+     "new_tint": [
+      0.2844,
+      0.2974,
+      0.2837
+     ],
+     "old_matrix": "mineral-sand-2-g1.png",
+     "old_tint": [
+      0.3349,
+      0.5056,
+      0.3357
+     ],
+     "psnr": 38.8788,
+     "rmse": 2.901342
+    },
+    "brown": {
+     "new_tint": [
+      0.6674,
+      0.4704,
+      0.3418
+     ],
+     "old_matrix": "mineral-sand-2-g1.png",
+     "old_tint": [
+      0.7859,
+      0.7997,
+      0.4045
+     ],
+     "psnr": 34.5837,
+     "rmse": 4.757217
+    },
+    "cream": {
+     "new_tint": [
+      0.9395,
+      0.899,
+      0.5553
+     ],
+     "old_matrix": "mineral-sand-2-g2.png",
+     "old_tint": [
+      0.9493,
+      0.8974,
+      0.5799
+     ],
+     "psnr": 35.1094,
+     "rmse": 4.477863
+    },
+    "dustyrose": {
+     "new_tint": [
+      0.5311,
+      0.4028,
+      0.3674
+     ],
+     "old_matrix": "mineral-sand-2-g1.png",
+     "old_tint": [
+      0.6253,
+      0.6847,
+      0.4348
+     ],
+     "psnr": 35.7358,
+     "rmse": 4.166313
+    },
+    "grey": {
+     "new_tint": [
+      0.5964,
+      0.6169,
+      0.5948
+     ],
+     "old_matrix": "mineral-sand-2-g2.png",
+     "old_tint": [
+      0.6026,
+      0.6158,
+      0.6212
+     ],
+     "psnr": 38.5628,
+     "rmse": 3.008841
+    },
+    "purple": {
+     "new_tint": [
+      0.3344,
+      0.3348,
+      0.676
+     ],
+     "old_matrix": "mineral-sand-2-g1.png",
+     "old_tint": [
+      0.3937,
+      0.5692,
+      0.7999
+     ],
+     "psnr": 34.727,
+     "rmse": 4.679403
+    },
+    "red": {
+     "new_tint": [
+      0.6796,
+      0.2997,
+      0.23
+     ],
+     "old_matrix": "mineral-sand-2-g1.png",
+     "old_tint": [
+      0.8002,
+      0.5095,
+      0.2721
+     ],
+     "psnr": 36.6022,
+     "rmse": 3.770776
+    },
+    "tan": {
+     "new_tint": [
+      0.8603,
+      0.7044,
+      0.4335
+     ],
+     "old_matrix": "mineral-sand-2-g2.png",
+     "old_tint": [
+      0.8693,
+      0.7032,
+      0.4527
+     ],
+     "psnr": 36.3816,
+     "rmse": 3.867767
+    },
+    "violet": {
+     "new_tint": [
+      0.5946,
+      0.325,
+      0.5641
+     ],
+     "old_matrix": "mineral-sand-2-g1.png",
+     "old_tint": [
+      0.7001,
+      0.5525,
+      0.6675
+     ],
+     "psnr": 34.822,
+     "rmse": 4.628485
+    },
+    "white": {
+     "new_tint": [
+      0.9513,
+      0.9632,
+      0.9208
+     ],
+     "old_matrix": "mineral-sand-2-g2.png",
+     "old_tint": [
+      0.9613,
+      0.9615,
+      0.9617
+     ],
+     "psnr": 34.5993,
+     "rmse": 4.748728
+    }
+   },
+   "family": "mineral-sand-2",
+   "mean_mse": 16.277251,
+   "output_png_sha256": "74a76712d5ab38af849b0ba6acf35a20199782762f0cf8c4f1e03a58d2be23a5",
+   "parameters": [
+    0.49870936131456667,
+    0.663603799833477,
+    0.7796724413885984,
+    0.9220505659992164,
+    0.8994687376891483,
+    0.9299740597897775
+   ],
+   "pixels_evaluated": 1376256,
+   "searches": [
+    {
+     "iterations": 32,
+     "message": "Optimization terminated successfully",
+     "start": 0.0,
+     "success": true
+    },
+    {
+     "iterations": 20,
+     "message": "Optimization terminated successfully",
+     "start": 0.5,
+     "success": true
+    },
+    {
+     "iterations": 17,
+     "message": "Optimization terminated successfully",
+     "start": 1.0,
+     "success": true
+    }
+   ],
+   "selected": "minimax-start-1",
+   "source_sha256": {
+    "mineral-sand-2-g1.png": "0621b2ff3ede9123ebef3c7d6cdb4b0b42bef787ef9c31948fdb9e519fbee89a",
+    "mineral-sand-2-g2.png": "315976a6a23dd4193d95fd242653ccf1b4c86ece8fb3b7b1a27eb50ff4a6c773"
+   },
+   "unique_pixel_pairs": 1431,
+   "worst_color": "brown",
+   "worst_psnr": 34.5837
+  },
+  {
+   "best_existing_worst_psnr": 32.9494,
+   "candidates": [
+    {
+     "mean_mse": 303.674774,
+     "name": "existing-g1",
+     "worst_psnr": 15.8914
+    },
+    {
+     "mean_mse": 13.127976,
+     "name": "existing-g2",
+     "worst_psnr": 32.9494
+    },
+    {
+     "mean_mse": 9.327539,
+     "name": "minimax-start-0",
+     "worst_psnr": 37.0929
+    },
+    {
+     "mean_mse": 9.334951,
+     "name": "minimax-start-0.5",
+     "worst_psnr": 37.0982
+    },
+    {
+     "mean_mse": 9.336203,
+     "name": "minimax-start-1",
+     "worst_psnr": 37.0831
+    }
+   ],
+   "colors": {
+    "aubergine": {
+     "new_tint": [
+      0.2802,
+      0.261,
+      0.3657
+     ],
+     "old_matrix": "mineral-sand-3-g1.png",
+     "old_tint": [
+      0.3889,
+      0.4846,
+      0.5254
+     ],
+     "psnr": 40.2525,
+     "rmse": 2.476949
+    },
+    "beige": {
+     "new_tint": [
+      0.6678,
+      0.6272,
+      0.4809
+     ],
+     "old_matrix": "mineral-sand-3-g2.png",
+     "old_tint": [
+      0.6375,
+      0.5886,
+      0.4766
+     ],
+     "psnr": 39.4377,
+     "rmse": 2.720525
+    },
+    "black": {
+     "new_tint": [
+      0.2636,
+      0.2865,
+      0.2627
+     ],
+     "old_matrix": "mineral-sand-3-g1.png",
+     "old_tint": [
+      0.3658,
+      0.5319,
+      0.3774
+     ],
+     "psnr": 41.4113,
+     "rmse": 2.167576
+    },
+    "brown": {
+     "new_tint": [
+      0.6106,
+      0.4564,
+      0.331
+     ],
+     "old_matrix": "mineral-sand-3-g1.png",
+     "old_tint": [
+      0.8474,
+      0.8475,
+      0.4756
+     ],
+     "psnr": 37.1158,
+     "rmse": 3.554284
+    },
+    "cream": {
+     "new_tint": [
+      0.8381,
+      0.8307,
+      0.5142
+     ],
+     "old_matrix": "mineral-sand-3-g2.png",
+     "old_tint": [
+      0.8,
+      0.7795,
+      0.5096
+     ],
+     "psnr": 37.449,
+     "rmse": 3.420494
+    },
+    "dustyrose": {
+     "new_tint": [
+      0.4742,
+      0.3853,
+      0.3437
+     ],
+     "old_matrix": "mineral-sand-3-g1.png",
+     "old_tint": [
+      0.6581,
+      0.7154,
+      0.4938
+     ],
+     "psnr": 38.3355,
+     "rmse": 3.088621
+    },
+    "grey": {
+     "new_tint": [
+      0.5494,
+      0.5897,
+      0.5531
+     ],
+     "old_matrix": "mineral-sand-3-g2.png",
+     "old_tint": [
+      0.5244,
+      0.5534,
+      0.5482
+     ],
+     "psnr": 40.3806,
+     "rmse": 2.440684
+    },
+    "purple": {
+     "new_tint": [
+      0.3047,
+      0.3161,
+      0.5898
+     ],
+     "old_matrix": "mineral-sand-3-g1.png",
+     "old_tint": [
+      0.4229,
+      0.587,
+      0.8474
+     ],
+     "psnr": 37.1077,
+     "rmse": 3.557565
+    },
+    "red": {
+     "new_tint": [
+      0.5877,
+      0.2842,
+      0.2192
+     ],
+     "old_matrix": "mineral-sand-3-g1.png",
+     "old_tint": [
+      0.8156,
+      0.5277,
+      0.315
+     ],
+     "psnr": 39.3803,
+     "rmse": 2.738581
+    },
+    "tan": {
+     "new_tint": [
+      0.7838,
+      0.6675,
+      0.408
+     ],
+     "old_matrix": "mineral-sand-3-g2.png",
+     "old_tint": [
+      0.7482,
+      0.6264,
+      0.4044
+     ],
+     "psnr": 38.5133,
+     "rmse": 3.026057
+    },
+    "violet": {
+     "new_tint": [
+      0.5144,
+      0.3057,
+      0.496
+     ],
+     "old_matrix": "mineral-sand-3-g1.png",
+     "old_tint": [
+      0.7139,
+      0.5676,
+      0.7127
+     ],
+     "psnr": 37.3542,
+     "rmse": 3.458044
+    },
+    "white": {
+     "new_tint": [
+      0.8062,
+      0.8525,
+      0.8072
+     ],
+     "old_matrix": "mineral-sand-3-g2.png",
+     "old_tint": [
+      0.7696,
+      0.8,
+      0.8
+     ],
+     "psnr": 37.0982,
+     "rmse": 3.561471
+    }
+   },
+   "family": "mineral-sand-3",
+   "mean_mse": 9.334951,
+   "output_png_sha256": "26118814f96255af4f328b806d39063d25eb99da3d87b5cf2a05b18c5cdb962e",
+   "parameters": [
+    0.501682169986616,
+    0.6553872508710508,
+    0.7188673905881878,
+    0.9999825742102437,
+    0.9779342579969686,
+    0.9962504062845289
+   ],
+   "pixels_evaluated": 1376256,
+   "searches": [
+    {
+     "iterations": 49,
+     "message": "Optimization terminated successfully",
+     "start": 0.0,
+     "success": true
+    },
+    {
+     "iterations": 44,
+     "message": "Optimization terminated successfully",
+     "start": 0.5,
+     "success": true
+    },
+    {
+     "iterations": 17,
+     "message": "Optimization terminated successfully",
+     "start": 1.0,
+     "success": true
+    }
+   ],
+   "selected": "minimax-start-0.5",
+   "source_sha256": {
+    "mineral-sand-3-g1.png": "50f545a6991aabf81fba046a79bbf9f44f098f05b2c369373a16ff65862a0d7f",
+    "mineral-sand-3-g2.png": "2b115acef2ab54ed45d0de92b70cfe5c5e46546cb07e62dcb6f711339a59e51e"
+   },
+   "unique_pixel_pairs": 1629,
+   "worst_color": "white",
+   "worst_psnr": 37.0982
+  },
+  {
+   "best_existing_worst_psnr": 22.5246,
+   "candidates": [
+    {
+     "mean_mse": 69.25479,
+     "name": "existing-g1",
+     "worst_psnr": 22.5246
+    },
+    {
+     "mean_mse": 405.405345,
+     "name": "existing-g2",
+     "worst_psnr": 17.1769
+    },
+    {
+     "mean_mse": 25.431924,
+     "name": "minimax-start-0",
+     "worst_psnr": 33.5052
+    },
+    {
+     "mean_mse": 25.423187,
+     "name": "minimax-start-0.5",
+     "worst_psnr": 33.5077
+    },
+    {
+     "mean_mse": 25.416354,
+     "name": "minimax-start-1",
+     "worst_psnr": 33.5053
+    }
+   ],
+   "colors": {
+    "blue": {
+     "new_tint": [
+      0.3271,
+      0.508,
+      0.7449
+     ],
+     "old_matrix": "vegetation-grass-1-g1.png",
+     "old_tint": [
+      0.505,
+      0.7505,
+      0.7728
+     ],
+     "psnr": 35.1684,
+     "rmse": 4.447562
+    },
+    "green": {
+     "new_tint": [
+      0.4872,
+      0.5734,
+      0.2224
+     ],
+     "old_matrix": "vegetation-grass-1-g1.png",
+     "old_tint": [
+      0.7522,
+      0.8472,
+      0.2307
+     ],
+     "psnr": 34.494,
+     "rmse": 4.806623
+    },
+    "mauve": {
+     "new_tint": [
+      0.3833,
+      0.447,
+      0.7757
+     ],
+     "old_matrix": "vegetation-grass-1-g1.png",
+     "old_tint": [
+      0.5918,
+      0.6604,
+      0.8047
+     ],
+     "psnr": 34.4944,
+     "rmse": 4.806415
+    },
+    "olive": {
+     "new_tint": [
+      0.6411,
+      0.7021,
+      0.1851
+     ],
+     "old_matrix": "vegetation-grass-1-g2.png",
+     "old_tint": [
+      0.7412,
+      0.7798,
+      0.8529
+     ],
+     "psnr": 33.6074,
+     "rmse": 5.323159
+    },
+    "orange": {
+     "new_tint": [
+      0.7176,
+      0.5443,
+      0.1818
+     ],
+     "old_matrix": "vegetation-grass-1-g2.png",
+     "old_tint": [
+      0.8296,
+      0.6046,
+      0.8375
+     ],
+     "psnr": 33.8231,
+     "rmse": 5.19258
+    },
+    "purple": {
+     "new_tint": [
+      0.466,
+      0.3546,
+      0.817
+     ],
+     "old_matrix": "vegetation-grass-1-g1.png",
+     "old_tint": [
+      0.7195,
+      0.5239,
+      0.8476
+     ],
+     "psnr": 33.5099,
+     "rmse": 5.383249
+    },
+    "red": {
+     "new_tint": [
+      0.6377,
+      0.263,
+      0.2009
+     ],
+     "old_matrix": "vegetation-grass-1-g2.png",
+     "old_tint": [
+      0.7372,
+      0.2921,
+      0.9257
+     ],
+     "psnr": 33.5077,
+     "rmse": 5.384607
+    },
+    "turquoise": {
+     "new_tint": [
+      0.4059,
+      0.5416,
+      0.4856
+     ],
+     "old_matrix": "vegetation-grass-1-g1.png",
+     "old_tint": [
+      0.6267,
+      0.8002,
+      0.5038
+     ],
+     "psnr": 35.1593,
+     "rmse": 4.452202
+    },
+    "violet": {
+     "new_tint": [
+      0.5488,
+      0.3134,
+      0.5026
+     ],
+     "old_matrix": "vegetation-grass-1-g1.png",
+     "old_tint": [
+      0.8473,
+      0.4631,
+      0.5214
+     ],
+     "psnr": 33.5082,
+     "rmse": 5.384338
+    },
+    "yellow": {
+     "new_tint": [
+      0.8011,
+      0.8339,
+      0.1594
+     ],
+     "old_matrix": "vegetation-grass-1-g2.png",
+     "old_tint": [
+      0.9261,
+      0.9262,
+      0.7346
+     ],
+     "psnr": 33.9544,
+     "rmse": 5.114719
+    }
+   },
+   "family": "vegetation-grass-1",
+   "mean_mse": 25.423187,
+   "output_png_sha256": "313dff68ff5181e582cba05be9af8e0ae291c8477a92cd1d926ed021adef14f0",
+   "parameters": [
+    0.6879947260921946,
+    0.5153643126490286,
+    0.21641817658539794,
+    1.0003858790272617,
+    0.999985812782293,
+    1.000165538619653
+   ],
+   "pixels_evaluated": 1376256,
+   "searches": [
+    {
+     "iterations": 60,
+     "message": "Optimization terminated successfully",
+     "start": 0.0,
+     "success": true
+    },
+    {
+     "iterations": 21,
+     "message": "Optimization terminated successfully",
+     "start": 0.5,
+     "success": true
+    },
+    {
+     "iterations": 26,
+     "message": "Optimization terminated successfully",
+     "start": 1.0,
+     "success": true
+    }
+   ],
+   "selected": "minimax-start-0.5",
+   "source_sha256": {
+    "vegetation-grass-1-g1.png": "81015f7fbad04c83a2cdd0ecbbccc531cab70ad4b220b5a5a402944e8ee627fa",
+    "vegetation-grass-1-g2.png": "1c6b57386443f8737ab244e23e6cf75312d253287007a25d86dfed2466fe42e8"
+   },
+   "unique_pixel_pairs": 6293,
+   "worst_color": "red",
+   "worst_psnr": 33.5077
+  },
+  {
+   "best_existing_worst_psnr": 21.3672,
+   "candidates": [
+    {
+     "mean_mse": 120.264435,
+     "name": "existing-g1",
+     "worst_psnr": 21.3672
+    },
+    {
+     "mean_mse": 226.066646,
+     "name": "existing-g2",
+     "worst_psnr": 19.2066
+    },
+    {
+     "mean_mse": 31.87689,
+     "name": "minimax-start-0",
+     "worst_psnr": 32.0515
+    },
+    {
+     "mean_mse": 31.873282,
+     "name": "minimax-start-0.5",
+     "worst_psnr": 32.0527
+    },
+    {
+     "mean_mse": 31.877707,
+     "name": "minimax-start-1",
+     "worst_psnr": 32.0526
+    }
+   ],
+   "colors": {
+    "blue": {
+     "new_tint": [
+      0.3608,
+      0.3969,
+      0.3938
+     ],
+     "old_matrix": "vegetation-grass-2-g1.png",
+     "old_tint": [
+      0.5768,
+      0.7788,
+      0.7415
+     ],
+     "psnr": 33.5421,
+     "rmse": 5.363361
+    },
+    "green": {
+     "new_tint": [
+      0.5833,
+      0.4995,
+      0.1714
+     ],
+     "old_matrix": "vegetation-grass-2-g2.png",
+     "old_tint": [
+      0.7137,
+      0.7967,
+      0.9998
+     ],
+     "psnr": 33.0767,
+     "rmse": 5.65852
+    },
+    "mauve": {
+     "new_tint": [
+      0.3931,
+      0.3336,
+      0.4278
+     ],
+     "old_matrix": "vegetation-grass-2-g1.png",
+     "old_tint": [
+      0.6284,
+      0.6546,
+      0.8057
+     ],
+     "psnr": 33.7248,
+     "rmse": 5.251675
+    },
+    "olive": {
+     "new_tint": [
+      0.7045,
+      0.565,
+      0.159
+     ],
+     "old_matrix": "vegetation-grass-2-g2.png",
+     "old_tint": [
+      0.862,
+      0.9012,
+      0.9276
+     ],
+     "psnr": 32.562,
+     "rmse": 6.004003
+    },
+    "orange": {
+     "new_tint": [
+      0.7519,
+      0.415,
+      0.151
+     ],
+     "old_matrix": "vegetation-grass-2-g2.png",
+     "old_tint": [
+      0.92,
+      0.6619,
+      0.8811
+     ],
+     "psnr": 33.3514,
+     "rmse": 5.482387
+    },
+    "purple": {
+     "new_tint": [
+      0.44,
+      0.2351,
+      0.4739
+     ],
+     "old_matrix": "vegetation-grass-2-g1.png",
+     "old_tint": [
+      0.7034,
+      0.4614,
+      0.8924
+     ],
+     "psnr": 33.7917,
+     "rmse": 5.211432
+    },
+    "red": {
+     "new_tint": [
+      0.679,
+      0.2067,
+      0.1533
+     ],
+     "old_matrix": "vegetation-grass-2-g2.png",
+     "old_tint": [
+      0.8308,
+      0.3297,
+      0.8941
+     ],
+     "psnr": 34.5384,
+     "rmse": 4.782097
+    },
+    "turquoise": {
+     "new_tint": [
+      0.4973,
+      0.4551,
+      0.2613
+     ],
+     "old_matrix": "vegetation-grass-2-g1.png",
+     "old_tint": [
+      0.795,
+      0.8929,
+      0.492
+     ],
+     "psnr": 32.0527,
+     "rmse": 6.366556
+    },
+    "violet": {
+     "new_tint": [
+      0.5585,
+      0.2269,
+      0.3046
+     ],
+     "old_matrix": "vegetation-grass-2-g1.png",
+     "old_tint": [
+      0.8929,
+      0.4452,
+      0.5736
+     ],
+     "psnr": 32.9195,
+     "rmse": 5.761906
+    },
+    "yellow": {
+     "new_tint": [
+      0.8173,
+      0.627,
+      0.1452
+     ],
+     "old_matrix": "vegetation-grass-2-g2.png",
+     "old_tint": [
+      1.0,
+      1.0,
+      0.8469
+     ],
+     "psnr": 32.0559,
+     "rmse": 6.36424
+    }
+   },
+   "family": "vegetation-grass-2",
+   "mean_mse": 31.873282,
+   "output_png_sha256": "2ee64b2f6d46845d137320c41e38cb37f28c7bf62519a965ded02c83ed59ecda",
+   "parameters": [
+    0.6021223391082395,
+    0.5416789283466407,
+    0.23360981873638406,
+    1.000099220949667,
+    1.0000561852579044,
+    1.0002408485940055
+   ],
+   "pixels_evaluated": 1376256,
+   "searches": [
+    {
+     "iterations": 44,
+     "message": "Optimization terminated successfully",
+     "start": 0.0,
+     "success": true
+    },
+    {
+     "iterations": 17,
+     "message": "Optimization terminated successfully",
+     "start": 0.5,
+     "success": true
+    },
+    {
+     "iterations": 12,
+     "message": "Optimization terminated successfully",
+     "start": 1.0,
+     "success": true
+    }
+   ],
+   "selected": "minimax-start-0.5",
+   "source_sha256": {
+    "vegetation-grass-2-g1.png": "0371359d3c4b55f6a86a77dfdfa8e39700a4c44ee7354839b63af54e85d40cd7",
+    "vegetation-grass-2-g2.png": "25a7f370acdbdb896713b6650c49f5bfb60d2b0dc74e2262b9207312c4a71734"
+   },
+   "unique_pixel_pairs": 4192,
+   "worst_color": "turquoise",
+   "worst_psnr": 32.0527
+  },
+  {
+   "best_existing_worst_psnr": 31.1378,
+   "candidates": [
+    {
+     "mean_mse": 24.865892,
+     "name": "existing-g1",
+     "worst_psnr": 31.1378
+    },
+    {
+     "mean_mse": 37.390456,
+     "name": "existing-g2",
+     "worst_psnr": 29.3809
+    },
+    {
+     "mean_mse": 15.029428,
+     "name": "minimax-start-0",
+     "worst_psnr": 36.3431
+    },
+    {
+     "mean_mse": 15.0282,
+     "name": "minimax-start-0.5",
+     "worst_psnr": 36.3419
+    },
+    {
+     "mean_mse": 15.031224,
+     "name": "minimax-start-1",
+     "worst_psnr": 36.3397
+    }
+   ],
+   "colors": {
+    "blue": {
+     "new_tint": [
+      0.3197,
+      0.4009,
+      0.5173
+     ],
+     "old_matrix": "volcanic-heat-2-g1.png",
+     "old_tint": [
+      0.6664,
+      0.8003,
+      0.8
+     ],
+     "psnr": 36.3717,
+     "rmse": 3.87217
+    },
+    "green": {
+     "new_tint": [
+      0.3528,
+      0.4338,
+      0.3903
+     ],
+     "old_matrix": "volcanic-heat-2-g2.png",
+     "old_tint": [
+      0.708,
+      0.846,
+      0.8457
+     ],
+     "psnr": 36.3845,
+     "rmse": 3.866477
+    },
+    "orange": {
+     "new_tint": [
+      0.4224,
+      0.3614,
+      0.3911
+     ],
+     "old_matrix": "volcanic-heat-2-g2.png",
+     "old_tint": [
+      0.8476,
+      0.7049,
+      0.8474
+     ],
+     "psnr": 36.3463,
+     "rmse": 3.883518
+    },
+    "purple": {
+     "new_tint": [
+      0.384,
+      0.3284,
+      0.5179
+     ],
+     "old_matrix": "volcanic-heat-2-g1.png",
+     "old_tint": [
+      0.8004,
+      0.6557,
+      0.8009
+     ],
+     "psnr": 36.3431,
+     "rmse": 3.884927
+    }
+   },
+   "family": "volcanic-heat-2",
+   "mean_mse": 15.029428,
+   "output_png_sha256": "22d2052b4fc8b7d8b572b3e630cc1f1aa5d6d1d3b6f41f24913f2e09d7127f95",
+   "parameters": [
+    0.6714460398099802,
+    0.6759131569706988,
+    0.30057422536229716,
+    1.001568351670048,
+    1.0011106187947865,
+    1.0360181943033142
+   ],
+   "pixels_evaluated": 1376256,
+   "searches": [
+    {
+     "iterations": 10,
+     "message": "Optimization terminated successfully",
+     "start": 0.0,
+     "success": true
+    },
+    {
+     "iterations": 24,
+     "message": "Optimization terminated successfully",
+     "start": 0.5,
+     "success": true
+    },
+    {
+     "iterations": 13,
+     "message": "Optimization terminated successfully",
+     "start": 1.0,
+     "success": true
+    }
+   ],
+   "selected": "minimax-start-0",
+   "source_sha256": {
+    "volcanic-heat-2-g1.png": "21843bbd781026ab0e9e1663ff1f052663ffd65207ed952b51d342ae0316468b",
+    "volcanic-heat-2-g2.png": "f0fafad0609a5e13e9f015584a3214e9207a9dc2379fa90ac9ce375e0cf42d9f"
+   },
+   "unique_pixel_pairs": 6656,
+   "worst_color": "purple",
+   "worst_psnr": 36.3431
+  },
+  {
+   "best_existing_worst_psnr": 28.2525,
+   "candidates": [
+    {
+     "mean_mse": 47.773388,
+     "name": "existing-g1",
+     "worst_psnr": 28.2525
+    },
+    {
+     "mean_mse": 112.634637,
+     "name": "existing-g2",
+     "worst_psnr": 24.5937
+    },
+    {
+     "mean_mse": 31.534982,
+     "name": "minimax-start-0",
+     "worst_psnr": 33.1102
+    },
+    {
+     "mean_mse": 31.541374,
+     "name": "minimax-start-0.5",
+     "worst_psnr": 33.1137
+    },
+    {
+     "mean_mse": 31.529736,
+     "name": "minimax-start-1",
+     "worst_psnr": 33.107
+    }
+   ],
+   "colors": {
+    "blue": {
+     "new_tint": [
+      0.3028,
+      0.4203,
+      0.6082
+     ],
+     "old_matrix": "volcanic-heat-3-g1.png",
+     "old_tint": [
+      0.5892,
+      0.7997,
+      0.7987
+     ],
+     "psnr": 33.2244,
+     "rmse": 5.563139
+    },
+    "green": {
+     "new_tint": [
+      0.3365,
+      0.5222,
+      0.3423
+     ],
+     "old_matrix": "volcanic-heat-3-g2.png",
+     "old_tint": [
+      0.5418,
+      0.8474,
+      0.8453
+     ],
+     "psnr": 33.1156,
+     "rmse": 5.633241
+    },
+    "orange": {
+     "new_tint": [
+      0.5262,
+      0.3334,
+      0.3434
+     ],
+     "old_matrix": "volcanic-heat-3-g2.png",
+     "old_tint": [
+      0.8473,
+      0.541,
+      0.8479
+     ],
+     "psnr": 33.1137,
+     "rmse": 5.634503
+    },
+    "purple": {
+     "new_tint": [
+      0.411,
+      0.2986,
+      0.6088
+     ],
+     "old_matrix": "volcanic-heat-3-g1.png",
+     "old_tint": [
+      0.7998,
+      0.5682,
+      0.7994
+     ],
+     "psnr": 33.1153,
+     "rmse": 5.633467
+    }
+   },
+   "family": "volcanic-heat-3",
+   "mean_mse": 31.541374,
+   "output_png_sha256": "8fe946ce4c40711cf395c562d22ff5574fc7a3b5f9467655c1f17bc903ba99dc",
+   "parameters": [
+    0.7618615722399832,
+    0.7303865503630945,
+    0.25117542555338906,
+    0.99998644144617,
+    0.9999970441511832,
+    1.00000820322336
+   ],
+   "pixels_evaluated": 1376256,
+   "searches": [
+    {
+     "iterations": 9,
+     "message": "Optimization terminated successfully",
+     "start": 0.0,
+     "success": true
+    },
+    {
+     "iterations": 8,
+     "message": "Optimization terminated successfully",
+     "start": 0.5,
+     "success": true
+    },
+    {
+     "iterations": 10,
+     "message": "Optimization terminated successfully",
+     "start": 1.0,
+     "success": true
+    }
+   ],
+   "selected": "minimax-start-0.5",
+   "source_sha256": {
+    "volcanic-heat-3-g1.png": "41261f75c6df7ce46fa293f716deba3d003d8b1a988b5c624e1912c24b088d9a",
+    "volcanic-heat-3-g2.png": "2488e058a76f5c9a95cfeaa3af89616871e71fef2629acbee7d279a1660565d3"
+   },
+   "unique_pixel_pairs": 5930,
+   "worst_color": "orange",
+   "worst_psnr": 33.1137
+  },
+  {
+   "best_existing_worst_psnr": 24.1526,
+   "candidates": [
+    {
+     "mean_mse": 115.687471,
+     "name": "existing-g1",
+     "worst_psnr": 24.1526
+    },
+    {
+     "mean_mse": 364.155685,
+     "name": "existing-g2",
+     "worst_psnr": 19.5053
+    },
+    {
+     "mean_mse": 57.689,
+     "name": "minimax-start-0",
+     "worst_psnr": 30.4992
+    },
+    {
+     "mean_mse": 57.66788,
+     "name": "minimax-start-0.5",
+     "worst_psnr": 30.4991
+    },
+    {
+     "mean_mse": 57.656078,
+     "name": "minimax-start-1",
+     "worst_psnr": 30.4976
+    }
+   ],
+   "colors": {
+    "blue": {
+     "new_tint": [
+      0.265,
+      0.5039,
+      0.8046
+     ],
+     "old_matrix": "volcanic-heat-4-g1.png",
+     "old_tint": [
+      0.4709,
+      0.848,
+      0.8475
+     ],
+     "psnr": 30.5764,
+     "rmse": 7.546044
+    },
+    "green": {
+     "new_tint": [
+      0.314,
+      0.7675,
+      0.2579
+     ],
+     "old_matrix": "volcanic-heat-4-g2.png",
+     "old_tint": [
+      0.3233,
+      0.7999,
+      0.8006
+     ],
+     "psnr": 30.5034,
+     "rmse": 7.609789
+    },
+    "orange": {
+     "new_tint": [
+      0.7763,
+      0.3106,
+      0.257
+     ],
+     "old_matrix": "volcanic-heat-4-g2.png",
+     "old_tint": [
+      0.7994,
+      0.3237,
+      0.7977
+     ],
+     "psnr": 30.5011,
+     "rmse": 7.611802
+    },
+    "purple": {
+     "new_tint": [
+      0.4767,
+      0.2602,
+      0.8043
+     ],
+     "old_matrix": "volcanic-heat-4-g1.png",
+     "old_tint": [
+      0.847,
+      0.4379,
+      0.8472
+     ],
+     "psnr": 30.4992,
+     "rmse": 7.613461
+    }
+   },
+   "family": "volcanic-heat-4",
+   "mean_mse": 57.689,
+   "output_png_sha256": "10e2638697a660b399ef045da16d02546b81ee54134de78d1d2a6c41213a17c2",
+   "parameters": [
+    0.865381152538536,
+    0.8534135711784211,
+    0.15826764476095534,
+    0.9973525411683482,
+    0.995286889640721,
+    1.0074329011540488
+   ],
+   "pixels_evaluated": 1376256,
+   "searches": [
+    {
+     "iterations": 10,
+     "message": "Optimization terminated successfully",
+     "start": 0.0,
+     "success": true
+    },
+    {
+     "iterations": 9,
+     "message": "Optimization terminated successfully",
+     "start": 0.5,
+     "success": true
+    },
+    {
+     "iterations": 20,
+     "message": "Optimization terminated successfully",
+     "start": 1.0,
+     "success": true
+    }
+   ],
+   "selected": "minimax-start-0",
+   "source_sha256": {
+    "volcanic-heat-4-g1.png": "72cff9428edb0de47402c22d4a626e6c1f1075806efba9263dfc5de39fd042ab",
+    "volcanic-heat-4-g2.png": "88e84d04f9552563b66fd7b51bf6b8348972f01437e4e3c63b18e76ca017aea6"
+   },
+   "unique_pixel_pairs": 5212,
+   "worst_color": "purple",
+   "worst_psnr": 30.4992
+  }
+ ],
+ "generator_sha256": "73a95ba84c40d64c2b2950a594b98537eeb3028730a2ebf2d7244a89dae2c452",
+ "png_encoding": "RGBA8; no palette; compress_level=0; no optimiser",
+ "reference": "current rendered source mod, not upstream",
+ "regions": [
+  [
+   0,
+   0,
+   1024,
+   64
+  ],
+  [
+   0,
+   128,
+   2048,
+   256
+  ],
+  [
+   0,
+   320,
+   4096,
+   576
+  ]
+ ],
+ "source_report_sha256": "8cb7cdc8d5da9314e0fdc942186474853bc9056cfbcf56977fafeb22a04b1c2a",
+ "source_version": "0.8.5"
+}
