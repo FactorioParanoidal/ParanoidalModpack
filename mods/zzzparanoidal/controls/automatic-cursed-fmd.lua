@@ -156,16 +156,31 @@ local function choose(record)
     return waiting
 end
 
+local function filter_name(entity, index)
+    local filter = entity.get_filter(index)
+    return type(filter) == "string" and filter or filter and filter.name or nil
+end
+
+-- Manual override: any filter state other than the one this script applied (another
+-- ore, blacklist mode, extra slots, a pasted or blueprinted filter) is the player's
+-- and is left untouched. Clearing every filter slot returns the drill to automatic.
+local function manual(record)
+    local entity = record.entity
+    local first = filter_name(entity, 1)
+    for index = 2, entity.filter_slot_count do
+        if entity.get_filter(index) then return true end
+    end
+    if not first then return false end
+    -- record.resource is always the filter last applied here (choose returns it).
+    return first ~= record.resource or entity.mining_drill_filter_mode ~= "whitelist"
+end
+
 local function update(record)
     local entity = record.entity
+    if manual(record) then return end
     local wanted = choose(record)
     if entity.mining_drill_filter_mode ~= "whitelist" then entity.mining_drill_filter_mode = "whitelist" end
-    local filter = entity.get_filter(1)
-    local current = type(filter) == "string" and filter or filter and filter.name
-    if current ~= wanted then entity.set_filter(1, wanted) end
-    for index = 2, entity.filter_slot_count do
-        if entity.get_filter(index) then entity.set_filter(index, nil) end
-    end
+    if filter_name(entity, 1) ~= wanted then entity.set_filter(1, wanted) end
 end
 
 local function add(entity)
