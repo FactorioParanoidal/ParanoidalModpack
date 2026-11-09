@@ -1,5 +1,10 @@
 ---------------------------------------------------------------------------------------------------
 Version: 9.1.4
+  Bugfixes:
+    - Script-raised teleports rebind machines to their destination chunks without carrying the previous gate or duplicating destruction registration.
+    - Configuration changes reconcile the AbandonedRuins event subscription; waiting status no longer claims the air is necessarily clean.
+  Features:
+    - Read-only schema-v1 get_machine_status reports the sampled chunk, sample time, hysteresis gate and separate native entity status; thresholds and cleaning performance are unchanged.
   Graphics:
     - thumbnail.png is redrawn at 144x144 after the old smaller picture: text and simple shapes are drawn again, the rest is resampled and sharpened.
     - All PNGs are recompressed (pingo -s4 -quality=45): 30 of 31 are pixel-identical, thumbnail.png 23104 -> 12919 bytes (PSNR 38.5 dB).
