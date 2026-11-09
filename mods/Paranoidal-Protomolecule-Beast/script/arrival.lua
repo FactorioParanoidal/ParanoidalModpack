@@ -81,15 +81,26 @@ local function best_on(surface, force, away, best)
   end
 end
 
+-- A map whose main surface was generated without enemy bases (enemy-base size "none", e.g. the preset "Paranoidal: no
+-- enemies") is a peaceful map: nothing lands anywhere on it by itself (factory floors and other surfaces included).
+local function peaceful_map()
+  local surface = game.surfaces["nauvis"] or game.get_surface(1)
+  local controls = surface and surface.map_gen_settings.autoplace_controls
+  local enemy_base = controls and controls["enemy-base"]
+  return enemy_base ~= nil and enemy_base.size == 0
+end
+
 -- One of the player's drills with at least so many others within the outpost's radius, no nearer to the spawn than the
 -- setting allows. Of those on the far side of the base from the replicators, the furthest out; if there are none there,
--- the one most nearly on that side. Only on a surface where the biters have evolved enough, unless that's ignored.
+-- the one most nearly on that side. Only on a surface where the biters have evolved enough and never on a peaceful map,
+-- unless that's ignored (the command and the remote call).
 local function find_outpost(ignore_evolution)
   local force = game.forces[target_force]
   if not force then return end
   local min_evolution = evolution_threshold(storage.arrival)
   local enemy = game.forces["enemy"]
   local best = {}
+  if not ignore_evolution and peaceful_map() then return end
   for _, surface in pairs(game.surfaces) do
     if not surface.platform and (ignore_evolution or min_evolution <= 0 or (enemy and enemy.get_evolution_factor(surface) >= min_evolution)) then
       local away = replicators(surface)

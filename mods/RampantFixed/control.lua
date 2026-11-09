@@ -46,6 +46,7 @@ local undergroundAttack = require("libs/UndergroundAttack")
 local unitGroupUtils = require("libs/UnitGroupUtils")
 local unitUtils = require("libs/UnitUtils")
 local upgrade = require("Upgrade")
+local peacefulMap = require("libs/PeacefulMap")
 
 -- Paranoidal: paranoidal-space-age-filter hides Space Age from the data stage of this mod (no biter suppressors,
 -- demolisher food or captive spawners), so the script treats Space Age as absent too.
@@ -1743,7 +1744,8 @@ script.on_nth_tick(30000,
 	function()
 		if universe then
 			local evo = game.forces.enemy.get_evolution_factor()
-			if settings.startup["rampantFixed--JuggernautEnemy"].value and (not universe.JuggernautAlertShown) and (evo > 0.75) and (evo < 0.82) then
+			if settings.startup["rampantFixed--JuggernautEnemy"].value and (not universe.JuggernautAlertShown) and (evo > 0.75) and (evo < 0.82)
+				and not peacefulMap.active() then
 				universe.JuggernautAlertShown = true
 				game.print({"description.rampantFixed--JuggernautAlert"})
 			end
@@ -1861,6 +1863,10 @@ local function initFlyerAlerts()
 end
 
 local function checkFlyerAlerts()
+	-- Paranoidal: no flyer warnings on a peaceful map (libs/PeacefulMap); the stage waits, as if evolution had not grown
+	if peacefulMap.active() then
+		return
+	end
 	local stage = universe.flyerAlertStage or 0
 	if stage >= 2 then
 		return

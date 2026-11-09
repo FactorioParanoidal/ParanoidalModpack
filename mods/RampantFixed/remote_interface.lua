@@ -16,6 +16,7 @@
 -- it is recommended to issue a message to the user to enable setting
 
 local aiPlanning = require("libs/AIPlanning")
+local peacefulMap = require("libs/PeacefulMap")
 local baseUtils = require("libs/BaseUtils")
 local chunkPropertyUtils = require("libs/ChunkPropertyUtils")
 local constants = require("libs/Constants")
@@ -415,10 +416,14 @@ remote.add_interface("rampantFixed", {
 	--------------------
 	-- Paranoidal: read-only truce data for EvoUI and Big Monsters.
 	-- parameters: {surfaceIndex = number}
-	-- return: nil (Rampant AI is off on the surface) or {minEvo = number (percent), peaceful = boolean (AI state),
+	-- return: nil (Rampant AI is off on the surface or the map is peaceful, libs/PeacefulMap) or {minEvo = number (percent), peaceful = boolean (AI state),
 	--         truce = boolean (the evolution or the peace period of the planet setting is not reached yet)}
 	getTruceInfo = function(parameters)
 		if (not parameters) or (not parameters.surfaceIndex) then
+			return nil
+		end
+		-- no truce to count down on a peaceful map (no enemy bases): as if the AI were off
+		if peacefulMap.active() then
 			return nil
 		end
 		local universe = storage.universe

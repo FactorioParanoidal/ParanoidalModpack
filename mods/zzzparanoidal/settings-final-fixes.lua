@@ -133,6 +133,8 @@ if mods["RSO-reforged"] then
     set_settings_default_value("double-setting", "rso-infinite-ore-threshold", 0.99)
     set_settings_default_value("bool-setting", "rso-remove-trees", true)
     set_settings_default_value("bool-setting", "rso-use-donuts", true)
+    -- Месторождения на 50% шире (вместе с newbie_resourse: богатство x5).
+    set_settings_default_value("double-setting", "rso-global-size-mult", 1.5)
 end
 -- end runtime.global
 -- runtime.per_user влияют на каждого игрока в отдельности
