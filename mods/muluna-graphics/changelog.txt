@@ -1,0 +1,254 @@
+---------------------------------------------------------------------------------------------------
+Version: 1.1.19
+Date: 2026-10-18
+  Bugfixes:
+    - When an obsolete version of planet-muluna is loaded, muluna-graphics will throw a more informative error message.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.18
+Date: 2026-10-17
+  Graphics:
+    - Cryolab's graphics now uses Hurricane046's full spritesheet
+---------------------------------------------------------------------------------------------------
+Version: 1.1.17
+Date: 2026-08-24
+  Graphics:
+    - Updated telescope alert icon to use pollution symbol created by Zack Gomez for the Pollution Combinator mod.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.16
+Date: 2026-08-24
+  Graphics:
+    - Added alert icon to indicate when a telescope is unable to see the sky.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.15
+Date: 2026-07-13
+  Graphics:
+    - Added roboport propellant icon.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.14
+Date: 2026-07-10
+  Graphics:
+    - Deleted some more unused assets and replaced excessively detailed technology icons with mipmapped versions with reduced filesize and a more appropriate resolution.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.13
+Date: 2026-07-09
+  Sounds:
+    - Added alert sounds for big rocket silo.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.12
+Date: 2026-07-01
+  Graphics:
+    - Added some to-be-used roboport graphics.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.11
+Date: 2026-07-01
+  Graphics:
+    - Deleted some long-unused graphics.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.10
+Date: 2026-06-25
+  Graphics:
+    - Updated normal map of platform backdrop.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.9
+Date: 2026-06-25
+  Graphics:
+    - Added graphics for Muluna's platform backdrop.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.8
+Date: 2026-06-25
+  Graphics:
+    - Copied old Assembling Machine 3 pipe graphics from Factorio 2.0 to ensure they remain available for Muluna to use.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.7
+Date: 2026-06-23
+  Compatibility:
+    - Raised required Factorio version to 2.1.7.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.6
+Date: 2026-06-23
+  Bugfixes:
+    - Removed executable files from release to comply with the mod portal's new policy regarding including executable scripts inside mod files.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.5
+Date: 2026-06-23
+  Graphics:
+    - Added gray rock icons.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.4
+Date: 2025-10-07
+  Graphics:
+    - Added more subtle pipe covers for the Vacuum heating tower. By Talandar.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.3
+Date: 2025-09-05
+  Bugfixes:
+    - Fixed duplicate changelog entry.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.2
+Date: 2025-09-05
+  Graphics:
+    - Added new achievement graphics.
+  Changes:
+    - New release
+---------------------------------------------------------------------------------------------------
+Version: 1.1.1
+Date: 2025-08-18
+  Compatibility:
+    - Reduced required version of Factorio.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.0
+Date: 2025-08-18
+  Features:
+    - Removed unused assets to save storage space.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.29
+Date: 2025-08-17
+  Graphics:
+    - Corrected shadows of rock assets.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.28
+Date: 2025-08-15
+  Sounds:
+    - Updated sounds.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.27
+Date: 2025-08-14
+  Sounds:
+    - Added new audio files intended for Muluna 2.0.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.26
+Date: 2025-08-14
+  Graphics:
+    - Added additional graphics to help Muluna 2.0 integrate better with Moshine.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.25
+Date: 2025-08-08
+  Graphics:
+    - Added assets for Anorthite asteroids.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.24
+Date: 2025-08-01
+  Graphics:
+    - Added new tile sprites.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.23
+Date: 2025-07-31
+  Graphics:
+    - Added ai-upscaled sprite of Crusher.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.22
+Date: 2025-07-22
+  Graphics:
+    - Minor rearrangement of mod in preparation for Muluna 2.0.0.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.21
+Date: 2025-07-21
+  Graphics:
+    - Added icon for Lunar regolith, from Brevven's Aluminum mod. Asset by Snouz.
+    - Added new icon for crushed alumina(Grayscale version of Moshine sand icon, by Snouz)
+    - Added technology-scale icons for oxygen and carbon dioxide molecules. From unused-renders.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.20
+Date: 2025-07-14
+  Graphics:
+    - Adjusted width of north-facing advanced steam turbine sprite.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.19
+Date: 2025-07-07
+  Graphics:
+    - Updated Crushed stone icon to match Bio Industries. Sprite by snouz.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.18
+Date: 2025-07-05
+  Graphics:
+    - Added flipped variant of plastic bar.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.17
+Date: 2025-06-21
+  Graphics:
+    - Replaced "Asteroid Collector" technology icon with version with more detail(Editing by MeteorSwarm, Initial AI upscale by Snouz).
+---------------------------------------------------------------------------------------------------
+Version: 1.0.16
+Date: 2025-06-20
+  Graphics:
+    - Replaced non-mipped icons with mipped icons to eliminate a log warning. https://github.com/nicholasgower/planet-muluna/issues/200
+---------------------------------------------------------------------------------------------------
+Version: 1.0.15
+Date: 2025-06-17
+  Graphics:
+    - Adjusted scale and removed background of space chest technology icon. https://github.com/nicholasgower/planet-muluna/issues/198
+---------------------------------------------------------------------------------------------------
+Version: 1.0.14
+Date: 2025-04-21
+  Graphics:
+    - Fixed shadow locations of advanced steam turbine.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.13
+Date: 2025-04-20
+  Graphics:
+    - Added graphics for Advanced steam turbine.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.12
+Date: 2025-04-15
+  Graphics:
+    - Replaced graphics of Cryolab with updated version and with corrected shadow sprite.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.11
+Date: 2025-04-15
+  Graphics:
+    - Added graphics from wood-gasification
+---------------------------------------------------------------------------------------------------
+Version: 1.0.10
+Date: 2025-04-14
+  Graphics:
+    - Replaced custom pipe assets with assets from reskins-library.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.9
+Date: 2025-04-14
+  Graphics:
+    - Added updated low density platform tile build animations(By AngryZealot).
+---------------------------------------------------------------------------------------------------
+Version: 1.0.8
+Date: 2025-04-14
+  Graphics:
+    - Improved "Low density space platform foundation" graphics(by AngryZealot).
+---------------------------------------------------------------------------------------------------
+Version: 1.0.7
+Date: 2025-04-13
+  Graphics:
+    - Added reworked vanilla inserter graphics with separated shadows.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.6
+Date: 2025-04-11
+  Graphics:
+    - Applied tint to additional sprites of low density space platform foundation.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.5
+Date: 2025-04-11
+  Graphics:
+    - Added graphics for low density space platform foundation.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.4
+Date: 2025-04-11
+  Graphics:
+    - Added graphics for multilayered pipe sprites.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.3
+Date: 2025-04-10
+  Graphics:
+    - Added graphics for Muluna cliffs and for shadow-separated underground pipes.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.2
+Date: 2025-04-10
+  Graphics:
+    - Added graphics for "Ancient cargo landing pod"
+---------------------------------------------------------------------------------------------------
+Version: 1.0.1
+Date: 2025-04-09
+  Bugfixes:
+    - Replaced references to planet-muluna.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 2025-04-09
+  Graphics:
+    - Initial Release

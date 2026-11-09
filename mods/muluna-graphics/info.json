@@ -1,0 +1,19 @@
+{
+  "name": "muluna-graphics",
+  "version": "1.1.19",
+  "title": "[MOD DISPLAY NAME]",
+  "author": "MeteorSwarm",
+  "homepage": "https://discord.gg/8pD6A3JRtZ",
+  "description": "[SHORT DESCRIPTION]",
+  "factorio_version": "2.1",
+  "dependencies": [
+    "base >= 2.1.7"
+  ],
+  "quality_required": false,
+  "rail_bridges_required": false,
+  "space_travel_required": false,
+  "spoiling_required": false,
+  "freezing_required": false,
+  "segmented_units_required": false,
+  "expansion_shaders_required": false
+}

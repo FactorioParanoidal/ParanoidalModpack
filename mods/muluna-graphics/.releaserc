@@ -1,0 +1,85 @@
+{
+    "branches": [
+        "main"
+    ],
+    "plugins": [
+        [
+            "@semantic-release/commit-analyzer",
+            {
+                "preset": "conventionalcommits",
+                "releaseRules": [
+                    { "breaking": true, "release": "major" },
+                    { "type": "info", "release": "patch" },
+                    { "type": "feat", "release": "minor" },
+                    { "type": "feature", "release": "minor" },
+                    { "type": "gui", "release": "patch" },
+                    { "type": "balance", "release": "patch" },
+                    { "type": "perf", "release": "patch" },
+                    { "type": "performance", "release": "patch" },
+                    { "type": "compat", "release": "patch" },
+                    { "type": "compatibility", "release": "patch" },
+                    { "type": "fix", "release": "patch" },
+                    { "type": "graphics", "release": "patch" },
+                    { "type": "sound", "release": "patch" },
+                    { "type": "locale", "release": "patch" },
+                    { "type": "translate", "release": "patch" },
+                    { "type": "control", "release": "patch" },
+                    { "type": "other", "release": "patch" }
+                ]
+            }
+        ],
+        [
+            "@semantic-release/release-notes-generator",
+            {
+                "preset": "conventionalcommits",
+                "writerOpts": {
+                    "headerPartial": "---------------------------------------------------------------------------------------------------\nVersion: {{version}}\nDate: {{#if date}}{{date}}{{else}}????{{/if}}\n",
+                    "footerPartial": "",
+                    "commitPartial": "{{#if scope}}[{{scope}}] {{/if}}{{~subject}}",
+                    "mainTemplate": "{{> header}}\n{{#each commitGroups}}\n  {{title}}:\n{{#each commits}}\n    - {{> commit root=@root}}\n{{/each}}\n{{/each}}"
+                },
+                "presetConfig": {
+                    "types": [
+                        { "type": "info", "section": "Info" },
+                        { "type": "feat", "section": "Features" },
+                        { "type": "feature", "section": "Features" },
+                        { "type": "gui", "section": "Gui" },
+                        { "type": "balance", "section": "Balancing" },
+                        { "type": "perf", "section": "Optimizations" },
+                        { "type": "performance", "section": "Optimizations" },
+                        { "type": "compat", "section": "Compatibility" },
+                        { "type": "compatibility", "section": "Compatibility" },
+                        { "type": "fix", "section": "Bugfixes" },
+                        { "type": "graphics", "section": "Graphics" },
+                        { "type": "sound", "section": "Sounds" },
+                        { "type": "locale", "section": "Locale" },
+                        { "type": "translate", "section": "Translation" },
+                        { "type": "control", "section": "Control" },
+                        { "type": "other", "section": "Changes" }
+                    ]
+                }
+            }
+        ],
+        "semantic-release-factorio",
+        [
+            "@semantic-release/github",
+            {
+                "assets": [
+                    {
+                        "path": "*_*.*.*.zip",
+                        "label": "Packaged Mod"
+                    }
+                ]
+            }
+        ],
+        [
+            "@semantic-release/git",
+            {
+                "assets": [
+                    "changelog.txt",
+                    "info.json"
+                ]
+            }
+        ]
+    ]
+}
