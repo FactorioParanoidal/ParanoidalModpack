@@ -1,4 +1,5 @@
--- Exact source paths only; geometry from the approved exports. Original sheets remain as fallbacks.
+-- Exact source paths only; geometry from the approved exports. Replaced original sheets were removed from their
+-- mods (only main-lab.png stays), so every reference must go through graphics-static-animation.lua.
 return {
     ["__angelsrefininggraphics__/graphics/entity/clarifier/clarifier-base.png"] = {
         width = 374, height = 365, frames = 64, columns = 8,

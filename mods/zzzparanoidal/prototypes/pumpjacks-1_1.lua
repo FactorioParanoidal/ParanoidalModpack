@@ -1,4 +1,4 @@
--- Bob Mining 1.1: restore the missing fourth pumpjack before Cursed-FMD copies it.
+-- Bob Mining 1.1: restore the missing fourth pumpjack.
 -- Keep Bob's existing top-tier ID so placed entities, items and blueprints survive.
 local drills = data.raw["mining-drill"]
 local source = drills["bob-pumpjack-3"]
