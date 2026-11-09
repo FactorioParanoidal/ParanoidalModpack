@@ -39,7 +39,7 @@ local function stack(name, durability, grid)
 	function s.transfer_stack(other)
 		if s.valid_for_read or not other.valid_for_read then return false end
 		s.valid_for_read, s.name, s.durability, s.grid, s.type = true, other.name, other.durability, other.grid, other.type
-		s.count = 1
+		s.count, s.quality = 1, other.quality
 		other.count = other.count - 1
 		if other.count <= 0 then other.clear() end
 		return true
@@ -136,11 +136,14 @@ do
 	local s = stack("hazmat-plain", 15)
 	local state = P.evaluate(player(), character(s), {}, 650, 150, 0, 1, true)
 	assert(state.protected and state.inhaled == 0, "armor without resistance still protects")
-	near(s.durability, 15 - 5, "full wear (650-150)/100")
+	near(s.durability, 15 - 5 / 3, "armor endurance: (650-150)/100/3")
 	-- an armor without a resource (creative) protects and never wears
-	local c = stack("creative-armor", nil)
-	local state2 = P.evaluate(player(), character(c), {}, 5000, 150, 0, 1, true)
+	local c = stack("creative-armor", nil, { equipment = {} })
+	local infinite_character = character(c)
+	infinite_character.main.items["CW-air-filter"] = 2
+	local state2 = P.evaluate(player(), infinite_character, {}, 5000, 150, 0, 1, true)
 	assert(state2.protected and state2.armor.infinite and c.valid_for_read)
+	assert(infinite_character.main.items["CW-air-filter"] == 2, "infinite grid armor must not be serviced")
 end
 
 -- Worn-out mask is destroyed and the BEST spare is put on (old bug: the worst one) --------------------
@@ -155,7 +158,7 @@ do
 	-- endurance = resource / (1 - share): respirator 1200, gas mask 500, heavy 7143 → heavy lasts longest
 	assert(ch.armor[1].valid_for_read and ch.armor[1].name == "heavy-armor", "longest-lasting first: " .. tostring(ch.armor[1].name))
 	assert(not spare_heavy.valid_for_read, "the spare moved")
-	assert(#printed == 2, "worn-out + equipped messages")
+	assert(#printed == 0 and #sounds == 1, "automatic replacement is quiet except the equip sound")
 end
 
 -- Worn out with no spare: lost, the body is unprotected from this second on ------------------------
@@ -176,7 +179,7 @@ end
 do
 	printed = {}
 	local grid = { equipment = {} }
-	local s = stack("power-armor-mk2", 5, grid)
+	local s = stack("power-armor-mk2", 1.1, grid)
 	local ch = character(s)
 	local data = {}
 	P.evaluate(player(), ch, data, 2000, 150, 0, 1, true)
@@ -222,7 +225,7 @@ do
 	local reaching = 4000 * 0.15
 	near(state.reaching, reaching, "air reaching the armor")
 	assert(state.protected and state.inhaled == 0)
-	near(s.durability, 20000 - (reaching - 150) * 0.3 / 100, "armor wear after the vehicle")
+	near(s.durability, 20000 - (reaching - 150) * 0.3 / 100 / 3, "armor wear after the vehicle")
 
 	grid.equipment[2].energy = 1e6
 	local s2 = stack("power-armor-mk2", 20000, grid)
@@ -244,6 +247,63 @@ do
 	local s = stack("power-armor-mk2", 20000, { equipment = { module } })
 	P.evaluate(player(), character(s), {}, 3000, 150, 0, 1, false)
 	assert(module.energy == 100000 and s.durability == 20000)
+end
+
+-- Exhaustion -> filter arrives -> ordinary update restores protection; getters cannot service it.
+do
+	local grid = { equipment = {} }
+	local s = stack("power-armor-mk2", 0.5, grid)
+	local ch, p, data = character(s), player(), {}
+	local empty = P.evaluate(p, ch, data, 2000, 150, 0, 1, true)
+	assert(empty.armor.exhausted and data.refill_retry > game.tick)
+	ch.main.items["CW-air-filter"] = 3
+	data.refill_retry = nil -- inventory-change handler clears only this persistent throttle
+	for _ = 1, 3 do
+		assert(not P.evaluate(p, ch, data, 2000, 150, 0, 1, false).protected)
+	end
+	assert(ch.main.items["CW-air-filter"] == 3 and s.durability == 0.5)
+	local state = P.evaluate(p, ch, data, 2000, 150, 0, 1, true)
+	assert(state.protected and state.inhaled == 0 and s.grid == grid)
+	near(s.durability, 1500.5 - 1850 * 0.3 / 100 / 3)
+	assert(ch.main.items["CW-air-filter"] == 2 and ch.main.items["CW-used-air-filter"] == 1,
+		"one transaction, not service plus spend refills")
+	-- Usable armor still does not refill in clean air; exhausted armor can.
+	s.durability = 10
+	P.evaluate(p, ch, data, 0, 150, 0, 1, true)
+	assert(ch.main.items["CW-air-filter"] == 2 and s.durability == 10)
+	s.durability = 0.5
+	assert(P.evaluate(p, ch, data, 0, 150, 0, 1, true).protected)
+	assert(ch.main.items["CW-air-filter"] == 1 and s.durability == 1500.5)
+end
+
+-- Small real-cap resource: cap, one quality-preserving return spilled from a full inventory.
+do
+	prototypes.item["small-grid"] = item_prototype("small-grid", 40, 800)
+	local grid = { equipment = {} }
+	local s = stack("small-grid", 0.5, grid)
+	s.quality = { name = "ic-defect-5" }
+	local ch, taken, returned, spilled = character(s), 0, 0, 0
+	ch.main.get_contents = function() return { { name = "CW-air-filter", quality = "uncommon", count = 5 } } end
+	ch.main.remove = function(spec) assert(spec.quality == "uncommon"); taken = taken + 1; return 1 end
+	ch.main.insert = function(spec) assert(spec.quality == "uncommon"); returned = returned + 1; return 0 end
+	ch.surface.spill_item_stack = function(spec)
+		assert(spec.stack.quality == "uncommon" and spec.stack.name == "CW-used-air-filter")
+		spilled = spilled + 1
+	end
+	P.evaluate(player(), ch, {}, 0, 150, 0, 1, true)
+	assert(s.durability == 800 and s.grid == grid and s.quality.name == "ic-defect-5")
+	assert(taken == 1 and returned == 1 and spilled == 1)
+end
+
+-- Same-name replacement at another quality must report its own cap, not the spent item's.
+do
+	prototypes.item["quality-mask"] = item_prototype("quality-mask", nil, 10)
+	prototypes.item["quality-mask"].get_durability = function(quality) return quality.name == "normal" and 10 or 20 end
+	local worn, spare = stack("quality-mask", 0.5), stack("quality-mask", 20)
+	spare.quality = { name = "uncommon" }
+	local state = P.evaluate(player(), character(worn, { spare }), {}, 1000, 150, 0, 1, true)
+	assert(state.armor.replaced and state.armor.quality == "uncommon" and state.armor.max == 20)
+	assert(state.armor.wear == 0 and state.armor.resource == 20)
 end
 
 print("protection: OK")

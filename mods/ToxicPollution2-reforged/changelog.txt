@@ -2,6 +2,9 @@
 Version: 9.0.0
 Date: 2026-10-29
   Bugfixes:
+    - Exhausted grid armor can refill on its normal player update after a filter becomes available, including in clean air, without double consumption or equipment loss.
+    - Recovery zones use final runtime energy-source prototypes and no longer miss a working absorber after eight idle candidates.
+    - Status reads no longer create player/force records; replacement armor does not inherit the previous item's duration estimate.
     - The tooltip of the filter module and the closed-loop breathing module showed "Smog filtration" and "Power in smog" three times: the fields were set on both the item and the equipment, and the item tooltip also shows the fields of its equipment. They are now on the item only.
   Major Features:
     - Rewrite of toxicPollution2 1.0.0 (Toxic Pollution by Likos, ArtMares, ViridiVir) for Paranoidal. Replaces toxicPollution2; saves of the old mod are not migrated.
@@ -9,6 +12,8 @@ Date: 2026-10-29
     - Intoxication 0-100 % instead of the hidden x60 time multiplier, for the unprotected player: it grows while the inhaled pollution is above the tolerable level (150, +10 % per research level) and falls below it, faster in cleaner air and twice as fast near a working air filter, farm or greenhouse. Damage starts at 50 % and only while the player breathes smog: leaving the smog or putting on protection stops it at once (the old mod kept dealing the last damage after leaving, often lethal).
     - Vehicle cabin and breathing modules in the armor grid clean the air before it reaches the armor, so the armor lasts longer.
   Features:
+    - Read-only schema-v1 get_player_status snapshots from the existing simulation step, with freshness/context validation; /toxic air reports viewed pollution, the existing VP solar factor and selected CW machine state.
+    - Clarified conditional forecasts, filter recycling and circuit-control tips in English and Russian. No changes to prices, thresholds, damage or resource amounts.
     - Gas mask (resistance 80 %), filter module (50 %, 40 kW in smog) and closed-loop breathing module (100 %, 200 kW in smog). The respirator has resistance 50 % (was 5 %) and stays the start recipe; light armor (crafted from it) 50 % with 1000 resource.
     - Protection wears only in harmful air. Armor with an equipment grid is never destroyed: with the resource exhausted it stops protecting. An air filter (Carbon Capture) in the inventory refills the worn protection and returns a used filter.
     - Worn-out protection without a grid is replaced by the next one of the stack, then by the one from the inventory that lasts longest (the old mod chose the worst); the swap is silent.

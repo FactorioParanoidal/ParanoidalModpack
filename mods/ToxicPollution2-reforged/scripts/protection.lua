@@ -22,6 +22,10 @@ end
 local share_cache, durability_cache = {}, {}
 local refill_ready
 
+function P.reset_caches()
+	share_cache, durability_cache, refill_ready = {}, {}, nil
+end
+
 function P.armor_share(name)
 	local share = share_cache[name]
 	if share == nil then
@@ -111,9 +115,10 @@ local function try_refill(player, character, stack, data)
 		data.refill_retry = game.tick + REFILL_RETRY
 		return false
 	end
+	local added = math.min(missing, C.REFILL_AMOUNT)
 	stack.durability = math.min(max, stack.durability + C.REFILL_AMOUNT)
 	data.exhausted_notice = nil
-	player.create_local_flying_text({ text = { "tpr-message.refill", C.REFILL_ITEM, tostring(C.REFILL_AMOUNT) },
+	player.create_local_flying_text({ text = { "tpr-message.refill", C.REFILL_ITEM, tostring(added) },
 		position = character.position, surface = character.surface, color = { 0.6, 1, 0.6 } })
 	play(player, "utility/armor_insert")
 	return true
@@ -181,9 +186,9 @@ local function worn_out(player, character, stack, slot, left)
 end
 
 -- Spends `amount` of the filter resource of the worn item (smog or poison gas).
-function P.spend(player, character, stack, amount, data, slot)
+function P.spend(player, character, stack, amount, data, slot, serviced)
 	if amount <= 0 or not (stack and stack.valid_for_read) then return end
-	try_refill(player, character, stack, data)
+	if not serviced then try_refill(player, character, stack, data) end
 	local left = stack.durability - amount
 	if stack.grid then
 		if left < EXHAUSTED then
@@ -221,6 +226,13 @@ function P.evaluate(player, character, data, pollution, tolerance, level, second
 	local reaching = pollution * (1 - vehicle_share)
 
 	local stack, slot = armor_stack(character)
+	-- Exhausted grid armor has no wear, so it cannot reach spend's ordinary refill path.
+	-- Service once in the mutating update, even in clean air; observation never refills.
+	local serviced = false
+	if apply and stack and stack.grid and P.max_resource(stack) > 0 and stack.durability < EXHAUSTED then
+		serviced = true
+		try_refill(player, character, stack, data)
+	end
 	local module_share = 0
 	local grid = stack and stack.grid
 	if grid then
@@ -256,27 +268,30 @@ function P.evaluate(player, character, data, pollution, tolerance, level, second
 		if max <= 0 then
 			-- Without a resource (an infinite armor added after data-final-fixes): protects, never wears.
 			protecting = true
-			state.armor = { name = stack.name, share = share, exhausted = false, infinite = true, wear = 0,
+			state.armor = { name = stack.name, quality = stack.quality.name, share = share, exhausted = false, infinite = true, wear = 0,
 				resource = 1, max = 1, disposable = true }
 		else
 			local exhausted = stack.grid ~= nil and stack.durability < EXHAUSTED
 			protecting = not exhausted
 			local wear = protecting and M.wear(reaching, tolerance, share, level) / P.endurance_factor(stack.name) or 0
 			state.armor = {
-				name = stack.name, share = share, exhausted = exhausted, wear = wear,
+				name = stack.name, quality = stack.quality.name, share = share, exhausted = exhausted, wear = wear,
 				resource = stack.durability, max = max, disposable = C.DISPOSABLE[stack.name] or false,
 			}
 			if apply and wear > 0 then
-				P.spend(player, character, stack, wear * seconds, data, slot)
+				P.spend(player, character, stack, wear * seconds, data, slot, serviced)
 				local now = stack.valid_for_read and stack or nil
 				local armor = state.armor
 				if not now then
 					armor.resource, armor.lost = 0, true
 					protecting = false
-				elseif now.name ~= armor.name then
-					-- Worn out and replaced by a spare (the same slot stack).
+				elseif now.name ~= armor.name or now.quality.name ~= armor.quality then
+					-- Worn out and replaced by a spare (possibly the same name, another quality).
 					armor.name, armor.share, armor.replaced = now.name, P.armor_share(now.name), true
+					armor.quality = now.quality.name
+					armor.wear = 0 -- the old item's wear is not an estimate for its replacement
 					armor.max = P.max_resource(now)
+					armor.infinite = armor.max <= 0
 					armor.resource = armor.max > 0 and now.durability or 1
 					armor.disposable = C.DISPOSABLE[now.name] or armor.max <= 0
 					armor.exhausted = now.grid ~= nil and armor.max > 0 and now.durability < EXHAUSTED
