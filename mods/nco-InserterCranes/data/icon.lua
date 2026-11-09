@@ -18,7 +18,7 @@ local function make_layered_icon(base, wide)
 	end
 	table.insert(icon_layers,{
 		icon = icon_file,
-		icon_size = 256,
+		icon_size = wide and 128 or 256,
 	})
 	if base.icon then
 		table.insert(icon_layers,make_icon_layer(base,icon_size))

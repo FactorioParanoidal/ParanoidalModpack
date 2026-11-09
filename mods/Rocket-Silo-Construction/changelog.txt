@@ -1,8 +1,6 @@
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.7
 Date: 26. 09. 2025
-  Graphics:
-    - Paranoidal build: removed the Space Exploration stage-2 launch-pad sheet and its two integration icons; Space Exploration is not shipped. Vanilla silo construction and failure recovery are unchanged; adding Space Exploration requires restoring these images.
   Features:
     - Paranoidal: remote interface RocketSiloCon.create_site(args) puts and registers a construction site of stage 2-6 (used by RocketExplosions2 to throw a silo back to stage 4 after a launch failure).
   Bugfixes:
