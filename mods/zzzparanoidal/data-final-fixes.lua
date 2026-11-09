@@ -450,6 +450,8 @@ require("tweaks.entity.crafting-machine-mirroring")
 require("tweaks.entity.spawners-2-0")
 -- Factorio 2.1: у вагонов нет max_speed — поезд идёт со скоростью своих локомотивов (решение G22 «А»).
 require("tweaks.entity.wagon-max-speed-2-1")
+-- Ветка Space Age: иконки утилизации жидкостей Мараксиса = итоговые иконки жидкостей; до атласа.
+require("tweaks.custom.maraxsis-void-icons")
 -- Оптимизация атласов графики: после всех правок, создающих и копирующих прототипы и иконки.
 require("tweaks.custom.graphics-atlas")
 -- Собственные изображения поверх оригинальных пакетов Reskins; после сравнения путей атласа.
