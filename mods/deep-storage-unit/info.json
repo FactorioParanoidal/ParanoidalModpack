@@ -1,0 +1,11 @@
+{
+  "name": "deep-storage-unit",
+  "version": "9.9.0",
+  "title": "Memory Storage — migration bridge",
+  "author": "FactorioParanoidal",
+  "factorio_version": "2.1",
+  "dependencies": [
+    "base >= 2.0.12"
+  ],
+  "description": "Compatibility bridge: keeps the contents of the item memory units that deep-storage-unit 9.8.0 and earlier saved in old saves and hands them over to paranoidal-deep-storage once. It adds no gameplay or prototypes."
+}
