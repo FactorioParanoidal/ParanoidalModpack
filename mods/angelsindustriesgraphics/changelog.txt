@@ -1,4 +1,6 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.0
+  Graphics:
+    - Paranoidal: added accepted static-base, animation-overlay and intact reference PNGs for the original main laboratory, preserving source geometry. Exact-path integration does not replace other laboratory skins or enable hidden content. Original sheet retained; new files losslessly recompressed only when each saves more than 5% with identical RGBA.
   Compatibility:
     - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
