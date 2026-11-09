@@ -1,0 +1,18 @@
+{
+    "recipe": [
+        [
+            "maraxsis-sand",
+            "maraxsis-sand-extraction"
+        ],
+        [
+            "maraxsis-sand-recycling",
+            "sand-recycling"
+        ]
+    ],
+    "item": [
+        [
+            "maraxsis-sand",
+            "sand"
+        ]
+    ]
+}

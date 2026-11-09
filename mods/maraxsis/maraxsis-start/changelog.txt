@@ -1,0 +1,133 @@
+---------------------------------------------------------------------------------------------------
+Version: 1.1.22
+Date: 2025-08-06
+  Bugfixes:
+    - Fixed crash on load.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.21
+Date: 2025-08-06
+  Changes:
+    - Carbon fiber from jelly now always displays the "made-in" section. Resolves https://github.com/notnotmelon/maraxsis/issues/321
+---------------------------------------------------------------------------------------------------
+Version: 1.1.20
+Date: 2025-08-05
+  Changes:
+    - Going to fulgora will now permanantly remove the "breath of fresh air" item.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.19
+Date: 2025-08-05
+  Bugfixes:
+    - Fixed medium asteroids appearing in orbit above maraxsis. Fixed big asteroids appearing in-route from vulcanus/fulgora to maraxsis.
+    - Fixed the trench not appearing in the "planets" tab in remote view.
+    - In multiplayer, making a new player grants 1 sub and 80 barrels of fuel.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.18
+Date: 2025-08-05
+  Compatibility:
+    - Fixed crash-on-load with k2.
+  Bugfixes:
+    - Fixed fulgora softlock due to lube recipe & rocket fuel recipe. Resolves https://github.com/notnotmelon/maraxsis/issues/308
+---------------------------------------------------------------------------------------------------
+Version: 1.1.17
+Date: 2025-05-05
+  Bugfixes:
+    - Fixed recycling of carbon fiber.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.16
+Date: 2025-05-01
+  Compatibility:
+    - Fixed compatibility with Muluna.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.15
+Date: 2025-04-22
+  Bugfixes:
+    - Fixed duplicate water shaders on starting new save.
+    - Fixed wrong tech prereqs for the salt reactor.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.14
+Date: 2025-04-22
+  Bugfixes:
+    - Fixed crash when making a new save. Resolves https://github.com/notnotmelon/maraxsis/issues/275
+---------------------------------------------------------------------------------------------------
+Version: 1.1.13
+Date: 2025-03-31
+  Compatibility:
+    - Fixed progression locks when combined with rocs hardcore vulcanus.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.12
+Date: 2025-03-04
+  Balancing:
+    - Increased atmosphere generation from a breath of fresh air from 20/s to 60/s
+---------------------------------------------------------------------------------------------------
+Version: 1.1.11
+Date: 2025-01-15
+  Balancing:
+    - Greatly reduced the price for the salt reactor research from 500 -> 100.
+  Bugfixes:
+    - Fixed a crash. Resolves https://github.com/notnotmelon/maraxsis/issues/207
+---------------------------------------------------------------------------------------------------
+Version: 1.1.10
+Date: 2025-01-02
+  Balancing:
+    - The stone -> uranium recipe is now 10x faster.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.9
+Date: 2025-01-01
+  Balancing:
+    - Moved cliff explosives from vulcanus to maraxsis.
+  Changes:
+    - Adjusted technology dependancies for super sealant substance productivity.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.8
+Date: 2025-01-01
+  Balancing:
+    - A breath of fresh air now accepts speed modules.
+  Locale:
+    - Fixed unknown key for the breath of fresh air.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.7
+Date: 2024-12-31
+  Balancing:
+    - Deepsea research no longer requires yellow, purple, or military science to research.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.6
+Date: 2024-12-31
+  Balancing:
+    - A breath of fresh air now generates 5MW instead of 3MW.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.5
+Date: 2024-12-30
+  Balancing:
+    - Now starts with 5 foundries instead of 3.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.4
+Date: 2024-12-30
+  Locale:
+    - add zh-CN locale (credit: PlexPT)
+---------------------------------------------------------------------------------------------------
+Version: 1.1.3
+Date: 2024-12-30
+  Bugfixes:
+    - Fixed crash. Resolves https://github.com/notnotmelon/maraxsis/issues/191
+    - Fixed wrong tech dependancies for plastics and military 2. Fixed wrong tech trigger for submarine automation.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.2
+Date: 2024-12-30
+  Balancing:
+    - A breath of fresh air now generates 3MW instead of 2MW.
+    - You now start with 3 foundries instead of 1.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.1
+Date: 2024-12-30
+  Bugfixes:
+    - Fixed a softlock involving refined concrete.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.0
+Date: 2024-12-30
+  Features:
+    - Initial release
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 2024-12-26
+  Graphics:
+    - Added thumbnail.

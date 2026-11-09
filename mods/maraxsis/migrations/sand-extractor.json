@@ -1,0 +1,12 @@
+{
+    "entity": [
+        [
+            "electric-mining-drill-sand-extractor",
+            "electric-mining-drill-ground-digger"
+        ],
+        [
+            "big-mining-drill-sand-extractor",
+            "big-mining-drill-ground-digger"
+        ]
+    ]
+}

@@ -1,0 +1,26 @@
+{
+    "item": [
+        [
+            "maraxsis-limestone",
+            "limestone"
+        ],
+        [
+            "maraxsis-salt",
+            "salt"
+        ]
+    ],
+    "recipe": [
+        [
+            "maraxsis-salt-recycling",
+            "salt-recycling"
+        ],
+        [
+            "maraxsis-limestone-recycling",
+            "limestone-recycling"
+        ],
+        [
+            "maraxsis-salt",
+            "salt"
+        ]
+    ]
+}

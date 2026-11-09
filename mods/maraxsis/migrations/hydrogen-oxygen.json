@@ -1,0 +1,48 @@
+{
+    "fluid": [
+        [
+            "maraxsis-hydrogen",
+            "hydrogen"
+        ],
+        [
+            "maraxsis-oxygen",
+            "oxygen"
+        ]
+    ],
+    "item": [
+        [
+            "maraxsis-hydrogen-barrel",
+            "hydrogen-barrel"
+        ],
+        [
+            "maraxsis-oxygen-barrel",
+            "oxygen-barrel"
+        ]
+    ],
+    "recipe": [
+        [
+            "maraxsis-hydrogen-barrel",
+            "hydrogen-barrel"
+        ],
+        [
+            "maraxsis-oxygen-barrel",
+            "oxygen-barrel"
+        ],
+        [
+            "empty-maraxsis-hydrogen-barrel",
+            "empty-hydrogen-barrel"
+        ],
+        [
+            "empty-maraxsis-oxygen-barrel",
+            "empty-oxygen-barrel"
+        ],
+        [
+            "maraxsis-hydrogen-barrel-recycling",
+            "hydrogen-barrel-recycling"
+        ],
+        [
+            "maraxsis-oxygen-barrel-recycling",
+            "oxygen-barrel-recycling"
+        ]
+    ]
+}
