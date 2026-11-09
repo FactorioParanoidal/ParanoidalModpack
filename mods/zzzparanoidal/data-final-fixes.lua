@@ -2,6 +2,7 @@ require("removals.bob-sand-glass-processing")
 require("tweaks.custom.space-exploration-tab") -- без SpaceXGAR2: ракетные предметы на вкладку, до меню
 require("tweaks.entity.roboport")
 require("tweaks.entity.add-liquid-to-mine-ores")
+require("tweaks.entity.automatic-cursed-fmd") -- Automatic-Cursed-FMD 9.0.0: native drill filters.
 require("tweaks.entity.construction-robots")
 require("tweaks.entity.logistic-robots") -- скорость транспортных дронов как с Robot Attrition
 require("tweaks.entity.unminable-robots") -- роботов нельзя снять рукой (Beta 8 UnminableBots)

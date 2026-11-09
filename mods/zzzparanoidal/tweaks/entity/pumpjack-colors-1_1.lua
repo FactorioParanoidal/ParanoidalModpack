@@ -49,15 +49,5 @@ for _, entry in ipairs({
                 end
             end
         end
-        -- Cursed-FMD's copies were generated before these final recolors.
-        for clone_name, clone in pairs(drills) do
-            if clone_name:match("^(.-)___") == name then
-                recolor(clone.graphics_set, tint, animation_speed)
-                clone.icon = entity.icon
-                clone.icons = table.deepcopy(entity.icons)
-                clone.corpse = entity.corpse
-                clone.dying_explosion = entity.dying_explosion
-            end
-        end
     end
 end
