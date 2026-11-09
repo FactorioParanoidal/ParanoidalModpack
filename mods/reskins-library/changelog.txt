@@ -2,6 +2,7 @@
 Version: 2.3.3
 Date: 2026-01-03
   Graphics:
+    - Paranoidal Space Age branch: graphics/entity/common/pipe-covers/shadows/pipe-cover-south-shadow.png is kept. planet-muluna builds its burner roboports in its data-final-fixes, after zzzparanoidal's graphics pass, with pipecoverspictures(), which this mod overrides to point to that file; without it the game with graphics cannot load.
     - Paranoidal build: removed three duplicate images already redirected to canonical files by zzzparanoidal's final graphics pass. Prototype and runtime code are unchanged; this trimmed copy targets the full modpack.
   Locale:
     - ru: the mod name and the mod list description are the same as in ParanoidalLocale (format "English title (Russian translation)"), so the mod reads the same with or without it.
