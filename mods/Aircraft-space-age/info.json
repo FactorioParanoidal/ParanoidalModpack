@@ -9,7 +9,6 @@
   "dependencies": [
     "base >= 2.0.23",
     "flib >= 0.15.0",
-    "? planet-muluna >= 1.9.0",
     "? AircraftRealism >= 2.0.2",
     "? HelicopterRevival >= 0.3.0",
     "? bobplates >= 2.0.0",

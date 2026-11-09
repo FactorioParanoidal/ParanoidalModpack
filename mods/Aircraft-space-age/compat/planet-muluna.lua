@@ -1,5 +1,2 @@
-local rro = require("lib.remove-replace-object")
-if mods["planet-muluna"] then
-    rro.remove(data.raw["technology"]["afterburner"].unit.ingredients,{"space-science-pack",1})
-    data.raw["technology"]["afterburner"].unit.count = 500
-end
+-- Paranoidal (Space Age branch): the home afterburner research stays as it is with Muluna too (upstream: 500 units and
+-- no space science with Muluna); nothing before the rocket changes.
