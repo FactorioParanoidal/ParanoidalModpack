@@ -209,6 +209,16 @@ local function replace_turret(entity, new_name, keep_counters, new_direction)
 	local wires = wire_connections(entity)
 	local control = control_settings(entity)
 
+	-- Script creation (without fast_replace) can overlap the original. Do not publish
+	-- the new entity or touch the original until creation succeeds: nil is a safe no-op.
+	if not entity.can_be_destroyed() then return nil end
+	local new_entity = surface.create_entity({
+		name = new_name, position = position, force = force, direction = direction,
+		orientation = orientation, quality = quality, raise_built = false,
+		create_build_effect_smoke = false,
+	})
+	if not (new_entity and new_entity.valid) then return nil end
+
 	local ammo, buffer = entity.get_inventory(defines.inventory.turret_ammo), nil
 	if ammo and not ammo.is_empty() then
 		buffer = game.create_inventory(#ammo)
@@ -217,7 +227,8 @@ local function replace_turret(entity, new_name, keep_counters, new_direction)
 		end
 	end
 
-	if not (entity.can_be_destroyed() and entity.destroy({raise_destroy = true})) then
+	if not entity.destroy({raise_destroy = true}) then
+		new_entity.destroy()
 		if buffer then
 			for i = 1, #buffer do
 				if buffer[i].valid_for_read then ammo[i].transfer_stack(buffer[i]) end
@@ -228,10 +239,8 @@ local function replace_turret(entity, new_name, keep_counters, new_direction)
 	end
 
 	if deploy then remote.call("paranoidal_turret_deploy", "skip_next", new_name) end
-	local new_entity = surface.create_entity({
-		name = new_name, position = position, force = force, direction = direction,
-		orientation = orientation, quality = quality, raise_built = true,
-	})
+	-- Keep the public event order: original destroyed, replacement built.
+	script.raise_script_built({entity = new_entity})
 	if deploy then remote.call("paranoidal_turret_deploy", "skip_next", nil) end
 	if new_entity and new_entity.valid then
 		if not max_health_on_rank and health ~= max_health then new_entity.health = health end
