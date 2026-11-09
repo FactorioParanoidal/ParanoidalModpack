@@ -3,21 +3,23 @@ local C = require("shared.config")
 
 local R = {}
 
-function R.compute(force)
-	local technologies = force.technologies
+local function researched_level(force)
 	for level = C.TECH_LEVELS, 1, -1 do
-		local technology = technologies[C.TECH .. "-" .. level]
-		if technology and technology.researched then
-			storage.levels[force.index] = level
-			return level
-		end
+		local technology = force.technologies[C.TECH .. "-" .. level]
+		if technology and technology.researched then return level end
 	end
-	storage.levels[force.index] = 0
 	return 0
 end
 
+function R.compute(force)
+	local level = researched_level(force)
+	storage.levels[force.index] = level
+	return level
+end
+
 function R.level(force)
-	return storage.levels[force.index] or R.compute(force)
+	-- A status read before the force cache is populated must not write storage.
+	return storage.levels[force.index] or researched_level(force)
 end
 
 function R.compute_all()

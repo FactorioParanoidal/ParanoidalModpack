@@ -1,6 +1,10 @@
 ---------------------------------------------------------------------------------------------------
 Version: 9.4.6
 Date: 2026-10-12
+  Features:
+    - Read-only schema-v1 get_surface_status exposes the existing legacy solar pollution component, application/cycle times and shared curve without rescanning panels or changing generation.
+  Locale:
+    - Explicit EN/RU setting descriptions distinguish visual opacity/layer from the shared smog/solar curve and explain the surface-wide multiplier. Saved values and solar weights are unchanged.
   Changes:
     - Version number starts with 9 (Paranoidal fork): the Mod Portal never offers an "update" over local changes.
     - Paranoidal: smog becomes visible above 60 pollution per chunk (was 2); maximum thickness at 1000 (was 900). Both stay adjustable in map settings.

@@ -4,12 +4,15 @@ local Sensor = require("scripts.sensor")
 local Alerts = require("scripts.alerts")
 local Interface = require("scripts.interface")
 local Protection = require("scripts.protection")
+local Zones = require("scripts.zones")
 
 local function init_storage()
 	storage.players = storage.players or {}
 	storage.levels = storage.levels or {}
 	storage.kills = storage.kills or {}
 	Sensor.init()
+	Protection.reset_caches()
+	Zones.reset()
 end
 
 -- One log line with the final armor filtration (after every data stage), for diagnostics.
@@ -42,6 +45,7 @@ script.on_configuration_changed(function()
 	end
 	for _, data in pairs(storage.players) do
 		data.hud = nil
+		data.sample = nil
 	end
 end)
 
@@ -85,7 +89,18 @@ script.on_event(defines.events.on_player_removed, function(event)
 end)
 script.on_event(defines.events.on_player_changed_surface, function(event)
 	local player = game.get_player(event.player_index)
+	Player.invalidate(event.player_index)
 	if player then Alerts.reset(player, Player.data(player.index)) end
+end)
+script.on_event({ defines.events.on_player_armor_inventory_changed, defines.events.on_player_main_inventory_changed },
+	function(event) Player.invalidate(event.player_index, true) end)
+script.on_event({ defines.events.on_player_controller_changed, defines.events.on_player_changed_force,
+	defines.events.on_player_driving_changed_state }, function(event) Player.invalidate(event.player_index) end)
+script.on_event({ defines.events.on_equipment_inserted, defines.events.on_equipment_removed,
+	defines.events.on_player_placed_equipment, defines.events.on_player_removed_equipment }, function(event)
+	local owner = event.grid.entity_owner
+	local player = owner and owner.valid and owner.type == "character" and owner.player
+	if player then Player.invalidate(player.index) end
 end)
 
 -- Poison clouds on a character wearing a mask.

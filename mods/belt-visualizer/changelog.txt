@@ -28,6 +28,7 @@ Date: 2026-10-14
   Locale:
     - Added Russian translation for container passthrough and clarified ghost keybind names
   Compatibility:
+    - Resolve Paranoidal loader presentation shells to native loaders for keybind/hover highlights and rotation/settings refreshes; ordinary belts and standalone use are unchanged.
     - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
     - Factorio 2.1 runtime API: underground belt ends are read through underground_belt_neighbour (LuaEntity::neighbours was removed).
 ---------------------------------------------------------------------------------------------------

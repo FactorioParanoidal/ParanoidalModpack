@@ -7,6 +7,18 @@ local lane_cycle = const.lane_cycle
 local side_cycle = const.side_cycle
 local e = defines.events
 
+-- Paranoidal loaders are selected through presentation shells. Resolve only UI/event
+-- entry points; the traversal already receives native belt-connectable entities.
+local function resolve_selected(entity)
+    if entity and entity.valid and entity.type == "constant-combinator" then
+        local interface = remote.interfaces.paranoidal_loaders
+        if interface and interface.resolve then
+            return remote.call("paranoidal_loaders", "resolve", entity) or entity
+        end
+    end
+    return entity
+end
+
 -- A modification near a highlight refreshes it after REFRESH_DELAY ticks of quiet,
 -- but never later than REFRESH_MAX_DELAY ticks after the first modification
 local REFRESH_DELAY = 60
@@ -249,7 +261,7 @@ local function highlight(event, cycle_lanes)
     local index = event.player_index
     clear(index)
     local player = game.get_player(index) --[[@as LuaPlayer]]
-    local selected = player.selected
+    local selected = resolve_selected(player.selected)
     if not selected then return end
     local ghost = event.input_name ~= "bv-highlight-belt" or selected.type == "entity-ghost"
     local type = selected.type
@@ -298,7 +310,7 @@ script.on_event(e.on_selected_entity_changed, function(event)
     local belt_line = data and data.belt_line
     if not (hover or belt_line) then return end
     local player = game.get_player(index) --[[@as LuaPlayer]]
-    local selected = player.selected
+    local selected = resolve_selected(player.selected)
     if selected and belt_line and belt_line[selected.unit_number] and connectables[get_belt_type(selected)] then
         data.origin = selected
         return
@@ -391,7 +403,7 @@ script.on_event(e.on_pre_ghost_deconstructed, on_entity_modified, filter)
 
 -- Splitter filter/priority pasted from another splitter
 script.on_event(e.on_entity_settings_pasted, function(event)
-    local entity = event.destination
+    local entity = resolve_selected(event.destination)
     if not (entity and entity.valid and connectables[get_belt_type(entity)]) then return end
     entity_modified(entity, event.tick)
 end)
@@ -399,7 +411,7 @@ end)
 -- After a rotation or flip the former neighbours are no longer linked to the entity,
 -- so the highlighted belts around it have to be looked up by area
 local function on_entity_reoriented(event)
-    local entity = event.entity
+    local entity = resolve_selected(event.entity)
     if not (entity and entity.valid and connectables[get_belt_type(entity)]) then return end
     local belt_type = get_belt_type(entity)
     local neighbour
