@@ -8,7 +8,11 @@ data:extend{
         type = "bool-setting",
         name = "override-space-connection",
         setting_type = "startup",
-        default_value = false,
+        -- Paranoidal fork (Space Age branch, user 2026-11-09): Muluna is the gateway of the system, every route from
+        -- Nauvis to another planet starts at Muluna's orbit.
+        default_value = true,
+        hidden = true,
+        forced_value = true,
         order = "ya",
       },
       {
