@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.3
 Date: 04.06.2026
+  Graphics:
+    - Paranoidal build: removed 70 unused entity images (25,612,742 bytes). Angel's Refining loads first and supplies the resource builder, so this mod's standalone fallback graphics are not used in the modpack. Icons, resource generation, yields and prototype IDs are unchanged; this trimmed copy targets the full Paranoidal modset, not standalone use.
   Changes:
     - Paranoidal: the optional dependency on rso-mod follows its rename to RSO-reforged (same load order).
     - Added additional error checking (1250, 1290)

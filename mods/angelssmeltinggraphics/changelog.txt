@@ -1,6 +1,7 @@
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.0
   Graphics:
+    - Paranoidal build: removed the duplicate cooling-tower pipe shadow already redirected to Angel's Petrochemical Graphics by zzzparanoidal's final graphics pass. The canonical image is unchanged.
     - Paranoidal: the superseded casting-iron technology image is archived outside the build and removed; zzzparanoidal assigns the final C2 iron card. Shared graphics are unchanged.
   Compatibility:
     - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
