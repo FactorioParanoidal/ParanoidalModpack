@@ -170,7 +170,7 @@ if true then
         local item = table.deepcopy(data.raw["item"][name])
         local steam_icon = {
             icon = data.raw["fluid"]["steam"].icon,
-            icon_size = data.raw["fluid"]["steam"].icon_size,
+            icon_size = data.raw["fluid"]["steam"].icon_size or 64, -- Paranoidal: explicit, the build fills a missing layer size from the prototype
             scale = 0.25,
             shift = {10,-10},
             draw_background = true,

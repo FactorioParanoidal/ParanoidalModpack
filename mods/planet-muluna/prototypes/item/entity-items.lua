@@ -204,6 +204,9 @@ local telescope = Muluna.rro.merge(table.deepcopy(data.raw["item"]["assembling-m
     }
 
 )
+if not mods["space-exploration-graphics"] then -- Paranoidal: the radar icon of the build
+    telescope = Muluna.rro.merge(telescope, Muluna.img.radar_icon_fields(data.raw["item"]["radar"]))
+end
 
 local data_cable = { --Forked from Moshine optical cable
     type = "item",

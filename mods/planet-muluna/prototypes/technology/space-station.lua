@@ -680,7 +680,7 @@ Muluna:extend{
         },  
         {
             icon = data.raw["fluid"]["steam"].icon,
-            icon_size=data.raw["fluid"]["steam"].icon_size,
+            icon_size=data.raw["fluid"]["steam"].icon_size or 64, -- Paranoidal: explicit, the build fills a missing layer size with the technology's 640
             --scale=0.3,
             shift = {45,45},
             scale=0.75,

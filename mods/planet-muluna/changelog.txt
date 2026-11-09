@@ -10,6 +10,7 @@ Date: 2026-11-08
     - Paranoidal: migrations of older Muluna saves that indexed removed technologies or granted Muluna technologies do nothing (all migrations of a mod run when it is added to a save).
     - Paranoidal: Russian texts completed (locale/ru/paranoidal.cfg).
   Bugfixes:
+    - Paranoidal: the game with graphics loads again. The steam layer of the steam crusher technology and of the steam furnaces and crusher has an explicit size (64): the build fills a missing layer size from the prototype, and the technology's 640 made the steam picture "outside the actual sprite size". The telescope (item and building) takes the layered icon of the build's radar: the radar has no single icon here, so the telescope kept the 32 px icon of the assembling machine 3 at size 64.
     - Remove invalid mipmap counts from lunar regolith pictures. https://github.com/nicholasgower/planet-muluna/issues/530
 ---------------------------------------------------------------------------------------------------
 Version: 2.9.14

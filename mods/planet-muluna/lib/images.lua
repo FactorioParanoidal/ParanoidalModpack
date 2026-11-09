@@ -53,6 +53,19 @@ function Public.blur_technology_icon(icons,blurriness)
         return icons
     end
 
+--- Paranoidal: icon fields of a radar prototype for rro.merge. The build's radar has only layered `icons`
+-- (no `icon`), so taking `.icon` left the telescope with the 32 px assembling machine 3 icon at size 64.
+function Public.radar_icon_fields(radar)
+    if radar.icons then
+        local icons = table.deepcopy(radar.icons)
+        for _, layer in pairs(icons) do
+            layer.icon_size = layer.icon_size or radar.icon_size or 64
+        end
+        return {icon = "_nil", icon_size = "_nil", icons = icons}
+    end
+    return {icon = radar.icon, icon_size = radar.icon_size or 64, icons = "_nil"}
+end
+
 
 
 

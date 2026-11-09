@@ -77,6 +77,9 @@ local telescope = Muluna.rro.merge(data.raw["assembling-machine"]["assembling-ma
     } or paranoidal_telescope_dish(), -- Paranoidal fork: without Space Exploration graphics a turning radar dish
     --icon = data.raw["item"]["muluna-telescope"].icon,
 })
+if not mods["space-exploration-graphics"] then -- Paranoidal: the radar icon of the build
+    telescope = Muluna.rro.merge(telescope, Muluna.img.radar_icon_fields(data.raw["radar"]["radar"]))
+end
 
 telescope.energy_source.emissions_per_minute={}
 
