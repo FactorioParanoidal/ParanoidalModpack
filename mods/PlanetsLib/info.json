@@ -1,0 +1,21 @@
+{
+  "name": "PlanetsLib",
+  "version": "2.4.0",
+  "factorio_version": "2.1",
+  "title": "PlanetsLib",
+  "author": "thesixthroc, MeteorSwarm",
+  "description": "Code, graphics and conventions to help modders creating planets, moons and other systems. This is a community project.",
+  "homepage": "https://github.com/danielmartin0/PlanetsLib",
+  "dependencies": [
+    "base >= 2.1.22",
+    "? space-age >= 2.1.7",
+    "? quality >= 2.1.7",
+    "? recycler >= 2.1.7",
+    "? PlanetsLibTiers",
+    "(?) Cosmic-Social-Distancing >= 1.0.2",
+    "! MT-lib"
+  ],
+  "package": {
+    "ignore": ["**/*.bat","**/*.py","**/*.sh","**/*.exe","**/*.ps1","test-mods/**",".opencode/**","helper_scripts/**",".claude/**","CLAUDE.md",".env",".env.*"]
+  }
+}

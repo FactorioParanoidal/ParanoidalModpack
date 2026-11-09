@@ -1,0 +1,1200 @@
+---------------------------------------------------------------------------------------------------
+Version: 2.4.0
+Date: 2026-10-26
+  Changes:
+    - Paranoidal (Space Age branch): home things stay as in the build: the subgroup of moons is planetslib-satellites (Expanded Rocket Payloads has a subgroup "satellites"), rocket silos keep their fixed recipe (the runtime replacement leaves them), vanilla item weights are not reapplied, the centrifuge keeps its tint, drills get no Factoriopedia note and corrected prototypes no tooltip line; Russian texts completed (locale/ru/paranoidal.cfg).
+  Features:
+    - Added PlanetsLib.assign_entity_removal_floor(planet, entities, default_tile, options). When configured simple entities are marked for deconstruction over tiles that destroy dropped items, PlanetsLib places temporary tile ghosts under them, pauses deconstruction until the floor is built, and then resumes it. Robot-built temporary floors are removed after the entity's drops are collected. Rules are stored per planet and entity in the Planetslib mod-data prototype's entity_removal_floors table, and each rule has its own default tile.
+---------------------------------------------------------------------------------------------------
+Version: 2.3.6
+Date: 2026-10-25
+  Bugfixes:
+    - Entity replacement migration no longer reports a false "orientation mismatch" warning for locomotives on curved tracks. The check compared floating-point orientations exactly, so engine rounding (for example 0.635507 becoming 0.63550692377612) triggered the warning even though the orientation was preserved.
+---------------------------------------------------------------------------------------------------
+Version: 2.3.5
+Date: 2026-10-25
+  Locale:
+    - Updated German locale. Thank you stef77stef!
+---------------------------------------------------------------------------------------------------
+Version: 2.3.4
+Date: 2026-10-23
+  Bugfixes:
+    - PlanetsLib.create_planet_entity_variant() no longer creates variants of its own generated variants. Calling it while iterating a prototype table (for example every solar panel) previously kept visiting the newly created variants and generated more variants recursively until the game ran out of RAM. Generated variants are now skipped using PlanetsLib_do_not_generate_variants and the generated -PlanetsLib- name suffix.
+---------------------------------------------------------------------------------------------------
+Version: 2.3.3
+Date: 2026-10-23
+  Changes:
+    - PlanetsLib.excise_recipe_from_tech_tree() now has option for additionally removing change-recipe-productivity effects.
+---------------------------------------------------------------------------------------------------
+Version: 2.3.2
+Date: 2026-10-22
+  Locale:
+    - Updated Czech locale. Thank you vagonek!
+---------------------------------------------------------------------------------------------------
+Version: 2.3.1
+Date: 2026-10-22
+  Bugfixes:
+    - Entity replacement migration no longer aborts game load when a rule recorded in an earlier session refers to an entity prototype that a mod update removed. Such rules are skipped and logged instead of making on_configuration_changed fail with "Unknown entity name". This fixes a regression introduced in 2.3.0.
+---------------------------------------------------------------------------------------------------
+Version: 2.3.0
+Date: 2026-10-21
+  Features:
+  Changes:
+    - Ground diggers are no longer generated for mining drills that can only mine specific resource sites, such as pumpjacks or anomaly collectors. Such drills must be able to mine ordinary solid resources (their resource_categories must include basic-solid, or be unset).
+  Bugfixes:
+    - PlanetsLib.crushing_recipe_icons() and PlanetsLib.asteroid_crushing_recipe_icons() now use their icon_size argument instead of always declaring the supplied icon as 64 pixels. The icon keeps its previous apparent size, so existing icons look unchanged.
+    - PlanetsLib-disable-all-entity-replacements now actually disables all entity replacement rules at runtime, including rules bound to their own startup setting and migrations.
+    - Entity replacement migration now reverts rules that were removed between saves, handles belt-like entities (transport belts, underground belts, splitters and loaders) via the engine's fast-replace path, and no longer tries to replace entities while the global entity-replacement setting is disabled.
+    - Ground diggers now respect the per-planet drill blacklist when assigning the locked recipe, and placement collision checks use the prototype selection box (the actual footprint) instead of tile_width/tile_height (the placement grid). This covers the full footprint, ignores adjacent entities outside it, and rejects colliding real entities and entity ghosts inside it. Ghost collisions no longer show the custom entity-in-the-way label, allowing the vanilla build overlay to remain visible. Directly placing a ground digger over its own ghost now builds the matching ghost closest to the cursor, while other entity ghosts still block placement.
+    - The backwards-compatibility tier helpers now return nil when the separate PlanetsLib: Tiers mod is not installed instead of erroring.
+    - rro.amend() is now the canonical in-place table merge and returns the mutated table for convenience. The misspelled rro.ammend() remains as an alias for backwards compatibility.
+    - get_planet_str_double() now truncates long planet names in its fallback, matching get_planet_str().
+    - Removed a leftover entity-replacement debug print that wrote to the log for every replacement.
+---------------------------------------------------------------------------------------------------
+Version: 2.2.2
+Date: 2026-10-20
+  Bugfixes:
+    - Restored the documented PlanetsLib.restrict_to_surface() export in the public API.
+    - Absolute positions calculated from nested orbits now use the same polar convention as the other orbit helpers, so orbit positions are no longer rotated 90 degrees relative to the rest of the library.
+    - PlanetsLib.assign_rocket_part_recipe() now accepts prototype tables for its planet and recipe arguments, restricts a recipe to a single planet only while it is exclusive to that planet, removes the restriction when the recipe becomes shared, and preserves lock_silo = false instead of coercing it to true.
+    - Rocket silos now respect a planet's lock_silo = false setting instead of falling back to the default lock.
+    - PlanetsLib.assign_entity_replacement() now handles planet lists correctly, including {name = ...} entries, and keeps the supplied name_suffix when expanding a list.
+    - PlanetsLib.get_replacement() now finds replacements by the original entity's unit number as documented; both the old and new unit numbers are recorded.
+    - Entity replacement now transfers health, crafting progress, bonus progress, direction, turret orientation, loader type, recipe lock, custom status, and proxy/link fields. Fields that are read-only for a particular entity type are skipped instead of aborting the replacement.
+    - Entity replacement no longer inserts modules into the new entity a second time after moving the module inventory, so modules cannot be duplicated in the crafting output.
+    - Generated entity variants now inherit the base entity's fast_replaceable_group (or its name when no group is set), so the engine accepts upgrades and fast replacement between a variant and the original entity, including locomotives.
+    - Rolling-stock replacement now falls back to recreating the rolling stock and restoring its inventories, grid and train state when the engine refuses the in-place upgrade. This also fixes ghost rolling stock, an undefined variable when spilling items, read-only fields, and a leaked global.
+    - Replacing an entity whose grid contains equipment ghosts no longer raises "Equipment is not equipment-ghost" when notifying the new entity as script-built.
+    - Vehicle ghosts now keep their orientation when an entity replacement rule swaps the ghost, instead of being recreated facing north.
+    - The more-than-12-science-pack lab pass now updates an existing lab_input entry in icons_positioning instead of adding a duplicate entry.
+    - icon-entry.detect_type() now applies the documented surface > tool > capsule > fluid > planet > item precedence instead of always preferring items.
+    - rro.deep_gsub() now writes string replacements back to the list and forwards the gsub flag through recursive deep_replace() calls.
+    - Building the returned-ingredient tooltip no longer crashes data-final-fixes when a returned ingredient has no probability; the tooltip uses the amount-only form in that case.
+    - Banning a player from a script or the server console no longer errors when by_player is absent; the message reports "server" instead.
+    - process_technology_recipe_productivity_effects() now clears the correctly spelled PlanetsLib_recipe_productivity_effects input field, preventing effects from being duplicated on a second call.
+    - Pipette-result processing now handles both array and dictionary shapes of defines.prototypes.entity, so custom PlanetsLib_pipette_result values are always registered.
+---------------------------------------------------------------------------------------------------
+Version: 2.2.1
+Date: 2026-10-20
+  Compatibility:
+    - Raised required Factorio version to 2.1.22.
+  Bugfixes:
+    - Added compatibility corrections for obsolete prototype fields removed in Factorio 2.1.22: WaterTileEffectParameters::textures/texture_variations_*, FluidBox::minimum_temperature/maximum_temperature, and late ItemPrototype::fuel_category writes.
+    - Prototypes corrected by these compatibility checks now display a warning in their descriptions.
+    - Fixed PlanetsLib.get_special_property() returning the entire special-properties table instead of the requested property.
+    - Fixed PlanetsLib.set_special_properties() discarding the result of its merge, so properties set by later calls are now retained.
+    - PlanetsLib.restrict_to_planet() now accepts a planet prototype as well as a name, creates missing surface_properties, and is idempotent. Repeated calls reuse the same surface condition, and an invert call replaces the previous value instead of adding a contradictory condition.
+    - PlanetsLib:extend() no longer errors when the parent planet has no planet-str surface property; the parent-planet-str field is simply left unset.
+    - PlanetsLib.is_space_location() now accepts a planet or space-location name as well as a prototype, and no longer errors when given an unrelated value.
+    - The deprecated cargo-pod whitelist now allows an item when any legacy entry matches (global or per-planet, by name or entity type), restoring the pre-refactor OR semantics.
+    - Removed a leftover debug print that dumped every colliding entity to chat when placing a ground digger.
+    - Ground-digger drills and blacklist options now accept both list and dictionary forms, including configurations injected directly into PlanetsLib.constants.ground_diggers.
+    - on_configuration_changed no longer errors if mod_changes is absent.
+---------------------------------------------------------------------------------------------------
+Version: 2.2.0
+Date: 2026-10-19
+  Changes:
+    - Extended event handler with a method to build a single remote interface for your mod.
+---------------------------------------------------------------------------------------------------
+Version: 2.1.2
+Date: 2026-10-19
+  Bugfixes:
+    - Improved filtering of colliding entities to exclude not-on-map entities in ground diggers.
+---------------------------------------------------------------------------------------------------
+Version: 2.1.1
+Date: 2026-10-18
+  Bugfixes:
+    - Ground diggers can now be placed as ghosts from remote view (the map view). Remote builds are treated as ghost builds and skip the build reach check, so diggers can be planned anywhere on a planet without travelling there.
+---------------------------------------------------------------------------------------------------
+Version: 2.1.0
+Date: 2026-10-18
+  Features:
+    - Added PlanetsLib.enable_ground_diggers(planet, recipe, options), allowing planets to convert mining drills placed without nearby resources into machines that craft a chosen recipe. All planets share one digger prototype per drill, named "<drill>-ground-digger" to match "Muluna, Moon of Nauvis", restricted to participating planets via a hidden surface property. Thank you MeteorSwarm!
+  Changes:
+    - Ground diggers are no longer limited to electric mining drills: any eligible drill can be converted, and each digger keeps the energy source of the drill it is copied from. Electric ground diggers default to no drain, matching mining drills.
+    - Mining drills that can be used as ground diggers now mention the ground digger variant in their Factoriopedia description.
+    - PlanetsLib now refuses to load with planet-muluna 2.7.40 or older. Those versions have their own ground digger implementation that conflicts with PlanetsLib's shared ground diggers.
+  Bugfixes:
+    - Ground diggers are no longer placed on planets where the mining drill they are copied from cannot be placed. For example, burner mining drills are banned from Muluna, so burner ground diggers are now banned there too.
+  Locale:
+    - Blanked the vanilla mining drill build warning "can only be built on resources" (cant-build-reason.no-resource-for-drill), which is misleading where ground diggers replace drills placed without resources. Ported from "Muluna, Moon of Nauvis".
+    - Added ground digger name translations ported from "Muluna, Moon of Nauvis". Also corrected the Czech locale directory name from "cz" to "cs" so Czech translations load.
+---------------------------------------------------------------------------------------------------
+Version: 2.0.10
+Date: 2026-10-16
+  Features:
+    - Added icon helpers PlanetsLib.dual_icon, PlanetsLib.dual_icon_reversed, PlanetsLib.blur_technology_icon, and PlanetsLib.melting_icon. Ported from "Muluna, Moon of Nauvis". Thank you MeteorSwarm!
+  Bugfixes:
+    - Entities with ghost equipment placed under the entity replacement system will no longer be replaced with non-ghost equipment. Thank you GreenTech-Solutions!
+---------------------------------------------------------------------------------------------------
+Version: 2.0.9
+Date: 2026-10-07
+  Changes:
+    - Properly preserves the raw distance/orientation values for all planets/locations regardless of parent in every case
+---------------------------------------------------------------------------------------------------
+Version: 2.0.8
+Date: 2026-10-02
+  Bugfixes:
+    - Entity Replacement System no longer produces duplicate smoke.
+    - Ghost rolling stock replaced by the Entity Replacement System will preserve train stops and queued fuel deliveries.
+  Locale:
+    - Updated German locale. Thank you stef77stef!
+---------------------------------------------------------------------------------------------------
+Version: 2.0.7
+Date: 2026-09-28
+  Changes:
+    - Ensure PlanetsLib does not override raw distance/orientation values for planets defined via PlanetsLib:extend, when the parent is star and the star has not moved. Thank you Kryzeth!
+---------------------------------------------------------------------------------------------------
+Version: 2.0.6
+Date: 2026-09-27
+  Changes:
+    - Whenever PlanetsLib corrects a prototype field, whether AmbientSoundPrototype:planet, ItemPrototype:fuel_category, or technologies with duplicate science pack costs, it will modify the localised description to indicate this.
+---------------------------------------------------------------------------------------------------
+Version: 2.0.5
+Date: 2026-09-26
+  Bugfixes:
+    - On_entity_placed events always fire, no matter whether or not entity replacement rules are active.
+---------------------------------------------------------------------------------------------------
+Version: 2.0.4
+Date: 2026-09-26
+  Bugfixes:
+    - Deepcopying a vanilla recipe productivity technology will no longer result in PlanetsLib applying PlanetsLib_recipe_productivity_effects to that technology unless PlanetsLib_recipe_productivity_effects.technology_name is deleted.
+---------------------------------------------------------------------------------------------------
+Version: 2.0.3
+Date: 2026-09-26
+  Changes:
+    - Ambient sound corrector now runs during every stage of data.
+    - Added error handling for nil input in PlanetsLib:extend and PlanetsLib:update functions.
+  Bugfixes:
+    - Added correction script that searches item prototypes for fuel_category field and corrects them, replacing the field with fuel_categories. Allows unmaintained mods to run on Factorio 2.1.20.
+---------------------------------------------------------------------------------------------------
+Version: 2.0.2
+Date: 2026-09-24
+  Bugfixes:
+    - Starmap will no longer generate duplicate starmap sprites over the same position. Proper fix this time.
+---------------------------------------------------------------------------------------------------
+Version: 2.0.1
+Date: 2026-09-24
+  Locale:
+    - Updated German locale. By stef77stef.
+---------------------------------------------------------------------------------------------------
+Version: 2.0.0
+Date: 2026-09-23
+  Features:
+    - Updated PlanetsLib orbit drawing functionality to rely on base game origin-based drawing instead. Several minor changes were necessary to accommodate this change, specifically regarding tracking of auto-generated orbit tables. Locations with pre-existing origin values are ignored by PlanetsLib orbit conversion functionality. Sprite_only locations are unaffected by this change.
+    - Enabled calling PlanetsLib:update during data-final-fixes. Modifies origin fields for the location itself, and updates origin fields of any child locations based on the new parent origin.
+  Graphics:
+    - Deleted all orbit sprites from PlanetsLib.
+    - Obsoleted PlanetsLib.get_orbit_sprite(). Running this function will now return an error.
+    - Defining an orbit sprite is still possible in orbit fields, but it is no longer the standard method of drawing orbits. Use draw_orbit.
+    - PlanetsLib:extend: Orbit field now supports `draw_orbit`.
+  Changes:
+    - Made star a permanent, but hidden, space-location. Needed to allow PlanetsLib:update to work on objects using star as parent.
+    - Deleted PlanetsLib.constants.orbit_sprites mod-data.
+  Bugfixes:
+    - Starmap will no longer generate duplicate starmap sprites over the same position.
+---------------------------------------------------------------------------------------------------
+Version: 1.26.7
+Date: 2026-09-21
+  Bugfixes:
+    - Improved compatibility with other mods that do runtime replacements of rolling stock.
+---------------------------------------------------------------------------------------------------
+Version: 1.26.6
+Date: 2026-09-20
+  Bugfixes:
+    - Adjusted scaling of lab science pack preview icons to reduce scale with a small number of science packs.
+---------------------------------------------------------------------------------------------------
+Version: 1.26.5
+Date: 2026-09-19
+  Bugfixes:
+    - Expanded list of filtered entities in on_entity_died events to fix crash.
+---------------------------------------------------------------------------------------------------
+Version: 1.26.4
+Date: 2026-09-19
+  Optimizations:
+    - Added filter to on_entity_died and similar events in PlanetsLib to prevent event from firing when asteroids, plants, simple entities, and trees are destroyed. Significantly improves performance on large saves.
+---------------------------------------------------------------------------------------------------
+Version: 1.26.3
+Date: 2026-09-19
+  Bugfixes:
+    - Fixed a crash when mods define lab prototype selection boxes with vector formats when "Enable lab science pack preview size change" is enabled.
+---------------------------------------------------------------------------------------------------
+Version: 1.26.2
+Date: 2026-09-10
+  Bugfixes:
+    - Fixed PlanetsLib.borrow_music.
+---------------------------------------------------------------------------------------------------
+Version: 1.26.1
+Date: 2026-09-05
+  Bugfixes:
+    - Vanilla cargo bays now accept cargo pods defined in PlanetsLib.constants.space_platform_hub_receiving_cargo_units, as do vanilla space platform hubs.
+---------------------------------------------------------------------------------------------------
+Version: 1.26.0
+Date: 2026-08-31
+  Features:
+    - Added remote interface "PlanetsLib_transfer_storage" to assist in copying the storage table of a mod to a fork of the mod.
+    - Added player-facing setting "Enable lab science pack preview size change", an optional feature that scales the size of science pack icons on labs in alt mode based on the number of science packs the lab supports.
+---------------------------------------------------------------------------------------------------
+Version: 1.25.1
+Date: 2026-08-14
+  Bugfixes:
+    - Locomotives replaced under the entity replacement system will now preserve orientation in all conditions.
+---------------------------------------------------------------------------------------------------
+Version: 1.25.0
+Date: 2026-08-13
+  Features:
+    - Added LuaEntity::PlanetsLib_pipette_result, a version of LuaEntity::placeable_by that only affects player pipetting, not robots. In data-final-fixes, edit PlanetsLib.constants.pipette_result directly.
+---------------------------------------------------------------------------------------------------
+Version: 1.24.0
+Date: 2026-08-12
+  Features:
+    - Added a modified version of the core mod's event handler. Can be imported during the control stage with "require("__PlanetsLib__.lib.event-handler.event-handler")".
+---------------------------------------------------------------------------------------------------
+Version: 1.23.5
+Date: 2026-08-05
+  Bugfixes:
+    - Added final fix that automatically corrects all ambient sounds that erroneously use AmbientSound::planet, a field that no longer works in Factorio 2.1.13.
+---------------------------------------------------------------------------------------------------
+Version: 1.23.4
+Date: 2026-08-01
+  Bugfixes:
+    - recipe productivity technology code no longer crashes the game if it found an invalid recipe result.
+---------------------------------------------------------------------------------------------------
+Version: 1.23.3
+Date: 2026-07-30
+  Locale:
+    - Updated German locale(By stef77stef)
+---------------------------------------------------------------------------------------------------
+Version: 1.23.2
+Date: 2026-07-30
+  Features:
+    - Added additional information to entity replacement system's mod-data to make compatibility patches for script-driven entities easier to make.
+---------------------------------------------------------------------------------------------------
+Version: 1.23.1
+Date: 2026-07-28
+  Features:
+    - Fixed crash on mining entities without a unit number.
+---------------------------------------------------------------------------------------------------
+Version: 1.23.0
+Date: 2026-07-28
+  Features:
+    - Added RecipePrototype::PlanetsLib_recipe_effects, a nested table containing fields that hook the recipe into raised events run by PlanetsLib.
+    - Added RecipePrototype::PlanetsLib_recipe_effects.returned_ingredients, a field that tells PlanetsLib to return ingredients back to the assembling machine's input on being crafted.
+    - Raised required Factorio version to 2.1.12 due to the inclusion of recipe on_crafted events.
+---------------------------------------------------------------------------------------------------
+Version: 1.22.9
+Date: 2026-07-27
+  Bugfixes:
+    - Locomotive orientation is now preserved when replacing locomotives onto existing trains in the entity replacement system.
+---------------------------------------------------------------------------------------------------
+Version: 1.22.8
+Date: 2026-07-27
+  Bugfixes:
+    - Locomotive orientation is now preserved when replacing locomotives in the entity replacement system.
+---------------------------------------------------------------------------------------------------
+Version: 1.22.7
+Date: 2026-07-27
+  Bugfixes:
+    - Equipment grids are now transferred between entities when migrating with the Entity Replacement System.
+    - Rolling stock can now use the Entity Replacement System.
+---------------------------------------------------------------------------------------------------
+Version: 1.22.6
+Date: 2026-07-26
+  Bugfixes:
+    - Reverted previously added check.
+---------------------------------------------------------------------------------------------------
+Version: 1.22.5
+Date: 2026-07-26
+  Bugfixes:
+    - Added temporary check to stop car entity ghosts from being placed on planets with relevant entity replacement rules to stop Factorio bug from crashing the game.
+---------------------------------------------------------------------------------------------------
+Version: 1.22.4
+Date: 2026-07-26
+  Bugfixes:
+    - Added tag to control to fix entity replacement system.
+---------------------------------------------------------------------------------------------------
+Version: 1.22.3
+Date: 2026-07-26
+  Bugfixes:
+    - Fixed entity replacement system when attempting to replace car prototypes.
+---------------------------------------------------------------------------------------------------
+Version: 1.22.2
+Date: 2026-07-24
+  Bugfixes:
+    - Fixed get_orbit_sprite function using incorrect folder names.
+    - Fixed get_orbit_sprite function not being publicly available, added via PlanetsLib.get_orbit_sprite(radius).
+  Changes:
+    - PlanetsLib.get_orbit_sprite(radius) will now accept a greater range of radius values by scaling the most appropriate sprite available when no exact match exists.
+    - PlanetsLib.constants.orbit_sprites can be modified by mods to add new orbit sprites and improve the appearance of orbit sprites in particular ranges generated by PlanetsLib.get_orbit_sprite().
+---------------------------------------------------------------------------------------------------
+Version: 1.22.1
+Date: 2026-07-23
+  Changes:
+    - Added additional checks to PlanetsLib.assign_rocket_part_recipe to reduce the chance of rocket part recipes being craftable in places they shouldn't be crafted. If a rocket part recipe is ever assigned exactly once to a planet, it will be automatically given a hidden surface condtition restricting it to that planet. If more than one planet assigns the same rocket part recipe to itself, this hidden restriction is removed and not reapplied.
+---------------------------------------------------------------------------------------------------
+Version: 1.22.0
+Date: 2026-07-19
+  Features:
+    - Added PlanetsLib.constants.space_platform_hub_receiving_cargo_units, a global table that overrides the default list of cargo pods that vanilla space platform hubs can receive.
+---------------------------------------------------------------------------------------------------
+Version: 1.21.4
+Date: 2026-07-17
+  Bugfixes:
+    - Fixed error handling when generating entity variants.
+    - Fixed crash on using PlanetsLib.assign_entity_replacement() with a list of planet names.
+---------------------------------------------------------------------------------------------------
+Version: 1.21.3
+Date: 2026-07-15
+  Bugfixes:
+    - Rocket silo variants with different rocket part counts will also have rocket_parts_storage_cap changed by the same amount if the field is defined. Fixes crash on load with Paracelsin and Lignumis.
+    - PlanetsLib.set_special_properties() now throws an error when called during data-final-fixes.
+    - Entity variants generated via PlanetsLib.create_planet_entity_variant now have `PlanetsLib_do_not_generate_variants` set to true automatically, preventing rocket silos generated via this function from being targeted by planet special properties.
+---------------------------------------------------------------------------------------------------
+Version: 1.21.2
+Date: 2026-07-15
+  Bugfixes:
+    - Fixed crash on defining "rocket part multiplier" on a planet while defining "rocket lift multiplier".
+---------------------------------------------------------------------------------------------------
+Version: 1.21.1
+Date: 2026-07-11
+  Changes:
+    - Added a helper function to access the sprite settings of moon orbits.
+---------------------------------------------------------------------------------------------------
+Version: 1.21.0
+Date: 2026-07-11
+  Bugfixes:
+    - Entity replacement system: Fixed that on an entity ghost being placed by a robot, the entity replacement is reversed. notnotmelon/maraxsis#413
+  Changes:
+    - Added a few preset graphics for moon orbits.
+---------------------------------------------------------------------------------------------------
+Version: 1.20.5
+Date: 2026-07-07
+  Bugfixes:
+    - Improved error handling when generating planet entity variants.
+---------------------------------------------------------------------------------------------------
+Version: 1.20.4
+Date: 2026-07-07
+  Bugfixes:
+    - Removed assumption that rocket silos are always placeable, fixing crash on load with Muluna and Fulgora Orbital Defense.
+---------------------------------------------------------------------------------------------------
+Version: 1.20.3
+Date: 2026-07-06
+  Bugfixes:
+    - Fixed stack overflow crash on placing entity with a variant.
+---------------------------------------------------------------------------------------------------
+Version: 1.20.2
+Date: 2026-07-06
+  Bugfixes:
+    - Fixed crash on making entity ghost of variant entity and placing it on another planet.
+---------------------------------------------------------------------------------------------------
+Version: 1.20.1
+Date: 2026-07-06
+  Bugfixes:
+    - Fixed crash on loading existing save.
+---------------------------------------------------------------------------------------------------
+Version: 1.20.0
+Date: 2026-07-06
+  Features:
+    - Added `PlanetsLib.create_planet_entity_variant`, a function that generates a variant of an existing entity and makes the game replace the original entity with the variant when placed on a given planet.
+    - Added `PlanetsLib.assign_entity_replacement`, a function that makes the game replace an entity with another entity when placed on a given planet.
+    - Added `PlanetsLib.set_special_properties, get_special_properties, and get_special_proprety, getters and setters for a planet's "special properties," a type of surface property that can not be changed during data-final-fixes, allowing novel effects to be creating during data-final-fixes and runtime using these properties.
+    - Added planet special properties "rocket_lift_multipiler" and "rocket_part_multiplier", special properties that use runtime entity replacements on rocket silos to change their behavior on particular planets.
+    - Added functions to assist in making script-driven entities work with PlanetsLib's entity replacement script.
+---------------------------------------------------------------------------------------------------
+Version: 1.19.5
+Date: 2026-06-28
+  Changes:
+    - PlanetsLib will not lock rocket silos if a script from another mod as already locked them.
+---------------------------------------------------------------------------------------------------
+Version: 1.19.4
+Date: 2026-06-28
+  Changes:
+    - On placing rocket silos, PlanetsLib now checks if alternative rocket part recipes exist before locking rocket silos on planets with undefined lock behavior.
+---------------------------------------------------------------------------------------------------
+Version: 1.19.3
+Date: 2026-06-24
+  Changes:
+    - Removed "Power required to heat up" tooltip, as it has been integrated into 2.1 vanilla.
+    - Changed "Freshness resets on craft beginning/completion" tooltips to specify which item(s) have their freshness reset.
+  Bugfixes:
+    - Fixed startup crash when a science pack prototype is an unexpected item sub-type.
+---------------------------------------------------------------------------------------------------
+Version: 1.19.2
+Date: 2026-06-24
+  Changes:
+    - Fixed PlanetsLib.restrict_to_planet.
+---------------------------------------------------------------------------------------------------
+Version: 1.19.1
+Date: 2026-06-24
+  Bugfixes:
+    - Ported science pack sorting and the recipe-productivity technology generator to 2.1.
+    - Ported enhanced recipe tooltips to 2.1.
+---------------------------------------------------------------------------------------------------
+Version: 1.19.0
+Date: 2026-06-23
+  Changes:
+    - Initial release for Factorio 2.1. No changes to code using documented functions are expected. Report bugs to https://github.com/danielmartin0/PlanetsLib/issues.
+---------------------------------------------------------------------------------------------------
+Version: 1.18.0
+Date: 2026-05-31
+  Changes:
+    - Added a variant of the empty space tile that can not be covered by anything to supersede the one in Cerys and other "floating in space" style surfaces.
+    - Removed Python helper scripts as these are no longer permitted on the mod portal.
+---------------------------------------------------------------------------------------------------
+Version: 1.17.2
+Date: 2026-04-15
+  Locale:
+    - Added Polish locale(By Hacai666).
+---------------------------------------------------------------------------------------------------
+Version: 1.17.1
+Date: 2026-03-26
+  Bugfixes:
+    - Fixed that ChangeResultProductivityModifier.type was required even when using ChangeResultProductivityModifier.category.
+  Changes:
+    - When evaluating recipes for PlanetsLib_recipe_productivity_effects, products having 'ignored_by_productivity >= (amount or amount_max)' are ignored.
+    - When evaluating recipes for PlanetsLib_recipe_productivity_effects, multiple products with the same name are counted as a single product for `allow_multiple_results`.
+---------------------------------------------------------------------------------------------------
+Version: 1.17.0
+Date: 2026-02-24
+  Changes:
+    - Fixed that the cargo drop restriction technology API only prevented cargo pods landing on planets directly; drops to cargo landing pads were unaffected.
+---------------------------------------------------------------------------------------------------
+Version: 1.16.4
+Date: 2026-02-16
+  Changes:
+    - Small performance improvements.
+---------------------------------------------------------------------------------------------------
+Version: 1.16.0-1.16.3
+Date: 2026-02-09
+  Changes:
+    - The custom recipe tooltips 'Freshness resets on craft completion', 'Freshness resets on craft beginning' and 'Products preserved in machine output' now show *only* if their value is 'Yes'.
+    - Reworded 'Heat dissipation' tooltip to 'Energy to heat up'.
+  Info:
+    - Added a 'Player-facing features' section near the top of the documentation.
+---------------------------------------------------------------------------------------------------
+Version: 1.15.4
+Date: 2026-02-05
+  Features:
+    - Expanded enhanced tooltips to include: Products preserved in machine output
+  Bugfixes:
+    - Fixed that the "Resets freshness on beginning craft" and "Resets freshness on completing craft" tooltip were unfortunately mixed up.
+  Changes:
+    - Updated reprocessing-arrow.png
+    - Added reprocessing-arrow-top.png overlay icon
+---------------------------------------------------------------------------------------------------
+Version: 1.15.3
+Date: 2026-01-27
+  Bugfixes:
+    - Fix the enhanced tooltip constructor. It will now apply correctly to all "item" subtypes.
+---------------------------------------------------------------------------------------------------
+Version: 1.15.2
+Date: 2026-01-11
+  Changes:
+    - (No functionality change) PlanetsLib Python scripts are now standalone files without shell scripts to run them, to avoid them getting tangled with user Python environment issues.
+---------------------------------------------------------------------------------------------------
+Version: 1.15.1
+Date: 2026-01-06
+  Changes:
+    - Certain logging is now hidden behind a new mod setting 'Enable detailed logging', false by default.
+    - Minor tweak to the cargo-drop blocking script to only block cargo pods ejected from platforms above a planet if the pod is actually travelling to that planet.
+---------------------------------------------------------------------------------------------------
+Version: 1.15.0
+Date: 2025-12-29
+  Changes:
+    - The 'Unlink hidden prerequisites' setting no longer tries to unlink hidden prerequisites of hidden technologies.
+---------------------------------------------------------------------------------------------------
+Version: 1.14.7
+Date: 2025-12-01
+  Changes:
+    - Added surface property "is-freezing" to be able to restrict recipes and entities to frozen planets.
+---------------------------------------------------------------------------------------------------
+Version: 1.14.5
+Date: 2025-11-19
+  Changes:
+    - Added documentation for a new orbit field "is_satellite", which will be used by Redrawn Space Connections to detect if a planet should be treated 'as a moon'. This is intended to deprecate the subgroup="satellites" convention in order to decouple these behaviors from the Factoriopedia position of the prototype.
+    - Removed some old code which renamed the internal name of space connections. This removal is expected to have no effect as it applied only to connections between subgroup="satellite" locations, which is a misspelling of the PlanetsLib subgroup.
+---------------------------------------------------------------------------------------------------
+Version: 1.14.4
+Date: 2025-11-06
+  Changes:
+    - PlanetsLib's warning about unresearchable technologies no longer prints more than 10 technologies to chat. The full list is printed in the game logs.
+---------------------------------------------------------------------------------------------------
+Version: 1.14.3
+Date: 2025-11-05
+  Bugfixes:
+    - Define mod-data helpers even when Space Age is not loaded.
+---------------------------------------------------------------------------------------------------
+Version: 1.14.2
+Date: 2025-11-04
+  Bugfixes:
+    - When Space Age is not loaded, all elements of PlanetsLib's rocket part replacement script are disabled.
+---------------------------------------------------------------------------------------------------
+Version: 1.14.1
+Date: 2025-11-01
+  Optimizations:
+    - Removed a performance hit when hovering platforms above planets with cargo drop restrictions by using the new on_cargo_pod_started_ascending API.
+---------------------------------------------------------------------------------------------------
+Version: 1.14.0
+Date: 2025-11-01
+  Changes:
+    - Added support for mods calling PlanetsLib:extend on a parent that does not yet exist, as long as the parent exists before PlanetsLib's data-updates.lua runs.
+    - PlanetsLib:update now once again supports taking an array of configs.
+  Bugfixes:
+    - Fixed a corner case in which the orbital children of the vanilla planets were not correctly moved with the planet if the planet was moved by another mod. This occurred in the case that the definition of the children and the movement of the parent happened before PlanetsLib got a chance to interact, and is fixed by PlanetsLib assigning `orbit` fields to the vanilla planet prototypes in data.lua.
+---------------------------------------------------------------------------------------------------
+Version: 1.13.7
+Date: 2025-10-22
+  Bugfixes:
+    - Fixed issue where recipes with the default crafting category("crafting") fail to get added to recipe productivity technologies with PlanetsLib_recipe_productivity_effects defined.
+---------------------------------------------------------------------------------------------------
+Version: 1.13.6
+Date: 2025-10-06
+  Changes:
+    - If a planet becomes hidden, its children will no longer draw orbit graphics.
+---------------------------------------------------------------------------------------------------
+Version: 1.13.5
+Date: 2025-09-29
+  Changes:
+    - Re-added the .bat script.
+---------------------------------------------------------------------------------------------------
+Version: 1.13.4
+Date: 2025-09-28
+  Changes:
+    - Reverted 1.13.3 due to fragility.
+---------------------------------------------------------------------------------------------------
+Version: 1.13.3
+Date: 2025-09-28
+  Changes:
+    - Added robustness fallback for PlanetsLib:update() to handle cases where the parent has been converted from a space location to a real planet.
+---------------------------------------------------------------------------------------------------
+Version: 1.13.2
+Date: 2025-09-28
+  Features:
+    - Added an additonal two fluidboxes to the centrifuge, controlled by a setting.
+    - Clearer error message when calling PlanetsLib:update() with an invalid parent.
+    - Deleted generate-visit-planet-achievement.bat to unblock mod portal upload.
+---------------------------------------------------------------------------------------------------
+Version: 1.13.1
+Date: 2025-09-14
+  Features:
+    - Added a mod-data prototype("Planetslib-planet-lock-rocket-silos") that defines if vanilla-style rocket silos have their recipes locked on being placed. Intended to allow mods with alternative rocket part recipes to selectively unlock rocket silos when placed on all or on particular surfaces.
+---------------------------------------------------------------------------------------------------
+Version: 1.13.0
+Date: 2025-09-13
+  Features:
+    - Added user-facing setting(enabled by default) that adds new tooltips to the game that expose previously-hidden information relevant to the user.
+    - New tooltip: Heat dissipation
+    - New tooltip: Resets freshness on beginning craft
+    - New tooltip: Resets freshness on completing craft
+  Locale:
+    - Updated Korean locale(By PolarZero)
+---------------------------------------------------------------------------------------------------
+Version: 1.12.1
+Date: 2025-09-08
+  Changes:
+    - Added PlanetsLib.check_global_variables, a function run at the beginning of every data cycle that checks if key global variables are not fully deleted by other mods.
+---------------------------------------------------------------------------------------------------
+Version: 1.12.0
+Date: 2025-08-23
+  Features:
+    - Added a script to generate "Visit [planet]" achievement graphics.
+    - Added PlanetsLib.visit_planet_achievement, a function that returns an achievement for visiting a given planet.
+---------------------------------------------------------------------------------------------------
+Version: 1.11.1
+Date: 2025-08-23
+  Changes:
+    - PlanetsLib_recipe_productivity_effects technology field will no longer add recipes with allow_productivity disabled unless PlanetsLib_recipe_productivity_effects.allow_recipes_without_productivity == true.
+---------------------------------------------------------------------------------------------------
+Version: 1.11.0
+Date: 2025-08-18
+  Features:
+    - Added new helper function: PlanetsLib.crushing_recipe_icons.
+    - Added new helper function: PlanetsLib.asteroid_crushing_recipe_icons.
+    - Added new helper function: PlanetsLib.advanced_crushing_recipe_icon.
+    - Migrated Cerys' centrifuge fluid box and graphical effects to PlanetsLib.
+  Changes:
+    - Added new library graphics: asteroid-crushing.png and generic-crushing.png
+---------------------------------------------------------------------------------------------------
+Version: 1.10.7
+Date: 2025-08-16
+  Changes:
+    - Added new optional shadow_scale(number) parameter to technology_icon_moon and technology_icon_planet that adds a shadow layer to the returned icon when defined.
+    - Added new library graphic: reprocessing-arrow.png
+---------------------------------------------------------------------------------------------------
+Version: 1.10.6
+Date: 2025-08-14
+  Changes:
+    - Added new optional parameters to PlanetsLib.borrow_music: track_types(table) and modifier_function(function), both optional. New syntax: PlanetsLib.borrow_music(source_planet, target_planet, (optional) options{track_types,modifier_function})
+---------------------------------------------------------------------------------------------------
+Version: 1.10.5
+Date: 2025-08-09
+  Bugfixes:
+    - Fixed a very rare crash in the cargo pod scripts.
+---------------------------------------------------------------------------------------------------
+Version: 1.10.4
+Date: 2025-08-09
+  Changes:
+    - Added a new API to control the cargo drops whitelist using mod-data prototypes. The old remote interface API is still supported to avoid breaking changes.
+---------------------------------------------------------------------------------------------------
+Version: 1.10.3
+Date: ???
+  Changes:
+    - Orbit generator script now can run as a standalone program that handles its own dependencies.
+---------------------------------------------------------------------------------------------------
+Version: 1.10.2
+Date: 2025-08-02
+  Bugfixes:
+    - Fixed crash when another mod deletes effects from a vanilla recipe productivity technology before PlanetsLib loads its data stage.
+---------------------------------------------------------------------------------------------------
+Version: 1.10.1
+Date: 2025-08-02
+  Bugfixes:
+    - Eliminated requirement to have an "effects" field when using "PlanetsLib_recipe_productivity_effects" in a technology.
+---------------------------------------------------------------------------------------------------
+Version: 1.10.0
+Date: 2025-08-02
+  Features:
+    - Added TechnologyPrototype field "PlanetsLib_recipe_productivity_effects" field, must be added before data-final-fixes. Simplifies the maintenance of recipe productivity technologies by automatically adding every recipe that produces a particular item/fluid.
+  Changes:
+    - Added user-facing option to set PlanetsLib_recipe_productivity_effects field for relevant vanilla technologies. Enabled by default, but can be disabled when incompatibility issues are noted.
+    - Added initial support for LDoc to prepare PlanetsLib for more proper documentation.
+---------------------------------------------------------------------------------------------------
+Version: 1.9.0
+Date: 2025-08-02
+  Bugfixes:
+    - Fixed a bug in PlanetsLib:update() in which the positions of the given planet's children were not appropriately updated.
+  Changes:
+    - PlanetsLib:update() no longer supports taking an array of configs, unless the array has length 1.
+---------------------------------------------------------------------------------------------------
+Version: 1.8.3
+Date: 2025-07-28
+  Bugfixes:
+    - Rocket silos locked after being set to a PlanetsLib-designated rocket part recipe.
+---------------------------------------------------------------------------------------------------
+Version: 1.8.2
+Date: 2025-07-20
+  Changes:
+    - Removed debug code that made 'Logistic science pack' a hidden technology. Ecksdee.
+---------------------------------------------------------------------------------------------------
+Version: 1.8.1
+Date: 2025-07-20
+  Changes:
+    - 'Unlinked prerequisites' text moved to locale file.
+---------------------------------------------------------------------------------------------------
+Version: 1.8.0
+Date: 2025-07-20
+  Changes:
+    - Our first player-facing settings: 'Warn on hidden prerequisites' and 'Unlink hidden prerequisites'. These prevent unresearchable technologies from arising due to compatibility issues.
+---------------------------------------------------------------------------------------------------
+Version: 1.7.1-1.7.3
+Date: 2025-07-20
+  Changes:
+    - In order for players to hold their tiers fixed and still be able to update PlanetsLib, the tiers have moved to a new mod: PlanetsLib: Tiers
+    - You can now access their values using `local tier = data.raw["mod-data"]["PlanetsLib-tierlist"].data[type][name] or data.raw["mod-data"]["PlanetsLib-tierlist"].data.default`. (The APIs get_planet_tier and get_space_location_tier are now undocumented but still exist for backwards compatibility.)
+  Info:
+    - Changelog update.
+---------------------------------------------------------------------------------------------------
+Version: 1.7.0
+Date: 2025-07-15
+  Changes:
+    - Added unified interface allowing planets to define rocket silo recipes on a per-surface basis.
+---------------------------------------------------------------------------------------------------
+Version: 1.6.4
+Date: 2025-07-10
+  Bugfixes:
+    - Fixed a possible crash in the cargo pod remote interface.
+  Locale:
+    - Added German translation.
+  Changes:
+    - Update to the orbit generator script to support valid sprites for larger orbit radii.
+---------------------------------------------------------------------------------------------------
+Version: 1.6.3
+Date: 2025-06-29
+  Changes:
+    - Tiers: Stargate from Metal and Stars to tier 4
+---------------------------------------------------------------------------------------------------
+Version: 1.6.2
+Date: 2025-06-16
+  Changes:
+    - Fixed a crash when adding an item to the cargo drops whitelist for a specific planet.
+---------------------------------------------------------------------------------------------------
+Version: 1.6.1
+Date: 2025-06-12
+  Changes:
+    - Tiers for Jahtra and Paracelsin added.
+---------------------------------------------------------------------------------------------------
+Version: 1.6.0
+Date: 2025-06-11
+  Changes:
+    - Moved the 'tier' property to PlanetsLib from Organized Solar System, allowing other authors to make use of it. The tier is a number assigned to each planet to indicate where it likely appears in Space Age gameplay progression.
+    - Rubia tier set to 4.5.
+---------------------------------------------------------------------------------------------------
+Version: 1.5.2
+Date: 2025-06-02
+  Changes:
+    - Russian translation updated.
+---------------------------------------------------------------------------------------------------
+Version: 1.5.1
+Date: 2025-05-25
+  Changes:
+    - Corrected the locale entries for cargo drops to remove the reference to construction robots.
+---------------------------------------------------------------------------------------------------
+Version: 1.5.0
+Date: 2025-05-21
+  Changes:
+    - Deprecated the implicit APIs planetslib_sort_sciences and planetslib_ensure_all_packs_from_vanilla_lab in favor of PlanetsLib.sort_science_pack_names and PlanetsLib.add_science_packs_from_vanilla_lab_to_technology.
+    - PlanetsLib no longer modifies the promethium-science-pack and research-productivity technologies to add packs from vanilla labs to them.
+---------------------------------------------------------------------------------------------------
+Version: 1.4.3
+Date: 2025-05-15
+  Changes:
+    - Renamed the surface conditions Oxygen, Nitrogen, Carbon Dioxide and Argon to Atmospheric Oxygen, Atmospheric Nitrogen, Atmospheric Carbon Dioxide and Atmospheric Argon.
+---------------------------------------------------------------------------------------------------
+Version: 1.4.2
+Date: 2025-05-13
+  Changes:
+    - Added a safety assertion in get_child_technologies.
+---------------------------------------------------------------------------------------------------
+Version: 1.4.1
+Date: 2025-05-12
+  Changes:
+    - Construction robots are no longer whitelisted for cargo drops by default.
+    - Remote interface provided for mods to whitelist cargo drop items.
+---------------------------------------------------------------------------------------------------
+Version: 1.4.0
+Date: 2025-05-12
+  Changes:
+    - PlanetsLib no longer has Space Age as a mandatory dependency.
+---------------------------------------------------------------------------------------------------
+Version: 1.3.8
+Date: 2025-05-11
+  Changes:
+    - New API: get_child_technologies.
+---------------------------------------------------------------------------------------------------
+Version: 1.3.7
+Date: 2025-05-04
+  Changes:
+    - Fixed a crash caused presumably by another mod shadowing the 'util' namespace.
+---------------------------------------------------------------------------------------------------
+Version: 1.3.6
+Date: 2025-05-02
+  Changes:
+    - Fixed a crash in excise_tech_from_tech_tree.
+---------------------------------------------------------------------------------------------------
+Version: 1.3.5
+Date: 2025-05-02
+  Changes:
+    - Fixed a crash in remove_surface_condition.
+---------------------------------------------------------------------------------------------------
+Version: 1.3.4
+Date: 2025-04-26
+  Changes:
+    - Fixed API export.
+---------------------------------------------------------------------------------------------------
+Version: 1.3.3
+Date: 2025-04-26
+  Changes:
+    - New API: remove_surface_condition
+---------------------------------------------------------------------------------------------------
+Version: 1.3.2
+Date: 2025-04-25
+  Changes:
+    - New API: excise_effect_from_tech_tree
+---------------------------------------------------------------------------------------------------
+Version: 1.3.1
+Date: 2025-04-21
+  Changes:
+    - Renamed all the 'magic' fields supported on prototypes to start with 'planetslib_' to make them less cryptic. (The previous names are still supported.)
+    - Removed unique planet surface conditions from the documentation for now as their error message is suboptimal.
+---------------------------------------------------------------------------------------------------
+Version: 1.3.0
+Date: 2025-04-21
+  Changes:
+    - Added two new APIs: excise_tech_from_tech_tree and excise_recipe_from_tech_tree.
+---------------------------------------------------------------------------------------------------
+Version: 1.2.20
+Date: 2025-04-15
+  Changes:
+    - The Cargo drop technology effect icon now matches the icon of the planet.
+---------------------------------------------------------------------------------------------------
+Version: 1.2.19
+Date: 2025-04-14
+  Changes:
+    - Updated Ukrainian localization.
+---------------------------------------------------------------------------------------------------
+Version: 1.2.18
+Date: 2025-04-10
+  Changes:
+    - Modified PlanetsLib.borrow_music() to allow the copying of music to/from "space-platform."
+---------------------------------------------------------------------------------------------------
+Version: 1.2.17
+Date: 2025-04-03
+  Info:
+    - Added Space Age tag.
+---------------------------------------------------------------------------------------------------
+Version: 1.2.16
+Date: 2025-03-18
+  Changes:
+    - Incompatility mark added for MT-lib.
+---------------------------------------------------------------------------------------------------
+Version: 1.2.15
+Date: 2025-03-16
+  Changes:
+    - Performance improvement to the cargo pod restriction technology feature.
+---------------------------------------------------------------------------------------------------
+Version: 1.2.14
+Date: 2025-03-16
+  Changes:
+    - If the 'type = "nothing"' effect is removed from a given cargo drops technology, PlanetsLib will no longer enforce that this technology must be researched to perform cargo drops.
+---------------------------------------------------------------------------------------------------
+Version: 1.2.13
+Date: 2025-03-12
+  Changes:
+    - Compatibility fix to handle the case where the vanilla lab has duplicate science packs listed in its inputs.
+---------------------------------------------------------------------------------------------------
+Version: 1.2.12
+Date: 2025-03-03
+  Graphics:
+    - Fixed positioning of corner icons in discovery technologies.
+  Locale:
+    - Russian locale update.
+---------------------------------------------------------------------------------------------------
+Version: 1.2.11
+Date: 2025-02-26
+  Changes:
+    - Fixed a crash on missing 'deepcopy' field.
+---------------------------------------------------------------------------------------------------
+Version: 1.2.9
+Date: 2025-02-24
+  Changes:
+    - Added an icon intended to represent item and recipes used only in ResearchProgressProducts.
+---------------------------------------------------------------------------------------------------
+Version: 1.2.8
+Date: 2025-02-18
+  Locale:
+    - French localization added.
+---------------------------------------------------------------------------------------------------
+Version: 1.2.7
+Date: 2025-02-18
+  Changes:
+    - Hidden optional dependency added for Cosmic Social Distancing.
+---------------------------------------------------------------------------------------------------
+Version: 1.2.6
+Date: 2025-02-07
+  Changes:
+    - No longer write 'Space Locations' in the remote view planet GUI. Space locations isn't technically correct here.
+---------------------------------------------------------------------------------------------------
+Version: 1.2.5
+Date: 2025-02-05
+  Changes:
+    - Fixed the API technology_icon_constant_planet.
+---------------------------------------------------------------------------------------------------
+Version: 1.2.4
+Date: 2025-02-05
+  Changes:
+    - New thumbnail.
+    - Image size compression.
+---------------------------------------------------------------------------------------------------
+Version: 1.2.3
+Date: 2025-02-04
+  Changes:
+    - Fixed bug in which promethium science tech required promethium to research it.
+---------------------------------------------------------------------------------------------------
+Version: 1.2.2
+Date: 2025-02-03
+  Changes:
+    - New API: technology_icon_planet
+---------------------------------------------------------------------------------------------------
+Version: 1.2.1
+Date: 2025-02-03
+  Changes:
+    - Readme update.
+---------------------------------------------------------------------------------------------------
+Version: 1.2.0
+Date: 2025-02-02
+  Changes:
+    - Mods are now able to move child locations simply by updating the position of the parent location. In data-final-fixes PlanetsLib now detects whether a location prototype's orbit object no longer matches the prototype's position and orientation fields, and if so, it applies the same positional shift to all that location's orbit children.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.42
+Date: 2025-02-02
+  Changes:
+    - Moved the nonfunctional orbit-setting code from data-final-fixes to data-updates.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.41
+Date: 2025-01-31
+  Changes:
+    - Rename give_all_packs_in_vanilla_lab to ensure_all_packs_from_vanilla_lab.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.40
+Date: 2025-01-31
+  Changes:
+    - New API: give_all_packs_in_vanilla_lab.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.39
+Date: 2025-01-31
+  Changes:
+    - Improve error message for specifying an orbit with a parent that doesn't exist.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.38
+Date: 2025-01-31
+  Changes:
+    - New helper: PlanetsLib.technology_icon_constant_planet.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.37
+Date: 2025-01-30
+  Changes:
+    - Updated the orbit image Python script to better center satellites on their orbit line.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.36
+Date: 2025-01-29
+  Changes:
+    - New APIs for management of science inputs in labs.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.35
+Date: 2025-01-27
+  Changes:
+    - borrow_music no longer copies hero tracks unless the `planet` field matches the source planet, matching the same behavior as other tracks.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.34
+Date: 2025-01-25
+  Changes:
+    - Fixed the size of the sun being slightly increased whilst PlanetsLib is installed.
+  Locale:
+    - Chinese update.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.33
+Date: 2025-01-24
+  Locale:
+    - Japanese added.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.32
+Date: 2025-01-23
+  Changes:
+    - New APIs: restrict_surface_conditions, relax_surface_conditions and restrict_to_planet.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.31
+Date: 2025-01-22
+  Changes:
+    - (Missing.)
+---------------------------------------------------------------------------------------------------
+Version: 1.1.30
+Date: 2025-01-22
+  Bugfixes:
+    - Bugfix new API.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.29
+Date: 2025-01-22
+  Changes:
+    - Properly export new API.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.28
+Date: 2025-01-22
+  Modding:
+    - Simpler API for cargo drops technologies.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.27
+Date: 2025-01-19
+  Changes:
+    - Updated the orbit image generation script.
+  Locale:
+    - Description update.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.26
+Date: 2025-01-15
+  Changes:
+    - Readded PlanetsLib.borrow_music.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.25
+Date: 2025-01-15
+  Changes:
+    - Removed PlanetsLib.borrow_music for now until issues can be resolved.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.24
+Date: 2025-01-14
+  Locale:
+    - Fixed locale key.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.23
+Date: 2025-01-14
+  Bugfixes:
+    - Fixed crash when a planet has no surface properties.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.22
+Date: 2025-01-14
+  Features:
+    - PlanetsLib.exact_value(property,value):  Returns a surface condition locking the acceptable range of values to one.
+    - PlanetsLib.restrict_to_surface(planet):  Returns a surface condition restricting a prototype to the provided planet.
+    - Added hidden surface conditions "planet-str" and "parent-body". Each planet-str is by default based on the planet's internal name, and is expected to be unique. Moons have their parent body value set to their parent body's planet-str.
+    - Added functions to set and get planet-str values.
+  Info:
+    - Added documentation for enabling optional surface conditions, in addition to everything else in this update.
+    - Fixed incorrect API documentation for borrow_music and set_default_import_location.
+  Locale:
+    - Added set of description templates to standardize how the relationships between planets are moons are described.
+
+---------------------------------------------------------------------------------------------------
+Version: 1.1.21
+Date: 2025-01-13
+  Bugfixes:
+    - Support for mods that delete all space locations.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.20
+Date: 2025-01-13
+  Features:
+    - The drawn starmap is now layered by a topological sort on the orbit structure.
+    - Support for missing 'orientation' fields when the 'distance' is 0.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.19
+Date: 2025-01-12
+  Changes:
+    - Update Python script examples
+---------------------------------------------------------------------------------------------------
+Version: 1.1.18
+Date: 2025-01-12
+  Features:
+    - Python script added to generate orbit images. This is a variation of MeteorSwarm's script.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.17
+Date: 2025-01-12
+  Changes:
+    - Better error handling for `PlanetsLib:update`.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.16
+Date: 2025-01-12
+  Changes:
+    - New API PlanetsLib:update to update existing planets or space location prototypes. Passing an `orbit` field will also update the `distance` and `orientation` fields of the prototype.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.15
+Date: 2025-01-12
+  Info:
+    - Changelog fix.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.14
+Date: 2025-01-12
+  Features:
+    - Support for all combinations of `starmap_icon`, `starmap_icons` and `sprite_only`. Previously, if `sprite_only` was true, `starmap_icons` was never read and it was impossible to hide the sprite by setting both to nil.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.13
+Date: 2025-01-10
+  Graphics:
+    - Reinstated orbit images files in case people find them helpful.
+    - Compressed the image files.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.12
+Date: 2025-01-03
+  Locale:
+    - Czech localization added.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.11
+Date: 2025-01-03
+  Changes:
+    - Switched API from PlanetsLib:planet_extend to PlanetsLib:extend.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.10
+Date: 2025-01-02
+  Locale:
+    - Adds translation into Russian.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.9
+Date: 2025-01-02
+  Changes:
+    - Compatibility with mods that update the positions of planets of other mods.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.8
+Date: 2025-01-02
+  Locale:
+    - Added Chinese localization.
+  Bugfixes:
+    - Fixed solar system edge not having an orbit sprite.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.7
+Date: 2025-01-02
+  Bugfixes:
+    - Fixed crash for planets without surface properties.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.6
+Date: 2025-01-02
+  Changes:
+    - Surface conditions for gas composition.
+    - New surface conditions are now off by default, unless requested by a mod.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.5
+Date: 2025-01-02
+  Bugfixes:
+    - Bail when updating the starmap for a planet without an 'orbit' field.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.4
+Date: 2025-01-02
+  Bugfixes:
+    - Fixed crash when space locations are added later than data.lua.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.3
+Date: 2025-01-02
+  Changes:
+    - Compatibility with mods that set the 'orbit' field of planets and space locations to other objects.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.2
+Date: 2025-01-01
+  Changes:
+    - is_space_location check enforced in planet_extend.
+    - Readme note added about breaking changes will bump the major version. Special thanks added to MidnightTigger.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.1
+Date: 2025-01-01
+  Info:
+    - Readme fixes.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.0
+Date: 2025-01-01
+  Changes:
+    - API for planets switched from 'planet_type' to 'sprite_only'. This is now simply a boolean that determines whether the prototype should be removed in data-final-fixes and replaced by a sprite on the starmap. With this change, PlanetsLib now supports extra solar systems, binary systems, etc.
+    - Form of 'parent' within 'orbit' changed to an object with 'type' and 'name' fields, rather than just a name.
+    - Core locale overrides changes to use 'space location' terminology instead of planets and moons.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.8
+Date: 2025-01-01
+  Bugfixes:
+    - Fixed items in cargo pod drops being allowed if they were not associated to an entity in Factorio.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.7
+Date: 2024-12-31
+  Info:
+    - README.md update
+---------------------------------------------------------------------------------------------------
+Version: 1.0.6
+Date: 2024-12-31
+  Info:
+    - README.md update
+---------------------------------------------------------------------------------------------------
+Version: 1.0.5
+Date: 2024-12-31
+  Changes:
+    - Extract the unified API into 'api.lua' for clarity.
+  Info:
+    - Syncing of README.md to the mod portal.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.4
+Date: 2024-12-30
+  Changes:
+    - Organized exports into a single API file for readability.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.3
+Date: 2024-12-30
+  Modding:
+    - Compatibility with Organized Solar System.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.2
+Date: 2024-12-30
+  Bugfixes:
+    - Fixed a crash.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.1
+Date: 2024-12-30
+  Modding:
+    - Dependencies updated.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 2024-12-30
+  Modding:
+    - APIs: PlanetsLib:planet_extend, PlanetsLib.technology_icons_moon, PlanetsLib.cargo_drops_tech_effect, PlanetsLib.technology_icons_planet_cargo_drops
+    - When a technology with name '[planet_name]-cargo-drops' is created, cargo drops to that planet (excepting those with only players or construction robots) will be prevented until that technology is researched.

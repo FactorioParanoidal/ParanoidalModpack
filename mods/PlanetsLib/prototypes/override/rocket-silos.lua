@@ -1,0 +1,2 @@
+-- Paranoidal fork: rocket silos keep their fixed recipe: one Paranoidal rocket everywhere (ПР-078 rule 4), and the home
+-- silo does not change before the rocket. scripts/rocket-parts.lua leaves silos with a fixed recipe alone.

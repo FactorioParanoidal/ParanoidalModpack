@@ -1,0 +1,16 @@
+-- local lift_multipliers = PlanetsLib.constants.rocket_silo_lift_multipliers
+-- for _,planet in pairs(PlanetsLib.constants.planet_special_properties) do
+--     local lift_multiplier = planet.lift_multiplier
+--     if lift_multiplier then
+--         lift_multipliers[tostring(lift_multiplier)] = {}
+--     end
+-- end
+-- for lift_multiplier,multiplier_table in pairs(lift_multipliers) do
+--     for _,silo in pairs(data.raw["rocket-silo"]) do
+--         local new_silo = table.deepcopy(silo)
+--         --Implement changed silo data once Factorio 2.1 comes out
+--         new_silo.name = silo.name .. "-lift-multiplied-" .. lift_multiplier
+--         multiplier_table[silo.name]=new_silo.name
+--         data:extend{new_silo}
+--     end
+-- end
