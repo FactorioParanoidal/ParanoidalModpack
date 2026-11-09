@@ -1,0 +1,8 @@
+{
+    "recipe": [
+        ["muluna-sapling-growth-greenhouse","muluna-tree-growth-greenhouse"],
+        ["muluna-sapling-growth-greenhouse-nutrients","muluna-tree-growth-greenhouse-nutrients"],
+        ["muluna-sapling-growth-greenhouse-vulcanus","muluna-tree-growth-greenhouse-vulcanus"],
+        ["space-science-pack-advanced","space-science-pack"]
+    ]   
+}

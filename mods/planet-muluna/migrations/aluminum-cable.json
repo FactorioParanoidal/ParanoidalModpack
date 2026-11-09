@@ -1,0 +1,16 @@
+{
+    "recipe":[
+        [
+            "electronic-circuit-aluminum",
+            "electronic-circuit"
+            
+        ],
+        [
+            "advanced-circuit-aluminum",
+            "advanced-circuit"
+        ]
+    ],
+    "item":[
+        ["aluminum-cable","copper-cable"]
+    ]
+}

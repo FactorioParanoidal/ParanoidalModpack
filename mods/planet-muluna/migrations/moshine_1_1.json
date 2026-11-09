@@ -1,0 +1,19 @@
+{
+    "recipe":[
+        [
+            "hard-drive-astronomical-data",
+            "datacell-empty-astronomical-data"
+        ],
+        [
+            "hard-drive-astronomical-data-empty",
+            "datacell-empty-astronomical-data-empty"
+        ]
+    ],
+    "item":[
+        [
+            "hard-drive-astronomical-data",
+            "datacell-empty-astronomical-data"
+        ]
+    ]
+
+}

@@ -1,0 +1,8 @@
+{
+    "item":[
+        ["wood-crushed", "woodchips"]
+    ],
+    "recipe":[
+        ["wood-crushing", "woodchips"]
+    ]
+}

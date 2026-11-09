@@ -1,0 +1,4 @@
+-- Paranoidal fork: Muluna is new in the build, so this upgrade of an older Muluna save never applies (when a mod is
+-- added to a save, Factorio runs all its migrations). Upstream it indexed technologies the fork removes (asteroid
+-- collector, crusher, asteroid crushings, thruster oxidizer, fluid barreling) and granted Muluna technologies by the
+-- upstream tree; Muluna is researched in the build's order.

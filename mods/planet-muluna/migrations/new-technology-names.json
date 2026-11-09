@@ -1,0 +1,47 @@
+{
+    "technology":[
+        [
+            "advanced-stone-processing",
+            "muluna-advanced-stone-processing"
+            
+        ],
+        [
+            "advanced-boiler",
+            "muluna-advanced-boiler"
+        ],
+        [
+            "anorthite-processing",
+            "muluna-anorthite-processing"
+        ],
+        [
+            "helium-enrichment",
+            "muluna-helium-enrichment"
+        ]
+    ],
+    "item":[
+        [
+            "advanced-boiler",
+            "muluna-advanced-boiler"
+        ]
+    ],
+    "entity":[
+        [
+            "advanced-boiler",
+            "muluna-advanced-boiler"
+        ],
+        [
+            "bioluminescent-advanced-boiler",
+            "bioluminescent-muluna-advanced-boiler"
+        ]
+    ],
+    "recipe":[
+        [
+            "advanced-boiler",
+            "muluna-advanced-boiler"
+        ],
+        [
+            "bioluminescent-advanced-boiler",
+            "bioluminescent-muluna-advanced-boiler"
+        ]
+    ]
+}

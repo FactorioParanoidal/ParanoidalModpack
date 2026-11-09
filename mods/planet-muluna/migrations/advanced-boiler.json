@@ -1,0 +1,11 @@
+{
+    "technology":[
+        ["space-boiler", "advanced-boiler"]
+    ],
+    "entity":[
+        ["double-boiler", "advanced-boiler"]
+    ],
+    "item":[
+        ["space-boiler", "advanced-boiler"]
+    ]
+}

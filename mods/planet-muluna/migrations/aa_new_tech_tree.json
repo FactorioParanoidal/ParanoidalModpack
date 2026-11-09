@@ -1,0 +1,7 @@
+{
+    "technology":[
+        ["muluna-advanced-boiler", "oxide-asteroid-crushing"],
+        ["crusher", "metallic-asteroid-crushing"],
+        ["greenhouses", "carbonic-asteroid-crushing"]
+    ]
+}

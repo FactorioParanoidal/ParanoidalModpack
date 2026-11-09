@@ -1,0 +1,61 @@
+-- local dual_icon = require("lib.dual-item-icon").dual_icon
+-- local seeds = 100
+-- local time = 10*60
+-- local greenhouse_growth = {
+--     type = "recipe",
+--     name = "muluna-tree-growth-greenhouse-11x11",
+--     enabled = false,
+--     categories = {"muluna-greenhouse-11x11"},
+--     icons = dual_icon("wood","carbon-dioxide"),
+--     ingredients = {
+--         {type = "item",name = "tree-seed", amount=seeds}, --Reminder: 1 tree seed = 2 wood
+--         {type = "fluid",name = "carbon-dioxide", amount=1000*seeds},
+--         {type = "fluid",name = "water", amount=50*seeds},
+--     },
+--     results = {
+--         {type = "item",name = "wood", amount=seeds * 4},
+--         {type = "fluid",name = "oxygen", amount=1000*seeds,ignored_by_productivity=1000*seeds}
+--     },
+--     energy_required=time,
+--     subgroup="muluna-products",
+--     max_productivity = 3,
+-- }
+-- Muluna:extend{greenhouse_growth}
+-- {
+--     type = "recipe",
+--     name = "muluna-tree-growth-greenhouse-water-saving-10x10",
+--     enabled = false,
+--     categories = {"greenhouse-10x10"},
+--     icons = dual_icon("wood","transport-belt"),
+--     ingredients = {
+--         {type = "item",name = "tree-seed", amount=10}, --Reminder: 1 tree seed = 2 wood
+--         {type = "fluid",name = "carbon-dioxide", amount=10000},
+--         {type = "fluid",name = "water", amount=250},
+--     },
+--     results = {
+--         {type = "item",name = "wood", amount=40},
+--         {type = "fluid",name = "oxygen", amount=10000,ignored_by_productivity=10000}
+--     },
+--     energy_required=10*60,
+--     subgroup="muluna-products",
+--     max_productivity = 3,
+-- },
+-- {
+--     type = "recipe",
+--     name = "muluna-tree-growth-greenhouse-quick-10x10",
+--     enabled = false,
+--     categories = {"greenhouse-10x10"},
+--     icons = dual_icon("wood","express-transport-belt"),
+--     ingredients = {
+--         {type = "item",name = "tree-seed", amount=10}, --Reminder: 1 tree seed = 2 wood
+--         {type = "fluid",name = "carbon-dioxide", amount=10000},
+--         {type = "fluid",name = "water", amount=1000},
+--     },
+--     results = {
+--         {type = "item",name = "wood", amount=40},
+--         {type = "fluid",name = "oxygen", amount=10000,ignored_by_productivity=10000}
+--     },
+--     energy_required=3*60,
+--     subgroup="muluna-products",
+--     max_productivity = 3,
+-- },

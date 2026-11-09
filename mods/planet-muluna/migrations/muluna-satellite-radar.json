@@ -1,0 +1,15 @@
+{
+    "entity":[
+            ["nav-beacon", "muluna-satellite-radar"]
+        ],
+    "item":[
+            ["nav-beacon", "muluna-satellite-radar"]
+        ],
+    "technology":[
+        ["nav-beacon","muluna-satellite-radar"]
+    ],
+    "recipe":[
+        ["nav-beacon","muluna-satellite-radar"]
+        ]
+    }
+    

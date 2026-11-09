@@ -1,0 +1,102 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "agent": {
+    "build": {
+      "description": "Default build agent for this project.",
+      "model": "opencode-go/deepseek-v4.1-flash",
+      "mode": "primary",
+      "temperature": 0.7,
+      "permission": {
+        "edit": "allow",
+        "bash": "ask",
+        "webfetch": "allow",
+        "git *": "allow",
+        "git commit *": "allow",
+        "git push *": "deny"
+      }
+    },
+    "issue-bugfix": {
+      "description": "Automated issue triage and bugfix agent for reproducible crashes and gameplay bugs.",
+      "mode": "primary",
+      "model": "opencode-go/deepseek-v4.1-flash",
+      "temperature": 0.2,
+      "prompt": "{file:./.github/opencode/bugfix-prompt.md}",
+      "permission": {
+        "*": "allow",
+        "edit": "allow",
+        "read": {
+          "*": "allow",
+          "*.env": "deny",
+          "*.env.*": "deny",
+          "*.env.example": "allow"
+        },
+        "webfetch": "deny",
+        "websearch": "deny",
+        "question": "deny",
+        "task": "deny",
+        "doom_loop": "allow",
+        "external_directory": {
+          "*": "allow",
+          "/tmp/opencode/**": "allow",
+          "$HOME/work/_temp/**": "allow"
+        },
+        "bash": {
+          "*": "allow",
+          "git push *main*": "deny",
+          "git push --force*": "deny",
+          "git push -f*": "deny",
+          "git reset --hard*": "deny",
+          "git checkout main*": "deny",
+          "git switch main*": "deny",
+          "gh pr merge *": "deny",
+          "gh issue close *": "deny",
+          "sudo *": "deny"
+        }
+      }
+    },
+  "factorio-docs-agent": {
+      "description": "Subagent that gets information from the Factorio documentation.",
+      "mode": "subagent",
+      "model": "opencode-go/deepseek-v4.1-flash",
+      "prompt": "{file:./prompts/factorio-docs.txt}",
+      "permission": {
+        "bash": "allow"
+      }
+  },
+  "factorio-docs": {
+      "mode": "primary",
+      "description": "Subagent that gets information from the Factorio documentation.",
+      "model": "opencode-go/deepseek-v4.1-flash",
+      "prompt": "{file:./prompts/factorio-docs.txt}",
+      "temperature":0.1,
+      "permission": {
+        "bash": "allow"
+        
+      }
+  },
+  "lua-docs": {
+      "mode": "primary",
+      "description": "Subagent that gets information from the Lua documentation.",
+      "model": "opencode-go/deepseek-v4.1-flash",
+      "prompt": "{file:./prompts/lua-docs.txt}",
+      "temperature":0.1,
+      "permission": {
+        "bash": "allow"
+        
+      }
+  },
+  "artcraft": { "disable": true },
+  "cadcraft": { "disable": true },
+  "deckcraft": { "disable": true },
+  "designcraft": { "disable": true },
+  "effectcraft": { "disable": true },
+  "figcraft": { "disable": true },
+  "filmcraft": { "disable": true },
+  "gridcraft": { "disable": true },
+  "lightcraft": { "disable": true },
+  "pdfcraft": { "disable": true },
+  "soundcraft": { "disable": true },
+  "vectorcraft": { "disable": true },
+  "wordcraft": { "disable": true }
+}
+}
