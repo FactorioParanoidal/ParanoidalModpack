@@ -43,7 +43,7 @@ end
 -- Control-behavior fields stored in settings tags; anything else in a tag is ignored.
 local circuit_fields = {
     "circuit_read_transfers", "circuit_set_filters", "circuit_enable_disable", "circuit_condition",
-    "connect_to_logistic_network", "logistic_condition",
+    "connect_to_logistic_network", "logistic_condition", "input_networks", "output_networks",
 }
 local attach, replace_shell
 
@@ -65,6 +65,18 @@ local function record(e)
     local s = state()
     return s.shells[e.unit_number] or s.machines[e.unit_number]
 end
+-- Read-only integration boundary: other mods must not guess the worker by position.
+remote.add_interface("paranoidal_loaders", {
+    resolve = function(entity)
+        if not valid(entity) then return end
+        local s = storage.paranoidal_loader_shells
+        local r = s and (s.shells[entity.unit_number] or s.machines[entity.unit_number])
+        if r and valid(r.shell) and valid(r.machine) then return r.machine end
+    end,
+})
+local function loader_mode(mode, fallback)
+    return (mode == "input" or mode == "output") and mode or fallback
+end
 -- The side of the container end: an input belt flows towards it, an output belt away from it.
 local function container_side(mode, direction)
     return mode == "input" and direction or (direction + 8) % 16
@@ -81,7 +93,7 @@ end
 -- exist (another modpack version). Apply each field on its own and never fail the build.
 local function configure(machine, c, direction)
     if type(c) == "table" then
-        machine.loader_type = (c.mode == "input" or c.mode == "output") and c.mode or "output"
+        machine.loader_type = loader_mode(c.mode, "output")
         if c.filter_mode ~= nil and not pcall(function() machine.loader_filter_mode = c.filter_mode end) then
             log("Paranoidal loader: ignored a stored filter mode")
         end
@@ -144,14 +156,18 @@ local function sync_link(r)
     local used = {}
     for _, wire in ipairs(external_wires(r.shell, r.machine)) do used[wire.id] = true end
     for _, id in ipairs(wire_ids) do
-        local a = r.shell.get_wire_connector(id, true)
-        local b = r.machine.get_wire_connector(id, true)
-        local linked = a.is_connected_to(b, defines.wire_origin.script)
-        if used[id] and not linked then
-            if not a.connect_to(b, false, defines.wire_origin.script) then
+        local a = r.shell.get_wire_connector(id, false)
+        local b = r.machine.get_wire_connector(id, false)
+        if used[id] then
+            a = a or r.shell.get_wire_connector(id, true)
+            b = b or r.machine.get_wire_connector(id, true)
+            if not (a and b) then
+                log("Paranoidal loader: shell circuit connector unavailable")
+            elseif not a.is_connected_to(b, defines.wire_origin.script)
+                and not a.connect_to(b, false, defines.wire_origin.script) then
                 log("Paranoidal loader: shell circuit connection failed")
             end
-        elseif linked and not used[id] then
+        elseif a and b and a.is_connected_to(b, defines.wire_origin.script) then
             a.disconnect_from(b, defines.wire_origin.script)
         end
     end
@@ -387,12 +403,13 @@ attach = function(shell, config, existing, no_snap)
     if pending and pending.tick == game.tick then config = config or pending.config else pending = nil end
     local stale = not existing and not pending and take_over_stale(shell) or nil
     if stale then config = config or stale.config end
+    -- Validate untrusted tags before passing a mode to create_entity or using it for orientation.
+    local mode = config and loader_mode(config.mode, "output") or def.mode
     -- Scripts and robots keep the old direction; a player may place the item rotated.
     -- The same container end (also the opposite-mode sprite of the same loader) keeps
     -- everything; another end keeps the mode and settings but takes the new orientation.
     local direction = shell.direction
     if pending then
-        local mode = (config and config.mode) or def.mode
         if shell.direction == pending.direction
             or container_side(def.mode, shell.direction) == container_side(mode, pending.direction) then
             direction = pending.direction
@@ -405,7 +422,7 @@ attach = function(shell, config, existing, no_snap)
     end
     local machine = existing or shell.surface.create_entity {
         name = def.machine, position = shell.position, direction = shell.direction,
-        type = (config and config.mode) or def.mode, force = shell.force, quality = shell.quality,
+        type = mode, force = shell.force, quality = shell.quality,
         create_build_effect_smoke = false,
     }
     if not valid(machine) then
@@ -880,8 +897,8 @@ on(defines.events.on_selected_entity_changed, function(e)
     if r then update_status(r) end
 end)
 -- Constant-time idle cost: update only players' inspected loaders, not every loader.
--- No wire-connected event exists: while a player holds a circuit wire, watch the
--- shells they point at (both ends of a drag) and sync once more when they stop.
+-- No wire-connected event exists: watch the selected shell and the actual drag source.
+-- Flush previous endpoints once, rather than retaining every shell hovered this session.
 local circuit_wires = { ["red-wire"] = true, ["green-wire"] = true }
 local function wiring()
     local s = state()
@@ -917,10 +934,21 @@ on(defines.events.on_tick, function(e)
     local s = state()
     for index, watched in pairs(wiring()) do
         local player = game.get_player(index)
-        local r = player and player.connected and record(player.selected)
-        if r then watched[r.shell_id] = r end
+        local selected, dragged
+        if player and player.connected then
+            selected = record(player.selected)
+            local target = player.drag_target
+            dragged = target and record(target.target_entity)
+        end
+        if selected then watched[selected.shell_id] = selected end
+        if dragged then watched[dragged.shell_id] = dragged end
         for id, w in pairs(watched) do
-            if valid(w.shell) and valid(w.machine) then sync_link(w) else watched[id] = nil end
+            if valid(w.shell) and valid(w.machine) and id == w.shell_id then
+                sync_link(w)
+                if w ~= selected and w ~= dragged then watched[id] = nil end
+            else
+                watched[id] = nil
+            end
         end
     end
     if s.replace_queue and next(s.replace_queue) then
