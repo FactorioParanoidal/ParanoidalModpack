@@ -20,6 +20,25 @@ local RS = {
 }
 
 local ReStack_Items = {}
+-- Space Age branch: recipes, resources, technologies and entities of Space Age and of the planet mods set the stack size
+-- only of their own items, never of a home item (nothing before the rocket changes): a planet smelting recipe made plastic
+-- a plate (400), a planet copy of the rocket part gave its inputs 10, Gleba's stone deposit gave stone the ore size.
+local space_age_filter = data.paranoidal_space_age_filter
+local planet_source = false
+local function from(prototype)
+  planet_source = space_age_filter ~= nil and space_age_filter.is_space_age(prototype)
+end
+local function home_item(name)
+  for kind in pairs(defines.prototypes.item) do
+    local item = data.raw[kind] and data.raw[kind][name]
+    if item then return not space_age_filter.is_space_age(item) end
+  end
+  return true
+end
+local function restack(name, entry)
+  if planet_source and home_item(name) then return end
+  ReStack_Items[name] = entry
+end
 local Launch_Products = {}
 local Tile_Whitelist = { ["stone-brick"] = true }
 
@@ -28,10 +47,10 @@ local function add_from_item_array(items, stack_size, category, placed_entity)
   for _, item in pairs(items) do
     if item.name and (item.type == nil or item.type == "item") then
       if placed_entity == nil or placed_entity == item.place_result then
-        ReStack_Items[item.name] = { stack_size = stack_size, type = category }
+        restack(item.name, { stack_size = stack_size, type = category })
       end
     elseif item[1] and placed_entity == nil then
-      ReStack_Items[item[1]] = { stack_size = stack_size, type = category }
+      restack(item[1], { stack_size = stack_size, type = category })
     end
   end
 end
@@ -40,19 +59,21 @@ local function SelectItemByEntity(ent_type, stack_size, category, reverse_check)
   category = category or ent_type
   if reverse_check == nil then reverse_check = true end
   for name, entity in pairs(data.raw[ent_type] or {}) do
+    from(entity)
     if entity.minable then
       if entity.minable.result then
-        ReStack_Items[entity.minable.result] = { stack_size = stack_size, type = category }
+        restack(entity.minable.result, { stack_size = stack_size, type = category })
       elseif entity.minable.results then
         add_from_item_array(entity.minable.results, stack_size, category, reverse_check and name or nil)
       end
     end
   end
+  planet_source = false
 end
 
 local function SelectItemsByRecipeResult(recipe, stack_size, category)
   if recipe.result then
-    ReStack_Items[recipe.result] = { stack_size = stack_size, type = category }
+    restack(recipe.result, { stack_size = stack_size, type = category })
   end
   if recipe.results then
     add_from_item_array(recipe.results, stack_size, category)
@@ -68,6 +89,7 @@ end
 -- INTERMEDIATE
 SelectItemByEntity("resource", RS.ores, "ore", false)
 for _, recipe in pairs(data.raw.recipe) do
+  from(recipe) -- the loop ends with the technologies below, which reset it
   if bobmods.lib.recipe.get_category(recipe) == "smelting" then -- Factorio 2.1: categories[1]
     SelectItemsByRecipeResult(recipe, RS.plates, "smelting")
   end
@@ -76,10 +98,12 @@ for _, recipe in pairs(data.raw.recipe) do
   end
 end
 for _, tech in pairs(data.raw.technology) do
+  from(tech)
   if tech.unit and tech.unit.ingredients then
     add_from_item_array(tech.unit.ingredients, RS["science-pack"], "science-pack")
   end
 end
+planet_source = false
 -- Factorio 2.1: ItemPrototype::fuel_category -> fuel_categories (list)
 local function has_fuel_category(item, category)
   for _, c in pairs(item.fuel_categories or {}) do
