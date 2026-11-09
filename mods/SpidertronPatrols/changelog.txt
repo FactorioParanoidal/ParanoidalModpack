@@ -1,0 +1,552 @@
+---------------------------------------------------------------------------------------------------
+Version: 2.7.1
+Date: 10 October 2026
+  Changes:
+    - Paranoidal (Space Age branch): patrols open with Maraxsis' submarine automation (after the rocket), not with the spidertron technology; no optional dependency on space-age (Space Age stays hidden from the mod, load order as without it); Spidertron Enhancements is optional; spider vehicles keep their flags (inserters still serve the home spidertron).
+  Bugfixes:
+    - Fixed error on load with 2.1.21
+---------------------------------------------------------------------------------------------------
+Version: 2.7.0
+Date: 25 June 2026
+  Features:
+    - Factorio 2.1 compatibility
+  Bugfixes:
+    - Improved support for modded quality levels
+    - Fixed crash when a SE ship with a circuit-controlled patrol/dock lands
+    - Fixed crash when removing a player from a multiplayer game
+---------------------------------------------------------------------------------------------------
+Version: 2.6.4
+Date: 13 April 2026
+  Bugfixes:
+    - Fixed crash when moving only waypoint up/down in schedule
+    - Fixed some tech tree ingredients/prerequisites when SA is active
+---------------------------------------------------------------------------------------------------
+Version: 2.6.3
+Date: 5 May 2025
+  Features:
+    - Added "Show schedule panel by default" mod setting
+  Compatibility:
+    - Fixed compatibility with Krastorio 2
+  Bugfixes:
+    - Fixed crash on load when spidertron docks are disabled in mod settings
+---------------------------------------------------------------------------------------------------
+Version: 2.6.2
+Date: 17 April 2025
+  Bugfixes:
+    - Actually fixed rare bug where spidertrons would get into a faulty state where they can't dock, caused by multiple spidertrons attempting to dock simultaneously
+---------------------------------------------------------------------------------------------------
+Version: 2.6.1
+Date: 15 April 2025
+  Bugfixes:
+    - Hopefully fixed rare bug where spidertrons would get into a faulty state where they can't dock
+    - Fixed dock graphics sometimes getting stuck in the open state
+---------------------------------------------------------------------------------------------------
+Version: 2.6.0
+Date: 11 March 2025
+  Features:
+    - Docks can now be configured to connect to a specific inventory of the connected spidertron (Trunk/Trash/Ammo/Fuel/FuelOutput)
+  Bugfixes:
+    - Fixed spidertron schedule not being saved in blueprints when using "Select new contents" button in blueprints
+    - Fixed dock door graphics remaining open if a spidertron disconnects from a dock immediately after connecting
+---------------------------------------------------------------------------------------------------
+Version: 2.5.12
+Date: 5 March 2025
+  Bugfixes:
+    - Fixed crash when updating from 2.5.10 or earlier
+---------------------------------------------------------------------------------------------------
+Version: 2.5.11
+Date: 4 March 2025
+  Changes:
+    - Minimum factorio version increased to 2.0.38
+    - Drastically improved performance of spidertron docks using new proxy-container feature
+    - Items with data no longer lose their data when transferred through docks
+---------------------------------------------------------------------------------------------------
+Version: 2.5.10
+Date: 24 January 2025
+  Features:
+    - Added tip for automatic refueling when Maraxsis or Lex's Aircraft are installed
+  Bugfixes:
+    - Fixed crash when copy-pasting spidertron configurations
+---------------------------------------------------------------------------------------------------
+Version: 2.5.9
+Date: 15 January 2025
+  Features:
+    - Improved cross-surface patrol support for Maraxsis planet
+    - Added patrol remote shortcut
+  Bugfixes:
+    - Fixed error on load when spidertron docks are disabled in mod settings
+    - Fixed spidertron remote not being unlocked alongside spiderling
+---------------------------------------------------------------------------------------------------
+Version: 2.5.8
+Date: 16 December 2024
+  Features:
+    - Added new "Empty trash" wait condition
+  Bugfixes:
+    - Fixed schedule GUI appearing on spidertron ghosts
+    - Fixed waypoint renders on ground not being cleared when the spidertron is removed
+    - Fixed crash when spidertron arrives at an autopilot destination while in "Automatic" mode but with no waypoints set
+  Compatibility:
+    - Constructrons from "Constructron"/"Spidertron Automation" can no longer have waypoints set
+    - Fixed schedule GUI appearing extremely wide in some circumstances when used with "Constructron"/"Spidertron Automation"
+---------------------------------------------------------------------------------------------------
+Version: 2.5.7
+Date: 12 December 2024
+  Compatibility:
+    - Fixed patrol renders getting messed up when a submarine submerges
+---------------------------------------------------------------------------------------------------
+Version: 2.5.6
+Date: 12 December 2024
+  Features:
+    - Added several more tips and tricks pages
+    - Added mod setting to enable fuel requirement for spiderling
+    - Names of some things will change from "spidertron" to "vehicle" when Lex's Aircraft or Maraxsis (submarines) are installed
+    - Blueprinting a spidertron will now also blueprint its schedule
+    - Up/down arrows in schedule GUI now wrap around, and can be shift+clicked to move to the top/bottom
+---------------------------------------------------------------------------------------------------
+Version: 2.5.5
+Date: 10 December 2024
+  Features:
+    - Added new keybind 'Control + R' which toggles automatic/manual for spidertrons currently selected, opened, connected to held remote, or being driven
+    - Added initial tips and tricks page demonstrating patrol setup
+    - Patrol remote can now be used on multiple spidertrons at once
+  Bugfixes:
+    - Fixed incorrect keybinds in tooltips
+  Compatibility:
+    - Improved compatibility with Maraxsis mod with new "on_spidertron_patrol_waypoint_reached" custom event
+---------------------------------------------------------------------------------------------------
+Version: 2.5.4
+Date: 5 December 2024
+  Features:
+    - Debug keybind "Toggle entity" can now toggle a spidertron's "Automatic"/"Manual" mode
+    - "Item count" and "Circuit condition" wait conditions now check quality
+  Compatibility:
+    - Added compatibility with Maraxsis
+  Bugfixes:
+    - Fixed 'Alt + A' to give spidertron remote would also move player
+    - Fixed spidertrons with burner inventories would 'connect' to inserters
+---------------------------------------------------------------------------------------------------
+Version: 2.5.3
+Date: 13 November 2024
+  Bugfixes:
+    - Fixed 'Inactivity' wait condition not working
+    - Fixed 'Read contents' checkbox in dock's circuit controls being reset when a spidertron docks there
+    - Added warning to help catch rare bug when creating waypoints - please report if you see it
+---------------------------------------------------------------------------------------------------
+Version: 2.5.2
+Date: 8 November 2024
+  Bugfixes:
+    - Fixed crash on load in 2.0.16
+    - Fixed crash when using the "Circuit condition" wait condition
+    - Fixed dock circuit connections not having correct graphics
+---------------------------------------------------------------------------------------------------
+Version: 2.5.1
+Date: 4 November 2024
+  Changes:
+    - Spidertrons with toolbelt equipment are prohibited from docking
+    - Removed "Add logistic requests to spidertron docks" mod setting
+  Bugfixes:
+    - Fixed crash when docking spidertrons with quality or toolbelt equipment
+    - Fixed crash when opening camera location in map
+    - Fixed docks on space platforms not working
+---------------------------------------------------------------------------------------------------
+Version: 2.5.0
+Date: 18 October 2024
+  Features:
+    - Factorio 2.0 compatibility
+---------------------------------------------------------------------------------------------------
+Version: 2.4.10
+Date: 8 November 2023
+  Bugfixes:
+    - Fixed spidertrons connecting to docks whilst travelling on autopilot
+    - Fixed crash when pressing Control + Right-click when respawning or spectating
+    - Fixed crash on load with Industrial Revolution 3.1
+---------------------------------------------------------------------------------------------------
+Version: 2.4.9
+Date: 19 August 2023
+  Bugfixes:
+    - Fixed nothing working when loading an existing save
+---------------------------------------------------------------------------------------------------
+Version: 2.4.8
+Date: 19 August 2023
+  Features:
+    - Added "Prevent docking when driving" setting (default off)
+  Compatibility:
+    - Fixed dock only having 2x2 collision box when using Squeak Through
+    - Fixed dock dimensions being shown as 2x2 by Extended Descriptions
+---------------------------------------------------------------------------------------------------
+Version: 2.4.7
+Date: 20 June 2023
+  Changes:
+    - Removed an accidentally released change in dock item transfer
+---------------------------------------------------------------------------------------------------
+Version: 2.4.6
+Date: 19 June 2023
+  Changes:
+    - Removed requirement for experimental version of Factorio
+---------------------------------------------------------------------------------------------------
+Version: 2.4.5
+Date: 16 June 2023
+  Features:
+    - Added default keybindings for controller users
+---------------------------------------------------------------------------------------------------
+Version: 2.4.4
+Date: 26 May 2023
+  Bugfixes:
+    - Fixed crash when shift-clicking with patrol remote when there are no waypoints
+    - Fixed crash when toggling automatic/manual after clearing all waypoints
+---------------------------------------------------------------------------------------------------
+Version: 2.4.3
+Date: 5 April 2023
+  Compatibility:
+    - Added compatibility with Freight Forwarding 1.5.0
+---------------------------------------------------------------------------------------------------
+Version: 2.4.2
+Date: 16 March 2023
+  Bugfixes:
+    - Fixed that schedule GUI wouldn't show when the spidertron inventory is opened remotely
+    - Fixed that only one spidertron's path would be drawn at a time
+---------------------------------------------------------------------------------------------------
+Version: 2.4.1
+Date: 15 March 2023
+  Features:
+    - Added 'Fuel full' wait condition (only visible when the spidertron requires fuel, e.g. with Krastorio 2 or Exotic Industries)
+    - Fully compatible with Industrial Revolution 3
+  Bugfixes:
+    - Fixed crash when tabbing into wait condition time textfields
+---------------------------------------------------------------------------------------------------
+Version: 2.4.0
+Date: 22 February 2023
+  Features:
+    - Changed remote interaction
+      - Patrol remote is no longer craftable, instead it is given for free
+      - Patrol remote can be accessed from the spidertron's GUI, or from patrol remote pipetting a spidertron (Control + Shift + Q)
+      - Each waypoint has a button for inserting waypoints immediately after it
+      - Shift click with patrol remote to move the previous waypoint instead
+    - Waypoint positions are snapped to the grid (and the center of spidertron docks)
+    - Compatibility with upcoming Freight Forwarding and Exotic Industries overhauls
+    - Added spiderling milestone when using Milestones mod
+  Changes:
+    - Spiderling, dock, and regular remote no longer require rocket control units to craft (unless playing with SE)
+    - Dock recipe now requires 4 stack inserters
+    - Spiderling recipe now requires 4 exoskeletons instead of 2
+    - Regular remote now requires processing units (unless playing with SE)
+    - As a result, fixed incompatibility with BZ Graphite & Diamonds
+  Bugfixes:
+    - "Remove military science requirement" now actually works
+---------------------------------------------------------------------------------------------------
+Version: 2.3.2
+Date: 28 January 2023
+  Features:
+    - Waypoints are now drawn in map view when holding a connected patrol remote
+---------------------------------------------------------------------------------------------------
+Version: 2.3.1
+Date: 18 December 2022
+  Bugfixes:
+    - Fixed dock being placed as a 2x2 entity instead of 3x3
+    - Fixed crash when using 'Circuit condition' wait condition
+---------------------------------------------------------------------------------------------------
+Version: 2.3.0
+Date: 16 December 2022
+  Features:
+    - Added 'Circuit condition' wait condition
+    - Added new docking and undocking animations for docks
+    - Updated dock item and technology icons
+    - Added "Remove military science requirement" startup setting for peaceful mode
+  Bugfixes:
+    - Fixed 'Robots inactive' wait condition not triggering if the spidertron is in a roboport network with active robots
+---------------------------------------------------------------------------------------------------
+Version: 2.2.9
+Date: 25 November 2022
+  Bugfixes:
+    - Fast spidertrons are now stopped when they reach the patrol point, teleporting is only used as a fallback
+    - Fixed blueprinted docks not functioning if the blueprint was made when the dock was active
+    - Fixed spidertrons being considered full even if they have empty filtered slots 
+---------------------------------------------------------------------------------------------------
+Version: 2.2.8
+Date: 6 October 2022
+  Compatibility:
+    - Complete Nullius integration (recipes, technologies, and locale)
+  Bugfixes:
+    - Fixed crash when setting a waypoint to 'Inactivity' whilst the spidertron is at that waypoint
+    - Removed ability to use patrol remote with docked spidertrons from Space Spidertron
+---------------------------------------------------------------------------------------------------
+Version: 2.2.7
+Date: 30 July 2022
+  Bugfixes:
+    - Fixed docks not working with spidertrons that have inventory filters
+    - Temporary fix for fast spidertrons overshooting patrol points by teleporting them back into place
+---------------------------------------------------------------------------------------------------
+Version: 2.2.6
+Date: 7 July 2022
+  Compatibility:
+    - Fixed incorrect spiderling equipment grid categories with Krastorio2
+---------------------------------------------------------------------------------------------------
+Version: 2.2.5
+Date: 1 July 2022
+  Bugfixes:
+    - Fixed broken tech tree with Space Exploration 0.6
+    - Removed duplicate info icons in mod settings (when using Factorio 1.1.61)
+---------------------------------------------------------------------------------------------------
+Version: 2.2.4
+Date: 31 May 2022
+  Bugfixes:
+    - Fixed spidertron with 'Full inventory' wait condition sometimes leaving before the inventory is actually full
+    - Fixed crash when docking with X-Logistics
+---------------------------------------------------------------------------------------------------
+Version: 2.2.3
+Date: 4 May 2022
+  Bugfixes:
+    - Fixed docks with spiderlings docked at them being deleted when updating past v2.2.2 due to inventory size change
+    - Fixed docks not being placeable in space (with Space Exploration mod)
+---------------------------------------------------------------------------------------------------
+Version: 2.2.2
+Date: 3 May 2022
+  Features:
+    - Added support for Spidertron Enhancement's patrol remote pipette ('Control + Shift + Q' by default)
+  Changes:
+    - Spiderling equipment grid size increased (from 8x4 to 10x4)
+    - Spiderling inventory size increased (from 20 to 30)
+    - Spiderling base speed decreased
+    - Spiderling recipe no longer requires portable solar panels and requires fewer low density structures (from 50 to 40)
+    - Spidertron dock recipe requires fewer rocket control units (from 10 to 4)
+    - Increased active waypoint opacity and decreased persistent waypoint opacity
+  Bugfixes:
+    - Fixed persistent waypoints rendering even though "Show patrol waypoints in alt-mode" is disabled 
+---------------------------------------------------------------------------------------------------
+Version: 2.2.1
+Date: 18 April 2022
+  Bugfixes:
+    - Fixed spiderling entity (not item) having the spidertron's icon
+  Locale:
+    - Added complete Russian translations (thanks SeptiSe7en on Crowdin!)
+    - Added some German translations (thanks LineBeck on Crowdin!)
+    - Added some French translations (thanks DaiKy RaRaga on Crowdin!)
+---------------------------------------------------------------------------------------------------
+Version: 2.2.0
+Date: 22 September 2021
+  Features:
+    - Patrol waypoints are now only shown to players that have alt-mode on (added an option to disable showing waypoints even in alt-mode)
+    - A spidertron's waypoints are also shown when selecting, driving, or opening it (in addition to holding a connected remote)
+    - Docks can now optionally have logistic requests (default: off)
+    - Added command `/reset-sps-render-objects` for use if render objects are behaving unexpectedly
+  Changes:
+    - Made unwanted undocking less common by only undocking at a further distance than is required for docking
+    - Decreased dock collision box so that players can walk between them
+    - Increased spiderling speed to just under walking speed
+  Bugfixes:
+    - Docks created by editor cloning now function properly
+  Compatibility:
+    - Removed incompatibility with Spidertron Logistics System
+---------------------------------------------------------------------------------------------------
+Version: 2.1.3
+Date: 10 May 2021
+  Bugfixes:
+    - Fixed crash when deleting the last waypoint whilst that spidertron is in automatic mode
+    - Fixed missing settings locale strings
+---------------------------------------------------------------------------------------------------
+Version: 2.1.2
+Date: 8 May 2021
+  Features:
+    - Added 'Maximum window height scale' per-player setting to workaround the interface overflowing at the bottom with some screen resolutions and interface UI scales
+  Bugfixes:
+    - Fixed spidertrons that have had a schedule pasted would sometimes spontaneously move to a waypoint
+    - Fixed schedule GUI being updated with other spidertron's statuses
+---------------------------------------------------------------------------------------------------
+Version: 2.1.1
+Date: 8 May 2021
+  Features:
+    - Added camera toggle button
+  Bugfixes:
+    - Fixed crash when spidertron with no roboports arrives at 'Robots inactive' waypoint
+    - Fixed GUI getting cut off at the bottom when AutoTrash is enabled
+    - Fixed crash when pressing 'move down' in schedule
+---------------------------------------------------------------------------------------------------
+Version: 2.1.0
+Date: 7 May 2021
+  Features:
+    - Change waypoint order with 'move up' and 'move down' buttons
+    - Added startup settings to disable patrols, docks and spiderling individually
+    - Copy-paste now copies spidertron schedules
+    - Now shows dotted lines between waypoints whilst holding a connected patrol remote
+  Changes:
+    - Improved technology icons
+    - New thumbnail
+  Bugfixes:
+    - Fixed repeated clicking on schedule time input text field would delete the last 2 digits
+    - Fixed waypoint visualisations not being centered vertically
+---------------------------------------------------------------------------------------------------
+Version: 2.0.0
+Date: 2 May 2021
+  Info:
+    - Everything has changed!
+    - Name changed from Spidertron Waypoints to Spidertron Patrols
+  Features:
+    - Patrol schedule interface
+    - Spidertron docks that can interface between spidertron inventories and inserters
+    - Spiderling: mid-game, weaker version of spidertron
+---------------------------------------------------------------------------------------------------
+Version: 1.7.3
+Date: 1 January 2021
+  Bugfixes:
+    - Fixed vanilla "Follow Entity" feature not working
+---------------------------------------------------------------------------------------------------
+Version: 1.7.2
+Date: 16 December 2020
+  Bugfixes:
+    - Fixed waypoints not being cancelled when moving the spidertron manually
+    - Fixed crash when another mod removes the spidertron whilst its wait condition GUI is open
+    - Fixed `Inventory slot is not empty.` crash
+    - Fixed strange behaviour when creating a waypoint or patrol remote filter in a player's inventory 
+---------------------------------------------------------------------------------------------------
+Version: 1.7.1
+Date: 7 December 2020
+  Compatibility:
+    - Added initial compatibility with Spidertron Squad Control (waypoint mode only)
+    - Fixed compatibility with Spidertron Weapon Switcher v1.2.0
+  Bugfixes:
+    - Fixed that moving the map whilst in a spidertron would cancel that spidertron's waypoints
+    - Fixed crash in `assign_waypoints` and `assign_patrol` remote interfaces
+    - Fixed incompatibility with mods that add custom spidertron remotes
+---------------------------------------------------------------------------------------------------
+Version: 1.7.0
+Date: 24 November 2020
+  Features:
+    - Updated to Factorio 1.1
+    - New waypoint remote icon
+    - Improved waypoint and patrol mode shortcut icons
+    - Press 'E' to confirm countdown selector GUI instead of 'Enter' ('Y' also still works as before)
+    - Wait condition selector GUI is now draggable
+    - Partial French and German translations (contribute here: https://crowdin.com/project/factorio-mods-localization)
+  Changes:
+    - Default keybind for "Disconnect remote" changed from 'Control + Left Click' to 'Shift + Right Click' to avoid clashing with new vanilla keybind
+    - Improved English wording
+  Bugfixes:
+    - Fixed remotes sometimes not staying in the quickbar
+    - Fixed spidertron 'cutting corners' when reaching waypoints
+    - Fixed already-placed waypoint markers keeping their old colour when the spidertron is set to a new colour
+---------------------------------------------------------------------------------------------------
+Version: 1.6.3
+Date: 2 October 2020
+  Features:
+    - Added 'Shift + Y' to always change default waypoint countdown length and type
+---------------------------------------------------------------------------------------------------
+Version: 1.6.2
+Date: 30 September 2020
+  Bugfixes:
+    - Fixed 'Alt + O' and 'Alt + P' for toggling shortcuts having no effect
+    - Fixed default keys for cycling forwards and backwards through remotes being invalid
+---------------------------------------------------------------------------------------------------
+Version: 1.6.1
+Date: 29 September 2020
+  Bugfixes:
+    - Fixed crash when pressing 'Y'
+    - Fixed pressing 'Y' would sometimes not open the countdown selector GUI
+---------------------------------------------------------------------------------------------------
+Version: 1.6.0
+Date: 29 September 2020
+  Features:
+    - Added 'Inactivity' countdown timer option - spidertron waits at waypoint until inactive (no inventory change) for X seconds
+    - Open wait time selector without a remote in hand to change default wait time
+    - Press 'Y' again to confirm the wait time selection GUI (as an alternative to 'Enter' or clicking the tick)
+  Changes:
+    - Changed wait time selector slider from linear to 'exponential'
+  Bugfixes:
+    - Waypoint and Patrol remotes no longer show up in filter selections and logistic requests
+    - Number '1' is no longer shown on ground when using direct mode
+  Compatibility:
+    - Waypoint tables from remote interface functions `assign_waypoints` and `assign_patrols` now accept additional key `wait_type` - must be set to `"time_passed"` or `"inactivity"`
+---------------------------------------------------------------------------------------------------
+Version: 1.5.1
+Date: 23 September 2020
+  Features:
+    - Compatibility with Spidertron Weapon Switcher
+  Bugfixes:
+    - Removed logging when any entity is destroyed
+  Compatibility:
+    - Remote interface `get_event_ids` renamed to `get_events`
+---------------------------------------------------------------------------------------------------
+Version: 1.5.0
+Date: 9 September 2020
+  Features:
+    - Now shows total and remaining wait time under each waypoint
+  Compatibility:
+    - New modding remote interface (see readme for documentation)
+---------------------------------------------------------------------------------------------------
+Version: 1.4.3
+Date: 7 September 2020
+  Bugfixes:
+    - Fixed crash when using shortcuts from other mods
+---------------------------------------------------------------------------------------------------
+Version: 1.4.2
+Date: 6 September 2020
+  Features:
+    - Alt + Click to complete a patrol assignment (as an alternative to reclicking on the first patrol waypoint again)
+    - Cycle forwards and backwards through remotes given default keys '+' and '-'
+  Bugfixes:
+    - Fixed weird behaviour and crash when starting patrol at the spidertron's location
+    - Fixed interrupting a wait time would cause the spidertron to wait at the next waypoint instead
+---------------------------------------------------------------------------------------------------
+Version: 1.4.1
+Date: 5 September 2020
+  Bugfixes:
+    - Fixed crash when shift-scrolling through a blueprint book
+---------------------------------------------------------------------------------------------------
+Version: 1.4.0
+Date: 5 September 2020
+  Features:
+    - Configure wait duration for a waypoint after placing it by pressing Y
+    - Major controls rework - go to Settings > Controls > Mods to see the different control options
+    - New setting to allow removal of waypoint and/or patrol mode from the remote cycle
+    - Added `event.remote` parameter to remote interface event `on_spidertron_given_new_destination`
+    - Added remote interface function `clear_waypoints()`
+  Changes:
+    - Waypoint shortcut now toggles off when patrol shortcut is toggled on (this makes no functional difference)
+  Bugfixes:
+    - Fixed remote interface `on_spidertron_given_new_destination` not always getting called
+    - Reduced chance of waypoints sometimes being lost if too many are placed close together
+---------------------------------------------------------------------------------------------------
+Version: 1.3.1
+Date: 1 September 2020
+  Changes:
+    - Increased thumbnail resolution by upscaling patrol remote icon
+  Bugfixes:
+    - Fixed shift-click to build ghost being overwritten
+---------------------------------------------------------------------------------------------------
+Version: 1.3.0
+Date: 1 September 2020
+  Features:
+    - Control + Click to disconnect the remote in your hand
+  Changes:
+    - Removed alternate patrol remote icon setting because the bug that was the reason behind it is fixed
+  Bugfixes:
+    - Fixed remotes being removed from quickbar when in patrol mode
+---------------------------------------------------------------------------------------------------
+Version: 1.2.1
+Date: 31 August 2020
+  Features:
+    - Added additional controls: right click and shift right click to toggle waypoint and patrol modes
+---------------------------------------------------------------------------------------------------
+Version: 1.2.0
+Date: 31 August 2020
+  Features:
+    - Added shortcut bar options for toggling patrol mode and waypoint mode
+    - New icon for patrol remote + thumbnail
+    - New setting to control whether it only appears in patrol mode, never, or always
+  Bugfixes:
+    - Fixed crash when spidertron is picked up/destroyed whilst travelling to a waypoint
+    - Fixed that placing sequential waypoints too close to each other would cause all waypoints to disappear
+    - Fixed waypoints being reset during version upgrade
+    - Fixed waypoints icons not being cleared during version upgrade
+    - Fixed breaking out of patrol requires one extra click
+---------------------------------------------------------------------------------------------------
+Version: 1.1.0
+Date: 30 August 2020
+  Features:
+    - Shift-scroll whilst holding remote to switch to patrol remote
+    - Mod interface
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 29 August 2020
+  Features:
+    - Clicking remote places waypoints
+    - Shift-click anywhere to remove all waypoints

@@ -1,0 +1,18 @@
+{
+    "name": "SpidertronPatrols",
+    "version": "2.7.1",
+    "title": "Spidertron Patrols",
+    "author": "Xorimuth",
+    "homepage": "https://discord.gg/pkJc4v9nfT",
+    "description": "Send spidertrons on patrols and automatically load and unload them using docks. Adds mid-game spiderling to allow the new features to be used sooner.",
+    "factorio_version": "2.1",
+    "dependencies": [
+        "base >= 2.1.21",
+        "? SpidertronEnhancements",
+        "(?) SpidertronWeaponSwitcher",
+        "(?) nullius"
+    ],
+    "package": {
+        "ignore": ["resources/*"]
+    }
+}
