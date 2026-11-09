@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.1.19
 Date: 2026-10-18
+  Changes:
+    - Paranoidal (Space Age branch): 395 of 507 PNG recompressed losslessly (pingo -s4 -lossless -noalpha): all PNG 139 632 978 -> 107 273 411 bytes (-23.2%); only files that became smaller and stay identical in every channel, including the colour under fully transparent pixels, are replaced; dimensions unchanged.
   Bugfixes:
     - When an obsolete version of planet-muluna is loaded, muluna-graphics will throw a more informative error message.
 ---------------------------------------------------------------------------------------------------
