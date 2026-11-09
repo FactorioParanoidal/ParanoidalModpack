@@ -10,7 +10,6 @@ Date: 2026-11-01
     - The Alt-mode amount is rewritten only when the rounded text changes.
     - Graphics recompressed (lossy palette, tint masks lossless).
   Changes:
-    - After the completed save migrations, deep-storage-unit is no longer shipped and its optional dependency is removed. Already migrated saves keep their data in this mod; direct content transfer from unmigrated old saves now requires the removed bridge.
     - deep-storage-unit stays as a migration bridge (9.9.0): on the first load of an old save the item units are taken over with their contents. Hidden power sources and combinators already standing at a unit are taken over too, so combinator wires stay.
     - Fluid units of old saves are taken over without their counters: the fluid stored outside the tank is lost (agreed loss); the fluid in the tank stays and the unit locks to it again.
     - Old migrations of both mods are dropped (they only fixed 1.x saves of the old mods).
