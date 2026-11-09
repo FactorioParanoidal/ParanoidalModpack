@@ -31,7 +31,7 @@ function M.on_player_created(player)
     local s = state()
     if not s then return end
     if not storage.bnl.landing_tick then welcome(player) end -- the players of the landing
-    if not professions.allowed(player) then professions.passenger(player) end
+    if not professions.allowed(player) then professions.mark_late(player) end
     -- The own flight along the debris trail is switched off (user decision 2026-10-26): the vanilla
     -- freeplay cutscene plays and the profession choice opens at once.
     professions.show(player)

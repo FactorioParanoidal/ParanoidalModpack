@@ -144,7 +144,8 @@ paralib.bobmods.lib.tech.remove_recipe_unlock("angels-slag-processing-1", "angel
 paralib.bobmods.lib.tech.add_recipe_unlock("angels-slag-processing-2", "angels-slag-processing-2")
 
 -- Шлам → руды 4–6 (кротиниум, рубит, бобмониум), как в Beta 8: Angels 2.0 сделал их скрытыми заглушками,
--- руды 4–6 шли парами в рецептах 1–3, которые выше уже стали одиночными. Кристаллизатор II, 50 → 3×90 %, 2 с;
+-- руды 4–6 шли парами в рецептах 1–3, которые выше уже стали одиночными. Кристаллизатор I, как рецепты 1–3
+-- (решение пользователя 2026-11-08: рубит и бобмониум открываются до кристаллизатора II), 50 → 3×90 %, 2 с;
 -- 5 и 6 открывает шлак I, 4 — шлак II. Названия и иконки 1–6 — по одной руде.
 local slag_base = data.raw.recipe["angels-slag-processing-1"]
 if slag_base then
@@ -157,7 +158,7 @@ if slag_base then
 		local recipe = data.raw.recipe[name]
 		if recipe and data.raw.item[ore] then
 			if index >= 4 then
-				bobmods.lib.recipe.set_main_category(recipe, "angels-crystallizing-2")
+				bobmods.lib.recipe.set_main_category(recipe, "angels-crystallizing")
 				recipe.energy_required = 2
 				recipe.ingredients = { fluid("angels-mineral-sludge", 50) }
 				recipe.results = { { type = "item", name = ore, amount = 3, independent_probability = 0.9 } }

@@ -1,4 +1,10 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.0.1
+Date: 2026-11-08
+  Changes:
+    - Professions: a player who first joins more than 30 minutes after the landing is no longer made a passenger without a choice. The choice opens for him too (once, it cannot be changed), but gives only the bonuses: RPG levels, technologies, recipes and the hand mining bonus; no kit, water, wreck ammo, repair packs, survey or bio farm. The probation counts from his own arrival. Older maps reopen the choice once for every passenger.
+    - Mechanic: +4 Crafting speed and +3 Reach distance RPG levels (no skill points spent); on older maps every mechanic gets them once.
+---------------------------------------------------------------------------------------------------
 Version: 2.0.0
 Date: 2026-10-26
   Graphics:

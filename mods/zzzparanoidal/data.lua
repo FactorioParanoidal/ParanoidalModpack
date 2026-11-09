@@ -60,6 +60,7 @@ require("prototypes.technology.bio-advanced-biotechnology-2")
 
 -- new selection-tools
 require("prototypes.selection-tool.heroturrets")
+require("prototypes.turret-rotate-input") -- R / Shift+R на стоящей турели с сектором обстрела
 
 -- new subgroups
 require("prototypes.subgroups.angels-subgroups")
