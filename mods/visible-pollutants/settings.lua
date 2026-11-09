@@ -4,6 +4,7 @@ data:extend({
   {
     type = "string-setting",
     name = Settings.PollutionLayer,
+    localised_description = { "vp-explanation.layer" },
     setting_type = "runtime-global",
     order = "a",
     default_value = "arrow",
@@ -22,6 +23,7 @@ data:extend({
   {
     type = "double-setting",
     name = Settings.PollutionOpacity,
+    localised_description = { "vp-explanation.opacity" },
     setting_type = "runtime-global",
     order = "b",
     default_value = 0.75,
@@ -31,6 +33,7 @@ data:extend({
   {
     type = "double-setting",
     name = Settings.PollutionSeeThroughMaxOpacity,
+    localised_description = { "vp-explanation.see-through" },
     setting_type = "runtime-global",
     order = "c",
     default_value = 0.25,
@@ -40,6 +43,7 @@ data:extend({
   {
     type = "int-setting",
     name = Settings.MinConsideredPollution,
+    localised_description = { "vp-explanation.min" },
     setting_type = "runtime-global",
     order = "d",
     default_value = 60,
@@ -49,6 +53,7 @@ data:extend({
   {
     type = "int-setting",
     name = Settings.MaxConsideredPollution,
+    localised_description = { "vp-explanation.max" },
     setting_type = "runtime-global",
     order = "e",
     default_value = 1000,
@@ -57,6 +62,7 @@ data:extend({
   {
     type = "double-setting",
     name = Settings.PollutionRangeExponent,
+    localised_description = { "vp-explanation.exponent" },
     setting_type = "runtime-global",
     order = "f",
     default_value = 0.4,
@@ -106,6 +112,7 @@ data:extend({
   {
     type = "bool-setting",
     name = Settings.EnableSolarOcclusion,
+    localised_description = { "vp-explanation.solar" },
     setting_type = "runtime-global",
     order = "l",
     default_value = true,

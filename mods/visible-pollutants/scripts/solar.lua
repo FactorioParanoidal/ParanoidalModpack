@@ -123,13 +123,30 @@ local function update_solar_multiplier(surface_data)
   if night and night.get_solar_multiplier then
     seasonal_multiplier = remote.call("NightBrightness", "get_solar_multiplier", surface.index)
   end
+  local multiplier = 1
   if Solar.OcclusionEnabled and surface_data.base_effectiveness > 0 then
-    local multiplier = surface_data.reduced_effectiveness / surface_data.base_effectiveness
+    multiplier = surface_data.reduced_effectiveness / surface_data.base_effectiveness
     if multiplier < 0 then multiplier = 0 end
-    surface.solar_power_multiplier = multiplier * seasonal_multiplier
-  else
-    surface.solar_power_multiplier = seasonal_multiplier
   end
+  surface.solar_power_multiplier = multiplier * seasonal_multiplier
+  -- Reporting only: these are application times, not simultaneous samples of every panel chunk.
+  surface_data.pollution_component = multiplier
+  surface_data.applied_tick = game.tick
+end
+
+-- Read existing aggregates; never synchronise panels, create records or change generation on read.
+function Solar.get_surface_status(surface_index)
+  local surface = game.surfaces[surface_index]
+  if not surface then return { schema_version = 1, availability = "missing_surface", surface_index = surface_index } end
+  local entry = storage.solar_surfaces and storage.solar_surfaces[surface_index]
+  local pollutant = surface.pollutant_type
+  return { schema_version = 1, availability = entry and entry.applied_tick and "ok" or "pending",
+    surface_index = surface_index, pollutant = pollutant and pollutant.name, model = "legacy",
+    occlusion_enabled = Solar.OcclusionEnabled, pollution_component = entry and entry.pollution_component,
+    applied_tick = entry and entry.applied_tick, last_complete_cycle_tick = entry and entry.last_complete_cycle_tick,
+    has_tracked_panels = entry and entry.base_effectiveness > 0 or false,
+    curve = { min = Pollution.MinPollutionShown, max = Pollution.MaxPollutionShown, exponent = Pollution.Exponent },
+    reduction = Solar.MaxEfficiencyReduction }
 end
 
 -- Called when a season changes, including surfaces without registered panels.
@@ -299,6 +316,7 @@ local function update_queued_chunk(chunk, updated_surfaces)
     if chunk.last_for_surface then
       surface_data.base_effectiveness = totals.base
       surface_data.reduced_effectiveness = totals.reduced
+      surface_data.last_complete_cycle_tick = game.tick
     end
   end
 end
