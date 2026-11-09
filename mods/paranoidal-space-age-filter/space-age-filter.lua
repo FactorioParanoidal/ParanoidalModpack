@@ -11,7 +11,7 @@ local SPACE_AGE = "space-age"
 -- ПР-078; their prototypes are taken by space-age-platforms.lua).
 local visible_to = {
 	core = true, base = true, quality = true, recycler = true, ["elevated-rails"] = true, ["space-age"] = true,
-	secretas = true, Moshine = true,
+	secretas = true, Moshine = true, ["planet-muluna"] = true, maraxsis = true, PlanetsLib = true,
 }
 
 return function(stage)

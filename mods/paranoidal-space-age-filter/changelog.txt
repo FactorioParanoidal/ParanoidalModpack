@@ -1,6 +1,10 @@
 ---------------------------------------------------------------------------------------------------
 Version: 9.0.0
 Date: 2026-11-07
+  Changes:
+    - Planet mods Muluna (planet-muluna) and Maraxsis (maraxsis) with their library PlanetsLib see Space Age; their prototypes count as Space Age content after the rocket (ПР-079 wave 1).
+    - A technology shown while disabled counts as visible for the hidden-recipe rule: a script enables it (Muluna's nanofoamed polymers after two planet science packs); before, its recipes were hidden.
+    - Victory needs every planet of the build (ПР-079 item 2): the solar system edge also needs golden science (Secretas, with Frozeta), the last cosmic scanner stage (Moshine), interstellar science (Muluna) and Project Seadragon (Maraxsis), each when present.
   Major Features:
     - First version (Space Age branch of Paranoidal, user decision 2026-11-07, variant A1). With Space Age enabled, mods["space-age"] reads nil in the settings and data stages of every other mod, so their own Space Age branches stay off; Factorio's own mods (base, core, quality, recycler, elevated-rails, space-age) still see it. The first time a mod asks, the log names the mod and the line. Without Space Age the mod does nothing.
     - No dependencies: the mod loads right after base, before every mod that has a dependency, so no mod reads the table before it is hidden.

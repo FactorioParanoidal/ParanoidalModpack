@@ -67,10 +67,16 @@ local add_prerequisites = {["holmium-processing"] = {"planet-discovery-fulgora"}
 -- Space Age unlocks the scrap recycling with recycling (put back as it was): Fulgora's own debris comes with Fulgora.
 local add_unlocks = {["planet-discovery-fulgora"] = {"paranoidal-ancient-debris-salvage"}}
 local drop_prerequisites = {["captive-biter-spawner"] = {["kovarex-enrichment-process"] = true}}
--- Mods of other planets (user 2026-11-08, ПР-078 item 8). They load after Space Age's data.lua; their prototypes count
--- as Space Age's own: after the rocket, references to the renamed planet materials follow, RSO leaves their planets and
--- resources to the game's generator, prices of the planets (zzzparanoidal).
-local planet_mods = {secretas = true, Moshine = true}
+-- Mods of other planets (user 2026-11-08, ПР-078 item 8; waves of ПР-079). They load after Space Age's data.lua; their
+-- prototypes count as Space Age's own: after the rocket, references to the renamed planet materials follow, RSO leaves
+-- their planets and resources to the game's generator, prices of the planets (zzzparanoidal). PlanetsLib is the
+-- library of the planet mods (orbits, cargo drops, surface properties).
+local planet_mods = {secretas = true, Moshine = true, ["planet-muluna"] = true, maraxsis = true, PlanetsLib = true}
+-- Victory needs every planet of the build (ПР-079 item 2): the solar system edge also needs a technology that only that
+-- planet opens. Secretas' golden science needs Frozeta as well; Muluna's interstellar science and Maraxsis' Project
+-- Seadragon are prerequisites of their own mods already (listed for the check). Absent technologies are skipped.
+local victory_needs = {"golden-science-pack", "moshine-tech-cosmicscanner-construction5", "interstellar-science-pack",
+	"maraxsis-project-seadragon"}
 
 local state = {phase = "before", owner = {}, collisions = {}, space_age = {}, planet_content = {}}
 
@@ -507,10 +513,11 @@ function M.is_space_age(prototype)
 	return prototype ~= nil and (state.space_age[prototype] or (state.copies or {})[prototype]) == true
 end
 
+-- A technology shown while disabled counts: a script enables it (Muluna's nanofoamed polymers after two planet packs).
 local function visible_unlocks()
 	local unlocked = {}
 	for _, technology in pairs(data.raw.technology) do
-		if not technology.hidden and technology.enabled ~= false then
+		if not technology.hidden and (technology.enabled ~= false or technology.visible_when_disabled) then
 			for _, effect in ipairs(technology.effects or {}) do
 				if effect.type == "unlock-recipe" then unlocked[effect.recipe] = true end
 			end
@@ -813,6 +820,20 @@ function M.hide_recipes()
 	end
 	table.sort(tied)
 	table.sort(early)
+	local woven = {}
+	local edge = raw.technology["stellar-discovery-solar-system-edge"]
+	if edge then
+		edge.prerequisites = edge.prerequisites or {}
+		for _, name in ipairs(victory_needs) do
+			local technology = raw.technology[name]
+			if technology and not technology.hidden then
+				local present = false
+				for _, prerequisite in ipairs(edge.prerequisites) do present = present or prerequisite == name end
+				if not present then table.insert(edge.prerequisites, name) end
+				woven[#woven + 1] = name
+			end
+		end
+	end
 	log("paranoidal-space-age-filter: planet mods' prototypes (" .. #planet_content .. "): "
 		.. table.concat(planet_content, ", "))
 	log("paranoidal-space-age-filter: Space Age technologies no longer unlocking home recipes: "
@@ -821,7 +842,8 @@ function M.hide_recipes()
 		.. "; Space Age recipes hidden (no visible technology unlocks them): " .. hidden
 		.. "; recipes with Space Age fluids that nothing makes hidden: " .. table.concat(cut, ", ")
 		.. "; tied to the technology of their science pack: " .. table.concat(tied, ", ")
-		.. "; Space Age technologies NOT after the rocket silo: " .. (#early > 0 and table.concat(early, ", ") or "none"))
+		.. "; Space Age technologies NOT after the rocket silo: " .. (#early > 0 and table.concat(early, ", ") or "none")
+		.. "; the solar system edge needs: " .. table.concat(woven, ", "))
 end
 
 return M
