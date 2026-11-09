@@ -1,7 +1,7 @@
 require("__zzzparanoidal__.paralib")
 
 -- «Продвинутая добыча» (uranium-mining, переименована Angels) убрана по решению пользователя:
--- её эффект mining-with-fluid уже открывает «Твердотопливная механизация» (zzzcompability).
+-- её эффект mining-with-fluid уже открывает «Твердотопливная механизация» (tweaks/entity/burner-drill-fluid.lua).
 -- Прототип оставлен скрытым ради сохранений; предшественником других технологий не является.
 if data.raw.technology["uranium-mining"] then
 	paralib.bobmods.lib.tech.hide("uranium-mining")

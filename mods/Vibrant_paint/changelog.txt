@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.1.3
 Date: 2024-10-28
+  Graphics:
+    - Paranoidal build: removed 14 Warden glow masks; AAI Vehicles: Warden is not shipped in this modpack. Painting of shipped vehicles is unchanged; adding Warden requires restoring its masks.
 	Changes:
 		-fixed an issue that made the mod unable to run without Space Age enabled
 		-painted the Capture Robot PROJECTILE, previously only the capture animation was painted

@@ -205,6 +205,16 @@ if mods["reskins-library"] then
 end
 -- end runtime.per_user
 -- startup влияют на прототипы(сущности, предметы, рецепты, технологии и их связи между собой)
+-- From zzzcompability: keep Bob's alternative early progression disabled.
+-- Preserve all three fields; default_value alone does not override a saved value.
+do
+    local setting = data.raw["bool-setting"]["bobmods-burnerphase"]
+    if setting then
+        setting.hidden = true
+        setting.forced_value = false
+        setting.default_value = false
+    end
+end
 if mods["aai-industry"] then
     set_settings_default_value("int-setting", "aai-burner-turbine-efficiency", 25)
 

@@ -1,3 +1,4 @@
+require("removals.bob-sand-glass-processing")
 require("tweaks.custom.space-exploration-tab") -- без SpaceXGAR2: ракетные предметы на вкладку, до меню
 require("tweaks.entity.roboport")
 require("tweaks.entity.add-liquid-to-mine-ores")
