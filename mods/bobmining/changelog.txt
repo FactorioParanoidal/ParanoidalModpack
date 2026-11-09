@@ -2,6 +2,7 @@
 Version: 2.1.0
 Date: 01. 06. 2026
   Changes:
+    - Paranoidal: added accepted static-base, animation-overlay and intact reference PNGs for the original water-miner horsehead. Exact-path integration preserves its geometry and does not replace the different 2.1 vanilla pumpjack used by active reskins. Original sheet retained; lossless recompression adopted only per PNG saving more than 5% with identical RGBA.
     - Disallowed certain entities in space #551
     - Set item weights #553
     - Adjust ingredients for some T4 and T5 recipes #583

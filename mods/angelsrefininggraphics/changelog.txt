@@ -1,6 +1,7 @@
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.0
   Graphics:
+    - Paranoidal: added accepted holed static bases, animation overlays and intact reference frames for clarifier, ore sorting and salination. Exact original geometry is preserved; original sheets are retained. Lossless pingo output is adopted only for individual PNGs saving more than 5% with identical RGBA pixels; zzzparanoidal integrates the layers after reskins.
     - Paranoidal build: removed seven obsolete ore-1.png through ore-7.png sheets. The active resource builder uses ore-11.png and later sheets; HR/glow artwork and settings-dependent ore styles are unchanged.
     - Paranoidal build: removed 20 obsolete low-resolution ore sheets and 16 duplicate images already redirected by zzzparanoidal's final graphics pass. Active HR sheets, their glow layers and alternate ore styles are unchanged.
   Compatibility:

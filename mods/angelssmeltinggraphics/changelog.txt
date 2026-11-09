@@ -1,6 +1,7 @@
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.0
   Graphics:
+    - Paranoidal: added accepted static-base/animation-overlay sheets and reference frames for the pellet press and all four normal/flipped idle/working induction furnace sheets. Working sheets retain their own colours; only the binary masks are shared with their matching idle variants. Original geometry and sheets are retained; PNG recompression is lossless and adopted only per file saving more than 5%. Strand casting and chemical furnace stripes are unchanged.
     - Paranoidal build: removed the duplicate cooling-tower pipe shadow already redirected to Angel's Petrochemical Graphics by zzzparanoidal's final graphics pass. The canonical image is unchanged.
     - Paranoidal: the superseded casting-iron technology image is archived outside the build and removed; zzzparanoidal assigns the final C2 iron card. Shared graphics are unchanged.
   Compatibility:

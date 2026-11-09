@@ -1,6 +1,11 @@
 local switches = require("scripts.switches")
 -- Quality switched off: the mod adds nothing; zzzparanoidal hides quality modules and their research.
-if not switches.quality() then return end
+if not switches.quality() then
+    if mods["zzzparanoidal"] then
+        require("__zzzparanoidal__/tweaks/custom/graphics-static-animation").apply(data.raw, log)
+    end
+    return
+end
 
 require("prototypes.utils")
 require("prototypes.remove-tech-final")
@@ -208,4 +213,9 @@ do
     local twins, report = require("prototypes.mode-twins").apply(data.raw)
     data:extend(twins)
     for _, line in ipairs(report) do log(line) end
+end
+
+-- After silhouettes, previews and mode twins: replace the final graphics, not their earlier sources.
+if mods["zzzparanoidal"] then
+    require("__zzzparanoidal__/tweaks/custom/graphics-static-animation").apply(data.raw, log)
 end
