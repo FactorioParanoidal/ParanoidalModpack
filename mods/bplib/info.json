@@ -1,0 +1,17 @@
+{
+  "name": "bplib",
+  "version": "2.1.4",
+  "title": "Blueprint Manipulation Library",
+  "author": "The LORD thy GOD",
+  "contact": "https://github.com/project-cybersyn/bplib",
+  "homepage": "https://github.com/project-cybersyn/bplib",
+  "description": "A utility library for other mods that need advanced manipulation of Factorio blueprints.",
+  "factorio_version": "2.1",
+  "dependencies": ["base >= 2.1.7"],
+  "package": {
+    "git_publish_branch": "main",
+    "ignore": ["crowdin.yml", "stylua.toml", "tests", "doc"],
+    "scripts": {},
+    "sync_portal_details": true
+  }
+}

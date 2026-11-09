@@ -1,0 +1,8 @@
+syntax = "Lua52"
+column_width = 80
+line_endings = "Windows"
+indent_type = "Tabs"
+indent_width = 2
+call_parentheses = "Always"
+collapse_simple_statement = "Always"
+space_after_function_names = "Never"

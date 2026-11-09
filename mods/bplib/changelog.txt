@@ -1,0 +1,91 @@
+---------------------------------------------------------------------------------------------------
+Version: 2.1.4
+Date: 2026-08-25
+  Changes:
+    - Added `surface_index` field to the `bplib-positions` and `bplib-overlaps` events.
+    - Added `cause` field to the `bplib-positions` and `bplib-overlaps` events.
+---------------------------------------------------------------------------------------------------
+Version: 2.1.3
+Date: 2026-08-16
+  Changes:
+    - Added `orientation_info` field to the `bplib-positions` and `bplib-overlaps` events.
+---------------------------------------------------------------------------------------------------
+Version: 2.1.2
+Date: 2026-07-06
+  Bugfixes:
+    - Fixed a geometry miscalculation that happened when the unit-cell of an absolutely snapped blueprint was non-square.
+---------------------------------------------------------------------------------------------------
+Version: 2.1.1
+Date: 2026-07-06
+  Bugfixes:
+    - Fixed a blueprint rail snapping issue.
+    - Blueprint snapping now correctly forces `space-platform-hub` to 0,0 in worldspace.
+    - Fixed blueprint snapping issues with `cargo-bay` and `cargo-landing-pad`.
+  Optimizations:
+    - Improved caching of geometry at the prototype level.
+---------------------------------------------------------------------------------------------------
+Version: 2.1.0
+Date: 2026-06-23
+  Changes:
+    - Updated for Factorio 2.1.
+    - As all mods need to be updated for 2.1, the deprecated API in `blueprint.lua` has been removed. All consumers should use the new API.
+---------------------------------------------------------------------------------------------------
+Version: 2.0.0
+Date: 2026-06-01
+  Changes:
+    - Added new API driven by mod-data and custom events. All consumers should use this API. See `README.md` for more details.
+    - The API in `blueprint.lua` is hereby marked deprecated and will be removed in a future release. It is recommended that all consumers switch to the new API as soon as possible.
+  Optimizations:
+    - Consumers using the new API will no longer cause linear scaling issues by repeating calculations across mods.
+    - Consumers using the new API will benefit from stricter entity filtering, reducing the CPU impact of building entities not registered with bplib.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.7
+Date: 2026-01-10
+  Bugfixes:
+    - Fixed issue involving positioning of blueprints with compound entities where one of the entities was inside the bbox of another.
+    - Fixed several issues involving snapping of blueprints with rails in them.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.6
+Date: 2025-10-22
+  Info:
+    - Updated the mod description for clarity.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.5
+Date: 2025-10-03
+  Changes:
+    - map_blueprint_indices_to_overlapping_entities now also includes overlapping ghosts, allowing mods to react to blueprints being placed over ghosts.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.4
+Date: 2025-10-03
+  Changes:
+    - Requires Factorio 2.0.69 or later.
+    - Uses new `get_selected_record` API to avoid previous issues with `is_preview`.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.3
+Date: 2025-09-14
+  Bugfixes:
+    - Requires Factorio 2.0.66 or later for `is_preview` fix.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.2
+Date: 2025-09-11
+  Bugfixes:
+    - Fixed crashes related to blueprint record objects with the `preview` flag set.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.1
+Date: 2025-09-03
+  Info:
+    - Changed title of mod to avoid confusion with in-game blueprint library.
+    - Added thumbnail icon.
+---------------------------------------------------------------------------------------------------
+Version: 1.1.0
+Date: 2025-05-16
+  Features:
+    - `BlueprintSetup:set_tags` method added
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 2025-05-15
+  Features:
+    - Initial release
+    - `__bplib__.blueprint.get_actual_blueprint` function added
+    - `__bplib__.blueprint.BlueprintSetup` class added
+    - `__bplib__.blueprint.BlueprintBuild` class added
