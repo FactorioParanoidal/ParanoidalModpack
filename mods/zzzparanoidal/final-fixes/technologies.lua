@@ -214,7 +214,6 @@ paralib.bobmods.lib.tech.add_prerequisite("angels-steel-smelting-2", "angels-str
 paralib.bobmods.lib.tech.add_prerequisite("CW-air-filtering-1", "automation-2") --фильтры под автомат 2
 paralib.bobmods.lib.tech.add_prerequisite("angels-water-treatment-2", "angels-metallurgy-2") --гидростанцию 2 под металлургию 2
 paralib.bobmods.lib.tech.add_prerequisite("angels-advanced-chemistry-1", "angels-metallurgy-2") --химию 2 под металлургию 2
-paralib.bobmods.lib.tech.remove_prerequisite("angels-gas-processing", "angels-metallurgy-2") --газ не ждёт металлургию 2: резервуар перенесён туда
 paralib.bobmods.lib.tech.add_prerequisite("CW-air-filtering-2", "advanced-circuit") --фильтры 2 под контроллеры
 paralib.bobmods.lib.tech.remove_prerequisite("angels-zinc-smelting-1", "angels-metallurgy-2") --металлургия 2 под латунь
 paralib.bobmods.lib.tech.remove_prerequisite("bob-zinc-processing", "angels-sulfur-processing-1") --металлургия 2 под латунь

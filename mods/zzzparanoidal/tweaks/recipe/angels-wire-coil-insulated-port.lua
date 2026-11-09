@@ -26,6 +26,27 @@ data:extend({
 	},
 })
 
+-- RITEG sanitizes recipes before this late port creates the coil. Restore only the
+-- two Yuoki inputs lost at that stage; keep every other ingredient and the batch sizes.
+for _, name in ipairs({"y-conductive-coil-1", "yi_magnetron"}) do
+	local recipe = data.raw.recipe[name]
+	if recipe then
+		local ingredients = recipe.ingredients or {}
+		local found = false
+		for _, ingredient in ipairs(ingredients) do
+			if (ingredient.type or "item") == "item"
+				and (ingredient.name or ingredient[1]) == "angels-wire-coil-insulated" then
+				found = true
+				break
+			end
+		end
+		if not found then
+			ingredients[#ingredients + 1] = {type = "item", name = "angels-wire-coil-insulated", amount = 1}
+			recipe.ingredients = ingredients
+		end
+	end
+end
+
 local converting_category = mods["bobelectronics"] and "electronics" or "crafting"
 
 data:extend({
