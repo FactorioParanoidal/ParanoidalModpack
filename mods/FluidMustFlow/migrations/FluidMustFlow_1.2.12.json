@@ -1,0 +1,13 @@
+{
+    "entity":
+    [
+        ["duct-intake-south", "duct-intake"],
+        ["duct-intake-west", "duct-intake"],
+        ["duct-intake-north", "duct-intake"],
+        ["duct-intake-east", "duct-intake"],
+        ["duct-exhaust-south", "duct-exhaust"],
+        ["duct-exhaust-west", "duct-exhaust"],
+        ["duct-exhaust-north", "duct-exhaust"],
+        ["duct-exhaust-east", "duct-exhaust"]
+    ]
+}

@@ -1,0 +1,6 @@
+{
+  "mod": "FluidMustFlow",
+  "source": "portal",
+  "upstreamVersion": "1.5.1",
+  "changeReason": "Ветка Space Age: русское название и описание мода совпадают с ParanoidalLocale (в сборке трубопроводы нужны Мараксису и открываются после ракеты)."
+}

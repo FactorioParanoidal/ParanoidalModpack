@@ -1,0 +1,17 @@
+{
+  "entity": [
+    ["duct-end-point-intake", "duct-intake"],
+    ["duct-end-point-outtake", "duct-exhaust"]
+  ],
+  "item": [
+    ["duct-end-point-intake", "duct-intake"],
+    ["duct-end-point-outtake", "duct-exhaust"]
+  ],
+  "recipe": [
+    ["duct-end-point-intake", "duct-intake"],
+    ["duct-end-point-outtake", "duct-exhaust"]
+  ],
+  "technology": [
+    ["Ducts", "ducts"]
+  ]
+}
