@@ -842,7 +842,10 @@ function A.report(player)
   for _, name in ipairs(names) do add("  " .. name .. " " .. script.active_mods[name]) end
   local file = "paranoidal-sa-tester/report-" .. game.tick .. ".txt"
   helpers.write_file(file, table.concat(lines, "\n") .. "\n", false, player.index)
-  return true, {"pst.report-written", "script-output/" .. file}
+  -- No API gives the data folder: name it for the Space Age launcher and for a regular install.
+  local path = (file:gsub("/", "\\"))
+  return true, {"pst.report-written", "%APPDATA%\\Factorio-2.1-SA\\script-output\\" .. path,
+    "%APPDATA%\\Factorio\\script-output\\" .. path}
 end
 
 -------------------------------------------------------------------------------- registry
