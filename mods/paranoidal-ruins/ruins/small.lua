@@ -311,7 +311,8 @@ def("pd-toolbox", function(b)
 end)
 
 def("pd-homemade-generator", function(b)
-  b:put("bob-burner-generator", -2, -2, { dmg = DMG(30, 120) })
+  -- KS Power's 3x2 generator fits inside the reserved Bob 3x3 footprint.
+  b:put("bob-burner-generator", -2, -2, { fallback = "burner-generator", dmg = DMG(30, 120) })
   b:put("wooden-chest", 2, -2, { items = { wood = R(10, 30), ["small-electric-pole"] = R(1, 3) } })
   b:put("small-electric-pole", 2, 1, { dead = 0.3 })
 end)

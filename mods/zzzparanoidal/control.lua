@@ -13,6 +13,7 @@ local turret_deploy = require("controls.turret-deploy")
 turret_deploy.install() -- Построенная турель включается через несколько секунд (настройки карты).
 local turret_priority_groups = require("controls.turret-priority-groups")
 turret_priority_groups.install() -- Панель «Приоритет по группам» у окна турели (ПР-072).
+local flamethrower_fuels = require("features.flamethrower-fuels.control")
 require("controls.turret-rotate").install() -- R / Shift+R поворачивают стоящую турель с сектором обстрела.
 -- Install after loader-shells chains the SpilledItems handler; neither consumer
 -- handles these inventory/grid-less types. Keep every other type, including modded containers.
@@ -114,6 +115,7 @@ script.on_init(function() --наш любимый init, запрещаем дв�
 	loader_shells.init()
 	rail_support_power.sync()
 	turret_deploy.sync()
+	flamethrower_fuels.sync()
 end)
 
 script.on_load(function() --без дропа эволюции потому что game недоступен
@@ -141,6 +143,7 @@ script.on_configuration_changed(function() --фикс эволюции при з
 	drop_old_fire_safety()
 	turret_deploy.sync()
 	turret_priority_groups.on_configuration_changed()
+	flamethrower_fuels.sync()
 end)
 
 script.on_event(defines.events.on_player_joined_game, disable_obsolete_basic_logistics)

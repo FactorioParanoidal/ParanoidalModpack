@@ -1,6 +1,7 @@
 -------------------------------------------------------------------------------
 ---Class to build production panel
 ---@class ProductionPanel : FormModel
+local ModelImport = require("data.ModelImport")
 ProductionPanel = newclass(FormModel, function(base, classname)
 	FormModel.init(base, classname)
 	base.add_special_button = true
@@ -2172,12 +2173,12 @@ function ProductionPanel:onEventAccessWrite(event, model, block)
 
 	if event.action == "past-block" then
 		local data_string = User.getParameter("copy_past")
-		local from_data = Converter.read(data_string)
-		if from_data ~= nil then
-			ModelBuilder.pastModel(model, block, from_data)
-			ModelCompute.update(model)
-			Controller:send("on_gui_update", event)
-		end
+		local from_data, reason = ModelImport.read(data_string, false)
+		if from_data == nil then ModelImport.report(reason); return end
+		local imported
+		imported, reason = ModelImport.paste(model, block, from_data)
+		if imported == nil then ModelImport.report(reason); return end
+		Controller:send("on_gui_update", event)
 	end
 
 	if event.action == "change-computing" then

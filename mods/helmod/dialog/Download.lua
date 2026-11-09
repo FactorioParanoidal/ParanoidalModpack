@@ -1,6 +1,7 @@
 -------------------------------------------------------------------------------
 ---Class to build Download panel
 ---@class Download
+local ModelImport = require("data.ModelImport")
 Download = newclass(FormModel)
 
 local transfert_mode = nil
@@ -28,14 +29,12 @@ function Download:onEvent(event)
   if event.action == "download-model" then
     local download_panel = event.element.parent
     local text_box = download_panel["data-text"]
-    local data_table = Converter.read(text_box.text)
-    if data_table ~= nil then
-      local model = Model.newModel()
-      model.time = data_table.time
-      ModelBuilder.copyModel(model, data_table)
-      ModelCompute.update(model)
-      Controller:send("on_gui_refresh", event)
-    end
+    local data_table, reason = ModelImport.read(text_box.text, true)
+    if data_table == nil then ModelImport.report(reason); return end
+    local model
+    model, reason = ModelImport.newModel(data_table)
+    if model == nil then ModelImport.report(reason); return end
+    Controller:send("on_gui_refresh", event)
   end
 end
 

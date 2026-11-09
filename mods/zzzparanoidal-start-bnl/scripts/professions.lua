@@ -497,6 +497,15 @@ end)
 -- Hook of the local test mod (pd-port21-diag only): late choice, migration and the mechanic's RPG levels.
 if script.active_mods["pd-port21-diag"] then
     remote.add_interface("bnl-professions-test", {
+        -- Old pre-landing saves can have no profession state at all. Prepare only
+        -- the local fixture, without replaying the landing or issuing any kit/bonus.
+        seed = function()
+            local existed = state() ~= nil
+            storage.bnl = storage.bnl or {}
+            M.init()
+            storage.bnl.landing_tick = storage.bnl.landing_tick or math.max(0, game.tick - cfg.window - 1)
+            return existed
+        end,
         -- set: {landing_shift = ticks to move the landing back, chosen = key or false, late = bool, migrated = bool}
         set = function(index, set)
             local s = state()

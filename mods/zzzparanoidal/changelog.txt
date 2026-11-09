@@ -1,4 +1,8 @@
 ---------------------------------------------------------------------------------------------------
+Version: 8.1.31
+  Changes:
+    - Added an isolated, optional liquid fuel balance for flamethrower turrets, Hero ranks and the flamethrower wagon: six explicit fuels including diesel, damage multipliers from the agreed final fuel values; all nine gases from the source fuel list are excluded. Native streams, fire, target burning, refuelling, timing and research handle combat without Lua shot or hit handlers. Disabling the startup setting restores the source fuel lists and multipliers. Save migration clears only unsupported internal fuel and preserves external pipes and existing turrets.
+---------------------------------------------------------------------------------------------------
 Version: 8.1.28
   Changes:
     - Space Age branch: Muluna is the gateway of the system (tweaks/custom/space-age-weaving.lua, user 2026-11-09). After the space platform thruster only Muluna can be discovered. Star cartography (after the interstellar science pack) unlocks a star map of every other planet, made on Muluna in the data assembler from interstellar science packs and astronomical data (the Secretas map also takes Maraxsis' glass panes, so Secretas comes after Maraxsis). Crafting a map researches "Star map: <planet>", which the discovery of that planet needs; every discovery also costs interstellar science packs. Nothing changes without Space Age or without Muluna.
