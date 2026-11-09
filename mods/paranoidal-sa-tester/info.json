@@ -1,0 +1,10 @@
+{
+  "name": "paranoidal-sa-tester",
+  "version": "1.0.0",
+  "title": "Paranoidal SA Tester",
+  "author": "FactorioParanoidal",
+  "homepage": "https://github.com/FactorioParanoidal/ParanoidalModpack",
+  "factorio_version": "2.1",
+  "description": "Tester panel of the Space Age branch: /sa-test, Ctrl+Shift+T or the shortcut button opens a window to research up to any point of the playthrough, travel between planets and platforms, take planet kits and infinite chests or pipes, switch test modes and check buildings, recipes and surfaces. Adds no game content.",
+  "dependencies": ["base >= 2.1.0"]
+}
