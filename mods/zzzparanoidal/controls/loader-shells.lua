@@ -21,6 +21,12 @@ if not feature_present() then
     function M.init() end
     return M
 end
+-- Exact own-name filters: never return unrelated combinators/loaders to Lua on init.
+local shell_names, machine_names = {}, {}
+for name in pairs(defs.shells) do shell_names[#shell_names + 1] = name end
+for name in pairs(defs.machines) do machine_names[#machine_names + 1] = name end
+table.sort(shell_names)
+table.sort(machine_names)
 local TAG = "paranoidal_loader"
 local wire_ids = { defines.wire_connector_id.circuit_red, defines.wire_connector_id.circuit_green }
 local status_keys = {}
@@ -463,7 +469,9 @@ function M.init()
     -- Reconcile only this feature's native 1x2 loaders.
     -- Existing native machines are wrapped in place: contents, energy and filters survive.
     for _, surface in pairs(game.surfaces) do
-        for _, shell in pairs(surface.find_entities_filtered { type = "constant-combinator" }) do
+        for _, shell in pairs(#shell_names > 0 and surface.find_entities_filtered {
+            type = "constant-combinator", name = shell_names,
+        } or {}) do
             if defs.shells[shell.name] then
                 local r = record(shell)
                 if not r or not valid(r.machine) then
@@ -483,7 +491,9 @@ function M.init()
                 end
             end
         end
-        for _, machine in pairs(surface.find_entities_filtered { type = "loader" }) do
+        for _, machine in pairs(#machine_names > 0 and surface.find_entities_filtered {
+            type = "loader", name = machine_names,
+        } or {}) do
             if defs.machines[machine.name] and not record(machine) then wrap(machine) end
         end
     end
@@ -545,11 +555,14 @@ end
 local function update_status(r)
     if not (valid(r.shell) and valid(r.machine)) then return end
     local status = r.machine.status
-    r.shell.custom_status = {
-        diode = status == nil and defines.entity_status_diode.green
-            or status_diodes[status] or defines.entity_status_diode.yellow,
-        label = { "entity-status." .. (status_keys[status] or "working") },
-    }
+    local diode = status == nil and defines.entity_status_diode.green
+        or status_diodes[status] or defines.entity_status_diode.yellow
+    local label = "entity-status." .. (status_keys[status] or "working")
+    -- Compare the actual entity property: replacement/reload/other writers need no cache invalidation.
+    local current = r.shell.custom_status
+    if current and current.diode == diode and type(current.label) == "table"
+        and #current.label == 1 and current.label[1] == label then return end
+    r.shell.custom_status = { diode = diode, label = { label } }
 end
 
 -- Planners list the input and output shells as two identical entries: see loader-planners.
@@ -834,9 +847,12 @@ on(defines.events.on_player_setup_blueprint, function(e)
 end)
 -- The shell has no window of its own: redirect to the native loader window.
 -- The machine also raises on_gui_opened; only the shell is redirected.
-local function sync_viewed(index)
+local function sync_viewed(index, seen)
     local r = state().viewers[index]
-    if r and valid(r.shell) and valid(r.machine) then replace_shell(r); update_status(r) end
+    if r and valid(r.shell) and valid(r.machine) and not (seen and seen[r]) then
+        if seen then seen[r] = true end
+        replace_shell(r); update_status(r)
+    end
 end
 on(defines.events.on_gui_opened, function(e)
     local entity = e.entity
@@ -931,10 +947,14 @@ on(defines.events.on_tick, function(e)
         end
     end
     if e.tick % 30 == 0 then
-        for index in pairs(s.viewers) do sync_viewed(index) end
+        local seen = {}
+        for index in pairs(s.viewers) do sync_viewed(index, seen) end
         for _, player in pairs(game.connected_players) do
             local r = record(player.selected)
-            if r then update_status(r) end
+            if r and not seen[r] then
+                seen[r] = true
+                update_status(r)
+            end
         end
     end
 end)

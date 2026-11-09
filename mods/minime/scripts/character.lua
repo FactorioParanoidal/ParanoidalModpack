@@ -42,6 +42,12 @@ minime.show("Set dummy.character_inventory_slots_bonus", dummy.character_invento
     minime.writeDebug("Copying from mod.player_data[\"%s\"].char_properties",
                       {index})
     src = mod.player_data[index].char_properties
+    -- Old saves stored active instead of the script-disable flag. Only use its
+    -- inverse as a legacy fallback; new backups preserve disabled_by_script itself.
+    if src.disabled_by_script == nil then
+      src.disabled_by_script = src.active == false
+    end
+    src.active = nil
     restore_from_dummy = true
   end
 

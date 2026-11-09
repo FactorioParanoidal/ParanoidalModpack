@@ -32,23 +32,8 @@ end
 for _, index in ipairs({ 2, 5, 6 }) do
 	moves[#moves + 1] = { "angels-ore7-crystallization-" .. index, "angels-geode-crystallization-2" }
 end
-for _, move in ipairs(moves) do
-	local recipe, target = move[1], technologies[move[2]]
-	if data.raw.recipe[recipe] and target then
-		for _, technology in pairs(technologies) do
-			if technology.max_level ~= "infinite" then
-				for index = #(technology.effects or {}), 1, -1 do
-					local effect = technology.effects[index]
-					if effect.type == "unlock-recipe" and effect.recipe == recipe then
-						table.remove(technology.effects, index)
-					end
-				end
-			end
-		end
-		target.effects = target.effects or {}
-		table.insert(target.effects, { type = "unlock-recipe", recipe = recipe })
-	end
-end
+for _, move in ipairs(moves) do move[2] = { move[2] } end
+require("tweaks.technology.unlock-batch").apply(moves, true)
 -- Единственный действующий потребитель прежних ворот — cutting — исправлен выше.
 -- Прототип и non-unlock эффекты сохраняем; старые сейвы вне текущего переноса.
 obsolete.enabled = false

@@ -65,24 +65,8 @@ local moves = {
 	{ "repair-pack", "electricity" },
 	{ "bob-stone-mixing-furnace", "burner-mechanics" },
 }
-for _, move in ipairs(moves) do
-	local recipe, target = move[1], move[2]
-	if data.raw.recipe[recipe] and (not target or data.raw.technology[target]) then
-		for _, technology in pairs(data.raw.technology) do
-			for index = #(technology.effects or {}), 1, -1 do
-				local effect = technology.effects[index]
-				if effect.type == "unlock-recipe" and effect.recipe == recipe then
-					table.remove(technology.effects, index)
-				end
-			end
-		end
-		if target then
-			local technology = data.raw.technology[target]
-			technology.effects = technology.effects or {}
-			table.insert(technology.effects, { type = "unlock-recipe", recipe = recipe })
-		end
-	end
-end
+for _, move in ipairs(moves) do move[2] = move[2] and { move[2] } or {} end
+require("tweaks.technology.unlock-batch").apply(moves, false)
 
 -- Все активные потребители этих трёх лишних ворот исправлены выше.
 -- Скрытые legacy-узлы и одноимённый скрытый electronic-circuit остаются для совместимости.

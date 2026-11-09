@@ -12,7 +12,7 @@ return {
   --                        property can be accessed)
   ------------------------------------------------------------------------------------
   -- These only work for characters or players with a character
-  active                                        = {default = true}, -- Only character!
+  disabled_by_script                            = {default = false}, -- Only character! Factorio 2.1: active is read-only.
   allow_dispatching_robots                      = {default = true}, -- Only character!
   character_additional_mining_categories        = {default = {}}, -- Must be a table! Player must have character!
   character_build_distance_bonus                = {default = 0}, -- Must be a number! Player must have character!

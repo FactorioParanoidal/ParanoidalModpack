@@ -4,6 +4,7 @@
 -- Порядок: после всех правок, создающих и копирующих прототипы и иконки (меню, переработка,
 -- Факториопедия), до research-evolution-icon (тот всегда последний).
 local D = require("tweaks.custom.graphics-atlas-data")
+local artwork = require("tweaks.custom.reskins-overrides-data")
 
 local EMPTY = "__core__/graphics/empty.png" -- 64x64, полностью прозрачный
 local ROLLING_STOCK = { "locomotive", "cargo-wagon", "fluid-wagon", "artillery-wagon", "infinity-cargo-wagon" }
@@ -177,6 +178,8 @@ local function walk(t)
 			if type(key) == "string" and (key == "icon" or key:sub(-5) == "_icon") and is_image(value) then
 				icon_keys = icon_keys or {}
 				icon_keys[#icon_keys + 1] = key
+			elseif artwork[value] then
+				t[key] = artwork[value]
 			end
 		elseif kind == "table" then
 			walk(value)
@@ -185,6 +188,9 @@ local function walk(t)
 	if icon_keys then
 		for _, key in ipairs(icon_keys) do
 			fix_icon(t, key, key == "icon" and "icon_size" or key .. "_size")
+			-- Preserve remap -> downscale/scale -> own artwork, once per shared table.
+			-- Neither pass reads another node's strings; stubs/compaction ran above.
+			if artwork[t[key]] then t[key] = artwork[t[key]] end
 		end
 	end
 end

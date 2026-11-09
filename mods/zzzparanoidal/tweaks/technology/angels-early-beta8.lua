@@ -357,25 +357,9 @@ local moves = {
 		["technologies"] = { "angels-bio-farm-1" },
 	},
 }
-for _, move in ipairs(moves) do
-	local available = data.raw.recipe[move.recipe] ~= nil
-	for _, name in ipairs(move.technologies) do available = available and data.raw.technology[name] ~= nil end
-	if available then
-		for _, technology in pairs(data.raw.technology) do
-			if technology.max_level ~= "infinite" then
-				for index = #(technology.effects or {}), 1, -1 do
-					local effect = technology.effects[index]
-					if effect.type == "unlock-recipe" and effect.recipe == move.recipe then table.remove(technology.effects, index) end
-				end
-			end
-		end
-		for _, name in ipairs(move.technologies) do
-			local technology = data.raw.technology[name]
-			technology.effects = technology.effects or {}
-			table.insert(technology.effects, { type = "unlock-recipe", recipe = move.recipe })
-		end
-	end
-end
+local transfers = {}
+for _, move in ipairs(moves) do transfers[#transfers + 1] = { move.recipe, move.technologies } end
+require("tweaks.technology.unlock-batch").apply(transfers, true)
 
 -- Компостер и почва перенесены в bio-farm, песок — в water-washing-1 (Clowns): angels-composting
 -- осталась пустым тупиком без потомков, которого в Beta 8 не было.

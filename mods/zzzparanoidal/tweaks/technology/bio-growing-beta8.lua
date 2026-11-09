@@ -91,22 +91,10 @@ local moves = {
 	{ "bi-tech-wooden-storage-2", { "bi-wooden-chest-huge" } },
 	{ "bi-tech-wooden-storage-3", { "bi-wooden-chest-giga" } },
 }
+local transfers = {}
 for _, move in ipairs(moves) do
-	local target = technologies[move[1]]
-	if target then
-		for _, recipe in ipairs(move[2]) do
-			if data.raw.recipe[recipe] then
-				for _, technology in pairs(technologies) do
-					if technology.max_level ~= "infinite" then
-						for index = #(technology.effects or {}), 1, -1 do
-							local effect = technology.effects[index]
-							if effect.type == "unlock-recipe" and effect.recipe == recipe then table.remove(technology.effects, index) end
-						end
-					end
-				end
-				target.effects = target.effects or {}
-				table.insert(target.effects, { type = "unlock-recipe", recipe = recipe })
-			end
-		end
+	for _, recipe in ipairs(move[2]) do
+		transfers[#transfers + 1] = { recipe, { move[1] } }
 	end
 end
+require("tweaks.technology.unlock-batch").apply(transfers, true)
