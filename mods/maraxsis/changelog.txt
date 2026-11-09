@@ -7,6 +7,7 @@ Date: 2026-11-07
     - Paranoidal: the quality technologies are hidden in the build (ic-more-qualities unlocks every quality by script): no second legendary quality technology, omega-3 and effect transmission 2 do not need them; stone centrifuging needs uranium processing instead of Kovarex enrichment.
     - Paranoidal: own names where the build has the material: sand maraxsis-sand "Coquina", halite, travertine, laminated glass, seawater, breathing gas, protium; the migration renaming effect-transmission-2 is removed (the build has a home technology of that name).
     - Paranoidal: the spiderling of Spidertron Patrols stays off (it changed the home spidertron technology); Spidertron Enhancements is not required; Russian texts completed (locale/ru/paranoidal.cfg).
+    - Paranoidal: 190 of 203 PNG recompressed losslessly (pingo -s4 -lossless -noalpha): all PNG 46 194 834 -> 43 651 033 bytes (-5.5%), every file identical in every channel, dimensions unchanged.
   Optimizations:
     - Filter on_entity_damaged events to pressure dome colliders
   Bugfixes:
