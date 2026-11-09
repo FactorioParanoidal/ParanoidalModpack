@@ -1,0 +1,15 @@
+---------------------------------------------------------------------------------------------------
+Version: 9.0.0
+Date: 2026-11-07
+  Features:
+    - Merged EpicWeaponSounds, immersive-sounds2 and newtrainsfx2 with all 476 original audio files and source credits.
+    - Added eleven independent startup sound-source dropdowns with the previous winning sources as defaults.
+    - Retained separate laser, door, brake-squeal, environmental and runtime input sounds.
+  Changes:
+    - Replaced global sound tables and repetitive handlers with private libraries and one event-only dispatcher.
+    - Preserved old custom-input, sound and projectile IDs without save-data migrations.
+  Bugfixes:
+    - Fixed misplaced engine, fire and flamethrower variations and Immersive train clatter.
+    - Replaced nuclear sound effects by type instead of overwriting a camera effect by array index.
+    - Isolated the grenade selector from shared explosion wrappers.
+    - Preserved BatteryElectricTrain clatter sharing, MIRV fire and explosion audio, and Picker sound copies across the new load order.

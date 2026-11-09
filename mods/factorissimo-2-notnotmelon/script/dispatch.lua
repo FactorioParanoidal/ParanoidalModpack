@@ -2,11 +2,11 @@
 -- factory-toggle-dispatch open a window with every factory building of the force that stands in the world:
 -- picture of the building, name, place, state and overlay icons; search, filters, sorting and pages; a details
 -- panel with a live view of the interior, renaming and remote view of the building or its interior.
--- Nothing is computed while the window is closed. The list is built when the window opens or the factories
--- change (built, removed, renamed, new overlay icons); the states of the shown page and the details panel
--- are refreshed every 2 seconds while the window is open (the selected factory is rescanned then, see stats.lua).
+-- Open windows share a bounded registry index. Views rebuild only on relevant changes; only the visible
+-- page is refreshed every 2 seconds. Rows and details read the same gameplay snapshot, without scanning interiors.
 
 local mod_gui = require("mod-gui")
+local model = require("script.dispatch-model")
 
 local FRAME = "factorissimo_dispatch_frame"
 local BUTTON = "factorissimo_dispatch_button"
@@ -28,6 +28,11 @@ factorissimo.on_event(factorissimo.events.on_init(), function()
     local dispatch = storage.dispatch
     dispatch.players = dispatch.players or {}
     dispatch.open = dispatch.open or {}
+    dispatch.catalog, dispatch.catalog_job, dispatch.jobs, dispatch.watching = nil, nil, nil, {}
+    dispatch.shared = {}
+    dispatch.revision = (dispatch.revision or 0) + 1
+    dispatch.dirty = true
+    for _, state in pairs(dispatch.players) do state.result, state.job = nil, nil end
 end)
 
 local function player_state(player)
@@ -37,13 +42,19 @@ local function player_state(player)
         state = {search = "", sort = "id", page = 1, problems = false}
         players[player.index] = state
     end
+    state.expanded = state.expanded or {}
+    state.history = state.history or {}
+    state.view = state.view or "list"
     return state
 end
 
---- Marks the lists of open windows for a rebuild (done at most twice a second).
+--- Invalidates structure, names and overlay presentation, not the gameplay statistics.
 function factorissimo.dispatch_changed()
     local dispatch = storage.dispatch
-    if dispatch and next(dispatch.open) then dispatch.dirty = true end
+    if dispatch and next(dispatch.open) then
+        dispatch.revision = (dispatch.revision or 0) + 1
+        dispatch.dirty = true
+    end
 end
 
 -- HELPERS --
@@ -90,18 +101,15 @@ local function parent_of(factory)
     local surface = factory.outside_surface
     if not (surface and surface.valid) then return nil end
     local parent = remote_api.find_surrounding_factory(surface, {x = factory.outside_x, y = factory.outside_y})
-    if parent and parent ~= factory then return parent end
+    if parent and parent.force == factory.force then return parent end
     return nil
 end
 
 local function depth_of(factory)
-    local depth, current = 0, factory
-    while depth < 16 do
-        current = parent_of(current)
-        if not current then break end
-        depth = depth + 1
-    end
-    return depth
+    local catalog = storage.dispatch and storage.dispatch.catalog
+    local node = catalog and catalog.nodes[factory.id]
+    if not node then return {"factorissimo-dispatch.measuring"} end
+    return node.cyclic and {"factorissimo-dispatch.cycle-depth"} or tostring(node.depth)
 end
 
 local function location_caption(factory)
@@ -117,6 +125,9 @@ end
 
 --- sprite, caption, problem flag
 local function status_of(factory)
+    if not factory.built then
+        return "utility/status_inactive", {"factorissimo-dispatch.packed"}, false
+    end
     if factory.inactive then
         return "utility/status_not_working", {"factorissimo-dispatch.status-inactive"}, true
     end
@@ -135,6 +146,9 @@ local function status_of(factory)
     end
     if factory.active == false then
         return "utility/status_inactive", {"factorissimo-dispatch.status-idle"}, false
+    end
+    if factory.active == nil then
+        return "utility/status_inactive", {"factorissimo-dispatch.measuring"}, false
     end
     return "utility/status_working", {"factorissimo-dispatch.status-working"}, false
 end
@@ -182,11 +196,12 @@ local IMPORT_COLOR = {r = 0.85, g = 0.85, b = 0.85}
 --- Short power figure of a list row: "+5.1 MW" (green) when the factory gives power, else what it takes.
 local function power_of_row(factory)
     local use, gen = factory.power_use, factory.power_gen or 0
-    if not use or (use == 0 and gen == 0) then return "", "", IMPORT_COLOR end
+    if not use then return {"factorissimo-dispatch.none"}, {"factorissimo-dispatch.measuring"}, IMPORT_COLOR end
     local tooltip = gen > 0 and {"factorissimo-dispatch.power-tooltip", format_power(use), format_power(gen)}
         or {"factorissimo-dispatch.power-tooltip-use", format_power(use)}
+    if gen == use then return format_power(0), tooltip, IMPORT_COLOR end
     if gen > use then return {"", "+", format_power(gen - use)}, tooltip, EXPORT_COLOR end
-    return format_power(use - gen), tooltip, IMPORT_COLOR
+    return {"", "−", format_power(use - gen)}, tooltip, IMPORT_COLOR
 end
 
 local function update_power_label(label, factory)
@@ -205,88 +220,145 @@ end
 
 -- LIST --
 
-local function sort_key_name(factory)
-    return factory.name and utf8_lower(factory.name) or nil
+local function describe(factory)
+    local force, layout = factory.force, factory.layout
+    if not (factory.id and storage.factories[factory.id] == factory and layout and force and force.valid) then return nil end
+    local built = is_standing(factory, force.index)
+    local parent = built and parent_of(factory)
+    local surface = factory.outside_surface
+    local _, _, problem = status_of(factory)
+    return {id = factory.id, force = force.index, built = built, layout = layout.name, tier = layout.tier or 0,
+        name = factory.name and utf8_lower(factory.name), parent = parent and parent.id,
+        surface = surface and surface.valid and surface.index or 0, problem = problem,
+        power = factory.power_use and (factory.power_gen or 0) - factory.power_use}
 end
 
-local comparators = {
-    id = function(a, b) return a.id < b.id end,
-    tier = function(a, b)
-        local ta, tb = a.layout.tier or 0, b.layout.tier or 0
-        if ta ~= tb then return ta > tb end
-        return a.id < b.id
-    end,
-}
+local function release_idle_cache(dispatch)
+    if not next(dispatch.open) then
+        dispatch.catalog, dispatch.catalog_job, dispatch.jobs = nil, nil, nil
+        dispatch.watching, dispatch.shared = {}, {}
+    end
+end
 
---- Factories of the player's force shown with the current filters, and the count of each building type.
+local function enqueue(job)
+    local dispatch = storage.dispatch
+    local queue = dispatch.jobs
+    if not queue then
+        queue = {head = 1, tail = 0, entries = {}}
+        dispatch.jobs = queue
+        factorissimo.execute_later("dispatch-work", 1)
+    end
+    queue.tail = queue.tail + 1
+    queue.entries[queue.tail] = job
+end
+
+local function request_catalog()
+    local dispatch = storage.dispatch
+    if not dispatch.catalog_job and (not dispatch.catalog or dispatch.catalog.revision ~= (dispatch.revision or 0)) then
+        dispatch.catalog_job = model.catalog(dispatch.revision or 0)
+        enqueue(dispatch.catalog_job)
+    end
+end
+
+-- Called by the existing sampler, not by a second scan of all factories. No work for closed windows.
+function factorissimo.dispatch_sampled(factory, tick)
+    local dispatch = storage.dispatch
+    local catalog = dispatch and dispatch.catalog
+    local node = catalog and catalog.nodes[factory.id]
+    if not (node and next(dispatch.open)) then return end
+    local force = catalog.forces[node.force]
+    local power = factory.power_use and (factory.power_gen or 0) - factory.power_use
+    if node.power ~= power then node.power = power; force.power_revision = force.power_revision + 1 end
+    if dispatch.watching and dispatch.watching[node.force] and (not node.checked or tick - node.checked >= LIGHT_REFRESH) then
+        node.checked = tick
+        local _, _, problem = status_of(factory)
+        if node.problem ~= problem then node.problem = problem; force.problem_revision = force.problem_revision + 1 end
+    end
+end
+
+factorissimo.register_delayed_function("dispatch-work", function()
+    local dispatch = storage.dispatch
+    local queue = dispatch and dispatch.jobs
+    if not queue then return end
+    if dispatch.work_tick == game.tick then return end
+    dispatch.work_tick = game.tick
+    if not next(dispatch.open) then release_idle_cache(dispatch); return end
+    -- At most 256 registry/sort/tree steps per tick globally, with round-robin view jobs.
+    for _ = 1, 8 do
+        if queue.head > queue.tail then break end
+        local job = queue.entries[queue.head]
+        queue.entries[queue.head] = nil; queue.head = queue.head + 1
+        local valid = job.kind == "catalog" and dispatch.catalog_job == job
+        for index in pairs(job.users or {}) do
+            local state = dispatch.players[index]
+            if state and state.job == job and dispatch.open[index] then valid = true; break end
+        end
+        if not valid then job.cancelled = true end
+        if valid then
+            local done
+            for _ = 1, 32 do
+                if job.kind == "catalog" then done = model.catalog_step(job, storage.factories, describe)
+                else done = model.view_step(job) end
+                if done then break end
+            end
+            if done then
+                if job.kind == "catalog" then
+                    dispatch.catalog = job; dispatch.catalog_job = nil
+                else
+                    local result = {rows = job.rows, positions = job.positions, counts = job.force.counts,
+                        total = job.force.total, matched = #job.matches, key = job.key, revision = job.catalog.revision, tree = job.tree}
+                    for index in pairs(job.users) do
+                        local state = dispatch.players[index]
+                        if state and state.job == job then state.result = result; state.job = nil end
+                    end
+                    local shared = dispatch.shared and dispatch.shared[job.force_index]
+                    if shared and shared.job == job then shared.result = result; shared.job = nil end
+                end
+                dispatch.ready = true
+            else
+                queue.tail = queue.tail + 1; queue.entries[queue.tail] = job
+            end
+        end
+    end
+    if queue.head <= queue.tail then factorissimo.execute_later("dispatch-work", 1)
+    else dispatch.jobs = nil end
+end)
+
+local function query_changed(state)
+    state.query_revision = (state.query_revision or 0) + 1
+    state.job = nil
+end
+
 local function collect(player, state)
-    local force_index = player.force.index
-    local search = state.search ~= "" and utf8_lower(state.search) or nil
-    local search_id = search and search:gsub("^#", ""):gsub("^\226\132\150", ""):gsub("^%s+", "") -- "#12", "№12"
-    local list, counts, total = {}, {}, 0
-    for _, factory in pairs(storage.factories) do
-        if is_standing(factory, force_index) then
-            local layout_name = factory.layout.name
-            counts[layout_name] = (counts[layout_name] or 0) + 1
-            total = total + 1
-            local show = not state.tier or state.tier == layout_name
-            if show and search then
-                local name = factory.name and utf8_lower(factory.name) or ""
-                show = name:find(search, 1, true) ~= nil or tostring(factory.id) == search_id
+    request_catalog()
+    local catalog = storage.dispatch.catalog
+    if catalog and (not state.search_due or game.tick >= state.search_due) then
+        state.search_due = nil
+        local force = catalog.forces[player.force.index]
+        local key = table.concat({catalog.revision, player.force.index, state.view, state.sort, tostring(state.problems),
+            state.sort == "power" and force and force.power_revision or 0,
+            state.problems and force and force.problem_revision or 0,
+            state.view == "tree" and player.index or 0, state.view == "tree" and (state.query_revision or 0) or 0,
+            #(state.tier or ""), state.tier or "", #state.search, state.search}, ":")
+        if not state.job and (not state.result or state.result.key ~= key) then
+            local dispatch = storage.dispatch
+            dispatch.shared = dispatch.shared or {}
+            local shared = state.view == "list" and dispatch.shared[player.force.index]
+            if shared and shared.key == key and shared.result then
+                state.result = shared.result
+            elseif shared and shared.key == key and shared.job and not shared.job.cancelled then
+                state.job = shared.job
+                shared.job.users[player.index] = true
+            else
+                local job = model.view(catalog, player.force.index, state, key, state.search ~= "" and utf8_lower(state.search) or nil)
+                job.users = {[player.index] = true}; job.force_index = player.force.index
+                state.job = job
+                if state.view == "list" then dispatch.shared[player.force.index] = {key = key, job = job} end
+                enqueue(job)
             end
-            if show and state.problems then
-                local _, _, problem = status_of(factory)
-                show = problem
-            end
-            if show then list[#list + 1] = factory end
         end
     end
-
-    local sort = state.sort
-    if sort == "name" then
-        local keys = {}
-        for _, factory in pairs(list) do keys[factory] = sort_key_name(factory) end
-        table.sort(list, function(a, b)
-            local ka, kb = keys[a], keys[b]
-            if ka and kb then
-                if ka ~= kb then return ka < kb end
-                return a.id < b.id
-            end
-            if ka or kb then return ka ~= nil end
-            return a.id < b.id
-        end)
-    elseif sort == "place" then
-        local keys = {}
-        for _, factory in pairs(list) do
-            local surface = factory.outside_surface
-            keys[factory] = {surface and surface.valid and surface.index or 0, depth_of(factory)}
-        end
-        table.sort(list, function(a, b)
-            local ka, kb = keys[a], keys[b]
-            if ka[1] ~= kb[1] then return ka[1] < kb[1] end
-            if ka[2] ~= kb[2] then return ka[2] < kb[2] end
-            return a.id < b.id
-        end)
-    elseif sort == "power" then
-        -- From the largest surplus ("+", gives power) down to the largest consumer; not measured yet at the end.
-        local keys = {}
-        for _, factory in pairs(list) do
-            local use = factory.power_use
-            keys[factory] = use and (factory.power_gen or 0) - use or nil
-        end
-        table.sort(list, function(a, b)
-            local ka, kb = keys[a], keys[b]
-            if ka and kb then
-                if ka ~= kb then return ka > kb end
-                return a.id < b.id
-            end
-            if ka or kb then return ka ~= nil end
-            return a.id < b.id
-        end)
-    else
-        table.sort(list, comparators[sort] or comparators.id)
-    end
-    return list, counts, total
+    return state.result, state.job ~= nil or storage.dispatch.catalog_job ~= nil or state.search_due ~= nil
 end
 
 -- GUI BUILDING --
@@ -325,9 +397,34 @@ local function tool_button(parent, action, sprite, tooltip, id)
     return button
 end
 
-local function add_row(list_flow, factory, selected)
+local function add_row(list_flow, factory, selected, entry, slot, revision)
     local id = factory.id
-    local row = list_flow.add {type = "flow", name = tostring(id), direction = "horizontal", tags = {id = id}}
+    local container = list_flow[tostring(slot)]
+    if not container then container = list_flow.add {type = "flow", name = tostring(slot), direction = "vertical"} end
+    local signature = table.concat({id, revision, entry.depth, entry.children, tostring(entry.tree),
+        tostring(entry.filtered), tostring(entry.context), tostring(entry.packed)}, ":")
+    if container.tags.signature == signature then
+        local row = container.row
+        row[P .. "select"].toggled = selected
+        if row[P .. "expand"] then row[P .. "expand"].sprite = entry.expanded and "utility/collapse" or "utility/expand" end
+        update_status(row.row_info.status, factory)
+        update_power_label(row.power_label, factory)
+        return
+    end
+    container.clear()
+    container.tags = {id = id, signature = signature}
+    local row = container.add {type = "flow", name = "row", direction = "horizontal", tags = {id = id}}
+    if entry.tree then
+        local indent = row.add {type = "empty-widget"}
+        indent.style.width = math.min(entry.depth, 3) * 12
+        local expand = tool_button(row, "expand", entry.expanded and "utility/collapse" or "utility/expand",
+            {entry.filtered and "factorissimo-dispatch.filtered-path" or "factorissimo-dispatch.expand-tooltip"}, id)
+        expand.enabled = entry.children > 0 and not entry.filtered
+        expand.visible = entry.children > 0
+        if entry.children == 0 then
+            local space = row.add {type = "empty-widget"}; space.style.width = 28
+        end
+    end
     row.style.vertical_align = "center"
     row.style.horizontal_spacing = 8
     row.style.padding = {4, 6, 4, 4}
@@ -343,17 +440,22 @@ local function add_row(list_flow, factory, selected)
     }
     picture.style.size = 56
     picture.toggled = selected
+    picture.enabled = not entry.packed
 
-    local info = row.add {type = "flow", direction = "vertical"}
-    info.style.width = 250
+    local info = row.add {type = "flow", name = "row_info", direction = "vertical"}
+    local text_width = entry.tree and 200 - math.min(entry.depth, 3) * 12 or 250
+    info.style.width = text_width
     info.style.vertical_spacing = 0
-    local name = info.add {type = "label", name = "factory_name", caption = factorissimo.factory_caption(factory), style = "caption_label"}
-    name.style.maximal_width = 250
+    local name = info.add {type = "label", name = P .. "select/name", tags = {id = id},
+        caption = factorissimo.factory_caption(factory), style = "caption_label", tooltip = factorissimo.factory_caption(factory)}
+    name.style.maximal_width = text_width
+    if entry.context then name.style.font_color = {r = 0.7, g = 0.7, b = 0.7} end
     if not factory.name then name.style.font_color = {r = 0.7, g = 0.7, b = 0.7} end
     local place = info.add {type = "label", caption = location_caption(factory)}
     place.style.font = "default-small"
     place.style.font_color = {r = 0.75, g = 0.75, b = 0.75}
-    place.style.maximal_width = 250
+    place.style.maximal_width = text_width
+    if entry.cycle then place.caption = {"factorissimo-dispatch.cycle-link", tostring(entry.cycle)} end
     add_status(info, factory)
 
     local icons = row.add {type = "table", column_count = 4}
@@ -379,14 +481,12 @@ local function add_row(list_flow, factory, selected)
     tool_button(buttons, "rename", "utility/rename_icon", {"factorissimo-dispatch.rename-tooltip"}, id)
     tool_button(buttons, "map", "utility/map", {"factorissimo-dispatch.map-tooltip"}, id)
     tool_button(buttons, "inside", "utility/search", {"factorissimo-dispatch.inside-tooltip"}, id)
+    for _, button in pairs(buttons.children) do button.enabled = not entry.packed end
+    container.add {type = "line", direction = "horizontal"}
 end
 
 local function build_toolbar(toolbar, state, counts, total)
     toolbar.clear()
-    local search = toolbar.add {type = "textfield", name = P .. "search", text = state.search, tooltip = {"factorissimo-dispatch.search-tooltip"}}
-    search.style.width = 160
-    search.lose_focus_on_confirm = true
-
     local tiers = toolbar.add {type = "flow", direction = "horizontal"}
     tiers.style.horizontal_spacing = 2
     local all = tiers.add {type = "sprite-button", name = P .. "tier/", sprite = "utility/list_view", style = "slot_button",
@@ -417,50 +517,68 @@ local function build_toolbar(toolbar, state, counts, total)
     dropdown.style.width = 150
 end
 
-local function build_list(frame, player, state, keep_unchanged_rows)
+local function build_list(frame, player, state)
     local left = frame.body.left
-    local list, counts, total = collect(player, state)
+    local result, pending = collect(player, state)
+    local list, counts, total = result and result.rows or {}, result and result.counts or {}, result and result.total or 0
+    if state.reveal and result and not pending and result.positions[state.reveal] then
+        state.page = math.floor((result.positions[state.reveal] - 1) / PAGE_SIZE) + 1
+        state.reveal = nil
+    end
     local pages = math.max(1, math.ceil(#list / PAGE_SIZE))
-    if state.page > pages then state.page = pages end
+    if result and state.page > pages then state.page = pages end
     if state.page < 1 then state.page = 1 end
 
-    -- The search field keeps its focus and text: the toolbar is rebuilt only when the counts change.
+    -- Tier controls rebuild only when counts change; search lives in a separate, stable navigation row.
     local signature = tostring(total)
     for layout_name, count in pairs(counts) do signature = signature .. ";" .. layout_name .. "=" .. count end
     local bar = left.toolbar.bar
-    if bar.tags.signature ~= signature or not bar[P .. "search"] then
+    if bar.tags.signature ~= signature or not bar[P .. "sort"] then
         build_toolbar(bar, state, counts, total)
         bar.tags = {signature = signature}
     end
 
     local footer = left.footer.bar
-    footer.page.caption = {"factorissimo-dispatch.page", tostring(state.page), tostring(pages)}
-    footer[P .. "prev"].enabled = state.page > 1
-    footer[P .. "next"].enabled = state.page < pages
-    footer.summary.caption = {"factorissimo-dispatch.summary", tostring(#list), tostring(total)}
+    footer.page.caption = result and {"factorissimo-dispatch.page", tostring(state.page), tostring(pages)} or ""
+    footer[P .. "prev"].enabled = result ~= nil and state.page > 1
+    footer[P .. "next"].enabled = result ~= nil and state.page < pages
+    footer.summary.caption = pending and {"factorissimo-dispatch.updating"}
+        or {"factorissimo-dispatch.summary", tostring(result and result.matched or 0), tostring(total)}
+    local nav = left.nav
+    if nav then
+        nav[P .. "list"].toggled = state.view == "list"
+        nav[P .. "tree"].toggled = state.view == "tree"
+        nav[P .. "back"].enabled = #state.history > 0
+    end
 
     local first = (state.page - 1) * PAGE_SIZE + 1
-    local ids = {tostring(state.selected or "")}
-    for i = first, math.min(#list, first + PAGE_SIZE - 1) do ids[#ids + 1] = tostring(list[i].id) end
-    local signature = table.concat(ids, ";")
     local scroll = left.scroll
-    if keep_unchanged_rows and scroll.tags.rows_signature == signature then return end
-    scroll.tags = {rows_signature = signature}
-    scroll.clear()
-    local list_flow = scroll.add {type = "flow", name = "rows", direction = "vertical"}
+    local list_flow = scroll.rows or scroll.add {type = "flow", name = "rows", direction = "vertical"}
     list_flow.style.vertical_spacing = 0
-    if #list == 0 then
-        local label = list_flow.add {type = "label", caption = total == 0 and {"factorissimo-dispatch.empty"} or {"factorissimo-dispatch.nothing-found"}}
-        label.style.padding = 12
-        label.style.font_color = {r = 0.7, g = 0.7, b = 0.7}
-    end
+    local hint = scroll.list_hint or scroll.add {type = "label", name = "list_hint"}
+    hint.visible = #list == 0
+    hint.caption = pending and {"factorissimo-dispatch.updating"}
+        or total == 0 and {"factorissimo-dispatch.empty"} or {"factorissimo-dispatch.nothing-found"}
+    hint.style.padding = 12
+    local slots = 0
     for i = first, math.min(#list, first + PAGE_SIZE - 1) do
-        if i > first then list_flow.add {type = "line", direction = "horizontal"} end
-        add_row(list_flow, list[i], list[i].id == state.selected)
+        local entry = list[i]
+        local factory = storage.factories[entry.id]
+        if factory and factory.layout and factory.force == player.force
+            and (entry.packed or is_standing(factory, player.force.index)) then
+            slots = slots + 1
+            entry.tree = result.tree
+            add_row(list_flow, factory, factory.id == state.selected, entry, slots, result.revision)
+        end
     end
-    -- A rebuilt list starts at the top; keep the selected factory in view.
-    local selected_row = state.selected and list_flow[tostring(state.selected)]
-    if selected_row then scroll.scroll_to_element(selected_row, "in-view") end
+    for i = #list_flow.children, slots + 1, -1 do list_flow.children[i].destroy() end
+    scroll.tags = {view_key = result and result.key}
+    if state.scroll_selected and not pending then
+        for _, row in pairs(list_flow.children) do
+            if row.tags.id == state.selected then scroll.scroll_to_element(row, "in-view"); break end
+        end
+        state.scroll_selected = nil
+    end
 
 end
 
@@ -489,14 +607,67 @@ local function add_info(info, key, value, tooltip)
 end
 
 local CONNECTION_TYPES = {"belt", "chest", "fluid", "heat", "circuit"}
+local WAITING_GROUPS = {"inputs", "output", "energy", "disabled", "task", "resources", "temperature", "other"}
 
-local function fill_info(info, factory)
-    -- Replace the old unnamed rows once when loading a window saved by an earlier version.
-    if not info["info-state-value"] then info.clear() end
+local function waiting_caption(factory)
+    local counts = factory.machine_waiting
+    if not counts or factory.machine_waiting_tick ~= factory.active_tick then
+        return {"factorissimo-dispatch.waiting-unmeasured"}
+    end
+    local text = {""}
+    for _, group in ipairs(WAITING_GROUPS) do
+        local count = counts[group] or 0
+        if count > 0 then
+            if #text > 1 then text[#text + 1] = "\n" end
+            text[#text + 1] = {"factorissimo-dispatch.waiting-" .. group, tostring(count)}
+        end
+    end
+    return #text > 1 and text or {"factorissimo-dispatch.waiting-none"}
+end
+
+-- Constant work for the selected card, independent of the GUI catalog and nesting depth.
+-- Source IDs describe the signal at the time of the event, not today's parent relationship.
+local function alarm_state(factory)
+    local tick, force_index = game.tick, factory.force.index
+    if (factory.alarm_until or 0) <= tick then return "none" end
+    local own = (factory.alarm_own_until or 0) > tick and factory.alarm_own_force == force_index
+    local signal = factory.alarm_signal
+    if signal and signal.until_tick > tick and signal.recipient_force == force_index
+        and signal.source_id ~= factory.id then
+        local source = storage.factories[signal.source_id]
+        if not (signal.source_force == force_index and source and is_standing(source, force_index)
+            and source.building.force.index == force_index) then source = nil end
+        return own and "own-inherited" or "inherited", source, signal.source_id
+    end
+    return own and "own" or "unknown"
+end
+
+local function fill_alarm(summary, factory)
+    local state, source, source_id = alarm_state(factory)
+    add_info(summary, "info-alarm", {"factorissimo-dispatch.alarm-" .. state}, {"factorissimo-dispatch.alarm-tooltip"})
+    local label, button = summary.alarm_source_label, summary[P .. "alarm_source"]
+    if not label then
+        label = summary.add {type = "label", name = "alarm_source_label", style = "bold_label",
+            caption = {"factorissimo-dispatch.alarm-source"}}
+        button = summary.add {type = "button", name = P .. "alarm_source"}
+        button.style.minimal_width = 0
+        button.style.maximal_width = 170
+        button.style.font = "default-small-semibold"
+    end
+    label.visible, button.visible = source_id ~= nil, source_id ~= nil
+    button.enabled = source ~= nil
+    button.tags = {id = factory.id}
+    button.caption = source and {"factorissimo-dispatch.alarm-source-id", tostring(source.id)}
+        or {"factorissimo-dispatch.alarm-source-unavailable"}
+    button.tooltip = source and {"factorissimo-dispatch.alarm-source-tooltip", factorissimo.factory_caption(source)}
+        or {"factorissimo-dispatch.alarm-source-missing"}
+end
+
+local function fill_info(info, factory, summary)
+    summary = summary or info
     local layout = factory.layout
     local status_sprite, status_caption = status_of(factory)
-    add_info(info, "info-state", {"", "[img=" .. status_sprite .. "] ", status_caption})
-    add_info(info, "info-place", location_caption(factory))
+    add_info(summary, "info-state", {"", "[img=" .. status_sprite .. "] ", status_caption})
 
     local ratio = factory.power_ratio
     local power
@@ -507,17 +678,19 @@ local function fill_info(info, factory)
     else
         power = {"factorissimo-dispatch.measuring"}
     end
-    add_info(info, "info-power", power)
+    add_info(summary, "info-power", power)
+    fill_alarm(summary, factory)
 
     local use, gen = factory.power_use, factory.power_gen or 0
-    add_info(info, "info-consumption", use and {"factorissimo-dispatch.approx", format_power(use)} or {"factorissimo-dispatch.measuring"})
+    add_info(info, "info-consumption", use and {"factorissimo-dispatch.approx", format_power(use)} or {"factorissimo-dispatch.measuring"},
+        {"factorissimo-dispatch.power-scope"})
     local generators = factory.generators or 0
-    local producing = use and generators > 0
+    local producing = use and (generators > 0 or gen > 0)
     add_info(info, "info-production", producing and format_power(gen) or nil,
-        {"factorissimo-dispatch.generators", tostring(factory.generators_working or 0), tostring(generators)})
+        {"", {"factorissimo-dispatch.power-scope"}, "\n", {"factorissimo-dispatch.generators", tostring(factory.generators_working or 0), tostring(generators)}})
     local net = gen - (use or 0)
-    local balance = producing and (net >= 0 and {"", "[color=#80e080]+", format_power(net), "[/color]"}
-        or {"", "[color=#ff8080]−", format_power(net), "[/color]"}) or nil
+    local balance = use and (net == 0 and format_power(0) or net > 0 and {"", "[color=#80e080]+", format_power(net), "[/color]"}
+        or {"", "−", format_power(-net)}) or nil
     add_info(info, "info-balance", balance, {"factorissimo-dispatch.balance-tooltip"})
 
     local used, by_type = 0, {}
@@ -534,11 +707,17 @@ local function fill_info(info, factory)
     add_info(info, "info-connections", {"factorissimo-dispatch.of", tostring(used), tostring(table_size(layout.connections))},
         #tooltip > 2 and tooltip or nil)
 
-    add_info(info, "info-machines", {"factorissimo-dispatch.machines", tostring(factory.machines_working or 0), tostring(factory.machines or 0)})
+    add_info(info, "info-machines", factory.active_tick and
+        {"factorissimo-dispatch.machines", tostring(factory.machines_working or 0), tostring(factory.machines or 0)}
+        or {"factorissimo-dispatch.measuring"}, {"factorissimo-dispatch.own-room"})
+    add_info(info, "info-waiting", waiting_caption(factory), {"factorissimo-dispatch.waiting-tooltip"})
+    add_info(info, "info-sample", factory.active_tick and
+        {"factorissimo-dispatch.sample-age", tostring(math.max(0, floor((game.tick - factory.active_tick) / 60)))}
+        or {"factorissimo-dispatch.measuring"}, {"factorissimo-dispatch.sample-tooltip"})
 
     local children = factory.children or 0
     add_info(info, "info-children", children > 0 and tostring(children) or nil)
-    add_info(info, "info-depth", tostring(depth_of(factory)))
+    add_info(info, "info-depth", depth_of(factory))
 
     add_info(info, "info-pollution", {"factorissimo-dispatch.per-minute", string.format("%.1f", (factory.pollution_rate or 0) * 60)})
     local tick = game.tick
@@ -550,10 +729,42 @@ local function fill_info(info, factory)
     add_info(info, "info-hull", hull and hull.reduction > 0
         and {"factorissimo-dispatch.hull", tostring(floor(hull.reduction * 100 + 0.5))}
         or {"factorissimo-dispatch.hull-none"})
+    local building = factory.building
+    add_info(info, "info-health", building and building.valid and building.health and
+        {"factorissimo-dispatch.health", tostring(math.ceil(building.health)), tostring(math.ceil(building.max_health))} or nil,
+        {"factorissimo-dispatch.health-tooltip"})
 end
 
 local function camera_zoom(player, layout)
     return (CAMERA_SIZE / 32) / (layout.inside_size + 2) * player.display_scale / player.display_density_scale
+end
+
+local function update_path(details, factory)
+    local path = details.path
+    local revision = storage.dispatch.revision or 0
+    if path.tags.revision == revision then return end
+    path.clear(); path.tags = {revision = revision}
+    local items, ids, seen = {location_caption(factory)}, {}, {[factory.id] = true}
+    local current = factory
+    for _ = 1, 32 do
+        current = parent_of(current)
+        if not current or seen[current.id] then break end
+        seen[current.id] = true
+        ids[#ids + 1] = current.id
+        items[#items + 1] = current.built and factorissimo.factory_caption(current)
+            or {"factorissimo-dispatch.packed-parent", factorissimo.factory_caption(current)}
+    end
+    if #ids == 0 then
+        local label = path.add {type = "label", caption = location_caption(factory)}
+        label.style.maximal_width = 300
+    else
+        local dropdown = path.add {type = "drop-down", name = P .. "path", items = items, selected_index = 1,
+            tags = {ids = ids}, tooltip = {"factorissimo-dispatch.path-tooltip"}}
+        dropdown.style.width = 260
+        local parent = storage.factories[ids[1]]
+        local up = tool_button(path, "select", "utility/hint_arrow_up", {"factorissimo-dispatch.parent"}, ids[1])
+        up.enabled = parent and is_standing(parent, factory.force.index) or false
+    end
 end
 
 local function build_details(frame, player, state)
@@ -571,12 +782,10 @@ local function build_details(frame, player, state)
         return
     end
 
-    -- The interior of the selected factory is scanned at most every LIGHT_REFRESH ticks (machines, power).
-    local tick = game.tick
-    factory = factorissimo.preview_factory(factory, tick, LIGHT_REFRESH)
-
     if details.tags.id == factory.id and details.info then
-        fill_info(details.info, factory)
+        fill_info(details.info, factory, details.summary)
+        update_path(details, factory)
+        details.rename.visible = state.rename_id == factory.id
         local title = details.header.titles.title
         local caption = factorissimo.factory_caption(factory)
         if not same_caption(title.caption, caption) then title.caption = caption end
@@ -599,15 +808,34 @@ local function build_details(frame, player, state)
     titles.add {type = "label", caption = {"factorissimo-dispatch.tier-line", entity_name_of(layout.name), tostring(factory.id),
         tostring(layout.inside_size)}}
 
+    tool_button(titles, "rename", "utility/rename_icon", {"factorissimo-dispatch.rename-tooltip"}, factory.id)
+    details.add {type = "flow", name = "path", direction = "horizontal"}
+    update_path(details, factory)
+
     local rename = details.add {type = "flow", name = "rename", direction = "horizontal"}
     rename.style.vertical_align = "center"
-    local field = rename.add {type = "textfield", name = P .. "name", text = factory.name or "", tags = {id = factory.id},
+    rename.visible = state.rename_id == factory.id
+    local field = rename.add {type = "textfield", name = P .. "name",
+        text = state.drafts and state.drafts[factory.id] or factory.name or "", tags = {id = factory.id},
         icon_selector = true, tooltip = {"factorissimo-dispatch.name-tooltip"}}
-    field.style.width = 260
+    field.style.width = 232
     field.lose_focus_on_confirm = true
     local confirm = rename.add {type = "sprite-button", name = P .. "name_confirm", sprite = "utility/check_mark", style = "tool_button_green",
         tags = {id = factory.id}, tooltip = {"factorissimo-dispatch.name-confirm"}}
     confirm.style.size = 28
+    tool_button(rename, "name_cancel", "utility/close", {"factorissimo-dispatch.name-cancel"}, factory.id)
+
+    local summary = details.add {type = "table", name = "summary", column_count = 2}
+    summary.style.horizontal_spacing = 8
+    local buttons = details.add {type = "flow", direction = "horizontal"}
+    buttons.style.horizontal_spacing = 4
+    for _, action in ipairs({"map", "inside"}) do
+        local button = buttons.add {type = "button", name = P .. action, caption = {"factorissimo-dispatch." .. action},
+            tags = {id = factory.id}, tooltip = {"factorissimo-dispatch." .. action .. "-tooltip"}}
+        button.style.minimal_width = 0
+        button.style.font = "default-small-semibold"
+        button.style.horizontally_stretchable = true
+    end
 
     local camera_frame = details.add {type = "frame", style = "deep_frame_in_shallow_frame"}
     local surface = factory.inside_surface
@@ -626,56 +854,40 @@ local function build_details(frame, player, state)
     local info = details.add {type = "table", name = "info", column_count = 2}
     info.style.horizontal_spacing = 8
     info.style.vertical_spacing = 2
-    fill_info(info, factory)
-
-    local buttons = details.add {type = "flow", direction = "horizontal"}
-    buttons.style.horizontal_spacing = 4
-    local map = buttons.add {type = "button", name = P .. "map", caption = {"factorissimo-dispatch.map"}, tags = {id = factory.id},
-        tooltip = {"factorissimo-dispatch.map-tooltip"}}
-    map.style.horizontally_stretchable = true
-    local inside = buttons.add {type = "button", name = P .. "inside", caption = {"factorissimo-dispatch.inside"}, tags = {id = factory.id},
-        tooltip = {"factorissimo-dispatch.inside-tooltip"}}
-    inside.style.horizontally_stretchable = true
+    fill_info(info, factory, summary)
 end
 
-local function refresh(player, light)
+local open
+local function refresh(player)
     local frame = get_frame(player)
     if not frame then return end
+    if frame.tags.schema ~= 2 then open(player); return end
     local state = player_state(player)
-    if light then
-        -- Membership and order depend on live state too, not just on building/renaming factories.
-        if state.problems or state.sort == "power" then build_list(frame, player, state, true) end
-        -- Keep existing row widgets when membership and order have not changed.
-        local rows = frame.body.left.scroll.rows
-        if rows then
-            for _, row in pairs(rows.children) do
-                local id = row.tags and row.tags.id
-                local factory = id and storage.factories[id]
-                if factory and factory.layout then
-                    local info = row.children[2]
-                    if info then update_status(info.status, factory) end
-                    update_power_label(row.power_label, factory)
-                end
-            end
-        end
-    else
-        build_list(frame, player, state)
-    end
+    build_list(frame, player, state)
     build_details(frame, player, state)
 end
 
 local function close(player)
     local frame = get_frame(player)
     if frame then frame.destroy() end
-    if storage.dispatch then storage.dispatch.open[player.index] = nil end
+    local dispatch = storage.dispatch
+    if dispatch then
+        dispatch.open[player.index] = nil
+        local state = dispatch.players[player.index]
+        if state then state.result, state.job = nil, nil end
+        release_idle_cache(dispatch)
+    end
 end
 
-local function open(player)
+open = function(player)
     close(player)
     local state = player_state(player)
-    local frame = player.gui.screen.add {type = "frame", name = FRAME, direction = "vertical"}
+    local frame = player.gui.screen.add {type = "frame", name = FRAME, direction = "vertical", tags = {schema = 2}}
+    local resolution, scale = player.display_resolution, player.display_scale
+    local height = math.max(240, math.min(560, floor(resolution.height / scale) - 100))
     if state.location then
-        frame.location = state.location
+        frame.location = {x = math.max(0, math.min(state.location.x, resolution.width - 1040 * scale)),
+            y = math.max(0, math.min(state.location.y, resolution.height - (height + 80) * scale))}
     else
         frame.auto_center = true
     end
@@ -695,6 +907,19 @@ local function open(player)
     body.style.horizontal_spacing = 12
 
     local left = body.add {type = "frame", name = "left", direction = "vertical", style = "inside_deep_frame"}
+    local nav = left.add {type = "flow", name = "nav", direction = "horizontal"}
+    nav.style.vertical_align = "center"
+    nav.style.horizontal_spacing = 8
+    tool_button(nav, "back", "utility/left_arrow", {"factorissimo-dispatch.back"})
+    for _, view in ipairs({"list", "tree"}) do
+        local button = nav.add {type = "button", name = P .. view, caption = {"factorissimo-dispatch.view-" .. view}, style = "tool_button"}
+        button.style.minimal_width = 60
+    end
+    nav.add {type = "label", caption = {"factorissimo-dispatch.search"}}
+    local search = nav.add {type = "textfield", name = P .. "search", text = state.search, tooltip = {"factorissimo-dispatch.search-tooltip"}}
+    search.style.width = 180
+    search.lose_focus_on_confirm = true
+    tool_button(nav, "reset", "utility/reset", {"factorissimo-dispatch.reset-filters"})
     local toolbar = left.add {type = "frame", name = "toolbar", direction = "horizontal", style = "subheader_frame"}
     toolbar.style.horizontally_stretchable = true
     toolbar.style.height = 48
@@ -705,7 +930,7 @@ local function open(player)
     local scroll = left.add {type = "scroll-pane", name = "scroll", style = "naked_scroll_pane"}
     scroll.horizontal_scroll_policy = "never"
     scroll.style.width = 640
-    scroll.style.height = 500
+    scroll.style.height = height - 96
     local footer_frame = left.add {type = "frame", name = "footer", direction = "horizontal", style = "subheader_frame"}
     footer_frame.style.horizontally_stretchable = true
     local footer = footer_frame.add {type = "flow", name = "bar", direction = "horizontal"}
@@ -724,7 +949,7 @@ local function open(player)
     details.style.vertically_stretchable = true
     local details_scroll = details.add {type = "scroll-pane", name = "scroll", style = "naked_scroll_pane"}
     details_scroll.horizontal_scroll_policy = "never"
-    details_scroll.style.height = 560
+    details_scroll.style.height = height
     details_scroll.style.horizontally_stretchable = true
     local content = details_scroll.add {type = "flow", name = "content", direction = "vertical"}
     content.style.vertical_spacing = 6
@@ -778,6 +1003,15 @@ factorissimo.on_event(defines.events.on_player_joined_game, function(event)
     end
 end)
 
+factorissimo.on_event(defines.events.on_player_left_game, function(event)
+    local dispatch = storage.dispatch
+    if not dispatch then return end
+    dispatch.open[event.player_index] = nil
+    local state = dispatch.players[event.player_index]
+    if state then state.job, state.result = nil, nil end
+    release_idle_cache(dispatch)
+end)
+
 factorissimo.on_event(defines.events.on_player_changed_force, function(event)
     local player = game.get_player(event.player_index)
     if not player then return end
@@ -795,6 +1029,7 @@ factorissimo.on_event(defines.events.on_player_removed, function(event)
     if not storage.dispatch then return end
     storage.dispatch.players[event.player_index] = nil
     storage.dispatch.open[event.player_index] = nil
+    release_idle_cache(storage.dispatch)
 end)
 
 factorissimo.on_event("factory-toggle-dispatch", function(event)
@@ -807,18 +1042,37 @@ end)
 factorissimo.on_nth_tick(30, function(event)
     local dispatch = storage.dispatch
     if not (dispatch and next(dispatch.open)) then return end
+    dispatch.watching = {}
+    local searching = false
+    for index in pairs(dispatch.open) do
+        local player = game.get_player(index)
+        local state = dispatch.players[index]
+        if player and player.connected and state then
+            if state.problems then dispatch.watching[player.force.index] = true end
+            if state.search_due and state.search_due <= event.tick then searching = true end
+        end
+    end
     local dirty = dispatch.dirty
     local light = event.tick % LIGHT_REFRESH == 0
-    if not (dirty or light) then return end
-    dispatch.dirty = nil
+    if not (dirty or light or dispatch.ready or searching) then return end
+    dispatch.dirty, dispatch.ready = nil, nil
     for player_index in pairs(dispatch.open) do
         local player = game.get_player(player_index)
         if player and player.connected and get_frame(player) then
-            refresh(player, not dirty)
+            refresh(player)
         else
             dispatch.open[player_index] = nil
+            local state = dispatch.players[player_index]
+            if state then state.job, state.result = nil, nil end
         end
     end
+    release_idle_cache(dispatch)
+end)
+
+factorissimo.on_event(defines.events.on_forces_merged, function() factorissimo.dispatch_changed() end)
+factorissimo.on_event({defines.events.on_player_display_resolution_changed, defines.events.on_player_display_scale_changed}, function(event)
+    local player = game.get_player(event.player_index)
+    if player and get_frame(player) then open(player) end
 end)
 
 -- GUI EVENTS --
@@ -838,36 +1092,90 @@ end
 
 local function select_factory(player, id)
     local state = player_state(player)
+    if state.selected and state.selected ~= id then
+        state.history[#state.history + 1] = state.selected
+        if #state.history > 20 then table.remove(state.history, 1) end
+    end
     state.selected = id
+    state.reveal = id
+    state.scroll_selected = true
+    if state.view == "tree" and not (state.result and state.result.positions[id]) then query_changed(state) end
     local frame = get_frame(player)
     if not frame then return end
-    local rows = frame.body.left.scroll.rows
-    if rows then
-        for _, row in pairs(rows.children) do
-            local picture = row[P .. "select"]
-            if picture then picture.toggled = row.tags.id == id end
-        end
-    end
+    build_list(frame, player, state)
     build_details(frame, player, state)
 end
 
 local function rename(player, factory, field)
     factorissimo.set_factory_name(factory, field.text)
     field.text = factory.name or ""
+    local state = player_state(player)
+    state.rename_id = nil
+    if state.drafts then state.drafts[factory.id] = nil end
     local frame = get_frame(player)
     if frame then refresh(player) end
 end
 
 local click_actions = {
     close = function(player) close(player) end,
-    refresh = function(player) refresh(player) end,
+    refresh = function(player) factorissimo.dispatch_changed(); refresh(player) end,
+    list = function(player)
+        local state = player_state(player); state.view = "list"; state.page = 1; query_changed(state); refresh(player)
+    end,
+    tree = function(player)
+        local state = player_state(player); state.view = "tree"; state.page = 1
+        state.reveal = state.selected; query_changed(state); refresh(player)
+    end,
+    expand = function(player, element)
+        local state = player_state(player)
+        local id = element.tags.id
+        state.expanded[id] = not state.expanded[id]
+        state.reveal = nil
+        query_changed(state); refresh(player)
+    end,
+    back = function(player)
+        local state = player_state(player)
+        while #state.history > 0 do
+            local id = table.remove(state.history)
+            local factory = storage.factories[id]
+            if factory and is_standing(factory, player.force.index) then
+                state.selected = nil; select_factory(player, id); return
+            end
+        end
+        refresh(player)
+    end,
+    reset = function(player)
+        local state = player_state(player)
+        state.search, state.tier, state.problems, state.page = "", nil, false, 1
+        state.search_due = nil
+        query_changed(state)
+        local frame = get_frame(player)
+        if frame then frame.body.left.nav[P .. "search"].text = ""; frame.body.left.toolbar.bar.tags = {} end
+        refresh(player)
+    end,
+    name_cancel = function(player, element)
+        local state = player_state(player)
+        state.rename_id = nil
+        if state.drafts then state.drafts[element.tags.id] = nil end
+        local factory = factory_of(element, player)
+        if factory then element.parent[P .. "name"].text = factory.name or "" end
+        element.parent.visible = false
+    end,
     select = function(player, element)
         local factory = factory_of(element, player)
         if factory then select_factory(player, factory.id) end
     end,
+    alarm_source = function(player, element)
+        local factory = factory_of(element, player)
+        if not factory then return end
+        -- Recheck expiration, ownership and placement at click time, not just at refresh.
+        local _, source = alarm_state(factory)
+        if source then select_factory(player, source.id) else refresh(player) end
+    end,
     rename = function(player, element)
         local factory = factory_of(element, player)
         if not factory then return end
+        player_state(player).rename_id = factory.id
         select_factory(player, factory.id)
         local frame = get_frame(player)
         local rename_flow = frame and frame.body.details.scroll.content.rename
@@ -895,6 +1203,7 @@ local click_actions = {
         local tier = element.tags.tier
         state.tier = tier ~= "" and tier or nil
         state.page = 1
+        query_changed(state)
         local frame = get_frame(player)
         if frame then frame.body.left.toolbar.bar.tags = {} end -- redraw the toggled state of the tier buttons
         refresh(player)
@@ -943,12 +1252,15 @@ end
 
 gui_events[defines.events.on_gui_text_changed]["^" .. P] = function(event)
     local element, player = own_element(event)
-    if not element or element.name ~= P .. "search" then return end
+    if not element then return end
     local state = player_state(player)
-    state.search = element.text
-    state.page = 1
-    local frame = get_frame(player)
-    if frame then build_list(frame, player, state) end
+    if element.name == P .. "name" then
+        state.drafts = state.drafts or {}; state.drafts[element.tags.id] = element.text
+    elseif element.name == P .. "search" then
+        state.search = element.text; state.page = 1
+        query_changed(state)
+        state.search_due = game.tick + 15
+    end
 end
 
 gui_events[defines.events.on_gui_checked_state_changed]["^" .. P] = function(event)
@@ -957,15 +1269,25 @@ gui_events[defines.events.on_gui_checked_state_changed]["^" .. P] = function(eve
     local state = player_state(player)
     state.problems = element.state
     state.page = 1
+    query_changed(state)
+    factorissimo.dispatch_changed() -- populate problem flags when enabling this filter
     refresh(player)
 end
 
 gui_events[defines.events.on_gui_selection_state_changed]["^" .. P] = function(event)
     local element, player = own_element(event)
-    if not element or element.name ~= P .. "sort" then return end
-    local state = player_state(player)
-    state.sort = SORTS[element.selected_index] or "id"
-    refresh(player)
+    if not element then return end
+    if element.name == P .. "path" then
+        local id = element.tags.ids[element.selected_index - 1]
+        element.selected_index = 1
+        local factory = id and storage.factories[id]
+        if factory and is_standing(factory, player.force.index) then select_factory(player, id) end
+    elseif element.name == P .. "sort" then
+        local state = player_state(player)
+        state.sort = SORTS[element.selected_index] or "id"
+        query_changed(state)
+        refresh(player)
+    end
 end
 
 gui_events[defines.events.on_gui_location_changed]["^" .. FRAME .. "$"] = function(event)

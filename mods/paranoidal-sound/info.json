@@ -1,0 +1,14 @@
+{
+  "name": "paranoidal-sound",
+  "version": "9.0.0",
+  "title": "Paranoidal Sound",
+  "author": "MrKalle, Fooltaurus, Artanis_Mattias; Paranoidal (integration and rewrite)",
+  "factorio_version": "2.1",
+  "dependencies": [
+    "base >= 2.1.24",
+    "! EpicWeaponSounds",
+    "! immersive-sounds2",
+    "! newtrainsfx2"
+  ],
+  "description": "Epic Weapon Sounds, Boombastique Immersive Sound Pack and New train sounds for CIS countries in one mod. Choose each overlapping weapon or railway sound in startup settings; defaults keep the previous source selection. Includes environmental, machinery, creature, vehicle and interface sounds. See SOUND-CREDITS.txt for audio credits."
+}

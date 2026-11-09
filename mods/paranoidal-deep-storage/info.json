@@ -7,7 +7,6 @@
   "factorio_version": "2.1",
   "dependencies": [
     "base >= 2.0.12",
-    "(?) deep-storage-unit >= 9.9.0",
     "! fluid-memory-storage",
     "! logistic-memory-units",
     "! logistic-memory-unit",
