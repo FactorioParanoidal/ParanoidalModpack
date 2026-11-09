@@ -459,6 +459,10 @@ require("tweaks.technology.inserter-capacity-cost") -- цена бонуса г�
 require("tweaks.custom.recipe-signals-hidden")
 -- Карточки элементов C2: окончательный владелец после Reskins, атласа и прежних замен.
 require("tweaks.technology.chemical-elements")
+-- With IC installed, its final pass also covers the workshop, silhouettes and mode twins.
+if not mods["ic-more-qualities"] then
+    require("tweaks.custom.graphics-static-animation").apply(data.raw, log)
+end
 -- Этот require ВСЕГДА ПОСЛЕДНИЙ: не переносить и не добавлять код ниже.
 -- Все новые правки размещать выше: здесь фиксируются иконка и последнее место эффекта эволюции.
 require("tweaks.technology.research-evolution-icon")
