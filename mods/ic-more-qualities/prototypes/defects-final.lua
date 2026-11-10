@@ -151,6 +151,24 @@ function M.after_gate_items(raw, gate)
             end
         end
     end
+    -- Rocket launch products belong to the era of the launched item: a satellite made only after the gate
+    -- gives an after-gate space science pack. Repeated until nothing changes (launch products may be launched).
+    local changed = true
+    while changed do
+        changed = false
+        for _, kind in ipairs(classify.item_types) do
+            for name, item in pairs(raw[kind] or {}) do
+                local era = (early[name] and early) or (late[name] and late) or nil
+                for _, product in ipairs(era and item.rocket_launch_products or {}) do
+                    local product_name = product.name or product[1]
+                    if (product.type or "item") == "item" and product_name and not era[product_name] then
+                        era[product_name] = true
+                        changed = true
+                    end
+                end
+            end
+        end
+    end
     for name in pairs(late) do
         if not early[name] then result[name] = true end
     end
