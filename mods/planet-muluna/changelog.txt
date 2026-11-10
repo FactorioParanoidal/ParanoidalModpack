@@ -10,6 +10,7 @@ Date: 2026-11-08
     - Paranoidal: no Space Exploration graphics (the telescope is drawn as the base radar dish, the navigation beacon as the radar) and no Alien Biomes graphics (the grey ground uses Space Age tiles).
     - Paranoidal: migrations of older Muluna saves that indexed removed technologies or granted Muluna technologies do nothing (all migrations of a mod run when it is added to a save).
     - Paranoidal: Russian texts completed (locale/ru/paranoidal.cfg).
+    - Paranoidal (Space Age branch, before the rocket as in the build without Space Age): the home copper cable keeps the build's name (no item and recipe name "Electrical cable") and the automation 3 technology keeps its description (the home assembling machine 3 takes no data ingredients here); removed from every language.
   Bugfixes:
     - Paranoidal: the game with graphics loads again. The steam layer of the steam crusher technology and of the steam furnaces and crusher has an explicit size (64): the build fills a missing layer size from the prototype, and the technology's 640 made the steam picture "outside the actual sprite size". The telescope (item and building) takes the layered icon of the build's radar: the radar has no single icon here, so the telescope kept the 32 px icon of the assembling machine 3 at size 64.
     - Remove invalid mipmap counts from lunar regolith pictures. https://github.com/nicholasgower/planet-muluna/issues/530
