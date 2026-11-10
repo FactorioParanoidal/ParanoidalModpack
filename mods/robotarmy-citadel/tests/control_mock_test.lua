@@ -116,6 +116,39 @@ check(said("replicator-message.destroyed"), "defeat message")
 -- the save/load path keeps the build queue handler consistent
 F.on_load()
 
+-- peaceful mode (the map creation checkbox, enemy bases generated): no citadel; one already there leaves silently
+storage.citadel = nil
+surface.peaceful_mode = true
+F.init()
+game.forces.enemy.evolution = 0.6
+F.printed = {}
+run(3600 * 3)
+check(status().phase == "dormant" and #F.printed == 0, "peaceful mode: no warning, no citadel (phase " .. status().phase .. ")")
+surface.peaceful_mode = false
+run(3600 + 1200)
+check(status().phase == "active", "peace over: the citadel appears (phase " .. status().phase .. ")")
+run(3600 * 15)
+local city = surface.count_entities_filtered({force = S.force})
+local loot = surface.count_entities_filtered({type = "item-entity"})
+local skulls = 0
+for _, t in pairs(game.forces.player.tags) do if t.valid then skulls = skulls + 1 end end
+check(city > 0 and skulls > 0, "a city stands: " .. city .. " entities, " .. skulls .. " map tags")
+surface.peaceful_mode = true
+F.printed = {}
+run(60)
+st = status()
+skulls = 0
+for _, t in pairs(game.forces.player.tags) do if t.valid then skulls = skulls + 1 end end
+check(st.phase == "dormant" and st.modules == 0 and not st.building, "peaceful mode: the citadel left (phase " .. st.phase .. ")")
+check(surface.count_entities_filtered({force = S.force}) == 0 and skulls == 0, "nothing of it is left, map tag included")
+check(surface.count_entities_filtered({type = "item-entity"}) == loot and #F.printed == 0, "no loot, no message")
+run(3600 * 3)
+check(status().phase == "dormant", "it does not come back while the peace lasts")
+check(remote.call(S.mod, "spawn", 3200, 0) and status().phase == "active", "forced spawn on a peaceful map")
+run(600)
+check(status().phase == "active" and surface.count_entities_filtered({force = S.force}) > 0, "the forced citadel stays")
+F.on_load()
+
 print(string.format("kills %d, groups %d", F.kills, #F.groups))
 print(fails == 0 and "ALL PASS" or ("FAILS " .. fails))
 os.exit(fails == 0 and 0 or 1)

@@ -31,10 +31,12 @@ function C.evolution(c)
   return enemy.get_evolution_factor(surface)
 end
 
--- A map generated without enemy bases (enemy-base size "none", e.g. the preset "Paranoidal: no enemies") is a
--- peaceful map: the citadel neither warns nor comes there.
+-- A surface in peaceful mode (the map creation checkbox, a script or a command) or a map generated without enemy bases
+-- (enemy-base size "none", e.g. the preset "Paranoidal: no enemies") is a peaceful map: the citadel neither warns nor
+-- comes there, and one that is already there leaves (heartbeat).
 function C.peaceful(c)
   local surface = state.surface(c)
+  if surface and surface.peaceful_mode then return true end
   local controls = surface and surface.map_gen_settings.autoplace_controls
   local enemy_base = controls and controls["enemy-base"]
   return enemy_base ~= nil and enemy_base.size == 0
@@ -399,6 +401,19 @@ local function defeat(c, cfg)
 end
 C.defeat = defeat
 
+--- Peaceful map: the citadel leaves without a word. Its squads, droids, buildings and map tag go (destroyed, not
+--- killed: no loot, no explosions); the floor tiles stay. The state starts over, so if the peace ends the citadel
+--- comes again by the evolution.
+local function withdraw(c, surface)
+  Q.disband_all(c)
+  remove_tags(c, surface)
+  for _, e in pairs(surface.find_entities_filtered({force = S.force})) do
+    if e.valid then e.destroy({raise_destroy = true}) end
+  end
+  local overrides = c.overrides
+  state.new().overrides = overrides
+end
+
 local function key_lost(c, m, unit_number)
   local cfg = state.cfg
   m.keys[unit_number] = nil
@@ -536,6 +551,11 @@ function C.heartbeat()
   end
   local surface = state.surface(c)
   if not surface then return end
+  -- a peaceful map (also peaceful mode switched on later); a citadel placed through the remote interface stays
+  if not c.forced and C.peaceful(c) then
+    if phase == "active" then withdraw(c, surface) else c.phase, c.site = "warned", nil end
+    return
+  end
   if phase == "siting" then
     site_step(c, cfg, surface)
     return
@@ -572,6 +592,7 @@ function C.force_spawn(x, y)
   local c = state.get()
   local cfg = state.cfg
   if c.phase == "active" or c.phase == "destroyed" then return false end
+  c.forced = true
   local surface = state.surface(c)
   if x and y then
     local force = game.forces.player or forces.players()[1]
