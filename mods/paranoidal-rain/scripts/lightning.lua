@@ -317,10 +317,12 @@ R.jobs.handler("chain", function(job)
   if surface then chain_from(surface, { x = job.x, y = job.y }, job.left, job.visited, job.draw) end
 end)
 
--- A map whose main surface was generated without enemy bases (enemy-base size "none", e.g. the preset "Paranoidal: no
--- enemies") is a peaceful map: lightning there is only the flash and the thunder.
+-- A map whose main surface is in peaceful mode (the map creation checkbox, a script or a command) or was generated
+-- without enemy bases (enemy-base size "none", e.g. the preset "Paranoidal: no enemies") is a peaceful map: lightning
+-- there is only the flash and the thunder.
 local function peaceful_map()
   local main = game.surfaces["nauvis"] or game.get_surface(1)
+  if main and main.peaceful_mode then return true end
   local controls = main and main.map_gen_settings.autoplace_controls
   local enemy_base = controls and controls["enemy-base"]
   return enemy_base ~= nil and enemy_base.size == 0

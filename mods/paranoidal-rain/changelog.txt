@@ -17,7 +17,7 @@ Date: 2026-11-02
   Graphics:
     - New thumbnail "RAIN · PARANOIDAL" and the icon of the weather forecast technology, made from the base game radar and drawn storm clouds.
   Changes:
-    - Peaceful map: on a map whose Nauvis was generated without enemy bases (enemy-base size "none", e.g. the preset "Paranoidal: no enemies") lightning is only the flash and the thunder: no damage, kills, fire, brownout, radar outage, drained buffers, discharge chain, cook-off or lightning rod charge.
+    - Peaceful map: on a map whose Nauvis is in peaceful mode (the map creation checkbox, a script or a command) or was generated without enemy bases (enemy-base size "none", e.g. the preset "Paranoidal: no enemies") lightning is only the flash and the thunder: no damage, kills, fire, brownout, radar outage, drained buffers, discharge chain, cook-off or lightning rod charge.
     - Settings renamed with the prefix "prain-"; solar power in the rain 75 % by default; weather only on Nauvis by default; no rain during the first 30-60 minutes of a map.
     - Removed: the weather statistics window and its hidden force (a desync risk on save load in multiplayer, and force switching of players), the debug overlay, Jetpack and Space Age planet support, the test hooks. Counters are shown by /prain status.
     - A radar struck by lightning is disabled by script for 20 s instead of being moved to the neutral force.
