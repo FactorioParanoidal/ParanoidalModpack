@@ -7,6 +7,9 @@ Date: 23. 10. 2026
     - Fixed a crash when loading a save after a mod change removed items (#931) (Thanks GreenTech-Solutions!)
     - Paranoidal: the 1.1.27 export string migration read the undefined global module instead of the beacon's module,
       so importing an export string from a version before 1.1.27 with beacon modules failed with "migration failure".
+  Compatibility:
+    - Paranoidal Space Age branch: with paranoidal-space-age-filter and Space Age rocket silos are planned as in the build
+      without Space Age: launch recipes of the payloads, no separate rocket recipe, no silo for the rockets view.
 
 ---------------------------------------------------------------------------------------------------
 Version: 2.1.20

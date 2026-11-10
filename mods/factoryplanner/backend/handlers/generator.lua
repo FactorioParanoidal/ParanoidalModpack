@@ -15,6 +15,12 @@ local generator = {
     qualities = {}
 }
 
+-- Paranoidal (Space Age branch): with paranoidal-space-age-filter the planner models rocket silos as the build without
+-- Space Age does: launch recipes of the payloads (their products still land on the cargo landing pad), no separate
+-- rocket recipe and no silo for the rockets view. Without the filter or without Space Age nothing changes.
+local CLASSIC_SILOS = script.active_mods["space-age"] ~= nil and script.active_mods["paranoidal-space-age-filter"] ~= nil
+local SPACE_TRAVEL = script.feature_flags["space_travel"] and not CLASSIC_SILOS
+
 ---@class ResearchSet
 ---@field category string
 ---@field pack_set table<string, boolean>
@@ -392,7 +398,7 @@ function generator.recipes.generate(context)
                 context.rocket_parts[parts_product.name] = true
 
                 -- Add rocket launch product recipes
-                if not proto.launch_to_space_platforms then
+                if not proto.launch_to_space_platforms or CLASSIC_SILOS then
                     for item_name, products in pairs(launch_products) do
                         local name = "impostor-launch-" .. item_name .. suffix
                         local launch_recipe = silo_recipes[name]
@@ -427,7 +433,7 @@ function generator.recipes.generate(context)
                 end
 
                 -- Add convenience recipe to build whole rocket instead of parts
-                if script.feature_flags["space_travel"] then
+                if SPACE_TRAVEL then
                     local name = "impostor-rocket" .. suffix
                     local rocket_recipe = silo_recipes[name]
 
@@ -779,7 +785,7 @@ function generator.items.generate(context)
         generator.util.add_default_groups(custom_items[item_name])
     end
 
-    if script.feature_flags["space_travel"] then
+    if SPACE_TRAVEL then
         -- Only need one rocket item for all silos/recipes, which means it only gets a
         -- Factoriopedia entry if every silo builds its rocket from the same parts
         local parts_name = next(context.rocket_parts)
@@ -1649,7 +1655,7 @@ function generator.silos.generate()
         {filter="hidden", invert=true, mode="and"}}
     for _, proto in pairs(prototypes.get_entity_filtered(silo_filter)) do
         local sprite = generator.util.determine_entity_sprite(proto)
-        if sprite ~= nil and proto.launch_to_space_platforms then
+        if sprite ~= nil and proto.launch_to_space_platforms and not CLASSIC_SILOS then
             ---@diagnostic disable-next-line: missing-fields
             local silo = {
                 name = proto.name,
