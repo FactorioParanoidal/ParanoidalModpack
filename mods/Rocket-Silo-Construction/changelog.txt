@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.7
 Date: 26. 09. 2025
+  Graphics:
+    - Paranoidal: replaced 10 PNGs with smaller user-recompressed Beta-7 files selected by the approved filename, folder and dimension report; resource paths and prototype code are unchanged.
   Features:
     - Paranoidal: remote interface RocketSiloCon.create_site(args) puts and registers a construction site of stage 2-6 (used by RocketExplosions2 to throw a silo back to stage 4 after a launch failure).
   Bugfixes:

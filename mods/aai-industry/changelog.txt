@@ -4,6 +4,7 @@ Date: 27. 02. 2026
   Bugfixes:
     - Paranoidal port to Factorio 2.1 (Space Age only): the burner assembling machine no longer gets the recipe category "pressing", which 2.1 removed (belts keep "crafting" and add "metallurgy"); loading with Space Age no longer fails.
   Graphics:
+    - Paranoidal: replaced 6 PNGs with smaller user-recompressed Beta-7 files selected by the approved filename, folder and dimension report; resource paths and prototype code are unchanged.
     - Paranoidal build: removed 39 duplicate radius/shadow images already redirected to canonical files by zzzparanoidal's final graphics pass. Prototype and runtime code are unchanged; this trimmed copy targets the full modpack.
   Changes:
     - Paranoidal: the on_tick handler (starting science on tick 1) is registered only until tick 1 has run; the done flag is saved so every peer derives the same registration on load.

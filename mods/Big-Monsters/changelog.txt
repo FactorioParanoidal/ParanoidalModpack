@@ -1,5 +1,7 @@
 ---------------------------------------------------------------------------------------------------
 Version: 2.1.2
+  Graphics:
+    - Paranoidal: replaced 3 PNGs with smaller user-recompressed Beta-7 files selected by the approved filename, folder and dimension report; resource paths and prototype code are unchanged.
   Changes:
     - Paranoidal Space Age branch: with paranoidal-space-age-filter active the script treats Space Age as absent (no Gleba invaders, no demolisher events, no Space Age planets), like the data stage, from which the filter hides it. Without the filter nothing changes.
     - Paranoidal fork: the five levels of the giant fire and acid spitters, the three biterzillas and the mother biterzilla had one icon and one name, the enemy spidertrons the icon of the player's spidertron. The level is shown on the icon (mferrari_lib level-icon) and, for the giants, in the name, so the list of turret priority targets tells them apart.

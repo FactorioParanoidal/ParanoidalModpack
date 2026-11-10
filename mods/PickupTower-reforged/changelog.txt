@@ -14,6 +14,7 @@ Date: 2026-10-30
     - Item icons use the tier labels of Artisanal Reskins.
     - The pickup text is one line per pickup (up to six item kinds) shown only to players of the force on the same surface near the tower.
   Graphics:
+    - Paranoidal: replaced 1 PNG with a smaller user-recompressed Beta-7 file selected by the approved filename, folder and dimension report; resource paths and prototype code are unchanged.
     - PNG recompressed (pingo -s4 -quality=45): item and technology icons lossy, worst PSNR 41.0 dB; sprite sheets and thumbnail.png pixel-identical; the tinted range sprite is untouched.
   Bugfixes:
     - A partly inserted ground stack is reduced instead of deleted (items were lost when the chest filled up).

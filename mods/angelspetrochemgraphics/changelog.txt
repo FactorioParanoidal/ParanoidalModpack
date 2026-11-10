@@ -1,6 +1,7 @@
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.1
   Graphics:
+    - Paranoidal: replaced 6 PNGs with smaller user-recompressed Beta-7 files selected by the approved filename, folder and dimension report; resource paths and prototype code are unchanged.
     - Paranoidal build: removed eight numbered polymerization overlays referenced only by unused local picture constructors. The separate polymerization-chamber sheet and all active petrochemical graphics are retained.
     - Paranoidal build: removed four duplicate empty/shadow images already redirected to canonical files by zzzparanoidal's final graphics pass. Active refinery and flame graphics are unchanged.
   Compatibility:

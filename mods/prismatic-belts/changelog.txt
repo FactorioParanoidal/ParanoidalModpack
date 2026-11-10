@@ -2,6 +2,7 @@
 Version: 3.0.4
 Date: 2026-06-26
   Graphics:
+    - Paranoidal: replaced 3 PNGs with smaller user-recompressed Beta-7 files selected by the approved filename, folder and dimension report; resource paths and prototype code are unchanged.
     - Paranoidal build: removed nine legacy hr-* sheets, six unused sheets in graphics/entity/reskins and two superseded standalone icons. Current presets, layered/custom-tint and frame-count alternatives, plus Space Age and frozen assets are retained.
   Locale:
     - ru: the mod name and the mod list description are the same as in ParanoidalLocale (format "English title (Russian translation)"), so the mod reads the same with or without it.
