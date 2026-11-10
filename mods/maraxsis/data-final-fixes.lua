@@ -89,8 +89,13 @@ while true do
     i = i + 1
 end
 
+-- Paranoidal fork: the home recipes the hydro plant also makes (prototypes/vanilla-changes.lua, compat/aai-industry.lua)
+-- keep their tooltip as in the build without Space Age; the other hydro plant recipes always show where they are made.
+local home_hydro_recipes = data.paranoidal_space_age_filter and table.invert {
+    "pump", "pipe", "pipe-to-ground", "storage-tank", "engine-unit", "electric-engine-unit", "motor", "electric-motor",
+} or {}
 for _, recipe in pairs(data.raw.recipe) do
-    if table_contains(recipe.categories,"maraxsis-hydro-plant") then
+    if table_contains(recipe.categories,"maraxsis-hydro-plant") and not home_hydro_recipes[recipe.name] then
         recipe.always_show_made_in = true
     end
 end
