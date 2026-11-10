@@ -42,13 +42,24 @@ local function validate_milestone_presets(interface_name, presets_to_validate, e
     return valid
 end
 
+-- Paranoidal (Space Age branch): with paranoidal-space-age-filter the presets see the build as before the rocket,
+-- like the build without Space Age: Space Age is hidden from the other mods (the filter), Spidertron Patrols is
+-- content after the rocket. Without the filter or without Space Age nothing changes.
+local HIDDEN_WITH_FILTER = {["space-age"] = true, ["SpidertronPatrols"] = true}
+local filtered = script.active_mods["space-age"] ~= nil and script.active_mods["paranoidal-space-age-filter"] ~= nil
+
+local function mod_active(mod_name)
+    if filtered and HIDDEN_WITH_FILTER[mod_name] then return false end
+    return script.active_mods[mod_name] ~= nil
+end
+
 function is_preset_mods_enabled(preset)
     local forbidden_mods = preset.forbidden_mods or {}
     for _, mod_name in pairs(preset.required_mods) do
-        if not script.active_mods[mod_name] then return false end
+        if not mod_active(mod_name) then return false end
     end
     for _, mod_name in pairs(forbidden_mods) do
-        if script.active_mods[mod_name] then return false end
+        if mod_active(mod_name) then return false end
     end
     return true
 end
