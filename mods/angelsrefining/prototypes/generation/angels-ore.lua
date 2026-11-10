@@ -10,8 +10,8 @@ angelsmods.functions.add_resource("make", {
   output_name = "angels-ore1",
   output_min = 1,
   output_max = 1,
-  icon = "__angelsrefininggraphics__/graphics/icons/angels-ore1/angels-ore1.png",
-  icon_size = 32,
+  icon = "__angelsrefininggraphics__/graphics/icons/angels-ore1/angels-ore1-HR.png", -- Paranoidal: same as the ore item
+  icon_size = 64,
   autoplace = {
     starting_area = settings.startup["angels-starting-resource-ore1"].value,
     base_density = 10,
@@ -107,8 +107,8 @@ angelsmods.functions.add_resource("make", {
   output_name = "angels-ore5",
   output_min = 1,
   output_max = 1,
-  icon = "__angelsrefininggraphics__/graphics/icons/angels-ore5/angels-ore5.png",
-  icon_size = 32,
+  icon = "__angelsrefininggraphics__/graphics/icons/angels-ore5/angels-ore5-HR.png", -- Paranoidal: same as the ore item
+  icon_size = 64,
   autoplace = {
     starting_area = settings.startup["angels-starting-resource-ore5"].value,
     base_density = 8,
