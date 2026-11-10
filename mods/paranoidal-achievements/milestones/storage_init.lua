@@ -1,5 +1,6 @@
 local table = require("__flib__.table")
 local sandbox = require("scripts.sandbox")
+local identity = require("milestones.identity")
 
 -- Paranoidal: Blueprint Sandboxes moves the player into a temporary force "bpsb-sb-f-<force>".
 -- Upstream tracked it as a separate force forever (full milestone list, backfill, polling).
@@ -76,6 +77,7 @@ function initialize_force_if_needed(force)
             end
         end
         remove_invalid_milestones_for_force(storage_force)
+        identity.ensure(storage_force)
         return backfill_completion_times(force)
     end
     return false
@@ -117,7 +119,7 @@ function reinitialize_player(player_index)
     local storage_player = storage.players[player_index]
     if storage_player then
         local outer_frame = storage_player.outer_frame
-        if outer_frame.valid then
+        if outer_frame and outer_frame.valid then
             outer_frame.destroy()
         end
     end
@@ -134,7 +136,9 @@ function initialize_player(player)
         main_frame = main_frame,
         inner_frame = inner_frame,
         opened_once_before = false,
-        pinned = false
+        pinned = false,
+        display_page = 1,
+        gui_version = 1
     }
 end
 

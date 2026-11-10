@@ -43,7 +43,7 @@ local function resolve_product(entry)
     if not fluid then return nil, "fluid is missing, hidden or not producible" end
     return target_of(fluid, "fluid")
   end
-  local item = util.first(entry.item, util.item, true)
+  local item = util.first(entry.item, util.item, true, entry.quality)
   if not item then return nil, "item is missing, hidden or not producible" end
   return target_of(item, "item", entry.quality)
 end
@@ -51,7 +51,7 @@ end
 local function resolve_item(entry, field)
   local ok, reason = resolve_quality(entry)
   if not ok then return nil, reason end
-  local item = util.first(entry[field], util.item)
+  local item = util.first(entry[field], util.item, false, entry.quality)
   if not item then return nil, field .. " item is missing or hidden" end
   local quality = entry.quality ~= "normal" and entry.quality or nil
   return target_of(item, "item", quality)

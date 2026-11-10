@@ -1,4 +1,6 @@
 local events = require("scripts.events")
+local milestone_events = require("milestones.remote_interface")
+local COMPLETIONS_PER_PASS = 256
 local core_util = require("__core__/lualib/util.lua")
 local flib_format = require("__flib__.format")
 require("milestones.gui")
@@ -22,15 +24,7 @@ local function force_print(force, message)
 end
 
 local function raise_milestone_reached_event(force, milestone, message)
-	if On_milestone_reached_event then
-		script.raise_event(On_milestone_reached_event, {
-            force = force,
-            name = milestone.name,
-            quantity = milestone.quantity,
-            completion_tick = milestone.completion_tick,
-            message = message
-		})
-	end
+    milestone_events.raise(force, milestone, message)
 end
 
 -- Writes to a file named "milestones-<MAP SEED>.txt"
@@ -44,13 +38,14 @@ local function write_milestone_to_file(force, milestone, human_timestamp)
         name = milestone.name,
         quantity = milestone.quantity,
         type = milestone.type,
+        quality = milestone.quality,
         completion_tick = milestone.completion_tick,
         completion_time = human_timestamp,
     }
     local json = helpers.table_to_json(table) .. "\n"
-    for player_index, player in pairs(force.players) do
+    for _, player in pairs(force.players) do
         if settings.get_player_settings(player)["milestones_write_file"].value then
-            helpers.write_file(file_name, json, true, player_index)
+            helpers.write_file(file_name, json, true, player.index)
         end
     end
 end
@@ -228,15 +223,16 @@ local function evaluate_tracker_cycle(tracker)
         local storage_force = storage.forces[force_name]
         local force = game.forces[force_name]
         if storage_force and force then
+            local backfill_only = storage_force.backfill_pending
+            local reached_anything = backfill_only and backfill_completion_times(force) or false
             local incomplete_milestones = storage_force.incomplete_milestones
-            local reached_anything = false
-            local i = 1
-            while i <= #incomplete_milestones do
+            local i, completed = 1, 0
+            while not backfill_only and i <= #incomplete_milestones and completed < COMPLETIONS_PER_PASS do
                 local milestone = incomplete_milestones[i]
                 if milestone.type ~= "technology"
                 and is_production_milestone_reached(milestone, storage_force, totals) then
                     if milestone.next then
-                        local next_milestone = create_next_milestone(force_name, milestone)
+                        local next_milestone = create_next_milestone(force_name, milestone, true)
                         if next_milestone then
                             -- Same name and type: it is evaluated from the same totals later in this loop.
                             table.insert(incomplete_milestones, next_milestone)
@@ -246,6 +242,7 @@ local function evaluate_tracker_cycle(tracker)
                     mark_milestone_reached(storage_force, milestone, game.tick, i)
                     print_milestone_reached(force, milestone)
                     reached_anything = true
+                    completed = completed + 1
                 else
                     -- When a milestone is reached, incomplete_milestones loses an element
                     -- so we only increment when a milestone is not reached
@@ -297,19 +294,29 @@ function check_technology_milestone_reached(event)
     local storage_force = storage.forces[force.name]
     if storage_force == nil then return end
 
-    local i = 1
+    local i, completed = 1, 0
     while i <= #storage_force.incomplete_milestones do
+        if completed >= COMPLETIONS_PER_PASS then
+            storage_force.backfill_pending = true
+            break
+        end
         local milestone = storage_force.incomplete_milestones[i]
         if is_tech_milestone_reached(milestone, technology_researched) then
+            if milestone.next then
+                local next_milestone = create_next_milestone(force.name, milestone, true)
+                if next_milestone then
+                    table.insert(storage_force.incomplete_milestones, next_milestone)
+                    table.insert(storage_force.milestones_by_group[next_milestone.group], next_milestone)
+                end
+            end
             mark_milestone_reached(storage_force, milestone, game.tick, i)
             print_milestone_reached(force, milestone)
-            refresh_gui_for_force(force)
+            completed = completed + 1
         else
-            -- I guess you could technically have the same technology in 2 milestones...
-            -- so we have to keep iterating
             i = i + 1
         end
     end
+    if completed > 0 then refresh_gui_for_force(force) end
 end
 events.on(defines.events.on_research_finished, check_technology_milestone_reached)
 

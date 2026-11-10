@@ -29,20 +29,27 @@ function events.on(event, fn, filter)
   end
 end
 
-function events.register()
-  for _, event in ipairs(order) do
-    local list = handlers[event]
-    local handler
-    if #list == 1 then
-      handler = list[1]
-    else
-      handler = function(e)
-        for i = 1, #list do list[i](e) end
-      end
+local function install(event)
+  local list = handlers[event]
+  local handler
+  if #list == 1 then
+    handler = list[1]
+  else
+    handler = function(e)
+      for i = 1, #list do list[i](e) end
     end
-    local filter = filters[event]
-    script.on_event(event, handler, filter or nil)
   end
+  script.on_event(event, handler, filters[event] or nil)
+end
+
+function events.register()
+  for _, event in ipairs(order) do install(event) end
+end
+
+-- Custom event IDs are resolved in on_init/on_load, after static registration.
+function events.dynamic(event, fn)
+  events.on(event, fn)
+  install(event)
 end
 
 return events

@@ -10,7 +10,7 @@
 --   setup(entries, core)      on_init and on_configuration_changed (game is available)
 --   custom() -> {[event id] = fn(event, entries, core)} for events of other mods (on_init, on_load)
 --   inputs[name](event, entries, core) for custom inputs of other mods
--- Runtime entry: {id, params, amounts, names[tier]}. Core API: see control.lua.
+-- Runtime entry: {id, params, amounts, names[tier]}. Core API: see scripts/achievements.lua.
 -- Trackers only read the game and other mods; they never change entities or other mods' data.
 
 local trackers = {}
@@ -134,7 +134,8 @@ trackers["handcraft-variety"] = {
 local WORKSHOP = "ic-refine-workshop"
 
 local function remember_workshop(entity, core)
-  if not (entity and entity.valid and entity.name == WORKSHOP and entity.unit_number) then return end
+  if not (entity and entity.valid and entity.name == WORKSHOP and entity.unit_number)
+    or core.is_sandbox_force(entity.force) or core.is_sandbox_surface(entity.surface) then return end
   local world = core.world()
   world.workshops = world.workshops or {}
   if not world.workshops[entity.unit_number] then
@@ -170,7 +171,7 @@ trackers["workshop"] = {
       local entity = record.entity
       if entity and entity.valid then
         local finished = entity.products_finished
-        if finished > record.last and not core.is_sandbox_surface(entity.surface) then
+        if finished > record.last and not core.is_sandbox_surface(entity.surface) and not core.is_sandbox_force(entity.force) then
           add(core.force_data(entity.force.index), "refined", finished - record.last)
           changed[entity.force.index] = entity.force
         end
@@ -208,8 +209,7 @@ trackers["count"] = {
     for _, force in ipairs(core.player_forces()) do
       for _, entry in ipairs(entries) do
         if not core.is_done(force, entry, #entry.amounts) then
-          local total = 0
-          for _, name in ipairs(entry.entity_names) do total = total + force.get_entity_count(name) end
+          local total = core.count_entities(force, entry.entity_names)
           core.progress(force, entry, total)
         end
       end
@@ -220,18 +220,16 @@ trackers["count"] = {
 ---------------------------------------------------------------------------------------------------
 -- Wind of Wind-Turbines-Reforged: share of full power = power_production / electric_buffer_size of a turbine.
 
-local function turbine_count(force, names)
-  local total = 0
-  for _, name in ipairs(names) do
-    if prototypes.entity[name] then total = total + force.get_entity_count(name) end
-  end
-  return total
+local function turbine_count(force, names, core)
+  local present = {}
+  for _, name in ipairs(names) do if prototypes.entity[name] then present[#present + 1] = name end end
+  return core.count_entities(force, present)
 end
 
 local function wind_share(core, names)
   local world = core.world()
   local turbine = world.turbine
-  if not (turbine and turbine.valid) then
+  if not (turbine and turbine.valid) or core.is_sandbox_surface(turbine.surface) or core.is_sandbox_force(turbine.force) then
     turbine = nil
     if (world.turbine_search or -MINUTE) + MINUTE <= game.tick then
       world.turbine_search = game.tick
@@ -241,7 +239,10 @@ local function wind_share(core, names)
       end
       for _, surface in pairs(game.surfaces) do
         if not core.is_sandbox_surface(surface) then
-          turbine = surface.find_entities_filtered({name = present, limit = 1})[1]
+          for _, force in ipairs(core.player_forces()) do
+            turbine = surface.find_entities_filtered({name=present, force=force, limit=1})[1]
+            if turbine then break end
+          end
           if turbine then break end
         end
       end
@@ -261,7 +262,7 @@ end
 
 local function any_turbines(core, names)
   for _, force in ipairs(core.player_forces()) do
-    if turbine_count(force, names) > 0 then return true end
+    if turbine_count(force, names, core) > 0 then return true end
   end
   return false
 end
@@ -274,7 +275,7 @@ trackers["wind-calm"] = {
         local share = wind_share(core, names)
         if share and share <= 0.001 then
           for _, force in ipairs(core.player_forces()) do
-            if turbine_count(force, names) >= entry.amounts[1] then core.unlock(force, entry) end
+            if turbine_count(force, names, core) >= entry.amounts[1] then core.unlock(force, entry) end
           end
         end
       end
@@ -295,7 +296,7 @@ trackers["wind-storm"] = {
       end
       if world.storm_ticks >= entry.amounts[1] * 60 then
         for _, force in ipairs(core.player_forces()) do
-          if turbine_count(force, names) > 0 then core.unlock(force, entry) end
+          if turbine_count(force, names, core) > 0 then core.unlock(force, entry) end
         end
       end
     end
@@ -422,7 +423,7 @@ local function step(event, core)
   local player = player_of(event)
   if not player then return end
   local data = core.player_data(player.index)
-  local position, surface = player.position, player.surface_index
+  local position, surface = player.physical_position, player.physical_surface_index
   local last = data.last_position
   if last and last.surface == surface then
     local dx, dy = position.x - last.x, position.y - last.y
@@ -440,7 +441,7 @@ trackers["walk"] = {
   events = {
     on_player_changed_position = function(event, entries, core)
       local player, distance = step(event, core)
-      if not player or distance > 3 or player.vehicle or not player.character then return end
+      if not player or distance > 3 or player.physical_vehicle or not player.character then return end
       local total = add(core.player_data(player.index), "walked", distance)
       each(entries, function(entry) core.progress(player, entry, total) end)
     end,
@@ -453,7 +454,7 @@ trackers["fly"] = {
     on_player_changed_position = function(event, entries, core)
       local player, distance = step(event, core)
       if not player or distance > 8 then return end
-      local vehicle = player.vehicle
+      local vehicle = player.physical_vehicle
       if not (vehicle and vehicle.valid) then return end
       for _, entry in ipairs(entries) do
         if entry.planes[vehicle.name] then
@@ -469,8 +470,8 @@ trackers["teleport"] = {
   events = {
     on_player_changed_position = function(event, entries, core)
       local player, distance = step(event, core)
-      if not player or distance < 20 or player.vehicle then return end
-      local near = player.surface.count_entities_filtered({name = "teleporter", position = player.position,
+      if not player or distance < 20 or player.physical_vehicle then return end
+      local near = player.physical_surface.count_entities_filtered({name = "teleporter", position = player.physical_position,
         radius = 8, limit = 1})
       if near == 0 then return end
       local total = add(core.player_data(player.index), "teleports")
@@ -482,8 +483,8 @@ trackers["teleport"] = {
 trackers["speed"] = {
   poll = {every = 60, run = function(entries, core)
     for _, player in pairs(game.connected_players) do
-      local vehicle = player.vehicle
-      if vehicle and vehicle.valid and vehicle.type == "car" then
+      local vehicle = player.physical_vehicle
+      if not core.player_in_sandbox(player) and vehicle and vehicle.valid and vehicle.type == "car" then
         local kmh = math.abs(vehicle.speed) * 216
         each(entries, function(entry) core.progress(player, entry, kmh) end)
       end
@@ -519,10 +520,12 @@ trackers["quiet-sky"] = {
       local data = core.force_data(force.index)
       local crashes = remote.call("paranoidal-robot-attrition", "get_crash_count", force.index)
       local busiest = 0
-      for _, networks in pairs(force.logistic_networks) do
-        for _, network in pairs(networks) do
-          local busy = network.all_logistic_robots - network.available_logistic_robots
-          if busy > busiest then busiest = busy end
+      for surface_name, networks in pairs(force.logistic_networks) do
+        if not core.is_sandbox_surface(game.get_surface(surface_name)) then
+          for _, network in pairs(networks) do
+            local busy = network.all_logistic_robots - network.available_logistic_robots
+            if busy > busiest then busiest = busy end
+          end
         end
       end
       each(entries, function(entry)
@@ -1095,9 +1098,22 @@ local function boss_names()
   return names
 end
 
+local function current_boss_count(data)
+  local seen, total = {}, 0
+  for _, kind in pairs(boss_kind_of or {}) do
+    if data[kind] and not seen[kind] then seen[kind] = true; total = total + 1 end
+  end
+  return total
+end
+
 trackers["bosses"] = {
   prepare = function()
     if #boss_names() == 0 then return false end
+  end,
+  merge = function(entries, core, force)
+    if current_boss_count(core.force_data(force.index).bosses or {}) >= boss_kinds_total then
+      each(entries, function(entry) core.unlock(force, entry) end)
+    end
   end,
   events = {
     on_entity_died = function(event, entries, core)
@@ -1108,8 +1124,7 @@ trackers["bosses"] = {
       data.bosses = data.bosses or {}
       if data.bosses[kind] then return end
       data.bosses[kind] = true
-      local killed = 0
-      for _ in pairs(data.bosses) do killed = killed + 1 end
+      local killed = current_boss_count(data.bosses)
       if killed >= boss_kinds_total then each(entries, function(entry) core.unlock(force, entry) end) end
     end,
   },

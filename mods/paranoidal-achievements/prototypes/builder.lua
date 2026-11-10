@@ -64,7 +64,7 @@ local function tier_name(series, tier)
 end
 
 -- A base-game ladder: base tiers are updated in place, extra tiers and quality variants are new.
-local function build_series(series, context, output)
+local function build_series(series, context, output, base_updates)
   local product = util.item(series.item)
   local existing = data.raw[series.type]
   if not (util.available(product) and existing) then return skip(series.name, "product or type missing") end
@@ -73,23 +73,27 @@ local function build_series(series, context, output)
   for tier = 1, series.base_tiers do
     local base = existing[tier_name(series, tier)]
     if not base then return skip(series.name, "base ladder changed by another mod") end
-    tiers[tier] = {base = base, amount = base.amount,
+    tiers[tier] = {tier = tier, base = base, amount = base.amount,
       name = base.localised_name or {"achievement-name." .. base.name}}
   end
+  local previous_amount = tiers[#tiers].amount
   for index, amount in ipairs(series.extra) do
     local tier = series.base_tiers + index
-    if amount <= tiers[tier - 1].amount then
-      log(string.format("%s%s tier %d (%s) is not above tier %d (%s)", LOG_PREFIX,
-        series.name, tier, amount, tier - 1, tiers[tier - 1].amount))
+    if amount <= previous_amount then
+      skip(tier_name(series, tier), "amount is not above the previous accepted tier")
+    else
+      tiers[#tiers + 1] = {tier = tier, amount = amount, name = {"mxlr.tier", {"mxlr-series." .. series.name}, tostring(tier)}}
+      previous_amount = amount
     end
-    tiers[tier] = {amount = amount, name = {"mxlr.tier", {"mxlr-series." .. series.name}, tostring(tier)}}
   end
 
-  for tier, info in ipairs(tiers) do
+  for _, info in ipairs(tiers) do
+    local tier = info.tier
     -- variant 1 is the plain ladder (normal quality when quality exists), then quality variants
     for variant = 1, #context.qualities + 1 do
       local quality = variant == 1 and context.normal or context.qualities[variant - 1]
-      local achievement = variant == 1 and info.base or {type = series.type}
+      local base = variant == 1 and info.base
+      local achievement = base and table.deepcopy(base) or {type = series.type}
       achievement.name = variant == 1 and tier_name(series, tier) or series.name .. "-" .. tier .. "-" .. quality
       achievement.amount = info.amount
       achievement.icon, achievement.icon_size = nil, nil
@@ -102,7 +106,8 @@ local function build_series(series, context, output)
       achievement.order = string.format("%s-%s%s", series.order, util.letter(tier), util.letter(variant))
       achievement.localised_name = table.deepcopy(info.name)
       finish(achievement, product, quality, series.badge_shift)
-      if achievement ~= info.base then table.insert(output, achievement) end
+      if base then base_updates[#base_updates + 1] = {original = base, replacement = achievement}
+      else table.insert(output, achievement) end
     end
   end
 end
@@ -150,6 +155,7 @@ local function build_catalog_entry(entry, index, context, output)
     quality = nil
   end
   if quality and not util.available(util.quality(quality)) then return skip(prefix, "quality missing") end
+  if not util.product_quality_available(product, quality) then return skip(prefix, "product cannot have this defect quality") end
 
   for tier, amount in ipairs(entry.amounts or DEFAULT_AMOUNTS) do
     local achievement = {
@@ -221,10 +227,24 @@ local function quality_variants()
   return result
 end
 
--- Runs one builder step; an error inside it is logged and the step is skipped.
-local function protected(name, fn, ...)
-  local ok, err = pcall(fn, ...)
-  if not ok then skip(name, "error: " .. tostring(err)) end
+-- Stage a whole entry before reserving names or touching base-game prototypes.
+local function protected(name, build, output, base_updates)
+  local staged, updates = {}, {}
+  local ok, err = pcall(build, staged, updates)
+  if not ok then skip(name, "error: " .. tostring(err)); return end
+  local names = {}
+  for _, achievement in ipairs(staged) do
+    if type(achievement.name) ~= "string" or names[achievement.name] or util.achievement_exists(achievement.name) then
+      skip(name, "name already used: " .. tostring(achievement.name))
+      return
+    end
+    names[achievement.name] = true
+  end
+  for _, achievement in ipairs(staged) do
+    util.mark_achievement(achievement.name)
+    output[#output + 1] = achievement
+  end
+  for _, update in ipairs(updates) do base_updates[#base_updates + 1] = update end
 end
 
 local builder = {}
@@ -234,32 +254,28 @@ function builder.build(base_series, catalog, themes)
   local qualities = quality_variants()
   local context = {qualities = qualities, normal = #qualities > 0 and "normal" or nil}
 
-  local output = {}
+  local output, base_updates = {}, {}
   for _, series in ipairs(base_series) do
-    protected(series.name, build_series, series, context, output)
+    protected(series.name, function(staged, updates) build_series(series, context, staged, updates) end, output, base_updates)
   end
   for index, entry in ipairs(catalog) do
-    protected(tostring(entry[1]), build_catalog_entry, entry, index, context, output)
+    protected(tostring(entry[1]), function(staged) build_catalog_entry(entry, index, context, staged) end, output, base_updates)
   end
   for theme_index, theme in ipairs(themes or {}) do
     for index, entry in ipairs(theme.entries) do
       local order = string.format("z[mxlr]-%s[%s]-%03d-", util.letter(theme_index), theme.key, index)
-      protected(tostring(entry.id), build_content_entry, entry, order, output)
+      protected(tostring(entry.id), function(staged) build_content_entry(entry, order, staged) end, output, base_updates)
     end
   end
 
-  local accepted = {}
-  for _, achievement in ipairs(output) do
-    if util.achievement_exists(achievement.name) then
-      skip(achievement.name, "name already used")
-    else
-      util.mark_achievement(achievement.name)
-      table.insert(accepted, achievement)
-    end
+  data:extend(output)
+  local changed_fields = {"name", "amount", "icon", "icon_size", "icons", "order", "localised_name",
+    "item_product", "fluid_product", "localised_description", "limited_to_one_game"}
+  for _, update in ipairs(base_updates) do
+    for _, field in ipairs(changed_fields) do update.original[field] = update.replacement[field] end
   end
-  data:extend(accepted)
 
-  log(LOG_PREFIX .. #accepted .. " achievements added, " .. #skipped .. " entries skipped")
+  log(LOG_PREFIX .. #output .. " achievements added, " .. #skipped .. " entries skipped")
   if #skipped > 0 then log(LOG_PREFIX .. "skipped: " .. table.concat(skipped, "; ")) end
 end
 

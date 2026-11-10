@@ -12,47 +12,21 @@ function table_get_index(table, element)
     return nil
 end
 
+local schema = require("milestones.schema")
+
 function validate_milestones(milestones)
-    local valid_categories = {"item", "fluid", "item_consumption", "fluid_consumption", "technology", "kill", "group", "alias"}
-    for _, milestone in pairs(milestones) do
-        if not table_contains(valid_categories, milestone.type) then
-            return nil, {"", {"milestones.message_invalid_import_type"}, milestone.type}
-        end
-        if type(milestone.name) ~= "string" then
-            return nil, {"", {"milestones.message_invalid_import_missing_field"}, "name"}
-        end
-        if milestone.type ~= "group" then
-            local num = tonumber(milestone.quantity)
-            if num == nil or num < 1 then
-                return nil, {"", {"milestones.message_invalid_import_quantity"}, milestone.quantity}
-            end
-            if milestone.next ~= nil then
-                local operator, _ = parse_next_formula(milestone.next)
-                if operator == nil then
-                    return nil, {"", {"milestones.message_invalid_import_next"}, milestone.next}
-                end
-            end
-        end
-        if milestone.type == "alias" and type(milestone.equals) ~= "string" then
-            return nil, {"", {"milestones.message_invalid_import_missing_field"}, "equals"}
-        end
-        if (type(milestone.hidden) == "boolean" and milestone.hidden) or milestone.hidden == "true" then
-            milestone.hidden = true
-        else
-            milestone.hidden = nil
-        end
-    end
-    return milestones, nil
+    return schema.normalize(milestones)
 end
 
 function convert_and_validate_imported_json(import_string)
-    local imported_milestones = helpers.json_to_table(import_string)
-
-    if imported_milestones == nil then
+    if type(import_string) ~= "string" then return nil, {"milestones.message_invalid_import_json"} end
+    local decoded_ok, decoded = pcall(helpers.decode_string, import_string)
+    if decoded_ok and decoded then import_string = decoded end
+    local ok, imported = pcall(helpers.json_to_table, import_string)
+    if not ok or type(imported) ~= "table" then
         return nil, {"milestones.message_invalid_import_json"}
     end
-
-    return validate_milestones(imported_milestones)
+    return validate_milestones(imported)
 end
 
 -- Called by the on_tick handler of control.lua every DELAYED_CHAT_DELAY ticks.

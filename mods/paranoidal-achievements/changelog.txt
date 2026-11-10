@@ -1,6 +1,20 @@
 ---------------------------------------------------------------------------------------------------
 Version: 9.0.0
 Date: 2026-11-01
+  Bugfixes:
+    - Milestone imports and remote presets are normalised before use; malformed entries, non-finite numbers, non-plain tables and non-growing next formulas are rejected. Research levels and their steps must be whole numbers. Provider failures are isolated and removed providers leave no stale local presets.
+    - Infinite milestones have a bounded completion budget; deferred backfill continues in later cycles. Research milestones now create subsequent levels too, without duplicate next stages after a manual reset.
+    - Fixed the milestone reached custom event and the player index used for per-client file output.
+    - Historical milestone estimates include weighted aliases. Shared commands and time editing require admin permissions and reject invalid or future times.
+    - Force merging preserves completed milestone times, scripted counters, sets and earned force achievements; pending cargo is reassigned. Incompatible no-crash streaks restart.
+    - Sandbox deaths no longer affect the real death counter. Entity-count achievements, wind checks, workshop tracking and logistic-network checks exclude lab progress even without force isolation.
+    - Movement trackers use the physical controller instead of the remote-view camera; car-speed polls also exclude sandbox players.
+    - Fixed stale editor selection after import, descending multi-row deletion, multiplayer notifications and accumulation of the backfill result across forces.
+    - JSON exports no longer rewrite user strings. The editor preserves exact normal quality, alias quality, tooltips and untouched unavailable targets/qualities, and prevents a stale admin draft from overwriting a newer shared set.
+    - Stable milestone IDs replace fractional sorting indices as GUI identity; display history is paged and column counts cannot fall below one. Existing GUI state is rebuilt lazily without resetting milestone progress.
+    - Achievement entries are staged before applying base changes or reserving names; incompatible extra thresholds are skipped without renumbering later tiers. Explicit defect targets respect ic-more-qualities classification.
+    - The two defect-production achievements now target burner inserters and stone furnaces instead of materials that cannot be defective; IDs, qualities and quantities are unchanged.
+    - Removed accidental scratch globals and a duplicate sprite declaration. Added /paranoidal-achievements-status for tracking diagnostics.
   Locale:
     - The "Crane Operator" achievement speaks of loading cranes (ru: погрузочных кранов), as the cranes and their technologies are now named.
     - ru: the "Old-School Dispatcher" achievement names the station controller instead of the Cybersyn combinator.

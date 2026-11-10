@@ -1,104 +1,110 @@
-function debug_print_forces()
-  game.print(serpent.block(storage.forces))
-  log(serpent.block(storage.forces))
+local schema = require("milestones.schema")
+
+local function reply(command, message)
+    local player = command.player_index and game.get_player(command.player_index)
+    if player then player.print(message) else log(message) end
 end
+
+local function permitted(command)
+    local player = command.player_index and game.get_player(command.player_index)
+    if player and not player.admin then
+        reply(command, {"milestones.message_settings_permission_denied"})
+        return false
+    end
+    return true
+end
+
+local function player_force(command)
+    if not permitted(command) then return nil end
+    local player = command.player_index and game.get_player(command.player_index)
+    if not player then
+        reply(command, {"milestones.message_command_requires_player"})
+        return nil
+    end
+    return get_display_storage_force(player.force)
+end
+
 commands.add_command("milestones-debug-print-forces",
-  "- Print the mod's internal storage table, for debugging purposes.",
-  debug_print_forces)
+    "- Print the internal force state (admin only).", function(command)
+        if not permitted(command) then return end
+        local text = serpent.block(storage.forces)
+        reply(command, text)
+        if command.player_index then log(text) end
+    end)
 
-function debug_print_loaded_milestones()
-  game.print(serpent.block(storage.loaded_milestones))
-  log(serpent.block(storage.loaded_milestones))
-end
 commands.add_command("milestones-debug-print-loaded-milestones",
-  "- Print the json of loaded milestones. Same as the \"export\" string available in settings.",
-  debug_print_loaded_milestones)
+    "- Print the loaded milestones (admin only).", function(command)
+        if not permitted(command) then return end
+        local text = serpent.block(storage.loaded_milestones)
+        reply(command, text)
+        if command.player_index then log(text) end
+    end)
 
-function debug_set_milestones_time(command_data)
-  if not command_data.parameter then return end
-  local storage_force, force = get_display_storage_force(game.get_player(command_data.player_index).force)
-  if not storage_force then return end
-  local parameters = {}
-  for word in string.gmatch(command_data.parameter, "([^,]+)") do -- Split comma-seperated string
-    table.insert(parameters, word)
-  end
-  local name = parameters[1]
-  local lower_bound_tick = tonumber(parameters[2])
-  local tick = tonumber(parameters[3])
-  local i = 1
-  while i <= #storage_force.incomplete_milestones do
-    local milestone = storage_force.incomplete_milestones[i]
-    if milestone.name == name then
-      mark_milestone_reached(storage_force, milestone, tick, i, lower_bound_tick)
-      refresh_gui_for_force(force)
-      game.print("Milestone set.")
-      return
-    end
-    i = i + 1
-  end
-  game.print("Milestone not found.")
-end
 commands.add_command("milestones-set-milestone-time",
-"- Manually set a time for a milestone. Usage: milestone_name,lower_bound_tick,tick. Example: `/milestones-set-milestone-time iron-plate,600,6000` will set the iron-plate milestone time to be between 10 seconds and 100 seconds.",
-  debug_set_milestones_time)
+    "- Set an incomplete milestone time: name,lower_tick,upper_tick (admin only).", function(command)
+        if not command.parameter then return end
+        local own, force = player_force(command)
+        if not own then return end
+        local name, lower, upper = command.parameter:match("^%s*([^,]+),%s*([^,]+),%s*([^,]+)%s*$")
+        lower, upper = tonumber(lower), tonumber(upper)
+        if not name or not schema.finite(lower) or not schema.finite(upper)
+            or lower < 0 or lower > upper or upper > game.tick or lower % 1 ~= 0 or upper % 1 ~= 0 then
+            reply(command, {"milestones.message_invalid_time"})
+            return
+        end
+        name = name:match("^%s*(.-)%s*$")
+        for i, milestone in ipairs(own.incomplete_milestones) do
+            if milestone.name == name then
+                mark_milestone_reached(own, milestone, upper, i, lower)
+                sort_milestones(own.complete_milestones)
+                reset_milestones_tracker()
+                refresh_gui_for_force(force)
+                reply(command, "Milestone set.")
+                return
+            end
+        end
+        reply(command, "Milestone not found.")
+    end)
 
-function debug_reset_milestones(command_data)
-  if not command_data.parameter then return end
-  local storage_force, force = get_display_storage_force(game.get_player(command_data.player_index).force)
-  if not storage_force then return end
-  local name = command_data.parameter
-  local i = 1
-  while i <= #storage_force.complete_milestones do
-    local milestone = storage_force.complete_milestones[i]
-    if milestone.name == name then
-      mark_milestone_unreached(storage_force, milestone, i)
-      refresh_gui_for_force(force)
-      game.print("Milestone reset.")
-      return
-    end
-    i = i + 1
-  end
-  game.print("Milestone not found.")
-end
 commands.add_command("milestones-reset-milestone",
-"- Manually reset a milestone. Usage: milestone_name. Example: `/milestones-reset-milestone iron-plate` will reset the iron-plate milestone.",
-  debug_reset_milestones)
+    "- Reset one completed milestone: name (admin only).", function(command)
+        if not command.parameter then return end
+        local own, force = player_force(command)
+        if not own then return end
+        for i, milestone in ipairs(own.complete_milestones) do
+            if milestone.name == command.parameter then
+                mark_milestone_unreached(own, milestone, i)
+                refresh_gui_for_force(force)
+                reply(command, "Milestone reset.")
+                return
+            end
+        end
+        reply(command, "Milestone not found.")
+    end)
 
-function reinitialize_gui(command_data)
-  if not command_data.player_index then return end
-  reinitialize_player(command_data.player_index)
-end
 commands.add_command("milestones-reinitialize-gui",
-  "- Reset the mod's internal variables related to the GUI, only for the player using the command. Try this if you experience GUI-related crashes.",
-  reinitialize_gui)
+    "- Rebuild your milestone window.", function(command)
+        if command.player_index then reinitialize_player(command.player_index) end
+    end)
 
-
-function reinitialize_surfaces()
-  for force_name, storage_force in pairs(storage.forces) do
-    local force = game.forces[force_name]
-    if force then
-      storage_force.item_stats = {}
-      storage_force.fluid_stats = {}
-      storage_force.kill_stats = {}
-      add_flow_statistics_to_storage_force(force)
-      backfill_completion_times(force)
-      force.print("Done. Incomplete milestones were estimated.")
-    end
-  end
-end
 commands.add_command("milestones-reinitialize-surfaces",
-  "- Reset the mod's tracking of surfaces and estimate incomplete milestones. Try this if some milestones didn't trigger for you when you would expect it (and please report this issue).",
-  reinitialize_surfaces)
+    "- Rebuild statistics references and backfill incomplete milestones (admin only).", function(command)
+        if not permitted(command) then return end
+        remove_ignored_surface_statistics()
+        reset_milestones_tracker()
+        for name in pairs(storage.forces) do
+            local force = game.forces[name]
+            if force then
+                backfill_completion_times(force)
+                refresh_gui_for_force(force)
+            end
+        end
+        reply(command, {"milestones.message_settings_backfilled"})
+    end)
 
-function reinitialize_storage()
-  for _, force in pairs(game.forces) do
-    initialize_force_if_needed(force)
-  end
-
-  for _, player in pairs(game.players) do
-    reinitialize_player(player.index)
-  end
-end
 commands.add_command("milestones-reinitialize-storage",
-  "- Reset all of the mod's internal variables (except achieved milestones) for all players. Try this as a last resort.",
-  reinitialize_storage)
+    "- Initialise missing state and rebuild windows without deleting progress (admin only).", function(command)
+        if not permitted(command) then return end
+        for _, force in pairs(game.forces) do initialize_force_if_needed(force) end
+        for _, player in pairs(game.players) do reinitialize_player(player.index) end
+    end)

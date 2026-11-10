@@ -62,19 +62,34 @@ local function build_index()
     end
   end
 
-  -- Items and fluids that something in the game can actually produce.
+  -- Known producer candidates, not a proof of progression or bootstrap reachability.
   local producible = index.producible
   local function add_results(results)
     for _, result in pairs(results or {}) do
       if type(result) == "table" then
         local name = result.name or result[1]
-        if name then producible[name] = true end
+        local amount = result.amount or result.amount_max or result[2] or 1
+        if name and result.probability ~= 0 and amount > 0 then producible[name] = true end
       end
     end
   end
-  for _, recipe in pairs(data.raw.recipe or {}) do
-    add_results(recipe.results)
-    if recipe.result then producible[recipe.result] = true end
+  local unlocked, fixed = {}, {}
+  for _, technology in pairs(data.raw.technology or {}) do
+    if technology.enabled ~= false and not technology.hidden then
+      for _, effect in pairs(technology.effects or {}) do
+        if effect.type == "unlock-recipe" then unlocked[effect.recipe] = true end
+      end
+    end
+  end
+  for _, prototype in pairs(index.entity) do
+    if prototype.fixed_recipe then fixed[prototype.fixed_recipe] = true end
+  end
+  for name, recipe in pairs(data.raw.recipe or {}) do
+    -- Hidden fixed/service recipes are kept; merely disabled legacy recipes are not evidence.
+    if recipe.enabled ~= false or unlocked[name] or fixed[name] then
+      add_results(recipe.results)
+      if recipe.result then producible[recipe.result] = true end
+    end
   end
   for _, prototype in pairs(index.entity) do
     local minable = prototype.minable
@@ -175,11 +190,21 @@ function util.entities(spec)
 end
 
 -- First available name of a candidate list (a single name is a list of one).
-function util.first(candidates, find, need_producible)
+function util.product_quality_available(prototype, quality)
+  if type(quality) ~= "string" or not quality:match("^ic%-defect%-[1-5]$") then return true end
+  if prototype.type == "fluid" then return false end
+  local classification = (data.raw["mod-data"] or {})["ic-defects-classification"]
+  local model = classification and classification.data
+  if not model or not model.finished or not model.no_defect then return true end
+  return model.finished[prototype.name] == true and not model.no_defect[prototype.name]
+end
+
+function util.first(candidates, find, need_producible, quality)
   if type(candidates) ~= "table" then candidates = {candidates} end
   for _, name in ipairs(candidates) do
     local prototype = find(name)
-    if util.available(prototype) and (not need_producible or util.producible(name)) then
+    if util.available(prototype) and (not need_producible or util.producible(name))
+      and util.product_quality_available(prototype, quality) then
       return prototype
     end
   end

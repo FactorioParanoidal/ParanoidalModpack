@@ -5,41 +5,25 @@ require("milestones.presets.presets")
 require("milestones.presets.presets_pymods")
 require("milestones.presets.preset_addons")
 
-local function validate_milestone_presets(interface_name, presets_to_validate, existing_table)
-    local valid = true
-    if type(presets_to_validate) ~= "table" then
-        print_delayed_red("Interface " .. interface_name .. " should return a table.")
-        valid = false
-    else
-        for preset_name, preset in pairs(presets_to_validate) do
-            if type(preset_name) ~= "string" then
-                print_delayed_red("Interface " .. interface_name .. " should return a table with named keys.")
-                valid = false
-                break
-            end
-            if existing_table[preset_name] then
-                log("Preset " .. preset_name .. " already exists. Overriding.")
-            end
-            if not preset.required_mods then
-                print_delayed_red("Preset " .. preset_name .. " is missing a `required_mods` value.")
-                valid = false
-            end
-            if not preset.milestones then
-                print_delayed_red("Preset " .. preset_name .. " is missing a `milestones` value.")
-                valid = false
-            else
-                _, error = validate_milestones(preset.milestones)
-                if error then
-                    print_delayed_red({"", "Preset ", preset_name, ": ", error})
-                    valid = false
-                end
-            end
-        end
-    end
-    if not valid then
-        print_delayed_red("[img=utility/danger_icon] Please warn the mod author for " .. interface_name .. " about the errors above.")
-    end
-    return valid
+local schema = require("milestones.schema")
+local builtin_presets = table.deep_copy(presets)
+local builtin_addons = table.deep_copy(preset_addons)
+
+local function ordered_names(values)
+    local names = {}
+    for name in pairs(values) do if type(name) == "string" then names[#names + 1] = name end end
+    table.sort(names)
+    return names
+end
+
+local function normalize_preset(preset)
+    if type(preset) ~= "table" or getmetatable(preset) ~= nil then return nil end
+    local required = schema.mod_names(preset.required_mods)
+    local forbidden = schema.mod_names(preset.forbidden_mods, true)
+    if not required or not forbidden then return nil end
+    local milestones, err = validate_milestones(preset.milestones)
+    if not milestones then return nil, err end
+    return {required_mods = required, forbidden_mods = forbidden, milestones = milestones}
 end
 
 function is_preset_mods_enabled(preset)
@@ -53,42 +37,54 @@ function is_preset_mods_enabled(preset)
     return true
 end
 
-local function validate_and_add_to_preset_table(interface_name, remote_milestones_presets, existing_table)
-    if validate_milestone_presets(interface_name, remote_milestones_presets, existing_table) then
-        ---@cast remote_milestones_presets table
-        for remote_preset_name, remote_preset in pairs(remote_milestones_presets) do
-            existing_table[remote_preset_name] = remote_preset
+local function fetch_provider(interface_name, method, destination)
+    local ok, supplied = pcall(remote.call, interface_name, method)
+    if not ok or type(supplied) ~= "table" or getmetatable(supplied) ~= nil then
+        local reason = not ok and tostring(supplied) or "expected a plain preset table"
+        print_delayed_red({"milestones.message_preset_provider_error", interface_name, method, reason})
+        return
+    end
+    for name in pairs(supplied) do
+        if type(name) ~= "string" or name == "" then
+            print_delayed_red({"milestones.message_preset_provider_error", interface_name, method, "invalid preset name"})
+        end
+    end
+    for _, name in ipairs(ordered_names(supplied)) do
+        if name ~= "" then
+            local preset, err = normalize_preset(supplied[name])
+            if preset then
+                if destination[name] then log("Preset " .. name .. " overridden by " .. interface_name) end
+                destination[name] = preset
+            else
+                print_delayed_red({"", {"milestones.message_preset_provider_error", interface_name, name, "invalid preset"}, " ", err or ""})
+            end
         end
     end
 end
 
 function fetch_remote_presets()
-    -- See presets.lua to find out how to use these reverse remote interface to add your own preset or preset addon.
-    storage.remote_presets = {}
-    storage.remote_preset_addons = {}
-    for interface_name, functions in pairs(remote.interfaces) do
-        if functions["milestones_presets"] then
-            local remote_milestones_presets = remote.call(interface_name, "milestones_presets")
-            validate_and_add_to_preset_table("milestones_presets", remote_milestones_presets, storage.remote_presets)
-        end
-        if functions["milestones_preset_addons"] then
-            local remote_milestones_presets = remote.call(interface_name, "milestones_preset_addons")
-            validate_and_add_to_preset_table("milestones_preset_addons", remote_milestones_presets, storage.remote_preset_addons)
-        end
+    storage.remote_presets, storage.remote_preset_addons = {}, {}
+    local interfaces = remote.interfaces
+    for _, name in ipairs(ordered_names(interfaces)) do
+        local functions = interfaces[name]
+        if functions.milestones_presets then fetch_provider(name, "milestones_presets", storage.remote_presets) end
+        if functions.milestones_preset_addons then fetch_provider(name, "milestones_preset_addons", storage.remote_preset_addons) end
+    end
+end
+
+local function rebuild_table(destination, builtin, supplied)
+    for name in pairs(destination) do destination[name] = nil end
+    for name, preset in pairs(builtin) do destination[name] = table.deep_copy(preset) end
+    for _, name in ipairs(ordered_names(supplied or {})) do
+        local preset = normalize_preset(supplied[name])
+        if preset then destination[name] = preset end
     end
 end
 
 function add_remote_presets_to_preset_tables()
-    if storage.remote_presets then -- Should always be set in on_init, but just for migration safety
-        for remote_preset_name, remote_preset in pairs(storage.remote_presets) do
-            presets[remote_preset_name] = remote_preset
-        end
-    end
-    if storage.remote_preset_addons then
-        for remote_preset_name, remote_preset in pairs(storage.remote_preset_addons) do
-            preset_addons[remote_preset_name] = remote_preset
-        end
-    end
+    -- Local tables only: safe in on_load, and removed providers leave no stale local presets.
+    rebuild_table(presets, builtin_presets, storage.remote_presets)
+    rebuild_table(preset_addons, builtin_addons, storage.remote_preset_addons)
 end
 
 function get_auto_detected_preset_name()
@@ -112,35 +108,30 @@ function load_presets()
             table.insert(storage.valid_preset_names, preset_name)
         end
     end
+    table.sort(storage.valid_preset_names)
     log("Valid presets found: " .. serpent.line(storage.valid_preset_names))
 
     if storage.current_preset_name == nil then
         storage.current_preset_name = get_auto_detected_preset_name()
         log("Auto-detected preset used: " .. storage.current_preset_name)
-        -- Paranoidal: no chat message about the auto-detected preset.
-        -- table.insert(storage.delayed_chat_messages, {"milestones.message_loaded_presets", storage.current_preset_name})
         storage.loaded_milestones = table.deep_copy(presets[storage.current_preset_name].milestones)
     end
 end
 
 function load_preset_addons()
     local preset_addons_loaded = {}
-    for preset_addon_name, preset_addon in pairs(preset_addons) do
+    for _, preset_addon_name in ipairs(ordered_names(preset_addons)) do
+        local preset_addon = preset_addons[preset_addon_name]
         if is_preset_mods_enabled(preset_addon) then
             table.insert(preset_addons_loaded, preset_addon_name)
             for _, milestone in pairs(preset_addon.milestones) do
-                table.insert(storage.loaded_milestones, milestone)
+                table.insert(storage.loaded_milestones, table.deep_copy(milestone))
             end
         end
     end
     log("Preset addons loaded: " .. serpent.line(preset_addons_loaded))
 
-    -- Paranoidal: no chat message about loaded preset addons.
-    -- if #preset_addons_loaded == 1 then
-    --     table.insert(storage.delayed_chat_messages, {"milestones.message_loaded_preset_addons_singular", preset_addons_loaded[1]})
-    -- elseif #preset_addons_loaded > 1 then
-    --     table.insert(storage.delayed_chat_messages, {"milestones.message_loaded_preset_addons_plural", table.concat(preset_addons_loaded, ", ")})
-    -- end
+    storage.default_milestones_snapshot = table.deep_copy(storage.loaded_milestones)
 end
 
 function reload_presets()
@@ -156,6 +147,8 @@ function reload_presets()
             end
         end
     end
+    table.sort(new_valid_preset_names)
+    table.sort(added_presets)
     storage.valid_preset_names = new_valid_preset_names
     log("New presets found: " .. serpent.line(added_presets))
     log("New list of valid presets: " .. serpent.line(storage.valid_preset_names))
@@ -170,7 +163,8 @@ end
 -- Paranoidal: the milestones a preset loads in on_init: the preset plus every enabled addon.
 local function get_default_milestones_for_preset(preset_name)
     local milestones = table.deep_copy(presets[preset_name].milestones)
-    for _, preset_addon in pairs(preset_addons) do
+    for _, name in ipairs(ordered_names(preset_addons)) do
+        local preset_addon = preset_addons[name]
         if is_preset_mods_enabled(preset_addon) then
             for _, milestone in pairs(preset_addon.milestones) do
                 table.insert(milestones, table.deep_copy(milestone))
@@ -180,22 +174,11 @@ local function get_default_milestones_for_preset(preset_name)
     return milestones
 end
 
-local function count_milestone_signatures(milestones)
-    local counts = {}
-    for _, milestone in pairs(milestones) do
-        local signature = serpent.line(milestone, {sortkeys = true, comment = false})
-        counts[signature] = (counts[signature] or 0) + 1
-    end
-    return counts
-end
-
-local function is_same_milestone_multiset(a, b)
-    if #a ~= #b then return false end
-    local counts_a, counts_b = count_milestone_signatures(a), count_milestone_signatures(b)
-    for signature, count in pairs(counts_a) do
-        if counts_b[signature] ~= count then return false end
-    end
-    return true
+local function is_unmodified_preset(current_name)
+    local baseline = storage.default_milestones_snapshot or get_default_milestones_for_preset(current_name)
+    local current = validate_milestones(storage.loaded_milestones)
+    local expected = validate_milestones(baseline)
+    return current ~= nil and expected ~= nil and table.deep_compare(current, expected)
 end
 
 -- Paranoidal: when a mod update adds a preset that auto-detection now prefers (e.g. "Paranoidal"
@@ -208,7 +191,7 @@ function upgrade_unmodified_preset(added_presets)
     if current_name == nil or presets[current_name] == nil then return end -- "Imported", "Empty", removed
     local best_name = get_auto_detected_preset_name()
     if best_name == nil or best_name == current_name or not table_contains(added_presets, best_name) then return end
-    if not is_same_milestone_multiset(storage.loaded_milestones, get_default_milestones_for_preset(current_name)) then
+    if not is_unmodified_preset(current_name) then
         log("Preset " .. current_name .. " was modified, not switching to " .. best_name)
         return
     end
@@ -217,6 +200,8 @@ function upgrade_unmodified_preset(added_presets)
     local new_milestones = get_default_milestones_for_preset(best_name)
     storage.current_preset_name = best_name
     storage.loaded_milestones = table.deep_copy(new_milestones)
+    storage.default_milestones_snapshot = table.deep_copy(new_milestones)
+    storage.milestones_revision = (storage.milestones_revision or 0) + 1
     initialize_alias_table()
     remove_invalid_aliases()
     local backfilled_anything = false

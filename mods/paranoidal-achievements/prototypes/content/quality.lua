@@ -6,8 +6,8 @@ local LADDER = {"uncommon-t5", "rare-t5", "epic-t5", "legendary-t5", "unique-t5"
   "infernal-t2", "unbreakable", "godly", "extreme"}
 
 return lib.list(
-  {id = "butterfingers", kind = "produce", item = "iron-gear-wheel", quality = "ic-defect-5", amount = 1000},
-  {id = "defect-plan", kind = "produce", item = "electronic-circuit", quality = "ic-defect-1", amount = 1e6},
+  {id = "butterfingers", kind = "produce", item = "burner-inserter", quality = "ic-defect-5", amount = 1000},
+  {id = "defect-plan", kind = "produce", item = "stone-furnace", quality = "ic-defect-1", amount = 1e6},
   {id = "quality-control", kind = "build", entity = "ic-control-post"},
   {id = "repair-shop", kind = "build", entity = "ic-refine-workshop"},
   {id = "six-sigma", kind = "research", technology = "ic-defect-control-10"},
