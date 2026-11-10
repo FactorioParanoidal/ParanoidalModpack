@@ -134,6 +134,7 @@ local function unpack_connection_settings_from_blueprint(entity)
         end
         local conn = factory.connections[cid]
         if conn then
+            factorissimo.connection_settings_changed(factory, cid)
             factorissimo.destroy_connection(conn)
             factorissimo.init_connection(factory, cid, cpos)
         end

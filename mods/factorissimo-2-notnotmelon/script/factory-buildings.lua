@@ -590,6 +590,7 @@ local function create_factory_exterior(factory, building)
     -- Decide first whether the factory may work here, so that an invalid placement never connects.
     set_factory_active_or_inactive(factory, true)
     factorissimo.recheck_factory_connections(factory)
+    factorissimo.recheck_adjacent_factory_connections(factory)
     factorissimo.update_power_connection(factory)
     factorissimo.update_overlay(factory)
     build_factory_upgrades(factory)

@@ -75,9 +75,10 @@ Chest.direction = function(conn)
     end
 end
 
-Chest.rotate = function(conn)
-    conn._settings.mode = ((conn._settings.mode or 0) + 1) % 3
+Chest.rotate = function(conn, reversed)
+    conn._settings.mode = ((conn._settings.mode or 0) + (reversed and 2 or 1)) % 3
     local mode = conn._settings.mode
+    if reversed and mode ~= 0 then mode = 3 - mode end
     if mode == 0 then
         return {"factory-connection-text.balance-mode"}
     elseif mode == 1 then
