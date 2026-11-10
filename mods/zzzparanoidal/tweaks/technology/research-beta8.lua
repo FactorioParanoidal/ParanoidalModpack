@@ -168,6 +168,27 @@ for name, list in pairs(prerequisites) do
     end
 end
 
+-- «Автоматизация 6» без «Космического научного пакета» (решение пользователя 2026-11-10): предок от Bob's
+-- (тир 6 за космосом), цена выше уже без белой колбы. «Автоматизация 7» остаётся за космосом напрямую:
+-- сборочный автомат 7 требует 5 космических научных пакетов.
+local automation_6 = technologies["automation-6"]
+if automation_6 and automation_6.prerequisites then
+    for i = #automation_6.prerequisites, 1, -1 do
+        if automation_6.prerequisites[i] == "space-science-pack" then table.remove(automation_6.prerequisites, i) end
+    end
+    local automation_7 = technologies["automation-7"]
+    if automation_7 and technologies["space-science-pack"] then
+        local present = false
+        for _, existing in ipairs(automation_7.prerequisites or {}) do
+            if existing == "space-science-pack" then present = true end
+        end
+        if not present then
+            automation_7.prerequisites = automation_7.prerequisites or {}
+            table.insert(automation_7.prerequisites, "space-science-pack")
+        end
+    end
+end
+
 -- Р-1 п.3: пояс для инструментов полностью как Beta 8.
 local toolbelt_bonus = 10
 for _, name in ipairs({"toolbelt", "toolbelt-2", "toolbelt-3", "toolbelt-4", "toolbelt-5"}) do
