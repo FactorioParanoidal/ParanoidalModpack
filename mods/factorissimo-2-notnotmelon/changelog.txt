@@ -2,11 +2,13 @@
 Version: 9.12.0
 Date: 2026-10-19
   Graphics:
+    - Paranoidal: the rear valleys of the MK4 roof now overlap its upper external port row like the lower tiers. Only the upper roof pixels were remapped; the facade, door, canvas, shadow, building bounds and port positions are unchanged. The edited PNG was optimized losslessly with pingo (-15.77% against its unoptimized export).
     - Paranoidal build: removed the entity-folder copy of the circuit connector image, already redirected to graphics/icon/factory-circuit-connector.png by zzzparanoidal's final graphics pass. Prototype and runtime code are unchanged.
   Optimizations:
     - Paranoidal: dispatcher registry, filtering, merge sorting and tree traversal use saved round-robin jobs (up to 256 steps per tick globally), sleeping when finished. Open players share the registry; live filters rebuild only when their inputs change. At most 20 row containers are retained per window. Opening the dispatcher no longer adds periodic interior scans; gameplay statistics and record sampling are unchanged.
     - Paranoidal: use native stack transfers for one-way chest connections and roboport supply/ejection, retaining source-slot priority, actual removal-proxy counts and partial-fill behavior. Balancing and linked-container connections retain their existing transfer path.
   Features:
+    - Paranoidal: touching factories connect matching opposing belt, fluid and chest ports directly between their interiors, without exterior endpoints. Belt/fluid transfer uses native linked helpers inside only; chest pairs share one scheduled job. Both indicators and blueprint settings stay synchronized; packing either building disconnects both ports. Existing saves discover touching ports once after loading.
     - Paranoidal: dispatcher groups machine waiting reasons in the existing dated minute sample, without new interior scans or changing activity, records and problem filtering. Ordinary waiting is not labelled a fault; old and unknown data remain explicit.
     - Paranoidal: selected factory details distinguish direct hull hits from inherited alarms, show current hull health and link to the latest available signal source. A direct hit during an inherited alarm is recorded without restarting light/sound or extending the alarm; hull protection and physical listener selection are unchanged. Source metadata is event-driven and bounded, with no health polling of other buildings.
     - Paranoidal: optional dispatcher tree with collapsed branches, ancestor navigation and back history. Search and filters retain ancestor context; packed parents and cyclic nesting stay visible without changing placement rules.

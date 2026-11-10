@@ -61,7 +61,7 @@ local function get_conn_facing(outside_entity, inside_entity, direction_out, dir
     return (outside_dir == inside_dir) and outside_dir or nil
 end
 
-Belt.connect = function(factory, cid, cpos, outside_entity, inside_entity)
+Belt.connect = function(factory, cid, cpos, outside_entity, inside_entity, settings, other)
     local conn_facing = get_conn_facing(outside_entity, inside_entity, cpos.direction_out, cpos.direction_in)
     if not (conn_facing == cpos.direction_in or conn_facing == cpos.direction_out) then return end
 
@@ -82,13 +82,18 @@ Belt.connect = function(factory, cid, cpos, outside_entity, inside_entity)
 
     if not prototypes.entity[inside_link_name] or not prototypes.entity[outside_link_name] then return end
 
-    local outside_link_position = {factory.outside_x + cpos.outside_x - cpos.indicator_dx, factory.outside_y + cpos.outside_y - cpos.indicator_dy}
+    local outside_link_position = other and {
+        other.factory.inside_x + other.cpos.inside_x + other.cpos.indicator_dx,
+        other.factory.inside_y + other.cpos.inside_y + other.cpos.indicator_dy
+    } or {factory.outside_x + cpos.outside_x - cpos.indicator_dx, factory.outside_y + cpos.outside_y - cpos.indicator_dy}
     local outside_link = outside_entity.surface.create_entity {
         name = outside_link_name,
         position = outside_link_position,
         create_build_effect_smoke = false,
         raise_built = false,
-    } or outside_entity.surface.find_entity(outside_link_name, outside_link_position)
+    }
+    local created_outside_link = outside_link ~= nil
+    outside_link = outside_link or outside_entity.surface.find_entity(outside_link_name, outside_link_position)
     if not outside_link then return end
     outside_link.destructible = false
     outside_link.force = outside_entity.force_index
@@ -100,7 +105,10 @@ Belt.connect = function(factory, cid, cpos, outside_entity, inside_entity)
         raise_built = false,
         force = inside_entity.force
     }
-    if not inside_link then return end
+    if not inside_link then
+        if created_outside_link then outside_link.destroy() end
+        return
+    end
     inside_link.destructible = false
 
     local connection
@@ -126,6 +134,15 @@ Belt.connect = function(factory, cid, cpos, outside_entity, inside_entity)
         }
     end
 
+    if other then
+        -- A broken direct pair spills each helper's items back into its own interior.
+        local input = conn_facing == cpos.direction_in
+        connection.from_spill_surface = input and outside_entity.surface or inside_entity.surface
+        connection.from_spill_position = input and outside_entity.position or inside_entity.position
+        connection.to_spill_surface = input and inside_entity.surface or outside_entity.surface
+        connection.to_spill_position = input and inside_entity.position or outside_entity.position
+    end
+
     connection.from_link.linked_belt_type = "input"
     connection.to_link.linked_belt_type = "output"
     connection.to_link.connect_linked_belts(connection.from_link)
@@ -148,7 +165,7 @@ Belt.rotate = factorissimo.beep
 
 Belt.adjust = factorissimo.beep
 
-local function spill_link_items(belt, link, surface, position)
+local function spill_link_items(link, surface, position)
     for _, i in pairs {1, 2} do
         local line = link.get_transport_line(i)
         for j = 1, math.min(256, #line) do
@@ -172,11 +189,11 @@ Belt.destroy = function(conn)
     local position = conn.spill_location
 
     if conn.from_link.valid then
-        spill_link_items(conn.from, conn.from_link, surface, position)
+        spill_link_items(conn.from_link, conn.from_spill_surface or surface, conn.from_spill_position or position)
         conn.from_link.destroy()
     end
     if conn.to_link.valid then
-        spill_link_items(conn.to, conn.to_link, surface, position)
+        spill_link_items(conn.to_link, conn.to_spill_surface or surface, conn.to_spill_position or position)
         conn.to_link.destroy()
     end
 end

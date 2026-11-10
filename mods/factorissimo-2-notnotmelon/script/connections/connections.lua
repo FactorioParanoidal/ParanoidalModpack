@@ -1,4 +1,7 @@
 local find_surrounding_factory = remote_api.find_surrounding_factory
+local Adjacent = require("adjacent")
+local adjacent_types = {belt = true, fluid = true, chest = true}
+factorissimo.recheck_adjacent_factory_connections = Adjacent.recheck_neighbors
 
 local floor, ceil, max = math.floor, math.ceil, math.max
 
@@ -46,6 +49,11 @@ factorissimo.is_connectable = is_connectable
 
 local CONNECTION_UPDATE_RATE = 5
 local CYCLIC_BUFFER_SIZE = 600
+local refresh_adjacency = false
+-- Older saves also discover existing pairs without a version bump or writes during on_load.
+factorissimo.on_event(factorissimo.events.on_load(), function()
+    refresh_adjacency = storage.adjacent_connections_version ~= 1
+end)
 factorissimo.on_event(factorissimo.events.on_init(), function()
     storage.connections = storage.connections or {}
     storage.delayed_connection_checks = storage.delayed_connection_checks or {}
@@ -57,6 +65,8 @@ factorissimo.on_event(factorissimo.events.on_init(), function()
     for _, factory in pairs(storage.factories) do
         if factory.built then factorissimo.recheck_factory_connections(factory, nil, nil, true) end
     end
+    storage.adjacent_connections_version = 1
+    refresh_adjacency = false
 end)
 
 --- Delays are kept on the update grid: a connection queued between the slots would never tick again.
@@ -80,6 +90,33 @@ local function get_connection_settings(factory, cid, ctype)
     return factory.connection_settings[cid][ctype]
 end
 factorissimo.get_connection_settings = get_connection_settings
+
+local function mirror_settings(source, target, ctype)
+    if ctype == "fluid" then
+        target.input_mode = not source.input_mode
+    elseif ctype == "chest" then
+        local mode = source.mode or 0
+        target.mode = mode == 0 and 0 or 3 - mode
+        target.delay = source.delay
+    end
+end
+
+local function sync_pair_settings(conn, from_factory)
+    local other = conn._other_factory
+    if not other then return end
+    local settings = get_connection_settings(other, conn._other_id, conn._type)
+    if from_factory == other then
+        mirror_settings(settings, conn._settings, conn._type)
+    else
+        mirror_settings(conn._settings, settings, conn._type)
+    end
+end
+
+-- Blueprint tags are expressed from the factory containing the selected indicator.
+function factorissimo.connection_settings_changed(factory, cid)
+    local conn = factory.connections[cid]
+    if conn then sync_pair_settings(conn, factory) end
+end
 
 -- Connection indicators --
 
@@ -106,29 +143,60 @@ end
 
 -- Connection changes --
 
-local function register_connection(factory, cid, ctype, conn, settings)
+local function update_connection_indicators(conn)
+    local setting, dir = c_direction[conn._type](conn)
+    set_connection_indicator(conn._factory, conn._id, conn._type, setting, dir)
+    if conn._other_factory then
+        -- Opposite walls have opposite local in/out meanings, but the same world flow direction.
+        set_connection_indicator(conn._other_factory, conn._other_id, conn._type, setting, dir)
+    end
+end
+
+local function register_connection(factory, cid, ctype, conn, settings, other)
     conn._id = cid
     conn._type = ctype
     conn._factory = factory
     conn._settings = settings
     conn._valid = true
     factory.connections[cid] = conn
+    if other then
+        conn._other_factory = other.factory
+        conn._other_id = other.cid
+        other.factory.connections[other.cid] = conn
+        sync_pair_settings(conn)
+    end
+    -- A pair is one transport job even though it occupies a port in each factory.
     if conn.do_tick_update then add_connection_to_queue(conn) end
-    local setting, dir = c_direction[ctype](conn)
-    set_connection_indicator(factory, cid, ctype, setting, dir)
+    update_connection_indicators(conn)
 end
 
 --- Only call this when factory.connections[cid] == nil!
 --- `silent` suppresses the "research required" text during bulk rechecks.
 local function init_connection(factory, cid, cpos, silent)
-    if factory.inactive then return end
+    if not factory.built or factory.inactive or not cpos then return end
     local outside_surface, inside_surface = factory.outside_surface, factory.inside_surface
     if not (outside_surface and outside_surface.valid) then return end
     if not (inside_surface and inside_surface.valid) then return end
     local force = factory.force
+    local other = Adjacent.find(factory, cpos)
+    if other then
+        -- Stable ownership keeps direction and the queue independent of which end triggered a check.
+        if factory.id > other.factory.id then
+            if not other.factory.connections[other.cid] then
+                init_connection(other.factory, other.cid, other.cpos, silent)
+            end
+            return
+        end
+        if other.factory.connections[other.cid] then return end
+        outside_surface = other.factory.inside_surface
+        if not (outside_surface and outside_surface.valid) then return end
+    end
 
+    local outside_position = other and {
+        other.factory.inside_x + other.cpos.inside_x, other.factory.inside_y + other.cpos.inside_y
+    } or {cpos.outside_x + factory.outside_x, cpos.outside_y + factory.outside_y}
     local outside_entities = outside_surface.find_entities_filtered {
-        position = {cpos.outside_x + factory.outside_x, cpos.outside_y + factory.outside_y},
+        position = outside_position,
         force = force
     }
     if not outside_entities[1] then return end
@@ -142,9 +210,12 @@ local function init_connection(factory, cid, cpos, silent)
     local warned = silent
     for _, outside_entity in pairs(outside_entities) do
         local ctype = type_map[outside_entity.type] or type_map[outside_entity.name]
-        if ctype then
+        -- Factory exteriors are storage tanks too, but never valid fluid endpoints.
+        if ctype and not storage.factories_by_entity[outside_entity.unit_number]
+            and (not other or adjacent_types[ctype]) then
             for _, inside_entity in pairs(inside_entities) do
-                if (type_map[inside_entity.type] or type_map[inside_entity.name]) == ctype then
+                if (type_map[inside_entity.type] or type_map[inside_entity.name]) == ctype
+                    and not storage.factories_by_entity[inside_entity.unit_number] then
                     if not c_unlocked[ctype](force) then
                         -- The connection type is not researched yet: no connection.
                         if not warned then
@@ -154,11 +225,15 @@ local function init_connection(factory, cid, cpos, silent)
                         end
                     else
                         local settings = get_connection_settings(factory, cid, ctype)
-                        local new_connection = c_connect[ctype](factory, cid, cpos, outside_entity, inside_entity, settings)
+                        if other and not next(settings) then
+                            local other_settings = get_connection_settings(other.factory, other.cid, ctype)
+                            if next(other_settings) then mirror_settings(other_settings, settings, ctype) end
+                        end
+                        local new_connection = c_connect[ctype](factory, cid, cpos, outside_entity, inside_entity, settings, other)
                         if new_connection then
                             inside_surface.play_sound {path = "entity-close/assembling-machine-3", position = inside_entity.position}
                             outside_surface.play_sound {path = "entity-close/assembling-machine-3", position = outside_entity.position}
-                            register_connection(factory, cid, ctype, new_connection, settings)
+                            register_connection(factory, cid, ctype, new_connection, settings, other)
                             return
                         end
                     end
@@ -172,9 +247,18 @@ factorissimo.init_connection = init_connection
 local function destroy_connection(conn)
     if conn and conn._valid then
         c_destroy[conn._type](conn)
-        conn._valid = false                       -- _valid should be true iff conn._factory.connections[conn._id] == conn
-        conn._factory.connections[conn._id] = nil -- Lua can handle this
+        conn._valid = false
+        conn._factory.connections[conn._id] = nil
         delete_connection_indicator(conn._factory, conn._id, conn._type)
+        local other = conn._other_factory
+        if other then
+            other.connections[conn._other_id] = nil
+            delete_connection_indicator(other, conn._other_id, conn._type)
+            -- The other exterior may be in the middle of being packed/deleted. Recheck after that event.
+            local checks = storage.delayed_connection_checks
+            checks[#checks + 1] = {factory = conn._factory}
+            checks[#checks + 1] = {factory = other}
+        end
     end
 end
 factorissimo.destroy_connection = destroy_connection
@@ -189,12 +273,23 @@ local function covers_port(entity, surface, x, y, force)
 end
 
 local function ends_at_ports(factory, cpos, conn)
+    -- Both port slots refer to the same record; its endpoints are always oriented to its owner.
+    factory = conn._factory
+    cpos = factory.layout.connections[conn._id]
+    if not cpos then return false end
+    local other = conn._other_factory
+    local opos = other and other.layout and other.layout.connections[conn._other_id]
+    if other and (not opos or not Adjacent.matches(factory, cpos, other, opos)) then return false end
+    if not other and adjacent_types[conn._type] and Adjacent.find(factory, cpos) then return false end
     local outside, inside = conn.outside or conn.outside_entity, conn.inside or conn.inside_entity
     if conn._type == "belt" then
         local input = conn.facing == cpos.direction_in
         outside, inside = input and conn.from or conn.to, input and conn.to or conn.from
     end
-    return covers_port(outside, factory.outside_surface, factory.outside_x + cpos.outside_x, factory.outside_y + cpos.outside_y, factory.force)
+    local outside_surface = other and other.inside_surface or factory.outside_surface
+    local outside_x = other and other.inside_x + opos.inside_x or factory.outside_x + cpos.outside_x
+    local outside_y = other and other.inside_y + opos.inside_y or factory.outside_y + cpos.outside_y
+    return covers_port(outside, outside_surface, outside_x, outside_y, factory.force)
         and covers_port(inside, factory.inside_surface, factory.inside_x + cpos.inside_x, factory.inside_y + cpos.inside_y, factory.force)
 end
 
@@ -306,6 +401,13 @@ end
 -- Connection effects --
 
 factorissimo.on_nth_tick(CONNECTION_UPDATE_RATE, function(event)
+    if refresh_adjacency then
+        refresh_adjacency = false
+        for _, factory in pairs(storage.factories) do
+            if factory.built then recheck_factory_connections(factory, nil, nil, true) end
+        end
+        storage.adjacent_connections_version = 1
+    end
     -- First let's run all them delayed connection checks
     local checks = storage.delayed_connection_checks
     if checks[1] then
@@ -350,11 +452,11 @@ end
 local function rotate(factory, indicator)
     local conn, cid = find_connection_of_indicator(factory, indicator)
     if not conn then return end
-    local text, noop = c_rotate[conn._type](conn)
+    local text, noop = c_rotate[conn._type](conn, factory == conn._other_factory)
     factorissimo.create_flying_text {position = indicator.position, color = c_color[conn._type], text = text}
     if noop then return end
-    local setting, dir = c_direction[conn._type](conn)
-    set_connection_indicator(factory, cid, conn._type, setting, dir)
+    sync_pair_settings(conn)
+    update_connection_indicators(conn)
 end
 
 local function adjust(factory, indicator, positive)
@@ -363,8 +465,8 @@ local function adjust(factory, indicator, positive)
     local text, noop = c_adjust[conn._type](conn, positive)
     factorissimo.create_flying_text {position = indicator.position, color = c_color[conn._type], text = text}
     if noop then return end
-    local setting, dir = c_direction[conn._type](conn)
-    set_connection_indicator(factory, cid, conn._type, setting, dir)
+    sync_pair_settings(conn)
+    update_connection_indicators(conn)
 end
 
 local function selected_indicator(event)
