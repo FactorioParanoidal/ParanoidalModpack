@@ -2,6 +2,7 @@
 Version: 2.0.34
 Date: 24.02.2026
   Graphics:
+    - Paranoidal: replaced 2 PNGs with smaller user-recompressed Beta-7 files selected by the approved filename, folder and dimension report; resource paths and prototype code are unchanged.
     - Halved bio_garden_huge.png from 1792x1856 to 896x928, compensating sprite scale to preserve its world size; shadow and turbine layers are unchanged. Compressed the resized PNG with pingo -s4 -lossless -noalpha; visual and compression-result checks skipped at the user's request.
     - Paranoidal build: removed seven duplicate images already redirected to canonical files by zzzparanoidal's final graphics pass. Prototype and runtime code are unchanged; this trimmed copy targets the full modpack.
   Changes:

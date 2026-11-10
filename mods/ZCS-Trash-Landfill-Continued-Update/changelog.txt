@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.2.7
 Date: 26.08.2025
+  Graphics:
+    - Paranoidal: replaced 1 PNG with a smaller user-recompressed Beta-7 file selected by the approved filename, folder and dimension report; resource paths and prototype code are unchanged.
   Bugfixes:
     - Paranoidal local fork: each cycle destroys the next non-empty slot instead of losing the cycle on an empty slot.
     - Paranoidal local fork: pollution is attributed to the landfill in the production statistics (it was not counted there).

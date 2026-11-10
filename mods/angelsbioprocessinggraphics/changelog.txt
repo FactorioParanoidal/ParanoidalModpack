@@ -1,6 +1,7 @@
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.0
   Graphics:
+    - Paranoidal: replaced 14 PNGs with smaller user-recompressed Beta-7 files selected by the approved filename, folder and dimension report; resource paths and prototype code are unchanged.
     - Paranoidal: added accepted holed static bases, animation overlays and intact reference frames for fish and puffer refugia. Original geometry and source sheets are retained; lossless pingo output is adopted only per PNG saving more than 5% with identical RGBA. Final layer integration belongs to zzzparanoidal.
     - Paranoidal build: removed solid-tree.png, already redirected to tree.png by zzzparanoidal's final graphics pass. The canonical image is unchanged.
   Compatibility:

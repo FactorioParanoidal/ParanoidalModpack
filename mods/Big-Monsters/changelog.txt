@@ -1,5 +1,7 @@
 ---------------------------------------------------------------------------------------------------
 Version: 2.1.2
+  Graphics:
+    - Paranoidal: replaced 3 PNGs with smaller user-recompressed Beta-7 files selected by the approved filename, folder and dimension report; resource paths and prototype code are unchanged.
   Changes:
     - Paranoidal fork: the five levels of the giant fire and acid spitters, the three biterzillas and the mother biterzilla had one icon and one name, the enemy spidertrons the icon of the player's spidertron. The level is shown on the icon (mferrari_lib level-icon) and, for the giants, in the name, so the list of turret priority targets tells them apart.
     - Paranoidal fork: saves whose map was generated before the autoplace of the behemoth worm and the acid boss worm was removed lose these worms once (all surfaces); the worms of the events stay. The migration 2.1.2-paranoidal-autoplaced-worms only raises the configuration change, the worms are destroyed in on_configuration_changed.

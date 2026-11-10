@@ -2,6 +2,7 @@
 Version: 2.1.0
 Date: 01. 06. 2026
   Graphics:
+    - Paranoidal: replaced 6 PNGs with smaller user-recompressed Beta-7 files selected by the approved filename, folder and dimension report; resource paths and prototype code are unchanged.
     - Paranoidal build: removed 16 duplicate ore particle images already redirected to Angel's Refining Graphics by zzzparanoidal's final graphics pass. Prototype and runtime code are unchanged; this trimmed copy targets the full modpack.
   Changes:
     - Set item weights #553

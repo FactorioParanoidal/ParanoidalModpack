@@ -2,6 +2,7 @@
 Version: 2.3.5
 Date: 2026-06-01
   Graphics:
+    - Paranoidal: replaced 24 PNGs with smaller user-recompressed Beta-7 files selected by the approved filename, folder and dimension report; resource paths and prototype code are unchanged.
     - Paranoidal build: removed 72 originals already redirected to canonical images or pack artwork by zzzparanoidal's final graphics pass. Replacement files and settings-dependent alternatives are unchanged; this trimmed copy targets the full modpack.
     - Paranoidal: 23 superseded, exclusively replaced metal casting/smelting technology images are archived outside the build and removed. The final C2 cards are owned by zzzparanoidal; shared images (including cobalt casting) remain.
   Locale:

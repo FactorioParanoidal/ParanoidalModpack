@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 2.1.1
 Date: 06. 06. 2026
+  Graphics:
+    - Paranoidal: replaced 2 PNGs with smaller user-recompressed Beta-7 files selected by the approved filename, folder and dimension report; resource paths and prototype code are unchanged.
   Bugfixes:
     - Fixed Vehicle fission cell/reactor MK1 using Carbon (with Space Age, without Bob's MCI mod) #597
   Compatibility:
