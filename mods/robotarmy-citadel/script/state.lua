@@ -6,6 +6,7 @@
 --   surface              surface index (Nauvis)
 --   base                 centre of the player base (spawn position), set when the citadel is placed
 --   spawn_tick           earliest tick the citadel may appear (late start in a save past the threshold)
+--   forced               placed through the remote interface: stays on a peaceful map
 --   site                 search of the core chunk while siting
 --   modules              chunk key -> module {key, x, y, type, built, ruined, keys = {unit_number -> entity},
 --                        nkeys, hub, born}
