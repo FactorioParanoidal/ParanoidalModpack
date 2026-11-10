@@ -1,3 +1,6 @@
+-- Resources and Bio Industries tree copies are available after every mod's data stage.
+require("prototypes/habitats/data")
+
 for _, tree in pairs(data.raw.tree) do
   if string.find(tree.name, "rubber", 1, true) and tree.autoplace then
     tree.autoplace.tile_restriction = alien_biomes.list_tiles(

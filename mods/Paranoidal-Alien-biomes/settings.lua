@@ -95,3 +95,11 @@ data:extend({{
     allowed_values = allowed_values(),
     order = "t-z-b-shallows"
 }})
+
+data:extend({{
+    type = "bool-setting",
+    name = "ab-habitat-seasonal-sounds",
+    setting_type = "runtime-per-user",
+    default_value = true,
+    order = "z[habitats]-a[sounds]",
+}})

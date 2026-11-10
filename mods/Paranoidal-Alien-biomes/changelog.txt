@@ -1,6 +1,21 @@
 ---------------------------------------------------------------------------------------------------
 Version: 9.8.6
 Date: 08. 11. 2026
+  Features:
+    - Added additive natural habitats for new Nauvis maps: lowland root colonies with native night lights, mineral outcrops following the existing geology, and crater centres, rims and ejecta sharing deterministic spatial fields.
+    - Wetland trees share a restrained day/night ambient sound group, including Bio Industries copies. This prototype-level ambience also applies to existing trees on other surfaces and saves; existing custom sound assignments are preserved.
+    - Lowland ground cover now favours the lower wet edge, with understory and rare colonies gathering inside the same patch. Existing climate, terrain, trees, graphics and night brightness are unchanged; a low wet edge does not guarantee adjacent water.
+    - Inspectable colonies and rocks explain their natural context in EN/RU. Outcrops yield only stone, not ore; RSO resource weights and all existing terrain expressions are unchanged.
+    - Added sparse damp and dry botanical margins and broken surface-silt traces using existing decorative textures. These additive ground layers do not create rivers, water, trees or resources.
+    - Added an optional personal field notebook in the shortcut bar. Examine nearby colonies, outcrops or impact breccia without items, rewards, science or automatic exploration. Records are deduplicated by variety and 128-tile sector, capped at 128 per player and 512 globally, with deterministic least-recently-examined eviction.
+    - Examined sites retain bounded notes about nearby tree removal, removal of the examined anchor, and friendly production seen during an examination. Notes are historical observations, not a continuously updated ecological state. Removing a surface/player removes their site records; force changes do not share or erase a personal notebook.
+    - Rare, quiet personal seasonal sound accents near Nauvis root colonies read NightBrightness's existing season. A per-user switch disables them; no second calendar, brightness override, texture replacement or periodic map scan is introduced.
+  Compatibility:
+    - Crater rims, ejecta and mineral crusts use ground deposits rather than decorative-rock prototypes, preserving their spatial pattern with the build's fake-rock suppression. The global decorative density and construction cleanup still apply.
+    - Ground deposits use base-style tile-only water collision checks to avoid interference with other decorative objects. Physical outcrops retain ordinary entity collisions. Deterministic habitat fields do not promise identical final occupancy when terrain, neighbours or other mods differ between generation orders.
+    - Habitat autoplace is explicitly enabled in the Nauvis planet definition, disabled by default on other surfaces. Existing save map-generation settings are not rewritten; new habitats require a newly created map using the updated planet definition.
+    - No periodic runtime simulation, new texture files, forced regeneration or migrations. Notebook state is initialised compatibly; existing terrain and save map-generation settings are not rewritten. Seasonal probes are movement-driven, bounded to a local radius and throttled; clearing notes use engine-filtered events and a bounded spatial index.
+    - Economy reduces moving lights, not habitat locations. Disabled vegetation/geology settings suppress generation without removing habitat prototype names or invalidating saved colony graphics variations.
   Changes:
     - Renamed the mod to Paranoidal-Alien-biomes (Paranoidal Alien Biomes), version 9.8.6.
     - Updated internal asset paths, maintenance generators and pack integrations to the new mod ID.

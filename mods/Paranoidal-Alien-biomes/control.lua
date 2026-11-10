@@ -6,3 +6,4 @@ end
 -- Called when the starting cutscene ends or is skipped
 script.on_event(defines.events.on_cutscene_cancelled, print_vegetation_disabled_warning)
 require("scripts/reforged-geology")
+require("scripts/habitat-fieldbook")
