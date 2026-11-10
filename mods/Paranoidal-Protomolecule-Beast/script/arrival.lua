@@ -81,10 +81,12 @@ local function best_on(surface, force, away, best)
   end
 end
 
--- A map whose main surface was generated without enemy bases (enemy-base size "none", e.g. the preset "Paranoidal: no
--- enemies") is a peaceful map: nothing lands anywhere on it by itself (factory floors and other surfaces included).
+-- A map whose main surface is in peaceful mode (the map creation checkbox, a script or a command) or was generated
+-- without enemy bases (enemy-base size "none", e.g. the preset "Paranoidal: no enemies") is a peaceful map: nothing
+-- lands anywhere on it by itself (factory floors and other surfaces included).
 local function peaceful_map()
   local surface = game.surfaces["nauvis"] or game.get_surface(1)
+  if surface and surface.peaceful_mode then return true end
   local controls = surface and surface.map_gen_settings.autoplace_controls
   local enemy_base = controls and controls["enemy-base"]
   return enemy_base ~= nil and enemy_base.size == 0

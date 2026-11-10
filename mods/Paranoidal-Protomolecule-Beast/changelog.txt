@@ -27,7 +27,7 @@ Date: 2026-11-03
     - Research: 10 stages with a message for each. Assembling machines and furnaces, then turrets, fluids and roboports can be taken one stage at a time; it stops keeping out of fights; artillery fire (stage 4); the lure station (stage 7); armour up to 45%, faster healing, larger raids; from stage 8 infected poles pass it along their copper wires; spore shells (stage 10). Creature speed rises from 25% to 150% of their own pace.
     - Until it stops keeping out of fights, its creatures don't attack, don't drill and go home when badly hurt.
   Changes:
-    - Peaceful map: on a map whose Nauvis was generated without enemy bases (enemy-base size "none", e.g. the preset "Paranoidal: no enemies") the protomolecule never lands by itself; the /beast-arrive command and the remote call still work.
+    - Peaceful map: on a map whose Nauvis is in peaceful mode (the map creation checkbox, a script or a command) or was generated without enemy bases (enemy-base size "none", e.g. the preset "Paranoidal: no enemies") the protomolecule never lands by itself; the /beast-arrive command and the remote call still work.
     - Paranoidal fork for Factorio 2.0 (2.0.77): factorio_version 2.0, base >= 2.0.0, space-age as an ordered optional dependency.
     - The other end of an underground belt and what pipes are connected to are read from LuaEntity.neighbours, as underground_belt_neighbour and fluidbox_neighbours are 2.1 only.
     - Only the player force's buildings are infected, and only those placed from an item and selectable: hidden parts of other mods' buildings are skipped, not removed. Factorissimo factory buildings and their parts are never infected. Decided once per entity name.
