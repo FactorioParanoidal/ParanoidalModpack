@@ -1,11 +1,12 @@
 local events = require("scripts.events")
-require("milestones.gui_display_page")
+local display_page = require("milestones.gui_display_page")
 require("milestones.gui_settings_page")
 require("milestones.gui_import_export")
 
 local function get_frame(player_index, frame_name)
     local storage_player = storage.players[player_index]
-    if not storage_player[frame_name] or not storage_player[frame_name].valid then
+    if not storage_player or storage_player.gui_version ~= 1
+        or not storage_player[frame_name] or not storage_player[frame_name].valid then
         reinitialize_player(player_index)
     end
     return storage.players[player_index][frame_name]
@@ -113,7 +114,7 @@ end
 
 local function update_settings_button(player) -- In case permissions changed
     local main_frame = get_main_frame(player.index)
-    settings_button = main_frame.milestones_titlebar.milestones_settings_button
+    local settings_button = main_frame.milestones_titlebar.milestones_settings_button
 
     if player.admin then
         settings_button.enabled = true
@@ -131,8 +132,9 @@ local function update_settings_button(player) -- In case permissions changed
 end
 
 local function open_gui(player)
-    local storage_player = storage.players[player.index]
     local outer_frame = get_outer_frame(player.index)
+    local storage_player = storage.players[player.index]
+    storage_player.editing_milestone_id = nil
     build_display_page(player)
     update_settings_button(player)
     outer_frame.visible = true
@@ -148,6 +150,7 @@ end
 
 local function close_gui(player)
     local outer_frame = get_outer_frame(player.index)
+    storage.players[player.index].editing_milestone_id = nil
     outer_frame.visible = false
     outer_frame.auto_center = false -- Remove auto_center from the force_auto_center() that we did for the first open
     get_inner_frame(player.index).clear()
@@ -173,6 +176,9 @@ local function toggle_gui(player)
 end
 
 function refresh_gui_for_player(player)
+    if not player then return end
+    local state = storage.players[player.index]
+    if state and state.editing_milestone_id then return end
     if is_display_page_visible(player.index) then
         get_inner_frame(player.index).clear()
         build_display_page(player)
@@ -212,7 +218,7 @@ local function toggle_pinned(player, element)
 end
 
 events.on(defines.events.on_gui_closed, function(event)
-    if event.element and event.element.name == "milestones_main_frame" then
+    if event.element and event.element.valid and event.element.name == "milestones_main_frame" then
 
         local player = game.get_player(event.player_index)
         local storage_player = storage.players[event.player_index]
@@ -225,15 +231,19 @@ events.on(defines.events.on_gui_closed, function(event)
     end
 end)
 
-events.on(defines.events.on_player_display_resolution_changed, function(event)
+local function display_changed(event)
     local player = game.players[event.player_index]
     refresh_gui_for_player(player)
-end)
+    local outer = get_outer_frame(player.index)
+    local location = outer.location
+    if outer.visible and location and (location.x < 0 or location.y < 0
+        or location.x > player.display_resolution.width - 64 or location.y > player.display_resolution.height - 64) then
+        outer.force_auto_center()
+    end
+end
 
-events.on(defines.events.on_player_display_scale_changed, function(event)
-    local player = game.players[event.player_index]
-    refresh_gui_for_player(player)
-end)
+events.on(defines.events.on_player_display_resolution_changed, display_changed)
+events.on(defines.events.on_player_display_scale_changed, display_changed)
 
 -- Quickbar shortcut
 events.on(defines.events.on_lua_shortcut, function(event)
@@ -252,8 +262,9 @@ end)
 -- Override `E` on the settings page
 events.on("milestones_confirm_settings", function(event)
     if is_settings_page_visible(event.player_index) then
-        confirm_settings_page(event.player_index)
-        storage.players[event.player_index].one_time_prevent_close = true
+        if confirm_settings_page(event.player_index) then
+            storage.players[event.player_index].one_time_prevent_close = true
+        end
     end
 end)
 
@@ -266,8 +277,14 @@ events.on("milestones_cancel_settings", function(event)
 end)
 
 events.on(defines.events.on_gui_click, function(event)
-    if not event.element then return end
+    if not (event.element and event.element.valid) then return end
     if not event.element.tags then return end
+    local action = event.element.tags.action
+    local state = storage.players[event.player_index]
+    if type(action) == "string" and action:find("^milestones_") and (not state or state.gui_version ~= 1) then
+        reinitialize_player(event.player_index)
+        return
+    end
     if event.element.tags.action == "milestones_close_gui" then
         local player = game.get_player(event.player_index)
         close_gui(player)
@@ -276,6 +293,8 @@ events.on(defines.events.on_gui_click, function(event)
         toggle_pinned(player, event.element)
     elseif event.element.tags.action == "milestones_open_settings" then
         local player = game.get_player(event.player_index)
+        if not player.admin then player.print{"milestones.message_settings_permission_denied"}; return end
+        storage.players[player.index].editing_milestone_id = nil
         get_inner_frame(player.index).clear()
         build_settings_page(player)
     elseif event.element.tags.action == "milestones_cancel_settings" then
@@ -288,6 +307,8 @@ events.on(defines.events.on_gui_click, function(event)
         delete_selected_settings(event.player_index)
     elseif event.element.tags.action == "milestones_add_setting" then
         add_setting(event.player_index, event.element)
+    elseif event.element.tags.action == "milestones_display_page" then
+        display_page.change_display_page(event.player_index, event.element.tags.direction)
     elseif event.element.tags.action == "milestones_edit_time" then
         enable_edit_time(event.player_index, event.element)
     elseif event.element.tags.action == "milestones_confirm_edit_time" then
@@ -311,7 +332,7 @@ end)
 
 -- Textfield enter
 events.on(defines.events.on_gui_confirmed, function(event)
-    if not event.element then return end
+    if not (event.element and event.element.valid) then return end
     if not event.element.tags then return end
     if event.element.tags.action == "milestones_confirm_edit_time_textfield" then
         confirm_edit_time(event.player_index, event.element)
@@ -320,7 +341,7 @@ end)
 
 -- Checkboxes
 events.on(defines.events.on_gui_checked_state_changed, function(event)
-    if not event.element then return end
+    if not (event.element and event.element.valid) then return end
     if not event.element.tags then return end
     if event.element.name == "milestones_export_encoded_checkbox" then
         toggle_export_encoded(event.element)
@@ -329,7 +350,7 @@ end)
 
 -- Dropdowns
 events.on(defines.events.on_gui_selection_state_changed, function(event)
-    if not event.element then return end
+    if not (event.element and event.element.valid) then return end
     if not event.element.tags then return end
     if event.element.tags.action == "milestones_change_preset" then
         preset_dropdown_changed(event)

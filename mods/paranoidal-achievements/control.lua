@@ -10,6 +10,8 @@
 -- storage.mxlr (achievements, as before).
 
 local events = require("scripts.events")
+local identity = require("milestones.identity")
+local force_merge = require("milestones.force_merge")
 
 require("milestones.commands")
 require("milestones.remote_interface")
@@ -30,6 +32,7 @@ local function milestones_on_init()
     storage.delayed_chat_messages = {}
     storage.forces = {}
     storage.players = {}
+    storage.milestones_revision = 0
     storage.milestones_check_frequency_setting = settings.global["milestones_check_frequency"].value
 
     local initial_preset
@@ -116,11 +119,13 @@ events.on(defines.events.on_player_changed_force, function(event)
         initialize_player(player)
     end
     initialize_force_if_needed(player.force)
+    storage.players[player.index].editing_milestone_id = nil
+    storage.players[player.index].display_page = 1
     refresh_gui_for_player(player)
 end)
 
 events.on(defines.events.on_forces_merged, function(event)
-    clear_force(event.source_name)
+    force_merge.merge(event.source_name, event.destination)
 end)
 
 events.on(defines.events.on_player_created, function(event)
@@ -164,6 +169,14 @@ local function milestones_on_configuration_changed(event)
     end
     remove_invalid_milestones_all_forces()
     remove_invalid_aliases()
+    for _, storage_force in pairs(storage.forces) do identity.ensure(storage_force) end
+    for _, player in pairs(game.players) do
+        if storage.players[player.index] and storage.players[player.index].gui_version ~= 1 then
+            reinitialize_player(player.index)
+        else
+            refresh_gui_for_player(player)
+        end
+    end
     reset_milestones_tracker()
 end
 

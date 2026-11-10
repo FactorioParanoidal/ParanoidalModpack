@@ -1,4 +1,7 @@
 local table = require("__flib__.table")
+local schema = require("milestones.schema")
+local identity = require("milestones.identity")
+local COMPLETIONS_PER_PASS = 256
 
 -- Each production graph bracket, from highest to lowest
 -- Used in find_precision_bracket()
@@ -65,16 +68,14 @@ local DICTIONARY_KEYS = {
     kill_in = MULTIPLE_QUALITIES,
 }
 
-local function find_possible_existing_completion_time(storage_force, new_milestone)
-    for _, complete_milestone in pairs(storage_force.complete_milestones) do
-        if complete_milestone.type == new_milestone.type and
-           complete_milestone.name == new_milestone.name and
-           complete_milestone.quality == new_milestone.quality and
-           complete_milestone.quantity == new_milestone.quantity then
-            return complete_milestone.completion_tick, complete_milestone.lower_bound_tick
-        end
-    end
-    return nil, nil
+local function completion_key(milestone)
+    return string.format("%s\0%s\0%s\0%.17g", milestone.type, milestone.name,
+        milestone.quality or "", milestone.quantity)
+end
+
+local function find_possible_existing_completion_time(index, milestone)
+    local previous = index[completion_key(milestone)]
+    if previous then return previous.completion_tick, previous.lower_bound_tick, previous.id end
 end
 
 function merge_new_milestones(force_name, new_loaded_milestones)
@@ -82,6 +83,12 @@ function merge_new_milestones(force_name, new_loaded_milestones)
     local new_complete = {}
     local new_incomplete = {}
     local new_milestones_by_group = {}
+    local completion_index = {}
+    for _, milestone in ipairs(storage_force.complete_milestones) do
+        local key = completion_key(milestone)
+        local previous = completion_index[key]
+        if not previous or milestone.completion_tick < previous.completion_tick then completion_index[key] = milestone end
+    end
 
     local current_group = "Other"
     for i, new_loaded_milestone in pairs(new_loaded_milestones) do
@@ -90,12 +97,13 @@ function merge_new_milestones(force_name, new_loaded_milestones)
         elseif new_loaded_milestone.type ~= "alias" then
             local new_milestone = table.deep_copy(new_loaded_milestone)
             new_milestone.sort_index = i
+            new_milestone.sequence = 0
             new_milestone.group = current_group
             new_milestones_by_group[current_group] = new_milestones_by_group[current_group] or {}
 
             local next_milestone = new_milestone
             while next_milestone ~= nil do
-                local completion_tick, lower_bound_tick = find_possible_existing_completion_time(storage_force, next_milestone)
+                local completion_tick, lower_bound_tick, id = find_possible_existing_completion_time(completion_index, next_milestone)
                 if completion_tick == nil then
                     table.insert(new_incomplete, next_milestone)
                     -- Intentionally insert the same reference in both new_milestones_by_group and new_incomplete/new_incomplete
@@ -104,6 +112,7 @@ function merge_new_milestones(force_name, new_loaded_milestones)
                 else
                     next_milestone.completion_tick = completion_tick
                     next_milestone.lower_bound_tick = lower_bound_tick
+                    next_milestone.id = id
                     table.insert(new_complete, next_milestone)
                     table.insert(new_milestones_by_group[current_group], next_milestone)
                     if next_milestone.next then
@@ -119,6 +128,7 @@ function merge_new_milestones(force_name, new_loaded_milestones)
     storage_force.complete_milestones = new_complete
     storage_force.incomplete_milestones = new_incomplete
     storage_force.milestones_by_group = new_milestones_by_group
+    identity.ensure(storage_force)
     reset_milestones_tracker()
 end
 
@@ -126,7 +136,9 @@ function initialize_alias_table()
     -- First make a dict of milestone names to attach a type to aliases later
     local milestone_type_by_name = {}
     for _, loaded_milestone in pairs(storage.loaded_milestones) do
-        milestone_type_by_name[loaded_milestone.name] = loaded_milestone.type
+        if loaded_milestone.type ~= "group" and loaded_milestone.type ~= "alias" then
+            milestone_type_by_name[loaded_milestone.name] = loaded_milestone.type
+        end
     end
     storage.production_aliases = {}
     for _, loaded_milestone in pairs(storage.loaded_milestones) do
@@ -136,7 +148,7 @@ function initialize_alias_table()
             prototypes.entity[loaded_milestone.name] ~= nil
         ) then
             local alias_type = milestone_type_by_name[loaded_milestone.equals]
-            if alias_type then
+            if alias_type and alias_type ~= "technology" then
                 local alias_milestone = {type=alias_type, name=loaded_milestone.name, quantity=loaded_milestone.quantity, quality=loaded_milestone.quality}
                 -- Paranoidal: upstream had `{} or existing`, which kept only the last alias of each milestone.
                 storage.production_aliases[loaded_milestone.equals] = storage.production_aliases[loaded_milestone.equals] or {}
@@ -164,43 +176,33 @@ function mark_milestone_unreached(storage_force, milestone, milestone_index)
 end
 
 function parse_next_formula(next_formula)
-    if next_formula == nil or string.len(next_formula) < 2 then return nil, nil end
-    local operator = string.sub(next_formula, 1, 1)
-    local next_value = tonumber(string.sub(next_formula, 2))
-
-    if next_value == nil then return nil, nil end
-    if operator == '*' then operator = 'x' end
-
-    if operator == 'x' then
-        if next_value <= 1 then return nil, nil end
-    elseif operator == '+' then
-        if next_value <= 0 then return nil, nil end
-    else
-        return nil, nil
-    end
-
-    return operator, next_value
+    return schema.parse_next(next_formula)
 end
 
-function create_next_milestone(force_name, milestone)
-    local operator, next_value = parse_next_formula(milestone.next)
-    if operator == nil then
-        game.forces[force_name].print({"", {"milestones.message_invalid_next"}, milestone.next})
-        return
+function create_next_milestone(force_name, milestone, only_missing)
+    local quantity = schema.next_quantity(milestone.quantity, milestone.next)
+    if not quantity or milestone.type == "technology" and quantity % 1 ~= 0 then
+        local force = game.forces[force_name]
+        if force then force.print({"", {"milestones.message_invalid_next"}, tostring(milestone.next)}) end
+        return nil
     end
-
+    if only_missing then
+        local own = storage.forces[force_name]
+        for _, list in ipairs({own.complete_milestones, own.incomplete_milestones}) do
+            for _, existing in ipairs(list) do
+                if existing.type == milestone.type and existing.name == milestone.name
+                    and existing.quality == milestone.quality and existing.quantity == quantity then return nil end
+            end
+        end
+    end
     local new_milestone = table.deep_copy(milestone)
-    if operator == '+' then
-        new_milestone.quantity = milestone.quantity + next_value
-    elseif operator == 'x' then
-        new_milestone.quantity = milestone.quantity * next_value
-    end
-
+    new_milestone.quantity = quantity
     new_milestone.lower_bound_tick = nil
     new_milestone.completion_tick = nil
-    new_milestone.sort_index = milestone.sort_index + 0.0001 -- Should work until there's 10000 iterations of an infinite milestone, lol
+    new_milestone.sequence = (milestone.sequence or 0) + 1
     new_milestone.hidden = nil
-
+    new_milestone.id = nil
+    identity.assign(storage.forces[force_name], new_milestone)
     return new_milestone
 end
 
@@ -331,7 +333,7 @@ local function sum_flow_counts(sources, category_type, precision_index, sample_i
             precision_index=precision_index,
             sample_index=sample_index,
             count=true,
-        })
+        }) * (source[3] or 1)
     end
     return total_count
 end
@@ -407,8 +409,16 @@ local function get_realtime_tick_bounds(lower_bound_ticks_ago, upper_bound_ticks
     return lower_bound_ticks, upper_bound_ticks
 end
 
-local function find_production_tick_bounds(milestone, flow_statistics_table)
+local function find_production_tick_bounds(milestone, flow_statistics_table, storage_force)
     local sources, total_count = get_flow_sources(flow_statistics_table, milestone)
+    for _, alias in ipairs(storage_force and storage.production_aliases[milestone.name] or {}) do
+        local alias_sources, alias_count = get_flow_sources(get_flow_statistics_table(alias, storage_force), alias)
+        for _, source in ipairs(alias_sources) do
+            source[3] = alias.quantity
+            sources[#sources + 1] = source
+        end
+        total_count = total_count + alias_count * alias.quantity
+    end
     local precision_bracket, bracket_count = find_precision_bracket(milestone, sources, total_count)
     log("bracket to search: " ..precision_bracket)
 
@@ -425,21 +435,19 @@ local function find_production_tick_bounds(milestone, flow_statistics_table)
         lower_bound_ticks_ago, upper_bound_ticks_ago = get_tick_bounds_from_sample(precision_bracket, sample_index)
     end
 
-    lower_bound_real_time, upper_bound_real_time = get_realtime_tick_bounds(lower_bound_ticks_ago, upper_bound_ticks_ago, precision_bracket)
-
-    return lower_bound_real_time, upper_bound_real_time
+    local lower_bound_real_time, upper_bound_real_time = get_realtime_tick_bounds(lower_bound_ticks_ago, upper_bound_ticks_ago, precision_bracket)
+    return math.max(0, lower_bound_real_time), math.min(game.tick, upper_bound_real_time)
 end
 
--- TODO FIXME: This does not account for aliases at all!
-function find_completion_tick_bounds(milestone, item_stats, fluid_stats, kill_stats)
+function find_completion_tick_bounds(milestone, item_stats, fluid_stats, kill_stats, storage_force)
     if milestone.type == "technology" then
         return 0, game.tick -- No way to know past research time
     elseif milestone.type == "item" or milestone.type == "item_consumption" then
-        return find_production_tick_bounds(milestone, item_stats)
+        return find_production_tick_bounds(milestone, item_stats, storage_force)
     elseif milestone.type == "fluid" or milestone.type == "fluid_consumption" then
-        return find_production_tick_bounds(milestone, fluid_stats)
+        return find_production_tick_bounds(milestone, fluid_stats, storage_force)
     elseif milestone.type == "kill" then
-        return find_production_tick_bounds(milestone, kill_stats)
+        return find_production_tick_bounds(milestone, kill_stats, storage_force)
     end
 end
 
@@ -447,7 +455,11 @@ function sort_milestones(milestones)
     table.sort(milestones, function(a,b)
         if a.completion_tick and not b.completion_tick then return true end -- a comes first
         if not a.completion_tick and b.completion_tick then return false end -- b comes first
-        if a.completion_tick == b.completion_tick then return a.sort_index < b.sort_index end
+        if a.completion_tick == b.completion_tick then
+            if a.sort_index ~= b.sort_index then return a.sort_index < b.sort_index end
+            if (a.sequence or 0) ~= (b.sequence or 0) then return (a.sequence or 0) < (b.sequence or 0) end
+            return (a.id or 0) < (b.id or 0)
+        end
         return a.completion_tick < b.completion_tick
     end)
 end
@@ -561,17 +573,24 @@ function backfill_completion_times(force)
     local backfilled_anything = false
     local technologies = force.technologies
     local storage_force = storage.forces[force.name]
+    if not storage_force then return false end
+    identity.ensure(storage_force)
+    storage_force.backfill_pending = nil
     -- Paranoidal: one dictionary read per statistics object instead of names x qualities x surfaces calls.
     local totals = compute_flow_totals(storage_force)
 
-    local i = 1
+    local i, completed = 1, 0
     while i <= #storage_force.incomplete_milestones do
+        if completed >= COMPLETIONS_PER_PASS then
+            storage_force.backfill_pending = true
+            break
+        end
         local milestone = storage_force.incomplete_milestones[i]
         if is_valid_milestone(milestone) and is_milestone_reached(milestone, storage_force, technologies, totals) then
-            local lower_bound, upper_bound = find_completion_tick_bounds(milestone, storage_force.item_stats, storage_force.fluid_stats, storage_force.kill_stats)
+            local lower_bound, upper_bound = find_completion_tick_bounds(milestone, storage_force.item_stats, storage_force.fluid_stats, storage_force.kill_stats, storage_force)
             log("Tick bounds for " ..milestone.name.. " : " ..lower_bound.. " - " ..upper_bound)
             if milestone.next then
-                local next_milestone = create_next_milestone(force.name, milestone)
+                local next_milestone = create_next_milestone(force.name, milestone, true)
                 if next_milestone then
                     table.insert(storage_force.incomplete_milestones, next_milestone)
                     table.insert(storage_force.milestones_by_group[next_milestone.group], next_milestone)
@@ -579,6 +598,7 @@ function backfill_completion_times(force)
             end
             mark_milestone_reached(storage_force, milestone, upper_bound, i, lower_bound)
             backfilled_anything = true
+            completed = completed + 1
         else
             i = i + 1
         end
@@ -607,11 +627,12 @@ function is_production_milestone_reached(milestone, storage_force, totals)
 end
 
 function is_tech_milestone_reached(milestone, technology)
-    if milestone.type == "technology" and
+    if milestone.type == "technology" and technology ~= nil and
        technology.name == milestone.name and
-       -- strict > because the level we get is the current researchable level, not the researched level
-       -- if technology.level == technology.prototype.level then this is just a non-repeating tech with a number at the end e.g. 'Electronics 3'
-       (technology.researched or (technology.level > milestone.quantity and technology.level > technology.prototype.level)) then
+       -- An unresearched repeating technology exposes the next researchable level.
+       -- Subtract first so a legacy fractional threshold cannot complete one level early.
+       ((technology.researched and technology.level >= milestone.quantity)
+        or (technology.level - 1 >= milestone.quantity and technology.level > technology.prototype.level)) then
         return true
     end
     return false
@@ -682,6 +703,10 @@ function remove_invalid_aliases()
 end
 
 function is_valid_milestone(milestone)
+    if type(milestone) ~= "table" or type(milestone.name) ~= "string"
+        or not schema.finite(milestone.quantity) or milestone.quantity <= 0 then return false end
+    if milestone.quality and milestone.type ~= "item" and milestone.type ~= "item_consumption"
+        and milestone.type ~= "kill" then return false end
     local prototype = get_milestone_prototype(milestone)
     if prototype == nil then
         return false

@@ -205,7 +205,6 @@ data:extend{
   data_util.build_sprite("milestones_icon_kill_black", {48, 16}, item_icons, 16),
   data_util.build_sprite("milestones_icon_group", {64, 0}, item_icons, 16),
   data_util.build_sprite("milestones_icon_group_black", {64, 16}, item_icons, 16),
-  data_util.build_sprite("milestones_icon_group_black", {64, 16}, item_icons, 16),
 
   {
     type = "sprite",

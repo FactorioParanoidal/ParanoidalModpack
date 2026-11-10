@@ -9,21 +9,18 @@ function toggle_import_export_page(player_index, button_element, import)
     end
 end
 
-local function milestones_table_to_json(table)
-    local json = helpers.table_to_json(table)
-
-    -- Beautification
-    -- Example milestone line:
-    -- {"type":"item","name":"se-cargo-rocket-section","quantity":100},
-
-    json = json:gsub("%[{", "[\n  {")
-    json = json:gsub("},{", "},\n  {")
-    json = json:gsub(",\"", ", \"")
-    json = json:gsub("}]", "}\n]")
-    return json
+local function milestones_table_to_json(milestones)
+    -- Never rewrite serialised strings: group names may themselves contain JSON punctuation.
+    return helpers.table_to_json(milestones)
 end
 
 function build_import_export_page(player_index, button_element, import)
+    local exported
+    if not import then
+        local err
+        exported, err = validate_milestones(get_resulting_milestones_array(player_index))
+        if not exported then game.get_player(player_index).print(err); return end
+    end
     local titlebar_caption = import and {"milestones.settings_import_title"} or {"milestones.settings_export_title"}
 
     local outer_frame = get_outer_frame(player_index)
@@ -42,8 +39,10 @@ function build_import_export_page(player_index, button_element, import)
     end
     local scroll = inside_frame.add{type="scroll-pane", name="milestones_import_export_scroll"}
     local textbox = scroll.add{type="text-box", name="milestones_settings_import_export_textbox", style="milestones_import_export_textbox", horizontal_scroll_policy="dont-show-but-allow-scrolling"}
+    local player = game.get_player(player_index)
+    textbox.style.width = math.max(200, math.min(600, math.floor(player.display_resolution.width / player.display_scale * 0.45)))
     if not import then
-        textbox.text = milestones_table_to_json(get_resulting_milestones_array(player_index))
+        textbox.text = milestones_table_to_json(exported)
         textbox.read_only = true
     end
 
@@ -84,9 +83,12 @@ function close_import_export_page(player_index)
     inside_frame.clear()
     import_export_frame.visible = false
 
-    local button_flow = get_inner_frame(player_index).milestones_settings_outer_flow.milestones_preset_flow
-    button_flow.milestones_import_button.style = "tool_button"
-    button_flow.milestones_export_button.style = "tool_button"
+    local settings_flow = get_inner_frame(player_index).milestones_settings_outer_flow
+    if settings_flow then
+        local button_flow = settings_flow.milestones_preset_flow
+        button_flow.milestones_import_button.style = "tool_button"
+        button_flow.milestones_export_button.style = "tool_button"
+    end
 end
 
 function import_settings(player_index)
@@ -99,16 +101,11 @@ function import_settings(player_index)
     if string.len(import_string) == 0 then
         return
     end
-    local decoded_string = helpers.decode_string(import_string)
-    if decoded_string then import_string = decoded_string end
-
-    local imported_milestones, error = convert_and_validate_imported_json(import_string)
+    local imported_milestones, err = convert_and_validate_imported_json(import_string)
     if imported_milestones == nil then
-        game.players[player_index].print(error)
+        game.players[player_index].print(err)
     else
-        local settings_flow = storage.players[player_index].settings_flow
-        settings_flow.clear()
-        fill_settings_flow(settings_flow, imported_milestones)
+        switch_to_milestones_set(imported_milestones, player_index)
         local preset_dropdown = get_inner_frame(player_index).milestones_settings_outer_flow.milestones_preset_flow.milestones_preset_dropdown
         preset_dropdown.caption = {"milestones.settings_imported"}
         preset_dropdown.tags = {action="milestones_change_preset", imported=true} -- For some reason, can't just change a single tag

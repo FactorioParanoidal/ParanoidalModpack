@@ -60,12 +60,11 @@ local function add_milestone_setting(milestone, settings_flow, gui_index)
     local milestone_flow = settings_flow.add{type="flow", direction="horizontal", style="milestones_horizontal_flow_big_settings", index=gui_index}
     milestone_flow.add{type="sprite", sprite="milestones_icon_"..common_type, tooltip={"milestones.type_"..common_type}}
 
-    if milestone.hidden then
-        milestone_flow.tags = {hidden= true}
-    end
+    milestone_flow.tags = {hidden=milestone.hidden, tooltip=milestone.tooltip,
+        original_name=milestone.name, original_quality=milestone.quality}
 
     -- Note: This works even with the quality mod disabled
-    local default_selection_quality = milestone.quality or "normal" -- Default to "normal" because "any" isn't possible yet
+    local default_selection_quality = milestone.quality or "normal"
     if prototypes.quality[default_selection_quality] == nil then
         default_selection_quality = "normal"
     end
@@ -99,7 +98,14 @@ local function add_milestone_setting(milestone, settings_flow, gui_index)
             elem_filters={{filter="entity-with-health"}}}
     end
 
+    local tags = milestone_flow.tags
+    tags.missing_name = milestone.name ~= nil and prototype == nil
+    tags.missing_quality = milestone.quality ~= nil and prototypes.quality[milestone.quality] == nil
+    milestone_flow.tags = tags
     milestone_flow.add(elem_button)
+    milestone_flow.add{type="checkbox", name="milestones_settings_any_quality", state=milestone.quality == nil,
+        caption={"milestones.any_quality"}, tooltip={"milestones.any_quality_tooltip"},
+        visible=common_type == "item" or common_type == "kill", tags={action="milestones_quality_mode"}}
     local caption
     if milestone.name ~= nil and (prototype == nil or milestone.quality and prototypes.quality[milestone.quality] == nil) then
         caption = {"", "[color=red]", {"milestones.invalid_entry"}, " " .. milestone.name .. " " .. (milestone.quality or ""), "[/color]"}
@@ -141,7 +147,8 @@ end
 local function add_alias_setting(milestone, settings_flow, gui_index)
     local milestone_flow = settings_flow.add({type="flow", direction="horizontal", style="milestones_horizontal_flow_big_settings", index=gui_index})
     local caption = {"", {"milestones.settings_alias"}, ": ", milestone.name, " = ", milestone.quantity, "x ", milestone.equals}
-    milestone_flow.add({type="label", name="milestones_settings_alias_label", caption=caption, tags={name=milestone.name, equals=milestone.equals, quantity=milestone.quantity}})
+    milestone_flow.add({type="label", name="milestones_settings_alias_label", caption=caption, tags={name=milestone.name, equals=milestone.equals, quantity=milestone.quantity,
+        quality=milestone.quality, tooltip=milestone.tooltip, hidden=milestone.hidden}})
 
     milestone_flow.add({type="empty-widget", style="flib_horizontal_pusher"})
 
@@ -152,7 +159,9 @@ end
 
 local function add_settings_element_from_json_item(settings_element, settings_flow, gui_index)
     if settings_element.type == "group" then
-        return add_group(settings_flow, settings_element.name, gui_index)
+        local flow = add_group(settings_flow, settings_element.name, gui_index)
+        flow.tags = {tooltip=settings_element.tooltip, hidden=settings_element.hidden}
+        return flow
     elseif settings_element.type == "alias" then
         return add_alias_setting(settings_element, settings_flow, gui_index)
     else
@@ -181,37 +190,45 @@ local function get_milestones_array_element(flow, allow_empty, player_index)
     if not allow_empty
        and (flow.milestones_settings_item == nil or flow.milestones_settings_item.elem_value == nil)
        and (flow.milestones_settings_group_name == nil or flow.milestones_settings_group_name.text == nil)
-       and flow.milestones_settings_alias_label == nil then
+       and flow.milestones_settings_alias_label == nil
+       and not (flow.tags.missing_name and not flow.tags.selection_changed) then
         return nil
     end
     if flow.milestones_settings_group_name then
-        return {type="group", name=flow.milestones_settings_group_name.text}
+        return {type="group", name=flow.milestones_settings_group_name.text,
+            hidden=flow.tags.hidden, tooltip=flow.tags.tooltip}
     elseif flow.milestones_settings_alias_label then
-        return {type="alias", name=flow.milestones_settings_alias_label.tags.name, equals=flow.milestones_settings_alias_label.tags.equals, quantity=flow.milestones_settings_alias_label.tags.quantity}
+        local tags = flow.milestones_settings_alias_label.tags
+        return {type="alias", name=tags.name, equals=tags.equals, quantity=tags.quantity,
+            quality=tags.quality, tooltip=tags.tooltip, hidden=tags.hidden}
     end
 
-    local quantity = tonumber(flow.milestones_settings_quantity.text) or 1
+    local quantity = tonumber(flow.milestones_settings_quantity.text)
     local next_formula = flow.milestones_settings_next_textfield.text
     if not flow.milestones_settings_next_textfield.visible or next_formula == "" then next_formula = nil end
-    if next_formula ~= nil then
-        local operator, _ = parse_next_formula(next_formula)
-        if operator == nil then
-            game.players[player_index].print({"", {"milestones.message_invalid_next"}, next_formula})
-            next_formula = nil
-        end
-    end
 
     local hidden = flow.tags.hidden
     if not hidden or hidden == "" then hidden = nil end
 
-    local milestone_name
-    local quality
-    if flow.milestones_settings_item.elem_type == "item-with-quality" or flow.milestones_settings_item.elem_type == "entity-with-quality" then
-        milestone_name = flow.milestones_settings_item.elem_value.name
-        quality = flow.milestones_settings_item.elem_value.quality
-        if quality == "normal" then quality = nil end -- For now consider a "normal" selection to be an "any" selection. Until we can get a choose-elem-button that can select "any".
+    local selector = flow.milestones_settings_item
+    local selected = selector.elem_value
+    local milestone_name, quality
+    if selector.elem_type == "item-with-quality" or selector.elem_type == "entity-with-quality" then
+        milestone_name = selected and selected.name
+        local any_quality = flow.milestones_settings_any_quality
+        if any_quality and not any_quality.state then
+            quality = selected and selected.quality
+            if flow.tags.missing_quality and not flow.tags.selection_changed and not flow.tags.quality_changed then
+                quality = flow.tags.original_quality
+            elseif not selected and flow.tags.missing_name and not flow.tags.selection_changed then
+                quality = flow.tags.original_quality
+            end
+        end
     else
-        milestone_name = flow.milestones_settings_item.elem_value
+        milestone_name = selected
+    end
+    if not milestone_name and flow.tags.missing_name and not flow.tags.selection_changed then
+        milestone_name = flow.tags.original_name
     end
 
     return {
@@ -220,7 +237,8 @@ local function get_milestones_array_element(flow, allow_empty, player_index)
         quantity=quantity,
         quality=quality,
         next=next_formula,
-        hidden=hidden
+        hidden=hidden,
+        tooltip=flow.tags.tooltip
     }
 end
 
@@ -230,7 +248,7 @@ function get_resulting_milestones_array(player_index)
     for _, child in pairs(settings_flow.children) do
         if child.type == "flow" then
             local milestone = get_milestones_array_element(child, false, player_index)
-            table.insert(resulting_milestones, milestone)
+            if milestone then table.insert(resulting_milestones, milestone) end
         end
     end
     return resulting_milestones
@@ -290,6 +308,9 @@ function build_settings_page(player)
     local settings_flow = settings_scroll.add{type="frame", name="milestones_settings_inner_flow", direction="vertical", style="milestones_deep_frame_in_shallow_frame"}
     storage.players[player.index].settings_flow = settings_flow
     storage.players[player.index].settings_selection_indexes = {}
+    storage.players[player.index].settings_revision = storage.milestones_revision or 0
+    settings_scroll.style.maximal_height = math.max(120, math.floor(player.display_resolution.height / player.display_scale - 220))
+    settings_scroll.style.maximal_width = math.max(200, math.floor(player.display_resolution.width / player.display_scale - 80))
     fill_settings_flow(settings_flow, storage.loaded_milestones)
 
     local buttons_flow = settings_outer_flow.add{type="flow", name="milestones_button_flow", direction="horizontal"}
@@ -334,8 +355,8 @@ function select_setting(event)
             local last_selected
             for i, checked in pairs(storage_player.settings_selection_indexes) do
                 if checked then
-                    if not first_selected then first_selected = i end
-                    last_selected = i
+                    first_selected = math.min(first_selected or i, i)
+                    last_selected = math.max(last_selected or i, i)
                 end
             end
             if index < first_selected then
@@ -371,8 +392,8 @@ function swap_settings(player_index, event)
     end
     local settings_flow = storage.players[player_index].settings_flow
 
-    gui_index1 = event.element.parent.parent.get_index_in_parent()
-    gui_index2 = gui_index1 + index_delta
+    local gui_index1 = event.element.parent.parent.get_index_in_parent()
+    local gui_index2 = gui_index1 + index_delta
     gui_index1, gui_index2 = math.min(gui_index1, gui_index2), math.max(gui_index1, gui_index2) -- Now index1 is always the first element
     gui_index1 = math.max(gui_index1, 1) -- Don't go beyond first element
     gui_index2 = math.min(gui_index2, #settings_flow.children) -- Don't go beyond the last element
@@ -391,10 +412,12 @@ function delete_selected_settings(player_index)
     local storage_player = storage.players[player_index]
     local settings_flow = storage_player.settings_flow
     local inverted_indexes = {}
-    for gui_index, _ in pairs(storage_player.settings_selection_indexes) do
-        table.insert(inverted_indexes, 1, gui_index)
+    for gui_index in pairs(storage_player.settings_selection_indexes) do
+        local child = settings_flow.children[gui_index]
+        if child and child.type == "flow" then table.insert(inverted_indexes, gui_index) end
     end
-    for _, gui_index in pairs(inverted_indexes) do
+    table.sort(inverted_indexes, function(a, b) return a > b end)
+    for _, gui_index in ipairs(inverted_indexes) do
         settings_flow.children[gui_index].destroy()
         if #settings_flow.children > 0 then
             -- If this is the first element, we have to delete the line AFTER the element
@@ -493,7 +516,13 @@ function confirm_settings_page(player_index)
         return
     end
 
-    local new_loaded_milestones = get_resulting_milestones_array(player_index)
+    if not is_settings_page_visible(player_index) then return false end
+    if (storage.players[player_index].settings_revision or 0) ~= (storage.milestones_revision or 0) then
+        player.print{"milestones.message_settings_conflict"}
+        return false
+    end
+    local new_loaded_milestones, err = validate_milestones(get_resulting_milestones_array(player_index))
+    if not new_loaded_milestones then player.print(err); return false end
 
     if not table.deep_compare(storage.loaded_milestones, new_loaded_milestones) then -- If something changed
         local inner_frame = get_inner_frame(player_index)
@@ -505,19 +534,23 @@ function confirm_settings_page(player_index)
         end
 
         storage.loaded_milestones = table.deep_copy(new_loaded_milestones)
+        storage.milestones_revision = (storage.milestones_revision or 0) + 1
         initialize_alias_table()
+        remove_invalid_aliases()
 
         local backfilled_anything = false
         for force_name, force in pairs(game.forces) do
             local storage_force = storage.forces[force_name]
             if storage_force ~= nil then
                 merge_new_milestones(force_name, new_loaded_milestones)
-                backfilled_anything = backfill_completion_times(force)
+                remove_invalid_milestones_for_force(storage_force)
+                backfilled_anything = backfill_completion_times(force) or backfilled_anything
+                refresh_gui_for_force(force)
             end
         end
         local main_message = {"milestones.message_settings_changed"}
         if game.is_multiplayer() then
-            main_message = game.print({"milestones.message_settings_changed_multiplayer", player.name})
+            main_message = {"milestones.message_settings_changed_multiplayer", player.name}
         end
         local full_message = {"", main_message}
         if backfilled_anything then
@@ -528,19 +561,55 @@ function confirm_settings_page(player_index)
     end
 
     cancel_settings_page(player_index)
+    return true
 end
 
+local function refresh_setting_caption(flow)
+    local selector = flow.milestones_settings_item
+    local value = selector.elem_value
+    local prototype, quality
+    if value then
+        if selector.elem_type == "item-with-quality" or selector.elem_type == "entity-with-quality" then
+            prototype = (selector.elem_type == "item-with-quality" and prototypes.item or prototypes.entity)[value.name]
+            if flow.milestones_settings_any_quality and not flow.milestones_settings_any_quality.state then quality = value.quality end
+        else
+            prototype = (selector.elem_type == "fluid" and prototypes.fluid or prototypes.technology)[value]
+        end
+    end
+    local caption = prototype and prototype.localised_name or ""
+    if prototype and quality and prototypes.quality[quality] then
+        caption = {"", caption, " (", prototypes.quality[quality].localised_name, ")"}
+    end
+    flow.milestones_settings_label.caption = caption
+end
+
+events.on(defines.events.on_gui_checked_state_changed, function(event)
+    if event.element and event.element.valid and event.element.tags.action == "milestones_quality_mode" then
+        local tags = event.element.parent.tags
+        tags.quality_changed = true
+        event.element.parent.tags = tags
+        refresh_setting_caption(event.element.parent)
+    end
+end)
+
 events.on(defines.events.on_gui_elem_changed, function(event)
-    if not event.element then return end
+    if not (event.element and event.element.valid) then return end
     if not event.element.tags then return end
     if event.element.tags.action == "milestones_change_setting" then
+        if not storage.players[event.player_index] or storage.players[event.player_index].gui_version ~= 1 then
+            reinitialize_player(event.player_index)
+            return
+        end
+        local tags = event.element.parent.tags
+        tags.selection_changed = true
+        event.element.parent.tags = tags
         local prototype
         local quality
         if event.element.elem_value then
             if event.element.elem_type == "item-with-quality" then
                 prototype = prototypes.item[event.element.elem_value.name]
                 quality = event.element.elem_value.quality
-                if quality == "normal" then quality = nil end -- For now consider a "normal" selection to be an "any" selection. Until we can get a choose-elem-button that can select "any".
+                if quality ~= "normal" then event.element.parent.milestones_settings_any_quality.state = false end
             elseif event.element.elem_type == "fluid" then
                 prototype = prototypes.fluid[event.element.elem_value]
             elseif event.element.elem_type == "technology" then
@@ -553,27 +622,19 @@ events.on(defines.events.on_gui_elem_changed, function(event)
             elseif event.element.elem_type == "entity-with-quality" then
                 prototype = prototypes.entity[event.element.elem_value.name]
                 quality = event.element.elem_value.quality
-                if quality == "normal" then quality = nil end -- For now consider a "normal" selection to be an "any" selection. Until we can get a choose-elem-button that can select "any".
+                if quality ~= "normal" then event.element.parent.milestones_settings_any_quality.state = false end
             end
         end
-        local caption = ""
-        if prototype ~= nil then
-            if quality ~= nil then
-                caption = {"", prototype.localised_name, " (", {"quality-name."..quality}, ")"}
-            else
-                caption = prototype.localised_name
-            end
-        end
-        event.element.parent.milestones_settings_label.caption = caption
+        refresh_setting_caption(event.element.parent)
     end
 end)
 
 -- Replaces 0s with 1s in quantity settings
 events.on(defines.events.on_gui_text_changed, function(event)
-    if not event.element then return end
+    if not (event.element and event.element.valid) then return end
     if not event.element.tags then return end
     if event.element.tags.action == "milestones_change_setting_quantity" then
-        local new_quantity = tonumber(event.text)
+        local new_quantity = tonumber(event.element.text)
         if new_quantity ~= nil and new_quantity < 1 then
             event.element.text = "1"
         end
