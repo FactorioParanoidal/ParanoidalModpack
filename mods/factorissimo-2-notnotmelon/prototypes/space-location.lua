@@ -80,6 +80,9 @@ end
 
 local function update_surface_render_parameters(planet, factory_floor)
     if not feature_flags.expansion_shaders then return end
+    -- Paranoidal (Space Age branch): Space Age hidden from this mod (paranoidal-space-age-filter) - the home factory
+    -- floor keeps the look of Nauvis as without Space Age; the floors of the planets get the fog.
+    if planet.name == "nauvis" and not mods["space-age"] then return end
 
     local color1, color2 = fog_color(planet.name)
 

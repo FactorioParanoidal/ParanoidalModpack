@@ -7,6 +7,9 @@ data:extend {{
 }}
 
 if not feature_flags.space_travel then return end
+-- Paranoidal (Space Age branch): Space Age hidden from this mod (paranoidal-space-age-filter) - no ceiling surface
+-- conditions, as without Space Age; script/indoor-restrictions.lua keeps these buildings out of factories.
+if not mods["space-age"] then return end
 
 local banned_from_being_placed_indoors = {
     "artillery-turret",

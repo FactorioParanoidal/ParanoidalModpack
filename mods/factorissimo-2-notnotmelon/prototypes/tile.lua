@@ -277,7 +277,9 @@ make_tile {
     localised_name = {"tile-name.factory-floor"},
 }
 
-if feature_flags.expansion_shaders then
+-- Paranoidal (Space Age branch): no space look of out-of-map while Space Age is hidden from this mod
+-- (paranoidal-space-age-filter), as without Space Age.
+if feature_flags.expansion_shaders and mods["space-age"] then
     data:extend {{
         type = "tile-effect",
         name = "factorissimo-out-of-map",
