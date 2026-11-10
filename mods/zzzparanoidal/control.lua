@@ -16,6 +16,8 @@ local turret_priority_groups = require("controls.turret-priority-groups")
 turret_priority_groups.install() -- Панель «Приоритет по группам» у окна турели (ПР-072).
 local flamethrower_fuels = require("features.flamethrower-fuels.control")
 require("controls.turret-rotate").install() -- R / Shift+R поворачивают стоящую турель с сектором обстрела.
+local rocket_victory = require("controls.rocket-victory")
+rocket_victory.install() -- Победа за первую ракету со своим текстом (без SpaceX).
 -- Install after loader-shells chains the SpilledItems handler; neither consumer
 -- handles these inventory/grid-less types. Keep every other type, including modded containers.
 if script.get_event_handler(defines.events.on_entity_died) then
@@ -118,6 +120,7 @@ script.on_init(function() --наш любимый init, запрещаем дв�
 	turret_deploy.sync()
 	flamethrower_fuels.sync()
 	automatic_cursed_fmd.sync()
+	rocket_victory.sync()
 end)
 
 script.on_load(function() --без дропа эволюции потому что game недоступен
@@ -147,6 +150,7 @@ script.on_configuration_changed(function() --фикс эволюции при з
 	turret_priority_groups.on_configuration_changed()
 	flamethrower_fuels.sync()
 	automatic_cursed_fmd.sync()
+	rocket_victory.sync()
 end)
 
 script.on_event(defines.events.on_player_joined_game, disable_obsolete_basic_logistics)

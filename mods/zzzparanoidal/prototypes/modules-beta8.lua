@@ -29,9 +29,25 @@ for _, entry in ipairs(integration.beacons) do
     for field, value in pairs(entry.fields) do beacon[field] = table.deepcopy(value) end
 end
 
+-- SpaceX ship research and components exist only with SpaceX (the build is without it since 2026-11-10).
+local spacex_only = {}
+if not mods["SpaceModFeorasFork"] then
+    for _, name in ipairs({
+        "ftl-propulsion", "space-assembly", "spaceship-command", "assembly-robot", "astrometrics", "command",
+        "ftl-drive", "life-support", "protection-field-goopless", "space-thruster",
+    }) do spacex_only[name] = true end
+end
+local function present(entries)
+    local result = {}
+    for _, entry in ipairs(entries) do
+        if not spacex_only[entry.name] then result[#result + 1] = entry end
+    end
+    return result
+end
+
 local module_technologies = {}
 for _, name in ipairs(integration.module_technologies) do module_technologies[name] = true end
-for _, entry in ipairs(integration.downstream) do
+for _, entry in ipairs(present(integration.downstream)) do
     local technology = assert(data.raw.technology[entry.name])
     local prerequisites = {}
     for _, name in ipairs(technology.prerequisites or {}) do
@@ -52,7 +68,7 @@ for name, module in pairs(data.raw.module) do
 end
 
 -- Replace only module inputs here; unrelated current material costs are untouched.
-for _, entry in ipairs(integration.consumers) do
+for _, entry in ipairs(present(integration.consumers)) do
     local recipe = assert(data.raw.recipe[entry.name], "Missing module consumer: " .. entry.name)
     local ingredients = {}
     for _, ingredient in ipairs(recipe.ingredients or {}) do

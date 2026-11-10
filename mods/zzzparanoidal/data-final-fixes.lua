@@ -173,6 +173,7 @@ require("tweaks.technology.spacemod-components-beta8")
 require("tweaks.recipe.spacemod-god-module-beta8")
 require("tweaks.recipe.spacemod-components-beta8")
 require("removals.spacemod-beta8")
+require("removals.erp-without-spacex") -- без SpaceX: от ERP остаются шаттлы, капсулы и фабрикатор
 require("tweaks.technology.science-foundation-beta8")
 require("tweaks.recipe.science-foundation-beta8")
 require("tweaks.technology.electronics-science-beta8")
