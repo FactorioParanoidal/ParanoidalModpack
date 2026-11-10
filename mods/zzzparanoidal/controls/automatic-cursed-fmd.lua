@@ -129,7 +129,11 @@ local function choose(record)
     local area = entity.mining_area -- includes direction, offset and quality
     local old = resources[record.resource]
     if old and ((record.fluid and old.fluid == record.fluid) or (not record.fluid and not old.fluid))
-        and usable(record, record.resource, area) then return record.resource end
+        and usable(record, record.resource, area) then record.waits = nil; return record.resource end
+    -- Still waiting (below) on the same ore under the drill, with the same or no fluid.
+    if record.waits ~= nil and record.waits == (record.fluid or false) and usable(record, record.resource, area) then
+        return record.resource
+    end
 
     local list = choices[entity.name]
     local allowed = {}
@@ -143,11 +147,24 @@ local function choose(record)
     -- searching the full mining area every cycle. The sort is deterministic in MP.
     for _, name in ipairs(allowed) do
         local found = entity.surface.find_entities_filtered({area = area, type = "resource", name = name, limit = 1})[1]
-        if found then record.resource, record.witness = name, found; return name end
+        if found then record.resource, record.witness, record.waits = name, found, nil; return name end
     end
-    record.witness = nil
-    -- No fluid yet: wait on a wet ore rather than admitting every resource. A real
-    -- supply, including one initially rejected by this filter, is detected above.
+    -- Nothing to mine with this fluid, or no fluid yet and no dry ore: wait on a wet ore that lies
+    -- under the drill rather than admitting every resource. Without its own fluid it is not mined,
+    -- and the filter shows the player the real ore and the fluid it needs. Name order, as above.
+    for _, name in ipairs(list.wet) do
+        if resources[name].fluid ~= record.fluid then -- ores of the known fluid were searched above
+            local found = entity.surface.find_entities_filtered({area = area, type = "resource", name = name, limit = 1})[1]
+            if found then
+                record.resource, record.witness, record.waits = name, found, record.fluid or false
+                return name
+            end
+        end
+    end
+    record.witness, record.waits = nil, nil
+    -- No wet ore under the drill either (exhausted, or only dry ore with a known fluid): any real
+    -- wet resource still blocks mining. A real supply, including one initially rejected by this
+    -- filter, is detected above.
     local waiting = list.wet[1]
     for _, name in ipairs(list.wet) do
         if resources[name].fluid == record.fluid then waiting = name; break end
@@ -195,6 +212,8 @@ local function add(entity)
         local slot = id % PERIOD
         s.buckets[slot] = s.buckets[slot] or {}
         s.buckets[slot][id] = true
+    else
+        record.waits = nil -- a rotation, flush or paste re-examines the whole mining area
     end
     local area, p = entity.mining_area, entity.position
     s.max_reach = math.max(s.max_reach or 0, math.abs(area.left_top.x - p.x), math.abs(area.left_top.y - p.y),
