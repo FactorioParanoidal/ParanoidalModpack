@@ -93,4 +93,3 @@ stick.icon = "__angelssmeltinggraphics__/graphics/icons/rod-iron.png"
 stick.icon_size = 32
 stick.subgroup = "angels-iron-casting"
 stick.order = "m"
-stick.stack_size = 200

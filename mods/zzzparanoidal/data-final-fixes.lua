@@ -7,7 +7,6 @@ require("tweaks.entity.construction-robots")
 require("tweaks.entity.logistic-robots") -- скорость транспортных дронов как с Robot Attrition
 require("tweaks.entity.unminable-robots") -- роботов нельзя снять рукой (Beta 8 UnminableBots)
 require("tweaks.entity.alien-loot")
-require("tweaks.entity.increase-stack-size")
 require("tweaks.entity.warfare")
 require("tweaks.entity.pipes")
 require("tweaks.entity.beacons") -- по маякам можно ходить
@@ -255,8 +254,9 @@ require("tweaks.entity.ore-sorting-bootstrap")
 require("tweaks.recipe.frame-metallurgy-beta8")
 require("tweaks.technology.frame-metallurgy-beta8")
 
-require("tweaks.custom.restack-port") -- ReStack (Optera, 1.1) порт: размеры пачек по категориям
-require("tweaks.item.stack-sizes") -- Согласованные размеры пачек отдельных предметов, после ReStack.
+-- Capture category membership here, before later recipe/prototype replacements; do not change stacks.
+require("__paranoidal-stack-sizes__/selection").capture(data.raw)
+require("tweaks.custom.barrel-port") -- Capacity, recipes and fuel only; stack sizes are finalized by the service mod.
 -- Модульный порт ниже уже содержит итоговые партии Beta 8.
 require("prototypes.modules-beta8")
 -- После восстановления модульных рецептов, масштабирования партий и OV.execute.

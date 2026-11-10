@@ -30,7 +30,7 @@ end
 angelsmods.industries.return_ingredients = angelsmods.industries.components
     and settings.startup["angels-return-ingredients"].value
   or false
-angelsmods.industries.block_stack_size = settings.startup["angels-components-stack-size"].value
+angelsmods.industries.block_stack_size = require("__paranoidal-stack-sizes__/config").initial_size("components", settings.startup)
 
 angelsmods.industries.component_result_multiplier = 1
 angelsmods.industries.component_crafting_time_multiplier = 1

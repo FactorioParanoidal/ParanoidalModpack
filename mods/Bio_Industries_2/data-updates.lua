@@ -590,7 +590,6 @@ if data.raw.item["tree-seed"] then
 	--data.raw.item["bi-seed"] = nil -- We can remove BI's seed, since it won't be used.
 	data.raw.item["bi-seed"].plant_result = "tree-plant"
 	data.raw.item["bi-seed"].place_result = "tree-plant"
-	data.raw.item["tree-seed"].stack_size = 200  -- Update tree seed stack size
 	   
 	thxbob.lib.recipe.remove_result("bi-seed-1", "bi-seed")
 	thxbob.lib.recipe.add_result("bi-seed-1", {

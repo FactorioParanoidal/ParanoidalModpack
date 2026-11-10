@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 2.1.1
 Date: 04. 06. 2026
+  Changes:
+    - Paranoidal: resource, plate, processing-unit and nuclear-fuel stack-size overrides moved to paranoidal-stack-sizes; weights and fuel properties are unchanged.
   Graphics:
     - Paranoidal build: removed five duplicate images already redirected to canonical files by zzzparanoidal's final graphics pass. Prototype and runtime code are unchanged; this trimmed copy targets the full modpack.
   Bugfixes:

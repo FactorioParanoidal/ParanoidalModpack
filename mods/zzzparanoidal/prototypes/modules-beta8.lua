@@ -3,7 +3,11 @@
 local prototypes = require("prototypes.modules-beta8.data")
 local integration = require("prototypes.modules-beta8.integration")
 
+local stack_sizes = require("__paranoidal-stack-sizes__/config").module_items
 for _, prototype in ipairs(prototypes) do
+    if defines.prototypes.item[prototype.type] then
+        prototype.stack_size = assert(stack_sizes[prototype.name], "Missing module stack size: " .. prototype.name)
+    end
     -- Module research consumes actual tools. Bob 2.0 defines these as items.
     if prototype.type == "tool" then
         data.raw.item[prototype.name] = nil

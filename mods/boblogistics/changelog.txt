@@ -4,6 +4,7 @@ Date: 01. 06. 2026
   Graphics:
     - Paranoidal build: removed four duplicate ceramic pipe images already redirected to canonical files by zzzparanoidal's final graphics pass. Prototype and runtime code are unchanged; settings-dependent original graphics remain available in the modpack.
   Changes:
+    - Paranoidal: train and roboport stack-size overrides moved to paranoidal-stack-sizes; the train startup setting, weights and other item properties are unchanged.
     - Updated Korean locale #524
   Bugfixes:
     - Fixed crash when Space Age mod is enabled and Bob's MCI mod is not enabled #593

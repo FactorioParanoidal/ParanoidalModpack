@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 2.1.2
 Date: 09. 06. 2026
+  Changes:
+    - Paranoidal: vanilla resource stack-size overrides moved to paranoidal-stack-sizes; resource generation and weights are unchanged.
   Bugfixes:
     - Fixed tungsten ore localization #598
   Compatibility:

@@ -244,7 +244,6 @@ end
 
 data.raw.item["nuclear-fuel"].fuel_acceleration_multiplier = 2
 data.raw.item["nuclear-fuel"].fuel_top_speed_multiplier = 1.25
-data.raw.item["nuclear-fuel"].stack_size = 2
 data.raw.item["nuclear-fuel"].fuel_emissions_multiplier = 5
 data.raw.item["nuclear-fuel"].fuel_glow_color = { r = 0.5, g = 1, b = 0.5 }
 
@@ -330,15 +329,6 @@ data.raw.item["coal"].fuel_emissions_multiplier = 2
 data.raw.item["solid-fuel"].fuel_emissions_multiplier = 0.8
 data.raw.item["rocket-fuel"].fuel_emissions_multiplier = 1.2
 data.raw.item["nuclear-fuel"].fuel_emissions_multiplier = 5
-
--- Stack Sizes
-data.raw.item["iron-plate"].stack_size = 200
-data.raw.item["copper-plate"].stack_size = 200
-data.raw.item["steel-plate"].stack_size = 200
-data.raw.item["coal"].stack_size = 200
-data.raw.item["uranium-ore"].stack_size = 200
-data.raw.item["sulfur"].stack_size = 200
-data.raw.item["wood"].stack_size = 200
 
 -- Weight changes
 data.raw.item["iron-plate"].weight = 1000

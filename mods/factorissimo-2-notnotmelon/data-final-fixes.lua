@@ -1,4 +1,3 @@
-require "compat.efficient-smelting"
 require "prototypes.quality-tooltips"
 
 -- Paranoidal: factories are immune to quality and defects. Their recipes never make quality buildings
@@ -10,8 +9,6 @@ end
 require "compat.gregtorio"
 require "prototypes.hull-icons"
 require "prototypes.architecture-4-final"
-
-data.raw.item["factory-hidden-construction-robot"].stack_size = 1000
 
 -- Auto-rebalance the roboport upgrade tech such that it costs the same packs as the construction-robotics tech.
 local construction_robotics = data.raw.technology["construction-robotics"]

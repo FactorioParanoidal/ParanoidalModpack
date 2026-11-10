@@ -3,14 +3,6 @@ local OV = angelsmods.functions.OV
 --PREPARATIONS
 
 --OVERRIDE FOR BASE
-angelsmods.functions.override_item_conditions({
-  value = 200,
-  list = {
-    "coal",
-    "uranium-ore",
-  },
-})
-
 angelsmods.functions.move_item("uranium-ore", "angels-ores", "h[uranium-ore]")
 
 if angelsmods.smelting then

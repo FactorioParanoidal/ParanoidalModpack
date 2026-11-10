@@ -31,9 +31,6 @@ for name, spec in pairs(C.ARMORS) do
 		set_resistance(armor, C.RESIST_TYPE, spec.filtration)
 		armor.infinite = false
 		armor.durability = spec.durability
-		if spec.stack_size then
-			armor.stack_size = spec.stack_size
-		end
 		applied[#applied + 1] = name .. " " .. spec.filtration .. "%/" .. spec.durability
 	end
 end

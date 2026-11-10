@@ -354,14 +354,6 @@ paralib.bobmods.lib.recipe.set_ingredients("combat-shotgun", {
 data.raw.recipe["combat-shotgun"].energy_required = 8
 
 
--- Stack-size buffs (1.1: prototypes/item.lua)
-
-data.raw.item["bob-basic-electronic-components"].stack_size = 400
-data.raw.item["iron-plate"].stack_size = 400
-data.raw.item["copper-plate"].stack_size = 400
-data.raw.item["copper-cable"].stack_size = 400
-
-
 -- electronic-circuit-wood: replaces the hidden electronic-circuit (stone-tablet path).
 -- Icon dropped to single-layer; recipe order matches the electronic-circuit item so
 -- bob-basic-circuit-board sorts to the left of it.

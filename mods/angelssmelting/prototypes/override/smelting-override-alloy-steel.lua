@@ -115,12 +115,6 @@ if angelsmods.trigger.smelting_products["steel"].plate then
   OV.global_replace_item("angels-plate-steel", "steel-plate")
   angelsmods.functions.hide("angels-plate-steel")
   angelsmods.functions.move_item("steel-plate", "angels-steel-casting", "l")
-  angelsmods.functions.override_item_conditions({
-    value = 200,
-    list = {
-      "steel-plate",
-    },
-  })
   data.raw["item"]["steel-plate"].icon = "__angelssmeltinggraphics__/graphics/icons/plate-steel.png"
   data.raw["item"]["steel-plate"].icon_size = 32
   OV.global_replace_icon(

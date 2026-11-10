@@ -23,6 +23,7 @@ Date: 2026-10-29
     - Tips and tricks of the mod (moved from zzzparanoidal) with the real numbers. Command /toxic (status, kills) answers only the caller. Remote interface toxic_pollution.
     - Death from smog is announced to the force; no killer entity and no extra force any more.
   Changes:
+    - Light/heavy armor stack-size rules moved to paranoidal-stack-sizes; filtration, durability and runtime behavior are unchanged.
     - Armor toxin resistance: Bob's power armor MK3/MK4/MK5 75/80/85 % (were 30/40/50, below MK2); Yuoki armor derives from it. Hazmat suit 85 % with 3000 resource (had 15 durability). Every armor without durability gets 10000 (creative armors stay infinite and never wear). Armor durability is shown as "Smog protection resource".
     - Pollution sensor: the signal "Pollution sensor" in a constant combinator. Only slots that hold the signal are written, only in manual sections, unchanged values are not rewritten; a combinator without the signal is forgotten (the old mod kept overwriting a slot the player had changed).
   Graphics:

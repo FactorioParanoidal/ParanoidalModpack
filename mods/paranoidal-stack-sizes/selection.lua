@@ -1,26 +1,12 @@
--- Порт ReStack (Optera, 1.1-only) в zzz: увеличенные размеры пачек по категориям.
--- Логика идёт по entity-категориям (покрывает предметы всех модов автоматически),
--- значения — из фактического 1.1 mod-settings. SA-аналог TLib_ReStack требует
--- space-age/quality — несовместим с нашей сборкой, поэтому переносим алгоритм сюда.
-
--- Значения пачек (из 1.1 mod-settings.dat). 0 = не трогать.
-local RS = {
-  ores = 200, plates = 400, ["rocket-parts"] = 10, ["science-pack"] = 200,
-  ["fuel-category-nuclear"] = 5, uranium = 100, wood = 200, ["solid-fuel"] = 100,
-  ["nuclear-fuel"] = 10, tiles = 500,
-  belt = 100, pipe = 100, container = 0, inserter = 50, ["electric-pole"] = 50,
-  roboport = 20, robot = 0, rail = 200, ["rail-signal"] = 0, ["train-stop"] = 0,
-  ["train-carriage"] = 0, car = 0, combinator = 50, wire = 400,
-  reactor = 10, ["crafting-machine"] = 20, furnace = 20, beacon = 20,
-  ["mining-drill"] = 20, boiler = 20, generator = 20, modules = 0,
-  wall = 0, turret = 0,
-  ["ammo-bullet"] = 200, ["ammo-shotgun"] = 200, ["ammo-flamethrower"] = 100,
-  ["ammo-rocket"] = 200, ["ammo-cannon"] = 200, ["ammo-artillery"] = 10,
-  ["barrel-stack"] = 5, ["barrel-fill"] = 100,
-}
-
+-- Pure category snapshot at the historical ReStack boundary. No prototype writes.
+local C = require("__paranoidal-stack-sizes__/config")
+local M = {}
+local snapshot
+function M.capture(raw)
+    assert(not snapshot, "Stack sizes: category snapshot captured twice")
+    local data = {raw = raw}
+    local RS = C.categories
 local ReStack_Items = {}
-local Launch_Products = {}
 local Tile_Whitelist = { ["stone-brick"] = true }
 
 -- lib (Optera), адаптировано под 2.0: recipe.normal/expensive убраны.
@@ -177,120 +163,47 @@ set_by_ammo_category("rocket", RS["ammo-rocket"])
 set_by_ammo_category("cannon-shell", RS["ammo-cannon"])
 set_by_ammo_category("artillery-shell", RS["ammo-artillery"])
 
--- BARREL (stack + ёмкость + fuel_value). Меняет fill/empty рецепты.
-local barrel_stack = RS["barrel-stack"]
-local barrel_cap = RS["barrel-fill"]
-local empty_barrels = {
-  ["barrel"] = true,              -- base 2.0 (жидкости)
-  ["bob-gas-canister"] = true,    -- Bob's (газы)
-  ["bob-empty-canister"] = true,  -- Bob's (газы)
-}
-local energy_per_recipe, mult = 2, 10
-if barrel_cap <= 500 then mult = math.ceil(500 / barrel_cap) else energy_per_recipe = math.floor(barrel_cap / 250) end
 
-if barrel_stack > 0 then
-  for k in pairs(empty_barrels) do
-    if data.raw.item[k] then data.raw.item[k].stack_size = barrel_stack end
-  end
-end
-
-local ENERGY_UNITS = { J = 1, kJ = 1e3, MJ = 1e6, GJ = 1e9, TJ = 1e12, PJ = 1e15 }
-local function energy_to_j(s)
-  local n, u = tostring(s):match("([%d%.]+)%s*([kMGTP]?J)")
-  return n and tonumber(n) * (ENERGY_UNITS[u] or 1) or nil
-end
-
--- Recipe-driven: в 2.0 имя бочки != имени жидкости (angels-gas-ammonia -> ammonia-barrel),
--- поэтому наполнение/опустошение определяем по структуре рецепта, а не по имени.
--- Нормализация ингредиентов/результатов: long-form ({name=,amount=,type=}) и short-form ({name, count}).
-local function rn(x) return x.name or x[1] end
-local function ra(x) return x.amount or x[2] or 1 end
-local function ra_set(x, v) if x.name then x.amount = v else x[2] = v end end
-local function is_filled_barrel(name)
-  return name and tostring(name):match("%-barrel$") and not empty_barrels[name]
-end
-
-for _, r in pairs(data.raw.recipe) do
-  if barrel_cap > 0 and r.ingredients and r.results then
-    local in_c, in_f, in_b, out_c, out_f, out_b
-    for _, ing in pairs(r.ingredients) do
-      local nm = rn(ing)
-      if empty_barrels[nm] then in_c = ing
-      elseif ing.type == "fluid" then in_f = ing
-      elseif is_filled_barrel(nm) then in_b = ing end
-    end
-    for _, res in pairs(r.results) do
-      local nm = rn(res)
-      if empty_barrels[nm] then out_c = res
-      elseif res.type == "fluid" then out_f = res
-      elseif is_filled_barrel(nm) then out_b = res end
-    end
-
-    if in_c and in_f and out_b then          -- НАПОЛНЕНИЕ: контейнер + жидкость -> бочка
-      r.energy_required = energy_per_recipe
-      ra_set(in_c, ra(in_c) * mult)
-      ra_set(in_f, barrel_cap * mult)
-      ra_set(out_b, ra(out_b) * mult)
-      local bi = data.raw.item[rn(out_b)]
-      if bi then
-        if barrel_stack > 0 then bi.stack_size = barrel_stack end
-        local fl = data.raw.fluid[rn(in_f)]
-        if fl and fl.fuel_value then
-          local ev = energy_to_j(fl.fuel_value)
-          if ev and ev > 0 then
-            bi.fuel_categories = bi.fuel_categories or {"chemical"} -- Factorio 2.1
-            bi.fuel_value = (ev * ra(in_f) / ra(out_b)) .. "J"
-          end
+    -- Filled barrel detection uses the same recipe shapes as the barrel conversion pass.
+    local barrels = {}
+    for name in pairs(C.empty_barrels) do barrels[name] = true end
+    local function name(entry) return entry.name or entry[1] end
+    local function filled(n) return n and n:match("%-barrel$") and not C.empty_barrels[n] end
+    for _, recipe in pairs(raw.recipe) do
+        if recipe.ingredients and recipe.results then
+            local inc, inf, inb, outc, outf, outb
+            for _, entry in pairs(recipe.ingredients) do
+                local n = name(entry)
+                if C.empty_barrels[n] then inc = n
+                elseif entry.type == "fluid" then inf = n
+                elseif filled(n) then inb = n end
+            end
+            for _, entry in pairs(recipe.results) do
+                local n = name(entry)
+                if C.empty_barrels[n] then outc = n
+                elseif entry.type == "fluid" then outf = n
+                elseif filled(n) then outb = n end
+            end
+            if inc and inf and outb then barrels[outb] = true
+            elseif inb and outc and outf then barrels[inb] = true end
         end
-      end
-    elseif in_b and out_c and out_f then     -- ОПУСТОШЕНИЕ: бочка -> контейнер + жидкость
-      r.energy_required = energy_per_recipe
-      ra_set(in_b, ra(in_b) * mult)
-      ra_set(out_c, ra(out_c) * mult)
-      ra_set(out_f, barrel_cap * mult)
-      local bi = data.raw.item[rn(in_b)]
-      if bi and barrel_stack > 0 then bi.stack_size = barrel_stack end
     end
-  end
-end
-
--- rocket launch products (для корректировки silo output)
-for _, group in pairs(data.raw) do
-  for _, item in pairs(group) do
-    if type(item) == "table" then
-      if item.rocket_launch_product then
-        local p = item.rocket_launch_product
-        Launch_Products[p.name or p[1]] = p.amount or p[2] or 1
-      end
-      if item.rocket_launch_products then
-        for _, p in pairs(item.rocket_launch_products) do
-          Launch_Products[p.name or p[1]] = p.amount or p[2] or 1
+    local products = {}
+    for _, group in pairs(raw) do
+        for _, item in pairs(group) do
+            if type(item) == "table" then
+                local p = item.rocket_launch_product
+                if p then products[p.name or p[1]] = p.amount or p[2] or 1 end
+                for _, p2 in pairs(item.rocket_launch_products or {}) do
+                    products[p2.name or p2[1]] = p2.amount or p2[2] or 1
+                end
+            end
         end
-      end
     end
-  end
+    snapshot = {categories = ReStack_Items, barrels = barrels, launch_products = products}
+    return snapshot
 end
-
--- ПРИМЕНЕНИЕ: предмет может лежать в любой группе data.raw (item/ammo/module/capsule/tool/…)
-for _, group in pairs(data.raw) do
-  for item_name, sd in pairs(ReStack_Items) do
-    local item = group[item_name]
-    if item and item.stack_size and sd.stack_size > 0 then
-      local nostack = false
-      if item.flags then
-        for _, f in pairs(item.flags) do if f == "not-stackable" then nostack = true break end end
-      end
-      if not nostack then
-        item.stack_size = sd.stack_size
-        local lp = Launch_Products[item_name]
-        if lp and lp > item.stack_size then
-          local stacks = math.ceil(lp / item.stack_size)
-          local silo = data.raw["rocket-silo"] and data.raw["rocket-silo"]["rocket-silo"]
-          if silo and silo.rocket_result_inventory_size and stacks > silo.rocket_result_inventory_size then
-            silo.rocket_result_inventory_size = stacks
-          end
-        end
-      end
-    end
-  end
+function M.get()
+    return assert(snapshot, "Stack sizes: zzzparanoidal did not capture the category boundary")
 end
+return M

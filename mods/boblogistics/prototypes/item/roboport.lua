@@ -1,4 +1,3 @@
-data.raw.item["roboport"].stack_size = 10
 data.raw.item["roboport"].order = "c[signal]-a[roboport-1]"
 data.raw.item["roboport"].subgroup = "bob-logistic-roboport"
 

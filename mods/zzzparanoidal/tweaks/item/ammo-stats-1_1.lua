@@ -576,7 +576,6 @@ local legacy_ammo = {
 		localised_name = { "?", { "item-name.w93-turret-light-cannon-shells" }, "W93 light cannon shells" },
 		ammo_category = "cannon-shell",
 		magazine_size = 6,
-		stack_size = 200,
 		ammo_type = {
 			action = {
 				type = "direct",
@@ -606,7 +605,6 @@ local legacy_ammo = {
 		localised_name = { "?", { "item-name.w93-turret-light-uranium-cannon-shells" }, "W93 uranium light cannon shells" },
 		ammo_category = "cannon-shell",
 		magazine_size = 6,
-		stack_size = 200,
 		ammo_type = {
 			action = {
 				type = "direct",
@@ -636,7 +634,6 @@ local legacy_ammo = {
 		localised_name = { "?", { "item-name.w93-turret-cannon-shells" }, "W93 cannon shells" },
 		ammo_category = "cannon-shell",
 		magazine_size = 6,
-		stack_size = 200,
 		ammo_type = {
 			cooldown_modifier = 1.25,
 			action = {
@@ -677,7 +674,6 @@ local legacy_ammo = {
 		localised_name = { "?", { "item-name.w93-turret-uranium-cannon-shells" }, "W93 uranium cannon shells" },
 		ammo_category = "cannon-shell",
 		magazine_size = 6,
-		stack_size = 200,
 		ammo_type = {
 			cooldown_modifier = 1.25,
 			action = {
@@ -718,7 +714,6 @@ local legacy_ammo = {
 		localised_name = { "?", { "item-name.w93-turret-slowdown-shells" }, "W93 slowdown cannon shells" },
 		ammo_category = "cannon-shell",
 		magazine_size = 6,
-		stack_size = 200,
 		ammo_type = {
 			action = {
 				type = "direct",
@@ -769,7 +764,6 @@ local legacy_ammo = {
 		localised_name = { "?", { "item-name.w93-turret-rocket" }, "W93 rocket pack" },
 		ammo_category = "rocket",
 		magazine_size = 4,
-		stack_size = 200,
 		ammo_type = {
 			action = {
 				type = "direct",
@@ -800,7 +794,6 @@ local legacy_ammo = {
 		localised_name = { "?", { "item-name.w93-turret-explosive-rocket" }, "W93 explosive rocket pack" },
 		ammo_category = "rocket",
 		magazine_size = 4,
-		stack_size = 200,
 		ammo_type = {
 			cooldown_modifier = 1.25,
 			action = {
@@ -832,7 +825,6 @@ local legacy_ammo = {
 		localised_name = { "?", { "item-name.Schall-explosive-rocket-pack" }, "Explosive rocket pack" },
 		ammo_category = "rocket",
 		magazine_size = 1,
-		stack_size = 50,
 		ammo_type = {
 			{
 				source_type = "default",
@@ -880,7 +872,6 @@ local legacy_ammo = {
 		localised_name = { "?", { "item-name.Schall-napalm-bomb" }, "Napalm bomb" },
 		ammo_category = "rocket",
 		magazine_size = 1,
-		stack_size = 200,
 		ammo_type = {
 			range_modifier = 3,
 			cooldown_modifier = 3,
@@ -919,7 +910,6 @@ local legacy_ammo = {
 		localised_name = { "?", { "item-name.Schall-poison-bomb" }, "Poison bomb" },
 		ammo_category = "rocket",
 		magazine_size = 1,
-		stack_size = 200,
 		ammo_type = {
 			range_modifier = 3,
 			cooldown_modifier = 3,
@@ -972,7 +962,8 @@ for _, spec in ipairs(legacy_ammo) do
 		ammo.ammo_category = spec.ammo_category
 		ammo.ammo_type = table.deepcopy(spec.ammo_type)
 		ammo.magazine_size = spec.magazine_size
-		ammo.stack_size = spec.stack_size
+		ammo.stack_size = assert(require("__paranoidal-stack-sizes__/config").created_ammo[spec.name],
+			"Missing restored ammo stack size: " .. spec.name)
 		if spec.icon_badge_item and data.raw.item[spec.icon_badge_item] then
 			local badge = data.raw.item[spec.icon_badge_item]
 			ammo.icons = table.deepcopy(source.icons or { { icon = source.icon, icon_size = source.icon_size or 64 } })
@@ -998,79 +989,6 @@ for _, spec in ipairs(legacy_ammo) do
 		end
 	end
 end
--- Размеры стопок боеприпасов из финального дампа 1.1; после ReStack и правок модов.
-local ammo_stack_sizes = {
-	[10] = {
-		["artillery-shell"] = true,
-		["bob-atomic-artillery-shell"] = true,
-		["bob-distractor-artillery-shell"] = true,
-		["bob-explosive-artillery-shell"] = true,
-		["bob-fire-artillery-shell"] = true,
-		["bob-poison-artillery-shell"] = true,
-	},
-	[200] = {
-		["atomic-bomb"] = true,
-		["bob-acid-bullet-magazine"] = true,
-		["bob-acid-rocket"] = true,
-		["bob-ap-bullet-magazine"] = true,
-		["bob-better-shotgun-shell"] = true,
-		["bob-bullet-magazine"] = true,
-		["bob-electric-bullet-magazine"] = true,
-		["bob-electric-rocket"] = true,
-		["bob-explosive-rocket"] = true,
-		["bob-flame-bullet-magazine"] = true,
-		["bob-flame-rocket"] = true,
-		["bob-he-bullet-magazine"] = true,
-		["bob-laser-rifle-battery"] = true,
-		["bob-laser-rifle-battery-amethyst"] = true,
-		["bob-laser-rifle-battery-diamond"] = true,
-		["bob-laser-rifle-battery-emerald"] = true,
-		["bob-laser-rifle-battery-ruby"] = true,
-		["bob-laser-rifle-battery-sapphire"] = true,
-		["bob-laser-rifle-battery-topaz"] = true,
-		["bob-piercing-rocket"] = true,
-		["bob-plasma-bullet-magazine"] = true,
-		["bob-plasma-rocket"] = true,
-		["bob-poison-bullet-magazine"] = true,
-		["bob-poison-rocket"] = true,
-		["bob-rocket"] = true,
-		["bob-scatter-cannon-shell"] = true,
-		["bob-shotgun-acid-shell"] = true,
-		["bob-shotgun-ap-shell"] = true,
-		["bob-shotgun-electric-shell"] = true,
-		["bob-shotgun-explosive-shell"] = true,
-		["bob-shotgun-flame-shell"] = true,
-		["bob-shotgun-plasma-shell"] = true,
-		["bob-shotgun-poison-shell"] = true,
-		["bob-shotgun-uranium-shell"] = true,
-		["cannon-shell"] = true,
-		["clowns-osmium-rounds-magazine"] = true,
-		["explosive-cannon-shell"] = true,
-		["explosive-rocket"] = true,
-		["explosive-uranium-cannon-shell"] = true,
-		["firearm-magazine"] = true,
-		["maf-small-atomic-rocket"] = true,
-		["piercing-rounds-magazine"] = true,
-		["piercing-shotgun-shell"] = true,
-		["rocket"] = true,
-		["shotgun-shell"] = true,
-		["uranium-cannon-shell"] = true,
-		["uranium-rounds-magazine"] = true,
-		["w93-fragmentation-cannon-shell"] = true,
-		["w93-slowdown-magazine"] = true,
-		["w93-turret-slowdown-rocket"] = true,
-		["w93-uranium-shotgun-shell"] = true,
-	},
-}
-for stack_size, names in pairs(ammo_stack_sizes) do
-	for name in pairs(names) do
-		local ammo = data.raw.ammo[name]
-		if ammo then
-			ammo.stack_size = stack_size
-		end
-	end
-end
-
 -- Маска попадания 1.1: object/player/train и боевые летающие цели Rampant.
 -- Старые динамические layer13/14/15 соответствуют trigger_target и слоям объектов 2.0.
 for _, name in ipairs({

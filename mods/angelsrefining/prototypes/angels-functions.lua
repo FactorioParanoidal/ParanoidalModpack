@@ -1374,12 +1374,10 @@ end
 -- OVERRIDES STACK SET CONDITION FOR LIST OF ITEMS ----------------------------
 -------------------------------------------------------------------------------
 function angelsmods.functions.override_item_conditions(override)
-  for i, items in pairs(override.list) do
-    if data.raw.item[items] then
-      if data.raw.item[items].stack_size <= override.value then
-        data.raw.item[items].stack_size = override.value
-      end
-    end
+  -- Preserve the public compatibility API without mutating prototypes before finalization.
+  local requests = require("__paranoidal-stack-sizes__/requests")
+  for _, name in pairs(override.list) do
+    requests.minimum("item", name, override.value, "angels-external-minimum")
   end
 end
 
