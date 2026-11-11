@@ -1,0 +1,13 @@
+{
+  "mod": "Aircraft-space-age-reforged",
+  "source": "local",
+  "original": {
+    "name": "Aircraft",
+    "authors": ["MeteorSwarm", "Nicholas Gower", "Stifling_Bossness"],
+    "portal": {
+      "name": "Aircraft-space-age",
+      "url": "https://mods.factorio.com/mod/Aircraft-space-age"
+    }
+  },
+  "changeReason": "Локальный форк Paranoidal 9.0.0 на основе Aircraft-space-age 2.3.4: перестрой под Factorio 2.1.24 с единым каталогом самолётов, согласованными наземными, воздушными и углепластиковыми вариантами, исправленными настройками, сопротивлениями и совместимостями. Сохраняет ID существующих объектов, вместимость, сетки оборудования и перепакованную пользователем графику. Удалены устаревшие поля API и миграция с принудительной перезагрузкой сценария; сохранено содержимое Space Age."
+}

@@ -1,0 +1,25 @@
+{
+  "name": "Aircraft-space-age-reforged",
+  "version": "9.0.0",
+  "title": "Aircraft Reforged",
+  "author": "MeteorSwarm, Nicholas Gower, Stifling_Bossness; Paranoidal (rewrite)",
+  "homepage": "https://github.com/FactorioParanoidal/ParanoidalModpack",
+  "description": "Four aircraft for reconnaissance, transport and combat. Rebuilt for Factorio 2.1 with consistent carbon-fiber and AircraftRealism variants, validated settings and modern mod integrations.",
+  "factorio_version": "2.1",
+  "dependencies": [
+    "base >= 2.1.24",
+    "? aai-industry",
+    "? planet-muluna >= 1.9.0",
+    "? AircraftRealism >= 2.0.2",
+    "? HelicopterRevival >= 0.3.0",
+    "? space-age >= 2.1.0",
+    "? bobplates >= 2.0.0",
+    "? bobelectronics >= 2.0.0",
+    "? boblibrary >= 2.0.0",
+    "? bobwarfare >= 2.0.0",
+    "? bobvehicleequipment >= 2.0.0",
+    "? angelssmelting",
+    "? Paranoidal-Alien-biomes",
+    "! Aircraft-space-age"
+  ]
+}

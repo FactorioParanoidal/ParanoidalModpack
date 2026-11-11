@@ -136,7 +136,7 @@ local list = {
   {id = "marathon", kind = "script", theme = "character", tracker = "walk", amounts = {1e5, 1e6},
     icon = {item = "exoskeleton-equipment"}},
   {id = "pilot", kind = "script", theme = "character", tracker = "fly", amounts = {1e5, 1e6},
-    params = {names = PLANES}, mods = {"Aircraft-space-age"}, needs = {any_entity = {names = PLANES}},
+    params = {names = PLANES}, mods = {"Aircraft-space-age-reforged"}, needs = {any_entity = {names = PLANES}},
     icon = {entity = "gunship"}},
   {id = "schumacher", kind = "script", theme = "character", tracker = "speed", amount = 200, icon = {entity = "car"}},
   {id = "infinity", kind = "script", theme = "character", tracker = "infinite-research", amount = 100,

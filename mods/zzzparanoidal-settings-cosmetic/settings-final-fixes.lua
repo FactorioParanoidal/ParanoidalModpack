@@ -68,7 +68,7 @@ hide("bool-setting", "paranoidal-bob-basic-belt-64-frames")
 hide("bool-setting", "wide-flashlight")
 hide("bool-setting", "enhanced-nightvision")
 hide("string-setting", "night-lut-set")
--- Aircraft-space-age
+-- Aircraft-space-age-reforged
 hide("bool-setting", "aircraft-sound-setting")
 -- angelspetrochem
 hide("bool-setting", "angels-show-chemical-formula")
