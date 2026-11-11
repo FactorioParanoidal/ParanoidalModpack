@@ -2,6 +2,7 @@
 Version: 2.1.1
 Date: 01. 06. 2026
   Graphics:
+    - Paranoidal: removed seven unreferenced PNG masks from graphics/entity/transport-belt/masks; belt prototypes and settings-dependent graphics are unchanged.
     - Paranoidal: replaced 20 PNGs with smaller user-recompressed Beta-7 files selected by the approved filename, folder and dimension report; resource paths and prototype code are unchanged.
     - Paranoidal build: removed four duplicate ceramic pipe images already redirected to canonical files by zzzparanoidal's final graphics pass. Prototype and runtime code are unchanged; settings-dependent original graphics remain available in the modpack.
   Changes:

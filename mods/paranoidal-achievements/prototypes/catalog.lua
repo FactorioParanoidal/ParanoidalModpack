@@ -3,6 +3,7 @@
 --   [2] item to produce; defaults to the prefix
 --   [3] picture in graphics/ without ".png", "%d" is replaced by the tier; without a picture
 --       the tiers use bronze/silver/gold frames around the product icon
+--   picture_tiers  optional source picture tier per achievement tier (e.g. {1, 2, 2})
 --   amounts   thresholds per tier, default 1M / 1G / 1T
 --   per_hour  produce-per-hour-achievement instead of produce-achievement
 --   fluid     fluid to produce instead of an item
@@ -41,25 +42,25 @@ return {
   {"green-science", "logistic-science-pack", "Sci-Green-1"},
   {"blue-science", "chemical-science-pack", "Sci-Blue-1"},
   {"black-science", "military-science-pack", "Sci-Black-1"},
-  {"yellow-science", "utility-science-pack", "Sci-Yellow-%d"},
-  {"purple-science", "production-science-pack", "Sci-Purple-%d"},
-  {"concrete", "concrete", "concrete-%d"},
+  {"yellow-science", "utility-science-pack", "Sci-Yellow-1"},
+  {"purple-science", "production-science-pack", "Sci-Purple-1"},
+  {"concrete", "concrete", "concrete-1"},
   {"stone-brick", "stone-brick", "Stone-Brick-%d"},
-  {"rail", "rail", "rails-%d"},
-  {"elec-furn", "electric-furnace", "Elec-Furn-%d"},
-  {"steel-plate", "steel-plate", "Steel-%d"},
-  {"plastic", "plastic-bar", "plastic-%d"},
+  {"rail", "rail", "rails-1"},
+  {"elec-furn", "electric-furnace", "Elec-Furn-%d", picture_tiers = {1, 2, 2}},
+  {"steel-plate", "steel-plate", "Steel-1"},
+  {"plastic", "plastic-bar", "plastic-1"},
   {"elec-drill", "electric-mining-drill", "Elec-Drill-%d"},
-  {"underground-belt", "underground-belt", "underground-belt-%d"},
-  {"red-under", "fast-underground-belt", "Red-Under-%d"},
-  {"express-underground-belt", "express-underground-belt", "express-underground-belt-%d"},
+  {"underground-belt", "underground-belt", "underground-belt-1"},
+  {"red-under", "fast-underground-belt", "Red-Under-1"},
+  {"express-underground-belt", "express-underground-belt", "express-underground-belt-1"},
   {"transport-belt", "transport-belt", "transport-belt-%d"},
   {"red-belt", "fast-transport-belt", "fast-transport-belt-%d"},
   {"blue-belt", "express-transport-belt", "express-transport-belt-%d"},
-  {"splitter", "splitter", "splitter-%d"},
-  {"fast-splitter", "fast-splitter", "fast-splitter-%d"},
-  {"express-splitter", "express-splitter", "express-splitter-%d"},
-  {"grenade", "grenade", "grenade-%d"},
+  {"splitter", "splitter", "splitter-1"},
+  {"fast-splitter", "fast-splitter", "fast-splitter-1"},
+  {"express-splitter", "express-splitter", "express-splitter-1"},
+  {"grenade", "grenade", "grenade-1"},
   {"uranium-ore", "uranium-ore", "uranium-ore"},
   {"uranium-235", "uranium-235", "uranium-235"},
   {"uranium-238", "uranium-238", "uranium-238"},
