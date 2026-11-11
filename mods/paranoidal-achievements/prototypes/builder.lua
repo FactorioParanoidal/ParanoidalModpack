@@ -114,7 +114,8 @@ end
 
 local function catalog_icons(entry, tier, product)
   if entry[3] then
-    return {{icon = util.GRAPHICS .. string.format(entry[3], tier) .. ".png", icon_size = 128}}
+    local picture_tier = entry.picture_tiers and entry.picture_tiers[tier] or tier
+    return {{icon = util.GRAPHICS .. string.format(entry[3], picture_tier) .. ".png", icon_size = 128}}
   end
   local inner
   if entry.product_icon then

@@ -22,6 +22,7 @@ Date: 2026-11-01
   Major Features:
     - One mod instead of MxlChievements-Reforged 9.1.0 (achievements: MxlChievements by Mxlppxl, More Achievements by LuziferSenpai and the Paranoidal content) and Milestones 9.4.8 (Paranoidal fork of Milestones 1.4.7 by Wiwiweb). Achievement, setting, hotkey, shortcut, sprite, style, command and locale key names are unchanged; the remote interface "milestones" keeps its name.
   Optimizations:
+    - Thirteen production achievement series share their existing tier-1 PNG across all three tiers; electric-furnace tiers 2 and 3 share the tier-2 PNG while tier 1 keeps its distinct picture. Removed 27 byte-identical PNG duplicates. Achievement IDs, conditions and appearance are unchanged.
     - Every event is registered once for the milestones and the achievements together; one on_tick handler replaces the on_tick of Milestones, the on_nth_tick(60) of the achievement polls and the on_nth_tick(240) of the delayed milestone messages.
     - The production statistics are read only by the milestones cycle. The "Chemist" achievement (every Angels gas) asks that cycle for the gases it has not seen yet, at most once per 10 minutes, instead of reading every surface itself.
     - One Blueprint Sandboxes check (sandbox forces and lab surfaces) for both parts.
