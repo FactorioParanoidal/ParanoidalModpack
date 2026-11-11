@@ -833,6 +833,7 @@ fake_human_spawner.name=base_name .. "_spawner"
 fake_human_spawner.max_health=1000 *hp_multiplier
 concat_lists(fake_human_spawner.flags, {"not-flammable"})
 fake_human_spawner.icon=path.. "graphics/entity/flying_saucer/flying_saucer_ico.png"
+fake_human_spawner.icon_size=32
 fake_human_spawner.map_color = data.raw["unit-spawner"]["biter-spawner"].map_color
 fake_human_spawner.enemy_map_color = data.raw["unit-spawner"]["biter-spawner"].enemy_map_color
 fake_human_spawner.corpse = nil -- "huge-scorchmark" --   base_name .. "_spawner_corpse" 
