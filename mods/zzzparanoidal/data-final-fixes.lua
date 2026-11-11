@@ -256,6 +256,7 @@ require("tweaks.recipe.frame-metallurgy-beta8")
 require("tweaks.technology.frame-metallurgy-beta8")
 
 require("tweaks.custom.restack-port") -- ReStack (Optera, 1.1) порт: размеры пачек по категориям
+require("tweaks.item.stack-sizes") -- Согласованные размеры пачек отдельных предметов, после ReStack.
 -- Модульный порт ниже уже содержит итоговые партии Beta 8.
 require("prototypes.modules-beta8")
 -- После восстановления модульных рецептов, масштабирования партий и OV.execute.
