@@ -17,6 +17,8 @@ Date: 08. 11. 2026
     - No periodic runtime simulation, new texture files, forced regeneration or migrations. Notebook state is initialised compatibly; existing terrain and save map-generation settings are not rewritten. Seasonal probes are movement-driven, bounded to a local radius and throttled; clearing notes use engine-filtered events and a bounded spatial index.
     - Economy reduces moving lights, not habitat locations. Disabled vegetation/geology settings suppress generation without removing habitat prototype names or invalidating saved colony graphics variations.
   Changes:
+    - Paranoidal packaging: moved the complete maintenance toolkit, reports, plans and upstream manifests to the local development workspace. Generated Lua and all game assets are unchanged.
+  Changes:
     - Renamed the mod to Paranoidal-Alien-biomes (Paranoidal Alien Biomes), version 9.8.6.
     - Updated internal asset paths, maintenance generators and pack integrations to the new mod ID.
     - Preserved all user-optimised graphics byte-for-byte. No graphics were regenerated or re-encoded.

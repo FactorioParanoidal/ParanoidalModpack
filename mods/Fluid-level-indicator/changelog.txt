@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 0.9.9
 Date: 09 May 2025
+  Changes:
+    - Paranoidal packaging: moved the release shell script out of the distributed mod into the local development workspace.
   Locale:
     - ru: the mod name and the mod list description are the same as in ParanoidalLocale (format "English title (Russian translation)"), so the mod reads the same with or without it.
   Minor Changes:

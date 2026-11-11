@@ -221,18 +221,3 @@ script.on_event(defines.events.on_gui_checked_state_changed, ToggleGUI.OnGuiChec
 
 -- Periodic
 script.on_nth_tick(RemoteView.chartAllSandboxesTick, RemoteView.ChartAndGenerateOccupiedSandboxes)
-
--- Tests
-if script.active_mods["factorio-test"] then
-    require("__factorio-test__/init")({
-        "tests/new-game",
-        -- "tests/isolation-full",
-        "tests/isolation-none",
-        -- "tests/isolation-transition",
-        "tests/new-game-post",
-
-        -- "tests/existing-game",
-
-        "tests/god-building",
-    })
-end

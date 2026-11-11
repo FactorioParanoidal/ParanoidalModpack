@@ -46,6 +46,8 @@ The merge does not edit `mod-list.json`, `mod-settings.dat`, `player-data.json` 
 
 ## Checks
 
+The test suite is maintained outside the distributed mod at `D:/PARANOIDAL/test-runs/mod-tests/paranoidal-sound/tests/`. Assemble a private development copy with `D:/PARANOIDAL/tools/mod-development/prepare.py` before using the original test paths below.
+
 `tests/unit.lua` runs with Lua 5.2 and the mod root as its argument. It exercises all eleven independent switches, shared grenade wrappers, default sources, laser coexistence, nuclear non-sound effects, known early-copy compatibility, referenced file existence, and every input binding including missing/empty inventory, invalid objects, unrelated vehicles and unlit/absent burners. These mocks do not prove engine audio playback or acoustic quality.
 
 Actual engine load/dump checks and their local artifacts are recorded outside the repository. Listening, loudness, key-press feel and settings presentation remain an in-game acceptance task.

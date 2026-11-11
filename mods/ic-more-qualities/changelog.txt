@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 9.1.5
 Date: 2026. 10. 14
+  Changes:
+    - Paranoidal packaging: moved standalone regression fixtures and their mocks out of the distributed mod into the local test collection.
   Bugfixes:
     - QueueToFrontLimited integration: exclude reconsumed cancellation returns from deferred defect rolls, without damaging spare items; actual leftovers and ordinary cancellations retain their rolls. Added same-tick begin/end_queue_reorder remote functions.
   Features:

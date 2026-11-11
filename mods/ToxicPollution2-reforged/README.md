@@ -11,7 +11,7 @@ Polluted air poisons the player. Rewrite of Toxic Pollution (Likos, ArtMares, Vi
 - No panel: one alert — lasting while unprotected in smog or damaged, once for the last protection running out (5 % or < 1 min), briefly on sharp changes; its message holds the whole status (text bars). Sounds, tips and tricks, command `/toxic`.
 - Pollution sensor: the signal *Pollution sensor* in a constant combinator outputs the chunk pollution once per second.
 
-Formulas, numbers and the reference timings: `scripts/model.lua`, `shared/config.lua`, tests in `tests/` (`lua tests/<name>.lua`, Lua 5.1/5.2, mocks only).
+Formulas, numbers and the reference timings: `scripts/model.lua`, `shared/config.lua`. Tests are maintained outside the distributed mod in `D:/PARANOIDAL/test-runs/mod-tests/ToxicPollution2-reforged/tests/`. Assemble a private development copy with `D:/PARANOIDAL/tools/mod-development/prepare.py` before running `lua tests/<name>.lua` (Lua 5.1/5.2, mocks only).
 
 ## Remote interface `toxic_pollution`
 

@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 3.2.2
 Date: 2025-11-25
+  Changes:
+    - Paranoidal packaging: moved the tests and release script out of the distributed mod. The conditional factorio-test loader is restored only in private development copies; normal gameplay and saved data are unchanged.
   Locale:
     - ru: the mod name and the mod list description are the same as in ParanoidalLocale (format "English title (Russian translation)"), so the mod reads the same with or without it.
   Bugfixes:

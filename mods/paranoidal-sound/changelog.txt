@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 9.0.0
 Date: 2026-11-07
+  Changes:
+    - Paranoidal packaging: moved standalone mock tests to the local test collection; all audio, including retained alternatives, is unchanged.
   Features:
     - Merged EpicWeaponSounds, immersive-sounds2 and newtrainsfx2 with all 476 original audio files and source credits.
     - Added eleven independent startup sound-source dropdowns with the previous winning sources as defaults.

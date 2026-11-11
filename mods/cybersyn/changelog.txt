@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.53
 Date: 2026-03-15
+  Changes:
+    - Paranoidal packaging: moved the isolated GUI regression fixture out of the distributed mod into the local test collection.
   Locale:
     - ru: the mod name in the mod list is "Project Cybersyn (Диспетчерская сеть поездов)" (user decision 2026-11-06), the same as in ParanoidalLocale; the other Russian texts of the build live in ParanoidalLocale.
     - ru: the mod name and the mod list description are the same as in ParanoidalLocale (format "English title (Russian translation)"), so the mod reads the same with or without it.

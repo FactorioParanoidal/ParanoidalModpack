@@ -74,6 +74,8 @@ through its remote function `credit_kill`.
 
 ## Tests (pure Lua 5.1, run from the mod root; not engine evidence)
 
+Tests are maintained outside the distributed mod at `D:/PARANOIDAL/test-runs/mod-tests/robotarmy-citadel/tests/`. The paths below apply to a private development copy assembled with `D:/PARANOIDAL/tools/mod-development/prepare.py`.
+
 `tests/fake_api.lua` is a small fake of the control API used by the control tests (entities in a
 spatial index, forces, unit groups that never move; a script placement is blocked by items on the
 ground and units in the footprint, as in the engine; event name filters must be single names).

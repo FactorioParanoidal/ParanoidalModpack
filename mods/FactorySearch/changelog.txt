@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.14.3
 Date: 8 June 2026
+  Changes:
+    - Paranoidal packaging: moved the upstream publication workflow out of the distributed mod into the local development workspace.
   Bugfixes:
     - Fixed crash when searching on Gleba in 'Module' search mode
   Compatibility:

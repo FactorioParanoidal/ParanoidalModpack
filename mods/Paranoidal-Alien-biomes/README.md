@@ -31,7 +31,7 @@ rewritten: use a new map for the intended habitat generation.
 
 Подробное руководство на русском: [Guide.md](Guide.md).
 
-Maintenance and verification: [tools/README.md](tools/README.md).
+Maintenance tools, reports and manifests are kept outside the distributed mod in the local Paranoidal workspace (`tools/mod-development/mods/Paranoidal-Alien-biomes/tools/README.md`). Assemble a private development copy with `tools/mod-development/prepare.py` before using their original relative-path commands.
 
 ## Original upstream notice
 

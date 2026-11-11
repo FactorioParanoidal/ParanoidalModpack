@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 2.3.3
 Date: 2026-01-03
+  Changes:
+    - Paranoidal packaging: moved the hr_version conversion script out of the distributed mod into the local development workspace.
   Graphics:
     - Paranoidal Space Age branch: graphics/entity/common/pipe-covers/shadows/pipe-cover-south-shadow.png is kept. planet-muluna builds its burner roboports in its data-final-fixes, after zzzparanoidal's graphics pass, with pipecoverspictures(), which this mod overrides to point to that file; without it the game with graphics cannot load.
     - Paranoidal: replaced 5 PNGs with smaller user-recompressed Beta-7 files selected by the approved filename, folder and dimension report; resource paths and prototype code are unchanged.

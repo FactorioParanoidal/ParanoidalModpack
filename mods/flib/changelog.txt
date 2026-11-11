@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 0.16.5
 Date: 2025-11-05
+  Changes:
+    - Paranoidal packaging: moved tests, the documentation generator, generated HTML and the editable Aseprite source to the local development workspace; game Lua modules and PNG resources are unchanged.
   Graphics:
     - Paranoidal: replaced 1 PNG with a smaller user-recompressed Beta-7 file selected by the approved filename, folder and dimension report; resource paths and prototype code are unchanged.
   Locale:
