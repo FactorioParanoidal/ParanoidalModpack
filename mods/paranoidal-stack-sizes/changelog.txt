@@ -9,5 +9,6 @@ Date: 2026-11-10
     - Resolves precedence in a virtual plan and applies each existing item size at most once after the build's final prototype stages; publishes a per-item source audit in mod-data.
     - Preserves the historical category-selection boundary and generator-derived minimums without early prototype mutations. Barrel recipe/capacity/fuel processing remains separate in zzzparanoidal.
   Changes:
+    - Owns the final stack size of all three seafloor pumps through one explicit exception; their constructor keeps valid inherited defaults without retuning the existing Angels item. Final stacks remain 20; includes resolver and constructor regression cases.
     - Preserves late-copy inheritance for both heavy armor variants and electrowinning MK3, and routes configurable initial Angels component/pavement sizes and ten restored ammo constructors through the same config.
     - Includes a maintenance README and targeted pure-rule regression cases. Original required item definitions remain valid; obsolete tuning modules and duplicate stack-size data are removed from their old owners.

@@ -24,7 +24,7 @@
 | `ammo` | Точные исключения боеприпасов после категорий |
 | `energy` | Пачки четырёх видов топлива; их топливные свойства сюда не перенесены |
 | `inherited_defaults` | Явные связи поздних копий с уже настроенным родителем: две тяжёлые брони и электролизёр MK3; без дублирования чисел |
-| `exceptions` | Явно согласованные точечные значения, в том числе правка 15 предметов от 2026-11-10 |
+| `exceptions` | Явно согласованные точечные значения: 15 предметов от 2026-11-10 и три донных насоса с пачкой 20 |
 | `empty_barrels` | Идентичность пустой тары для совместной обработки пачек и разливки |
 
 Обычно для нового точечного решения достаточно добавить предмет в `exceptions`. Например,
@@ -48,6 +48,11 @@
 из `config.module_items` до регистрации новых прототипов. Аналогично, конструктор десяти восстанавливаемых
 боеприпасов получает размеры из `config.created_ammo`. Локальных вторых списков размеров у них нет.
 
+Донные насосы I–III получают итоговую пачку 20 из `exceptions` с источником `seafloor-pumps`.
+Конструктор в `zzzparanoidal` не перенастраивает существующий предмет Angels: новые тиры наследуют
+валидное начальное поле из его исходного объявления, а итоговое значение выбирает только resolver.
+В `prototypes/seafloor-pumps/tiers.lua` второго числового правила пачек нет.
+
 ## Состав и порядок работы
 
 Тесты из таблицы ниже хранятся вне игровой поставки: `D:/PARANOIDAL/test-runs/mod-tests/paranoidal-stack-sizes/tests/`. Для их прежней раскладки используется отдельная копия, собранная через `D:/PARANOIDAL/tools/mod-development/prepare.py` с обоими модами `paranoidal-stack-sizes` и `zzzparanoidal`.
@@ -60,7 +65,9 @@
 | `rules.lua` | Разрешение приоритетов в виртуальном плане и единственное применение к существующим предметам |
 | `data-final-fixes.lua` | Запуск итогового прохода и публикация аудита |
 | `info.json` | Явный порядок после модов, имеющих финальную стадию; это не надежда на алфавитное имя |
-| `tests/rules.lua` | Изолированные проверки приоритетов, единственной записи, типов/флагов, настроек, вычисляемых минимумов и наследования |
+| `tests/rules.lua` | Изолированные проверки приоритетов, единственной записи, типов/флагов, настроек, вычисляемых минимумов, наследования и правила донных насосов |
+| `tests/selection.lua` | Host-проверка реального capture/get, неизменности прототипов, сохранности снимка после поздних изменений, нулевой категории, ядерного топлива/остатка, тары и зависимости пересечений категорий от порядка рецептов |
+| `tests/seafloor-pumps.lua` | Host Lua 5.2 fixture реального конструктора: не меняет пачку существующего предмета, сохраняет свойства копий и безопасно пропускает отсутствующую основу |
 | `changelog.txt` | История изменений компонента |
 
 `zzzparanoidal` вызывает `selection.capture(data.raw)` ровно там, где раньше выполнялся ReStack:
@@ -82,7 +89,9 @@
 ## Вычисляемые ограничения и совместимость
 
 - WideChests регистрирует минимальную пачку исходного сундука по **реальной максимальной площади**
-  сгенерированных объединённых сундуков. Он не меняет пачку немедленно. Число ячеек сундуков не затронуто.
+  сгенерированных объединённых сундуков. Если режим включён, но подходящих размеров нет, ограничения нет:
+  ноль не передаётся в строгий API положительных минимумов. Фильтры выбора сохраняют прежнее поведение.
+  Генератор не меняет пачку немедленно. Число ячеек сундуков не затронуто.
 - `angelsmods.functions.override_item_conditions` сохранена как совместимый API для внешних интеграций:
   она регистрирует минимум через `requests.minimum`, а не перезаписывает прототип. Известные настройки
   самой сборки перенесены из её старых вызовов в `config.lua`.
@@ -96,6 +105,9 @@
 Обработка вместимости бочек, партий наполнения/опорожнения, времени и топливной ценности остаётся
 в `zzzparanoidal/tweaks/custom/barrel-port.lua`. Старый файл ReStack удалён, а не оставлен вторым
 переопределителем. Нельзя отключать обработку разливки под видом удаления правок пачек.
+`categories["barrel-fill"]` — вместимость жидкости, а не размер пачки; её изменение затрагивает количества,
+время и топливную энергию тары. В топливном владельце сохранены разные ранняя, явная и рецептная
+политики: совпадение конечного дампа не разрешает объединять их парсеры, значения по умолчанию или фазы.
 
 ## Аудит и сопровождение
 
@@ -115,7 +127,12 @@
 
 - Keep all build tuning in `config.lua`; keep algorithms free of balance constants.
 - Preserve the category capture boundary. Do not turn the snapshot into a later rescan of changed recipes.
-- Register generator-derived constraints through `requests.minimum`; do not patch item prototypes from generators.
+- Register positive generator-derived constraints through `requests.minimum`; no generated variants means no
+  constraint, not zero. Do not patch item prototypes from generators.
+- Category overlaps retain historical last-match behavior. Review new competing recipes; do not invent an
+  alphabetical winner or move capture to the final prototype state.
+- Keep config construction literal with the scalar `initial_size` getter. Unsupported construction must fail
+  closed in the local audit; extend its bounded model explicitly instead of silently omitting new targets.
 - When adding/updating a mod with final-stage prototype creation, extend the optional dependencies in
   `info.json` (or prove an existing transitive dependency). Never introduce a dependency cycle.
 - Keep this service enabled together with the adapted full modpack. It is not an independently optional

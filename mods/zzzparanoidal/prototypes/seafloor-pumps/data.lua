@@ -30,7 +30,7 @@ local function retexture(node, filename)
 	end
 end
 
-local function apply_stats(pump, item, spec, next_spec)
+local function apply_stats(pump, spec, next_spec)
 	pump.energy_source = {
 		type = "electric",
 		usage_priority = "secondary-input",
@@ -41,12 +41,11 @@ local function apply_stats(pump, item, spec, next_spec)
 	pump.max_health = spec.max_health
 	pump.fast_replaceable_group = base_name
 	pump.next_upgrade = next_spec and next_spec.name or nil
-	item.stack_size = tiers.stack_size
 end
 
 local prototypes = {}
 for tier, spec in ipairs(tiers) do
-	local pump, item = base_pump, base_item
+	local pump = base_pump
 	if tier > 1 then
 		local icons = tier_icons(spec, tier)
 
@@ -57,7 +56,7 @@ for tier, spec in ipairs(tiers) do
 		pump.localised_description = { "entity-description." .. base_name }
 		retexture(pump.graphics_set, GRAPHICS .. spec.sprite .. ".png")
 
-		item = table.deepcopy(base_item)
+		local item = table.deepcopy(base_item)
 		item.name = spec.name
 		item.icon, item.icons = nil, icons
 		item.place_result = spec.name
@@ -74,6 +73,6 @@ for tier, spec in ipairs(tiers) do
 			results = { { type = "item", name = spec.name, amount = 1 } },
 		}
 	end
-	apply_stats(pump, item, spec, tiers[tier + 1])
+	apply_stats(pump, spec, tiers[tier + 1])
 end
 data:extend(prototypes)

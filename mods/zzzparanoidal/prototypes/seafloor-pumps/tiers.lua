@@ -6,7 +6,6 @@ local function item(name, amount)
 end
 
 return {
-	stack_size = 20,
 	{
 		name = "angels-seafloor-pump",
 		technology = "angels-water-washing-1",
