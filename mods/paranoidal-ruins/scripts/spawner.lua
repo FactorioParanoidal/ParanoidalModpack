@@ -3,6 +3,7 @@
 -- Gangsir, Bilka; MIT) with the Paranoidal fixes it had, for the one ruin set of this mod.
 local util = require("__core__/lualib/util")
 local expressions = require("scripts.expressions")
+local infected_ship = require("scripts.infected-ship")
 
 local M = {}
 
@@ -191,6 +192,8 @@ local function spawn_entity(expression, offset, center, surface, opts, vars)
   })
   if not (entity and entity.valid) then return end
 
+  if entity.name == infected_ship.NAME then infected_ship.sync_evolution(surface) end
+
   if opts.dmg then
     local amount = expressions.number(opts.dmg.dmg, vars)
     if amount > 0 then entity.damage(amount, opts.dmg.force or "neutral", opts.dmg.type or "physical") end
@@ -261,7 +264,24 @@ local function spawned(ruin, size, center, surface)
   script.raise_event(M.ruin_spawned_event, data)
 end
 
+-- Opt-in only: all legacy templates keep their previous distance behavior.
+local function safe_here(ruin, surface, center)
+  local distance = ruin.safe_distance
+  if type(distance) ~= "number" then return true end
+  local function near(pos)
+    return (center.x - pos.x)^2 + (center.y - pos.y)^2 < distance^2
+  end
+  if near({x = 0, y = 0}) then return false end
+  for _, force in pairs(game.forces) do
+    if not force.ai_controllable and force.name ~= "neutral" and near(force.get_spawn_position(surface)) then
+      return false
+    end
+  end
+  return true
+end
+
 local function allowed_here(ruin, surface, center)
+  if not safe_here(ruin, surface, center) then return false end
   if ruin.spawn_on_surfaces ~= nil and not ruin.spawn_on_surfaces[surface.name] then return false end
   if ruin.no_spawning ~= nil and ruin.no_spawning[surface.name] then return false end
   if cfg.distance_matters and type(ruin.min_distance) == "number" then
@@ -285,6 +305,11 @@ local function pick_weighted(candidates)
   return candidates[#candidates]
 end
 
+local function appearance(ruin)
+  if type(ruin.spawn_chance) == "number" and math.random() >= ruin.spawn_chance then return nil end
+  return ruin
+end
+
 ---Weighted choice; with "avoid repeats" only among the ruins of the size not used in this cycle.
 local function choose(size, surface, center)
   local allowed = {}
@@ -292,7 +317,7 @@ local function choose(size, surface, center)
     if allowed_here(ruin, surface, center) then allowed[#allowed + 1] = ruin end
   end
   if #allowed == 0 then return nil end
-  if not cfg.avoid_repeats then return pick_weighted(allowed) end
+  if not cfg.avoid_repeats then return appearance(pick_weighted(allowed)) end
 
   local bag = storage.bags[size]
   if not bag then
@@ -311,7 +336,7 @@ local function choose(size, surface, center)
   end
   local ruin = pick_weighted(fresh)
   bag.used[ruin_name(ruin)] = true
-  return ruin
+  return appearance(ruin)
 end
 
 -- Queue: ruins of new chunks are built at the next multiple of the spawn interval (the BnL debris
@@ -388,6 +413,7 @@ end
 ---@return boolean
 function M.spawn_now(ruin, size, center, surface)
   if not (cfg.enabled and M.HALF[size] and M.surface_allowed(surface)) then return false end
+  if not safe_here(ruin, surface, center) then return false end
   if ruin.spawn_on_surfaces ~= nil and not ruin.spawn_on_surfaces[surface.name] then return false end
   if not build(ruin, M.HALF[size], center, surface) then return false end
   spawned(ruin, size, center, surface)

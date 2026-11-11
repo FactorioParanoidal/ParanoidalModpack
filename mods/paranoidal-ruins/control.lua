@@ -7,6 +7,7 @@
 local spawner = require("scripts.spawner")
 local balance_base = require("ruins.base-balance")
 local legendary = require("legendary.init")
+local infected_ship = require("scripts.infected-ship")
 
 local ERASER = "Delete-Chunk-Tool-reforged"
 
@@ -223,6 +224,7 @@ local function discover(player, ruin)
 end
 
 local function check_players()
+  infected_ship.sync_evolution()
   local pending = storage.pending
   if not pending or next(pending) == nil then return end
   for _, player in pairs(game.connected_players) do
@@ -394,7 +396,10 @@ script.on_event(defines.events.on_player_mined_entity, legendary.on_mined)
 script.on_event(defines.events.on_robot_mined_entity, legendary.on_mined)
 script.on_event(defines.events.on_marked_for_deconstruction, legendary.on_marked_for_deconstruction,
   { { filter = "name", name = "pd-legend-lever" } })
-script.on_event(defines.events.on_object_destroyed, legendary.on_object_destroyed)
+script.on_event(defines.events.on_object_destroyed, function(event)
+  infected_ship.on_object_destroyed(event)
+  legendary.on_object_destroyed(event)
+end)
 script.on_event(defines.events.on_player_changed_position, legendary.on_player_changed_position)
 script.on_event(defines.events.on_pre_player_died, legendary.on_pre_player_died)
 script.on_event(defines.events.on_player_respawned, legendary.on_player_respawned)
@@ -403,7 +408,11 @@ do
   -- relics that die in battle (not mined) are gone: fact "relic-died"
   local filters = {}
   for _, name in ipairs(legendary.relic_prototypes()) do filters[#filters + 1] = { filter = "name", name = name } end
-  if #filters > 0 then script.on_event(defines.events.on_entity_died, legendary.on_entity_died, filters) end
+  filters[#filters + 1] = { filter = "name", name = infected_ship.NAME }
+  script.on_event(defines.events.on_entity_died, function(event)
+    infected_ship.on_entity_died(event)
+    legendary.on_entity_died(event)
+  end, filters)
 end
 
 -- Old mines for RSO Reforged: these ruins of the set are placed next to rich ore fields.
