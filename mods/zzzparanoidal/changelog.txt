@@ -1,6 +1,7 @@
 ---------------------------------------------------------------------------------------------------
 Version: 8.1.31
   Changes:
+    - Set the high-capacity T1 accumulator input/output limits to 60kW instead of 600kW, matching the capacity-to-power ratio of T2/T3. Slow accumulators T1-T3 now cost 2 tier-appropriate circuits instead of 4; their capacity, flow limits and other ingredients are unchanged.
     - Keep ingredient/process marks on recipes, not products: wooden and fibreglass boards retain clean item icons, thorium ore retains its ore artwork instead of sorting, and six raw gems no longer inherit crystallization-liquid icons. Production recipe process marks are retained; generated recycling/product marks follow the corrected items. Item IDs, recipe mechanics and ground-picture variants are unchanged.
     - Followed the Aircraft-space-age-reforged rename in dependencies and startup defaults. Removed the redundant Alien Biomes napalm-water patch now owned by Aircraft Reforged; the existing ammo/progression integration remains.
     - Paranoidal packaging: moved the chemical-icon checker, belt-sheet baker, host regression fixture and empty temporary file to the local development workspace. The shortcut-icon generator and all generated game PNGs remain in the mod.

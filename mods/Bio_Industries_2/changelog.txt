@@ -2,6 +2,7 @@
 Version: 2.0.34
 Date: 24.02.2026
   Changes:
+    - Paranoidal: reduced the large bio accumulator input/output limits from 25MW to 2.5MW; its 300MJ capacity and recipe are unchanged.
     - Paranoidal packaging: moved the wood-production spreadsheet to the local source-assets collection; game resources are unchanged.
   Graphics:
     - Paranoidal: replaced 2 PNGs with smaller user-recompressed Beta-7 files selected by the approved filename, folder and dimension report; resource paths and prototype code are unchanged.
