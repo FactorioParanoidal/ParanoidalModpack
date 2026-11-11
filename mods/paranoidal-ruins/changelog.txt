@@ -11,6 +11,7 @@ Date: 2026-11-01
     - The settings are read once per load and when they change, not for every chunk; the debug logging and the "expensive sanity checks" are removed from the spawning code.
     - Graphics recompressed (lossy palette).
   Changes:
+    - Added a neutral infested crash-site ruin with salvage and mferrari_lib's infected spaceship artwork; the large base shipwreck uses the same lootable hull. The new hull is a container, not a boss spawner, and has no nuclear death explosion. Existing ruins are not replaced; without the optional library the vanilla hull is used.
     - Removed the API for third-party ruin sets of the core (add_ruin_sets, get_ruin_set(s), get_current_ruin_set, register_ruin_size, spawn_exclusively_on, no_spawning_on, spawn_ruin, enable_spawning_ruins, is_spawning_ruins_enabled) and utils.register_ruin_set; nothing in the build used them. Kept: get_on_entity_force_changed_event, get_on_ruin_spawned_event, exclude_surface, reinclude_surface.
     - Removed the settings ruins-enable-debug-log, ruins-enable-debug-utils, ruins-enable-debug-on-tick, ruins-expensive-sanity-checks and ruins-enable-spawn-ruins-all-planets (ruins are allowed on every planet, as with its default) and the "debug" scenario.
     - The defaults of the ruin-free zone (400) and the three ruin chances (0.01875 / 0.0075 / 0.001875) are now set by the mod itself, not by zzzparanoidal.

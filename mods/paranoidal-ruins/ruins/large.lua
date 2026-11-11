@@ -190,6 +190,20 @@ def("pd-crash-site", function(b)
   b:put("small-worm-turret", 12, -14, { force = "enemy" })
 end):weight(0.6):far(1000):tag("danger")
 
+def("pd-infected-crash-site", function(b)
+  -- Reserve the hull, shadow and ground patch, not the builder's default 1x1 footprint.
+  b:put("pd-infected-ship-wreck", -12, -9, { w = 24, h = 18, items = {
+    ["iron-plate"] = R(15, 35), ["copper-cable"] = R(10, 30), ["pipe"] = R(4, 10),
+  } })
+  b:put("crash-site-spaceship-wreck-big-1", -15, -14)
+  b:put("crash-site-spaceship-wreck-big-2", 11, 10)
+  b:put("crash-site-spaceship-wreck-medium-1", -14, 10)
+  b:scatter("crash-site-spaceship-wreck-medium-2", 3, nil, { -15, -15, 15, -10 })
+  b:scatter_deco(lib.DEAD_TREES, 8)
+  b:scatter_deco(lib.STUMPS, 10)
+  b:scatter_deco(lib.SCORCH, 8)
+end):weight(0.6)
+
 def("pd-ghost-town", function(b)
   local houses = { { -15, -15 }, { -5, -15 }, { 5, -15 }, { -15, -3 }, { 5, -3 }, { -15, 8 }, { -5, 8 }, { 5, 8 } }
   for i, h in ipairs(houses) do
