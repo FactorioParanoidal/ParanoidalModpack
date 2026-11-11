@@ -225,7 +225,7 @@ if mods["aai-industry"] then
         fuel_processor.forced_value = false
     end
 end
-if mods["Aircraft-space-age"] then
+if mods["Aircraft-space-age-reforged"] then
     set_settings_default_value("bool-setting", "aircraft-hardmode", true)
     set_settings_default_value("bool-setting", "inserter-immunity", true)
 end

@@ -1,1 +1,0 @@
---require("control.assert-minable") --Asserts that vehicles are minable. Causes crash when entering all vehicles.

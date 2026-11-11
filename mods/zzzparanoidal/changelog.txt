@@ -1,6 +1,7 @@
 ---------------------------------------------------------------------------------------------------
 Version: 8.1.31
   Changes:
+    - Followed the Aircraft-space-age-reforged rename in dependencies and startup defaults. Removed the redundant Alien Biomes napalm-water patch now owned by Aircraft Reforged; the existing ammo/progression integration remains.
     - Paranoidal packaging: moved the chemical-icon checker, belt-sheet baker, host regression fixture and empty temporary file to the local development workspace. The shortcut-icon generator and all generated game PNGs remain in the mod.
   Changes:
     - Stack-size tuning is centralized in paranoidal-stack-sizes: replaced ReStack writes with a pure category snapshot, separated barrel capacity/recipe/fuel processing, removed early/marathon/ammo/energy/15-item overrides, and sourced all 96 imported module item sizes and ten restored ammo sizes from the central config. Original required prototype defaults remain in their owners; other gameplay properties are unchanged.

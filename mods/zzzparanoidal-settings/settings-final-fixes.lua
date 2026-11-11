@@ -55,7 +55,7 @@ hide("bool-setting", "aai-wide-drill")
 hide("int-setting", "aai-burner-turbine-efficiency")
 hide("int-setting", "aai-fuel-processor-efficiency")
 hide("bool-setting", "aai-stone-path")
--- Aircraft-space-age
+-- Aircraft-space-age-reforged
 hide("bool-setting", "aircraft-hardmode")
 hide("bool-setting", "aircraft-belt-immunity")
 hide("bool-setting", "non-combat-mode")
