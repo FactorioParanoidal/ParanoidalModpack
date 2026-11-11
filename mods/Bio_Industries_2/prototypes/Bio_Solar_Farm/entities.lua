@@ -226,8 +226,8 @@ if BI.Settings.BI_Solar_Additions then
         type = "electric",
         buffer_capacity = "300MJ",
         usage_priority = "tertiary",
-        input_flow_limit = "25MW",
-        output_flow_limit = "25MW"
+        input_flow_limit = "2.5MW",
+        output_flow_limit = "2.5MW"
     },
 	
     chargable_graphics =

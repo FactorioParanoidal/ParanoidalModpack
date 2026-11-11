@@ -2,8 +2,8 @@
 -- Имена 1.1→2.0: solar-panel-*→bob-solar-panel-*, *-accumulator-*→bob-*; large-accum T1 = base accumulator.
 -- Гарды на рецепт/энтити/ингредиент.
 
--- Выставить количество уже существующего ингредиента (предыдущего тира) в рецепте.
-local function set_prev(recipe_name, ing_name, amount)
+-- Выставить количество уже существующего ингредиента в рецепте.
+local function set_ingredient_amount(recipe_name, ing_name, amount)
 	local r = data.raw.recipe[recipe_name]
 	if not (r and r.ingredients) then return end
 	for _, ing in ipairs(r.ingredients) do
@@ -26,11 +26,12 @@ local panels = {
 for name, p in pairs(panels) do
 	local e = data.raw["solar-panel"][name]
 	if e then e.production = p.prod end
-	set_prev(name, p.prev, 4)
+	set_ingredient_amount(name, p.prev, 4)
 end
 
 -- Аккумуляторы: buffer + потоки (1.1) + предыдущий тир ×4
 local accs = {
+	["accumulator"] = { buf = "10MJ", inflow = "60kW", outflow = "60kW" },
 	["bob-large-accumulator-2"] = { prev = "accumulator", buf = "40MJ", inflow = "240kW", outflow = "240kW" },
 	["bob-large-accumulator-3"] = { prev = "bob-large-accumulator-2", buf = "160MJ", inflow = "960kW", outflow = "960kW" },
 	["bob-fast-accumulator-2"] = { prev = "bob-fast-accumulator", buf = "16MJ", inflow = "960kW", outflow = "3840kW" },
@@ -45,5 +46,14 @@ for name, a in pairs(accs) do
 		e.energy_source.input_flow_limit = a.inflow
 		e.energy_source.output_flow_limit = a.outflow
 	end
-	set_prev(name, a.prev, 4)
+	if a.prev then set_ingredient_amount(name, a.prev, 4) end
+end
+
+-- Медленная отдача компенсируется меньшей ценой схем на каждом тире.
+for name, circuit in pairs({
+	["bob-slow-accumulator"] = "electronic-circuit",
+	["bob-slow-accumulator-2"] = "advanced-circuit",
+	["bob-slow-accumulator-3"] = "processing-unit",
+}) do
+	set_ingredient_amount(name, circuit, 2)
 end
