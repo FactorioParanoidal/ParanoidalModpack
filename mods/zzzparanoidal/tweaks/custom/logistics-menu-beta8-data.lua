@@ -5,9 +5,9 @@ return {
     rows = {
         {subgroup = "paranoidal-logistics-storage", order = "a-01", recipes = {
             {["name"] = "wooden-chest", ["order"] = "01"},
-            {["name"] = "bi-wooden-chest-large", ["order"] = "02", ["icon"] = {["icon"] = "__zzzparanoidal__/graphics/logistics-menu-beta8/0bb8080d78161b75e03d.png", ["icon_size"] = 64}},
-            {["name"] = "bi-wooden-chest-huge", ["order"] = "03", ["icon"] = {["icon"] = "__zzzparanoidal__/graphics/logistics-menu-beta8/6658ddfb8522ea813016.png", ["icon_size"] = 64}},
-            {["name"] = "bi-wooden-chest-giga", ["order"] = "04", ["icon"] = {["icon"] = "__zzzparanoidal__/graphics/logistics-menu-beta8/7202aad576f9770a2972.png", ["icon_size"] = 64}},
+            {["name"] = "bi-wooden-chest-large", ["order"] = "02", ["icon"] = {["icon"] = "__zzzparanoidal__/graphics/Bio_Industries_graphics/graphics/icons/entity/wood_chest_large.png", ["icon_size"] = 64}},
+            {["name"] = "bi-wooden-chest-huge", ["order"] = "03", ["icon"] = {["icon"] = "__zzzparanoidal__/graphics/Bio_Industries_graphics/graphics/icons/entity/wood_chest_huge.png", ["icon_size"] = 64}},
+            {["name"] = "bi-wooden-chest-giga", ["order"] = "04", ["icon"] = {["icon"] = "__zzzparanoidal__/graphics/Bio_Industries_graphics/graphics/icons/entity/wood_chest_giga.png", ["icon_size"] = 64}},
             {["name"] = "iron-chest", ["order"] = "05"},
             {["name"] = "zcs-trash-landfill", ["order"] = "06"},
             {["name"] = "memory-unit", ["order"] = "07", ["icon"] = {["icon"] = "__zzzparanoidal__/graphics/logistics-menu-beta8/445578517125b31194df.png", ["icon_size"] = 64}},
@@ -28,9 +28,9 @@ return {
         {subgroup = "paranoidal-logistics-wooden-pole", order = "a-03", recipes = {
             {["name"] = "small-electric-pole", ["order"] = "01"},
             {["name"] = "lighted-small-electric-pole", ["order"] = "02"},
-            {["name"] = "bi-wooden-pole-big", ["order"] = "03", ["icon"] = {["icon"] = "__zzzparanoidal__/graphics/logistics-menu-beta8/64cd25d46f483b5fc175.png", ["icon_size"] = 64}},
+            {["name"] = "bi-wooden-pole-big", ["order"] = "03", ["icon"] = {["icon"] = "__zzzparanoidal__/graphics/Bio_Industries_graphics/graphics/icons/entity/wood_pole_big.png", ["icon_size"] = 64}},
             {["name"] = "lighted-bi-wooden-pole-big", ["order"] = "04"},
-            {["name"] = "bi-wooden-pole-huge", ["order"] = "05", ["icon"] = {["icon"] = "__zzzparanoidal__/graphics/logistics-menu-beta8/e843696224bf5be3c7d2.png", ["icon_size"] = 64}},
+            {["name"] = "bi-wooden-pole-huge", ["order"] = "05", ["icon"] = {["icon"] = "__zzzparanoidal__/graphics/Bio_Industries_graphics/graphics/icons/entity/wood_pole_huge.png", ["icon_size"] = 64}},
             {["name"] = "lighted-bi-wooden-pole-huge", ["order"] = "06"},
         }},
         {subgroup = "paranoidal-logistics-medium-electric-pole", order = "a-04", recipes = {
@@ -62,7 +62,7 @@ return {
             {["name"] = "lighted-bob-substation-3", ["order"] = "06"},
             {["name"] = "bob-substation-4", ["order"] = "07", ["icon"] = {["icons"] = {{["icon"] = "__zzzparanoidal__/graphics/logistics-menu-beta8/512a8a627a7e3337990d.png", ["icon_size"] = 64}, {["icon"] = "__zzzparanoidal__/graphics/logistics-menu-beta8/dd81783d9848390c1ad0.png", ["tint"] = {["r"] = 0.7058823529411765, ["g"] = 0.34901960784313724, ["b"] = 1}, ["icon_size"] = 64}, {["icon"] = "__zzzparanoidal__/graphics/logistics-menu-beta8/401add91aed0042981f6.png", ["tint"] = {1, 1, 1, 0}, ["icon_size"] = 64}, {["icon"] = "__reskins-library__/graphics/icons/tiers/rounded-rectangle/4.png", ["icon_size"] = 64}, {["icon"] = "__reskins-library__/graphics/icons/tiers/rounded-rectangle/4.png", ["icon_size"] = 64, ["tint"] = {["r"] = 0.7058823529411765, ["g"] = 0.34901960784313724, ["b"] = 1, ["a"] = 0.75}}}}},
             {["name"] = "lighted-bob-substation-4", ["order"] = "08"},
-            {["name"] = "bi-large-substation", ["order"] = "09", ["icon"] = {["icon"] = "__zzzparanoidal__/graphics/logistics-menu-beta8/0d2d8c45485b95aa4f70.png", ["icon_size"] = 64}},
+            {["name"] = "bi-large-substation", ["order"] = "09", ["icon"] = {["icon"] = "__zzzparanoidal__/graphics/Bio_Industries_graphics/graphics/icons/entity/substation_large.png", ["icon_size"] = 64}},
             {["name"] = "lighted-bi-large-substation", ["order"] = "10"},
         }},
         {subgroup = "paranoidal-logistics-factorissimo2", order = "a-07", recipes = {
@@ -105,7 +105,7 @@ return {
             {["name"] = "bob-storage-chest-2", ["order"] = "06", ["icon"] = {["icons"] = {{["icon"] = "__zzzparanoidal__/graphics/logistics-menu-beta8/4edc2236136fea04a639.png", ["icon_size"] = 64}, {["icon"] = "__zzzparanoidal__/graphics/logistics-menu-beta8/ff8c9d4ee99f6a3c913e.png", ["icon_size"] = 64}, {["icon"] = "__reskins-library__/graphics/icons/tiers/rounded-rectangle/2.png", ["icon_size"] = 64}, {["icon"] = "__reskins-library__/graphics/icons/tiers/rounded-rectangle/2.png", ["icon_size"] = 64, ["tint"] = {["r"] = 0.9490196078431372, ["g"] = 0.13725490196078433, ["b"] = 0.09411764705882353, ["a"] = 0.75}}}}},
         }},
         {subgroup = "paranoidal-logistics-logistic-chests-3", order = "a-12", recipes = {
-            {["name"] = "bob-titanium-chest", ["order"] = "01", ["icon"] = {["icon"] = "__zzzparanoidal__/graphics/logistics-menu-beta8/b45c13c8e869ad2bc747.png", ["icon_size"] = 64}},
+            {["name"] = "bob-titanium-chest", ["order"] = "01", ["icon"] = {["icon"] = "__zzzparanoidal__/graphics/chest/hr-titanium-chest-icon.png", ["icon_size"] = 64}},
             {["name"] = "bob-active-provider-chest-3", ["order"] = "02", ["icon"] = {["icons"] = {{["icon"] = "__zzzparanoidal__/graphics/logistics-menu-beta8/895ed272900e21b2e70e.png", ["icon_size"] = 64}, {["icon"] = "__zzzparanoidal__/graphics/logistics-menu-beta8/672297fc9aa8bb4a5cdb.png", ["icon_size"] = 64}, {["icon"] = "__reskins-library__/graphics/icons/tiers/rounded-rectangle/3.png", ["icon_size"] = 64}, {["icon"] = "__reskins-library__/graphics/icons/tiers/rounded-rectangle/3.png", ["icon_size"] = 64, ["tint"] = {["r"] = 0.2, ["g"] = 0.7058823529411765, ["b"] = 1, ["a"] = 0.75}}}}},
             {["name"] = "bob-buffer-chest-3", ["order"] = "03", ["icon"] = {["icons"] = {{["icon"] = "__zzzparanoidal__/graphics/logistics-menu-beta8/1891fd13b02faab2faaf.png", ["icon_size"] = 64}, {["icon"] = "__zzzparanoidal__/graphics/logistics-menu-beta8/672297fc9aa8bb4a5cdb.png", ["icon_size"] = 64}, {["icon"] = "__reskins-library__/graphics/icons/tiers/rounded-rectangle/3.png", ["icon_size"] = 64}, {["icon"] = "__reskins-library__/graphics/icons/tiers/rounded-rectangle/3.png", ["icon_size"] = 64, ["tint"] = {["r"] = 0.2, ["g"] = 0.7058823529411765, ["b"] = 1, ["a"] = 0.75}}}}},
             {["name"] = "bob-passive-provider-chest-3", ["order"] = "04", ["icon"] = {["icons"] = {{["icon"] = "__zzzparanoidal__/graphics/logistics-menu-beta8/4a62a6544d88aff371a6.png", ["icon_size"] = 64}, {["icon"] = "__zzzparanoidal__/graphics/logistics-menu-beta8/672297fc9aa8bb4a5cdb.png", ["icon_size"] = 64}, {["icon"] = "__reskins-library__/graphics/icons/tiers/rounded-rectangle/3.png", ["icon_size"] = 64}, {["icon"] = "__reskins-library__/graphics/icons/tiers/rounded-rectangle/3.png", ["icon_size"] = 64, ["tint"] = {["r"] = 0.2, ["g"] = 0.7058823529411765, ["b"] = 1, ["a"] = 0.75}}}}},

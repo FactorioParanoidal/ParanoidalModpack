@@ -17,6 +17,7 @@ local directions = { "north", "east", "south", "west" }
 
 -- Horizontal 600x129 sheet: one 150x129 frame per direction, 1.1 scale 0.5.
 local function body(name)
+    local shadow_name = name == "decider_combinator" and "arithmetic_combinator" or name
     local result = {}
     for i, direction in ipairs(directions) do
         local x = (i - 1) * 150
@@ -27,7 +28,7 @@ local function body(name)
                 shift = { 0, 0 }, scale = 0.5,
             },
             {
-                filename = root .. "entity/" .. name .. "_shadow.png",
+                filename = root .. "entity/" .. shadow_name .. "_shadow.png",
                 priority = "high", x = x, width = 150, height = 129,
                 shift = util.by_pixel(21, 0), scale = 0.5, draw_as_shadow = true,
             },
