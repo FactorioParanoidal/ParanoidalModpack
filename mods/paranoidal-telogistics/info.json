@@ -1,0 +1,12 @@
+{
+  "name": "paranoidal-telogistics",
+  "version": "1.0.0",
+  "title": "Paranoidal Telogistics",
+  "author": "FactorioParanoidal",
+  "contact": "Based on Telogistics by S6X",
+  "homepage": "https://github.com/FactorioParanoidal/ParanoidalModpack",
+  "factorio_version": "2.1",
+  "description": "Cargo teleporters of the Space Age branch: three tiers move chest contents between planets for electricity, researched after the science packs of Muluna, Vulcanus and Fulgora. Rewritten from scratch after Telogistics by S6X (GPLv3).",
+  "dependencies": ["base >= 2.1.0", "space-age >= 2.1.0", "paranoidal-space-age-filter", "planet-muluna", "bobpower"],
+  "space_travel_required": true
+}
