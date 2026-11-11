@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 9.0.5
 Date: 2026-10-14
+  Bugfixes:
+    - TimedSpawnControl-reforged creates and handles its own buttons; only decorate them and keep its action tooltips, including right-click point management. Dependency and icon entries follow its new internal name.
   Changes:
     - Paranoidal packaging: moved the editable button SVG source to the local source-assets collection; game graphics are unchanged.
   Changes:

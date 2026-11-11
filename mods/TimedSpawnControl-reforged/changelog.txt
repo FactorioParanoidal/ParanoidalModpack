@@ -1,0 +1,31 @@
+---------------------------------------------------------------------------------------------------
+Version: 9.0.0
+Date: 2026-11-11
+  Graphics:
+    - Uses the user's improved 144x144 thumbnail.png without re-encoding it.
+  Bugfixes:
+    - Validate a shifted respawn point before replacing it or consuming the shift cooldown; recheck on confirmation and at respawn.
+    - Discard stale death dialogs after a surface is deleted or the personal point changes; cancel dialogs with Escape.
+    - Own and repair the mod's buttons instead of relying on foreign GUI elements and tags.
+    - Preserve manual and shift cooldowns when a personal point is reset.
+  Changes:
+    - Right-click Set Spawn to inspect the surface, coordinates and minimap, print a map link, or explicitly confirm a reset.
+    - Warn about enemies near a proposed shift without claiming the destination is safe.
+    - Rate-limit long-range unstuck attempts to once per 5 seconds; retain the original 1000-tile rescue radius with intermediate searches.
+    - Fit scrollable dialogs to the display size and scale; widen standalone text buttons for translations.
+  Compatibility:
+    - Renamed to TimedSpawnControl-reforged. Factorio migrates the old TimedSpawnControl storage and GUI ownership through migrates_from; personal points and cooldowns are imported without renaming their internal IDs.
+    - GUI_Unifyer and the unstuck achievement follow the new mod identity.
+  Info:
+    - README contains complete player controls, recovery behavior, limitations and upgrade instructions.
+---------------------------------------------------------------------------------------------------
+Version: 2.0.0
+Date: 2026-10-28
+  Graphics:
+    - thumbnail.png is redrawn at 144x144 after the old smaller picture: text and simple shapes are drawn again, the rest is resampled and sharpened.
+  Features:
+    - When a player dies within 1 chunk of their saved respawn point and enemies are within 2 chunks of it, a dialog offers to move the point by 2 chunks in one of eight directions before respawning.
+    - The dialog sits below the engine's death notice and shows a minimap centred on the selected point; without an answer the point stays unchanged.
+    - After a confirmed shift the dialog is not offered for 2 minutes; a death at the overrun point during that time prints the remaining time instead. Setting the point manually does not reset this cooldown.
+  Compatibility:
+    - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.

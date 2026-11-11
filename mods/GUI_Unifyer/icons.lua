@@ -179,8 +179,9 @@ local icons = {
     create_icon_entry("paranoidal-CodexRPG", "rpg_button", "btcharxp", nil, nil, nil,
         {"screen", "char-panel"}),
     create_icon_entry("SpawnControl", "spawncontrol_button", "spawn", {'guiu.spawncontrol_button'}, nil, nil, nil),
-    create_icon_entry("TimedSpawnControl", "spawncontrol_button", "spawn", {'guiu.spawncontrol_button'}, nil, nil, nil),
-    create_icon_entry("TimedSpawnControl", "spawncontrol_random_button", "unstuck", {'guiu.spawncontrol_unstuck'}, nil, nil, nil),
+    -- Keep the fork's own tooltips (including its right-click management action).
+    create_icon_entry("TimedSpawnControl-reforged", "spawncontrol_button", "spawn", nil, nil, nil, nil),
+    create_icon_entry("TimedSpawnControl-reforged", "spawncontrol_random_button", "unstuck", nil, nil, nil, nil),
     -- Paranoidal: нажатие обрабатывает сам Blueprint Sandboxes по имени кнопки; выделена, пока игрок в песочнице.
     create_icon_entry("blueprint-sandboxes", "blueprintsandboxes_button", "bpsb-toggle-gui-sb-toggle-shortcut", {'guiu.blueprintsandboxes_button'}, nil, nil,
         {"left", "bpsb-toggle-gui"}),

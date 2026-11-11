@@ -2,6 +2,7 @@
 Version: 9.0.0
 Date: 2026-11-01
   Bugfixes:
+    - The unstuck achievement follows TimedSpawnControl-reforged: both the availability guard and GUI owner check use the renamed mod.
     - Milestone imports and remote presets are normalised before use; malformed entries, non-finite numbers, non-plain tables and non-growing next formulas are rejected. Research levels and their steps must be whole numbers. Provider failures are isolated and removed providers leave no stale local presets.
     - Infinite milestones have a bounded completion budget; deferred backfill continues in later cycles. Research milestones now create subsequent levels too, without duplicate next stages after a manual reset.
     - Fixed the milestone reached custom event and the player index used for per-client file output.

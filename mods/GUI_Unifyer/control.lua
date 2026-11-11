@@ -292,7 +292,6 @@ end
 		{"pycoalprocessing",	"pywiki",									"pycoalprocessing_button",		{'guiu.pycoalprocessing_button'},			true},
 		{"usage-detector",		"usage_detector",							"usagedetector_button",			{'guiu.usagedetector_button'},				true},
 		{"RPG",					"104",										"rpg_button",					{'guiu.rpg_button'},						true},
-		{"TimedSpawnControl",	"unstuck",								"spawncontrol_random_button",	{'guiu.spawncontrol_unstuck'},			true},
 		{"blueprint-sandboxes",	"bpsb-toggle-gui-sb-toggle-shortcut",	"blueprintsandboxes_button",	{'guiu.blueprintsandboxes_button'},		true},
 		-- Paranoidal: объединитель сундуков; нажатие обрабатывает сам WideChests по имени кнопки.
 		{"WideChests",			"WideChests_merge-chest-button",		"widechests_button",			{'guiu.widechests_button'},				true},
@@ -387,7 +386,8 @@ local function create_new_buttons(player)
 		button_flow.clockGUI.destroy()
 	end
 
-	if script.active_mods["SpawnControl"] or script.active_mods["TimedSpawnControl"] then
+	-- TimedSpawnControl-reforged owns its buttons/tags; only decorate them in fix_buttons.
+	if script.active_mods["SpawnControl"] and not script.active_mods["TimedSpawnControl-reforged"] then
 		if not button_flow.spawn then
 			button_flow.add {
 				type = "sprite-button",
@@ -396,7 +396,7 @@ local function create_new_buttons(player)
 				sprite = "spawncontrol_button",
 			}
 		end
-	elseif button_flow["spawn"] then
+	elseif not script.active_mods["TimedSpawnControl-reforged"] and button_flow["spawn"] then
 		button_flow["spawn"].destroy()
 	end
 
@@ -684,8 +684,8 @@ end
 -- every other element follows at the end in its current order. Elements are swapped, never recreated:
 -- their style, sprite and state stay.
 local PANEL_ORDER = {
-	"spawn",                                -- TimedSpawnControl: teleport to spawn
-	"unstuck",                              -- TimedSpawnControl: unstuck
+	"spawn",                                -- TimedSpawnControl-reforged: set/manage personal respawn point
+	"unstuck",                              -- TimedSpawnControl-reforged: unstuck
 	"todo_maximize_button",                 -- Todo-List
 	"inserter-throughput-toggle",           -- inserter-throughput
 	"paranoidal_autofill_button",           -- paranoidal-autofill

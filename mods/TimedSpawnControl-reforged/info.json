@@ -1,0 +1,12 @@
+{
+  "name": "TimedSpawnControl-reforged",
+  "version": "9.0.0",
+  "factorio_version": "2.1",
+  "title": "Timed Spawn Control Reforged",
+  "author": "Maxikaaz",
+  "contact": "",
+  "homepage": "https://mods.factorio.com/mod/TimedSpawnControl",
+  "dependencies": ["base >= 2.1.24", "! TimedSpawnControl"],
+  "migrates_from": ["TimedSpawnControl"],
+  "description": "Paranoidal adaptation for Factorio 2.1. Personal respawn points with a fixed 60-second setting cooldown, point management on right-click, an unstuck action and a validated directional escape from an overrun point. Random spawning is intentionally excluded."
+}

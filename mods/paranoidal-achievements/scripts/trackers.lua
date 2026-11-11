@@ -1059,13 +1059,13 @@ trackers["auto-deconstruct"] = {
   filters = {on_marked_for_deconstruction = function() return {{filter = "type", type = "mining-drill"}} end},
 }
 
--- The "unstuck" button of TimedSpawnControl.
+-- The "unstuck" button of TimedSpawnControl-reforged.
 trackers["unstuck"] = {
   events = {
     on_gui_click = function(event, entries, core)
       local element = event.element
       if not (element and element.valid and element.name == "unstuck") then return end
-      if element.get_mod() ~= "TimedSpawnControl" then return end
+      if element.get_mod() ~= "TimedSpawnControl-reforged" then return end
       local player = player_of(event)
       each(entries, function(entry) core.unlock(player, entry) end)
     end,
