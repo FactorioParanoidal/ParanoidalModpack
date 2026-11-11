@@ -84,6 +84,9 @@ data:extend({
         order = "g[scrap-recycling]",
         enabled = true,
         auto_recycle = false,
+        -- Parts from scrap are salvage, not production: they must not count for milestones and
+        -- production achievements (the first electronic circuit from scrap was a milestone).
+        hide_from_stats = true,
         energy_required = 0.2,
         ingredients = {{type = "item", name = "scrap", amount = 1}},
         results = results,

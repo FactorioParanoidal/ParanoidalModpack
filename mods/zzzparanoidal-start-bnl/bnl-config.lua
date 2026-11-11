@@ -426,11 +426,12 @@ config.anomalies = {
 -- 9. Scrap deposit along the crash furrow behind the ship.
 config.scrap = {
     from = 6, to = 52, width = {5, 8}, amount = {1000, 10000}, noise = 0.35, -- amount: the whole deposit, uniform
+    -- At most 12 results: every recycler has 12 output slots and refuses a recipe with more
+    -- ("Scrap cannot be recycled"). Sum 0.83 items per scrap.
     results = {
-        {"iron-gear-wheel", 0.18}, {"iron-stick", 0.12}, {"iron-plate", 0.10}, {"copper-cable", 0.08},
-        {"stone", 0.06}, {"pipe", 0.05}, {"bob-basic-circuit-board", 0.05}, {"angels-slag", 0.05},
-        {"repair-pack", 0.04}, {"steel-plate", 0.03}, {"bob-insulated-cable", 0.02}, {"motor", 0.02},
-        {"electronic-circuit", 0.01}, {"battery", 0.01}, {"bob-titanium-bearing-ball", 0.01},
+        {"iron-gear-wheel", 0.21}, {"iron-stick", 0.14}, {"iron-plate", 0.12}, {"copper-cable", 0.10},
+        {"pipe", 0.06}, {"bob-basic-circuit-board", 0.06}, {"repair-pack", 0.05}, {"steel-plate", 0.04},
+        {"motor", 0.02}, {"electronic-circuit", 0.01}, {"battery", 0.01}, {"bob-titanium-bearing-ball", 0.01},
     },
 }
 
