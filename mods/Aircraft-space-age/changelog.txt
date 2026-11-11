@@ -2,6 +2,8 @@
 Version: 2.3.4
 Date: 2025-10-22
   Changes:
+    - Paranoidal packaging: moved the backup Lua file and empty editor document out of the distributed mod into the local archive.
+  Changes:
     - Added option to disable Aircraft's changes to the Space Age tech tree. https://mods.factorio.com/mod/Aircraft-space-age/discussion/67ef131ed2abb65391774eff
   Optimizations:
     - Aircraft trail smoke now respects the graphics "smoke" option (show_when_smoke_off = false), so players who disable smoke no longer render it.

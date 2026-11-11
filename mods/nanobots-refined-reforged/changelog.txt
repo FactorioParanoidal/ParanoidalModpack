@@ -2,6 +2,8 @@
 Version: 9.0.7
 Date: 2026-10-21
   Changes:
+    - Paranoidal packaging: moved three unused MP3 source recordings to the local source-assets collection; all game OGG sounds and their definitions are unchanged.
+  Changes:
     - No longer needs stdlib2: event handling, player and force data, the remote interface, the console command and the prototype helpers are part of the mod. Storage keeps the same layout (storage.players, storage.forces, pending action keys) (Paranoidal local change)
     - Removed dead code: the reprogramming pad (needed the absent PickerAtheneum mod), the disabled-chip shortcuts for PickerInventoryTools (absent), the 1.8.x migrations (the fork starts with fresh storage) and the stdlib remote functions write_global, dump_all and merge_interfaces (1.1 API) (Paranoidal local change)
     - Renamed to nanobots-refined-reforged, the Paranoidal fork of nanobots-refined (title "Nanobots: Early Bots Refined (Reforged)"); version 9 against portal auto-updates. Prototype, setting and key names are unchanged. An existing save keeps the entities and items but starts with fresh mod storage (custom ranges, queues).

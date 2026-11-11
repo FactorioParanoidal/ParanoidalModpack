@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.5
 Date: 29.06.2025
+  Changes:
+    - Paranoidal packaging: moved stray Git metadata, sample hooks and object files out of the mod root into the local archive; game files and migrations are unchanged.
   Bugfixes:
     - Fix recycling of copper and iron ore
   Compatibility:

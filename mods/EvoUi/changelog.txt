@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 0.5.1
 Date: 2026-10-12
+  Changes:
+    - Paranoidal packaging: moved regression fixtures and the editable Paint.NET source to the local development workspace; game resources are unchanged.
   Optimizations:
     - Paranoidal: schedule positive exact integer update intervals with on_nth_tick; restore subscriptions on load and retain the legacy modulo path for fractional or out-of-range values without rewriting settings.
     - Paranoidal: periodically update GUI recipients only while connected, using player.index; keep saved offline settings and the player-locations sensor's show_offline data source.

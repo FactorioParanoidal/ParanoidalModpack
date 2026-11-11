@@ -419,6 +419,8 @@ if registry then registry.data.machines["machine-name"] = true end
 
 ### Проверки
 
+Тесты вынесены из игровой поставки в локальную папку `D:/PARANOIDAL/test-runs/mod-tests/ic-more-qualities/tests/`. Команды ниже выполняются в отдельной копии для разработки, собранной через `D:/PARANOIDAL/tools/mod-development/prepare.py`; исходная раскладка тестов в ней восстанавливается.
+
 ```text
 lua tests/defects-model.lua
 lua tests/defects-preview.lua

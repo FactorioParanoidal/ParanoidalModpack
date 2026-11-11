@@ -50,6 +50,8 @@
 
 ## Состав и порядок работы
 
+Тесты из таблицы ниже хранятся вне игровой поставки: `D:/PARANOIDAL/test-runs/mod-tests/paranoidal-stack-sizes/tests/`. Для их прежней раскладки используется отдельная копия, собранная через `D:/PARANOIDAL/tools/mod-development/prepare.py` с обоими модами `paranoidal-stack-sizes` и `zzzparanoidal`.
+
 | Файл | Роль |
 |---|---|
 | `config.lua` | Единственный реестр числовых правил и списков исключений |

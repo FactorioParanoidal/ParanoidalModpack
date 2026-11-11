@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 9.4.6
 Date: 2026-10-12
+  Changes:
+    - Paranoidal packaging: moved standalone regression fixtures out of the distributed mod into the local test collection.
   Features:
     - Read-only schema-v1 get_surface_status exposes the existing legacy solar pollution component, application/cycle times and shared curve without rescanning panels or changing generation.
   Locale:

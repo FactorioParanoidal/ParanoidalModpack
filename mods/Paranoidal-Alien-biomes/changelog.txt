@@ -2,6 +2,8 @@
 Version: 9.8.6
 Date: 08. 11. 2026
   Changes:
+    - Paranoidal packaging: moved the complete maintenance toolkit, reports, plans and upstream manifests to the local development workspace. Generated Lua and all game assets are unchanged.
+  Changes:
     - Renamed the mod to Paranoidal-Alien-biomes (Paranoidal Alien Biomes), version 9.8.6.
     - Updated internal asset paths, maintenance generators and pack integrations to the new mod ID.
     - Preserved all user-optimised graphics byte-for-byte. No graphics were regenerated or re-encoded.

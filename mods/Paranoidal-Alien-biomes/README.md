@@ -8,7 +8,7 @@ User-optimised graphics are preserved. Prototype names, setting keys and the
 `alien-biomes-reforged` remote interface are unchanged. No rename migrations were added;
 the existing upstream migration files are untouched.
 
-Maintenance and verification: [tools/README.md](tools/README.md).
+Maintenance tools, reports and manifests are kept outside the distributed mod in the local Paranoidal workspace (`tools/mod-development/mods/Paranoidal-Alien-biomes/tools/README.md`). Assemble a private development copy with `tools/mod-development/prepare.py` before using their original relative-path commands.
 
 ## Original upstream notice
 

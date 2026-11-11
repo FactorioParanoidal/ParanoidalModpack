@@ -2,6 +2,8 @@
 Version: 2025.09.15
 Date: 2025-09-15
   Changes:
+    - Paranoidal packaging: moved the release shell script out of the distributed mod into the local development workspace.
+  Changes:
     - Added fluidbox nudging to resolve long outstanding icon placement issues; thanks for the
       inspiration watdafawx
     - Removed the 1.1 fluid box fields base_level, height and base_area, the unreachable bounding box

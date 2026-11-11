@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.0
 Date: 2026-11-10
+  Changes:
+    - Paranoidal packaging: moved regression fixtures out of the distributed mod into the local test collection; stack rules and configuration are unchanged by this packaging change.
   Features:
     - Centralized Paranoidal stack-size configuration: Bob/Angels/BI compatibility, category rules ported from ReStack (Optera), module items, ammo, energy fuels and the 15 approved item exceptions.
     - Resolves precedence in a virtual plan and applies each existing item size at most once after the build's final prototype stages; publishes a per-item source audit in mod-data.
