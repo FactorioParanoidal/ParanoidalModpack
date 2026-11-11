@@ -991,6 +991,24 @@ trackers["legendary"] = {
 }
 
 ---------------------------------------------------------------------------------------------------
+-- True ending of the Space Age branch (paranoidal-true-ending): its custom event (remote
+-- get_on_ending_event; fields fact "chapter-1" | "true-ending", force_index, platform_index), raised
+-- once per force. Params of the entries: fact.
+
+trackers["true-ending"] = {
+  custom = function()
+    if not has_remote("paranoidal-true-ending", "get_on_ending_event") then return nil end
+    return {[remote.call("paranoidal-true-ending", "get_on_ending_event")] = function(event, entries, core)
+      local force = event.force_index and game.forces[event.force_index]
+      if not (force and force.valid) then return end
+      each(entries, function(entry)
+        if entry.params and entry.params.fact == event.fact then core.unlock(force, entry) end
+      end)
+    end}
+  end,
+}
+
+---------------------------------------------------------------------------------------------------
 -- Small actions of players and other mods
 
 trackers["rename"] = {

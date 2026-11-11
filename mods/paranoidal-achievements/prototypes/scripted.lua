@@ -126,6 +126,12 @@ local list = {
     needs = {entities = {"rocket-silo"}}, icon = {item = "rocket-part"}},
   {id = "immortal", kind = "script", theme = "space", tracker = "immortal", needs = {entities = {"rocket-silo"}},
     icon = {item = "heavy-armor"}},
+  -- true ending of the Space Age branch: facts of the custom event of paranoidal-true-ending
+  {id = "chapter-one", kind = "script", theme = "space", tracker = "true-ending", params = {fact = "chapter-1"},
+    mods = {"paranoidal-true-ending"}, icon = {technology = "stellar-discovery-solar-system-edge"}, frame = 2},
+  {id = "true-ending", kind = "script", theme = "space", tracker = "true-ending", params = {fact = "true-ending"},
+    mods = {"paranoidal-true-ending"}, needs = {items = {"paranoidal-ark"}},
+    icon = {technology = "paranoidal-shattered-planet"}, frame = 3},
 
   -- character
   {id = "phoenix", kind = "script", theme = "character", tracker = "deaths", amounts = {10, 100},
