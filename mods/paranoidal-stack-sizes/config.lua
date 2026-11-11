@@ -264,6 +264,7 @@ C.inherited_defaults = {
 }
 
 C.exceptions = {
+    {source = "seafloor-pumps", mod = "zzzparanoidal", size = 20, names = {"angels-seafloor-pump", "paranoidal-seafloor-pump-2", "paranoidal-seafloor-pump-3"}},
     {source = "approved-15", size = 10, names = {"y_alien_solar2", "bi-wooden-chest-giga"}},
     {source = "approved-15", size = 20, names = {"y_alien_solar"}},
     {source = "approved-15", size = 25, names = {"bi-wooden-chest-huge"}},

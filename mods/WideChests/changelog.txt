@@ -9,6 +9,7 @@ Date: 31.5.2025
     - Paranoidal: chest generation registers its derived stack minimum with paranoidal-stack-sizes instead of changing the item immediately; mergeable areas and chest slot counts are unchanged.
     - Paranoidal: after 16 tiles each additional tile adds 5/12 of the usual capacity, so large merged chests differ in size instead of hitting the shared limit.
   Bugfixes:
+    - Paranoidal: enabled modes with no generated sizes no longer submit an invalid zero stack minimum. Positive derived minima, selection filters and chest capacities are unchanged.
     - Fixed inventory bar being set to higher than game limit during merging AGAIN.
   Compatibility:
     - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.

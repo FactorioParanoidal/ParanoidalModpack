@@ -1,16 +1,11 @@
--- Barrel capacity, recipes and fuel only. Item stack sizes belong to paranoidal-stack-sizes.
+-- Barrel capacity and recipes; fuel is delegated at the original phase. Stack sizes belong to the service.
 local C = require("__paranoidal-stack-sizes__/config")
+local container_fuel = require("tweaks.custom.energy-port-containers")
 local barrel_cap = C.categories["barrel-fill"]
 local empty_barrels = C.empty_barrels
 local energy_per_recipe, mult = 2, 10
 if barrel_cap <= 500 then mult = math.ceil(500 / barrel_cap) else energy_per_recipe = math.floor(barrel_cap / 250) end
 
-
-local ENERGY_UNITS = { J = 1, kJ = 1e3, MJ = 1e6, GJ = 1e9, TJ = 1e12, PJ = 1e15 }
-local function energy_to_j(s)
-  local n, u = tostring(s):match("([%d%.]+)%s*([kMGTP]?J)")
-  return n and tonumber(n) * (ENERGY_UNITS[u] or 1) or nil
-end
 
 -- Recipe-driven: в 2.0 имя бочки != имени жидкости (angels-gas-ammonia -> ammonia-barrel),
 -- поэтому наполнение/опустошение определяем по структуре рецепта, а не по имени.
@@ -43,17 +38,7 @@ for _, r in pairs(data.raw.recipe) do
       ra_set(in_c, ra(in_c) * mult)
       ra_set(in_f, barrel_cap * mult)
       ra_set(out_b, ra(out_b) * mult)
-      local bi = data.raw.item[rn(out_b)]
-      if bi then
-        local fl = data.raw.fluid[rn(in_f)]
-        if fl and fl.fuel_value then
-          local ev = energy_to_j(fl.fuel_value)
-          if ev and ev > 0 then
-            bi.fuel_categories = bi.fuel_categories or {"chemical"} -- Factorio 2.1
-            bi.fuel_value = (ev * ra(in_f) / ra(out_b)) .. "J"
-          end
-        end
-      end
+      container_fuel.initialize_fill(data.raw, in_f, out_b)
     elseif in_b and out_c and out_f then     -- ОПУСТОШЕНИЕ: бочка -> контейнер + жидкость
       r.energy_required = energy_per_recipe
       ra_set(in_b, ra(in_b) * mult)

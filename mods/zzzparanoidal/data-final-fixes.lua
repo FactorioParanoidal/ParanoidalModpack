@@ -19,7 +19,6 @@ require("tweaks.entity.trains")
 require("tweaks.entity.locomotive-fuel-efficiency") -- КПД топлива локомотивов по уровням
 require("tweaks.entity.drills")
 require("tweaks.entity.bio-mod")
-require("tweaks.entity.fuel")
 require("tweaks.entity.belts")
 require("tweaks.entity.boilers")
 require("tweaks.entity.alert-arrow")

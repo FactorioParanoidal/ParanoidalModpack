@@ -265,7 +265,10 @@ function MergingChests.create_mergeable_chest(entity_data, segments_data)
 
 	if enable_chest or enable_warehouse or enable_trashdump then
 		table.insert(data.raw['selection-tool'][MergingChests.merge_selection_tool_name].select.entity_filters, entity_data.chest_name)
-		require("__paranoidal-stack-sizes__/requests").minimum("item", entity_data.chest_name, max_area, "wide-chests-area")
+		-- No generated variants means no minimum, not an invalid zero-sized constraint.
+		if max_area > 0 then
+			require("__paranoidal-stack-sizes__/requests").minimum("item", entity_data.chest_name, max_area, "wide-chests-area")
+		end
 	end
 end
 
