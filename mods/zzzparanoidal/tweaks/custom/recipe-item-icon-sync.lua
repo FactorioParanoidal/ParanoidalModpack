@@ -8,6 +8,20 @@ local foreign_icon_groups = {
     j_yuoki_logistics = true, yi_engines = true, yie_harvest = true,
 }
 
+-- These recipes depict inputs/processes, not the product (wood/fibre marks,
+-- crystallization liquid or sorting). Keep the item's own curated artwork.
+local product_icon_authoritative = {
+    ["bob-wooden-board"] = true,
+    ["bob-fibreglass-board"] = true,
+    ["bob-thorium-ore"] = true,
+    ["bob-amethyst-ore"] = true,
+    ["bob-diamond-ore"] = true,
+    ["bob-emerald-ore"] = true,
+    ["bob-ruby-ore"] = true,
+    ["bob-sapphire-ore"] = true,
+    ["bob-topaz-ore"] = true,
+}
+
 local function equal(a, b)
     if type(a) ~= type(b) then return false end
     if type(a) ~= "table" then return a == b end
@@ -73,9 +87,12 @@ function M.apply(raw, item_types, emit)
     for _, name in ipairs(names) do
         local list = candidates[name]
         table.sort(list, function(a, b) return a.name < b.name end)
-        local conflict = blocked[name] and "multiple-products" or nil
+        local conflict = product_icon_authoritative[name] and "process-icon"
+            or (blocked[name] and "multiple-products" or nil)
         for _, candidate in ipairs(list) do
-            if not equal(candidate.layers, list[1].layers) then conflict = "different-icons" end
+            if not product_icon_authoritative[name] and not equal(candidate.layers, list[1].layers) then
+                conflict = "different-icons"
+            end
         end
         if conflict then
             local recipes = {}

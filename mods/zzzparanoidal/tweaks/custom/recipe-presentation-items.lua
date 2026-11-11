@@ -48,9 +48,9 @@ for item_name, recipe_name in pairs(from_main) do
     if item and layer then set_icons(item, {layer}) end
 end
 
--- Whole ordinary-recipe icon: wooden source mark, turret colour and level dots.
--- The board's source mark must also appear on the item in Factoriopedia.
-for _, name in ipairs({"bob-wooden-board", "artillery-turret", "bob-artillery-turret-2", "bob-artillery-turret-3",
+-- Whole ordinary-recipe icon: turret colour and level dots belong to the product.
+-- Wooden-board source marks stay on recipes; recipe-presentation sets the clean item icon.
+for _, name in ipairs({"artillery-turret", "bob-artillery-turret-2", "bob-artillery-turret-3",
     "bob-sniper-turret-1", "bob-sniper-turret-2", "bob-sniper-turret-3",
     "bob-plasma-turret-1", "bob-plasma-turret-2", "bob-plasma-turret-3", "bob-plasma-turret-4"}) do
     local item, recipe = find_item(name), data.raw.recipe[name]

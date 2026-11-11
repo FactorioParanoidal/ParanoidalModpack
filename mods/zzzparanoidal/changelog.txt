@@ -1,6 +1,7 @@
 ---------------------------------------------------------------------------------------------------
 Version: 8.1.31
   Changes:
+    - Keep ingredient/process marks on recipes, not products: wooden and fibreglass boards retain clean item icons, thorium ore retains its ore artwork instead of sorting, and six raw gems no longer inherit crystallization-liquid icons. Production recipe process marks are retained; generated recycling/product marks follow the corrected items. Item IDs, recipe mechanics and ground-picture variants are unchanged.
     - Followed the Aircraft-space-age-reforged rename in dependencies and startup defaults. Removed the redundant Alien Biomes napalm-water patch now owned by Aircraft Reforged; the existing ammo/progression integration remains.
     - Paranoidal packaging: moved the chemical-icon checker, belt-sheet baker, host regression fixture and empty temporary file to the local development workspace. The shortcut-icon generator and all generated game PNGs remain in the mod.
   Changes:
