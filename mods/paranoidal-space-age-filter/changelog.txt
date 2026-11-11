@@ -2,6 +2,7 @@
 Version: 9.0.0
 Date: 2026-11-07
   Changes:
+    - The true ending (paranoidal-true-ending, 2026-11-11) counts as Space Age content after the rocket like a planet mod: its technology keeps unlocking the Ark made of planet materials. The edge still needs every planet of the build; it now ends chapter 1, the victory moves to the shattered planet (description changed).
     - The cargo teleporters (paranoidal-telogistics) count as Space Age content after the rocket like a planet mod: their technologies keep unlocking their recipes made of planet materials (a home technology would lose them to the technology of the material).
     - Planet mods Muluna (planet-muluna) and Maraxsis (maraxsis) with their library PlanetsLib see Space Age; their prototypes count as Space Age content after the rocket (ПР-079 wave 1).
     - A technology shown while disabled counts as visible for the hidden-recipe rule: a script enables it (Muluna's nanofoamed polymers after two planet science packs); before, its recipes were hidden.

@@ -71,9 +71,10 @@ local drop_prerequisites = {["captive-biter-spawner"] = {["kovarex-enrichment-pr
 -- prototypes count as Space Age's own: after the rocket, references to the renamed planet materials follow, RSO leaves
 -- their planets and resources to the game's generator, prices of the planets (zzzparanoidal). PlanetsLib is the
 -- library of the planet mods (orbits, cargo drops, surface properties). paranoidal-telogistics (cargo teleporters
--- between planets) is after-rocket content made of planet materials: its technologies keep their recipes.
+-- between planets) is after-rocket content made of planet materials: its technologies keep their recipes; so is
+-- paranoidal-true-ending (the Ark of every planet's materials, the way to the Shattered Planet).
 local planet_mods = {secretas = true, Moshine = true, ["planet-muluna"] = true, maraxsis = true, PlanetsLib = true,
-	["paranoidal-telogistics"] = true}
+	["paranoidal-telogistics"] = true, ["paranoidal-true-ending"] = true}
 -- Victory needs every planet of the build (ПР-079 item 2): the solar system edge also needs a technology that only that
 -- planet opens. Secretas' golden science needs Frozeta as well; Muluna's interstellar science and Maraxsis' Project
 -- Seadragon are prerequisites of their own mods already (listed for the check). Absent technologies are skipped.
