@@ -1,0 +1,12 @@
+{
+  "name": "paranoidal-true-ending",
+  "version": "1.0.0",
+  "title": "Paranoidal True Ending",
+  "author": "FactorioParanoidal",
+  "contact": "Based on True Ending Is Shattered Planet by Talandar (MIT)",
+  "homepage": "https://github.com/FactorioParanoidal/ParanoidalModpack",
+  "factorio_version": "2.1",
+  "description": "True ending of the Space Age branch: the solar system edge ends chapter 1, the victory comes when a platform reaches the shattered planet with the Ark, made from the materials of every planet. Three ever more dangerous legs beyond the edge. Based on True Ending Is Shattered Planet by Talandar (MIT).",
+  "dependencies": ["base >= 2.1.0", "space-age >= 2.1.0", "paranoidal-space-age-filter", "? zzzparanoidal"],
+  "space_travel_required": true
+}

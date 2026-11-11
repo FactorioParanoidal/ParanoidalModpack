@@ -1,0 +1,15 @@
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 2026-11-11
+  Major Features:
+    - First version (Space Age branch of Paranoidal only, user decision 2026-11-11): the true ending at the shattered planet. Based on True Ending Is Shattered Planet 0.3.1 by Talandar (MIT, licence in LICENSE); its thumbnail is reused (288 x 288, pingo -s4 -quality=75, 36.8 dB), the code is rewritten.
+    - The solar system edge ends chapter 1: Space Age's victory there is switched off (its freeplay script, set_no_victory); the first platform of a force beyond the edge prints the chapter 1 message and raises the custom event for the achievements.
+    - The victory comes when a platform reaches the shattered planet with the Ark in its hub (any quality), once per force; a platform without the Ark gets a message instead. Own victory screen texts. Chapter 1 and the victory are kept in storage: a loaded save does not repeat them (the original mod kept them in a local table).
+    - Beyond the edge the route has three legs, each more dangerous: edge -> halfway to the shattered planet (2 000 000 km; a stop where a platform can wait and mine promethium) -> debris belt (1 200 000 km) -> shattered planet (800 000 km). The legs are the three parts of Space Age's shattered planet trip (0 - 0.5, 0.5 - 0.8, 0.8 - 1); the debris belt leg and stop have 25 % more huge asteroids. Space Age's route from the edge keeps its name for the first leg, so its three achievements still count km from the edge.
+    - The promethium science pack technology opens the way to the halfway point; the new technology "Shattered planet" (after it, 20 000 units of every science pack of the build including military, golden and promethium, 120 s) opens the debris belt, the shattered planet and the Ark.
+    - The Ark (stack 1, 1 t) is made on a space platform in a cryogenic plant in 600 s from 250 promethium asteroid chunks, 50 quantum processors, 100 low density structures and one material of every planet: 100 pobedit (Vulcanus), 100 supercapacitors (Fulgora), 100 carbon fiber (Gleba), 100 ice silver (Aquilo), 200 lunite plates (Muluna), 100 aurite plates (Secretas), 100 carborundum (Moshine), 100 triplex (Maraxsis); a missing planet mod is skipped with a log line. Its result is always of normal quality (ic-more-qualities registry ic-normal-result).
+  Locale:
+    - English and Russian; the promethium asteroid chunk is described as found on the way from the edge (Space Age: only at the shattered planet).
+  Compatibility:
+    - Needs Space Age and paranoidal-space-age-filter, which counts the mod as content after the rocket (its technology keeps the Ark).
+    - Remote interface "paranoidal-true-ending": get_on_ending_event (custom event {fact = "chapter-1" | "true-ending", force_index, platform_index}, used by paranoidal-achievements), get_state.
