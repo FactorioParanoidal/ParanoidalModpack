@@ -49,7 +49,8 @@ C.pre = {
     {source = "angels-copper-plate-minimum", mod = "angelssmelting", trigger = "plate:copper", action = "minimum", size = 200, names = {"copper-plate"}},
     {source = "angels-steel-plate-minimum", mod = "angelssmelting", trigger = "plate:steel", action = "minimum", size = 200, names = {"steel-plate"}},
     {source = "angels-silicon-minimum", mod = "angelssmelting", trigger = "powder:silicon", also_mod = "bobplates", action = "minimum", size = 200, names = {"bob-silicon-powder"}},
-    {source = "bi-tree-seed", mod = "Bio_Industries_2", size = 200, names = {"tree-seed"}},
+    -- Space Age branch: as in Bio Industries' own code, only when it sees Space Age (paranoidal-space-age-filter hides it).
+    {source = "bi-tree-seed", mod = "Bio_Industries_2", also_mod = "space-age", size = 200, names = {"tree-seed"}},
     {source = "factorissimo-robot", mod = "factorissimo-2-notnotmelon", size = 1000, names = {"factory-hidden-construction-robot"}},
     {source = "factorissimo-efficient-smelting", mod = "factorissimo-2-notnotmelon", also_mod = "EfficientSmelting", size = 1, names = {"factory-connection-indicator-settings", "factory-overlay-controller-settings"}},
     {source = "toxic-armor", mod = "ToxicPollution2-reforged", kind = "armor", size = 10, names = {"light-armor", "heavy-armor"}},
@@ -261,6 +262,14 @@ C.inherited_defaults = {
     {kind = "armor", name = "heavy-armor-2", parent = "heavy-armor"},
     {kind = "armor", name = "heavy-armor-3", parent = "heavy-armor"},
     {kind = "item", name = "angels-electro-whinning-cell-3", parent = "angels-electro-whinning-cell-2"},
+    -- Space Age branch: planet items that copy a home stack size in their data stage get the final home size here
+    -- (factor = the planet's own multiplier), as before the centralization moved home sizes to the final pass.
+    {kind = "item", name = "alumina", parent = "iron-ore"}, -- planet-muluna: iron ore x1
+    {kind = "item", name = "alumina-crushed", parent = "iron-ore", factor = 2},
+    {kind = "item", name = "aluminum-crushed", parent = "iron-ore", factor = 2},
+    {kind = "item", name = "cellulose", parent = "iron-ore", factor = 4},
+    {kind = "armor", name = "light-armor-maraxsis-swimming", parent = "light-armor"}, -- Maraxsis: copy of the armor
+    {kind = "armor", name = "heavy-armor-maraxsis-swimming", parent = "heavy-armor"},
 }
 
 C.exceptions = {

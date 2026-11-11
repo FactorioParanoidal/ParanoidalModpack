@@ -2,6 +2,7 @@
 Version: 1.0.0
 Date: 2026-11-10
   Changes:
+    - Paranoidal Space Age branch: planet items that copy a home stack size in their data stage inherit the final home size (an optional factor of an inherited default): Muluna's alumina (iron ore x1), crushed alumina and crushed aluminum (x2), cellulose (x4), Maraxsis' swimming copies of light and heavy armor. The Bio Industries tree seed rule applies only when Space Age is visible, as in Bio Industries itself. Planet stack sizes stay as before the centralization.
     - Paranoidal packaging: moved regression fixtures out of the distributed mod into the local test collection; stack rules and configuration are unchanged by this packaging change.
   Features:
     - Centralized Paranoidal stack-size configuration: Bob/Angels/BI compatibility, category rules ported from ReStack (Optera), module items, ammo, energy fuels and the 15 approved item exceptions.

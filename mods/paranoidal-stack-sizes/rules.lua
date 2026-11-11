@@ -99,7 +99,7 @@ function M.apply(raw, item_types, active_mods, startup, triggers, snapshot, requ
         local entry = plan[rule.kind .. "/" .. rule.name]
         if entry and entry.source == "declared" then
             local parent = assert(plan[rule.kind .. "/" .. rule.parent], "Missing stack-size parent: " .. rule.parent)
-            set(rule.kind, rule.name, parent.size, "inherited-" .. rule.parent)
+            set(rule.kind, rule.name, parent.size * (rule.factor or 1), "inherited-" .. rule.parent)
         end
     end
     groups(C.exceptions)
