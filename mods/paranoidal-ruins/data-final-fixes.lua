@@ -15,6 +15,17 @@ end
 
 local function get(type_name, name) return data.raw[type_name] and data.raw[type_name][name] end
 
+-- Ordinary local fauna, including Bob's ordinary tiers when enabled. Do not inherit boss lists.
+local nest = get("unit-spawner", "pd-infected-ship-nest")
+nest.result_units = {}
+for _, name in ipairs({"biter-spawner", "spitter-spawner"}) do
+  for _, entry in ipairs(get("unit-spawner", name).result_units) do
+    local copy = table.deepcopy(entry)
+    for _, point in ipairs(copy[2]) do point[2] = point[2] * 0.5 end
+    nest.result_units[#nest.result_units + 1] = copy
+  end
+end
+
 local daedalus = get("assembling-machine", "pd-relic-daedalus-workshop")
 local am2 = get("assembling-machine", "assembling-machine-2")
 if daedalus and am2 then daedalus.crafting_categories = union(am2.crafting_categories) end

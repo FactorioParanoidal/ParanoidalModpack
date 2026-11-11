@@ -1,5 +1,6 @@
 local util = require("__core__/lualib/util")
 require("prototypes.infected-ship-wreck")
+require("prototypes.infected-ship-nest")
 
 -- The ruins force "AbandonedRuins:enemy" is drawn in the enemy colour.
 local constants = data.raw["utility-constants"]["default"]

@@ -277,6 +277,12 @@ function Builder:weight(w) self.meta.weight = w return self end
 ---Minimum distance from the map origin (tiles). Use for dangerous or valuable ruins.
 function Builder:far(distance) self.meta.min_distance = distance return self end
 
+---Mandatory safety radius from the origin and force spawns, even with ignore-distance enabled.
+function Builder:safe_distance(distance) self.meta.safe_distance = distance return self end
+
+---Chance to actually build a selected ruin; a miss still consumes its anti-repeat slot.
+function Builder:chance(chance) self.meta.spawn_chance = chance return self end
+
 ---Tag for discovery map markers: "danger" or "rare".
 function Builder:tag(tag) self.meta.pd_tag = tag return self end
 
@@ -292,6 +298,8 @@ local Meta = {}
 Meta.__index = Meta
 function Meta:weight(w) self.ruin.weight = w return self end
 function Meta:far(distance) self.ruin.min_distance = distance return self end
+function Meta:safe_distance(distance) self.ruin.safe_distance = distance return self end
+function Meta:chance(chance) self.ruin.spawn_chance = chance return self end
 function Meta:tag(tag) self.ruin.pd_tag = tag return self end
 
 ---Collects ruins of one size. Returns def(name, fn) and the list.

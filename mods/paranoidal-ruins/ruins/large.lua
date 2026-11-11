@@ -204,6 +204,18 @@ def("pd-infected-crash-site", function(b)
   b:scatter_deco(lib.SCORCH, 8)
 end):weight(0.6)
 
+def("pd-infected-ship-colony", function(b)
+  b:put("pd-infected-ship-nest", -12, -9, {w = 24, h = 18, force = "enemy"})
+  -- Keep the hull and its spawn/access lanes clear; solid debris stays in opposite corners.
+  b:reserve(-14, -12, 13, 11)
+  b:put("crash-site-spaceship-wreck-big-1", -15, -15)
+  b:put("crash-site-spaceship-wreck-medium-1", 13, 13)
+  b:deco("small-biter-corpse", -5, -13)
+  b:deco("small-spitter-corpse", 7, 12)
+  b:scatter_deco(lib.SCORCH, 10)
+  b:scatter_deco(lib.STUMPS, 6)
+end):weight(0.2):chance(0.25):safe_distance(2200):tag("danger")
+
 def("pd-ghost-town", function(b)
   local houses = { { -15, -15 }, { -5, -15 }, { 5, -15 }, { -15, -3 }, { 5, -3 }, { -15, 8 }, { -5, 8 }, { 5, 8 } }
   for i, h in ipairs(houses) do
