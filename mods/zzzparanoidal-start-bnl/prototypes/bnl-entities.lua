@@ -152,7 +152,7 @@ entities[#entities + 1] = {
     picture = picture("reactor"),
 }
 
--- The ship of the previous expedition: the vanilla ship overgrown and faded.
+-- The previous expedition stays a loot container; only its hull is colonised by the local fauna.
 local ship = data.raw.container["crash-site-spaceship"]
 if ship then
     local old = table.deepcopy(ship)
@@ -167,7 +167,14 @@ if ship then
     old.dying_explosion = "big-explosion"
     old.map_color = {r = 0.45, g = 0.55, b = 0.35, a = 1}
     for _, layer in ipairs(old.picture.layers or {}) do
-        if not layer.draw_as_shadow then layer.tint = {r = 0.62, g = 0.72, b = 0.5, a = 1} end
+        if not layer.draw_as_shadow then
+            if mods["mferrari_lib"] then
+                layer.filename = "__mferrari_lib__/graphics/entity/spaceship-infection.png"
+                layer.tint = nil
+            else
+                layer.tint = {r = 0.62, g = 0.72, b = 0.5, a = 1}
+            end
+        end
     end
     entities[#entities + 1] = old
 end

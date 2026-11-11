@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.1
 Date: 2026-11-08
+  Graphics:
+    - Axiom-6 uses mferrari_lib's infected spaceship hull instead of a green-tinted vanilla wreck. Its container, note, salvage, nearby car and safe-code quest are unchanged; without the optional library the previous appearance stays.
   Changes:
     - The existing pd-port21-diag-only test interface can prepare a persisted profession fixture in an older map with no landing/profession state, without replaying the landing or issuing bonuses. Normal games do not expose this interface.
     - Deferred the old-map profession migration while bnl-start-professions is disabled: passenger choices, RPG levels and the migration marker stay untouched. Enabling the setting resumes it once, without requiring players to rejoin.

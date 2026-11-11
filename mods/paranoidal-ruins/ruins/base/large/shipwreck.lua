@@ -10,7 +10,7 @@ return
     {"tree-02-stump", {x = -10.39, y = -5.63}, {dir = "east", }},
     {"crash-site-spaceship-wreck-big-2", {x = -7.55, y = -6.26}, {items = {["flying-robot-frame"] = {type = "random", min = 0, max = 8}}, }},
     {"dry-tree", {x = -5.64, y = -7.17}, {}},
-    {"crash-site-spaceship", {x = 4.66, y = -3.06}, {items = {["rocket-control-unit"] = {type = "random", min = 0, max = 4}}, }},
+    {"pd-infected-ship-wreck", {x = 4.66, y = -3.06}, {items = {["rocket-control-unit"] = {type = "random", min = 0, max = 4}}, }},
     {"small-scorchmark", {x = -8.93, y = -3.81}, {dir = "east", }},
     {"big-scorchmark", {x = -4.06, y = -0.72}, {dir = "east", }},
     {"big-sand-rock", {x = 12.73, y = -4.57}, {}},
