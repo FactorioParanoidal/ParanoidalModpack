@@ -27,7 +27,7 @@ data:extend{{
     name = 'equipment-bot-chip-launcher',
     take_result = 'equipment-bot-chip-launcher',
     sprite = {
-        filename = '__nanobots-refined-reforged__/graphics/equipment/equipment-bot-chip-launcher.png',
+        filename = '__nanobots-refined-reforged__/graphics/icons/equipment-bot-chip-launcher.png',
         width = 64,
         height = 64,
         priority = 'medium',

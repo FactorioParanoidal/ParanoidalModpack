@@ -27,7 +27,7 @@ data:extend{{
     name = 'equipment-bot-chip-nanointerface',
     take_result = 'equipment-bot-chip-nanointerface',
     sprite = {
-        filename = '__nanobots-refined-reforged__/graphics/equipment/equipment-bot-chip-nanointerface.png',
+        filename = '__nanobots-refined-reforged__/graphics/icons/equipment-bot-chip-nanointerface.png',
         width = 64,
         height = 64,
         priority = 'medium',

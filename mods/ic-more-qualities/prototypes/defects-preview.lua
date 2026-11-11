@@ -81,7 +81,8 @@ function M.prepare(raw)
         local research = model.research(level)
         local prerequisites = research.prerequisite and {research.prerequisite} or {}
         -- Titanium gear under a magnifier: cracked at I-II, clean at VII-VIII, golden at IX-X.
-        local icons = {{icon = "__ic-more-qualities__/graphics/technology/defect-control-" .. level .. ".png", icon_size = 256}}
+        local picture_level = (level == 8 or level == 10) and (level - 1) or level
+        local icons = {{icon = "__ic-more-qualities__/graphics/technology/defect-control-" .. picture_level .. ".png", icon_size = 256}}
         if mods and mods["zzzparanoidal"] then
             -- Same upper-right geometry as zzzparanoidal's technology markers.
             icons[#icons + 1] = {
