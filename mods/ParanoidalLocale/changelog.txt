@@ -1,6 +1,7 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.26.0
   Locale:
+    - zzzz-user-overrides.cfg (Space Age branch): the new paranoidal-true-ending mod (true ending at the shattered planet) gets its mod name and description (same text as in the mod and in mods-metadata/!descriptions.json); the paranoidal-space-age-filter description says that the solar system edge ends chapter 1 and the true ending is at the shattered planet.
     - zzzz-user-overrides.cfg (Space Age branch): the new paranoidal-telogistics mod (cargo teleporters) gets its mod name and description (same text as in the mod and in mods-metadata/!descriptions.json).
     - zzzz-user-overrides.cfg (Space Age branch): the new paranoidal-sa-tester mod (tester panel) gets its mod name and description (same text as in the mod and in mods-metadata/!descriptions.json).
     - zzzz-user-overrides.cfg (Space Age branch): the new mods Moshine (planet Мошайн), Moshine-assets and module-category-defaults get their mod names and descriptions (same text as in the mods and in mods-metadata/!descriptions.json); the paranoidal-space-age-filter description names Мошайн among the third-party planets.
