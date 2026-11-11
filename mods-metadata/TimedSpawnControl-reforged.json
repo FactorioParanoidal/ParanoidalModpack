@@ -1,0 +1,13 @@
+{
+  "mod": "TimedSpawnControl-reforged",
+  "source": "local",
+  "original": {
+    "name": "Spawn Control with cooldown",
+    "authors": ["Maxikaaz"],
+    "portal": {
+      "name": "TimedSpawnControl",
+      "url": "https://mods.factorio.com/mod/TimedSpawnControl"
+    }
+  },
+  "changeReason": "Локальный форк TimedSpawnControl из Paranoidal Beta 8 для Factorio 2.1.24. Версия 9.0.0: управление личной точкой, проверяемый сдвиг после смерти, ограничение дальних unstuck-поисков, согласованное владение GUI и перенос storage/GUI старого TimedSpawnControl через migrates_from. Случайное возрождение исключено; исходная атрибуция и лицензия сохранены."
+}

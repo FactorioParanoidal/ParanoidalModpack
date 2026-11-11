@@ -400,7 +400,7 @@ Elevated Rails и Recycler, без Space Age; число доступных до
 | Стиратель миров | `mxlr-world-eraser` | Удалите 100 чанков инструментом (обрезка карты не считается). *(скрипт: chunks)* — нужен `Delete-Chunk-Tool-reforged` |
 | Ой | `mxlr-oops` | Буры 100 раз отправлены на разборку после выработки месторождения. *(скрипт: auto-deconstruct)* — нужен `AutoDeconstruct` |
 | Ночная смена | `mxlr-night-shift` | Постройте 1 тыс. объектов глубокой ночью. *(скрипт: night-build)* |
-| Застрял | `mxlr-stuck` | Воспользуйтесь кнопкой «Застрял». *(скрипт: unstuck)* — нужен `TimedSpawnControl` |
+| Застрял | `mxlr-stuck` | Воспользуйтесь кнопкой «Застрял». *(скрипт: unstuck)* — нужен `TimedSpawnControl-reforged` |
 
 ### Легендарные руины
 

@@ -161,7 +161,7 @@ local list = {
     mods = {"AutoDeconstruct"}, icon = {item = "deconstruction-planner"}},
   {id = "night-shift", kind = "script", theme = "character", tracker = "night-build", amount = 1000,
     icon = {item = "small-lamp"}},
-  {id = "stuck", kind = "script", theme = "character", tracker = "unstuck", mods = {"TimedSpawnControl"},
+  {id = "stuck", kind = "script", theme = "character", tracker = "unstuck", mods = {"TimedSpawnControl-reforged"},
     icon = {item = "stone-wall"}},
 }
 
