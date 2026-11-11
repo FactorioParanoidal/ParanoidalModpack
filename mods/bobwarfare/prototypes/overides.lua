@@ -27,7 +27,6 @@ end
 
 data.raw.ammo["uranium-rounds-magazine"].magazine_size = 25
 
-data.raw.ammo["artillery-shell"].stack_size = 20
 data.raw.ammo["artillery-shell"].ammo_type.clamp_position = true
 
 data.raw["artillery-turret"]["artillery-turret"].ammo_stack_limit = 50

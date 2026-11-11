@@ -6,6 +6,7 @@ Date: 31.5.2025
   Locale:
     - ru: the mod name and the mod list description are the same as in ParanoidalLocale (format "English title (Russian translation)"), so the mod reads the same with or without it.
   Changes:
+    - Paranoidal: chest generation registers its derived stack minimum with paranoidal-stack-sizes instead of changing the item immediately; mergeable areas and chest slot counts are unchanged.
     - Paranoidal: after 16 tiles each additional tile adds 5/12 of the usual capacity, so large merged chests differ in size instead of hitting the shared limit.
   Bugfixes:
     - Fixed inventory bar being set to higher than game limit during merging AGAIN.

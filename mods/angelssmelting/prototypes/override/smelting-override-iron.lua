@@ -39,12 +39,6 @@ end
 -- ORE ------------------------------------------------------------------------
 -------------------------------------------------------------------------------
 if angelsmods.trigger.ores["iron"] then
-  angelsmods.functions.override_item_conditions({
-    value = 200,
-    list = {
-      "iron-ore",
-    },
-  })
   angelsmods.functions.move_item("iron-ore", "angels-iron", "a")
 else
   angelsmods.functions.hide("iron-ore")
@@ -94,12 +88,6 @@ end
 -------------------------------------------------------------------------------
 if angelsmods.trigger.smelting_products["iron"].plate then
   angelsmods.functions.move_item("iron-plate", "angels-iron-casting", "l")
-  angelsmods.functions.override_item_conditions({
-    value = 200,
-    list = {
-      "iron-plate",
-    },
-  })
   data.raw["item"]["iron-plate"].icon = "__angelssmeltinggraphics__/graphics/icons/plate-iron.png"
   data.raw["item"]["iron-plate"].icon_size = 32
   OV.global_replace_icon(

@@ -1,0 +1,10 @@
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 2026-11-10
+  Features:
+    - Centralized Paranoidal stack-size configuration: Bob/Angels/BI compatibility, category rules ported from ReStack (Optera), module items, ammo, energy fuels and the 15 approved item exceptions.
+    - Resolves precedence in a virtual plan and applies each existing item size at most once after the build's final prototype stages; publishes a per-item source audit in mod-data.
+    - Preserves the historical category-selection boundary and generator-derived minimums without early prototype mutations. Barrel recipe/capacity/fuel processing remains separate in zzzparanoidal.
+  Changes:
+    - Preserves late-copy inheritance for both heavy armor variants and electrowinning MK3, and routes configurable initial Angels component/pavement sizes and ten restored ammo constructors through the same config.
+    - Includes a maintenance README and targeted pure-rule regression cases. Original required item definitions remain valid; obsolete tuning modules and duplicate stack-size data are removed from their old owners.

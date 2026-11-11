@@ -45,17 +45,16 @@ P.ingredients("y-wall-forcefield", { { "bob-reinforced-wall", 1 }, { "y-conducti
 
 -- repair tools above bob-repair-pack-5 (speed 10, durability 5000)
 local repair = {
-	["y-repair-durotal"] = { speed = 12, durability = 8000, stack = 100,
+	["y-repair-durotal"] = { speed = 12, durability = 8000,
 		recipe = { { "bob-repair-pack-5", 1 }, { "y-unicomp-raw", 2 }, { "y_structure_element", 1 } } },
-	["y-repair-krakon"] = { speed = 16, durability = 15000, stack = 100,
+	["y-repair-krakon"] = { speed = 16, durability = 15000,
 		recipe = { { "y-repair-durotal", 1 }, { "y-orange-stuff", 4 }, { "y-chip-2", 1 } } },
-	y_repair_quantrinum = { speed = 30, durability = 30000, stack = 50,
+	y_repair_quantrinum = { speed = 30, durability = 30000,
 		recipe = { { "y-repair-krakon", 1 }, { "y-quantrinum", 1 }, { "y-infused-uca2", 1 } } },
 }
 for name, r in pairs(repair) do
 	local tool = P.entity("repair-tool", name)
 	tool.speed = r.speed
 	tool.durability = r.durability
-	tool.stack_size = r.stack
 	P.ingredients(name, r.recipe)
 end

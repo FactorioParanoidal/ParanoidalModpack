@@ -2,6 +2,7 @@
 Version: 2.0.0
 Date: ???
   Changes:
+    - Paranoidal: configurable component stack defaults are obtained from paranoidal-stack-sizes; the existing startup setting and its saved value remain supported.
     - Removed references to normal / expensive recipes (945)
     - Added item description to Gravitational analyzer (984)
     - Adjusted the recipes and science packs for Bob's Assembling Machines when Components or Technology Overhauls are enabled (985)

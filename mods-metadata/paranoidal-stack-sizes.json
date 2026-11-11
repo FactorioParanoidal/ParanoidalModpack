@@ -1,0 +1,13 @@
+{
+  "mod": "paranoidal-stack-sizes",
+  "source": "local",
+  "original": {
+    "name": "ReStack",
+    "authors": ["Optera"],
+    "portal": {
+      "name": "ReStack",
+      "url": "https://mods.factorio.com/mod/ReStack"
+    }
+  },
+  "changeReason": "Собственный служебный мод Paranoidal: единый реестр правил размеров пачек предметов, снимок категорий и однократное итоговое применение вместо разрозненных переопределений."
+}

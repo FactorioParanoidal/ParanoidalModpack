@@ -115,7 +115,6 @@ if settings.startup["bobmods-assembly-chemicalplants"].value == true then
 
   data.raw.item["chemical-plant"].icon = "__bobassembly__/graphics/icons/chemical-plant-1.png"
   data.raw.item["chemical-plant"].icon_size = 32
-  data.raw.item["chemical-plant"].stack_size = 50
   data.raw.item["chemical-plant"].subgroup = "bob-chemical-machine"
   data.raw.item["chemical-plant"].order = "e[chemical-plant-1]"
 

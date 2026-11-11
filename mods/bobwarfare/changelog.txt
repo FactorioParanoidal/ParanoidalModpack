@@ -8,6 +8,7 @@ Date: 01. 06. 2026
     - Fixed Biters / Spitters deliberately targeting walls and gates. #562
     - Fixed Spidertron gatling gun missing locale #582
   Changes:
+    - Paranoidal: tank and artillery-shell stack-size overrides moved to paranoidal-stack-sizes; ammo, vehicle and turret properties are unchanged.
     - Disallowed certain entities in space #551
     - Set item weights #553
     - Renamed Laser robot to Devestator robot #578

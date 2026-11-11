@@ -2,6 +2,7 @@
 Version: 2.1.1
 Date: 06. 06. 2026
   Changes:
+    - Paranoidal: the wood stack-size override moved to paranoidal-stack-sizes; item weight is unchanged.
     - Updated Korean locale #524
   Bugfixes:
     - Fixed Basic electronic components using Carbon (with Space Age, without Bob's MCI mod) #597

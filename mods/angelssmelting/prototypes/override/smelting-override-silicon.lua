@@ -116,12 +116,6 @@ end
 if angelsmods.trigger.smelting_products["silicon"].powder then
   if mods["bobplates"] then
     OV.global_replace_item("angels-powder-silicon", "bob-silicon-powder")
-    angelsmods.functions.override_item_conditions({
-      value = 200,
-      list = {
-        "bob-silicon-powder",
-      },
-    })
     angelsmods.functions.hide("angels-powder-silicon")
     OV.disable_recipe({ "angels-powder-silicon" })
     OV.remove_unlock("bob-silicon-processing", "bob-silicon-powder")

@@ -226,37 +226,6 @@ if BI.Settings.BI_Game_Tweaks_Bot then
 end
 
 
----- Game Tweaks stack size ----
-if BI.Settings.BI_Game_Tweaks_Stack_Size then
-    -- Changed for 0.18.34/1.1.4
-    local tweaks = {
-        ["wood"]          = { value = 400, se_limit = 200 },
-        ["stone"]         = { value = 400, se_limit = 50 },
-        ["stone-crushed"] = { value = 800, se_limit = 200 },
-        ["concrete"]      = { value = 400, se_limit = 200 },
-        ["slag"]          = { value = 800, se_limit = 200 },
-    }
-    local item
-    local five_dim = BioInd.get_startup_setting("5d-change-stack")
-
-    for tweak_name, tweak in pairs(tweaks) do
-        item = data.raw.item[tweak_name]
-        if item then
-            -- Only adjust stack_size if 5Dim sets multiplier of 1 or is not active!
-            if item.stack_size < tweak.value and (five_dim == 1 or not five_dim) then
-                BioInd.writeDebug("Changing stacksize of %s from %s to %s",
-                    { item.name, item.stack_size, tweak.value })
-                item.stack_size = tweak.value
-            end
-            if mods["space-exploration"] then
-                item.stack_size = math.min(tweak.se_limit, item.stack_size)
-                BioInd.show("Adjusted stack_size on account of SE", item.stack_size)
-            end
-        end
-    end
-end
-
-
 --- Update fuel_emissions_multiplier values
 if BI.Settings.BI_Game_Tweaks_Emissions_Multiplier then
     for item, factor in pairs({
@@ -395,46 +364,6 @@ if mods["pycoalprocessing"] and BI.Settings.BI_Bio_Fuel then
     })
 end
 
-
---- If Space Exploration Mod is installed.
-if mods["space-exploration"] then
-    -- Space Exploration Mod likes Stack Sizes to be 200 max.
-    -- Changed in 1.1.11
-    local tweaks = {
-        ["bi-solar-mat"]  = 400,
-        ["bi-seed"]       = 800,
-		["tree-seed"]     = 800,
-        ["seedling"]      = 400,
-        ["bi-woodpulp"]   = 800,
-        ["bi-ash"]        = 400,
-        ["wood-charcoal"] = 400,
-        ["pellet-coke"]   = 400,
-        ["stone-crushed"] = 400,
-    }
-    local item
-
-    for tweak_name, tweak in pairs(tweaks) do
-        item = data.raw.item[tweak_name]
-        if item and item.stack_size then
-            item.stack_size = 200
-        end
-    end
-
-    if not mods["Natural_Evolution_Buildings"] then
-        local ammo_tweaks = {
-            ["bi-dart-magazine-basic"]    = 400,
-            ["bi-dart-magazine-standard"] = 400,
-            ["bi-dart-magazine-enhanced"] = 400,
-            ["bi-dart-magazine-poison"]   = 400,
-        }
-        local item
-
-        for tweak_name, tweak in pairs(ammo_tweaks) do
-            item = data.raw.ammo[tweak_name]
-            item.stack_size = 200
-        end
-    end
-end
 
 if BI.Settings.Bio_Cannon then
     local default_target_masks = data.raw["utility-constants"].default.default_trigger_target_mask_by_type

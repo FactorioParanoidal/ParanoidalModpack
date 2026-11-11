@@ -4,6 +4,7 @@ Date: 01. 06. 2026
   Graphics:
     - Paranoidal build: removed four duplicate ceramic pipe images already redirected to canonical files by zzzparanoidal's final graphics pass. Prototype and runtime code are unchanged; settings-dependent original graphics remain available in the modpack.
   Changes:
+    - Paranoidal: train and roboport stack-size overrides moved to paranoidal-stack-sizes; the train startup setting, weights and other item properties are unchanged.
     - Updated Korean locale #524
   Bugfixes:
     - Paranoidal port to Factorio 2.1 (Space Age only): belts, undergrounds, splitters and the basic loader no longer use the recipe category "pressing", which 2.1 removed; like the base 2.1 belts they keep their category and add "metallurgy" (express ones get "crafting", as without Space Age). Loading with Space Age no longer fails.

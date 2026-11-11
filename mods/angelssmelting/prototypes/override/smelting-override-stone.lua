@@ -3,13 +3,6 @@ local OV = angelsmods.functions.OV
 -------------------------------------------------------------------------------
 -- BASE OVERRIDES -------------------------------------------------------------
 -------------------------------------------------------------------------------
-angelsmods.functions.override_item_conditions({
-  value = 200,
-  list = {
-    "stone",
-  },
-})
-
 angelsmods.functions.move_item("stone", "angels-slag-processing-1", "c")
 angelsmods.functions.move_item("stone-brick", "angels-stone", "f")
 angelsmods.functions.move_item("concrete", "angels-stone-casting", "ha")

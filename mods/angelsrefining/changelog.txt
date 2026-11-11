@@ -12,6 +12,7 @@ Date: 04.06.2026
     - Removed references to Bob's Sulfur resource (1304)
     - Fixed migration function to check if a logistics slot is manual before attempting to migrate it (1306)
   Changes:
+    - Paranoidal: pavement stack-size tuning and configurable initial defaults moved to paranoidal-stack-sizes; override_item_conditions remains a compatibility API and registers minimums without early prototype writes.
     - Prevented resources being removed from planets other than Nauvis (1289)
   Compatibility:
     - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.

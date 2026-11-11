@@ -5,6 +5,7 @@ Date: 24.02.2026
     - Halved bio_garden_huge.png from 1792x1856 to 896x928, compensating sprite scale to preserve its world size; shadow and turbine layers are unchanged. Compressed the resized PNG with pingo -s4 -lossless -noalpha; visual and compression-result checks skipped at the user's request.
     - Paranoidal build: removed seven duplicate images already redirected to canonical files by zzzparanoidal's final graphics pass. Prototype and runtime code are unchanged; this trimmed copy targets the full modpack.
   Changes:
+    - Paranoidal: stack-size minimums, tree seeds and Space Exploration limits are resolved by paranoidal-stack-sizes instead of mutating items here; settings and optional compatibility are preserved.
     - Add glass to the bio nursery if it exists
     - ru/en: the solid fuel description is shortened to "Немного ускоряет транспорт." / "Slightly speeds up vehicles."; ru recipe name bi-solid-fuel is spelled "Твёрдое" (Paranoidal local change)
     - Alien Biomes integration (optional dependency, removing AB tiles from blueprints) follows the merged Alien-biomes-Reforged mod instead of alien-biomes (Paranoidal local fix)

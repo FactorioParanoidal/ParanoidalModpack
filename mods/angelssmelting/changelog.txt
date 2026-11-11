@@ -4,6 +4,7 @@ Date: 04.06.2026
   Bugfixes:
     - Paranoidal: angelssmeltinggraphics is now a plain required dependency instead of "~" (load order is unchanged): Factorio 2.0 never reuses the data stage cache (cache-prototype-data) while any enabled mod has a "~" dependency.
   Changes:
+    - Paranoidal: ore/plate stack minimums and the iron-stick stack rule moved to paranoidal-stack-sizes; product triggers and other overrides are retained.
     - Removed Metallurgic science pack as a prerequisite for Bob's Tungsten Processing technology (1303)
   Compatibility:
     - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.

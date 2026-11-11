@@ -26,14 +26,13 @@ C.REFILL_AMOUNT = 1500 -- filter resource restored by one filter
 -- Armor-slot items (toxicPollution2 behaviour): ANY worn item takes the whole harm of the smog on
 -- its filter resource (durability) while the resource lasts; the body is not poisoned meanwhile.
 -- `filtration` = toxin resistance = how much slower the resource wears (wear × (1 − share)).
--- Missing names are skipped. Light/heavy armor keep stack 10 as in toxicPollution2; heavy-armor-2/3
--- (ПР-045) and Yuoki (derived from the power armor of its tier) get their values from their owners.
+-- Missing names are skipped. Stack sizes belong to paranoidal-stack-sizes; filtration and durability live here.
 -- Light armor is crafted from a respirator, so it never protects shorter than the respirator.
 C.ARMORS = {
 	[C.RESPIRATOR] = { filtration = 50, durability = 650 },
 	[C.GAS_MASK] = { filtration = 80, durability = 1300 },
-	["light-armor"] = { filtration = 50, durability = 1000, stack_size = 10 },
-	["heavy-armor"] = { filtration = 30, durability = 5000, stack_size = 10 },
+	["light-armor"] = { filtration = 50, durability = 1000 },
+	["heavy-armor"] = { filtration = 30, durability = 5000 },
 	["modular-armor"] = { filtration = 40, durability = 10000 },
 	["power-armor"] = { filtration = 60, durability = 15000 },
 	["power-armor-mk2"] = { filtration = 70, durability = 20000 },
