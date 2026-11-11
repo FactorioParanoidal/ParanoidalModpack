@@ -2,6 +2,7 @@
 Version: 9.1.5
 Date: 2026. 10. 14
   Changes:
+    - Reused the identical base PNGs of quality-control research 7 and 9 for levels 8 and 10; removed two duplicate files, preserving separate technologies and their level-marker layers.
     - Paranoidal packaging: moved standalone regression fixtures and their mocks out of the distributed mod into the local test collection.
   Bugfixes:
     - QueueToFrontLimited integration: exclude reconsumed cancellation returns from deferred defect rolls, without damaging spare items; actual leftovers and ordinary cancellations retain their rolls. Added same-tick begin/end_queue_reorder remote functions.

@@ -2,6 +2,7 @@
 Version: 9.0.7
 Date: 2026-10-21
   Changes:
+    - Reused the five chip item-icon PNGs for their equipment sprites and the range technology base PNG for speed technologies; removed six identical copies, preserving sprite sizes and separate range/speed overlay icons.
     - Paranoidal packaging: moved three unused MP3 source recordings to the local source-assets collection; all game OGG sounds and their definitions are unchanged.
   Changes:
     - No longer needs stdlib2: event handling, player and force data, the remote interface, the console command and the prototype helpers are part of the mod. Storage keeps the same layout (storage.players, storage.forces, pending action keys) (Paranoidal local change)
