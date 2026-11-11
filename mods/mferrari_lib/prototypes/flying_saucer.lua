@@ -51,7 +51,7 @@ local function add_flying_saucer(k)
 local flyind_saucer = table.deepcopy(data.raw["spider-vehicle"].spidertron)
 flyind_saucer.name="maf_flying_saucer_"..k 
 flyind_saucer.icon= path .."graphics/entity/flying_saucer/flying_saucer_ico.png"
-flyind_saucer.icon_size=64
+flyind_saucer.icon_size=32
 flyind_saucer.max_health = (20000 * k^boss_hp_variant) * boss_hp_multiplier/boss_hp_variant
 -- Paranoidal: the ten saucers had one icon and one name; the level on both tells them apart in the entity lists
 -- (turret priority targets)
@@ -70,8 +70,8 @@ flyind_saucer.minimap_representation =
     {
       filename = path .."graphics/entity/flying_saucer/flying_saucer_ico.png",
       flags = {"icon"},
-      size = {64, 64},
-      scale = 0.8
+      size = {32, 32},
+      scale = 1.6
     }
 flyind_saucer.resistances = {
 	  {type = "fire", percent = 30+k*5},
@@ -111,7 +111,7 @@ data:extend({
     type = "gun",
     name = "flying-saucer-laser-cannon",
     icon = path .."graphics/entity/flying_saucer/laser-cannon.png",
-    icon_size = 64,
+    icon_size = 32,
     hidden = true,
     subgroup = "gun",
     order = "f-s-c",
@@ -254,8 +254,9 @@ data:extend({
     animation = {
       filename = path .. "graphics/entity/flying_saucer/laser.png",
       frame_count = 1,
-      width = 6,
-      height = 120,
+      width = 3,
+      height = 60,
+      scale = 2,
       priority = "high",
     },
     light = { intensity = 2, size = 15, color = colors.pink },
