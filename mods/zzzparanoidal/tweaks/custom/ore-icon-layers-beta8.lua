@@ -15,6 +15,7 @@ local menu_snapshots = {
     ["__zzzparanoidal__/graphics/refining-smelting-menu-beta8/8a1895be03530e411644.png"] = "bob-lead-ore",
     ["__zzzparanoidal__/graphics/refining-smelting-menu-beta8/8cea21de2c9ff1f1f8ec.png"] = "bob-zinc-ore",
     ["__zzzparanoidal__/graphics/refining-smelting-menu-beta8/ba08c1386af301c822fc.png"] = "bob-tin-ore",
+    ["__zzzparanoidal__/graphics/reskins-overrides/reskins-angels/icons/smelting/ores/tin-ore/tin-ore.png"] = "bob-tin-ore",
     ["__zzzparanoidal__/graphics/refining-smelting-menu-beta8/c40f64a51b209bfb9934.png"] = "bob-bauxite-ore",
     ["__zzzparanoidal__/graphics/refining-smelting-menu-beta8/ced4fe660ad05f6c497f.png"] = "bob-gold-ore",
     ["__zzzparanoidal__/graphics/refining-smelting-menu-beta8/0d44a932f8cd4f6ccb0f.png"] = "bob-thorium-ore",
