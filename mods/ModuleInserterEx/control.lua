@@ -529,18 +529,24 @@ remote.add_interface("ModuleInserterEx", {
 
         ent_name = util.convert_entity_name(ent_name)
 
-        local set_to_use = util.find_module_set_to_use_for_entity(ent_name, recipe,
-            storage._pdata[player.index].active_config)
+        local pdata = storage._pdata[player.index]
+        local module_count = storage.name_to_slot_count[ent_name]
+        if not pdata or not module_count then return end
+        if type(entity) ~= "string" and entity.type ~= "entity-ghost" then
+            local inventory = entity.get_module_inventory()
+            if inventory then module_count = #inventory end
+        end
+        local set_to_use = util.find_module_set_to_use_for_entity(ent_name, recipe, pdata.active_config)
         if set_to_use == true then return end -- Don't set anything on this entity type
-        module_config, messages = util.choose_module_config_from_set(ent_name, recipe, set_to_use)
+        local module_config = util.choose_module_config_from_set(ent_name, recipe, set_to_use)
         if not module_config then return end
 
-        local module_list = module_config and module_config.module_list
-        local module_count = storage.name_to_slot_count[ent_name]
-        while #module_list > module_count do
-            table.remove(module_list)
+        local result = {}
+        for slot = 1, module_count do
+            local module = util.get_module_for_slot(module_config, slot)
+            result[slot] = module and { name = module.name, quality = module.quality or "normal" } or false
         end
-        return module_config and module_config.module_list or nil
+        return result
     end,
 
     --- @param player int|LuaPlayer player index or LuaPlayer to source the config from

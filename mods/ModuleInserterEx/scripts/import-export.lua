@@ -5,33 +5,34 @@ local checker = {}
 --- @alias Checkers {[string]:Checker}
 --- @alias Checker fun(x): string?
 
--- "migrations" for exported strings from older versions
-local migrate = {}
-function migrate.v7_3_0_module_config(entry)
-    if entry.module_list and next(entry.module_list) == nil then return end
-    for key, value in pairs(entry.module_list) do
-        if value == false then
-            entry.module_list[key] = {
-                count = 1,
-            }
-        elseif value.count == nil then
-            value.count = 1
-            value.module = {}
-            value.module.name = value.name
-            value.name = nil
-            value.module.quality = value.quality
-            value.quality = nil
-        end
-    end
-end
-
 local function is_array(t)
+    if type(t) ~= "table" then return false end
     local i = 0
     for _ in pairs(t) do
         i = i + 1
         if t[i] == nil then return false end
     end
     return true
+end
+
+-- "migrations" for exported strings from older versions
+local migrate = {}
+function migrate.v7_3_0_module_config(entry)
+    if type(entry) ~= "table" then return "module_config not a table" end
+    if not is_array(entry.module_list) then return "module_list not an array" end
+    for key, value in ipairs(entry.module_list) do
+        if value == false then
+            entry.module_list[key] = { count = 1 }
+        elseif type(value) ~= "table" then
+            return "module_list entry not a table"
+        elseif value.count == nil then
+            if value.module ~= nil then return "module_list entry has no count" end
+            entry.module_list[key] = {
+                count = 1,
+                module = next(value) and { name = value.name, quality = value.quality } or nil,
+            }
+        end
+    end
 end
 
 --- Checks every field passed as defined by checkers param
@@ -86,7 +87,9 @@ end
 --- @return string? error string
 local function check_quality_valid(quality)
     if quality ~= nil then
-        if prototypes.quality[quality] == nil then return "not a valid quality: " .. quality end
+        if type(quality) ~= "string" or prototypes.quality[quality] == nil then
+            return "not a valid quality: " .. tostring(quality)
+        end
     end
 end
 
@@ -125,24 +128,38 @@ function checker.target_config_set(config_set)
         entities = function(x)
             return check_array("entities", x, function(ent)
                 -- TODO instead of failing with a missing prototype, maybe do a clean after and notify of the missing things?
-                if prototypes.entity[ent] == nil then return "entity not valid: " .. ent end
+                if type(ent) ~= "string" or prototypes.entity[ent] == nil then
+                    return "entity not valid: " .. tostring(ent)
+                end
             end)
         end,
         recipes = function(x)
             return check_array("recipes", x, checker.recipe_with_quality)
+        end,
+        slot_count = function(x)
+            if x ~= nil and (type(x) ~= "number" or x < 1 or x % 1 ~= 0
+                or x > storage.max_slot_count) then
+                return "slot_count out of range"
+            end
+        end,
+        show_details = function(x)
+            if x ~= nil and type(x) ~= "boolean" then return "show_details not a boolean" end
         end,
     })
 end
 
 --- @return string? error string
 function checker.recipe_with_quality(recipe_with_quality)
-    return check_all("recipe_with_quality", recipe_with_quality, {
+    local err = check_all("recipe_with_quality", recipe_with_quality, {
         name = function(x)
-            -- TODO instead of failing with a missing prototype, maybe do a clean after and notify of the missing things?
-            if prototypes.recipe[x] == nil then return "recipe not valid: " .. x end
+            if type(x) ~= "string" or prototypes.recipe[x] == nil then
+                return "recipe not valid: " .. tostring(x)
+            end
         end,
         quality = check_quality_valid,
     })
+    if err then return err end
+    recipe_with_quality.quality = recipe_with_quality.quality or "normal"
 end
 
 --- @return string? error string
@@ -156,7 +173,8 @@ end
 
 --- @return string? error string
 function checker.module_config(config)
-    migrate.v7_3_0_module_config(config)
+    local err = migrate.v7_3_0_module_config(config)
+    if err then return err end
     return check_all("module_config", config, {
         module_list = function(x)
             return check_array("module_list", x, checker.is_module_list_entry)
@@ -166,10 +184,11 @@ end
 
 --- @return string? error string
 function checker.is_module_list_entry(item)
-    if next(item) == nil then return end
     return check_all("module_list_entry", item, {
         count = function(x)
-            if x < 0 then return "not a valid count: " .. x end
+            if type(x) ~= "number" or x < 0 or x % 1 ~= 0 or x > 4294967295 then
+                return "not a valid count: " .. tostring(x)
+            end
         end,
         module = checker.is_module_definition,
     })
@@ -178,13 +197,16 @@ end
 --- @return string? error string
 function checker.is_module_definition(item)
     if item == nil then return end
-    return check_all("item_quality_pair", item, {
+    local err = check_all("item_quality_pair", item, {
         name = function(x)
-            -- TODO instead of failing with a missing prototype, maybe do a clean after and notify of the missing things?
-            if prototypes.item[x] == nil then return "not a valid item: " .. x end
+            if type(x) ~= "string" or prototypes.item[x] == nil or prototypes.item[x].type ~= "module" then
+                return "not a valid module: " .. tostring(x)
+            end
         end,
         quality = check_quality_valid,
     })
+    if err then return err end
+    item.quality = item.quality or "normal"
 end
 
 
@@ -192,7 +214,7 @@ end
 --- @return PresetConfig[]|string
 --- @nodiscard
 function import_export.import_config(string)
-    source = helpers.json_to_table(string)
+    local source = helpers.json_to_table(string)
     if type(source) ~= "table" then
         return "did not parse into a table"
     end
