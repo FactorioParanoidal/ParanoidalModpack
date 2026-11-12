@@ -33,7 +33,15 @@ local function index_tools()
 			end
 		end
 	end
-	table.sort(qualities, function(q1, q2) return prototypes.quality[q1].level > prototypes.quality[q2].level end)
+	local function quality_rank(name)
+		local defect = tonumber(name:match("^ic%-defect%-(%d+)$"))
+		return defect and -defect or prototypes.quality[name].level
+	end
+	table.sort(qualities, function(q1, q2)
+		local rank1, rank2 = quality_rank(q1), quality_rank(q2)
+		if rank1 ~= rank2 then return rank1 > rank2 end
+		return q1 < q2
+	end)
 
 
 	local tools, inf_tools = {}, {}
@@ -94,7 +102,7 @@ local function repair_item(repairPack, damagedItem, time)
 		repairAmount = remaining_durability
 	end
 	repairPack.drain_durability(repairAmount)
-	damagedItem.health = (currHealth + repairAmount*speed) / maxHealth
+	damagedItem.health = math.min(1, (currHealth + repairAmount*speed) / maxHealth)
 	return true
 end
 
@@ -125,6 +133,7 @@ local function check_inventory_for_repairs(player, time)
 		-- qualities of ic-more-qualities up to 5 x 47 inventory searches per player every interval). The
 		-- first tool of storage.repair_tools that is present is used, as before.
 		if not tool_names then
+			index_tools() -- Rebuild persisted ordering on the first repair after loading.
 			tool_names = {}
 			for _, tool in ipairs(storage.repair_tools) do tool_names[tool.name] = true end
 		end

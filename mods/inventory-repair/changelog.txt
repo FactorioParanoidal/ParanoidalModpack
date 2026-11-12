@@ -2,6 +2,8 @@
 Version: 20.0.3
 Date: 2025-05-02
   Bugfixes:
+    - Paranoidal: cap repaired item health at full health after rounding durability consumption, keeping the whole-point repair cost.
+    - Paranoidal: order defect qualities by their grade rather than their shared zero level; retain infinite-tool priority and use a deterministic tie-break for equal ranks.
     - Fixed an error when a player was deleted from the game.
   Optimizations:
     - Paranoidal: a player's repair pack is found with one inventory read (get_contents) instead of one search per repair tool and quality (with the 47 qualities of ic-more-qualities up to 235 searches per player every interval). The same pack is chosen as before.
