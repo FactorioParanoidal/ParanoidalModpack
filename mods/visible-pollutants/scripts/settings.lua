@@ -1,6 +1,7 @@
 local Settings = {}
 
 Settings.PollutionLayer = "visible-pollutants-layer"
+Settings.Motion = "visible-pollutants-motion"
 Settings.PollutionOpacity = "visible-pollutants-opacity"
 Settings.PollutionSeeThroughMaxOpacity = "visible-pollutants-see-through-max-opacity"
 Settings.MinConsideredPollution = "visible-pollutants-min"
@@ -17,6 +18,7 @@ Settings.MaxSolarUpdatesPerTick = "visible-pollutants-solar-occlusion-update-lim
 
 function Settings.update_caches()
   Sprite.RenderLayer = settings.global[Settings.PollutionLayer].value
+  Sprite.MotionEnabled = settings.global[Settings.Motion].value
   Sprite.Opacity = settings.global[Settings.PollutionOpacity].value
   Sprite.MaxImportantOpacity = settings.global[Settings.PollutionSeeThroughMaxOpacity].value
   Sprite.MaxNearbyOpacity = math.pow(Sprite.MaxImportantOpacity, 0.6)

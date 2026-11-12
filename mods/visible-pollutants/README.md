@@ -1,41 +1,157 @@
 ## Pollution: Impactful Smog / Spore Cloud — Paranoidal fork
 
 Maintained in Paranoidal, based on somethingtohide's version 1.4.4 (MIT).
-The mod ID and settings are retained for existing saves. Version 1.4.5 rebuilds
-its derived caches through the existing configuration-change handler.
+The mod ID, existing setting IDs and saved values are retained. Four HD cloud
+shapes share one render per cell; stage 4 adds an optional native veil animation.
+The shared pollution curve and solar formulas are unchanged. There is no extra
+full-size layer or per-machine entity.
 
-The fork caches see-through regions per surface, avoids unrelated player scans,
-reuses chunk layouts and solar queues, and incrementally cleans expired render
-references. Solar totals are rebased over the existing update batches rather
-than through a full scan every cycle; topology changes still rebuild the queue
-at a cycle boundary. Full synchronization when enabling solar occlusion or
-changing the mod configuration still scans existing panels.
+### Four HD cloud shapes
 
-Multiplayer queues, diagonal movement, cross-surface see-through, and solar
-panel teleport/clone bookkeeping are corrected. Texture, coverage, lifetime,
-opacity/solar formulas, RNG-based rotation and blend coefficients are unchanged.
-The upstream inclusive batch bounds and cycle-end pause are retained: the
-configured batch size N can process N+1 entries, as before.
-No FPS/UPS improvement percentage is claimed without a representative benchmark.
+The renderer uses four 1024 x 1024 RGBA8 resources in `graphics/`:
 
-Do you feel like your factory is _too clean_? A gross, smoggy atmosphere might be what you need. This mod adds a visible pollution cloud, based on the actual pollution in the area. It can also reduce the effectiveness of solar panels based on how occluded they are by pollution. It's quite configurable, and very efficient, compared to similar but older mods.
+* `pollution-veil.png`: soft, broad veil.
+* `pollution-haze.png`: elongated airflow structure.
+* `pollution-broken.png`: asymmetric separated masses with transparent gaps.
+* `pollution-smog.png`: heavier, more concentrated structure.
 
-### Features
+These are variations of one effect, not different pollution severity levels.
+They use straight alpha with neutral RGB, fully transparent outer edges and
+comparable optical weight. Procedural sources and comparison sheets stay outside
+the distributed mod. One render object per cell selects its variant, initial
+orientation and center offset deterministically from surface/cell coordinates,
+without consuming map RNG. Recreation keeps the same initial layout.
 
-* Visiblity of pollution cloud is based on the actual pollution in the area.
-* Solar panels can be less effective if placed underneath heavy pollution.
-* Thickness, minimum, and maximum opacity of the cloud is configurable.
-* See-through the cloud to see what's underneath your cursor, no matter how polluted you are.
-* Special support for spores (and potentially other modded pollutants).
-* Configurable to add pollution to any planets, purely for visual effect.
-* Performance-related configurations to handle any scale.
+The initial calibration is a 64-tile square (scale 2) on the 32-tile grid, with
+no extra opacity gain. It deliberately produces lighter, more varied coverage
+than the old 96-tile blanket, not an optically equivalent replacement. The user
+opacity and see-through limits still apply; the common pollution/solar curve is
+not retuned to compensate. Broken-cloud gaps may remain recognizable at high
+opacity. Final density, motion and readability still need in-game acceptance.
 
-# Known Issues
+The original `visible-pollutants-pollution` ID and `pollution.png` remain intact.
+With motion off, old objects fade out over 60 game ticks from their first service,
+then change resource and pose in place at zero opacity and blend back in. Sparse
+service can lengthen that transition; a temporary local dip is preferable to a
+texture pop. New clouds also start transparent. There is no mass clear or mass
+recreation; missing derivative state is initialized during bounded event work.
 
-### Pinned Remote Views may not show pollution
+New sprites request smoke mipmaps, linear minification/magnification and linear
+mip-level filtering. Straight PNGs are premultiplied by the loader; runtime tint
+is premultiplied once through the existing color function. No glow/light mode is
+enabled. The default layer for a missing setting is now `smoke`, below selection
+boxes and robots but above ground ALT icons; it is not a guarantee that all
+annotations remain unobscured. Existing saved layers (including `arrow`) remain
+unchanged. The user can select another existing layer without recreating clouds.
 
-Because of the way this mod is designed, and given of the lack of events for the small Remote View tooltips, it's possible that "stale" pollution is removed and not added back when looking at the tooltip view. If you don't like this, you can extend the pollution lifetime so that it's hopefully not removed before you look at the tooltip again.
+### Optional motion
 
-### Dragging the Remote View to move may not update pollution until dropped
+`Cloud motion` (`visible-pollutants-motion`, runtime-global) is off by default.
+Static mode keeps all four 1024-square forms and stops rotation, translation and
+frame animation; opacity still follows pollution. Existing clouds converge to
+the chosen mode through bounded service/maintenance, not a synchronous scan.
 
-Because of the way this mod is designed, and given of the lack of events for dragging the Remote View around, it's not possible to update the pollution until the dragging is finished. By default, a wide-enough area is constantly scanned, in the hopes that it fully covers the widest dragging distance.
+When enabled, only cells deterministically assigned the soft veil use a native
+animation: one 512-square, 32-frame cycle at two frames per game second. The other
+three forms remain HD sprites. Its small periodic internal warp is normalized
+for mean optical depth; it is not a crossfade between unrelated cloud shapes.
+Per-cell phase offsets avoid a single global starting pose. Native rendering
+advances frames; Lua does not switch every object's frame each tick.
+
+The additional 4096x2048 RGBA8 atlas is 32 MiB of pixel data before mipmaps,
+atlases or engine compression (not measured VRAM). The four static forms remain
+16 MiB, plus the retained old texture. Motion off does not unload the atlas.
+The smaller animated frame is an explicit memory/definition trade-off, not a
+replacement of the four HD resources. It still covers the same 64-tile square.
+
+Wind direction and speed set a small bounded offset, at most 1.5 tiles per axis
+from each stable center, with elapsed-tick smoothing (two-second half-life).
+Clouds do not drift indefinitely or snap their orientation around with the wind;
+the old continuous rotation is removed. Native internal motion has a constant
+16-second period, independent of wind speed and pollution density. Its softness,
+frame stepping, 4K readability and night appearance await in-game acceptance.
+
+Sprite/animation mode changes fade the old object to zero, retire it, then create
+the current mode on a later visit under the existing four-creates-per-tick cap.
+There is never a second overlapping cloud for that cell. A toggle back before
+retirement cancels the fade from its current alpha. Already animated objects
+pause/resume phase when serviced; switching off is gradual across the cache.
+Legacy 96-tile sprites still upgrade in place when the target is a static form;
+an animated target uses the same budgeted retirement/recreation path. Brief
+local opacity dips during replacement are possible. No save migration is added.
+
+### Bounded visual scheduler
+
+Movement, teleport, selection and display events only flag a player's context.
+A persistent round-robin, center-out cursor visits current camera demand without
+allocating whole chunk rectangles or accumulating old movement jobs. Coverage
+includes rotation, deterministic center offset and the full wind reserve (about
+48.8 tiles beyond the viewport, including in static mode so frozen offsets fit).
+A bounded counter conservatively retains the old 69.9-tile
+margin until old/unknown cache entries and the legacy queue are resolved; no
+full-cache scan is needed. The old four-chunk camera-radius cap is gone. Chart-only views
+and surfaces without a pollutant do not generate visual demand.
+
+Per tick, the visual worker visits at most 64 candidate turns, refreshes at most
+4 player contexts, performs at most the configured update limit of cell work
+(default 20, including discovery), creates at most 4 renders and maintains at
+most 8 cache records. A cell-work operation reads pollution at most once and
+creates or updates at most one render. Clean fading can retire at most one
+render per cell-work operation, in addition to bounded maintenance removals.
+Budget exhaustion preserves the next player's turn rather than starving it.
+
+Pollution samples, including clean cells, are reused for 60 ticks. Entirely
+clean views sleep between sweeps and wake on view events. See-through areas use
+per-surface reference counts, not repeated all-player scans. Connected-player
+enumeration is a one-time topology snapshot at init/upgrade, not a per-tick scan.
+Zoom and available camera changes are polled through the bounded worker.
+
+The cache holds at most 8192 sampled cells/renders after legacy adoption.
+Under extreme aggregate demand, each online player's near-camera share is
+prioritized; complete distant-edge coverage is not promised beyond that cap.
+Unvisited entries are retired incrementally after a workload-aware grace period
+(at least 120 ticks), limited by the user's maximum lifetime. TTL is an upper
+bound, not a promise to retain off-screen pollution for that many minutes.
+Old saves' render handles are adopted/trimmed in bounded batches; an oversized
+legacy cache may temporarily exceed the cap while being drained, without new
+growth. No storage is changed during on_load.
+
+Opacity blending and wind-offset smoothing use elapsed game ticks rather than
+queue visits. Clean clouds disappear completely. Layer/opacity settings retain
+render identities; changing the veil's object kind uses the bounded transition
+above, never a mass clear. Shared pollution-curve changes invalidate samples.
+
+### Gameplay and integration
+
+* Clouds reflect actual chunk pollution, with configurable opacity and curve.
+* Player/selected-entity areas are more transparent; this effect is shared.
+* Spores retain their separate tint and compatibility groundwork.
+* Optional solar occlusion retains the existing surface-wide legacy formula,
+  quality accounting, seasonal composition with NightBrightness and read-only
+  status interface. Its queues are separate from visual scheduling.
+* Solar synchronization on relevant settings/configuration changes still scans
+  panels as before; visual budgets do not claim to bound that independent work.
+* Planet pollutant assignment and chart-color settings retain their behavior.
+
+No measured FPS/UPS improvement is claimed without a representative benchmark.
+Headless runtime checks do not establish visual quality.
+
+### Technical verification boundary
+
+Targeted Factorio 2.1.24 checks validated the six graphic prototype definitions,
+natural camera discovery, legacy in-place upgrades, native Sprite/Animation
+replacement, real setting events, pause/resume property updates, clean retirement
+and the existing work/create budgets. A real save/load of a synthetic mixed-handle
+cache preserved both render identities and derived fields before the first
+scheduler step, then continued a pending transition through retirement/recreation.
+No original player save was used; this is not an exhaustive save-upgrade or
+multiplayer test. Headless does not load image pixels or prove visible frame
+progress, seamless motion, lighting, 4K readability or subjective density.
+Those remain user visual acceptance; the asset checks and CPU sheets are separate.
+
+### Known camera limits
+
+Pinned remote-view tooltips do not provide their own demand events, so they may
+show absent or stale pollution. Extending TTL alone does not guarantee coverage.
+During remote-view dragging, polling can follow only the view coordinates the
+engine exposes; a camera position withheld until release cannot be reconstructed.

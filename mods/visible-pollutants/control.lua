@@ -17,7 +17,6 @@ script.on_init(function()
   Sprite.init_storage()
   Pollution.init_storage()
   Proximity.init_storage()
-  Proximity.add_sprites_near_players()
   Solar.init_storage()
   Solar.full_synchronize()
 end)
@@ -26,10 +25,10 @@ end)
 script.on_configuration_changed(function(event)
   Settings.update_caches()
   Settings.startup_settings_changed()
-  Sprite.init_storage()
+  Sprite.prepare_storage()
+  Sprite.invalidate_samples()
   Pollution.init_storage()
   Proximity.init_storage()
-  Proximity.add_sprites_near_players()
   Solar.init_storage()
   Solar.full_synchronize()
 end)
@@ -38,10 +37,13 @@ end)
 script.on_event(defines.events.on_runtime_mod_setting_changed, function(event)
   if string.sub(event.setting, 1, #script.mod_name) ~= script.mod_name then return end
   Settings.update_caches()
-  Sprite.init_storage()
-  Pollution.init_storage()
-  Proximity.init_storage()
-  Proximity.add_sprites_near_players()
+  if event.setting == Settings.MinConsideredPollution
+      or event.setting == Settings.MaxConsideredPollution
+      or event.setting == Settings.PollutionRangeExponent then
+    Sprite.invalidate_samples()
+  end
+  -- The solar handler dispatches only its own/shared curve settings. Visual
+  -- changes converge in bounded work and never trigger solar synchronization.
   Solar.on_setting_changed(event.setting)
 end)
 
@@ -49,49 +51,25 @@ script.on_load(function()
   Settings.update_caches()
 end)
 
----@param event EventData.on_player_joined_game
-script.on_event(defines.events.on_player_joined_game, function(event)
-  Proximity.add_sprites_near_player(game.players[event.player_index])
+script.on_event({
+  defines.events.on_player_created,
+  defines.events.on_player_joined_game,
+  defines.events.on_player_changed_surface,
+  defines.events.on_player_changed_position,
+  defines.events.on_player_controller_changed,
+  defines.events.on_selected_entity_changed,
+  defines.events.on_player_display_resolution_changed,
+  defines.events.on_player_display_scale_changed,
+}, function(event)
+  Proximity.mark_player(event.player_index)
 end)
 
----@param event EventData.on_player_removed
 script.on_event({ defines.events.on_player_removed, defines.events.on_player_left_game }, function(event)
   Proximity.remove_player_storage(event.player_index)
 end)
 
----@param event EventData.on_player_changed_surface
-script.on_event(defines.events.on_player_changed_surface, function(event)
-  Proximity.add_sprites_near_player(game.players[event.player_index])
-end)
-
----@param event EventData.on_player_changed_position
-script.on_event(defines.events.on_player_changed_position, function(event)
-  Proximity.add_sprites_near_player_if_moved(game.players[event.player_index])
-end)
-
----@param event EventData.on_player_controller_changed
-script.on_event(defines.events.on_player_controller_changed, function(event)
-  Proximity.add_sprites_near_player(game.players[event.player_index])
-end)
-
----@param event EventData.on_selected_entity_changed
-script.on_event(defines.events.on_selected_entity_changed, function(event)
-  Proximity.set_selections_for_player(game.players[event.player_index])
-end)
-
----@param event EventData.on_tick
-script.on_nth_tick(Proximity.FullScanInterval, function(event)
-  Proximity.set_selections_for_players()
-  Proximity.add_sprites_near_players()
-end)
-
----@param event EventData.on_tick
-script.on_nth_tick(Sprite.SpriteUpdateInterval, function(event)
-  Sprite.cleanup_expired()
-  local finished = Sprite.incrementally_update_sprites_in_queue()
-  if finished then
-    Sprite.queue_sprites_for_update()
-  end
+script.on_nth_tick(Sprite.SpriteUpdateInterval, function()
+  Proximity.step()
 end)
 
 ---@param event EventData.on_robot_built_entity
@@ -137,8 +115,9 @@ end)
 
 script.on_event(defines.events.on_surface_deleted, function(event)
   storage.sprites_by_surface_cells[event.surface_index] = nil
+  if storage.sprite_update_ticks then storage.sprite_update_ticks[event.surface_index] = nil end
   storage.pollutant_color_by_surface[event.surface_index] = nil
-  Proximity.invalidate_important_cells()
+  Proximity.on_surface_deleted(event.surface_index)
   Solar.on_surface_deleted(event.surface_index)
 end)
 
