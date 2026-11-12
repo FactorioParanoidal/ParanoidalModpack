@@ -1,4 +1,23 @@
 ---------------------------------------------------------------------------------------------------
+Version: 9.5.0
+Date: 2026-11-12
+  Graphics:
+    - Add four distinct 1024x1024 RGBA8 cloud shapes with deterministic surface/cell selection and pose, one render per cell and no map RNG use.
+    - Use 64-tile clouds on the 32-tile grid with unchanged tint gain: intentionally lighter coverage than the old blanket, without changing the shared pollution curve or solar mechanics.
+    - Add optional Cloud motion, off by default: one 32-frame 512x512 RGBA8 native veil cycle over 16 game seconds, independent cell phases and bounded wind offsets with elapsed-tick smoothing. No permanent second layer or continuous cloud rotation.
+    - Keep all four HD static textures and a fully still mode that continues to track pollution density. Disabling motion does not unload the animation atlas.
+    - Match camera margins to rotated shapes, jitter and wind offsets. Use smoke mipmaps and linear filtering; default missing layer settings to smoke while retaining all saved layer/opacity values.
+    - Retain the original sprite ID and PNG. Fade legacy static renders to zero before changing their texture/pose in place; switch Sprite/Animation kinds through retirement and later budgeted creation, cancelling a pending switch when appropriate.
+  Optimizations:
+    - Replace synchronous creation scans and snapshot queues with bounded round-robin camera cursors and separate work, creation and maintenance budgets.
+    - Cache pollution samples, sleep clean views and fairly prioritize near-camera demand under an 8192-cell cache cap; adopt old caches incrementally without a full clear.
+    - Blend opacity by elapsed ticks, retire fully faded clean-air objects and discard their timing state. Pause/resume cached animations in bounded work and preserve render identities on layer changes.
+  Locale:
+    - Add EN/RU Cloud motion setting text describing gradual switching, static mode, independent gameplay mechanics and retained texture memory.
+  Compatibility:
+    - Preserve actual pollution, solar/quality/seasonal mechanics, public interfaces and saved settings; initialise missing derivative state lazily without writing during on_load.
+    - Targeted Factorio 2.1.24 checks cover graphic prototypes, native-object transitions, setting events, work limits and synthetic mixed-cache save/reload. Visible frame motion, lighting and subjective density still await user acceptance; no FPS/UPS or real multiplayer claim.
+---------------------------------------------------------------------------------------------------
 Version: 9.4.6
 Date: 2026-10-12
   Changes:
