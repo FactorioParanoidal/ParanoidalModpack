@@ -1,0 +1,23 @@
+The MIT License (MIT)
+
+Copyright © 2026 0n0w1c
+
+Code, audio, graphics and/or ideas provided by:
+(MIT) Copyright © 2021 max2344 [Transformators](https://mods.factorio.com/mod/Electric_Transformators)
+(MIT) Copyright © 2020 OwnlyMe [Transformators](https://mods.factorio.com/mod/Electric_Transformators)
+(MIT) Copyright © 2022 Tom Burrows [Power Overload](https://github.com/tburrows13/PowerOverload)
+(MIT) Copyright © 2024 GreatGrogrodor [Underground Energy Distribution](https://github.com/GeorgeBroughton/underground-energy-distribution)
+(MIT) Copyright © 2024 darkfrei [ConnectionBox](https://mods.factorio.com/mod/ConnectionBox)
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the “Software”),
+to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense,
+and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+IN THE SOFTWARE.
+
+(https://mit-license.org/)
