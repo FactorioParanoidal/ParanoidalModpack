@@ -1,0 +1,66 @@
+---------------------------------------------------------------------------------------------------
+Version: 0.2.1
+Date: 2026-11-12
+  Graphics:
+    - New transformer art in the vanilla style: weathered steel tank, tall brown porcelain input bushing with a
+      grading ring on the left, short grey output bushing on the right, a warning sign at the input, flow chevrons
+      and a lamp at the output; the tier stripes keep the tier colours. New shadow, icons and technology icons.
+    - All PNGs recompressed with pingo (764 -> 461 KB): entity sprites -quality=75, icons, technology icons and
+      thumbnail -quality=45, the status lamp, its halo, the shadow and the GUI pictures lossless.
+  Changes:
+    - The Input/Output captions on the transformer are removed: the bushings tell the sides apart; the blinking
+      "not connected" icon over an unwired bushing stays. Circuit wires attach at the lamp.
+    - The lamp on the front shows the status: green - all right, yellow - out of the green zone or waiting, red -
+      not working (blinking); a soft halo by day, a light at night.
+    - No more text over transformers (alt-mode load and bonus) and over power meters; the setting for the labels
+      is hidden. The numbers stay in the windows and the Dispatcher.
+    - Placed transformers move their bushing poles to the new tips on load and keep their wires.
+  Bugfixes:
+    - The on-load tap changer stopped the game (nil arithmetic) when a district hit the limit while its average
+      was still in the green zone.
+    - Load shedding remembered only what a starved district had drawn, not what it asked: it was switched back on
+      15 s later and shed again, over and over. It now stays off until the grid can carry it.
+  Info:
+    - Transformer art made with ChatGPT image generation from the mod's own layout mockup (2026-11-12).
+---------------------------------------------------------------------------------------------------
+Version: 0.2.0
+Date: 2026-11-12
+  Features:
+    - Transformer taps (research, 2 levels): the nominal of a district moves by 10 % per step, up to +-20 %.
+    - On-load tap changer (research): the tap moves by itself when a district stays out of the green zone.
+    - Short overload (research): up to 150 % of the nominal for 60 s when a district asks for more than the limit.
+    - Amorphous cores (research): idle draw 60 % lower.
+    - Power meter (research "Power metering"): satisfaction on its screen and signals E, G, M, U, C of any network.
+    - Blueprints and copy-paste keep the wires to the bushings; a rebuilt death ghost keeps the transformer settings.
+    - Delivered and saved energy of a transformer in its window; the transformer hums like a substation.
+  Changes:
+    - The transformer no longer rotates: one 4x2 view, the tall bushing on the left is the input, the short one on the
+      right is the output. A bushing without a wire shows the blinking "not connected" icon, the front says Input and
+      Output (always while not wired, then in alt mode). New statuses "Input not connected", "Output not connected".
+    - Placed 0.1.0 transformers are turned to this view on load and keep their wires; one may overlap a neighbour until
+      rebuilt.
+  Bugfixes:
+    - The input drew a whole period's energy in 2-3 ticks (spikes on the main grid every second, a brownout after
+      building). It now draws the district's use evenly; empty buffers fill in about 30 s and only from spare power.
+    - Item tooltips showed every transformer and load bank number twice.
+    - Angels electric boilers (assembling machines) were not seen as electricity-to-steam converters: a loop through
+      the main grid's steam engines made energy from nothing. Such machines now switch the district bonus off.
+    - "No power at the input" no longer shows while new buffers charge; it needs the grid to give less than asked.
+    - Alt-mode labels for everybody were stored as a fixed player list: players who joined later did not see them.
+    - Settings pasted from a vanilla constant combinator or a blueprint no longer leave stray constants on the
+      transformer, load bank or meter signals; a toggled-off transformer combinator is switched back on.
+    - Merged forces keep their transformers; technology effects reset refreshes the research levels.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.1.0
+Date: 2026-11-12
+  Features:
+    - Transformers T-40, T-80, T-160, T-320 with the green zone, bonus, idle draw and the 125 % output cap.
+    - Parallel transformers on one district, priorities, protection against bypass, transit and loops.
+    - Power automation: load shedding, staged restore, reserve transformers, emergency stop.
+    - Load bank (manual, circuit signal W, automatic), circuit signals L, P, B, D, S, A and the enable condition.
+    - Border guard for new poles, transformer window, Dispatcher (overview, scheme, map, districts with advisor,
+      journal, automation), energy map, alerts, alt-mode labels, tips.
+  Info:
+    - Quality does not affect transformers: recipes always give normal items, the bonus ignores quality.
+    - Transformer art: Electric Transformators (max2344, OwnlyMe, MIT) in the priority-power version (thomaslunn, MIT).

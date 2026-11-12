@@ -1,0 +1,15 @@
+{
+  "name": "paranoidal-power-districts",
+  "version": "0.2.1",
+  "title": "Paranoidal: Power Districts",
+  "author": "Paranoidal",
+  "factorio_version": "2.1",
+  "description": "Transformers T-40...T-320 split the base into districts. Keep a district's load in the green zone (90-110 % of the nominal) and the transformer gives it 6-12 % more energy than it takes. Priorities, load shedding, reserve, taps and an on-load tap changer, short overload, load bank, power meter, circuit signals and a Dispatcher window.",
+  "dependencies": [
+    "base >= 2.1.24",
+    "? quality",
+    "? ic-more-qualities",
+    "? Bio_Industries_2",
+    "? zzzparanoidal"
+  ]
+}
