@@ -4,7 +4,9 @@ Date: 2026. 10. 14
   Changes:
     - Reused the identical base PNGs of quality-control research 7 and 9 for levels 8 and 10; removed two duplicate files, preserving separate technologies and their level-marker layers.
     - Paranoidal packaging: moved standalone regression fixtures and their mocks out of the distributed mod into the local test collection.
+    - Clarified precise production-mode tooltips: the mode prevents new defects but does not repair defective ingredients; the refinement workshop does that.
   Bugfixes:
+    - Reject production-mode changes on script-protected unminable machines before fast replacement and show an explanatory message, keeping their protection and mode record intact.
     - QueueToFrontLimited integration: exclude reconsumed cancellation returns from deferred defect rolls, without damaging spare items; actual leftovers and ordinary cancellations retain their rolls. Added same-tick begin/end_queue_reorder remote functions.
   Features:
     - Look of defective buildings: a defective building is always darker than a standard one, brightness 75% / 65% / 55% / 45% / 35% at -1 ... -5, with a warm rust cast growing with the grade (luminance kept), and dark smoke while working: buildings with their own smoke (furnaces, burner drills, boilers, steam engines) add it at their chimney, other machines, labs and generators puff from the top with a chance of grade/5; the smoke is blended from the base smoke into the train smoke (50 / 70 / 85 / 94%), -5 is an exact copy of train-smoke; 1-3 smokes per look, one look per building every 20 ticks. Standard and positive quality are unchanged.

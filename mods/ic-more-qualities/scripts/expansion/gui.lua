@@ -1273,8 +1273,8 @@ function M.on_checked(event, hooks)
         if entity and element.state then
             -- The machine is replaced by its mode twin; the window follows the replacement.
             local result, reason = modes.set(entity, tags.mode, hooks and hooks.track_machine)
-            if not result and reason == "marked" then
-                player.create_local_flying_text({text = {"ic-quality.mode-marked"}, create_at_cursor = true})
+            if not result and (reason == "marked" or reason == "protected") then
+                player.create_local_flying_text({text = {"ic-quality.mode-" .. reason}, create_at_cursor = true})
             end
             reopen(player)
         end
