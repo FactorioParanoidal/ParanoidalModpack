@@ -1,0 +1,7 @@
+Graphics of the anti-air turrets are taken from the mod "King Jo's Vierling Flak" (kj_vierling 2.1.0)
+by TheKingJo, https://mods.factorio.com/mod/kj_vierling, licensed under CC BY-NC-SA 4.0
+(https://creativecommons.org/licenses/by-nc-sa/4.0/).
+Changes: the base and the icon are recolored per tier (yellow, red, blue); the icon is cropped.
+
+3D model: "2cm Vierlingflak - 38 ww2" (https://skfb.ly/6Uout) by DFS studio,
+licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
