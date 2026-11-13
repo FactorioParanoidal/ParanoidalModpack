@@ -119,7 +119,6 @@ function I.register()
 		end,
 		set_intoxication = function(player_index, value)
 			Player.data(player_index).x = M.clamp(tonumber(value) or 0, 0, 100)
-			Player.invalidate(player_index)
 		end,
 		get_player_status = Player.get_status,
 		-- Read-only snapshot: pollution, tolerance, inhaled (0 while the worn item protects), protected,

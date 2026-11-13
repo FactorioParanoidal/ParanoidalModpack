@@ -2,6 +2,7 @@
 Version: 9.0.0
 Date: 2026-10-29
   Changes:
+    - get_player_status now reads current personal conditions without changing intoxication, armor resource or module energy. Removed stored status snapshots, freshness checks and snapshot-only invalidation handlers; inventory changes still enable normal armor-refill retries.
     - Paranoidal packaging: moved standalone regression fixtures out of the distributed mod into the local test collection.
   Bugfixes:
     - Exhausted grid armor can refill on its normal player update after a filter becomes available, including in clean air, without double consumption or equipment loss.

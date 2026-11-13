@@ -17,6 +17,7 @@ Formulas, numbers and the reference timings: `scripts/model.lua`, `shared/config
 
 - `get_intoxication(player_index)` → 0..100
 - `set_intoxication(player_index, value)`
+- `get_player_status(player_index)` → current protection, armor resource, intoxication and localised `description` (schema 1, availability `ok` or `no_character`). Reads do not advance intoxication, damage health, wear protection, refill filters or consume module energy. No stored snapshots or freshness checks; `sample_tick` is the read tick. EvoUi shows this description on hover while its caption always shows pollution at the viewing position.
 - `get_state(player_index)` → `{pollution, tolerance, inhaled, protected, filtration, rate, intoxication}` or nil (`inhaled` is 0 while protected; `filtration` = cabin and module)
 
 ## Credits of the graphics
