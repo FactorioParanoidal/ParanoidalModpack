@@ -15,45 +15,32 @@ local SECONDS = U.INTERVAL * U.SLOTS / 60
 
 local base_tolerance = settings.startup["tpr-tolerance"].value
 
-local function copy(value)
-	if type(value) ~= "table" then return value end
-	local result = {}
-	for key, entry in pairs(value) do result[key] = copy(entry) end
-	return result
-end
-
-function U.invalidate(index, inventory_changed)
+function U.inventory_changed(index)
 	local data = storage.players[index]
-	if data then
-		data.sample = nil
-		if inventory_changed then data.refill_retry = nil end
-	end
+	if data then data.refill_retry = nil end
 end
 
--- Plain, detached simulation-step result. Never evaluates protection or creates player state.
+-- Read current protection without advancing intoxication, wearing armor or spending module energy.
 function U.get_status(index)
 	local player = game.get_player(index)
 	local character = player and player.character
 	if not (character and character.valid) then
 		return { schema_version = 1, availability = "no_character", player_index = index }
 	end
-	local data = storage.players[index]
-	local sample = data and data.sample
-	if not sample then return { schema_version = 1, availability = "pending", player_index = index } end
-	local vehicle = character.vehicle
-	local availability = "ok"
-	if game.tick - sample.sample_tick > U.INTERVAL * U.SLOTS * 2
-		or sample.character_unit_number ~= character.unit_number
-		or sample.surface_index ~= character.surface.index
-		or sample.chunk_x ~= math.floor(character.position.x / 32)
-		or sample.chunk_y ~= math.floor(character.position.y / 32)
-		or sample.force_index ~= player.force.index or sample.level ~= Research.level(player.force)
-		or sample.vehicle_unit_number ~= (vehicle and vehicle.unit_number) then
-		availability = "stale"
-	end
-	local result = copy(sample)
-	result.availability = availability
-	return result
+	local data = storage.players[index] or { x = 0 }
+	local state = U.evaluate(player, data, false)
+	state.damage = M.damage(data.x, character.max_health, state.inhaled, state.tolerance)
+	local pollutant = character.surface.pollutant_type
+	state.schema_version, state.availability = 1, "ok"
+	state.sample_tick, state.interval_ticks = game.tick, U.INTERVAL * U.SLOTS
+	state.player_index, state.character_unit_number = index, character.unit_number
+	state.surface_index, state.pollutant = character.surface.index, pollutant and pollutant.name
+	state.chunk_x, state.chunk_y = math.floor(character.position.x / 32), math.floor(character.position.y / 32)
+	state.force_index = player.force.index
+	state.vehicle_unit_number = character.vehicle and character.vehicle.unit_number
+	state.intoxication = data.x
+	state.description = Alerts.describe(state, data.x)
+	return state
 end
 
 function U.data(index)
@@ -68,7 +55,6 @@ end
 local function killed(player, data)
 	storage.kills[player.index] = (storage.kills[player.index] or 0) + 1
 	data.x = 0
-	data.sample = nil
 	Alerts.reset(player, data)
 	player.force.print({ "tpr-message.killed", player.name })
 end
@@ -92,10 +78,7 @@ end
 function U.update(player)
 	local data = U.data(player.index)
 	local character = player.character
-	if not (character and character.valid) then
-		data.sample = nil
-		return
-	end
+	if not (character and character.valid) then return end
 	local state
 	state, character = U.evaluate(player, data, true)
 	if not character.valid then return end
@@ -109,18 +92,6 @@ function U.update(player)
 		end
 	end
 	Alerts.update(player, character, data, state, data.x)
-	-- Exposure/rate are those used by this step; resources and intoxication are post-step.
-	local pollutant = character.surface.pollutant_type
-	state.schema_version, state.availability = 1, "ok"
-	state.sample_tick, state.interval_ticks = game.tick, U.INTERVAL * U.SLOTS
-	state.player_index, state.character_unit_number = player.index, character.unit_number
-	state.surface_index, state.pollutant = character.surface.index, pollutant and pollutant.name
-	state.chunk_x, state.chunk_y = math.floor(character.position.x / 32), math.floor(character.position.y / 32)
-	state.force_index = player.force.index
-	state.vehicle_unit_number = character.vehicle and character.vehicle.unit_number
-	state.intoxication = data.x
-	state.description = Alerts.describe(state, data.x)
-	data.sample = state
 end
 
 function U.tick(tick)
@@ -134,13 +105,11 @@ end
 
 function U.on_died(player)
 	local data = U.data(player.index)
-	data.sample = nil
 	data.x = 0
 	Alerts.reset(player, data)
 end
 
 function U.on_respawned(player)
-	U.invalidate(player.index)
 	if not player.mod_settings["tpr-respawn-respirator"].value then return end
 	local character = player.character
 	if not (character and character.valid) then return end
@@ -160,7 +129,6 @@ function U.on_poison(event)
 	if not (stack and C.POISON_FILTERS[stack.name]) then return end
 	local absorbed = event.original_damage_amount * C.POISON_SHARE
 	if absorbed > 0 then
-		U.invalidate(player.index)
 		Protection.spend(player, character, stack, absorbed, U.data(player.index), slot)
 	end
 end
