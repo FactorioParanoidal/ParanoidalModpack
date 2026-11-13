@@ -24,8 +24,7 @@ end
 
 function sensor:get_line(player)
     local pollution = player.surface.get_pollution(player.position)
-    local whole = math.floor(pollution)
-    local decimal = whole .. "." .. math.floor((pollution - whole) * 10)
+    local amount = tostring(math.floor(pollution + 0.5))
     self.color = { r = 255, g = 255, b = 255 }
     self.tooltip = { "sensor.pollution_around_player.environment" }
     local sample = status(player)
@@ -34,7 +33,7 @@ function sensor:get_line(player)
     elseif sample and sample.availability == "no_character" then
         self.tooltip = { "sensor.pollution_around_player.no_character" }
     end
-    return { self.format_key, decimal }
+    return { self.format_key, amount }
 end
 
 -- Only this sensor needs the detailed tooltip; leave other sensors' update paths untouched.

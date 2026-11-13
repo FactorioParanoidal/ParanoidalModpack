@@ -2,6 +2,7 @@
 Version: 0.5.1
 Date: 2026-10-12
   Changes:
+    - Paranoidal: round displayed pollution to the nearest integer, without changing the simulation or update interval.
     - Paranoidal: keep the pollution caption in its original format; show current Toxic Pollution protection, armor resource and intoxication only in the tooltip. Removed stale/pending display modes and the explanatory footer.
     - Paranoidal packaging: moved regression fixtures and the editable Paint.NET source to the local development workspace; game resources are unchanged.
   Optimizations:
