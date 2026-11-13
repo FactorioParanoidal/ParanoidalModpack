@@ -1,0 +1,141 @@
+---------------------------------------------------------------------------------------------------
+Version: 9.5.0
+Date: 2026-11-12
+  Graphics:
+    - Add four distinct 1024x1024 RGBA8 cloud shapes with deterministic surface/cell selection and pose, one render per cell and no map RNG use.
+    - Use 128-tile clouds on the 32-tile grid with unchanged tint gain. Correct the initial 64-tile calibration, which combined smaller coverage with lighter masks and made polluted factories look almost clean; preserve the shared pollution curve and solar mechanics.
+    - Include the larger of current and legacy cloud footprints during bounded old-cache adoption, so saved render objects cannot reduce camera coverage.
+    - Add optional Cloud motion, off by default: one 32-frame 512x512 RGBA8 native veil cycle over 16 game seconds, independent cell phases and bounded wind offsets with elapsed-tick smoothing. No permanent second layer or continuous cloud rotation.
+    - Keep all four HD static textures and a fully still mode that continues to track pollution density. Disabling motion does not unload the animation atlas.
+    - Match camera margins to rotated shapes, jitter and wind offsets. Use smoke mipmaps and linear filtering; default missing layer settings to smoke while retaining all saved layer/opacity values.
+    - Retain the original sprite ID and PNG. Fade legacy static renders to zero before changing their texture/pose in place; switch Sprite/Animation kinds through retirement and later budgeted creation, cancelling a pending switch when appropriate.
+  Optimizations:
+    - Replace synchronous creation scans and snapshot queues with bounded round-robin camera cursors and separate work, creation and maintenance budgets.
+    - Cache pollution samples, sleep clean views and fairly prioritize near-camera demand under an 8192-cell cache cap; adopt old caches incrementally without a full clear.
+    - Blend opacity by elapsed ticks, retire fully faded clean-air objects and discard their timing state. Pause/resume cached animations in bounded work and preserve render identities on layer changes.
+  Locale:
+    - Add EN/RU Cloud motion setting text describing gradual switching, static mode, independent gameplay mechanics and retained texture memory.
+  Compatibility:
+    - Preserve actual pollution, solar/quality/seasonal mechanics, public interfaces and saved settings; initialise missing derivative state lazily without writing during on_load.
+    - Targeted Factorio 2.1.24 checks cover graphic prototypes, native-object transitions, setting events, work limits and synthetic mixed-cache save/reload. Visible frame motion, lighting and subjective density still await user acceptance; no FPS/UPS or real multiplayer claim.
+---------------------------------------------------------------------------------------------------
+Version: 9.4.6
+Date: 2026-10-12
+  Changes:
+    - Paranoidal packaging: moved standalone regression fixtures out of the distributed mod into the local test collection.
+  Features:
+    - Read-only schema-v1 get_surface_status exposes the existing legacy solar pollution component, application/cycle times and shared curve without rescanning panels or changing generation.
+  Locale:
+    - Explicit EN/RU setting descriptions distinguish visual opacity/layer from the shared smog/solar curve and explain the surface-wide multiplier. Saved values and solar weights are unchanged.
+  Changes:
+    - Version number starts with 9 (Paranoidal fork): the Mod Portal never offers an "update" over local changes.
+    - Paranoidal: smog becomes visible above 60 pollution per chunk (was 2); maximum thickness at 1000 (was 900). Both stay adjustable in map settings.
+  Compatibility:
+    - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
+---------------------------------------------------------------------------------------------------
+Version: 1.4.5
+Date: 2026-10-08
+  Changes:
+    - Maintained Paranoidal fork of 1.4.4; original MIT license and mod ID retained.
+  Optimizations:
+    - Cache per-surface see-through regions and full-scan chunk layouts.
+    - Check only the moving player; share overlapping checks within a full scan.
+    - Reuse solar queues until topology changes, amortize total rebasing, and batch surface writes.
+    - Skip unchanged solar cell arithmetic and incrementally clean expired sprite references.
+    - Preserve visual resources, settings, formulas and update intervals.
+  Bugfixes:
+    - Keep every player's visible sprites in the queue, without overlap duplicates.
+    - Cover diagonal moves and teleports; keep the visible neighbourhood bounded.
+    - Scope see-through areas to their surface and clear disconnected player state.
+    - Correct solar panel teleport, clone and duplicate-build registration bookkeeping.
+    - Synchronize solar panels on tick zero and clean deleted-surface state.
+    - Reset empty-surface solar totals exactly, avoiding ratios of floating-point residues.
+---------------------------------------------------------------------------------------------------
+Version: 1.4.4
+Date: 2026-06-13
+  Bugfixes:
+    - Fix crash when last_player_cell is nil (any-planet-start compatibility)
+---------------------------------------------------------------------------------------------------
+Version: 1.4.3
+Date: 2026-01-02
+  Changes:
+    - Solar occlusion is disabled when using Space Exploration
+---------------------------------------------------------------------------------------------------
+Version: 1.4.2
+Date: 2025-06-15
+  Bugfixes:
+    - Fix for some zoom-based pop-ins
+---------------------------------------------------------------------------------------------------
+Version: 1.4.1
+Date: 2025-06-15
+  Bugfixes:
+    - Removed debugging text
+---------------------------------------------------------------------------------------------------
+Version: 1.4.0
+Date: 2025-06-14
+  Changes:
+    - Nearby sprites are determined by zoom level, slightly improving performance while zoomed in
+---------------------------------------------------------------------------------------------------
+Version: 1.3.2
+Date: 2025-01-12
+  Bugfixes:
+    - Fix for rare teleportation cases from other mods
+---------------------------------------------------------------------------------------------------
+Version: 1.3.1
+Date: 2024-12-13
+  Bugfixes:
+    - Math fix for see-through opacity limiting for less pollution
+---------------------------------------------------------------------------------------------------
+Version: 1.3.0
+Date: 2024-12-12
+  Changes:
+    - See-through pollution cloud for selected/nearby entities
+    - Decouple visible animations from placements for improved visuals and performance
+    - Animation algorithm includes the current wind direction/speed
+  Bugfixes:
+    - Math fix for extreme pollution values
+---------------------------------------------------------------------------------------------------
+Version: 1.2.0
+Date: 2024-12-08
+  Changes:
+    - Solar panel occlusion: reducing power output based on efficiency and pollution
+---------------------------------------------------------------------------------------------------
+Version: 1.1.3
+Date: 2024-11-28
+  Bugfixes:
+    - Fix for missing Pollution especially when changing surfaces
+---------------------------------------------------------------------------------------------------
+Version: 1.1.2
+Date: 2024-11-28
+  Changes:
+    - Prioritize updating sprites based on player proximity
+    - Reduced key collisions for less pops
+    - Expanded search radius for less pops
+    - General performance improvements
+    - More efficient handling of common remote view interactions
+---------------------------------------------------------------------------------------------------
+Version: 1.1.1
+Date: 2024-11-27
+  Changes:
+    - Update default settings based on more examples
+    - Update sprite to prevent some translucent areas
+---------------------------------------------------------------------------------------------------
+Version: 1.1.0
+Date: 2024-11-20
+  Changes:
+    - Pollution can be added to specified Planets that don't already have a pollutant type
+---------------------------------------------------------------------------------------------------
+Version: 1.0.1
+Date: 2024-11-07
+  Changes:
+    - Pollution on the map can now follow a similar color to the visual cloud
+    - Player tracking occurs more frequently, but also more efficiently
+    - Re-titling
+  Bugfixes:
+    - Pollution spawns correctly after remaining far away in the Remote View for long whiles
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 2024-11-06
+  Changes:
+    - Pollution sprites spawn around each player, forming a cloud
+    - Special colors for Gleba spores
