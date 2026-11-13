@@ -2,6 +2,9 @@
 Version: 9.0.0
 Date: 2026-10-29
   Changes:
+    - Shorten the existing armor duration text to "Should last about ..." / "Примерно хватит на ..." without changing the duration calculation or units.
+    - Shorten the Russian armor durability label to "Ресурс защиты".
+    - Keep the compact personal status layout without section headings. Round displayed pollution consistently in /toxic air; no simulation or refill changes.
     - get_player_status now reads current personal conditions without changing intoxication, armor resource or module energy. Removed stored status snapshots, freshness checks and snapshot-only invalidation handlers; inventory changes still enable normal armor-refill retries.
     - Paranoidal packaging: moved standalone regression fixtures out of the distributed mod into the local test collection.
   Bugfixes:

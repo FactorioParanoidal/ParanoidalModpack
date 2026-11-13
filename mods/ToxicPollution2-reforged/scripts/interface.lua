@@ -65,7 +65,7 @@ local function air(player)
 	local surface = player.surface
 	local pollutant = surface.pollutant_type
 	player.print({ "tpr-air.environment", surface.name, pollutant and pollutant.name or { "tpr-air.none" },
-		tostring(math.floor(surface.get_pollution(player.position))) })
+		tostring(math.floor(surface.get_pollution(player.position) + 0.5)) })
 	local solar = read_remote("visible-pollutants", "get_surface_status", surface.index)
 	if solar and solar.availability == "ok" then
 		player.print({ "tpr-air.solar", tostring(math.floor(solar.pollution_component * 100 + 0.5)),
@@ -89,7 +89,7 @@ local function air(player)
 			end
 			player.print({ "tpr-air.machine", selected.localised_name,
 				machine.script_gate_enabled and { "tpr-air.gate-on" } or { "tpr-air.gate-off" },
-				tostring(machine.pollution), age(machine.sample_tick), native })
+				tostring(math.floor(machine.pollution + 0.5)), age(machine.sample_tick), native })
 			player.print({ "tpr-air.thresholds", tostring(machine.start_above), tostring(machine.stop_at_or_below) })
 		else
 			player.print({ "tpr-air.machine-unavailable" })
