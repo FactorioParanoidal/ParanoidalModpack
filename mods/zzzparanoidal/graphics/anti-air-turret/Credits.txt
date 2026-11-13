@@ -1,7 +1,12 @@
-Graphics of the anti-air turrets are taken from the mod "King Jo's Vierling Flak" (kj_vierling 2.1.0)
+Current model and renders: ParanoidalModpack.
+The compact open quadruple mount was rebuilt as editable procedural geometry.
+Source and build instructions: mods-metadata/anti-air-turret/.
+Assets remain distributed under CC BY-NC-SA 4.0.
+
+The preceding graphics revision was taken from the mod "King Jo's Vierling Flak" (kj_vierling 2.1.0)
 by TheKingJo, https://mods.factorio.com/mod/kj_vierling, licensed under CC BY-NC-SA 4.0
 (https://creativecommons.org/licenses/by-nc-sa/4.0/).
-Changes: the base and the icon are recolored per tier (yellow, red, blue); the icon is cropped.
+Rebuilt assets: a new light model, elevated barrels, tier panels, all animation frames and icons.
 
-3D model: "2cm Vierlingflak - 38 ww2" (https://skfb.ly/6Uout) by DFS studio,
+Source model credited by that mod: "2cm Vierlingflak - 38 ww2" (https://skfb.ly/6Uout) by DFS studio,
 licensed under Creative Commons Attribution (http://creativecommons.org/licenses/by/4.0/).
