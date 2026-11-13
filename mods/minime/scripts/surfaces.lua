@@ -36,11 +36,11 @@ local function restore_preview_characters(char_name)
   minime.entered_function({char_name})
 
   if not minime.character_selector then
-    minime.entered_function({}, "leave", "Character selector is not active!")
+    minime.entered_function({}, "leave", "Выбор персонажа не активен!")
     return
   end
 
-  minime.assert(char_name, "string", "name of character prototype")
+  minime.assert(char_name, "string", "имя прототипа персонажа")
 
   local c_data = mod.minime_characters and
                   mod.minime_characters[char_name] or
@@ -49,7 +49,7 @@ local function restore_preview_characters(char_name)
 minime.show(char_name, c_data)
   if not (c_data.preview and
           c_data.preview.surface and c_data.preview.surface.valid) then
-    minime.writeDebug("Must initialize mod.minime_character[%s].preview!",
+    minime.writeDebug("Необходимо инициализировать mod.minime_character[%s].preview!",
                       {char_name})
     minime_character.initialize_character_preview(char_name)
   end
@@ -76,18 +76,18 @@ minime.show("player_chars", player_chars)
         force = player.force,
         direction = defines.direction.south,
       })
-      minime.writeDebug("Created preview %s for player %s!",
+      minime.writeDebug("Создан предпросмотр %s для игрока %s!",
                         {minime.argprint(chars[p]), minime.argprint(p)})
 
       if chars[p] and chars[p].valid then
         chars[p].disabled_by_script = true -- Factorio 2.1: LuaEntity::active is read-only
-        minime.writeDebug("Made %s inactive!", {minime.argprint(chars[p])})
+        minime.writeDebug("Перевёл %s в неактивное состояние!", {minime.argprint(chars[p])})
       end
 
       -- Make sure the preview character has the same armor as the player's current
       -- character, so that it will really reflect the player's appearance!
       if player.character then
-        minime.writeDebug("Updating armor of preview character!")
+        minime.writeDebug("Обновляю броню персонажа предпросмотра!")
         minime_player.update_armor({player_index = p, character = char_name})
       end
     end
@@ -103,8 +103,8 @@ end
 minime_surfaces.create_surface = function(surface_name, flags)
   minime.entered_function({surface_name, flags})
 
-  minime.assert(surface_name, "string", "surface name")
-  minime.assert(flags, {"table", "nil"}, "table of flags, or nil")
+  minime.assert(surface_name, "string", "имя поверхности")
+  minime.assert(flags, {"table", "nil"}, "таблица флагов или nil")
 
   local surface = game.get_surface(surface_name)
 
@@ -115,24 +115,24 @@ minime_surfaces.create_surface = function(surface_name, flags)
 
   minime.writeDebugNewBlock("Create surface %s?", {minime.enquote(surface_name)})
   if surface and surface.valid then
-    minime.writeDebug("No: surface already exists!")
+    minime.writeDebug("Нет: поверхность уже существует!")
 
   else
     --~ minime.writeDebug("Yes!")
-    minime.writeDebug("Yes: Trying to blacklist surface %s with other mods!",
+    minime.writeDebug("Да: пытаюсь добавить поверхность %s в чёрный список других модов!",
                       {minime.argprint(surface_name)})
     minime_surfaces.blacklist_surface(surface_name)
 
     minime.writeDebugNewBlock("Trying to create surface!")
     surface = game.create_surface(surface_name, map_gen_settings)
-    minime.writeDebug("Created %s!", {minime.argprint(surface)})
+    minime.writeDebug("Создано %s!", {minime.argprint(surface)})
 
     if surface and surface.valid then
       -- Adjust some properties
       minime.writeDebugNewBlock("Trying to set surface properties!")
       for p_name, p in pairs(new_surface_properties) do
         if surface[p_name] == p then
-          minime.writeDebug("Ignoring property %s!", {minime.enquote(p_name)})
+          minime.writeDebug("Игнорирую свойство %s!", {minime.enquote(p_name)})
         elseif p == "nil" then
           surface[p_name] = nil
           minime.modified_msg(p_name, surface, "Removed")
@@ -148,14 +148,14 @@ minime_surfaces.create_surface = function(surface_name, flags)
 
   minime.writeDebugNewBlock("Hide surface?")
   if dont_hide then
-    minime.writeDebug("No: forbidden by flag!")
+    minime.writeDebug("Нет: запрещено флагом!")
 
   elseif surface and surface.valid then
-    minime.writeDebug("Yes!")
+    minime.writeDebug("Да!")
     -- Calling function with just the surface name will hide it to all forces!
     minime_surfaces.hide_surface(surface)
   else
-    minime.writeDebug("No: %s surface!", {surface and "not a valid" or "no"})
+    minime.writeDebug("Поверхность: %s!", {surface and "недопустима" or "отсутствует"})
   end
 
 
@@ -179,7 +179,7 @@ minime_surfaces.delete_surface = function(surface)
     mod.deleted_surfaces[surface.index] = surface.name
 
     -- Delete surface
-    minime.writeDebug("Removing %s!", {minime.argprint(surface)})
+    minime.writeDebug("Удаляю %s!", {minime.argprint(surface)})
     game.delete_surface(surface)
 
     --------------------------------------------------------------------------------
@@ -192,7 +192,7 @@ minime_surfaces.delete_surface = function(surface)
     --~ minime_surfaces.whitelist_surface(surface)
     --------------------------------------------------------------------------------
   else
-    minime.writeDebug("Nothing to do: %s is not a valid surface!",
+    minime.writeDebug("Ничего делать не нужно: %s — недопустимая поверхность!",
                       {minime.argprint(surface)})
   end
 
@@ -211,41 +211,41 @@ minime_surfaces.hide_surface = function(surface_or_id, force_or_id)
     -- Use specified surface?
     minime.writeDebugNewBlock("Did we get a surface specification?")
     if surface_or_id then
-      minime.writeDebug("Yes! Does it resolve to a valid surface?")
+      minime.writeDebug("Да! Проверяю, разрешается ли это в допустимую поверхность.")
       local surface = minime.ascertain_surface(surface_or_id)
       -- We'll hide just this one surface!
       if surface and surface.valid then
-        minime.writeDebug("Yes!")
+        minime.writeDebug("Да!")
         surfaces = {surface}
       -- Error: not a valid surface!
       else
-        minime.writeDebug("No!")
+        minime.writeDebug("Нет!")
         minime.arg_err(surface_or_id, "reference to a valid surface")
       end
 
     -- surface_or_id is nil
     else
-      minime.writeDebug("No!")
+      minime.writeDebug("Нет!")
     end
 
     -- Use specified force?
     minime.writeDebugNewBlock("Did we get a force specification?")
     if force_or_id then
-      minime.writeDebug("Yes! Does it resolve to a valid force?")
+      minime.writeDebug("Да! Проверяю, разрешается ли это в допустимую фракцию.")
       local force = minime.ascertain_force(force_or_id)
       -- We'll hide the surface(s) for just this one force!
       if force and force.valid then
-        minime.writeDebug("Yes!")
+        minime.writeDebug("Да!")
         forces = force and force.valid and {force}
       -- Error: not a valid force!
       else
-        minime.writeDebug("No!")
+        minime.writeDebug("Нет!")
         minime.arg_err(force_or_id, "reference to a valid force")
       end
 
     -- force_or_id is nil
     else
-      minime.writeDebug("No!")
+      minime.writeDebug("Нет!")
     end
 minime.show("surfaces", surfaces)
 minime.show("forces", forces)
@@ -259,10 +259,10 @@ minime.show("forces", forces)
       for c_name, c_data in pairs(mod.minime_characters or minime.EMPTY_TAB) do
         s = c_data.preview and c_data.preview.surface
         if s and s.valid then
-          minime.writeDebug("Adding %s!", {minime.argprint(s)})
+          minime.writeDebug("Добавляю %s!", {minime.argprint(s)})
           table.insert(surfaces, s)
         else
-          minime.writeDebug("Ignoring surface for previews of \"%s\"!", {c_name})
+          minime.writeDebug("Игнорирую поверхность для предпросмотра \"%s\"!", {c_name})
         end
       end
     end
@@ -329,7 +329,7 @@ minime_surfaces.on_pre_surface_deleted = function(event)
 
   -- We've deleted the surface ourselves!
   if mod.deleted_surfaces and mod.deleted_surfaces[index] then
-    minime.writeDebug("%s was marked for deletion!", {minime.argprint(surface)})
+    minime.writeDebug("%s помечена для удаления!", {minime.argprint(surface)})
 
   -- Some other mod destroyed one of our surfaces!
   elseif name == minime.dummy_surface or
@@ -337,7 +337,7 @@ minime_surfaces.on_pre_surface_deleted = function(event)
     mod.restore_surfaces = mod.restore_surfaces or {}
     mod.restore_surfaces[index] = name
 
-    minime.writeDebug("Marked %s for restoring!", {minime.argprint(surface)})
+    minime.writeDebug("Помечена %s для восстановления!", {minime.argprint(surface)})
   end
 
   minime.entered_function("leave")
@@ -355,7 +355,7 @@ minime_surfaces.on_surface_deleted = function(event)
   -- Whitelist surface with other mods if we have deleted it ourselves!
   minime.writeDebugNewBlock("Did we delete surface %s ourselves?", {index})
   if mod.deleted_surfaces and mod.deleted_surfaces[index] then
-    minime.writeDebug("Yes! Whitelisting surface \"%s\" with other mods!",
+    minime.writeDebug("Да! Добавляю поверхность \"%s\" в белый список других модов!",
                       {mod.deleted_surfaces[index]})
     minime_surfaces.whitelist_surface(mod.deleted_surfaces[index])
 
@@ -363,15 +363,15 @@ minime_surfaces.on_surface_deleted = function(event)
     mod.deleted_surfaces[index] = nil
     if not next(mod.deleted_surfaces) then
       mod.deleted_surfaces = nil
-      minime.writeDebug("Removed mod.deleted_surfaces!")
+      minime.writeDebug("Удалён mod.deleted_surfaces!")
     end
 
-    minime.entered_function({}, "leave", "all done")
+    minime.entered_function({}, "leave", "всё готово")
     return
 
   -- Proceed if it was deleted by some other mod
   else
-    minime.writeDebug("No: proceeding!")
+    minime.writeDebug("Нет: продолжаем!")
   end
 
 
@@ -379,7 +379,7 @@ minime_surfaces.on_surface_deleted = function(event)
 
   -- Leave if this surface doesn't concern us!
   if not name then
-    local reason = "nothing to do for surface "..index
+    local reason = "Нечего делать с поверхностью "..index
     minime.entered_function({}, "leave", reason)
     return
   end
@@ -387,34 +387,34 @@ minime_surfaces.on_surface_deleted = function(event)
 
   -- Recreate dummy surface and dummies?
   if name == minime.dummy_surface then
-    minime.writeDebug("Restoring dummy surface!")
+    minime.writeDebug("Восстанавливаю поверхность-заглушку!")
     minime_surfaces.create_surface(name)
 
-    minime.writeDebug("Recreating dummies!")
+    minime.writeDebug("Пересоздаю персонажей-заглушек!")
     local p_data
     for p, player in pairs(game.players) do
       p_data = mod.player_data[p]
       if p_data then
-        minime.writeDebug("Creating new dummy for %s!", {minime.argprint(player)})
+        minime.writeDebug("Создаю новую заглушку для %s!", {minime.argprint(player)})
         p_data.dummy = minime_player.make_dummy(p)
       else
-        minime.writeDebug("Skipping: %s has no player data yet!")
+        minime.writeDebug("Пропускаю: данные игрока %s ещё не созданы!")
       end
     end
 
   -- Recreate surface for preview character and reinitialize preview data
   elseif minime.prefixed(name, minime.preview_surface_name_prefix) then
     local char_name = string.sub(name, CHAR_NAME_START_POS)
-    minime.writeDebug("Restoring preview surface for \"%s\"!", {char_name})
+    minime.writeDebug("Восстанавливаю поверхность предпросмотра для \"%s\"!", {char_name})
     restore_preview_characters(char_name)
   end
 
   mod.restore_surfaces[index] = nil
-  minime.writeDebug("Removed mod.restore_surfaces[%s]!", {index})
+  minime.writeDebug("Удалён mod.restore_surfaces[%s]!", {index})
 
   if not next(mod.restore_surfaces) then
     mod.restore_surfaces = nil
-    minime.writeDebug("Removed mod.restore_surfaces!")
+    minime.writeDebug("Удалён mod.restore_surfaces!")
   end
 
   minime.entered_function("leave")
@@ -430,7 +430,7 @@ minime_surfaces.blacklist_surface = function(surface)
   surface = (type(surface) == "string" and surface) or
             (type(surface) == "userdata" and surface.object_name == "LuaSurface" and
               surface.valid and surface.name)
-  minime.assert(surface, "string", "surface name or surface")
+  minime.assert(surface, "string", "имя поверхности или поверхность")
 
   local mod_interfaces = {
     ["AbandonedRuins"] = {
@@ -463,7 +463,7 @@ minime_surfaces.whitelist_surface = function(surface)
   surface = (type(surface) == "string" and surface) or
             (type(surface) == "userdata" and surface.valid and
               surface.object_name == "LuaSurface" and surface.name)
-  minime.assert(surface, "string", "surface name or surface")
+  minime.assert(surface, "string", "имя поверхности или поверхность")
 
   local mod_interfaces = {
     ["AbandonedRuins"] = {
@@ -473,7 +473,7 @@ minime_surfaces.whitelist_surface = function(surface)
   }
 
   for mod_name, mod_data in pairs(mod_interfaces) do
-    minime.writeDebug("Trying to whitelist surface \"%s\" with mod \"%s\"!",
+    minime.writeDebug("Пытаюсь добавить поверхность \"%s\" в белый список мода \"%s\"!",
                       {surface, mod_name})
     minime.remote_call(mod_name, mod_data.f_name, table.unpack(mod_data.args))
   end

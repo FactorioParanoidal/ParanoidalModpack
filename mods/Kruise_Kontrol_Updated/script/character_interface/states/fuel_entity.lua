@@ -48,7 +48,7 @@ function State.new(Character, target)
     {
         type = "fuel_entity",
         character = Character,
-        target = target or error("No target?"),
+        target = target or error("Нет цели?"),
         items = get_burner_items(target.burner),
         current_item = nil
     }

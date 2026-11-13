@@ -2,7 +2,7 @@
 -- Standalone port: preserve fuel, mining return, light and the unusual 1TW buffer.
 -- Registered late: no existing 2.0 prototype/early consumer owns this object.
 assert(not data.raw.item.torch and not data.raw.recipe.torch
-	and not data.raw["burner-generator"].torch, "Beta 8 torch conflicts with an existing prototype")
+	and not data.raw["burner-generator"].torch, "Факел Beta 8 конфликтует с существующим прототипом")
 
 local path = "__zzzparanoidal__/graphics/torch/"
 local body = {

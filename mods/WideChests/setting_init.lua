@@ -46,7 +46,7 @@ function MergingChests.create_mergeable_chest_setting(chest_name, options)
     end
 
     if table_size(allowed_values) <= 1 then
-        error('All mergeable modes are disabled for '..chest_name)
+        error('Все режимы объединения отключены для '..chest_name)
     end
 
     options.size_settings = options.size_settings or MergingChests.is_mod_active(MergingChests.override_size_settings_mod_name)

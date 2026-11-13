@@ -1,6 +1,6 @@
 -- Промежуточный контейнер сохраняет 256 слотов силоса до согласованной обрезки в Lua.
 local target = "WideChests_steel-chest-warehouse-4x4"
-local source = assert(data.raw.container[target], "Storage migration requires WideChests steel warehouse 4x4")
+local source = assert(data.raw.container[target], "Для миграции хранилища требуется стальной склад WideChests размером 4x4")
 local entity = table.deepcopy(source)
 entity.name = "paranoidal-storage-silo-migration"
 entity.inventory_size = 256

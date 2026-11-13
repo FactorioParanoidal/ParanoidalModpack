@@ -69,7 +69,7 @@ local function create_entity(entity_data, loc_name, subgroup, width, height, seg
 	local base_chest = data.raw['logistic-container'][entity_data.chest_name] or data.raw.container[entity_data.chest_name]
 
 	if base_chest == nil then
-		error('Chest with name '..entity_data.chest_name..' not found')
+		error('Сундук с именем '..entity_data.chest_name..' не найден')
 	end
 
 	local sprite = create_sprite(width, height, segment_data)

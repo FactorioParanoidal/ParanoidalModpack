@@ -76,7 +76,7 @@ PClib_log(string.format("debugging.is_debug: %s", debugging.is_debug))
   -- Allow the mod requiring the lib to toggle logging on the fly
   debugging.set_debug_state = function(debug_state)
     if type(debug_state) ~= "boolean" then
-      error(string.format("Not a boolean value: %s!", debug_state))
+      error(string.format("Не логическое значение: %s!", debug_state))
     end
 
     -- We only change debug_state if logging is allowed at all (depending on presence
@@ -318,19 +318,19 @@ PClib_log(string.format("debugging.is_debug: %s", debugging.is_debug))
     local t = type(object)
     local tab_or_userdata = (t == "table") or (t == "userdata")
     local err_msg = (not object and "argument") or
-                    (tab_or_userdata and (not object.name) and "object name") or
-                    (tab_or_userdata and (not object.type) and "object type")
+                    (tab_or_userdata and (not object.name) and "имя объекта") or
+                    (tab_or_userdata and (not object.type) and "тип объекта")
 
     if err_msg then
       error(string.format(
-        "Wrong argument! %s is not a valid %s!",
+        "Неверный аргумент! %s не является допустимым значением типа %s!",
         debugging.argprint(object),
         err_msg
       ))
     end
 
     --~ debugging.writeDebug("Created %s \"%s\".", {proto_type, proto_name})
-    debugging.writeDebug("Created %s.", {debugging.argprint(object)})
+    debugging.writeDebug("Создано %s.", {debugging.argprint(object)})
   end
 
   ------------------------------------------------------------------------------------
@@ -354,10 +354,10 @@ PClib_log(string.format("debugging.is_debug: %s", debugging.is_debug))
     end
 
     if read_data then
-      debugging.writeDebug("Read data for %s%s.",
+      debugging.writeDebug("Прочитаны данные для %s%s.",
                             {name, list_name and " ("..list_name..")" or ""})
     else
-      debugging.writeDebug("No data for %s read.", {name})
+      debugging.writeDebug("Данные для %s не прочитаны.", {name})
     end
   end
 
@@ -372,14 +372,14 @@ PClib_log(string.format("debugging.is_debug: %s", debugging.is_debug))
     common.assert(desc, {"string", "table"},
                           "description")
 --~ common.show("type(proto)", type(proto))
-    common.assert(proto, {"table", "userdata"}, "prototype or object")
+    common.assert(proto, {"table", "userdata"}, "прототип или объект")
 
     mode = (type(mode) == "string") and mode or "Changed"
     local lc = mode:lower()
     local preposition = (lc == "added") and "to" or
                         (lc == "removed") and "from" or
                         "of"
-    debugging.writeDebug("%s property \"%s\" %s %s.",
+    debugging.writeDebug("Действие %s: свойство «%s» %s %s.",
                           {mode, desc, preposition, debugging.argprint(proto)})
   end
 
@@ -409,14 +409,14 @@ PClib_log(string.format("debugging.is_debug: %s", debugging.is_debug))
       elseif not args then
         args = {}
       end
-      leave = leave and "Leaving" or "Entered"
+      leave = leave and "Выход:" or "Вход:"
 
       -- Preserve nil/false (normal exit) and strings (reason for leaving early)
       if bail_out and type(bail_out) ~= "string" then
         bail_out = ""
       end
       bail_out = bail_out and
-                  (bail_out ~= "" and " early: "..bail_out or " early!") or
+                  (bail_out ~= "" and " досрочно: "..bail_out or " досрочно!") or
                   ""
 
       -- Pretty-format the arguments
@@ -468,7 +468,7 @@ PClib_log(string.format("debugging.is_debug: %s", debugging.is_debug))
 
       print_on_entered({
         leave = leave, bail_out = bail_out,
-        f_name = f_name, description = "file", sep = sep,
+        f_name = f_name, description = "файл", sep = sep,
         is_file = true
       })
     end
@@ -495,7 +495,7 @@ PClib_log(string.format("debugging.is_debug: %s", debugging.is_debug))
 
       print_on_entered({
         args = args, leave = leave, bail_out = bail_out,
-        file = file, f_name = f_name, description = "function", sep = sep
+        file = file, f_name = f_name, description = "функция", sep = sep
       })
     end
   end
@@ -523,7 +523,7 @@ PClib_log(string.format("debugging.is_debug: %s", debugging.is_debug))
 
         print_on_entered({
             args = args, leave = leave, bail_out = bail_out,
-            file = file, f_name = f_name, description = "function for command",
+            file = file, f_name = f_name, description = "функция команды",
             sep = sep
         })
       end
@@ -565,7 +565,7 @@ PClib_log(string.format("debugging.is_debug: %s", debugging.is_debug))
         print_on_entered({
           args = args, leave = leave, bail_out = bail_out,
           file = file, f_name = f_name or "unnamed event",
-          description = "event script for", sep = sep,
+          description = "обработчик события", sep = sep,
           is_event = true
         })
       end
@@ -586,7 +586,7 @@ PClib_log(string.format("debugging.is_debug: %s", debugging.is_debug))
                   string.format("%s\n(%s: %s)",
                                 function_name, file.source, file.currentline) or
                   file.source
-    debugging.writeDebug("\n%s\nNothing to do in %s\n%s\n", {sep, msg, sep})
+    debugging.writeDebug("\n%s\nНечего делать в %s\n%s\n", {sep, msg, sep})
   end
 
 
@@ -969,7 +969,7 @@ debugging.show("mod_string", mod_string)
                                 --~ {"PiClib-commands.command-"..name.."-help", name},
                                 help_string,
                                 command)
-          debugging.writeDebug("Added debugging mode command \"%s\".", {name})
+          debugging.writeDebug("Добавлена команда режима отладки «%s».", {name})
         end
       end
     end

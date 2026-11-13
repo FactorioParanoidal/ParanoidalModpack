@@ -315,11 +315,11 @@ local function get_molecule_codes(molec_formula)
       table.insert(string_codes, { form = string.sub(molec_formula, 1, 1), amount = 1 }) --no amount-default 1
     else --none of the above segments
       error(
-        "Cannot determine next string code in '"
+        "Не удалось определить следующий код строки в '"
           .. (molec_formula or "")
-          .. " of original code "
+          .. " исходного кода "
           .. orig
-          .. "'. Please report this to the Angel's dev team."
+          .. "'. Пожалуйста, сообщите об этом команде разработчиков Angel's."
       )
     end
     --trim string correctly

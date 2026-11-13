@@ -134,7 +134,7 @@ end
 
 local finalized = false
 factorissimo.finalize_events = function()
-    if finalized then error("Events already finalized") end
+    if finalized then error("События уже окончательно обработаны") end
 
     -- GUI events are registered only when some file added a handler pattern for them.
     for event, patterns in pairs(gui_events) do
@@ -184,7 +184,7 @@ end
 
 local function run_delayed_function(key, args)
     local f = delayed_functions[key]
-    if not f then error("No function found for key: " .. tostring(key)) end
+    if not f then error("Не найдена функция для ключа: " .. tostring(key)) end
     f(unpack(args, 1, args.n or #args))
 end
 

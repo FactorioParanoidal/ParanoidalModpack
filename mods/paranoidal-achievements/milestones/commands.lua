@@ -25,7 +25,7 @@ local function player_force(command)
 end
 
 commands.add_command("milestones-debug-print-forces",
-    "- Print the internal force state (admin only).", function(command)
+    "- Вывести внутреннее состояние сил (только для администраторов).", function(command)
         if not permitted(command) then return end
         local text = serpent.block(storage.forces)
         reply(command, text)
@@ -33,7 +33,7 @@ commands.add_command("milestones-debug-print-forces",
     end)
 
 commands.add_command("milestones-debug-print-loaded-milestones",
-    "- Print the loaded milestones (admin only).", function(command)
+    "- Вывести загруженные вехи (только для администраторов).", function(command)
         if not permitted(command) then return end
         local text = serpent.block(storage.loaded_milestones)
         reply(command, text)
@@ -41,7 +41,7 @@ commands.add_command("milestones-debug-print-loaded-milestones",
     end)
 
 commands.add_command("milestones-set-milestone-time",
-    "- Set an incomplete milestone time: name,lower_tick,upper_tick (admin only).", function(command)
+    "- Установить время незавершённой вехи: name,lower_tick,upper_tick (только для администраторов).", function(command)
         if not command.parameter then return end
         local own, force = player_force(command)
         if not own then return end
@@ -59,15 +59,15 @@ commands.add_command("milestones-set-milestone-time",
                 sort_milestones(own.complete_milestones)
                 reset_milestones_tracker()
                 refresh_gui_for_force(force)
-                reply(command, "Milestone set.")
+                reply(command, "Веха установлена.")
                 return
             end
         end
-        reply(command, "Milestone not found.")
+        reply(command, "Веха не найдена.")
     end)
 
 commands.add_command("milestones-reset-milestone",
-    "- Reset one completed milestone: name (admin only).", function(command)
+    "- Сбросить одну завершённую веху: name (только для администраторов).", function(command)
         if not command.parameter then return end
         local own, force = player_force(command)
         if not own then return end
@@ -75,20 +75,20 @@ commands.add_command("milestones-reset-milestone",
             if milestone.name == command.parameter then
                 mark_milestone_unreached(own, milestone, i)
                 refresh_gui_for_force(force)
-                reply(command, "Milestone reset.")
+                reply(command, "Веха сброшена.")
                 return
             end
         end
-        reply(command, "Milestone not found.")
+        reply(command, "Веха не найдена.")
     end)
 
 commands.add_command("milestones-reinitialize-gui",
-    "- Rebuild your milestone window.", function(command)
+    "- Пересоздать окно вех.", function(command)
         if command.player_index then reinitialize_player(command.player_index) end
     end)
 
 commands.add_command("milestones-reinitialize-surfaces",
-    "- Rebuild statistics references and backfill incomplete milestones (admin only).", function(command)
+    "- Перестроить ссылки на статистику и добавить недостающие данные по незавершённым вехам (только для администраторов).", function(command)
         if not permitted(command) then return end
         remove_ignored_surface_statistics()
         reset_milestones_tracker()
@@ -103,7 +103,7 @@ commands.add_command("milestones-reinitialize-surfaces",
     end)
 
 commands.add_command("milestones-reinitialize-storage",
-    "- Initialise missing state and rebuild windows without deleting progress (admin only).", function(command)
+    "- Инициализировать отсутствующие данные и пересоздать окна, не удаляя прогресс (только для администраторов).", function(command)
         if not permitted(command) then return end
         for _, force in pairs(game.forces) do initialize_force_if_needed(force) end
         for _, player in pairs(game.players) do reinitialize_player(player.index) end

@@ -27,7 +27,7 @@ minime.entered_file()
 -- reuse saves I made with the previous WIP version of minime), but it should be
 -- removed before release!
 for p, p_data in pairs(storage.player_data or {}) do
-  minime.writeDebug("Checking data of player %s", {p})
+  minime.writeDebug("Проверяю данные игрока %s", {p})
 
   --~ -- Destroy backup inventories
   --~ for c, c_data in pairs(p_data.corpses or {}) do
@@ -47,8 +47,8 @@ for p, p_data in pairs(storage.player_data or {}) do
 
   -- Make sure the dummies have the same force as the player
   if p_data.dummy and p_data.dummy.valid then
-minime.show("Dummy force", p_data.dummy.force)
-minime.show("Player force", game.players[p] and game.players[p].force)
+minime.show("Фракция манекена", p_data.dummy.force)
+minime.show("Фракция игрока", game.players[p] and game.players[p].force)
     p_data.dummy.force = game.players[p].force
   end
 end
@@ -110,10 +110,10 @@ minime.show("corpse.character_corpse_tick_of_death", corpse.character_corpse_tic
         -- numbers, so we'd better add it once the table contains all corpses!)
         dead_character_id = id,
       })
-      minime.writeDebug("Stored %s in storage.minime_corpses[\"%s\"]!",
+      minime.writeDebug("Сохранено %s в storage.minime_corpses[\"%s\"]!",
                         {minime.argprint(corpse), id})
     else
-      minime.writeDebug("%s is not a valid corpse prototype!",
+      minime.writeDebug("%s не является допустимым прототипом трупа!",
                         {minime.argprint(corpse)})
     end
   end
@@ -122,13 +122,13 @@ end
 -- Add corpse_index!
 for c_index, c_data in pairs(storage.minime_corpses[id]) do
   c_data.corpse_index = c_index
-  minime.show("Added corpse_index to \""..c_data.name.."\"", c_index )
+  minime.show("Добавлено поле corpse_index для \""..c_data.name.."\"", c_index )
 end
 
 -- If there were no corpses to migrate, remove the table entry
 if not next(storage.minime_corpses[id]) then
   storage.minime_corpses[id] = nil
-  minime.writeDebug("Removed storage.minime_corpses[\"%s\"]!", {id})
+  minime.writeDebug("Удалено storage.minime_corpses[\"%s\"]!", {id})
 end
 
 

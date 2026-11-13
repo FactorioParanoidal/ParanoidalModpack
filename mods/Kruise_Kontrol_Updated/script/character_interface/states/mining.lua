@@ -7,7 +7,7 @@ function Mining.new(Character, target, amount)
   {
     type = "mining",
     character = Character,
-    target = target or error("No mining target?"),
+    target = target or error("Нет цели для добычи?"),
     amount = amount or 1, --related to mining resources, how many times we want to mine it.
     progress = 0
   }

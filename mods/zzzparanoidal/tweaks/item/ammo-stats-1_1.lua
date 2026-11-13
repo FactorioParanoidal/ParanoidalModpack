@@ -963,7 +963,7 @@ for _, spec in ipairs(legacy_ammo) do
 		ammo.ammo_type = table.deepcopy(spec.ammo_type)
 		ammo.magazine_size = spec.magazine_size
 		ammo.stack_size = assert(require("__paranoidal-stack-sizes__/config").created_ammo[spec.name],
-			"Missing restored ammo stack size: " .. spec.name)
+			"Отсутствует восстановленный размер стопки боеприпасов: " .. spec.name)
 		if spec.icon_badge_item and data.raw.item[spec.icon_badge_item] then
 			local badge = data.raw.item[spec.icon_badge_item]
 			ammo.icons = table.deepcopy(source.icons or { { icon = source.icon, icon_size = source.icon_size or 64 } })

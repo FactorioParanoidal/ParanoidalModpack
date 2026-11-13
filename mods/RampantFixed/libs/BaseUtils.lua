@@ -1675,7 +1675,7 @@ function baseUtils.ShowNewBaseAligments(universe, targetEvolution)
 	end	
     local tier = evoToTierNorandom(universe, targetEvolution)
     local alignments = universe.evolutionTableAlignment[tier]
-	game.print("Evo = "..tostring(targetEvolution*100).."%, tier:"..tostring(tier)) 
+	game.print("Эволюция = "..tostring(targetEvolution*100).."%, уровень:"..tostring(tier))
 	for i=1,#alignments do
 		local alignment = alignments[i]
 		local aligmentStats = tostring(i)..":"

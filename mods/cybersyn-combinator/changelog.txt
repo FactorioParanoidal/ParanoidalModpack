@@ -4,6 +4,7 @@ Date: 2026-06-28
   Changes:
     - Update to support Factorio 2.1.
   Locale:
+    - Russian hardcoded player-facing text: 108 UI, chat, command-help and error-message literals; technical identifiers, format parameters and gameplay logic are unchanged.
     - ru: the mod name and description name the Cybersyn constant combinator "Комбинатор заявок" (request combinator) and the train network "диспетчерская сеть" (user decision 2026-11-06), the same as in ParanoidalLocale; the full Russian translation of the build lives in ParanoidalLocale (cybersyn-combinator.mod.cfg).
     - ru: the mod name and the mod list description are the same as in ParanoidalLocale (format "English title (Russian translation)"), so the mod reads the same with or without it.
   Compatibility:

@@ -11,10 +11,10 @@ return function(mod_args)
   string_stuff.trim_chars = function(remove_from, left, right)
     common.entered_function({remove_from, left, right})
 
-    common.assert(remove_from, "string", "string to be trimmed")
-    common.assert(left, "string", "characters to be trimmed on left side")
+    common.assert(remove_from, "string", "строка для обрезки")
+    common.assert(left, "string", "символы для обрезки слева")
     common.assert(right, {"string", "nil",
-                          "characters to be trimmed on right side, or nil"})
+                          "символы для обрезки справа или nil"})
     --~ right = (type(right) == "string") and right or left
     right = right or left
 
@@ -33,8 +33,8 @@ return function(mod_args)
   string_stuff.add_to_msg = function(msg, strings)
     common.entered_function({msg, strings})
 
-    common.assert(msg, "table", "localized message")
-    common.assert(strings, {"table", "string"}, "string or array of strings to add")
+    common.assert(msg, "table", "локализованное сообщение")
+    common.assert(strings, {"table", "string"}, "строка или массив строк для добавления")
     strings = (type(strings) == "table") and strings or {strings}
 
     for a, add in pairs(strings) do

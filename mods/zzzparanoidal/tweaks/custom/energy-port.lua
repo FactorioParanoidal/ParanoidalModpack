@@ -3,7 +3,7 @@ local util = require("util")
 local port = require("tweaks.custom.energy-port-data")
 local container_fuel = require("tweaks.custom.energy-port-containers")
 local function apply(prototype, fields)
-    assert(prototype, "Energy port: missing prototype")
+    assert(prototype, "Энергетический порт: отсутствует прототип")
     for key, value in pairs(fields) do
         -- Factorio 2.1: the Beta 8 data keeps the 2.0 names; recipe category is categories[1] (the other
         -- categories kept), item fuel_category is the list fuel_categories.
@@ -55,7 +55,7 @@ for _, fix in ipairs(amount_fixes) do
     for _, entry in pairs(assert(data.raw.recipe[fix.recipe], fix.recipe)[fix.key]) do
         if entry.name == fix.name then entry.amount, found = fix.amount, true end
     end
-    assert(found, "Energy port: " .. fix.recipe .. " has no " .. fix.name)
+    assert(found, "Энергетический порт: " .. fix.recipe .. " отсутствует " .. fix.name)
 end
 
 -- 2026-10-25 user decision (variant A): preserve the late reciprocal-recipe policy and its phase.

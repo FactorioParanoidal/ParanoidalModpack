@@ -28,7 +28,7 @@ remote.add_interface("bobores", {
 
     regenerate_entity("bob-thorium-ore")
     for i, player in ipairs(game.players) do
-      player.print("All ores successfully regenerated!")
+      player.print("Все руды успешно восстановлены!")
     end
   end,
 })

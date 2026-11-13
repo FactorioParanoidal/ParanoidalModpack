@@ -115,7 +115,7 @@ function bitersEnrage.enrageBitersInRange(map, position, chunk, tick)
 				neighborChunk.enrageTick = chunk.enrageTick 
 			end
 		end
-		local flyingTextparameters = {text = "biters enraged", surface = surface, position = position, color = {1, 0, 0}, speed  = 4, time_to_live = 120}
+		local flyingTextparameters = {text = "Кусаки взбешены", surface = surface, position = position, color = {1, 0, 0}, speed  = 4, time_to_live = 120}
 		for i, player in pairs(game.connected_players) do
 			if player.valid then
 				if map.surface.index == ((player.surface and player.surface.index) or 0) then

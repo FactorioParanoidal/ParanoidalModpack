@@ -13,7 +13,7 @@ for _, effect in ipairs(restored.effects or {}) do
         break
     end
 end
-assert(has_unlock, "Beta 8 God modules must unlock intelligent-io before retiring bob-god-module")
+assert(has_unlock, "Модули God в Beta 8 должны открывать intelligent-io до вывода bob-god-module из обращения")
 obsolete.hidden = true
 obsolete.enabled = false
 obsolete.hidden_in_factoriopedia = true

@@ -20,7 +20,7 @@ for name, recipe in pairs(data.raw.recipe) do
     if not recipes[name] then
         for _, list in ipairs({recipe.ingredients or {}, recipe.results or {}}) do
             for _, ingredient in pairs(list) do
-                assert(not items[ingredient.name or ingredient[1]], "Removed fluid boiler still used by recipe: " .. name)
+                assert(not items[ingredient.name or ingredient[1]], "Удалённый жидкостный котёл всё ещё используется в рецепте: " .. name)
             end
         end
     end
@@ -28,7 +28,7 @@ end
 for name, technology in pairs(data.raw.technology) do
     if not technologies[name] then
         for _, prerequisite in pairs(technology.prerequisites or {}) do
-            assert(not technologies[prerequisite], "Removed fluid boiler technology still required by: " .. name)
+            assert(not technologies[prerequisite], "Технология удалённого жидкостного котла всё ещё требуется для: " .. name)
         end
         for index = #(technology.effects or {}), 1, -1 do
             local effect = technology.effects[index]

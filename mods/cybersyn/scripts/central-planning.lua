@@ -106,7 +106,7 @@ end
 function parse_item_network_name(item_network_name)
 	local s, e = string.find(item_network_name, ":", 1, true)
 	if not (s and e) then
-		error(item_network_name.." is no ItemNetworkName")
+		error(item_network_name.." не является ItemNetworkName")
 	end
 
 	local network_name = string.sub(item_network_name, 1, s - 1)
@@ -286,7 +286,7 @@ function create_delivery(map_data, r_station_id, p_station_id, train_id, manifes
 		local r_is_each = r_station.network_name == NETWORK_EACH
 		local p_is_each = p_station.network_name == NETWORK_EACH
 		for item_i, item in ipairs(manifest) do
-			assert(item.count > 0, "main.lua error, transfer amount was not positive")
+			assert(item.count > 0, "ошибка в main.lua: объём передачи должен быть положительным")
 
 			local item_hash = hash_item(item.name, item.quality)
 
@@ -1110,7 +1110,7 @@ function tick_poll_entities(map_data, mod_settings)
 			if train and not train.se_is_being_teleported then
 				if (not train.entity or not train.entity.valid) then
 					game.print(
-						"Cybersyn: Lost track of invalid train after migration. You need to check for lost trains manually. You might get a few of these messages.")
+						"Диспетчерская сеть поездов: при миграции утрачены данные недействительного поезда. Проверьте потерянные поезда вручную. Это сообщение может появиться несколько раз.")
 					map_data.trains[train_id] = nil
 					return
 				end

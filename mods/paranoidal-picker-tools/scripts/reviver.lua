@@ -486,7 +486,7 @@ local function toggle_ghost_revive(event)
 			player.set_shortcut_toggled("toggle-ghost-revive", pdata.ghost_revive)
 			--game.print("toggled to: "..tostring(pdata.ghost_revive))
 		else	-- provide a message if attempt to toggle when setting is disabled
-			player.print("Automatic Ghost Revive is disabled in player settings.")
+			player.print("Автоматическое восстановление призраков отключено в настройках игрока.")
 		end
 	end
 end

@@ -1,5 +1,7 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.0
+  Locale:
+    - Russian hardcoded player-facing text: 2 UI, chat, command-help and error-message literals; technical identifiers, format parameters and gameplay logic are unchanged.
 Date: 2026-10-14
   Graphics:
     - Paranoidal: replaced 9 PNGs with smaller user-recompressed Beta-7 files selected by the approved filename, folder and dimension report; resource paths and prototype code are unchanged.

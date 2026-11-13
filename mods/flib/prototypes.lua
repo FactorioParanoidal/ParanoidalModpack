@@ -69,13 +69,13 @@ local flib_prototypes = {}
 --- @overload fun(base_type: "virtual-signal"): data.VirtualSignalPrototype[]
 function flib_prototypes.all(base_type)
   if not base_type then
-    error("Did not provide a base_type")
+    error("Не указан base_type")
   end
   if type(base_type) ~= "string" then
-    error("base_type must be a string")
+    error("base_type должен быть строкой")
   end
   if not defines.prototypes[base_type] then
-    error("'" .. base_type .. "' is not a valid base prototype type")
+    error("'" .. base_type .. "' не является допустимым базовым типом прототипа")
   end
 
   local result = {}
@@ -156,26 +156,26 @@ end
 --- @overload fun(base_type: "virtual-signal", name: string): data.VirtualSignalPrototype?
 function flib_prototypes.find(base_type, name)
   if not base_type then
-    error("Did not provide a base_type")
+    error("Не указан base_type")
   end
   if type(base_type) ~= "string" then
-    error("base_type must be a string")
+    error("base_type должен быть строкой")
   end
   if base_type == "" then
-    error("base_type must be a non-empty string")
+    error("base_type должен быть непустой строкой")
   end
   if not defines.prototypes[base_type] then
-    error("'" .. base_type .. "' is not a valid base prototype type")
+    error("'" .. base_type .. "' не является допустимым базовым типом прототипа")
   end
 
   if not name then
-    error("Did not provide a name")
+    error("Не указано имя")
   end
   if type(name) ~= "string" then
-    error("name must be a string")
+    error("name должен быть строкой")
   end
   if name == "" then
-    error("name must be a non-empty string")
+    error("name должен быть непустой строкой")
   end
 
   for derived_type in pairs(defines.prototypes[base_type]) do
@@ -257,7 +257,7 @@ end
 function flib_prototypes.get(base_type, name)
   local result = flib_prototypes.find(base_type, name)
   if not result then
-    error("Prototype '" .. base_type .. "/" .. name .. "' does not exist.")
+    error("Прототип '" .. base_type .. "/" .. name .. "' не существует.")
   end
   return result
 end
@@ -276,7 +276,7 @@ end
 function flib_prototypes.get_base_type(derived_type)
   local base_type = base_type_lookup[derived_type]
   if not base_type then
-    error("'" .. derived_type .. "' is not a valid prototype type.")
+    error("'" .. derived_type .. "' не является допустимым типом прототипа.")
   end
   return base_type
 end

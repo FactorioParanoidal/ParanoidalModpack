@@ -454,7 +454,7 @@ events.on(defines.events.on_forces_merged, function(event)
   end
 end)
 
-commands.add_command("paranoidal-achievements-status", "- Show scripted achievement tracking status and stopped trackers.", function(command)
+commands.add_command("paranoidal-achievements-status", "- Показать состояние отслеживания достижений скриптом и остановленные средства отслеживания.", function(command)
   local stopped = {}
   for name in pairs(storage.mxlr and storage.mxlr.broken or {}) do stopped[#stopped + 1] = name end
   table.sort(stopped)

@@ -1,5 +1,7 @@
 ---------------------------------------------------------------------------------------------------
 Version: 9.8.6
+  Locale:
+    - Russian hardcoded player-facing text: 6 UI, chat, command-help and error-message literals; technical identifiers, format parameters and gameplay logic are unchanged.
 Date: 08. 11. 2026
   Features:
     - Added additive natural habitats for new Nauvis maps: lowland root colonies with native night lights, mineral outcrops following the existing geology, and crater centres, rims and ejecta sharing deterministic spatial fields.

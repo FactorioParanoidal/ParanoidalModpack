@@ -287,7 +287,7 @@ local function get_flow_statistics_table(milestone, storage_force)
     elseif milestone.type == "kill" then
         return storage_force.kill_stats
     end
-    error("Invalid milestone type! " .. milestone.type)
+    error("Недопустимый тип этапа: " .. milestone.type)
 end
 
 -- Paranoidal: the (LuaFlowStatistics, id) pairs with a non-zero total for this milestone, and that total.
@@ -727,6 +727,6 @@ function sprite_prefix(milestone)
     elseif milestone.type == "technology" then
         return "technology"
     else
-        error("Unknown milestone type: " .. milestone.type)
+        error("Неизвестный тип этапа: " .. milestone.type)
     end
 end

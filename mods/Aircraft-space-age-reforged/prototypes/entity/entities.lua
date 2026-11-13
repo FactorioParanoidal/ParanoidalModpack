@@ -4,7 +4,7 @@ local realism = mods["AircraftRealism"] ~= nil
 local carbon_enabled = mods["space-age"] and settings.startup["carbon-fiber-aircraft"].value
 local hardmode = settings.startup["aircraft-hardmode"].value
 local fuel_multiplier = settings.startup["fuel-consumption-multiplier"].value
-assert(fuel_multiplier > 0 and fuel_multiplier < math.huge, "Aircraft fuel multiplier must be finite and positive")
+assert(fuel_multiplier > 0 and fuel_multiplier < math.huge, "Множитель расхода топлива самолёта должен быть конечным и положительным")
 
 local function sheet(spec, suffix)
   local name = spec.sheet

@@ -682,11 +682,11 @@ local replaced = {}
 local all_ents = {}
 local bp = surface.create_entity({name="item-on-ground",position=center,force=force,stack={name="blueprint"}})
 	if bp == nil then
-		if not noerrorlog then game.print("Failed to create blueprint at " .. center.x .. " , " .. center.y) end
+		if not noerrorlog then game.print("Не удалось создать чертёж по координатам " .. center.x .. " , " .. center.y) end
 		return
 	end
 if bp.stack.import_stack(blueprint) ~= 0 then
-   if not noerrorlog then game.print('ERROR Loading blueprint string!') end
+   if not noerrorlog then game.print('ОШИБКА: не удалось загрузить строку чертежа!') end
    return
    end
 local ghosts, retry
@@ -701,7 +701,7 @@ for t=1,2 do
 		skip_fog_of_war=false
 		}
 		if #ghosts <1 then 
-			if not noerrorlog then game.print('ERROR Building blueprint: No ghosts') end
+			if not noerrorlog then game.print('ОШИБКА: не удалось построить чертёж: призраков нет') end
 			--return
 			elseif check_terrain and t==1 then
 				for _,g in pairs (ghosts) do 
@@ -761,7 +761,7 @@ for t=1,2 do
 					invert=true
 					}) do e.destroy() end
 					if v.revive()==nil then 
-						if not noerrorlog then game.print('ERROR Could not revive blueprint ghost') end
+						if not noerrorlog then game.print('ОШИБКА: не удалось восстановить призрак чертежа') end
 						end
 				else
 				

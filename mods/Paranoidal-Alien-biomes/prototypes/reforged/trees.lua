@@ -27,8 +27,8 @@ local function halve(sprite, where)
   end
   if not halved_file(sprite.filename) then return end
   if (sprite.x or 0) ~= 0 or (sprite.y or 0) ~= 0 or (sprite.line_length or 0) ~= 0 then
-    error("Paranoidal-Alien-biomes: unexpected layout of " .. sprite.filename .. " in " .. where ..
-          "; regenerate it with tools/trees.py and extend this rule")
+    error("Paranoidal-Alien-biomes: неожиданный формат расположения " .. sprite.filename .. " in " .. where ..
+          "; создайте файл заново с помощью tools/trees.py и дополните это правило")
   end
   sprite.width = math.ceil(sprite.width / 2)
   sprite.height = math.ceil(sprite.height / 2)

@@ -121,7 +121,7 @@ local common = require("__Pi-C_lib__/common")(mod_data)
   -- Names of GUI types we may try to reopen
   if script then
     common.gui_types = {}
-    common.writeDebugNewBlock("Making reverse lookup list of GUI types!")
+    common.writeDebugNewBlock("Составление обратного списка соответствия типов GUI!")
     for k, v in pairs(defines.gui_type) do
 common.show(k, v)
       common.gui_types[v] = k
@@ -228,7 +228,7 @@ minime.show("args", args)
             for char, c in pairs(chars) do
               -- Check for literal strings first, then for regular expressions
               if char:find(pattern, 1, true) or char:find(pattern) then
-                common.writeDebug("Ignoring character %s", {common.argprint(char)})
+                common.writeDebug("Игнорирую персонажа %s", {common.argprint(char)})
                 ignore_characters[char] = true
               end
             end

@@ -171,7 +171,7 @@ function epd:move_entity(move_event)
         -- if the original entity has moved, target_entity is the same as the entity itself
         assert(entity.unit_number == target_entity.unit_number)
         -- move back to start position
-        assert(entity.teleport(start_pos), "Could not move back to start position!")
+        assert(entity.teleport(start_pos), "Не удалось вернуть объект в исходную позицию!")
     else
         -- target box is now the collision box of the new entity itself
         target_box = target_entity.bounding_box

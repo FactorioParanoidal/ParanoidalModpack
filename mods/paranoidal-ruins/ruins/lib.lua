@@ -101,7 +101,7 @@ local BUILDER_ONLY = { w = true, h = true, free = true }
 ---@param name string Unique ruin name inside its size, prefixed "pd-"
 ---@param size string "small"|"medium"|"large"
 function lib.ruin(name, size)
-  local half = assert(lib.HALF[size], "unknown size " .. tostring(size))
+  local half = assert(lib.HALF[size], "неизвестный размер " .. tostring(size))
   return setmetatable({
     name = name, size = size, half = half,
     entities = {}, tiles = {}, occ = {}, tile_set = {},
@@ -151,7 +151,7 @@ end
 ---Place an entity by its top-left tile (tx, ty). Errors when it overlaps or leaves the ruin.
 function Builder:put(name, tx, ty, opts)
   local w, h = footprint(name, opts)
-  assert(self:is_free(tx, ty, w, h), string.format("%s: %s at %d,%d (%dx%d) overlaps or is out of bounds", self.name, tostring(type(name) == "table" and name.list and name.list[1] or name), tx, ty, w, h))
+  assert(self:is_free(tx, ty, w, h), string.format("%s: %s в точке %d,%d (%dx%d) перекрывает другие объекты или выходит за границы", self.name, tostring(type(name) == "table" and name.list and name.list[1] or name), tx, ty, w, h))
   self:mark(tx, ty, w, h)
   self.entities[#self.entities + 1] = { name, { x = tx + w / 2, y = ty + h / 2 }, core_opts(opts) }
   return self

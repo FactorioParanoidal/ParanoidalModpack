@@ -7,7 +7,7 @@ function Take_item.new(Character, target, name, count)
   {
     type = "take_item",
     character = Character,
-    target = target or error("No target?"),
+    target = target or error("Нет цели?"),
     name = name,
     count = count
   }
@@ -52,7 +52,7 @@ function Take_item:update()
 
   if self.count <= 0 then
     self:succeed()
-    self.character:print("We have enough of the item "..self.name)
+    self.character:print("Предмета уже достаточно: "..self.name)
   end
 
 

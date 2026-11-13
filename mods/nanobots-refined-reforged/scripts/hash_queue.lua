@@ -84,7 +84,7 @@ function Queue.execute(t)
     local data = t[t.next]
     
     if not data then
-        game.print("Nanobots error! Queue task missing?")
+        game.print("Ошибка Nanobots! Задача очереди отсутствует?")
         return false
     end
 

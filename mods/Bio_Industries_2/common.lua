@@ -20,7 +20,7 @@ return function(mod_name)
 
         local function parse_version(vstr) -- string "Major.Minor.Patch"
             local err = function()
-                error('Invalid Version String: <' .. tostring(vstr) .. '>')
+                error('Недопустимая строка версии: <' .. tostring(vstr) .. '>')
             end
             local r = { vstr:match('^(%d+)%.(%d+)%.(%d+)$') }
 
@@ -207,8 +207,8 @@ return function(mod_name)
     -- Throw an error if a wrong argument has been passed to a function
     common.arg_err = function(arg, arg_type)
         error(string.format(
-            "Wrong argument! %s is not %s!",
-            tostring(arg or "nil"), (arg_type and "a valid " .. arg_type or "valid")
+            "Неверный аргумент! Значение %s должно быть %s!",
+            tostring(arg or "nil"), (arg_type and "допустимым " .. arg_type or "valid")
         )
         )
     end

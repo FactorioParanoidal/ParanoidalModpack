@@ -48,7 +48,7 @@ end
 function Surface.find_all_entities(search_criteria)
     fail_if_missing(search_criteria, "missing search_criteria argument")
     if search_criteria.name == nil and search_criteria.type == nil and search_criteria.force == nil and search_criteria.area == nil then
-        error("Missing search criteria field: name or type or force or area of entity", 2)
+        error("Не задано поле критерия поиска: name, type, force или area сущности", 2)
     end
 
     local surface_list = Surface.lookup(search_criteria.surface)

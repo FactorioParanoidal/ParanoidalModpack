@@ -9,7 +9,7 @@ function fail_if_missing(var, msg)
         if msg then
             error(msg, 3)
         else
-            error("Missing value", 3)
+            error("Отсутствует значение", 3)
         end
     end
     return false

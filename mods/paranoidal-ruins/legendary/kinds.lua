@@ -11,8 +11,8 @@ local NAMES = {
 local list, by_name = {}, {}
 for _, name in ipairs(NAMES) do
   local kind = require("legendary.kinds." .. name)
-  assert(kind.name == name, "legendary kind name mismatch: " .. name)
-  assert(kind.size % 32 == 0, "legendary kind size must be a multiple of 32: " .. name)
+  assert(kind.name == name, "имя типа legendary не совпадает: " .. name)
+  assert(kind.size % 32 == 0, "размер типа legendary должен быть кратен 32: " .. name)
   list[#list + 1] = kind
   by_name[name] = kind
 end

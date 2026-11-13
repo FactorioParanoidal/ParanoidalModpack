@@ -4,6 +4,7 @@ Date: 31.5.2025
   Graphics:
     - thumbnail.png is redrawn at 144x144 after the old smaller picture: text and simple shapes are drawn again, the rest is resampled and sharpened.
   Locale:
+    - Russian hardcoded player-facing text: 3 UI, chat, command-help and error-message literals; technical identifiers, format parameters and gameplay logic are unchanged.
     - ru: the mod name and the mod list description are the same as in ParanoidalLocale (format "English title (Russian translation)"), so the mod reads the same with or without it.
   Changes:
     - Paranoidal: chest generation registers its derived stack minimum with paranoidal-stack-sizes instead of changing the item immediately; mergeable areas and chest slot counts are unchanged.

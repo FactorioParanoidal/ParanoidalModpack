@@ -38,7 +38,7 @@ data:extend {{
 
 local function generate_factory_floor_planet_icons(planet)
     if not planet.icons and not planet.icon then
-        error("Planet " .. planet.name .. " has no icon or icons")
+        error("У планеты " .. planet.name .. " не задано ни поле icon, ни поле icons")
     end
 
     local icons = table.deepcopy(planet.icons or {})

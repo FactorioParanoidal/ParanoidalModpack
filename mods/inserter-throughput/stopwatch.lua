@@ -152,7 +152,7 @@ local waiting_state = {
 
 local function result(watch)
     if watch.cycle <= cycles then
-        error('Unable to get the result of an ongoing stopwatch.')
+        error('Невозможно получить результат работающего секундомера.')
     end
     local stable = true
     local timestamps = watch.timestamps

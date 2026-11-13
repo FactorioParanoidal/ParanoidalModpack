@@ -86,7 +86,7 @@ local EXPERIMENTAL = setting("rso-experimental")
 
 local defs, defined = {}, {}
 local function define(prototype)
-	assert(not defined[prototype.name], "RSO: noise name defined twice: " .. prototype.name)
+	assert(not defined[prototype.name], "RSO: имя шума задано дважды: " .. prototype.name)
 	defined[prototype.name] = true
 	defs[#defs + 1] = prototype
 end

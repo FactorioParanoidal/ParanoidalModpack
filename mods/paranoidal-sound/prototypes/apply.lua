@@ -16,7 +16,7 @@ local function replace_sound_effects(effects, replacements)
             if next_sound > #replacements then return end
         end
     end
-    error("Paranoidal Sound: expected base sound effects are missing")
+    error("Paranoidal Sound: отсутствуют ожидаемые базовые звуковые эффекты")
 end
 
 raw["combat-robot"].defender.attack_parameters.sound = sounds.defender_shot_sound

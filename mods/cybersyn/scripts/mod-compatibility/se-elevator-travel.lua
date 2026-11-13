@@ -256,7 +256,7 @@ local function se_create_closest_elevator_travel(elevators, from)
 		end
 	end
 
-	assert(elevator_stop, "travel_data had no elevators")
+	assert(elevator_stop, "travel_data не содержит лифтов")
 	return {
 		station = elevator_stop.backer_name,
 		temporary = true,

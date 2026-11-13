@@ -1,5 +1,7 @@
 ---------------------------------------------------------------------------------------------------
 Version: 9.0.5
+  Locale:
+    - Russian hardcoded player-facing text: 3 UI, chat, command-help and error-message literals; technical identifiers, format parameters and gameplay logic are unchanged.
 Date: 2026-10-14
   Bugfixes:
     - TimedSpawnControl-reforged creates and handles its own buttons; only decorate them and keep its action tooltips, including right-click point management. Dependency and icon entries follow its new internal name.

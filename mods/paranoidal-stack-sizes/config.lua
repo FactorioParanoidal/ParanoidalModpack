@@ -9,9 +9,9 @@ C.initial = {
     pavement = {setting = "angels-pavement-stack-size"},
 }
 function C.initial_size(key, startup)
-    local spec = assert(C.initial[key], "Unknown initial stack policy: " .. key)
-    local size = spec.size or assert(startup[spec.setting], "Missing stack setting: " .. spec.setting).value
-    assert(type(size) == "number" and size >= 1 and size % 1 == 0, "Invalid initial stack policy: " .. key)
+    local spec = assert(C.initial[key], "Неизвестная политика начального размера стопки: " .. key)
+    local size = spec.size or assert(startup[spec.setting], "Отсутствует настройка размера стопки: " .. spec.setting).value
+    assert(type(size) == "number" and size >= 1 and size % 1 == 0, "Недопустимая политика начального размера стопки: " .. key)
     return size
 end
 

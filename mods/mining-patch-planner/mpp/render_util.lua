@@ -704,7 +704,7 @@ function render_util.draw_power_grid(player_data, event)
 
 	local connectivity = state.power_connectivity
 	if not connectivity then
-		game.print("No connectivity exists")
+		game.print("Связность отсутствует")
 		return
 	end
 	local rendered = {}
@@ -788,12 +788,12 @@ function render_util.draw_centricity(player_data, event)
 	renderer.draw_text{
 		x = C.gx,
 		y = C.gy - 4,
-		text = "Centricity: ".. attempt.heuristics.centricity,
+		text = "Центричность: ".. attempt.heuristics.centricity,
 	}
 	renderer.draw_text{
 		x = C.gx,
 		y = C.gy - 3.5,
-		text = "Heuristic: " ..(1 + (attempt.heuristics.centricity / state.miner.size * 0.5)),
+		text = "Эвристика: " ..(1 + (attempt.heuristics.centricity / state.miner.size * 0.5)),
 	}
 	
 	renderer.draw_circle{
@@ -1345,7 +1345,7 @@ function render_util.draw_consumed_resources(player_data, event)
 	renderer.draw_text{
 		x = C.gx - 2,
 		y = C.gy - 4,
-		text = "Index: "..A.index,
+		text = "Индекс: "..A.index,
 	}
 	renderer.draw_text{
 		x = C.gx - 2,
@@ -1355,7 +1355,7 @@ function render_util.draw_consumed_resources(player_data, event)
 	renderer.draw_text{
 		x = C.gx - 2,
 		y = C.gy - 2,
-		text = "Unconsumed: "..A.heuristics.unconsumed,
+		text = "Не израсходовано: "..A.heuristics.unconsumed,
 	}
 end
 
@@ -1384,7 +1384,7 @@ function render_util.draw_belt_specification(player_data, event)
 	renderer.draw_text{
 		x = C.gx, y = C.gy,
 		alignment = "center", vertical_alignment = "middle",
-		text = "capable ".. tostring(coverage.capable_span),
+		text = "Возможный пролёт: ".. tostring(coverage.capable_span),
 	}
 	
 	for _, belt in pairs(belts) do

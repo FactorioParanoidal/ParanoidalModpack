@@ -652,7 +652,7 @@ end
 function ListXPTable(player)
 local scroll = create_gui_box(player, 'XP Level Table:')
 for k=1,#storage.xp_table do
-	local txt = 'Level '.. k .. ' - ' .. storage.xp_table[k]
+	local txt = 'Уровень '.. k .. ' - ' .. storage.xp_table[k]
 	scroll.add{type="label", caption=txt}
 	end
 end
@@ -1625,25 +1625,25 @@ end
 
 
 
-commands.add_command('rpg-reset-points', 'Reconstruct XP table and reset all habilities to zero. Players can spent all points again', function(event)
+commands.add_command('rpg-reset-points', 'Пересоздать таблицу опыта и сбросить все умения до нуля. Игроки смогут снова потратить все очки.', function(event)
 local player = game.players[event.player_index]
 if player.admin then 
 	ResetPointSpent()
 	game.print({'xp_reset_altert'})
 	end
 end)
-commands.add_command('rpg-reset-all', 'Reconstruct XP table and reset everything to zero, as a new game', function(event)
+commands.add_command('rpg-reset-all', 'Пересоздать таблицу опыта и сбросить всё до нуля, как в новой игре', function(event)
 local player = game.players[event.player_index]
 if player.admin then
 	ResetAll()
 	game.print({'xp_reset_altert'})
 	end
 end)
-commands.add_command('rpg-players-list', 'List all players', function(event)
+commands.add_command('rpg-players-list', 'Список всех игроков', function(event)
 local player = game.players[event.player_index]
 ListAll(player)
 end)
-commands.add_command('rpg-listXPTable', 'List XP table', function(event)
+commands.add_command('rpg-listXPTable', 'Список таблицы опыта', function(event)
 local player = game.players[event.player_index]
 ListXPTable(player) 
 end)

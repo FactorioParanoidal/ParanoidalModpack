@@ -582,7 +582,7 @@ function Form:updateError(event)
   if not(self:isOpened()) then return end
   local panel = self:getFrameDeepPanel("error")
   panel.clear()
-  GuiElement.add(panel, GuiLabel("message"):caption(event.message or "Unknown error"):color("red"))
+  GuiElement.add(panel, GuiLabel("message"):caption(event.message or "Неизвестная ошибка"):color("red"))
 end
 
 -------------------------------------------------------------------------------

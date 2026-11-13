@@ -11,7 +11,7 @@ function Moving.new(Character, destination, radius, timeout)
     {
         type = "moving",
         character = Character,
-        destination = destination or error("No destination given for creating a moving state."),
+        destination = destination or error("Для создания состояния перемещения не указано место назначения."),
         radius = radius or 0.5,
         fail_count = -1,
         tick_to_timeout = (timeout and game.tick + timeout) or nil
@@ -125,11 +125,11 @@ function Moving:request_path()
     })
 
     self.requested_destination = destination
-    self.character:print("Requested a path. ")
+    self.character:print("Запрошен путь. ")
 end
 
 function Moving:finish()
-    self.character:print("No more nodes, we must be at the destination?")
+    self.character:print("Узлов больше нет — значит, мы уже добрались до места назначения?")
     self.character.entity.walking_state = { walking = false }
     self.character:pop_state()
     self:cleanup()
@@ -203,7 +203,7 @@ function Moving:check_path()
     end
 
     --Request a new path, but keep walking along the old as its probably its in the right direction still.
-    self.character:print("Target moved, recalculating path")
+    self.character:print("Цель переместилась, пересчитываю путь")
     self:request_path()
 end
 
@@ -295,7 +295,7 @@ function Moving:on_path_recieved(event)
     end
 
     self.path_request_index = nil
-    self.character:print("Path request finished")
+    self.character:print("Запрос пути завершён")
     local path = event.path
     if not path then
         self.path = nil

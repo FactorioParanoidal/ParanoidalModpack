@@ -48,13 +48,13 @@ end
 --- @return CybersynCombinator
 function CC:new(entity, sort_all)
   if not entity or not entity.valid then
-    log:error("new: entity must be valid")
-    error("CybersynCombinator:new: entity must be valid")
+    log:error("new: сущность должна быть действительной")
+    error("CybersynCombinator:new: сущность должна быть действительной")
   end
   local name = entity.name == "entity-ghost" and entity.ghost_name or entity.name
   if name ~= constants.ENTITY_NAME then
-    log:error("new: entity must be valid instance of ", constants.ENTITY_NAME, ", but ", entity.name, " was passed")
-    error("CybersynCombinator:new: entity has to be a valid instance of " .. constants.ENTITY_NAME)
+    log:error("new: ожидалась действительная сущность типа ", constants.ENTITY_NAME, "; передано ", entity.name, " .")
+    error("CybersynCombinator:new: сущность должна быть экземпляром " .. constants.ENTITY_NAME)
   end
 
   local instance = setmetatable({ entity = entity }, CC_meta)
@@ -186,7 +186,7 @@ function CC:get_or_create_section(id)
   storage.combinator_sections[unit_number][id] = section
 
   if not section then
-    log:error("get_or_create_section: failed to create section")
+    log:error("get_or_create_section: не удалось создать секцию")
   end
 
   return section
@@ -216,7 +216,7 @@ end
 function CC:get_cs_value(name)
   if not self:is_valid_entity() then return 0 end
   if not config.cs_signals[name] then
-    log:warn("get_cs_value: ", name, " is not a valid cybersyn signal")
+    log:warn("get_cs_value: ", name, " не является допустимым сигналом диспетчерской сети поездов")
     return nil
   end
 
@@ -237,7 +237,7 @@ end
 function CC:set_cs_value(name, value)
   if not self:is_valid_entity() then return false end
   if not config.cs_signals[name] then
-    log:warn("set_cs_value: ", name, " is not a valid cybersyn signal")
+    log:warn("set_cs_value: ", name, " не является допустимым сигналом диспетчерской сети поездов")
     return false
   end
 
@@ -275,7 +275,7 @@ end
 --- @return string? error_msg
 function CC:reset_cs_value(name)
   if not config.cs_signals[name] then
-    log:warn("reset_cs_value: ", name, " is not a valid cybersyn signal")
+    log:warn("reset_cs_value: ", name, " не является допустимым сигналом диспетчерской сети поездов")
     return false
   end
 
@@ -647,16 +647,16 @@ end
 --- @return LuaConstantCombinatorControlBehavior?
 function CC:get_control_behavior()
   if not self:is_valid_entity() then
-    log:warn("get_control_behavior: entity is not valid")
+    log:warn("get_control_behavior: сущность недействительна")
     return nil
   end
   local control = self.entity.get_or_create_control_behavior()
   if not control then
-    log:warn("get_control_behavior: control behavior is nil")
+    log:warn("get_control_behavior: поведение контроллера равно nil")
     return nil
   end
   if control.type ~= defines.control_behavior.type.constant_combinator then
-    log:warn("get_control_behavior: unexpected type. expected constant combinator but was ", control.type)
+    log:warn("get_control_behavior: неожиданный тип. ожидался constant combinator, получен ", control.type)
     return nil
   end
 
@@ -715,7 +715,7 @@ function CC:sort_network_signals()
 end
 
 function CC:sort_signals()
-  log:debug("performing sort")
+  log:debug("Выполняется сортировка")
   if not self:is_valid_entity() then return end
   local control = self:get_control_behavior()
   if not control then return end
@@ -724,7 +724,7 @@ function CC:sort_signals()
   local net_sec = self:get_or_create_section(NETWORK_SECTION_ID)
 
   if not cs_sec or not net_sec then
-    log:error("sort_signals: failed to get sections")
+    log:error("sort_signals: не удалось получить секции")
     return
   end
 
@@ -757,12 +757,12 @@ function CC:sort_signals()
           cs_filter.min = cs_filter.min + count
           local success, error = pcall(cs_sec.set_slot, cs_slot, cs_filter)
           if not success then
-            log:error("Failed to set CS signal ", serpent.line(cs_filter), " in slot ", cs_slot, ": ", serpent.line(error))
+            log:error("Не удалось установить сигнал CS ", serpent.line(cs_filter), " в ячейке ", cs_slot, ": ", serpent.line(error))
           end
         else
           local success, error_msg = self:set_cs_value(name, count)
           if not success then
-            log:error("Failed to set CS signal ", name, " to ", tostring(count), ": ", error_msg)
+            log:error("Не удалось установить сигнал CS ", name, " to ", tostring(count), ": ", error_msg)
           end
         end
         section.clear_slot(filter_index)
@@ -770,12 +770,12 @@ function CC:sort_signals()
         local net_key = name .. "__|__" .. (value.quality or "normal")
         local net_slot = net_lookup[net_key]
         if net_slot then
-          log:debug("found net signal ", net_key, " in slot ", net_slot)
+          log:debug("Найден сигнал сети ", net_key, " в слоте ", net_slot)
           local net_filter = net_sec.get_slot(net_slot)
           net_filter.min = net_filter.min + count
           net_sec.set_slot(net_slot, net_filter)
         else
-          log:debug("net signal ", net_key, " not found, creating it")
+          log:debug("Сигнал сети ", net_key, " не найден, создаётся")
           net_slot = net_sec.filters_count + 1
           filter.min = count
           net_sec.set_slot(net_slot, filter)

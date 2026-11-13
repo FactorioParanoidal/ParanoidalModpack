@@ -384,7 +384,7 @@ local function checkForUnusedResources(player)
 	for _, name in ipairs(info.resources) do used[name] = true end
 	for name, prototype in pairs(prototypes.get_entity_filtered{{filter = "type", type = "resource"}}) do
 		if not used[name] and not IsIgnoreResource(prototype) then
-			player.print("The resource " .. name .. " is not configured in RSO. It won't be spawned!")
+			player.print("Ресурс " .. name .. " не настроен в RSO. Он не будет сгенерирован!")
 		end
 	end
 end
@@ -703,7 +703,7 @@ end)
 local function allowed(command)
 	local player = command.player_index and game.get_player(command.player_index)
 	if player and not player.admin then
-		player.print("RSO: only admins can use /" .. command.name)
+		player.print("RSO: использовать / могут только администраторы" .. command.name)
 		return false
 	end
 	return true
@@ -731,11 +731,11 @@ local function regenerateSurfaceCommand(parameters)
 		return
 	end
 	if not planet_info(player.surface) then
-		player.print("RSO does not generate resources on surface " .. player.surface.name)
+		player.print("RSO не генерирует ресурсы на поверхности " .. player.surface.name)
 		return
 	end
 	regenerateSurface(player.surface, false, skipEnemiesParameter(parameters))
-	player.print("Surface " .. player.surface.name .. " regenerated")
+	player.print("Поверхность " .. player.surface.name .. " перегенерирована")
 end
 
 commands.add_command("rso-regenerate", "", regenerateCommand)

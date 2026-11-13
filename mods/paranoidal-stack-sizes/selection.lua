@@ -3,7 +3,7 @@ local C = require("__paranoidal-stack-sizes__/config")
 local M = {}
 local snapshot
 function M.capture(raw)
-    assert(not snapshot, "Stack sizes: category snapshot captured twice")
+    assert(not snapshot, "Размеры стопок: снимок категорий уже создан")
     -- Space Age branch: the filter is read from the global data, which the local below shadows.
     local space_age_filter = data.paranoidal_space_age_filter
     local data = {raw = raw}
@@ -229,6 +229,6 @@ set_by_ammo_category("artillery-shell", RS["ammo-artillery"])
     return snapshot
 end
 function M.get()
-    return assert(snapshot, "Stack sizes: zzzparanoidal did not capture the category boundary")
+    return assert(snapshot, "Размеры стопок: zzzparanoidal не зафиксировал границу категорий")
 end
 return M

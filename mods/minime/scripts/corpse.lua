@@ -62,7 +62,7 @@ minime.show("mod.minime_corpses", mod.minime_corpses)
 
   -- Event data contains a pointer to a specific corpse
   if char_id and corpse_index then
-minime.writeDebug("Looking for corpse using event data!")
+minime.writeDebug("Ищем труп по данным события!")
     data = mod.minime_corpses[char_id] and mod.minime_corpses[char_id][corpse_index]
 minime.show("data", data)
     if data then
@@ -71,7 +71,7 @@ minime.show("data", data)
       -- Destroy inventory
       if data.inventory and data.inventory.valid then
         data.inventory.destroy()
-        minime.writeDebug("Removed inventory of %s created on tick %s!",
+        minime.writeDebug("Инвентарь трупа %s, созданного на тике %s, удалён!",
                           {minime.argprint(data.entity), data.character_corpse_tick_of_death})
       end
 
@@ -85,17 +85,17 @@ minime.show("data", data)
 
       -- Remove all data of this corpse
       mod.minime_corpses[char_id][corpse_index] = nil
-      minime.writeDebug("Removed data of mod.minime_corpses[%s][%s]!",
+      minime.writeDebug("Удалены данные mod.minime_corpses[%s][%s]!",
                         {char_id, corpse_index})
       if not next(mod.minime_corpses[char_id]) then
         mod.minime_corpses[char_id] = nil
-        minime.writeDebug("Removed mod.minime_corpses[%s]!", {char_id})
+        minime.writeDebug("Удалён mod.minime_corpses[%s]!", {char_id})
       end
     end
 
   -- We must search our data for the right corpse
   else
-minime.writeDebug("Must search corpses!")
+minime.writeDebug("Нужно искать трупы!")
 
     -- Compare data of event corpse and stored corpse
     local function compare(args)
@@ -164,7 +164,7 @@ minime.show(desc..serpent.line(a).." == "..serpent.line(b), ret)
     --~ end
   --~ end
     for c_id, corpses in pairs(mod.minime_corpses) do
-minime.show("Checking corpses for character", c_id)
+minime.show("Проверка трупов персонажа", c_id)
       for c, corpse_data in pairs(corpses) do
 minime.show("INDEX", c)
 
@@ -176,7 +176,7 @@ minime.show("INDEX", c)
                                   corpse.name == corpse_data.name) or
           (corpse.name == minime.generic_corpse_name and corpse_data.use_generic) then
 
-          minime.writeDebug("Both corpses are valid!")
+          minime.writeDebug("Оба трупа действительны!")
           tests = {
             {corpse.position, corpse_data.position, "position"},
             {corpse.surface.name, corpse_data.surface, "surface"},
@@ -189,21 +189,21 @@ minime.show("INDEX", c)
           for t, test in pairs(tests) do
             if not compare(test) then
               match = false
-              minime.writeDebug("Test failed!")
+              minime.writeDebug("Проверка не пройдена!")
               break
             end
           end
 
           -- Found stored data. Run this function again to remove stored corpse!
           if match then
-            minime.writeDebug("Recurse to remove corpse %s of dead character %s!",
+            minime.writeDebug("Рекурсивно удаляем труп %s умершего персонажа %s!",
                               {c, c_id})
             minime_corpse.remove_corpse_data(pass_on)
           end
 
         -- The stored corpse has become invalid, so we can remove its data
         elseif not (corpse_data.entity and corpse_data.entity.valid) then
-          minime.writeDebug("Remove data for invalid corpse %s of dead character %s!",
+          minime.writeDebug("Удаляем данные недействительного трупа %s умершего персонажа %s!",
                             {c, c_id})
           minime_corpse.remove_corpse_data(pass_on)
         end
@@ -234,16 +234,16 @@ minime_corpse.update_corpse_inventory = function(corpse_data, entity)
 
     -- Resize inventory
     if #inventory ~= #entity_inventory then
-      minime.writeDebug("Changing size of stored inventory from %s to %s",
+      minime.writeDebug("Меняем размер сохранённого инвентаря с %s на %s",
                         {#inventory, #entity_inventory})
       inventory.resize(#entity_inventory)
     end
 
     -- Backup items
-    minime.writeDebug("Backing up inventory")
+    minime.writeDebug("Создаём резервную копию инвентаря")
     for slot = 1, #entity_inventory do
       inventory[slot].set_stack(entity_inventory[slot])
-      minime.writeDebug("Backed up slot %s: %s (%s)", {
+      minime.writeDebug("Сохранена копия ячейки %s: %s (%s)", {
         slot,
         inventory[slot].valid_for_read and inventory[slot].name or "empty",
         inventory[slot].valid_for_read and inventory[slot].count or "nil"
@@ -265,7 +265,7 @@ minime_corpse.replace_corpse = function(corpse_data, new_name, old_entity)
       not (corpse_data.dead_character_id and corpse_data.corpse_index) then
     minime.arg_err(corpse_data, "corpse_data")
   end
-  minime.check_args(new_name, "string", "corpse name")
+  minime.check_args(new_name, "string", "имя трупа")
 
   old_entity = old_entity or corpse_data.entity
 minime.show("old_entity", old_entity)
@@ -286,17 +286,17 @@ minime.show("old_entity", old_entity)
 
   local inventory = old_data.inventory
 
-  minime.writeDebug("Found data of removed corpse \"%s\" (%s of %s) for dead character \"%s\": %s",
+  minime.writeDebug("Найдены данные удалённого трупа \"%s\" (%s из %s) для умершего персонажа \"%s\": %s",
                     {corpse_data.name, corpse_index, table_size(mod.minime_corpses[char_id]), char_id, corpse_data})
 
   if surface and surface.valid and inventory and inventory.valid then
     if old_entity and old_entity.valid then
       -- Sync inventory of old entity with stored data
-      minime.writeDebug("Updating stored inventory!")
+      minime.writeDebug("Обновляем сохранённый инвентарь!")
       minime_corpse.update_corpse_inventory(old_data, old_entity)
 
       -- Remove old corpse entity
-      minime.writeDebug("Removing old corpse %s!", old_entity.name)
+      minime.writeDebug("Удаляем старый труп %s!", old_entity.name)
       old_entity.destroy({raise_destroy = true})
     end
 
@@ -312,7 +312,7 @@ minime.show("old_entity", old_entity)
       spawn_decorations = true,
       move_stuck_players = true,
     })
-    minime.writeDebug("Created replacement %s \"%s\" for character %s!",
+    minime.writeDebug("Создана замена %s \"%s\" для персонажа %s!",
                       {new.type, new.name, old_data.dead_character_id})
 
     -- Make sure the corpse has really been created!
@@ -327,13 +327,13 @@ minime.show("old_entity", old_entity)
       end
       new.character_corpse_tick_of_death = old_data.character_corpse_tick_of_death
       new.character_corpse_death_cause = old_data.character_corpse_death_cause
-      minime.writeDebug("Set corpse player index (%s), tick (%s) and cause (%s) of death.",
+      minime.writeDebug("Заданы индекс игрока (%s), тик (%s) и причина смерти (%s) трупа.",
                         {new.character_corpse_player_index or "nil",
                           new.character_corpse_tick_of_death,
                           new.character_corpse_death_cause})
 
       new.orientation = old_data.orientation
-      minime.writeDebug("Changed orientation to %s", {new.orientation})
+      minime.writeDebug("Изменена ориентация на %s", {new.orientation})
 
       -- Fill inventory
       if inventory then
@@ -343,11 +343,11 @@ minime.show("old_entity", old_entity)
           new_inventory[slot].set_stack(inventory[slot])
           --~ minime.writeDebug("Copied slot %s: %s (%s)",
                             --~ {slot, inventory[slot].name, inventory[slot].count})
-          minime.writeDebug("Copied slot %s: %s",
+          minime.writeDebug("Скопирована ячейка %s: %s",
                             {slot, minime.argprint(inventory[slot])})
         end
       end
-      minime.writeDebug("Finished copying inventory!")
+      minime.writeDebug("Копирование инвентаря завершено!")
     end
   end
 
@@ -377,17 +377,17 @@ minime_corpse.check_corpses = function()
       if corpse.corpse_expires_on_tick and
           corpse.corpse_expires_on_tick <= game.tick then
 
-        minime.writeDebug("Removing corpse \"%s\" (expired on tick %s)",
+        minime.writeDebug("Удаление трупа \"%s\" (срок истёк на тике %s)",
                           {name, corpse.corpse_expires_on_tick})
         minime_corpse.remove_corpse_data(corpse)
 
       -- If the corpse prototype doesn't exist, and if we didn't replace it with
       -- the generic corpse yet, do that now!
       elseif not (mod.minime_corpse_prototypes[name] or corpse.use_generic) then
-        minime.writeDebug("Expected prototype \"%s\" does not exist!", {name})
+        minime.writeDebug("Ожидаемый прототип \"%s\" не существует!", {name})
         minime_corpse.replace_corpse(corpse, minime.generic_corpse_name)
 
-        minime.writeDebug("Mark corpse as generic!")
+        minime.writeDebug("Пометить труп как универсальный!")
         corpse.use_generic = true
 
       -- Corpse prototype exists or has already been replaced with generic corpse
@@ -396,16 +396,16 @@ minime_corpse.check_corpses = function()
         if current.valid then
           -- Corpse prototype exists, but generic corpse is used
           if current.name ~= name and mod.minime_corpse_prototypes[name] then
-            minime.writeDebug("Replacing character-corpse \"%s\" with \"%s\"!",
+            minime.writeDebug("Замена трупа персонажа \"%s\" на \"%s\"!",
                               {name, current.name})
             minime_corpse.replace_corpse(corpse, name, current)
 
-            minime.writeDebug("Remove flag for generic corpse!")
+            minime.writeDebug("Снять флаг универсального трупа!")
             corpse.use_generic = nil
 
           -- Found expected corpse. Sync inventory with stored data!
           else
-            minime.writeDebug("Syncing stored inventory data with %s",
+            minime.writeDebug("Синхронизация сохранённых данных инвентаря с %s",
                               {current.name})
             minime_corpse.update_corpse_inventory(corpse, current)
           end
@@ -455,7 +455,7 @@ minime.show("mod.minime_corpses["..char.unit_number.."]", mod.minime_corpses[cha
 
   -- Nothing to do
   else
-    minime.writeDebug("%s has no character!", {minime.argprint(player)})
+    minime.writeDebug("У %s нет персонажа!", {minime.argprint(player)})
   end
 
   minime.entered_function("leave")
@@ -478,11 +478,11 @@ minime.show("entity.associated_player", entity.associated_player)
   if mod.minime_character_properties and
       mod.minime_character_properties[entity.name] then
 
-    minime.writeDebug("We care about dead %s!", {minime.argprint(entity)})
+    minime.writeDebug("Нас интересует погибший %s!", {minime.argprint(entity)})
     -- If the dead character was connected to a player, we've already initialized
     -- the table for this corpse!
     if not mod.minime_corpses[entity.unit_number] then
-      minime.writeDebug("Initializing corpse table for dead %s", {minime.argprint(entity)})
+      minime.writeDebug("Инициализация таблицы трупа для погибшего %s", {minime.argprint(entity)})
       -- If the death was caused by a character, we want the name of the player!
       local killer = event.cause
 minime.show("killer.type", killer and killer.type)
@@ -505,7 +505,7 @@ minime.show("killer", killer)
       }
     -- Nothing to do!
     else
-      minime.writeDebug("Already initialized corpse table!")
+      minime.writeDebug("Таблица трупа уже инициализирована!")
     end
   end
 minime.show("mod.minime_corpses["..entity.unit_number.."]", mod.minime_corpses[entity.unit_number])
@@ -566,7 +566,7 @@ minime.show("corpse.character_corpse_tick_of_death", corpse.character_corpse_tic
         dead_character_id = char_id,
         corpse_index = corpse_index,
       })
-      minime.writeDebug("Stored %s in mod.minime_corpses[%s]!",
+      minime.writeDebug("Сохранён %s в mod.minime_corpses[%s]!",
                         {minime.argprint(corpse), event.unit_number})
     end
     -- As these values have been copied to all corpses, we can remove the originals!

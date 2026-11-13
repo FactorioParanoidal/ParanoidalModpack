@@ -391,7 +391,7 @@ function superHives.onDied(universe, map, entity)
     end
     map.points = map.points + DEATH_POINTS
     if universe.aiPointsPrintGainsToChat then
-        game.print(map.surface.name .. ": Points: +" .. DEATH_POINTS .. ". [Super-hive Lost] Total: "
+        game.print(map.surface.name .. ": Очки: +" .. DEATH_POINTS .. ". [Суперулей потерян] Всего: "
             .. string.format("%.2f", map.points))
     end
     local surface = entity.surface

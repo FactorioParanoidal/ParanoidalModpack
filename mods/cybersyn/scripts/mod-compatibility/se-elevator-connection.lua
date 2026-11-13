@@ -122,7 +122,7 @@ function Elevators.from_entity(entity)
 
 	-- construct new data
 	if entity.name ~= Elevators.name_elevator and entity.name ~= Elevators.name_stop then
-		error("entity must be an elevator or the corresponding connector entity")
+		error("сущность должна быть лифтом или соответствующим соединительным объектом")
 	end
 
 	local opposite_surface_index, opposite_zone_type = find_opposite_surface(entity.surface.index)
@@ -144,7 +144,7 @@ function Elevators.from_entity(entity)
 		[opposite_surface_index] = end2,
 	}
 	if data.ground == data.orbit then
-		error("only know how to handle elevators in zone.type 'planet', 'moon' and 'orbit'")
+		error("Обработка лифтов поддерживается только для зон с zone.type 'planet', 'moon' и 'orbit'")
 	end
 	data.ground.is_orbit = false
 	data.orbit.is_orbit = true
@@ -223,7 +223,7 @@ local function create_frame(player, elevator, elevator_data)
 			{
 				type = "label", style = "frame_title", ignored_by_interaction = true,
 				style_mods = { top_margin = -3 },
-				caption = "Cybersyn",
+				caption = "Диспетчерская сеть поездов",
 			},
 			{
 				type = "switch", name = "connect_switch",
@@ -272,7 +272,7 @@ local function command_reset_elevators(command)
 		Surfaces.disconnect_surfaces(data.ground.stop, data.orbit.stop)
 	end
 	storage.se_elevators = {}
-	game.print("All elevator connections reset.")
+	game.print("Все соединения лифтов сброшены.")
 end
 
 commands.add_command("cre", { "cybersyn-messages.reset-elevator-command-help" }, command_reset_elevators)

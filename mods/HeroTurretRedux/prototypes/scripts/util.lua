@@ -116,7 +116,7 @@ local local_create_icon = function(base_icons, new_icons, options)
         if options.from ~= nil and type(options.from) == "table" then
             if options.from.icons then new_icons = options.from.icons
             elseif options.from.icon then new_icons = {{icon = options.from.icon}}
-            else error("Table given had no icons.") end
+            else error("В переданной таблице нет значков.") end
             for _, icon in pairs(new_icons) do
                 if not icon.icon_size then
                     if options.from.icon_size then
@@ -128,7 +128,7 @@ local local_create_icon = function(base_icons, new_icons, options)
                 end
             end
         else
-            error("Couldn't build icons: no icons and no table to build from.")
+            error("Не удалось создать значки: нет ни значков, ни исходной таблицы.")
         end
     end
     local icons = local_table_clone(new_icons)

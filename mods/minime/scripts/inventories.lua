@@ -32,8 +32,8 @@ local function move_stack(inventory, src_index, dst_index)
   --~ minime.check_args(src_index, "number")
   --~ minime.check_args(dst_index, "number")
   minime.assert(inventory, "LuaInventory", "inventory")
-  minime.assert(src_index, "number", "index of src inventory")
-  minime.assert(dst_index, "number", "index of dst inventory")
+  minime.assert(src_index, "number", "индекс исходного инвентаря")
+  minime.assert(dst_index, "number", "индекс целевого инвентаря")
 
   local src = inventory[src_index] or
               minime.arg_err(src_index, "a valid source slot index")
@@ -44,16 +44,16 @@ local function move_stack(inventory, src_index, dst_index)
   if src.valid_for_read then
     dst.set_stack(src)
     src.clear()
-    minime.writeDebug("%s: Moved %s (%s) to slot %s", {src_index, dst.name, dst.count, dst_index})
+    minime.writeDebug("%s: перемещено %s (%s) в ячейку %s", {src_index, dst.name, dst.count, dst_index})
 
   -- Source is empty, but destination isn't: clear destination!
   elseif dst.valid_for_read then
     dst.clear()
-    minime.writeDebug("%s: Emptied slot %s!", {src_index, dst_index})
+    minime.writeDebug("%s: очищена ячейка %s!", {src_index, dst_index})
 
   -- Source and destination are empty: skip slot
   else
-    minime.writeDebug("%s: Nothing to move to slot %s!", {src_index, dst_index})
+    minime.writeDebug("%s: нечего перемещать в ячейку %s!", {src_index, dst_index})
   end
 
   -- minime.entered_function("leave")
@@ -65,17 +65,17 @@ end
 minime_inventories.transfer_inventory = function(src, dst, flags)
   minime.entered_function({minime.argprint(src), minime.argprint(dst), flags})
 
-  minime.assert(src, "LuaInventory", "source inventory")
-  minime.assert(dst, "LuaInventory", "destination inventory")
+  minime.assert(src, "LuaInventory", "исходный инвентарь")
+  minime.assert(dst, "LuaInventory", "целевой инвентарь")
   for i, inventory in pairs({ src, dst }) do
     if not inventory.valid then
-      error(minime.argprint(inventory).." is not a valid inventory!")
+      error(minime.argprint(inventory).." — недопустимый инвентарь!")
     end
   end
 minime.show("SRC slots", #src)
 minime.show("DST slots", #dst)
 
-  minime.assert(flags, {"nil", "table"}, "table of flags or nil")
+  minime.assert(flags, {"nil", "table"}, "таблица флагов или nil")
   local clear_target        = not (flags and flags.dont_clear_target)
   local ignore_slot_filters = flags and flags.ignore_slot_filters
 
@@ -84,12 +84,12 @@ minime.show("DST slots", #dst)
 
   -- Transfer inventory contents if inventory isn't empty
   if src.is_empty() then
-    minime.writeDebug("Source inventory is empty, clear destination?")
+    minime.writeDebug("Исходный инвентарь пуст. Очистить целевой?")
     -- Shouldn't be really necessary, but just let's play it safe!
     if dst.is_empty() then
-      minime.writeDebug("No: already empty!")
+      minime.writeDebug("Нет: уже пуст!")
     else
-      minime.writeDebug("Yes!")
+      minime.writeDebug("Да!")
       dst.clear()
     end
 
@@ -106,14 +106,14 @@ minime.show("DST slots", #dst)
         -- special stack (so we can update armor equipment, blueprints etc.)!
         if not is_special and dst[i].valid_for_read and
             (src[i].name == dst[i].name) and (src[i].count == dst[i].count) then
-          minime.writeDebug("Ignoring slot %s: has same contents as source slot!",
+          minime.writeDebug("Ячейка %s пропущена: её содержимое совпадает с содержимым исходной ячейки!",
                             {i})
 
         elseif dst[i].can_set_stack(src[i]) then
           success = dst[i].set_stack(src[i])
-          minime.writeDebug("%s: %s %s (%s stack)", {
+          minime.writeDebug("%s: %s %s (стек %s)", {
             i,
-            success and "Set" or "Couldn't set",
+            success and "Set" or "Не удалось установить",
             minime.argprint(dst[i]),
             is_special and "special" or "normal",
           })
@@ -126,10 +126,10 @@ minime.show("DST slots", #dst)
       elseif clear_target and dst[i].valid_for_read then
         dst[i].clear()
         made_changes = made_changes + 1
-        minime.writeDebug("%s: Emptied slot!", {i})
+        minime.writeDebug("%s: ячейка очищена!", {i})
       end
     end
-    minime.writeDebug("Transferred %s %s (%s slots total).",
+    minime.writeDebug("Перенесено %s %s (всего ячеек: %s).",
                       {transferred, transferred == 1 and "stack" or "stacks", limit})
   end
 
@@ -138,23 +138,23 @@ minime.show("DST slots", #dst)
   -- point to set filters)
   minime.writeDebugNewBlock("Set slot filters?")
   if ignore_slot_filters then
-    minime.writeDebug("No: forbidden by flag!")
+    minime.writeDebug("Нет: запрещено флагом!")
 
   -- Copy filters if at least one slot is filtered
   elseif src.is_filtered() then
-    minime.writeDebug("Yes!")
+    minime.writeDebug("Да!")
     for i = 1, limit do
       local success = dst.set_filter(i, src.get_filter(i))
-      minime.writeDebug("Set filter for slot %s: %s", {i, success})
+      minime.writeDebug("Установлен фильтр для ячейки %s: %s", {i, success})
     end
   elseif dst.is_filtered() then
-    minime.writeDebug("Yes: must clear filters in destination!")
+    minime.writeDebug("Да: нужно очистить фильтры целевого инвентаря!")
     for i = 1, limit do
       local success = dst.set_filter(i, nil)
-      minime.writeDebug("Cleared filter for slot %s: %s", {i, success})
+      minime.writeDebug("Очищен фильтр для ячейки %s: %s", {i, success})
     end
   else
-    minime.writeDebug("No: neither src nor dst has filters!")
+    minime.writeDebug("Нет: ни у исходного, ни у целевого инвентаря нет фильтров!")
   end
 
   minime.entered_function({src, dst}, "leave")
@@ -207,8 +207,8 @@ minime.show("New dummy.character_inventory_slots_bonus", dummy.character_invento
     -- Get index of the first and the last slot we must shift in the dummy inventory
     local first = #char_inv - additional_slots + 1
     local last = #dummy_inv - additional_slots
-minime.show("New character inventory slots", #char_inv)
-minime.show("Dummy inventory slots", #dummy_inv)
+minime.show("Новое количество слотов инвентаря персонажа", #char_inv)
+minime.show("Слоты инвентаря персонажа-заглушки", #dummy_inv)
 minime.show("first", first)
 minime.show("last", last)
 minime.show("Old dummy.character_inventory_slots_bonus", dummy.character_inventory_slots_bonus)
@@ -227,7 +227,7 @@ minime.show("Old dummy.character_inventory_slots_bonus", dummy.character_invento
     end
 
     -- Back up the character!
-    minime.writeDebug("Backing up character!")
+    minime.writeDebug("Создание резервной копии персонажа!")
     minime_character.copy_character(char, dummy)
   end
 
@@ -276,8 +276,8 @@ minime_inventories.shift_slots_down = function(player, removed_slots)
     -- Get index of the first and the last slot we must shift in the dummy inventory
     local first = #char_inv + 1
     local last = #dummy_inv - removed_slots
-minime.show("New character inventory slots", #char_inv)
-minime.show("Dummy inventory slots", #dummy_inv)
+minime.show("Новое количество слотов инвентаря персонажа", #char_inv)
+minime.show("Слоты инвентаря персонажа-заглушки", #dummy_inv)
 minime.show("first", first)
 minime.show("last", last)
 minime.show("Old dummy.character_inventory_slots_bonus", dummy.character_inventory_slots_bonus)
@@ -291,7 +291,7 @@ minime.show("Old dummy.character_inventory_slots_bonus", dummy.character_invento
     end
 
     -- Back up the character!
-    minime.writeDebug("Backing up character!")
+    minime.writeDebug("Создание резервной копии персонажа!")
     minime_character.copy_character(char, dummy)
 
     -- Reduce dummy inventory
@@ -333,11 +333,11 @@ minime.show("changed_slots_count", changed_slots_count)
 
   -- Ignore changes by 0!
   if changed_slots_count > 0 then
-    minime.writeDebug("Increased size of main inventory by %s slot(s)!", {changed_slots_count})
+    minime.writeDebug("Размер основного инвентаря увеличен на %s ячеек!", {changed_slots_count})
     minime_inventories.shift_slots_up(player, changed_slots_count)
   elseif changed_slots_count < 0 then
     -- Multiplying by -1 seems to be almost 10 times faster than using math.abs()!
-    minime.writeDebug("Reduced size of main inventory by %s slot(s)!", {changed_slots_count * -1})
+    minime.writeDebug("Размер основного инвентаря уменьшен на %s ячеек!", {changed_slots_count * -1})
     minime_inventories.shift_slots_down(player, changed_slots_count * -1)
   end
   minime.entered_function("leave")
@@ -358,10 +358,10 @@ minime_inventories.move_char_to_corpse = function(player_or_char, corpse)
 minime.show("char", char)
 
   if not (char and char.valid) then
-    minime.entered_function({player_or_char, corpse}, "leave", "no character")
+    minime.entered_function({player_or_char, corpse}, "leave", "нет персонажа")
     return
   elseif not (corpse and corpse.valid) then
-    minime.entered_function({player_or_char, corpse}, "leave", "no corpse")
+    minime.entered_function({player_or_char, corpse}, "leave", "нет трупа")
     return
   end
 
@@ -371,14 +371,14 @@ minime.show("char", char)
   for i, i_name in pairs(minime.inventory_list_move_to_corpse) do
     inventory = char.get_inventory(defines.inventory["character_"..i_name])
     if inventory and inventory.valid then
-      minime.writeDebug("Moving items from %s to corpse!",
+      minime.writeDebug("Перемещение предметов из %s в труп!",
                         {minime.argprint(inventory)})
 
       for slot = 1, #inventory do
         transfer = inventory[slot]
         if transfer.valid_for_read then
           inserted = c_inventory[#c_inventory + 1].transfer_stack(transfer)
-          minime.writeDebug("Added %s (%s of %s) to corpse inventory",
+          minime.writeDebug("Добавлено %s (%s из %s) в инвентарь трупа",
                             {transfer.name, inserted, transfer.count})
         end
       end
@@ -386,7 +386,7 @@ minime.show("char", char)
   end
 
   c_inventory.sort_and_merge()
-  minime.writeDebug("Sorted and merged items in corpse inventory!")
+  minime.writeDebug("Предметы в инвентаре трупа отсортированы и объединены!")
 
   minime.entered_function("leave")
 end

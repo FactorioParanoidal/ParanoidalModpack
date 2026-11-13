@@ -380,7 +380,7 @@ function ProductionPanel:updateSubMenuLeftPanel(model, block)
 	if User.getModGlobalSetting("debug_solver") == true then
 		local group_debug = GuiElement.add(left_panel, GuiFlowH("group_debug"))
 		group_debug.style.horizontal_spacing = button_spacing
-		GuiElement.add(group_debug, GuiButton("HMModelDebug", "OPEN", model.id, block_id):sprite("menu", defines.sprites.run_test.black, defines.sprites.run_test.black):style("helmod_button_menu"):tooltip("Open Debug"))
+		GuiElement.add(group_debug, GuiButton("HMModelDebug", "OPEN", model.id, block_id):sprite("menu", defines.sprites.run_test.black, defines.sprites.run_test.black):style("helmod_button_menu"):tooltip("Открыть отладку"))
 		local default_solver = User.getParameter("solver_selected") or defines.constant.solvers.default
 		local items = {}
 		for _, value in pairs(defines.constant.solvers) do
@@ -1270,7 +1270,7 @@ function ProductionPanel:addTableRowRecipe(gui_table, model, block, recipe)
 	local is_support_factory = recipe_prototype:isSupportFactory()
 	GuiElement.add(cell_recipe, GuiCellRecipe(edition_panel, "OPEN", model.id, block.id, recipe.id):element(recipe):infoIcon(recipe.type) :tooltip("tooltip.edit-recipe"):color(recipe_color):broken(recipe_prototype:native() == nil) :byLimit(block.by_limit))
 	if recipe_prototype:native() == nil then
-		Player.print("ERROR: Recipe " .. recipe.name .. " not exist in game")
+		Player.print("ОШИБКА: Рецепт " .. recipe.name .. " отсутствует в игре")
 	end
 	---col energy
 	local cell_energy = GuiElement.add(gui_table, GuiTable("energy", recipe.id):column(2):style("helmod_table_list"))
@@ -2335,7 +2335,7 @@ function ProductionPanel:onEventAccessWrite(event, model, block)
 			Controller:send("on_gui_update", event)
 		end)
 		if not (ok) then
-			Player.print("Formula is not valid!")
+			Player.print("Недопустимая формула!")
 		end
 	end
 
@@ -2349,7 +2349,7 @@ function ProductionPanel:onEventAccessWrite(event, model, block)
 			Controller:send("on_gui_update", event)
 		end)
 		if not (ok) then
-			Player.print("Formula is not valid!")
+			Player.print("Недопустимая формула!")
 		end
 	end
 

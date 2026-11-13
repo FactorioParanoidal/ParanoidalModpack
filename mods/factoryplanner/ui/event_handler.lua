@@ -92,7 +92,7 @@ local action_inputs = {}  ---@type table<string, boolean>
 local function compile_actions(definitions)
     local actions, shortcuts, inputs = {}, {}, {}
     for name, definition in pairs(definitions) do
-        assert(not (definition.shortcut and definition.input), "Action has both shortcut and input: " .. name)
+        assert(not (definition.shortcut and definition.input), "Действие одновременно использует shortcut и input: " .. name)
         local input = definition.input and ("fp_" .. definition.input)
         -- Linked inputs use the vanilla control's binding, not their own empty binding.
         local control = input and (prototypes.custom_input[input].linked_game_control or input)
@@ -131,7 +131,7 @@ for _, listener in pairs(event_listeners) do
                     compile_actions(definition.actions_table)
             end
 
-            assert(not GUI_HANDLERS[definition.name], "Duplicate handler: " .. definition.name)
+            assert(not GUI_HANDLERS[definition.name], "Дублирующийся обработчик: " .. definition.name)
             GUI_HANDLERS[definition.name] = registered_handler
         end
     end

@@ -61,7 +61,7 @@ remote.add_interface(script.mod_name, {
     count_queue = interface.count_queue
 })
 
-commands.add_command(script.mod_name, 'Nanobot commands', commands_handler)
+commands.add_command(script.mod_name, 'Команды Nanobot', commands_handler)
 
 -- Installed after every module has registered its handlers; the only death handler removes this interface.
 script.set_event_filter(defines.events.on_entity_died, {{filter = 'name', name = 'roboport-interface-main'}})

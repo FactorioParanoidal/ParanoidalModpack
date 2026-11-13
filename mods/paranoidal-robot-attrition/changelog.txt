@@ -1,5 +1,7 @@
 ---------------------------------------------------------------------------------------------------
 Version: 9.0.0
+  Locale:
+    - Russian hardcoded player-facing text: 4 UI, chat, command-help and error-message literals; technical identifiers, format parameters and gameplay logic are unchanged.
 Date: 2026-10-30
   Major Features:
     - First version, written for Factorio Paranoidal from scratch; replaces Robot Attrition (robot_attrition), which is removed from the build. Only the idea of the mechanic is repeated: no code, graphics or texts of that mod.

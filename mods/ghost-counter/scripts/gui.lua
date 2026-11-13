@@ -81,7 +81,7 @@ function Gui.make_gui(player_index)
     titlebar_flow.drag_target = playerdata.gui.root
     titlebar_flow.add{
         type="label",
-        caption="Ghost Counter",
+        caption="Счётчик призраков",
         ignored_by_interaction=true,
         style="frame_title"
     }

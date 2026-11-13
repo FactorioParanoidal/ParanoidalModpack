@@ -202,7 +202,7 @@ function PreferenceEdition:getDebugTab()
     if content_panel[panel_name] ~= nil and content_panel[panel_name].valid then
         return content_panel[scroll_name]
     end
-    local tab_panel = GuiElement.add(content_panel, GuiTab(panel_name):caption("Debug"))
+    local tab_panel = GuiElement.add(content_panel, GuiTab(panel_name):caption("Отладка"))
     local scroll_panel = GuiElement.add(content_panel, GuiScroll(scroll_name):style(defines.styles.frame.tab_scroll_pane))
     content_panel.add_tab(tab_panel, scroll_panel)
     scroll_panel.style.horizontally_stretchable = true

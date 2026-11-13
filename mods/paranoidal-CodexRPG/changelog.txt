@@ -1,5 +1,7 @@
 ---------------------------------------------------------------------------------------------------
 Version: 9.3.0
+  Locale:
+    - Russian hardcoded player-facing text: 5 UI, chat, command-help and error-message literals; technical identifiers, format parameters and gameplay logic are unchanged.
 Date: 2026-11-06
   Features:
     - BnL Premium lists the Gold Card holders, the supporters of the modpack (16, alphabetically, by display name). The club card shows the number of holders, fulfilled wishes and the average review time. A holder opens a profile on the right page: card number, the status Platinum passenger (the same for every holder) and the wishes, each with its version, quote and description (expandable) and an "Open" button. Holders without wishes get a BnL joke instead of an empty list.

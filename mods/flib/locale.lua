@@ -27,7 +27,7 @@ end
 --- @return data.LocalisedString
 function flib_locale.of_item(item)
   if not defines.prototypes.item[item.type] then
-    error("Given prototype is not an item: " .. serpent.block(item))
+    error("Предоставленный прототип не является предметом: " .. serpent.block(item))
   end
   if item.localised_name then
     return item.localised_name
@@ -57,7 +57,7 @@ end
 --- @return data.LocalisedString
 function flib_locale.of_recipe(recipe)
   if recipe.type ~= "recipe" then
-    error("Given prototype is not an recipe: " .. serpent.block(recipe))
+    error("Предоставленный прототип не является рецептом: " .. serpent.block(recipe))
   end
   if recipe.localised_name then
     return recipe.localised_name

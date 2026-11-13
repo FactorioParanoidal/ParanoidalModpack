@@ -470,7 +470,7 @@ function FilterHelper.add_items_splitter(entity, items)
             if prototypes.item[always_shown_item] then
                 fh_util.add_item_to_table(items, always_shown_item)
             else
-                game.print("FilterHelper: Unknown default item " .. always_shown_item)
+                game.print("FilterHelper: неизвестный предмет по умолчанию " .. always_shown_item)
             end
         end
     end

@@ -296,7 +296,7 @@ local tab = add_gui(frame, {type="table", name='tab3',  column_count = 4})
 add_gui(tab, {type="sprite-button", sprite = "utility/close", name='bt_destroy_my_2parent', style = "back_button" }) --style='rounded_button'style="tool_button"
 add_gui(tab, {type="sprite-button", name='bt_holo_sign_textbox', tooltip={'bt_holo_sign_textbox'}, style = "tool_button", sprite = "utility/custom_tag_icon"}) --rename_icon_normal
 add_gui(tab, {type="sprite-button", name='bt_holo_sign_inputs', tooltip={'bt_holo_sign_inputs'},style = "tool_button", sprite = "utility/logistic_network_panel_black" }) --"item/red-wire"
-add_gui(tab, {type="button", caption ='OK', name='bt_holo_sign_ok', tooltip={'bt_holo_sign_confirm'},  style = "confirm_button"})  
+add_gui(tab, {type="button", caption ='ОК', name='bt_holo_sign_ok', tooltip={'bt_holo_sign_confirm'},  style = "confirm_button"})
 
 if Sign_Data.input then add_inputs(frame,player) end
 if Sign_Data.show_textbox then add_textbox(frame,player)	end
@@ -1187,14 +1187,14 @@ end)
 
 
 
-commands.add_command('hologram-turn-on', 'Turn ON all holograms', function(event)
+commands.add_command('hologram-turn-on', 'Включить все голограммы', function(event)
 local player = game.players[event.player_index]
 if player.admin then 
     storage.all_turned_off = false
 	UpdateAll()
 	end
 end)
-commands.add_command('hologram-turn-off', 'Turn OFF all holograms', function(event)
+commands.add_command('hologram-turn-off', 'Выключить все голограммы', function(event)
 local player = game.players[event.player_index]
 if player.admin then 
     storage.all_turned_off = true

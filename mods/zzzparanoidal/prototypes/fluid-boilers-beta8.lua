@@ -78,11 +78,11 @@ for tier, spec in ipairs(tiers) do
     local description = {"paranoidal-fluid-boilers.description", tostring(spec.temperature), tostring(math.floor(spec.efficiency * 100 + 0.5))}
     local ingredients, packs = {}, {}
     for _, ingredient in ipairs(spec.ingredients) do
-        assert(data.raw.item[ingredient[1]], "Beta 8 boiler ingredient missing: " .. ingredient[1])
+        assert(data.raw.item[ingredient[1]], "Отсутствует ингредиент котла Beta 8: " .. ingredient[1])
         ingredients[#ingredients + 1] = {type = "item", name = ingredient[1], amount = ingredient[2]}
     end
     for _, prerequisite in ipairs(spec.prerequisites) do
-        assert(data.raw.technology[prerequisite], "Beta 8 boiler prerequisite missing: " .. prerequisite)
+        assert(data.raw.technology[prerequisite], "Отсутствует предварительная технология котла Beta 8: " .. prerequisite)
     end
     for index = 1, spec.sciences do
         packs[#packs + 1] = {sciences[index], spec.science_amount}

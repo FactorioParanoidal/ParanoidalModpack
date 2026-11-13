@@ -1,5 +1,7 @@
 ---------------------------------------------------------------------------------------------------
 Version: 9.0.0
+  Locale:
+    - Russian hardcoded player-facing text: 15 UI, chat, command-help and error-message literals; technical identifiers, format parameters and gameplay logic are unchanged.
 Date: 2026-11-01
   Major Features:
     - One mod instead of AbandonedRuins_updated_fork 1.5.7 (Abandoned Ruins - Updated, Paranoidal fork of the core by roland77, Keysivi, Gangsir, Bilka), AbandonedRuins-base 0.1.8 (its vanilla "base" ruin set) and AbandonedRuins-paranoidal 9.1.0 (the Paranoidal ruin set, discovery journal and legendary ruins). Ruins, item, entity, force, setting, command and locale key names are unchanged; the remote interfaces "AbandonedRuins" and "AbandonedRuins-paranoidal" keep their names for the other mods.

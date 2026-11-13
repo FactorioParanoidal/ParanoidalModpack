@@ -3,7 +3,7 @@ local drill = data.raw["mining-drill"]["burner-mining-drill"]
 local bbox = drill.collision_box
 local anchor = bbox[2] or bbox.right_bottom
 if not anchor then
-	error("No map position found in BoundingBox: " .. serpent.block(bbox))
+	error("В BoundingBox не найдена позиция на карте: " .. serpent.block(bbox))
 end
 anchor = { (anchor[1] or anchor.x) / 2, (anchor[2] or anchor.y) / 2 }
 drill.input_fluid_box = {
@@ -19,7 +19,7 @@ drill.input_fluid_box = {
 }
 
 local tech = data.raw.technology["burner-mechanics"]
-assert(tech, "Given tech not found!")
+assert(tech, "Указанная технология не найдена!")
 tech.unit = nil
 -- Later early-electronics-beta8 restores the science cost; the fluid-mining effect stays.
 tech.research_trigger = {

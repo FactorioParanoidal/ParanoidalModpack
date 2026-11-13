@@ -68,7 +68,7 @@ function Calculator:onEvent(event)
       self:updateHistory()
     end)
     if not(ok) then
-      Player.print("Formula is not valid!")
+      Player.print("Недопустимая формула!")
     end
   end
   if event.action == "selected-key" then
@@ -82,7 +82,7 @@ function Calculator:onEvent(event)
         self:updateHistory()
       end)
       if not(ok) then
-        Player.print("Formula is not valid!")
+        Player.print("Недопустимая формула!")
       end
     elseif event.item1 == "clear" then
       User.setParameter("calculator_value", 0)
@@ -139,14 +139,14 @@ function Calculator:updateKeyboard()
 
   local table_panel = GuiElement.add(keyboard_panel, GuiTable("keys"):column(4))
   local keys = {}
-  table.insert(keys, {key="clear" ,caption="C", tooltip="clear"})
+  table.insert(keys, {key="clear" ,caption="C", tooltip="очистить"})
   table.insert(keys, {key="(" ,caption="("})
   table.insert(keys, {key=")" ,caption=")"})
   table.insert(keys, {key="" ,caption=""})
 
   table.insert(keys, {key="" ,caption=""})
-  table.insert(keys, {key="^" ,caption="^", tooltip="x pow y"})
-  table.insert(keys, {key="%" ,caption="%", tooltip="x modulo y"})
+  table.insert(keys, {key="^" ,caption="^", tooltip="x в степени y"})
+  table.insert(keys, {key="%" ,caption="%", tooltip="x по модулю y"})
   table.insert(keys, {key="/" ,caption="/"})
 
   table.insert(keys, {key="7" ,caption="7"})

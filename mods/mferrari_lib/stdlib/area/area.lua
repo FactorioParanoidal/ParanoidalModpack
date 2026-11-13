@@ -61,7 +61,7 @@ end
 function Area.shrink(area, amount)
     fail_if_missing(area, "missing area value")
     fail_if_missing(amount, "missing amount value")
-    if amount < 0 then error("Can not shrunk area by a negative amount (see Area.expand)!", 2) end
+    if amount < 0 then error("Нельзя уменьшить область на отрицательную величину (см. Area.expand)!", 2) end
     area = Area.to_table(area)
 
     local left_top = Position.to_table(area.left_top)
@@ -76,7 +76,7 @@ end
 function Area.expand(area, amount)
     fail_if_missing(area, "missing area value")
     fail_if_missing(amount, "missing amount value")
-    if amount < 0 then error("Can not expand area by a negative amount (see Area.shrink)!", 2) end
+    if amount < 0 then error("Нельзя расширить область на отрицательную величину (см. Area.shrink)!", 2) end
     area = Area.to_table(area)
 
     local left_top = Position.to_table(area.left_top)

@@ -43,7 +43,7 @@ end
 
 local function remove_guis()
   minime.entered_function()
-  minime.writeDebug("Character selector is disabled -- check if any players have a GUI.")
+  minime.writeDebug("Селектор персонажа отключён — проверьте, открыто ли у игроков какое-либо GUI.")
 
   for p, player in pairs(game.players) do
     minime_gui.remove_gui(player)
@@ -67,9 +67,9 @@ local function scenario_supports_characters()
         script.level.level_name == level_name then
 
       ret = false
-      minime.writeDebug("%s scenario \"%s\" is active!", {
+      minime.writeDebug("%s: активен сценарий \"%s\"!", {
         mod_name == "base" and "Vanilla" or
-        "Mod "..minime.enquote(mod_name).."'s",
+        "Мод "..minime.enquote(mod_name).."'s",
         level_name
       })
       break
@@ -106,17 +106,17 @@ init = function(event)
     local mod_name = minime.modName
     local remote = "CharacterModHelper"
     if scenario_supports_characters() then
-      minime.writeDebug("Scenario supports characters!")
+      minime.writeDebug("Сценарий поддерживает персонажей!")
       if mod.no_characters then
         mod.no_characters = nil
-        minime.writeDebug("Removed flag mod.no_characters!")
+        minime.writeDebug("Удалён флаг mod.no_characters!")
 
         minime.remote_call(remote, "selector_mode_active", mod_name)
         minime.remote_call(remote, "allow_character_commands", mod_name)
       end
 
     else
-      minime.writeDebug("Scenario doesn't support characters!")
+      minime.writeDebug("Сценарий не поддерживает персонажей!")
       local reason = {
         "minime-selector-mode.disabled-no-char-scenario",
         script.level.level_name,
@@ -125,13 +125,13 @@ init = function(event)
       -- "CharacterModHelper" will warn that the scenario doesn't support characters
       -- if it is active
       if script.active_mods["CharacterModHelper"] then
-        minime.writeDebug("Asking \"CharacterModHelper\" to print warning!")
+        minime.writeDebug("Прошу \"CharacterModHelper\" вывести предупреждение!")
         minime.remote_call(remote, "selector_mode_disabled", mod_name, reason)
         minime.remote_call(remote, "forbid_character_commands", mod_name)
 
       -- When "CharacterModHelper" is not active, we'll print the warning ourselves
       else
-        minime.writeDebug("\"CharacterModHelper\" is not active!")
+        minime.writeDebug("\"CharacterModHelper\" не активен!")
         local msg = {
           "minime-selector-mode.wrapper",
           {"mod-name."..script.mod_name},
@@ -141,24 +141,24 @@ init = function(event)
       end
 
       mod.no_characcters = true
-      minime.writeDebug("Set flag mod.no_characters!")
+      minime.writeDebug("Установлен флаг mod.no_characters!")
 
       -- Remove GUIs
-      minime.writeDebug("Remove GUIs?")
+      minime.writeDebug("Удалить GUI?")
       for p, player in pairs(game.players) do
-        minime.writeDebug("Trying to remove GUIs of %s!", {minime.argprint(player)})
+        minime.writeDebug("Пытаюсь удалить GUI игрока %s!", {minime.argprint(player)})
         minime_gui.remove_gui(player)
       end
 
       -- Disable shortcuts?
-      minime.writeDebug("Disable shortcuts?")
+      minime.writeDebug("Отключить сочетания клавиш?")
       local shortcut = minime.toggle_gui_input_shortcut_name
       --~ if game.shortcut_prototypes[shortcut] then
       if prototypes.shortcut[shortcut] then
         for p, player in pairs(game.players) do
           if player.is_shortcut_available(shortcut) then
             player.set_shortcut_available(shortcut, false)
-            minime.writeDebug("Disabled shortcut of %s!", {minime.argprint(player)})
+            minime.writeDebug("Отключено сочетание клавиш игрока %s!", {minime.argprint(player)})
           end
         end
       end
@@ -166,9 +166,9 @@ init = function(event)
       -- If new players are added, we must disable their shortcuts!
       local e_name = "on_player_created"
       script.on_event(defines.events[e_name], minime_player[e_name])
-      minime.writeDebug("Added listener for event \"%s\"!", {e_name})
+      minime.writeDebug("Добавлен обработчик события \"%s\"!", {e_name})
 
-      minime.entered_function({}, "leave", "scenario doesn't support characters")
+      minime.entered_function({}, "leave", "сценарий не поддерживает персонажей")
       return
     end
   end
@@ -179,7 +179,7 @@ init = function(event)
   do
     minime.writeDebugNewBlock("Checking global tables!")
     local function init_table(tab)
-      local msg = mod[tab] and "Reusing" or "Initialized"
+      local msg = mod[tab] and "Повторно используется" or "Инициализировано"
       mod[tab] = mod[tab] or {}
       minime.writeDebug("%s storage.%s", {msg, tab})
     end
@@ -210,7 +210,7 @@ init = function(event)
 
     -- Mod is added to an existing game
     if event.name == "on_init" and in_game then
-      minime.writeDebug("Yes: we're in %s!", {event.name})
+      minime.writeDebug("Да: мы находимся в %s!", {event.name})
 
       for p, player in pairs(game.players) do
         minime.writeDebugNewBlock("Try to pre-initialize data for %s?",
@@ -218,19 +218,19 @@ init = function(event)
 
         -- Only connected players have a character attached!
         if player.connected then
-          minime.writeDebug("Yes!")
+          minime.writeDebug("Да!")
           controller = controllers[player.controller_type]
 minime.show("controller", controller)
 
-          minime.writeDebugNewBlock("Do we have a character?")
+          minime.writeDebugNewBlock("Есть ли у нас персонаж?")
           if player.character and player.character.valid then
-            minime.writeDebug("Yes: using player.character!")
+            minime.writeDebug("Да: используем player.character!")
             char = player.character
           elseif player.cutscene_character and player.cutscene_character.valid then
-            minime.writeDebug("Yes: using player.cutscene_character!")
+            minime.writeDebug("Да: используем player.cutscene_character!")
             char = player.cutscene_character
           else
-            minime.writeDebug("No!")
+            minime.writeDebug("Нет!")
             -- Make sure we don't reuse the char of a previous player!
             char = nil
           end
@@ -247,20 +247,20 @@ minime.show("mod.player_data["..p.."]", mod.player_data[p])
 
         -- Player is not connected
         else
-          minime.writeDebug("No: not connected!")
+          minime.writeDebug("Нет: не подключён!")
         end
       end
 
     -- Mod existed, but we're reinitializing because of on_configuration_changed
     elseif in_game then
       minime.writeDebug("No: %s by %s!", {
-        event.name and "called" or "not called",
+        event.name and "called" or "не вызывался",
         event.name or "on_init"
       })
 
     -- We're starting a new game, there are no players yet!
     else
-      minime.writeDebug("No: just started a new game!"  )
+      minime.writeDebug("Нет: только что началась новая игра!"  )
     end
   end
 
@@ -271,10 +271,10 @@ minime.show("mod.player_data["..p.."]", mod.player_data[p])
   minime.writeDebugNewBlock("Create dummy surface?")
   if not (game.surfaces[minime.dummy_surface] and
           game.surfaces[minime.dummy_surface].valid) then
-    minime.writeDebug("Yes!")
+    minime.writeDebug("Да!")
     minime_surfaces.create_surface(minime.dummy_surface, create_surface_passon)
   else
-    minime.writeDebug("No: surface already exists, making sure it's blacklisted!")
+    minime.writeDebug("Нет: поверхность уже существует, добавляю её в чёрный список!")
     minime_surfaces.blacklist_surface(minime.dummy_surface)
   end
 
@@ -302,12 +302,12 @@ minime.show("mod.player_data["..p.."]", mod.player_data[p])
   if minime.character_selector then
     minime.writeDebugNewBlock("Yes: checking preview surfaces!")
     for c_name, c_data in pairs(mod.minime_characters) do
-      minime.writeDebug("Initializing surface for previews of character \"%s\"!",
+      minime.writeDebug("Инициализирую поверхность для предварительного просмотра персонажа \"%s\"!",
                         {c_name})
       minime_character.initialize_character_preview(c_name, create_surface_passon)
     end
   else
-    minime.writeDebug("No!")
+    minime.writeDebug("Нет!")
   end
 
   ----------------------------------------------------------------------------------
@@ -325,25 +325,25 @@ minime.show("mod.player_data["..p.."]", mod.player_data[p])
   -- the game yet!
   minime.writeDebugNewBlock("Try to initialize player data?")
   if in_game then
-    minime.writeDebug("Yes!")
+    minime.writeDebug("Да!")
     for p, player in pairs(game.players) do
-      minime.writeDebug("Calling init_player for %s.", {player.name})
+      minime.writeDebug("Вызываю init_player для %s.", {player.name})
       minime_player.init_player({ player = player })
     end
   else
-    minime.writeDebug("No: game is just starting, there are no players yet!")
+    minime.writeDebug("Нет: игра только начинается, игроков пока нет!")
   end
 
   ----------------------------------------------------------------------------------
   -- Remove GUIs?
   minime.writeDebugNewBlock("Remove GUIs?")
   if minime.character_selector then
-    minime.writeDebug("No: selector is enabled!")
+    minime.writeDebug("Нет: селектор включён!")
   elseif in_game then
-    minime.writeDebug("Yes: character selector has been turned off!")
+    minime.writeDebug("Да: селектор персонажей отключён!")
     remove_guis()
   else
-    minime.writeDebug("No: game has just started, no GUIs yet!")
+    minime.writeDebug("Нет: игра только началась, GUI пока нет!")
   end
 
   ----------------------------------------------------------------------------------
@@ -353,7 +353,7 @@ minime.show("mod.player_data["..p.."]", mod.player_data[p])
 
   minime.writeDebugNewBlock("Looking for optional events!")
   for event_list, e in pairs(mod.optional_events or {}) do
-    minime.writeDebug("Attaching %s events!", {event_list})
+    minime.writeDebug("Подключаю события %s!", {event_list})
     minime_events.attach_events(minime.optional_events[event_list])
   end
 
@@ -404,13 +404,13 @@ minime.show("minime.character_selector", minime.character_selector)
     p_data = mod.player_data and mod.player_data[p]
     -- Bob's classes
     if p_data and p_data.bob_class and not script.active_mods["bobclasses"] then
-      minime.writeDebug("Removing Bob's class \"%s\" from data of %s.",
+      minime.writeDebug("Удаляю класс Bob \"%s\" из данных %s.",
                         {p_data.bob_class, minime.argprint(player)})
       p_data.bob_class = nil
     end
     -- Jetpack
     if p_data and p_data.flying and not script.active_mods["jetpack"] then
-      minime.writeDebug("Removing Jetpack property \"flying\" from data of %s.",
+      minime.writeDebug("Удаляю свойство Jetpack \"flying\" из данных %s.",
                         {minime.argprint(player)})
       p_data.flying = nil
     end
@@ -424,26 +424,26 @@ minime.show("minime.character_selector", minime.character_selector)
     -- Run init if 'changes' is nil (other mods have changed) or changes.old_version
     -- exists (we have been updated)!
     if (not changes) or changes.old_version then
-      minime.writeDebug("Yes!")
+      minime.writeDebug("Да!")
       init(event)
 
     -- Skip init if we have changes.new_version without changes.old_version (mod has
     -- been added to the game and we've already run this from on_init)!
     else
-      minime.writeDebug("No: have just run handler for on_init! Rebuild previews?")
+      minime.writeDebug("Нет: обработчик on_init уже запускался! Пересоздать предварительные просмотры?")
       -- If this flag has been set in a migration script, we must rebuild the
       -- preview characters!
       if storage.rebuild_preview_characters then
-        minime.writeDebug("Yes: a migration may have removed preview characters!")
+        minime.writeDebug("Да: миграция могла удалить персонажей для предварительного просмотра!")
         for p, player in pairs(game.players) do
           minime.writeDebugNewBlock("Re-initializing previews for %s!", {player})
           minime_player.initialize_player_previews(player)
         end
 
-        minime.writeDebug("Removing flag storage.rebuild_preview_characters!")
+        minime.writeDebug("Удаляю флаг storage.rebuild_preview_characters!")
         storage.rebuild_preview_characters = nil
       else
-        minime.writeDebug("No: no migration removing previews has been run!")
+        minime.writeDebug("Нет: миграция, удаляющая предварительные просмотры, не запускалась!")
       end
     end
   end
@@ -464,10 +464,10 @@ minime.show("minime.character_selector", minime.character_selector)
   -- Is character selector mode active?
   minime.writeDebugNewBlock("Is character selector mode active?")
   if minime.character_selector then
-    minime.writeDebug("Yes!")
+    minime.writeDebug("Да!")
 
   else
-    minime.writeDebug("No: character selector mode has been disabled!")
+    minime.writeDebug("Нет: режим селектора персонажей отключён!")
 
     -- Don't leave players stranded without a character!
     local last_char, fallback_char
@@ -477,23 +477,23 @@ minime.show("minime.character_selector", minime.character_selector)
 
       p_data = mod.player_data and mod.player_data[p]
       last_char = p_data and p_data.last_character
-minime.show("last_char of player " .. player.name, last_char or "nil")
-minime.show("Current char of player "..player.name, player.character)
+minime.show("last_char игрока " .. player.name, last_char or "nil")
+minime.show("Текущий персонаж игрока "..player.name, player.character)
 minime.show("next(mod.minime_characters)", mod.minime_characters and
                                               next(mod.minime_characters) or "nil")
 
       -- No character stored for player
       if not last_char then
-        minime.writeDebug("No character stored for player %s! Don't do anything.",
+        minime.writeDebug("Для игрока %s не сохранён персонаж! Ничего не делаю.",
                           {p})
 
       -- Player was in god mode when the game was last saved
       elseif last_char == "" then
-        minime.writeDebug("Player %s was in god mode! Don't do anything.", {p})
+        minime.writeDebug("Игрок %s был в режиме бога! Ничего не делаю.", {p})
 
       -- Player's last character still exists
       elseif mod.minime_characters[last_char] then
-        minime.writeDebug("Player %s can still use character \"%s\". Don't do anything.",
+        minime.writeDebug("Игрок %s всё ещё может использовать персонажа \"%s\". Ничего не делаю.",
                           {p, last_char})
 
       -- Last character of player has been removed
@@ -502,7 +502,7 @@ minime.show("next(mod.minime_characters)", mod.minime_characters and
         fallback_char = mod.minime_characters["character"] and "character" or
         -- … or to the next character that's available
                         next(mod.minime_characters)
-        minime.writeDebug("Last character of player %s (\"%s\") has been removed. Falling back to \"%s\"!",
+        minime.writeDebug("Последний персонаж игрока %s (\"%s\") удалён. Переключаюсь на \"%s\"!",
                           {p, last_char, fallback_char})
 
         p_data.last_character = fallback_char
@@ -516,7 +516,7 @@ minime.show("next(mod.minime_characters)", mod.minime_characters and
 
     -- Remove preview surfaces!
     do
-minime.writeDebug("Remove preview surfaces?")
+minime.writeDebug("Удалить поверхности предварительного просмотра?")
 for s_name, s in pairs(game.surfaces) do
   minime.show("s_name", s_name)
 end
@@ -535,7 +535,7 @@ minime.show(c_name, c_data)
           -- Entities are removed when surface is destroyed, remove their data!
           if preview.entities then
             preview.entities = nil
-            minime.writeDebug("Removed preview entities!")
+            minime.writeDebug("Удалены сущности предварительного просмотра!")
           end
         end
       end
@@ -572,21 +572,21 @@ script.on_load(function()
     attach_events()
 
     -- Attach optional events
-    minime.writeDebug("Looking for optional events!")
+    minime.writeDebug("Ищу необязательные события!")
     for event_list, e in pairs(mod.optional_events or {}) do
-      minime.writeDebug("Attaching %s events!", {event_list})
+      minime.writeDebug("Подключаю события %s!", {event_list})
       minime_events.attach_events(minime.optional_events[event_list])
     end
 
   else
-    minime.writeDebug("Scenario \"%s\" of mod \"%s\" doesn't support events!",
+    minime.writeDebug("Сценарий \"%s\" мода \"%s\" не поддерживает события!",
                       {script.level.level_name, script.level.mod_name})
   end
 
   minime.entered_event({name = "on_load"}, "leave")
 end)
 
-minime.writeDebug("Outside of on_load -- attaching remote interface!")
+minime.writeDebug("Вне on_load — подключаю удалённый интерфейс!")
 minime_if.attach_interfaces()
 
 
@@ -606,12 +606,12 @@ do
   }
   setmetatable(_ENV, {
     __newindex  = function(self, key, value)    -- locked_global_write
-      error('\n\n[ER Global Lock] Forbidden global *write*:\n' ..
+      error('\n\n[ER Global Lock] Запрещена *запись* в глобальную переменную:\n' ..
             serpent.line({key = key or '<nil>', value = value or '<nil>'})..'\n')
     end,
     __index     = function(self, key)           -- locked_global_read
       if not allowed_vars[key] then
-        error('\n\n[ER Global Lock] Forbidden global *read*:\n' ..
+        error('\n\n[ER Global Lock] Запрещено *чтение* глобальной переменной:\n' ..
             serpent.line({key = key or '<nil>'})..'\n')
       end
     end

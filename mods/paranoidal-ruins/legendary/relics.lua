@@ -328,7 +328,7 @@ if script.active_mods["pd-port21-diag"] then
   remote.add_interface("paranoidal-relics-test", {
     set = function(entity, values)
       assert(entity and entity.valid and entity.name == "pd-relic-rescue-beacon")
-      local r = assert(state().relics[entity.unit_number], "beacon is not registered")
+      local r = assert(state().relics[entity.unit_number], "маяк не зарегистрирован")
       if values.born ~= nil then r.born = values.born end
       if values.next_drop ~= nil then r.next_drop = values.next_drop or nil end
     end,

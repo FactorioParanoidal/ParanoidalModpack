@@ -72,7 +72,7 @@ end
 ---*@throws* `string` — Thrown when `icon_data[n].icon_size` is not a positive integer.<br/>
 ---@nodiscard
 function _sprites.create_sprite_from_icons(icon_data, scale)
-	assert(icon_data, "Invalid parameter: 'icon_data' must not be nil.")
+	assert(icon_data, "Недопустимый параметр: 'icon_data' не должен быть nil.")
 
 	---@type data.Sprite
 	local sprite = {}
@@ -121,7 +121,7 @@ end
 ---*@throws* `string` — Thrown when `icon_datum.icon_size` is not a positive integer.<br/>
 ---@nodiscard
 function _sprites.create_sprite_from_icon(icon_datum, scale)
-	assert(icon_datum, "Invalid parameter: 'icon_datum' must not be nil.")
+	assert(icon_datum, "Недопустимый параметр: 'icon_datum' не должен быть nil.")
 
 	return convert_icon_layer_to_sprite_layer(icon_datum, scale)
 end

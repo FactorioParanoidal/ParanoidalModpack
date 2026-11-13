@@ -213,7 +213,7 @@ end
 
 local function printSpending(map, cost, label, position)
     if map.universe.aiPointsPrintSpendingToChat then
-        game.print(map.surface.name .. ": Points: -" .. cost .. ". [" .. label .. "] Total: " .. string.format("%.2f", map.points) .. " [gps=" .. position.x .. "," .. position.y .. "," .. map.surface.name .. "]")
+        game.print(map.surface.name .. ": Очки: -" .. cost .. ". [" .. label .. "] Всего: " .. string.format("%.2f", map.points) .. " [gps=" .. position.x .. "," .. position.y .. "," .. map.surface.name .. "]")
     end
 end
 

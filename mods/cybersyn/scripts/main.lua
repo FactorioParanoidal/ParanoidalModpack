@@ -305,7 +305,7 @@ local function on_combinator_built(map_data, comb, tags)
 		position = comb.position,
 		force = comb.force,
 	})
-	assert(out, "cybersyn: could not spawn combinator controller")
+	assert(out, "cybersyn: не удалось создать контроллер комбинатора")
 	local comb_red = comb.get_wire_connector(defines.wire_connector_id.combinator_output_red, true)
 	local out_red = out.get_wire_connector(defines.wire_connector_id.circuit_red, true)
 	out_red.connect_to(comb_red, false, defines.wire_origin.script)
@@ -488,7 +488,7 @@ function combinator_update(map_data, comb, reset_display)
 
 	if (old_params == nil) then
 		--should be generated after this tick, but in case it persists it is better to let the player know to replace it
-		game.print("cybersyn combinator lacking internal data @ " .. comb.gps_tag)
+		game.print("У станционного контроллера отсутствуют внутренние данные @ " .. comb.gps_tag)
 	end
 
 	local op = params.operation

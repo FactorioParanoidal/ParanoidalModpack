@@ -20,15 +20,15 @@ interface_functions.register_characters = function(chars)
     chars = {chars}
   end
 
-  minime.writeDebug("Queueing %s character(s) for registration!", {#chars})
+  minime.writeDebug("Ставлю в очередь на регистрацию %s персонажей!", {#chars})
   mod.mod_registered_characters = mod.mod_registered_characters or {}
   for c, char in pairs(chars) do
     mod.mod_registered_characters[char] = true
-    minime.writeDebug("Added \"%s\" to queue!", {char})
+    minime.writeDebug("Добавлено \"%s\" в очередь!", {char})
   end
 
   if not mod.minime_characters then
-    minime.entered_function({}, "leave", "tables not yet ready")
+    minime.entered_function({}, "leave", "таблицы ещё не готовы")
     return
   end
 
@@ -44,18 +44,18 @@ interface_functions.register_characters = function(chars)
     -- Sanity checks
     -- Character name must be a string
     if type(char) ~= "string" then
-      error(serpent.line(char).." is not a valid name!")
+      error(serpent.line(char).." не является допустимым именем!")
     -- Character name must represent a valid character prototype
     elseif not characters[char] then
-      error(serpent.line(char).." is not a valid character!")
+      error(serpent.line(char).." не является допустимым персонажем!")
     end
 
     -- Skip if character already has been registered
     if mod.minime_characters[char] and next(mod.minime_characters[char]) then
-      minime.writeDebug("Character %s has already been registered -- nothing to do!", {char}, "line")
+      minime.writeDebug("Персонаж %s уже зарегистрирован — ничего делать не нужно!", {char}, "line")
     -- Register character
     else
-      minime.writeDebug("Registering character %s", {char}, "line")
+      minime.writeDebug("Регистрирую персонажа %s", {char}, "line")
 
       -- Try to add data of the character. If there is no character prototype with
       -- the given name, mod.minime_characters[char] will still be nil!
@@ -63,7 +63,7 @@ interface_functions.register_characters = function(chars)
 
       -- If we succeeded in setting character data, add the character properties!
       if mod.minime_characters[char] then
-        minime.writeDebug("Try to add mod.minime_character_properties[%s]",
+        minime.writeDebug("Пробую добавить mod.minime_character_properties[%s]",
                           {char})
         tmp_data = minime_character.get_minime_character_properties(char)
 minime.show("tmp_data", tmp_data)
@@ -94,7 +94,7 @@ interface_functions.unregister_characters = function(chars)
   minime.entered_function({chars})
 
   if not chars or (type(chars) ~= "string" and type(chars) ~="table") then
-    error(serpent.line(chars) .. " is not a valid argument! (Must be string or array of strings.)")
+    error(serpent.line(chars) .. " не является допустимым аргументом! (Ожидается строка или массив строк.)")
   end
 
   -- Make sure we have a table!
@@ -111,14 +111,14 @@ interface_functions.unregister_characters = function(chars)
     -- Remove character from list
     if mod.minime_characters[char] then
       mod.minime_characters[char] = nil
-      minime.writeDebug("Removed character %s from list!", {char}, "line")
+      minime.writeDebug("Персонаж %s удалён из списка!", {char}, "line")
       rebuild_gui = true
     end
   end
 
   -- Update GUIs
   if rebuild_gui then
-    minime.writeDebug("Removing character(s) from GUIs!")
+    minime.writeDebug("Удаляю персонажей из GUI!")
     for p, player in pairs(game.players) do
       minime_player.init_player({ player = player, remove_character = true })
     end
@@ -163,7 +163,7 @@ interface_functions.player_changed_character = function(player)
     minime.arg_err(player, "player specification")
   end
 
-  minime.writeDebug("Player changed character to %s.", {player.character})
+  minime.writeDebug("Игрок сменил персонажа на %s.", {player.character})
   minime_player.init_player({ player = player, restore = true })
 
   minime.entered_function("leave")
@@ -187,14 +187,14 @@ end
 --~ end
 interface_functions.get_minime_event_id = function()
   local event = "minime_exchanged_characters"
-  minime.writeDebug("Returning ID of event \"%s\" (%s)!",
+  minime.writeDebug("Возвращаю ID события \"%s\" (%s)!",
                     {event, defines.events[event]})
   return defines.events[event]
 end
 
 -- Return list of all custom events and their IDs (currently, there's just one)
 interface_functions.get_minime_event_ids = function()
-  minime.writeDebug("Returning IDs of custom events defined by \"%s\": %s",
+  minime.writeDebug("Возвращаю ID пользовательских событий, определённых модом \"%s\": %s",
                     {minime.modName, minime.minime_event_ids})
   local ret = {}
   for e, e_name in pairs(minime.custom_events) do
@@ -222,13 +222,13 @@ interface_functions.dump = function(player, inventory_list)
 
   local inv, slots, test
   for i, inventory in pairs(inventory_list) do
-    minime.writeDebug("Inventory %s:", {inventory}, "line")
+    minime.writeDebug("Инвентарь %s:", {inventory}, "line")
     inv = defines.inventory["character_" .. inventory]
     slots = mod.player_data[player.index].dummy.get_inventory(inv)
     for x = 1, #slots do
       test = slots[x].valid_for_read
       minime.writeDebug("%s:\t%s %s",
-        {x, test and slots[x].name or "NOT VALID FOR READ",
+        {x, test and slots[x].name or "НЕДОПУСТИМ ДЛЯ ЧТЕНИЯ",
             test and " ("..slots[x].count..")" or  ""}, "line")
     end
   end
@@ -269,13 +269,13 @@ interface_functions.on_character_swapped = function(event)
   if player then
     p_data = mod.player_data and mod.player_data[player.index]
 
-    minime.writeDebug("Swapped character of %s from \"%s\" to \"%s\"!",
+    minime.writeDebug("Переключил персонажа игрока %s с \"%s\" на \"%s\"!",
                       {minime.print_name_id(player), old or "nil", new or "nil"})
 
     -- Player switched to another character
     if new then
       -- Lookup character properties in dictionary
-      minime.writeDebug("Looking up data for character %s!", {new})
+      minime.writeDebug("Ищу данные персонажа %s!", {new})
       char_data = mod.minime_character_properties and
                   mod.minime_character_properties[new]
       -- We have data for character with this name!
@@ -289,7 +289,7 @@ interface_functions.on_character_swapped = function(event)
           if (p_data.god_mode or p_data.editor_mode) and not old then
             p_data.god_mode = nil
             p_data.editor_mode = nil
-            minime.writeDebug("Reset flags for editor/god mode!")
+            minime.writeDebug("Сбрасываю флаги режима редактора/бога!")
           end
           minime_gui.select_character(player, char_data.button)
           minime_gui.selector.gui_update(player)
@@ -310,20 +310,20 @@ interface_functions.on_character_swapped = function(event)
 
     -- Player switched to God or Editor mode
     else
-  minime.writeDebug("Player %s switched to God or Editor mode!", {player.index})
+  minime.writeDebug("Игрок %s переключился в режим бога или редактора!", {player.index})
       p_data.last_character = ""
       p_data.god_mode = event.god_mode
       p_data.editor_mode = event.editor_mode
 
       if minime.character_selector then
-        minime.writeDebug("Updating GUI of %s", minime.argprint(player))
+        minime.writeDebug("Обновляю GUI игрока %s", minime.argprint(player))
         minime_gui.selector.gui_update(player)
       end
     end
 
   -- Try to get the player from detached characters
   else
-    minime.writeDebug("Looking for detached character %s",
+    minime.writeDebug("Ищу отсоединённого персонажа %s",
                       {old_char and old_char.unit_number or "nil"})
 
 
@@ -331,7 +331,7 @@ interface_functions.on_character_swapped = function(event)
       local p = mod.detached_characters[old_id]
       p_data = p and mod.player_data and mod.player_data[p]
       if p_data then
-minime.writeDebug("Updating detached character!")
+minime.writeDebug("Обновляю отсоединённого персонажа!")
         -- Update pointer from detached character to player
         if new_char and new_char.valid then
           mod.detached_characters[new_char.unit_number] = p
@@ -396,7 +396,7 @@ interface_functions.bob_class_pick_character = function(player, class_data)
   local p_data = mod.player_data and mod.player_data[player.index]
   local class = class_data and class_data.class_name
 minime.show("p_data", p_data)
-  minime.writeDebug("Bob's classes: Player %s changed class to \"%s\"",
+  minime.writeDebug("Bob's classes: игрок %s сменил класс на \"%s\"",
                     {player.index, class})
 
   -- Store new class with player data!
@@ -417,7 +417,7 @@ interface_functions.bob_classes_update = function()
   minime.entered_function()
 
   if not next(mod) then
-minime.writeDebug("Must initialize game!")
+minime.writeDebug("Необходимо инициализировать игру!")
     --~ init()
     init({name = "on_init"})
   end

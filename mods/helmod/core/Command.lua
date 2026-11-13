@@ -11,7 +11,7 @@ local Command = {
 -- Start
 --
 function Command.start()
-    commands.add_command("helmod", "helmod commands", Command.run)
+    commands.add_command("helmod", "команды helmod", Command.run)
 end
 
 -------------------------------------------------------------------------------
@@ -42,7 +42,7 @@ function Command.help()
     for _, cmd in pairs(commands) do
         table.insert(names, cmd.name)
     end
-    Player.print(string.format("Valid arguments: %s", table.concat(names, " | ")))
+    Player.print(string.format("Допустимые аргументы: %s", table.concat(names, " | ")))
 end
 
 function Command.execute(parameters)
@@ -59,7 +59,7 @@ function Command.initialize()
     local commands = {}
     commands["close"] = {
         name = "CloseUI",
-        description = "Close all panels",
+        description = "Закрыть все панели",
         action = function()
             for _, location in pairs({ "top", "left", "center", "screen", "goal" }) do
                 for _, element in pairs(Player.getGui(location).children) do
@@ -68,32 +68,32 @@ function Command.initialize()
                     end
                 end
             end
-            Player.print("Close all panels executed!")
+            Player.print("Команда закрытия всех панелей выполнена!")
         end
     }
     commands["resetuserall"] = {
         name = "ResetUserAll",
-        description = "Reset all parameters for all users",
+        description = "Сбросить все параметры для всех пользователей",
         action = function()
             User.resetAll()
-            Player.print("All Users are reseted!")
+            Player.print("Параметры всех пользователей сброшены!")
         end
     }
     commands["resetuser"] = {
         name = "ResetUser",
-        description = "Reset all user parameters",
+        description = "Сбросить все параметры пользователя",
         action = function()
             User.reset()
-            Player.print("User parameters are reseted!")
+            Player.print("Параметры пользователя сброшены!")
         end
     }
     commands["resetuserexplorer"] = {
         name = "ResetUserExplorer",
-        description = "Reset user explorer parameters",
+        description = "Сбросить параметры обозревателя рецептов пользователя",
         action = function()
             User.setParameter("explore_recipe", nil)
             User.setParameter("explore_recipe_id", nil)
-            Player.print("User explorer parameter are reseted!")
+            Player.print("Параметры обозревателя рецептов пользователя сброшены!")
         end
     }
     return commands

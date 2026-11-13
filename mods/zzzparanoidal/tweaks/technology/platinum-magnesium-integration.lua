@@ -2,15 +2,15 @@
 -- Поздно, после OV.execute и восстановления модульной системы. Остальные рецептуры не меняются.
 local technologies, recipes = data.raw.technology, data.raw.recipe
 local function prerequisite(name, parent)
-    local technology = assert(technologies[name], "Missing technology: " .. name)
-    assert(technologies[parent], "Missing prerequisite: " .. parent)
+    local technology = assert(technologies[name], "Отсутствует технология: " .. name)
+    assert(technologies[parent], "Отсутствует предварительная технология: " .. parent)
     technology.prerequisites = technology.prerequisites or {}
     for _, value in ipairs(technology.prerequisites) do if value == parent then return end end
     technology.prerequisites[#technology.prerequisites + 1] = parent
 end
 local function unlock(name, recipe)
-    local technology = assert(technologies[name], "Missing technology: " .. name)
-    assert(recipes[recipe], "Missing recipe: " .. recipe)
+    local technology = assert(technologies[name], "Отсутствует технология: " .. name)
+    assert(recipes[recipe], "Отсутствует рецепт: " .. recipe)
     technology.effects = technology.effects or {}
     for _, effect in ipairs(technology.effects) do
         if effect.type == "unlock-recipe" and effect.recipe == recipe then return end
@@ -25,7 +25,7 @@ local consumers = {
     { "satellite-communications", "paranoidal-platinum-harness", 8, "extremely-advanced-material-processing", "paranoidal-platinum-cabling" },
 }
 for _, row in ipairs(consumers) do
-    local recipe = assert(recipes[row[1]], "Missing platinum consumer: " .. row[1])
+    local recipe = assert(recipes[row[1]], "Отсутствует рецепт-потребитель платины: " .. row[1])
     local found = false
     for _, ingredient in ipairs(recipe.ingredients) do
         if (ingredient.name or ingredient[1]) == row[2] then
@@ -39,7 +39,7 @@ end
 -- Clowns 2.0 скрывает литьё магния при выключенном plate-trigger, несмотря на оставшихся потребителей.
 -- Возвращаем два последних шага Beta 8; действующая добыча и обработка руды/слитков сохраняются.
 for _, name in ipairs({ "clowns-molten-magnesium-smelting", "clowns-plate-magnesium" }) do
-    local recipe = assert(recipes[name], "Missing magnesium recipe: " .. name)
+    local recipe = assert(recipes[name], "Отсутствует рецепт магния: " .. name)
     recipe.hidden = false
     recipe.enabled = false
     recipe.localised_name = nil -- Удаляем служебное имя angels-void, имя берётся из результата.

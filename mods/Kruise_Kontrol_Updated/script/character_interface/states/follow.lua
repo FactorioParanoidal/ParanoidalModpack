@@ -7,7 +7,7 @@ function Follow.new(Character, target, distance)
   {
     type = "follow",
     character = Character,
-    target = target or error("No target?"),
+    target = target or error("Нет цели?"),
     distance = distance or 3
   }
   return setmetatable(state, Follow.metatable)

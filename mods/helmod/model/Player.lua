@@ -171,7 +171,7 @@ function Player.beginCrafting(item, count)
         local craft = { count = math.ceil(count), recipe = first_recipe.name, silent = false }
         Lua_player.begin_crafting(craft)
     else
-        Player.print("No recipe found for this craft!")
+        Player.print("Не найден рецепт для этого изготовления!")
     end
 end
 
@@ -471,7 +471,7 @@ function Player.setSmartToolBuildingConstantCombinator(block)
                         signal_index = signal_index + 1
                     end
                 else
-                    Player.print(string.format("Item '%s' not exist",item_name))
+                    Player.print(string.format("Предмет '%s' не существует",item_name))
                 end
             end
             if #section.filters > 0 then

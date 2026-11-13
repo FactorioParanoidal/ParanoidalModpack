@@ -1,5 +1,7 @@
 ---------------------------------------------------------------------------------------------------
 Version: 9.0.0
+  Locale:
+    - Russian hardcoded player-facing text: 6 UI, chat, command-help and error-message literals; technical identifiers, format parameters and gameplay logic are unchanged.
 Date: 2026-11-01
   Bugfixes:
     - Quality scrolling follows the quality chain instead of prototype levels, so all five defect tiers are distinct from normal. Both directions wrap safely and stop after one complete pass, including when no matching item is available.

@@ -5,6 +5,6 @@
 -- fluid box volume of 100 / 400 / 2000), so the valve is capped at its own fluid box volume.
 for _, valve in ipairs(require("config")) do
     local prototype = data.raw.valve[valve.name]
-    assert(prototype, "Valve '" .. valve.name .. "' not found in data.raw.valve")
+    assert(prototype, "Клапан '" .. valve.name .. "' не найден в data.raw.valve")
     prototype.flow_rate = math.min(prototype.flow_rate, prototype.fluid_box.volume)
 end

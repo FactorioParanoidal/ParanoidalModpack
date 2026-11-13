@@ -13,23 +13,23 @@ minime.show("minime.preview_surface_name_prefix", minime.preview_surface_name_pr
 
 local removed_previews
 for s, surface in pairs(game.surfaces) do
-minime.show(surface.name.." matches minime%%-preview%%-.+", surface.name:match("minime%-preview%-.+"))
+minime.show(surface.name.." соответствует шаблону minime%%-preview%%-.+", surface.name:match("minime%-preview%-.+"))
 minime.show(surface.name.." matches "..minime.preview_surface_name_prefix,
             surface.name:match(minime.preview_surface_name_prefix))
   removed_previews = 0
   if surface.name:match("minime%-preview%-.+") or
       surface.name:match(minime.preview_surface_name_prefix) then
 
-    minime.writeDebug("Looking for preview characters on %s!",
+    minime.writeDebug("Ищу персонажей для предварительного просмотра на %s!",
                       {minime.argprint(surface)})
     for e, entity in pairs(surface.find_entities()) do
       if entity.valid then
-minime.writeDebug("Destroying %s!", minime.argprint(entity))
+minime.writeDebug("Уничтожаю %s!", minime.argprint(entity))
         entity.destroy()
         removed_previews = removed_previews + 1
       end
     end
-    minime.writeDebug("Removed %s preview_characters.", {removed_previews})
+    minime.writeDebug("Удалено персонажей preview_characters: %s.", {removed_previews})
   end
 end
 
@@ -43,7 +43,7 @@ storage.rebuild_preview_characters = true
 ------------------------------------------------------------------------------------
 local old_dummy_surface = game.surfaces["dummy_dungeon"]
 if old_dummy_surface and old_dummy_surface.valid then
-  minime.writeDebug("Removing obsolete %s!", {minime.argprint(old_dummy_surface)})
+  minime.writeDebug("Удаляю устаревшую поверхность %s!", {minime.argprint(old_dummy_surface)})
 
   -- Set flag so that we'll ignore on_surface_deleted and don't restore things!
   storage.deleted_surfaces = storage.deleted_surfaces or {}

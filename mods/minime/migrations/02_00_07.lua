@@ -15,12 +15,12 @@ for p, player in pairs(game.players) do
   minime.writeDebugNewBlock("Update checkboxes in GUI of %s?",
                             {minime.argprint(player)})
   if p_data and char and char.valid then
-    minime.writeDebug("Yes!")
+    minime.writeDebug("Да!")
     minime_gui.available.update_all_checkboxes(player)
   else
     minime.writeDebug("No: %s!", {
-      p_data and  "player doesn't have a valid character" or
-                  "no data stored for player"
+      p_data and  "у игрока нет действительного персонажа" or
+                  "для игрока не сохранены данные"
     })
   end
 end

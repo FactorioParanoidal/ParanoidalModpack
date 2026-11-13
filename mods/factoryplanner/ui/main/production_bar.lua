@@ -115,7 +115,7 @@ listeners.gui = {
                     lib.gui.reset_player(player)  -- destroys all FP GUIs
                     lib.gui.toggle_mod_gui(player)  -- fixes the mod gui button after its been destroyed
                     game.reload_mods()  -- toggle needs to be delayed by a tick since the reload is not instant
-                    game.print("Mods reloaded")
+                    game.print("Моды перезагружены")
 
                     ---@class InterfaceToggleMetadata
                     ---@field player_index PlayerIndex

@@ -1718,7 +1718,7 @@ function biterFunctions.createRangedAttack(attributes, attack, animation)
     elseif (attributes.attackType == "projectile") then
 		return biterFunctions.createProjectileAttack(attributes, attack, animation)
     else
-        error("Unknown range attack")
+        error("Неизвестная дальняя атака")
     end
 end
 

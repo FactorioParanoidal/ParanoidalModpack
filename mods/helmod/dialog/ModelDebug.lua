@@ -107,10 +107,10 @@ function ModelDebug:updateHeader(event)
     local action_panel = self:getMenuPanel()
     action_panel.clear()
     local group1 = GuiElement.add(action_panel, GuiFlowH("group1"))
-    GuiElement.add(group1, GuiButton(self.classname, "change-stage", "initial"):sprite("menu", defines.sprites.expand_left_group.black, defines.sprites.expand_left_group.black):style("helmod_button_menu"):tooltip("Initial"))
-    GuiElement.add(group1, GuiButton(self.classname, "change-stage", "previous"):sprite("menu", defines.sprites.expand_left.black, defines.sprites.expand_left.black):style("helmod_button_menu"):tooltip("Previous Step"))
-    GuiElement.add(group1, GuiButton(self.classname, "change-stage", "next"):sprite("menu", defines.sprites.expand_right.black, defines.sprites.expand_right.black):style("helmod_button_menu"):tooltip("Next Step"))
-    GuiElement.add(group1, GuiButton(self.classname, "change-stage", "final"):sprite("menu", defines.sprites.expand_right_group.black, defines.sprites.expand_right_group.black):style("helmod_button_menu"):tooltip("Final"))
+    GuiElement.add(group1, GuiButton(self.classname, "change-stage", "initial"):sprite("menu", defines.sprites.expand_left_group.black, defines.sprites.expand_left_group.black):style("helmod_button_menu"):tooltip("Исходное"))
+    GuiElement.add(group1, GuiButton(self.classname, "change-stage", "previous"):sprite("menu", defines.sprites.expand_left.black, defines.sprites.expand_left.black):style("helmod_button_menu"):tooltip("Предыдущий шаг"))
+    GuiElement.add(group1, GuiButton(self.classname, "change-stage", "next"):sprite("menu", defines.sprites.expand_right.black, defines.sprites.expand_right.black):style("helmod_button_menu"):tooltip("Следующий шаг"))
+    GuiElement.add(group1, GuiButton(self.classname, "change-stage", "final"):sprite("menu", defines.sprites.expand_right_group.black, defines.sprites.expand_right_group.black):style("helmod_button_menu"):tooltip("Итоговое"))
 
     if block.blocks_linked ~= nil then
         local group2 = GuiElement.add(action_panel, GuiFlowH("group2"))
@@ -164,7 +164,7 @@ function ModelDebug:updateDebugPanel(event)
             local ma_panel = GuiElement.add(scroll_panel, GuiFrameV("stage_panel"):style(helmod_frame_style.hidden):caption(runtime.name))
             self:buildTableSolverMatrix(ma_panel, runtime.matrix, runtime.pivot)
             if runtime.pivot ~= nil then
-                GuiElement.add(scroll_panel, GuiLabel("stage_pivot"):caption({"","Pivot:", runtime.pivot.x, ",", runtime.pivot.y}))
+                GuiElement.add(scroll_panel, GuiLabel("stage_pivot"):caption({"","Опорная точка:", runtime.pivot.x, ",", runtime.pivot.y}))
             end
         end
     end
@@ -235,15 +235,15 @@ end
 function ModelDebug:buildTableSolverMatrix(matrix_panel, matrix, pivot)
     if matrix ~= nil then
         local parameter_columns = {}
-        table.insert(parameter_columns, {type="none", name="UL", tooltip="unlinked", property="unlinked"})
+        table.insert(parameter_columns, {type="none", name="UL", tooltip="Без связи", property="unlinked"})
         table.insert(parameter_columns, {type="none", name="BP", tooltip="by_product", property="by_product"})
-        table.insert(parameter_columns, {type="none", name="V", tooltip="voider", property="voider"})
-        table.insert(parameter_columns, {type="none", name="Cn", tooltip="Contraint", property="contraint"})
-        table.insert(parameter_columns, {type="none", name="FC", tooltip="Factory Count", property="factory_count"})
-        table.insert(parameter_columns, {type="none", name="FS", tooltip="Factory Speed", property="factory_speed"})
-        table.insert(parameter_columns, {type="none", name="RC", tooltip="Recipe Count", property="recipe_count"})
-        table.insert(parameter_columns, {type="none", name="RP", tooltip="Recipe Production", property="recipe_production"})
-        table.insert(parameter_columns, {type="none", name="RE", tooltip="Recipe Energy", property="recipe_energy"})
+        table.insert(parameter_columns, {type="none", name="V", tooltip="Утилизатор", property="voider"})
+        table.insert(parameter_columns, {type="none", name="Cn", tooltip="Ограничение", property="contraint"})
+        table.insert(parameter_columns, {type="none", name="FC", tooltip="Количество производственных машин", property="factory_count"})
+        table.insert(parameter_columns, {type="none", name="FS", tooltip="Скорость производственных машин", property="factory_speed"})
+        table.insert(parameter_columns, {type="none", name="RC", tooltip="Количество рецептов", property="recipe_count"})
+        table.insert(parameter_columns, {type="none", name="RP", tooltip="Производительность рецепта", property="recipe_production"})
+        table.insert(parameter_columns, {type="none", name="RE", tooltip="Энергия рецепта", property="recipe_energy"})
         --table.insert(parameter_columns, {type="none", name="Coefficient", property="coefficient"})
         local num_col = #matrix.columns + #parameter_columns + 1
 

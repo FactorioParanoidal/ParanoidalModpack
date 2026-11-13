@@ -1,5 +1,7 @@
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.7
+  Locale:
+    - Russian hardcoded player-facing text: 12 UI, chat, command-help and error-message literals; technical identifiers, format parameters and gameplay logic are unchanged.
 Date: 15.11.2024
   Bugfixes:
     - Fixed breaking changes from base game version 2.0.18 related to new shortcut icons (thanks to hankthesnake and yavis1231).

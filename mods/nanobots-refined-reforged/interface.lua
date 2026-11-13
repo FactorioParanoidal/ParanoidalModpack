@@ -10,9 +10,9 @@ function interface.reset_mod(are_you_sure)
     if are_you_sure then
         storage = {}
         events.dispatch('on_init')
-        game.print('Full Reset Completed by ' .. player_name)
+        game.print('Полный сброс выполнен игроком ' .. player_name)
     else
-        game.print('Full reset attempted but ' .. player_name .. ' was not sure')
+        game.print('Полный сброс запущен, но уверенности у игрока ' .. player_name .. ' не было')
     end
 end
 
@@ -20,7 +20,7 @@ function interface.reset_queue(queue)
     queue = queue or 'nano_queue'
     local reset = interface.queue_resets[queue]
     if storage[queue] and reset then
-        game.print('Resetting ' .. queue)
+        game.print('Сброс очереди ' .. queue)
         reset()
     end
 end
@@ -29,7 +29,7 @@ function interface.count_queue(queue)
     queue = queue or 'nano_queue'
     if storage[queue] then
         local a, b = Queue.count(storage[queue])
-        game.print('Queued:' .. a .. ' Hashed:' .. b)
+        game.print('В очереди:' .. a .. ' Хешировано:' .. b)
     end
 end
 

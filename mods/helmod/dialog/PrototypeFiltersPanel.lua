@@ -187,12 +187,12 @@ end
 ---Update header filter
 ---@param itable LuaGuiElement
 function PrototypeFiltersPanel:addHeaderFilter(itable)
-  GuiElement.add(itable, GuiLabel("mode"):caption("Mode"))
-  GuiElement.add(itable, GuiLabel("invert"):caption("Invert"))
-  GuiElement.add(itable, GuiLabel("filter"):caption("Filter"))
-  GuiElement.add(itable, GuiLabel("option"):caption("Option"))
-  GuiElement.add(itable, GuiLabel("result"):caption("String"))
-  GuiElement.add(itable, GuiLabel("action"):caption("Action"))
+  GuiElement.add(itable, GuiLabel("mode"):caption("Режим"))
+  GuiElement.add(itable, GuiLabel("invert"):caption("Инвертировать"))
+  GuiElement.add(itable, GuiLabel("filter"):caption("Фильтр"))
+  GuiElement.add(itable, GuiLabel("option"):caption("Параметр"))
+  GuiElement.add(itable, GuiLabel("result"):caption("Строка"))
+  GuiElement.add(itable, GuiLabel("action"):caption("Действие"))
 end
 
 -------------------------------------------------------------------------------
@@ -250,7 +250,7 @@ function PrototypeFiltersPanel:addRowFilter(itable, prototype_filter, index)
     prototype_filter.option = prototype_filter.option or options[1]
     GuiElement.add(itable, GuiDropDown(self.classname, "change-filter-option", index):items(options, prototype_filter.option))
   else
-    GuiElement.add(itable, GuiLabel("option-none", index):caption("None"))
+    GuiElement.add(itable, GuiLabel("option-none", index):caption("Нет"))
   end
   ---result col
   local filter_value = PrototypeFiltersPanel:convertFilter(prototype_filter)
@@ -279,9 +279,9 @@ function PrototypeFiltersPanel:updateFilter()
   local choose_panel = GuiElement.add(content_panel, GuiFlowH("choose-filter"))
   choose_panel.style.horizontal_spacing = 5
   local prototype_filter_type = User.getParameter("prototype_filter_type") or filter_types[1]
-  GuiElement.add(choose_panel, GuiLabel("prototype"):caption("Type"))
+  GuiElement.add(choose_panel, GuiLabel("prototype"):caption("Тип"))
   GuiElement.add(choose_panel, GuiDropDown(self.classname, "change-prototype-filter-type"):items(filter_types, prototype_filter_type))
-  GuiElement.add(choose_panel, GuiLabel("sample"):caption("Sample"))
+  GuiElement.add(choose_panel, GuiLabel("sample"):caption("Образец"))
   local items = {}
   table.insert(items, "Choose a sample")
   for _,sample in pairs(samples) do

@@ -174,7 +174,7 @@ function ProductEdition:onEvent(event)
         Controller:send("on_gui_refresh", event)
       end)
       if not(ok) then
-        Player.print("Formula is not valid!")
+        Player.print("Недопустимая формула!")
       end
     end
     if event.action == "element-select" then

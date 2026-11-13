@@ -555,7 +555,7 @@ local function planningMap(map, tick)
 	end	
 				
     if universe.printAIStateChanges and (game.tick % 3600 == 0) then
-        game.print(map.surface.name .. ": AI is now: " .. constants.stateEnglish[map.state] .. ", Next state change is in " .. string.format("%.2f", (map.stateTick - tick) / (60*60)) .. " minutes @ " .. getTimeStringFromTick(map.stateTick) .. " playtime")
+        game.print(map.surface.name .. ": ИИ теперь: " .. constants.stateEnglish[map.state] .. ", следующая смена состояния через " .. string.format("%.2f", (map.stateTick - tick) / (60*60)) .. " мин. на отметке " .. getTimeStringFromTick(map.stateTick) .. " игрового времени")
     end
 end
 
@@ -635,15 +635,15 @@ local function temperamentPlanner(map)
 	
     if universe.debugTemperament then
         if game.tick % 1800 == 0 then
-            game.print("Rampant Stats:")
+            game.print("Статистика Rampant:")
             game.print("aN:" .. map.activeNests .. ", aRN:" .. map.activeRaidNests .. ", dPB:" .. map.destroyPlayerBuildings ..
                        ", lEU:" .. map.lostEnemyUnits .."(evoK="..evoK..", LEU_evo:"..LEU_evo.. "), lEB:" .. map.lostEnemyBuilding ..", ARN_AN:"..ARN_AN)
-            game.print("temp: " .. map.temperament .. "-->" .. newTemp .. ", points:" .. math.floor(map.points).."/"..math.floor(map.maxPoints).. ", state:" .. constants.stateEnglish[map.state] .. ", surface:" .. map.surface.index .. " [" .. map.surface.name .. "]")
+            game.print("темперамент: " .. map.temperament .. "-->" .. newTemp .. ", очки:" .. math.floor(map.points).."/"..math.floor(map.maxPoints).. ", состояние:" .. constants.stateEnglish[map.state] .. ", поверхность:" .. map.surface.index .. " [" .. map.surface.name .. "]")
             game.print("aS:" .. universe.squadCount .. ", aB:" .. universe.builderCount .. ", atkSize:" .. attackWaveSize .. ", stlSize:" .. map.settlerWaveSize .. ", formGroup:" .. map.formSquadThreshold
 				.. ", Rtrb = "..map.retribution)
             game.print("gTk="..game.tick..", stTk="..map.stateTick..", trEt="..map.truceEndTick..", nDAT = "..map.nextDemolisherAttackTick)
-			game.print("next squad is: "..tostring(map.nextSquad))
-			game.print("Next state change is in " .. string.format("%.2f", (map.stateTick - game.tick) / (60*60)))
+			game.print("Следующий отряд: "..tostring(map.nextSquad))
+			game.print("До следующей смены состояния: " .. string.format("%.2f", (map.stateTick - game.tick) / (60*60)))
           end
     end
 end

@@ -995,24 +995,24 @@ on_ground_radar_tick = function(event)
 end
 
 commands.add_command("bob-enemies-unlocks-check", nil, function(command)
-  game.print("Faction unlock order: ")
+  game.print("Порядок разблокировки фракций: ")
   for i, unlock_set in pairs(storage.bobmods.enemies.nauvis_faction_unlock_order) do
-    game.print("Unlock set " .. tostring(i) .. " at evo level " .. tostring(unlock_set.unlock_evo))
+    game.print("Набор разблокировки " .. tostring(i) .. " при уровне эволюции " .. tostring(unlock_set.unlock_evo))
     for v, faction_name in pairs(unlock_set.factions) do
-      game.print("Faction: " .. faction_name)
+      game.print("Фракция: " .. faction_name)
     end
   end
 
-  game.print("Unlocked factions: ")
+  game.print("Разблокированные фракции: ")
   for i, faction_name2 in pairs(storage.bobmods.enemies.nauvis_faction_unlock_table) do
-    game.print("Unlocked " .. tostring(i) .. ": " .. faction_name2)
+    game.print("Разблокировано " .. tostring(i) .. ": " .. faction_name2)
   end
 end)
 
 commands.add_command("bob-enemies-faction-counts-check", nil, function(command)
-  game.print("Faction table check: ")
+  game.print("Проверка таблицы фракций: ")
   for faction_name, faction_count in pairs(storage.bobmods.enemies.nauvis_faction_table) do
-    game.print("Table: " .. tostring(faction_name) .. " " .. tostring(faction_count))
+    game.print("Таблица: " .. tostring(faction_name) .. " " .. tostring(faction_count))
   end
 end)
 
@@ -1020,19 +1020,19 @@ commands.add_command("bob-enemies-flag-check", nil, function(command)
   local check_index = tonumber(command.parameter)
   if check_index and storage.bobmods.enemies.faction_flags[check_index] then
     local check_flag = storage.bobmods.enemies.faction_flags[check_index]
-    game.print("Flag check: " .. check_index)
+    game.print("Проверка флага: " .. check_index)
     if check_flag.factions[1] then
-      game.print("Faction 1: " .. check_flag.factions[1])
+      game.print("Фракция 1: " .. check_flag.factions[1])
     end
     if check_flag.factions[2] then
-      game.print("Faction 2: " .. check_flag.factions[2])
+      game.print("Фракция 2: " .. check_flag.factions[2])
     end
     if check_flag.factions[3] then
-      game.print("Faction 3: " .. check_flag.factions[3])
+      game.print("Фракция 3: " .. check_flag.factions[3])
     end
-    game.print("Quality limit: " .. check_flag.quality_limit)
+    game.print("Ограничение качества: " .. check_flag.quality_limit)
     game.print(
-      "Quality table: "
+      "Таблица качества: "
         .. check_flag.quality_values[1]
         .. " "
         .. check_flag.quality_values[2]
@@ -1042,12 +1042,12 @@ commands.add_command("bob-enemies-flag-check", nil, function(command)
         .. check_flag.quality_values[4]
         .. " "
         .. check_flag.quality_values[5]
-        .. " Total: "
+        .. " Всего: "
         .. check_flag.quality_values[6]
     )
     game.print("X: " .. check_flag.x .. ", Y: " .. check_flag.y)
-    game.print("Tick: " .. check_flag.tick)
+    game.print("Тик: " .. check_flag.tick)
   else
-    game.print("Need valid numerical index")
+    game.print("Требуется допустимый числовой индекс")
   end
 end)

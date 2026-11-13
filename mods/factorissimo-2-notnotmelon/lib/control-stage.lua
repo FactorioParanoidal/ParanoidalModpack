@@ -116,7 +116,7 @@ factorissimo.find_grandparent = function(element, name)
         if element.name == name then return element end
         element = element.parent
     end
-    error("Could not find parent gui element with name: " .. name)
+    error("Не удалось найти родительский элемент GUI с именем: " .. name)
 end
 
 local si_prefixes = {

@@ -12,7 +12,7 @@ local filters = {}    -- event -> joined filter list, or false when a handler ta
 local order = {}      -- events in the order they were first added (deterministic registration)
 
 function events.on(event, fn, filter)
-  if event == nil then error("events.on: unknown event") end
+  if event == nil then error("events.on: неизвестное событие") end
   local list = handlers[event]
   if not list then
     list = {}

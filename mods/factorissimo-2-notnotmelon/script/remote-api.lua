@@ -75,7 +75,7 @@ end
 remote_api.get_factory_by_building = function(entity)
     local factory = storage.factories_by_entity[entity.unit_number]
     if factory == nil then
-        game.print("ERROR: Unbound factory building: " .. entity.name .. "@" .. entity.surface.name .. "(" .. entity.position.x .. ", " .. entity.position.y .. ")")
+        game.print("ОШИБКА: не привязано здание фабрики: " .. entity.name .. "@" .. entity.surface.name .. "(" .. entity.position.x .. ", " .. entity.position.y .. ")")
     end
     return factory
 end

@@ -1,5 +1,7 @@
 ---------------------------------------------------------------------------------------------------
 Version: 9.5.3
+  Locale:
+    - Russian hardcoded player-facing text: 1 UI, chat, command-help and error-message literals; technical identifiers, format parameters and gameplay logic are unchanged.
   Changes:
     - Version number starts with 9 (Paranoidal fork): the Mod Portal never offers an "update" over local changes.
     - Paranoidal local maintenance of 0.5.2 (not an upstream release).

@@ -294,11 +294,11 @@ local function artillery_on_player_selected_area(event) -- Toggles "Auto targeti
 			local player = game.players[event.player_index]
 			local message = ("Player " .. player.name .. " on surface " .. player.surface.name .. " has ")
 			if i ~= 0 and j == 0 then
-				player.force.print(message .. "disabled " .. i .. " artillery")
+				player.force.print(message .. "отключено " .. i .. " ед. артиллерийской техники")
 			elseif i == 0 and j ~= 0 then
-				player.force.print(message .. "enabled " .. j .. " artillery")
+				player.force.print(message .. "включено " .. j .. " ед. артиллерийской техники")
 			elseif i ~= 0 and j ~= 0 then
-				player.force.print(message .. "enabled " .. j .. " and disabled " .. i .. " artillery")
+				player.force.print(message .. "включено " .. j .. " и отключено " .. i .. " ед. артиллерийской техники")
 			end
 		end
 	end
@@ -355,7 +355,7 @@ script.on_event(defines.events.on_runtime_mod_setting_changed, function(event)
 							end
 						end
 						if count > 0 then
-							game.print("PLAYER: " .. player.name .. "\nNumber of equipment pieces enabled: " .. count)
+							game.print("ИГРОК: " .. player.name .. "\nКоличество включённых элементов экипировки: " .. count)
 						end
 					end
 				end
@@ -364,12 +364,12 @@ script.on_event(defines.events.on_runtime_mod_setting_changed, function(event)
 
 		if mode == "uninstall" then
 			enable_equipment({"active-defense-equipment", "belt-immunity-equipment", "night-vision-equipment"})
-			game.print("\nREADY TO UNINSTALL")
+			game.print("\nГОТОВО К УДАЛЕНИЮ")
 		elseif mode == "active-defense-equipment" or mode == "belt-immunity-equipment" or mode == "night-vision-equipment" then
 			enable_equipment({mode})
-			game.print("Ready to disable the setting corresponding to " .. mode)
+			game.print("Можно отключить настройку, соответствующую " .. mode)
 		else
-			game.print("There went something wrong. Please make sure you entered the right word. (ERROR X)")
+			game.print("Что-то пошло не так. Убедитесь, что вы ввели правильное слово. (ERROR X)")
 		end
 		settings.global["ick-prepare-uninstall"] = {value = ""}
 	end

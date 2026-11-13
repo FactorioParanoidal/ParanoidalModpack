@@ -31,7 +31,7 @@ local function scale_position(position, hr)
   -- Make sure position is in correct format
   position = position or { x = 0, y = 0}
   if type(position) ~= "table" or table_size(position) ~= 2 then
-    error(serpent.line(position) .. " is not a valid position!")
+    error(serpent.line(position) .. " не является допустимой позицией!")
   end
 
   -- Is this for the HR version?

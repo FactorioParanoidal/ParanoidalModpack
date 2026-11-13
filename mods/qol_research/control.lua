@@ -46,7 +46,7 @@ local function calculate_technology_bonus_at(category, levels)
         return 0
     end
     local tiers = config[category.name]
-    assert(#levels == #tiers, 'levels size must be match tier count')
+    assert(#levels == #tiers, 'Размер массива уровней должен совпадать с количеством уровней категории')
     local multiplier = setting_multiplier(category.name)
 
     local bonus = 0
@@ -194,7 +194,7 @@ local function parse_research_name(research_name)
         tier_index > #tiers or
         technology_index < 1
         then
-        game.print(('[qol] warning: unknown technology, bug or conflicting mod? %q'):format(research_name))
+        game.print(('[qol] предупреждение: неизвестная технология, ошибка или конфликт с другим модом? %q'):format(research_name))
         return
     end
 
@@ -251,35 +251,35 @@ script.on_configuration_changed(function (changes)
             version_major = tonumber(version_major)
 
             if version_major < 3 then
-                game.print(('[qol] Updated to version 3'))
-                game.print('[qol] Check out https://qol-research.aidiakapi.com/ if you want to create your own configuration!')
+                game.print(('[qol] Выполнено обновление до версии 3'))
+                game.print('[qol] Посетите https://qol-research.aidiakapi.com/, если хотите создать собственную конфигурацию!')
             end
         end
     end
 end)
 
-commands.add_command('qol-sync', [[Syncs all technology effects, you can run this manually after using commands or mods to undo researching a technology.]], function (event)
+commands.add_command('qol-sync', [[Синхронизирует все эффекты технологий. Можно запустить вручную после отмены исследования технологии с помощью команд или модов.]], function (event)
     local player = game.players[event.player_index]
     if player.admin then
         local was_logging_enabled = is_logging_enabled
         is_logging_enabled = true
-        player.print('[qol] Synced, any details can be found in the log file.')
+        player.print('[qol] Синхронизация завершена; подробности см. в журнале.')
         update_for_all_forces()
         plog('syncing completed')
         is_logging_enabled = was_logging_enabled
     else
-        player.print('[qol] You must be an admin to run this command.')
+        player.print('[qol] Для выполнения этой команды нужны права администратора.')
     end
 end)
 
-commands.add_command('qol-reset-technology-effects', [[Calls LuaForce::reset_technology_effects() for all forces.]], function (event)
+commands.add_command('qol-reset-technology-effects', [[Вызывает LuaForce::reset_technology_effects() для всех сил.]], function (event)
     local player = game.players[event.player_index]
     if player.admin then
         for _, force in pairs(game.forces) do
             force.reset_technology_effects()
         end
-        player.print('[qol] Technology effects reset.')
+        player.print('[qol] Эффекты технологий сброшены.')
     else
-        player.print('[qol] You must be an admin to run this command.')
+        player.print('[qol] Для выполнения этой команды нужны права администратора.')
     end
 end)

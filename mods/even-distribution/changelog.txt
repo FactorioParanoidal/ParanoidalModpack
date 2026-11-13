@@ -1,5 +1,7 @@
 ---------------------------------------------------------------------------------------------------
 Version: 9.0.2
+  Locale:
+    - Russian hardcoded player-facing text: 3 UI, chat, command-help and error-message literals; technical identifiers, format parameters and gameplay logic are unchanged.
 Date: 2026-10-21
   Changes:
     - Paranoidal fork of 2.0.2 (version 9.x marks the local fork).

@@ -14,5 +14,5 @@ elseif script then
     factorissimo.stage = "control"
     require "control-stage"
 else
-    error("Could not determine load order stage.")
+    error("Не удалось определить этап порядка загрузки.")
 end

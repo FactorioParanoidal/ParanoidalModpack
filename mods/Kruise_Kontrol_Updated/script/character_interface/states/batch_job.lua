@@ -60,7 +60,7 @@ function Batch_job:update()
   elseif self.job_type == "upgrade" then
     self.character:upgrade(self.target)
   else
-    error("Unknown batch job type "..self.job_type)
+    error("Неизвестный тип пакетного задания "..self.job_type)
   end
 
 
