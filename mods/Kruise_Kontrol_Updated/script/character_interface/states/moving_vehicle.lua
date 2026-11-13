@@ -12,7 +12,7 @@ function Moving_vehicle.new(Character, destination, radius)
     {
         type = "moving_vehicle",
         character = Character,
-        destination = destination or error("No destination given for creating a moving state."),
+        destination = destination or error("Для создания состояния перемещения не указано место назначения."),
         radius = radius or 0.5,
         fail_count = -1,
     }
@@ -107,7 +107,7 @@ function Moving_vehicle:request_path()
     })
 
     self.requested_destination = destination
-    self.character:print("Requested a path. ")
+    self.character:print("Запрошен путь. ")
 end
 
 function Moving_vehicle:finish()
@@ -266,7 +266,7 @@ function Moving_vehicle:check_path()
     end
 
     --Request a new path, but keep walking along the old as its probably its in the right direction still.
-    self.character:print("Target moved, recalculating path")
+    self.character:print("Цель переместилась, пересчитываю путь")
     self:request_path()
 end
 
@@ -330,7 +330,7 @@ function Moving_vehicle:on_path_recieved(event)
     end
 
     self.path_request_index = nil
-    self.character:print("Path request finished")
+    self.character:print("Запрос пути завершён")
     local path = event.path
     if not path then
         self.path = nil

@@ -123,7 +123,7 @@ local function measure_area(event)
 		-- if clamp value is 10, just print the raw values
 		if num_digits == 10 then
 			player.print(format_area(area) .. format_point(area_center(area),"Center"))
-			player.print('Size = ' .. size .. ' Width = ' .. width .. ' Height = ' .. height)
+			player.print('Размер = ' .. size .. ' Ширина = ' .. width .. ' Высота = ' .. height)
 		elseif num_digits == 0 then
 			local new_area = clamp_area(area, num_digits)
 			local new_center = clamp_point(area_center(area), num_digits)
@@ -183,7 +183,7 @@ local function set_tree_killer_filters(player)
                             table.insert(filters, entity.name)
                         end
                     else
-                        player.print({"", {"Shortcuts-ick.error-environment", type}, " (ERROR 3)"})
+                        player.print({"", {"Shortcuts-ick.error-environment", type}, " (ОШИБКА 3)"})
                         break
                     end
                 end

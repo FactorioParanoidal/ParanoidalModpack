@@ -70,7 +70,7 @@ local function set_button_state(button_data)
     minime.arg_err(player, "player specification")
   end
 
-  local name = minime.assert(button_data.name, "string", "button name") and
+  local name = minime.assert(button_data.name, "string", "имя кнопки") and
                 button_data.name
 
   -- This will be true if anything except false/nil has been passed on, or false
@@ -89,10 +89,10 @@ minime.show("tooltip", tooltip)
   if button and button.valid then
     button.enabled = state
     button.tooltip = tooltip
-    minime.writeDebug("%sabled %s.",
+    minime.writeDebug("Состояние (%s) элемента %s.",
                       {state and "En" or "Dis", minime.argprint(button)})
   else
-    minime.arg_err(name, "button name")
+    minime.arg_err(name, "имя кнопки")
   end
 
   minime.entered_function("leave")
@@ -118,7 +118,7 @@ local function set_checkbox_state(player, name, state)
   end
 
   name = minime.assert(name, "string") and
-          checkbox_prefix..name or minime.arg_err(name, "button name")
+          checkbox_prefix..name or minime.arg_err(name, "имя кнопки")
 
 minime.show("name", name)
 minime.show("state", state)
@@ -126,7 +126,7 @@ minime.show("state", state)
   local checkboxes = get_checkboxes(player)
   if checkboxes[name] then
     checkboxes[name].state = state
-    minime.writeDebug("%sabled %s.",
+    minime.writeDebug("Состояние (%s) элемента %s.",
                       {state and "En" or "Dis", minime.argprint(checkboxes[name])})
   else
     minime.arg_err(name, "button name")
@@ -152,7 +152,7 @@ local function is_all_enabled(player)
     -- Skip disabled checkbox -- we always want to keep at least one character!
     if element.type == "checkbox" and element.enabled and not element.state then
       ret = false
-      minime.writeDebug("Found disabled %s!", {minime.argprint(element)})
+      minime.writeDebug("Обнаружен выключенный элемент %s!", {minime.argprint(element)})
       break
     end
   end
@@ -179,7 +179,7 @@ local function is_all_disabled(player)
     -- Skip disabled checkbox -- we always want to keep at least one character!
     if element.type == "checkbox" and element.enabled and element.state then
       ret = false
-      minime.writeDebug("Found enabled character %s!", {minime.argprint(element)})
+      minime.writeDebug("Обнаружен включённый персонаж %s!", {minime.argprint(element)})
       break
     end
   end
@@ -201,7 +201,7 @@ local function update_all_buttons(player)
   local p_data = mod.player_data[player.index]
 
   local function debug_msg(name, state)
-    minime.writeDebug("%sabled button \"%s\".", {state and "En" or "Dis", name})
+    minime.writeDebug("Состояние (%s) кнопки «%s».", {state and "En" or "Dis", name})
   end
 
   local state = not is_all_enabled(player)
@@ -234,7 +234,7 @@ local function update_all_buttons(player)
   -- Update tooltip of close button
   local close_button = player.gui.screen[main_frame_name].header[main_frame_close_button_name]
   close_button.tooltip = state and {"minime-GUI.available-list-close-button-tooltip"} or {""}
-minime.show("Tooltip of close button", close_button.tooltip)
+minime.show("Подсказка кнопки закрытия", close_button.tooltip)
 
   minime.entered_function("leave")
 end
@@ -254,7 +254,7 @@ minime.show("checkboxes", checkboxes)
 
   minime.writeDebugNewBlock("Do we have a valid table for checkboxes?")
   if checkboxes and checkboxes.valid then
-    minime.writeDebug("Yes!")
+    minime.writeDebug("Да!")
     local char_name
     for c, checkbox in pairs(checkboxes.children) do
 minime.show(c, checkbox)
@@ -265,19 +265,19 @@ minime.show("char_name", char_name)
 minime.show("p_data.last_character", p_data.last_character)
         if char_name ~= "character" then
           checkbox.enabled = (char_name ~= p_data.last_character)
-          minime.writeDebug("%sabled checkbox for %s!",
+          minime.writeDebug("Состояние (%s) флажка для %s!",
                             {checkbox.enabled and "En" or "Dis", char_name})
 
           local tip = "minime-GUI.available-list-disabled-checkbox-tooltip"
           checkbox.tooltip = (not checkbox.enabled) and {tip} or nil
-          minime.writeDebug("%s tooltip for checkbox!",
+          minime.writeDebug("Подсказка для флажка: %s!",
                             {checkbox.enabled and "No" or "Set"})
         end
       end
     end
 
   else
-    minime.writeDebug("No!")
+    minime.writeDebug("Нет!")
   end
 
   minime.entered_function("leave")
@@ -302,27 +302,27 @@ local function enable_character(player, char)
 
   p_data.available_pending_changes = p_data.available_pending_changes or {}
   pending = p_data.available_pending_changes
-minime.show("Pending changes", pending)
+minime.show("Ожидающие изменения", pending)
 
   -- Only add the character to pending changes if there is no pending change yet!
   if pending[char] == nil then
-    minime.writeDebug("New pending change: Must enable \"%s\"!", {char})
+    minime.writeDebug("Новое ожидающее изменение: нужно включить \"%s\"!", {char})
     pending[char] = true
 
   -- Pending change: Character was to be disabled, revert the change!
   elseif pending[char] == false then
-    minime.writeDebug("Reverting pending change: Will keep \"%s\" enabled!", {char})
+    minime.writeDebug("Отмена ожидающего изменения: \"%s\" останется включённым!", {char})
     pending[char] = nil
 
     if not next(pending) then
       p_data.available_pending_changes = nil
-      minime.writeDebug("There are no pending changes!")
+      minime.writeDebug("Нет ожидающих изменений!")
     end
 
   -- Pending change: Character already was to be enabled, ignore this request
   -- (Relevant if a checkbox has been enabled before "Enable all" was used.)
   else
-    minime.writeDebug("Nothing to do: There already is a pending change to enable \"%s\"!", {char})
+    minime.writeDebug("Нечего делать: уже есть ожидающее изменение для включения \"%s\"!", {char})
   end
 
   minime.entered_function("leave")
@@ -374,23 +374,23 @@ local function disable_character(player, char)
 
   -- Only add the character to pending changes if there is no pending change yet!
   if pending[char] == nil then
-    minime.writeDebug("New pending change: Must disable \"%s\"!", {char})
+    minime.writeDebug("Новое ожидающее изменение: нужно отключить \"%s\"!", {char})
     pending[char] = false
 
   -- Pending change: Character was to be enabled, revert the change!
   elseif pending[char] == true then
-    minime.writeDebug("Reverting pending change: Will keep \"%s\" disabled!", {char})
+    minime.writeDebug("Отмена ожидающего изменения: \"%s\" останется отключённым!", {char})
     pending[char] = nil
 
     if not next(pending) then
       p_data.available_pending_changes = nil
-      minime.writeDebug("There are no pending changes!")
+      minime.writeDebug("Нет ожидающих изменений!")
     end
 
   -- Pending change: Character already was to be disabled, ignore this request
   -- (Relevant if a checkbox has been disabled before "Disable all" was used.)
   else
-    minime.writeDebug("Nothing to do: There already is a pending change to disable \"%s\"!", {char})
+    minime.writeDebug("Нечего делать: уже есть ожидающее изменение для отключения \"%s\"!", {char})
   end
 
   minime.entered_function("leave")
@@ -413,7 +413,7 @@ local function disable_all_characters(player)
 minime.show(element.name, element.enabled)
     -- Skip disabled checkbox -- we always want to keep at least one character!
     if element.type == "checkbox" and element.enabled and element.state then
-      minime.writeDebug("Disabling checkbox for character \"%s\"", {element.name})
+      minime.writeDebug("Отключение флажка персонажа \"%s\"", {element.name})
       char = element.name:match(checkbox_prefix.."(.+)")
 
       disable_character(player, char)
@@ -460,7 +460,7 @@ local function toggle_all_characters(player)
 
   -- Update number of hidden characters
   p_data.hidden_characters = available.count_hidden_characters(player)
-  minime.writeDebug("Updated number of hidden characters (%s)!", {p_data.hidden_characters})
+  minime.writeDebug("Обновлено количество скрытых персонажей (%s)!", {p_data.hidden_characters})
 
   minime.entered_function("leave")
 end
@@ -485,19 +485,19 @@ local function apply_changes(player)
     -- the preview entity!
     if not state then
       minime_player.remove_single_character_preview(player, char)
-      minime.writeDebug("Removed preview entity for hidden character \"%s\"!",
+      minime.writeDebug("Удалена сущность-предпросмотр скрытого персонажа \"%s\"!",
                         {char})
     end
   end
-  minime.writeDebug("Applied all changes to player data!")
+  minime.writeDebug("Все изменения применены к данным игрока!")
 
   -- Remove list of pending changes
   p_data.available_pending_changes = nil
-  minime.writeDebug("Removed list of pending changes!")
+  minime.writeDebug("Список ожидающих изменений удалён!")
 
   -- Count hidden characters (turned off by the player)
   p_data.hidden_characters = available.count_hidden_characters(player)
-  minime.writeDebug("Number of characters turned off by %s: %s",
+  minime.writeDebug("Количество отключённых персонажей у игрока %s: %s",
                     {minime.argprint(player), p_data.hidden_characters})
 
   -- Update character selector
@@ -568,11 +568,11 @@ available.count_hidden_characters = function(player)
 
   for char, state in pairs(p_data.available_characters) do
     if not state then
-      minime.writeDebug("Found hidden character: \"%s\"", {char})
+      minime.writeDebug("Найден скрытый персонаж: \"%s\"", {char})
       ret = ret + 1
     end
   end
-  minime.show("Hidden characters", ret)
+  minime.show("Скрытые персонажи", ret)
 
   minime.entered_function("leave")
   return ret
@@ -593,12 +593,12 @@ available.init_gui = function(player)
 
   -- Leave early if character-selector mode has been turned off
   if not minime.character_selector then
-    minime.writeDebug("Character selector is disabled -- check if any players have a GUI.")
+    minime.writeDebug("Селектор персонажа отключён — проверьте, открыто ли у игроков какое-либо GUI.")
     for p_index, p in pairs(game.players) do
       available.remove_gui(p)
     end
 
-    minime.entered_function({player}, "leave", "Character selector is disabled!")
+    minime.entered_function({player}, "leave", "Выбор персонажа отключён!")
     return
   end
 
@@ -607,7 +607,7 @@ available.init_gui = function(player)
 
   -- Make sure player has a  list of available characters!
   if not p_data.available_characters then
-    minime.writeDebug("Initializing list of available characters for %s!",
+    minime.writeDebug("Инициализация списка доступных персонажей для игрока %s!",
                       {minime.argprint(player)})
     minime_gui.available.init_player_character_list(player)
   end
@@ -617,12 +617,12 @@ minime.show("table_size(p_data.available_characters)", table_size(p_data.availab
   -- Leave early and remove GUI if there are not enough characters available
   -- (This GUI is only useful if there are at least 2 characters to choose from.)
   if table_size(p_data.available_characters) < 2 then
-    minime.writeDebug("Not enough characters available -- check if any players have a GUI.")
+    minime.writeDebug("Недостаточно доступных персонажей — проверьте, не открыто ли GUI у игроков.")
     for p_index, p in pairs(game.players) do
       available.remove_gui(p)
     end
 
-    minime.entered_function({player}, "leave", "not enough characters available!")
+    minime.entered_function({player}, "leave", "недостаточно доступных персонажей!")
     return
   end
 
@@ -656,10 +656,10 @@ minime.show("table_size(p_data.available_characters)", table_size(p_data.availab
       direction = "vertical",
       visible = p_data.show_available_character_list or false,
     })
-    minime.writeDebug("Created %s!", {minime.argprint(main_frame)})
+    minime.writeDebug("Создано %s!", {minime.argprint(main_frame)})
   else
     main_frame.clear()
-    minime.writeDebug("Cleared %s!", {minime.argprint(main_frame)})
+    minime.writeDebug("Очищено %s!", {minime.argprint(main_frame)})
   end
 
   gui = main_frame
@@ -671,7 +671,7 @@ minime.show("table_size(p_data.available_characters)", table_size(p_data.availab
     caption = {"minime-GUI.available-chars-frame-caption"},
     direction = "horizontal"
   })
-  minime.writeDebug("Created %s", {minime.argprint(header)})
+  minime.writeDebug("Создано %s", {minime.argprint(header)})
   header.style.vertically_stretchable = false
   header.title.drag_target = gui
 
@@ -695,7 +695,7 @@ minime.show("table_size(p_data.available_characters)", table_size(p_data.availab
     sprite = "utility/close",
     mouse_button_filter = {"left"},
   })
-  minime.writeDebug("Created GUI header!")
+  minime.writeDebug("Создан заголовок GUI!")
 
 
   ------------------------------------------------------------------------------------
@@ -705,7 +705,7 @@ minime.show("table_size(p_data.available_characters)", table_size(p_data.availab
     name = main_flow_name,
     direction = "horizontal"
   })
-  minime.writeDebug("Created %s", {minime.argprint(header)})
+  minime.writeDebug("Создано %s", {minime.argprint(header)})
   main_flow.style.vertical_align = "bottom"
   main_flow.style.maximal_height = 500
 
@@ -726,7 +726,7 @@ minime.show("table_size(p_data.available_characters)", table_size(p_data.availab
     column_count = 4,
     visible = true,
   })
-  minime.writeDebug("Created %s.", {minime.argprint(elements)})
+  minime.writeDebug("Создано %s.", {minime.argprint(elements)})
 
   local element
 
@@ -741,7 +741,7 @@ minime.show("table_size(p_data.available_characters)", table_size(p_data.availab
       visible = true,
 
     })
-    minime.writeDebug("Created %s.", {minime.argprint(element)})
+    minime.writeDebug("Создано %s.", {minime.argprint(element)})
 
     -- Sprite
     element = elements.add({
@@ -750,7 +750,7 @@ minime.show("table_size(p_data.available_characters)", table_size(p_data.availab
       sprite = "entity/"..char,
       visible = true,
     })
-    minime.writeDebug("Created %s.", {minime.argprint(element)})
+    minime.writeDebug("Создано %s.", {minime.argprint(element)})
 
     -- Label
     element = elements.add({
@@ -759,7 +759,7 @@ minime.show("table_size(p_data.available_characters)", table_size(p_data.availab
       caption = mod.minime_characters[char].loc_name,
       visible = true,
     })
-    minime.writeDebug("Created %s.", {minime.argprint(element)})
+    minime.writeDebug("Создано %s.", {minime.argprint(element)})
 
     -- Checkbox
     element = elements.add({
@@ -769,21 +769,21 @@ minime.show("table_size(p_data.available_characters)", table_size(p_data.availab
       visible = true,
       enabled = p_data.last_character ~= char,
     })
-    minime.writeDebug("Created %s.", {minime.argprint(element)})
+    minime.writeDebug("Создано %s.", {minime.argprint(element)})
 
     -- Are there pending changes? If the GUI is re-initialized (e.g. for
     -- on_configuration_changed), we must account for that when setting the state!
     local pending = p_data.available_pending_changes
     if pending and pending[char] ~= nil then
       element.state = pending[char]
-      minime.writeDebug("Changed state of %s to %s (change pending)!",
+      minime.writeDebug("Состояние %s изменено на %s (изменение ожидает применения)!",
                         {minime.argprint(element), element.state})
     end
 
     -- Default character can't be disabled
     if char == "character" then
       element.enabled = false
-      minime.writeDebug("Disabled %s!", {minime.argprint(element)})
+      minime.writeDebug("Отключён %s!", {minime.argprint(element)})
     end
   end
 
@@ -791,7 +791,7 @@ minime.show("table_size(p_data.available_characters)", table_size(p_data.availab
   ----------------------------------------------------------------------------------
   -- Create spacer
   local spacer = minime_gui.make_spacer(main_flow, button_table_name.."spacer", 100)
-  minime.writeDebug("Created %s.", {minime.argprint(spacer)})
+  minime.writeDebug("Создано %s.", {minime.argprint(spacer)})
 
 
   ----------------------------------------------------------------------------------
@@ -800,7 +800,7 @@ minime.show("table_size(p_data.available_characters)", table_size(p_data.availab
     parent = main_flow,
     name = button_flow_name,
   })
-  minime.writeDebug("Added %s.", {minime.argprint(button_flow)})
+  minime.writeDebug("Добавлен %s.", {minime.argprint(button_flow)})
 
 
 
@@ -813,7 +813,7 @@ minime.show("table_size(p_data.available_characters)", table_size(p_data.availab
     visible = true,
     style = "minime_character_button_on",
   })
-  minime.writeDebug("Added %s.", {minime.argprint(element)})
+  minime.writeDebug("Добавлен %s.", {minime.argprint(element)})
 
   -- Create "Disable all" button
   element = button_flow.add({
@@ -824,7 +824,7 @@ minime.show("table_size(p_data.available_characters)", table_size(p_data.availab
     visible = true,
     style = "minime_character_button_on",
   })
-  minime.writeDebug("Added %s.", {minime.argprint(element)})
+  minime.writeDebug("Добавлен %s.", {minime.argprint(element)})
 
   -- Create "Toggle all" button
   element = button_flow.add({
@@ -836,7 +836,7 @@ minime.show("table_size(p_data.available_characters)", table_size(p_data.availab
     tooltip = {"minime-GUI.available-list-toggle-all-button-tooltip"},
     style = "minime_character_button_on",
   })
-  minime.writeDebug("Added %s.", {minime.argprint(element)})
+  minime.writeDebug("Добавлен %s.", {minime.argprint(element)})
 
   -- Create button to close available character list and apply changes
   element = button_flow.add({
@@ -848,7 +848,7 @@ minime.show("table_size(p_data.available_characters)", table_size(p_data.availab
     visible = true,
     style = "minime_character_button_on",
   })
-  minime.writeDebug("Added %s.", {minime.argprint(element)})
+  minime.writeDebug("Добавлен %s.", {minime.argprint(element)})
 
   -- Update buttons
   update_all_buttons(player)
@@ -882,14 +882,14 @@ available.remove_gui = function(player)
   player = minime.ascertain_player(player)
 
   if player and player.valid then
-    minime.writeDebug("Trying to remove GUI of player %s", player.name)
+    minime.writeDebug("Попытка удалить GUI игрока %s", player.name)
 
     -- Remove character list
     local gui_frames = player.gui.screen
     if gui_frames and gui_frames[main_frame_name] and
                       gui_frames[main_frame_name].valid then
       gui_frames[main_frame_name].destroy()
-      minime.writeDebug("Removed GUI of player %s!", {player.name or "nil"})
+      minime.writeDebug("Удалён GUI игрока %s!", {player.name or "nil"})
     end
 
   end
@@ -908,7 +908,7 @@ available.hide_gui = function(player)
   player = minime.ascertain_player(player)
 
   if player and player.valid then
-    minime.writeDebug("Trying to hide GUI of player %s", player.name)
+    minime.writeDebug("Попытка скрыть GUI игрока %s", player.name)
 
     -- Hide character list
     do
@@ -920,7 +920,7 @@ minime.show("tags", tags)
         tags.visible = gui.visible
         gui.tags = tags
         gui.visible = false
-        minime.writeDebug("GUI of player %s is now invisible!",
+        minime.writeDebug("GUI игрока %s теперь невидимо!",
                           {player.name or "nil"})
       end
     end
@@ -941,7 +941,7 @@ available.unhide_gui = function(player)
   player = minime.ascertain_player(player)
 
   if player and player.valid then
-    minime.writeDebug("Trying to unhide GUI of player %s", player.name)
+    minime.writeDebug("Попытка снова показать GUI игрока %s", player.name)
 
 
     -- Unhide character list
@@ -969,7 +969,7 @@ minime.show("tags", tags)
     minime.show("gui.visible", gui.visible)
 
         gui.tags = tags
-        minime.writeDebug("GUI of player %s is now %s!",
+        minime.writeDebug("GUI игрока %s теперь %s!",
                   {player.name or "nil", gui.visible and "visible" or "invisible"})
       end
     end
@@ -994,7 +994,7 @@ available.gui_toggle = function(player)
   local gui = player.gui.screen and player.gui.screen[main_frame_name]
 
   if not (gui and gui.valid) then
-    minime.writeDebug("Initializing GUI!")
+    minime.writeDebug("Инициализация GUI!")
     gui = available.init_gui(player)
   end
 minime.show("gui", gui)
@@ -1006,7 +1006,7 @@ minime.show("Toggled gui.visible", gui and gui.valid and gui.visible)
   -- If GUI is visible, it should be in the foreground
   if gui.visible then
     gui.bring_to_front()
-    minime.writeDebug("%s is now on top!", {minime.argprint(gui)})
+    minime.writeDebug("%s теперь поверх остальных!", {minime.argprint(gui)})
   end
 
   -- Copy that setting to mod.player_data
@@ -1033,7 +1033,7 @@ available.on_gui_click = function(event)
   local button = event.element.name
 
   if not minime.prefixed(button, minime.available_chars_prefix) then
-    minime.entered_function({}, "leave", "Nothing to do for %s \""..minime.argprint(event.element).."\"!")
+    minime.entered_function({}, "leave", "Нечего делать для %s \""..minime.argprint(event.element).."\"!")
     return
   end
 
@@ -1043,37 +1043,37 @@ available.on_gui_click = function(event)
   ------------------------------------------------------------------------------------
   -- Close button was clicked
   if button == main_frame_close_button_name then
-    minime.writeDebug("%s closed the selection list.", {player.name})
+    minime.writeDebug("%s закрыл список выбора.", {player.name})
     available.gui_toggle(player)
 
   -- Apply button was clicked
   elseif button == apply_button_name then
-    minime.writeDebug("%s applied the changes.", {player.name})
+    minime.writeDebug("%s применил изменения.", {player.name})
     apply_changes(player)
 
   -- Enable all
   elseif button == enable_all_button_name then
-    minime.writeDebug("%s enabled all characters.", {player.name})
+    minime.writeDebug("%s включил всех персонажей.", {player.name})
     enable_all_characters(player)
 
   -- Disable all
   elseif button == disable_all_button_name then
-    minime.writeDebug("%s disabled all characters.", {player.name})
+    minime.writeDebug("%s отключил всех персонажей.", {player.name})
     disable_all_characters(player)
 
   -- Toggle all
   elseif button == toggle_all_button_name then
-    minime.writeDebug("%s toggled all characters.", {player.name})
+    minime.writeDebug("%s переключил состояние всех персонажей.", {player.name})
     toggle_all_characters(player)
 
   -- Something else from our GUI has been clicked
   else
     update_buttons = false
-    minime.writeDebug("Nothing to do for \"%s\"!", {button})
+    minime.writeDebug("Нечего делать для \"%s\"!", {button})
   end
 
   if update_buttons then
-    minime.writeDebug("Must update buttons!")
+    minime.writeDebug("Нужно обновить кнопки!")
     update_all_buttons(player)
   end
 
@@ -1092,7 +1092,7 @@ available.on_gui_checked_state_changed = function(event)
   local player = minime.ascertain_player(event.player_index)
 
   if not minime.prefixed(checkbox.name, minime.available_chars_prefix) then
-    minime.entered_function({}, "leave", "Nothing to do for %s \""..minime.argprint(checkbox).."\"!")
+    minime.entered_function({}, "leave", "Нечего делать для %s \""..minime.argprint(checkbox).."\"!")
     return
   end
 

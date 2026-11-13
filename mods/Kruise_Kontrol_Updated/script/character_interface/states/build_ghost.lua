@@ -8,7 +8,7 @@ function Build_ghost.new(Character, target)
     {
         type = "build_ghost",
         character = Character,
-        target = target or error("No target?"),
+        target = target or error("Нет цели?"),
         check_index = nil
     }
     return setmetatable(state, Build_ghost.metatable)
@@ -116,7 +116,7 @@ function Build_ghost:update()
     end
 
     if not ghost_type[self.target.type] then
-        error("Non-ghost given to build ghost order?")
+        error("Для команды строительства указан объект, не являющийся призраком?")
     end
 
     if not self.item or not self.character:has_item(self.item.name, self.item.count) then

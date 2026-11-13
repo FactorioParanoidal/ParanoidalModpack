@@ -27,16 +27,16 @@ local function is_science_pack(name)
 end
 for _, name in ipairs(chain.names(require("prototypes.chains"))) do
     local technology = technologies[name]
-    if not technology then error("paranoidal-upgrade-tech: technology '" .. name .. "' was removed by another mod") end
+    if not technology then error("paranoidal-upgrade-tech: технология '" .. name .. "' удалена другим модом") end
     for _, prerequisite in ipairs(technology.prerequisites or {}) do
         if not technologies[prerequisite] then
-            error("paranoidal-upgrade-tech: '" .. name .. "' requires missing technology '" .. prerequisite .. "'")
+            error("paranoidal-upgrade-tech: '" .. name .. "' требует отсутствующую технологию '" .. prerequisite .. "'")
         end
     end
     for _, ingredient in ipairs(technology.unit and technology.unit.ingredients or {}) do
         local pack = ingredient[1] or ingredient.name
         if not is_science_pack(pack) then
-            error("paranoidal-upgrade-tech: '" .. name .. "' uses missing science pack '" .. tostring(pack) .. "'")
+            error("paranoidal-upgrade-tech: '" .. name .. "' использует отсутствующий научный пакет '" .. tostring(pack) .. "'")
         end
     end
 end

@@ -907,7 +907,7 @@ function AbstractSelector:updateItemList(event)
       end
     end
   else
-    event.message = "Empty list"
+    event.message = "Список пуст"
     Dispatcher:send("on_gui_message", event, self.classname)
   end
 

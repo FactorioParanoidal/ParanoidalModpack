@@ -23,7 +23,7 @@ function todo.import_tasks(encoded, player)
         local message = "Importing tasks failed for input %s. Result was %s. Please contact the mod author."
         todo.log(string.format(message, encoded, result))
         if (not todo.show_log(player)) then
-            player.print("Import failed. Please enable debug output and contact the author.")
+            player.print("Не удалось импортировать задачи. Включите отладочный вывод и свяжитесь с автором.")
         end
         return
     end

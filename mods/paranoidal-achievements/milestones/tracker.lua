@@ -77,7 +77,7 @@ local function print_milestone_reached(force, milestone)
         elseif milestone.type == "kill" then
             milestone_localised_name = prototypes.entity[milestone.name].localised_name
         else
-            error("Invalid milestone type! " .. milestone.type)
+            error("Недопустимый тип этапа: " .. milestone.type)
         end
 
         local message_type

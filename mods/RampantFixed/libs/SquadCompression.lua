@@ -625,7 +625,7 @@ function squadCompression.processCompression(map, squad, chunk, fullCompressAllo
 		else
 			if (chunk[BASE_DETECTION_PHEROMONE] > 7000) or (chunk[PLAYER_PHEROMONE] > PLAYER_PHEROMONE_GENERATOR_AMOUNT * 0.04) then	-- ~ 4 chunks
 				if debugMessages then
-					game.print("processCompression: squad#"..squad.groupNumber.." squadDecompress [gps=" .. squad.group.position.x .. "," .. squad.group.position.y .."]")	-- debug
+					game.print("processCompression: отряд №"..squad.groupNumber.." отряд разжат [gps=" .. squad.group.position.x .. "," .. squad.group.position.y .."]")	-- debug
 				end
 				squadCompression.squadDecompress(map.universe, map.surface, squad)	
 			elseif (not squad.smoothCompressed) and (chunk[BASE_DETECTION_PHEROMONE] > 4300) then	-- ~8 chunks; above the full-compression threshold (was 3874)
@@ -637,7 +637,7 @@ function squadCompression.processCompression(map, squad, chunk, fullCompressAllo
 				end
 				
 				if debugMessages then
-					game.print("processCompression: squad#"..squad.groupNumber.." squadSmoothCompress [gps=" .. squad.group.position.x .. "," .. squad.group.position.y .."]")	-- debug
+					game.print("processCompression: отряд №"..squad.groupNumber.." отряд плавно сжат [gps=" .. squad.group.position.x .. "," .. squad.group.position.y .."]")	-- debug
 				end	
 				squadSmoothCompress(map, squad, squadSize)	-- squadFullToSmoothCompress
 			end	

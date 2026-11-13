@@ -18,7 +18,7 @@ M.MAX_SPEED = 4           -- positive-quality workshops are capped at x4 speed (
 -- nil: no researchable recipe (treated as an average item).
 function M.science_factor(kinds)
     if kinds == nil then return 1 end
-    assert(type(kinds) == "number" and kinds >= 0, "Invalid science kind count")
+    assert(type(kinds) == "number" and kinds >= 0, "Недопустимое количество видов научных пакетов")
     if kinds <= 1 then return 0.2 end
     if kinds == 2 then return 1 end
     if kinds <= 4 then return 3 end
@@ -42,7 +42,7 @@ end
 
 local function check_grade(grade)
     assert(type(grade) == "number" and grade == math.floor(grade) and grade >= -5 and grade <= -1,
-        "Refinement needs a defect grade -5..-1")
+        "Для переработки нужна степень дефекта -5..-1")
 end
 
 -- One attempt. random() must be Factorio's deterministic generator.

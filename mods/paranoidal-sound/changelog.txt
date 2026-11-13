@@ -1,5 +1,7 @@
 ---------------------------------------------------------------------------------------------------
 Version: 9.0.0
+  Locale:
+    - Russian hardcoded player-facing text: 1 UI, chat, command-help and error-message literals; technical identifiers, format parameters and gameplay logic are unchanged.
 Date: 2026-11-07
   Changes:
     - Paranoidal packaging: moved standalone mock tests to the local test collection; all audio, including retained alternatives, is unchanged.

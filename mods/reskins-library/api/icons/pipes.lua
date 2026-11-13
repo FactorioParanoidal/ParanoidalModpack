@@ -110,8 +110,8 @@ function _pipes.get_icon(prototype, material_type, tier)
 	---@type data.IconData
 	local icon_datum = get_icon_datum(prototype.type, material_type)
 
-	assert(prototype, "Invalid parameter: 'prototype' must not be nil.")
-	assert(supported_types[prototype.type], "Invalid parameter: 'prototype' must be of a supported type.")
+	assert(prototype, "Недопустимый параметр: 'prototype' не должен быть nil.")
+	assert(supported_types[prototype.type], "Недопустимый параметр: 'prototype' должен иметь один из поддерживаемых типов.")
 
 	---@type DeferrableIconDatum|DeferrableIconData
 	local deferrable_icon

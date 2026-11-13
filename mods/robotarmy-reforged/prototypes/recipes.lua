@@ -40,7 +40,7 @@ local function ingredients(recipe_name, list)
       end
     end
     if not chosen then
-      error(string.format("robotarmy-reforged: no usable ingredient for %s among %s", recipe_name, serpent.line(alternatives)))
+      error(string.format("robotarmy-reforged: не найден подходящий ингредиент для %s среди %s", recipe_name, serpent.line(alternatives)))
     end
     local name, amount = chosen[1], chosen[2]
     if index[name] then -- two fallbacks resolved to the same item: merge them

@@ -39,11 +39,11 @@ local request_timeout_ticks = (60 * 5)
 --- @return flib.DictionaryStorage
 local function get_data(init_only)
   if not storage.__flib or not storage.__flib.dictionary then
-    error("Dictionary module was not properly initialized - ensure that all lifecycle events are handled.")
+    error("Модуль словарей неправильно инициализирован — убедитесь, что обрабатываются все события жизненного цикла.")
   end
   local data = storage.__flib.dictionary
   if init_only and data.init_ran then
-    error("Dictionaries cannot be modified after initialization.")
+    error("После инициализации словари изменять нельзя.")
   end
   return data
 end
@@ -294,7 +294,7 @@ function flib_dictionary.on_tick()
     local request = wip.last_batch_end
     if not request then
       -- TODO: Remove WIP because we actually finished somehow? This should never happen I think
-      error("We're screwed")
+      error("Нам конец")
     end
     wip.dict = request.dict
     wip.finished = false
@@ -394,7 +394,7 @@ function flib_dictionary.new(name, initial_strings)
   local data = get_data(true)
   local raw = data.raw
   if raw[name] then
-    error("Attempted to create dictionary '" .. name .. "' twice.")
+    error("Попытка создать словарь '" .. name .. "' повторно.")
   end
   raw[name] = initial_strings or {}
   if initial_strings then
@@ -410,7 +410,7 @@ function flib_dictionary.add(dict_name, key, localised)
   local data = get_data(true)
   local raw = data.raw[dict_name]
   if not raw then
-    error("Dictionary '" .. dict_name .. "' does not exist.")
+    error("Словарь '" .. dict_name .. "' не существует.")
   end
   if not raw[key] then
     data.raw_count = data.raw_count + 1
@@ -436,7 +436,7 @@ end
 function flib_dictionary.get(player_index, dict_name)
   local data = get_data()
   if not data.raw[dict_name] then
-    error("Dictionary '" .. dict_name .. "' does not exist.")
+    error("Словарь '" .. dict_name .. "' не существует.")
   end
   local language_dicts = flib_dictionary.get_all(player_index) or {}
   return language_dicts[dict_name]

@@ -7,7 +7,7 @@ function Repair.new(Character, target, distance)
     {
         type = "repair",
         character = Character,
-        target = target or error("No target?"),
+        target = target or error("Нет цели?"),
     }
     return setmetatable(state, Repair.metatable)
 end

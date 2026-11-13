@@ -1245,87 +1245,87 @@ local function update_debugging_selection(player_data)
 	local values = {
 		{
 			value="draw_clear_rendering",
-			tooltip="Clear rendering",
+			tooltip="Очистить визуализацию",
 			icon=("mpp_no_entity"),
 		},
 		{
 			value="draw_drill_struct",
-			tooltip="Draw drill struct overlay",
+			tooltip="Отрисовывать наложение структуры буровой установки",
 			icon=("entity/electric-mining-drill"),
 		},
 		{
 			value="draw_raw_drill_struct",
-			tooltip="Draw drill struct overlay",
+			tooltip="Отрисовывать наложение структуры буровой установки",
 			icon=("entity/electric-mining-drill"),
 		},
 		{
 			value="draw_pole_layout_simple",
-			tooltip="Draw power pole layout",
+			tooltip="Показать схему размещения опор ЛЭП",
 			icon=("entity/medium-electric-pole"),
 		},
 		{
 			value="draw_pole_layout_interleaved",
-			tooltip="Draw power pole layout compact",
+			tooltip="Показать компактную схему размещения опор ЛЭП",
 			icon=("entity/medium-electric-pole"),
 		},
 		{
 			value="draw_built_things",
-			tooltip="Draw built tile values",
+			tooltip="Показать значения построенных тайлов",
 			icon=("mpp_print_placement_info_enabled"),
 		},
 		{
 			value="draw_drill_convolution",
-			tooltip="Draw a drill convolution preview",
+			tooltip="Показать предварительный просмотр свёртки буровой установки",
 			icon=("mpp_debugging_grid_convolution"),
 		},
 		{
 			value="draw_power_grid",
-			tooltip="Draw power grid connectivity",
+			tooltip="Показать связность электросети",
 			icon=("entity/substation"),
 		},
 		{
 			value="draw_pole_joiner",
-			tooltip="Draw power pole joiner",
+			tooltip="Показать соединение опор ЛЭП",
 			icon=("entity/substation"),
 		},
 		{
 			value="draw_centricity",
-			tooltip="Draw layout centricity",
+			tooltip="Показать центричность схемы",
 			icon=("mpp_plus"),
 		},
 		{
 			value="draw_blueprint_data",
-			tooltip="Draw blueprint entities",
+			tooltip="Показать сущности чертежа",
 			icon=("item/blueprint"),
 		},
 		{
 			value="draw_deconstruct_preview",
-			tooltip="Draw deconstruct preview",
+			tooltip="Показать предварительный просмотр сноса",
 			icon=("item/deconstruction-planner"),
 		},
 		{
 			value="draw_can_place_entity",
-			tooltip="Draw entity placement checks",
+			tooltip="Показать проверки размещения сущностей",
 			icon=("item/blueprint"),
 		},
 		{
 			value="draw_inserter_rotation_preview",
-			tooltip="Draw inserter rotation preview",
+			tooltip="Показать предварительный просмотр поворота манипулятора",
 			icon=("item/inserter"),
 		},
 		{
 			value="draw_cliff_collisions",
-			tooltip="Draw cliff collisions (area select)",
+			tooltip="Показать столкновения со скалами (выделение области)",
 			icon=("entity/cliff"),
 		},
 		{
 			value="draw_consumed_resources",
-			tooltip="Draw consumed resource tiles",
+			tooltip="Показать тайлы израсходованных ресурсов",
 			icon=("entity/copper-ore"),
 		},
 		{
 			value="draw_belt_specification",
-			tooltip="Draw belt specification",
+			tooltip="Показать параметры конвейера",
 			icon=("item/transport-belt"),
 		}
 	}
@@ -1447,7 +1447,7 @@ local function on_gui_click(event)
 
 			player.mod_settings["mpp-dump-heuristics-data"] = {value = not setting}
 
-			player.print("Set dumping option to "..tostring(not setting))
+			player.print("Параметр выгрузки данных установлен в "..tostring(not setting))
 			return
 		end
 

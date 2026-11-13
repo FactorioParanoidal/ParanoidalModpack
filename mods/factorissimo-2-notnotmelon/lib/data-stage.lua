@@ -21,7 +21,7 @@ end
 ---@return data.AnyPrototype
 factorissimo.merge = function(old, new)
     if not old then
-        error("Failed to factorissimo.merge: Old prototype is nil", 2)
+        error("Не удалось выполнить factorissimo.merge: старый прототип отсутствует", 2)
     end
 
     old = table.deepcopy(old)

@@ -107,13 +107,13 @@ local function script_event_triggered(event)
     local target = event.target_position
     
     if not source then 
-        game.print("Nanobots debug: No source entity for event")
+        game.print("Отладка Nanobots: у события нет исходной сущности")
         return
     end
     
     local player = source.player
     if not player then
-        game.print("Nanobots debug: Source entity for event has no attached player")
+        game.print("Отладка Nanobots: у исходной сущности события нет связанного игрока")
         return
     end
     
@@ -416,7 +416,7 @@ function has_supplies_for_nanobot_action(entity, action, player)
     end
     
     --there should be no other cases
-    game.print("Bad nanobot action type? " .. action)
+    game.print("Недопустимый тип действия нанобота? " .. action)
     return false
 end
 
@@ -655,7 +655,7 @@ end
 --- @return boolean whether an action was successfully performed.
 function NanobotActions.explode_cliff(entity, player)
     if config.DEBUG then
-        game.print("In NA:explode_cliff")
+        game.print("Вызов NA:explode_cliff")
     end
     
     local pdata = storage.players[player.index]
@@ -684,7 +684,7 @@ end
 --- @return boolean whether an action was successfully performed. True even if the action was only partially completed.
 function NanobotActions.build(ghost, player)
     if config.DEBUG then
-        game.print("In NA:build")
+        game.print("Вызов NA:build")
     end
     
     if are_items_under_ghost(ghost) then
@@ -703,7 +703,7 @@ function NanobotActions.build(ghost, player)
         placing_item = remove_any_from_player(get_quality_placing_items(proto, quality), player)
         
         if config.DEBUG then
-            game.print("Removed items")
+            game.print("Предметы удалены")
         end
     else
         placing_item = { health = 1 }
@@ -718,7 +718,7 @@ function NanobotActions.build(ghost, player)
     if success then
         create_projectile('nano-projectile-constructors', ghost.surface, player.character, ghost.position)
         if config.DEBUG then
-            game.print("Fired projectile")
+            game.print("Снаряд выпущен")
         end
         return true
     else
@@ -735,7 +735,7 @@ end
 --- @return boolean whether an action was successfully performed. True even if the action was only partially completed.
 function NanobotActions.upgrade(entity, player)
     if config.DEBUG then
-        game.print("In NA:upgrade")
+        game.print("Вызов NA:upgrade")
     end
     
     local proto, quality = entity.get_upgrade_target()
@@ -745,7 +745,7 @@ function NanobotActions.upgrade(entity, player)
         placing_item = remove_any_from_player(get_quality_placing_items(proto, quality), player)
         
         if config.DEBUG then
-            game.print("Removed items")
+            game.print("Предметы удалены")
         end
     else
         placing_item = { health = 1 }
@@ -760,7 +760,7 @@ function NanobotActions.upgrade(entity, player)
     if success then
         create_projectile('nano-projectile-upgraders', entity.surface, player.character, entity.position)
         if config.DEBUG then
-            game.print("Fired projectile")
+            game.print("Снаряд выпущен")
         end
         return true
     else
@@ -768,7 +768,7 @@ function NanobotActions.upgrade(entity, player)
             insert_or_spill_items(player.character, placing_item)
         end
         if config.DEBUG then
-            game.print("Items refunded")
+            game.print("Предметы возвращены")
         end
         return false
     end
@@ -780,7 +780,7 @@ end
 --- @return boolean whether an action was successfully performed. True even if the action was only partially completed.
 function NanobotActions.build_tile(ghost, player)
     if config.DEBUG then
-        game.print("In NA:build_tile")
+        game.print("Вызов NA:build_tile")
     end
     
     local proto = ghost.ghost_prototype
@@ -789,7 +789,7 @@ function NanobotActions.build_tile(ghost, player)
         placing_item = remove_any_from_player(proto.items_to_place_this, player)
         
         if config.DEBUG then
-            game.print("Removed items")
+            game.print("Предметы удалены")
         end
     end
     
@@ -802,7 +802,7 @@ function NanobotActions.build_tile(ghost, player)
     if success then
         create_projectile('nano-projectile-constructors', ghost.surface, player.character, ghost.position)
         if config.DEBUG then
-            game.print("Fired projectile")
+            game.print("Снаряд выпущен")
         end
         return true
     else
@@ -819,7 +819,7 @@ end
 --- @return boolean whether an action was successfully performed. True even if the action was only partially completed.
 function NanobotActions.upgrade_tile(ghost, player)
     if config.DEBUG then
-        game.print("In NA:upgrade_tile")
+        game.print("Вызов NA:upgrade_tile")
     end
     
     local proto = ghost.ghost_prototype
@@ -828,7 +828,7 @@ function NanobotActions.upgrade_tile(ghost, player)
         placing_item = remove_any_from_player(proto.items_to_place_this, player)
         
         if config.DEBUG then
-            game.print("Removed items")
+            game.print("Предметы удалены")
         end
     end
     
@@ -841,7 +841,7 @@ function NanobotActions.upgrade_tile(ghost, player)
     if success then
         create_projectile('nano-projectile-upgraders', ghost.surface, player.character, ghost.position)
         if config.DEBUG then
-            game.print("Fired projectile")
+            game.print("Снаряд выпущен")
         end
         return true
     else
@@ -858,7 +858,7 @@ end
 --- @return boolean whether an action was successfully performed.
 function NanobotActions.empty(entity, player)
     if config.DEBUG then
-        game.print("In NA:empty")
+        game.print("Вызов NA:empty")
     end
     
     if not player.cheat_mode then
@@ -880,7 +880,7 @@ end
 --- @return boolean whether an action was successfully performed.
 function NanobotActions.deconstruct(entity, player)
     if config.DEBUG then
-        game.print("In NA:deconstruct")
+        game.print("Вызов NA:deconstruct")
     end
     
     if not entity.minable then
@@ -888,7 +888,7 @@ function NanobotActions.deconstruct(entity, player)
     end
     
     if config.DEBUG then
-        game.print("Entity is minable")
+        game.print("Сущность можно добыть")
     end
     
     local data = { type = "deconstruct",
@@ -907,7 +907,7 @@ end
 --- @return boolean whether an action was successfully performed.
 function NanobotActions.clear_ground(ghost, player)
     if config.DEBUG then
-        game.print("In NA:clear_ground")
+        game.print("Вызов NA:clear_ground")
     end
     
     local surface, position, bounding_box = ghost.surface, ghost.position, ghost.ghost_prototype.selection_box
@@ -925,22 +925,22 @@ function NanobotActions.clear_ground(ghost, player)
     end
     
     if not target_item then
-        game.print("Nanobots error: No clearable stacks found by clear_ground action!")
+        game.print("Ошибка Nanobots: действие clear_ground не нашло предметов, которые можно убрать!")
         return false
     end
     
     if not target_item.valid then
-        game.print("Nanobots error: Target item to clear from ground invalid!")
+        game.print("Ошибка Nanobots: целевой предмет для уборки с земли недействителен!")
         return false
     end
     
     if not target_item.minable then
-        game.print("Nanobots error: Target item to clear from ground not minable!")
+        game.print("Ошибка Nanobots: целевой предмет для уборки с земли нельзя добыть!")
         return false
     end
     
     if config.DEBUG then
-        game.print("Found minable stack")
+        game.print("Найдена стопка, которую можно добыть")
     end
     
     local data = { type = "deconstruct",
@@ -960,7 +960,7 @@ end
 --- @return boolean whether an action was successfully performed.
 function NanobotActions.repair(entity, player)
     if config.DEBUG then
-        game.print("In NA:repair")
+        game.print("Вызов NA:repair")
     end
     
     local data = { type = "repair" }
@@ -980,7 +980,7 @@ end
 --- @return boolean whether an action was successfully performed.
 function NanobotActions.removal_request(request_proxy, player)
     if config.DEBUG then
-        game.print("In NA:removal_request")
+        game.print("Вызов NA:removal_request")
     end
     
     local entity = request_proxy.proxy_target
@@ -1007,7 +1007,7 @@ end
 --- @return boolean whether an action was successfully performed.
 function NanobotActions.insert_request(request_proxy, player)
     if config.DEBUG then
-        game.print("In NA:insert_request")
+        game.print("Вызов NA:insert_request")
     end
     
     local entity = request_proxy.proxy_target
@@ -1048,7 +1048,7 @@ end
 --- @return boolean whether an action was successfully performed.
 function NanobotActions.destroy_tree(tree, player)
     if config.DEBUG then
-        game.print("In NA:destroy_tree")
+        game.print("Вызов NA:destroy_tree")
     end
     
     local data = { type = "destroy_tree" }
@@ -1066,7 +1066,7 @@ end
 --- @return boolean whether an action was successfully performed.
 function NanobotActions.destroy_rock(rock, player)
     if config.DEBUG then
-        game.print("In NA:destroy_rock")
+        game.print("Вызов NA:destroy_rock")
     end
     
     local data = { type = "destroy_rock" }
@@ -1084,14 +1084,14 @@ end
 --- @return boolean whether an action was successfully performed.
 function NanobotActions.fill_water(tile, player)
     if config.DEBUG then
-        game.print("In NA:fill_water")
+        game.print("Вызов NA:fill_water")
     end
     
     local placing_item
     if not player.cheat_mode then 
         placing_item = remove_any_from_player({{ name = 'landfill', count = 1 }}, player, false)
         if config.DEBUG then
-            game.print("Removed items")
+            game.print("Предметы удалены")
         end
     end
     
@@ -1104,7 +1104,7 @@ function NanobotActions.fill_water(tile, player)
     if success then
         create_projectile('nano-projectile-pavers', tile.surface, player.character, tile.position)
         if config.DEBUG then
-            game.print("Fired projectile")
+            game.print("Снаряд выпущен")
         end
         return true
     else
@@ -1119,11 +1119,11 @@ end
 --- @param position MapPosition the position to return from
 create_nano_returners = function(entity, position)
     if config.DEBUG then
-        game.print("In create_nano_returners")
+        game.print("Вызов create_nano_returners")
     end
     create_projectile('nano-projectile-return', entity.surface, position, entity, nil, 0.3)
     if config.DEBUG then
-        game.print("Created returner")
+        game.print("Возвращающийся нанобот создан")
     end
 end
 
@@ -1131,29 +1131,29 @@ end
 --- @param target MapPosition the position of the entity to build
 complete_build_action = function(player, target)
     if config.DEBUG then
-        game.print("In complete_build_action")
+        game.print("Вызов complete_build_action")
     end
     
     local data = remove_pending_action(target)
     if not data then
-        game.print("Nanobots error: Pending action was not found for build!")
+        game.print("Ошибка Nanobots: ожидаемое действие постройки не найдено!")
         return false
     end
     
     if not (data.type == "build" or data.type == "build_tile") then
-        game.print("Nanobots error: Pending action for build projectile was not build!")
+        game.print("Ошибка Nanobots: ожидаемое действие для снаряда постройки не было постройкой!")
         return false
     end
     
     if data.player ~= player then
-        game.print("Nanobots error: Pending build action registered to different player!")
+        game.print("Ошибка Nanobots: ожидаемое действие постройки зарегистрировано за другим игроком!")
         return false
     end
     
     local ghost = data.ghost
     if not is_valid_nanobot_target(ghost) then
         if config.DEBUG then
-            game.print("Build target no longer valid")
+            game.print("Цель постройки больше недействительна")
         end
         --refund reserved item
         if not player.cheat_mode then
@@ -1169,7 +1169,7 @@ complete_build_action = function(player, target)
 
     if not revived then
         if config.DEBUG then
-            game.print("Revive failed")
+            game.print("Восстановление не удалось")
         end
         --refund reserved item
         if not player.cheat_mode then
@@ -1180,12 +1180,12 @@ complete_build_action = function(player, target)
     end
     
     if config.DEBUG then
-        game.print("Revived ghost")
+        game.print("Призрак восстановлен")
     end
 
     if not tile_mode then
         if not entity then
-            game.print("Nanobots error: Successful revive resulted in no entity?")
+            game.print("Ошибка Nanobots: восстановление прошло успешно, но сущность не появилась?")
             return
         end
         
@@ -1199,22 +1199,22 @@ end
 --- @param target MapPosition the position of the entity to deconstruct
 complete_deconstruct_action = function(player, target)
     if config.DEBUG then
-        game.print("In complete_deconstruct_action")
+        game.print("Вызов complete_deconstruct_action")
     end
     
     local data = remove_pending_action(target)
     if not data then
-        game.print("Nanobots error: Pending action was not found for deconstruct!")
+        game.print("Ошибка Nanobots: ожидаемое действие демонтажа не найдено!")
         return false
     end
     
     if data.type ~= "deconstruct" then
-        game.print("Nanobots error: Pending action for deconstruct projectile was not deconstruct!")
+        game.print("Ошибка Nanobots: ожидаемое действие для снаряда демонтажа не было демонтажем!")
         return false
     end
     
     if data.player ~= player then
-        game.print("Nanobots error: Pending deconstruct action registered to different player!")
+        game.print("Ошибка Nanobots: ожидаемое действие демонтажа зарегистрировано за другим игроком!")
         return false
     end
     
@@ -1222,7 +1222,7 @@ complete_deconstruct_action = function(player, target)
     
     if not is_valid_nanobot_target(entity) then
         if config.DEBUG then
-            game.print("Deconstruct target no longer valid")
+            game.print("Цель демонтажа больше недействительна")
         end
         
         return false
@@ -1239,7 +1239,7 @@ complete_deconstruct_action = function(player, target)
     end
     
     if config.DEBUG then
-        game.print("Deconstructed successfully")
+        game.print("Демонтаж выполнен успешно")
     end
 end
 
@@ -1247,17 +1247,17 @@ end
 --- @param target MapPosition the position of the entity to build
 complete_upgrade_action = function(player, target)
     if config.DEBUG then
-        game.print("In complete_upgrade_action")
+        game.print("Вызов complete_upgrade_action")
     end
     
     local data = remove_pending_action(target)
     if not data then
-        game.print("Nanobots error: Pending action was not found for upgrade!")
+        game.print("Ошибка Nanobots: ожидаемое действие улучшения не найдено!")
         return false
     end
     
     if data.player ~= player then
-        game.print("Nanobots error: Pending upgrade action registered to different player!")
+        game.print("Ошибка Nanobots: ожидаемое действие улучшения зарегистрировано за другим игроком!")
         return false
     end
     
@@ -1267,14 +1267,14 @@ complete_upgrade_action = function(player, target)
     end
     
     if data.type ~= "upgrade" then
-        game.print("Nanobots error: Pending action for upgrade projectile was not upgrade!")
+        game.print("Ошибка Nanobots: ожидаемое действие для снаряда улучшения не было улучшением!")
         return false
     end
     
     local entity = data.entity
     if not is_valid_nanobot_target(entity) then
         if config.DEBUG then
-            game.print("Upgrade target no longer valid")
+            game.print("Цель улучшения больше недействительна")
         end
         --refund reserved item
         if not player.cheat_mode then
@@ -1290,7 +1290,7 @@ complete_upgrade_action = function(player, target)
     local belt_type = entity.type == 'underground-belt' and entity.belt_to_ground_type or nil
     
     if config.DEBUG then
-        game.print("Attempting create entity")
+        game.print("Попытка создать сущность")
     end
     
     local upgrade = surface.create_entity({
@@ -1308,12 +1308,12 @@ complete_upgrade_action = function(player, target)
     })
     
     if config.DEBUG then
-        game.print("Create entity passed")
+        game.print("Вызов create_entity прошёл успешно")
     end
 
     if not upgrade then
         if config.DEBUG then
-            game.print("Upgrade (create_entity) failed")
+            game.print("Не удалось улучшить (create_entity)")
         end
         --refund reserved item
         if not player.cheat_mode then
@@ -1333,7 +1333,7 @@ complete_upgrade_action = function(player, target)
     end
     
     if config.DEBUG then
-        game.print("Upgrade successful")
+        game.print("Улучшение выполнено успешно")
     end
 
 end
@@ -1342,18 +1342,18 @@ end
 --- @param target MapPosition the position of the entity to build
 complete_upgrade_tile_action = function(player, target, data)
     if config.DEBUG then
-        game.print("In complete_upgrade_tile_action")
+        game.print("Вызов complete_upgrade_tile_action")
     end
     
     if not (data.type == "upgrade_tile") then
-        game.print("Nanobots error: In upgrade tile method but action is not upgrade tile!")
+        game.print("Ошибка Nanobots: в методе улучшения плитки передано действие не типа «улучшение плитки»!")
         return false
     end
     
     local ghost = data.ghost
     if not is_valid_nanobot_target(ghost) then
         if config.DEBUG then
-            game.print("Build target no longer valid")
+            game.print("Цель строительства больше недействительна")
         end
         --refund reserved item
         if not player.cheat_mode then
@@ -1370,7 +1370,7 @@ complete_upgrade_tile_action = function(player, target, data)
 
     if not tile_was_mined then
         if config.DEBUG then
-            game.print("Mining old tile failed")
+            game.print("Не удалось добыть старую плитку")
         end
         --refund reserved item
         if not player.cheat_mode then
@@ -1381,7 +1381,7 @@ complete_upgrade_tile_action = function(player, target, data)
     end
     
     if config.DEBUG then
-        game.print("Mined old tile")
+        game.print("Старая плитка добыта")
     end
 
     surface.set_tiles({target_tile}, true, true, true, true)
@@ -1395,22 +1395,22 @@ end
 --- @param target MapPosition the position of the tile to pave
 complete_pave_action = function(player, target)
     if config.DEBUG then
-        game.print("In complete_pave_action")
+        game.print("Вызов complete_pave_action")
     end
     
     local data = remove_pending_action(target)
     if not data then
-        game.print("Nanobots error: Pending action was not found for pave!")
+        game.print("Ошибка Nanobots: не найдено отложенное действие укладки!")
         return false
     end
     
     if not (data.type == "pave") then
-        game.print("Nanobots error: Pending action for pave projectile was not pave!")
+        game.print("Ошибка Nanobots: отложенное действие для снаряда укладки не является укладкой!")
         return false
     end
     
     if data.player ~= player then
-        game.print("Nanobots error: Pending pave action registered to different player!")
+        game.print("Ошибка Nanobots: отложенное действие укладки зарегистрировано для другого игрока!")
         return false
     end
     
@@ -1418,7 +1418,7 @@ complete_pave_action = function(player, target)
     local existing_tile = surface.get_tile(target)
     local tile_name = data.item.name --this is a BAD PLAN but it might work anyway
     if config.DEBUG then
-        game.print("Tile name: " .. tile_name)
+        game.print("Имя плитки: " .. tile_name)
     end
     local target_tile = {name = tile_name, position = target}
 
@@ -1431,17 +1431,17 @@ end
 --- @param target MapPosition the position of the entity to repair
 complete_automatic_action = function(player, target)
     if config.DEBUG then
-        game.print("In complete_automatic_action")
+        game.print("Вызов complete_automatic_action")
     end
     
     local data = remove_pending_action(target)
     if not data then
-        game.print("Nanobots error: Pending automatic action was not found!")
+        game.print("Ошибка Nanobots: не найдено отложенное автоматическое действие!")
         return false
     end
     
     if data.type ~= "repair" and data.type ~= "destroy_tree" and data.type ~= "destroy_rock" then
-        game.print("Nanobots error: Pending automatic action not of an automatic type!")
+        game.print("Ошибка Nanobots: отложенное действие не относится к автоматическим действиям!")
         return false
     end
 end
@@ -1642,7 +1642,7 @@ transfer_requested_from_player = function(entity, plans, player, at_least_one)
                 if not transferred then
                     if orig_player_stack_count == player_stack.count then
                         --none were transferred
-                        game.print("Nanobots error: Could not transfer any items of matching stacks!")
+                        game.print("Ошибка Nanobots: не удалось переместить ни одного предмета из подходящих стеков!")
                         return false, plans
                     end
                     --some were transferred, so we can still work with this
@@ -1651,7 +1651,7 @@ transfer_requested_from_player = function(entity, plans, player, at_least_one)
                 --find the amount actually transferred
                 count = orig_player_stack_count - player_stack.count
                 if count < 0 then
-                    game.print("Nanobots error: Transferred a negative amount of items?")
+                    game.print("Ошибка Nanobots: перемещено отрицательное количество предметов?")
                     return false, plans
                 end
                 
@@ -1759,7 +1759,7 @@ cheat_insert_all_requests = function(entity, plans)
                     stack.set_stack(new_stack)
                 else
                     --...we have no recourse currently
-                    game.print("Nanobots error! Set stack in cheat_insert_all_requests failed!")
+                    game.print("Ошибка Nanobots! Не удалось установить стек в cheat_insert_all_requests!")
                 end
             else
                 --we assume they're the correct item, or there'd be a removal request as well (which takes priority)
@@ -1814,7 +1814,7 @@ insert_contents_to_player = function(entity, player, at_least_one)
                     if test_stack.count ~= 0 then
                         local count = inv.remove(test_stack)
                         if count ~= test_stack.count then
-                            game.print("Nanobots error: Could not remove all items inserted!")
+                            game.print("Ошибка Nanobots: не удалось удалить все добавленные предметы!")
                             test_stack.count = count
                             remove_items_from_player(test_stack, player)
                         end
@@ -1872,7 +1872,7 @@ insert_requested_to_player = function(entity, plans, player, at_least_one)
                     
                     if original_stack.count < 0 then
                         --this is logically impossible, but who the fuck knows
-                        game.print("Nanobots error: Removed more items than present!")
+                        game.print("Ошибка Nanobots: удалено больше предметов, чем было!")
                         return false, plans
                     end 
                     
@@ -2032,7 +2032,7 @@ create_projectile = function(name, surface, source, target, speed)
     local force = source.force or target.force or 'player'
     local position = source.position or source
     if config.DEBUG then
-        game.print("Creating projectile")
+        game.print("Создание снаряда")
     end
     return surface.create_entity { name = name, force = force, position = position, source = source, target = target, speed = speed }
 end

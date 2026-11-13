@@ -204,7 +204,7 @@ function retrigger_train_calculation(print_message)
 		end
 	end
 	if print_message then
-		game.print("All ".. nbtrains .. " train capacities recalculated.")
+		game.print("Пересчитана вместимость поездов: ".. nbtrains .. " .")
 	end
 	log("Recalculated "..nbtrains.." trains")
 end

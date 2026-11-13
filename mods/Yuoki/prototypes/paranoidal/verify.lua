@@ -15,6 +15,6 @@ end
 table.sort(missing)
 table.sort(empty)
 if #missing > 0 or #empty > 0 then
-	error("Yuoki (Paranoidal): recipes without a technology: " .. table.concat(missing, ", ")
-		.. "\ntechnologies without effects: " .. table.concat(empty, ", "))
+	error("Yuoki (Paranoidal): рецепты без технологии: " .. table.concat(missing, ", ")
+		.. "\nтехнологии без эффектов: " .. table.concat(empty, ", "))
 end

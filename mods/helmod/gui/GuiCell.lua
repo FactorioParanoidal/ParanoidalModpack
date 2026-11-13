@@ -673,7 +673,7 @@ function GuiCellRecipe:create(parent)
     self:add_mask(recipe_icon, color)
 
     if self.m_broken == true then
-        recipe_icon.tooltip = "ERROR: Recipe " .. recipe.name .. " not exist in game"
+        recipe_icon.tooltip = "ОШИБКА: Рецепт " .. recipe.name .. " not exist in game"
         recipe_icon.sprite = "utility/warning_icon"
         row1.style = "helmod_frame_element_w50_red_1"
     end
@@ -823,7 +823,7 @@ function GuiCellBlock:create(parent)
 
             GuiElement.infoRecipe(button, first_recipe)
             if recipe_prototype:native() == nil then
-                button.tooltip = "ERROR: Recipe " .. element.name .. " not exist in game"
+                button.tooltip = "ОШИБКА: Рецепт " .. element.name .. " not exist in game"
                 button.sprite = "utility/warning_icon"
                 row1.style = "helmod_frame_element_w30_red_1"
             end
@@ -913,7 +913,7 @@ function GuiCellBlockM:create(parent)
 
             GuiElement.infoRecipe(button, first_recipe)
             if recipe_prototype:native() == nil then
-                button.tooltip = "ERROR: Recipe " .. element.name .. " not exist in game"
+                button.tooltip = "ОШИБКА: Рецепт " .. element.name .. " not exist in game"
                 button.sprite = "utility/warning_icon"
                 row1.style = "helmod_frame_element_w30_red_1"
             end

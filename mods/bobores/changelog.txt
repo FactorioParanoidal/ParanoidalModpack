@@ -1,5 +1,7 @@
 ---------------------------------------------------------------------------------------------------
 Version: 2.1.2
+  Locale:
+    - Russian hardcoded player-facing text: 1 UI, chat, command-help and error-message literals; technical identifiers, format parameters and gameplay logic are unchanged.
 Date: 09. 06. 2026
   Changes:
     - Paranoidal: vanilla resource stack-size overrides moved to paranoidal-stack-sizes; resource generation and weights are unchanged.

@@ -1,5 +1,7 @@
 ---------------------------------------------------------------------------------------------------
 Version: 0.1.6
+  Locale:
+    - Russian hardcoded player-facing text: 1 UI, chat, command-help and error-message literals; technical identifiers, format parameters and gameplay logic are unchanged.
 Date: 21. 10. 2024
   Changes:
     - Updated for Factorio 2.0. This is a transitory update to make the mod functional. There will be another update to account for the changed inserter mechanics. Meanwhile, as always, the stopwatch command remains the ultimate arbiter on inserter throughput and will report the correct number.

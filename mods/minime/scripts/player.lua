@@ -14,7 +14,7 @@ minime_player.initialize_player_previews = function(player, flags)
     minime.arg_err(player, "player specification")
   end
 
-  minime.assert(flags, {"table", "nil"}, "flags or nil")
+  minime.assert(flags, {"table", "nil"}, "флаги или nil")
   -- If called from minime_update.armor, we won't call it back!
   local ignore_armor = flags and flags.ignore_armor
 
@@ -27,7 +27,7 @@ minime_player.initialize_player_previews = function(player, flags)
   local player_chars = mod.player_data[p].available_characters
 minime.show("player_chars", player_chars)
   if minime.character_selector then
-    minime.writeDebug("Character selector is active!")
+    minime.writeDebug("Выбор персонажа активен!")
 
     -- Find all character prototypes
     local characters = prototypes.get_entity_filtered({
@@ -42,7 +42,7 @@ minime.show("player_chars", player_chars)
     local pos = {(p * offset) - offset, 0}
 
     -- Look for preview characters
-    minime.writeDebug("Looking for preview characters.")
+    minime.writeDebug("Ищу персонажей для предпросмотра.")
     local remove_these = {}
     for c_name, c_data in pairs(mod.minime_characters) do
 minime.show(c_name, c_data)
@@ -54,11 +54,11 @@ minime.show(c_name, c_data)
         minime.writeDebugNewBlock("Is character \"%s\" available to player?",
                                   {c_name})
         if player_chars and player_chars[c_name] then
-          minime.writeDebug("Yes!")
+          minime.writeDebug("Да!")
 
           if not (c_data.preview and c_data.preview.surface and
                                       c_data.preview.surface.valid) then
-            minime.writeDebug("Must initialize mod.minime_character[%s].preview!",
+            minime.writeDebug("Необходимо инициализировать mod.minime_character[%s].preview!",
                               {c_name})
             minime_character.initialize_character_preview(c_name)
           end
@@ -73,7 +73,7 @@ minime.show("chars[p]", chars[p])
           if not (chars[p] and chars[p].valid) then
             chars[p] = surface.find_entity(c_name, pos)
             if chars[p] and chars[p].valid then
-              minime.writeDebug("Reusing existing preview %s for player %s!",
+              minime.writeDebug("Повторно использую существующий предпросмотр %s для игрока %s!",
                                 {minime.argprint(chars[p]), minime.argprint(p)})
             else
               chars[p] = surface.create_entity({
@@ -82,36 +82,36 @@ minime.show("chars[p]", chars[p])
                 force = player.force,
                 direction = defines.direction.south,
               })
-              minime.writeDebug("Created preview %s for player %s!",
+              minime.writeDebug("Создан предпросмотр %s для игрока %s!",
                                 {minime.argprint(chars[p]), minime.argprint(p)})
             end
           end
 
           if chars[p] and chars[p].valid and chars[p].active then
             chars[p].disabled_by_script = true -- Factorio 2.1: LuaEntity::active is read-only
-            minime.writeDebug("Made %s inactive!", {minime.argprint(chars[p])})
+            minime.writeDebug("Перевёл %s в неактивное состояние!", {minime.argprint(chars[p])})
           end
 
         -- Player turned off this character
         elseif player_chars then
-          minime.writeDebug("No: player must have it turned off!")
+          minime.writeDebug("Нет: игрок должен оставить его выключенным!")
 
         -- For some reason, player_chars is still nil
         else
-          minime.writeDebug("No: player_chars not yet initialized!")
+          minime.writeDebug("Нет: player_chars ещё не инициализирована!")
         end
 
       -- Character prototype has been removed from game. We'll mark it for removal
       -- from the table (removing it now would mess with the table iterator).
       else
-        minime.writeDebug("Marking \"%s\" for removal.", {c_name})
+        minime.writeDebug("Помечаю \"%s\" для удаления.", {c_name})
         table.insert(remove_these, c_name)
       end
     end
 
     -- Remove obsolete characters from character list
     for c, c_name in pairs(remove_these) do
-      minime.writeDebug("Removing mod.minime_characters.%s!", {c_name})
+      minime.writeDebug("Удаляю mod.minime_characters.%s!", {c_name})
       mod.minime_characters[c_name] = nil
     end
 
@@ -119,9 +119,9 @@ minime.show("chars[p]", chars[p])
     -- character, so that the previews will really reflect the player's appearance!
     if player.character then
       if ignore_armor then
-        minime.writeDebug("Skipping callback to minime_player.update_armor!")
+        minime.writeDebug("Пропускаю вызов minime_player.update_armor!")
       else
-        minime.writeDebug("Updating armors of preview characters!")
+        minime.writeDebug("Обновляю броню персонажей предпросмотра!")
         minime_player.update_armor({player_index = p})
       end
     end
@@ -234,7 +234,7 @@ minime.show("chars[p]", chars[p])
     if chars[p] and chars[p].valid then
       chars[p].destroy()
       chars[p] = nil
-      minime.writeDebug("Removed preview character \"%s\" for player %s!",
+      minime.writeDebug("Удалён персонаж предпросмотра \"%s\" у игрока %s!",
                         {char, p})
     end
     --~ if surface and surface.valid and not next(chars[p]) then
@@ -251,7 +251,7 @@ minime.show("surface", surface)
 minime.show("chars", chars)
 minime.show("next(chars)", next(chars), "line")
     if surface and surface.valid and not next(chars) then
-      minime.writeDebug("Removing %s!", {minime.argprint(surface)})
+      minime.writeDebug("Удаляю %s!", {minime.argprint(surface)})
       minime_surfaces.delete_surface(surface)
 minime.show("surface", surface)
     end
@@ -292,8 +292,8 @@ end
 minime_player.update_global_settings = function(setting, flags)
   minime.entered_function({setting, flags})
 
-  minime.assert(setting, {"string", "nil", "table"}, "setting name or nil")
-  minime.assert(flags, {"table", "nil"}, "table of flags or nil")
+  minime.assert(setting, {"string", "nil", "table"}, "имя настройки или nil")
+  minime.assert(flags, {"table", "nil"}, "таблица флагов или nil")
 
   -- If only flags have been passed on, we might end up with a table for setting
   -- and nil for flags!
@@ -301,7 +301,7 @@ minime_player.update_global_settings = function(setting, flags)
     if not flags then
       flags = table.deepcopy(setting)
       setting = nil
-      minime.writeDebug("Moved \"setting\" to \"flags\"!")
+      minime.writeDebug("Перенёс \"setting\" в \"flags\"!")
     else
       minime.arg_err(setting, "setting name")
     end
@@ -339,7 +339,7 @@ minime.show("keep_gui", keep_gui)
 
       -- We won't do anything if setting doesn't differ from stored value!
       if stored[s_name] ~= value then
-        minime.writeDebug("Storing new value of setting %s!",
+        minime.writeDebug("Сохраняю новое значение настройки %s!",
                           {minime.enquote(s_name)})
         stored[s_name] = value
         minime.writeDebug("mod.map_settings[\"%s\"]: %s", {
@@ -352,12 +352,12 @@ minime.show("keep_gui", keep_gui)
       if s_name == "show_removal_buttons" then
           -- Don't initialize GUIs if called from on_init as we have no player data yet!
           if keep_gui then
-            minime.writeDebug("Won't initialize GUIs yet!")
+            minime.writeDebug("Пока не инициализирую GUI!")
 
           -- Rebuild GUIs if called from on_runtime_mod_setting_changed
           else
             for p, player in pairs(game.players) do
-              minime.writeDebug("Initializing GUIs of %s!", {minime.argprint(player)})
+              minime.writeDebug("Инициализирую GUI для %s!", {minime.argprint(player)})
               minime_gui.init_guis(player)
             end
           end
@@ -367,7 +367,7 @@ minime.show("keep_gui", keep_gui)
       --~ elseif s_name == "create_corpse_on_leaving" then
         --~ stored[s_name] = game.is_multiplayer() and stored[s_name]
       else
-        minime.writeDebug("Value of setting \"%s\" hasn't changed!")
+        minime.writeDebug("Значение настройки \"%s\" не изменилось!")
       end
     end
   end
@@ -386,7 +386,7 @@ local function update_player_settings(player, setting)
     minime.arg_err(player, "player specification")
   end
 
-  minime.assert(setting, {"string", "nil"}, "setting name or nil")
+  minime.assert(setting, {"string", "nil"}, "имя настройки или nil")
   local update_all = not setting
 minime.show("update_all", update_all)
 
@@ -401,7 +401,7 @@ minime.show("update_all", update_all)
   local s, s_name, v
 
   local log_setting_name = function(name)
-    minime.writeDebug("Trying to update setting %s!", {minime.enquote(name)})
+    minime.writeDebug("Пытаюсь обновить настройку %s!", {minime.enquote(name)})
   end
   local log_setting_value = function(name)
 minime.show("p_data.settings[\""..name.."\"]", p_data.settings[name])
@@ -427,11 +427,11 @@ minime.show("p_data.settings[\""..name.."\"]", p_data.settings[name])
         minime_events.attach_events(minime.optional_events.shortcut)
         mod.optional_events.shortcut = true
         player.set_shortcut_available(minime.toggle_gui_input_shortcut_name, true)
-        minime.writeDebug("Activated shortcut for %s!", minime.argprint(player))
+        minime.writeDebug("Активировал сочетание клавиш для %s!", minime.argprint(player))
 
         -- Remove the toggle button of the main GUI!
         minime_gui.selector.remove_toggle_button(player)
-        minime.writeDebug("Removed toggle button!")
+        minime.writeDebug("Кнопка переключения удалена!")
 
       -- Disable shortcuts
       else
@@ -439,7 +439,7 @@ minime.show("p_data.settings[\""..name.."\"]", p_data.settings[name])
 
         if minime.character_selector then
           player.set_shortcut_available(minime.toggle_gui_input_shortcut_name, false)
-          minime.writeDebug("Deactivated shortcut for %s!",
+          minime.writeDebug("Деактивировал сочетание клавиш для %s!",
                             {minime.argprint(player)})
 
           --~ local check_data
@@ -456,13 +456,13 @@ minime.show("p_data.settings[\""..name.."\"]", p_data.settings[name])
           for p, data in pairs(mod.player_data) do
             if data.settings and data.settings[s_name] == "shortcut" then
               unregister = false
-              minime.writeDebug("%s still needs shortcut events!", {p})
+              minime.writeDebug("Для %s всё ещё нужны события сочетания клавиш!", {p})
               break
             end
           end
         end
         if unregister then
-          minime.writeDebug("Unregistering shortcut events!")
+          minime.writeDebug("Отменяю регистрацию событий сочетания клавиш!")
           minime_events.detach_events(minime.optional_events.shortcut)
           if mod.optional_events then
             mod.optional_events.shortcut = nil
@@ -472,11 +472,11 @@ minime.show("p_data.settings[\""..name.."\"]", p_data.settings[name])
         -- Add toggle button for the main GUI?
         if minime.character_selector then
           minime_gui.selector.create_toggle_button(player)
-          minime.writeDebug("Added toggle button!")
+          minime.writeDebug("Кнопка переключения добавлена!")
 
         -- Remove toggle button of main GUI!
         else
-          minime.writeDebug("Removing toggle button!")
+          minime.writeDebug("Удаляю кнопку переключения!")
           minime_gui.selector.remove_toggle_button(player)
         end
       end
@@ -522,7 +522,7 @@ minime_player.on_runtime_mod_setting_changed = function(event)
   local setting = event.setting
 
   if not minime.prefixed(setting, minime.mod_settings_prefix) then
-    minime.entered_function({}, "leave", "not our setting")
+    minime.entered_function({}, "leave", "это не наша настройка")
     return
   end
 
@@ -548,7 +548,7 @@ minime_player.on_lua_shortcut = function(event)
 
   -- Selector GUI has been toggled
   if event.prototype_name == minime.toggle_gui_input_shortcut_name then
-    minime.writeDebug("Must toggle character selector GUI for player %s!",
+    minime.writeDebug("Необходимо переключить GUI выбора персонажа для игрока %s!",
                       {event.player_index})
     minime_gui.selector.gui_toggle(event.player_index)
   end
@@ -566,7 +566,7 @@ minime_player.on_custom_input = function(event)
 
   -- Selector GUI has been toggled
   if event.input_name == minime.toggle_gui_input_shortcut_name then
-    minime.writeDebug("Must toggle character selector GUI for player %s!",
+    minime.writeDebug("Необходимо переключить GUI выбора персонажа для игрока %s!",
                       {event.player_index})
     minime_gui.selector.gui_toggle(event.player_index)
   end
@@ -596,7 +596,7 @@ minime_player.update_armor = function(event)
   --                    Return if the player has no character!                    --
   ----------------------------------------------------------------------------------
   if not (player.character and player.character.valid) then
-    minime.entered_function({}, "leave", "player has no character")
+    minime.entered_function({}, "leave", "у игрока нет персонажа")
     return
   end
 
@@ -605,7 +605,7 @@ minime_player.update_armor = function(event)
   --                       Player has a character, proceed!                       --
   ----------------------------------------------------------------------------------
   -- Check all characters or just some?
-  minime.assert(event.character, {"string", "nil"}, "character name or nil")
+  minime.assert(event.character, {"string", "nil"}, "имя персонажа или nil")
   local update = event.character and
                   {[event.character] = mod.minime_characters[event.character]} or
                   mod.minime_characters
@@ -642,7 +642,7 @@ minime.show("available[char_name]", available[char_name])
 
     --~ if not (char and char.valid) then
     if available[char_name] and not (char and char.valid) then
-      minime.writeDebug("Must re-initialize previews of %s!",
+      minime.writeDebug("Необходимо повторно инициализировать предпросмотры игрока %s!",
                         {minime.argprint(player)})
       flags = {ignore_armor = true}
       minime_player.initialize_player_previews(player, flags)
@@ -664,12 +664,12 @@ minime.show("char", char)
         -- Set armor, or …
         if p_name then
           c_armor.set_stack(p_armor)
-          minime.writeDebug("Changed armor from \"%s\" to \"%s\"!",
+          minime.writeDebug("Броня изменена с \"%s\" на \"%s\"!",
                             {c_name, p_name})
         -- … remove armor
         else
           c_armor.clear()
-          minime.writeDebug("Removed \"%s\"!", {c_name})
+          minime.writeDebug("Удалено \"%s\"!", {c_name})
         end
       end
     end
@@ -684,16 +684,16 @@ minime.show("char", char)
   local skip = mod.skip_events and mod.skip_events[e_name]
 
   if skip and skip[p] then
-    minime.writeDebug("No: just restored character from backup!")
+    minime.writeDebug("Нет: персонаж только что восстановлен из резервной копии!")
     skip[p] = nil
-    minime.writeDebug("Removed skip_events.on_player_armor_inventory_changed[%s]!",
+    minime.writeDebug("Удалён skip_events.on_player_armor_inventory_changed[%s]!",
                       {p})
     minime.writeDebugNewBlock("Trying to clean up mod.skip_events!")
     minime_events.remove_skip_event(e_name)
 
   -- Back up the character!
   else
-    minime.writeDebug("Yes!")
+    minime.writeDebug("Да!")
     char = mod.player_data[p] and mod.player_data[p].dummy
     c_armor = char and char.valid and
                         char.get_inventory(defines.inventory.character_armor)
@@ -731,10 +731,10 @@ minime.show("p_armor.quality", p_name and p_armor.quality)
     minime.writeDebugNewBlock("Does inventory_size_bonus of %s and %s differ?",
                               {minime.enquote(p_name), minime.enquote(c_name)})
     if p_bonus ~= c_bonus then
-      minime.writeDebug("Yes: %s vs. %s. Copying character!", {p_bonus, c_bonus})
+      minime.writeDebug("Да: %s против %s. Копирую персонажа!", {p_bonus, c_bonus})
       minime_character.copy_character(player.character, char)
     else
-      minime.writeDebug("No: won't back up %s!",
+      minime.writeDebug("Нет: не создаю резервную копию персонажа %s!",
                         {minime.argprint(player.character)})
     end
   end
@@ -762,16 +762,16 @@ minime_player.update_gun_inventory = function(event)
   local e_name = "on_player_gun_inventory_changed"
   local skip = mod.skip_events and mod.skip_events[e_name]
   if skip and skip[p] then
-    minime.writeDebug("No: just restored character from backup!")
+    minime.writeDebug("Нет: персонаж только что восстановлен из резервной копии!")
     skip[p] = nil
-    minime.writeDebug("Removed skip_events.on_player_gun_inventory_changed[%s]!",
+    minime.writeDebug("Удалён skip_events.on_player_gun_inventory_changed[%s]!",
                       {p})
     minime.writeDebugNewBlock("Trying to clean up mod.skip_events!")
     minime_events.remove_skip_event(e_name)
 
   -- Back up the character!
   else
-    minime.writeDebug("Yes!")
+    minime.writeDebug("Да!")
     minime_player.backup_player(event)
   end
 
@@ -815,15 +815,15 @@ minime.show("color", color)
 --~ minime.show("char.color", char and char.valid and char.color)
     if char and char.valid then
       if not minime.compare_colors(char.color, color) then
-        minime.writeDebug("Changing color of preview %s!",
+        minime.writeDebug("Меняю цвет предпросмотра %s!",
                           {minime.argprint(char)})
         char.color = color
       else
-        minime.writeDebug("Color of  preview %s hasn't changed!",
+        minime.writeDebug("Цвет  предпросмотра %s не изменился!",
                           {minime.argprint(char)})
       end
     else
-      minime.writeDebug("%s is not a valid character!", {minime.argprint(char)})
+      minime.writeDebug("%s не является допустимым персонажем!", {minime.argprint(char)})
     end
   end
 
@@ -831,7 +831,7 @@ minime.show("color", color)
   -- Update color in player data
   if mod.player_data[p] and mod.player_data[p].char_properties then
     mod.player_data[p].char_properties.color = color
-    minime.writeDebug("Updated color in player_data.char_properties!")
+    minime.writeDebug("Цвет в player_data.char_properties обновлён!")
   end
 
   minime.entered_function("leave")
@@ -919,7 +919,7 @@ minime_player.update_logistic_slots = function(event)
   local char = event.entity
   if char.type ~= "character" then
     minime.entered_function({}, "leave",
-                                minime.argprint(char).." is not a character")
+                                minime.argprint(char).." не является персонажем")
     return
   end
 
@@ -933,7 +933,7 @@ minime.show("slot", slot)
 minime.show("skip", skip)
   -- Return if we must ignore the event for this slot!
   if skip == slot then
-    local msg = string.format("Must ignore event for logistic slot %s of %s)!",
+    local msg = string.format("Необходимо игнорировать событие для логистического слота %s у %s)!",
                               slot, minime.argprint(char))
     mod.skip_events[e_name][char.unit_number] = nil
     minime.entered_function({}, "leave", msg)
@@ -944,7 +944,7 @@ minime.show("skip", skip)
   local player = char.player
   if not (player and player.valid) then
     minime.entered_function({}, "leave",
-                                minime.argprint(char).." has no player")
+                                minime.argprint(char).." не имеет игрока")
     return
   end
 
@@ -967,15 +967,15 @@ minime.show("dst_logistics", dst_logistics)
       local d_section = dst_logistics.get_section(event.section.index)
 
       if s_section and s_section.valid then
-        minime.writeDebug("Found valid section in src!")
+        minime.writeDebug("Найден действительный раздел в src!")
 
         -- Create section?
         minime.writeDebugNewBlock("Does section %s exist in dst?", {section_id})
         if d_section and d_section.valid then
-          minime.writeDebug("Yes: copying group!")
+          minime.writeDebug("Да: копирую группу!")
           d_section.group = s_section.group
         else
-          minime.writeDebug("No: creating it!")
+          minime.writeDebug("Нет: создаю её!")
           d_section = dst_logistics.add_section(s_section.group)
         end
 
@@ -987,30 +987,30 @@ minime.show("dst_logistics", dst_logistics)
 minime.show("s", s)
 minime.show("d", d)
           if s and d and util.table.compare(s, d) then
-            minime.writeDebug("No!")
+            minime.writeDebug("Нет!")
           elseif s then
             --~ minime.writeDebug("Yes: copying filter!")
             --~ d_section.set_slot(slot, s)
-            minime.writeDebug("Yes! Is filter already set in destination?")
+            minime.writeDebug("Да! Фильтр уже задан в целевой секции?")
             local cleared
             for f, filter in pairs(d_section.filters) do
 minime.show("Filter "..f, filter)
 minime.show("s.value", s.value)
               if table.compare(filter.value or minime.EMPTY_TAB,
                                 s.value or minime.EMPTY_TAB) then
-                minime.writeDebug("Yes: clearing slot %s!", f)
+                minime.writeDebug("Да: очищаю слот %s!", f)
                 d_section.clear_slot(f)
                 cleared = true
                 break
               end
             end
             if not cleared then
-              minime.writeDebug("No!")
+              minime.writeDebug("Нет!")
             end
-            minime.writeDebug("Copying filter!")
+            minime.writeDebug("Копирую фильтр!")
             d_section.set_slot(slot, s)
           else
-            minime.writeDebug("Yes: clearing filter!")
+            minime.writeDebug("Да: очищаю фильтр!")
             d_section.clear_slot(slot)
           end
         end
@@ -1049,23 +1049,23 @@ minime_player.make_dummy = function(player)
 
   -- Player has no dummy yet
   if not (old_dummy and old_dummy.valid) then
-    minime.writeDebug("Creating dummy for player %s (no dummy yet)!",
+    minime.writeDebug("Создаю персонажа-заглушку для игрока %s (заглушки пока нет)!",
                       {player.index})
     new_dummy = create()
 
   -- We decided to change the dummy name, migrate old dummy!
   elseif old_dummy.name ~= minime.dummy_character_name then
-    minime.writeDebug("Dummy \"%s\" has not the expected name \"%s\"!",
+    minime.writeDebug("У персонажа-заглушки \"%s\" неожиданное имя: ожидалось \"%s\"!",
                       {old_dummy.name, minime.dummy_character_name})
     new_dummy = create()
     minime_character.copy_character(old_dummy, new_dummy)
-    minime.writeDebug("Copied %s to %s", {minime.argprint(old_dummy), minime.argprint(new_dummy)})
+    minime.writeDebug("Скопировал %s в %s", {minime.argprint(old_dummy), minime.argprint(new_dummy)})
     old_dummy.destroy()
-    minime.writeDebug("Removed old dummy!")
+    minime.writeDebug("Удалил старого персонажа-заглушку!")
 
   -- Player already has a dummy with the expected name, use that!
   else
-    minime.writeDebug("Using old dummy!")
+    minime.writeDebug("Использую старую заглушку!")
     new_dummy = old_dummy
   end
 
@@ -1089,7 +1089,7 @@ minime_player.init_player = function(event)
   -- Mandatory argument
   local player = minime.ascertain_player(event.player or event.player_index)
   if not (player and player.valid) then
-    error(serpent.line(event) .. " contains no valid player data!")
+    error(serpent.line(event) .. " не содержит допустимых данных игрока!")
   end
 
 
@@ -1098,10 +1098,10 @@ minime.show("player.cutscene_character", player.cutscene_character and player.cu
 
   -- Only proceed if player is connected!
   if not player.connected then
-    minime.writeDebug("Removing GUI of player %s (not connected)!", {player.name})
+    minime.writeDebug("Удаляю GUI игрока %s (игрок не подключён)!", {player.name})
     minime_gui.remove_gui(player)
 
-    local reason = minime.argprint(player).." is not connected"
+    local reason = minime.argprint(player).." не подключён"
     minime.entered_function({event}, "leave", reason)
     return
   end
@@ -1117,7 +1117,7 @@ minime.show("mod.minime_characters",
 
   -- Get player's controller type
   local controller = minime.controller_names[player.controller_type]
-  minime.writeDebug("Current controller of %s: %s",
+  minime.writeDebug("Текущий контроллер игрока %s: %s",
                     {minime.argprint(player), controller})
 
   -- Initialize player data
@@ -1143,25 +1143,25 @@ minime.show("p_data", p_data)
   minime.writeDebugNewBlock("Have we already stored char_properties?")
   p_data.char_properties = p_data.char_properties or {}
   if next(p_data.char_properties) then
-    minime.writeDebug("Yes!")
+    minime.writeDebug("Да!")
   else
-    minime.writeDebug("No: initializing p_data.char_properties!")
+    minime.writeDebug("Нет: инициализирую p_data.char_properties!")
     local target = p_data.char_properties
 
    --~ local researched = global.researched_by[player.force.name]
 
     -- Player has a character
     if player.character then
-      minime.writeDebug("Player has a character!")
+      minime.writeDebug("У игрока есть персонаж!")
       for property_name, property in pairs(minime.copyable_character_properties) do
 minime.show(property_name, property)
         -- Property does not depend on a tech: Copy it from the character!
         if property.need_techs == nil then
-          minime.writeDebug("Copying from character!")
+          minime.writeDebug("Копирую данные из персонажа!")
           target[property_name] = table.deepcopy(player.character[property_name])
         -- Only copy property if the prerequisite tech has been researched!
         elseif minime_forces.is_tech_researched(player.force, property.need_techs) then
-          minime.writeDebug("Required techs have been researched. Copying from character!")
+          minime.writeDebug("Необходимые технологии исследованы. Копирую данные из персонажа!")
           target[property_name] = table.deepcopy(player.character[property_name])
         end
 minime.show("p_data.char_properties["..minime.enquote(property_name).."]",
@@ -1170,28 +1170,28 @@ minime.show("p_data.char_properties["..minime.enquote(property_name).."]",
 
     -- Player is in god or editor mode
     else
-      minime.writeDebug("Player has no character!")
+      minime.writeDebug("У игрока нет персонажа!")
       for property_name, property in pairs(minime.copyable_character_properties) do
 minime.show(property_name, property)
         -- We can get the property from the player
         if property.init_from_player then
-          minime.writeDebug("Get property from player!")
+          minime.writeDebug("Получаю свойство из данных игрока!")
           -- Only copy property from player if it either doesn't depend on a tech
           -- or if the tech has been researched!
           -- if (not p.need_techs) or minime.is_tech_researched(player.force, p.need_techs) then
           if (not property.need_techs) or
               minime_forces.is_tech_researched(player.force, property.need_techs) then
-            minime.writeDebug("Copying property from player!")
+            minime.writeDebug("Копирую свойство из данных игрока!")
             target[property_name] = table.deepcopy(player[property_name])
           -- Skip property
           else
-            minime.writeDebug("Skipping property %s (depends on unresearched techs)!",
+            minime.writeDebug("Пропускаю свойство %s (зависит от неизученных технологий)!",
                               {minime.enquote(property_name)})
           end
 
         -- Fall back to the default value
         else
-          minime.writeDebug("Falling back to default value!")
+          minime.writeDebug("Использую значение по умолчанию!")
           target[property_name] = property.default
         end
 minime.show("p_data.char_properties["..property_name.."]",
@@ -1205,13 +1205,13 @@ minime.show("p_data.char_properties["..property_name.."]",
   -- editor mode, check whether SE put us there and try to update our data!
   minime.writeDebugNewBlock("Does the player have a character?")
   if player.character then
-    minime.writeDebug("Yes!")
+    minime.writeDebug("Да!")
   else
-    minime.writeDebug("No: checking remote interfaces of SE!")
+    minime.writeDebug("Нет: проверяю удалённые интерфейсы SE!")
     local SE_remote_view = minime.SE_remote_view(player)
 minime.show("SE_remote_view", SE_remote_view)
     if SE_remote_view then
-      minime.writeDebug("SE removed character of %s! Current mode: %s", {
+      minime.writeDebug("SE удалил персонажа %s! Текущий режим: %s", {
         minime.argprint(player),
         minime.controller_names[player.controller_type]
       })
@@ -1231,11 +1231,11 @@ minime.show("p_data.SE_nav_view", p_data.SE_nav_view)
       if p_data.detached_character and p_data.detached_character.valid and
           p_data.dummy and p_data.dummy.valid then
 
-        minime.writeDebug("Backing up detached character!")
+        minime.writeDebug("Создаю резервную копию отсоединённого персонажа!")
         minime_character.copy_character(p_data.detached_character, p_data.dummy)
       end
     else
-      minime.writeDebug("Not in remote view!")
+      minime.writeDebug("Не в режиме удалённого обзора!")
     end
   end
 
@@ -1252,7 +1252,7 @@ minime.show("p_data.SE_nav_view", p_data.SE_nav_view)
 
   -- Another mod changed the character already -- use that!
   if restore and player.character then
-    minime.writeDebug("Restore character \"%s\"!", {player.character.name})
+    minime.writeDebug("Восстанавливаю персонажа \"%s\"!", {player.character.name})
     --~ p_data.last_character = minime_character.get_character_basename(player.character)
     p_data.last_character = p_basename
     --~ p_data.char_entity = player.character
@@ -1262,7 +1262,7 @@ minime.show("p_data.SE_nav_view", p_data.SE_nav_view)
   --~ elseif p_data.last_character and available[p_data.last_character] and
                                    --~ mod.minime_characters[p_data.last_character] then
   elseif p_data.last_character and available[p_data.last_character] then
-    minime.writeDebug("Using same character as last time (\"%s\")!",
+    minime.writeDebug("Использую того же персонажа, что и в прошлый раз (\"%s\")!",
                       {p_data.last_character})
 
   -- The character currently in use (e.g. after starting a new game or adding the
@@ -1270,7 +1270,7 @@ minime.show("p_data.SE_nav_view", p_data.SE_nav_view)
   --~ elseif player.character and available[player.character.name] and
                               --~ mod.minime_characters[player.character.name] then
   elseif player.character and available[player.character.name] then
-    minime.writeDebug("Initialize with current base character (\"%s\")!",
+    minime.writeDebug("Инициализирую с текущим базовым персонажем (\"%s\")!",
                       {player.character.name})
     p_data.last_character = player.character.name
 
@@ -1280,7 +1280,7 @@ minime.show("p_data.SE_nav_view", p_data.SE_nav_view)
             --~ mod.minime_character_properties[player.character.name] then
   elseif player.character and p_basename and available[p_basename] and
                         mod.minime_character_properties[player.character.name] then
-    minime.writeDebug("Initialize with current character version (\"%s\")!",
+    minime.writeDebug("Инициализирую с текущей версией персонажа (\"%s\")!",
                       {player.character.name})
 
     -- Get the name of the base character
@@ -1294,8 +1294,8 @@ minime.show("p_data.SE_nav_view", p_data.SE_nav_view)
 
   -- The player doesn't have a character (e.g. in god mode) --> empty string!
   else
-    minime.writeDebug("Player has %s character!",
-                      {player.character and "no valid" or "no"})
+    minime.writeDebug("Персонаж игрока: %s!",
+                      {player.character and "недействителен" or "no"})
     p_data.last_character = ""
   end
 
@@ -1304,25 +1304,25 @@ minime.show("p_data.SE_nav_view", p_data.SE_nav_view)
 minime.show("controller", controller)
   minime.writeDebugNewBlock("Check for SE respawn event?")
   if controller == "character" then
-    minime.writeDebug("Yes!")
+    minime.writeDebug("Да!")
     if p_data.god_mode then
       p_data.god_mode = nil
-      minime.writeDebug("Removed p_data.god_mode!")
+      minime.writeDebug("Удалён p_data.god_mode!")
     elseif p_data.editor_mode then
       p_data.editor_mode = nil
-      minime.writeDebug("Removed p_data.editor_mode!")
+      minime.writeDebug("Удалён p_data.editor_mode!")
     end
     local old = p_data.detached_character
     if old then
       p_data.detached_character = nil
-      minime.writeDebug("Removed p_data.detached_character!")
+      minime.writeDebug("Удалён p_data.detached_character!")
 
       -- Remove the detached character from mod.detached_characters!
       if mod.detached_characters then
         -- If the old character is still valid, we can use its unit_number
         if old.valid and mod.detached_characters[old.unit_number] then
           mod.detached_characters[old.unit_number] = nil
-          minime.writeDebug("Removed mod.detached_characters[%s]!",
+          minime.writeDebug("Удалён mod.detached_characters[%s]!",
                             {old.unit_number})
 
         -- We can't identify the old character directly, so we'll loop over the
@@ -1331,7 +1331,7 @@ minime.show("controller", controller)
           for c_id, c_player in pairs(mod.detached_characters) do
             if c_player == player.index then
               mod.detached_characters[c_id] = nil
-              minime.writeDebug("Removed mod.detached_characters[%s].", {c_id})
+              minime.writeDebug("Удалён mod.detached_characters[%s].", {c_id})
             end
           end
         end
@@ -1339,12 +1339,12 @@ minime.show("controller", controller)
         -- Remove the list if it is empty!
         if not next(mod.detached_characters) then
           mod.detached_characters = nil
-          minime.writeDebug("Removed mod.detached_characters!")
+          minime.writeDebug("Удалён mod.detached_characters!")
         end
       end
     end
   else
-    minime.writeDebug("No: player's controller type is %s, not \"character\"!",
+    minime.writeDebug("Нет: тип контроллера игрока — %s, а не \"character\"!",
                       {controller})
   end
 minime.show("p_data", p_data)
@@ -1384,7 +1384,7 @@ minime.show("mod.player_data["..p.."].show_available_character_list",
 --~ local av_gui = player.gui.screen["minime_available_chars_main_frame"]
 --~ local sel_gui = player.gui.screen["minime_char_selector_main_frame"]
   minime_gui.remove_gui(p)
-  minime.show("Removed GUI of player", p)
+  minime.show("Интерфейс игрока удалён", p)
 
   -- Create GUI for list of available characters
   minime.writeDebugNewBlock("Creating available-characters GUI for player %s", {p})
@@ -1404,7 +1404,7 @@ minime.show("p_data.hidden_characters", p_data.hidden_characters)
 minime.show("removed", removed)
   minime_gui.selector.init_gui(p, removed)
 
-  minime.writeDebug("Current character: %s \tLast character: %s",
+  minime.writeDebug("Текущий персонаж: %s \tПоследний персонаж: %s",
                     {player.character and player.character.name or "nil",
                       p_data.last_character})
                     --~ {minime.argprint(player.character), p_data.last_character})
@@ -1419,21 +1419,21 @@ minime.show("removed", removed)
   if (p_data.last_character ~= "" and restore) or
      p_data.last_character ~= (c and c.name) then
 
-    minime.writeDebug("Yes: %s --> %s!",
+    minime.writeDebug("Да: %s --> %s!",
                       {c and c.name or "nil", p_data.last_character}, "line")
     local passon_flags = {restore = restore}
     minime_character.switch_characters(p, passon_flags)
 
   -- Otherwise just make a backup of the current character
   elseif player.character then
-    minime.writeDebug("No: backing up old character!")
+    minime.writeDebug("Нет: создаю резервную копию прежнего персонажа!")
     minime_character.copy_character(player.character, p_data.dummy)
 
   -- Last character has been removed, so the player actually is in god mode but
   -- didn't select this.
   elseif p_data.last_character == "" and
           not (p_data.god_mode or p_data.editor_mode) then
-    minime.writeDebug("No: last character of player has been removed!")
+    minime.writeDebug("Нет: последний персонаж игрока удалён!")
   end
 
   if player.character and player.character.valid then
@@ -1453,27 +1453,27 @@ minime_player.on_player_created = function(event)
   -- If we are in a scenario that doesn't support characters, we must disable our
   -- shortcuts! (This is important if a new player is joining.)
   if mod.no_characters then
-    minime.writeDebug("Scenario doesn't support characters!")
+    minime.writeDebug("Сценарий не поддерживает персонажей!")
 
     local player = minime.ascertain_player(event.player_index)
     local shortcut = minime.toggle_gui_input_shortcut_name
 
     -- Disable shortcuts
-    minime.writeDebug("Disable shortcuts for %s?", {minime.argprint(player)})
+    minime.writeDebug("Отключить сочетания клавиш для %s?", {minime.argprint(player)})
     --~ if game.shortcut_prototypes[shortcut] and
     if prototypes.shortcut[shortcut] and
         player.is_shortcut_available(shortcut) then
 
       player.set_shortcut_available(shortcut, false)
-      minime.writeDebug("Disabled shortcut of %s!", {minime.argprint(player)})
+      minime.writeDebug("Отключено сочетание клавиш игрока %s!", {minime.argprint(player)})
     end
 
     -- If CharacterModHelper is not running, warn player that character selector
     -- mode has been disabled!
-    minime.writeDebug("Warn %s that selector mode is disabled?",
+    minime.writeDebug("Предупредить игрока %s, что режим выбора отключён?",
                       {minime.argprint(player)})
     if not script.active_mods["CharacterModHelper"] then
-      minime.writeDebug("\"CharacterModHelper\" is not active!")
+      minime.writeDebug("\"CharacterModHelper\" не активен!")
       local reason = {
         "minime-selector-mode.disabled-no-char-scenario",
         script.level.level_name,
@@ -1486,7 +1486,7 @@ minime_player.on_player_created = function(event)
         reason,
       }
       game.print(msg)
-      minime.show("Printed warning", msg)
+      minime.show("Предупреждение выведено", msg)
     end
   end
 
@@ -1510,21 +1510,21 @@ minime_player.on_player_joined_game = function(event)
 
   -- We're still in a cutscene. Wait until it is finished!
   if player.cutscene_character then
-    minime.writeDebug("Player has no character yet. Waiting for cutscene to finish!")
+    minime.writeDebug("У игрока пока нет персонажа. Жду окончания кат-сцены!")
 
   -- Cutscene has finished or wasn't played. Initialize player immediately!
   else
-    minime.writeDebug("Not in cutscene!")
+    minime.writeDebug("Не в кат-сцене!")
 
     -- Initialize player data
-      minime.writeDebug("Initializing %s!", {minime.argprint(player)})
+      minime.writeDebug("Инициализирую %s!", {minime.argprint(player)})
       minime_player.init_player(event)
 
     -- Warn player that character selector mode has been disabled?
-    minime.writeDebug("Warn %s that selector mode is disabled?",
+    minime.writeDebug("Предупредить игрока %s, что режим выбора отключён?",
                       {minime.argprint(player)})
     if mod.no_characters and not script.active_mods["CharacterModHelper"] then
-      minime.writeDebug("\"CharacterModHelper\" is not active!")
+      minime.writeDebug("\"CharacterModHelper\" не активен!")
       local reason = {
         "minime-selector-mode.disabled-no-char-scenario",
         script.level.level_name,
@@ -1537,10 +1537,10 @@ minime_player.on_player_joined_game = function(event)
         reason,
       }
       game.print(msg)
-      minime.show("Printed warning", msg)
+      minime.show("Предупреждение выведено", msg)
 
     else
-      minime.writeDebug("No!")
+      minime.writeDebug("Нет!")
     end
 
   end
@@ -1558,7 +1558,7 @@ minime_player.on_pre_player_left_game = function(event)
   local p = minime.argprint(player)
 
   if not (player and player.valid) then
-    minime.entered_function({event}, "leave", p.." is not a valid player")
+    minime.entered_function({event}, "leave", p.." не является допустимым игроком")
     return
   end
 
@@ -1592,14 +1592,14 @@ minime_player.remove_player = function(event)
 
   -- Remove GUI
   minime_gui.remove_gui(player)
-  minime.writeDebug("Removed GUI of %s", {player})
+  minime.writeDebug("Удалён GUI игрока %s", {player})
 
   -- Remove dummy and shortcut
   if p_data then
     -- Dummy
     if p_data.dummy and p_data.dummy.valid then
       p_data.dummy.destroy()
-      minime.writeDebug("Removed dummy character!")
+      minime.writeDebug("Удалён персонаж-заглушка!")
     end
 
     --~ -- Shortcut
@@ -1607,7 +1607,7 @@ minime_player.remove_player = function(event)
 
     --~ end
     mod.player_data[p] = nil
-    minime.writeDebug("Removed data of player %s!", {p or "nil"})
+    minime.writeDebug("Удалены данные игрока %s!", {p or "nil"})
   end
 
   -- Disable shortcut?
@@ -1615,7 +1615,7 @@ minime_player.remove_player = function(event)
       player.is_shortcut_available(minime.toggle_gui_input_shortcut_name) then
 
     player.set_shortcut_available(minime.toggle_gui_input_shortcut_name, false)
-    minime.writeDebug("Disabled shortcut of %s!", {minime.argprint(player)})
+    minime.writeDebug("Отключено сочетание клавиш игрока %s!", {minime.argprint(player)})
   end
 
   -- Remove preview entities
@@ -1623,7 +1623,7 @@ minime_player.remove_player = function(event)
     if c_data.preview and c_data.preview.entities then
       entity = c_data.preview.entities[p]
       if entity and entity.valid then
-        minime.writeDebug("Removing %s!", {minime.argprint(entity)})
+        minime.writeDebug("Удаляю %s!", {minime.argprint(entity)})
         entity.destroy()
       end
     end
@@ -1657,7 +1657,7 @@ minime_player.backup_player = function(event)
 
   if char and char.valid and dummy and dummy.valid then
     minime_character.copy_character(char, dummy)
-    minime.writeDebug("Made backup of character for player \"%s\".", {player.name})
+    minime.writeDebug("Создал резервную копию персонажа для игрока \"%s\".", {player.name})
   end
 
   minime.entered_function("leave")
@@ -1676,7 +1676,7 @@ minime_player.stop_SE_remote_view = function(player, flags)
   end
   local p_data = mod.player_data[player.index]
 
-  minime.assert(flags, {"table", "nil"}, "table of flags or nil")
+  minime.assert(flags, {"table", "nil"}, "таблица флагов или nil")
   -- Don't remove record of detached_character if the player is changing from remote
   -- view (god mode) to editor mode!
   local keep_detached_character = flags and flags.keep_detached_character
@@ -1687,26 +1687,26 @@ minime_player.stop_SE_remote_view = function(player, flags)
 
   --~ if minime.SE_remote_view(player) then
   if p_data.SE_nav_view then
-    minime.writeDebug("Must exit remote view of SE!")
+    minime.writeDebug("Необходимо выйти из режима удалённого обзора SE!")
 
     --~ local p_data = global.player_data[player.index]
 
     if keep_last_character then
       p_data.keep_last_character = keep_last_character
-      minime.writeDebug("Set flag p_data.keep_last_character!")
+      minime.writeDebug("Установлен флаг p_data.keep_last_character!")
     end
 
-    minime.writeDebug("Trying to call SE's remote function!")
+    minime.writeDebug("Пытаюсь вызвать удалённую функцию SE!")
     minime.remote_call("space-exploration", "remote_view_stop", {player = player})
 
     if keep_last_character then
       p_data.keep_last_character = nil
-      minime.writeDebug("Removed flag p_data.keep_last_character!")
+      minime.writeDebug("Удалён флаг p_data.keep_last_character!")
     end
 
 
     --~ local controller = minime.controller_names[player.controller_type]
-    minime.writeDebug("Controller of %s! Current mode: %s\tCurrent character: %s", {
+    minime.writeDebug("Контроллер игрока %s! Текущий режим: %s\tТекущий персонаж: %s", {
       minime.argprint(player),
       minime.controller_names[player.controller_type],
       minime.argprint(player.character)
@@ -1727,7 +1727,7 @@ minime.show("p_data", p_data)
 p_data.char_entity = player.character
 
     --~ p_data.editor_mode = nil
-    minime.writeDebug("Backing up player's new character!")
+    minime.writeDebug("Создаю резервную копию нового персонажа игрока!")
     if player.character and player.character.valid then
       minime_character.copy_character(player.character, p_data.dummy)
     end

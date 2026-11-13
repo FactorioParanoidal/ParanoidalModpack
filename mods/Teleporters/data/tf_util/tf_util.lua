@@ -113,7 +113,7 @@ end
 
 util.base_player = function()
 
-  local player = util.table.deepcopy(data.raw.player.player or error("Wat man cmon why"))
+  local player = util.table.deepcopy(data.raw.player.player or error("Что происходит?"))
   player.ticks_to_keep_gun = SU(600)
   player.ticks_to_keep_aiming_direction = SU(100)
   player.ticks_to_stay_in_combat = SU(600)

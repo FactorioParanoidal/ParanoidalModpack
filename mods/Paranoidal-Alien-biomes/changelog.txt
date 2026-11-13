@@ -1,5 +1,7 @@
 ---------------------------------------------------------------------------------------------------
 Version: 9.8.6
+  Locale:
+    - Russian hardcoded player-facing text: 6 UI, chat, command-help and error-message literals; technical identifiers, format parameters and gameplay logic are unchanged.
 Date: 08. 11. 2026
   Changes:
     - Paranoidal packaging: moved the complete maintenance toolkit, reports, plans and upstream manifests to the local development workspace. Generated Lua and all game assets are unchanged.

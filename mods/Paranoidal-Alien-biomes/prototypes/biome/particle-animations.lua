@@ -2059,8 +2059,8 @@ end
 
 local make_particle = function(params)
 
-  if not params then error("No params given to make_particle function") end
-  local name = params.name or error("No name given")
+  if not params then error("Для функции make_particle не заданы параметры") end
+  local name = params.name or error("Имя не задано")
 
   local ended_in_water_trigger_effect = params.ended_in_water_trigger_effect or default_ended_in_water_trigger_effect()
   if params.ended_in_water_trigger_effect == false then

@@ -1,5 +1,7 @@
 ---------------------------------------------------------------------------------------------------
 Version: 9.0.0
+  Locale:
+    - Russian hardcoded player-facing text: 6 UI, chat, command-help and error-message literals; technical identifiers, format parameters and gameplay logic are unchanged.
 Date: 2026-11-11
   Major Features:
     - Aircraft Reforged: renamed to Aircraft-space-age-reforged and rebuilt for Factorio 2.1.24. Existing aircraft, item, recipe, equipment, technology and AircraftRealism sprite IDs are retained.

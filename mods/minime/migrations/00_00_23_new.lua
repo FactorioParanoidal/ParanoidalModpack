@@ -11,7 +11,7 @@ do
     gui = player.gui and player.gui.top and player.gui.top["minime_gui"]
     if gui then
       gui.destroy()
-      minime.writeDebug("Removed GUI of player %s!", {player.name or "nil"})
+      minime.writeDebug("Удалён GUI игрока %s!", {player.name or "nil"})
     end
   end
 end
@@ -29,7 +29,7 @@ do
     -- Create surface
     --~ local surface = game.create_surface(new, {width = 1, height = 1})
     local surface = minime_surfaces.create_surface(new)
-    minime.writeDebug("Created dummy surface %s!",
+    minime.writeDebug("Создана поверхность манекена %s!",
                       {minime.argprint(surface)}, "line")
 
     if surface and surface.valid then
@@ -47,19 +47,19 @@ do
 
           -- If everything went fine, replace the old dummy in the table
           if clone then
-            minime.writeDebug("Successfully cloned %s!", {minime.print_name_id(dummy)})
+            minime.writeDebug("Клонирование %s прошло успешно!", {minime.print_name_id(dummy)})
             minime.created_msg(clone)
             storage.player_data[p].dummy = clone
           else
-            minime.writeDebug("Couldn't clone %s!", {minime.print_name_id(dummy)})
-            error("Something went wrong!")
+            minime.writeDebug("Не удалось клонировать %s!", {minime.print_name_id(dummy)})
+            error("Что-то пошло не так!")
           end
         end
       end
       -- Remove old surface
       --~ game.delete_surface(old)
       minime_surfaces.delete_surface(old)
-      minime.writeDebug("Removed surface %s!", {old})
+      minime.writeDebug("Удалена поверхность %s!", {old})
     end
   end
 end
@@ -77,7 +77,7 @@ if storage.player_data then
     -- Remove obsolete variables
     if data and data.researched then
       data.researched = nil
-      minime.writeDebug("Removed table storage.player_data[%s].researched!",
+      minime.writeDebug("Удалена таблица storage.player_data[%s].researched!",
                         {player})
     end
   end

@@ -19,7 +19,7 @@ local function first(kind, ...)
     for _, name in ipairs({ ... }) do
         if data.raw[kind][name] then return name end
     end
-    error("Wind-Turbines-Reforged: none of " .. table.concat({ ... }, ", ") .. " exists in " .. kind)
+    error("Wind-Turbines-Reforged: не найден ни один из " .. table.concat({ ... }, ", ") .. " в " .. kind)
 end
 
 local function ingredients(list)

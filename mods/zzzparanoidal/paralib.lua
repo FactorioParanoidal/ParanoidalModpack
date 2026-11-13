@@ -15,7 +15,7 @@ function paralib.ProcessError(message)
 		return
 	end
 	if paralib.debug == paralib.debugLevels.DebugAbort then
-		assert(false, "DEBUG: " .. message)
+		assert(false, "ОТЛАДКА: " .. message)
 	end
 end
 
@@ -240,7 +240,7 @@ function paralib.bobmods.lib.recipe.set_result(recipe, result)
 end
 
 function paralib.bobmods.lib.recipe.set_results(recipe, results)
-	assert(bobmods.lib.recipe.set_results == nil, "Rewrite me to use bobmods.lib.recipe.set_results please!")
+	assert(bobmods.lib.recipe.set_results == nil, "Перепишите меня, чтобы использовать bobmods.lib.recipe.set_results, пожалуйста!")
 	paralib.EnsureExists("recipe", recipe)
 	data.raw.recipe[recipe].results = results
 end

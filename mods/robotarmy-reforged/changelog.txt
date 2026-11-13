@@ -83,6 +83,7 @@ Date: 2026.10.25
     - Item, unit and technology icons of the new droids are tinted copies of the existing ones; their models are the existing droid sprites with a tint on the body layer (shadows untinted). With Yuoki Industries active, the Sniper Droid uses the animated CB4 walker and the Laser Rifleman the ROBO1 walker of that mod (walking 8 directions x 22 frames, aiming 18 directions; files referenced from Yuoki, not copied); without it they keep the tinted sprites.
     - Rank droids have a star per rank in their icon and over them.
   Locale:
+    - Russian hardcoded player-facing text: 1 UI, chat, command-help and error-message literals; technical identifiers, format parameters and gameplay logic are unchanged.
     - Messages are localised (en, ru); descriptions match the current behaviour. New droids, ranks, tooltips, buttons, panels, signals, research and the repair setting in en and ru; de/pl/pt-BR fall back to English for the new strings.
   Modding:
     - Rank prototypes, tooltips (computed from the final prototypes) and the entity filters of the command tool are made in data-updates (prototypes/ranks.lua), after Bob's drones exist; script/droids.lua builds the runtime name tables from the prototypes; new modules script/ranks.lua, script/pods.lua, script/territory.lua.

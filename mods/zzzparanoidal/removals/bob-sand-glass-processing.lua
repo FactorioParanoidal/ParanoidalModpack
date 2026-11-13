@@ -1,5 +1,5 @@
 -- From zzzcompability (Tias): remove Bob's obsolete sand/glass research before core tech patches.
-assert(data.raw and data.raw.technology, "Expected data.raw.technology but it is nil")
+assert(data.raw and data.raw.technology, "Ожидалось наличие data.raw.technology, но оно равно nil")
 data.raw.technology["sand-processing"] = nil
 data.raw.technology["glass-processing"] = nil
 

@@ -5,6 +5,7 @@ Date: 2026-06-26
     - Paranoidal: replaced 3 PNGs with smaller user-recompressed Beta-7 files selected by the approved filename, folder and dimension report; resource paths and prototype code are unchanged.
     - Paranoidal build: removed nine legacy hr-* sheets, six unused sheets in graphics/entity/reskins and two superseded standalone icons. Current presets, layered/custom-tint and frame-count alternatives, plus Space Age and frozen assets are retained.
   Locale:
+    - Russian hardcoded player-facing text: 1 UI, chat, command-help and error-message literals; technical identifiers, format parameters and gameplay logic are unchanged.
     - ru: the mod name and the mod list description are the same as in ParanoidalLocale (format "English title (Russian translation)"), so the mod reads the same with or without it.
   Bugfixes:
     - Restored the Factorio 2.0 belt entity sprites; a manual sync had replaced them with half-size 1.1 sprites that do not fit the 128x128 frame layout.

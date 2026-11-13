@@ -2,7 +2,7 @@
 local M = {}
 local minimums = {}
 function M.minimum(kind, name, value, source)
-    assert(type(value) == "number" and value >= 1 and value % 1 == 0, "Invalid stack minimum")
+    assert(type(value) == "number" and value >= 1 and value % 1 == 0, "Недопустимый минимум размера стопки")
     local key = kind .. "/" .. name
     local old = minimums[key]
     if not old or value > old.size then

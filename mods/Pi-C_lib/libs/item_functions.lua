@@ -96,7 +96,7 @@ common.show("item_types", item_types)
   item_stuff.basic_item = function(inputs)
     common.entered_function({inputs})
 
-    common.assert(inputs, "table", "table with fields 'name' and 'amount'")
+    common.assert(inputs, "table", "таблица с полями 'name' и 'amount'")
     local item = {
       name = inputs.name or inputs[1],
       amount = inputs.amount or inputs[2],
@@ -136,7 +136,7 @@ common.show("item_types", item_types)
   item_stuff.item = function(inputs)
     common.entered_function({inputs})
 
-    common.assert(inputs, table, "table with item/fluid data")
+    common.assert(inputs, table, "таблица с данными предмета/жидкости")
 
 
     local item = {

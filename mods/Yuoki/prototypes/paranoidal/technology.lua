@@ -169,7 +169,7 @@ local function icon_of(item_name)
 			return { icon = p.icon, icon_size = p.icon_size or 64 }
 		end
 	end
-	error("Yuoki (Paranoidal): technology icon item not found: " .. item_name)
+	error("Yuoki (Paranoidal): не найден предмет для значка технологии: " .. item_name)
 end
 
 for index, t in ipairs(tree) do
@@ -184,7 +184,7 @@ for index, t in ipairs(tree) do
 	end
 	for _, recipe_name in ipairs(recipes) do
 		if not data.raw.recipe[recipe_name] and not optional[recipe_name] then
-			error("Yuoki (Paranoidal): technology " .. name .. " lists a missing recipe " .. recipe_name)
+			error("Yuoki (Paranoidal): технология " .. name .. " содержит отсутствующий рецепт " .. recipe_name)
 		end
 		add(recipe_name)
 	end
@@ -202,7 +202,7 @@ for index, t in ipairs(tree) do
 	end
 	for _, a in ipairs(anchors) do
 		if not data.raw.technology[a] and not a:find("^yuoki%-") then
-			error("Yuoki (Paranoidal): technology " .. name .. " anchors to a missing technology " .. a)
+			error("Yuoki (Paranoidal): технология " .. name .. " ссылается на отсутствующую технологию " .. a)
 		end
 	end
 	local ingredients = {}

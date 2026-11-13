@@ -502,7 +502,7 @@ function upgrade.attempt(universe)
 					end
 				end
 				if chunksProcessed>0 then
-					game.print("update, "..chunksProcessed.." chunks processed")
+					game.print("обновление, "..chunksProcessed.." чанков обработано")
 				end
 				
 				-- bases
@@ -539,7 +539,7 @@ function upgrade.attempt(universe)
 					end	
 				end
 				if basesProcessed>0 then
-					game.print("update, "..basesProcessed.." bases processed")
+					game.print("обновление, "..basesProcessed.." баз обработано")
 				end
 			end	
 			--game.print("Rampant fixed, Version 1.0.8")
@@ -619,7 +619,7 @@ function upgrade.attempt(universe)
 			end
 			
 			if mapsCounter>0 then
-				game.print("Rampant fixed, Version 1.0.14. Factorissimo surfaces are excluded:"..mapsCounter..", squads removed: "..squadsCleared)
+				game.print("Rampant fixed, версия 1.0.14. Поверхности Factorissimo исключены:"..mapsCounter..", отрядов удалено: "..squadsCleared)
 			end
 		end
 		
@@ -687,7 +687,7 @@ function upgrade.attempt(universe)
 			end
 			
 			if mapsCounter>0 then
-				game.print("Rampant fixed, Version 1.1.0 Surfaces excluded:"..mapsCounter..", squads removed: "..squadsCleared)
+				game.print("Rampant fixed, версия 1.1.0. Исключено поверхностей:"..mapsCounter..", отрядов удалено: "..squadsCleared)
 			end
 			
 			for surfaceIndex, map in pairs(universe.maps) do
@@ -820,7 +820,7 @@ function upgrade.attempt(universe)
 						end	
 					end	
 					if wormsDeleted > 0 then
-						game.print("update 1.2.8: "..map.surface.name..":".. wormsDeleted.." worm(s) removed")
+						game.print("Обновление 1.2.8: "..map.surface.name..":".. wormsDeleted.." червей удалено")
 					end
 				end	
 			end

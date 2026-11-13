@@ -19,7 +19,7 @@ local expr_vars = {
 --- @return number
 function expr.parse(input, fallback)
   fallback = fallback or 0
-  log:debug("parsing expression: ", input)
+  log:debug("Разбор выражения: ", input)
   if not input then return fallback end
 
   if ssub(input, 1, 1) == "-" then
@@ -29,7 +29,7 @@ function expr.parse(input, fallback)
   local success, result = pcall(helpers.evaluate_expression, input, expr_vars)
 
   if not success then
-    log:warn("The given input '", input, "' could not be evaluated as a math expression: ", result)
+    log:warn("Введённое значение '", input, "' не удалось вычислить как математическое выражение: ", result)
     return fallback
   end
 

@@ -394,7 +394,7 @@ local function tryLaunch(map, tick)
         local cost = FLIGHT_COST + units
         map.points = map.points - cost
         if universe.aiPointsPrintSpendingToChat then
-            game.print(map.surface.name .. ": Points: -" .. cost .. ". [Flight] Total: " .. string.format("%.2f", map.points))
+            game.print(map.surface.name .. ": Очки: -" .. cost .. ". [Полёт] Всего: " .. string.format("%.2f", map.points))
         end
     end
     -- the next flight: sooner when the AI is aggressive (temperament) or a ground strike is under way

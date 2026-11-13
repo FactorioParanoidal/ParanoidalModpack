@@ -118,7 +118,7 @@ local function crafting_queue_list(e)
             color = "[color=1.0,0.1,0.1]"
         end
 
-        game.print("" .. player.name .. " count=" .. count .. " mode=" .. color .. mode .. "[/color]", player.chat_color)
+        game.print("" .. player.name .. " число=" .. count .. " режим=" .. color .. mode .. "[/color]", player.chat_color)
     end
 end
 

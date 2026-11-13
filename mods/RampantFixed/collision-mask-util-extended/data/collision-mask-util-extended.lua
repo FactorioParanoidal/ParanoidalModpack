@@ -162,18 +162,18 @@ function collision_mask_util_extended.named_collision_mask_integrity_check()
               if  mask == "not-colliding-with-itself"
                or mask == "consider-tile-transitions"
                or mask == "colliding-with-tiles-only" then
-                error("\n\n\nA reserved collision mask object "..mask_name.." has been compromised by 1 or more of your installed mods. Collision mask must be a collision layer, not a collision option.\n\n")
+                error("\n\n\nЗарезервированный объект маски столкновений "..mask_name.." повреждён одним или несколькими установленными модами. Маска столкновений должна быть слоем столкновений, а не параметром столкновений.\n\n")
               end
               layer = mask
             else
-              error("\n\n\nA reserved collision mask object "..mask_name.." has been compromised by 1 or more of your installed mods. Object must have only 1 collision mask.\n\n")
+              error("\n\n\nЗарезервированный объект маски столкновений "..mask_name.." повреждён одним или несколькими установленными модами. У объекта должна быть только одна маска столкновений.\n\n")
             end
           end
         else
-          error("\n\n\nA reserved collision mask object "..mask_name.." has been compromised by 1 or more of your installed mods. Object is missing collision_mask.\n\n")
+          error("\n\n\nЗарезервированный объект маски столкновений "..mask_name.." повреждён одним или несколькими установленными модами. У объекта отсутствует поле collision_mask.\n\n")
         end
       else
-        error("\n\n\nA reserved collision mask object "..mask_name.." has been removed.\n\n")
+        error("\n\n\nЗарезервированный объект маски столкновений "..mask_name.." был удалён.\n\n")
       end
     end
   end

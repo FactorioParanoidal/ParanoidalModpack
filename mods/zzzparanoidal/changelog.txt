@@ -1,5 +1,7 @@
 ---------------------------------------------------------------------------------------------------
 Version: 8.1.31
+  Locale:
+    - Russian hardcoded player-facing text: 62 UI, chat, command-help and error-message literals; technical identifiers, format parameters and gameplay logic are unchanged.
   Changes:
     - Reused identical local PNGs for menu icons, Reskins artwork, chrome ore variants, titanium chest sprites and combinator shadows; consolidated transparent beacon images without removing their layers. Removed 54 duplicate files (181733 bytes), preserving prototype IDs, icon geometry, recipe overlays and startup modes.
     - Set the high-capacity T1 accumulator input/output limits to 60kW instead of 600kW, matching the capacity-to-power ratio of T2/T3. Slow accumulators T1-T3 now cost 2 tier-appropriate circuits instead of 4; their capacity, flow limits and other ingredients are unchanged.

@@ -149,10 +149,10 @@ function Migrate.v1_7_4()
     log("Migration 1.7.4 Starting")
 
     if settings.global[Settings.allowAllTech].value then
-        game.print("Blueprint Sandboxes Notice: You had the Unlock-all-Technologies " ..
-                "Setting enabled, but there was a bug pre-1.7.4 that was incorrectly " ..
-                "overriding some of the bonuses from leveled-research. You should " ..
-                "disable, then re-enable this setting in order to fix that.")
+        game.print("Уведомление Blueprint Sandboxes: у вас был включён параметр «Разблокировать все технологии», " ..
+                "но до версии 1.7.4 была ошибка, из-за которой некорректно " ..
+                "применялись некоторые бонусы исследований с уровнями. Чтобы исправить это, " ..
+                "отключите этот параметр, а затем включите его снова.")
     end
 
     log("Migration 1.7.4 Finished")

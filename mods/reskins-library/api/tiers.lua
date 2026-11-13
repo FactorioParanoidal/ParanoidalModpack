@@ -120,7 +120,7 @@ local basic_belt_color_override = _settings.get_value("reskins-bobs-basic-belts-
 ---### Exceptions
 ---*@throws* `string` — Thrown when `tier` is not an integer between 0 and 6.
 function _tiers.get_tint(tier)
-	assert(tier and tier >= 0 and tier <= 6 and tier % 1 == 0, "Invalid parameter: 'tier' must be an integer between 0 and 6.")
+	assert(tier and tier >= 0 and tier <= 6 and tier % 1 == 0, "Недопустимый параметр: 'tier' должен быть целым числом от 0 до 6.")
 
 	if is_using_custom_tier_colors then
 		return util.copy(custom_tier_colors[tier])
@@ -136,8 +136,8 @@ end
 ---@param prog_tier? integer # The progression tier to get a color for; must be between 0 and 6.
 ---@return integer # The tier appropriate for the current settings.
 local function get_tier_from_parameters(tier, prog_tier)
-	assert(tier and tier >= 0 and tier <= 6 and tier % 1 == 0, "Invalid parameter: 'tier' must be an integer between 0 and 6.")
-	assert(not prog_tier or (prog_tier and prog_tier >= 0 and prog_tier <= 6 and prog_tier % 1 == 0), "Invalid parameter: 'prog_tier' must be an integer between 0 and 6.")
+	assert(tier and tier >= 0 and tier <= 6 and tier % 1 == 0, "Недопустимый параметр: 'tier' должен быть целым числом от 0 до 6.")
+	assert(not prog_tier or (prog_tier and prog_tier >= 0 and prog_tier <= 6 and prog_tier % 1 == 0), "Недопустимый параметр: 'prog_tier' должен быть целым числом от 0 до 6.")
 
 	if reskins.lib.settings.get_value("reskins-lib-tier-mapping") == "progression-map" then
 		return prog_tier or tier
@@ -150,7 +150,7 @@ end
 ---@param tier_value PrototypeTierValue
 ---@return integer # The tier appropriate for the current settings.
 local function get_tier_from_value(tier_value)
-	assert(tier_value.tier, "Invalid parameter: 'tier' field is a required field on PrototypeTierValue.")
+	assert(tier_value.tier, "Недопустимый параметр: поле 'tier' обязательно для PrototypeTierValue.")
 
 	return get_tier_from_parameters(tier_value.tier, tier_value.prog_tier)
 end
@@ -188,7 +188,7 @@ end
 ---### Exceptions
 ---*@throws* `string` — Thrown when `tier` is not an integer between 0 and 6.
 function _tiers.get_belt_tint(tier)
-	assert(tier and tier >= 0 and tier <= 6 and tier % 1 == 0, "Invalid parameter: 'tier' must be an integer between 0 and 6.")
+	assert(tier and tier >= 0 and tier <= 6 and tier % 1 == 0, "Недопустимый параметр: 'tier' должен быть целым числом от 0 до 6.")
 
 	---@type data.Color
 	local tint
@@ -308,7 +308,7 @@ end
 ---### Parameters
 ---@param icon_data data.IconData[] # An array of `IconData` objects.
 function _tiers.remove_tier_labels_from_icons(icon_data)
-	assert(icon_data, "Invalid parameter: 'icon_data' must not be nil.")
+	assert(icon_data, "Недопустимый параметр: 'icon_data' не должен быть nil.")
 
 	local icon_data_copy = util.copy(icon_data)
 
@@ -369,8 +369,8 @@ end
 ---*@throws* `string` — Thrown when `icon_data[n].icon_size` is not a positive integer.<br/>
 ---@nodiscard
 function _tiers.add_tier_labels_to_icons(tier, icon_data)
-	assert(tier and tier >= 0 and tier <= 6 and tier % 1 == 0, "Invalid parameter: 'tier' must be an integer between 0 and 6.")
-	assert(icon_data, "Invalid parameter: 'icon_data' must not be nil.")
+	assert(tier and tier >= 0 and tier <= 6 and tier % 1 == 0, "Недопустимый параметр: 'tier' должен быть целым числом от 0 до 6.")
+	assert(icon_data, "Недопустимый параметр: 'icon_data' не должен быть nil.")
 
 	if not _tiers.is_tier_labeling_enabled then
 		return util.copy(icon_data)
@@ -506,7 +506,7 @@ end
 ---*@throws* `string` — Thrown when `prototype` has an icon with field `icon` that is not an absolute file path with a valid extension.<br/>
 ---*@throws* `string` — Thrown when `prototype` has an icon with field `icon_size` that is not a positive integer.<br/>
 function _tiers.get_deferrable_icon_for_prototype_with_added_tier_labels(tier, prototype)
-	assert(tier and tier >= 0 and tier <= 6 and tier % 1 == 0, "Invalid parameter: 'tier' must be an integer between 0 and 6.")
+	assert(tier and tier >= 0 and tier <= 6 and tier % 1 == 0, "Недопустимый параметр: 'tier' должен быть целым числом от 0 до 6.")
 
 	-- There is not a 0th tier pip.
 	if tier == 0 then
@@ -601,8 +601,8 @@ end
 ---*@throws* `string` — Thrown when the prototype icon has an with field `icon` that is not an absolute file path with a valid extension.<br/>
 ---*@throws* `string` — Thrown when the prototype icon has an with field `icon_size` that is not a positive integer.<br/>
 function _tiers.add_tier_labels_to_prototype_by_name(tier, name, type_name)
-	assert(name and name ~= "", "Invalid parameter: 'name' must not be nil or an empty string.")
-	assert(type_name and type_name ~= "", "Invalid parameter: 'type_name' must not be nil or an empty string.")
+	assert(name and name ~= "", "Недопустимый параметр: 'name' не должен быть nil или пустой строкой.")
+	assert(type_name and type_name ~= "", "Недопустимый параметр: 'type_name' не должен быть nil или пустой строкой.")
 
 	_tiers.add_tier_labels_to_prototype_by_reference(tier, data.raw[type_name][name])
 end

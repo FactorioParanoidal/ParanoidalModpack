@@ -150,7 +150,7 @@ function GuiTree:create_tree(parent, list, expand)
         -- header
         local header = GuiElement.add(content_branch, GuiFlowH("header"))
         if index > 25 then
-            local caption = "More..."
+            local caption = "Ещё..."
             local label = GuiElement.add(header, GuiLink(self.classname, "expand-continue", "bypass"):caption(caption):font_color(self.font_link.font_color, self.font_link.hovered_font_color))
             label.tags = {list=table.slice(list, 25)}
         else

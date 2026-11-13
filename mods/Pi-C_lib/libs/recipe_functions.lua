@@ -60,7 +60,7 @@ return function(mod_args)
   -- Make sure we've got a valid difficulty name!
   local function check_difficulty(difficulty)
     if difficulty ~= "" and difficulty ~= "normal" and difficulty ~= "expensive" then
-      error(string.format("%s is not a valid difficulty!", difficulty))
+      error(string.format("%s не является допустимым уровнем сложности!", difficulty))
     end
   end
 
@@ -96,7 +96,7 @@ return function(mod_args)
     local recipe = check_recipe(recipe_in)
 
     if not recipe_properties[property] then
-      error(string.format("%s is not a valid recipe property!", property))
+      error(string.format("%s не является допустимым свойством рецепта!", property))
     end
     if
       (recipe_properties[property] == "boolean" and type(value) ~= "boolean") or
@@ -108,7 +108,7 @@ return function(mod_args)
       (recipe_properties[property] == "string" and type(value) ~= "string") or
       (recipe_properties[property] == "table" and type(value) ~= "table")
     then
-      error(string.format("%s is not a %s value!", value, recipe_properties[property]))
+      error(string.format("%s не является значением типа %s!", value, recipe_properties[property]))
     end
 
     -- Set value
@@ -196,7 +196,7 @@ return function(mod_args)
         split_line(recipe, property)
       end
     else
-      common.writeDebug("Recipe %s does not exist.", {recipe_in})
+      common.writeDebug("Рецепт %s не существует.", {recipe_in})
     end
 
     common.entered_function("leave")
@@ -240,10 +240,10 @@ return function(mod_args)
 
     else
       if not recipe then
-        common.writeDebug("Recipe %s does not exist.", {recipe_in})
+        common.writeDebug("Рецепт %s не существует.", {recipe_in})
       end
       if not item_stuff.get_basic_type(item.name) then
-        common.writeDebug("Ingredient %s does not exist.", {item_in})
+        common.writeDebug("Ингредиент %s не существует.", {item_in})
       end
     end
 
@@ -262,10 +262,10 @@ return function(mod_args)
       recipe_stuff.add_difficulty_ingredient(recipe, "expensive", item)
     else
       if not recipe then
-        common.writeDebug("No recipe!")
+        common.writeDebug("Нет рецепта!")
       end
       if not item then
-        common.writeDebug("No ingredient!")
+        common.writeDebug("Нет ингредиента!")
       end
     end
 
@@ -299,10 +299,10 @@ return function(mod_args)
 
     else
       if not recipe then
-        common.writeDebug("Recipe %s does not exist.", {recipe_in})
+        common.writeDebug("Рецепт %s не существует.", {recipe_in})
       end
       if not item then
-        common.writeDebug("Ingredient %s does not exist.", {item_in})
+        common.writeDebug("Ингредиент %s не существует.", {item_in})
       end
     end
 
@@ -321,10 +321,10 @@ return function(mod_args)
       recipe_stuff.add_new_difficulty_ingredient(recipe, "expensive", item)
     else
       if not recipe then
-        common.writeDebug("No recipe!")
+        common.writeDebug("Нет рецепта!")
       end
       if not item then
-        common.writeDebug("No ingredient!")
+        common.writeDebug("Нет ингредиента!")
       end
     end
 
@@ -360,7 +360,7 @@ return function(mod_args)
       end
     else
       if not recipe then
-        common.writeDebug("Recipe %s does not exist.", {recipe_in})
+        common.writeDebug("Рецепт %s не существует.", {recipe_in})
       end
     end
 
@@ -379,10 +379,10 @@ return function(mod_args)
       recipe_stuff.remove_difficulty_ingredient(recipe, "expensive", item)
     else
       if not recipe then
-        common.writeDebug("No recipe!")
+        common.writeDebug("Нет рецепта!")
       end
       if not item then
-        common.writeDebug("No ingredient!")
+        common.writeDebug("Нет ингредиента!")
       end
     end
 
@@ -403,10 +403,10 @@ return function(mod_args)
     local recipe = check_recipe(recipe_in)
 
     if type(old) ~= "string" and (type(old) ~= "table" or not old.name and old.type) then
-      error(string.format("\"%s\" is not a valid item name or item!", old))
+      error(string.format("\"%s\" не является допустимым именем предмета или предметом!", old))
     end
     if type(new) ~= "string" and (type(new) ~= "table" or not new.name and new.type) then
-      error(string.format("\"%s\" is not a valid item name or item!", new))
+      error(string.format("\"%s\" не является допустимым именем предмета или предметом!", new))
     end
 
     local retval = false
@@ -448,7 +448,7 @@ return function(mod_args)
 
           -- Switch from fluid to item?
           if old_type == "fluid" and new_type == "item" then
-            common.writeDebug("Switching from fluid (%s) to item (%s)!",
+            common.writeDebug("Замена жидкости (%s) на предмет (%s)!",
                           {common.enquote(old_name), common.enquote(new_name)})
             new_item.amount = math.ceil(new_item.amount * 0.1)
             new_item.catalyst_amount = math.ceil(new_item.catalyst_amount * 0.1)
@@ -457,14 +457,14 @@ return function(mod_args)
 
           -- Switch from item to fluid
           elseif old_type == "item" and new_type == "fluid" then
-            common.writeDebug("Switching from item (%s) to fluid (%s)!",
+            common.writeDebug("Замена предмета (%s) на жидкость (%s)!",
                           {common.enquote(old_name), common.enquote(new_name)})
             new_item.amount = new_item.amount * 10
             new_item.catalyst_amount = new_item.catalyst_amount * 10
 
           -- Same item
           else
-            common.writeDebug("Type of %s and %s is the same (%s)!",
+            common.writeDebug("Типы %s и %s совпадают (%s)!",
                   {common.enquote(old_name), common.enquote(new_name), common.enquote(old_type)})
           end
 
@@ -487,7 +487,7 @@ return function(mod_args)
 
     else
       if not recipe then
-        common.writeDebug("Recipe %s does not exist.", {recipe_in})
+        common.writeDebug("Рецепт %s не существует.", {recipe_in})
       end
       --~ if not new_type then
         --~ common.writeDebug("Ingredient %s does not exist.", {new})
@@ -509,13 +509,13 @@ return function(mod_args)
       recipe_stuff.replace_difficulty_ingredient(recipe, "expensive", old, new)
     else
       if not recipe then
-        common.writeDebug("No recipe!")
+        common.writeDebug("Нет рецепта!")
       end
       if not old then
-        common.writeDebug("No old ingredient to replace!")
+        common.writeDebug("Нет старого ингредиента для замены!")
       end
       if not new then
-        common.writeDebug("No new ingredient!")
+        common.writeDebug("Нет нового ингредиента!")
       end
     end
 
@@ -529,12 +529,12 @@ return function(mod_args)
 
     if new and item_stuff.get_basic_type(new) then
       for r, recipe in pairs(data.raw.recipe) do
-        common.writeDebug("Recipe \"%s\": Trying to replace ingredient \"%s\" with \"%s\"",
+        common.writeDebug("Рецепт «%s»: попытка заменить ингредиент «%s» на «%s»",
                         {r, old and old.name or old or "nil", new and new.name or new or "nil"})
         recipe_stuff.replace_ingredient(recipe.name, old, new)
       end
     else
-      common.writeDebug("%s is not a valid ingredient!", {new})
+      common.writeDebug("%s — недопустимый ингредиент!", {new})
     end
 
     common.entered_function("leave")
@@ -568,10 +568,10 @@ return function(mod_args)
 
     else
       if not recipe then
-        common.writeDebug("Recipe %s does not exist.", {recipe_in})
+        common.writeDebug("Рецепт %s не существует.", {recipe_in})
       end
       if not item_stuff.get_basic_type(item.name) then
-        common.writeDebug("%s is not a valid ingredient.", {item_in})
+        common.writeDebug("%s — недопустимый ингредиент.", {item_in})
       end
     end
 
@@ -589,10 +589,10 @@ return function(mod_args)
       recipe_stuff.set_difficulty_ingredient(recipe, "expensive", item)
     else
       if not recipe then
-        common.writeDebug("No recipe!")
+        common.writeDebug("Нет рецепта!")
       end
       if not item then
-        common.writeDebug("No ingredient!")
+        common.writeDebug("Нет ингредиента!")
       end
     end
 
@@ -635,10 +635,10 @@ return function(mod_args)
       end
     else
       if not recipe then
-        common.writeDebug("Recipe %s does not exist.", {recipe_in})
+        common.writeDebug("Рецепт %s не существует.", {recipe_in})
       end
       if not item_stuff.get_basic_type(item.name) then
-        common.writeDebug("Item %s does not exist.", {item_in})
+        common.writeDebug("Предмет %s не существует.", {item_in})
       end
     end
 
@@ -657,10 +657,10 @@ return function(mod_args)
       recipe_stuff.add_difficulty_result(recipe, "expensive", item)
     else
       if not recipe then
-        common.writeDebug("No recipe!")
+        common.writeDebug("Нет рецепта!")
       end
       if not item then
-        common.writeDebug("No ingredient!")
+        common.writeDebug("Нет ингредиента!")
       end
     end
 
@@ -682,10 +682,10 @@ return function(mod_args)
 
     local old_name = (type(old) == "string") and old or
                       (type(old) == "table") and old.name or
-                      error(string.format("\"%s\" is not a valid value for old result!", old))
+                      error(string.format("\"%s\" не является допустимым значением старого результата!", old))
     local new_name = (type(new) == "string") and new or
                       (type(new) == "table") and new.name or
-                      error(string.format("\"%s\" is not a valid value for new result!", old))
+                      error(string.format("\"%s\" не является допустимым значением нового результата!", old))
 
     -- Will be "item" or "fluid"
     local new_type = item_stuff.get_basic_type(new_name)
@@ -757,10 +757,10 @@ return function(mod_args)
       end
     else
       if not recipe then
-        common.writeDebug("Recipe %s does not exist.", {recipe_in})
+        common.writeDebug("Рецепт %s не существует.", {recipe_in})
       end
       if not new_type then
-        common.writeDebug("Result %s does not exist.", {new})
+        common.writeDebug("Результат %s не существует.", {new})
       end
     end
 
@@ -782,13 +782,13 @@ return function(mod_args)
 
     else
       if not recipe then
-        common.writeDebug("No recipe!")
+        common.writeDebug("Нет рецепта!")
       end
       if not old then
-        common.writeDebug("No old result to replace!")
+        common.writeDebug("Нет старого результата для замены!")
       end
       if not new then
-        common.writeDebug("No new result!")
+        common.writeDebug("Нет нового результата!")
       end
     end
 
@@ -806,7 +806,7 @@ return function(mod_args)
         recipe_stuff.replace_result(recipe, old, new)
       end
     else
-      common.writeDebug("%s is not a valid result!", {new})
+      common.writeDebug("%s — недопустимый результат!", {new})
     end
 
     common.entered_function("leave")
@@ -841,10 +841,10 @@ return function(mod_args)
       end
     else
       if not recipe then
-        common.writeDebug("No recipe!")
+        common.writeDebug("Нет рецепта!")
       end
       if not item_name then
-        common.writeDebug("No item name!")
+        common.writeDebug("Нет названия предмета!")
       end
     end
 
@@ -862,10 +862,10 @@ return function(mod_args)
       recipe_stuff.remove_difficulty_result(recipe, "expensive", item)
     else
       if not recipe then
-        common.writeDebug("No recipe!")
+        common.writeDebug("Нет рецепта!")
       end
       if not item then
-        common.writeDebug("No item!")
+        common.writeDebug("Нет предмета!")
       end
     end
 
@@ -902,10 +902,10 @@ return function(mod_args)
 
     else
       if not recipe then
-        common.writeDebug("Recipe %s does not exist.", {recipe_in})
+        common.writeDebug("Рецепт %s не существует.", {recipe_in})
       end
       if not item_stuff.get_basic_type(item.name) then
-        common.writeDebug("%s is not a valid result.", {item_in})
+        common.writeDebug("%s — недопустимый результат.", {item_in})
       end
     end
 
@@ -924,10 +924,10 @@ return function(mod_args)
       recipe_stuff.set_difficulty_result(recipe, "expensive", item)
     else
       if not recipe then
-        common.writeDebug("No recipe!")
+        common.writeDebug("Нет рецепта!")
       end
       if not item then
-        common.writeDebug("No item!")
+        common.writeDebug("Нет предмета!")
       end
     end
 
@@ -1003,7 +1003,7 @@ return function(mod_args)
               elseif not amount_min then
                 amount_min = amount_max
               end
-  common.writeDebug("Result: %s\nname: %s\tamount: %s\tamount_min: %s\tamount_max: %s",
+  common.writeDebug("Результат: %s\nимя: %s\tколичество: %s\tминимальное количество: %s\tмаксимальное количество: %s",
                     {result, name, amount or "nil", amount_min or "nil", amount_max or "nil"})
 
               ret[name].amount_min      = amount_min and (ret[name].amount_min + amount_min) or
@@ -1070,7 +1070,7 @@ common.show("ret", ret)
     local recipe = check_recipe(recipe_in)
 
     local ret
-    common.writeDebug("Get results for recipe %s",
+    common.writeDebug("Получение результатов рецепта %s",
                       {recipe and recipe.name or "nil"})
     if recipe then
       -- If difficulty doesn't exist, it will be created from the raw recipe, so we don't
@@ -1096,7 +1096,7 @@ common.show("ret", ret)
     local recipe = check_recipe(recipe_in)
 
     if type(result_name) ~= "string" then
-      error(string.format("%s is not a valid result name!", result_name))
+      error(string.format("%s не является допустимым именем результата!", result_name))
     end
 
     local ret
@@ -1117,7 +1117,7 @@ common.show("ret", ret)
     local recipe = check_recipe(recipe_in)
 
     if type(result_name) ~= "string" then
-      error(string.format("%s is not a valid result name!", result_name))
+      error(string.format("%s не является допустимым именем результата!", result_name))
     end
 
     local ret
@@ -1160,7 +1160,7 @@ common.show("ret", ret)
         name = ingredient.name or ingredient[1]
         amount = ingredient.amount or ingredient[2]
         if not (name and amount) then
-          error(string.format("%s is not a valid recipe ingredient specification!",
+          error(string.format("%s не является допустимым описанием ингредиента рецепта!",
                                 serpent.line(ingredient)))
         end
 
@@ -1288,7 +1288,7 @@ common.show("ret", ret)
     check_difficulty(difficulty)
     local recipe = check_recipe(recipe_in)
     if type(ingredient) ~= "string" then
-      error(string.format("%s is not a valid ingredient name!", ingredient))
+      error(string.format("%s не является допустимым именем ингредиента!", ingredient))
     end
 
     local ret, ingredients
@@ -1308,7 +1308,7 @@ common.show("ret", ret)
     local recipe = check_recipe(recipe_in)
 
     if type(ingredient) ~= "string" then
-      error(string.format("%s is not a valid ingredient name!", ingredient))
+      error(string.format("%s не является допустимым именем ингредиента!", ingredient))
     end
 
     local ret, ingredients
@@ -1390,7 +1390,7 @@ common.show("ret", ret)
       end
 
     else
-      common.writeDebug("%s does not exist.", {object})
+      common.writeDebug("%s не существует.", {object})
     end
 
     common.entered_function("leave")

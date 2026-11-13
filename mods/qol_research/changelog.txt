@@ -1,5 +1,7 @@
 ---------------------------------------------------------------------------------------------------
 Version: 3.4.2
+  Locale:
+    - Russian hardcoded player-facing text: 10 UI, chat, command-help and error-message literals; technical identifiers, format parameters and gameplay logic are unchanged.
 Date: 4. 5. 2025
   Changes:
     - Paranoidal: removed the "[qol] Quality of Life Research v3 is installed" and configurator link messages at player creation.

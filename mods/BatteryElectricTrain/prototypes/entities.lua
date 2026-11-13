@@ -4,7 +4,7 @@ local sounds      = require("__base__/prototypes/entity/sounds")
 local function MakeLocomotive()
 	local vanilla_loc = data.raw["locomotive"]["locomotive"]
 	if not vanilla_loc then
-		error("Required vanilla locomotive not found. Another mod must have removed it.", 0)
+		error("Не найден требуемый локомотив из базовой игры. Возможно, другой мод удалил его.", 0)
 	end
 
 	local fuel_slots = settings.startup[setting_battery_slots].value

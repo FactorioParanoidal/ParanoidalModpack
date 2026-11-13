@@ -24,7 +24,7 @@ local handlers_lookup = {}
 --- @return LuaGuiElement first The element that was created first;  the "top level" element.
 function flib_gui.add(parent, def, elems)
   if not parent or not parent.valid then
-    error("Parent element is missing or invalid")
+    error("Родительский элемент отсутствует или недопустим")
   end
   if not elems then
     elems = {}
@@ -47,7 +47,7 @@ function flib_gui.add(parent, def, elems)
       local has_array_children = false
       if def[1] then
         if children then
-          error("Cannot define children in array portion and subtable simultaneously")
+          error("Нельзя одновременно задавать дочерние элементы в массиве и подтаблице")
         end
         has_array_children = true
         children = {}
@@ -83,7 +83,7 @@ function flib_gui.add(parent, def, elems)
       if drag_target then
         local target = elems[drag_target]
         if not target then
-          error("Drag target '" .. drag_target .. "' not found.")
+          error("Цель перетаскивания '" .. drag_target .. "' не найдена.")
         end
         elem.drag_target = target
       end
@@ -139,7 +139,7 @@ function flib_gui.add_handlers(new_handlers, wrapper, prefix)
     end
     if type(handler) == "function" then
       if handlers_lookup[name] then
-        error("Attempted to register two GUI event handlers with the same name: " .. name)
+        error("Попытка зарегистрировать два обработчика событий GUI с одинаковым именем: " .. name)
       end
       handlers[handler] = name
       if wrapper then

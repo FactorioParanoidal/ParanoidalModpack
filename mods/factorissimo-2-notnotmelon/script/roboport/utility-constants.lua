@@ -8,7 +8,7 @@ local utility_constants = {
 if mods then
     local prototype = data.raw["utility-constants"]["default"]
     for key, value in pairs(utility_constants) do
-        assert(prototype[key] == value, "expected %s to be %s but was %s.", key, serpent.line(value), serpent.line(prototype[key]))
+        assert(prototype[key] == value, "ожидалось, что %s будет равно %s, но получено %s.", key, serpent.line(value), serpent.line(prototype[key]))
     end
 end
 

@@ -1,5 +1,7 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.0
+  Locale:
+    - Russian hardcoded player-facing text: 10 UI, chat, command-help and error-message literals; technical identifiers, format parameters and gameplay logic are unchanged.
 Date: 2026-11-10
   Changes:
     - Paranoidal packaging: moved regression fixtures out of the distributed mod into the local test collection; stack rules and configuration are unchanged by this packaging change.

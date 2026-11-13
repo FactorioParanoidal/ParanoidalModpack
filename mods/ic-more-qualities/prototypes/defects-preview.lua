@@ -60,15 +60,15 @@ function M.defect(tier)
 end
 
 function M.prepare(raw)
-    assert(raw.quality and raw.quality.normal, "Missing standard quality")
-    assert(raw.technology, "Missing technologies")
-    local quality_module = assert(raw.technology["quality-module"], "Missing first quality-module technology")
-    assert(raw.quality.normal.level == 0, "Defects require standard quality at level 0")
+    assert(raw.quality and raw.quality.normal, "Не найдено стандартное качество")
+    assert(raw.technology, "Не найдены технологии")
+    local quality_module = assert(raw.technology["quality-module"], "Не найдена первая технология quality-module")
+    assert(raw.quality.normal.level == 0, "Для дефектов требуется стандартное качество уровня 0")
     for tier = 1, 5 do
-        assert(not raw.quality["ic-defect-" .. tier], "Defect quality already registered")
+        assert(not raw.quality["ic-defect-" .. tier], "Качество дефекта уже зарегистрировано")
     end
     for level = 1, 10 do
-        assert(not raw.technology[model.research(level).name], "Defect research already registered")
+        assert(not raw.technology[model.research(level).name], "Исследование дефектов уже зарегистрировано")
     end
 
     local prototypes = {}

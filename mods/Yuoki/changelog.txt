@@ -55,6 +55,7 @@ Date: 2026-10-24
     - 25 language-neutral scheme pictures for the tips (graphics/tips, 1024x440, icons of the build); technology icons for the four YI armor technologies.
     - Technologies use their own 256x256 icons (graphics/technology/, the same neural upscale of the item icon) instead of the 32-96 px item icons.
   Locale:
+    - Russian hardcoded player-facing text: 15 UI, chat, command-help and error-message literals; technical identifiers, format parameters and gameplay logic are unchanged.
     - Complete en/ru for all remaining content (888 keys each); Engines locale merged into locale/*/yi_engines.cfg; additions in locale/*/paranoidal.cfg; keys of removed content pruned; languages other than en and ru dropped.
   Compatibility:
     - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.

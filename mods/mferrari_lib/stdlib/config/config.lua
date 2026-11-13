@@ -53,11 +53,11 @@ Config = {}
 --CONFIG.is_set("your.path.here")
 function Config.new(config_table)
     if not config_table then
-        error("config_table is a required parameter.", 2)
+        error("Параметр config_table обязателен.", 2)
     elseif type(config_table) ~= "table" then
-        error("config_table must be a table. Was given [" .. type(options) .. "]", 2)
+        error("config_table должен быть таблицей. Передан тип [" .. type(options) .. "]", 2)
     elseif type(config_table.get) == "function" then
-        error("Config can't manage another Config object", 2)
+        error("Объект Config не может управлять другим объектом Config", 2)
     end
 
     -----------------------------------------------------------------------
@@ -70,12 +70,12 @@ function Config.new(config_table)
     -- @param default (optional) value to be used if path is nil
     -- @return value at path or nil if not found and no default given
     function Config.get(path, default)
-        if type(path) ~= "string" or path:is_empty() then error("path is invalid", 2) end
+        if type(path) ~= "string" or path:is_empty() then error("путь недопустим", 2) end
 
         local config = config_table
 
         local c = testReservedCharacters(path)
-        if c ~= nil then error("path '" .. path .. "' contains the reserved character '" .. c .. "'", 2) end
+        if c ~= nil then error("путь '" .. path .. "' содержит зарезервированный символ '" .. c .. "'", 2) end
 
         local pathParts = path:split('.')
         local part = config;
@@ -107,12 +107,12 @@ function Config.new(config_table)
     -- @param data (optional) Value to set path to. If nil it behaves identical to Config.delete()
     -- @return number 0 on failure; number of affected paths on success
     function Config.set(path, data)
-        if type(path) ~= "string" or path:is_empty() then error("path is invalid", 2) end
+        if type(path) ~= "string" or path:is_empty() then error("путь недопустим", 2) end
 
         local config = config_table
 
         local c = testReservedCharacters(path)
-        if c ~= nil then error("path contains the reserved character '" .. c .. "'", 2) end
+        if c ~= nil then error("путь содержит зарезервированный символ '" .. c .. "'", 2) end
 
         local pathParts = path:split('.')
         local part = config;
@@ -137,12 +137,12 @@ function Config.new(config_table)
     -- @param path a string, config path to delete
     -- @return number 0 on failure; number of affected paths on success
     function Config.delete(path)
-        if type(path) ~= "string" or path:is_empty() then error("path is invalid", 2) end
+        if type(path) ~= "string" or path:is_empty() then error("путь недопустим", 2) end
 
         local config = config_table
 
         local c = testReservedCharacters(path)
-        if c ~= nil then error("path contains the reserved character '" .. c .. "'", 2) end
+        if c ~= nil then error("путь содержит зарезервированный символ '" .. c .. "'", 2) end
 
         local pathParts = path:split('.')
         local part = config
@@ -169,7 +169,7 @@ function Config.new(config_table)
     -- @param path a string, config path to test
     -- @return boolean, true on success, false otherwise
     function Config.is_set(path)
-        if type(path) ~= "string" or path:is_empty() then error("path is invalid", 2) end
+        if type(path) ~= "string" or path:is_empty() then error("путь недопустим", 2) end
 
         return Config.get(path) ~= nil
     end

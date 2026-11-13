@@ -138,7 +138,7 @@ function UnitTestPanel:updateRemoteAPI()
     local data = self:dataRemoteAPI()
     local root_branch = GuiElement.add(remote_api_tab, GuiFlowV())
     root_branch.style.vertically_stretchable = false
-    local branch = GuiTree("expand-source"):caption("first model..."):source(data):font_color(defines.color.blue.deep_sky_blue):expanded(true)
+    local branch = GuiTree("expand-source"):caption("первая модель..."):source(data):font_color(defines.color.blue.deep_sky_blue):expanded(true)
     local treeview = GuiElement.add(root_branch, branch)
 end
 
@@ -175,7 +175,7 @@ function UnitTestPanel:updateMenu()
     local group1 = GuiElement.add(menu_panel, GuiFlowH("group1"))
     GuiElement.add(group1,
         GuiButton("HMUnitTestPanel", "reload-script"):sprite("menu", defines.sprites.refresh.black,
-            defines.sprites.refresh.black):style("helmod_button_menu"):tooltip("Reload script"))
+            defines.sprites.refresh.black):style("helmod_button_menu"):tooltip("Перезагрузить скрипт"))
 end
 
 -------------------------------------------------------------------------------

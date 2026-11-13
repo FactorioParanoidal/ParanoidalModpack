@@ -120,7 +120,7 @@ end
 --- @param players LuaPlayer[]? game.connected_players, if the caller already has it
 NanobotsAuto.process_queue_tasks = function(tick, players)
     if config.DEBUG then
-        game.print("In process_queue_tasks")
+        game.print("Вызов process_queue_tasks")
     end
 
     for _, player in pairs(players or game.connected_players) do
@@ -314,7 +314,7 @@ local function run_task(data, ammo_kind, target_finder)
     end
 
     if config.DEBUG then
-        game.print("Dequeued " .. target_type .. " action")
+        game.print("Извлечено из очереди " .. target_type .. " действие")
     end
 
     if not in_reach(entity, state) then
@@ -335,11 +335,11 @@ local function run_task(data, ammo_kind, target_finder)
         ammo_drain(player, state.ammo, 1)
         forget_state(player)
         if config.DEBUG then
-            game.print("Action succeeded: " .. target_type)
+            game.print("Действие выполнено: " .. target_type)
         end
         return true
     end
-    game.print("Nanobots error: " .. target_type .. " action failed")
+    game.print("Ошибка Nanobots: " .. target_type .. " действие не выполнено")
     return false
 end
 
@@ -387,7 +387,7 @@ end
 --- @param state NanoState
 queue_constructor_targets = function(player, state, scan)
     if config.DEBUG then
-        game.print("In queue_constructor_targets")
+        game.print("Вызов queue_constructor_targets")
     end
 
     local force = player.force
@@ -418,7 +418,7 @@ end
 --- @param state NanoState
 queue_leveler_targets = function(player, state, scan)
     if config.DEBUG then
-        game.print("In queue_leveler_targets")
+        game.print("Вызов queue_leveler_targets")
     end
 
     local finder = NanobotsCommon.get_leveler_target_type

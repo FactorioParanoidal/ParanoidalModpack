@@ -61,7 +61,7 @@ minime_gui.make_flow = function(flow_data)
   minime.entered_function({flow_data})
 
   if type(flow_data) ~= "table" then
-    minime.entered_function("leave", "Missing argument!")
+    minime.entered_function("leave", "Отсутствует аргумент!")
     return
   end
 
@@ -97,14 +97,14 @@ minime_gui.make_gui_character_pages = function(player)
 
   player = minime.ascertain_player(player)
   if not player and player.valid then
-    minime.arg_err(player, "player specification")
+    minime.arg_err(player, "обозначение игрока")
   end
 
 minime.show("mod.player_data", mod.player_data)
   -- Get or initialize player data!
   local p_data = mod.player_data[player.index]
   if not p_data then
-    minime.writeDebug("Must initialize mod.player_data[%s]!", {player.index})
+    minime.writeDebug("Необходимо инициализировать mod.player_data[%s]!", {player.index})
     minime_player.init_player({player_index = player.index})
     p_data = mod.player_data[player.index]
   end
@@ -158,7 +158,7 @@ minime_gui.init_guis = function(player)
 
   -- We don't initialize GUIs of disconnected players!
   if not player.connected then
-    minime.entered_function({player}, "leave", "not connected")
+    minime.entered_function({player}, "leave", "не подключён")
     return
   end
 
@@ -235,7 +235,7 @@ minime_gui.select_character = function(player, clicked)
   if not (player and player.valid) then
     minime.arg_err(player, "player specification")
   end
-  minime.assert(clicked, "string", "button name")
+  minime.assert(clicked, "string", "имя кнопки")
 
   local names = minime_gui_names.selector
   local frames = names.frames
@@ -254,7 +254,7 @@ minime_gui.select_character = function(player, clicked)
                             frame[flows.bottom][flows.removal] and
                             frame[flows.bottom][flows.removal][flows.removal_buttons]
 
-  minime.writeDebug("%s clicked button \"%s\"", {player.name, clicked}, "line")
+  minime.writeDebug("%s нажал кнопку \"%s\"", {player.name, clicked}, "line")
 
   -- Toggle the buttons
   if (char_page and char_page[clicked]) or (removal and removal[clicked]) then
@@ -265,7 +265,7 @@ minime_gui.select_character = function(player, clicked)
 
     -- Player selected god mode
     if p_data.last_character == minime.godmode_button_name then
-minime.writeDebug("Selected god mode!\nlast_character: %s\tgod_mode: %s\teditor_mode: %s",
+minime.writeDebug("Выбран режим бога!\nlast_character: %s\tgod_mode: %s\teditor_mode: %s",
                   {p_data.last_character, p_data.god_mode or "nil", p_data.editor_mode or "nil"})
 
       p_data.last_character = ""
@@ -276,7 +276,7 @@ minime.writeDebug("last_character: %s\tgod_mode: %s\teditor_mode: %s",
 
     -- Player selected editor mode
     elseif p_data.last_character == minime.editor_button_name then
-minime.writeDebug("Selected editor mode!\nlast_character: %s\tgod_mode: %s\teditor_mode: %s",
+minime.writeDebug("Выбран режим редактора!\nlast_character: %s\tgod_mode: %s\teditor_mode: %s",
                   {p_data.last_character, p_data.god_mode or "nil", p_data.editor_mode or "nil"})
 
       -- SE doesn't allow players to enter editor mode if remote view mode is active
@@ -292,13 +292,13 @@ minime.writeDebug("last_character: %s\tgod_mode: %s\teditor_mode: %s",
 
     -- Player selected character
     else
-minime.writeDebug("Selected character!\nlast_character: %s\tgod_mode: %s\teditor_mode: %s",
+minime.writeDebug("Выбран персонаж!\nlast_character: %s\tgod_mode: %s\teditor_mode: %s",
                   {p_data.last_character, p_data.god_mode or "nil", p_data.editor_mode or "nil"})
 
       -- If the player is in SE's remote view mode, turn it off!
-      minime.writeDebug("Has player activated SE's remote view?")
+      minime.writeDebug("Игрок включил удалённый обзор SE?")
       if p_data.SE_nav_view then
-        minime.writeDebug("Must stop remote view mode!")
+        minime.writeDebug("Нужно отключить режим удалённого обзора!")
         -- Stopping remote view will cause SE to immediately raise its event. We
         -- don't want to overwrite p_data.last_character in this case, because we'd
         -- be stuck with the old character SE has returned us to instead of getting
@@ -306,11 +306,11 @@ minime.writeDebug("Selected character!\nlast_character: %s\tgod_mode: %s\teditor
         local flags = {keep_last_character = true}
         minime_player.stop_SE_remote_view(player, flags)
       else
-        minime.writeDebug("Remote view isn't active!")
+        minime.writeDebug("Режим удалённого обзора не активен!")
       end
 
     end
-    minime.writeDebug("Changed last_character for player %s to \"%s\"",
+    minime.writeDebug("Для игрока %s изменено значение last_character на \"%s\"",
                       --~ {player.name, global.player_data[player.index].last_character})
                       {player.name, mod.player_data[player.index].last_character})
 
@@ -321,7 +321,7 @@ minime.writeDebug("Selected character!\nlast_character: %s\tgod_mode: %s\teditor
     -- Close GUI if setting "minime_close_gui_on_selection" is enabled
     if p_data.settings.close_gui_on_selection then
       minime_gui.selector.gui_toggle(player)
-      minime.writeDebug("Closed GUI!")
+      minime.writeDebug("GUI закрыто!")
     end
   end
 
@@ -345,8 +345,8 @@ minime_gui.on_gui_click = function(event)
   do
     local mod_name = event.element.get_mod()
     if mod_name ~= minime.modName then
-      local reason = string.format("%s belongs to %s",
-                                    element_string, mod_name or "scenario script")
+      local reason = string.format("%s принадлежит %s",
+                                    element_string, mod_name or "скрипт сценария")
       minime.entered_function({}, "leave", reason)
       return
     end
@@ -356,7 +356,7 @@ minime_gui.on_gui_click = function(event)
   ----------------------------------------------------------------------------------
   -- Element of available-characters list was clicked
   if minime.prefixed(element, minime.available_chars_prefix) then
-    minime.writeDebug("Diverting to available-characters list (%s)!",
+    minime.writeDebug("Переход к списку доступных персонажей (%s)!",
                       --~ minime.argprint(element))
                       {element_string})
     minime_gui.available.on_gui_click(event)
@@ -364,14 +364,14 @@ minime_gui.on_gui_click = function(event)
 
   -- Element character selector was clicked
   elseif minime.prefixed(element, minime.character_selector_prefix) then
-    minime.writeDebug("Diverting to character selector (%s)!",
+    minime.writeDebug("Переход к выбору персонажа (%s)!",
                       --~ minime.argprint(element))
                       {element_string})
     minime_gui.selector.on_gui_click(event)
 
   -- Something else from our GUI has been clicked
   else
-    minime.writeDebug("Player %s clicked %s!",
+    minime.writeDebug("Игрок %s нажал %s!",
                       --~ {event.player_index, minime.argprint(element)})
                       {event.player_index, element_string})
   end
@@ -385,12 +385,12 @@ minime_gui.on_gui_click = function(event)
     }
     local e = event.element
 minime.show("event.element", e)
-    minime.writeDebugNewBlock("Trying to find GUI root element!")
+    minime.writeDebugNewBlock("Поиск корневого элемента интерфейса!")
 
     -- GUI could have been destroyed if changes have been applied on the GUI for
     -- turning characters on or off, enforcing a rebuild of the GUI.
     while e and e.valid and not gui_top_names[e.name] do
-minime.show("Checking element", e)
+minime.show("Проверка элемента", e)
       e = e.parent
     end
     if e and e.valid then
@@ -415,13 +415,13 @@ minime_gui.on_gui_selection_state_changed = function(event)
 
   -- Return if this is not an element of our mod
   if not minime.prefixed(element.name, minime.mod_elements_prefix) then
-    minime.entered_function({},"leave", "Nothing to do!")
+    minime.entered_function({},"leave", "Нечего делать!")
     return
   end
 
   -- Page selection in character selector was changed via drop-down list
   if minime.prefixed(element.name, minime.character_selector_prefix) then
-    minime.writeDebug("Diverting to character selector (%s)!", minime.argprint(element))
+    minime.writeDebug("Переход к выбору персонажа (%s)!", minime.argprint(element))
     minime_gui.selector.on_gui_selection_state_changed(event)
   end
 
@@ -439,14 +439,14 @@ minime_gui.on_gui_checked_state_changed = function(event)
   local element = event.element
 
   if not minime.prefixed(element.name, minime.mod_elements_prefix) then
-    minime.entered_function({}, "leave", "Nothing to do for %s \""..minime.argprint(element).."\"!")
+    minime.entered_function({}, "leave", "Нечего делать для %s \""..minime.argprint(element).."\"!")
     return
   end
 
   ------------------------------------------------------------------------------------
   -- Divert to available characters!
   if minime.prefixed(element.name, minime.available_chars_prefix) then
-    minime.writeDebug("Diverting to available-characters list (%s)!", minime.argprint(element))
+    minime.writeDebug("Переход к списку доступных персонажей (%s)!", minime.argprint(element))
     minime_gui.available.on_gui_checked_state_changed(event)
   end
 

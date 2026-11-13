@@ -20,7 +20,7 @@ minime_forces.init_force_data = function(force)
   force = minime.ascertain_force(force)
 minime.show("force", force)
   if not (force and force.valid) then
-    minime.entered_function({}, "leave", "no valid force")
+    minime.entered_function({}, "leave", "нет действительной фракции")
     return
   end
 
@@ -46,10 +46,10 @@ minime.show("has_players", has_players)
   minime.writeDebugNewBlock("Are any (suspended) players on %s?",
                             {force_string})
   if has_players then
-    minime.writeDebug("Yes: initializing force data!")
+    minime.writeDebug("Да: инициализация данных силы!")
     f_data[force.name] = f_data[force.name] or {}
 
-    minime.writeDebug("Checking whether required techs have been researched!")
+    minime.writeDebug("Проверка, исследованы ли требуемые технологии!")
     local techs = force.technologies or {}
     for tech, t in pairs(required_techs) do
       mod.researched_by[force.name][tech] = techs[tech] and
@@ -58,11 +58,11 @@ minime.show("has_players", has_players)
 minime.show("mod.researched_by[\""..force.name.."\"]", mod.researched_by[force.name])
 
     -- Remove empty tables
-    minime.writeDebugNewBlock("Has %s researched relevant techs?", {force})
+    minime.writeDebugNewBlock("Исследовала ли фракция %s нужные технологии?", {force})
     if next(mod.researched_by[force.name]) then
-      minime.writeDebug("Yes!")
+      minime.writeDebug("Да!")
     else
-      minime.writeDebug("No: removing empty table mod.researched_by[%s]!",
+      minime.writeDebug("Нет: удаление пустой таблицы mod.researched_by[%s]!",
                         {force.name})
       mod.researched_by[force.name] = nil
     end
@@ -74,7 +74,7 @@ minime.show("mod.researched_by[\""..force.name.."\"]", mod.researched_by[force.n
 
   -- No players/suspended players on that force!
   else
-    minime.writeDebug("No: removing empty table mod.researched_by[%s]!",
+    minime.writeDebug("Нет: удаление пустой таблицы mod.researched_by[%s]!",
                       {force.name})
     mod.researched_by[force.name] = nil
   end
@@ -93,7 +93,7 @@ minime_forces.on_force_created_or_reset = function(event)
   local reset = (e_name == "on_force_reset")
 
   minime.writeDebugNewBlock("%s force: %s data!",
-    {reset and "Reset" or "New", reset and "reinitializing" or "initializing"})
+    {reset and "Сброс" or "New", reset and "reinitializing" or "initializing"})
   minime_forces.init_force_data(event.force)
 
   minime.entered_function("leave")
@@ -113,7 +113,7 @@ minime_forces.on_forces_merged = function(event)
   -- Remove data of destroyed force
   if mod.researched_by[src] then
     mod.researched_by[src] = nil
-    minime.writeDebug("Removed mod.researched_by[%s]!", {src})
+    minime.writeDebug("Удалено mod.researched_by[%s]!", {src})
   end
 
   -- Not sure whether the remaining force would inherit researched techs from
@@ -137,7 +137,7 @@ minime_forces.is_tech_researched = function(force, techs)
   end
 
   -- List of required techs may not be empty!
-  minime.assert(techs, "table", "table of technology names")
+  minime.assert(techs, "table", "таблица имён технологий")
   if not next(techs) then
     minime.arg_err(techs, "non-empty table")
   end
@@ -150,7 +150,7 @@ minime_forces.is_tech_researched = function(force, techs)
     for t, tech in pairs(techs) do
       if force_researched[tech] then
         ret = true
-        minime.writeDebug("%s has researched tech \"%s\"!",
+        minime.writeDebug("%s исследовала технологию \"%s\"!",
                           {minime.argprint(force), tech})
         break
       end
@@ -181,9 +181,9 @@ minime.show("tech.level", tech.level)
     if required_techs[tech.name] and force and force.valid and next(force.players) then
       mod.researched_by[force.name] = mod.researched_by[force.name] or {}
       mod.researched_by[force.name][tech.name] = true
-      minime.writeDebug("Added tech \"%s\" to researched techs of force \"%s\".", {tech.name, force.name})
+      minime.writeDebug("Технология \"%s\" добавлена в список исследованных технологий силы \"%s\".", {tech.name, force.name})
     else
-      minime.writeDebug("Nothing to do!")
+      minime.writeDebug("Нечего делать!")
     end
 
   -- If a tech was unresearched, remove it from list of researched techs!
@@ -193,14 +193,14 @@ minime.show("tech.level", tech.level)
 
     if mod.researched_by[force] and mod.researched_by[force][tech.name] then
       mod.researched_by[force][tech.name] = nil
-      minime.writeDebug("Removed \"%s\" from list of techs researched by force \"%s\".", {tech.name, force})
+      minime.writeDebug("Технология \"%s\" удалена из списка исследованных силой \"%s\".", {tech.name, force})
 
       if not next(mod.researched_by[force]) then
         mod.researched_by[force] = nil
-        minime.writeDebug("Removed mod.researched_by[\"%s\"]!", {force})
+        minime.writeDebug("Удалено mod.researched_by[\"%s\"]!", {force})
       end
     else
-      minime.writeDebug("Nothing to do!")
+      minime.writeDebug("Нечего делать!")
     end
 
   --~ -- If there was a force_reset, remove all techs from lists of players in that force!
@@ -216,7 +216,7 @@ minime.show("tech.level", tech.level)
 
   -- Apparently we've got here by mistake!
   else
-    minime.writeDebug("Nothing to do for event \"%s\"!", {e_name})
+    minime.writeDebug("Нечего делать для события \"%s\"!", {e_name})
   end
 
   minime.entered_function("leave")
@@ -249,20 +249,20 @@ minime_forces.on_player_changed_force = function(event)
   ----------------------------------------------------------------------------------
   minime.writeDebugNewBlock("Is BP_SANDBOXES active?")
   if BP_SANDBOXES then
-    minime.writeDebug("Yes! Did player enter/leave Blueprint Sandbox?")
+    minime.writeDebug("Да! Игрок вошёл в Blueprint Sandbox или вышел из него?")
     local prefix = "bpsb-sb-f-"
     local reason
 
     -- Player entered sandbox. Hide GUIs!
     if minime.prefixed(new_force.name, prefix) then
       reason = "changed to"
-      minime.writeDebug("Hiding GUIs of %s!", {minime.argprint(player)})
+      minime.writeDebug("Скрытие GUI игрока %s!", {minime.argprint(player)})
       minime_gui.disable_guis(player)
 
       -- Mark player as suspended: won't be able to use the GUI!
       if p_data then
         p_data.suspended = true
-        minime.writeDebug("Marked %s as suspended!", {minime.argprint(player)})
+        minime.writeDebug("Игрок %s помечен как приостановленный!", {minime.argprint(player)})
       end
 
       -- Add player to list of suspended players in data of original force, so that
@@ -270,31 +270,31 @@ minime_forces.on_player_changed_force = function(event)
       if old_force_data then
         old_force_data.suspended_players = old_force_data.suspended_players or {}
         old_force_data.suspended_players[player.index] = true
-        minime.writeDebug("Added %s to list of players suspended by %s!",
+        minime.writeDebug("%s добавлен в список игроков, приостановленных силой %s!",
                           {minime.argprint(player), minime.argprint(old_force)})
       end
 
     -- Player left sandbox. Unhide GUIs!
     elseif minime.prefixed(old_force.name, prefix) then
       reason = "returned from"
-      minime.writeDebug("Unhiding GUIs of %s!", {minime.argprint(player)})
+      minime.writeDebug("GUI игрока %s снова отображается!", {minime.argprint(player)})
       minime_gui.enable_guis(player)
 
       -- Remove suspended mark from player data!
       if p_data and p_data.suspended then
         p_data.suspended = nil
-        minime.writeDebug("%s is no longer suspended!", {minime.argprint(player)})
+        minime.writeDebug("Игрок %s больше не приостановлен!", {minime.argprint(player)})
       end
 
       -- Remove player from list of suspended players in data of original force
       if new_force_data and new_force_data.suspended_players then
         new_force_data.suspended_players[player.index] = nil
-        minime.writeDebug("Removed %s from list of players suspended by %s!",
+        minime.writeDebug("%s удалён из списка игроков, приостановленных силой %s!",
                           {minime.argprint(player), minime.argprint(old_force)})
 
         if not next(new_force_data.suspended_players) then
           new_force_data.suspended_players = nil
-          minime.writeDebug("Removed mod.force_data[%s].suspended_players!",
+          minime.writeDebug("Удалено mod.force_data[%s].suspended_players!",
                             {minime.enquote(new_force.name)})
         end
       end
@@ -309,7 +309,7 @@ minime_forces.on_player_changed_force = function(event)
     end
 
   else
-    minime.writeDebug("No!")
+    minime.writeDebug("Нет!")
   end
   ----------------------------------------------------------------------------------
 
@@ -317,9 +317,9 @@ minime_forces.on_player_changed_force = function(event)
   minime.writeDebugNewBlock("Create mod.force_data[%s]!",
                             {minime.enquote(new_force.name)})
   if new_force_data then
-    minime.writeDebug("No: already exists!")
+    minime.writeDebug("Нет: уже существует!")
   else
-    minime.writeDebug("Yes!")
+    minime.writeDebug("Да!")
     mod.force_data[new_force.name] = {}
   end
 
@@ -328,15 +328,15 @@ minime_forces.on_player_changed_force = function(event)
                             {minime.enquote(old_force.name)})
   if old_force_data and #old_force.players == 0 and
       not old_force_data.suspended_players then
-    minime.writeDebug("Yes!")
+    minime.writeDebug("Да!")
     mod.force_data[old_force.name] = nil
 
   else
     minime.writeDebug("No: %s!", {
-      (not old_force_data and "no data stored") or
-      (#old_force.players > 0 and "force still has players") or
-      (old_force_data.suspended_players and "force has suspended players") or
-      "unknown reason"
+      (not old_force_data and "нет сохранённых данных") or
+      (#old_force.players > 0 and "у силы всё ещё есть игроки") or
+      (old_force_data.suspended_players and "у силы есть приостановленные игроки") or
+      "неизвестная причина"
     })
   end
 

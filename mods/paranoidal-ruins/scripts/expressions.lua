@@ -10,7 +10,7 @@ local function common(t, vars)
   elseif t.type == "random-from-list" then
     return t.list[math.random(#t.list)]
   end
-  error("Unrecognized expression type: " .. tostring(t.type))
+  error("Нераспознанный тип выражения: " .. tostring(t.type))
 end
 
 ---@param t table|number
@@ -18,14 +18,14 @@ end
 ---@return number
 function M.number(t, vars)
   if type(t) == "number" then return t end
-  if type(t) ~= "table" then error("Number expression expected, got " .. type(t)) end
+  if type(t) ~= "table" then error("Ожидалось числовое выражение, получено значение типа " .. type(t)) end
   local value
   if t.type == "random" then
     value = math.random(t.min, t.max)
   else
     value = common(t, vars or {})
   end
-  if type(value) ~= "number" then error("Number expression did not return a number: " .. serpent.line(t)) end
+  if type(value) ~= "number" then error("Числовое выражение вернуло значение нечислового типа: " .. serpent.line(t)) end
   return value
 end
 
@@ -34,7 +34,7 @@ end
 ---@return string
 function M.entity(t, vars)
   if type(t) == "string" then return t end
-  if type(t) ~= "table" then error("Entity expression expected, got " .. type(t)) end
+  if type(t) ~= "table" then error("Ожидалось выражение сущности, получено значение типа " .. type(t)) end
   local value
   if t.type == "random-of-entity-type" then
     local names = {}
@@ -45,7 +45,7 @@ function M.entity(t, vars)
   else
     value = common(t, vars or {})
   end
-  if type(value) ~= "string" then error("Entity expression did not return a string: " .. serpent.line(t)) end
+  if type(value) ~= "string" then error("Выражение сущности вернуло значение нестрокового типа: " .. serpent.line(t)) end
   return value
 end
 
@@ -59,7 +59,7 @@ function M.variables(variables)
     elseif var.type == "number-expression" then
       parsed[var.name] = M.number(var.value)
     else
-      error("Unrecognized variable type: " .. tostring(var.type))
+      error("Нераспознанный тип переменной: " .. tostring(var.type))
     end
   end
   return parsed

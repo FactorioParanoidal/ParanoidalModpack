@@ -6,7 +6,7 @@ function M.icon(t, key, size_key)
     local spec = D.icons[t[key]]
     if not spec then return false end
     local size = t[size_key] or 64
-    assert(size == 256, "atlas reduction: unexpected icon size for " .. t[key])
+    assert(size == 256, "Сокращение атласа: неожиданный размер значка для " .. t[key])
     t[key], t[size_key] = spec.file, spec.size
     if key == "icon" and t.scale then t.scale = t.scale * size / spec.size end
     return true
@@ -19,17 +19,17 @@ function M.sprite(t)
     local size = t.size
     local width = t.width or (type(size) == "table" and size[1] or size)
     local height = t.height or (type(size) == "table" and size[2] or size)
-    assert(width == spec.width and height == spec.height, "atlas reduction: unexpected frame size for " .. file)
+    assert(width == spec.width and height == spec.height, "Сокращение атласа: неожиданный размер кадра для " .. file)
     if spec.sequence then
-        assert((t.x or 0) == 0 and (t.y or 0) == 0 and not t.position, "atlas reduction: offset compacted sprite")
-        assert((t.direction_count or 1) == 1, "atlas reduction: rotated compacted sprite")
+        assert((t.x or 0) == 0 and (t.y or 0) == 0 and not t.position, "Сокращение атласа: у уплотнённого спрайта есть смещение")
+        assert((t.direction_count or 1) == 1, "Сокращение атласа: уплотнённый спрайт повёрнут")
         local count = t.frame_count or 1
         if count > 1 then
-            assert(count == #spec.sequence, "atlas reduction: unexpected compacted frame count")
+            assert(count == #spec.sequence, "Сокращение атласа: неожиданное число кадров уплотнённого спрайта")
             local sequence = {}
             for i, frame in ipairs(t.frame_sequence or spec.sequence) do
                 -- The generated map is already the natural playback order; existing sequences name source frames.
-                sequence[i] = t.frame_sequence and assert(spec.sequence[frame], "atlas reduction: missing source frame") or frame
+                sequence[i] = t.frame_sequence and assert(spec.sequence[frame], "Сокращение атласа: отсутствует исходный кадр") or frame
             end
             t.frame_count, t.frame_sequence = spec.frames, sequence
         end
@@ -54,8 +54,8 @@ function M.sprite(t)
     else
         local files = {}
         for i, source in ipairs(t.filenames) do
-            local entry = assert(D.sprites[source], "atlas reduction: mixed sprite sheets")
-            assert(entry.width == width and entry.height == height, "atlas reduction: mixed frame geometry")
+            local entry = assert(D.sprites[source], "Сокращение атласа: смешанные листы спрайтов")
+            assert(entry.width == width and entry.height == height, "Сокращение атласа: смешанная геометрия кадров")
             files[i] = entry.file
         end
         t.filenames = files

@@ -227,12 +227,12 @@ script.on_nth_tick(trees.PROCESS_INTERVAL, trees.on_nth_tick)
 ------------------------------------------------------------------------------------
 setmetatable(_ENV, {
     __newindex = function(self, key, value) --locked_global_write
-        error('\n\n[ER Global Lock] Forbidden global *write*:\n'
+        error('\n\n[ER Global Lock] Запрещена *запись* глобальной переменной:\n'
             .. serpent.line { key = key or '<nil>', value = value or '<nil>' } .. '\n')
     end,
     __index = function(self, key) --locked_global_read
         if not (key == "game" or key == "mods" or key == "storage") then
-            error('\n\n[ER Global Lock] Forbidden global *read*:\n'
+            error('\n\n[ER Global Lock] Запрещено *чтение* глобальной переменной:\n'
                 .. serpent.line { key = key or '<nil>' } .. '\n')
         end
     end

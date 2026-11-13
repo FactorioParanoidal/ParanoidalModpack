@@ -14,7 +14,7 @@ function Moving_spider.new(Character, destination, radius)
         type = "moving_spider",
         character = Character,
         spider = Character.entity.vehicle,
-        destination = destination or error("No destination given for creating a moving state."),
+        destination = destination or error("Для создания состояния перемещения не указано место назначения."),
         radius = radius or 0.5
     }
     return setmetatable(state, Moving_spider.metatable)
@@ -59,7 +59,7 @@ function Moving_spider:request_path()
     })
 
     self.requested_destination = destination
-    self.character:print("Requested a path. ")
+    self.character:print("Запрошен путь. ")
 end
 
 function Moving_spider:finish()

@@ -7,12 +7,12 @@
 commands.add_command('setWaveMaxSize', "", 
 	function(command)
 		if not remote.call("rampantFixed", "allowExternalControl") then
-			game.print("external control isn't allowed")
+			game.print("внешнее управление запрещено")
 			return		
 		end
 		local result = remote.call("rampantFixed", "setWaveMaxSize_ExtCtrl", {attackWaveMaxSize = tonumber(command.parameter)})
 		if result then
-			game.print("max wave size now:"..result)
+			game.print("Максимальный размер волны теперь:"..result)
 		end
 	end
 )
@@ -28,12 +28,12 @@ commands.add_command('getWaveMaxSize', "",
 commands.add_command('setWaveSize', "", 
 	function(command)
 		if not remote.call("rampantFixed", "allowExternalControl") then
-			game.print("external control isn't allowed")
+			game.print("внешнее управление запрещено")
 			return		
 		end
 		local result = remote.call("rampantFixed", "setWaveSize_ExtCtrl", {attackWaveSize = tonumber(command.parameter)})
 		if result then
-			game.print("wave size now:"..result)
+			game.print("Размер волны теперь:"..result)
 		end
 	end
 )
@@ -49,14 +49,14 @@ commands.add_command('getWaveSize', "",
 commands.add_command('createSquad', "", 
 	function(command)
 		if not remote.call("rampantFixed", "allowExternalControl") then
-			game.print("external control isn't allowed")
+			game.print("внешнее управление запрещено")
 			return		
 		end
 		local result = remote.call("rampantFixed", "createSquad_ExtCtrl", {surfaceIndex = game.players[command.player_index].surface.index, size = tonumber(command.parameter), ignoreSquadLimit = true})
 		if result then
-			game.print("squad created at [gps=" .. result.position.x .. "," .. result.position.y  .. "," .. game.players[command.player_index].surface.name .."]")
+			game.print("отряд создан: [gps=" .. result.position.x .. "," .. result.position.y  .. "," .. game.players[command.player_index].surface.name .."]")
 		else
-			game.print("Cant create squad")
+			game.print("Не удалось создать отряд")
 		end
 	end
 )
@@ -91,7 +91,7 @@ commands.add_command('getFactions', "",
 	function(command)
 		local factions = remote.call("rampantFixed", "getFactions") 
 		for faction, tiers in pairs(factions) do
-			game.print(faction..", tiers:"..tiers.tierMin.."-"..tiers.tierMax)
+			game.print(faction..", уровни:"..tiers.tierMin.."-"..tiers.tierMax)
 		end
 	end
 )
@@ -102,7 +102,7 @@ commands.add_command('getFactionsByTier', "",
 	function(command)
 		local factions = remote.call("rampantFixed", "getFactionsByTier", {tier = tonumber(command.parameter)}) 
 		for faction, tiers in pairs(factions) do
-			game.print(faction..", tiers:"..tiers.tierMin.."-"..tiers.tierMax)
+			game.print(faction..", уровни:"..tiers.tierMin.."-"..tiers.tierMax)
 		end
 	end
 )
@@ -113,7 +113,7 @@ commands.add_command('getFactionsByTier', "",
 commands.add_command('setFactionToBaseAtPlayerPosition', "", 
 	function(command)
 		if not remote.call("rampantFixed", "allowExternalControl") then
-			game.print("external control isn't allowed")
+			game.print("внешнее управление запрещено")
 			return		
 		end
 		local parameters = {}
@@ -121,16 +121,16 @@ commands.add_command('setFactionToBaseAtPlayerPosition', "",
 		parameters.position = game.players[command.player_index].position
 		local base = remote.call("rampantFixed", "getBaseByPosition", parameters)
 		if not base then
-			game.print("no base at player position!")
+			game.print("В позиции игрока нет базы!")
 			return
 		end
 		if not command.parameter then
-			game.print("specify faction name in parameters!")
+			game.print("Укажите название фракции в параметрах!")
 			return
 		end
 		local factions = remote.call("rampantFixed", "getFactions") 
 		if not factions[command.parameter] then
-			game.print("wrong faction name. Use /getFactions to show factions list")
+			game.print("Неверное название фракции. Используйте /getFactions, чтобы вывести список фракций")
 			return
 		end
 		
@@ -138,13 +138,13 @@ commands.add_command('setFactionToBaseAtPlayerPosition', "",
 		parameters.factions[command.parameter] = 1				-- 100% of specified faction
 		local result = remote.call("rampantFixed", "setBaseFactions_ExtCtrl", parameters)		
 		if not result then
-			game.print("external control isn't allowed")	-- impossible in this algorithm, because allowExternalControl checked
+			game.print("внешнее управление запрещено")	-- impossible in this algorithm, because allowExternalControl checked
 		elseif result == 1 then
-			game.print("success")
+			game.print("успешно")
 		elseif result == -1 then
-			game.print("wrong parameters")					-- impossible in this algorithm, because base and factions checked
+			game.print("неверные параметры")					-- impossible in this algorithm, because base and factions checked
 		elseif result == -2 then
-			game.print("sum of rates is not equals 1")		 	-- impossible in this algorithm, because "parameters.factions[command.parameter] = 1"
+			game.print("сумма коэффициентов не равна 1")		 	-- impossible in this algorithm, because "parameters.factions[command.parameter] = 1"
 		end
 	end
 )
@@ -155,9 +155,9 @@ commands.add_command('getRampantAttackGroups', "",
 		local groups = remote.call("rampantFixed", "getRampantAttackGroups") 
 		for index, group in pairs(groups) do
 			if group.surface == game.players[command.player_index].surface then	-- lets ping only same surface groups
-				game.print("group "..index..", [gps=" .. group.position.x .. "," .. group.position.y .. "," .. group.surface.name .."]")
+				game.print("отряд "..index..", [gps=" .. group.position.x .. "," .. group.position.y .. "," .. group.surface.name .."]")
 			else
-				game.print("group "..index..", x/y = " .. group.position.x .. "/" .. group.position.y)
+				game.print("отряд "..index..", x/y = " .. group.position.x .. "/" .. group.position.y)
 			end	
 		end
 	end
@@ -169,9 +169,9 @@ commands.add_command('getAI_points', "",
 	function(command)
 		local result = remote.call("rampantFixed", "getAI_points", {surfaceIndex = game.players[command.player_index].surface.index})
 		if result then
-			game.print("AI_points: ".. result )
+			game.print("Очки ИИ: ".. result )
 		else
-			game.print("non-rampant surface")
+			game.print("поверхность без Rampant")
 		end
 	end
 )
@@ -180,15 +180,15 @@ commands.add_command('getAI_points', "",
 commands.add_command('setAI_points', "", 
 	function(command)
 		if not remote.call("rampantFixed", "allowExternalControl") then
-			game.print("external control isn't allowed")
+			game.print("внешнее управление запрещено")
 			return		
 		end
 		
 		local result = remote.call("rampantFixed", "setAI_points_ExtCtrl", {surfaceIndex = game.players[command.player_index].surface.index, points = (command.parameter and tonumber(command.parameter))})
 		if result then
-			game.print("AI_points: ".. result )
+			game.print("Очки ИИ: ".. result )
 		else
-			game.print("non-rampant surface")
+			game.print("поверхность без Rampant")
 		end
 	end
 )
@@ -198,9 +198,9 @@ commands.add_command('getAI_state', "",
 	function(command)
 		local result = remote.call("rampantFixed", "getAI_state", {surfaceIndex = game.players[command.player_index].surface.index})
 		if result then
-			game.print("AI_state: ".. result.state .. "("..result.stateEnglish..")")
+			game.print("Состояние ИИ: ".. result.state .. "("..result.stateEnglish..")")
 		else
-			game.print("non-rampant surface")
+			game.print("поверхность без Rampant")
 		end
 	end
 )
@@ -209,15 +209,15 @@ commands.add_command('getAI_state', "",
 commands.add_command('setAI_state', "", 
 	function(command)
 		if not remote.call("rampantFixed", "allowExternalControl") then
-			game.print("external control isn't allowed")
+			game.print("внешнее управление запрещено")
 			return		
 		end
 		
 		local result = remote.call("rampantFixed", "setAI_state_ExtCtrl", {surfaceIndex = game.players[command.player_index].surface.index, state = (command.parameter and tonumber(command.parameter))})
 		if result then
-			game.print("AI_state: ".. result.state .. "("..result.stateEnglish..")" )
+			game.print("Состояние ИИ: ".. result.state .. "("..result.stateEnglish..")" )
 		else
-			game.print("non-rampant surface or invalid state. Use /printValidAI_StateList")
+			game.print("поверхность без Rampant или неверное состояние. Используйте /printValidAI_StateList")
 		end
 	end
 )

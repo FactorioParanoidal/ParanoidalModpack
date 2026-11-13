@@ -8,7 +8,7 @@ function Put_item.new(Character, target, name, count)
   {
     type = "put_item",
     character = Character,
-    target = target or error("No target?"),
+    target = target or error("Нет цели?"),
     name = name,
     count = count
   }

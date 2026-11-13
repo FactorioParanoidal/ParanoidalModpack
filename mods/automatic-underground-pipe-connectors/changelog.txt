@@ -1,5 +1,7 @@
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.15
+  Locale:
+    - Russian hardcoded player-facing text: 4 UI, chat, command-help and error-message literals; technical identifiers, format parameters and gameplay logic are unchanged.
 Date: 2026-09-08
   Bugfixes:
     - Stop paving ground a pipe can sit on. A connector on ordinary buildable ground

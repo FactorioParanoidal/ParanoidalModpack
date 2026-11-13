@@ -1,5 +1,7 @@
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.3
+  Locale:
+    - Russian hardcoded player-facing text: 2 UI, chat, command-help and error-message literals; technical identifiers, format parameters and gameplay logic are unchanged.
 Date: 2023.11.24
   Bugfixes:
     - Paranoidal: bracket queue reordering with optional ic-more-qualities return accounting, including queue-limit exits, so restored crafts do not cause defects in spare items.

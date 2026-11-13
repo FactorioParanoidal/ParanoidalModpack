@@ -353,8 +353,8 @@ function M.apply(raw, options)
     local mode = options.mode or "materials"
     local supply = options.supply_reduction or 0
     local wire = options.wire_reduction or 0
-    assert(supply >= 0 and wire >= 0, "Pole reductions must be non-negative")
-    for tier = 1, 5 do assert(raw.quality["ic-defect-" .. tier], "Defect qualities must be registered first") end
+    assert(supply >= 0 and wire >= 0, "Снижение параметров столбов должно быть неотрицательным")
+    for tier = 1, 5 do assert(raw.quality["ic-defect-" .. tier], "Сначала необходимо зарегистрировать качества дефектов") end
 
     local finished, reasons = classify.classify(raw, mode)
     local white, drills, opened = M.positive_quality(raw, finished, options.everywhere)

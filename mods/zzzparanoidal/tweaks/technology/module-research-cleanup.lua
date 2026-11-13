@@ -18,11 +18,11 @@ for _, name in ipairs({ "quality-module-2", "quality-module-3", "bob-quality-mod
             if seen[prerequisite] then return end
             seen[prerequisite] = true
             if obsolete[prerequisite] then
-                local old = assert(technologies[prerequisite], "Missing module technology: " .. prerequisite)
+                local old = assert(technologies[prerequisite], "Отсутствует технология модулей: " .. prerequisite)
                 if board_owners[prerequisite] then add(board_owners[prerequisite]) end
                 for _, parent in ipairs(old.prerequisites or {}) do add(parent) end
             else
-                assert(technologies[prerequisite], "Missing module prerequisite: " .. prerequisite)
+                assert(technologies[prerequisite], "Отсутствует предварительная технология модулей: " .. prerequisite)
                 prerequisites[#prerequisites + 1] = prerequisite
             end
         end
@@ -35,7 +35,7 @@ end
 for name, technology in pairs(technologies) do
     if not obsolete[name] then
         for _, prerequisite in ipairs(technology.prerequisites or {}) do
-            assert(not obsolete[prerequisite], "Module cleanup: " .. name .. " still requires " .. prerequisite)
+            assert(not obsolete[prerequisite], "Очистка модулей: " .. name .. " всё ещё требует " .. prerequisite)
         end
     end
 end
@@ -46,12 +46,12 @@ local replacements = {
     { "modules-3", "bob-module-processor-board-3" },
 }
 for level, entry in ipairs(replacements) do
-    local technology = assert(technologies[entry[1]], "Missing module technology: " .. entry[1])
+    local technology = assert(technologies[entry[1]], "Отсутствует технология модулей: " .. entry[1])
     local has_unlock = false
     for _, effect in ipairs(technology.effects or {}) do
         if effect.type == "unlock-recipe" and effect.recipe == entry[2] then has_unlock = true end
     end
-    assert(has_unlock, "Module cleanup would lose board unlock: " .. entry[2])
+    assert(has_unlock, "Очистка модулей приведёт к потере открытия рецепта платы: " .. entry[2])
     technology.localised_name = { "technology-name.paranoidal-module-components-" .. level }
     technology.localised_description = { "technology-description.paranoidal-module-components-" .. level }
 end

@@ -105,7 +105,7 @@ end
 -- Returns finished = {name = true}, reasons = {name = reason} for excluded items.
 function M.classify(raw, mode)
     mode = mode or "materials"
-    assert(M.modes[mode], "Unknown defect ingredient mode: " .. tostring(mode))
+    assert(M.modes[mode], "Неизвестный режим ингредиентов дефекта: " .. tostring(mode))
     local raw_items = {wood = true, coal = true, stone = true}
     for _, kind in ipairs({"resource", "tree", "fish"}) do
         for _, entity in pairs(raw[kind] or {}) do add_minable(entity.minable, raw_items) end

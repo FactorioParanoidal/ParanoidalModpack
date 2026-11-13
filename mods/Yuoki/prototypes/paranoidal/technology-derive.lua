@@ -273,5 +273,5 @@ log("Yuoki (Paranoidal): derived prerequisites (" .. #added .. "): " .. table.co
 log("Yuoki (Paranoidal): packs taken from prerequisites (" .. #pack_changes .. "): " .. table.concat(pack_changes, "; "))
 if #unresolved > 0 then
 	table.sort(unresolved)
-	error("Yuoki (Paranoidal): unreachable Yuoki recipes:\n" .. table.concat(unresolved, "\n"))
+	error("Yuoki (Paranoidal): недостижимые рецепты Yuoki:\n" .. table.concat(unresolved, "\n"))
 end

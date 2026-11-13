@@ -1,5 +1,7 @@
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.2
+  Locale:
+    - Russian hardcoded player-facing text: 1 UI, chat, command-help and error-message literals; technical identifiers, format parameters and gameplay logic are unchanged.
 Date: 2026-06-24
   Bugfixes:
     - Fixed crash encountered when quality is not specified in blueprints [Thanks jim-hart]

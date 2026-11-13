@@ -8,11 +8,11 @@ local rules, count = {}, 0
 
 for name, entry in pairs(registry) do
     local technology = assert(data.raw.technology[name],
-        "chemical-elements: expected technology missing: " .. name .. "; update the C2 registry")
+        "chemical-elements: отсутствует ожидаемая технология: " .. name .. "; обновите реестр C2")
     if entry.badge then
         local kind = entry.badge_type or "item"
         assert(data.raw[kind] and data.raw[kind][entry.badge],
-            "chemical-elements: branch badge missing: " .. entry.badge .. " for " .. name)
+            "chemical-elements: отсутствует значок ветки: " .. entry.badge .. " для " .. name)
     end
     technology.icon = root .. entry.element .. ".png"
     technology.icon_size = 256
@@ -42,15 +42,15 @@ for name, entry in pairs(registry) do
         end
     end
     assert((layers and layers[1].icon or technology.icon) == root .. entry.element .. ".png",
-        "chemical-elements: card overwritten: " .. name)
+        "chemical-elements: карточка перезаписана: " .. name)
     if technology.enabled ~= false and entry.level then
         local expected, found = marker_root .. "level-" .. entry.level .. ".png", false
         for _, layer in ipairs(layers or {}) do if layer.icon == expected then found = true end end
-        assert(found, "chemical-elements: level marker missing: " .. name)
+        assert(found, "chemical-elements: отсутствует маркер уровня: " .. name)
     end
     if technology.enabled ~= false and entry.badge then
         assert(layers and #layers >= (entry.level and 4 or 3),
-            "chemical-elements: branch marker missing: " .. name)
+            "chemical-elements: отсутствует маркер ветки: " .. name)
     end
 end
 log("chemical-elements: assigned " .. count .. " technologies; C2 cards and branch/level markers verified")

@@ -202,7 +202,7 @@ local function onIonCannonFired(event)
     map.ionCannonBlasts = map.ionCannonBlasts + 1
     map.points = map.points + 4000
     if universe.aiPointsPrintGainsToChat then
-        game.print(map.surface.name .. ": Points: +" .. 4000 .. ". [Ion Cannon] Total: " .. string.format("%.2f", map.points))
+        game.print(map.surface.name .. ": Очки: +" .. 4000 .. ". [Ионная пушка] Всего: " .. string.format("%.2f", map.points))
     end
 
     local chunk = getChunkByPosition(map, event.position)
@@ -261,7 +261,7 @@ local function prepMap(surface)
 		return	
 	end
 	
-    surface.print("Rampant, fixed - Indexing surface:" .. tostring(surface.index) .. ", please wait.")
+    surface.print("Rampant, fixed — Индексирование поверхности:" .. tostring(surface.index) .. ", подождите.")
 
     local map = universe.maps[surfaceIndex]
     if not map then
@@ -756,7 +756,7 @@ local function onDeath(event)
 				
                 map.points = map.points + pointsGain
                 if universe.aiPointsPrintGainsToChat and (pointsGain > 0) then
-                        game.print(map.surface.name .. ": Points: +" .. pointsGain .. ". [Worm or Nest Lost] Total: " .. string.format("%.2f", map.points))				
+                        game.print(map.surface.name .. ": Очки: +" .. pointsGain .. ". [Потеря червя или гнезда] Всего: " .. string.format("%.2f", map.points))
 				end
 				
 				-- if (chunk ~= -1) then	-- spawn too many nests in late game
@@ -1078,7 +1078,7 @@ local function onRocketLaunch(event)
         map.rocketLaunched = (map.rocketLaunched or 0) + 1
         map.points = map.points + points
         if universe.aiPointsPrintGainsToChat then
-            game.print(map.surface.name .. ": Points: +" .. points .. ". [Rocket Launch] Total: " .. string.format("%.2f", map.points))
+            game.print(map.surface.name .. ": Очки: +" .. points .. ". [Запуск ракеты] Всего: " .. string.format("%.2f", map.points))
         end
     end
 end
@@ -1273,7 +1273,7 @@ local function onBuilderArrived(event)
     targetPosition.y = builder.position.y
 
     if universe.aiPointsPrintSpendingToChat then
-        game.print("Settled: [gps=" .. targetPosition.x .. "," .. targetPosition.y .. "," .. builder.surface.name .."]")		
+        game.print("Размещено: [gps=" .. targetPosition.x .. "," .. targetPosition.y .. "," .. builder.surface.name .."]")
     end
     builder.surface.create_entity(universe.createBuildCloudQuery)
 	local map = universe.maps[builder.surface.index]
@@ -2269,7 +2269,7 @@ local function rampantSetAIState(event)
     local map = universe.maps[surfaceIndex]
 	if not map then
 		local surfaceName = game.players[event.player_index].surface.name
-		game.print(surfaceName .. " is excluded from processing ")
+		game.print(surfaceName .. " исключена из обработки ")
 		return
 	end	
 
@@ -2279,7 +2279,7 @@ local function rampantSetAIState(event)
         local target = tonumber(event.parameter)
 
         if (target == nil) then
-            game.print("invalid param")
+            game.print("недопустимый параметр")
             return
         end
 
@@ -2291,7 +2291,7 @@ local function rampantSetAIState(event)
 			and target ~= constants.AI_STATE_ONSLAUGHT
 			and target ~= constants.AI_STATE_GROWING
 			) then
-            game.print(target .. " is not a valid state")
+            game.print(target .. " не является допустимым состоянием")
             return
         else
             
@@ -2299,7 +2299,7 @@ local function rampantSetAIState(event)
 			if map.state == constants.AI_STATE_GROWING then
 				aiPlanning.updateBasesToGrow(map, game.tick, false)
 			end	
-            game.print(map.surface.name .. " is now in " .. constants.stateEnglish[map.state])
+            game.print(map.surface.name .. " теперь находится в " .. constants.stateEnglish[map.state])
         end
     end
 end
@@ -2311,14 +2311,14 @@ local function rampantAIReport(event)
 	local player = game.players[event.player_index]
 	local map = universe.maps[player.surface.index]
 	if not map then
-		player.print(player.surface.name .. " is excluded from processing")
+		player.print(player.surface.name .. " исключена из обработки")
 		return
 	end
 	if universe.classicAI then
-		player.print("Rampant: classic behaviour is on, the AI does not learn")
+		player.print("Rampant: включён классический режим, ИИ не обучается")
 	end
-	player.print("Rampant AI on " .. map.surface.name .. ", state " .. tostring(constants.stateEnglish[map.state])
-		.. ", heavy models " .. tostring(universe.heavyAI ~= false))
+	player.print("ИИ Rampant включён на " .. map.surface.name .. ", состояние " .. tostring(constants.stateEnglish[map.state])
+		.. ", тяжёлые модели " .. tostring(universe.heavyAI ~= false))
 	for _, line in pairs(aiBrain.report(map)) do
 		player.print(line)
 	end
@@ -2346,7 +2346,7 @@ local function rampantForceMutations(event)
 			i = i + 1
 		end
 	end
-	game.print("Bases forces to mutate: ".. i.."/"..basesTotal)
+	game.print("Количество сил баз для изменения: ".. i.."/"..basesTotal)
 	
 end
 
@@ -2370,7 +2370,7 @@ local function resetResourceSeetlerTick(event)
     local map = universe.maps[surfaceIndex]
 	if map then
 		map.resourceSettleTick = 0
-		game.print("resource settle tick reseted")
+		game.print("Тик стабилизации ресурсов сброшен")
 		return
 	end	
 end

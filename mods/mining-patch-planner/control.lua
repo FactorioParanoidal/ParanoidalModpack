@@ -177,7 +177,7 @@ script.on_event(defines.events.on_player_alt_reverse_selected_area, function(eve
 			game.print(error)
 		end
 	else
-		game.print("No valid debugging function selected")
+		game.print("Не выбрана допустимая функция отладки")
 	end
 
 end)

@@ -5,7 +5,7 @@ local P = {}
 function P.recipe(name)
 	local recipe = data.raw.recipe[name]
 	if not recipe then
-		error("Yuoki (Paranoidal): recipe not found: " .. name)
+		error("Yuoki (Paranoidal): рецепт не найден: " .. name)
 	end
 	return recipe
 end
@@ -92,13 +92,13 @@ function P.result_amount(name, result_name, amount)
 			return
 		end
 	end
-	error("Yuoki (Paranoidal): " .. name .. " has no result " .. result_name)
+	error("Yuoki (Paranoidal): " .. name .. " не содержит результат " .. result_name)
 end
 
 function P.entity(type_name, name)
 	local e = data.raw[type_name] and data.raw[type_name][name]
 	if not e then
-		error("Yuoki (Paranoidal): prototype not found: " .. type_name .. "/" .. name)
+		error("Yuoki (Paranoidal): прототип не найден: " .. type_name .. "/" .. name)
 	end
 	return e
 end
@@ -112,7 +112,7 @@ function P.first_item(names)
 			end
 		end
 	end
-	error("Yuoki (Paranoidal): none of these items exist: " .. table.concat(names, ", "))
+	error("Yuoki (Paranoidal): не существует ни одного из этих предметов: " .. table.concat(names, ", "))
 end
 
 return P

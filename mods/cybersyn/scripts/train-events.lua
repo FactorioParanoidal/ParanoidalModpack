@@ -341,7 +341,7 @@ local function on_train_leaves_stop(map_data, mod_settings, train_id, train)
 			end
 		else
 			-- Train needs refueled. Locate matching refueler.
-			local t_stock = assert(train.entity.front_stock, "train without stock in a train event")
+			local t_stock = assert(train.entity.front_stock, "событие поезда получило поезд без головного подвижного состава")
 			local t_surface = t_stock.surface_index
 			local d_surface = train.depot_surface_id
 

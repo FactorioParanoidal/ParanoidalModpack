@@ -20,7 +20,7 @@ function Gui.Event.register(event, gui_element_pattern, handler)
     fail_if_missing(gui_element_pattern, "missing gui name or pattern argument")
 
     if type(gui_element_pattern) ~= "string" then
-        error("gui_element_pattern argument must be a string")
+        error("Аргумент gui_element_pattern должен быть строкой")
     end
 
     if handler == nil then
@@ -83,7 +83,7 @@ function Gui.Event.remove(event, gui_element_pattern)
     fail_if_missing(gui_element_pattern, "missing gui_element_pattern argument")
 
     if type(gui_element_pattern) ~= "string" then
-        error("gui_element_pattern argument must be a string")
+        error("Аргумент gui_element_pattern должен быть строкой")
     end
 
     local function tablelength(T)

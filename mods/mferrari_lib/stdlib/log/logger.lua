@@ -34,7 +34,7 @@ Logger = {}
 -- @return the logger instance
 function Logger.new(mod_name, log_name, debug_mode, options)
     if not mod_name then
-        error("Logger must be given a mod_name as the first argument")
+        error("Для Logger необходимо указать mod_name в качестве первого аргумента")
     end
     if not log_name then
         log_name = "main"

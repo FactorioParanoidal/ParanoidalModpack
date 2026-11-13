@@ -1,5 +1,7 @@
 ---------------------------------------------------------------------------------------------------
 Version: 19.15.2
+  Locale:
+    - Russian hardcoded player-facing text: 1 UI, chat, command-help and error-message literals; technical identifiers, format parameters and gameplay logic are unchanged.
 Date: 2026-05-20
   Bugfixes:
     - Fixed non-recoverable crash when interacting with a task or subtask that was deleted by another player while a dialog was open (multiplayer race condition).

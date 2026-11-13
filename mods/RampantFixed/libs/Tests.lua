@@ -16,7 +16,7 @@ end
 
 function tests.addDebugButton(player, root)
 	if tests.in_debug_list(player) then
-		root.add{type = "button", name = "rampantFixed_DebugMenu", caption = "DEBUG", style = "rampantFixed_menu_button"}		
+		root.add{type = "button", name = "rampantFixed_DebugMenu", caption = "ОТЛАДКА", style = "rampantFixed_menu_button"}
 	end
 end
 
@@ -46,7 +46,7 @@ local function createDebugMenu(player, universeDebugSettings)
     titlebar.drag_target = root
     titlebar.add { -- Title
         type = "label",
-        caption = "DEBUG",
+        caption = "ОТЛАДКА",
         ignored_by_interaction = true,
         style = "rampantFixed_menu_label"	--"frame_title"
     }
@@ -61,7 +61,7 @@ local function createDebugMenu(player, universeDebugSettings)
 		sprite = "utility/close",
 		style = "close_button"
 	}
-	root.add{type = "button", name = "rampantFixed_Debug_SquadsManagment", caption = "Squads managment (pre-alpha)", style = "rampantFixed_menu_button"}
+	root.add{type = "button", name = "rampantFixed_Debug_SquadsManagment", caption = "Управление отрядами (предварительная версия)", style = "rampantFixed_menu_button"}
 	
 	
 	local showPheromonesTitle
@@ -80,7 +80,7 @@ local function createDebugMenu(player, universeDebugSettings)
 	end
 	root.add{type = "button", name = "rampantFixed_Debug_ShowNestsActiveness", caption = showNestsActivenessTitle, style = "rampantFixed_menu_button"}
 	
-	root.add{type = "button", name = "rampantFixed_Debug_showResourceGenerator", caption = "Show/Hide resource generator", style = "rampantFixed_menu_button"}
+	root.add{type = "button", name = "rampantFixed_Debug_showResourceGenerator", caption = "Показать/скрыть генератор ресурсов", style = "rampantFixed_menu_button"}
 	
 	-- root.add{type = "button", name = "rampantFixed_showSurfaceIteractionFrame", caption = {"description.rampantFixed--surfaceIteraction_frame"}, style = "rampantFixed_menu_button"}
 end
@@ -107,7 +107,7 @@ local function createSquadMenu(player, universe)
     titlebar.drag_target = root
     titlebar.add { -- Title
         type = "label",
-        caption = "Squads",
+        caption = "Отряды",
         ignored_by_interaction = true,
         style = "rampantFixed_menu_label"	--"frame_title"
     }
@@ -155,7 +155,7 @@ function tests.onDebugElementClick(event, universe)
 		for groupNumber, squad in pairs(universe.groupNumberToSquad) do
 			if squad.map and squad.group.valid then
 				if squad.group.unique_id == group_number then
-					game.print("group_number = ".. group_number.. ": [gps=" .. squad.group.position.x .. "," .. squad.group.position.y .."]")
+					game.print("номер группы = ".. group_number.. ": [gps=" .. squad.group.position.x .. "," .. squad.group.position.y .."]")
 					-- local player = game.players[event.player_index]
 					-- player.set_controller({type = defines.controllers.editor, position  = {squad.group.position.x, squad.group.position.y}, surface = squad.group.surface})
 				end
@@ -180,9 +180,9 @@ function tests.onDebugElementClick(event, universe)
 		universeDebugSettings.showNestsActiveness = not universeDebugSettings.showNestsActiveness
 		tests.showNestsActiveness(map, universeDebugSettings.showNestsActiveness)			
 		if universeDebugSettings.showNestsActiveness then
-			guiElement.caption = "Hide nests activeness"
+			guiElement.caption = "Скрыть активность гнёзд"
 		else
-			guiElement.caption = "Show nests activeness"
+			guiElement.caption = "Показать активность гнёзд"
 		end
 	elseif guiElement.name == "rampantFixed_Debug_showResourceGenerator" then
 		local player = game.players[event.player_index]

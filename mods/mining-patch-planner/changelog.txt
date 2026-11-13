@@ -1,5 +1,7 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.7.19
+  Locale:
+    - Russian hardcoded player-facing text: 35 UI, chat, command-help and error-message literals; technical identifiers, format parameters and gameplay logic are unchanged.
 Date: 2026-06-02
   Changes:
     - Throughput overlay now automatically accounts for mining drills that stack output items.

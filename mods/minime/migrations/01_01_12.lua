@@ -17,13 +17,13 @@ minime.show("player", player.name)
 
   -- Remove button?
   if buttons and buttons[button] and buttons[button].valid then
-    minime.writeDebug("Player %s: Removing %s.", {p, minime.argprint(buttons[button])})
+    minime.writeDebug("Игрок %s: удаляю %s.", {p, minime.argprint(buttons[button])})
     buttons[button].destroy()
   end
 
   -- Remove main frame?
   if frames and frames[main_frame] and frames[main_frame].valid then
-    minime.writeDebug("Player %s: Removing %s.", {p, minime.argprint(frames[main_frame])})
+    minime.writeDebug("Игрок %s: удаляю %s.", {p, minime.argprint(frames[main_frame])})
     frames[main_frame].destroy()
   end
 end
@@ -35,7 +35,7 @@ end
 for t, tab in pairs({"gui_character_pages", "gui_character_pages_lookup"}) do
   if storage[tab] then
     storage[tab] = nil
-    minime.writeDebug("Removed storage.%s.", {tab})
+    minime.writeDebug("Удалено storage.%s.", {tab})
   end
 end
 

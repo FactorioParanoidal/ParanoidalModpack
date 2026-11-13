@@ -137,9 +137,9 @@ function SolverMatrix:solve(block, parameters, debug)
     end)
     if not (ok) then
         if block.solver == true and block.by_factory ~= true then
-            Player.print("Matrix solver can not find solution!")
+            Player.print("Матричный решатель не смог найти решение!")
         else
-            Player.print("Algebraic solver can not find solution!")
+            Player.print("Алгебраический решатель не смог найти решение!")
         end
         if debug then
             Player.print(err)

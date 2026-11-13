@@ -1,6 +1,6 @@
 function shallowcopy(old)
 	if type(old) ~= 'table' then
-		error("Trying to create a shallow copy of a non-table object is probably an error.")
+		error("Попытка создать поверхностную копию объекта, не являющегося таблицей, вероятно, является ошибкой.")
 	end
 
 	local new = {}

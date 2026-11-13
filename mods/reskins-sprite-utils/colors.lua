@@ -51,9 +51,9 @@ end
 ---*@throws* - `string` When `hex` is not 8 characters.
 function _colors.from_argb(hex)
 	if type(hex) ~= "string" then
-		error("Invalid type: 'hex' must be a string.")
+		error("Недопустимый тип: 'hex' должен быть строкой.")
 	elseif #hex ~= 8 then
-		error("Invalid format: 'hex' must have 8 characters.")
+		error("Недопустимый формат: 'hex' должен содержать 8 символов.")
 	end
 	return util.color(hex:sub(3, 8) .. hex:sub(1, 2))
 end

@@ -24,9 +24,9 @@ util.register_gui = function(data, gui_element, param)
 end
 
 util.gui_action_handler = function(event, data, functions)
-  error("don't actually use me")
-  if not data then error("Gui action handler data is nil") end
-  if not functions then error("Gui action handler functions is nil") end
+  error("Не используйте меня")
+  if not data then error("Данные обработчика действий GUI равны nil") end
+  if not functions then error("Функции обработчика действий GUI равны nil") end
   local element = event.element
   if not (element and element.valid) then return end
   local player_data = data[event.player_index]

@@ -33,7 +33,7 @@ local function native_parameters()
 end
 
 local native = native_parameters()
-if enabled then assert(native, "Flamethrower fuel balance requires a native fire stream; disable the startup setting to restore the source attack") end
+if enabled then assert(native, "Для баланса топлива огнемёта требуется штатный поток огня; отключите стартовую настройку, чтобы восстановить исходную атаку") end
 local original = table.deepcopy(source.attack_parameters.fluids)
 local profiles, order, whitelist, turrets = {}, {}, {}, {}
 if enabled then

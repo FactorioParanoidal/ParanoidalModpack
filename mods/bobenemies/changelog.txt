@@ -1,5 +1,7 @@
 ---------------------------------------------------------------------------------------------------
 Version: 2.1.0
+  Locale:
+    - Russian hardcoded player-facing text: 17 UI, chat, command-help and error-message literals; technical identifiers, format parameters and gameplay logic are unchanged.
 Date: 01. 06. 2026
   Optimizations:
     - Paranoidal: subscribe to ticks only while ground radar requests are queued, restoring the subscription on load; preserve FIFO, scan strips and the per-tick backlog budget.

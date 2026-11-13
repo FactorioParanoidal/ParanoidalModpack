@@ -1,5 +1,7 @@
 ---------------------------------------------------------------------------------------------------
 Version: 0.1.1
+  Locale:
+    - Russian hardcoded player-facing text: 43 UI, chat, command-help and error-message literals; technical identifiers, format parameters and gameplay logic are unchanged.
 Date: 2026-06-07
   Changes:
     - Revised `icons.assign_icons_to_prototype_and_related_prototypes` to pattern match for explosion/remnant related entities, as well as retrieve the first configured explosion and corpse for updates, if available on the prototype.

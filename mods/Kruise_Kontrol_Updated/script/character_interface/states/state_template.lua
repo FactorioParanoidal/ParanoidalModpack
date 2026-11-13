@@ -7,7 +7,7 @@ function State.new(Character, target)
   {
     type = "follow",
     character = Character,
-    target = target or error("No target?")
+    target = target or error("Нет цели?")
   }
   return setmetatable(state, State.metatable)
 end

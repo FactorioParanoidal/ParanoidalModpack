@@ -118,7 +118,7 @@ local function settleHere(map, group, squad, dontDistract)
     targetPosition.y = group.position.y
 
     if universe.aiPointsPrintSpendingToChat then
-        game.print("Settled: [gps=" .. targetPosition.x .. "," .. targetPosition.y .. "," .. group.surface.name .."]")		
+        game.print("Обосновались: [gps=" .. targetPosition.x .. "," .. targetPosition.y .. "," .. group.surface.name .."]")
     end
     group.surface.create_entity(universe.createBuildCloudQuery)	
 	---------

@@ -7,7 +7,7 @@ function Upgrade.new(Character, target)
     {
         type = "upgrade",
         character = Character,
-        target = target or error("No target?"),
+        target = target or error("Нет цели?"),
         check_index = nil
     }
     return setmetatable(state, Upgrade.metatable)

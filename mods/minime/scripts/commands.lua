@@ -17,7 +17,7 @@ minime_commands.uninstall = function(args)
 minime.show("player", player)
     if not player.admin then
       player.print({"minime-command-errors.uninstall-not-admin"})
-      minime.entered_command({}, "leave", "only admins may use this command")
+      minime.entered_command({}, "leave", "эту команду могут использовать только администраторы")
       return
     end
   end
@@ -25,23 +25,23 @@ minime.show("player", player)
 
   -- All players that are not in god/editor mode should switch to the default
   -- character!
-  minime.writeDebugNewBlock("Looking for players with a character!")
+  minime.writeDebugNewBlock("Поиск игроков с персонажем!")
   local passon_flags = {keep_opened = true}
   for p, p_data in pairs(mod.player_data) do
 minime.show(p, p_data)
 
     -- Switch character?
-    minime.writeDebugNewBlock("Change character of player %s to default?", {p})
+    minime.writeDebugNewBlock("Сменить персонажа игрока %s на персонажа по умолчанию?", {p})
     if p_data.last_character ~= "" and p_data.last_character ~= "character" then
-      minime.writeDebug("Yes: switching from \"%s\" to \"%s\"!",
+      minime.writeDebug("Да: переключаемся с \"%s\" на \"%s\"!",
                         {p_data.last_character, "character"})
       p_data.last_character = "character"
       minime_character.switch_characters(p, passon_flags)
     else
       minime.writeDebug("No: %s!", {
         p_data.last_character == "" and
-          (p_data.god_mode and "god mode" or "editor mode") or
-          "player already has default character"
+          (p_data.god_mode and "режим бога" or "режим редактора") or
+          "игрок уже использует персонажа по умолчанию"
       })
     end
 
@@ -51,36 +51,36 @@ minime.show(p, p_data)
   end
 
   -- Move all character corpses to default-character corpses
-  minime.writeDebugNewBlock("Trying to replace character corpses with default!")
+  minime.writeDebugNewBlock("Попытка заменить трупы персонажей трупами персонажа по умолчанию!")
   local default = "character-corpse"
   for char_id, corpses in pairs(mod.minime_corpses) do
 minime.show("char_id", char_id)
     for c, c_data in pairs(corpses) do
 minime.show(c, c_data)
       -- Replace corpse if a valid corpse still exists, if it is a modded corpse, …
-      minime.writeDebugNewBlock("Replace %s with default corpse?",
+      minime.writeDebugNewBlock("Заменить %s трупом персонажа по умолчанию?",
                                 {minime.argprint(c_data.entity)})
       if c_data.entity and c_data.entity.valid and c_data.name ~= default and
           -- … and if it expires never or in the future.
           (not c_data.corpse_expires_on_tick or
             c_data.corpse_expires_on_tick > game.tick) then
 
-        minime.writeDebug("Yes!")
+        minime.writeDebug("Да!")
         minime_corpse.replace_corpse(c_data, default, c_data.entity)
       else
-        minime.writeDebug("No: %s corpse!", {
-          (c_data.entity and c_data.valid and "is default") or
-          (c_data.entity and "no valid" or "no")
+        minime.writeDebug("Нет: труп %s!", {
+          (c_data.entity and c_data.valid and "стандартный") or
+          (c_data.entity and "недействителен" or "no")
         })
       end
 
       minime.writeDebugNewBlock("Remove script inventory?")
       if c_data.inventory and c_data.inventory.valid then
-        minime.writeDebug("Yes!")
+        minime.writeDebug("Да!")
         c_data.inventory.destroy()
       else
-        minime.writeDebug("No: %s inventory!",
-                          {c_data.inventory and "no valid" or "no"})
+        minime.writeDebug("Нет: инвентарь %s!",
+                          {c_data.inventory and "недействителен" or "no"})
       end
     end
   end
@@ -92,13 +92,13 @@ minime.show(c, c_data)
     minime.writeDebugNewBlock("Remove previews of %s!", {minime.enquote(c_name)})
     if c_data.preview and c_data.preview.surface and
                           c_data.preview.surface.valid then
-      minime.writeDebug("Yes!")
+      minime.writeDebug("Да!")
       minime_surfaces.delete_surface(c_data.preview.surface)
     else
       minime.writeDebug("No: no %s!", {
-        (not c_data.preview and "preview data") or
+        (not c_data.preview and "данных предварительного просмотра") or
         (not c_data.preview.surface and "surface") or
-        "valid surface"
+        "действительная поверхность"
       })
     end
   end
@@ -113,12 +113,12 @@ minime.show(c, c_data)
 
   minime.writeDebugNewBlock("Looking for optional events!")
   for event_list, e in pairs(mod.optional_events or {}) do
-    minime.writeDebug("Detaching %s events!", {event_list})
+    minime.writeDebug("Отключаем события %s!", {event_list})
     minime_events.detach_events(minime.optional_events[event_list])
   end
 
   -- Empty storage!
-  minime.writeDebugNewBlock("Removing everything from global table 'storage'!")
+  minime.writeDebugNewBlock("Удаление всех данных из глобальной таблицы 'storage'!")
   storage = {}
 
   minime.entered_command(args, "leave")
@@ -136,12 +136,12 @@ minime.show("name", name)
 minime.show("command", command)
 minime.show("help_text", help_text)
 
-  minime.writeDebug("Add command %s?", {name})
+  minime.writeDebug("Добавить команду %s?", {name})
   if not commands.commands[name] then
-    minime.writeDebug("Yes!")
+    minime.writeDebug("Да!")
     commands.add_command(command, help_text, c_func)
   else
-    minime.writeDebug("No: command already exists!")
+    minime.writeDebug("Нет: команда уже существует!")
   end
 end
 

@@ -5,7 +5,7 @@ local function set_settings_default_value(settings_type, settings_name, settings
             .. tostring(settings_type)
             .. " settings_name "
             .. tostring(settings_name)
-            .. " has wrong signature!"
+            .. " имеет неверную сигнатуру!"
         )
     end
     if
@@ -14,10 +14,10 @@ local function set_settings_default_value(settings_type, settings_name, settings
         or type(settings_default_value) == "thread"
         or type(settings_default_value) == "userdata"
     then
-        error("default value must be have only primitive type such as boolean, string, number")
+        error("Значение по умолчанию должно иметь примитивный тип, например boolean, string или number")
     end
     if not data.raw[settings_type][settings_name] then
-        error("mod setting data.raw['" .. settings_type .. "']['" .. settings_name .. "'] not exists!")
+        error("Настройка мода data.raw['" .. settings_type .. "']['" .. settings_name .. "'] не существует!")
     end
     data.raw[settings_type][settings_name].default_value = settings_default_value
     log(
@@ -293,7 +293,7 @@ if mods["bobmodules"] then
     }) do
         local setting = data.raw["double-setting"] and data.raw["double-setting"][name]
         if not setting then
-            error("mod setting data.raw['double-setting']['" .. name .. "'] not exists!")
+            error("Настройка мода data.raw['double-setting']['" .. name .. "'] не существует!")
         end
         setting.minimum_value = 0
         set_settings_default_value("double-setting", name, 0)

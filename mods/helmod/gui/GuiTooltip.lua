@@ -817,7 +817,7 @@ function GuiTooltipBeacons:create()
 				table.insert(tooltip, beacons_tooltip)
 			end
 			if index > 20 then
-				Player.print("Too many beacon, are you sure that you use 'Amount affect one' ?")
+				Player.print("Слишком много маяков. Вы уверены, что выбрали режим «Количество влияет на один»?")
 				break
 			end
 		end
@@ -1064,7 +1064,7 @@ function GuiTooltipPriority:create()
 				table.insert(tooltip_priority,tooltip_priority_stage)
 			end
 			if index > 100 then
-				Player.print("Too many module")
+				Player.print("Слишком много модулей")
 				break
 			end
 		end
@@ -1097,7 +1097,7 @@ function GuiTooltipPriorities:create()
 				table.insert(tooltip, tooltip_priorities)
 			end
 			if index > 100 then
-				Player.print("Too many factory")
+				Player.print("Слишком много производственных машин")
 				break
 			end
 		end
@@ -1160,7 +1160,7 @@ function GuiTooltipLocation:create()
 				table.insert(tooltip, sub_tooltip)
 			end
 			if index > 100 then
-				Player.print("Too many factory")
+				Player.print("Слишком много производственных машин")
 				break
 			end
 		end

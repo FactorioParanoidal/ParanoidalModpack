@@ -8,7 +8,7 @@ local gui
 for p, player in pairs(game.players) do
   gui = player.gui.left and player.gui.left.mod_gui_frame_flow
   if gui and gui["minime_character_list"] and gui["minime_character_list"].valid then
-    minime.writeDebug("Player %s: Removing %s.",
+    minime.writeDebug("Игрок %s: удаляю %s.",
                       {p, minime.argprint(gui["minime_character_list"])})
     gui["minime_character_list"].destroy()
   end

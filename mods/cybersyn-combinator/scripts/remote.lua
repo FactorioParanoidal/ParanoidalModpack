@@ -59,7 +59,7 @@ end
 --- @param entity LuaEntity?
 --- @return boolean success `true` if a combinator was successfully found and opened, otherwise `false`.
 function cc_remote.open(player_index, entity)
-  log:debug("Remote open called with player index ", player_index)
+  log:debug("Вызов удалённого открытия с индексом игрока ", player_index)
 
   if not entity or not entity.valid then return false end
   if entity.type == "entity-ghost" then return false end
@@ -67,7 +67,7 @@ function cc_remote.open(player_index, entity)
   local combinator = find_combinator(entity, 20)
 
   if not combinator then
-    log:debug("Could not find entity to open")
+    log:debug("Не удалось найти сущность для открытия")
     return false
   end
 
@@ -76,7 +76,7 @@ end
 
 --- @param player_index uint?
 function cc_remote.close(player_index)
-  log:debug("Remote close called with player index ", player_index)
+  log:debug("Вызов удалённого закрытия с индексом игрока ", player_index)
   cc_gui:close(player_index)
 end
 

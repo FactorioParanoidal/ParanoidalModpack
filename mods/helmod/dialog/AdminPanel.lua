@@ -165,27 +165,27 @@ function AdminPanel:updateConversion()
   table_panel.style.cell_padding = 5
   table_panel.vertical_centering = false
   
-  GuiElement.add(table_panel, GuiLabel("label-encoded-text"):caption("Encoded Text"))
-  GuiElement.add(table_panel, GuiLabel("label-actions"):caption("Actions"))
-  GuiElement.add(table_panel, GuiLabel("label-decoded-text"):caption("Decoded Text"))
-  GuiElement.add(table_panel, GuiLabel("label-replacement"):caption("Replacement"))
-  GuiElement.add(table_panel, GuiLabel("label-content"):caption("Content"))
+  GuiElement.add(table_panel, GuiLabel("label-encoded-text"):caption("Закодированный текст"))
+  GuiElement.add(table_panel, GuiLabel("label-actions"):caption("Действия"))
+  GuiElement.add(table_panel, GuiLabel("label-decoded-text"):caption("Декодированный текст"))
+  GuiElement.add(table_panel, GuiLabel("label-replacement"):caption("Замена"))
+  GuiElement.add(table_panel, GuiLabel("label-content"):caption("Содержимое"))
 
   GuiElement.add(table_panel, GuiTextBox("encoded-text"))
   
   local actions = GuiElement.add(table_panel, GuiFlowV("actions"))
-  GuiElement.add(actions, GuiButton(self.classname, "string-decode"):caption("Decode ==>"))
-  GuiElement.add(actions, GuiButton(self.classname, "string-encode"):caption("<== Encode"))
+  GuiElement.add(actions, GuiButton(self.classname, "string-decode"):caption("Декодировать ==>"))
+  GuiElement.add(actions, GuiButton(self.classname, "string-encode"):caption("<== Кодировать"))
   
   local decoded_textbox = GuiElement.add(table_panel, GuiTextBox("decoded-text"))
   decoded_textbox.style.height = 600
 
   local elements_panel = GuiElement.add(table_panel, GuiFlowV("elements"))
-  GuiElement.add(elements_panel, GuiLabel("label-entities"):caption("Entities"))
+  GuiElement.add(elements_panel, GuiLabel("label-entities"):caption("Объекты"))
   local entities_view = GuiElement.add(elements_panel, GuiFlowV("entities"))
-  GuiElement.add(elements_panel, GuiLabel("label-tiles"):caption("Tiles"))
+  GuiElement.add(elements_panel, GuiLabel("label-tiles"):caption("Покрытия"))
   local tiles_view = GuiElement.add(elements_panel, GuiFlowV("tiles"))
-  GuiElement.add(elements_panel, GuiButton(self.classname, "apply_replace"):caption("Apply"))
+  GuiElement.add(elements_panel, GuiButton(self.classname, "apply_replace"):caption("Применить"))
 
   local tree_view = GuiElement.add(table_panel, GuiScroll("tree_view"))
   tree_view.style.height = 600
@@ -256,8 +256,8 @@ function AdminPanel:updateCache()
   local scroll_panel = self:getCacheTab()
   scroll_panel.clear()
 
-  GuiElement.add(scroll_panel, GuiLabel("warning"):caption({"", defines.mod.tags.color.orange, defines.mod.tags.font.default_large_bold, "Do not use this panel, unless absolutely necessary", defines.mod.tags.font.close, defines.mod.tags.color.close}))
-  GuiElement.add(scroll_panel, GuiButton(self.classname, "generate-cache"):sprite("menu", defines.sprites.process.black, defines.sprites.process.black):style("helmod_button_menu_sm_red"):tooltip("Generate missing cache"))
+  GuiElement.add(scroll_panel, GuiLabel("warning"):caption({"", defines.mod.tags.color.orange, defines.mod.tags.font.default_large_bold, "Не используйте эту панель без крайней необходимости", defines.mod.tags.font.close, defines.mod.tags.color.close}))
+  GuiElement.add(scroll_panel, GuiButton(self.classname, "generate-cache"):sprite("menu", defines.sprites.process.black, defines.sprites.process.black):style("helmod_button_menu_sm_red"):tooltip("Создать недостающий кэш"))
   
   local table_panel = GuiElement.add(scroll_panel, GuiTable("list-table"):column(2))
   table_panel.vertical_centering = false
@@ -265,7 +265,7 @@ function AdminPanel:updateCache()
 
   if table.size(Cache.get()) > 0 then
     local translate_panel = GuiElement.add(table_panel, GuiFlowV("global-caches"))
-    GuiElement.add(translate_panel, GuiLabel("translate-label"):caption("Global caches"):style("helmod_label_title_frame"))
+    GuiElement.add(translate_panel, GuiLabel("translate-label"):caption("Глобальные кэши"):style("helmod_label_title_frame"))
     local result_table = GuiElement.add(translate_panel, GuiTable("list-data"):column(3))
     self:addCacheListHeader(result_table)
     
@@ -280,7 +280,7 @@ function AdminPanel:updateCache()
   local users_data = storage["users"]
   if table.size(users_data) > 0 then
     local cache_panel = GuiElement.add(table_panel, GuiFlowV("user-caches"))
-    GuiElement.add(cache_panel, GuiLabel("translate-label"):caption("User caches"):style("helmod_label_title_frame"))
+    GuiElement.add(cache_panel, GuiLabel("translate-label"):caption("Кэши пользователей"):style("helmod_label_title_frame"))
     local result_table = GuiElement.add(cache_panel, GuiTable("list-data"):column(3))
     self:addCacheListHeader(result_table)
     
@@ -747,9 +747,9 @@ function AdminPanel:onEvent(event)
       else
         storage[event.item1][event.item2][event.item3][event.item4] = nil
       end
-      Player.print("Deleted:", event.item1, event.item2, event.item3, event.item4)
+      Player.print("Удалено:", event.item1, event.item2, event.item3, event.item4)
     else
-      Player.print("Not found to delete:", event.item1, event.item2, event.item3, event.item4)
+      Player.print("Не найдено для удаления:", event.item1, event.item2, event.item3, event.item4)
     end
     Controller:send("on_gui_update", event)
   end

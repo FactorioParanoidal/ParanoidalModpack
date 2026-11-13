@@ -133,7 +133,7 @@ this.templates.settingsWindow = {
 					type = "label",
 					name = "frame_caption",
 					style = "frame_title",
-					caption = "Even Distribution",
+					caption = "Равномерное распределение",
 				},
 				{
 					type = "empty-widget",
@@ -858,7 +858,7 @@ this.templates.settingsWindow = {
 											type = "button",
 											name = "delay_type",
 											enabled = false,
-											caption = "s",
+											caption = "с",
 											style = {
 												padding = 0,
 												width = 56, -- 38,
@@ -952,7 +952,7 @@ this.templates.settingsWindow = {
 											type = "button",
 											name = "range_type",
 											enabled = false,
-											caption = "tiles",
+											caption = "клеток",
 											style = {
 												padding = 0,
 												width = 56, -- 38,

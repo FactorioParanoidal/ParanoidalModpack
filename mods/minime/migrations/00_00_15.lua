@@ -31,7 +31,7 @@ if storage.player_data then
     -- Player is connected and either has no dummy (use current character) or
     -- another dummy -- copy it!
     if old and old.valid and old.name ~= minime.dummy_character_name then
-      minime.writeDebug("Creating new dummy for player %s!", {player.name})
+      minime.writeDebug("Создаю нового манекена для игрока %s!", {player.name})
 
       --~ new_dummy = minime_character.make_dummy(p)
       new_dummy = minime_player.make_dummy(p)
@@ -40,7 +40,7 @@ if storage.player_data then
       local inventory_list = minime.inventory_list
       local inventory
       for i, inv in ipairs(inventory_list) do
-        minime.writeDebug("%s: Transferring items from inventory %s", {i, inv})
+        minime.writeDebug("%s: Переношу предметы из инвентаря %s", {i, inv})
         inventory = defines.inventory["character_" .. inv]
         minime_inventories.transfer_inventory(old.get_inventory(inventory),
                                               new_dummy.get_inventory(inventory))
@@ -54,19 +54,19 @@ if storage.player_data then
       for i = 1, slots do
         new_dummy.set_personal_logistic_slot(i, old.get_personal_logistic_slot(i))
       end
-      minime.writeDebug("Copied %s personal logistic slots from \"%s\" to \"%s\".",
+      minime.writeDebug("Скопировано %s слотов персональной логистики с \"%s\" на \"%s\".",
                     {slots, minime.loc_name(old), minime.loc_name(new_dummy)})
       local personal_logistics = "character_personal_logistic_requests_enabled"
       --~ new_dummy.character_personal_logistic_requests_enabled = old.character_personal_logistic_requests_enabled
       --~ minime.writeDebug("Personal logistic requests are %s.",
                     --~ {old.character_personal_logistic_requests_enabled and "enabled" or "disabled"})
       new_dummy[personal_logistics] = old[personal_logistics]
-      minime.writeDebug("Personal logistic requests are %s.",
+      minime.writeDebug("Запросы персональной логистики %s.",
                         {old[personal_logistics] and "enabled" or "disabled"})
 
 
-      minime.writeDebug("player_data for player %s: ", {p, storage.player_data[p]})
-minime.show("dummy name", minime.loc_name(storage.player_data[p].dummy))
+      minime.writeDebug("player_data для игрока %s: ", {p, storage.player_data[p]})
+minime.show("Имя манекена", minime.loc_name(storage.player_data[p].dummy))
       -- If we have an old dummy, remove it!
       if old ~= player.character then
         old.destroy()
@@ -74,21 +74,21 @@ minime.show("dummy name", minime.loc_name(storage.player_data[p].dummy))
 
       -- Store new dummy
       storage.player_data[p].dummy = new_dummy
-      minime.writeDebug("Final player_data for player %s: %s", {p, storage.player_data[p]})
-minime.show("Final dummy name", minime.loc_name(storage.player_data[p].dummy))
+      minime.writeDebug("Итоговое значение player_data для игрока %s: %s", {p, storage.player_data[p]})
+minime.show("Итоговое имя манекена", minime.loc_name(storage.player_data[p].dummy))
 
     -- Player is not connected
     elseif not old then
-      minime.writeDebug("Player %s is not connected -- nothing to do!",
+      minime.writeDebug("Игрок %s не подключён — делать нечего!",
                         {player.name})
     else
-      minime.writeDebug("Player %s already has the correct dummy: nothing to do!",
+      minime.writeDebug("У игрока %s уже правильный манекен: делать нечего!",
                         {player.name})
     end
 
   end
 else
-  minime.writeDebug("storage.player_data doesn't exist -- nothing to do!")
+  minime.writeDebug("storage.player_data не существует — делать нечего!")
 end
 
 minime.entered_file("leave")

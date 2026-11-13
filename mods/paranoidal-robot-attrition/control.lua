@@ -97,7 +97,7 @@ end)
 
 local function surface_index(surface)
   local s = game.get_surface(surface)
-  if not s then error("unknown surface: " .. tostring(surface)) end
+  if not s then error("неизвестная поверхность: " .. tostring(surface)) end
   return s.index
 end
 
@@ -118,7 +118,7 @@ remote.add_interface("paranoidal-robot-attrition", {
   -- Crash rate multiplier of a surface (name or index) on top of the map setting; nil resets it to 1, 0 disables.
   set_surface_multiplier = function(surface, multiplier)
     if multiplier ~= nil and (type(multiplier) ~= "number" or multiplier < 0) then
-      error("multiplier must be a number >= 0 or nil")
+      error("множитель должен быть числом >= 0 или nil")
     end
     storage.surface_multiplier[surface_index(surface)] = multiplier
   end,
@@ -126,8 +126,8 @@ remote.add_interface("paranoidal-robot-attrition", {
   -- players).
   set_force_enabled = function(force, enabled)
     local f = game.forces[force]
-    if not f then error("unknown force: " .. tostring(force)) end
-    if enabled ~= nil and type(enabled) ~= "boolean" then error("enabled must be a boolean or nil") end
+    if not f then error("неизвестная фракция: " .. tostring(force)) end
+    if enabled ~= nil and type(enabled) ~= "boolean" then error("enabled должно быть логическим значением или nil") end
     storage.force_enabled[f.index] = enabled
   end,
   get_surface_multiplier = function(surface)

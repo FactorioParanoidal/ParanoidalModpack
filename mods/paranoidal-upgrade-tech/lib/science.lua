@@ -19,7 +19,7 @@ for index, name in ipairs(science.order) do position[name] = index end
 -- Ingredients {{pack, 1}, ...} from the first pack up to and including `last`.
 function science.upto(last)
     local count = position[last]
-    if not count then error("paranoidal-upgrade-tech: unknown science pack '" .. tostring(last) .. "'") end
+    if not count then error("paranoidal-upgrade-tech: неизвестный научный пакет '" .. tostring(last) .. "'") end
     local ingredients = {}
     for index = 1, count do ingredients[index] = {science.order[index], 1} end
     return ingredients

@@ -1,5 +1,7 @@
 ---------------------------------------------------------------------------------------------------
 Version: 0.6.6
+  Locale:
+    - Russian hardcoded player-facing text: 22 UI, chat, command-help and error-message literals; technical identifiers, format parameters and gameplay logic are unchanged.
   Graphics:
     - Paranoidal fork: flying_saucer graphics use half-resolution images with doubled sprite scales; animation frames are filtered separately, with transparent padding and compensated shifts for odd dimensions. Icons, minimap and laser definitions are updated to preserve their displayed size. Resized PNGs are losslessly optimized.
     - thumbnail.png is redrawn at 144x144 after the old smaller picture: text and simple shapes are drawn again, the rest is resampled and sharpened.

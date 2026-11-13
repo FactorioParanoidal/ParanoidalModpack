@@ -68,11 +68,11 @@ end
 --- @return T? The matched element.
 function flib_table.binary_search(array, comparator)
   local low, high = 1, #array
-  assert(high, "Invalid array was passed to binary search.")
+  assert(high, "Для двоичного поиска передан недопустимый массив.")
   while low <= high do
     local i = low + math.floor((high - low) / 2)
     local elem = array[i]
-    assert(elem, "Found a nil element during binary search; array was modified or is invalid.")
+    assert(elem, "Во время двоичного поиска обнаружен элемент nil; массив изменён или недопустим.")
     local res = comparator(elem)
     if res < 0 then
       high = i - 1

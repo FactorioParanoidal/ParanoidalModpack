@@ -689,7 +689,7 @@ function C.configure(overrides)
   else
     c.overrides = c.overrides or {}
     for k, v in pairs(overrides) do
-      if state.cfg[k] == nil or type(state.cfg[k]) ~= type(v) then error("unknown or wrong setting " .. tostring(k)) end
+      if state.cfg[k] == nil or type(state.cfg[k]) ~= type(v) then error("Неизвестная или некорректная настройка " .. tostring(k)) end
       c.overrides[k] = v
     end
   end

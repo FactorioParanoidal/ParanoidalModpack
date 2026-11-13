@@ -4,7 +4,7 @@ local startup = settings.startup
 local slot_count_wagon = tonumber(startup[constants.SETTINGS.SLOT_COUNT_WAGON].value)
 
 if not slot_count_wagon then
-  error("wagon slot count is not a valid number")
+  error("количество слотов вагона не является допустимым числом")
 end
 
 --- @class CybersynSignal

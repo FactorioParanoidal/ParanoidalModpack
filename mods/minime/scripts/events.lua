@@ -42,7 +42,7 @@ do
     minime.minime_event_ids[custom_event_name] = defines.events[custom_event_name]
     event_names[custom_event_name] = custom_event_name
     minime.event_names[custom_event_name] = custom_event_name
-    minime.show("Generated ID for event "..custom_event_name, custom_event_name)
+    minime.show("Сгенерирован ID события "..custom_event_name, custom_event_name)
   end
 end
 
@@ -275,7 +275,7 @@ minime.show("id", id)
   -- Listeners for our own custom events, so we can check what data we've passed on --
   ------------------------------------------------------------------------------------
   if minime.is_debug then
-    minime.writeDebug("Debugging mode: Add handlers for our custom event(s)!")
+    minime.writeDebug("Режим отладки: добавление обработчиков наших пользовательских событий!")
     event_handlers.minime_exchanged_characters = log_event_data
   end
 
@@ -290,7 +290,7 @@ minime_events.attach_events = function(event_list)
   minime.entered_function({event_list})
 
     minime.assert(event_list, {"table", "nil"},
-                                "table of event names/handlers or nil")
+                                "таблица имён событий и обработчиков или nil")
 
     local id, filters
     for event_name, event_handler in pairs(event_list or event_handlers) do
@@ -303,11 +303,11 @@ minime_events.attach_events = function(event_list)
 
         minime.entered_event(event, "leave")
       end)
-      minime.writeDebug("Attached event \"%s\".", {event_name})
+      minime.writeDebug("Подключено событие \"%s\".", {event_name})
 
       filters = event_filters[event_name]
       if filters then
-        minime.writeDebug("Setting filters for event %s: %s",
+        minime.writeDebug("Настройка фильтров для события %s: %s",
                           {minime.enquote(event_name), filters}, "line")
         script.set_event_filter(id, filters)
       end
@@ -324,11 +324,11 @@ minime_events.detach_events = function(event_list)
   minime.entered_function({event_list})
 
   minime.assert(event_list, {"table", "nil"},
-                              "table of event names/handlers or nil")
+                              "таблица имён событий и обработчиков или nil")
 
   for event_name, event_handler in pairs(event_list or event_handlers) do
     script.on_event(event_names[event_name], nil)
-    minime.writeDebug("Detached event %s.", {event_name})
+    minime.writeDebug("Отключено событие %s.", {event_name})
   end
 
   minime.entered_function("leave")
@@ -341,7 +341,7 @@ end
 minime_events.setup_skip_event = function(event_name)
   minime.entered_function({event_name})
 
-  minime.assert(event_name, "string", "event name")
+  minime.assert(event_name, "string", "имя события")
 
   --~ global.skip_events = global.skip_events or {}
   --~ global.skip_events[event_name] = global.skip_events[event_name] or {}
@@ -349,7 +349,7 @@ minime_events.setup_skip_event = function(event_name)
                             --~ {event_name})
   mod.skip_events = mod.skip_events or {}
   mod.skip_events[event_name] = mod.skip_events[event_name] or {}
-  minime.writeDebugNewBlock("Made sure mod.skip_events.%s exists!", {event_name})
+  minime.writeDebugNewBlock("Проверено наличие mod.skip_events.%s!", {event_name})
   minime.entered_function("leave")
 end
 
@@ -360,7 +360,7 @@ end
 minime_events.remove_skip_event = function(event_name)
   minime.entered_function({event_name})
 
-  minime.assert(event_name, "string", "event name")
+  minime.assert(event_name, "string", "имя события")
 
   if mod.skip_events and mod.skip_events[event_name] and
                           not next(mod.skip_events[event_name]) then

@@ -17,6 +17,7 @@ Date: 2026-11-01
     - The two defect-production achievements now target burner inserters and stone furnaces instead of materials that cannot be defective; IDs, qualities and quantities are unchanged.
     - Removed accidental scratch globals and a duplicate sprite declaration. Added /paranoidal-achievements-status for tracking diagnostics.
   Locale:
+    - Russian hardcoded player-facing text: 16 UI, chat, command-help and error-message literals; technical identifiers, format parameters and gameplay logic are unchanged.
     - Simplified the EN/RU milestone history notifications: earlier completion times are approximate, without statistics-backfill implementation jargon.
     - The "Crane Operator" achievement speaks of loading cranes (ru: погрузочных кранов), as the cranes and their technologies are now named.
     - ru: the "Old-School Dispatcher" achievement names the station controller instead of the Cybersyn combinator.

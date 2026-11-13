@@ -1,9 +1,9 @@
 -- From zzzcompability (Tias): run in data-updates, before the final recipe/icon passes.
 local function assert_current(condition, message)
-	assert(condition, message .. " Maybe current fix outdated?")
+	assert(condition, message .. " Возможно, текущее исправление устарело?")
 end
 
-assert(data.raw and data.raw.recipe, "Expected data.raw.recipe but it is nil")
+assert(data.raw and data.raw.recipe, "Ожидалось наличие data.raw.recipe, но оно равно nil")
 local recipe = data.raw.recipe["bi-sand"]
 assert_current(type(recipe) == "table", "Recipe bi-sand not found.")
 assert_current(type(recipe.results) == "table" or type(recipe.result) == "string",

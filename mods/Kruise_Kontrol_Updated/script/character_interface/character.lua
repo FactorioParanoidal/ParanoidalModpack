@@ -22,7 +22,7 @@ end
 
 function Character.new(character_entity)
     if character_entity.type ~= "character" then
-        error("Character interface only works on character entities." .. character_entity.type)
+        error("Интерфейс персонажа работает только с сущностями типа character." .. character_entity.type)
     end
 
     script.register_on_object_destroyed(character_entity)
@@ -53,7 +53,7 @@ function Character:update()
 end
 
 function Character:pop_state(dont_update_state)
-    self:print("Popped state " .. self.state_stack[1].type)
+    self:print("Снято состояние " .. self.state_stack[1].type)
     table.remove(self.state_stack, 1)
     --maybe?
     if dont_update_state == nil or dont_update_state == false then
@@ -62,12 +62,12 @@ function Character:pop_state(dont_update_state)
 end
 
 function Character:push_state(state)
-    self:print("Pushed state " .. state.type)
+    self:print("Добавлено в стек состояние " .. state.type)
     table.insert(self.state_stack, 1, state)
 end
 
 function Character:emplace_state(state)
-    self:print("Emplaced state " .. state.type)
+    self:print("Вставлено состояние " .. state.type)
     table.insert(self.state_stack, state)
 end
 
@@ -345,7 +345,7 @@ function Character:is_moving()
 end
 
 function Character:craft_item(name, count)
-    self:print("Told to find item " .. name .. " x" .. count)
+    self:print("Поручено найти предмет " .. name .. " x" .. count)
     self:push_state(States.craft_item(self, name, count))
 end
 
@@ -494,7 +494,7 @@ function Character:can_craft_recipe(recipe)
 end
 
 function Character:find_nearby_entities(radius, param)
-    if not radius then error("Give me a radius dude") end
+    if not radius then error("Укажите радиус.") end
     local param = param or {}
     param.position = self:get_position()
     param.radius = radius
@@ -684,7 +684,7 @@ end
 function Character:load()
     for k, state in pairs(self.state_stack) do
         local state_type = States[state.type]
-        assert(state_type, "WTF IS THIS STATE? " .. state.type)
+        assert(state_type, "Что это за состояние? " .. state.type)
         setmetatable(state, state_type.metatable)
     end
 end

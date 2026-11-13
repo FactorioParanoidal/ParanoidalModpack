@@ -1073,7 +1073,7 @@ local function fillEntityTemplate(entity)
 					elseif (attribute[1] == "bonusSpawningTime") then
 						entity["spawningTimeModifer"] = entity["spawningTimeModifer"] * attribute[2]
 					else
-                        error("Unknown table attribute " .. attribute[1])
+                        error("Неизвестный атрибут таблицы " .. attribute[1])
                     end
 				elseif (attribute == "notInKillStatistics") then
 					entity.additionalFlags[#entity.additionalFlags+1] = "not-in-kill-statistics"
@@ -1082,7 +1082,7 @@ local function fillEntityTemplate(entity)
 				elseif (attribute == "noLoot") then
 					entity.noLoot = true
                 else
-                    error("Unknown attribute " .. attribute)
+                    error("Неизвестный атрибут " .. attribute)
                 end
             end
         end
@@ -1198,7 +1198,7 @@ local function buildCaptiveBiterSpawner(faction)
 		end
 	end
 	if #factionSpawners == 0 then
-		error("Faction "..faction.type.." has no spawners!")
+		error("Фракция "..faction.type.." не имеет гнёзд!")
 	end	
 	------ spawner
 	local captiveBiterSpawner = deepcopy(data.raw["assembling-machine"]["captive-biter-spawner"])
@@ -1951,7 +1951,7 @@ local function buildAttack(faction, template)
 			
 			end	
        else
-            error ("unknown attack " .. type(attack).." = "..attack)
+            error ("неизвестная атака " .. type(attack).." = "..attack)
         end
     end
 end
@@ -1999,7 +1999,7 @@ local function buildUnitTemplate(faction, unit)
     end
 
     if not template.attackGenerator then
-        error("missing attack generator " .. faction.type .. " " .. template.name)
+        error("отсутствует генератор атаки " .. faction.type .. " " .. template.name)
     end
 
     return template
@@ -2038,7 +2038,7 @@ local function buildTurretTemplate(faction, turret)
     end
 
     if not template.attackGenerator then
-        error("missing attack generator " .. faction.type .. " " .. template.name)
+        error("отсутствует генератор атаки " .. faction.type .. " " .. template.name)
     end
 
     return template
@@ -2105,7 +2105,7 @@ local function buildUnitSpawnerTemplate(faction, incomingTemplate, unitSets, cap
         end
         if (#sharedSets > 0) and (otherUnits > 0) then
             if (totalShare <= 0) or (totalShare >= 1) then
-                error("unit set shares must sum to (0, 1): " .. template.name)
+                error("сумма долей наборов юнитов должна быть в интервале (0, 1): " .. template.name)
             end
             local tierWeights = {}
             for i=1,#sharedSets do

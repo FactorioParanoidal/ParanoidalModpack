@@ -17,7 +17,7 @@ local emissions = {
 local parse_energy = function(energy)
   local ending = energy:sub(energy:len())
   if not (ending == "J" or ending == "W") then
-    error(ending.. " is not a valid unit of energy")
+    error(ending.. " не является допустимой единицей энергии")
   end
   local magnitude = energy:sub(energy:len() - 1, energy:len() - 1)
   local multiplier = 1
@@ -35,7 +35,7 @@ local parse_energy = function(energy)
     Y = 1000000000000000000000000
   }
   multiplier = char[magnitude]
-  if not multiplier then error(magnitude.. " is not valid magnitude") end
+  if not multiplier then error(magnitude.. " не является допустимым обозначением величины") end
   return tonumber(energy:sub(1, energy:len()-2)) * multiplier
 end
 

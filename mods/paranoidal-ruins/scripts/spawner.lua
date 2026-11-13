@@ -115,10 +115,10 @@ end
 
 ---@param name string
 function M.exclude_surface(name)
-  if type(name) ~= "string" or name == "" then error("exclude_surface: surface name expected") end
+  if type(name) ~= "string" or name == "" then error("exclude_surface: ожидалось имя поверхности") end
   local surface = game.surfaces[name]
   if surface and surface.planet then
-    error("Surface '" .. name .. "' is a planet surface: exclude_surface is for internal or hidden surfaces only")
+    error("Поверхность '" .. name .. "' является поверхностью планеты: exclude_surface предназначена только для внутренних или скрытых поверхностей")
   end
   M.init_storage()
   storage.excluded[name] = true
@@ -126,7 +126,7 @@ end
 
 ---@param name string
 function M.reinclude_surface(name)
-  if type(name) ~= "string" or name == "" then error("reinclude_surface: surface name expected") end
+  if type(name) ~= "string" or name == "" then error("reinclude_surface: ожидалось имя поверхности") end
   if storage.excluded then storage.excluded[name] = nil end
 end
 

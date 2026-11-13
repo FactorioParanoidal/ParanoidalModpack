@@ -225,7 +225,7 @@ function util.create_request_proxy(entity, module_config, clear)
 
     local inventory_define = util.inventory_defines_map[entity.type]
     if not inventory_define then
-        game.print("ERROR [ModuleInserterEx]: Unknown inventory type: " .. entity.type)
+        game.print("ОШИБКА [ModuleInserterEx]: неизвестный тип инвентаря: " .. entity.type)
         return
     end
 

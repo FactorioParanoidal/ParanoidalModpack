@@ -1,5 +1,7 @@
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.19
+  Locale:
+    - Russian hardcoded player-facing text: 844 UI, chat, command-help and error-message literals; technical identifiers, format parameters and gameplay logic are unchanged.
 Date: 2026-03-03
   Changes:
     - Paranoidal packaging: moved twelve backup Lua files out of the distributed mod into the local archive; active Lua modules are unchanged.

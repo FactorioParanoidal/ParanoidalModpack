@@ -125,10 +125,10 @@ function reskins.internal.create_icons_from_list(table, inputs)
 		-- Handle input parameters
 		inputs_copy.type = overrides.type or inputs_copy.type or nil
 		inputs_copy.mod = overrides.mod or inputs_copy.mod
-		assert(inputs_copy.mod, "A mod must be specified for icon creation.")
+		assert(inputs_copy.mod, "Для создания значка необходимо указать мод.")
 
 		inputs_copy.group = overrides.group or inputs_copy.group
-		assert(inputs_copy.group, "A group must be specified for icon creation.")
+		assert(inputs_copy.group, "Для создания значка необходимо указать группу.")
 
 		inputs_copy.icon_size = overrides.icon_size or inputs_copy.icon_size
 		inputs_copy.technology_icon_size = overrides.technology_icon_size or inputs_copy.technology_icon_size

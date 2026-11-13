@@ -549,7 +549,7 @@ function reset_stop_layout(map_data, stop, is_station_or_refueler, forbidden_ent
 		area_delta = { 7, 0 }
 		is_ver = false
 	else
-		assert(false, "cybersyn: invalid stop direction")
+		assert(false, "cybersyn: недопустимое направление остановки")
 	end
 	local length = 1
 	---@type LuaEntity?

@@ -289,10 +289,10 @@ function common.save_state_to_file(state, type_)
 	
 	if type_ == "json" then
 		state._previous_state = nil
-		game.print(string.format("Dumped data to %s ", filename))
+		game.print(string.format("Данные выгружены в %s ", filename))
 		helpers.write_file("mpp-inspect/"..filename, helpers.table_to_json(state), false, state.player.index)
 	elseif type_ == "lua" then
-		game.print(string.format("Dumped data to %s ", filename))
+		game.print(string.format("Данные выгружены в %s ", filename))
 		helpers.write_file("mpp-inspect/"..filename, serpent.dump(state, {}), false, state.player.index)
 	end
 end
@@ -920,7 +920,7 @@ function common.create_belt_building_environment(state)
 			place_interleaved_belt_west(target.x_start, merge_x, target.y, merge_x == target.x2)
 			target.overlay_line = {{target.x_start, yt}, {merge_x, yt}, {merge_x, y}, {belt.x1, y}}
 		else
-			state.player.print("Failed placing a belt")
+			state.player.print("Не удалось разместить конвейер")
 		end
 	end
 	environment.make_interleaved_back_merge_belt = make_interleaved_back_merge_belt
@@ -993,7 +993,7 @@ function common.create_belt_building_environment(state)
 			place_sparse_belt(target, {x1 = target.x_start, x2 = merge_x}) -- target belt
 			target.overlay_line = {{target.x_start, yt}, {merge_x, yt}, {merge_x, y}, {belt.x1, y}}
 		else
-			state.player.print("Failed placing a belt")
+			state.player.print("Не удалось разместить конвейер")
 		end
 	end
 	environment.make_sparse_back_merge_belt = make_sparse_back_merge_belt

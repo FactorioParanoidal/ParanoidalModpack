@@ -11,7 +11,7 @@ local function init_cs_default(name)
   local num = tonumber(settings.global[name].value)
   if not num then return end
   config.cs_signals[name].default = num
-  log:debug("default value for ", name, " initialized to ", num)
+  log:debug("Параметру ", name, " назначено значение по умолчанию ", num)
 end
 
 init_cs_default(constants.SETTINGS.CS_REQUEST_THRESHOLD)
@@ -21,24 +21,24 @@ init_cs_default(constants.SETTINGS.CS_LOCKED_SLOTS)
 init_cs_default(constants.SETTINGS.CS_RESERVED_FLUID_CAPACITY)
 
 local function sort_all_combinators()
-  log:info("Sorting all Cybersyn Constant Combinators")
+  log:info("Сортировка всех станционных контроллеров диспетчерской сети поездов")
   ---@type EntitySearchFilters
   local filter = {
     name = constants.ENTITY_NAME
   }
   for surface_name, surface in pairs(game.surfaces) do
-    log:info("Processing surface ", surface_name)
+    log:info("Обработка поверхности ", surface_name)
     local entities = surface.find_entities_filtered(filter)
     for _, entity in pairs(entities) do
       if entity.valid then
-        log:debug("Sorting combinator ", entity.unit_number)
+        log:debug("Сортировка контроллера ", entity.unit_number)
         local combinator = CybersynCombinator:new(entity, false)
         combinator:sort_signals()
       end
     end
-    log:info("Done with surface ", surface_name)
+    log:info("Завершена обработка поверхности ", surface_name)
   end
-  log:info("Done sorting combinators")
+  log:info("Сортировка контроллеров завершена")
 end
 
 script.on_configuration_changed(function(data)
@@ -67,7 +67,7 @@ script.on_event(defines.events.on_runtime_mod_setting_changed, function(event)
   local num = tonumber(settings.global[name].value)
   if not num then return end
   tbl.default = num
-  log:debug("default value for ", name, " changed to ", num)
+  log:debug("значение по умолчанию для ", name, " изменено на ", num)
 end)
 
 local entity_event_filters = {
@@ -82,7 +82,7 @@ script.on_event(defines.events.on_player_mined_entity, function(event)
   local entity = event.entity
   if not player or not entity then return end
   local pname = player.name
-  log:debug(entity.name, "[", entity.unit_number, "] destroyed by ", pname)
+  log:debug(entity.name, "[", entity.unit_number, "] уничтожен игроком ", pname)
   cc_gui:on_entity_destroyed(entity.unit_number)
   if storage.combinator_sections[entity.unit_number] then
     storage.combinator_sections[entity.unit_number] = nil
@@ -92,7 +92,7 @@ end, entity_event_filters)
 script.on_event(defines.events.on_robot_mined_entity, function(event)
   local entity = event.entity
   if not entity then return end
-  log:debug(entity.name, "[", entity.unit_number, "] destroyed by bot")
+  log:debug(entity.name, "[", entity.unit_number, "] уничтожен роботом")
   cc_gui:on_entity_destroyed(entity.unit_number)
   if storage.combinator_sections[entity.unit_number] then
     storage.combinator_sections[entity.unit_number] = nil
@@ -102,7 +102,7 @@ end, entity_event_filters)
 script.on_event(defines.events.script_raised_destroy, function(event)
   local entity = event.entity
   if not entity then return end
-  log:debug(entity.name, "[", entity.unit_number, "] destroyed by script")
+  log:debug(entity.name, "[", entity.unit_number, "] уничтожен скриптом")
   cc_gui:on_entity_destroyed(entity.unit_number)
   if storage.combinator_sections[entity.unit_number] then
     storage.combinator_sections[entity.unit_number] = nil
@@ -115,7 +115,7 @@ script.on_event(defines.events.on_built_entity, function(event)
   cc_gui:on_entity_built(entity)
   if not player or not entity then return end
   local pname = player.name
-  log:debug(entity.name, "[", entity.unit_number, "] built by ", pname)
+  log:debug(entity.name, "[", entity.unit_number, "] построен игроком ", pname)
   local disable = settings.get_player_settings(player)[constants.SETTINGS.DISABLE_BUILT].value
   local combinator = CybersynCombinator:new(entity, true)
   if combinator:get_item_section_count() == 0 then
@@ -123,7 +123,7 @@ script.on_event(defines.events.on_built_entity, function(event)
   end
   if not disable then return end
   combinator:disable()
-  log:debug(entity.name, "[", entity.unit_number, "] disabled due to per-player setting")
+  log:debug(entity.name, "[", entity.unit_number, "] отключён индивидуальной настройкой игрока")
 end, entity_event_filters)
 
 --- @param event EventData.script_raised_built|EventData.script_raised_revive
@@ -134,7 +134,7 @@ local function on_script_raised_built_or_revive(event)
   local player = entity.last_user
   local disable = false
   if player then
-    log:debug("found relevant player in script_raised_built_or_revive")
+    log:debug("Найден соответствующий игрок в событии script_raised_built_or_revive")
     disable = settings.get_player_settings(player)[constants.SETTINGS.DISABLE_BUILT].value == true
   else
     disable = settings.global[constants.SETTINGS.DISABLE_NONPLAYER_BUILT].value == true
@@ -145,7 +145,7 @@ local function on_script_raised_built_or_revive(event)
   end
   if not disable then return end
   combinator:disable()
-  log:debug(entity.name, "[", entity.unit_number, "] disabled due to per-player or global setting")
+  log:debug(entity.name, "[", entity.unit_number, "] отключён индивидуальной или глобальной настройкой")
 end
 
 script.on_event(defines.events.script_raised_built, on_script_raised_built_or_revive, entity_event_filters)
@@ -159,7 +159,7 @@ script.on_event(defines.events.on_robot_built_entity, function(event)
   local player = entity.last_user or robot.last_user
   local disable = false
   if player then
-    log:debug("found relevant player in robot_built_entity")
+    log:debug("Найден соответствующий игрок в событии robot_built_entity")
     disable = settings.get_player_settings(player)[constants.SETTINGS.DISABLE_BUILT].value == true
   else
     disable = settings.global[constants.SETTINGS.DISABLE_NONPLAYER_BUILT].value == true
@@ -170,7 +170,7 @@ script.on_event(defines.events.on_robot_built_entity, function(event)
   end
   if not disable then return end
   combinator:disable()
-  log:debug(entity.name, "[", entity.unit_number, "] disabled due to per-player or global setting")
+  log:debug(entity.name, "[", entity.unit_number, "] отключён индивидуальной или глобальной настройкой")
 end, entity_event_filters)
 
 ---@param source LuaEntity
@@ -226,7 +226,7 @@ script.on_event(defines.events.on_entity_settings_pasted, function(event)
   if not src or not src.valid then return end
   local src_type = src.name == "entity-ghost" and src.ghost_type or src.type
   local src_name = src.name == "entity-ghost" and src.ghost_name or src.name
-  log:debug("Paste from ", src_name, " (", src_type, ") [", src.unit_number, "] to ", dest.unit_number)
+  log:debug("Копирование из ", src_name, " (", src_type, ") [", src.unit_number, "] to ", dest.unit_number)
   if src_type == "constant-combinator" then
     on_cc_pasted(src, dest)
   elseif src_type == "assembling-machine" then
@@ -250,14 +250,14 @@ end)
 script.on_event(defines.events.on_player_joined_game, function(event)
   local player = game.get_player(event.player_index)
   if not player then return end
-  log:debug("Player ", event.player_index, " joined, requesting translation")
+  log:debug("Player ", event.player_index, " вошёл в игру; запрашивается перевод")
   player.request_translation({ "gui-train.empty-train-group" })
 end)
 
 script.on_event(defines.events.on_player_locale_changed, function(event)
   local player = game.get_player(event.player_index)
   if not player then return end
-  log:debug("Locale changed for player ", event.player_index, ", requesting translation")
+  log:debug("Изменён язык игрока ", event.player_index, ", запрашивается перевод")
   player.request_translation({ "gui-train.empty-train-group" })
 end)
 

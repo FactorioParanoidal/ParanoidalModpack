@@ -1,5 +1,7 @@
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.4
+  Locale:
+    - Russian hardcoded player-facing text: 3 UI, chat, command-help and error-message literals; technical identifiers, format parameters and gameplay logic are unchanged.
 Date: 04.06.2026
   Bugfixes:
     - Paranoidal: the optional dependency on rso-mod follows its rename to RSO-reforged (same load order).

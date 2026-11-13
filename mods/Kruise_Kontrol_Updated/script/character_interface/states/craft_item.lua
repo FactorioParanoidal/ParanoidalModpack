@@ -12,7 +12,7 @@ function Craft_item.new(Character, name, count)
         need_new_recipe = true,
         attempted_ingredients = {}
     }
-    Character:print("Init craft item state for " .. name .. " x " .. (count or 0))
+    Character:print("Инициализация состояния изготовления предмета " .. name .. " x " .. (count or 0))
     return setmetatable(state, Craft_item.metatable)
 end
 
@@ -43,7 +43,7 @@ end
 
 function Craft_item:get_next_recipe()
     -- Returns false if we have no more recipes we can use.
-    self.character:print("Finding next recipe to use for " .. self.name)
+    self.character:print("Поиск следующего рецепта для изготовления " .. self.name)
     local recipes = get_recipes_for_product(self.name)
     local force_recipes = self.character.entity.force.recipes
 
@@ -52,7 +52,7 @@ function Craft_item:get_next_recipe()
 
         if self.recipe == nil then
             --We have looped through all of them, none are worthy.
-            self.character:print("No worthy recipes " .. serpent.line(recipes))
+            self.character:print("Нет подходящих рецептов " .. serpent.line(recipes))
             return
         end
 
@@ -75,7 +75,7 @@ function Craft_item:get_ingredients()
             -- We already have enough of this item.
         elseif self.attempted_ingredients[ingredient.name] then
             --We have already tried to get this ingredient (and failed). giveup.
-            self.character:print("Already attempted ingredient " .. ingredient.name)
+            self.character:print("Ингредиент уже пытались получить " .. ingredient.name)
             self.need_new_recipe = true
             return
         else
@@ -97,7 +97,7 @@ function Craft_item:get_ingredients()
 end
 
 function Craft_item:update()
-    self.character:print("Craft item update " .. self.name)
+    self.character:print("Обновление состояния изготовления предмета " .. self.name)
 
     if self.character:has_item(self.name, self.count) then
         --We already have enough of this item anyway.
@@ -114,7 +114,7 @@ function Craft_item:update()
     end
 
     if self.need_new_recipe and not self:get_next_recipe() then
-        self.character:print("Failed to find a recipe we can use for " .. self.name)
+        self.character:print("Не удалось найти подходящий рецепт для изготовления " .. self.name)
         self:finish()
         return
     end

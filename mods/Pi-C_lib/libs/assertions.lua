@@ -164,7 +164,7 @@ PClib_log(string.format("is_debug: %s", is_debug))
     assert.ascertain_itemstack = function(stack)
       assert.entered_function({stack})
 
-      assert.assert(stack, {"LuaItemStack", "table", "string"}, "item stack or name")
+      assert.assert(stack, {"LuaItemStack", "table", "string"}, "стек предметов или имя")
 
       local t = type(stack)
 
@@ -233,9 +233,9 @@ PClib_log(string.format("is_debug: %s", is_debug))
       assert.entered_function({a, b, ...})
 
       assert.assert(a, {"LuaQualityPrototype", "string"},
-                        "quality name or prototype")
+                        "имя качества или прототип")
       assert.assert(b, {"LuaQualityPrototype", "string"},
-                        "quality name or prototype")
+                        "имя качества или прототип")
 
       local q_a = assert.ascertain_quality(a)
       if not q_a then
@@ -245,13 +245,13 @@ PClib_log(string.format("is_debug: %s", is_debug))
       local function compare(x, y)
         -- First two arguments are identical
         if x == y then
-assert.writeDebug("Identical arguments!")
+assert.writeDebug("Аргументы идентичны!")
           return true
 
         -- Args may refer to the same quality if one is a string and the other is a
         -- prototype!
         elseif type(x) ~= type(y) then
-assert.writeDebug("Args differ, comparing quality prototypes!")
+assert.writeDebug("Аргументы различаются, сравниваем прототипы качества!")
           return (q_a == assert.ascertain_quality(y))
         end
       end
@@ -263,17 +263,17 @@ assert.writeDebug("Args differ, comparing quality prototypes!")
       -- We only check additional arguments if the first two args refer to the same
       -- quality prototype!
       if ret then
-        assert.writeDebug("Yes: trying to compare additional args with first arg!")
+        assert.writeDebug("Да: пытаемся сравнить дополнительные аргументы с первым аргументом!")
         for _, arg in pairs({...}) do
           ret = compare(a, arg)
           if not ret then
-            assert.writeDebug("Failed: %s and %s refer to different qualities!",
+            assert.writeDebug("Не удалось: %s и %s относятся к разным качествам!",
                               {a, arg})
             break
           end
         end
       else
-        assert.writeDebug("Failed: first two args differ!")
+        assert.writeDebug("Не удалось: первые два аргумента различаются!")
       end
 
       assert.entered_function("leave")
@@ -285,8 +285,8 @@ assert.writeDebug("Args differ, comparing quality prototypes!")
     assert.is_same_signal_id = function(a, b)
       assert.entered_function({a, b})
 
-      assert.assert(a, "table", "table with signal data")
-      assert.assert(b, "table", "table with signal data")
+      assert.assert(a, "table", "таблица с данными сигнала")
+      assert.assert(b, "table", "таблица с данными сигнала")
 
       local same_name = (a.name == b.name)
       -- When reading signal IDs, type will be nil instead of "item"!
@@ -368,7 +368,7 @@ assert.show("ret",ret)
   assert.ascertain_color = function(color)
     assert.entered_function({color})
 
-    assert.assert(color, {"table", "string", "nil"}, "color, string, or nil")
+    assert.assert(color, {"table", "string", "nil"}, "цвет, строка или nil")
 
     local ret
     local c = type(color)
@@ -394,7 +394,7 @@ assert.show("ret", ret)
 
         -- If the copied table is not empty, the input wasn't a valid color!
         if next(copy) then
-          assert.entered_function({}, "leave", "not a valid color")
+          assert.entered_function({}, "leave", "некорректный цвет")
           return
         end
       end
@@ -429,8 +429,8 @@ assert.show("ret", ret)
   -- Throw an error if a wrong argument has been passed to a function
   assert.arg_err = function(arg, arg_type)
     error(string.format(
-      "Wrong argument! %s is not %s!",
-      assert.argprint(arg), (arg_type and "a valid "..arg_type or "valid")
+      "Неверный аргумент! %s не является %s!",
+      assert.argprint(arg), (arg_type and "допустимый "..arg_type or "valid")
     ))
   end
 
@@ -658,8 +658,8 @@ assert.show("ret", ret)
   ----------------------------------------------------------------------------------
   -- Extract a number from a string, given a variable pattern
   assert.number_from_string = function(look_in, find_pattern)
-    assert.assert(look_in, "string", "string containing number")
-    assert.assert(find_pattern, "string", "search pattern")
+    assert.assert(look_in, "string", "строка, содержащая число")
+    assert.assert(find_pattern, "string", "шаблон поиска")
     return tonumber(look_in:match(find_pattern))
   end
 
@@ -667,8 +667,8 @@ assert.show("ret", ret)
   --             Compare two values that may be either boolean or nil             --
   ----------------------------------------------------------------------------------
   assert.states_differ = function(a, b)
-    assert.assert(a, {"boolean", "nil"}, "Boolean value or nil")
-    assert.assert(b, {"boolean", "nil"}, "Boolean value or nil")
+    assert.assert(a, {"boolean", "nil"}, "логическое значение или nil")
+    assert.assert(b, {"boolean", "nil"}, "логическое значение или nil")
     return ((not a) ~= (not b))
   end
 

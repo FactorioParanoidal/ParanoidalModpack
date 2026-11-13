@@ -25,11 +25,11 @@ function task_runner.mining_patch_task(state)
 		if __DebugAdapter then
 			table.remove(storage.tasks, 1)
 		else
-			error("Layout "..state.layout_choice.." step "..tostring(tick_result).." called itself again")
+			error("Схема "..state.layout_choice.." шаг "..tostring(tick_result).." снова вызвал себя")
 		end
 	elseif tick_result == nil then
 		if __DebugAdapter then
-			game.print(("Callback for layout %s after call %s has no result"):format(state.layout_choice, state._callback))
+			game.print(("Обратный вызов макета %s после вызова %s не вернул результат"):format(state.layout_choice, state._callback))
 			table.remove(storage.tasks, 1)
 
 			---@type PlayerData
@@ -40,7 +40,7 @@ function task_runner.mining_patch_task(state)
 			end
 			mpp_util.update_undo_button(player_data)
 		else
-			error("Layout "..state.layout_choice.." missing a callback name")
+			error("Макет "..state.layout_choice.." не содержит имени обратного вызова")
 		end
 	elseif tick_result == false then
 		local player = state.player

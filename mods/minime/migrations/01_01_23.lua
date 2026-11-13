@@ -11,7 +11,7 @@ for p, player in pairs(game.players) do
   buttons = mod_gui.get_button_flow(player)
 
   if buttons and buttons[toggle_name] and buttons[toggle_name].valid then
-    minime.writeDebug("%s: Removing %s.",
+    minime.writeDebug("%s: удаляю %s.",
                       {minime.argprint(player), minime.argprint(buttons[toggle_name])})
     buttons[toggle_name].destroy()
   end

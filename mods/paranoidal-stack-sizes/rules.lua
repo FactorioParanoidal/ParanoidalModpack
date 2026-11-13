@@ -18,7 +18,7 @@ function M.apply(raw, item_types, active_mods, startup, triggers, snapshot, requ
     local function set(kind, name, size, source, action)
         local entry = plan[kind .. "/" .. name]
         if not entry then return end -- Optional integrations may refer to absent prototypes.
-        assert(type(size) == "number" and size >= 1 and size % 1 == 0, "Invalid stack rule: " .. source)
+        assert(type(size) == "number" and size >= 1 and size % 1 == 0, "Недопустимое правило размера стопки: " .. source)
         if action == "minimum" then size = math.max(entry.size, size)
         elseif action == "maximum" then size = math.min(entry.size, size) end
         entry.size, entry.source = size, source
@@ -98,7 +98,7 @@ function M.apply(raw, item_types, active_mods, startup, triggers, snapshot, requ
     for _, rule in ipairs(C.inherited_defaults) do
         local entry = plan[rule.kind .. "/" .. rule.name]
         if entry and entry.source == "declared" then
-            local parent = assert(plan[rule.kind .. "/" .. rule.parent], "Missing stack-size parent: " .. rule.parent)
+            local parent = assert(plan[rule.kind .. "/" .. rule.parent], "Не найден родительский элемент для размера стопки: " .. rule.parent)
             set(rule.kind, rule.name, parent.size, "inherited-" .. rule.parent)
         end
     end
@@ -108,9 +108,9 @@ function M.apply(raw, item_types, active_mods, startup, triggers, snapshot, requ
     for _, key in ipairs(keys) do
         local entry = plan[key]
         for _, flag in pairs(entry.item.flags or {}) do
-            assert(flag ~= "not-stackable" or entry.size == 1, "Non-stackable item has a stack rule: " .. key)
+            assert(flag ~= "not-stackable" or entry.size == 1, "Для нескладываемого предмета задано правило размера стопки: " .. key)
         end
-        assert(entry.size >= 1 and entry.size % 1 == 0, "Invalid declared stack size: " .. key)
+        assert(entry.size >= 1 and entry.size % 1 == 0, "Недопустимый объявленный размер стопки: " .. key)
         if entry.item.stack_size ~= entry.size then
             entry.item.stack_size = entry.size
             changed = changed + 1

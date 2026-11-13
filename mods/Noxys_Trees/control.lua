@@ -681,7 +681,7 @@ cache_settings()
 
 local function nx_debug(message)
   if config.debug then
-    game.print("NX Debug: " .. message)
+    game.print("Отладка NX: " .. message)
   end
 end
 

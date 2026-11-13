@@ -39,7 +39,7 @@ function GUI_Elements.openPlanetAISettings(player_index)
 	local universe = storage.universe
 	local player = game.get_player(player_index)
 	if not player then
-		game.print("GUI_Elements.openPlanetAISettings: #"..player_index.." player not found")
+		game.print("GUI_Elements.openPlanetAISettings: #"..player_index.." игрок не найден")
 		return
 	end	
 
@@ -157,7 +157,7 @@ local function surfaceStatusClick(guiElement)
 	local surfaceIndex = tonumber(string.sub(guiElement.name, 28))
 	local surface = game.surfaces[surfaceIndex]
 	if not surface then
-		game.print("Surface #"..surfaceIndex.." is not found")
+		game.print("Поверхность #"..surfaceIndex.." не найдена")
 		return
 	end
 	local universe = storage.universe
@@ -166,9 +166,9 @@ local function surfaceStatusClick(guiElement)
 	
 	guiElement.caption = surfaceStatusCaption(newStatus)
 	if newStatus then
-		game.print("Surface <"..surface.name.."> now is ignored")
+		game.print("Поверхность <"..surface.name.."> теперь игнорируется")
 	else
-		game.print("Surface <"..surface.name.."> now processed")	
+		game.print("Поверхность <"..surface.name.."> теперь обрабатывается")
 	end	
 end
 

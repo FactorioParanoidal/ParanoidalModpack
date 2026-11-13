@@ -3,7 +3,7 @@
 local M = {handlers = {}, filters = {}, unfiltered = {}, order = {}}
 
 function M.on(event, handler, filters)
-    assert(event ~= nil, "Unknown event")
+    assert(event ~= nil, "Неизвестное событие")
     local list = M.handlers[event]
     if not list then
         list = {}

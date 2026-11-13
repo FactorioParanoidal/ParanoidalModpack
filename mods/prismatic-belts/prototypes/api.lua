@@ -690,7 +690,7 @@ function api.apply_belt_animation_set_and_update_related_connectables(transport_
 	-- The identifier of the belt animation set to be replaced
 	local set_id_to_replace = get_animation_set_identity(transport_belt)
 	if not set_id_to_replace then
-		error("Unable to resolve transport belt animation set identity for belt '" .. transport_belt.name .. "'.")
+		error("Не удалось определить идентификатор набора анимации конвейера для конвейера '" .. transport_belt.name .. "'.")
 	end
 
 	-- Replace the animation set after we have the identity.

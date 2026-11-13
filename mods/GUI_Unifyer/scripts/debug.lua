@@ -58,7 +58,7 @@ function debug_button(event)
     
     local element = event.element
     if not element.valid then
-        player.print("Debug: Invalid GUI element")
+        player.print("Отладка: недопустимый элемент GUI")
         return
     end
     
@@ -73,14 +73,14 @@ function debug_button(event)
     -- Print parent chain
     local parents = get_parent_chain(element)
     if next(parents) then
-        player.print("\nParent hierarchy:")
+        player.print("\nИерархия родительских элементов:")
         for depth, parent in pairs(parents) do
             player.print(string.rep("  ", depth - 1) .. parent.name .. " (" .. parent.type .. ")")
         end
     end
     
     -- Print current surface name
-    player.print("\nsurface = " .. player.surface.name)
+    player.print("\nповерхность = " .. player.surface.name)
     
     game.print("_________________________________________")
 end

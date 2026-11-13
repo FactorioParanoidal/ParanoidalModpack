@@ -6,8 +6,8 @@ function M.insert_unique(list, value)
 end
 
 function M.prerequisite(technology, prerequisite)
-  local target = assert(data.raw.technology[technology], "Missing aircraft technology: " .. technology)
-  assert(data.raw.technology[prerequisite], "Missing prerequisite: " .. prerequisite)
+  local target = assert(data.raw.technology[technology], "Не найдена авиационная технология: " .. technology)
+  assert(data.raw.technology[prerequisite], "Не найдена необходимая технология: " .. prerequisite)
   target.prerequisites = target.prerequisites or {}
   M.insert_unique(target.prerequisites, prerequisite)
 end
@@ -31,19 +31,19 @@ function M.replace_ingredient(recipe, old, replacement)
       return
     end
   end
-  error("Aircraft: missing ingredient " .. old .. " in " .. recipe.name)
+  error("Aircraft: отсутствует ингредиент " .. old .. " in " .. recipe.name)
 end
 
 function M.split_ingredient(recipe, old, replacement, amount)
   for _, ingredient in ipairs(recipe.ingredients) do
     if ingredient.type == "item" and ingredient.name == old then
-      assert(ingredient.amount > amount, "Aircraft: invalid material split in " .. recipe.name)
+      assert(ingredient.amount > amount, "Aircraft: недопустимое разделение материалов в " .. recipe.name)
       ingredient.amount = ingredient.amount - amount
       recipe.ingredients[#recipe.ingredients + 1] = {type = "item", name = replacement, amount = amount}
       return
     end
   end
-  error("Aircraft: missing material " .. old .. " in " .. recipe.name)
+  error("Aircraft: отсутствует материал " .. old .. " in " .. recipe.name)
 end
 
 function M.science(technology, name)

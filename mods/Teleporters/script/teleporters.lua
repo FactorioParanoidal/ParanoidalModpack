@@ -152,12 +152,12 @@ local make_teleporter_gui = function(player, source)
   if teleporter_frame then
     location = teleporter_frame.location
     script_data.teleporter_frames[player.index] = nil
-    print("Frame already exists")
+    print("Окно уже существует")
     close_gui(teleporter_frame)
     player.opened = nil
   end
 
-  print("Making new frame")
+  print("Создаю новое окно")
 
   if not (source and source.valid and not script_data.to_be_removed[source.unit_number]) then
     unlink_teleporter(player)
@@ -296,20 +296,20 @@ local refresh_teleporter_frames = function()
     local player = players[player_index]
     local frame = get_teleporter_frame(player)
     if frame then
-      print("Refreshing frame")
+      print("Обновляю окно")
       make_teleporter_gui(player, source)
     end
   end
 end
 
 local check_player_linked_teleporter = function(player)
-  print("Checking player linked teleporter")
+  print("Проверяю привязанный к игроку телепорт")
   local source = script_data.player_linked_teleporter[player.index]
   if source and source.valid then
-    print("Linked teleporter exists...")
+    print("Привязанный телепорт существует...")
     make_teleporter_gui(player, source)
   else
-    print("Unlinnkgin")
+    print("Отвязываю")
     unlink_teleporter(player)
   end
 end
@@ -381,7 +381,7 @@ local gui_actions =
     local player = game.get_player(event.player_index)
     close_gui(get_rename_frame(player))
 
-    print("On cancel rename linked check")
+    print("Отмена переименования: проверяю привязку")
     check_player_linked_teleporter(player)
   end,
   confirm_rename_button = function(event, param)
@@ -401,7 +401,7 @@ local gui_actions =
     close_gui(get_rename_frame(player))
     rename_teleporter(player.force, old_name, new_name)
 
-    print("On rename linked check")
+    print("Переименование: проверяю привязку")
     --check_player_linked_teleporter(player)
   end,
   confirm_rename_textfield = function(event, param)
@@ -421,7 +421,7 @@ local gui_actions =
     close_gui(get_rename_frame(player))
     rename_teleporter(player.force, old_name, new_name)
 
-    print("On rename linked check")
+    print("Переименование: проверяю привязку")
     --check_player_linked_teleporter(player)
   end,
   teleport_button = function(event, param)
@@ -555,7 +555,7 @@ local on_gui_closed = function(event)
   local rename_frame = get_rename_frame(player)
   if rename_frame and rename_frame == element then
     close_gui(rename_frame)
-    print("Closed rename frame, checking player linked")
+    print("Окно переименования закрыто; проверяю привязку игрока")
     check_player_linked_teleporter(player)
     return
   end
@@ -564,7 +564,7 @@ local on_gui_closed = function(event)
   if teleporter_frame and teleporter_frame == element and not teleporter_frame.ignored_by_interaction then
     close_gui(teleporter_frame)
     unlink_teleporter(player)
-    print("Frame unlinked")
+    print("Окно отвязано")
     return
   end
 

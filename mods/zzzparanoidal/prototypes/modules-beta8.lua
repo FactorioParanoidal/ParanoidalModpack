@@ -6,7 +6,7 @@ local integration = require("prototypes.modules-beta8.integration")
 local stack_sizes = require("__paranoidal-stack-sizes__/config").module_items
 for _, prototype in ipairs(prototypes) do
     if defines.prototypes.item[prototype.type] then
-        prototype.stack_size = assert(stack_sizes[prototype.name], "Missing module stack size: " .. prototype.name)
+        prototype.stack_size = assert(stack_sizes[prototype.name], "Отсутствует размер стопки модуля: " .. prototype.name)
     end
     -- Module research consumes actual tools. Bob 2.0 defines these as items.
     if prototype.type == "tool" then
@@ -73,7 +73,7 @@ end
 
 -- Replace only module inputs here; unrelated current material costs are untouched.
 for _, entry in ipairs(present(integration.consumers)) do
-    local recipe = assert(data.raw.recipe[entry.name], "Missing module consumer: " .. entry.name)
+    local recipe = assert(data.raw.recipe[entry.name], "Отсутствует рецепт-потребитель модуля: " .. entry.name)
     local ingredients = {}
     for _, ingredient in ipairs(recipe.ingredients or {}) do
         local name = ingredient.name or ingredient[1]

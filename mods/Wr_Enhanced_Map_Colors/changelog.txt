@@ -1,5 +1,7 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.5.10
+  Locale:
+    - Russian hardcoded player-facing text: 19 UI, chat, command-help and error-message literals; technical identifiers, format parameters and gameplay logic are unchanged.
 Date: 23/6/2026
   Changes:
     - fix map colors not updating on addition to saves without this mod

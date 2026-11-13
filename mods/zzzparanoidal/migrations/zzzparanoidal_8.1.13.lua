@@ -64,7 +64,7 @@ for _, surface in pairs(game.surfaces) do
 		local health_ratio = old.health / old.prototype.get_max_health(quality)
 		old.destroy()
 		local replacement = assert(surface.create_entity({ name = is_warehouse and "warehouse-storage" or target,
-			position = position, force = force, quality = quality }), "Cannot migrate Angels storage")
+			position = position, force = force, quality = quality }), "Не удалось перенести хранилище Angels")
 		replacement.health = replacement.prototype.get_max_health(quality) * health_ratio
 		local destination = replacement.get_inventory(defines.inventory.chest)
 		for index = 1, #cargo do
@@ -73,9 +73,9 @@ for _, surface in pairs(game.surfaces) do
 				local lost = stack.count - destination.insert(stack)
 				if is_warehouse and lost > 0 then
 					error(string.format(
-						"Angels Storage migration: warehouse-storage (%d slots) cannot hold the cargo at %s (%.1f, %.1f). "
-							.. "Keep a backup of the original save; do not overwrite it. Check Warehousing/Extended Angels startup "
-							.. "capacity settings and review the migration map (zzzparanoidal/migrations/README-storage.md) before retrying.",
+						"Миграция хранилища Angels: warehouse-storage (%d ячеек) не может вместить груз по адресу %s (%.1f, %.1f). "
+							.. "Сохраните резервную копию исходного сохранения; не перезаписывайте его. Проверьте стартовые настройки вместимости Warehousing/Extended Angels "
+							.. "и перед повторной попыткой ознакомьтесь с картой миграции (zzzparanoidal/migrations/README-storage.md).",
 						#destination, surface.name, position.x, position.y))
 				end
 				discarded = discarded + lost

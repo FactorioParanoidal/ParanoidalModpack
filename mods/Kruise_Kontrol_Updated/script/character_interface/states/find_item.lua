@@ -7,7 +7,7 @@ function Find_item.new(Character, name, count, radius)
     {
         type = "find_item",
         character = Character,
-        name = name or error("No name given"),
+        name = name or error("Не указано имя"),
         count = count or 0,
         radius = radius or 64
     }
@@ -25,7 +25,7 @@ end
 
 function Find_item:fail()
     --In this case, we try to craft the item we are looking for.
-    self.character:print("Couldn't find " .. self.name)
+    self.character:print("Не удалось найти " .. self.name)
     self:finish(true)
     self.character:craft_item(self.name, self.count)
 end
@@ -144,7 +144,7 @@ local get_stack_size = function(name)
 end
 
 function Find_item:update()
-    self.character:print("Find item update " .. self.name)
+    self.character:print("Обновление поиска предмета " .. self.name)
 
     local needed = self.count - self.character.entity.get_item_count(self.name)
     if needed <= 0 then

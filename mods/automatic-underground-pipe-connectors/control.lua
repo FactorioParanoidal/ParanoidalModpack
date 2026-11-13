@@ -353,9 +353,9 @@ local function on_built_entity(event)
         if inventory then
             inventory.remove({name=pipe_item_name, quality=pipe_quality, count=1})
         else
-            player.print("Placed a pipe for free. This shouldn't happen. Please report a bug on "
-                .. "the Automatic Underground Pipe Connectors mod discussion page or github issue "
-                .. "tracker, including your game save.")
+            player.print("Бесплатно установлена труба. Такого не должно происходить. Сообщите об ошибке на "
+                .. "странице обсуждения мода Automatic Underground Pipe Connectors или в трекере ошибок GitHub, "
+                .. "приложив сохранение игры.")
         end
     end
 
@@ -456,7 +456,7 @@ local function validate_lookup(underground_entity, lookup_entry)
     -- Filter out the extra fields
     lookup_entry = { item = lookup_entry.item, entity = lookup_entry.entity }
     if not is_valid_lookup(underground_entity, lookup_entry) then
-        error("Given underground lookup entry is not valid: "..underground_entity.." -> "..serpent.line(lookup_entry))
+        error("Переданная запись поиска подземного объекта недействительна: "..underground_entity.." -> "..serpent.line(lookup_entry))
     end
     return lookup_entry
 end

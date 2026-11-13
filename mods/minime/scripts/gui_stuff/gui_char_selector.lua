@@ -8,7 +8,7 @@ local selector = {}
 ------------------------------------------------------------------------------------
 ------------------------------------------------------------------------------------
 local names = minime_gui_names.selector
-minime.show("selector names", names)
+minime.show("Имена selector", names)
 
 ------------------------------------------------------------------------------------
 --                             Character selector GUI                             --
@@ -99,7 +99,7 @@ local function make_table(parent, page)
     column_count = minime_gui.characters_per_page,
     visible = visible,
   })
-  minime.writeDebug("Created %s.", {minime.argprint(ret)})
+  minime.writeDebug("Создано %s.", {minime.argprint(ret)})
 
   local char, element, id, preview, preview_entity
   local chars = p_data.gui_character_pages[page]
@@ -142,11 +142,11 @@ minime.show("ret[element]", ret[element])
 minime.show("ret[element].position", ret[element].position)
 minime.show("preview_entity", preview_entity)
 minime.show("preview_entity.position", preview_entity.position)
-        minime.writeDebug("Added preview for character \"%s\".", {char})
+        minime.writeDebug("Добавлен предпросмотр персонажа \"%s\".", {char})
       end
     -- Add a spacer to fill up the table
     else
-minime.writeDebug("Must add spacer!")
+minime.writeDebug("Нужно добавить разделитель!")
       id = (id or 0) + 1
       minime_gui.make_spacer(ret, minime.character_placeholder_prefix..id, 160)
     end
@@ -170,7 +170,7 @@ minime.writeDebug("Must add spacer!")
         enabled = true,
         style = "minime_character_button_on",
       })
-      minime.writeDebug("Added %s.", {minime.argprint(ret[element])})
+      minime.writeDebug("Добавлен %s.", {minime.argprint(ret[element])})
 
     --~ -- Add a spacer to fill up the table
     --~ else
@@ -216,7 +216,7 @@ selector.toggle_character_page_entities = function(player, page, state)
 
     if preview and preview.valid then
       preview.disabled_by_script = not state
-      minime.writeDebug("%sctivated preview %s.",
+      minime.writeDebug("Состояние (%s) предпросмотра %s.",
                         {preview.active and "A" or "Dea", minime.argprint(preview)})
     end
   end
@@ -288,7 +288,7 @@ local function set_button_state(button, state)
     for k, v in pairs(state) do
       button[k] = table.deepcopy(state[k])
     end
-minime.writeDebug("Updated state of button \"%s\"", {button.name})
+minime.writeDebug("Обновлено состояние кнопки \"%s\"", {button.name})
   end
 
   minime.entered_function("leave")
@@ -313,7 +313,7 @@ local function update_character_buttons(player_data, buttons)
     for b, button in pairs(buttons.children) do
 
       if button.type == "button" then
-minime.writeDebug("Updating button \"%s\"", {button.name})
+minime.writeDebug("Обновление кнопки \"%s\"", {button.name})
         short_name = button.name:gsub("^"..minime.character_button_prefix, "")
 minime.show("short_name", short_name)
         -- Get new button state
@@ -335,7 +335,7 @@ minime.show("camera", camera)
 minime.show("camera.enabled", camera.enabled)
         end
       else
-minime.writeDebug("Ignoring %s \"%s\"!", {button.type, button.name})
+minime.writeDebug("Игнорируется %s \"%s\"!", {button.type, button.name})
       end
     end
   else
@@ -365,7 +365,7 @@ local function update_removal_buttons(player_data, buttons)
       -- We only have these two buttons now, but perhaps we'll need something
       -- else later.
       if (button.name == god_mode) or (button.name == editor_mode) then
-minime.writeDebug("Updating button \"%s\"", {button.name})
+minime.writeDebug("Обновление кнопки \"%s\"", {button.name})
         state = prepare_button_state({
           condition = (button.name == god_mode and player_data.god_mode) or
                       (button.name == editor_mode and player_data.editor_mode),
@@ -375,7 +375,7 @@ minime.writeDebug("Updating button \"%s\"", {button.name})
         })
         set_button_state(button, state)
       else
-minime.writeDebug("Ignoring %s \"%s\"!", {button.type, button.name})
+minime.writeDebug("Игнорируется %s \"%s\"!", {button.type, button.name})
       end
     end
   else
@@ -421,19 +421,19 @@ selector.update_page_selector_buttons = function(data)
       button.style = "minime_arrow_button_off"
       button.enabled = false
     end
-    minime.writeDebug("%sabled %s!", {enabled and "En" or "Dis", minime.argprint(button)})
+    minime.writeDebug("Состояние (%s) элемента %s!", {enabled and "En" or "Dis", minime.argprint(button)})
   end
 
 
   -- A new page has been chosen via the drop-down list. Just update these buttons!
   if element.name == dropdown_list_name then
-    minime.writeDebug("Dropdown list was used. Must update state of character-page selector buttons!")
+    minime.writeDebug("Использован выпадающий список. Нужно обновить состояние кнопок выбора страницы персонажей!")
 
     new_page = elements[dropdown_list_name].selected_index
 
   -- One of the buttons has been used
   else
-    minime.writeDebug("%s was used!", {minime.argprint(element)})
+    minime.writeDebug("Использован элемент %s!", {minime.argprint(element)})
 
     new_page = (element.name == prev_button_name and old_page - 1) or
                 (element.name == next_button_name and old_page + 1) or
@@ -449,12 +449,12 @@ selector.update_page_selector_buttons = function(data)
     -- Deactivate preview entities from the old page, and hide the old page
     selector.toggle_character_page_entities(player, old_page, false)
     previews[character_page_prefix..old_page].visible = false
-    minime.writeDebug("%s is now hidden!", {minime.argprint(previews[character_page_prefix..old_page])})
+    minime.writeDebug("%s теперь скрыт!", {minime.argprint(previews[character_page_prefix..old_page])})
 
     -- Activate preview entities from the new page, and unhide it
     selector.toggle_character_page_entities(player, new_page, true)
     previews[character_page_prefix..new_page].visible = true
-    minime.writeDebug("%s is now visible!", {minime.argprint(previews[character_page_prefix..new_page])})
+    minime.writeDebug("%s теперь виден!", {minime.argprint(previews[character_page_prefix..new_page])})
 
     -- Update the dropdown list!
     minime_gui.on_gui_selection_state_changed(data)
@@ -499,17 +499,17 @@ minime.show("Player", player)
   if p_data.last_character ~= "" then
     char = mod.minime_characters[p_data.last_character] and
             mod.minime_characters[p_data.last_character].loc_name or ""
-    minime.writeDebug("Player has a character!")
+    minime.writeDebug("У игрока есть персонаж!")
   -- We're in god or editor mode. If removal buttons are shown, we output nothing.
   elseif show_removal_buttons then
     char = ""
-    minime.writeDebug("Player has no character, removal buttons are shown.")
+    minime.writeDebug("У игрока нет персонажа, кнопки удаления отображаются.")
   -- We're in god or editor mode, the removal buttons are hidden. Output mode.
   else
     char = (p_data.editor_mode and {"minime-GUI.editor-mode-button-caption"}) or
             (p_data.god_mode and {"minime-GUI.god-mode-button-caption"}) or
             ""
-    minime.writeDebug("Player has no character, removal buttons are hidden.")
+    minime.writeDebug("У игрока нет персонажа, кнопки удаления скрыты.")
   end
 minime.show("char", char)
   elements[current_char_name].caption = char
@@ -596,14 +596,14 @@ selector.get_character_gui_page = function(player)
                       chars[player_data.last_character] and
                       available[player_data.last_character] then
     char = player_data.last_character
-    minime.writeDebug("Using player_data.last_character: %s!", {char})
+    minime.writeDebug("Используется player_data.last_character: %s!", {char})
   -- We may have a detached character if the player is in god mode
   elseif player_data and player_data.detached_character and
                           player_data.detached_character.valid and
                           available[player_data.detached_character] then
     char = chars[player_data.detached_character.name] and
             player_data.detached_character.name
-    minime.writeDebug("Using player_data.detached_character %s!", {char})
+    minime.writeDebug("Используется player_data.detached_character %s!", {char})
   end
 
   local ret = player_data and player_data.gui_character_pages_lookup[char] or 1
@@ -648,7 +648,7 @@ selector.create_toggle_button = function(player)
           --~ style = "minime_toggle_button"
           style = "minime_toggle_button_in_flow"
         })
-        minime.writeDebug("Created character-selector toggle button!")
+        minime.writeDebug("Создана кнопка переключения выбора персонажа!")
       end
     end
   end
@@ -677,9 +677,9 @@ selector.remove_toggle_button = function(player)
   local toggle = buttons and buttons.valid and buttons[toggle_button_name]
   if toggle and toggle.valid then
     toggle.destroy()
-    minime.writeDebug("Destroyed old toggle button!")
+    minime.writeDebug("Старая кнопка переключения уничтожена!")
   else
-    minime.writeDebug("Player has no valid toggle button!")
+    minime.writeDebug("У игрока нет действительной кнопки переключения!")
   end
 
   -- Remove button flow if it contains no other elements, or an empty frame will be
@@ -705,17 +705,17 @@ minime.show("must_remove(buttons)", must_remove(buttons))
     -- Button flow is an inner frame. We must remove the outer frame as well if it's
     -- empty after we have removed the inner frame.
     local parent = buttons.parent
-minime.show("parent frame", parent)
+minime.show("Родительский фрейм", parent)
 
     -- Remove inner fame
     buttons.destroy()
-    minime.writeDebug("Destroyed button flow!")
+    minime.writeDebug("Поток кнопок уничтожен!")
 
     -- Remove outer frame?
     --~ if parent and parent.valid and table_size(parent.children) == 0 then
     if must_remove(parent) then
       parent.destroy()
-      minime.writeDebug("Destroyed parent of button flow!")
+      minime.writeDebug("Родительский элемент потока кнопок уничтожен!")
     end
   end
 
@@ -742,7 +742,7 @@ minime.show("player", player.name)
 
 
   if not minime.character_selector then
-    minime.writeDebug("Character selector is disabled -- check if any players have a GUI.")
+    minime.writeDebug("Селектор персонажа отключён — проверьте, открыто ли у игроков какое-либо GUI.")
     --~ for p, player in pairs(game.players) do
       --~ selector.remove_gui(player)
     --~ end
@@ -750,13 +750,13 @@ minime.show("player", player.name)
       selector.remove_gui(p)
     end
 
-    minime.entered_function({player, remove_character}, "leave", "Character selector is disabled!")
+    minime.entered_function({player, remove_character}, "leave", "Выбор персонажа отключён!")
     return
   end
 
   local player_data = mod.player_data[player.index]
   if not player_data then
-    minime.entered_function({player, remove_character}, "leave", "Player data not yet initialized!")
+    minime.entered_function({player, remove_character}, "leave", "Данные игрока ещё не инициализированы!")
     return
   end
 
@@ -794,7 +794,7 @@ minime.show("player", player.name)
     direction = "vertical",
     visible = player_data.show_character_list,
   })
-  minime.writeDebug("Created %s!", {minime.argprint(gui[main_frame_name])})
+  minime.writeDebug("Создано %s!", {minime.argprint(gui[main_frame_name])})
 
   gui = gui[main_frame_name]
   gui.auto_center = true
@@ -808,7 +808,7 @@ minime.show("player", player.name)
     caption = {"mod-name.minime"},
     direction = "horizontal"
   })
-  minime.writeDebug("Created %s", {minime.argprint(header)})
+  minime.writeDebug("Создано %s", {minime.argprint(header)})
   header.style.vertically_stretchable = false
   header.title.drag_target = gui
 
@@ -832,7 +832,7 @@ minime.show("player", player.name)
     sprite = "utility/close",
     mouse_button_filter = {"left"},
   })
-  minime.writeDebug("Created GUI header!")
+  minime.writeDebug("Создан заголовок GUI!")
 
 
   ----------------------------------------------------------------------------------
@@ -852,7 +852,7 @@ minime.show("player", player.name)
     style = "inside_shallow_frame_with_padding",
   })
   char_window.style.use_header_filler = false
-  minime.writeDebug("Created %s for character buttons.", {minime.argprint(char_window)})
+  minime.writeDebug("Создано %s для кнопок персонажей.", {minime.argprint(char_window)})
 
   local element, flow, main_flow, button_flow, spacer_width
 
@@ -860,8 +860,8 @@ minime.show("player", player.name)
   -- Create table: entity-previews above clickable buttons
   for p_index, p in ipairs(player_data.gui_character_pages) do
     element = make_table(char_window, p_index)
-    minime.writeDebug("Created %s.", {minime.argprint(element)})
-minime.show("Width of inner table", element.style.natural_width)
+    minime.writeDebug("Создано %s.", {minime.argprint(element)})
+minime.show("Ширина внутренней таблицы", element.style.natural_width)
   end
 
 
@@ -889,7 +889,7 @@ minime.show("Width of inner table", element.style.natural_width)
       direction = "horizontal",
       visible = true,
     })
-    minime.writeDebug("Created %s.", {minime.argprint(main_flow)})
+    minime.writeDebug("Создано %s.", {minime.argprint(main_flow)})
   end
 
   -----------------------------------------------------------------------------------
@@ -902,7 +902,7 @@ minime.show("Width of inner table", element.style.natural_width)
       name = removal_flow_name,
       caption = {"minime-GUI.gui-name-charremoval-caption"},
     })
-    minime.writeDebug("Created %s", {minime.argprint(flow)})
+    minime.writeDebug("Создано %s", {minime.argprint(flow)})
 
     -- Add flow containing buttons for character removal (editor/god mode)
     button_flow = flow.add({
@@ -911,7 +911,7 @@ minime.show("Width of inner table", element.style.natural_width)
       direction = "horizontal",
       visible = true,
     })
-    minime.writeDebug("Created %s", {minime.argprint(button_flow)})
+    minime.writeDebug("Создано %s", {minime.argprint(button_flow)})
 
     -- Create buttons
     for b, button in pairs({minime.godmode_button_name, minime.editor_button_name}) do
@@ -926,7 +926,7 @@ minime.show("Width of inner table", element.style.natural_width)
         string.format("minime-GUI.%s-mode-button-caption",
                       button == minime.godmode_button_name and "god" or "editor")
       }
-      minime.writeDebug("Added %s.", {minime.argprint(button_flow[element])})
+      minime.writeDebug("Добавлен %s.", {minime.argprint(button_flow[element])})
     end
 
     -- Add spacer
@@ -935,7 +935,7 @@ minime.show("Width of inner table", element.style.natural_width)
       spacer_width = 25
 
       element = minime_gui.make_spacer(main_flow, e_name, spacer_width)
-      minime.writeDebug("Added %s.", {minime.argprint(element)})
+      minime.writeDebug("Добавлен %s.", {minime.argprint(element)})
     end
   end
 
@@ -950,7 +950,7 @@ minime.show("Width of inner table", element.style.natural_width)
       caption = {"minime-GUI.gui-name-available-toggle-caption"},
       --~ caption = "",
     })
-    minime.writeDebug("Created %s", {minime.argprint(flow)})
+    minime.writeDebug("Создано %s", {minime.argprint(flow)})
 
     -- Add toggle button for "Available characters GUI?
     local available = table_size(player_data.available_characters) or 0
@@ -968,14 +968,14 @@ minime.show("Width of inner table", element.style.natural_width)
       visible = true,
       style = "minime_toggle_button_in_gui"
     })
-    minime.writeDebug("Added %s.", {minime.argprint(element)})
+    minime.writeDebug("Добавлен %s.", {minime.argprint(element)})
 
     -- Add spacer
     if create_page_selector then
       local e_name = toggle_button_available_name.."-"..spacer_name
       spacer_width = 15
       element = minime_gui.make_spacer(main_flow, e_name, spacer_width)
-      minime.writeDebug("Added %s.", {minime.argprint(element)})
+      minime.writeDebug("Добавлен %s.", {minime.argprint(element)})
     end
   end
 
@@ -989,7 +989,7 @@ minime.show("Width of inner table", element.style.natural_width)
       name = info_flow_name,
       caption = {"minime-GUI.gui-name-infoframe-caption"},
     })
-    minime.writeDebug("Created %s", {minime.argprint(flow)})
+    minime.writeDebug("Создано %s", {minime.argprint(flow)})
 
     -- Add text (name of the character )
     element = flow.add({
@@ -998,13 +998,13 @@ minime.show("Width of inner table", element.style.natural_width)
       direction = "horizontal",
       visible = true,
     })
-    minime.writeDebug("Created %s", {minime.argprint(element)})
+    minime.writeDebug("Создано %s", {minime.argprint(element)})
 
     local e_name  = current_char_name.."-"..spacer_name
     spacer_width = 15
 
     element = minime_gui.make_spacer(main_flow, e_name, spacer_width)
-    minime.writeDebug("Added %s.", {minime.argprint(element)})
+    minime.writeDebug("Добавлен %s.", {minime.argprint(element)})
   end
 
 
@@ -1020,7 +1020,7 @@ minime.show("Width of inner table", element.style.natural_width)
       name = character_pages_flow_name,
       caption = {"minime-GUI.gui-name-pageselector-caption"},
     })
-    minime.writeDebug("Created %s", {minime.argprint(flow)})
+    minime.writeDebug("Создано %s", {minime.argprint(flow)})
 
     -- Create flow for the elements
     button_flow = flow.add({
@@ -1029,7 +1029,7 @@ minime.show("Width of inner table", element.style.natural_width)
       direction = "horizontal",
       visible = true,
     })
-    minime.writeDebug("Created %s", {minime.argprint(button_flow)})
+    minime.writeDebug("Создано %s", {minime.argprint(button_flow)})
 
     -- Create "Back" button
     element = button_flow.add({
@@ -1042,7 +1042,7 @@ minime.show("Width of inner table", element.style.natural_width)
       mouse_button_filter = {"left"},
       style = "minime_arrow_button_on",
     })
-    minime.writeDebug("Created %s", {minime.argprint(element)})
+    minime.writeDebug("Создано %s", {minime.argprint(element)})
 
     -- Create drop-down list
     element = button_flow.add({
@@ -1053,7 +1053,7 @@ minime.show("Width of inner table", element.style.natural_width)
       ignored_by_interaction = false,
       mouse_button_filter = {"left"},
     })
-    minime.writeDebug("Created %s", {minime.argprint(element)})
+    minime.writeDebug("Создано %s", {minime.argprint(element)})
 
     -- Add items to drop-down list
     local first, last
@@ -1073,7 +1073,7 @@ minime.show("Width of inner table", element.style.natural_width)
         last,
         total
       }, page)
-      minime.writeDebug("Added item for page %s to %s.",
+      minime.writeDebug("Для страницы %s добавлен элемент в %s.",
                         {page, minime.argprint(element)})
     end
     element.selected_index = player_data.character_gui_page
@@ -1089,7 +1089,7 @@ minime.show("Width of inner table", element.style.natural_width)
       mouse_button_filter = {"left"},
       style = "minime_arrow_button_on",
     })
-    minime.writeDebug("Created %s", {minime.argprint(element)})
+    minime.writeDebug("Создано %s", {minime.argprint(element)})
   end
 
 
@@ -1102,7 +1102,7 @@ minime.show("Width of inner table", element.style.natural_width)
 
   -----------------------------------------------------------------------------------
   -- Update GUI
-  minime.writeDebug("Updating GUI of %s!", {minime.argprint(player)})
+  minime.writeDebug("Обновление GUI игрока %s!", {minime.argprint(player)})
   selector.gui_update(player)
 
   if create_page_selector then
@@ -1142,7 +1142,7 @@ selector.hide_gui = function(player)
   player = minime.ascertain_player(player)
 
   if player and player.valid then
-    minime.writeDebug("Trying to disable GUI of player %s", player.name)
+    minime.writeDebug("Попытка отключить GUI игрока %s", player.name)
 
     -- Disable toggle button
     do
@@ -1151,7 +1151,7 @@ selector.hide_gui = function(player)
       if button and button.valid then
         button.enabled = false
         button.tooltip = {"minime-GUI.toggle-char-selector-button-tooltip-hidden"}
-        minime.writeDebug("Disabled GUI toggle button of player %s!",
+        minime.writeDebug("Кнопка переключения GUI игрока %s отключена!",
                           {player.name or "nil"})
       end
     end
@@ -1166,7 +1166,7 @@ minime.show("tags", tags)
         tags.visible = gui.visible
         gui.tags = tags
         gui.visible = false
-        minime.writeDebug("GUI of player %s is now invisible!",
+        minime.writeDebug("GUI игрока %s теперь невидимо!",
                           {player.name or "nil"})
       end
     end
@@ -1187,7 +1187,7 @@ selector.unhide_gui = function(player)
   player = minime.ascertain_player(player)
 
   if player and player.valid then
-    minime.writeDebug("Trying to enable GUI of player %s", player.name)
+    minime.writeDebug("Попытка включить GUI игрока %s", player.name)
 
 
     -- Enable toggle button
@@ -1197,7 +1197,7 @@ selector.unhide_gui = function(player)
       if button and button.valid then
         button.enabled = true
         button.tooltip = {"minime-GUI.toggle-char-selector-button-tooltip"}
-        minime.writeDebug("Enabled GUI toggle button of player %s!",
+        minime.writeDebug("Кнопка переключения GUI игрока %s включена!",
                           {player.name or "nil"})
       end
     end
@@ -1226,7 +1226,7 @@ minime.show("tags", tags)
 minime.show("gui.visible", gui.visible)
 
         gui.tags = tags
-        minime.writeDebug("GUI of player %s is now %s!",
+        minime.writeDebug("GUI игрока %s теперь %s!",
                   {player.name or "nil", gui.visible and "visible" or "invisible"})
       end
     end
@@ -1249,7 +1249,7 @@ selector.remove_gui = function(player)
                                         game.get_player(player.player_index))
 
   if player and player.valid then
-    minime.writeDebug("Trying to remove GUI of player %s", player.name)
+    minime.writeDebug("Попытка удалить GUI игрока %s", player.name)
 
     -- Remove toggle button
     --~ local gui_buttons = mod_gui.get_button_flow(player)
@@ -1264,7 +1264,7 @@ selector.remove_gui = function(player)
     if gui_frames and gui_frames[main_frame_name] and
                       gui_frames[main_frame_name].valid then
       gui_frames[main_frame_name].destroy()
-      minime.writeDebug("Removed GUI of player %s!", {player.name or "nil"})
+      minime.writeDebug("Удалён GUI игрока %s!", {player.name or "nil"})
     end
 
   end
@@ -1290,7 +1290,7 @@ selector.gui_toggle = function(player)
   -- If GUI is visible, it should be in the foreground
   if gui.visible then
     gui.bring_to_front()
-    minime.writeDebug("%s is now on top!", {minime.argprint(gui)})
+    minime.writeDebug("%s теперь поверх остальных!", {minime.argprint(gui)})
   end
 minime.show("player", player)
 minime.show("mod", mod)
@@ -1314,7 +1314,7 @@ minime.show("p_data.show_character_list", p_data.show_character_list)
     if gui.visible and entity then
       page = page_lookup[c_name]
       active = (player_page == page)
-      minime.writeDebug("Player's page: %s\tCharacter page: %s",
+      minime.writeDebug("Страница игрока: %s\tСтраница персонажа: %s",
                         {player_page, page or "nil"})
 
     -- All entities will be turned off if the GUI is invisible!
@@ -1324,7 +1324,7 @@ minime.show("p_data.show_character_list", p_data.show_character_list)
 
     if entity then
       entity.disabled_by_script = not active
-      minime.writeDebug("Turned preview %s %s.",
+      minime.writeDebug("Для предпросмотра %s задано состояние: %s.",
                         {minime.argprint(entity), active and "on" or "off"})
 -- TODO: Destroy camera for inactive previews!
     end
@@ -1342,7 +1342,7 @@ selector.gui_update = function(player, page)
 minime.show("type(page)", type(page))
 
   if not minime.character_selector then
-    minime.entered_function({}, "leave", "Character selector is disabled!")
+    minime.entered_function({}, "leave", "Выбор персонажа отключён!")
     return
   end
 
@@ -1352,7 +1352,7 @@ minime.show("type(page)", type(page))
   end
 
   --~ page = tonumber(page)
-  minime.assert(page, {"number", "nil"}, "page number or nil")
+  minime.assert(page, {"number", "nil"}, "номер страницы или nil")
 
   if not (mod.player_data and mod.player_data[player.index]) then
     minime_player.init_player(player)
@@ -1397,7 +1397,7 @@ end
       --~ update_character_buttons(p_data, gui[character_frame_name][tab_name])
     --~ end
     if gui[character_frame_name] and gui[character_frame_name][gui_page] then
-      minime.writeDebug("Updating character buttons!")
+      minime.writeDebug("Обновление кнопок персонажей!")
       update_character_buttons(p_data, gui[character_frame_name][gui_page])
     end
 
@@ -1406,13 +1406,13 @@ end
 minime.show("Have bottom flow", gui[bottom_flow_name])
       -- God/editor mode
       if gui[bottom_flow_name][removal_flow_name] then
-        minime.writeDebug("Updating removal buttons!")
+        minime.writeDebug("Обновление кнопок удаления!")
         update_removal_buttons(p_data, gui[bottom_flow_name][removal_flow_name][removal_buttons_flow_name])
       end
 
       -- Character info
       if gui[bottom_flow_name][info_flow_name] then
-        minime.writeDebug("Updating character info!")
+        minime.writeDebug("Обновление информации о персонаже!")
         update_character_info(player)
       end
     end
@@ -1514,7 +1514,7 @@ selector.on_gui_click = function(event)
   --~ end
   if not minime.prefixed(element, minime.character_selector_prefix) or
       element == character_page_selector_flow_name then
-    minime.entered_function({}, "leave", "Nothing to do for "..
+    minime.entered_function({}, "leave", "Нечего делать для "..
                                           minime.argprint(element).."!")
     return
   end
@@ -1541,41 +1541,41 @@ selector.on_gui_click = function(event)
   -- Toggle button for character selector was clicked
 minime.writeDebugNewBlock("What did the player do?")
   if element == toggle_button_name then
-    minime.writeDebug("%s toggled the selection list.", {player.name})
+    minime.writeDebug("%s переключил список выбора.", {player.name})
     selector.gui_toggle(player)
 
 
   -- Toggle button for "Available characters" GUI was clicked (Added in 1.1.23)
   elseif element == toggle_button_available_name then
-    minime.writeDebug("%s toggled the list of available characters.", {player.name})
+    minime.writeDebug("%s переключил список доступных персонажей.", {player.name})
     minime_gui.available.gui_toggle(player)
 
   -- Close button was clicked
   elseif element == main_frame_close_button_name then
-    minime.writeDebug("%s closed the selection list.", {player.name})
+    minime.writeDebug("%s закрыл список выбора.", {player.name})
     selector.gui_toggle(player)
 
   -- Player clicked a character selection or removal (god/editor mode) button.
   elseif minime.prefixed(element, minime.character_button_prefix) then
-    minime.writeDebug("%s clicked %s.", {player.name, element_string})
+    minime.writeDebug("%s нажал %s.", {player.name, element_string})
     character_button_click(element)
 
   -- Player clicked on a character preview. Let's pretend it was the button!
   elseif minime.prefixed(element, minime.character_preview_prefix) then
-    minime.writeDebug("%s clicked preview %s.", {player.name, element_string})
+    minime.writeDebug("%s нажал на предпросмотр %s.", {player.name, element_string})
     character_button_click(element:gsub(minime.character_preview_prefix,
                                         minime.character_button_prefix))
 
   -- Player clicked on a character-page selector button!
   elseif minime.prefixed(element, minime.character_page_button_prefix) and
           element ~= dropdown_list_name then
-    minime.writeDebug("%s clicked character-page selector %s.",
+    minime.writeDebug("%s нажал кнопку выбора страницы персонажей %s.",
                       {player.name, element_string})
     selector.update_page_selector_buttons(event)
 
   -- Something else from our GUI has been clicked
   else
-    minime.writeDebug("Nothing to do for %s!", {element_string})
+    minime.writeDebug("Нечего делать для %s!", {element_string})
   end
 
   minime.entered_function("leave")
@@ -1593,7 +1593,7 @@ selector.on_gui_selection_state_changed = function(event)
 
 
   if not minime.prefixed(element.name, minime.character_page_button_prefix) then
-    minime.entered_function({},"leave", "Nothing to do!")
+    minime.entered_function({},"leave", "Нечего делать!")
     return
   end
 
@@ -1607,7 +1607,7 @@ selector.on_gui_selection_state_changed = function(event)
 
   -- Dropdown list was used to change the page
   if element.name == dropdown_list_name then
-    minime.writeDebug("Value of %s has been changed. New page: %s!",
+    minime.writeDebug("Значение %s изменено. Новая страница: %s!",
                       {minime.argprint(element), element.selected_index})
     local previews = main_frame[character_frame_name]
 
@@ -1618,12 +1618,12 @@ selector.on_gui_selection_state_changed = function(event)
     -- Deactivate preview entities from the old page, and hide the old page
     selector.toggle_character_page_entities(player, old_page, false)
     previews[character_page_prefix..old_page].visible = false
-    minime.writeDebug("%s is now hidden!", {minime.argprint(previews[character_page_prefix..old_page])})
+    minime.writeDebug("%s теперь скрыт!", {minime.argprint(previews[character_page_prefix..old_page])})
 
     -- Activate preview entities from the new page, and unhide it
     selector.toggle_character_page_entities(player, new_page, true)
     previews[character_page_prefix..new_page].visible = true
-    minime.writeDebug("%s is now visible!", {minime.argprint(previews[character_page_prefix..new_page])})
+    minime.writeDebug("%s теперь виден!", {minime.argprint(previews[character_page_prefix..new_page])})
 
     -- Update the buttons for previous/next character preview page!
     selector.update_page_selector_buttons(event)
@@ -1653,11 +1653,11 @@ minime.show("element.name == buttons.next", element.name == buttons.next)
     elseif new_page > last_page then
       new_page = last_page
     end
-minime.writeDebug("minime: dropdown list index\n"..
-                  "new_page: %s\tlast_page: %s\nnew_page is in allowd range: %s",
+minime.writeDebug("minime: индекс выпадающего списка\n"..
+                  "new_page: %s\tlast_page: %s\nnew_page входит в допустимый диапазон: %s",
                   {new_page, last_page, (new_page > 0 and new_page <= last_page)})
     elements[dropdown_list_name].selected_index = new_page
-    minime.writeDebug("Updated page via buttons!")
+    minime.writeDebug("Страница обновлена с помощью кнопок!")
 
   end
 

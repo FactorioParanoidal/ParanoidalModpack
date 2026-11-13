@@ -213,20 +213,20 @@ end
 ---*@throws* `string` — Thrown when `icon_dataum.icon_size` is not a positive integer.<br/>
 ---@nodiscard
 function _icons.add_missing_icon_defaults(icon_datum, is_technology_icon)
-	assert(icon_datum, "Missing required parameter: 'icon_datum' must not be nil.")
-	assert(not (icon_datum[1] and icon_datum[1].icon), "Invalid parameter type: 'icon_datum' must be IconData, but was IconData[].")
-	assert(not icon_datum[1], "Invalid parameter type: 'icon_datum' must be IconData, and not an array.")
+	assert(icon_datum, "Отсутствует обязательный параметр: 'icon_datum' не должен быть nil.")
+	assert(not (icon_datum[1] and icon_datum[1].icon), "Недопустимый тип параметра: 'icon_datum' должен иметь тип IconData, получен IconData[].")
+	assert(not icon_datum[1], "Недопустимый тип параметра: 'icon_datum' должен иметь тип IconData, а не быть массивом.")
 
 	-- Validate icon file path.
-	assert(icon_datum.icon and icon_datum.icon ~= "", "Missing required field: 'icon' must not be nil or empty.")
-	assert(icon_datum.icon:find("^__[%a%d%-%_-]+__"), "Invalid filename: 'icon' must be an absolute file path, but was '" .. icon_datum.icon .. "'.")
-	assert(icon_datum.icon:match("%.([%a%d]+)$"), "Invalid filename: 'icon' must have a valid file extension, but was '" .. icon_datum.icon .. "'.")
+	assert(icon_datum.icon and icon_datum.icon ~= "", "Отсутствует обязательное поле: 'icon' не должно быть nil или пустым.")
+	assert(icon_datum.icon:find("^__[%a%d%-%_-]+__"), "Недопустимое имя файла: 'icon' должно быть абсолютным путём к файлу, но указано '" .. icon_datum.icon .. "'.")
+	assert(icon_datum.icon:match("%.([%a%d]+)$"), "Недопустимое имя файла: 'icon' должно иметь допустимое расширение, но указано '" .. icon_datum.icon .. "'.")
 
 	-- Validate icon size, which is now optional.
 	local icon_size = icon_datum.icon_size or defines.constant.default_icon_size
 
-	assert(type(icon_size) == "number", "Invalid type: 'icon_size' must be a number, but was a '" .. type(icon_size) .. "'.")
-	assert(icon_size > 0 and icon_size % 1 == 0, "Invalid value: 'icon_size' must be an integer greater than zero, but was '" .. icon_size .. "'.")
+	assert(type(icon_size) == "number", "Недопустимый тип: 'icon_size' должен быть числом, получен тип '" .. type(icon_size) .. "'.")
+	assert(icon_size > 0 and icon_size % 1 == 0, "Недопустимое значение: 'icon_size' должно быть положительным целым числом, получено '" .. icon_size .. "'.")
 
 	return {
 		icon = icon_datum.icon,
@@ -274,7 +274,7 @@ end
 ---*@throws* `string` — Thrown when `icon_data[n].icon_size` is not a positive integer.<br/>
 ---@nodiscard
 function _icons.add_missing_icons_defaults(icon_data, is_technology_icon)
-	assert(icon_data, "Invalid parameter: 'icon_data' must not be nil.")
+	assert(icon_data, "Недопустимый параметр: 'icon_data' не должен быть nil.")
 
 	local new_icon_data = {}
 	for n = 1, #icon_data do
@@ -399,9 +399,9 @@ function _icons.get_icon_from_prototype_by_reference(prototype)
 	end
 
 	-- Recipes must have an icon or icons field if being passed to this function.
-	assert((prototype.type ~= "recipe" or (prototype.icons or prototype.icon)), "Invalid parameter: 'prototype' must not be a RecipePrototype with an undefined 'icon' or 'icons' field.")
+	assert((prototype.type ~= "recipe" or (prototype.icons or prototype.icon)), "Недопустимый параметр: 'prototype' не должен быть RecipePrototype с незаданным полем 'icon' или 'icons'.")
 
-	assert(prototype.icons or prototype.icon, "Invalid parameter: 'prototype' must have a defined 'icon' or 'icons' field.")
+	assert(prototype.icons or prototype.icon, "Недопустимый параметр: для 'prototype' должно быть задано поле 'icon' или 'icons'.")
 
 	---@type data.IconData[]
 	local icons
@@ -451,8 +451,8 @@ end
 ---*@throws* `string` — Thrown when the prototype has no defined field `icon` or `icons`.<br/>
 ---@nodiscard
 function _icons.get_icon_from_prototype_by_name(name, type_name)
-	assert(name and name ~= "", "Invalid parameter: 'name' must not be nil or an empty string.")
-	assert(type_name and type_name ~= "", "Invalid parameter: 'type_name' must not be nil or an empty string.")
+	assert(name and name ~= "", "Недопустимый параметр: 'name' не должен быть nil или пустой строкой.")
+	assert(type_name and type_name ~= "", "Недопустимый параметр: 'type_name' не должен быть nil или пустой строкой.")
 
 	return _icons.get_icon_from_prototype_by_reference(data.raw[type_name][name])
 end
@@ -502,7 +502,7 @@ local related_prototypes = {
 ---*@throws* `string` — Thrown when `icon_data[n].icon` is not an absolute file path with a valid extension.<br/>
 ---*@throws* `string` — Thrown when `icon_data[n].icon_size` is not a positive integer.<br/>
 function _icons.assign_icons_to_prototype_and_related_prototypes(name, type_name, icon_data, pictures)
-	assert(name and name ~= "", "Invalid parameter: 'name' must not be nil or an empty string.")
+	assert(name and name ~= "", "Недопустимый параметр: 'name' не должен быть nil или пустой строкой.")
 
 	local icon_data_copy = _icons.add_missing_icons_defaults(icon_data, type_name == "technology")
 
@@ -616,15 +616,15 @@ end
 ---### See Also
 ---@see Reskins.Lib.Icons.assign_icons_deferred_to_stage
 function _icons.store_icon_for_deferred_assigment_in_stage(deferred_icons, stage, deferrable_icon)
-	assert(deferred_icons, "Invalid parameter: 'deferred_icons' must not be nil.")
-	assert(stage, "Invalid parameter: 'stage' must not be nil.")
+	assert(deferred_icons, "Недопустимый параметр: 'deferred_icons' не должен быть nil.")
+	assert(stage, "Недопустимый параметр: 'stage' не должен быть nil.")
 
 	-- Validate the deferred icon.
-	assert(deferrable_icon, "Invalid parameter: 'deferrable_icon' must not be nil.")
-	assert(deferrable_icon.name and deferrable_icon.name ~= "", "Invalid operation: 'deferrable_icon.name' must not be nil or an empty string.")
-	assert(deferrable_icon.type_name and deferrable_icon.type_name ~= "", "Invalid operation: 'deferrable_icon.type_name' must not be nil or an empty string.")
-	assert(deferrable_icon.icon_data or deferrable_icon.icon_datum, "Invalid operation: 'deferrable_icon.icon_data' or `deferrable_icon.icon_datum` are required.")
-	assert(deferrable_icon.icon_data and deferrable_icon.icon_data[1], "Invalid operation: 'deferrable_icon.icon_data' must not be an empty array.")
+	assert(deferrable_icon, "Недопустимый параметр: 'deferrable_icon' не должен быть nil.")
+	assert(deferrable_icon.name and deferrable_icon.name ~= "", "Недопустимая операция: 'deferrable_icon.name' не должен быть nil или пустой строкой.")
+	assert(deferrable_icon.type_name and deferrable_icon.type_name ~= "", "Недопустимая операция: 'deferrable_icon.type_name' не должен быть nil или пустой строкой.")
+	assert(deferrable_icon.icon_data or deferrable_icon.icon_datum, "Недопустимая операция: требуется 'deferrable_icon.icon_data' или `deferrable_icon.icon_datum`.")
+	assert(deferrable_icon.icon_data and deferrable_icon.icon_data[1], "Недопустимая операция: 'deferrable_icon.icon_data' не должен быть пустым массивом.")
 
 	-- Validate the icon data and add missing defaults.
 	deferrable_icon.icon_data = _icons.add_missing_icons_defaults(deferrable_icon.icon_data, deferrable_icon.type_name == "technology")
@@ -861,7 +861,7 @@ end
 ---@see Reskins.Lib.Icons.get_icon_from_prototype_by_reference
 ---@nodiscard
 function _icons.add_icons_from_prototype_to_icons_by_reference(icon_data, prototype, scale, shift, tint)
-	assert(icon_data, "Invalid parameter: 'icon_data' must not be nil.")
+	assert(icon_data, "Недопустимый параметр: 'icon_data' не должен быть nil.")
 
 	if not prototype then
 		return util.copy(icon_data)
@@ -926,8 +926,8 @@ end
 ---@see Reskins.Lib.Icons.add_icons_from_prototype_to_icons_by_reference
 ---@nodiscard
 function _icons.add_icons_from_prototype_to_icon_by_reference(icon_datum, prototype, scale, shift, tint)
-	assert(icon_datum, "Invalid parameter: 'icon_datum' must not be nil.")
-	assert(icon_datum.icon, "Invalid parameter: 'icon_datum' must be an IconData object with a defined 'icon' field.")
+	assert(icon_datum, "Недопустимый параметр: 'icon_datum' не должен быть nil.")
+	assert(icon_datum.icon, "Недопустимый параметр: 'icon_datum' должен быть объектом IconData с заданным полем 'icon'.")
 
 	return _icons.add_icons_from_prototype_to_icons_by_reference({ icon_datum }, prototype, scale, shift, tint)
 end
@@ -963,9 +963,9 @@ end
 ---@see Reskins.Lib.Icons.add_icons_from_prototype_to_icons_by_reference
 ---@nodiscard
 function _icons.add_icons_from_prototype_to_icons_by_name(icon_data, name, type_name, scale, shift, tint)
-	assert(icon_data, "Invalid parameter: 'icon_data' must not be nil.")
-	assert(name and name ~= "", "Invalid parameter: 'name' must not be nil or an empty string.")
-	assert(type_name and type_name ~= "", "Invalid parameter: 'type_name' must not be nil or an empty string.")
+	assert(icon_data, "Недопустимый параметр: 'icon_data' не должен быть nil.")
+	assert(name and name ~= "", "Недопустимый параметр: 'name' не должен быть nil или пустой строкой.")
+	assert(type_name and type_name ~= "", "Недопустимый параметр: 'type_name' не должен быть nil или пустой строкой.")
 
 	return _icons.add_icons_from_prototype_to_icons_by_reference(icon_data, data.raw[type_name][name], scale, shift, tint)
 end
@@ -1015,10 +1015,10 @@ end
 ---@see Reskins.Lib.Icons.add_icons_from_prototype_to_icons_by_reference
 ---@nodiscard
 function _icons.add_icons_from_prototype_to_icon_by_name(icon_datum, name, type_name, scale, shift, tint)
-	assert(icon_datum, "Invalid parameter: 'icon_datum' must not be nil.")
-	assert(icon_datum.icon, "Invalid parameter: 'icon_datum' must be an IconData object with a defined 'icon' field.")
-	assert(name and name ~= "", "Invalid parameter: 'name' must not be nil or an empty string.")
-	assert(type_name and type_name ~= "", "Invalid parameter: 'type_name' must not be nil or an empty string.")
+	assert(icon_datum, "Недопустимый параметр: 'icon_datum' не должен быть nil.")
+	assert(icon_datum.icon, "Недопустимый параметр: 'icon_datum' должен быть объектом IconData с заданным полем 'icon'.")
+	assert(name and name ~= "", "Недопустимый параметр: 'name' не должен быть nil или пустой строкой.")
+	assert(type_name and type_name ~= "", "Недопустимый параметр: 'type_name' не должен быть nil или пустой строкой.")
 
 	return _icons.add_icons_from_prototype_to_icons_by_reference({ icon_datum }, data.raw[type_name][name], scale, shift, tint)
 end
@@ -1133,8 +1133,8 @@ end
 ---@see Reskins.Lib.Icons.get_icon_from_prototype_by_name
 ---@nodiscard
 function _icons.add_icons_from_sources_to_icons(icon_data, sources, is_technology_icon)
-	assert(icon_data, "Invalid parameter: 'icon_data' must not be nil.")
-	assert(sources, "Invalid parameter: 'sources' must not be nil.")
+	assert(icon_data, "Недопустимый параметр: 'icon_data' не должен быть nil.")
+	assert(sources, "Недопустимый параметр: 'sources' не должен быть nil.")
 
 	---@type data.IconData[]
 	local combined_icon = _icons.add_missing_icons_defaults(icon_data, is_technology_icon)
@@ -1199,7 +1199,7 @@ end
 ---*@throws* `string` — Thrown when `sources` is `nil`.<br/>
 ---@nodiscard
 function _icons.create_icons_from_sources(sources)
-	assert(sources, "Invalid parameter: 'sources' must not be nil.")
+	assert(sources, "Недопустимый параметр: 'sources' не должен быть nil.")
 
 	---@type IconSources
 	local sources_copy = util.copy(sources)
@@ -1287,7 +1287,7 @@ local supported_symbols = {
 ---*@throws* `string` — Thrown when `symbol` is not one of `"area-drill"`, `"filter"`, or `"shield"`.
 ---@nodiscard
 function _icons.get_symbol(symbol, tint)
-	assert(supported_symbols[symbol], "Invalid parameter: 'symbol' must be one of 'area-drill', 'filter', or 'shield'.")
+	assert(supported_symbols[symbol], "Недопустимый параметр: 'symbol' должен быть одним из значений 'area-drill', 'filter' или 'shield'.")
 
 	---@type data.IconData[]
 	local icon_data = {
@@ -1334,7 +1334,7 @@ end
 ---*@throws* `string` — Thrown when `icon_data` is `nil`.
 ---@nodiscard
 function _icons.remove_symbols_from_icons(icon_data)
-	assert(icon_data, "Invalid parameter: 'icon_data' must not be nil.")
+	assert(icon_data, "Недопустимый параметр: 'icon_data' не должен быть nil.")
 
 	---@type data.IconData[]
 	local icon_data_copy = util.copy(icon_data)
@@ -1388,7 +1388,7 @@ local supported_letters = {
 ---*@throws* `string` — Thrown when `letter` is not one of `"F"`, `"H"`, `"L"`, `"M"`, or `"S"`.
 ---@nodiscard
 function _icons.get_letter(letter, tint)
-	assert(supported_letters[letter], "Invalid parameter: 'letter' must be one of 'F', 'H', 'L', 'M', or 'S'.")
+	assert(supported_letters[letter], "Недопустимый параметр: 'letter' должен быть одним из значений 'F', 'H', 'L', 'M' или 'S'.")
 
 	---@type data.IconData[]
 	local icon_data = {
@@ -1434,7 +1434,7 @@ end
 ---*@throws* `string` — Thrown when `icon_data` is `nil`.
 ---@nodiscard
 function _icons.remove_letters_from_icons(icon_data)
-	assert(icon_data, "Invalid parameter: 'icon_data' must not be nil.")
+	assert(icon_data, "Недопустимый параметр: 'icon_data' не должен быть nil.")
 
 	---@type data.IconData[]
 	local icon_data_copy = util.copy(icon_data)
@@ -1486,7 +1486,7 @@ local equipment_background_tints = {
 ---@nodiscard
 function _icons.get_equipment_icon_background(category)
 	local tint = equipment_background_tints[category]
-	assert(tint, "Invalid parameter: 'category' must be one of 'defense', 'energy', 'offense', or 'utility'.")
+	assert(tint, "Недопустимый параметр: 'category' должен быть одним из значений 'defense', 'energy', 'offense' или 'utility'.")
 
 	---@type data.IconData
 	local icon_data = {

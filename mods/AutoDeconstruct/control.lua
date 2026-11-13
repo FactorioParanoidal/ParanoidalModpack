@@ -42,31 +42,31 @@ function cmd_debug(params)
   local cmd = params.parameter
   if cmd == "on" then
     storage.debug = true
-    game.print("Autodeconstruct debug prints enabled")
+    game.print("Отладочные сообщения AutoDeconstruct включены")
   elseif cmd == "off" then
     storage.debug = false
-    game.print("Autodeconstruct debug prints disabled")
+    game.print("Отладочные сообщения AutoDeconstruct отключены")
   elseif cmd == "init" then
-    game.print("Autodeconstruct stored state reset")
+    game.print("Сохранённое состояние AutoDeconstruct сброшено")
     autodeconstruct.init_globals()
     update_tick_event()
   elseif cmd == "print" then
-    game.print("Autodeconstruct storage.max_radius = "..tostring(storage.max_radius))
+    game.print("Максимальный радиус AutoDeconstruct (storage.max_radius) = "..tostring(storage.max_radius))
   elseif cmd == "dump" then
     game.print(serpent.block(storage))
   elseif cmd == "dumplog" then
     log(serpent.block(storage))
-    game.print("Autodeconstruct storage logged")
+    game.print("Содержимое storage записано в журнал")
   else
     storage.debug = not storage.debug
     if storage.debug then
-      game.print("Autodeconstruct debug prints enabled")
+      game.print("Отладочные сообщения AutoDeconstruct включены")
     else
-      game.print("Autodeconstruct debug prints disabled")
+      game.print("Отладочные сообщения AutoDeconstruct отключены")
     end
   end
 end
-commands.add_command("ad-debug", "Usage: ad-debug [on | off | init]", cmd_debug)
+commands.add_command("ad-debug", "Использование: ad-debug [on | off | init]", cmd_debug)
 
 
 
@@ -115,11 +115,11 @@ end)
 ------------------------------------------------------------------------------------
 setmetatable(_ENV,{
   __newindex=function (self,key,value) --locked_global_write
-    error('\n\n[ER Global Lock] Forbidden global *write*:\n'
+    error('\n\n[ER Global Lock] Запись глобальной переменной запрещена:\n'
       .. serpent.line{key=key or '<nil>',value=value or '<nil>'}..'\n')
     end,
   __index   =function (self,key) --locked_global_read
-    error('\n\n[ER Global Lock] Forbidden global *read*:\n'
+    error('\n\n[ER Global Lock] Чтение глобальной переменной запрещено:\n'
       .. serpent.line{key=key or '<nil>'}..'\n')
     end ,
   })

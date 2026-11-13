@@ -1,5 +1,7 @@
 ﻿---------------------------------------------------------------------------------------------------
 Version: 1.0.38
+  Locale:
+    - Russian hardcoded player-facing text: 2 UI, chat, command-help and error-message literals; technical identifiers, format parameters and gameplay logic are unchanged.
 Date: 03/11/2026
   Changes:
     - Paranoidal: the rank recipes are hidden from the signal selection window only when the zzzparanoidal setting "Show recipes in signal selection" is off (on by default).

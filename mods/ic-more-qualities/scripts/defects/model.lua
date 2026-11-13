@@ -8,7 +8,7 @@ M.research_prefix = "ic-defect-control-"
 
 local function integer(value, minimum, maximum, label)
     assert(type(value) == "number" and value == math.floor(value)
-        and value >= minimum and value <= maximum, "Invalid " .. label)
+        and value >= minimum and value <= maximum, "Недопустимое значение " .. label)
     return value
 end
 
@@ -69,7 +69,7 @@ end
 -- Only a completed contiguous chain counts; force-specific runtime state belongs
 -- to the caller. No module-global cache shared between forces or saved games.
 function M.completed_level(technologies)
-    assert(type(technologies) == "table" or type(technologies) == "userdata", "Expected technology lookup")
+    assert(type(technologies) == "table" or type(technologies) == "userdata", "Ожидалась таблица поиска технологий")
     local completed = 0
     for level = 1, 10 do
         local technology = technologies[M.research_prefix .. level]
@@ -133,7 +133,7 @@ function M.draw(research_level, sample)
         end
         cumulative[research_level] = sums
     end
-    assert(type(sample) == "number" and sample >= 0 and sample < 1, "Invalid RNG sample")
+    assert(type(sample) == "number" and sample >= 0 and sample < 1, "Недопустимая выборка генератора случайных чисел")
     for grade = -5, -1 do
         if sample < sums[grade] then return grade end
     end

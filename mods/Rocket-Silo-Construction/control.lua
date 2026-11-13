@@ -427,7 +427,7 @@ script.on_event(defines.events.on_gui_click, on_gui_click)
 
 -- /COMMAND  --
 --------------------------------------------------------------------------------------
-commands.add_command('rsc-totalcost', 'Print total construction cost', function(event)
+commands.add_command('rsc-totalcost', 'Вывести общую стоимость строительства', function(event)
 local player = game.players[event.player_index]
 local totalcost = {}
 local text = {}
@@ -435,7 +435,7 @@ for s=1,6 do
 	if s~=1 and s~=3 then
 		local recipe = prototypes.recipe['rsc-construction-stage'..s]
 		local ingred = recipe.ingredients 
-		table.insert(text, '[font=default-large-bold][color=yellow]* Stage '..s..' cost:[/color][/font]')
+		table.insert(text, '[font=default-large-bold][color=yellow]* Этап '..s..' стоимость:[/color][/font]')
 		for k,i in pairs (ingred) do
 			local name = i.name
 			local tipo = i.type
@@ -450,12 +450,12 @@ for s=1,6 do
 			end
 		end
 	end
-table.insert(text, '[font=default-large-bold][color=yellow]** TOTAL Construction cost:[/color][/font]')	
+table.insert(text, '[font=default-large-bold][color=yellow]** ИТОГО: стоимость строительства:[/color][/font]')
 for k,qt in pairs (totalcost) do
 	local lname,ico = get_localized_name(k)
 	table.insert(text, {"",format_number(qt),ico,lname})
 	end
-create_message_board_gui_for_player(player,'Rocket-Silo construction cost',sprite,subtitle,text,1)	
+create_message_board_gui_for_player(player,'Стоимость строительства ракетной шахты',sprite,subtitle,text,1)
 end)
 
 

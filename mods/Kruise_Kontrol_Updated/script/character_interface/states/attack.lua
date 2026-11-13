@@ -7,7 +7,7 @@ function Attack.new(Character, target, timeout)
     {
         type = "attack",
         character = Character,
-        target = target or error("No target?"),
+        target = target or error("Нет цели?"),
         tick_to_timeout = (timeout and game.tick + timeout) or nil
     }
     return setmetatable(state, Attack.metatable)

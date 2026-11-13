@@ -188,7 +188,7 @@ end
 local function set_player_state(player_index, state)
   local data = cc_util.get_player_data(player_index)
   if not data then
-    log:error("failed to get player data table for player ", player_index, " for writing state")
+    log:error("Не найдена таблица данных игрока ", player_index, " для записи состояния")
     return -- TODO: Throw error?
   end
   data.state = state
@@ -263,7 +263,7 @@ local function destroy(player, window_id)
     if state then state.dimmer = nil end
   end
   if not screen[window_id] then
-    log:debug("destroy called on ", window_id, " but it doesn't exist")
+    log:debug("Вызван destroy для ", window_id, " но оно не существует")
     return false
   end
   screen[window_id].destroy()
@@ -385,7 +385,7 @@ local function change_signal_count(state, player_index)
   local signal_name = signal.signal.name
 
   local value = signal.count
-  log:debug("change_signal_count: signal type is ", signal_type, ", name is ", signal_name)
+  log:debug("change_signal_count: тип сигнала — ", signal_type, ", название — ", signal_name)
 
   local focus_stacks = false
 
@@ -434,9 +434,9 @@ local function set_cs_signal_value(element, player, update_element)
   local current = state.combinator:get_cs_value(signal_name)
   local value = resolve_textfield_number(element, player, current)
   if value then
-    log:debug("cs_signal_value_changed: ", signal_name, " changed to ", value)
+    log:debug("cs_signal_value_changed: ", signal_name, " изменено на ", value)
   else
-    log:debug("cs_signal_value_changed: invalid new value, resetting to current (", current, ")")
+    log:debug("cs_signal_value_changed: новое значение недопустимо, восстановлено текущее (", current, ")")
     value = current
   end
   if not value then return end
@@ -519,7 +519,7 @@ local function add_network_mask(player, state)
   local mask = signal.count
   local formatted_mask = masking.format(mask, player)
   local rich = "[" .. rich_type .. "=" .. signal.signal.name .. "] " .. formatted_mask
-  log:debug("result rich text: ", rich)
+  log:debug("Результат форматированного текста: ", rich)
 
   state.combinator:add_or_update_network_signal(signal)
   refresh_network_list(player, state)
@@ -531,13 +531,13 @@ end
 
 --- @param event EventData.on_gui_click
 function handlers.close(event)
-  log:debug("close button clicked")
+  log:debug("Нажата кнопка закрытия")
   cc_gui:close(event.player_index)
 end
 
 --- @param event EventData.on_gui_click
 function handlers.dialog_close(event)
-  log:debug("dialog close button clicked")
+  log:debug("Нажата кнопка закрытия диалога")
   local player = game.get_player(event.player_index)
   local state = get_player_state(event.player_index)
   if not state then return end
@@ -560,7 +560,7 @@ function handlers.on_off(event)
   local enabled = element.switch_state == "right"
   local state = get_player_state(event.player_index)
   if not state then return end
-  log:debug("combinator switch changed to ", enabled)
+  log:debug("Переключатель контроллера изменён на ", enabled)
   state.combinator:set_enabled(enabled)
   local status = state.entity.status
   local is_ghost = state.entity.name == "entity-ghost"
@@ -600,7 +600,7 @@ function handlers.signal_changed(event)
     player.print({ "gui-logistic-section.conflict-error", orig_slot })
     return
   end
-  log:debug("elem changed in section", section_index, ", slot ", slot, ": ", serpent.line(element.elem_value))
+  log:debug("Элемент в секции изменён", section_index, ", slot ", slot, ": ", serpent.line(element.elem_value))
   if state.selected_slot_button and state.selected_slot_button.valid then
     state.selected_slot_button.style = SLOT_BUTTON_STYLE
   end
@@ -626,7 +626,7 @@ function handlers.signal_click(event)
   if not section then return end
   local total_count = section.filters_count
   local active = section.active
-  log:debug("signal click on slot ", slot, " in section ", section_index, ": ", element.elem_value)
+  log:debug("Щелчок по сигналу в слоте ", slot, " в секции ", section_index, ": ", element.elem_value)
 
   if event.button == defines.mouse_button_type.right then
     state.combinator:remove_item_slot(section_index, slot)
@@ -687,17 +687,17 @@ function handlers.signal_value_changed(event)
     state.signal_value_confirm.enabled = false
     return
   end
-  log:debug("value of ", element.name, " changed to : ", value)
+  log:debug("Значение ", element.name, " изменено на: ", value)
   state.signal_value_confirm.enabled = true
   if element.name == "signal_value_items" then
     local stack_size = state.stack_size
     if state.stack_size == nil then
       -- Try to recover stack size
       if state.selected_section_index == nil or state.selected_slot == nil then
-        log:error("Unexpected nil values in handlers.signal_value_changed while handling change in ", element.name, " please tell a developer")
+        log:error("Неожиданные nil в handlers.signal_value_changed при обработке изменения в ", element.name, " — сообщите об этом разработчику")
         return
       end
-      log:warn("stack size for current selection unexpectedly nil")
+      log:warn("Размер стопки для текущего выбора неожиданно равен nil")
       local combi_sig = state.combinator:get_item_slot(state.selected_section_index, state.selected_slot)
       if combi_sig.signal.type == "item" then
         stack_size = prototypes.item[combi_sig.signal.name].stack_size
@@ -843,7 +843,7 @@ local function create_dimmer(player_index)
   if not player then return end
   local screen = player.gui.screen
   if screen[DIMMER_ID] then
-    log:debug("dimmer already exists")
+    log:debug("Затемняющий фон уже существует")
     return
   end
   local _, dimmer = flib_gui.add(screen, {
@@ -935,7 +935,7 @@ local function confirm_logistic_group(player_index, close)
   local special_no_group = "[No group assigned]"
   local player_data = cc_util.get_player_data(player_index)
   if player_data and player_data.translations and player_data.translations["gui-train.empty-train-group"] then
-    log:debug("Updating 'no group' string from cached translation")
+    log:debug("Обновление строки «нет группы» из кэшированного перевода")
     special_no_group = player_data.translations["gui-train.empty-train-group"]
   end
 
@@ -943,7 +943,7 @@ local function confirm_logistic_group(player_index, close)
     group = ""
   end
 
-  log:debug("confirm logistic group '", group, "' with multiplier ", multiplier)
+  log:debug("Подтверждение логистической группы '", group, "' с множителем ", multiplier)
 
   state.logistic_group_edit.section.group = group or ""
   state.logistic_group_edit.section.multiplier = multiplier
@@ -988,14 +988,14 @@ function handlers.logistic_group_item_delete_click(event)
   local state = get_player_state(event.player_index)
   if not state then return end
   if not state.logistic_group_edit then return end
-  log:debug("logistic group item delete clicked for group: ", group)
+  log:debug("Нажата кнопка удаления элемента логистической группы: ", group)
   state.logistic_group_edit.section.group = ""
   element.parent.destroy()
   local player = game.get_player(event.player_index)
   if not player or not player.valid then return end
   local force = player.force
   if not force.valid then return end
-  log:debug("deleting logistic group: ", group)
+  log:debug("Удаление логистической группы: ", group)
   force.delete_logistic_group(group)
   update_signal_sections(state, false, nil, group)
 end
@@ -1071,7 +1071,7 @@ end
 --- @param section_index integer?
 local function create_logistic_group_edit(player_index, state, section_id, section_index)
   if not section_id and not section_index then
-    error("create_logistic_group_edit: Either section_id or section_index must be provided")
+    error("create_logistic_group_edit: необходимо указать section_id или section_index")
   end
 
   local player = game.players[player_index]
@@ -1303,7 +1303,7 @@ end
 function handlers.logistic_group_edit_click(event)
   local state = get_player_state(event.player_index)
   if not state then return end
-  log:debug("Showing logistic group editor")
+  log:debug("Открытие редактора логистических групп")
   local section_id = event.element.tags.section_id --[[@as integer]]
   local section_index = event.element.tags.section_index --[[@as integer]]
   create_logistic_group_edit(event.player_index, state, section_id, section_index)
@@ -1448,7 +1448,7 @@ end
 ---@return { [string]: LuaGuiElement } named
 ---@return LuaGuiElement element
 local function add_signal_section(state, section)
-  log:debug("adding new signal section to GUI")
+  log:debug("Добавление нового раздела сигналов в интерфейс")
   local container = state.section_container
   local section_element = create_signal_section(section)
   local named, element = flib_gui.add(container, section_element)
@@ -1467,7 +1467,7 @@ update_signal_table = function(state, signal_table, reset)
   local section = combinator:get_item_section(signal_table.tags.section_index)
 
   if not section then
-    error("Failed to get signals section")
+    error("Не удалось получить секцию сигналов")
   end
 
   local section_index = section.index
@@ -1493,7 +1493,7 @@ update_signal_table = function(state, signal_table, reset)
     ---@diagnostic disable-next-line: undefined-field
     signal_table.clear()
 
-    log:debug("Adding ", slot_count, " slots to signal table for section ", section.index)
+    log:debug("Adding ", slot_count, " слотов в таблицу сигналов для секции ", section.index)
 
     for slot = 1, slot_count do
       local signal = state.combinator:get_item_slot(section_index, slot --[[@as uint]])
@@ -1728,7 +1728,7 @@ function handlers.mask_signal_changed(event, on_failure)
   if signal.signal.type ~= "virtual" then
     event.element.elem_value = nil
     on_failure()
-    log:info("attempt to use non-virtual signal as network mask")
+    log:info("Попытка использовать невиртуальный сигнал в качестве маски сети")
     local player = game.get_player(event.player_index)
     if not player then return false end
     player.play_sound { path = constants.CANNOT_BUILD_SOUND }
@@ -1748,7 +1748,7 @@ function handlers.network_mask_signal_changed(event)
   end)
   if not signal then return end
   state.network_mask.signal = signal
-  log:debug("network signal changed to ", serpent.block(signal))
+  log:debug("Сигнал сети изменён на ", serpent.block(signal))
   --- @type integer?
   local new_count = nil
   local use_cs_default = settings.get_player_settings(event.player_index)[constants.SETTINGS.NETWORK_MASK_USE_CS_DEFAULT].value
@@ -1843,13 +1843,13 @@ end
 
 --- @param event EventData.on_gui_click
 function handlers.encoder_confirm(event)
-  log:debug("encoder confirm button clicked")
+  log:debug("Нажата кнопка подтверждения кодировщика")
   confirm_encoder(event.player_index, true)
 end
 
 --- @param event EventData.on_gui_click
 function handlers.description_edit_confirm(event)
-  log:debug("description edit confirm button clicked")
+  log:debug("Нажата кнопка подтверждения редактирования описания")
   confirm_description(event.player_index, true)
 end
 
@@ -1922,7 +1922,7 @@ function handlers.encoder_bit_button_click(event)
   local index = event.element.tags.index
   local bit_index = event.element.tags.bit_index --[[@as integer]]
   state.encoder.mask = bit32.bxor(state.encoder.mask, bit32.lshift(1, bit_index))
-  log:debug("Pressed bit button ", index, " (bit ", bit_index, ")")
+  log:debug("Нажата кнопка бита ", index, " (bit ", bit_index, ")")
   refresh_encoder(event.player_index, state, true)
 end
 
@@ -2387,11 +2387,11 @@ function handlers.network_list_item_click(event)
   if not element then return end
   local slot = element.tags.slot --[[@as uint?]]
   if not slot then return end
-  log:debug("clicked on network list button for slot ", slot, " with button ", event.button)
+  log:debug("Нажата кнопка списка сети для слота ", slot, " с кнопкой ", event.button)
   if event.button == defines.mouse_button_type.right then
     state.combinator:remove_network_slot(slot)
     refresh_network_list(event.player_index, state)
-    log:debug("removed network signal at slot ", slot)
+    log:debug("Удалён сигнал сети из слота ", slot)
     return
   end
   if event.button ~= defines.mouse_button_type.left then return end
@@ -2401,7 +2401,7 @@ function handlers.network_list_item_click(event)
   state.network_mask.mask = signal.count
   state.network_mask.slot = slot
   if event.control then
-    log:debug("Showing network encoder!")
+    log:debug("Открытие кодировщика сети")
     create_encoder(event.player_index, state)
   else
     state.network_mask.signal_button.elem_value = signal.signal
@@ -2413,12 +2413,12 @@ end
 
 ---@param event EventData.on_gui_click
 function handlers.logistic_section_add_click(event)
-  log:debug("add section button click")
+  log:debug("Нажатие кнопки добавления секции")
   local state = get_player_state(event.player_index)
   if not state then return end
   local section = state.combinator:add_item_section()
   if not section then
-    log:error("Failed to add logistic section")
+    log:error("Не удалось добавить логистическую секцию")
     return
   end
   add_signal_section(state, section)
@@ -2428,7 +2428,7 @@ end
 function handlers.description_edit_click(event)
   local state = get_player_state(event.player_index)
   if not state then return end
-  log:debug("Showing description editor")
+  log:debug("Открытие редактора описания")
   create_description_edit(event.player_index, state)
 end
 
@@ -3125,7 +3125,7 @@ local function create_window(player, combinator)
 
   local cs_signals_table = named.cs_signals_table
   if not cs_signals_table then
-    error("cs_signals_table is nil")
+    error("cs_signals_table имеет значение nil")
   end
   ---@type UiState
   ---@diagnostic disable-next-line: missing-fields
@@ -3232,14 +3232,14 @@ function cc_gui:open(player_index, entity)
     end
     self:close(player_index)
   end
-  log:debug("GUI open for entity ", entity.unit_number, ", player index ", player_index)
+  log:debug("Интерфейс открыт для сущности ", entity.unit_number, ", индекс игрока ", player_index)
 
   local combinator = CybersynCombinator:new(entity)
   local state = create_window(player, combinator)
   state.combinator = combinator
 
   if not combinator then
-    log:error("Failed to create combinator object")
+    log:error("Не удалось создать объект станционного контроллера")
   end
 
   state.on_off.switch_state = combinator:is_enabled() and "right" or "left"
@@ -3261,7 +3261,7 @@ function cc_gui:close(player_index, silent)
   if not player_index then return end
   local player = game.get_player(player_index)
   if not player then return end
-  log:debug("GUI close, player index ", player_index)
+  log:debug("Закрытие интерфейса, индекс игрока ", player_index)
   local destroyed = destroy(player, WINDOW_ID)
   local player_data = cc_util.get_player_data(player_index)
   if player_data and player_data.state and player_data.state.combinator then
@@ -3303,7 +3303,7 @@ function cc_gui:on_gui_closed(event)
   local state = get_player_state(player_index)
   local screen = player.gui.screen
   if DIALOG_IDS[element.name] then
-    log:debug("dialog is closing")
+    log:debug("Диалог закрывается")
     if screen[LOGI_GROUP_EDIT_ID] and screen[DIMMER_ID] and state and state.logistic_group_edit then
       local is_searching = state.logistic_group_edit.search_textfield.visible
       local confirmed = state.logistic_group_edit.confirmed
@@ -3322,7 +3322,7 @@ function cc_gui:on_gui_closed(event)
       state.dialog_close_clicked = false
       if state.main_window then
         state.main_window.visible = true
-        log:debug("opening main window back")
+        log:debug("Повторное открытие главного окна")
         player.opened = state.main_window
       end
     end
@@ -3380,7 +3380,7 @@ function cc_gui:on_input_confirm(event)
   ---@type LuaGuiElement?
   local window = screen[WINDOW_ID]
   if window and state.selected_section_index and state.selected_slot then
-    log:debug("input_confirm from ", event.player_index)
+    log:debug("input_confirm от ", event.player_index)
     confirm_signal_value(event.player_index, state, false)
   end
 end
@@ -3407,21 +3407,21 @@ function cc_gui:on_entity_built(entity)
     ghost_unit_number = entity.ghost_unit_number
   end
   if not unit_number and not ghost_unit_number then return end
-  log:debug("entity built: ", unit_number, " (", ghost_unit_number, ")")
+  log:debug("Сущность построена: ", unit_number, " (", ghost_unit_number, ")")
   for _, player in pairs(game.players) do
     if not player or not player.valid then goto continue end
     local screen = player.gui.screen
     local window = screen[WINDOW_ID]
     if not window or not window.tags.unit_number then goto continue end
-    log:debug("current window unit number: ", window.tags.unit_number)
+    log:debug("Номер сущности текущего окна: ", window.tags.unit_number)
     if window.tags.unit_number == unit_number or window.tags.unit_number == ghost_unit_number then
-      log:debug("closing window")
+      log:debug("Закрытие окна")
       self:close(player.index)
       goto continue
     end
     local state = get_player_state(player)
     if state and (not state.entity or not state.entity.valid) then
-      log:debug("closing window, entity no longer valid")
+      log:debug("Закрытие окна: сущность больше недействительна")
       self:close(player.index)
     end
     ::continue::
@@ -3436,9 +3436,9 @@ function cc_gui:on_entity_destroyed(unit_number)
     local screen = player.gui.screen
     local window = screen[WINDOW_ID]
     if not window then goto continue end
-    log:debug("current window unit number: ", window.tags.unit_number)
+    log:debug("Номер сущности текущего окна: ", window.tags.unit_number)
     if window.tags.unit_number == unit_number then
-      log:debug("closing window")
+      log:debug("Закрытие окна")
       self:close(player.index)
     end
 

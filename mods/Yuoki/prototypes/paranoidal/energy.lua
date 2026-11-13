@@ -101,7 +101,7 @@ local function fuel_engine(name, effectivity, pollution)
 			by_x[box.pipe_connections[1].position[1]] = box
 		end
 	end
-	assert(output and by_x[0] and by_x[1] and by_x[-1], "Yuoki (Paranoidal): unexpected fluid boxes of " .. name)
+	assert(output and by_x[0] and by_x[1] and by_x[-1], "Yuoki (Paranoidal): неожиданная конфигурация блоков для жидкости у " .. name)
 	local function connections(a, b)
 		return {
 			{ flow_direction = "input-output", direction = a[3], position = { a[1], a[2] } },
@@ -199,7 +199,7 @@ local function replace_ingredient(recipe_name, old, new)
 			return
 		end
 	end
-	error("Yuoki (Paranoidal): " .. recipe_name .. " has no ingredient " .. old)
+	error("Yuoki (Paranoidal): " .. recipe_name .. " не содержит ингредиент " .. old)
 end
 replace_ingredient("ye_rheinsberg", "ye_wpump_m", "ye_emotor_m")
 
@@ -251,7 +251,7 @@ for name, recipe in pairs(data.raw.recipe) do
 		end
 		for _, r in pairs(recipe.results or {}) do
 			if r.type == "fluid" and r.name == "y-mechanical-force" and not r.temperature then
-				error("Yuoki (Paranoidal): cold MF result in " .. name)
+				error("Yuoki (Paranoidal): холодный результат MF в " .. name)
 			end
 		end
 		for _, r in pairs(recipe.results or {}) do

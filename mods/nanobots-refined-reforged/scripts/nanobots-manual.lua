@@ -17,7 +17,7 @@ local sort_by_proximity
 --- @param target MapPosition
 constructor_ammo_fired = function(player, target)
     if config.DEBUG then
-        game.print("In constructor_ammo_fired")
+        game.print("Вызов constructor_ammo_fired")
     end
     
     local character = player.character
@@ -38,7 +38,7 @@ end
 --- @param target MapPosition
 leveler_ammo_fired = function(player, target)
     if config.DEBUG then
-        game.print("In leveler_ammo_fired")
+        game.print("Вызов leveler_ammo_fired")
     end
     
     local character = player.character
@@ -81,7 +81,7 @@ end
 --- @param possible_actions NanobotsAction[]|nil
 initial_target_search = function(possible_targets, player, target_finder, possible_actions)
     if config.DEBUG then
-        game.print("In initial_target_search")
+        game.print("Вызов initial_target_search")
     end
     
     possible_actions = possible_actions or {}
@@ -95,7 +95,7 @@ initial_target_search = function(possible_targets, player, target_finder, possib
         end
         
         if config.DEBUG then
-            game.print("Got target type: " .. target_type)
+            game.print("Получен тип цели: " .. target_type)
         end
         
         if not is_valid_nanobot_target(entity, target_type, player) then
@@ -104,7 +104,7 @@ initial_target_search = function(possible_targets, player, target_finder, possib
         end
         
         if config.DEBUG then
-            game.print("Passed validity test")
+            game.print("Проверка допустимости пройдена")
         end
         
         table.insert(possible_actions, { entity = entity,
@@ -119,7 +119,7 @@ end
 
 sort_actions_and_activate = function(possible_actions, player, ammo, target)
     if config.DEBUG then
-        game.print("In sort_actions_and_activate")
+        game.print("Вызов sort_actions_and_activate")
     end
 
     possible_actions = sort_by_proximity(target, possible_actions, true)
@@ -131,7 +131,7 @@ sort_actions_and_activate = function(possible_actions, player, ammo, target)
     for _, action in pairs(possible_actions) do
         if action.dist > config.MANUAL_RADIUS then
             if config.DEBUG then
-                game.print("Exceeded max radius: " .. config.MANUAL_RADIUS)
+                game.print("Превышен максимальный радиус: " .. config.MANUAL_RADIUS)
             end
             out_of_area_actions = true
             break
@@ -147,7 +147,7 @@ sort_actions_and_activate = function(possible_actions, player, ammo, target)
         end
         
         if config.DEBUG then
-            game.print("Passed supply test")
+            game.print("Проверка снабжения пройдена")
         end
         
         --all tests passed, let's goooooo
@@ -157,11 +157,11 @@ sort_actions_and_activate = function(possible_actions, player, ammo, target)
             ammo_drain(player, ammo, 1)
             pdata.consecutive_lack_of_targets = 0
             if config.DEBUG then
-                game.print("Action succeeded: " .. target_type)
+                game.print("Действие выполнено: " .. target_type)
             end
             return true
         else
-            game.print("Nanobots error: " .. target_type .. " action failed")
+            game.print("Ошибка Nanobots: " .. target_type .. " действие не выполнено")
             return false
         end
         

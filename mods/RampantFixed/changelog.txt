@@ -4,6 +4,7 @@ Date: 2026.10.27
   Graphics:
     - Paranoidal build: removed the duplicate purple acid projectile shadow already redirected to the base-game image by zzzparanoidal's final graphics pass. Enemy prototypes and runtime code are unchanged.
   Locale:
+    - Russian hardcoded player-facing text: 123 UI, chat, command-help and error-message literals; technical identifiers, format parameters and gameplay logic are unchanged.
     - EN/RU demolisher feeding replies no longer reveal the next-attack timer or remaining feeding counter; they report temporary satiation with a diplomatic disclaimer. Feeding and AI behaviour are unchanged.
     - ru: the mod name and the mod list description are the same as in ParanoidalLocale (format "English title (Russian translation)"), so the mod reads the same with or without it.
   Changes:

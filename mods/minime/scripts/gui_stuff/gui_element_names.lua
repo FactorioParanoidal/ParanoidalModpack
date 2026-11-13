@@ -118,7 +118,7 @@ available.prefixes = {
   checkboxes                            = avail_prefix.."checkbox_",
 }
 
-minime.show("Names of GUI elements", names)
+minime.show("Имена элементов GUI", names)
 
 ------------------------------------------------------------------------------------
 minime.entered_file("leave")

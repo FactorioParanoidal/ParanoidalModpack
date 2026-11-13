@@ -1,5 +1,7 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.0
+  Locale:
+    - Russian hardcoded player-facing text: 5 UI, chat, command-help and error-message literals; technical identifiers, format parameters and gameplay logic are unchanged.
 Date: 2026-10-29
   Major Features:
     - Replaces All-infinit-tech with the upgrade technologies of Beta 8 (efficient-research 0.0.3, InfiniteTech 1.0.2 with the zzzparanoidal prerequisites), same names, effects, costs and prerequisites.

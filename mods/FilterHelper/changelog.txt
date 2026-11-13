@@ -1,5 +1,7 @@
 ---------------------------------------------------------------------------------------------------
 Version: 0.2.24
+  Locale:
+    - Russian hardcoded player-facing text: 1 UI, chat, command-help and error-message literals; technical identifiers, format parameters and gameplay logic are unchanged.
 Date: 2026-02-20
   Changes:
     - Paranoidal: the per-tick GUI refresh walks connected players only, not every player ever seen.

@@ -1,5 +1,7 @@
 ---------------------------------------------------------------------------------------------------
 Version: 9.1.5
+  Locale:
+    - Russian hardcoded player-facing text: 15 UI, chat, command-help and error-message literals; technical identifiers, format parameters and gameplay logic are unchanged.
 Date: 2026. 10. 14
   Changes:
     - Reused the identical base PNGs of quality-control research 7 and 9 for levels 8 and 10; removed two duplicate files, preserving separate technologies and their level-marker layers.

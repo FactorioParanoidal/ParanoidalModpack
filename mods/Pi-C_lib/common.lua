@@ -60,14 +60,14 @@ return function(mod_args)
     local arg
 
     if type(mod_args) ~= "table" or not next(mod_args) then
-      error("No arguments!")
+      error("Аргументы не заданы!")
     end
 
     local function is_valid_arg(arg_type)
       if not mod_args[arg] then
-        error(string.format("Missing argument: '%s'!", arg))
+        error(string.format("Отсутствует аргумент '%s'!", arg))
       elseif type(mod_args[arg]) ~= arg_type then
-        error(string.format("'%s' is not a %s: %s!",
+        error(string.format("Значение '%s' не относится к типу %s: %s!",
                             arg, arg_type, serpent.line(mod_args[arg])))
       end
       return true
@@ -95,7 +95,7 @@ return function(mod_args)
           include_other = v
 
         else
-          error(string.format("Not a file name or array of file names: %s",
+          error(string.format("Это не имя файла и не массив имён файлов: %s",
                               serpent.line(v)))
         end
       end
@@ -165,7 +165,7 @@ return function(mod_args)
   -- Get mod name and path to mod
   common.modName = mod_args.mod_name or (script and script.active_mod)
   if common.modName == nil and not include_other then
-    error("Missing argument 'mod_name'!")
+    error("Отсутствует аргумент 'mod_name'!")
 
   elseif type(common.modName) ~= "string" then
     local msg = "Wrong argument 'mod_name'!\nExpected: string\nGot: %s"
@@ -215,14 +215,14 @@ return function(mod_args)
     -- Error if add_to_tab is not a table
     elseif t_a ~= "table" then
       PClib_log("add_to_tab is not a table!")
-      error("No table to include data!")
+      error("Не указана таблица, в которую следует включить данные!")
     end
     PClib_log(string.format("add_to_tab: %s", add_to_tab))
     PClib_log(string.format("file_name: %s", file_name))
 
     -- Error if file_name is missing
     if type(file_name) ~= "string" or file_name == "" then
-      error("Missing library name!")
+      error("Не указано имя библиотеки!")
     end
 
     -- Read lib. This will return either a function we must call, or a table.
@@ -346,7 +346,7 @@ return function(mod_args)
     --                ALL: Get value of a startup setting (by name)                 --
     --------------------------------------------------------------------------------
     common.get_startup_setting = function(name)
-      common.assert(name, {"string", "nil"}, "setting name or nil")
+      common.assert(name, {"string", "nil"}, "имя настройки или nil")
       return name and common.get_setting_value(settings.startup[name])
     end
 
@@ -356,7 +356,7 @@ return function(mod_args)
     --------------------------------------------------------------------------------
     if script then
       common.get_global_setting = function(name)
-        common.assert(name, {"string", "nil"}, "setting name")
+        common.assert(name, {"string", "nil"}, "имя настройки")
         --~ return settings.global[name] and settings.global[name].value
         return name and common.get_setting_value(settings.global[name])
       end
@@ -378,15 +378,15 @@ return function(mod_args)
         local ret = common.EMPTY_TAB
 
         if remote.interfaces[interface] and remote.interfaces[interface][func] then
-          common.writeDebug("Calling function %s of interface %s!",
+          common.writeDebug("Вызов функции %s интерфейса %s!",
                             {func, interface})
           -- Make ret a table to catch all values returned by the remote call!
           ret = {remote.call(interface, func, table.unpack(args))}
-common.show("Returned by remote call", ret)
+common.show("Возвращено удалённым вызовом", ret)
         else
-          common.writeDebug("Remote %s doesn't exist!", {
-            remote.interfaces[interface] and "function "..common.enquote(func) or
-                                             "interface "..common.enquote(interface)
+          common.writeDebug("Удалённый объект %s не существует!", {
+            remote.interfaces[interface] and "функция "..common.enquote(func) or
+                                             "интерфейс "..common.enquote(interface)
           })
         end
 

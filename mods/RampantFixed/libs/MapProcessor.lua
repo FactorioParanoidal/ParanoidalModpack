@@ -639,7 +639,7 @@ local function processSpawners(map, tick, iterator, chunks, remoteInterfaceParam
 	if squadCreated then
 		if remoteInterfaceParameters then
 			if map.universe.aiPointsPrintSpendingToChat then
-				game.print(currentSquad.." squad created by remote interface")
+				game.print(currentSquad.." отряд создан через удалённый интерфейс")
 			end	
 		else
 			if (currentSquad == "migrate") and not (map.state == AI_STATE_MIGRATING) then
@@ -670,7 +670,7 @@ local function processSpawners(map, tick, iterator, chunks, remoteInterfaceParam
 			map.nextSquad = chooseSquad(map, migrate, attack, tick)
 			chunk.nextSquadTick = tick + squadCooldown
 			if map.universe.aiPointsPrintSpendingToChat then
-				game.print(currentSquad.." squad created. Next is "..map.nextSquad.." squad")
+				game.print(currentSquad.." отряд создан. Следующий — "..map.nextSquad.." отряд")
 			end	
 		end
 	end
