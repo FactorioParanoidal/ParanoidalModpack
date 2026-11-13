@@ -60,7 +60,10 @@ script.on_event({ defines.events.on_player_removed, defines.events.on_player_lef
 end)
 
 ---@param event EventData.on_player_changed_surface
-script.on_event(defines.events.on_player_changed_surface, function(event)
+script.on_event({ defines.events.on_player_changed_surface,
+  defines.events.on_player_display_resolution_changed,
+  defines.events.on_player_display_scale_changed,
+  defines.events.on_player_display_density_scale_changed }, function(event)
   Proximity.add_sprites_near_player(game.players[event.player_index])
 end)
 
@@ -76,17 +79,18 @@ end)
 
 ---@param event EventData.on_selected_entity_changed
 script.on_event(defines.events.on_selected_entity_changed, function(event)
+  Proximity.ensure_camera_storage()
   Proximity.set_selections_for_player(game.players[event.player_index])
 end)
 
 ---@param event EventData.on_tick
-script.on_nth_tick(Proximity.FullScanInterval, function(event)
-  Proximity.set_selections_for_players()
-  Proximity.add_sprites_near_players()
+script.on_nth_tick(Proximity.ContextPollInterval, function(event)
+  Proximity.poll_camera()
 end)
 
 ---@param event EventData.on_tick
 script.on_nth_tick(Sprite.SpriteUpdateInterval, function(event)
+  Proximity.discover_sprites()
   Sprite.cleanup_expired()
   local finished = Sprite.incrementally_update_sprites_in_queue()
   if finished then
@@ -138,7 +142,7 @@ end)
 script.on_event(defines.events.on_surface_deleted, function(event)
   storage.sprites_by_surface_cells[event.surface_index] = nil
   storage.pollutant_color_by_surface[event.surface_index] = nil
-  Proximity.invalidate_important_cells()
+  Proximity.on_surface_deleted(event.surface_index)
   Solar.on_surface_deleted(event.surface_index)
 end)
 

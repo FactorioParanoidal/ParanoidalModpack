@@ -1,6 +1,13 @@
 ---------------------------------------------------------------------------------------------------
 Version: 9.4.6
 Date: 2026-10-12
+  Optimizations:
+    - Paranoidal: replace immediate triple-radius scans with camera bounds and resumable global discovery (32 probes / 2 creates per tick).
+    - Refill the legacy update queue from bounded priority and viewport cursors; avoid full viewport arrays and unnecessary important-cell invalidation.
+    - Poll one camera context at a time; retain original graphics, opacity, rotation, saved settings, TTL and solar mechanics.
+  Bugfixes:
+    - Include distant visible clouds and the rotated sprite footprint; do not discover clouds in chart view.
+    - Honor the exact configured sprite update limit instead of processing one extra queue item.
   Changes:
     - Paranoidal packaging: moved standalone regression fixtures out of the distributed mod into the local test collection.
   Features:
