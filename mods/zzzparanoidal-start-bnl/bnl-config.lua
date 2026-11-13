@@ -24,7 +24,6 @@ config.falling = {
     last_tick = 9 * MINUTE + 30 * 60,
     warning = 6 * 60, -- shadow and chat warning before the impact; the roar of the low pass starts with the flight
     flight = 2 * 60, -- projectile flight time
-    all_clear_delay = 3 * 60, -- the AUTO all-clear comes this long after the last planned impact
     sound_lead = 3 * 60, -- the roar of the low pass starts this long before the launch
     -- Players this close to the impact point hear the incoming shell whistle (it ends at the impact)
     -- instead of the low pass roar; the choice is made per player when the roar would start.

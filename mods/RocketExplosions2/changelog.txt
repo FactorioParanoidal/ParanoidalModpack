@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.1.5
 Date: 2026-10-30
+  Changes:
+    - Reworded EN/RU reliability and post-explosion messages in AUTO's voice: no promise about every future launch or construction-stage internals. Reliability, health, existing quips and the outcome tooltip are unchanged.
   Features:
     - Paranoidal: a launch failure is nuclear, a big explosion or an accident. The first failure of a force is always nuclear; with every failure nuclear explosions get rarer, big explosions more frequent at first, then accidents prevail.
     - Paranoidal: after a nuclear or big explosion the silo is thrown back to stage 4 of Rocket-Silo-Construction (same quality); after an accident it stays. The site or silo keeps 2-15% of its health and cannot be damaged while the blast waves pass (4 s) and while any fire burns within 16 tiles (at most 10 minutes), so a ground fire cannot finish it.

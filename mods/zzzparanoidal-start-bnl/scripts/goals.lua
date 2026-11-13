@@ -73,7 +73,7 @@ end
 
 -- Lines: each returns stage, locale base (without the variant number), parameters; nil: not shown --
 
--- Falling debris: the countdown until the last planned impact (the all-clear: scripts/falling.lua).
+-- Falling debris: keep the warning active until the last planned impact; the timer is not displayed.
 local function falling_line()
     if not (storage.bnl.falling and storage.bnl.falling.ends) then return nil end
     local minutes = util.falling_minutes()

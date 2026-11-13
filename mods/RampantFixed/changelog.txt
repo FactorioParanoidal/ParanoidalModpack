@@ -4,6 +4,7 @@ Date: 2026.10.27
   Graphics:
     - Paranoidal build: removed the duplicate purple acid projectile shadow already redirected to the base-game image by zzzparanoidal's final graphics pass. Enemy prototypes and runtime code are unchanged.
   Locale:
+    - EN/RU demolisher feeding replies no longer reveal the next-attack timer or remaining feeding counter; they report temporary satiation with a diplomatic disclaimer. Feeding and AI behaviour are unchanged.
     - ru: the mod name and the mod list description are the same as in ParanoidalLocale (format "English title (Russian translation)"), so the mod reads the same with or without it.
   Changes:
     - Peaceful map: on a map whose Nauvis was generated without enemy bases (enemy-base size "none", e.g. the preset "Paranoidal: no enemies") Rampant shows no "truce over", flyer, juggernaut or underground attack messages, and getTruceInfo returns nil (EvoUI shows no truce countdown). New libs/PeacefulMap.lua.
