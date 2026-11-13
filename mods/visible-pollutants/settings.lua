@@ -2,19 +2,12 @@ Settings = require("scripts.settings")
 
 data:extend({
   {
-    type = "bool-setting",
-    name = Settings.Motion,
-    setting_type = "runtime-global",
-    order = "a-motion",
-    default_value = false,
-  },
-  {
     type = "string-setting",
     name = Settings.PollutionLayer,
     localised_description = { "vp-explanation.layer" },
     setting_type = "runtime-global",
     order = "a",
-    default_value = "smoke", -- below selection boxes; existing saved layers are retained
+    default_value = "arrow",
     allowed_values = {
       "smoke",
       "air-object",
