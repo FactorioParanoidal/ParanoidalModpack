@@ -22,12 +22,14 @@ the distributed mod. One render object per cell selects its variant, initial
 orientation and center offset deterministically from surface/cell coordinates,
 without consuming map RNG. Recreation keeps the same initial layout.
 
-The initial calibration is a 64-tile square (scale 2) on the 32-tile grid, with
-no extra opacity gain. It deliberately produces lighter, more varied coverage
-than the old 96-tile blanket, not an optically equivalent replacement. The user
-opacity and see-through limits still apply; the common pollution/solar curve is
-not retuned to compensate. Broken-cloud gaps may remain recognizable at high
-opacity. Final density, motion and readability still need in-game acceptance.
+Clouds cover a 128-tile square (scale 4) on the 32-tile grid, with no extra
+opacity gain. The initial 64-tile calibration combined reduced overlap with
+masks having roughly half the legacy optical depth: real polluted factories
+looked almost clean. The larger footprint restores aggregate optical weight
+without replacing the HD resources, changing saved opacity/see-through values,
+or retuning the shared pollution/solar curve. This is not an exact pixel or
+perceptual match to the old 96-tile blanket. Final density, motion and readability
+remain subject to in-game acceptance.
 
 The original `visible-pollutants-pollution` ID and `pollution.png` remain intact.
 With motion off, old objects fade out over 60 game ticks from their first service,
@@ -62,7 +64,7 @@ The additional 4096x2048 RGBA8 atlas is 32 MiB of pixel data before mipmaps,
 atlases or engine compression (not measured VRAM). The four static forms remain
 16 MiB, plus the retained old texture. Motion off does not unload the atlas.
 The smaller animated frame is an explicit memory/definition trade-off, not a
-replacement of the four HD resources. It still covers the same 64-tile square.
+replacement of the four HD resources. It covers the same 128-tile square.
 
 Wind direction and speed set a small bounded offset, at most 1.5 tiles per axis
 from each stable center, with elapsed-tick smoothing (two-second half-life).
@@ -86,10 +88,11 @@ Movement, teleport, selection and display events only flag a player's context.
 A persistent round-robin, center-out cursor visits current camera demand without
 allocating whole chunk rectangles or accumulating old movement jobs. Coverage
 includes rotation, deterministic center offset and the full wind reserve (about
-48.8 tiles beyond the viewport, including in static mode so frozen offsets fit).
-A bounded counter conservatively retains the old 69.9-tile
-margin until old/unknown cache entries and the legacy queue are resolved; no
-full-cache scan is needed. The old four-chunk camera-radius cap is gone. Chart-only views
+94.0 tiles beyond the viewport, including in static mode so frozen offsets fit).
+During old-cache adoption, coverage uses the larger of current and legacy
+footprints (the old one is 69.9 tiles), never a smaller transitional margin; no
+full-cache scan is needed. The larger footprint can increase total camera demand,
+not the existing per-tick budgets. The old four-chunk camera-radius cap is gone. Chart-only views
 and surfaces without a pollutant do not generate visual demand.
 
 Per tick, the visual worker visits at most 64 candidate turns, refreshes at most
@@ -147,7 +150,18 @@ scheduler step, then continued a pending transition through retirement/recreatio
 No original player save was used; this is not an exhaustive save-upgrade or
 multiplayer test. Headless does not load image pixels or prove visible frame
 progress, seamless motion, lighting, 4K readability or subjective density.
-Those remain user visual acceptance; the asset checks and CPU sheets are separate.
+Those headless limits remain; the asset checks and CPU sheets are separate.
+
+A later graphical before/after check on physical copies of a supplied polluted
+factory save established the visibility regression: 27-29 valid, nontransparent
+clouds were serviced normally, but the initial 64-tile coverage was too weak.
+The corrected 128-tile coverage produced visible smog at the same game tick,
+camera, light, pollution and saved settings, preserving all 28 render identities
+in the comparison frame. Work/create limits were checked over 331 service ticks.
+Only the copied surface's daytime was frozen for comparison; no original save or
+working settings were changed. This checks that save/camera, not every zoom,
+night scene or multiplayer configuration. Subjective density is still user
+acceptance. Restart the game to load changed graphic prototypes.
 
 ### Known camera limits
 

@@ -2,7 +2,9 @@
 local Visuals = {}
 
 Visuals.TextureSize = 1024
-Visuals.WorldSize = 64
+-- HD masks have about half the legacy optical depth. Restore their aggregate
+-- weight through overlap, not through player settings or the shared solar curve.
+Visuals.WorldSize = 128
 Visuals.LegacyWorldSize = 96
 Visuals.Jitter = 2
 Visuals.MotionRadius = 1.5 -- maximum displacement per axis, also reserved in static mode
