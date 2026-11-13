@@ -397,6 +397,8 @@ function M.set(entity, mode, on_tracked)
         return entity
     end
     if entity.to_be_deconstructed() or entity.to_be_upgraded() then return nil, "marked" end
+    -- The engine refuses fast replacement when a script forbids mining. Keep its protection and record intact.
+    if not entity.minable_flag then return nil, "protected" end
     local target = M.twin_name(M.base_name(entity.name), mode)
     if not target then return nil, "no-twin" end
     local new, old_id, keep = swap(entity, target, current, mode)
