@@ -3,7 +3,8 @@ Version: 9.5.0
 Date: 2026-11-12
   Graphics:
     - Add four distinct 1024x1024 RGBA8 cloud shapes with deterministic surface/cell selection and pose, one render per cell and no map RNG use.
-    - Use 64-tile clouds on the 32-tile grid with unchanged tint gain: intentionally lighter coverage than the old blanket, without changing the shared pollution curve or solar mechanics.
+    - Use 128-tile clouds on the 32-tile grid with unchanged tint gain. Correct the initial 64-tile calibration, which combined smaller coverage with lighter masks and made polluted factories look almost clean; preserve the shared pollution curve and solar mechanics.
+    - Include the larger of current and legacy cloud footprints during bounded old-cache adoption, so saved render objects cannot reduce camera coverage.
     - Add optional Cloud motion, off by default: one 32-frame 512x512 RGBA8 native veil cycle over 16 game seconds, independent cell phases and bounded wind offsets with elapsed-tick smoothing. No permanent second layer or continuous cloud rotation.
     - Keep all four HD static textures and a fully still mode that continues to track pollution density. Disabling motion does not unload the animation atlas.
     - Match camera margins to rotated shapes, jitter and wind offsets. Use smoke mipmaps and linear filtering; default missing layer settings to smoke while retaining all saved layer/opacity values.

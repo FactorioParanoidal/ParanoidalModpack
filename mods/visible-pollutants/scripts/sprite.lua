@@ -45,7 +45,7 @@ end
 function Sprite.get_footprint_half_extent()
   local cache = Sprite.prepare_storage()
   if cache.pending_footprints > 0 or cache.legacy_index <= cache.legacy_count then
-    return Visuals.LegacyFootprintHalfExtent
+    return math.max(Visuals.LegacyFootprintHalfExtent, Sprite.FootprintHalfExtent)
   end
   return Sprite.FootprintHalfExtent
 end
