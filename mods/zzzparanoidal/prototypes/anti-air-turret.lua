@@ -5,25 +5,16 @@
 --  * стреляют втрое чаще (cooldown / 3), один выстрел = один патрон и одно попадание;
 --  * целятся только в летающих врагов: тип цели "pd-air-unit" есть только у летающих юнитов
 --    (RampantFixed flyers, включая чемпионов, и любые юниты со слоем отрисовки air-object);
---  * трёхствольная графика (graphics/anti-air-turret, собрана из листов reskins-bobs) и иконка;
---  * каждый выстрел движок выпускает из одного из трёх стволов наугад (projectile_creation_offsets,
---    как у ракетной турели Space Age; без скрипта).
+--  * графика и иконка счетверённой зенитки мода kj_vierling 2.1.0 (graphics/anti-air-turret, лицензия и
+--    авторство в Credits.txt; основание и иконка перекрашены по тирам: 1 жёлтый, 2 красный, 3 синий),
+--    звук выстрела ванильной пулемётной турели (своих звуков у kj_vierling нет);
+--  * пули вылетают из четырёх стволов по очереди наугад (projectile_creation_offsets, без скрипта).
 -- Ранговые копии HeroTurretRedux (он грузится после zzz) создаются из этих прототипов сами.
 local AIR = "pd-air-unit"
 local SNIPER = "bob-sniper-turret-"
 local NAME = "pd-anti-air-turret-"
 local TIERS = 3
-local SPRITES = "__reskins-bobs__/graphics/entity/warfare/sniper-turret/sniper-turret-"
-local OWN = "__zzzparanoidal__/graphics/anti-air-turret/anti-air-turret-"
--- Слои иконки снайперки (меню Beta 8 и reskins) → трёхствольные слои.
-local ICONS = {
-	["__zzzparanoidal__/graphics/bob-combat-menu-beta8/f801f3d74997921484ac.png"] = OWN .. "icon-base.png",
-	["__zzzparanoidal__/graphics/bob-combat-menu-beta8/3d3606bdb20267baa67e.png"] = OWN .. "icon-mask.png",
-	["__zzzparanoidal__/graphics/bob-combat-menu-beta8/84345afb20b48c763e0c.png"] = OWN .. "icon-highlights.png",
-	["__reskins-bobs__/graphics/icons/warfare/sniper-turret/sniper-turret-icon-base.png"] = OWN .. "icon-base.png",
-	["__reskins-bobs__/graphics/icons/warfare/sniper-turret/sniper-turret-icon-mask.png"] = OWN .. "icon-mask.png",
-	["__reskins-bobs__/graphics/icons/warfare/sniper-turret/sniper-turret-icon-highlights.png"] = OWN .. "icon-highlights.png",
-}
+local GFX = "__zzzparanoidal__/graphics/anti-air-turret/"
 local SUBGROUP = "paranoidal-split-defense-anti-air-turrets"
 local RANGES = {{range = 25, min_range = 5}, {range = 30, min_range = 7}, {range = 35, min_range = 10}}
 local function item(name, amount)
@@ -34,8 +25,56 @@ local RECIPES = {
 	{item(SNIPER .. 2, 1), item("bob-cobalt-steel-bearing", 10), item("bob-invar-alloy", 10)},
 	{item(SNIPER .. 3, 1), item("bob-titanium-bearing", 10), item("bob-titanium-plate", 10)},
 }
--- Стволы на листах спрайтов разнесены на 19 px исходника (scale 0.5) = 9.5 px игры поперёк ствола.
-local BARREL_OFFSETS = {{0, 0}, {9.5 / 32, 0}, {-9.5 / 32, 0}}
+-- Сетка спрайтов kj_vierling: кадры 500x500; стрельба — 8 файлов по 8 направлений (всего 64), по 2 кадра;
+-- подъём стволов — 4 направления по 6 кадров; основание и тени отдельными слоями. Модель в кадре
+-- по центру основания (центр основания на 10 px выше центра кадра); масштаб подогнан под турель 2x2.
+local SCALE = 0.38
+local SHIFT = {0, 10 * SCALE / 32}
+local BARREL_OFFSETS = {{-0.12, 0}, {0.12, 0}}
+
+local function sprite(extra)
+	local animation = {
+		priority = "medium",
+		width = 500,
+		height = 500,
+		scale = SCALE,
+		shift = SHIFT,
+	}
+	for key, value in pairs(extra) do animation[key] = value end
+	return animation
+end
+
+local function shooting(frame_count, shadow)
+	local filenames = {}
+	for i = 0, 7 do
+		filenames[#filenames + 1] = GFX .. "vierling_shooting_" .. (shadow and "shadow_" or "") .. i .. ".png"
+	end
+	-- frame_count = 1 читает только первый столбец листа (line_length = 1): кадр покоя без отдачи.
+	return sprite({
+		filenames = filenames,
+		lines_per_file = 8,
+		line_length = frame_count,
+		direction_count = 64,
+		frame_count = frame_count,
+		draw_as_shadow = shadow,
+	})
+end
+
+local function raising(frame_count, extra)
+	local layers = {}
+	for _, shadow in pairs({false, true}) do
+		local layer = sprite({
+			filename = GFX .. "vierling_raising" .. (shadow and "_shadow" or "") .. ".png",
+			line_length = frame_count,
+			direction_count = 4,
+			frame_count = frame_count,
+			draw_as_shadow = shadow,
+		})
+		for key, value in pairs(extra or {}) do layer[key] = value end
+		layers[#layers + 1] = layer
+	end
+	return {layers = layers}
+end
 
 for tier = 1, TIERS do
 	if not (data.raw["ammo-turret"][SNIPER .. tier] and data.raw.item[SNIPER .. tier] and data.raw.recipe[SNIPER .. tier]) then
@@ -71,30 +110,21 @@ end
 log("anti-air-turret: летающих юнитов с типом цели " .. AIR .. ": " .. flyers)
 
 -- Графика ----------------------------------------------------------------------------------------------------
-local function remap_sprites(t, seen)
-	if type(t) ~= "table" or seen[t] then return end
-	seen[t] = true
-	for key, value in pairs(t) do
-		if type(value) == "string" and (key == "filename" or type(key) == "number") then
-			local rest = value:sub(1, #SPRITES) == SPRITES and value:sub(#SPRITES + 1)
-			if rest and (rest:find("^shooting") or rest:find("^raising")) then t[key] = OWN .. rest end
-		elseif type(value) == "table" then
-			remap_sprites(value, seen)
-		end
-	end
-end
+local gunshot = require("__base__.prototypes.entity.sounds").gun_turret_gunshot
 
-local function remap_icons(icons)
-	icons = table.deepcopy(icons)
-	for _, layer in pairs(icons) do
-		if ICONS[layer.icon] then layer.icon = ICONS[layer.icon] end
-	end
-	return icons
-end
-
-local function icons_of(proto)
-	if proto.icons then return proto.icons end
-	if proto.icon then return {{icon = proto.icon, icon_size = proto.icon_size or 64}} end
+local function apply_graphics(turret, tier)
+	turret.folded_animation = raising(1)
+	turret.preparing_animation = raising(6)
+	turret.folding_animation = raising(6, {run_mode = "backward"})
+	turret.prepared_animation = {layers = {shooting(1), shooting(1, true)}}
+	turret.attacking_animation = {layers = {shooting(2), shooting(2, true)}}
+	turret.graphics_set = {base_visualisation = {animation = {layers = {
+		sprite({filename = GFX .. "vierling_base-" .. tier .. ".png"}),
+		sprite({filename = GFX .. "vierling_base_shadow.png", draw_as_shadow = true}),
+	}}}}
+	turret.drawing_box_vertical_extension = 1
+	turret.attack_parameters.sound = table.deepcopy(gunshot)
+	turret.attack_parameters.projectile_creation_offsets = table.deepcopy(BARREL_OFFSETS)
 end
 
 -- Подгруппа меню сразу под снайперскими турелями --------------------------------------------------------
@@ -118,7 +148,13 @@ for tier = 1, TIERS do
 	local name = NAME .. tier
 	local sniper = data.raw["ammo-turret"][SNIPER .. tier]
 	local recipe_source = data.raw.recipe[SNIPER .. tier]
-	local icons = remap_icons(icons_of(recipe_source) or icons_of(data.raw.item[SNIPER .. tier]) or icons_of(sniper))
+	local icons = {{icon = GFX .. "icon-" .. tier .. ".png", icon_size = 128}}
+	-- Метка тира reskins (цветные точки) — те же слои, что на иконке снайперки этого тира.
+	for _, layer in pairs(data.raw.item[SNIPER .. tier].icons or {}) do
+		if type(layer.icon) == "string" and layer.icon:find("/icons/tiers/", 1, true) then
+			icons[#icons + 1] = table.deepcopy(layer)
+		end
+	end
 	local localised_name = {"entity-name." .. name}
 	local localised_description = {"entity-description." .. name}
 
@@ -139,8 +175,7 @@ for tier = 1, TIERS do
 	turret.attack_parameters.range = RANGES[tier].range
 	turret.attack_parameters.min_range = RANGES[tier].min_range
 	turret.prepare_range = RANGES[tier].range + 2
-	turret.attack_parameters.projectile_creation_offsets = table.deepcopy(BARREL_OFFSETS)
-	remap_sprites(turret, {})
+	apply_graphics(turret, tier)
 
 	local item = table.deepcopy(data.raw.item[SNIPER .. tier])
 	item.name = name
