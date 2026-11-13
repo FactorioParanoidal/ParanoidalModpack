@@ -20,7 +20,8 @@ Sprite.OrientationDelta = math.min(
 )
 
 --- @class SpriteUpdateQueueItem
---- @field cell GridCell
+--- @field key number | nil
+--- @field cell GridCell | nil Legacy saved queue entries.
 --- @field sprite LuaRenderObject
 
 function Sprite.init_storage()
@@ -63,19 +64,17 @@ local function add_to_cache(surface, key, sprite)
   queue[#queue + 1] = { surface = surface.index, key = key, sprite = sprite }
 end
 
---- @param surface LuaSurface
+--- @param surface_index uint
 --- @param key number
 --- @return LuaRenderObject | nil
-local function get_from_cache(surface, key)
-  if not storage.sprites_by_surface_cells[surface.index] then
-    return nil
-  end
-  ---@type LuaRenderObject | nil
-  local cached = storage.sprites_by_surface_cells[surface.index][key]
+function Sprite.get_by_key(surface_index, key)
+  local cells = storage.sprites_by_surface_cells[surface_index]
+  if not cells then return nil end
+  local cached = cells[key]
   if cached and cached.valid then
     return cached
   elseif cached then
-    storage.sprites_by_surface_cells[surface.index][key] = nil
+    cells[key] = nil
   end
   return nil
 end
@@ -84,22 +83,22 @@ end
 --- @param cell GridCell
 --- @return LuaRenderObject | nil
 function Sprite.get(surface, cell)
-  return get_from_cache(surface, cell.key)
+  return Sprite.get_by_key(surface.index, cell.key)
 end
 
 --- @param surface LuaSurface
 --- @param cell GridCell
---- @return LuaRenderObject | nil
+--- @return LuaRenderObject | nil, boolean created
 function Sprite.ensure_existence_if_polluted(surface, cell)
-  local cached = get_from_cache(surface, cell.key)
+  local cached = Sprite.get_by_key(surface.index, cell.key)
   if cached then
     cached.time_to_live = Sprite.OutOfBoundsSpriteTTL
-    return cached
+    return cached, false
   end
 
   local pollution = Sprite.Opacity * Pollution.thickness(surface, cell.center)
   if pollution <= 0 then
-    return nil
+    return nil, false
   end
 
   local created = rendering.draw_sprite {
@@ -116,7 +115,7 @@ function Sprite.ensure_existence_if_polluted(surface, cell)
   }
 
   add_to_cache(surface, cell.key, created)
-  return created
+  return created, true
 end
 
 local function queue_sprites_near_players_for_update()
@@ -125,6 +124,7 @@ end
 
 function Sprite.queue_sprites_for_update()
   queue_sprites_near_players_for_update()
+  storage.sprite_update_queue_index = 1
 end
 
 ---@return boolean finished if all sprites have been updated
@@ -137,7 +137,7 @@ function Sprite.incrementally_update_sprites_in_queue()
   local important_cells = Proximity.get_important_cells()
   local wind_directions = {}
   local next_index = math.min(storage.sprite_update_queue_index, queue_length)
-  local end_index = math.min(next_index + Sprite.MaxUpdatesPerTick, queue_length)
+  local end_index = math.min(next_index + Sprite.MaxUpdatesPerTick - 1, queue_length)
   for i = next_index, end_index do
     Sprite.update_sprite(storage.sprite_update_queue[i], important_cells, wind_directions)
   end
@@ -154,8 +154,9 @@ end
 ---@param queued SpriteUpdateQueueItem
 ---@param important_cells table<number, ImportantCells>
 function Sprite.update_sprite(queued, important_cells, wind_directions)
-  if not queued.sprite or not queued.sprite.valid then return end
-  local surface = queued.sprite.surface
+  local sprite = queued.sprite
+  if not sprite or not sprite.valid then return end
+  local surface = sprite.surface
   local surface_index = surface.index
   local direction = wind_directions and wind_directions[surface_index]
   if direction == nil then
@@ -166,8 +167,8 @@ function Sprite.update_sprite(queued, important_cells, wind_directions)
     if wind_directions then wind_directions[surface_index] = direction end
   end
 
-  queued.sprite.orientation = (
-    queued.sprite.orientation
+  sprite.orientation = (
+    sprite.orientation
     + Sprite.OrientationDelta
     * math.random()
     * direction
@@ -175,24 +176,25 @@ function Sprite.update_sprite(queued, important_cells, wind_directions)
 
   local max_opacity = 1
   local cells = important_cells[surface_index]
+  local key = queued.key or queued.cell.key -- Read old saved queues without resetting renders.
   if cells then
-    if cells.important[queued.cell.key] then
+    if cells.important[key] then
       max_opacity = Sprite.MaxImportantOpacity
-    elseif cells.nearby[queued.cell.key] then
+    elseif cells.nearby[key] then
       max_opacity = Sprite.MaxNearbyOpacity
     end
   end
 
-  local desired_thickness = Sprite.Opacity * Pollution.thickness(surface, queued.sprite.target.position)
+  local desired_thickness = Sprite.Opacity * Pollution.thickness(surface, sprite.target.position)
   if desired_thickness > max_opacity then
     desired_thickness = max_opacity
   end
 
-  local last_thickness = queued.sprite.color.a
+  local last_thickness = sprite.color.a
   local thickness_difference = desired_thickness - last_thickness
   if thickness_difference > Sprite.DesiredStateEpsilon or thickness_difference < -Sprite.DesiredStateEpsilon then
     local blended = last_thickness * (1 - Sprite.BlendIn) + desired_thickness * Sprite.BlendIn
-    queued.sprite.color = Pollution.color(surface, blended)
+    sprite.color = Pollution.color(surface, blended)
   end
 end
 
