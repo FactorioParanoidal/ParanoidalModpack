@@ -11,6 +11,7 @@ Date: 2026-11-01
     - The settings are read once per load and when they change, not for every chunk; the debug logging and the "expensive sanity checks" are removed from the spawning code.
     - Graphics recompressed (lossy palette).
   Changes:
+    - Replaced eleven automatic discovery hints in EN/RU with atmospheric danger warnings and dark humour, without puzzle solutions, hidden counters, reward schedules or exact timers. Ruin mechanics and the separate lore entries are unchanged.
     - Added the separate rare dangerous pd-infected-ship-colony: a moderate nest using ordinary evolution-based biter/spitter tables and the ruins force's cease-fire. Its 2200-tile safety radius is mandatory even with ignore-distance enabled; a 25% appearance roll also keeps it rare with anti-repeat cycles.
     - A killed colony leaves one neutral lootable infected hull after the engine's object-destroyed notification, preserving position, direction and quality. Material salvage is awarded once; direct deletion/mining and unrelated wrecks do not trigger it. No nuclear explosion, world scan, new tick scheduler, dependencies or migrations.
     - Added EN/RU colony text and documented its parameters. The expedition, neutral crash sites, base shipwreck and existing mferrari boss are unchanged.

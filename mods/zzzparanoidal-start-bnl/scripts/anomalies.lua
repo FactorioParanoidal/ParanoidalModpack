@@ -49,8 +49,6 @@ scheduler.handler("night-thaw", function(job)
     job.left = job.left - 1
     if job.left > 0 then
         scheduler.at(next_midnight(surface), "night-freeze", job)
-    else
-        util.say({"bnl.anomaly-long-night-end"})
     end
 end)
 
@@ -71,10 +69,7 @@ end
 scheduler.handler("storm-start", function(job)
     local surface = game.get_surface(job.surface)
     local force = util.player_force()
-    if not surface or storm_over(force) then
-        util.say({"bnl.anomaly-magnetic-storm-end"})
-        return
-    end
+    if not surface or storm_over(force) then return end
     local jammed = {}
     for _, radar in pairs(radars(surface, force)) do
         if not radar.disabled_by_script then
@@ -175,8 +170,6 @@ scheduler.handler("dust-hit", function(job)
     job.left = job.left - 1
     if job.left > 0 then
         scheduler.after(util.int(cfg.dust_storms.every) - cfg.dust_storms.warning, "dust-warn", job)
-    else
-        util.say({"bnl.anomaly-dust-storms-end"})
     end
 end)
 

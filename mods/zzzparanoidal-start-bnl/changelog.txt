@@ -4,6 +4,9 @@ Date: 2026-11-08
   Graphics:
     - Axiom-6 uses mferrari_lib's infected spaceship hull instead of a green-tinted vanilla wreck. Its container, note, salvage, nearby car and safe-code quest are unchanged; without the optional library the previous appearance stays.
   Changes:
+    - Reworked EN/RU start messages with BnL humour instead of debris timers/radii, reactor schedules, salvage rewards and safe-solving hints. Localized Fusion Lite as "Ядер-Лайт" in Russian. Late-arrival equipment limits and immediate danger warnings remain clear.
+    - Removed end-of-season announcements for long nights, magnetic storms and dust storms without changing their effects, restoration or scheduling.
+    - Removed AUTO's debris all-clear chat message in EN/RU: the end of the debris shower is no longer announced. Previously queued all-clear jobs finish silently; debris behaviour is unchanged.
     - The existing pd-port21-diag-only test interface can prepare a persisted profession fixture in an older map with no landing/profession state, without replaying the landing or issuing bonuses. Normal games do not expose this interface.
     - Deferred the old-map profession migration while bnl-start-professions is disabled: passenger choices, RPG levels and the migration marker stay untouched. Enabling the setting resumes it once, without requiring players to rejoin.
     - Professions: a player who first joins more than 30 minutes after the landing is no longer made a passenger without a choice. The choice opens for him too (once, it cannot be changed), but gives only the bonuses: RPG levels, technologies, recipes and the hand mining bonus; no kit, water, wreck ammo, repair packs, survey or bio farm. The probation counts from his own arrival. Older maps reopen the choice once for every passenger.
