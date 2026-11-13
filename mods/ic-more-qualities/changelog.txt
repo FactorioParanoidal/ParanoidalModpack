@@ -6,6 +6,7 @@ Date: 2026. 10. 14
     - Paranoidal packaging: moved standalone regression fixtures and their mocks out of the distributed mod into the local test collection.
     - Clarified precise production-mode tooltips: the mode prevents new defects but does not repair defective ingredients; the refinement workshop does that.
   Bugfixes:
+    - Preserve fluid amount and temperature when changing production modes in Factorio 2.1, including connected fluid networks; restore each shared segment once without duplicating fluid left in pipes.
     - Reject production-mode changes on script-protected unminable machines before fast replacement and show an explanatory message, keeping their protection and mode record intact.
     - QueueToFrontLimited integration: exclude reconsumed cancellation returns from deferred defect rolls, without damaging spare items; actual leftovers and ordinary cancellations retain their rolls. Added same-tick begin/end_queue_reorder remote functions.
   Features:

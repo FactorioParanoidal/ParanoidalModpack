@@ -2,8 +2,9 @@
 -- A machine in a mode is its hidden twin (prototypes/mode-twins.lua): crafting speed / 5 or / 20 and power x5 or
 -- x20, so the engine itself runs every operation slower at any machine speed. A switch replaces the machine in
 -- place by an engine fast replace, which keeps the recipe, the running operation (progress and the result
--- quality fixed at its start), inventories, modules, fluids, wires and circuit settings (engine check
--- test-runs/ic-twin1-20261102); health, last user, the finished counter and script flags are copied here.
+-- quality fixed at its start), inventories, modules, wires and circuit settings. Fluid segment contents
+-- and temperature are restored explicitly: 2.1 can drop them during fast replacement. Health, last user,
+-- the finished counter and script flags are copied here.
 -- The quality-module boost of a mode is a hidden beacon on the machine with weighted quality modules, tuned every
 -- REFRESH ticks (and when the window is open, closed or settings are pasted) so that the engine roll has the
 -- chance of `boost` independent native rolls (rules.boosted_chance). The defect decision of an operation
@@ -15,6 +16,7 @@ local names = require("scripts.expansion.names")
 local rules = require("scripts.expansion.rules")
 local wheel = require("scripts.wheel")
 local stats = require("scripts.stats")
+local fluids = require("scripts.expansion.mode-fluids")
 
 local M = {}
 M.types = {["assembling-machine"] = true, furnace = true}
@@ -357,6 +359,7 @@ local function swap(entity, target, from_mode, to_mode)
     end
     local surface, position = entity.surface, entity.position
     local health, last_user, finished = entity.health, entity.last_user, entity.products_finished
+    local fluid_state = fluids.capture(entity)
     local flags = {}
     for _, key in ipairs(FLAGS) do flags[key] = entity[key] end
     local new = surface.create_entity({name = target, position = position, direction = entity.direction,
@@ -368,6 +371,7 @@ local function swap(entity, target, from_mode, to_mode)
         if record and entity.valid then M.adopt(entity) end
         return nil
     end
+    fluids.restore(new, fluid_state)
     if health then new.health = health end
     if last_user then new.last_user = last_user end
     new.products_finished = finished
