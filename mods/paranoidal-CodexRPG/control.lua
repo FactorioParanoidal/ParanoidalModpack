@@ -221,43 +221,6 @@ local name= player.name
 UpdatePlayerLvStats(player)	
 end
 
-local function LevelForXP(xp)
-	for level=1,#storage.xp_table do
-		if xp < storage.xp_table[level] then return level end
-	end
-	return storage.setting_max_player_level
-end
-
-local function MigrateRPGsystemXP()
-	if storage.rpgsystem_xp_migration then return end
-
-	local migration = {version = 1, imported = 0, players = {}}
-	storage.rpgsystem_xp_migration = migration
-	local migration_interface = remote.interfaces["RPGsystemMigration"]
-	if not (migration_interface and migration_interface.get_all_player_xp) then return end
-
-	local legacy_xp = remote.call("RPGsystemMigration", "get_all_player_xp")
-	if type(legacy_xp) ~= "table" then return end
-
-	for _, player in pairs(game.players) do
-		local xp = legacy_xp[player.name]
-		if type(xp) == "number" and xp == xp and xp ~= math.huge and xp ~= -math.huge then
-			local name = player.name
-			storage.personalxp.XP[name] = xp
-			storage.personalxp.Level[name] = LevelForXP(xp)
-			for _, attrib in pairs(storage.Player_Attributes) do
-				storage.personalxp[attrib][name] = 0
-			end
-			storage.personalxp.opt_Pick_Extender[name] = false
-			migration.imported = migration.imported + 1
-			migration.players[name] = {xp = xp, level = storage.personalxp.Level[name]}
-			UpdatePanel(player)
-			log("paranoidal-CodexRPG: migrated RPGsystem XP for " .. name .. ": xp=" .. xp ..
-				", level=" .. storage.personalxp.Level[name] .. ", skill points reset")
-		end
-	end
-end
-
 function CheckPlayers()
 	for _, player in pairs(game.players) do
 		if not (storage.personalxp.Level[player.name]) then
@@ -418,7 +381,6 @@ storage.personal_kill_turrets = storage.personal_kill_turrets or {}
 	
 VersionChange()
 CheckPlayers()
-MigrateRPGsystemXP()
 
 -- Опыт, уже накопленный силами песочницы, не раздаётся.
 for name in pairs(storage.XP) do
@@ -997,37 +959,7 @@ premium.on_player_joined(player)
 end
 
 
--- paranoidal-CodexRPG is PMRPGsystem renamed. Factorio keeps the storage of a mod under the mod's own
--- name, so on an old save the progress stays with PMRPGsystem, which is now a bridge without gameplay.
--- When this mod is added to such a save, it takes everything over once (before anything is set up)
--- and the bridge removes the windows and buttons of the old version.
-local function ImportPMRPGsystem()
-	if storage.pmrpg_import then return end
-	storage.pmrpg_import = {tick = game.tick, keys = 0}
-	local iface = remote.interfaces["PMRPGsystemMigration"]
-	if not iface then return end
-	if iface.remove_gui then remote.call("PMRPGsystemMigration", "remove_gui") end
-	local old = iface.get_storage and remote.call("PMRPGsystemMigration", "get_storage")
-	if type(old) ~= "table" then return end
-	local keys, team_xp, players = 0, 0, 0
-	for key, value in pairs(old) do
-		if key ~= "pmrpg_import" then
-			storage[key] = value
-			keys = keys + 1
-		end
-	end
-	for _, xp in pairs(type(storage.XP) == "table" and storage.XP or {}) do
-		if type(xp) == "number" then team_xp = team_xp + xp end
-	end
-	local personal = type(storage.personalxp) == "table" and storage.personalxp.XP
-	for _ in pairs(type(personal) == "table" and personal or {}) do players = players + 1 end
-	storage.pmrpg_import = {tick = game.tick, keys = keys, players = players}
-	log("paranoidal-CodexRPG: took over the progress saved by PMRPGsystem: " .. keys .. " storage keys, "
-		.. players .. " players, team XP pool " .. team_xp)
-end
-
 function On_Init() 
-ImportPMRPGsystem()
 stats.on_init()
 XPModSetup()
 premium.on_init()
