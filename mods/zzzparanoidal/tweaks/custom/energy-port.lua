@@ -17,17 +17,6 @@ local function apply(prototype, fields)
         end
     end
 end
--- JSON recipe rename directly to the new recipe discards incompatible buffered ingredients
--- before Lua can recover them. Preserve the old layouts until the one-time Lua migration.
-for name, fields in pairs(port.migration_recipes) do
-    local recipe = table.deepcopy(assert(data.raw.recipe[name]))
-    apply(recipe, fields)
-    recipe.name = "paranoidal-energy-migration-" .. name
-    recipe.hidden, recipe.enabled = true, false
-    recipe.hide_from_player_crafting, recipe.hide_from_signal_gui = true, true
-    recipe.localised_name = {"item-name.uranium-fuel-cell"}
-    data:extend({recipe})
-end
 for name, fields in pairs(port.items) do apply(data.raw.item[name], fields) end
 for name, fields in pairs(port.recipes) do apply(data.raw.recipe[name], fields) end
 for _, entry in ipairs(port.entities) do apply(data.raw[entry.type][entry.name], entry.fields) end
@@ -124,7 +113,7 @@ for _, prototypes in pairs(data.raw) do
     end
 end
 -- Recipe IDs for the nine solid-fuel methods are retained: machines keep their chosen method.
--- The obsolete 100-cell recipe is hidden; JSON + Lua migration safely moves machine recipes.
+-- The obsolete 100-cell recipe is hidden.
 local obsolete = data.raw.recipe["angels-uranium-fuel-cell"]
 obsolete.hidden, obsolete.enabled = true, false
 obsolete.hide_from_player_crafting, obsolete.hide_from_signal_gui = true, true

@@ -99,8 +99,6 @@ require("tweaks.recipe.holographic-signs-port") -- gate hs_holo_sign behind circ
 require("prototypes.map-gen-presets")
 require("removals.decoratives") -- «Без декораций»: после пресетов, чтобы вычистить и их ссылки
 
-require("prototypes.entity.storage-migration")
-
 -- final aplying of override functions
 angelsmods.functions.OV.execute()
 

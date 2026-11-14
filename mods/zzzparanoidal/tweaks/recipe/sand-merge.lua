@@ -1,7 +1,7 @@
 -- Единый песок: aai-industry вводит предмет "sand", Angels — "angels-solid-sand".
 -- Два «Песка» дублировались в поиске; aai-шный не производился (рецепт скрыт),
 -- но оставался в bob-glass и триггере glass-processing. Переводим все ссылки
--- на angels-solid-sand и удаляем aai-шные предмет и рецепт. Сохранения — migrations/zzzparanoidal_8.1.28-sand.json.
+-- на angels-solid-sand и удаляем aai-шные предмет и рецепт.
 local OLD, NEW = "sand", "angels-solid-sand"
 if not (data.raw.item[OLD] and data.raw.item[NEW]) then return end
 
