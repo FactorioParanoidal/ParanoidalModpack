@@ -1,9 +1,5 @@
 -- Reviewed normal Beta 8 fields; adapted IDs and liquid fuel rules (energy decisions 2026-10-09).
 return {
-  migration_recipes = {
-    ["uranium-fuel-cell"] = {["ingredients"] = {{["type"] = "item", ["name"] = "35pc-uranium", ["amount"] = 1}, {["type"] = "item", ["name"] = "uranium-238", ["amount"] = 29}, {["type"] = "item", ["name"] = "iron-plate", ["amount"] = 15}}, ["results"] = {{["name"] = "uranium-fuel-cell", ["type"] = "item", ["amount"] = 15}}, ["category"] = "centrifuging", ["energy_required"] = 10},
-    ["angels-uranium-fuel-cell"] = {["ingredients"] = {{["type"] = "item", ["name"] = "angels-uranium-234", ["amount"] = 1}, {["type"] = "item", ["name"] = "uranium-238", ["amount"] = 199}, {["type"] = "item", ["name"] = "iron-plate", ["amount"] = 100}}, ["results"] = {{["type"] = "item", ["name"] = "angels-uranium-fuel-cell", ["amount"] = 100}}, ["category"] = "centrifuging", ["energy_required"] = 700},
-  },
   items = {
     ["angels-wood-bricks"] = {["fuel_value"] = "20MJ", ["fuel_category"] = "chemical", ["fuel_emissions_multiplier"] = 1.05, ["fuel_acceleration_multiplier"] = 1, ["fuel_top_speed_multiplier"] = 1},
     ["angels-pellet-coke"] = {["fuel_value"] = "15MJ", ["fuel_category"] = "chemical", ["fuel_emissions_multiplier"] = 1.05, ["fuel_acceleration_multiplier"] = 1.1, ["fuel_top_speed_multiplier"] = 1.2},

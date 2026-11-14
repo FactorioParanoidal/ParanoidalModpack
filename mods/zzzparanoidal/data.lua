@@ -17,7 +17,6 @@ require("prototypes.entity.artillery-prototype")
 require("prototypes.armoured-train-mk3") -- бронепоезда Mk3 (до MU-копий в data-updates)
 
 -- new items
-require("prototypes.item.storage-migration")
 require("prototypes.item.mining-drill-bit")
 require("prototypes.item.structured-components")
 require("prototypes.item.electronics")

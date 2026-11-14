@@ -4,7 +4,6 @@ local sync_air_filter_beta8 = require("controls.air-filter-beta8")
 local burner_pump_status = require("controls.burner-pump-status")
 local loader_shells = require("controls.loader-shells")
 local automatic_cursed_fmd = require("controls.automatic-cursed-fmd")
-require("controls.energy-recipe-migration").install() -- Старые чертежи ячеек после JSON/Lua-миграции.
 local rail_support_power = require("controls.rail-support-power")
 rail_support_power.install() -- Кабель в опорах эстакадных рельсов (только с elevated-rails).
 require("controls.battery-locomotive-return").install() -- Аккумулятор BET при разборке MU-и hiend-локомотивов.

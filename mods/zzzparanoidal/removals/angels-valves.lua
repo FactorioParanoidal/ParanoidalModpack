@@ -3,7 +3,7 @@ require("__zzzparanoidal__.paralib")
 -- дублирующие one-way/overflow/top-up из мода valves. Прячем их рецепты — этого хватает,
 -- чтобы убрать из меню крафта (recipe.hide безопасен и при отсутствии имени: paralib и
 -- boblib только пишут в лог). angels-valve-inspector НЕ трогаем — у него нет аналога в
--- valves. Построенные клапаны переезжают в valves-* через migrations/zzzparanoidal_8.1.6.json.
+-- valves.
 
 if mods["angelspetrochem"] and mods["valves"] then
 	paralib.bobmods.lib.recipe.hide("angels-valve-one-way")
