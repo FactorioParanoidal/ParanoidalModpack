@@ -108,7 +108,6 @@ local units = {
     ["radiothermal-fuel-2"] = {count = 100, time = 30, ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"chemical-science-pack", 1}}}, -- Р-3: radiothermal-fuel-2
     ["radiothermal-fuel-3"] = {count = 100, time = 30, ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"chemical-science-pack", 1}}}, -- Р-3: radiothermal-fuel-3
     ["steam-power"] = {count = 100, time = 10, ingredients = {{"automation-science-pack", 1}}}, -- Р-5: steam-power
-    ["thermonuclear-bomb"] = {count = 10000, time = 45, ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"chemical-science-pack", 1}, {"military-science-pack", 1}, {"production-science-pack", 1}, {"utility-science-pack", 1}}}, -- Р-4: thermonuclear-bomb
     ["thorium-nuclear-fuel-reprocessing-2"] = {count = 2000, time = 30, ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"chemical-science-pack", 1}, {"production-science-pack", 1}}}, -- Р-3: thorium-nuclear-fuel-reprocessing-2
     ["thorium-ore-processing"] = {count = 100, time = 30, ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"chemical-science-pack", 1}, {"production-science-pack", 1}}}, -- Р-3: thorium-ore-processing
     ["toolbelt-2"] = {count = 150, time = 30, ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"chemical-science-pack", 1}}}, -- Р-1: toolbelt-2

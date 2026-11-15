@@ -17,11 +17,15 @@ local flamethrower_fuels = require("features.flamethrower-fuels.control")
 require("controls.turret-rotate").install() -- R / Shift+R поворачивают стоящую турель с сектором обстрела.
 local rocket_victory = require("controls.rocket-victory")
 rocket_victory.install() -- Победа за первую ракету со своим текстом (без SpaceX).
+-- Открытие карты вокруг цели артиллерии (из AtomicArtillery2): последним в цепочке on_entity_died,
+-- гнёзда и черви идут только в него.
+require("controls.artillery-reveal").install()
 -- Install after loader-shells chains the SpilledItems handler; neither consumer
 -- handles these inventory/grid-less types. Keep every other type, including modded containers.
+-- Spawners and worms pass the filter for artillery-reveal only (it does not hand them on).
 if script.get_event_handler(defines.events.on_entity_died) then
 	local death_filters = {}
-	for _, entity_type in ipairs({"unit", "unit-spawner", "turret", "tree", "fish", "cliff", "simple-entity"}) do
+	for _, entity_type in ipairs({"unit", "tree", "fish", "cliff", "simple-entity"}) do
 		death_filters[#death_filters + 1] = {filter = "type", type = entity_type, invert = true, mode = "and"}
 	end
 	script.set_event_filter(defines.events.on_entity_died, death_filters)

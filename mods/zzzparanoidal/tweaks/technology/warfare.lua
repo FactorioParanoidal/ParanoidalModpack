@@ -4,10 +4,6 @@ require("__zzzparanoidal__.paralib")
 paralib.bobmods.lib.tech.hide("bob-robot-plasma-drones")
 
 
---фикс атомной артилерии
-paralib.bobmods.lib.tech.add_prerequisite("bob-atomic-artillery-shell", "atomic-bomb")
-paralib.bobmods.lib.tech.remove_recipe_unlock("atomic-bomb", "bob-atomic-artillery-shell")
-
 --фикс плазменных ракет
 paralib.bobmods.lib.tech.add_prerequisite("bob-plasma-rocket", "rocketry")
 

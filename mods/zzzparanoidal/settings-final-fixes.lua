@@ -229,10 +229,6 @@ if mods["Aircraft-space-age-reforged"] then
     set_settings_default_value("bool-setting", "aircraft-hardmode", true)
     set_settings_default_value("bool-setting", "inserter-immunity", true)
 end
-if mods["True-Nukes"] then
-    set_settings_default_value("bool-setting", "enable-menu-backgrounds", false)
-    set_settings_default_value("bool-setting", "enable-nuclear-tests", false)
-end
 if mods["angelsrefining"] then
     set_settings_default_value("bool-setting",   "angels-enable-hide-void", true)
 end

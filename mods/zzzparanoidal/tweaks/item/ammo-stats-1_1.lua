@@ -286,23 +286,6 @@ if orbital_ai then
 end
 
 -- Ядерные атаки финальной 1.1. nuke-explosion.created_effect с радиацией остаётся в 2.0.
--- AtomicArtillery2 имеет отдельный новый снаряд, без соответствия в финальной 1.1.
-local new_atomic_artillery = data.raw["artillery-projectile"]["atomic-artillery-projectile"]
-if new_atomic_artillery then
-	for _, name in ipairs({ "atomic-bomb-ground-zero-projectile", "atomic-bomb-wave" }) do
-		local source = data.raw.projectile[name]
-		if source then
-			local projectile = table.deepcopy(source)
-			projectile.name = "paranoidal-atomic-artillery-" .. name
-			data:extend({ projectile })
-			visit_attack(new_atomic_artillery.action, function(node)
-				if node.type == "projectile" and node.projectile == name then
-					node.projectile = projectile.name
-				end
-			end)
-		end
-	end
-end
 local nuclear_attacks = {
 	{ "projectile", "atomic-rocket", 400 },
 	{ "artillery-projectile", "bob-atomic-artillery-projectile", 400, 2000 },

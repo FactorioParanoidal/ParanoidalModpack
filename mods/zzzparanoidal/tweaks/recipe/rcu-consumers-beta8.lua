@@ -74,16 +74,6 @@ local patch = {
 			{ type = "item", name = "bob-plutonium-239", amount = 10 },
 		},
 	},
-	["thermonuclear-bomb"] = {
-		ingredients = {
-			{ name = "atomic-bomb", amount = 1, type = "item" },
-			{ name = "bob-speed-module-5", amount = 3, type = "item" },
-			{ name = "bob-productivity-module-5", amount = 3, type = "item" },
-			{ name = "bob-efficiency-module-5", amount = 3, type = "item" },
-			{ name = "bob-fission-reactor-equipment-2", amount = 1, type = "item" },
-			{ name = "rocket-control-unit", amount = 200, type = "item" },
-		},
-	},
 	["radioisotope-thermoelectric-generator-thorium"] = {
 		ingredients = {
 			{ type = "item", name = "bob-thorium-fuel-cell", amount = 100 },

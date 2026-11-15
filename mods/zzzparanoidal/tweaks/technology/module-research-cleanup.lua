@@ -76,6 +76,3 @@ for level = 1, 5 do
     local technology = assert(technologies["god-module-" .. level])
     technology.localised_name = { "technology-name.paranoidal-quantum-modules-" .. level }
 end
-
--- Рецепт уже потребляет продуктивность VI; скорость/эффективность VI наследуются.
-paralib.bobmods.lib.tech.add_prerequisite("thermonuclear-bomb", "bob-productivity-module-6")
