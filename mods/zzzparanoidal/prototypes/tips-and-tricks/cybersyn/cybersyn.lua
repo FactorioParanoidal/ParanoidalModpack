@@ -24,7 +24,8 @@ local function tip(name, order, tag, simulation, title, trigger)
 end
 
 local list = {{type = "tips-and-tricks-item-category", name = CATEGORY, order = "b-c"}}
--- Порядок обучения: быстрый старт → устройство станций → как сеть выбирает → настройка → для опытных → неисправности.
+-- Порядок обучения: быстрый старт → устройство станций → как сеть выбирает → настройка → для опытных → окно
+-- «Диспетчерская» → неисправности.
 local items = {
     {"zzz-cybersyn", "a", "[item=cybersyn-combinator]", "quickstart", true, {type = "unlock-recipe", recipe = "cybersyn-combinator"}},
     {"zzz-cybersyn-controller", "b", "[virtual-signal=signal-S]", "controller"},
@@ -38,7 +39,8 @@ local items = {
     {"zzz-cybersyn-allow-list", "j", "[item=bulk-inserter]", "allow_list"},
     {"zzz-cybersyn-fluids", "k", "[item=fluid-wagon]", "fluids"},
     {"zzz-cybersyn-multi", "l", "[virtual-signal=cybersyn-locked-slots]", "multi"},
-    {"zzz-cybersyn-problems", "m", "[virtual-signal=signal-alert]", "problems"},
+    {"zzz-cybersyn-manager", "m", "[virtual-signal=signal-info]", "manager"},
+    {"zzz-cybersyn-problems", "n", "[virtual-signal=signal-alert]", "problems"},
 }
 for _, entry in ipairs(items) do
     list[#list + 1] = tip(entry[1], entry[2], entry[3], entry[4], entry[5], entry[6])

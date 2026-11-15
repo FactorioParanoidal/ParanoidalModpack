@@ -284,7 +284,8 @@ function C.stop(x, y, direction, name, color, limit)
 end
 
 -- Station controller (cybersyn-combinator). Modes and settings bits as in cybersyn scripts/constants.lua.
-C.MODE = {station = "/", depot = "+", refueler = ">>", control = "%", wagon = "-", active = "<<", failed = "^"}
+C.MODE = {station = "/", depot = "+", refueler = ">>", control = "%", wagon = "-", active = "<<", failed = "^",
+  inventory = "AND", inventory_failed = "OR"}
 C.BIT = {allow_off = 2, stack = 3, inactive = 4, any_depot = 5, no_bypass = 6, train_count = 9}
 -- o: network (virtual signal name), pr (0 provide and request, 1 provide only, 2 request only), bits {name = true},
 -- register = false keeps Cybersyn from seeing it (a picture of a mode)
@@ -668,7 +669,7 @@ C.scene(function()
 end)
 ]=])
 
--- 2. Станционный контроллер: режимы у остановок, питание и расстояние, цвета буквы S. Картинка без скрипта мода.
+-- 2. Станционный контроллер: шесть режимов у остановок, питание и расстояние, цвета буквы S. Картинка без скрипта мода.
 simulations.controller = simulation([=[
 C.scene(function()
   C.camera({1, 0.5}, 1)
@@ -691,18 +692,20 @@ C.scene(function()
   C.line({-13.7, 3.3}, {-12.3, 4.7}, {1, 0.2, 0.2}, 5)
   C.line({-13.7, 4.7}, {-12.3, 3.3}, {1, 0.2, 0.2}, 5)
   C.text({-13, 6.3}, {"zzz-cybersyn-sim.too-far"}, {scale = 0.9, color = C.COL.red})
-  -- Station with station control and a parked train with wagon control
+  -- Station with station control, a secondary inventory under the stop and a parked train with wagon control
   stop(3, C.NAMES.provider, C.COL.provider)
   local comb = C.controller({1.5, 2}, "station", {register = false})
   C.controller({4.5, 2}, "control", {register = false})
+  C.controller({3.5, 4}, "inventory", {register = false})
   C.make("locomotive", {-2, 0}, nil, {orientation = 0.25})
   C.make("cargo-wagon", {-9, 0}, nil, {orientation = 0.25})
   C.controller({-9, -2}, "wagon", {register = false})
   C.text({-8, -4.2}, letter("W", "cybersyn-gui.wagon-manifest"), {scale = 1.0})
-  C.pulse({0.8, 0.8}, {5.2, 3.2}, C.COL.note)
-  C.text({2, y1}, letter("S", "cybersyn-gui.comb1"), {scale = 1.1})
-  local state = C.text({2, y1 + 1.4}, "", {scale = 1.0})
-  C.text({5, y1 + 2.8}, letter("C", "cybersyn-gui.comb2"), {scale = 1.0})
+  C.pulse({0.8, 0.8}, {5.2, 5.2}, C.COL.note)
+  C.text({-0.5, y1}, letter("S", "cybersyn-gui.comb1"), {scale = 1.1})
+  local state = C.text({-0.5, y1 + 1.4}, "", {scale = 1.0})
+  C.text({4.5, y1 + 2.6}, letter("C", "cybersyn-gui.comb2"), {scale = 1.0})
+  C.text({4.5, y1 + 3.9}, letter("I", "cybersyn-gui.secondary-inventory"), {scale = 1.0})
   -- Refueler
   stop(12, C.NAMES.refueler, C.COL.refuel)
   C.controller({10.5, 2}, "refueler", {register = false})
@@ -712,7 +715,7 @@ C.scene(function()
   C.controller({18.5, 2}, "station", {register = false})
   C.sprite("utility/electricity_icon_unplugged", {18.5, 4.3}, 0.9)
   C.text({19.5, y1 + 1.4}, {"zzz-cybersyn-sim.no-power"}, {scale = 0.9, color = C.COL.red})
-  C.text({1, 9.6}, {"zzz-cybersyn-sim.one-tile"}, {scale = 1.1, color = C.COL.green})
+  C.text({1, 10.3}, {"zzz-cybersyn-sim.one-tile"}, {scale = 1.1, color = C.COL.green})
   local cycle = {{"station", "zzz-cybersyn-sim.s-blue"}, {"active", "zzz-cybersyn-sim.s-green"}, {"failed", "zzz-cybersyn-sim.s-red"}}
   local index = 0
   C.main = function(t)
@@ -1199,7 +1202,8 @@ C.scene(function()
 end)
 ]=])
 
--- 12. Для опытных: заказ из нескольких грузов по ячейкам вагона, затем W и C. Схема.
+-- 12. Для опытных: заказ из нескольких грузов по ячейкам вагона, затем W и C, затем дополнительный
+-- склад I со своей сетью у той же остановки. Схема.
 simulations.multi = simulation([=[
 C.scene(function()
   C.camera({0, 0}, 1)
@@ -1258,10 +1262,47 @@ C.scene(function()
     C.text({1.5, 4.5}, {"zzz-cybersyn-sim.control-out-1"}, {scale = 1.0, align = "left"})
     C.text({1.5, 5.9}, {"zzz-cybersyn-sim.control-out-2"}, {scale = 1.0, align = "left"})
   end
+  -- Phase 3: a secondary inventory (I) at the same stop advertises its own cargo on its own network
+  local function inventory_phase()
+    begin(3)
+    C.title({"zzz-cybersyn-sim.inventory-title"}, -9.2, 1.4)
+    local A, B = {0.45, 1, 0.5}, {1, 0.7, 0.35}
+    C.sprite("item/train-stop", {-16.5, -0.5}, 2.2)
+    C.text({-16.5, 1.9}, {"zzz-cybersyn-sim.inventory-stop"}, {scale = 1.0})
+    C.line({-15, -0.9}, {-11, -4.2}, A, 3)
+    C.line({-15, -0.1}, {-11, 3.2}, B, 3)
+    C.box(-5.5, -4.2, 11, 2.4, A, {"", "[font=default-large-bold]S[/font]  ", {"cybersyn-gui.comb1"}}, 0.95)
+    C.box(-5.5, 3.2, 11, 2.4, B, {"", "[font=default-large-bold]I[/font]  ", {"cybersyn-gui.secondary-inventory"}}, 0.95)
+    C.text({-5.5, -2.0}, {"zzz-cybersyn-sim.inventory-row", "[virtual-signal=signal-A]", "[item=iron-plate] +8000"}, {scale = 1.0, color = A})
+    C.text({-5.5, 5.4}, {"zzz-cybersyn-sim.inventory-row", "[virtual-signal=signal-B]", "[item=copper-plate] +6000"}, {scale = 1.0, color = B})
+    C.text({0, 7.5}, {"zzz-cybersyn-sim.inventory-hint-1", "[virtual-signal=signal-A]", "[item=iron-plate]",
+      "[virtual-signal=signal-B]", "[item=copper-plate]"}, {scale = 1.05, color = C.COL.note})
+    C.text({0, 8.9}, {"zzz-cybersyn-sim.inventory-hint-2"}, {scale = 1.0})
+    -- A train of each network comes to the stop and takes only its own network's cargo
+    local function run(y, item, signal, delay)
+      C.after(delay, function()
+        if phase_id ~= 3 then return end
+        local token = C.token({{sprite = "item/locomotive", offset = {0, 0}, scale = 1.4},
+          {sprite = "item/cargo-wagon", offset = {2.4, 0}, scale = 1.4},
+          {sprite = "virtual-signal/" .. signal, offset = {0, -1.5}, scale = 0.7}}, {19, y})
+        C.path(token, {{3.5, y}}, 150, function(arrived)
+          local position = arrived.position
+          C.destroy(arrived)
+          local loaded = C.token({{sprite = "item/locomotive", offset = {0, 0}, scale = 1.4},
+            {sprite = "item/cargo-wagon", offset = {2.4, 0}, scale = 1.4},
+            {sprite = "virtual-signal/" .. signal, offset = {0, -1.5}, scale = 0.7},
+            {sprite = "item/" .. item, offset = {2.4, -1.5}, scale = 0.9}}, position)
+          C.path(loaded, {{19, y}}, 150)
+        end)
+      end)
+    end
+    run(-4.2, "iron-plate", "signal-A", 10)
+    run(3.2, "copper-plate", "signal-B", 160)
+  end
   slots_phase()
   C.main = function(t)
-    local cycle = t % 1200
-    if cycle == 0 then slots_phase() elseif cycle == 600 then control_phase() end
+    local cycle = t % 1800
+    if cycle == 0 then slots_phase() elseif cycle == 600 then control_phase() elseif cycle == 1200 then inventory_phase() end
     if phase_id == 1 and t % 15 == 0 then
       local total = 0
       for _, m in ipairs(manifest) do total = total + m[2] end
@@ -1280,7 +1321,126 @@ C.scene(function()
 end)
 ]=])
 
--- 13. Если поезда не едут: порог больше вместимости поезда, красная S; порог исправили, поезд поехал.
+-- 13. Диспетчерская: схема окна мода. Вкладка «Обзор» (плитки и неисполненные запросы с причиной
+-- и объяснением), затем «Станции» (статусы). Подписи берутся из локали Cybersyn, как в настоящем окне.
+simulations.manager = simulation([=[
+C.scene(function()
+  C.camera({0, 0}, 1)
+  local phase_id, group = 0, nil
+  C.phases_seen = {}
+  local function begin(id)
+    C.clear(group)
+    group = {}
+    C.group = group
+    phase_id = id
+    C.phases_seen[id] = true
+  end
+  local G = function(key, ...) return {"cybersyn-gui." .. key, ...} end
+  local D = function(key, ...) return {"cybersyn-diag." .. key, ...} end
+  local NET = "[virtual-signal=signal-A]"
+  local FRAME = {0.55, 0.55, 0.55, 1}
+  -- The window: title bar and the five tabs; `active` is the tab drawn as selected
+  local function window(active)
+    C.title({"zzz-cybersyn-sim.manager-title"}, -9.9, 1.25)
+    C.rect({-21, -8.6}, {21, 10.4}, {0.13, 0.13, 0.13, 0.96})
+    C.rect({-21, -8.6}, {21, 10.4}, FRAME, false, 2)
+    C.text({-20.4, -7.8}, {"mod-name.cybersyn"}, {scale = 0.85, align = "left", color = {1, 0.9, 0.75}})
+    local tabs = {"overview", "inventory", "stations", "trains", "log"}
+    for i, key in ipairs(tabs) do
+      local x = -16.8 + (i - 1) * 7.2
+      local on = key == active
+      C.rect({x - 3.4, -7.0}, {x + 3.4, -5.6}, on and {0.85, 0.6, 0.2, 0.9} or {0.25, 0.25, 0.25, 0.9})
+      C.text({x, -6.3}, G(key), {scale = 0.8, color = on and {0, 0, 0} or C.COL.white})
+    end
+  end
+  local function chip(x, y, w, color, caption)
+    C.rect({x - w / 2, y - 0.55}, {x + w / 2, y + 0.55}, color)
+    return C.text({x, y}, caption, {scale = 0.75, color = {0, 0, 0}})
+  end
+  local LEFT = {align = "left", scale = 0.78}
+  -- Phase 1: Overview, the tiles, the unserved requests with their reasons, then the explanation of one
+  local function overview_phase()
+    begin(1)
+    window("overview")
+    local tiles = {{"overview-tile-unserved", "2"}, {"overview-tile-fleet", "0"}, {"overview-tile-failing", "1"},
+      {"overview-tile-throughput", "14"}}
+    for i, tile in ipairs(tiles) do
+      local x = -15.6 + (i - 1) * 10.4
+      C.rect({x - 4.9, -5.0}, {x + 4.9, -2.3}, {0.2, 0.2, 0.2, 0.95})
+      C.rect({x - 4.9, -5.0}, {x + 4.9, -2.3}, FRAME, false, 1)
+      C.text({x, -4.4}, G(tile[1]), {scale = 0.75})
+      C.text({x, -3.1}, tile[2], {scale = 1.3, color = i == 2 and C.COL.red or C.COL.white})
+    end
+    C.text({-20.4, -1.5}, G("unserved-caption"), {align = "left", scale = 0.85, color = C.COL.note})
+    local cols = {{-20.2, "unserved-col-requester"}, {-9.5, "unserved-col-why"}, {-1.5, "unserved-col-provider"},
+      {9.6, "unserved-col-stock"}, {16.6, "unserved-col-wait"}}
+    for _, c in ipairs(cols) do C.text({c[1], -0.4}, G(c[2]), {align = "left", scale = 0.72, color = {0.75, 0.75, 0.75}}) end
+    local rows = {
+      {"[item=iron-plate]", {"zzz-cybersyn-sim.requester-n", 1}, D("chip-no-trains-on-network"), {1, 0.5, 0.45}, "4 000 / 2 000", "1m 20s"},
+      {"[item=copper-plate]", {"zzz-cybersyn-sim.requester-n", 2}, D("chip-p-below-threshold"), {1, 0.78, 0.45}, "600 / 2 000", "45s"},
+    }
+    for i, r in ipairs(rows) do
+      local y = -0.6 + i * 1.2
+      C.text({-20.2, y}, {"", r[1], "  ", r[2]}, LEFT)
+      chip(-6.6, y, 6.0, r[4], r[3])
+      C.text({-1.5, y}, {"zzz-cybersyn-sim.provider"}, LEFT)
+      C.text({9.6, y}, r[5], LEFT)
+      C.text({16.6, y}, r[6], LEFT)
+    end
+    C.after(200, function()
+      if phase_id ~= 1 then return end
+      C.pulse({-9.8, -0.05}, {-3.4, 1.25}, C.COL.note)
+      C.text({-6.6, 3.0}, {"zzz-cybersyn-sim.manager-click"}, {scale = 0.85, color = C.COL.note})
+      C.rect({-20.4, 4.0}, {20.4, 9.8}, {0.2, 0.2, 0.2, 0.95})
+      C.rect({-20.4, 4.0}, {20.4, 9.8}, FRAME, false, 1)
+      C.text({-19.8, 5.1}, G("explain-title", "[item=iron-plate]", {"zzz-cybersyn-sim.requester-n", 1}), {align = "left", scale = 0.85})
+      C.text({-19.8, 6.6}, G("unserved-why", D("why-no-trains-on-network", NET, "3", NET)), LEFT)
+      C.text({-19.8, 8.1}, G("unserved-fix", D("fix-no-trains-on-network", NET)), {align = "left", scale = 0.78, color = C.COL.green})
+    end)
+  end
+  -- Phase 2: Stations, the status filter chips and a status per station; the unpowered one is pointed at
+  local function stations_phase()
+    begin(2)
+    window("stations")
+    local chips = {{"all", "5", nil}, {"no-power", "1", "red"}, {"starved", "1", "pink"}, {"ok", "3", "green"}}
+    for i, c in ipairs(chips) do
+      local x = -17.5 + (i - 1) * 6.8
+      C.rect({x - 3.2, -5.0}, {x + 3.2, -3.8}, {0.3, 0.3, 0.3, 0.95})
+      C.text({x, -4.4}, {"", c[3] and ("[img=flib_indicator_" .. c[3] .. "] ") or "", G("station-status-" .. c[1]), "  ", c[2]}, {scale = 0.75})
+    end
+    local cols = {{-20.2, "name"}, {-9.0, "station-status"}, {-1.0, "network"}, {4.0, "provided-requested"}, {16.6, "wait"}}
+    for _, c in ipairs(cols) do C.text({c[1], -2.4}, G(c[2]), {align = "left", scale = 0.72, color = {0.75, 0.75, 0.75}}) end
+    local rows = {
+      {{"zzz-cybersyn-sim.provider"}, "ok", "green", "[item=iron-plate] 8 000", "–"},
+      {{"zzz-cybersyn-sim.requester-n", 1}, "ok", "green", "[item=iron-plate] -1 500", "–"},
+      {{"zzz-cybersyn-sim.requester-n", 2}, "starved", "pink", "[item=steel-plate] -2 000", "5m 10s"},
+      {{"zzz-cybersyn-sim.requester-n", 3}, "no-power", "red", "[item=copper-plate] -3 000", "–"},
+      {{"zzz-cybersyn-sim.depot"}, "ok", "green", "", "–"},
+    }
+    for i, r in ipairs(rows) do
+      local y = -2.4 + i * 1.25
+      C.text({-20.2, y}, r[1], LEFT)
+      C.text({-9.0, y}, {"", "[img=flib_indicator_" .. r[3] .. "] ", G("station-status-" .. r[2])}, LEFT)
+      C.text({-1.0, y}, NET, LEFT)
+      C.text({4.0, y}, r[4], LEFT)
+      C.text({16.6, y}, r[5], LEFT)
+    end
+    C.after(150, function()
+      if phase_id ~= 2 then return end
+      C.pulse({-20.6, 1.95}, {20.6, 3.25}, C.COL.red)
+      C.text({0, 6.0}, {"zzz-cybersyn-sim.manager-status"}, {scale = 0.9, color = C.COL.note})
+      C.text({0, 7.7}, {"zzz-cybersyn-sim.manager-panel"}, {scale = 0.85})
+    end)
+  end
+  overview_phase()
+  C.main = function(t)
+    local cycle = t % 1200
+    if cycle == 0 then overview_phase() elseif cycle == 600 then stations_phase() end
+  end
+end)
+]=])
+
+-- 14. Если поезда не едут: порог больше вместимости поезда, красная S; порог исправили, поезд поехал.
 simulations.problems = live([=[
 C.scene(function()
   if not C.need() then return end
