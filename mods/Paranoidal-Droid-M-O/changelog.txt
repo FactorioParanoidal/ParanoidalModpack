@@ -1,0 +1,25 @@
+---------------------------------------------------------------------------------------------------
+Version: 9.0.0
+Date: 2026-11-15
+  Major Features:
+    - Д-ОК (M-O), the Microbe Obliterator of the BnL starliners, for Paranoidal: a local rebuild of Klaudia's Sweepbot 2.1.0.
+    - Foreign contaminants: decoratives and muddy prints on the paving; next to it items on the ground (sucked into his bin), remains and remnants, and small wreck debris (broken down over several strokes, 1 part every 2 strokes, of what the wreck is made of).
+    - Muddy prints: an engineer (or a car) coming off the ground leaves prints on the paving while his force has a station on that surface; Д-ОК hesitates, leaves his line and cleans them.
+    - A dirty engineer on the paving near a station is chased and scrubbed clean; a filthy one may smear Д-ОК's face: he screams and shakes it off for a moment.
+    - His bin (4 slots) is emptied into any chest touching the station.
+    - Paranoidal Decoration Cleanup leaves the paving to him (its startup setting "Leave the cleaning to M-O", on by default): floor tiles remove only their own share of the decorations, buildings only what they stand on.
+  Features:
+    - Two looks (startup setting): his own model rendered for the mod, or his head on the recoloured Sweepbot chassis.
+    - His voice, synthesised for the mod after the film's logic: the scanner's chirp and his gasp at a contaminant, the siren rising from his head, "Hm..." before leaving his line, angry chattering at stubborn dirt, a scream when smeared, "M-O." when he meets an engineer, "All clean" when done, "whoa" when stuck.
+    - Scanner labels over contaminants ("%NN FOREIGN CONTAMINANT", "ALL CLEAN") and over the chest he empties his bin into; each player can turn labels and voice off.
+    - The station's quality scales his battery (defects by their useful share).
+    - Д-ОК technology needs only red science (after Electronics); recipe from Paranoidal's basic circuit boards.
+  Optimisations:
+    - Docks are updated on their own tick of each half-second cycle instead of all at once.
+    - Built, mined, died, damaged and cloned events are filtered to the mod's entities.
+    - PNG recompressed with pingo (-s4 -quality=45; shadow and glow layers lossless): 9.6 -> 6.3 MB, worst PSNR 35.0 dB.
+---------------------------------------------------------------------------------------------------
+Version: 2.1.0
+Date: 2026-11-08
+  Major Features:
+    - Initial release of Sweepbot by Klaudia (the base of this mod).
