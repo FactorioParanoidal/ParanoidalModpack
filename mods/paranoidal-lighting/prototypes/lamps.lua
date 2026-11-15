@@ -123,6 +123,7 @@ data:extend({
   {
     type = "assembling-machine",
     name = COPPER,
+    bottleneck_ignore = true,
     icon = G .. "icons/copper-lamp.png",
     icon_size = 64,
     flags = {"placeable-player", "placeable-neutral", "player-creation"},

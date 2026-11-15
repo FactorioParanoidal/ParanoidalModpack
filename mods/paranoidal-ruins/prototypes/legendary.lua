@@ -282,12 +282,14 @@ local function fixed_machine(name, base, fallback, recipe, category, tint, order
   e.module_slots = 0
   e.allowed_effects = nil
   add(e, order)
+  return e
 end
 fixed_machine("pd-relic-xeno-incubator", "bi-bio-reactor", "chemical-plant", "pd-relic-xeno-culture", "pd-relic-xeno",
   { 0.7, 1, 0.5 }, "m", nil)
 -- 21. Sprout of Yggdrasil: grows wood from nothing and cleans the air
-fixed_machine("pd-relic-yggdrasil-sprout", "bi-bio-greenhouse", "assembling-machine-1", "pd-relic-sprout-growth", "pd-relic-sprout",
+local sprout = fixed_machine("pd-relic-yggdrasil-sprout", "bi-bio-greenhouse", "assembling-machine-1", "pd-relic-sprout-growth", "pd-relic-sprout",
   { 0.6, 1, 0.6 }, "u", { pollution = -120 })
+if sprout then sprout.bottleneck_ignore = true end
 
 -- 14. Director's hive: roboport without power
 do
