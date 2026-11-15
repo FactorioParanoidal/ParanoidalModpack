@@ -6,6 +6,7 @@ Date: 01.06.2026
     - Fixed Agriculture module recipe speed (with Bob's Modules mod) (1255)
     - Fixed crystals not being added to Quality module recipes (1271)
   Changes:
+    - Paranoidal: cellulose acetate uses a general repeat-unit formula with variable degree of acetylation and an explanatory tooltip; fluid properties and recipes are unchanged. The long rich-text formula is stored in locale, not as a Lua LocalisedString literal, to respect the prototype-stage 200-character limit.
     - Allowed Crystal powder recipes to be selected as signals (1262)
     - Moved Sodium carbonate from Brown alge recipe later in the tech tree (1264)
     - Adjusted which tiles each type of tree and garden can swawn on (1265)

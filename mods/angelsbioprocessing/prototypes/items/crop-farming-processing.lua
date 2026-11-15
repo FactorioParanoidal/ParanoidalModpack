@@ -193,8 +193,13 @@ data:extend({
     name = "angels-liquid-cellulose-acetate",
     localised_description = show_formula
         and {
-          "tooltip-description.chemical-formula",
-          "(C[font=default-tiny-bold]4[/font]H[font=default-tiny-bold]14[/font]O[font=default-tiny-bold]13[/font])[font=default-tiny-bold]n[/font]",
+          "",
+          {
+            "tooltip-description.chemical-formula",
+            { "tooltip-description.cellulose-acetate-formula" },
+          },
+          "\n",
+          { "tooltip-description.cellulose-acetate-degree" },
         }
       or nil,
     icons = AF.create_liquid_fluid_icon(
