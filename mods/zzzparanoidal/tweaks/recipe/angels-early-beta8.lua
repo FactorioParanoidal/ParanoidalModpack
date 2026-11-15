@@ -279,11 +279,6 @@ local definitions = {
 			{ type = "item", name = "bi-ash", amount = 40 },
 		},
 	},
-	["angels-plastic-pipe-casting"] = {
-		["ingredients"] = {
-			{ type = "fluid", name = "angels-liquid-plastic", amount = 4 },
-		},
-	},
 }
 for name, fields in pairs(definitions) do
 	local recipe = data.raw.recipe[name]
