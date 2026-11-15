@@ -1124,6 +1124,52 @@ local function current_boss_count(data)
   return total
 end
 
+-- The sum produced of a list of items (all qualities and surfaces), from the shared statistics read.
+trackers["produced-sum"] = {
+  statistics = {
+    needs = function(entries, core, force)
+      local names, open = {}, false
+      for _, entry in ipairs(entries) do
+        if not core.is_done(force, entry, #entry.amounts) then
+          open = true
+          for _, name in ipairs(entry.params.items) do
+            if prototypes.item[name] then names[name] = true end
+          end
+        end
+      end
+      if open and next(names) then return {item_in = names} end
+    end,
+    receive = function(entries, core, force, totals)
+      local made = totals.item_in or {}
+      for _, entry in ipairs(entries) do
+        local total = 0
+        for _, name in ipairs(entry.params.items) do total = total + (made[name] or 0) end
+        core.progress(force, entry, total)
+      end
+    end,
+  },
+}
+
+-- Detonations set off in a paranoidal-true-nukes test site, counted by that mod (remote getDetonationCount).
+-- The remote is checked at each poll: paranoidal-true-nukes registers it after this mod's control.lua loads.
+trackers["test-detonation"] = {
+  poll = {every = MINUTE, run = function(entries, core)
+    if not has_remote("True-Nukes Scripts", "getDetonationCount") then return end
+    for _, force in ipairs(core.player_forces()) do
+      for _, entry in ipairs(entries) do
+        if not core.is_done(force, entry, #entry.amounts) then
+          local total = 0
+          for _, name in ipairs(entry.params.detonations) do
+            local ok, n = pcall(remote.call, "True-Nukes Scripts", "getDetonationCount", force.index, name)
+            if ok and type(n) == "number" then total = total + n end
+          end
+          core.progress(force, entry, total)
+        end
+      end
+    end
+  end},
+}
+
 trackers["bosses"] = {
   prepare = function()
     if #boss_names() == 0 then return false end
