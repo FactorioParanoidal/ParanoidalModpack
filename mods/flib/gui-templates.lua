@@ -1,7 +1,3 @@
-if ... ~= "__flib__.gui-templates" then
-  return require("__flib__.gui-templates")
-end
-
 local flib_math = require("__flib__.math")
 local flib_gui = require("__flib__.gui")
 local flib_table = require("__flib__.table")

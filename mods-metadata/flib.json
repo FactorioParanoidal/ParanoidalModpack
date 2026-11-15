@@ -1,6 +1,6 @@
 {
   "mod": "flib",
   "source": "portal",
-  "upstreamVersion": "0.16.5",
-  "changeReason": "Русское название и описание мода в locale/ru совпадают с ParanoidalLocale (название в виде «English (Русский)»)."
+  "upstreamVersion": "0.17.2",
+  "changeReason": "Двадцать восемь вшитых сообщений об ошибках переведены на русский. Русское название мода в locale/ru совпадает с ParanoidalLocale (название в виде «English (Русский)»). Картинка slots.png и миниатюра заменены сжатыми файлами сборки. Тесты и исходник Aseprite хранятся вне мода."
 }

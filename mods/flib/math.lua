@@ -1,36 +1,25 @@
-if ... ~= "__flib__.math" then
-  return require("__flib__.math")
-end
-
---- Extension of the Lua 5.2 math library.
+--- Additional mathematical utilities.
 --- ```lua
 --- local flib_math = require("__flib__.math")
 --- ```
---- @class flib_math: factorio.mathlib
+--- @class flib_math
 local flib_math = {}
-
-local unpack = table.unpack
-
--- Import lua math functions
-for name, func in pairs(math) do
-  flib_math[name] = func
-end
 
 --- Multiply by degrees to convert to radians.
 --- ```lua
 --- local rad = 1 x flib_math.deg_to_rad -- 0.0174533
 --- ```
-flib_math.deg_to_rad = flib_math.pi / 180 --- @type number
+flib_math.deg_to_rad = math.pi / 180 --- @type number
 
 --- Multiply by radians to convert to degrees.
 ---
 --- ```lua
 --- local deg = 1 x flib_math.rad_to_deg -- 57.2958
 --- ```
-flib_math.rad_to_deg = 180 / flib_math.pi --- @type number
+flib_math.rad_to_deg = 180 / math.pi --- @type number
 
 --- One radian.
-flib_math.radian = 2 * flib_math.pi
+flib_math.radian = 2 * math.pi
 
 flib_math.max_double = 0X1.FFFFFFFFFFFFFP+1023
 flib_math.min_double = -0X1.FFFFFFFFFFFFFP+1023
@@ -56,9 +45,9 @@ flib_math.min_int53 = -0x20000000000000 --- -9,007,199,254,740,992
 function flib_math.round(num, divisor)
   divisor = divisor or 1
   if num >= 0 then
-    return flib_math.floor((num / divisor) + 0.5) * divisor
+    return math.floor((num / divisor) + 0.5) * divisor
   else
-    return flib_math.ceil((num / divisor) - 0.5) * divisor
+    return math.ceil((num / divisor) - 0.5) * divisor
   end
 end
 
@@ -67,9 +56,9 @@ end
 --- @param divisor? number `num` will be ceiled to the nearest multiple of `divisor` (default: 1).
 function flib_math.ceiled(num, divisor)
   if divisor then
-    return flib_math.ceil(num / divisor) * divisor
+    return math.ceil(num / divisor) * divisor
   end
-  return flib_math.ceil(num)
+  return math.ceil(num)
 end
 
 --- Floor a number to the nearest multiple of divisor.
@@ -77,23 +66,23 @@ end
 --- @param divisor? number `num` will be floored to the nearest multiple of `divisor` (default: 1).
 function flib_math.floored(num, divisor)
   if divisor then
-    return flib_math.floor(num / divisor) * divisor
+    return math.floor(num / divisor) * divisor
   end
-  return flib_math.floor(num)
+  return math.floor(num)
 end
 
 --- Returns the argument with the maximum value from a set.
 --- @param set number[]
 --- @return number
 function flib_math.maximum(set)
-  return flib_math.max(unpack(set))
+  return math.max(table.unpack(set))
 end
 
 --- Returns the argument with the minimum value from a set.
 --- @param set number[]
 --- @return number
 function flib_math.minimum(set)
-  return flib_math.min(unpack(set))
+  return math.min(table.unpack(set))
 end
 
 --- Calculate the sum of a set of numbers.

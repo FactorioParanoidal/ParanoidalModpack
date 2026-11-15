@@ -1,7 +1,3 @@
-if ... ~= "__flib__.format" then
-  return require("__flib__.format")
-end
-
 --- Various string formatting functions.
 --- ```lua
 --- local flib_format = require("__flib__.format")

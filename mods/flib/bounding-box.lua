@@ -1,7 +1,3 @@
-if ... ~= "__flib__.bounding-box" then
-  return require("__flib__.bounding-box")
-end
-
 local flib_position = require("__flib__.position")
 
 --- Utilities for manipulating bounding boxes. All functions support both the shorthand and explicit syntaxes for boxes
