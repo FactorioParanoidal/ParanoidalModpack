@@ -75,7 +75,7 @@ local definitions = {
 		["unit"] = {
 			["count"] = 200,
 			["time"] = 30,
-			["ingredients"] = { { "automation-science-pack", 2 }, { "logistic-science-pack", 2 } },
+			["ingredients"] = { { "automation-science-pack", 2 }, { "logistic-science-pack", 2 }, { "chemical-science-pack", 1 } },
 		},
 		["prerequisites"] = { "fluid-wagon", "bob-railway-2", "bob-fluid-handling-2" },
 	},

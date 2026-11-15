@@ -349,7 +349,7 @@ if(hasFusion) then
           recipe = "FOGBANK"
         }
       },
-      prerequisites = {"tritium-processing"},
+      prerequisites = {"tritium-processing", "space-science-pack"},
       unit =
       {
         count = 2000,

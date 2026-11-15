@@ -30,7 +30,7 @@ local techs = {
 		unlocks("CW-air-filter-machine-4"), 500, packs(1, 1, 1, 2), 75 },
 	{ "CW-air-filtering-5", { "CW-air-filtering-4" },
 		unlocks("CW-air-filter-machine-5"), 2000, packs(2, 2, 2, 2, 1), 90 },
-	{ "CW-air-filtering-6", { "CW-air-filtering-5" },
+	{ "CW-air-filtering-6", { "CW-air-filtering-5", "space-science-pack" },
 		unlocks("CW-air-filter-machine-6"), 2500, packs(5, 5, 5, 3, 2, 1), 180 },
 	{ "CW-air-filter-cleaning-1", { "CW-air-filtering-1" },
 		unlocks("CW-air-filter-cleaning-1"), 400, packs(1), 30 },

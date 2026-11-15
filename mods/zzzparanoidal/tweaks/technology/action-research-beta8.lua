@@ -13,7 +13,7 @@ local units = {
 	["bob-steel-axe-5"] = { count = 250, time = 50, ingredients = { R, G, B, P } },
 	["bob-titanium-processing"] = { count = 75, time = 30, ingredients = { R, G, B } },
 	["bob-tungsten-processing"] = { count = 75, time = 30, ingredients = { R, G, B, P } },
-	["bob-nitinol-processing"] = { count = 75, time = 30, ingredients = { R, G, B, U } },
+	["bob-nitinol-processing"] = { count = 75, time = 30, ingredients = { R, G, B, U, P } },
 	["uranium-processing"] = { count = 200, time = 30, ingredients = { R, G, B } },
 }
 

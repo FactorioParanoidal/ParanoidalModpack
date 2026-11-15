@@ -36,7 +36,7 @@ technology.prerequisites = {"bob-pumpjacks-3"}
 technology.effects = {{type = "unlock-recipe", recipe = name}}
 technology.unit = {
     count = 100, time = 30,
-    ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"chemical-science-pack", 1}},
+    ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"chemical-science-pack", 1}, {"production-science-pack", 1}},
 }
 local prototypes = {entity, item, recipe, technology}
 local corpse = data.raw.corpse[source.corpse]
