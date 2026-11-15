@@ -2,6 +2,8 @@
 Version: 2.3.8
 Date: 2026-06-01
   Graphics:
+    - Paranoidal: the existing steel/brass gear icons are now the canonical resources also referenced by zzzparanoidal's bobicons menu and steel stack-conversion recipe. Two byte-identical consumer copies were removed; these PNGs and their optional alternative skins are unchanged.
+    - Paranoidal: made the approved crafting-menu artwork the canonical source for 18 ordinary/underground pipe icons (nine materials). Menu and casting recipes now reference these PNGs directly; icon dimensions, tier overlays and placed pipe sprites are unchanged.
     - Paranoidal: recolored bronze pipes to warm amber-brown and steel pipes to cool silver (approved variant B), including icons, all pipe shapes, underground entrances, covers and remnants. Recoloring preserved PNG dimensions, alpha and resource paths without additional optimization; the user subsequently recompressed the pipe, pipe-covers and pipe-to-ground entity graphics for all materials.
     - Paranoidal: replaced 45 PNGs with smaller user-recompressed Beta-7 files selected by the approved filename, folder and dimension report; resource paths and prototype code are unchanged.
     - Paranoidal: added accepted holed static bases, animation overlays and intact reference frames for the three preserved 2.0 centrifuge parts. Final integration keeps existing tier masks, highlights, shadows, shifts and playback; original sheets retained. New PNGs use lossless recompression only where the per-file saving exceeds 5% with identical RGBA.

@@ -4,6 +4,7 @@ Date: 2026-01-03
   Changes:
     - Paranoidal packaging: moved the hr_version conversion script out of the distributed mod into the local development workspace.
   Graphics:
+    - Paranoidal: stores the four canonical iron/wood ordinary and underground pipe icons previously embedded in zzzparanoidal's menu artwork. The approved PNGs are copied byte-for-byte; no additional compression or optimization was performed.
     - Paranoidal: replaced 5 PNGs with smaller user-recompressed Beta-7 files selected by the approved filename, folder and dimension report; resource paths and prototype code are unchanged.
     - Paranoidal build: removed three duplicate images already redirected to canonical files by zzzparanoidal's final graphics pass. Prototype and runtime code are unchanged; this trimmed copy targets the full modpack.
   Locale:

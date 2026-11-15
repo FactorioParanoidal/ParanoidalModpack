@@ -2,6 +2,7 @@
 -- Never create prototypes or guess renamed IDs. Gameplay stays intact; ore ground pictures follow Beta 8.
 local entries = require("tweaks.custom.bobicons-beta8-data")
 local chemical = require("tweaks.technology.chemical-elements-data")
+local icon_available = require("tweaks.custom.pipe-graphics").icon_available
 -- Эти назначения выведены из старого каталога: у C2 один поздний владелец.
 -- Удаляем из самой таблицы, чтобы повторное require тоже не вернуло старые назначения.
 for i = #entries, 1, -1 do
@@ -38,7 +39,7 @@ local function equal(a, b)
     return true
 end
 
-local applied, missing, changed = 0, 0, 0
+local applied, missing, changed, unavailable = 0, 0, 0, 0
 for _, entry in ipairs(entries) do
     local prototypes = data.raw[entry.type]
     local prototype = prototypes and prototypes[entry.name]
@@ -47,6 +48,8 @@ for _, entry in ipairs(entries) do
     elseif not equal(current_icon(prototype), entry.before) then
         changed = changed + 1 -- A newer owner/override needs a new review, not a blind overwrite.
         log("[bobicons-beta8] retained changed icon: " .. entry.type .. "/" .. entry.name)
+    elseif not icon_available(entry.after) then
+        unavailable = unavailable + 1 -- Keep the original icon if any optional artwork owner is absent.
     else
         prototype.icon = entry.after.icon
         prototype.icon_size = entry.after.icon_size
@@ -55,7 +58,7 @@ for _, entry in ipairs(entries) do
         applied = applied + 1
     end
 end
-log(string.format("[bobicons-beta8] applied=%d missing=%d changed=%d", applied, missing, changed))
+log(string.format("[bobicons-beta8] applied=%d missing=%d changed=%d unavailable=%d", applied, missing, changed, unavailable))
 
 -- Beta 8 bobicons also replaced the ground/belt pictures of ores; match them to the restored icons.
 -- The data keeps the 1.1 scale (32 px per tile); 2.0 renders 64 px per tile, so double it
