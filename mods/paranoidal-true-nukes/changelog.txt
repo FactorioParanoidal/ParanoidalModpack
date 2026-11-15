@@ -1,0 +1,46 @@
+---------------------------------------------------------------------------------------------------
+Version: 9.0.0
+Date: 2026-11-15
+  Major Features:
+    - One mod instead of True Nukes Continued Continued 1.0.3 and its required library Warheads Continued Continued 1.0.2 (Drake4273; ports of True Nukes 0.3.33 and Warheads 0.0.19 by BicycleEater). Data stage order is kept: Warheads data, True Nukes data, Warheads generation in data-updates, then the test sites.
+    - Prototype, setting and remote interface names are kept; only the mod path changed (__paranoidal-true-nukes__).
+  Features:
+    - Nuclear tests (user decision 2026-11-15): the atomic bomb is an ordinary research of the build again (True Nukes made it a test-pack trigger of cost 1, unreachable in 2.x: the one-slot furnace test site refused the two-result test recipe). Full fission, compact fission and compact fusion weapons have a scripted research trigger: set off the listed charge in a test site while the prerequisites are researched. Test packs are removed; detonation recipes have one result.
+    - Hybrid materials: charges up to 20 t stay on uranium-235; the 500 t, 1 kt, 15 kt and two-stage charges use the build's plutonium-239 (a third of the uranium amount); californium is bred from curium and americium of MOX reprocessing (10 per craft, needs "Mixed oxide fuel"), tritium breeder cells use lithium instead of iron (needs Bob's lithium processing); the two-stage warheads also need a fission reactor and three tier 5 modules (taken from the removed Clowns thermonuclear bomb).
+    - Quality of a charge: linear in its quality step up to the highest one, heat and blast damage up to x2, their radius up to x1.25, fallout and pollution down to x0.5. Normal and defective charges are unchanged.
+    - The large thermobaric charge replaces Bob's fire artillery shell: Bob's alien fire in the recipe, unlocked by Bob's fire artillery shells research.
+    - Russian translation of every string.
+  Optimizations:
+    - Detonations no longer generate the map synchronously (force_generate_chunk_requests made up to ~4000 chunks, with every mod's chunk handlers, inside one tick). Chunks are requested asynchronously; chunks generated within 10 minutes get the heat and blast when they appear.
+    - 100 kt and larger: the generated chunks within reach are handled nearest first, instead of every generated chunk of the surface in the detonation tick. Budget per tick, checked after each chunk: 300 deaths in the fireball (a destroyed tree counts as a tenth), 6 chunks with crater tiles, 1500 entities hit by the heat and blast, 32 chunks. On the test base (6500 buildings) the 100 kt detonation tick took 1.3 s (5500 deaths in 32 chunks), now 0.07 s, the worst tick 0.12 s; 1 Mt on 33 x 33 chunks: worst tick 0.17 s.
+    - Heat wave: 16 cells of 100x100 tiles per tick (was up to 100), started the tick after the detonation; waves with a radius from 200 are sliced (was 500).
+    - Area searches skip entities without health (ores, corpses, ghosts, fires, smoke, projectiles, cliffs ...) in the engine; health, resistances and the aircraft flag are cached per prototype.
+    - Decoratives that the fireball destroys anyway are removed with one call per area instead of one call per decorative.
+    - Only forces with players chart the blast area.
+    - Fireball, crater and fires of a normal detonation run over several ticks with a budget (deaths, crater tiles and fires per tick, nearest chunks first); fireballs below radius 15 stay instant. The crater keeps True Nukes' rules and order of tile changes.
+    - Lighter engine effects: no area damage of 0.1-2 points over radius up to 500 (it only raised on_entity_damaged for every entity in range), at most 2500 smoke particles (was 10000), 40% of the fallout clouds (created by script, from mod-data paranoidal-true-nukes-fallout), a quarter of True Nukes' fires on the crater and in the thermobaric wave, at most 4000 scattered fires.
+  Bugfixes:
+    - Nuclear and thermobaric cannon shells use the cannon shell ammo category again: the 2.x port gave them "bullet", so gun turrets, machine guns and the submachine gun fired them.
+    - Generated ammo and mines have the inventory sounds of their base item.
+    - Test sites no longer crash the game every tick when the detonation has a quality other than normal (defective or better warheads).
+    - The heat wave always finishes; with non-default range settings it never ended. Cells the circle enters without a corner are no longer skipped.
+    - Rails of 2.x and Elevated Rails take a tenth of the blast damage like rails did in 1.1; aircraft take half again.
+    - Kills by the blast and heat are credited to the shooter (2.x damage() takes the cause as the 5th argument).
+    - The retain-death-statistics settings now also apply to the blast wave (a misspelled variable ignored them).
+    - The nuclear flash fades its light again (the 2.x port shrank it instead).
+    - Lose-nuke achievement reads the 2.x inventory contents; the remote getGlobal/setGlobal work with storage.
+    - Removed the unused "Nuke firing" pre-loading code (the effect was never created).
+    - Loads on Factorio 2.1.24: tritium breeder fuel cells use fuel_categories (fuel_category was removed in 2.1.20).
+    - Bob's Warfare 2.x names in the warhead weapon types (bob-rocket-body, bob-bullet-casing, bob-cordite, bob-bullet-magazine, bob-better-shotgun-shell, bob-better-shotgun-projectile, bob-shotgun-shell-casing); the 1.1 names crashed the data stage.
+    - Bob 2.x names for warhead materials: bob-superior-circuit-board (nuclear warheads), bob-circuit-board and bob-enriched-fuel (thermobaric warheads); the missing 1.1 names were silently dropped from the recipes.
+    - The custom dead-material and light-material settings now set those materials (they overwrote the boom and computer materials).
+  Graphics:
+    - PNGs recompressed (17.7 MB -> 11.1 MB for the 145 files of the merge; 28 files of removed weapons, equipment and achievements removed afterwards): lossy (pingo -s4 -quality=45; -quality=75 for the two test site icons and the test site sprite) for sprites and icons, worst PSNR 33.9 dB (icons) and 45.6 dB (animation sheets); lossless for the 55 tinted warhead layers, light layers, power labels, mask and shadow, and for the two mushroom cloud sheets that pingo turned into dithered palettes. Names, dimensions and frame layout are unchanged.
+  Changes:
+    - No nuclear or thermobaric rounds, shotgun shells or capsules (user decision 2026-11-15); 0.1 t and 0.5 t warheads remain for shells, rockets and mines. The fire shield equipment is removed.
+    - Startup settings (materials, charge tiers, carriers, nuclear tests) are hidden and fixed to the build's values; only the runtime blast settings are shown. Removed the settings that did nothing (menu backgrounds, fusion building, keep atomic bomb, 100 kt fire reduction).
+    - Achievements: removed "nuke self" (the build has "own goal") and "multi-force 500 t"; "arms race" counts 150 hours instead of 15.
+    - Remote interface: getDetonationCount(force index, detonation item) for paranoidal-achievements.
+    - Removed the 1.1 tile transition templates (in 2.x they were ignored: the field does not exist) and the sand layer overrides.
+    - Removed compatibility code for mods that are not part of Paranoidal: Space Exploration, Krastorio 2, Schall Tank Platoon, Atomic Overhaul, APM Nuclear, Nuclear Fuel, Plutonium Energy, Clowns Nuclear, Industrial Revolution, Rampant Arsenal, AAI Ironclad, Light Artillery, True Nukes Graphics.
+    - Removed the 1.1 migrations (a new mod name has no old saves), the unconnected menu simulations and editor backup files.

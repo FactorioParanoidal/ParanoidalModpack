@@ -1,0 +1,15 @@
+{
+  "mod": "paranoidal-true-nukes",
+  "source": "local",
+  "original": {
+    "name": "True Nukes",
+    "authors": [
+      "BicycleEater"
+    ],
+    "portal": {
+      "name": "True-Nukes",
+      "url": "https://mods.factorio.com/mod/True-Nukes"
+    }
+  },
+  "changeReason": "Собственный мод проекта: объединяет True Nukes Continued Continued 1.0.3 и библиотеку Warheads Continued Continued 1.0.2 (Drake4273; порты True Nukes и Warheads от BicycleEater). Исправлены ошибки порта на 2.1, детонация разложена по тикам без синхронной генерации карты, испытания на полигоне открывают поздние ступени, материалы переведены на плутоний, калифорний и тритий сборки, усиление от качества заряда, русский перевод, графика пережата."
+}

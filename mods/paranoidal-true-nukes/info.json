@@ -1,0 +1,20 @@
+{
+  "name": "paranoidal-true-nukes",
+  "version": "9.0.0",
+  "title": "Paranoidal True Nukes",
+  "author": "BicycleEater (True Nukes, Warheads), Daimonfire, Drake4273 (2.x ports), Paranoidal",
+  "description": "True Nukes and Warheads merged into one mod for Paranoidal: realistic nuclear and thermobaric blasts with craters, heat and blast waves, delivered by any suitable weapon.",
+  "factorio_version": "2.1",
+  "dependencies": [
+    "base >= 2.1.24",
+    "? bobwarfare",
+    "? bobelectronics",
+    "? bobplates",
+    "! True-Nukes",
+    "! True-Nukes_Continued",
+    "! True-Nukes_Continued_Continued",
+    "! Warheads",
+    "! Warheads_Continued",
+    "! Warheads_Continued_Continued"
+  ]
+}
