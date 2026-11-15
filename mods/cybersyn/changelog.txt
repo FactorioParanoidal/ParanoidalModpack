@@ -6,8 +6,6 @@ Date: 2026-10-29
     - Train and station alerts and their sound are sent to the force once instead of to each of its players, so players who are offline no longer collect them
   Bugfixes:
     - Includes upstream 2.1.3: the Space Exploration elevator connect switch works again, and an elevator window left open in a save is closed once so its frame is rebuilt
-  Compatibility:
-    - Paranoidal: the flib dependency is lowered from 0.17.1 to 0.16.5, the build's flib ported to Factorio 2.1. The mod calls only flib bounding-box, data-util, format.number, gui (add, add_handlers, dispatch, format_handlers), position.distance and train.get_main_locomotive, all present in 0.16.5, and none of the functions flib 0.17 renamed or removed.
   Locale:
     - Russian hardcoded player-facing text: the 13 UI, chat and error-message literals of the 2.0.53 fork; technical identifiers, format parameters and gameplay logic are unchanged.
     - ru: the mod name in the mod list is "Project Cybersyn (Диспетчерская сеть поездов)", the same as in ParanoidalLocale (upstream 2.2.2 has no ru mod name).

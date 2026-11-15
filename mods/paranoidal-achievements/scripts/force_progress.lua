@@ -1,5 +1,5 @@
 -- Merge only fields with known semantics; timestamps and streaks are not counters.
-local table = require("__flib__.table")
+local flib_table = require("__flib__.table")
 local sandbox = require("scripts.sandbox")
 local M = {}
 
@@ -47,7 +47,7 @@ function M.merge(state, event)
             own.launch_ticks = recent
             for field, value in pairs(source) do
                 if not known[field] and own[field] == nil then
-                    own[field] = type(value) == "table" and table.deep_copy(value) or value
+                    own[field] = type(value) == "table" and flib_table.deep_copy(value) or value
                 end
             end
         end

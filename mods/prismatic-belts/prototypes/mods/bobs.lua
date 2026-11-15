@@ -1,5 +1,5 @@
 local api = require("prototypes.api")
-local migration = require("__flib__.migration")
+local migration = require("__prismatic-belts__.prototypes.flib-migration")
 local sprite_utils = {
 	icons = require("__reskins-sprite-utils__.icons"),
 	colors = require("__reskins-sprite-utils__.colors"),

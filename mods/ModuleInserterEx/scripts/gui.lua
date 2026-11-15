@@ -1,4 +1,4 @@
-local table = require("__flib__.table")
+local flib_table = require("__flib__.table")
 local gui = require("__flib__.gui")
 
 local import_export = require("scripts.import-export")
@@ -1716,7 +1716,7 @@ mi_gui.handlers = {
         --- @param e MiEventInfo
         add = function(e)
             if e.event.shift then
-                mi_gui.add_preset(e.player, e.pdata, true, table.deep_copy(e.pdata.active_config))
+                mi_gui.add_preset(e.player, e.pdata, true, flib_table.deep_copy(e.pdata.active_config))
             else
                 mi_gui.add_preset(e.player, e.pdata, true)
             end

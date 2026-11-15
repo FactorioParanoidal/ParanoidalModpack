@@ -1,4 +1,4 @@
-local migration = require("__flib__.migration")
+local migration = require("__extendedangels__.flib-migration")
 
 script.on_configuration_changed(function(config)
   -- Check recipe and technology states and make corrections as needed

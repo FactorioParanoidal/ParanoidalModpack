@@ -1,6 +1,6 @@
 local gui = require("__flib__.gui")
-local migration = require("__flib__.migration")
-local table = require("__flib__.table")
+local migration = require("__ModuleInserterEx__.scripts.flib-migration")
+local flib_table = require("__flib__.table")
 
 local mi_gui = require("scripts.gui")
 local types = require("scripts.types")
@@ -191,7 +191,7 @@ local function on_player_selected_area(e)
         player.print({ "module-inserter-ex-config-not-set" })
         return
     end
-    preset = table.deep_copy(preset)
+    preset = flib_table.deep_copy(preset)
 
     add_work_data(e.player_index, preset, e.entities)
 end

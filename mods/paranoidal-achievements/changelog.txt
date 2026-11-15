@@ -39,4 +39,5 @@ Date: 2026-11-01
     - Paranoidal Space Age branch: two achievements of the true ending (paranoidal-true-ending, 2026-11-11), unlocked for the force by its custom event: "Chapter One" (a platform reaches the solar system edge) and "True Ending" (a platform brings the Ark to the shattered planet). Without the mod they do not exist.
     - Paranoidal Space Age branch: with paranoidal-space-age-filter and Space Age the milestone presets and addons treat Space Age and Spidertron Patrols as absent, so the milestone window is the same as in the build without Space Age (the Quality group is there, no Space Age preset, no Spidertron Patrols group).
     - Paranoidal Space Age branch: no optional dependency on space-age, so with Space Age enabled the mod loads in the same order as without it; paranoidal-space-age-filter hides the expansion from it in any case.
+    - flib 0.17 no longer copies the Lua table functions into flib_table: the flib table module is required as flib_table, so table.insert, table.remove, table.sort and table.concat are the standard Lua functions.
     - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.

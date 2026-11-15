@@ -17,7 +17,7 @@ end
 local _version = {}
 
 ---@type flib_migration
-local _migration = require("__flib__.migration")
+local _migration = require("__reskins-library__.api.flib-migration")
 
 -- Setup additional version comparison functions
 
