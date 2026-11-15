@@ -6,6 +6,7 @@ pipe_elbow = util.table.deepcopy(data.raw["storage-tank"]["storage-tank"])
 pipe_elbow.name = "pipe-elbow"
 pipe_elbow.icon = "__Flow Control__/graphics/icon/pipe-elbow.png"
 pipe_elbow.icon_size = 64
+pipe_elbow.icons = nil -- a reskinned storage tank brings an icons list, which would override icon
 pipe_elbow.minable = pipe.minable
 pipe_elbow.corpse = "pipe-remnants"
 pipe_elbow.max_health = pipe.max_health
