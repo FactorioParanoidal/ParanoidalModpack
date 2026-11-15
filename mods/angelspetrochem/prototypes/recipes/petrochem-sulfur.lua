@@ -69,6 +69,7 @@ data:extend({
     type = "recipe",
     name = "angels-gas-sulfur-dioxide",
     localised_name = { "fluid-name.angels-gas-sulfur-dioxide" },
+    localised_description = { "recipe-description.angels-gas-sulfur-dioxide" },
     categories = {"angels-liquifying"},
     subgroup = "angels-petrochem-sulfur",
     energy_required = 2,

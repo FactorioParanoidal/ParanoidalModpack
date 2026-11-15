@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.3
 Date: 04.06.2026
+  Changes:
+    - Paranoidal: the sulfur oxide fluid represents sulfur trioxide (SO3); updated its formula and English names, and described sulfur synthesis as combined combustion and oxidation. Legacy IDs, recipe amounts and existing molecular graphics are unchanged.
   Bugfixes:
     - Paranoidal: angelspetrochemgraphics is now a plain required dependency instead of "~" (load order is unchanged): Factorio 2.0 never reuses the data stage cache (cache-prototype-data) while any enabled mod has a "~" dependency.
     - Fixed Centrifuge pipe graphics (1293)
