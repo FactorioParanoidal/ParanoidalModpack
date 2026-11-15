@@ -60,8 +60,6 @@ return lib.list(
   {id = "sapper", kind = "kill", type_to_kill = "unit", amount = 1000, label = "enemies",
     damage_dealer = {names = {"land-mine", "bob-poison-mine", "bob-slowdown-mine", "bob-distractor-mine"}}},
 
-  {id = "atomic-artillery", kind = "produce", item = {"atomic-artillery-shell", "bob-atomic-artillery-shell"}, amount = 10},
-  {id = "tsar-bomba", kind = "produce", item = "thermonuclear-bomb", amount = 1},
   {id = "mirv", kind = "use-item", item = "mirv-targeting-remote"},
   {id = "nerve-agent", kind = "use-item", item = "clowns-neurotoxin-capsule", amount = 100},
   {id = "poisoner", kind = "shoot", item = "bob-poison-bullet-magazine", amount = 1e4},

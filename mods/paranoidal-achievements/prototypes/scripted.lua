@@ -15,6 +15,10 @@ local TANKS = {"tank", "bob-tank-2", "bob-tank-3", "Schall-tank-L", "Schall-tank
   "Schall-tank-H-mk2", "Schall-tank-SH", "Schall-tank-SH-mk1", "Schall-tank-SH-mk2", "Schall-tank-F",
   "Schall-tank-F-mk1", "Schall-tank-F-mk2"}
 
+local ATOMIC_ARTILLERY = {"artillery-shell-atomic-4t", "artillery-shell-atomic-8t", "artillery-shell-atomic-20t",
+  "artillery-shell-atomic-500t", "artillery-shell-atomic-1kt", "artillery-shell-atomic-15kt",
+  "artillery-shell-atomic-2-stage-15kt", "artillery-shell-atomic-2-stage-100kt"}
+
 local function count(id, theme, amounts, spec, icon, mods)
   local entry = {id = id, kind = "script", theme = theme, tracker = "count", params = spec,
     needs = {any_entity = spec}, icon = icon, mods = mods}
@@ -92,6 +96,14 @@ local list = {
     icon = {entity = "behemoth-biter"}},
   {id = "guard-breaker", kind = "script", theme = "combat", tracker = "rso", params = {stat = "guards"},
     amounts = {1, 10}, fight = true, mods = {"RSO-reforged"}, icon = {entity = "biter-spawner"}},
+  -- paranoidal-true-nukes (2026-11-15): the atomic artillery shells of AtomicArtillery2/Bob/Clowns and the Clowns
+  -- thermonuclear bomb were removed from the build; these two follow the True Nukes weapons
+  {id = "atomic-artillery", kind = "script", theme = "combat", tracker = "produced-sum", amount = 10,
+    params = {items = ATOMIC_ARTILLERY}, needs = {any_item = ATOMIC_ARTILLERY}, mods = {"paranoidal-true-nukes"},
+    icon = {item = "artillery-shell-atomic-20t"}},
+  {id = "tsar-bomba", kind = "script", theme = "combat", tracker = "test-detonation",
+    params = {detonations = {"detonation-atomic-2-stage-50Mt-1"}}, needs = {items = {"detonation-atomic-2-stage-50Mt-1"}},
+    mods = {"paranoidal-true-nukes"}, icon = {item = "TN-warhead-big--1"}},
 
   -- nature
   {id = "first-winter", kind = "script", theme = "nature", tracker = "season", params = {season = "winter"},

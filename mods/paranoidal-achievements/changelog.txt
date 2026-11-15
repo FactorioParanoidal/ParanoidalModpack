@@ -30,6 +30,7 @@ Date: 2026-11-01
     - One Blueprint Sandboxes check (sandbox forces and lab surfaces) for both parts.
     - Graphics recompressed: 131 of 134 PNG pixel-identical and smaller, the thumbnail, the spidertron picture and the milestone type icons lossy (1.49 -> 1.30 MB).
   Changes:
+    - Atomic Artillery and Tsar Bomba follow paranoidal-true-nukes (2026-11-15): the AtomicArtillery2/Bob/Clowns atomic artillery shells and the Clowns thermonuclear bomb were removed from the build. Atomic Artillery: produce 10 True Nukes atomic artillery shells of any yield (new tracker produced-sum over the shared production statistics). Tsar Bomba: set off a 50 Mt charge in a fusion test site (new tracker test-detonation, remote getDetonationCount of True Nukes, checked every minute). Descriptions in en/ru.
     - The setting "Ticks between each check" (milestones_check_frequency) also sets how often the statistics are read for the achievements; its description says so.
     - The Milestones version migrations are removed: the storage of the new mod name is always created by on_init.
     - Locales: English and Russian only (the other Milestones translations covered only the milestone window).
