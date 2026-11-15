@@ -4,6 +4,7 @@ Version: 9.1.5
     - Russian hardcoded player-facing text: 15 UI, chat, command-help and error-message literals; technical identifiers, format parameters and gameplay logic are unchanged.
 Date: 2026. 10. 14
   Changes:
+    - Flow Control cursor fittings (elbows, T-junctions and straight pipes chosen with R, mod-data "flow-control-cursor") are materials like the ordinary pipe they alias: no defect rolls and no defect-look silhouettes for them. The public pipe-straight, pipe-elbow and pipe-junction items stay exempt finished products.
     - Reused the identical base PNGs of quality-control research 7 and 9 for levels 8 and 10; removed two duplicate files, preserving separate technologies and their level-marker layers.
     - Paranoidal packaging: moved standalone regression fixtures and their mocks out of the distributed mod into the local test collection.
     - Clarified precise production-mode tooltips: the mode prevents new defects but does not repair defective ingredients; the refinement workshop does that.
