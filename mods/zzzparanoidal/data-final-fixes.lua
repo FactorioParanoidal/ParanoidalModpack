@@ -421,6 +421,11 @@ require("tweaks.recipe.ingot-plate-smelting")
 require("tweaks.entity.quality-ladder-module-slots")
 -- Закрытие схем бесплатных ресурсов и энергии: после всех правок рецептов и машин, до пересборки переработки.
 require("tweaks.custom.anti-exploit")
+-- paranoidal-true-nukes: дубли ядерного и огненного оружия Bob/Clowns удалены, «Простое атомное оружие» перед «Атомной бомбой».
+-- До пересборки переработки: она строит рецепты по итоговому списку предметов.
+require("removals.nuclear-duplicates")
+require("tweaks.technology.true-nukes")
+require("tweaks.item.true-nukes-carriers") -- Носители мода: ускорение ракет, артснаряды и мины как у исходных после Beta 8.
 -- После всех правок рецептов: полная пересборка переработки Quality (один рецепт на предмет, без мусора).
 require("tweaks.custom.quality-recycling-refresh")
 -- Генерация рыбы: только Луч Санты, в 5 раз реже.

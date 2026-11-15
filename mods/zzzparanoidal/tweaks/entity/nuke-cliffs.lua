@@ -1,7 +1,4 @@
 -- Ударная волна ядерных зарядов разрушает скалы (KaoExtended, Beta 8).
--- Атомная артиллерия (AtomicArtillery2) использует копию paranoidal-atomic-artillery-atomic-bomb-wave,
--- которую tweaks/item/ammo-stats-1_1 делает позже из atomic-bomb-wave: копия наследует этот эффект.
--- Старое имя atomic-artillery-wave (AtomicArtillery 1.1) в 2.0 не существует.
 local function add_cliff_destruction(name)
 	local projectile = data.raw.projectile[name]
 	if not (projectile and projectile.action) then return end
