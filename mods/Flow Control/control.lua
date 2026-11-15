@@ -1,0 +1,17 @@
+local cursor = require("scripts.cursor")
+
+script.on_event("flow-control-cycle", function(event) cursor.rotate(event, 1) end)
+script.on_event("flow-control-cycle-reverse", function(event) cursor.rotate(event, -1) end)
+script.on_event("flow-control-clear-cursor", cursor.clear)
+script.on_event("flow-control-drop-cursor", cursor.clear)
+script.on_event(defines.events.on_player_cursor_stack_changed, cursor.cursor_changed)
+script.on_event(defines.events.on_player_main_inventory_changed, cursor.inventory_changed)
+script.on_event(defines.events.on_player_trash_inventory_changed, cursor.inventory_changed)
+script.on_event(defines.events.on_player_dropped_item, cursor.dropped)
+script.on_event(defines.events.on_player_fast_transferred, cursor.transferred)
+script.on_event(defines.events.on_gui_closed, cursor.closed)
+script.on_event(defines.events.on_pre_player_died, cursor.clear)
+script.on_event(defines.events.on_player_removed, cursor.removed)
+script.on_event(defines.events.on_built_entity, cursor.built,
+  {{filter = "type", type = "storage-tank"}})
+script.on_configuration_changed(cursor.configure)
