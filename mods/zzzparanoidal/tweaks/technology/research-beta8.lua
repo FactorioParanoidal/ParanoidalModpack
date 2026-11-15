@@ -1,4 +1,4 @@
--- Цена исследований как в Beta 8 normal: число циклов/формула, наука, время цикла.
+-- Базовые цены Beta 8 normal; состав пакетов уточнён согласованным аудитом научного дерева.
 -- Источник: локальные решения Р-1…Р-11 (review/research-beta8-alignment/cat*.json), применяется одной пачкой.
 -- Поздняя стадия: после OV.execute и всех поздних правок дерева; эффект эволюции пересчитывается позже.
 -- Остальные поля (предки, открытия, бонусы) не меняются, кроме явно согласованных ниже.
@@ -7,25 +7,25 @@ local technologies = data.raw.technology
 
 -- [id 2.0] = {count | formula, time, ingredients}; комментарий — решение и исследование Beta 8.
 local units = {
-    ["advanced-depleted-uranium-smelting-1"] = {count = 100, time = 30, ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"chemical-science-pack", 1}, {"utility-science-pack", 1}}}, -- Р-3: advanced-depleted-uranium-smelting-1
-    ["advanced-depleted-uranium-smelting-2"] = {count = 100, time = 30, ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"chemical-science-pack", 1}, {"utility-science-pack", 1}}}, -- Р-3: advanced-depleted-uranium-smelting-2
-    ["advanced-magnesium-smelting"] = {count = 100, time = 30, ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"chemical-science-pack", 1}, {"utility-science-pack", 1}}}, -- Р-2: advanced-magnesium-smelting
-    ["advanced-osmium-smelting"] = {count = 100, time = 30, ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"chemical-science-pack", 1}, {"utility-science-pack", 1}}}, -- Р-2: advanced-osmium-smelting
-    ["advanced-uranium-processing-1"] = {count = 100, time = 30, ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"chemical-science-pack", 1}, {"utility-science-pack", 1}}}, -- Р-3: advanced-uranium-processing-1
-    ["advanced-uranium-processing-2"] = {count = 100, time = 30, ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"chemical-science-pack", 1}, {"utility-science-pack", 1}}}, -- Р-3: advanced-uranium-processing-2
+    ["advanced-depleted-uranium-smelting-1"] = {count = 100, time = 30, ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"chemical-science-pack", 1}, {"utility-science-pack", 1}, {"production-science-pack", 1}}}, -- Р-3: advanced-depleted-uranium-smelting-1
+    ["advanced-depleted-uranium-smelting-2"] = {count = 100, time = 30, ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"chemical-science-pack", 1}, {"utility-science-pack", 1}, {"production-science-pack", 1}}}, -- Р-3: advanced-depleted-uranium-smelting-2
+    ["advanced-magnesium-smelting"] = {count = 100, time = 30, ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"chemical-science-pack", 1}, {"utility-science-pack", 1}, {"production-science-pack", 1}}}, -- Р-2: advanced-magnesium-smelting
+    ["advanced-osmium-smelting"] = {count = 100, time = 30, ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"chemical-science-pack", 1}, {"utility-science-pack", 1}, {"production-science-pack", 1}}}, -- Р-2: advanced-osmium-smelting
+    ["advanced-uranium-processing-1"] = {count = 100, time = 30, ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"chemical-science-pack", 1}, {"utility-science-pack", 1}, {"production-science-pack", 1}}}, -- Р-3: advanced-uranium-processing-1
+    ["advanced-uranium-processing-2"] = {count = 100, time = 30, ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"chemical-science-pack", 1}, {"utility-science-pack", 1}, {"production-science-pack", 1}}}, -- Р-3: advanced-uranium-processing-2
     ["angels-advanced-bio-processing"] = {count = 150, time = 30, ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"chemical-science-pack", 1}, {"production-science-pack", 1}, {"utility-science-pack", 1}}}, -- Р-6: angels-advanced-bio-processing
     ["angels-bio-desert-farming-1"] = {count = 32, time = 30, ingredients = {{"automation-science-pack", 4}, {"angels-token-bio", 1}}}, -- Р-6: bio-desert-farming-1
     ["angels-bio-farm-advanced-upgrade-2"] = {count = 256, time = 30, ingredients = {{"automation-science-pack", 4}, {"logistic-science-pack", 4}, {"chemical-science-pack", 4}, {"production-science-pack", 4}, {"angels-token-bio", 1}}}, -- Р-6: bio-farm-advanced-upgrade
     ["angels-bio-swamp-farming-1"] = {count = 32, time = 30, ingredients = {{"automation-science-pack", 4}, {"angels-token-bio", 1}}}, -- Р-6: bio-swamp-farming-1
     ["angels-bio-temperate-farming-1"] = {count = 32, time = 30, ingredients = {{"automation-science-pack", 4}, {"angels-token-bio", 1}}}, -- Р-6: bio-temperate-farming-1
     ["angels-bio-wood-processing-2"] = {count = 50, time = 30, ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}}}, -- Р-6: bio-wood-processing-2
-    ["angels-chrome-smelting-1"] = {count = 200, time = 30, ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"chemical-science-pack", 1}}}, -- Р-2: angels-chrome-smelting-1
-    ["angels-chrome-smelting-2"] = {count = 250, time = 30, ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"chemical-science-pack", 1}, {"production-science-pack", 1}}}, -- Р-2: angels-chrome-smelting-2
+    ["angels-chrome-smelting-1"] = {count = 200, time = 30, ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"chemical-science-pack", 1}, {"production-science-pack", 1}}}, -- Р-2: angels-chrome-smelting-1
+    ["angels-chrome-smelting-2"] = {count = 250, time = 30, ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"chemical-science-pack", 1}, {"production-science-pack", 1}, {"utility-science-pack", 1}}}, -- Р-2: angels-chrome-smelting-2
     ["angels-chrome-smelting-3"] = {count = 300, time = 30, ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"chemical-science-pack", 1}, {"production-science-pack", 1}, {"utility-science-pack", 1}}}, -- Р-2: angels-chrome-smelting-3
-    ["angels-cobalt-casting-2"] = {count = 250, time = 30, ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"chemical-science-pack", 1}}}, -- Р-2: angels-cobalt-casting-2
-    ["angels-ironworks-4"] = {count = 300, time = 30, ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"chemical-science-pack", 1}}}, -- Р-2: angels-ironworks-4
+    ["angels-cobalt-casting-2"] = {count = 250, time = 30, ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"chemical-science-pack", 1}, {"production-science-pack", 1}}}, -- Р-2: angels-cobalt-casting-2
+    ["angels-ironworks-4"] = {count = 300, time = 30, ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"chemical-science-pack", 1}, {"production-science-pack", 1}}}, -- Р-2: angels-ironworks-4
     ["angels-ironworks-5"] = {count = 300, time = 30, ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"chemical-science-pack", 1}, {"production-science-pack", 1}}}, -- Р-2: angels-ironworks-5
-    ["angels-ore-electro-whinning-cell"] = {count = 75, time = 15, ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"chemical-science-pack", 1}}}, -- Р-2: ore-electro-whinning-cell
+    ["angels-ore-electro-whinning-cell"] = {count = 75, time = 15, ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"chemical-science-pack", 1}, {"production-science-pack", 1}}}, -- Р-2: ore-electro-whinning-cell
     ["angels-ore-processing-5"] = {count = 250, time = 30, ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"chemical-science-pack", 1}, {"production-science-pack", 1}, {"utility-science-pack", 1}}}, -- Р-2: ore-processing-5
     ["angels-tungsten-carbide-smelting-3"] = {count = 150, time = 30, ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"chemical-science-pack", 1}, {"production-science-pack", 1}, {"utility-science-pack", 1}}}, -- Р-2: angels-tungsten-carbide-smelting-3
     ["angels-tungsten-smelting-3"] = {count = 350, time = 30, ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"chemical-science-pack", 1}, {"production-science-pack", 1}, {"utility-science-pack", 1}}}, -- Р-2: angels-tungsten-smelting-3
@@ -34,7 +34,7 @@ local units = {
     ["automation-6"] = {count = 150, time = 75, ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"chemical-science-pack", 1}, {"production-science-pack", 1}, {"utility-science-pack", 1}}}, -- Р-8: automation-6
     ["automation-7"] = {count = 200, time = 100, ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"utility-science-pack", 1}, {"production-science-pack", 1}}}, -- Р-8: automation-7
     ["automation-8"] = {count = 250, time = 150, ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"utility-science-pack", 1}, {"production-science-pack", 1}}}, -- Р-8: automation-8
-    ["automation-9"] = {count = 500, time = 200, ingredients = {{"automation-science-pack", 2}, {"logistic-science-pack", 1}, {"utility-science-pack", 1}, {"production-science-pack", 2}}}, -- Р-8: automation-9
+    ["automation-9"] = {count = 500, time = 200, ingredients = {{"automation-science-pack", 2}, {"logistic-science-pack", 1}, {"utility-science-pack", 1}, {"production-science-pack", 2}, {"chemical-science-pack", 1}}}, -- Р-8: automation-9
     ["battery-mk3-equipment"] = {count = 150, time = 30, ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"chemical-science-pack", 1}}}, -- Р-1: bob-battery-equipment-3
     ["bob-advanced-research"] = {count = 100, time = 30, ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"chemical-science-pack", 1}}}, -- Р-10: advanced-research
     ["bob-alien-research"] = {count = 300, time = 30, ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"military-science-pack", 1}, {"chemical-science-pack", 1}}}, -- Р-10: alien-research
@@ -51,7 +51,7 @@ local units = {
     ["bob-fission-reactor-equipment-4"] = {count = 350, time = 45, ingredients = {{"bob-science-pack-gold", 1}, {"bob-alien-science-pack", 1}, {"bob-alien-science-pack-purple", 1}, {"bob-alien-science-pack-yellow", 1}}}, -- Р-1: fusion-reactor-equipment-4
     ["bob-fluid-handling-3"] = {count = 75, time = 30, ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"chemical-science-pack", 1}}}, -- Р-7: bob-fluid-handling-3
     ["bob-fluid-handling-4"] = {count = 100, time = 30, ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"chemical-science-pack", 1}, {"production-science-pack", 1}, {"bob-advanced-logistic-science-pack", 1}}}, -- Р-7: bob-fluid-handling-4
-    ["bob-fluid-wagon-3"] = {count = 200, time = 30, ingredients = {{"automation-science-pack", 2}, {"logistic-science-pack", 2}, {"chemical-science-pack", 1}}}, -- Р-7: bob-fluid-wagon-3
+    ["bob-fluid-wagon-3"] = {count = 200, time = 30, ingredients = {{"automation-science-pack", 2}, {"logistic-science-pack", 2}, {"chemical-science-pack", 1}, {"production-science-pack", 1}}}, -- Р-7: bob-fluid-wagon-3
     ["bob-more-inserters-2"] = {count = 900, time = 15, ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 2}, {"chemical-science-pack", 1}}}, -- Р-7: more-inserters-2
     ["bob-plasma-turrets-1"] = {count = 100, time = 30, ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"military-science-pack", 1}}}, -- Р-4: bob-plasma-turrets-1
     ["bob-plasma-turrets-2"] = {count = 200, time = 30, ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"military-science-pack", 1}}}, -- Р-4: bob-plasma-turrets-2
@@ -65,11 +65,11 @@ local units = {
     ["bob-repair-pack-5"] = {count = 200, time = 30, ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"chemical-science-pack", 1}, {"production-science-pack", 1}}}, -- Р-11: bob-repair-pack-5
     ["bob-rtg"] = {count = 200, time = 30, ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"chemical-science-pack", 1}}}, -- Р-3: rtg
     ["bob-solar-panel-equipment-2"] = {count = 75, time = 30, ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}}}, -- Р-1: solar-panel-equipment-2
-    ["bob-solar-panel-equipment-3"] = {count = 100, time = 30, ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"chemical-science-pack", 1}}}, -- Р-1: solar-panel-equipment-3
+    ["bob-solar-panel-equipment-3"] = {count = 100, time = 30, ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"chemical-science-pack", 1}, {"production-science-pack", 1}}}, -- Р-1: solar-panel-equipment-3
     ["bob-solar-panel-equipment-4"] = {count = 100, time = 45, ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"chemical-science-pack", 1}, {"production-science-pack", 1}}}, -- Р-1: solar-panel-equipment-4
     ["bob-vehicle-big-turret-equipment-1"] = {count = 100, time = 30, ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"chemical-science-pack", 1}, {"military-science-pack", 1}}}, -- Р-4: vehicle-big-turret-equipment-1
     ["bob-vehicle-big-turret-equipment-2"] = {count = 150, time = 30, ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"chemical-science-pack", 1}, {"military-science-pack", 1}}}, -- Р-4: vehicle-big-turret-equipment-2
-    ["bob-vehicle-big-turret-equipment-3"] = {count = 250, time = 30, ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"chemical-science-pack", 1}, {"military-science-pack", 1}, {"utility-science-pack", 1}}}, -- Р-4: vehicle-big-turret-equipment-3
+    ["bob-vehicle-big-turret-equipment-3"] = {count = 250, time = 30, ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"chemical-science-pack", 1}, {"military-science-pack", 1}, {"utility-science-pack", 1}, {"production-science-pack", 1}}}, -- Р-4: vehicle-big-turret-equipment-3
     ["bob-vehicle-big-turret-equipment-4"] = {count = 400, time = 30, ingredients = {{"bob-science-pack-gold", 1}, {"bob-alien-science-pack", 1}, {"bob-alien-science-pack-green", 1}, {"bob-alien-science-pack-red", 1}}}, -- Р-4: vehicle-big-turret-equipment-6
     ["bob-vehicle-fission-cell-equipment-1"] = {count = 100, time = 30, ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"chemical-science-pack", 1}}}, -- Р-1: vehicle-fusion-cell-equipment-1
     ["bob-vehicle-fission-cell-equipment-2"] = {count = 125, time = 30, ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"chemical-science-pack", 1}, {"production-science-pack", 1}}}, -- Р-1: vehicle-fusion-cell-equipment-2
@@ -85,7 +85,7 @@ local units = {
     ["bob-vehicle-fission-reactor-equipment-6"] = {count = 450, time = 45, ingredients = {{"bob-science-pack-gold", 1}, {"bob-alien-science-pack", 1}, {"bob-alien-science-pack-green", 1}, {"bob-alien-science-pack-red", 1}}}, -- Р-1: vehicle-fusion-reactor-equipment-6
     ["bob-vehicle-solar-panel-equipment-1"] = {count = 50, time = 15, ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}}}, -- Р-1: vehicle-solar-panel-equipment-1
     ["bob-vehicle-solar-panel-equipment-2"] = {count = 75, time = 30, ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}}}, -- Р-1: vehicle-solar-panel-equipment-2
-    ["bob-vehicle-solar-panel-equipment-3"] = {count = 90, time = 30, ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"chemical-science-pack", 1}}}, -- Р-1: vehicle-solar-panel-equipment-3
+    ["bob-vehicle-solar-panel-equipment-3"] = {count = 90, time = 30, ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"chemical-science-pack", 1}, {"production-science-pack", 1}}}, -- Р-1: vehicle-solar-panel-equipment-3
     ["bob-vehicle-solar-panel-equipment-4"] = {count = 100, time = 45, ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"chemical-science-pack", 1}, {"production-science-pack", 1}}}, -- Р-1: vehicle-solar-panel-equipment-4
     ["bob-vehicle-solar-panel-equipment-5"] = {count = 125, time = 45, ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"chemical-science-pack", 1}, {"production-science-pack", 1}, {"utility-science-pack", 1}}}, -- Р-1: vehicle-solar-panel-equipment-5
     ["burner-mechanics"] = {count = 1, time = 30, ingredients = {{"automation-science-pack", 1}}}, -- Р-5: basic-automation; время 60 → 30 по решению пользователя 2026-10-13
@@ -102,7 +102,7 @@ local units = {
     ["nuclear-fuel-2"] = {count = 100, time = 30, ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"chemical-science-pack", 1}}}, -- Р-3: nuclear-fuel-2
     ["nuclear-fuel-3"] = {count = 100, time = 30, ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"chemical-science-pack", 1}}}, -- Р-3: nuclear-fuel-3
     ["oil-gathering"] = {count = 50, time = 15, ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}}}, -- Р-5: oil-gas-extraction
-    ["phosphorus-processing-2"] = {count = 100, time = 30, ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}}}, -- Р-2: phosphorus-processing-2
+    ["phosphorus-processing-2"] = {count = 100, time = 30, ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"chemical-science-pack", 1}, {"production-science-pack", 1}}}, -- Р-2: phosphorus-processing-2
     ["platinum-ore-refining"] = {count = 75, time = 15, ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"chemical-science-pack", 1}}}, -- Р-2: platinum-ore-refining
     ["radiothermal-fuel-1"] = {count = 100, time = 30, ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"chemical-science-pack", 1}}}, -- Р-3: radiothermal-fuel-1
     ["radiothermal-fuel-2"] = {count = 100, time = 30, ingredients = {{"automation-science-pack", 1}, {"logistic-science-pack", 1}, {"chemical-science-pack", 1}}}, -- Р-3: radiothermal-fuel-2
@@ -120,6 +120,8 @@ local units = {
 
 -- Предок, открывающий колбу Beta 8, которой нет среди предков 2.0 (Р-1 п.2, Р-2 п.2, Р-3 п.2).
 local prerequisites = {
+    ["angels-bio-wood-processing-2"] = {"logistic-science-pack"},
+    ["angels-platinum-smelting-3"] = {"space-science-pack"},
     ["advanced-depleted-uranium-smelting-1"] = {"utility-science-pack"},
     ["advanced-osmium-smelting"] = {"utility-science-pack"},
     ["bob-vehicle-fission-cell-equipment-3"] = {"utility-science-pack"},
@@ -162,6 +164,18 @@ for name, list in pairs(prerequisites) do
             end
             if technologies[prerequisite] and not present then
                 table.insert(technology.prerequisites, prerequisite)
+            end
+        end
+    end
+end
+
+-- Цена этих ступеней уже не космическая; платина III сохраняет белый порог явно выше.
+for _, name in ipairs({"bob-electronics-machine-3", "angels-ore-processing-5"}) do
+    local technology = technologies[name]
+    if technology and technology.prerequisites then
+        for i = #technology.prerequisites, 1, -1 do
+            if technology.prerequisites[i] == "space-science-pack" then
+                table.remove(technology.prerequisites, i)
             end
         end
     end

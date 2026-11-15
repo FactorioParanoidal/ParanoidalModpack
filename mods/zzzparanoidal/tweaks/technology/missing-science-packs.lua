@@ -11,7 +11,7 @@ local add = {
         "k-angels-advanced-chemistry-5"},
     utility = {"automation-5", "bob-area-drills-4", "bob-drills-5", "bob-fluid-handling-4", "bob-pumpjacks-4", "bob-repair-pack-5",
         "bob-solar-panel-equipment-4", "bob-vehicle-solar-panel-equipment-4", "angels-ironworks-5",
-        "angels-bio-farm-advanced-upgrade-2", "follower-robot-count-4"},
+        "angels-bio-farm-advanced-upgrade-2", "follower-robot-count-4", "angels-silver-smelting-3"},
 }
 
 for pack, names in pairs(add) do
