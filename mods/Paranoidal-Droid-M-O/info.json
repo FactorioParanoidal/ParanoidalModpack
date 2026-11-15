@@ -1,0 +1,11 @@
+{
+  "name": "Paranoidal-Droid-M-O",
+  "version": "9.0.0",
+  "title": "Paranoidal Droid M-O",
+  "author": "Klaudia (Sweepbot), Paranoidal",
+  "description": "Д-ОК (M-O), the Microbe Obliterator of the BnL starliners, on your paved floors: from his charging station he hunts every foreign contaminant on the paving — grass and grit, muddy prints the engineer brings in, items on the floor, remains, small wreck debris, which he breaks down for a few parts — and scrubs dirty engineers themselves. Built on Klaudia's Sweepbot.",
+  "factorio_version": "2.1",
+  "dependencies": [
+    "base >= 2.1.24"
+  ]
+}
