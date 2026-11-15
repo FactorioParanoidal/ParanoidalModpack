@@ -1,7 +1,3 @@
-if ... ~= "__flib__.orientation" then
-  return require("__flib__.orientation")
-end
-
 --- Functions for working with orientations.
 --- ```lua
 --- local flib_orientation = require("__flib__.orientation")

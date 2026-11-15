@@ -1,16 +1,16 @@
 {
   "name": "flib",
-  "version": "0.16.5",
+  "version": "0.17.2",
   "title": "Factorio Library",
   "author": "raiguard, Optera, justarandomgeek, Nexela",
   "contact": "https://codeberg.org/raiguard/flib",
   "homepage": "https://codeberg.org/raiguard/flib",
   "description": "A set of high-quality, commonly-used utilities for creating Factorio mods.",
   "factorio_version": "2.1",
-  "dependencies": [ "base >= 2.0.0" ],
+  "dependencies": [ "base >= 2.1.0" ],
   "package": {
     "git_publish_branch": "trunk",
-    "ignore": [ "crowdin.yml", "imgui.ini", "stylua.toml", "tests", "graphics/slots.xcf" ],
+    "ignore": [ "crowdin.yml", "doc-html/*", "docs/**", "imgui.ini", "stylua.toml", "tests", "graphics/slots.xcf", "*.sh" ],
     "scripts": {
       "prepublish": "factorio-crowdin-sync"
     },

@@ -1,10 +1,6 @@
-if ... ~= "__flib__.dictionary" then
-  return require("__flib__.dictionary")
-end
-
-local gui = require("__flib__.gui")
+local flib_array = require("__flib__.array")
+local flib_gui = require("__flib__.gui")
 local mod_gui = require("__core__.lualib.mod-gui")
-local table = require("__flib__.table")
 
 --- @class flib.DictionaryStorage
 --- @field init_ran boolean
@@ -39,7 +35,7 @@ local request_timeout_ticks = (60 * 5)
 --- @return flib.DictionaryStorage
 local function get_data(init_only)
   if not storage.__flib or not storage.__flib.dictionary then
-    error("Модуль словарей неправильно инициализирован — убедитесь, что обрабатываются все события жизненного цикла.")
+    error("Модуль словарей неправильно инициализирован: убедитесь, что обрабатываются все события жизненного цикла.")
   end
   local data = storage.__flib.dictionary
   if init_only and data.init_ran then
@@ -66,7 +62,7 @@ local function update_gui(data)
     local window = frame_flow.flib_translation_progress
     if wip then
       if not window then
-        _, window = gui.add(frame_flow, {
+        _, window = flib_gui.add(frame_flow, {
           type = "frame",
           name = "flib_translation_progress",
           style = mod_gui.frame_style,
@@ -90,7 +86,7 @@ local function update_gui(data)
       local pane = window.pane --[[@as LuaGuiElement]]
       local mod_flow = pane[script.mod_name]
       if not mod_flow then
-        _, mod_flow = gui.add(pane, {
+        _, mod_flow = flib_gui.add(pane, {
           type = "flow",
           name = script.mod_name,
           style_mods = { vertical_align = "center", top_margin = 4, horizontal_spacing = 8 },
@@ -355,7 +351,7 @@ function flib_dictionary.on_player_joined_game(e)
     return
   elseif data.wip and data.wip.language == language then
     return
-  elseif table.find(data.to_translate, language) then
+  elseif flib_array.contains(data.to_translate, language) then
     return
   end
   table.insert(data.to_translate, language)
