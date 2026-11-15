@@ -1,6 +1,7 @@
+local util = require("util")
+
 local flib_bounding_box = require("__flib__.bounding-box")
 local flib_math = require("__flib__.math")
-local flib_migration = require("__flib__.migration")
 local flib_table = require("__flib__.table")
 
 --- @alias RateCategory
@@ -150,11 +151,12 @@ end
 --- @param index uint
 --- @return LuaFluidPrototype?
 local function get_fluid(entity, index)
-  -- Factorio 2.1: LuaEntity::fluidbox was removed; the filter is read on the entity as a LuaFluidPrototype
-  local filter = entity.get_fluid_filter(index)
+  local filter = entity.has_fluid_segment(index) and entity.get_fluid_segment_filter(index)
+    or entity.get_fluid_filter(index)
   if filter then
-    return prototypes.fluid[filter.name]
+    return filter
   end
+
   local fluid = entity.get_fluid(index)
   if fluid then
     return prototypes.fluid[fluid.name]
@@ -174,31 +176,26 @@ end
 --- @param invert boolean
 function calc_util.process_boiler(set, entity, invert)
   local entity_prototype = entity.prototype
+
+  -- heat-fluid-inside doesn't produce or consume any fluids, only the burner matters.
+  if entity_prototype.boiler_mode ~= "output-to-separate-pipe" then
+    return
+  end
+
   local input_fluid = get_fluid(entity, 1)
   if not input_fluid then
     calc_util.add_error(set, "no-input-fluid")
     return
   end
 
-  -- Factorio 2.1: fluid boxes lost their temperature limits, the boiler prototype has minimum_input_temperature
-  local minimum_temperature = entity_prototype.minimum_input_temperature or input_fluid.default_temperature
-  local energy_per_amount = (entity_prototype.target_temperature - minimum_temperature) * input_fluid.heat_capacity
-  local fluid_usage = entity_prototype.get_max_energy_usage(entity.quality) / energy_per_amount * 60
-  calc_util.add_rate(set, "input", "fluid", input_fluid.name, "normal", fluid_usage, invert, entity.name)
+  local target_temperature = entity_prototype.target_temperature
+  --- @cast target_temperature -?
 
-  if entity_prototype.boiler_mode == "heat-water-inside" then
-    calc_util.add_rate(
-      set,
-      "output",
-      "fluid",
-      input_fluid.name,
-      "normal",
-      fluid_usage,
-      invert,
-      entity.name,
-      input_fluid.max_temperature
-    )
-    return
+  do
+    local minimum_temperature = entity_prototype.minimum_input_temperature or input_fluid.default_temperature
+    local energy_per_amount = (target_temperature - minimum_temperature) * input_fluid.heat_capacity
+    local fluid_usage = entity_prototype.get_max_energy_usage(entity.quality) / energy_per_amount * 60
+    calc_util.add_rate(set, "input", "fluid", input_fluid.name, "normal", fluid_usage, invert, entity.name)
   end
 
   local output_fluid = get_fluid(entity, 2)
@@ -206,8 +203,8 @@ function calc_util.process_boiler(set, entity, invert)
     return
   end
 
-  local minimum_temperature = output_fluid.default_temperature -- 2.1: no temperature limit on the output fluid box
-  local energy_per_amount = (entity_prototype.target_temperature - minimum_temperature) * output_fluid.heat_capacity
+  local minimum_temperature = entity_prototype.minimum_input_temperature or output_fluid.default_temperature
+  local energy_per_amount = (target_temperature - minimum_temperature) * output_fluid.heat_capacity
   local fluid_usage = entity_prototype.get_max_energy_usage(entity.quality) / energy_per_amount * 60
   calc_util.add_rate(set, "output", "fluid", output_fluid.name, "normal", fluid_usage, invert, entity.name)
 end
@@ -256,11 +253,7 @@ function calc_util.process_crafter(set, entity, invert, emissions_per_second)
     end
 
     -- stylua: ignore start
-    local extra_count_fraction_contribution = product.extra_count_fraction or 0
-    local max_amount = product.amount_max or product.amount
-    local min_amount = product.amount_min or product.amount
-    -- Factorio 2.1: independent_probability (was probability) times the shared_probability range
-    local expected_amount = ((product.independent_probability or product.probability or 1) * (product.shared_probability and (product.shared_probability.max - product.shared_probability.min) or 1)) * 0.5 * (max_amount + min_amount) + extra_count_fraction_contribution
+    local expected_amount = util.product_amount(product)
     local productivity_base_complement = math.min(expected_amount, product.ignored_by_productivity or 0)
     local productivity_base = expected_amount - productivity_base_complement
     -- stylua: ignore end
@@ -360,7 +353,6 @@ function calc_util.process_fluid_energy_source(set, entity, invert, emissions_pe
   local fluid_energy_source_prototype = entity_prototype.fluid_energy_source_prototype --[[@as LuaFluidEnergySourcePrototype]]
 
   -- The fluid energy source fluidbox will always be the first one
-  -- (Factorio 2.1: LuaEntity::fluidbox was removed, fluid storages are read on the entity)
   local fluid_prototype
   if entity.type == "boiler" then
     fluid_prototype = get_fluid(entity, entity.fluids_count)
@@ -457,14 +449,15 @@ function calc_util.process_lab(set, entity, invert)
   local research_multiplier = research_data.multiplier
   local researching_speed = entity.prototype.get_researching_speed(entity.quality)
   local speed_modifier = research_data.speed_modifier
+  -- TODO: Lab rates are wrong somehow. :(
   -- XXX: Due to a bug with entity_speed_bonus, we must subtract the force's lab speed bonus and convert it to a
   -- multiplicative relationship
   local lab_multiplier = research_multiplier
-    * ((entity.speed_bonus + 1 - speed_modifier) * (speed_modifier + 1))
+    * (entity.speed_bonus + 1)
     * researching_speed
     * science_pack_drain
 
-  local inputs = flib_table.invert(entity.prototype.lab_inputs)
+  local inputs = flib_table.inverted(entity.prototype.lab_inputs)
   for _, ingredient in pairs(research_data.ingredients) do
     if not inputs[ingredient.name] then
       calc_util.add_error(set, "incompatible-science-packs")
@@ -474,11 +467,11 @@ function calc_util.process_lab(set, entity, invert)
 
   for _, ingredient in ipairs(research_data.ingredients) do
     -- TODO: Select quality
-    -- Factorio 2.1: science packs may be plain items (the vanilla packs are); a lab takes science_capacity research
-    -- units from such an item and durability only from a tool. get_durability() is nil for an item that is no tool.
+    -- Paranoidal: a lab takes science_capacity research units from a science pack that is a plain item (the vanilla
+    -- packs are plain items in 2.1) and durability only from a tool. get_durability() is nil for an item that is no tool.
     local pack = prototypes.item[ingredient.name]
-    local capacity = pack.type == "tool" and pack.get_durability() or pack.science_capacity
-    local amount = (ingredient.amount * lab_multiplier) / capacity
+    local durability = pack.type == "tool" and pack.get_durability() or pack.science_capacity
+    local amount = ingredient.amount * lab_multiplier / durability
     calc_util.add_rate(set, "input", "item", ingredient.name, "normal", amount, invert, entity.name)
   end
 end
@@ -545,7 +538,7 @@ function calc_util.process_mining_drill(set, entity, invert)
         type = "fluid",
         name = required_fluid,
         amount = mineable_properties.fluid_amount / 10, -- Ten mining operations per fluid consumed
-        independent_probability = 1,
+        probability = 1,
       }
     end
 
@@ -582,16 +575,8 @@ function calc_util.process_mining_drill(set, entity, invert)
 
     -- Iterate each product
     for _, product in pairs(resource_data.products or {}) do
-      -- Get rate per second for this product on this drill
-      local product_per_second
-      if product.amount then
-        product_per_second = product.amount * resource_multiplier
-      else
-        product_per_second = product.amount_max - (product.amount_max - product.amount_min) / 2 * resource_multiplier
-      end
-
-      -- Account for probability
-      local adjusted_product_per_second = product_per_second * ((product.independent_probability or product.probability or 1) * (product.shared_probability and (product.shared_probability.max - product.shared_probability.min) or 1)) -- Factorio 2.1
+      -- Get rate per second for this product on this drill, accounting for amount range and probability
+      local adjusted_product_per_second = util.product_amount(product) * resource_multiplier
 
       -- Add to outputs table
       calc_util.add_rate(
@@ -613,17 +598,12 @@ end
 --- @param entity LuaEntity
 --- @param invert boolean
 function calc_util.process_offshore_pump(set, entity, invert)
-  local fluid = entity.get_fluid(1) -- Factorio 2.1: LuaEntity::fluidbox was removed
+  local fluid = entity.get_fluid(1)
   if not fluid then
     return
   end
-  local pumping_speed = 0
-  if flib_migration.is_newer_version("2.0.32", script.active_mods.base) then -- 2.0.33 or higher
-    pumping_speed = entity.prototype.get_pumping_speed(entity.quality)
-  else
-    pumping_speed = entity.prototype.pumping_speed
-  end
 
+  local pumping_speed = entity.prototype.get_pumping_speed(entity.quality)
   calc_util.add_rate(set, "output", "fluid", fluid.name, "normal", pumping_speed * 60, invert, entity.name)
 end
 

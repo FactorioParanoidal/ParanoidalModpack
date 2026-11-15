@@ -36,4 +36,5 @@ Date: 2026-11-01
     - Locales: English and Russian only (the other Milestones translations covered only the milestone window).
     - Saves: the storage of the two old mods cannot move to a new mod name and is lost (agreed). Scripted achievement counters start again; milestones are found again on the first load (items already made get an estimated time from the production graphs, research times are unknown, manual edits of the milestone list and times are lost).
   Compatibility:
+    - flib 0.17 no longer copies the Lua table functions into flib_table: the flib table module is required as flib_table, so table.insert, table.remove, table.sort and table.concat are the standard Lua functions.
     - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.

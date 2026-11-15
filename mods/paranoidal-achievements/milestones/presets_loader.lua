@@ -1,4 +1,4 @@
-local table = require("__flib__.table")
+local flib_table = require("__flib__.table")
 
 require("milestones.util")
 require("milestones.presets.presets")
@@ -6,8 +6,8 @@ require("milestones.presets.presets_pymods")
 require("milestones.presets.preset_addons")
 
 local schema = require("milestones.schema")
-local builtin_presets = table.deep_copy(presets)
-local builtin_addons = table.deep_copy(preset_addons)
+local builtin_presets = flib_table.deep_copy(presets)
+local builtin_addons = flib_table.deep_copy(preset_addons)
 
 local function ordered_names(values)
     local names = {}
@@ -74,7 +74,7 @@ end
 
 local function rebuild_table(destination, builtin, supplied)
     for name in pairs(destination) do destination[name] = nil end
-    for name, preset in pairs(builtin) do destination[name] = table.deep_copy(preset) end
+    for name, preset in pairs(builtin) do destination[name] = flib_table.deep_copy(preset) end
     for _, name in ipairs(ordered_names(supplied or {})) do
         local preset = normalize_preset(supplied[name])
         if preset then destination[name] = preset end
@@ -114,7 +114,7 @@ function load_presets()
     if storage.current_preset_name == nil then
         storage.current_preset_name = get_auto_detected_preset_name()
         log("Auto-detected preset used: " .. storage.current_preset_name)
-        storage.loaded_milestones = table.deep_copy(presets[storage.current_preset_name].milestones)
+        storage.loaded_milestones = flib_table.deep_copy(presets[storage.current_preset_name].milestones)
     end
 end
 
@@ -125,13 +125,13 @@ function load_preset_addons()
         if is_preset_mods_enabled(preset_addon) then
             table.insert(preset_addons_loaded, preset_addon_name)
             for _, milestone in pairs(preset_addon.milestones) do
-                table.insert(storage.loaded_milestones, table.deep_copy(milestone))
+                table.insert(storage.loaded_milestones, flib_table.deep_copy(milestone))
             end
         end
     end
     log("Preset addons loaded: " .. serpent.line(preset_addons_loaded))
 
-    storage.default_milestones_snapshot = table.deep_copy(storage.loaded_milestones)
+    storage.default_milestones_snapshot = flib_table.deep_copy(storage.loaded_milestones)
 end
 
 function reload_presets()
@@ -162,12 +162,12 @@ end
 
 -- Paranoidal: the milestones a preset loads in on_init: the preset plus every enabled addon.
 local function get_default_milestones_for_preset(preset_name)
-    local milestones = table.deep_copy(presets[preset_name].milestones)
+    local milestones = flib_table.deep_copy(presets[preset_name].milestones)
     for _, name in ipairs(ordered_names(preset_addons)) do
         local preset_addon = preset_addons[name]
         if is_preset_mods_enabled(preset_addon) then
             for _, milestone in pairs(preset_addon.milestones) do
-                table.insert(milestones, table.deep_copy(milestone))
+                table.insert(milestones, flib_table.deep_copy(milestone))
             end
         end
     end
@@ -178,7 +178,7 @@ local function is_unmodified_preset(current_name)
     local baseline = storage.default_milestones_snapshot or get_default_milestones_for_preset(current_name)
     local current = validate_milestones(storage.loaded_milestones)
     local expected = validate_milestones(baseline)
-    return current ~= nil and expected ~= nil and table.deep_compare(current, expected)
+    return current ~= nil and expected ~= nil and flib_table.deep_compare(current, expected)
 end
 
 -- Paranoidal: when a mod update adds a preset that auto-detection now prefers (e.g. "Paranoidal"
@@ -199,8 +199,8 @@ function upgrade_unmodified_preset(added_presets)
     log("Switching unmodified preset " .. current_name .. " to " .. best_name)
     local new_milestones = get_default_milestones_for_preset(best_name)
     storage.current_preset_name = best_name
-    storage.loaded_milestones = table.deep_copy(new_milestones)
-    storage.default_milestones_snapshot = table.deep_copy(new_milestones)
+    storage.loaded_milestones = flib_table.deep_copy(new_milestones)
+    storage.default_milestones_snapshot = flib_table.deep_copy(new_milestones)
     storage.milestones_revision = (storage.milestones_revision or 0) + 1
     initialize_alias_table()
     remove_invalid_aliases()

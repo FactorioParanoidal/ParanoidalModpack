@@ -1,5 +1,5 @@
 local events = require("scripts.events")
-local table = require("__flib__.table")
+local flib_table = require("__flib__.table")
 require("milestones.presets.presets")
 require("milestones.milestones_util")
 
@@ -266,7 +266,7 @@ end
 
 local function is_preset_modified(current_milestones, preset_name)
     return presets[preset_name] ~= nil
-        and not table.deep_compare(current_milestones, presets[preset_name].milestones)
+        and not flib_table.deep_compare(current_milestones, presets[preset_name].milestones)
 end
 
 function build_settings_page(player)
@@ -524,7 +524,7 @@ function confirm_settings_page(player_index)
     local new_loaded_milestones, err = validate_milestones(get_resulting_milestones_array(player_index))
     if not new_loaded_milestones then player.print(err); return false end
 
-    if not table.deep_compare(storage.loaded_milestones, new_loaded_milestones) then -- If something changed
+    if not flib_table.deep_compare(storage.loaded_milestones, new_loaded_milestones) then -- If something changed
         local inner_frame = get_inner_frame(player_index)
         local preset_dropdown = inner_frame.milestones_settings_outer_flow.milestones_preset_flow.milestones_preset_dropdown
         if preset_dropdown.tags.imported then
@@ -533,7 +533,7 @@ function confirm_settings_page(player_index)
             storage.current_preset_name = preset_dropdown.get_item(preset_dropdown.selected_index)
         end
 
-        storage.loaded_milestones = table.deep_copy(new_loaded_milestones)
+        storage.loaded_milestones = flib_table.deep_copy(new_loaded_milestones)
         storage.milestones_revision = (storage.milestones_revision or 0) + 1
         initialize_alias_table()
         remove_invalid_aliases()
@@ -654,7 +654,7 @@ end
 function reset_preset(player_index)
     -- Preset
     local chosen_preset_name = get_auto_detected_preset_name()
-    local new_milestones = table.deep_copy(presets[chosen_preset_name].milestones)
+    local new_milestones = flib_table.deep_copy(presets[chosen_preset_name].milestones)
 
     -- Preset addons
     for _preset_addon_name, preset_addon in pairs(preset_addons) do

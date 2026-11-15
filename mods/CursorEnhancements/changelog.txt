@@ -10,6 +10,7 @@ Date: 2024-12-17
   Compatibility:
     - [Just Go!] Auto-ghost-cursor is disabled for vehicles when this mod is installed. (#36)
     - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
+    - Paranoidal: flib 0.17 removed flib_migration; the migrations use a copy of its 0.16.5 code in scripts/flib-migration.lua and run as before.
 ---------------------------------------------------------------------------------------------------
 Version: 2.2.1
 Date: 2024-10-29

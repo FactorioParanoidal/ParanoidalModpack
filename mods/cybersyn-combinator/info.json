@@ -9,8 +9,8 @@
   "factorio_version": "2.1",
   "dependencies": [
     "base >= 2.1.8",
-    "cybersyn >= 2.0.53",
-    "flib >= 0.16.5"
+    "cybersyn >= 2.1.2",
+    "flib >= 0.17.2"
   ],
   "package": {
     "readme": "information.md",

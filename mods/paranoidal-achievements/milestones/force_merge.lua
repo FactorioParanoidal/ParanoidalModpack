@@ -1,4 +1,4 @@
-local table = require("__flib__.table")
+local flib_table = require("__flib__.table")
 local identity = require("milestones.identity")
 local sandbox = require("scripts.sandbox")
 local M = {}
@@ -47,7 +47,7 @@ function M.merge(source_name, destination)
                     if matches then
                         for _, existing in ipairs(matches) do merge_time(existing, milestone) end
                     else
-                        local copy = table.deep_copy(milestone)
+                        local copy = flib_table.deep_copy(milestone)
                         copy.id = nil
                         records[#records + 1] = copy
                         by_key[signature] = {copy}

@@ -1,3 +1,4 @@
+local flib_array = require("__flib__.array")
 local flib_gui = require("__flib__.gui")
 local flib_position = require("__flib__.position")
 local flib_table = require("__flib__.table")
@@ -68,7 +69,7 @@ local function update_gui(self)
   else
     timescale_divisor_chooser.visible = false
   end
-  elems.timescale_dropdown.selected_index = flib_table.find(gui_util.ordered_timescales, timescale) --[[@as uint]]
+  elems.timescale_dropdown.selected_index = flib_array.find(gui_util.ordered_timescales, timescale) --[[@as uint]]
   elems.multiplier_textfield.text = tostring(self.manual_multiplier)
 
   set.errors["inserter-rates-estimates"] = divisor_source == "inserter_divisor" and true or nil
@@ -373,7 +374,7 @@ local function build_gui(player)
         {
           type = "drop-down",
           name = "timescale_dropdown",
-          items = flib_table.map(gui_util.ordered_timescales, function(timescale)
+          items = flib_table.mapped(gui_util.ordered_timescales, function(timescale)
             return { "string-mod-setting.rcalc-default-timescale-" .. timescale }
           end),
           handler = { [defines.events.on_gui_selection_state_changed] = on_timescale_dropdown_changed },
