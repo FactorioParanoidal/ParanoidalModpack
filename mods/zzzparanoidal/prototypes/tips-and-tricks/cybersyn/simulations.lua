@@ -1,14 +1,16 @@
 -- Анимации к «Советам и подсказкам» о диспетчерской сети поездов (prototypes/tips-and-tricks/cybersyn/cybersyn.lua).
--- Каждая симуляция = общий пролог C + своя сцена. Сцены с поездами запускают настоящий скрипт Cybersyn
+-- Каждая симуляция = общий пролог C + своя сцена. Живые сцены запускают настоящий скрипт Cybersyn
 -- (поле mods = {"cybersyn"}): доставки, заправку и обход депо назначает сам мод, сцена только строит станции,
--- изображает добычу и расход груза и подписывает происходящее. Схемы (сети, маски, приоритет, ячейки вагона)
--- нарисованы. Любая ошибка сцены выводится текстом в окне симуляции (ключ zzz-cybersyn-sim.error).
+-- изображает расход груза, подсвечивает нужное место и подписывает происходящее. Схемы (режимы, сети, маски,
+-- ячейки вагона) нарисованы. Любая ошибка сцены выводится текстом в окне симуляции (ключ zzz-cybersyn-sim.error).
 
 local PRELUDE = [=[
 local surface = game.surfaces[1]
 local force = game.forces.player
 local sim = game.simulation
-C = {t = 0, jobs = {}, movers = {}, trains = {}, stats = {dispatch = 0, deliveries = 0, bypass = 0, refuel = 0}}
+C = {t = 0, jobs = {}, movers = {}, trains = {}, pulses = {},
+  stats = {dispatch = 0, deliveries = 0, bypass = 0, refuel = 0, depot = 0}}
+surface.always_day = true
 -- The default checkerboard ({-20, -15} to {20, 15}) is smaller than the rail loop of the big scenes
 surface.build_checkerboard{{-48, -28}, {48, 28}}
 -- Reading sim.camera_position gives {x = , y = }: the scene keeps its own copy of the camera position
@@ -21,6 +23,12 @@ sim.hide_cursor = true
 local GREEN = defines.wire_connector_id.circuit_green
 local IN = defines.wire_connector_id.combinator_input_green
 C.GREEN, C.IN = GREEN, IN
+C.INPUTS = {defines.wire_connector_id.combinator_input_red, defines.wire_connector_id.combinator_input_green}
+C.OUTPUTS = {defines.wire_connector_id.combinator_output_red, defines.wire_connector_id.combinator_output_green}
+-- Text size: the scenes give relative sizes, this factor makes them readable in the 1408x704 tips window
+C.TEXT = 1.35
+C.COL = {depot = {0.8, 0.8, 0.8}, provider = {0.45, 1, 0.5}, requester = {0.55, 0.75, 1}, refuel = {1, 0.75, 0.35},
+  note = {1, 0.9, 0.55}, dim = {0.55, 0.55, 0.55}, green = {0.5, 1, 0.5}, red = {1, 0.45, 0.45}, white = {1, 1, 1}}
 
 function C.fail(message)
   if C.err then return end
@@ -40,6 +48,7 @@ function C.step()
   end
   if C.main then C.main(C.t) end
   C.step_movers()
+  C.step_pulses()
   if C.t % 6 == 0 then C.poll() end
 end
 
@@ -63,7 +72,10 @@ end
 
 -- Cybersyn -----------------------------------------------------------------------------------------
 function C.need()
-  if remote.interfaces["cybersyn"] then return true end
+  if remote.interfaces["cybersyn"] then
+    C.live = true
+    return true
+  end
   C.fail({"zzz-cybersyn-sim.no-script"})
   return false
 end
@@ -75,39 +87,97 @@ function C.status_of(train)
   return remote.call("cybersyn", "read_global", "trains", train.id, "status")
 end
 
--- Drawing ------------------------------------------------------------------------------------------
+-- Cargo on its way to (+) or from (-) a station, as Cybersyn counts it
+function C.in_transit(stop, item)
+  if not (stop and stop.valid) then return 0 end
+  return remote.call("cybersyn", "read_global", "stations", stop.unit_number, "deliveries", item) or 0
+end
+
+-- Drawing: every object goes into C.group while a scene phase collects them ---------------------------
+function C.keep(object)
+  if C.group then C.group[#C.group + 1] = object end
+  return object
+end
+
+function C.clear(group)
+  for _, object in ipairs(group or {}) do
+    if object.valid then object.destroy() end
+  end
+end
+
 function C.text(position, text, o)
   o = o or {}
-  return rendering.draw_text{text = text, surface = surface, target = position, color = o.color or {1, 1, 1},
-    scale = o.scale or 1, font = o.font or "default-bold", alignment = o.align or "center",
-    vertical_alignment = o.valign or "middle", use_rich_text = true}
+  return C.keep(rendering.draw_text{text = text, surface = surface, target = position, color = o.color or C.COL.white,
+    scale = (o.scale or 1) * C.TEXT, font = o.font or "default-bold", alignment = o.align or "center",
+    vertical_alignment = o.valign or "middle", use_rich_text = true})
 end
 
 function C.rect(left_top, right_bottom, color, filled, width)
-  return rendering.draw_rectangle{surface = surface, left_top = left_top, right_bottom = right_bottom, color = color,
-    filled = filled ~= false, width = width or 2}
+  return C.keep(rendering.draw_rectangle{surface = surface, left_top = left_top, right_bottom = right_bottom, color = color,
+    filled = filled ~= false, width = width or 2})
 end
 
 function C.line(from, to, color, width, dash)
-  return rendering.draw_line{surface = surface, from = from, to = to, color = color, width = width or 3,
-    dash_length = dash or 0, gap_length = dash or 0}
+  return C.keep(rendering.draw_line{surface = surface, from = from, to = to, color = color, width = width or 3,
+    dash_length = dash or 0, gap_length = dash or 0})
 end
 
 function C.sprite(sprite, position, scale, tint)
-  return rendering.draw_sprite{sprite = sprite, surface = surface, target = position, x_scale = scale or 1,
-    y_scale = scale or 1, tint = tint}
+  return C.keep(rendering.draw_sprite{sprite = sprite, surface = surface, target = position, x_scale = scale or 1,
+    y_scale = scale or 1, tint = tint})
+end
+
+-- Dark plate under the explanations
+function C.board(left, top, right, bottom)
+  C.rect({left, top}, {right, bottom}, {0, 0, 0, 0.72})
+  C.rect({left, top}, {right, bottom}, {0.45, 0.45, 0.45, 0.9}, false, 2)
 end
 
 -- Box with a title: a station, a train or a combinator of a scheme
 function C.box(x, y, w, h, color, title, scale)
-  local back = C.rect({x - w / 2, y - h / 2}, {x + w / 2, y + h / 2}, {color[1] * 0.25, color[2] * 0.25, color[3] * 0.25, 0.85})
-  local frame = C.rect({x - w / 2, y - h / 2}, {x + w / 2, y + h / 2}, color, false, 3)
-  local label = title and C.text({x, y}, title, {scale = scale or 1}) or nil
-  return {back = back, frame = frame, label = label, x = x, y = y}
+  C.rect({x - w / 2, y - h / 2}, {x + w / 2, y + h / 2}, {color[1] * 0.22, color[2] * 0.22, color[3] * 0.22, 0.9})
+  C.rect({x - w / 2, y - h / 2}, {x + w / 2, y + h / 2}, color, false, 3)
+  if title then return C.text({x, y}, title, {scale = scale or 1}) end
 end
 
 function C.title(text, y, scale)
-  return C.text({C.cam[1], y}, text, {scale = scale or 1.6, color = {1, 0.9, 0.6}})
+  return C.text({C.cam[1], y}, text, {scale = scale or 1.5, color = C.COL.note})
+end
+
+-- Arrow: a line with a head at `to`
+function C.arrow(from, to, color, width)
+  local dx, dy = to[1] - from[1], to[2] - from[2]
+  local length = math.sqrt(dx * dx + dy * dy)
+  if length == 0 then return end
+  local ux, uy = dx / length, dy / length
+  C.line(from, to, color, width or 4)
+  for _, s in ipairs({1, -1}) do
+    C.line(to, {to[1] - 0.7 * (ux * 0.87 - s * uy * 0.5), to[2] - 0.7 * (uy * 0.87 + s * ux * 0.5)}, color, width or 4)
+  end
+end
+
+-- Pulsing frame around the place the text talks about
+function C.pulse(left_top, right_bottom, color)
+  local p = {color = color or C.COL.note}
+  p.object = C.rect(left_top, right_bottom, p.color, false, 5)
+  C.pulses[#C.pulses + 1] = p
+  return p
+end
+
+function C.unpulse(p)
+  if p and p.object.valid then p.object.destroy() end
+end
+
+function C.step_pulses()
+  local a = 0.35 + 0.65 * (0.5 + 0.5 * math.sin(C.t * 0.12))
+  local list = {}
+  for _, p in ipairs(C.pulses) do
+    if p.object.valid then
+      p.object.color = {p.color[1] * a, p.color[2] * a, p.color[3] * a, a}
+      list[#list + 1] = p
+    end
+  end
+  C.pulses = list
 end
 
 -- Moving tokens: a group of sprites moving together ----------------------------------------------------
@@ -187,19 +257,23 @@ function C.wire(a, a_id, b, b_id)
   a.get_wire_connector(a_id, true).connect_to(b.get_wire_connector(b_id, true), false)
 end
 
--- Substations at the points, wired together, and an energy interface
+-- Substations at the points, each wired to the nearest earlier one, and one energy interface
 function C.power(points, interface)
   local poles = {}
+  local id = defines.wire_connector_id.pole_copper
   for i, p in ipairs(points) do
     poles[i] = C.make("substation", p)
-    if i > 1 then
-      pcall(function()
-        local id = defines.wire_connector_id.pole_copper
-        poles[i - 1].get_wire_connector(id, true).connect_to(poles[i].get_wire_connector(id, true), false)
-      end)
+    local best, distance
+    for j = 1, i - 1 do
+      local d = math.sqrt((p[1] - points[j][1]) ^ 2 + (p[2] - points[j][2]) ^ 2)
+      if not distance or d < distance then best, distance = j, d end
+    end
+    if best then
+      pcall(function() poles[best].get_wire_connector(id, true).connect_to(poles[i].get_wire_connector(id, true), false) end)
     end
   end
-  C.make("electric-energy-interface", interface)
+  if interface then C.make("electric-energy-interface", interface) end
+  return poles
 end
 
 function C.stop(x, y, direction, name, color, limit)
@@ -332,9 +406,8 @@ function C.train(stop, cars, o)
   end
   local loco = carriages[1]
   loco.get_fuel_inventory().insert{name = "coal", count = o.fuel or 1200}
-  if o.color then loco.color = o.color end
   if o.cargo then
-    for i, car in ipairs(carriages) do
+    for _, car in ipairs(carriages) do
       if car.type == "cargo-wagon" then car.get_inventory(defines.inventory.cargo_wagon).insert(o.cargo) end
     end
   end
@@ -345,11 +418,12 @@ function C.train(stop, cars, o)
   return loco, carriages
 end
 
--- Status label over a locomotive; C.poll follows the Cybersyn status and calls C.on_status(train, old, new)
-function C.track(loco, name)
-  local tracked = {loco = loco, status = "none", name = name}
+-- Status label over a locomotive (below it on the bottom half of the loop); C.poll follows the Cybersyn status
+-- and calls C.on_status(tracked, old, new)
+function C.track(loco)
+  local tracked = {loco = loco, status = "none", below = false}
   tracked.label = rendering.draw_text{text = {"zzz-cybersyn-sim.status-none"}, surface = surface,
-    target = {entity = loco, offset = {0, -2.6}}, color = {1, 1, 0.75}, scale = 1.7, font = "default-bold",
+    target = {entity = loco, offset = {0, -2.6}}, color = {1, 1, 0.75}, scale = 2.2, font = "default-bold",
     alignment = "center", vertical_alignment = "middle", use_rich_text = true}
   C.trains[#C.trains + 1] = tracked
   return tracked
@@ -357,115 +431,174 @@ end
 
 function C.poll()
   if not remote.interfaces["cybersyn"] then return end
+  -- Cybersyn reloads all its settings when any runtime setting changes; keep new stations from waiting 20 s
+  if C.live and C.t % 120 == 0 then C.setting("warmup_time", 0) end
   for _, tracked in ipairs(C.trains) do
-    if tracked.loco.valid then
+    if tracked.loco.valid and tracked.label.valid then
+      local below = tracked.loco.position.y > 0
+      if below ~= tracked.below then
+        tracked.below = below
+        tracked.label.target = {entity = tracked.loco, offset = {0, below and 2.6 or -2.6}}
+      end
       local status = C.status_of(tracked.loco.train) or "none"
       if status ~= tracked.status then
         local old = tracked.status
         tracked.status = status
-        if tracked.label.valid then tracked.label.text = {"zzz-cybersyn-sim.status-" .. status} end
+        tracked.label.text = {"zzz-cybersyn-sim.status-" .. status}
         if old == 0 and status == 1 then C.stats.dispatch = C.stats.dispatch + 1 end
         if old == 6 and status == 1 then C.stats.bypass = C.stats.bypass + 1 end
         if old == 4 and status ~= 4 then C.stats.deliveries = C.stats.deliveries + 1 end
         if status == 7 then C.stats.refuel = C.stats.refuel + 1 end
+        if status == 0 and old ~= "none" then C.stats.depot = C.stats.depot + 1 end
         if C.on_status then C.on_status(tracked, old, status) end
       end
     end
   end
 end
 
-function C.cargo(loco)
-  if not loco.valid then return 0 end
-  return loco.train.get_item_count()
+function C.busy(tracked)
+  local s = tracked.status
+  return s == 1 or s == 2 or s == 3 or s == 4
 end
 
 -- The network of the big scenes ---------------------------------------------------------------------
--- Loop XL = -20, XR = 20, T = -13: depot and provider on the top straight (driven east), requester and
--- refueler on the bottom one (driven west). Parked trains: locomotive 3 tiles and wagon 10 tiles before the stop.
--- o: item, request, threshold, start (requester stock), stock (provider), refill / consume (per second),
--- refueler, fuel, constant (combinator name), no_bypass, control (station control at the requester)
-C.NAMES = {depot = "[virtual-signal=signal-D]", provider = "[virtual-signal=up-arrow]", requester = "[virtual-signal=down-arrow]", refueler = "[item=coal]"}
+-- Loop XL = -20, XR = 20, T = -13: depot and provider on the top straight (driven east), requesters and the
+-- refueler on the bottom one (driven west). A parked train: the locomotive 3-10 tiles and the wagon 10-17 tiles
+-- past the stop. The middle of the loop (x -15..15, y -4..4) is kept free for the board with explanations.
+C.NAMES = {depot = "[virtual-signal=signal-D]", provider = "[virtual-signal=up-arrow]", requester = "[virtual-signal=down-arrow]",
+  requester2 = "[virtual-signal=down-arrow][virtual-signal=signal-2]", refueler = "[item=coal]"}
+C.REQ = {
+  {stop = {-17, 11}, comb = {-15.5, 11}, const = {-15.5, 8.5}, x1 = -9.5, x2 = -4.5, label = {-7, 8.8}},
+  {stop = {3, 11}, comb = {4.5, 11}, const = {4.5, 8.5}, x1 = 10.5, x2 = 15.5, label = {13, 8.8}},
+}
 
--- Power inside the loop: station controllers read their input only while powered (Cybersyn checks the status),
--- inserters and pumps need it too.
-function C.network_power()
-  C.power({{-16, 6}, {-2, 6}, {5, -7}, {16, -7}}, {13, -5})
+function C.net_power(extra)
+  local points = {{-4, -5.5}, {10, -5.5}, {4, 5.5}, {-10, 5.5}}
+  if extra then points[#points + 1] = {13, 5.5} end
+  C.power(points, {17, -1})
 end
 
-function C.network(o)
-  o = o or {}
-  local N = {o = o, item = o.item or "iron-ore"}
+-- o: item, request, threshold, start, start2, consume, consume2 (per second), stock, stock_cap, refill,
+-- second (a second requester), refueler, fuel, constant (combinator name), no_bypass
+function C.net_base(o)
+  local N = {o = o or {}, req = {}}
+  N.item = N.o.item or "iron-ore"
+  N.capacity = 20 * prototypes.item[N.item].stack_size
   C.setting("warmup_time", 0)
   force.bulk_inserter_capacity_bonus = 40
   C.loop(-20, 20, -13)
-  C.network_power()
-  -- Depot
-  N.depot = C.stop(-1, -11, defines.direction.east, C.NAMES.depot, {0.55, 0.55, 0.55}, 1)
-  N.depot_comb = C.controller({-2.5, -11}, "depot", {bits = {any_depot = true, train_count = true, no_bypass = o.no_bypass}})
-  -- Provider: chests south of the top rail, inserters load the wagon (north)
-  N.p_stop = C.stop(17, -11, defines.direction.east, C.NAMES.provider, {0.25, 0.85, 0.3})
-  N.p_chests = C.loader(4.5, 9.5, -11.5, -10.5, -13)
-  N.p_comb = C.controller({15.5, -11}, "station", {pr = 1})
-  C.wire(N.p_chests[#N.p_chests], GREEN, N.p_comb, IN)
-  C.fill(N.p_chests, N.item, o.stock or 9000)
-  -- Requester: chests north of the bottom rail, inserters unload the wagon (south)
-  N.r_stop = C.stop(-17, 11, defines.direction.west, C.NAMES.requester, {0.3, 0.55, 1})
-  N.r_chests = C.loader(-9.5, -4.5, 11.5, 10.5, 9.5)
-  N.r_comb = C.controller({-15.5, 11}, "station", {pr = 2})
-  N.request = o.request or 8000
-  N.threshold = o.threshold or 2000
-  N.const = C.constant(o.constant or "constant-combinator", {-15.5, 8.5},
-    {{"item", N.item, -N.request}, {"virtual", "cybersyn-request-threshold", N.threshold}})
-  C.wire(N.const, GREEN, N.r_comb, IN)
-  C.wire(N.r_chests[1], GREEN, N.r_comb, IN)
-  C.fill(N.r_chests, N.item, o.start or 4000)
-  if o.refueler then
-    N.f_stop = C.stop(3, 11, defines.direction.west, C.NAMES.refueler, {1, 0.6, 0.15})
-    N.f_chests = C.loader(4.5, 5.5, 11.5, 10.5, 13.5, "wooden-chest")
-    N.f_comb = C.controller({1.5, 11}, "refueler")
-    C.fill(N.f_chests, "coal", 1000)
-  end
-  local loco = C.train(N.depot, {"locomotive", "cargo-wagon"}, {depot = C.NAMES.depot, fuel = o.fuel or 1200})
-  N.loco = loco
-  N.tracked = C.track(loco)
-  N.capacity = 20 * prototypes.item[N.item].stack_size
+  C.net_power(N.o.second)
   return N
 end
 
--- Mining at the provider and consumption at the requester, every 30 ticks
+function C.net_depot(N)
+  N.depot = C.stop(-1, -11, defines.direction.east, C.NAMES.depot, C.COL.depot, 1)
+  N.depot_comb = C.controller({-2.5, -11}, "depot", {bits = {any_depot = true, train_count = true, no_bypass = N.o.no_bypass}})
+end
+
+-- Provider: chests south of the top rail, inserters load the wagon (north)
+function C.net_provider(N)
+  N.p_stop = C.stop(17, -11, defines.direction.east, C.NAMES.provider, C.COL.provider)
+  N.p_chests = C.loader(4.5, 9.5, -11.5, -10.5, -13)
+  N.p_comb = C.controller({15.5, -11}, "station", {pr = 1})
+  C.wire(N.p_chests[#N.p_chests], GREEN, N.p_comb, IN)
+  C.fill(N.p_chests, N.item, N.o.stock or 9000)
+end
+
+-- Requester k: chests north of the bottom rail, inserters unload the wagon (south)
+function C.net_requester(N, k)
+  local d = C.REQ[k]
+  local r = {k = k, request = N.o.request or 8000, threshold = N.o.threshold or 2000, priority = nil,
+    consume = (k == 1 and N.o.consume or N.o.consume2) or 80}
+  r.stop = C.stop(d.stop[1], d.stop[2], defines.direction.west, k == 1 and C.NAMES.requester or C.NAMES.requester2, C.COL.requester)
+  r.chests = C.loader(d.x1, d.x2, 11.5, 10.5, 9.5)
+  r.comb = C.controller(d.comb, "station", {pr = 2})
+  r.const = C.constant(N.o.constant or "constant-combinator", d.const, {})
+  C.wire(r.const, GREEN, r.comb, IN)
+  C.wire(r.chests[1], GREEN, r.comb, IN)
+  N.req[k] = r
+  C.set_request(N, k, {})
+  C.fill(r.chests, N.item, (k == 1 and N.o.start or N.o.start2) or 4000)
+  return r
+end
+
+-- Rewrites the request combinator: the cargo with a minus sign, the threshold and the priority (if set)
+function C.set_request(N, k, o)
+  local r = N.req[k]
+  for key, value in pairs(o) do r[key] = value end
+  local signals = {{"item", N.item, -r.request}, {"virtual", "cybersyn-request-threshold", r.threshold}}
+  if r.priority then signals[#signals + 1] = {"virtual", "cybersyn-priority", r.priority} end
+  C.set_signals(r.const, signals)
+end
+
+function C.net_refueler(N)
+  N.f_stop = C.stop(3, 11, defines.direction.west, C.NAMES.refueler, C.COL.refuel)
+  N.f_chests = C.loader(4.5, 5.5, 11.5, 10.5, 13.5, "wooden-chest")
+  N.f_comb = C.controller({1.5, 11}, "refueler")
+  C.fill(N.f_chests, "coal", 1000)
+end
+
+function C.net_train(N, o)
+  o = o or {}
+  N.loco = C.train(N.depot, {"locomotive", "cargo-wagon"}, {depot = C.NAMES.depot, fuel = o.fuel or N.o.fuel or 1200, back = o.back})
+  N.tracked = C.track(N.loco)
+end
+
+function C.network(o)
+  local N = C.net_base(o)
+  C.net_depot(N)
+  C.net_provider(N)
+  C.net_requester(N, 1)
+  if N.o.second then C.net_requester(N, 2) end
+  if N.o.refueler then C.net_refueler(N) end
+  C.net_train(N)
+  return N
+end
+
+-- Mining at the provider and consumption at the requesters, every 30 ticks
 function C.economy(N, t)
   if t % 30 ~= 0 then return end
   local o = N.o
-  local have = C.count(N.p_chests, N.item)
-  local cap = o.stock_cap or 12000
-  if have < cap then C.fill(N.p_chests, N.item, math.min(cap - have, math.floor((o.refill or 400) / 2))) end
-  C.drain(N.r_chests, N.item, math.floor((o.consume or 300) / 2))
+  if N.p_chests then
+    local have = C.count(N.p_chests, N.item)
+    local cap = o.stock_cap or 12000
+    if have < cap then C.fill(N.p_chests, N.item, math.min(cap - have, math.floor((o.refill or 400) / 2))) end
+  end
+  for _, r in pairs(N.req) do C.drain(r.chests, N.item, math.floor(r.consume / 2)) end
   if N.f_chests then
     local coal = C.count(N.f_chests, "coal")
     if coal < 800 then C.fill(N.f_chests, "coal", 800 - coal) end
   end
 end
 
-function C.labels(N, scale)
-  scale = scale or 2.0
-  C.text({-8, -8.6}, {"zzz-cybersyn-sim.depot"}, {scale = scale, color = {0.8, 0.8, 0.8}})
-  C.text({10, -8.6}, {"zzz-cybersyn-sim.provider"}, {scale = scale, color = {0.45, 1, 0.5}})
-  C.text({-8, 8.4}, {"zzz-cybersyn-sim.requester"}, {scale = scale, color = {0.55, 0.75, 1}})
-  if N.f_stop then C.text({6, 8.4}, {"zzz-cybersyn-sim.refueler"}, {scale = scale, color = {1, 0.75, 0.35}}) end
+-- Station names next to the stations
+function C.label(N, kind)
+  local scale = 1.6
+  if kind == "depot" then
+    C.text({-6, -8.8}, {"zzz-cybersyn-sim.depot"}, {scale = scale, color = C.COL.depot})
+  elseif kind == "provider" then
+    C.text({7, -8.8}, {"zzz-cybersyn-sim.provider"}, {scale = scale, color = C.COL.provider})
+  elseif kind == "requester" then
+    C.text(C.REQ[1].label, N.req[2] and {"zzz-cybersyn-sim.requester-n", 1} or {"zzz-cybersyn-sim.requester"}, {scale = scale, color = C.COL.requester})
+  elseif kind == "requester2" then
+    C.text(C.REQ[2].label, {"zzz-cybersyn-sim.requester-n", 2}, {scale = scale, color = C.COL.requester})
+  elseif kind == "refueler" then
+    C.text({5, 8.8}, {"zzz-cybersyn-sim.refueler"}, {scale = scale, color = C.COL.refuel})
+  end
 end
 
--- Stock panel in the middle of the loop
-function C.panel(N, x, y, scale)
-  scale = scale or 1.6
-  local icon = "[item=" .. N.item .. "]"
-  local p = C.text({x, y}, "", {scale = scale, align = "left"})
-  local r = C.text({x, y + 1.7}, "", {scale = scale, align = "left"})
-  local d = C.text({x, y + 3.4}, "", {scale = scale, align = "left"})
-  return function()
-    p.text = {"zzz-cybersyn-sim.panel-provider", icon, C.count(N.p_chests, N.item)}
-    r.text = {"zzz-cybersyn-sim.panel-requester", icon, C.count(N.r_chests, N.item), N.request, N.threshold}
-    d.text = {"zzz-cybersyn-sim.panel-deliveries", C.stats.deliveries}
-  end
+function C.labels(N)
+  if N.depot then C.label(N, "depot") end
+  if N.p_stop then C.label(N, "provider") end
+  if N.req[1] then C.label(N, "requester") end
+  if N.req[2] then C.label(N, "requester2") end
+  if N.f_stop then C.label(N, "refueler") end
+end
+
+function C.stock_text(N)
+  local r = N.req[1]
+  return {"zzz-cybersyn-sim.stock", "[item=" .. N.item .. "]", N.p_chests and C.count(N.p_chests, N.item) or 0,
+    C.count(r.chests, N.item), r.request, C.stats.deliveries}
 end
 ]=]
 
@@ -484,63 +617,102 @@ end
 
 local simulations = {}
 
--- Обзор: депо, снабжение, запрос; один поезд возит руду, над ним статус из Cybersyn.
-simulations.overview = live([=[
+-- 1. Быстрый старт: сеть собирается по шагам (депо и поезд, снабжение, запрос), потом поезд возит сам.
+simulations.quickstart = live([=[
 C.scene(function()
   if not C.need() then return end
   C.camera({0, -0.5}, 0.66)
-  local N = C.network{start = 4500, consume = 260}
-  C.labels(N)
-  local panel = C.panel(N, -10, -3.6)
-  C.text({0, 3.4}, {"zzz-cybersyn-sim.overview-hint"}, {scale = 1.61, color = {1, 0.9, 0.6}})
+  local N = C.net_base{start = 2000, consume = 80}
+  C.board(-15, -3.9, 15, 3.9)
+  local lines = {}
+  for i = 1, 4 do
+    lines[i] = C.text({-14, -3.0 + (i - 1) * 1.5}, {"zzz-cybersyn-sim.quick-" .. i}, {scale = 1.45, align = "left", color = C.COL.dim})
+  end
+  local stock = C.text({-14, 3.0}, "", {scale = 1.3, align = "left"})
+  local marks, current = {}, 0
+  local function step(i, boxes)
+    current = i
+    C.quick_step = i
+    for k, line in ipairs(lines) do
+      line.color = k == i and C.COL.note or (k < i and C.COL.green or C.COL.dim)
+    end
+    for _, p in ipairs(marks) do C.unpulse(p) end
+    marks = {}
+    for _, b in ipairs(boxes) do marks[#marks + 1] = C.pulse(b[1], b[2], b[3]) end
+  end
+  C.after(40, function()
+    C.net_depot(N)
+    C.net_train(N, {back = 6})
+    C.label(N, "depot")
+    step(1, {{{-3.4, -12.3}, {0.2, -9.7}, C.COL.depot}})
+  end)
+  C.after(480, function()
+    C.net_provider(N)
+    C.label(N, "provider")
+    step(2, {{{3.8, -12.3}, {10.2, -9.9}, C.COL.provider}, {{14.8, -12.2}, {16.2, -9.8}, C.COL.note}})
+  end)
+  C.after(900, function()
+    C.net_requester(N, 1)
+    C.label(N, "requester")
+    step(3, {{{-10.2, 9.9}, {-3.8, 12.3}, C.COL.requester}, {{-16.2, 7.8}, {-14.8, 12.2}, C.COL.note}})
+  end)
+  C.on_status = function(tracked, old, new)
+    if new == 1 and current == 3 then step(4, {}) end
+  end
   C.main = function(t)
-    C.economy(N, t)
-    if t % 15 == 0 then panel() end
+    if current >= 3 then
+      C.economy(N, t)
+      if t % 15 == 0 then stock.text = C.stock_text(N) end
+    end
   end
 end)
 ]=])
 
--- Станционный контроллер: пять режимов у остановок, зона «1 клетка» и цвета буквы S.
+-- 2. Станционный контроллер: режимы у остановок, питание и расстояние, цвета буквы S. Картинка без скрипта мода.
 simulations.controller = simulation([=[
 C.scene(function()
-  C.camera({1, 0.5}, 0.82)
-  C.straight(-27, 29, 3)
-  -- Combinators need power; the crossed-out one far from the stop stays without it
-  C.power({{-18, -2}, {-4, -2}, {9, -2}, {20, -2}}, {-22, -2})
-  local function station(sx, name, color)
-    return C.make("train-stop", {sx, 5}, defines.direction.east, {station = name, color = color})
+  C.camera({1, 0.5}, 1)
+  C.straight(-23, 25, 0)
+  C.power({{-14, -3.5}, {-2, -4}, {8, -4}}, {3, -6.5})
+  local function stop(x, name, color)
+    return C.make("train-stop", {x, 2}, defines.direction.east, {station = name, color = color})
   end
-  local y_label = 8.3
+  local function letter(letter_text, key)
+    return {"", "[font=default-large-bold]" .. letter_text .. "[/font]  ", {key}}
+  end
+  local y1 = 4.7
+  C.title({"zzz-cybersyn-sim.controller-title"}, -8.7, 1.3)
   -- Depot
-  station(-19, "[virtual-signal=signal-D]", {0.55, 0.55, 0.55})
-  C.controller({-20.5, 5}, "depot", {register = false})
-  C.text({-19.5, y_label}, {"", "[font=default-large-bold]D[/font]  ", {"cybersyn-gui.depot"}}, {scale = 1.1})
-  -- Station + wagon control, a parked train
-  local s = station(-1, "[virtual-signal=up-arrow]", {0.25, 0.85, 0.3})
-  local comb = C.controller({-2.5, 5}, "station", {register = false})
-  C.make("locomotive", {-4, 3}, nil, {orientation = 0.25})
-  C.make("cargo-wagon", {-11, 3}, nil, {orientation = 0.25})
-  C.controller({-11.5, 1}, "wagon", {register = false})
-  C.text({-11.5, -1.8}, {"", "[font=default-large-bold]W[/font]  ", {"cybersyn-gui.wagon-manifest"}}, {scale = 1.0})
-  C.rect({-3, 3}, {1, 7}, {0.3, 1, 0.3, 1}, false, 3)
-  C.text({-1, y_label}, {"", "[font=default-large-bold]S[/font]  ", {"cybersyn-gui.comb1"}}, {scale = 1.1})
-  local state = C.text({-1, y_label + 1.3}, "", {scale = 0.95})
-  C.text({-1, y_label + 2.6}, {"zzz-cybersyn-sim.one-tile"}, {scale = 0.95, color = {0.5, 1, 0.5}})
+  stop(-17, C.NAMES.depot, C.COL.depot)
+  C.controller({-18.5, 2}, "depot", {register = false})
+  C.text({-17.5, y1}, letter("D", "cybersyn-gui.depot"), {scale = 1.1})
+  -- Too far from the depot stop
+  C.controller({-13, 4}, "station", {register = false})
+  C.line({-13.7, 3.3}, {-12.3, 4.7}, {1, 0.2, 0.2}, 5)
+  C.line({-13.7, 4.7}, {-12.3, 3.3}, {1, 0.2, 0.2}, 5)
+  C.text({-13, 6.3}, {"zzz-cybersyn-sim.too-far"}, {scale = 0.9, color = C.COL.red})
+  -- Station with station control and a parked train with wagon control
+  stop(3, C.NAMES.provider, C.COL.provider)
+  local comb = C.controller({1.5, 2}, "station", {register = false})
+  C.controller({4.5, 2}, "control", {register = false})
+  C.make("locomotive", {-2, 0}, nil, {orientation = 0.25})
+  C.make("cargo-wagon", {-9, 0}, nil, {orientation = 0.25})
+  C.controller({-9, -2}, "wagon", {register = false})
+  C.text({-8, -4.2}, letter("W", "cybersyn-gui.wagon-manifest"), {scale = 1.0})
+  C.pulse({0.8, 0.8}, {5.2, 3.2}, C.COL.note)
+  C.text({2, y1}, letter("S", "cybersyn-gui.comb1"), {scale = 1.1})
+  local state = C.text({2, y1 + 1.4}, "", {scale = 1.0})
+  C.text({5, y1 + 2.8}, letter("C", "cybersyn-gui.comb2"), {scale = 1.0})
   -- Refueler
-  station(11, "[item=coal]", {1, 0.6, 0.15})
-  C.controller({9.5, 5}, "refueler", {register = false})
-  C.text({10.5, y_label}, {"", "[font=default-large-bold]R[/font]  ", {"cybersyn-gui.refueler"}}, {scale = 1.1})
-  -- Station + station control
-  station(23, "[virtual-signal=down-arrow]", {0.3, 0.55, 1})
-  C.controller({21.5, 5}, "station", {register = false})
-  C.controller({24.5, 5}, "control", {register = false})
-  C.text({23, y_label}, {"", "[font=default-large-bold]S + C[/font]  ", {"cybersyn-gui.comb2"}}, {scale = 1.1})
-  -- Too far from the stop
-  C.controller({14.5, 9}, "station", {register = false})
-  C.line({13.8, 8.3}, {15.2, 9.7}, {1, 0.2, 0.2}, 5)
-  C.line({13.8, 9.7}, {15.2, 8.3}, {1, 0.2, 0.2}, 5)
-  C.text({14.5, 10.9}, {"zzz-cybersyn-sim.too-far"}, {scale = 0.9, color = {1, 0.5, 0.5}})
-  C.title({"zzz-cybersyn-sim.controller-title"}, -6.5, 1.5)
+  stop(12, C.NAMES.refueler, C.COL.refuel)
+  C.controller({10.5, 2}, "refueler", {register = false})
+  C.text({11.5, y1}, letter("R", "cybersyn-gui.refueler"), {scale = 1.1})
+  -- A station without power: the letter still glows, but Cybersyn does not read its input
+  stop(20, C.NAMES.requester, C.COL.requester)
+  C.controller({18.5, 2}, "station", {register = false})
+  C.sprite("utility/electricity_icon_unplugged", {18.5, 4.3}, 0.9)
+  C.text({19.5, y1 + 1.4}, {"zzz-cybersyn-sim.no-power"}, {scale = 0.9, color = C.COL.red})
+  C.text({1, 9.6}, {"zzz-cybersyn-sim.one-tile"}, {scale = 1.1, color = C.COL.green})
   local cycle = {{"station", "zzz-cybersyn-sim.s-blue"}, {"active", "zzz-cybersyn-sim.s-green"}, {"failed", "zzz-cybersyn-sim.s-red"}}
   local index = 0
   C.main = function(t)
@@ -553,33 +725,31 @@ C.scene(function()
 end)
 ]=])
 
--- Депо: пустой поезд входит в сеть, поезд с грузом задержан; груз убрали — поезд тоже в сети.
+-- 3. Депо: пустой поезд входит в сеть, поезд с грузом задержан; груз убрали, поезд тоже в сети.
 simulations.depot = live([=[
 C.scene(function()
   if not C.need() then return end
-  C.setting("warmup_time", 0)
   C.camera({0, -0.5}, 0.66)
-  C.loop(-20, 20, -13)
+  C.net_base{}
   local name = C.NAMES.depot
-  local top = C.stop(-1, -11, defines.direction.east, name, {0.55, 0.55, 0.55}, 1)
+  local top = C.stop(-1, -11, defines.direction.east, name, C.COL.depot, 1)
   C.controller({-2.5, -11}, "depot")
-  local bottom = C.stop(3, 11, defines.direction.west, name, {0.55, 0.55, 0.55}, 1)
+  local bottom = C.stop(3, 11, defines.direction.west, name, C.COL.depot, 1)
   C.controller({1.5, 11}, "depot")
-  C.text({-8, -8.6}, {"zzz-cybersyn-sim.depot"}, {scale = 2.1, color = {0.8, 0.8, 0.8}})
-  C.text({10, 8.4}, {"zzz-cybersyn-sim.depot"}, {scale = 2.1, color = {0.8, 0.8, 0.8}})
-  C.text({0, -4.6}, {"zzz-cybersyn-sim.depot-same-name", name}, {scale = 1.54})
-  local note = C.text({0, 0}, "", {scale = 1.68, color = {1, 0.9, 0.6}})
-  local a, b, phase
+  C.text({-6, -8.8}, {"zzz-cybersyn-sim.depot"}, {scale = 1.6, color = C.COL.depot})
+  C.text({10, 8.8}, {"zzz-cybersyn-sim.depot"}, {scale = 1.6, color = C.COL.depot})
+  C.board(-15, -3.9, 15, 3.9)
+  C.text({-14, -2.4}, {"zzz-cybersyn-sim.depot-same-name", name}, {scale = 1.35, align = "left"})
+  local note = C.text({-14, 0.2}, "", {scale = 1.35, align = "left", color = C.COL.note})
+  local a, b
   local function spawn()
     a = C.train(top, {"locomotive", "cargo-wagon"}, {depot = name})
     C.track(a)
     b = C.train(bottom, {"locomotive", "cargo-wagon"}, {depot = name, back = 1, cargo = {name = "iron-ore", count = 600}})
     C.track(b)
-    phase = 1
     note.text = {"zzz-cybersyn-sim.depot-arrive"}
   end
   spawn()
-  C.on_status = function(tracked, old, new) end
   C.main = function(t)
     local cycle = t % 1500
     if cycle == 600 and b and b.valid then
@@ -587,7 +757,6 @@ C.scene(function()
       for _, car in ipairs(b.train.cargo_wagons) do car.get_inventory(defines.inventory.cargo_wagon).clear() end
       b.train.schedule = {current = 1, records = {{station = name, wait_conditions = {{type = "inactivity", compare_type = "and", ticks = 120}}}}}
       b.train.manual_mode = true
-      phase = 2
       note.text = {"zzz-cybersyn-sim.depot-unloaded"}
     elseif cycle == 602 and b and b.valid then
       b.train.manual_mode = false
@@ -601,180 +770,196 @@ C.scene(function()
       C.trains = {}
       C.after(30, spawn)
     end
-    if phase == 1 and t % 30 == 0 and b and b.valid and b.train.state == defines.train_state.wait_station then
-      local held = C.status_of(b.train) == nil and b.train.get_item_count() > 0
+    if cycle < 600 and t % 30 == 0 and b and b.valid and b.train.state == defines.train_state.wait_station then
       for _, tracked in ipairs(C.trains) do
-        if tracked.loco == b and held and tracked.label.valid then tracked.label.text = {"zzz-cybersyn-sim.status-held"} end
+        if tracked.loco == b and tracked.status == "none" and b.train.get_item_count() > 0 and tracked.label.valid then
+          tracked.label.text = {"zzz-cybersyn-sim.status-held"}
+        end
       end
     end
   end
 end)
 ]=])
 
--- Снабжение крупно: сундуки → вход контроллера (плюс = отдаём), загрузка вагона, выход контроллера.
+-- 4. Снабжение крупно: сундуки → вход контроллера (плюс = могу отдать), на выходе заказ поезда.
 simulations.provider = live([=[
 C.scene(function()
   if not C.need() then return end
-  C.camera({9, -7.5}, 1.05)
-  local N = C.network{start = 3000, consume = 300}
-  C.text({7, -8.4}, {"zzz-cybersyn-sim.provider-chests"}, {scale = 1.0, color = {0.6, 1, 0.6}})
-  C.text({17, -15.6}, {"zzz-cybersyn-sim.provider"}, {scale = 1.4, color = {0.45, 1, 0.5}})
-  local input = C.text({-1.5, -4.6}, "", {scale = 1.05, align = "left"})
-  local output = C.text({-1.5, -3.4}, "", {scale = 1.05, align = "left"})
-  C.text({-1.5, -2.0}, {"zzz-cybersyn-sim.provider-rule"}, {scale = 0.95, align = "left", color = {1, 0.9, 0.6}})
+  C.camera({6, -7.5}, 1.1)
+  local N = C.network{start = 3000, consume = 80}
+  C.label(N, "depot")
+  C.label(N, "provider")
+  C.board(-13, -3.8, 15, 1.9)
+  local input = C.text({-12, -2.8}, "", {scale = 1.2, align = "left"})
+  local output = C.text({-12, -1.2}, "", {scale = 1.2, align = "left"})
+  C.text({-12, 0.6}, {"zzz-cybersyn-sim.provider-rule"}, {scale = 1.1, align = "left", color = C.COL.note})
+  C.pulse({3.8, -12.3}, {10.2, -9.9}, C.COL.provider)
+  C.pulse({14.8, -12.2}, {16.2, -9.8}, C.COL.note)
   C.main = function(t)
     C.economy(N, t)
     if t % 15 == 0 then
-      input.text = {"zzz-cybersyn-sim.comb-input", C.signal_text(C.signals_of(N.p_comb, {defines.wire_connector_id.combinator_input_red, defines.wire_connector_id.combinator_input_green}))}
-      output.text = {"zzz-cybersyn-sim.comb-output", C.signal_text(C.signals_of(N.p_comb, {defines.wire_connector_id.combinator_output_red, defines.wire_connector_id.combinator_output_green}))}
+      input.text = {"zzz-cybersyn-sim.comb-input", C.signal_text(C.signals_of(N.p_comb, C.INPUTS))}
+      output.text = {"zzz-cybersyn-sim.comb-output", C.signal_text(C.signals_of(N.p_comb, C.OUTPUTS))}
     end
   end
 end)
 ]=])
 
--- Запрос крупно: комбинатор заявок (−8000 и порог), сундуки, сумма на входе контроллера.
+-- 5. Запрос крупно: заявка −8000 и порог в комбинаторе заявок, сундуки, сумма на входе, груз в пути.
 simulations.requester = live([=[
 C.scene(function()
   if not C.need() then return end
-  C.camera({-8, 7.5}, 1.05)
-  local N = C.network{start = 6500, consume = 330, constant = "cybersyn-constant-combinator"}
-  C.text({-7, 8.4}, {"zzz-cybersyn-sim.requester-chests"}, {scale = 1.0, color = {0.6, 0.8, 1}})
-  C.text({-15.5, 7.2}, {"zzz-cybersyn-sim.request-combinator"}, {scale = 0.9, color = {1, 0.9, 0.6}})
-  C.text({-17, 15.6}, {"zzz-cybersyn-sim.requester"}, {scale = 1.4, color = {0.55, 0.75, 1}})
-  local stock = C.text({-20, 1.0}, "", {scale = 1.05, align = "left"})
-  local sum = C.text({-20, 2.3}, "", {scale = 1.05, align = "left"})
-  local verdict = C.text({-20, 3.6}, "", {scale = 1.05, align = "left"})
+  C.camera({-6, 7.5}, 1.1)
+  local N = C.network{start = 6500, consume = 90, constant = "cybersyn-constant-combinator"}
+  C.label(N, "requester")
+  local r = N.req[1]
+  C.board(-15, -1.9, 13, 3.9)
+  local sum = C.text({-14, -0.9}, "", {scale = 1.2, align = "left"})
+  local transit = C.text({-14, 0.7}, "", {scale = 1.2, align = "left"})
+  local verdict = C.text({-14, 2.4}, "", {scale = 1.2, align = "left", color = C.COL.note})
+  C.pulse({-10.2, 9.9}, {-3.8, 12.3}, C.COL.requester)
+  C.pulse({-16.2, 7.8}, {-14.8, 9.2}, C.COL.note)
+  C.text({-15.5, 6.9}, {"zzz-cybersyn-sim.request-combinator"}, {scale = 1.0, color = C.COL.note})
   local icon = "[item=" .. N.item .. "]"
   C.main = function(t)
     C.economy(N, t)
     if t % 15 == 0 then
-      local have = C.count(N.r_chests, N.item)
-      stock.text = {"zzz-cybersyn-sim.request-sum", icon, -N.request, have, have - N.request}
-      local deficit = N.request - have
-      sum.text = {"zzz-cybersyn-sim.request-deficit", icon, math.max(0, deficit), N.threshold}
-      if N.tracked.status ~= 0 and N.tracked.status ~= "none" and N.tracked.status ~= 6 then
-        verdict.text = {"zzz-cybersyn-sim.request-on-way"}
-      elseif deficit >= N.threshold then
-        verdict.text = {"zzz-cybersyn-sim.request-yes"}
-      else
-        verdict.text = {"zzz-cybersyn-sim.request-no"}
-      end
+      local have = C.count(r.chests, N.item)
+      local coming = C.in_transit(r.stop, N.item)
+      local missing = math.max(0, r.request - have - coming)
+      sum.text = {"zzz-cybersyn-sim.request-sum", icon, -r.request, have, have - r.request}
+      transit.text = {"zzz-cybersyn-sim.request-transit", coming, missing, r.threshold}
+      verdict.text = {missing >= r.threshold and "zzz-cybersyn-sim.request-yes" or "zzz-cybersyn-sim.request-no"}
     end
   end
 end)
 ]=])
 
--- Порог запроса: шкала запаса станции запроса, линия порога, момент вызова поезда.
+-- 6. Порог запроса: шкала склада, линия порога, момент вызова поезда.
 simulations.threshold = live([=[
 C.scene(function()
   if not C.need() then return end
   C.camera({0, -0.5}, 0.66)
-  local N = C.network{start = 7600, consume = 240}
+  local N = C.network{start = 7600, consume = 90}
   C.labels(N)
-  local left, top, width, height = -12, -4.2, 24, 1.2
-  C.rect({left, top}, {left + width, top + height}, {0.05, 0.05, 0.05, 0.85})
+  local r = N.req[1]
+  C.board(-15, -3.9, 15, 3.9)
+  local left, top, width, height = -12, -1.9, 24, 1.2
+  C.rect({left, top}, {left + width, top + height}, {0.12, 0.12, 0.12, 1})
   local fill = C.rect({left, top}, {left, top + height}, {0.3, 0.55, 1, 1})
-  local x_threshold = left + width * (N.request - N.threshold) / N.request
-  C.line({x_threshold, top - 0.6}, {x_threshold, top + height + 0.6}, {1, 0.85, 0.2}, 4)
-  C.text({x_threshold, top - 1.2}, {"zzz-cybersyn-sim.threshold-line", N.threshold}, {scale = 1.4, color = {1, 0.85, 0.2}})
-  C.text({left + width, top - 1.2}, {"zzz-cybersyn-sim.threshold-full", N.request}, {scale = 1.26, align = "right"})
-  C.text({left, top - 1.2}, "0", {scale = 1.26, align = "left"})
-  local value = C.text({0, top + height + 1.4}, "", {scale = 1.54})
-  local verdict = C.text({0, top + height + 3.2}, "", {scale = 1.54, color = {1, 0.9, 0.6}})
+  local coming = C.rect({left, top}, {left, top + height}, {0.3, 0.55, 1, 0.45})
+  local x_threshold = left + width * (r.request - r.threshold) / r.request
+  C.line({x_threshold, top - 0.5}, {x_threshold, top + height + 0.5}, {1, 0.85, 0.2}, 4)
+  C.text({x_threshold, top - 1.1}, {"zzz-cybersyn-sim.threshold-line", r.threshold}, {scale = 1.25, color = {1, 0.85, 0.2}})
+  C.text({left + width, top - 1.1}, {"zzz-cybersyn-sim.threshold-full", r.request}, {scale = 1.15, align = "right"})
+  C.text({left, top - 1.1}, "0", {scale = 1.15, align = "left"})
+  local value = C.text({0, top + height + 1.1}, "", {scale = 1.35})
+  local verdict = C.text({0, top + height + 2.6}, "", {scale = 1.35, color = C.COL.note})
   local icon = "[item=" .. N.item .. "]"
   C.main = function(t)
     C.economy(N, t)
     if t % 10 == 0 then
-      local have = C.count(N.r_chests, N.item)
-      local fraction = math.max(0, math.min(1, have / N.request))
-      fill.right_bottom = {left + width * fraction, top + height}
-      local deficit = math.max(0, N.request - have)
-      value.text = {"zzz-cybersyn-sim.threshold-value", icon, have, deficit}
-      local busy = N.tracked.status ~= 0 and N.tracked.status ~= "none" and N.tracked.status ~= 6
-      if busy then
+      local have = C.count(r.chests, N.item)
+      local transit = C.in_transit(r.stop, N.item)
+      local a = math.max(0, math.min(1, have / r.request))
+      local b = math.max(0, math.min(1, (have + transit) / r.request))
+      fill.right_bottom = {left + width * a, top + height}
+      coming.left_top = {left + width * a, top}
+      coming.right_bottom = {left + width * b, top + height}
+      local missing = math.max(0, r.request - have - transit)
+      value.text = {"zzz-cybersyn-sim.threshold-value", icon, have, transit, missing}
+      if transit > 0 then
         verdict.text = {"zzz-cybersyn-sim.threshold-busy"}
-      elseif deficit >= N.threshold then
+      elseif missing >= r.threshold then
         verdict.text = {"zzz-cybersyn-sim.threshold-call"}
       else
-        verdict.text = {"zzz-cybersyn-sim.threshold-wait", N.threshold - deficit}
+        verdict.text = {"zzz-cybersyn-sim.threshold-wait", r.threshold - missing}
       end
     end
   end
 end)
 ]=])
 
--- Как проходит доставка: шаги подсвечиваются по статусу поезда; заказ поезда из Cybersyn.
+-- 7. Как сеть выбирает: один поезд, две станции запроса; приоритет 1 и 0, потом равные (по очереди).
 simulations.delivery = live([=[
 C.scene(function()
   if not C.need() then return end
   C.camera({0, -0.5}, 0.66)
-  local N = C.network{start = 4000, consume = 280}
+  -- The requests are larger than a train load plus the threshold: even while a train unloads (its cargo counts as
+  -- on the way) both stations keep requesting, so only the priority decides
+  local N = C.network{second = true, request = 12000, start = 3000, start2 = 5000, consume = 200, consume2 = 100,
+    stock = 16000, stock_cap = 20000, refill = 700}
   C.labels(N)
-  local steps = {}
-  for i = 1, 6 do
-    steps[i] = C.text({-14, -6.6 + (i - 1) * 1.75}, {"zzz-cybersyn-sim.step-" .. i}, {scale = 1.47, align = "left", color = {0.6, 0.6, 0.6}})
+  C.board(-15, -3.9, 15, 3.9)
+  local title = C.text({-14, -3.0}, "", {scale = 1.35, align = "left", color = C.COL.note})
+  local rows = {C.text({-14, -1.4}, "", {scale = 1.3, align = "left"}), C.text({-14, 0.1}, "", {scale = 1.3, align = "left"})}
+  local going = C.text({-14, 1.6}, "", {scale = 1.3, align = "left"})
+  C.text({-14, 3.0}, {"zzz-cybersyn-sim.choice-red"}, {scale = 1.1, align = "left", color = C.COL.red})
+  C.choice = {phase = 1, total = {{0, 0}, {0, 0}}}
+  local counts = {0, 0}
+  local function set_phase(p)
+    C.choice.phase = p
+    counts = {0, 0}
+    local priority = p == 1 and {1, 0} or {0, 0}
+    for k = 1, 2 do C.set_request(N, k, {priority = priority[k]}) end
+    title.text = {"zzz-cybersyn-sim.choice-phase-" .. p}
+    going.text = ""
   end
-  local manifest = C.text({-14, 4.2}, "", {scale = 1.47, align = "left", color = {1, 0.9, 0.6}})
-  local function light(i)
-    for k, s in ipairs(steps) do s.color = k == i and {1, 1, 0.4} or {0.55, 0.55, 0.55} end
+  set_phase(1)
+  C.on_status = function(tracked, old, new)
+    if new ~= 1 then return end
+    local id = remote.call("cybersyn", "read_global", "trains", tracked.loco.train.id, "r_station_id")
+    for k, r in ipairs(N.req) do
+      if r.stop.unit_number == id then
+        counts[k] = counts[k] + 1
+        local total = C.choice.total[C.choice.phase]
+        total[k] = total[k] + 1
+        going.text = {"zzz-cybersyn-sim.choice-going", k}
+      end
+    end
   end
-  local STEP = {[0] = 1, [1] = 3, [2] = 4, [3] = 5, [4] = 5, [5] = 6, [6] = 6, [7] = 6, [8] = 6}
   C.main = function(t)
     C.economy(N, t)
-    if t % 10 == 0 then
-      local status = N.tracked.status
-      local step = STEP[status] or 1
-      if status == 0 then
-        local have = C.count(N.r_chests, N.item)
-        step = N.request - have >= N.threshold and 2 or 1
-      end
-      light(step)
-      local m = N.loco.valid and remote.call("cybersyn", "read_global", "trains", N.loco.train.id, "manifest")
-      if m and m[1] then
-        manifest.text = {"zzz-cybersyn-sim.manifest", "[item=" .. m[1].name .. "]", m[1].count}
-      else
-        manifest.text = ""
+    if t % 3000 == 0 then set_phase(3 - C.choice.phase) end
+    if t % 15 == 0 then
+      for k, r in ipairs(N.req) do
+        rows[k].text = {"zzz-cybersyn-sim.choice-row", k, "[virtual-signal=cybersyn-priority]", r.priority or 0,
+          C.count(r.chests, N.item), counts[k]}
       end
     end
   end
 end)
 ]=])
 
--- Обход депо: расход большой, поезд берёт новые заказы, не заезжая в депо.
+-- 8. После доставки: через раз поезд возвращается почти без топлива и заезжает на заправку,
+-- в остальные разы сразу берёт новый заказ (обход депо). Завод забирает груз, как только поезд свободен.
 simulations.bypass = live([=[
 C.scene(function()
   if not C.need() then return end
   C.camera({0, -0.5}, 0.66)
-  local N = C.network{start = 3000, consume = 700, request = 12000, stock = 12000, refill = 900, stock_cap = 16000}
+  local N = C.network{refueler = true, start = 5000, consume = 0}
   C.labels(N)
-  local counter = C.text({0, -2.6}, "", {scale = 1.82, color = {1, 0.9, 0.6}})
-  local visits = C.text({0, -0.4}, "", {scale = 1.54})
-  C.text({0, 2.0}, {"zzz-cybersyn-sim.bypass-hint"}, {scale = 1.4})
-  local depot_visits = 0
+  local r = N.req[1]
+  C.board(-15, -3.9, 15, 3.9)
+  local fuel = C.text({-14, -2.8}, "", {scale = 1.35, align = "left"})
+  local bypass = C.text({-14, -1.2}, "", {scale = 1.35, align = "left", color = C.COL.note})
+  local refuel = C.text({-14, 0.4}, "", {scale = 1.35, align = "left", color = C.COL.refuel})
+  C.text({-14, 2.4}, {"zzz-cybersyn-sim.bypass-hint"}, {scale = 1.1, align = "left"})
+  local unloads = 0
   C.on_status = function(tracked, old, new)
-    if new == 0 and old ~= "none" then depot_visits = depot_visits + 1 end
-  end
-  C.main = function(t)
-    C.economy(N, t)
-    if t % 15 == 0 then
-      counter.text = {"zzz-cybersyn-sim.bypass-count", C.stats.bypass}
-      visits.text = {"zzz-cybersyn-sim.bypass-depot", depot_visits, C.stats.deliveries}
+    if new == 4 and N.loco.valid then
+      -- Every second delivery the train comes back nearly without fuel
+      unloads = unloads + 1
+      local inventory = N.loco.get_fuel_inventory()
+      inventory.clear()
+      inventory.insert{name = "coal", count = unloads % 2 == 1 and 150 or 1200}
+    end
+    if new == 6 and (old == 4 or old == 8) then
+      -- The train is free after unloading or refueling, and the factory takes the cargo:
+      -- the requester needs a train again right away
+      C.drain(r.chests, N.item, 3000)
     end
   end
-end)
-]=])
-
--- Заправка: топлива мало, после доставки поезд заезжает на заправку и уезжает за новым заказом.
-simulations.refuel = live([=[
-C.scene(function()
-  if not C.need() then return end
-  C.camera({0, -0.5}, 0.66)
-  local N = C.network{start = 3000, consume = 450, refueler = true, fuel = 150, request = 10000}
-  C.labels(N)
-  local gauge = rendering.draw_text{text = "", surface = game.surfaces[1], target = {entity = N.loco, offset = {0, -3.9}},
-    color = {1, 0.8, 0.4}, scale = 1.68, font = "default-bold", alignment = "center", vertical_alignment = "middle", use_rich_text = true}
-  local count = C.text({0, -2.4}, "", {scale = 1.68, color = {1, 0.9, 0.6}})
-  C.text({0, -0.4}, {"zzz-cybersyn-sim.refuel-hint"}, {scale = 1.4})
   local function fuel_share()
     local inventory = N.loco.get_fuel_inventory()
     local total = 0
@@ -784,234 +969,183 @@ C.scene(function()
     end
     return total / #inventory
   end
-  C.on_status = function(tracked, old, new)
-    -- Burn the fuel down again for the next round: the next delivery will need the refueler too
-    if old == 8 and N.loco.valid then
-      C.after(240, function()
-        if N.loco.valid then
-          local inventory = N.loco.get_fuel_inventory()
-          inventory.clear()
-          inventory.insert{name = "coal", count = 150}
-        end
-      end)
-    end
-  end
   C.main = function(t)
     C.economy(N, t)
     if t % 10 == 0 and N.loco.valid then
-      gauge.text = {"zzz-cybersyn-sim.fuel", "[item=coal]", math.floor(fuel_share() * 100 + 0.5)}
-      count.text = {"zzz-cybersyn-sim.refuel-count", C.stats.refuel, C.stats.deliveries}
+      fuel.text = {"zzz-cybersyn-sim.fuel", "[item=coal]", math.floor(fuel_share() * 100 + 0.5)}
+      bypass.text = {"zzz-cybersyn-sim.bypass-count", C.stats.bypass, C.stats.depot}
+      refuel.text = {"zzz-cybersyn-sim.refuel-count", C.stats.refuel}
     end
   end
 end)
 ]=])
 
--- Сети: сеть A — короткие поезда, сеть B — длинные; поезд чужой сети к станции не едет.
+-- 9. Сети и подсети: сначала сети A/B для поездов разной длины, потом маски подсетей. Схема.
 simulations.networks = simulation([=[
 C.scene(function()
   C.camera({0, 0}, 1)
-  C.title({"zzz-cybersyn-sim.networks-title"}, -9.3, 1.3)
+  -- phase_id grows with every phase: delayed calls of an earlier round see a changed id and stop
+  local phase_id, kind, group = 0, 0, nil
+  C.phases_seen = {}
+  local function begin(k)
+    C.clear(group)
+    C.movers = {}
+    group = {}
+    C.group = group
+    phase_id = phase_id + 1
+    kind = k
+    C.phases_seen[k] = true
+  end
+  -- Networks A and B
+  local X = {depot = -15, provider = -2, requester = 12}
   local lanes = {
-    {y = -4.5, signal = "signal-A", color = {0.35, 0.9, 0.4}, cars = 1},
+    {y = -3.5, signal = "signal-A", color = {0.35, 0.9, 0.4}, cars = 1},
     {y = 4.5, signal = "signal-B", color = {0.4, 0.6, 1}, cars = 2},
   }
-  local X = {depot = -15, provider = -2, requester = 12}
-  for _, lane in ipairs(lanes) do
-    local net = "[virtual-signal=" .. lane.signal .. "]"
-    C.box(X.depot, lane.y, 6, 3, lane.color, {"", net, " ", {"zzz-cybersyn-sim.depot"}})
-    C.box(X.provider, lane.y, 7, 3, lane.color, {"", net, " ", {"zzz-cybersyn-sim.provider"}})
-    C.box(X.requester, lane.y, 7, 3, lane.color, {"", net, " ", {"zzz-cybersyn-sim.requester"}})
-    C.line({X.depot + 3, lane.y}, {X.provider - 3.5, lane.y}, {lane.color[1], lane.color[2], lane.color[3], 0.5}, 3, 0.4)
-    C.line({X.provider + 3.5, lane.y}, {X.requester - 3.5, lane.y}, {lane.color[1], lane.color[2], lane.color[3], 0.5}, 3, 0.4)
-    lane.label = C.text({X.requester + 5, lane.y - 2.2}, {"zzz-cybersyn-sim.train-length-" .. lane.cars}, {scale = 0.9, color = lane.color})
-  end
   local function train_sprites(cars)
-    local list = {{sprite = "item/locomotive", offset = {0, 0}, scale = 0.9}}
-    for i = 1, cars do list[#list + 1] = {sprite = "item/cargo-wagon", offset = {-1.1 * i, 0}, scale = 0.9} end
+    local list = {{sprite = "item/locomotive", offset = {0, 0}, scale = 1.8}}
+    for i = 1, cars do list[#list + 1] = {sprite = "item/cargo-wagon", offset = {-1.9 * i, 0}, scale = 1.8} end
     return list
   end
-  local function run(lane)
-    local y = lane.y - 2.2
+  local function run(lane, id)
+    if phase_id ~= id then return end
+    local y = lane.y - 2.7
     local token = C.token(train_sprites(lane.cars), {X.depot, y})
-    C.path(token, {{X.provider, y}, {X.requester, y}, {X.depot, y}}, 70, function(t) C.destroy(t) C.after(20, function() run(lane) end) end)
+    C.path(token, {{X.provider, y}, {X.requester, y}, {X.depot, y}}, 70, function(t)
+      C.destroy(t)
+      C.after(20, function() run(lane, id) end)
+    end)
   end
-  run(lanes[1])
-  C.after(35, function() run(lanes[2]) end)
-  -- A train of network B looks at the requester of network A: no
-  local cross = {}
-  local wrong = C.text({0, 0}, "", {scale = 1.0, color = {1, 0.45, 0.45}})
-  C.main = function(t)
-    local phase = t % 300
-    if phase == 150 then
-      cross[1] = C.line({X.depot + 3, lanes[2].y - 1.5}, {X.requester - 3.5, lanes[1].y + 1.5}, {1, 0.3, 0.3, 0.9}, 4, 0.5)
-      cross[2] = C.sprite("virtual-signal/signal-deny", {(X.depot + X.requester) / 2, 0}, 1.2)
-      wrong.text = {"zzz-cybersyn-sim.networks-wrong"}
-      wrong.target = {(X.depot + X.requester) / 2, 1.6}
-    elseif phase == 270 then
-      for _, object in ipairs(cross) do if object.valid then object.destroy() end end
-      cross = {}
-      wrong.text = ""
+  local function networks()
+    begin(1)
+    C.title({"zzz-cybersyn-sim.networks-title"}, -9.2, 1.4)
+    for _, lane in ipairs(lanes) do
+      local net = "[virtual-signal=" .. lane.signal .. "]"
+      C.box(X.depot, lane.y, 6, 3, lane.color, {"", net, " ", {"zzz-cybersyn-sim.depot"}}, 1.1)
+      C.box(X.provider, lane.y, 7, 3, lane.color, {"", net, " ", {"zzz-cybersyn-sim.provider"}}, 1.1)
+      C.box(X.requester, lane.y, 7, 3, lane.color, {"", net, " ", {"zzz-cybersyn-sim.requester"}}, 1.1)
+      C.line({X.depot + 3, lane.y}, {X.provider - 3.5, lane.y}, {lane.color[1], lane.color[2], lane.color[3], 0.5}, 3, 0.4)
+      C.line({X.provider + 3.5, lane.y}, {X.requester - 3.5, lane.y}, {lane.color[1], lane.color[2], lane.color[3], 0.5}, 3, 0.4)
+      C.text({X.requester + 5, lane.y}, {"zzz-cybersyn-sim.train-length-" .. lane.cars}, {scale = 1.0, color = lane.color, align = "left"})
     end
+    local id = phase_id
+    run(lanes[1], id)
+    C.after(35, function() run(lanes[2], id) end)
+    C.after(260, function()
+      if phase_id ~= id then return end
+      C.arrow({X.depot + 2, lanes[2].y - 1.6}, {X.requester - 3.6, lanes[1].y + 1.6}, {1, 0.3, 0.3, 1}, 4)
+      C.sprite("virtual-signal/signal-deny", {(X.depot + X.requester) / 2 - 1.5, 0.4}, 1.6)
+      C.text({(X.depot + X.requester) / 2 + 3, 1.0}, {"zzz-cybersyn-sim.networks-wrong"}, {scale = 1.0, color = C.COL.red, align = "left"})
+    end)
   end
-end)
-]=])
-
--- Маски подсетей: значение сигнала сети — набор битов; доставка, если маски пересекаются.
-simulations.masks = simulation([=[
-C.scene(function()
-  C.camera({0, 0}, 1)
-  C.title({"zzz-cybersyn-sim.masks-title"}, -9.3, 1.3)
+  -- Sub-network masks
   local stations = {
-    {x = -13, y = -2, mask = 1, name = "1"},
-    {x = 0, y = 4, mask = 5, name = "2"},
-    {x = 13, y = -2, mask = 4, name = "3"},
+    {x = -13, y = -2.5, mask = 1, name = "1"},
+    {x = 0, y = -2.5, mask = 5, name = "2"},
+    {x = 13, y = -2.5, mask = 4, name = "3"},
   }
   local function bits(x, y, mask, highlight)
-    local objects = {}
     for b = 0, 3 do
       local on = bit32.btest(mask, bit32.lshift(1, b))
       local cx = x + 2.25 - b * 1.5
-      objects[#objects + 1] = C.rect({cx - 0.6, y - 0.6}, {cx + 0.6, y + 0.6}, on and (highlight or {0.35, 0.9, 0.4, 1}) or {0.15, 0.15, 0.15, 1})
-      objects[#objects + 1] = C.text({cx, y}, on and "1" or "0", {scale = 0.9})
+      C.rect({cx - 0.6, y - 0.6}, {cx + 0.6, y + 0.6}, on and (highlight or {0.35, 0.9, 0.4, 1}) or {0.15, 0.15, 0.15, 1})
+      C.text({cx, y}, on and "1" or "0", {scale = 1.0})
     end
-    return objects
   end
-  for _, s in ipairs(stations) do
-    C.box(s.x, s.y, 9, 5, {0.6, 0.6, 0.6}, nil)
-    C.text({s.x, s.y - 1.6}, {"zzz-cybersyn-sim.mask-station", s.name, "[virtual-signal=signal-A]", s.mask}, {scale = 1.0})
-    bits(s.x, s.y + 0.7, s.mask)
+  local pair_objects, pair_index = {}, 0
+  local result
+  local function masks()
+    begin(2)
+    C.title({"zzz-cybersyn-sim.masks-title"}, -9.2, 1.4)
+    C.text({0, -7.2}, {"zzz-cybersyn-sim.masks-hint"}, {scale = 1.0, color = C.COL.note})
+    for _, s in ipairs(stations) do
+      C.box(s.x, s.y, 10, 5, {0.6, 0.6, 0.6}, nil)
+      C.text({s.x, s.y - 1.3}, {"zzz-cybersyn-sim.mask-station", s.name, "[virtual-signal=signal-A]", s.mask}, {scale = 1.05})
+      bits(s.x, s.y + 0.9, s.mask)
+    end
+    C.text({-2.4, 4.6}, {"zzz-cybersyn-sim.masks-and"}, {scale = 1.05, align = "right"})
+    result = C.text({0, 7.8}, "", {scale = 1.1})
+    pair_objects, pair_index = {}, 0
   end
   local pairs_list = {{1, 2}, {2, 3}, {1, 3}}
-  local index, objects = 0, {}
-  local result = C.text({0, 8.3}, "", {scale = 1.1})
-  C.text({0, -6.6}, {"zzz-cybersyn-sim.masks-hint"}, {scale = 0.95, color = {1, 0.9, 0.6}})
-  C.main = function(t)
-    if t % 180 ~= 1 then return end
-    for _, object in ipairs(objects) do if object.valid then object.destroy() end end
-    objects = {}
-    index = index % #pairs_list + 1
-    local a, b = stations[pairs_list[index][1]], stations[pairs_list[index][2]]
+  local function next_pair()
+    C.clear(pair_objects)
+    pair_objects = {}
+    C.group = pair_objects
+    pair_index = pair_index % #pairs_list + 1
+    local a, b = stations[pairs_list[pair_index][1]], stations[pairs_list[pair_index][2]]
     local both = bit32.band(a.mask, b.mask)
     local ok = both ~= 0
+    -- The pair is framed; lines lead from it to the bits both masks share
     local color = ok and {0.35, 1, 0.4, 1} or {1, 0.3, 0.3, 1}
-    objects[#objects + 1] = C.line({a.x, a.y}, {b.x, b.y}, color, 5, ok and 0 or 0.6)
-    local mx, my = (a.x + b.x) / 2, (a.y + b.y) / 2
-    for _, object in ipairs(bits(mx, my - 2.2, both, {1, 0.85, 0.25, 1})) do objects[#objects + 1] = object end
-    objects[#objects + 1] = C.sprite(ok and "virtual-signal/signal-check" or "virtual-signal/signal-deny", {mx, my - 0.5}, 1)
+    for _, s in ipairs({a, b}) do
+      C.rect({s.x - 5.2, s.y - 2.7}, {s.x + 5.2, s.y + 2.7}, color, false, 5)
+      C.line({s.x, s.y + 2.7}, {1, 3.6}, color, 3, ok and 0 or 0.5)
+    end
+    bits(1, 4.6, both, {1, 0.85, 0.25, 1})
+    C.sprite(ok and "virtual-signal/signal-check" or "virtual-signal/signal-deny", {5.4, 4.6}, 1.2)
+    C.group = group
     result.text = {"zzz-cybersyn-sim.masks-result-" .. (ok and "yes" or "no"), a.name, b.name, a.mask, b.mask, both}
   end
-end)
-]=])
-
--- Приоритет: снабжение одно, двум запросам нужно; сначала обслуживается приоритет 1, при равных — по очереди.
-simulations.priority = simulation([=[
-C.scene(function()
-  C.camera({0, 0}, 1)
-  C.title({"zzz-cybersyn-sim.priority-title"}, -9.3, 1.3)
-  local P = {x = -14, y = 0}
-  local R = {{x = 12, y = -4.5, need = 0}, {x = 12, y = 4.5, need = 0}}
-  C.box(P.x, P.y, 8, 4, {0.35, 0.9, 0.4}, nil)
-  C.text({P.x, P.y - 0.8}, {"zzz-cybersyn-sim.provider"}, {scale = 1.1})
-  local p_stock = C.text({P.x, P.y + 0.7}, "", {scale = 1.0})
-  for i, r in ipairs(R) do
-    C.box(r.x, r.y, 9, 4, {0.4, 0.6, 1}, nil)
-    C.text({r.x, r.y - 1.0}, {"zzz-cybersyn-sim.requester-n", i}, {scale = 1.1})
-    r.prio = C.text({r.x, r.y + 0.1}, "", {scale = 0.95})
-    r.label = C.text({r.x, r.y + 1.1}, "", {scale = 0.95})
-    C.line({P.x + 4, P.y}, {r.x - 4.5, r.y}, {0.6, 0.6, 0.6, 0.5}, 2, 0.4)
-  end
-  local mode_text = C.text({0, 8.2}, "", {scale = 1.05, color = {1, 0.9, 0.6}})
-  p_stock.text = {"zzz-cybersyn-sim.priority-trains"}
-  local priorities, last, busy, stock
-  local function setup(phase)
-    if phase == 1 then priorities = {1, 0} else priorities = {0, 0} end
-    for i, r in ipairs(R) do
-      r.need = 4
-      r.prio.text = {"zzz-cybersyn-sim.priority-value", "[virtual-signal=cybersyn-priority]", priorities[i]}
-      r.served = 0
-    end
-    stock = 99
-    last = {0, 0}
-    mode_text.text = {"zzz-cybersyn-sim.priority-mode-" .. phase}
-  end
-  local phase = 1
-  setup(phase)
-  local function pick()
-    local best
-    for i, r in ipairs(R) do
-      if r.need > 0 then
-        if not best or priorities[i] > priorities[best] or (priorities[i] == priorities[best] and last[i] < last[best]) then best = i end
-      end
-    end
-    return best
-  end
+  networks()
   C.main = function(t)
-    for i, r in ipairs(R) do r.label.text = {"zzz-cybersyn-sim.priority-need", r.need} end
-    if busy then return end
-    local i = pick()
-    if not i then
-      if t % 120 == 0 then phase = 3 - phase setup(phase) end
-      return
+    local cycle = t % 1500
+    if cycle == 0 then
+      C.clear(pair_objects)
+      pair_objects = {}
+      networks()
+    elseif cycle == 600 then
+      masks()
     end
-    busy = true
-    local r = R[i]
-    last[i] = t
-    local token = C.token({{sprite = "item/locomotive", offset = {0, 0}, scale = 0.9}, {sprite = "item/iron-ore", offset = {-1.1, 0}, scale = 0.8}}, {P.x + 4, P.y})
-    C.path(token, {{r.x - 4.5, r.y}}, 50, function(tk)
-      C.destroy(tk)
-      r.need = r.need - 1
-      busy = false
-    end)
+    if kind == 2 and (cycle - 600) % 220 == 1 then next_pair() end
   end
 end)
 ]=])
 
--- Список разрешённых поездов: манипуляторы стоят у одного вагона — поезд 1-1 проходит, 1-2 — нет.
+-- 10. Список разрешённых поездов: манипуляторы у одного вагона, поезд 1-1 проходит, 1-2 нет. Картинка.
 simulations.allow_list = simulation([=[
 C.scene(function()
   C.camera({-2, 0.5}, 0.9)
-  C.title({"zzz-cybersyn-sim.allow-title"}, -10.2, 1.3)
+  C.title({"zzz-cybersyn-sim.allow-title"}, -10.2, 1.4)
   C.power({{6, 0}}, {10, 0})
   local rows = {{y = -5, cars = {"locomotive", "cargo-wagon"}}, {y = 5, cars = {"locomotive", "cargo-wagon", "cargo-wagon"}}}
   for _, row in ipairs(rows) do
     C.straight(-31, 23, row.y)
     local sx = 13
-    C.make("train-stop", {sx, row.y + 2}, defines.direction.east, {color = {0.25, 0.85, 0.3}})
+    C.make("train-stop", {sx, row.y + 2}, defines.direction.east, {color = C.COL.provider})
     C.controller({sx - 1.5, row.y + 2}, "station", {register = false})
     for x = sx - 12.5, sx - 7.5 do
       C.inserter("bulk-inserter", {x, row.y - 1.5}, row.y)
       C.make("iron-chest", {x, row.y - 2.5})
     end
+    C.pulse({sx - 13.2, row.y - 3.2}, {sx - 6.8, row.y - 0.9}, C.COL.note)
     for i, name in ipairs(row.cars) do
       local x = sx - 3 - 7 * (i - 1)
       C.make(name, {x, row.y}, nil, {orientation = 0.25})
       local ok = name == "locomotive" or i == 2
-      C.sprite(ok and "virtual-signal/signal-check" or "virtual-signal/signal-deny", {x, row.y + 2.4}, 0.9)
+      C.sprite(ok and "virtual-signal/signal-check" or "virtual-signal/signal-deny", {x, row.y + 2.4}, 1.0)
     end
     local fits = #row.cars == 2
     local layout = ""
     for _, name in ipairs(row.cars) do layout = layout .. "[item=" .. name .. "]" end
-    C.text({sx + 3, row.y - 1.6}, layout, {scale = 1.3, align = "left"})
-    C.text({sx + 3, row.y + 0.2}, {fits and "zzz-cybersyn-sim.allow-yes" or "zzz-cybersyn-sim.allow-no"}, {scale = 1.0, align = "left",
-      color = fits and {0.5, 1, 0.5} or {1, 0.5, 0.5}})
+    C.text({-25, row.y - 2.4}, {"", layout, "  ", {fits and "zzz-cybersyn-sim.allow-yes" or "zzz-cybersyn-sim.allow-no"}},
+      {scale = 1.1, align = "left", color = fits and C.COL.green or C.COL.red})
   end
-  C.text({-12, 0}, {"zzz-cybersyn-sim.allow-hint"}, {scale = 1.0, color = {1, 0.9, 0.6}})
+  C.board(-25, -1.3, 1, 1.3)
+  C.text({-24, 0}, {"zzz-cybersyn-sim.allow-hint"}, {scale = 1.1, align = "left", color = C.COL.note})
 end)
 ]=])
 
--- Жидкости: цистерна, насосы у станций; запасы баков изображены сигналами постоянных комбинаторов.
+-- 11. Жидкости: цистерна и насосы у станций; запасы баков изображены сигналами постоянных комбинаторов.
 simulations.fluids = live([=[
 C.scene(function()
   if not C.need() then return end
-  C.setting("warmup_time", 0)
   C.camera({0, -0.5}, 0.66)
   local fluid = "crude-oil"
-  C.loop(-20, 20, -13)
-  C.network_power()
-  local depot = C.stop(-1, -11, defines.direction.east, C.NAMES.depot, {0.55, 0.55, 0.55}, 1)
-  C.controller({-2.5, -11}, "depot")
-  -- Provider: pumps fill the wagon from an endless source (the tank farm of the scene)
-  local p_stop = C.stop(17, -11, defines.direction.east, "[fluid=crude-oil][virtual-signal=up-arrow]", {0.25, 0.85, 0.3})
+  local N = C.net_base{}
+  C.net_depot(N)
+  -- Provider: pumps fill the fluid wagon from an endless source (the tank farm of the scene)
+  C.stop(17, -11, defines.direction.east, "[fluid=crude-oil][virtual-signal=up-arrow]", C.COL.provider)
   for _, x in ipairs({9.5, 7.5, 5.5}) do
     C.make("pump", {x, -11}, defines.direction.north)
     C.make("infinity-pipe", {x, -9.5}, nil, {infinity_settings = {name = fluid, percentage = 1, mode = "at-least", temperature = 25}})
@@ -1019,8 +1153,8 @@ C.scene(function()
   local p_comb = C.controller({15.5, -11}, "station", {pr = 1})
   local p_const = C.constant("constant-combinator", {15.5, -8.5}, {})
   C.wire(p_const, C.GREEN, p_comb, C.IN)
-  -- Requester: pumps empty the wagon into the consumers
-  local r_stop = C.stop(-17, 11, defines.direction.west, "[fluid=crude-oil][virtual-signal=down-arrow]", {0.3, 0.55, 1})
+  -- Requester: pumps empty the fluid wagon into the consumers
+  C.stop(-17, 11, defines.direction.west, "[fluid=crude-oil][virtual-signal=down-arrow]", C.COL.requester)
   for _, x in ipairs({-9.5, -7.5, -5.5}) do
     C.make("pump", {x, 11}, defines.direction.north)
     C.make("infinity-pipe", {x, 9.5}, nil, {infinity_settings = {name = fluid, percentage = 0, mode = "at-most", temperature = 25}})
@@ -1028,16 +1162,17 @@ C.scene(function()
   local r_comb = C.controller({-15.5, 11}, "station", {pr = 2})
   local r_const = C.constant("constant-combinator", {-15.5, 8.5}, {})
   C.wire(r_const, C.GREEN, r_comb, C.IN)
-  local loco = C.train(depot, {"locomotive", "fluid-wagon"}, {depot = C.NAMES.depot})
-  local tracked = C.track(loco)
+  local loco = C.train(N.depot, {"locomotive", "fluid-wagon"}, {depot = C.NAMES.depot})
+  C.track(loco)
   local request, threshold = 50000, 15000
   local stock, level, carried = 80000, 30000, 0
-  C.labels({})
-  C.text({8, -6.4}, {"zzz-cybersyn-sim.fluid-provider"}, {scale = 1.4, color = {0.6, 1, 0.6}})
-  C.text({-8, 6.2}, {"zzz-cybersyn-sim.fluid-requester"}, {scale = 1.4, color = {0.6, 0.8, 1}})
-  local panel1 = C.text({-12, -3.6}, "", {scale = 1.54, align = "left"})
-  local panel2 = C.text({-12, -1.8}, "", {scale = 1.54, align = "left"})
-  local panel3 = C.text({-12, 0.0}, "", {scale = 1.54, align = "left"})
+  C.text({-6, -8.8}, {"zzz-cybersyn-sim.depot"}, {scale = 1.6, color = C.COL.depot})
+  C.text({7, -7.6}, {"zzz-cybersyn-sim.fluid-provider"}, {scale = 1.5, color = C.COL.provider})
+  C.text({-7, 7.6}, {"zzz-cybersyn-sim.fluid-requester"}, {scale = 1.5, color = C.COL.requester})
+  C.board(-15, -3.9, 15, 3.9)
+  local panel1 = C.text({-14, -2.6}, "", {scale = 1.35, align = "left"})
+  local panel2 = C.text({-14, -0.6}, "", {scale = 1.35, align = "left"})
+  local panel3 = C.text({-14, 1.4}, "", {scale = 1.35, align = "left"})
   local icon = "[fluid=" .. fluid .. "]"
   local function wagon_fluid()
     if not loco.valid then return 0 end
@@ -1045,7 +1180,7 @@ C.scene(function()
     for _, wagon in ipairs(loco.train.fluid_wagons) do total = total + wagon.get_fluid_count(fluid) end
     return total
   end
-  C.on_status = function(t, old, new)
+  C.on_status = function(tracked, old, new)
     if old == 2 and new == 3 then stock = stock - wagon_fluid() end
     if old == 3 and new == 4 then carried = wagon_fluid() end
     if old == 4 then level = level + carried carried = 0 end
@@ -1053,7 +1188,7 @@ C.scene(function()
   C.main = function(t)
     if t % 30 == 0 then
       stock = math.min(120000, stock + 1200)
-      level = math.max(0, level - 900)
+      level = math.max(0, level - 600)
       C.set_signals(p_const, {{"fluid", fluid, math.floor(stock)}})
       C.set_signals(r_const, {{"fluid", fluid, math.floor(level - request)}, {"virtual", "cybersyn-fluid-request-threshold", threshold}})
       panel1.text = {"zzz-cybersyn-sim.fluid-stock", icon, math.floor(stock)}
@@ -1064,108 +1199,114 @@ C.scene(function()
 end)
 ]=])
 
--- Несколько грузов в одном вагоне: заказ раскладывается по ячейкам, заблокированные ячейки остаются пустыми.
+-- 12. Для опытных: заказ из нескольких грузов по ячейкам вагона, затем W и C. Схема.
 simulations.multi = simulation([=[
 C.scene(function()
   C.camera({0, 0}, 1)
-  C.title({"zzz-cybersyn-sim.multi-title"}, -9.3, 1.3)
-  local slots, locked = 20, 2
-  local cols = 10
-  local cells = {}
-  for i = 1, slots do
-    local col, row = (i - 1) % cols, math.floor((i - 1) / cols)
-    local x, y = -11.25 + col * 2.5, -3 + row * 2.5
-    cells[i] = {x = x, y = y, back = C.rect({x - 1.1, y - 1.1}, {x + 1.1, y + 1.1}, {0.12, 0.12, 0.12, 1})}
-    if i > slots - locked then
-      C.line({x - 0.8, y - 0.8}, {x + 0.8, y + 0.8}, {1, 0.3, 0.3}, 4)
-      C.line({x - 0.8, y + 0.8}, {x + 0.8, y - 0.8}, {1, 0.3, 0.3}, 4)
-    end
+  local phase_id, group = 0, nil
+  C.phases_seen = {}
+  local function begin(id)
+    C.clear(group)
+    group = {}
+    C.group = group
+    phase_id = id
+    C.phases_seen[id] = true
   end
-  C.sprite("item/cargo-wagon", {-15.5, -1.75}, 1.6)
-  C.text({0, 1.9}, {"zzz-cybersyn-sim.multi-locked", locked, "[virtual-signal=cybersyn-locked-slots]", slots - locked}, {scale = 1.0})
-  local order = C.text({0, 3.4}, "", {scale = 1.05, color = {1, 0.9, 0.6}})
-  C.text({0, 5.4}, {"zzz-cybersyn-sim.multi-wagon"}, {scale = 0.95})
-  C.text({0, 6.7}, {"zzz-cybersyn-sim.multi-inactive"}, {scale = 0.95})
+  -- Phase 1: one order of three cargos in a 20-slot wagon with 2 locked slots
+  local slots, locked, cols = 20, 2, 10
   local manifest = {{"iron-plate", 7}, {"copper-plate", 6}, {"steel-plate", 5}}
-  local filled, step, objects = 0, 0, {}
-  local function reset()
-    for _, object in ipairs(objects) do if object.valid then object.destroy() end end
-    objects, filled, step = {}, 0, 0
-  end
-  local text = {""}
-  for _, m in ipairs(manifest) do text[#text + 1] = "[item=" .. m[1] .. "]×" .. m[2] .. "  " end
-  order.text = {"zzz-cybersyn-sim.multi-order", text}
-  C.main = function(t)
-    if t % 12 ~= 0 then return end
-    step = step + 1
-    if step > 40 then reset() return end
-    local total, k = 0, 0
-    for _, m in ipairs(manifest) do total = total + m[2] end
-    if filled >= total then return end
-    filled = filled + 1
-    local acc = 0
-    for _, m in ipairs(manifest) do
-      acc = acc + m[2]
-      if filled <= acc then k = m[1] break end
+  local cells, filled
+  local function slots_phase()
+    begin(1)
+    C.title({"zzz-cybersyn-sim.multi-title"}, -9.2, 1.4)
+    cells, filled = {}, 0
+    for i = 1, slots do
+      local col, row = (i - 1) % cols, math.floor((i - 1) / cols)
+      local x, y = -11.25 + col * 2.5, -4.5 + row * 2.5
+      cells[i] = {x = x, y = y}
+      -- Only a frame: render shapes are drawn over sprites, a filled cell would hide the item
+      C.rect({x - 1.1, y - 1.1}, {x + 1.1, y + 1.1}, {0.5, 0.5, 0.5, 1}, false, 2)
+      if i > slots - locked then
+        C.line({x - 0.8, y - 0.8}, {x + 0.8, y + 0.8}, {1, 0.3, 0.3}, 4)
+        C.line({x - 0.8, y + 0.8}, {x + 0.8, y - 0.8}, {1, 0.3, 0.3}, 4)
+      end
     end
-    local cell = cells[filled]
-    objects[#objects + 1] = C.sprite("item/" .. k, {cell.x, cell.y}, 0.9)
+    C.sprite("item/cargo-wagon", {-15.6, -3.25}, 1.6)
+    local text = {""}
+    for _, m in ipairs(manifest) do text[#text + 1] = "[item=" .. m[1] .. "]×" .. m[2] .. "   " end
+    C.text({0, 1.4}, {"zzz-cybersyn-sim.multi-order", text}, {scale = 1.2, color = C.COL.note})
+    C.text({0, 3.2}, {"zzz-cybersyn-sim.multi-locked", locked, "[virtual-signal=cybersyn-locked-slots]", slots - locked}, {scale = 1.1})
+    C.text({0, 5.0}, {"zzz-cybersyn-sim.multi-inactive"}, {scale = 1.1})
+  end
+  -- Phase 2: wagon control (W) and station control (C)
+  local function control_phase()
+    begin(2)
+    C.title({"zzz-cybersyn-sim.control-title"}, -9.2, 1.4)
+    local orders = {"[item=iron-plate]×3200", "[item=copper-plate]×2400", "[item=steel-plate]×2000"}
+    C.sprite("item/locomotive", {-14, -4}, 1.6)
+    for i = 1, 3 do
+      local x = -14 + 5.5 * i
+      C.sprite("item/cargo-wagon", {x, -4}, 1.6)
+      C.box(x, -0.6, 4.6, 2.2, {0.55, 0.75, 1}, {"", "[font=default-large-bold]W[/font]  ", orders[i]}, 0.9)
+      C.arrow({x, -1.8}, {x, -3.0}, {0.55, 0.75, 1, 1}, 3)
+    end
+    C.text({-11.5, 1.6}, {"zzz-cybersyn-sim.control-w"}, {scale = 1.05, align = "left"})
+    C.box(-7, 5.2, 8, 3, {1, 0.85, 0.3}, {"", "[font=default-large-bold]C[/font]  ", {"cybersyn-gui.comb2"}}, 0.95)
+    C.arrow({-15, 5.2}, {-11.2, 5.2}, {1, 0.85, 0.3, 1}, 3)
+    C.arrow({-2.8, 5.2}, {1, 5.2}, {1, 0.85, 0.3, 1}, 3)
+    C.text({-15.5, 3.4}, {"zzz-cybersyn-sim.control-in"}, {scale = 1.0, align = "left"})
+    C.text({1.5, 4.5}, {"zzz-cybersyn-sim.control-out-1"}, {scale = 1.0, align = "left"})
+    C.text({1.5, 5.9}, {"zzz-cybersyn-sim.control-out-2"}, {scale = 1.0, align = "left"})
+  end
+  slots_phase()
+  C.main = function(t)
+    local cycle = t % 1200
+    if cycle == 0 then slots_phase() elseif cycle == 600 then control_phase() end
+    if phase_id == 1 and t % 15 == 0 then
+      local total = 0
+      for _, m in ipairs(manifest) do total = total + m[2] end
+      if filled < total then
+        filled = filled + 1
+        local acc, item = 0, nil
+        for _, m in ipairs(manifest) do
+          acc = acc + m[2]
+          if filled <= acc then item = m[1] break end
+        end
+        local cell = cells[filled]
+        C.sprite("item/" .. item, {cell.x, cell.y}, 0.9)
+      end
+    end
   end
 end)
 ]=])
 
--- Управление станцией (C): свой порог для руды на входе, на выходе — доставки в пути и число поездов.
-simulations.station_control = live([=[
-C.scene(function()
-  if not C.need() then return end
-  C.camera({0, -0.5}, 0.66)
-  local N = C.network{start = 5000, consume = 300}
-  C.labels(N)
-  local control = C.controller({-18.5, 9}, "control", {bits = {train_count = true}})
-  local own = C.constant("constant-combinator", {-18.5, 6.5}, {{"item", N.item, 1000}})
-  C.wire(own, C.GREEN, control, C.IN)
-  C.text({-18.5, 4.0}, {"zzz-cybersyn-sim.control-own"}, {scale = 1.33, color = {1, 0.9, 0.6}})
-  local input = C.text({-12, -3.4}, "", {scale = 1.54, align = "left"})
-  local output = C.text({-12, -1.6}, "", {scale = 1.54, align = "left"})
-  C.text({-12, 0.4}, {"zzz-cybersyn-sim.control-hint"}, {scale = 1.33, align = "left"})
-  C.main = function(t)
-    C.economy(N, t)
-    if t % 15 == 0 then
-      input.text = {"zzz-cybersyn-sim.control-input", C.signal_text(C.signals_of(control, {defines.wire_connector_id.combinator_input_red, defines.wire_connector_id.combinator_input_green}))}
-      output.text = {"zzz-cybersyn-sim.control-output", C.signal_text(C.signals_of(control, {defines.wire_connector_id.combinator_output_red, defines.wire_connector_id.combinator_output_green}))}
-    end
-  end
-end)
-]=])
-
--- Если поезда не едут: порог больше вместимости поезда — красная S; порог исправили — поезд поехал.
+-- 13. Если поезда не едут: порог больше вместимости поезда, красная S; порог исправили, поезд поехал.
 simulations.problems = live([=[
 C.scene(function()
   if not C.need() then return end
   C.camera({0, -0.5}, 0.66)
   local N = C.network{start = 0, consume = 0, request = 10000, threshold = 9000, stock = 12000}
   C.labels(N)
-  local state = C.text({0, -3.8}, "", {scale = 1.75})
-  local reason = C.text({0, -2.0}, "", {scale = 1.47, color = {1, 0.9, 0.6}})
+  local r = N.req[1]
+  C.board(-15, -3.9, 15, 3.9)
+  local state = C.text({-14, -2.4}, "", {scale = 1.5, align = "left"})
+  local reason = C.text({-14, -0.3}, "", {scale = 1.3, align = "left", color = C.COL.note})
+  C.text({-14, 2.2}, {"zzz-cybersyn-sim.problem-hint"}, {scale = 1.1, align = "left"})
+  local mark = C.pulse({-16.2, 7.8}, {-14.8, 12.2}, C.COL.red)
   local bad = true
-  local function set(threshold)
-    N.threshold = threshold
-    C.set_signals(N.const, {{"item", N.item, -N.request}, {"virtual", "cybersyn-request-threshold", threshold}})
-  end
   C.main = function(t)
     C.economy(N, t)
     local cycle = t % 2400
     if cycle == 900 then
       bad = false
-      set(2000)
+      C.set_request(N, 1, {threshold = 2000})
     elseif cycle == 0 then
       bad = true
-      set(9000)
-      local have = C.count(N.r_chests, N.item)
-      C.drain(N.r_chests, N.item, have)
+      C.set_request(N, 1, {threshold = 9000})
+      C.drain(r.chests, N.item, C.count(r.chests, N.item))
     end
     if t % 10 == 0 then
-      local mode = C.mode_of(N.r_comb)
+      local mode = C.mode_of(r.comb)
       if mode == C.MODE.failed then
         state.text = {"zzz-cybersyn-sim.problem-red"}
       elseif mode == C.MODE.active then
@@ -1173,7 +1314,8 @@ C.scene(function()
       else
         state.text = {"zzz-cybersyn-sim.problem-blue"}
       end
-      reason.text = bad and {"zzz-cybersyn-sim.problem-capacity", N.threshold, N.capacity} or {"zzz-cybersyn-sim.problem-fixed", N.threshold}
+      mark.color = bad and C.COL.red or C.COL.green
+      reason.text = bad and {"zzz-cybersyn-sim.problem-capacity", r.threshold, N.capacity} or {"zzz-cybersyn-sim.problem-fixed", r.threshold}
     end
   end
 end)
