@@ -66,16 +66,16 @@ local definitions = {
 	["bob-railway-2"] = {
 		["unit"] = {
 			["count"] = 100,
-			["ingredients"] = { { "automation-science-pack", 2 }, { "logistic-science-pack", 1 } },
+			["ingredients"] = { { "automation-science-pack", 2 }, { "logistic-science-pack", 1 }, { "chemical-science-pack", 1 } },
 			["time"] = 20,
 		},
-		["prerequisites"] = { "advanced-circuit", "automated-rail-transportation", "angels-invar-smelting-1" },
+		["prerequisites"] = { "advanced-circuit", "automated-rail-transportation", "angels-invar-smelting-1", "chemical-science-pack" },
 	},
 	["bob-fluid-wagon-2"] = {
 		["unit"] = {
 			["count"] = 200,
 			["time"] = 30,
-			["ingredients"] = { { "automation-science-pack", 2 }, { "logistic-science-pack", 2 } },
+			["ingredients"] = { { "automation-science-pack", 2 }, { "logistic-science-pack", 2 }, { "chemical-science-pack", 1 } },
 		},
 		["prerequisites"] = { "fluid-wagon", "bob-railway-2", "bob-fluid-handling-2" },
 	},

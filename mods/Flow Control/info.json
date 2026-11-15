@@ -8,6 +8,9 @@
   "factorio_version": "2.1",
   "dependencies": [
     "base >= 2.0.8",
-    "? valves >= 1.0.0"
+    "? valves >= 1.0.0",
+    "? zzzparanoidal",
+    "? reskins-bobs",
+    "? Bio_Industries_2"
   ]
 }

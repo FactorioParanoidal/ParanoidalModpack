@@ -65,7 +65,7 @@ data:extend({
     name = "angels-gas-allylchlorid",
     localised_description = show_formula and {
       "tooltip-description.chemical-formula",
-      "C[font=default-tiny-bold]3[/font]H[font=default-tiny-bold]5[/font]ClO",
+      "C[font=default-tiny-bold]3[/font]H[font=default-tiny-bold]5[/font]Cl",
     } or nil,
     icons = angelsmods.functions.create_gas_fluid_icon(
       { "__angelspetrochemgraphics__/graphics/icons/molecules/allyl-chloride.png", 72 },
@@ -86,7 +86,7 @@ data:extend({
     name = "angels-gas-epichlorohydrin",
     localised_description = show_formula and {
       "tooltip-description.chemical-formula",
-      "C[font=default-tiny-bold]3[/font]H[font=default-tiny-bold]5[/font]Cl",
+      "C[font=default-tiny-bold]3[/font]H[font=default-tiny-bold]5[/font]ClO",
     } or nil,
     icons = angelsmods.functions.create_gas_fluid_icon(
       { "__angelspetrochemgraphics__/graphics/icons/molecules/epichlorohydrin.png", 72 },

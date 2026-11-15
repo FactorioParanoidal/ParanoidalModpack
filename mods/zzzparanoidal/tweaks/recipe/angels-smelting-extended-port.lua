@@ -271,15 +271,13 @@ end
 -- их не портируем, повторяя поведение 1.1 modpack.
 -- Subgroup — общая angels-alloys-casting.
 local special_pipe_recipes = {
-	-- plastic (default casting, liquid-plastic 40 / 170).
-	-- Regular pipe в 1.1 имел amount=4 (баг автора), подогнал к 40 как у
-	-- остальных металлов.
+	-- Plastic: 10 liquid per regular pipe; underground casting keeps its own batch.
 	{
 		name = "angels-plastic-pipe-casting",
 		pipe_item = "bob-plastic-pipe",
 		category = "angels-casting",
-		ingredients = { { type = "fluid", name = "angels-liquid-plastic", amount = 40 } },
-		results_amount = 4,
+		ingredients = { { type = "fluid", name = "angels-liquid-plastic", amount = 10 } },
+		results_amount = 1,
 		tint_fluid = "angels-liquid-plastic",
 	},
 	{
@@ -526,9 +524,9 @@ end
 paralib.bobmods.lib.tech.add_recipe_unlock("angels-ironworks-1", "angels-iron-pipe-casting")
 paralib.bobmods.lib.tech.add_recipe_unlock("angels-ironworks-1", "angels-iron-pipe-to-ground-casting")
 
--- Спец-кейсы pipe-casting (см. секцию 1b). Каждый на своей T1-техе по 1.1 ASE.
-paralib.bobmods.lib.tech.add_recipe_unlock("angels-plastic-1", "angels-plastic-pipe-casting")
-paralib.bobmods.lib.tech.add_recipe_unlock("angels-plastic-1", "angels-plastic-pipe-to-ground-casting")
+-- Plastic casting follows the bar-based pipes unlocked by angels-plastic-1.
+paralib.bobmods.lib.tech.add_recipe_unlock("plastics", "angels-plastic-pipe-casting")
+paralib.bobmods.lib.tech.add_recipe_unlock("plastics", "angels-plastic-pipe-to-ground-casting")
 
 -- 3b. Roll'ы brass/bronze/tungsten: на existing angels-<metal>-smelting-2/3.
 for _, metal in ipairs({ "brass", "bronze", "tungsten" }) do

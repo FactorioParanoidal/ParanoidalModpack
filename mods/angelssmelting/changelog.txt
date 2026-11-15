@@ -2,6 +2,7 @@
 Version: 2.0.5
 Date: 04.06.2026
   Bugfixes:
+    - Paranoidal: clarified the existing hexachloroplatinic-acid composition as H2PtCl6·2H2O (dihydrate), with an explanatory tooltip; fluid properties and recipes are unchanged.
     - Paranoidal: angelssmeltinggraphics is now a plain required dependency instead of "~" (load order is unchanged): Factorio 2.0 never reuses the data stage cache (cache-prototype-data) while any enabled mod has a "~" dependency.
   Changes:
     - Paranoidal: ore/plate stack minimums and the iron-stick stack rule moved to paranoidal-stack-sizes; product triggers and other overrides are retained.

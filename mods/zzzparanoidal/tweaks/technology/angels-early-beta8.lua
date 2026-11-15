@@ -248,6 +248,19 @@ end
 
 -- Перемещаем только перечисленные старые рецепты, не подменяем весь effects.
 local moves = {
+	-- First bars and bar-based pipes, then direct casting at plastics.
+	{
+		["recipe"] = "angels-solid-plastic",
+		["technologies"] = { "angels-plastic-1" },
+	},
+	{
+		["recipe"] = "bob-plastic-pipe",
+		["technologies"] = { "angels-plastic-1" },
+	},
+	{
+		["recipe"] = "bob-plastic-pipe-to-ground",
+		["technologies"] = { "angels-plastic-1" },
+	},
 	{
 		["recipe"] = "bi-slag-slurry",
 		["technologies"] = { "angels-slag-processing-1" },

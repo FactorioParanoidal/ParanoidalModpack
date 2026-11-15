@@ -3,6 +3,7 @@ Version: 9.1.4
   Changes:
     - Paranoidal packaging: moved standalone regression fixtures out of the distributed mod into the local test collection.
   Bugfixes:
+    - Air filtering 6 explicitly requires space science research, matching its existing research ingredients.
     - Script-raised teleports rebind machines to their destination chunks without carrying the previous gate or duplicating destruction registration.
     - Configuration changes reconcile the AbandonedRuins event subscription; waiting status no longer claims the air is necessarily clean.
   Features:

@@ -185,7 +185,7 @@ data:extend({
     type = "fluid",
     name = "angels-liquid-water-heavy",
     localised_description = show_formula
-        and { "tooltip-description.chemical-formula", "D[font=default-tiny-bold]2[/font]" }
+        and { "tooltip-description.chemical-formula", "D[font=default-tiny-bold]2[/font]O" }
       or nil,
     icons = angelsmods.functions.create_liquid_fluid_icon(
       { "__angelspetrochemgraphics__/graphics/icons/molecules/heavy-water.png", 64 },

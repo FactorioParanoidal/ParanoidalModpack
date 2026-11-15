@@ -34,8 +34,13 @@ data:extend({
     type = "fluid",
     name = "angels-liquid-hexachloroplatinic-acid",
     localised_description = show_formula and {
-      "tooltip-description.chemical-formula",
-      "H[font=default-tiny-bold]6[/font]Cl[font=default-tiny-bold]6[/font]O[font=default-tiny-bold]2[/font]Pt",
+      "",
+      {
+        "tooltip-description.chemical-formula",
+        "H[font=default-tiny-bold]2[/font]PtCl[font=default-tiny-bold]6[/font]·2H[font=default-tiny-bold]2[/font]O",
+      },
+      "\n",
+      { "tooltip-description.hexachloroplatinic-acid-hydrate" },
     } or nil,
     icons = angelsmods.functions.create_viscous_liquid_fluid_icon(
       nil,
