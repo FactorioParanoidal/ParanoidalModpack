@@ -12,6 +12,9 @@ local function clear_under(event)
 	}}
 end
 
+-- Not while Д-ОК cleans the floors (yield-to-droid.lua): the engine still clears what a building stands on.
+if not require("yield-to-droid").automatic then return end
+
 -- Resources (RSO Reforged raises an event per ore tile) and ghosts never reach the handler.
 local filters = {{filter = "type", type = "resource", invert = true}, {filter = "ghost", invert = true, mode = "and"}}
 for _, event in pairs({
