@@ -90,6 +90,7 @@ data:extend({
   {
     type = "fluid",
     name = "angels-liquid-naphtha",
+    localised_description = { "fluid-description.angels-liquid-naphtha" },
     icons = angelsmods.functions.create_viscous_liquid_fluid_icon(nil, { { 196, 075, 085 }, { 148, 066, 075 } }),
     subgroup = "angels-petrochem-carbon-fluids",
     order = "dba",

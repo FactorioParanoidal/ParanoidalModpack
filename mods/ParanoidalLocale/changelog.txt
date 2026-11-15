@@ -1,6 +1,7 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.26.0
   Locale:
+    - Corrected chemical terminology: bisphenol A, hydrogen chloride, cellulose acetate, kraft liquors, sulfite cooking/spent liquor, coal gasification and mineral-oil synthesis. Added variable-acetylation, acid-dihydrate and residual-fuel-oil explanations; the long cellulose-acetate formula is a locale template to avoid the LocalisedString literal limit; the accepted Mazut and NGL interpretations are retained.
     - Matched the Paranoidal sulfur-trioxide interpretation in Russian sulfur synthesis and Bob's fluid/oil-processing names; added the combined combustion and oxidation description. Legacy prototype IDs are unchanged.
     - Completed Russian fallback keys and untranslated RU values through zzzzz-ru-completion.cfg, including Factory Planner, Angel's industry/science branches, GUI Unifyer buttons, Alien Biomes, Bio Industries, advanced machines, achievements and conditional Space Age/other integrations. Added an optional MilesBobsExpansion2 ordering dependency so its untranslated descriptions cannot overwrite the Russian overrides. BnL flyer texts are unchanged.
     - RampantFixed: matched the spoiler-free Russian demolisher feeding replies in the mod itself; removed precise attack delays and feeding counts from both translated variants.
