@@ -12,6 +12,8 @@ Date: 08. 02. 2025
   Compatibility:
     - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
     - Factorio 2.1: hide_connection_info moved from the fluid box to every pipe connection (FluidBox::hide_connection_info was removed, PipeConnectionDefinition::hide_connection_info added; without it 2.1 draws connection arrows and fluid icons on these entities).
+  Bugfixes:
+    - Paranoidal: the elbow, T-junction and straight pipes and the cursor fittings copied from them no longer show the storage tank icon. Flow Control now loads after reskins-bobs, so the copied storage tank brought its reskinned icons list, which overrides icon; the copy clears it.
 ---------------------------------------------------------------------------------------------------
 Version: 3.2.2
 Date: 12. 11. 2024
