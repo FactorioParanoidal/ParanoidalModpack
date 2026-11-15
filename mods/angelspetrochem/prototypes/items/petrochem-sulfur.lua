@@ -42,9 +42,10 @@ data:extend({
   },
   {
     type = "fluid",
+    -- Paranoidal uses SO3; keep the legacy prototype ID for saves and integrations.
     name = "angels-gas-sulfur-dioxide",
     localised_description = show_formula
-        and { "tooltip-description.chemical-formula", "SO[font=default-tiny-bold]2[/font]" }
+        and { "tooltip-description.chemical-formula", "SO[font=default-tiny-bold]3[/font]" }
       or nil,
     icons = angelsmods.functions.create_gas_fluid_icon(
       { "__angelspetrochemgraphics__/graphics/icons/molecules/sulfur-dioxide.png", 72 },

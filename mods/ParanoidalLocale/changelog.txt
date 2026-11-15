@@ -1,6 +1,7 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.26.0
   Locale:
+    - Matched the Paranoidal sulfur-trioxide interpretation in Russian sulfur synthesis and Bob's fluid/oil-processing names; added the combined combustion and oxidation description. Legacy prototype IDs are unchanged.
     - Completed Russian fallback keys and untranslated RU values through zzzzz-ru-completion.cfg, including Factory Planner, Angel's industry/science branches, GUI Unifyer buttons, Alien Biomes, Bio Industries, advanced machines, achievements and conditional Space Age/other integrations. Added an optional MilesBobsExpansion2 ordering dependency so its untranslated descriptions cannot overwrite the Russian overrides. BnL flyer texts are unchanged.
     - RampantFixed: matched the spoiler-free Russian demolisher feeding replies in the mod itself; removed precise attack delays and feeding counts from both translated variants.
     - TimedSpawnControl-reforged: the renamed mod has an updated Russian title and canonical description, including left/right click point management and long-range unstuck throttling.
