@@ -179,13 +179,13 @@ if slag_base then
 	end
 end
 
--- Плазменные турели I–II снова на зелёной науке: предки Beta 8 вместо материалов рецептов 2.0.
--- Лазерные турели II у плазмы II оставлены (ПР-040, зелёная ступень).
+-- Плазма I остаётся зелёной, II — синяя по согласованному научному аудиту.
+-- Предки материалов Beta 8 и лазерные турели II у плазмы II сохранены.
 if data.raw.technology["bob-plasma-turrets-1"] then
 	data.raw.technology["bob-plasma-turrets-1"].prerequisites = { "laser-turret" }
 end
 if data.raw.technology["bob-plasma-turrets-2"] then
-	data.raw.technology["bob-plasma-turrets-2"].prerequisites = { "bob-plasma-turrets-1", "advanced-circuit", "bob-laser-turrets-2" }
+	data.raw.technology["bob-plasma-turrets-2"].prerequisites = { "bob-plasma-turrets-1", "advanced-circuit", "bob-laser-turrets-2", "chemical-science-pack" }
 end
 
 -- Получение углерода II (coke-purification-2 Beta 8): в Angels 2.0 рецепта нет.
