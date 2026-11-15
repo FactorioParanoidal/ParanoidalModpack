@@ -1,8 +1,11 @@
 -- Floor tiles (from Clean Floor): every tile that removes decorations at all removes all of them.
 -- Base and AAI stone path, concrete and refined concrete (0.15-0.25) are covered here too.
-for _, tile in pairs(data.raw.tile or {}) do
-	if (tile.decorative_removal_probability or 0) > 0 then
-		tile.decorative_removal_probability = 1
+-- Not while Д-ОК cleans the floors (yield-to-droid.lua).
+if require("yield-to-droid").automatic then
+	for _, tile in pairs(data.raw.tile or {}) do
+		if (tile.decorative_removal_probability or 0) > 0 then
+			tile.decorative_removal_probability = 1
+		end
 	end
 end
 
