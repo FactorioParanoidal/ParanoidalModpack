@@ -6,6 +6,7 @@
 local D = require("tweaks.custom.graphics-atlas-data")
 local artwork = require("tweaks.custom.reskins-overrides-data")
 local reductions = require("tweaks.custom.graphics-atlas-reductions")
+local pipe_graphics = require("tweaks.custom.pipe-graphics")
 
 local EMPTY = "__core__/graphics/empty.png" -- 64x64, полностью прозрачный
 local ROLLING_STOCK = { "locomotive", "cargo-wagon", "fluid-wagon", "artillery-wagon", "infinity-cargo-wagon" }
@@ -148,6 +149,12 @@ for old, target in pairs(D.file_remap) do
 	if target[2] == "base" or target[2] == "core" or mods[target[2]] then
 		remap[old] = target[1]
 	end
+end
+
+-- These are approved artwork choices, not claims of pixel-identical duplicates.
+-- Original owner files remain valid fallbacks when the matching Reskins mod is absent.
+for old, target in pairs(pipe_graphics.icon_remap) do
+	if mods[target[2]] then remap[old] = target[1] end
 end
 
 local function fix_icon(t, key, size_key)
