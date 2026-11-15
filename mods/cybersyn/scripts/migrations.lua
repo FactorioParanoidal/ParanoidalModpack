@@ -1,9 +1,58 @@
 --By Mami
-local flib_migration = require("__flib__.migration")
 local manager_gui = require("gui.main")
 local debug_revision = require("info")
 local analytics = require("scripts.analytics")
 local check_debug_revision
+
+local version_pattern = "%d+"
+local version_format = "%03d"
+
+---@param version string?
+---@param format string?
+---@return string?
+local function format_version(version, format)
+	if version then
+		format = format or version_format
+		local parts = {}
+		for part in string.gmatch(version, version_pattern) do
+			parts[#parts + 1] = string.format(format, part)
+		end
+		if next(parts) then
+			return table.concat(parts, ".")
+		end
+	end
+	return nil
+end
+
+---@param old_version string?
+---@param current_version string?
+---@return boolean
+local function is_newer_version(old_version, current_version)
+	local old_normalized = format_version(old_version)
+	local current_normalized = format_version(current_version)
+	return old_normalized ~= nil and current_normalized ~= nil and current_normalized > old_normalized
+end
+
+---@param config_change_data ConfigurationChangedData
+---@param migrations table<string, fun()>
+local function run_versioned_migrations(config_change_data, migrations)
+	local mod_change = config_change_data.mod_changes and config_change_data.mod_changes["cybersyn"]
+	local old_version = mod_change and mod_change.old_version
+	local new_version = mod_change and mod_change.new_version
+	if not old_version or not new_version then return end
+
+	local migration_versions = {}
+	for version, _ in pairs(migrations) do
+		migration_versions[#migration_versions + 1] = version
+	end
+	table.sort(migration_versions, is_newer_version)
+
+	for _, version in ipairs(migration_versions) do
+		if is_newer_version(old_version, version) and not is_newer_version(new_version, version) then
+			migrations[version]()
+		end
+	end
+end
 
 local migrations_table = {
 	["1.0.6"] = function()
@@ -193,7 +242,7 @@ local migrations_table = {
 				if train.entity.valid then
 					local e = get_any_train_entity(train.entity)
 					if e then
-						local stops = e.force.get_train_stops({ name = train.depot_name, surface = e.surface })
+						local stops = game.train_manager.get_train_stops({ station_name = train.depot_name, surface = e.surface, force = e.force })
 						for stop in rnext_consume, stops do
 							local new_depot_id = stop.unit_number
 							if map_data.depots[new_depot_id] then
@@ -403,8 +452,92 @@ local migrations_table = {
 			local map_data = storage
 			analytics.init(map_data)
 		end
-	end
+	end,
+	["2.2.0"] = function()
+		---@type MapData
+		local map_data = storage
+
+		map_data.recent_external_items = nil
+		-- warmup_station_cycles holds every warming station on its own.
+		map_data.warmup_station_ids = nil
+		-- tick_init refills the economy under the per-stop keys; the per-station ones would only linger.
+		map_data.economy = { all_r_stops = {}, all_p_stops = {}, all_names = {}, starved = {} }
+
+		for _, station in pairs(map_data.stations) do
+			station.secondary_inv_combs = station.secondary_inv_combs or {}
+			-- Moved onto each stop's StopInfo, rebuilt by every poll.
+			station.tick_signals = nil
+			station.item_p_counts = nil
+			-- Wait tracking was optional before and its cleanup hung on the same setting, so entries left from a time
+			-- it was on would read as hours-long waits.
+			station.request_start_ticks = {}
+		end
+
+		-- A network with no available trains has no table; older saves could keep an empty one.
+		for network_name, trains in pairs(map_data.available_trains) do
+			if next(trains) == nil then map_data.available_trains[network_name] = nil end
+		end
+
+		local tick = game.tick
+		for _, train in pairs(map_data.trains) do
+			local entity = train.entity
+			if entity and entity.valid then
+				train.last_state = entity.state
+				train.state_tick = tick
+			end
+		end
+
+		local players = map_data.manager and map_data.manager.players
+		for _, pd in pairs(players or {}) do
+			pd.stations_sort, pd.trains_sort, pd.auto_refresh, pd.pinned = nil, nil, nil, nil
+			pd.recent_panel_dirty, pd.disable_top_left_button = nil, nil
+			pd.delivery_times_interval, pd.delivery_times_mode, pd.delivery_times_selected = nil, nil, nil
+			pd.breakdown_registered = nil
+			-- Moved into pd.filters; only transient filter state, so it starts empty.
+			pd.search_query, pd.search_network_name, pd.search_network_mask = nil, nil, nil
+			pd.search_surface_idx, pd.search_item = nil, nil
+			-- The tabs' choices move under pd.tabs; the view caches are rebuilt into pd.cache.
+			pd.tabs = pd.tabs or {
+				utilization_tab = { interval = pd.utilization_interval, selected = pd.utilization_selected },
+				delivery_breakdown_tab = { interval = pd.breakdown_interval },
+			}
+			pd.utilization_interval, pd.utilization_selected, pd.breakdown_interval = nil, nil, nil
+			pd.cache = {}
+			pd.utilization_cache, pd.breakdown_cache, pd.utilization_registered, pd.visible = nil, nil, nil, nil
+		end
+	end,
 }
+
+--- Moves each item-hash key of `t` to its migrated name and quality; drops the keys whose name or quality was removed.
+---@param t {[string]: any}?
+---@param migrations {[string]: {[string]: string}}
+---@param removed {[string]: true}? collects the removed names
+---@return int gone entries dropped: their item or quality was removed, or their new key was already taken
+local function rename_keys(t, migrations, removed)
+	if not t then return 0 end
+	local moved, gone = {}, 0
+	for hash, v in pairs(t) do
+		local name, quality = unhash_signal(hash)
+		local new_name = migrations.item[name] or migrations.fluid[name]
+		local new_quality = quality and migrations.quality[quality]
+		if new_name == "" or new_quality == "" then
+			t[hash] = nil
+			gone = gone + 1
+			if removed then removed[name] = true end
+		elseif new_name or new_quality then
+			local new_hash = hash_item(new_name or name, new_quality or quality)
+			if moved[new_hash] then gone = gone + 1 end
+			moved[new_hash] = v
+			t[hash] = nil
+		end
+	end
+	-- Added after the walk: a key inserted during `pairs` makes the traversal undefined.
+	for hash, v in pairs(moved) do
+		if t[hash] ~= nil then gone = gone + 1 end
+		t[hash] = v
+	end
+	return gone
+end
 
 ---@param config_change_data ConfigurationChangedData
 function sanitize_economy_names(config_change_data)
@@ -423,26 +556,26 @@ function sanitize_economy_names(config_change_data)
 	-- no need to migrate map_data.economy, on_config_changed() sets map_data.tick_state = STATE_INIT which will wipe it
 
 	for _, station in pairs(map_data.stations) do
-		local deliveries = station.deliveries
-		if deliveries then
-			for item_hash, count in pairs(deliveries) do
-				local item_name, quality = unhash_signal(item_hash)
-				local new_name = migrations.item[item_name] or migrations.fluid[item_name]
-				local new_quality = quality and migrations.quality[quality]
-				if new_name == "" or new_quality == "" then
-					deliveries[item_hash] = nil
-					removed[item_name] = true
-				elseif new_name or new_quality then
-					local new_hash = hash_item(new_name or item_name, new_quality or quality)
-					deliveries[new_hash] = count
-					deliveries[item_hash] = nil
-				end
-			end
-		end
+		rename_keys(station.deliveries, migrations, removed)
 	end
 
 	if next(removed) then
 		log("Migrated names removed from economy: "..serpent.block(removed, {sortkeys = true}))
+	end
+
+	local stats = map_data.stats
+	if stats then
+		for _, ring in pairs({ stats.minute, stats.hour }) do
+			for _, b in pairs(ring) do rename_keys(b.items, migrations) end
+		end
+		rename_keys(stats.trip_ema, migrations)
+	end
+	local acks = map_data.acks
+	if acks then
+		for id, by_hash in pairs(acks.request) do
+			acks.n = acks.n - rename_keys(by_hash, migrations)
+			if next(by_hash) == nil then acks.request[id] = nil end
+		end
 	end
 
 	for train_id, train in pairs(map_data.trains) do
@@ -480,7 +613,7 @@ function on_config_changed(config_change_data)
 	storage.tick_data = {}
 	storage.perf_cache = {}
 
-	flib_migration.on_config_changed(config_change_data, migrations_table)
+	run_versioned_migrations(config_change_data, migrations_table)
 
 	IS_SE_PRESENT = remote.interfaces["space-exploration"] ~= nil
 
@@ -495,15 +628,21 @@ function on_config_changed(config_change_data)
 		sanitize_economy_names(config_change_data)
 	end
 
-	-- Ensure analytics is initialized if enabled (in case migration didn't run)
-	if analytics.is_enabled() and not storage.analytics then
-		analytics.init(storage)
+	-- Reshapes the utilization series, moves every chart onto fresh chunks and drops the series no tab draws; on any
+	-- change, also for a table an older version left when factorio-charts was missing during the upgrade, so the
+	-- samples taken before a tab opens go into the current series.
+	if analytics.is_library_available() and (storage.analytics or analytics.is_enabled()) then
+		analytics.migrate(storage)
 	end
 
 	-- Ensure analytics surface is hidden from map view for all forces
 	if storage.analytics and storage.analytics.surface then
 		for _, force in pairs(game.forces) do
 			force.set_surface_hidden(storage.analytics.surface, true)
+		end
+		-- Only a factorio-charts update can leave chunks in an older library's style: a chunk allocated since is styled.
+		if config_change_data.mod_changes and config_change_data.mod_changes["factorio-charts"] then
+			analytics.restyle_chunks(storage)
 		end
 	end
 
