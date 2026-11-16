@@ -1,4 +1,34 @@
 ---------------------------------------------------------------------------------------------------
+Version: 3.4.2
+Date: 2026-10-15
+  Changes:
+    - Updated minimum Factorio version to 2.1.22.
+    - Paranoidal: pesticide.json, a debugger configuration left in the 1.1 sandbox copy, is not kept; it is not part of the upstream package.
+  Bugfixes:
+    - Fixed a crash when selecting boilers on Factorio 2.1.22 or newer. (#239)
+    - Paranoidal: lab rates divide by the science_capacity of a science pack that is a plain item (the vanilla packs are plain items in 2.1) and by the durability only for tool packs, as in the Paranoidal 3.3.8 port; upstream divides plain items by 1.
+  Locale:
+    - ru: removed the extra multiplication sign from the net machine count and restored the information icon in the no-power warning.
+    - en/ru: removed the outdated claim that power consumption display is disabled by default; Paranoidal enables it by default.
+    - ru: the mod name and the mod list description are the same as in ParanoidalLocale (format "English title (Russian translation)"), so the mod reads the same with or without it.
+  Graphics:
+    - Paranoidal: thumbnail.png is the 144x144 redraw of the build.
+  Compatibility:
+    - Paranoidal: the Factorio 2.1 port of 3.3.8 (product probabilities, fluid filters and contents, boiler temperatures, offshore pump speed) is replaced by the upstream 2.1 code; the flib 0.17 functions (flib_table.mapped, flib_table.inverted, flib_array) are used as upstream does.
+---------------------------------------------------------------------------------------------------
+Version: 3.4.1
+Date: 2026-07-14
+  Bugfixes:
+    - Fixed that probabilistic products (recycling, uranium processing, etc.) all showed identical rates instead of being weighted by their probability. (#229, #233)
+    - Fixed that lab rates were incorrect. (#230, #231)
+---------------------------------------------------------------------------------------------------
+Version: 3.4.0
+Date: 2026-06-23
+  Info:
+    - Lab rates are incorrect. This will be fixed in a future update.
+  Changes:
+    - Updated to Factorio 2.1.
+---------------------------------------------------------------------------------------------------
 Version: 3.3.8
 Date: 2026-01-18
   Locale:

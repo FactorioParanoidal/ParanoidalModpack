@@ -1,0 +1,6 @@
+require("prototypes.sounds")
+require("prototypes.effects")
+require("prototypes.decoratives")
+require("prototypes.bot")
+require("prototypes.dock")
+require("prototypes.technology")

@@ -15,4 +15,11 @@ data:extend{
 		default_value = "by-order",
 		allowed_values = {"keep", "by-control", "by-order", "by-name"},
 	},
+	{
+		-- With Paranoidal-Droid-M-O loaded, floors and buildings leave the decorations to him (yield-to-droid.lua).
+		type = "bool-setting",
+		name = "paranoidal-decoration-cleanup-droid-m-o",
+		setting_type = "startup",
+		default_value = true,
+	},
 }

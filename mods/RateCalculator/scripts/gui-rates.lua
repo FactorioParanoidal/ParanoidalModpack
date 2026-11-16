@@ -417,7 +417,7 @@ function gui_rates.update_display_data(self, set)
     local multiplier = is_watts and 1 or multiplier
     local divisor = is_watts and 1 or divisor
     return {
-      machine_counts = flib_table.map(rate.machine_counts, function(count)
+      machine_counts = flib_table.mapped(rate.machine_counts, function(count)
         return count * manual_multiplier
       end),
       machines = rate.machines * manual_multiplier,
@@ -475,7 +475,8 @@ function gui_rates.update_display_data(self, set)
     if path == "item/rcalc-pollution-dummy/normal" and not show_pollution then
       goto continue
     end
-    local to_search = string.lower(dictionary[path] or rates.name)
+    local path_without_quality = string.match(path, "^(.*)/(.-)$")
+    local to_search = string.lower(dictionary[path_without_quality] or rates.name)
     if not string.find(to_search, search_query, nil, true) then
       goto continue
     end

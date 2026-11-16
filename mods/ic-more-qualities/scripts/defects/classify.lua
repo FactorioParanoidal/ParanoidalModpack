@@ -72,6 +72,18 @@ end
 local usable = {ammo = true, armor = true, gun = true, capsule = true, module = true, ["repair-tool"] = true}
 local pipe_entities = {pipe = true, ["pipe-to-ground"] = true}
 
+-- Flow Control cursor fittings (R on an ordinary pipe, mod-data "flow-control-cursor"): hidden storage-tank
+-- aliases that carry the pipe's item and quality 1:1, so they are materials like the pipe itself.
+local function pipe_aliases(raw)
+    local out = {}
+    local registry = raw["mod-data"] and raw["mod-data"]["flow-control-cursor"]
+    local items = registry and type(registry.data) == "table" and registry.data.items
+    for name, info in pairs(type(items) == "table" and items or {}) do
+        if type(info) == "table" and info.shape ~= 0 then out[name] = true end
+    end
+    return out
+end
+
 -- Accept long and old short forms while walking intermediate Lua tables.
 local function entries(list)
     local out = {}
@@ -121,6 +133,7 @@ function M.classify(raw, mode)
     for kind in pairs(pipe_entities) do
         for name in pairs(raw[kind] or {}) do pipes[name] = true end
     end
+    local aliases = pipe_aliases(raw)
 
     local finished, reasons = {}, {}
     for _, kind in ipairs(M.item_types) do
@@ -131,7 +144,7 @@ function M.classify(raw, mode)
             -- User decision: pipes, bricks/concrete/landfill (tiles) and rails are materials.
             elseif item.place_as_tile then reasons[name] = "material-tile"
             elseif kind == "rail-planner" then reasons[name] = "material-rail"
-            elseif item.place_result and pipes[item.place_result] then reasons[name] = "material-pipe"
+            elseif (item.place_result and pipes[item.place_result]) or aliases[name] then reasons[name] = "material-pipe"
             elseif usable[kind] or item.place_result or item.place_as_equipment_result then
                 finished[name] = true
             end

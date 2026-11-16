@@ -1,4 +1,4 @@
-local table = require("__flib__.table")
+local flib_table = require("__flib__.table")
 local schema = require("milestones.schema")
 local identity = require("milestones.identity")
 local COMPLETIONS_PER_PASS = 256
@@ -95,7 +95,7 @@ function merge_new_milestones(force_name, new_loaded_milestones)
         if new_loaded_milestone.type == "group" then
             current_group = new_loaded_milestone.name
         elseif new_loaded_milestone.type ~= "alias" then
-            local new_milestone = table.deep_copy(new_loaded_milestone)
+            local new_milestone = flib_table.deep_copy(new_loaded_milestone)
             new_milestone.sort_index = i
             new_milestone.sequence = 0
             new_milestone.group = current_group
@@ -195,7 +195,7 @@ function create_next_milestone(force_name, milestone, only_missing)
             end
         end
     end
-    local new_milestone = table.deep_copy(milestone)
+    local new_milestone = flib_table.deep_copy(milestone)
     new_milestone.quantity = quantity
     new_milestone.lower_bound_tick = nil
     new_milestone.completion_tick = nil

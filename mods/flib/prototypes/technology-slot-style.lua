@@ -170,14 +170,15 @@ styles.flib_technology_slot_ingredient = {
 styles.flib_technology_slot_progressbar = {
   type = "progressbar_style",
   bar = { position = { 305, 39 }, corner_size = 4 },
-  bar_shadow = {
-    base = { position = { 296, 39 }, corner_size = 4 },
-    shadow = {
-      left = { position = { 456, 152 }, size = { 16, 1 } },
-      center = { position = { 472, 152 }, size = { 1, 1 } },
-      right = { position = { 473, 152 }, size = { 16, 1 } },
-    },
-  },
+  -- TODO: This isn't a part of progressbar_style; it only exists on technology_slot_style
+  -- bar_shadow = {
+  --   base = { position = { 296, 39 }, corner_size = 4 },
+  --   shadow = {
+  --     left = { position = { 456, 152 }, size = { 16, 1 } },
+  --     center = { position = { 472, 152 }, size = { 1, 1 } },
+  --     right = { position = { 473, 152 }, size = { 16, 1 } },
+  --   },
+  -- },
   bar_width = 4,
   color = { g = 1 },
   width = 72,

@@ -1,7 +1,3 @@
-if ... ~= "__flib__.position" then
-  return require("__flib__.position")
-end
-
 local flib_direction = require("__flib__.direction")
 local flib_math = require("__flib__.math")
 

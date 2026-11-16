@@ -1,4 +1,42 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.17.2
+Date: 2026-06-25
+  Changes:
+    - Paranoidal packaging: tests and the editable Aseprite source stay in the local development workspace, as in 0.16.5; game Lua modules and PNG resources are unchanged.
+  Graphics:
+    - Paranoidal: graphics/slots.png and thumbnail.png are the smaller recompressed files of the build; the upstream images have not changed since 0.16.5.
+  Locale:
+    - Russian hardcoded error-message literals: 28, the 0.16.5 translations carried over and the two new flib_array messages translated; technical identifiers and format parameters are unchanged.
+    - ru: the mod name is the same as in ParanoidalLocale (format "English title (Russian translation)"), so the mod reads the same with or without it.
+  Bugfixes:
+    - Fixed missing localisation for the `flib_dictionary` module.
+---------------------------------------------------------------------------------------------------
+Version: 0.17.1
+Date: 2026-06-23
+  Bugfixes:
+    - Fixed crashes in the `flib_dictionary` module related to the array/table library split.
+---------------------------------------------------------------------------------------------------
+Version: 0.17.0
+Date: 2026-06-23
+  Features:
+    - Added `flib_array` module for working with arrays.
+    - Added `flib_table.all_of`.
+  Changes:
+    - Split `flib_table` module into separate `flib_array` and `flib_table` modules.
+    - Removed deprecated functions: `flib_direction.to_vector`, `flib_direction.to_vector_2d`, `flib_table.for_n_of`, `flib_table.filter`, `flib_table.partial_sort`, and `flib_table.size`.
+    - Removed deprecated modules: `flib_migration`.
+    - Removed upstream Lua library functions from the `flib_math` and `flib_table` modules; please use those functions directly.
+    - Renamed `flib_table.array_copy` to `flib_array.shallow_copy`.
+    - Renamed `flib_table.array_merge` to `flib_array.flatten`.
+    - Renamed `flib_table.binary_search` to `flib_array.binary_search`.
+    - Renamed `flib_table.for_each` to `flib_table.any_of`.
+    - Renamed `flib_table.invert` to `flib_table.inverted`.
+    - Renamed `flib_table.map` to `flib_table.mapped` and added a new `flib_table.map` which maps in-place.
+    - Renamed `flib_table.slice` to `flib_array.slice`.
+    - Renamed `flib_table.splice` to `flib_array.splice`.
+  Bugfixes:
+    - Removed require guards, which are no longer needed as of Factorio 2.0.
+---------------------------------------------------------------------------------------------------
 Version: 0.16.5
 Date: 2025-11-05
   Changes:

@@ -10,6 +10,7 @@ Date: 2026-06-14
   Compatibility:
     - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
     - Paranoidal port to Factorio 2.1: recipes use categories (RecipePrototype::category and additional_categories were merged into categories; the first entry keeps the meaning of the former main category, a changed main category keeps the other entries).
+    - Paranoidal: flib 0.17 removed flib_migration; the legacy inventory size notice compares versions with a copy of its 0.16.5 code in flib-migration.lua, with the same result.
 ---------------------------------------------------------------------------------------------------
 Version: 0.6.8
 Date: 2026-05-08

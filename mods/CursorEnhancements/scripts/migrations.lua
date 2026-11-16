@@ -1,4 +1,4 @@
-local migration = require("__flib__.migration")
+local migration = require("__CursorEnhancements__.scripts.flib-migration")
 
 local migrations = {
   ["2.0.0"] = function()

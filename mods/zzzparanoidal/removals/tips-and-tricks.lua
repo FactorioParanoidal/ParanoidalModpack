@@ -9,6 +9,8 @@ local KEEP_CATEGORIES = {
     -- Презентации «Брак и доводка» и «Качество» (prototypes/tips-and-tricks/quality).
     ["zzz-defects"] = true,
     ["zzz-quality"] = true,
+    -- Диспетчерская сеть поездов (prototypes/tips-and-tricks/cybersyn); без cybersyn категории нет.
+    ["zzz-cybersyn"] = true,
     -- Советы форка Yuoki (prototypes/paranoidal/tips.lua в моде Yuoki); без мода категории нет.
     ["yuoki"] = true,
     -- Советы paranoidal-robot-attrition (только текст, без симуляций); без мода категории нет.

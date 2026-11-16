@@ -8,6 +8,7 @@ Date: 2026-11-01
     - Entities: building an entity removes the decorations under its selection box plus 0.6 tiles (Realistic Decoration Cleanup with the Paranoidal build event filters: no resources, no ghosts).
     - Map generation: the decorative rate multiplier and the fake rock removal of UnPollock, rewritten. The rate is applied only when it is below 1 (UnPollock multiplied by 1 when only rocks were removed).
     - Removed the startup setting unpollock-avoid-resources (off in the build): RSO Reforged already keeps decoratives off and around ore (rso_free_decor).
+    - New startup setting paranoidal-decoration-cleanup-droid-m-o ("Leave the cleaning to M-O", on): with Paranoidal-Droid-M-O loaded, floor tiles keep their own share of decorative removal (base game: 0.15 stone path, 0.25 concrete) and building an entity no longer clears around it (the engine still removes what a building stands on); Д-ОК cleans the paving. Map generation is unchanged. Without Paranoidal-Droid-M-O, or with the setting off, everything works as before.
     - Thumbnail: the Realistic Decoration Cleanup picture scaled to 144x144 and recompressed (45 -> 21 KB; the old three thumbnails were 382 KB).
     - Locales: English and Russian only; the default of the decorative rate is given as 0.7 (the descriptions said 0.4).
   Bugfixes:
