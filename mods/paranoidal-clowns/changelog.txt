@@ -13,6 +13,7 @@ Date: 2026-11-01
     - Paranoidal: superseded thorium, phosphorus and advanced uranium technology images are archived outside the build and removed; zzzparanoidal owns the final C2 assignments. Item images and shared resources remain.
     - Only the 34 pictures the game uses are kept, plus the magnesium plate icon that only Artisanal Reskins replaces (of 162 graphics files in the three mods); they are recompressed (lossy palette; the sluicer sprites and the tinted thorium salt icon lossless): 0.76 MB -> 0.63 MB of kept graphics, the whole mod 2.2 MB -> 1.0 MB.
   Bugfixes:
+    - Paranoidal: molten magnesium defaults to 650 C instead of 100 C; maximum temperature matches the melt. Heat capacity and recipes are unchanged.
     - The thermonuclear bomb no longer gets its module and reactor ingredients twice (the AngelBob part repeated them, the last one with the invalid type "name"); zzzparanoidal no longer has to remove them.
     - The magnesium steel sink molten-steel-smelting-c2 is only created without Bob's plates or the Angel's Industries overhaul, as in 1.1 (the 2.0 port always created it next to molten-iron-smelting-6); zzzparanoidal no longer has to hide it.
     - Nuclear fuel reprocessing asked for the missing item "plutonium-239"; it uses angels-plutonium-239.

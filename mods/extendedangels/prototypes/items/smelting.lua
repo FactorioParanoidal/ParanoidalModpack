@@ -16,11 +16,12 @@ data:extend({
     name = "angels-gas-tungsten-hexachloride",
     icon = "__extendedangels__/graphics/icons/gas-tungsten-hexachloride.png",
     icon_size = 32,
-    default_temperature = 0,
+    default_temperature = 350,
+    gas_temperature = 345,
     heat_capacity = "0kJ",
     base_color = { r = 138 / 255, g = 20 / 255, b = 230 / 255 },
     flow_color = { r = 138 / 255, g = 20 / 255, b = 230 / 255 },
-    max_temperature = 0,
+    max_temperature = 350,
   },
 
   -- Sodium tungstate

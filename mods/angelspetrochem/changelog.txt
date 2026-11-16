@@ -2,6 +2,7 @@
 Version: 2.0.3
 Date: 04.06.2026
   Changes:
+    - Paranoidal: liquid plastic used for casting is a 220 C melt, and liquid polyethylene is a 150 C polymer melt instead of 0 C. Liquid resin and rubber remain chemical intermediates; ordinary gases, steam, coolant loops, heat capacities and recipe amounts are unchanged.
     - Paranoidal: corrected heavy-water, allyl-chloride and epichlorohydrin tooltip formulas; renamed coal gasification and mineral-oil synthesis. The legacy naphtha fluid is described as heavy residual fuel oil, matching its accepted Russian name; IDs, palettes and recipe mechanics are unchanged.
     - Paranoidal: the sulfur oxide fluid represents sulfur trioxide (SO3); updated its formula and English names, and described sulfur synthesis as combined combustion and oxidation. Legacy IDs, recipe amounts and existing molecular graphics are unchanged.
   Bugfixes:

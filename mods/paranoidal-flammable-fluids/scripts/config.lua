@@ -2,9 +2,20 @@
 local C = {}
 
 -- Ignition chance of a dying entity by damage type (upstream).
-C.CHANCES = { fire = 0.95, explosion = 0.75, acid = 0.5, electric = 0.5, laser = 0.5 }
+C.CHANCES = { fire = 0.95, explosion = 0.75, acid = 0.5, electric = 0.5, laser = 0.5, ["flo-thermal"] = 1 }
 -- Damage types that set tanks on fire and ammo stores cooking off.
-C.HEAT_DAMAGE = { fire = true, explosion = true }
+C.HEAT_DAMAGE = { fire = true, explosion = true, ["flo-thermal"] = true }
+
+-- Wooden pipes: safe for ordinary 165 C steam, not for melts. Water cannot reset internal heat.
+C.PIPE_SAFE_TEMPERATURE = 200
+C.PIPE_MIN_AMOUNT = 1
+C.PIPE_HEATING_AMOUNT = 10
+C.PIPE_CHECK_PERIOD = 60
+C.PIPE_CHECK_BUDGET = 256
+C.PIPE_MAX_ELAPSED = 120
+C.PIPE_COOL_TIME = 600
+C.PIPE_FX_INTERVAL = 30
+C.PIPE_QUENCH_TIME = 120
 
 C.MIN_ENERGY = 10                 -- smallest fluid charge that explodes (upstream)
 

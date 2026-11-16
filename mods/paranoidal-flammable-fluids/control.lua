@@ -28,6 +28,7 @@ require("scripts.fuse")
 require("scripts.tanks")
 require("scripts.cookoff")
 require("scripts.alerts")
+require("scripts.thermal")
 require("scripts.achievements")
 require("scripts.traps")
 require("scripts.demo")
@@ -84,16 +85,29 @@ local function register()
   script.on_event(E.on_entity_damaged, FO.core.on_entity_damaged, type_filters(C.DAMAGE_EVENT_TYPES))
 
   local turrets = FO.safety.names()
+  local built_names = FO.thermal.names()
+  for _, name in ipairs(turrets) do built_names[#built_names + 1] = name end
+  if #built_names > 0 then
+    local function on_built(event)
+      FO.safety.on_built(event)
+      FO.thermal.on_built(event)
+    end
+    local filters = name_filters(built_names)
+    for _, event in ipairs(BUILT_EVENTS) do script.on_event(event, on_built, filters) end
+    script.on_event(E.on_entity_cloned, on_built, filters)
+  end
   if #turrets > 0 then
     local filters = name_filters(turrets)
-    for _, event in ipairs(BUILT_EVENTS) do script.on_event(event, FO.safety.on_built, filters) end
-    script.on_event(E.on_entity_cloned, FO.safety.on_built, filters)
     script.on_event(E.script_raised_teleported, FO.safety.on_reoriented, filters)
     script.on_event({ E.on_player_rotated_entity, E.on_player_flipped_entity }, FO.safety.on_reoriented)
     script.on_event(E.on_object_destroyed, FO.safety.on_object_destroyed)
     script.on_event(E.on_script_trigger_effect, FO.safety.on_hit)
-    script.on_nth_tick(FO.safety.STEP, FO.safety.update)
   end
+  -- Both modules share the existing service interval: a second registration would replace the first.
+  script.on_nth_tick(FO.safety.STEP, function(event)
+    FO.safety.update(event)
+    FO.thermal.update(event)
+  end)
 
   FO.sched.sync()
   FO.traps.sync()
@@ -103,6 +117,7 @@ end
 script.on_init(function()
   register()
   FO.safety.sync()
+  FO.thermal.sync()
 end)
 
 script.on_load(function()
@@ -114,6 +129,7 @@ script.on_configuration_changed(function()
   FO.fluids.reset()
   FO.sched.sync()
   FO.safety.sync()
+  FO.thermal.sync()
 end)
 
 remote.add_interface("flammable_oils", {
@@ -134,13 +150,15 @@ remote.add_interface("flammable_oils", {
     if not (entity and entity.valid) then return false end
     local tank = FO.tanks.extinguish(entity)
     local cook = FO.cook.stop(entity)
-    return tank or cook
+    local pipe = FO.thermal.extinguish(entity)
+    return tank or cook or pipe
   end,
   -- Water poured on a spot: every burning tank and cooking store reaching into radius; returns their number.
   extinguish_area = function(surface_index, position, radius)
     if type(surface_index) ~= "number" or not position or type(radius) ~= "number" then return 0 end
     local p = { x = position.x or position[1], y = position.y or position[2] }
     return FO.tanks.extinguish_area(surface_index, p, radius) + FO.cook.stop_area(surface_index, p, radius)
+      + FO.thermal.extinguish_area(surface_index, p, radius)
   end,
   -- Test scene east of the player.
   demo = function(player)

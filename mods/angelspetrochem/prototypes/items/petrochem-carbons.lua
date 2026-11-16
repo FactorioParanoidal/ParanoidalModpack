@@ -342,11 +342,11 @@ data:extend({
     }, "CHH"),
     subgroup = "angels-petrochem-carbon-fluids",
     order = "ef",
-    default_temperature = 0,
+    default_temperature = 150,
     heat_capacity = "0.1kJ",
     base_color = angelsmods.functions.fluid_color("C2H4"), --{r = 0.65, g = 0.65, b = 0.65},
     flow_color = angelsmods.functions.flow_color("C2H4"), --{r = 0.65, g = 0.65, b = 0.65},
-    max_temperature = 0,
+    max_temperature = 150,
   },
   {
     type = "fluid",

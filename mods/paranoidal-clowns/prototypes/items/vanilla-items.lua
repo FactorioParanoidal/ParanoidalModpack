@@ -191,11 +191,11 @@ data:extend(
       name = "clowns-liquid-molten-magnesium",
       icon = "__paranoidal-clowns__/graphics/icons/molten-magnesium.png",
       icon_size = 32,
-      default_temperature = 100,
+      default_temperature = 650,
       heat_capacity = "0kJ",
       base_color = {r = 242/255, g = 212/255, b = 194/255},
       flow_color = {r = 242/255, g = 212/255, b = 194/255},
-      max_temperature = 100,
+      max_temperature = 650,
       auto_barrel = false
     },
     --plate

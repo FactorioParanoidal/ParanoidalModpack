@@ -8,11 +8,11 @@ if mods["bobplates"] then
       icon_size = 64,
       subgroup = "angels-alloys-casting",
       order = "f[nitinol]-a[liquid-molten-nitinol]",
-      default_temperature = 0,
+      default_temperature = 1310,
       heat_capacity = "0kJ",
       base_color = { r = 106 / 256, g = 92 / 256, b = 153 / 256 },
       flow_color = { r = 106 / 256, g = 92 / 256, b = 153 / 256 },
-      max_temperature = 0,
+      max_temperature = 1310,
       auto_barrel = false,
     },
   })
