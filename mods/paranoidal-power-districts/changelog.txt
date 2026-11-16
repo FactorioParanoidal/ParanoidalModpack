@@ -20,6 +20,7 @@ Date: 2026-11-12
       was still in the green zone.
     - Load shedding remembered only what a starved district had drawn, not what it asked: it was switched back on
       15 s later and shed again, over and over. It now stays off until the grid can carry it.
+    - A save with transformers loads again after a mod change: when every player shows the alt-mode texts the labels got nil as their player list, which Factorio 2.1.24 rejects ("table expected, got nil"); an empty list is written instead.
   Info:
     - Transformer art made with ChatGPT image generation from the mod's own layout mockup (2026-11-12).
 ---------------------------------------------------------------------------------------------------

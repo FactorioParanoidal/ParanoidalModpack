@@ -609,7 +609,8 @@ function M.label_players()
         o.destroy()
         m.label = nil
       else
-        o.players = storage.label_players
+        -- 2.1.24 rejects nil here ("table expected, got nil"): an empty list is "everybody" too
+        o.players = storage.label_players or {}
       end
     end
   end
