@@ -656,7 +656,7 @@ function squadCompression.nonRampantCompressedSquads(universe)
 	for i, squad in pairs(universe.nonRampantCompressedSquads) do
 		u = u + 1
 		map = squad.map
-		if map and squad.group.valid then
+		if map and squad.group and squad.group.valid then
 			squadCompression.processCompression(map, squad, getChunkByPosition(map, squad.group.position), false, false)	-- debug	, true
 			-- debug
 			-- rendering.draw_circle{color = renderColor, filled = false, radius = 0.5, width = 2, target  = squad.group.position, surface = squad.group.surface, time_to_live = 600}
@@ -777,7 +777,7 @@ function squadCompression.removeOneTickImmunity(universe)
  	for i,entityData in pairs(universe.oneTickImmunityUnits) do
 		if game.tick >= entityData.tick then
 			local entity = entityData.entity
-			if entity.valid then
+			if entity and entity.valid then
 				entity.destructible = true
 			end
 			universe.oneTickImmunityUnits[i] = nil

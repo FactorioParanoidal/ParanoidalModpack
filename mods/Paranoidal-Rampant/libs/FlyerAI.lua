@@ -414,7 +414,7 @@ function flyerAI.plan(universe, tick)
         return
     end
     for _, map in pairs(universe.maps) do
-        if map and (not map.suspended) and map.surface.valid and map.ai then
+        if map and (not map.suspended) and map.surface and map.surface.valid and map.ai then
             tryLaunch(map, tick)
         end
     end
@@ -457,7 +457,8 @@ function flyerAI.onLoss(map, squad, entity, tick)
         squad.engageX = position.x
         squad.engageY = position.y
     end
-    if (squad.flightPhase == "strike") and (squad.losses >= squad.startSize * FLEE_LOSSES) and squad.group.valid then
+    if (squad.flightPhase == "strike") and (squad.losses >= squad.startSize * FLEE_LOSSES)
+        and squad.group and squad.group.valid then
         aiBrain.debugPrint(map, "flight breaks off after losing " .. squad.losses .. "/" .. squad.startSize)
         goHome(map, squad, tick)
     end

@@ -886,7 +886,7 @@ function aiAttackWave.processBuilders(universe, tick)
 			-- game.print("group #"..squad.group.unique_id..": "..math.floor((buildData.nextTick - tick)/60).."seconds, builded = ".. buildData.builded)
 		-- end
 		processBuild = false
-		if (not squad) or not (squad.group.valid)then
+		if (not squad) or not (squad.group and squad.group.valid) then
 			builderSquads[squad] = nil
 		elseif buildData.builded >= 20 then
 			builderSquads[squad] = nil
@@ -895,7 +895,7 @@ function aiAttackWave.processBuilders(universe, tick)
 		end
 		if processBuild then
 			map = squad.map
-			if (not map) or (not map.surface.valid) then
+			if (not map) or (not map.surface) or (not map.surface.valid) then
 				processBuild = false
 			end
 		end

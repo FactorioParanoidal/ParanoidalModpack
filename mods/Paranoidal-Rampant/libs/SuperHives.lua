@@ -240,7 +240,7 @@ end
 -- the cheap conditions first: limit, distance from the centre, spacing
 local function placeAvailable(universe, map, position, evo)
     local surface = map.surface
-    if not surface.valid then
+    if not (surface and surface.valid) then
         return false
     end
     local index = surface.index
@@ -258,7 +258,7 @@ local function placeAvailable(universe, map, position, evo)
             local dx = record.x - position.x
             local dy = record.y - position.y
             if ((dx * dx) + (dy * dy)) < spacing2 then
-                if record.entity.valid then
+                if record.entity and record.entity.valid then
                     return false
                 end
             end
@@ -364,7 +364,7 @@ function superHives.update(universe, tick)
             key = nil
             break
         end
-        if not record.entity.valid then
+        if not (record.entity and record.entity.valid) then
             forget(data, nextKey)       -- removed by a script without a death event (a mutation replaces it)
         else
             key = nextKey
@@ -429,7 +429,7 @@ function superHives.randomNear(universe, map, position, range)
     local found
     local range2 = range * range
     for _, record in pairs(data.records) do
-        if (record.surfaceIndex == index) and record.entity.valid then
+        if (record.surfaceIndex == index) and record.entity and record.entity.valid then
             local dx = record.x - position.x
             local dy = record.y - position.y
             if ((dx * dx) + (dy * dy)) <= range2 then
@@ -450,7 +450,7 @@ function superHives.report(universe, surfaceIndex)
     end
     for unitNumber, record in pairs(data.records) do
         local entity = record.entity
-        if entity.valid and ((not surfaceIndex) or (record.surfaceIndex == surfaceIndex)) then
+        if entity and entity.valid and ((not surfaceIndex) or (record.surfaceIndex == surfaceIndex)) then
             result[#result + 1] = {
                 unitNumber = unitNumber, name = entity.name, surfaceIndex = record.surfaceIndex,
                 position = {x = record.x, y = record.y}, health = entity.health, maxHealth = entity.max_health

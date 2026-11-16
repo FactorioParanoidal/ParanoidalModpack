@@ -123,7 +123,7 @@ local function createSquadMenu(player, universe)
 		style = "close_button"
 	}
 		for groupNumber, squad in pairs(universe.groupNumberToSquad) do
-			if squad.map and squad.group.valid then
+			if squad.map and squad.group and squad.group.valid then
 				local group = squad.group
 				local squadFrame = createSquadFrame(root, group)
 				squadFrame.rampantFixed_Debug_squadButton.caption = "x, y ="..math.floor(group.position.x)..", "..math.floor(group.position.y).. ", "..#group.members.." biters"
@@ -153,7 +153,7 @@ function tests.onDebugElementClick(event, universe)
 		if squad and squad.valid then
 			end	
 		for groupNumber, squad in pairs(universe.groupNumberToSquad) do
-			if squad.map and squad.group.valid then
+			if squad.map and squad.group and squad.group.valid then
 				if squad.group.unique_id == group_number then
 					game.print("номер группы = ".. group_number.. ": [gps=" .. squad.group.position.x .. "," .. squad.group.position.y .."]")
 					-- local player = game.players[event.player_index]

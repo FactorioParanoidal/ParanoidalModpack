@@ -11,6 +11,9 @@ Date: 2026.11.16
     - A dying nest and its remains keep the size of the nest (they always had the normal size) and the faction colour of the body (only the mask kept its colour).
     - Champions and hour bosses leave a corpse as big as they are (x1.15 and x1.4): the corpse of their unit gets one hidden enlarged copy per kind. Ordinary units keep their corpses; the glow and the removal of the corpse are unchanged.
     - Attack fires no longer pass the 1.1 size and speed values that the 2.0 fire pictures ignored; the fires look as before.
+  Bugfixes:
+    - Loading a save with a missing engine-group reference no longer crashes the helper sweep. Stale records use the existing cleanup, including removal of only one helper from a compressed pack.
+    - Missing saved group/entity/surface references are also handled in squad, builder and mutation cleanup, pincer waves, flyer loss handling, temporary immunity, champion/corpse and super-hive records, cached demolisher attacks and map work queues. Healthy objects and surviving compressed carriers are kept.
   Locale:
     - ru: the mod name in locale/ru, the same as in ParanoidalLocale.
 ---------------------------------------------------------------------------------------------------
