@@ -87,6 +87,7 @@ script.on_event(prototypes.custom_input["sp-replace-previous-waypoint"],
 ---@param spidertron LuaEntity
 ---@param waypoint_index WaypointIndex?
 function PatrolRemote.give_remote(player, spidertron, waypoint_index)
+  if not Control.patrols_unlocked(player.force) then return end
   if not player.is_cursor_empty() then
     local cleared = player.clear_cursor()
     if not cleared then return end
@@ -105,7 +106,19 @@ function PatrolRemote.give_remote(player, spidertron, waypoint_index)
   end
 end
 
+-- Paranoidal fork: the Ctrl+Alt+A custom input spawns the remote without the shortcut's technology check.
+---@param event EventData.on_player_cursor_stack_changed
+local function on_player_cursor_stack_changed(event)
+  local player = game.get_player(event.player_index)  ---@cast player -?
+  local cursor = player.cursor_stack
+  if cursor and cursor.valid_for_read and cursor.name == "sp-spidertron-patrol-remote"
+      and not Control.patrols_unlocked(player.force) then
+    cursor.clear()
+  end
+end
+
 PatrolRemote.events = {
+  [defines.events.on_player_cursor_stack_changed] = on_player_cursor_stack_changed,
   [defines.events.on_player_used_spidertron_remote] = on_player_used_spidertron_remote,
   [prototypes.custom_input["sp-use-item-custom"]] = on_player_right_clicked
 }

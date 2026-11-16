@@ -496,6 +496,11 @@ local function on_gui_opened(event)
   local player = game.get_player(event.player_index)  ---@cast player -?
   local entity = event.entity
   if entity and entity.type == "spider-vehicle" and is_allowed_spidertron_name[entity.name] then
+    if not Control.patrols_unlocked(player.force) then
+      local stale_frame = player.gui.relative["sp-relative-frame"]
+      if stale_frame then stale_frame.destroy() end
+      return
+    end
     WaypointRendering.update_player_render_paths(player)
 
     local relative_frame = player.gui.relative["sp-relative-frame"]
@@ -986,6 +991,7 @@ local toggleable_entities = {
 ---@param event EventData.CustomInputEvent
 local function toggle_spidertron_automatic_manual(event)
   local player = game.get_player(event.player_index)  ---@cast player -?
+  if not Control.patrols_unlocked(player.force) then return end
   local spidertron = player.selected
   local spidertrons
   if not spidertron or spidertron.type ~= "spider-vehicle" then

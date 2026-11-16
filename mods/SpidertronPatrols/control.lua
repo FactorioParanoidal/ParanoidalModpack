@@ -21,6 +21,15 @@ WaypointRendering = require "scripts.waypoint-rendering"
 
 Control = {}
 
+-- Paranoidal fork: patrols are after-rocket content (ПР-079 item 4). Until the force researches the automation
+-- technology the schedule pane, the patrol remote and the patrol hotkeys stay away from home spidertrons.
+---@param force LuaForce
+---@return boolean
+function Control.patrols_unlocked(force)
+  local technology = force.technologies["sp-spidertron-automation"]
+  return technology == nil or technology.researched
+end
+
 ---@alias PlayerIndex uint
 ---@alias UnitNumber uint
 ---@alias GameTick uint
@@ -148,6 +157,7 @@ script.on_event({"move-right-custom", --[["move-left-custom",]] "move-up-custom"
   function(event)
     local player = game.get_player(event.player_index)  ---@cast player -?
     local vehicle = player.vehicle
+    if not Control.patrols_unlocked(player.force) then return end
     if vehicle and vehicle.type == "spider-vehicle" and player.render_mode == defines.render_mode.game then  -- Render mode means player isn't in map view...
       local patrol_data = get_patrol_data(vehicle)
       patrol_data.on_patrol = nil

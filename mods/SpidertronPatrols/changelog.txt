@@ -3,6 +3,7 @@ Version: 2.7.1
 Date: 10 October 2026
   Changes:
     - Paranoidal (Space Age branch): patrols open with Maraxsis' submarine automation (after the rocket), not with the spidertron technology; no optional dependency on space-age (Space Age stays hidden from the mod, load order as without it); Spidertron Enhancements is optional; spider vehicles keep their flags (inserters still serve the home spidertron).
+    - Paranoidal (Space Age branch): until the force researches spidertron automation (after the rocket) the schedule pane does not open on spider vehicles, the panel and pipette give no patrol remote, a patrol remote spawned by Ctrl+Alt+A is cleared from the cursor, and the toggle hotkey and driving leave patrol state alone: home spidertrons behave as in the build without Space Age.
   Bugfixes:
     - Fixed error on load with 2.1.21
 ---------------------------------------------------------------------------------------------------
