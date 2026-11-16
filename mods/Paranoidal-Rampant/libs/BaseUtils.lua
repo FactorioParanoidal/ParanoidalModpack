@@ -1610,7 +1610,7 @@ function baseUtils.lowerTiersToEvolution(universe)
 	local replaced = 0
 	for _, base in pairs(universe.bases) do
 		local map = universe.maps[base.mapIndex]
-		if map and map.surface.valid and base.thisIsRampantEnemy and base.alignment and base.tier then
+		if map and map.surface and map.surface.valid and base.thisIsRampantEnemy and base.alignment and base.tier then
 			local surface = map.surface
 			local distanceIndex = mMin(1, euclideanDistancePoints(base.x, base.y, 0, 0) * BASE_DISTANCE_TO_EVO_INDEX)
 			local evo = game.forces.enemy.get_evolution_factor(surface)

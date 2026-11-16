@@ -929,7 +929,7 @@ local function pickMap(universe)
         if not seen[index] then
             seen[index] = true
             local map = universe.maps[index]
-            if map and (not map.suspended) and map.surface.valid and (not surface.peaceful_mode)
+            if map and (not map.suspended) and map.surface and map.surface.valid and (not surface.peaceful_mode)
                 and (map.state ~= AI_STATE_PEACEFUL) and next(map.chunkToNests)
                 and (next(map.chunkToPlayerTurrets) or next(map.chunkToPlayerBase)) then
                 candidates[#candidates + 1] = map
@@ -1045,7 +1045,7 @@ function champions.onSettingsChanged(universe)
     end
     local changed = false
     for unitNumber, record in pairs(data.units) do
-        if not record.entity.valid then
+        if not (record.entity and record.entity.valid) then
             data.units[unitNumber] = nil
             changed = true
         elseif not record.died then
@@ -1063,7 +1063,7 @@ function champions.update(universe, tick)
     if data then
         local changed = false
         for unitNumber, record in pairs(data.units) do
-            if not record.entity.valid then
+            if not (record.entity and record.entity.valid) then
                 data.units[unitNumber] = nil    -- removed without on_post_entity_died (destroyed by a script)
                 changed = true
             elseif not record.died then
@@ -1076,10 +1076,10 @@ function champions.update(universe, tick)
             local count = #corpses
             for i = 1, count do
                 local corpse = corpses[i]
-                if corpse.entity.valid and (tick < corpse.expire) then
+                if corpse.entity and corpse.entity.valid and (tick < corpse.expire) then
                     kept = kept + 1
                     corpses[kept] = corpse
-                elseif corpse.entity.valid then
+                elseif corpse.entity and corpse.entity.valid then
                     corpse.entity.destroy()
                 end
             end
@@ -1187,13 +1187,14 @@ function champions.report(universe)
     end
     for unitNumber, record in pairs(data.units) do
         local entity = record.entity
+        local valid = entity and entity.valid
         result.units[#result.units + 1] = {
             unitNumber = unitNumber, kind = record.kind, name = record.prototypeName, state = record.state,
             pool = record.pool, poolMax = record.poolMax, nameIndex = record.nameIndex,
             color = COLORS[record.colorIndex].name, died = record.died,
-            health = entity.valid and entity.health or nil, maxHealth = entity.valid and entity.max_health or nil,
-            speed = entity.valid and entity.speed or nil,
-            position = entity.valid and entity.position or nil, home = record.home, target = record.target,
+            health = valid and entity.health or nil, maxHealth = valid and entity.max_health or nil,
+            speed = valid and entity.speed or nil,
+            position = valid and entity.position or nil, home = record.home, target = record.target,
         }
     end
     result.corpses = #data.corpses

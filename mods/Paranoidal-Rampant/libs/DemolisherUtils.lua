@@ -28,7 +28,7 @@ function demolisherUtils.feedDemolisher(demolisher, cause_entity, surface_index)
 	local hunger = 0
 	if map and map.wildDemolishers then
 		for unit_number, wildDemolisherData in pairs(map.wildDemolishers) do			
-			if wildDemolisherData.entity.valid 
+			if wildDemolisherData.entity and wildDemolisherData.entity.valid
 				and (unit_number == demolisher.unit_number) 
 				and (wildDemolisherData.hunger > 0)
 				then
@@ -91,7 +91,7 @@ function demolisherUtils.fearDemolishers(surface_index)
 	local hunger = 0
 	if map.wildDemolishers then
 		for unit_number, wildDemolisherData in pairs(map.wildDemolishers) do
-			if wildDemolisherData.entity.valid then
+			if wildDemolisherData.entity and wildDemolisherData.entity.valid then
 				wildDemolisherData.hunger = 0
 				universe.demolisherTriggers[unit_number] = nil
 			end
@@ -162,7 +162,7 @@ function demolisherUtils.processDemolishers()
 	local evo
 	
 	for _, map in pairs(universe.maps) do
-		if (not map.suspended) and (game.tick >= map.nextDemolisherAttackTick) and map.surface.valid and not (map.state == constants.AI_STATE_PEACEFUL) then
+		if (not map.suspended) and (game.tick >= map.nextDemolisherAttackTick) and map.surface and map.surface.valid and not (map.state == constants.AI_STATE_PEACEFUL) then
 			surface = map.surface
 			evo = game.forces.enemy.get_evolution_factor(surface)
 			planetAISetting = (universe.planetAISettings[surface.name] or universe.planetAISettings["others"])
@@ -182,7 +182,7 @@ function demolisherUtils.processDemolishers()
 						local attackCandidates = {}
 						if map.wildDemolishers then
 							for i, wildDemolisherData in pairs(map.wildDemolishers) do
-								if wildDemolisherData.entity.valid then
+								if wildDemolisherData.entity and wildDemolisherData.entity.valid then
 									attackCandidates[#attackCandidates+1] = wildDemolisherData.entity
 								else
 									map.wildDemolishers[i] = nil
@@ -205,10 +205,11 @@ function demolisherUtils.processDemolishers()
 						if not demolisher then
 							local demolisherSource = demolishers[mRandom(1, demolishersCount)]
 							local newEntityName = mutateDemolisher(demolisherSource, evo)
-							if map.nextDemolisherAttack and map.nextDemolisherAttack.demolisher.valid then
+							if map.nextDemolisherAttack and map.nextDemolisherAttack.demolisher
+								and map.nextDemolisherAttack.demolisher.valid then
 								demolisherSource = map.nextDemolisherAttack.demolisher
 								newEntityName = map.nextDemolisherAttack.newEntityName
-								if map.nextDemolisherAttack.target.valid then
+								if map.nextDemolisherAttack.target and map.nextDemolisherAttack.target.valid then
 									targetEntity = map.nextDemolisherAttack.target
 								end
 							else

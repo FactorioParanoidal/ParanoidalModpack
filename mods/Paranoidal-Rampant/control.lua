@@ -1341,7 +1341,7 @@ local function processProtectedUnits()
 		-- return
 	-- end	
 	for unitNumber, protectionData in pairs(universe.protectedUnits) do
-		if not protectionData.entity.valid then
+		if not (protectionData.entity and protectionData.entity.valid) then
 			universe.protectedUnits[unitNumber] = nil
 		elseif protectionData.tick <= game.tick then
 			protectionData.entity.destructible = true
@@ -1762,7 +1762,7 @@ script.on_nth_tick(5000,
 			---
 			if universe.nonRampantSquads then
 				for i, squad in pairs(universe.nonRampantSquads) do
-					if not squad.group.valid then
+					if not (squad.group and squad.group.valid) then
 						universe.nonRampantSquads[i] = nil
 					end	
 				end
@@ -1888,7 +1888,7 @@ script.on_nth_tick(3600,
 		if universe then
 			checkFlyerAlerts()
 			for _, map in pairs(universe.maps) do
-				if map and (not map.suspended) and map.surface.valid then
+				if map and (not map.suspended) and map.surface and map.surface.valid then
 					undergroundAttack.updateUndergroundAttackProbability(map)
 					map.buildingsLvl = baseUtils.evoToBuildingLvl(game.forces.enemy.get_evolution_factor(map.surface))
 				end	

@@ -522,7 +522,7 @@ function mapProcessor.processActiveNests(universe, tick)
         universe.processActiveNestIterator = next(processActiveNest, chunk)
         if chunkPack.tick < tick  then
             local map = chunkPack.map
-            if (not map) or (not map.surface.valid) then
+            if (not map) or (not map.surface) or (not map.surface.valid) then
                 processActiveNest[chunk] = nil
                 return
             end

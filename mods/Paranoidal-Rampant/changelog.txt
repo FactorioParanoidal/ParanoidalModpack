@@ -6,6 +6,9 @@ Date: 2026.11.16
     - Saves made before the rename keep their Rampant state. The mod RampantFixed stays in the build as a bridge without content, and on the first load of such a save Paranoidal-Rampant takes over the state kept in the bridge (AI, bases, squads, champions, truce) instead of starting anew, which would also kill every enemy unit. Then the bridge is emptied and its old buttons are replaced by those of Paranoidal-Rampant. Values of map settings are kept, as the setting names did not change.
     - The hidden optional dependency "RampantFixed >= 9.3.0" keeps Paranoidal-Rampant from loading next to the old full RampantFixed.
     - Super-hive auras drawn before the rename belong to RampantFixed; they are dropped too when the aura changes.
+  Bugfixes:
+    - Loading a save with a missing engine-group reference no longer crashes the helper sweep. Stale records use the existing cleanup, including removal of only one helper from a compressed pack.
+    - Missing saved group/entity/surface references are also handled in squad, builder and mutation cleanup, pincer waves, flyer loss handling, temporary immunity, champion/corpse and super-hive records, cached demolisher attacks and map work queues. Healthy objects and surviving compressed carriers are kept.
   Locale:
     - ru: the mod name in locale/ru, the same as in ParanoidalLocale.
 ---------------------------------------------------------------------------------------------------
