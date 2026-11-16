@@ -10,8 +10,8 @@ that every turret is refreshed once per update period. The turret search around
 a player runs only when the player moved, changed surface, forces changed, or
 after RESCAN_MAX_AGE ticks; turrets built nearby are added through build events.
 
-All mutable state lives in `storage`; module locals hold only values derived
-from settings and prototypes, so they are identical on every client.
+Tracking state and the fractional work budget live in `storage`. Module locals
+hold derived settings/prototypes and the handler registration restored on load.
 ]]
 
 local RADIUS = 100
@@ -43,6 +43,14 @@ local crit_r, crit_g, crit_b, crit_a
 
 -- Derived from prototypes.
 local limit_cache, mag_size_cache = {}, {}
+local on_tick, tick_active
+
+local function set_tick_active(active)
+	if tick_active ~= active then
+		tick_active = active
+		script.on_event(defines.events.on_tick, active and on_tick or nil)
+	end
+end
 
 local function turret_limit(name)
 	local x = limit_cache[name]
@@ -102,6 +110,8 @@ local function reset_state()
 	storage.pos = {}     -- [unit_number] = index in list
 	storage.cursor = 1
 	storage.players = {} -- [player_index] = scan state
+	storage.budget = 0
+	set_tick_active(false)
 end
 
 local function ensure_state()
@@ -113,6 +123,7 @@ local function destroy_objects()
 	for _, rec in pairs(storage.turrets) do
 		rec.obj, rec.value, rec.level = nil, nil, nil
 		rec.viewers = {}
+		rec.seen_m = nil
 	end
 end
 
@@ -132,10 +143,15 @@ local function add_watch(unit, entity, player_index)
 		local list = storage.list
 		list[#list + 1] = unit
 		storage.pos[unit] = #list
+		if #list == 1 then
+			storage.budget = period - 1 -- first result on the next tick, without over-polling
+			set_tick_active(true)
+		end
 	end
 	if not rec.watchers[player_index] then
 		rec.watchers[player_index] = true
 		rec.nwatch = rec.nwatch + 1
+		rec.seen_m = nil
 	end
 end
 
@@ -144,6 +160,10 @@ local function remove_record(unit)
 	if not rec then return end
 	if rec.obj then rec.obj.destroy() end
 	storage.turrets[unit] = nil
+	for pi in pairs(rec.watchers) do
+		local ps = storage.players[pi]
+		if ps then ps.set[unit] = nil end
+	end
 
 	local list, pos = storage.list, storage.pos
 	local i, last = pos[unit], #list
@@ -152,6 +172,10 @@ local function remove_record(unit)
 	pos[moved] = i
 	list[last] = nil
 	pos[unit] = nil
+	if last == 1 then
+		storage.cursor, storage.budget = 1, 0
+		set_tick_active(false)
+	end
 end
 
 local function remove_watch(unit, player_index)
@@ -159,6 +183,7 @@ local function remove_watch(unit, player_index)
 	if not (rec and rec.watchers[player_index]) then return end
 	rec.watchers[player_index] = nil
 	rec.nwatch = rec.nwatch - 1
+	rec.seen_m = nil
 	if rec.nwatch <= 0 then remove_record(unit) end
 end
 
@@ -184,13 +209,13 @@ local function visible_forces(player_force)
 	return result
 end
 
-local function scan_player(ps, player, tick)
+local function scan_player(ps, player, tick, forces)
 	local position = player.position
 	local found = player.surface.find_entities_filtered{
 		type = "ammo-turret",
 		position = position,
 		radius = RADIUS,
-		force = visible_forces(player.force),
+		force = forces,
 	}
 	local pi = ps.index
 	local old, new = ps.set, {}
@@ -211,6 +236,7 @@ end
 
 local function check_players(tick)
 	local states = storage.players
+	local forces_by_index = {} -- never kept across events or friendship changes
 	for pi in pairs(states) do
 		local p = game.get_player(pi)
 		if not (p and p.connected) then drop_player(pi) end
@@ -230,7 +256,15 @@ local function check_players(tick)
 			local dx, dy = pos.x - ps.x, pos.y - ps.y
 			rescan = dx * dx + dy * dy >= RESCAN_MOVE_SQ
 		end
-		if rescan then scan_player(ps, p, tick) end
+		if rescan then
+			local force = p.force
+			local forces = forces_by_index[force.index]
+			if not forces then
+				forces = visible_forces(force)
+				forces_by_index[force.index] = forces
+			end
+			scan_player(ps, p, tick, forces)
+		end
 	end
 end
 
@@ -241,17 +275,36 @@ end
 ---------------------------------------------------------------------------
 -- Per-turret refresh
 
-local function clear_viewers(viewers)
-	for i = #viewers, 1, -1 do viewers[i] = nil end
-end
-
 local function hide(rec)
 	if rec.obj then
 		rec.obj.destroy()
 		rec.obj = nil
 	end
 	rec.value, rec.level = nil, nil
-	clear_viewers(rec.viewers)
+	-- Keep the cached viewer decision, even when it is empty.
+end
+
+local function update_viewers(rec, m)
+	if rec.seen_m == m then return false end
+	local viewers = rec.viewers
+	local nv, changed = 0, false
+	for pi in pairs(rec.watchers) do
+		local ps = storage.players[pi]
+		if ps then
+			local f = ps.factor
+			if m == 0 or not f or m < rec.limit * f then
+				nv = nv + 1
+				if viewers[nv] ~= pi then
+					viewers[nv], changed = pi, true
+				end
+			end
+		end
+	end
+	for i = #viewers, nv + 1, -1 do
+		viewers[i], changed = nil, true
+	end
+	rec.seen_m = m
+	return changed
 end
 
 -- Returns true when the record was removed (the list slot now holds another unit).
@@ -263,18 +316,17 @@ local function refresh(unit)
 		return true
 	end
 
-	local m, value
+	local m, value, inv, first_stack, slots
 	if disp_mode == "shot" then
-		local inv = e.get_inventory(TURRET_INV)
-		m, value = 0, 0
+		inv = e.get_inventory(TURRET_INV)
+		m, slots = 0, 0
 		if inv then
-			for j = 1, #inv do
-				local s = inv[j]
-				if s.valid_for_read then
-					local c = s.count
-					m = m + c
-					value = value + mag_size(s.name) * (c - 1) + s.ammo
-				end
+			slots = #inv
+			if slots == 1 then
+				local s = inv[1]
+				if s.valid_for_read then m, first_stack = s.count, s end
+			else
+				m = inv.get_item_count()
 			end
 		end
 	else
@@ -292,33 +344,29 @@ local function refresh(unit)
 		return false
 	end
 
+	local viewers_changed = update_viewers(rec, m)
 	local viewers = rec.viewers
-	local players = storage.players
-	local nv, viewers_changed = 0, false
-	for pi in pairs(rec.watchers) do
-		local ps = players[pi]
-		if ps then
-			local f = ps.factor
-			if m == 0 or not f or m < limit * f then
-				nv = nv + 1
-				if viewers[nv] ~= pi then
-					viewers[nv] = pi
-					viewers_changed = true
+	if #viewers == 0 then hide(rec) return false end
+
+	-- Count loaded rounds only when somebody will see them. The common one-slot
+	-- path reuses the stack/count above; multi-slot inventories use one Lua pass.
+	if disp_mode == "shot" then
+		value = 0
+		if first_stack then
+			value = mag_size(first_stack.name) * (m - 1) + first_stack.ammo
+		elseif m > 0 then
+			for j = 1, slots do
+				local s = inv[j]
+				if s.valid_for_read then
+					value = value + mag_size(s.name) * (s.count - 1) + s.ammo
 				end
 			end
 		end
 	end
-	if nv == 0 then hide(rec) return false end
-	for i = #viewers, nv + 1, -1 do
-		viewers[i] = nil
-		viewers_changed = true
-	end
 
 	local obj = rec.obj
+	if obj and not obj.valid then obj = nil end
 	local value_changed = rec.value ~= value
-	if obj and (value_changed or viewers_changed or rec.level ~= level) and not obj.valid then
-		obj = nil
-	end
 
 	if text_mode then
 		local color = level_color[level]
@@ -383,22 +431,26 @@ end
 ---------------------------------------------------------------------------
 -- Events
 
-local function on_tick(event)
-	ensure_state()
-	local tick = event.tick
-	if tick % RESCAN_CHECK_TICKS == 0 then check_players(tick) end
-
+on_tick = function()
 	local list = storage.list
 	local n = #list
-	if n == 0 then return end
+	if n == 0 then set_tick_active(false) return end
+	local budget = (storage.budget or period - 1) + n
+	local count = math.floor(budget / period)
+	storage.budget = budget - count * period
 	local c = storage.cursor
-	for _ = 1, math.ceil(n / period) do
+	for _ = 1, count do
 		local size = #list
 		if size == 0 then break end
 		if c > size then c = 1 end
 		if not refresh(list[c]) then c = c + 1 end
 	end
 	storage.cursor = c
+end
+
+local function on_scan_tick(event)
+	ensure_state()
+	check_players(event.tick)
 end
 
 local function on_turret_built(event)
@@ -431,10 +483,24 @@ local function on_setting_changed(event)
 	if event.setting_type == "runtime-per-user" then
 		local ps = event.player_index and storage.players[event.player_index]
 		local p = ps and game.get_player(event.player_index)
-		if p then ps.factor = player_factor(p) end
+		if p then
+			local factor = player_factor(p)
+			if ps.factor ~= factor then
+				ps.factor = factor
+				for unit in pairs(ps.set) do
+					local rec = storage.turrets[unit]
+					if rec then rec.seen_m = nil end
+				end
+			end
+		end
 	else
+		local old_period = period
 		read_settings()
-		destroy_objects()
+		if name == "nearby-ammo-update-per-second" then
+			storage.budget = math.floor((storage.budget or 0) * period / old_period)
+		else
+			destroy_objects()
+		end
 	end
 end
 
@@ -459,7 +525,10 @@ script.on_init(function()
 	reset_state()
 end)
 
-script.on_load(read_settings)
+script.on_load(function()
+	read_settings()
+	set_tick_active(storage.list ~= nil and #storage.list > 0)
+end)
 
 script.on_configuration_changed(function()
 	read_settings()
@@ -467,7 +536,7 @@ script.on_configuration_changed(function()
 	reset_state()
 end)
 
-script.on_event(defines.events.on_tick, on_tick)
+script.on_nth_tick(RESCAN_CHECK_TICKS, on_scan_tick)
 script.on_event(defines.events.on_runtime_mod_setting_changed, on_setting_changed)
 script.on_event(defines.events.on_player_left_game, on_player_gone)
 script.on_event(defines.events.on_player_removed, on_player_gone)
