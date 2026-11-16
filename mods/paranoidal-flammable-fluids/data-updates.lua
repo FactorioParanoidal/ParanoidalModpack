@@ -82,9 +82,15 @@ smoke.end_scale = 6
 smoke.affected_by_wind = true
 smoke.show_when_smoke_off = true
 
--- Exterior wood fire is intentionally mild; the thermal script owns the accelerating pipe damage.
+-- Wood smokes white; plastic and overheating tanks keep the existing black smoke.
+local white_smoke = util.table.deepcopy(smoke)
+white_smoke.name = "flo-white-smoke"
+white_smoke.color = {r = 1, g = 1, b = 1, a = 0.75}
+
+-- Exterior pipe fire is intentionally mild; the thermal script owns the accelerating pipe damage.
 local pipe_fire = util.table.deepcopy(tank_fire)
 pipe_fire.name = "flo-pipe-fire"
+pipe_fire.smoke = nil -- the thermal script owns the material-specific smoke, without extra grey plumes
 pipe_fire.initial_lifetime = 90
 pipe_fire.maximum_lifetime = 90
 pipe_fire.damage_per_tick = {amount = 0.002, type = "fire"}
@@ -99,7 +105,7 @@ hot_spill.damage_per_tick = {amount = 0.1, type = "flo-thermal"}
 hot_spill.emissions_per_second = {pollution = 0}
 hot_spill.localised_name = {"entity-name.flo-hot-spill"}
 
-data:extend({long_fire, tank_fire, smoke, pipe_fire, hot_spill, {type = "damage-type", name = "flo-thermal"}})
+data:extend({long_fire, tank_fire, smoke, white_smoke, pipe_fire, hot_spill, {type = "damage-type", name = "flo-thermal"}})
 
 -- Blast tiers: base explosions plus camera shake, a sound heard from afar and, for the biggest,
 -- the visual shock wave of the atomic bomb (its damaging parts are not used).

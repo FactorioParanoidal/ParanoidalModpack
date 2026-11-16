@@ -1,6 +1,8 @@
--- Material warning belongs to the hazard mod, including when Bio Industries is optional.
+-- Material warnings belong to the hazard mod; Bio Industries and Bob Logistics are optional.
+local materials = require("scripts.config").PIPE_MATERIALS
 for _, kind in ipairs { "pipe", "pipe-to-ground" } do
-  local name = kind == "pipe" and "bi-wood-pipe" or "bi-wood-pipe-to-ground"
-  local pipe = data.raw[kind] and data.raw[kind][name]
-  if pipe then pipe.localised_description = { "flo-thermal.pipe-description" } end
+  for name, material in pairs(materials) do
+    local pipe = data.raw[kind] and data.raw[kind][name]
+    if pipe then pipe.localised_description = { material.description } end
+  end
 end

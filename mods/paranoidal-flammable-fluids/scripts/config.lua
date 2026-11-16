@@ -6,7 +6,14 @@ C.CHANCES = { fire = 0.95, explosion = 0.75, acid = 0.5, electric = 0.5, laser =
 -- Damage types that set tanks on fire and ammo stores cooking off.
 C.HEAT_DAMAGE = { fire = true, explosion = true, ["flo-thermal"] = true }
 
--- Wooden pipes: safe for ordinary 165 C steam, not for melts. Water cannot reset internal heat.
+-- Wood/plastic pipes: safe for ordinary 165 C steam, not for melts. Water cannot reset internal heat.
+-- Fixed material emissions, independent of the burnt-fluid pollution multiplier.
+C.PIPE_MATERIALS = {
+  ["bi-wood-pipe"] = { smoke = "flo-white-smoke", description = "flo-thermal.pipe-description" },
+  ["bi-wood-pipe-to-ground"] = { smoke = "flo-white-smoke", description = "flo-thermal.pipe-description" },
+  ["bob-plastic-pipe"] = { smoke = "flo-black-smoke", description = "flo-thermal.plastic-description", pollution = 50 },
+  ["bob-plastic-pipe-to-ground"] = { smoke = "flo-black-smoke", description = "flo-thermal.plastic-description", pollution = 50 },
+}
 C.PIPE_SAFE_TEMPERATURE = 200
 C.PIPE_MIN_AMOUNT = 1
 C.PIPE_HEATING_AMOUNT = 10
