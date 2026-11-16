@@ -200,7 +200,7 @@ function chunkProcessor.processPendingMutations(universe)
 		local entityValid
 		local chunkIndex = entityData.chunkIndex
 		map = universe.maps[entityData.surfaceIndex]
-		entityValid = entityData.entity.valid and entityData.base and map
+		entityValid = entityData.entity and entityData.entity.valid and entityData.base and map
 		if entityValid then
 			if not base or (base ~= entityData.base) then
 				base = entityData.base 

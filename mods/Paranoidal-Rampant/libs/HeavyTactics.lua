@@ -157,7 +157,7 @@ function heavyTactics.periodic(universe, tick)
     end
     for _, map in pairs(universe.maps) do
         local ai = map and map.ai
-        if ai and (not map.suspended) and map.surface.valid then
+        if ai and (not map.suspended) and map.surface and map.surface.valid then
             scanTrains(map, ai, tick)
             pruneHeat(map, ai, tick)
             for id, wave in pairs(ai.waves) do
@@ -268,7 +268,7 @@ local function releaseWave(map, ai, wave, tick)
     local squads = map.universe.groupNumberToSquad
     for groupNumber in pairs(wave.members) do
         local squad = squads[groupNumber]
-        if squad and squad.group.valid then
+        if squad and squad.group and squad.group.valid then
             squad.goal = {x = wave.x, y = wave.y, kind = "strike", reach = 40, untilTick = tick + 3 * 3600}
         end
     end
@@ -289,7 +289,7 @@ function heavyTactics.onStageReached(map, squad, group, tick)
     local allReady = true
     for groupNumber, ready in pairs(wave.members) do
         local other = squads[groupNumber]
-        if (not ready) and other and other.group.valid then
+        if (not ready) and other and other.group and other.group.valid then
             allReady = false
             break
         end

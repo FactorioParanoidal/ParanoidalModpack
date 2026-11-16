@@ -136,7 +136,7 @@ local function addDigOutArea(surface, positions, x1, x2, stepX, y1, y2, stepY)
 end
 local function digOut(undergroundSquad, targetPosition)
 	local map = undergroundSquad.map
-	if (not map) or (not map.surface.valid) then
+	if (not map) or (not map.surface) or (not map.surface.valid) then
 		return
 	end
 	local universe = map.universe

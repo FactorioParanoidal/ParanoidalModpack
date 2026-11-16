@@ -884,7 +884,7 @@ local function disbandSquad(universe, squads, groupId)
 	if squad.map then
 		removeSquadFromChunk(squad.map, squad)
 		local group = squad.group
-		if group.valid then
+		if group and group.valid then
 			group.destroy()
 		end	
 		clearDebugLines(squad)	-- DEBUG
@@ -963,7 +963,7 @@ function squadAttack.processSquads(universe)
         local group = squad.group
         if not map then
 			disbandSquad(universe, squads, groupId)
-        elseif not group.valid then
+        elseif not (group and group.valid) then
 			if squad.chunk and (squad.chunk ~= -1) then
 				addDeathGenerator(map, squad.chunk, FIVE_DEATH_PHEROMONE_GENERATOR_AMOUNT)
 			end	

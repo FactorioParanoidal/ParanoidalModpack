@@ -142,7 +142,7 @@ function engineGroupHelpers.sweep(universe, tick)
     for id, record in pairs(records) do
         local group = record.group
         local helper = record.helper
-        if not group.valid then
+        if not (group and group.valid) then
             records[id] = nil
             removeHelperUnit(universe, helper)
         elseif (tick - record.tick) > timeout then

@@ -142,7 +142,7 @@ remote.add_interface("rampantFixed", {
 	getRampantAttackGroups = function() 
 		local groups = {}
 		for groupNumber, squad in pairs(storage.universe.groupNumberToSquad) do
-			if squad.map and squad.group.valid then
+			if squad.map and squad.group and squad.group.valid then
 				groups[#groups+1] = squad.group
 			end
 		end
