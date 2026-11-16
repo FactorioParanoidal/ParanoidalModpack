@@ -46,11 +46,19 @@ for name,warhead_dirty in pairs(warheads) do
                 if not data.raw.technology[tech].effects then
                   data.raw.technology[tech].effects = {}
                 end
-                table.insert(data.raw.technology[tech].effects,
-                  {
-                    type = "unlock-recipe",
-                    recipe = combination.recipe.name
-                  })
+                -- Paranoidal: a combination renamed to an existing recipe (big-rocket-atomic-20t is the atomic bomb)
+                -- must not unlock it a second time.
+                local unlocked = false
+                for _, effect in pairs(data.raw.technology[tech].effects) do
+                  if effect.type == "unlock-recipe" and effect.recipe == combination.recipe.name then unlocked = true end
+                end
+                if not unlocked then
+                  table.insert(data.raw.technology[tech].effects,
+                    {
+                      type = "unlock-recipe",
+                      recipe = combination.recipe.name
+                    })
+                end
               end
             end
           end

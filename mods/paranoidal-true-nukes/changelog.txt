@@ -35,6 +35,8 @@ Date: 2026-11-15
     - Bob's Warfare 2.x names in the warhead weapon types (bob-rocket-body, bob-bullet-casing, bob-cordite, bob-bullet-magazine, bob-better-shotgun-shell, bob-better-shotgun-projectile, bob-shotgun-shell-casing); the 1.1 names crashed the data stage.
     - Bob 2.x names for warhead materials: bob-superior-circuit-board (nuclear warheads), bob-circuit-board and bob-enriched-fuel (thermobaric warheads); the missing 1.1 names were silently dropped from the recipes.
     - The custom dead-material and light-material settings now set those materials (they overwrote the boom and computer materials).
+    - Expanded atomics, californium processing and everything after them can be researched: they needed Kovarex enrichment, which Clowns switch off; they need MOX fuel instead (as Clowns do for Bob's fission equipment).
+    - The atomic bomb technology unlocks the atomic bomb once (the 20 t big rocket combination is renamed to it and added it a second time).
   Graphics:
     - PNGs recompressed (17.7 MB -> 11.1 MB for the 145 files of the merge; 28 files of removed weapons, equipment and achievements removed afterwards): lossy (pingo -s4 -quality=45; -quality=75 for the two test site icons and the test site sprite) for sprites and icons, worst PSNR 33.9 dB (icons) and 45.6 dB (animation sheets); lossless for the 55 tinted warhead layers, light layers, power labels, mask and shadow, and for the two mushroom cloud sheets that pingo turned into dithered palettes. Names, dimensions and frame layout are unchanged.
   Changes:

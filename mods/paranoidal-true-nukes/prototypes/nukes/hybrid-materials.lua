@@ -45,3 +45,25 @@ local function uses(recipe, name)
 end
 if uses("californium-processing", "angels-curium-245") then add_prerequisite("californium-processing", "mixed-oxide-fuel") end
 if uses("tritium-breeder-fuel-cell", "lithium-plate") then add_prerequisite("tritium-processing", "bob-lithium-processing") end
+
+-- Paranoidal: Clowns switch Kovarex enrichment off (its unlocks go to MOX fuel), so the weapons that needed it could
+-- never be researched. They need MOX fuel instead, as Clowns do for Bob's fission equipment.
+local kovarex = data.raw.technology["kovarex-enrichment-process"]
+if kovarex and kovarex.enabled == false then
+  local replacement = data.raw.technology["mixed-oxide-fuel"] and "mixed-oxide-fuel" or nil
+  for _, name in pairs({"expanded-atomics", "artillery-atomics", "californium-processing", "californium-weapons",
+      "compact-full-fission-weapons"}) do
+    local t = data.raw.technology[name]
+    if t and t.prerequisites then
+      local list, present = {}, {}
+      for _, prerequisite in pairs(t.prerequisites) do
+        if prerequisite == "kovarex-enrichment-process" then prerequisite = replacement end
+        if prerequisite and not present[prerequisite] then
+          present[prerequisite] = true
+          list[#list + 1] = prerequisite
+        end
+      end
+      t.prerequisites = list
+    end
+  end
+end
