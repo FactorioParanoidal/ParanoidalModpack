@@ -1,24 +1,24 @@
--- Material failure, not fuel combustion: hot contents char wooden pipes even in a fire safety zone.
--- Only registered wooden pipes are sampled; no map scans during ordinary updates.
+-- Material failure, not fuel combustion: hot contents destroy wood/plastic even in a fire safety zone.
+-- Only registered vulnerable pipes are sampled; no map scans during ordinary updates.
 local FO = require("scripts.registry")
 local C = require("scripts.config")
 local M = {}
 FO.thermal = M
 
-local NAMES = { "bi-wood-pipe", "bi-wood-pipe-to-ground" }
-local wooden = {}
-for _, name in ipairs(NAMES) do wooden[name] = true end
+local MATERIALS = C.PIPE_MATERIALS
+local REGISTRY_SCHEMA = 2 -- adds plastic to saves whose wood-only registry is already discovered
 
 function M.names()
   local out = {}
-  for _, name in ipairs(NAMES) do
+  for name in pairs(MATERIALS) do
     if prototypes.entity[name] then out[#out + 1] = name end
   end
+  table.sort(out)
   return out
 end
 
 local function add(entity)
-  if not (entity and entity.valid and wooden[entity.name] and entity.unit_number) then return end
+  if not (entity and entity.valid and MATERIALS[entity.name] and entity.unit_number) then return end
   local s = storage.thermal
   if not s then s = { list = {}, by_id = {}, cursor = 1 }; storage.thermal = s end
   local id = entity.unit_number
@@ -37,6 +37,7 @@ function M.sync()
   local s = storage.thermal
   if not s then s = { list = {}, by_id = {}, cursor = 1 }; storage.thermal = s end
   s.discovered = true
+  s.schema = REGISTRY_SCHEMA
   local names = M.names()
   if #names == 0 then return end
   for _, surface in pairs(game.surfaces) do
@@ -57,6 +58,14 @@ end
 local function duration(fluid)
   local seconds = math.max(20, math.min(120, 120 * (200 / (fluid.temperature - C.PIPE_SAFE_TEMPERATURE)) ^ 1.2))
   return seconds * 60 / math.min(1, fluid.amount / C.PIPE_HEATING_AMOUNT)
+end
+
+local function emit(entity, elapsed)
+  local pollution = MATERIALS[entity.name].pollution
+  if pollution and elapsed > 0 then
+    -- Fixed material rate, attributed to the pipe rather than the fluid or individual flames.
+    entity.surface.pollute(entity.position, pollution * elapsed / 60, entity.name)
+  end
 end
 
 local function clear_fire(entity)
@@ -81,6 +90,7 @@ local function sample(rec, tick)
   -- Bound only first detection; sustained backlog must not discard heating time forever.
   if not rec.hot then elapsed = math.min(C.PIPE_MAX_ELAPSED, elapsed) end
   rec.hot = true
+  emit(entity, elapsed)
   rec.exposure = math.min(1, before + elapsed / duration(fluid))
   if not rec.warned then
     rec.warned = true
@@ -89,13 +99,13 @@ local function sample(rec, tick)
   if not rec.fx_tick or tick - rec.fx_tick >= C.PIPE_FX_INTERVAL then
     rec.fx_tick = tick
     local pos, surface = entity.position, entity.surface
-    surface.create_trivial_smoke { name = "flo-black-smoke", position = pos }
+    surface.create_trivial_smoke { name = MATERIALS[entity.name].smoke, position = pos }
     if rec.exposure >= 0.25 and tick >= (rec.quenched_until or 0) and not FO.protection.entity(entity) then
       surface.create_entity { name = "flo-pipe-fire", position = pos, force = "neutral" }
     end
   end
   if rec.exposure >= 1 then
-    -- Repair bots and water cannot make wood a permanent conduit for molten metal.
+    -- Repair bots and water cannot make wood/plastic permanent conduits for molten metal.
     entity.damage(entity.health + entity.max_health, "neutral", "flo-thermal")
   elseif rec.exposure > 0.25 then
     local a = math.max(0.25, before)
@@ -105,7 +115,7 @@ local function sample(rec, tick)
 end
 
 function M.update(event)
-  if not storage.thermal or not storage.thermal.discovered then M.sync() end
+  if not storage.thermal or storage.thermal.schema ~= REGISTRY_SCHEMA then M.sync() end
   local s = storage.thermal
   local list = s.list
   local count = math.min(#list, C.PIPE_CHECK_BUDGET, math.max(1, math.ceil(#list * FO.safety.STEP / C.PIPE_CHECK_PERIOD)))
@@ -127,9 +137,15 @@ end
 -- Called before the ordinary death handler measures the (now drained) contents.
 -- Debit only this pipe's own share, never the entire connected fluid segment.
 function M.on_died(entity)
-  if not wooden[entity.name] then return end
+  if not MATERIALS[entity.name] then return end
   local fluid = hot_contents(entity)
   if not fluid then return end
+  local s = storage.thermal
+  local rec = s and s.by_id[entity.unit_number]
+  if rec and rec.hot then
+    emit(entity, math.max(0, game.tick - rec.last))
+    rec.last = game.tick -- sample-triggered death has zero remainder; never pay that interval twice
+  end
   local content = FO.fluids.measure(entity)
   local amount = entity.extract_fluid { name = fluid.name, amount = math.min(fluid.amount, entity.get_fluid_capacity(1)) }
   if content then
