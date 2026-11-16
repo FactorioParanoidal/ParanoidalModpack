@@ -26,6 +26,6 @@ if mods['Yuoki'] then
 end
 
 -- Factorissimo 3, thanks aerospacesmith
-if mods['factorissimo-2-notnotmelon'] then
+if mods['Paranoidal-factorissimo-4'] then
   blacklist['borehole-pump'] = true
 end

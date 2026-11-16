@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 8.1.31
   Compatibility:
+    - Followed the rename of factorissimo-2-notnotmelon to Paranoidal-factorissimo-4: the loader shells template check, the recursion technology cleanup and the graphics atlas entry of the circuit connector (__Paranoidal-factorissimo-4__ paths).
+  Compatibility:
     - Followed the rename of RampantFixed to Paranoidal-Rampant: the Rampant setting defaults in settings-final-fixes.lua and the two graphics atlas entries of the mod (tweaks/custom/graphics-atlas-data.lua) use the new mod name and __Paranoidal-Rampant__ paths.
   Changes:
     - Tips and tricks: new category "Cybersyn train network" with 17 entries for beginners (overview, the cybernetic combinator and its modes, depot, provider, requester, request threshold, the delivery cycle, depot bypass, refueling, networks, sub-network masks, priority, allow-list and train limit, fluids, several cargos and wagon control, station control, troubleshooting), EN/RU. Every entry has an animation: eleven scenes run the real Cybersyn script inside the simulation (SimulationDefinition.mods) on a rail loop, so deliveries, depot bypass and refueling are dispatched by the mod itself; the others are drawn schemes. Only with cybersyn in the build (prototypes/tips-and-tricks/cybersyn, locale tips-cybersyn.cfg; the category is kept in removals/tips-and-tricks.lua).

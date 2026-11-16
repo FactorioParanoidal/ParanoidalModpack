@@ -9,7 +9,7 @@
   "dependencies": [
     "base >= 2.0.46",
     "? EditorExtensions >= 2.3.0",
-    "? factorissimo-2-notnotmelon",
+    "? Paranoidal-factorissimo-4",
     "! Factorissimo2",
     "! Factorissimo2-Space-Age-Port",
     "? space-exploration >= 0.7.0"

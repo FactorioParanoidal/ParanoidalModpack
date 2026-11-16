@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 3.2.2
 Date: 2025-11-25
+  Compatibility:
+    - Paranoidal: the optional dependency and the Factorissimo tip check follow the rename of factorissimo-2-notnotmelon to Paranoidal-factorissimo-4.
   Changes:
     - Paranoidal: rewrote the EN/RU automated-building tip for beginners; retained robot-free building, upgrades, deconstruction and adjustable processing speed, without Lua/tick details or obsolete engine-version history.
     - Paranoidal packaging: moved the tests and release script out of the distributed mod. The conditional factorio-test loader is restored only in private development copies; normal gameplay and saved data are unchanged.

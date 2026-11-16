@@ -98,7 +98,7 @@ end
 -- Factorissimo makes its wall-crossing linked belts in data-updates from the loaders that
 -- existed then: the Bob tiers had none, the others kept the replaced loaders' fields.
 -- Rebuild them from the final native loaders, exactly as Factorissimo derives them.
-local linked_template = mods["factorissimo-2-notnotmelon"]
+local linked_template = mods["Paranoidal-factorissimo-4"]
     and data.raw["linked-belt"]["factory-linked-transport-belt"]
 if linked_template then
     for _, name in ipairs(defs.names) do

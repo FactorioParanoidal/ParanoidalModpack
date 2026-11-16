@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 9.0.0
 Date: 2026-11-01
+  Compatibility:
+    - The four Factorissimo achievements (tardis, factory-in-factory, no-emissions, factory-24-7) and the Milestones preset require Paranoidal-factorissimo-4, the renamed factorissimo-2-notnotmelon.
   Locale:
     - ru: the mod description names the renamed Paranoidal Rampant.
   Bugfixes:

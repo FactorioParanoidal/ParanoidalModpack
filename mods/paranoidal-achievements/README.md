@@ -263,8 +263,8 @@ Elevated Rails и Recycler, без Space Age; число доступных до
 | Рой | `mxlr-swarm-1…2` | боевых роботов одновременно: 250 / 500 |
 | Тяни-толкай | `mxlr-push-pull` | Соберите состав, в котором локомотивы тянут в обе стороны. *(скрипт: mu-train)* — нужен `MultipleUnitTrainControl-reforged` |
 | Перегруз | `mxlr-overload` | Отправьте в путь поезд из 20 гружёных вагонов. *(скрипт: overload)* |
-| ТАРДИС | `mxlr-tardis` | Зайдите внутрь здания-фабрики. *(скрипт: factory-floor)* — нужен `factorissimo-2-notnotmelon` |
-| Фабрика в фабрике | `mxlr-factory-in-factory` | Постройте здание-фабрику внутри другой фабрики. *(скрипт: factory-nest)* — нужен `factorissimo-2-notnotmelon` |
+| ТАРДИС | `mxlr-tardis` | Зайдите внутрь здания-фабрики. *(скрипт: factory-floor)* — нужен `Paranoidal-factorissimo-4` |
+| Фабрика в фабрике | `mxlr-factory-in-factory` | Постройте здание-фабрику внутри другой фабрики. *(скрипт: factory-nest)* — нужен `Paranoidal-factorissimo-4` |
 | Прыгун | `mxlr-jumper-1…2` | Телепортируйтесь 100 / 1 тыс. раз. *(скрипт: teleport)* — нужен `Teleporters` |
 | Плюшкин | `mxlr-hoarder` | Держите одновременно 100 складов и хранилищ. *(скрипт: count)* |
 | Крановщик | `mxlr-crane-operator` | Держите одновременно 100 кранов-манипуляторов. *(скрипт: count)* |

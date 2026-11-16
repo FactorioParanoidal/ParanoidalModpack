@@ -151,7 +151,7 @@ data:extend({
     },
 })
 
-if mods["factorissimo-2-notnotmelon"] then
+if mods["Paranoidal-factorissimo-4"] then
     category = BPSB.pfx .. "factorissimo"
     pfxCategory = category .. "-"
     data:extend({
