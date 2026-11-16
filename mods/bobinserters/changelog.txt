@@ -11,6 +11,11 @@ Date: 15. 01. 2026
   Bugfixes:
     - Paranoidal: fixed a crash in on_tick (control.lua:853, field 'grand') on saves that already had the position check data from an earlier build
   Optimizations:
+    - Paranoidal: the per-tick enforcement handler is unloaded while its sweep and blueprint queue are empty and restored on load or new work; GUI reach checks use a separate 20-tick handler
+    - Paranoidal: repeated blueprint areas are skipped only after an unchanged covering pass; position changes invalidate this proof, and requests added by event listeners are retained
+    - Paranoidal: crane geometry is cached per prototype and orientation; vector conversions reuse temporary tables and entity positions, and checkbox refreshes only write changed states
+    - Paranoidal: removed unused GUI position reads, duplicate direction updates and an accidental runtime global; public position-change events and conservative blueprint bounds are unchanged
+    - Paranoidal: research snapshots are refreshed after synchronous adjustment callbacks, so a listener changing research cannot make later blueprint checks use stale permissions
     - Paranoidal: on_built_entity is filtered to inserters and inserter ghosts; before, every entity and ghost a player built ran the handler
     - Paranoidal: the check after a blueprint placement reads the blueprint once per blueprint in the cursor (kept per player, dropped when the cursor changes) instead of copying all its entities and tiles on every placement while dragging
     - Paranoidal: the position check caches per inserter name whether the prototype is checked, and reads each force's technologies once instead of twice per technology

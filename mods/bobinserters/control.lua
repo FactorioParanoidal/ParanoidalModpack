@@ -603,24 +603,37 @@ script.on_event(defines.events.on_player_rotated_entity, function(event)
   end
 end)
 
-script.on_event(defines.events.on_tick, function(event)
+local enforce_ticking = false
+local function enforce_on_tick(event)
   bobmods.inserters.enforce_tick(event.tick)
-  if game.tick % 20 == 0 then
-    if storage and storage.bobmods and storage.bobmods.inserters then
-      for i, player in pairs(game.connected_players) do
-        if storage.bobmods.inserters[player.index] then
-          local entity = storage.bobmods.inserters[player.index].entity
-          if entity and (not entity.valid or not player.can_reach_entity(entity)) then
-            bobmods.inserters.delete_gui(player.index)
-          end
-        else
-          bobmods.inserters.create_global_table(player.index) -- Create for this specific online player.
+  bobmods.inserters.update_tick_handler()
+end
+
+-- No per-tick callback once the sweep and blueprint queue are empty. Restore on load without changing storage.
+function bobmods.inserters.update_tick_handler()
+  local s = storage.bob_enforce
+  local wanted = not (s and s.filled) or #s.list > 0 or #s.pending > 0
+  if wanted ~= enforce_ticking then
+    enforce_ticking = wanted
+    script.on_event(defines.events.on_tick, wanted and enforce_on_tick or nil)
+  end
+end
+
+script.on_nth_tick(20, function(event)
+  if storage and storage.bobmods and storage.bobmods.inserters then
+    for i, player in pairs(game.connected_players) do
+      if storage.bobmods.inserters[player.index] then
+        local entity = storage.bobmods.inserters[player.index].entity
+        if entity and (not entity.valid or not player.can_reach_entity(entity)) then
+          bobmods.inserters.delete_gui(player.index)
         end
+      else
+        bobmods.inserters.create_global_table(player.index) -- Create for this specific online player.
       end
-    else
-      for index, player in pairs(game.players) do -- Create for all if there are none.
-        bobmods.inserters.create_global_table(index)
-      end
+    end
+  else
+    for index, player in pairs(game.players) do -- Create for all if there are none.
+      bobmods.inserters.create_global_table(index)
     end
   end
 end)
@@ -636,6 +649,7 @@ script.on_configuration_changed(function(event)
     player.gui.center.visible = true
   end
   bobmods.inserters.enforce_fill()
+  bobmods.inserters.update_tick_handler()
 end)
 
 script.on_init(function(event)
@@ -644,6 +658,11 @@ script.on_init(function(event)
     bobmods.logistics.create_gui_button(player.index)
   end
   bobmods.inserters.enforce_fill()
+  bobmods.inserters.update_tick_handler()
+end)
+
+script.on_load(function()
+  bobmods.inserters.update_tick_handler()
 end)
 
 script.on_event(defines.events.on_player_created, function(event)
@@ -884,16 +903,19 @@ local function _enforce_track(entity)
     local n = #s.list + 1
     s.list[n] = entity
     s.ids[n] = id
+    if n == 1 then bobmods.inserters.update_tick_handler() end
   end
 end
 
 local function _enforce_and_track(entity, cache)
   if not (entity and entity.valid) or _enforce_is_grand(entity) then
-    return
+    return false
   end
-  if bobmods.inserters.enforce_research(entity, cache) == false and entity.valid and entity.type == "inserter" then
+  local status, changed = bobmods.inserters.enforce_research(entity, cache)
+  if status == false and entity.valid and entity.type == "inserter" then
     _enforce_track(entity)
   end
+  return changed == true
 end
 bobmods.inserters.enforce_and_track = _enforce_and_track
 
@@ -1058,6 +1080,7 @@ local function _enforce_pre_build(event)
     force = player.force.index,
     area = { { p.x - reach, p.y - reach }, { p.x + reach, p.y + reach } },
   }
+  bobmods.inserters.update_tick_handler()
 end
 
 local function _enforce_tick(tick)
@@ -1070,22 +1093,51 @@ local function _enforce_tick(tick)
 
   local pending = s.pending
   if pending[1] then
-    local cache = {}
-    local rest = {}
+    -- Keep reentrant requests queued by position-change listeners for the following tick.
+    s.pending = {}
+    local cache, checked = {}, {}
     for _, p in ipairs(pending) do
       if p.tick < tick then
         local surface = game.surfaces[p.surface]
         local force = game.forces[p.force]
         if surface and surface.valid and force and force.valid then
-          for _, entity in pairs(surface.find_entities_filtered({ area = p.area, type = "inserter", force = force })) do
-            _enforce_and_track(entity, cache)
+          local research = cache[p.force]
+          if not research then
+            research = _enforce_research_table(force)
+            cache[p.force] = research
+          end
+          local covered = research.full
+          if not covered then
+            for _, previous in ipairs(checked) do
+              local a, b = previous.area, p.area
+              if previous.surface == p.surface and previous.force == p.force
+                and b[1][1] >= a[1][1] and b[1][2] >= a[1][2]
+                and b[2][1] <= a[2][1] and b[2][2] <= a[2][2] then
+                covered = true
+                break
+              end
+            end
+          end
+          if not covered then
+            local changed = false
+            for _, entity in pairs(surface.find_entities_filtered({ area = p.area, type = "inserter", force = force })) do
+              if _enforce_and_track(entity, cache) then
+                changed = true
+                cache = {} -- A synchronous adjustment listener can also change research.
+              end
+            end
+            -- Only a pass with no changes is reusable: setters raise synchronous events which may change the world.
+            if changed then
+              checked = {}
+            elseif #checked < 32 then
+              checked[#checked + 1] = p
+            end
           end
         end
       else
-        rest[#rest + 1] = p
+        s.pending[#s.pending + 1] = p
       end
     end
-    s.pending = rest
   end
 
   if tick % ENFORCE_SWEEP_INTERVAL ~= 0 then
@@ -1168,13 +1220,13 @@ function tech_unlocked(force, tech)
 end
 
 ---private function, used by slimDropOffset andslimPickupOffset
+local ZERO_OFFSET = { x = 0, y = 0 }
 function _slimOffset(entity, l)
-  -- inserters have tile_height=1, tile_width=1 this normal form is assumed by bobinserters
-  -- for "slim" insertes we transform the position into this normal form and back.
-  -- this saves us from having to adjust all the calculations of bobinserters
-
+  -- Callers only read the offset; ordinary inserters share the immutable zero vector.
+  local proto = entity.prototype
+  if proto.tile_height ~= 0 or proto.tile_width ~= 1 then return ZERO_OFFSET end
   local o = { x = 0, y = 0 }
-  if entity.prototype.tile_height == 0 and entity.prototype.tile_width == 1 then
+  do
     -- this calculation is tested with mod arrow-inserter and slim-inserters
     if entity.direction == defines.direction.north then
       o.y = -0.5 + l
@@ -1200,17 +1252,24 @@ end
 -- Paranoidal: inserters larger than 1x1 (e.g. nco-InserterCranes 2x2 and 6x2) are mapped to the
 -- 1x1 normal form by removing the extra body size on each axis. Coordinates inside the body span
 -- map to 0; when mapping back, 0 keeps the current in-span coordinate (the chosen column).
+local big_shifts = {}
 local function _bigShift(entity)
-  local proto = entity.type == "entity-ghost" and entity.ghost_prototype or entity.prototype
-  local w, h = proto.tile_width, proto.tile_height
-  if not w or not h or (w <= 1 and h <= 1) then
-    return nil
+  local ghost = entity.type == "entity-ghost"
+  local name = ghost and entity.ghost_name or entity.name
+  local shifts = big_shifts[name]
+  if shifts == nil then
+    local proto = ghost and entity.ghost_prototype or entity.prototype
+    local w, h = proto.tile_width, proto.tile_height
+    shifts = false
+    if w and h and (w > 1 or h > 1) then
+      shifts = { normal = { x = (w - 1) / 2, y = (h - 1) / 2 },
+        rotated = { x = (h - 1) / 2, y = (w - 1) / 2 } }
+    end
+    big_shifts[name] = shifts
   end
+  if not shifts then return nil end
   local d = entity.direction
-  if d == defines.direction.east or d == defines.direction.west then
-    w, h = h, w
-  end
-  return { x = (w - 1) / 2, y = (h - 1) / 2 }
+  return (d == defines.direction.east or d == defines.direction.west) and shifts.rotated or shifts.normal
 end
 
 local function _bigToNormal(c, s)
@@ -1236,26 +1295,29 @@ local function _bigFromNormal(n, s, prev)
 end
 
 local function _relToNormal(entity, abs, o, snap)
-  local rel = { x = abs.x - entity.position.x, y = abs.y - entity.position.y }
+  local position = entity.position
+  local rel = { x = abs.x - position.x, y = abs.y - position.y }
   local s = _bigShift(entity)
   if s then
-    rel = { x = _bigToNormal(rel.x, s.x), y = _bigToNormal(rel.y, s.y) }
+    rel.x, rel.y = _bigToNormal(rel.x, s.x), _bigToNormal(rel.y, s.y)
     if snap then
       -- pickup has no near/far offset in the grid (crane default pickup is 1.7 = tile + 0.2)
-      rel = { x = bobmods.math.round(rel.x), y = bobmods.math.round(rel.y) }
+      rel.x, rel.y = bobmods.math.round(rel.x), bobmods.math.round(rel.y)
     end
   end
-  return { x = rel.x + o.x, y = rel.y + o.y }
+  rel.x, rel.y = rel.x + o.x, rel.y + o.y
+  return rel
 end
 
 local function _normalToAbs(entity, newpos, o, current_abs)
+  local position = entity.position
   local rel = { x = newpos.x - o.x, y = newpos.y - o.y }
   local s = _bigShift(entity)
   if s then
-    local prev = { x = current_abs.x - entity.position.x, y = current_abs.y - entity.position.y }
-    rel = { x = _bigFromNormal(rel.x, s.x, prev.x), y = _bigFromNormal(rel.y, s.y, prev.y) }
+    rel.x = _bigFromNormal(rel.x, s.x, current_abs.x - position.x)
+    rel.y = _bigFromNormal(rel.y, s.y, current_abs.y - position.y)
   end
-  return { x = entity.position.x + rel.x, y = entity.position.y + rel.y }
+  return { x = position.x + rel.x, y = position.y + rel.y }
 end
 
 function get_pickup_position(entity)
@@ -1530,11 +1592,9 @@ function bobmods.logistics.set_positions(entity, player_index)
 end
 
 function bobmods.inserters.gui_pickup_click(entity, element)
-  local pickup_position = get_pickup_position(entity)
   local i = string.gsub(element.name, "button", "") + 0
-  pickup_position = bobmods.inserters.positions[i]
+  local pickup_position = bobmods.inserters.positions[i]
   set_pickup_position(entity, pickup_position)
-  entity.direction = entity.direction -- set direction to force update
   bobmods.inserters.draw_button_position_check(element.parent, pickup_position)
 end
 
@@ -1544,15 +1604,13 @@ function bobmods.inserters.gui_drop_click(entity, element)
   local drop_position, drop_offset = get_split_drop_position(entity)
   local new_offset = calculate_new_drop_offset(drop_position, drop_offset, new_position)
   set_split_drop_position(entity, new_position, new_offset)
-  entity.direction = entity.direction -- set direction to force update
   bobmods.inserters.refresh_position_checkboxes(entity, game.players[element.player_index])
 end
 
 function bobmods.inserters.gui_offset_click(entity, element)
   local i = string.gsub(element.name, "button", "") + 0
-  new_offset = bobmods.inserters.offset_positions[i]
+  local new_offset = bobmods.inserters.offset_positions[i]
   set_split_drop_position(entity, get_drop_tile_position(entity), new_offset)
-  entity.direction = entity.direction -- set direction to force update
   bobmods.inserters.draw_button_offset_check(element.parent, new_offset)
 end
 
@@ -2448,22 +2506,20 @@ end
 
 function bobmods.inserters.draw_button_position_check(gui, position)
   for i, new_position in ipairs(bobmods.inserters.positions) do
-    if gui["button" .. i] then
-      gui["button" .. i].state = false
-      if check_position(position, new_position) then
-        gui["button" .. i].state = true
-      end
+    local button = gui["button" .. i]
+    if button then
+      local state = check_position(position, new_position) == true
+      if button.state ~= state then button.state = state end
     end
   end
 end
 
 function bobmods.inserters.draw_button_offset_check(gui, position)
   for i, new_position in ipairs(bobmods.inserters.offset_positions) do
-    if gui["button" .. i] then
-      gui["button" .. i].state = false
-      if check_position(position, new_position) then
-        gui["button" .. i].state = true
-      end
+    local button = gui["button" .. i]
+    if button then
+      local state = check_position(position, new_position) == true
+      if button.state ~= state then button.state = state end
     end
   end
 end
