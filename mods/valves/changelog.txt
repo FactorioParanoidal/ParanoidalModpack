@@ -20,7 +20,8 @@ Date: 14.01.2026
     - Paranoidal: removed the composite valves from before 2.0.8 (hidden *-legacy pumps), their migration 0008 and their replacement on build.
   Graphics:
     - Paranoidal: sprites, icons and thumbnail repacked with lossy palette compression.
-    - Paranoidal: startup setting "valves-graphics" (Valve look): "reskins" (default) draws the valves as the Angel's valves of Artisanal Reskins with a coloured mask, as in earlier Paranoidal versions; "classic" keeps the animated sprites of this mod. Without reskins-angels the setting is hidden and the classic look is used.
+    - Paranoidal: startup setting "valves-graphics" (Valve look): "reskins" (default) draws the valves as the Angel's valves of Artisanal Reskins with a coloured mask, as in earlier Paranoidal versions; "classic" keeps the animated sprites of this mod. Without reskins-angels that look falls back to classic.
+    - Paranoidal: added "reskins-bobs" (Artisanal Reskins, Bob's) as a third valve look, reusing its base/mask sprites and icons with the upstream red/green/cyan role colours. Sprite directions are reversed to match this mod's fluid outputs. Existing choices and the default are unchanged; a missing graphics mod falls back to classic, and the setting is hidden only when both reskins mods are absent.
   Compatibility:
     - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
     - Factorio 2.1: hide_connection_info moved from the fluid box to every pipe connection (FluidBox::hide_connection_info was removed, PipeConnectionDefinition::hide_connection_info added; without it 2.1 draws connection arrows and fluid icons on these entities). Valve speed is capped at the valve's own fluid box volume instead of the removed utility constant max_fluid_flow (2.1 derives the flow limit from the volume; engine probe test-runs/port21-flow-20261102).

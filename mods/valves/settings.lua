@@ -13,10 +13,10 @@ local settings_list = {
         name = "valves-graphics",
         setting_type = "startup",
         order = "c[graphics]",
-        allowed_values = { "reskins", "classic" },
+        allowed_values = { "reskins", "classic", "reskins-bobs" },
         default_value = "reskins",
-        -- Without reskins-angels only the classic look exists (data.lua falls back to it).
-        hidden = mods["reskins-angels"] == nil,
+        -- Keep saved choices valid; a look whose resource mod is absent falls back to classic.
+        hidden = mods["reskins-angels"] == nil and mods["reskins-bobs"] == nil,
     },
 }
 

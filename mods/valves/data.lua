@@ -57,8 +57,38 @@ function looks.reskins(valve)
     return icons, animations
 end
 
+-- Static Bob's valve from Artisanal Reskins, with the upstream colours for each role.
+local BOBS = "__reskins-bobs__/graphics/"
+local bobs_tints = {
+    ["overflow"] = util.color("#ff3b29"),
+    ["top-up"] = util.color("#4dff2a"),
+    ["one-way"] = util.color("#2ac0ff"),
+}
+
+looks["reskins-bobs"] = function(valve)
+    local tint = bobs_tints[valve.mode]
+    local animations = {}
+    -- Bob's sheets point north/east/south/west, but these valves output south at direction north.
+    -- Rotate the sprite mapping by 180 degrees so the arrows follow the actual fluid output.
+    for column, direction in ipairs{ "south", "west", "north", "east" } do
+        local x = (column - 1) * 128
+        animations[direction] = { layers = {
+            { filename = BOBS .. "entity/logistics/valve/valve-base.png", x = x, width = 128, height = 128,
+                scale = 0.5, priority = "extra-high" },
+            { filename = BOBS .. "entity/logistics/valve/valve-mask.png", x = x, width = 128, height = 128,
+                scale = 0.5, priority = "extra-high", tint = tint },
+        } }
+    end
+    local icons = {
+        { icon = BOBS .. "icons/logistics/valve/valve-icon-base.png", icon_size = 64 },
+        { icon = BOBS .. "icons/logistics/valve/valve-icon-mask.png", icon_size = 64, tint = tint },
+    }
+    return icons, animations
+end
+
 local look = looks[settings.startup["valves-graphics"].value]
 if look == looks.reskins and not mods["reskins-angels"] then look = looks.classic end
+if look == looks["reskins-bobs"] and not mods["reskins-bobs"] then look = looks.classic end
 
 local function description(mode)
     local factoriopedia = { "", { "entity-description." .. mode .. "-valve" } }
