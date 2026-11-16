@@ -1,6 +1,7 @@
 -- After prior menu patches: casting/water recipe placement and icons only.
 -- Explicit lists preserve all visible recipes; hidden recipes and gameplay stay untouched.
 local layout = require("tweaks.custom.casting-water-menu-beta8-data")
+local pipe_graphics = require("tweaks.custom.pipe-graphics")
 
 local function set_icon(prototype, icon)
     prototype.icon = icon.icon
@@ -28,7 +29,7 @@ for _, row in ipairs(layout.rows) do
             if recipe then
                 recipe.subgroup = row.subgroup
                 recipe.order = entry.order
-                if entry.icon then
+                if entry.icon and pipe_graphics.icon_available(entry.icon) then
                     set_icon(recipe, entry.icon)
                     icons = icons + 1
                 end

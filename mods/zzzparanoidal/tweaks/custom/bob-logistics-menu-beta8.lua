@@ -1,6 +1,7 @@
 -- Approved crafting-menu layout, after OV, Reskins and other late menu patches.
 -- Recipe layout and explicit item ordering; item/entity grouping stays untouched.
 local layout = require("tweaks.custom.bob-logistics-menu-beta8-data")
+local pipe_graphics = require("tweaks.custom.pipe-graphics")
 
 if not data.raw["item-group"]["bob-logistics"] then return end
 
@@ -23,7 +24,7 @@ for _, row in ipairs(layout.rows) do
         if recipe then
             recipe.subgroup = row.subgroup
             recipe.order = entry.order
-            if entry.icon then
+            if entry.icon and pipe_graphics.icon_available(entry.icon) then
                 recipe.icon = entry.icon.icon
                 recipe.icon_size = entry.icon.icon_size
                 recipe.icons = entry.icon.icons and table.deepcopy(entry.icon.icons) or nil

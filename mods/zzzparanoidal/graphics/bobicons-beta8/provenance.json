@@ -2413,7 +2413,7 @@
         120,
         64
       ],
-      "target": "__zzzparanoidal__/graphics/bobicons-beta8/bobicons/graphics/icons/bobplates/brass-gear-wheel-64.png",
+      "target": "__reskins-bobs__/graphics/icons/plates/gears/bob-brass-gear-wheel.png",
       "reused_module_asset": false
     },
     "__bobicons__/graphics/icons/plate/bronze-alloy-128.png": {
@@ -2893,7 +2893,7 @@
         120,
         64
       ],
-      "target": "__zzzparanoidal__/graphics/bobicons-beta8/bobicons/graphics/icons/bobplates/nitinol-gear-wheel-64.png",
+      "target": "__reskins-angels__/graphics/icons/smelting/gears/bob-nitinol-gear-wheel.png",
       "reused_module_asset": false
     },
     "__bobicons__/graphics/icons/electronics/phenolic-board-64.png": {
@@ -3229,7 +3229,7 @@
         120,
         64
       ],
-      "target": "__zzzparanoidal__/graphics/bobicons-beta8/bobicons/graphics/icons/bobplates/steel-gear-wheel-64.png",
+      "target": "__reskins-bobs__/graphics/icons/plates/gears/bob-steel-gear-wheel.png",
       "reused_module_asset": false
     },
     "__bobicons__/graphics/icons/electronics/superior-circuit-board-64.png": {
@@ -3289,7 +3289,7 @@
         120,
         64
       ],
-      "target": "__zzzparanoidal__/graphics/bobicons-beta8/bobicons/graphics/icons/bobplates/titanium-bearing-64.png",
+      "target": "__reskins-angels__/graphics/icons/smelting/bearings/bob-titanium-bearing.png",
       "reused_module_asset": false
     },
     "__bobicons__/graphics/icons/bobplates/titanium-bearing-ball-64.png": {
@@ -3301,7 +3301,7 @@
         120,
         64
       ],
-      "target": "__zzzparanoidal__/graphics/bobicons-beta8/bobicons/graphics/icons/bobplates/titanium-bearing-ball-64.png",
+      "target": "__reskins-angels__/graphics/icons/smelting/bearing-balls/bob-titanium-bearing-ball.png",
       "reused_module_asset": false
     },
     "__bobicons__/graphics/icons/bobplates/titanium-gear-wheel-64.png": {
@@ -3313,7 +3313,7 @@
         120,
         64
       ],
-      "target": "__zzzparanoidal__/graphics/bobicons-beta8/bobicons/graphics/icons/bobplates/titanium-gear-wheel-64.png",
+      "target": "__reskins-angels__/graphics/icons/smelting/gears/bob-titanium-gear-wheel.png",
       "reused_module_asset": false
     },
     "__bobicons__/graphics/icons/bobplates/gems/topaz-3-64.png": {
@@ -3373,7 +3373,7 @@
         120,
         64
       ],
-      "target": "__zzzparanoidal__/graphics/bobicons-beta8/bobicons/graphics/icons/bobplates/tungsten-gear-wheel-64.png",
+      "target": "__reskins-angels__/graphics/icons/smelting/gears/bob-tungsten-gear-wheel.png",
       "reused_module_asset": false
     },
     "__bobicons__/graphics/icons/bobplates/tungsten-oxide-64.png": {
