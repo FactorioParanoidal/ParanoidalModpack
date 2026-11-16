@@ -78,7 +78,7 @@ Working notes for whoever changes this mod. The player-facing description is `in
 | ic-more-qualities | Defect qualities and mod-data `ic-defects-classification`; quality is kept for samples, clones and returns |
 | paranoidal-lighting | Lit pole = pole + hidden lamp. Lifted, it breaks and only its lamp is carried off (a `small-lamp` is what comes back). One infected but not lifted is given back by a fast replace raised as built, so its lamp is placed again |
 | HeroTurretRedux, MultipleUnitTrainControl | Recreate their entities; ranks are lost when lifted; recreated entities are not adopted |
-| RampantFixed | Ignores non-enemy groups; ceasefire `the-beast` ↔ `enemy` stays until task T-1 |
+| Paranoidal-Rampant | Ignores non-enemy groups; ceasefire `the-beast` ↔ `enemy` stays until task T-1 |
 | mferrari_lib | Leaves any unit with `protomolecule` in its name out of random enemy lists |
 
 ## Known hypotheses (not engine-confirmed)

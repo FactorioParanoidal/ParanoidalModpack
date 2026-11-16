@@ -24,7 +24,7 @@ end
 if script.active_mods["Rampant"] and settings.startup["rampant--newEnemies"].value == true then
   bobmods.enemies.stop_all = true
 end
-if script.active_mods["RampantFixed"] and settings.startup["rampantFixed--newEnemies"].value == true then
+if script.active_mods["Paranoidal-Rampant"] and settings.startup["rampantFixed--newEnemies"].value == true then
   bobmods.enemies.stop_all = true
 end
 if script.active_mods["enemyracemanager"] then

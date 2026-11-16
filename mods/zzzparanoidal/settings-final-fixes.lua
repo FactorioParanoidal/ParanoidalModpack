@@ -116,7 +116,7 @@ if mods["QualityOfLife"] then
     set_settings_default_value("double-setting", "qol-toolbelts-flat-bonus", 0)
     set_settings_default_value("double-setting", "qol-toolbelts-multiplier", 1)
 end
-if mods["RampantFixed"] then
+if mods["Paranoidal-Rampant"] then
     set_settings_default_value("int-setting", "rampantFixed--attackWaveMaxSize", 55)
     set_settings_default_value("int-setting", "rampantFixed--maxNumberOfBuilders", 25)
     set_settings_default_value("int-setting", "rampantFixed--maxNumberOfSquads", 20)
@@ -341,7 +341,7 @@ end
 if mods["P-U-M-P-S"] then
     set_settings_default_value("bool-setting", "osm-pumps-burner-offshore-pump", true)
 end
-if mods["RampantFixed"] then
+if mods["Paranoidal-Rampant"] then
     set_settings_default_value("bool-setting", "rampantFixed--allowLongRangeImmunity", false)
     set_settings_default_value("bool-setting", "rampantFixed--allowOneshotProtection", false)
     set_settings_default_value("bool-setting", "rampantFixed--removeBloodParticles", true)

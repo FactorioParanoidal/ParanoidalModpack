@@ -9,7 +9,7 @@
   "dependencies": [
     "base >= 2.0.77",
     "? paranoidal-flammable-fluids",
-    "? RampantFixed",
+    "? Paranoidal-Rampant",
     "? Big-Monsters",
     "? mferrari_lib",
     "? Aircraft-space-age-reforged",

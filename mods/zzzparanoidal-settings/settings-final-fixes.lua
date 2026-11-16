@@ -272,7 +272,7 @@ hide("bool-setting", "qol-mining-speed-research-enabled")
 hide("bool-setting", "qol-movement-speed-research-enabled")
 hide("bool-setting", "qol-player-reach-research-enabled")
 hide("string-setting", "qol-custom-config")
--- RampantFixed
+-- Paranoidal-Rampant
 hide("bool-setting", "rampantFixed--disableCollidingProjectiles")
 hide("bool-setting", "rampantFixed--enableShrinkNestsAndWorms")
 hide("bool-setting", "rampantFixed--enableSwarm")

@@ -4,7 +4,7 @@ local sensor = ValueSensor.new("evolution_factor")
 sensor.extra_precision = sensor:make_on_click_checkbox_handler("extra_precision")
 
 -- Paranoidal: Rampant truce threshold (percent) for the player's surface, or nil if
--- RampantFixed is absent or its AI is off on this surface.
+-- Paranoidal-Rampant is absent or its AI is off on this surface.
 local function get_truce_min_evo(surface)
     local iface = remote.interfaces["rampantFixed"]
     if not (iface and iface.getTruceInfo) then return nil end
