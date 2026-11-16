@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 0.6.9
 Date: 2026-06-14
+  Bugfixes:
+    - Paranoidal: tungsten hexachloride is a hot vapour at 350 C instead of 0 C, with gas-flow rendering above 345 C. Tungsten hexafluoride, heat capacities and recipes are unchanged.
   Locale:
     - ru: the mod name and the mod list description are the same as in ParanoidalLocale (format "English title (Russian translation)"), so the mod reads the same with or without it.
   Changes:

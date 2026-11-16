@@ -129,6 +129,15 @@ function M.toxic(entity, cloud)
   say(players, { "", { "flo-alert.toxic", entity.localised_name }, " ", gps(entity.surface, entity.position) })
 end
 
+function M.pipe(entity, fluid)
+  if not enabled() or not fresh("pipe-heat", entity.surface, entity.position) then return end
+  local players = players_of(entity.force)
+  local message = { "flo-alert.pipe-heat", entity.localised_name,
+    prototypes.fluid[fluid.name].localised_name, math.floor(fluid.temperature + 0.5) }
+  alert(players, entity, "fire", message)
+  say(players, { "", message, " ", gps(entity.surface, entity.position) })
+end
+
 function M.trap(flame)
   if not enabled() or not (flame and flame.valid) then return end
   alert(game.connected_players, flame, "fire", { "flo-alert.trap" })

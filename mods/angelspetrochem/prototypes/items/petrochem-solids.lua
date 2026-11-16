@@ -6,11 +6,11 @@ data:extend({
     icons = angelsmods.functions.create_viscous_liquid_fluid_icon(nil, { { 255, 255, 255 }, { 255, 255, 255 } }),
     subgroup = "angels-petrochem-solids-fluids",
     order = "a[plastic]",
-    default_temperature = 0,
+    default_temperature = 220,
     heat_capacity = "0.1kJ",
     base_color = { r = 0.8, g = 0.8, b = 1 },
     flow_color = { r = 0.8, g = 0.8, b = 1 },
-    max_temperature = 0,
+    max_temperature = 220,
   },
   {
     type = "fluid",

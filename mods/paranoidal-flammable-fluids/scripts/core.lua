@@ -255,6 +255,7 @@ end
 function M.on_entity_died(event)
   local entity = event.entity
   if silenced and entity.unit_number == silenced then return end
+  local thermal_content = FO.thermal.on_died(entity)
   local entity_type = entity.type
 
   -- a burning tank always ends in a catastrophe, whatever killed it
@@ -274,9 +275,9 @@ function M.on_entity_died(event)
   end
   if entity_type == "pump" then return end
 
-  local content
+  local content = thermal_content
   if not ignited then
-    content = FO.fluids.measure(entity)
+    content = content or FO.fluids.measure(entity)
     if not (content and content.volatile) then return end
   end
   content = content or FO.fluids.measure(entity)

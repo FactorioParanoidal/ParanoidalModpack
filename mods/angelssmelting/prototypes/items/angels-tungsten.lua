@@ -43,11 +43,11 @@ data:extend({
     ),
     subgroup = "angels-tungsten",
     order = "f",
-    default_temperature = 3422,
+    default_temperature = 25,
     heat_capacity = "0kJ",
     base_color = { r = 136 / 255, g = 98 / 255, b = 65 / 255 },
     flow_color = { r = 136 / 255, g = 98 / 255, b = 65 / 255 },
-    max_temperature = 3422,
+    max_temperature = 100,
   },
   {
     type = "item",

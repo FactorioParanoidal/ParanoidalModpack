@@ -82,7 +82,24 @@ smoke.end_scale = 6
 smoke.affected_by_wind = true
 smoke.show_when_smoke_off = true
 
-data:extend({long_fire, tank_fire, smoke})
+-- Exterior wood fire is intentionally mild; the thermal script owns the accelerating pipe damage.
+local pipe_fire = util.table.deepcopy(tank_fire)
+pipe_fire.name = "flo-pipe-fire"
+pipe_fire.initial_lifetime = 90
+pipe_fire.maximum_lifetime = 90
+pipe_fire.damage_per_tick = {amount = 0.002, type = "fire"}
+pipe_fire.emissions_per_second = {pollution = 0.02}
+pipe_fire.localised_name = {"entity-name.flo-pipe-fire"}
+
+local hot_spill = util.table.deepcopy(tank_fire)
+hot_spill.name = "flo-hot-spill"
+hot_spill.initial_lifetime = 180
+hot_spill.maximum_lifetime = 180
+hot_spill.damage_per_tick = {amount = 0.1, type = "flo-thermal"}
+hot_spill.emissions_per_second = {pollution = 0}
+hot_spill.localised_name = {"entity-name.flo-hot-spill"}
+
+data:extend({long_fire, tank_fire, smoke, pipe_fire, hot_spill, {type = "damage-type", name = "flo-thermal"}})
 
 -- Blast tiers: base explosions plus camera shake, a sound heard from afar and, for the biggest,
 -- the visual shock wave of the atomic bomb (its damaging parts are not used).

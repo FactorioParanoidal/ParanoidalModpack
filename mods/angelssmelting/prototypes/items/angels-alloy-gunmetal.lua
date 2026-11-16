@@ -8,11 +8,11 @@ if mods["bobplates"] then
       icon_size = 64,
       subgroup = "angels-alloys-casting",
       order = "c[gunmetal]-a[liquid-molten-gunmetal]",
-      default_temperature = 0,
+      default_temperature = 1000,
       heat_capacity = "0kJ",
       base_color = { r = 224 / 256, g = 103 / 256, b = 70 / 256 },
       flow_color = { r = 224 / 256, g = 103 / 256, b = 70 / 256 },
-      max_temperature = 0,
+      max_temperature = 1000,
       auto_barrel = false,
     },
   })
