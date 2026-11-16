@@ -10,6 +10,13 @@ local item_multiplier = settings.startup["muluna-balance-fulgoran-cargo-drop-ite
 
 local modded_cargo_drop_spawns_imports = Muluna.constants.cargo_drop_spawn_imports
 local modded_cargo_drop_spawns = {}
+
+-- Paranoidal (Space Age branch): Muluna is the gateway to the other planets, so its ancient pods keep their supplies
+-- but carry nothing those planets give first: no planet materials, no planet machines, no specimens of planet mods.
+-- (Muluna.constants.names maps "tungsten-plate" to Vulcanus' plate under its own name in the build.)
+local paranoidal_planet_items = {["holmium-plate"] = true, superconductor = true, ["carbon-fiber"] = true}
+paranoidal_planet_items[Muluna.constants.names["tungsten-plate"]] = true
+local paranoidal_planet_drops = false
  
 for _,import in pairs(modded_cargo_drop_spawns_imports) do
     local imported = require(import)
@@ -63,7 +70,9 @@ local function place_muluna_cargo_pods()
     for _,spawn in pairs(modded_cargo_drop_spawns) do
         for i = 1,spawn.pod_count() do
             -- FIXED FOR FACTORIO 2.0: Safe validation via prototypes.item
-            if prototypes.item[spawn.item] then
+            if paranoidal_planet_items[spawn.item] then
+                break
+            elseif prototypes.item[spawn.item] then
                 random_place(muluna,spawn.item,spawn.item_quantity())
             else
                 -- FIXED: Replaced non-existent item with spawn.item to prevent print from crashing
@@ -76,7 +85,7 @@ local function place_muluna_cargo_pods()
         
     
     for mod,item in pairs(mod_list) do
-        if mods[mod] and math.random(1,10)>3 then
+        if paranoidal_planet_drops and mods[mod] and math.random(1,10)>3 then
             if prototypes.get_item_filtered{{filter = "name",name = item}} then
                 random_place(muluna,item,math.random(2,5)+math.random(2,5))
             else
@@ -103,7 +112,7 @@ local function place_muluna_cargo_pods()
     if prototypes.space_location["maraxsis"] then
         table.insert(random_chance_table,{"maraxsis-hydro-plant",8,1})
     end
-    for i = 1,2 do 
+    for i = 1,(paranoidal_planet_drops and 2 or 0) do
         local dice_roll = math.random(1,200)
         for _,item in pairs(random_chance_table) do
             if dice_roll<= item[2] then
