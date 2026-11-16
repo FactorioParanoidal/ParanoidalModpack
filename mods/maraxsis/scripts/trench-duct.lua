@@ -3,7 +3,7 @@ local function opposite_direction(dir)
 end
 
 maraxsis.on_event(maraxsis.events.on_init(), function()
-    storage.trench_ducts = {}
+    storage.trench_ducts = storage.trench_ducts or {}
 end)
 
 maraxsis.on_event(maraxsis.events.on_built(), function(event)
@@ -53,8 +53,8 @@ maraxsis.on_event(maraxsis.events.on_destroyed(), function(event)
 
     local surface_duct = trench_duct_data.surface_duct
     local trench_duct = trench_duct_data.trench_duct
-    if surface_duct ~= entity then surface_duct.destroy() end
-    if trench_duct ~= entity then trench_duct.destroy() end
+    if surface_duct ~= entity and surface_duct.valid then surface_duct.destroy() end
+    if trench_duct ~= entity and trench_duct.valid then trench_duct.destroy() end
 
     storage.trench_ducts[trench_duct_data.surface_duct_unit_number] = nil
     storage.trench_ducts[trench_duct_data.trench_duct_unit_number] = nil

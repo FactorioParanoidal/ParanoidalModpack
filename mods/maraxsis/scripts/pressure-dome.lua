@@ -1059,7 +1059,7 @@ local function cleanup_dome_for_deletion(pressure_dome_data, buffer)
     end
 
     for _, collision_box in pairs(pressure_dome_data.collision_boxes) do
-        collision_box.destroy()
+        if collision_box.valid then collision_box.destroy() end
     end
     pressure_dome_data.collision_boxes = {}
 
@@ -1092,7 +1092,7 @@ local function cleanup_dome_for_deletion(pressure_dome_data, buffer)
     pressure_dome_data.regulator = nil
 
     if pressure_dome_data.regulator_fluidbox then
-        pressure_dome_data.regulator_fluidbox.destroy()
+        if pressure_dome_data.regulator_fluidbox.valid then pressure_dome_data.regulator_fluidbox.destroy() end
         pressure_dome_data.regulator_fluidbox = nil
     end
 
@@ -1100,7 +1100,7 @@ local function cleanup_dome_for_deletion(pressure_dome_data, buffer)
     if light then light.destroy() end
 
     local combinator = pressure_dome_data.combinator
-    if combinator then combinator.destroy() end
+    if combinator and combinator.valid then combinator.destroy() end
 end
 
 local function bigass_explosion(surface, x, y) -- this looks really stupid. too bad!
@@ -1136,7 +1136,7 @@ end
 
 local function on_dome_died(event, pressure_dome_data)
     local surface = pressure_dome_data.surface
-    local dome_prototype = domes[pressure_dome_data.prototype_name]
+    local dome_prototype = domes[pressure_dome_data.prototype]
     local DOME_POLYGON = dome_prototype.DOME_POLYGON
     if not surface.valid then return end
     local position = pressure_dome_data.position

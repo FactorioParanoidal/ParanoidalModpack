@@ -38,7 +38,9 @@ end)
 
 maraxsis.on_event(defines.events.on_object_destroyed, function(event)
     local spawner = storage.fishing_tower_spawners[event.registration_number]
-    if spawner then spawner.destroy() end
+    if not spawner then return end
+    if spawner.valid then spawner.destroy() end
+    storage.fishing_tower_spawners[event.registration_number] = nil
 end)
 
 -- https://mods.factorio.com/mod/quality-trees

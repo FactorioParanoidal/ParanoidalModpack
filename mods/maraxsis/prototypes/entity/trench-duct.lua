@@ -1,5 +1,12 @@
 local constants = require "__FluidMustFlow__.prototypes.constants"
 
+-- Paranoidal: the Space Age branch gives Vulcanus' tungsten plate its own name (Bob's tungsten plate keeps
+-- "tungsten-plate"). Maraxsis' own prototypes follow it through the filter; these direct edits of Fluid Must Flow's
+-- recipes need the name themselves. Read when used: the planet copy appears with the first prototype after Space Age.
+local function planet_tungsten_plate()
+    return data.raw.item["paranoidal-refractory-beam"] and "paranoidal-refractory-beam" or "tungsten-plate"
+end
+
 data.raw.technology["ducts"].unit = nil
 data.raw.technology["ducts"].research_trigger = {
     type = "mine-entity",
@@ -43,7 +50,7 @@ for _, effect in pairs(data.raw.technology["ducts"].effects) do
         recipe.categories = {"maraxsis-hydro-plant", "advanced-crafting"}
         for _, ingredient in pairs(recipe.ingredients) do
             if ingredient.name == "iron-plate" then
-                ingredient.name = "tungsten-plate"
+                ingredient.name = planet_tungsten_plate()
                 ingredient.amount = ingredient.amount / 4
                 break
             elseif not data.raw.item[ingredient.name] and not data.raw.fluid[ingredient.name] then -- https://github.com/notnotmelon/maraxsis/issues/271
@@ -330,12 +337,12 @@ data:extend {{
 }}
 
 data.raw.recipe["duct-intake"].ingredients = {
-    {type = "item", name = "tungsten-plate", amount = 6},
+    {type = "item", name = planet_tungsten_plate(), amount = 6},
     {type = "item", name = "pump",           amount = 1},
 }
 
 data.raw.recipe["duct-exhaust"].ingredients = {
-    {type = "item", name = "tungsten-plate", amount = 6},
+    {type = "item", name = planet_tungsten_plate(), amount = 6},
     {type = "item", name = "pump",           amount = 1},
 }
 

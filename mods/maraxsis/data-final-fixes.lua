@@ -26,6 +26,13 @@ for drill_name in pairs(PlanetsLib.constants.ground_diggers["maraxsis"].diggers)
     end
 end
 
+-- Paranoidal: Droid M-O's dock (an electric-energy-interface, the type Maraxsis treats as a wind turbine) works in a
+-- dome, never in water or the trench: its port needs paved floor, and the dome floor is the only one on Maraxsis.
+local droid_dock = data.raw["electric-energy-interface"]["droid-m-o-dock"]
+if droid_dock then
+    droid_dock.maraxsis_buildability_rules = {water = false, dome = true, coral = false, trench = false, trench_entrance = false, trench_lava = false}
+end
+
 require "prototypes.collision-mask"
 require "prototypes.swimming"
 

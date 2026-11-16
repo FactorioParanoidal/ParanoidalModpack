@@ -93,8 +93,9 @@ maraxsis.on_event(defines.events.on_object_destroyed, function(event)
 	if not coral_animation then return end
 
 	for _, entity in pairs(coral_animation) do
-		entity.destroy()
+		if entity.valid then entity.destroy() end
 	end
+	storage.coral_animations[event.registration_number] = nil
 end)
 
 maraxsis.on_event(defines.events.on_script_trigger_effect, function(event)

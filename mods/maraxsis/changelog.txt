@@ -13,6 +13,11 @@ Date: 2026-11-07
     - Filter on_entity_damaged events to pressure dome colliders
   Bugfixes:
     - Pressure dome damage events no longer scan every dome
+    - Paranoidal: a pressure dome destroyed by damage no longer stops the game with a script error (the dome data field is prototype, not prototype_name).
+    - Paranoidal: the pairs of trench ducts are kept on a configuration change (mod update, settings): before, the list was emptied, mining the surface duct left the lower one in the trench and rotating no longer turned both.
+    - Paranoidal: removing coral, a fishing tower, a trench duct or a dome together with its helper entities (chunk or surface deletion) no longer fails on helpers already gone; their records are cleared.
+    - Paranoidal (Space Age branch): the duct intake and exhaust and any duct recipe that took iron plate cost the planets' tungsten plate (its own name in the build), not Bob's home tungsten plate.
+    - Paranoidal: Droid M-O's dock can be built inside a pressure dome (not in water or the trench).
 ---------------------------------------------------------------------------------------------------
 Version: 1.41.0
 Date: 2026-11-07
