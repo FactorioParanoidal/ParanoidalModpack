@@ -10,6 +10,8 @@ Date: 2026-11-11
     - The Ark (stack 1, 1 t) is made on a space platform in a cryogenic plant in 600 s from 250 promethium asteroid chunks, 50 quantum processors, 100 low density structures and one material of every planet: 100 pobedit (Vulcanus), 100 supercapacitors (Fulgora), 100 carbon fiber (Gleba), 100 ice silver (Aquilo), 200 lunite plates (Muluna), 100 aurite plates (Secretas), 100 carborundum (Moshine), 100 triplex (Maraxsis); a missing planet mod is skipped with a log line. Its result is always of normal quality (ic-more-qualities registry ic-normal-result).
   Locale:
     - English and Russian; the promethium asteroid chunk is described as found on the way from the edge (Space Age: only at the shattered planet).
+  Bugfixes:
+    - A platform that came to the shattered planet without the Ark wins as soon as the Ark is in its hub (made on board or put in later; checked every 5 seconds while such a platform is there); before, it had to depart or change state.
   Compatibility:
     - Needs Space Age and paranoidal-space-age-filter, which counts the mod as content after the rocket (its technology keeps the Ark).
     - Remote interface "paranoidal-true-ending": get_on_ending_event (custom event {fact = "chapter-1" | "true-ending", force_index, platform_index}, used by paranoidal-achievements), get_state.

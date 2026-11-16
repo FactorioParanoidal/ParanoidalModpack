@@ -118,6 +118,27 @@ end
 
 script.on_event(defines.events.on_space_platform_changed_state, on_platform_changed_state)
 
+-- A platform that came to the Shattered Planet without the Ark stays there: the Ark may be made on board or put into
+-- the hub later, which changes no platform state. Only platforms told "no Ark" are looked at, so the check is empty
+-- for the whole game before that.
+local ARK_CHECK_TICKS = 300
+script.on_nth_tick(ARK_CHECK_TICKS, function()
+	if not (storage.told and next(storage.told)) then return end
+	for _, force in pairs(game.forces) do
+		if not storage.finished[force.index] and not is_sandbox(force) then
+			for index, platform in pairs(force.platforms) do
+				if storage.told[index] and platform.valid then
+					local location = platform.space_location
+					if location and location.name == names.target and arks(platform) > 0 then
+						true_ending(force, platform)
+						break
+					end
+				end
+			end
+		end
+	end
+end)
+
 remote.add_interface("paranoidal-true-ending", {
 	get_on_ending_event = function() return ending_event end,
 	get_state = function()
