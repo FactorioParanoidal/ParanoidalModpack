@@ -1,0 +1,18 @@
+---------------------------------------------------------------------------------------------------
+Version: 9.0.0
+Date: 2026-11-16
+  Features:
+    - NAN-E (НЯН-Я), the nanny robot of the Axiom-6, rebuilt from Informatron 0.5.0 (Earendel, MIT) as a companion for Paranoidal.
+    - She follows her engineer hovering over buildings (only water stops her, she never blocks a build), catches up, waits outside factories; now and then she checks an idle machine (technical debt), rummages in wrecks and ruin chests or looks round the base.
+    - Lessons, jokes, glimpses of memory and, very rarely, secrets of the start and the build; how often she talks is a per-player setting.
+    - Her memory: memory cards from the Axiom-6, ruins (paranoidal-ruins), wrecks and her searches; 5 chapters, 24 memories, decoding takes circuits and a minute (a map setting); chapters open by research.
+    - Case №A113-6: 5 questions on the case board; answers mark places on the map; the colony's last camp with its letter.
+    - Her research branch: L-T's lamp, VN-GO's paint trail home, VAQ-M's vacuum (not on M-O's paving), BRL-A's umbrella against lightning (paranoidal-rain), D-FIB's defibrillator stun.
+    - Knocked out she switches off; repair packs bring her back. One per engineer; a new one is researched and placed from a BnL box.
+    - Her window (Alt+N, shortcut, top-left button) on Informatron's frame: nanny, memory, case board, live summary, journal, help on the build's mods.
+    - Own look by default; the startup setting switches to Informatron's original look.
+    - Synthesised voice (babble with intonation) and tunes; no film audio.
+  Changes:
+    - From Informatron: the window frame, live pages and opening on a page are kept; its remote interface for other mods' help pages, the console/editor pages and the I hotkey are dropped.
+  Bugfixes:
+    - Informatron's menu click compared with an undefined action and worked only by accident (nil == nil); the menu here uses explicit tags.

@@ -1,0 +1,13 @@
+{
+  "name": "Paranoidal-NAN-E",
+  "version": "9.0.0",
+  "title": "Paranoidal NAN-E",
+  "author": "FactorioParanoidal; Informatron by Earendel",
+  "homepage": "https://github.com/FactorioParanoidal/ParanoidalModpack",
+  "factorio_version": "2.1",
+  "description": "NAN-E, the nanny robot of the Axiom-6 care center, rebuilt from Informatron: a companion who follows you, jokes, lectures you on technical debt and now and then drives round the base on her own errands. Her memory is wiped: recover it from memory cards found in wrecks and ruins and solve case №A113-6, what really happened to the Axiom-6. Her own research branch gives her a lamp, a paint trail home, a vacuum, an umbrella against lightning and a defibrillator that stuns attackers. Her window (Alt+N) holds her memory, the case board, a live summary of your base and help on the build.",
+  "dependencies": [
+    "base >= 2.1.24",
+    "? paranoidal-rain"
+  ]
+}
