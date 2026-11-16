@@ -27,6 +27,9 @@ local TRAVEL = "unlock-travel-to-space-platforms"
 local platform_effects = {["rocket-silo"] = true}
 -- Item fields Space Age sets that stay: the rocket silo item draws the logistic requests of the silo.
 local carried_item_fields = {"flags"}
+-- Technologies of other mods that a planet mod moves after its own discovery: they keep their recipes of planet
+-- materials (Fluid Must Flow's ducts follow Maraxsis; the intake and exhaust cost the planets' tungsten plate).
+local after_planet_technologies = {ducts = true}
 
 -- Planet materials that have the name of a home material: Space Age's prototype (item, resource, recipe, fluid of that
 -- name) goes under the new name, and every reference in Space Age's own prototypes follows it (user 2026-11-08: own new
@@ -497,7 +500,8 @@ function M.install()
 		return state.extend(self, otherdata)
 	end
 	data.paranoidal_space_age_filter = {check = check, finish = finish, hide_recipes = M.hide_recipes,
-		payload_weight = M.payload_weight, space_age_recipes = M.space_age_recipes, is_space_age = M.is_space_age}
+		payload_weight = M.payload_weight, tile_placement = M.tile_placement, space_age_recipes = M.space_age_recipes,
+		is_space_age = M.is_space_age}
 end
 
 -- Names of the recipes that are Space Age's own prototypes or its planet materials under own names (zzzparanoidal: they
@@ -540,6 +544,37 @@ end
 -- the orbital solar collector) weigh 500 kg (user, 2026-11-07): without Space Age the rocket holds one item, with it any
 -- items up to 1 t, and at 1 kg (their own weight) one rocket took ten. Now two fit, platform cargo is unchanged.
 local PAYLOAD_WEIGHT = 500000 -- 500 kg; weight is in grams (the base satellite: 1 t = 1000000)
+
+-- Tile placement rules Space Age sets on base items for its planets: the restore of the base items drops them. Only
+-- planet tiles take part, so nothing changes before the rocket: landfill fills Gleba's wetlands and deep lake, stone
+-- bricks stay off Aquilo's ice (the home build has no meltable tile).
+local space_age_landfill_tiles = {"wetland-light-green-slime", "wetland-green-slime", "wetland-light-dead-skin",
+	"wetland-dead-skin", "wetland-pink-tentacle", "wetland-red-tentacle", "wetland-yumako", "wetland-jellynut",
+	"wetland-blue-slime", "gleba-deep-lake"}
+
+function M.tile_placement()
+	local landfill = data.raw.item.landfill
+	local place = landfill and landfill.place_as_tile
+	if place and place.tile_condition then
+		local present = {}
+		for _, name in ipairs(place.tile_condition) do present[name] = true end
+		for _, name in ipairs(space_age_landfill_tiles) do
+			if data.raw.tile[name] and not present[name] then
+				table.insert(place.tile_condition, name)
+				present[name] = true
+			end
+		end
+	end
+	local brick = data.raw.item["stone-brick"]
+	local path = brick and brick.place_as_tile
+	if path and path.condition and path.condition.layers and data.raw["collision-layer"].meltable then
+		path.condition.layers.meltable = true
+	end
+	-- Droid M-O's dock needs no heat (like Space Age's containers): it stands on Aquilo's ice, where its bot drives.
+	local dock = data.raw["electric-energy-interface"]["droid-m-o-dock"]
+	local layers = dock and dock.collision_mask and dock.collision_mask.layers
+	if layers then layers.meltable = nil end
+end
 
 function M.payload_weight()
 	local names = {}
@@ -681,7 +716,7 @@ function M.hide_recipes()
 	end
 	local moved = {}
 	for name, technology in pairs(raw.technology) do
-		local effects = not technologies[name] and technology.effects
+		local effects = not technologies[name] and not after_planet_technologies[name] and technology.effects
 		for i = #(effects or {}), 1, -1 do
 			local effect = effects[i]
 			local recipe = effect.type == "unlock-recipe" and raw.recipe[effect.recipe]
