@@ -82,7 +82,8 @@ function M.refresh_audience()
     local entity = label and label.target and label.target.entity
     if entity and entity.valid then
       local players, visible = audience(entity.force, cache)
-      label.players = players
+      -- 2.1.24 rejects nil here ("table expected, got nil"): an empty list means every player of the force
+      label.players = players or {}
       label.visible = visible
     elseif label then
       label.destroy()
