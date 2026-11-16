@@ -12,7 +12,8 @@
 -- and never for units whose attack damages themselves (suicide and nuclear biters).
 -- Copies are not spawned by nests, have no loot (the champion drops one artifact) and are hidden: they carry the icon
 -- and the name of their unit, so the entity lists (turret priority targets) showed every unit two or three times.
--- They are bigger than their unit (constants.CHAMPION_KINDS sizeK: sprites and selection box; collisionK: collision).
+-- They are bigger than their unit (constants.CHAMPION_KINDS sizeK: sprites and selection box; collisionK: collision),
+-- and so is their corpse: one hidden copy of the unit's corpse per kind, <corpse><suffix>, with the sprites x sizeK.
 -- Runs at the end of data-final-fixes, after the resistance updates of this mod. If a copy is missing, the runtime
 -- spawns the ordinary unit with a script health pool as before.
 
@@ -158,6 +159,38 @@ local function scaleBox(box, k)
     return {{(a[1] or a.x) * k, (a[2] or a.y) * k}, {(b[1] or b.x) * k, (b[2] or b.y) * k}}
 end
 
+-- the graphics of a corpse prototype (CorpsePrototype, EntityPrototype.water_reflection)
+local CORPSE_GRAPHICS = {"animation", "animation_overlay", "decay_animation", "ground_patch", "ground_patch_higher",
+    "ground_patch_decay", "splash", "underwater_patch", "water_reflection"}
+local corpses = data.raw["corpse"]
+local enlargedCorpses = {}
+local corpseCopies = {}
+
+-- the corpse of a copy dies as big as the copy: one enlarged corpse per corpse and kind, the original corpse stays for
+-- the ordinary units; a missing corpse or a taken name keeps the original
+local function enlargedCorpse(name, spec, k)
+    local copyName = name .. spec.suffix
+    if enlargedCorpses[copyName] then
+        return copyName
+    end
+    local original = corpses[name]
+    if (not original) or corpses[copyName] then
+        return name
+    end
+    local corpse = table.deepcopy(original)
+    corpse.name = copyName
+    corpse.localised_name = original.localised_name or {"entity-name." .. name}
+    corpse.hidden = true
+    corpse.hidden_in_factoriopedia = true
+    local seen = {}
+    for _, field in ipairs(CORPSE_GRAPHICS) do
+        scaleSprites(corpse[field], k, seen)
+    end
+    enlargedCorpses[copyName] = true
+    corpseCopies[#corpseCopies + 1] = corpse
+    return copyName
+end
+
 -- Paranoidal: champions are a bit bigger than their unit, hour bosses clearly bigger (constants.CHAMPION_KINDS)
 local function enlarge(copy, spec)
     local k = spec.sizeK or 1
@@ -168,6 +201,15 @@ local function enlarge(copy, spec)
         scaleSprites(copy.water_reflection, k, seen)
         copy.selection_box = scaleBox(copy.selection_box, k)
         copy.sticker_box = scaleBox(copy.sticker_box, k)
+        if type(copy.corpse) == "string" then
+            copy.corpse = enlargedCorpse(copy.corpse, spec, k)
+        elseif type(copy.corpse) == "table" then
+            local list = {}
+            for i, name in ipairs(copy.corpse) do
+                list[i] = enlargedCorpse(name, spec, k)
+            end
+            copy.corpse = list
+        end
     end
     local c = spec.collisionK or 1
     if c ~= 1 then
@@ -213,4 +255,7 @@ end
 if #copies > 0 then
     data:extend(copies)
 end
-log("Paranoidal-Rampant: champion unit prototypes: " .. #copies)
+if #corpseCopies > 0 then
+    data:extend(corpseCopies)
+end
+log("Paranoidal-Rampant: champion unit prototypes: " .. #copies .. ", enlarged corpses: " .. #corpseCopies)
