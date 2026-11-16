@@ -6,6 +6,11 @@ Date: 2026.11.16
     - Saves made before the rename keep their Rampant state. The mod RampantFixed stays in the build as a bridge without content, and on the first load of such a save Paranoidal-Rampant takes over the state kept in the bridge (AI, bases, squads, champions, truce) instead of starting anew, which would also kill every enemy unit. Then the bridge is emptied and its old buttons are replaced by those of Paranoidal-Rampant. Values of map settings are kept, as the setting names did not change.
     - The hidden optional dependency "RampantFixed >= 9.3.0" keeps Paranoidal-Rampant from loading next to the old full RampantFixed.
     - Super-hive auras drawn before the rename belong to RampantFixed; they are dropped too when the aura changes.
+  Graphics:
+    - Nests, hives and super-hives of any size keep the colour mask on the body: the sprite shifts of the vanilla nest are made for its normal size and did not grow with the nest, so on a big super-hive the mask slid down and to the right (on a small nest the other way).
+    - A dying nest and its remains keep the size of the nest (they always had the normal size) and the faction colour of the body (only the mask kept its colour).
+    - Champions and hour bosses leave a corpse as big as they are (x1.15 and x1.4): the corpse of their unit gets one hidden enlarged copy per kind. Ordinary units keep their corpses; the glow and the removal of the corpse are unchanged.
+    - Attack fires no longer pass the 1.1 size and speed values that the 2.0 fire pictures ignored; the fires look as before.
   Locale:
     - ru: the mod name in locale/ru, the same as in ParanoidalLocale.
 ---------------------------------------------------------------------------------------------------

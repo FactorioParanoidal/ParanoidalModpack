@@ -9,6 +9,8 @@ local imageUtils = require("ImageUtils")
 -- imported functions
 
 local create_burnt_patch_pictures = imageUtils.create_burnt_patch_pictures
+-- Paranoidal: create_fire_pictures (2.0 fire sheets) takes scale1/scale2 and animation_speed1/animation_speed2 with
+-- vanilla-like defaults; the 1.1 scale/animation_speed (values of the vanilla 1.1 fires) were ignored and are dropped
 local create_fire_pictures = imageUtils.create_fire_pictures
 local create_small_tree_flame_animations = imageUtils.create_small_tree_flame_animations
 
@@ -67,7 +69,7 @@ function fireUtils.makeSpreadEffect(attributes)
 
                 small_tree_fire_pictures = create_small_tree_flame_animations({ blend_mode = "additive", animation_speed = 0.5, scale = 0.7 * 0.75, tint2 = attributes.tint2 }),
 
-                pictures = create_fire_pictures({ blend_mode = "additive", animation_speed = 1, scale = 0.5 * 1.25, tint2 = attributes.tint2}),
+                pictures = create_fire_pictures({ blend_mode = "additive", tint2 = attributes.tint2}),
 
                 smoke_source_pictures =
                     {
@@ -175,7 +177,7 @@ function fireUtils.makeSpreadOnceEffect(attributes)
 
                 small_tree_fire_pictures = create_small_tree_flame_animations({ blend_mode = "additive", animation_speed = 0.5, scale = 0.7 * 0.75, tint2 = attributes.tint2 }),
 
-                pictures = create_fire_pictures({ blend_mode = "additive", animation_speed = 1, scale = 0.5 * 1.25, tint2 = attributes.tint2}),
+                pictures = create_fire_pictures({ blend_mode = "additive", tint2 = attributes.tint2}),
 
                 smoke_source_pictures =
                     {
@@ -315,7 +317,7 @@ function fireUtils.makeFire(attributes)
                             }
                     },
 
-                pictures = create_fire_pictures({ blend_mode = "normal", animation_speed = 1, scale = 0.5, tint2 = attributes.tint2}),
+                pictures = create_fire_pictures({ blend_mode = "normal", tint2 = attributes.tint2}),
 
                 smoke_source_pictures =
                     {
