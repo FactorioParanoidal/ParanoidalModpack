@@ -161,7 +161,7 @@ hide("string-setting", "minime_icon-scheme")
 hide("bool-setting", "picker-planner-sorter")
 -- visible-pollutants
 hide("bool-setting", "visible-pollutants-update-chart-colors")
--- RampantFixed
+-- Paranoidal-Rampant
 hide("bool-setting", "rampantFixed--oldRedEnemyMapColor")
 hide("bool-setting", "rampantFixed--enableFadeTime")
 hide("int-setting", "rampantFixed--unitAndSpawnerFadeTime")

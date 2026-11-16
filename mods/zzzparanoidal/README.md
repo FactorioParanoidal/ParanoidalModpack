@@ -86,7 +86,7 @@ Factorio 2.0 не читает `hr_version`, а файлы base 2.0 — это �
   ровно в кадр корпуса (восточная маска раньше была обрезана); плитка «кирпич с разметкой» — HR; база и
   тень прототипа артиллерии; трубы теплицы 2 — как у теплицы BI 2.0; трубы биореакторов 2/3 — трубы
   сборщика 2 из base 2.0 (рисовалась четверть картинки).
-- RampantFixed: дроны-осы и яйца, лучи, кислотные снаряды, огонь стикеров ярости/кристалла
+- Paranoidal-Rampant: дроны-осы и яйца, лучи, кислотные снаряды, огонь стикеров ярости/кристалла
   регенерации; удалён ни на что не ссылавшийся труп `acid-splash-purple`.
 - PCPRedux (пластиковая стена), LargerLamps (медная лампа), SpaceMod (комбинатор, LED), nanobots
   (интерфейс роботов), Teleporters (взрыв), BigLight (огни станций), Bob's Warfare (ракета атомного
@@ -320,7 +320,7 @@ zzz (`tweaks/technology/research-evolution-icon.lua`) только добавл�
 | Переработка артиллерийских вагонов MK2/MK3 | `item-name.bob-artillery-wagon-N` ссылался на `__ITEM__artillery-wagon__`, такого ключа в 2.0 нет | `__ENTITY__artillery-wagon__` в bobwarfare (все языки) и копиях ParanoidalLocale |
 | Плитки `hazard-concrete-brick-left/right` | нет `tile-name` | zzz `locale/{en,ru}` и ParanoidalLocale |
 | 261 труп «фейковых людей» Big-Monsters и такие же сигналы FactorySearch | копии `character-corpse` без названия | mferrari_lib: «<юнит> (труп)» |
-| 4 сигнала оповещений RampantFixed | нет `virtual-signal-name` | RampantFixed en, ParanoidalLocale ru |
+| 4 сигнала оповещений Paranoidal-Rampant | нет `virtual-signal-name` | Paranoidal-Rampant en, ParanoidalLocale ru |
 | Категории боеприпасов `artillery-shell-prototype`, `mirv-launcher`, `flying-saucer-laser`, `humanoid_ammo_category` | нет `ammo-category-name` (у MIRV2 — ключ без секции) | zzz, MIRV2, mferrari_lib + ParanoidalLocale |
 
 В Beta 8 готовых переводов для этих ключей не было (плиток, сигналов, категорий там нет) — тексты написаны

@@ -2,7 +2,7 @@
 -- 2.1.7 changed the vanilla biter and spitter spawners: spawning_radius 10 -> 2 and spawning_spacing 3 -> 1 ("spawning
 -- range reduced, precision increased") and the new spawn_blocked_trigger, an acid cloud when no spawn position is free.
 -- The copies of the vanilla spawner in the build (bobenemies tier 0, Big-Monsters, mferrari_lib bosses) inherited it; the
--- other spawner families (RampantFixed, Bob, mferrari_lib) set their own radius and spacing, and no spawner of the 2.0
+-- other spawner families (Paranoidal-Rampant, Bob, mferrari_lib) set their own radius and spacing, and no spawner of the 2.0
 -- build had a spawn_blocked_trigger. Keep 2.0 for all: no spawner gets the acid cloud, and a spawner left with the 2.1
 -- vanilla radius and spacing (2 and 1, never used in the 2.0 build) gets the 2.0 vanilla values (10 and 3).
 local restored, untriggered = {}, {}

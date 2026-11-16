@@ -9,7 +9,7 @@ local M = {}
 
 M.prefix = "paranoidal-enemies-"
 
--- Фракции Rampant в порядке их описания в RampantFixed (libs/Constants.lua); неизвестные — после, по имени.
+-- Фракции Rampant в порядке их описания в Paranoidal-Rampant (libs/Constants.lua); неизвестные — после, по имени.
 local RAMPANT_FACTIONS = {"neutral", "acid", "laser", "fire", "inferno", "wasp", "spawner", "electric", "physical",
 	"troll", "poison", "suicide", "nuclear", "energy-thief", "fast", "juggernaut", "arachnids"}
 -- Виды Rampant: длинные раньше коротких (super-hive раньше hive); категория и место ряда гнезда внутри фракции.

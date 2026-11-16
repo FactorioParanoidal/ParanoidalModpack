@@ -1,6 +1,6 @@
 -- Paranoidal: level marks on the icons of the enemies that come in several levels with one picture (fake humans,
 -- bosses, flying saucers, the Big Monsters giants), so the entity lists (turret priority targets) tell them apart.
--- The level (1-10, A = 10) is drawn in the upper right corner as on the RampantFixed units; `mark` (a base signal
+-- The level (1-10, A = 10) is drawn in the upper right corner as on the Paranoidal-Rampant units; `mark` (a base signal
 -- icon name) adds a small sign in the lower left corner. Levels above 10 get no number.
 local function level_icons(prototype, level, mark)
   local icons = prototype.icons and table.deepcopy(prototype.icons)

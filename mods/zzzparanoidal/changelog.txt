@@ -2,6 +2,7 @@
 Version: 8.1.31
   Compatibility:
     - Followed the rename of factorissimo-2-notnotmelon to Paranoidal-factorissimo-4: the loader shells template check, the recursion technology cleanup and the graphics atlas entry of the circuit connector (__Paranoidal-factorissimo-4__ paths).
+    - Followed the rename of RampantFixed to Paranoidal-Rampant: the Rampant setting defaults in settings-final-fixes.lua and the two graphics atlas entries of the mod (tweaks/custom/graphics-atlas-data.lua) use the new mod name and __Paranoidal-Rampant__ paths.
   Changes:
     - Recolored the four bronze/steel pipe menu icon PNGs to match Reskins variant B (warm bronze, cool silver steel), including their shared use by casting recipes. Tier overlays, dimensions, alpha and paths are unchanged; no additional compression or optimization was performed at the user's request.
     - Plastic 1 now unlocks plastic bars and the regular/underground bar-based plastic pipes; Plastics unlocks both direct pipe casting recipes instead. Regular pipe casting consumes 10 liquid plastic for 1 pipe instead of 4 for 4. Research costs, the 4-bar regular pipe recipe and underground pipe recipe quantities are unchanged.

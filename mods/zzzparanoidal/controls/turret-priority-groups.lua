@@ -2,7 +2,7 @@
 -- свёрнута по умолчанию, раскрытие запоминается у каждого игрока. Фильтры «Кто» (категории вкладки «Враги»:
 -- tweaks/custom/enemies-tab.lua и ряды robotarmy-citadel) и «Фракция» (фракции Rampant, стихии Bob) работают вместе;
 -- «Добавить в приоритет», «Убрать», «Очистить список» меняют список приоритетных целей самой турели (его переносят
--- копирование настроек, чертежи и смена ранга HeroTurretRedux). Копии вожаков и боссов RampantFixed (скрытые
+-- копирование настроек, чертежи и смена ранга HeroTurretRedux). Копии вожаков и боссов Paranoidal-Rampant (скрытые
 -- прототипы) идут вместе со своим врагом. «Не стрелять по летунам»: летуны уходят из списка, все остальные враги
 -- добавляются, включается «Стрелять только по приоритетным целям»; повторное нажатие возвращает как было (записи,
 -- добавленные после этого вручную, остаются).
@@ -14,7 +14,7 @@ local TYPES = {["ammo-turret"] = true, ["electric-turret"] = true, ["fluid-turre
 -- Категории вкладки «Враги» (буква подгруппы paranoidal-enemies-<буква>-NNN).
 local CATEGORIES = {"a", "b", "c", "d", "e", "f", "g", "h", "i"}
 local FLYERS = "c"
--- Фракции Rampant в порядке RampantFixed, затем стихии Bob без пары у Rampant.
+-- Фракции Rampant в порядке Paranoidal-Rampant, затем стихии Bob без пары у Rampant.
 local FACTIONS = {"neutral", "acid", "laser", "fire", "inferno", "wasp", "spawner", "electric", "physical", "troll",
 	"poison", "suicide", "nuclear", "energy-thief", "fast", "juggernaut", "arachnids", "piercing", "explosive"}
 local RAMPANT_KINDS = {"super-hive", "biter-spawner", "spitter-spawner", "hive", "biter", "spawn", "spitter", "flyer",

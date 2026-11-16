@@ -419,9 +419,9 @@ end
 
 
 -- Sends the enemies near the target at it (Big Monsters swarms and silo attacks, Rocket Silo Construction stages).
--- Paranoidal: with RampantFixed the attack is made of Rampant squads (remote strikePosition_ExtCtrl): packing, retreat
+-- Paranoidal: with Paranoidal-Rampant the attack is made of Rampant squads (remote strikePosition_ExtCtrl): packing, retreat
 -- and one path per squad instead of hundreds of single units commanded one by one, and no attack while the Rampant AI
--- is peaceful. Without RampantFixed (or on a surface it does not manage) the old single-unit command is used.
+-- is peaceful. Without Paranoidal-Rampant (or on a surface it does not manage) the old single-unit command is used.
 local FRENZY_MIN = 10
 local FRENZY_MAX = 300
 local FRENZY_DISTANCE = 1500

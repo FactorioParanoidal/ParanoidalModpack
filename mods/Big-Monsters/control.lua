@@ -17,7 +17,7 @@ require "__mferrari_lib__/stdlib/area/area"
 -- Skip event spawning on peaceful surfaces or on maps generated with
 -- enemy-base size = 0 (i.e. no enemies expected). Can be overridden via
 -- runtime setting "bm-events-when-peaceful" (default off).
--- Paranoidal: also during the truce of RampantFixed on the surface (remote getTruceInfo: the evolution or the
+-- Paranoidal: also during the truce of Paranoidal-Rampant on the surface (remote getTruceInfo: the evolution or the
 -- peace period of its planet setting is not reached yet).
 local function rampant_truce(surface)
     local rampant = remote.interfaces["rampantFixed"]
@@ -143,7 +143,7 @@ local removed = 0
 for _, surface in pairs(game.surfaces) do
 	for _, worm in pairs(surface.find_entities_filtered{name=names}) do
 		if worm.valid and not (worm.unit_number and keep[worm.unit_number]) then
-			-- raised: RampantFixed takes the worm out of the turret count of its chunk
+			-- raised: Paranoidal-Rampant takes the worm out of the turret count of its chunk
 			worm.destroy{raise_destroy=true}
 			removed = removed + 1
 			end

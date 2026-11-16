@@ -1,10 +1,10 @@
 {
     "name" : "RampantFixed",
     "factorio_version" : "2.1",
-    "version" : "9.02.15",
-    "title" : "Rampant, fixed - Reforged Paranoidal fork",
-    "author" : "Dimm2101 (RampantFixed), Veden (Rampant), Reforged Paranoidal (fork)",
+    "version" : "9.3.0",
+    "title" : "RampantFixed save bridge",
+    "author" : "Reforged Paranoidal",
     "homepage" : "",
-    "description" : "Based on Rampant 1.1.1 (new AI and enemies). \n 1. Can attack from afar. Improved search for a passage in the defense. By default, it does not populate the entire map \n 2. Can mutate existing nests. Can be combined with nests of other enemies. Works on Gleba and Vulcanus",
-    "dependencies" : ["base >= 2.0.0", "!Rampant", "!combat-mechanics-overhaul", "!intelligent-enemy", "?alien-module", "?Arachnids", "?ArmouredBiters", "?Explosive_biters", "?Krastorio2", "?RampantArsenalFork", "?SchallAlienLoot"]
+    "description" : "Keeps the Rampant state of saves made before RampantFixed was renamed to Paranoidal Rampant and hands it over to Paranoidal Rampant when such a save is loaded. Has no content of its own; keep it enabled.",
+    "dependencies" : ["base >= 2.1.0"]
 }
