@@ -697,7 +697,7 @@ local PANEL_ORDER = {
 	"fp_button_toggle_interface",           -- factoryplanner
 	"helmod_planner-command",               -- helmod
 	"space_toggle_button",                  -- SpaceModFeorasFork (SpaceX)
-	"factorissimo_dispatch_button",         -- factorissimo-2-notnotmelon
+	"factorissimo_dispatch_button",         -- Paranoidal-factorissimo-4
 	"bnl_journal_button",                   -- zzzparanoidal-start-bnl
 	"creative-mod_main-menu-open-button",   -- creative-mod
 }

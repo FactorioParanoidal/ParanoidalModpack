@@ -51,8 +51,8 @@ C.pre = {
     {source = "angels-silicon-minimum", mod = "angelssmelting", trigger = "powder:silicon", also_mod = "bobplates", action = "minimum", size = 200, names = {"bob-silicon-powder"}},
     -- Space Age branch: as in Bio Industries' own code, only when it sees Space Age (paranoidal-space-age-filter hides it).
     {source = "bi-tree-seed", mod = "Bio_Industries_2", also_mod = "space-age", size = 200, names = {"tree-seed"}},
-    {source = "factorissimo-robot", mod = "factorissimo-2-notnotmelon", size = 1000, names = {"factory-hidden-construction-robot"}},
-    {source = "factorissimo-efficient-smelting", mod = "factorissimo-2-notnotmelon", also_mod = "EfficientSmelting", size = 1, names = {"factory-connection-indicator-settings", "factory-overlay-controller-settings"}},
+    {source = "factorissimo-robot", mod = "Paranoidal-factorissimo-4", size = 1000, names = {"factory-hidden-construction-robot"}},
+    {source = "factorissimo-efficient-smelting", mod = "Paranoidal-factorissimo-4", also_mod = "EfficientSmelting", size = 1, names = {"factory-connection-indicator-settings", "factory-overlay-controller-settings"}},
     {source = "toxic-armor", mod = "ToxicPollution2-reforged", kind = "armor", size = 10, names = {"light-armor", "heavy-armor"}},
     {source = "yuoki-repair", mod = "Yuoki", kind = "repair-tool", size = 100, names = {"y-repair-durotal", "y-repair-krakon"}},
     {source = "yuoki-repair-top", mod = "Yuoki", kind = "repair-tool", size = 50, names = {"y_repair_quantrinum"}},

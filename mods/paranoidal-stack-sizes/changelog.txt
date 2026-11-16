@@ -1,5 +1,7 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.0
+  Compatibility:
+    - The optional dependency and the two Factorissimo sources follow the rename of factorissimo-2-notnotmelon to Paranoidal-factorissimo-4.
   Locale:
     - Russian hardcoded player-facing text: 10 UI, chat, command-help and error-message literals; technical identifiers, format parameters and gameplay logic are unchanged.
 Date: 2026-11-10

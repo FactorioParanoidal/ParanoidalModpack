@@ -141,7 +141,7 @@ hide("bool-setting", "Use-Mod-Color-for-heat-pipes")
 hide("bool-setting", "Use-Mod-Color-for-pipes")
 hide("bool-setting", "Use-Mod-Color-for-roboports")
 hide("bool-setting", "Use-Mod-Color-for-steam-generators")
--- factorissimo-2-notnotmelon
+-- Paranoidal-factorissimo-4
 hide("bool-setting", "Factorissimo2-disable-new-tile-effects")
 -- Flow Control
 hide("bool-setting", "flow-control-new-group")

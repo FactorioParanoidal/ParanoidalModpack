@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.26.0
   Locale:
+    - Followed the rename of factorissimo-2-notnotmelon to Paranoidal-factorissimo-4 in the dependency, the mod name ("Paranoidal Factorissimo 4"), the canonical description and the comments of zzzzz-ru-completion.cfg; the factorissimo-2-notnotmelon save bridge has its own Russian name and description.
+  Locale:
     - zzzz-user-overrides.cfg (Space Age branch): the new paranoidal-true-ending mod (true ending at the shattered planet) gets its mod name and description (same text as in the mod and in mods-metadata/!descriptions.json); the paranoidal-space-age-filter description says that the solar system edge ends chapter 1 and the true ending is at the shattered planet.
     - zzzz-user-overrides.cfg (Space Age branch): the new paranoidal-telogistics mod (cargo teleporters) gets its mod name and description (same text as in the mod and in mods-metadata/!descriptions.json).
     - zzzz-user-overrides.cfg (Space Age branch): the new paranoidal-sa-tester mod (tester panel) gets its mod name and description (same text as in the mod and in mods-metadata/!descriptions.json).

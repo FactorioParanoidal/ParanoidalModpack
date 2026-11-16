@@ -1,6 +1,6 @@
 -- Рекурсия выдаётся скриптом (по .researched), а не эффектом, поэтому пустой
 -- nothing-эффект Factorissimo (голый "+") можно безопасно убрать.
-if not mods["factorissimo-2-notnotmelon"] then
+if not mods["Paranoidal-factorissimo-4"] then
     return
 end
 

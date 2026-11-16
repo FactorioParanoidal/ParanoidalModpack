@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 9.0.0
 Date: 2026-11-01
+  Compatibility:
+    - The four Factorissimo achievements (tardis, factory-in-factory, no-emissions, factory-24-7) and the Milestones preset require Paranoidal-factorissimo-4, the renamed factorissimo-2-notnotmelon.
   Bugfixes:
     - The unstuck achievement follows TimedSpawnControl-reforged: both the availability guard and GUI owner check use the renamed mod.
     - Milestone imports and remote presets are normalised before use; malformed entries, non-finite numbers, non-plain tables and non-growing next formulas are rejected. Research levels and their steps must be whole numbers. Provider failures are isolated and removed providers leave no stale local presets.

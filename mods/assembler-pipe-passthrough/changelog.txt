@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 2025.09.15
 Date: 2025-09-15
+  Compatibility:
+    - Paranoidal: the Factorissimo check follows the rename of factorissimo-2-notnotmelon to Paranoidal-factorissimo-4.
   Changes:
     - Paranoidal packaging: moved the release shell script out of the distributed mod into the local development workspace.
   Changes:
