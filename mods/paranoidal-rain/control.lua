@@ -34,6 +34,7 @@ local commands_module = require("scripts.commands")
 
 -- Rebuild everything that depends on settings and the surface list.
 local function reconcile()
+  R.players.invalidate()
   R.cfg.load()
   R.surfaces.rebuild()
   R.weather.ensure()
@@ -168,7 +169,7 @@ local function player_changed(event)
     R.sound.queue(player.surface_index)
   end
 end
-script.on_event(E.on_player_joined_game, function(event)
+script.on_event({ E.on_player_created, E.on_player_joined_game }, function(event)
   R.players.refresh_hide(event.player_index)
   player_changed(event)
 end)
@@ -179,11 +180,13 @@ script.on_event(E.on_player_left_game, function(event)
   R.visual.forget_player(event.player_index)
 end)
 script.on_event(E.on_player_removed, function(event)
+  R.players.invalidate()
   if storage.hide then storage.hide[event.player_index] = nil end
   if storage.no_flash then storage.no_flash[event.player_index] = nil end
   R.visual.forget_player(event.player_index)
 end)
 script.on_event(E.on_forces_merged, function()
+  R.players.invalidate()
   R.sound.queue_all()
   R.forecast.reconcile()
 end)
@@ -206,6 +209,7 @@ script.on_event(E.on_surface_cleared, function(event)
   R.chunks.reconcile()
 end)
 script.on_event(E.on_surface_deleted, function(event)
+  R.players.invalidate()
   local index = event.surface_index
   R.sound.stop(index)
   R.weather.forget(index)
@@ -228,6 +232,7 @@ script.on_event(E.on_chunk_generated, function(event)
   R.pollution.on_chunk_generated(index, event.position)
 end)
 
+script.on_event(defines.events.on_prain_fire_created, R.fire.on_created)
 script.on_event(E.on_trigger_created_entity, R.fire.on_marker)
 
 script.on_nth_tick(R.forecast.CHECK, function() R.forecast.check() end)

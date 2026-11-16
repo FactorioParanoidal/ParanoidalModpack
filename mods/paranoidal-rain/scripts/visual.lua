@@ -20,6 +20,23 @@ local GRID_COLS, GRID_ROWS = 10, 6
 local GRID_REFRESH = 90
 local POST_DENSITY = 0.00036   -- puddles per visible tile per tick at the start of the post-rain tail
 
+-- Finite prototype names are built once, not for every particle.
+local DROP_NAMES, SPLASH_NAMES, PUDDLE_NAMES = {}, {}, {}
+for _, wind in ipairs({ "left", "straight", "right", "gust" }) do
+  local frames = {}
+  for frame = 1, 4 do
+    frames[frame] = { "prain-drop-front-" .. frame .. "-" .. wind,
+      "prain-drop-mid-" .. frame .. "-" .. wind, "prain-drop-mist-" .. frame .. "-" .. wind }
+  end
+  DROP_NAMES[wind] = frames
+end
+for _, kind in ipairs({ "ripple", "splash", "splash-soil" }) do
+  local frames = {}
+  for frame = 1, 4 do frames[frame] = "prain-drop-" .. kind .. "-" .. frame end
+  SPLASH_NAMES[kind] = frames
+end
+for frame = 1, 4 do PUDDLE_NAMES[frame] = "prain-drop-puddle-" .. frame end
+
 local function player_rect(player)
   if not player.valid then return nil end
   local mode = player.render_mode
@@ -38,7 +55,7 @@ local function player_rect(player)
     s = w * h }
 end
 
-local function rects_of(players)
+local function rects_of(players, overlaps)
   local rects, total = {}, 0
   for i = 1, #players do
     local player = players[i]
@@ -51,6 +68,20 @@ local function rects_of(players)
       end
     end
   end
+  -- A broad phase helps multiplayer views far apart. Keep the two-player path allocation-free.
+  if overlaps and #rects >= 3 and #rects <= 64 then
+    for i = 1, #rects do rects[i].neighbors = {} end
+    for i = 1, #rects - 1 do
+      local a = rects[i]
+      for j = i + 1, #rects do
+        local b = rects[j]
+        if a.x < b.x2 and b.x < a.x2 and a.y < b.y2 and b.y < a.y2 then
+          a.neighbors[#a.neighbors + 1] = j
+          b.neighbors[#b.neighbors + 1] = i
+        end
+      end
+    end
+  end
   return rects, total
 end
 
@@ -59,10 +90,18 @@ local function keep(rects, i, x, y)
   local count = #rects
   if count == 1 then return true end
   local hits = 1
-  for j = 1, count do
-    if j ~= i then
-      local r = rects[j]
+  local neighbors = rects[i].neighbors
+  if neighbors then
+    for j = 1, #neighbors do
+      local r = rects[neighbors[j]]
       if x >= r.x and x < r.x2 and y >= r.y and y < r.y2 then hits = hits + 1 end
+    end
+  else
+    for j = 1, count do
+      if j ~= i then
+        local r = rects[j]
+        if x >= r.x and x < r.x2 and y >= r.y and y < r.y2 then hits = hits + 1 end
+      end
     end
   end
   return hits == 1 or random() < 1 / hits
@@ -141,7 +180,7 @@ local function splash(surface, g, x, y, frame)
   if col >= 0 and col < GRID_COLS and row >= 0 and row < GRID_ROWS then
     kind = g.cells[row * GRID_COLS + col + 1] or kind
   end
-  surface.create_entity { name = "prain-drop-" .. kind .. "-" .. frame, position = { x, y } }
+  surface.create_entity { name = SPLASH_NAMES[kind][frame], position = { x, y } }
 end
 
 local function gust_sound(players)
@@ -174,7 +213,8 @@ local function take_budget(want)
 end
 
 function M.rain(index, surface, players, strength)
-  local rects, total = rects_of(players)
+  if budget_tick == game.tick and budget_left <= 0 then return end
+  local rects, total = rects_of(players, true)
   if total <= 0 then return end
   local c = storage.cfg
   local raining = R.weather.is_raining(index)
@@ -186,6 +226,7 @@ function M.rain(index, surface, players, strength)
   k = k * allowed / demanded
 
   local wind = wind_bucket(index, raining)
+  local drop_names = DROP_NAMES[wind]
   local splash_chance = c.splashes and SPLASH_CHANCE * R.weather.stage_data(index).splash or 0
   local n = storage.drop_index or 0
   for i = 1, #rects do
@@ -204,8 +245,8 @@ function M.rain(index, surface, players, strength)
         n = n + 1
         local frame = n % 4 + 1
         local roll = random()
-        local layer = roll < 0.38 and "front" or (roll < 0.82 and "mid" or "mist")
-        surface.create_entity { name = "prain-drop-" .. layer .. "-" .. frame .. "-" .. wind, position = { x, y } }
+        local layer = roll < 0.38 and 1 or (roll < 0.82 and 2 or 3)
+        surface.create_entity { name = drop_names[frame][layer], position = { x, y } }
         if grid and random() < splash_chance then
           splash(surface, grid, x + random() * 1.4 - 0.7, y + random() * 1.4 - 0.7, frame)
         end
@@ -233,7 +274,7 @@ function M.post_rain(index, surface, players, factor)
     end
     for _ = 1, take_budget(count) do
       n = n + 1
-      surface.create_entity { name = "prain-drop-puddle-" .. (n % 4 + 1),
+      surface.create_entity { name = PUDDLE_NAMES[n % 4 + 1],
         position = { r.x + random() * r.w, r.y + random() * r.h } }
     end
   end

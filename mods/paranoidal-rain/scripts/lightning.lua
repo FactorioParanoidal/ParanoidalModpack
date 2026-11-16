@@ -107,9 +107,16 @@ local function combustible(target)
   return has_word(name, { wood = true, wooden = true, timber = true, lumber = true })
 end
 
+local bonus_cache = {}
 local function bonus(entity)
-  local d = data()
-  return (d.ids[entity.name] or 0) + (d.types[entity.type] or 0)
+  local name = entity.name
+  local value = bonus_cache[name]
+  if value == nil then
+    local d = data()
+    value = (d.ids[name] or 0) + (d.types[entity.type] or 0)
+    bonus_cache[name] = value
+  end
+  return value
 end
 
 -- The most attractive entity within SEARCH_RADIUS: priority bonus minus 2 per tile of distance.
