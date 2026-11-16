@@ -1,4 +1,4 @@
--- Final data: fire markers and the mod-data read by control (fire classes, lightning targets).
+-- Final data: fire creation events and the mod-data read by control (fire classes, lightning targets).
 -- Runs after the mods that define fires late (optional dependencies in info.json).
 
 -- Fires rain does not put out: lit by lightning, or burning flammable fluids of paranoidal-flammable-fluids
@@ -10,24 +10,26 @@ local EXEMPT = {
   ["flo-tank-fire"] = true,
 }
 
-local marker_effect = {
+data:extend({ { type = "custom-event", name = "on_prain_fire_created" } })
+local fire_effect = {
   type = "direct",
   action_delivery = {
     type = "instant",
     source_effects = {
-      type = "create-entity",
-      entity_name = "prain-fire-marker",
-      ignore_collision_condition = true,
-      trigger_created_entity = true,
+      type = "script",
+      effect_id = "prain-fire-created",
+      custom_event = "on_prain_fire_created",
     },
   },
 }
 
-local function has_marker(effect)
+local function has_fire_hook(effect)
   if type(effect) ~= "table" then return false end
+  if effect.type == "script" and effect.effect_id == "prain-fire-created" then return true end
+  -- Retain a hook explicitly supplied by another mod; do not register the same flame twice.
   if effect.type == "create-entity" and effect.entity_name == "prain-fire-marker" then return true end
   for _, value in pairs(effect) do
-    if type(value) == "table" and has_marker(value) then return true end
+    if type(value) == "table" and has_fire_hook(value) then return true end
   end
   return false
 end
@@ -49,8 +51,8 @@ for name, fire in pairs(data.raw.fire or {}) do
   else
     local damage = fire.damage_per_tick
     if (damage and damage.type == "acid") or string.find(name, "acid", 1, true) then acid[#acid + 1] = name end
-    if not has_marker(fire.created_effect) then
-      fire.created_effect = append_effect(fire.created_effect, marker_effect)
+    if not has_fire_hook(fire.created_effect) then
+      fire.created_effect = append_effect(fire.created_effect, fire_effect)
     end
   end
 end

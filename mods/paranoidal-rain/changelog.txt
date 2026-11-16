@@ -24,6 +24,11 @@ Date: 2026-11-02
     - Removed: the weather statistics window and its hidden force (a desync risk on save load in multiplayer, and force switching of players), the debug overlay, Jetpack and Space Age planet support, the test hooks. Counters are shown by /prain status.
     - A radar struck by lightning is disabled by script for 20 s instead of being moved to the neutral force.
   Optimizations:
+    - Fire creation uses a direct custom event instead of creating and deleting a temporary marker for every flame, including dry weather; legacy marker prototypes and handling are retained
+    - Quench sizing avoids position reads; waves read each position once and reuse their sorted array without changing outer-first order, steam, random draws or deadlines
+    - Player/sound listener groups are cached between lifecycle events rather than rebuilt every tick; sound source validity is still checked every tick
+    - Rain particle names are precomputed, multiplayer overlap checks exclude nonintersecting views, and exhausted surfaces skip view preparation; particle counts, positions and random draws are preserved
+    - Lightning target bonuses are cached per prototype without changing search ranges, target scoring, chains or effects
     - A shared drop limit per tick (prain-max-drops-per-tick, 300): far zoom and many players thin the rain instead of slowing the game.
     - Only own settings and surface events rebuild the state; chunk counts are not recounted for every new surface.
     - The fire/acid damage handler is registered only while it rains.

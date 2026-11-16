@@ -130,11 +130,7 @@ function M.sync(index, surface, players, volume)
     sources = {}
     s.sources[index] = sources
   end
-  local listeners = {}
-  for i = 1, #players do
-    local player = players[i]
-    listeners[player.force_index] = player
-  end
+  local listeners = R.players.by_force(index)
   for force_index, source in pairs(sources) do
     -- a force merge can move a speaker to another force
     if not listeners[force_index] or not source.entity.valid or source.entity.force_index ~= force_index then

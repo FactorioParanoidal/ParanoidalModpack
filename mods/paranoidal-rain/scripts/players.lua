@@ -1,4 +1,4 @@
--- Connected players grouped by surface, rebuilt at most once per tick (Dynamic Rain player-cache), and the
+-- Connected players grouped by surface/force, invalidated by player and force lifecycle events, and the
 -- per-player settings prain-show-rain and prain-screen-flash mirrored into storage.hide / storage.no_flash (reading
 -- player settings every tick is costly).
 local R = require("scripts.registry")
@@ -7,27 +7,33 @@ local M = {}
 R.players = M
 
 local EMPTY = {}
-local cached_tick, cached
+local cached, cached_forces
 
 function M.invalidate()
-  cached_tick, cached = nil, nil
+  cached, cached_forces = nil, nil
 end
 
 function M.by_surface()
-  if cached_tick ~= game.tick or not cached then
-    local result = {}
+  if not cached then
+    local result, forces = {}, {}
     for _, player in pairs(game.connected_players) do
       local index = player.surface_index
       local list = result[index]
       if not list then
         list = {}
-        result[index] = list
+        result[index], forces[index] = list, {}
       end
       list[#list + 1] = player
+      forces[index][player.force_index] = player
     end
-    cached, cached_tick = result, game.tick
+    cached, cached_forces = result, forces
   end
   return cached
+end
+
+function M.by_force(index)
+  M.by_surface()
+  return cached_forces[index] or EMPTY
 end
 
 function M.on_surface(index)

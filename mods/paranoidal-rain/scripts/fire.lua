@@ -1,5 +1,5 @@
 -- Rain puts ordinary fires out slowly, the fire shrinking from its edges.
--- Every fire prototype creates a marker (data-final-fixes.lua); while it rains on the surface the new flame is
+-- Fire creation raises a custom event (data-final-fixes.lua); while it rains on the surface the new flame is
 -- registered, and when the rain starts all flames of the surface are registered once.
 --   * Flames are grouped in 8x8-tile cells. 5 s after the first flame of a cell the fire is sized up: a big fire
 --     (20+ flames) lasts prain-fire-quench-seconds (30 s), a smaller one proportionally less, at least 10 s. It goes out
@@ -111,20 +111,25 @@ R.jobs.handler("quench", function(job)
     return
   end
 
-  local fires, n, sx, sy = {}, 0, 0, 0
+  -- The sizing pass only needs a count. Waves read each position once and reuse their sorted array.
+  local fires = cell.waves and {} or nil
+  local positions = cell.waves and {} or nil
+  local n, sx, sy = 0, 0, 0
   for _, fire in ipairs(cell.fires) do
     if fire.valid then
       n = n + 1
-      fires[n] = fire
-      local p = fire.position
-      sx, sy = sx + p.x, sy + p.y
+      if fires then
+        fires[n] = fire
+        local p = fire.position
+        sx, sy = sx + p.x, sy + p.y
+        positions[n * 2 - 1], positions[n * 2] = p.x, p.y
+      end
     end
   end
   if n == 0 then
     drop_cell(index, key)
     return
   end
-  local centre = { x = sx / n, y = sy / n }
 
   if not cell.waves then
     -- size the fire up: total time from the first flame, number of waves and the pause between them
@@ -134,12 +139,12 @@ R.jobs.handler("quench", function(job)
     R.jobs.after(cell.interval, job)
     return
   end
+  local centre = { x = sx / n, y = sy / n }
   local k = ceil(n / cell.waves)
-  -- outer flames first
+  -- outer flames first; keep the same sort and tie behavior as existing saves.
   local d2 = {}
   for i = 1, n do
-    local p = fires[i].position
-    local dx, dy = p.x - centre.x, p.y - centre.y
+    local dx, dy = positions[i * 2 - 1] - centre.x, positions[i * 2] - centre.y
     d2[fires[i]] = dx * dx + dy * dy
   end
   table.sort(fires, function(a, b) return d2[a] > d2[b] end)
@@ -156,14 +161,15 @@ R.jobs.handler("quench", function(job)
   R.lightning.stat("fires_quenched", k)
   surface.play_sound { path = "prain-hiss", position = centre, volume_modifier = 0.45 }
 
-  local left = {}
-  for i = k + 1, n do left[#left + 1] = fires[i] end
-  if #left == 0 then
+  local remaining = n - k
+  if remaining == 0 then
     steam(surface, centre, min(MAX_STEAM, 2 + floor(cell.total / 3)), "prain-steam")
     drop_cell(index, key)
     return
   end
-  cell.fires = left
+  for i = 1, remaining do fires[i] = fires[i + k] end
+  for i = remaining + 1, n do fires[i] = nil end
+  cell.fires = fires
   cell.waves = max(1, cell.waves - 1) -- flames that joined late go out with the last wave
   R.jobs.after(cell.interval, { kind = "quench", surface_index = index, key = key })
 end)
@@ -179,12 +185,28 @@ function M.forget(index)
   if storage.fire then storage.fire.cells[index] = nil end
 end
 
--- on_trigger_created_entity: the marker of a new flame.
+-- Direct trigger: no temporary entity for every new flame (including dry weather).
+function M.on_created(event)
+  local index = event.surface_index
+  if not storage.cfg.enabled or not R.weather.is_raining(index) or not quench_enabled(index) then return end
+  local fire = event.source_entity
+  if not (fire and fire.valid and fire.type == "fire") then fire = event.target_entity end
+  if not (fire and fire.valid and fire.type == "fire") then
+    local surface = R.surfaces.get(index)
+    local position = event.source_position or event.target_position
+    if surface and position then
+      fire = surface.find_entities_filtered { position = position, radius = 0.5, type = "fire", limit = 1 }[1]
+    end
+  end
+  M.register(fire)
+end
+
+-- Compatibility with fire prototypes that still explicitly create the old marker.
 function M.on_marker(event)
   local marker = event.entity
   if not (marker and marker.valid) or marker.name ~= "prain-fire-marker" then return end
   local fire = event.source
-  if storage.cfg.enabled and R.weather.is_raining(marker.surface_index) then
+  if storage.cfg.enabled and R.weather.is_raining(marker.surface_index) and quench_enabled(marker.surface_index) then
     if not (fire and fire.valid and fire.type == "fire") then
       -- not confirmed for 2.0 that source is the fire (Dynamic Rain relied on it in 2.1): look at the marker spot
       fire = marker.surface.find_entities_filtered { position = marker.position, radius = 0.5, type = "fire",
