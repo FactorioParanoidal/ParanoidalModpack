@@ -1,6 +1,9 @@
 ---------------------------------------------------------------------------------------------------
 Version: 9.0.0
 Date: 2026-11-01
+  Locale:
+    - Added selective inline images and restrained colour emphasis to Russian mod-setting tooltips; wording, setting values and mechanics are unchanged.
+    - Added selective inline images to Russian mod-setting names; existing tooltip formatting, wording, saved values and mechanics are preserved.
   Major Features:
     - One mod instead of Flammable_Oils_QUICKFIX 0.2.22 (Paranoidal fork of Flammable Oils) and the fire safety turret script of zzzparanoidal (controls/fire-safety.lua). Setting, entity, achievement, locale key and remote interface "flammable_oils" names are unchanged; the turret prototypes are still created from zzzparanoidal/data-final-fixes.lua at the same place (before the quality recycling rebuild), from this mod's prototypes/fire-safety-turret.lua.
   Features:

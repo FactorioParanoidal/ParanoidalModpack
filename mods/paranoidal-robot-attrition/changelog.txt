@@ -1,6 +1,7 @@
 ---------------------------------------------------------------------------------------------------
 Version: 9.0.0
   Locale:
+    - Added selective inline images to Russian mod-setting names; existing tooltip formatting, wording, saved values and mechanics are preserved.
     - Russian hardcoded player-facing text: 4 UI, chat, command-help and error-message literals; technical identifiers, format parameters and gameplay logic are unchanged.
 Date: 2026-10-30
   Major Features:

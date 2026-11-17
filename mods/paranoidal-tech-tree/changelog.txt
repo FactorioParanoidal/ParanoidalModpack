@@ -1,5 +1,7 @@
 ---------------------------------------------------------------------------------------------------
 Version: 0.3.0
+  Locale:
+    - Added selective inline images to Russian mod-setting names; existing tooltip formatting, wording, saved values and mechanics are preserved.
   Major Features:
     - Window rebuilt in the vanilla window style: a titlebar to drag the window by (the position is remembered), a top pane with the toolbar, filters, queue and goal, then three panes - eras, technologies, the selected technology - with even 12 px gaps. The window takes 85% of the screen by default instead of the whole screen.
     - Settings window (button on the toolbar), remembered per player and kept over mod updates: window size (70, 85, 100% of the screen), card size, cards or list, which technology is selected on open, show researched inside eras, show disabled technologies, show technologies unlocked by an action, put the cursor into the search on open, mark new technologies, the game's detailed tooltip on icons, enemy evolution of the path, goal messages in chat; "Restore defaults".
