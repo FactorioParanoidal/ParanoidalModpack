@@ -2,6 +2,7 @@
 Version: 9.0.0
 Date: 2026.10.25
   Changes:
+    - Quick reaction squads no longer announce their deployment with a custom alert, regardless of the saved alert setting. Response behaviour and squad problem alerts are unchanged.
     - Rank droids are hidden prototypes: the ammo damage and shooting speed research tooltips list only the base droids; the bonuses of the ammo categories still apply to every rank.
   Info:
     - Renamed to robotarmy-reforged (title Robot Army Reforged); incompatible with the original robotarmy mod (same prototype names).

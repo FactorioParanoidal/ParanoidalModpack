@@ -4,6 +4,15 @@ local state = require("scripts.state")
 local M = {}
 local MAX = 500
 local ICON = { type = "virtual", name = "signal-lightning" }
+local JOURNAL_ONLY = {
+  ["ppd-journal.zone-in"] = true,
+  ["ppd-journal.zone-out"] = true,
+  ["ppd-journal.tap"] = true,
+  ["ppd-journal.restored"] = true,
+  ["ppd-journal.off-manual"] = true,
+  ["ppd-journal.on-manual"] = true,
+  ["ppd-journal.boost"] = true,
+}
 
 -- level: "alarm" (alerts for "all" and "alarms"), "info" (only for "all")
 -- kind: "zone", "overload", "auto", "destroy", "wire"
@@ -14,6 +23,8 @@ function M.add(force_index, kind, level, msg, m, entity)
   local pos = ent and ent.valid and ent.position or nil
   f.journal[(f.jn - 1) % MAX + 1] = { t = game.tick, k = kind, l = level, msg = msg, u = m and m.unit or nil,
     pos = pos, s = ent and ent.valid and ent.surface.index or nil }
+  -- Routine switching stays in the journal, not in alerts or chat.
+  if JOURNAL_ONLY[msg[1]] then return end
   local setting = m and m.msg or settings.global["ppd-default-messages"].value
   if setting == "none" or (setting == "alarms" and level ~= "alarm") then return end
   local force = game.forces[force_index]
