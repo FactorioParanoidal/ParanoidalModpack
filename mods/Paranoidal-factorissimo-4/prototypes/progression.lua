@@ -42,14 +42,20 @@ local function tip(name, order, trigger, extra)
 end
 
 local unlocked = {type = "unlock-recipe", recipe = "factory-1"}
+-- Paranoidal: language-neutral schemes (graphics/tips, drawn by the workspace tool tools/tips-schemes) and the
+-- port animation (prototypes/tips-simulations.lua).
+local images = "__Paranoidal-factorissimo-4__/graphics/tips/"
+local simulations = require("prototypes.tips-simulations")
 
 data:extend {
     {type = "tips-and-tricks-item-category", name = category, order = "z-factorissimo"},
-    tip("introduction", "a", unlocked, {indent = 0, is_title = true, tag = "[item=factory-1]"}),
-    tip("connections", "b", unlocked),
-    tip("connection-research", "c", {type = "research", technology = "factory-connection-type-fluid"}),
-    tip("connection-settings", "d", {type = "research", technology = "factory-connection-type-fluid"}),
-    tip("recursion", "e", {type = "research", technology = "factory-recursion-t1"}),
+    tip("introduction", "a", unlocked, {indent = 0, is_title = true, tag = "[item=factory-1]", image = images .. "introduction.png"}),
+    tip("connections", "b", unlocked, {simulation = simulations.ports}),
+    tip("connection-research", "c", {type = "research", technology = "factory-connection-type-fluid"},
+        {image = images .. "connection-types.png"}),
+    tip("connection-settings", "d", {type = "research", technology = "factory-connection-type-fluid"},
+        {image = images .. "indicators.png"}),
+    tip("recursion", "e", {type = "research", technology = "factory-recursion-t1"}, {image = images .. "recursion.png"}),
     tip("dispatch", "f", unlocked, {tag = "[img=factorissimo-dispatch-button]"}),
-    tip("hull", "g", {type = "research", technology = "factory-hull-1"}),
+    tip("hull", "g", {type = "research", technology = "factory-hull-1"}, {image = images .. "hull.png"}),
 }
