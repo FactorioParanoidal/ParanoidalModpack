@@ -53,9 +53,11 @@ data:extend({
   },
 })
 
--- tips and tricks
-local function tip(name, order, title)
+-- tips and tricks (animations: prototypes/tips-simulations.lua)
+local simulations = require("prototypes.tips-simulations")
+local function tip(name, order, title, simulation)
   return {
+    simulation = simulation,
     type = "tips-and-tricks-item",
     name = "ppd-" .. name,
     category = "ppd",
@@ -69,9 +71,9 @@ local function tip(name, order, title)
 end
 data:extend({
   { type = "tips-and-tricks-item-category", name = "ppd", order = "c-[electric-network]-z" },
-  tip("districts", "a", true),
-  tip("green-zone", "b"),
-  tip("matching", "c"),
-  tip("smoothing", "d"),
-  tip("priorities", "e"),
+  tip("districts", "a", true, simulations.districts),
+  tip("green-zone", "b", nil, simulations.green_zone),
+  tip("matching", "c", nil, simulations.matching),
+  tip("smoothing", "d", nil, simulations.smoothing),
+  tip("priorities", "e", nil, simulations.priorities),
 })
