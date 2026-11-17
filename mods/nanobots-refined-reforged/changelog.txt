@@ -1,6 +1,7 @@
 ---------------------------------------------------------------------------------------------------
 Version: 9.0.7
   Locale:
+    - Internal event, pending-action, queue and inventory errors are logged and shown in chat only with paranoidal-debug-chat enabled. Action results and existing DEBUG traces are unchanged.
     - Russian hardcoded player-facing text: 104 UI, chat, command-help and error-message literals; technical identifiers, format parameters and gameplay logic are unchanged.
 Date: 2026-10-21
   Changes:

@@ -1,4 +1,5 @@
 require "gui"
+local paranoidal_debug = require("paranoidal-debug-chat")
 
 local function onGuiClick(event)
 	if event.element.name == "close" then
@@ -17,7 +18,7 @@ local function onResearchFinished()
 end
 
 local function pprint(msg)
-	game.print(tostring(msg))
+	paranoidal_debug.print(tostring(msg))
 end
 
 local function rechart(msg)
@@ -47,15 +48,15 @@ local function modChange(event)
 
 	destroyOldMainGuiButton()
 	if previousOldEMCModVersion == nil then 
-		rechart("No Enhanced Map Colors previously installed, calling rechart for player ")
+		rechart("Enhanced Map Colors установлен впервые: обновление цветов карты")
 		return
 	end -- no previous mod
 	if currentNewEMCModVersion == nil then
-		rechart("Enhanced Map Colors removed, calling rechart for player ")
+		rechart("Enhanced Map Colors удалён: обновление цветов карты")
 		return
 	end --mod removed ¯\_(ツ)_/¯
 	if tostring(tostring(previousOldEMCModVersion) <= tostring(currentNewEMCModVersion)) then
-		rechart("Old Enhanced Map Colors version previously installed, calling rechart for player ")
+		rechart("Enhanced Map Colors обновлён: обновление цветов карты")
 		return
 	end	-- mod was updated, rechart map
 end

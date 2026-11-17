@@ -2,6 +2,7 @@
 Version: 2.3.3
 Date: 2026-01-03
   Changes:
+    - Installation and update recommendations are logged and shown in chat only with paranoidal-debug-chat enabled, still respecting the existing notification preference and recipient. Reskin behaviour is unchanged.
     - Paranoidal packaging: moved the hr_version conversion script out of the distributed mod into the local development workspace.
   Graphics:
     - Paranoidal: stores the four canonical iron/wood ordinary and underground pipe icons previously embedded in zzzparanoidal's menu artwork. The approved PNGs are copied byte-for-byte; no additional compression or optimization was performed.

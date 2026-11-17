@@ -1,5 +1,6 @@
 --By Mami
 local manager_gui = require("gui.main")
+local paranoidal_debug = require("paranoidal-debug-chat")
 local debug_revision = require("info")
 local analytics = require("scripts.analytics")
 local check_debug_revision
@@ -584,16 +585,15 @@ function sanitize_economy_names(config_change_data)
 				local type_migrations = migrations[entry.type]
 				if not type_migrations then
 					local msg = string.format(
-						"[Cybersyn] Economy sanitization: no migration data for prototype type '%s' (name: '%s')",
+						"[Cybersyn] Проверка доставок после обновления: нет данных переноса для типа прототипа '%s' (имя: '%s')",
 						entry.type, entry.name
 					)
-					log(msg)
-					game.print(msg)
+					paranoidal_debug.print(msg)
 				end
 				local new_name = type_migrations and type_migrations[entry.name]
 				local new_quality = entry.quality and migrations.quality[entry.quality]
 				if new_name == "" or new_quality == "" then
-					local msg = string.format("%s delivery aborted: %s/%s no longer exists", train_richtext(train.entity), entry.name, entry.quality or "normal")
+					local msg = string.format("%s: доставка отменена — груз %s (качество: %s) больше не существует", train_richtext(train.entity), entry.name, entry.quality or "normal")
 					log(msg)
 					game.print(msg)
 					remove_train(map_data, train_id, train)

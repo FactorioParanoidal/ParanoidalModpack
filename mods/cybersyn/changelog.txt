@@ -2,6 +2,7 @@
 Version: 2.2.2
 Date: 2026-10-29
   Changes:
+    - Missing internal combinator data and economy migration diagnostics are logged and shown in chat only with paranoidal-debug-chat enabled. Delivery-cancellation text is Russian; delivery handling is unchanged.
     - Paranoidal: updated from the local fork of 2.0.53 to upstream 2.2.2 (mod portal ZIP, SHA-256 d9479d1e2fc1fc38...). The fork's patches for the Factorio 2.1 API (pump rail targets, fluid wagon capacity, recipe categories) and its merged on_gui_closed handler are dropped: upstream 2.1.2-2.2.0 makes the same changes.
     - Train and station alerts and their sound are sent to the force once instead of to each of its players, so players who are offline no longer collect them
   Bugfixes:

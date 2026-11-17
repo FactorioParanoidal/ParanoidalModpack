@@ -1,4 +1,5 @@
 local types = require("scripts.types")
+local paranoidal_debug = require("paranoidal-debug-chat")
 
 local util = {}
 
@@ -225,7 +226,10 @@ function util.create_request_proxy(entity, module_config, clear)
 
     local inventory_define = util.inventory_defines_map[entity.type]
     if not inventory_define then
-        game.print("ОШИБКА [ModuleInserterEx]: неизвестный тип инвентаря: " .. entity.type)
+        paranoidal_debug.print("Ошибка ModuleInserterEx: неизвестный тип инвентаря: " .. entity.type)
+        if not paranoidal_debug.enabled() then
+            entity.force.print({"", "Не удалось настроить модули: эта постройка пока не поддерживается — ", entity.localised_name, "."})
+        end
         return
     end
 

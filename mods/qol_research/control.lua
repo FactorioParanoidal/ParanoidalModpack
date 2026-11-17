@@ -9,6 +9,7 @@
 ]=]
 
 local categories = require('categories')
+local paranoidal_debug = require('paranoidal-debug-chat')
 local config = require('config_control')
 local technology_formats = require('defines.technology_name_formats')
 local setting_formats = require('defines.setting_name_formats')
@@ -251,8 +252,8 @@ script.on_configuration_changed(function (changes)
             version_major = tonumber(version_major)
 
             if version_major < 3 then
-                game.print(('[qol] Выполнено обновление до версии 3'))
-                game.print('[qol] Посетите https://qol-research.aidiakapi.com/, если хотите создать собственную конфигурацию!')
+                paranoidal_debug.print('[qol] Выполнено обновление до версии 3')
+                paranoidal_debug.print('[qol] Редактор конфигурации: https://qol-research.aidiakapi.com/')
             end
         end
     end

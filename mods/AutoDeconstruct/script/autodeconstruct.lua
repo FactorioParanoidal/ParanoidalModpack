@@ -96,7 +96,7 @@ function autodeconstruct.init_globals()
   end
   storage.max_radius = math.ceil(new_max_radius*2)+1
   log("storage.max_radius updated to " .. tostring(storage.max_radius))
-  if storage.debug then msg_all({"autodeconstruct-debug", "storage.max_radius updated to " .. storage.max_radius}) end
+  if storage.debug then msg_all({"autodeconstruct-debug", "Максимальный радиус обновлён: " .. storage.max_radius}) end
 
   -- Find the largest drop-distance in the game to search for targeting entities
   local new_target_radius = 1
@@ -119,7 +119,7 @@ function autodeconstruct.init_globals()
   end
   storage.target_radius = math.ceil(new_target_radius*2)+1
   log("storage.target_radius updated to " .. tostring(storage.target_radius))
-  if storage.debug then msg_all({"autodeconstruct-debug", "storage.target_radius updated to " .. storage.target_radius}) end
+  if storage.debug then msg_all({"autodeconstruct-debug", "Радиус поиска обновлён: " .. storage.target_radius}) end
 
   pipeutil.cache_pipe_categories()
   
@@ -149,12 +149,12 @@ local function find_target(entity)
       end
     end
   elseif entity.drop_target then  -- works when target is a chest
-    if storage.debug then msg_all({"autodeconstruct-debug", "found " .. entity.drop_target.name .. " at " .. util.positiontostr(entity.drop_target.position)}) end
+    if storage.debug then msg_all({"autodeconstruct-debug", "Найдено: " .. entity.drop_target.name .. "; координаты: " .. util.positiontostr(entity.drop_target.position)}) end
     return entity.drop_target
   else
     local entities = entity.surface.find_entities_filtered{position=entity.drop_position, limit=1}  -- works when target is a belt, or when entity is a ghost or hasn't started dropping in chest yet
     if #entities > 0 then
-      if storage.debug then msg_all({"autodeconstruct-debug", "found " .. entities[1].name .. " at " .. util.positiontostr(entities[1].position)}) end
+      if storage.debug then msg_all({"autodeconstruct-debug", "Найдено: " .. entities[1].name .. "; координаты: " .. util.positiontostr(entities[1].position)}) end
       return entities[1]
     end
   end
@@ -189,7 +189,7 @@ local function find_targeting(entity, types)
     end
   end
 
-  if storage.debug then msg_all({"autodeconstruct-debug", "found " .. #targeting .. " targeting"}) end
+  if storage.debug then msg_all({"autodeconstruct-debug", "Объектов, направленных к цели: " .. #targeting}) end
 
   return targeting
 end
@@ -203,7 +203,7 @@ local function find_extracting(entity)
     end
   end
 
-  if storage.debug then msg_all({"autodeconstruct-debug", "found " .. #extracting .. " extracting"}) end
+  if storage.debug then msg_all({"autodeconstruct-debug", "Объектов, забирающих предметы: " .. #extracting}) end
 
   return extracting
 end
@@ -239,13 +239,13 @@ function autodeconstruct.on_resource_depleted(event)
   local resource = event.entity
   if storage.ore_blacklist[resource.name] or resource.prototype.infinite_resource then
     if storage.debug then
-      msg_all({"autodeconstruct-debug", "tick=".. tostring(game.tick) .. ", amount=" .. resource.amount .. ", resource_category=" .. resource.prototype.resource_category .. ", infinite_resource=" .. tostring(resource.prototype.infinite_resource) .. ", ore blacklist=" .. tostring(storage.ore_blacklist[resource.name])})
+      msg_all({"autodeconstruct-debug", "Тик: ".. tostring(game.tick) .. ", количество: " .. resource.amount .. ", категория ресурса: " .. resource.prototype.resource_category .. ", бесконечный ресурс: " .. tostring(resource.prototype.infinite_resource) .. ", ресурс в исключениях: " .. tostring(storage.ore_blacklist[resource.name])})
     end
     return
   end
   local drills = resource.surface.find_entities_filtered{area=math2d.bounding_box.create_from_centre(resource.position, storage.max_radius), type='mining-drill'}
   
-  if storage.debug then msg_all({"autodeconstruct-debug", "tick=".. tostring(game.tick) .. ", found " .. #drills  .. " drills"}) end
+  if storage.debug then msg_all({"autodeconstruct-debug", "Тик: ".. tostring(game.tick) .. ", найдено буров: " .. #drills}) end
 
   for _, drill in pairs(drills) do
     check_drill(drill)
@@ -255,7 +255,7 @@ end
 function autodeconstruct.on_cancelled_deconstruction(event)
   if event.player_index ~= nil then return end  -- Don't override player commands to cancel deconstruction
 
-  if storage.debug then msg_all({"autodeconstruct-debug", util.positiontostr(event.entity.position) .. " deconstruction timed out, checking again"}) end
+  if storage.debug then msg_all({"autodeconstruct-debug", util.positiontostr(event.entity.position) .. " — время ожидания сноса истекло, повторная проверка"}) end
   -- If another mod cancelled deconstruction of a miner, check this miner again
   check_drill(event.entity)
 end
@@ -288,9 +288,9 @@ local function deconstruct_beacons(drill)
         if beacon.order_deconstruction(beacon.force) then
           deconstruct_tiles(beacon)
           if beacon and beacon.valid then
-            debug_message_with_position(beacon, "marked for deconstruction")
+            debug_message_with_position(beacon, "помечено для сноса")
           else
-            debug_message_with_position(ent_dat, "instantly deconstructed")
+            debug_message_with_position(ent_dat, "снесено немедленно")
           end
         end
       end
@@ -308,18 +308,18 @@ local function check_is_belt_deconstructable(target, drill, deconstruct_wired)
     local targeting = find_targeting(target, {'mining-drill', 'inserter', 'assembling-machine', 'furnace'})
     
     if #targeting == 0 then
-      debug_message_with_position(target, "checked "..tostring(target.unit_number).." for targeting entities, found "..tostring(#targeting)..". Not targeted by anything.")
+      debug_message_with_position(target, "Проверена цель "..tostring(target.unit_number).."; направленных к ней объектов: "..tostring(#targeting)..". Действующих связей нет.")
       return true
     else
     
       for _,targeter in pairs(targeting) do
         if targeter ~= drill and not targeter.to_be_deconstructed() then
-          debug_message_with_position(target, "checked "..tostring(target.unit_number).." for targeting entities, found "..tostring(#targeting)..". At least one is new, so belt is targeted.")
+          debug_message_with_position(target, "Проверена цель "..tostring(target.unit_number).."; направленных к ней объектов: "..tostring(#targeting)..". Есть новая связь: конвейер используется.")
           return false  -- targeted by a different drill or inserter that is not marked for deconstruction, so it is in use
         end
       end
       
-      debug_message_with_position(target, "checked "..tostring(target.unit_number).." for targeting entities, but the only one is the OLD miner.")
+      debug_message_with_position(target, "Проверена цель "..tostring(target.unit_number)..": к ней направлен только прежний бур.")
       return true
     end
   else
@@ -412,7 +412,7 @@ local function deconstruct_belts(drill)
       if sideload_safe then
         table.insert(upstream_belts_to_deconstruct, next_start_belt)
       else
-        debug_message_with_position(next_start_belt, "NOT SIDELOAD SAFE")
+        debug_message_with_position(next_start_belt, "Боковая загрузка небезопасна")
       end
       
       -- 3b. Follow the tree upstream, make a list of all the belts we travel and stop if we find another dropping entity
@@ -539,12 +539,12 @@ local function deconstruct_target(drill)
           if target.order_deconstruction(target.force) then
             deconstruct_tiles(target)
             if target and target.valid then
-              debug_message_with_position(target, "marked for deconstruction")
+              debug_message_with_position(target, "помечено для сноса")
             else
-              debug_message_with_position(ent_dat, "instantly deconstructed")
+              debug_message_with_position(ent_dat, "снесено немедленно")
             end
           else
-            msg_all({"autodeconstruct-err-specific", util.positiontostr(ent_dat.position) .. " failed to order deconstruction on target " .. ent_dat.name})
+            msg_all({"autodeconstruct-err-specific", util.positiontostr(ent_dat.position) .. " — не удалось пометить цель для сноса: " .. ent_dat.name})
           end
         end
       end
@@ -555,14 +555,14 @@ end
 
 local function order_deconstruction(drill)
   if drill.to_be_deconstructed(drill.force) then
-    debug_message_with_position(drill, "already marked, skipping")
+    debug_message_with_position(drill, "уже помечено для сноса, пропуск")
     return
   end
   
   local surface_name = drill.surface.name
   for _,pfx in pairs(blacklist_surface_prefixes) do
     if string.match(surface_name, pfx) then
-      debug_message_with_position(drill, "is on blacklisted surface "..surface_name..", skipping")
+      debug_message_with_position(drill, "поверхность в исключениях: "..surface_name..", пропуск")
       return
     end
   end
@@ -574,7 +574,7 @@ local function order_deconstruction(drill)
   if drill.fluids_count > 0 then -- Factorio 2.1: LuaEntity::fluidbox removed
     has_fluid = true
     if not settings.global['autodeconstruct-remove-fluid-drills'].value then
-      debug_message_with_position(drill, "has a fluidbox and fluid deconstruction is not enabled, skipping")
+      debug_message_with_position(drill, "содержит жидкость, снос таких буров выключен, пропуск")
       return
     end
     -- Select the pipe to use for replacements, based on connection categories, collision masks, and available logistics inventory
@@ -583,7 +583,7 @@ local function order_deconstruction(drill)
     pipeType = pipeutil.choose_pipe(drill, pipesToBuild)
     
     if #pipesToBuild > 0 and not pipeType then
-      debug_message_with_position(drill, "requires pipes and no pipe type is given, skipping")
+      debug_message_with_position(drill, "требуются трубы, но их тип не задан, пропуск")
       return
     end
   end
@@ -592,28 +592,28 @@ local function order_deconstruction(drill)
   
   if not settings.global['autodeconstruct-remove-wired'].value then
     if drill.get_circuit_network(defines.wire_connector_id.circuit_red) or drill.get_circuit_network(defines.wire_connector_id.circuit_green) then
-      debug_message_with_position(drill, "is hooked up to the circuit network and wire deconstruction is not enabled, skipping")
+      debug_message_with_position(drill, "подключено к логической сети, снос таких объектов выключен, пропуск")
       return
     end
   end
 
   if not drill.minable then
-    debug_message_with_position(drill, "is not minable, skipping")
+    debug_message_with_position(drill, "нельзя разобрать, пропуск")
     return
   end
 
   if not drill.prototype.selectable_in_game then
-    debug_message_with_position(drill, "is not selectable in game, skipping")
+    debug_message_with_position(drill, "нельзя выбрать в игре, пропуск")
     return
   end
 
   if drill.has_flag("not-deconstructable") then
-    debug_message_with_position(drill, "is flagged as not-deconstructable, skipping")
+    debug_message_with_position(drill, "снос запрещён, пропуск")
     return
   end
 
   if settings.global['autodeconstruct-preserve-inserter-chains'].value and drill.burner and #find_extracting(drill)>0 then
-    debug_message_with_position(drill, "is part of inserter chain, skipping")
+    debug_message_with_position(drill, "входит в цепочку манипуляторов, пропуск")
     return
   end
 
@@ -635,7 +635,7 @@ local function order_deconstruction(drill)
   
   local pipe_ghosts = {}
   if has_fluid and settings.global['autodeconstruct-build-pipes'].value then
-    debug_message_with_position(drill, "trying to add pipe blueprints")
+    debug_message_with_position(drill, "попытка разместить призраки труб")
     pipe_ghosts = pipeutil.build_pipes(drill, pipeType, pipesToBuild)
   end
   
@@ -646,7 +646,7 @@ local function order_deconstruction(drill)
     end
     
     if drill and drill.valid then
-      debug_message_with_position(drill, "marked for deconstruction")
+      debug_message_with_position(drill, "помечено для сноса")
       -- Check for inserters providing fuel to this miner
       if drill.valid and drill.burner then
         local targeting = find_targeting(drill, {'inserter'})
@@ -656,14 +656,14 @@ local function order_deconstruction(drill)
         end
       end
     else
-      if storage.debug then msg_all({"autodeconstruct-err-specific", util.positiontostr(ent_dat.position) .. " " .. ent_dat.name .. " instantly deconstructed, nothing else done" }) end
+      if storage.debug then msg_all({"autodeconstruct-err-specific", util.positiontostr(ent_dat.position) .. " " .. ent_dat.name .. " — снесено немедленно, дополнительных действий нет" }) end
     end
   else
     -- If deconstruction fails, delete our preemptive pipe ghosts
     for _,g in pairs(pipe_ghosts) do
       g.destroy()
     end
-    msg_all({"autodeconstruct-err-specific", util.positiontostr(drill.position) .. " " .. drill.name .. " failed to order deconstruction" })
+    msg_all({"autodeconstruct-err-specific", util.positiontostr(drill.position) .. " " .. drill.name .. " — не удалось пометить для сноса" })
   end
 end
 
@@ -677,14 +677,14 @@ function autodeconstruct.process_queue()
       if entry.check_drill then
         if not entry.check_drill.valid then
           table.remove(storage.drill_queue, i)
-          debug_message_with_position(entry.check_drill, "invalid check drill removed from queue")
+          debug_message_with_position(entry.check_drill, "недействительный бур удалён из очереди проверки")
           break
         elseif game.tick >= entry.tick then
           if entry.check_drill.status == defines.entity_status.no_minable_resources then
-            if storage.debug then msg_all({"autodeconstruct-debug", util.positiontostr(entry.check_drill.position) .. " found no compatible resources, deconstructing"}) end
+            if storage.debug then msg_all({"autodeconstruct-debug", util.positiontostr(entry.check_drill.position) .. " — подходящих ресурсов нет, снос"}) end
             queue_deconstruction(entry.check_drill)
           else
-            if storage.debug then msg_all({"autodeconstruct-debug", util.positiontostr(entry.check_drill.position) .. " still has resources"}) end
+            if storage.debug then msg_all({"autodeconstruct-debug", util.positiontostr(entry.check_drill.position) .. " — ресурсы ещё есть"}) end
           end
           table.remove(storage.drill_queue, i)
           break

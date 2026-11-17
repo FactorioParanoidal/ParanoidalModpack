@@ -261,7 +261,7 @@ function heavyTactics.preparePincer(map, squads, chunk, tick)
         wave.members[squad.groupNumber] = false
     end
     ai.waves[id] = wave
-    aiBrain.debugPrint(map, "pincer: " .. #squads .. " squads close in on [gps=" .. tx .. "," .. ty .. "," .. map.surface.name .. "]")
+    aiBrain.debugPrint(map, "Охват клещами: отрядов на подходе — " .. #squads .. "; цель [gps=" .. tx .. "," .. ty .. "," .. map.surface.name .. "]")
 end
 
 local function releaseWave(map, ai, wave, tick)
@@ -273,7 +273,7 @@ local function releaseWave(map, ai, wave, tick)
         end
     end
     ai.waves[wave.id] = nil
-    aiBrain.debugPrint(map, "pincer: strike [gps=" .. wave.x .. "," .. wave.y .. "," .. map.surface.name .. "]")
+    aiBrain.debugPrint(map, "Охват клещами: удар [gps=" .. wave.x .. "," .. wave.y .. "," .. map.surface.name .. "]")
 end
 
 -- a pincer squad reached its staging point: hold until every arm is there (or time is up).

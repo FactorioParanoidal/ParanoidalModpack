@@ -15,7 +15,7 @@ local function checkAllowAchievements()
     for _,player in pairs(game.players) do
       if(player.cheat_mode) then
         storage.allowAchievements = false;
-        game.print("Warning, cheat mode detected - achievements disabled for True-Nukes")
+        game.print("Включён режим читов: достижения True Nukes для этого сохранения отключены.")
       end
     end
   end

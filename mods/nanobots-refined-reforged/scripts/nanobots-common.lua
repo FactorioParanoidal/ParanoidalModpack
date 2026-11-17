@@ -3,6 +3,7 @@
 NanobotsCommon = {}
 
 local events = require('scripts/events')
+local paranoidal_debug = require('paranoidal-debug-chat')
 
 -- A prototype box (array or named form) moved to `position`.
 local function offset_area(box, position)
@@ -107,13 +108,13 @@ local function script_event_triggered(event)
     local target = event.target_position
     
     if not source then 
-        game.print("Отладка Nanobots: у события нет исходной сущности")
+        paranoidal_debug.print("Отладка Nanobots: у события нет исходной сущности")
         return
     end
     
     local player = source.player
     if not player then
-        game.print("Отладка Nanobots: у исходной сущности события нет связанного игрока")
+        paranoidal_debug.print("Отладка Nanobots: у исходной сущности события нет связанного игрока")
         return
     end
     
@@ -416,7 +417,7 @@ function has_supplies_for_nanobot_action(entity, action, player)
     end
     
     --there should be no other cases
-    game.print("Недопустимый тип действия нанобота? " .. action)
+    paranoidal_debug.print("Недопустимый тип действия нанобота: " .. action)
     return false
 end
 
@@ -925,17 +926,17 @@ function NanobotActions.clear_ground(ghost, player)
     end
     
     if not target_item then
-        game.print("Ошибка Nanobots: действие clear_ground не нашло предметов, которые можно убрать!")
+        paranoidal_debug.print("Ошибка Nanobots: уборка с земли не нашла подходящих предметов")
         return false
     end
     
     if not target_item.valid then
-        game.print("Ошибка Nanobots: целевой предмет для уборки с земли недействителен!")
+        paranoidal_debug.print("Ошибка Nanobots: целевой предмет для уборки с земли недействителен!")
         return false
     end
     
     if not target_item.minable then
-        game.print("Ошибка Nanobots: целевой предмет для уборки с земли нельзя добыть!")
+        paranoidal_debug.print("Ошибка Nanobots: целевой предмет для уборки с земли нельзя добыть!")
         return false
     end
     
@@ -1136,17 +1137,17 @@ complete_build_action = function(player, target)
     
     local data = remove_pending_action(target)
     if not data then
-        game.print("Ошибка Nanobots: ожидаемое действие постройки не найдено!")
+        paranoidal_debug.print("Ошибка Nanobots: ожидаемое действие постройки не найдено!")
         return false
     end
     
     if not (data.type == "build" or data.type == "build_tile") then
-        game.print("Ошибка Nanobots: ожидаемое действие для снаряда постройки не было постройкой!")
+        paranoidal_debug.print("Ошибка Nanobots: ожидаемое действие для снаряда постройки не было постройкой!")
         return false
     end
     
     if data.player ~= player then
-        game.print("Ошибка Nanobots: ожидаемое действие постройки зарегистрировано за другим игроком!")
+        paranoidal_debug.print("Ошибка Nanobots: ожидаемое действие постройки зарегистрировано за другим игроком!")
         return false
     end
     
@@ -1185,7 +1186,7 @@ complete_build_action = function(player, target)
 
     if not tile_mode then
         if not entity then
-            game.print("Ошибка Nanobots: восстановление прошло успешно, но сущность не появилась?")
+            paranoidal_debug.print("Ошибка Nanobots: восстановление прошло успешно, но сущность не появилась?")
             return
         end
         
@@ -1204,17 +1205,17 @@ complete_deconstruct_action = function(player, target)
     
     local data = remove_pending_action(target)
     if not data then
-        game.print("Ошибка Nanobots: ожидаемое действие демонтажа не найдено!")
+        paranoidal_debug.print("Ошибка Nanobots: ожидаемое действие демонтажа не найдено!")
         return false
     end
     
     if data.type ~= "deconstruct" then
-        game.print("Ошибка Nanobots: ожидаемое действие для снаряда демонтажа не было демонтажем!")
+        paranoidal_debug.print("Ошибка Nanobots: ожидаемое действие для снаряда демонтажа не было демонтажем!")
         return false
     end
     
     if data.player ~= player then
-        game.print("Ошибка Nanobots: ожидаемое действие демонтажа зарегистрировано за другим игроком!")
+        paranoidal_debug.print("Ошибка Nanobots: ожидаемое действие демонтажа зарегистрировано за другим игроком!")
         return false
     end
     
@@ -1252,12 +1253,12 @@ complete_upgrade_action = function(player, target)
     
     local data = remove_pending_action(target)
     if not data then
-        game.print("Ошибка Nanobots: ожидаемое действие улучшения не найдено!")
+        paranoidal_debug.print("Ошибка Nanobots: ожидаемое действие улучшения не найдено!")
         return false
     end
     
     if data.player ~= player then
-        game.print("Ошибка Nanobots: ожидаемое действие улучшения зарегистрировано за другим игроком!")
+        paranoidal_debug.print("Ошибка Nanobots: ожидаемое действие улучшения зарегистрировано за другим игроком!")
         return false
     end
     
@@ -1267,7 +1268,7 @@ complete_upgrade_action = function(player, target)
     end
     
     if data.type ~= "upgrade" then
-        game.print("Ошибка Nanobots: ожидаемое действие для снаряда улучшения не было улучшением!")
+        paranoidal_debug.print("Ошибка Nanobots: ожидаемое действие для снаряда улучшения не было улучшением!")
         return false
     end
     
@@ -1346,7 +1347,7 @@ complete_upgrade_tile_action = function(player, target, data)
     end
     
     if not (data.type == "upgrade_tile") then
-        game.print("Ошибка Nanobots: в методе улучшения плитки передано действие не типа «улучшение плитки»!")
+        paranoidal_debug.print("Ошибка Nanobots: в методе улучшения плитки передано действие не типа «улучшение плитки»!")
         return false
     end
     
@@ -1400,17 +1401,17 @@ complete_pave_action = function(player, target)
     
     local data = remove_pending_action(target)
     if not data then
-        game.print("Ошибка Nanobots: не найдено отложенное действие укладки!")
+        paranoidal_debug.print("Ошибка Nanobots: не найдено отложенное действие укладки!")
         return false
     end
     
     if not (data.type == "pave") then
-        game.print("Ошибка Nanobots: отложенное действие для снаряда укладки не является укладкой!")
+        paranoidal_debug.print("Ошибка Nanobots: отложенное действие для снаряда укладки не является укладкой!")
         return false
     end
     
     if data.player ~= player then
-        game.print("Ошибка Nanobots: отложенное действие укладки зарегистрировано для другого игрока!")
+        paranoidal_debug.print("Ошибка Nanobots: отложенное действие укладки зарегистрировано для другого игрока!")
         return false
     end
     
@@ -1436,12 +1437,12 @@ complete_automatic_action = function(player, target)
     
     local data = remove_pending_action(target)
     if not data then
-        game.print("Ошибка Nanobots: не найдено отложенное автоматическое действие!")
+        paranoidal_debug.print("Ошибка Nanobots: не найдено отложенное автоматическое действие!")
         return false
     end
     
     if data.type ~= "repair" and data.type ~= "destroy_tree" and data.type ~= "destroy_rock" then
-        game.print("Ошибка Nanobots: отложенное действие не относится к автоматическим действиям!")
+        paranoidal_debug.print("Ошибка Nanobots: отложенное действие не относится к автоматическим действиям!")
         return false
     end
 end
@@ -1642,7 +1643,7 @@ transfer_requested_from_player = function(entity, plans, player, at_least_one)
                 if not transferred then
                     if orig_player_stack_count == player_stack.count then
                         --none were transferred
-                        game.print("Ошибка Nanobots: не удалось переместить ни одного предмета из подходящих стеков!")
+                        paranoidal_debug.print("Ошибка Nanobots: не удалось переместить ни одного предмета из подходящих стеков!")
                         return false, plans
                     end
                     --some were transferred, so we can still work with this
@@ -1651,7 +1652,7 @@ transfer_requested_from_player = function(entity, plans, player, at_least_one)
                 --find the amount actually transferred
                 count = orig_player_stack_count - player_stack.count
                 if count < 0 then
-                    game.print("Ошибка Nanobots: перемещено отрицательное количество предметов?")
+                    paranoidal_debug.print("Ошибка Nanobots: перемещено отрицательное количество предметов?")
                     return false, plans
                 end
                 
@@ -1759,7 +1760,7 @@ cheat_insert_all_requests = function(entity, plans)
                     stack.set_stack(new_stack)
                 else
                     --...we have no recourse currently
-                    game.print("Ошибка Nanobots! Не удалось установить стек в cheat_insert_all_requests!")
+                    paranoidal_debug.print("Ошибка Nanobots: не удалось добавить стопку при бесплатном заполнении запросов")
                 end
             else
                 --we assume they're the correct item, or there'd be a removal request as well (which takes priority)
@@ -1814,7 +1815,7 @@ insert_contents_to_player = function(entity, player, at_least_one)
                     if test_stack.count ~= 0 then
                         local count = inv.remove(test_stack)
                         if count ~= test_stack.count then
-                            game.print("Ошибка Nanobots: не удалось удалить все добавленные предметы!")
+                            paranoidal_debug.print("Ошибка Nanobots: не удалось удалить все добавленные предметы!")
                             test_stack.count = count
                             remove_items_from_player(test_stack, player)
                         end
@@ -1872,7 +1873,7 @@ insert_requested_to_player = function(entity, plans, player, at_least_one)
                     
                     if original_stack.count < 0 then
                         --this is logically impossible, but who the fuck knows
-                        game.print("Ошибка Nanobots: удалено больше предметов, чем было!")
+                        paranoidal_debug.print("Ошибка Nanobots: удалено больше предметов, чем было!")
                         return false, plans
                     end 
                     

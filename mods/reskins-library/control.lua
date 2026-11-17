@@ -14,6 +14,10 @@ local _control = require("__reskins-library__.prototypes.functions.control-funct
 
 ---The color to use for message notifications.
 local message_color = "#9cdcfe" -- Light blue
+local paranoidal_debug = require("paranoidal-debug-chat")
+local function notify_player(player, message)
+    paranoidal_debug.print(message, player)
+end
 
 ---
 ---Checks for supported mods for which a reskin mod is missing, and notifies the player if so.
@@ -102,7 +106,7 @@ local function check_for_missing_reskin(player)
 			if notify_mod_name then
 				storage.notify[reskin].status = true
 				if count == 0 then
-					player.print({
+					notify_player(player, {
 						"",
 						"[",
 						{ "reskins-library.reskins-suite-name" },
@@ -114,7 +118,7 @@ local function check_for_missing_reskin(player)
 						},
 					})
 				else
-					player.print({
+					notify_player(player, {
 						"",
 						"[",
 						{ "reskins-library.reskins-suite-name" },
@@ -159,13 +163,13 @@ local function notify(data)
 				if data.mod_changes and data.mod_changes["reskins-library"] and data.mod_changes["reskins-library"].old_version then
 					-- 1.0.4 update
 					if _version.is_older(data.mod_changes["reskins-library"].old_version, "1.0.4") then
-						player.print({ "", "[", { "reskins-library.reskins-suite-name" }, "] ", { "reskins-updates.reskins-lib-1-0-4-update", { "mod-setting-name.reskins-lib-blend-mode" } } })
+						notify_player(player, { "", "[", { "reskins-library.reskins-suite-name" }, "] ", { "reskins-updates.reskins-lib-1-0-4-update", { "mod-setting-name.reskins-lib-blend-mode" } } })
 					end
 
 					-- 1.1.3 update
 					if not _version.is_older(data.mod_changes["reskins-library"].old_version, "1.1.3") then
 						if script.active_mods["reskins-bobs"] and not script.active_mods["reskins-compatibility"] then
-							player.print({
+							notify_player(player, {
 								"",
 								"[",
 								{ "reskins-library.reskins-suite-name" },
@@ -175,7 +179,7 @@ local function notify(data)
 						end
 
 						if script.active_mods["reskins-angels"] and not script.active_mods["reskins-compatibility"] then
-							player.print({
+							notify_player(player, {
 								"",
 								"[",
 								{ "reskins-library.reskins-suite-name" },

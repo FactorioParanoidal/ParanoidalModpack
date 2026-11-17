@@ -1,7 +1,8 @@
 --GUI
+local paranoidal_debug = require("paranoidal-debug-chat")
 
 function spriteCheck(guiLeft, spritePath)
-	game.print(spritePath)
+	paranoidal_debug.print("Спрайт легенды карты: " .. spritePath)
 	if guiLeft.gui.is_valid_sprite_path(spritePath) then
 		return spritePath
 	else

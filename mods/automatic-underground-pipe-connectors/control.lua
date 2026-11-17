@@ -353,9 +353,8 @@ local function on_built_entity(event)
         if inventory then
             inventory.remove({name=pipe_item_name, quality=pipe_quality, count=1})
         else
-            player.print("Бесплатно установлена труба. Такого не должно происходить. Сообщите об ошибке на "
-                .. "странице обсуждения мода Automatic Underground Pipe Connectors или в трекере ошибок GitHub, "
-                .. "приложив сохранение игры.")
+            log("Automatic Underground Pipe Connectors: при платной установке трубы не найден инвентарь игрока")
+            player.print("Не удалось списать трубу из инвентаря. Проверьте запас труб после установки.")
         end
     end
 

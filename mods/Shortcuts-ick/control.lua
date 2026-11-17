@@ -369,7 +369,7 @@ script.on_event(defines.events.on_runtime_mod_setting_changed, function(event)
 			enable_equipment({mode})
 			game.print("Можно отключить настройку, соответствующую " .. mode)
 		else
-			game.print("Что-то пошло не так. Убедитесь, что вы ввели правильное слово. (ERROR X)")
+			game.print("Неизвестный режим. Проверьте название режима в команде.")
 		end
 		settings.global["ick-prepare-uninstall"] = {value = ""}
 	end
@@ -616,7 +616,7 @@ local function tree_killer_setup(player)
 								table.insert(filters, entity.name)
 							end
 						else
-							player.print({"", {"Shortcuts-ick.error-environment", type}, " (ERROR 3)"})
+							player.print("В фильтр сноса помещается не больше 255 типов объектов. Остальные типы не добавлены.")
 							break
 						end
 					end
