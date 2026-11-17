@@ -142,7 +142,7 @@ local function flex_widths(content_width)
 	for t, cols in pairs(COLUMNS) do
 		local fixed = 0
 		for _, c in ipairs(cols) do fixed = fixed + (c.width or 0) end
-		out[t] = content_width - FRAME_BORDER - TABLE_PADDING - (#cols - 1) * TABLE_SPACING - fixed - SCROLLBAR
+		out[t] = math.max(0, content_width - FRAME_BORDER - TABLE_PADDING - (#cols - 1) * TABLE_SPACING - fixed - SCROLLBAR)
 	end
 	return out
 end

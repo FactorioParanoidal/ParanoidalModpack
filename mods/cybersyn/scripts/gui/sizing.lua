@@ -101,7 +101,7 @@ function sizing.compute(res_w, res_h, scale, filter_row, banner)
 	end
 	return {
 		width = width,
-		content_width = width - sizing.OUTER_WIDTH,
+		content_width = math.max(0, width - sizing.OUTER_WIDTH),
 		content_height = content,
 		window_height = sizing.OUTER_HEIGHT + extra + content,
 		rows_by_tab = rows,

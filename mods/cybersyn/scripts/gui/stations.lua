@@ -170,7 +170,7 @@ local function column_widths(cw, problems, hide_wait, show_control)
 		problems_view = problems == true,
 		hide_wait = hide_wait == true,
 		show_control = show_control == true,
-		name = name,
+		name = math.max(0, name),
 		station_status = W.station_status,
 		network = W.network,
 		priority = W.priority,

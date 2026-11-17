@@ -451,10 +451,10 @@ function log_tab.apply_layout(player_data, layout)
 	local rows = layout.rows_by_tab[TAB]
 	local station = math.floor(W.station * math.min(cw, BASE_CONTENT_WIDTH) / BASE_CONTENT_WIDTH)
 	local fixed = W.age + W.dot + W.kind + W.train + station + W.item + W.count + W.print
-	local message = cw - FRAME_BORDER - ROW_PADDING - (CELLS - 1) * SPACING - fixed - SCROLLBAR
+	local message = math.max(0, cw - FRAME_BORDER - ROW_PADDING - (CELLS - 1) * SPACING - fixed - SCROLLBAR)
 	local old = player_data.tabs.log_tab.widths
 	-- Two summary frames side by side with 12 between them, inside the body's 8 px padding.
-	local summary = math.floor((cw - FRAME_BORDER - 16 - 12) / 2)
+	local summary = math.max(0, math.floor((cw - FRAME_BORDER - 16 - 12) / 2))
 	player_data.tabs.log_tab.widths = { station = station, message = message, rows = rows, summary = summary }
 	for _, name in ipairs({ "log_summary_stations_frame", "log_summary_items_frame" }) do
 		local frame = refs[name]
