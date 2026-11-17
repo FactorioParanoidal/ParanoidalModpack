@@ -37,10 +37,9 @@ end
 
 data:extend({
   -- 75 at the centre, 5 at 3.5 tiles.
-  explosion(shared.explosion_entity, {"medium-explosion", "explosion"}, {{0.5, 40}, {1.5, 20}, {2.5, 10}, {3.5, 5}}),
+  explosion(shared.explosion_entity, {"medium-explosion", "explosion"}, shared.crash_rings),
   -- Detonating cargo: 265 at the centre, 10 at 5.5 tiles.
-  explosion(shared.cargo_explosion_entity, {"big-explosion", "medium-explosion", "explosion"},
-    {{1, 150}, {2.5, 75}, {4, 30}, {5.5, 10}}),
+  explosion(shared.cargo_explosion_entity, {"big-explosion", "medium-explosion", "explosion"}, shared.cargo_rings),
 })
 
 ---------------------------------------------------------------------------------------------------
