@@ -1,6 +1,5 @@
 -- Quick reaction force: squads near a destroyed building go there, fight, and return
 -- to where they were, resuming what they did before.
-local config = require("script.config")
 local cache = require("script.settings_cache")
 local util = require("script.util")
 local ai = require("script.ai")
@@ -55,24 +54,13 @@ function qrf.on_entity_died(event)
   local surface_index = entity.surface_index
   local radius2 = radius * radius
   local coarse = (radius + 16) * (radius + 16)
-  local responding, first = 0, nil
   for _, squad in pairs(fd.squads) do
     if squad.size > 0 and squad.surface_index == surface_index
       and util.distance2(squad.pos, position) <= coarse then
       local group = squad.group
-      if group and group.valid and util.distance2(group.position, position) <= radius2
-        and ai.start_qrf(squad, position) then
-        responding = responding + 1
-        first = first or squad
+      if group and group.valid and util.distance2(group.position, position) <= radius2 then
+        ai.start_qrf(squad, position)
       end
-    end
-  end
-
-  if responding > 0 and cache.qrf_alerts then
-    local now = game.tick
-    if not fd.qrf_alert_tick or now >= fd.qrf_alert_tick + config.QRF_ALERT_COOLDOWN then
-      fd.qrf_alert_tick = now
-      util.alert(fd.force, util.leader(first), util.ICON_QRF, {"robotarmy-message.qrf-alert", responding})
     end
   end
 end

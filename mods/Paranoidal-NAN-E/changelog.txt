@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 9.0.0
 Date: 2026-11-16
+  Locale:
+    - Russian offline alert now reads "НЯН-Я выключена: требует ремонта"; repair behaviour is unchanged.
   Features:
     - NAN-E (НЯН-Я), the nanny robot of the Axiom-6, rebuilt from Informatron 0.5.0 (Earendel, MIT) as a companion for Paranoidal.
     - She follows her engineer hovering over buildings (only water stops her, she never blocks a build), catches up, waits outside factories; now and then she checks an idle machine (technical debt), rummages in wrecks and ruin chests or looks round the base.
