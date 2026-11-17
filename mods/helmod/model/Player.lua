@@ -1164,7 +1164,7 @@ function Player.getProductionsCrafting(category, lua_recipe)
     local productions = {}
     local rules_included, rules_excluded = Player.getRules("production-crafting")
     if lua_recipe.name ~= nil and category == "fluid" then
-        for key, lua_entity in pairs(Player.getOffshorePumps()) do
+        for key, lua_entity in pairs(Player.getOffshorePumps(lua_recipe.name)) do
             productions[lua_entity.name] = lua_entity
         end
     else
@@ -1481,20 +1481,36 @@ end
 
 -------------------------------------------------------------------------------
 ---Return list of Offshore-Pump
+---@param fluid_name? string
 ---@return table
 local offshore_pumps_cache = nil
-function Player.getOffshorePumps()
+local offshore_pumps_by_fluid_cache = nil
+function Player.getOffshorePumps(fluid_name)
     ---the prototype query is fixed for the session, callers get their own table
     if offshore_pumps_cache == nil then
         local filters = {}
         table.insert(filters, { filter = "type", type = "offshore-pump", mode = "or" })
         offshore_pumps_cache = {}
+        offshore_pumps_by_fluid_cache = {}
+        local tile_fluids = {}
+        for _, tile in pairs(Player.getTilePrototypes()) do
+            if tile.fluid then tile_fluids[tile.fluid.name] = true end
+        end
         for key, entity in pairs(prototypes.get_entity_filtered(filters)) do
             offshore_pumps_cache[key] = entity
+            local output_fluid = EntityPrototype(entity):getFluidProductionFilter()
+            -- Filtered pumps produce their fixed fluid; unfiltered pumps use the tile's fluid.
+            local fluids = output_fluid and { [output_fluid.name] = true } or tile_fluids
+            for name in pairs(fluids) do
+                if offshore_pumps_by_fluid_cache[name] == nil then offshore_pumps_by_fluid_cache[name] = {} end
+                offshore_pumps_by_fluid_cache[name][key] = entity
+            end
         end
     end
     local offshore_pump = {}
-    for key, entity in pairs(offshore_pumps_cache) do
+    local pumps = offshore_pumps_cache
+    if fluid_name then pumps = offshore_pumps_by_fluid_cache[fluid_name] or {} end
+    for key, entity in pairs(pumps) do
         offshore_pump[key] = entity
     end
     return offshore_pump
@@ -1678,6 +1694,15 @@ local function buildFluidRecipes()
             if tile.hidden then
                 recipes[tile.fluid.name].hidden = true
             end
+        end
+    end
+    for _, pump in pairs(Player.getOffshorePumps()) do
+        local output_fluid = EntityPrototype(pump):getFluidProductionFilter()
+        if output_fluid and not recipes[output_fluid.name] then
+            local recipe = Player.buildFluidRecipe(output_fluid.name, {}, nil)
+            recipe.subgroup = { name = "helmod-fluid", order = "bbbb" }
+            recipe.hidden = pump.hidden or output_fluid.hidden
+            recipes[output_fluid.name] = recipe
         end
     end
     return recipes

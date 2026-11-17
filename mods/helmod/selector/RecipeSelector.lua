@@ -8,6 +8,28 @@ require "selector.AbstractSelector"
 
 RecipeSelector = newclass(AbstractSelector)
 
+local source_index_version = 1
+
+-------------------------------------------------------------------------------
+---Prepare
+---@param event LuaEvent
+function RecipeSelector:prepare(event)
+  -- Source-only patches can change the persisted index without a mod version change.
+  if Cache.getData(self.classname, "source_index_version") ~= source_index_version then
+    Cache.reset(self.classname)
+  end
+  AbstractSelector.prepare(self, event)
+  Cache.setData(self.classname, "source_index_version", source_index_version)
+end
+
+-------------------------------------------------------------------------------
+---On before open
+---@param event LuaEvent
+function RecipeSelector:onBeforeOpen(event)
+  self:prepare(event)
+  AbstractSelector.onBeforeOpen(self, event)
+end
+
 -------------------------------------------------------------------------------
 ---After initialization
 --
@@ -231,7 +253,7 @@ function RecipeSelector:buildPrototypeTooltip(prototype)
     if prototype.type == "boiler" then
       entities = Player.getBoilersForRecipe(recipe_prototype)
     elseif prototype.type == "fluid" then
-      entities = Player.getOffshorePumps()
+      entities = Player.getOffshorePumps(prototype.name)
     end
     if table.size(entities) > 0 then
       table.insert(tooltip, {"", "\n", defines.mod.tags.font.default_bold, defines.mod.tags.color.gold, {"helmod_common.made-in"}, ":", defines.mod.tags.color.close, defines.mod.tags.font.close})

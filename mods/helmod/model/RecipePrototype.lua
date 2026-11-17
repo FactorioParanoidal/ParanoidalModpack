@@ -136,6 +136,8 @@ function RecipePrototype:getAllowedMachines()
         all_productions[self.lua_prototype.name] = self.lua_prototype
     elseif self.lua_type == defines.mod.recipes.boiler.name then
         all_productions = Player.getBoilersForRecipe(self)
+    elseif self.lua_type == defines.mod.recipes.fluid.name then
+        all_productions = Player.getOffshorePumps(self.lua_prototype.name)
     else
         local recipe_ingredient_count = self:getIngredientCount()
         local all_ready = {}
