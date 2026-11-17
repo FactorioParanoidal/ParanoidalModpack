@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 9.0.0
 Date: 2026-11-01
+  Locale:
+    - Added beginner-friendly English and Russian descriptions with contextual images for previously undocumented mod settings; existing names, values and tooltips are preserved.
   Major Features:
     - One mod instead of LargerLamps-2_0 0.2.3 (Larger Lamps 2.0 by Deadlock989, Goakiller900, MasterBuilder, NullHarp), InlaidLampsExtended 2.0.0 (Inlaid Lamps Extended by Mathematician, CobaltTiger, Pi-C), Lighted-Poles-Plus 2.0.4 (Lighted Electric Poles + by Optera) and BigLight 0.3.0 (BIG LIGHT by Ritn). Entity, item, recipe, technology, recipe category, kept setting and locale key names are unchanged, so buildings, recipes and research of existing saves stay.
   Optimizations:

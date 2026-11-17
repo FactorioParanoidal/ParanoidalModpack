@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.3
 Date: 04.06.2026
+  Locale:
+    - Added beginner-friendly English and Russian descriptions with contextual images for previously undocumented mod settings; existing names, values and tooltips are preserved.
   Changes:
     - Paranoidal: liquid plastic used for casting is a 220 C melt, and liquid polyethylene is a 150 C polymer melt instead of 0 C. Liquid resin and rubber remain chemical intermediates; ordinary gases, steam, coolant loops, heat capacities and recipe amounts are unchanged.
     - Paranoidal: corrected heavy-water, allyl-chloride and epichlorohydrin tooltip formulas; renamed coal gasification and mineral-oil synthesis. The legacy naphtha fluid is described as heavy residual fuel oil, matching its accepted Russian name; IDs, palettes and recipe mechanics are unchanged.

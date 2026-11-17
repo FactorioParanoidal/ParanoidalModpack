@@ -4,6 +4,7 @@ Date: 2025-06-06
   Changes:
     - Paranoidal packaging: moved the editable SVG source out of the distributed mod; game graphics are unchanged.
   Locale:
+    - Added beginner-friendly English and Russian descriptions with contextual images for previously undocumented mod settings; existing names, values and tooltips are preserved.
     - ru: the mod name and the mod list description are the same as in ParanoidalLocale (format "English title (Russian translation)"), so the mod reads the same with or without it.
   Features:
     - Added "tiny" indicator size setting. (#20)

@@ -3,6 +3,7 @@ Version: 9.3.0
   Changes:
     - The migration bridges PMRPGsystem 9.0.5 and RPGsystem 2.0.9 are no longer shipped and are no longer dependencies; the one-time takeover of their progress is removed. Old 2.0 saves are no longer supported: progress saved by PMRPGsystem or RPGsystem 2.0.8 is not carried over.
   Locale:
+    - Added beginner-friendly English and Russian descriptions with contextual images for previously undocumented mod settings; existing names, values and tooltips are preserved.
     - Russian hardcoded player-facing text: 5 UI, chat, command-help and error-message literals; technical identifiers, format parameters and gameplay logic are unchanged.
 Date: 2026-11-06
   Features:

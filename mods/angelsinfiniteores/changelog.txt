@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.3
 Date: 04.06.2026
+  Locale:
+    - Added beginner-friendly English and Russian descriptions with contextual images for previously undocumented mod settings; existing names, values and tooltips are preserved.
   Graphics:
     - Paranoidal build: removed 70 unused entity images (25,612,742 bytes). Angel's Refining loads first and supplies the resource builder, so this mod's standalone fallback graphics are not used in the modpack. Icons, resource generation, yields and prototype IDs are unchanged; this trimmed copy targets the full Paranoidal modset, not standalone use.
   Changes:

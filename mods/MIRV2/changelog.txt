@@ -8,6 +8,7 @@ Date: 05. 11. 2026
     - The M.I.R.V recipe is made only in the ballistic missile silo (category ballistic-missile), one strike per missile. A M.I.R.V built earlier can still be sent up in a rocket and leaves a launcher with five shots as before.
     - Graphics helpers scale_vector and scale_graphics taken from the tf_util of MIRV 2.1.0.
   Locale:
+    - Added beginner-friendly English and Russian descriptions with contextual images for previously undocumented mod settings; existing names, values and tooltips are preserved.
     - en/ru: ballistic missile silo name and description; M.I.R.V and technology descriptions follow the silo.
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.0
