@@ -16,7 +16,8 @@ function customAlerts.showAlert(surface, entity, alertName, message)
 				if visible == nil then visible = force.is_chunk_visible(surface, chunkPosition) end
 				if visible then
 					local player_settings = settings.get_player_settings(player)
-					if player_settings["rampantFixed--showSquadAlert"].value then 
+					-- Keep detection bookkeeping, but never announce ordinary AI squads.
+					if alertName ~= "squadDetected-warning-rampant" and player_settings["rampantFixed--showSquadAlert"].value then
 						player.add_custom_alert(
 						  entity,
 						  {
