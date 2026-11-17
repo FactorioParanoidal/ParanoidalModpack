@@ -33,6 +33,7 @@ data:extend({
             type = "unlock-recipe",
             recipe = BPSB.pfx .. "electric-energy-interface",
         },
+        image = BPSB.path .. "/graphics/tips/isolation.png", -- Paranoidal: scheme
     },
     {
         type = "tips-and-tricks-item",
@@ -59,7 +60,7 @@ data:extend({
             type = "unlock-recipe",
             recipe = BPSB.pfx .. "electric-energy-interface",
         },
-        image = BPSB.path .. "/graphics/reset-sandbox.png",
+        image = BPSB.path .. "/graphics/tips/reset.png", -- Paranoidal: scheme
     },
     {
         type = "tips-and-tricks-item",
@@ -86,6 +87,7 @@ data:extend({
             type = "unlock-recipe",
             recipe = BPSB.pfx .. "electric-energy-interface",
         },
+        image = BPSB.path .. "/graphics/tips/sandbox-force.png", -- Paranoidal: scheme
     },
     {
         type = "tips-and-tricks-item",
@@ -98,6 +100,7 @@ data:extend({
             type = "unlock-recipe",
             recipe = BPSB.pfx .. "electric-energy-interface",
         },
+        image = BPSB.path .. "/graphics/tips/new-recipes.png", -- Paranoidal: scheme
     },
     {
         type = "tips-and-tricks-item",
@@ -110,6 +113,7 @@ data:extend({
             type = "unlock-recipe",
             recipe = BPSB.pfx .. "electric-energy-interface",
         },
+        image = BPSB.path .. "/graphics/tips/god-mode.png", -- Paranoidal: scheme
     },
     {
         type = "tips-and-tricks-item",
@@ -182,6 +186,7 @@ if mods["Paranoidal-factorissimo-4"] then
                     }
                 },
             },
+            image = BPSB.path .. "/graphics/tips/factorissimo.png", -- Paranoidal: scheme
         },
     })
 end
