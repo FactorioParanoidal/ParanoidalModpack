@@ -17,6 +17,7 @@ local flyerAI = {}
 
 local constants = require("Constants")
 local aiBrain = require("AIBrain")
+local chatNames = require("ChatNames")
 local aiPredicates = require("AIPredicates")
 local unitGroupUtils = require("UnitGroupUtils")
 local mapUtils = require("MapUtils")
@@ -221,7 +222,7 @@ local function strike(map, squad, entry, kind, tick)
     squad.onTheWay = true
     squad.nextCommandTick = tick + 60
     squad.checkTick = squad.strikeUntil + 18000
-    aiBrain.debugPrint(map, "flight (" .. tostring(squad.startSize) .. ") " .. kind .. " strike [gps=" .. tx .. "," .. ty
+    aiBrain.debugPrint(map, "Авианалёт (бойцов: " .. tostring(squad.startSize) .. "), " .. chatNames.name(kind) .. ": удар [gps=" .. tx .. "," .. ty
         .. "," .. map.surface.name .. "]")
 end
 
@@ -459,7 +460,7 @@ function flyerAI.onLoss(map, squad, entity, tick)
     end
     if (squad.flightPhase == "strike") and (squad.losses >= squad.startSize * FLEE_LOSSES)
         and squad.group and squad.group.valid then
-        aiBrain.debugPrint(map, "flight breaks off after losing " .. squad.losses .. "/" .. squad.startSize)
+        aiBrain.debugPrint(map, "Авианалёт прекращает атаку; потери: " .. squad.losses .. "/" .. squad.startSize)
         goHome(map, squad, tick)
     end
 end
@@ -477,7 +478,7 @@ function flyerAI.onFlightEnd(map, squad, tick)
     local reward = aiBrain.squadReward(kills, losses, mMax(1, squad.startSize or 1))
     local ai = aiBrain.getMapAI(map)
     aiBrain.updateValue(ai.flight, squad.flightKind, reward, tick)
-    aiBrain.debugPrint(map, string.format("flight %s ended: %d kills, %d lost, outcome %.2f", squad.flightKind, kills, losses, reward))
+    aiBrain.debugPrint(map, string.format("Авианалёт «%s» завершён: уничтожено %d, потеряно %d, результат %.2f", chatNames.name(squad.flightKind), kills, losses, reward))
 end
 
 flyerAIG = flyerAI

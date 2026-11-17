@@ -95,9 +95,11 @@ function aiBrain.heavyScriptsAllowed(universe)
     return universe.heavyAI ~= false
 end
 
+local chatNames = require("ChatNames")
+
 local function debugPrint(map, text)
     if map.universe.printAIStateChanges then
-        game.print(map.surface.name .. ": [AI] " .. text)
+        game.print(map.surface.name .. ": [ИИ] " .. text)
     end
 end
 aiBrain.debugPrint = debugPrint
@@ -813,7 +815,7 @@ function aiBrain.mutationBias(map, base, tier)
         if points >= 1.5 then
             roll = roll - alignment[1] * points * points
             if roll <= 0 then
-                debugPrint(map, "nests adapt to " .. damageName .. " (" .. mFloor(share * 100) .. "% of kills): mutation to "
+                debugPrint(map, "Гнёзда адаптируются к урону " .. damageName .. " (" .. mFloor(share * 100) .. "% потерь): мутация во фракцию "
                     .. alignment[2] .. " [gps=" .. base.x .. "," .. base.y .. "," .. map.surface.name .. "]")
                 return alignment[2]
             end
@@ -1029,13 +1031,13 @@ end
 function aiBrain.describeSquad(map, squad, label, size, position)
     if map.universe.printAIStateChanges then
         local goal = squad.goal
-        local text = (label or "squad") .. " " .. tostring(squad.tactic) .. (squad.support and " (support)" or "")
-            .. ", " .. tostring(size) .. " units"
+        local text = (label and chatNames.name(label) or "отряд") .. ": " .. chatNames.name(squad.tactic) .. (squad.support and " (поддержка)" or "")
+            .. ", бойцов: " .. tostring(size)
         if goal then
-            text = text .. ", " .. goal.kind .. " [gps=" .. mFloor(goal.x) .. "," .. mFloor(goal.y) .. "," .. map.surface.name .. "]"
+            text = text .. ", цель: " .. chatNames.name(goal.kind) .. " [gps=" .. mFloor(goal.x) .. "," .. mFloor(goal.y) .. "," .. map.surface.name .. "]"
         end
         if position then
-            text = text .. " from [gps=" .. mFloor(position.x) .. "," .. mFloor(position.y) .. "," .. map.surface.name .. "]"
+            text = text .. ", исходная точка [gps=" .. mFloor(position.x) .. "," .. mFloor(position.y) .. "," .. map.surface.name .. "]"
         end
         debugPrint(map, text)
     end
@@ -1149,8 +1151,8 @@ function aiBrain.onSquadEnd(map, squad, tick)
     if squad.aiState then
         updateValue(ai.states, squad.aiState, reward, tick)
     end
-    debugPrint(map, string.format("%s squad ended: %d kills, %d/%d lost, outcome %.2f, %s value %.2f",
-        tostring(squad.tactic), kills, losses, size, reward, tostring(squad.tactic),
+    debugPrint(map, string.format("Тактика «%s»: бой завершён, уничтожено %d, потеряно %d/%d, результат %.2f, оценка тактики «%s» %.2f",
+        chatNames.name(squad.tactic), kills, losses, size, reward, chatNames.name(squad.tactic),
         (squad.tactic and ai.tactics[squad.tactic] and ai.tactics[squad.tactic].v) or 0))
     if reward < 0.2 then
         ai.failStreak = ai.failStreak + 1
@@ -1162,7 +1164,7 @@ function aiBrain.onSquadEnd(map, squad, tick)
             if map.stateTick and (map.stateTick > tick + 3600) then
                 map.stateTick = tick + 3600
             end
-            debugPrint(map, "losing streak: the AI rethinks its tactics")
+            debugPrint(map, "Серия поражений: ИИ пересматривает тактику")
         end
     elseif reward > 0.6 then
         ai.winStreak = ai.winStreak + 1
@@ -1170,7 +1172,7 @@ function aiBrain.onSquadEnd(map, squad, tick)
         if ai.winStreak >= 4 then
             ai.winStreak = 0
             ai.pressUntil = tick + 15 * 3600
-            debugPrint(map, "winning streak: the AI presses the attack")
+            debugPrint(map, "Серия побед: ИИ усиливает атаку")
         end
     end
 end
@@ -1221,8 +1223,8 @@ function aiBrain.adjustPlannedState(map, state, ctx, tick)
         end
     end
     if best and (mRandom() < 0.5) then
-        debugPrint(map, constants.stateEnglish[state] .. " keeps failing (" .. string.format("%.2f", record.v)
-            .. "), switching to " .. constants.stateEnglish[best])
+        debugPrint(map, "Состояние «" .. chatNames.state(state) .. "» приводит к поражениям (" .. string.format("%.2f", record.v)
+            .. "); переключение на «" .. chatNames.state(best) .. "»")
         return best
     end
     return state
@@ -1235,7 +1237,7 @@ function aiBrain.report(map)
     local ai = map.ai
     local tick = game.tick
     if not ai then
-        return {"no learning data yet"}
+        return {"Данных об обучении пока нет"}
     end
     local lines = {}
     local function records(title, list, names)
@@ -1246,21 +1248,21 @@ function aiBrain.report(map)
         table.sort(parts)
         lines[#lines + 1] = title .. ": " .. ((#parts > 0) and table.concat(parts, ", ") or "-")
     end
-    records("tactics (value/samples)", ai.tactics)
-    records("states", ai.states, constants.stateEnglish)
-    records("flights", ai.flight)
+    records("Тактики (оценка/число боёв)", ai.tactics, chatNames.names)
+    records("Состояния", ai.states, chatNames.states)
+    records("Авианалёты", ai.flight, chatNames.names)
     local damageName, share = dominantDamage(map, nil)
-    lines[#lines + 1] = string.format("outcomes %d, last tactic %s, losing streak %d, winning streak %d, rethinking %s, pressing %s",
-        ai.outcomes, tostring(ai.lastTactic), ai.failStreak, ai.winStreak, tostring(ai.exploreUntil > tick),
-        tostring(ai.pressUntil > tick))
-    lines[#lines + 1] = string.format("targets: weak %d, strong %d, infrastructure %d, ambush %d, artillery %d, follow-ups %d; dominant damage %s",
+    lines[#lines + 1] = string.format("Итогов боёв: %d; последняя тактика: %s; серия поражений: %d; серия побед: %d; пересмотр тактики: %s; усиление атаки: %s",
+        ai.outcomes, chatNames.name(ai.lastTactic), ai.failStreak, ai.winStreak, ai.exploreUntil > tick and "да" or "нет",
+        ai.pressUntil > tick and "да" or "нет")
+    lines[#lines + 1] = string.format("Цели: слабые места %d, укреплённые позиции %d, инфраструктура %d, засады %d, артиллерия %d, последующие удары %d; основной тип урона: %s",
         #ai.weak, #ai.strong, #ai.infra, #ai.heatTop, #ai.artillery, #ai.followUps,
         damageName and (damageName .. " " .. mFloor(share * 100) .. "%") or "-")
     local regions = 0
     for _ in pairs(ai.regions) do
         regions = regions + 1
     end
-    lines[#lines + 1] = "approach memory regions: " .. regions
+    lines[#lines + 1] = "Областей памяти о подходах: " .. regions
     return lines
 end
 

@@ -1,13 +1,16 @@
 require "script.autodeconstruct"
+local paranoidal_debug = require("paranoidal-debug-chat")
 
 function msg_all(message)
   if message[1] == "autodeconstruct-debug" then
     table.insert(message, 2, debug.getinfo(2).name)
   end
+  log(message)
+  local technical = message[1] == "autodeconstruct-debug" or message[1] == "autodeconstruct-err-specific"
+  if technical and not storage.debug and not paranoidal_debug.enabled() then return end
   for _,p in pairs(game.players) do
     p.print(message)
   end
-  log(message)
 end
 
 

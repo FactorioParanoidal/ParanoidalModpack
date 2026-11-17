@@ -1,4 +1,5 @@
 local upgrade = {}
+local paranoidal_debug = require("paranoidal-debug-chat")
 
 -- imports
 
@@ -502,7 +503,7 @@ function upgrade.attempt(universe)
 					end
 				end
 				if chunksProcessed>0 then
-					game.print("обновление, "..chunksProcessed.." чанков обработано")
+					paranoidal_debug.print("Rampant: обновление, обработано чанков: " .. chunksProcessed)
 				end
 				
 				-- bases
@@ -539,7 +540,7 @@ function upgrade.attempt(universe)
 					end	
 				end
 				if basesProcessed>0 then
-					game.print("обновление, "..basesProcessed.." баз обработано")
+					paranoidal_debug.print("Rampant: обновление, обработано баз: " .. basesProcessed)
 				end
 			end	
 			--game.print("Rampant fixed, Version 1.0.8")
@@ -619,7 +620,7 @@ function upgrade.attempt(universe)
 			end
 			
 			if mapsCounter>0 then
-				game.print("Rampant fixed, версия 1.0.14. Поверхности Factorissimo исключены:"..mapsCounter..", отрядов удалено: "..squadsCleared)
+				paranoidal_debug.print("Rampant, версия 1.0.14: исключено поверхностей Factorissimo: "..mapsCounter..", удалено отрядов: "..squadsCleared)
 			end
 		end
 		
@@ -687,7 +688,7 @@ function upgrade.attempt(universe)
 			end
 			
 			if mapsCounter>0 then
-				game.print("Rampant fixed, версия 1.1.0. Исключено поверхностей:"..mapsCounter..", отрядов удалено: "..squadsCleared)
+				paranoidal_debug.print("Rampant, версия 1.1.0: исключено поверхностей: "..mapsCounter..", удалено отрядов: "..squadsCleared)
 			end
 			
 			for surfaceIndex, map in pairs(universe.maps) do
@@ -729,13 +730,13 @@ function upgrade.attempt(universe)
 				end
 			end	
 		end
-		game.print({"description.rampantFixed--EnemySettings1_1_9"})	
+		paranoidal_debug.print({"description.rampantFixed--EnemySettings1_1_9"})
 	end
 	
 	if storage.version < 129 then	-- Version 1.1.10
 		storage.version = 129
 		if universe.NEW_ENEMIES then
-			game.print({"description.rampantFixed--EnemySettings1_1_10"})	
+			paranoidal_debug.print({"description.rampantFixed--EnemySettings1_1_10"})
 		end
 	end	
 
@@ -820,7 +821,7 @@ function upgrade.attempt(universe)
 						end	
 					end	
 					if wormsDeleted > 0 then
-						game.print("Обновление 1.2.8: "..map.surface.name..":".. wormsDeleted.." червей удалено")
+						paranoidal_debug.print("Rampant, обновление 1.2.8: "..map.surface.name..", удалено червей: "..wormsDeleted)
 					end
 				end	
 			end

@@ -1,5 +1,6 @@
 --By Mami
 local manager = require("gui.main")
+local paranoidal_debug = require("paranoidal-debug-chat")
 local picker_dollies_compat = require("scripts.mod-compatibility.picker-dollies")
 local analytics = require("scripts.analytics")
 local utilization_tab = require("scripts.gui.utilization")
@@ -547,7 +548,7 @@ function combinator_update(map_data, comb, reset_display)
 
 	if (old_params == nil) then
 		--should be generated after this tick, but in case it persists it is better to let the player know to replace it
-		game.print("У станционного контроллера отсутствуют внутренние данные @ " .. comb.gps_tag)
+		paranoidal_debug.print("У станционного контроллера отсутствуют внутренние данные: " .. comb.gps_tag)
 	end
 
 	local op = params.operation

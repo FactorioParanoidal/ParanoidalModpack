@@ -1,5 +1,7 @@
 require("features.flamethrower-fuels.settings")
 data:extend({
+  {type = "bool-setting", name = "paranoidal-debug-chat", setting_type = "runtime-global",
+    default_value = false, order = "debug-chat"},
   {type = "double-setting", name = "paranoidal-miniloader-energy-multiplier", setting_type = "startup",
     default_value = 4, minimum_value = 0.01, maximum_value = 100, order = "loader-a"},
   {type = "bool-setting", name = "paranoidal-loader-auto-connect", setting_type = "runtime-global",

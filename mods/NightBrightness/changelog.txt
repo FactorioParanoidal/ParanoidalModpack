@@ -2,6 +2,7 @@
 Version: 2.0.0
 Date: 2026-10-08
   Bugfixes:
+    - Russian debug output displays the season in Russian instead of the internal English season ID. Calendar and brightness calculations are unchanged.
     - The first day after the start or a settings change used the non-seasonal baseline; the current season is applied at once.
     - Day parameters are written in one go (LuaSurface.daytime_parameters) instead of four assignments through temporary values.
   Features:

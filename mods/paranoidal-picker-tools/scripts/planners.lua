@@ -107,8 +107,8 @@ end
 
 -- returns in format specific to Area: Left Top = (x,y), Right Bottom = (x,y)
 local function format_area(area)
-    local msg = format_point(area.left_top,"Left Top")
-    msg = msg..", "..format_point(area.right_bottom,"Right Bottom")
+    local msg = format_point(area.left_top,"Левый верхний угол")
+    msg = msg..", "..format_point(area.right_bottom,"Правый нижний угол")
     return msg
 end
 
@@ -122,23 +122,23 @@ local function measure_area(event)
         local size, width, height = area_size(area)
 		-- if clamp value is 10, just print the raw values
 		if num_digits == 10 then
-			player.print(format_area(area) .. format_point(area_center(area),"Center"))
+			player.print(format_area(area) .. format_point(area_center(area),"Центр"))
 			player.print('Размер = ' .. size .. ' Ширина = ' .. width .. ' Высота = ' .. height)
 		elseif num_digits == 0 then
 			local new_area = clamp_area(area, num_digits)
 			local new_center = clamp_point(area_center(area), num_digits)
-			player.print(format_area(new_area) .. ", " .. format_point(new_center,"Center"))
-			player.print(format_number(clamp_number(size,num_digits,"ceil"),"Size")..", "..
-				format_number(clamp_number(width,num_digits,"ceil"),"Width")..", "..
-				format_number(clamp_number(height,num_digits,"ceil"),"Height")
+			player.print(format_area(new_area) .. ", " .. format_point(new_center,"Центр"))
+			player.print(format_number(clamp_number(size,num_digits,"ceil"),"Размер")..", "..
+				format_number(clamp_number(width,num_digits,"ceil"),"Ширина")..", "..
+				format_number(clamp_number(height,num_digits,"ceil"),"Высота")
 			)
 		else
 			local new_area = clamp_area(area, num_digits)
 			local new_center = clamp_point(area_center(area), num_digits)
-			player.print(format_area(new_area) .. ", " .. format_point(new_center,"Center"))
-			player.print(format_number(clamp_number(size,num_digits),"Size")..", "..
-				format_number(clamp_number(width,num_digits),"Width")..", "..
-				format_number(clamp_number(height,num_digits),"Height")
+			player.print(format_area(new_area) .. ", " .. format_point(new_center,"Центр"))
+			player.print(format_number(clamp_number(size,num_digits),"Размер")..", "..
+				format_number(clamp_number(width,num_digits),"Ширина")..", "..
+				format_number(clamp_number(height,num_digits),"Высота")
 			)
 		end
     end
@@ -183,7 +183,7 @@ local function set_tree_killer_filters(player)
                             table.insert(filters, entity.name)
                         end
                     else
-                        player.print({"", {"Shortcuts-ick.error-environment", type}, " (ОШИБКА 3)"})
+                        player.print("В фильтр сноса помещается не больше 255 типов объектов. Остальные типы не добавлены.")
                         break
                     end
                 end

@@ -107,18 +107,18 @@ end
 local function crafting_queue_list(e)
     for _, player in pairs(game.connected_players) do
         local count = 0
-        local mode = "default"
+        local mode = "в конец очереди"
         local color = "[color=0.0,1.0,0.1]"
 
         if player.crafting_queue then
             count = #player.crafting_queue
         end
         if storage.queue_to_front[player.index] then
-            mode = "front"
+            mode = "в начало очереди"
             color = "[color=1.0,0.1,0.1]"
         end
 
-        game.print("" .. player.name .. " число=" .. count .. " режим=" .. color .. mode .. "[/color]", player.chat_color)
+        game.print("" .. player.name .. ": заказов в очереди — " .. count .. "; новые заказы — " .. color .. mode .. "[/color]", player.chat_color)
     end
 end
 

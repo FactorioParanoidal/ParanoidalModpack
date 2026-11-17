@@ -7,6 +7,7 @@ local Player = {
 }
 
 local Lua_player = nil
+local paranoidal_debug = require("paranoidal-debug-chat")
 
 function Player.open_factoriopedia_gui(element)
     if Lua_player ~= nil and element ~= nil then
@@ -50,8 +51,14 @@ end
 ---@param error string
 ---@param trace string
 function Player.repportError(error, trace)
-    Player.print(error)
-    log(error)
+    if Lua_player ~= nil then
+        paranoidal_debug.print(error, Lua_player)
+    else
+        log(error)
+    end
+    if not paranoidal_debug.enabled() then
+        Player.print("Не удалось выполнить действие в планировщике. Подробности записаны в журнал Factorio.")
+    end
     log(trace)
     local error_message = {}
     table.insert(error_message, error)

@@ -2,6 +2,7 @@
 Version: 9.0.0
   Locale:
     - Added beginner-friendly English and Russian descriptions with contextual images for previously undocumented mod settings; existing names, values and tooltips are preserved.
+    - Tape-measure coordinates and dimensions use Russian labels. The demolition-filter warning explains the 255-type limit instead of an internal error code.
     - Russian hardcoded player-facing text: 6 UI, chat, command-help and error-message literals; technical identifiers, format parameters and gameplay logic are unchanged.
 Date: 2026-11-01
   Bugfixes:

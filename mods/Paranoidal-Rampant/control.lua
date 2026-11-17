@@ -14,6 +14,8 @@
 -- imports
 
 local aiAttackWave = require("libs/AIAttackWave")
+local paranoidal_debug = require("paranoidal-debug-chat")
+local chatNames = require("libs/ChatNames")
 local aiPredicates = require("libs/AIPredicates")
 local aiPlanning = require("libs/AIPlanning")
 local aiBrain = require("libs/AIBrain")
@@ -263,7 +265,7 @@ local function prepMap(surface)
 		return	
 	end
 	
-    surface.print("Rampant, fixed — Индексирование поверхности:" .. tostring(surface.index) .. ", подождите.")
+    paranoidal_debug.print("Rampant: индексирование поверхности " .. tostring(surface.index), surface)
 
     local map = universe.maps[surfaceIndex]
     if not map then
@@ -2319,7 +2321,7 @@ local function rampantSetAIState(event)
 		return
 	end	
 
-    game.print(map.surface.name .. " is in " .. constants.stateEnglish[map.state])
+    game.print(map.surface.name .. ": состояние ИИ — " .. chatNames.state(map.state))
 
     if event.parameter then
         local target = tonumber(event.parameter)
@@ -2345,7 +2347,7 @@ local function rampantSetAIState(event)
 			if map.state == constants.AI_STATE_GROWING then
 				aiPlanning.updateBasesToGrow(map, game.tick, false)
 			end	
-            game.print(map.surface.name .. " теперь находится в " .. constants.stateEnglish[map.state])
+            game.print(map.surface.name .. ": состояние ИИ изменено на «" .. chatNames.state(map.state) .. "»")
         end
     end
 end
@@ -2363,7 +2365,7 @@ local function rampantAIReport(event)
 	if universe.classicAI then
 		player.print("Rampant: включён классический режим, ИИ не обучается")
 	end
-	player.print("ИИ Rampant включён на " .. map.surface.name .. ", состояние " .. tostring(constants.stateEnglish[map.state])
+	player.print("ИИ Rampant включён на " .. map.surface.name .. ", состояние " .. chatNames.state(map.state)
 		.. ", тяжёлые модели " .. tostring(universe.heavyAI ~= false))
 	for _, line in pairs(aiBrain.report(map)) do
 		player.print(line)

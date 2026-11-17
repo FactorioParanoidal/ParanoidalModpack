@@ -744,7 +744,7 @@ local function spawn_trees(surface, parent, tilestoupdate, newpos)
         if tile.hidden_tile then
           tilestoupdate[#tilestoupdate + 1] = { ["name"] = tile.hidden_tile, ["position"] = tile.position }
         else
-          nx_debug("ERROR: Can't degrade tile because no hidden_tile: " .. tile.name)
+          nx_debug("Ошибка: покрытие нельзя изменить, отсутствует скрытый тайл: " .. tile.name)
         end
       else
         if
@@ -752,7 +752,7 @@ local function spawn_trees(surface, parent, tilestoupdate, newpos)
         then
           tilestoupdate[#tilestoupdate + 1] = { ["name"] = degrade_to, ["position"] = tile.position }
         else
-          nx_debug("ERROR: Invalid tile?: " .. degrade_to .. " Tried to convert from: " .. tile.name)
+          nx_debug("Ошибка: неизвестный тайл: " .. degrade_to .. "; исходное покрытие: " .. tile.name)
         end
       end
     elseif                                   -- Tree spreading
@@ -929,12 +929,12 @@ local function service(event)
   prepare_tree_prototypes()
   if config.debug and storage.lastdebugmessage + config.debug_interval < event.tick then
     local timegap = (event.tick - storage.lastdebugmessage) / 60
-    nx_debug("Chunks processed: " .. storage.chunksprocessed .. ". "
-      .. " Grown: " .. storage.spawnedcount .. " (" .. round(storage.spawnedcount / timegap, 2) .. "/s)."
-      .. " Deaded: " .. storage.deadedcount .. " (" .. round(storage.deadedcount / timegap, 2) .. "/s)."
-      .. " Killed: " .. storage.killedcount .. " (" .. round(storage.killedcount / timegap, 2) .. "/s)."
-      .. " Degrade: " .. storage.degradedcount .. " (" .. round(storage.degradedcount / timegap, 2) .. "/s)."
-      .. " Rezzed: " .. storage.resurrected .. " (" .. round(storage.resurrected / timegap, 2) .. "/s)."
+    nx_debug("Обработано чанков: " .. storage.chunksprocessed .. ". "
+      .. " Выросло деревьев: " .. storage.spawnedcount .. " (" .. round(storage.spawnedcount / timegap, 2) .. "/с)."
+      .. " Засохло: " .. storage.deadedcount .. " (" .. round(storage.deadedcount / timegap, 2) .. "/с)."
+      .. " Уничтожено: " .. storage.killedcount .. " (" .. round(storage.killedcount / timegap, 2) .. "/с)."
+      .. " Изменено покрытий: " .. storage.degradedcount .. " (" .. round(storage.degradedcount / timegap, 2) .. "/с)."
+      .. " Восстановлено деревьев: " .. storage.resurrected .. " (" .. round(storage.resurrected / timegap, 2) .. "/с)."
     )
     storage.lastdebugmessage = event.tick
     storage.spawnedcount     = 0

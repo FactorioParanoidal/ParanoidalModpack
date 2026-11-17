@@ -131,9 +131,9 @@ function pipeutil.build_pipes(drill, pipeType, pipesToBuild)
        ((pipe_box.left_top.y - pipe_box.right_bottom.y) % 2 == 1) then
       pipes[#pipes+1] = join_pipes(drillData, pipeType)
     end
-    debug_message_with_position(drill, "connected pipes to "..tostring(#pipesToBuild).." neighbors")
+    debug_message_with_position(drill, "Трубы подключены к соседним бурам: "..tostring(#pipesToBuild))
   else
-    debug_message_with_position(drill, "can't find fluid connectors pointing toward any neighbors")
+    debug_message_with_position(drill, "Нет жидкостных соединений, направленных к соседним бурам")
   end
   
   return pipes
@@ -282,7 +282,7 @@ function pipeutil.choose_pipe(drill, pipes_to_build)
 
   -- Make sure the resulting list of pipes includes something real
   if table_size(valid_pipes) == 0 then
-    debug_message_with_position(drill, "can't find valid pipe type to build")
+    debug_message_with_position(drill, "Не найден подходящий тип трубы для постройки")
     
     return nil 
   end
@@ -303,7 +303,7 @@ function pipeutil.choose_pipe(drill, pipes_to_build)
 
   -- Make sure the resulting list of pipes includes something real
   if table_size(valid_pipes) == 0 then
-    debug_message_with_position(drill, "can't find valid pipe type to build")
+    debug_message_with_position(drill, "Не найден подходящий тип трубы для постройки")
     
     return nil 
   end
@@ -351,16 +351,16 @@ function pipeutil.choose_pipe(drill, pipes_to_build)
   end
   
   if default_pipe.name and default_pipe.count > 0 then
-    debug_message_with_position(drill, "Selected available default pipe "..serpent.line(default_pipe).." from among "..serpent.line(valid_pipes).." to connect neighbors")
+    debug_message_with_position(drill, "Выбрана доступная труба по умолчанию "..serpent.line(default_pipe).." из списка "..serpent.line(valid_pipes).." для соединения соседей")
     return default_pipe
   elseif available_pipe.name then
-    debug_message_with_position(drill, "Selected available pipe "..serpent.line(available_pipe).." from among "..serpent.line(valid_pipes).." to connect neighbors")
+    debug_message_with_position(drill, "Выбрана доступная труба "..serpent.line(available_pipe).." из списка "..serpent.line(valid_pipes).." для соединения соседей")
     return available_pipe
   elseif default_pipe.name then
-    debug_message_with_position(drill, "Selected default pipe ghost "..serpent.line(default_pipe).." from among "..serpent.line(valid_pipes).." to connect neighbors")
+    debug_message_with_position(drill, "Выбран призрак трубы по умолчанию "..serpent.line(default_pipe).." из списка "..serpent.line(valid_pipes).." для соединения соседей")
     return default_pipe
   else
-    debug_message_with_position(drill, "No valid pipe type to infill this depleted fluid drill.")
+    debug_message_with_position(drill, "Не найден подходящий тип трубы для замены истощённого жидкостного бура.")
     return nil
   end
 end

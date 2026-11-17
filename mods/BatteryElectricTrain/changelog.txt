@@ -2,6 +2,7 @@
 Version: 2.0.3
 Date: 2025-11-21
   Locale:
+    - Fuel recognition and lost battery-pack warnings are Russian. The unrecognised fuel identifier is written to the log; battery handling is unchanged.
     - Russian hardcoded player-facing text: 4 UI, chat, command-help and error-message literals; technical identifiers, format parameters and gameplay logic are unchanged.
     - Brazilian Portuguese locale added, provided by Slondo (https://mods.factorio.com/user/Slondo).
   Compatibility:

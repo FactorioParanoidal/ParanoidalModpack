@@ -1,3 +1,5 @@
+local paranoidal_debug = require("paranoidal-debug-chat")
+
 remote_api = {}
 
 BUILDING_TYPE = "storage-tank"
@@ -75,7 +77,7 @@ end
 remote_api.get_factory_by_building = function(entity)
     local factory = storage.factories_by_entity[entity.unit_number]
     if factory == nil then
-        game.print("ОШИБКА: не привязано здание фабрики: " .. entity.name .. "@" .. entity.surface.name .. "(" .. entity.position.x .. ", " .. entity.position.y .. ")")
+        paranoidal_debug.print("Ошибка Factorissimo: не привязано здание фабрики: " .. entity.name .. "@" .. entity.surface.name .. "(" .. entity.position.x .. ", " .. entity.position.y .. ")")
     end
     return factory
 end

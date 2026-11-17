@@ -3,6 +3,7 @@ if settings.startup["nanobots-auto"].value then return end
 require('nanobots-common')
 
 local config = require('config')
+local paranoidal_debug = require('paranoidal-debug-chat')
 
 
 local consecutive_lack_of_targets = 0
@@ -161,7 +162,10 @@ sort_actions_and_activate = function(possible_actions, player, ammo, target)
             end
             return true
         else
-            game.print("Ошибка Nanobots: " .. target_type .. " действие не выполнено")
+            paranoidal_debug.print("Ошибка Nanobots: действие не выполнено, тип: " .. target_type, player)
+            if not paranoidal_debug.enabled() then
+                player.print("Наноботы не смогли выполнить действие. Подробности записаны в журнал Factorio.")
+            end
             return false
         end
         

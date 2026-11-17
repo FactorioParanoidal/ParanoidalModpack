@@ -2,6 +2,7 @@
 Version: 2.3.3
 Date: 2026-01-03
   Changes:
+    - Installation and update recommendations are logged and shown in chat only with paranoidal-debug-chat enabled, still respecting the existing notification preference and recipient. Reskin behaviour is unchanged.
     - Paranoidal packaging: moved the hr_version conversion script out of the distributed mod into the local development workspace.
   Graphics:
     - Paranoidal Space Age branch: graphics/entity/common/pipe-covers/shadows/pipe-cover-south-shadow.png is kept. planet-muluna builds its burner roboports in its data-final-fixes, after zzzparanoidal's graphics pass, with pipecoverspictures(), which this mod overrides to point to that file; without it the game with graphics cannot load.

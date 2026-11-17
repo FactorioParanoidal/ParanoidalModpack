@@ -131,7 +131,8 @@ local function apply_day(surface, announce)
     if announce then announce_season(p.season) end
   end
   if storage.debug then
-    game.print({"night-brightness.debug", tostring(storage.calendar_day + 1), tostring(cycle_day()), p.season,
+    game.print({"night-brightness.debug", tostring(storage.calendar_day + 1), tostring(cycle_day()),
+      ({winter = "зима", spring = "весна", summer = "лето", autumn = "осень"})[p.season] or p.season,
       string.format("%.3f", p.min_brightness), string.format("%.3f", p.solar)})
   end
 end

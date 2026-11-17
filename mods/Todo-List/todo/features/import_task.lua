@@ -20,21 +20,21 @@ function todo.import_tasks(encoded, player)
 
     local status, result = pcall(helpers.decode_string, encoded)
     if (not status) then
-        local message = "Importing tasks failed for input %s. Result was %s. Please contact the mod author."
+        local message = "Не удалось прочитать задачи из строки %s. Результат: %s."
         todo.log(string.format(message, encoded, result))
         if (not todo.show_log(player)) then
-            player.print("Не удалось импортировать задачи. Включите отладочный вывод и свяжитесь с автором.")
+            player.print("Не удалось прочитать список задач. Проверьте, что строка экспорта скопирована полностью.")
         end
         return
     end
 
     local tasks = helpers.json_to_table(result)
 
-    todo.log("Importing tasks:")
+    todo.log("Импорт задач:")
     todo.log(serpent.block(tasks))
 
     if (type(tasks) ~= "table") then
-        local message = "Importing tasks failed for input %s. Table expected but got %s. Please contact the mod author."
+        local message = "Не удалось прочитать задачи из строки %s. Ожидалась таблица, получено: %s."
         todo.log(string.format(message, encoded, tasks))
         return
     end

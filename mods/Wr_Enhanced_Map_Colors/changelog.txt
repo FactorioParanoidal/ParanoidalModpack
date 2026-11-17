@@ -1,6 +1,7 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.5.10
   Locale:
+    - Rechart reports and legend sprite paths are logged and shown in chat only with paranoidal-debug-chat enabled. Rechart reports are Russian; map and legend behaviour are unchanged.
     - Russian hardcoded player-facing text: 19 UI, chat, command-help and error-message literals; technical identifiers, format parameters and gameplay logic are unchanged.
 Date: 23/6/2026
   Changes:
