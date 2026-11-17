@@ -15,4 +15,5 @@ Date: 2026-11-16
   Changes:
     - From Informatron: the window frame, live pages and opening on a page are kept; its remote interface for other mods' help pages, the console/editor pages and the I hotkey are dropped.
   Bugfixes:
+    - Fixed the names and chapter-specific descriptions of numbered memory recovery technologies in Russian and English.
     - Informatron's menu click compared with an undefined action and worked only by accident (nil == nil); the menu here uses explicit tags.

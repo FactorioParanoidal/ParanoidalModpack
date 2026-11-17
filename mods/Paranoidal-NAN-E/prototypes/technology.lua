@@ -40,6 +40,7 @@ local function tech(name, prerequisites, unit, extra_effects)
   {
     type = "technology",
     name = name,
+    localised_description = {"technology-description." .. name},
     icons = {{icon = icons .. name .. ".png", icon_size = 256}},
     effects = effects,
     prerequisites = existing(prerequisites),
