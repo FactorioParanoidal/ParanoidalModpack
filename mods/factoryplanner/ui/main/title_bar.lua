@@ -43,7 +43,7 @@ local function determine_left_handle_width(player)
     local left_margins = 3 * 8 + 2 * 4  -- horizontal spacing + drag handle margin
     local left_buttons_width = 3 * 24 + 2 * 8  -- button width + spacing
 
-    return half_total_width - half_label_width - left_margins - left_buttons_width
+    return math.max(0, half_total_width - half_label_width - left_margins - left_buttons_width)
 end
 
 ---@param player LuaPlayer

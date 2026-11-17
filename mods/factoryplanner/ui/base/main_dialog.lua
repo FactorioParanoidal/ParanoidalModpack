@@ -15,7 +15,9 @@ end
 ---@param player LuaPlayer
 ---@return integer
 function main_dialog.get_content_width(player)
-    return main_dialog.get_dimensions(player).width - MAGIC_NUMBERS.list_width - (3 * MAGIC_NUMBERS.frame_spacing)
+    -- The fixed sidebar can exceed the preferred dialog width on a small viewport.
+    return math.max(0, main_dialog.get_dimensions(player).width
+        - MAGIC_NUMBERS.list_width - (3 * MAGIC_NUMBERS.frame_spacing))
 end
 
 
