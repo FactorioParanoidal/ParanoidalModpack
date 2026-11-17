@@ -5,8 +5,10 @@ Date: 2025-11-25
     - Paranoidal: the optional dependency and the Factorissimo tip check follow the rename of factorissimo-2-notnotmelon to Paranoidal-factorissimo-4.
   Changes:
     - Paranoidal: rewrote the EN/RU automated-building tip for beginners; retained robot-free building, upgrades, deconstruction and adjustable processing speed, without Lua/tick details or obsolete engine-version history.
+    - Paranoidal: the animation of the automated-building tip sets its camera (zoom 3 on the belt loop); without it the loop took a sixth of the tips window.
     - Paranoidal packaging: moved the tests and release script out of the distributed mod. The conditional factorio-test loader is restored only in private development copies; normal gameplay and saved data are unchanged.
   Locale:
+    - ru: tips "Sandbox choices", "Cleanup", "Surface properties", "Linked Force", "Sandbox Recipes", "God-mode" and "Factories in Sandboxes" translated anew from the current English texts (the old Russian ones described removed features: start equipment set by the reset button, resource planners, a map visibility setting); EN/RU name Paranoidal Factorissimo 4 as the compatible fork.
     - Russian hardcoded player-facing text: 4 UI, chat, command-help and error-message literals; technical identifiers, format parameters and gameplay logic are unchanged.
     - ru: the mod name and the mod list description are the same as in ParanoidalLocale (format "English title (Russian translation)"), so the mod reads the same with or without it.
   Bugfixes:

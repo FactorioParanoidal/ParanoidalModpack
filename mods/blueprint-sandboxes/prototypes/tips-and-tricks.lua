@@ -124,6 +124,9 @@ data:extend({
         },
         simulation = {
             init = [[
+                -- Paranoidal: the 16-belt loop fills the tips window (it took a sixth of it at zoom 1)
+                game.simulation.camera_position = { 0.5, 0.6 }
+                game.simulation.camera_zoom = 3
                 local stack = game.create_inventory(1)[1]
                 stack.import_stack("0eNqV1NuKwyAQBuB3mWtb4ilpfZWyLEkri5CYoHbZEHz3muambFOYufT0ifLPLND1dzsF5xOYBdx19BHMZYHofnzbr3NpniwYcMkOwMC3wzpKofVxGkM6dLZPkBk4f7N/YHj+YmB9csnZTXoO5m9/HzobyoZPBoNpjOXY6NdbC3UQR81gBiOPulxwc8Fet2WR2Zsr8G5FcSXe5RRXoV0Sq9Es6RdqNCs/sWqHbdAsKQsnesZUcXekM13S+xKv6EHS/x9b78GcnnwcLMhZwrmSHH2cq8hpwrmaHH6cSy8q9V5Upd0+W7N56eQMfm2IW3mcuGrOotFcc1lXOT8AiIPzfg==")
                 stack.build_blueprint {
