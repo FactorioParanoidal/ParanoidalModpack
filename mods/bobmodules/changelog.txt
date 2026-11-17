@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 2.1.0
 Date: 01. 06. 2026
+  Locale:
+    - Added beginner-friendly English and Russian descriptions with contextual images for previously undocumented mod settings; existing names, values and tooltips are preserved.
   Bugfixes:
     - Fixed crash with Classic Beacons mod #527
   Changes:

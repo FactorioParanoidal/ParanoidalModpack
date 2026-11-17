@@ -21,6 +21,7 @@ Version: 8.1.31
     - AtomicArtillery2 is removed from the build (its shell duplicates the True Nukes artillery shells). Its map reveal moved to controls/artillery-reveal.lua: a nest, worm or turret killed by any artillery turret or wagon of the build charts 16 tiles around it for the shooter's force (AtomicArtillery2 checked only the vanilla turret and wagon). Spawners and worms now pass the on_entity_died filter and go only to this handler.
     - Removed the save migrations 8.1.6-8.1.28 (JSON and Lua) together with the hidden prototypes kept only for them (paranoidal-storage-*-migration containers and item, paranoidal-energy-migration-* recipes) and the control hook that converted those recipes in blueprints. They only served 2.0 saves, which are no longer supported; maps created on 2.1 already count them as applied. The Cursed-FMD migration 8.1.31 stays.
   Locale:
+    - Added beginner-friendly English and Russian descriptions with contextual images for previously undocumented mod settings; existing names, values and tooltips are preserved.
     - Russian hardcoded player-facing text: 62 UI, chat, command-help and error-message literals; technical identifiers, format parameters and gameplay logic are unchanged.
   Changes:
     - Reused identical local PNGs for menu icons, Reskins artwork, chrome ore variants, titanium chest sprites and combinator shadows; consolidated transparent beacon images without removing their layers. Removed 54 duplicate files (181733 bytes), preserving prototype IDs, icon geometry, recipe overlays and startup modes.

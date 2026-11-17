@@ -16,6 +16,7 @@ Date: 2026.11.16
     - Loading a save with a missing engine-group reference no longer crashes the helper sweep. Stale records use the existing cleanup, including removal of only one helper from a compressed pack.
     - Missing saved group/entity/surface references are also handled in squad, builder and mutation cleanup, pincer waves, flyer loss handling, temporary immunity, champion/corpse and super-hive records, cached demolisher attacks and map work queues. Healthy objects and surviving compressed carriers are kept.
   Locale:
+    - Added beginner-friendly English and Russian descriptions with contextual images for previously undocumented mod settings; existing names, values and tooltips are preserved.
     - ru: demolisher and underground detection alerts now read "Обнаружен Разрушитель!" and "Обнаружена подземная активность!", also in ParanoidalLocale.
     - ru: the mod name in locale/ru, the same as in ParanoidalLocale.
 ---------------------------------------------------------------------------------------------------

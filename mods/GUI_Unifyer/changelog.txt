@@ -3,6 +3,7 @@ Version: 9.0.5
   Compatibility:
     - Paranoidal: the Factorissimo dispatcher button is styled for Paranoidal-factorissimo-4 (renamed from factorissimo-2-notnotmelon).
   Locale:
+    - Added beginner-friendly English and Russian descriptions with contextual images for previously undocumented mod settings; existing names, values and tooltips are preserved.
     - Russian hardcoded player-facing text: 3 UI, chat, command-help and error-message literals; technical identifiers, format parameters and gameplay logic are unchanged.
 Date: 2026-10-14
   Bugfixes:
