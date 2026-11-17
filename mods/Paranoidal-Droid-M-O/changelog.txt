@@ -1,6 +1,9 @@
 ---------------------------------------------------------------------------------------------------
 Version: 9.0.0
 Date: 2026-11-15
+  Locale:
+    - Added selective inline images and restrained colour emphasis to Russian mod-setting tooltips; wording, setting values and mechanics are unchanged.
+    - Added selective inline images to Russian mod-setting names; existing tooltip formatting, wording, saved values and mechanics are preserved.
   Major Features:
     - Д-ОК (M-O), the Microbe Obliterator of the BnL starliners, for Paranoidal: a local rebuild of Klaudia's Sweepbot 2.1.0.
     - Foreign contaminants: decoratives and muddy prints on the paving; next to it items on the ground (sucked into his bin), remains and remnants, and small wreck debris (broken down over several strokes, 1 part every 2 strokes, of what the wreck is made of).

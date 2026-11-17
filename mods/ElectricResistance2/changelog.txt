@@ -1,6 +1,9 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.1
 Date: 2026-10-19
+  Locale:
+    - Added selective inline images and restrained colour emphasis to Russian mod-setting tooltips; wording, setting values and mechanics are unchanged.
+    - Added selective inline images to Russian mod-setting names; existing tooltip formatting, wording, saved values and mechanics are preserved.
   Changes:
     - Входной лимит и буфер невидимого потребителя рассчитаны на наибольшее значение (настройка или 3 кВт); резисторы старых сохранений один раз пересоздаются.
   Features:

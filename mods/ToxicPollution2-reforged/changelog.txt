@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 9.0.0
 Date: 2026-10-29
+  Locale:
+    - Added selective inline images to Russian mod-setting names; existing tooltip formatting, wording, saved values and mechanics are preserved.
   Changes:
     - Tips: the smog alert entry states the real condition (the excess over the tolerable level doubled) and the 30 second cooldown.
     - Tips: five entries of "Toxic smog" have animations (prototypes/tips-simulations.lua): walking into the smog without protection and out of it; a respirator stack, a gas mask and heavy armor in the same smog; the alerts in their order (time sped up x3); the pollution signal of a constant combinator switching an air filter by its circuit condition; a respirator stopping the damage and the twice faster recovery near a working absorber. The mod script is not loaded in the tips window, so the scenes run the intoxication and wear formulas of scripts/model.lua with the numbers of shared/config.lua and the startup tolerance; the texts say what each animation shows (EN/RU).

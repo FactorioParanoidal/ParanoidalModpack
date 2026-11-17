@@ -9,6 +9,7 @@ Date: 2025-11-25
     - Paranoidal: Tips and tricks get six schemes (graphics/tips) for "Isolation level", "Cleanup", "Linked Force", "Sandbox Recipes", "God-mode" and "Factories in Sandboxes": icons, colours and arrows instead of text-only pages. The "Cleanup" scheme replaces the screenshot reset-sandbox.png, which showed an outdated tooltip and is removed.
     - Paranoidal packaging: moved the tests and release script out of the distributed mod. The conditional factorio-test loader is restored only in private development copies; normal gameplay and saved data are unchanged.
   Locale:
+    - Added selective inline images to Russian mod-setting names; existing tooltip formatting, wording, saved values and mechanics are preserved.
     - Added beginner-friendly English and Russian descriptions with contextual images for previously undocumented mod settings; existing names, values and tooltips are preserved.
     - en/ru: each of these six tips explains its scheme in one paragraph; "Sandbox Recipes" also names the heat interface and the infinity cargo wagon, which the mod unlocks in sandboxes too.
     - ru: tips "Sandbox choices", "Cleanup", "Surface properties", "Linked Force", "Sandbox Recipes", "God-mode" and "Factories in Sandboxes" translated anew from the current English texts (the old Russian ones described removed features: start equipment set by the reset button, resource planners, a map visibility setting); EN/RU name Paranoidal Factorissimo 4 as the compatible fork.

@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 9.0.0
 Date: 2026-11-02
+  Locale:
+    - Added selective inline images to Russian mod-setting names; existing tooltip formatting, wording, saved values and mechanics are preserved.
   Compatibility:
     - The optional dependency follows the rename of RampantFixed to Paranoidal-Rampant, so the rain still loads after its enemies.
   Major Features:
