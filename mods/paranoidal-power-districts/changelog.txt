@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 0.2.1
 Date: 2026-11-12
+  Locale:
+    - Added selective inline images and restrained colour emphasis to Russian mod-setting tooltips; wording, setting values and mechanics are unchanged.
   Graphics:
     - New transformer art in the vanilla style: weathered steel tank, tall brown porcelain input bushing with a
       grading ring on the left, short grey output bushing on the right, a warning sign at the input, flow chevrons
