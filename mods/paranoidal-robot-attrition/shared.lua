@@ -56,6 +56,9 @@ local M = {
   -- Share of an explosive cargo destroyed by its detonation; fuel from this energy per item burns.
   explosive_loss = 0.5,
   flammable_fuel_value = 10e6,
+  -- Explosion rings {radius, damage}; the rings add up (data-final-fixes.lua, the tips animations).
+  crash_rings = {{0.5, 40}, {1.5, 20}, {2.5, 10}, {3.5, 5}},  -- 75 at the centre, 5 at 3.5 tiles
+  cargo_rings = {{1, 150}, {2.5, 75}, {4, 30}, {5.5, 10}},    -- detonating cargo: 265 at the centre, 10 at 5.5 tiles
 
   -- At most one crash alert per force and surface in this many ticks.
   alert_interval = 5 * 3600,

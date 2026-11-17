@@ -99,14 +99,15 @@ list[#list + 1] = {
   },
 }
 
--- Tips and tricks (text only: simulations crash in the build). zzzparanoidal keeps this category.
+-- Tips and tricks with animations (prototypes/tips-simulations.lua). zzzparanoidal keeps this category.
+local simulations = require("prototypes.tips-simulations")
 list[#list + 1] = {type = "tips-and-tricks-item-category", name = shared.tips_category, order = "c-r"}
 local tips = {
-  {"pra-intro", "[item=logistic-robot]"},
-  {"pra-congestion", "[entity=roboport]"},
-  {"pra-wreck", "[item=repair-pack]"},
-  {"pra-cargo", "[item=explosives]"},
-  {"pra-reliability", "[technology=" .. shared.dispatch_prefix .. "1]"},
+  {"pra-intro", "[item=logistic-robot]", simulations.intro},
+  {"pra-congestion", "[entity=roboport]", simulations.congestion},
+  {"pra-wreck", "[item=repair-pack]", simulations.wreck},
+  {"pra-cargo", "[item=explosives]", simulations.cargo},
+  {"pra-reliability", "[technology=" .. shared.dispatch_prefix .. "1]", simulations.reliability},
 }
 for index, tip in ipairs(tips) do
   list[#list + 1] = {
@@ -119,6 +120,7 @@ for index, tip in ipairs(tips) do
     tag = tip[2],
     starting_status = "locked",
     trigger = {type = "research", technology = "logistic-robotics"},
+    simulation = tip[3],
   }
 end
 
