@@ -838,8 +838,47 @@ commands.add_command("otsr", { "otsr.command-help" }, function(command)
   player.print(curve_text(info))
 end)
 
--- Panel next to the train window; filled when the window is opened.
+-- The train GUI's relative anchor is centred over the map in 2.1. Use screen
+-- coordinates instead. The schedule sidebar is 452 logical pixels wide and
+-- starts 40 from the top. Item-group counts do not describe its visible width:
+-- predicting a wider Fuel tab leaves a gap beside the actual schedule sidebar.
+local function place_panel(player, frame)
+  local scale = player.display_scale
+  frame.location = {
+    x = math.floor(452 * scale + 0.5),
+    y = math.floor(40 * scale + 0.5),
+  }
+end
+
+local function hide_panel(event)
+  local player = game.get_player(event.player_index)
+  if player then
+    local frame = player.gui.screen[PANEL]
+    if frame then frame.visible = false end
+  end
+end
+
+local function refresh_panel_location(event)
+  local player = game.get_player(event.player_index)
+  if not player then return end
+  local frame = player.gui.screen[PANEL]
+  if not (frame and frame.visible) then return end
+  local entity = player.opened_gui_type == defines.gui_type.entity and player.opened
+  if entity and entity.valid and entity.train then
+    place_panel(player, frame)
+  else
+    frame.visible = false
+  end
+end
+
+-- Panel next to the train window; filled and positioned on every open.
 local function on_gui_opened(event)
+  local player = game.get_player(event.player_index)
+  if not player then return end
+  -- Remove the old relative panel lazily, including in existing saves.
+  local old_frame = player.gui.relative[PANEL]
+  if old_frame then old_frame.destroy() end
+  hide_panel(event)
   local entity = event.entity
   if not (entity and entity.valid) then
     return
@@ -848,21 +887,17 @@ local function on_gui_opened(event)
   if not (train and train.valid) then
     return
   end
-  local player = game.get_player(event.player_index)
-  if not player then
-    return
-  end
-  local relative = player.gui.relative
-  local frame = relative[PANEL]
+  local frame = player.gui.screen[PANEL]
   if not frame then
-    frame = relative.add({
+    frame = player.gui.screen.add({
       type = "frame",
       name = PANEL,
       caption = { "otsr.panel-title" },
       direction = "vertical",
-      anchor = { gui = defines.relative_gui_type.train_gui, position = defines.relative_gui_position.right },
     })
   end
+  frame.visible = true
+  place_panel(player, frame)
   frame.clear()
   local info = describe(train)
   frame.add({ type = "label", caption = { "otsr.panel-cargo", string.format("%.1f", info.slots), string.format("%.0f", info.fluid) } })
@@ -899,3 +934,10 @@ script.on_event(defines.events.on_train_created, on_train_created)
 script.on_event(defines.events.on_player_driving_changed_state, on_player_driving_changed_state)
 script.on_event(defines.events.on_runtime_mod_setting_changed, on_runtime_mod_setting_changed)
 script.on_event(defines.events.on_gui_opened, on_gui_opened)
+script.on_event(defines.events.on_gui_closed, hide_panel)
+-- These paths need explicit cleanup: the engine does not raise on_gui_closed.
+script.on_event(defines.events.on_player_died, hide_panel)
+script.on_event(defines.events.on_player_left_game, hide_panel)
+script.on_event(defines.events.on_player_display_resolution_changed, refresh_panel_location)
+script.on_event(defines.events.on_player_display_scale_changed, refresh_panel_location)
+script.on_event(defines.events.on_player_controller_changed, refresh_panel_location)
