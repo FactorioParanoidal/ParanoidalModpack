@@ -206,8 +206,8 @@ function AbstractSelector:onBeforeOpen(event)
     end
   else
     local filter_prototype = self:getFilter()
-    -- an empty filter builds the same list as no filter, keep the cached list
-    if filter_prototype ~= nil and filter_prototype ~= "" and event.continue ~= true then
+    -- Research can change availability even when the search stays empty.
+    if event.continue ~= true and (self.disable_option or (filter_prototype ~= nil and filter_prototype ~= "")) then
       event.reset = true
       self:resetGroups()
     end
