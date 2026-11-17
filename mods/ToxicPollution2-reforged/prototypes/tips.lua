@@ -1,10 +1,12 @@
 -- Tips and tricks: how the smog works. Always available: the mechanic acts from the first minute.
 local C = require("shared.config")
+local simulations = require("prototypes.tips-simulations")
 
 local CATEGORY = "tpr-smog"
 
-local function tip(name, order, tag, description)
+local function tip(name, order, tag, description, simulation)
 	return {
+		simulation = simulation,
 		type = "tips-and-tricks-item",
 		name = name,
 		category = CATEGORY,
@@ -33,11 +35,11 @@ local refill = mods["carbon-capture2"]
 data:extend({
 	{ type = "tips-and-tricks-item-category", name = CATEGORY, order = "c-[tpr-smog]" },
 	tip(CATEGORY, "a", "[img=virtual-signal/" .. C.ALERT.smog .. "]", { "tips-and-tricks-item-description." .. CATEGORY,
-		tolerance, tostring(M.damage_from), tostring(math.floor(M.damage_share * 100 + 0.5)) }),
+		tolerance, tostring(M.damage_from), tostring(math.floor(M.damage_share * 100 + 0.5)) }, simulations.smog),
 	tip("tpr-smog-protection", "b", "[img=item/" .. C.GAS_MASK .. "]", { "tips-and-tricks-item-description.tpr-smog-protection",
-		refill, tostring(M.zone_radius) }),
-	tip("tpr-smog-alerts", "c", "[img=virtual-signal/" .. C.ALERT.danger .. "]"),
-	tip("tpr-smog-sensor", "d", "[img=virtual-signal/" .. C.SIGNAL .. "]"),
-	tip("tpr-smog-sos", "e", "[img=item/" .. C.RESPIRATOR .. "]"),
+		refill, tostring(M.zone_radius) }, simulations.protection),
+	tip("tpr-smog-alerts", "c", "[img=virtual-signal/" .. C.ALERT.danger .. "]", nil, simulations.alerts),
+	tip("tpr-smog-sensor", "d", "[img=virtual-signal/" .. C.SIGNAL .. "]", nil, simulations.sensor),
+	tip("tpr-smog-sos", "e", "[img=item/" .. C.RESPIRATOR .. "]", nil, simulations.sos),
 	tip("tpr-smog-settings", "f", "[img=item/iron-gear-wheel]", settings_text),
 })

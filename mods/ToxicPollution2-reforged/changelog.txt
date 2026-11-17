@@ -2,6 +2,8 @@
 Version: 9.0.0
 Date: 2026-10-29
   Changes:
+    - Tips: the smog alert entry states the real condition (the excess over the tolerable level doubled) and the 30 second cooldown.
+    - Tips: five entries of "Toxic smog" have animations (prototypes/tips-simulations.lua): walking into the smog without protection and out of it; a respirator stack, a gas mask and heavy armor in the same smog; the alerts in their order (time sped up x3); the pollution signal of a constant combinator switching an air filter by its circuit condition; a respirator stopping the damage and the twice faster recovery near a working absorber. The mod script is not loaded in the tips window, so the scenes run the intoxication and wear formulas of scripts/model.lua with the numbers of shared/config.lua and the startup tolerance; the texts say what each animation shows (EN/RU).
     - Shorten the existing armor duration text to "Should last about ..." / "Примерно хватит на ..." without changing the duration calculation or units.
     - Shorten the Russian armor durability label to "Ресурс защиты".
     - Keep the compact personal status layout without section headings. Round displayed pollution consistently in /toxic air; no simulation or refill changes.
