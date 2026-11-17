@@ -36,6 +36,8 @@ M.STATUS = {
   boost = { diode = DIODE.yellow, code = 4, color = { 1, 0.66, 0.22 } },
 }
 local OK_STATUS = { zone = true, under = true, over = true, idle = true, reserve_wait = true, boost = true }
+local ACTIVE_ALERT_KEYS = { limit = "ppd-journal.limit", noinput = "ppd-journal.noinput",
+  loop = "ppd-journal.loop", converter = "ppd-journal.converter" }
 
 local function cmp(v, op, c)
   if op == ">" then return v > c elseif op == "<" then return v < c elseif op == "=" then return v == c
@@ -732,6 +734,7 @@ local function bypass_group(g, t)
   if set_status(m, "bypass") then
     journal.add(m.force, "wire", "alarm", { "ppd-journal.bypass", name_of(m) }, m)
   end
+  journal.current(m, { "ppd-journal.bypass", name_of(m) })
   if m.sig then write_signals(m, { 0, 0, 0, 0, 6, 0 }) end
   if m.label then drop_label(m) end
 end
@@ -992,6 +995,11 @@ function M.process(g, t)
   ds.dem, ds.boosting, ds.tap = dem_all or ds.dem, boosting, lead.tap or 0
   if zone then ds.zone_since = ds.zone_since or t else ds.zone_since = nil end
   history(lead, r, members[1]._dt, t)
+
+  local alert_key = ACTIVE_ALERT_KEYS[status]
+  local alert_message = alert_key and { alert_key, name_of(lead) } or nil
+  if status == "limit" then alert_message[3] = floor(r * 100 + 0.5) end
+  for _, m in ipairs(members) do journal.current(m, m == lead and alert_message or nil) end
 
   -- journal on district status changes
   if prev ~= status and prev ~= nil then

@@ -83,11 +83,23 @@ function M.explosion(rec, flame)
   end
 end
 
+-- Refresh only the panel warning, not the initial chat/sound. The tank scheduler owns its lifetime.
+function M.refresh_tank(entity, ticks_left)
+  if not (entity and entity.valid) then return end
+  local players = players_of(entity.force)
+  for _, player in pairs(players) do
+    player.remove_alert { entity = entity, type = defines.alert_type.custom, icon = ICONS.tank }
+  end
+  if enabled() then
+    alert(players, entity, "tank", { "flo-alert.tank", entity.localised_name, math.ceil(ticks_left / 60) })
+  end
+end
+
 function M.tank(entity, ticks, cause)
   if not enabled() then return end
   local players = players_of(entity.force)
   local seconds = math.ceil(ticks / 60)
-  alert(players, entity, "tank", { "flo-alert.tank", entity.localised_name, seconds })
+  M.refresh_tank(entity, ticks)
   say(players, { "", { "flo-alert.tank-chat", entity.localised_name, cause or { "flo-cause.unknown" }, seconds }, " ",
     gps(entity.surface, entity.position) })
 end
@@ -99,11 +111,11 @@ function M.tank_smoke(entity, ticks_left)
 end
 
 local function tank_out(entity, key)
-  if not enabled() then return end
   local players = players_of(entity.force)
   for _, player in pairs(players) do
-    player.remove_alert { entity = entity }
+    player.remove_alert { entity = entity, type = defines.alert_type.custom, icon = ICONS.tank }
   end
+  if not enabled() then return end
   say(players, { "", { key, entity.localised_name }, " ", gps(entity.surface, entity.position) })
 end
 

@@ -7,6 +7,7 @@ Date: 2026-10-30
   Major Features:
     - First version, written for Factorio Paranoidal from scratch; replaces Robot Attrition (robot_attrition), which is removed from the build. Only the idea of the mechanic is repeated: no code, graphics or texts of that mod.
   Features:
+    - Explosive-cargo and flammable-cargo crashes have contextual EN/RU alerts and separate 30-second cooldowns per force and surface, independent of the ordinary 5-minute crash alert. Player opt-outs and wreck targets are retained; crash rates, cargo losses, fire, damage and safety coverage are unchanged.
     - Logistic networks with more than 50 busy logistic robots lose robots now and then. Expected crashes per tick = (busy × 0.5 + robots waiting to charge × 5) × risk × map setting × multipliers × 1e-6, where the risk is the moving average of speed × (carried items + 0.5) of the robots picked so far (start 0.1). A robot waiting in a charging queue counts 10 times as much as a flying one; with 10% of the busy robots waiting the rate equals busy × risk. Construction robots never crash.
     - Victims come from the charging queues (a queue drawn by its length, a random logistic robot in it) with the share the queues have in that load, otherwise from all flying logistic robots.
     - Reliability: crash chance of a picked robot = min(1, health of the vanilla logistic robot / its health) × 10 / (10 + quality level). Bob tiers 2–4 crash 80% / 67% / 57% as often, legendary robots 67%.

@@ -289,21 +289,23 @@ end
 
 local function alert(record, active)
     local entity = record.entity
+    local signal = {type = "virtual", name = S.ws_no_resource}
     if active then
-        if record.alerted then return end
-        record.alerted = true
+        if record.alerted and game.tick < (record.alert_tick or 0) then return end
+        record.alerted, record.alert_tick = true, game.tick + 300
         local players_settings = storage.ic_players or {}
         for _, player in pairs(entity.force.players) do
             local settings = players_settings[player.index]
+            player.remove_alert({entity = entity, type = defines.alert_type.custom, icon = signal})
             if player.connected and not (settings and settings.alerts == false) then
-                player.add_custom_alert(entity, {type = "virtual", name = S.ws_no_resource},
+                player.add_custom_alert(entity, signal,
                     {"ic-quality.alert-no-resource", entity.localised_name}, true)
             end
         end
     elseif record.alerted then
-        record.alerted = nil
+        record.alerted, record.alert_tick = nil, nil
         for _, player in pairs(entity.force.players) do
-            player.remove_alert({entity = entity, type = defines.alert_type.custom})
+            player.remove_alert({entity = entity, type = defines.alert_type.custom, icon = signal})
         end
     end
 end
@@ -325,6 +327,10 @@ function M.progress(record, tick)
 end
 
 local function publish(record, crafting, tick)
+    if record.status_key and record.status_key ~= "no-resource" then
+        record.starved_since = nil
+        alert(record, false)
+    end
     if not (record.emitter and record.emitter.valid) then return end
     local attempt = record.sc or record.craft
     local refining = crafting and attempt and attempt.kind == "refine"

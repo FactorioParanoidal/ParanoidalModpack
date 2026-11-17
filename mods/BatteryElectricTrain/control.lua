@@ -18,14 +18,14 @@ local function on_loc_remove(event) -- entity, player_index
 
 	if not fuel then
 		log("BatteryElectricTrain: неожиданный тип топлива: " .. burning.name.name)
-		player_print(event.player_index, "Не удалось вернуть частично разряженный аккумулятор: топливо в локомотиве не распознано.")
+		player_print(event.player_index, {"bet-notice.unknown-fuel"})
 		return
 	end
 
 	if burner.burnt_result_inventory.insert({name=fuel.."-empty"}) > 0 then
 		burner.currently_burning = nil
 	else
-		player_print(event.player_index, "При снятии локомотива потерян аккумуляторный блок: отсек разряженных аккумуляторов заполнен.")
+		player_print(event.player_index, {"bet-notice.full"})
 	end
 end
 

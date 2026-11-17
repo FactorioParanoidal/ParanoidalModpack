@@ -63,4 +63,11 @@ data:extend({
 		default_value = false,
 		order = "g",
 	},
+	{
+		type = "bool-setting",
+		name = "re-success-messages",
+		setting_type = "runtime-per-user",
+		default_value = false,
+		order = "h",
+	},
 })

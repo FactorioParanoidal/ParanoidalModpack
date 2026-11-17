@@ -2,6 +2,7 @@
 Version: 9.0.0
 Date: 2026-10-29
   Locale:
+    - The EN/RU last-protection warning and matching tips distinguish unavailable automatic replacement from an empty inventory; the SOS tip notes the setting and manual replacement of equipment-grid armor. Warning thresholds, estimates, protection and damage are unchanged.
     - Added selective inline images to Russian mod-setting names; existing tooltip formatting, wording, saved values and mechanics are preserved.
   Changes:
     - Tips: the smog alert entry states the real condition (the excess over the tolerable level doubled) and the 30 second cooldown.
@@ -12,6 +13,7 @@ Date: 2026-10-29
     - get_player_status now reads current personal conditions without changing intoxication, armor resource or module energy. Removed stored status snapshots, freshness checks and snapshot-only invalidation handlers; inventory changes still enable normal armor-refill retries.
     - Paranoidal packaging: moved standalone regression fixtures out of the distributed mod into the local test collection.
   Bugfixes:
+    - Lasting smog/damage warnings end with their condition instead of keeping an accidental short-alert deadline, including old saved alerts. New/escalating warnings and sharp smog increases may sound; numeric refreshes and severity downgrades stay silent. Sound preferences and hazard thresholds are unchanged; EN/RU tips match the policy.
     - Exhausted grid armor can refill on its normal player update after a filter becomes available, including in clean air, without double consumption or equipment loss.
     - Recovery zones use final runtime energy-source prototypes and no longer miss a working absorber after eight idle candidates.
     - Status reads no longer create player/force records; replacement armor does not inherit the previous item's duration estimate.

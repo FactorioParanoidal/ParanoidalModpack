@@ -100,6 +100,11 @@ local function update(task)
     return
   end
 
+  if tick >= (st.alert_tick or 0) then
+    FO.alerts.refresh_tank(entity, st.finish - tick)
+    st.alert_tick = tick + 60
+  end
+
   local surface, box = entity.surface, entity.bounding_box
   for _ = 1, 2 do
     surface.create_entity { name = "flo-tank-fire", position = FO.fx.random_point(box, 0.6), force = "neutral" }

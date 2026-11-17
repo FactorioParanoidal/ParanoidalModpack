@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.26.0
   Locale:
+    - Cybersyn cargo warnings distinguish a departure finding and its loading location from the train's current position; keys and parameters match the owning mod's EN/RU text.
+    - The Cybersyn stuck-train warning describes exceeding the delivery time limit and suggests checking the route and stations, matching the owning mod's Russian text without changing its key or timeout.
     - Added selective inline images and restrained colour emphasis to Russian mod-setting tooltips; wording, setting values and mechanics are unchanged.
     - Added selective inline images to Russian mod-setting names; existing tooltip formatting, wording, saved values and mechanics are preserved.
     - ru: the Blueprint Sandboxes tip "Isolation level" (bpsb-intro-isolation) explains its new scheme: Full and None columns, colours and rows.

@@ -5,6 +5,7 @@ Version: 9.0.7
     - Russian hardcoded player-facing text: 104 UI, chat, command-help and error-message literals; technical identifiers, format parameters and gameplay logic are unchanged.
 Date: 2026-10-21
   Changes:
+    - Action failures have private EN/RU action labels and a target GPS; repeats of the same action kind are summarized every 30 seconds per player, including when failures stop before the summary. Debug details, action results, ammunition and queues are unchanged; pending notices survive reload and use the existing event registry in manual and automatic modes.
     - Reused the five chip item-icon PNGs for their equipment sprites and the range technology base PNG for speed technologies; removed six identical copies, preserving sprite sizes and separate range/speed overlay icons.
     - Paranoidal packaging: moved three unused MP3 source recordings to the local source-assets collection; all game OGG sounds and their definitions are unchanged.
   Changes:

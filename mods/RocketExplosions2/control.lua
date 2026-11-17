@@ -577,8 +577,13 @@ local function on_success(silo, r)
 			{color = {r = 0.5, g = 1, b = 0.5}})
 	elseif r.success < 1 then
 		data.won = true
-		force.print({"", {"re2-message.success", where, percent(1 - r.success)}, " ", quip("success")},
-			{color = {r = 0.7, g = 0.9, b = 0.7}})
+		-- Keep the original random draw even when nobody requests routine reports.
+		local message = {"", {"re2-message.success", where, percent(1 - r.success)}, " ", quip("success")}
+		for _, player in pairs(force.connected_players) do
+			if settings.get_player_settings(player)["re-success-messages"].value then
+				player.print(message, {color = {r = 0.7, g = 0.9, b = 0.7}})
+			end
+		end
 	end
 	local after = reliability(silo)
 	if after.success >= 1 and not site.perfect then

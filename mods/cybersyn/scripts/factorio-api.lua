@@ -1166,89 +1166,169 @@ function send_alert_missing_train(r_stop, p_stop)
 end
 
 local send_stuck_train_alert_icon = { name = LOST_TRAIN_NAME, type = "fluid" }
+local send_nonempty_train_in_depot_alert_icon = { name = NONEMPTY_TRAIN_NAME, type = "fluid" }
+local send_lost_train_alert_icon = { name = LOST_TRAIN_NAME, type = "fluid" }
+local TRAIN_ALERT_KEYS = {
+	[1] = "stuck-train", [2] = "nonempty-train", [3] = "depot-broken", [4] = "station-broken",
+	[5] = "refueler-broken", [6] = "train-at-incorrect", [7] = "cannot-path-between-surfaces",
+	[8] = "train-group-schedule-broken", [9] = "train-schedule-broken", [10] = "unexpected-cargo",
+}
+
+local function train_alert_text(data)
+	local id = data[2]
+	if id == 10 and data[4] then
+		return { "cybersyn-messages.unexpected-cargo-at", data[4][1], data[4][2] }
+	elseif id == 8 then
+		local group = data.group
+		if not group and data[1].valid then
+			local schedule = data[1].get_schedule()
+			group = schedule and schedule.group
+		end
+		if group and group ~= "" then return { "cybersyn-messages.train-group-schedule-broken", group } end
+		return { "cybersyn-messages.train-schedule-broken" }
+	end
+	return { "cybersyn-messages." .. TRAIN_ALERT_KEYS[id] }
+end
+
+local function train_alert_icon(data)
+	if data[2] == 1 then return send_stuck_train_alert_icon end
+	return data[2] == 2 and send_nonempty_train_in_depot_alert_icon or send_lost_train_alert_icon
+end
+
+local function remove_train_alert(data)
+	local entity = data.entity or (data[1].valid and get_any_train_entity(data[1]))
+	if entity and entity.valid then
+		local force = data.force or entity.force
+		if force.valid then
+			force.remove_alert({ entity = entity, type = defines.alert_type.custom,
+				icon = train_alert_icon(data), message = data.message or train_alert_text(data) })
+		end
+	end
+end
+
+-- Exact retirement also removes the native marker, not just the bookkeeping row.
+local function clear_train_alert(map_data, train_id)
+	local alerts = map_data.active_alerts
+	local data = alerts and alerts[train_id]
+	if not data then return end
+	remove_train_alert(data)
+	alerts[train_id] = nil
+	if next(alerts) == nil then map_data.active_alerts = nil end
+end
+
+local function present_train_alert(data)
+	local train = data[1]
+	local entity = train.front_stock or train.back_stock
+	if not entity then return end
+	remove_train_alert(data)
+	-- A captured/transferred train must not disclose its former force's loading location or group.
+	if data.force and data.force ~= entity.force then data[4], data.group = nil, nil end
+	data.entity, data.force, data.message = entity, entity.force, train_alert_text(data)
+	entity.force.add_custom_alert(entity, train_alert_icon(data), data.message, true)
+end
+
+local function set_train_alert(map_data, train, id, context, group)
+	local old = map_data.active_alerts and map_data.active_alerts[train.id]
+	-- A generic timeout must not overwrite a more specific unresolved finding.
+	if id == 1 and old and old[2] ~= 1 then return false end
+	if old and old[2] == id and old.group == group
+		and ((not old[4] and not context) or (old[4] and context
+			and old[4][1] == context[1] and old[4][2] == context[2])) then
+		old.last_seen = map_data.total_ticks
+		return false
+	end
+	clear_train_alert(map_data, train.id)
+	map_data.active_alerts = map_data.active_alerts or {}
+	local data = { train, id, map_data.total_ticks, context, group = group }
+	map_data.active_alerts[train.id] = data
+	present_train_alert(data)
+	if id ~= 1 then send_alert_sounds(train) end
+	return true
+end
+
+-- Only notification state changes here. Dispatch, schedules and cargo are untouched.
+local function recheck_train_alert(map_data, train_id)
+	local data = map_data.active_alerts and map_data.active_alerts[train_id]
+	if not data then return end
+	local train, id = data[1], data[2]
+	local resolved = not train.valid
+	if not resolved then
+		if id == 1 then
+			local record = map_data.trains[train_id]
+			resolved = not mod_settings.stuck_train_alert_enabled or not record or not record.manifest
+				or record.last_manifest_tick + mod_settings.stuck_train_time * mod_settings.tps >= map_data.total_ticks
+		elseif id == 2 or id == 10 then
+			-- Moving does not prove that unexpected cargo has been removed.
+			resolved = next(train.get_contents()) == nil and next(train.get_fluid_contents()) == nil
+		elseif id == 8 or id == 9 then
+			local schedule = train.get_schedule()
+			resolved = schedule and schedule.get_record_count() > 0
+		elseif id >= 3 and id <= 7 then
+			-- Movement alone does not restore a lost train to Cybersyn. Require acceptance back into
+			-- the available fleet, or a later dispatch with a path and no new failure of this kind.
+			local record = map_data.trains[train_id]
+			resolved = record and not train.manual_mode and ((record.is_available and not record.manifest)
+				or (record.manifest and record.last_manifest_tick > (data.last_seen or data[3]) and train.has_path))
+		end
+	end
+	if resolved then clear_train_alert(map_data, train_id) end
+end
+
 ---@param map_data MapData
 ---@param train LuaTrain
 function send_alert_stuck_train(map_data, train)
-	send_alert_for_train(train, send_stuck_train_alert_icon, "cybersyn-messages.stuck-train")
-	map_data.active_alerts = map_data.active_alerts or {}
-	map_data.active_alerts[train.id] = { train, 1, map_data.total_ticks }
+	set_train_alert(map_data, train, 1)
 	diag.alert(DIAG_ALERT_STUCK, train)
 end
 
-local send_nonempty_train_in_depot_alert_icon = { name = NONEMPTY_TRAIN_NAME, type = "fluid" }
 ---@param map_data MapData
 ---@param train LuaTrain
 function send_alert_nonempty_train_in_depot(map_data, train)
-	send_alert_for_train(train, send_nonempty_train_in_depot_alert_icon, "cybersyn-messages.nonempty-train")
-	send_alert_sounds(train)
-	map_data.active_alerts = map_data.active_alerts or {}
-	map_data.active_alerts[train.id] = { train, 2, map_data.total_ticks }
+	set_train_alert(map_data, train, 2)
 	diag.alert(DIAG_ALERT_NONEMPTY_IN_DEPOT, train)
 end
 
-local send_lost_train_alert_icon = { name = LOST_TRAIN_NAME, type = "fluid" }
 ---@param map_data MapData
 ---@param train LuaTrain
 function send_alert_depot_of_train_broken(map_data, train)
-	send_alert_for_train(train, send_lost_train_alert_icon, "cybersyn-messages.depot-broken")
-	send_alert_sounds(train)
-	map_data.active_alerts = map_data.active_alerts or {}
-	map_data.active_alerts[train.id] = { train, 3, map_data.total_ticks }
+	set_train_alert(map_data, train, 3)
 	diag.alert(DIAG_ALERT_DEPOT_BROKEN, train)
 end
 ---@param map_data MapData
 ---@param train LuaTrain
 function send_alert_station_of_train_broken(map_data, train)
-	send_alert_for_train(train, send_lost_train_alert_icon, "cybersyn-messages.station-broken")
-	send_alert_sounds(train)
-	map_data.active_alerts = map_data.active_alerts or {}
-	map_data.active_alerts[train.id] = { train, 4, map_data.total_ticks }
+	set_train_alert(map_data, train, 4)
 	diag.alert(DIAG_ALERT_STATION_BROKEN, train)
 end
 ---@param map_data MapData
 ---@param train LuaTrain
 function send_alert_refueler_of_train_broken(map_data, train)
-	send_alert_for_train(train, send_lost_train_alert_icon, "cybersyn-messages.refueler-broken")
-	send_alert_sounds(train)
-	map_data.active_alerts = map_data.active_alerts or {}
-	map_data.active_alerts[train.id] = { train, 5, map_data.total_ticks }
+	set_train_alert(map_data, train, 5)
 	diag.alert(DIAG_ALERT_REFUELER_BROKEN, train)
 end
 ---@param map_data MapData
 ---@param train LuaTrain
 function send_alert_train_at_incorrect_station(map_data, train)
-	send_alert_for_train(train, send_lost_train_alert_icon, "cybersyn-messages.train-at-incorrect")
-	send_alert_sounds(train)
-	map_data.active_alerts = map_data.active_alerts or {}
-	map_data.active_alerts[train.id] = { train, 6, map_data.total_ticks }
+	set_train_alert(map_data, train, 6)
 	diag.alert(DIAG_ALERT_AT_INCORRECT_STATION, train)
 end
 ---@param map_data MapData
 ---@param train LuaTrain
 function send_alert_cannot_path_between_surfaces(map_data, train)
-	send_alert_for_train(train, send_lost_train_alert_icon, "cybersyn-messages.cannot-path-between-surfaces")
-	send_alert_sounds(train)
-	map_data.active_alerts = map_data.active_alerts or {}
-	map_data.active_alerts[train.id] = { train, 7, map_data.total_ticks }
+	set_train_alert(map_data, train, 7)
 	diag.alert(DIAG_ALERT_CANNOT_PATH_BETWEEN_SURFACES, train)
 end
 ---@param map_data MapData
 ---@param train LuaTrain
 ---@param group string
 function send_alert_train_group_base_schedule_broken(map_data, train, group)
-	send_alert_for_train(train, send_lost_train_alert_icon, "cybersyn-messages.train-group-schedule-broken", group)
-	send_alert_sounds(train)
-	map_data.active_alerts = map_data.active_alerts or {}
-	map_data.active_alerts[train.id] = { train, 8, map_data.total_ticks }
+	set_train_alert(map_data, train, 8, nil, group)
 	diag.alert(DIAG_ALERT_GROUP_SCHEDULE_BROKEN, train)
 end
 ---@param map_data MapData
 ---@param train LuaTrain
 function send_alert_train_base_schedule_broken(map_data, train)
-	send_alert_for_train(train, send_lost_train_alert_icon, "cybersyn-messages.train-schedule-broken")
-	send_alert_sounds(train)
-	map_data.active_alerts = map_data.active_alerts or {}
-	map_data.active_alerts[train.id] = { train, 9, map_data.total_ticks }
+	set_train_alert(map_data, train, 9)
 	diag.alert(DIAG_ALERT_SCHEDULE_BROKEN, train)
 end
 
@@ -1270,13 +1350,17 @@ end
 ---@param train LuaTrain
 ---@param stop LuaEntity? the stop the train loaded at
 function send_alert_unexpected_cargo(map_data, train, stop)
-	send_alert_for_train(train, send_lost_train_alert_icon, "cybersyn-messages.unexpected-cargo")
-	send_alert_sounds(train)
-	map_data.active_alerts = map_data.active_alerts or {}
-	map_data.active_alerts[train.id] = { train, 10, map_data.total_ticks }
+	local context
+	if stop and stop.valid then
+		local loco = get_any_train_entity(train)
+		if loco and loco.force == stop.force then context = { stop.backer_name or "", gps_text(stop) } end
+	end
+	-- Plain values survive reload and removal of the loading stop; old three-field alerts still work.
+	local changed = set_train_alert(map_data, train, 10, context)
 	-- Logged by the departure's unexpected_cargo event, which names the item and amount (one row, not two).
 
 	-- Only the owning force, like the alert: other forces must not learn where its stops are.
+	if not changed then return end
 	if stop and stop.valid then
 		stop.force.print({ "cybersyn-messages.unexpected-cargo-at", stop.backer_name or "", gps_text(stop) } --[[@as LocalisedString]])
 	else
@@ -1286,37 +1370,22 @@ function send_alert_unexpected_cargo(map_data, train, stop)
 end
 
 ---@param map_data MapData
-function process_active_alerts(map_data)
-	for train_id, data in pairs(map_data.active_alerts) do
-		local train = data[1]
-		if train.valid then
-			local id = data[2]
-			if id == 1 then
-				send_alert_for_train(train, send_stuck_train_alert_icon, "cybersyn-messages.stuck-train")
-			elseif id == 2 then
-				--this is an alert that we have to actively check if we can clear
-				local is_train_empty = next(train.get_contents()) == nil and next(train.get_fluid_contents()) == nil
-				if is_train_empty then
-					--NOTE: this function could get confused being called internally, be sure it can handle that
-					on_train_changed({ train = train })
-				else
-					send_alert_for_train(train, send_nonempty_train_in_depot_alert_icon, "cybersyn-messages.nonempty-train")
-				end
-			elseif id == 3 then
-				send_alert_for_train(train, send_lost_train_alert_icon, "cybersyn-messages.depot-broken")
-			elseif id == 4 then
-				send_alert_for_train(train, send_lost_train_alert_icon, "cybersyn-messages.station-broken")
-			elseif id == 5 then
-				send_alert_for_train(train, send_lost_train_alert_icon, "cybersyn-messages.refueler-broken")
-			elseif id == 6 then
-				send_alert_for_train(train, send_lost_train_alert_icon, "cybersyn-messages.train-at-incorrect")
-			elseif id == 7 then
-				send_alert_for_train(train, send_lost_train_alert_icon, "cybersyn-messages.cannot-path-between-surfaces")
-			elseif id == 10 then
-				send_alert_for_train(train, send_lost_train_alert_icon, "cybersyn-messages.unexpected-cargo")
+function process_active_alerts(map_data, train_id)
+	if train_id then
+		recheck_train_alert(map_data, train_id)
+		return
+	end
+	local alerts = map_data.active_alerts
+	if not alerts then return end
+	for train_id, data in pairs(alerts) do
+		if map_data.active_alerts and map_data.active_alerts[train_id] == data then
+			recheck_train_alert(map_data, train_id)
+			if map_data.active_alerts and map_data.active_alerts[train_id] == data then
+				present_train_alert(data)
+			elseif data[2] == 2 and data[1].valid then
+				-- Keep the existing empty-depot retry; removing a marker must not change dispatch.
+				on_train_changed({ train = data[1] })
 			end
-		else
-			map_data.active_alerts[train_id] = nil
 		end
 	end
 end

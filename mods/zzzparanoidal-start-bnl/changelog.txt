@@ -7,6 +7,7 @@ Date: 2026-11-08
   Graphics:
     - Axiom-6 uses mferrari_lib's infected spaceship hull instead of a green-tinted vanilla wreck. Its container, note, salvage, nearby car and safe-code quest are unchanged; without the optional library the previous appearance stays.
   Changes:
+    - Journal notifications show the opening instructions once per player, then use a short EN/RU title. Silent entries, automatic opening, story texts, radio sound and the first-rocket letter are unchanged; the hint flag survives reload.
     - Reworked EN/RU start messages with BnL humour instead of debris timers/radii, reactor schedules, salvage rewards and safe-solving hints. Localized Fusion Lite as "Ядер-Лайт" in Russian. Late-arrival equipment limits and immediate danger warnings remain clear.
     - Removed end-of-season announcements for long nights, magnetic storms and dust storms without changing their effects, restoration or scheduling.
     - Removed AUTO's debris all-clear chat message in EN/RU: the end of the debris shower is no longer announced. Previously queued all-clear jobs finish silently; debris behaviour is unchanged.

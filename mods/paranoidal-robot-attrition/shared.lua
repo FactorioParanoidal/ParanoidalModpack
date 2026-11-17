@@ -60,8 +60,9 @@ local M = {
   crash_rings = {{0.5, 40}, {1.5, 20}, {2.5, 10}, {3.5, 5}},  -- 75 at the centre, 5 at 3.5 tiles
   cargo_rings = {{1, 150}, {2.5, 75}, {4, 30}, {5.5, 10}},    -- detonating cargo: 265 at the centre, 10 at 5.5 tiles
 
-  -- At most one crash alert per force and surface in this many ticks.
+  -- Ordinary crashes: one alert per force/surface; each dangerous cargo kind has its own shorter gate.
   alert_interval = 5 * 3600,
+  danger_alert_interval = 30 * 60,
 }
 
 return M

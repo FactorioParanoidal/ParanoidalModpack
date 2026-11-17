@@ -85,20 +85,32 @@ local function drop(robot, ctx)
   end
 end
 
--- At most one alert per force and surface in alert_interval, pointing at the wreck.
+-- Dangerous cargo has separate cooldowns, so an ordinary crash cannot mask a fire or detonation.
 local function alert(robot, ctx)
   local wreck = ctx.wreck
   if not (wreck and wreck.valid) then return end
   local force_index, surface_index = ctx.force.index, ctx.surface.index
-  local last = storage.alerts[force_index]
-  if not last then
-    last = {}
-    storage.alerts[force_index] = last
+  local danger = ctx.detonate and "explosive" or (ctx.ignite and "fire" or nil)
+  if danger then
+    storage.cargo_alerts = storage.cargo_alerts or {}
+    local forces = storage.cargo_alerts
+    forces[force_index] = forces[force_index] or {}
+    local surfaces = forces[force_index]
+    surfaces[surface_index] = surfaces[surface_index] or {}
+    local last = surfaces[surface_index]
+    if last[danger] and game.tick - last[danger] < shared.danger_alert_interval then return end
+    last[danger] = game.tick
+  else
+    local last = storage.alerts[force_index]
+    if not last then
+      last = {}
+      storage.alerts[force_index] = last
+    end
+    if last[surface_index] and game.tick - last[surface_index] < shared.alert_interval then return end
+    last[surface_index] = game.tick
   end
-  if last[surface_index] and game.tick - last[surface_index] < shared.alert_interval then return end
-  last[surface_index] = game.tick
   local icon = {type = "entity", name = robot.name}
-  local message = {"pra.alert-crash", robot.prototype.localised_name}
+  local message = {danger and ("pra.alert-crash-" .. danger) or "pra.alert-crash", robot.prototype.localised_name}
   for _, player in pairs(ctx.force.connected_players) do
     if player.mod_settings[shared.setting_alerts].value then
       player.add_custom_alert(wreck, icon, message, true)

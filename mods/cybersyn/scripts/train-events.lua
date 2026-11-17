@@ -661,19 +661,7 @@ function on_train_changed(event)
 		end
 	end
 
-	if map_data.active_alerts then
-		--remove the alert if the train is interacted with at all
-		local data = map_data.active_alerts[train_id]
-		if data then
-			--we need to wait for the train to come to a stop from being locked
-			if data[3] + 10 * mod_settings.tps < map_data.total_ticks then
-				map_data.active_alerts[train_id] = nil
-				if next(map_data.active_alerts) == nil then
-					map_data.active_alerts = nil
-				end
-			end
-		end
-	end
+	process_active_alerts(map_data, train_id)
 
 	if train_e.state == defines.train_state.wait_station then
 		local stop = train_e.station

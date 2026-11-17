@@ -82,9 +82,23 @@ end
 
 local function announce(force, surface, truth, days)
   local points = points_of(force, surface)
+  local f = st()
+  f.missing_radars = f.missing_radars or {}
+  local missing = f.missing_radars[force.index]
   if points <= 0 then
-    force.print({ "prain-forecast.silent" }, { color = COLOR })
+    if not missing then
+      missing = {}
+      f.missing_radars[force.index] = missing
+    end
+    if not missing[surface.index] then
+      force.print({ "prain-forecast.silent", surface.localised_name or surface.name }, { color = COLOR })
+      missing[surface.index] = true
+    end
     return
+  end
+  if missing then
+    missing[surface.index] = nil
+    if next(missing) == nil then f.missing_radars[force.index] = nil end
   end
   local p = M.reliability(points)
   local shown = truth

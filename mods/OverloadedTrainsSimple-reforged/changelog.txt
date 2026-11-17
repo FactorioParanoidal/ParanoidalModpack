@@ -4,6 +4,7 @@ Date: 2026-10-27
   Locale:
     - Added selective inline images to Russian mod-setting names; existing tooltip formatting, wording, saved values and mechanics are preserved.
   Bugfixes:
+    - Removing a departure overload notice matches the custom alert type as well as its entity and icon, leaving native warnings alone. Train physics and the departure-only warning policy are unchanged.
     - Removed the predicted Fuel-tab width from panel placement: the load panel now touches the actual schedule sidebar instead of leaving a gap in remote view, and stays at that map corner on resize.
     - Positioned the train load panel at the upper-left of the map beside the train sidebar instead of in the centre; reposition on reopen and display changes, hide on close, and remove the old relative panel in existing saves.
   Graphics:

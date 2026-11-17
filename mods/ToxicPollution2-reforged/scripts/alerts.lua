@@ -2,7 +2,7 @@
 -- Lasting while the condition holds: health damage; harmful air without protection ("put on a
 -- respirator!", no forecast).
 -- Short (SHOW ticks) on a sharp change: entering harmful air in protection, the smog twice as harmful,
--- the LAST protection (no item left in the stack, no spare) at 5 % or less than a minute before health
+-- protection without an available automatic replacement at 5 % or less than a minute before health
 -- damage (once, with a short danger sound). A spent item replaced by the next one is not announced.
 -- The message carries the whole status: intoxication bar, air, layers, resource bar, spare filters.
 local C = require("shared.config")
@@ -17,6 +17,7 @@ local WORSE_MIN = 50 -- ... and at least this much higher
 local RESEND = 300 -- ticks: re-add an unchanged alert in case the game dropped it
 local BAR_CELLS = 20
 local PRIORITY = { smog = 1, last = 2, bare = 2, danger = 3 }
+local SOUND_PRIORITY = { smog = 1, last = 2, bare = 3, danger = 4 }
 local SOUNDS = { smog = "utility/console_message", last = "utility/alert_destroyed", bare = "utility/alert_destroyed",
 	danger = "utility/alert_destroyed" }
 local ICONS = { smog = "smog", last = "filters", bare = "filters", danger = "danger" }
@@ -175,7 +176,7 @@ function A.detect(state, data, tick, intoxication)
 			if state.protected then
 				local title = ref and { "tpr-alert.smog-worse", int(state.pollution) }
 					or { "tpr-alert.smog-protected", int(state.pollution), armor.name }
-				event = event or { kind = "smog", title = title }
+				event = event or { kind = "smog", title = title, escalated = ref ~= nil }
 				data.smog_ready = tick + SMOG_COOLDOWN
 			end
 			data.harm_ref = harmful
@@ -215,15 +216,15 @@ function A.reset(player, data)
 	data.harm_ref, data.smog_ready, data.warned = nil, nil, nil
 end
 
-local function show(player, character, data, kind, item, tick)
-	if data.alert ~= kind then
+local function show(player, character, data, kind, item, tick, previous_kind)
+	local old_priority = SOUND_PRIORITY[previous_kind] or 0
+	if SOUND_PRIORITY[kind] > old_priority
+		or (kind == previous_kind and item.escalated) then
 		play(player, kind)
-		if data.alert then
-			remove(player, character, data.alert)
-		end
 	end
+	if data.alert and data.alert ~= kind then remove(player, character, data.alert) end
 	data.alert, data.alert_title, data.alert_brief = kind, item.title, item.brief
-	data.alert_until = item.lasting and nil or tick + A.SHOW
+	if item.lasting then data.alert_until = nil else data.alert_until = tick + A.SHOW end
 end
 
 function A.update(player, character, data, state, intoxication)
@@ -231,17 +232,20 @@ function A.update(player, character, data, state, intoxication)
 	local event = A.detect(state, data, tick, intoxication)
 	local lasting = A.lasting(state)
 	local kind = data.alert
-	-- A lasting alert ends with its condition; a short one after SHOW ticks.
-	if kind and ((not data.alert_until and not (lasting and lasting.kind == kind))
-		or (data.alert_until and tick >= data.alert_until)) then
+	local previous_kind = kind
+	local was_lasting = kind == "danger" or kind == "bare"
+	local expired = not was_lasting and data.alert_until and tick >= data.alert_until
+	if expired then previous_kind = nil end
+	-- The kind also identifies old saved lasting alerts with an erroneous deadline.
+	if kind and ((was_lasting and not (lasting and lasting.kind == kind)) or expired) then
 		A.clear(player, data)
 		kind = nil
 	end
 	if lasting and (not event or PRIORITY[lasting.kind] >= PRIORITY[event.kind]) then
 		lasting.lasting = true
-		show(player, character, data, lasting.kind, lasting, tick)
+		show(player, character, data, lasting.kind, lasting, tick, previous_kind)
 	elseif event and (not kind or PRIORITY[event.kind] >= PRIORITY[kind]) then
-		show(player, character, data, event.kind, event, tick)
+		show(player, character, data, event.kind, event, tick, previous_kind)
 	end
 	kind = data.alert
 	if not kind then return end

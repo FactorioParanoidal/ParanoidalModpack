@@ -146,7 +146,13 @@ function M.add(key, params, opts)
         if player.gui.screen[FRAME] then fill(player.gui.screen[FRAME], player) end
     end
     if not (opts and opts.silent) then
-        util.say({"bnl.journal-new", entry.title})
+        local journal = state()
+        journal.hint_given = journal.hint_given or {}
+        for _, player in pairs(game.connected_players) do
+            local key = journal.hint_given[player.index] and "bnl-notice.journal-new" or "bnl.journal-new"
+            util.say({key, entry.title}, nil, player)
+            journal.hint_given[player.index] = true
+        end
     end
     if opts and opts.open then
         for _, player in pairs(game.connected_players) do M.open(player) end

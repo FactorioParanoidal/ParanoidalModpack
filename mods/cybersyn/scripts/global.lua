@@ -21,7 +21,7 @@
 ---@field public tick_data {}
 ---@field public economy Cybersyn.Economy An indexed cache of all the items on the Cybersyn network. It is updated in `tick_poll_station` and then used in `tick_dispatch` to match providers to requesters. (could contain invalid stations or stations with modified settings from when they were first appended)
 ---@field public each_refuelers {[uint]: true}
----@field public active_alerts {[uint]: {[1]: LuaTrain, [2]: int}}?
+---@field public active_alerts {[uint]: {[1]: LuaTrain, [2]: int, [3]: uint, [4]: {[1]: string, [2]: string}?, group: string?, entity: LuaEntity?, force: LuaForce?, message: LocalisedString?, last_seen: uint?}}?
 ---@field public manager Manager
 ---@field public se_elevators {[uint]: Cybersyn.ElevatorData} maps relevant entities on both surfaces to one shared data structure for the whole space elevator; the key can be the unit_number of the elevator's main assembler or its train stop
 ---@field public connected_surfaces {[string]: {[string]: Cybersyn.SurfaceConnection}} maps pairs of surfaces to the pairs of entities connecting them

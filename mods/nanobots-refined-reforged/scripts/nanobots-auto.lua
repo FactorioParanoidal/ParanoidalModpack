@@ -6,6 +6,7 @@ NanobotsAuto = {}
 
 local Queue = require('scripts/hash_queue')
 local paranoidal_debug = require('paranoidal-debug-chat')
+local action_notices = require('scripts/action-notices')
 
 local max = math.max
 
@@ -342,7 +343,7 @@ local function run_task(data, ammo_kind, target_finder)
     end
     paranoidal_debug.print("Ошибка Nanobots: действие не выполнено, тип: " .. target_type, player)
     if not paranoidal_debug.enabled() then
-        player.print("Наноботы не смогли выполнить действие. Подробности записаны в журнал Factorio.")
+        action_notices.failed(player, target_type, entity)
     end
     return false
 end

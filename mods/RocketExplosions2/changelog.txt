@@ -2,6 +2,7 @@
 Version: 1.1.5
 Date: 2026-10-30
   Changes:
+    - Routine successful-launch reports are a personal opt-in setting, off by default. Failures, the first successful launch and each silo's 100% reliability milestone remain announced. Launch mechanics, counters and the shared random draw sequence are unchanged.
     - Russian nuclear launch-failure alert now reads "Ракета при старте вызвала сильнейший взрыв!"; the failure outcome and other messages are unchanged.
     - Reworded EN/RU reliability and post-explosion messages in AUTO's voice: no promise about every future launch or construction-stage internals. Reliability, health, existing quips and the outcome tooltip are unchanged.
   Features:

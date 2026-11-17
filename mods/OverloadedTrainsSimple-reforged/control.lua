@@ -245,7 +245,7 @@ local function clear_alert(state, id)
   state.alerts[id] = nil
   if entity.valid then
     for _, player in pairs(entity.force.connected_players) do
-      player.remove_alert({ entity = entity, icon = ALERT_ICON })
+      player.remove_alert({ entity = entity, type = defines.alert_type.custom, icon = ALERT_ICON })
     end
   end
 end
