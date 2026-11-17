@@ -445,7 +445,10 @@ require("tweaks.custom.fluids-tab").apply(data.raw, log)
 require("tweaks.custom.enemies-tab").apply(data.raw, log)
 -- Компактное окно «Создание»: слияние однотипных строк и скрытие бочек; после всех раскладок меню.
 require("tweaks.custom.crafting-menu-compaction")
--- Временно: из «Советов и подсказок» остаётся только категория PARANOIDAL.
+-- «Советы и подсказки» о железной дороге: здесь, а не в data.lua, — технологии модов поездов
+-- (спарка, электровозы), на которые ссылаются уведомления, к этому этапу уже есть.
+require("prototypes.tips-and-tricks.railway.railway")
+-- Из «Советов и подсказок» остаются только перечисленные категории (своё и сверенное с модами).
 require("removals.tips-and-tricks")
 -- Иконки и цвет в трубах расплавов олова и хрома как в Beta 8.
 require("tweaks.custom.molten-tin-chrome-beta8")

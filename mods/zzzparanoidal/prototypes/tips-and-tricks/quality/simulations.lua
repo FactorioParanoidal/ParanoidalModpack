@@ -329,7 +329,7 @@ local simulations = {}
 simulations.defects = simulation([=[
 Z.start(function()
   Z.unlock_all()
-  Z.power(-9, 9, 5.5)
+  Z.power(-9, 9, 6.5)
   Z.text({0, -4.6}, {"zzz-tips-sim.grades-title"}, {scale = 1.3})
   local machines = {}
   for i = 0, 5 do
@@ -360,7 +360,7 @@ end)
 simulations.defects_origin = simulation([=[
 Z.start(function()
   Z.unlock_all()
-  Z.power(-9, 9, 5.5)
+  Z.power(-9, 9, 6.5)
   local machine = Z.machine("assembling-machine-1", {-7.5, 0}, "normal", "iron-chest")
   Z.text({-7.5, -2.4}, {"zzz-tips-sim.level", "0"}, {scale = 1})
   Z.text({4, -4.6}, {"zzz-tips-sim.new-products"}, {scale = 1.1})
@@ -423,7 +423,7 @@ end)
 simulations.defects_ingredients = simulation([=[
 Z.start(function()
   Z.unlock_all()
-  Z.power(-9, 9, 5.5)
+  Z.power(-9, 9, 6.5)
   local recipe = "lighted-small-electric-pole"
   local lanes = {
     {x = -7, quality = "ic-defect-3"},
@@ -593,7 +593,7 @@ Z.start(function()
     {x = 0, mode = "careful", time = 5, level = 4, roman = "II"},
     {x = 7.5, mode = "precise", time = 20, level = 10, roman = "III"},
   }
-  Z.power(-9, 9, 5.5)
+  Z.power(-9, 9, 6.5)
   Z.text({0, -4.7}, {"zzz-tips-sim.production-modes-title"}, {scale = 1.15})
   for _, lane in ipairs(lanes) do
     Z.create("assembling-machine-1", {lane.x, -0.5})
@@ -634,8 +634,8 @@ Z.start(function()
 end)
 ]=])
 
--- Контрольный пост: заказ «строго обычное ×10»; годное вперёд, брак влево в мастерскую
--- и обратно на пост, излишек и чужое — вправо.
+-- Контрольный пост: заказ — 4 бура третьей ступени; 5 изделий одной ступени → 1 на ступень выше
+-- (иногда сразу через ступень, как process_outcome в ic rules.lua), годное — вперёд по стрелке.
 simulations.defects_post = simulation([=[
 Z.start(function()
   Z.unlock_all()
@@ -662,14 +662,17 @@ Z.start(function()
     stock[tier] = stock[tier] + 1
     while stock[tier] >= 5 do
       stock[tier] = stock[tier] - 5
-      if tier + 1 >= 3 then
+      -- One operation: a tier up, then the chain chance of the tier reached may lift it further.
+      local up = tier + 1
+      while up < 3 and math.random() < (tiers[up].chain_probability or 0) do up = up + 1 end
+      if up >= 3 then
         local made = Z.token("burner-mining-drill", tiers[3].name, {0, 0})
         accepted = accepted + 1
         Z.move(made, {0, -4}, 30, function(t) Z.destroy(t) end)
       else
-        stock[tier + 1] = stock[tier + 1] + 1
+        stock[up] = stock[up] + 1
       end
-      tier = math.min(tier + 1, 2)
+      tier = math.min(up, 2)
     end
     refresh()
   end
@@ -699,7 +702,7 @@ Z.start(function()
   Z.unlock_all()
   -- Three tiers: the supply area of higher tiers does not fit the scene.
   local tiers = Z.positive(3)
-  Z.power(3.5, 9, 5.5)
+  Z.power(3.5, 9, 6.5)
   local pole_proto, machine_proto = prototypes.entity["small-electric-pole"], prototypes.entity["assembling-machine-2"]
   local index, wait = 1, 0
   local pole, machine
@@ -707,7 +710,7 @@ Z.start(function()
   local frame = Z.rect({0, 0}, {0, 0}, {0.4, 0.7, 1, 1}, false)
   local title = Z.text({0, -4.6}, "", {scale = 1.4})
   local pole_info = Z.text({-6, 4.3}, "", {scale = 0.85, font = "default"})
-  local machine_info = Z.text({6, 4.3}, "", {scale = 0.85, font = "default"})
+  local machine_info = Z.text({6, 2.4}, "", {scale = 0.85, font = "default"})
   local function show()
     local quality = tiers[index]
     if pole and pole.valid then pole.destroy() end
@@ -740,7 +743,7 @@ end)
 simulations.quality_modules = simulation([=[
 Z.start(function()
   Z.unlock_all()
-  Z.power(-9, 9, 5.5)
+  Z.power(-9, 9, 6.5)
   local module = "quality-module-3"
   local machines = {}
   local positions = {{-9, -1.5}, {-5.5, -1.5}, {-9, 2}, {-5.5, 2}}
@@ -837,7 +840,7 @@ end)
 simulations.quality_ingredients = simulation([=[
 Z.start(function()
   Z.unlock_all()
-  Z.power(-9, 9, 5.5)
+  Z.power(-9, 9, 6.5)
   local tiers = Z.positive(3)
   local lanes = {}
   for i, q in ipairs(tiers) do
@@ -879,7 +882,7 @@ Z.start(function()
     {x = 0, mode = "careful", time = 5, rolls = 3, roman = "II"},
     {x = 7.5, mode = "precise", time = 20, rolls = 10, roman = "III"},
   }
-  Z.power(-9, 9, 5.5)
+  Z.power(-9, 9, 6.5)
   Z.text({0, -4.7}, {"zzz-tips-sim.quality-modes-title", "[item=" .. module .. "]"}, {scale = 1})
   for _, lane in ipairs(lanes) do
     local entity = Z.create("assembling-machine-3", {lane.x, -0.5})
@@ -915,7 +918,7 @@ end)
 simulations.quality_recycling = simulation([=[
 Z.start(function()
   Z.unlock_all()
-  Z.power(-9, 9, 5.5)
+  Z.power(-9, 9, 6.5)
   local recycler = Z.create("recycler", {-6, 0})
   local slots = 0
   pcall(function() local m = recycler.get_module_inventory() slots = #m m.insert{name = "quality-module-3", count = #m} end)
@@ -944,5 +947,30 @@ Z.start(function()
   end)
 end)
 ]=])
+
+-- Кадр окна подсказок (1408×704 px): при масштабе 1 сцены занимали меньше половины окна и подписи
+-- были мелкими. Центр и масштаб подобраны по снимкам сцен (рамка содержимого + поля); строка
+-- добавляется в конец init, после сцены. «Шансы и лесенка» — окно игрока, камера ей не нужна.
+-- Энергоблок Z.power стоит на y = 6.5: вершины подстанций не задевают подписи под автоматами (y ≈ 3).
+local CAMERA = {
+    defects = {0, 1.6, 1.5},
+    defects_origin = {0, 1.6, 1.5},
+    defects_research = {0, 0, 2},
+    defects_ingredients = {0.5, 1.6, 1.5},
+    defects_buildings = {0.5, -0.3, 1.8},
+    defects_workshop = {0, 0, 2},
+    defects_workshop_modes = {0, -0.3, 2},
+    defects_production_modes = {0, 1.6, 1.5},
+    defects_post = {-2.6, 0.2, 1.75},
+    quality = {0, 1.6, 1.5},
+    quality_modules = {0, 1.6, 1.5},
+    quality_ingredients = {0, 1.6, 1.5},
+    quality_modes = {0, 1.6, 1.5},
+    quality_recycling = {0, 1.6, 1.5},
+}
+for name, camera in pairs(CAMERA) do
+    simulations[name].init = simulations[name].init
+        .. string.format("\nsim.camera_position = {%g, %g}\nsim.camera_zoom = %g\n", camera[1], camera[2], camera[3])
+end
 
 return simulations

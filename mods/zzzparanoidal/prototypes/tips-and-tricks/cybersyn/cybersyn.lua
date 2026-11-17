@@ -23,7 +23,7 @@ local function tip(name, order, tag, simulation, title, trigger)
     }
 end
 
-local list = {{type = "tips-and-tricks-item-category", name = CATEGORY, order = "b-c"}}
+local list = {{type = "tips-and-tricks-item-category", name = CATEGORY, order = "b-d"}}
 -- Порядок обучения: быстрый старт → устройство станций → как сеть выбирает → настройка → для опытных → окно
 -- «Диспетчерская» → неисправности.
 local items = {
