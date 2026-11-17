@@ -296,7 +296,7 @@ function overview_tab.apply_layout(player_data, layout)
 	local refs = player_data.refs
 	local cw = layout.content_width
 	local rows = layout.rows_by_tab[TAB]
-	local tile = math.floor((cw - 3 * 12) / 4)
+	local tile = math.max(0, math.floor((cw - 3 * 12) / 4))
 	local provider = math.floor(W.provider * math.min(cw, BASE_CONTENT_WIDTH) / BASE_CONTENT_WIDTH)
 	local fixed = W.item + W.why + provider + W.stock + W.lost + W.wait + W.ack
 	local requester = cw - FRAME_BORDER - TABLE_PADDING - (TABLE_COLUMNS - 1) * TABLE_SPACING - fixed
@@ -305,6 +305,8 @@ function overview_tab.apply_layout(player_data, layout)
 		local give = math.max(0, math.min(provider - PROVIDER_MIN, REQUESTER_MIN - requester))
 		provider, requester = provider - give, requester + give
 	end
+	-- A narrow resized window can exhaust both flexible columns; GUI widths cannot be negative.
+	requester = math.max(0, requester)
 	local widths = { tile = tile, requester = requester, provider = provider, rows = rows }
 	for _, t in ipairs(TILES) do
 		local button = refs["overview_tile_" .. t.name]

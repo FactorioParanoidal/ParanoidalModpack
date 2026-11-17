@@ -5,6 +5,7 @@ Date: 2026-10-29
     - Paranoidal: updated from the local fork of 2.0.53 to upstream 2.2.2 (mod portal ZIP, SHA-256 d9479d1e2fc1fc38...). The fork's patches for the Factorio 2.1 API (pump rail targets, fluid wagon capacity, recipe categories) and its merged on_gui_closed handler are dropped: upstream 2.1.2-2.2.0 makes the same changes.
     - Train and station alerts and their sound are sent to the force once instead of to each of its players, so players who are offline no longer collect them
   Bugfixes:
+    - Clamped exhausted GUI widths to zero when resizing the manager or increasing UI scale; prevents negative-size errors in Overview and the other table layouts without changing normal-size widths or dispatcher logic.
     - Includes upstream 2.1.3: the Space Exploration elevator connect switch works again, and an elevator window left open in a save is closed once so its frame is rebuilt
   Locale:
     - Russian hardcoded player-facing text: the 13 UI, chat and error-message literals of the 2.0.53 fork; technical identifiers, format parameters and gameplay logic are unchanged.

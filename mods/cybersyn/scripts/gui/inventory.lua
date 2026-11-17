@@ -169,7 +169,7 @@ end
 --- @return int width
 --- @return int columns
 local function grid_size(cw)
-	local width = math.floor((cw - 2 * GRID_GAP) / 3)
+	local width = math.max(0, math.floor((cw - 2 * GRID_GAP) / 3))
 	return width, math.max(4, math.floor((width - GRID_INNER) / SLOT_ROW))
 end
 

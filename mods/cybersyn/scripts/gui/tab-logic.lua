@@ -90,7 +90,7 @@ end
 --- @param pane boolean
 --- @return int
 function logic.table_width(content_width, pane)
-	if pane then return content_width - logic.PANE_WIDTH - logic.PANE_GAP end
+	if pane then return math.max(0, content_width - logic.PANE_WIDTH - logic.PANE_GAP) end
 	return content_width
 end
 
@@ -187,7 +187,7 @@ function logic.train_widths(content_width, hidden, pane)
 		w.group_marker = logic.GROUP_MARKER_ICON
 		name = name + logic.GROUP_MARKER - logic.GROUP_MARKER_ICON
 	end
-	w.group_name = math.min(logic.GROUP_NAME_MAX, name)
+	w.group_name = math.max(0, math.min(logic.GROUP_NAME_MAX, name))
 	return w
 end
 
