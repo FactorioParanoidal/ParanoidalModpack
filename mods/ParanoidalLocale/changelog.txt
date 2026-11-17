@@ -1,6 +1,7 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.26.0
   Locale:
+    - ru: the Blueprint Sandboxes tip "Isolation level" (bpsb-intro-isolation) explains its new scheme: Full and None columns, colours and rows.
     - Added the mod name and description of Paranoidal: Power Districts (paranoidal-power-districts), the same as in the mod itself.
     - Followed the rename of factorissimo-2-notnotmelon to Paranoidal-factorissimo-4 in the dependency, the mod name ("Paranoidal Factorissimo 4"), the canonical description and the comments of zzzzz-ru-completion.cfg; the factorissimo-2-notnotmelon save bridge has its own Russian name and description.
   Locale:
