@@ -447,6 +447,38 @@ function AbstractSelector:translate(event)
 end
 
 -------------------------------------------------------------------------------
+---Resolve the clicked product's filter after its asynchronous translation.
+---@param event LuaEvent
+---@return boolean
+function AbstractSelector:translateFilter(event)
+  if event.item4 == nil or event.item4 == "" or not User.isFilterTranslate() then
+    return false
+  end
+  local translated = User.get("translated")
+  local list_translate = Cache.getData(self.classname, "list_translate") or {}
+  local localised_name = list_translate[event.item4]
+  -- A partially populated translation cache can skip the bulk request loop.
+  if translated[event.item4] == nil and localised_name ~= nil then
+    if event.filter_translation_id == nil then
+      event.filter_translation_id = User.queryTranslate(localised_name, event.item4)
+    end
+    local pending = User.get("translated_ids")
+    if event.filter_translation_id == nil or pending[event.filter_translation_id] ~= nil then
+      self:updateWaitMessage("Wait translate: 1")
+      event.continue = true
+      return User.createNextEvent(event, self.classname, "translate-filter").wait
+    end
+  end
+  if event.method == "translate-filter" then event.continue = false end
+  local filter = User.getTranslate(event.item4)
+  if self:getFilter() ~= filter then
+    User.setParameter("filter_prototype", filter)
+    self:updateFilter(event)
+  end
+  return false
+end
+
+-------------------------------------------------------------------------------
 ---On update
 ---@param event LuaEvent
 function AbstractSelector:onUpdate(event)
@@ -464,6 +496,8 @@ function AbstractSelector:onUpdate(event)
   if response.wait == true then 
     return
   end
+
+  if self:translateFilter(event) then return end
   
   response = self:createElementLists(event)
 
