@@ -232,7 +232,11 @@ local function onChunkGenerated(event)
     -- queue generated chunk for delayed processing, queuing is required because
     -- some mods (RSO) mess with chunk as they are generated, which messes up the
     -- scoring.
-    universe.pendingChunks[event] = true
+    local map = universe.maps[event.surface.index]
+    if map then
+        local p = event.area.left_top
+        chunkProcessor.queueGeneratedChunk(map, p.x, p.y)
+    end
 end
 
 local function onChunkDeleted(event)
@@ -244,6 +248,7 @@ local function onChunkDeleted(event)
             local position = positions[i]
             local x = position.x * 32
             local y = position.y * 32
+            chunkProcessor.cancelGeneratedChunk(map, x, y)
             local chunk = mapUtils.getChunkByXY(map, x, y)
             if chunk ~= -1 then
 				mapUtils.removeChunkFromMap(map, chunk)
@@ -273,6 +278,9 @@ local function prepMap(surface)
 
     map.processedChunks = 0
     map.processQueue = {}
+    map.chunkQueueSlots = {}
+    map.chunkQueueHoles = nil
+    map.chunkQueueRebuild = nil
     map.processIndex = 1
     map.cleanupIndex = 1
     map.scanPlayerIndex = 1
@@ -395,23 +403,11 @@ local function prepMap(surface)
 	map.resourceSettleTick = 0
 	--
 	
-    -- queue all current chunks that wont be generated during play
-    local tick = game.tick
-    local position = {0,0}
-    map.nextChunkSort = 0
-    for chunk in surface.get_chunks() do
-        local x = chunk.x
-        local y = chunk.y
-        position[1] = x
-        position[2] = y
-        if surface.is_chunk_generated(position) then
-            onChunkGenerated({ surface = surface,
-                               area = { left_top = { x = x * 32,
-                                                     y = y * 32}}})
-        end
-    end
-
-     processPendingChunks(universe, tick, true)
+    -- LuaChunkIterator is a LuaObject, used as resumable storage by OreRadar
+    -- and FactorySearch. The processor checks validity before every batch.
+    map.indexing = true
+    map.chunkIterator = surface.get_chunks()
+    map.firstStateTick = game.tick
 end
 
 local function setNewEnemySide()
@@ -569,11 +565,12 @@ local function onBuild(event)
             registerResource(entity, map)
         else
             accountPlayerEntity(entity, map, true, false)
-            if universe.safeBuildings then
+            if universe.safeBuildings and universe.activePlayerForceSet and universe.activePlayerForceSet[entity.force.name] then
                 if entityIsImmortal(entity) then
                     entity.destructible = false
                 end
             end
+            if aiBrain.active(universe) then aiBrain.field.observe(map, entity) end
         end
     end
 end
@@ -736,6 +733,10 @@ local function onDeath(event)
 				map.vengenceLimiter = 0
 				local pointsGain = 0
                 if (entityType == "unit-spawner") then
+                    if aiBrain.active(universe) and universe.activePlayerForceSet
+                            and universe.activePlayerForceSet[event.force.name] then
+                        aiBrain.field.loseNest(map, chunk, tick)
+                    end
 					if artilleryBlast then
 						map.retribution = map.retribution + 0.018	-- additional retribution points					
 					end
@@ -824,7 +825,8 @@ local function onDeath(event)
 
         elseif (entityForceName ~= "enemy") then
             local creditNatives = false
-            if (event.force ~= nil) and (event.force.name == "enemy") then
+            if event.force and event.force.name == "enemy" and universe.activePlayerForceSet
+                    and universe.activePlayerForceSet[entityForceName] then
                 creditNatives = true
                 if (chunk ~= -1) then
                     victoryScent(map, chunk, entityType)
@@ -866,12 +868,11 @@ local function onDeath(event)
                     unregisterResource(entity, map)
                 end
             end
-            if creditNatives then
-				if universe.safeBuildings and entityIsImmortal(entity) then
-					makeImmortalEntity(surface, entity)
-				else	
-					accountPlayerEntity(entity, map, false, creditNatives)
-				end
+            if creditNatives and universe.activePlayerForceSet and universe.activePlayerForceSet[entityForceName] then
+                if universe.safeBuildings and entityIsImmortal(entity) and makeImmortalEntity(surface, entity) then
+                    return  -- a replacement is not a meaningful victory for the attacker
+                end
+                accountPlayerEntity(entity, map, false, creditNatives)
 				local causeCommandable = (entityType ~= "wall") and cause and cause.valid and (cause.type == "unit") and cause.commandable
 				local causeGroup = causeCommandable and causeCommandable.parent_group
 				if causeGroup then
@@ -880,6 +881,8 @@ local function onDeath(event)
 						squad.kills = (squad.kills or 0) + 1
 						if aiBrain.active(universe) then
 							aiBrain.onSquadKill(squad, entity)
+                            aiBrain.field.confirmObjective(map, squad, entity, tick)
+                            aiBrain.field.recordBreach(map, squad, chunk, tick)
 						end
 					end
 				end
@@ -958,10 +961,7 @@ local function onSurfaceTileChange(event)
                 local chunk = getChunkByPosition(map, position)
 
                 if (chunk ~= -1) then
-					local chunkData = {chunk.x, chunk.y, map.surface.index}
-					local chunkIndex = "x"..chunkData[1].."y"..chunkData[2].."m"..chunkData[3]
-
-                    universe.chunkToPassScan[chunkIndex] = chunkData
+					chunkProcessor.queuePassScan(map, chunk)
                 else
                     local x,y = positionToChunkXY(position)
                     local addMe = true
@@ -989,10 +989,7 @@ local function onSurfaceTileChange(event)
                 local chunk = getChunkByPosition(map, position)
 
                 if (chunk ~= -1) then
-					local chunkData = {chunk.x, chunk.y, map.surface.index}
-					local chunkIndex = "x"..chunkData[1].."y"..chunkData[2].."m"..chunkData[3]
-
-                    universe.chunkToPassScan[chunkIndex] = chunkData
+					chunkProcessor.queuePassScan(map, chunk)
                 else
                     local x,y = positionToChunkXY(position)
                     local addMe = true
@@ -1237,7 +1234,7 @@ end
 
 local function onSurfaceCreated(event)
 	local surface = game.surfaces[event.surface_index]
-	if not SURFACE_IGNORED(surface, universe) then
+	if surface and surface.valid and not universe.maps[event.surface_index] and not SURFACE_IGNORED(surface, universe) then
 		prepMap(surface)
 		local map = universe.maps[event.surface_index]
 		if map then
@@ -1249,12 +1246,15 @@ end
 local function onSurfaceDeleted(event)
     local surfaceIndex = event.surface_index
     if (universe.mapIterator == surfaceIndex) then
-        universe.mapIterator, universe.activeMap = next(universe.maps, universe.mapIterator)
+        universe.mapIterator, universe.activeMap = nil, nil
     end
     if (universe.suspendMapsIterator == surfaceIndex) then
-        universe.suspendMapsIterator = next(universe.maps, universe.suspendMapsIterator)
+        universe.suspendMapsIterator = nil
     end
 	
+    if universe.processMapAIIterator == surfaceIndex then universe.processMapAIIterator = nil end
+    local oldMap = universe.maps[surfaceIndex]
+    if oldMap then aiBrain.field.forgetMap(oldMap) end
 	universe.maps[surfaceIndex] = nil
 	--game.print("onSurfaceDeleted: surfaceIndex =".. tostring(surfaceIndex))	-- debug
 	-- bases and squads will be deleted by baseUtils.recycleBases and squadAttack.cleanSquads
@@ -1280,12 +1280,12 @@ local function onBuilderArrived(event)
     builder.surface.create_entity(universe.createBuildCloudQuery)
 	local map = universe.maps[builder.surface.index]
 	if map then
-		local chunk = mapUtils.getChunkByXY(map, builder.position.x, builder.position.y)
+		local chunk = mapUtils.getChunkByPosition(map, builder.position)
 		if chunk and (chunk~=-1) then
 			chunk.nextSquadTick = game.tick + 3600*5	-- temporary stop attacks from this chunk
 		end
 		local group = event.group
-		if group and group.is_unit_group and not universe.groupNumberToSquad[group.unique_id] then
+		if group and group.valid and group.is_unit_group and not universe.groupNumberToSquad[group.unique_id] then
 			local members = {}
 			for _, entity in pairs(group.members) do 
 				if entity.valid and (entity.type == "unit") then
@@ -1506,6 +1506,15 @@ local function onEntityDamagedWithChampions(event)
 	if not (entity and entity.valid) then
 		return
 	end
+    if universe.safeBuildings and event.final_health <= 0 and event.force and event.force.name == "enemy"
+            and universe.maps[entity.surface.index] and universe.activePlayerForceSet
+            and universe.activePlayerForceSet[entity.force.name] and entityIsImmortal(entity) then
+        -- Restore the original entity before the engine kills it. This retains
+        -- quality, wiring, train associations, and circuit configuration.
+        entity.health = entity.max_health
+        entity.destructible = false
+        return
+    end
 	local record = champions.recordOf(universe, entity)
 	if record then
 		if not record.died then
@@ -1525,27 +1534,39 @@ end
 -- The state is derived from settings and storage, so on_load restores the same registration on every peer.
 updateEntityDamagedHandler = function()
 	rampantDamageActive = allowOneshotProtection or allowLongRangeImmunity
-	local championNames = champions.trackedNames(universe)
-	if championNames then
-		local filters = {}
-		if rampantDamageActive then
-			for i = 1, #entityDamagedFilters do
-				filters[i] = entityDamagedFilters[i]
-			end
-		end
-		for _, name in ipairs(championNames) do
-			filters[#filters + 1] = {mode = "or", filter = "name", name = name}
-		end
-		script.on_event(defines.events.on_entity_damaged, onEntityDamagedWithChampions, filters)
-		script.on_event(defines.events.on_post_entity_died, onPostEntityDied, {{filter = "type", type = "unit"}})
-		return
-	end
-	script.on_event(defines.events.on_post_entity_died, nil)
-	if rampantDamageActive then
-		script.on_event(defines.events.on_entity_damaged, onEntityDamaged, entityDamagedFilters)
-	else
-		script.on_event(defines.events.on_entity_damaged, nil)
-	end
+    local championNames = champions.trackedNames(universe)
+    local filters = {}
+    if rampantDamageActive then
+        for i = 1, #entityDamagedFilters do filters[i] = entityDamagedFilters[i] end
+    end
+    for _, name in ipairs(championNames or {}) do
+        filters[#filters + 1] = {mode = "or", filter = "name", name = name}
+    end
+    if universe and universe.safeBuildings then
+        local function addSafe(filter)
+            filters[#filters + 1] = filter
+            filters[#filters + 1] = {mode = "and", filter = "final-health", comparison = "<=", value = 0}
+        end
+        -- Do not feed old saved prototype names such as curved-rail to the
+        -- engine as type filters. The rail family predicates include elevated rails.
+        addSafe({mode = "or", filter = "type", type = "electric-pole"})
+        local safe = universe.safeEntities or {}
+        if safe["straight-rail"] then
+            addSafe({mode = "or", filter = "rail"})
+            addSafe({mode = "or", filter = "rail-signal"})
+            for _, id in ipairs({"train-stop", "rail-ramp", "rail-support"}) do
+                addSafe({mode = "or", filter = "type", type = id})
+            end
+        end
+        if safe.lamp then addSafe({mode = "or", filter = "type", type = "lamp"}) end
+    end
+    script.on_event(defines.events.on_entity_damaged, #filters > 0 and onEntityDamagedWithChampions or nil,
+        #filters > 0 and filters or nil)
+    if championNames then
+        script.on_event(defines.events.on_post_entity_died, onPostEntityDied, {{filter = "type", type = "unit"}})
+    else
+        script.on_event(defines.events.on_post_entity_died, nil)
+    end
 end
 champions.onTrackedChanged = updateEntityDamagedHandler
 
@@ -1655,6 +1676,9 @@ script.on_event(defines.events.on_tick,
 					if universe.aiBehaviorVersion ~= aiBrain.BEHAVIOR_VERSION then
 						aiBrain.refreshSettings(universe)
 					end
+                    if not universe.paranoidalDiplomacyCache then
+                        upgrade.rebuildActivePlayerForces(universe)
+                    end
 					---------
 					removeOneTickImmunity(universe)
 					processProtectedUnits()
@@ -1681,6 +1705,7 @@ script.on_event(defines.events.on_tick,
 						end	
                         processPendingChunks(universe, tick)
                         processScanChunks(universe)
+                        processDecompressQueue(universe)
                         universe.processedChunks = universe.processedChunks + PROCESS_QUEUE_SIZE
 						return
 					end	
@@ -1693,6 +1718,7 @@ script.on_event(defines.events.on_tick,
                         if universe.NEW_ENEMIES then
                             recycleBases(universe, tick)
                         end
+                        chunkProcessor.indexExistingChunks(map, tick)
                         cleanUpMapTables(map, tick)
                     elseif (pick == 1) then
 						if (tick % 16) == 1 then	-- every 16 ticks; hunting chances are rescaled in MapProcessor
@@ -2096,6 +2122,9 @@ local function onModSettingsChange(event)
 		end
 	end
 	
+    if event.setting and string.find(event.setting, "rampantFixed--safeBuildings", 1, true) then
+        updateEntityDamagedHandler()
+    end
     return true
 end
 
@@ -2211,7 +2240,10 @@ local function onInit()
 end
 
 script.on_event(defines.events.on_surface_deleted, onSurfaceDeleted)
-script.on_event(defines.events.on_surface_cleared, onSurfaceCreated)
+script.on_event(defines.events.on_surface_cleared, function(event)
+    onSurfaceDeleted(event)
+    onSurfaceCreated(event)
+end)
 script.on_event(defines.events.on_surface_created, onSurfaceCreated)
 
 script.on_init(onInit)
@@ -2269,6 +2301,10 @@ script.on_event(defines.events.on_force_created, onForceCreated)
 script.on_event(defines.events.on_forces_merged, onForceMerged)
 script.on_event(defines.events.on_force_cease_fire_changed, onForceDiplomacyChanged)
 script.on_event(defines.events.on_force_friends_changed, onForceDiplomacyChanged)
+script.on_event({defines.events.on_train_created, defines.events.on_train_changed_state,
+                 defines.events.on_player_driving_changed_state}, function(event)
+    aiBrain.heavy.observeTrain(universe, event)
+end)
 
 script.on_event(defines.events.on_unit_group_finished_gathering, onGroupFinishedGathering)
 

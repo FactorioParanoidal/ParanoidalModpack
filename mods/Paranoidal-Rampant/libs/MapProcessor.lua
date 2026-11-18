@@ -10,6 +10,8 @@ local aiAttackWave = require("AIAttackWave")
 local aiPredicates = require("AIPredicates")
 local constants = require("Constants")
 local mapUtils = require("MapUtils")
+local chunkQueue = require("ChunkQueue")
+local getQueuedChunk = chunkQueue.get
 local playerUtils = require("PlayerUtils")
 local chunkUtils = require("ChunkUtils")
 local chunkPropertyUtils = require("ChunkPropertyUtils")
@@ -135,17 +137,19 @@ function mapProcessor.processMap(map, tick)
     end
 
     for x=index,endIndex,step do
-        local chunk = processQueue[x]
+        local chunk = getQueuedChunk(map, x)
         if chunk and (chunk[CHUNK_TICK] ~= tick) then
             chunk[CHUNK_TICK] = tick
             processPheromone(map, chunk)
         end
     end
 
-    if (endIndex == processQueueLength) then
+    if outgoingWave and endIndex == processQueueLength then
         map.outgoingScanWave = false
-    elseif (endIndex == 1) then
+        map.processIndex = endIndex
+    elseif not outgoingWave and endIndex == 1 then
         map.outgoingScanWave = true
+        map.processIndex = endIndex
     elseif outgoingWave then
         map.processIndex = endIndex + 1
     else
@@ -175,14 +179,16 @@ function mapProcessor.processStaticMap(map)
     end
 
     for x=index,endIndex,step do
-        local chunk = processQueue[x]
-        processStaticPheromone(map, chunk)
+        local chunk = getQueuedChunk(map, x)
+        if chunk then processStaticPheromone(map, chunk) end
     end
 
-    if (endIndex == processQueueLength) then
+    if outgoingWave and endIndex == processQueueLength then
         map.outgoingStaticScanWave = false
-    elseif (endIndex == 1) then
+        map.processStaticIndex = endIndex
+    elseif not outgoingWave and endIndex == 1 then
         map.outgoingStaticScanWave = true
+        map.processStaticIndex = endIndex
     elseif outgoingWave then
         map.processStaticIndex = endIndex + 1
     else
@@ -268,11 +274,7 @@ function mapProcessor.processPlayers(players, universe, tick)
 					if (playerChunk ~= -1) then
 						local roll = mRandom() 
 						local allowingAttacks = canAttack(map, tick)
-						local allowDaytimePlayerHunting = universe.allowDaytimePlayerHunting
-						if allowDaytimePlayerHunting == nil then
-							allowDaytimePlayerHunting = settings.global["rampantFixed--allowDaytimePlayerHunting"].value
-						end
-						local allowingVengence = (allowingAttacks or allowDaytimePlayerHunting) and (map.points >= (AI_VENGENCE_SQUAD_COST*0))
+						local allowingVengence = aiPredicates.canHunt(map, tick) and map.points >= 0
 
 						local forceVengence = (getEnemyStructureCount(map, playerChunk) > 0)
 
@@ -325,6 +327,7 @@ function mapProcessor.processPlayers(players, universe, tick)
 end
 
 function mapProcessor.cleanUpMapTables(map, tick)
+    chunkQueue.maintain(map, mapUtils.discardChunkState)
     local index = map.cleanupIndex
 
     local retreats = map.chunkToRetreats
@@ -340,7 +343,7 @@ function mapProcessor.cleanUpMapTables(map, tick)
     end
 
     for x=index,endIndex do
-        local chunk = processQueue[x]
+        local chunk = getQueuedChunk(map, x)
 
         local retreatTick = retreats[chunk]
         if retreatTick and ((tick - retreatTick) > COOLDOWN_RETREAT) then
@@ -412,15 +415,17 @@ function mapProcessor.scanPlayerMap(map, tick)
     end
 
     for x=index,endIndex do
-        local chunk = processQueue[x]
+        local chunk = getQueuedChunk(map, x)
 
-        chunkBox[1] = chunk.x
-        chunkBox[2] = chunk.y
+        if chunk then
+            chunkBox[1] = chunk.x
+            chunkBox[2] = chunk.y
 
-        offset[1] = chunk.x + CHUNK_SIZE
-        offset[2] = chunk.y + CHUNK_SIZE
+            offset[1] = chunk.x + CHUNK_SIZE
+            offset[2] = chunk.y + CHUNK_SIZE
 
-        mapScanPlayerChunk(chunk, map)
+            mapScanPlayerChunk(chunk, map)
+        end
     end
 
     if (endIndex == processQueueLength) then
@@ -450,15 +455,17 @@ function mapProcessor.scanEnemyMap(map, tick)
     end
 
     for x=index,endIndex do
-        local chunk = processQueue[x]
+        local chunk = getQueuedChunk(map, x)
 
-        chunkBox[1] = chunk.x
-        chunkBox[2] = chunk.y
+        if chunk then
+            chunkBox[1] = chunk.x
+            chunkBox[2] = chunk.y
 
-        offset[1] = chunk.x + CHUNK_SIZE
-        offset[2] = chunk.y + CHUNK_SIZE
+            offset[1] = chunk.x + CHUNK_SIZE
+            offset[2] = chunk.y + CHUNK_SIZE
 
-        mapScanEnemyChunk(chunk, map)
+            mapScanEnemyChunk(chunk, map)
+        end
     end
 
     if (endIndex == processQueueLength) then
@@ -489,15 +496,17 @@ function mapProcessor.scanResourceMap(map, tick)
     end
 
     for x=index,endIndex do
-        local chunk = processQueue[x]
+        local chunk = getQueuedChunk(map, x)
 
-        chunkBox[1] = chunk.x
-        chunkBox[2] = chunk.y
+        if chunk then
+            chunkBox[1] = chunk.x
+            chunkBox[2] = chunk.y
 
-        offset[1] = chunk.x + CHUNK_SIZE
-        offset[2] = chunk.y + CHUNK_SIZE
+            offset[1] = chunk.x + CHUNK_SIZE
+            offset[2] = chunk.y + CHUNK_SIZE
 
-        mapScanResourceChunk(chunk, map)
+            mapScanResourceChunk(chunk, map)
+        end
     end
 
     if (endIndex == processQueueLength) then
@@ -522,7 +531,8 @@ function mapProcessor.processActiveNests(universe, tick)
         universe.processActiveNestIterator = next(processActiveNest, chunk)
         if chunkPack.tick < tick  then
             local map = chunkPack.map
-            if (not map) or (not map.surface) or (not map.surface.valid) then
+            if (not map) or (not map.surface) or (not map.surface.valid)
+                    or universe.maps[map.surface.index] ~= map or not chunkQueue.isLive(map, chunk) then
                 processActiveNest[chunk] = nil
                 return
             end
@@ -550,7 +560,7 @@ function mapProcessor.processVengence(map)
         end
     else
         map.deployVengenceIterator = next(ss, chunk)
-        formVengenceSquad(map, chunk)
+        if chunkQueue.isLive(map, chunk) then formVengenceSquad(map, chunk) end
         ss[chunk] = nil
     end
 end
@@ -564,6 +574,11 @@ function mapProcessor.processNests(map, tick)
         map.processNestIterator = nil
         return
     else
+        if not chunkQueue.isLive(map, chunk) then
+            mapUtils.discardChunkState(map, chunk)
+            map.processNestIterator = nil
+            return
+        end
         processNestActiveness(map, chunk)
         queueNestSpawners(map, chunk, tick)
 
@@ -598,6 +613,11 @@ local function processSpawners(map, tick, iterator, chunks, remoteInterfaceParam
 		map[iterator] = nil
         return
     end
+    if not chunkQueue.isLive(map, chunk) then
+        mapUtils.discardChunkState(map, chunk)
+        map[iterator] = nil
+        return
+    end
 	if chunk.nextSquadTick and (chunk.nextSquadTick > tick) then
 		map[iterator] = chunk
 		return
@@ -621,7 +641,7 @@ local function processSpawners(map, tick, iterator, chunks, remoteInterfaceParam
 		currentSquad = "attack"
 		squadCreated = formSquads(map, chunk, tick, remoteInterfaceParameters)
 	else
-		if attack and map.hasNonmoddedBiters and (map.resourceSettleTick < tick) and map.universe.expansion and (map.points > 0) then
+		if attack and map.hasNonmoddedBiters and (map.resourceSettleTick < tick) and map.universe.enabledMigration and (map.points >= 10) then
 			squadCreated = formResourceSettlers(map, chunk)
 			if squadCreated then
 				currentSquad = "resource"
@@ -688,17 +708,24 @@ local function processFollowUp(map, tick)
 	if not canAttack(map, tick) then
 		return
 	end
-	local plan = aiBrain.popDueFollowUp(map, tick)
-	if plan then
-		formSquads(map, plan.chunk, tick, nil, plan)
-	end
+    local plan, index = aiBrain.popDueFollowUp(map, tick)
+    if plan then
+        if formSquads(map, plan.chunk, tick, nil, plan) then
+            table.remove(map.ai.followUps, index)
+            return true
+        end
+        plan.tick = tick + 600 -- resources, slot and approach can change; expiry is unchanged
+    end
 end
 
 function mapProcessor.processSpawners(map, tick, remoteInterfaceParameters)
+    if map.fieldBreach and aiBrain.active(map.universe) and aiBrain.field.breachTruce(map, tick) then
+        aiBrain.field.cancelBreach(map, tick)
+    end
     if (map.state ~= AI_STATE_PEACEFUL) then
 		local ai = map.ai
 		if ai and (not remoteInterfaceParameters) and (ai.followUps[1] ~= nil) and aiBrain.active(map.universe) then
-			processFollowUp(map, tick)
+			if processFollowUp(map, tick) then return end
 		end
         if (map.state == AI_STATE_MIGRATING) then
 			if remoteInterfaceParameters or (map.nextSquad and (map.nextSquad == "attack")) then

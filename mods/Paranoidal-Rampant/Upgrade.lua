@@ -30,6 +30,22 @@ local TRIPLE_CHUNK_SIZE = constants.TRIPLE_CHUNK_SIZE
 -- module code
 
 local function addCommandSet(queriesAndCommands)
+    local enemy = game.forces.enemy
+    local active, ignored, activeSet = {}, {}, {}
+    for _, force in pairs(game.forces) do
+        local name = force.name
+        if name == "enemy" or name == "neutral" or enemy.is_friend(force) or enemy.get_cease_fire(force) then
+            ignored[#ignored + 1] = name
+        else
+            active[#active + 1] = name
+            activeSet[name] = true
+        end
+    end
+    queriesAndCommands.activePlayerForces = active
+    queriesAndCommands.activePlayerForceSet = activeSet
+    queriesAndCommands.nonPlayerForces = ignored
+    queriesAndCommands.paranoidalDiplomacyCache = true
+
     -- preallocating memory to be used in code, making it fast by reducing garbage generated.
     queriesAndCommands.neighbors = {
             -1,
@@ -192,28 +208,6 @@ local function addCommandSet(queriesAndCommands)
         position = queriesAndCommands.position
     }
 
-    queriesAndCommands.activePlayerForces = {"player"}
-    queriesAndCommands.nonPlayerForces = {"neutral", "enemy"}
-
-    for _,force in pairs(game.forces) do
-        local add = true
-
-        if (force.name ~= "neutral") and (force.name ~= "enemy") then
-            for i=1,#queriesAndCommands.activePlayerForces do
-                if (queriesAndCommands.activePlayerForces[i] == force.name) then
-                    add = false
-                    break
-                end
-            end
-
-            if add then
-                queriesAndCommands.activePlayerForces[#queriesAndCommands.activePlayerForces+1] = force.name
-			else
-                queriesAndCommands.nonPlayerForces[#queriesAndCommands.nonPlayerForces+1] = force.name			
-            end
-        end
-    end
-
     queriesAndCommands.filteredEntitiesChunkNeutral = {
         area=queriesAndCommands.area,
         collision_mask = "player",
@@ -369,26 +363,7 @@ local function addCommandSet(queriesAndCommands)
 end
 
 function upgrade.rebuildActivePlayerForces(universe)
-	universe.activePlayerForces = {}
-	universe.nonPlayerForces = {}
-	local forceIgnored
-	for _,force in pairs(game.forces) do
-		forceIgnored = false
-		if (force.name == "neutral") or (force.name == "enemy") then
-			forceIgnored = true
-		elseif game.forces["enemy"].is_friend(force) then
-			forceIgnored = true
-		end	
-		if game.forces["enemy"].get_cease_fire(force) then
-			forceIgnored = true
-		end	
-		if forceIgnored then
-			universe.nonPlayerForces[#universe.nonPlayerForces+1] = force.name			
-		else
-			universe.activePlayerForces[#universe.activePlayerForces+1] = force.name	
-		end	
-	end
-	addCommandSet(universe)
+    addCommandSet(universe)
 end
 
 function upgrade.attempt(universe)

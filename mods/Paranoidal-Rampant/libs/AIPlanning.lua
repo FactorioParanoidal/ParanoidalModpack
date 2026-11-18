@@ -207,7 +207,7 @@ local function getMaxActiveRaidNests(universe)
 	return activeRaidNests
 end
 
-local function planningUniverseMap(map, tick)
+local function planningUniverseMap(map, tick, maxRaidNests)
 	local universe = map.universe
 	local evo = game.forces.enemy.get_evolution_factor(map.surface)
 	local evolution_factor = getEvoAI(universe, evo, tick)
@@ -227,7 +227,7 @@ local function planningUniverseMap(map, tick)
 	
 	local newWaveSize
 	local evoForMaxWaveSize = mMin(evolution_factor / (universe.attackWaveMaxSizeEvoPercent * 0.01), 1)
-	newWaveSize = mMin(mMax(attackWaveMaxSize * (evoForMaxWaveSize ^ 1.4), getMaxActiveRaidNests(universe)*0.02), attackWaveMaxSize)			
+	newWaveSize = mMin(mMax(attackWaveMaxSize * (evoForMaxWaveSize ^ 1.4), maxRaidNests*0.02), attackWaveMaxSize)
 	map.attackWaveSize = newWaveSize + mMin(mFloor(map.retribution*0.1), 25)	
     if (map.attackWaveSize < 2) then
         map.attackWaveSize = 2
@@ -259,9 +259,10 @@ local function planningUniverseMap(map, tick)
 end
 
 function aiPlanning.planningUniverse(universe, tick)
+    local maxRaidNests = getMaxActiveRaidNests(universe)
 	for mapId, map in pairs(universe.maps) do
 		if map and not map.suspended then
-			planningUniverseMap(map, tick)
+			planningUniverseMap(map, tick, maxRaidNests)
 		end
 	end
 end
@@ -381,6 +382,7 @@ local function planningMap(map, tick)
 		local truceEndTick = map.firstStateTick + planetAISetting.peacePeriod * 3600		
 		-----------------
 		if ((truceEvo > evo) or (truceEndTick > tick)) then
+            if map.fieldBreach and aiBrain.active(universe) then aiBrain.field.cancelBreach(map, tick) end
 			if not (map.state == constants.AI_STATE_PEACEFUL) then
 				map.state = constants.AI_STATE_PEACEFUL
 				map.truceEndTick = truceEndTick

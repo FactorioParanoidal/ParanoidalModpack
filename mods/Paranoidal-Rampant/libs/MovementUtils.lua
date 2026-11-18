@@ -9,6 +9,7 @@ local constants = require("Constants")
 local mapUtils = require("MapUtils")
 local mathUtils = require("MathUtils")
 local pheromoneUtils = require("PheromoneUtils")
+local field = require("FieldTactics")
 
 local BASE_DETECTION_PHEROMONE = constants.BASE_DETECTION_PHEROMONE
 
@@ -131,7 +132,7 @@ end
 -- from an unregistered chunk when anyFromUnknown. validFunction: optional filter.
 -- Returns the chosen chunk, its direction and score, and the best score (they differ only with noise).
 local function bestNeighbor(map, chunk, neighbors, scoreFunction, validFunction, checkMove, anyFromUnknown,
-                            defaultDirection, noise, avoidChunk)
+                            defaultDirection, noise, avoidChunk, fieldSquad, tick)
     local highestChunk = -1
     local highestScore = -MAGIC_MAXIMUM_NUMBER
     local highestDirection = defaultDirection
@@ -143,6 +144,7 @@ local function bestNeighbor(map, chunk, neighbors, scoreFunction, validFunction,
             and ((not validFunction) or validFunction(map, neighborChunk))
         then
             local score = scoreFunction(map, neighborChunk)
+            if fieldSquad then score = field.edgeScore(map, fieldSquad, chunk, neighborChunk, score, tick) end
             if noise then
                 count = count + 1
                 candidateChunks[count] = neighborChunk
@@ -191,9 +193,9 @@ end
     Expects all neighbors adjacent to a chunk.
     noise (optional): randomised near-best first step for squad doctrines; avoidChunk is never a random pick.
 --]]
-function movementUtils.scoreNeighborsForAttack(map, chunk, neighborDirectionChunks, scoreFunction, noise, avoidChunk)
+function movementUtils.scoreNeighborsForAttack(map, chunk, neighborDirectionChunks, scoreFunction, noise, avoidChunk, fieldSquad, tick)
     local highestChunk, highestDirection, highestScore, bestScore = bestNeighbor(map, chunk, neighborDirectionChunks,
-        scoreFunction, nil, true, true, nil, noise, avoidChunk)
+        scoreFunction, nil, true, true, nil, noise, avoidChunk, fieldSquad, tick)
     -- a squad standing on a local maximum refreshes the static pheromones around it
     if (chunk ~= -1) and (scoreFunction(map, chunk) >= bestScore) then
         pheromoneUtils.processStaticPheromone(map, chunk, {recursion = true, color = {1, 1, 1}})

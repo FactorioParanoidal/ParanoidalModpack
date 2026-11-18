@@ -214,6 +214,7 @@ local function scanPaths(chunk, map)
     elseif passableNorthSouth then
         pass = CHUNK_NORTH_SOUTH
     end
+    chunk.terrainPass = pass -- not the later fallback for a chunk with structures
     return pass
 end
 
@@ -224,7 +225,21 @@ local function scorePlayerBuildings(map, chunk)
 	local pheromones = {}
 	pheromones[BASE_PHEROMONE] = 0
 	pheromones[BASE_DETECTION_PHEROMONE] = 0
-    if surface.count_entities_filtered(universe.hasPlayerStructuresQuery) > 0 then
+    local sample
+    local present = false
+    local forces = universe.activePlayerForces
+    if forces and forces[1] then
+        local query = universe.hasPlayerStructuresQuery
+        if aiBrain.active(universe) then
+            -- Reuse the same limit=1 presence search to observe an old
+            -- building. One engine call, no new sweep over existing maps.
+            sample = surface.find_entities_filtered(query)[1]
+            present = sample ~= nil
+        else
+            present = surface.count_entities_filtered(query) > 0
+        end
+    end
+    if present then
 		for lvlName, values in pairs(GENERATOR_PHEROMONE_LEVEL) do
 			local query = universe.filteredEntities_player_pheromones[lvlName]
 			if query then
@@ -258,6 +273,7 @@ local function scorePlayerBuildings(map, chunk)
 	setPlayerTurretCount(map, chunk, turretsCount)
 	-- weak spots, strongpoints and infrastructure for the AI tactics (universe.area still holds this chunk)
 	aiBrain.onPlayerChunkScored(map, chunk, pheromones[BASE_PHEROMONE], turretsCount)
+    if sample and turretsCount <= 2 and pheromones[BASE_PHEROMONE] > 0 then aiBrain.field.observe(map, sample) end
 
 	return pheromones[BASE_PHEROMONE]
 end
@@ -412,6 +428,7 @@ function chunkUtils.chunkPassScan(chunk, map)
         end
 
         setPassable(map, chunk, pass)
+        chunk.passRevision = (chunk.passRevision or 0) + 1
         setPathRating(map, chunk, waterTiles + neutralObjects)
 
         return chunk
@@ -446,7 +463,6 @@ function chunkUtils.mapScanEnemyChunk(chunk, map)
 	local enemyAlignmentLookup = universe.enemyAlignmentLookup
 	local base = getChunkBase(map, chunk)
 	local changingEntities = false
-	local dynamicRates
 	
 	local buildingsLvl = 1
 			
@@ -458,9 +474,6 @@ function chunkUtils.mapScanEnemyChunk(chunk, map)
 		buildingsLvl = mMax(map.buildingsLvl - mRandom(0, 2), 1)
 	end	
 	
-	if changingEntities then
-		dynamicRates = baseUtils.getDynamicRates(base)
-	end	
 	
     for i=1,#HIVE_BUILDINGS_TYPES do
         counts[HIVE_BUILDINGS_TYPES[i]] = 0
@@ -492,12 +505,12 @@ function chunkUtils.mapScanEnemyChunk(chunk, map)
 						local entityData = {
 							["chunkIndex"] = chunkIndex,
 							["surfaceIndex"] = map.surface.index,
+                            ["chunk"] = chunk,
 							["base"] = base,
 							["entity"] = building
 						}
 						pendingEntities[building.unit_number] = entityData 
 					-- else
-						-- newBuilding = changeEntityAndUpdateDynamicRates(building, dynamicRates, map, base)
 						-- if newBuilding then
 							-- mutatesCnt = mutatesCnt + 1
 							-- building = newBuilding
@@ -599,7 +612,7 @@ function chunkUtils.entityForPassScan(map, entity)
     for i=1,#overlapArray do
         local chunk = overlapArray[i]
         if (chunk ~= -1) then
-			local chunkData = {chunk.x, chunk.y, map.surface.index}
+			local chunkData = {chunk.x, chunk.y, map.surface.index, chunk}
 			local chunkIndex = "x"..chunkData[1].."y"..chunkData[2].."m"..chunkData[3]
             map.universe.chunkToPassScan[chunkIndex] = chunkData
         end
@@ -893,29 +906,36 @@ function chunkUtils.makeImmortalEntity(surface, entity)
     local repairName = entity.name
     local repairForce = entity.force
     local repairDirection = entity.direction
-	local entityType = entity.type	
- 	local connections = {}											
-    if (entity.type == "electric-pole") then
-		local wire_connector = entity.get_wire_connector(defines.wire_connector_id.pole_copper)
-		for _, wireConnection in pairs(wire_connector.connections) do
-			connections[#connections+1] = wireConnection.target
-		end
-	end	
-    entity.destroy()
-    local newEntity = surface.create_entity({position=repairPosition,
-                                             name=repairName,
-                                             direction=repairDirection,
-                                             force=repairForce})
-    if newEntity then
-		if (newEntity.type == "electric-pole") then
-			local newWire_connector = newEntity.get_wire_connector(defines.wire_connector_id.pole_copper)
-			for i = 1, #connections do
-				newWire_connector.connect_to(connections[i], true)
-			end
-		end
-		newEntity.destructible = false
-	end
-	
+    local quality = entity.quality.name
+    if not entity.can_be_destroyed() then return false end
+    -- Signals/stops/lamps with live programmable state are handled in-place
+    -- before death. Never rebuild them with default control behavior.
+    if entity.get_control_behavior() then return false end
+    local connections = {}
+    for id, connector in pairs(entity.get_wire_connectors(false)) do
+        local targets = {}
+        for _, wire in pairs(connector.real_connections) do
+            if wire.target.valid and wire.target.owner ~= entity then
+                targets[#targets + 1] = {target = wire.target, origin = wire.origin}
+            end
+        end
+        if #targets > 0 then connections[id] = targets end
+    end
+    if not entity.destroy() then return false end
+    local newEntity = surface.create_entity({position=repairPosition, name=repairName,
+        direction=repairDirection, force=repairForce, quality=quality})
+    if not (newEntity and newEntity.valid) then return false end
+    newEntity.destructible = false
+    for id, targets in pairs(connections) do
+        local connector = newEntity.get_wire_connector(id, true)
+        if connector then
+            for i = 1, #targets do
+                local wire = targets[i]
+                if wire.target.valid then connector.connect_to(wire.target, false, wire.origin) end
+            end
+        end
+    end
+    return true
 end
 
 chunkUtilsG = chunkUtils

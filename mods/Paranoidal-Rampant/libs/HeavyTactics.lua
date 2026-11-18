@@ -107,26 +107,108 @@ function heavyTactics.recordPresence(map, chunk, tick, amount)
     end
 end
 
-local trainFilter = {surface = nil, is_moving = true}
-local function scanTrains(map, ai, tick)
-    trainFilter.surface = map.surface
-    local trains = game.train_manager.get_trains(trainFilter)
-    local count = #trains
-    if count == 0 then
-        return
+local TRAIN_VISITS_PER_SCAN = 80
+-- Same scope as the former periodic query. The engine has no train iterator
+-- or limit; once per map this preserves continuously moving pre-existing trains.
+local trainSeedFilter = {surface = nil, is_moving = true}
+
+local function getTrainIndex(map)
+    local index = map.trainHeatIndex
+    if not index then
+        index = {ids = {}, slots = {}, trains = {}, cursor = 1}
+        map.trainHeatIndex = index
     end
-    local start = (ai.trainCursor or 0) % count
-    for i = 1, mMin(count, TRAINS_PER_SCAN) do
-        local train = trains[((start + i - 1) % count) + 1]
-        local stock = train.valid and train.front_stock
-        if stock and stock.valid then
-            local chunk = getChunkByPosition(map, stock.position)
-            if chunk ~= -1 then
-                heavyTactics.recordPresence(map, chunk, tick, 4)
+    return index
+end
+
+local function insertTrain(index, train)
+    local id = train.id
+    if not index.slots[id] then
+        local slot = #index.ids + 1
+        index.ids[slot], index.slots[id] = id, slot
+    end
+    index.trains[id] = train
+end
+
+local function removeTrain(index, id)
+    local slot = id and index.slots[id]
+    if not slot then return end
+    local count = #index.ids
+    local last = index.ids[count]
+    index.ids[slot], index.slots[last] = last, slot
+    index.ids[count], index.slots[id], index.trains[id] = nil, nil, nil
+end
+
+function heavyTactics.observeTrain(universe, event)
+    if not (universe and aiBrain.heavyActive(universe)) then return end
+    local train = event.train
+    if not train then
+        local vehicle = event.entity
+        if vehicle and vehicle.valid and (vehicle.type == "locomotive" or vehicle.type == "cargo-wagon"
+                or vehicle.type == "fluid-wagon" or vehicle.type == "artillery-wagon") then
+            train = vehicle.train
+        end
+    end
+    local stock = train and train.valid and train.front_stock
+    if not (stock and stock.valid) then return end
+    local map = universe.maps[stock.surface.index]
+    if not map then return end
+    local index = getTrainIndex(map)
+    removeTrain(index, event.old_train_id_1)
+    removeTrain(index, event.old_train_id_2)
+    insertTrain(index, train)
+end
+
+local function seedTrains(map, index, maySnapshot)
+    local started = false
+    if not index.seeded and maySnapshot then
+        started = true
+        index.seeded = true
+        trainSeedFilter.surface = map.surface
+        index.seed = game.train_manager.get_trains(trainSeedFilter)
+        index.seedNext, index.seedCount = 1, #index.seed
+        trainSeedFilter.surface = nil
+    end
+    if not index.seed then return started end
+    local last = mMin(index.seedCount, index.seedNext + TRAIN_VISITS_PER_SCAN - 1)
+    for i = index.seedNext, last do
+        local train = index.seed[i]
+        if train and train.valid then insertTrain(index, train) end
+        index.seed[i] = nil
+    end
+    index.seedNext = last + 1
+    if last >= index.seedCount then index.seed, index.seedNext, index.seedCount = nil, nil, nil end
+    return started
+end
+
+local function scanTrains(map, tick, maySnapshot)
+    local index = getTrainIndex(map)
+    local started = seedTrains(map, index, maySnapshot)
+    local ids = index.ids
+    local seen = {}
+    local sampled = 0
+    for _ = 1, mMin(#ids, TRAIN_VISITS_PER_SCAN) do
+        local pos = index.cursor
+        if pos > #ids then pos = 1 end
+        local id = ids[pos]
+        if not id then break end
+        local train = index.trains[id]
+        local stock = train and train.valid and train.front_stock
+        if not (stock and stock.valid and stock.surface == map.surface) then
+            removeTrain(index, id)
+            index.cursor = pos -- check the moved entry at this slot next
+        else
+            index.cursor = pos + 1
+            if train.speed ~= 0 and not seen[id] then
+                seen[id] = true
+                local chunk = getChunkByPosition(map, stock.position)
+                if chunk ~= -1 then heavyTactics.recordPresence(map, chunk, tick, 4) end
+                sampled = sampled + 1
+                if sampled >= TRAINS_PER_SCAN then break end
             end
         end
     end
-    ai.trainCursor = start + TRAINS_PER_SCAN
+    return started
 end
 
 -- drops cold entries, HEAT_PRUNE_PER_SCAN per call; the traversal resumes on the next call
@@ -155,10 +237,11 @@ function heavyTactics.periodic(universe, tick)
     if not aiBrain.heavyActive(universe) then
         return
     end
+    local maySnapshot = true -- do not materialize multiple legacy fleets in one update
     for _, map in pairs(universe.maps) do
         local ai = map and map.ai
         if ai and (not map.suspended) and map.surface and map.surface.valid then
-            scanTrains(map, ai, tick)
+            if scanTrains(map, tick, maySnapshot) then maySnapshot = false end
             pruneHeat(map, ai, tick)
             for id, wave in pairs(ai.waves) do
                 if wave.untilTick + 3600 < tick then

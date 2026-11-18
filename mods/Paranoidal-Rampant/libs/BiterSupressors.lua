@@ -3,6 +3,8 @@ if (biterSupressorG) then
 end
 local biterSupressor = {}
 
+local PULSE_TICKS = 300 * 60 -- 3000 MJ / 10 MW at nominal speed
+local PULSE_GRACE = 60
 local supressorsData = {}
 supressorsData["biterSupressor1-rampant"] = {supressionType = 1, number = 1, tint = {0, 0.2, 0.4, 0.5}}	--- if add or remove elements, don't forget to change recipes in biterSupressor.addEntities(). Also locale ru and en
 supressorsData["biterSupressor2-rampant"] = {supressionType = 2, number = 2, tint = {0, 0, 0.2, 0.5}}
@@ -27,7 +29,7 @@ function biterSupressor.addEntities()
 			selection_box = {{-1.5, -1.5}, {1.5, 1.5}},
 			energy_per_nearby_scan = "3000MJ",
 			energy_per_sector = "3000MJ",
-			max_distance_of_sector_revealed = 0,
+			max_distance_of_sector_revealed = 2,
 			max_distance_of_nearby_sector_revealed = 1,
 			drawing_box_vertical_extension = 4.3,
 			resistances = {
@@ -50,7 +52,7 @@ function biterSupressor.addEntities()
 				}
 			},
 			energy_source =  {type = "electric", usage_priority = "primary-input"},
-			energy_usage = "10MJ",
+			energy_usage = "10MW",
 				
 			pictures = 
 			{ 
@@ -333,24 +335,24 @@ function biterSupressor.processSupression(entity)
 			end
 		end
 	end	
-	if hasCharacters then
-		map.supressionData.supressionType = 0
-	else	
-		map.supressionData.supressionType = (biterSupressor.supressionType(entity.name) or 0)
-	end
-	----- freezze evo
-	if map.supressionData.supressionType >= 3 then
-		if map.supressionData.evo and ((map.supressionData.supressionEndTick + 60) >= game.tick) then
-			local evo = game.forces.enemy.get_evolution_factor(surface)
-			if evo > map.supressionData.evo then
-				game.forces.enemy.set_evolution_factor(map.supressionData.evo, surface)
-			end	
-		end
-		map.supressionData.evo = game.forces.enemy.get_evolution_factor(surface)
-	end
-	-----
+	local data = map.supressionData
+    local tick = game.tick
+    local level = not hasCharacters and biterSupressor.supressionType(entity.name) or 0
+    if (data.supressionEndTick or 0) < tick then
+        data.supressionType, data.evo = 0, nil
+    end
+    if level > 0 and level >= (data.supressionType or 0) then
+        if level >= 3 then
+            local force = game.forces.enemy
+            local evo = force.get_evolution_factor(surface)
+            if data.evo and evo > data.evo then force.set_evolution_factor(data.evo, surface) end
+            data.evo = force.get_evolution_factor(surface)
+        end
+        data.supressionType = level
+        data.supressionEndTick = tick + PULSE_TICKS + PULSE_GRACE
+    end
 
-	if map.supressionData.supressionType == 0 then
+	if level == 0 then
 		rendering.draw_light({sprite = "utility/light_medium", scale = 5, color = {1, 1, 0, 0.5}, minimum_darkness = 0, target = entity, surface = surface, time_to_live = 300})
 		rendering.draw_circle({color = {1, 1, 0, 0.5}, radius = 0.1, filled = true, target= entity, surface = surface, time_to_live = 300})
 	else

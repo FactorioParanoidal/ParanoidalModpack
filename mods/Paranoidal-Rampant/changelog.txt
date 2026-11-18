@@ -12,7 +12,19 @@ Date: 2026.11.16
     - A dying nest and its remains keep the size of the nest (they always had the normal size) and the faction colour of the body (only the mask kept its colour).
     - Champions and hour bosses leave a corpse as big as they are (x1.15 and x1.4): the corpse of their unit gets one hidden enlarged copy per kind. Ordinary units keep their corpses; the glow and the removal of the corpse are unchanged.
     - Attack fires no longer pass the 1.1 size and speed values that the 2.0 fire pictures ignored; the fires look as before.
+  Features:
+    - In the new AI mode, squads remember repeated movement refusals and share a route penalty only if the terrain scan supports it. Ground and air raids can focus on a specific observed building, a truce discards pending breach campaigns, and destroying a nest at an active base gives that base a short respite. The AI report shows the outcomes.
+  Optimizations:
+    - Train ambush sampling maintains a train index from events after seeding it once per surface; updates visit at most 80 entries per surface and sample at most 40 moving trains.
+    - Super-hives bound heal queries. Dense colonies rotate through small cells instead of repeating a full enumeration every pulse.
   Bugfixes:
+    - Chunk removal, recreation and surface clear no longer leave live references in scan queues. Existing surfaces are indexed in bounded batches.
+    - Failed releases preserve the contents of compressed squads, including quality. Ordinary, detached and underground releases share a bounded attempt budget.
+    - Queued reprisals respect the truce, flyer champions respect real surface evolution, and flight and resource-settler admission respect their limits and budget.
+    - Wave controls use the current evolution API and resolve a managed surface. External faction changes reach the base mutation queue.
+    - The AI respects hostile forces when rebuilding its scan filters. Lethal enemy damage to protected buildings is intercepted without resetting their state.
+    - Follow-ups require an approach, stale strongpoints are removed, and bridgeheads no longer erase a squad's battle total.
+    - Space Age suppression radars have a sector-scan pulse that renews a finite suppression interval.
     - Ordinary AI squad detection no longer creates custom alerts, even when a player has the old debug alert setting enabled. Detection bookkeeping and the other alert types are unchanged.
     - Loading a save with a missing engine-group reference no longer crashes the helper sweep. Stale records use the existing cleanup, including removal of only one helper from a compressed pack.
     - Missing saved group/entity/surface references are also handled in squad, builder and mutation cleanup, pincer waves, flyer loss handling, temporary immunity, champion/corpse and super-hive records, cached demolisher attacks and map work queues. Healthy objects and surviving compressed carriers are kept.

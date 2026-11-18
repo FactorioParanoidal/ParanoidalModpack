@@ -6,171 +6,124 @@ local chunkProcessor = {}
 -- imports
 
 local chunkUtils = require("ChunkUtils")
-local mathUtils = require("MathUtils")
 local constants = require("Constants")
 local baseUtils = require("BaseUtils")
-
--- constants
-
+local mapUtils = require("MapUtils")
+local chunkQueue = require("ChunkQueue")
 local CHUNK_SIZE = constants.CHUNK_SIZE
-
-local MAX_TICKS_BEFORE_SORT_CHUNKS = constants.MAX_TICKS_BEFORE_SORT_CHUNKS
-
--- imported functions
-
-local mapScanEnemyChunk = chunkUtils.mapScanEnemyChunk
-local mapScanPlayerChunk = chunkUtils.mapScanPlayerChunk
-local mapScanResourceChunk = chunkUtils.mapScanResourceChunk
-
-local createChunk = chunkUtils.createChunk
-local initialScan = chunkUtils.initialScan
-local chunkPassScan = chunkUtils.chunkPassScan
-
-local euclideanDistanceNamed = mathUtils.euclideanDistanceNamed
-
 local changeEntityAndUpdateDynamicRates = baseUtils.changeEntityAndUpdateDynamicRates
-local getDynamicRates = baseUtils.getDynamicRates 
+local getDynamicRates = baseUtils.getDynamicRates
 
-local tSort = table.sort
-
-local abs = math.abs
-local next = next
-local table_size = table_size
-
-local tRemove = table.remove
-
--- module code
-
-local origin = {x=0,y=0}
-
-local function sorter(a, b)
-    local aDistance = euclideanDistanceNamed(a, origin)
-    local bDistance = euclideanDistanceNamed(b, origin)
-
-    if (aDistance == bDistance) then
-        if (a.x == b.x) then
-            return (abs(a.y) < abs(b.y))
-        else
-            return (abs(a.x) < abs(b.x))
-        end
-    end
-
-    return (aDistance < bDistance)
+function chunkProcessor.queueGeneratedChunk(map, x, y)
+    local key = "x"..x.."y"..y.."m"..map.surface.index
+    map.universe.pendingChunks[key] = {x = x, y = y, map = map}
 end
 
-function chunkProcessor.processPendingChunks(universe, tick, flush)
-    local pendingChunks = universe.pendingChunks
+function chunkProcessor.cancelGeneratedChunk(map, x, y)
+    local key = "x"..x.."y"..y.."m"..map.surface.index
+    map.universe.pendingChunks[key] = nil
+end
 
-    local area = universe.area
-    local topOffset = area[1]
-    local bottomOffset = area[2]
+function chunkProcessor.queuePassScan(map, chunk)
+    local key = "x"..chunk.x.."y"..chunk.y.."m"..map.surface.index
+    map.universe.chunkToPassScan[key] = {chunk.x, chunk.y, map.surface.index, chunk}
+end
 
-    local endCount = 2
-	local chunkCount = 0
-    -- if flush then
-        -- endCount = table_size(pendingChunks)
-    -- end
-	for event, _ in pairs(pendingChunks) do
-		local map = event.surface.valid and universe.maps[event.surface.index]
-		if map then
-			chunkCount = chunkCount + 1
-            local topLeft = event.area.left_top
-            local x = topLeft.x
-            local y = topLeft.y
-
-			topOffset[1] = x
-			topOffset[2] = y
-			bottomOffset[1] = x + CHUNK_SIZE
-			bottomOffset[2] = y + CHUNK_SIZE
-
-            if map[x] and map[x][y] then
-                local chunk = map[x][y]
-                mapScanPlayerChunk(chunk, map)
-                mapScanEnemyChunk(chunk, map)
-                mapScanResourceChunk(chunk, map)
-            else
-                if map[x] == nil then
-                    map[x] = {}
-                end
-
-                local chunk = createChunk(x, y)
-
-                chunk = initialScan(chunk, map, tick)
-
-                if (chunk ~= -1) then	
-                    map[x][y] = chunk
-					local processQueue = map.processQueue
-                    processQueue[#processQueue+1] = chunk
-                end
+local function scanGenerated(map, x, y, tick, refresh)
+    local area = map.universe.area
+    local top, bottom = area[1], area[2]
+    top[1], top[2] = x, y
+    bottom[1], bottom[2] = x + CHUNK_SIZE, y + CHUNK_SIZE
+    local chunk = mapUtils.getChunkByXY(map, x, y)
+    if chunk ~= -1 then
+        if refresh then
+            chunkUtils.mapScanPlayerChunk(chunk, map)
+            chunkUtils.mapScanEnemyChunk(chunk, map)
+            chunkUtils.mapScanResourceChunk(chunk, map)
+        end
+    else
+        local fresh = chunkUtils.createChunk(x, y)
+        chunk = chunkUtils.initialScan(fresh, map, tick)
+        if chunk == -1 then
+            mapUtils.discardChunkState(map, fresh)
+        else
+            local column = map[x]
+            if not column then
+                column = {}
+                map[x] = column
             end
-		end	
-        pendingChunks[event] = nil
-		if (not flush) and (chunkCount >= endCount) then
-			break
-		end	
+            column[y] = chunk
+            chunkQueue.append(map, chunk)
+        end
     end
-    -- if (#processQueue > map.nextChunkSort) or
-        -- (((tick - map.nextChunkSortTick) > MAX_TICKS_BEFORE_SORT_CHUNKS) and
-                -- ((map.nextChunkSort - 150) < #processQueue))
-    -- then
-        -- map.nextChunkSort = #processQueue + 150
-        -- map.nextChunkSortTick = tick
-        -- tSort(processQueue, sorter)
-    -- end
+end
+
+function chunkProcessor.indexExistingChunks(map, tick)
+    if not map.indexing then return end
+    local iterator = map.chunkIterator
+    if not (iterator and iterator.valid) then
+        iterator = map.surface.get_chunks()
+        map.chunkIterator = iterator
+    end
+    for _ = 1, 8 do
+        local position = iterator()
+        if not position then
+            map.chunkIterator, map.indexing = nil, nil
+            return
+        end
+        local x, y = position.x * CHUNK_SIZE, position.y * CHUNK_SIZE
+        if map.surface.is_chunk_generated(position) then
+            -- on_chunk_generated, if pending, owns the delayed RSO scan.
+            local key = "x"..x.."y"..y.."m"..map.surface.index
+            if not map.universe.pendingChunks[key] then scanGenerated(map, x, y, tick, false) end
+        end
+    end
+end
+
+function chunkProcessor.processPendingChunks(universe, tick)
+    local pending = universe.pendingChunks
+    local visited = 0
+    for key, data in pairs(pending) do
+        local map, x, y
+        if type(key) == "table" then -- generated events persisted by older versions
+            local surface = key.surface
+            map = surface and surface.valid and universe.maps[surface.index]
+            x, y = key.area.left_top.x, key.area.left_top.y
+        else
+            map, x, y = data.map, data.x, data.y
+        end
+        pending[key] = nil
+        if map and map.surface and map.surface.valid and universe.maps[map.surface.index] == map
+                and map.surface.is_chunk_generated({x / CHUNK_SIZE, y / CHUNK_SIZE}) then
+            scanGenerated(map, x, y, tick, true)
+        end
+        visited = visited + 1
+        if visited >= 2 then break end
+    end
 end
 
 function chunkProcessor.processScanChunks(universe)
     local area = universe.area
-
-    local topOffset = area[1]
-    local bottomOffset = area[2]
-
-    --local removals = map.chunkRemovals
-
-    local endCount = 2
-    local chunkCount = 0
-
-    local chunkToPassScan = universe.chunkToPassScan
-
-    for chunkIndex, chunkData in pairs(chunkToPassScan) do
-        local x = chunkData[1]
-        local y = chunkData[2]
-        local map = universe.maps[chunkData[3]]
-		if map then
-
-			topOffset[1] = x
-			topOffset[2] = y
-			bottomOffset[1] = x + CHUNK_SIZE
-			bottomOffset[2] = y + CHUNK_SIZE
-
-			local preScanChunk = map[x] and map[x][y]
-			if not preScanChunk or (chunkPassScan(preScanChunk, map) == -1) then
-				map[x][y] = nil
-				-- removals[chunkCount] = preScanChunk
-			end
-
-			chunkCount = chunkCount + 1
-			chunkToPassScan[chunkIndex] = nil
-			if chunkCount >= endCount then
-				break
-			end	
-		else	
-			chunkToPassScan[chunkIndex] = nil
-		end	
+    local top, bottom = area[1], area[2]
+    local visited = 0
+    local pending = universe.chunkToPassScan
+    for key, data in pairs(pending) do
+        pending[key] = nil
+        if type(data) == "table" then
+            local x, y = data[1], data[2]
+            local map = universe.maps[data[3]]
+            local chunk = map and mapUtils.getChunkByXY(map, x, y)
+            if chunk and chunk ~= -1 and (not data[4] or data[4] == chunk) then
+                top[1], top[2] = x, y
+                bottom[1], bottom[2] = x + CHUNK_SIZE, y + CHUNK_SIZE
+                if chunkUtils.chunkPassScan(chunk, map) == -1 then
+                    mapUtils.removeChunkFromMap(map, chunk)
+                end
+            end
+        end
+        visited = visited + 1
+        if visited >= 2 then break end
     end
-
-    -- if (chunkCount > 0) then
-        -- local processQueue = map.processQueue
-        -- for i=#processQueue,1,-1 do
-            -- for ri=chunkCount,1,-1 do
-                -- if (removals[ri] == processQueue[i]) then
-                    -- tRemove(processQueue, i)
-                    -- -- tRemove(removals, ri)
-                    -- break
-                -- end
-            -- end
-        -- end
-    -- end
 end
 
 function chunkProcessor.processPendingMutations(universe)
@@ -201,6 +154,7 @@ function chunkProcessor.processPendingMutations(universe)
 		local chunkIndex = entityData.chunkIndex
 		map = universe.maps[entityData.surfaceIndex]
 		entityValid = entityData.entity and entityData.entity.valid and entityData.base and map
+            and (not entityData.chunk or chunkQueue.isLive(map, entityData.chunk))
 		if entityValid then
 			if not base or (base ~= entityData.base) then
 				base = entityData.base 
@@ -214,7 +168,8 @@ function chunkProcessor.processPendingMutations(universe)
 		processedCnt = processedCnt + 1
 				
 		pendingEntities[entityId] = nil
-		pendingChunks[chunkIndex] = pendingChunks[chunkIndex] - 1
+		local remaining = (pendingChunks[chunkIndex] or 1) - 1
+        pendingChunks[chunkIndex] = remaining > 0 and remaining or nil
 		
 		entityId, entityData = next(pendingEntities, entityId)
 	end

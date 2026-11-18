@@ -17,6 +17,7 @@ local flyerAI = {}
 
 local constants = require("Constants")
 local aiBrain = require("AIBrain")
+local field = aiBrain.field
 local chatNames = require("ChatNames")
 local aiPredicates = require("AIPredicates")
 local unitGroupUtils = require("UnitGroupUtils")
@@ -192,8 +193,10 @@ end
 local function strike(map, squad, entry, kind, tick)
     local group = squad.group
     local chunk = entry.chunk
-    local tx = chunk.x + 16
-    local ty = chunk.y + 16
+    local objective = field.objective(map, chunk, tick)
+    squad.flightObjective = objective
+    local tx = objective and objective.x or (chunk.x + 16)
+    local ty = objective and objective.y or (chunk.y + 16)
     local commands = {}
     if kind == "shore" then
         local wx, wy = shoreApproach(map, chunk)
@@ -204,8 +207,13 @@ local function strike(map, squad, entry, kind, tick)
     end
     commands[#commands + 1] = {type = defines.command.go_to_location, destination = {x = tx, y = ty}, radius = 10,
                                distraction = DEFINES_DISTRACTION_BY_DAMAGE}
-    commands[#commands + 1] = {type = defines.command.attack_area, destination = {x = tx, y = ty}, radius = 24,
-                               distraction = DEFINES_DISTRACTION_BY_ANYTHING}
+    if objective then
+        commands[#commands + 1] = {type = defines.command.attack, target = objective.entity,
+                                   distraction = DEFINES_DISTRACTION_NONE}
+    else
+        commands[#commands + 1] = {type = defines.command.attack_area, destination = {x = tx, y = ty}, radius = 24,
+                                   distraction = DEFINES_DISTRACTION_BY_ANYTHING}
+    end
     group.set_command({type = defines.command.compound, structure_type = defines.compound_command.return_last,
                        commands = commands})
     if not group.valid then
@@ -218,6 +226,7 @@ local function strike(map, squad, entry, kind, tick)
     squad.flightPhase = "strike"
     squad.flightKind = squad.flightKind or kind
     squad.strikeUntil = tick + mFloor(travel) + STRIKE_TICKS
+    if objective then squad.strikeUntil = mMin(squad.strikeUntil, objective.untilTick) end
     squad.hitChunks[chunk] = true
     squad.onTheWay = true
     squad.nextCommandTick = tick + 60
@@ -226,7 +235,17 @@ local function strike(map, squad, entry, kind, tick)
         .. "," .. map.surface.name .. "]")
 end
 
+local function releaseObjective(map, squad, tick)
+    local goal = squad.flightObjective
+    if goal then
+        field.closeObjective(map, goal, goal.confirmed, tick)
+        squad.flightObjective = nil
+        return true
+    end
+end
+
 local function goHome(map, squad, tick)
+    releaseObjective(map, squad, tick)
     local group = squad.group
     squad.flightPhase = "return"
     squad.strikeUntil = nil
@@ -243,6 +262,11 @@ local function goHome(map, squad, tick)
 end
 
 local function relocateOrReturn(map, squad, tick)
+    -- A lock ends the mission, including when a different group destroys it.
+    if squad.flightObjective then
+        goHome(map, squad, tick)
+        return
+    end
     local ai = aiBrain.getMapAI(map)
     local losses = squad.losses or 0
     if ((squad.hops or 0) < MAX_HOPS) and (losses < squad.startSize * FLEE_LOSSES) then
@@ -311,21 +335,37 @@ function flyerAI.splitFlight(map, squad)
             flyers[count] = member
         end
     end
-    if (count < MIN_SPLIT_SIZE) or (count >= #members) then
-        return      -- too few for a flight, or nothing would be left on the ground
-    end
+    if count == 0 or (count < MIN_SPLIT_SIZE and count < #members) then return end
     local tick = game.tick
-    local flightGroup = map.surface.create_unit_group({position = flyers[1].position, force = group.force})
+    local ai = aiBrain.getMapAI(map)
+    local origin = flyers[1].position
+    local entry, kind = pickTarget(map, ai, origin.x, origin.y, FLIGHT_RANGE, nil, tick)
+    if not entry or not aiPredicates.attackAllowed(map, tick) then return end
+    local units = count + countPackedUnits(universe, flyers)
+    if count == #members then
+        if not squad.excluded then universe.squadCount = universe.squadCount - 1 end
+        if squad.goal and squad.goal.kind == "objective" then
+            aiBrain.field.closeObjective(map, squad.goal, false, tick)
+        end
+        squad.goal, squad.pendingGoal = nil, nil
+        squad.flight, squad.excluded = true, true
+        squad.startSize = units
+        squad.hitChunks, squad.hops = {}, 0
+        squad.originPosition = origin
+        squad.disbandTick = tick + 20 * 3600
+        strike(map, squad, entry, kind, tick)
+        return
+    end
+    local flightGroup = map.surface.create_unit_group({position = origin, force = group.force})
     for i = 1, count do
         flightGroup.add_member(flyers[i])
     end
     -- packed flyers count with their whole pack: sizes and losses are in units
-    local units = count + countPackedUnits(universe, flyers)
     local flight = registerFlight(map, flightGroup, units, tick)
     if squad.startSize then
         squad.startSize = mMax(1, squad.startSize - units)
     end
-    launch(map, flight, tick)
+    strike(map, flight, entry, kind, tick)
 end
 
 local flyerQuery = {position = {0, 0}, radius = GATHER_RADIUS, force = "enemy", type = "unit", name = nil, limit = GATHER_LIMIT}
@@ -364,7 +404,7 @@ local function tryLaunch(map, tick)
         return
     end
     local chunk = nextLaunchChunk(map, ai)
-    if not chunk then
+    if not chunk or not aiBrain.chunkIsLive(map, chunk) or field.held(map, chunk, tick) then
         return
     end
     flyerQuery.position[1] = chunk.x + 16
@@ -384,15 +424,17 @@ local function tryLaunch(map, tick)
     if #free < MIN_FLIGHT_SIZE then
         return
     end
+    local units = #free + countPackedUnits(universe, free)
+    local cost = FLIGHT_COST + units
+    if map.points < cost then return end
     local group = map.surface.create_unit_group({position = free[1].position, force = free[1].force})
     for i = 1, #free do
         group.add_member(free[i])
     end
-    local units = #free + countPackedUnits(universe, free)
     local flight = registerFlight(map, group, units, tick)
     if launch(map, flight, tick) then
+        field.launch(map, chunk, tick)
         ai.lastFlightTick = tick
-        local cost = FLIGHT_COST + units
         map.points = map.points - cost
         if universe.aiPointsPrintSpendingToChat then
             game.print(map.surface.name .. ": Очки: -" .. cost .. ". [Полёт] Всего: " .. string.format("%.2f", map.points))
@@ -404,6 +446,7 @@ local function tryLaunch(map, tick)
         delay = mFloor(delay * 0.5)
     end
     ai.nextFlightTick = tick + delay
+    return true -- a slot remains reserved even if the empty target list disbanded this flight
 end
 
 -- on_tick every 300 ticks
@@ -411,12 +454,12 @@ function flyerAI.plan(universe, tick)
     if not aiBrain.active(universe) or not flyersExist() then
         return
     end
-    if countFlights(universe) >= flightCap(universe) then
-        return
-    end
+    local slots = flightCap(universe) - countFlights(universe)
+    if slots <= 0 then return end
     for _, map in pairs(universe.maps) do
-        if map and (not map.suspended) and map.surface and map.surface.valid and map.ai then
-            tryLaunch(map, tick)
+        if map and not map.suspended and map.surface and map.surface.valid and map.ai and tryLaunch(map, tick) then
+            slots = slots - 1
+            if slots <= 0 then return end
         end
     end
 end
@@ -466,6 +509,7 @@ function flyerAI.onLoss(map, squad, entity, tick)
 end
 
 function flyerAI.onFlightEnd(map, squad, tick)
+    if aiBrain.active(map.universe) then releaseObjective(map, squad, tick) end
     if squad.learned or not squad.flightKind then
         return
     end

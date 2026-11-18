@@ -46,8 +46,12 @@ for tier, stats in ipairs({
 	})
 end
 
--- Финальная 1.1: расход огнемёта 0.2, дальность W93 Gatling 25/30.
-apply_stats("fluid-turret", "flamethrower-turret", nil, { fluid_consumption = 0.2 })
+-- Без ребаланса Rampant сохраняется обычный расход сборки.
+local rampantFlameSetting = settings.startup["rampantFixed--flamethrowerTurretsRebalance"]
+local rampantFlame = rampantFlameSetting and rampantFlameSetting.value
+if not rampantFlame then
+    apply_stats("fluid-turret", "flamethrower-turret", nil, { fluid_consumption = 0.2 })
+end
 apply_stats("ammo-turret", "w93-gatling-turret", nil, { range = 25 })
 apply_stats("ammo-turret", "w93-gatling-turret2", nil, { range = 30 })
 
@@ -121,6 +125,14 @@ local function apply_full_stats(prototype_type, name, stats)
 	if not attack then
 		return
 	end
+    local rampant
+    if rampantFlame and name == "flamethrower-turret" then
+        local delivery = attack.ammo_type and attack.ammo_type.action and attack.ammo_type.action.action_delivery
+        if delivery and delivery.stream == "flamethrower-fire-stream2" then
+            rampant = {stream = delivery.stream, cooldown = attack.cooldown,
+                fluid_consumption = attack.fluid_consumption, gun_barrel_length = attack.gun_barrel_length}
+        end
+    end
 	for _, field in ipairs(entity_fields) do
 		prototype[field] = nil
 	end
@@ -138,6 +150,12 @@ local function apply_full_stats(prototype_type, name, stats)
 	for field, value in pairs(stats.attack) do
 		attack[field] = table.deepcopy(value)
 	end
+    if rampant then
+        attack.ammo_type.action.action_delivery.stream = rampant.stream
+        attack.cooldown = rampant.cooldown
+        attack.fluid_consumption = rampant.fluid_consumption
+        attack.gun_barrel_length = rampant.gun_barrel_length
+    end
 	-- Bob/Angel переименовали горючие жидкости; множители финальной 1.1 сохраняются.
 	for index = #(attack.fluids or {}), 1, -1 do
 		local fluid = attack.fluids[index]

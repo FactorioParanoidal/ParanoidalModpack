@@ -7,6 +7,7 @@ local aiAttackWave = {}
 
 local constants = require("Constants")
 local mapUtils = require("MapUtils")
+local aiPredicates = require("AIPredicates")
 local chunkPropertyUtils = require("ChunkPropertyUtils")
 local unitGroupUtils = require("UnitGroupUtils")
 local movementUtils = require("MovementUtils")
@@ -14,6 +15,7 @@ local mathUtils = require("MathUtils")
 local config = require("__Paranoidal-Rampant__/config")
 local scoreChunks = require("ScoreChunks")
 local aiBrain = require("AIBrain")
+local field = aiBrain.field
 local unitUtils = require("UnitUtils")
 local isForeign = require("ForeignEnemies").isForeign
 
@@ -315,6 +317,12 @@ function aiAttackWave.formSettlers(map, chunk)
 end			
 
 function aiAttackWave.formResourceSettlers(map, chunk)
+    local universe = map.universe
+    local settlerCost = 10
+    if not universe.enabledMigration or universe.builderCount >= universe.AI_MAX_BUILDER_COUNT
+            or map.points < settlerCost or not aiPredicates.attackAllowed(map, game.tick) then
+        return false
+    end
 	if chunk.nextSquadTick and (chunk.nextSquadTick > game.tick) then
 		return false
 	end
@@ -322,7 +330,6 @@ function aiAttackWave.formResourceSettlers(map, chunk)
 		return false
 	end
 	
-    local universe = map.universe
 	local squadCreated = false
 	
 	local squadPath, squadDirection = scoreNeighborsForResource(chunk,
@@ -341,7 +348,6 @@ function aiAttackWave.formResourceSettlers(map, chunk)
 				squad.kamikaze = false
 				universe.builderCount = universe.builderCount + 1
 
-				local settlerCost = 10
 				map.points = map.points - settlerCost
 				printSpending(map, settlerCost, "claiming resource", squadPosition)
 				universe.groupNumberToSquad[squad.groupNumber] = squad
@@ -362,6 +368,7 @@ function aiAttackWave.formResourceSettlers(map, chunk)
 end
 
 function aiAttackWave.formVengenceSquad(map, chunk)
+    if not aiPredicates.canHunt(map, game.tick) then return false end
 	if chunk.nextSquadTick and (chunk.nextSquadTick > game.tick) then
 		return false
 	end
@@ -471,7 +478,7 @@ local function formTacticExtras(map, chunk, tick, tactic, firstSquad, squadDirec
 	if (stage1 and (stage1.approach == "pincer")) and aiBrain.heavy then
 		aiBrain.heavy.preparePincer(map, squads, chunk, tick)
 	end
-	if spec.followUp then
+	if spec.followUp and firstSquad.goal and firstSquad.goal.kind == "approach" then
 		aiBrain.scheduleFollowUp(map, chunk, tactic, tick, {approach = spec.approach, refSector = firstSquad.goalSector})
 	end
 	-- flights strike elsewhere while the ground attack is under way
@@ -488,7 +495,10 @@ end
 -- remoteInterfaceParameters.external: an attack ordered by another mod (formStrikeSquads): any nest chunk, no
 -- cooldown, no cost and no effect on the attack schedule of the AI; the number of units is returned in .units
 function aiAttackWave.formSquads(map, chunk, tick, remoteInterfaceParameters, plan)
+    if not aiPredicates.attackAllowed(map, tick) then return false end
 	local external = remoteInterfaceParameters and remoteInterfaceParameters.external
+    local ordinary = not (remoteInterfaceParameters or plan) and aiBrain.active(map.universe)
+    if ordinary and field.held(map, chunk, tick) then return false end
 	if (not plan) and (not external) and chunk.nextSquadTick and (chunk.nextSquadTick > tick) then
 		return false
 	end
@@ -518,8 +528,11 @@ function aiAttackWave.formSquads(map, chunk, tick, remoteInterfaceParameters, pl
 				-- tactic (new behaviour only; remote-created squads keep the old one)
 				local tactic
 				local spec
+                local breach = ordinary and field.breachFor(map, chunk, tick)
 				if not remoteInterfaceParameters then
-					if plan then
+                    if breach then
+                        tactic = "assault"
+					elseif plan then
 						tactic = plan.tactic
 					else
 						tactic = aiBrain.chooseTactic(map, chunk, tick, config.getAttackWaveSize(map))
@@ -531,7 +544,7 @@ function aiAttackWave.formSquads(map, chunk, tick, remoteInterfaceParameters, pl
 						end
 					end
 				end
-				if universe.undergroundAttack and (not remoteInterfaceParameters) and aiBrain.heavyScriptsAllowed(universe)
+				if universe.undergroundAttack and not breach and (not remoteInterfaceParameters) and aiBrain.heavyScriptsAllowed(universe)
 					and ((not tactic) or (tactic == "assault"))
 					and (map.undergroundAttackProbability > 0) and (mRandom() < map.undergroundAttackProbability)  then
 					squad.undergoundAttack = "common"
@@ -577,6 +590,7 @@ function aiAttackWave.formSquads(map, chunk, tick, remoteInterfaceParameters, pl
 					if tactic then
 						squad.startSize = foundUnits
 						aiBrain.prepareSquad(map, squad, chunk, tactic, spec, plan, tick)
+                        if breach then field.useBreach(map, squad, breach, tick) end
 						aiBrain.describeSquad(map, squad, plan and "follow-up" or nil, foundUnits, squadPosition)
 						if not plan then
 							formTacticExtras(map, chunk, tick, tactic, squad, squadDirection, scaledWaveSize, finalSquadCost)
@@ -607,6 +621,7 @@ function aiAttackWave.formSquads(map, chunk, tick, remoteInterfaceParameters, pl
 																AGGRESSIVE_CAN_ATTACK_WAIT_MAX_DURATION)
 						end										
                     end
+                    if ordinary then field.launch(map, chunk, tick) end
 					chunk.nextSquadTick = tick + 1800	-- 30 sec
 					printSpending(map, squadCost, "Squad", squadPosition)
                 else
@@ -642,17 +657,20 @@ function aiAttackWave.formStrikeSquads(map, position, units, searchRadius, tick)
 	local chunks = {}
 	local distances = {}
 	local count = 0
-	for chunk, nests in pairs(map.chunkToNests) do
-		if nests > 0 then
+    local function closer(a, ad, b, bd)
+        return ad < bd or (ad == bd and (a.x < b.x or (a.x == b.x and a.y < b.y)))
+    end
+	local function offer(chunk, nests)
+		if nests and nests > 0 and mapUtils.getChunkByXY(map, chunk.x, chunk.y) == chunk then
 			local dx = chunk.x + 16 - px
 			local dy = chunk.y + 16 - py
 			local d2 = dx * dx + dy * dy
-			if (d2 <= range2) and ((count < STRIKE_NESTS) or (d2 < distances[count])) then
+			if (d2 <= range2) and ((count < STRIKE_NESTS) or closer(chunk, d2, chunks[count], distances[count])) then
 				if count < STRIKE_NESTS then
 					count = count + 1
 				end
 				local i = count
-				while (i > 1) and (distances[i - 1] > d2) do
+				while (i > 1) and closer(chunk, d2, chunks[i - 1], distances[i - 1]) do
 					chunks[i] = chunks[i - 1]
 					distances[i] = distances[i - 1]
 					i = i - 1
@@ -662,6 +680,26 @@ function aiAttackWave.formStrikeSquads(map, position, units, searchRadius, tick)
 			end
 		end
 	end
+    local floor = math.floor
+    local x0 = floor((px - searchRadius) / CHUNK_SIZE) * CHUNK_SIZE
+    local x1 = floor((px + searchRadius) / CHUNK_SIZE) * CHUNK_SIZE
+    local y0 = floor((py - searchRadius) / CHUNK_SIZE) * CHUNK_SIZE
+    local y1 = floor((py + searchRadius) / CHUNK_SIZE) * CHUNK_SIZE
+    local envelope = ((x1 - x0) / CHUNK_SIZE + 1) * ((y1 - y0) / CHUNK_SIZE + 1)
+    local nests = map.chunkToNests
+    if table_size(nests) <= envelope then
+        for chunk, nestCount in pairs(nests) do offer(chunk, nestCount) end
+    else
+        for x = x0, x1, CHUNK_SIZE do
+            local column = map[x]
+            if column then
+                for y = y0, y1, CHUNK_SIZE do
+                    local chunk = column[y]
+                    if chunk and nests[chunk] then offer(chunk, nests[chunk]) end
+                end
+            end
+        end
+    end
 	local waveMax = mMax(STRIKE_MIN_UNITS, getAttackWaveMaxSize(map.universe))
 	local parameters = strikeParameters
 	local sent = 0

@@ -16,6 +16,7 @@
 -- it is recommended to issue a message to the user to enable setting
 
 local aiPlanning = require("libs/AIPlanning")
+local aiPredicates = require("libs/AIPredicates")
 local peacefulMap = require("libs/PeacefulMap")
 local baseUtils = require("libs/BaseUtils")
 local chunkPropertyUtils = require("libs/ChunkPropertyUtils")
@@ -81,6 +82,18 @@ validAI_StateList[constants.AI_STATE_ONSLAUGHT] = constants.stateEnglish[constan
 validAI_StateList[constants.AI_STATE_GROWING] = constants.stateEnglish[constants.AI_STATE_GROWING]				-- [8]
 
 
+local function waveMap(universe, surfaceIndex)
+    if surfaceIndex ~= nil then return universe.maps[surfaceIndex] end
+    local nauvis = game.surfaces.nauvis
+    if nauvis and universe.maps[nauvis.index] then return universe.maps[nauvis.index] end
+    local id, map = next(universe.maps)
+    if id and not next(universe.maps, id) then return map end
+end
+
+local function waveSizeValue(value)
+    return type(value) == "number" and value > 0 and value <= 1000 and value or nil
+end
+
 remote.add_interface("rampantFixed", {
 	--------------------
 	-- return true if external control is enabled
@@ -95,13 +108,11 @@ remote.add_interface("rampantFixed", {
 	-- parameters: {attackWaveMaxSize = number}
 	-- return: number 
 	setWaveMaxSize_ExtCtrl = function(parameters)
-		if parameters and parameters.attackWaveMaxSize and (type(parameters.attackWaveMaxSize) == "number") and (parameters.attackWaveMaxSize > 0) and (parameters.attackWaveMaxSize <= 1000) then
-			storage.universe.externalControlValues.attackWaveMaxSize = parameters.attackWaveMaxSize
-		else
-			storage.universe.externalControlValues.attackWaveMaxSize = nil		
-		end
-		aiPlanning.planningUniverse(storage.universe, game.forces.enemy.evolution_factor, game.tick)
-		return config.getAttackWaveMaxSize(storage.universe)
+        local universe = storage.universe
+        if not universe.allowExternalControl or (parameters ~= nil and type(parameters) ~= "table") then return nil end
+        universe.externalControlValues.attackWaveMaxSize = waveSizeValue(parameters and parameters.attackWaveMaxSize)
+        aiPlanning.planningUniverse(universe, game.tick)
+        return config.getAttackWaveMaxSize(universe)
 	end
 	,
 	--------------------
@@ -113,28 +124,28 @@ remote.add_interface("rampantFixed", {
 	,
 	--------------------
 	-- set and freeze wave size. Canceled if no value is passed, or a value outside the allowed range
-	-- parameters: {attackWaveSize = number}
+	-- parameters: {attackWaveSize = number, surfaceIndex = optional number}
 	-- return: number
 	-- note: its average wave size, including all modifiers.  When forming attacking squads, this value is taken 
 	-- note: starting from 50% of the maximum size, the cost of the squad increases
 	setWaveSize_ExtCtrl = function(parameters)
-		if not storage.universe.allowExternalControl then
-			return nil
-		end
-		if parameters and parameters.attackWaveSize and (type(parameters.attackWaveSize) == "number") and (parameters.attackWaveSize > 0) and (parameters.attackWaveSize <= 1000) then
-			storage.universe.externalControlValues.attackWaveSize = parameters.attackWaveSize
-		else
-			storage.universe.externalControlValues.attackWaveSize = nil
-		end
-		aiPlanning.planningUniverse(storage.universe, game.tick)
-		return config.getAttackWaveSize(storage.universe)
+        local universe = storage.universe
+        if not universe.allowExternalControl or (parameters ~= nil and type(parameters) ~= "table") then return nil end
+        local surfaceIndex = parameters and parameters.surfaceIndex
+        local map = waveMap(universe, surfaceIndex)
+        if surfaceIndex ~= nil and not map then return nil end
+        universe.externalControlValues.attackWaveSize = waveSizeValue(parameters and parameters.attackWaveSize)
+        aiPlanning.planningUniverse(universe, game.tick)
+        return map and config.getAttackWaveSize(map)
 	end
 	,
 	--------------------
 	-- return: number 
 	-- note: its average wave size, including all modifiers.  When forming attacking squads, this value is taken 
-	getWaveSize = function()
-		return config.getAttackWaveSize(storage.universe)
+	getWaveSize = function(parameters)
+        if parameters ~= nil and type(parameters) ~= "table" then return nil end
+        local map = waveMap(storage.universe, parameters and parameters.surfaceIndex)
+        return map and config.getAttackWaveSize(map)
 	end
 	,
 	--------------------
@@ -287,14 +298,14 @@ remote.add_interface("rampantFixed", {
 		if not storage.universe.allowExternalControl then
 			return nil
 		end
-		if (not parameters) or (not parameters.id) then
+		if type(parameters) ~= "table" or type(parameters.id) ~= "number" then
 			return -1
 		end
 		local base = storage.universe.bases[parameters.id]
 		if not base then
 			return -1
 		end
-		if (not parameters) or (not parameters.factions) or (not type(parameters.factions) == "table") then
+		if type(parameters.factions) ~= "table" then
 			return -1
 		end
 		-- lets check new factions for mistakes
@@ -302,21 +313,23 @@ remote.add_interface("rampantFixed", {
 		local sumRates = 0
 		local baseFactions = {}
 		for faction, rate in pairs(parameters.factions) do
-			if (type(faction) == "string") and (type(rate) == "number") then
+			if type(faction) == "string" and type(rate) == "number" and rate >= 0 and rate <= 1.01 then
 				sumRates = sumRates + rate
 				if factionsList[faction] then
 					baseFactions[faction] = (baseFactions[faction] or 0) + rate
 				else
 					baseFactions["neutral"] = (baseFactions["neutral"] or 0) + rate		
 				end
-			end	
+			else
+                return -1
+			end
 		end
 		
 		if (sumRates >= 0.99) and (sumRates <= 1.01) then
 			local tick = game.tick
 			base.newAlignmentAndSteps = nil
 			base.alignment = baseFactions
-			changingEntities = true
+			base.changingEntities = true
 			base.nextMutationTick = tick + 54000	-- prevent ingame mutations for 15 min
 			for chunk, _ in pairs(base.chunks) do
 				chunk.nextMutationTick = tick
@@ -431,15 +444,9 @@ remote.add_interface("rampantFixed", {
 		if not (map and map.surface and map.surface.valid) then
 			return nil
 		end
-		local planetAISettings = universe.planetAISettings
-		local planetAISetting = planetAISettings and (planetAISettings[map.surface.name] or planetAISettings["others"])
-		if not (planetAISetting and (type(planetAISetting.minEvo) == "number")) then
-			return nil
-		end
-		local evo = game.forces.enemy.get_evolution_factor(map.surface)
-		local truce = ((evo * 100) < planetAISetting.minEvo)
-			or (game.tick < ((map.firstStateTick or 0) + (planetAISetting.peacePeriod or 0) * 3600))
-		return {minEvo = planetAISetting.minEvo, peaceful = (map.state == constants.AI_STATE_PEACEFUL), truce = truce}
+        local truce, minEvo = aiPredicates.truceInfo(map, game.tick)
+        if not minEvo then return nil end
+        return {minEvo = minEvo, peaceful = (map.state == constants.AI_STATE_PEACEFUL), truce = truce}
 	end
 
 	,
@@ -463,12 +470,14 @@ remote.add_interface("rampantFixed", {
 		if not (map and map.surface and map.surface.valid) then
 			return nil
 		end
-		local surface = map.surface
-		if surface.peaceful_mode or (map.state == constants.AI_STATE_PEACEFUL)
-			or (universe.aiNocturnalMode and (surface.darkness <= 0.65)) then
+        if not aiPredicates.attackAllowed(map, game.tick) then
 			return 0
 		end
-		local units = math.floor(tonumber(parameters.units) or 0)
+		local position = parameters.position
+        local x, y = position.x or position[1], position.y or position[2]
+        local function finite(v) return type(v) == "number" and math.abs(v) <= 2^30 end
+        if not finite(x) or not finite(y) then return 0 end
+        local units = math.floor(tonumber(parameters.units) or 0)
 		if units < 1 then
 			return 0
 		end

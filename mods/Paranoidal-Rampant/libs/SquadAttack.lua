@@ -14,6 +14,7 @@ local chunkPropertyUtils = require("ChunkPropertyUtils")
 local scoreChunks = require("ScoreChunks")
 local squadCompression = require("SquadCompression")
 local aiBrain = require("AIBrain")
+local field = aiBrain.field
 local unitUtils = require("UnitUtils")
 local foreignEnemies = require("ForeignEnemies")
 
@@ -274,7 +275,7 @@ local function settleMove(map, squad)
 				if position then
 					targetPosition.x = position.x
 					targetPosition.y = position.y
-					if nextAttackChunk then
+					if nextAttackChunk ~= -1 then
 						addDeathGenerator(map, nextAttackChunk, SQUAD_PATH_DEATH_PHEROMONE_GENERATOR_AMOUNT)			-- FIVE_DEATH_PHEROMONE_GENERATOR_AMOUNT
 					else
 						addDeathGenerator(map, attackChunk, SQUAD_PATH_DEATH_PHEROMONE_GENERATOR_AMOUNT)			-- FIVE_DEATH_PHEROMONE_GENERATOR_AMOUNT
@@ -463,6 +464,23 @@ local function goalMove(map, squad, group, chunk, groupPosition)
 	local goal = squad.goal
 	local universe = map.universe
 	local tick = game.tick
+    if goal.kind == "objective" then
+        if goal.confirmed or goal.done or goal.untilTick < tick or not field.validObjective(map, goal.entity) then
+            field.closeObjective(map, goal, goal.confirmed, tick)
+            squad.goal = nil
+            if squadAttack.retreatSquad(map, squad) then
+                squad.regroup = false
+                squad.objectiveWithdrawal = true
+                squad.disbandTick = tick + 1800
+            else
+                squad.disbandTick = tick
+            end
+            return true
+        end
+    elseif goal.fieldChunk and not field.strikeStillUseful(map, goal.fieldChunk) then
+        squad.goal = nil
+        return false
+    end
 	if goal.untilTick < tick then
 		squad.goal = nil
 		return false
@@ -472,7 +490,12 @@ local function goalMove(map, squad, group, chunk, groupPosition)
 	local distance = mSqrt(dx * dx + dy * dy)
 	local kind = goal.kind
 	if distance <= goal.reach then
-		if kind == "strike" then
+        if kind == "objective" then
+            group.set_command({type = defines.command.attack, target = goal.entity, distraction = DEFINES_DISTRACTION_NONE})
+            if group.valid then group.start_moving() end
+            commandIssued(squad, tick)
+            return true
+        elseif kind == "strike" then
 			-- hit the target area itself
 			squad.goal = nil
 			local targetPosition = universe.position
@@ -538,6 +561,7 @@ local function goalMove(map, squad, group, chunk, groupPosition)
 		position = findMovementPosition(map.surface, targetPosition)
 	end
 	if not position then
+        if goal.kind == "objective" then field.closeObjective(map, goal, false, tick) end
 		squad.goal = nil
 		return false
 	end
@@ -680,7 +704,7 @@ local function attackMove(map, squad)
 	end
 		
 	-- bridgehead: a squad that destroyed enough turns part of itself into a nest (heavy script)
-	if not squad.hasSpiders and squad.kills and (squad.kills>5) and aiBrain.heavyScriptsAllowed(universe) then
+	if not squad.hasSpiders and squad.kills and (squad.kills - (squad.bridgeheadKills or 0) > 5) and aiBrain.heavyScriptsAllowed(universe) then
 	
 		if surface.count_entities_filtered({
 			position={groupPosition.x, groupPosition.y},
@@ -690,7 +714,7 @@ local function attackMove(map, squad)
 			}) == 0 then
 			
 			partiallySettleHere(map, group, squad, 6)
-			squad.kills = 0
+			squad.bridgeheadKills = squad.kills
 				--return
 		end	
 	end
@@ -710,7 +734,8 @@ local function attackMove(map, squad)
                                                                        getNeighborChunks(map, x, y),
                                                                        attackScorer,
                                                                        brainOn and squad.noise,
-                                                                       squad.prevAttackChunk)
+                                                                       squad.prevAttackChunk,
+                                                                       brainOn and squad, game.tick)
 	if brainOn then
 		squad.prevAttackChunk = chunk
 	end
@@ -739,6 +764,7 @@ local function attackMove(map, squad)
     end
 
     if not position then
+        if brainOn and nextAttackChunk == -1 then field.edgeRefused(map, squad, chunk, attackChunk, game.tick) end
         cmd = universe.wonderCommand
         group.set_command(cmd)
 		squad.onTheWay = true
@@ -746,7 +772,7 @@ local function attackMove(map, squad)
     else
         targetPosition.x = position.x
         targetPosition.y = position.y
-        if nextAttackChunk then
+        if nextAttackChunk ~= -1 then
             addDeathGenerator(map, nextAttackChunk, SQUAD_PATH_DEATH_PHEROMONE_GENERATOR_AMOUNT)		--FIVE_DEATH_PHEROMONE_GENERATOR_AMOUNT)
         else
             addDeathGenerator(map, attackChunk, SQUAD_PATH_DEATH_PHEROMONE_GENERATOR_AMOUNT)			--FIVE_DEATH_PHEROMONE_GENERATOR_AMOUNT)
@@ -885,6 +911,7 @@ local function disbandSquad(universe, squads, groupId)
 		removeSquadFromChunk(squad.map, squad)
 		local group = squad.group
 		if group and group.valid then
+            squadDecompress(universe, group.surface, squad, group, nil, true)
 			group.destroy()
 		end	
 		clearDebugLines(squad)	-- DEBUG
@@ -1025,6 +1052,10 @@ function squadAttack.squadDispatch(map, squad)
         elseif (status == SQUAD_SETTLING) then
             settleMove(map, squad)
         elseif (status == SQUAD_RETREATING) then
+            if squad.objectiveWithdrawal then
+                squad.disbandTick = game.tick
+                return
+            end
 			squad.compressed = true		-- some compressed units can join while retreating
 			if squad.regroup and (not squad.settlers) and aiBrain.active(map.universe) then
 				squad.regroup = nil

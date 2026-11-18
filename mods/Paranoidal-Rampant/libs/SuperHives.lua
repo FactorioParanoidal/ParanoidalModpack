@@ -311,29 +311,68 @@ end
 ----------------------------------------------------------------------------------------------------------------------
 -- heart of the nest
 
-local healQuery = {position = {x = 0, y = 0}, radius = HEART_RADIUS, force = "enemy", type = HEALED_TYPES}
+local HEAL_QUERY_LIMIT = 128
+local GRID = 4
+local CELL_SIZE = 2 * HEART_RADIUS / GRID
+local HEAL_CELLS_PER_PULSE = 3
+local CELL_QUERY_LIMIT = 64
+local healQuery = {position = {x = 0, y = 0}, radius = HEART_RADIUS, force = "enemy", type = HEALED_TYPES,
+    limit = HEAL_QUERY_LIMIT + 1}
+local cellQuery = {area = {{0, 0}, {0, 0}}, force = "enemy", type = HEALED_TYPES, limit = CELL_QUERY_LIMIT}
+
+local function healTargets(found, record, healed, x, y)
+    for i = 1, #found do
+        local target = found[i]
+        if target.valid and target ~= record.entity and not isForeign(target.name) then
+            local eligible = true
+            if x then
+                -- A building may overlap two cells. Only its centre's cell
+                -- heals it, and partitioning never extends the heart's radius.
+                local p = target.position
+                local dx, dy = p.x - record.x, p.y - record.y
+                local right, bottom = x + CELL_SIZE, y + CELL_SIZE
+                eligible = p.x >= x and (p.x < right or (p.x == right and dx == HEART_RADIUS))
+                    and p.y >= y and (p.y < bottom or (p.y == bottom and dy == HEART_RADIUS))
+                    and dx * dx + dy * dy <= HEART_RADIUS * HEART_RADIUS
+            end
+            if eligible then
+                local maxHealth, health = target.max_health, target.health
+                if health < maxHealth then
+                    target.health = mMin(maxHealth, health + maxHealth * HEAL_SHARE + HEAL_FLAT)
+                    healed = healed + 1
+                    if healed >= HEAL_TARGETS then break end
+                end
+            end
+        end
+    end
+    return healed
+end
 
 local function pulse(universe, record, tick)
     record.nextPulse = tick + PULSE_TICKS
     local entity = record.entity
     local surface = entity.surface
-    healQuery.position.x = record.x
-    healQuery.position.y = record.y
-    local found = surface.find_entities_filtered(healQuery)
     local healed = 0
-    for i = 1, #found do
-        local target = found[i]
-        if (target ~= entity) and target.valid and (not isForeign(target.name)) then
-            local maxHealth = target.max_health
-            local health = target.health
-            if health < maxHealth then
-                target.health = mMin(maxHealth, health + maxHealth * HEAL_SHARE + HEAL_FLAT)
-                healed = healed + 1
-                if healed >= HEAL_TARGETS then
-                    break
-                end
-            end
+    if not record.healCell then
+        healQuery.position.x, healQuery.position.y = record.x, record.y
+        local found = surface.find_entities_filtered(healQuery)
+        healed = healTargets(found, record, 0)
+        if #found > HEAL_QUERY_LIMIT then record.healCell = 0 end
+    else
+        -- Dense clusters rotate cells; never let the same full-health prefix
+        -- starve an entire side of the hive. Recheck density after each sweep.
+        local cell = record.healCell
+        for _ = 1, HEAL_CELLS_PER_PULSE do
+            local x = record.x - HEART_RADIUS + (cell % GRID) * CELL_SIZE
+            local y = record.y - HEART_RADIUS + math.floor(cell / GRID) * CELL_SIZE
+            local area = cellQuery.area
+            area[1][1], area[1][2] = x, y
+            area[2][1], area[2][2] = x + CELL_SIZE, y + CELL_SIZE
+            healed = healTargets(surface.find_entities_filtered(cellQuery), record, healed, x, y)
+            cell = cell + 1
+            if cell >= GRID * GRID or healed >= HEAL_TARGETS then break end
         end
+        record.healCell = cell < GRID * GRID and cell or nil
     end
     if healed > 0 then
         local color = auraColor(universe, entity.name)

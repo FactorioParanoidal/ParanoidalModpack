@@ -27,6 +27,9 @@ local aiBrain = {}
 
 local constants = require("Constants")
 local mapUtils = require("MapUtils")
+local chunkQueue = require("ChunkQueue")
+local field = require("FieldTactics")
+aiBrain.field = field
 local chunkPropertyUtils = require("ChunkPropertyUtils")
 
 local BASE_DETECTION_PHEROMONE = constants.BASE_DETECTION_PHEROMONE
@@ -69,8 +72,23 @@ local function globalSetting(name, default)
 end
 
 function aiBrain.refreshSettings(universe)
+    local oldClassic = universe.classicAI == true
+    local oldHeavy = not oldClassic and universe.heavyAI ~= false
     universe.classicAI = globalSetting("rampantFixed--classicBehavior", false)
     universe.heavyAI = globalSetting("rampantFixed--heavyBehavior", true)
+    local classic = universe.classicAI
+    local heavy = not classic and universe.heavyAI
+    if oldClassic ~= classic or oldHeavy ~= heavy then
+        -- Settings events only. Do not scan a map or carry pending sorties
+        -- across an interval when the doctrine was inactive.
+        for _, map in pairs(universe.maps or {}) do
+            if oldClassic ~= classic then
+                if map.objectiveRaid then map.objectiveRaid.done = true end
+                map.objectiveRaid, map.fieldBreach = nil, nil
+            end
+            if oldHeavy ~= heavy then map.trainHeatIndex = nil end
+        end
+    end
     -- runtime settings read on hot paths elsewhere
     universe.settlementsProbability = settings.global["rampantFixed--settlementsProbability"].value
     universe.allowDaytimePlayerHunting = settings.global["rampantFixed--allowDaytimePlayerHunting"].value
@@ -498,7 +516,7 @@ function aiBrain.onPlayerChunkScored(map, chunk, baseValue, turretCount)
     -- strongpoints: turret clusters
     if turretCount >= 2 and turrets >= 4 then
         reservoirOffer(ai.strong, STRONG_SIZE, chunk, turrets, tick, turrets, false)
-    elseif turretCount == 0 then
+    else
         local i = reservoirFind(ai.strong, chunk)
         if i then
             reservoirRemove(ai.strong, i)
@@ -509,46 +527,44 @@ function aiBrain.onPlayerChunkScored(map, chunk, baseValue, turretCount)
     end
 end
 
--- Fills the reservoirs from the player chunks Rampant already knows (saves from before this version, where the
--- reservoirs would otherwise wait for the slow background rescan). Once per map, SEED_PER_CALL chunks per call.
-local SEED_PER_CALL = 100     -- one engine count per uncovered chunk with heavy models: keep the tick short
+-- Fill the reservoirs from the live queue, without a snapshot or an
+-- unbounded iterator over every surface. New/scanned chunks score themselves.
 function aiBrain.seedTargets(universe)
-    if not brainActive(universe) then
-        return
-    end
-    for _, map in pairs(universe.maps) do
-        local ai = map and (not map.suspended) and map.ai
-        if ai and not ai.seeded then
-            local list = ai.seedList
-            if not list then
-                list = {}
-                for chunk in pairs(map.chunkToPlayerBase) do
-                    list[#list + 1] = chunk
+    if not brainActive(universe) then return end
+    local maps = universe.maps
+    local id = universe.seedMapCursor
+    if id and not maps[id] then id = nil end
+    local budget = 100
+    local first
+    for _ = 1, 8 do
+        local map
+        id, map = next(maps, id)
+        if not id then id, map = next(maps) end
+        if not id or id == first then break end
+        first = first or id
+        universe.seedMapCursor = id
+        if not map.suspended and not map.indexing then
+            local ai = map.ai or (next(map.chunkToPlayerBase) and getMapAI(map))
+            if ai and not ai.seeded then
+                ai.seedList, ai.seedIndex = nil, nil -- legacy temporary snapshot only
+                local index = map.seedTargetIndex or 1
+                local n = #map.processQueue
+                local count = mMin(25, budget, n - index + 1)
+                local area = universe.area
+                for i = index, index + count - 1 do
+                    local chunk = chunkQueue.get(map, i)
+                    local value = chunk and map.chunkToPlayerBase[chunk]
+                    if value then
+                        area[1][1], area[1][2] = chunk.x, chunk.y
+                        area[2][1], area[2][2] = chunk.x + CHUNK_SIZE, chunk.y + CHUNK_SIZE
+                        aiBrain.onPlayerChunkScored(map, chunk, value, getPlayerTurretCount(map, chunk))
+                    end
                 end
-                ai.seedList = list
-                ai.seedIndex = 1
+                map.seedTargetIndex = index + count
+                ai.seeded = map.seedTargetIndex > n
+                budget = budget - count
+                if budget <= 0 then break end
             end
-            local area = universe.area
-            local last = mMin(#list, ai.seedIndex + SEED_PER_CALL - 1)
-            for i = ai.seedIndex, last do
-                local chunk = list[i]
-                local baseValue = map.chunkToPlayerBase[chunk]
-                if baseValue and chunkIsLive(map, chunk) then
-                    area[1][1] = chunk.x
-                    area[1][2] = chunk.y
-                    area[2][1] = chunk.x + CHUNK_SIZE
-                    area[2][2] = chunk.y + CHUNK_SIZE
-                    aiBrain.onPlayerChunkScored(map, chunk, baseValue, getPlayerTurretCount(map, chunk))
-                end
-            end
-            ai.seedIndex = last + 1
-            if ai.seedIndex > #list then
-                ai.seedList = nil
-                ai.seedIndex = nil
-                ai.seeded = true
-            end
-        elseif map and (not map.suspended) and (not ai) and next(map.chunkToPlayerBase) then
-            getMapAI(map)   -- seeding starts on the next call
         end
     end
 end
@@ -601,7 +617,7 @@ end
 
 local function strongScorer(entry, d, map)
     local turrets = turretsAround(map, entry.chunk)
-    if turrets < 4 then
+    if getPlayerTurretCount(map, entry.chunk) < 2 or turrets < 4 then
         return nil
     end
     return turrets / (1 + d / 480) * (0.8 + mRandom() * 0.4)
@@ -977,7 +993,8 @@ local function makeGoal(map, squad, chunk, spec, plan, tick)
     if target == "weak" then
         local entry = aiBrain.pickWeakTarget(map, ox, oy)
         if entry then
-            return {x = entry.chunk.x + 16, y = entry.chunk.y + 16, kind = "strike", reach = 40}
+            local goal = field.objective(map, entry.chunk, tick)
+            return goal or {x = entry.chunk.x + 16, y = entry.chunk.y + 16, kind = "strike", reach = 40}
         end
     elseif target == "strong" then
         local entry = aiBrain.pickStrongTarget(map, ox, oy)
@@ -1010,7 +1027,7 @@ function aiBrain.prepareSquad(map, squad, chunk, tactic, spec, plan, tick)
     squad.losses = squad.losses or 0
     local goal = makeGoal(map, squad, chunk, spec, plan, tick)
     if goal then
-        goal.untilTick = tick + 5 * 3600
+        goal.untilTick = goal.untilTick or tick + 5 * 3600
         goal.dash = spec.dash
         squad.goal = goal
     end
@@ -1064,7 +1081,7 @@ function aiBrain.scheduleFollowUp(map, chunk, tactic, tick, plan)
     ai.followUps[#ai.followUps + 1] = plan
 end
 
--- removes and returns the first due follow-up (drops expired or dead ones)
+-- Finds a due follow-up (drops expired or dead ones); caller confirms execution.
 function aiBrain.popDueFollowUp(map, tick)
     local ai = map.ai
     if not ai then
@@ -1077,8 +1094,7 @@ function aiBrain.popDueFollowUp(map, tick)
         if (plan.expires < tick) or (not chunkIsLive(map, plan.chunk)) then
             table.remove(list, i)
         elseif plan.tick <= tick then
-            table.remove(list, i)
-            return plan
+            return plan, i
         else
             i = i + 1
         end
@@ -1117,6 +1133,9 @@ end
 
 -- learning from a finished squad (disbanded, wiped out or merged)
 function aiBrain.onSquadEnd(map, squad, tick)
+    if brainActive(map.universe) and squad.goal and squad.goal.kind == "objective" then
+        field.closeObjective(map, squad.goal, squad.goal.confirmed, tick)
+    end
     if squad.flight then
         if aiBrain.flyers then
             aiBrain.flyers.onFlightEnd(map, squad, tick)
@@ -1263,6 +1282,7 @@ function aiBrain.report(map)
         regions = regions + 1
     end
     lines[#lines + 1] = "Областей памяти о подходах: " .. regions
+    if brainActive(map.universe) then field.report(map, lines) end
     return lines
 end
 

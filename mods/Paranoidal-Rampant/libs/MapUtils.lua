@@ -7,6 +7,7 @@ local mapUtils = {}
 
 local constants = require("Constants")
 local chunkPropertyUtils = require("ChunkPropertyUtils")
+local chunkQueue = require("ChunkQueue")
 
 -- constants
 
@@ -65,18 +66,14 @@ function mapUtils.getChunkListInRange(map, x, y, range)
 	return chunkList
 end
 
-function mapUtils.removeChunkFromMap(map, chunk)
-    local x = chunk.x
-    local y = chunk.y
-    if not map[x][y] then
-        return
-    end
-	local universe = map.universe
-    map[x][y] = nil
-
-	local chunkData = {chunk.x, chunk.y, map.surface.index}
-	local chunkIndex = "x"..chunkData[1].."y"..chunkData[2].."m"..chunkData[3]
-    universe.chunkToPassScan[chunkIndex] = nil
+-- Clean state keyed by this chunk object; a replacement at the same coordinates is independent.
+function mapUtils.discardChunkState(map, chunk)
+    local universe = map.universe
+    if map.playerDirtyChunks then map.playerDirtyChunks[chunk] = nil end
+    if map.vengenceQueue then map.vengenceQueue[chunk] = nil end
+    if map.deployVengenceIterator == chunk then map.deployVengenceIterator = nil end
+    if universe.processActiveNest then universe.processActiveNest[chunk] = nil end
+    if universe.processActiveNestIterator == chunk then universe.processActiveNestIterator = nil end
 	
 	chunkPropertyUtils.setNestActiveTick(map, chunk, 0)
 	
@@ -97,7 +94,7 @@ function mapUtils.removeChunkFromMap(map, chunk)
     map.chunkToRetreats[chunk] = nil
     chunkPropertyUtils.removeSquadsFromChunk(map, chunk)	-- map.chunkToSquad[chunk] = nil
     chunkPropertyUtils.setTrapCount(map, chunk, 0)			-- map.chunkToTraps[chunk] = nil
-    chunkPropertyUtils.setNestCount(map, chunk, 0)			-- map.chunkToTurrets[chunk] = nil
+    chunkPropertyUtils.setTurretCount(map, chunk, 0)			-- map.chunkToTurrets[chunk] = nil
     chunkPropertyUtils.setUtilityCount(map, chunk, 0)		-- map.chunkToUtilities[chunk] = nil
     map.chunkToVictory[chunk] = nil
 	
@@ -114,6 +111,17 @@ function mapUtils.removeChunkFromMap(map, chunk)
     if map.processMigrationIterator == chunk then
         map.processMigrationIterator = nil
     end
+end
+
+function mapUtils.removeChunkFromMap(map, chunk)
+    if not chunkQueue.isLive(map, chunk) then return end
+    local column = map[chunk.x]
+    column[chunk.y] = nil
+    if not next(column) then map[chunk.x] = nil end
+    chunkQueue.invalidate(map, chunk)
+    local index = "x"..chunk.x.."y"..chunk.y.."m"..map.surface.index
+    map.universe.chunkToPassScan[index] = nil
+    mapUtils.discardChunkState(map, chunk)
 end
 
 --[[

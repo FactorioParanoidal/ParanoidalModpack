@@ -42,7 +42,7 @@ local engineGroupHelpers = require("EngineGroupHelpers")
 local superHives = require("SuperHives")
 
 local CHUNK_SIZE = constants.CHUNK_SIZE
-local AI_STATE_PEACEFUL = constants.AI_STATE_PEACEFUL
+local attackAllowed = require("AIPredicates").attackAllowed
 
 local turretsAround = aiBrain.turretsAround
 local chunkIsLive = aiBrain.chunkIsLive
@@ -240,6 +240,8 @@ end
 -- boss unit and the ordinary unit it is compared with, or nil if the nest has no unit of that kind.
 -- tierUp: tiers above the units the nest spawns now (vanilla / Bob nests: steps up the health ladder of the nest)
 local function resolveBoss(spawnerPrototype, desiredType, evo, tierUp)
+    -- Also used by forced spawns: check raw surface evolution, not AI scaling.
+    if desiredType == "flyer" and evo < 0.1 then return nil end
     local units = spawnerPrototype.result_units
     if (not units) or (#units == 0) then
         return nil
@@ -929,8 +931,8 @@ local function pickMap(universe)
         if not seen[index] then
             seen[index] = true
             local map = universe.maps[index]
-            if map and (not map.suspended) and map.surface and map.surface.valid and (not surface.peaceful_mode)
-                and (map.state ~= AI_STATE_PEACEFUL) and next(map.chunkToNests)
+            if map and not map.suspended and map.surface and map.surface.valid and attackAllowed(map, game.tick)
+                and next(map.chunkToNests)
                 and (next(map.chunkToPlayerTurrets) or next(map.chunkToPlayerBase)) then
                 candidates[#candidates + 1] = map
             end

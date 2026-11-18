@@ -204,6 +204,7 @@ local function digOut(undergroundSquad, targetPosition)
 		group = squad.group
 	
 		local undergroundTotal = 0
+        local attempts = 0
 		local unitsInTile = 999
 		local digOutIndex
 		local digOutPosition
@@ -220,7 +221,7 @@ local function digOut(undergroundSquad, targetPosition)
 						qualityName = quality.name
 					end
 					local left = count
-					while (left > 0) and (undergroundTotal < DIG_OUT_AT_ONCE) do
+					while (left > 0) and (attempts < DIG_OUT_AT_ONCE) do
 						if unitsInTile > 5 then
 							unitsInTile = 0
 							digOutIndex, digOutPosition = next(digOutPositions, digOutIndex)
@@ -228,7 +229,7 @@ local function digOut(undergroundSquad, targetPosition)
 								digOutIndex, digOutPosition = next(digOutPositions, nil)
 							end
 						end
-						left = left - 1
+                        attempts = attempts + 1
 						local newEntity = surface.create_entity({
 							name = entityName,
 							position = {digOutPosition.x, digOutPosition.y},
@@ -236,6 +237,7 @@ local function digOut(undergroundSquad, targetPosition)
 							force = "enemy",
 							})
 						if newEntity and newEntity.valid then
+                            left = left - 1
 							unitsInTile = unitsInTile + 1
 							group.add_member(newEntity)
 
@@ -250,12 +252,15 @@ local function digOut(undergroundSquad, targetPosition)
 							if digOutPosition.healthRate then
 								newEntity.health = newEntity.max_health * digOutPosition.healthRate
 							end
+                        else
+                            break -- defer this cohort, not a loss
 						end
 					end
 					if left > 0 then
 						-- over the limit: the rest comes out gradually (was one more unit per name and quality)
 						queuedMembers[#queuedMembers + 1] = {
 							count = left,
+                            surfaceIndex = surface.index,
 							name = entityName,
 							position = {x = digOutPosition.x, y = digOutPosition.y},
 							quality = qualityName,
@@ -294,13 +299,11 @@ local function digOut(undergroundSquad, targetPosition)
 				)
 			end	
 			
-			if decomressLater then
-				universe.decomressQueue[group] = queuedMembers
-			end
 		else
 			group.destroy()	-- nothing came out: the empty group would stay
 			squad = nil
-		end	
+		end
+        if decomressLater then universe.decomressQueue[group] = queuedMembers end
 		universe.undergroundSquads[undergroundSquad.groupNumber] = nil
 	end
 	
