@@ -136,6 +136,7 @@ do
         for recipe_name, source_name in pairs({
             ["bob-wooden-board"] = "wood",
             ["bi-press-wood"] = "bi-woodpulp",
+            ["wooden-board-paper"] = "angels-solid-paper",
         }) do
             local recipe, source = data.raw.recipe[recipe_name], data.raw.item[source_name]
             if recipe and source and (source.icons or source.icon) then

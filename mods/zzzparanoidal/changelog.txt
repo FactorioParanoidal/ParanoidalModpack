@@ -1,5 +1,7 @@
 ---------------------------------------------------------------------------------------------------
 Version: 8.1.31
+  Graphics:
+    - Added the cardboard source badge at the top right of wooden-board-paper, matching the wood/sawdust recipes. Item artwork and recipe mechanics are unchanged.
   Compatibility:
     - Followed the rename of factorissimo-2-notnotmelon to Paranoidal-factorissimo-4: the loader shells template check, the recursion technology cleanup and the graphics atlas entry of the circuit connector (__Paranoidal-factorissimo-4__ paths).
   Compatibility:
