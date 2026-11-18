@@ -1,12 +1,32 @@
 local has_layout = has_layout
 
-local function setup_blueprint_tags(blueprint, mapping)
-    for i, entity in pairs(mapping) do
-        if not entity.valid then goto continue end
-        local factory = entity.unit_number and storage.factories_by_entity[entity.unit_number]
-        if factory and factory.id and has_layout(entity.name) then
-            blueprint.set_blueprint_entity_tag(i, "id", factory.id)
-        elseif factorissimo.connection_indicator_names[entity.name] then
+local function setup_blueprint_tags(blueprint, mapping, cuts)
+    for _, planned in ipairs(blueprint.get_blueprint_entities() or {}) do
+        local i = planned.entity_number
+        local entity = mapping[i]
+        local matches = entity and entity.valid and (entity.name == planned.name
+            or (entity.type == "entity-ghost" and entity.ghost_name == planned.name))
+        if has_layout(planned.name) then
+            local factory = matches and entity.type ~= "entity-ghost" and entity.unit_number
+                and storage.factories_by_entity[entity.unit_number]
+            local tags = planned.tags or {}
+            local action, ticket = "copy", nil
+            if factory and factory.id then
+                tags.id = factory.id
+                if cuts then
+                    factory.cut_sequence = (factory.cut_sequence or 0) + 1
+                    factory.cut_ticket = factory.cut_sequence
+                    action, ticket = "cut", factory.cut_ticket
+                end
+            elseif not matches then
+                -- The mapping can be stale after another mod edits the blueprint.
+                tags.id = nil
+            end
+            -- A blueprint of an existing ghost is a copy, not a new recovery/cut authorization.
+            tags.factorissimo_action = (tags.id or not matches) and action or nil
+            tags.factorissimo_ticket = ticket
+            blueprint.set_blueprint_entity_tags(i, tags)
+        elseif matches and factorissimo.connection_indicator_names[entity.name] then
             local factory = remote_api.find_surrounding_factory(entity.surface, entity.position)
             if factory then
                 for cid, indicator in pairs(factory.connection_indicators) do
@@ -20,14 +40,22 @@ local function setup_blueprint_tags(blueprint, mapping)
                 end
             end
         end
-        ::continue::
     end
 end
 
-local function paste_blueprint(inventory, destination)
+local function paste_blueprint(inventory, destination, source_force)
     if not inventory.valid then return end
-    if destination.inside_surface and destination.inside_surface.valid and destination.force and destination.force.valid then
-        local stack = inventory[1]
+    local stack = inventory[1]
+    if stack.valid_for_read and stack.is_blueprint and destination.id and storage.factories[destination.id] == destination
+        and destination.inside_surface and destination.inside_surface.valid
+        and destination.force and destination.force.valid and (not source_force or source_force == destination.force) then
+        -- Includes saves with a paste already queued before tags acquired an action.
+        for _, entity in ipairs(stack.get_blueprint_entities() or {}) do
+            if has_layout(entity.name) and entity.tags and entity.tags.id then
+                stack.set_blueprint_entity_tag(entity.entity_number, "factorissimo_action", "copy")
+                stack.set_blueprint_entity_tag(entity.entity_number, "factorissimo_ticket", nil)
+            end
+        end
         stack.build_blueprint {
             surface = destination.inside_surface,
             force = destination.force,
@@ -43,7 +71,9 @@ end
 factorissimo.register_delayed_function("paste_blueprint", paste_blueprint)
 
 function factorissimo.copy_entity_ghosts(source, destination)
-    if not source.inside_surface.valid or not destination.inside_surface.valid then return end
+    if not (source.inside_surface and source.inside_surface.valid and destination.inside_surface
+        and destination.inside_surface.valid and source.force and source.force.valid
+        and source.force == destination.force) then return false end
 
     local j = 60
     local first_anchor = source.inside_surface.create_entity {name = "factory-blueprint-anchor", position = {source.inside_x - j, source.inside_y - j}, force = source.force}
@@ -51,7 +81,7 @@ function factorissimo.copy_entity_ghosts(source, destination)
     if not (first_anchor and second_anchor) then
         if first_anchor then first_anchor.destroy() end
         if second_anchor then second_anchor.destroy() end
-        return
+        return false
     end
 
     local inventory = game.create_inventory(1)
@@ -82,29 +112,29 @@ function factorissimo.copy_entity_ghosts(source, destination)
     factorissimo.copy_overlay_between_factory_buildings(source, destination)
 
     -- Delay this function a bit to give the radars a chance to scan the area
-    factorissimo.execute_later("paste_blueprint", 240, inventory, destination)
+    factorissimo.execute_later("paste_blueprint", 240, inventory, destination, source.force)
 
     first_anchor.destroy()
     second_anchor.destroy()
+    return true
 end
 
 -- setup ghost tags for factory components
 factorissimo.on_event(defines.events.on_player_setup_blueprint, function(event)
     local player = game.get_player(event.player_index)
     if not player then return end
-    local blueprint = player.blueprint_to_setup
-    if not (blueprint and blueprint.valid_for_read) then blueprint = player.cursor_stack end
-    if not blueprint or not blueprint.valid_for_read then return end
-
-    local entities = blueprint.get_blueprint_entities()
-    if not entities then return end
-    local mapping = event.mapping.get()
-    for i, entity in ipairs(entities) do
-        local map = mapping[i]
-        if not map or map.name ~= entity.name then return end -- Another mod has broken the mapping, abort
+    local blueprint = event.record
+    if blueprint then
+        if not (blueprint.valid and blueprint.type == "blueprint") then return end
+    else
+        blueprint = player.blueprint_to_setup
+        if not (blueprint and blueprint.valid_for_read) then blueprint = player.cursor_stack end
+        if not (blueprint and blueprint.valid_for_read and blueprint.is_blueprint) then return end
     end
 
-    setup_blueprint_tags(blueprint, mapping)
+    local tool = prototypes.item[event.item]
+    local cuts = tool and tool.type == "copy-paste-tool" and tool.cuts
+    setup_blueprint_tags(blueprint, event.mapping.get(), cuts)
 end)
 
 local function get_cpos(factory, position)

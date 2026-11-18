@@ -586,6 +586,9 @@ local function create_factory_exterior(factory, building)
     factory.building = building
     factory.building_quality = building.quality.name -- only to return the same item if the building vanishes
     factory.built = true
+    factory.cut_ticket = nil
+    factory.rebuild_unit = nil
+    factory.platform_target = nil
 
     -- Decide first whether the factory may work here, so that an invalid placement never connects.
     set_factory_active_or_inactive(factory, true)
@@ -878,6 +881,7 @@ local function prevent_factory_mining(entity)
     storage.factories_by_entity[replacement.unit_number] = factory
     script.register_on_object_destroyed(replacement)
     factory.building = replacement
+    factory.cut_ticket = nil
     factory.overlay_signature = nil
     factorissimo.update_overlay(factory)
     factorissimo.update_name_labels(factory)
@@ -900,6 +904,14 @@ factorissimo.on_event(defines.events.on_robot_pre_mined, function(event)
     end
 end, factorissimo.entity_filters {BUILDING_TYPE, "item-entity"})
 
+-- Cancelling a cut revokes the transfer, even if the same factory is packed later.
+factorissimo.on_event(defines.events.on_cancelled_deconstruction, function(event)
+    local entity = event.entity
+    if not entity.valid or not has_layout(entity.name) then return end
+    local factory = storage.factories_by_entity[entity.unit_number]
+    if factory and factory.building == entity then factory.cut_ticket = nil end
+end, building_filters)
+
 -- How biters pick up factories
 -- Too bad they don't have hands
 factorissimo.on_event(defines.events.on_entity_died, function(event)
@@ -908,6 +920,7 @@ factorissimo.on_event(defines.events.on_entity_died, function(event)
     local factory = get_factory_by_building(entity)
     if not factory then return end
 
+    factory.cut_ticket = nil
     storage.saved_factories[factory.id] = factory
     cleanup_factory_exterior(factory)
 
@@ -919,8 +932,13 @@ end, building_filters)
 factorissimo.on_event(defines.events.on_post_entity_died, function(event)
     if not event.ghost or not event.unit_number or not has_layout(event.prototype.name) then return end
     local factory = storage.factories_by_entity[event.unit_number]
-    if not factory or not factory.id then return end
-    event.ghost.tags = {id = factory.id}
+    if not factory or not factory.id or storage.saved_factories[factory.id] ~= factory then return end
+    factory.rebuild_unit = event.unit_number
+    local tags = event.ghost.tags or {}
+    tags.id = factory.id
+    tags.factorissimo_action = "rebuild"
+    tags.factorissimo_ticket = factory.rebuild_unit
+    event.ghost.tags = tags
 end, {{filter = "type", type = BUILDING_TYPE}})
 
 -- A factory building vanished without any event (another mod destroyed it silently).
@@ -933,6 +951,7 @@ local function rescue_orphaned_factory(factory)
         forget_factory(factory)
         return
     end
+    factory.cut_ticket = nil
     storage.saved_factories[factory.id] = factory
     cleanup_factory_exterior(factory)
     if not (surface and surface.valid) then return end -- recoverable with /give-lost-factory-buildings
@@ -960,6 +979,7 @@ end)
 factorissimo.on_event(factorissimo.events.on_init(), function()
     for _, factory in pairs(storage.factories) do
         if factory.built and factory.layout and factory.id and not (factory.building and factory.building.valid) then
+            factory.cut_ticket = nil
             storage.saved_factories[factory.id] = factory
             cleanup_factory_exterior(factory)
         end
@@ -1174,14 +1194,21 @@ local function create_fresh_factory(entity)
     return factory
 end
 
--- It's possible that the item used to build this factory is not the same as the one that was saved.
--- In this case, clear tags and description of the saved item such that there is only 1 copy of the factory item.
--- https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/155
-local function handle_factory_control_xed(factory)
+local function is_packed_item_of(item, factory)
+    if not (item and item.valid and factory.layout and item.name == factory.layout.name .. "-instantiated") then
+        return false
+    end
+    local tags = item.tags
+    return tags and tags.id == factory.id
+end
+
+-- A cut/rebuild can use a plain hull. Unbind the outstanding packed item only after attachment.
+local function clear_redundant_packed_item(factory)
     local item = factory.item
-    if not item or not item.valid then return end
-    factory.item.tags = {}
-    factory.item.custom_description = factory.item.prototype.localised_description
+    factory.item = nil
+    if not is_packed_item_of(item, factory) then return end
+    item.tags = {}
+    item.custom_description = item.prototype.localised_description
 
     -- We should also attempt to swapped the packed factory item with an unpacked.
     -- If this fails, whatever. It's just to avoid confusion. A packed factory with no tags is equal to an unpacked factory.
@@ -1196,38 +1223,91 @@ local function handle_factory_control_xed(factory)
     }
 end
 
-local function handle_factory_placed(entity, tags)
-    if not tags or not tags.id then
+local function matches_factory(factory, entity)
+    return factory and factory.layout and factory.layout.name == entity.name and factory.force == entity.force
+        and factory.inside_surface and factory.inside_surface.valid
+end
+
+local function unpack_factory(factory, entity, id)
+    factory.quality = factory_quality()
+    create_factory_exterior(factory, entity)
+    storage.saved_factories[id] = nil
+    clear_redundant_packed_item(factory)
+end
+
+local function factory_placement_message(entity, key)
+    factorissimo.create_flying_text {position = entity.position, text = {"factory-connection-text." .. key}}
+end
+
+local function handle_factory_placed(entity, tags, packed_stack, platform)
+    if not tags or type(tags.id) ~= "number" then
+        create_fresh_factory(entity)
+        if tags and tags.factorissimo_action == "copy" then factory_placement_message(entity, "copy-source-unavailable") end
+        return
+    end
+
+    local id = tags.id
+    local saved = storage.saved_factories[id]
+    local source = storage.factories[id]
+    local action = tags.factorissimo_action
+    if packed_stack then
+        if matches_factory(saved, entity) and not saved.built then
+            unpack_factory(saved, entity, id)
+            return
+        end
+        -- A stale duplicate of an already placed/deleted factory is only an empty hull.
+        if saved or not ((source and source.built) or (storage.was_deleted and storage.was_deleted[id])) then
+            factory_placement_message(entity, "invalid-factory-data")
+            local old_item = packed_stack.item
+            local spilled = entity.surface.spill_item_stack {
+                position = entity.position, stack = packed_stack,
+                allow_belts = false, max_radius = 0, use_start_position_on_failure = true,
+            }
+            if spilled[1] then
+                if saved and (saved.item == old_item or not is_packed_item_of(saved.item, saved)) then
+                    saved.item = spilled[1].stack.item
+                end
+                entity.destroy()
+                return
+            end
+        end
         create_fresh_factory(entity)
         return
     end
 
-    local factory = storage.saved_factories[tags.id]
-    storage.saved_factories[tags.id] = nil
-    if factory and factory.inside_surface and factory.inside_surface.valid then
-        -- This is a saved factory, we need to unpack it
-        factory.quality = factory_quality()
-        create_factory_exterior(factory, entity)
-        handle_factory_control_xed(factory)
+    local matches_saved = matches_factory(saved, entity) and not saved.built
+    if action == "rebuild" then
+        local position = entity.position
+        if matches_saved and saved.rebuild_unit and saved.rebuild_unit == tags.factorissimo_ticket
+            and saved.outside_surface == entity.surface and saved.outside_x == position.x and saved.outside_y == position.y then
+            unpack_factory(saved, entity, id)
+            return
+        end
+        create_fresh_factory(entity)
+        factory_placement_message(entity, "recovery-source-unavailable")
         return
     end
+    if matches_saved then
+        local cut = action == "cut" and saved.cut_ticket and saved.cut_ticket == tags.factorissimo_ticket
+        local target = action == "platform" and saved.platform_target
+        local position = entity.position
+        local on_platform = target and platform and entity.surface.platform == platform
+            and target.surface == entity.surface.index and target.x == position.x and target.y == position.y
+            and target.ticket == tags.factorissimo_ticket
+        if cut or on_platform then
+            unpack_factory(saved, entity, id)
+            return
+        end
+    end
 
-    if not factory and storage.factories[tags.id] then
-        -- This factory was copied from somewhere else. Clone all contained entities
-        local factory = create_fresh_factory(entity)
-        factorissimo.copy_entity_ghosts(storage.factories[tags.id], factory)
+    -- A bare legacy blueprint ID is only a plan reference, even if the original is packed.
+    local factory = create_fresh_factory(entity)
+    if (action == nil or action == "copy" or action == "cut") and matches_factory(source or saved, entity)
+        and factorissimo.copy_entity_ghosts(source or saved, factory) then
         factorissimo.update_overlay(factory)
         return
     end
-
-    -- https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/211
-    if storage.was_deleted and storage.was_deleted[tags.id] then
-        create_fresh_factory(entity)
-        return
-    end
-
-    factorissimo.create_flying_text {position = entity.position, text = {"factory-connection-text.invalid-factory-data"}}
-    entity.destroy()
+    factory_placement_message(entity, "copy-source-unavailable")
 end
 
 -- https://github.com/notnotmelon/factorissimo-2-notnotmelon/issues/259
@@ -1255,7 +1335,9 @@ local function try_randomly_tag_an_itemized_factory_from_space_platform_hub(enti
         if stack and stack.valid_for_read and stack.name == cursor_ghost_name and stack.quality.name == cursor_ghost.quality.name then
             if stack.type == "item-with-tags" and stack.tags and stack.tags.id then
                 local factory = storage.saved_factories[stack.tags.id]
-                if factory and factory.inside_surface and factory.inside_surface.valid and factory.inside_surface.name == "space-factory-floor" then
+                if factory and factory.force == entity_ghost.force and factory.layout
+                    and factory.layout.name == entity_ghost.ghost_name and not factory.built
+                    and factory.inside_surface and factory.inside_surface.valid and factory.inside_surface.name == "space-factory-floor" then
                     random_indicies[#random_indicies + 1] = i
                 end
             end
@@ -1264,9 +1346,15 @@ local function try_randomly_tag_an_itemized_factory_from_space_platform_hub(enti
 
     if #random_indicies == 0 then return end
     local index = random_indicies[math.random(1, #random_indicies)]
-    local stack = inventory[index]
-    entity_ghost.tags = stack.tags
-    local factory = storage.saved_factories[entity_ghost.tags.id]
+    local tags = inventory[index].tags
+    local factory = storage.saved_factories[tags.id]
+    local position = entity_ghost.position
+    local ticket = entity_ghost.unit_number
+    -- Preserve the hub fallback without making an untyped (or copied) blueprint an unpack request.
+    factory.platform_target = {surface = entity_ghost.surface.index, x = position.x, y = position.y, ticket = ticket}
+    tags.factorissimo_action = "platform"
+    tags.factorissimo_ticket = ticket
+    entity_ghost.tags = tags
 
     if #random_indicies > 1 then
         local certainty = string.format("%.2f", 100 / #random_indicies)
@@ -1291,13 +1379,21 @@ factorissimo.on_event(factorissimo.events.on_built(), function(event)
 
     if entity_type == BUILDING_TYPE then
         if not has_layout(entity.name) then return end
-        -- The tags come from the ghost, from the item a player used, or from the item a robot/platform used.
+        -- A real packed item takes precedence over a conflicting ghost.
+        local packed_name = entity.name .. "-instantiated"
         local inventory = event.consumed_items
-        local tags = event.tags
-            or (inventory and not inventory.is_empty() and tags_of_stack(inventory[1]))
-            or tags_of_stack(event.stack)
-            or nil
-        handle_factory_placed(entity, tags)
+        local stack = event.stack
+        if inventory then
+            for i = 1, #inventory do
+                local consumed = inventory[i]
+                if consumed.valid_for_read and consumed.name == packed_name then
+                    stack = consumed
+                    break
+                end
+            end
+        end
+        local packed_tags = stack and stack.valid_for_read and stack.name == packed_name and tags_of_stack(stack)
+        handle_factory_placed(entity, packed_tags or event.tags, packed_tags and stack, event.platform)
         return
     end
 
@@ -1309,8 +1405,13 @@ factorissimo.on_event(factorissimo.events.on_built(), function(event)
 
     local tags = entity.tags
     if tags and tags.id then
+        if tags.factorissimo_action == "rebuild" and entity.ghost_unit_number ~= tags.factorissimo_ticket then
+            tags.factorissimo_action = "copy"
+            tags.factorissimo_ticket = nil
+            entity.tags = tags
+        end
         local copied_from_factory = storage.factories[tags.id]
-        if copied_from_factory and copied_from_factory.built then
+        if copied_from_factory and copied_from_factory.built and copied_from_factory.force == entity.force then
             factorissimo.update_overlay(copied_from_factory, entity)
         end
     end
@@ -1397,7 +1498,8 @@ commands.add_command("give-lost-factory-buildings", {"command-help-message.give-
 
     for id, factory in pairs(storage.saved_factories) do
         local item_name = factory.layout and (factory.layout.name .. "-instantiated")
-        if not held[id] and item_name and prototypes.item[item_name] then
+        if factory.force == player.force and factory.inside_surface and factory.inside_surface.valid
+            and not held[id] and not is_packed_item_of(factory.item, factory) and item_name and prototypes.item[item_name] then
             local quality = factory.building_quality
             if quality and not prototypes.quality[quality] then quality = nil end
             local inserted = player.insert {
@@ -1408,7 +1510,7 @@ commands.add_command("give-lost-factory-buildings", {"command-help-message.give-
                 custom_description = generate_factory_item_description(factory),
             }
             if inserted > 0 then
-                -- Bind the new item so that unpacking another stale copy clears it (see handle_factory_control_xed).
+                -- Bind the replacement so restoring via a ghost also unbinds the item.
                 for i = 1, #inventory do
                     local tags = tags_of_stack(inventory[i])
                     if tags and tags.id == id then
