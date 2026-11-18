@@ -2,6 +2,8 @@
 Version: 2.0.1
 Date: 2026-10-14
   Features:
+    - Geological survey uses the causal RSO survey API when present, with the legacy forecast fallback preserved. Resource/signal modes, scan cost and timing are unchanged.
+  Features:
     - Third radar mode "Geological survey" (with RSO Reforged): each scan marks on the map the nearest
       field the force has not charted yet (generated or not), with its resource and rough size, and
       announces it in chat; falls back to ore when nothing is left around. With RSO Reforged 9.2.0 the mark

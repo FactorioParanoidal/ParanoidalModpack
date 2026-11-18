@@ -6,6 +6,8 @@ local story = require("script.story")
 local speech = require("script.speech")
 
 local memory = {}
+local memory_stage_event = script.generate_event_name()
+function memory.get_memory_stage_event() return memory_stage_event end
 
 local minute = 3600
 local wrong_lock = 5 * minute
@@ -529,7 +531,12 @@ memory.on_gui_opened = function(event)
   local player = game.get_player(event.player_index)
   if not player then return end
   local f = memory.force_data(player.force)
-  if f.epilogue then return end
+  local force_index, surface_index, unit_number = player.force.index, entity.surface.index, entity.unit_number
+  if f.epilogue then
+    script.raise_event(memory_stage_event, {force_index = force_index, surface_index = surface_index,
+      entity_unit_number = unit_number, success = true, stage = "epilogue", epilogue_tick = f.epilogue, reconfirmed = true})
+    return
+  end
   f.epilogue = game.tick
   local data = state.s.players[player.index]
   if data and data.status == "active" then
@@ -538,6 +545,8 @@ memory.on_gui_opened = function(event)
   tell(player, {"nan-e-case.epilogue"}, {mood = "happy", ticks = 1800, chat = true})
   tell(player, {"nan-e.epilogue-after"}, {mood = "glitch", ticks = 600, silent = true})
   changed(player.force)
+  script.raise_event(memory_stage_event, {force_index = force_index, surface_index = surface_index,
+    entity_unit_number = unit_number, success = true, stage = "epilogue", epilogue_tick = f.epilogue})
 end
 
 -- Every 60 ticks: near the camp she notices the box; a minute after a distress beacon, the BnL update knocks.

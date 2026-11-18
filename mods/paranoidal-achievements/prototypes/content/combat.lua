@@ -21,8 +21,6 @@ return lib.list(
     amount = 100, label = "rampant-hive"},
   {id = "fight-fire", kind = "kill", to_kill = {patterns = {"^fire%-.*%-rampant$", "^inferno%-.*%-rampant$"},
     types = ENEMY_TYPES}, damage_type = "fire", amount = 1000, label = "rampant-fire"},
-  {id = "short-circuit", kind = "kill", to_kill = {patterns = {"^electric%-.*%-rampant$"}, types = ENEMY_TYPES},
-    damage_type = "electric", amount = 1000, label = "rampant-electric"},
   {id = "face-to-face", kind = "kill", to_kill = {patterns = {"^troll%-.*%-t10%-rampant$"}, types = ENEMY_TYPES},
     personally = true, label = "rampant-troll-t10"},
   {id = "godzilla", kind = "kill", to_kill = {"biterzilla15", "biterzilla25", "biterzilla35"}},

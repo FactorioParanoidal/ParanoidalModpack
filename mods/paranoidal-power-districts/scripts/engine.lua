@@ -10,6 +10,8 @@ local journal = require("scripts.journal")
 local U = require("scripts.util")
 
 local M = {}
+local achievement_facts = require("scripts.achievement-facts")
+M.get_managed_interval_event = achievement_facts.get_event
 local exp, floor, min, max, abs = math.exp, math.floor, math.min, math.max, math.abs
 local RED, GREEN = defines.wire_connector_id.circuit_red, defines.wire_connector_id.circuit_green
 local COPPER = defines.wire_connector_id.pole_copper
@@ -719,6 +721,7 @@ function M.tap_text(tap)
 end
 
 local function bypass_group(g, t)
+  for _, unit in ipairs(g.units) do achievement_facts.reset(storage.tr[unit]) end
   local m = storage.tr[g.units[1]]
   if not (m and m.e.valid and m.ein and m.ein.valid and m.eout and m.eout.valid) then return end
   local oe = m.eout.energy
@@ -748,7 +751,10 @@ function M.process(g, t)
     local m = tr[u]
     if m and m.e.valid and m.ein and m.ein.valid and m.eout and m.eout.valid then members[#members + 1] = m end
   end
-  if #members == 0 then return end
+  if #members == 0 then
+    for _, unit in ipairs(g.units) do achievement_facts.reset(tr[unit]) end
+    return
+  end
   local lead = tr[g.lead]
   if not (lead and lead.e.valid) then lead = members[1] end
   local f = state.force(lead.force)
@@ -784,6 +790,7 @@ function M.process(g, t)
     local oe = m.eout.energy
     local dr = (m.lo or 0) - oe
     if dr < 0 then dr = 0 end
+    m._achievement_lt = m.lt
     m._dt, m._oe, m._dr = dt, oe, dr
     drate = drate + dr / dt
   end
@@ -980,6 +987,7 @@ function M.process(g, t)
   end
   f.saved = f.saved + saved_j
   f.saved_acc = (f.saved_acc or 0) + saved_sum
+  achievement_facts.sample(lead, members, g, t, status, off == nil, N, fr, drate, saved_j, st.period)
 
   -- district summary for the windows, the advisor and the load banks
   local prev = ds.status

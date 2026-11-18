@@ -151,8 +151,9 @@ end
 
 local function forecast(surface, force, position)
   local interface = remote.interfaces[RSO]
-  if not (interface and interface.forecast) then return false end
-  return remote.call(RSO, "forecast", surface.index, force.index, position) ~= nil
+  if not interface then return false end
+  local method = interface.survey_forecast and "survey_forecast" or interface.forecast and "forecast"
+  return method ~= nil and remote.call(RSO, method, surface.index, force.index, position) ~= nil
 end
 
 local function modes()

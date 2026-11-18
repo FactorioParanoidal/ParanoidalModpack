@@ -177,6 +177,7 @@ script.on_nth_tick(300, memory.poll_axiom6)
 -- For other mods and the autotest.
 remote.add_interface("nan-e",
 {
+  get_memory_stage_event = memory.get_memory_stage_event,
   -- {status, task, has_unit, has_husk, journal, fragments, solved, decrypting}
   status = function(player_index)
     local player = game.get_player(player_index)

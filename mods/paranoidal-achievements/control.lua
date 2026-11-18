@@ -24,6 +24,7 @@ require("milestones.storage_init")
 
 -- After milestones.tracker: registers its handlers and the statistics consumers.
 local achievements = require("scripts.achievements")
+local atlas = require("scripts.atlas")
 
 ---------------------------------------------------------------------------------------------------
 -- Milestones
@@ -186,6 +187,7 @@ end
 script.on_init(function()
     milestones_on_init()
     achievements.on_init()
+    atlas.on_init()
 end)
 
 script.on_load(function()
@@ -196,11 +198,13 @@ end)
 script.on_configuration_changed(function(event)
     milestones_on_configuration_changed(event)
     achievements.on_configuration_changed()
+    atlas.on_configuration_changed()
 end)
 
 events.on(defines.events.on_tick, function(event)
     track_item_creation(event)
     local tick = event.tick
+    if tick % 15 == 0 then atlas.poll(tick) end
     if tick % 60 == 0 then
         achievements.poll(tick)
         if tick % DELAYED_CHAT_DELAY == 0 then print_chat_delayed(event) end

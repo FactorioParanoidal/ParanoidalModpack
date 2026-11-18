@@ -28,14 +28,15 @@ function M.merge(state, event)
         own = own or {}
         state.forces[destination_index] = own
         if source then
-            local known = {refined=true, launches=true, paints=true, auto_deconstructed=true,
+            local known = {refined=true, repaired=true, normalized_repairs=true, owner_facts=true, electric_kills=true, launches=true, paints=true, auto_deconstructed=true,
                 gases=true, bosses=true, legendary=true, gases_tick=true, launch_ticks=true,
                 quiet_ticks=true, quiet_crashes=true}
-            for _, field in ipairs({"refined", "launches", "paints", "auto_deconstructed"}) do
+            for _, field in ipairs({"refined", "repaired", "normalized_repairs", "electric_kills", "launches", "paints", "auto_deconstructed"}) do
                 if source[field] then own[field] = (own[field] or 0) + source[field] end
             end
             own.gases = union(own.gases, source.gases)
             own.bosses = union(own.bosses, source.bosses)
+            own.owner_facts = union(own.owner_facts, source.owner_facts)
             own.legendary = merge_legendary(own.legendary, source.legendary)
             local recent = {}
             for _, list in ipairs({own.launch_ticks or {}, source.launch_ticks or {}}) do

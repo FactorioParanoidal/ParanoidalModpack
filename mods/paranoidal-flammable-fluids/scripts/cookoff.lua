@@ -158,12 +158,12 @@ local function pop(task)
   local damage = 6 * energy + 10
   FO.core.guarded(shrapnel, surface, pos, 2 + math.min(4, energy / 5), damage,
     pick.class == "fire" and "fire" or "explosion", entity)
+  -- The threshold pop counts even when its own blast destroys the store.
+  if st.pops == C.COOK_ACHIEVEMENT then FO.ach.near("flo-cookoff", surface, pos, 100) end
   if not entity.valid then -- destroyed by its own ammunition
     forget(task.id)
     return
   end
-
-  if st.pops == C.COOK_ACHIEVEMENT then FO.ach.near("flo-cookoff", surface, pos, 100) end
   st.interval = math.max(C.COOK_MIN_INTERVAL, math.floor(st.interval * C.COOK_ACCEL))
   FO.sched.schedule(st.interval * FO.weather.slowdown(surface), task) -- rain (paranoidal-rain): slower
 end

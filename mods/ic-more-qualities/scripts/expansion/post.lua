@@ -14,6 +14,8 @@ local stats = require("scripts.stats")
 local wheel = require("scripts.wheel")
 
 local M = {}
+local achievement_facts = require("scripts.expansion.achievement-facts")
+M.get_order_completed_event = achievement_facts.get_event
 local S = names.signals
 M.routes = {"good"}
 M.TARGET_TTL = 300  -- a found output target is trusted this long (a building moved by a script)
@@ -417,10 +419,12 @@ local function notify(record)
 end
 
 local function accept(record, count, tick)
+    local eligible = record.state == "active" and record.order.item and record.accepted < record.order.required
     record.accepted = record.accepted + count
     stats.add(record.entity.force.index, "order.accepted", count)
     if record.accepted >= record.order.required then
         record.batches = record.batches + 1
+        local completion = eligible and achievement_facts.order_payload(record, count)
         record.done_tick = tick
         stats.add(record.entity.force.index, "order.batches")
         notify(record)
@@ -429,6 +433,7 @@ local function accept(record, count, tick)
         else
             record.state = "done"
         end
+        if completion then achievement_facts.order_completed(record, completion) end
     end
 end
 

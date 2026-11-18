@@ -6,6 +6,11 @@ Date: 2026-11-01
   Locale:
     - ru: the mod description names the renamed Paranoidal Rampant.
   Bugfixes:
+    - Short Circuit keeps its ID and 1000 threshold, but now tracks hostile units, spawners and worms killed by electric damage regardless of faction. Owner-attributed events reject neutral/friendly targets and sandbox activity; force counters merge and replay normally. The prototype is script-unlocked, so native electric-faction progress is not imported; previously earned client IDs are not deliberately revoked.
+    - Death safety facts and player lifecycle continue while scripted awards are paused; positive death achievements count only enabled intervals. Unverifiable legacy zero-death history cannot earn Immortal; existing counters and earned IDs remain intact.
+    - Restorer consumes committed successful refinement events from ic-more-qualities instead of generic products_finished. Verified repairs have a separate force counter, summed on force merge; the old production counter is retained but not treated as repair evidence.
+    - Rocket trackers reject MIRV ballistic launches and never import the surface-agnostic native rocket total into the ordinary launch counter.
+    - A failing tracker preparation or filter callback discards only that family's staged registrations; other trackers and core lifecycle remain active. Status includes static preparation failures without writes during on_load.
     - The unstuck achievement follows TimedSpawnControl-reforged: both the availability guard and GUI owner check use the renamed mod.
     - Milestone imports and remote presets are normalised before use; malformed entries, non-finite numbers, non-plain tables and non-growing next formulas are rejected. Research levels and their steps must be whole numbers. Provider failures are isolated and removed providers leave no stale local presets.
     - Infinite milestones have a bounded completion budget; deferred backfill continues in later cycles. Research milestones now create subsequent levels too, without duplicate next stages after a manual reset.
@@ -26,6 +31,8 @@ Date: 2026-11-01
     - The "Crane Operator" achievement speaks of loading cranes (ru: погрузочных кранов), as the cranes and their technologies are now named.
     - ru: the "Old-School Dispatcher" achievement names the station controller instead of the Cybersyn combinator.
   Major Features:
+    - Adds the read-only Mastery Atlas: 44 curated families in seven themes, grouped stages, the original Milestones chronicle, page-bounded unbounded production records through the shared statistics cycle, and explicit legacy/native-status limits. Personal search/translations, filters, paging, close/reopen and display changes do not alter shared progression. No old IDs, medals or histories are removed.
+    - Adds six distinct owner-confirmed goals: forecast discovery, a measured working energy district, a useful M-O service cycle, NAN-E memory confirmation, normalization of a defective item and a delivered control-post order. Old IDs and earned maps remain; no retrospective unknown counters are invented.
     - One mod instead of MxlChievements-Reforged 9.1.0 (achievements: MxlChievements by Mxlppxl, More Achievements by LuziferSenpai and the Paranoidal content) and Milestones 9.4.8 (Paranoidal fork of Milestones 1.4.7 by Wiwiweb). Achievement, setting, hotkey, shortcut, sprite, style, command and locale key names are unchanged; the remote interface "milestones" keeps its name.
   Optimizations:
     - Thirteen production achievement series share their existing tier-1 PNG across all three tiers; electric-furnace tiers 2 and 3 share the tier-2 PNG while tier 1 keeps its distinct picture. Removed 27 byte-identical PNG duplicates. Achievement IDs, conditions and appearance are unchanged.

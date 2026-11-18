@@ -26,6 +26,7 @@ Date: 2026-11-01
     - Removed the remote interface "paranoidal_fire_safety" (only this mod used it), the French locale and the optional dependencies on mods absent from the build.
     - Saves: the storage of Flammable_Oils_QUICKFIX cannot move to a new mod name and is lost (agreed): oil ruin traps not yet triggered stay as plain ruins, and a fire burning at save time stops. Fire safety turrets are picked up again from the map on the first load; their barrels start folded.
   Bugfixes:
+    - The cook-off achievement counts its threshold pop even when that pop destroys the ammunition store; nearby-player eligibility is unchanged.
     - A storage tank with hydrogen or deuterium no longer explodes twice in a catastrophe (its own die() call raised a second, volatile explosion).
     - The per-entity damage cooldown table no longer grows forever when fire or explosions hit stores and tanks that start nothing.
   Compatibility:

@@ -90,6 +90,8 @@ local list = {
     mods = {"paranoidal-robot-attrition"}, icon = {entity = "roboport"}},
 
   -- combat
+  {id = "short-circuit", kind = "script", theme = "combat", tracker = "electric-kills", amount = 1000, fight = true,
+    icon = {entity = "small-biter"}},
   {id = "bounty-hunter", kind = "script", theme = "combat", tracker = "bosses", fight = true, mods = {"Big-Monsters"},
     needs = {entities = {"bm-volcano"}}, icon = {entity = "biterzilla35"}},
   {id = "evolution", kind = "script", theme = "combat", tracker = "evolution", amounts = {50, 90, 99}, fight = true,
@@ -170,6 +172,21 @@ local list = {
   {id = "stuck", kind = "script", theme = "character", tracker = "unstuck", mods = {"TimedSpawnControl-reforged"},
     icon = {item = "stone-wall"}},
 }
+
+for _, entry in ipairs({
+  {id = "survey-confirmed", kind = "script", theme = "resources", tracker = "owner-facts", params = {source = "survey"},
+    mods = {"RSO-reforged", "OreRadar"}, needs = {entities = {"ore-radar"}}, icon = {entity = "ore-radar"}},
+  {id = "district-control", kind = "script", theme = "energy", tracker = "owner-facts", params = {source = "district"},
+    mods = {"paranoidal-power-districts"}, needs = {entities = {"ppd-transformer-40"}}, icon = {entity = "ppd-transformer-40"}},
+  {id = "mo-cycle", kind = "script", theme = "character", tracker = "owner-facts", params = {source = "mo"},
+    mods = {"Paranoidal-Droid-M-O"}, needs = {entities = {"droid-m-o-dock"}}, icon = {entity = "droid-m-o-dock"}},
+  {id = "memory-restored", kind = "script", theme = "character", tracker = "owner-facts", params = {source = "memory"},
+    mods = {"Paranoidal-NAN-E"}, needs = {items = {"nan-e"}}, icon = {item = "nan-e"}},
+  {id = "not-discard", kind = "script", theme = "quality", tracker = "workshop", params = {normalized = true},
+    mods = {"ic-more-qualities"}, needs = {entities = {"ic-refine-workshop"}}, icon = {entity = "ic-refine-workshop"}},
+  {id = "order-accepted", kind = "script", theme = "quality", tracker = "owner-facts", params = {source = "order"},
+    mods = {"ic-more-qualities"}, needs = {entities = {"ic-control-post"}}, icon = {entity = "ic-control-post"}},
+}) do list[#list + 1] = entry end
 
 -- legendary ruins of AbandonedRuins-paranoidal (tracker "legendary", prototypes/legendary-ruins.lua)
 for _, entry in ipairs(require("prototypes.legendary-ruins")) do table.insert(list, entry) end

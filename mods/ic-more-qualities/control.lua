@@ -275,6 +275,15 @@ events.on(defines.events.on_runtime_mod_setting_changed, function(event)
     if enabled() and look.is_setting(event.setting) then look.redraw_all() end
 end)
 
+-- A completed furnace product can precede its next scheduled look by one tick.
+-- Flush while the entity is still readable, before native mining/death removes it.
+for _, id in ipairs({defines.events.on_pre_player_mined_item, defines.events.on_robot_pre_mined,
+    defines.events.on_entity_died}) do
+    events.on(id, function(event)
+        if enabled() then workshop.flush_completed(event.entity) end
+    end, {{filter = "name", name = names.workshop}})
+end
+
 events.on(defines.events.on_object_destroyed, function(event)
     local id = event.useful_id
     if event.type ~= defines.target_type.entity or not id or id == 0 then return end
@@ -388,6 +397,8 @@ end)
 
 -- Quality counters for CodexRPG; synchronous queue-reordering accounting for crafting helpers.
 remote.add_interface("ic-more-qualities", {
+    get_refinement_completed_event = workshop.get_refinement_completed_event,
+    get_order_completed_event = post.get_order_completed_event,
     get_counters = function(force_index) return stats.get(force_index) end,
     begin_queue_reorder = function(player_index)
         return enabled() and cancel.begin_queue_reorder(game.get_player(player_index))

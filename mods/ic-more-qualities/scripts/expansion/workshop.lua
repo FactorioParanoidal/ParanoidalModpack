@@ -30,6 +30,24 @@ local stats = require("scripts.stats")
 local wheel = require("scripts.wheel")
 
 local M = {}
+local refinement_completed_event = script.generate_event_name()
+
+-- Public fact: a successfully improved defective item has actually left its attempt.
+function M.get_refinement_completed_event() return refinement_completed_event end
+
+local function report_refinement(entity, attempt)
+    if not (attempt and attempt.kind == "refine" and attempt.final and entity.valid) then return end
+    local from = model.grade_of(attempt.from)
+    if from >= 0 or not attempt.grade or attempt.grade <= from then return end
+    local target = model.quality_name(attempt.grade)
+    script.raise_event(refinement_completed_event, {
+        entity = entity, entity_unit_number = entity.unit_number,
+        force_index = entity.force.index, surface_index = entity.surface.index,
+        item = attempt.item, from_quality = attempt.from, to_quality = target,
+        amount = 1, normalized = target == "normal",
+    })
+end
+
 local S = names.signals
 local NO_RESOURCE_ALERT_TICKS = 300
 -- A held attempt never goes back to exactly 0: the engine treats a started craft at 0 progress as not
@@ -228,10 +246,25 @@ function M.get(entity)
     return s and s.records[entity.unit_number]
 end
 
+-- Observe the previous furnace attempt before idle/script paths can replace its record.
+local function observe_completion(record)
+    local entity, attempt = record.entity, record.craft
+    if not (entity.valid and attempt and attempt.finished) then return end
+    if entity.products_finished <= attempt.finished then return end
+    record.craft = nil -- consume before raising a re-entrant public event
+    report_refinement(entity, attempt)
+end
+
+function M.flush_completed(entity)
+    local record = M.get(entity)
+    if record then observe_completion(record) end
+end
+
 function M.forget(id)
     local s = storage.ic_workshops
     local record = s and s.records[id]
     if not record then return end
+    observe_completion(record)
     power.destroy(record.interface)
     emitter.destroy(record.emitter)
     s.records[id] = nil
@@ -663,6 +696,7 @@ local function script_step(record, entity, ctx, stack, paused, stop)
             alert(record, false)
             publish(record, false, tick)
             record.next_tick = tick + 1
+            report_refinement(entity, attempt)
             return false
         end
         attempt.running, attempt.speed = false, nil
@@ -744,6 +778,8 @@ end
 
 function M.step(record, ctx)
     local entity = record.entity
+    observe_completion(record)
+    if not entity.valid then return end
     local tick = ctx.tick
     if (record.drive_tick or 0) <= tick then
         ensure_drive(entity)
@@ -762,6 +798,7 @@ function M.step(record, ctx)
     local input = inv.source[1]
     if record.sc or stateful(input) then
         if script_step(record, entity, ctx, input, paused, stop) then return end
+        if not entity.valid then return end
         -- Delivered: the next used item is handled on the next look, a whole one by the furnace now.
         if stateful(input) then
             record.next_tick = tick + 1

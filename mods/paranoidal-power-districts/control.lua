@@ -503,6 +503,7 @@ end)
 ---------------------------------------------------------------- remote (tests and other mods)
 
 remote.add_interface("ppd", {
+  get_managed_interval_event = engine.get_managed_interval_event,
   -- numbers of a transformer
   get = function(unit)
     local m = storage.tr[unit]

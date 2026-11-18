@@ -79,6 +79,28 @@ local function add(data, key, amount)
 end
 
 ---------------------------------------------------------------------------------------------------
+-- Hostile combat
+
+-- Electric kills: native kill filters cannot express current force hostility.
+local ELECTRIC_TARGETS = {unit = true, ["unit-spawner"] = true, turret = true}
+trackers["electric-kills"] = {
+  events = {
+    on_entity_died = function(event, entries, core)
+      local entity, damage = event.entity, event.damage_type
+      if not (entity and entity.valid and ELECTRIC_TARGETS[entity.type] and damage and damage.name == "electric") then return end
+      local cause = event.cause
+      local force = event.force or (cause and cause.valid and cause.force)
+      if not (force and force.valid and #force.players > 0 and force.is_enemy(entity.force)) then return end
+      local total = add(core.force_data(force.index), "electric_kills")
+      each(entries, function(entry) core.progress(force, entry, total) end)
+    end,
+  },
+  filters = {on_entity_died = function()
+    return {{filter = "type", type = "unit"}, {filter = "type", type = "unit-spawner"}, {filter = "type", type = "turret"}}
+  end},
+}
+
+---------------------------------------------------------------------------------------------------
 -- Start and crafting
 
 local wreck_set
@@ -129,62 +151,86 @@ trackers["handcraft-variety"] = {
 }
 
 ---------------------------------------------------------------------------------------------------
--- Defect workshop of ic-more-qualities: crafts finished by every workshop since it was seen.
-
-local WORKSHOP = "ic-refine-workshop"
-
-local function remember_workshop(entity, core)
-  if not (entity and entity.valid and entity.name == WORKSHOP and entity.unit_number)
-    or core.is_sandbox_force(entity.force) or core.is_sandbox_surface(entity.surface) then return end
-  local world = core.world()
-  world.workshops = world.workshops or {}
-  if not world.workshops[entity.unit_number] then
-    world.workshops[entity.unit_number] = {entity = entity, last = entity.products_finished}
+-- Owner-completed facts. No inference from placement, aggregate counters or attempted work.
+local FACT_EVENTS = {
+  survey = {"RSO", "get_survey_discovered_event"},
+  district = {"ppd", "get_managed_interval_event"},
+  mo = {"droid-m-o", "get_service_cycle_event"},
+  memory = {"nan-e", "get_memory_stage_event"},
+  order = {"ic-more-qualities", "get_order_completed_event"},
+}
+local function positive(value) return type(value) == "number" and value > 0 and value < math.huge end
+local function valid_fact(source, event)
+  if source == "survey" then
+    local prototype = type(event.resource) == "string" and prototypes.entity[event.resource]
+    return prototype and prototype.type == "resource" and type(event.field_x) == "number" and type(event.field_y) == "number"
+  elseif source == "district" then
+    return event.district_status == "zone" and positive(event.controller_measured_ticks)
+      and event.controller_measured_ticks >= 3600 and positive(event.saved_energy_j)
+      and positive(event.non_transit_output_energy_j)
+  elseif source == "mo" then
+    return event.success == true and positive(event.cleaned_count) and event.unloaded == true and event.charged == true
+  elseif source == "memory" then
+    return event.success == true and event.stage == "epilogue" and type(event.epilogue_tick) == "number" and event.epilogue_tick >= 0
+  elseif source == "order" then
+    local quality = type(event.order_quality) == "string" and prototypes.quality[event.order_quality]
+    return event.completion_kind == "control-post-output" and type(event.order_item) == "string"
+      and prototypes.item[event.order_item] ~= nil and quality and quality.level > 0
+      and positive(event.required_count) and positive(event.accepted_count)
+      and event.accepted_count >= event.required_count and event.remaining == 0 and positive(event.delivered_count)
   end
+  return false
 end
-
-local function on_workshop_built(event, _, core) remember_workshop(event.entity, core) end
-local function workshop_filter() return {{filter = "name", name = WORKSHOP}} end
-
-trackers["workshop"] = {
-  events = {
-    on_built_entity = on_workshop_built,
-    on_robot_built_entity = on_workshop_built,
-    script_raised_built = on_workshop_built,
-    script_raised_revive = on_workshop_built,
-  },
-  filters = {
-    on_built_entity = workshop_filter,
-    on_robot_built_entity = workshop_filter,
-    script_raised_built = workshop_filter,
-    script_raised_revive = workshop_filter,
-  },
-  setup = function(_, core)
-    for _, surface in pairs(game.surfaces) do
-      for _, entity in pairs(surface.find_entities_filtered({name = WORKSHOP})) do remember_workshop(entity, core) end
-    end
-  end,
-  poll = {every = MINUTE, run = function(entries, core)
-    local world = core.world()
-    local changed = {}
-    for unit, record in pairs(world.workshops or {}) do
-      local entity = record.entity
-      if entity and entity.valid then
-        local finished = entity.products_finished
-        if finished > record.last and not core.is_sandbox_surface(entity.surface) and not core.is_sandbox_force(entity.force) then
-          add(core.force_data(entity.force.index), "refined", finished - record.last)
-          changed[entity.force.index] = entity.force
+trackers["owner-facts"] = {
+  custom = function()
+    local map = {}
+    for source, spec in pairs(FACT_EVENTS) do
+      if has_remote(spec[1], spec[2]) then
+        local own_source = source
+        map[remote.call(spec[1], spec[2])] = function(event, entries, core)
+          local force = event.force_index and game.forces[event.force_index]
+          if not (force and force.valid and valid_fact(own_source, event)) then return end
+          local data = core.force_data(force.index)
+          data.owner_facts = data.owner_facts or {}
+          data.owner_facts[own_source] = true
+          each(entries, function(entry)
+            if entry.params.source == own_source then core.progress(force, entry, 1) end
+          end)
         end
-        record.last = finished
-      else
-        world.workshops[unit] = nil
       end
     end
-    for index, force in pairs(changed) do
-      local total = core.force_data(index).refined
-      each(entries, function(entry) core.progress(force, entry, total) end)
-    end
-  end},
+    return map
+  end,
+}
+
+---------------------------------------------------------------------------------------------------
+-- Defect workshop: only the owner's committed successful repairs, never generic furnace output.
+
+local function repair_grade(quality)
+  if quality == "normal" then return 0 end
+  local grade = type(quality) == "string" and quality:match("^ic%-defect%-([1-5])$")
+  return grade and -tonumber(grade) or nil
+end
+
+trackers["workshop"] = {
+  custom = function()
+    if not has_remote("ic-more-qualities", "get_refinement_completed_event") then return nil end
+    return {[remote.call("ic-more-qualities", "get_refinement_completed_event")] = function(event, entries, core)
+      local force = event.force_index and game.forces[event.force_index]
+      local from, target = repair_grade(event.from_quality), repair_grade(event.to_quality)
+      local amount = event.amount
+      if not (force and force.valid and from and from < 0 and target and target > from
+        and type(amount) == "number" and amount >= 1 and amount < math.huge and amount == math.floor(amount)) then return end
+      local data = core.force_data(force.index)
+      local total = add(data, "repaired", amount)
+      if target == 0 then add(data, "normalized_repairs", amount) end
+      each(entries, function(entry)
+        local value = total
+        if entry.params.normalized then value = data.normalized_repairs end
+        core.progress(force, entry, value)
+      end)
+    end}
+  end,
 }
 
 ---------------------------------------------------------------------------------------------------
@@ -731,9 +777,12 @@ trackers["rso"] = {
 -- Rockets
 
 local function silo_force(event)
-  local silo = event.rocket_silo
+  local silo, rocket = event.rocket_silo, event.rocket
+  -- MIRV is a ballistic weapon, not a space launch; the silo may already be gone.
+  if silo and silo.valid and silo.name == "ballistic-missile-silo" then return end
+  if rocket and rocket.valid and rocket.name == "ballistic-missile-silo-rocket" then return end
   if silo and silo.valid then return silo.force end
-  if event.rocket and event.rocket.valid then return event.rocket.force end
+  if rocket and rocket.valid then return rocket.force end
 end
 
 -- The cargo is read from the cargo pod when the launch is ordered (world.cargo_pods[pod unit number]) and
@@ -791,8 +840,8 @@ trackers["launches"] = {
     on_rocket_launched = function(event, entries, core)
       local force = silo_force(event)
       if not force then return end
-      local own = add(core.force_data(force.index), "launches")
-      local total = math.max(own, force.rockets_launched)
+      -- The native force total includes other surfaces and cannot prove launch provenance.
+      local total = add(core.force_data(force.index), "launches")
       each(entries, function(entry) core.progress(force, entry, total) end)
     end,
   },
@@ -851,7 +900,7 @@ trackers["deaths"] = {
     on_pre_player_died = function(event, entries, core)
       local player = player_of(event)
       if not player then return end
-      local deaths = core.player_data(player.index).deaths or 0
+      local deaths = add(core.player_data(player.index), "tracked_deaths")
       each(entries, function(entry) core.progress(player, entry, deaths) end)
     end,
   },

@@ -24,6 +24,7 @@ Date: 2026-11-15
     - Fireball, crater and fires of a normal detonation run over several ticks with a budget (deaths, crater tiles and fires per tick, nearest chunks first); fireballs below radius 15 stay instant. The crater keeps True Nukes' rules and order of tile changes.
     - Lighter engine effects: no area damage of 0.1-2 points over radius up to 500 (it only raised on_entity_damaged for every entity in range), at most 2500 smoke particles (was 10000), 40% of the fallout clouds (created by script, from mod-data paranoidal-true-nukes-fallout), a quarter of True Nukes' fires on the crater and in the thermobaric wave, at most 4000 scattered fires.
   Bugfixes:
+    - Lose-nuke now respects the same saved cheat-mode eligibility gate as the other True Nukes achievements. Its warhead prefix uses a literal hyphen: the old Lua pattern did not match the actual TN-warhead items.
     - Fusion weapons explicitly require space science research, matching their existing research ingredients.
     - Nuclear and thermobaric cannon shells use the cannon shell ammo category again: the 2.x port gave them "bullet", so gun turrets, machine guns and the submachine gun fired them.
     - Generated ammo and mines have the inventory sounds of their base item.

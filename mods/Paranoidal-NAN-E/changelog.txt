@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 9.0.0
 Date: 2026-11-16
+  Features:
+    - Publishes get_memory_stage_event after epilogue completion or a current capsule reconfirmation of an already completed stage; listeners deduplicate the force award. Reopening does not replay story or reset memory. Puzzles, costs and previous APIs are unchanged.
   Locale:
     - Added selective inline images and restrained colour emphasis to Russian mod-setting tooltips; wording, setting values and mechanics are unchanged.
     - Russian offline alert now reads "НЯН-Я выключена: требует ремонта"; repair behaviour is unchanged.

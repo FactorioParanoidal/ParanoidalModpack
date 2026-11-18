@@ -6,7 +6,7 @@
 --     next configuration change, the others keep working;
 --   * a tracker is active only when its achievement prototypes exist (the data stage skips them when
 --     a mod, an entity or an item is missing) and a remote interface is called only when it exists;
---   * the map setting "mxlr-scripted-achievements" stops all tracking;
+--   * the map setting pauses achievement progress; death safety facts remain observable;
 --   * a setup failure leaves tracking inert instead of stopping the load; status explains the failure.
 -- Unlocks: player progress unlocks for that player, force progress for all players of the force,
 -- world progress for everyone. Force and world unlocks are repeated for players who join later.
@@ -26,6 +26,7 @@ local active = {}   -- tracker name -> runtime entries {id, params, amounts, nam
 local enabled = true
 local registration_ok = false
 local setup_error
+local static_failures = {}
 
 local function read_setting()
   local setting = settings.global[SETTING]
@@ -49,10 +50,13 @@ end
 -- Returns the first result of fn (nil when the tracker is off or failed).
 local function run(tracker_name, fn, ...)
   local s = storage.mxlr
-  if not (registration_ok and enabled and s) or s.broken[tracker_name] then return end
+  if not (registration_ok and (enabled or tracker_name == "core") and s) or s.broken[tracker_name] then return end
   local ok, result = pcall(fn, ...)
   if not ok then
     s.broken[tracker_name] = tostring(result)
+    if tracker_name == "core" then
+      for _, data in pairs(s.players) do data.deaths_known = false end
+    end
     log(LOG .. "tracker " .. tracker_name .. " stopped until the next configuration change: " .. tostring(result))
     return
   end
@@ -69,6 +73,12 @@ function core.player_data(player_index)
     data = {}
     players[player_index] = data
   end
+  -- Legacy tracking could miss deaths while disabled: do not invent a verified zero.
+  if data.death_tracking_version ~= 1 then
+    data.deaths_known = false
+    data.death_tracking_version = 1
+  end
+  if data.tracked_deaths == nil then data.tracked_deaths = data.deaths or 0 end
   return data
 end
 
@@ -224,7 +234,7 @@ function core.progress(scope, runtime, value)
 end
 
 local function replay(player)
-  if not (player and player.valid) then return end
+  if not enabled or not (player and player.valid) then return end
   local unlocked = storage.mxlr.unlocked
   for name in pairs(unlocked.world) do unlock_player(player, name) end
   local list = unlocked.forces[player.force.index]
@@ -239,7 +249,7 @@ end
 local core_events = {
   on_player_created = function(event)
     local data = core.player_data(event.player_index)
-    data.deaths, data.deaths_known = 0, true
+    data.deaths, data.deaths_known, data.tracked_deaths = 0, true, 0
     replay(game.get_player(event.player_index))
   end,
   on_player_joined_game = function(event) replay(game.get_player(event.player_index)) end,
@@ -274,26 +284,64 @@ local function add_handler(event_name, tracker_name, fn, filter)
   end
 end
 
+local function static_failure(name, reason)
+  static_failures[name] = tostring(reason)
+  active[name] = nil
+  log(LOG .. "tracker " .. name .. " not registered: " .. tostring(reason))
+end
+
 local function prepare_entries()
   for _, entry in ipairs(require("prototypes.scripted")) do
     local tracker = trackers[entry.tracker]
-    if tracker then
-      local amounts = naming.amounts(entry)
-      local names, any = {}, false
-      for tier = 1, #amounts do
-        local name = naming.name(entry, tier)
-        if prototypes.achievement[name] then
-          names[tier] = name
-          any = true
+    if tracker and not static_failures[entry.tracker] then
+      local ok, runtime = pcall(function()
+        local amounts = naming.amounts(entry)
+        local names, any = {}, false
+        for tier = 1, #amounts do
+          local name = naming.name(entry, tier)
+          if prototypes.achievement[name] then names[tier], any = name, true end
         end
-      end
-      local runtime = {id = entry.id, params = entry.params or {}, amounts = amounts, names = names}
-      if any and (not tracker.prepare or tracker.prepare(runtime) ~= false) then
+        local candidate = {id = entry.id, params = entry.params or {}, amounts = amounts, names = names}
+        if any and (not tracker.prepare or tracker.prepare(candidate) ~= false) then return candidate end
+      end)
+      if not ok then
+        static_failure(entry.tracker, runtime)
+      elseif runtime then
         active[entry.tracker] = active[entry.tracker] or {}
         table.insert(active[entry.tracker], runtime)
       end
     end
   end
+end
+
+-- Evaluate every user callback and validate the registration shape before committing any of it.
+local function plan_tracker(tracker, entries)
+  local planned_filters = {}
+  for event_name, fn in pairs(tracker.events or {}) do
+    assert(type(event_name) == "string" and type(fn) == "function", "invalid event handler")
+    local filter = tracker.filters and tracker.filters[event_name] and tracker.filters[event_name](entries)
+    if filter ~= nil then
+      assert(type(filter) == "table", "invalid event filter list")
+      for index, value in pairs(filter) do
+        assert(type(index) == "number" and index >= 1 and index <= #filter and index == math.floor(index)
+          and type(value) == "table" and type(value.filter) == "string", "invalid event filter entry")
+      end
+    end
+    planned_filters[event_name] = filter or false
+  end
+  if tracker.poll then
+    local every = tracker.poll.every
+    assert(type(every) == "number" and every > 0 and every < math.huge and every % 60 == 0
+      and type(tracker.poll.run) == "function", "invalid poll")
+  end
+  if tracker.statistics then
+    assert(type(tracker.statistics.needs) == "function" and type(tracker.statistics.receive) == "function",
+      "invalid statistics consumer")
+  end
+  for name, fn in pairs(tracker.inputs or {}) do
+    assert(type(name) == "string" and type(fn) == "function", "invalid custom input handler")
+  end
+  return planned_filters
 end
 
 local function register_static()
@@ -302,22 +350,27 @@ local function register_static()
   local names = {}
   for tracker_name in pairs(active) do table.insert(names, tracker_name) end
   table.sort(names)
+  local plans = {}
+  for _, tracker_name in ipairs(names) do
+    local ok, plan = pcall(plan_tracker, trackers[tracker_name], active[tracker_name])
+    if ok then plans[tracker_name] = plan else static_failure(tracker_name, plan) end
+  end
   for _, tracker_name in ipairs(names) do
     local tracker, entries = trackers[tracker_name], active[tracker_name]
-    for event_name, fn in pairs(tracker.events or {}) do
-      local filter = tracker.filters and tracker.filters[event_name] and tracker.filters[event_name](entries)
-      local guarded = outside_sandbox(fn)
-      add_handler(event_name, tracker_name, function(event) guarded(event, entries, core) end, filter)
-    end
-    if tracker.poll then
-      table.insert(polls, {tracker_name, tracker.poll.every, function() tracker.poll.run(entries, core) end})
-    end
-    if tracker.statistics then
-      table.insert(consumers, {tracker_name, tracker.statistics, entries})
-    end
-    for input_name, fn in pairs(tracker.inputs or {}) do
-      if prototypes.custom_input[input_name] then
-        inputs[input_name] = function(event) run(tracker_name, outside_sandbox(fn), event, entries, core) end
+    if plans[tracker_name] then
+      for event_name, fn in pairs(tracker.events or {}) do
+        local filter = plans[tracker_name][event_name]
+        local guarded = outside_sandbox(fn)
+        add_handler(event_name, tracker_name, function(event) guarded(event, entries, core) end, filter or nil)
+      end
+      if tracker.poll then
+        table.insert(polls, {tracker_name, tracker.poll.every, function() tracker.poll.run(entries, core) end})
+      end
+      if tracker.statistics then table.insert(consumers, {tracker_name, tracker.statistics, entries}) end
+      for input_name, fn in pairs(tracker.inputs or {}) do
+        if prototypes.custom_input[input_name] then
+          inputs[input_name] = function(event) run(tracker_name, outside_sandbox(fn), event, entries, core) end
+        end
       end
     end
   end
@@ -420,9 +473,17 @@ end
 
 local function reconcile_force(force)
   local data = core.force_data(force.index)
-  local counters = {workshop="refined", launches="launches", paint="paints", ["auto-deconstruct"]="auto_deconstructed"}
+  local counters = {workshop="repaired", ["electric-kills"]="electric_kills", launches="launches",
+    paint="paints", ["auto-deconstruct"]="auto_deconstructed"}
   for tracker_name, field in pairs(counters) do
-    for _, entry in ipairs(active[tracker_name] or {}) do core.progress(force, entry, data[field] or 0) end
+    for _, entry in ipairs(active[tracker_name] or {}) do
+      local value = data[field]
+      if tracker_name == "workshop" and entry.params.normalized then value = data.normalized_repairs end
+      core.progress(force, entry, value or 0)
+    end
+  end
+  for _, entry in ipairs(active["owner-facts"] or {}) do
+    if data.owner_facts and data.owner_facts[entry.params.source] then core.progress(force, entry, 1) end
   end
   for _, entry in ipairs(active["launch-rate"] or {}) do
     local recent = 0
@@ -456,7 +517,10 @@ end)
 
 commands.add_command("paranoidal-achievements-status", "- Показать состояние отслеживания достижений скриптом и остановленные средства отслеживания.", function(command)
   local stopped = {}
-  for name in pairs(storage.mxlr and storage.mxlr.broken or {}) do stopped[#stopped + 1] = name end
+  local failed = {}
+  for name in pairs(storage.mxlr and storage.mxlr.broken or {}) do failed[name] = true end
+  for name in pairs(static_failures) do failed[name] = true end
+  for name in pairs(failed) do stopped[#stopped + 1] = name end
   table.sort(stopped)
   local names = {}
   for name in pairs(active) do names[#names + 1] = name end
@@ -466,8 +530,13 @@ commands.add_command("paranoidal-achievements-status", "- Показать со�
   if player then player.print(message) else log(message) end
 end)
 
+local function record_static_failures()
+  for name, reason in pairs(static_failures) do storage.mxlr.broken[name] = reason end
+end
+
 function M.on_init()
   ensure_storage()
+  record_static_failures()
   read_setting()
   -- In a save that existed before this mod, earlier deaths are unknown.
   for _, player in pairs(game.players) do
@@ -488,6 +557,7 @@ function M.on_configuration_changed()
   ensure_storage()
   read_setting()
   storage.mxlr.broken = {}
+  record_static_failures()
   setup_trackers()
 end
 

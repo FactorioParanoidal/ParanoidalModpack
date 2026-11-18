@@ -461,6 +461,8 @@ end)
 
 -- storage.forecasts[surface index][chunk key][force index] = map label (LuaRenderObject); the chunk
 -- key is tile_key of the chunk's top left tile
+local survey = require("survey")
+
 local function forecast_marks(surface_index)
 	storage.forecasts = storage.forecasts or {}
 	local marks = storage.forecasts[surface_index]
@@ -472,6 +474,7 @@ local function forecast_marks(surface_index)
 end
 
 local function clear_forecasts(surface_index)
+	survey.clear(surface_index)
 	local marks = storage.forecasts and storage.forecasts[surface_index]
 	if not marks then return end
 	for _, forces in pairs(marks) do
@@ -514,7 +517,7 @@ local function description(site)
 end
 
 -- marks for the force on its map the nearest field around position that the force has not charted
-local function forecast(surface_index, force_index, position)
+local function forecast(surface_index, force_index, position, surveyed)
 	local surface = game.get_surface(surface_index)
 	local force = game.forces[force_index]
 	local info = surface and planet_info(surface)
@@ -548,6 +551,7 @@ local function forecast(surface_index, force_index, position)
 	}
 	marks[bestKey] = marks[bestKey] or {}
 	marks[bestKey][force_index] = label
+	if surveyed then survey.remember(surface, force_index, best, bestKey, info) end
 	count("forecasts")
 	force.print({"rso-message.forecast", icon, string.format("[gps=%d,%d,%s]", x, y, surface.name), text})
 	return {x = x, y = y}
@@ -568,6 +572,8 @@ script.on_event(defines.events.on_chunk_charted, function(event)
 			if next(forces) == nil then marks[key] = nil end
 		end
 	end
+	local surface = game.get_surface(event.surface_index)
+	if surface then survey.chart(event, surface, planet_info(surface)) end
 	local sites = storage.sites and storage.sites[event.surface_index]
 	local list = sites and sites[tile_key(event.position.x, event.position.y)]
 	if list then
@@ -683,6 +689,7 @@ script.on_event(defines.events.on_resource_depleted, function(event)
 end)
 
 script.on_event(defines.events.on_surface_deleted, function(event)
+	survey.clear(event.surface_index)
 	storage.surfaces[event.surface_index] = nil
 	if storage.forecasts then storage.forecasts[event.surface_index] = nil end
 	if storage.sites then storage.sites[event.surface_index] = nil end
@@ -696,6 +703,8 @@ script.on_event(defines.events.on_surface_cleared, function(event)
 	if storage.cells then storage.cells[event.surface_index] = nil end
 	if storage.blocks then storage.blocks[event.surface_index] = nil end
 end)
+
+script.on_event(defines.events.on_forces_merged, survey.merge)
 
 --[[ COMMANDS ]]--
 
@@ -802,7 +811,9 @@ remote.add_interface("RSO", {
 	-- Geological survey (Ore Radar): marks for the force on its map the nearest field the force has
 	-- not charted yet, with its grade. Returns the marked position or nil.
 	-- remote.call("RSO", "forecast", surface_index, force_index, {x = 0, y = 0})
-	forecast = forecast,
+	forecast = function(surface, force, position) return forecast(surface, force, position, false) end,
+	survey_forecast = function(surface, force, position) return forecast(surface, force, position, true) end,
+	get_survey_discovered_event = survey.get_event,
 
 	-- counters of the Reforged mechanics: veins, guards, mines, depletion_veins, forecasts
 	stats = function()

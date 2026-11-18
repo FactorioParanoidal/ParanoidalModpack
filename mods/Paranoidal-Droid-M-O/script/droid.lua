@@ -8,6 +8,7 @@ local reactions = require("script.reactions")
 local tracks = require("script.tracks")
 
 local droid = {}
+local achievement_facts = require("script.achievement-facts")
 
 local drain_per_tick = 10000 / 60
 local update_interval = 30
@@ -426,7 +427,8 @@ local unload = function(data)
   data.bin_full = backpack.count_empty_stacks() == 0 or nil
 end
 
-local dock_bot = function(data)
+local dock_bot = function(data, completed_return)
+  achievement_facts.returned(data, completed_return == true)
   -- Rather than idling there and looking for dirt again.
   local arriving = data.state ~= states.charging or distance(data.port, data.bot.position) > 0.01
   release_target(data)
@@ -468,7 +470,7 @@ local go_home = function(data, finished)
     reactions.siren_down(data)
   end
   if distance(data.port, data.bot.position) < docked_distance then
-    dock_bot(data)
+    dock_bot(data, true)
     return
   end
   set_state(data, states.returning)
@@ -502,6 +504,7 @@ local start_sweeping = function(data, target, point)
   if not proxy then return false end
   local departing = data.state == states.charging
   if departing then
+    achievement_facts.begin(data)
     play_sound(data, shared.sounds.disconnect)
   end
   announce(data, target, departing)
@@ -917,7 +920,7 @@ droid.on_ai_command_completed = function(event)
       if data.fails then
         reactions.say(data, shared.sounds.whoa)
       end
-      dock_bot(data)
+      dock_bot(data, not data.fails)
       return
     end
     set_state(data, states.charging)
@@ -964,7 +967,7 @@ droid.on_script_trigger_effect = function(event)
   end
   if data.state ~= states.sweeping then return end
 
-  local result = contaminants.stroke(data, target)
+  local result, cleaned = contaminants.stroke(data, target)
   data.turned_back = nil
   if result == "more" then return end
   if result == "full" then
@@ -976,6 +979,7 @@ droid.on_script_trigger_effect = function(event)
     return
   end
   data.cleaned = (data.cleaned or 0) + 1
+  if cleaned then achievement_facts.cleaned(data) end
   release_target(data)
 end
 
@@ -1054,6 +1058,7 @@ local update_dock = function(data, tick)
         status = "bin_full"
       end
       set_status(data, status)
+      achievement_facts.service(data, capacity, states.charging, docked_distance)
       if data.battery >= capacity and tick >= (data.next_think or 0) then
         think(data)
       end
@@ -1180,6 +1185,7 @@ end
 
 droid.remote =
 {
+  get_service_cycle_event = achievement_facts.get_event,
   get_bot = function(dock)
     local data = get_dock_data(dock)
     return data and data.bot and data.bot.valid and data.bot or nil

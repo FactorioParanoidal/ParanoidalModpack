@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 9.0.0
 Date: 2026-11-15
+  Features:
+    - Publishes get_service_cycle_event after a known sortie actually clears a contaminant, returns normally, unloads and fully charges. Empty/unknown trips and forced recovery do not qualify; cleaning, contents, charging and quality are unchanged.
   Locale:
     - Added selective inline images and restrained colour emphasis to Russian mod-setting tooltips; wording, setting values and mechanics are unchanged.
     - Added selective inline images to Russian mod-setting names; existing tooltip formatting, wording, saved values and mechanics are preserved.

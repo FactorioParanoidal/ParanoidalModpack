@@ -284,7 +284,7 @@ contaminants.stroke = function(data, target)
     if found[1] then
       puff(surface, {target.x + 0.5, target.y + 0.5})
     end
-    return "done"
+    return "done", found[1] ~= nil
   end
 
   local entity = target.entity
@@ -303,7 +303,7 @@ contaminants.stroke = function(data, target)
     end
     if inserted >= count then
       entity.destroy()
-      return "done"
+      return "done", not entity.valid
     end
     if inserted > 0 then
       stack.count = count - inserted
@@ -318,7 +318,7 @@ contaminants.stroke = function(data, target)
       local position = entity.position
       entity.destroy()
       puff(surface, position)
-      return "done"
+      return "done", not entity.valid
     end
     return "more"
   end
@@ -344,7 +344,7 @@ contaminants.stroke = function(data, target)
       local position = entity.position
       entity.destroy{raise_destroy = true}
       puff(surface, position)
-      return "done"
+      return "done", not entity.valid
     end
     -- The wreck's health bar shows how far along he is.
     local max_health = entity.max_health
