@@ -1,6 +1,9 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.26.0
   Locale:
+    - Clarified Russian setting help for AAI integration overrides, collision exclusions, QoL scope, pollution visuals and RSO generation, with contextual object images; values and gameplay are unchanged.
+    - Clarified setting tooltips against current code, corrected units, conditions and default labels, and added contextual images; setting values and gameplay are unchanged.
+    - Clarified Bio Industries and Noxys Trees setting tooltips against current code, corrected unavailable zero-value examples for Bob modules, and added contextual images; setting values and mechanics are unchanged.
     - Cybersyn cargo warnings distinguish a departure finding and its loading location from the train's current position; keys and parameters match the owning mod's EN/RU text.
     - The Cybersyn stuck-train warning describes exceeding the delivery time limit and suggests checking the route and stations, matching the owning mod's Russian text without changing its key or timeout.
     - Added selective inline images and restrained colour emphasis to Russian mod-setting tooltips; wording, setting values and mechanics are unchanged.

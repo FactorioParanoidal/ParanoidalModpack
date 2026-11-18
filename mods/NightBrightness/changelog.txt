@@ -12,6 +12,7 @@ Date: 2026-10-08
     - Setting "Cold winter nights" (on): in winter brightness keeps a little more blue (brightness_visual_weights 1/1/0.96), dusk and nights are slightly colder; daylight is unchanged.
     - Remote interface: get_state gives the calendar (day, days passed, year, day of year), the season with its day, length and the next season, the solar factor and the daytime parameters; new get_season, get_season_name, get_season_color, clock.
   Locale:
+    - Explained the four startup night-colour modes; lighting, saved settings and restart requirements are unchanged.
     - ru: the mod name and the mod list description are the same as in ParanoidalLocale (format "English title (Russian translation)"), so the mod reads the same with or without it.
   Changes:
     - Maintained Paranoidal port of Beta 8 nights, seasons and solar-power formulas to Factorio 2.0.

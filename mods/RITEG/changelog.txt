@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.2
 Date: 2026-09-10
+  Locale:
+    - Clarified setting tooltips against current code, corrected units, conditions and default labels, and added contextual images; setting values and gameplay are unchanged.
   Optimizations:
     - Paranoidal: disable the tick handler while no RTGs are tracked; restore it on build, load and configuration change without changing active decay timing.
   By:

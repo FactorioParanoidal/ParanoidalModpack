@@ -2,6 +2,7 @@
 Version: 1.0.14
 Date: 2026-07-29
   Locale:
+    - Clarified setting tooltips against current code, corrected units, conditions and default labels, and added contextual images; setting values and gameplay are unchanged.
     - Added selective inline images and restrained colour emphasis to Russian mod-setting tooltips; wording, setting values and mechanics are unchanged.
     - Added selective inline images to Russian mod-setting names; existing tooltip formatting, wording, saved values and mechanics are preserved.
     - Added beginner-friendly English and Russian descriptions with contextual images for previously undocumented mod settings; existing names, values and tooltips are preserved.

@@ -11,6 +11,7 @@ Date: 2026-06-01
     - Paranoidal build: removed 16 ore sheets for Bob deposits suppressed by Angels Refining and four sprites from the unconnected lab module. Shared ore icons, active laboratories and configurable skins are unchanged; this trimmed copy targets the full modpack without additional resource planets.
     - Paranoidal build: removed 38 originals already redirected to canonical images or pack artwork by zzzparanoidal's final graphics pass. Replacement files and settings-dependent alternatives are unchanged; this trimmed copy targets the full modpack.
   Locale:
+    - Clarified setting tooltips against current code, corrected units, conditions and default labels, and added contextual images; setting values and gameplay are unchanged.
     - ru: the mod name and the mod list description are the same as in ParanoidalLocale (format "English title (Russian translation)"), so the mod reads the same with or without it.
   Changes:
     - Revised how heat pipe sprites are handled to avoid issues related to modified base-mod global functions

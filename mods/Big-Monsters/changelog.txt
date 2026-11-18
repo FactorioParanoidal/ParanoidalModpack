@@ -1,6 +1,7 @@
 ---------------------------------------------------------------------------------------------------
 Version: 2.1.2
   Locale:
+    - Clarified setting tooltips against current code, corrected units, conditions and default labels, and added contextual images; setting values and gameplay are unchanged.
     - Added beginner-friendly English and Russian descriptions with contextual images for previously undocumented mod settings; existing names, values and tooltips are preserved.
   Graphics:
     - Paranoidal: replaced 3 PNGs with smaller user-recompressed Beta-7 files selected by the approved filename, folder and dimension report; resource paths and prototype code are unchanged.

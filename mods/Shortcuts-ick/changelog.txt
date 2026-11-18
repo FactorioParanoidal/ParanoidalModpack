@@ -1,6 +1,7 @@
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.7
   Locale:
+    - Clarified setting tooltips against current code, corrected units, conditions and default labels, and added contextual images; setting values and gameplay are unchanged.
     - Added beginner-friendly English and Russian descriptions with contextual images for previously undocumented mod settings; existing names, values and tooltips are preserved.
     - Russian shortcut warnings explain the 255-type filter limit and unknown command modes instead of exposing ERROR 3 / ERROR X codes.
     - Russian hardcoded player-facing text: 12 UI, chat, command-help and error-message literals; technical identifiers, format parameters and gameplay logic are unchanged.

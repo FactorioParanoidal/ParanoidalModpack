@@ -1,6 +1,7 @@
 ---------------------------------------------------------------------------------------------------
 Version: 9.5.3
   Locale:
+    - Clarified Bio Industries and Noxys Trees setting tooltips against current code, corrected unavailable zero-value examples for Bob modules, and added contextual images; setting values and mechanics are unchanged.
     - Existing debug counters and tile-error descriptions use Russian wording. Debug gates and tree simulation are unchanged.
     - Russian hardcoded player-facing text: 1 UI, chat, command-help and error-message literals; technical identifiers, format parameters and gameplay logic are unchanged.
   Changes:

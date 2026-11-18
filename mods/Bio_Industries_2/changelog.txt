@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.34
   Locale:
+    - Clarified setting tooltips against current code, corrected units, conditions and default labels, and added contextual images; setting values and gameplay are unchanged.
+    - Clarified Bio Industries and Noxys Trees setting tooltips against current code, corrected unavailable zero-value examples for Bob modules, and added contextual images; setting values and mechanics are unchanged.
     - Russian hardcoded player-facing text: 5 UI, chat, command-help and error-message literals; technical identifiers, format parameters and gameplay logic are unchanged.
 Date: 24.02.2026
   Changes:

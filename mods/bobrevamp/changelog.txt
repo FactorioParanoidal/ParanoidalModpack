@@ -2,6 +2,7 @@
 Version: 2.1.1
 Date: 04. 06. 2026
   Locale:
+    - Clarified setting tooltips against current code, corrected units, conditions and default labels, and added contextual images; setting values and gameplay are unchanged.
     - Added beginner-friendly English and Russian descriptions with contextual images for previously undocumented mod settings; existing names, values and tooltips are preserved.
   Changes:
     - Paranoidal: EN/RU oil-processing names now say sulfur trioxide, matching the Angel's fluid used by the build; recipe IDs and amounts are unchanged.

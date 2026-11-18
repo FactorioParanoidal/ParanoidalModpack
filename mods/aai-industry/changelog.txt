@@ -16,6 +16,7 @@ Date: 27. 02. 2026
     - Paranoidal port to Factorio 2.1: items use fuel_categories (ItemPrototype::fuel_category was removed).
     - Factorio 2.1: no zoom_to_world_daytime_color_lookup (utility constant removed in 2.1).
   Locale:
+    - Corrected EN/RU setting help for Paranoidal recipe, lighting and drill overrides, first-tick science and research timing; settings and mechanics are unchanged.
     - Updated Spanish translation, thanks to Spiderlove.
     - Added Ukrainian translation, thanks to Генріх Мхітарян.
 ---------------------------------------------------------------------------------------------------
