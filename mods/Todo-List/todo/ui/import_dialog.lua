@@ -23,7 +23,7 @@ function todo.create_import_dialog(player)
         type = "button",
         style = "todo_button_default",
         name = "todo_import_cancel_button",
-        caption = { todo.translate(player, "cancel") }
+        caption = { "gui.close" }
     })
 
     flow.add({

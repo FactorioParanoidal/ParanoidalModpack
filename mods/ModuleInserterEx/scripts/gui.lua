@@ -15,6 +15,30 @@ local MODULE_FILTER = { { filter = "type", type = "module" }, { filter = "hidden
 
 local mi_gui = {}
 
+-- Find/create the label by name so already-open saved dialogs need no new refs.
+local function show_import_result(e, message, details)
+    local import_gui = e.pdata.gui.import
+    local window = import_gui and import_gui.window
+    if not window or not window.valid then
+        e.player.print(details or message)
+        return
+    end
+    local label = window.miex_import_status
+    if not label then
+        label = window.add({
+            type = "label",
+            name = "miex_import_status",
+            index = #window.children,
+            caption = message,
+        })
+        label.style.single_line = false
+        label.style.maximal_width = 400
+    else
+        label.caption = message
+    end
+    label.tooltip = details or ""
+end
+
 mi_gui.templates = {
     --- @param row_index int index of the config row this is part of
     --- @param config_index int index of this entity in the target.entities array
@@ -1732,6 +1756,14 @@ mi_gui.handlers = {
                 end
                 util.normalize_preset_config(preset)
                 mi_gui.add_preset(e.player, e.pdata, true, preset)
+                local has_targets = false
+                for _, row in ipairs(preset.rows) do
+                    if util.target_config_has_entries(row.target) then
+                        has_targets = true
+                        break
+                    end
+                end
+                e.player.print({has_targets and "miex-feedback.blueprint-imported" or "miex-feedback.blueprint-no-targets", preset.name})
             else
                 mi_gui.create_import_window(e.pdata, e.player)
             end
@@ -1802,7 +1834,6 @@ mi_gui.handlers = {
 
             if not keep_open then
                 mi_gui.close(e)
-                e.player.print({ "module-inserter-ex-storage-loaded", pdata.active_config.name })
             end
         end,
 
@@ -1859,17 +1890,29 @@ mi_gui.handlers = {
         import_button = function(e)
             local player = e.player
             local pdata = e.pdata
-            local text_box = pdata.gui.import.textbox
+            local import_gui = pdata.gui.import
+            local text_box = import_gui and import_gui.textbox
+            if not text_box or not text_box.valid then return end
+            if text_box.text:match("^%s*$") then
+                show_import_result(e, {"miex-feedback.import-empty"})
+                return
+            end
             local configs = import_export.import_config(text_box.text)
             if type(configs) == "string" then
-                player.print({ "failed-to-import-string", configs })
+                log("Module Inserter Ex import rejected: " .. configs)
+                show_import_result(e, {"miex-feedback.import-failed"}, {"failed-to-import-string", configs})
+                return
+            end
+            if #configs == 0 then
+                show_import_result(e, {"miex-feedback.import-no-presets"})
                 return
             end
             for _, preset in ipairs(configs) do
                 util.normalize_preset_config(preset)
-                mi_gui.add_preset(e.player, e.pdata, true, preset)
+                mi_gui.add_preset(player, pdata, true, preset)
             end
-            mi_gui.handlers.import.close_button(e)
+            text_box.text = ""
+            show_import_result(e, {"miex-feedback.imported", #configs})
         end,
         --- @param e MiEventInfo
         close_button = function(e)

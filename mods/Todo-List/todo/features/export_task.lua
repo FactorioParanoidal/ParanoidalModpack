@@ -22,7 +22,7 @@ function todo.generate_and_show_export_string(player)
     local tasks_table = dialog.todo_export_dialog_scroll_pane.todo_export_dialog_table
 
     local tasks = {}
-    local has_missing = false
+    local missing = 0
 
     for i, checkbox in ipairs(tasks_table.children) do
         -- every odd child is a checkbox, even child is a label (lists start at 1)
@@ -32,13 +32,9 @@ function todo.generate_and_show_export_string(player)
             if task then
                 table.insert(tasks, task)
             else
-                has_missing = true
+                missing = missing + 1
             end
         end
-    end
-
-    if has_missing then
-        player.print({"todo.error_export_skipped"})
     end
 
     -- if no tasks are selected, remove the textbox
@@ -46,6 +42,7 @@ function todo.generate_and_show_export_string(player)
         if (dialog.todo_export_dialog_string_flow.todo_export_string_textbox) then
             dialog.todo_export_dialog_string_flow.todo_export_string_textbox.destroy()
         end
+        todo.set_transfer_status(dialog, {missing > 0 and "todo-action.export-unavailable" or "todo-action.export-empty"})
         return
     end
 
@@ -62,6 +59,11 @@ function todo.generate_and_show_export_string(player)
             text = encoded
         })
         textbox.word_wrap = true
+    end
+    if missing > 0 then
+        todo.set_transfer_status(dialog, {"todo-action.export-partial", #tasks, missing})
+    else
+        todo.set_transfer_status(dialog, {"todo-action.exported", #tasks})
     end
 end
 

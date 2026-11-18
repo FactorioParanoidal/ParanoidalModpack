@@ -36,3 +36,20 @@ function todo.create_frame(player, name, caption, close_name)
 
     return frame
 end
+
+-- Lazy creation also supports transfer windows left open in older saves.
+function todo.set_transfer_status(dialog, message)
+    local label = dialog.todo_transfer_status
+    if not label then
+        label = dialog.add({
+            type = "label",
+            name = "todo_transfer_status",
+            style = "todo_label_task",
+            index = #dialog.children,
+            caption = message
+        })
+        label.style.maximal_width = 500
+    else
+        label.caption = message
+    end
+end

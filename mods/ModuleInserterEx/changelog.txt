@@ -9,6 +9,8 @@ Date: 2026-02-04
     - Russian hardcoded player-facing text: 1 UI, chat, command-help and error-message literals; technical identifiers, format parameters and gameplay logic are unchanged.
     - ru: the mod name and the mod list description are the same as in ParanoidalLocale (format "English title (Russian translation)"), so the mod reads the same with or without it.
   Changes:
+    - JSON import results appear in the existing window: rejected input is kept, empty results are distinct, successful input is cleared and the appended preset count is shown. Validation details remain in the message tooltip and engine log, without duplicate chat.
+    - Blueprint imports give one private result, distinguishing presets with no configured targets; preset loading no longer calls chat output twice. Preset normalization, module qualities, selection and exported formats are unchanged.
     - Local Paranoidal patch: remote function toggle_gui(player_index) opens or closes the configuration window; used by the GUI Unifyer button.
     - Removed "Clear All" button (was causing a crash)
   Bugfixes:
