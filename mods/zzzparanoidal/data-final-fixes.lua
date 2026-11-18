@@ -461,6 +461,8 @@ require("tweaks.entity.wagon-max-speed-2-1")
 require("tweaks.custom.graphics-atlas")
 -- Собственные изображения поверх оригинальных пакетов Reskins; после сравнения путей атласа.
 require("tweaks.custom.reskins-overrides")
+-- Метки сырья только на рецептах: после синхронизаций предметов, energy-port и замен графики.
+require("tweaks.custom.recipe-source-marks").apply(data.raw)
 require("tweaks.technology.inserter-capacity-cost") -- цена бонуса грузоподъёмности II–IV
 -- Рецепты не показываются в окне выбора сигнала (настройка paranoidal-recipe-signals-visible); после всех созданий рецептов.
 require("tweaks.custom.recipe-signals-hidden")
