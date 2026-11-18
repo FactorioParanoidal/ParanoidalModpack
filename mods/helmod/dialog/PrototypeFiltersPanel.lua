@@ -161,7 +161,7 @@ function PrototypeFiltersPanel:getContentPanel()
   local display_width, display_height, scale = User.getMainSizes()
   local width_main = display_width/scale
   local height_main = display_height/scale
-  panel.style.minimal_height = height_main-300
+  panel.style.minimal_height = math.max(0, height_main-300)
   panel.style.minimal_width = width_main
   return panel
 end

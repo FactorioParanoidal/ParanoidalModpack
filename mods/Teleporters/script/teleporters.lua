@@ -195,7 +195,7 @@ local make_teleporter_gui = function(player, source)
   local inner = frame.add{type = "frame", style = "inside_deep_frame"}
   local scroll = inner.add{type = "scroll-pane", direction = "vertical"}
   scroll.style.maximal_height = (player.display_resolution.height / player.display_scale) * 0.8
-  local column_count = ((player.display_resolution.width / player.display_scale) * 0.6) / preview_size
+  local column_count = math.max(1, math.floor(((player.display_resolution.width / player.display_scale) * 0.6) / preview_size))
   local holding_table = scroll.add{type = "table", column_count = column_count}
   util.register_gui(script_data.button_actions, search_box, {type = "search_text_changed", parent = holding_table})
   holding_table.style.horizontal_spacing = 2

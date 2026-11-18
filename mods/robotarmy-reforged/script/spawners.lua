@@ -156,7 +156,7 @@ local function process(record)
     local done_unit = record.unit or unit
     local done_quality = record.unit and record.quality or quality_name
     if done_unit then
-      for _ = 1, min(done, config.MAX_PENDING - #pending) do
+      for _ = 1, done do
         pending[#pending + 1] = {done_unit, done_quality}
       end
     end
@@ -166,16 +166,21 @@ local function process(record)
   if #pending > 0 then
     local fd = state.force_data(entity.force)
     local free = min(room(record, fd), config.MAX_SPAWNS_PER_CHECK)
-    while free > 0 and #pending > 0 do
-      local next_droid = pending[1]
-      if not deploy(record, next_droid[1], next_droid[2]) then break end
-      table.remove(pending, 1)
+    while free > 0 and entity.valid and #record.pending > 0 do
+      -- A raised built event may remove the machine and spill the remaining queue.
+      local next_droid = table.remove(record.pending, 1)
+      if not deploy(record, next_droid[1], next_droid[2]) then
+        table.insert(record.pending, 1, next_droid)
+        break
+      end
       free = free - 1
     end
   end
-  local hold = #pending > 0
-  if entity.disabled_by_script ~= hold then
-    entity.disabled_by_script = hold
+  if entity.valid then
+    local hold = #record.pending > 0
+    if entity.disabled_by_script ~= hold then
+      entity.disabled_by_script = hold
+    end
   end
 end
 spawners.process = process

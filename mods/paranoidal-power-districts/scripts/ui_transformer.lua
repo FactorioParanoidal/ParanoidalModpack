@@ -324,8 +324,9 @@ function W.refresh(player)
   r.loadtxt.caption = { "ppd-gui.load-of", U.tpower(ds and ds.L or 0), U.power(group_n) }
   r.bar.value = U.clamp(ratio / S.LIMIT, 0, 1)
   G.bar_color(r.bar, st.color)
-  local w1 = math.floor(GAUGE_W * lo / S.LIMIT)
-  local w2 = math.floor(GAUGE_W * (hi - lo) / S.LIMIT)
+  -- Research can extend the green zone beyond the gauge; clip only its visual bands.
+  local w1 = U.clamp(math.floor(GAUGE_W * lo / S.LIMIT), 0, GAUGE_W)
+  local w2 = U.clamp(math.floor(GAUGE_W * (hi - lo) / S.LIMIT), 0, GAUGE_W - w1)
   r.z1.style.width = w1
   r.z2.style.width = w2
   r.z3.style.width = GAUGE_W - w1 - w2

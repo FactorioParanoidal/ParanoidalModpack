@@ -1,7 +1,8 @@
 -- Persistent state of the citadel (storage.citadel) and the cached map settings.
 --
 -- storage.citadel
---   schema, phase        "dormant" | "warned" | "siting" | "active" | "destroyed"
+--   schema, phase        "dormant" | "warned" | "siting" | "active" | "destroyed" | "suspended_merge"
+--   suspension           prior phase, source force index, merge destination and tick; assets/work retained
 --   rng                  random generator state (script/util.lua)
 --   surface              surface index (Nauvis)
 --   base                 centre of the player base (spawn position), set when the citadel is placed

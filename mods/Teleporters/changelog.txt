@@ -3,6 +3,8 @@ Version: 2.0.0
   Locale:
     - Russian hardcoded player-facing text: 17 UI, chat, command-help and error-message literals; technical identifiers, format parameters and gameplay logic are unchanged.
 Date: 2024-10-27
+  Bugfixes:
+    - Teleporter previews always use a positive integer column count, including narrow windows and large UI scales; links, destinations and saved positions are unchanged.
   Changes:
     - 2.0 update.
   Graphics:

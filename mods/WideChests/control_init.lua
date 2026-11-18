@@ -185,10 +185,14 @@ end
 --- @param entities LuaEntity[]
 --- @return LuaQualityPrototype
 function MergingChests.get_minimum_quality(entities)
-	local min_quality = nil
+	local min_quality, min_rank = nil, nil
 	for _, entity in ipairs(entities) do
-		if min_quality == nil or min_quality.level > entity.quality.level then
-			min_quality = entity.quality
+		local quality = entity.quality
+		-- Defects share level 0 with normal, but must still sort below it.
+		local defect = quality.name:match("^ic%-defect%-([1-5])$")
+		local rank = defect and -tonumber(defect) or quality.level
+		if min_quality == nil or min_rank > rank then
+			min_quality, min_rank = quality, rank
 		end
 	end
 

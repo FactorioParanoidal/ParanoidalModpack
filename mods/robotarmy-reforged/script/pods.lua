@@ -189,14 +189,21 @@ local function open(record)
   local pod = record.entity
   local surface, force = pod.surface, pod.force
   local fd = state.force_data(force)
-  local squad
-  local landed = 0
-  for _, d in pairs(record.droids) do
+  local squad = record.squad_id and storage.squads[record.squad_id]
+  if squad and (squad.deleted or squad.force_index ~= force.index or squad.surface_index ~= surface.index) then
+    squad = nil
+  end
+  local landed = record.landed or 0
+  local i = 1
+  while pod.valid and i <= #record.droids do
+    local d = record.droids[i]
     local name = droid_name(d.name)
     local quality = type(d.quality) == "string" and prototypes.quality[d.quality] and d.quality or "normal"
     local position = name and surface.find_non_colliding_position(name, pod.position, 15, 0.5)
     local droid = position and surface.create_entity({name = name, position = position, force = force, quality = quality})
     if droid then
+      -- Consume only successful rows, before any integration can raise another event.
+      table.remove(record.droids, i)
       droid.health = math.max(1, droid.max_health * (tonumber(d.health) or 1))
       local unit_number = droid.unit_number
       storage.kills[unit_number] = tonumber(d.kills)
@@ -205,22 +212,30 @@ local function open(record)
       if compat.unit_control then
         compat.unit_spawned(droid, pod)
       else
-        if not squad then
+        if not squad or squad.deleted then
           squad = Squad.create(fd, droid)
           squad.hold = true
           squad.hold_pos = util.copy_position(pod.position)
+          record.squad_id = squad.id
         end
         Squad.add(squad, droid)
       end
       ranks.mark(droid)
-      script.raise_script_built({entity = droid})
       landed = landed + 1
+      record.landed = landed
+      script.raise_script_built({entity = droid})
+    else
+      i = i + 1 -- keep this row for a later retry
     end
   end
-  pod.minable_flag = true
-  if squad then
+  if pod.valid and squad and not squad.deleted then
     squad.order.dirty = true
-    util.squad_message(force, {"robotarmy-message.pod-landed", squad.id, landed, util.gps(pod.position, surface)})
+  end
+  if pod.valid and #record.droids == 0 then
+    pod.minable_flag = true
+    if squad and not squad.deleted then
+      util.squad_message(force, {"robotarmy-message.pod-landed", squad.id, landed, util.gps(pod.position, surface)})
+    end
   end
 end
 
@@ -230,8 +245,10 @@ function pods.on_nth_tick(tick)
     if not record.entity.valid then
       storage.pods[unit_number] = nil
     elseif tick >= record.open_tick then
-      storage.pods[unit_number] = nil
       open(record)
+      if storage.pods[unit_number] == record and #record.droids == 0 then
+        storage.pods[unit_number] = nil
+      end
     end
   end
 end

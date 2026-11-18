@@ -6,6 +6,8 @@ Date: 2025-11-21
     - Fuel recognition and lost battery-pack warnings are Russian. The unrecognised fuel identifier is written to the log; battery handling is unchanged.
     - Russian hardcoded player-facing text: 4 UI, chat, command-help and error-message literals; technical identifiers, format parameters and gameplay logic are unchanged.
     - Brazilian Portuguese locale added, provided by Slondo (https://mods.factorio.com/user/Slondo).
+  Bugfixes:
+    - Returning a partially discharged battery preserves the burning battery's quality; a failed insertion still leaves the fuel untouched.
   Compatibility:
     - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
     - Paranoidal port to Factorio 2.1: recipes use categories (RecipePrototype::category and additional_categories were merged into categories; the first entry keeps the meaning of the former main category, a changed main category keeps the other entries).

@@ -1,6 +1,9 @@
 ---------------------------------------------------------------------------------------------------
 Version: 9.0.0
 Date: 2026.10.25
+  Bugfixes:
+    - Drop pods retain blocked or failed droid landings and retry without duplicating successful landings; the remaining payload stays protected from mining and keeps its saved attributes.
+    - Droid deployers retain all completed crafts instead of truncating their pending queue at 20, while keeping the per-check deployment limit; reentrant removal cannot spill the droid just deployed.
   Changes:
     - Quick reaction squads no longer announce their deployment with a custom alert, regardless of the saved alert setting. Response behaviour and squad problem alerts are unchanged.
     - Rank droids are hidden prototypes: the ammo damage and shooting speed research tooltips list only the base droids; the bonuses of the ammo categories still apply to every rank.

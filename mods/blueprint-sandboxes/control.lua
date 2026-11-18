@@ -159,16 +159,32 @@ end)
 
 script.on_event(defines.events.on_pre_surface_deleted, function(event)
     local surface = game.surfaces[event.surface_index]
-    if storage.labSurfaces[surface.name] then
-        storage.labSurfaces[surface.name] = nil
+    storage.labSurfaces[surface.name] = nil
+    for _, playerData in pairs(storage.players) do
+        if playerData.preSandboxSurfaceName == surface.name then
+            playerData.preSandboxSurfaceName = nil
+        end
+        if playerData.preSandboxRemoteSurfaceName == surface.name then
+            playerData.preSandboxRemoteSurfaceName = nil
+            playerData.preSandboxRemotePosition = nil
+            playerData.preSandboxRemoteCenteredOn = nil
+        end
     end
 end)
 
 script.on_event(defines.events.on_surface_renamed, function(event)
-    -- TODO: Renaming surfaces likely doesn't really work
+    local surface = game.surfaces[event.surface_index]
     if storage.labSurfaces[event.old_name] then
-        storage.labSurfaces[event.new_name] = storage.labSurfaces[event.old_name]
+        storage.labSurfaces[surface.name] = storage.labSurfaces[event.old_name]
         storage.labSurfaces[event.old_name] = nil
+    end
+    for _, playerData in pairs(storage.players) do
+        if playerData.preSandboxSurfaceName == event.old_name then
+            playerData.preSandboxSurfaceName = surface.name
+        end
+        if playerData.preSandboxRemoteSurfaceName == event.old_name then
+            playerData.preSandboxRemoteSurfaceName = surface.name
+        end
     end
 end)
 

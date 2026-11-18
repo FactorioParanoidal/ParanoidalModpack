@@ -295,7 +295,7 @@ function GuiElement.getIndexColumnNumber()
   local display_ratio_horizontal = User.getModSetting("display_ratio_horizontal")
   local width , height, scale = Player.getDisplaySizes()
   local width_main = math.ceil(width*display_ratio_horizontal/scale)
-  return math.ceil((width_main - 100)/36)
+  return math.max(1, math.ceil((width_main - 100)/36))
 end
 
 -------------------------------------------------------------------------------

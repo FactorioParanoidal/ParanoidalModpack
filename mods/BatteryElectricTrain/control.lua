@@ -22,7 +22,7 @@ local function on_loc_remove(event) -- entity, player_index
 		return
 	end
 
-	if burner.burnt_result_inventory.insert({name=fuel.."-empty"}) > 0 then
+	if burner.burnt_result_inventory.insert({name=fuel.."-empty", quality=burning.quality}) > 0 then
 		burner.currently_burning = nil
 	else
 		player_print(event.player_index, {"bet-notice.full"})

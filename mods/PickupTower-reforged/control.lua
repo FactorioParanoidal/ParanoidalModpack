@@ -105,17 +105,49 @@ end
 ---------------------------------------------------------------------------------------------------
 -- Registry
 
+local retry_radars
+local retry_live = false
+
+local function sync_retry()
+  local want = storage.radar_retry and next(storage.radar_retry) ~= nil or false
+  if want ~= retry_live then
+    retry_live = want
+    script.on_nth_tick(60, want and retry_radars or nil)
+  end
+end
+
+local function remove_retry(rec)
+  if storage.radar_retry then storage.radar_retry[rec.chest_unit] = nil end
+  if storage.radar_retry_cursor == rec.chest_unit then storage.radar_retry_cursor = nil end
+  sync_retry()
+end
+
 local function place_radar(rec)
   local chest = rec.chest
   local pos = chest.position
+  rec.x, rec.y = pos.x, pos.y
   local radar = chest.surface.create_entity{
     name = S.radar(rec.tier), position = {pos.x, pos.y + 0.01}, force = chest.force,
     create_build_effect_smoke = false,
   }
+  if not (radar and radar.valid) then
+    rec.radar, rec.radar_unit = nil, nil
+    storage.radar_retry = storage.radar_retry or {}
+    storage.radar_retry[rec.chest_unit] = rec
+    if not rec.radar_warned then
+      log("Pickup Tower: radar creation failed for tower " .. rec.chest_unit .. "; retry scheduled")
+      rec.radar_warned = true
+    end
+    sync_retry()
+    return false
+  end
   radar.destructible = false
-  rec.radar, rec.radar_unit, rec.x, rec.y = radar, radar.unit_number, pos.x, pos.y
+  rec.radar, rec.radar_unit = radar, radar.unit_number
+  rec.radar_warned = nil
   storage.by_radar[rec.radar_unit] = rec.chest_unit
   script.register_on_object_destroyed(radar)
+  remove_retry(rec)
+  return true
 end
 
 local function add_tower(chest)
@@ -140,28 +172,52 @@ local function add_tower(chest)
 end
 
 local function drop_radar(rec)
-  storage.by_radar[rec.radar_unit] = nil
-  if rec.radar.valid then rec.radar.destroy() end
+  if rec.radar_unit then storage.by_radar[rec.radar_unit] = nil end
+  if rec.radar and rec.radar.valid then rec.radar.destroy() end
+  rec.radar, rec.radar_unit = nil, nil
 end
 
 local function remove_tower(unit)
   local rec = storage.towers[unit]
   if not rec then return end
   storage.towers[unit] = nil
+  remove_retry(rec)
   drop_radar(rec)
+end
+
+-- Failure-only work: one pending tower per second, round-robin until it recovers.
+retry_radars = function()
+  local queue = storage.radar_retry
+  if not queue then sync_retry(); return end
+  local key = next(queue, storage.radar_retry_cursor)
+  if not key then key = next(queue) end
+  if key then
+    storage.radar_retry_cursor = key
+    local rec = queue[key]
+    if storage.towers[key] ~= rec then
+      remove_retry(rec)
+    elseif not rec.chest.valid then
+      remove_tower(key)
+    else
+      place_radar(rec)
+    end
+  end
+  sync_retry()
 end
 
 local function follow_chest(rec)
   local pos = rec.chest.position
   if pos.x ~= rec.x or pos.y ~= rec.y then
     rec.x, rec.y = pos.x, pos.y
-    if rec.radar.valid then rec.radar.teleport({pos.x, pos.y + 0.01}) end
+    if rec.radar and rec.radar.valid then rec.radar.teleport({pos.x, pos.y + 0.01}) end
   end
 end
 
 -- Full rebuild: every placed tower gets a fresh record and radar; stray radars are removed.
 local function rebuild()
   storage.towers, storage.by_radar = {}, {}
+  storage.radar_retry, storage.radar_retry_cursor = {}, nil
+  sync_retry()
   for index in pairs(storage.views) do hide_view(index) end
   for index in pairs(storage.hover) do hide_hover(index) end
   local towers, radars = {}, {}
@@ -176,6 +232,7 @@ end
 local function init_storage()
   storage.towers = storage.towers or {}
   storage.by_radar = storage.by_radar or {}
+  storage.radar_retry = storage.radar_retry or {}
   storage.views = storage.views or {}
   storage.hover = storage.hover or {}
 end
@@ -345,6 +402,7 @@ local function on_destroyed(e)
   storage.by_radar[id] = nil
   local rec = storage.towers[unit]
   if rec and rec.radar_unit == id then
+    rec.radar, rec.radar_unit = nil, nil
     if rec.chest.valid then place_radar(rec) else remove_tower(unit) end
   end
 end
@@ -463,6 +521,7 @@ end)
 
 script.on_load(function()
   dollies(false)
+  sync_retry()
 end)
 
 script.on_configuration_changed(function()

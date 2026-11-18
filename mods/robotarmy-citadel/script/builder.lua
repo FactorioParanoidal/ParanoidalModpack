@@ -35,7 +35,12 @@ local function set_handler(on)
   script.on_nth_tick(B.PERIOD, on and step or nil)
 end
 
+function B.pause()
+  set_handler(false)
+end
+
 function B.queue(c, job)
+  if c.phase == "suspended_merge" then return end
   c.work[#c.work + 1] = job
   set_handler(true)
 end
@@ -43,7 +48,7 @@ end
 --- After a load: the handler follows the queue (storage is read-only here).
 function B.on_load(c)
   registered = false
-  if c and c.work and c.work[1] then
+  if c and c.phase ~= "suspended_merge" and c.work and c.work[1] then
     registered = true
     script.on_nth_tick(B.PERIOD, step)
   end
@@ -290,7 +295,7 @@ end
 
 step = function()
   local c = state.get()
-  if not c or not c.work[1] then
+  if not c or c.phase == "suspended_merge" or not c.work[1] then
     set_handler(false)
     return
   end

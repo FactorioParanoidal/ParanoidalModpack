@@ -110,6 +110,7 @@ end
 -- Records
 
 local function activate(rec)
+    if rec.pending then return end
     rec.idle = 0
     if rec.mi then return end
     local moving = storage.moving
@@ -132,8 +133,8 @@ end
 local function forget(rec)
     local units = storage.units
     units[rec.id] = nil
-    units[rec.t1] = nil
-    units[rec.t2] = nil
+    if rec.t1 then units[rec.t1] = nil end
+    if rec.t2 then units[rec.t2] = nil end
     if rec.mi then deactivate(rec) end
     local list = storage.list
     local i, n = rec.li, #list
@@ -172,44 +173,53 @@ local function make_turret(wagon, position, quarter)
 end
 
 --- Creates the turrets of a wagon once; returns the record.
+local function restore_clone(rec)
+    local saved = rec.clone_snapshot
+    if not saved then return end
+    for i, turret in ipairs({rec.a, rec.b}) do
+        local data = saved[i]
+        if data.fluid then turret.set_fluid(1, data.fluid) else turret.clear_fluid(1) end
+        turret.health = data.health
+    end
+    rec.clone_snapshot = nil
+end
+
+local function create_turrets(rec)
+    local wagon = rec.wagon
+    local q = quadrant(place(wagon, 0))
+    local a = make_turret(wagon, PA, q)
+    local b = a and a.valid and make_turret(wagon, PB, (q + 2) % 4)
+    if not (b and b.valid) then
+        destroy(a)
+        rec.pending = true
+        rec.retry_tick = game.tick + SERVICE_PERIOD
+        if not rec.creation_warned then
+            log("Flamethrower Wagon: helper creation failed for wagon " .. rec.id .. "; retry scheduled")
+            rec.creation_warned = true
+        end
+        return false
+    end
+    rec.a, rec.b, rec.q = a, b, q
+    rec.t1, rec.t2 = a.unit_number, b.unit_number
+    rec.pending, rec.retry_tick, rec.creation_warned = nil, nil, nil
+    storage.units[rec.t1], storage.units[rec.t2] = rec, rec
+    script.register_on_object_destroyed(a)
+    script.register_on_object_destroyed(b)
+    restore_clone(rec)
+    activate(rec)
+    return true
+end
+
 local function register(wagon)
     local id = wagon.unit_number
     local rec = storage.units[id]
     if rec then return rec end
-
-    local q = quadrant(place(wagon, 0))
-    local a = make_turret(wagon, PA, q)
-    local b = a and make_turret(wagon, PB, (q + 2) % 4)
-    if not b then
-        destroy(a)
-        wagon.destroy()
-        return nil
-    end
-
     local list = storage.list
     local li = #list + 1
-    rec = {
-        wagon = wagon,
-        a = a,     -- turret at the front end of the wagon orientation
-        b = b,
-        q = q,     -- base direction quadrant of turret a
-        id = id,
-        t1 = a.unit_number,
-        t2 = b.unit_number,
-        li = li,
-        idle = 0,
-    }
-    list[li] = rec
-    local units = storage.units
-    units[id] = rec
-    units[rec.t1] = rec
-    units[rec.t2] = rec
-
+    rec = {wagon = wagon, id = id, li = li, idle = 0, pending = true}
+    list[li], storage.units[id] = rec, rec
     script.register_on_object_destroyed(wagon)
-    script.register_on_object_destroyed(a)
-    script.register_on_object_destroyed(b)
-
-    activate(rec) -- a new train is in manual mode; the poll parks it if it is not
+    create_turrets(rec)
     sync_handlers()
     return rec
 end
@@ -268,7 +278,12 @@ end
 --- Services one record; returns false when the record was removed.
 local function service(rec)
     local wagon, a, b = rec.wagon, rec.a, rec.b
-    if not (wagon.valid and a.valid and b.valid) then
+    if not wagon.valid then teardown(rec); return false end
+    if rec.pending then
+        if game.tick < rec.retry_tick or not create_turrets(rec) then return true end
+        a, b = rec.a, rec.b
+    end
+    if not (a and a.valid and b and b.valid) then
         teardown(rec)
         return false
     end
@@ -406,10 +421,13 @@ local function on_train_created(event)
     end
 end
 
---- Factorio 2.1: LuaEntity::fluidbox was removed; copies the fluid box (storage 1) of one turret to another.
-local function copy_fluid(from, to)
-    local fluid = from.get_fluid(1)
-    if fluid then to.set_fluid(1, fluid) else to.clear_fluid(1) end
+-- Plain data survives a deferred clone even if its source wagon is removed meanwhile.
+local function clone_snapshot(rec)
+    if rec.pending then return rec.clone_snapshot end
+    if rec.a and rec.a.valid and rec.b and rec.b.valid then
+        return {{fluid = rec.a.get_fluid(1), health = rec.a.health},
+            {fluid = rec.b.get_fluid(1), health = rec.b.health}}
+    end
 end
 
 local function on_cloned(event)
@@ -424,11 +442,9 @@ local function on_cloned(event)
     if not rec then return end
     local src = event.source
     local old = src and src.valid and storage.units[src.unit_number]
-    if old and old ~= rec and old.a.valid and old.b.valid then
-        copy_fluid(old.a, rec.a)
-        copy_fluid(old.b, rec.b)
-        rec.a.health = old.a.health
-        rec.b.health = old.b.health
+    if old and old ~= rec then
+        rec.clone_snapshot = clone_snapshot(old)
+        if not rec.pending then restore_clone(rec) end
     end
 end
 
@@ -437,7 +453,8 @@ local function reconcile()
     local list = storage.list
     for i = #list, 1, -1 do
         local rec = list[i]
-        if rec and not (rec.wagon.valid and rec.a.valid and rec.b.valid) then teardown(rec) end
+        if rec and (not rec.wagon.valid or (not rec.pending and not
+            (rec.a and rec.a.valid and rec.b and rec.b.valid))) then teardown(rec) end
     end
     local units = storage.units
     for _, surface in pairs(game.surfaces) do

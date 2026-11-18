@@ -16,6 +16,7 @@ Date: 2025-11-25
     - Russian hardcoded player-facing text: 4 UI, chat, command-help and error-message literals; technical identifiers, format parameters and gameplay logic are unchanged.
     - ru: the mod name and the mod list description are the same as in ParanoidalLocale (format "English title (Russian translation)"), so the mod reads the same with or without it.
   Bugfixes:
+    - Saved return surfaces follow renames; deleted or stale origins use a valid character or surface fallback in both remote and normal exits without resetting stored inventories or preferences.
     - Fixed surface exclusions for mods that are added after generating Sandboxes
     - Fixed leveling issues with synchronizing research
   Changes:

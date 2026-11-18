@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 9.0.0
 Date: 2026-10-30
+  Bugfixes:
+    - Failed hidden-radar creation keeps the tower and inventory intact and retries one pending tower per second; optional radar references, removal, movement and reloads are handled safely. Normal radar quality and pickup behavior are unchanged.
   Info:
     - Paranoidal rewrite of Schall Pickup Tower 2.0.1 (mod SchallPickupTower) under a new name; graphics by Schallfalke. No migration from SchallPickupTower: towers of the old mod are not converted.
   Changes:

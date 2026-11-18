@@ -214,18 +214,35 @@ function Sandbox.Exit(player)
     playerData.lastSandboxPositions[player.surface.name] = player.position
 
     local preSandboxSurface = playerData.preSandboxSurfaceName and game.surfaces[playerData.preSandboxSurfaceName]
-    if not Controllers.IsUsingRemoteView(player) and not preSandboxSurface then
-        playerData.preSandboxSurfaceName = nil
-        log(player.name .. " has no last known Surface, so they cannot exit the Sandbox normally")
-        player.print{"messages.sandbox-exiting-without-known-entrace"}
-        Controllers.RestoreLastController(player, playerData)
-        return
+    if not preSandboxSurface then
+        local character = playerData.preSandboxCharacter
+        if character and character.valid and not Sandbox.IsSandbox(character.surface) then
+            preSandboxSurface = character.surface
+            playerData.preSandboxPosition = character.position
+        else
+            preSandboxSurface = game.surfaces["nauvis"]
+            if not preSandboxSurface then
+                for _, surface in pairs(game.surfaces) do
+                    if not Sandbox.IsSandbox(surface) then
+                        preSandboxSurface = surface
+                        break
+                    end
+                end
+            end
+            playerData.preSandboxPosition = { 0, 0 }
+        end
+        if not preSandboxSurface then
+            log(player.name .. " has no available Surface to exit the Sandbox")
+            player.print{"messages.sandbox-exiting-without-known-entrace"}
+            return
+        end
+        playerData.preSandboxSurfaceName = preSandboxSurface.name
     end
 
-    -- Harmlessly teleport them out of the Sandbox
+    -- Harmlessly teleport them out of the Sandbox, including a remote-view return.
     Teleport.ToPositionOnSurface(
         player,
-        playerData.preSandboxSurfaceName,
+        preSandboxSurface,
         playerData.preSandboxPosition or { 0, 0 }
     )
     Controllers.SafelyCloseRemoteView(player)

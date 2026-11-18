@@ -536,7 +536,7 @@ end
 --- Heartbeat, every 60 ticks.
 function C.heartbeat()
   local c = state.get()
-  if not c then return end
+  if not c or c.phase == "suspended_merge" then return end
   local cfg = state.cfg
   c.beat = c.beat + 1
   local phase = c.phase
@@ -591,7 +591,7 @@ end
 function C.force_spawn(x, y)
   local c = state.get()
   local cfg = state.cfg
-  if c.phase == "active" or c.phase == "destroyed" then return false end
+  if c.phase == "active" or c.phase == "destroyed" or c.phase == "suspended_merge" then return false end
   c.forced = true
   local surface = state.surface(c)
   if x and y then

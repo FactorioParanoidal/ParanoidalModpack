@@ -139,24 +139,28 @@ function sea_pump:on_build_entity(created_entity, entity_tags)
       local position = created_entity.position
       local force = created_entity.force
       local direction = created_entity.direction
-      local time_to_live = created_entity.time_to_live
-      local item_requests = created_entity.item_requests
+      local quality = created_entity.quality
+      local tags = created_entity.tags
+      local insert_plan = created_entity.insert_plan
 
-      -- remove the sea pump (miner) ghost
-      created_entity.destroy({ raise_destroy = true })
-
-      -- create the sea pump (placeable) ghost
-      created_entity_2 = surface.create_entity({
+      -- Retain the original ghost until its replacement is ready.
+      local created_entity_2 = surface.create_entity({
         name = "entity-ghost",
         inner_name = self:get_placeable_name(),
         position = position,
         direction = direction,
         force = force,
-        expires = time_to_live,
+        quality = quality,
+        tags = tags,
+        preserve_ghosts_and_corpses = true,
         create_build_effect_smoke = false,
-        raise_built = false, -- raise manually after adding the item requests
+        raise_built = false, -- raise manually after transferring the insert plan
       })
-      created_entity_2.item_requests = item_requests
+      if not (created_entity_2 and created_entity_2.valid) then
+        return
+      end
+      created_entity_2.insert_plan = insert_plan
+      created_entity.destroy({ raise_destroy = true })
       script.raise_event(defines.events.script_raised_built, { entity = created_entity_2 })
     end
   end

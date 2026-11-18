@@ -60,6 +60,7 @@ end
 
 --- Creates the citadel force and sets the diplomacy with every force.
 function F.ensure()
+  if storage.citadel and storage.citadel.phase == "suspended_merge" then return end
   local force = game.forces[S.force] or game.create_force(S.force)
   -- needed to create unit groups by script; without unit spawners the force neither expands nor
   -- sends pollution attacks on its own

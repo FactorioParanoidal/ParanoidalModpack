@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 9.0.0
 Date: 2026-10-27
+  Bugfixes:
+    - A failed turret creation no longer destroys the wagon or its fluid: the existing service retries safely, including after reloads; deferred clones retain helper fluid and health.
   Locale:
     - ru: the mod name and the mod list description are the same as in ParanoidalLocale (format "English title (Russian translation)"), so the mod reads the same with or without it.
   Major Features:

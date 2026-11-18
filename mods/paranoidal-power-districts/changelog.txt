@@ -22,6 +22,7 @@ Date: 2026-11-12
       is hidden. The numbers stay in the windows and the Dispatcher.
     - Placed transformers move their bushing poles to the new tips on load and keep their wires.
   Bugfixes:
+    - Transformer gauge bands stay within the gauge when research extends the green zone beyond its scale; electrical regulation, settings and research effects are unchanged.
     - The on-load tap changer stopped the game (nil arithmetic) when a district hit the limit while its average
       was still in the green zone.
     - Load shedding remembered only what a starved district had drawn, not what it asked: it was switched back on

@@ -619,7 +619,7 @@ local function build_compact_factory(player)
 
     -- This is necessary to work around scrolling/squashing issues
     local width, _ = get_compact_frame_dimensions(player)
-    flow_navigation.style.width = width - 40
+    flow_navigation.style.width = math.max(0, width - 40)
 
     local dropdown_factory = flow_navigation.add{type="drop-down", style="fp_drop-down_slim"}
     dropdown_factory.style.horizontally_squashable = true

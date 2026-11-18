@@ -45,6 +45,7 @@ local function on_configuration_changed()
     -- no migrations: an unknown state starts over (the city of an old state stays as ruins)
     c = C.init()
   end
+  if c.phase == "suspended_merge" then B.pause(); return end
   forces.ensure()
   UP.apply(c)
   C.unlock_recipes(c)
@@ -70,17 +71,32 @@ end)
 
 -- New forces: truce with the biters, war with the players; players get the decryption recipe.
 local function on_forces_changed()
+  local c = state.get()
+  if c and c.phase == "suspended_merge" then return end
   forces.ensure()
-  C.unlock_recipes(state.get())
+  C.unlock_recipes(c)
+end
+
+local function on_forces_merged(event)
+  if event.source_name ~= S.force then on_forces_changed(); return end
+  local c = state.get() or state.new()
+  if c.phase ~= "suspended_merge" then
+    c.suspension = {phase = c.phase, source_index = event.source_index,
+      destination = event.destination.name, tick = game.tick}
+    c.phase = "suspended_merge"
+  end
+  -- The merge is intentional: retain its assets and queue, but issue no more campaign work.
+  B.pause()
+  forces.invalidate()
 end
 script.on_event(defines.events.on_force_created, on_forces_changed)
-script.on_event(defines.events.on_forces_merged, on_forces_changed)
+script.on_event(defines.events.on_forces_merged, on_forces_merged)
 script.on_event(defines.events.on_player_changed_force, on_forces_changed)
 script.on_event(defines.events.on_player_created, on_forces_changed)
 
 script.on_event(defines.events.on_technology_effects_reset, function(event)
   local c = state.get()
-  if not c then return end
+  if not c or c.phase == "suspended_merge" then return end
   if event.force.name == S.force then
     UP.on_effects_reset(c, event.force)
   else

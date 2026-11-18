@@ -4,7 +4,6 @@ return {
   BUCKETS = 60,                       -- each squad is updated once per this many ticks
   SPAWNER_PERIOD = 60,                -- each droid assembler / guard station is checked once per this many ticks
   MAX_SPAWNS_PER_CHECK = 5,           -- droids deployed by one spawner per check
-  MAX_PENDING = 20,                   -- finished deploy crafts waiting for room (the machine pauses meanwhile)
   CIRCUIT_PERIOD = 60,                -- droid counters
   GUI_PERIOD = 30,                    -- open army windows and selection marks
 
