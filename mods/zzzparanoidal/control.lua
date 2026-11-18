@@ -17,6 +17,8 @@ local flamethrower_fuels = require("features.flamethrower-fuels.control")
 require("controls.turret-rotate").install() -- R / Shift+R поворачивают стоящую турель с сектором обстрела.
 local rocket_victory = require("controls.rocket-victory")
 rocket_victory.install() -- Победа за первую ракету со своим текстом (без SpaceX).
+local fluid_output_wake = require("controls.fluid-output-wake")
+fluid_output_wake.install() -- Будит манипуляторы машин «предметы → жидкость» после пробки на выходе (ошибка движка).
 -- Открытие карты вокруг цели артиллерии (из AtomicArtillery2): последним в цепочке on_entity_died,
 -- гнёзда и черви идут только в него.
 require("controls.artillery-reveal").install()
@@ -124,6 +126,7 @@ script.on_init(function() --наш любимый init, запрещаем дв�
 	flamethrower_fuels.sync()
 	automatic_cursed_fmd.sync()
 	rocket_victory.sync()
+	fluid_output_wake.sync()
 end)
 
 script.on_load(function() --без дропа эволюции потому что game недоступен
@@ -154,6 +157,7 @@ script.on_configuration_changed(function() --фикс эволюции при з
 	flamethrower_fuels.sync()
 	automatic_cursed_fmd.sync()
 	rocket_victory.sync()
+	fluid_output_wake.sync()
 end)
 
 script.on_event(defines.events.on_player_joined_game, disable_obsolete_basic_logistics)
