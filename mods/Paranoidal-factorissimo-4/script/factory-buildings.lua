@@ -186,11 +186,13 @@ local function set_factory_active_or_inactive(factory, announce)
     local building = factory.building
     if not building or not building.valid then
         factory.inactive = false
+        factorissimo.clear_factory_specialization(factory)
         return false
     end
 
     local msg = placement_problem(factory, building)
     factory.inactive = msg ~= nil
+    factorissimo.sync_factory_specialization(factory)
     if not msg then return was_inactive == true end
 
     -- TODO: vanilla bug; `player.mine_entity` does not respect event.buffer
@@ -613,6 +615,7 @@ local function destroy_render_objects(ids)
 end
 
 local function cleanup_factory_exterior(factory)
+    factorissimo.clear_factory_specialization(factory)
     factorissimo.cleanup_outside_energy_receiver(factory)
     factorissimo.cleanup_factory_roboport_exterior_chest(factory)
 
@@ -766,6 +769,7 @@ local function forget_factory(factory, context)
 end
 
 local function cleanup_factory_interior(factory, context)
+    factorissimo.clear_factory_specialization(factory)
     local surface = factory.inside_surface
     if surface and surface.valid then
         local area, x, y, D = interior_area(factory)
@@ -1448,6 +1452,7 @@ local clone_forbidden_prefixes = {
     "factory-inside-pump-output",
     "factory-outside-pump-input",
     "factory-outside-pump-output",
+    "factory-specialization-",
 }
 
 local clone_forbidden_cache = {}

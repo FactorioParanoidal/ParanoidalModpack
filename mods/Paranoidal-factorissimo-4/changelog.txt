@@ -2,8 +2,10 @@
 Version: 9.20.0
 Date: 2026-11-16
   Major Features:
+    - Added Operation Optimization after Factory architecture 1: uniform machine parks save operating energy, and serial workshops also gain crafting speed. Interior indicators explain the current tier and refresh on hover.
     - Paranoidal: the Factorissimo fork of the build is renamed from factorissimo-2-notnotmelon to Paranoidal-factorissimo-4 (title "Paranoidal Factorissimo 4"). Prototype, setting, remote interface (factorissimo), command, custom input and storage names are unchanged; graphics paths are __Paranoidal-factorissimo-4__.
   Bugfixes:
+    - Operation Optimization handles previous furnace recipes returned as prototypes, without stopping the factory update.
     - Factory blueprints distinguish copies, cuts and death recovery. Copies, including older blueprints with only an ID tag, cannot unpack the original. Building from a packed item uses its own interior even when a ghost references another factory.
   Changes:
     - Missing internal factory bindings are logged and shown in chat only with paranoidal-debug-chat enabled. Lookup results and factory behaviour are unchanged.
