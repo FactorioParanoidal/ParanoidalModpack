@@ -962,7 +962,7 @@ local function disbandSquad(universe, squads, groupId)
 		removeSquadFromChunk(squad.map, squad)
 		local group = squad.group
 		if group and group.valid then
-            squadDecompress(universe, group.surface, squad, group, nil, true)
+			squadCompression.squadDecompress(universe, group.surface, squad, group, nil, true)
 			group.destroy()
 		end	
 		clearDebugLines(squad)	-- DEBUG
