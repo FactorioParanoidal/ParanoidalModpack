@@ -115,35 +115,6 @@ local FLIGHT_KINDS = {"shore", "outpost", "deep"}
 local kindNames = {}
 local kindScores = {}
 
-local pickKind
-local function kindScorer(entry, d, map)
-    local value = aiBrain.liveWeakScore(entry, map)     -- also refreshes entry.turrets
-    if not value then
-        return nil
-    end
-    if pickKind == "shore" then
-        if not entry.shore then
-            return nil
-        end
-    elseif pickKind == "outpost" then
-        if entry.turrets > 0 then
-            return nil
-        end
-    end
-    return value / (1 + d / 640) * (0.7 + mRandom() * 0.6)
-end
-
--- away from the ground strike while one is under way
-local escortX, escortY
-local function escortScorer(entry, d, map)
-    local score = kindScorer(entry, d, map)
-    if score and escortX then
-        local away = aiBrain.distance(entry.chunk.x + 16, entry.chunk.y + 16, escortX, escortY)
-        score = score * mMin(2, 0.5 + away / 320)
-    end
-    return score
-end
-
 local function pickTarget(map, ai, x, y, range, excluded, tick)
     -- learned choice of the kind, then the best target of that kind
     local count = 0
@@ -155,23 +126,23 @@ local function pickTarget(map, ai, x, y, range, excluded, tick)
         kindScores[count] = value + ((samples < 2) and 0.15 or 0)
     end
     local kind = aiBrain.softmaxPick(kindNames, kindScores, count, 0.15, 0.1)
-    local escorting = ai.escortUntil > tick
-    escortX = escorting and ai.escortX or nil
-    escortY = escorting and ai.escortY or nil
-    for attempt = 1, 2 do
-        pickKind = kind
-        local entry = aiBrain.pickFromReservoir(map, ai.weak, x, y, range, function(e, d, m)
-            if excluded and excluded[e.chunk] then
-                return nil
-            end
-            return escortScorer(e, d, m)
-        end)
-        if entry then
-            return entry, kind
+    local escortX = ai.escortUntil > tick and ai.escortX or nil
+    local preferred, preferredScore, backup, backupScore
+    for _, pick in ipairs(aiBrain.weakCandidates(map, x, y, range, excluded, true, tick)) do
+        local entry, c = pick.entry, pick.chunk
+        local score = pick.value / (1 + pick.distance / 640) * (0.7 + mRandom() * 0.6)
+        if escortX then
+            local away = aiBrain.distance(c.x + 16, c.y + 16, escortX, ai.escortY)
+            score = score * mMin(2, 0.5 + away / 320)
         end
-        kind = "deep"   -- no target of the learned kind: any weak spot
+        if not backupScore or score > backupScore then backup, backupScore = entry, score end
+        if (kind == "deep" or (kind == "shore" and entry.shore) or (kind == "outpost" and entry.turrets == 0))
+                and (not preferredScore or score > preferredScore) then
+            preferred, preferredScore = entry, score
+        end
     end
-    return nil
+    if preferred then return preferred, kind end
+    return backup, "deep"
 end
 
 -- the side of the target chunk where water or unscanned land is: flyers come from there
@@ -193,10 +164,17 @@ end
 local function strike(map, squad, entry, kind, tick)
     local group = squad.group
     local chunk = entry.chunk
-    local objective = field.objective(map, chunk, tick)
+    field.note(map, "air-selected", tick)
+    local goal = aiBrain.raidGoal(map, entry, tick, true)
+    goal.origin = group.position
+    local objective = goal.kind == "objective" and goal or nil
+    if not aiBrain.recheckRaid(map, goal) then
+        if objective then field.closeObjective(map, objective, false, tick) end
+        field.note(map, "unconfirmed", tick)
+        return false
+    end
     squad.flightObjective = objective
-    local tx = objective and objective.x or (chunk.x + 16)
-    local ty = objective and objective.y or (chunk.y + 16)
+    local tx, ty = goal.x, goal.y
     local commands = {}
     if kind == "shore" then
         local wx, wy = shoreApproach(map, chunk)
@@ -218,8 +196,10 @@ local function strike(map, squad, entry, kind, tick)
                        commands = commands})
     if not group.valid then
         squad.disbandTick = tick    -- the engine dropped the emptied group on the new command
-        return
+        if objective then field.closeObjective(map, objective, false, tick) end
+        return false
     end
+    field.beginRaid(map, squad, goal, tick)
     group.start_moving()
     local position = group.position
     local travel = aiBrain.distance(position.x, position.y, tx, ty) / FLYER_SPEED
@@ -233,6 +213,7 @@ local function strike(map, squad, entry, kind, tick)
     squad.checkTick = squad.strikeUntil + 18000
     aiBrain.debugPrint(map, "Авианалёт (бойцов: " .. tostring(squad.startSize) .. "), " .. chatNames.name(kind) .. ": удар [gps=" .. tx .. "," .. ty
         .. "," .. map.surface.name .. "]")
+    return true
 end
 
 local function releaseObjective(map, squad, tick)
@@ -245,6 +226,7 @@ local function releaseObjective(map, squad, tick)
 end
 
 local function goHome(map, squad, tick)
+    field.finishRaid(map, squad, "unconfirmed", tick)
     releaseObjective(map, squad, tick)
     local group = squad.group
     squad.flightPhase = "return"
@@ -263,10 +245,13 @@ end
 
 local function relocateOrReturn(map, squad, tick)
     -- A lock ends the mission, including when a different group destroys it.
-    if squad.flightObjective then
+    if squad.flightObjective or squad.returnAfterStrike or not field.modeCurrent(map, squad)
+            or (squad.orderEpoch or 0) ~= (map.orderEpoch or 0)
+            or not aiPredicates.attackAllowed(map, tick) or not evolutionAllows(map) then
         goHome(map, squad, tick)
         return
     end
+    field.finishRaid(map, squad, "unconfirmed", tick)
     local ai = aiBrain.getMapAI(map)
     local losses = squad.losses or 0
     if ((squad.hops or 0) < MAX_HOPS) and (losses < squad.startSize * FLEE_LOSSES) then
@@ -274,8 +259,7 @@ local function relocateOrReturn(map, squad, tick)
         local entry, kind = pickTarget(map, ai, position.x, position.y, HOP_RANGE, squad.hitChunks, tick)
         if entry then
             squad.hops = (squad.hops or 0) + 1
-            strike(map, squad, entry, kind, tick)
-            return
+            if strike(map, squad, entry, kind, tick) then return end
         end
     end
     goHome(map, squad, tick)
@@ -288,6 +272,7 @@ local function registerFlight(map, group, size, tick)
     local universe = map.universe
     local squad = createSquad(group.position, map, group, false)
     squad.flight = true
+    squad.doctrineEpoch, squad.orderEpoch = universe.doctrineEpoch, map.orderEpoch
     squad.excluded = true       -- not counted as an attack squad
     squad.status = SQUAD_RAIDING
     squad.startSize = size
@@ -309,8 +294,9 @@ local function launch(map, squad, tick)
         squad.disbandTick = tick
         return false
     end
-    strike(map, squad, entry, kind, tick)
-    return true
+    if strike(map, squad, entry, kind, tick) then return true end
+    squad.disbandTick = tick
+    return false
 end
 
 -- a ground attack squad hands its flyers over to a flight
@@ -400,7 +386,7 @@ local function tryLaunch(map, tick)
         return
     end
     ai.nextFlightTick = tick + 600
-    if (#ai.weak == 0) or (map.points < FLIGHT_COST) or (not evolutionAllows(map)) or (not canAttack(map, tick)) then
+    if (not map.frontTargets) or (map.points < FLIGHT_COST) or (not evolutionAllows(map)) or (not canAttack(map, tick)) then
         return
     end
     local chunk = nextLaunchChunk(map, ai)
@@ -467,10 +453,6 @@ end
 -- group finished its command (target cleared, or arrived home)
 function flyerAI.dispatch(map, squad)
     local tick = game.tick
-    if not aiBrain.active(map.universe) then
-        squad.disbandTick = tick
-        return
-    end
     if #squad.group.members == 0 then
         squad.disbandTick = tick     -- the whole flight was shot down: no new command for an empty group
         return
@@ -480,27 +462,37 @@ function flyerAI.dispatch(map, squad)
         squad.disbandTick = tick     -- home: the flyers idle at the nests again
     elseif phase == "strike" then
         relocateOrReturn(map, squad, tick)
-    else
+    elseif field.modeCurrent(map, squad) and aiPredicates.attackAllowed(map, tick) and evolutionAllows(map) then
         launch(map, squad, tick)
+    else
+        squad.disbandTick = tick
     end
 end
 
 function flyerAI.onStrikeTimeout(map, squad)
     if squad.flightPhase == "strike" then
-        relocateOrReturn(map, squad, game.tick)
+        local tick = game.tick
+        if not field.modeCurrent(map, squad) or not aiPredicates.attackAllowed(map, tick) or not evolutionAllows(map) then
+            -- This timer can fire before the engine finishes its compound.
+            -- Defer the return to dispatch; do not replace the running order.
+            squad.strikeUntil, squad.returnAfterStrike = nil, true
+        else
+            relocateOrReturn(map, squad, tick)
+        end
     else
         squad.strikeUntil = nil
     end
 end
 
 -- a flyer of the flight was killed by the player
-function flyerAI.onLoss(map, squad, entity, tick)
+function flyerAI.onLoss(map, squad, entity, tick, hostileLoss)
     squad.losses = (squad.losses or 0) + 1
     if not squad.engageX then
         local position = entity.position
         squad.engageX = position.x
         squad.engageY = position.y
     end
+    if hostileLoss then field.recordRaidLoss(map, squad, squad.startSize * FLEE_LOSSES, tick) end
     if (squad.flightPhase == "strike") and (squad.losses >= squad.startSize * FLEE_LOSSES)
         and squad.group and squad.group.valid then
         aiBrain.debugPrint(map, "Авианалёт прекращает атаку; потери: " .. squad.losses .. "/" .. squad.startSize)

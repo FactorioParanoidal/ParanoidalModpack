@@ -705,11 +705,17 @@ local function onDeath(event)
 						local commandable = entity.commandable
 						local group = commandable and commandable.parent_group
 						local squad = group and universe.groupNumberToSquad[group.unique_id]
-						if squad then
+						if squad and aiBrain.field.modeCurrent(map, squad) then
+                            local hostileLoss = universe.activePlayerForceSet and universe.activePlayerForceSet[event.force.name]
 							if squad.flight then
-								flyerAI.onLoss(map, squad, entity, tick)
-							elseif aiBrain.onSquadUnitLost(map, squad, entity) then
-								squadAttack.retreatSquad(map, squad)
+								flyerAI.onLoss(map, squad, entity, tick, hostileLoss)
+                            else
+                                local retreat = aiBrain.onSquadUnitLost(map, squad, entity)
+                                if hostileLoss then
+                                    local threshold = retreat and squad.startSize * squad.retreatAt or nil
+                                    aiBrain.field.recordRaidLoss(map, squad, threshold, tick)
+                                end
+                                if retreat then squadAttack.retreatSquad(map, squad) end
 							end
 						end
 					end
@@ -879,7 +885,7 @@ local function onDeath(event)
 					local squad = universe.groupNumberToSquad[causeGroup.unique_id]
 					if squad then
 						squad.kills = (squad.kills or 0) + 1
-						if aiBrain.active(universe) then
+						if aiBrain.field.modeCurrent(map, squad) then
 							aiBrain.onSquadKill(squad, entity)
                             aiBrain.field.confirmObjective(map, squad, entity, tick)
                             aiBrain.field.recordBreach(map, squad, chunk, tick)
@@ -1195,6 +1201,7 @@ end
 
 local function onForceDiplomacyChanged(event)
 	upgrade.rebuildActivePlayerForces(universe)
+    universe.frontRevision = (universe.frontRevision or 0) + 1
 	-- local otherForce = event.force
 	-- if event.force.name == "enemy" then
 		-- otherForce = event.other_force
@@ -1224,6 +1231,7 @@ end
 
 local function onForceMerged(event)
 	upgrade.rebuildActivePlayerForces(universe)
+    universe.frontRevision = (universe.frontRevision or 0) + 1
     -- for i=#universe.activePlayerForces,1,-1 do
         -- if (universe.activePlayerForces[i] == event.source_name) then
             -- tRemove(universe.activePlayerForces, i)
@@ -1934,7 +1942,12 @@ script.on_nth_tick(36000,
 )
 
 local function on_gui_click(event)
+    local savedPlanetSettings = event.element and event.element.valid
+        and event.element.name == "rampantFixed--button_planetAISettings_ok"
 	GUI_Elements.on_gui_click(event)
+    if savedPlanetSettings then
+        for _, map in pairs(universe.maps) do aiBrain.field.syncTruce(map, game.tick) end
+    end
 	return
 end
 
@@ -1951,6 +1964,9 @@ local function applyNauvisMinEvoSetting()
     local nauvis = getNauvisAISetting()
     if nauvis then
         nauvis.minEvo = settings.global[NAUVIS_MIN_EVO_SETTING].value
+        local surface = game.surfaces.nauvis
+        local map = surface and universe.maps[surface.index]
+        if map then aiBrain.field.syncTruce(map, game.tick) end
     end
 end
 
@@ -2390,29 +2406,35 @@ commands.add_command('rampantSetAIState', "", rampantSetAIState)
 
 -- what the AI has learned on the player's surface (tactic values, streaks, targets)
 local function rampantAIReport(event)
-	local player = game.players[event.player_index]
-	local map = universe.maps[player.surface.index]
-	if not map then
-		player.print(player.surface.name .. " исключена из обработки")
-		return
-	end
-	if universe.classicAI then
-		player.print("Rampant: включён классический режим, ИИ не обучается")
-	end
-	player.print("ИИ Rampant включён на " .. map.surface.name .. ", состояние " .. chatNames.state(map.state)
-		.. ", тяжёлые модели " .. tostring(universe.heavyAI ~= false))
-	for _, line in pairs(aiBrain.report(map)) do
-		player.print(line)
-	end
-	local hives = superHives.report(universe, map.surface.index)
-	local line = "Super-hives: " .. #hives .. " (limit now "
-		.. superHives.limit(game.forces.enemy.get_evolution_factor(map.surface)) .. ")"
-	for i = 1, math.min(#hives, 5) do
-		local hive = hives[i]
-		line = line .. " [gps=" .. math.floor(hive.position.x) .. "," .. math.floor(hive.position.y) .. ","
-			.. map.surface.name .. "]"
-	end
-	player.print(line)
+    local player = event.player_index and game.get_player(event.player_index)
+    if event.player_index and not player then return end
+    local parameter = event.parameter and event.parameter:match("^%s*(.-)%s*$")
+    local surface = player and player.surface or (parameter and game.surfaces[parameter])
+    local emit = player and player.print or localised_print
+    local map = surface and universe.maps[surface.index]
+    if not map then
+        emit({"rampant-fronts.report-surface"})
+        return
+    end
+    if universe.classicAI then emit({"rampant-fronts.report-classic"}) end
+    emit("ИИ Rampant включён на " .. map.surface.name .. ", состояние " .. chatNames.state(map.state)
+        .. ", тяжёлые модели " .. tostring(universe.heavyAI ~= false))
+    for _, line in ipairs(aiBrain.report(map)) do emit(line) end
+    local hives = superHives.report(universe, surface.index)
+    local line = "Super-hives: " .. #hives .. " (limit now "
+        .. superHives.limit(game.forces.enemy.get_evolution_factor(surface)) .. ")"
+    local count, delay, saturated = 0, 0, 0
+    for _, hive in ipairs(hives) do
+        delay = math.max(delay, hive.lastDelay or 0)
+        saturated = saturated + (hive.saturated or 0)
+        local p = hive.position
+        if count < 5 and (not player or player.force.is_chunk_charted(surface, {math.floor(p.x / 32), math.floor(p.y / 32)})) then
+            line = line .. " [gps=" .. math.floor(p.x) .. "," .. math.floor(p.y) .. "," .. surface.name .. "]"
+            count = count + 1
+        end
+    end
+    emit(line)
+    emit({"rampant-fronts.report-hives", delay, saturated})
 end
 
 commands.add_command('rampantAIReport', {"description.rampantFixed--aiReportCommand"}, rampantAIReport)

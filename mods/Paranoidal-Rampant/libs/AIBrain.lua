@@ -29,6 +29,7 @@ local constants = require("Constants")
 local mapUtils = require("MapUtils")
 local chunkQueue = require("ChunkQueue")
 local field = require("FieldTactics")
+local fronts = require("FrontTargets")
 aiBrain.field = field
 local chunkPropertyUtils = require("ChunkPropertyUtils")
 
@@ -53,7 +54,7 @@ local mFloor = math.floor
 local mAbs = math.abs
 local mSqrt = math.sqrt
 
-aiBrain.BEHAVIOR_VERSION = 1
+aiBrain.BEHAVIOR_VERSION = 2
 
 -- optional modules register themselves here (HeavyTactics, FlyerAI)
 aiBrain.heavy = nil
@@ -78,6 +79,11 @@ function aiBrain.refreshSettings(universe)
     universe.heavyAI = globalSetting("rampantFixed--heavyBehavior", true)
     local classic = universe.classicAI
     local heavy = not classic and universe.heavyAI
+    if oldClassic ~= classic then
+        universe.doctrineEpoch = (universe.doctrineEpoch or 0) + 1
+        universe.frontRevision = (universe.frontRevision or 0) + 1
+    end
+    if oldHeavy ~= heavy then universe.heavyEpoch = (universe.heavyEpoch or 0) + 1 end
     if oldClassic ~= classic or oldHeavy ~= heavy then
         -- Settings events only. Do not scan a map or carry pending sorties
         -- across an interval when the doctrine was inactive.
@@ -85,6 +91,9 @@ function aiBrain.refreshSettings(universe)
             if oldClassic ~= classic then
                 if map.objectiveRaid then map.objectiveRaid.done = true end
                 map.objectiveRaid, map.fieldBreach = nil, nil
+                if map.ai then map.ai.followUps, map.ai.waves = {}, {} end
+            elseif oldHeavy and map.ai then
+                map.ai.waves = {}
             end
             if oldHeavy ~= heavy then map.trainHeatIndex = nil end
         end
@@ -502,12 +511,16 @@ function aiBrain.onPlayerChunkScored(map, chunk, baseValue, turretCount)
     local ai = getMapAI(map)
     local tick = game.tick
     local turrets = turretsAround(map, chunk)
+    fronts.defence(chunk, turrets)
     -- weak spots: valuable and barely defended
     if (baseValue >= WEAK_MIN_VALUE) and (turrets <= 2) then
         local shore = isShore(map, chunk)
         -- shore spots score a bit higher so that flights keep some targets reachable over water
-        reservoirOffer(ai.weak, WEAK_SIZE, chunk, baseValue / (1 + 2 * turrets) * (shore and 1.15 or 1), tick, turrets, shore)
+        local score = baseValue / (1 + 2 * turrets) * (shore and 1.15 or 1)
+        reservoirOffer(ai.weak, WEAK_SIZE, chunk, score, tick, turrets, shore)
+        fronts.observe(map, chunk, score, shore, tick)
     else
+        fronts.observe(map, chunk, nil, nil, tick)
         local i = reservoirFind(ai.weak, chunk)
         if i then
             reservoirRemove(ai.weak, i)
@@ -545,7 +558,12 @@ function aiBrain.seedTargets(universe)
         universe.seedMapCursor = id
         if not map.suspended and not map.indexing then
             local ai = map.ai or (next(map.chunkToPlayerBase) and getMapAI(map))
-            if ai and not ai.seeded then
+            if ai and (not ai.seeded or not ai.frontSeeded) then
+                if not ai.frontSeeded then
+                    ai.frontSeeded = true
+                    ai.seeded = nil
+                    map.seedTargetIndex = 1
+                end
                 ai.seedList, ai.seedIndex = nil, nil -- legacy temporary snapshot only
                 local index = map.seedTargetIndex or 1
                 local n = #map.processQueue
@@ -602,6 +620,7 @@ local function liveWeakScore(entry, map)
         return nil
     end
     local turrets = turretsAround(map, entry.chunk)
+    fronts.defence(entry.chunk, turrets)
     if turrets > 2 then
         return nil
     end
@@ -609,11 +628,6 @@ local function liveWeakScore(entry, map)
     return baseValue / (1 + 2 * turrets) * (entry.shore and 1.15 or 1)
 end
 aiBrain.liveWeakScore = liveWeakScore
-
-local function weakScorer(entry, d, map)
-    local score = liveWeakScore(entry, map)
-    return score and (score / (1 + d / 320) * (0.75 + mRandom() * 0.5))
-end
 
 local function strongScorer(entry, d, map)
     local turrets = turretsAround(map, entry.chunk)
@@ -628,8 +642,63 @@ local SAPPER_RANGE = 22 * CHUNK_SIZE
 local COUNTER_BATTERY_RANGE = 45 * CHUNK_SIZE
 local ARTILLERY_MEMORY = 15 * 3600
 
+function aiBrain.weakCandidates(map, x, y, range, excluded, flight, tick)
+    local picks = fronts.candidates(map, x, y, range, excluded)
+    local n, alternative = 0, false
+    for i = 1, #picks do
+        local pick = picks[i]
+        local value = liveWeakScore(pick.entry, map)
+        if value then
+            local penalty = field.frontPenalty(map, x, y, pick.chunk, flight, pick.entry.turrets, tick)
+            pick.value, pick.wait = value * penalty, penalty == 0.4
+            alternative = alternative or not pick.wait
+            n = n + 1
+            picks[n] = pick
+        end
+    end
+    local kept = 0
+    for i = 1, n do
+        if not (alternative and picks[i].wait) then
+            kept = kept + 1
+            picks[kept] = picks[i]
+        end
+    end
+    for i = kept + 1, #picks do picks[i] = nil end
+    return picks
+end
+
 function aiBrain.pickWeakTarget(map, x, y, maxDistance)
-    return pickFromReservoir(map, getMapAI(map).weak, x, y, maxDistance or RAID_RANGE, weakScorer)
+    local best, top
+    for _, pick in ipairs(aiBrain.weakCandidates(map, x, y, maxDistance or RAID_RANGE, nil, false, game.tick)) do
+        local score = pick.value / (1 + pick.distance / 320) * (0.75 + mRandom() * 0.5)
+        if not top or score > top then best, top = pick.entry, score end
+    end
+    return best
+end
+
+function aiBrain.raidGoal(map, entry, tick, exact)
+    fronts.used(map, entry)
+    local chunk = entry.chunk
+    local goal = exact and field.objective(map, chunk, tick)
+        or {x = chunk.x + 16, y = chunk.y + 16, kind = "strike", reach = 40}
+    goal.targetChunk, goal.epoch = chunk, map.universe.frontRevision
+    goal.revision, goal.defence = chunk.passRevision, entry.turrets
+    return goal
+end
+
+-- One final check per local assignment. The shortlist reserved this slot.
+function aiBrain.recheckRaid(map, goal)
+    local c = goal.targetChunk
+    if not c then return true end
+    if goal.epoch ~= map.universe.frontRevision or not chunkIsLive(map, c) or not map.chunkToPlayerBase[c]
+            or (goal.kind == "objective" and not field.validObjective(map, goal.entity)) then return false end
+    if goal.checked then return true end
+    local defence = turretsAround(map, c)
+    fronts.defence(c, defence)
+    if defence > 2 then return false end
+    goal.checked, goal.defence, goal.revision = true, defence, c.passRevision
+    goal.defenceRevision = c.frontDefenceRevision
+    return true
 end
 
 function aiBrain.pickStrongTarget(map, x, y, maxDistance)
@@ -924,9 +993,8 @@ function aiBrain.chooseTactic(map, chunk, tick, expectedWave)
         count = addCandidate(count, "probe", 0)
         count = addCandidate(count, "feint", 0)
     end
-    if #ai.weak > 0 and aiBrain.pickWeakTarget(map, ox, oy) then
-        count = addCandidate(count, "raider", 0)
-    end
+    local weak = aiBrain.pickWeakTarget(map, ox, oy)
+    if weak then count = addCandidate(count, "raider", 0) end
     if alignment then
         local sapperShare = 0
         for faction, rate in pairs(alignment) do
@@ -942,7 +1010,7 @@ function aiBrain.chooseTactic(map, chunk, tick, expectedWave)
         count = addCandidate(count, "counterBattery", 0.25)
     end
     if aiBrain.heavy and heavyActive(universe) then
-        count = aiBrain.heavy.addTacticCandidates(map, ai, chunk, tick, bigEnough, reserve, addCandidate, count)
+        count = aiBrain.heavy.addTacticCandidates(map, ai, chunk, tick, bigEnough, reserve, addCandidate, count, weak)
     end
     -- scores: learned value + leanings + optimism for the untried
     local stateBonus = STATE_TACTIC_BONUS[map.state]
@@ -967,11 +1035,11 @@ function aiBrain.chooseTactic(map, chunk, tick, expectedWave)
         tacticScores[i] = score
     end
     local exploring = ai.exploreUntil > tick
-    return softmaxPick(tacticNames, tacticScores, count, exploring and 0.3 or 0.15, exploring and 0.15 or 0.06)
+    return softmaxPick(tacticNames, tacticScores, count, exploring and 0.3 or 0.15, exploring and 0.15 or 0.06), weak
 end
 
 -- goal for a squad: approach waypoint or target, nil when nothing suits
-local function makeGoal(map, squad, chunk, spec, plan, tick)
+local function makeGoal(map, squad, chunk, spec, plan, tick, weak)
     local ai = getMapAI(map)
     local ox = chunk.x + 16
     local oy = chunk.y + 16
@@ -991,10 +1059,9 @@ local function makeGoal(map, squad, chunk, spec, plan, tick)
     end
     local target = spec.target
     if target == "weak" then
-        local entry = aiBrain.pickWeakTarget(map, ox, oy)
-        if entry then
-            local goal = field.objective(map, entry.chunk, tick)
-            return goal or {x = entry.chunk.x + 16, y = entry.chunk.y + 16, kind = "strike", reach = 40}
+        if weak then
+            field.note(map, "ground-selected", tick)
+            return aiBrain.raidGoal(map, weak, tick, true)
         end
     elseif target == "strong" then
         local entry = aiBrain.pickStrongTarget(map, ox, oy)
@@ -1014,9 +1081,11 @@ end
 
 -- Sets the doctrine of a freshly formed attack squad. spec = TACTICS[tactic] or its stage1.
 -- plan: follow-up data (approach mode, reference sector). Returns false if the tactic found no goal.
-function aiBrain.prepareSquad(map, squad, chunk, tactic, spec, plan, tick)
-    local ai = getMapAI(map)
+function aiBrain.prepareSquad(map, squad, chunk, tactic, spec, plan, tick, weak)
     squad.learn = true
+    squad.doctrineEpoch = map.universe.doctrineEpoch
+    squad.heavyEpoch = map.universe.heavyEpoch
+    squad.orderEpoch = map.orderEpoch
     squad.tactic = tactic
     squad.support = spec.support
     squad.noise = spec.noise
@@ -1025,13 +1094,12 @@ function aiBrain.prepareSquad(map, squad, chunk, tactic, spec, plan, tick)
     squad.originX = chunk.x + 16
     squad.originY = chunk.y + 16
     squad.losses = squad.losses or 0
-    local goal = makeGoal(map, squad, chunk, spec, plan, tick)
+    local goal = makeGoal(map, squad, chunk, spec, plan, tick, weak)
     if goal then
         goal.untilTick = goal.untilTick or tick + 5 * 3600
         goal.dash = spec.dash
         squad.goal = goal
     end
-    ai.lastTactic = tactic
     local needsGoal = spec.target or (spec.approach and (spec.approach ~= "pincer"))
     if needsGoal and not goal then
         if not spec.support then
@@ -1133,9 +1201,12 @@ end
 
 -- learning from a finished squad (disbanded, wiped out or merged)
 function aiBrain.onSquadEnd(map, squad, tick)
-    if brainActive(map.universe) and squad.goal and squad.goal.kind == "objective" then
+    field.finishRaid(map, squad, "unconfirmed", tick)
+    if squad.goal and squad.goal.kind == "objective" then
         field.closeObjective(map, squad.goal, squad.goal.confirmed, tick)
     end
+    if squad.waveId and aiBrain.heavy and map.ai then aiBrain.heavy.onWaveSquadEnd(map, map.ai, squad) end
+    if not field.modeCurrent(map, squad) then return end
     if squad.flight then
         if aiBrain.flyers then
             aiBrain.flyers.onFlightEnd(map, squad, tick)
@@ -1156,9 +1227,6 @@ function aiBrain.onSquadEnd(map, squad, tick)
     local ai = getMapAI(map)
     if squad.engageX and squad.originX then
         updateRegion(getRegion(ai, squad.originX, squad.originY), squad, lossRatio, kills, size)
-    end
-    if squad.waveId and aiBrain.heavy then
-        aiBrain.heavy.onWaveSquadEnd(map, ai, squad)
     end
     ai.outcomes = ai.outcomes + 1
     if squad.support then

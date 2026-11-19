@@ -15,6 +15,7 @@ local scoreChunks = require("ScoreChunks")
 local squadCompression = require("SquadCompression")
 local aiBrain = require("AIBrain")
 local field = aiBrain.field
+local attackAllowed = require("AIPredicates").attackAllowed
 local unitUtils = require("UnitUtils")
 local foreignEnemies = require("ForeignEnemies")
 
@@ -466,6 +467,7 @@ local function goalMove(map, squad, group, chunk, groupPosition)
 	local tick = game.tick
     if goal.kind == "objective" then
         if goal.confirmed or goal.done or goal.untilTick < tick or not field.validObjective(map, goal.entity) then
+            field.finishRaid(map, squad, "unconfirmed", tick)
             field.closeObjective(map, goal, goal.confirmed, tick)
             squad.goal = nil
             if squadAttack.retreatSquad(map, squad) then
@@ -490,9 +492,20 @@ local function goalMove(map, squad, group, chunk, groupPosition)
 	local distance = mSqrt(dx * dx + dy * dy)
 	local kind = goal.kind
 	if distance <= goal.reach then
+        if not aiBrain.recheckRaid(map, goal) then
+            field.finishRaid(map, squad, "unconfirmed", tick)
+            if kind == "objective" then field.closeObjective(map, goal, false, tick) end
+            if not goal.issued and squad.tactic == "raider" then squad.tactic = "assault" end
+            squad.goal = nil
+            return false
+        end
         if kind == "objective" then
             group.set_command({type = defines.command.attack, target = goal.entity, distraction = DEFINES_DISTRACTION_NONE})
-            if group.valid then group.start_moving() end
+            if group.valid then
+                field.beginRaid(map, squad, goal, tick)
+                if map.ai then map.ai.lastTactic = squad.tactic end
+                group.start_moving()
+            end
             commandIssued(squad, tick)
             return true
         elseif kind == "strike" then
@@ -508,6 +521,8 @@ local function goalMove(map, squad, group, chunk, groupPosition)
 			end
 			group.set_command(universe.compoundAttackCommand)
 			if group.valid then
+                field.beginRaid(map, squad, goal, tick)
+                if map.ai then map.ai.lastTactic = squad.tactic end
 				group.start_moving()
 			end
 			commandIssued(squad, tick)
@@ -544,7 +559,7 @@ local function goalMove(map, squad, group, chunk, groupPosition)
 	goalAvoidDanger = not goal.dash
 	local x, y = positionToChunkXY(groupPosition)
 	local stepChunk, stepDirection, nextStepChunk, nextStepDirection = scoreNeighborsForRetreat(chunk,
-		getNeighborChunks(map, x, y), scoreGoalLocation, map)
+		getNeighborChunks(map, x, y), scoreGoalLocation, map, squad, tick)
 	local targetPosition = universe.position
 	local position
 	if (distance < 72) or (stepChunk == -1) then
@@ -561,7 +576,17 @@ local function goalMove(map, squad, group, chunk, groupPosition)
 		position = findMovementPosition(map.surface, targetPosition)
 	end
 	if not position then
+        if distance >= 72 and stepChunk ~= -1 and nextStepChunk == -1 then
+            field.edgeRefused(map, squad, chunk, stepChunk, tick)
+        end
+        if not goal.retriedStep then
+            goal.retriedStep = true
+            squad.nextCommandTick = tick + 60
+            return true -- consider an alternative on the next dispatch, never in this tick
+        end
+        field.finishRaid(map, squad, "unconfirmed", tick)
         if goal.kind == "objective" then field.closeObjective(map, goal, false, tick) end
+        if not goal.issued and squad.tactic == "raider" then squad.tactic = "assault" end
 		squad.goal = nil
 		return false
 	end
@@ -615,6 +640,10 @@ function squadAttack.retreatSquad(map, squad)
 	squad.status = SQUAD_RETREATING
 	squad.regroup = true
 	squad.frenzy = false
+    field.finishRaid(map, squad, "unconfirmed", game.tick)
+    if squad.goal and squad.goal.kind == "objective" then
+        field.closeObjective(map, squad.goal, false, game.tick)
+    end
 	squad.goal = nil
 	group.set_command({
 		type = defines.command.compound,
@@ -681,7 +710,26 @@ local function attackMove(map, squad)
     if squad.kamikaze then
         attackScorer = scoreAttackKamikazeLocation
     end
-	local brainOn = aiBrain.active(universe)
+	local brainOn = field.modeCurrent(map, squad)
+    local huntByDay = squad.vengence and universe.allowDaytimePlayerHunting
+    if not attackAllowed(map, game.tick, huntByDay) then
+        if not squad.retreated and squadAttack.retreatSquad(map, squad) then
+            squad.regroup = false
+        else
+            squad.disbandTick = game.tick
+        end
+        return
+    end
+    local doctrine = aiBrain.TACTICS[squad.tactic]
+    if not brainOn or (squad.learn and (squad.orderEpoch or 0) ~= (map.orderEpoch or 0))
+            or (doctrine and doctrine.heavy and (not aiBrain.heavyActive(universe)
+            or (squad.heavyEpoch or 0) ~= (universe.heavyEpoch or 0))) then
+        if squad.goal and squad.goal.kind == "objective" then
+            field.closeObjective(map, squad.goal, false, game.tick)
+        end
+        squad.goal, squad.pendingGoal = nil, nil
+    end
+    if not squad.goal then field.finishRaid(map, squad, "unconfirmed", game.tick) end
 
 	-- doctrine goal first: approach waypoint, target, ambush site or pincer stage
 	if brainOn and (squad.goal or squad.pendingGoal) then
@@ -836,6 +884,8 @@ local function attackMove(map, squad)
 		group.set_command(universe.wonderCommand)	
 	end
 	
+    if brainOn and squad.tactic and map.ai and group.valid then map.ai.lastTactic = squad.tactic end
+
 	-- DEBUG
 	-- if not squad.debugPath then
 		-- squad.debugPath = {}
@@ -897,8 +947,9 @@ end
 
 local function disbandSquad(universe, squads, groupId)
 	local squad = squads[groupId]
-	if squad.map and (squad.learn or squad.flight) then
-		aiBrain.onSquadEnd(squad.map, squad, game.tick)	-- what the AI learns from this squad
+    local map = squad.map
+	if map and map.surface.valid and universe.maps[map.surface.index] == map and (squad.learn or squad.flight) then
+		aiBrain.onSquadEnd(map, squad, game.tick)	-- what the AI learns from this squad
 	end
 	if not squad.excluded then
 		if squad.settlers then
@@ -988,7 +1039,7 @@ function squadAttack.processSquads(universe)
     else
 		local map = squad.map
         local group = squad.group
-        if not map then
+        if not map or not map.surface.valid or universe.maps[map.surface.index] ~= map then
 			disbandSquad(universe, squads, groupId)
         elseif not (group and group.valid) then
 			if squad.chunk and (squad.chunk ~= -1) then

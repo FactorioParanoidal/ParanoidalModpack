@@ -5,6 +5,7 @@ local getPlayerTurretCount = require("ChunkPropertyUtils").getPlayerTurretCount
 local floor, abs = math.floor, math.abs
 local constants = require("Constants")
 local truceInfo = require("AIPredicates").truceInfo
+local frontRegion = require("FrontTargets").region
 local CHUNK = constants.CHUNK_SIZE
 local EDGE_TTL, BREACH_TTL, RESPITE_TTL = 7200, 10800, 5400
 
@@ -50,7 +51,7 @@ local function store(map, name, key, entry, localLimit, globalLimit)
 end
 
 function field.forgetMap(map)
-    for _, name in ipairs({"fieldEdges", "fieldTargets", "fieldSources"}) do
+    for _, name in ipairs({"fieldEdges", "fieldTargets", "fieldSources", "frontFailures"}) do
         local index = map.universe[name]
         local ring = map[name]
         if index and ring then
@@ -167,9 +168,8 @@ function field.objective(map, targetChunk, tick)
     if best then
         local p = best.entity.position
         local goal = {x = p.x, y = p.y, entity = best.entity, unit = best.entity.unit_number,
-            kind = "objective", reach = 40, untilTick = tick + 7200}
+            kind = "objective", targetChunk = targetChunk, reach = 40, untilTick = tick + 7200}
         map.objectiveRaid = goal
-        event(map, "Налёт выбрал один объект инфраструктуры", tick)
         return goal
     end
 end
@@ -178,15 +178,89 @@ function field.closeObjective(map, goal, success, tick)
     if goal.done then return end
     goal.done = true
     if map.objectiveRaid == goal then map.objectiveRaid = nil end
-    event(map, success and "Объект налёта уничтожен его отрядом" or "Налёт прекратил преследовать объект", tick)
+end
+
+function field.modeCurrent(map, squad)
+    local u = map.universe
+    return not u.classicAI and (squad.doctrineEpoch or 0) == (u.doctrineEpoch or 0)
+end
+
+function field.note(map, key, tick)
+    event(map, {"rampant-fronts." .. key}, tick)
+end
+
+local function failureKey(map, x, y, chunk, flight)
+    return keyAt(map, chunk) .. ":" .. frontRegion(x, y) .. (flight and ":air" or ":ground")
+end
+
+function field.frontPenalty(map, x, y, chunk, flight, defence, tick)
+    if not map.frontFailures then return 1 end
+    local entry = lookup(map, "frontFailures", failureKey(map, x, y, chunk, flight))
+    if entry and entry.chunk == chunk and entry.revision == chunk.passRevision and entry.defence == defence
+            and entry.defenceRevision == chunk.frontDefenceRevision and entry.epoch == map.universe.frontRevision and tick < entry.untilTick then
+        return entry.count >= 2 and 0.4 or 0.8
+    end
+    return 1
+end
+
+function field.beginRaid(map, squad, goal, tick)
+    if not (goal and goal.targetChunk) or not field.modeCurrent(map, squad) then return end
+    if squad.localRaid and squad.localRaid.goal == goal then return end
+    field.finishRaid(map, squad, "unconfirmed", tick)
+    goal.issued = true
+    squad.localRaid = {goal = goal, group = squad.groupNumber, flight = squad.flight == true}
+    field.note(map, squad.flight and "air-issued" or "ground-issued", tick)
+end
+
+function field.finishRaid(map, squad, outcome, tick)
+    local raid = squad.localRaid
+    if not raid then return end
+    squad.localRaid = nil
+    local goal = raid.goal
+    if goal.kind == "objective" then field.closeObjective(map, goal, outcome == "success", tick) end
+    if not field.modeCurrent(map, squad) then return end
+    if outcome == "unconfirmed" and raid.hit then outcome = "area-contact" end
+    field.note(map, outcome, tick)
+    local c = goal.targetChunk
+    local origin = goal.origin or squad.originPosition
+    if outcome ~= "repelled" or not origin or not live(map, c) or goal.defence == nil
+            or goal.revision ~= c.passRevision or goal.defenceRevision ~= c.frontDefenceRevision
+            or goal.epoch ~= map.universe.frontRevision then return end
+    local key = failureKey(map, origin.x, origin.y, c, raid.flight)
+    local entry = lookup(map, "frontFailures", key)
+    if not entry or entry.chunk ~= c or entry.revision ~= goal.revision or entry.defence ~= goal.defence
+            or entry.defenceRevision ~= goal.defenceRevision or entry.epoch ~= goal.epoch or entry.untilTick <= tick then
+        entry = {chunk = c, defence = goal.defence, defenceRevision = goal.defenceRevision,
+            revision = goal.revision, epoch = goal.epoch, count = 0}
+        store(map, "frontFailures", key, entry, 32, 256)
+    end
+    if entry.group ~= raid.group then
+        entry.group, entry.count = raid.group, math.min(2, entry.count + 1)
+        entry.untilTick = tick + 5400
+    end
+end
+
+function field.recordRaidLoss(map, squad, threshold, tick)
+    local raid = squad.localRaid
+    if not raid or not field.modeCurrent(map, squad) then return end
+    raid.hostileLosses = (raid.hostileLosses or 0) + 1
+    if threshold and raid.hostileLosses >= threshold then
+        field.finishRaid(map, squad, "repelled", tick)
+    end
 end
 
 function field.confirmObjective(map, squad, entity, tick)
-    local goal = squad.flightObjective or squad.goal
-    if goal and goal.kind == "objective" and not goal.done and goal.untilTick >= tick
-            and goal.unit == entity.unit_number and goal.entity == entity then
-        goal.confirmed = true
-        field.closeObjective(map, goal, true, tick)
+    local raid = squad.localRaid
+    local goal = raid and raid.goal
+    if not goal or not field.modeCurrent(map, squad) then return end
+    if goal.kind == "objective" then
+        if not goal.done and goal.untilTick >= tick and goal.unit == entity.unit_number and goal.entity == entity then
+            goal.confirmed = true
+            field.finishRaid(map, squad, "success", tick)
+        end
+    else
+        local p, c = entity.position, goal.targetChunk
+        if floor(p.x / CHUNK) * CHUNK == c.x and floor(p.y / CHUNK) * CHUNK == c.y then raid.hit = true end
     end
 end
 
@@ -200,6 +274,20 @@ end
 
 function field.breachTruce(map, tick)
     return map.surface.peaceful_mode or map.state == constants.AI_STATE_PEACEFUL or truceInfo(map, tick)
+end
+
+function field.syncTruce(map, tick, closed)
+    if closed == nil then closed = field.breachTruce(map, tick) end
+    if not closed then map.pendingTruce = nil; return end
+    if not map.pendingTruce then
+        map.pendingTruce = true
+        map.orderEpoch = (map.orderEpoch or 0) + 1
+        if map.objectiveRaid and not map.objectiveRaid.issued then
+            field.closeObjective(map, map.objectiveRaid, false, tick)
+        end
+        if map.ai then map.ai.followUps, map.ai.waves = {}, {} end
+    end
+    field.cancelBreach(map, tick)
 end
 
 -- Two distinct ordinary squads must each prove a local success. Counting the
@@ -306,7 +394,7 @@ function field.report(map, lines)
     if not report then return end
     for i = 0, 7 do
         local e = report.items[(report.next + i - 1) % 8 + 1]
-        if e then lines[#lines + 1] = string.format("[Rampant · %d] %s", e.tick, e.text) end
+        if e then lines[#lines + 1] = {"", "[Rampant · " .. e.tick .. "] ", e.text} end
     end
 end
 

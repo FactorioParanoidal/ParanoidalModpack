@@ -34,6 +34,7 @@ local superHives = {}
 
 local constants = require("Constants")
 local foreignEnemies = require("ForeignEnemies")
+local hiveClock = require("HiveClock")
 
 local isForeign = foreignEnemies.isForeign
 
@@ -107,6 +108,7 @@ end
 local function forget(data, unitNumber)
     local record = data.records[unitNumber]
     if record then
+        hiveClock.drop(data.clock, unitNumber)
         data.records[unitNumber] = nil
         local index = record.surfaceIndex
         data.counts[index] = mMax(0, (data.counts[index] or 1) - 1)
@@ -205,7 +207,10 @@ function superHives.register(universe, entity)
     if data.auraVersion ~= AURA_VERSION then
         dropOldAuras(data)
     end
-    drawAura(universe, data.records[unitNumber])
+    local record = data.records[unitNumber]
+    data.clock = data.clock or hiveClock.new()
+    hiveClock.add(data.clock, unitNumber, record.nextPulse)
+    drawAura(universe, record)
 end
 
 ----------------------------------------------------------------------------------------------------------------------
@@ -320,7 +325,7 @@ local healQuery = {position = {x = 0, y = 0}, radius = HEART_RADIUS, force = "en
     limit = HEAL_QUERY_LIMIT + 1}
 local cellQuery = {area = {{0, 0}, {0, 0}}, force = "enemy", type = HEALED_TYPES, limit = CELL_QUERY_LIMIT}
 
-local function healTargets(found, record, healed, x, y)
+local function healTargets(found, record, healed, x, y, size)
     for i = 1, #found do
         local target = found[i]
         if target.valid and target ~= record.entity and not isForeign(target.name) then
@@ -330,7 +335,7 @@ local function healTargets(found, record, healed, x, y)
                 -- heals it, and partitioning never extends the heart's radius.
                 local p = target.position
                 local dx, dy = p.x - record.x, p.y - record.y
-                local right, bottom = x + CELL_SIZE, y + CELL_SIZE
+                local right, bottom = x + size, y + size
                 eligible = p.x >= x and (p.x < right or (p.x == right and dx == HEART_RADIUS))
                     and p.y >= y and (p.y < bottom or (p.y == bottom and dy == HEART_RADIUS))
                     and dx * dx + dy * dy <= HEART_RADIUS * HEART_RADIUS
@@ -361,18 +366,29 @@ local function pulse(universe, record, tick)
     else
         -- Dense clusters rotate cells; never let the same full-health prefix
         -- starve an entire side of the hive. Recheck density after each sweep.
-        local cell = record.healCell
+        local cell, part = record.healCell, record.healPart
         for _ = 1, HEAL_CELLS_PER_PULSE do
             local x = record.x - HEART_RADIUS + (cell % GRID) * CELL_SIZE
             local y = record.y - HEART_RADIUS + math.floor(cell / GRID) * CELL_SIZE
+            local size = CELL_SIZE
+            if part then
+                size = size * 0.5
+                x, y = x + (part % 2) * size, y + math.floor(part / 2) * size
+            end
             local area = cellQuery.area
             area[1][1], area[1][2] = x, y
-            area[2][1], area[2][2] = x + CELL_SIZE, y + CELL_SIZE
-            healed = healTargets(surface.find_entities_filtered(cellQuery), record, healed, x, y)
-            cell = cell + 1
+            area[2][1], area[2][2] = x + size, y + size
+            local found = surface.find_entities_filtered(cellQuery)
+            if not part and #found >= CELL_QUERY_LIMIT then
+                part = 0 -- do not heal the parent and its subcells in the same pulse
+            else
+                if #found >= CELL_QUERY_LIMIT then record.saturated = (record.saturated or 0) + 1 end
+                healed = healTargets(found, record, healed, x, y, size)
+                if part and part < 3 then part = part + 1 else cell, part = cell + 1, nil end
+            end
             if cell >= GRID * GRID or healed >= HEAL_TARGETS then break end
         end
-        record.healCell = cell < GRID * GRID and cell or nil
+        record.healCell, record.healPart = cell < GRID * GRID and cell or nil, part
     end
     if healed > 0 then
         local color = auraColor(universe, entity.name)
@@ -396,7 +412,9 @@ function superHives.update(universe, tick)
     if data.auraVersion ~= AURA_VERSION then
         dropOldAuras(data)
     end
-    local pulses = 0
+    local clock = data.clock or hiveClock.new()
+    data.clock = clock
+    -- Admit legacy records and clean up script removals in the old bounded sweep.
     for _ = 1, STEPS_PER_UPDATE do
         local nextKey, record = next(records, key)
         if nextKey == nil then
@@ -410,16 +428,28 @@ function superHives.update(universe, tick)
             if record.aura ~= AURA_VERSION then
                 drawAura(universe, record)  -- registered before the aura existed or with an old one
             end
-            if tick >= record.nextPulse then
-                pulse(universe, record, tick)
-                pulses = pulses + 1
-                if pulses >= PULSES_PER_UPDATE then
-                    break
-                end
-            end
+            hiveClock.add(clock, nextKey, record.nextPulse)
         end
     end
     data.iterator = key
+    for _ = 1, PULSES_PER_UPDATE do
+        local id, due = hiveClock.take(clock, tick)
+        if not id then break end
+        local record = records[id]
+        local entity = record and record.entity
+        if entity and entity.valid then
+            if entity.force.name == "enemy" then
+                record.lastDelay = tick - due
+                data.maxPulseDelay = mMax(data.maxPulseDelay or 0, record.lastDelay)
+                pulse(universe, record, tick)
+            else
+                record.nextPulse = tick + PULSE_TICKS
+            end
+            hiveClock.add(clock, id, record.nextPulse)
+        else
+            forget(data, id)
+        end
+    end
 end
 
 ----------------------------------------------------------------------------------------------------------------------
@@ -492,7 +522,8 @@ function superHives.report(universe, surfaceIndex)
         if entity and entity.valid and ((not surfaceIndex) or (record.surfaceIndex == surfaceIndex)) then
             result[#result + 1] = {
                 unitNumber = unitNumber, name = entity.name, surfaceIndex = record.surfaceIndex,
-                position = {x = record.x, y = record.y}, health = entity.health, maxHealth = entity.max_health
+                position = {x = record.x, y = record.y}, health = entity.health, maxHealth = entity.max_health,
+                lastDelay = record.lastDelay, saturated = record.saturated
             }
         end
     end

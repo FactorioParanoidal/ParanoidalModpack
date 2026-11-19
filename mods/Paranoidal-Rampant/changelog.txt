@@ -14,10 +14,15 @@ Date: 2026.11.16
     - Attack fires no longer pass the 1.1 size and speed values that the 2.0 fire pictures ignored; the fires look as before.
   Features:
     - In the new AI mode, squads remember repeated movement refusals and share a route penalty only if the terrain scan supports it. Ground and air raids can focus on a specific observed building, a truce discards pending breach campaigns, and destroying a nest at an active base gives that base a short respite. The AI report shows the outcomes.
+    - Local ground and air raids select from nearby districts, not a single surface-wide weak-target shortlist. The report distinguishes selection, issued orders and attributed outcomes.
+    - Rail ambushes require repeat observed transits by hostile trains; a single sample or dwelling in one chunk is not enough. Player presence is unchanged.
   Optimizations:
+    - Due super-hive pulses share a deadline queue without catch-up bursts. Saturated healing cells subdivide within the existing query budget.
     - Train ambush sampling maintains a train index from events after seeding it once per surface; updates visit at most 80 entries per surface and sample at most 40 moving trains.
     - Super-hives bound heal queries. Dense colonies rotate through small cells instead of repeating a full enumeration every pulse.
   Bugfixes:
+    - New ordinary battle orders and flight retargets respect current truce and daytime limits. Old orders are not erased in combat, but cancelled campaigns do not resume.
+    - The AI report works from the server console with an explicit surface; player output omits uncharted hive positions.
     - Chunk removal, recreation and surface clear no longer leave live references in scan queues. Existing surfaces are indexed in bounded batches.
     - Failed releases preserve the contents of compressed squads, including quality. Ordinary, detached and underground releases share a bounded attempt budget.
     - Queued reprisals respect the truce, flyer champions respect real surface evolution, and flight and resource-settler admission respect their limits and budget.

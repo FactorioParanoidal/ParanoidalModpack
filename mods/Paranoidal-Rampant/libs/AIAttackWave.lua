@@ -444,7 +444,7 @@ local function addSpiders(map, squad, scaledWaveSize, foundUnits)
 end
 
 -- extra squads of two-squad tactics (second probe, second pincer arm) and the delayed main strike
-local function formTacticExtras(map, chunk, tick, tactic, firstSquad, squadDirection, unitCount, finalSquadCost)
+local function formTacticExtras(map, chunk, tick, tactic, firstSquad, squadDirection, unitCount, finalSquadCost, weak)
 	local universe = map.universe
 	local spec = TACTICS[tactic]
 	local stage1 = spec.stage1
@@ -476,7 +476,7 @@ local function formTacticExtras(map, chunk, tick, tactic, firstSquad, squadDirec
 		end
 	end
 	if (stage1 and (stage1.approach == "pincer")) and aiBrain.heavy then
-		aiBrain.heavy.preparePincer(map, squads, chunk, tick)
+		aiBrain.heavy.preparePincer(map, squads, chunk, tick, weak)
 	end
 	if spec.followUp and firstSquad.goal and firstSquad.goal.kind == "approach" then
 		aiBrain.scheduleFollowUp(map, chunk, tactic, tick, {approach = spec.approach, refSector = firstSquad.goalSector})
@@ -497,8 +497,9 @@ end
 function aiAttackWave.formSquads(map, chunk, tick, remoteInterfaceParameters, plan)
     if not aiPredicates.attackAllowed(map, tick) then return false end
 	local external = remoteInterfaceParameters and remoteInterfaceParameters.external
-    local ordinary = not (remoteInterfaceParameters or plan) and aiBrain.active(map.universe)
-    if ordinary and field.held(map, chunk, tick) then return false end
+    local localAttack = not remoteInterfaceParameters and aiBrain.active(map.universe)
+    local ordinary = localAttack and not plan
+    if localAttack and field.held(map, chunk, tick) then return false end
 	if (not plan) and (not external) and chunk.nextSquadTick and (chunk.nextSquadTick > tick) then
 		return false
 	end
@@ -526,7 +527,7 @@ function aiAttackWave.formSquads(map, chunk, tick, remoteInterfaceParameters, pl
             squad, squadPosition = placeSquad(map, chunk, squadDirection)
             if squad then
 				-- tactic (new behaviour only; remote-created squads keep the old one)
-				local tactic
+				local tactic, weak
 				local spec
                 local breach = ordinary and field.breachFor(map, chunk, tick)
 				if not remoteInterfaceParameters then
@@ -535,7 +536,7 @@ function aiAttackWave.formSquads(map, chunk, tick, remoteInterfaceParameters, pl
 					elseif plan then
 						tactic = plan.tactic
 					else
-						tactic = aiBrain.chooseTactic(map, chunk, tick, config.getAttackWaveSize(map))
+						tactic, weak = aiBrain.chooseTactic(map, chunk, tick, config.getAttackWaveSize(map))
 					end
 					if tactic then
 						spec = TACTICS[tactic]
@@ -589,11 +590,11 @@ function aiAttackWave.formSquads(map, chunk, tick, remoteInterfaceParameters, pl
 
 					if tactic then
 						squad.startSize = foundUnits
-						aiBrain.prepareSquad(map, squad, chunk, tactic, spec, plan, tick)
+						aiBrain.prepareSquad(map, squad, chunk, tactic, spec, plan, tick, weak)
                         if breach then field.useBreach(map, squad, breach, tick) end
 						aiBrain.describeSquad(map, squad, plan and "follow-up" or nil, foundUnits, squadPosition)
 						if not plan then
-							formTacticExtras(map, chunk, tick, tactic, squad, squadDirection, scaledWaveSize, finalSquadCost)
+							formTacticExtras(map, chunk, tick, tactic, squad, squadDirection, scaledWaveSize, finalSquadCost, weak)
 						end
 					end
 					

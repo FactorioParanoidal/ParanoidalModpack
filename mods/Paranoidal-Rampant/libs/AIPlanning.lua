@@ -382,7 +382,7 @@ local function planningMap(map, tick)
 		local truceEndTick = map.firstStateTick + planetAISetting.peacePeriod * 3600		
 		-----------------
 		if ((truceEvo > evo) or (truceEndTick > tick)) then
-            if map.fieldBreach and aiBrain.active(universe) then aiBrain.field.cancelBreach(map, tick) end
+            aiBrain.field.syncTruce(map, tick, true)
 			if not (map.state == constants.AI_STATE_PEACEFUL) then
 				map.state = constants.AI_STATE_PEACEFUL
 				map.truceEndTick = truceEndTick
@@ -428,6 +428,7 @@ local function planningMap(map, tick)
 	end	
 	--------------------
 
+    aiBrain.field.syncTruce(map, tick, map.surface.peaceful_mode or map.state == AI_STATE_PEACEFUL)
 	if not mapStateChanged then
 		if universe.aiNocturnalMode 
 			and siegeAIToggle

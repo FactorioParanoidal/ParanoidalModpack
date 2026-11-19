@@ -166,7 +166,7 @@ local function bestNeighbor(map, chunk, neighbors, scoreFunction, validFunction,
 end
 
 -- Second step from fromChunk (never back to excludeChunk); it must score above threshold.
-local function bestNextStep(map, fromChunk, excludeChunk, scoreFunction, threshold, defaultDirection)
+local function bestNextStep(map, fromChunk, excludeChunk, scoreFunction, threshold, defaultDirection, fieldSquad, tick)
     local nextChunk = -1
     local nextScore = threshold
     local nextDirection = defaultDirection
@@ -178,6 +178,7 @@ local function bestNextStep(map, fromChunk, excludeChunk, scoreFunction, thresho
                 canMoveChunkDirection(map, x, fromChunk, neighborChunk)
             then
                 local score = scoreFunction(map, neighborChunk)
+                if fieldSquad then score = field.edgeScore(map, fieldSquad, fromChunk, neighborChunk, score, tick) end
                 if (score > nextScore) then
                     nextScore = score
                     nextChunk = neighborChunk
@@ -200,7 +201,7 @@ function movementUtils.scoreNeighborsForAttack(map, chunk, neighborDirectionChun
     if (chunk ~= -1) and (scoreFunction(map, chunk) >= bestScore) then
         pheromoneUtils.processStaticPheromone(map, chunk, {recursion = true, color = {1, 1, 1}})
     end
-    local nextHighestChunk, nextHighestDirection = bestNextStep(map, highestChunk, chunk, scoreFunction, highestScore, nil)
+    local nextHighestChunk, nextHighestDirection = bestNextStep(map, highestChunk, chunk, scoreFunction, highestScore, nil, fieldSquad, tick)
     return highestChunk, highestDirection, nextHighestChunk, nextHighestDirection
 end
 
@@ -232,10 +233,10 @@ end
 --[[
     Expects all neighbors adjacent to a chunk
 --]]
-function movementUtils.scoreNeighborsForRetreat(chunk, neighborDirectionChunks, scoreFunction, map)
+function movementUtils.scoreNeighborsForRetreat(chunk, neighborDirectionChunks, scoreFunction, map, fieldSquad, tick)
     local highestChunk, highestDirection, highestScore = bestNeighbor(map, chunk, neighborDirectionChunks,
-        scoreFunction, nil, true, true, nil)
-    local nextHighestChunk, nextHighestDirection = bestNextStep(map, highestChunk, chunk, scoreFunction, highestScore, nil)
+        scoreFunction, nil, true, true, nil, nil, nil, fieldSquad, tick)
+    local nextHighestChunk, nextHighestDirection = bestNextStep(map, highestChunk, chunk, scoreFunction, highestScore, nil, fieldSquad, tick)
     return highestChunk, highestDirection, nextHighestChunk, nextHighestDirection
 end
 

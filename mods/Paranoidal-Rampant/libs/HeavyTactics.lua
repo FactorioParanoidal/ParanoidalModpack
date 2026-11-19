@@ -107,6 +107,7 @@ function heavyTactics.recordPresence(map, chunk, tick, amount)
     end
 end
 
+local railEvidence = require("RailEvidence")
 local TRAIN_VISITS_PER_SCAN = 80
 -- Same scope as the former periodic query. The engine has no train iterator
 -- or limit; once per map this preserves continuously moving pre-existing trains.
@@ -133,6 +134,7 @@ end
 local function removeTrain(index, id)
     local slot = id and index.slots[id]
     if not slot then return end
+    railEvidence.drop(index, id)
     local count = #index.ids
     local last = index.ids[count]
     index.ids[slot], index.slots[last] = last, slot
@@ -157,6 +159,10 @@ function heavyTactics.observeTrain(universe, event)
     removeTrain(index, event.old_train_id_1)
     removeTrain(index, event.old_train_id_2)
     insertTrain(index, train)
+    if event.old_train_id_1 or event.old_train_id_2 then
+        index.railRequireMove = index.railRequireMove or {}
+        index.railRequireMove[train.id] = true
+    end
 end
 
 local function seedTrains(map, index, maySnapshot)
@@ -202,7 +208,9 @@ local function scanTrains(map, tick, maySnapshot)
             if train.speed ~= 0 and not seen[id] then
                 seen[id] = true
                 local chunk = getChunkByPosition(map, stock.position)
-                if chunk ~= -1 then heavyTactics.recordPresence(map, chunk, tick, 4) end
+                if railEvidence.visit(map, index, id, stock.force.name, chunk, tick) then
+                    heavyTactics.recordPresence(map, chunk, tick, 4)
+                end
                 sampled = sampled + 1
                 if sampled >= TRAINS_PER_SCAN then break end
             end
@@ -274,10 +282,10 @@ local function pickInfraTarget(map, ai, x, y)
     end)
 end
 
-function heavyTactics.addTacticCandidates(map, ai, chunk, tick, expectedWave, reserve, addCandidate, count)
+function heavyTactics.addTacticCandidates(map, ai, chunk, tick, expectedWave, reserve, addCandidate, count, weak)
     local ox = chunk.x + 16
     local oy = chunk.y + 16
-    if reserve and (expectedWave >= TACTICS.pincer.minWave) and (#ai.weak > 0) and aiBrain.pickWeakTarget(map, ox, oy) then
+    if reserve and (expectedWave >= TACTICS.pincer.minWave) and weak then
         count = addCandidate(count, "pincer", 0)
     end
     if (#ai.heatTop > 0) and pickAmbushSite(map, ai, ox, oy, tick) then
@@ -310,11 +318,10 @@ end
 ----------------------------------------------------------------------------------------------------------------------
 -- pincer waves
 
-function heavyTactics.preparePincer(map, squads, chunk, tick)
+function heavyTactics.preparePincer(map, squads, chunk, tick, entry)
     local ai = aiBrain.getMapAI(map)
     local ox = chunk.x + 16
     local oy = chunk.y + 16
-    local entry = aiBrain.pickWeakTarget(map, ox, oy)
     if (not entry) or (#squads < 2) then
         for i = 1, #squads do
             squads[i].tactic = "assault"     -- no wave possible: plain attack

@@ -719,8 +719,9 @@ local function processFollowUp(map, tick)
 end
 
 function mapProcessor.processSpawners(map, tick, remoteInterfaceParameters)
-    if map.fieldBreach and aiBrain.active(map.universe) and aiBrain.field.breachTruce(map, tick) then
-        aiBrain.field.cancelBreach(map, tick)
+    if aiBrain.active(map.universe) and (map.fieldBreach or (map.ai and map.ai.followUps[1]))
+            and aiBrain.field.breachTruce(map, tick) then
+        aiBrain.field.syncTruce(map, tick, true)
     end
     if (map.state ~= AI_STATE_PEACEFUL) then
 		local ai = map.ai
