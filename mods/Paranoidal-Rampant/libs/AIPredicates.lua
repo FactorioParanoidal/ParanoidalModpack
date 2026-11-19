@@ -21,17 +21,48 @@ local AI_STATE_GROWING = constants.AI_STATE_GROWING
 
 -- module code
 
+local function truceValue(proposed, stored, max)
+    if type(proposed) == "number" and proposed >= 0 and proposed <= max then return proposed end
+    if type(stored) == "number" and stored >= 0 and stored <= max then return stored end
+end
+
+-- Invalid edits keep the previous value; a save already missing a value uses the planet default.
+function aiPredicates.planetTruceValues(name, row, minEvo, period)
+    return truceValue(minEvo, row.minEvo, 100)
+            or (name == "nauvis" and settings.global["rampantFixed--nauvisMinEvo"].value
+                or (name == "vulcanus" and 25 or 20)),
+        truceValue(period, row.peacePeriod, math.floor(2^53 / 3600)) or (name == "nauvis" and 60 or 120)
+end
+
+aiPredicates.FLYER_MIN_EVOLUTION = 0.10 -- also used by the native spawn curves in SwarmUtils
+
+function aiPredicates.isRampantFlyer(name)
+    return name:find("%-flyer%-v%d+%-t%d+%-rampant$") ~= nil
+end
+
+function aiPredicates.flyerEvolutionAllows(surface)
+    return game.forces.enemy.get_evolution_factor(surface) >= aiPredicates.FLYER_MIN_EVOLUTION
+end
+
+function aiPredicates.canCreateUnitOnSurface(name, surface)
+    return not aiPredicates.isRampantFlyer(name) or aiPredicates.flyerEvolutionAllows(surface)
+end
+
 -- The settings can change before the next planning pass updates map.state.
 function aiPredicates.truceInfo(map, tick, evolution)
     local all = map.universe.planetAISettings
-    local planet = all and (all[map.surface.name] or all.others)
-    if not (planet and type(planet.minEvo) == "number") then return false end
-    local ends = (map.firstStateTick or 0) + (planet.peacePeriod or 0) * 3600
-    if tick < ends then return true, planet.minEvo end
-    local minEvolution = planet.minEvo * 0.01
-    if minEvolution <= 0 then return false, planet.minEvo end
+    local name = map.surface.name
+    local planet = all and (all[name] or all.others)
+    if not planet then
+        local ends = map.truceEndTick or 0
+        return tick < ends, nil, ends
+    end
+    local minEvo, period = aiPredicates.planetTruceValues(all[name] and name or "others", planet)
+    local ends = (map.firstStateTick or 0) + period * 3600
+    if tick < ends then return true, minEvo, ends end
+    if minEvo <= 0 then return false, minEvo, ends end
     local evo = evolution or game.forces.enemy.get_evolution_factor(map.surface)
-    return evo < minEvolution, planet.minEvo
+    return evo < minEvo * 0.01, minEvo, ends
 end
 
 function aiPredicates.attackAllowed(map, tick, allowDay)

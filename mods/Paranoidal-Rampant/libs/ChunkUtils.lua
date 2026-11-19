@@ -10,7 +10,6 @@ local constants = require("Constants")
 local mapUtils = require("MapUtils")
 local chunkPropertyUtils = require("ChunkPropertyUtils")
 local aiBrain = require("AIBrain")
-local unitUtils = require("UnitUtils")
 local foreignEnemies = require("ForeignEnemies")
 
 -- constants
@@ -340,56 +339,27 @@ function chunkUtils.initialScan(chunk, map, tick)
 					thisIsRampantEnemy = base.thisIsRampantEnemy
 				end
 				
-				if map.hasNonmoddedBiters and thisIsRampantEnemy then
-					local alignment = base.alignment
-						local unitList = surface.find_entities_filtered(universe.filteredEntitiesUnitQuery)
-						local champions = unitUtils.championUnits(universe)
-						for i=1,#unitList do
-							local unit = unitList[i]
-							if unit.valid and not (champions and champions[unit.unit_number]) and not isForeign(unit.name) then
-								unit.destroy()
-							end
-						end
-
-						for i = 1, #enemyBuildings do
-							local enemyBuilding = enemyBuildings[i]							
-							if not buildingHiveTypeLookup[enemyBuilding.name] then
-								local newEntity								
-								if needReplacement(map, enemyBuilding) then
-									newEntity = upgradeEntity(enemyBuilding, alignment, map, nil, true)
-								end	
-								if newEntity then
-									local hiveType = buildingHiveTypeLookup[newEntity.name]
-									counts[hiveType] = counts[hiveType] + 1
-								elseif enemyBuilding.valid then
-									if enemyBuilding.type == "turret" then
-										counts["turret"] = counts["turret"] + 1	-- kept foreign worms are turrets of the chunk
-									elseif not isForeign(enemyBuilding.name) then
-										unknownNests = unknownNests + 1
-									end
-								end
-							end
-						end
-						setNestCount(map, chunk, counts["spitter-spawner"] + counts["biter-spawner"] + counts["super-hive"] + unknownNests)
-						setUtilityCount(map, chunk, counts["utility"])
-						setHiveCount(map, chunk, counts["hive"])
-						setTrapCount(map, chunk, counts["trap"])
-						setTurretCount(map, chunk, counts["turret"])
-				
-				else
-                    for i=1,#enemyBuildings do
-                        local building = enemyBuildings[i]
-                        local hiveType = buildingHiveTypeLookup[building.name] or
-                            ((building.type == "turret") and "turret")
-							if hiveType then	
-								counts[hiveType] = counts[hiveType] + 1
-							elseif (building.type == "unit-spawner") and not isForeign(building.name) then
-								unknownNests = unknownNests + 1
-							end
+                for i = 1, #enemyBuildings do
+                    local building = enemyBuildings[i]
+                    if building.valid and map.hasNonmoddedBiters and thisIsRampantEnemy
+                            and not buildingHiveTypeLookup[building.name] and needReplacement(map, building) then
+                        -- The first scan may be a re-index of a populated surface. Keep its live units.
+                        building = upgradeEntity(building, base.alignment, map, nil, true, false, true) or building
                     end
-                    setNestCount(map, chunk, counts["spitter-spawner"] + counts["biter-spawner"] + counts["super-hive"] + unknownNests)
-					setTurretCount(map, chunk, counts["turret"])
-				end				
+                    if building.valid then
+                        local hiveType = buildingHiveTypeLookup[building.name] or (building.type == "turret" and "turret")
+                        if hiveType then
+                            counts[hiveType] = counts[hiveType] + 1
+                        elseif building.type == "unit-spawner" and not isForeign(building.name) then
+                            unknownNests = unknownNests + 1
+                        end
+                    end
+                end
+                setNestCount(map, chunk, counts["spitter-spawner"] + counts["biter-spawner"] + counts["super-hive"] + unknownNests)
+                setUtilityCount(map, chunk, counts["utility"])
+                setHiveCount(map, chunk, counts["hive"])
+                setTrapCount(map, chunk, counts["trap"])
+                setTurretCount(map, chunk, counts["turret"])
 				if map.suspended then
 					map.suspended = false
 					map.suspendCheckTick = tick

@@ -153,7 +153,7 @@ remote.add_interface("rampantFixed", {
 	getRampantAttackGroups = function() 
 		local groups = {}
 		for groupNumber, squad in pairs(storage.universe.groupNumberToSquad) do
-			if squad.map and squad.group and squad.group.valid then
+			if squad.map and not squad.settlers and not squad.undergoundAttack and squad.group and squad.group.valid then
 				groups[#groups+1] = squad.group
 			end
 		end
@@ -361,23 +361,18 @@ remote.add_interface("rampantFixed", {
 	-- parameters: {surfaceIndex = number,  points = number} 
 	-- return: nil or number of points
 	-- note: attack squad cost 175 points (can vary from 90 to 350, depending on various modifiers). But it is worth focusing on the value 175
-	setAI_points_ExtCtrl  = function(parameters) 
-		if (not parameters) or (not parameters.surfaceIndex) then
+	setAI_points_ExtCtrl = function(parameters)
+		local universe = storage.universe
+		if not universe.allowExternalControl or type(parameters) ~= "table" or type(parameters.surfaceIndex) ~= "number" then
 			return nil
 		end
-		local map = storage.universe.maps[parameters.surfaceIndex]
-		if not map then 
-			return nil
+		local map = universe.maps[parameters.surfaceIndex]
+		if not map then return nil end
+		local points = parameters.points
+		if points ~= nil then
+			if type(points) ~= "number" or points ~= points then return nil end
+			map.points = math.max(0, math.min(100000, points))
 		end
-		if parameters.points then		
-			if parameters.points <= 0 then
-				map.points = 0
-			elseif parameters.points > 100000 then
-				map.points = 100000
-			else
-				map.points = parameters.points	
-			end
-		end	
 		return map.points
 	end
 	,
@@ -385,11 +380,12 @@ remote.add_interface("rampantFixed", {
 	-- set AI state for specified surface.  Return nil, if no surface, or surface is ignored by Rampant, or rampantFixed--allowExternalControl is disabled
 	-- parameters: {surfaceIndex = number,  state = number} 
 	-- return: nil or number (new AI state)
-	setAI_state_ExtCtrl  = function(parameters) 
-		if (not parameters) or (not parameters.surfaceIndex) then
+	setAI_state_ExtCtrl = function(parameters)
+		local universe = storage.universe
+		if not universe.allowExternalControl or type(parameters) ~= "table" or type(parameters.surfaceIndex) ~= "number" then
 			return nil
 		end
-		local map = storage.universe.maps[parameters.surfaceIndex]
+		local map = universe.maps[parameters.surfaceIndex]
 		if not map then
 			return nil
 		end	
@@ -463,7 +459,7 @@ remote.add_interface("rampantFixed", {
 		if not (universe and universe.allowExternalControl) then
 			return nil
 		end
-		if not (parameters and parameters.surfaceIndex and (type(parameters.position) == "table")) then
+		if not (type(parameters) == "table" and type(parameters.surfaceIndex) == "number" and type(parameters.position) == "table") then
 			return nil
 		end
 		local map = universe.maps and universe.maps[parameters.surfaceIndex]
@@ -477,12 +473,12 @@ remote.add_interface("rampantFixed", {
         local x, y = position.x or position[1], position.y or position[2]
         local function finite(v) return type(v) == "number" and math.abs(v) <= 2^30 end
         if not finite(x) or not finite(y) then return 0 end
-        local units = math.floor(tonumber(parameters.units) or 0)
-		if units < 1 then
-			return 0
-		end
-		local searchRadius = math.min(math.max(tonumber(parameters.searchRadius) or 1500, 64), 3000)
-		return aiAttackWave.formStrikeSquads(map, parameters.position, math.min(units, 1000), searchRadius, game.tick)
+        local units = tonumber(parameters.units)
+        if not units or not (units >= 1 and units < math.huge) then return 0 end
+        local radius = tonumber(parameters.searchRadius)
+        if not radius or not (math.abs(radius) < math.huge) then radius = 1500 end
+        local searchRadius = math.min(math.max(radius, 64), 3000)
+		return aiAttackWave.formStrikeSquads(map, {x = x, y = y}, math.floor(math.min(units, 1000)), searchRadius, game.tick)
 	end
 
 	,

@@ -10,14 +10,16 @@ local debug_onUnitDamaged = tests.debug_onUnitDamaged
 local in_debug_list = tests.in_debug_list
 
 local constants = require("libs/Constants")
+local aiPredicates = require("libs/AIPredicates")
 
 local function setPlanetAISettings(root)
 	local universe = storage.universe
 	local title_table = root["rampantFixed--planetAISettings_table"]
 	for planetName ,planetAISetting in pairs(universe.planetAISettings) do
 		local NewAI = title_table["rampantFixed_AIStatus_"..planetName].selected_index
-		local NewPeacePeriod = tonumber(title_table["rampantFixed_AIPeacePeriod_"..planetName].text)
-		local NewMinEvo = tonumber(title_table["rampantFixed_AIMinEvo_"..planetName].text)
+		local NewMinEvo, NewPeacePeriod = aiPredicates.planetTruceValues(planetName, planetAISetting,
+			tonumber(title_table["rampantFixed_AIMinEvo_"..planetName].text),
+			tonumber(title_table["rampantFixed_AIPeacePeriod_"..planetName].text))
 		
 		local changed = not ((planetAISetting.AI == NewAI) and (planetAISetting.peacePeriod == NewPeacePeriod) and (planetAISetting.minEvo == NewMinEvo))
 		planetAISetting.changed = planetAISetting.changed or changed
@@ -106,8 +108,9 @@ function GUI_Elements.openPlanetAISettings(player_index)
 		-- title_table.add{type="sprite", name="rampantFixed_planetSprite_"..tostring(planetName), sprite=planetAISetting.icon}
 			
 		title_table.add{type="drop-down", name="rampantFixed_AIStatus_"..tostring(planetName), items = AI_dropdownList, selected_index = planetAISetting.AI}
-		title_table.add{type="textfield", name="rampantFixed_AIPeacePeriod_"..tostring(planetName), numeric = true, allow_negative = false, text = planetAISetting.peacePeriod}
-		title_table.add{type="textfield", name="rampantFixed_AIMinEvo_"..tostring(planetName), numeric = true, allow_negative = false, text = planetAISetting.minEvo}
+		local minEvo, period = aiPredicates.planetTruceValues(planetName, planetAISetting)
+		title_table.add{type="textfield", name="rampantFixed_AIPeacePeriod_"..tostring(planetName), numeric = true, allow_negative = false, text = tostring(period)}
+		title_table.add{type="textfield", name="rampantFixed_AIMinEvo_"..tostring(planetName), numeric = true, allow_negative = false, text = tostring(minEvo)}
 	end	
 	
 	root.add{type="label", name="rampantFixed_planetAISettings_Note2", caption={"description.rampantFixed--planetAISettings_Note2"}}

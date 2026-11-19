@@ -276,6 +276,8 @@ local function prepMap(surface)
         universe.maps[surfaceIndex] = map
     end
 
+    universe.baseGeneration = (universe.baseGeneration or 0) + 1
+    map.baseGeneration = universe.baseGeneration
     map.processedChunks = 0
     map.processQueue = {}
     map.chunkQueueSlots = {}
@@ -846,25 +848,35 @@ local function onDeath(event)
                             local newEntity = surface.create_entity({
                                     position=entity.position,
                                     name=convertTypeToDrainCrystal(entity.force.get_evolution_factor(surface), conversion),
-                                    direction=entity.direction
+                                    direction=entity.direction,
+                                    quality=entity.quality
                             })
-                            if (conversion == "pole") then
-                                local targetEntity = surface.create_entity({
-                                        position=entity.position,
-                                        name="pylon-target-rampant",
-                                        direction=entity.direction
-                                })
-                                targetEntity.backer_name = ""
-                                local pair = {targetEntity, newEntity}
-                                map.drainPylons[targetEntity.unit_number] = pair
-                                map.drainPylons[newEntity.unit_number] = pair
-                                local wire_connector = entity.get_wire_connector(defines.wire_connector_id.pole_copper)
-								local newWire_connector = newEntity.get_wire_connector(defines.wire_connector_id.pole_copper)
-								for _, wireConnection in pairs(wire_connector.connections) do
-									newWire_connector.connect_to(wireConnection.target, true)
-								end
-                            elseif newEntity.backer_name then
-                                newEntity.backer_name = ""
+                            if newEntity and newEntity.valid then
+                                if conversion == "pole" then
+                                    local targetEntity = surface.create_entity({
+                                            position=entity.position,
+                                            name="pylon-target-rampant",
+                                            direction=entity.direction,
+                                            quality=entity.quality
+                                    })
+                                    if targetEntity and targetEntity.valid then
+                                        targetEntity.backer_name = ""
+                                        local pair = {targetEntity, newEntity}
+                                        map.drainPylons[targetEntity.unit_number] = pair
+                                        map.drainPylons[newEntity.unit_number] = pair
+                                        local connector = entity.get_wire_connector(defines.wire_connector_id.pole_copper, false)
+                                        local replacement = newEntity.get_wire_connector(defines.wire_connector_id.pole_copper, true)
+                                        if connector and replacement then
+                                            for _, wire in pairs(connector.connections) do
+                                                if wire.target.valid then replacement.connect_to(wire.target, true) end
+                                            end
+                                        end
+                                    else
+                                        newEntity.destroy() -- never leave one half of the drain pylon
+                                    end
+                                elseif newEntity.backer_name then
+                                    newEntity.backer_name = ""
+                                end
                             end
                         end
                     end
@@ -917,7 +929,7 @@ local function onEnemyBaseBuild(event)
             local base
             if universe.NEW_ENEMIES then
 				local thisIsRampantEnemy = false
-                base = findNearbyBase(map, chunk, MAXIMUM_BASE_RADIUS, BASE_CHANGING_CHANCE)
+                base = findNearbyBase(map, chunk, constants.MAXIMUM_BASE_RADIUS, BASE_CHANGING_CHANCE)
                 if not base then
 					thisIsRampantEnemy = map.hasNonmoddedBiters and thisIsNewEnemyPosition(universe, chunk.x, chunk.y)
                     base = createBase(map,
@@ -929,7 +941,7 @@ local function onEnemyBaseBuild(event)
 					if needReplacement(map, entity) then	-- if change this, look also chunkUtils.initialScan
 						entity = upgradeEntity(entity,
 										   base.alignment,
-										   map ,nil, true)
+										   map, nil, true) or entity
 					end					   
 				end						   
             end
@@ -1407,74 +1419,30 @@ local function fillAndReturnUnitProtections(entity)
 end	
  
 local function onEntityDamaged(event)
-	if not event.entity then
-		return
-	end
-	if event.entity.valid and event.entity.unit_number then
-		local entity = event.entity
-		 
-		local unitProtection = fillAndReturnUnitProtections(event.entity)
-		if (event.final_damage_amount > 0) and event.cause and (event.cause ~= event.entity) then
-			-----------------
-			if allowLongRangeImmunity and unitProtection.longRangeImmunity then
-				local incomingRange = 0
-				if event.cause and event.cause.valid then
-					if LR_exceptions[event.cause.type] then
-						incomingRange = -1
-					else	
-						incomingRange = mathUtils.euclideanDistancePoints(entity.position.x, entity.position.y, event.cause.position.x, event.cause.position.y)
-					end	
-					if incomingRange == - 1 then
-						local startHP = universe.unitProtectionData.unitCurrentHP[entity.unit_number] or (entity.max_health)
-						event.final_damage_amount = event.final_damage_amount * LR_exceptions_DamageKf
-						entity.health = startHP - event.final_damage_amount					
-						event.final_health = entity.health					
-					elseif incomingRange>unitProtection.longRangeImmunity then
-						local startHP = universe.unitProtectionData.unitCurrentHP[entity.unit_number] or (entity.max_health)
-						if LR_DamageKf > 0 then
-							event.final_damage_amount = event.final_damage_amount * LR_DamageKf
-						else
-							event.final_damage_amount =	0
-						end	
-						entity.health = startHP - event.final_damage_amount					
-						event.final_health = entity.health					
-						-- game.print("LRI:"..startHP.."-("..event.original_damage_amount.."->"..event.final_damage_amount..")="..entity.health)	-- DEBUG
-					end	
-				end	
-			end
-			-----------------
-			if allowOneshotProtection and unitProtection.overdamageProtection and (event.original_damage_amount > OVERDAMAGEPROTECTION_THRESHOLD) and (event.original_damage_amount >= event.final_damage_amount)  then
-				local maxDamage = unitProtection.overdamageProtection
-				local startHP = universe.unitProtectionData.unitCurrentHP[entity.unit_number] or (entity.max_health)
-				if maxDamage<event.original_damage_amount then
-					local final_damage_amount = maxDamage*(event.final_damage_amount/event.original_damage_amount)
-					if OP_efficienty < 1 then
-						final_damage_amount = event.final_damage_amount - (event.final_damage_amount - final_damage_amount) * OP_efficienty
-					end
-					event.final_damage_amount = final_damage_amount
-					entity.health = startHP - final_damage_amount
-				end	
-				event.final_health = entity.health
-				--game.print("OP:"..startHP.."-("..event.original_damage_amount.."->"..event.final_damage_amount..")="..entity.health..", source = ".. tostring(event.cause.name))		-- DEBUG
-			end
-		end
-		
-		-- canceled since 1.5.0
-		-- if entity.health<=0 then 
-			-- local compressedUnit = universe.compressedUnits[entity.unit_number]
-			-- if compressedUnit and (compressedUnit.count > 1) then
-				-- onUnitPreKilled(universe, entity.surface, entity, event.force, event.cause)
-			-- end	
-		-- end	
-		
-		if unitProtection.longRangeImmunity or unitProtection.overdamageProtection then
-			if entity.health<=0 then
-				universe.unitProtectionData.unitCurrentHP[entity.unit_number] = nil
-			else
-				universe.unitProtectionData.unitCurrentHP[entity.unit_number] = entity.health
-			end
-		end
-	end		
+    local entity, cause = event.entity, event.cause
+    local damage = event.final_damage_amount
+    if not (entity and entity.valid and entity.unit_number and damage > 0 and cause and cause ~= entity) then return end
+
+    local protection = fillAndReturnUnitProtections(entity)
+    if allowLongRangeImmunity and protection.longRangeImmunity and cause.valid then
+        if LR_exceptions[cause.type] then
+            damage = damage * LR_exceptions_DamageKf
+        elseif mathUtils.euclideanDistancePoints(entity.position.x, entity.position.y,
+                cause.position.x, cause.position.y) > protection.longRangeImmunity then
+            damage = damage * LR_DamageKf
+        end
+    end
+    local original = event.original_damage_amount
+    local cap = protection.overdamageProtection
+    if allowOneshotProtection and cap and original > OVERDAMAGEPROTECTION_THRESHOLD
+            and original >= damage and original > cap then
+        damage = damage - (damage - cap * (damage / original)) * OP_efficienty
+    end
+    if damage ~= event.final_damage_amount then
+        -- Correct only this hit. Filtered-out damage and healing can happen between events.
+        local before = math.min(entity.max_health, event.final_health + event.final_damage_amount)
+        entity.health = before - damage
+    end
 end
 
 local entityDamagedFilters = {
@@ -2363,21 +2331,22 @@ end
 commands.add_command('rampantSetSurfaces', "", setSurfaces)
 
 local function rampantSetAIState(event)
-    local surfaceIndex = game.players[event.player_index].surface.index
-    local map = universe.maps[surfaceIndex]
-	if not map then
-		local surfaceName = game.players[event.player_index].surface.name
-		game.print(surfaceName .. " исключена из обработки ")
-		return
-	end	
+    local player = event.player_index and game.get_player(event.player_index)
+    local surface = player and player.surface or (not event.player_index and game.surfaces.nauvis)
+    local emit = player and game.print or localised_print
+    local map = surface and universe.maps[surface.index]
+    if not map then
+        emit("Rampant: поверхность не управляется модом.")
+        return
+    end
 
-    game.print(map.surface.name .. ": состояние ИИ — " .. chatNames.state(map.state))
+    emit(map.surface.name .. ": состояние ИИ — " .. chatNames.state(map.state))
 
     if event.parameter then
         local target = tonumber(event.parameter)
 
         if (target == nil) then
-            game.print("недопустимый параметр")
+            emit("недопустимый параметр")
             return
         end
 
@@ -2389,7 +2358,7 @@ local function rampantSetAIState(event)
 			and target ~= constants.AI_STATE_ONSLAUGHT
 			and target ~= constants.AI_STATE_GROWING
 			) then
-            game.print(target .. " не является допустимым состоянием")
+            emit(target .. " не является допустимым состоянием")
             return
         else
             
@@ -2397,7 +2366,7 @@ local function rampantSetAIState(event)
 			if map.state == constants.AI_STATE_GROWING then
 				aiPlanning.updateBasesToGrow(map, game.tick, false)
 			end	
-            game.print(map.surface.name .. ": состояние ИИ изменено на «" .. chatNames.state(map.state) .. "»")
+            emit(map.surface.name .. ": состояние ИИ изменено на «" .. chatNames.state(map.state) .. "»")
         end
     end
 end
@@ -2470,13 +2439,16 @@ end
 --commands.add_command('rampantCreateCompressedBiter', "", rampantCreateCompressedBiter)
 
 local function resetResourceSeetlerTick(event)
-    local surfaceIndex = game.players[event.player_index].surface.index
-    local map = universe.maps[surfaceIndex]
-	if map then
-		map.resourceSettleTick = 0
-		game.print("Тик стабилизации ресурсов сброшен")
-		return
-	end	
+    local player = event.player_index and game.get_player(event.player_index)
+    local surface = player and player.surface or (not event.player_index and game.surfaces.nauvis)
+    local emit = player and game.print or localised_print
+    local map = surface and universe.maps[surface.index]
+    if map then
+        map.resourceSettleTick = 0
+        emit("Тик стабилизации ресурсов сброшен")
+    else
+        emit("Rampant: поверхность не управляется модом.")
+    end
 end
 commands.add_command('resetResourceSeetlerTick', "", resetResourceSeetlerTick)
 

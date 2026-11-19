@@ -521,8 +521,10 @@ local function goalMove(map, squad, group, chunk, groupPosition)
 			end
 			group.set_command(universe.compoundAttackCommand)
 			if group.valid then
-                field.beginRaid(map, squad, goal, tick)
-                if map.ai then map.ai.lastTactic = squad.tactic end
+                if not squad.external then
+                    field.beginRaid(map, squad, goal, tick)
+                    if map.ai then map.ai.lastTactic = squad.tactic end
+                end
 				group.start_moving()
 			end
 			commandIssued(squad, tick)
@@ -576,7 +578,7 @@ local function goalMove(map, squad, group, chunk, groupPosition)
 		position = findMovementPosition(map.surface, targetPosition)
 	end
 	if not position then
-        if distance >= 72 and stepChunk ~= -1 and nextStepChunk == -1 then
+        if not squad.external and distance >= 72 and stepChunk ~= -1 and nextStepChunk == -1 then
             field.edgeRefused(map, squad, chunk, stepChunk, tick)
         end
         if not goal.retriedStep then
@@ -710,7 +712,8 @@ local function attackMove(map, squad)
     if squad.kamikaze then
         attackScorer = scoreAttackKamikazeLocation
     end
-	local brainOn = field.modeCurrent(map, squad)
+    local externalGoal = squad.external and squad.goal and squad.goal.kind == "strike"
+    local brainOn = not squad.external and field.modeCurrent(map, squad)
     local huntByDay = squad.vengence and universe.allowDaytimePlayerHunting
     if not attackAllowed(map, game.tick, huntByDay) then
         if not squad.retreated and squadAttack.retreatSquad(map, squad) then
@@ -721,9 +724,9 @@ local function attackMove(map, squad)
         return
     end
     local doctrine = aiBrain.TACTICS[squad.tactic]
-    if not brainOn or (squad.learn and (squad.orderEpoch or 0) ~= (map.orderEpoch or 0))
+    if not externalGoal and (not brainOn or (squad.learn and (squad.orderEpoch or 0) ~= (map.orderEpoch or 0))
             or (doctrine and doctrine.heavy and (not aiBrain.heavyActive(universe)
-            or (squad.heavyEpoch or 0) ~= (universe.heavyEpoch or 0))) then
+            or (squad.heavyEpoch or 0) ~= (universe.heavyEpoch or 0)))) then
         if squad.goal and squad.goal.kind == "objective" then
             field.closeObjective(map, squad.goal, false, game.tick)
         end
@@ -731,8 +734,8 @@ local function attackMove(map, squad)
     end
     if not squad.goal then field.finishRaid(map, squad, "unconfirmed", game.tick) end
 
-	-- doctrine goal first: approach waypoint, target, ambush site or pincer stage
-	if brainOn and (squad.goal or squad.pendingGoal) then
+	-- Explicit orders are independent of doctrine, but still pass the attack admission above.
+	if externalGoal or (brainOn and (squad.goal or squad.pendingGoal)) then
 		if not squad.goal then
 			squad.goal = squad.pendingGoal
 			squad.pendingGoal = nil

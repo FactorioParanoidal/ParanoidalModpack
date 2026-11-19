@@ -75,7 +75,8 @@ function chunkProcessor.indexExistingChunks(map, tick)
         if map.surface.is_chunk_generated(position) then
             -- on_chunk_generated, if pending, owns the delayed RSO scan.
             local key = "x"..x.."y"..y.."m"..map.surface.index
-            if not map.universe.pendingChunks[key] then scanGenerated(map, x, y, tick, false) end
+            local pending = map.universe.pendingChunks[key]
+            if not pending or pending.map ~= map then scanGenerated(map, x, y, tick, false) end
         end
     end
 end

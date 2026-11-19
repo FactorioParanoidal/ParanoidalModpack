@@ -9,6 +9,7 @@ local mathUtils = require("libs/MathUtils")
 local scoreChunks = require("ScoreChunks")
 local unitGroupUtils = require("libs/UnitGroupUtils")
 local unitUtils = require("UnitUtils")
+local canCreateUnitOnSurface = require("AIPredicates").canCreateUnitOnSurface
 local foreignEnemies = require("ForeignEnemies")
 local peacefulMap = require("PeacefulMap")
 
@@ -212,6 +213,7 @@ local function digOut(undergroundSquad, targetPosition)
 		for member, quality_count in pairs (members) do
 			local entityName = sGsub(member, "nuclear", "suicide")	-- nuclear biters --> suicide biters
 			if prototypes.entity[entityName] then	-- once per unit name (was a prototype query per unit)
+				local allowed = canCreateUnitOnSurface(entityName, surface)
 				for quality, count in pairs (quality_count) do
 					-- quality names; saves made before 9.02.14 may hold prototype objects or false here
 					local qualityName
@@ -221,7 +223,7 @@ local function digOut(undergroundSquad, targetPosition)
 						qualityName = quality.name
 					end
 					local left = count
-					while (left > 0) and (attempts < DIG_OUT_AT_ONCE) do
+					while allowed and (left > 0) and (attempts < DIG_OUT_AT_ONCE) do
 						if unitsInTile > 5 then
 							unitsInTile = 0
 							digOutIndex, digOutPosition = next(digOutPositions, digOutIndex)
@@ -257,12 +259,13 @@ local function digOut(undergroundSquad, targetPosition)
 						end
 					end
 					if left > 0 then
-						-- over the limit: the rest comes out gradually (was one more unit per name and quality)
+						-- Over the cap, a failed spawn, or a flyer waiting for evolution: release later.
+						local releasePosition = digOutPosition or digOutPositions[1]
 						queuedMembers[#queuedMembers + 1] = {
 							count = left,
                             surfaceIndex = surface.index,
 							name = entityName,
-							position = {x = digOutPosition.x, y = digOutPosition.y},
+							position = {x = releasePosition.x, y = releasePosition.y},
 							quality = qualityName,
 							force = "enemy"
 							}

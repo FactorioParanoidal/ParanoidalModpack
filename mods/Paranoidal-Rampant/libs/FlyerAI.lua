@@ -38,13 +38,12 @@ local mRandom = math.random
 local mFloor = math.floor
 local mMax = math.max
 local mMin = math.min
-local sFind = string.find
 
 local DEFINES_DISTRACTION_NONE = defines.distraction.none
 local DEFINES_DISTRACTION_BY_DAMAGE = defines.distraction.by_damage
 local DEFINES_DISTRACTION_BY_ANYTHING = defines.distraction.by_anything
 
-flyerAI.MIN_EVOLUTION = 0.1         -- same gate as the flyer spawn tables
+flyerAI.MIN_EVOLUTION = aiPredicates.FLYER_MIN_EVOLUTION
 local MIN_FLIGHT_SIZE = 4
 local MIN_SPLIT_SIZE = 3
 local GATHER_RADIUS = 40
@@ -68,7 +67,7 @@ local function loadFlyerNames()
     flyerNameList = {}
     flyerNameSet = {}
     for name in pairs(prototypes.get_entity_filtered({{filter = "type", type = "unit"}})) do
-        if sFind(name, "%-flyer%-v%d+%-t%d+%-rampant$") then
+        if aiPredicates.isRampantFlyer(name) then
             flyerNameList[#flyerNameList + 1] = name
             flyerNameSet[name] = true
         end
@@ -90,7 +89,7 @@ local function flyersExist()
 end
 
 local function evolutionAllows(map)
-    return game.forces.enemy.get_evolution_factor(map.surface) >= flyerAI.MIN_EVOLUTION
+    return aiPredicates.flyerEvolutionAllows(map.surface)
 end
 
 local function countFlights(universe)

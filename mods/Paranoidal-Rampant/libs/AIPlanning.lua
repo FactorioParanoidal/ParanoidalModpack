@@ -12,7 +12,7 @@ local config = require("__Paranoidal-Rampant__/config")
 local aiBrain = require("AIBrain")
 local peacefulMap = require("PeacefulMap")
 
--- local aiPredicates = require("AIPredicates")
+local aiPredicates = require("AIPredicates")
 
 -- constants
 
@@ -374,58 +374,22 @@ local function planningMap(map, tick)
 	local enabledMigration = (universe.enabledMigration and map.hasNonmoddedBiters)
 	
 	--------------------
-	local truceEvo = 0
-	local planetAISetting = universe.planetAISettings[map.surface.name]
-	planetAISetting = planetAISetting or universe.planetAISettings["others"]
-	if planetAISetting then
-		truceEvo = planetAISetting.minEvo * 0.01
-		local truceEndTick = map.firstStateTick + planetAISetting.peacePeriod * 3600		
-		-----------------
-		if ((truceEvo > evo) or (truceEndTick > tick)) then
-            aiBrain.field.syncTruce(map, tick, true)
-			if not (map.state == constants.AI_STATE_PEACEFUL) then
-				map.state = constants.AI_STATE_PEACEFUL
-				map.truceEndTick = truceEndTick
-				map.stateTick = mMax(truceEndTick, tick + 3600)
-				mapStateChanged = true
-				resetNextStateTick = false
-				map.points = 400
-				-- Paranoidal: the truce start is shown by EvoUI next to the evolution line, no chat message.
-				-- local truceLeft = mMax(math.floor((truceEndTick+5 - tick) / 3600), 0)
-				-- if truceLeft > 0 then
-					-- game.print({"description.rampantFixed--peacefullModeNotification", map.surface.name, truceLeft, planetAISetting.minEvo})
-				-- else
-					-- game.print({"description.rampantFixed--peacefullMode_LowEvoNotification", map.surface.name, planetAISetting.minEvo})
-				-- end
-			elseif (map.stateTick <= tick) then
-				map.stateTick = mMax(truceEndTick, tick + 3600)
-			end	
-		elseif (map.state == constants.AI_STATE_PEACEFUL) then
-			if (tick >= truceEndTick) and (evo >= truceEvo) then
-				endTruce(map, siegeAIToggle,  universe.raidAIToggle)
-				-- if siegeAIToggle then
-					-- map.state = AI_STATE_SIEGE
-				-- elseif universe.raidAIToggle then
-					-- map.state = AI_STATE_RAIDING	
-				-- else
-					-- map.state = AI_STATE_GROWING
-				-- end
-				mapStateChanged = true
-				resetNextStateTick = true
-				-- game.print({"description.rampantFixed--peacefullModeEndNotification", map.surface.name})
-			elseif	(tick >= truceEndTick) then
-				if (map.stateTick <= tick) then
-					map.stateTick = tick + 3600 				
-					mapStateChanged = true	
-					resetNextStateTick = false
-				end	
-			end
+	local truce, _, truceEndTick = aiPredicates.truceInfo(map, tick, evo)
+	if truce then
+		map.truceEndTick = truceEndTick
+		if map.state ~= AI_STATE_PEACEFUL then
+			map.state = AI_STATE_PEACEFUL
+			map.stateTick = mMax(truceEndTick, tick + 3600)
+			mapStateChanged = true
+			resetNextStateTick = false
+			map.points = 400
+		elseif map.stateTick <= tick then
+			map.stateTick = mMax(truceEndTick, tick + 3600)
 		end
-	elseif (tick >= truceEndTick) and (map.state == constants.AI_STATE_PEACEFUL) then
-		endTruce(map, siegeAIToggle,  universe.raidAIToggle)
+	elseif map.state == AI_STATE_PEACEFUL then
+		endTruce(map, siegeAIToggle, universe.raidAIToggle)
 		mapStateChanged = true
-		resetNextStateTick = true	
-	end	
+	end
 	--------------------
 
     aiBrain.field.syncTruce(map, tick, map.surface.peaceful_mode or map.state == AI_STATE_PEACEFUL)

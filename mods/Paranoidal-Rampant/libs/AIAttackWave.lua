@@ -37,6 +37,7 @@ local AI_SQUAD_COST = constants.AI_SQUAD_COST
 local AI_SETTLER_COST = constants.AI_SETTLER_COST
 local AI_VENGENCE_SQUAD_COST = constants.AI_VENGENCE_SQUAD_COST
 local AI_STATE_AGGRESSIVE = constants.AI_STATE_AGGRESSIVE
+local AI_STATE_GROWING = constants.AI_STATE_GROWING
 
 local COOLDOWN_RALLY = constants.COOLDOWN_RALLY
 
@@ -993,14 +994,15 @@ function aiAttackWave.processBuilders(universe, tick)
 							entity.position)
 					end
 					if newPosition then
-						buildData.builded = buildData.builded + 1
-						buildData.nextTick = tick + (buildData.buildCooldown or 3600)
-						
-						local newEntity = map.surface.create_entity({name = entityName, position = newPosition, force = entity.force, raise_built = false})
+						local newEntity = surface.create_entity({name = entityName, position = newPosition, force = entity.force, raise_built = false})
 						if newEntity and newEntity.valid then
+							buildData.builded = buildData.builded + 1
+							buildData.nextTick = tick + (buildData.buildCooldown or 3600)
 							newEntity.spawn_decorations()
-							script.raise_event(defines.events.on_biter_base_built, {entity = newEntity, tick = tick}) 
-						end						
+							script.raise_event(defines.events.on_biter_base_built, {entity = newEntity, tick = tick})
+						else
+							buildData.nextTick = tick + 300 -- retry without consuming a build slot
+						end
 						break
 					end
 					entity.destroy()

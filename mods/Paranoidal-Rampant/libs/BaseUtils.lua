@@ -11,6 +11,9 @@ local chunkPropertyUtils = require("ChunkPropertyUtils")
 local mapUtils = require("MapUtils")
 local aiBrain = require("AIBrain")
 local superHives = require("SuperHives")
+local chunkQueue = require("ChunkQueue")
+local unitUtils = require("UnitUtils")
+local foreignEnemies = require("ForeignEnemies")
 
 -- constants
 
@@ -125,31 +128,38 @@ function baseUtils.evoToBuildingLvl(evolutionFactor)
 	return 10
 end
 
+local function baseBelongsToMap(base, map)
+    if base.mapGeneration ~= map.baseGeneration then return false end
+    if map.baseGeneration then return true end
+    -- Legacy saves have no generation; compare the actual chunk objects, not their coordinates.
+    for chunk in pairs(base.chunks) do
+        if chunkQueue.isLive(map, chunk) then return true end
+    end
+    return false
+end
+
 function baseUtils.findNearbyBase(map, chunk, maxDistance, baseChangingChance)	
     local x = chunk.x
     local y = chunk.y
 
  	local closest = MAGIC_MAXIMUM_NUMBER	
 	local foundBase = getChunkBase(map, chunk)
+	if foundBase and foundBase.mapGeneration ~= map.baseGeneration then foundBase = nil end
 	if not foundBase then
 		if baseChangingChance and (mRandom() < baseChangingChance) then
 			return nil
 		else
 			local bases = map.universe.bases
-			local basesScanned = 0
 			local mapIndex = map.surface.index
-			for i, base in pairs(bases) do
-				if base.mapIndex == mapIndex then
-					basesScanned = basesScanned + 1
+			for _, base in pairs(bases) do
+				if base.mapIndex == mapIndex and base.mapGeneration == map.baseGeneration then
 					local distance = euclideanDistancePoints(base.x, base.y, x, y)
-					if (distance <= base.distanceThreshold) and (distance < closest) then
+					if distance <= base.distanceThreshold and distance < closest
+						and (not maxDistance or distance <= maxDistance) and baseBelongsToMap(base, map) then
 						closest = distance
-						foundBase = bases[i]	--base
+						foundBase = base
 					end
-				end	
-			end
-			if maxDistance and (closest > maxDistance) then
-				foundBase = nil
+				end
 			end
 		end	
 	end
@@ -522,56 +532,87 @@ function baseUtils.recycleBases(universe)
 		base = bases[id]
 		if base then
 			local map = universe.maps[base.mapIndex]
-			if not map then
-				universe.growingBases[id] = nil
-				if universe.growingBasesIterator == id then
-					universe.growingBasesIterator = nil
-				end
-				bases[id] = nil
-				return
-			end	
-			for chunk, _ in pairs(base.chunks) do
-				local chunkBase = getChunkBase(map, chunk)
-				if (not chunkBase) then
-					setChunkBase(map, chunk, base)
-					--game.print("restore lost chunk [gps=" .. chunk.x .. "," .. chunk.y .."] to base [gps=" .. base.x .. "," .. base.y .."]")	-- debug
-				elseif chunkBase.id ~= base.id then
-					base.chunks[chunk] = nil
-					chunkBase.chunks[chunk] = true
-					--game.print("reassign chunk [gps=" .. chunk.x .. "," .. chunk.y .."]".." from [gps=" .. base.x .. "," .. base.y .."] to [gps=" .. chunkBase.x .. "," .. chunkBase.y .."]")	-- debug
-				end
-			end
-			
-			local chunk = next(base.chunks, nil)
-			if not chunk then
-				--game.print("recycled base [gps=" .. base.x .. "," .. base.y .."]".. serpent.dump(base.chunks)) 	-- debug
-				universe.growingBases[id] = nil
-				if universe.growingBasesIterator == id then
-					universe.growingBasesIterator = nil
-				end
-				map.basesToGrow[id] = nil
-				bases[id] = nil
-			end
+            local belongs = map and base.mapGeneration == map.baseGeneration
+            if belongs then
+                for chunk in pairs(base.chunks) do
+                    local owner = getChunkBase(map, chunk)
+                    if not chunkQueue.isLive(map, chunk) then
+                        if owner == base then map.chunkToBase[chunk] = nil end
+                        base.chunks[chunk] = nil
+                        if base.chunkFactions then base.chunkFactions[chunk] = nil end
+                    elseif not owner then
+                        setChunkBase(map, chunk, base)
+                    elseif owner ~= base then
+                        base.chunks[chunk] = nil
+                        if base.chunkFactions then base.chunkFactions[chunk] = nil end
+                        owner.chunks[chunk] = true
+                    end
+                end
+            end
+            if not belongs or not next(base.chunks) then
+                universe.growingBases[id] = nil
+                if universe.growingBasesIterator == id then universe.growingBasesIterator = nil end
+                if map and map.basesToGrow[id] == base then map.basesToGrow[id] = nil end
+                universe.recycleBaseIterator = next(bases, id)
+                bases[id] = nil
+                return
+            end
 		end	
         universe.recycleBaseIterator = next(bases, id)
     end
 end
 
 
-local function deleteAssociatedUnits(entity)
-	if entity.valid and (entity.type == "unit-spawner") then
-		if entity.units then
-			for i, unit in pairs(entity.units) do
-				if unit and unit.valid and (unit.type == "unit") and (not unit.commandable.parent_group) then
-					unit.destroy()		--unit.die(unit.force)
-				end
-			end
-		end
-	end		
+local function deleteAssociatedUnits(units, universe)
+    local packs = universe.compressedUnits
+    local champions = unitUtils.championUnits(universe)
+    for _, unit in pairs(units) do
+        local commandable = unit.valid and unit.type == "unit" and unit.commandable
+        if commandable and not commandable.parent_group
+                and not (packs and packs[unit.unit_number]) and not (champions and champions[unit.unit_number])
+                and not foreignEnemies.isForeign(unit.name) then
+            unit.destroy()
+        end
+    end
+end
+
+local function finishReplacement(entity, newEntity, universe, keepUnits)
+    if not (newEntity and newEntity.valid) then return nil end
+    local associated = not keepUnits and entity.type == "unit-spawner" and entity.units
+    if not entity.destroy() then
+        newEntity.destroy()
+        return nil
+    end
+    if associated then deleteAssociatedUnits(associated, universe) end
+    return newEntity
+end
+
+-- Do not delete the source to find out if we can place the replacement. Chunk scans and
+-- faction totals account for the source's chunk, so never move its replacement across an edge.
+local function replaceNest(entity, map, name, position, keepUnits)
+    local surface, universe = map.surface, map.universe
+    local force, quality = entity.force, entity.quality
+    if not surface.can_place_entity{name = name, position = position, force = force} then
+        local x, y = mapUtils.positionToChunkXY(entity.position)
+        position = surface.find_non_colliding_position_in_box(name, {{x, y}, {x + CHUNK_SIZE, y + CHUNK_SIZE}}, 1, true)
+        if not position or position.x < x or position.y < y or position.x >= x + CHUNK_SIZE
+                or position.y >= y + CHUNK_SIZE then return nil end
+    end
+    local newEntity = surface.create_entity{name = name, position = position, force = force, quality = quality}
+    return finishReplacement(entity, newEntity, universe, keepUnits)
+end
+
+local function registerUpgrade(map, entity)
+    if not (entity and entity.valid) then return nil end
+    if remote.interfaces["kr-creep"] then
+        remote.call("kr-creep", "spawn_creep_at_position", map.surface, entity.position)
+    end
+    superHives.register(map.universe, entity)
+    return entity
 end
 
 -- baseAlignment{fire = 0.8, acid = 0.2,...}
-function baseUtils.upgradeEntity(entity, baseAlignment, map, disPos, evolve, addEntity)	
+function baseUtils.upgradeEntity(entity, baseAlignment, map, disPos, evolve, addEntity, keepUnits)
     local surface = map.surface
     local position = entity.position
     local universe = map.universe
@@ -592,12 +633,7 @@ function baseUtils.upgradeEntity(entity, baseAlignment, map, disPos, evolve, add
 		end
 	end
 
-	if not faction then
-		if not addEntity then
-			entity.destroy()
-		end	
-		return nil
-    end
+	if not faction then return nil end
 
     local spawnerName = findEntityUpgrade(faction,
                                           entity,
@@ -607,50 +643,18 @@ function baseUtils.upgradeEntity(entity, baseAlignment, map, disPos, evolve, add
 										  )
  	
 
-   if spawnerName and (addEntity or (spawnerName~=entity.name)) then   
-		-- game.print(entity.name.."->"..spawnerName.." [gps=" .. entity.position.x .. "," .. entity.position.y .."]")	-- debug
-		if not addEntity then
-			deleteAssociatedUnits(entity)
-			entity.destroy()
-		end	
-        local name = universe.buildingSpaceLookup[spawnerName] or spawnerName
-        local query = universe.upgradeEntityQuery		
-        query.name = name		
-        query.position = disPos or position
-        if addEntity or (not surface.can_place_entity(query)) then
-			local addEntityPrototype = "chunk-scanner-nest-rampant"
-			if addEntity and (universe.buildingHiveTypeLookup[name] == "turret") then
-				addEntityPrototype = "chunk-scanner-turret-rampant"
-			elseif universe.buildingHiveTypeLookup[name] == "super-hive" then
-				addEntityPrototype = name	-- larger than the nest scanner
-			end
-            local newPosition = surface.find_non_colliding_position(
-                (addEntity and addEntityPrototype) or name,
-                disPos or position,
-				CHUNK_SIZE,
-                1,
-                true
-            )
-			-- if addEntity then
-				-- game.print(entity.name.."baseUtils.upgradeEntity: add source = "..entity.name .." [gps=" .. entity.position.x .. "," .. entity.position.y .."]")	-- debug			
-			-- end
-			if addEntity and not newPosition then
-				return nil
-			end	
-            query.position = newPosition or disPos or position
-        end
-
-		query.name = spawnerName
-        if remote.interfaces["kr-creep"] then
-            remote.call("kr-creep", "spawn_creep_at_position", surface, query.position)
-        end
-
-        local newEntity = surface.create_entity(query)
-		superHives.register(universe, newEntity)
-		return newEntity
-
+    if not spawnerName or (not addEntity and spawnerName == entity.name) then return nil end
+    position = disPos or position
+    if not addEntity then
+        return registerUpgrade(map, replaceNest(entity, map, spawnerName, position, keepUnits))
     end
-    return nil
+    local name = universe.buildingSpaceLookup[spawnerName] or spawnerName
+    local kind = universe.buildingHiveTypeLookup[name]
+    local scanner = (kind == "super-hive" and name) or (kind == "turret" and "chunk-scanner-turret-rampant")
+        or "chunk-scanner-nest-rampant"
+    local newPosition = surface.find_non_colliding_position(scanner, position, CHUNK_SIZE, 1, true)
+    if not newPosition then return nil end
+    return registerUpgrade(map, surface.create_entity{name = spawnerName, position = newPosition})
 end
 
 function baseUtils.evolveEntity(entity, map)
@@ -662,7 +666,6 @@ function baseUtils.evolveEntity(entity, map)
     local spawnerName = entityEvolve(entity, map)
     if spawnerName and (spawnerName~=oldName)then
 		-- game.print("evolve "..entity.name.."-->"..spawnerName)  -- debug
-		local surface = map.surface
 		local position = entity.position
 		local universe = map.universe
 		-- a hive grows into a super-hive only when libs/SuperHives.lua allows it (chance, spacing, limit)
@@ -670,31 +673,7 @@ function baseUtils.evolveEntity(entity, map)
 			return nil
 		end
 
-		deleteAssociatedUnits(entity)
-        entity.destroy()
-        local name = universe.buildingSpaceLookup[spawnerName] or spawnerName
-        local query = universe.upgradeEntityQuery
-        query.name = name
-        query.position = position
-
-        if not surface.can_place_entity(query) then
-            local newPosition = surface.find_non_colliding_position(
-                name,
-                position,
-                CHUNK_SIZE,
-                1,
-                true
-            )
-            query.position = newPosition or position
-        end
-
-		query.name = spawnerName
-        if remote.interfaces["kr-creep"] then
-            remote.call("kr-creep", "spawn_creep_at_position", surface, query.position)
-        end
-       local newEntity = surface.create_entity(query)
-       superHives.register(universe, newEntity)
-       return newEntity
+        return registerUpgrade(map, replaceNest(entity, map, spawnerName, position))
 	else   
 		--game.print("cant evolve "..entity.name)
 	end
@@ -721,14 +700,11 @@ function baseUtils.changeEntityLvl(entity, lvl, map)
         query.name = name
         query.position = position	--position
 		query.move_stuck_players = true
+		query.quality, query.force = entity.quality, entity.force
 
-		local NewEntity = surface.create_entity(query)  
-		if NewEntity then
-			deleteAssociatedUnits(entity)
-			entity.destroy()
-			superHives.register(universe, NewEntity)
-			return NewEntity		
-		end	
+        local replacement = finishReplacement(entity, surface.create_entity(query), universe)
+        if replacement then superHives.register(universe, replacement) end
+        return replacement
 	end
 	return nil
 end
@@ -772,16 +748,11 @@ function baseUtils.changeEntityAligment(entity, newAlignments, map, allowTierCha
         query.name = name
         query.position = position	--position
 		query.move_stuck_players = true
+		query.quality, query.force = entity.quality, entity.force
 
-		local NewEntity = surface.create_entity(query)  
-		if NewEntity then
-			if not keepUnits then
-				deleteAssociatedUnits(entity)
-			end
-			entity.destroy()
-			superHives.register(universe, NewEntity)
-			return NewEntity		
-		end	
+        local replacement = finishReplacement(entity, surface.create_entity(query), universe, keepUnits)
+        if replacement then superHives.register(universe, replacement) end
+        return replacement
 	end
    return nil
 	
@@ -1102,7 +1073,8 @@ function baseUtils.changeEntityAndUpdateDynamicRates(entity, dynamicRates, map, 
 				factionsTotal[oldFaction] = (factionsTotal[oldFaction] or 0) - oldCnt
 			end	
 			if newCnt > 0 then
-				factionsTotal[newFaction] = (factionsTotal[newFaction] or 0) - newCnt
+				local actualFaction = universe.enemyAlignmentLookup[newEntity.name] or newFaction
+				factionsTotal[actualFaction] = (factionsTotal[actualFaction] or 0) + newCnt
 			end	
 			base.factionsTotal[1] = base.factionsTotal[1] + newCnt - oldCnt 
 			if oldCnt>0  or newCnt>0 then
@@ -1186,6 +1158,7 @@ local function convertAlignment(alignment, alignmentAndStep, writeToalignment)
 end
 
 function baseUtils.chunkCanGrow(map, chunk)
+    if not chunkQueue.isLive(map, chunk) then return false end
 	if chunk.growFails and (chunk.growFails > 5) then
 		return false
 	end
@@ -1376,6 +1349,7 @@ function baseUtils.createBase(map, chunk, tick, thisIsRampantEnemy)
         points = 0,
 		thisIsRampantEnemy = thisIsRampantEnemy,
 		mapIndex = map.surface.index,
+		mapGeneration = map.baseGeneration,
 		chunks = {},
 		basesToGrow = {},
 		geneRandomizer = game.create_random_generator(geneSeed),

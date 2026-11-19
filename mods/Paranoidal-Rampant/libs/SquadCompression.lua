@@ -8,6 +8,7 @@ local mapUtils = require("MapUtils")
 local mathUtils = require("MathUtils")
 local unitUtils = require("UnitUtils")
 local foreignEnemies = require("ForeignEnemies")
+local canCreateUnitOnSurface = require("AIPredicates").canCreateUnitOnSurface
 
 local championUnits = unitUtils.championUnits
 local isForeign = foreignEnemies.isForeign
@@ -160,8 +161,22 @@ local function processDecompressEntry(universe, entry, tick, budget)
         name = entity.name, position = entity.position, direction = entity.direction,
         force = entity.force, quality = qualityName(entity)
     }
-    local attempts, released = 0, 0
     local left = detached and 0 or 1
+    if not canCreateUnitOnSurface(spawn.name, surface) then
+        pack.retryTick = tick + 300
+        if not entry.flyerWait then
+            -- Park this pack once. Later ground packs of the same group can still be released.
+            local waiting = newDecompressEntry(universe)
+            waiting.flyerWait = true
+            addPackToEntry(waiting, pack)
+            entry.extraTotal = entry.extraTotal - (pack.count - left)
+            entry.packs[index] = false
+            entry.packIndex = index + 1
+            return 0, not entry.packs[index + 1]
+        end
+        return 0, false
+    end
+    local attempts, released = 0, 0
     while attempts < quota and pack.count > left do
         attempts = attempts + 1
         local newEntity = surface.create_entity(spawn)
@@ -537,9 +552,9 @@ local function squadSmoothCompress(map, squad, compressedSize)
 		
 		local entities = compressData.entities
 		local unitsToCreate = compressData.maxStacks - #entities
-		if unitsToCreate > 0 then 
+		local unitSample = compressData.unitSample
+		if unitsToCreate > 0 and canCreateUnitOnSurface(unitSample.name, surface) then
 			for i = 1, unitsToCreate do
-				local unitSample = compressData.unitSample
 				local newEntity = surface.create_entity({
 									name = unitSample.name,
 									quality = qualityName(unitSample),
@@ -670,7 +685,8 @@ function squadCompression.onUnitKilled(universe, surface, entity, eventForce, ca
         local spawn = {name = entity.name, position = entity.position, direction = entity.direction,
                        force = entity.force, quality = qualityName(entity)}
         local group = entity.commandable and entity.commandable.parent_group
-        local newEntity = surface.create_entity(spawn)
+        local newEntity
+        if canCreateUnitOnSurface(spawn.name, surface) then newEntity = surface.create_entity(spawn) end
         destroy_RenderingText(compressedUnit.textId)
         compressedUnit.textId = nil
         if not (newEntity and newEntity.valid) then
@@ -734,16 +750,16 @@ function squadCompression.onUnitPreKilled(universe, surface, entity, eventForce,
 			compressedUnit.textId = draw_CompressedText(compressedUnit.count, surface, entity)	
 		end
 
-		local newEntity = surface.create_entity({
-			name = entity.name,
-            quality = qualityName(entity),
-			position = entity.position, 
-			direction = entity.direction,
-			force = entity.force,
-			})			
-		if newEntity and newEntity.valid then
-			newEntity.health = 0
-		end	
+        if canCreateUnitOnSurface(entity.name, surface) then
+            local newEntity = surface.create_entity({
+                name = entity.name,
+                quality = qualityName(entity),
+                position = entity.position,
+                direction = entity.direction,
+                force = entity.force,
+            })
+            if newEntity and newEntity.valid then newEntity.health = 0 end
+        end
 		
 		if eventForce and (eventForce.name ~= "enemy") and cause and cause.valid then
 			local incomingRange = mathUtils.euclideanDistancePoints(entity.position.x, entity.position.y, cause.position.x, cause.position.y)

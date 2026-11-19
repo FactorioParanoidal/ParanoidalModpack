@@ -21,6 +21,12 @@ Date: 2026.11.16
     - Train ambush sampling maintains a train index from events after seeding it once per surface; updates visit at most 80 entries per surface and sample at most 40 moving trains.
     - Super-hives bound heal queries. Dense colonies rotate through small cells instead of repeating a full enumeration every pulse.
   Bugfixes:
+    - Blank or invalid planet AI fields keep their previous values. Older incomplete truce settings are read safely, and both server-side AI commands work on Nauvis without a player.
+    - Long-range and one-shot protection refund only the current hit. Failed energy drain creation does not leave an incomplete pylon or stop the death handler.
+    - Re-indexing a populated surface preserves its fighters and pack carriers. Rebuilt maps no longer adopt chunks or bases left over from the previous map.
+    - Nest replacements preserve quality and leave the original and its units untouched when creation fails. Successful mutations credit the new faction; a failed builder placement does not count as a building.
+    - External strikes keep their destination in classic mode and after doctrine changes, without bypassing the truce. Remote setters respect the external-control flag and the attack group list excludes settlers and underground squads.
+    - Stored flyers wait for real surface evolution to return to 10%, without preventing ground packs from being released. Growing-mode waves and the radius limit for associating new nests with bases use the proper AI constants.
     - New ordinary battle orders and flight retargets respect current truce and daytime limits. Old orders are not erased in combat, but cancelled campaigns do not resume.
     - The AI report works from the server console with an explicit surface; player output omits uncharted hive positions.
     - Chunk removal, recreation and surface clear no longer leave live references in scan queues. Existing surfaces are indexed in bounded batches.
