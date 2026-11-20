@@ -7,8 +7,13 @@ Version: 9.0.5
     - Russian hardcoded player-facing text: 3 UI, chat, command-help and error-message literals; technical identifiers, format parameters and gameplay logic are unchanged.
 Date: 2026-10-14
   Bugfixes:
+    - Refresh the Factorissimo dispatcher button when a player changes forces, even on the same surface.
+    - Track Factory Planner's main window by name and role without renaming frames; ignore modal dialogs and preserve support for correctly renamed frames in older saves.
+    - Opening a tracked window with any of the eight custom panel skins now uses that skin's selected artwork instead of requesting a missing style.
+    - The NAN-E and Paranoidal Atlas buttons use the shared panel style; the Atlas bookmark uses a light grey 128 × 128 sprite for sharpness at higher display scales.
     - TimedSpawnControl-reforged creates and handles its own buttons; only decorate them and keep its action tooltips, including right-click point management. Dependency and icon entries follow its new internal name.
   Changes:
+    - The six-tick panel worker sleeps until needed. On refresh, reuse the player's live toolbar and settings, skip satisfied frame searches, and reorder only a disordered panel without recreating buttons. Cursor updates still run immediately.
     - Paranoidal packaging: moved the editable button SVG source to the local source-assets collection; game graphics are unchanged.
   Changes:
     - Local Paranoidal patch: one fixed order of the top panel buttons for every player (spawn, unstuck, Todo-List, Inserter Throughput, Autofill, WideChests, tech tree, Blueprint Sandboxes, RPG, Module Inserter, Factory Planner, Helmod, SpaceX, Factorissimo dispatcher, BnL journal, Creative Mod). Buttons that appear later take their place on the next panel update; other buttons follow at the end. Buttons are swapped in place, not recreated.

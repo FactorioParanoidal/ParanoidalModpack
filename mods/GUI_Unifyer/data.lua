@@ -34,6 +34,17 @@ for _, i in pairs(sprites) do
 	data:extend({p})
 end
 
+-- High-resolution glyph: keep the 16 px logical size without magnifying the old small mipmap.
+data:extend({{
+    type = "sprite",
+    name = "pd-atlas-bookmark-light",
+    filename = ICONPATH .. "pd-atlas-bookmark-light.png",
+    size = 128,
+    scale = 0.125,
+    flags = {"gui-icon"},
+    priority = "extra-high-no-scale"
+}})
+
 -- Paranoidal: the WideChests button uses the build's 128 px steel chest icon at full resolution
 -- (same 32 px on screen as the 64 px icons at scale 0.5).
 data.raw["sprite"]["widechests_button"].width = 128
@@ -109,19 +120,6 @@ data:extend({
     height = 26,
     scale = 0.5,
 	},
-})
-
-data:extend({
-    {
-        type = "sprite",
-        name = "visualsignals_button",
-        filename = ICONPATH .. "visualsignals_button.png",
-        flags = { "gui-icon" },
-        width = 64,
-        height = 64,
-        scale = 0.5,
-        priority = "extra-high-no-scale"
-    }
 })
 
 require('prototypes/button_style')

@@ -1,14 +1,6 @@
--- Helper function to create icon entries with named fields for better readability
+-- Keep the shared positional format used by settings, runtime and existing saves.
 local function create_icon_entry(mod, sprite, button, tooltip, dont_replace_sprite, button_path, window_check)
-    return {
-        mod = mod,
-        sprite = sprite,
-        button = button,
-        tooltip = tooltip,
-        dont_replace_sprite = dont_replace_sprite,
-        button_path = button_path,
-        window_check = window_check
-    }
+    return {mod, sprite, button, tooltip, dont_replace_sprite, button_path, window_check}
 end
 
 -- Complete icon list
@@ -261,27 +253,4 @@ local icons = {
 
 }
 
--- Convert new format back to legacy format for backward compatibility
-local function to_legacy_format(icon)
-    return {
-        icon.mod,
-        icon.sprite,
-        icon.button,
-        icon.tooltip,
-        icon.dont_replace_sprite,
-        icon.button_path,
-        icon.window_check
-    }
-end
-
--- Get all icons in legacy format
-local function get_all_icons_legacy()
-    local legacy_icons = {}
-    for _, icon in ipairs(icons) do
-        table.insert(legacy_icons, to_legacy_format(icon))
-    end
-    return legacy_icons
-end
-
--- Maintain backward compatibility
-return get_all_icons_legacy()
+return icons

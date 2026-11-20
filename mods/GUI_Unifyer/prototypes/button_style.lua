@@ -78,6 +78,11 @@ local function create_dynamic_button_style(name, imgsize, border, opacity)
             base = {type = "composition", filename = GUIPATH .. name .. ".png", border = border, position = {imgsize, 0}, size = imgsize, opacity = opacity}
         }
     }
+    -- Open windows select a style by name, not by toggling the owner's button.
+    data.raw["gui-style"].default[name .. "_selected"] = {
+        type = "button_style", parent = name,
+        default_graphical_set = table.deepcopy(data.raw["gui-style"].default[name].selected_graphical_set)
+    }
 end
 
 -- Define custom button styles with varying opacities

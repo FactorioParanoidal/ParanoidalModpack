@@ -50,7 +50,7 @@ local function get_element_details(element)
     return details
 end
 
-function debug_button(event)
+return function(event)
     if not event or not event.element then return end
     
     local player = game.players[event.player_index]
