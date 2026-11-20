@@ -109,6 +109,7 @@ end
 function EvoUi.update_gui(event)
     if (event.tick % storage.settings.update_delay) ~= 0 then return end
 
+    local evolution_by_surface = {}
     for _, player in pairs(game.connected_players) do
         local player_index = player.index
         local player_settings = storage.EvoUi[player.name]
@@ -128,9 +129,9 @@ function EvoUi.update_gui(event)
         end
 
         local sensor_flow = player.gui.top.EvoUi_root.sensor_flow
-        EvoUi.update_av(player, sensor_flow.always_visible)
+        EvoUi.update_av(player, sensor_flow.always_visible, evolution_by_surface)
         if player_settings.popup_open then
-            EvoUi.update_ip(player, sensor_flow.in_popup)
+            EvoUi.update_ip(player, sensor_flow.in_popup, evolution_by_surface)
         end
     end
 end
@@ -255,12 +256,12 @@ function EvoUi.create_sensor_display(player)
 end
 
 
-local function update_sensors(element, sensor_list, active_sensors)
+local function update_sensors(element, sensor_list, active_sensors, evolution_by_surface)
     for _, sensor in ipairs(sensor_list) do
         if active_sensors[sensor.name] then
             local status, err = pcall(sensor.create_ui, sensor, element)
             if err then error({"err_specific", sensor.name, "create_ui", err}) end
-            status, err = pcall(sensor.update_ui, sensor, element)
+            status, err = pcall(sensor.update_ui, sensor, element, evolution_by_surface)
             if err then error({"err_specific", sensor.name, "update_ui", err}) end
         else
             local status, err = pcall(sensor.delete_ui, sensor, element)
@@ -270,19 +271,19 @@ local function update_sensors(element, sensor_list, active_sensors)
 end
 
 
-function EvoUi.update_av(player, element)
+function EvoUi.update_av(player, element, evolution_by_surface)
     local always_visible = storage.EvoUi[player.name].always_visible
 
-    update_sensors(element, EvoUi.value_sensors, always_visible)
+    update_sensors(element, EvoUi.value_sensors, always_visible, evolution_by_surface)
 end
 
 
-function EvoUi.update_ip(player, element)
+function EvoUi.update_ip(player, element, evolution_by_surface)
     if not storage.EvoUi[player.name].popup_open then return end
 
     local in_popup = storage.EvoUi[player.name].in_popup
 
-    update_sensors(element, EvoUi.value_sensors, in_popup)
+    update_sensors(element, EvoUi.value_sensors, in_popup, evolution_by_surface)
 end
 
 

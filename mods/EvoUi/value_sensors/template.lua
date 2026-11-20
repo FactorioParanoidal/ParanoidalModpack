@@ -22,13 +22,13 @@ function ValueSensor.new(name)
         end
     end
 
-    function sensor:update_ui(owner)
+    function sensor:update_ui(owner, evolution_by_surface)
         local player = game.players[owner.player_index]
         local sensor_settings = storage.EvoUi[player.name].sensor_settings[self.name]
 
         self.settings = sensor_settings
 
-        owner[self.name].caption = self:get_line(player)
+        owner[self.name].caption = self:get_line(player, evolution_by_surface)
         owner[self.name].style.font_color = self.color
     end
 

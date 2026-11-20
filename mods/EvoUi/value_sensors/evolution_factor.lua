@@ -3,20 +3,24 @@ require "template"
 local sensor = ValueSensor.new("evolution_factor")
 sensor.extra_precision = sensor:make_on_click_checkbox_handler("extra_precision")
 
--- Paranoidal: Rampant truce threshold (percent) for the player's surface, or nil if
--- Paranoidal-Rampant is absent or its AI is off on this surface.
-local function get_truce_min_evo(surface)
+local function read_evolution(surface, surface_index)
     local iface = remote.interfaces["rampantFixed"]
-    if not (iface and iface.getTruceInfo) then return nil end
-    local info = remote.call("rampantFixed", "getTruceInfo", {surfaceIndex = surface.index})
-    if info and type(info.minEvo) == "number" and info.minEvo > 0 then
-        return info.minEvo
-    end
-    return nil
+    local info = iface and iface.getTruceInfo and remote.call("rampantFixed", "getTruceInfo", {
+        surfaceIndex = surface_index, includeEvolution = true
+    })
+    local evolution = info and info.evolution or game.forces.enemy.get_evolution_factor(surface)
+    return {evolution = evolution, truce = info and info.truce, min_evo = info and info.minEvo}
 end
 
-function sensor:get_line(player)
-    local percent_evo_factor = game.forces.enemy.get_evolution_factor(player.surface) * 100
+function sensor:get_line(player, evolution_by_surface)
+    local surface = player.surface
+    local surface_index = surface.index
+    local snapshot = evolution_by_surface and evolution_by_surface[surface_index]
+    if not snapshot then
+        snapshot = read_evolution(surface, surface_index)
+        if evolution_by_surface then evolution_by_surface[surface_index] = snapshot end
+    end
+    local percent_evo_factor = snapshot.evolution * 100
     -- this nonsense is because string.format(%.4f) is not safe in MP across platforms, but integer math is
     local whole_number = math.floor(percent_evo_factor)
     local fractional_component = math.floor((percent_evo_factor - whole_number) * 10)
@@ -28,9 +32,13 @@ function sensor:get_line(player)
         evo_text = string.format("%d.%d%%", whole_number, fractional_component)
     end
 
-    local truce_min_evo = get_truce_min_evo(player.surface)
-    if truce_min_evo and percent_evo_factor < truce_min_evo then
-        return {"sensor.evolution_factor.format_truce", evo_text, tostring(truce_min_evo)}
+    if snapshot.truce then
+        local min_evo = snapshot.min_evo
+        -- Compare in the same units as Rampant; converting to percent can round to the threshold.
+        if type(min_evo) == "number" and snapshot.evolution < min_evo * 0.01 then
+            return {"sensor.evolution_factor.format_truce", evo_text, tostring(min_evo)}
+        end
+        return {"sensor.evolution_factor.format_truce_time", evo_text}
     end
 
     return {self.format_key, evo_text}
