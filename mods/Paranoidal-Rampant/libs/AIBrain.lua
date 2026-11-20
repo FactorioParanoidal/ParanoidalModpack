@@ -218,6 +218,7 @@ aiBrain.distance = distance
 local function turretsAround(map, chunk)
     local x = chunk.x
     local y = chunk.y
+    local counts = map.chunkToPlayerTurrets
     local total = 0
     for dx = -CHUNK_SIZE, CHUNK_SIZE, CHUNK_SIZE do
         local xChunks = map[x + dx]
@@ -225,7 +226,7 @@ local function turretsAround(map, chunk)
             for dy = -CHUNK_SIZE, CHUNK_SIZE, CHUNK_SIZE do
                 local c = xChunks[y + dy]
                 if c then
-                    total = total + getPlayerTurretCount(map, c)
+                    total = total + (counts[c] or 0)
                 end
             end
         end
@@ -233,6 +234,22 @@ local function turretsAround(map, chunk)
     return total
 end
 aiBrain.turretsAround = turretsAround
+
+-- Counts from setPlayerTurretCount are positive or absent. Boolean users can
+-- stop at the first defended chunk without totalling the remaining counts.
+function aiBrain.hasTurretsAround(map, chunk)
+    local x, y = chunk.x, chunk.y
+    local counts = map.chunkToPlayerTurrets
+    for dx = -CHUNK_SIZE, CHUNK_SIZE, CHUNK_SIZE do
+        local column = map[x + dx]
+        if column then
+            for dy = -CHUNK_SIZE, CHUNK_SIZE, CHUNK_SIZE do
+                if (counts[column[y + dy]] or 0) > 0 then return true end
+            end
+        end
+    end
+    return false
+end
 
 ----------------------------------------------------------------------------------------------------------------------
 -- running values
@@ -630,10 +647,9 @@ end
 aiBrain.liveWeakScore = liveWeakScore
 
 local function strongScorer(entry, d, map)
+    if getPlayerTurretCount(map, entry.chunk) < 2 then return nil end
     local turrets = turretsAround(map, entry.chunk)
-    if getPlayerTurretCount(map, entry.chunk) < 2 or turrets < 4 then
-        return nil
-    end
+    if turrets < 4 then return nil end
     return turrets / (1 + d / 480) * (0.8 + mRandom() * 0.4)
 end
 

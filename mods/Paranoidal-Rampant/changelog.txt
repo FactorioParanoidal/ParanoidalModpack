@@ -18,6 +18,10 @@ Date: 2026.11.16
     - Rail ambushes require repeat observed transits by hostile trains; a single sample or dwelling in one chunk is not enough. Player presence is unchanged.
   Optimizations:
     - Count Factorissimo factories without building a list of entities during chunk scans; optionally return the shared evolution reading with remote truce snapshots.
+    - Keep the empty squad table after compaction; reuse the member snapshot when dispatching flights and filter launch candidates in place. Detection of ordinary squads stops at the first observing force without reading alert settings.
+    - Use a passability lookup for movement, skip redundant work in local target shortlists and growth scans, and stop at the first turret when only the presence of cover is needed.
+    - Reuse the full-chunk terrain query to skip redundant tile checks inside dry chunks; keep cliff checks and the outer strip queries.
+    - Read only the needed prototype resistance keys and reuse LuaEntity positions in the damage protection handler. Damage formulas and range cutoffs are unchanged.
     - Precompute the player scan offsets in their original order, avoid empty squad scans and remove a redundant attack check. Hunting odds, random draws and scan timing are unchanged.
     - Player scent reads only usable neighbors in restricted chunks; player-building scans accumulate scores without temporary tables. Scent and targeting formulas are unchanged.
     - Due super-hive pulses share a deadline queue without catch-up bursts. Saturated healing cells subdivide within the existing query budget.

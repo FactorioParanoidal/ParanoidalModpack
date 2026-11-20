@@ -181,35 +181,27 @@ end
     /|\
     6 7 8
 ]]--
+-- For each source passability, a direction accepts either the listed axis or
+-- a fully passable destination. Restricted sources still accept diagonals to open chunks.
+local movePassability = {
+    [CHUNK_ALL_DIRECTIONS] = {CHUNK_ALL_DIRECTIONS, CHUNK_NORTH_SOUTH, CHUNK_ALL_DIRECTIONS, CHUNK_EAST_WEST,
+        CHUNK_EAST_WEST, CHUNK_ALL_DIRECTIONS, CHUNK_NORTH_SOUTH, CHUNK_ALL_DIRECTIONS},
+    [CHUNK_NORTH_SOUTH] = {CHUNK_ALL_DIRECTIONS, CHUNK_NORTH_SOUTH, CHUNK_ALL_DIRECTIONS, nil,
+        nil, CHUNK_ALL_DIRECTIONS, CHUNK_NORTH_SOUTH, CHUNK_ALL_DIRECTIONS},
+    [CHUNK_EAST_WEST] = {CHUNK_ALL_DIRECTIONS, nil, CHUNK_ALL_DIRECTIONS, CHUNK_EAST_WEST,
+        CHUNK_EAST_WEST, CHUNK_ALL_DIRECTIONS, nil, CHUNK_ALL_DIRECTIONS},
+}
+
 function mapUtils.canMoveChunkDirection(map, direction, startChunk, endChunk)
-    local canMove = false
-    local startPassable = getPassable(map, startChunk)
-    local endPassable = getPassable(map, endChunk)
-    -- print(direction, startPassable, endPassable)
-    if (startPassable == CHUNK_ALL_DIRECTIONS) then
-        if ((direction == 1) or (direction == 3) or (direction == 6) or (direction == 8)) then
-            canMove = (endPassable == CHUNK_ALL_DIRECTIONS)
-        elseif (direction == 2) or (direction == 7) then
-            canMove = ((endPassable == CHUNK_NORTH_SOUTH) or (endPassable == CHUNK_ALL_DIRECTIONS))
-        elseif (direction == 4) or (direction == 5) then
-            canMove = ((endPassable == CHUNK_EAST_WEST) or (endPassable == CHUNK_ALL_DIRECTIONS))
-        end
-    elseif (startPassable == CHUNK_NORTH_SOUTH) then
-        if ((direction == 1) or (direction == 3) or (direction == 6) or (direction == 8)) then
-            canMove = (endPassable == CHUNK_ALL_DIRECTIONS)
-        elseif (direction == 2) or (direction == 7) then
-            canMove = ((endPassable == CHUNK_NORTH_SOUTH) or (endPassable == CHUNK_ALL_DIRECTIONS))
-        end
-    elseif (startPassable == CHUNK_EAST_WEST) then
-        if ((direction == 1) or (direction == 3) or (direction == 6) or (direction == 8)) then
-            canMove = (endPassable == CHUNK_ALL_DIRECTIONS)
-        elseif (direction == 4) or (direction == 5) then
-            canMove = ((endPassable == CHUNK_EAST_WEST) or (endPassable == CHUNK_ALL_DIRECTIONS))
-        end
-    else
-        canMove = (endPassable ~= CHUNK_IMPASSABLE)
+    local rules = movePassability[getPassable(map, startChunk)]
+    if not rules then
+        -- A group already on an impassable chunk may escape in any direction.
+        return getPassable(map, endChunk) ~= CHUNK_IMPASSABLE
     end
-    return canMove
+    local axis = rules[direction]
+    if not axis then return false end
+    local pass = getPassable(map, endChunk)
+    return pass == CHUNK_ALL_DIRECTIONS or pass == axis
 end
 
 function mapUtils.getCardinalChunks(map, x, y)

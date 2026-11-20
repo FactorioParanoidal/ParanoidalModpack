@@ -31,7 +31,7 @@ local TACTICS = aiBrain.TACTICS
 local reservoirOffer = aiBrain.reservoirOffer
 local reservoirFind = aiBrain.reservoirFind
 local reservoirRemove = aiBrain.reservoirRemove
-local turretsAround = aiBrain.turretsAround
+local hasTurretsAround = aiBrain.hasTurretsAround
 
 local INFRA_SIZE = 12
 local HEAT_TOP_SIZE = 12
@@ -96,7 +96,7 @@ function heavyTactics.recordPresence(map, chunk, tick, amount)
         heat[chunk] = record
     end
     if record.v >= 3 then
-        if outOfCover(chunk, turretsAround(map, chunk), 0.8) then
+        if chunk[BASE_DETECTION_PHEROMONE] < MAX_DETECTION * 0.8 and not hasTurretsAround(map, chunk) then
             reservoirOffer(ai.heatTop, HEAT_TOP_SIZE, chunk, record.v, tick, 0, false)
         else
             local i = reservoirFind(ai.heatTop, chunk)
@@ -266,7 +266,7 @@ end
 local function pickAmbushSite(map, ai, x, y, tick)
     return aiBrain.pickFromReservoir(map, ai.heatTop, x, y, AMBUSH_RANGE, function(entry, d)
         local v = decayed(entry.score, entry.tick, tick)
-        if (v < 3) or (turretsAround(map, entry.chunk) > 0) then
+        if v < 3 or hasTurretsAround(map, entry.chunk) then
             return nil
         end
         return v / (1 + d / 480) * (0.8 + mRandom() * 0.4)
@@ -275,7 +275,7 @@ end
 
 local function pickInfraTarget(map, ai, x, y)
     return aiBrain.pickFromReservoir(map, ai.infra, x, y, SABOTAGE_RANGE, function(entry, d)
-        if turretsAround(map, entry.chunk) > 0 then
+        if hasTurretsAround(map, entry.chunk) then
             return nil
         end
         return entry.score / (1 + d / 400) * (0.75 + mRandom() * 0.5)

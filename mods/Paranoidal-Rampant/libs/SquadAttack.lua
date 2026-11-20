@@ -52,7 +52,7 @@ local DEFINES_DISTRACTION_BY_ANYTHING = defines.distraction.by_anything
 local DEFINES_DISTRACTION_BY_DAMAGE = defines.distraction.by_damage	-- + !КДА 
 
 -- imported functions
-local showAlert = customAlerts.showAlert
+local isSquadDetected = customAlerts.isSquadDetected
 
 local euclideanDistancePoints = mathUtils.euclideanDistancePoints
 
@@ -948,6 +948,8 @@ local function clearDebugLines(squad)
 end
 -- DEBUG
 
+-- Remember the last fresh empty table; never persist a scheduler cache.
+local compactedSquads
 local function disbandSquad(universe, squads, groupId)
 	local squad = squads[groupId]
     local map = squad.map
@@ -972,6 +974,7 @@ local function disbandSquad(universe, squads, groupId)
 		clearComresseData(universe, squad)
 	end	
 	squads[groupId] = nil
+	compactedSquads = nil
 end
 
 -- A squad back from a retreat joins a nearby attack squad, or comes again from another side.
@@ -1035,11 +1038,14 @@ function squadAttack.processSquads(universe)
     end
     if not groupId then
         universe.squadIterator = nil
-        if (table_size(squads) == 0) then
-            -- this is needed as the next command remembers the max length a table has been
-            universe.groupNumberToSquad = {}
+        -- next(squads, nil) already confirmed it is empty. Compact after use,
+        -- not again on every idle tick.
+        if squads ~= compactedSquads then
+            compactedSquads = {}
+            universe.groupNumberToSquad = compactedSquads
         end
     else
+		compactedSquads = nil
 		local map = squad.map
         local group = squad.group
         if not map or not map.surface.valid or universe.maps[map.surface.index] ~= map then
@@ -1082,12 +1088,12 @@ function squadAttack.squadDispatch(map, squad)
 		if not squad.detected then
 			members = group.members
 			if #members > 0 then
-				squad.detected = showAlert(group.surface, members[1], "squadDetected-warning-rampant", {"", {"description.rampantFixed--squadDetectedWarning", #members}})
+				squad.detected = isSquadDetected(group.surface, members[1])
 			end
 		end
 		if squad.flight then
 			if aiBrain.flyers then
-				aiBrain.flyers.dispatch(map, squad)
+				aiBrain.flyers.dispatch(map, squad, members)
 			end
 			return
 		end

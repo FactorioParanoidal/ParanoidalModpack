@@ -397,24 +397,26 @@ local function tryLaunch(map, tick)
     flyerQuery.name = flyerNameList
     local found = map.surface.find_entities_filtered(flyerQuery)
     local champions = championUnits(universe)
-    local free = {}
+    local count = 0
     for i = 1, #found do
         local unit = found[i]
         local commandable = unit.commandable
         -- a flying champion walking home to regenerate has no group either
         if commandable and (not commandable.parent_group) and not (champions and champions[unit.unit_number]) then
-            free[#free + 1] = unit
+            count = count + 1
+            if count ~= i then found[count] = unit end
         end
     end
-    if #free < MIN_FLIGHT_SIZE then
+    if count < MIN_FLIGHT_SIZE then
         return
     end
-    local units = #free + countPackedUnits(universe, free)
+    for i = #found, count + 1, -1 do found[i] = nil end
+    local units = count + countPackedUnits(universe, found)
     local cost = FLIGHT_COST + units
     if map.points < cost then return end
-    local group = map.surface.create_unit_group({position = free[1].position, force = free[1].force})
-    for i = 1, #free do
-        group.add_member(free[i])
+    local group = map.surface.create_unit_group({position = found[1].position, force = found[1].force})
+    for i = 1, count do
+        group.add_member(found[i])
     end
     local flight = registerFlight(map, group, units, tick)
     if launch(map, flight, tick) then
@@ -450,9 +452,9 @@ function flyerAI.plan(universe, tick)
 end
 
 -- group finished its command (target cleared, or arrived home)
-function flyerAI.dispatch(map, squad)
+function flyerAI.dispatch(map, squad, members)
     local tick = game.tick
-    if #squad.group.members == 0 then
+    if #(members or squad.group.members) == 0 then
         squad.disbandTick = tick     -- the whole flight was shot down: no new command for an empty group
         return
     end

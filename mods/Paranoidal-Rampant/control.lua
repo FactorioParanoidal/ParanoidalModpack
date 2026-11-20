@@ -1393,30 +1393,26 @@ local LR_exceptions_DamageKf = 0.5
  
 
 local function fillAndReturnUnitProtections(entity)
-	if unitsProtection[entity.name] then
-		return unitsProtection[entity.name]
-	else
-		local longRangeImmunity
-		local overdamageProtection
-		if entity.prototype.resistances then
-			for resistance, values in pairs(entity.prototype.resistances) do
-				-- some checks, becouse mods can assign there resistances to their own units. And make them almost immortal
-				if resistance == "rampant-longRangeImmunity" then
-					if values.percent and (math.floor(100*values.percent+0.1) == LR_EfficiencyPercent) and (values.decrease > 10) then	-- 	-- bug: sometimes percent can differ (ex: 0.949000049)
-						longRangeImmunity = values.decrease
-					end	
-				elseif resistance == "rampant-overdamageProtection" then
-					if values.percent and (math.floor(100*values.percent+0.1) == OP_EfficiencyPercent) and (values.decrease > 5) then 
-						overdamageProtection = values.decrease
-					end	
-				end					
-			end
-		end	
-		unitsProtection[entity.name] = {longRangeImmunity = longRangeImmunity, overdamageProtection = overdamageProtection}
-		-- game.print("LRI = "..tostring(longRangeImmunity).." , OP = "..tostring(overdamageProtection))	-- debug
-		return unitsProtection[entity.name]
-	end
-end	
+    local name = entity.name
+    local cached = unitsProtection[name]
+    if cached then return cached end
+
+    local result = {}
+    local resistances = entity.prototype.resistances
+    if resistances then
+        -- Keep the tolerance and the thresholds; other mods can assign these damage resistances too.
+        local lr = resistances["rampant-longRangeImmunity"]
+        if lr and lr.percent and math.floor(100 * lr.percent + 0.1) == LR_EfficiencyPercent and lr.decrease > 10 then
+            result.longRangeImmunity = lr.decrease
+        end
+        local op = resistances["rampant-overdamageProtection"]
+        if op and op.percent and math.floor(100 * op.percent + 0.1) == OP_EfficiencyPercent and op.decrease > 5 then
+            result.overdamageProtection = op.decrease
+        end
+    end
+    unitsProtection[name] = result
+    return result
+end
  
 local function onEntityDamaged(event)
     local entity, cause = event.entity, event.cause
@@ -1427,9 +1423,11 @@ local function onEntityDamaged(event)
     if allowLongRangeImmunity and protection.longRangeImmunity and cause.valid then
         if LR_exceptions[cause.type] then
             damage = damage * LR_exceptions_DamageKf
-        elseif mathUtils.euclideanDistancePoints(entity.position.x, entity.position.y,
-                cause.position.x, cause.position.y) > protection.longRangeImmunity then
-            damage = damage * LR_DamageKf
+        else
+            local target, source = entity.position, cause.position
+            if mathUtils.euclideanDistancePoints(target.x, target.y, source.x, source.y) > protection.longRangeImmunity then
+                damage = damage * LR_DamageKf
+            end
         end
     end
     local original = event.original_damage_amount

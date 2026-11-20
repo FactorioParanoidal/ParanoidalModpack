@@ -82,17 +82,19 @@ function front.candidates(map, x, y, radius, excluded)
     if not data or data.epoch ~= map.universe.frontRevision then return {} end
     local candidates, seen = {}, {}
     local radius2 = radius * radius
+    local yFirst, yLast = floor((y - radius) / SIZE), floor((y + radius) / SIZE)
     for sx = floor((x - radius) / SIZE), floor((x + radius) / SIZE) do
-        for sy = floor((y - radius) / SIZE), floor((y + radius) / SIZE) do
-            local cell = data.cells[sx .. ":" .. sy]
+        local prefix = sx .. ":"
+        for sy = yFirst, yLast do
+            local cell = data.cells[prefix .. sy]
             if cell then
                 for i = 1, 4 do
                     local e = i <= 2 and cell.best[i] or cell.changing[i - 2]
                     local c = e and e.chunk
-                    if c and not seen[c] and not (excluded and excluded[c]) and live(map, c) then
+                    if type(c) == "table" and c.x and c.y and not seen[c] and not (excluded and excluded[c]) then
                         local dx, dy = c.x + 16 - x, c.y + 16 - y
                         local d2 = dx * dx + dy * dy
-                        if d2 <= radius2 then
+                        if d2 <= radius2 and live(map, c) then
                             seen[c] = true
                             local d = math.sqrt(d2)
                             candidates[#candidates + 1] = {entry = e, distance = d, score = e.score / (1 + d / 640), chunk = c}
@@ -102,9 +104,10 @@ function front.candidates(map, x, y, radius, excluded)
             end
         end
     end
-    table.sort(candidates, better)
-    local result, n = {}, #candidates
-    local top = math.min(n, 8)
+    local n = #candidates
+    if n > 1 then table.sort(candidates, better) end
+    if n <= 8 then return candidates end
+    local result, top = {}, 8
     for i = 1, top do result[i] = candidates[i] end
     local rest = n - top
     if rest > 0 then

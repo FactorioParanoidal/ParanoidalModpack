@@ -82,8 +82,6 @@ local mapScanResourceChunk = chunkUtils.mapScanResourceChunk
 local registerEnemyBaseStructure = chunkUtils.registerEnemyBaseStructure
 
 local getNestCount = chunkPropertyUtils.getNestCount
-local getHiveCount = chunkPropertyUtils.getHiveCount
-local getTurretCount = chunkPropertyUtils.getTurretCount
 local getEnemyStructureCount = chunkPropertyUtils.getEnemyStructureCount
 local getNestActiveness = chunkPropertyUtils.getNestActiveness
 local getNestActiveTick = chunkPropertyUtils.getNestActiveTick
@@ -912,9 +910,7 @@ function mapProcessor.processGrowingBases(universe, tick)
 	local growed = false
 	local chunksCount = 0
 	local chunksArray = {}
-	for chunk, _ in pairs(base.chunks) do
-		local nestCount = getNestCount(map, chunk) + getHiveCount(map, chunk)
-		local turretCount = getTurretCount(map, chunk)
+	for chunk in pairs(base.chunks) do
 		chunksCount = chunksCount + 1
 		if baseUtils.chunkCanGrow(map, chunk) then
 			chunksArray[#chunksArray+1] = chunk

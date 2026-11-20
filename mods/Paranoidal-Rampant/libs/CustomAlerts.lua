@@ -3,7 +3,23 @@ if (customAlertsG) then
 end
 local customAlerts = {}
 
+-- Ordinary squads still record detection, but never emit a custom alert.
+function customAlerts.isSquadDetected(surface, entity)
+    local planet = surface.planet
+    local location = planet and planet.name
+    local position = entity.position
+    local chunk = {x = math.floor(position.x / 32), y = math.floor(position.y / 32)}
+    for _, force in pairs(game.forces) do
+        if (not location or force.is_space_location_unlocked(location)) and #force.connected_players > 0
+            and force.is_chunk_visible(surface, chunk) then
+            return true
+        end
+    end
+    return false
+end
+
 function customAlerts.showAlert(surface, entity, alertName, message)
+	if alertName == "squadDetected-warning-rampant" then return customAlerts.isSquadDetected(surface, entity) end
 	local planet = surface.planet
 	local position = entity.position
 	local chunkPosition = {x = math.floor(position.x / 32), y = math.floor(position.y / 32)}
@@ -16,8 +32,7 @@ function customAlerts.showAlert(surface, entity, alertName, message)
 				if visible == nil then visible = force.is_chunk_visible(surface, chunkPosition) end
 				if visible then
 					local player_settings = settings.get_player_settings(player)
-					-- Keep detection bookkeeping, but never announce ordinary AI squads.
-					if alertName ~= "squadDetected-warning-rampant" and player_settings["rampantFixed--showSquadAlert"].value then
+					if player_settings["rampantFixed--showSquadAlert"].value then
 						player.add_custom_alert(
 						  entity,
 						  {

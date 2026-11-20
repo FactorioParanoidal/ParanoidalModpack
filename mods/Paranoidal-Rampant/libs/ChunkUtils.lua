@@ -160,16 +160,24 @@ local function getEntityOverlapChunks(map, entity)
     return overlapArray
 end
 
-local function scanPaths(chunk, map)
+local function scanPaths(chunk, map, blockingTiles)
     local surface = map.surface
     local pass = CHUNK_IMPASSABLE
 
-    local x = chunk.x
-    local y = chunk.y
+    local x, y = chunk.x, chunk.y
+    local right, bottom = x + CHUNK_SIZE, y + CHUNK_SIZE
 
     local universe = map.universe
     local filteredEntitiesCliffQuery = universe.filteredEntitiesCliffQuery
     local filteredTilesPathQuery = universe.filteredTilesPathQuery
+    local clearInside = false
+    if blockingTiles == 0 then
+        -- Both tile queries use the same collision mask. An empty full-chunk
+        -- result also proves every interior strip clear, but not the outer strip.
+        local area = universe.filteredTilesQuery.area
+        clearInside = area[1][1] == x and area[1][2] == y and area[2][1] == right and area[2][2] == bottom
+            and universe.filteredTilesQuery.collision_mask == filteredTilesPathQuery.collision_mask
+    end
     local count_entities_filtered = surface.count_entities_filtered
     local count_tiles_filtered = surface.count_tiles_filtered
 
@@ -179,13 +187,13 @@ local function scanPaths(chunk, map)
     local topPosition = filteredEntitiesCliffQuery.area[1]
     local bottomPosition = filteredEntitiesCliffQuery.area[2]
     topPosition[2] = y
-    bottomPosition[2] = y + 32
+    bottomPosition[2] = bottom
 
-    for xi=x, x + 32 do
+    for xi = x, right do
         topPosition[1] = xi
         bottomPosition[1] = xi + 1
         if (count_entities_filtered(filteredEntitiesCliffQuery) == 0) and
-            (count_tiles_filtered(filteredTilesPathQuery) == 0)
+            ((clearInside and xi < right) or count_tiles_filtered(filteredTilesPathQuery) == 0)
         then
             passableNorthSouth = true
             break
@@ -193,13 +201,13 @@ local function scanPaths(chunk, map)
     end
 
     topPosition[1] = x
-    bottomPosition[1] = x + 32
+    bottomPosition[1] = right
 
-    for yi=y, y + 32 do
+    for yi = y, bottom do
         topPosition[2] = yi
         bottomPosition[2] = yi + 1
         if (count_entities_filtered(filteredEntitiesCliffQuery) == 0) and
-            (count_tiles_filtered(filteredTilesPathQuery) == 0)
+            ((clearInside and yi < bottom) or count_tiles_filtered(filteredTilesPathQuery) == 0)
         then
             passableEastWest = true
             break
@@ -315,15 +323,16 @@ local needReplacement = chunkUtils.needReplacement
 function chunkUtils.initialScan(chunk, map, tick)
     local surface = map.surface
     local universe = map.universe
-    local waterTiles = (1 - (surface.count_tiles_filtered(universe.filteredTilesQuery) * 0.0009765625)) * 0.80
+    local blockingTiles = surface.count_tiles_filtered(universe.filteredTilesQuery)
+    local waterTiles = (1 - blockingTiles * 0.0009765625) * 0.80
     local enemyBuildings = surface.find_entities_filtered(universe.filteredEntitiesEnemyStructureQuery)
 
     if (waterTiles >= CHUNK_PASS_THRESHOLD) or (#enemyBuildings > 0) then
         local neutralObjects = mMax(0,
                                     mMin(1 - (surface.count_entities_filtered(universe.filteredEntitiesChunkNeutral) * 0.005),
                                          1) * 0.20)
-        local pass = scanPaths(chunk, map)		
-		
+        local pass = scanPaths(chunk, map, blockingTiles)
+
 		local pheromones = scorePlayerBuildings(map, chunk)
 
         if ((pheromones > 0) or (#enemyBuildings > 0)) and (pass == CHUNK_IMPASSABLE) then
@@ -394,13 +403,14 @@ end
 function chunkUtils.chunkPassScan(chunk, map)
     local surface = map.surface
     local universe = map.universe
-    local waterTiles = (1 - (surface.count_tiles_filtered(universe.filteredTilesQuery) * 0.0009765625)) * 0.80
+    local blockingTiles = surface.count_tiles_filtered(universe.filteredTilesQuery)
+    local waterTiles = (1 - blockingTiles * 0.0009765625) * 0.80
 
     if (waterTiles >= CHUNK_PASS_THRESHOLD) then
         local neutralObjects = mMax(0,
                                     mMin(1 - (surface.count_entities_filtered(universe.filteredEntitiesChunkNeutral) * 0.005),
                                          1) * 0.20)
-        local pass = scanPaths(chunk, map)
+        local pass = scanPaths(chunk, map, blockingTiles)
 
         local playerObjects = getPlayerBaseGenerator(map, chunk, BASE_PHEROMONE)
 
