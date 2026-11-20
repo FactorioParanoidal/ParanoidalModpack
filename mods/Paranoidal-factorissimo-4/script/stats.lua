@@ -417,7 +417,7 @@ function factorissimo.sample_factory(factory, released, tick)
         if streak > record.clean then record.clean = streak end
         if streak >= CLEAN_MILESTONE_TICKS then trigger_milestone(force, MILESTONE_CLEAN) end
     end
-    if not factory.inactive and is_nested(factory) then trigger_milestone(force, MILESTONE_NESTED) end
+    if working and is_nested(factory) then trigger_milestone(force, MILESTONE_NESTED) end
 
     if not factory.launched and not factory.inactive and ratio and ratio >= LAUNCH_POWER and next(factory.connections or {}) then
         factory.launched = true

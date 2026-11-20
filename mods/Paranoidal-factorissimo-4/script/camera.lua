@@ -85,7 +85,8 @@ local function update_camera(player)
     -- Screen pixels per tile are 32 * zoom * display_density_scale: since 2.0.7 the world view is scaled by the
     -- display density on high-DPI Windows displays like on Retina (4K with Windows scaling 150-200 %).
     -- Without the density factor the preview was drawn smaller and shifted towards the screen centre there.
-    local zoom = player.zoom * player.display_density_scale
+    local density = player.display_density_scale
+    local zoom = player.zoom * density
     local display_resolution = player.display_resolution
     local display_scale = player.display_scale
 
@@ -96,16 +97,33 @@ local function update_camera(player)
     local preview_size_world = (factory.layout.outside_size * 32 - 32)
     local preview_size_screen = preview_size_world * zoom
 
-    camera_frame.location = {
-        left_margin + display_resolution.width / 2 - preview_size_screen / 2,
-        top_margin + display_resolution.height / 2 - preview_size_screen / 2
-    }
-
     local camera = camera_frame.factory_camera
     if not camera then return end
-    camera.style.width = preview_size_screen / display_scale
-    camera.style.height = preview_size_screen / display_scale
-    camera.zoom = preview_size_world / (factory.layout.inside_size + 2) * zoom / 32 / player.display_density_scale
+    local x = left_margin + display_resolution.width / 2 - preview_size_screen / 2
+    local y = top_margin + display_resolution.height / 2 - preview_size_screen / 2
+    local size = preview_size_screen / display_scale
+    local camera_zoom = preview_size_world / (factory.layout.inside_size + 2) * zoom / 32 / density
+
+    -- Keep tracking movement/zoom every tick, but avoid writing the same GUI values.
+    local active, index = storage.fancy_preview_active, player.index
+    local last = active[index]
+    if type(last) ~= "table" or last.camera ~= camera then
+        last = {camera = camera}
+        active[index] = last
+    end
+    if last.x ~= x or last.y ~= y then
+        camera_frame.location = {x, y}
+        last.x, last.y = x, y
+    end
+    if last.size ~= size then
+        camera.style.width = size
+        camera.style.height = size
+        last.size = size
+    end
+    if last.zoom ~= camera_zoom then
+        camera.zoom = camera_zoom
+        last.zoom = camera_zoom
+    end
 end
 
 local function set_camera(player, factory)
@@ -115,7 +133,8 @@ local function set_camera(player, factory)
     if not factory or factory.inactive then return false end
     local inside_surface = factory.inside_surface
     if not (inside_surface and inside_surface.valid) then return false end
-    storage.fancy_preview_active[player.index] = true
+    local active = storage.fancy_preview_active
+    active[player.index] = active[player.index] or true
 
     local position = {x = factory.inside_x, y = factory.inside_y}
 

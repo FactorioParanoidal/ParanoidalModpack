@@ -328,19 +328,11 @@ end)
 --- searches a factory floor for "holes" where a new factory could be created
 --- else returns the next position
 local function find_first_unused_position(surface)
-    local used_indexes = {}
-    for k in pairs(storage.surface_factories[surface.index] or {}) do
-        used_indexes[#used_indexes + 1] = k
-    end
-    table.sort(used_indexes)
-
-    for i, index in ipairs(used_indexes) do
-        if i ~= index then -- found a gap
-            return (used_indexes[i - 1] or 0) + 1
-        end
-    end
-
-    return #used_indexes + 1
+    local factories = storage.surface_factories[surface.index]
+    if not factories then return 1 end
+    local index = 1
+    while factories[index] do index = index + 1 end
+    return index
 end
 
 local function surface_sanity_checks(surface)
