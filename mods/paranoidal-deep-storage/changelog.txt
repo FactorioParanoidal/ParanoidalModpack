@@ -9,6 +9,8 @@ Date: 2026-11-01
     - The power source is written only when the power usage changes (the number of stored stacks), and its buffer size is not read back on every update; the power setting is read once and the quality factor of a unit is cached.
     - The Alt-mode amount is rewritten only when the rounded text changes.
     - Graphics recompressed (lossy palette, tint masks lossless).
+  Bugfixes:
+    - Mining a fluid memory unit preserves tank contents even before its first update has locked onto the fluid. Destruction still loses the contents.
   Changes:
     - deep-storage-unit is no longer shipped and its optional dependency is removed: old 2.0 saves are no longer supported. Already migrated saves keep their data in this mod; in unmigrated 2.0 saves the contents of the item units are lost.
     - deep-storage-unit stays as a migration bridge (9.9.0): on the first load of an old save the item units are taken over with their contents. Hidden power sources and combinators already standing at a unit are taken over too, so combinator wires stay.

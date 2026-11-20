@@ -193,11 +193,13 @@ end
 
 -- Moves the tank contents into the counter (before mining/deconstruction).
 function M.pre_mined(unit_data)
-	if not unit_data.item then return end
-	local amount, temperature = M.buffer(unit_data)
-	if amount <= 0 then return end
-	M.mix_temperature(unit_data, temperature)
-	unit_data.count = unit_data.count + unit_data.entity.extract_fluid {name = unit_data.item, amount = amount}
+	local fluid = unit_data.entity.get_fluid(1)
+	if not fluid or fluid.amount <= 0 then return end
+	-- A tank can fill before the first powered update has locked it.
+	if not unit_data.item then M.lock(unit_data, fluid.name, fluid.temperature) end
+	if fluid.name ~= unit_data.item then return end
+	M.mix_temperature(unit_data, fluid.temperature)
+	unit_data.count = unit_data.count + unit_data.entity.extract_fluid {name = fluid.name, amount = fluid.amount}
 end
 
 -- Contents of a packed unit. Renamed fluids follow recorded migrations.
@@ -319,15 +321,23 @@ end
 
 -- Mined unit: the unit item in the buffer is replaced by a packed unit with the contents.
 function M.pack(unit_number, unit_data, entity, buffer)
-	local item = unit_data.item
+	if not buffer then return end -- destruction still loses the contents
+	local item, temperature = unit_data.item, unit_data.temperature
 	local count = unit_data.count or 0
-	if not (buffer and item and count > EPSILON) then return end
+	-- Include any fluid still in the physical tank, even if mining bypassed the pre-mine hook.
+	local fluid = entity.get_fluid(1)
+	if fluid and fluid.amount > 0 and (not item or item == fluid.name) then
+		item = fluid.name
+		temperature = count > EPSILON and temperature and math.min(temperature, fluid.temperature) or fluid.temperature
+		count = count + fluid.amount
+	end
+	if not (item and count > EPSILON) then return end
 
 	local quality = entity.quality.name
 	if buffer.remove {name = M.name, count = 1, quality = quality} == 0 then
 		log("fluid memory unit " .. unit_number .. ": mined unit item not found in the buffer")
 	end
-	local temperature = unit_data.temperature or prototypes.fluid[item].default_temperature
+	temperature = temperature or prototypes.fluid[item].default_temperature
 	buffer.insert {
 		name = M.packed_name,
 		count = 1,
