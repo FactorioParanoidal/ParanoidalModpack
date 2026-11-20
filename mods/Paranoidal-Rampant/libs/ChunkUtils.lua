@@ -31,7 +31,7 @@ local GENERATOR_PHEROMONE_LEVEL = constants.GENERATOR_PHEROMONE_LEVEL
 
 local GET_ENTITY_PHEROMONES = constants.GET_ENTITY_PHEROMONES
 local BUILDING_PHEROMONES = constants.BUILDING_PHEROMONES
-local FACTORISSIMO_ENTITY = constants.FACTORISSIMO_ENTITY
+local isFactorissimoName = constants.isFactorissimoName
 local FACTORISSIMO_ENTITY_FEROMONE = constants.FACTORISSIMO_ENTITY_FEROMONE
 	
 
@@ -217,6 +217,25 @@ local function scanPaths(chunk, map)
     return pass
 end
 
+-- The filters depend on loaded prototypes and on the current player-structure query.
+-- Keep the cache local so older saves also get it on their first scan after loading.
+local factorissimoNames, factorissimoQuery, playerStructureQuery
+local function getFactorissimoQuery(query)
+    if not factorissimoNames then
+        factorissimoNames = {}
+        for name in pairs(prototypes.get_entity_filtered({{filter = "type", type = "storage-tank"}})) do
+            if isFactorissimoName(name) then factorissimoNames[#factorissimoNames + 1] = name end
+        end
+    end
+    if #factorissimoNames == 0 then return end
+    if playerStructureQuery ~= query then
+        playerStructureQuery = query
+        factorissimoQuery = {area = query.area, force = query.force, collision_mask = "player",
+            type = "storage-tank", name = factorissimoNames}
+    end
+    return factorissimoQuery
+end
+
 local function scorePlayerBuildings(map, chunk)
     local surface = map.surface
 	local universe = map.universe
@@ -254,17 +273,12 @@ local function scorePlayerBuildings(map, chunk)
 			end	
 		end
 		
-		-- nil when the game has no Factorissimo factory prototypes (Upgrade.lua addCommandSet)
-		local factorissimoQuery = universe.filteredEntitiesPlayerQueryFactorissimo
-		if factorissimoQuery then
-			local entities = surface.find_entities_filtered(factorissimoQuery)
-			for i = 1, #entities do
-				if FACTORISSIMO_ENTITY(entities[i]) then
-					baseScent = baseScent + FACTORISSIMO_ENTITY_FEROMONE[BASE_PHEROMONE]
-					detectionScent = detectionScent + FACTORISSIMO_ENTITY_FEROMONE[BASE_DETECTION_PHEROMONE]
-				end
-			end
-		end
+        local query = getFactorissimoQuery(universe.hasPlayerStructuresQuery)
+        if query then
+            local count = surface.count_entities_filtered(query)
+            baseScent = baseScent + count * FACTORISSIMO_ENTITY_FEROMONE[BASE_PHEROMONE]
+            detectionScent = detectionScent + count * FACTORISSIMO_ENTITY_FEROMONE[BASE_DETECTION_PHEROMONE]
+        end
     end
 	setPlayerBaseGenerator(map, chunk, baseScent, BASE_PHEROMONE)
 	setPlayerBaseGenerator(map, chunk, detectionScent, BASE_DETECTION_PHEROMONE)

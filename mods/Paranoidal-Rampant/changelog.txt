@@ -17,12 +17,14 @@ Date: 2026.11.16
     - Local ground and air raids select from nearby districts, not a single surface-wide weak-target shortlist. The report distinguishes selection, issued orders and attributed outcomes.
     - Rail ambushes require repeat observed transits by hostile trains; a single sample or dwelling in one chunk is not enough. Player presence is unchanged.
   Optimizations:
+    - Count Factorissimo factories without building a list of entities during chunk scans; optionally return the shared evolution reading with remote truce snapshots.
     - Precompute the player scan offsets in their original order, avoid empty squad scans and remove a redundant attack check. Hunting odds, random draws and scan timing are unchanged.
     - Player scent reads only usable neighbors in restricted chunks; player-building scans accumulate scores without temporary tables. Scent and targeting formulas are unchanged.
     - Due super-hive pulses share a deadline queue without catch-up bursts. Saturated healing cells subdivide within the existing query budget.
     - Train ambush sampling maintains a train index from events after seeding it once per surface; updates visit at most 80 entries per surface and sample at most 40 moving trains.
     - Super-hives bound heal queries. Dense colonies rotate through small cells instead of repeating a full enumeration every pulse.
   Bugfixes:
+    - Apply the Factorissimo scent bonus only to factory tanks, including space factories, and recognize current factory-floor surface names.
     - Blank or invalid planet AI fields keep their previous values. Older incomplete truce settings are read safely, and both server-side AI commands work on Nauvis without a player.
     - Long-range and one-shot protection refund only the current hit. Failed energy drain creation does not leave an incomplete pylon or stop the death handler.
     - Re-indexing a populated surface preserves its fighters and pack carriers. Rebuilt maps no longer adopt chunks or bases left over from the previous map.

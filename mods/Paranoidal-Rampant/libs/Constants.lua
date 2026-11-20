@@ -372,6 +372,7 @@ local sFind = string.find
 -- list of names. Can't be enabled manually/by remote interface
 function constants.isExcludedSurface(surfaceName)
 	return (sFind(surfaceName, "Factory floor") or
+        sFind(surfaceName, "%-factory%-floor$") or
 		sFind(surfaceName, " Orbit") or
         sFind(surfaceName, "clonespace") or
         sFind(surfaceName, "BPL_TheLabplayer") or
@@ -468,26 +469,13 @@ function constants.IS_VANILLA_BITERS_SURFACE(surface)
 	return hasBiters
 end
 
+function constants.isFactorissimoName(name)
+    return name:sub(1, 8) == "factory-" or name:sub(1, 14) == "space-factory-"
+end
+
 function constants.FACTORISSIMO_ENTITY(entity)
-	local entityNames = {"factory-"}
-	if not entity or not entity.valid then
-		return false
-	end	
-	if not entity.type == "storage-tank" then	-- Factorissimo. Yes, this is a "storage-tank" enities
-		return false	
-	end
-	
-	local sLen = string.len
-	local returnValue = false
-	for _, entityName in pairs(entityNames) do
-		local lenSurface = sLen(entityName)
-		if (sLen(entity.name)>=lenSurface) and (string.sub(entity.name, 1, lenSurface) == entityName) then
-			returnValue = true
-			break
-		end		
-	end
-	--game.print(entity.name.." is factorissimo building: "..tostring(returnValue))
-	return returnValue
+    return entity ~= nil and entity.valid and entity.type == "storage-tank"
+        and constants.isFactorissimoName(entity.name)
 end
 
 constants.VANILLA_ENTITIES = {}

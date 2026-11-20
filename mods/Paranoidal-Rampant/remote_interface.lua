@@ -424,9 +424,9 @@ remote.add_interface("rampantFixed", {
 	,
 	--------------------
 	-- Paranoidal: read-only truce data for EvoUI and Big Monsters.
-	-- parameters: {surfaceIndex = number}
-	-- return: nil (Rampant AI is off on the surface or the map is peaceful, libs/PeacefulMap) or {minEvo = number (percent), peaceful = boolean (AI state),
-	--         truce = boolean (the evolution or the peace period of the planet setting is not reached yet)}
+	-- parameters: {surfaceIndex = number, includeEvolution = boolean?}
+	-- return: nil (AI off or the map is peaceful) or {minEvo = number (percent), peaceful = boolean (AI state),
+	--         truce = boolean (evolution or peace period not reached), evolution = number (0..1, if requested)}
 	getTruceInfo = function(parameters)
 		if (not parameters) or (not parameters.surfaceIndex) then
 			return nil
@@ -440,9 +440,13 @@ remote.add_interface("rampantFixed", {
 		if not (map and map.surface and map.surface.valid) then
 			return nil
 		end
-        local truce, minEvo = aiPredicates.truceInfo(map, game.tick)
+        local evolution
+        if parameters.includeEvolution == true then
+            evolution = game.forces.enemy.get_evolution_factor(map.surface)
+        end
+        local truce, minEvo = aiPredicates.truceInfo(map, game.tick, evolution)
         if not minEvo then return nil end
-        return {minEvo = minEvo, peaceful = (map.state == constants.AI_STATE_PEACEFUL), truce = truce}
+        return {minEvo = minEvo, peaceful = (map.state == constants.AI_STATE_PEACEFUL), truce = truce, evolution = evolution}
 	end
 
 	,
