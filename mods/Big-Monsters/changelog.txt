@@ -32,6 +32,7 @@ Version: 2.1.2
     - Paranoidal fork: fixed level 1-2 mother biterzillas using fire/electric effects instead of brooding
     - Paranoidal fork: fixed settings-updates looking up int/bool settings as double settings
   Optimizations:
+    - Use a count for edge-of-base presence checks and skip unused spawn position searches without changing the random draws.
     - Paranoidal fork: on_entity_died is filtered to bm-volcano
     - Paranoidal fork: the boss kind is resolved once instead of string searches every second
     - Paranoidal fork: brood limits use count_entities_filtered with a limit

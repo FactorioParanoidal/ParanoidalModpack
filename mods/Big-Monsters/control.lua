@@ -281,15 +281,15 @@ for p=1,#storage.player_forces do
 			local target  
 			
 			if the_event=='swarm' then 
-					local last_building = FindTeamAttackCorner(surface, pforce, player_spawn,1)
+					local last_building = FindTeamAttackCorner(surface, pforce, player_spawn, 1, true)
 					local attack = {surface=surface,target=last_building}   --(at.surface,at.target,at.limit,at.multiplier)
 					table.insert (next_waves,attack) 	
 					--CallFrenzyAttack(surface,last_building)  --- now on waves
 					alert_force(pforce,{"bm-txt-swarm"})
 					Play_sound_alert(pforce,1)	
 						
-				elseif the_event=='invasion' then 
-					local last_building, player_chunks = FindTeamAttackCorner(surface, pforce, player_spawn,1)
+				elseif the_event=='invasion' then
+					local _, player_chunks = FindTeamAttackCorner(surface, pforce, player_spawn, 1, true)
 					local rchunk = player_chunks[math.random(#player_chunks)]
 					local target = {x= rchunk.x*32+math.random(31), y= rchunk.y*32+math.random(31)}
 					create_invasion(surface,target,pcount,evo)
@@ -299,7 +299,7 @@ for p=1,#storage.player_forces do
 					
 					
 				elseif the_event=='volcano' then
-					local last_building, player_chunks = FindTeamAttackCorner(surface, pforce, player_spawn,1)
+					local _, player_chunks = FindTeamAttackCorner(surface, pforce, player_spawn, 1, true)
 					local rchunk = player_chunks[math.random(#player_chunks)]
 					local target = {x= rchunk.x*32+math.random(31), y= rchunk.y*32+math.random(31)}
 					local volcano = create_volcano(surface, target, pcount)
@@ -311,7 +311,7 @@ for p=1,#storage.player_forces do
 
 				
 				elseif the_event=='worms' then
-					local last_building, player_chunks = FindTeamAttackCorner(surface, pforce, player_spawn,1)
+					local _, player_chunks = FindTeamAttackCorner(surface, pforce, player_spawn, 1, true)
 					local rchunk = player_chunks[math.random(#player_chunks)]
 					local target = {x= rchunk.x*32+math.random(31), y= rchunk.y*32+math.random(31)}
 					local bigworm = create_bigworm(surface,target,pcount,evo)
@@ -575,7 +575,7 @@ end)
 
 
 
-function FindTeamAttackCorner(surface, force, initial_position, chunk_distance)
+function FindTeamAttackCorner(surface, force, initial_position, chunk_distance, skip_spawn_search)
 local directionVec=GetRandomVector()
 if not chunk_distance then chunk_distance=4 end
 local enemy_spawn
@@ -595,8 +595,7 @@ local last_building = table.deepcopy(chunkPos)
         
         elseif (surface.is_chunk_generated(chunkPos)) then
 			local area = Chunk.to_area(chunkPos) 
-			local builds = surface.find_entities_filtered{force=force,area=area,limit=1}
-			if #builds>0 then 
+			if surface.count_entities_filtered{force=force,area=area,limit=1} > 0 then
 				last_building = table.deepcopy(chunkPos)
 				table.insert (player_chunks,table.deepcopy(chunkPos))
 				nothing = 0 -- only consecutive empty chunks count
@@ -612,7 +611,12 @@ local last_building = table.deepcopy(chunkPos)
 last_building = {x= last_building.x*32+math.random(31), y= last_building.y*32+math.random(31)}
 if enemy_spawn then 
 	enemy_spawn = {x= enemy_spawn.x*32+math.random(31), y= enemy_spawn.y*32+math.random(31)}
-	enemy_spawn = surface.find_non_colliding_position('rocket-silo', enemy_spawn, 100, 1)
+	-- Preserve the two spawn-offset draws even for callers that do not use the spawn.
+	if skip_spawn_search then
+		enemy_spawn = nil
+	else
+		enemy_spawn = surface.find_non_colliding_position('rocket-silo', enemy_spawn, 100, 1)
+	end
 	end
 
 return last_building, player_chunks, enemy_spawn
