@@ -62,8 +62,8 @@ Date: 2026-11-03
     - Buildings taken from a force that has gone since (ruins) are given to the player instead of staying the protomolecule's or failing.
     - Inserters that can't form a creature after all let go of what they were lifting instead of losing what was in it.
   Locale:
-    - Added selective inline images and restrained colour emphasis to Russian mod-setting tooltips; wording, setting values and mechanics are unchanged.
     - Russian arrival and railway junction notifications use the requested asteroid-impact and unplanned railway recalculation wording. Their triggers are unchanged.
+    - Added selective inline images and restrained colour emphasis to Russian mod-setting tooltips; wording, setting values and mechanics are unchanged.
     - Russian locale. Mod settings and the unknown technology message in English.
     - Clinical texts for the landing, research stages and the end of the outbreak; new mod title and description; names of the power, artillery and vehicle creatures; the rail junction message; the alert for a train at a raid.
     - Wire resistance, the name the seed's draw goes by in the power network's statistics; the seed and power settings; the mod description mentions the seed. The 'no carriers formed' message is gone.

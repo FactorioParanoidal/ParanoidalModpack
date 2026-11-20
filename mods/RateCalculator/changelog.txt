@@ -8,9 +8,10 @@ Date: 2026-10-15
     - Fixed a crash when selecting boilers on Factorio 2.1.22 or newer. (#239)
     - Paranoidal: lab rates divide by the science_capacity of a science pack that is a plain item (the vanilla packs are plain items in 2.1) and by the durability only for tool packs, as in the Paranoidal 3.3.8 port; upstream divides plain items by 1.
   Locale:
-    - Added selective inline images and restrained colour emphasis to Russian mod-setting tooltips; wording, setting values and mechanics are unchanged.
-    - Added selective inline images to Russian mod-setting names; existing tooltip formatting, wording, saved values and mechanics are preserved.
+    - Clarified setting descriptions against current code and modpack overrides, including units, dependencies and limits; setting values and gameplay are unchanged.
     - Added beginner-friendly English and Russian descriptions with contextual images for previously undocumented mod settings; existing names, values and tooltips are preserved.
+    - Added selective inline images to Russian mod-setting names; existing tooltip formatting, wording, saved values and mechanics are preserved.
+    - Added selective inline images and restrained colour emphasis to Russian mod-setting tooltips; wording, setting values and mechanics are unchanged.
     - ru: removed the extra multiplication sign from the net machine count and restored the information icon in the no-power warning.
     - en/ru: removed the outdated claim that power consumption display is disabled by default; Paranoidal enables it by default.
     - ru: the mod name and the mod list description are the same as in ParanoidalLocale (format "English title (Russian translation)"), so the mod reads the same with or without it.

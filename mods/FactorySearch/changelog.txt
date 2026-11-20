@@ -1,6 +1,7 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.14.3
   Locale:
+    - Clarified setting descriptions against current code and modpack overrides, including units, dependencies and limits; setting values and gameplay are unchanged.
     - Russian hardcoded player-facing text: 6 UI, chat, command-help and error-message literals; technical identifiers, format parameters and gameplay logic are unchanged.
 Date: 8 June 2026
   Changes:

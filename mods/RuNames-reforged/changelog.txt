@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 9.0.0
 Date: 2026-10-30
+  Locale:
+    - Clarified setting descriptions against current code and modpack overrides, including units, dependencies and limits; setting values and gameplay are unchanged.
   Major Features:
     - One mod instead of Name Lists 2.2.0, Russian Station Names 9.2.0 (RussianStations2) and Renamer 2.2.2, which are now incompatible with it.
     - New train stops, locomotives, labs, radars and roboports (the entity types with a backer name in Factorio 2.0) get a random Russian name. Ghosts get a name when placed with an empty name; names from blueprints and undo are kept. A built entity is renamed only if the engine gave it a backer name. Entities created by other mods' scripts (script_raised_built) are handled the same way.

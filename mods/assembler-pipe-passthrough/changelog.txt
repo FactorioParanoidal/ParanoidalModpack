@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 2025.09.15
 Date: 2025-09-15
+  Locale:
+    - Clarified setting descriptions against current code and modpack overrides, including units, dependencies and limits; setting values and gameplay are unchanged.
   Compatibility:
     - Paranoidal: the Factorissimo check follows the rename of factorissimo-2-notnotmelon to Paranoidal-factorissimo-4.
   Changes:

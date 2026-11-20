@@ -3,10 +3,10 @@ Version: 1.0.14
 Date: 2026-07-29
   Locale:
     - Clarified setting tooltips against current code, corrected units, conditions and default labels, and added contextual images; setting values and gameplay are unchanged.
-    - Added selective inline images and restrained colour emphasis to Russian mod-setting tooltips; wording, setting values and mechanics are unchanged.
-    - Added selective inline images to Russian mod-setting names; existing tooltip formatting, wording, saved values and mechanics are preserved.
     - Added beginner-friendly English and Russian descriptions with contextual images for previously undocumented mod settings; existing names, values and tooltips are preserved.
     - Runtime debug prose is Russian. Internal deconstruction-failure details are logged and shown in chat only with the existing debug mode or paranoidal-debug-chat enabled. User configuration warnings and explicit debug commands remain available.
+    - Added selective inline images to Russian mod-setting names; existing tooltip formatting, wording, saved values and mechanics are preserved.
+    - Added selective inline images and restrained colour emphasis to Russian mod-setting tooltips; wording, setting values and mechanics are unchanged.
     - Russian hardcoded player-facing text: 10 UI, chat, command-help and error-message literals; technical identifiers, format parameters and gameplay logic are unchanged.
     - ru: corrected the tile deconstruction setting to refer to paving under entities, not an interface section.
   Changes:

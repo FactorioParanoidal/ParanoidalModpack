@@ -2,8 +2,8 @@
 Version: 2.0.1
 Date: 2026-11-08
   Locale:
-    - Added selective inline images and restrained colour emphasis to Russian mod-setting tooltips; wording, setting values and mechanics are unchanged.
     - Added selective inline images to Russian mod-setting names; existing tooltip formatting, wording, saved values and mechanics are preserved.
+    - Added selective inline images and restrained colour emphasis to Russian mod-setting tooltips; wording, setting values and mechanics are unchanged.
   Graphics:
     - Axiom-6 uses mferrari_lib's infected spaceship hull instead of a green-tinted vanilla wreck. Its container, note, salvage, nearby car and safe-code quest are unchanged; without the optional library the previous appearance stays.
   Changes:

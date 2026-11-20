@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 2.1.4
 Date: 31.01.2026
+  Locale:
+    - Clarified setting descriptions against current code and modpack overrides, including units, dependencies and limits; setting values and gameplay are unchanged.
   Bugfixes:
     - Potential fix that inserters in a modded environment are no longer cleaned up.
     - Paranoidal: "delete all marks" clears marks on every surface, not only game.surfaces[1].

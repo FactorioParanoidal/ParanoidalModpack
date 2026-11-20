@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.1
 Date: 2026-10-18
+  Locale:
+    - Clarified setting descriptions against current code and modpack overrides, including units, dependencies and limits; setting values and gameplay are unchanged.
   Features:
     - Added per-user settings "Show only turrets short of ammo" (on by default) and "Shortage threshold, %" (default 100). A counter is shown only while the turret holds fewer magazines than the given share of its inserter fill limit (automated_ammo_count).
     - Empty turrets are now always shown (critical colour / full-urgency icon) instead of being skipped.

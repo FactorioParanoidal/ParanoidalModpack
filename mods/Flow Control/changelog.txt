@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 3.2.3
 Date: 08. 02. 2025
+  Locale:
+    - Clarified setting descriptions against current code and modpack overrides, including units, dependencies and limits; setting values and gameplay are unchanged.
   Features:
     - Paranoidal: rotate while holding an ordinary pipe cycles through four elbows, four T-junctions, two straight orientations and the original pipe. Reverse rotate cycles backwards.
     - Cursor fittings preserve the source pipe's material, stack count and quality. Supported ordinary pipes include Bob's and Bio Industries pipes; underground and special-connection pipes are excluded.

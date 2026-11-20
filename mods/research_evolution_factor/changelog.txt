@@ -1,4 +1,8 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.1.05
+  Locale:
+    - Clarified setting descriptions against current code and modpack overrides, including units, dependencies and limits; setting values and gameplay are unchanged.
+---------------------------------------------------------------------------------------------------
 Version: 1.1.5
 Date: 2026. 10. 15
   Graphics:

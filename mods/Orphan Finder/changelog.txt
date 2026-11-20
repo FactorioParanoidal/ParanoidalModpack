@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.2.2
 Date: 25. 01. 2025
+  Locale:
+    - Clarified setting descriptions against current code and modpack overrides, including units, dependencies and limits; setting values and gameplay are unchanged.
   Changes:
     - Rewrote control script to better support modded underground pipes with multiple connections
   Compatibility:

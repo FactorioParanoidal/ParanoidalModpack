@@ -4,6 +4,7 @@ Date: 2026-11-01
   Compatibility:
     - The four Factorissimo achievements (tardis, factory-in-factory, no-emissions, factory-24-7) and the Milestones preset require Paranoidal-factorissimo-4, the renamed factorissimo-2-notnotmelon.
   Locale:
+    - Clarified setting descriptions against current code and modpack overrides, including units, dependencies and limits; setting values and gameplay are unchanged.
     - ru: the mod description names the renamed Paranoidal Rampant.
   Bugfixes:
     - Short Circuit keeps its ID and 1000 threshold, but now tracks hostile units, spawners and worms killed by electric damage regardless of faction. Owner-attributed events reject neutral/friendly targets and sandbox activity; force counters merge and replay normally. The prototype is script-unlocked, so native electric-faction progress is not imported; previously earned client IDs are not deliberately revoked.

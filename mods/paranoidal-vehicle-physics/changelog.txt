@@ -2,9 +2,9 @@
 Version: 9.0.0
 Date: 2026-11-01
   Locale:
-    - Added selective inline images and restrained colour emphasis to Russian mod-setting tooltips; wording, setting values and mechanics are unchanged.
-    - Added selective inline images to Russian mod-setting names; existing tooltip formatting, wording, saved values and mechanics are preserved.
     - Added beginner-friendly English and Russian descriptions with contextual images for previously undocumented mod settings; existing names, values and tooltips are preserved.
+    - Added selective inline images to Russian mod-setting names; existing tooltip formatting, wording, saved values and mechanics are preserved.
+    - Added selective inline images and restrained colour emphasis to Russian mod-setting tooltips; wording, setting values and mechanics are unchanged.
   Major Features:
     - One mod instead of Vehicle Physics 2.0.4 (OwnlyMe), VehicleSnap 2.0.3 (Zaflis) and Shield FX 2.0.1 (OwnlyMe), with one rewritten control script. Drift, tire marks, dust, sounds, angle snapping and shield effects behave as before.
     - Prototype, setting, hotkey and shortcut names are unchanged (hover-smoke, drifting-tire-marks, vehphy-*, shield-effect*, VehicleSnap-toggle, VehicleSnap-shortcut, vehphy-tiremarks-duration, VehicleSnap_amount, SFX_alternate_effect), so saved setting values carry over.

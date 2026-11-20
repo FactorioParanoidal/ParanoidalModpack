@@ -4,6 +4,7 @@ Version: 19.15.2
     - Import and export results appear in their existing windows without routine chat or sound. Failed imports retain the input; successful imports show the added count and clear it against accidental repeats. Empty and partial exports have distinct results.
     - Invalid encoded/JSON input and malformed task records are rejected before task insertion; valid export format, task ordering and subtask handling are unchanged. Raw import failures remain in the engine log and opt-in debug output.
   Locale:
+    - Clarified setting descriptions against current code and modpack overrides, including units, dependencies and limits; setting values and gameplay are unchanged.
     - Failed task imports ask the player to check the complete export string. Import diagnostics are Russian; no request to contact the author. Parsing is unchanged.
     - Russian hardcoded player-facing text: 1 UI, chat, command-help and error-message literals; technical identifiers, format parameters and gameplay logic are unchanged.
 Date: 2026-05-20

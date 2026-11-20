@@ -1,6 +1,7 @@
 ---------------------------------------------------------------------------------------------------
 Version: 2.1.2
   Locale:
+    - Clarified setting descriptions against current code and modpack overrides, including units, dependencies and limits; setting values and gameplay are unchanged.
     - Clarified setting tooltips against current code, corrected units, conditions and default labels, and added contextual images; setting values and gameplay are unchanged.
     - Added beginner-friendly English and Russian descriptions with contextual images for previously undocumented mod settings; existing names, values and tooltips are preserved.
   Graphics:

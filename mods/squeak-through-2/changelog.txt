@@ -14,6 +14,7 @@ Date: 2026-04-23
     - Fixed removed_layers leaking as a global variable
     - Fixed RealisticReactors compatibility for 2.0 (layer "player", collision_mask_util.remove_layer no longer exists)
   Locale:
+    - Clarified setting descriptions against current code and modpack overrides, including units, dependencies and limits; setting values and gameplay are unchanged.
     - Clarified collision-exclusion checkbox polarity, explicit-removal dependencies and upgrade-chain scope; retained the 0.2-tile tree rule and existing images. Collision code and setting values are unchanged.
     - Added descriptions of chests, drills, trees and turrets; valves and display panels in the descriptions (en, ru)
   Compatibility:

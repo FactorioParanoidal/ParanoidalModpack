@@ -2,6 +2,7 @@
 Version: 9.0.0
 Date: 2026-11-01
   Locale:
+    - Clarified setting descriptions against current code and modpack overrides, including units, dependencies and limits; setting values and gameplay are unchanged.
     - Added selective inline images to Russian mod-setting names; existing tooltip formatting, wording, saved values and mechanics are preserved.
   Major Features:
     - One mod instead of CleanFloor 2.0.0 (Clean Floor by David Skrundz), RealisticDecorationCleanup 2.0.2 (Realistic Decoration Cleanup by someone1337) and UnPollock 2.0.1 (UnPollock by Loren1350). The setting names unpollock-decorative-rate and unpollock-fake-rocks are unchanged.

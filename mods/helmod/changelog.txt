@@ -1,6 +1,7 @@
 ---------------------------------------------------------------------------------------------------
 Version: 2.2.14
   Locale:
+    - Clarified setting descriptions against current code and modpack overrides, including units, dependencies and limits; setting values and gameplay are unchanged.
     - Caught GUI errors show a short Russian failure notice instead of a raw Lua error. Original details remain in the log and are sent only to the affected player when paranoidal-debug-chat is enabled.
     - Russian hardcoded player-facing text: 77 UI, chat, command-help and error-message literals; technical identifiers, format parameters and gameplay logic are unchanged.
 Date: 2026-06-19

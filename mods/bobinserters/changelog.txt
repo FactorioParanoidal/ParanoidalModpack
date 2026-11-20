@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 2.0.3
 Date: 15. 01. 2026
+  Locale:
+    - Clarified setting descriptions against current code and modpack overrides, including units, dependencies and limits; setting values and gameplay are unchanged.
   Changes:
     - Updated Korean locale #506
     - Paranoidal: position grid supports inserters larger than 1x1 (nco-InserterCranes 2x2 and 6x2)

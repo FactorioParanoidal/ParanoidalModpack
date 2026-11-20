@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 2.1.1
 Date: 04. 06. 2026
+  Locale:
+    - Clarified setting descriptions against current code and modpack overrides, including units, dependencies and limits; setting values and gameplay are unchanged.
   Changes:
     - Paranoidal: the Russian hydrogen-chloride name now identifies hydrogen chloride rather than its aqueous acid; IDs and recipes are unchanged.
     - Paranoidal: EN/RU sulfur oxide names now say sulfur trioxide, matching the Angel's fluid used by the build; the legacy bob-sulfur-dioxide ID and recipes are unchanged.

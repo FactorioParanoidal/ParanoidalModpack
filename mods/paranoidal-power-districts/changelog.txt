@@ -4,6 +4,7 @@ Date: 2026-11-12
   Features:
     - Publishes get_managed_interval_event after 3600 consecutive controller-measured ticks in a working green-zone district with positive non-transit consumption and net saving. Invalid samples, bypasses, loops and discontinuities reset the interval; energy formulas are unchanged.
   Locale:
+    - Clarified setting descriptions against current code and modpack overrides, including units, dependencies and limits; setting values and gameplay are unchanged.
     - Added selective inline images and restrained colour emphasis to Russian mod-setting tooltips; wording, setting values and mechanics are unchanged.
   Graphics:
     - New transformer art in the vanilla style: weathered steel tank, tall brown porcelain input bushing with a

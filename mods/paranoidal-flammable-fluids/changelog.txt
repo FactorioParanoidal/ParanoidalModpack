@@ -2,8 +2,9 @@
 Version: 9.0.0
 Date: 2026-11-01
   Locale:
-    - Added selective inline images and restrained colour emphasis to Russian mod-setting tooltips; wording, setting values and mechanics are unchanged.
+    - Clarified setting descriptions against current code and modpack overrides, including units, dependencies and limits; setting values and gameplay are unchanged.
     - Added selective inline images to Russian mod-setting names; existing tooltip formatting, wording, saved values and mechanics are preserved.
+    - Added selective inline images and restrained colour emphasis to Russian mod-setting tooltips; wording, setting values and mechanics are unchanged.
   Changes:
     - Burning-tank warnings refresh their remaining heating time once per second through the existing tank task, without repeating chat or sound. Extinguishing/draining removes only the tank warning, even when map alerts were disabled. EN/RU text distinguishes heating time from a fixed wall-clock deadline because rain slows heating; fire and explosion mechanics are unchanged.
   Major Features:

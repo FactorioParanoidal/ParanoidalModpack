@@ -2,9 +2,10 @@
 Version: 9.0.0
 Date: 2026-11-15
   Locale:
-    - Added selective inline images and restrained colour emphasis to Russian mod-setting tooltips; wording, setting values and mechanics are unchanged.
-    - Added selective inline images to Russian mod-setting names; existing tooltip formatting, wording, saved values and mechanics are preserved.
+    - Clarified setting descriptions against current code and modpack overrides, including units, dependencies and limits; setting values and gameplay are unchanged.
     - The cheat-mode achievement warning is Russian; achievement eligibility is unchanged.
+    - Added selective inline images to Russian mod-setting names; existing tooltip formatting, wording, saved values and mechanics are preserved.
+    - Added selective inline images and restrained colour emphasis to Russian mod-setting tooltips; wording, setting values and mechanics are unchanged.
   Major Features:
     - One mod instead of True Nukes Continued Continued 1.0.3 and its required library Warheads Continued Continued 1.0.2 (Drake4273; ports of True Nukes 0.3.33 and Warheads 0.0.19 by BicycleEater). Data stage order is kept: Warheads data, True Nukes data, Warheads generation in data-updates, then the test sites.
     - Prototype, setting and remote interface names are kept; only the mod path changed (__paranoidal-true-nukes__).

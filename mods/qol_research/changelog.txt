@@ -1,6 +1,7 @@
 ---------------------------------------------------------------------------------------------------
 Version: 3.4.2
   Locale:
+    - Clarified setting descriptions against current code and modpack overrides, including units, dependencies and limits; setting values and gameplay are unchanged.
     - Clarified that the infinite-research switch affects QoL tiers only, and explained modpack-configuration fallback and custom-configuration precedence; research mechanics and values are unchanged.
     - Legacy version-3 update and configurator-link reports are logged and shown in chat only with paranoidal-debug-chat enabled. Technology effects and explicit commands are unchanged.
     - Russian hardcoded player-facing text: 10 UI, chat, command-help and error-message literals; technical identifiers, format parameters and gameplay logic are unchanged.

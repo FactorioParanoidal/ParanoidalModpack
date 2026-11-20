@@ -2,8 +2,8 @@
 Version: 9.0.0
 Date: 2026-10-31
   Locale:
-    - Added selective inline images and restrained colour emphasis to Russian mod-setting tooltips; wording, setting values and mechanics are unchanged.
     - Added selective inline images to Russian mod-setting names; existing tooltip formatting, wording, saved values and mechanics are preserved.
+    - Added selective inline images and restrained colour emphasis to Russian mod-setting tooltips; wording, setting values and mechanics are unchanged.
   Major Features:
     - Paranoidal fork of Pipe Visualizer 2.0 2.4.4 under a new name; the runtime is rewritten for speed. Key bindings, shortcuts, setting names and the PipeVisualizer remote interface are kept.
     - The drawing follows building, removal, rotation and flipping of fluid entities: new entities join a shown network or the overlay, removed ones disappear, neighbours update their connections.
