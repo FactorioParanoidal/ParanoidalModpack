@@ -99,14 +99,36 @@ function M.sync()
 	end
 end
 
--- The inserter's filter lets the item through (quality conditions are not evaluated: a needless wake only
--- makes the inserter look again and fall asleep).
-local function allows(inserter, name)
+local function prototype_name(id)
+	return type(id) == "string" and id or (id and id.name)
+end
+
+local function matches_filter(filter, name, quality)
+	if type(filter) == "string" then return filter == name and quality == "normal" end
+	if filter.name and prototype_name(filter.name) ~= name then return false end
+	if not filter.quality then return true end
+
+	local wanted = prototype_name(filter.quality)
+	local comparator = filter.comparator or "="
+	if comparator == "=" then return quality == wanted end
+	if comparator == "≠" or comparator == "!=" then return quality ~= wanted end
+
+	local actual_proto, wanted_proto = prototypes.quality[quality], prototypes.quality[wanted]
+	if not (actual_proto and wanted_proto) then return false end
+	local a, b = actual_proto.level, wanted_proto.level
+	if comparator == ">" then return a > b end
+	if comparator == "<" then return a < b end
+	if comparator == "≥" or comparator == ">=" then return a >= b end
+	if comparator == "≤" or comparator == "<=" then return a <= b end
+	return false
+end
+
+local function allows(inserter, name, quality)
 	if not inserter.use_filters then return true end
 	local listed = false
 	for i = 1, inserter.filter_slot_count do
 		local filter = inserter.get_filter(i)
-		if filter and (filter.name == nil or filter.name == name) then
+		if filter and matches_filter(filter, name, quality) then
 			listed = true
 			break
 		end
@@ -153,7 +175,7 @@ local function check(s, rec)
 			local output = source and source.get_output_inventory()
 			if output then
 				for _, name in ipairs(need) do
-					if allows(inserter, name) and output.get_item_count({ name = name, quality = q }) > 0 then
+					if allows(inserter, name, q) and output.get_item_count({ name = name, quality = q }) > 0 then
 						if pcall(wake, inserter, machine) then s.woken = s.woken + 1 end
 						break
 					end
