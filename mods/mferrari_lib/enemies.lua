@@ -230,9 +230,10 @@ end
 function get_worms_for_evolution(evolution, extra_evo, surface, position)
 --check temperature ,aux (toxic)
 local temp, aux 
-if surface and position then 
-	temp = GetLocalTemp(surface,position) 
-	aux  = GetLocalAux(surface,position) 
+if surface and position then
+	local props = surface.calculate_tile_properties({"temperature", "aux"}, {position})
+	temp = props.temperature and props.temperature[1]
+	aux = props.aux and props.aux[1]
 	end
 
 	local function is_valid_worm(name) 
@@ -425,6 +426,13 @@ end
 local FRENZY_MIN = 10
 local FRENZY_MAX = 300
 local FRENZY_DISTANCE = 1500
+local function frenzy_unit_count(surface, force, limit, multiplier)
+    local aliens = math.max(FRENZY_MIN, math.floor(FRENZY_MAX * get_evo_here(surface, force)))
+    if limit and aliens > limit then aliens = limit end
+    if multiplier then aliens = math.floor(aliens * multiplier) end
+    return aliens
+end
+
 function CallFrenzyAttack(surface,target,limit,multiplier)
     if not (surface and surface.valid and target) then return end
     local entity = (type(target) == "userdata") and target or nil
@@ -436,21 +444,31 @@ function CallFrenzyAttack(surface,target,limit,multiplier)
         position = {x = target.x or target[1], y = target.y or target[2]}
     end
 
-    local spawn = surface.find_entities_filtered({type = "unit-spawner", limit = 1, position = position, radius = FRENZY_DISTANCE})
-    if #spawn == 0 then return end
-    local force = spawn[1].force
-
-    local aliens = math.max(FRENZY_MIN, math.floor(FRENZY_MAX * get_evo_here(surface, force)))
-    if limit and aliens > limit then aliens = limit end
-    if multiplier then aliens = math.floor(aliens * multiplier) end
+    local query = {type = "unit-spawner", limit = 1, position = position, radius = FRENZY_DISTANCE}
+    local spawn = surface.find_entities_filtered(query)[1]
+    if not spawn then return end
+    local force = spawn.force
 
     local rampant = remote.interfaces["rampantFixed"]
-    if rampant and rampant["strikePosition_ExtCtrl"] and (force.name == "enemy") then
-        local sent = remote.call("rampantFixed", "strikePosition_ExtCtrl", {
-            surfaceIndex = surface.index, position = position, units = aliens, searchRadius = FRENZY_DISTANCE})
-        if sent ~= nil then return end
+    local aliens
+    if rampant and rampant.strikePosition_ExtCtrl then
+        local enemy = game.forces.enemy
+        if force ~= enemy then
+            -- Another force must not hide a nearby enemy nest from Rampant. Keep the
+            -- original force for fallback when Rampant does not manage this strike.
+            query.force = enemy
+            if surface.count_entities_filtered(query) == 0 then enemy = nil end
+        end
+        if enemy then
+            local enemy_count = frenzy_unit_count(surface, enemy, limit, multiplier)
+            local sent = remote.call("rampantFixed", "strikePosition_ExtCtrl", {
+                surfaceIndex = surface.index, position = position, units = enemy_count, searchRadius = FRENZY_DISTANCE})
+            if sent ~= nil then return end -- 0 also means Rampant handled the request
+            if force == enemy then aliens = enemy_count end
+        end
     end
 
+    aliens = aliens or frenzy_unit_count(surface, force, limit, multiplier)
     if entity then
         surface.set_multi_command({
             command = {type = defines.command.attack, target = entity, distraction = defines.distraction.by_anything},
