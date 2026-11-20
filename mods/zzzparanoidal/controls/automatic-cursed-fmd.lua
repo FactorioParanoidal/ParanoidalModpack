@@ -2,6 +2,7 @@
 -- consume/flush fluids, change disabled_by_script, or script the mining itself.
 local M = {version = "9.0.0"}
 local PERIOD = 120 -- distribute registered drills over two seconds
+local NO_PORTS = {}
 local eligible, resources, choices = {}, {}, {}
 local eligible_names = {}
 
@@ -81,7 +82,7 @@ local function supplied_fluid(entity, input)
     local inside = fluid_in(entity, input)
     if inside then return inside end
     local found = {}
-    for _, connection in pairs(entity.get_fluid_box_pipe_connections(input)) do
+    for _, connection in pairs(entity.get_fluid_box_pipe_connections(input) or NO_PORTS) do
         if connection.flow_direction ~= "output" then
             if connection.target then
                 local fluid = fluid_in(connection.target, connection.target_fluidbox_index)
@@ -93,8 +94,9 @@ local function supplied_fluid(entity, input)
                 -- or a drill's unrelated fuel box.
                 for _, neighbour in pairs(entity.surface.find_entities_filtered({position = connection.target_position})) do
                     if neighbour ~= entity and neighbour.valid then
+                        -- Wagon contents and turret buffers are storages without pipe ports.
                         for index = 1, neighbour.fluids_count do
-                            for _, port in pairs(neighbour.get_fluid_box_pipe_connections(index)) do
+                            for _, port in pairs(neighbour.get_fluid_box_pipe_connections(index) or NO_PORTS) do
                                 if port.flow_direction ~= "input" and same_position(port.position, connection.target_position)
                                     and same_position(port.target_position, connection.position) then
                                     local fluid = fluid_in(neighbour, index)

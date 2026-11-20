@@ -3,6 +3,7 @@ Version: 8.1.31
   Bugfixes:
     - Inserter wake-up uses the engine's quality order for range filters, including different qualities at the same prototype level.
     - Inserter wake-up after a blocked fluid output clears now respects item filter quality and comparison operators.
+    - Automatic-Cursed-FMD no longer crashes when a drill checks nearby fluid storages without pipe ports, such as a fluid wagon beside an unconnected input. Only pipe ports count as a fluid supply.
   Graphics:
     - Added top-right source badges to 17 recipes: wood/coke pellets, landfill, polymer glass, lithium salts, ceramic filter manufacture/refurbishment and Yuoki organic dust. Final recipe-only pass preserves product artwork, layered fluid tints and recipe mechanics.
     - Added the cardboard source badge at the top right of wooden-board-paper, matching the wood/sawdust recipes. Item artwork and recipe mechanics are unchanged.
