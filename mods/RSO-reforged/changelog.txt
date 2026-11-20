@@ -4,6 +4,8 @@ Version: 9.2.0
     - Added selective inline images and restrained colour emphasis to Russian mod-setting tooltips; wording, setting values and mechanics are unchanged.
     - Russian hardcoded player-facing text: 7 UI, chat, command-help and error-message literals; technical identifiers, format parameters and gameplay logic are unchanged.
 Date: 2026.10.23
+  Bugfixes:
+    - Regenerating or clearing a surface preserves mobile units, including scripted bosses, and only clears listed enemy bases of the enemy force.
   Features:
     - Adds survey_forecast/get_survey_discovered_event: a survey completes only when charted nonempty resources match the predicted owner cell, including off-centre fields. Pending metadata is separate from old map labels and is cleared on surface removal or source-force merge; generation and the legacy forecast API are unchanged.
   Major Features:

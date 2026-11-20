@@ -332,15 +332,19 @@ local function regenerateSurface(surface, clearOnly, noEnemies)
 	local names = {}
 	for _, name in ipairs(resources) do names[#names + 1] = name end
 	for _, name in ipairs(enemies) do names[#names + 1] = name end
+	if #names == 0 then return end
 	local chunks = {}
 	for chunk in surface.get_chunks() do
 		local x, y = chunk.x * CHUNK_SIZE, chunk.y * CHUNK_SIZE
 		if not isInStartingArea(surface.index, x, y) then
 			chunks[#chunks + 1] = {chunk.x, chunk.y}
 			local area = {{x, y}, {x + CHUNK_SIZE, y + CHUNK_SIZE}}
-			for _, entity in pairs(surface.find_entities_filtered{area = area, name = names}) do entity.destroy() end
+			if #resources > 0 then
+				for _, entity in pairs(surface.find_entities_filtered{area = area, name = resources}) do entity.destroy() end
+			end
+			-- RSO autoplaces bases, not mobile units. A unit's force does not identify its owner.
 			if #enemies > 0 then
-				for _, entity in pairs(surface.find_entities_filtered{area = area, type = "unit", force = "enemy"}) do entity.destroy() end
+				for _, entity in pairs(surface.find_entities_filtered{area = area, name = enemies, force = "enemy"}) do entity.destroy() end
 			end
 		end
 	end
