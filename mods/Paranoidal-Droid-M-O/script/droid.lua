@@ -89,8 +89,7 @@ droid.new_storage = function()
     skipped = {},
     forces = {},
     buckets = {},
-    players = {},
-    dock_counts = {}
+    players = {}
   }
 end
 
@@ -737,10 +736,47 @@ local draw_port = function(data)
   }
 end
 
-local count_dock = function(surface_index, force_index, delta)
-  local counts = get_surface_table(state.s.dock_counts, surface_index)
-  local count = (counts[force_index] or 0) + delta
-  counts[force_index] = count > 0 and count or nil
+local function add_to_dock_index(index, number, data)
+  local by_force = get_surface_table(index, data.surface_index)
+  get_surface_table(by_force, data.force_index)[number] = true
+end
+
+local function rebuild_dock_index()
+  local s = state.s
+  local index = {}
+  for number, data in pairs(s.docks) do
+    if data.dock.valid then
+      data.force_index = data.dock.force.index
+      add_to_dock_index(index, number, data)
+    end
+  end
+  s.dock_index = index
+  s.dock_counts = nil -- superseded; older saves rebuild from the dock records
+  return index
+end
+
+local function dock_index()
+  return state.s.dock_index or rebuild_dock_index()
+end
+
+local function remove_from_dock_index(index, number, data)
+  local by_force = index[data.surface_index]
+  local docks = by_force and by_force[data.force_index]
+  if not docks then return end
+  docks[number] = nil
+  if not next(docks) then
+    by_force[data.force_index] = nil
+    if not next(by_force) then index[data.surface_index] = nil end
+  end
+end
+
+local function docks_on(surface_index, force_index)
+  local by_force = dock_index()[surface_index]
+  return by_force and by_force[force_index]
+end
+
+tracks.has_docks = function(surface_index, force_index)
+  return docks_on(surface_index, force_index) ~= nil
 end
 
 local bucket_of = function(dock_number)
@@ -767,9 +803,10 @@ local on_dock_built = function(dock)
     scan_index = 1,
     backpack = game.create_inventory(shared.backpack_slots)
   }
+  local index = dock_index()
   s.docks[dock.unit_number] = data
   get_surface_table(s.buckets, bucket_of(dock.unit_number))[dock.unit_number] = true
-  count_dock(data.surface_index, data.force_index, 1)
+  add_to_dock_index(index, dock.unit_number, data)
   s.registrations[script.register_on_object_destroyed(dock)] = {dock = dock.unit_number}
   draw_port(data)
   spawn_bot(data)
@@ -878,7 +915,7 @@ droid.on_object_destroyed = function(event)
     if bucket then
       bucket[registration.dock] = nil
     end
-    count_dock(data.surface_index, data.force_index, -1)
+    remove_from_dock_index(dock_index(), registration.dock, data)
     release_target(data)
     reactions.siren_down(data)
     if data.backpack and data.backpack.valid then
@@ -1018,6 +1055,18 @@ local update_dock = function(data, tick)
   local dock = data.dock
   if not dock.valid then return end
 
+  local force = dock.force
+  local force_index = force.index
+  if data.force_index ~= force_index then
+    local index = state.s.dock_index
+    if index then
+      remove_from_dock_index(index, dock.unit_number, data)
+      data.force_index = force_index
+      add_to_dock_index(index, dock.unit_number, data)
+    else
+      rebuild_dock_index()
+    end
+  end
   scan(data, tick)
 
   local bot = data.bot
@@ -1031,9 +1080,7 @@ local update_dock = function(data, tick)
   end
 
   -- A script can change the dock's force, with no event for it.
-  if bot.force ~= dock.force then
-    bot.force = dock.force
-  end
+  if bot.force ~= force then bot.force = force end
 
   look_around(data, tick)
 
@@ -1141,6 +1188,7 @@ end
 droid.on_surface_gone = function(event)
   state.s.skipped[event.surface_index] = nil
   state.s.claimed[event.surface_index] = nil
+  if state.s.dock_index then state.s.dock_index[event.surface_index] = nil end
 end
 
 droid.on_research_changed = function(event)
@@ -1152,27 +1200,34 @@ droid.on_force_changed = function(event)
   update_force(event.force)
 end
 
--- Rebuilt from the docks: which tick each is updated on and how many are on each surface.
+droid.on_forces_merged = function(event)
+  state.s.forces[event.source_index] = nil
+  update_force(event.destination)
+  rebuild_dock_index()
+end
+
+-- Rebuilt from the docks: which tick each is updated on and which can see new prints.
 droid.rebuild_indexes = function()
   local s = state.s
   s.buckets = {}
-  s.dock_counts = {}
   for dock_number, data in pairs(s.docks) do
     if data.dock.valid then
-      data.force_index = data.dock.force.index
       get_surface_table(s.buckets, bucket_of(dock_number))[dock_number] = true
-      count_dock(data.surface_index, data.force_index, 1)
     end
   end
+  rebuild_dock_index()
 end
 
 -- Fresh muddy prints (script/tracks.lua): straight onto the queue of every station of that force in reach of them.
 tracks.notice = function(surface_index, force_index, x, y)
+  local docks = docks_on(surface_index, force_index)
+  if not docks then return end
   local key = contaminants.tile_key(x, y)
   local centre = {x = x + 0.5, y = y + 0.5}
-  for _, data in pairs(state.s.docks) do
-    if data.surface_index == surface_index and data.force_index == force_index and not data.queue_keys[key] and
-      data.dock.valid and distance(centre, data.port) <= reach(get_capacity(data)) then
+  for number in pairs(docks) do
+    local data = state.s.docks[number]
+    if data and not data.queue_keys[key] and data.dock.valid and data.dock.force.index == force_index and
+      distance(centre, data.port) <= reach(get_capacity(data)) then
       data.queue_keys[key] = true
       data.queue[#data.queue + 1] = {kind = "decor", key = key, x = x, y = y, prints = true}
     end

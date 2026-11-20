@@ -62,6 +62,7 @@ script.on_event(defines.events.on_script_trigger_effect, droid.on_script_trigger
 script.on_event(defines.events.on_research_finished, droid.on_research_changed)
 script.on_event(defines.events.on_research_reversed, droid.on_research_changed)
 script.on_event(defines.events.on_force_created, droid.on_force_changed)
+script.on_event(defines.events.on_forces_merged, droid.on_forces_merged)
 script.on_event(defines.events.on_force_reset, droid.on_force_changed)
 script.on_event(defines.events.on_technology_effects_reset, droid.on_force_changed)
 script.on_event(defines.events.on_tick, droid.on_tick)

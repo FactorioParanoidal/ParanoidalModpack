@@ -19,7 +19,10 @@ Date: 2026-11-15
     - Scanner labels over contaminants ("%NN FOREIGN CONTAMINANT", "ALL CLEAN") and over the chest he empties his bin into; each player can turn labels and voice off.
     - The station's quality scales his battery (defects by their useful share).
     - Д-ОК technology needs only red science (after Electronics); recipe from Paranoidal's basic circuit boards.
+  Bugfixes:
+    - Docks remain eligible to see and react to muddy prints after a force merge or a script changing the dock's force.
   Optimisations:
+    - Index docks by surface and force so fresh prints no longer scan every dock on the map.
     - Docks are updated on their own tick of each half-second cycle instead of all at once.
     - Built, mined, died, damaged and cloned events are filtered to the mod's entities.
     - PNG recompressed with pingo (-s4 -quality=45; shadow and glow layers lossless): 9.6 -> 6.3 MB, worst PSNR 35.0 dB.

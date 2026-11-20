@@ -43,12 +43,6 @@ tracks.clean = function(player_index, amount)
   return record.dirt
 end
 
--- Whether any of a force's docks is on a surface: prints are left only where a Д-ОК could clean them.
-local has_docks = function(surface_index, force_index)
-  local counts = state.s.dock_counts[surface_index]
-  return counts and (counts[force_index] or 0) > 0
-end
-
 local vehicle_types = {car = true, ["spider-vehicle"] = true}
 
 tracks.on_player_changed_position = function(event)
@@ -75,7 +69,8 @@ tracks.on_player_changed_position = function(event)
     return
   end
   if record.dirt <= 0 then return end
-  if tracks_enabled() and has_docks(surface.index, player.force_index) then
+  -- droid.lua owns the surface/force index; no prints where no station can service them.
+  if tracks_enabled() and tracks.has_docks(surface.index, player.force_index) then
     surface.create_decoratives
     {
       check_collision = false,
