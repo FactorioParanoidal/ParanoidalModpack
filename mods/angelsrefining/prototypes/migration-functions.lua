@@ -375,6 +375,19 @@ function angelsmods.migration.replace_logistics_slot(entities_to_check, items_to
   end
 end
 
+local function id_name(id)
+  return type(id) == "string" and id or (id and id.name)
+end
+
+local function renamed_item_filter(filter, items_to_replace)
+  if not filter then return end
+  if type(filter) == "string" then return items_to_replace[filter] end
+  local new_name = items_to_replace[id_name(filter.name)]
+  if new_name then
+    return { name = new_name, quality = filter.quality, comparator = filter.comparator }
+  end
+end
+
 function angelsmods.migration.replace_filter(entities_to_check, items_to_replace)
   -- items_to_replace is a table where the keys are the old item, and
   -- the values are the new item.
@@ -393,31 +406,22 @@ function angelsmods.migration.replace_filter(entities_to_check, items_to_replace
       -- find used slots
       for i = 1, entity.filter_slot_count do
         local filter = entity.get_filter(i)
-        if filter then
-          for old_item, new_item in pairs(items_to_replace) do
-            if filter.name == old_item then
-              entity.set_filter(i, new_item)
-            end
-          end
+        if entity.type == "mining-drill" or entity.type == "asteroid-collector" then
+          local name = filter and type(filter) ~= "string" and filter.name
+          if name and items_to_replace[name] then entity.set_filter(i, items_to_replace[name]) end
+        else
+          local replacement = renamed_item_filter(filter, items_to_replace)
+          if replacement then entity.set_filter(i, replacement) end
         end
       end
     elseif entity.type == "splitter" then
-      local filter = entity.splitter_filter
-      if filter then
-        for old_item, new_item in pairs(items_to_replace) do
-          if filter.name == old_item then
-            entity.splitter_filter = new_item
-          end
-        end
-      end
+      local replacement = renamed_item_filter(entity.splitter_filter, items_to_replace)
+      if replacement then entity.splitter_filter = replacement end
     elseif entity.type == "logistic-container" and entity.prototype.logistic_mode == "storage" then
       local filter = entity.storage_filter
       if filter then
-        for old_item, new_item in pairs(items_to_replace) do
-          if filter.name.name == old_item then
-            entity.storage_filter = new_item
-          end
-        end
+        local new_name = items_to_replace[id_name(filter.name)]
+        if new_name then entity.storage_filter = { name = new_name, quality = filter.quality } end
       end
     end
 
@@ -433,14 +437,8 @@ function angelsmods.migration.replace_filter(entities_to_check, items_to_replace
       local inventory = entity.get_inventory(inventory_index)
       if inventory and inventory.is_filtered() then
         for i = 1, #inventory do
-          local filter = inventory.get_filter(i)
-          if filter then
-            for old_item, new_item in pairs(items_to_replace) do
-              if filter.name == old_item then
-                inventory.set_filter(i, new_item)
-              end
-            end
-          end
+          local replacement = renamed_item_filter(inventory.get_filter(i), items_to_replace)
+          if replacement then inventory.set_filter(i, replacement) end
         end
       end
     end

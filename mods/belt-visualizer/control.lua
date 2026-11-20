@@ -274,9 +274,9 @@ local function highlight(event, cycle_lanes)
     local data = storage.data[index] or {}
     storage.data[index] = data
     local unit_number = selected.unit_number --[[@as number]]
-    local filter = utils.get_cursor_name(player)
+    local filter, filter_quality = utils.get_cursor_item(player)
     local repeat_origin = data.origin and data.origin.valid and data.origin.unit_number == unit_number
-    if cycle_lanes and data.filter == filter and repeat_origin and data.cycle then
+    if cycle_lanes and data.filter == filter and data.filter_quality == filter_quality and repeat_origin and data.cycle then
         -- one step past the lane modes is "off"
         data.cycle = data.cycle % (#lane_cycle + 1) + 1
     else
@@ -284,7 +284,7 @@ local function highlight(event, cycle_lanes)
     end
     data.index = index
     data.ghost = ghost
-    data.filter = filter
+    data.filter, data.filter_quality = filter, filter_quality
     data.origin = selected
     if not lane_cycle[data.cycle] then return end -- off: the highlight is already cleared
     start(data, selected, type)
@@ -312,8 +312,11 @@ script.on_event(e.on_selected_entity_changed, function(event)
     local player = game.get_player(index) --[[@as LuaPlayer]]
     local selected = resolve_selected(player.selected)
     if selected and belt_line and belt_line[selected.unit_number] and connectables[get_belt_type(selected)] then
-        data.origin = selected
-        return
+        local name, quality = utils.get_cursor_item(player)
+        if data.filter == name and data.filter_quality == quality then
+            data.origin = selected
+            return
+        end
     end
     if not hover then return end
     highlight(event)

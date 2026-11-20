@@ -159,11 +159,7 @@ function Search.process_found_entities(entities, state, surface_data, surface_st
   local target_quality_is_any = target_quality == "any"
 
   ---@type ItemFilter
-  local target_item_filter = {name = target_name, quality = target_quality}
-  if target_quality_is_any then
-    target_item_filter.quality = "normal"
-    target_item_filter.comparator = "≥"
-  end
+  local target_item_filter = {name = target_name, quality = not target_quality_is_any and target_quality or nil}
   ---@type ItemIDAndQualityIDPair
   local target_item_and_quality = {name = target_name, quality = target_quality}
 
@@ -290,12 +286,14 @@ function Search.process_found_entities(entities, state, surface_data, surface_st
           elseif entity_type == "constant-combinator" then
             ---@cast control_behavior LuaConstantCombinatorControlBehavior
             for _, section in ipairs(control_behavior.sections) do
-              for _, filter in ipairs(section.filters) do
-                local signal = filter.value  --[[@as SignalID]]
-                if signal_eq(target_item, signal) then
-                  SearchResults.add_entity(entity, surface_data.signals)
-                  SearchResults.add_surface_statistics("signal_count", 1, surface_statistics)
-                  goto break_both
+              if section.active then
+                for _, filter in ipairs(section.filters) do
+                  local signal = filter.value  --[[@as SignalID]]
+                  if (filter.min or 0) ~= 0 and signal_eq(target_item, signal) then
+                    SearchResults.add_entity(entity, surface_data.signals)
+                    SearchResults.add_surface_statistics("signal_count", 1, surface_statistics)
+                    goto break_both
+                  end
                 end
               end
             end
@@ -615,7 +613,10 @@ function Search.process_found_entities(entities, state, surface_data, surface_st
         local logistic_points = entity.get_logistic_point() --[=[@as LuaLogisticPoint[]]=]
         for _, logistic_point in pairs(logistic_points) do
           for _, filter in pairs(logistic_point.filters or {}) do
-            if filter and filter.name == target_name and (target_quality_is_any or filter.quality == target_quality) then  -- TODO take into account filter.comparator for quality
+            -- A nonzero logistic minimum requires exact quality; range/any filters are auto-trash only.
+            if filter and filter.count > 0 and filter.name == target_name
+                and (not filter.type or filter.type == "item")
+                and (target_quality_is_any or filter.quality == target_quality) then
               SearchResults.add_entity_request(entity, surface_data.requesters, filter.count)
               SearchResults.add_surface_statistics("request_count", filter.count, surface_statistics)
             end

@@ -12,6 +12,7 @@ Date: 2026-02-20
     - Paranoidal: while such a window is open the refresh runs every 6 ticks (on_nth_tick) instead of every tick and reuses the filter updater of the open entity instead of rebuilding it; item suggestions are still collected every 60 ticks.
     - Paranoidal: the belt scan for suggestions remembers the belts it has walked, so belts reached again through splitters are not walked again (the walk could grow up to 2^10 belts per direction); underground belts are read once instead of twice. The reach is unchanged.
   Bugfixes:
+    - Exact item actions no longer mistake range or any-quality filters for the selected item quality, preserving auto-trash rules when editing requests.
     - Paranoidal: closing a GUI no longer errors for a player without Filter Helper data.
     - Paranoidal: closing a GUI or rebuilding the panel no longer errors when the panel was already destroyed from outside.
   Compatibility:

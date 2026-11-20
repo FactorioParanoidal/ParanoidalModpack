@@ -103,6 +103,16 @@ local function prototype_name(id)
 	return type(id) == "string" and id or (id and id.name)
 end
 
+-- In 2.1.24 the engine compares quality prototype order, including distinct qualities at the same level.
+local filter_quality_order = {}
+do
+	local index = 0
+	for name in pairs(prototypes.quality) do
+		index = index + 1
+		filter_quality_order[name] = index
+	end
+end
+
 local function matches_filter(filter, name, quality)
 	if type(filter) == "string" then return filter == name and quality == "normal" end
 	if filter.name and prototype_name(filter.name) ~= name then return false end
@@ -113,9 +123,8 @@ local function matches_filter(filter, name, quality)
 	if comparator == "=" then return quality == wanted end
 	if comparator == "≠" or comparator == "!=" then return quality ~= wanted end
 
-	local actual_proto, wanted_proto = prototypes.quality[quality], prototypes.quality[wanted]
-	if not (actual_proto and wanted_proto) then return false end
-	local a, b = actual_proto.level, wanted_proto.level
+	local a, b = filter_quality_order[quality], filter_quality_order[wanted]
+	if not (a and b) then return false end
 	if comparator == ">" then return a > b end
 	if comparator == "<" then return a < b end
 	if comparator == "≥" or comparator == ">=" then return a >= b end

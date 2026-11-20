@@ -41,6 +41,14 @@ function fh_util.is_same_item(item1, item2)
     return item1 and item2 and item1.name == item2.name and item1.quality == item2.quality
 end
 
+-- The panel selects a specific item and quality, not a range or an any-quality rule.
+function fh_util.is_exact_item_filter(filter, item)
+    if not filter then return false end
+    if type(filter) ~= "string" and ((filter.type and filter.type ~= "item") or not filter.quality
+        or (filter.comparator or "=") ~= "=") then return false end
+    return not item or fh_util.is_same_item(filter, item)
+end
+
 function fh_util.get_effective_type(entity)
     return entity.type == "entity-ghost" and entity.ghost_type or entity.type
 end

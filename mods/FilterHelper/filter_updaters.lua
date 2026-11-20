@@ -33,7 +33,8 @@ local filtered_inventory_updater = {
         local inventory = get_storage_inventory(entity)
         local active_items = {}
         for i = 1, #inventory do
-            fh_util.add_item_to_table(active_items, inventory.get_filter(i))
+            local filter = inventory.get_filter(i)
+            if fh_util.is_exact_item_filter(filter) then fh_util.add_item_to_table(active_items, filter) end
         end
         return active_items
     end,
@@ -85,14 +86,14 @@ local filtered_inventory_updater = {
         local found_index
         if modifiers.shift or modifiers.control then
             for i = 1, #inventory do
-                if fh_util.is_same_item(inventory.get_filter(i), clicked_item) then
+                if fh_util.is_exact_item_filter(inventory.get_filter(i), clicked_item) then
                     inventory.set_filter(i, nil)
                 end
             end
             return
         end
         for i = #inventory, 1, -1 do
-            if fh_util.is_same_item(inventory.get_filter(i), clicked_item) then
+            if fh_util.is_exact_item_filter(inventory.get_filter(i), clicked_item) then
                 if not inventory[i].valid_for_read then
                     found_index = i
                     break
@@ -134,7 +135,7 @@ local logistic_chest_updater = {
         end
         for _, filter in pairs(found_section.filters) do
             local value = filter.value
-            if value and (value.type == "item" or not value.type) then
+            if (filter.min or 0) > 0 and fh_util.is_exact_item_filter(value) then
                 fh_util.add_item_to_table(active_items, value)
             end
         end
@@ -145,17 +146,14 @@ local logistic_chest_updater = {
         if not found_section then
             return
         end
-        local found_filter
-        local new_filters = found_section.filters
-        for _, filter in pairs(new_filters) do
+        local found_index, found_filter
+        for index, filter in ipairs(found_section.filters) do
             local value = filter.value
-            if value then
-                if fh_util.is_same_item(value, clicked_item) then
-                    found_filter = filter
-                    break
-                end
-            elseif not found_filter then
-                found_filter = filter
+            if fh_util.is_exact_item_filter(value, clicked_item) then
+                found_index, found_filter = index, filter
+                break
+            elseif not value and not found_index then
+                found_index, found_filter = index, filter
             end
         end
         local stack_size = prototypes.item[clicked_item.name].stack_size
@@ -167,17 +165,12 @@ local logistic_chest_updater = {
         if modifiers.control then
             amount_to_set = stack_size * fh_util.get_effective_prototype(entity).get_inventory_size(defines.inventory.chest, entity.quality)
         end
-        if found_filter then
-            found_filter.min = amount_to_set
-            found_filter.value = { name = clicked_item.name, quality = clicked_item.quality }
-        else
-            table.insert(new_filters, {
-                value = { name = clicked_item.name, quality = clicked_item.quality },
-                min = amount_to_set,
-            })
-        end
-        found_section.filters = new_filters
-        return
+        found_filter = found_filter or {}
+        found_filter.value = found_filter.value or { name = clicked_item.name, quality = clicked_item.quality, comparator = "=" }
+        found_filter.min = amount_to_set
+        -- Let the engine report an overlapping range rather than silently adding a masked request.
+        local conflict = found_section.set_slot(found_index or found_section.filters_count + 1, found_filter)
+        if conflict then return { "gui-logistic-section.conflict-error", conflict } end
     end,
     remove = function(entity, clicked_item, modifiers)
         local found_section = find_section(entity)
@@ -192,9 +185,9 @@ local logistic_chest_updater = {
         local new_filters = found_section.filters
         for _, filter in pairs(new_filters) do
             local value = filter.value
-            if value and fh_util.is_same_item(value, clicked_item) then
-                local new_count = filter.min - amount_to_remove
-                if new_count > 0 and not modifiers.control then
+            if fh_util.is_exact_item_filter(value, clicked_item) and (filter.min or 0) > 0 then
+                local new_count = modifiers.control and 0 or math.max(0, filter.min - amount_to_remove)
+                if new_count > 0 or filter.max ~= nil then
                     filter.min = new_count
                 else
                     for v in pairs(filter) do
@@ -209,6 +202,18 @@ local logistic_chest_updater = {
     end,
 }
 
+local function is_non_item_slot(entity)
+    local kind = fh_util.get_effective_type(entity)
+    return kind == "mining-drill" or kind == "asteroid-collector"
+end
+
+local function matches_slot(entity, filter, item)
+    if is_non_item_slot(entity) then
+        return fh_util.is_same_item(filter, item)
+    end
+    return fh_util.is_exact_item_filter(filter, item)
+end
+
 local one_filter_updater = {
     condition = function(entity)
         return entity.filter_slot_count == 1 and fh_util.get_effective_type(entity) ~= "infinity-container"
@@ -217,14 +222,18 @@ local one_filter_updater = {
     get_active_items = function(entity)
         local active_items = {}
         local filter = entity.get_filter(1)
-        fh_util.add_item_to_table(active_items, filter)
+        if is_non_item_slot(entity) or fh_util.is_exact_item_filter(filter) then fh_util.add_item_to_table(active_items, filter) end
         return active_items
     end,
     add = function(entity, clicked_item)
         update_filter_slot(entity, 1, clicked_item)
     end,
     remove = function(entity, clicked_item)
-        entity.set_filter(1, nil)
+        if matches_slot(entity, entity.get_filter(1), clicked_item) then
+            entity.set_filter(1, nil)
+            return
+        end
+        return { "fh.filters-empty" }
     end,
 }
 
@@ -236,7 +245,8 @@ local many_filters_updater = {
     get_active_items = function(entity)
         local active_items = {}
         for i = 1, entity.filter_slot_count do
-            fh_util.add_item_to_table(active_items, entity.get_filter(i))
+            local filter = entity.get_filter(i)
+            if is_non_item_slot(entity) or fh_util.is_exact_item_filter(filter) then fh_util.add_item_to_table(active_items, filter) end
         end
         return active_items
     end,
@@ -245,7 +255,7 @@ local many_filters_updater = {
         for i = 1, entity.filter_slot_count do
             local found_filter = entity.get_filter(i)
             if found_filter then
-                if fh_util.is_same_item(found_filter, clicked_item) then
+                if matches_slot(entity, found_filter, clicked_item) then
                     return
                 end
             elseif not found_slot then
@@ -261,7 +271,7 @@ local many_filters_updater = {
     remove = function(entity, clicked_item)
         for i = 1, entity.filter_slot_count do
             local filter = entity.get_filter(i)
-            if filter and fh_util.is_same_item(filter, clicked_item) then
+            if matches_slot(entity, filter, clicked_item) then
                 entity.set_filter(i, nil)
                 return
             end
@@ -278,7 +288,8 @@ local splitter_filter_updater = {
     button_description = { "fh.tooltip-filters" },
     get_active_items = function(entity)
         local active_items = {}
-        fh_util.add_item_to_table(active_items, entity.splitter_filter)
+        local filter = entity.splitter_filter
+        if fh_util.is_exact_item_filter(filter) then fh_util.add_item_to_table(active_items, filter) end
         return active_items
     end,
     add = function(entity, clicked_item)
@@ -301,7 +312,11 @@ local splitter_filter_updater = {
         end
     end,
     remove = function(entity, clicked_item)
-        entity.splitter_filter = nil
+        if fh_util.is_exact_item_filter(entity.splitter_filter, clicked_item) then
+            entity.splitter_filter = nil
+            return
+        end
+        return { "fh.filters-empty" }
     end,
 }
 

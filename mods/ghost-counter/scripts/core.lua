@@ -25,20 +25,9 @@ function get_make_playerdata(player_index)
     return playerdata
 end
 
----Gets the base quality name, which is typically "normal" though this may be modified by mods.
+---Blueprints with omitted quality use normal, not the first quality of the lowest level.
 function get_base_quality()
-    local base_quality_name
-    local base_quality_level
-
-    -- Iterate through each quality prototype to identify the one with the lowest level
-    for name, quality_prototype in pairs(prototypes.quality) do
-        if base_quality_name == nil or quality_prototype.level < base_quality_level then
-            base_quality_name = name
-            base_quality_level = quality_prototype.level
-        end
-    end
-
-    return base_quality_name
+    return "normal"
 end
 
 ---Returns GC Requests logistic section for a given player
@@ -368,7 +357,6 @@ end
 function update_logistics_info(player_index)
     local playerdata = get_make_playerdata(player_index)
     local requests = playerdata.job.requests
-    local base_quality = get_base_quality()
 
     -- Get player character
     local character = playerdata.luaplayer.character
@@ -380,8 +368,9 @@ function update_logistics_info(player_index)
     local logistic_requests = {}
     if logistic_point and logistic_point.filters then
         for _, slot in pairs(logistic_point.filters) do
-            local entity_quality = slot.quality or base_quality
-            local name_and_quality = slot.name .. "+" .. entity_quality
+            -- Compiled zero-minimum filters are auto-trash rules, not delivery requests.
+            if not (slot.name and slot.quality and slot.comparator == "=" and slot.count > 0) then goto continue end
+            local name_and_quality = slot.name .. "+" .. slot.quality
             if requests[name_and_quality] then
                 requests[name_and_quality].requested = slot.count
                 logistic_requests[name_and_quality] = true
@@ -391,6 +380,7 @@ function update_logistics_info(player_index)
             if temp_request then
                 temp_request.existing = slot.count - temp_request.new_min
             end
+            ::continue::
         end
     end
 
@@ -415,8 +405,9 @@ function update_one_time_logistic_requests(player_index)
     if not logistic_section then return end
 
     for i, slot in pairs(logistic_section.filters) do
-        if next(slot) then
-            local name_and_quality = slot.value.name .. "+" .. slot.value.quality
+        local value = slot.value
+        if value and value.quality and (value.comparator or "=") == "=" then
+            local name_and_quality = value.name .. "+" .. value.quality
             local logi_req = playerdata.logistic_requests[name_and_quality]
 
             if logi_req then
@@ -458,10 +449,9 @@ end
 ---@return table|nil logistic_request
 function get_existing_logistic_request(logistic_section, name, quality)
     for i, slot in pairs(logistic_section.filters) do
-        if next(slot) then
-            if slot.value.name == name and slot.value.quality == quality then
-                return {slot_index=i, min=slot.min}
-            end
+        local value = slot.value
+        if value and value.name == name and value.quality == quality and (value.comparator or "=") == "=" then
+            return {slot_index=i, min=slot.min}
         end
     end
 end
@@ -512,6 +502,7 @@ function make_one_time_logistic_request(player_index, name_and_quality)
 
     local combined_request_count = get_existing_combined_logistic_request_count(logistic_point, request.name, request.quality)
     local new_slot_min = request.count - combined_request_count
+    if new_slot_min <= 0 then return end
 
     -- Prepare new logistic slot and get existing or first empty `slot_index`
     local new_slot = {
@@ -525,6 +516,7 @@ function make_one_time_logistic_request(player_index, name_and_quality)
     -- Save details of change in playerdata so that it can be reverted later
     -- This is set here in order for the event handler to be able to identify this change
     -- as originating from the mod and to ignore it.
+    local previous_request = playerdata.logistic_requests[name_and_quality]
     playerdata.logistic_requests[name_and_quality] = {
         slot_index=slot_index,
         name=request.name,
@@ -535,10 +527,15 @@ function make_one_time_logistic_request(player_index, name_and_quality)
     }
 
     -- Actually modify logistic section slot
-    logistic_section.set_slot(slot_index, new_slot)
+    local conflict = logistic_section.set_slot(slot_index, new_slot)
+    if conflict then
+        playerdata.logistic_requests[name_and_quality] = previous_request
+        playerdata.luaplayer.print({"gui-logistic-section.conflict-error", conflict})
+        return
+    end
 
-    -- Update request with new requested value
-    request.requested = request.count
+    -- The compiled minimum can still be masked by a filter in another section.
+    request.requested = get_existing_combined_logistic_request_count(logistic_point, request.name, request.quality)
 
     register_update(player_index, game.tick)
 end
@@ -560,7 +557,12 @@ function clear_one_time_request(player_index, name_and_quality)
     local logistic_request = playerdata.logistic_requests[name_and_quality]
     if not logistic_request then return end
 
-    logistic_section.clear_slot(logistic_request.slot_index)
+    local slot = logistic_section.get_slot(logistic_request.slot_index)
+    local value = slot.value
+    if value and value.name == logistic_request.name and value.quality == logistic_request.quality
+        and (value.comparator or "=") == "=" then
+        logistic_section.clear_slot(logistic_request.slot_index)
+    end
 end
 
 ---Iterates over `playerdata.logistic_requests` to get rid of them.
@@ -579,9 +581,9 @@ function cancel_all_one_time_requests(player_index)
 
     if logistic_section.filters_count == 0 then return end
 
-    for slot_index, _ in pairs(logistic_section.filters) do
-        logistic_section.clear_slot(slot_index)
-    end
+    local keys = {}
+    for key in pairs(playerdata.logistic_requests) do keys[#keys + 1] = key end
+    for _, key in ipairs(keys) do clear_one_time_request(player_index, key) end
 
     playerdata.logistic_requests = {}
 end

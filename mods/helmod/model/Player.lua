@@ -463,18 +463,20 @@ function Player.setSmartToolBuildingConstantCombinator(block)
                     if by_limit == true then
                         count = element.count_limit
                     end
-                    if items[item_name] ~= nil then
-                        items[item_name].count = items[item_name].count + math.ceil(count)
+                    local quality = element.quality or "normal"
+                    local key = item_name .. "\0" .. quality
+                    if items[key] ~= nil then
+                        items[key].count = items[key].count + math.ceil(count)
                     else
                         local filter = {
                             name = item_name,
                             count = math.ceil(count),
-                            quality = element.quality or "normal",
+                            quality = quality,
                             comparator = "=",
                             index = signal_index
                         }
                         table.insert(section.filters, filter)
-                        items[item_name] = filter
+                        items[key] = filter
                         signal_index = signal_index + 1
                     end
                 else

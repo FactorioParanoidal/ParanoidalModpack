@@ -5,6 +5,7 @@ Version: 2.0.4
     - Russian hardcoded player-facing text: 3 UI, chat, command-help and error-message literals; technical identifiers, format parameters and gameplay logic are unchanged.
 Date: 04.06.2026
   Bugfixes:
+    - Existing item-replacement migrations preserve filter quality and comparison when renaming items in entity and inventory filters.
     - Legacy sea-pump death ghosts use the Factorio 2.1 insert plan instead of obsolete ghost TTL and writable item requests; quality and tags are kept, and a failed replacement leaves the original ghost intact.
     - Paranoidal: thermal water is produced at 90 C instead of 0 C, with a maximum of 100 C. Heat capacity, resource yield and recipes are unchanged.
     - Paranoidal: the optional dependency on rso-mod follows its rename to RSO-reforged (same load order).

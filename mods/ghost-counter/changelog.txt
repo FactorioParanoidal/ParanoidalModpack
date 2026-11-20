@@ -4,6 +4,7 @@ Version: 2.0.2
     - Russian hardcoded player-facing text: 1 UI, chat, command-help and error-message literals; technical identifiers, format parameters and gameplay logic are unchanged.
 Date: 2026-06-24
   Bugfixes:
+    - Ghost counts default to normal when quality is absent; auto-trash range rules are not counted, replaced or cleared as one-time requests.
     - Fixed crash encountered when quality is not specified in blueprints [Thanks jim-hart]
     - Fixed shift-selecting an area not including tile ghosts in count
     - Fixed character inventories not being accounted for when in remote view [Thanks EvilPLa]

@@ -2,7 +2,6 @@ local const = require("scripts/constants")
 local utils = require("scripts/utils")
 local draw = require("scripts/rendering")
 local get_belt_type = utils.get_belt_type
-local get_item_name = utils.get_item_name
 local empty_check = utils.empty_check
 local check_entity = utils.check_entity
 local lane_cycle = const.lane_cycle
@@ -31,11 +30,12 @@ end
 
 local function get_filter_side(data, entity)
     if not data.filter then return end
-    local splitter_filter = get_item_name(entity.splitter_filter)
-    if not splitter_filter then return end
+    local filter = entity.splitter_filter
+    if not filter then return end
     local output_priority = entity.splitter_output_priority
     if output_priority == "none" then return end
-    return (output_priority == "left") == (data.filter == splitter_filter) and "left" or "right"
+    local matches = utils.matches_item_filter(filter, data.filter, data.filter_quality or "normal")
+    return (output_priority == "left") == matches and "left" or "right"
 end
 
 local function get_input_paths(check, lanes)

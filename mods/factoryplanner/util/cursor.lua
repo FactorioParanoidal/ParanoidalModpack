@@ -12,12 +12,25 @@ end
 ---@param player LuaPlayer
 ---@param blueprint_entities BlueprintEntity[]
 ---@param metadata BlueprintMetadata?
-local function set_cursor_blueprint(player, blueprint_entities, metadata)
+---@param expected_signals? integer Validate an edited combinator before replacing the cursor.
+local function set_cursor_blueprint(player, blueprint_entities, metadata, expected_signals)
     local script_inventory = game.create_inventory(1)
     local blank_slot = script_inventory[1]
 
     blank_slot.set_stack{name="blueprint"}
     blank_slot.set_blueprint_entities(blueprint_entities)
+    if expected_signals then
+        local entity = (blank_slot.get_blueprint_entities() or {})[1]
+        local control_behavior = entity and entity.control_behavior
+        local sections = control_behavior and control_behavior.sections and control_behavior.sections.sections
+        local filters = sections and sections[1] and sections[1].filters or {}
+        -- The engine silently discards an overlapping range or exact filter when writing a blueprint.
+        if #filters ~= expected_signals then
+            script_inventory.destroy()
+            _cursor.create_flying_text(player, {"fp.put_into_combinator_unavailable"})
+            return
+        end
+    end
 
     if metadata then
         blank_slot.label = metadata.label
@@ -97,14 +110,19 @@ function _cursor.set_entity(player, line, object)
     return true
 end
 
+local function clamp_generated_count(count)
+    -- Make sure amounts < 1 are not excluded, and the int32 limit is not exceeded.
+    return math.min(math.max(count, 1), 2^31 - 1)
+end
+
 ---@param player LuaPlayer
 ---@param item_filters BlueprintLogisticFilter[]
 ---@param metadata BlueprintMetadata?
-function _cursor.set_item_combinator(player, item_filters, metadata)
+---@param preserve_counts? boolean Counts already validated; do not turn zero-count quality rules into signals.
+function _cursor.set_item_combinator(player, item_filters, metadata, preserve_counts)
     local slot_index = 1
     for _, filter in pairs(item_filters) do
-        -- Make sure amounts < 1 are not excluded, and the int32 limit is not exceeded
-        filter.count = math.min(math.max(filter.count, 1)--[[@cast -nil]], 2^31 - 1)
+        if not preserve_counts then filter.count = clamp_generated_count(filter.count) end
         filter.index = slot_index
         slot_index = slot_index + 1
     end
@@ -125,7 +143,7 @@ function _cursor.set_item_combinator(player, item_filters, metadata)
         }
     }
 
-    set_cursor_blueprint(player, {blueprint_entity}, metadata)
+    set_cursor_blueprint(player, {blueprint_entity}, metadata, preserve_counts and #item_filters or nil)
 end
 
 
@@ -152,8 +170,9 @@ local function add_to_item_combinator(player, blueprint_entity, item_proto, amou
         if section--[[@cast -nil]].group then goto skip_cursor end
 
         for _, filter in pairs(section--[[@cast -nil]].filters or {}) do
-            if item_proto.type == (filter.type or "item") and item_name == filter.name then
-                filter.count = filter.count + (amount * timescale)  ---@as int32
+            if item_proto.type == (filter.type or "item") and item_name == filter.name
+                and filter.quality == "normal" and (filter.comparator or "=") == "=" then
+                filter.count = clamp_generated_count(filter.count + amount * timescale)  ---@as int32
                 filter_matched = true
             end
             table.insert(item_signals, filter)
@@ -168,11 +187,11 @@ local function add_to_item_combinator(player, blueprint_entity, item_proto, amou
             name = item_name,
             quality = "normal",
             comparator = "=",
-            count = math.ceil(amount * timescale - MAGIC_NUMBERS.margin_of_error)
+            count = clamp_generated_count(math.ceil(amount * timescale - MAGIC_NUMBERS.margin_of_error))
         })
     end
 
-    _cursor.set_item_combinator(player, item_signals)
+    _cursor.set_item_combinator(player, item_signals, nil, true)
 end
 
 
@@ -210,12 +229,14 @@ local function filter_inserter(player, cursor_entity, item_proto)
             local message = {"fp.entity_filter_limit_reached", entity_proto.localised_name}
             _cursor.create_flying_text(player, message--[[@as LocalisedString]])
         else
-            -- Silently drop any duplicates
+            local used = {}
             for _, filter in pairs(blueprint_entity.filters) do
-                if filter.name == item_proto.name then return end
+                if filter.name == new_filter.name and filter.quality == new_filter.quality
+                    and (filter.comparator or "=") == new_filter.comparator then return end
+                used[filter.index] = true
             end
 
-            new_filter.index = filter_count + 1
+            while used[new_filter.index] do new_filter.index = new_filter.index + 1 end
             table.insert(blueprint_entity.filters, new_filter)
             set_cursor_blueprint(player, {blueprint_entity})
         end

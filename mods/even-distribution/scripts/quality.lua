@@ -8,7 +8,16 @@ local LE = "\226\137\164" -- U+2264, returned by the API for "<="
 local NE = "\226\137\160" -- U+2260, returned by the API for "!="
 
 local ranks = {}
+local filter_order = {}
+do
+	local index = 0
+	for name in pairs(prototypes.quality) do
+		index = index + 1
+		filter_order[name] = index
+	end
+end
 
+-- Distribution preference, separate from the engine's filter ordering.
 function this.rank(quality)
 	quality = quality or "normal"
 	local rank = ranks[quality]
@@ -33,7 +42,8 @@ function this.matches(filter, quality)
 	local comparator = filter.comparator or "="
 	if comparator == "=" then return quality == wanted end
 	if comparator == "!=" or comparator == NE then return quality ~= wanted end
-	local a, b = this.rank(quality), this.rank(wanted)
+	local a, b = filter_order[quality], filter_order[wanted]
+	if not (a and b) then return false end
 	if comparator == ">" then return a > b end
 	if comparator == "<" then return a < b end
 	if comparator == ">=" or comparator == GE then return a >= b end

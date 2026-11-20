@@ -7,6 +7,7 @@ Date: 2026-06-19
   Features:
     - Added pipette tool to create combinator from input or ouput items
   Bugfixes:
+    - The building-summary combinator keeps separate signals for the same item at different qualities.
     - Small display ratios and large UI scales no longer produce nonpositive index-table columns or a negative prototype-filter panel minimum height; saved ratios and model calculations are unchanged.
     - Paranoidal: opening a recipe selector from a product waits for that product's translation before filtering, including with a partially populated translation cache. The first opening now uses the translated name and shows the same recipes as reopening the window.
     - Paranoidal: pumped fluid sources include fluids fixed by offshore pump output filters, even when no tile provides them. Seafloor pumps are available for viscous mud, with only matching pumps offered in the planner and source tooltips; unfiltered pumps continue to use tile fluids. Existing selector indexes are rebuilt once on first opening so saved games gain the new sources without resetting user settings.

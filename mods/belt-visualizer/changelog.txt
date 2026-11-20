@@ -12,6 +12,7 @@ Date: 2026-10-14
     - Traversal-only tables are freed from storage when the highlight is finished
     - Renders use surface index and a shared player list
   Bugfixes:
+    - Splitter path highlighting matches the cursor item's quality and the complete filter comparison.
     - Fixed splitter filter matching against the cursor ghost in 2.0
     - Fixed splitters being skipped or queued twice when only one side was already checked
     - Fixed duplicate circles, rectangles and underground dashes
