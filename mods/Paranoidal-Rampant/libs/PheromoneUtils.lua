@@ -16,6 +16,7 @@ local VICTORY_SCENT_BOUND = constants.VICTORY_SCENT_BOUND
 
 local MAGIC_MAXIMUM_NUMBER = constants.MAGIC_MAXIMUM_NUMBER
 
+local CHUNK_SIZE = constants.CHUNK_SIZE
 local CHUNK_ALL_DIRECTIONS = constants.CHUNK_ALL_DIRECTIONS
 local CHUNK_NORTH_SOUTH = constants.CHUNK_NORTH_SOUTH
 local CHUNK_EAST_WEST = constants.CHUNK_EAST_WEST
@@ -364,11 +365,20 @@ function pheromoneUtils.processStaticPheromone(map, chunk, parameters)
     
 end
 
+local function cardinalPlayerScent(map, neighbor, direction, current)
+    if neighbor then
+        local pass = getPassable(map, neighbor)
+        if pass == CHUNK_ALL_DIRECTIONS or pass == direction then
+            local scent = neighbor[PLAYER_PHEROMONE]
+            if current < scent then return scent end
+        end
+    end
+    return current
+end
+
 function pheromoneUtils.processPheromone(map, chunk, player)
     local chunkPlayer = -MAGIC_MAXIMUM_NUMBER
     local chunkPathRating = getPathRating(map, chunk)
-
-    local tempNeighbors = getNeighborChunks(map, chunk.x, chunk.y)
 
     local neighbor
     local neighborPass
@@ -376,6 +386,7 @@ function pheromoneUtils.processPheromone(map, chunk, player)
     local chunkPass = getPassable(map, chunk)
     local pheromone
     if (chunkPass == CHUNK_ALL_DIRECTIONS) then
+        local tempNeighbors = getNeighborChunks(map, chunk.x, chunk.y)
         neighbor = tempNeighbors[2]
         if (neighbor ~= -1) then
             neighborPass = getPassable(map, neighbor)
@@ -463,51 +474,17 @@ function pheromoneUtils.processPheromone(map, chunk, player)
                 end
             end
         end
-    elseif (chunkPass == CHUNK_EAST_WEST) then
-
-        neighbor = tempNeighbors[4]
-        if (neighbor ~= -1) then
-            neighborPass = getPassable(map, neighbor)
-            if ((neighborPass == CHUNK_ALL_DIRECTIONS) or (neighborPass == CHUNK_EAST_WEST)) then
-                pheromone = neighbor[PLAYER_PHEROMONE]
-                if chunkPlayer < pheromone then
-                    chunkPlayer = pheromone
-                end
-            end
-        end
-
-        neighbor = tempNeighbors[5]
-        if (neighbor ~= -1) then
-            neighborPass = getPassable(map, neighbor)
-            if ((neighborPass == CHUNK_ALL_DIRECTIONS) or (neighborPass == CHUNK_EAST_WEST)) then
-                pheromone = neighbor[PLAYER_PHEROMONE]
-                if chunkPlayer < pheromone then
-                    chunkPlayer = pheromone
-                end
-            end
-        end
-    elseif (chunkPass == CHUNK_NORTH_SOUTH) then
-
-        neighbor = tempNeighbors[2]
-        if (neighbor ~= -1) then
-            neighborPass = getPassable(map, neighbor)
-            if ((neighborPass == CHUNK_ALL_DIRECTIONS) or (neighborPass == CHUNK_NORTH_SOUTH)) then
-                pheromone = neighbor[PLAYER_PHEROMONE]
-                if chunkPlayer < pheromone then
-                    chunkPlayer = pheromone
-                end
-            end
-        end
-
-        neighbor = tempNeighbors[7]
-        if (neighbor ~= -1) then
-            neighborPass = getPassable(map, neighbor)
-            if ((neighborPass == CHUNK_ALL_DIRECTIONS) or (neighborPass == CHUNK_NORTH_SOUTH)) then
-                pheromone = neighbor[PLAYER_PHEROMONE]
-                if chunkPlayer < pheromone then
-                    chunkPlayer = pheromone
-                end
-            end
+    -- Restricted chunks only read the two neighbors that can propagate player scent.
+    elseif chunkPass == CHUNK_EAST_WEST then
+        local x, y = chunk.x, chunk.y
+        local west, east = map[x - CHUNK_SIZE], map[x + CHUNK_SIZE]
+        chunkPlayer = cardinalPlayerScent(map, west and west[y], CHUNK_EAST_WEST, chunkPlayer)
+        chunkPlayer = cardinalPlayerScent(map, east and east[y], CHUNK_EAST_WEST, chunkPlayer)
+    elseif chunkPass == CHUNK_NORTH_SOUTH then
+        local column, y = map[chunk.x], chunk.y
+        if column then
+            chunkPlayer = cardinalPlayerScent(map, column[y - CHUNK_SIZE], CHUNK_NORTH_SOUTH, chunkPlayer)
+            chunkPlayer = cardinalPlayerScent(map, column[y + CHUNK_SIZE], CHUNK_NORTH_SOUTH, chunkPlayer)
         end
     end
 

@@ -91,7 +91,6 @@ local setNestActiveTick = chunkPropertyUtils.setNestActiveTick
 
 local getRaidNestActiveness = chunkPropertyUtils.getRaidNestActiveness
 local thisIsNewEnemyPosition = chunkPropertyUtils.thisIsNewEnemyPosition
-local getSquadsOnChunk = chunkPropertyUtils.getSquadsOnChunk
 
 local squadDecompress = squadCompression.squadDecompress
 
@@ -209,19 +208,26 @@ local function queueNestSpawners(map, chunk, tick)
 end
 
 
--- signs of the offsets around the player chunk; a zero offset has one side only (each chunk is visited once:
--- the four sign pairs repeated the row and column through the player chunk)
-local SIGNS_BOTH = {-1, 1}
-local SIGNS_ZERO = {1}
--- processPlayers runs every 16 ticks (was 8): chances are 1-(1-p)^2 of the old per-8-tick values,
--- so the hunting probability per unit of time is unchanged.
-local huntingChance = {}
-huntingChance[0] = 1
-huntingChance[32] = 0.75
-huntingChance[64] = 0.19
-huntingChance[96] = 0.0396
-huntingChance[128] = 0.007984
-local HUNTING_CHANCE_DEFAULT = 0.003996
+-- Preserve the sign-loop order: the pheromone updates read previously visited chunks,
+-- and the first entry of each chunk into the vengeance queue determines its position.
+local playerScanOffsets = {}
+do
+    local both, zero = {-1, 1}, {1}
+    -- Every 16 ticks: 1-(1-p)^2 of the former per-8-tick probability.
+    local chance = {[0] = 1, [32] = 0.75, [64] = 0.19, [96] = 0.0396, [128] = 0.007984}
+    for dx = 0, PROCESS_PLAYER_BOUND, CHUNK_SIZE do
+        local xSigns = dx == 0 and zero or both
+        for dy = 0, PROCESS_PLAYER_BOUND, CHUNK_SIZE do
+            local ySigns = dy == 0 and zero or both
+            local threshold = chance[mMax(dx, dy)] or 0.003996
+            for xi = 1, #xSigns do
+                for yi = 1, #ySigns do
+                    playerScanOffsets[#playerScanOffsets + 1] = {dx * xSigns[xi], -dy * ySigns[yi], threshold}
+                end
+            end
+        end
+    end
+end
 --[[
     Localized player radius were processing takes place in realtime, doesn't store state
     between calls.
@@ -272,47 +278,34 @@ function mapProcessor.processPlayers(players, universe, tick)
 				if map then
 					local playerChunk = getChunkByPosition(map, playerCharacter.position)
 					if (playerChunk ~= -1) then
-						local roll = mRandom() 
-						local allowingAttacks = canAttack(map, tick)
+						local roll = mRandom()
 						local allowingVengence = aiPredicates.canHunt(map, tick) and map.points >= 0
+						local forceVengence = getEnemyStructureCount(map, playerChunk) > 0
+						local centerX, centerY = playerChunk.x, playerChunk.y
 
-						local forceVengence = (getEnemyStructureCount(map, playerChunk) > 0)
-
-						for dx= 0, PROCESS_PLAYER_BOUND, 32 do
-							local xSigns = (dx == 0) and SIGNS_ZERO or SIGNS_BOTH
-							for dy= 0, PROCESS_PLAYER_BOUND, 32 do
-								local ySigns = (dy == 0) and SIGNS_ZERO or SIGNS_BOTH
-								local vengence = allowingVengence and (forceVengence or (roll < (huntingChance[mMax(dx, dy)] or HUNTING_CHANCE_DEFAULT)))
-								for xi = 1, #xSigns do
-									local x = playerChunk.x + dx*xSigns[xi]
-									for yi = 1, #ySigns do
-										local y = playerChunk.y - dy*ySigns[yi]
-										local chunk = getChunkByXY(map, x, y)
-										if (chunk ~= -1) then
-											if (chunk[CHUNK_TICK] ~= tick) then
-												chunk[CHUNK_TICK] = tick
-												processPheromone(map, chunk, true)
-												if (not chunk.nextHuntTick) or (chunk.nextHuntTick <= tick) then
-													if (getNestCount(map, chunk) > 0) then
-														processNestActiveness(map, chunk)
-														if vengence then
-															local count = map.vengenceQueue[chunk]
-															if not count then
-																count = 0
-																map.vengenceQueue[chunk] = count
-															end
-															map.vengenceQueue[chunk] = count + 1
-															chunk.nextHuntTick = tick + COOLDOWN_HUNT
-														end
-													end
-												end
-											end
-											--- compressed squads
-											for _,squad in pairs(getSquadsOnChunk(map, chunk)) do
-												local unitGroup = squad.group
-												if squad.compressed and unitGroup and unitGroup.valid then
-													squadDecompress(universe, map.surface, squad, nil, playerCharacter, true)
-												end
+						for i = 1, #playerScanOffsets do
+							local offset = playerScanOffsets[i]
+							local chunk = getChunkByXY(map, centerX + offset[1], centerY + offset[2])
+							if chunk ~= -1 then
+								if chunk[CHUNK_TICK] ~= tick then
+									chunk[CHUNK_TICK] = tick
+									processPheromone(map, chunk, true)
+									if (not chunk.nextHuntTick or chunk.nextHuntTick <= tick) and getNestCount(map, chunk) > 0 then
+										processNestActiveness(map, chunk)
+										if allowingVengence and (forceVengence or roll < offset[3]) then
+											local queue = map.vengenceQueue
+											queue[chunk] = (queue[chunk] or 0) + 1
+											chunk.nextHuntTick = tick + COOLDOWN_HUNT
+										end
+									end
+								end
+								local squads = map.chunkToSquad[chunk]
+								if squads then
+									for _, squad in pairs(squads) do
+										if squad.compressed then
+											local group = squad.group
+											if group and group.valid then
+												squadDecompress(universe, map.surface, squad, nil, playerCharacter, true)
 											end
 										end
 									end

@@ -221,9 +221,7 @@ local function scorePlayerBuildings(map, chunk)
     local surface = map.surface
 	local universe = map.universe
 	local turretsCount = 0
-	local pheromones = {}
-	pheromones[BASE_PHEROMONE] = 0
-	pheromones[BASE_DETECTION_PHEROMONE] = 0
+	local baseScent, detectionScent = 0, 0
     local sample
     local present = false
     local forces = universe.activePlayerForces
@@ -248,8 +246,8 @@ local function scorePlayerBuildings(map, chunk)
 					enityCnt = mMax(enityCnt - surface.count_entities_filtered(query2), 0)
 				end
 				
-				pheromones[BASE_PHEROMONE] = pheromones[BASE_PHEROMONE] + enityCnt*values[BASE_PHEROMONE]
-				pheromones[BASE_DETECTION_PHEROMONE] = pheromones[BASE_DETECTION_PHEROMONE] + enityCnt*values[BASE_DETECTION_PHEROMONE]
+				baseScent = baseScent + enityCnt*values[BASE_PHEROMONE]
+				detectionScent = detectionScent + enityCnt*values[BASE_DETECTION_PHEROMONE]
 				if lvlName == "turrets" then
 					turretsCount = turretsCount + enityCnt
 				end
@@ -258,23 +256,24 @@ local function scorePlayerBuildings(map, chunk)
 		
 		-- nil when the game has no Factorissimo factory prototypes (Upgrade.lua addCommandSet)
 		local factorissimoQuery = universe.filteredEntitiesPlayerQueryFactorissimo
-		local entities = (factorissimoQuery and surface.find_entities_filtered(factorissimoQuery)) or {}
-		for i = 1, #entities do
-			local entity = entities[i]
-			if FACTORISSIMO_ENTITY(entity) then
-				pheromones[BASE_PHEROMONE] = pheromones[BASE_PHEROMONE] + FACTORISSIMO_ENTITY_FEROMONE[BASE_PHEROMONE]			
-				pheromones[BASE_DETECTION_PHEROMONE] = pheromones[BASE_DETECTION_PHEROMONE] + FACTORISSIMO_ENTITY_FEROMONE[BASE_DETECTION_PHEROMONE]			
+		if factorissimoQuery then
+			local entities = surface.find_entities_filtered(factorissimoQuery)
+			for i = 1, #entities do
+				if FACTORISSIMO_ENTITY(entities[i]) then
+					baseScent = baseScent + FACTORISSIMO_ENTITY_FEROMONE[BASE_PHEROMONE]
+					detectionScent = detectionScent + FACTORISSIMO_ENTITY_FEROMONE[BASE_DETECTION_PHEROMONE]
+				end
 			end
-		end    
-    end		
-	setPlayerBaseGenerator(map, chunk, pheromones[BASE_PHEROMONE], BASE_PHEROMONE)
-	setPlayerBaseGenerator(map, chunk, pheromones[BASE_DETECTION_PHEROMONE], BASE_DETECTION_PHEROMONE)
+		end
+    end
+	setPlayerBaseGenerator(map, chunk, baseScent, BASE_PHEROMONE)
+	setPlayerBaseGenerator(map, chunk, detectionScent, BASE_DETECTION_PHEROMONE)
 	setPlayerTurretCount(map, chunk, turretsCount)
 	-- weak spots, strongpoints and infrastructure for the AI tactics (universe.area still holds this chunk)
-	aiBrain.onPlayerChunkScored(map, chunk, pheromones[BASE_PHEROMONE], turretsCount)
-    if sample and turretsCount <= 2 and pheromones[BASE_PHEROMONE] > 0 then aiBrain.field.observe(map, sample) end
+	aiBrain.onPlayerChunkScored(map, chunk, baseScent, turretsCount)
+    if sample and turretsCount <= 2 and baseScent > 0 then aiBrain.field.observe(map, sample) end
 
-	return pheromones[BASE_PHEROMONE]
+	return baseScent
 end
 
 -- Big Monsters / mferrari structures are never replaced (libs/ForeignEnemies.lua)
