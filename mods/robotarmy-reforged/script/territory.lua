@@ -117,36 +117,84 @@ local function step(t)
   end
 end
 
-local function has_patrol(force_index, surface_index)
-  local fd = storage.forces[force_index]
-  if not fd then return false end
-  local patrol = Squad.MODE.patrol
-  for _, squad in pairs(fd.squads) do
-    if squad.surface_index == surface_index
-      and (squad.mode == patrol or (squad.qrf and squad.qrf.mode == patrol)) then
-      return true
+local function collect_active(active, force_index, by_force)
+  local remaining = 0
+  for surface_index, t in pairs(by_force) do
+    if t.force.valid and t.surface.valid then
+      remaining = remaining + 1
+    else
+      by_force[surface_index] = nil
     end
   end
-  return false
+  if remaining == 0 then
+    storage.territories[force_index] = nil
+    return
+  end
+  local fd = storage.forces[force_index]
+  if not fd then return end
+  local patrolling, patrol = {}, Squad.MODE.patrol
+  for _, squad in pairs(fd.squads) do
+    local index = squad.surface_index
+    if by_force[index] and not patrolling[index]
+      and (squad.mode == patrol or (squad.qrf and squad.qrf.mode == patrol)) then
+      patrolling[index] = true
+      remaining = remaining - 1
+      if remaining == 0 then break end
+    end
+  end
+  -- Keep the same territory order for round-robin selection.
+  for index, t in pairs(by_force) do
+    if patrolling[index] then active[#active + 1] = t end
+  end
 end
 
 --- Every TERRITORY_PERIOD ticks: one chunk of the next territory that has a patrol.
 function territory.on_nth_tick()
   local active = {}
   for force_index, by_force in pairs(storage.territories) do
-    for surface_index, t in pairs(by_force) do
-      if not (t.force.valid and t.surface.valid) then
-        by_force[surface_index] = nil
-      elseif has_patrol(force_index, surface_index) then
-        active[#active + 1] = t
-      end
-    end
-    if next(by_force) == nil then storage.territories[force_index] = nil end
+    collect_active(active, force_index, by_force)
   end
   if #active == 0 then return end
   local turn = (storage.territory_turn or 0) + 1
   storage.territory_turn = turn
   step(active[(turn - 1) % #active + 1])
+end
+
+--- Transfer the source force's patrol knowledge before its entities change force.
+function territory.merge_forces(source, destination)
+  local all = storage.territories
+  local old = all[source.index]
+  if not old then return end
+  for index, src in pairs(old) do
+    if src.surface.valid then
+      local dst = get(destination, src.surface, false)
+      if not (dst and dst.surface.valid) then
+        local by_surface = all[destination.index] or {}
+        all[destination.index] = by_surface
+        src.force = destination
+        by_surface[index] = src
+      else
+        for key in pairs(src.seen) do dst.seen[key] = true end
+        for key in pairs(src.occupied) do dst.occupied[key] = true end
+        for key, tick in pairs(src.visits) do
+          if tick > (dst.visits[key] or 0) then dst.visits[key] = tick end
+        end
+        -- Keep all outstanding scans, even for a chunk previously seen by the other force.
+        local queued = {}
+        for i = dst.head, dst.tail do queued[dst.queue[i]] = true end
+        for i = src.head, src.tail do
+          local key = src.queue[i]
+          if not queued[key] then
+            dst.tail = dst.tail + 1
+            dst.queue[dst.tail] = key
+            queued[key] = true
+          end
+        end
+        -- dst.verify is still valid: its seen set only grew.
+      end
+    end
+  end
+  all[source.index] = nil
 end
 
 --- A squad starts patrolling: scan the base around it first.

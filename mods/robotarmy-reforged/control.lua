@@ -253,6 +253,7 @@ local function on_configuration_changed()
 end
 
 local function on_forces_merging(event)
+  territory.merge_forces(event.source, event.destination)
   local source = storage.forces[event.source.index]
   if not source then return end
   local destination = state.force_data(event.destination)
