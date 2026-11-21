@@ -1,4 +1,5 @@
 local indicators = require("script.specialization-indicators")
+local inspection = require("script.specialization-inspection")
 
 local TECH = "factory-specialization-optimization"
 local PERIOD = 10 * 60
@@ -7,6 +8,8 @@ local THRESHOLDS = {10, 20, 40}
 local TYPES = {"assembling-machine", "furnace"}
 local CHANNELS = {"speed", "consumption"}
 local PREFIX = "factory-specialization-"
+local INSPECT_INPUT = PREFIX .. "inspect"
+local INSPECT_ROWS = {[PREFIX .. "speed"] = 1, [PREFIX .. "efficiency"] = 2}
 
 local function eligible(factory)
     local building, force, surface = factory.building, factory.force, factory.inside_surface
@@ -58,6 +61,7 @@ local function clear(factory)
         local entry = storage.factory_specialization_effects[unit]
         if entry and entry.factory_id == factory.id then release(unit, entry) end
     end
+    inspection.clear(factory)
     indicators.clear(state)
     factory.specialization = nil
 end
@@ -88,8 +92,12 @@ end
 
 local function add_group(groups, key, model, recipe)
     local group = groups[key]
-    if group then group.count = group.count + 1
-    else groups[key] = {model = model, recipe = recipe, count = 1} end
+    if not group then
+        group = {model = model, recipe = recipe, count = 0}
+        groups[key] = group
+    end
+    group.count = group.count + 1
+    return group
 end
 
 local function descending(groups)
@@ -117,7 +125,7 @@ local function tier_for(groups, total)
 end
 
 local function snapshot(factory)
-    local machines, series, park = {}, {}, {}
+    local machines, series, park, machine_series, machine_models = {}, {}, {}, {}, {}
     local area = factorissimo.factory_interior_area(factory)
     local left, right = area[1], area[2]
     for _, machine in ipairs(factory.inside_surface.find_entities_filtered {area = area, type = TYPES, force = factory.force}) do
@@ -136,13 +144,26 @@ local function snapshot(factory)
                     name = type(id) == "string" and id or (id and id.name)
                 end
                 name = name or ""
-                machines[#machines + 1] = machine
-                add_group(park, model, model)
-                add_group(series, model .. "\0" .. name, model, name)
+                local i = #machines + 1
+                machines[i] = machine
+                machine_models[i] = add_group(park, model, model)
+                machine_series[i] = add_group(series, model .. "\0" .. name, model, name)
             end
         end
     end
-    return machines, descending(series), descending(park)
+    series, park = descending(series), descending(park)
+    -- Tied candidates share the highlight; an unconfigured machine can never lead a speed series.
+    local best_series = 0
+    for _, group in ipairs(series) do
+        if group.recipe ~= "" then best_series = group.count; break end
+    end
+    local best_model = park[1] and park[1].count or 0
+    local matches = {}
+    for i, group in ipairs(machine_series) do
+        matches[i] = (group.recipe ~= "" and group.count == best_series and 1 or 0)
+            + (machine_models[i].count == best_model and 2 or 0)
+    end
+    return machines, series, park, matches
 end
 
 local function apply(state, factory_id, machines, speed, efficiency)
@@ -168,15 +189,18 @@ end
 local function refresh(factory, tick, interval)
     if not eligible(factory) then clear(factory); return end
     local state = factory.specialization
-    if not state or (state.tick and tick - state.tick < interval) then return end
-    local machines, series, park = snapshot(factory)
+    if not state or (state.tick and tick - state.tick < interval and inspection.has_snapshot(factory)) then return end
+    local machines, series, park, matches = snapshot(factory)
     local speed, efficiency = tier_for(series, #machines), tier_for(park, #machines)
     apply(state, factory.id, machines, speed, efficiency)
     indicators.update(factory, state, series, park, #machines, speed, efficiency, THRESHOLDS)
     state.tick = tick
+    inspection.update(factory, machines, matches, speed, efficiency)
+    return true
 end
 
 factorissimo.on_event(factorissimo.events.on_init(), function()
+    inspection.reset()
     storage.factory_specialization_slots = {}
     storage.factory_specialization_effects = storage.factory_specialization_effects or {}
     storage.factory_specialization_markers = storage.factory_specialization_markers or {}
@@ -208,16 +232,44 @@ factorissimo.on_event(defines.events.on_forces_merged, function(event)
     sync_force(event.destination)
 end)
 
-factorissimo.on_event(defines.events.on_selected_entity_changed, function(event)
-    local player = game.get_player(event.player_index)
-    local entity = player and player.selected
-    if not (entity and entity.valid and (entity.name == PREFIX .. "speed" or entity.name == PREFIX .. "efficiency")) then return end
+local function selected_row(player)
+    local entity = player.selected
+    local index = entity and entity.valid and INSPECT_ROWS[entity.name]
+    if not index then return end
     local markers = storage.factory_specialization_markers
     local id = markers and markers[entity.unit_number]
     local factory = id and storage.factories[id]
-    if factory and player.force == factory.force and player.surface == factory.inside_surface then
-        refresh(factory, event.tick, HOVER_COOLDOWN)
+    local state = factory and factory.specialization
+    local row = state and state.rows and state.rows[index]
+    if row and row.marker == entity and inspection.at_factory(player, factory) then return factory, index, entity end
+end
+
+factorissimo.on_event(defines.events.on_selected_entity_changed, function(event)
+    local player = game.get_player(event.player_index)
+    if not (player and player.valid) then return end
+    local factory, row = selected_row(player)
+    if inspection.select(player, factory, row, false) then
+        if not factory or not refresh(factory, event.tick, HOVER_COOLDOWN) then inspection.redraw(player) end
     end
+end)
+
+factorissimo.on_event(INSPECT_INPUT, function(event)
+    if event.in_gui then return end
+    local player = game.get_player(event.player_index)
+    if not (player and player.valid) then return end
+    local factory, row, marker = selected_row(player)
+    if not marker then return end
+    -- Ignore stale world selection when the operating click was outside the plate.
+    local p, box = event.cursor_position, marker.selection_box
+    if p.x < box.left_top.x or p.x > box.right_bottom.x or p.y < box.left_top.y or p.y > box.right_bottom.y then return end
+    if inspection.select(player, factory, row, true) then inspection.redraw(player) end
+end)
+
+factorissimo.on_event(defines.events.on_player_changed_position, inspection.position_changed)
+factorissimo.on_event({defines.events.on_player_changed_surface, defines.events.on_player_changed_force,
+    defines.events.on_player_controller_changed, defines.events.on_player_died, defines.events.on_player_joined_game,
+    defines.events.on_player_left_game, defines.events.on_player_removed}, function(event)
+    inspection.drop(event.player_index)
 end)
 
 factorissimo.on_event(defines.events.on_entity_cloned, function(event)

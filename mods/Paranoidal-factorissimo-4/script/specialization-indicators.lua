@@ -9,6 +9,10 @@ local background = {{0.075, 0.09, 0.105}, {0.064, 0.088, 0.07}}
 local font_color = {0.94, 0.94, 0.94}
 local muted = {0.60, 0.63, 0.64}
 local tier_name = {"I", "II", "III"}
+local tooltip_schema = "v3\0"
+local inactive_icon_color = {0.5, 0.5, 0.5, 0.65}
+-- At the reference Full HD view (~26 px/tile), world scale 1.38 matches the old screen scale 1.13.
+local label_scale = 1.38
 
 local function destroy(row)
     local marker = row.marker
@@ -37,12 +41,12 @@ local function create(factory, i)
         left_top = {entity = marker, offset = {-9, -1}}, right_bottom = {entity = marker, offset = {9, 1}},
     }
     local icon = rendering.draw_sprite {
-        sprite = prefix .. rows[i] .. "-1", surface = surface, forces = {force},
+        sprite = prefix .. rows[i] .. "-0", tint = inactive_icon_color, surface = surface, forces = {force},
         target = {entity = marker, offset = {-7.85, 0}}, x_scale = 0.83, y_scale = 0.83, render_layer = "entity-info-icon",
     }
     local text = rendering.draw_text {
         text = "", color = muted, surface = surface, forces = {force}, target = {entity = marker, offset = {-6.7, 0}},
-        scale = 1.13, scale_with_zoom = true, vertical_alignment = "middle", font = "default-bold",
+        scale = label_scale, scale_with_zoom = false, vertical_alignment = "middle", font = "default-bold",
     }
     return {marker = marker, unit = unit, icon = icon, text = text}
 end
@@ -62,13 +66,11 @@ end
 
 local function tooltip(row, groups, total, tier, thresholds)
     local shown = math.min(#groups, max_groups)
-    local best
-    for _, group in ipairs(groups) do
-        if group.recipe ~= "" then best = group; break end
-    end
     local required = thresholds[math.max(1, tier)]
     local next_target = thresholds[tier + 1]
     field(row, 1, {locale .. "park"}, {locale .. "summary", total, tier_name[tier] or {locale .. "inactive"}})
+    field(row, 11, {locale .. "inspect"}, {locale .. "inspect-toggle"})
+    field(row, 12, {locale .. "inspect-colors"}, {locale .. (tier > 0 and "inspect-active" or "inspect-candidate")})
     for i = 1, shown do
         local group = groups[i]
         local model = prototypes.entity[group.model]
@@ -90,28 +92,24 @@ local function tooltip(row, groups, total, tier, thresholds)
         row.marker.clear_tooltip_field(8)
     end
     if next_target then
-        local n = best and best.count or 0
-        local add = math.max(next_target - n, 9 * total - 10 * n)
-        local change = total >= next_target and math.max(next_target, math.ceil(9 * total / 10)) - n
         field(row, 9, {locale .. "next-tier", tier_name[tier + 1]}, {locale .. "requirements", next_target})
-        if not best then
-            field(row, 10, {locale .. "tip"}, {locale .. "first-group"})
-        elseif change and change > 0 then
-            field(row, 10, {locale .. "tip"}, {locale .. "change-machines", change})
-        else
-            field(row, 10, {locale .. "tip"}, {locale .. "add-machines", add})
-        end
     else
         row.marker.clear_tooltip_field(9)
-        row.marker.clear_tooltip_field(10)
     end
 end
 
 local function update_row(row, index, groups, total, tier, thresholds)
-    if row.tier ~= tier then
+    -- Update saved screen-sized labels in place, even when the tier and tooltip are unchanged.
+    if row.text.scale_with_zoom then
+        row.text.scale = label_scale
+        row.text.scale_with_zoom = false
+    end
+    local sprite = prefix .. rows[index] .. "-" .. tier
+    -- A saved inactive row can still show the old tier-I sprite.
+    if row.tier ~= tier or (tier == 0 and row.icon.sprite ~= sprite) then
         local active = tier > 0
-        row.icon.sprite = prefix .. rows[index] .. "-" .. math.max(1, tier)
-        row.icon.color = active and {1, 1, 1, 1} or {0.5, 0.5, 0.5, 0.65}
+        row.icon.sprite = sprite
+        row.icon.color = active and {1, 1, 1, 1} or inactive_icon_color
         row.text.color = active and font_color or muted
         row.text.text = {locale .. (active and rows[index] .. "-active" or rows[index] .. "-inactive"), tier * 5}
         row.tier = tier
@@ -123,8 +121,12 @@ local function update_row(row, index, groups, total, tier, thresholds)
         key[#key + 1] = group.recipe or ""
         key[#key + 1] = group.count
     end
-    local signature = table.concat(key, "\0")
+    local signature = tooltip_schema .. table.concat(key, "\0")
     if row.signature ~= signature then
+        -- Saved markers can still carry the old advice field even when the park is unchanged.
+        if row.signature and row.signature:sub(1, #tooltip_schema) ~= tooltip_schema then
+            row.marker.clear_tooltip_field(10)
+        end
         tooltip(row, groups, total, tier, thresholds)
         row.signature = signature
     end

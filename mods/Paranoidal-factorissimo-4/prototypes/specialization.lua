@@ -26,6 +26,10 @@ for i, row in ipairs(rows) do
         is_military_target = false,
         picture = {filename = "__core__/graphics/empty.png", size = 1},
     }}
+    data:extend {{
+        type = "sprite", name = prefix .. row.name .. "-0",
+        filename = "__Paranoidal-factorissimo-4__/graphics/icon/" .. row.module .. "-0.png", size = 64, mipmap_count = 4,
+    }}
     for tier = 1, 3 do
         local suffix = tier == 1 and "" or "-" .. tier
         data:extend {{
@@ -36,6 +40,12 @@ for i, row in ipairs(rows) do
 end
 
 data:extend {{
+    type = "custom-input",
+    name = prefix .. "inspect",
+    key_sequence = "",
+    linked_game_control = "open-gui",
+    consuming = "none",
+}, {
     type = "technology",
     name = prefix .. "optimization",
     icons = icons,
