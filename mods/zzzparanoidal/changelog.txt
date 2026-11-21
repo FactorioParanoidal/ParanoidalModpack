@@ -1,4 +1,8 @@
 ---------------------------------------------------------------------------------------------------
+Version: 8.1.32
+  Features:
+    - New gas reservoirs accept only the selected gas. Set the filter with the large gas picker in the tank window; blueprints and settings paste carry it. Existing unfiltered tanks retain their contents and keep working without a filter until configured.
+---------------------------------------------------------------------------------------------------
 Version: 8.1.31
   Bugfixes:
     - Inserter wake-up uses the engine's quality order for range filters, including different qualities at the same prototype level.

@@ -4,6 +4,7 @@ local sync_air_filter_beta8 = require("controls.air-filter-beta8")
 local burner_pump_status = require("controls.burner-pump-status")
 local loader_shells = require("controls.loader-shells")
 local automatic_cursed_fmd = require("controls.automatic-cursed-fmd")
+local gas_reservoir = require("features.gas-reservoir.control")
 local rail_support_power = require("controls.rail-support-power")
 rail_support_power.install() -- Кабель в опорах эстакадных рельсов (только с elevated-rails).
 require("controls.battery-locomotive-return").install() -- Аккумулятор BET при разборке MU-и hiend-локомотивов.
@@ -127,6 +128,7 @@ script.on_init(function() --наш любимый init, запрещаем дв�
 	automatic_cursed_fmd.sync()
 	rocket_victory.sync()
 	fluid_output_wake.sync()
+	gas_reservoir.sync()
 end)
 
 script.on_load(function() --без дропа эволюции потому что game недоступен
@@ -158,6 +160,7 @@ script.on_configuration_changed(function() --фикс эволюции при з
 	automatic_cursed_fmd.sync()
 	rocket_victory.sync()
 	fluid_output_wake.sync()
+	gas_reservoir.sync()
 end)
 
 script.on_event(defines.events.on_player_joined_game, disable_obsolete_basic_logistics)
@@ -170,5 +173,6 @@ require("controls.milestones-preset").install()
 -- Цветные пинги: кольцо и ник цветом игрока у GPS-ссылки в чате.
 require("controls.ping-color").install()
 
--- Last: preserve all previous handlers shared with the automatic drill controller.
+-- These modules chain the previously installed handlers.
 automatic_cursed_fmd.install()
+gas_reservoir.install()

@@ -472,6 +472,8 @@ require("tweaks.technology.chemical-elements")
 if not mods["ic-more-qualities"] then
     require("tweaks.custom.graphics-static-animation").apply(data.raw, log)
 end
+-- Копируем уже настроенный и перекрашенный бак, оставляя старый прототип для сохранений.
+require("features.gas-reservoir.data")
 -- Этот require ВСЕГДА ПОСЛЕДНИЙ: не переносить и не добавлять код ниже.
 -- Все новые правки размещать выше: здесь фиксируются иконка и последнее место эффекта эволюции.
 require("tweaks.technology.research-evolution-icon")
