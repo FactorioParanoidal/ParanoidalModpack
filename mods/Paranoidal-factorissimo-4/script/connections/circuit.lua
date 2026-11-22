@@ -73,9 +73,9 @@ Circuit.direction = function(conn)
     return "b0", defines.direction.north
 end
 
-Circuit.rotate = factorissimo.beep
+Circuit.rotate = factorissimo.connection_direction_not_adjustable
 
-Circuit.adjust = factorissimo.beep
+Circuit.adjust = factorissimo.connection_rate_not_adjustable
 
 Circuit.destroy = function(conn)
     if conn.inside_middleman and conn.inside_middleman.valid then conn.inside_middleman.destroy() end

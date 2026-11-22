@@ -2,6 +2,7 @@
 Version: 9.20.0
 Date: 2026-11-16
   Locale:
+    - Port feedback explains why a direction or rate command did not take effect instead of showing Beep, Boop or Beeple. The fluid-port research tooltip describes the fixed pumping speed.
     - Clarified setting descriptions against current code and modpack overrides, including units, dependencies and limits; setting values and gameplay are unchanged.
   Major Features:
     - Walk between touching factories at matching ports, even at empty ports. Alt mode shows green two-way arrows in the void exactly opposite the ports, with one label per destination clear of the specialization panels. Ordinary doors and logistics connections are unchanged.
@@ -9,6 +10,13 @@ Date: 2026-11-16
     - Hover over a specialization panel to highlight the counted machines and dim the workshop around them. Click the panel to pin the highlights for your view only; click it again to clear them.
     - Paranoidal: the Factorissimo fork of the build is renamed from factorissimo-2-notnotmelon to Paranoidal-factorissimo-4 (title "Paranoidal Factorissimo 4"). Prototype, setting, remote interface (factorissimo), command, custom input and storage names are unchanged; graphics paths are __Paranoidal-factorissimo-4__.
   Bugfixes:
+    - Chest ports ignore construction logistics helpers; linked terminals sharing one inventory no longer transfer to themselves.
+    - Rejected construction no longer edits the player's undo history.
+    - Inactive factories disconnect their external power links without disabling local generators or the internal distribution pole.
+    - Interior lighting no longer follows the last factory to update on a shared floor. On mixed floors without solar power, only researched workshops receive the built-in light.
+    - Sandbox cleanup skips packed items in shared linked inventories and stale duplicates of a live bound item.
+    - Power Grid Comb excludes factory infrastructure in both selection modes; factory recovery help describes the actual command.
+    - Factory travel now handles failed teleports and retries a failed return from the transit surface.
     - Moved passage arrows one tile farther outside the workshop to clear the logistics indicators, with matching green arrows and labels.
     - Factory passages now arrive at the port or on a free tile immediately beside it, not farther inside the workshop.
     - The nested factory milestone requires an active interior, not an empty building.
@@ -18,6 +26,10 @@ Date: 2026-11-16
     - Specialization labels scale with their in-world panels instead of staying small on high-density displays.
     - Factory blueprints distinguish copies, cuts and death recovery. Copies, including older blueprints with only an ID tag, cannot unpack the original. Building from a packed item uses its own interior even when a ghost references another factory.
   Optimizations:
+    - Skip unrelated port walls on local rechecks, share the neighbor search during bulk connection checks, and coalesce consecutive redundant area checks.
+    - New fluid ports use one native pump and a passive terminal at the other end, with the pump still configured for 100 units per tick. The terminal uses one tile of that side's pipeline extent. Existing two-pump connections stay as they are.
+    - Applying the same fluid direction from a blueprint keeps the connectors and their contents. Reversing a working fluid port leaves its passive terminal in place or retains both pumps on an older port.
+    - Reused workshop and neighbor lookups, and matched passages against opposing ports only.
     - Find the first free interior slot without sorting occupied slots; update the preview's GUI geometry only when values change.
     - Reuse the specialization hover mask when the floor bounds and machine openings have not changed.
   Changes:
@@ -106,7 +118,7 @@ Date: 2026-10-16
     - Paranoidal: factory connections are only created after their connection research (fluid, chest, heat, circuit). Connections that already exist are kept.
     - Paranoidal: deconstruction by script removes a factory building like a pickup: an empty factory is deleted, otherwise the packed factory is dropped. Inside a Blueprint Sandboxes lab (god mode) the factory is deleted completely, with the factories built inside it and packed factories lying inside. Other script destruction still rebuilds the building.
     - Paranoidal: clearing or deleting a sandbox lab also deletes packed factories lying on its ground or in its chests.
-    - Paranoidal: factories are immune to quality and defects. Factory recipes are standard quality only (quality modules have no effect); factory items never get defects (ic-more-qualities). The quality of a building no longer changes its ports, fluid port speed or internal entities; factories placed before keep their ports and internal entities until they are moved.
+    - Paranoidal: factories are immune to quality and defects. Factory recipes are standard quality only (quality modules have no effect); factory items never get defects (ic-more-qualities). New factory interiors use standard ports and internal entities regardless of building quality. Existing interiors keep their saved layout, including any legacy ports, when moved; fluid ports use the fixed configured speed. Packed items retain the building item's quality.
     - Paranoidal: factory ids are never reused.
     - Paranoidal: fluid port speed (100 per tick) and the fluid flow limit (250 per tick) are fixed values instead of depending on load order. The factory tooltip shows the real values without per-quality values.
   Bugfixes:

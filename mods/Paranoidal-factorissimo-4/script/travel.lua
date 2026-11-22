@@ -4,12 +4,18 @@
 local find_surrounding_factory = remote_api.find_surrounding_factory
 local find_factory_by_area = remote_api.find_factory_by_area
 local Passages = require("script.passages")
+local d = defines.direction
+local travel_cooldown = 35
 
 factorissimo.on_event(factorissimo.events.on_init(), function()
     storage.last_player_teleport = storage.last_player_teleport or {}
     Passages.rebuild()
 end)
 factorissimo.on_event(defines.events.on_forces_merged, Passages.rebuild)
+factorissimo.on_event(defines.events.on_player_removed, function(event)
+    local returns = storage.factory_travel_returns
+    if returns then returns[event.player_index] = nil end
+end)
 
 --- This function exists in order to teleport the personal robopots of a player along with the player when moving between factories.
 local function purgatory_surface()
@@ -29,41 +35,50 @@ local function purgatory_surface()
     return surface
 end
 
-local function teleport_safely(e, surface, position, player, prechecked)
-    if not e.valid then return end
-    if not player.valid then return end
-
-    position = {x = position.x or position[1], y = position.y or position[2]}
-
-    if e.is_player() and not e.character then -- god controller
-        e.teleport(position, surface)
-        storage.last_player_teleport[player.index] = game.tick
-    else
-        if prechecked then
-            local origin, origin_surface = player.physical_position, player.physical_surface
-            if not e.teleport({0, 0}, purgatory_surface()) then return false end
-            if not e.teleport(position, surface) then
-                e.teleport(origin, origin_surface)
-                return false
-            end
-        else
-            position = surface.find_non_colliding_position(e.character.name, position, 5, 0.5, false) or position
-            e.teleport({0, 0}, purgatory_surface())
-            e.teleport(position, surface)
+-- Retry only a failed return from the transit surface, even if the player stops walking.
+local function recover_travel(player, tick)
+    local returns = storage.factory_travel_returns
+    local pending = returns and returns[player.index]
+    if not pending then return end
+    if player.physical_surface ~= pending.transit then
+        returns[player.index] = nil
+    elseif tick - (storage.last_player_teleport[player.index] or 0) >= travel_cooldown then
+        storage.last_player_teleport[player.index] = tick
+        if pending.surface.valid and player.controller_type ~= defines.controllers.remote
+            and player.teleport(pending.position, pending.surface) then
+            returns[player.index] = nil
+            factorissimo.update_factory_preview(player)
         end
-        storage.last_player_teleport[player.index] = game.tick
     end
-
-    if player then factorissimo.update_factory_preview(player) end
     return true
 end
 
-local function enter_factory(e, factory, player)
-    teleport_safely(e, factory.inside_surface, {factory.inside_door_x, factory.inside_door_y}, player)
-end
-
-local function leave_factory(e, factory, player)
-    teleport_safely(e, factory.outside_surface, {factory.outside_door_x, factory.outside_door_y}, player)
+local function teleport_safely(player, surface, position, prechecked)
+    if not player.valid then return false end
+    -- Throttle failed attempts as well as successes, so holding a key cannot spam teleports.
+    storage.last_player_teleport[player.index] = game.tick
+    if not player.character then -- God controller: no personal robots to transfer.
+        if not player.teleport(position, surface) then return false end
+    else
+        if not prechecked then
+            position = surface.find_non_colliding_position(player.character.name, position, 5, 0.5, false) or position
+        end
+        local origin, origin_surface = player.physical_position, player.physical_surface
+        local transit = purgatory_surface()
+        if not player.teleport({0, 0}, transit) then return false end
+        if not (surface.valid and player.teleport(position, surface)) then
+            if player.valid and player.physical_surface == transit then
+                if not (origin_surface.valid and player.teleport(origin, origin_surface)) then
+                    storage.factory_travel_returns = storage.factory_travel_returns or {}
+                    storage.factory_travel_returns[player.index] = {surface = origin_surface, position = origin, transit = transit}
+                    log("Factorissimo: scheduled travel recovery for player " .. player.index)
+                end
+            end
+            return false
+        end
+    end
+    factorissimo.update_factory_preview(player)
+    return true
 end
 
 -- https://mods.factorio.com/mod/jetpack
@@ -99,20 +114,7 @@ end
 
 -- The remote view has no well-defined position; it is handled by shift clicking the factory/power monitor.
 -- God, editor and spectator controllers walk in and out like characters (e.g. Blueprint Sandboxes).
-local function check_position_and_leave_factory(player, walking_state, is_airborne)
-    if player.controller_type == defines.controllers.remote then return end
-
-    local position = player.physical_position
-
-    local walking_direction = walking_state.direction
-    local is_moving_downwards =
-        walking_direction == defines.direction.south or
-        walking_direction == defines.direction.southeast or
-        walking_direction == defines.direction.southwest
-
-    if not is_moving_downwards then return end
-
-    local factory = find_surrounding_factory(player.physical_surface, position)
+local function check_position_and_leave_factory(player, factory, position, is_airborne)
     if not factory then return end
 
     local y = position.y + (is_airborne and 0.5 or -1)
@@ -121,61 +123,51 @@ local function check_position_and_leave_factory(player, walking_state, is_airbor
     if math.abs(position.x - factory.inside_door_x) >= 4 then return end
     if not (factory.outside_surface and factory.outside_surface.valid) then return end
 
-    leave_factory(player, factory, player)
-    factorissimo.update_factory_preview(player)
-    factorissimo.update_overlay(factory)
-    return true
+    if teleport_safely(player, factory.outside_surface, {factory.outside_door_x, factory.outside_door_y}) then
+        factorissimo.update_overlay(factory)
+    end
+    return true -- The ordinary doorway owns this attempt, even if travel failed.
 end
 
-local function check_position_and_enter_factory(player, walking_state, is_airborne)
-    if player.controller_type == defines.controllers.remote then return end
-
-    local physical_position = player.physical_position
-
-    local walking_direction = walking_state.direction
-    local is_moving_upwards = is_airborne
-        or walking_direction == defines.direction.north
-        or walking_direction == defines.direction.northeast
-        or walking_direction == defines.direction.northwest
+local function check_position_and_enter_factory(player, surface, position, direction, is_airborne)
+    local is_moving_upwards = is_airborne or direction == d.north or direction == d.northeast or direction == d.northwest
 
     if not is_moving_upwards then return end
 
     local factory = find_factory_by_area {
-        surface = player.physical_surface,
+        surface = surface,
         area = (not is_airborne) and {
-            {physical_position.x - 0.2, physical_position.y - 0.3},
-            {physical_position.x + 0.2, physical_position.y}
+            {position.x - 0.2, position.y - 0.3},
+            {position.x + 0.2, position.y}
         } or nil,
-        position = is_airborne and player.physical_position or nil
+        position = is_airborne and position or nil
     }
 
     if not factory or factory.inactive or not (factory.inside_surface and factory.inside_surface.valid) then return end
 
     local door_width = is_airborne and 4 or 0.9
-    local is_standing_in_doorway = physical_position.y > factory.outside_y + 1 and math.abs(physical_position.x - factory.outside_x) < door_width
+    local is_standing_in_doorway = position.y > factory.outside_y + 1 and math.abs(position.x - factory.outside_x) < door_width
     if not is_standing_in_doorway then return end
 
-    enter_factory(player, factory, player)
-    return true
+    teleport_safely(player, factory.inside_surface, {factory.inside_door_x, factory.inside_door_y})
+    return true -- Do not try a passage after a matched ordinary doorway.
 end
 
-local function try_passage(player, direction)
-    if player.controller_type ~= defines.controllers.character or not player.character then return end
-    local surface, port, dx, dy = Passages.destination(player.physical_surface, player.physical_position, direction)
+local function try_passage(player, factory, position, direction)
+    local surface, port, dx, dy = Passages.destination(factory, position, direction)
     if not surface then return end
 
     -- Cross-surface teleport does not check collisions; accept only the exact tile center.
     local character = player.character.name
-    local function arrive(position)
-        local clear = surface.find_non_colliding_position(character, position, 0.01, 0.01, true)
-        if not clear or clear.x ~= position.x or clear.y ~= position.y then return false end
-        teleport_safely(player, surface, position, player, true)
-        return true
+    local function clear_tile(candidate)
+        local clear = surface.find_non_colliding_position(character, candidate, 0.01, 0.01, true)
+        if clear and clear.x == candidate.x and clear.y == candidate.y then return clear end
     end
 
-    -- Keep the same depth at the wall. Try the port first, then either neighboring tile along the wall.
-    if arrive(port) or arrive({x = port.x - dy, y = port.y + dx}) then return end
-    arrive({x = port.x + dy, y = port.y - dx})
+    -- Find a free cell along the wall before attempting any teleport.
+    local arrival = clear_tile(port) or clear_tile({x = port.x - dy, y = port.y + dx})
+        or clear_tile({x = port.x + dy, y = port.y - dx})
+    if arrival then return teleport_safely(player, surface, arrival, true) end
 end
 
 -- Reuse the ordinary door checks; nothing polls passage pairs or their endpoints.
@@ -191,14 +183,24 @@ factorissimo.on_nth_tick(6, function(event)
     if not last_teleport then return end
     local jetpacks -- fetched once, only when somebody is walking
     for _, player in pairs(game.connected_players) do
-        if not player.driving and tick - (last_teleport[player.index] or 0) >= 35 then
+        local controller = player.controller_type
+        if not recover_travel(player, tick) and controller ~= defines.controllers.remote and not player.driving
+            and tick - (last_teleport[player.index] or 0) >= travel_cooldown then
             local walking_state = player.walking_state
             if walking_state.walking then
                 if jetpacks == nil then jetpacks = get_jetpacks() or false end
                 local airborne = is_airborne(jetpacks or nil, player)
-                if not check_position_and_enter_factory(player, walking_state, airborne)
-                    and not check_position_and_leave_factory(player, walking_state, airborne) then
-                    try_passage(player, walking_state.direction)
+                local surface, position, direction = player.physical_surface, player.physical_position, walking_state.direction
+                if not check_position_and_enter_factory(player, surface, position, direction, airborne) then
+                    local southwards = direction == d.south or direction == d.southeast or direction == d.southwest
+                    local can_use_passage = controller == defines.controllers.character and player.character
+                    if southwards or can_use_passage then
+                        local factory = find_surrounding_factory(surface, position)
+                        if not (southwards and check_position_and_leave_factory(player, factory, position, airborne))
+                            and can_use_passage then
+                            try_passage(player, factory, position, direction)
+                        end
+                    end
                 end
             end
         end

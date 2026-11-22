@@ -1,6 +1,7 @@
 local get_factory_by_building = remote_api.get_factory_by_building
 local find_surrounding_factory = remote_api.find_surrounding_factory
 local Passages = require("script.passages")
+local Adjacent = require("script.connections.adjacent")
 
 local has_layout = has_layout
 local floor, ceil = math.floor, math.ceil
@@ -15,7 +16,7 @@ local building_filters = factorissimo.entity_filters {BUILDING_TYPE}
 
 -- Paranoidal: factories are immune to quality and defects. The quality of the building does not change
 -- its ports or the quality of its internal entities (fluid ports, power pole, indicators, roboport).
--- Factories placed before keep their ports and internal entities until they are moved.
+-- Existing interiors keep their saved layout; moving one does not delete legacy ports.
 local function factory_quality()
     return prototypes.quality.normal
 end
@@ -180,8 +181,8 @@ local function placement_problem(factory, building)
 end
 
 --- Updates factory.inactive. Returns true when an inactive factory became active again.
---- An inactive factory loses all its connections. The warning is shown when the factory becomes
---- inactive, or always when `announce` is set (a building was just placed).
+--- Inactive factories lose ports, passages and their external power link, not local generation.
+--- Warn when the factory becomes inactive or when it has just been placed.
 local function set_factory_active_or_inactive(factory, announce)
     local was_inactive = factory.inactive
     local building = factory.building
@@ -203,6 +204,7 @@ local function set_factory_active_or_inactive(factory, announce)
 
     factorissimo.disconnect_factory_connections(factory)
     Passages.remove(factory)
+    factorissimo.disconnect_exterior_power(factory)
     return false
 end
 
@@ -237,9 +239,12 @@ end
 local function activate_factories(recheck)
     for _, factory in pairs(storage.factories) do
         local reactivated = set_factory_active_or_inactive(factory)
-        if reactivated and recheck and factory.built then
-            factorissimo.recheck_factory_connections(factory)
-            Passages.add(factory)
+        if reactivated and factory.built then
+            factorissimo.update_power_connection(factory)
+            if recheck then
+                factorissimo.recheck_factory_connections(factory)
+                Passages.add(factory)
+            end
         end
         build_factory_upgrades(factory)
     end
@@ -357,9 +362,6 @@ local function surface_sanity_checks(surface)
         surface.localised_name = surface_localised_name(surface)
     end
 
-    surface.daytime = 0.5
-    surface.freeze_daytime = true
-
     -- Ensure grass does not generate.
     surface.map_gen_settings = {width = 2, height = 2}
 end
@@ -398,6 +400,10 @@ local function create_factory_position(layout, building)
 
     if not surface then
         surface = create_factory_surface(surface_name)
+    end
+    if not storage.surface_factories[surface.index] then
+        surface.daytime = 0.5
+        surface.freeze_daytime = true
     end
 
     surface_sanity_checks(surface)
@@ -590,8 +596,9 @@ local function create_factory_exterior(factory, building)
     -- Decide first whether the factory may work here, so that an invalid placement never connects.
     set_factory_active_or_inactive(factory, true)
     factorissimo.recheck_factory_connections(factory)
-    factorissimo.recheck_adjacent_factory_connections(factory)
-    Passages.add(factory)
+    local neighbors = Adjacent.neighbor_buildings(factory) or {}
+    factorissimo.recheck_adjacent_factory_connections(factory, neighbors)
+    Passages.add(factory, neighbors)
     factorissimo.update_power_connection(factory)
     factorissimo.update_overlay(factory)
     build_factory_upgrades(factory)
@@ -738,6 +745,7 @@ end
 
 --- Removes every reference to the factory, remembers its id as deleted and clears the table.
 local function forget_factory(factory, context)
+    factorissimo.clear_factory_lights(factory)
     if factory.id then factory_groups[factory.id % 4 + 1][factory.id] = nil end
     factorissimo.index_roboport_factory(factory, true)
     if context then
@@ -1001,30 +1009,48 @@ end
 --- Whether the position is in a sandbox, also through factories built inside factories.
 function is_inside_sandbox(surface, position)
     if not sandboxes_active then return false end
-    for _ = 1, 100 do -- a factory can contain itself
+    local seen
+    while true do
         if is_sandbox_surface(surface) then return true end
         local factory = find_surrounding_factory(surface, position)
         local outside_surface = factory and factory.built and factory.outside_surface
         if not (outside_surface and outside_surface.valid) then return false end
+        if not seen then seen = {} end
+        if seen[factory] then return false end
+        seen[factory] = true
         surface, position = outside_surface, {x = factory.outside_x, y = factory.outside_y}
     end
-    return false
 end
 factorissimo.is_inside_sandbox = is_inside_sandbox
 
-local CONTAINER_TYPES = {"container", "logistic-container", "infinity-container", "linked-container", "item-entity"}
+-- A linked container only exposes a shared inventory. Its removal does not prove that
+-- the item is discarded, so never infer a packed-interior purge from a linked terminal.
+local LOCAL_STORAGE_TYPES = {"container", "logistic-container", "infinity-container", "item-entity"}
 
---- Ids of packed factories whose items lie on the ground or in chests in the area (whole surface without area).
+local function is_packed_item_of(item, factory)
+    if not (item and item.valid and factory.layout and item.name == factory.layout.name .. "-instantiated") then
+        return false
+    end
+    local tags = item.tags
+    return tags and tags.id == factory.id
+end
+
+--- IDs of packed factories with local items in the disposal area (whole surface without area).
 local function packed_factory_ids(surface, area)
     local ids = {}
     local saved = storage.saved_factories
     local function note(stack)
-        if stack and stack.valid_for_read and stack.is_item_with_tags and has_layout(stack.name) then
-            local tags = stack.tags
-            if tags and tags.id and saved[tags.id] then ids[#ids + 1] = tags.id end
+        if not (stack and stack.valid_for_read and stack.is_item_with_tags) then return end
+        local tags = stack.tags
+        local id = tags and tags.id
+        local factory = id and saved[id]
+        if not (factory and factory.layout and stack.name == factory.layout.name .. "-instantiated") then return end
+        -- An old duplicate in a lab is not proof that the real, still bound item was discarded.
+        if not is_packed_item_of(factory.item, factory) or factory.item == stack.item then
+            ids[id] = true
         end
     end
-    for _, entity in pairs(surface.find_entities_filtered {area = area, type = CONTAINER_TYPES}) do
+    for _, entity in pairs(surface.find_entities_filtered {area = area, type = LOCAL_STORAGE_TYPES}) do
         if entity.type == "item-entity" then
             note(entity.stack)
         else
@@ -1084,7 +1110,7 @@ function destroy_factory_with_interior(factory, purge_packed, context)
     end
     if factory.built then cleanup_factory_exterior(factory) end
     cleanup_factory_interior(factory, context)
-    for _, id in pairs(packed) do
+    for id in pairs(packed) do
         local saved = storage.saved_factories[id]
         if saved then destroy_factory_with_interior(saved, true, context) end
     end
@@ -1099,7 +1125,7 @@ local function on_surface_removal(surface)
 
     -- Packed factories left on the floor of a sandbox lab are deleted with it.
     if sandbox then
-        for _, id in pairs(packed_factory_ids(surface)) do
+        for id in pairs(packed_factory_ids(surface)) do
             local saved = storage.saved_factories[id]
             if saved then destroy_factory_with_interior(saved, true, context) end
         end
@@ -1193,14 +1219,6 @@ local function create_fresh_factory(entity)
     local factory = create_factory_interior(layout, entity)
     create_factory_exterior(factory, entity)
     return factory
-end
-
-local function is_packed_item_of(item, factory)
-    if not (item and item.valid and factory.layout and item.name == factory.layout.name .. "-instantiated") then
-        return false
-    end
-    local tags = item.tags
-    return tags and tags.id == factory.id
 end
 
 -- A cut/rebuild can use a plain hull. Unbind the outstanding packed item only after attachment.
@@ -1436,6 +1454,7 @@ local clone_forbidden_prefixes = {
     "factory-port-marker",
     "factory-blueprint-anchor",
     "factory-fluid-dummy-connector-",
+    "factory-fluid-terminal-",
     "factory-linked-",
     "factory-requester-chest-",
     "factory-eject-chest-",

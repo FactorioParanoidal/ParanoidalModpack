@@ -9,6 +9,7 @@ end
 require "compat.gregtorio"
 require "prototypes.hull-icons"
 require "prototypes.architecture-4-final"
+require "compat.power-grid-comb"
 
 -- Auto-rebalance the roboport upgrade tech such that it costs the same packs as the construction-robotics tech.
 local construction_robotics = data.raw.technology["construction-robotics"]

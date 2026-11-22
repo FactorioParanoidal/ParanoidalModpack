@@ -58,7 +58,7 @@ Heat.direction = function(conn)
     return "b" .. make_valid_delay(conn._settings.delay or DEFAULT_DELAY), defines.direction.north
 end
 
-Heat.rotate = factorissimo.beep
+Heat.rotate = factorissimo.connection_direction_not_adjustable
 
 Heat.adjust = function(conn, positive)
     local delay = conn._settings.delay or DEFAULT_DELAY

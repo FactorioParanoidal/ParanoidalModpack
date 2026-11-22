@@ -147,7 +147,8 @@ local function get_cpos(factory, position)
 end
 
 local function unpack_connection_settings_from_blueprint(entity)
-    if not entity.tags or not next(entity.tags) then return end
+    local tags = entity.tags
+    if not tags or not next(tags) then return end
     local surface = entity.surface
     local position = entity.position
     local factory = remote_api.find_surrounding_factory(surface, position)
@@ -159,10 +160,15 @@ local function unpack_connection_settings_from_blueprint(entity)
     if cpos then
         local cid = cpos.id
         local settings = factorissimo.get_connection_settings(factory, cid, ctype)
-        for k, v in pairs(entity.tags) do
+        local conn = factory.connections[cid]
+        if ctype == "fluid" and conn and conn._type == "fluid" then
+            local input = tags.input_mode
+            if input == nil then input = settings.input_mode end
+            if factorissimo.apply_fluid_blueprint(factory, conn, not not input) then return end
+        end
+        for k, v in pairs(tags) do
             settings[k] = v
         end
-        local conn = factory.connections[cid]
         if conn then
             factorissimo.connection_settings_changed(factory, cid)
             factorissimo.destroy_connection(conn)

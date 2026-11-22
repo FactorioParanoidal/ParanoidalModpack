@@ -60,6 +60,7 @@ remote_api.set_global = function(path, v)
     end
     g[path[#path]] = v
     factorissimo.clear_layout_cache()
+    factorissimo.clear_connection_layout_cache()
     if path[1] == "factories" then
         if #path <= 2 then
             factorissimo.index_factory_groups()

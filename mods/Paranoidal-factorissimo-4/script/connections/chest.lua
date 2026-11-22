@@ -4,9 +4,21 @@ Chest.color = {r = 200 / 255, g = 110 / 255, b = 38 / 255}
 Chest.entity_types = {"container", "logistic-container", "infinity-container", "linked-container"}
 Chest.unlocked = function(force) return force.technologies["factory-connection-type-chest"].researched end
 
-local blacklist = {"factory-overlay-controller", "factory-requester-chest-factory-1", "factory-requester-chest-factory-2", "factory-requester-chest-factory-3"}
-local blacklisted = {}
-for _, name in pairs(blacklist) do blacklisted[name] = true end
+local blacklisted = {["factory-overlay-controller"] = true}
+for tier = 1, 4 do
+    blacklisted["factory-requester-chest-factory-" .. tier] = true
+    blacklisted["factory-eject-chest-factory-" .. tier] = true
+end
+
+local function is_endpoint(entity)
+    return entity.valid and not blacklisted[entity.name] and not factorissimo.is_roboport_exterior_chest(entity)
+end
+
+-- A pair of linked terminals can refer to the same inventory, and the link can change in place.
+local function is_same_inventory(outside, inside)
+    return outside == inside or (outside.type == "linked-container" and inside.type == "linked-container"
+        and outside.name == inside.name and outside.force_index == inside.force_index and outside.link_id == inside.link_id)
+end
 
 local function get_chest_type(chest)
     local type = chest.prototype.logistic_mode
@@ -26,7 +38,7 @@ local function get_chest_type(chest)
 end
 
 Chest.connect = function(factory, cid, cpos, outside_entity, inside_entity, settings)
-    if blacklisted[outside_entity.name] or blacklisted[inside_entity.name] then return nil end
+    if not (is_endpoint(outside_entity) and is_endpoint(inside_entity)) then return nil end
 
     -- Connection mode: 0 for balance, 1 for inwards, 2 for outwards
     if not settings.mode then
@@ -45,7 +57,7 @@ Chest.connect = function(factory, cid, cpos, outside_entity, inside_entity, sett
 end
 
 Chest.recheck = function(conn)
-    return conn.outside.valid and conn.inside.valid
+    return is_endpoint(conn.outside) and is_endpoint(conn.inside)
 end
 
 local DELAYS = {10, 20, 60, 180, 600}
@@ -233,11 +245,11 @@ Chest.tick = function(conn)
     local outside = conn.outside
     local inside = conn.inside
     if outside.valid and inside.valid then
+        if is_same_inventory(outside, inside) then return conn._settings.delay or DEFAULT_DELAY end
         local outside_inv = outside.get_inventory(defines.inventory.chest)
         local inside_inv = inside.get_inventory(defines.inventory.chest)
         local mode = conn._settings.mode or 0
-        local native_transfer = outside ~= inside and outside.type ~= "linked-container"
-            and inside.type ~= "linked-container"
+        local native_transfer = outside.type ~= "linked-container" and inside.type ~= "linked-container"
         if mode == 0 then
             balance_chests(outside_inv, inside_inv)
         elseif mode == 1 then

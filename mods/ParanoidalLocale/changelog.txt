@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.26.0
   Locale:
+    - Matched the Russian Factorissimo fluid-port research tooltip to the actual fixed pumping speed.
+    - Matched the Russian Factorissimo recovery command help to the owning mod and the actual packed-item safeguards.
     - Removed miskeyed Todo-List button-mode labels; GUI Unifier now supplies the corrected Russian labels.
     - Clarified setting descriptions against current code and modpack overrides, including units, dependencies and limits; setting values and gameplay are unchanged.
     - Clarified Russian setting help for AAI integration overrides, collision exclusions, QoL scope, pollution visuals and RSO generation, with contextual object images; values and gameplay are unchanged.

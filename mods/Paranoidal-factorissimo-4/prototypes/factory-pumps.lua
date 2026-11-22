@@ -1,4 +1,4 @@
--- Hidden pumps to work around the extents @raiguard
+-- Hidden pumps split pipeline extents. Keep all four pump names for existing connections.
 
 local pump_pictures = {
     north = data.raw.pipe.pipe.pictures.ending_up,
@@ -87,4 +87,36 @@ outside_output.name = "factory-outside-pump-output"
 outside_output.selection_box = {{-0.5, -0.5}, {0.5, 0.5}}
 outside_output.selection_priority = 51
 
-data:extend {outside_input, outside_output}
+-- Only the other end of a new port is passive. It joins the local pipeline, including its extent.
+local inside_terminal = {
+    type = "storage-tank",
+    name = "factory-fluid-terminal-inside",
+    icon = outside_input.icon,
+    icon_size = outside_input.icon_size,
+    localised_name = {"entity-name.factory-pump"},
+    flags = table.deepcopy(outside_input.flags),
+    max_health = outside_input.max_health,
+    hidden = true,
+    collision_box = table.deepcopy(outside_input.collision_box),
+    collision_mask = {layers = {}},
+    integration_patch = table.deepcopy(pump_pictures),
+    integration_patch_render_layer = outside_input.integration_patch_render_layer,
+    quality_indicator_scale = 0,
+    squeak_behaviour = false,
+    window_bounding_box = {{0, 0}, {0, 0}},
+    flow_length_in_ticks = 1,
+    show_fluid_icon = false,
+    fluid_box = {
+        volume = pumping_speed_with_quality,
+        pipe_connections = {
+            {position = {0, 0}, direction = defines.direction.north, hide_connection_info = true},
+            {connection_type = "linked", linked_connection_id = 0, hide_connection_info = true},
+        },
+    },
+}
+local outside_terminal = table.deepcopy(inside_terminal)
+outside_terminal.name = "factory-fluid-terminal-outside"
+outside_terminal.selection_box = table.deepcopy(outside_input.selection_box)
+outside_terminal.selection_priority = outside_input.selection_priority
+
+data:extend {outside_input, outside_output, inside_terminal, outside_terminal}

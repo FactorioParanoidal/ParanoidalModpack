@@ -17,12 +17,47 @@ function Adjacent.matches(factory, cpos, other, opos)
             other.outside_y + opos.outside_y - 0.5 * opos.indicator_dy)
 end
 
-function Adjacent.find(factory, cpos)
+-- Short-lived negative filter for a full recheck. Crowded searches fall back to exact point queries.
+function Adjacent.neighbor_boxes(factory, bounds)
     local surface = factory.outside_surface
     if not (surface and surface.valid) then return end
+    local x, y = factory.outside_x, factory.outside_y
+    local limit, margin = 8, 1 / 256 -- Include edge points even on a single-line custom layout.
+    local buildings = surface.find_entities_filtered {
+        area = {{x + bounds.min_x - margin, y + bounds.min_y - margin},
+            {x + bounds.max_x + margin, y + bounds.max_y + margin}},
+        type = BUILDING_TYPE,
+        force = factory.force,
+        limit = limit
+    }
+    if #buildings >= limit then return end
+    local boxes = {}
+    local by_entity = storage.factories_by_entity
+    for _, building in pairs(buildings) do
+        local other = by_entity[building.unit_number]
+        if other and other ~= factory then boxes[#boxes + 1] = building.bounding_box end
+    end
+    return boxes
+end
+
+function Adjacent.find(factory, cpos, boxes)
+    local surface = factory.outside_surface
+    if not (surface and surface.valid) then return end
+    local x, y = factory.outside_x + cpos.outside_x, factory.outside_y + cpos.outside_y
+    if boxes then
+        local possible
+        for _, box in ipairs(boxes) do
+            if x >= box.left_top.x and x <= box.right_bottom.x and y >= box.left_top.y and y <= box.right_bottom.y then
+                possible = true
+                break
+            end
+        end
+        -- A positive result still uses the old point search, including its ordering at a shared port.
+        if not possible then return end
+    end
     local by_entity = storage.factories_by_entity
     for _, building in pairs(surface.find_entities_filtered {
-        position = {factory.outside_x + cpos.outside_x, factory.outside_y + cpos.outside_y},
+        position = {x, y},
         type = BUILDING_TYPE,
         force = factory.force
     }) do
@@ -49,8 +84,8 @@ function Adjacent.neighbor_buildings(factory)
     }
 end
 
-function Adjacent.recheck_neighbors(factory)
-    for _, building in pairs(Adjacent.neighbor_buildings(factory) or {}) do
+function Adjacent.recheck_neighbors(factory, neighbors)
+    for _, building in pairs(neighbors or Adjacent.neighbor_buildings(factory) or {}) do
         local other = storage.factories_by_entity[building.unit_number]
         if other and other ~= factory and other.built then
             factorissimo.recheck_factory_connections(other, nil, nil, true)

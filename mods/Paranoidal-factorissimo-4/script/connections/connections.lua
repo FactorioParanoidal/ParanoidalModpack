@@ -3,9 +3,10 @@ local Adjacent = require("adjacent")
 local adjacent_types = {belt = true, fluid = true, chest = true}
 factorissimo.recheck_adjacent_factory_connections = Adjacent.recheck_neighbors
 
-local floor, ceil, max = math.floor, math.ceil, math.max
+local floor, ceil, min, max = math.floor, math.ceil, math.min, math.max
 
 local type_map = {}
+local fluid_terminal_names
 
 -- Not using metatables, for..... reasons
 local c_unlocked = {}
@@ -41,7 +42,9 @@ local function register_connection_type(ctype, class)
 end
 
 local function is_connectable(entity)
-    return type_map[entity.type] or type_map[entity.name]
+    local ctype = type_map[entity.type] or type_map[entity.name]
+    if ctype == "fluid" and fluid_terminal_names[entity.name] then return end
+    return ctype
 end
 factorissimo.is_connectable = is_connectable
 
@@ -49,10 +52,10 @@ factorissimo.is_connectable = is_connectable
 
 local CONNECTION_UPDATE_RATE = 5
 local CYCLIC_BUFFER_SIZE = 600
-local refresh_adjacency = false
--- Older saves also discover existing pairs without a version bump or writes during on_load.
+local connection_revision = 2 -- recheck saved chest connections before their first transfer
+local refresh_connections = false
 factorissimo.on_event(factorissimo.events.on_load(), function()
-    refresh_adjacency = storage.adjacent_connections_version ~= 1
+    refresh_connections = storage.adjacent_connections_version ~= connection_revision
 end)
 factorissimo.on_event(factorissimo.events.on_init(), function()
     storage.connections = storage.connections or {}
@@ -65,8 +68,8 @@ factorissimo.on_event(factorissimo.events.on_init(), function()
     for _, factory in pairs(storage.factories) do
         if factory.built then factorissimo.recheck_factory_connections(factory, nil, nil, true) end
     end
-    storage.adjacent_connections_version = 1
-    refresh_adjacency = false
+    storage.adjacent_connections_version = connection_revision
+    refresh_connections = false
 end)
 
 --- Delays are kept on the update grid: a connection queued between the slots would never tick again.
@@ -172,18 +175,18 @@ end
 
 --- Only call this when factory.connections[cid] == nil!
 --- `silent` suppresses the "research required" text during bulk rechecks.
-local function init_connection(factory, cid, cpos, silent)
+local function init_connection(factory, cid, cpos, silent, neighbor_boxes)
     if not factory.built or factory.inactive or not cpos then return end
     local outside_surface, inside_surface = factory.outside_surface, factory.inside_surface
     if not (outside_surface and outside_surface.valid) then return end
     if not (inside_surface and inside_surface.valid) then return end
     local force = factory.force
-    local other = Adjacent.find(factory, cpos)
+    local other = Adjacent.find(factory, cpos, neighbor_boxes)
     if other then
         -- Stable ownership keeps direction and the queue independent of which end triggered a check.
         if factory.id > other.factory.id then
             if not other.factory.connections[other.cid] then
-                init_connection(other.factory, other.cid, other.cpos, silent)
+                return init_connection(other.factory, other.cid, other.cpos, silent)
             end
             return
         end
@@ -209,12 +212,12 @@ local function init_connection(factory, cid, cpos, silent)
 
     local warned = silent
     for _, outside_entity in pairs(outside_entities) do
-        local ctype = type_map[outside_entity.type] or type_map[outside_entity.name]
+        local ctype = is_connectable(outside_entity)
         -- Factory exteriors are storage tanks too, but never valid fluid endpoints.
         if ctype and not storage.factories_by_entity[outside_entity.unit_number]
             and (not other or adjacent_types[ctype]) then
             for _, inside_entity in pairs(inside_entities) do
-                if (type_map[inside_entity.type] or type_map[inside_entity.name]) == ctype
+                if is_connectable(inside_entity) == ctype
                     and not storage.factories_by_entity[inside_entity.unit_number] then
                     if not c_unlocked[ctype](force) then
                         -- The connection type is not researched yet: no connection.
@@ -234,7 +237,7 @@ local function init_connection(factory, cid, cpos, silent)
                             inside_surface.play_sound {path = "entity-close/assembling-machine-3", position = inside_entity.position}
                             outside_surface.play_sound {path = "entity-close/assembling-machine-3", position = outside_entity.position}
                             register_connection(factory, cid, ctype, new_connection, settings, other)
-                            return
+                            return true
                         end
                     end
                 end
@@ -272,15 +275,15 @@ local function covers_port(entity, surface, x, y, force)
         and in_area(x, y, entity.bounding_box)
 end
 
-local function ends_at_ports(factory, cpos, conn)
+local function ends_at_ports(conn, neighbor_boxes)
     -- Both port slots refer to the same record; its endpoints are always oriented to its owner.
-    factory = conn._factory
-    cpos = factory.layout.connections[conn._id]
+    local factory = conn._factory
+    local cpos = factory.layout.connections[conn._id]
     if not cpos then return false end
     local other = conn._other_factory
     local opos = other and other.layout and other.layout.connections[conn._other_id]
     if other and (not opos or not Adjacent.matches(factory, cpos, other, opos)) then return false end
-    if not other and adjacent_types[conn._type] and Adjacent.find(factory, cpos) then return false end
+    if not other and adjacent_types[conn._type] and Adjacent.find(factory, cpos, neighbor_boxes) then return false end
     local outside, inside = conn.outside or conn.outside_entity, conn.inside or conn.inside_entity
     if conn._type == "belt" then
         local input = conn.facing == cpos.direction_in
@@ -293,23 +296,90 @@ local function ends_at_ports(factory, cpos, conn)
         and covers_port(inside, factory.inside_surface, factory.inside_x + cpos.inside_x, factory.inside_y + cpos.inside_y, factory.force)
 end
 
+-- Derived from the actual saved layout, not its tier: older and custom layouts may have extra ports.
+local port_layouts = setmetatable({}, {__mode = "k"})
+function factorissimo.clear_connection_layout_cache()
+    port_layouts = setmetatable({}, {__mode = "k"})
+end
+
+local function extend_bounds(bounds, x, y)
+    if not bounds then return {min_x = x, min_y = y, max_x = x, max_y = y} end
+    bounds.min_x, bounds.min_y = min(bounds.min_x, x), min(bounds.min_y, y)
+    bounds.max_x, bounds.max_y = max(bounds.max_x, x), max(bounds.max_y, y)
+    return bounds
+end
+
+local function port_layout(ports)
+    local index = port_layouts[ports]
+    if index then return index end
+    index = {walls = {}, count = 0}
+    for cid, cpos in pairs(ports) do
+        local wall = index.walls[cpos.direction_out]
+        if not wall then
+            wall = {}
+            index.walls[cpos.direction_out] = wall
+        end
+        wall[#wall + 1] = cid
+        wall.inside = extend_bounds(wall.inside, cpos.inside_x, cpos.inside_y)
+        wall.outside = extend_bounds(wall.outside, cpos.outside_x, cpos.outside_y)
+        index.outside = extend_bounds(index.outside, cpos.outside_x, cpos.outside_y)
+        index.count = index.count + 1
+    end
+    port_layouts[ports] = index
+    return index
+end
+
+local function overlaps(bounds, x, y, area)
+    return bounds.min_x + x <= area.right_bottom.x and bounds.max_x + x >= area.left_top.x
+        and bounds.min_y + y <= area.right_bottom.y and bounds.max_y + y >= area.left_top.y
+end
+
+local function recheck_port(factory, cid, cpos, outside_area, inside_area, silent, neighbor_boxes)
+    if outside_area and not in_area(cpos.outside_x + factory.outside_x, cpos.outside_y + factory.outside_y, outside_area) then return end
+    if inside_area and not in_area(cpos.inside_x + factory.inside_x, cpos.inside_y + factory.inside_y, inside_area) then return end
+    local conn = factory.connections[cid]
+    if conn then
+        if ends_at_ports(conn, neighbor_boxes) and c_recheck[conn._type](conn) then return end
+        destroy_connection(conn)
+        init_connection(factory, cid, cpos, silent, neighbor_boxes)
+        return true
+    end
+    return init_connection(factory, cid, cpos, silent, neighbor_boxes)
+end
+
 local function recheck_factory_connections(factory, outside_area, inside_area, silent) -- Areas are optional
     if not factory.built then return end
-    local outside_x, outside_y, inside_x, inside_y = factory.outside_x, factory.outside_y, factory.inside_x, factory.inside_y
-    for cid, cpos in pairs(factory.layout.connections) do
-        if (not outside_area or in_area(cpos.outside_x + outside_x, cpos.outside_y + outside_y, outside_area))
-            and (not inside_area or in_area(cpos.inside_x + inside_x, cpos.inside_y + inside_y, inside_area)) then
-            local conn = factory.connections[cid]
-            if conn then
-                if not ends_at_ports(factory, cpos, conn) or not c_recheck[conn._type](conn) then
-                    destroy_connection(conn)
-                    init_connection(factory, cid, cpos, silent)
+    local ports = factory.layout.connections
+    local index = port_layout(ports)
+    local wall, neighbor_boxes
+    if outside_area or inside_area then
+        for _, candidate in pairs(index.walls) do
+            if (not outside_area or overlaps(candidate.outside, factory.outside_x, factory.outside_y, outside_area))
+                and (not inside_area or overlaps(candidate.inside, factory.inside_x, factory.inside_y, inside_area)) then
+                if wall then
+                    -- More than one wall: keep the original order of checks across walls.
+                    wall = false
+                    break
                 end
-            else
-                init_connection(factory, cid, cpos, silent)
+                wall = candidate
             end
         end
+        if wall == nil then return end
+    elseif index.count > 1 then
+        neighbor_boxes = Adjacent.neighbor_boxes(factory, index.outside)
     end
+
+    local changed
+    if wall then
+        for _, cid in ipairs(wall) do
+            if recheck_port(factory, cid, ports[cid], outside_area, inside_area, silent) then changed = true end
+        end
+    else
+        for cid, cpos in pairs(ports) do
+            if recheck_port(factory, cid, cpos, outside_area, inside_area, silent, neighbor_boxes) then changed = true end
+        end
+    end
+    return changed
 end
 factorissimo.recheck_factory_connections = recheck_factory_connections
 
@@ -398,22 +468,35 @@ local function connection_entity_filters()
     return factorissimo.entity_filters(connectable_entity_types)
 end
 
+local function same_area(a, b)
+    return a == b or (a and b and a.left_top.x == b.left_top.x and a.left_top.y == b.left_top.y
+        and a.right_bottom.x == b.right_bottom.x and a.right_bottom.y == b.right_bottom.y)
+end
+
 -- Connection effects --
 
 factorissimo.on_nth_tick(CONNECTION_UPDATE_RATE, function(event)
-    if refresh_adjacency then
-        refresh_adjacency = false
+    if refresh_connections then
+        refresh_connections = false
         for _, factory in pairs(storage.factories) do
             if factory.built then recheck_factory_connections(factory, nil, nil, true) end
         end
-        storage.adjacent_connections_version = 1
+        storage.adjacent_connections_version = connection_revision
     end
     -- First let's run all them delayed connection checks
     local checks = storage.delayed_connection_checks
     if checks[1] then
         storage.delayed_connection_checks = {}
+        local previous, changed
         for _, check in pairs(checks) do
-            recheck_factory_connections(check.factory, check.outside_area, check.inside_area)
+            -- Only consecutive equal area checks with no intervening topology change are redundant.
+            if changed or not previous or previous.factory ~= check.factory
+                or not (check.outside_area or check.inside_area)
+                or not same_area(previous.outside_area, check.outside_area)
+                or not same_area(previous.inside_area, check.inside_area) then
+                changed = recheck_factory_connections(check.factory, check.outside_area, check.inside_area)
+            end
+            previous = check
         end
     end
 
@@ -493,15 +576,41 @@ factorissimo.on_event("factory-decrease", function(event)
     if indicator then adjust(factory, indicator, false) end
 end)
 
-local beeps = {"Beep", "Boop", "Beep", "Boop", "Beeple"}
-factorissimo.beep = function()
-    local t = game.tick
-    return beeps[t % 5 + 1], true
+function factorissimo.connection_direction_not_adjustable()
+    return {"factory-connection-text.direction-not-adjustable"}, true
+end
+
+function factorissimo.connection_rate_not_adjustable()
+    return {"factory-connection-text.rate-not-adjustable"}, true
 end
 
 register_connection_type("belt", require("belt"))
 register_connection_type("chest", require("chest"))
-register_connection_type("fluid", require("fluid"))
+local Fluid = require("fluid")
+fluid_terminal_names = Fluid.terminal_names
+register_connection_type("fluid", Fluid)
+
+local function fluid_indicator_matches(factory, cid, direction)
+    local indicator = factory.connection_indicators[cid]
+    return indicator and indicator.valid and indicator.direction == direction
+end
+
+-- Prefer reconfiguring a live port to disconnecting it (which would lose its buffers and legacy mode).
+function factorissimo.apply_fluid_blueprint(from_factory, conn, input_mode)
+    local factory, other = conn._factory, conn._other_factory
+    if conn._type ~= "fluid" or not conn._valid or not factory.built or factory.inactive
+        or not Fluid.recheck(conn) or not ends_at_ports(conn) then return false end
+    if from_factory == other then input_mode = not input_mode end
+    if Fluid.set_direction(conn, input_mode) then
+        sync_pair_settings(conn)
+        local _, dir = Fluid.direction(conn)
+        if not fluid_indicator_matches(factory, conn._id, dir)
+            or (other and not fluid_indicator_matches(other, conn._other_id, dir)) then
+            update_connection_indicators(conn)
+        end
+    end
+    return true -- On a failed replacement the old port and its settings stay intact.
+end
 register_connection_type("circuit", require("circuit"))
 register_connection_type("heat", require("heat"))
 

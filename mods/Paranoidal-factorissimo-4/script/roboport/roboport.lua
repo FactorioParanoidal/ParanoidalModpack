@@ -7,6 +7,29 @@ local TARGET_NUMBER_OF_ROBOTS_IN_NETWORK = 200
 
 -- Derived lists: idle factories without this upgrade never enter the three roboport jobs.
 local roboports, requesters, request_groups = {}, {}, {{}, {}, {}, {}}
+local exterior_chests, exterior_units = {}, {}
+
+local function index_exterior_chests(id, upgrade)
+    local units = exterior_units[id]
+    if units then
+        for _, unit in ipairs(units) do exterior_chests[unit] = nil end
+        exterior_units[id] = nil
+    end
+    if not upgrade then return end
+    for _, chest in pairs {upgrade.requester, upgrade.ejector} do
+        if chest.valid and chest.unit_number then
+            units = exterior_units[id] or {}
+            exterior_units[id] = units
+            units[#units + 1] = chest.unit_number
+            exterior_chests[chest.unit_number] = true
+        end
+    end
+end
+
+function factorissimo.is_roboport_exterior_chest(entity)
+    return exterior_chests[entity.unit_number] == true
+end
+
 function factorissimo.index_roboport_factory(factory, remove)
     local id = factory.id
     if not id then return end
@@ -15,9 +38,11 @@ function factorissimo.index_roboport_factory(factory, remove)
     local exterior = upgrade and factory.built and upgrade.requester
     requesters[id] = exterior and factory or nil
     request_groups[id % 4 + 1][id] = exterior and factory or nil
+    index_exterior_chests(id, factory.built and upgrade)
 end
 function factorissimo.index_roboport_factories()
     roboports, requesters, request_groups = {}, {}, {{}, {}, {}, {}}
+    exterior_chests, exterior_units = {}, {}
     for _, factory in pairs(storage.factories or {}) do factorissimo.index_roboport_factory(factory) end
 end
 
@@ -367,6 +392,7 @@ factorissimo.cleanup_factory_roboport_exterior_chest = function(factory)
     if not factory.roboport_upgrade then return end
     requesters[factory.id] = nil
     request_groups[factory.id % 4 + 1][factory.id] = nil
+    index_exterior_chests(factory.id)
     factory.roboport_upgrade.request_job = nil
     factory.roboport_upgrade.item_request_proxies = {}
 

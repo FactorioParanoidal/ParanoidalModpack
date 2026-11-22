@@ -13,7 +13,6 @@ require "prototypes.dispatch"
 require "prototypes.hull"
 require "prototypes.progression"
 require "graphics.space-platform-build-anim.entity-build-animations"
-require "compat.power-grid-comb"
 
 data:extend {
     {

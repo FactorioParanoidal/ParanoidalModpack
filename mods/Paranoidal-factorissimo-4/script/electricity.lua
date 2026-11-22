@@ -87,12 +87,65 @@ local function get_or_create_inside_power_pole(factory)
 end
 factorissimo.get_or_create_inside_power_pole = get_or_create_inside_power_pole
 
+local copper = defines.wire_connector_id.pole_copper
+local script_wire = defines.wire_origin.script
+
 local function connect_power(factory, outside_power_pole)
+    if not factory.built or factory.inactive then return end
     if not (factory.inside_surface and factory.inside_surface.valid and outside_power_pole.valid) then return end
     local inside_power_pole = get_or_create_inside_power_pole(factory)
-    local outside_power_pole_wire_connector = outside_power_pole.get_wire_connector(defines.wire_connector_id.pole_copper, true)
-    local inside_power_pole_wire_connector = inside_power_pole.get_wire_connector(defines.wire_connector_id.pole_copper, true)
-    inside_power_pole_wire_connector.connect_to(outside_power_pole_wire_connector, false, defines.wire_origin.script)
+    if inside_power_pole == outside_power_pole then return end
+    local outside_connector = outside_power_pole.get_wire_connector(copper, true)
+    local inside_connector = inside_power_pole.get_wire_connector(copper, true)
+    if not (outside_connector and inside_connector) then return end
+    if inside_connector.connect_to(outside_connector, false, script_wire) then
+        local peers = factory.exterior_power_peers
+        local current = {}
+        if peers then
+            for _, connection in pairs(inside_connector.connections) do
+                if connection.origin == script_wire and connection.target.valid then
+                    local unit = connection.target.owner.unit_number
+                    if peers[unit] then current[unit] = true end
+                end
+            end
+        end
+        current[outside_power_pole.unit_number] = true
+        factory.exterior_power_peers = current
+    end
+end
+
+local function get_parent_factory(factory)
+    local surface = factory.outside_surface
+    if storage.surface_factories[surface.index] then
+        local parent = find_surrounding_factory(surface, {x = factory.outside_x, y = factory.outside_y})
+        if parent ~= factory then return parent end
+    end
+end
+
+-- Only detach the script-origin wires to this factory's exterior. A child may share this
+-- floor with its parent, so the surface index alone cannot distinguish inside from outside.
+function factorissimo.disconnect_exterior_power(factory)
+    local inside = factory._inside_power_pole
+    local surface = factory.outside_surface
+    if not (inside and inside.valid and surface and surface.valid) then return end
+    local connector = inside.get_wire_connector(copper, false)
+    if not connector then return end
+
+    local parent = get_parent_factory(factory)
+    local parent_pole = parent and parent._inside_power_pole
+    local peers = factory.exterior_power_peers
+    for _, connection in pairs(connector.connections) do
+        if connection.origin == script_wire and connection.target.valid then
+            local owner = connection.target.owner
+            if owner == parent_pole or owner == factory.global_electric_network_pole
+                or (peers and peers[owner.unit_number])
+                or (owner.type == "electric-pole" and not owner.prototype.hidden and owner.surface == surface
+                    and (surface ~= inside.surface or (parent and find_surrounding_factory(surface, owner.position) == parent))) then
+                connector.disconnect_from(connection.target, script_wire)
+            end
+        end
+    end
+    factory.exterior_power_peers = nil
 end
 
 local base_pole_reach_cache
@@ -138,6 +191,7 @@ local function find_connected_poles(surface, x, y, D, electric_network, excluded
 end
 
 local function update_power_connection(factory, pole) -- pole parameter is optional
+    if not factory.built or factory.inactive then return end
     if not factory.outside_energy_receiver or not factory.outside_energy_receiver.valid then return end
     local electric_network = factory.outside_energy_receiver.electric_network_id
     if electric_network == nil then return end
@@ -151,12 +205,10 @@ local function update_power_connection(factory, pole) -- pole parameter is optio
     local x = factory.outside_x
     local y = factory.outside_y
 
-    if storage.surface_factories[surface.index] then
-        local surrounding = find_surrounding_factory(surface, {x = x, y = y})
-        if surrounding then
-            connect_power(factory, get_or_create_inside_power_pole(surrounding))
-            return
-        end
+    local parent = get_parent_factory(factory)
+    if parent then
+        connect_power(factory, get_or_create_inside_power_pole(parent))
+        return
     end
 
     -- find the nearest connected power pole
@@ -186,7 +238,7 @@ local function get_factories_near_pole(pole)
     local result = {}
     for _, candidate in pairs(surface.find_entities_filtered {type = BUILDING_TYPE, area = area}) do
         local factory = by_entity[candidate.unit_number]
-        if factory and factory.built then result[#result + 1] = factory end
+        if factory and factory.built and not factory.inactive then result[#result + 1] = factory end
     end
     return result
 end
@@ -244,6 +296,7 @@ end)
 -- which players cannot remove (SHIFT+CLICK on a pole only removes player wires).
 
 function factorissimo.cleanup_outside_energy_receiver(factory)
+    factory.exterior_power_peers = nil
     local receiver = factory.outside_energy_receiver
     if receiver and receiver.valid then receiver.destroy() end
     if factory.inside_surface and factory.inside_surface.valid then
@@ -282,7 +335,23 @@ function factorissimo.disconnect_all_copper_connections(pole)
 end
 
 -- Existing and packed MK4 interiors receive the distributor on configuration change, not just on placement.
+local repair_isolation_on_tick = false
+factorissimo.on_event(factorissimo.events.on_load(), function()
+    repair_isolation_on_tick = storage.factory_power_isolation_revision ~= 1
+end)
+factorissimo.on_event(defines.events.on_tick, function()
+    if not repair_isolation_on_tick then return end
+    repair_isolation_on_tick = false
+    for _, factory in pairs(storage.factories) do
+        if factory.built and factory.inactive then factorissimo.disconnect_exterior_power(factory) end
+    end
+    storage.factory_power_isolation_revision = 1
+end)
+
 factorissimo.on_event(factorissimo.events.on_init(), function()
+    -- The factory activation handler runs first and already isolates inactive exteriors.
+    repair_isolation_on_tick = false
+    storage.factory_power_isolation_revision = 1
     for _, factory in pairs(storage.factories) do
         if factory.layout and factory.layout.inside_size > 60 and factory.inside_surface and factory.inside_surface.valid then
             get_or_create_inside_power_pole(factory)

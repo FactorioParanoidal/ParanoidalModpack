@@ -93,15 +93,28 @@ function Passages.remove(factory)
     update_changed_labels(state, changed)
 end
 
-local function add(factory, state, changed)
+local function add(factory, state, changed, neighbors)
     if not live(factory) then return end
-    for _, building in pairs(Adjacent.neighbor_buildings(factory) or {}) do
+    for _, building in pairs(neighbors or Adjacent.neighbor_buildings(factory) or {}) do
         local other = storage.factories_by_entity[building.unit_number]
         if other ~= factory and live(other) then
+            -- Only ports on the opposing wall can match. Keep their original traversal order.
+            local walls = {}
+            for oid, opos in pairs(other.layout.connections) do
+                local dx, dy = opos.indicator_dx, opos.indicator_dy
+                local by_y = walls[dx]
+                if not by_y then by_y = {}; walls[dx] = by_y end
+                local wall = by_y[dy]
+                if not wall then wall = {}; by_y[dy] = wall end
+                wall[#wall + 1] = oid
+            end
             for cid, cpos in pairs(factory.layout.connections) do
                 local here = state[factory.id]
-                if not (here and here.ports[cid]) then
-                    for oid, opos in pairs(other.layout.connections) do
+                local by_y = walls[-cpos.indicator_dx]
+                local wall = by_y and by_y[-cpos.indicator_dy]
+                if wall and not (here and here.ports[cid]) then
+                    for _, oid in ipairs(wall) do
+                        local opos = other.layout.connections[oid]
                         local there = state[other.id]
                         if not (there and there.ports[oid]) and Adjacent.matches(factory, cpos, other, opos) then
                             local e = endpoint(factory, cpos, other, oid)
@@ -121,11 +134,11 @@ local function add(factory, state, changed)
     end
 end
 
-function Passages.add(factory)
+function Passages.add(factory, neighbors)
     local state = storage.factory_passages
     if not state then return end
     local changed = {}
-    add(factory, state, changed)
+    add(factory, state, changed, neighbors)
     update_changed_labels(state, changed)
 end
 
@@ -165,8 +178,7 @@ function Passages.rebuild()
     storage.factory_passage_marker_revision = Markers.revision
 end
 
-function Passages.destination(surface, position, direction)
-    local factory = remote_api.find_surrounding_factory(surface, position)
+function Passages.destination(factory, position, direction)
     local index = factory and storage.factory_passages[factory.id]
     if not index then return end
     local cid = cell(index, floor(position.x), floor(position.y))
