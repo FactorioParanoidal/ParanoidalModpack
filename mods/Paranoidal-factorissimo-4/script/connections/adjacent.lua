@@ -37,16 +37,20 @@ function Adjacent.find(factory, cpos)
     end
 end
 
-function Adjacent.recheck_neighbors(factory)
+function Adjacent.neighbor_buildings(factory)
     local surface = factory.outside_surface
     if not (surface and surface.valid) then return end
     local radius = factory.layout.outside_size / 2 + 0.3
-    for _, building in pairs(surface.find_entities_filtered {
+    return surface.find_entities_filtered {
         area = {{factory.outside_x - radius, factory.outside_y - radius},
             {factory.outside_x + radius, factory.outside_y + radius}},
         type = BUILDING_TYPE,
         force = factory.force
-    }) do
+    }
+end
+
+function Adjacent.recheck_neighbors(factory)
+    for _, building in pairs(Adjacent.neighbor_buildings(factory) or {}) do
         local other = storage.factories_by_entity[building.unit_number]
         if other and other ~= factory and other.built then
             factorissimo.recheck_factory_connections(other, nil, nil, true)

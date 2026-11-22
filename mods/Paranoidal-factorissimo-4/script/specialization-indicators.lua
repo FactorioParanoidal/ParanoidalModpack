@@ -5,6 +5,8 @@ local green = "[color=0.63,0.89,0.53]"
 local red = "[color=1,0.57,0.51]"
 local max_groups = 6
 local rows = {"speed", "efficiency"}
+local panel_half_width, panel_half_height = 9, 1
+local first_row_offset, row_spacing = 3.4, 2.1
 local background = {{0.075, 0.09, 0.105}, {0.064, 0.088, 0.07}}
 local font_color = {0.94, 0.94, 0.94}
 local muted = {0.60, 0.63, 0.64}
@@ -26,10 +28,20 @@ function M.clear(state)
     state.rows = nil
 end
 
+local function row_y(factory, i)
+    return factory.inside_door_y + first_row_offset + (i - 1) * row_spacing
+end
+
+function M.label_reservation(factory)
+    return {left = factory.inside_door_x - panel_half_width - 0.5,
+        right = factory.inside_door_x + panel_half_width + 0.5,
+        bottom = row_y(factory, #rows) + panel_half_height}
+end
+
 local function create(factory, i)
     local surface, force = factory.inside_surface, factory.force
     local marker = surface.create_entity {
-        name = prefix .. rows[i], force = force, position = {factory.inside_door_x, factory.inside_door_y + 3.4 + (i - 1) * 2.1},
+        name = prefix .. rows[i], force = force, position = {factory.inside_door_x, row_y(factory, i)},
     }
     if not marker then return end
     marker.destructible = false
@@ -38,7 +50,8 @@ local function create(factory, i)
     storage.factory_specialization_markers[unit] = factory.id
     rendering.draw_rectangle {
         surface = surface, forces = {force}, color = background[i], filled = true, draw_on_ground = true,
-        left_top = {entity = marker, offset = {-9, -1}}, right_bottom = {entity = marker, offset = {9, 1}},
+        left_top = {entity = marker, offset = {-panel_half_width, -panel_half_height}},
+        right_bottom = {entity = marker, offset = {panel_half_width, panel_half_height}},
     }
     local icon = rendering.draw_sprite {
         sprite = prefix .. rows[i] .. "-0", tint = inactive_icon_color, surface = surface, forces = {force},

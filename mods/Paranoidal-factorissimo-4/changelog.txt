@@ -4,6 +4,7 @@ Date: 2026-11-16
   Locale:
     - Clarified setting descriptions against current code and modpack overrides, including units, dependencies and limits; setting values and gameplay are unchanged.
   Major Features:
+    - Walk between touching factories at matching ports, even at empty ports. Alt mode shows green two-way arrows in the void exactly opposite the ports, with one label per destination clear of the specialization panels. Ordinary doors and logistics connections are unchanged.
     - Added Operation Optimization after Factory architecture 1: uniform machine parks save operating energy, and serial workshops also gain crafting speed. Interior indicators explain the current tier and refresh on hover.
     - Hover over a specialization panel to highlight the counted machines and dim the workshop around them. Click the panel to pin the highlights for your view only; click it again to clear them.
     - Paranoidal: the Factorissimo fork of the build is renamed from factorissimo-2-notnotmelon to Paranoidal-factorissimo-4 (title "Paranoidal Factorissimo 4"). Prototype, setting, remote interface (factorissimo), command, custom input and storage names are unchanged; graphics paths are __Paranoidal-factorissimo-4__.

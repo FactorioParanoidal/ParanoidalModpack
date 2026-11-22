@@ -1,5 +1,6 @@
 local get_factory_by_building = remote_api.get_factory_by_building
 local find_surrounding_factory = remote_api.find_surrounding_factory
+local Passages = require("script.passages")
 
 local has_layout = has_layout
 local floor, ceil = math.floor, math.ceil
@@ -201,6 +202,7 @@ local function set_factory_active_or_inactive(factory, announce)
     end
 
     factorissimo.disconnect_factory_connections(factory)
+    Passages.remove(factory)
     return false
 end
 
@@ -237,6 +239,7 @@ local function activate_factories(recheck)
         local reactivated = set_factory_active_or_inactive(factory)
         if reactivated and recheck and factory.built then
             factorissimo.recheck_factory_connections(factory)
+            Passages.add(factory)
         end
         build_factory_upgrades(factory)
     end
@@ -588,6 +591,7 @@ local function create_factory_exterior(factory, building)
     set_factory_active_or_inactive(factory, true)
     factorissimo.recheck_factory_connections(factory)
     factorissimo.recheck_adjacent_factory_connections(factory)
+    Passages.add(factory)
     factorissimo.update_power_connection(factory)
     factorissimo.update_overlay(factory)
     build_factory_upgrades(factory)
@@ -607,6 +611,7 @@ local function destroy_render_objects(ids)
 end
 
 local function cleanup_factory_exterior(factory)
+    Passages.remove(factory)
     factorissimo.clear_factory_specialization(factory)
     factorissimo.cleanup_outside_energy_receiver(factory)
     factorissimo.cleanup_factory_roboport_exterior_chest(factory)

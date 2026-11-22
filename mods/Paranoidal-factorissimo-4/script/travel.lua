@@ -3,10 +3,13 @@
 
 local find_surrounding_factory = remote_api.find_surrounding_factory
 local find_factory_by_area = remote_api.find_factory_by_area
+local Passages = require("script.passages")
 
 factorissimo.on_event(factorissimo.events.on_init(), function()
     storage.last_player_teleport = storage.last_player_teleport or {}
+    Passages.rebuild()
 end)
+factorissimo.on_event(defines.events.on_forces_merged, Passages.rebuild)
 
 --- This function exists in order to teleport the personal robopots of a player along with the player when moving between factories.
 local function purgatory_surface()
@@ -26,7 +29,7 @@ local function purgatory_surface()
     return surface
 end
 
-local function teleport_safely(e, surface, position, player)
+local function teleport_safely(e, surface, position, player, prechecked)
     if not e.valid then return end
     if not player.valid then return end
 
@@ -36,16 +39,23 @@ local function teleport_safely(e, surface, position, player)
         e.teleport(position, surface)
         storage.last_player_teleport[player.index] = game.tick
     else
-        position = surface.find_non_colliding_position(
-            e.character.name,
-            position, 5, 0.5, false
-        ) or position
-        e.teleport({0, 0}, purgatory_surface())
-        e.teleport(position, surface)
+        if prechecked then
+            local origin, origin_surface = player.physical_position, player.physical_surface
+            if not e.teleport({0, 0}, purgatory_surface()) then return false end
+            if not e.teleport(position, surface) then
+                e.teleport(origin, origin_surface)
+                return false
+            end
+        else
+            position = surface.find_non_colliding_position(e.character.name, position, 5, 0.5, false) or position
+            e.teleport({0, 0}, purgatory_surface())
+            e.teleport(position, surface)
+        end
         storage.last_player_teleport[player.index] = game.tick
     end
 
     if player then factorissimo.update_factory_preview(player) end
+    return true
 end
 
 local function enter_factory(e, factory, player)
@@ -149,8 +159,20 @@ local function check_position_and_enter_factory(player, walking_state, is_airbor
     return true
 end
 
--- teleport players between factory buildings
+local function try_passage(player, direction)
+    if player.controller_type ~= defines.controllers.character or not player.character then return end
+    local surface, position = Passages.destination(player.physical_surface, player.physical_position, direction)
+    if not surface then return end
+    local clear = surface.find_non_colliding_position(player.character.name, position, 1.25, 0.25, false)
+    if clear then teleport_safely(player, surface, clear, player, true) end
+end
+
+-- Reuse the ordinary door checks; nothing polls passage pairs or their endpoints.
 factorissimo.on_nth_tick(6, function(event)
+    -- Existing 9.20.0 saves may load the new Lua without a configuration-changed event.
+    if not storage.factory_passages or storage.factory_passage_revision ~= Passages.revision then
+        Passages.rebuild()
+    end
     local tick = event.tick
     local last_teleport = storage.last_player_teleport
     if not last_teleport then return end
@@ -161,8 +183,9 @@ factorissimo.on_nth_tick(6, function(event)
             if walking_state.walking then
                 if jetpacks == nil then jetpacks = get_jetpacks() or false end
                 local airborne = is_airborne(jetpacks or nil, player)
-                if not check_position_and_enter_factory(player, walking_state, airborne) then
-                    check_position_and_leave_factory(player, walking_state, airborne)
+                if not check_position_and_enter_factory(player, walking_state, airborne)
+                    and not check_position_and_leave_factory(player, walking_state, airborne) then
+                    try_passage(player, walking_state.direction)
                 end
             end
         end

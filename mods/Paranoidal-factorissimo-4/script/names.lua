@@ -5,6 +5,7 @@
 -- Render objects are attached to entities (the building, the inside power pole), so they disappear together
 -- with them; they are redrawn only when the name or the building changes, or once when LABELS_REV changes.
 
+local Passages = require("script.passages")
 local MAX_NAME_LENGTH = 40 -- characters
 local NAME_COLOR = {r = 1, g = 0.9, b = 0.6}
 local SHADOW_COLOR = {r = 0, g = 0, b = 0, a = 0.85}
@@ -120,6 +121,7 @@ function factorissimo.set_factory_name(factory, name)
     if factory.name == name then return name end
     factory.name = name
     factorissimo.update_name_labels(factory)
+    Passages.rename_destination(factory)
     factorissimo.dispatch_changed()
     return name
 end
