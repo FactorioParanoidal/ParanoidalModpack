@@ -1,4 +1,16 @@
 ---------------------------------------------------------------------------------------------------
+Version: 9.0.0
+Date: 23. 11. 2026
+  Changes:
+    - Paranoidal: blueprint overlays validate the exact reported inserter or inserter ghost on the next tick without touching unrelated neighbours. Grandfathered positions are preserved.
+  Bugfixes:
+    - Paranoidal: editor sessions close with either window type and ignore foreign GUI events. Stale or replaced editors are not refreshed after position notifications.
+    - Paranoidal: editing respects non-adjustable prototypes and applies the blacklist to the actual ghost prototype. Locked range and offset shortcuts no longer write positions.
+  Optimizations:
+    - Paranoidal: removed blueprint cursor parsing and area searches for new overlays. Saved area requests and work queued by synchronous listeners are still processed.
+    - Paranoidal: the background sweep runs only on even ticks, with a short path for ordinary cardinal 1x1 layouts. It still detects direct script changes to tracked inserters.
+    - Paranoidal: reach checks run only while an editor is active, grid updates touch only the previous and current selection, and ordinary placement without a preset skips the cursor query.
+---------------------------------------------------------------------------------------------------
 Version: 2.0.3
 Date: 15. 01. 2026
   Locale:
