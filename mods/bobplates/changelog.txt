@@ -2,6 +2,7 @@
 Version: 2.1.1
 Date: 04. 06. 2026
   Locale:
+    - Paranoidal: corrected the Russian name of purple alien artifact research.
     - Clarified setting descriptions against current code and modpack overrides, including units, dependencies and limits; setting values and gameplay are unchanged.
   Changes:
     - Paranoidal: the Russian hydrogen-chloride name now identifies hydrogen chloride rather than its aqueous acid; IDs and recipes are unchanged.

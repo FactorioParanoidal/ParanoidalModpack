@@ -3,6 +3,7 @@ Version: 2.1.0
   Compatibility:
     - Paranoidal: the Rampant new enemies check (stop_all) follows the rename of RampantFixed to Paranoidal-Rampant.
   Locale:
+    - Paranoidal: corrected the Russian names of the purple and small purple alien artifacts.
     - Clarified setting descriptions against current code and modpack overrides, including units, dependencies and limits; setting values and gameplay are unchanged.
     - Russian hardcoded player-facing text: 17 UI, chat, command-help and error-message literals; technical identifiers, format parameters and gameplay logic are unchanged.
 Date: 01. 06. 2026
