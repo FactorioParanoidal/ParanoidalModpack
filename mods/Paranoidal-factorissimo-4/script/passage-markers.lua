@@ -1,9 +1,9 @@
 local Panels = require("script.specialization-indicators")
-local Markers = {}
+local Markers = {revision = 2}
 local min, max = math.min, math.max
-local color = {r = 0.44, g = 0.95, b = 0.34}
+local color = {r = 96 / 255, g = 208 / 255, b = 80 / 255}
 local row_step = 1.4
-local arrow_offset = 2.2 -- From the first walking cell: past the port and fully outside the wall.
+local arrow_offset = 3.2 -- From the first walking cell: clear of the logistics indicator.
 
 -- One triangle strip per port. Repeated x coordinates join the two arrowheads to the narrow shaft.
 local arrow = {{-0.48, 0}, {-0.22, -0.23}, {-0.22, 0.23}, {-0.22, -0.06}, {-0.22, 0.06},
@@ -50,7 +50,7 @@ end
 
 local function draw_label(factory, group, wall, rows, reserve)
     local text, width = text_and_width(storage.factories[group.id])
-    local x0, y0, edge = factory.inside_x, factory.inside_y, factory.layout.inside_size / 2 + 3
+    local x0, y0, edge = factory.inside_x, factory.inside_y, factory.layout.inside_size / 2 + 4
     local x, y, align = x0, y0, "center"
     if wall == 2 or wall == 4 then
         local east = wall == 2

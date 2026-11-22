@@ -1,6 +1,6 @@
 local Adjacent = require("script.connections.adjacent")
 local Markers = require("script.passage-markers")
-local Passages = {revision = 2} -- Port-aligned walking cells and markers outside the room.
+local Passages = {revision = 2, marker_revision = Markers.revision} -- Port-aligned walking cells.
 local floor = math.floor
 local d = defines.direction
 local directions = {
@@ -138,6 +138,20 @@ function Passages.rename_destination(factory)
     update_changed_labels(state, changed)
 end
 
+-- Redraw saved overlays without rediscovering neighbors or changing walking cells.
+function Passages.refresh_saved_markers()
+    for id, index in pairs(storage.factory_passages) do
+        local factory = storage.factories[id]
+        local visible = live(factory)
+        for _, e in pairs(index.ports) do
+            Markers.destroy(e.marker)
+            e.marker = visible and Markers.draw_arrow(factory, e) or nil
+        end
+        if visible then Markers.update_labels(factory, index) else Markers.clear_labels(index) end
+    end
+    storage.factory_passage_marker_revision = Markers.revision
+end
+
 function Passages.rebuild()
     for _, index in pairs(storage.factory_passages or {}) do
         for _, e in pairs(index.ports) do Markers.destroy(e.marker) end
@@ -148,6 +162,7 @@ function Passages.rebuild()
     for _, factory in pairs(storage.factories) do add(factory, state, changed) end
     update_changed_labels(state, changed)
     storage.factory_passage_revision = Passages.revision
+    storage.factory_passage_marker_revision = Markers.revision
 end
 
 function Passages.destination(surface, position, direction)
@@ -167,8 +182,7 @@ function Passages.destination(surface, position, direction)
     local target = storage.factory_passages[other.id]
     local o = target and target.ports[e.other_port]
     if not o or o.other ~= factory.id or o.other_port ~= cid then return end
-    -- Search for room strictly inward from the target trigger so arrival is not a new departure.
-    return other.inside_surface, {x = o.x + 0.5 - 2 * o.dx, y = o.y + 0.5 - 2 * o.dy}
+    return other.inside_surface, {x = o.x + o.dx + 0.5, y = o.y + o.dy + 0.5}, o.dx, o.dy
 end
 
 return Passages

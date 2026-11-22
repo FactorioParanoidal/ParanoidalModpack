@@ -161,10 +161,21 @@ end
 
 local function try_passage(player, direction)
     if player.controller_type ~= defines.controllers.character or not player.character then return end
-    local surface, position = Passages.destination(player.physical_surface, player.physical_position, direction)
+    local surface, port, dx, dy = Passages.destination(player.physical_surface, player.physical_position, direction)
     if not surface then return end
-    local clear = surface.find_non_colliding_position(player.character.name, position, 1.25, 0.25, false)
-    if clear then teleport_safely(player, surface, clear, player, true) end
+
+    -- Cross-surface teleport does not check collisions; accept only the exact tile center.
+    local character = player.character.name
+    local function arrive(position)
+        local clear = surface.find_non_colliding_position(character, position, 0.01, 0.01, true)
+        if not clear or clear.x ~= position.x or clear.y ~= position.y then return false end
+        teleport_safely(player, surface, position, player, true)
+        return true
+    end
+
+    -- Keep the same depth at the wall. Try the port first, then either neighboring tile along the wall.
+    if arrive(port) or arrive({x = port.x - dy, y = port.y + dx}) then return end
+    arrive({x = port.x + dy, y = port.y - dx})
 end
 
 -- Reuse the ordinary door checks; nothing polls passage pairs or their endpoints.
@@ -172,6 +183,8 @@ factorissimo.on_nth_tick(6, function(event)
     -- Existing 9.20.0 saves may load the new Lua without a configuration-changed event.
     if not storage.factory_passages or storage.factory_passage_revision ~= Passages.revision then
         Passages.rebuild()
+    elseif storage.factory_passage_marker_revision ~= Passages.marker_revision then
+        Passages.refresh_saved_markers()
     end
     local tick = event.tick
     local last_teleport = storage.last_player_teleport
