@@ -1862,6 +1862,9 @@ end
 function bobmods.logistics.create_gui_button(player_index)
   bobmods.logistics.destroy_gui_button(player_index)
 
+  -- Paranoidal's GUI Unifier excludes this button. Do not create it just to have it removed.
+  if script.active_mods["GUI_Unifyer"] then return end
+
   local player = game.players[player_index]
 
   if not settings.get_player_settings(player)["bobmods-inserters-button-enable"].value then

@@ -1,19 +1,15 @@
-local debug_button = require("scripts/debug")
-local mod_gui = require("mod-gui")
+-- DORMANT | local mod_gui = require("mod-gui") -- YARM
 local icons = require("icons")
 local logging = require("scripts/logging")
 local toolbar = require("scripts/toolbar")
 local mods = script.active_mods
 
-local function ensure_player(player)
-    local state = storage.player[player.index]
-    if not state then
-        logging.debug("Player", "Setting up player: " .. player.name, player)
-        state = {}
-        storage.player[player.index] = state
-        logging.info("Player", "Initialized new player state for: " .. player.name, player)
+local watched_windows = {}
+for _, entry in ipairs(icons) do
+    local owner = entry[1]
+    if mods[owner] and (owner == "factoryplanner" or owner == "ModuleInserterEx") then
+        watched_windows[owner] = entry
     end
-    return state
 end
 
 -- Keep the original six-tick boundaries, but register no idle worker. The saved
@@ -29,10 +25,30 @@ end
 
 local function queue(player)
     if not (player and player.valid and player.connected) then return end
-    ensure_player(player)
     storage.pending_players[player.index] = true
     if not scheduled then schedule(true) end
 end
+
+local function update(player, source, fn, ...)
+    local ok, err = pcall(fn, player, ...)
+    if not ok then logging.error(source, "Error updating panel: " .. tostring(err), player) end
+end
+
+-- Called by window owners after their final visibility change. Repaint only
+-- the existing button; neither fake an input event nor wait for simulation.
+remote.add_interface("GUI_Unifyer", {
+    window_changed = function(player_index, owner)
+        local entry = watched_windows[owner]
+        if not entry then return end
+        local player = game.get_player(player_index)
+        if player and player.valid then update(player, "Selection", toolbar.refresh_selection, entry) end
+    end,
+    evo_layout_changed = function(player_index)
+        if not mods.EvoUi then return end
+        local player = game.get_player(player_index)
+        if player and player.valid then update(player, "EvoUi layout", toolbar.refresh_layout) end
+    end,
+})
 
 flush = function()
     -- Detach before updating. A synchronously raised event belongs to the NEXT
@@ -42,8 +58,7 @@ flush = function()
     for index in pairs(pending) do
         local player = game.get_player(index)
         if player and player.valid and player.connected then
-            local ok, err = pcall(toolbar.refresh, player)
-            if not ok then logging.error("Tick", "Error updating " .. player.name .. ": " .. tostring(err), player) end
+            update(player, "Tick", toolbar.refresh)
         end
     end
     schedule(next(storage.pending_players) ~= nil)
@@ -58,8 +73,8 @@ end
 
 local function initialize()
     logging.invalidate()
-    storage.player = storage.player or {}
-    storage.window_states = storage.window_states or {}
+    storage.player = nil -- Legacy frame flags; layout now reconciles against live elements.
+    storage.window_states = nil -- Legacy cache: selection now only reads the live window.
     storage.pending_players = storage.pending_players or {}
     local registry, logger = {}, game.get_player(1)
     logging.info("Init", "Starting init_button_array", logger)
@@ -71,20 +86,9 @@ local function initialize()
         end
     end
     logging.info("Buttons", "Completed build_button_array with " .. #registry .. " buttons", logger)
-    if #registry == 0 then
-        logging.info("Migration", "Performing button array migration", logger)
-        registry[1] = {} -- legacy empty registry representation
-    end
     storage.gubuttonarray = registry
     logging.info("Init", "Completed init_button_array", logger)
-    for _, state in pairs(storage.player) do
-        state.checknexttick = nil
-        state.update_frame = true
-    end
-    for _, player in pairs(game.connected_players) do
-        queue(player)
-        storage.player[player.index].update_frame = true
-    end
+    queue_all()
     schedule(next(storage.pending_players) ~= nil)
 end
 
@@ -96,8 +100,6 @@ local function on_setting(event)
     queue(player)
     if event.setting == "inserter-throughput-enabled" and player and player.valid then
         toolbar.throughput_changed(player)
-    elseif event.setting == "gu_frame_style_setting" and storage.player[index] then
-        storage.player[index].update_frame = true
     end
 end
 
@@ -105,25 +107,21 @@ local function on_joined(event)
     local player = game.get_player(event.player_index)
     if not player or not player.valid then return end
     logging.invalidate(player.index)
-    queue(player)
-    local state = storage.player[player.index]
-    if state then state.update_frame = true end
-    -- EvoUi recreates its root after the button panel.
-    if mods.EvoUi and player.gui.top.EvoUi_root then player.gui.top.EvoUi_root.destroy() end
+    -- Player-created buttons and earlier join handlers are ready. Finish before
+    -- the first playable frame, even if BnL has paused the simulation.
+    storage.pending_players[player.index] = nil
+    update(player, "Join", toolbar.refresh)
+    schedule(next(storage.pending_players) ~= nil)
 end
 
 local function on_removed(event)
     local index = event.player_index
-    storage.player[index] = nil
     storage.pending_players[index] = nil
     schedule(next(storage.pending_players) ~= nil)
     logging.invalidate(index)
-    local prefix = index .. "_"
-    for key in pairs(storage.window_states) do
-        if key:sub(1, #prefix) == prefix then storage.window_states[key] = nil end
-    end
 end
 
+--[=[ DORMANT: YARM
 local function cycle_yarm(player)
     local flow = mod_gui.get_button_flow(player)
     local all, none, warnings = flow.YARM_filter_all, flow.YARM_filter_none, flow.YARM_filter_warnings
@@ -133,21 +131,25 @@ local function cycle_yarm(player)
         elseif warnings.visible then warnings.visible = false; all.visible = true end
     end
 end
+]=]
 
 local function on_click(event)
     local player = event.player_index and game.get_player(event.player_index)
     if not player or not player.valid then return end
     local element = event.element
     local name = element and element.valid and element.name
+    --[=[ DORMANT: YARM
     if mods.YARM and (name == "YARM_filter_all" or name == "YARM_filter_none" or name == "YARM_filter_warnings") then
         cycle_yarm(player)
     end
+    ]=]
     if name == "module_inserter_config_button" then
         local interface = remote.interfaces.ModuleInserterEx
         if interface and interface.toggle_gui then remote.call("ModuleInserterEx", "toggle_gui", player.index) end
     end
     -- Other owners can mutate any of the watched windows on an unrelated click.
     queue(player)
+    --[=[ DORMANT: clock, pycoalprocessing, SolarRatio, CitiesOfEarth, automatic-belt-direction
     if mods.clock then
         local frame = player.gui.top.mod_gui_top_frame
         local inner = frame and frame.mod_gui_inner_frame
@@ -170,7 +172,7 @@ local function on_click(event)
         element.sprite = sprite
         element.tooltip = {"guiu." .. sprite}
     end
-    if player == game.players["snouz"] then debug_button(event) end
+    ]=]
 end
 
 script.on_init(initialize)
@@ -183,7 +185,7 @@ script.on_event({defines.events.on_research_finished, defines.events.on_rocket_l
 script.on_event(defines.events.on_runtime_mod_setting_changed, on_setting)
 script.on_event({defines.events.on_gui_closed, defines.events.on_gui_confirmed, defines.events.on_gui_opened,
     defines.events.on_player_display_resolution_changed, defines.events.on_player_display_scale_changed,
-    defines.events.on_player_changed_surface, defines.events.on_player_created}, queue_event)
+    defines.events.on_player_changed_surface}, queue_event)
 if mods["Paranoidal-factorissimo-4"] then
     -- The owner adds/removes the dispatcher button according to the new force's research.
     script.on_event(defines.events.on_player_changed_force, queue_event)
@@ -195,10 +197,13 @@ script.on_event(defines.events.on_player_cursor_stack_changed, function(event)
     local player = event.player_index and game.get_player(event.player_index)
     if player and player.valid then toolbar.cursor_changed(player) end
 end)
+--[=[ DORMANT: Hive_Mind, Hive_Mind_Remastered
 if mods.Hive_Mind or mods.Hive_Mind_Remastered then
     script.on_event({defines.events.on_player_gun_inventory_changed, defines.events.on_player_died}, queue_event)
 end
+]=]
 
+--[=[ DORMANT: visual-signals, Teleportation_Redux, PersonalTeleporter
 local function on_built(event)
     local entity = event.entity or event.destination
     if not entity or not entity.valid then return end
@@ -222,3 +227,4 @@ if #build_filters > 0 then
     script.on_event(defines.events.on_robot_built_entity, on_built, build_filters)
     script.on_event(defines.events.on_entity_cloned, on_built, build_filters)
 end
+]=]

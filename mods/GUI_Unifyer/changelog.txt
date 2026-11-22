@@ -1,4 +1,17 @@
 ---------------------------------------------------------------------------------------------------
+Version: 9.1.0
+Date: 2026-11-22
+  Changes:
+    - Paranoidal: park integrations absent from both builds and stop registering their dedicated GUI sprites and styles. Keep the source blocks and assets for restoration, with Space Age and Space Exploration compatibility intact.
+  Bugfixes:
+    - Paranoidal: update Factory Planner and ModuleInserterEx selection on window changes without waiting for a tick, including paused and pinned windows.
+    - Reapply frame styles to live elements and place a recreated EvoUi root next to the toolbar without rebuilding it.
+    - Log the first occurrence of a recent GUI error even with verbose logging disabled.
+    - Fix English and Russian labels for the Todo-List button mode and distinguish the transparent skin's selected state.
+    - Paranoidal: finish the toolbar on player join, even during the BnL profession pause. Apply the existing refresh once without waiting for a game tick.
+    - Put the existing EvoUi root after the toolbar without destroying it. Only the Inserter Throughput mod creates its toggle, so its per-player visibility is respected.
+    - Removed the unused window-state cache and the name-based click debugger.
+---------------------------------------------------------------------------------------------------
 Version: 9.0.5
   Compatibility:
     - Paranoidal: the Factorissimo dispatcher button is styled for Paranoidal-factorissimo-4 (renamed from factorissimo-2-notnotmelon).

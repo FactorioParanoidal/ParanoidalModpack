@@ -31,6 +31,14 @@ end
 
 
 ---@param player LuaPlayer
+local function notify_toolbar(player)
+    local unifier = remote.interfaces.GUI_Unifyer
+    if unifier and unifier.window_changed then
+        remote.call("GUI_Unifyer", "window_changed", player.index, "factoryplanner")
+    end
+end
+
+---@param player LuaPlayer
 ---@param default_visibility boolean
 function main_dialog.rebuild(player, default_visibility)
     local ui_state = lib.globals.ui_state(player)
@@ -91,6 +99,7 @@ function main_dialog.rebuild(player, default_visibility)
         player.opened = frame_main_dialog
     end
     main_dialog.set_pause_state(player, frame_main_dialog)
+    notify_toolbar(player)
 end
 
 ---@param player LuaPlayer
@@ -114,6 +123,7 @@ function main_dialog.toggle(player, skip_opened)
 
         -- Make sure FP is not behind some vanilla interfaces
         if new_dialog_visibility then frame_main_dialog.bring_to_front() end
+        notify_toolbar(player)
     end
 end
 

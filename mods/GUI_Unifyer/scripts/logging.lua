@@ -72,8 +72,20 @@ function M.warning(category, message, player)
     M.log(LOG_LEVELS.WARNING, category, message, player)
 end
 
+-- Keep a bounded set of recent failures even when verbose logging is off.
+-- A recurring incompatible control must neither fail silently nor flood the log.
+local recent, slots, slot = {}, {}, 1
 function M.error(category, message, player)
-    M.log(LOG_LEVELS.ERROR, category, message, player)
+    local key = category .. "\0" .. message
+    if recent[key] then
+        if not should_log(LOG_LEVELS.ERROR, player) then return end
+    else
+        local previous = slots[slot]
+        if previous then recent[previous] = nil end
+        slots[slot], recent[key] = key, true
+        slot = slot % 64 + 1
+    end
+    log(format_message(LOG_LEVELS.ERROR, category, message))
 end
 
 return M 

@@ -7,17 +7,20 @@ local mods = script.active_mods -- constant for this control stage (also on relo
 local M = {}
 
 local obsolete_top = {
-    "blpflip_flow", "fjei_toggle_button", "Homeworld_btn", "lawful_evil_button", "trashbingui", "pywiki_frame", "usage_detector", "104",
-    "spawn", "random", "what_is_missing", "logistics-view-button", "flw_zoom", "stats_show_settings", "teleportation_main_button",
-    "personalTeleporter_PersonalTeleportTool", "inserter-throughput-toggle", "b_recexplo", "CTLM_mainbutton", "market_button", "rd_container", "abdgui", "clockGUI", "visual_signals",
+    "spawn", "inserter-throughput-toggle", "rd_container",
+    -- DORMANT | "blpflip_flow", "fjei_toggle_button", "Homeworld_btn", "lawful_evil_button", "trashbingui", "pywiki_frame", "usage_detector", "104",
+    -- DORMANT | "random", "what_is_missing", "logistics-view-button", "flw_zoom", "stats_show_settings", "teleportation_main_button",
+    -- DORMANT | "personalTeleporter_PersonalTeleportTool", "b_recexplo", "CTLM_mainbutton", "market_button", "abdgui", "clockGUI", "visual_signals",
 }
 local obsolete_name = {}
 for _, name in ipairs(obsolete_top) do obsolete_name[name] = true end
+--[=[ DORMANT: DeleteAdjacentChunk, YARM, LandfillEverything variants, SchallOreConversion
 local adjacent = {"DeleteAdjacentChunk_nw", "DeleteAdjacentChunk_n", "DeleteAdjacentChunk_ne", "DeleteAdjacentChunk_w",
     "DeleteAdjacentChunk_e", "DeleteAdjacentChunk_sw", "DeleteAdjacentChunk_s", "DeleteAdjacentChunk_se"}
 local yarm = {"YARM_filter_none", "YARM_filter_warnings", "YARM_filter_all"}
 local landfill = mods.LandfillEverythingU or mods.LandfillEverything or mods.LandfillEverythingButTrains or mods.LandfillEverythingAndPumps
 local ore = {["iron-ore"]=true, ["copper-ore"]=true, stone=true, coal=true, ["uranium-ore"]=true, ["crude-oil"]=true}
+]=]
 
 local function set_sprite(button, path, kind)
     path = path or ""
@@ -72,7 +75,7 @@ local function reconcile(ctx, enabled, name, sprite, tooltip)
     if enabled then
         if not button then
             button = add(ctx, {type="sprite-button", name=name, sprite=sprite, style=ctx.style, tooltip=tooltip})
-            if name == "YARM_filter_none" or name == "YARM_filter_warnings" then button.visible = false end
+            -- DORMANT | if name == "YARM_filter_none" or name == "YARM_filter_warnings" then button.visible = false end
         end
     elseif button then
         button.destroy()
@@ -81,6 +84,7 @@ local function reconcile(ctx, enabled, name, sprite, tooltip)
 end
 
 local function create_buttons(ctx)
+    --[=[ DORMANT: visual-signals
     if mods["visual-signals"] then
         if ctx.top.visual_signals then
             ctx.top.visual_signals.destroy()
@@ -88,6 +92,7 @@ local function create_buttons(ctx)
         end
         reconcile(ctx, true, "visual_signals", "visualsignals_button", {"guiu.visual_signals_button"})
     end
+    ]=]
     for _, row in ipairs(proxies) do
         local enabled = mods[row[1]]
         if enabled and type(row[5]) == "string" then
@@ -99,6 +104,7 @@ local function create_buttons(ctx)
         -- Absent mods can still have legacy controls in a save. Use the live index.
         if enabled or ctx.buttons[row[2]] then reconcile(ctx, enabled, row[2], row[3], row[4]) end
     end
+    --[=[ DORMANT: advanced-logistics-system-fork
     local advanced = mods["advanced-logistics-system-fork"]
     if advanced or ctx.buttons["logistics-view-button"] then
         local force = ctx.player.force
@@ -107,6 +113,8 @@ local function create_buttons(ctx)
             reconcile(ctx, advanced, "logistics-view-button", "logisticssystemfork_button", {"guiu.logisticssystemfork_button"})
         end
     end
+    ]=]
+    --[=[ DORMANT: clock
     if mods.clock then
         if not ctx.buttons.clockGUI then
             add(ctx, {type="button", name="clockGUI", style="todo_button_default_snouz", caption=""})
@@ -115,8 +123,11 @@ local function create_buttons(ctx)
         ctx.buttons.clockGUI.destroy()
         ctx.buttons.clockGUI = nil
     end
+    ]=]
+    --[=[ DORMANT: SpawnControl (not TimedSpawnControl-reforged)
     -- TimedSpawnControl-reforged creates its own spawn/unstuck controls and tags.
     if not mods["TimedSpawnControl-reforged"] then reconcile(ctx, mods.SpawnControl, "spawn", "spawncontrol_button") end
+    ]=]
     if mods["inserter-throughput"] then throughput(ctx.buttons["inserter-throughput-toggle"], ctx.settings, ctx.style) end
 end
 
@@ -157,22 +168,16 @@ local function apply_icon(ctx, button, entry, style, visible)
     elseif ctx.debug then logging.debug("Icons", "Updated button " .. entry[3], ctx.player) end
 end
 
+local function is_selected(gui, entry)
+    local path = entry[7]
+    if not path then return false end
+    if entry[1] == "factoryplanner" then return factoryplanner_visible(gui[path[1]], path[2]) end
+    return window_visible(gui, path)
+end
+
 local function change_icon(ctx, entry)
     local name = entry[3]
     if not name or not entry[2] then return end -- legacy empty registry entry
-    local style = ctx.style
-    local path = entry[7]
-    if path then
-        local selected
-        if entry[1] == "factoryplanner" then
-            selected = factoryplanner_visible(ctx.gui[path[1]], path[2])
-        else
-            selected = window_visible(ctx.gui, path)
-        end
-        local key = ctx.prefix .. name
-        if storage.window_states[key] ~= selected then storage.window_states[key] = selected end
-        if selected then style = ctx.selected end
-    end
     local parent = ctx.buttons
     if entry[6] then
         for _, key in ipairs(entry[6]) do
@@ -182,10 +187,22 @@ local function change_icon(ctx, entry)
     end
     local top, nested = ctx.top[name], parent and parent[name]
     if not (top or nested) then return end
+    local style = is_selected(ctx.gui, entry) and ctx.selected or ctx.style
     local setting = ctx.settings["gu_button_" .. name]
     local visible = not setting or setting.value
     if top then apply_icon(ctx, top, entry, style, visible) end
     if nested then apply_icon(ctx, nested, entry, style, visible) end
+end
+
+function M.refresh_selection(player, entry)
+    local gui, name = player.gui, entry[3]
+    local top = gui.top
+    local outer = top.mod_gui_top_frame
+    local flow = top.mod_gui_button_flow or (outer and outer.mod_gui_inner_frame)
+    local button = flow and flow[name] or top[name]
+    if not (button and button.type == "sprite-button") then return end
+    local style = player.mod_settings["gu_button_style_setting"].value
+    props.style(button, is_selected(gui, entry) and style .. "_selected" or style)
 end
 
 local function decorate(ctx)
@@ -197,11 +214,14 @@ local function decorate(ctx)
         set_sprite(atlas, "pd-atlas-bookmark-light", "sprite-button")
     end
     for _, entry in ipairs(storage.gubuttonarray) do change_icon(ctx, entry) end
+    --[=[ DORMANT: BlackMarket2
     if mods.BlackMarket2 then
         local credits = buttons.flw_blkmkt and buttons.flw_blkmkt.but_blkmkt_credits
         local caption = credits and credits.caption
         if caption then props.set(credits, "tooltip", "Credit: " .. caption) end
     end
+    ]=]
+    --[=[ DORMANT: AttilaZoomMod
     if mods.AttilaZoomMod then
         local style = ctx.style == "slot_sized_button_notext" and "slot_sized_button_blacktext" or "slot_button_whitetext"
         for i = 1, 15 do
@@ -213,6 +233,7 @@ local function decorate(ctx)
             end
         end
     end
+    ]=]
     if mods["Todo-List"] and buttons.todo_maximize_button then
         local button, style = buttons.todo_maximize_button, ctx.style
         local mode = ctx.settings["gu_todolist_style_setting"].value
@@ -224,12 +245,15 @@ local function decorate(ctx)
         if frame and frame.visible then style = style .. "_selected" end
         props.style(button, style)
     end
+    --[=[ DORMANT: DeleteAdjacentChunk
     if mods.DeleteAdjacentChunk and buttons.DeleteAdjacentChunk_table then
         for _, name in ipairs(adjacent) do
             local button = buttons.DeleteAdjacentChunk_table[name]
             if button then props.style(button, "adjacentchunks_button"); props.set(button, "sprite", nil) end
         end
     end
+    ]=]
+    --[=[ DORMANT: Factorissimo2 (not Paranoidal-factorissimo-4)
     if mods.Factorissimo2 and buttons.factory_camera_toggle_button then
         local b = buttons.factory_camera_toggle_button
         local sprite = b.sprite
@@ -238,22 +262,26 @@ local function decorate(ctx)
             b.tooltip = {"guiu.factorissimo2_button"}
         end
     end
+    ]=]
 end
 
+--[=[ DORMANT: legacy blueprint and automatic-belt-direction cleanup helper
 local function destroy(button)
     if button then button.destroy() end
 end
+]=]
 local function show(button, wanted)
     if button and button.visible ~= wanted then button.visible = wanted end
 end
 
 -- Also runs immediately on cursor changes (other mods may just have recreated a
 -- legacy button). In a queued refresh use the existing name indexes. For the
--- cursor-only path do not enumerate the whole toolbar or probe 24 absent names.
-local function cleanup(player, buttons, top, ps, blueprint, indexed)
+-- cursor-only path use the top-level name lookup.
+local function cleanup(player, buttons, top, ps, indexed)
+    --[=[ DORMANT: LandfillEverything variants, blueprint_flip_and_turn, automatic-belt-direction
+    buttons = buttons or mod_gui.get_button_flow(player)
     destroy(buttons.le_flow)
-    destroy(buttons.bob_logistics_inserter_button)
-    if not blueprint then
+    if not player.is_cursor_blueprint() then
         destroy(buttons.le_button)
         destroy(buttons.blueprint_flip_horizontal)
         destroy(buttons.blueprint_flip_vertical)
@@ -262,6 +290,7 @@ local function cleanup(player, buttons, top, ps, blueprint, indexed)
         local setting = ps["abd-showgui"]
         if setting and not setting.value then destroy(buttons.abdgui) end
     end
+    ]=]
     local visible = not ps["gu_mod_enabled_perplayer"].value
     if indexed then
         for _, name in ipairs(obsolete_top) do show(top[name], visible) end
@@ -272,6 +301,7 @@ local function cleanup(player, buttons, top, ps, blueprint, indexed)
             if obsolete_name[name] then show(top[name], visible) end
         end
     end
+    --[=[ DORMANT: production-monitor, YARM, BlueprintLab_design, Spiderissmo
     local left = player.gui.left
     if mods["production-monitor"] then
         local holder = left.stats_item_flow or top.stats_item_flow
@@ -293,9 +323,11 @@ local function cleanup(player, buttons, top, ps, blueprint, indexed)
         show(top["108"], false)
         local surface = player.surface
         local away = not surface or surface.name ~= "nauvis"
-        show(buttons.minimap_button, away)
-        show(buttons["108"], away)
+        local flow = buttons or mod_gui.get_button_flow(player)
+        show(flow.minimap_button, away)
+        show(flow["108"], away)
     end
+    ]=]
 end
 
 local frames = {
@@ -304,39 +336,58 @@ local frames = {
     snouz_large_barebone_frame_style = {"snouz_invisible_frame", "snouz_large_barebone_frame"},
     snouz_invisible_frame_style = {"snouz_invisible_frame", "snouz_invisible_frame"},
 }
+
+local function refresh_layout(root, top, ps, children)
+    local outer = top.mod_gui_top_frame
+    local inner = outer and outer.mod_gui_inner_frame
+    local style_pair = frames[ps["gu_frame_style_setting"].value]
+    if inner and style_pair then
+        props.style(outer, style_pair[1])
+        props.style(inner, style_pair[2])
+    end
+    local evo = mods.EvoUi and top.EvoUi_root
+    local anchor = top.mod_gui_button_flow or outer
+    if evo and anchor then panel.place_after(root, evo, anchor, children) end
+end
+
+function M.refresh_layout(player)
+    local top = player.gui.top
+    refresh_layout(top, top, player.mod_settings)
+end
+
 function M.refresh(player)
     local flow = mod_gui.get_button_flow(player)
     local ps = settings.get_player_settings(player)
     local style = ps["gu_button_style_setting"].value or "slot_button_notext"
     local gui = player.gui
     local buttons, ordered = panel.inspect(flow)
-    local top = {}
-    for _, child in ipairs(gui.top.children) do top[child.name] = child end
+    local top, children = {}, gui.top.children
+    for _, child in ipairs(children) do top[child.name] = child end
+    -- Use the same snapshot before proxy reconciliation can remove a top child.
+    refresh_layout(gui.top, top, ps, children)
     local ctx = {player=player, flow=flow, gui=gui, top=top, buttons=buttons, settings=ps, style=style,
-        selected=style .. "_selected", prefix=player.index .. "_", debug=logging.debug_enabled(player)}
-    panel.rename_frames(gui.screen, mods)
+        selected=style .. "_selected", debug=logging.debug_enabled(player)}
+    -- DORMANT | panel.rename_frames(gui.screen, mods) -- train-log, Rich_Text_Helper, Not_Enough_Todo
     create_buttons(ctx)
     decorate(ctx)
-    cleanup(player, buttons, top, ps, player.is_cursor_blueprint(), true)
+    -- Bob's Inserters does not create this button with the Unifier present.
+    -- Retire an existing Bob button from older saves or the Bob's Logistics fallback.
+    local bob = buttons.bob_logistics_inserter_button
+    if bob then
+        local owner = bob.get_mod()
+        if owner == "bobinserters" or owner == "boblogistics" then bob.destroy() end
+    end
+    cleanup(player, buttons, top, ps, true)
     -- Deletions keep the order of surviving children. Only a disorder or an addition can require swaps.
     if ctx.added or not ordered then panel.sort(flow) end
-    local state = storage.player[player.index]
-    if state.update_frame then
-        local style_pair = frames[ps["gu_frame_style_setting"].value]
-        local outer = top.mod_gui_top_frame
-        local inner = outer and outer.mod_gui_inner_frame
-        if inner and style_pair then
-            outer.style = style_pair[1]
-            inner.style = style_pair[2]
-        end
-        state.update_frame = nil
-    end
 end
 
 function M.cursor_changed(player)
+    local ps = settings.get_player_settings(player)
+    cleanup(player, nil, player.gui.top, ps, false)
+    --[=[ DORMANT: blueprint-request, LandfillEverything variants, blueprint_flip_and_turn, SchallOreConversion
     local flow = mod_gui.get_button_flow(player)
-    local blueprint, ps = player.is_cursor_blueprint(), settings.get_player_settings(player)
-    cleanup(player, flow, player.gui.top, ps, blueprint, false)
+    local blueprint = player.is_cursor_blueprint()
     if blueprint and (mods["blueprint-request"] or landfill or mods.blueprint_flip_and_turn) then
         local style = ps["gu_button_style_setting"].value or "slot_button_notext"
         if mods["blueprint-request"] then
@@ -358,6 +409,7 @@ function M.cursor_changed(player)
             if button then button.style = ps["gu_button_style_setting"].value; set_sprite(button, "schalloreconversion_button") end
         end
     end
+    ]=]
 end
 
 return M

@@ -11,6 +11,7 @@ Date: 15. 01. 2026
     - Paranoidal: inserter positions are also re-checked after blueprint placement and by a light background pass (1 inserter every 2 ticks, stops once all inserter technologies are researched); already built inserters keep their positions
     - Paranoidal: Inserter length 1-2, Inserter offset and Full inserter 1-2 show in their result an effect with the technology icon and a short text of what they unlock (en, ru)
   Bugfixes:
+    - Paranoidal: do not create the excluded Bob's Inserters toolbar button when GUI Unifier is loaded; standalone behaviour and saved settings are unchanged.
     - Paranoidal: fixed a crash in on_tick (control.lua:853, field 'grand') on saves that already had the position check data from an earlier build
   Optimizations:
     - Paranoidal: the per-tick enforcement handler is unloaded while its sweep and blueprint queue are empty and restored on load or new work; GUI reach checks use a separate 20-tick handler

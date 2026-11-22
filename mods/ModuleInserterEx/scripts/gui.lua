@@ -1211,6 +1211,13 @@ function mi_gui.window_is_open(e)
     return window and window.valid and window.visible
 end
 
+local function notify_toolbar(player)
+    local unifier = remote.interfaces.GUI_Unifyer
+    if unifier and unifier.window_changed then
+        remote.call("GUI_Unifyer", "window_changed", player.index, "ModuleInserterEx")
+    end
+end
+
 --- @param e MiEventInfo
 function mi_gui.open(e)
     -- mi_gui.destroy(e.pdata, e.player) -- For debugging - uncomment to always recreate the dialog when opening
@@ -1224,6 +1231,7 @@ function mi_gui.open(e)
     if not e.pdata.pinned then
         e.player.opened = window
     end
+    notify_toolbar(e.player)
 end
 
 --- @param e MiEventInfo
@@ -1243,6 +1251,7 @@ function mi_gui.close(e)
         e.player.opened = nil
         pdata.closing = nil
     end
+    notify_toolbar(e.player)
 end
 
 --- @param e MiEventInfo

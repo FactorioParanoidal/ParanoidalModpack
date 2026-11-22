@@ -6,6 +6,7 @@ Date: 2026-10-12
     - Paranoidal: keep the pollution caption in its original format; show current Toxic Pollution protection, armor resource and intoxication only in the tooltip. Removed stale/pending display modes and the explanatory footer.
     - Paranoidal packaging: moved regression fixtures and the editable Paint.NET source to the local development workspace; game resources are unchanged.
   Bugfixes:
+    - Paranoidal: notify GUI Unifier when the sensor display is created so it can restore its place next to the toolbar immediately.
     - Paranoidal: show Rampant's truce while its start timer is active even after evolution reaches the configured threshold.
   Optimizations:
     - Paranoidal: read evolution and truce once per visible surface in each GUI refresh; player precision remains individual.

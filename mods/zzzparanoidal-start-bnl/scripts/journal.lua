@@ -185,6 +185,13 @@ end
 
 events.on(defines.events.on_gui_click, on_click)
 events.on(defines.events.on_gui_closed, on_closed)
+events.on(defines.events.on_player_created, function(event)
+    local s = storage.bnl
+    if not (s and s.journal and (s.goals or s.journal.entries[1])) then return end
+    -- Make the journal available before the shared toolbar is ordered on join.
+    local player = game.get_player(event.player_index)
+    if player then button(player) end
+end)
 events.on(defines.events.on_player_joined_game, on_joined)
 
 commands.add_command("bnl-journal", {"bnl.journal-command"}, function(command)

@@ -252,6 +252,11 @@ function EvoUi.create_sensor_display(player)
                         name="in_popup",
                         direction="vertical",
                         style="EvoUi_cramped_flow_v"}
+
+        local unifier = remote.interfaces.GUI_Unifyer
+        if unifier and unifier.evo_layout_changed then
+            remote.call("GUI_Unifyer", "evo_layout_changed", player.index)
+        end
     end
 end
 

@@ -5,6 +5,7 @@ Date: 23. 10. 2026
     - Russian hardcoded player-facing text: 12 UI, chat, command-help and error-message literals; technical identifiers, format parameters and gameplay logic are unchanged.
     - ru: the mod name and the mod list description are the same as in ParanoidalLocale (format "English title (Russian translation)"), so the mod reads the same with or without it.
   Bugfixes:
+    - Paranoidal: notify GUI Unifier after changing main window visibility so the toolbar reflects it even while the game is paused.
     - Cursor blueprints keep filters and combinator entries of different qualities or comparison operators separate from new exact normal entries.
     - Prevented a negative compact navigation width at small resolutions or large UI scales, including rebuilds of a hidden compact window; preferences and calculations are unchanged.
     - Prevented negative content and title-bar drag-handle widths when resizing the game window or increasing UI scale; saved size preferences and factory calculations are unchanged.

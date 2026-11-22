@@ -1,13 +1,16 @@
 # GUI Unifier
 
-## Local Paranoidal patch (9.0.5)
+## Local Paranoidal patch (9.1.0)
 
 This is a local patch of portal version **2.0.1**, not an upstream release.
 `control.lua` coalesces refresh requests by connected player. The worker is
 registered only while the saved queue is nonempty and runs on the next multiple
-of six ticks. A load restores the subscription, not a new delay. Cursor changes
-and the Inserter Throughput setting still have immediate handlers. A join or
-configuration change requests a refresh; construction events use entity filters.
+of six ticks. A load restores the subscription, not a new delay. On player join the same
+refresh runs immediately, including during the BnL pause; configuration changes
+request a queued refresh. Cursor changes and the Inserter Throughput setting
+have immediate handlers. Factory Planner and ModuleInserterEx notify the
+Unifier when their main window changes, so selection updates without a tick.
+EvoUi notifies it after rebuilding its root. Construction events use entity filters.
 
 `scripts/toolbar.lua` reconciles the live controls: it creates the proxies listed
 in `scripts/proxy-buttons.lua`, decorates supported buttons from `icons.lua`, and
@@ -15,8 +18,27 @@ handles special integrations. Other mods may replace a button or change its
 properties on an unrelated event, so GUI references are **not** cached between
 refreshes. `scripts/panel-scan.lua` resolves legacy names and the fixed toolbar
 order, swapping siblings only when needed. Unlisted controls keep their relative
-order, including anonymous ones. The same per-player settings, storage keys,
-button names, click actions and owner tooltips remain in use.
+order, including anonymous ones. Frame styles are checked against the live GUI,
+not a saved flag. The saved queue, per-player settings, button names, click
+actions and owner tooltips remain in use.
+
+## Restoring a dormant integration
+
+`DORMANT` marks the former implementation for a mod outside both Paranoidal
+builds. Keep those blocks and their assets and translations. When the mod is
+added, check its current internal ID, toolbar element, window and click owner.
+Then restore only the matching lines (`-- DORMANT |`) or code inside matching
+long-comment blocks (`--[=[ DORMANT: …` / `]=]`). Check `icons.lua` and
+`scripts/proxy-buttons.lua`, then restore the referenced sprites in `data.lua`,
+any named styles in `prototypes/button_style.lua`, and matching handlers,
+frame aliases, or toolbar order entries in `control.lua` and `scripts/`.
+Some blocks share helpers; follow the calls rather than restoring every block.
+JSON has no comments: copy the relevant optional dependency from
+`dormant-dependencies.json` back into `info.json` if it was parked. For an
+alternative mod ID that never had an entry there, check the required load order.
+Test visibility, one action per click, and any applicable late unlock before
+claiming compatibility. Base scenarios, Creative Mod support used locally and
+Space Age / Space Exploration groundwork are not dormant.
 
 ## What is this?
 **GUI Unifier** is a Factorio mod that standardizes the appearance of mod buttons, making them uniform, aligned, and visually consistent. This mod harmonizes most of the modded buttons, ensuring a cleaner and more organized interface.
@@ -67,8 +89,10 @@ https://mods.factorio.com/mod/snouz-useful-icons
 https://mods.factorio.com/mod/emoji-signals
 https://mods.factorio.com/mod/ToggleSpeedBoost
 
-## Supported Mods
-GUI Unifier is compatible with a wide range of mods, bringing consistency to even more of your interface. Some of the supported mods include:
+## Historical upstream integrations
+
+This list is historical, not an assertion of active support in Paranoidal.
+Use the live rows or the `DORMANT` markers described above to distinguish them:
 
 - Quick Item Menu
 - Visual Signals

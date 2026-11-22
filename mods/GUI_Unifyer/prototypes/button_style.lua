@@ -2,7 +2,7 @@ local GUIPATH = "__GUI_Unifyer__/graphics/gui/"
 local COLORS = {
     transparent = {0, 0, 0, 0},
     white = {1, 1, 1, 0.9},
-    black = {0, 0, 0, 0.9},
+    -- DORMANT | black = {0, 0, 0, 0.9}, -- AttilaZoomMod
     strikethrough = {0.5, 0.5, 0.5},
     disabled = {179, 179, 179}
 }
@@ -30,9 +30,9 @@ define_button_style("slot_button_notext_selected", "slot_button_notext", COLORS.
     base = {border = 4, position = {160, 736}, size = 80},
     shadow = offset_by_2_rounded_corners_glow({15, 7, 3, 100})
 })
-define_button_style("slot_button_whitetext", "slot_button", COLORS.white, nil)
+-- DORMANT | define_button_style("slot_button_whitetext", "slot_button", COLORS.white, nil) -- AttilaZoomMod
 define_button_style("slot_sized_button_notext", "slot_sized_button", COLORS.transparent, nil)
-define_button_style("slot_sized_button_blacktext", "slot_sized_button", COLORS.black, nil)
+-- DORMANT | define_button_style("slot_sized_button_blacktext", "slot_sized_button", COLORS.black, nil) -- AttilaZoomMod
 define_button_style("slot_button_notext_transparent", "slot_button_notext", COLORS.transparent, {
     base = {border = 4, position = {0, 736}, size = 80, opacity = 0.5},
     shadow = offset_by_2_rounded_corners_glow({15, 7, 3, 100})
@@ -52,7 +52,7 @@ data.raw["gui-style"].default["slot_button_notext_transparent_selected"] = {
     type = "button_style",
     parent = "slot_button_notext_transparent",
     default_graphical_set = {
-        base = {border = 4, position = {0, 736}, size = 80, opacity = 0.5},
+        base = {border = 4, position = {160, 736}, size = 80, opacity = 0.5},
         shadow = offset_by_2_rounded_corners_glow({15, 7, 3, 100})
     }
 }
@@ -131,6 +131,7 @@ data.raw["gui-style"].default["todo_button_default_snouz_selected"] = {
     default_graphical_set = {base = {filename = GUIPATH .. "gui_Unifier_gui_default_recreated.png", position = {50, 0}, corner_size = 12, scale = 0.5}}
 }
 
+--[=[ DORMANT: DeleteAdjacentChunk
 data.raw["gui-style"].default["adjacentchunks_button"] = {
     type = "button_style",
     parent = "todo_button_default_snouz",
@@ -139,3 +140,4 @@ data.raw["gui-style"].default["adjacentchunks_button"] = {
     left_padding = 0,
     right_padding = 0
 }
+]=]
