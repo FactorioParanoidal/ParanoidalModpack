@@ -7,7 +7,7 @@ local max_groups = 6
 local rows = {"speed", "efficiency"}
 local panel_half_width, panel_half_height = 9, 1
 local first_row_offset, row_spacing = 3.4, 2.1
-local background = {{0.075, 0.09, 0.105}, {0.064, 0.088, 0.07}}
+local background = {{0.075, 0.09, 0.105}, {0.064, 0.088, 0.07}, {0.095, 0.085, 0.055}}
 local font_color = {0.94, 0.94, 0.94}
 local muted = {0.60, 0.63, 0.64}
 local tier_name = {"I", "II", "III"}
@@ -33,15 +33,20 @@ local function row_y(factory, i)
 end
 
 function M.label_reservation(factory)
-    return {left = factory.inside_door_x - panel_half_width - 0.5,
-        right = factory.inside_door_x + panel_half_width + 0.5,
-        bottom = row_y(factory, #rows) + panel_half_height}
+    local state = factory.specialization
+    local third = state and state.rows and state.rows[3]
+    local count, width = third and 3 or #rows, third and 13 or panel_half_width
+    return {left = factory.inside_door_x - width - 0.5,
+        right = factory.inside_door_x + width + 0.5,
+        bottom = row_y(factory, count) + panel_half_height}
 end
 
 local function create(factory, i)
     local surface, force = factory.inside_surface, factory.force
+    local station = i == 3
+    local width = station and 13 or panel_half_width
     local marker = surface.create_entity {
-        name = prefix .. rows[i], force = force, position = {factory.inside_door_x, row_y(factory, i)},
+        name = prefix .. (station and "power" or rows[i]), force = force, position = {factory.inside_door_x, row_y(factory, i)},
     }
     if not marker then return end
     marker.destructible = false
@@ -50,15 +55,16 @@ local function create(factory, i)
     storage.factory_specialization_markers[unit] = factory.id
     rendering.draw_rectangle {
         surface = surface, forces = {force}, color = background[i], filled = true, draw_on_ground = true,
-        left_top = {entity = marker, offset = {-panel_half_width, -panel_half_height}},
-        right_bottom = {entity = marker, offset = {panel_half_width, panel_half_height}},
+        left_top = {entity = marker, offset = {-width, -panel_half_height}},
+        right_bottom = {entity = marker, offset = {width, panel_half_height}},
     }
     local icon = rendering.draw_sprite {
-        sprite = prefix .. rows[i] .. "-0", tint = inactive_icon_color, surface = surface, forces = {force},
-        target = {entity = marker, offset = {-7.85, 0}}, x_scale = 0.83, y_scale = 0.83, render_layer = "entity-info-icon",
+        sprite = station and "item/steam-engine" or prefix .. rows[i] .. "-0", tint = inactive_icon_color,
+        surface = surface, forces = {force}, target = {entity = marker, offset = {1.15 - width, 0}},
+        x_scale = 0.83, y_scale = 0.83, render_layer = "entity-info-icon",
     }
     local text = rendering.draw_text {
-        text = "", color = muted, surface = surface, forces = {force}, target = {entity = marker, offset = {-6.7, 0}},
+        text = "", color = muted, surface = surface, forces = {force}, target = {entity = marker, offset = {2.3 - width, 0}},
         scale = label_scale, scale_with_zoom = false, vertical_alignment = "middle", font = "default-bold",
     }
     return {marker = marker, unit = unit, icon = icon, text = text}
@@ -158,6 +164,42 @@ function M.update(factory, state, series, park, total, speed, efficiency, thresh
             update_row(row, i, i == 1 and series or park, total, i == 1 and speed or efficiency, thresholds)
         end
     end
+end
+
+function M.update_station(factory, state, station)
+    state.rows = state.rows or {}
+    local row = state.rows[3]
+    local tier = station and math.max(station.fuel, station.ecology, station.power) or 0
+    if tier == 0 then
+        if row then destroy(row); state.rows[3] = nil end
+        return
+    end
+    if not (row and row.marker.valid and row.marker.force == factory.force and row.icon.valid and row.text.valid) then
+        if row then destroy(row) end
+        row = create(factory, 3)
+        state.rows[3] = row
+    end
+    if not row then return end
+    local signature = "filters-v1:" .. station.fuel .. ":" .. station.ecology .. ":" .. station.power
+    if row.signature == signature then return end
+    local icons = {"steam-engine", "bob-steam-engine-2", "bob-steam-engine-3"}
+    local item = prototypes.item[icons[tier]] and icons[tier] or "steam-engine"
+    row.icon.sprite, row.icon.color, row.text.color = "item/" .. item, {1, 1, 1, 1}, font_color
+    local text = {"", {locale .. "station-name"}, ": "}
+    local amounts = {0, 25, 50, 100}
+    local separator = false
+    for _, entry in ipairs {{"station-fuel", station.fuel, false}, {"station-cleanup", station.ecology, false},
+        {"station-output", station.power, true}} do
+        if entry[2] > 0 then
+            if separator then text[#text + 1] = " · " end
+            local amount = entry[3] and entry[2] * 5 or amounts[entry[2] + 1] / 10
+            local percent = amount == 2.5 and {locale .. "station-quarter"} or {locale .. "station-percent", amount}
+            text[#text + 1] = {locale .. entry[1], percent}
+            separator = true
+        end
+    end
+    row.text.text, row.signature = text, signature
+    field(row, 1, {locale .. "station-name"}, {locale .. "station-description"})
 end
 
 return M

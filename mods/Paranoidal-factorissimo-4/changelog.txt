@@ -5,11 +5,14 @@ Date: 2026-11-16
     - Port feedback explains why a direction or rate command did not take effect instead of showing Beep, Boop or Beeple. The fluid-port research tooltip describes the fixed pumping speed.
     - Clarified setting descriptions against current code and modpack overrides, including units, dependencies and limits; setting values and gameplay are unchanged.
   Major Features:
+    - Pure steam power stations can discover hidden fuel-economy, output and native air-cleaner bonuses. A third interior panel appears only after qualification. Boilers and engines are never replaced: a bounded energy interface credits only measured local steam generation.
     - Walk between touching factories at matching ports, even at empty ports. Alt mode shows green two-way arrows in the void exactly opposite the ports, with one label per destination clear of the specialization panels. Ordinary doors and logistics connections are unchanged.
     - Added Operation Optimization after Factory architecture 1: uniform machine parks save operating energy, and serial workshops also gain crafting speed. Interior indicators explain the current tier and refresh on hover.
     - Hover over a specialization panel to highlight the counted machines and dim the workshop around them. Click the panel to pin the highlights for your view only; click it again to clear them.
     - Paranoidal: the Factorissimo fork of the build is renamed from factorissimo-2-notnotmelon to Paranoidal-factorissimo-4 (title "Paranoidal Factorissimo 4"). Prototype, setting, remote interface (factorissimo), command, custom input and storage names are unchanged; graphics paths are __Paranoidal-factorissimo-4__.
   Bugfixes:
+    - Ecology boosts serviced air cleaners without discounting exported pollution; old clouds and nested transfers no longer receive a repeated export discount. Other local effects and original boiler/engine identities are preserved.
+    - Operation Optimization uses the mod's tier-0 speed/efficiency symbols in its technology artwork and research effects, not actual tier-1 modules.
     - Chest ports ignore construction logistics helpers; linked terminals sharing one inventory no longer transfer to themselves.
     - Rejected construction no longer edits the player's undo history.
     - Inactive factories disconnect their external power links without disabling local generators or the internal distribution pole.

@@ -70,3 +70,5 @@ factorissimo.on_nth_tick(15, function(event)
         sample_factory(factory, update_pollution(factory), tick)
     end
 end)
+
+return update_pollution

@@ -195,7 +195,8 @@ local function scan_factory(factory, tick)
                     generators_working = generators_working + 1
                 end
             elseif kind == "interface" then
-                local produced = entity.power_production
+                local station = factory.power_station
+                local produced = station and station.helper == entity and (station.last_output or 0) or entity.power_production
                 use = use + entity.power_usage
                 if produced > 0 then
                     generators = generators + 1

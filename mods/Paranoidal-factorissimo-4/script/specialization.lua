@@ -1,5 +1,6 @@
 local indicators = require("script.specialization-indicators")
 local inspection = require("script.specialization-inspection")
+local station = require("script.power-station")
 
 local TECH = "factory-specialization-optimization"
 local PERIOD = 10 * 60
@@ -52,6 +53,7 @@ local function release(unit, entry)
 end
 
 local function clear(factory)
+    station.clear(factory)
     local state = factory.specialization
     if not state then return end
     local slots = storage.factory_specialization_slots
@@ -194,6 +196,7 @@ local function refresh(factory, tick, interval)
     local speed, efficiency = tier_for(series, #machines), tier_for(park, #machines)
     apply(state, factory.id, machines, speed, efficiency)
     indicators.update(factory, state, series, park, #machines, speed, efficiency, THRESHOLDS)
+    station.refresh(factory)
     state.tick = tick
     inspection.update(factory, machines, matches, speed, efficiency)
     return true
