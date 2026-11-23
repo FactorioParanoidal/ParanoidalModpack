@@ -1,6 +1,7 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.26.0
   Locale:
+    - Distinguished the Russian names of coal and ceramic coolant filtration and corrected the phosphoric acid recipe name.
     - Matched the Russian Factorissimo fluid-port research tooltip to the actual fixed pumping speed.
     - Matched the Russian Factorissimo recovery command help to the owning mod and the actual packed-item safeguards.
     - Removed miskeyed Todo-List button-mode labels; GUI Unifier now supplies the corrected Russian labels.

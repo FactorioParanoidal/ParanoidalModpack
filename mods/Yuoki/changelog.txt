@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 9.0.0
 Date: 2026-10-24
+  Graphics:
+    - Small generator recipes use the existing S/P icons of their respective products.
   Major Features:
     - Tips and tricks: 26 illustrated entries (category Yuoki) explain every Yuoki mechanic for a new player, from the solar Stirling dish and mechanical force to trade, armor and the domination symbols; each unlocks with its technology. Texts in locale/*/tips.cfg, pictures in graphics/tips.
     - Paranoidal fork: one mod from Yuoki Industries 1.2.23 and Yuoki Industries - Engines 1.2.9 (Engines under engines/, graphics paths __Yuoki__/engines/), with selected content of zJatmnYiFixes 0.2.23. Incompatible with yi_engines, yi_pfw, zJatmnYiFixes, Yi_Tech_Tree(_ExtraVanilla), jatmn_yuoki_reimagined, Yuoki_F2, yi_engines_F2, YuokiTweaks. Version 9 keeps the mod portal from auto-updating it.

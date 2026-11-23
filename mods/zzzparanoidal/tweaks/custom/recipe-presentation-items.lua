@@ -56,3 +56,51 @@ for _, name in ipairs({"artillery-turret", "bob-artillery-turret-2", "bob-artill
     local item, recipe = find_item(name), data.raw.recipe[name]
     if item and recipe and recipe.icons then set_icons(item, table.deepcopy(recipe.icons)) end
 end
+
+-- The digits count sodium atoms in these two salts; they are not recipe tiers.
+for name, digit in pairs({["angels-solid-disodium-phosphate"] = 2, ["angels-solid-tetrasodium-pyrophosphate"] = 4}) do
+    local item, recipe = data.raw.item[name], data.raw.recipe[name]
+    local base = recipe and main_layer(recipe)
+    if item and base then
+        local layers = {base, {icon = "__base__/graphics/icons/signal/signal_" .. digit .. ".png",
+            icon_size = 64, scale = 0.25, shift = {8, -8}}}
+        set_icons(item, layers)
+        set_icons(recipe, table.deepcopy(layers))
+    end
+end
+
+-- The plus identifies the casting mixture, on the item as well as its recipes.
+-- The Roman numerals identify production methods and stay on recipes only.
+for _, material in ipairs({"osmium", "depleted-uranium"}) do
+    local name = "clowns-casting-powder-" .. material
+    local item = data.raw.item[name]
+    local base = item and main_layer(item)
+    if base then
+        if mods["reskins-compatibility"] then
+            base = {icon = "__reskins-compatibility__/graphics/icons/mad-clowns/powders/" .. material
+                .. "-mixture/powder-" .. material .. "-mixture.png", icon_size = 64}
+        end
+        set_icons(item, {base, {icon = "__base__/graphics/icons/signal/signal-plus.png",
+            icon_size = 64, scale = 0.25, shift = {8, -8}}})
+        if material == "osmium" then
+            local recipe = data.raw.recipe[name]
+            if recipe then set_icons(recipe, table.deepcopy(item.icons)) end
+        else
+            for tier = 1, 4 do
+                local recipe = data.raw.recipe[name .. "-" .. tier]
+                if recipe then
+                    local layers = table.deepcopy(item.icons)
+                    if recipe.icons and #recipe.icons > 1 then
+                        for i = 2, #recipe.icons do
+                            layers[#layers + 1] = table.deepcopy(recipe.icons[i])
+                        end
+                    elseif mods["angelsrefininggraphics"] then
+                        layers[#layers + 1] = {icon = "__angelsrefininggraphics__/graphics/icons/numerals/num-"
+                            .. tier .. ".png", icon_size = 64, tint = {1, 0.8, 0, 1}}
+                    end
+                    set_icons(recipe, layers)
+                end
+            end
+        end
+    end
+end

@@ -86,6 +86,7 @@ Date: 2026.10.25
     - Droid counter activity LED uses the 2.0 sprite size; the loot chest has a 2.0 circuit connector.
     - Symmetric selection boxes of the ground droids.
     - Deploy recipes show the droid icon.
+    - The CB4 Sniper Droid icon has a crosshair so it is distinguishable from Yuoki's wearable CB4 armour.
     - Item, unit and technology icons of the new droids are tinted copies of the existing ones; their models are the existing droid sprites with a tint on the body layer (shadows untinted). With Yuoki Industries active, the Sniper Droid uses the animated CB4 walker and the Laser Rifleman the ROBO1 walker of that mod (walking 8 directions x 22 frames, aiming 18 directions; files referenced from Yuoki, not copied); without it they keep the tinted sprites.
     - Rank droids have a star per rank in their icon and over them.
   Locale:

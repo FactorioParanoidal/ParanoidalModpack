@@ -15,9 +15,21 @@ local sources = {
     ["angels-algae-brown-burning"] = "angels-algae-brown",
     ["angels-filter-ceramic"] = "angels-filter-frame",
     ["angels-filter-ceramic-refurbish"] = "angels-filter-ceramic-used",
+    ["angels-coolant-used-filtration-1"] = "angels-filter-coal",
+    ["angels-coolant-used-filtration-2"] = "angels-filter-ceramic",
+    ["clowns-white-phosphorus-smelting-2"] = "clowns-solid-white-phosphorus",
+    ["y-centrifuge-n4-seeded"] = "y-crystal-seed",
+    ["y-centrifuge-f7-seeded"] = "y-crystal-seed",
+    ["y-centrifuge-n4-catalytic"] = "y-crystal-cnd",
+    ["y-centrifuge-f7-catalytic"] = "y-crystal-cnd",
     ["y_granulate_wood"] = "wood",
     ["ye_granulate_vuger"] = "ye_corn_b",
     ["ye_granulate_corn"] = "ye_corn_a",
+}
+
+-- The menu's old solid icon shows the input instead of the liquid result.
+local result_icons = {
+    ["clowns-white-phosphorus-smelting-2"] = "clowns-liquid-phosphoric-acid",
 }
 
 local function icon_layers(prototype)
@@ -40,7 +52,8 @@ function M.apply(raw)
                     break
                 end
             end
-            local base = icon_layers(recipe)
+            local fluid_name = result_icons[name]
+            local base = icon_layers(fluid_name and raw.fluid[fluid_name] or recipe)
             if not base then
                 local result = recipe.results and recipe.results[1]
                 base = result and icon_layers((raw[result.type or "item"] or {})[result.name])

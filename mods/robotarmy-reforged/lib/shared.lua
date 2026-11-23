@@ -118,7 +118,12 @@ shared.miner_mines = 10
 function shared.droid_icons(unit)
   local d = shared.droid_by_name[unit]
   if d.yuoki == "cb4" and mods and mods["Yuoki"] then
-    return {{icon = "__Yuoki__/graphics/armor/cb4_icon.png", icon_size = 64}}
+    return {
+      {icon = "__Yuoki__/graphics/armor/cb4_icon.png", icon_size = 64},
+      -- Leave the upper edge free for ranks and the lower left for Citadel focus marks.
+      {icon = "__core__/graphics/crosshair-x32.png", icon_size = 32,
+        scale = 0.375, shift = {7, 5}, draw_background = true},
+    }
   end
   return {{icon = shared.mod_path .. "/graphics/icons/" .. d.icon, icon_size = 64, tint = d.tint}}
 end

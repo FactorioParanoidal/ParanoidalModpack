@@ -119,8 +119,6 @@ data:extend({
 	{
 		type = "recipe",
 		name = "y-seg",
-		icon_size = 64,
-		icon = "__Yuoki__/graphics/entity/energy-t2/seg_icon.png",
 		ingredients = {
 			{ type = "item", name = "y-basic-t2-mf", amount = 1 },
 			{ type = "item", name = "y_structure_element", amount = 8 },

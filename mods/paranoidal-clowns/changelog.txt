@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 9.0.0
 Date: 2026-11-01
+  Locale:
+    - Named the white-phosphorus route to phosphoric acid after its actual product.
   Major Features:
     - One mod instead of Clowns-Processing 2.0.14 (MadClown01's Processing), Clowns-Nuclear 2.0.08 (MadClown01's Vanilla Nuclear) and Clowns-AngelBob-Nuclear 2.0.13 (MadClown01's AngelBob Nuclear) by MadClown01 and Pezzawinkle. Item, fluid, recipe, technology, entity, subgroup and locale key names are unchanged, so buildings, items and research of existing saves stay.
   Changes:
