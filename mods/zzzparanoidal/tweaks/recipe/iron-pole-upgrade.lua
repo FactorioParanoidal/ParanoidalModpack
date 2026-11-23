@@ -56,6 +56,7 @@ local function add_upgrade(name, source_name, target_name, order, extra_ingredie
         energy_required = ordinary.energy_required or 0.5,
         allow_productivity = false,
         allow_intermediates = false, -- Require a ready source pole without affecting its ordinary consumers.
+        allow_as_intermediate = false, -- Required by the engine when allow_intermediates is false.
         subgroup = source.subgroup,
         order = order,
         icons = icons,
