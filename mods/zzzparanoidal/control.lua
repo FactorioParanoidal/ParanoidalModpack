@@ -5,6 +5,7 @@ local burner_pump_status = require("controls.burner-pump-status")
 local loader_shells = require("controls.loader-shells")
 local automatic_cursed_fmd = require("controls.automatic-cursed-fmd")
 local gas_reservoir = require("features.gas-reservoir.control")
+local lab_productivity = require("controls.lab-productivity")
 local rail_support_power = require("controls.rail-support-power")
 rail_support_power.install() -- Кабель в опорах эстакадных рельсов (только с elevated-rails).
 require("controls.battery-locomotive-return").install() -- Аккумулятор BET при разборке MU-и hiend-локомотивов.
@@ -161,6 +162,7 @@ script.on_configuration_changed(function() --фикс эволюции при з
 	rocket_victory.sync()
 	fluid_output_wake.sync()
 	gas_reservoir.sync()
+	lab_productivity.sync()
 end)
 
 script.on_event(defines.events.on_player_joined_game, disable_obsolete_basic_logistics)
@@ -176,3 +178,4 @@ require("controls.ping-color").install()
 -- These modules chain the previously installed handlers.
 automatic_cursed_fmd.install()
 gas_reservoir.install()
+lab_productivity.install()

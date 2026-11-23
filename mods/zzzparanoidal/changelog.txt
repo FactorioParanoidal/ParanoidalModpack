@@ -5,6 +5,7 @@ Version: 8.1.32
     - Kept recipe-only artwork off manganese oxide, fertilizer, uranium fuel cells, Krutag DNA and sand molds.
     - Distinguished phosphoric acid, coolant filtration and seeded/catalytic centrifuging with recipe-only ingredient badges. Gave the two sodium phosphates, casting powders and narrow ultimate loading crane distinct item and recipe icons. W93 uranium rounds keep their weapon badges on belts and on the ground without losing their glow.
   Features:
+    - The lab window now shows a panel below it with the total productivity bonus, including research and modules. It updates while the window is open and is hidden at zero.
     - New gas reservoirs accept only the selected gas. Set the filter with the large gas picker in the tank window; blueprints and settings paste carry it. Existing unfiltered tanks retain their contents and keep working without a filter until configured.
 ---------------------------------------------------------------------------------------------------
 Version: 8.1.31
