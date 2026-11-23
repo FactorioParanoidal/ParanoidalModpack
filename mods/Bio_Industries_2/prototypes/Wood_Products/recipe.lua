@@ -19,7 +19,7 @@ data:extend({
       },
     results = {{type="item", name="bi-wooden-pole-big", amount=1}},
     main_product = "",
-    allow_as_intermediate = false,    -- Added for 0.18.34/1.1.4
+    allow_as_intermediate = true,     -- Allow hand crafting the pole for the lighted variant.
     always_show_made_in = false,      -- Added for 0.18.34/1.1.4
     allow_decomposition = true,       -- Added for 0.18.34/1.1.4
     subgroup = "energy-pipe-distribution",

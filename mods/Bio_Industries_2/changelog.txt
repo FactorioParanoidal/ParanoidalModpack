@@ -6,6 +6,7 @@ Version: 2.0.34
     - Russian hardcoded player-facing text: 5 UI, chat, command-help and error-message literals; technical identifiers, format parameters and gameplay logic are unchanged.
 Date: 24.02.2026
   Changes:
+    - Paranoidal: hand crafting can make the big wooden pole as an intermediate for its lighted and huge variants.
     - Paranoidal: reduced the large bio accumulator input/output limits from 25MW to 2.5MW; its 300MJ capacity and recipe are unchanged.
     - Paranoidal packaging: moved the wood-production spreadsheet to the local source-assets collection; game resources are unchanged.
   Graphics:
