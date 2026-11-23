@@ -1,5 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 8.1.32
+  Graphics:
+    - Concrete keeps its unmarked item icon in inventories and on the ground; the tier mark remains on the crafting recipe.
+    - Kept recipe-only artwork off manganese oxide, fertilizer, uranium fuel cells, Krutag DNA and sand molds.
   Features:
     - New gas reservoirs accept only the selected gas. Set the filter with the large gas picker in the tank window; blueprints and settings paste carry it. Existing unfiltered tanks retain their contents and keep working without a filter until configured.
 ---------------------------------------------------------------------------------------------------

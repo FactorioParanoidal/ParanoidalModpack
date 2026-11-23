@@ -49,6 +49,7 @@ Date: 2026-10-24
     - H-Metal is called T-Metal in English as well.
     - YI suits and walkers improve the build's power armor: the working suit is built from power armor MK2, the master technician suit from Bob's MK3, the master suit from Bob's MK4, the T.R. walker from Bob's MK5, the top walker from the T.R. walker. Each has the base armor's resistances +5 % and +2, 5 more inventory slots, 1.25 x durability and a grid one size larger; four technologies after Bob's power armor 3/4/5 (37 technologies).
   Graphics:
+    - Restored the original unmarked Krutag DNA item icon from Yuoki Engines. The import recipe keeps its arrow.
     - 813 graphics files that no remaining prototype references were removed (47 -> 33 MB). The removed prototypes are still defined in the source files and deleted at the end of data.lua, so their definitions point to deleted files: restoring one of them needs its graphics back from Yuoki 1.2.23 / Engines 1.2.9.
     - 106 icons of 32x32 px (all from Engines) replaced by a neural upscale to 64x64 (Real-ESRGAN x4plus, alpha upscaled separately, Lanczos down to 64, no mipmaps); icon_size 32 -> 64 in the 213 prototype tables that use them.
     - 12 files used only by the removed MF water pump and accumulators deleted; technology icons for the Stirling dish and the flow compensator.

@@ -11,6 +11,12 @@ local foreign_icon_groups = {
 -- These recipes depict inputs/processes, not the product (wood/fibre marks,
 -- crystallization liquid or sorting). Keep the item's own curated artwork.
 local product_icon_authoritative = {
+    concrete = true, -- The recipe tier mark is not part of the item artwork.
+    ["angels-solid-manganese-oxide"] = true,
+    ["angels-solid-fertilizer"] = true,
+    ["uranium-fuel-cell"] = true,
+    ["ye_dna_fish2"] = true,
+    ["ASE-sand-die"] = true,
     ["bob-wooden-board"] = true,
     ["bob-fibreglass-board"] = true,
     ["bob-thorium-ore"] = true,
