@@ -80,103 +80,6 @@ end
     --Table local funcs
 local local_table_contains = function(table, value) return local_table_index_of(table, value) ~= nil end
     
-local local_inner_table_clone = function(t,c,e,a)  
-    local meta = getmetatable(t)
-      local tbl = { }
-      for k, v in pairs(t) do
-          if type(v) == "table" then
-        local i = local_table_index_of(e,v)
-        if i ~= nil then
-          tbl[k] = a[i]
-        else
-          table.insert(e,v)
-          local nt = c(v,c,e,a)
-          table.insert(a,nt)
-          tbl[k] = nt
-        end
-          else
-              tbl[k] = v
-          end
-      end
-    setmetatable(tbl, meta)
-      return tbl
-end
-local local_table_clone = function (t)
-    if type(t) ~= "table" then return t end	
-    return local_inner_table_clone(t,local_inner_table_clone,{},{})	
-end
-
-local local_create_icon = function(base_icons, new_icons, options)
-    if type(base_icons) ~= "table" then return base_icons end
-    if type(options) ~= "table" then options = { } end
-    local icon = nil
-    if not options.rescale then options.rescale = 1 end
-    if not options.origin then options.origin = {0,0} end
-    if not new_icons then
-        if options.from ~= nil and type(options.from) == "table" then
-            if options.from.icons then new_icons = options.from.icons
-            elseif options.from.icon then new_icons = {{icon = options.from.icon}}
-            else error("В переданной таблице нет значков.") end
-            for _, icon in pairs(new_icons) do
-                if not icon.icon_size then
-                    if options.from.icon_size then
-                        icon.icon_size = options.from.icon_size
-                    else
-                        icon.icon_size = 64 -- Default to 64 (Factorio standard size)
-                        log("Warning: Missing icon_size for " .. tostring(icon.icon) .. ". Defaulting to 64.")
-                    end
-                end
-            end
-        else
-            error("Не удалось создать значки: нет ни значков, ни исходной таблицы.")
-        end
-    end
-    local icons = local_table_clone(new_icons)
-    for _, icon in pairs(base_icons) do
-        if not icon.scale then icon.scale = 1 end
-        if icon.shift ~= nil and type(icon.shift) ~= "table" then
-            icon.shift = {0,0}
-        end
-        if not icon.shift then icon.shift = {0,0} end
-    end
-    if options.type == nil or options.type == "recipe" then
-        for _, icon in pairs(icons) do
-            if not icon.icon_size then icon.icon_size = 32 end
-        end
-    end
-    local extra_scale
-    for _, icon in pairs(icons) do
-        if not icon.scale then icon.scale = 1 end
-        if icon.shift ~= nil and type(icon.shift) ~= "table" then
-            icon.shift = {0,0} 
-        end
-        if (not icon.shift) or (not icon.shift[1]) then icon.shift = {0,0} end
-        extra_scale = 1
-        if base_icons[1] then
-            if (base_icons[1].icon_size* base_icons[1].scale) ~= (icon.icon_size* icon.scale) then
-              extra_scale = (base_icons[1].icon_size * base_icons[1].scale) / (icon.icon_size)
-            end
-        else
-            if (icons[1].icon_size* icons[1].scale) ~= (icon.icon_size* icon.scale) then
-                extra_scale = (icons[1].icon_size * icons[1].scale) / (icon.icon_size)
-            end
-        end
-
-        icon.shift[1] = icon.shift[1] / icon.scale
-        icon.shift[2] = icon.shift[2] / icon.scale
-        icon.scale = icon.scale * options.rescale * extra_scale
-        icon.shift[1] = icon.shift[1] * icon.scale + options.origin[1] * icon.scale * icon.icon_size
-        icon.shift[2] = icon.shift[2] * icon.scale + options.origin[2] * icon.scale * icon.icon_size
-    end
-    for _, icon in pairs(icons) do
-        table.insert(base_icons, icon)
-    end
-    for i=1, #base_icons do 
-        if type(base_icons[i].shift) ~= "table" then base_icons[i].shift = {0,0} end
-    end
-    return base_icons
-end
-
 local local_is_int = function(n) return (type(n) == "number") and(math.floor(n) == n) end
 
 
@@ -326,7 +229,6 @@ function get_utils()
             remove = local_table_remove
         },
         get_name_for = local_get_name_for,
-        create_icon = local_create_icon,
         recipe = {
             find_recipes_for = local_find_recipes_for
         },

@@ -10,7 +10,6 @@ local ends_with  = heroturrets.util.ends_with
 local get_name_for = heroturrets.util.get_name_for
 local table_contains = heroturrets.util.table.contains
 local table_remove = heroturrets.util.table.remove
-local create_icon = heroturrets.util.create_icon
 local convert_to_string = heroturrets.util.convert_to_string
 local name_is_excluded = require("compatibility").turret_name_is_excluded
 local recipes_of = heroturrets.util.recipe.find_recipes_for
@@ -533,24 +532,24 @@ local local_create_turret = function(turret,rank,rank_string,mod,custom_buff_mod
             ir = ir - 4
         end
 
-        local base_icon = 
-		{   
-           {
+        local source_icons = turret.item.icons or {{
+            icon = turret.item.icon,
+            icon_size = turret.item.icon_size,
+        }}
+        local new_icon = {}
+        -- Keep the existing layer order and let each layer retain its native scale in alt-mode.
+        for i = #source_icons, 1, -1 do
+            new_icon[#new_icon + 1] = table.deepcopy(source_icons[i])
+        end
+        new_icon[#new_icon + 1] = {
             icon = "__HeroTurretRedux__/graphics/icons/hero-"..ir.."-icon.png",
-			icon_size = 64,
+            icon_size = 64,
             icon_mipmaps = 4,
             tint = tint
-           }
-		}
+        }
 
         local localised_name = get_name_for(turret.item,""," "..rank_string)
         local localised_desc = get_name_for(turret.item,""," "..rank_string)
-        local new_icon = create_icon(base_icon, nil, {from = turret.item})
-        local rev = {}
-        for i=#new_icon, 1, -1 do
-	        rev[#rev+1] = new_icon[i]
-        end
-        new_icon = rev
         local item_name = "hero-turret-"..rank.."-for-"..turret.item.name
         local entity_name = "hero-turret-"..rank.."-for-"..turret.entity.name
         local recipe_name = "hero-turret-"..rank.."-for-"..turret.recipe.name
