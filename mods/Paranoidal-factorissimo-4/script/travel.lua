@@ -36,11 +36,21 @@ local function purgatory_surface()
 end
 
 -- Retry only a failed return from the transit surface, even if the player stops walking.
+local ExternalRooms = factorissimo.external_rooms
 local function recover_travel(player, tick)
     local returns = storage.factory_travel_returns
-    local pending = returns and returns[player.index]
+    local index = player.index
+    local pending = returns and returns[index]
     if not pending then return end
-    if player.physical_surface ~= pending.transit then
+    if pending.owner == "external-room" then
+        if tick - (storage.last_player_teleport[player.index] or 0) >= travel_cooldown then
+            storage.last_player_teleport[player.index] = tick
+            if ExternalRooms.recover_travel(player, pending) then
+                if returns[index] == pending then returns[index] = nil end
+                if player.valid then factorissimo.update_factory_preview(player) end
+            end
+        end
+    elseif player.physical_surface ~= pending.transit then
         returns[player.index] = nil
     elseif tick - (storage.last_player_teleport[player.index] or 0) >= travel_cooldown then
         storage.last_player_teleport[player.index] = tick
@@ -53,12 +63,12 @@ local function recover_travel(player, tick)
     return true
 end
 
-local function teleport_safely(player, surface, position, prechecked)
+local function teleport_safely(player, surface, position, prechecked, metadata)
     if not player.valid then return false end
     -- Throttle failed attempts as well as successes, so holding a key cannot spam teleports.
     storage.last_player_teleport[player.index] = game.tick
     if not player.character then -- God controller: no personal robots to transfer.
-        if not player.teleport(position, surface) then return false end
+        if metadata or not player.teleport(position, surface) then return false end
     else
         if not prechecked then
             position = surface.find_non_colliding_position(player.character.name, position, 5, 0.5, false) or position
@@ -66,18 +76,23 @@ local function teleport_safely(player, surface, position, prechecked)
         local origin, origin_surface = player.physical_position, player.physical_surface
         local transit = purgatory_surface()
         if not player.teleport({0, 0}, transit) then return false end
-        if not (surface.valid and player.teleport(position, surface)) then
+        -- Instant teleport handlers can change the body, permissions, host or landing.
+        if not (player.valid and surface.valid and (not metadata or ExternalRooms.transit_ready(player, metadata, transit, surface, position))
+            and player.teleport(position, surface)) then
             if player.valid and player.physical_surface == transit then
-                if not (origin_surface.valid and player.teleport(origin, origin_surface)) then
+                if metadata or not (origin_surface.valid and player.teleport(origin, origin_surface)) then
                     storage.factory_travel_returns = storage.factory_travel_returns or {}
-                    storage.factory_travel_returns[player.index] = {surface = origin_surface, position = origin, transit = transit}
+                    storage.factory_travel_returns[player.index] = {surface = origin_surface, position = origin, transit = transit,
+                        owner = metadata and metadata.owner, operation = metadata and metadata.operation,
+                        visit_id = metadata and metadata.visit_id, door_id = metadata and metadata.door_id}
                     log("Factorissimo: scheduled travel recovery for player " .. player.index)
+                    return false, true
                 end
             end
             return false
         end
     end
-    factorissimo.update_factory_preview(player)
+    if player.valid then factorissimo.update_factory_preview(player) end
     return true
 end
 
@@ -155,7 +170,7 @@ end
 
 local function try_passage(player, factory, position, direction)
     local surface, port, dx, dy = Passages.destination(factory, position, direction)
-    if not surface then return end
+    if not surface then return false end
 
     -- Cross-surface teleport does not check collisions; accept only the exact tile center.
     local character = player.character.name
@@ -167,7 +182,8 @@ local function try_passage(player, factory, position, direction)
     -- Find a free cell along the wall before attempting any teleport.
     local arrival = clear_tile(port) or clear_tile({x = port.x - dy, y = port.y + dx})
         or clear_tile({x = port.x + dy, y = port.y - dx})
-    if arrival then return teleport_safely(player, surface, arrival, true) end
+    if arrival then teleport_safely(player, surface, arrival, true) end
+    return true
 end
 
 -- Reuse the ordinary door checks; nothing polls passage pairs or their endpoints.
@@ -181,27 +197,32 @@ factorissimo.on_nth_tick(6, function(event)
     local tick = event.tick
     local last_teleport = storage.last_player_teleport
     if not last_teleport then return end
+    ExternalRooms.maintenance(tick, teleport_safely)
     local jetpacks -- fetched once, only when somebody is walking
     for _, player in pairs(game.connected_players) do
         local controller = player.controller_type
         if not recover_travel(player, tick) and controller ~= defines.controllers.remote and not player.driving
             and tick - (last_teleport[player.index] or 0) >= travel_cooldown then
             local walking_state = player.walking_state
-            if walking_state.walking then
+            local walking = walking_state.walking
+            local direction = walking and walking_state.direction or nil
+            local handled = ExternalRooms.has_visit(player.index)
+                and ExternalRooms.process(player, tick, direction, teleport_safely) or false
+            if not handled and walking then
                 if jetpacks == nil then jetpacks = get_jetpacks() or false end
                 local airborne = is_airborne(jetpacks or nil, player)
-                local surface, position, direction = player.physical_surface, player.physical_position, walking_state.direction
-                if not check_position_and_enter_factory(player, surface, position, direction, airborne) then
+                local surface, position = player.physical_surface, player.physical_position
+                handled = check_position_and_enter_factory(player, surface, position, direction, airborne) or false
+                if not handled then
                     local southwards = direction == d.south or direction == d.southeast or direction == d.southwest
                     local can_use_passage = controller == defines.controllers.character and player.character
                     if southwards or can_use_passage then
                         local factory = find_surrounding_factory(surface, position)
-                        if not (southwards and check_position_and_leave_factory(player, factory, position, airborne))
-                            and can_use_passage then
-                            try_passage(player, factory, position, direction)
-                        end
+                        handled = southwards and check_position_and_leave_factory(player, factory, position, airborne) or false
+                        if not handled and can_use_passage then handled = try_passage(player, factory, position, direction) end
                     end
                 end
+                if not handled then ExternalRooms.process(player, tick, direction, teleport_safely) end
             end
         end
     end

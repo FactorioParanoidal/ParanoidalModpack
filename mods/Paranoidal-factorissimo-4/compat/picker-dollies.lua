@@ -1,4 +1,6 @@
+local Rooms = require("script.external-rooms.registry")
 local function moved(event)
+    Rooms.host_changed(event.moved_entity)
     factorissimo.connection_entity_moved(event.moved_entity, event.start_pos)
 end
 

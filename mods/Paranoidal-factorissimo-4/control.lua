@@ -2,6 +2,7 @@ require "lib.lib"
 require "script.legacy-bridge" -- first initialization handler: takes over the state of saves made before the rename
 
 require "script.remote-api"
+require "script.external-rooms.init"
 require "script.layout"
 require "script.factory-buildings"
 require "script.connections.connections"
