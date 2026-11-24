@@ -530,6 +530,22 @@ data:extend({
 
         {
             type = "bool-setting",
+            name = "rampantFixed--colonyMind",
+            setting_type = 'runtime-global',
+            default_value = true,
+            order = "m[total]-0ba[ai]",
+            per_user = false
+        },
+        {
+            type = "bool-setting",
+            name = "rampantFixed--colonyOrders",
+            setting_type = 'runtime-global',
+            default_value = true,
+            order = "m[total]-0bb[ai]"
+        },
+
+        {
+            type = "bool-setting",
             name = "rampantFixed--champions",
             setting_type = "runtime-global",
             default_value = true,

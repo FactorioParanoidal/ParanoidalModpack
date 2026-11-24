@@ -189,13 +189,18 @@ local function scanPaths(chunk, map, blockingTiles)
     topPosition[2] = y
     bottomPosition[2] = bottom
 
-    for xi = x, right do
+    -- Retain one actually clear interior strip per axis. Prefer the centre;
+    -- still test every original strip, including the outer fallback, for the ordinary pass flag.
+    local col, row = false, false
+    for i = 0, CHUNK_SIZE do
+        local xi = x + (i == 0 and 16 or i <= 16 and i-1 or i)
         topPosition[1] = xi
         bottomPosition[1] = xi + 1
         if (count_entities_filtered(filteredEntitiesCliffQuery) == 0) and
             ((clearInside and xi < right) or count_tiles_filtered(filteredTilesPathQuery) == 0)
         then
             passableNorthSouth = true
+            if xi < right then col = xi-x end
             break
         end
     end
@@ -203,13 +208,15 @@ local function scanPaths(chunk, map, blockingTiles)
     topPosition[1] = x
     bottomPosition[1] = right
 
-    for yi = y, bottom do
+    for i = 0, CHUNK_SIZE do
+        local yi = y + (i == 0 and 16 or i <= 16 and i-1 or i)
         topPosition[2] = yi
         bottomPosition[2] = yi + 1
         if (count_entities_filtered(filteredEntitiesCliffQuery) == 0) and
             ((clearInside and yi < bottom) or count_tiles_filtered(filteredTilesPathQuery) == 0)
         then
             passableEastWest = true
+            if yi < bottom then row = yi-y end
             break
         end
     end
@@ -221,6 +228,7 @@ local function scanPaths(chunk, map, blockingTiles)
     elseif passableNorthSouth then
         pass = CHUNK_NORTH_SOUTH
     end
+    chunk.colonyCol,chunk.colonyRow = col,row
     chunk.terrainPass = pass -- not the later fallback for a chunk with structures
     return pass
 end
@@ -244,12 +252,24 @@ local function getFactorissimoQuery(query)
     return factorissimoQuery
 end
 
+local reserveLevels = {}
+for _,kind in ipairs(aiBrain.field.reserveKinds) do reserveLevels[constants.BUILDING_PHEROMONES[kind]]=true end
+
+-- Only an unrestricted absence in the same area and forces can rule out
+-- infrastructure. A missing, narrower or unfamiliar query proves nothing.
+local function emptyForHeavy(u,q)
+    if q.area~=u.area or q.force~=u.activePlayerForces or q.limit~=1 then return end
+    for key in pairs(q) do if key~='area' and key~='force' and key~='limit' then return end end
+    return true
+end
+
 local function scorePlayerBuildings(map, chunk)
     local surface = map.surface
 	local universe = map.universe
 	local turretsCount = 0
 	local baseScent, detectionScent = 0, 0
-    local sample
+    local sample, empty
+    local possible = 0
     local present = false
     local forces = universe.activePlayerForces
     if forces and forces[1] then
@@ -262,12 +282,14 @@ local function scorePlayerBuildings(map, chunk)
         else
             present = surface.count_entities_filtered(query) > 0
         end
+        if not present and universe.heavyAI and not universe.classicAI then empty=emptyForHeavy(universe,query) end
     end
     if present then
 		for lvlName, values in pairs(GENERATOR_PHEROMONE_LEVEL) do
 			local query = universe.filteredEntities_player_pheromones[lvlName]
 			if query then
 				local enityCnt = surface.count_entities_filtered(query)
+                if universe.colonyMind and reserveLevels[lvlName] then possible=possible+enityCnt end
 				local query2 = universe.ignoredEntities_player_pheromones[lvlName]
 				if query2 then
 					enityCnt = mMax(enityCnt - surface.count_entities_filtered(query2), 0)
@@ -292,8 +314,11 @@ local function scorePlayerBuildings(map, chunk)
 	setPlayerBaseGenerator(map, chunk, detectionScent, BASE_DETECTION_PHEROMONE)
 	setPlayerTurretCount(map, chunk, turretsCount)
 	-- weak spots, strongpoints and infrastructure for the AI tactics (universe.area still holds this chunk)
-	aiBrain.onPlayerChunkScored(map, chunk, baseScent, turretsCount)
-    if sample and turretsCount <= 2 and baseScent > 0 then aiBrain.field.observe(map, sample) end
+	aiBrain.onPlayerChunkScored(map, chunk, baseScent, turretsCount, empty)
+    if sample and turretsCount <= 2 and baseScent > 0 then
+        aiBrain.field.observe(map, sample)
+        if universe.colonyMind then aiBrain.field.sampleChunk(map,chunk,sample,possible) end
+    end
 
 	return baseScent
 end

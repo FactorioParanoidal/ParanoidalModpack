@@ -40,6 +40,14 @@ function aiPredicates.isRampantFlyer(name)
     return name:find("%-flyer%-v%d+%-t%d+%-rampant$") ~= nil
 end
 
+-- The credited unit, not its group's rally point or majority, proves a ground contact.
+function aiPredicates.groundMember(surface, squad, unit)
+    if not (unit and unit.valid and unit.type == "unit" and unit.surface == surface)
+        or aiPredicates.isRampantFlyer(unit.name) then return false end
+    local group, commandable = squad.group, unit.commandable
+    return group and group.valid and commandable and commandable.parent_group == group
+end
+
 function aiPredicates.flyerEvolutionAllows(surface)
     return game.forces.enemy.get_evolution_factor(surface) >= aiPredicates.FLYER_MIN_EVOLUTION
 end

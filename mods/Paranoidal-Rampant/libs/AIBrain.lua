@@ -31,6 +31,8 @@ local chunkQueue = require("ChunkQueue")
 local field = require("FieldTactics")
 local fronts = require("FrontTargets")
 aiBrain.field = field
+aiBrain.colony = field.colony
+aiBrain.ordinaryOpportunity = require("MovementUtils").ordinaryOpportunity
 local chunkPropertyUtils = require("ChunkPropertyUtils")
 
 local BASE_DETECTION_PHEROMONE = constants.BASE_DETECTION_PHEROMONE
@@ -54,7 +56,7 @@ local mFloor = math.floor
 local mAbs = math.abs
 local mSqrt = math.sqrt
 
-aiBrain.BEHAVIOR_VERSION = 2
+aiBrain.BEHAVIOR_VERSION = 4
 
 -- optional modules register themselves here (HeavyTactics, FlyerAI)
 aiBrain.heavy = nil
@@ -79,6 +81,7 @@ function aiBrain.refreshSettings(universe)
     universe.heavyAI = globalSetting("rampantFixed--heavyBehavior", true)
     local classic = universe.classicAI
     local heavy = not classic and universe.heavyAI
+    field.colony.configure(universe, globalSetting(field.colony.SETTING, false), globalSetting(field.colony.COMMAND, false))
     if oldClassic ~= classic then
         universe.doctrineEpoch = (universe.doctrineEpoch or 0) + 1
         universe.frontRevision = (universe.frontRevision or 0) + 1
@@ -325,13 +328,21 @@ local function softmaxPick(names, scores, count, temperature, epsilon)
 end
 aiBrain.softmaxPick = softmaxPick
 
--- squad outcome 0..1: kills against the squad size, survival
-local function squadReward(kills, losses, size)
+-- A cheap proxy for damage, not a claim about a factory's actual downtime.
+-- Raw kills still drive bridgeheads, reports, etc. An attributed mission
+-- success earns full yield, but always pays the same casualty cost.
+local killCredits = {
+    container = 0.25, ["transport-belt"] = 0.25, lamp = 0.25, pipe = 0.25,
+    ["assembling-machine"] = 2, ["mining-drill"] = 2, ["train-stop"] = 2,
+    lab = 3, roboport = 3, generator = 3, reactor = 5, ["rocket-silo"] = 6
+}
+local function squadReward(kills, losses, size, credit, objective, assigned)
     local lossRatio = mMin(1, losses / mMax(1, size))
     if kills > 0 then
-        return 0.55 * mMin(1, kills / (3 + size * 0.1)) + 0.45 * (1 - lossRatio), lossRatio
+        local yield = objective and 1 or mMin(assigned and 0.5 or 1, (credit or kills) / (3 + size * 0.1))
+        return 0.55 * yield + 0.45 * (1 - lossRatio), lossRatio, yield
     end
-    return 0.25 * (1 - lossRatio), lossRatio
+    return 0.25 * (1 - lossRatio), lossRatio, 0
 end
 aiBrain.squadReward = squadReward
 
@@ -349,6 +360,7 @@ local function getRegion(ai, x, y)
     local region = ai.regions[key]
     if not region then
         region = {
+            launchFrame = true,
             cx = mFloor(x / REGION_SIZE) * REGION_SIZE + REGION_SIZE * 0.5,
             cy = mFloor(y / REGION_SIZE) * REGION_SIZE + REGION_SIZE * 0.5,
             l = {0, 0, 0, 0, 0, 0, 0, 0},   -- lethality: share of the squad lost
@@ -357,24 +369,42 @@ local function getRegion(ai, x, y)
             dist = nil                      -- typical distance from the nests to the fighting
         }
         ai.regions[key] = region
+    elseif not region.launchFrame then
+        -- Old samples have a known regional reference point but no individual
+        -- launch points. Use them only in that frame, as a weak prior.
+        region.regionalPrior = {l = region.l, y = region.y, n = region.n}
+        region.l, region.y, region.n = {0,0,0,0,0,0,0,0}, {0,0,0,0,0,0,0,0}, {0,0,0,0,0,0,0,0}
+        region.launchFrame = true
     end
     return region, key
 end
 aiBrain.getRegion = getRegion
 
-local function sectorScore(region, sector)
+local function sectorScore(region, sector, chunk)
     if region.n[sector] == 0 then
+        local prior = region.regionalPrior
+        if prior then
+            local dx, dy = chunk.x + 16 - region.cx, chunk.y + 16 - region.cy
+            if dx ~= 0 or dy ~= 0 then
+                local old = sectorOf(dx, dy)
+                if prior.n[old] > 0 then return 0.15 + 0.25 * (prior.y[old] - prior.l[old]) end
+            end
+        end
         return 0.15     -- optimistic: untested approaches are worth a look
     end
     return region.y[sector] - region.l[sector]
 end
 
-local function updateRegion(region, squad, lossRatio, kills, size)
-    local sector = sectorOf(squad.engageX - region.cx, squad.engageY - region.cy)
+local function updateRegion(region, squad, lossRatio, yield)
+    -- pickApproach scores bearings from the launch position, not from the
+    -- region centre. A contact at the origin has no directional evidence.
+    local dx, dy = squad.engageX - squad.originX, squad.engageY - squad.originY
+    if dx == 0 and dy == 0 then return end
+    local sector = sectorOf(dx, dy)
     local n = region.n[sector]
     local alpha = mMax(0.25, 1 / (n + 1))
     region.l[sector] = region.l[sector] + alpha * (lossRatio - region.l[sector])
-    region.y[sector] = region.y[sector] + alpha * (mMin(1, kills / (3 + size * 0.1)) - region.y[sector])
+    region.y[sector] = region.y[sector] + alpha * (yield - region.y[sector])
     region.n[sector] = n + 1
     if squad.originX then
         local d = distance(squad.originX, squad.originY, squad.engageX, squad.engageY)
@@ -405,7 +435,7 @@ function aiBrain.pickApproach(map, chunk, mode, refSector, excludeSector)
     for r = 1, #APPROACH_RADII do
         local d = baseDistance * APPROACH_RADII[r]
         for s = 1, 8 do
-            if s ~= excludeSector then
+            if s ~= excludeSector and (mode ~= "opposite" or (refSector and sectorDistance(s,refSector)>=3)) then
                 local vector = SECTOR_VECTORS[s]
                 local x = mFloor((ox + vector[1] * d) / CHUNK_SIZE) * CHUNK_SIZE
                 local y = mFloor((oy + vector[2] * d) / CHUNK_SIZE) * CHUNK_SIZE
@@ -421,9 +451,9 @@ function aiBrain.pickApproach(map, chunk, mode, refSector, excludeSector)
                             score = danger * 0.1 + mRandom() * 0.05
                         elseif mode == "opposite" then
                             score = -sectorDistance(s, ((refSector or 1) + 3) % 8 + 1) * 0.3
-                                + sectorScore(region, s) * 0.5 - danger * 0.05 + mRandom() * 0.1
+                                + sectorScore(region, s, c) * 0.5 - danger * 0.05 + mRandom() * 0.1
                         else
-                            score = sectorScore(region, s) - danger * 0.08 + mRandom() * 0.1
+                            score = sectorScore(region, s, c) - danger * 0.08 + mRandom() * 0.1
                         end
                         -- prefer the belt 2-5 chunks in front of the turrets
                         if (detection >= MAX_DETECTION * 0.55) and (detection <= MAX_DETECTION * 0.92) then
@@ -520,7 +550,7 @@ local function isShore(map, chunk)
 end
 aiBrain.isShore = isShore
 
-function aiBrain.onPlayerChunkScored(map, chunk, baseValue, turretCount)
+function aiBrain.onPlayerChunkScored(map, chunk, baseValue, turretCount, empty)
     local universe = map.universe
     if not brainActive(universe) then
         return
@@ -553,7 +583,7 @@ function aiBrain.onPlayerChunkScored(map, chunk, baseValue, turretCount)
         end
     end
     if aiBrain.heavy and heavyActive(universe) then
-        aiBrain.heavy.onPlayerChunkScored(map, ai, chunk, turrets, tick)
+        aiBrain.heavy.onPlayerChunkScored(map, ai, chunk, turrets, tick, empty)
     end
 end
 
@@ -953,6 +983,15 @@ local TACTICS = {
 }
 aiBrain.TACTICS = TACTICS
 
+-- Recruitment has already happened at the original cost. No reroll, refill
+-- or refund when an arm cannot perform the job it was gathered for.
+function aiBrain.fitTactic(tactic, spec, found, followUp)
+    if spec and found < (spec.minSize or (followUp and spec.minWave) or 1) then
+        return "assault", TACTICS.assault, true
+    end
+    return tactic, spec, false
+end
+
 -- faction leanings (multiplied by the faction share of the base)
 local FACTION_TACTIC_BONUS = {
     physical = {assault = 0.1, sapper = 0.15},
@@ -1076,8 +1115,10 @@ local function makeGoal(map, squad, chunk, spec, plan, tick, weak)
     local target = spec.target
     if target == "weak" then
         if weak then
-            field.note(map, "ground-selected", tick)
-            return aiBrain.raidGoal(map, weak, tick, true)
+            local row, slot = field.note(map, "ground-selected", tick)
+            local goal = aiBrain.raidGoal(map, weak, tick, true)
+            if row then field.identifyRaid(map,squad,goal,row,slot) end
+            return goal
         end
     elseif target == "strong" then
         local entry = aiBrain.pickStrongTarget(map, ox, oy)
@@ -1110,7 +1151,13 @@ function aiBrain.prepareSquad(map, squad, chunk, tactic, spec, plan, tick, weak)
     squad.originX = chunk.x + 16
     squad.originY = chunk.y + 16
     squad.losses = squad.losses or 0
-    local goal = makeGoal(map, squad, chunk, spec, plan, tick, weak)
+    local goal
+    if plan and plan.waypoint then
+        goal=plan.waypoint
+        goal.kind,goal.reach,squad.goalSector="approach",48,plan.sector
+    else
+        goal=makeGoal(map,squad,chunk,spec,plan,tick,weak)
+    end
     if goal then
         goal.untilTick = goal.untilTick or tick + 5 * 3600
         goal.dash = spec.dash
@@ -1163,6 +1210,19 @@ function aiBrain.scheduleFollowUp(map, chunk, tactic, tick, plan)
     plan.tick = tick + followUp.delayMin + mFloor(mRandom() * (followUp.delayMax - followUp.delayMin))
     plan.expires = plan.tick + 4 * 3600
     ai.followUps[#ai.followUps + 1] = plan
+    return plan
+end
+
+local predicates = require("AIPredicates")
+function aiBrain.feintContact(map,squad,p,cause,force,tick)
+    local plan = squad.feintPlan
+    if not plan or plan.source ~= squad.groupNumber or squad.flight or not squad.support or squad.tactic ~= "feint"
+        or plan.expires <= tick or plan.diplomacy ~= map.universe.frontRevision or (squad.orderEpoch or 0) ~= (map.orderEpoch or 0)
+        or not field.modeCurrent(map,squad) or not cause or not cause.valid or cause.surface ~= map.surface or cause.force.name ~= force
+        or not (cause.type == "character" or cause.type == "car" or cause.type == "spider-vehicle") then return end
+    local q = cause.position
+    if (p.x-plan.x)^2+(p.y-plan.y)^2 <= 64^2 and (q.x-plan.x)^2+(q.y-plan.y)^2 <= 64^2
+        and (p.x-q.x)^2+(p.y-q.y)^2 <= 64^2 and predicates.attackAllowed(map,tick) then plan.response=tick end
 end
 
 -- Finds a due follow-up (drops expired or dead ones); caller confirms execution.
@@ -1175,9 +1235,11 @@ function aiBrain.popDueFollowUp(map, tick)
     local i = 1
     while i <= #list do
         local plan = list[i]
-        if (plan.expires < tick) or (not chunkIsLive(map, plan.chunk)) then
+        local feint = plan.tactic == "feint"
+        if (plan.expires < tick) or (not chunkIsLive(map, plan.chunk))
+            or (feint and (not plan.source or plan.diplomacy ~= map.universe.frontRevision)) then
             table.remove(list, i)
-        elseif plan.tick <= tick then
+        elseif plan.tick <= tick and (not feint or (plan.response and tick-plan.response <= 3600)) then
             return plan, i
         else
             i = i + 1
@@ -1213,10 +1275,17 @@ function aiBrain.onSquadKill(squad, entity)
         squad.engageX = position.x
         squad.engageY = position.y
     end
+    if squad.learn or squad.flight then
+        local value = killCredits[entity.type] or 1
+        -- A squad saved mid-battle has a raw count, not historical type data.
+        squad.killCredit = (squad.killCredit or ((squad.kills or 1) - 1)) + value
+        return value
+    end
 end
 
 -- learning from a finished squad (disbanded, wiped out or merged)
 function aiBrain.onSquadEnd(map, squad, tick)
+    if squad.goal and squad.goal.journalRaid and not squad.goal.issued then field.raidPhase(map,squad,squad.goal,tick,'ended') end
     field.finishRaid(map, squad, "unconfirmed", tick)
     if squad.goal and squad.goal.kind == "objective" then
         field.closeObjective(map, squad.goal, squad.goal.confirmed, tick)
@@ -1239,14 +1308,14 @@ function aiBrain.onSquadEnd(map, squad, tick)
         return      -- never met the player: nothing learned
     end
     local size = mMax(1, squad.startSize or 1)
-    local reward, lossRatio = squadReward(kills, losses, size)
+    local reward, lossRatio, yield = squadReward(kills, losses, size, squad.killCredit, squad.objectiveAchieved, squad.objectiveIssued)
     local ai = getMapAI(map)
     if squad.engageX and squad.originX then
-        updateRegion(getRegion(ai, squad.originX, squad.originY), squad, lossRatio, kills, size)
+        updateRegion(getRegion(ai, squad.originX, squad.originY), squad, lossRatio, yield)
     end
     ai.outcomes = ai.outcomes + 1
-    if squad.support then
-        return      -- probes and feints only teach the approach memory
+    if squad.support or squad.colonyMission then
+        return      -- a redirected mission is not evidence for the ordinary assault tactic
     end
     if squad.tactic then
         updateValue(ai.tactics, squad.tactic, reward, tick)
@@ -1340,7 +1409,9 @@ function aiBrain.report(map)
     local ai = map.ai
     local tick = game.tick
     if not ai then
-        return {"Данных об обучении пока нет"}
+        local lines = {"Данных об обучении пока нет"}
+        field.colony.report(map, lines, tick)
+        return lines
     end
     local lines = {}
     local function records(title, list, names)
@@ -1367,6 +1438,7 @@ function aiBrain.report(map)
     end
     lines[#lines + 1] = "Областей памяти о подходах: " .. regions
     if brainActive(map.universe) then field.report(map, lines) end
+    field.colony.report(map, lines, tick)
     return lines
 end
 

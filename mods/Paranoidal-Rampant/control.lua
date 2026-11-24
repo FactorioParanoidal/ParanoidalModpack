@@ -554,6 +554,7 @@ do
 	end
 end
 local entityIsImmortal = safeRules.entityIsImmortal
+aiBrain.field.isProtected = entityIsImmortal
 
 local function onBuild(event)
     local entity = event.created_entity or event.entity
@@ -572,7 +573,7 @@ local function onBuild(event)
                     entity.destructible = false
                 end
             end
-            if aiBrain.active(universe) then aiBrain.field.observe(map, entity) end
+            if aiBrain.active(universe) then aiBrain.field.observe(map, entity, true) end
         end
     end
 end
@@ -709,15 +710,22 @@ local function onDeath(event)
 						local squad = group and universe.groupNumberToSquad[group.unique_id]
 						if squad and aiBrain.field.modeCurrent(map, squad) then
                             local hostileLoss = universe.activePlayerForceSet and universe.activePlayerForceSet[event.force.name]
+                            if hostileLoss and squad.feintPlan then aiBrain.feintContact(map,squad,entityPosition,cause,event.force.name,tick) end
+                            local adverse
+                            if hostileLoss and universe.colonyMind then
+                                adverse = aiBrain.colony.loss(map, squad, entityPosition, event.force.name, cause, tick, entity)
+                            end
 							if squad.flight then
-								flyerAI.onLoss(map, squad, entity, tick, hostileLoss)
+								flyerAI.onLoss(map, squad, entity, tick, hostileLoss, entityPosition)
                             else
                                 local retreat = aiBrain.onSquadUnitLost(map, squad, entity)
+                                local beatenRaid
                                 if hostileLoss then
                                     local threshold = retreat and squad.startSize * squad.retreatAt or nil
-                                    aiBrain.field.recordRaidLoss(map, squad, threshold, tick)
+                                    beatenRaid = aiBrain.field.recordRaidLoss(map, squad, threshold, tick, entityPosition, entity, event.force.name, aiBrain)
+                                    if adverse then aiBrain.colony.approachLoss(map, squad, entityPosition, event.force.name, adverse, tick, aiBrain.field) end
                                 end
-                                if retreat then squadAttack.retreatSquad(map, squad) end
+                                if retreat then squadAttack.retreatSquad(map, squad, beatenRaid) end
 							end
 						end
 					end
@@ -898,9 +906,12 @@ local function onDeath(event)
 					if squad then
 						squad.kills = (squad.kills or 0) + 1
 						if aiBrain.field.modeCurrent(map, squad) then
-							aiBrain.onSquadKill(squad, entity)
-                            aiBrain.field.confirmObjective(map, squad, entity, tick)
-                            aiBrain.field.recordBreach(map, squad, chunk, tick)
+							local credit = aiBrain.onSquadKill(squad, entity)
+                            local exact = aiBrain.field.confirmObjective(map, squad, entity, tick, credit, entityPosition)
+                            if universe.colonyMind and (exact or (credit and credit >= 2)) then
+                                aiBrain.colony.hit(map, squad, entityPosition, entityForceName, tick, cause, entity)
+                            end
+                            aiBrain.field.recordBreach(map, squad, chunk, tick, cause, entityForceName)
 						end
 					end
 				end
@@ -1143,6 +1154,8 @@ local function onGroupFinishedGathering(event)
 		if squad.learn and (not squad.settlers) and (not squad.undergoundAttack) and aiBrain.active(universe) then
 			flyerAI.splitFlight(map, squad)	-- flyers leave the ground squad and act as a flight of their own
 		end
+        if squad.goal and squad.goal.journalRaid then aiBrain.field.raidPhase(map,squad,squad.goal,game.tick,'gather') end
+        if squad.colonySlot then aiBrain.colony.orders.gathered(map,squad,game.tick,aiBrain) end
 		if squad.flight then
 			-- flights are dispatched at once and never compressed
 		elseif (not squad.undergoundAttack) or squad.hasSpiders then
@@ -1212,6 +1225,7 @@ local function onForceCreated(event)
 end
 
 local function onForceDiplomacyChanged(event)
+    if universe.colonySurface then aiBrain.colony.invalidate(universe,game.tick) end
 	upgrade.rebuildActivePlayerForces(universe)
     universe.frontRevision = (universe.frontRevision or 0) + 1
 	-- local otherForce = event.force
@@ -1242,6 +1256,7 @@ local function onForceDiplomacyChanged(event)
 end 
 
 local function onForceMerged(event)
+    if universe.colonySurface then aiBrain.colony.invalidate(universe,game.tick) end
 	upgrade.rebuildActivePlayerForces(universe)
     universe.frontRevision = (universe.frontRevision or 0) + 1
     -- for i=#universe.activePlayerForces,1,-1 do
@@ -1273,6 +1288,7 @@ local function onSurfaceDeleted(event)
     end
 	
     if universe.processMapAIIterator == surfaceIndex then universe.processMapAIIterator = nil end
+    if universe.colonySurface==surfaceIndex then aiBrain.colony.invalidate(universe,game.tick) end
     local oldMap = universe.maps[surfaceIndex]
     if oldMap then aiBrain.field.forgetMap(oldMap) end
 	universe.maps[surfaceIndex] = nil
@@ -1721,6 +1737,7 @@ script.on_event(defines.events.on_tick,
 					
 					if pick60 == 0 then	
 						processMapAIs(universe, tick)
+                        if universe.colonyMind then aiBrain.colony.step(universe, tick, aiBrain) end
 					end
 					if pick60 == 30 then
 						aiBrain.seedTargets(universe)		-- once per map: targets from the known player chunks
@@ -1949,6 +1966,11 @@ end
 local function onModSettingsChange(event)
 
     if not isRampantSetting(event.setting) then
+        return
+    end
+
+    if event.setting == aiBrain.colony.SETTING or event.setting == aiBrain.colony.COMMAND then
+        aiBrain.colony.configure(universe, settings.global[aiBrain.colony.SETTING].value, settings.global[aiBrain.colony.COMMAND].value)
         return
     end
 

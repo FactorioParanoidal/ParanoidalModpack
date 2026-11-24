@@ -470,17 +470,31 @@ local function formTacticExtras(map, chunk, tick, tactic, firstSquad, squadDirec
 			universe.squadCount = universe.squadCount + 1
 			universe.groupNumberToSquad[squad.groupNumber] = squad
 			squad.startSize = foundUnits
-			aiBrain.prepareSquad(map, squad, chunk, tactic, stage1, {excludeSector = firstSquad.goalSector}, tick)
+            if universe.colonyMind then squad.formationCost = cost end
+            local actual, doctrine = aiBrain.fitTactic(tactic,stage1,foundUnits)
+            aiBrain.prepareSquad(map,squad,chunk,actual,doctrine,{excludeSector=firstSquad.goalSector},tick)
 			aiBrain.describeSquad(map, squad, "extra", foundUnits, squadPosition)
 			printSpending(map, cost, "Squad", squadPosition)
 			squads[#squads + 1] = squad
 		end
 	end
 	if (stage1 and (stage1.approach == "pincer")) and aiBrain.heavy then
-		aiBrain.heavy.preparePincer(map, squads, chunk, tick, weak)
+        if #squads == 2 and squads[2].tactic == "pincer" and weak then
+            aiBrain.heavy.preparePincer(map,squads,chunk,tick,weak)
+        else
+            for _,arm in ipairs(squads) do
+                aiBrain.prepareSquad(map,arm,chunk,"assault",TACTICS.assault,nil,tick)
+            end
+        end
 	end
 	if spec.followUp and firstSquad.goal and firstSquad.goal.kind == "approach" then
-		aiBrain.scheduleFollowUp(map, chunk, tactic, tick, {approach = spec.approach, refSector = firstSquad.goalSector})
+        local plan = {approach=spec.approach,refSector=firstSquad.goalSector}
+        if tactic == "feint" then
+            plan.source, plan.x, plan.y = firstSquad.groupNumber, firstSquad.goal.x, firstSquad.goal.y
+            plan.diplomacy = universe.frontRevision
+        end
+        local queued=aiBrain.scheduleFollowUp(map,chunk,tactic,tick,plan)
+        if tactic == "feint" then firstSquad.feintPlan=queued end
 	end
 	-- flights strike elsewhere while the ground attack is under way
 	local ai = aiBrain.getMapAI(map)
@@ -525,6 +539,12 @@ function aiAttackWave.formSquads(map, chunk, tick, remoteInterfaceParameters, pl
                                                                      map)
         if (squadPath ~= -1) then
 			local squadPosition
+            -- No viable opposite approach: no delayed wave, recruitment or charge.
+            if localAttack and plan and plan.tactic == "feint" then
+                local point,sector=aiBrain.pickApproach(map,chunk,"opposite",plan.refSector)
+                if not point then return false end
+                plan={tactic="feint",waypoint=point,sector=sector}
+            end
             squad, squadPosition = placeSquad(map, chunk, squadDirection)
             if squad then
 				-- tactic (new behaviour only; remote-created squads keep the old one)
@@ -590,12 +610,19 @@ function aiAttackWave.formSquads(map, chunk, tick, remoteInterfaceParameters, pl
 					map.vengenceLimiter = mMax(0, map.vengenceLimiter - 2)
 
 					if tactic then
-						squad.startSize = foundUnits
-						aiBrain.prepareSquad(map, squad, chunk, tactic, spec, plan, tick, weak)
+                        squad.startSize = foundUnits
+                        if universe.colonyMind then squad.formationCost=squadCost end
+                        local actual, doctrine, short = aiBrain.fitTactic(tactic,spec,foundUnits,plan)
+                        local missionPlan = plan
+                        if short then missionPlan=nil end
+                        aiBrain.prepareSquad(map,squad,chunk,actual,doctrine,missionPlan,tick,weak)
+                        if ordinary and universe.colonySurface then
+                            aiBrain.colony.orders.nominate(map,squad,tick,tactic=="assault" and not breach and not squad.undergoundAttack)
+                        end
                         if breach then field.useBreach(map, squad, breach, tick) end
 						aiBrain.describeSquad(map, squad, plan and "follow-up" or nil, foundUnits, squadPosition)
 						if not plan then
-							formTacticExtras(map, chunk, tick, tactic, squad, squadDirection, scaledWaveSize, finalSquadCost, weak)
+							formTacticExtras(map, chunk, tick, actual, squad, squadDirection, scaledWaveSize, finalSquadCost, weak)
 						end
 					end
 					

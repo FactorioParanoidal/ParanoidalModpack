@@ -63,8 +63,8 @@ local function outOfCover(chunk, turrets, share)
 end
 
 -- called while universe.area still holds the scanned chunk
-function heavyTactics.onPlayerChunkScored(map, ai, chunk, turrets, tick)
-    if outOfCover(chunk, turrets, 0.85) then
+function heavyTactics.onPlayerChunkScored(map, ai, chunk, turrets, tick, empty)
+    if not empty and outOfCover(chunk, turrets, 0.85) then
         local count = map.surface.count_entities_filtered(getInfraQuery(map.universe))
         if count >= 4 then
             reservoirOffer(ai.infra, INFRA_SIZE, chunk, count, tick, 0, false)
@@ -108,6 +108,7 @@ function heavyTactics.recordPresence(map, chunk, tick, amount)
 end
 
 local railEvidence = require("RailEvidence")
+local colonyRail = require("ColonyRail")
 local TRAIN_VISITS_PER_SCAN = 80
 -- Same scope as the former periodic query. The engine has no train iterator
 -- or limit; once per map this preserves continuously moving pre-existing trains.
@@ -162,6 +163,10 @@ function heavyTactics.observeTrain(universe, event)
     if event.old_train_id_1 or event.old_train_id_2 then
         index.railRequireMove = index.railRequireMove or {}
         index.railRequireMove[train.id] = true
+    end
+    if universe.colonySurface and event.old_state and universe.colonySurface==map.surface.index
+        and train.state==defines.train_state.wait_station then
+        colonyRail.arrived(map,train,stock,event.tick)
     end
 end
 

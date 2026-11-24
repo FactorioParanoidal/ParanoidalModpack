@@ -92,11 +92,12 @@ local function evolutionAllows(map)
     return aiPredicates.flyerEvolutionAllows(map.surface)
 end
 
-local function countFlights(universe)
+local function countFlights(universe, cap)
     local count = 0
     for _, squad in pairs(universe.groupNumberToSquad) do
         if squad.flight then
             count = count + 1
+            if count==cap then break end -- neither caller needs the excess
         end
     end
     return count
@@ -160,6 +161,7 @@ end
 ----------------------------------------------------------------------------------------------------------------------
 -- commands
 
+local colonyAir = require("ColonyAir")
 local function strike(map, squad, entry, kind, tick)
     local group = squad.group
     local chunk = entry.chunk
@@ -198,16 +200,24 @@ local function strike(map, squad, entry, kind, tick)
         if objective then field.closeObjective(map, objective, false, tick) end
         return false
     end
+    -- At most the initial strike + MAX_HOPS. A legacy flight already in
+    -- progress keeps its single aggregate result until it lands.
+    if not squad.flightKind or squad.flightResults then
+        local legs = squad.flightResults or {}
+        squad.flightResults = legs
+        legs[#legs+1] = {kind = kind, lossBase = squad.losses or 0, assigned = objective ~= nil, kills = 0, credit = 0}
+    end
     field.beginRaid(map, squad, goal, tick)
+    squad.onTheWay = true -- start_moving can raise finished_gathering before it returns
     group.start_moving()
     local position = group.position
     local travel = aiBrain.distance(position.x, position.y, tx, ty) / FLYER_SPEED
     squad.flightPhase = "strike"
     squad.flightKind = squad.flightKind or kind
     squad.strikeUntil = tick + mFloor(travel) + STRIKE_TICKS
-    if objective then squad.strikeUntil = mMin(squad.strikeUntil, objective.untilTick) end
+    if objective then squad.strikeUntil = mMin(squad.strikeUntil, objective.untilTick)
+    elseif map.universe.colonyMind then colonyAir.issued(map,squad,goal,tick) end
     squad.hitChunks[chunk] = true
-    squad.onTheWay = true
     squad.nextCommandTick = tick + 60
     squad.checkTick = squad.strikeUntil + 18000
     aiBrain.debugPrint(map, "Авианалёт (бойцов: " .. tostring(squad.startSize) .. "), " .. chatNames.name(kind) .. ": удар [gps=" .. tx .. "," .. ty
@@ -304,9 +314,12 @@ function flyerAI.splitFlight(map, squad)
     if not flyersExist() or not evolutionAllows(map) then
         return
     end
-    if countFlights(universe) >= flightCap(universe) then
-        return
-    end
+    local cap=flightCap(universe)
+    -- Don't fetch a potentially huge recursive members array at a full cap.
+    -- Small paid assaults already have to classify their members when a slot
+    -- is free; postpone the global count until they actually have a split.
+    local small=squad.startSize and squad.startSize<=8
+    if not small and countFlights(universe,cap)>=cap then return end
     local group = squad.group
     local members = group.members
     local champions = championUnits(universe)
@@ -321,6 +334,7 @@ function flyerAI.splitFlight(map, squad)
         end
     end
     if count == 0 or (count < MIN_SPLIT_SIZE and count < #members) then return end
+    if small and countFlights(universe,cap)>=cap then return end
     local tick = game.tick
     local ai = aiBrain.getMapAI(map)
     local origin = flyers[1].position
@@ -381,10 +395,9 @@ end
 local function tryLaunch(map, tick)
     local universe = map.universe
     local ai = aiBrain.getMapAI(map)
-    if ai.nextFlightTick > tick then
-        return
-    end
+    local due=ai.nextFlightTick
     ai.nextFlightTick = tick + 600
+    if not due then return end -- no legacy due time: seed the normal clock, not a launch
     if (not map.frontTargets) or (map.points < FLIGHT_COST) or (not evolutionAllows(map)) or (not canAttack(map, tick)) then
         return
     end
@@ -441,12 +454,18 @@ function flyerAI.plan(universe, tick)
     if not aiBrain.active(universe) or not flyersExist() then
         return
     end
-    local slots = flightCap(universe) - countFlights(universe)
-    if slots <= 0 then return end
+    local slots
     for _, map in pairs(universe.maps) do
-        if map and not map.suspended and map.surface and map.surface.valid and map.ai and tryLaunch(map, tick) then
-            slots = slots - 1
-            if slots <= 0 then return end
+        if map and not map.suspended and map.surface and map.surface.valid and map.ai and (map.ai.nextFlightTick or 0)<=tick then
+            if not slots then
+                local cap=flightCap(universe)
+                slots=cap-countFlights(universe,cap)
+                if slots<=0 then return end
+            end
+            if tryLaunch(map,tick) then
+                slots=slots-1
+                if slots<=0 then return end
+            end
         end
     end
 end
@@ -486,14 +505,14 @@ function flyerAI.onStrikeTimeout(map, squad)
 end
 
 -- a flyer of the flight was killed by the player
-function flyerAI.onLoss(map, squad, entity, tick, hostileLoss)
+function flyerAI.onLoss(map, squad, entity, tick, hostileLoss, position)
     squad.losses = (squad.losses or 0) + 1
     if not squad.engageX then
-        local position = entity.position
+        position = position or entity.position
         squad.engageX = position.x
         squad.engageY = position.y
     end
-    if hostileLoss then field.recordRaidLoss(map, squad, squad.startSize * FLEE_LOSSES, tick) end
+    if hostileLoss then field.recordRaidLoss(map, squad, squad.startSize * FLEE_LOSSES, tick, position or entity.position) end
     if (squad.flightPhase == "strike") and (squad.losses >= squad.startSize * FLEE_LOSSES)
         and squad.group and squad.group.valid then
         aiBrain.debugPrint(map, "Авианалёт прекращает атаку; потери: " .. squad.losses .. "/" .. squad.startSize)
@@ -507,12 +526,32 @@ function flyerAI.onFlightEnd(map, squad, tick)
         return
     end
     squad.learned = true
+    if squad.flightResults then
+        local ai = aiBrain.getMapAI(map)
+        for i, leg in ipairs(squad.flightResults) do
+            local nextLeg = squad.flightResults[i+1]
+            local losses = (nextLeg and nextLeg.lossBase or squad.losses or 0) - leg.lossBase
+            if losses > 0 or leg.kills > 0 then
+                -- Transit/escape casualties cost the operation, even when they
+                -- do not say anything about the defence of the target chunk.
+                local size = mMax(1, squad.startSize - leg.lossBase)
+                local reward = aiBrain.squadReward(leg.kills, losses, size, leg.credit, leg.objective, leg.assigned)
+                aiBrain.updateValue(ai.flight, leg.kind, reward, tick)
+                if map.universe.printAIStateChanges then
+                    aiBrain.debugPrint(map, string.format("Цель авианалёта «%s»: уничтожено у цели %d, потеряно %d, результат %.2f",
+                        chatNames.name(leg.kind), leg.kills, losses, reward))
+                end
+            end
+        end
+        return
+    end
+    -- A flight already in the air in an older save has no per-leg evidence.
     local kills = squad.kills or 0
     local losses = squad.losses or 0
     if (kills == 0) and (losses == 0) then
         return
     end
-    local reward = aiBrain.squadReward(kills, losses, mMax(1, squad.startSize or 1))
+    local reward = aiBrain.squadReward(kills, losses, mMax(1, squad.startSize or 1), squad.killCredit, squad.objectiveAchieved, squad.objectiveIssued)
     local ai = aiBrain.getMapAI(map)
     aiBrain.updateValue(ai.flight, squad.flightKind, reward, tick)
     aiBrain.debugPrint(map, string.format("Авианалёт «%s» завершён: уничтожено %d, потеряно %d, результат %.2f", chatNames.name(squad.flightKind), kills, losses, reward))

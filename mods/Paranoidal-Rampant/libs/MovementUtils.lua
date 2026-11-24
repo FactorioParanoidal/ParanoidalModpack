@@ -10,6 +10,7 @@ local mapUtils = require("MapUtils")
 local mathUtils = require("MathUtils")
 local pheromoneUtils = require("PheromoneUtils")
 local field = require("FieldTactics")
+local attackScores = require("ScoreChunks")
 
 local BASE_DETECTION_PHEROMONE = constants.BASE_DETECTION_PHEROMONE
 
@@ -166,12 +167,12 @@ local function bestNeighbor(map, chunk, neighbors, scoreFunction, validFunction,
 end
 
 -- Second step from fromChunk (never back to excludeChunk); it must score above threshold.
-local function bestNextStep(map, fromChunk, excludeChunk, scoreFunction, threshold, defaultDirection, fieldSquad, tick)
+local function bestNextStep(map, fromChunk, excludeChunk, scoreFunction, threshold, defaultDirection, fieldSquad, tick, private)
     local nextChunk = -1
     local nextScore = threshold
     local nextDirection = defaultDirection
     if (fromChunk ~= -1) then
-        local neighbors = getNeighborChunks(map, fromChunk.x, fromChunk.y)
+        local neighbors = getNeighborChunks(map, fromChunk.x, fromChunk.y, private)
         for x=1,8 do
             local neighborChunk = neighbors[x]
             if (neighborChunk ~= -1) and (neighborChunk ~= excludeChunk) and
@@ -188,6 +189,49 @@ local function bestNextStep(map, fromChunk, excludeChunk, scoreFunction, thresho
         end
     end
     return nextChunk, nextDirection
+end
+
+-- At gathering there is no ordinary destination yet. Bound the opportunity
+-- on its next movement command, not its lifetime yield. Read cached scents
+-- only: never roll noisyPick, refresh pheromones or use shared neighbor arrays.
+function movementUtils.ordinaryOpportunity(map, squad, tick, project)
+    local x,y = mapUtils.positionToChunkXY(squad.group.position)
+    local c = mapUtils.getChunkByXY(map,x,y)
+    if c == -1 then return "unknown" end
+    local bases = map.chunkToPlayerBase
+    if (bases[c] or 0)~=0 then return "local", c.x, c.y end
+    if c[constants.PLAYER_PHEROMONE] == 0 and c[BASE_DETECTION_PHEROMONE] == 0 then return "idle" end
+    local score = squad.kamikaze and attackScores.scoreAttackKamikazeLocation or attackScores.scoreAttackLocation
+    local near, scores = getNeighborChunks(map,x,y,true), {}
+    local best, high
+    for i=1,8 do
+        local a=near[i]
+        if a ~= -1 and canMoveChunkDirection(map,i,c,a) then
+            local v=field.edgeScore(map,squad,c,a,score(map,a),tick)
+            scores[i]=v
+            if not best or v>high then best,high=i,v end
+        end
+    end
+    -- The native selector may rescore a local maximum. Do not perform that
+    -- write for an estimate, or interpret an unknown continuation as empty.
+    if not best or score(map,c)>=high then return "unknown" end
+    local band, branches, endpoint = mAbs(high)*NOISE_BAND, 0, nil
+    for i=1,8 do
+        local v,a=scores[i],near[i]
+        if i==best or (v and squad.noise and squad.noise>0 and a~=squad.prevAttackChunk
+            and (v>high-band or (band==0 and v==high))) then
+            branches=branches+1
+            if branches>3 then return "unknown" end -- at most 8 + 3*8 neighbor slots for the entire comparison
+            if (bases[a] or 0)~=0 then return "local", a.x, a.y end
+            local b=bestNextStep(map,a,c,score,v,nil,squad,tick,true)
+            if b~=-1 and (bases[b] or 0)~=0 then return "local", b.x, b.y end
+            if project then endpoint = b~=-1 and b or a end
+        end
+    end
+    -- No extra scoring, path queries or random tie-breaks. If different
+    -- first steps are possible, the nominated squad has no single forecast.
+    if endpoint and branches==1 then return "move",nil,nil,endpoint.x,endpoint.y end
+    return "move"
 end
 
 --[[

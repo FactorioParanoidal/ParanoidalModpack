@@ -15,6 +15,7 @@ local scoreChunks = require("ScoreChunks")
 local squadCompression = require("SquadCompression")
 local aiBrain = require("AIBrain")
 local field = aiBrain.field
+local colonyOutcome = require("ColonyOutcome")
 local attackAllowed = require("AIPredicates").attackAllowed
 local unitUtils = require("UnitUtils")
 local foreignEnemies = require("ForeignEnemies")
@@ -448,15 +449,58 @@ local function setMoveCommand(universe, group, squad, quiet)
 		cmd.commands[2].distraction = DEFINES_DISTRACTION_BY_DAMAGE
 	end
 	group.set_command(cmd)
-	if group.valid then	-- the engine drops an emptied group on a new command
-		group.start_moving()
-	end
 end
 
+-- start_moving can synchronously raise finished_gathering. Publish the
+-- dispatch before that callback; do not overwrite a recall on return.
 local function commandIssued(squad, tick)
 	squad.nextCommandTick = tick + 60
 	squad.checkTick = tick + 18000	-- some groups get stuck
 	squad.onTheWay = true
+end
+
+local route = require('ColonyRoute')
+
+local function dispatchGoalStep(map,squad,group,chunk,position,goal,tick)
+    local u=map.universe
+    u.position.x,u.position.y=position.x,position.y
+    if chunk~=-1 and chunk[BASE_DETECTION_PHEROMONE] < MAX_BASE_DETECTION_PHEROMONES_IN_CHUNK*0.1
+        and chunk[PLAYER_PHEROMONE] < PLAYER_PHEROMONE_GENERATOR_AMOUNT*0.02 then
+        applySpeedBuffToGroup(map,squad,group)
+    end
+    setMoveCommand(u,group,squad,goal.dash)
+    commandIssued(squad,tick)
+    if group.valid then
+        if goal.journalRaid then field.raidPhase(map,squad,goal,tick,'move') end
+        if goal.colonyRecord then goal.dispatched=true end
+        if u.colonyMind and goal.kind=='objective' and not goal.issued then goal.walker,goal.walkEpoch=squad.groupNumber,u.colonyEpoch end
+        if goal.colonyRecord or goal.walker then
+            goal.moveX,goal.moveY,goal.moveDistraction=position.x,position.y,u.compoundMoveCommand.commands[2].distraction
+        end
+        group.start_moving()
+    end
+    return true
+end
+
+-- Revoking a live mission must also replace the engine command. Do not
+-- interrupt an unrelated ordinary command or recycle the paid group.
+function field.colony.orders.recall(squad,goal,tick)
+    if squad.goal~=goal then return end
+    squad.goal=nil
+    if squad.localRaid and squad.localRaid.goal==goal then squad.localRaid=nil end
+    local group=squad.group
+    if not group.valid or not (goal.dispatched or goal.issued) then return end
+    local cmd=group.command
+    if not cmd then return end
+    if goal.issued then
+        if cmd.type~=defines.command.attack or cmd.target~=goal.entity then return end
+    else
+        -- The logical ticket can outlive its engine move. Match the last
+        -- dispatched waypoint, not the building or a mutable shared position.
+        if not route.ownsMove(cmd,goal) then return end
+    end
+    group.set_command{type=defines.command.stop,ticks_to_wait=1,distraction=DEFINES_DISTRACTION_NONE}
+    squad.nextCommandTick=tick+1
 end
 
 -- Moves a squad towards squad.goal. Returns false when the goal is reached or dropped
@@ -479,20 +523,33 @@ local function goalMove(map, squad, group, chunk, groupPosition)
             end
             return true
         end
-    elseif goal.fieldChunk and not field.strikeStillUseful(map, goal.fieldChunk) then
+    elseif goal.fieldChunk and not field.strikeStillUseful(map, goal.fieldChunk, goal.breach) then
         squad.goal = nil
         return false
     end
 	if goal.untilTick < tick then
+        if goal.journalRaid then field.raidPhase(map,squad,goal,tick,'expired') end
 		squad.goal = nil
 		return false
 	end
+    if goal.colonyPath then
+        local via=route.current(map,goal,tick,aiBrain) and route.waypoint(goal.colonyPath,groupPosition)
+        if via then
+            local pos=findMovementPosition(map.surface,via)
+            if pos and math.floor(pos.x/32)==math.floor(via.x/32) and math.floor(pos.y/32)==math.floor(via.y/32) then
+                return dispatchGoalStep(map,squad,group,chunk,pos,goal,tick)
+            end
+            via=false
+        end
+        if via==false then field.colony.orders.routeLost(map,goal,tick);return false end
+    end
 	local dx = goal.x - groupPosition.x
 	local dy = goal.y - groupPosition.y
 	local distance = mSqrt(dx * dx + dy * dy)
 	local kind = goal.kind
 	if distance <= goal.reach then
         if not aiBrain.recheckRaid(map, goal) then
+            if goal.journalRaid then field.raidPhase(map,squad,goal,tick,'recheck') end
             field.finishRaid(map, squad, "unconfirmed", tick)
             if kind == "objective" then field.closeObjective(map, goal, false, tick) end
             if not goal.issued and squad.tactic == "raider" then squad.tactic = "assault" end
@@ -501,12 +558,12 @@ local function goalMove(map, squad, group, chunk, groupPosition)
         end
         if kind == "objective" then
             group.set_command({type = defines.command.attack, target = goal.entity, distraction = DEFINES_DISTRACTION_NONE})
+            commandIssued(squad, tick)
             if group.valid then
                 field.beginRaid(map, squad, goal, tick)
                 if map.ai then map.ai.lastTactic = squad.tactic end
                 group.start_moving()
             end
-            commandIssued(squad, tick)
             return true
         elseif kind == "strike" then
 			-- hit the target area itself
@@ -520,6 +577,7 @@ local function goalMove(map, squad, group, chunk, groupPosition)
 				squad.frenzyPosition.y = groupPosition.y
 			end
 			group.set_command(universe.compoundAttackCommand)
+			commandIssued(squad, tick)
 			if group.valid then
                 if not squad.external then
                     field.beginRaid(map, squad, goal, tick)
@@ -527,7 +585,6 @@ local function goalMove(map, squad, group, chunk, groupPosition)
                 end
 				group.start_moving()
 			end
-			commandIssued(squad, tick)
 			return true
 		elseif kind == "ambush" then
 			-- wait for the player or a train to come by
@@ -586,21 +643,14 @@ local function goalMove(map, squad, group, chunk, groupPosition)
             squad.nextCommandTick = tick + 60
             return true -- consider an alternative on the next dispatch, never in this tick
         end
+        if goal.journalRaid then field.raidPhase(map,squad,goal,tick,'no-step') end
         field.finishRaid(map, squad, "unconfirmed", tick)
         if goal.kind == "objective" then field.closeObjective(map, goal, false, tick) end
         if not goal.issued and squad.tactic == "raider" then squad.tactic = "assault" end
 		squad.goal = nil
 		return false
 	end
-	targetPosition.x = position.x
-	targetPosition.y = position.y
-	if (chunk ~= -1) and (chunk[BASE_DETECTION_PHEROMONE] < (MAX_BASE_DETECTION_PHEROMONES_IN_CHUNK*0.1))
-		and (chunk[PLAYER_PHEROMONE] < (PLAYER_PHEROMONE_GENERATOR_AMOUNT*0.02)) then
-		applySpeedBuffToGroup(map, squad, group)
-	end
-	setMoveCommand(universe, group, squad, goal.dash)
-	commandIssued(squad, tick)
-	return true
+	return dispatchGoalStep(map,squad,group,chunk,position,goal,tick)
 end
 
 local function scoreRetreatLocation(map, neighborChunk)
@@ -611,7 +661,7 @@ local function scoreRetreatLocation(map, neighborChunk)
 end
 
 -- Pulls a beaten squad two chunks back from the fight; after a short pause it regroups (squadDispatch).
-function squadAttack.retreatSquad(map, squad)
+function squadAttack.retreatSquad(map, squad, beatenRaid)
 	local group = squad.group
 	if not (group and group.valid) then
 		return false
@@ -642,11 +692,15 @@ function squadAttack.retreatSquad(map, squad)
 	squad.status = SQUAD_RETREATING
 	squad.regroup = true
 	squad.frenzy = false
-    field.finishRaid(map, squad, "unconfirmed", game.tick)
+    -- Only now has the ordinary retreat found an exit. A failed attempt
+    -- must leave the still-fighting exact raid open, including for a win.
+    local withdrawing = squad.goal
+    field.finishRaid(map, squad, beatenRaid and beatenRaid == squad.localRaid and "repelled" or "unconfirmed", game.tick)
     if squad.goal and squad.goal.kind == "objective" then
         field.closeObjective(map, squad.goal, false, game.tick)
     end
 	squad.goal = nil
+    if not group.valid then return false end -- a recalled, empty group may no longer exist
 	group.set_command({
 		type = defines.command.compound,
 		structure_type = defines.compound_command.return_last,
@@ -657,6 +711,7 @@ function squadAttack.retreatSquad(map, squad)
 		}
 	})
 	commandIssued(squad, game.tick)
+    if withdrawing and withdrawing.journalRaid and not withdrawing.issued then field.raidPhase(map,squad,withdrawing,game.tick,'retreat') end
 	aiBrain.debugPrint(map, tostring(squad.tactic) .. " squad retreats after losing " .. tostring(squad.losses) .. "/"
 		.. tostring(squad.startSize) .. " [gps=" .. math.floor(groupPosition.x) .. "," .. math.floor(groupPosition.y) .. "," .. map.surface.name .. "]")
 	return true
@@ -722,6 +777,16 @@ local function attackMove(map, squad)
             squad.disbandTick = game.tick
         end
         return
+    end
+    -- A recommendation and a live engine order are distinct. Before any
+    -- new approach/attack, revalidate its owner, epoch and protected target.
+    local g = squad.goal
+    if g and g.colonyRecord and not g.confirmed and (not field.colony.orders.owner(map,squad,g,game.tick)
+        or not field.colonyTargetLive(map,g)) then
+        field.finishRaid(map,squad,"unconfirmed",game.tick)
+        field.closeObjective(map,g,false,game.tick)
+        squad.goal=nil
+        if not group.valid then return end
     end
     local doctrine = aiBrain.TACTICS[squad.tactic]
     if not externalGoal and (not brainOn or (squad.learn and (squad.orderEpoch or 0) ~= (map.orderEpoch or 0))
@@ -861,6 +926,7 @@ local function attackMove(map, squad)
 		if not group.valid then
 			return	-- the engine dropped the emptied group: processSquads disbands the squad
 		end
+		commandIssued(squad, game.tick)
 		group.start_moving()
 		if squad.hasSpiders then	-- spider ignore group attack
 			for _, entity in pairs(group.members) do
@@ -882,9 +948,11 @@ local function attackMove(map, squad)
 		if not group.valid then
 			return
 		end
+		commandIssued(squad, game.tick)
 		group.start_moving()
 	elseif cmd_type == "wander" then
-		group.set_command(universe.wonderCommand)	
+		group.set_command(universe.wonderCommand)
+		commandIssued(squad, game.tick)
 	end
 	
     if brainOn and squad.tactic and map.ai and group.valid then map.ai.lastTactic = squad.tactic end
@@ -906,9 +974,6 @@ local function attackMove(map, squad)
 	-- squad.debugPath[#squad.debugPath+1] = rendering.draw_text{text = (tostring((#squad.debugPath+1)*0.5).."("..targetPosition.x..","..targetPosition.y..")"), surface = group.surface, target = targetPosition, color = lineColor, scale = 3}	
 	-- DEBUG
 	
-	squad.nextCommandTick = game.tick + 60	
- 	squad.checkTick = game.tick + 18000	-- some groups get stuck 
-	squad.onTheWay = true
 end
 
 local function buildMove(map, squad)
@@ -985,14 +1050,23 @@ local function regroupSquad(map, squad)
 	if partner then
 		local members = group.members
 		local partnerGroup = partner.group
-		local moved = 0
+		local record = (partner.colonySlot or partner.colonyMission) and field.colony.orders.regroupRecord(map, partner, game.tick)
+		local moved, joined = 0, 0
 		for i = 1, #members do
 			local member = members[i]
 			if member.valid then
 				partnerGroup.add_member(member)
 				moved = moved + 1
+				if record then
+					local cmd = member.valid and member.commandable
+					if cmd and cmd.parent_group == partnerGroup then
+						local pack = universe.compressedUnits[member.unit_number]
+						joined = joined + (pack and pack.count or 1)
+					end
+				end
 			end
 		end
+		if joined > 0 then colonyOutcome.reinforce(record, squad, joined) end
 		if partner.startSize then
 			partner.startSize = partner.startSize + moved
 		end
