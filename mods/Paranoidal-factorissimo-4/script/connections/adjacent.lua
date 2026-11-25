@@ -1,5 +1,10 @@
 local Adjacent = {}
 
+-- Revalidate at each use: earlier callbacks may have changed a saved search result.
+function Adjacent.factory_from_hull(entity)
+    if entity and entity.valid then return storage.factories_by_entity[entity.unit_number] end
+end
+
 local abs = math.abs
 local function same_position(a, b)
     return abs(a - b) < 0.000001
@@ -32,9 +37,8 @@ function Adjacent.neighbor_boxes(factory, bounds)
     }
     if #buildings >= limit then return end
     local boxes = {}
-    local by_entity = storage.factories_by_entity
     for _, building in pairs(buildings) do
-        local other = by_entity[building.unit_number]
+        local other = Adjacent.factory_from_hull(building)
         if other and other ~= factory then boxes[#boxes + 1] = building.bounding_box end
     end
     return boxes
@@ -55,13 +59,12 @@ function Adjacent.find(factory, cpos, boxes)
         -- A positive result still uses the old point search, including its ordering at a shared port.
         if not possible then return end
     end
-    local by_entity = storage.factories_by_entity
     for _, building in pairs(surface.find_entities_filtered {
         position = {x, y},
         type = BUILDING_TYPE,
         force = factory.force
     }) do
-        local other = by_entity[building.unit_number]
+        local other = Adjacent.factory_from_hull(building)
         if other and other ~= factory and other.layout then
             for cid, opos in pairs(other.layout.connections) do
                 if Adjacent.matches(factory, cpos, other, opos) then
@@ -76,17 +79,21 @@ function Adjacent.neighbor_buildings(factory)
     local surface = factory.outside_surface
     if not (surface and surface.valid) then return end
     local radius = factory.layout.outside_size / 2 + 0.3
-    return surface.find_entities_filtered {
+    local hulls = {}
+    for _, building in pairs(surface.find_entities_filtered {
         area = {{factory.outside_x - radius, factory.outside_y - radius},
             {factory.outside_x + radius, factory.outside_y + radius}},
         type = BUILDING_TYPE,
         force = factory.force
-    }
+    }) do
+        if Adjacent.factory_from_hull(building) then hulls[#hulls + 1] = building end
+    end
+    return hulls
 end
 
 function Adjacent.recheck_neighbors(factory, neighbors)
     for _, building in pairs(neighbors or Adjacent.neighbor_buildings(factory) or {}) do
-        local other = storage.factories_by_entity[building.unit_number]
+        local other = Adjacent.factory_from_hull(building)
         if other and other ~= factory and other.built then
             factorissimo.recheck_factory_connections(other, nil, nil, true)
         end

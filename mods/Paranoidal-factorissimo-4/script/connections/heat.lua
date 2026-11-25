@@ -101,9 +101,9 @@ end
 -- Moves both ends to a common temperature while conserving heat energy: heat pipes of different
 -- prototypes can store different energy per degree.
 Heat.tick = function(conn)
+    if not Heat.recheck(conn) then return false end
     local outside = conn.outside
     local inside = conn.inside
-    if not outside.valid or not inside.valid then return false end
 
     local delay = conn._settings.delay or DEFAULT_DELAY
     local temp_1, temp_2 = outside.temperature, inside.temperature

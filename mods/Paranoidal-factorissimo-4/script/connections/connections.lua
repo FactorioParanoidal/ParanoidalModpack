@@ -42,6 +42,7 @@ local function register_connection_type(ctype, class)
 end
 
 local function is_connectable(entity)
+    if not (entity and entity.valid) then return end
     local ctype = type_map[entity.type] or type_map[entity.name]
     if ctype == "fluid" and fluid_terminal_names[entity.name] then return end
     return ctype
@@ -416,15 +417,15 @@ end
 
 -- When a connection piece is placed or destroyed, check if can be connected to a factory building
 local function recheck_nearby_connections(entity, delayed, old_position, old_surface)
+    if not (entity and entity.valid) then return end
     local surface = old_surface or entity.surface
     if not (surface and surface.valid) then return end
     -- The entity's bounding box already respects its direction; expand it to whole tiles,
     -- plus a margin that reaches the factory buildings (their collision box ends 0.2 tiles inside the tile).
-    local box = entity.bounding_box
+    local box, position = entity.bounding_box, entity.position
     local left_top, right_bottom = box.left_top, box.right_bottom
     if old_position then
         -- A move can rotate a rectangle too; the enclosing square covers both orientations at the old place.
-        local position = entity.position
         local radius = max(position.x - left_top.x, right_bottom.x - position.x,
             position.y - left_top.y, right_bottom.y - position.y)
         left_top = {x = old_position.x - radius, y = old_position.y - radius}
@@ -435,9 +436,10 @@ local function recheck_nearby_connections(entity, delayed, old_position, old_sur
         right_bottom = {x = ceil(right_bottom.x) + 0.3, y = ceil(right_bottom.y) + 0.3}
     }
 
-    local by_entity = storage.factories_by_entity
-    for _, building in pairs(surface.find_entities_filtered {area = area, type = BUILDING_TYPE}) do
-        local factory = by_entity[building.unit_number]
+    local nearby = surface.find_entities_filtered {area = area, type = BUILDING_TYPE}
+    for _, building in pairs(nearby) do
+        -- Rechecking a port can destroy a passive terminal in this same storage-tank snapshot.
+        local factory = Adjacent.factory_from_hull(building)
         if factory and factory.built then
             if delayed then
                 recheck_factory_connections_delayed(factory, area, nil)
@@ -447,7 +449,7 @@ local function recheck_nearby_connections(entity, delayed, old_position, old_sur
         end
     end
 
-    local factory = find_surrounding_factory(surface, old_position or entity.position)
+    local factory = surface.valid and find_surrounding_factory(surface, old_position or position)
     if factory then
         if delayed then
             recheck_factory_connections_delayed(factory, nil, area)
@@ -458,7 +460,7 @@ local function recheck_nearby_connections(entity, delayed, old_position, old_sur
 end
 
 function factorissimo.connection_entity_moved(entity, old_position, old_surface)
-    if not (entity and entity.valid and is_connectable(entity)) then return end
+    if not is_connectable(entity) then return end
     recheck_nearby_connections(entity, false, old_position, old_surface)
     recheck_nearby_connections(entity)
 end
@@ -622,14 +624,14 @@ end, connection_filters)
 
 factorissimo.on_event(factorissimo.events.on_destroyed(), function(event)
     local entity = event.entity
-    if entity.valid and is_connectable(entity) then
+    if is_connectable(entity) then
         recheck_nearby_connections(entity, true) -- Delay
     end
 end, connection_filters)
 
 factorissimo.on_event(factorissimo.events.on_built(), function(event)
     local entity = event.entity
-    if not entity.valid or not is_connectable(entity) then return end
+    if not is_connectable(entity) then return end
 
     if entity.name == "factory-circuit-connector" then
         entity.operable = false
@@ -640,7 +642,7 @@ end, connection_filters)
 
 factorissimo.on_event(defines.events.on_player_flipped_entity, function(event)
     local entity = event.entity
-    if not connection_indicator_names[entity.name] then return end
+    if not (entity and entity.valid and connection_indicator_names[entity.name]) then return end
     entity.mirroring = false
     local factory = find_surrounding_factory(entity.surface, entity.position)
     if factory then rotate(factory, entity) end
@@ -648,6 +650,7 @@ end)
 
 factorissimo.on_event(defines.events.on_player_rotated_entity, function(event)
     local entity = event.entity
+    if not (entity and entity.valid) then return end
     if connection_indicator_names[entity.name] then
         entity.direction = event.previous_direction
     elseif is_connectable(entity) then

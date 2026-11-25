@@ -96,7 +96,7 @@ end
 local function add(factory, state, changed, neighbors)
     if not live(factory) then return end
     for _, building in pairs(neighbors or Adjacent.neighbor_buildings(factory) or {}) do
-        local other = storage.factories_by_entity[building.unit_number]
+        local other = Adjacent.factory_from_hull(building)
         if other ~= factory and live(other) then
             -- Only ports on the opposing wall can match. Keep their original traversal order.
             local walls = {}
