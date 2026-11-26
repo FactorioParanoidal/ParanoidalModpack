@@ -12,7 +12,9 @@ Version: 0.6.6
     - Paranoidal fork: a dying reactor no longer creates a "nuke-explosion" (sight and sound without damage); real meltdowns come from the reactor prototypes
   Optimizations:
     - Read temperature and aux together when choosing worms for a scripted attack.
+    - Keep an existing speech bubble when the text is unchanged.
   Bugfixes:
+    - Remove expired speech bubbles from the registry; nest placement searches within 64 tiles and falls back to the original origin if needed.
     - CallFrenzyAttack checks for enemy nests when a different force's spawner is found first, so Rampant can handle or refuse the attack.
     - Paranoidal fork: CallFrenzyAttack no longer reads an invalid target entity
     - Paranoidal fork: get_pos_near_from_aproach returns the point at the given distance on the straight line to the approaching position (used pos.x for y and offset both axes, a diagonal 1.41 times longer, out of the boss spidertron and flying saucer weapon range)

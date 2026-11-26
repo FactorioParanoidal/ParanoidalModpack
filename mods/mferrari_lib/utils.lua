@@ -311,8 +311,8 @@ function get_pos_near_enemy_nest(surface,spawn,pforce)
 		local f = enemy.force
 		local nests = surface.find_entities_filtered{type='unit-spawner', position=enemy.position, radius=300, force=f, limit=5}
 		if #nests>0 then 
-			spawn = get_random_pos_near(nests[math.random(#nests)].position,30)
-			spawn = surface.find_non_colliding_position('assembling-machine-1', spawn, 0, 1)
+			local near_nest = get_random_pos_near(nests[math.random(#nests)].position,30)
+			spawn = surface.find_non_colliding_position('assembling-machine-1', near_nest, 64, 1) or spawn
 			end
 		end
 return spawn 
