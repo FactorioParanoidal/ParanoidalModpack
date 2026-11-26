@@ -215,12 +215,33 @@ local function run_refresh(pending)
       end
     end
   end
+  -- Connectivity cannot change during this draw-only pass. Keep the original viewer and entity
+  -- order, but let system viewers share one lazy snapshot per entity. Overlay viewers don't use it.
+  local get_segments, first_system_viewer
+  for _, V in pairs(storage.viewers) do
+    if V.mode == "systems" then
+      if first_system_viewer then
+        local by_unit = {}
+        get_segments = function(entity, unit)
+          local entry = by_unit[unit]
+          if not entry then
+            entry = {{}, {}}
+            core.collect_segments(entity, entry[1], entry[2])
+            by_unit[unit] = entry
+          end
+          return entry[1], entry[2]
+        end
+        break
+      end
+      first_system_viewer = true
+    end
+  end
   for _, V in pairs(storage.viewers) do
     if V.mode then
       for i = 1, #list do
         local entity = list[i]
         if entity.valid and protos.info(entity.name) then
-          core.refresh(V, entity)
+          core.refresh(V, entity, get_segments)
         end
       end
     end

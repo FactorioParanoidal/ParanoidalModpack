@@ -250,29 +250,6 @@ local function reset_queue(V)
   V.qe, V.qu, V.qfirst, V.qlast, V.queued, V.redraw = {}, {}, 1, 0, {}, {}
 end
 
---- Removes everything drawn for the viewer, including the overlay.
---- @param V PvViewer
-function core.clear_all(V)
-  for _, rec in pairs(V.entities) do
-    destroy_objects(rec)
-  end
-  V.entities = {}
-  V.systems = {}
-  V.next_color = 0
-  reset_queue(V)
-  local O = V.overlay
-  if O then
-    O.background.destroy()
-    if O.map_background then
-      O.map_background.destroy()
-    end
-    V.overlay = nil
-  end
-  storage.active[V.index] = nil
-  set_mode(V, nil)
-  notify()
-end
-
 --- Forgets the state without destroying render objects (after rendering.clear).
 --- @param V PvViewer
 function core.forget_all(V)
@@ -282,6 +259,38 @@ function core.forget_all(V)
   V.overlay = nil
   V.mode = nil
   reset_queue(V)
+end
+
+--- The mod-wide engine clear is safe only when this viewer owns every drawing.
+local function can_clear_in_bulk(V)
+  for _, other in pairs(storage.viewers) do
+    if other ~= V and (other.overlay or next(other.entities)) then
+      return false
+    end
+  end
+  return true
+end
+
+--- Removes everything drawn for the viewer, including the overlay.
+--- @param V PvViewer
+function core.clear_all(V)
+  local O = V.overlay
+  if O or next(V.entities) then
+    if can_clear_in_bulk(V) then
+      rendering.clear(script.mod_name)
+    else
+      for _, rec in pairs(V.entities) do
+        destroy_objects(rec)
+      end
+      if O then
+        O.background.destroy()
+        if O.map_background then O.map_background.destroy() end
+      end
+    end
+  end
+  core.forget_all(V)
+  storage.active[V.index] = nil
+  notify()
 end
 
 --- Factorio 2.1: get_fluid_segment_id errors for a fluid box outside any segment (pumps); 2.0 returned nil.
@@ -734,11 +743,17 @@ end
 
 --- @param V PvViewer
 function core.clear_hovered(V)
-  local hovered = {}
+  local hovered, pinned = {}, false
   for seg, sys in pairs(V.systems) do
     if sys.hover then
       hovered[#hovered + 1] = seg
+    else
+      pinned = true
     end
+  end
+  if #hovered > 0 and not pinned then
+    core.clear_all(V)
+    return
   end
   for i = 1, #hovered do
     core.clear_system(V, hovered[i])
@@ -888,31 +903,54 @@ local function scan_chunk(V, O, key)
   end
 end
 
+local function append_edge_span(O, lo, hi, a, b, vertical)
+  local sq, last = O.sq, O.slast
+  for i = lo, hi do
+    if a then
+      last = last + 1
+      sq[last] = vertical and chunk_key(a, i) or chunk_key(i, a)
+    end
+    if b then
+      last = last + 1
+      sq[last] = vertical and chunk_key(b, i) or chunk_key(i, b)
+    end
+  end
+  O.slast = last
+end
+
+-- Clip the paired edges against the old view without changing their interleaved order.
+-- lo/hi vary along the edges; a/b are their fixed coordinates.
+local function append_new_edges(O, lo, hi, a, b, old_lo, old_hi, old_a, old_b, vertical)
+  local covered_a = old_a and a >= old_a and a <= old_b
+  local covered_b = old_a and b >= old_a and b <= old_b
+  if not (covered_a or covered_b) or hi < old_lo or lo > old_hi then
+    append_edge_span(O, lo, hi, a, b, vertical)
+    return
+  end
+  if lo < old_lo then append_edge_span(O, lo, old_lo - 1, a, b, vertical) end
+  if not (covered_a and covered_b) then
+    append_edge_span(O, math.max(lo, old_lo), math.min(hi, old_hi),
+      not covered_a and a, not covered_b and b, vertical)
+  end
+  if hi > old_hi then append_edge_span(O, old_hi + 1, hi, a, b, vertical) end
+end
+
 --- Queues chunks of the new view that were not in the old one, nearest first.
 --- @param O PvOverlay
 local function queue_new_chunks(O, ox1, ox2, oy1, oy2)
   local cx, cy, kx, ky = O.cx, O.cy, O.kx, O.ky
-  local x1, x2, y1, y2 = cx - kx, cx + kx, cy - ky, cy + ky
-  local sq = O.sq
-  local function add(x, y)
-    if x >= x1 and x <= x2 and y >= y1 and y <= y2 and not (ox1 and x >= ox1 and x <= ox2 and y >= oy1 and y <= oy2) then
-      local last = O.slast + 1
-      O.slast = last
-      sq[last] = chunk_key(x, y)
-    end
+  if not ox1 or cx < ox1 or cx > ox2 or cy < oy1 or cy > oy2 then
+    O.slast = O.slast + 1
+    O.sq[O.slast] = chunk_key(cx, cy)
   end
-  for d = 0, math.max(kx, ky) do
-    if d == 0 then
-      add(cx, cy)
-    else
-      for x = cx - d, cx + d do
-        add(x, cy - d)
-        add(x, cy + d)
-      end
-      for y = cy - d + 1, cy + d - 1 do
-        add(cx - d, y)
-        add(cx + d, y)
-      end
+  for d = 1, math.max(kx, ky) do
+    if d <= ky then
+      local w = math.min(d, kx)
+      append_new_edges(O, cx - w, cx + w, cy - d, cy + d, ox1, ox2, oy1, oy2, false)
+    end
+    if d <= kx then
+      local h = math.min(d - 1, ky) -- corners belong to the horizontal edges
+      append_new_edges(O, cy - h, cy + h, cx - d, cx + d, oy1, oy2, ox1, ox2, true)
     end
   end
 end
@@ -1095,7 +1133,8 @@ end
 --- An entity was built, rotated or lost a neighbour: bring its drawing up to date.
 --- @param V PvViewer
 --- @param entity LuaEntity
-function core.refresh(V, entity)
+--- @param get_segments function? Read-only snapshot shared by system viewers of this refresh batch.
+function core.refresh(V, entity, get_segments)
   local unit = entity.unit_number
   if not unit then
     return
@@ -1117,8 +1156,13 @@ function core.refresh(V, entity)
     end
     push_redraw(V, entity, unit, key)
   elseif mode == "systems" then
-    local fbs, idxs = {}, {}
-    collect_segments(entity, fbs, idxs)
+    local fbs, idxs
+    if get_segments then
+      fbs, idxs = get_segments(entity, unit)
+    else
+      fbs, idxs = {}, {}
+      collect_segments(entity, fbs, idxs)
+    end
     local rec = V.entities[unit]
     if rec then
       local changed = nil

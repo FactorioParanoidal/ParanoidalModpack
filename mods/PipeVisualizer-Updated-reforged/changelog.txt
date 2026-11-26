@@ -13,6 +13,8 @@ Date: 2026-10-31
     - Pumps and other entities whose fluidbox has no fluid segment of its own show arrows for the networks they connect, and Y on them shows those networks.
     - Toggling colour by fluid/system recolours the shown systems as well, not only the overlay.
   Optimizations:
+    - When the overlay crosses a chunk boundary, queue only the newly exposed parts of the viewport rings, in the same nearest-first order.
+    - System viewers share one segment lookup per changed entity in a refresh batch. Clearing the last viewer's drawings uses one engine call; other viewers' drawings are never cleared with it.
     - Underground connections are two dashed lines per pair (world and map) instead of two sprites per tile.
     - Every render object is created once with its final sprite and colour; the hidden object pool is removed.
     - The overlay scans chunk by chunk within the per-tick budget, nearest chunks first; opening it is no longer one long tick. Chunks that leave the view are removed over the next ticks.
