@@ -1,9 +1,10 @@
 -- Pickup tower: a passive provider chest with a hidden radar on top. The radar draws power and
 -- finishes one sector scan per interval; on_sector_scanned moves ground items around the chest into it.
 --
--- storage.towers[chest unit] = {chest, radar, radar_unit, tier, radius, x, y}
+-- storage.towers[chest unit] = {chest, radar, radar_unit, tier, radius, x, y, surface_index}
+-- storage.towers_by_surface[surface index][chest unit] = tower record
 -- storage.by_radar[radar unit] = chest unit
--- storage.views[player index].by_unit[chest unit] = render object  -- ranges while a tower is in the cursor
+-- storage.views[player index].by_unit[chest unit] = shared range render object while building
 -- storage.hover[player index] = render object      -- range of the hovered tower
 local S = require("shared")
 
@@ -52,21 +53,59 @@ end
 ---------------------------------------------------------------------------------------------------
 -- Range rectangles
 
-local function draw_range(rec, player)
+local function draw_range(rec, players)
   local r = rec.radius
   return rendering.draw_rectangle{
     color = RANGE_COLOR, filled = true, draw_on_ground = true,
     left_top = {entity = rec.chest, offset = {-r, -r}},
     right_bottom = {entity = rec.chest, offset = {r, r}},
-    surface = rec.chest.surface, players = {player},
+    surface = rec.chest.surface, players = players,
   }
+end
+
+local function add_viewer(rec, index)
+  local obj = rec.range_view
+  if obj and obj.valid then
+    local players = rec.range_players
+    players[#players + 1] = index
+    obj.players = players
+  else
+    rec.range_players = {index}
+    obj = draw_range(rec, rec.range_players)
+    rec.range_view = obj
+  end
+  return obj
+end
+
+local function remove_viewer(rec, obj, index)
+  if not rec or rec.range_view ~= obj then
+    obj.destroy() -- Older saves have private rectangles.
+    return
+  end
+  local players = rec.range_players
+  if #players == 1 then
+    rec.range_view, rec.range_players = nil, nil
+    obj.destroy() -- An empty players list would make the object public.
+  else
+    for i = 1, #players do
+      if players[i] == index then
+        players[i] = players[#players]
+        players[#players] = nil
+        if obj.valid then obj.players = players end
+        break
+      end
+    end
+  end
 end
 
 local function hide_view(index)
   local view = storage.views[index]
   if not view then return end
-  -- Older saves kept a plain list. Its entity anchors still expire normally.
-  for _, obj in pairs(view.by_unit or view) do obj.destroy() end
+  if view.by_unit then
+    for unit, obj in pairs(view.by_unit) do remove_viewer(storage.towers[unit], obj, index) end
+  else
+    for _, obj in pairs(view) do obj.destroy() end
+  end
   storage.views[index] = nil
 end
 
@@ -78,17 +117,43 @@ local function hide_hover(index)
   end
 end
 
+local function index_tower(by_surface, unit, rec)
+  local index = rec.chest.surface_index
+  local bucket = by_surface[index]
+  if not bucket then
+    bucket = {}
+    by_surface[index] = bucket
+  end
+  rec.surface_index = index
+  bucket[unit] = rec
+end
+
+local function surface_towers(index)
+  local by_surface = storage.towers_by_surface
+  if not by_surface then -- Same-version saves build the index on first use, without replacing radars.
+    by_surface = {}
+    for unit, rec in pairs(storage.towers) do
+      if rec.chest.valid then index_tower(by_surface, unit, rec) end
+    end
+    storage.towers_by_surface = by_surface
+  end
+  return by_surface[index]
+end
+
 local function show_view(player)
-  hide_view(player.index)
+  local index, force = player.index, player.force
+  hide_view(index)
   local by_unit = {}
-  local force, surface = player.force, player.surface
-  for unit, rec in pairs(storage.towers) do
-    local chest = rec.chest
-    if chest.valid and chest.surface == surface and chest.force == force then
-      by_unit[unit] = draw_range(rec, player)
+  local bucket = surface_towers(player.surface_index)
+  if bucket then
+    for unit, rec in pairs(bucket) do
+      -- A chest stays on its surface, but its force can change without a build or removal event.
+      if rec.chest.valid and rec.chest.force == force then
+        by_unit[unit] = add_viewer(rec, index)
+      end
     end
   end
-  storage.views[player.index] = {by_unit = by_unit}
+  storage.views[index] = {by_unit = by_unit}
 end
 
 local function in_cursor(player)
@@ -160,6 +225,7 @@ local function add_tower(chest)
     radius = S.tiers[tier].radius * chest.quality.range_multiplier,
   }
   storage.towers[unit] = rec
+  if storage.towers_by_surface then index_tower(storage.towers_by_surface, unit, rec) end
   script.register_on_object_destroyed(chest)
   place_radar(rec)
 
@@ -167,7 +233,7 @@ local function add_tower(chest)
   for index, view in pairs(storage.views) do
     local player = game.get_player(index)
     if player and player.connected and player.force == force and player.surface == surface then
-      if view.by_unit then view.by_unit[unit] = draw_range(rec, player)
+      if view.by_unit then view.by_unit[unit] = add_viewer(rec, index)
       else show_view(player) end -- Upgrade a legacy view on demand.
     end
   end
@@ -183,11 +249,18 @@ local function remove_tower(unit)
   local rec = storage.towers[unit]
   if not rec then return end
   storage.towers[unit] = nil
+  local by_surface, index = storage.towers_by_surface, rec.surface_index
+  if by_surface and index then
+    local bucket = by_surface[index]
+    bucket[unit] = nil
+    if not next(bucket) then by_surface[index] = nil end
+  end
+  if rec.range_view then rec.range_view.destroy() end
   for _, view in pairs(storage.views) do
     local by_unit = view.by_unit
     local obj = by_unit and by_unit[unit]
     if obj then
-      obj.destroy()
+      if obj ~= rec.range_view then obj.destroy() end
       by_unit[unit] = nil
     end
   end
@@ -225,11 +298,11 @@ end
 
 -- Full rebuild: every placed tower gets a fresh record and radar; stray radars are removed.
 local function rebuild()
-  storage.towers, storage.by_radar = {}, {}
-  storage.radar_retry, storage.radar_retry_cursor = {}, nil
-  sync_retry()
   for index in pairs(storage.views) do hide_view(index) end
   for index in pairs(storage.hover) do hide_hover(index) end
+  storage.towers, storage.by_radar, storage.towers_by_surface = {}, {}, {}
+  storage.radar_retry, storage.radar_retry_cursor = {}, nil
+  sync_retry()
   local towers, radars = {}, {}
   for name in pairs(TOWER) do towers[#towers + 1] = name end
   for name in pairs(RADAR) do radars[#radars + 1] = name end
@@ -448,7 +521,7 @@ local function update_hover(player)
   end
   local rec = unit and storage.towers[unit]
   if rec and rec.chest.valid and rec.chest.surface == player.surface then
-    storage.hover[index] = draw_range(rec, player)
+    storage.hover[index] = draw_range(rec, {index})
   end
 end
 
