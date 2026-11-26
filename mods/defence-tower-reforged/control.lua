@@ -28,6 +28,9 @@ local function rebuild_all()
 	shield.compute_levels()
 	repair.rebuild()
 	shield.full_rescan()
+	for _, player in pairs(game.connected_players) do
+		repair.on_placement_context{player_index = player.index}
+	end
 end
 
 local function on_moved(entity)
@@ -119,7 +122,10 @@ on_event(defines.events.on_forces_merged, rebuild_all)
 on_event(defines.events.on_force_created, shield.on_force_created)
 
 on_event(defines.events.on_selected_entity_changed, repair.on_selected_entity_changed)
-on_event(defines.events.on_player_removed, repair.on_player_removed)
+on_event({defines.events.on_player_cursor_stack_changed, defines.events.on_player_changed_surface,
+	defines.events.on_player_changed_force, defines.events.on_player_controller_changed,
+	defines.events.on_player_joined_game}, repair.on_placement_context)
+on_event({defines.events.on_player_left_game, defines.events.on_player_removed}, repair.on_player_removed)
 on_event(defines.events.on_surface_deleted, repair.on_surface_deleted)
 
 on_event(defines.events.on_entity_damaged, shield.on_lethal, shield.lethal_filter)

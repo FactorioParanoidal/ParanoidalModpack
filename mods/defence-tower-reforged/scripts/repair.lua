@@ -16,6 +16,7 @@
 -- the old and the new square. Without towers the module does nothing per tick.
 local C = require("shared")
 local A = require("scripts.area")
+local placement = require("scripts.placement")
 
 local R = {}
 
@@ -575,6 +576,7 @@ local function add_turret(entity)
   map_add(T)
   script.register_on_object_destroyed(entity)
   queue_area(T, -1)
+  placement.tower_changed(entity)
   return T
 end
 
@@ -582,6 +584,7 @@ local function remove_turret(uid)
   local T = data.turrets[uid]
   if not T then return end
   data.turrets[uid] = nil
+  placement.tower_removed(uid)
   map_remove(T)
   if T.active then deactivate(T) end
   if T.eei and T.eei.valid then T.eei.destroy() end
@@ -689,6 +692,7 @@ local function refresh_force(force)
   local index = force.index
   local S = compute_stats(force)
   data.stats[index] = S
+  placement.range_changed(index, S.range, data.turrets)
   if not data.forces[index] then return end
   local old
   for _, T in pairs(data.turrets) do
@@ -722,6 +726,7 @@ end
 
 -- Full rebuild from the entities on the map: init, configuration change, force merge.
 function R.rebuild()
+  placement.clear_all()
   local old = storage.rt
   if old then
     for _, T in pairs(old.turrets or {}) do
@@ -1043,6 +1048,7 @@ function R.on_selected_entity_changed(event)
   if stale() then return end
   local index = event.player_index
   clear_hover(index)
+  if placement.active(index) then return end
   local player = game.get_player(index)
   local selected = player and player.selected
   if not (selected and selected.name == TURRET) then return end
@@ -1065,14 +1071,26 @@ function R.on_selected_entity_changed(event)
   }
 end
 
+function R.on_placement_context(event)
+  if stale() then return end
+  local index = event.player_index
+  local player = game.get_player(index)
+  if not player then return end
+  local was_active = placement.active(index)
+  placement.sync(player, data.turrets, R.range_of)
+  if was_active or placement.active(index) then R.on_selected_entity_changed(event) end
+end
+
 function R.on_player_removed(event)
+  placement.clear(event.player_index)
   if stale() then return end
   clear_hover(event.player_index)
 end
 
 function R.on_surface_deleted(event)
-  if stale() then return end
   local s = event.surface_index
+  placement.clear_all(s)
+  if stale() then return end
   for uid, T in pairs(data.turrets) do
     if T.surface == s then remove_turret(uid) end
   end
@@ -1084,7 +1102,10 @@ function R.on_moved(entity)
   if stale() then return end
   if not (entity and entity.valid and entity.name == TURRET) then return end
   local T = data.turrets[entity.unit_number]
-  if T then relocate(T) end
+  if T then
+    relocate(T)
+    placement.tower_changed(entity)
+  end
 end
 
 -- Event id of Picker Dollies style moves, if such a mod is present.
