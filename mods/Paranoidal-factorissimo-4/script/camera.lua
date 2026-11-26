@@ -19,16 +19,6 @@ local function preview_mode(player)
     return mode
 end
 
-factorissimo.on_event(defines.events.on_runtime_mod_setting_changed, function(event)
-    if event.setting == PREVIEW_MODE_SETTING then
-        if event.player_index then
-            preview_mode_cache[event.player_index] = nil
-        else
-            preview_mode_cache = {}
-        end
-    end
-end)
-
 local function new_frame(player, name)
     local frame = player.gui.screen.add {type = "frame", name = name, style = "invisible_frame", auto_center = false}
     frame.style.padding = 0
@@ -294,16 +284,37 @@ local function update_factory_preview(player)
 end
 factorissimo.update_factory_preview = update_factory_preview
 
+local function refresh_player_preview(event)
+    local player = game.get_player(event.player_index)
+    if player then update_factory_preview(player) end
+end
+
+factorissimo.on_event(defines.events.on_runtime_mod_setting_changed, function(event)
+    if event.setting ~= PREVIEW_MODE_SETTING then return end
+    if event.player_index then
+        preview_mode_cache[event.player_index] = nil
+        refresh_player_preview(event)
+    else
+        preview_mode_cache = {}
+        for _, player in pairs(game.connected_players) do update_factory_preview(player) end
+    end
+end)
+
 factorissimo.on_event({
     defines.events.on_selected_entity_changed,
     defines.events.on_player_cursor_stack_changed,
     defines.events.on_player_display_resolution_changed,
     defines.events.on_player_display_scale_changed,
+    defines.events.on_player_display_density_scale_changed,
     defines.events.on_player_controller_changed,
-    defines.events.on_player_changed_surface
-}, function(event)
+    defines.events.on_player_changed_surface,
+    defines.events.on_player_joined_game
+}, refresh_player_preview)
+
+factorissimo.on_event({defines.events.on_player_left_game, defines.events.on_player_removed}, function(event)
+    preview_mode_cache[event.player_index] = nil
     local player = game.get_player(event.player_index)
-    if player then update_factory_preview(player) end
+    if player then unset_camera(player) else storage.fancy_preview_active[event.player_index] = nil end
 end)
 
 local god_controllers = {

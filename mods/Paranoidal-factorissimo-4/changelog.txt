@@ -12,6 +12,7 @@ Date: 2026-11-16
     - Hover over a specialization panel to highlight the counted machines and dim the workshop around them. Click the panel to pin the highlights for your view only; click it again to clear them.
     - Paranoidal: the Factorissimo fork of the build is renamed from factorissimo-2-notnotmelon to Paranoidal-factorissimo-4 (title "Paranoidal Factorissimo 4"). Prototype, setting, remote interface (factorissimo), command, custom input and storage names are unchanged; graphics paths are __Paranoidal-factorissimo-4__.
   Bugfixes:
+    - Apply factory preview mode and display-density changes immediately, and refresh the active preview on multiplayer rejoin.
     - Port and passage rechecks skip invalidated search results and only treat registered factory hulls as neighbors. Heat ports rebuild missing helpers before transferring heat again.
     - Recheck the external-room body, rights and exact landing across transit; retire moved hosts and check the entire slot and the provider's approved handles before cleanup.
     - Validate external-room doors and observer policies before admission, retry blocked emergency returns, account for detached visitor bodies, use the correct force-merge event fields, and quarantine equipment holding fluids.
