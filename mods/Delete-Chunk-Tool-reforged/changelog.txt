@@ -16,8 +16,10 @@ Date: 2026-10-31
     - The icon is renamed to graphics/chunk-eraser.png; it and thumbnail.png are recompressed (pingo -s4 -quality=45, lossy, same dimensions): 59.9 -> 33.5 KB, worst PSNR 34.4 dB.
   Optimizations:
     - Chunks are checked by entity counts with a limit instead of building entity lists; classification and deletion run a batch per tick (128 checked, 64 deleted), so large areas do not freeze the game; on_tick is registered only while a job runs.
+    - Map trimming scans the generated map and builds an exact building and radar coverage index across ticks instead of pre-scanning the map and comparing each candidate against all radars. The radar snapshot reads the range once per prototype and quality.
     - Removed prototype fields that Factorio 2.0 does not read (stackable, show_in_library, toggleable).
   Bugfixes:
+    - Map trimming skips chunks that became visible or were removed before deletion.
     - Map trimming no longer crashes with "Invalid SurfaceIdentification" in on_tick: LuaForce.is_chunk_visible takes the surface first, then the chunk position.
   Compatibility:
     - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.

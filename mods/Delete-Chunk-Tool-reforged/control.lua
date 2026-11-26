@@ -28,6 +28,7 @@ local GUI = "dct_confirm"
 
 local SCAN_PER_TICK = 128   -- chunks classified per tick
 local FILTER_PER_TICK = 256 -- trim candidates checked against buildings and radars per tick
+local COVER_PER_TICK = 128  -- building/radar squares added to the trim index per tick
 local DELETE_PER_TICK = 64  -- chunks deleted per tick
 local MAX_SELECTION = 16384 -- chunks in one selection of the tool
 local LINGER = 120          -- ticks the chunks of a finished trim stay known to count_trimmed
@@ -275,7 +276,7 @@ end
 local function finish_scan(job)
     local player = game.get_player(job.player_index)
     job.state = "preview"
-    job.todo, job.rows, job.radars, job.visible = nil, nil, nil, nil
+    job.todo, job.rows, job.radars, job.visible, job.coverage = nil, nil, nil, nil, nil
     if not player then return cancel_job(job.player_index) end
     draw_preview(job, job.preview)
     job.preview = nil
@@ -302,74 +303,121 @@ local function scan_chunk(job, surface, c)
     end
 end
 
--- Trim: is a free chunk near buildings or radars or seen by a force? Buildings are kept as merged
--- row intervals [x - d, x + d] of the chunks with buildings, so a check reads 2d + 1 rows.
-local function trim_keeps(job, surface, c)
-    local d = job.distance
-    local rows = job.rows
-    for y = c.y - d, c.y + d do
-        local row = rows[y]
-        if row then
-            for i = 1, #row, 2 do
-                if c.x >= row[i] and c.x <= row[i + 1] then return true end
-            end
+-- Index exact closed squares as a union of aligned power-of-two rectangles. Each axis needs
+-- only logarithmically many intervals, even for a modded radar with a huge chart range.
+-- Scales are stored as numbers; floor gives the same alignment on either side of zero.
+local function cover_square(index, x, y, radius)
+    radius = floor(radius)
+    local x1, x2, y1, y2 = x - radius, x + radius, y - radius, y + radius
+    while x1 <= x2 do
+        local sx = 1
+        while x1 % (2 * sx) == 0 and x1 + 2 * sx - 1 <= x2 do sx = sx * 2 end
+        local by_height = index[sx]
+        if not by_height then by_height = {}; index[sx] = by_height end
+        local left, top = x1 / sx, y1
+        while top <= y2 do
+            local sy = 1
+            while top % (2 * sy) == 0 and top + 2 * sy - 1 <= y2 do sy = sy * 2 end
+            local columns = by_height[sy]
+            if not columns then columns = {}; by_height[sy] = columns end
+            local column = columns[left]
+            if not column then column = {}; columns[left] = column end
+            column[top / sy] = true
+            top = top + sy
+        end
+        x1 = x1 + sx
+    end
+end
+
+local function covered(index, x, y)
+    for sx, by_height in pairs(index) do
+        local left = floor(x / sx)
+        for sy, columns in pairs(by_height) do
+            local column = columns[left]
+            if column and column[floor(y / sy)] then return true end
         end
     end
-    for _, r in ipairs(job.radars) do
-        if math.abs(c.x - r[1]) <= r[3] and math.abs(c.y - r[2]) <= r[3] then return true end
+    return false
+end
+
+local function force_viewers(forces)
+    local visible = {}
+    for _, name in ipairs(forces.owned) do
+        local force = game.forces[name]
+        if force and #force.players > 0 then visible[#visible + 1] = force end
     end
-    for _, force in ipairs(job.visible) do
+    return visible
+end
+
+local function is_visible(visible, surface, c)
+    for _, force in ipairs(visible) do
         if force.valid and force.is_chunk_visible(surface, c) then return true end
     end
     return false
 end
 
-local function start_filter(job, surface)
-    job.state = "filter"
-    job.todo = job.chunks
-    job.chunks = {}
-    job.i = 1
-    -- chunks with buildings: per row the merged intervals {x1, x2, x1, x2, ...} widened by d
-    local d, xs = job.distance, {}
-    for _, c in ipairs(job.seeds) do
-        local row = xs[c.y]
-        if not row then
-            row = {}
-            xs[c.y] = row
-        end
-        row[#row + 1] = c.x
-    end
-    local rows = {}
-    for y, row in pairs(xs) do
-        table.sort(row)
-        local merged = {}
-        for _, x in ipairs(row) do
-            local n = #merged
-            if n > 0 and x - d <= merged[n] + 1 then
-                merged[n] = x + d
-            else
-                merged[n + 1], merged[n + 2] = x - d, x + d
+local function trim_keeps(job, surface, c)
+    if job.coverage then
+        if covered(job.coverage, c.x, c.y) then return true end
+    else
+        -- Already-filtering jobs from old saves finish with their original snapshots.
+        local d = job.distance
+        for y = c.y - d, c.y + d do
+            local row = job.rows[y]
+            if row then
+                for i = 1, #row, 2 do
+                    if c.x >= row[i] and c.x <= row[i + 1] then return true end
+                end
             end
         end
-        rows[y] = merged
+        for _, r in ipairs(job.radars) do
+            if math.abs(c.x - r[1]) <= r[3] and math.abs(c.y - r[2]) <= r[3] then return true end
+        end
     end
-    job.rows = rows
-    job.seeds = nil
-    -- radars of player forces with the range they chart, in chunks
-    local radars = {}
+    return is_visible(job.visible, surface, c)
+end
+
+local function start_filter(job, surface)
+    job.state, job.i = "cover", 1
+    job.todo, job.chunks, job.coverage = job.chunks, {}, {}
+    -- Freeze the same positions and ranges as the old trim filter. Only index construction
+    -- is deferred: removing or moving a radar during this job cannot shrink its snapshot.
     local found = #job.forces.owned > 0 and surface.find_entities_filtered{type = "radar", force = job.forces.owned} or {}
+    job.radars = {}
+    local ranges = {}
     for _, radar in pairs(found) do
-        local proto, quality = radar.prototype, radar.quality
-        local range = math.max(proto.get_max_distance_of_sector_revealed(quality) or 0,
-            proto.get_max_distance_of_nearby_sector_revealed(quality) or 0)
+        local name, quality = radar.name, radar.quality
+        local by_quality = ranges[name]
+        if not by_quality then by_quality = {}; ranges[name] = by_quality end
+        local grade = quality.name
+        local radius = by_quality[grade]
+        if not radius then
+            local proto = radar.prototype
+            radius = math.max(proto.get_max_distance_of_sector_revealed(quality) or 0,
+                proto.get_max_distance_of_nearby_sector_revealed(quality) or 0) + 1
+            by_quality[grade] = radius
+        end
         local p = radar.position
-        radars[#radars + 1] = {floor(p.x / 32), floor(p.y / 32), range + 1}
+        job.radars[#job.radars + 1] = {floor(p.x / 32), floor(p.y / 32), radius}
     end
-    job.radars = radars
-    job.visible = {}
-    for _, name in ipairs(job.forces.owned) do
-        local force = game.forces[name]
-        if force and #force.players > 0 then job.visible[#job.visible + 1] = force end
+    job.visible = force_viewers(job.forces)
+end
+
+local function build_coverage(job)
+    local seeds, radars = job.seeds, job.radars
+    local last = math.min(job.i + COVER_PER_TICK - 1, #seeds + #radars)
+    for i = job.i, last do
+        if i <= #seeds then
+            local c = seeds[i]
+            cover_square(job.coverage, c.x, c.y, job.distance)
+        else
+            local r = radars[i - #seeds]
+            cover_square(job.coverage, r[1], r[2], r[3])
+        end
+    end
+    job.i = last + 1
+    if job.i > #seeds + #radars then
+        job.seeds, job.radars, job.state, job.i = nil, nil, "filter", 1
     end
 end
 
@@ -380,6 +428,8 @@ local function mark(surface_index, x, y, value)
 end
 
 local function delete_one(job, surface, c)
+    if not surface.is_chunk_generated(c) then return false end
+    if job.mode == "trim" and is_visible(job.visible, surface, c) then return false end
     local reason = classify(surface, c.x, c.y, job.forces, job.rects)
     if not allowed(job.mode, reason) then return false end
     if job.mode == "trim" then
@@ -410,13 +460,27 @@ local function process_job(job)
         storage.jobs[job.player_index] = nil
         return
     end
-    if job.state == "scan" then
+    if job.state == "trim_scan" then
+        local iterator = job.iterator
+        if not iterator.valid then return cancel_job(job.player_index) end
+        for _ = 1, SCAN_PER_TICK do
+            local c = iterator()
+            if not c then
+                job.iterator = nil
+                start_filter(job, surface)
+                return
+            end
+            if surface.is_chunk_generated(c) then scan_chunk(job, surface, c) end
+        end
+    elseif job.state == "scan" then
         local todo, last = job.todo, math.min(job.i + SCAN_PER_TICK - 1, #job.todo)
         for i = job.i, last do scan_chunk(job, surface, todo[i]) end
         job.i = last + 1
         if job.i > #todo then
             if job.mode == "trim" then start_filter(job, surface) else finish_scan(job) end
         end
+    elseif job.state == "cover" then
+        build_coverage(job)
     elseif job.state == "filter" then
         local todo, last = job.todo, math.min(job.i + FILTER_PER_TICK - 1, #job.todo)
         for i = job.i, last do
@@ -429,6 +493,8 @@ local function process_job(job)
         job.i = last + 1
         if job.i > #todo then finish_scan(job) end
     elseif job.state == "delete" then
+        -- Refresh the viewer list per batch, including for jobs already deleting in old saves.
+        if job.mode == "trim" then job.visible = force_viewers(force_sets()) end
         local chunks, last = job.chunks, math.min(job.i + DELETE_PER_TICK - 1, #job.chunks)
         for i = job.i, last do
             if delete_one(job, surface, chunks[i]) then job.deleted = job.deleted + 1 else job.skipped = job.skipped + 1 end
@@ -520,10 +586,8 @@ local function start_trim(player, distance)
     local job = new_job(player, surface, "trim")
     job.distance = distance or settings.global["dct-trim-distance"].value
     job.seeds = {}
-    for c in surface.get_chunks() do
-        if surface.is_chunk_generated(c) then job.todo[#job.todo + 1] = {x = c.x, y = c.y} end
-    end
-    player.print({"dct.trim-scan", #job.todo})
+    job.state, job.iterator = "trim_scan", surface.get_chunks()
+    player.print({"dct.trim-start"})
     run(job)
 end
 
