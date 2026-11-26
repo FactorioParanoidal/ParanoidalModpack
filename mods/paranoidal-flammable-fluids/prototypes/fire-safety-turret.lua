@@ -8,7 +8,7 @@
 -- Пока в турели есть вода, scripts/fire-safety.lua держит защиту в её зоне (в ней ничего не загорается
 -- и не взрывается), а при целях в зоне стреляет струями воды: гасит огонь
 -- и кислоту на земле, рассеивает вражеские облака, снимает вредные стикеры со своих.
--- Зона = дальность и сектор attack_parameters: движок сам рисует её при установке.
+-- Движок рисует фиксированный круг защиты из radius_visualisation_specification.
 -- Параметры турелей и списки целей передаются в control через mod-data "pd-fire-safety".
 local TIERS = {
 	{
@@ -337,9 +337,14 @@ for index, tier in ipairs(TIERS) do
 	-- Тип цели, которого нет ни у кого: сам движок турелью никогда не стреляет, струи создаёт скрипт.
 	turret.attack_target_mask = {"pd-fire-safety-no-target"}
 	turret.prepare_range = tier.range + PREPARE_MARGIN
-	turret.radius_visualisation_specification = nil
-	turret.attack_parameters.range = tier.range
-	turret.attack_parameters.min_range = MIN_RANGE
+	-- Show the scripted protection zone, not the dormant weapon's quality-scaled attack range.
+	turret.radius_visualisation_specification = {
+		distance = tier.range,
+		sprite = {filename = "__paranoidal-flammable-fluids__/graphics/fire-safety-radius.png",
+			size = 512, scale = 1 / 16, priority = "medium"},
+	}
+	turret.attack_parameters.range = 0
+	turret.attack_parameters.min_range = 0
 	turret.attack_parameters.turn_range = tier.turn_range
 	turret.attack_parameters.fluids = {{type = "water"}}
 	turret.attack_parameters.ammo_type = {
