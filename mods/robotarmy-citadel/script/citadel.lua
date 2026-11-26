@@ -167,6 +167,13 @@ end
 local FOUNDRY_OF = {[E.core] = "core"}
 for _, f in pairs(S.foundries) do FOUNDRY_OF[E["foundry_" .. f]] = f end
 
+local function live_foundry(m)
+  for _, e in pairs(m.keys) do
+    if e.valid and FOUNDRY_OF[e.name] and e.name ~= E.core then return true end
+  end
+  return false
+end
+
 local function register_foundries(c, m)
   for _, e in pairs(m.keys) do
     local f = e.valid and FOUNDRY_OF[e.name]
@@ -180,17 +187,34 @@ local function core_lost(c, cfg)
   forces.print(cfg, {"replicator-message.core-destroyed", math.ceil(cfg.stun_ticks / 3600)})
 end
 
+local check_defeat -- defined after the defeat transition
+
+local function repair_due(fails)
+  return game.tick + state.cfg.growth_ticks * 2 ^ math.min(3, fails - 1)
+end
+
 local function on_module_built(c, k)
+  if c.phase ~= "active" then return end
   local m = c.modules[k]
   local cfg = state.cfg
   local surface = state.surface(c)
   local is_core = k == c.core_key
+  local relocated = is_core and c.relocating == k
+  -- A script can remove a key between placement and finish without raising a death event.
+  for un, e in pairs(m.keys) do
+    if not e.valid then
+      m.keys[un], c.key_of[un] = nil, nil
+      P.remove_foundry(c, un)
+      m.nkeys = math.max(0, m.nkeys - 1)
+    end
+  end
   m.built = true
   if is_core then c.relocating = nil end
   if m.nkeys <= 0 then
     -- nothing of its plan stands there (could not be placed, or destroyed while being built)
     m.ruined = true
     m.failed = (m.failed or 0) + 1
+    if not is_core then m.rebuild_at = repair_due(m.failed) end
     if is_core then
       if not c.core_ever and m.failed < MAX_BUILD_FAILS then
         B.build_module(c, k, true) -- the first hive: clear the place again and retry
@@ -198,16 +222,20 @@ local function on_module_built(c, k)
         core_lost(c, cfg)
       end
     end
+    check_defeat(c, cfg, k)
     return
   end
   if is_core then c.core_ever = true end
   m.ruined = false
-  m.failed = nil
+  m.failed, m.rebuild_at = nil, nil
+  if m.hub and m.hub.valid then m.restore_fails, m.restore_at = nil, nil end
   c.alive[m.type] = (c.alive[m.type] or 0) + 1
   register_foundries(c, m)
   wire_hub(c, m)
   UP.apply(c)
-  surface.request_to_generate_chunks(U.center(m.x, m.y), 2)
+  local center = U.center(m.x, m.y)
+  surface.request_to_generate_chunks(center, 2)
+  if relocated then forces.print(cfg, {"replicator-message.new-core", U.gps(center, surface)}) end
   if not c.shields and c.count >= cfg.shield_modules and UP.shields_available() then
     c.shields = true
     forces.print(cfg, {"replicator-message.shields"})
@@ -223,10 +251,18 @@ local function on_module_built(c, k)
 end
 bus.on("module_built", on_module_built)
 bus.on("module_restored", function(c, k)
+  if c.phase ~= "active" then return end
   local m = c.modules[k]
+  check_defeat(c, state.cfg, k)
+  if c.phase ~= "active" or m.ruined then return end
   register_foundries(c, m)
   wire_hub(c, m)
-  m.restore_fails = not (m.hub and m.hub.valid) and (m.restore_fails or 0) + 1 or nil
+  if m.hub and m.hub.valid then
+    m.restore_fails, m.restore_at = nil, nil
+  else
+    m.restore_fails = (m.restore_fails or 0) + 1
+    m.restore_at = repair_due(m.restore_fails)
+  end
 end)
 bus.on("droid_made", function(c, e) Q.assign(c, e) end)
 
@@ -353,26 +389,30 @@ local function pick_chunk(c, surface)
   return nil
 end
 
-local function rebuild(c, m)
-  B.build_module(c, m.key, false)
+local function ready_to_repair(m, field, fails)
+  -- Old saves that had stopped retrying resume after a cooldown, not all at once.
+  if not m[field] and (fails or 0) >= MAX_BUILD_FAILS then m[field] = repair_due(fails) end
+  return (m[field] or 0) <= game.tick
 end
 
 local function grow(c, cfg, surface)
   c.next_growth = game.tick + cfg.growth_ticks
   UP.adapt(c)
   I.prune(c)
-  -- first a ruined module, then a standing one that lost its hub pylon (no power), then a new one
-  for _, k in ipairs(c.order) do
-    local m = c.modules[k]
-    if m.ruined and m.type ~= "core" and (m.failed or 0) < MAX_BUILD_FAILS then
-      rebuild(c, m)
+  -- Rotate repairs so an earlier blocked module cannot starve later ones. When nothing is
+  -- due (including during a failed repair's cooldown), growth can build normally.
+  local n = #c.order
+  for j = 1, n do
+    local i = ((c.repair_cursor or 0) + j - 1) % n + 1
+    local m = c.modules[c.order[i]]
+    if m.ruined and m.type ~= "core" and ready_to_repair(m, "rebuild_at", m.failed) then
+      c.repair_cursor = i
+      B.build_module(c, m.key, false)
       return
-    end
-  end
-  for _, k in ipairs(c.order) do
-    local m = c.modules[k]
-    if m.built and not m.ruined and not (m.hub and m.hub.valid) and (m.restore_fails or 0) < MAX_BUILD_FAILS then
-      B.restore_module(c, k)
+    elseif m.built and not m.ruined and not (m.hub and m.hub.valid)
+      and ready_to_repair(m, "restore_at", m.restore_fails) then
+      c.repair_cursor = i
+      B.restore_module(c, m.key)
       return
     end
   end
@@ -389,14 +429,13 @@ end
 -- Losses.
 ---------------------------------------------------------------------------------------------------
 local function defeat(c, cfg)
-  if c.phase == "destroyed" then return end
+  if c.phase ~= "active" then return end
   c.phase = "destroyed"
+  c.stunned_until, c.relocating = nil, nil
   local surface = state.surface(c)
   forces.print(cfg, {"replicator-message.destroyed"}, {r = 0.4, g = 1, b = 0.4})
   Q.disband_all(c)
-  local keys = {}
-  for i, k in ipairs(c.order) do keys[i] = k end
-  B.queue(c, {t = "cascade", keys = keys})
+  B.collapse(c)
   for _, r in pairs(c.units.list) do
     if r.e.valid then r.e.destroy() end
   end
@@ -405,6 +444,17 @@ local function defeat(c, cfg)
   if surface then remove_tags(c, surface) end
 end
 C.defeat = defeat
+
+check_defeat = function(c, cfg, finishing)
+  if c.phase ~= "active" or not c.core_ever or c.relocating or not core_down(c) then return end
+  if P.foundry_count(c) > 0 or B.foundry_pending(c, finishing) then return end
+  -- A placed foundry counts even before it is registered for production.
+  for _, k in ipairs(c.order) do
+    local m = c.modules[k]
+    if M.types[m.type].cat == "production" and live_foundry(m) then return end
+  end
+  defeat(c, cfg)
+end
 
 --- Peaceful map: the citadel leaves without a word. Its squads, droids, buildings and map tag go (destroyed, not
 --- killed: no loot, no explosions); the floor tiles stay. The state starts over, so if the peace ends the citadel
@@ -432,21 +482,16 @@ local function key_lost(c, m, unit_number)
     UP.apply(c)
     if m.type == "core" then core_lost(c, cfg) end
   end
-  -- defeat: the hive is down and no foundry stands (not while the first hive or a new one is built)
-  if c.core_ever and not c.relocating and core_down(c) and P.foundry_count(c) == 0 then defeat(c, cfg) end
+  check_defeat(c, cfg)
 end
 
 --- After the pause: the farthest foundry module from the base becomes the new core.
 local function end_stun(c, cfg)
   c.stunned_until = nil
-  if P.foundry_count(c) == 0 then
-    defeat(c, cfg)
-    return
-  end
   local best, best_d
   for _, k in ipairs(c.order) do
     local m = c.modules[k]
-    if usable(m) and M.types[m.type].cat == "production" then
+    if usable(m) and M.types[m.type].cat == "production" and live_foundry(m) then
       local d = c.base and U.dist2(U.center(m.x, m.y), c.base) or 0
       if not best_d or d > best_d then best, best_d = m, d end
     end
@@ -458,7 +503,7 @@ local function end_stun(c, cfg)
   local old = c.core_key and c.modules[c.core_key]
   if old and old ~= best then
     old.type = "foundry-light" -- the old core is rebuilt later as a foundry
-    old.failed = nil
+    old.failed, old.rebuild_at = nil, nil
   end
   for un in pairs(best.keys) do
     P.remove_foundry(c, un)
@@ -474,8 +519,6 @@ local function end_stun(c, cfg)
   c.core_key = best.key
   c.next_growth = game.tick + cfg.growth_ticks
   UP.apply(c)
-  local surface = state.surface(c)
-  forces.print(cfg, {"replicator-message.new-core", U.gps(U.center(best.x, best.y), surface)})
 end
 
 --- A key building whose entity is gone without a death event (another script): a few modules per look.
@@ -571,9 +614,11 @@ function C.heartbeat()
   P.step(c, cfg, surface)
   if c.phase ~= "active" then return end
   Q.step(c, cfg, surface)
-  for _ = 1, math.min(4, c.alive.radar or 0) do I.scan(c, surface, cfg.base_radius) end
+  local radars = M.powered_radars(c, surface)
+  for _ = 1, radars do I.scan(c, surface, cfg.base_radius) end
+  I.maintain(c, surface, radars > 0)
   if c.beat % 5 == 0 then
-    P.sweep_units(c, 25, function(e) Q.absorb(c, e) end)
+    Q.recruit(c, cfg)
     SUP.repair(c, surface)
     validate_keys(c)
     if c.phase ~= "active" then return end
@@ -585,7 +630,8 @@ function C.heartbeat()
     c.cull_next = game.tick + cfg.cull_min + U.random_int(c, math.max(1, cfg.cull_jitter))
   end
   if c.stunned_until then
-    if game.tick >= c.stunned_until then end_stun(c, cfg) end
+    -- Do not convert a module while its queued construction or restoration can still write to it.
+    if game.tick >= c.stunned_until and not B.busy(c) then end_stun(c, cfg) end
   elseif game.tick >= (c.next_growth or 0) and not B.busy(c) then
     grow(c, cfg, surface)
   end
@@ -691,16 +737,19 @@ end
 function C.configure(overrides)
   local c = state.get()
   if not c then return false end
-  if overrides == nil then
-    c.overrides = nil
-  else
-    c.overrides = c.overrides or {}
+  local next_overrides
+  if overrides ~= nil then
+    if type(overrides) ~= "table" then error("Ожидается таблица настроек или nil") end
+    next_overrides = {}
+    for k, v in pairs(c.overrides or {}) do next_overrides[k] = v end
     for k, v in pairs(overrides) do
-      if state.cfg[k] == nil or type(state.cfg[k]) ~= type(v) then error("Неизвестная или некорректная настройка " .. tostring(k)) end
-      c.overrides[k] = v
+      if not state.valid_override(k, v) then error("Неизвестная или некорректная настройка " .. tostring(k)) end
+      next_overrides[k] = v
     end
   end
+  c.overrides = next_overrides
   state.read_settings()
+  B.sync(c)
   return true
 end
 

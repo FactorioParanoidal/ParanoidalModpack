@@ -38,6 +38,10 @@ local DANGER_HALF = 108000
 local MAX_RECORDS = 6000
 local SAMPLE = 40
 local LOCAL_RADIUS = 40
+local RAID_RADIUS = 128
+local CONFIRM_AFTER = 216000 -- one hour; powered radar can refresh disconnected records
+local MAINTAIN_PER_BEAT = 4
+local VERIFY_PER_TARGET = 4
 
 ---------------------------------------------------------------------------------------------------
 -- Danger.
@@ -101,6 +105,47 @@ function I.count(c)
   return #c.intel.list
 end
 
+-- The area filter can include a building whose collision box overlaps a chunk border.
+-- Count or confirm it only in the chunk containing its position.
+local function check_chunk(surface, x, y, presence_only)
+  local soft, def, power = 0, 0, 0
+  for _, e in ipairs(surface.find_entities_filtered({area = U.area(x, y), force = forces.player_names(),
+    type = I.TARGETS})) do
+    local ex, ey = U.chunk_of(e.position)
+    if ex == x and ey == y then
+      if presence_only then return true end
+      if IS_DEFENSE[e.type] then def = def + 1 else soft = soft + 1 end
+      if IS_POWER[e.type] then power = power + 1 end
+    end
+  end
+  if presence_only then return false end
+  return math.min(60, soft), math.min(30, def), math.min(30, power)
+end
+
+function I.maintain(c, surface, powered)
+  local intel = c.intel
+  local i = intel.maintain_at or 1
+  for _ = 1, math.min(MAINTAIN_PER_BEAT, #intel.list) do
+    if i > #intel.list then i = 1 end
+    local k = intel.list[i]
+    if not k then break end
+    local r = intel.map[k]
+    if game.tick - (r.tick or 0) >= CONFIRM_AFTER then
+      local soft, def, power = 0, 0, 0
+      if powered then soft, def, power = check_chunk(surface, r.x, r.y) end
+      if soft + def > 0 then
+        remember(c, r.x, r.y, soft, def, power)
+        i = i + 1
+      else
+        forget(c, k) -- next iteration checks the entry swapped into i
+      end
+    else
+      i = i + 1
+    end
+  end
+  intel.maintain_at = i
+end
+
 --- One radar look: the next chunk of the flood fill from the base centre. Chunks with player
 --- buildings spread the fill to their neighbours; empty chunks spread it only within `radius`
 --- chunks of the centre (the spawn area may be empty, the base around it is not).
@@ -116,12 +161,8 @@ function I.scan(c, surface, radius)
   intel.queue[intel.head] = nil
   intel.head = intel.head + 1
   local x, y = U.unkey(k)
-  local area = U.area(x, y)
-  local pf = forces.player_names()
-  local soft = surface.count_entities_filtered({area = area, force = pf, type = I.SOFT, limit = 60})
-  local def = surface.count_entities_filtered({area = area, force = pf, type = I.DEFENSE, limit = 30})
+  local soft, def, power = check_chunk(surface, x, y)
   if soft + def > 0 then
-    local power = surface.count_entities_filtered({area = area, force = pf, type = I.POWER, limit = 30})
     remember(c, x, y, soft, def, power)
   else
     forget(c, k)
@@ -152,13 +193,16 @@ end
 
 --- Position to attack (a known chunk) for a squad starting at `from`; the base centre if nothing is
 --- known. `exclude`: positions the chosen target must keep away from (pincers).
-function I.choose_target(c, level, from, exclude)
+function I.choose_target(c, level, from, exclude, surface)
   local list = c.intel.list
-  local best, best_score
+  local candidates, picks = {}, {}
   local n = #list
-  local tries = math.min(n, SAMPLE)
-  for _ = 1, tries do
-    local k = list[U.random_int(c, n)]
+  for i = 1, math.min(n, SAMPLE) do
+    -- Sample without replacement, storing only the at most SAMPLE swapped positions.
+    local last = n - i + 1
+    local j = U.random_int(c, last)
+    local k = list[picks[j] or j]
+    picks[j] = picks[last] or last
     local r = c.intel.map[k]
     if r and far_from(r, exclude) then
       local p = {x = r.x * 32 + 16, y = r.y * 32 + 16}
@@ -166,38 +210,61 @@ function I.choose_target(c, level, from, exclude)
       if level >= 2 then score = score + 2 * math.min(r.soft, 30) / 10 - 6 * r.def end
       if level >= 3 then score = score - 5 * I.danger(c, k) end
       if level >= 6 then score = score + 4 * math.min(r.power, 10) / 5 end
-      if not best_score or score > best_score then best, best_score = p, score end
+      candidates[#candidates + 1] = {k = k, p = p, score = score, order = #candidates + 1}
     end
   end
-  return best or (c.base and {x = c.base.x, y = c.base.y})
+  table.sort(candidates, function(a, b)
+    if a.score == b.score then return a.order < b.order end
+    return a.score > b.score
+  end)
+  for i = 1, math.min(#candidates, VERIFY_PER_TARGET) do
+    local candidate = candidates[i]
+    local r = c.intel.map[candidate.k]
+    if check_chunk(surface, r.x, r.y, true) then return candidate.p end
+    forget(c, candidate.k)
+  end
+  return c.base and {x = c.base.x, y = c.base.y}
 end
 
---- Target near a squad: the entity position to attack, or nil. Records the chunk as known.
-function I.local_target(c, surface, position, level)
-  local found = surface.find_entities_filtered({position = position, radius = LOCAL_RADIUS,
+local function nearby_target(surface, position, level, radius, c)
+  local found = surface.find_entities_filtered({position = position, radius = radius,
     force = forces.player_names(), type = I.TARGETS, limit = 40})
   if #found == 0 then return nil end
   local best, best_score
-  local soft, def, power = 0, 0, 0
-  for _, e in pairs(found) do
-    local t = e.type
-    local d = U.dist(position, e.position)
-    local score = -d
-    if IS_DEFENSE[t] then
-      def = def + 1
-      if level >= 2 then score = score - 40 end
-    else
-      soft = soft + 1
+  local seen, records = c and {}, c and {}
+  for _, e in ipairs(found) do
+    local t, pos = e.type, e.position
+    local score = -U.dist(position, pos)
+    if level >= 2 and IS_DEFENSE[t] then score = score - 40 end
+    if level >= 6 and IS_POWER[t] then score = score + 30 end
+    if not best_score or score > best_score then best, best_score = pos, score end
+    if seen then
+      local x, y = U.chunk_of(pos)
+      local k = U.key(x, y)
+      if not seen[k] then
+        seen[k] = {x = x, y = y, soft = 0, def = 0, power = 0}
+        records[#records + 1] = seen[k]
+      end
+      local r = seen[k]
+      if IS_DEFENSE[t] then r.def = r.def + 1 else r.soft = r.soft + 1 end
+      if IS_POWER[t] then r.power = r.power + 1 end
     end
-    if IS_POWER[t] then
-      power = power + 1
-      if level >= 6 then score = score + 30 end
-    end
-    if not best_score or score > best_score then best, best_score = e.position, score end
   end
-  local x, y = U.chunk_of(position)
-  remember(c, x, y, soft, def, power)
+  if records then
+    for _, r in ipairs(records) do remember(c, r.x, r.y, r.soft, r.def, r.power) end
+  end
   return best
+end
+
+--- Targets near the city need not be connected to the radar's scan from the player spawn.
+function I.raid_target(surface, origin, level)
+  local target = nearby_target(surface, origin, level, RAID_RADIUS)
+  return target
+end
+
+--- Target near a marching squad: the entity position to attack, or nil. Records the chunk as known.
+function I.local_target(c, surface, position, level)
+  return nearby_target(surface, position, level, LOCAL_RADIUS, c)
 end
 
 --- Waypoints from `from` to `to` (segments of about SEGMENT tiles). From level 3 the route bends

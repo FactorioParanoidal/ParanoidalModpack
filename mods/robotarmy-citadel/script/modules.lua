@@ -10,6 +10,7 @@
 --   demand   power the module draws in a fight, MW (the power plants are planned against it)
 local S = require("lib.shared")
 local U = require("script.util")
+local state = require("script.state")
 local E = S.entity
 
 local M = {}
@@ -78,8 +79,26 @@ function M.power(c)
     local t = M.types[name]
     if t then demand = demand + n * ((t.demand or 0) + M.TOWER_DEMAND + (c.shields and M.SHIELD_DEMAND or 0)) end
   end
-  supply = M.REACTOR_MW * (2 * (c.alive["power-plant"] or 0) + ((c.alive.core or 0) > 0 and 1 or 0))
+  local surface = state.surface(c)
+  if surface then
+    -- The engine counts living entities by prototype and force, including a hive reactor that
+    -- is still standing after the hive dies. No saved counter to drift or migrate.
+    supply = M.REACTOR_MW * surface.count_entities_filtered({name = E.reactor, force = S.force})
+  end
   return demand, supply
+end
+
+function M.powered_radars(c, surface)
+  if (c.alive.radar or 0) == 0 then return 0 end
+  local n = 0
+  for _, e in ipairs(surface.find_entities_filtered({name = E.radar, force = S.force})) do
+    local m = c.modules[c.key_of[e.unit_number]]
+    if m and m.built and not m.ruined and e.status == defines.entity_status.working then
+      n = n + 1
+      if n == 4 then break end
+    end
+  end
+  return n
 end
 
 local function cap_of(t, c)

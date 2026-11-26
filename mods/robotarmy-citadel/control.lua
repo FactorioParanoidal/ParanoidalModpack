@@ -45,7 +45,8 @@ local function on_configuration_changed()
     -- no migrations: an unknown state starts over (the city of an old state stays as ruins)
     c = C.init()
   end
-  if c.phase == "suspended_merge" then B.pause(); return end
+  B.sync(c)
+  if c.phase == "suspended_merge" then return end
   forces.ensure()
   UP.apply(c)
   C.unlock_recipes(c)
@@ -66,6 +67,7 @@ script.on_event(defines.events.on_entity_died, C.on_entity_died, died_filter())
 script.on_event(defines.events.on_runtime_mod_setting_changed, function(event)
   if event.setting_type == "runtime-global" and string.sub(event.setting, 1, #S.mod) == S.mod then
     state.read_settings()
+    B.sync(state.get())
   end
 end)
 

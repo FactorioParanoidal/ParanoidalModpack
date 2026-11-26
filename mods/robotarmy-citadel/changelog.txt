@@ -1,4 +1,20 @@
 ---------------------------------------------------------------------------------------------------
+Version: 1.1.0
+Date: 2026.11.26
+  Bugfixes:
+    - Losing the hive while a foundry is under construction no longer triggers premature victory, and a finished defeat cancels pending construction without interrupting the cleanup of the city.
+    - A replacement hive is announced only after it actually stands; stalled or failed construction is not mistaken for a surviving foundry.
+    - Retreating squads check whether their droids actually returned and retry failed routes before releasing survivors.
+    - A raid never requires more droids than the city's configured population limit.
+    - Stale target chunks are checked and cleared in bounded batches; squad reports use the buildings' actual chunks.
+    - Ruined modules and lost power hubs can recover after a temporary placement failure, with a cooldown instead of permanent abandonment.
+    - Only working radars scout, and the power estimate counts reactors that actually stand.
+    - Disabling the citadel pauses its construction queue without losing progress; admin setting overrides are validated and applied atomically.
+    - Idle droids stranded beyond recruitment range no longer block raids at the unit cap: only the slots needed for the next raid are freed, without loot or kill credit.
+    - Raids check for nearby player buildings before using long-range radar targets, even on maps without a developed base at the player spawn.
+  Locale:
+    - Updated English and Russian setting descriptions for construction pauses, repair retries and raid size limits.
+---------------------------------------------------------------------------------------------------
 Version: 1.0.0
 Date: 2026.10.26
   Bugfixes:
@@ -31,7 +47,7 @@ Date: 2026.10.26
     - The citadel clears its surroundings: every one to two minutes it removes a few biter nests and worms within 5 chunks of the city (removed by script: no evolution).
     - Loot: destroyed replicator droids drop parts of their bodies by kind (gears, plates of Bob's metals, bearing balls and bearings, rods, cables, circuit boards, electronic components, circuits), destroyed key buildings drop replicator cores; the core decryption recipe (learned when the citadel appears) takes a core apart into advanced parts.
     - Remote interface robotarmy-citadel: status(), modules(), squads(), spawn(x, y), grow(n, type), defeat() and configure(overrides) (map settings for this save, e.g. growth_ticks, stun_ticks; configure(nil) clears them).
-    - Messages: a warning at 45 % evolution, the place of the citadel (map tag and chat link), the shield and acceleration stages, the fall of the hive, a new hive, the defeat. Command /citadel shows its state.
+    - Messages: a warning at 45 % evolution, the place of the citadel (map tag and chat link), the shield and acceleration stages, the fall of the hive, a new hive, the defeat. The state command was introduced as /citadel (now /signal).
   Compatibility:
     - The replicator droids and towers fire their own hidden ammo categories ("replicator-<category>", copies of the Robot Army droid categories and of "capsule"), so the droid damage and rate research of the players no longer lists the replicators in its tooltip (it never boosted them: the bonuses belong to a force).
     - Kills of replicator droids by Robot Army droids count for the droid ranks (remote function credit_kill of Robot Army Reforged); Robot Army droids attack the citadel like any enemy.

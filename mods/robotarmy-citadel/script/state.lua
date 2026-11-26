@@ -76,13 +76,32 @@ end
 ---------------------------------------------------------------------------------------------------
 state.cfg = {}
 
+-- Numeric bounds mirror settings.lua for map settings. The remote tick-based delays have
+-- independent minima (one heartbeat for growth/stun/cull and one tick for cull jitter).
+local RULES = {
+  enabled = "boolean", messages = "boolean",
+  warning = {0, 1}, evolution = {0, 1}, base_radius = {0, 500, true}, distance = {3, 500, true},
+  growth_ticks = {60, 600 * 3600, true}, stun_ticks = {60, 6000 * 3600, true},
+  accel_modules = {1, 10000, true}, accel_per_hour = {0, 10}, shield_modules = {1, 10000, true},
+  unit_limit = {10, 5000, true}, attack_groups = {1, 50, true}, squad_base = {1, 200, true},
+  squad_max = {1, 200, true}, clear_radius = {0, 50, true},
+  cull_min = {60, 216000, true}, cull_jitter = {1, 216000, true},
+}
+
+function state.valid_override(k, v)
+  local rule = RULES[k]
+  if rule == "boolean" then return type(v) == "boolean" end
+  return rule ~= nil and type(v) == "number" and v >= rule[1] and v <= rule[2]
+    and (not rule[3] or v % 1 == 0)
+end
+
 function state.read_settings()
   local g = settings.global
   local s = S.setting
   local cfg = state.cfg
   cfg.enabled = g[s.enabled].value
   cfg.evolution = g[s.evolution].value
-  cfg.warning = math.min(g[s.warning].value, cfg.evolution)
+  cfg.warning = g[s.warning].value
   cfg.base_radius = g[s.base_radius].value
   cfg.distance = g[s.distance].value
   cfg.growth_ticks = math.max(60, math.floor(g[s.growth].value * 3600))
@@ -101,8 +120,13 @@ function state.read_settings()
   -- overrides set through the remote interface (tests, admins), kept in the save
   local c = storage.citadel
   if c and c.overrides then
-    for k, v in pairs(c.overrides) do cfg[k] = v end
+    -- Leave legacy raw values in storage. Invalid ones fall back to the map until replaced
+    -- explicitly or reset; neither load nor a different setting change erases an override.
+    for k, v in pairs(c.overrides) do
+      if state.valid_override(k, v) then cfg[k] = v end
+    end
   end
+  cfg.warning = math.min(cfg.warning, cfg.evolution)
 end
 
 function state.surface(c)

@@ -1,6 +1,6 @@
 # Robot Army: Replicator Citadel
 
-A hostile city of replicator droids for Factorio 2.0, built on the droids of Robot Army Reforged.
+A hostile city of replicator droids for Factorio 2.1, built on the droids of Robot Army Reforged.
 At 50 % biter evolution it appears far from the player base, grows by one walled module chunk
 every 10 minutes and sends every finished squad against the players.
 
@@ -10,11 +10,11 @@ every 10 minutes and sends every finished squad against the players.
 |---|---|
 | Waiting | Evolution of the `enemy` force on Nauvis is read once a minute. At 45 % the players get a warning. A save already past the threshold gets the citadel 10 minutes after the mod is added. |
 | Place | Spawn point + base radius (10 chunks) + distance (50 chunks), random direction; the chunk may have at most 25 % water (paved over) and no player building in the 3x3 chunks around. Up to 8 tries per distance, then 5 chunks farther. |
-| Growth | Every growth interval: a ruined module is rebuilt first; otherwise a new module next to the city (compact shapes preferred, toward the base with relay masts). Chunks with water, player buildings or no generation are skipped for 30 minutes. |
+| Growth | Every growth interval: a ruined module or missing hub is repaired when due; a failed repair backs off so growth can continue. Otherwise a new module is added next to the city (compact shapes preferred, toward the base with relay masts). Chunks with water, player buildings or no generation are skipped for 30 minutes. |
 | Shields | From 25 modules (with Defence Tower Reforged): a defence tower in every module, shield research for the citadel force, shield modules in the choice. |
 | Acceleration | From 100 modules: foundries +10 % speed per hour, no limit. |
 | Hive lost | No growth for 60 minutes (foundries keep working). Then the foundry module farthest from the base becomes the new hive; the old hive is rebuilt later as a foundry. |
-| Defeat | The hive down and every foundry destroyed: the remaining buildings blow up, the droids are gone. |
+| Defeat | With the hive down, a standing foundry or pending foundry build can still save the city. When no foundry stands and none can finish building, construction is cancelled and the remaining city is cleaned up once. |
 
 ## Modules
 
@@ -38,11 +38,17 @@ module stands: when all of them are destroyed the module is ruined (no bonus, re
 ## Squads and intelligence
 
 Droids join the squad gathering on the hive plaza; a full squad (8 + 1 per foundry module, at most
-40) marches on the base in route segments; at most 6 squads attack at once, at most 400 droids
-live. Intelligence levels (one per computing centre, up to 6): 0 nearest target, half squads,
+40 by default) marches on the base in route segments; at most 6 squads attack at once, at most
+400 droids live by default. The muster target cannot exceed the configured droid limit. Intelligence levels (one per computing centre, up to 6): 0 nearest target, half squads,
 no retreat; 1 full squads and retreat after heavy losses; 2 undefended buildings first; 3 avoids
 the chunks where droids died; 4 marches without distraction; 5 pincers (two squads, two targets);
-6 strikes poles and generators, damaged squads go to the repair docks.
+6 strikes poles and generators, damaged squads go to the repair docks. A retreat checks the
+positions of the survivors and retries failed routes before releasing them. Only working, powered
+radars scan; squads remember the chunks of actual buildings and do not select empty known chunks.
+
+At launch, squads check for player buildings within 128 tiles of the muster group before using
+radar targets. If the droid limit prevents reinforcements, the citadel may retire idle, ungrouped
+droids outside the 400-tile recruitment radius, freeing only the slots needed for the next raid.
 
 ## Performance
 
@@ -62,14 +68,25 @@ the chunks where droids died; 4 marches without distraction; 5 pincers (two squa
 
 Enabled, warning and appearance evolution, base radius, distance, growth interval, pause after the
 hive falls, acceleration threshold and percent per hour, shield threshold, droid limit, attacking
-squads, squad size and maximum, cleared radius, messages.
+squads, squad size and maximum, cleared radius, messages. Turning the citadel off pauses
+construction and repair at the current queue position. An existing defeat cleanup still runs.
 
 ## Interfaces
 
 Remote interface `robotarmy-citadel`: `status()`, `modules()`, `squads()`, `spawn(x, y)`,
-`grow(n, module_type)`, `defeat()`, `configure(overrides)` (keys of the cached settings such as
-`growth_ticks`, `stun_ticks`, `base_radius`, `distance`, `squad_base`, `cull_min`; kept in the save,
-`configure(nil)` clears them; `grow` forces chunk generation and is meant for tests and admins). Command `/signal` (a neutral name: it is listed in `/help` from the start) prints the phase before the citadel appears and the full state after. Robot Army Reforged gets the kills of its droids
+`grow(n, module_type)`, `defeat()`, `configure(overrides)`. Explicit `spawn(x, y)` and `grow`
+can queue construction while disabled, but it does not advance until enabled. `spawn()` without
+coordinates uses the normal site search, which also waits for enablement. `grow` can force chunk
+generation and is meant for tests and admins.
+
+`configure` atomically updates the supplied keys of the cached settings (e.g. `base_radius`,
+`unit_limit`, `squad_base`). `growth_ticks` and `stun_ticks` use integer ticks (at least 60, up to
+the corresponding map setting's maximum in ticks); `cull_min` and `cull_jitter` use respectively
+60–216,000 and 1–216,000 ticks. `accel_per_hour` is a fraction (0–10) rather than a percentage.
+`configure(nil)` clears the saved overrides. Invalid legacy overrides remain in storage but fall
+back to map defaults until explicitly replaced or reset.
+
+Command `/signal` (a neutral name: it is listed in `/help` from the start) prints the phase before the citadel appears and the full state after. Robot Army Reforged gets the kills of its droids
 through its remote function `credit_kill`.
 
 ## Tests (pure Lua 5.1, run from the mod root; not engine evidence)

@@ -39,19 +39,46 @@ function B.pause()
   set_handler(false)
 end
 
+local function can_work(c)
+  return c and c.work[1] ~= nil and (c.phase == "destroyed" or (c.phase == "active" and state.cfg.enabled))
+end
+
+function B.sync(c)
+  set_handler(not not can_work(c))
+end
+
 function B.queue(c, job)
-  if c.phase == "suspended_merge" then return end
+  if c.phase ~= "active" then return end
   c.work[#c.work + 1] = job
+  B.sync(c)
+end
+
+local function collapse_job(c)
+  local keys = {}
+  for i, k in ipairs(c.order) do keys[i] = k end
+  return {t = "cascade", keys = keys}
+end
+
+function B.collapse(c)
+  c.work = {collapse_job(c)}
   set_handler(true)
+end
+
+--- Ignore the job whose completion callback is currently running, if any.
+function B.foundry_pending(c, finishing)
+  for _, job in ipairs(c.work) do
+    if job.k and job.k ~= finishing and (job.t == "finish" or job.t == "rewire") then
+      local m = c.modules[job.k]
+      if m and M.types[m.type].cat == "production" then return true end
+    end
+  end
+  return false
 end
 
 --- After a load: the handler follows the queue (storage is read-only here).
 function B.on_load(c)
   registered = false
-  if c and c.phase ~= "suspended_merge" and c.work and c.work[1] then
-    registered = true
-    script.on_nth_tick(B.PERIOD, step)
-  end
+  B.sync(c)
 end
 
 function B.busy(c)
@@ -164,6 +191,10 @@ end
 run.place = function(c, job, surface)
   local m = c.modules[job.k]
   if not m then return true end
+  local after = c.work[2]
+  -- Restoration was for a standing module. If its last key fell meanwhile, only the normal
+  -- rebuild or hive relocation can recover it. Identify the pair in existing saved queues too.
+  if m.ruined and after and after.t == "rewire" and after.k == job.k then return true end
   local force = forces.get()
   if not job.list then
     job.list = L.entries(m.type)
@@ -182,6 +213,7 @@ run.place = function(c, job, surface)
       job.missed = job.missed or {}
       job.missed[#job.missed + 1] = entry[1]
     end
+    if c.phase ~= "active" then return true end
   end
   if job.list[job.i] ~= nil then return false end
   -- what the last placement achieved (inspection, remote modules())
@@ -265,6 +297,7 @@ run.towers = function(c, job, surface)
     job.i = job.i + 1
     local m = c.modules[k]
     if m and m.built and not (m.tower and m.tower.valid) then place(c, m, surface, force, L.TOWER, {}) end
+    if c.phase ~= "active" then return true end
   end
   return job.keys[job.i] == nil
 end
@@ -295,17 +328,25 @@ end
 
 step = function()
   local c = state.get()
-  if not c or c.phase == "suspended_merge" or not c.work[1] then
+  if not can_work(c) then
     set_handler(false)
     return
   end
   local job = c.work[1]
+  if c.phase == "destroyed" then
+    -- Older saves may have construction on either side of a pending cascade. Keep its progress
+    -- if it exists; otherwise clean up any buildings left by those stale jobs.
+    for _, queued in ipairs(c.work) do
+      if queued.t == "cascade" then job = queued; break end
+    end
+    if job.t ~= "cascade" then job = collapse_job(c) end
+    if c.work[1] ~= job or c.work[2] then c.work = {job} end
+  end
   local surface = state.surface(c)
   local done = (not surface) or run[job.t](c, job, surface)
-  if done then
-    table.remove(c.work, 1)
-    if not c.work[1] then set_handler(false) end
-  end
+  -- A callback (including finish) can replace the queue with the defeat cascade.
+  if done and c.work[1] == job then table.remove(c.work, 1) end
+  if not c.work[1] then set_handler(false) end
 end
 
 --- Puts back the missing buildings of a standing module (its hub first) and wires it again.
