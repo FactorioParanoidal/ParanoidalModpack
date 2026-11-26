@@ -298,7 +298,7 @@ function placedfli(placed_entity)
       storage.flis[placed_entity.unit_number] = placed_entity
       if storage.flishown then storage.flishown[placed_entity.unit_number] = nil end
       create_textbox(placed_entity, surface)
-      storage.fliindex = placed_entity.unit_number
+      -- A new indicator joins the scan without skipping the existing indicators.
       storage.flitype[placed_entity.unit_number] = 1
     end
   end

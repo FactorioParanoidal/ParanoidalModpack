@@ -22,6 +22,7 @@ Date: 09 May 2025
     - Paranoidal: mining, robot mining, script destroy, clone and platform events are filtered by the indicator names
       (before, every mined or script-removed entity of any kind ran the handler).
   Bugfixes:
+    - Building an indicator no longer moves the update cursor past existing indicators; repeated construction can no longer keep their percentages stale in this way.
     - Paranoidal: an indicator removed without an event or mid-iteration no longer breaks the update cursor;
       missing render objects are recreated instead of erroring.
     - Paranoidal: removed the unused set_color helper that called the removed rendering.set_color API.
