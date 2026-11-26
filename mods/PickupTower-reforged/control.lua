@@ -3,7 +3,7 @@
 --
 -- storage.towers[chest unit] = {chest, radar, radar_unit, tier, radius, x, y}
 -- storage.by_radar[radar unit] = chest unit
--- storage.views[player index] = {render objects}  -- ranges while a tower is in the cursor
+-- storage.views[player index].by_unit[chest unit] = render object  -- ranges while a tower is in the cursor
 -- storage.hover[player index] = render object      -- range of the hovered tower
 local S = require("shared")
 
@@ -65,7 +65,8 @@ end
 local function hide_view(index)
   local view = storage.views[index]
   if not view then return end
-  for _, obj in pairs(view) do obj.destroy() end
+  -- Older saves kept a plain list. Its entity anchors still expire normally.
+  for _, obj in pairs(view.by_unit or view) do obj.destroy() end
   storage.views[index] = nil
 end
 
@@ -79,15 +80,15 @@ end
 
 local function show_view(player)
   hide_view(player.index)
-  local view = {}
+  local by_unit = {}
   local force, surface = player.force, player.surface
-  for _, rec in pairs(storage.towers) do
+  for unit, rec in pairs(storage.towers) do
     local chest = rec.chest
     if chest.valid and chest.surface == surface and chest.force == force then
-      view[#view + 1] = draw_range(rec, player)
+      by_unit[unit] = draw_range(rec, player)
     end
   end
-  storage.views[player.index] = view
+  storage.views[player.index] = {by_unit = by_unit}
 end
 
 local function in_cursor(player)
@@ -165,8 +166,9 @@ local function add_tower(chest)
   local force, surface = chest.force, chest.surface
   for index, view in pairs(storage.views) do
     local player = game.get_player(index)
-    if player and player.force == force and player.surface == surface then
-      view[#view + 1] = draw_range(rec, player)
+    if player and player.connected and player.force == force and player.surface == surface then
+      if view.by_unit then view.by_unit[unit] = draw_range(rec, player)
+      else show_view(player) end -- Upgrade a legacy view on demand.
     end
   end
 end
@@ -181,6 +183,14 @@ local function remove_tower(unit)
   local rec = storage.towers[unit]
   if not rec then return end
   storage.towers[unit] = nil
+  for _, view in pairs(storage.views) do
+    local by_unit = view.by_unit
+    local obj = by_unit and by_unit[unit]
+    if obj then
+      obj.destroy()
+      by_unit[unit] = nil
+    end
+  end
   remove_retry(rec)
   drop_radar(rec)
 end
@@ -421,24 +431,10 @@ local function on_scanned(e)
   end
 end
 
-local function on_cursor(e)
-  local player = game.get_player(e.player_index)
-  if not player then return end
-  local want = shows(player) and in_cursor(player)
-  local has = storage.views[e.player_index] ~= nil
-  if want and not has then
-    hide_hover(e.player_index)
-    show_view(player)
-  elseif has and not want then
-    hide_view(e.player_index)
-  end
-end
-
-local function on_selected(e)
-  local index = e.player_index
-  if storage.hover[index] then hide_hover(index) end
-  local player = game.get_player(index)
-  if not player then return end
+local function update_hover(player)
+  local index = player.index
+  hide_hover(index)
+  if not player.connected or storage.views[index] or not shows(player) then return end
   local selected = player.selected
   if not selected then return end
   local name = selected.name
@@ -450,19 +446,42 @@ local function on_selected(e)
   else
     return
   end
-  if storage.views[index] or not shows(player) then return end
   local rec = unit and storage.towers[unit]
-  if rec and rec.chest.valid then storage.hover[index] = draw_range(rec, player) end
-end
-
-local function on_surface_changed(e)
-  if storage.views[e.player_index] then
-    local player = game.get_player(e.player_index)
-    if player then show_view(player) end
+  if rec and rec.chest.valid and rec.chest.surface == player.surface then
+    storage.hover[index] = draw_range(rec, player)
   end
 end
 
-local function on_player_removed(e)
+local function update_view(player, refresh)
+  local index = player.index
+  local view = storage.views[index]
+  if player.connected and shows(player) and in_cursor(player) then
+    if refresh or not view or not view.by_unit then
+      hide_hover(index)
+      show_view(player)
+    end
+  elseif view or refresh then
+    hide_view(index)
+    update_hover(player)
+  end
+end
+
+local function on_cursor(e)
+  local player = game.get_player(e.player_index)
+  if player then update_view(player, false) end
+end
+
+local function on_selected(e)
+  local player = game.get_player(e.player_index)
+  if player then update_hover(player) end
+end
+
+local function refresh_player(e)
+  local player = game.get_player(e.player_index)
+  if player then update_view(player, true) end
+end
+
+local function clear_player(e)
   hide_view(e.player_index)
   hide_hover(e.player_index)
   show_cache[e.player_index] = nil
@@ -471,11 +490,12 @@ end
 local function on_setting(e)
   if e.setting ~= S.show_setting or not e.player_index then return end
   show_cache[e.player_index] = nil
-  local player = game.get_player(e.player_index)
-  if player and not shows(player) then
-    hide_view(e.player_index)
-    hide_hover(e.player_index)
-  end
+  refresh_player(e)
+end
+
+local function rebuild_and_refresh()
+  rebuild()
+  for _, player in pairs(game.connected_players) do update_view(player, true) end
 end
 
 -- Even Pickier Dollies: the tower chest may be moved, the hidden radar may not.
@@ -508,14 +528,15 @@ script.on_event(defines.events.on_sector_scanned, on_scanned, (function()
 end)())
 script.on_event(defines.events.on_player_cursor_stack_changed, on_cursor)
 script.on_event(defines.events.on_selected_entity_changed, on_selected)
-script.on_event(defines.events.on_player_changed_surface, on_surface_changed)
-script.on_event(defines.events.on_player_removed, on_player_removed)
+script.on_event({defines.events.on_player_changed_surface, defines.events.on_player_changed_force,
+    defines.events.on_player_joined_game}, refresh_player)
+script.on_event({defines.events.on_player_left_game, defines.events.on_player_removed}, clear_player)
 script.on_event(defines.events.on_runtime_mod_setting_changed, on_setting)
-script.on_event(defines.events.on_forces_merged, rebuild)
+script.on_event(defines.events.on_forces_merged, rebuild_and_refresh)
 
 script.on_init(function()
   init_storage()
-  rebuild()
+  rebuild_and_refresh()
   dollies(true)
 end)
 
@@ -526,6 +547,6 @@ end)
 
 script.on_configuration_changed(function()
   init_storage()
-  rebuild()
+  rebuild_and_refresh()
   dollies(true)
 end)
