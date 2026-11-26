@@ -38,6 +38,16 @@ local function bm_target_allowed(surface, force)
 end
 
 -- Removes invalid entities from an array in place, keeping the order.
+-- Keep retries local to the selected spawn, rather than searching the entire map.
+local BOSS_SPAWN_RADIUS = 64
+
+local function announce_boss(force, boss, surface, message)
+	if not (boss and boss.valid) then return end
+	alert_force(force, {message})
+	Play_sound_alert(force, 3)
+	if storage.show_cameras then CreateCameraForForce(force, boss, surface, nil, nil, 120, 0.15) end
+end
+
 local function compact_valid_entities(list)
     local n = 0
     for i = 1, #list do
@@ -351,10 +361,8 @@ for p=1,#storage.player_forces do
 					local attack2 = {x= rchunk.x*32+math.random(31), y= rchunk.y*32+math.random(31)}
 					if spawn then
 						if storage.spawn_near_nests then spawn = get_pos_near_enemy_nest(surface,spawn,pforce) end 
-						local group, zilla = create_biterzilla(surface,spawn,pcount,attack1, attack2, player_spawn,nil,evo)
-						alert_force(pforce,{"bm-txt-biterzilla"})
-						Play_sound_alert(pforce,3)
-						if storage.show_cameras then CreateCameraForForce(pforce,zilla,surface,nil,nil,120,0.15) end
+						local _, zilla = create_biterzilla(surface,spawn,pcount,attack1, attack2, player_spawn,nil,evo)
+						announce_boss(pforce, zilla, surface, "bm-txt-biterzilla")
 						end
 
 
@@ -365,9 +373,7 @@ for p=1,#storage.player_forces do
 					if spawn then
 						if storage.spawn_near_nests then spawn = get_pos_near_enemy_nest(surface,spawn,pforce) end 
 						local spider = create_spidertron(surface,spawn,pcount,evo)
-						alert_force(pforce,{"bm-txt-spidertron"})
-						Play_sound_alert(pforce,3)	
-						if storage.show_cameras then CreateCameraForForce(pforce,spider,surface,nil,nil,120,0.15) end
+						announce_boss(pforce, spider, surface, "bm-txt-spidertron")
 						end
 
 				elseif the_event=='demolisher' and script.active_mods["space-age"] then
@@ -388,9 +394,7 @@ for p=1,#storage.player_forces do
 					if spawn then
 						if storage.spawn_near_nests then spawn = get_pos_near_enemy_nest(surface,spawn,pforce) end 
 						local spider = create_flying_saucer(surface,spawn,pcount,evo)
-						alert_force(pforce,{"bm-txt-ufo"})
-						Play_sound_alert(pforce,3)	
-						if storage.show_cameras then CreateCameraForForce(pforce,spider,surface,nil,nil,120,0.15) end
+						announce_boss(pforce, spider, surface, "bm-txt-ufo")
 						end
 
 
@@ -399,9 +403,7 @@ for p=1,#storage.player_forces do
 					if spawn then
 						if storage.spawn_near_nests then spawn = get_pos_near_enemy_nest(surface,spawn,pforce) end 
 						local group, zilla = create_biterzilla(surface,spawn,pcount,attack1, nil, player_spawn,'bm_fake_human_ultimate_boss_cannon_20',evo)
-						alert_force(pforce,{"bm-txt-ultimate_boss"})
-						Play_sound_alert(pforce,3)	
-						if storage.show_cameras then CreateCameraForForce(pforce,zilla,surface,nil,nil,120,0.15) end
+						announce_boss(pforce, zilla, surface, "bm-txt-ultimate_boss")
 						end
 
 				end
@@ -498,10 +500,8 @@ local evo = get_evo_here(surface)
 					local spawn = surface.find_nearest_enemy{position=position, max_distance=500, force=pforce}
 					if spawn then
 						spawn = get_random_pos_near(spawn.position,30)
-						local group, zilla = create_biterzilla(surface,spawn,pcount,position,nil,nil,nil,evo)
-						alert_force(pforce,{"bm-txt-biterzilla"})
-						Play_sound_alert(pforce,3)	
-						if storage.show_cameras then CreateCameraForForce(pforce,zilla,surface,nil,nil,120,0.15) end
+						local _, zilla = create_biterzilla(surface,spawn,pcount,position,nil,nil,nil,evo)
+						announce_boss(pforce, zilla, surface, "bm-txt-biterzilla")
 						end
 
 
@@ -510,9 +510,7 @@ local evo = get_evo_here(surface)
 					if spawn then
 						if storage.spawn_near_nests then spawn = get_pos_near_enemy_nest(surface,spawn,pforce) end 
 						local spider = create_flying_saucer(surface,spawn,pcount,evo)
-						alert_force(pforce,{"bm-txt-ufo"})
-						Play_sound_alert(pforce,3)	
-						if storage.show_cameras then CreateCameraForForce(pforce,spider,surface,nil,nil,120,0.15) end
+						announce_boss(pforce, spider, surface, "bm-txt-ufo")
 						end
 
 				elseif the_event=='demolisher' and script.active_mods["space-age"] then
@@ -769,7 +767,7 @@ if evo<0.9 and (not specific_zilla) then
 
 if specific_zilla then name=specific_zilla end
 
-local position = surface.find_non_colliding_position(name, spawn, 0, 1)
+local position = surface.find_non_colliding_position(name, spawn, BOSS_SPAWN_RADIUS, 1)
 	if position then
 		group = surface.create_unit_group{position = position, force = game.forces.enemy}
 		create_remnants_particles (surface, math.random(60,100) , position) 
@@ -816,10 +814,11 @@ if evo>0.98 then N=5
 	end
 local name='bm-spidertron_' .. N
 	
-local position = surface.find_non_colliding_position(name, spawn, 0, 1)
+local position = surface.find_non_colliding_position(name, spawn, BOSS_SPAWN_RADIUS, 1)
 	if position then
 		create_remnants_particles (surface, math.random(60,100) , position) 
 		spider = surface.create_entity{name=name, position=position, force = game.forces.enemy}
+		if not (spider and spider.valid) then return end
 		surface.create_entity{name="bm-large-tunnel", position=position, force = game.forces.neutral}
 		local effect 
 		if evo>0.6 and math.random (3)==1 then effect='defender_capsules' end 
@@ -842,10 +841,11 @@ if evo>0.96 then N="big"
 	elseif evo>0.93 then N="medium"
 	end
 local name= "mf_".. N .. "-demolisher"
-local position = surface.find_non_colliding_position(name, spawn, 0, 1)
+local position = surface.find_non_colliding_position(name, spawn, BOSS_SPAWN_RADIUS, 1)
 	if position then
 		create_remnants_particles (surface, math.random(60,100) , position) 
 		worm = surface.create_entity{name=name, position=position, force = game.forces.enemy}
+		if not (worm and worm.valid) then return end
 		surface.create_entity{name="bm-large-tunnel", position=position, force = game.forces.neutral}
 		surface.create_entity{name="small-demolisher-trail-upper", position=position, force = game.forces.neutral}
 		surface.create_entity{name="small-demolisher-trail-lower", position=position, force = game.forces.neutral}
@@ -868,10 +868,11 @@ if evo>0.98 then N=8
 	elseif evo>0.7  then N=2
 	end
 local name='maf_flying_saucer_' .. N
-local position = surface.find_non_colliding_position(name, spawn, 0, 1)
+local position = surface.find_non_colliding_position(name, spawn, BOSS_SPAWN_RADIUS, 1)
 	if position then
 		create_remnants_particles (surface, math.random(60,100) , position) 
 		spider = surface.create_entity{name=name, position=position, force = game.forces.enemy}
+		if not (spider and spider.valid) then return end
 		spider.insert({name='flying-saucer-laser-ammo',count=1}) 
 		local effect 
 		if evo>0.8 and math.random (3)==1 then effect='defender_capsules' end 

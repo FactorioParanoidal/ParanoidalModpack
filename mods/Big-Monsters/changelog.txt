@@ -25,6 +25,7 @@ Version: 2.1.2
     - Paranoidal fork: spidertron, demolisher and ultimate boss events have their own alert messages
     - Paranoidal fork: Russian locale for the peaceful setting and the new alert messages
   Bugfixes:
+    - Bosses search for a free position within 64 tiles; failed placement no longer announces a boss or opens its camera.
     - Native No Enemies prevents monster events and new reinforcements, even with the peaceful-mode override enabled.
     - Paranoidal fork: fixed a crash when changing the per-player camera settings (wrong setting names were read)
     - Paranoidal fork: fixed event targets placed at the end of the search line instead of player chunks; only consecutive empty chunks count towards the enemy spawn distance
