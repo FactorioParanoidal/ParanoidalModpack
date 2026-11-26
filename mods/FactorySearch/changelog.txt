@@ -7,8 +7,12 @@ Date: 8 June 2026
   Changes:
     - Paranoidal packaging: moved the upstream publication workflow out of the distributed mod into the local development workspace.
   Bugfixes:
+    - Non-blocking searches advance even at a saved chunk budget of zero and count boundary entities and map tags only in their own chunk.
     - Search excludes auto-trash-only requests and zero-count combinator rules; any-quality item searches include qualities below normal.
+    - Blocking entity search respects charted chunks, like background search.
     - Fixed crash when searching on Gleba in 'Module' search mode
+  Optimizations:
+    - Non-blocking searches show a loading indicator without pre-counting the map, budget uncharted chunks too, and find the first matching result group with a spatial index.
   Compatibility:
     - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.
     - Factorio 2.1 runtime API: signal search reads logistic chests through read_contents (the exclusive mode of operation was removed) and storage tanks through the exclusive mode of the single fluid box control behavior (storage tanks no longer have read_contents).

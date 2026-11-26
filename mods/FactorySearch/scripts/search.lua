@@ -782,7 +782,7 @@ function Search.blocking_search(force, state, target_item, surface_list, type_li
       local tags = force.find_chart_tags(surface.name)
       for _, tag in pairs(tags) do
         local tag_icon = tag.icon
-        if tag_icon and signal_eq(target_item, tag_icon) then
+        if tag_icon and signal_eq(target_item, tag_icon) and force.is_chunk_charted(surface, to_chunk_position(tag.position)) then
           SearchResults.add_tag(tag, surface_data.map_tags)
           SearchResults.add_surface_statistics("tag_count", 1, surface_statistics)
         end
@@ -803,12 +803,14 @@ function Search.blocking_search(force, state, target_item, surface_list, type_li
           force = { force, "neutral" },
         }
         for _, entity in pairs(entities) do
-          if entity.type == "resource" then
-            local amount = SearchResults.add_entity_resource(entity, surface_data.entities)
-            SearchResults.add_surface_statistics("resource_count", amount, surface_statistics)
-          else
-            SearchResults.add_entity(entity, surface_data.entities)
-            SearchResults.add_surface_statistics("entity_count", 1, surface_statistics)
+          if force.is_chunk_charted(surface, to_chunk_position(entity.position)) then
+            if entity.type == "resource" then
+              local amount = SearchResults.add_entity_resource(entity, surface_data.entities)
+              SearchResults.add_surface_statistics("resource_count", amount, surface_statistics)
+            else
+              SearchResults.add_entity(entity, surface_data.entities)
+              SearchResults.add_surface_statistics("entity_count", 1, surface_statistics)
+            end
           end
         end
       end
@@ -831,6 +833,11 @@ function Search.blocking_search(force, state, target_item, surface_list, type_li
   storage.current_searches[player.index] = nil
 end
 
+local function owns_position(box, p)
+  return p.x >= box.left_top.x and p.x < box.right_bottom.x
+    and p.y >= box.left_top.y and p.y < box.right_bottom.y
+end
+
 function on_tick()
   local player_index, search_data = next(storage.current_searches)
   if not player_index or not search_data then return end
@@ -851,12 +858,13 @@ function on_tick()
     SearchGui.hide_search_progress(refs)
     refs.sort_results_dropdown.enabled = true
     storage.current_searches[player_index] = nil
+    return
   end
 
   local current_surface_search_data = search_data.current_surface_search_data
   if not current_surface_search_data or not current_surface_search_data.surface.valid then
     -- Start next surface
-    next_surface = table.remove(search_data.not_started_surfaces)
+    local next_surface = table.remove(search_data.not_started_surfaces)
     if not next_surface then
       -- All surfaces are complete
       search_data.search_complete = true
@@ -890,7 +898,8 @@ function on_tick()
   local current_surface = current_surface_search_data.surface
   local force = search_data.force
   local chunks_processed = 0
-  local chunks_per_tick = settings.global["fs-chunks-per-tick"].value
+  -- Zero was permitted by older settings, but must not stall a search.
+  local chunks_per_tick = math.max(1, settings.global["fs-chunks-per-tick"].value)
   while chunks_processed < chunks_per_tick do
     local chunk = chunk_iterator()
     if not chunk then
@@ -904,16 +913,11 @@ function on_tick()
       search_data.statistics[current_surface.name] = current_surface_search_data.surface_statistics
       search_data.current_surface_search_data = nil
 
-      search_data.completed_chunk_count = search_data.completed_chunk_count + chunks_processed
-      SearchGui.show_search_progress(storage.players[player_index].refs, search_data.completed_chunk_count / search_data.total_chunk_count)
       return
     end
 
-    if force.is_chunk_charted(current_surface, chunk) then
-      chunks_processed = chunks_processed + 1
-    else
-      goto continue
-    end
+    chunks_processed = chunks_processed + 1
+    if not force.is_chunk_charted(current_surface, chunk) then goto continue end
 
     local target_item = search_data.target_item
     local target_name = target_item.name
@@ -946,7 +950,7 @@ function on_tick()
     end
 
     for i, entity in pairs(entities) do
-      if not math2d.bounding_box.contains_point(chunk_area, entity.position) then
+      if not owns_position(chunk_area, entity.position) then
         entities[i] = nil
       end
     end
@@ -955,10 +959,9 @@ function on_tick()
 
     -- Map tags
     if state.map_tags then
-      local slightly_smaller_chunk_area = {left_top = {chunk_area.left_top.x, chunk_area.left_top.y}, right_bottom = {chunk_area.right_bottom.x - 1, chunk_area.right_bottom.y - 1}}
-      local tags = force.find_chart_tags(current_surface.name, slightly_smaller_chunk_area)
+      local tags = force.find_chart_tags(current_surface.name, chunk_area)
       for _, tag in ipairs(tags) do
-        if math2d.bounding_box.contains_point(chunk_area, tag.position) then
+        if owns_position(chunk_area, tag.position) then
           local tag_icon = tag.icon
           if tag_icon and signal_eq(target_item, tag_icon) then
             SearchResults.add_tag(tag, surface_data.map_tags)
@@ -983,7 +986,7 @@ function on_tick()
           force = { force, "neutral" },
         }
         for _, entity in pairs(entities) do
-          if math2d.bounding_box.contains_point(chunk_area, entity.position) then
+          if owns_position(chunk_area, entity.position) then
             if entity.type == "resource" then
               local amount = SearchResults.add_entity_resource(entity, surface_data.entities)
               SearchResults.add_surface_statistics("resource_count", amount, surface_statistics)
@@ -997,9 +1000,6 @@ function on_tick()
     end
     ::continue::
   end
-
-  search_data.completed_chunk_count = search_data.completed_chunk_count + chunks_processed
-  SearchGui.show_search_progress(storage.players[player_index].refs, search_data.completed_chunk_count / search_data.total_chunk_count)
 end
 
 ---@param target_item SignalID
@@ -1079,22 +1079,9 @@ function Search.find_machines(target_item, force, state, player, immediate)
     surface_list = filtered_surfaces()
   end
 
-  local total_chunk_count = 0
   local non_blocking_setting = settings.global["fs-non-blocking-search"].value
-  if non_blocking_setting == "on" or (non_blocking_setting == "multiplayer" and game.is_multiplayer()) then
-    non_blocking_search = true
-
-    for _, surface in ipairs(surface_list) do
-      for chunk in surface.get_chunks() do
-        if force.is_chunk_charted(surface, chunk) then
-          total_chunk_count = total_chunk_count + 1
-        end
-      end
-    end
-  else
-    non_blocking_search = false
-  end
-  search_data = {
+  local non_blocking_search = non_blocking_setting == "on" or (non_blocking_setting == "multiplayer" and game.is_multiplayer())
+  local search_data = {
     blocking = not non_blocking_search,
     tick_triggered = game.tick - (immediate and DEBOUNCE_TICKS or 0),
     force = force,
@@ -1106,9 +1093,7 @@ function Search.find_machines(target_item, force, state, player, immediate)
     data = {},
     statistics = {},
     not_started_surfaces = surface_list,
-    search_complete = false,
-    total_chunk_count = total_chunk_count,
-    completed_chunk_count = 0
+    search_complete = false
   }
   storage.current_searches[player.index] = search_data
   return true

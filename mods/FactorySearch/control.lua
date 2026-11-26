@@ -79,8 +79,6 @@ Interop = require "scripts.remote"
 ---@field not_started_surfaces LuaSurface[]
 ---@field search_complete boolean
 ---@field current_surface_search_data? CurrentSurfaceSearchData Used for non-blocking searches
----@field total_chunk_count number
----@field completed_chunk_count number
 
 ---@class (exact) EntityGroup
 ---@field count number

@@ -815,11 +815,7 @@ function SearchGui.start_search(player, player_data, _, _, immediate)
       search_started = Search.find_machines(item, force, state, player, immediate)
       refs.subheader_title.caption = get_signal_name(item) or ""
       if search_started then
-        if storage.current_searches[player.index].blocking then
-          SearchGui.build_loading_results(refs, nil)
-        else
-          SearchGui.build_loading_results(refs, 0)
-        end
+        SearchGui.build_loading_results(refs) -- Counting chunks for a percentage would block startup.
       else
         SearchGui.build_results({}, {}, refs.result_flow)
       end

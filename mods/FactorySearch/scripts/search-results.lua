@@ -1,6 +1,83 @@
 local SearchResults = {}
 
 local group_gap_size = 20
+local CELL, MAX_CELLS = 64, 64
+local floor = math.floor
+-- Search accumulators are append-only until their surface is finished, then sorted for display.
+-- The index is derived, rebuilt from the saved group order after a reload, and never stored.
+local indexes = setmetatable({}, {__mode = "k"})
+
+local function cells(box)
+  return floor(box.left_top.x / CELL), floor(box.left_top.y / CELL),
+    floor(box.right_bottom.x / CELL), floor(box.right_bottom.y / CELL)
+end
+
+local function register(index, group, id, old_box)
+  local x1, y1, x2, y2 = cells(group.selection_box)
+  local ox1, oy1, ox2, oy2
+  if old_box then
+    ox1, oy1, ox2, oy2 = cells(old_box)
+    if ox1 == x1 and oy1 == y1 and ox2 == x2 and oy2 == y2 then return end
+    if (ox2 - ox1 + 1) * (oy2 - oy1 + 1) > MAX_CELLS then return end
+  end
+  local name = group.entity_name
+  local kind = index[name]
+  if not kind then
+    kind = {rows = {}, large = {}, all = {}}
+    index[name] = kind
+  end
+  if not old_box then kind.all[id] = group end
+  if (x2 - x1 + 1) * (y2 - y1 + 1) > MAX_CELLS then
+    kind.large[id] = group
+    if old_box then
+      for y = oy1, oy2 do
+        local row = kind.rows[y]
+        for x = ox1, ox2 do
+          local bucket = row[x]
+          bucket[id] = nil
+          if not next(bucket) then row[x] = nil end
+        end
+        if not next(row) then kind.rows[y] = nil end
+      end
+    end
+    return
+  end
+  for y = y1, y2 do
+    local row = kind.rows[y]
+    if not row then row = {}; kind.rows[y] = row end
+    for x = x1, x2 do
+      local bucket = row[x]
+      if not bucket then bucket = {}; row[x] = bucket end
+      bucket[id] = group
+    end
+  end
+end
+
+local function first_group(index, name, box)
+  local kind = index[name]
+  if not kind then return end
+  local x1, y1, x2, y2 = cells(box)
+  local best, found
+  local function consider(bucket)
+    for id, group in pairs(bucket) do
+      if (not best or id < best) and math2d.bounding_box.collides_with(box, group.selection_box) then
+        best, found = id, group
+      end
+    end
+  end
+  if (x2 - x1 + 1) * (y2 - y1 + 1) > MAX_CELLS then
+    consider(kind.all)
+  else
+    consider(kind.large)
+    for y = y1, y2 do
+      local row = kind.rows[y]
+      if row then
+        for x = x1, x2 do if row[x] then consider(row[x]) end end
+      end
+    end
+  end
+  return found, best
+end
 
 ---@param entity LuaEntity
 ---@param entity_groups EntityGroup[]
@@ -11,12 +88,16 @@ function SearchResults.add_entity(entity, entity_groups)
   local entity_name = entity.name
   local entity_position = entity.position
   local entity_selection_box = entity.selection_box
-  ---@type EntityGroup?
-  local assigned_group
-  for _, group in pairs(entity_groups) do
-    if entity_name == group.entity_name and math2d.bounding_box.collides_with(entity_selection_box, group.selection_box) then
-      -- Add entity to group
-      assigned_group = group
+  local index = indexes[entity_groups]
+  if not index then
+    index = {}
+    for id, group in ipairs(entity_groups) do register(index, group, id) end
+    indexes[entity_groups] = index
+  end
+  local assigned_group, id = first_group(index, entity_name, entity_selection_box)
+  if assigned_group then
+      local group = assigned_group
+      local old_box = group.selection_box
       local count = group.count
       local new_count = count + 1
       group.avg_position = {
@@ -34,11 +115,9 @@ function SearchResults.add_entity(entity, entity_groups)
         },
       }
       group.count = new_count
-      table.insert(group.selection_boxes, entity.selection_box)
-      break
-    end
-  end
-  if not assigned_group then
+      table.insert(group.selection_boxes, entity_selection_box)
+      register(index, group, id, old_box)
+  else
     -- Create new group
     assigned_group = {
       count = 1,
@@ -54,10 +133,11 @@ function SearchResults.add_entity(entity, entity_groups)
         }
       },
       entity_name = entity_name,
-      selection_boxes = {[1] = entity.selection_box},
+      selection_boxes = {[1] = entity_selection_box},
       localised_name = entity.localised_name,
     }
     table.insert(entity_groups, assigned_group)
+    register(index, assigned_group, #entity_groups)
   end
   return assigned_group
 end
