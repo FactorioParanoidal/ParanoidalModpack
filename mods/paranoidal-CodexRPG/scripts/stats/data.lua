@@ -976,31 +976,58 @@ function STEP.recipes(job, force)
 	return false
 end
 
-local P5 -- flow precision for "now"
-local function read_network(a, pole)
+local function begin_network(pole, id)
 	local es = pole.electric_network_statistics
-	P5 = P5 or defines.flow_precision_index.five_seconds
-	local H1 = defines.flow_precision_index.one_hour
-	local ops, produced, now_total, sources = 2, 0, 0, {}
-	for name in pairs(es.output_counts) do
-		local now = es.get_flow_count({name = name, category = "output", precision_index = P5})
-		local hour = es.get_flow_count({name = name, category = "output", precision_index = H1})
-		add(a.power_now, name, now)
-		add(a.power_hour, name, hour)
-		produced = produced + now + hour
-		now_total = now_total + now
-		sources[#sources + 1] = name
+	if not es then return end
+	local outputs, inputs = es.output_counts, es.input_counts
+	return {pole = pole, id = id, outputs = outputs, inputs = inputs,
+		cost = 2 * table_size(outputs) + table_size(inputs), now_total = 0, produced = 0,
+		sources = {}, now = {}, hour = {}, use = {}}
+end
+
+-- Keep normal networks on one tick. Oversized ones resume between prototypes; publish their
+-- totals only after all samples were read from the same network.
+local function sample_network(a, pending, remaining)
+	if not pending.pole.valid or pending.pole.electric_network_id ~= pending.id then return 1, false end
+	local es = pending.pole.electric_network_statistics
+	if not es then return 2, false end
+	local P5, H1 = defines.flow_precision_index.five_seconds, defines.flow_precision_index.one_hour
+	local ops = 2
+	if pending.cost + ops <= BUDGET and pending.cost + ops > remaining then return ops end
+	local query = {category = "output"}
+	while not pending.outputs_done do
+		local name = next(pending.outputs, pending.last_output)
+		if not name then pending.outputs_done = true break end
+		if ops + 2 > remaining then return ops end
+		pending.last_output = name
+		query.name, query.precision_index = name, P5
+		local now = es.get_flow_count(query)
+		query.precision_index = H1
+		local hour = es.get_flow_count(query)
+		pending.now[name], pending.hour[name] = now, hour
+		pending.produced = pending.produced + now + hour
+		pending.now_total = pending.now_total + now
+		pending.sources[#pending.sources + 1] = name
 		ops = ops + 2
 	end
-	for name in pairs(es.input_counts) do
-		add(a.power_use, name, es.get_flow_count({name = name, category = "input", precision_index = P5}))
+	query.category, query.precision_index = "input", P5
+	while ops < remaining do
+		local name = next(pending.inputs, pending.last_input)
+		if not name then break end
+		pending.last_input = name
+		query.name = name
+		pending.use[name] = es.get_flow_count(query)
 		ops = ops + 1
 	end
-	if produced > 0 then
+	if next(pending.inputs, pending.last_input) then return ops end
+	for name, value in pairs(pending.now) do add(a.power_now, name, value) end
+	for name, value in pairs(pending.hour) do add(a.power_hour, name, value) end
+	for name, value in pairs(pending.use) do add(a.power_use, name, value) end
+	if pending.produced > 0 then
 		a.networks = a.networks + 1
-		a.nets[#a.nets + 1] = {pole = pole, now = now_total, sources = sources}
+		a.nets[#a.nets + 1] = {pole = pending.pole, id = pending.id, now = pending.now_total, sources = pending.sources}
 	end
-	return ops
+	return ops, true
 end
 
 -- Planet chunks row by row: charted chunks, the farthest one, chunks with our poles, and electric
@@ -1016,39 +1043,64 @@ function STEP.sweep(job, force)
 		job.sx, job.sy = math.floor(spawn.x / 32), math.floor(spawn.y / 32)
 		job.seen = {}
 	end
-	local x1, x2 = w.x1, w.x2
 	local ops = 0
 	while ops < BUDGET do
 		local y = job.y
-		if y > w.y2 then return true end
-		local dy2 = (y - job.sy) ^ 2
-		local pos = {0, y}
-		for x = x1, x2 do
-			pos[1] = x
-			if force.is_chunk_charted(surface, pos) then
-				a.charted = a.charted + 1
-				local d2 = (x - job.sx) ^ 2 + dy2
-				if d2 > a.far2 then a.far2 = d2 end
+		if job.sweep_network then
+			if BUDGET - ops < 4 then break end
+			local cost, sampled = sample_network(a, job.sweep_network, BUDGET - ops)
+			ops = ops + cost
+			if sampled == nil then break end
+			if sampled then job.seen[job.sweep_network.id] = true end
+			job.sweep_network = nil
+		elseif not job.sweep_poles then
+			local x = job.sweep_x or w.x1
+			if y > w.y2 then return true end
+			if x > w.x2 then
+				job.y, job.sweep_x, job.sweep_row = y + 1, nil, nil
+			else
+				-- Reserve room for the chart reads and the following pole query.
+				local count = math.min(16, w.x2 - x + 1, math.floor((BUDGET - ops - 1) / 2))
+				if count < 1 then break end
+				local last = x + count - 1
+				local dy2 = (y - job.sy) ^ 2
+				local pos = {0, y}
+				for cx = x, last do
+					pos[1] = cx
+					if force.is_chunk_charted(surface, pos) then
+						a.charted = a.charted + 1
+						local d2 = (cx - job.sx) ^ 2 + dy2
+						if d2 > a.far2 then a.far2 = d2 end
+					end
+				end
+				job.sweep_x, job.sweep_i = last + 1, 1
+				job.sweep_row = job.sweep_row or {}
+				job.sweep_poles = surface.find_entities_filtered({
+					area = {{x * 32, y * 32}, {(last + 1) * 32, (y + 1) * 32}},
+					type = "electric-pole", force = force})
+				ops = ops + 2 * count + 1
+			end
+		else
+			if BUDGET - ops < 4 then break end
+			local pole = job.sweep_poles[job.sweep_i]
+			if not pole then
+				job.sweep_poles = nil
+			else
+				job.sweep_i = job.sweep_i + 1
+				ops = ops + 1
+				if pole.valid then
+					local pp = pole.position
+					local cx = math.floor(pp.x / 32)
+					local row = job.sweep_row
+					if math.floor(pp.y / 32) == y and not row[cx] then row[cx] = true a.footprint = a.footprint + 1 end
+					local id = pole.electric_network_id
+					if id and not job.seen[id] then
+						job.sweep_network = begin_network(pole, id)
+						ops = ops + 3
+					end
+				end
 			end
 		end
-		ops = ops + 2 * (x2 - x1 + 1)
-		local poles = surface.find_entities_filtered({
-			area = {{x1 * 32, y * 32}, {(x2 + 1) * 32, (y + 1) * 32}},
-			type = "electric-pole", force = force})
-		ops = ops + 1 + #poles
-		local seen = job.seen
-		local row = {}
-		for _, pole in pairs(poles) do
-			local pp = pole.position
-			local cx = math.floor(pp.x / 32)
-			if math.floor(pp.y / 32) == y and not row[cx] then row[cx] = true a.footprint = a.footprint + 1 end
-			local id = pole.electric_network_id
-			if id and not seen[id] then
-				seen[id] = true
-				ops = ops + read_network(a, pole)
-			end
-		end
-		job.y = y + 1
 	end
 	return false
 end
@@ -1098,19 +1150,22 @@ function STEP.peak(job, force)
 	end
 	local H10 = defines.flow_precision_index.ten_hours
 	local ops = 0
-	while ops < BUDGET do
+	while ops + 302 <= BUDGET do
 		local net = job.pk[job.n]
 		if not net then return true end
 		local src = net.sources[job.k]
-		if not (src and net.pole.valid) then
+		local pole = net.pole
+		local es = src and pole.valid and (not net.id or net.id == pole.electric_network_id) and pole.electric_network_statistics
+		if not es then
 			job.n, job.k = job.n + 1, 1
+			ops = ops + 2
 		else
-			local es = net.pole.electric_network_statistics
-			local peak = a.peak
+			local peak, query = a.peak, {name = src, category = "output", precision_index = H10}
 			for i = 1, 300 do
-				peak[i] = (peak[i] or 0) + es.get_flow_count({name = src, category = "output", precision_index = H10, sample_index = i})
+				query.sample_index = i
+				peak[i] = (peak[i] or 0) + es.get_flow_count(query)
 			end
-			ops = ops + 301
+			ops = ops + 302
 			job.k = job.k + 1
 		end
 	end
