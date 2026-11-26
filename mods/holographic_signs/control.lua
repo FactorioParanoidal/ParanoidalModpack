@@ -526,11 +526,6 @@ if entity and entity.valid then
 	local icon = gui.tab1.hs_icon_bt.elem_value
 	local add_tag = gui.tab_cb.hs_cb_add_map.state
 	local plain_text = gui.tab_cb.hs_cb_plain_text.state
-	local big_hologram_render = Sign_Data.big_hologram_render
-	if big_hologram_render then 
-		if big_hologram_render.valid then big_hologram_render.destroy() end
-		Sign_Data.big_hologram_render = nil
-		end
 	if gui.hs_textbox then 
 		Sign_Data.show_textbox = true
 		Sign_Data.textbox = gui.hs_textbox.text 
@@ -666,7 +661,63 @@ local function accumulator_charge(surface, force, memo)
 	return ch, t
 end
 
-function apply_holo_sign(Sign_Data, charge_memo)
+local function network_power(entity, force, input, memo)
+	local surface = entity.surface
+	local pole = surface.find_entities_filtered{type='electric-pole', force=force, position=entity.position, radius=3, limit=1}[1]
+	if not pole then return end
+	local network = pole.electric_network_id
+	local key = memo and network and (surface.index .. ':' .. force.index .. ':' .. network .. ':' .. input)
+	if key and memo[key] ~= nil then return memo[key] end
+	local stats = pole.electric_network_statistics
+	if not stats then return end
+	local names = input == 'input' and stats.input_counts or stats.output_counts
+	local query = {category=input, precision_index=defines.flow_precision_index.five_seconds}
+	local power = 0
+	for name in pairs(names) do
+		query.name = name
+		power = power + stats.get_flow_count(query)
+	end
+	power = power * 60 / 1000000 -- J/tick to MW; keep the average over the whole window.
+	if key then memo[key] = power end
+	return power
+end
+
+local function same_icon(a, b)
+	if not a or not b then return a == b end
+	return (a.type or 'item') == (b.type or 'item') and a.name == b.name
+		and (a.quality or 'normal') == (b.quality or 'normal')
+end
+
+local function tag_needs_refresh(data, entity)
+	if not data.add_tag or data.state == 'left' or storage.all_turned_off then return false end
+	if not (data.input or data.icon or (data.text and data.text ~= '')) then return false end
+	local tag, pos, force = data.maptag, entity.position, entity.force
+	if tag and tag.valid then
+		local old = tag.position
+		return tag.surface ~= entity.surface or tag.force ~= force or old.x ~= pos.x or old.y ~= pos.y
+	end
+	return force.is_chunk_charted(entity.surface, {math.floor(pos.x / 32), math.floor(pos.y / 32)})
+end
+
+local function update_map_tag(data, entity, force, icon, text)
+	local tag = data.maptag
+	if tag and tag.valid then
+		if (icon or text ~= '') and tag.surface == entity.surface and tag.force == force then
+			if tag.text ~= text then tag.text = text end
+			if not same_icon(tag.icon, icon) then tag.icon = icon end
+			local pos, target = tag.position, entity.position
+			if pos.x ~= target.x or pos.y ~= target.y then tag.position = target end
+			return
+		end
+		tag.destroy()
+	end
+	data.maptag = nil
+	if icon or text ~= '' then
+		data.maptag = force.add_chart_tag(entity.surface, {icon=icon, text=text, position=entity.position})
+	end
+end
+
+function apply_holo_sign(Sign_Data, charge_memo, power_memo)
 	local function get_precision_index(opt)
 	local def = {
 			defines.flow_precision_index.five_seconds,
@@ -713,6 +764,7 @@ if is_it_on  then
 					for _, asignal in pairs (signals) do
 						local signal=asignal.signal
 						Sign_Data.icon = signal
+						icon = signal
 						ipt = asignal.count
 						break
 						end
@@ -792,27 +844,8 @@ if is_it_on  then
 					end
 
 			elseif input=='hs_production_p' or input=='hs_consumption_p' then 
-				local pole = entity.surface.find_entities_filtered{type='electric-pole', force=force, position=entity.position, radius=3, limit=1}
-				if pole[1] then 
-					local NS = pole[1].electric_network_statistics
-					local cons=0
-					local prod=0
-					-- prod
-					for n,v in pairs (NS.output_counts) do 
-						prod = prod + NS.get_flow_count{name=n,category="output", precision_index=defines.flow_precision_index.five_seconds, sample=1}
-						end
-					-- cons
-					for n,v in pairs (NS.input_counts) do 
-						cons = cons + NS.get_flow_count{name=n,category="input", precision_index=defines.flow_precision_index.five_seconds, sample=1}
-						end
-					
-					prod=prod*60/1000000
-					cons=cons*60/1000000
-					
-					if input=='hs_production_p' then ipt =d_format_number(prod, "%.1f").. " MJ"
-						elseif input=='hs_consumption_p' then ipt = d_format_number(cons, "%.1f") .. " MJ"
-					end
-					end
+				local power = network_power(entity, force, input=='hs_production_p' and 'output' or 'input', power_memo)
+				if power then ipt = d_format_number(power, "%.1f") .. " MW" end
 
 
 			elseif  input=='hs_charge' then 
@@ -897,14 +930,19 @@ if icon then --and (not plain_text)
 	end	
 
 local destroy_plan_text = false
-clear_speach_bubble(entity)
+if plain_text or pt == '' or not is_it_on then clear_speach_bubble(entity) end
 
 if (pt~='' or holo_img) and is_it_on then 
 	if pt~='' then 
 		if plain_text then 
 		if the_plain_text and the_plain_text.valid then 
-			the_plain_text.color=color
-			the_plain_text.text = pt
+			local old_color = Sign_Data.rendered_color
+			if not old_color or old_color.r ~= color.r or old_color.g ~= color.g or old_color.b ~= color.b
+				or old_color.a ~= color.a then
+				the_plain_text.color = color
+				Sign_Data.rendered_color = {r=color.r, g=color.g, b=color.b, a=color.a}
+			end
+			if Sign_Data.rendered_text ~= pt then the_plain_text.text = pt end
 			else 
 			the_plain_text = rendering.draw_text{
 							text=pt, 
@@ -913,7 +951,9 @@ if (pt~='' or holo_img) and is_it_on then
 							color=color,
 							use_rich_text=true}
 			Sign_Data.the_plain_text = the_plain_text
+			Sign_Data.rendered_color = {r=color.r, g=color.g, b=color.b, a=color.a}
 			end
+		Sign_Data.rendered_text = pt
 		else
 			if the_plain_text then destroy_plan_text =true end
 			pt = '[color=' .. color.r ..',' .. color.g ..',' .. color.b ..']' .. pt .. '[/color]'
@@ -925,6 +965,8 @@ if (pt~='' or holo_img) and is_it_on then
 	if holo_img then
 		if big_hologram_render and big_hologram_render.valid then 
 			if big_hologram_render.sprite ~= holo_img then big_hologram_render.sprite=holo_img end
+			if big_hologram_render.x_scale ~= img_scale then big_hologram_render.x_scale = img_scale end
+			if big_hologram_render.y_scale ~= img_scale then big_hologram_render.y_scale = img_scale end
 			else
 			big_hologram_render = rendering.draw_sprite {  
 					sprite = holo_img,
@@ -933,7 +975,10 @@ if (pt~='' or holo_img) and is_it_on then
 					surface = entity.surface}
 			Sign_Data.big_hologram_render=big_hologram_render
 			end
-		end 
+	elseif big_hologram_render then
+		if big_hologram_render.valid then big_hologram_render.destroy() end
+		Sign_Data.big_hologram_render = nil
+	end
 	
 	if not (animation and animation.valid) then --storage.opt_animation 
 		--[[if storage.animation == 'hs_hologram_animated' then
@@ -955,27 +1000,24 @@ if (pt~='' or holo_img) and is_it_on then
 	
 	else
 	if the_plain_text then destroy_plan_text =true end
-	if animation and animation.valid then animation.destroy() Sign_Data.animation=nil end
-	if big_hologram_render and big_hologram_render.valid then big_hologram_render.destroy() Sign_Data.big_hologram_render=nil end
+	if animation and animation.valid then animation.destroy() end
+	if big_hologram_render and big_hologram_render.valid then big_hologram_render.destroy() end
+	Sign_Data.animation, Sign_Data.big_hologram_render = nil, nil
 	end
 
 if destroy_plan_text then 
 	the_plain_text.destroy()
 	Sign_Data.the_plain_text = nil
+	Sign_Data.rendered_text, Sign_Data.rendered_color = nil, nil
 	end
 
 
 -- MAP TAG
-if Sign_Data.maptag and Sign_Data.maptag.valid then Sign_Data.maptag.destroy() end
-if add_tag and is_it_on then 
-	local ico 
-	if icon then ico = translate_element_icon(icon, true) end
-	if ico or (text~='') then 
-		local tag = {icon=ico,text=text,position=entity.position}
-		local thetag = force.add_chart_tag(entity.surface,tag)
-		Sign_Data.maptag = thetag
-		end
-	end
+if add_tag and is_it_on then
+	update_map_tag(Sign_Data, entity, force, icon and translate_element_icon(icon, true), text)
+else
+	update_map_tag(Sign_Data, entity, force, nil, '')
+end
 
 local UN = entity.unit_number
 storage.signs[UN]=Sign_Data
@@ -1204,17 +1246,20 @@ end)
 
  
 function UpdateAll()
-local charge_memo = {}
+local charge_memo, power_memo = {}, {}
 for UN, Sign_Data in pairs (storage.signs) do
 	local entity = Sign_Data.entity
-	if entity and entity.valid then apply_holo_sign(Sign_Data, charge_memo)
-	else storage.signs[UN]=nil end
+	if entity and entity.valid then apply_holo_sign(Sign_Data, charge_memo, power_memo)
+	else
+		if Sign_Data.maptag and Sign_Data.maptag.valid then Sign_Data.maptag.destroy() end
+		storage.signs[UN]=nil
 	end
+end
 end
 
 
 script.on_nth_tick(60*2, function (event)
-local charge_memo = {}
+local charge_memo, power_memo = {}, {}
 for UN, Sign_Data in pairs (storage.signs) do
 	local entity = Sign_Data.entity
 	if entity and entity.valid then
@@ -1224,7 +1269,9 @@ for UN, Sign_Data in pairs (storage.signs) do
 		 				or entity.get_signal({type="virtual",name='signal-red'}, defines.wire_connector_id.circuit_green)==1
 		if green then Sign_Data.state='right' end		
 		if red then Sign_Data.state='left' end
-		if Sign_Data.input or green or red then apply_holo_sign(Sign_Data, charge_memo) end
+		if Sign_Data.input or green or red or tag_needs_refresh(Sign_Data, entity) then
+			apply_holo_sign(Sign_Data, charge_memo, power_memo)
+		end
 		else
 		if Sign_Data.maptag and Sign_Data.maptag.valid then Sign_Data.maptag.destroy() end
 		storage.signs[UN]=nil
