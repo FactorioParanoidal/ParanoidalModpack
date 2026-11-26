@@ -7,6 +7,7 @@ Date: 2026-11-01
     - Clarified setting descriptions against current code and modpack overrides, including units, dependencies and limits; setting values and gameplay are unchanged.
     - ru: the mod description names the renamed Paranoidal Rampant.
   Bugfixes:
+    - Legendary collection achievements require every available kind in the relevant tier, not a fixed count that may include disabled encounters or be met by old finds of unavailable kinds.
     - Short Circuit keeps its ID and 1000 threshold, but now tracks hostile units, spawners and worms killed by electric damage regardless of faction. Owner-attributed events reject neutral/friendly targets and sandbox activity; force counters merge and replay normally. The prototype is script-unlocked, so native electric-faction progress is not imported; previously earned client IDs are not deliberately revoked.
     - Death safety facts and player lifecycle continue while scripted awards are paused; positive death achievements count only enabled intervals. Unverifiable legacy zero-death history cannot earn Immortal; existing counters and earned IDs remain intact.
     - Restorer consumes committed successful refinement events from ic-more-qualities instead of generic products_finished. Verified repairs have a separate force counter, summed on force merge; the old production counter is retained but not treated as repair evidence.

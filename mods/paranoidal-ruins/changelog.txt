@@ -27,6 +27,8 @@ Date: 2026-11-01
     - Locales: English and Russian only (the core's German, Finnish, Korean and Polish files covered only its own settings).
     - Saves: the storage of the three old mods cannot move to a new mod name and is lost (agreed): the discovery journal, the radar ruin signals, the legendary sites, relics and their facts, the anti-repeat cycles and surfaces excluded by other mods (the default list stays). Ruins already standing in the world, their buildings and both forces stay; legendary sites of an old save are no longer protected or played.
   Bugfixes:
+    - Respect No Enemies and zero enemy-base size in ordinary and legendary ruins: skip encounters that require native enemies; omit surviving biters, spawners and worms from the other new sites. The neutral wreck, traps and existing entities stay; unavailable types are excluded from collection progress.
+    - The Labyrinth's pacifist feat requires a living Minotaur. If the Cemetery's Founder cannot be created, the lever can be tried again instead of locking the encounter.
     - The homemade generator and wood-power ruins use KS Power's burner-generator only when bob-burner-generator is absent. The original Bob generator, layout reservations, damage/death rolls and loot stay unchanged when available; existing ruins are not scanned or replaced.
     - Old rescue beacons with no stored next_drop use their original placement tick for the first 30-minute wait. Existing drop timers are not reset; no configuration-change migration or scan is needed.
     - The Queen's death skips hive members removed by another member's death handler instead of calling die on an invalid entity.

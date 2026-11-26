@@ -6,6 +6,7 @@ local P = require("legendary.plan")
 local loot = require("legendary.loot")
 local kinds = require("legendary.kinds")
 local F = require("legendary.feats")
+local enemy_mode = require("scripts.enemy-mode")
 
 local S = {}
 
@@ -65,19 +66,33 @@ local function core_allows()
   return C.setting("current-ruin-set") == "paranoidal"
 end
 
-local function choose_kind(L)
-  local repeats = C.setting("pd-legendary-repeat") == true
-  local candidates, total = {}, 0
+local function without_fauna(kind)
+  return not kind.requires_enemy_bases or (kind.fauna_free_guardian and prototypes.entity[kind.fauna_free_guardian] ~= nil)
+end
+
+function S.kind_allowed(surface, kind)
+  return without_fauna(kind) or enemy_mode.enabled(surface)
+end
+
+local function choose_kind(L, surface)
+  local candidates, eligible, total = {}, {}, 0
+  local with_fauna = enemy_mode.enabled(surface)
+  local function admit(kind)
+    candidates[#candidates + 1] = kind
+    total = total + (kind.weight or 1)
+  end
   for _, kind in ipairs(kinds.list) do
-    if (L.spawned[kind.name] or 0) == 0 then
-      candidates[#candidates + 1] = kind
-      total = total + (kind.weight or 1)
+    if with_fauna or without_fauna(kind) then
+      eligible[#eligible + 1] = kind
+      if (L.spawned[kind.name] or 0) == 0 then admit(kind) end
     end
   end
-  if #candidates == 0 and repeats then
-    -- every type has appeared: a new cycle
-    L.spawned = {}
-    return choose_kind(L)
+  if #candidates == 0 and C.setting("pd-legendary-repeat") then
+    -- Only reachable kinds participate in a new cycle on this surface.
+    for _, kind in ipairs(eligible) do
+      L.spawned[kind.name] = nil
+      admit(kind)
+    end
   end
   if #candidates == 0 then return nil end
   local roll = math.random() * total
@@ -103,6 +118,7 @@ end
 
 ---Plans a site of `kind` around the chunk; returns the site or nil.
 function S.plan(surface, chunk, kind, forced)
+  if not S.kind_allowed(surface, kind) then return nil end
   local L = S.state()
   local n = math.floor(kind.size / 32)
   local tlx, tly = chunk.x - math.floor(n / 2), chunk.y - math.floor(n / 2)
@@ -139,7 +155,7 @@ function S.on_chunk_generated(event, deleted_before)
   local spawn = game.forces.player.get_spawn_position(surface)
   if K.dist(center, spawn) < C.min_distance(surface) then return end
   local L = S.state()
-  local kind = choose_kind(L)
+  local kind = choose_kind(L, surface)
   if not kind then return end
   S.plan(surface, event.position, kind, false)
 end
@@ -191,11 +207,14 @@ local function player_buildings(surface, site)
   return false
 end
 
-local function start_build(site)
+local function start_build(site, surface)
   local kind = kinds.by_name[site.kind]
+  if not S.kind_allowed(surface, kind) then
+    S.lose(site)
+    return
+  end
   -- A natural site never covers somebody's outpost: it is given up and may appear elsewhere.
-  local surface = K.surface(site)
-  if not site.forced and surface and player_buildings(surface, site) then
+  if not site.forced and player_buildings(surface, site) then
     log(string.format("[legendary] %s #%d given up: player buildings in the area", site.kind, site.id))
     S.lose(site)
     return
@@ -209,10 +228,17 @@ end
 local function build_step(site)
   local surface = K.surface(site)
   if not surface then
-    site.state = "lost"
+    S.lose(site)
     return
   end
   local b = site.build
+  -- A plan from an old build may already be queued. Stop before placing a disabled encounter;
+  -- do not delete entities of a site that has already begun placing them.
+  if (b.phase == "clear" or b.phase == "tiles" or (b.phase == "entities" and b.ei == 1))
+    and not S.kind_allowed(surface, kinds.by_name[site.kind]) then
+    S.lose(site)
+    return
+  end
   if b.phase == "clear" then
     local y1 = site.y + b.row
     local y2 = math.min(y1 + C.CLEAR_ROWS, site.y + site.half)
@@ -261,13 +287,13 @@ local function check_waiting(L)
   for _, site in pairs(L.sites) do
     if site.state == "waiting" then
       local surface = K.surface(site)
-      if not surface then
-        site.state = "lost"
+      if not surface or not S.kind_allowed(surface, kinds.by_name[site.kind]) then
+        S.lose(site)
       elseif all_generated(surface, site) then
         if not site.ready then
           site.ready = game.tick + C.SETTLE_TICKS
         elseif game.tick >= site.ready then
-          start_build(site)
+          start_build(site, surface)
         end
       elseif game.tick - site.planned > 36000 then
         -- the map generator did not get there in 10 minutes: ask again
@@ -722,10 +748,24 @@ end
 
 -- Statistics and debugging ---------------------------------------------------------------
 
-function S.found_count(found_force)
+function S.collection()
+  local eligible = {}
+  for name in pairs(C.SURFACES) do
+    local surface = game.surfaces[name]
+    if surface then
+      local with_fauna = enemy_mode.enabled(surface)
+      for _, kind in ipairs(kinds.list) do
+        if with_fauna or without_fauna(kind) then eligible[kind.name] = kind.tier end
+      end
+    end
+  end
+  return eligible
+end
+
+function S.found_count(found_force, eligible)
   local n = 0
-  for key in pairs(found_force or {}) do
-    if key:sub(1, 10) == "legendary/" then n = n + 1 end
+  for name in pairs(eligible) do
+    if found_force["legendary/" .. name] then n = n + 1 end
   end
   return n
 end

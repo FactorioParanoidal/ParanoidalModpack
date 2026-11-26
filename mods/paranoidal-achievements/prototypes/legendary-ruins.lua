@@ -56,11 +56,11 @@ local function add(id, params, frame, relic, amount)
 end
 
 -- the collection
-add("found-all", {fact = "found", set = "found"}, 3, "pd-relic-star-telescope", #RUINS)
+add("found-all", {fact = "found", set = "found", all = true}, 3, "pd-relic-star-telescope", #RUINS)
 add("solved-5", {fact = "solved", set = "solved"}, 2, "pd-relic-champion-banner", 5)
-add("solved-all", {fact = "solved", set = "solved"}, 3, "pd-relic-champion-banner", #RUINS)
-add("trials-all", {fact = "solved", tier = "trial", set = "solved-trial"}, 3, RELIC.labyrinth, TRIALS)
-add("citadels-all", {fact = "solved", tier = "citadel", set = "solved-citadel"}, 3, RELIC.hammer, CITADELS)
+add("solved-all", {fact = "solved", set = "solved", all = true}, 3, "pd-relic-champion-banner", #RUINS)
+add("trials-all", {fact = "solved", tier = "trial", set = "solved-trial", all = true}, 3, RELIC.labyrinth, TRIALS)
+add("citadels-all", {fact = "solved", tier = "citadel", set = "solved-citadel", all = true}, 3, RELIC.hammer, CITADELS)
 add("no-mercy", {fact = "solved", ferocity = "legendary", set = "no-mercy"}, 3, RELIC.mirrors, 5)
 add("ruined-first", {fact = "ruined"}, 1, RELIC.reactor)
 add("lazy", {fact = "summoned", scope = "player"}, 1, RELIC.gates)

@@ -219,6 +219,7 @@ script.on_event(E.on_surface_deleted, function(event)
   R.pollution.forget(index)
   R.chunks.forget(index)
   R.rods.forget(index)
+  R.lightning.forget_radar_outages(index)
   R.jobs.purge(index)
   if storage.wind then storage.wind[index] = nil end
   R.surfaces.rebuild()
@@ -249,6 +250,8 @@ local function surface_of(index)
 end
 
 remote.add_interface("paranoidal-rain", {
+  -- Temporary radar ownership shared with the optional BnL magnetic anomaly.
+  radar_lightning_claim = R.lightning.radar_lightning_claim,
   -- true/false for a rain surface, nil for others
   is_raining = function(index)
     if not surface_of(index) then return nil end

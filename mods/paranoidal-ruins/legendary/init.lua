@@ -98,8 +98,8 @@ function M.reserved(surface_index, position, margin)
 end
 
 -- Statistics for /ruins: found legendary types of a force and the total.
-function M.found(found_force) return S.found_count(found_force) end
-function M.total() return #kinds.list end
+function M.found(found_force, eligible) return S.found_count(found_force, eligible) end
+M.collection = S.collection
 
 M.site = S
 M.config = C

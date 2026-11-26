@@ -196,6 +196,11 @@ local function crater_pond(surface, p)
 end
 
 local function guard(surface, center)
+    -- Scripted guards bypass autoplace; the no-enemies preset disables the enemy-base control.
+    local map_gen = surface.map_gen_settings
+    local enemy_base = map_gen.autoplace_controls["enemy-base"]
+    if map_gen.no_enemies_mode or (enemy_base and enemy_base.size == 0) then return end
+
     local g = cfg.guard
     for _, part in ipairs({g.spawner, g.worms}) do
         local name = part[1]

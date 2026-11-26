@@ -8,6 +8,7 @@ local spawner = require("scripts.spawner")
 local balance_base = require("ruins.base-balance")
 local legendary = require("legendary.init")
 local infected_ship = require("scripts.infected-ship")
+local enemy_mode = require("scripts.enemy-mode")
 
 local ERASER = "Delete-Chunk-Tool-reforged"
 
@@ -25,6 +26,8 @@ local CHECK_INTERVAL = 120
 local tags = {}
 ---@type table<string, integer> size -> number of distinct ruins in the current set
 local totals = {}
+local totals_without_enemy_bases = {}
+local enemy_only = {}
 
 local function setting(name)
   local s = settings.global[name]
@@ -65,7 +68,7 @@ end
 
 local function build_set()
   local set = { small = {}, medium = {}, large = {} }
-  tags, totals = {}, {}
+  tags, totals, totals_without_enemy_bases, enemy_only = {}, {}, {}, {}
   if setting("pd-ruins-include-base") then
     for size, ruins in pairs(base) do
       for _, ruin in ipairs(ruins) do set[size][#set[size] + 1] = ruin end
@@ -76,10 +79,16 @@ local function build_set()
   end
   for size, ruins in pairs(set) do
     totals[size] = #ruins
+    local restricted = 0
     for _, ruin in pairs(ruins) do
       local key = size .. "/" .. (ruin.name or "?")
       tags[key] = ruin.pd_tag or (has_hostile(ruin) and "danger" or nil)
+      if ruin.requires_enemy_bases then
+        enemy_only[key] = true
+        restricted = restricted + 1
+      end
     end
+    totals_without_enemy_bases[size] = #ruins - restricted
   end
   spawner.set = set
 end
@@ -113,21 +122,31 @@ local function on_ruin_spawned(data)
 end
 spawner.on_spawned = on_ruin_spawned
 
-local function count_found(found_force, size)
+-- Project the collection onto the eligible types without rewriting discovery history.
+local function collection()
+  for _, surface in pairs(game.surfaces) do
+    if spawner.surface_allowed(surface) and enemy_mode.enabled(surface) then return totals, false end
+  end
+  return totals_without_enemy_bases, true
+end
+
+local function count_found(found_force, size, without_enemy_bases)
   local n = 0
   for key in pairs(found_force) do
-    if size == nil then
-      if key:sub(1, 10) ~= "legendary/" then n = n + 1 end
-    elseif key:sub(1, #size + 1) == size .. "/" then
-      n = n + 1
+    if not (without_enemy_bases and enemy_only[key]) then
+      if size == nil then
+        if key:sub(1, 10) ~= "legendary/" then n = n + 1 end
+      elseif key:sub(1, #size + 1) == size .. "/" then
+        n = n + 1
+      end
     end
   end
   return n
 end
 
-local function total_types()
+local function total_types(types)
   local n = 0
-  for _, t in pairs(totals) do n = n + t end
+  for _, t in pairs(types) do n = n + t end
   return n
 end
 
@@ -206,7 +225,9 @@ local function discover(player, ruin)
   if setting("pd-ruins-discovery-messages") then
     local caption = ruin_caption(ruin.size, ruin.name)
     if first then
-      force.print({ "pd-ruins.discovered-new", player.name, caption, count_found(found[force.index]), total_types() })
+      local types, without_enemy_bases = collection()
+      force.print({ "pd-ruins.discovered-new", player.name, caption,
+        count_found(found[force.index], nil, without_enemy_bases), total_types(types) })
     else
       player.print({ "pd-ruins.discovered-again", caption })
     end
@@ -257,14 +278,16 @@ local function show_progress(command)
   if not player then return end
   local _, found = journal()
   local mine = found[player.force.index] or {}
-  player.print({ "pd-ruins.progress", count_found(mine), total_types(),
-    count_found(mine, "small"), totals.small or 0,
-    count_found(mine, "medium"), totals.medium or 0,
-    count_found(mine, "large"), totals.large or 0 })
+  local types, without_enemy_bases = collection()
+  player.print({ "pd-ruins.progress", count_found(mine, nil, without_enemy_bases), total_types(types),
+    count_found(mine, "small", without_enemy_bases), types.small or 0,
+    count_found(mine, "medium", without_enemy_bases), types.medium or 0,
+    count_found(mine, "large", without_enemy_bases), types.large or 0 })
   -- no spoilers: the legendary ruins are counted only after the first one is found
-  local legendary_found = legendary.found(mine)
+  local eligible = legendary.collection()
+  local legendary_found = legendary.found(mine, eligible)
   if legendary_found > 0 then
-    player.print({ "pd-legendary.progress", legendary_found, legendary.total() })
+    player.print({ "pd-legendary.progress", legendary_found, table_size(eligible) })
   else
     player.print({ "pd-legendary.progress-none" })
   end
@@ -293,6 +316,8 @@ local function spawn_legendary_command(command)
     legendary.spawned_by_command(player)
     player.print({ "pd-legendary.spawned", { "pd-legendary-name." .. name },
       string.format("[gps=%d,%d,%s]", site.x, site.y, player.surface.name) })
+  else
+    player.print({ "pd-legendary.requires-fauna", { "pd-legendary-name." .. name } })
   end
 end
 
@@ -455,8 +480,11 @@ remote.add_interface("AbandonedRuins-paranoidal", {
     local pending = 0
     for _, bucket in pairs(storage.pending or {}) do pending = pending + #bucket end
     local found = {}
-    for force_index, list in pairs(storage.found or {}) do found[force_index] = count_found(list) end
-    return { pending = pending, types = totals, found = found }
+    local types, without_enemy_bases = collection()
+    for force_index, list in pairs(storage.found or {}) do
+      found[force_index] = count_found(list, nil, without_enemy_bases)
+    end
+    return { pending = pending, types = types, found = found }
   end,
   -- Discovery summary of a force for the base journal of paranoidal-CodexRPG. As in /ruins, legendary
   -- ruins are counted only after the first one is found (no spoilers).
@@ -467,25 +495,27 @@ remote.add_interface("AbandonedRuins-paranoidal", {
       if key:sub(1, 10) ~= "legendary/" then visits = visits + n end
     end
     local sizes = {}
+    local types, without_enemy_bases = collection()
     for _, size in ipairs({ "small", "medium", "large" }) do
-      sizes[size] = { found = count_found(mine, size), total = totals[size] or 0 }
+      sizes[size] = { found = count_found(mine, size, without_enemy_bases), total = types[size] or 0 }
     end
-    local legendary_found = legendary.found(mine)
+    local eligible = legendary.collection()
+    local legendary_found = legendary.found(mine, eligible)
     local solved, first_legend, first_won = 0, nil, nil
     if legendary_found > 0 and storage.legend then
       for _, site in pairs(storage.legend.sites or {}) do
         local t = site.found and site.found[force_index]
         if type(t) == "number" and (not first_legend or t < first_legend) then first_legend = t end
         if site.state == "solved" and t then
-          solved = solved + 1
+          if eligible[site.kind] then solved = solved + 1 end
           if type(site.solved) == "number" and (not first_won or site.solved < first_won) then first_won = site.solved end
         end
       end
     end
     return {
-      found_types = count_found(mine), total_types = total_types(), found_total = visits, sizes = sizes,
+      found_types = count_found(mine, nil, without_enemy_bases), total_types = total_types(types), found_total = visits, sizes = sizes,
       legendary_found = legendary_found, legendary_solved = solved,
-      legendary_total = legendary_found > 0 and legendary.total() or nil,
+      legendary_total = legendary_found > 0 and table_size(eligible) or nil,
       -- ticks; nil when unknown
       first_found = (storage.first_found or {})[force_index],
       legendary_first_found = first_legend, legendary_first_solved = first_won,
@@ -500,6 +530,8 @@ remote.add_interface("AbandonedRuins-paranoidal", {
   -- Legendary ruins: custom event with facts about them (found, solved, feats, relics...), see
   -- legendary/feats.lua. paranoidal-achievements builds its achievements on it.
   get_on_legendary_event = function() return legendary.feats_event end,
+  -- Natural legendary types available in the current map, indexed by kind with the tier as value.
+  get_legendary_collection = legendary.collection,
   -- Legendary ruins: is the position inside (or within `margin` tiles of) a legendary site?
   legendary_reserved = function(surface_index, position, margin)
     return legendary.reserved(surface_index, position, margin)

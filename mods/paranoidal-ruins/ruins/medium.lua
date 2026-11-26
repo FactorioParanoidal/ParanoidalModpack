@@ -441,7 +441,7 @@ def("pd-worm-nest", function(b)
   b:put("medium-worm-turret", 4, 4, { force = "enemy" })
   b:put("wooden-chest", -1, 0, { items = { ["bob-alien-artifact"] = R(2, 6), ["bob-alien-artifact-green"] = R(0, 3) } })
   b:scatter_deco({ "small-biter-corpse", "medium-biter-corpse", "small-spitter-corpse" }, 10)
-end):far(1300):tag("danger")
+end):far(1300):tag("danger"):requires_enemy_bases()
 
 def("pd-flame-redoubt", function(b)
   b:ring("stone-wall", -7, -7, 6, 6, { gap = 0.15, door = { { 0, 6 } } })

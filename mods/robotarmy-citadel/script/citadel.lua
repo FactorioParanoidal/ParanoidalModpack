@@ -42,6 +42,11 @@ function C.peaceful(c)
   return enemy_base ~= nil and enemy_base.size == 0
 end
 
+local function no_enemies(c)
+  local surface = state.surface(c)
+  return surface and surface.no_enemies_mode
+end
+
 ---------------------------------------------------------------------------------------------------
 -- Start.
 ---------------------------------------------------------------------------------------------------
@@ -50,7 +55,7 @@ function C.init()
   forces.ensure()
   state.read_settings()
   local cfg = state.cfg
-  if cfg.enabled and not C.peaceful(c) and C.evolution(c) >= cfg.evolution then
+  if cfg.enabled and not no_enemies(c) and not C.peaceful(c) and C.evolution(c) >= cfg.evolution then
     c.phase = "warned"
     c.spawn_tick = game.tick + LATE_START
     c.late_message = true
@@ -59,7 +64,7 @@ function C.init()
 end
 
 local function check_evolution(c, cfg)
-  if C.peaceful(c) then return end
+  if no_enemies(c) or C.peaceful(c) then return end
   if c.late_message then
     c.late_message = nil
     forces.print(cfg, {"replicator-message.late-start", math.ceil((c.spawn_tick - game.tick) / 3600)})
@@ -557,6 +562,8 @@ function C.heartbeat()
     return
   end
   if phase == "siting" then
+    -- Stop automatic placement without withdrawing an already built city or changing manual spawns.
+    if surface.no_enemies_mode and not c.forced then return end
     site_step(c, cfg, surface)
     return
   end

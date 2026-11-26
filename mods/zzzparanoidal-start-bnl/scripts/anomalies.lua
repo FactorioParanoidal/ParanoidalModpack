@@ -4,7 +4,7 @@
 -- * magnetic storm: radars are jammed for a minute every few minutes until a technology;
 -- * rich vein: the ship struck a deposit of the rarest ore near the crash site;
 -- * quiet planet: peaceful for two hours, then the whole planet wakes up at once;
--- * dust storms: a warning, then a one-time pollution cloud in a chunk near the base.
+-- * dust storms: a warning, then a one-time pollution cloud in a chunk near the landing site.
 local config = require("bnl-config")
 local util = require("scripts.util")
 local scheduler = require("scripts.scheduler")
@@ -21,7 +21,16 @@ function M.init()
     if storage.bnl.anomaly then return end
     local setting = settings.global["bnl-start-anomaly"]
     local value = setting and setting.value or "random"
-    if value == "random" then value = cfg.list[math.random(#cfg.list)] end
+    if value == "random" then
+        local choices = cfg.list
+        if not game.map_settings.pollution.enabled then
+            choices = {}
+            for _, name in ipairs(cfg.list) do
+                if name ~= "dust-storms" then choices[#choices + 1] = name end
+            end
+        end
+        value = choices[math.random(#choices)]
+    end
     storage.bnl.anomaly = {name = value ~= "none" and value or nil}
 end
 
@@ -66,24 +75,46 @@ local function radars(surface, force)
     return surface.find_entities_filtered({name = names, force = force})
 end
 
+local function lightning_claim(radar, handoff)
+    local rain = remote.interfaces["paranoidal-rain"]
+    return rain and rain.radar_lightning_claim
+        and remote.call("paranoidal-rain", "radar_lightning_claim", radar, handoff)
+end
+
+remote.add_interface("paranoidal-bnl-anomalies", {
+    radar_magnetic_claim = function(radar)
+        if not (radar and radar.valid and radar.type == "radar") then return false end
+        for _, job in ipairs(storage.bnl and storage.bnl.queue or {}) do
+            if job.kind == "storm-stop" and job.data.surface == radar.surface_index then
+                if job.data.claims then
+                    if job.data.claims[radar.unit_number] == radar then return true end
+                else -- a queued magnetic storm from an older build
+                    for _, jammed in ipairs(job.data.jammed or {}) do if jammed == radar then return true end end
+                end
+            end
+        end
+        return false
+    end,
+})
+
 scheduler.handler("storm-start", function(job)
     local surface = game.get_surface(job.surface)
     local force = util.player_force()
     if not surface or storm_over(force) then return end
-    local jammed = {}
+    local claims = {}
     for _, radar in pairs(radars(surface, force)) do
-        if not radar.disabled_by_script then
+        if not radar.disabled_by_script or lightning_claim(radar, false) then
             radar.disabled_by_script = true
-            jammed[#jammed + 1] = radar
+            claims[radar.unit_number] = radar
         end
     end
-    if jammed[1] then util.say({"bnl.anomaly-magnetic-storm-now"}, nil, force) end
-    scheduler.after(util.int(cfg.magnetic_storm.length), "storm-stop", {surface = job.surface, jammed = jammed})
+    if next(claims) then util.say({"bnl.anomaly-magnetic-storm-now"}, nil, force) end
+    scheduler.after(util.int(cfg.magnetic_storm.length), "storm-stop", {surface = job.surface, claims = claims})
 end)
 
 scheduler.handler("storm-stop", function(job)
-    for _, radar in ipairs(job.jammed) do
-        if radar.valid then radar.disabled_by_script = false end
+    for _, radar in pairs(job.claims or job.jammed or {}) do
+        if radar.valid and not lightning_claim(radar, true) then radar.disabled_by_script = false end
     end
     scheduler.after(util.int(cfg.magnetic_storm.every), "storm-start", {surface = job.surface})
 end)
@@ -144,38 +175,49 @@ scheduler.handler("quiet-end", function(job)
 end)
 
 -- dust storms --------------------------------------------------------------------------------
-local function storm_center(surface)
-    local players = {}
-    for _, player in pairs(game.connected_players) do
-        if player.surface == surface and player.character then players[#players + 1] = player end
+local function storm_center(surface, landing)
+    for _ = 1, 8 do
+        local p = util.add(landing, util.vector(math.random(), util.float(cfg.dust_storms.distance)))
+        local x, y = math.floor(p.x / 32), math.floor(p.y / 32)
+        if surface.is_chunk_generated({x, y}) then return {x = x * 32 + 16, y = y * 32 + 16} end
     end
-    local base = players[1] and util.pos(players[math.random(#players)].character.position) or util.ship_position()
-    local p = util.add(base, util.vector(math.random(), util.float(cfg.dust_storms.distance)))
-    return {x = math.floor(p.x / 32) * 32 + 16, y = math.floor(p.y / 32) * 32 + 16}
+end
+
+local function next_dust(job, warning_elapsed)
+    job.left = job.left - 1
+    if job.left > 0 then
+        scheduler.after(util.int(cfg.dust_storms.every) - warning_elapsed, "dust-warn", job)
+    end
 end
 
 scheduler.handler("dust-warn", function(job)
+    if not game.map_settings.pollution.enabled then return end
     local surface = game.get_surface(job.surface)
     if not surface then return end
-    local center = storm_center(surface)
+    local center = storm_center(surface, job.landing or util.ship_position())
+    if not center then
+        next_dust(job, 0)
+        return
+    end
     job.center = center
     util.say({"bnl.anomaly-dust-storm-warning", util.gps(center, surface)})
     scheduler.after(cfg.dust_storms.warning, "dust-hit", job)
 end)
 
 scheduler.handler("dust-hit", function(job)
+    if not game.map_settings.pollution.enabled then return end
     local surface = game.get_surface(job.surface)
     if not surface then return end
-    surface.pollute(job.center, cfg.dust_storms.pollution)
-    job.left = job.left - 1
-    if job.left > 0 then
-        scheduler.after(util.int(cfg.dust_storms.every) - cfg.dust_storms.warning, "dust-warn", job)
+    -- A chunk can be deleted after the warning. Do not move the announced target or regenerate it.
+    if surface.is_chunk_generated({math.floor(job.center.x / 32), math.floor(job.center.y / 32)}) then
+        surface.pollute(job.center, cfg.dust_storms.pollution)
     end
+    next_dust(job, cfg.dust_storms.warning)
 end)
 
 -- start --------------------------------------------------------------------------------------
 -- Called when the crash site is ready; the report goes to the journal.
-function M.start(surface)
+function M.start(surface, landing)
     local s = state()
     if not (s and s.name) or s.started then return end
     s.started = true
@@ -202,7 +244,14 @@ function M.start(surface)
         surface.peaceful_mode = true
         scheduler.after(cfg.quiet_planet.duration, "quiet-end", {surface = surface.index})
     elseif name == "dust-storms" then
-        scheduler.at(game.tick + cfg.dust_storms.first, "dust-warn", {surface = surface.index, left = cfg.dust_storms.count})
+        if not game.map_settings.pollution.enabled then
+            s.name = nil
+            journal.add("anomaly-dust-storms-disabled")
+            return
+        end
+        scheduler.at(game.tick + cfg.dust_storms.first, "dust-warn", {
+            surface = surface.index, left = cfg.dust_storms.count, landing = landing and util.pos(landing),
+        })
     end
     journal.add("anomaly-" .. name, params)
 end

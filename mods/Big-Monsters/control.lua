@@ -10,9 +10,8 @@ require "__mferrari_lib__/stdlib/area/chunk"
 require "__mferrari_lib__/stdlib/area/area"
 
 
--- Skip event spawning on peaceful surfaces or on maps generated with
--- enemy-base size = 0 (i.e. no enemies expected). Can be overridden via
--- runtime setting "bm-events-when-peaceful" (default off).
+-- Native No Enemies prevents new events. The peaceful override still applies to
+-- peaceful mode, enemy-base size = 0 and the Rampant truce, as before.
 -- Paranoidal: also during the truce of Paranoidal-Rampant on the surface (remote getTruceInfo: the evolution or the
 -- peace period of its planet setting is not reached yet).
 local function rampant_truce(surface)
@@ -23,7 +22,7 @@ local function rampant_truce(surface)
 end
 
 local function bm_peaceful_skip(surface)
-    if not surface or not surface.valid then return true end
+    if not surface or not surface.valid or surface.no_enemies_mode then return true end
     if settings.global["bm-events-when-peaceful"] and settings.global["bm-events-when-peaceful"].value then return false end
     if surface.peaceful_mode then return true end
     local ac = surface.map_gen_settings and surface.map_gen_settings.autoplace_controls
@@ -1229,6 +1228,7 @@ local function brood_children(mother, evo)
 end
 
 function Brood(mother)
+if mother.surface.no_enemies_mode then return end
 local x = mother.position.x
 local y = mother.position.y 
 local r = 10
@@ -1254,6 +1254,7 @@ end
 
 
 function BroodHumans(mother, extra)
+if mother.surface.no_enemies_mode then return end
 extra=extra or 0
 local x = mother.position.x
 local y = mother.position.y 
@@ -1377,6 +1378,7 @@ function on_corpse_feasted(event)
 local corpse=event.corpse
 local attack=event.attack_target
 if corpse and corpse.valid and attack and attack.valid then 
+	if corpse.surface.no_enemies_mode then return end
 	local evo = get_evo_here(corpse.surface)
 	local surface = corpse.surface
 	---if corpse.get_item_count("rocket-launcher")>0 then 

@@ -82,7 +82,7 @@ def("pd-great-worm-pit", function(b)
   b:put("iron-chest", -1, 3, { items = { ["bob-alien-artifact"] = R(5, 15), ["bob-alien-artifact-red"] = R(1, 4), ["bob-alien-artifact-blue"] = R(1, 4) } })
   b:scatter_deco({ "small-biter-corpse", "medium-biter-corpse", "big-biter-corpse", "medium-spitter-corpse" }, 25)
   b:tiles_blob("red-desert-2", 0, 0, 15, 0.6)
-end):weight(0.6):far(2000):tag("danger")
+end):weight(0.6):far(2000):tag("danger"):requires_enemy_bases()
 
 def("pd-mined-warehouse", function(b)
   b:tiles_rect("hazard-concrete-left", -16, -16, 15, -16)
@@ -214,7 +214,7 @@ def("pd-infected-ship-colony", function(b)
   b:deco("small-spitter-corpse", 7, 12)
   b:scatter_deco(lib.SCORCH, 10)
   b:scatter_deco(lib.STUMPS, 6)
-end):weight(0.2):chance(0.25):safe_distance(2200):tag("danger")
+end):weight(0.2):chance(0.25):safe_distance(2200):tag("danger"):requires_enemy_bases()
 
 def("pd-ghost-town", function(b)
   local houses = { { -15, -15 }, { -5, -15 }, { 5, -15 }, { -15, -3 }, { 5, -3 }, { -15, 8 }, { -5, 8 }, { 5, 8 } }

@@ -175,9 +175,45 @@ R.jobs.handler("brownout-end", function(job)
   if job.entity.valid then job.entity.destroy() end
 end)
 
-local function radar_outage(radar)
+-- The scheduled job is the lightning claim. Legacy jobs can be adopted without resetting a save.
+local function radar_outage_job(radar)
+  local id = radar.unit_number
+  local outages = storage.radar_outages
+  local job = outages and outages[id]
+  if job then return job end
   local status = radar.custom_status
-  if status and status.label and status.label[1] == RADAR_STATUS then return end
+  if not (status and status.label and status.label[1] == RADAR_STATUS) then return nil end
+  for tick, jobs in pairs(storage.jobs or {}) do
+    if tick >= game.tick then
+      for _, pending in ipairs(jobs) do
+        if pending.kind == "radar-end" and pending.entity == radar then return pending end
+      end
+    end
+  end
+end
+
+-- BnL joins only a disable owned by lightning, not one that was already in force.
+-- When BnL releases first, lightning inherits the obligation to clear the shared flag.
+function M.radar_lightning_claim(radar, handoff)
+  if not (radar and radar.valid and radar.type == "radar") then return false end
+  local job = radar_outage_job(radar)
+  if not job then return false end
+  if handoff then
+    job.previous.disabled = false
+    radar.disabled_by_script = true
+  end
+  return not job.previous.disabled
+end
+
+function M.forget_radar_outages(surface_index)
+  for id, job in pairs(storage.radar_outages or {}) do
+    if job.surface_index == surface_index then storage.radar_outages[id] = nil end
+  end
+end
+
+local function radar_outage(radar)
+  if radar_outage_job(radar) then return end
+  local status = radar.custom_status
   local previous = { disabled = radar.disabled_by_script, status = status }
   radar.disabled_by_script = true
   radar.custom_status = { diode = defines.entity_status_diode.yellow, label = { RADAR_STATUS } }
@@ -185,18 +221,23 @@ local function radar_outage(radar)
     target = { entity = radar, offset = { 0, -2 } }, render_mode = "game", time_to_live = RADAR_OUTAGE_TICKS,
     blink_interval = 15 }
   stat("radar_outages")
-  R.jobs.after(RADAR_OUTAGE_TICKS, { kind = "radar-end", entity = radar, previous = previous,
-    surface_index = radar.surface_index })
+  local id = radar.unit_number
+  local job = { kind = "radar-end", entity = radar, previous = previous, surface_index = radar.surface_index, id = id }
+  storage.radar_outages = storage.radar_outages or {}
+  storage.radar_outages[id] = job
+  R.jobs.after(RADAR_OUTAGE_TICKS, job)
 end
 
 R.jobs.handler("radar-end", function(job)
+  if job.id and storage.radar_outages then storage.radar_outages[job.id] = nil end
   local radar = job.entity
   if not radar.valid then return end
+  local bnl = remote.interfaces["paranoidal-bnl-anomalies"]
+  local magnetic = bnl and bnl.radar_magnetic_claim
+    and remote.call("paranoidal-bnl-anomalies", "radar_magnetic_claim", radar)
+  radar.disabled_by_script = magnetic == true or job.previous.disabled
   local status = radar.custom_status
-  if status and status.label and status.label[1] == RADAR_STATUS then
-    radar.disabled_by_script = job.previous.disabled
-    radar.custom_status = job.previous.status
-  end
+  if status and status.label and status.label[1] == RADAR_STATUS then radar.custom_status = job.previous.status end
 end)
 
 local function strike_living(target)
@@ -319,21 +360,20 @@ local function chain_from(surface, from, left, visited, draw)
   end
 end
 
-R.jobs.handler("chain", function(job)
-  local surface = R.surfaces.get(job.surface_index)
-  if surface then chain_from(surface, { x = job.x, y = job.y }, job.left, job.visited, job.draw) end
-end)
-
--- A map whose main surface is in peaceful mode (the map creation checkbox, a script or a command) or was generated
--- without enemy bases (enemy-base size "none", e.g. the preset "Paranoidal: no enemies") is a peaceful map: lightning
--- there is only the flash and the thunder.
+-- On a map with a peaceful main surface, native No Enemies, or zero enemy base size, lightning is visual and audio only.
 local function peaceful_map()
   local main = game.surfaces["nauvis"] or game.get_surface(1)
-  if main and main.peaceful_mode then return true end
+  if main and (main.peaceful_mode or main.no_enemies_mode) then return true end
   local controls = main and main.map_gen_settings.autoplace_controls
   local enemy_base = controls and controls["enemy-base"]
   return enemy_base ~= nil and enemy_base.size == 0
 end
+
+R.jobs.handler("chain", function(job)
+  if peaceful_map() then return end
+  local surface = R.surfaces.get(job.surface_index)
+  if surface then chain_from(surface, { x = job.x, y = job.y }, job.left, job.visited, job.draw) end
+end)
 
 -- [2.0] A scripted strike. opts.visible: draw it and play it to the players (opts.players); otherwise only effects.
 -- On a peaceful map no effects: no damage, fire, brownout, drained buffers, chain or lightning rod charge.

@@ -5,7 +5,7 @@
 local C = require("legendary.config")
 local MZ = require("legendary.maze")
 
-local KIND = { name = "labyrinth", tier = "trial", size = 128, weight = 1.2, relic = "pd-relic-daedalus-workshop" }
+local KIND = { name = "labyrinth", tier = "trial", size = 128, weight = 1.2, relic = "pd-relic-daedalus-workshop", requires_enemy_bases = true }
 
 local N, CELL, X0 = 30, 4, -60
 local SANCTUM = { 13, 16 }            -- sanctum cells i, j in [13, 16]
@@ -422,7 +422,7 @@ end
 
 function KIND.step(site, p, K)
   if site.data.door_open and p.rx >= -7 and p.rx < 8 and p.ry >= -7 and p.ry < 8 then
-    if site.data.minotaur_alive ~= false then K.feat(site, "labyrinth-pacifist", p.player) end
+    if K.get(site, "minotaur") then K.feat(site, "labyrinth-pacifist", p.player) end
     K.solve(site, p.player)
   end
 end

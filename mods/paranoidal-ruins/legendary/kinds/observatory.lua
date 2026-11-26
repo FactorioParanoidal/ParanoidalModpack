@@ -4,7 +4,7 @@
 -- telescope falls, it is rebuilt by the ancients a minute later and the ritual starts over.
 local C = require("legendary.config")
 
-local KIND = { name = "observatory", tier = "citadel", size = 128, weight = 1, relic = "pd-relic-star-telescope" }
+local KIND = { name = "observatory", tier = "citadel", size = 128, weight = 1, relic = "pd-relic-star-telescope", requires_enemy_bases = true }
 
 local ISLAND, MOAT = 38, 50
 local ENDS = { { 0, -58 }, { 58, 0 }, { 0, 57 }, { -58, 0 } }

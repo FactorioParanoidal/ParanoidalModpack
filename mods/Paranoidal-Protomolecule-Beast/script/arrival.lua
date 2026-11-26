@@ -81,12 +81,11 @@ local function best_on(surface, force, away, best)
   end
 end
 
--- A map whose main surface is in peaceful mode (the map creation checkbox, a script or a command) or was generated
--- without enemy bases (enemy-base size "none", e.g. the preset "Paranoidal: no enemies") is a peaceful map: nothing
--- lands anywhere on it by itself (factory floors and other surfaces included).
+-- On maps with native No Enemies, peaceful mode on the main surface or a zero enemy base size there, nothing
+-- lands automatically, even on secondary surfaces.
 local function peaceful_map()
   local surface = game.surfaces["nauvis"] or game.get_surface(1)
-  if surface and surface.peaceful_mode then return true end
+  if surface and (surface.peaceful_mode or surface.no_enemies_mode) then return true end
   local controls = surface and surface.map_gen_settings.autoplace_controls
   local enemy_base = controls and controls["enemy-base"]
   return enemy_base ~= nil and enemy_base.size == 0
@@ -104,7 +103,8 @@ local function find_outpost(ignore_evolution)
   local best = {}
   if not ignore_evolution and peaceful_map() then return end
   for _, surface in pairs(game.surfaces) do
-    if not surface.platform and (ignore_evolution or min_evolution <= 0 or (enemy and enemy.get_evolution_factor(surface) >= min_evolution)) then
+    if not surface.platform and (ignore_evolution or (not surface.no_enemies_mode
+      and (min_evolution <= 0 or (enemy and enemy.get_evolution_factor(surface) >= min_evolution)))) then
       local away = replicators(surface)
       if away == "wait" and ignore_evolution then away = nil end
       if away ~= "wait" then best_on(surface, force, away, best) end

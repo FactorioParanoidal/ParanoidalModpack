@@ -4,6 +4,7 @@
 local util = require("__core__/lualib/util")
 local expressions = require("scripts.expressions")
 local infected_ship = require("scripts.infected-ship")
+local enemy_mode = require("scripts.enemy-mode")
 
 local M = {}
 
@@ -164,16 +165,18 @@ local function insert_items(entity, items, vars)
   if next(plain) then util.insert_safe(entity, plain) end
 end
 
-local function spawn_entity(expression, offset, center, surface, opts, vars)
+local function spawn_entity(expression, offset, center, surface, opts, vars, with_fauna)
   local name = expressions.entity(expression, vars)
   -- Explicit template fallback only; keep the original when its prototype is available.
   if not prototypes.entity[name] and type(opts.fallback) == "string" and prototypes.entity[opts.fallback] then
     name = opts.fallback
   end
-  if not prototypes.entity[name] then
+  local prototype = prototypes.entity[name]
+  if not prototype then
     log("[paranoidal-ruins] entity '" .. name .. "' does not exist - skipped")
     return
   end
+  if not with_fauna and enemy_mode.is_fauna(prototype) then return end
   local recipe = opts.recipe
   if type(recipe) ~= "string" or not prototypes.recipe[recipe] then recipe = nil end
   local quality = opts.quality
@@ -237,8 +240,9 @@ end
 local function build(ruin, half, center, surface)
   if not clear_area(half, center, surface) then return false end
   local vars = (ruin.variables and next(ruin.variables)) and expressions.variables(ruin.variables) or {}
+  local with_fauna = enemy_mode.enabled(surface)
   for _, info in pairs(ruin.entities or {}) do
-    spawn_entity(info[1], info[2], center, surface, info[3] or {}, vars)
+    spawn_entity(info[1], info[2], center, surface, info[3] or {}, vars, with_fauna)
   end
   if ruin.tiles and next(ruin.tiles) then spawn_tiles(ruin.tiles, center, surface) end
   for _, corpse in pairs(surface.find_entities_filtered({ area = area_of(half, center), type = { "corpse", "rail-remnants" } })) do
@@ -280,7 +284,8 @@ local function safe_here(ruin, surface, center)
   return true
 end
 
-local function allowed_here(ruin, surface, center)
+local function allowed_here(ruin, surface, center, with_fauna)
+  if ruin.requires_enemy_bases and not with_fauna then return false end
   if not safe_here(ruin, surface, center) then return false end
   if ruin.spawn_on_surfaces ~= nil and not ruin.spawn_on_surfaces[surface.name] then return false end
   if ruin.no_spawning ~= nil and ruin.no_spawning[surface.name] then return false end
@@ -313,8 +318,9 @@ end
 ---Weighted choice; with "avoid repeats" only among the ruins of the size not used in this cycle.
 local function choose(size, surface, center)
   local allowed = {}
+  local with_fauna = enemy_mode.enabled(surface)
   for _, ruin in ipairs(M.set[size] or {}) do
-    if allowed_here(ruin, surface, center) then allowed[#allowed + 1] = ruin end
+    if allowed_here(ruin, surface, center, with_fauna) then allowed[#allowed + 1] = ruin end
   end
   if #allowed == 0 then return nil end
   if not cfg.avoid_repeats then return appearance(pick_weighted(allowed)) end
@@ -413,6 +419,7 @@ end
 ---@return boolean
 function M.spawn_now(ruin, size, center, surface)
   if not (cfg.enabled and M.HALF[size] and M.surface_allowed(surface)) then return false end
+  if ruin.requires_enemy_bases and not enemy_mode.enabled(surface) then return false end
   if not safe_here(ruin, surface, center) then return false end
   if ruin.spawn_on_surfaces ~= nil and not ruin.spawn_on_surfaces[surface.name] then return false end
   if not build(ruin, M.HALF[size], center, surface) then return false end

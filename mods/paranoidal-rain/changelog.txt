@@ -6,6 +6,9 @@ Date: 2026-11-02
     - Added selective inline images to Russian mod-setting names; existing tooltip formatting, wording, saved values and mechanics are preserved.
   Compatibility:
     - The optional dependency follows the rename of RampantFixed to Paranoidal-Rampant, so the rain still loads after its enemies.
+  Bugfixes:
+    - Lightning has no harmful effects in native No Enemies; queued discharges stop if the map becomes harmless, while existing outages still expire.
+    - Overlapping lightning and BnL magnetic storms keep radars off until both outages end, in either order; a radar already disabled before lightning stays disabled.
   Major Features:
     - New mod of the build: a fork of Dynamic Rain 1.2.0 (valertron, MIT) for Factorio 2.0 with parts of Real Rain 1.2.15 (Squishy1870): storm stages drizzle - rain - heavy - storm - monsoon, three drop layers with wind buckets and gusts, splashes and water ripples, puddles after the rain, rolling thunder and its Mixkit sounds.
     - Lightning strikes on 2.0 without Space Age: the engine lightning needs the Space Age feature flag, so a strike is scripted (target priorities of Dynamic Rain, effects on poles, radars, robots, creatures, trees, fish and flammable things, a discharge chain) and drawn with the Space Age impact flash, ground streamers and sounds copied into the mod. The engine variant of Dynamic Rain is kept commented out for 2.1.

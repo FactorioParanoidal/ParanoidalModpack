@@ -490,14 +490,7 @@ local function reconcile_force(force)
     for _, tick in ipairs(data.launch_ticks or {}) do if tick > game.tick - 216000 then recent = recent + 1 end end
     core.progress(force, entry, recent)
   end
-  for _, entry in ipairs(active.legendary or {}) do
-    local params = entry.params
-    if params.scope ~= "player" then
-      local own = data.legendary or {}
-      if params.set then core.progress(force, entry, table_size(own[params.set] or {}))
-      elseif params.sum then core.progress(force, entry, own[params.sum] or 0) end
-    end
-  end
+  if active.legendary then run("legendary", trackers.legendary.merge, active.legendary, core, force) end
   if active.bosses and trackers.bosses.merge then run("bosses", trackers.bosses.merge, active.bosses, core, force) end
 end
 

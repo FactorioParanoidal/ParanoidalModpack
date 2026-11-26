@@ -1,6 +1,7 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.26.0
   Locale:
+    - Matched the Russian Big Monsters override tooltip to the owning mod: it does not bypass native No Enemies.
     - Distinguished the Russian names of coal and ceramic coolant filtration and corrected the phosphoric acid recipe name.
     - Matched the Russian Factorissimo fluid-port research tooltip to the actual fixed pumping speed.
     - Matched the Russian Factorissimo recovery command help to the owning mod and the actual packed-item safeguards.

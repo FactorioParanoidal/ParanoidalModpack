@@ -3,7 +3,7 @@
 -- worms guard the approaches and the Queen spits acid. Kill the Queen and the whole hive dies.
 local C = require("legendary.config")
 
-local KIND = { name = "hive", tier = "citadel", size = 160, weight = 1, relic = "pd-relic-xeno-incubator" }
+local KIND = { name = "hive", tier = "citadel", size = 160, weight = 1, relic = "pd-relic-xeno-incubator", requires_enemy_bases = true }
 
 local BROOD = { "medium-biter", "big-biter", "big-spitter", "medium-spitter" }
 

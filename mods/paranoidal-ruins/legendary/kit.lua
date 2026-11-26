@@ -1,5 +1,6 @@
 -- Shared runtime helpers of legendary ruins: positions, players, effects, entities, messages.
 local C = require("legendary.config")
+local enemy_mode = require("scripts.enemy-mode")
 
 local K = {}
 
@@ -240,7 +241,8 @@ end
 
 ---Creates an entity from a plan entry (relative position) and records keys. Returns the entity.
 function K.create(site, surface, entry)
-  if not prototypes.entity[entry.name] then return nil end
+  local prototype = prototypes.entity[entry.name]
+  if not prototype or (enemy_mode.is_fauna(prototype) and not enemy_mode.enabled(surface)) then return nil end
   local quality = entry.quality
   if quality and not prototypes.quality[quality] then quality = nil end
   local params = {
@@ -339,7 +341,8 @@ end
 ---Guardian unit; quality raises its health (+30% per quality level).
 function K.spawn(site, name, pos, quality, force)
   local surface = K.surface(site)
-  if not (surface and prototypes.entity[name]) then return nil end
+  local prototype = prototypes.entity[name]
+  if not (surface and prototype) or (enemy_mode.is_fauna(prototype) and not enemy_mode.enabled(surface)) then return nil end
   local at = surface.find_non_colliding_position(name, pos, 6, 0.5) or pos
   if quality and not prototypes.quality[quality] then quality = nil end
   return surface.create_entity({ name = name, position = at, force = force or C.FORCE, quality = quality })

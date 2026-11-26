@@ -2,6 +2,7 @@
 Version: 9.3.0
 Date: 2026.11.16
   Changes:
+    - Native No Enemies suppresses truce information and enemy warnings the same way as a zero enemy base size.
     - Surface indexing and legacy upgrade reports are logged and shown in chat only with paranoidal-debug-chat enabled. AI debug prose and learning reports use Russian display names; saved tactic/state IDs, remote learning data and AI behaviour are unchanged.
     - The mod is renamed from RampantFixed to Paranoidal-Rampant (title "Paranoidal Rampant"). Prototype, setting, remote interface, command and storage names stay as they were; graphics and sound paths are __Paranoidal-Rampant__ now.
     - Saves made before the rename keep their Rampant state. The mod RampantFixed stays in the build as a bridge without content, and on the first load of such a save Paranoidal-Rampant takes over the state kept in the bridge (AI, bases, squads, champions, truce) instead of starting anew, which would also kill every enemy unit. Then the bridge is emptied and its old buttons are replaced by those of Paranoidal-Rampant. Values of map settings are kept, as the setting names did not change.

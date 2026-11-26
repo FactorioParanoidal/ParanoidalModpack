@@ -1001,7 +1001,53 @@ local function legendary_matches(params, event)
     and (params.ferocity == nil or params.ferocity == event.ferocity)
 end
 
+local function legendary_collection()
+  if has_remote("AbandonedRuins-paranoidal", "get_legendary_collection") then
+    return remote.call("AbandonedRuins-paranoidal", "get_legendary_collection")
+  end
+end
+
+local function legendary_progress(scope, entry, set, eligible, core)
+  local params = entry.params
+  if not (params.all and eligible) then
+    core.progress(scope, entry, table_size(set))
+    return
+  end
+  local any = false
+  for kind, tier in pairs(eligible) do
+    if not params.tier or params.tier == tier then
+      if not set[kind] then return end
+      any = true
+    end
+  end
+  if any then core.unlock(scope, entry) end
+end
+
+local function reconcile_legendary(force, entries, core, eligible, only_collections)
+  local own = core.force_data(force.index).legendary
+  if not own then return end
+  for _, entry in ipairs(entries) do
+    local params = entry.params
+    if params.scope ~= "player" and (params.all or not only_collections) then
+      if params.set and own[params.set] then
+        legendary_progress(force, entry, own[params.set], eligible, core)
+      elseif params.sum then
+        core.progress(force, entry, own[params.sum] or 0)
+      end
+    end
+  end
+end
+
 trackers["legendary"] = {
+  -- Reconcile aggregate achievements if the map's eligible set changed after the last event.
+  poll = {every = MINUTE, run = function(entries, core)
+    local eligible = legendary_collection()
+    if not eligible then return end
+    for _, force in ipairs(core.player_forces()) do reconcile_legendary(force, entries, core, eligible, true) end
+  end},
+  merge = function(entries, core, force)
+    reconcile_legendary(force, entries, core, legendary_collection(), false)
+  end,
   custom = function()
     if not has_remote("AbandonedRuins-paranoidal", "get_on_legendary_event") then return nil end
     return {[remote.call("AbandonedRuins-paranoidal", "get_on_legendary_event")] = function(event, entries, core)
@@ -1024,7 +1070,7 @@ trackers["legendary"] = {
               local set = own[params.set] or {}
               own[params.set] = set
               if member then set[member] = true end
-              core.progress(scope, entry, table_size(set))
+              legendary_progress(scope, entry, set, params.all and legendary_collection(), core)
             elseif params.sum then
               local key = (scope == player and "p" or "f") .. params.sum
               if not counted[key] then

@@ -5,7 +5,8 @@
 local C = require("legendary.config")
 local loot = require("legendary.loot")
 
-local KIND = { name = "cemetery", tier = "citadel", size = 128, weight = 1, relic = "pd-relic-funeral-bell" }
+local KIND = { name = "cemetery", tier = "citadel", size = 128, weight = 1, relic = "pd-relic-funeral-bell",
+  requires_enemy_bases = true, fauna_free_guardian = "bm_fake_human_melee_8" }
 
 local WRATH_MAX = 20
 local DEAD = { "bm_fake_human_melee_3", "bm_fake_human_melee_4", "bm_fake_human_pistol_gunner_3" }
@@ -61,18 +62,20 @@ end
 local function wake_founder(site, K, player)
   local d = site.data
   if d.founder then return end
-  d.founder = true
-  local boss = K.spawn(site, "bm_fake_human_melee_8", K.abs(site, 0, -2), C.boss_tier(8))
+  local boss = K.spawn(site, KIND.fauna_free_guardian, K.abs(site, 0, -2), C.boss_tier(8))
     or K.spawn(site, "behemoth-biter", K.abs(site, 0, -2), C.boss_tier(1))
-  if boss then
-    site.lists = site.lists or {}
-    site.lists.guardian = site.lists.guardian or {}
-    table.insert(site.lists.guardian, boss)
-    K.watch(site, boss, "founder")
-    rendering.draw_text({ text = { "pd-legendary-cemetery.founder" }, surface = site.surface, target = { entity = boss, offset = { 0, -2.5 } },
-      color = { 0.6, 0.7, 1 }, scale = 1.5, alignment = "center" })
-    if player and player.character then K.attack(boss, player.character) end
+  if not boss then
+    K.relever(site, "founder", -1, -4)
+    return
   end
+  d.founder = true
+  site.lists = site.lists or {}
+  site.lists.guardian = site.lists.guardian or {}
+  table.insert(site.lists.guardian, boss)
+  K.watch(site, boss, "founder")
+  rendering.draw_text({ text = { "pd-legendary-cemetery.founder" }, surface = site.surface, target = { entity = boss, offset = { 0, -2.5 } },
+    color = { 0.6, 0.7, 1 }, scale = 1.5, alignment = "center" })
+  if player and player.character then K.attack(boss, player.character) end
   rise(site, K, K.abs(site, 0, 0), 8, player and player.character, 5)
   K.say(site, { "pd-legendary-cemetery.founder-wakes" })
 end

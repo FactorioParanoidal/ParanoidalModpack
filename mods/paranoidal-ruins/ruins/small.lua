@@ -397,7 +397,7 @@ def("pd-lone-worm", function(b)
   b:put("small-worm-turret", 1, -2, { force = "enemy" })
   b:put("wooden-chest", -3, 2, { items = { ["bob-alien-artifact"] = R(1, 3), ["iron-plate"] = R(10, 30) } })
   b:scatter_deco({ "small-biter-corpse", "medium-biter-corpse" }, 3)
-end):far(600):tag("danger")
+end):far(600):tag("danger"):requires_enemy_bases()
 
 def("pd-dart-sentry", function(b)
   b:put("bi-dart-turret", 0, 0, { force = "enemy", items = { ["bi-dart-magazine-basic"] = R(5, 15) } })
@@ -422,7 +422,7 @@ def("pd-worm-burrow", function(b)
   b:put("small-worm-turret", 1, -3, { force = "enemy" })
   b:put("medium-worm-turret", -1, 1, { force = "enemy" })
   b:scatter_deco({ "small-biter-corpse", "small-spitter-corpse" }, 3)
-end):weight(0.6):far(1200):tag("danger")
+end):weight(0.6):far(1200):tag("danger"):requires_enemy_bases()
 
 -- More curiosities ------------------------------------------------------------------------
 

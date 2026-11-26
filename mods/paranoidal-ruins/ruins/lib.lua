@@ -301,6 +301,7 @@ function Meta:far(distance) self.ruin.min_distance = distance return self end
 function Meta:safe_distance(distance) self.ruin.safe_distance = distance return self end
 function Meta:chance(chance) self.ruin.spawn_chance = chance return self end
 function Meta:tag(tag) self.ruin.pd_tag = tag return self end
+function Meta:requires_enemy_bases() self.ruin.requires_enemy_bases = true return self end
 
 ---Collects ruins of one size. Returns def(name, fn) and the list.
 ---@param size string

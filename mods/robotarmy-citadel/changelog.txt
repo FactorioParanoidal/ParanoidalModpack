@@ -2,6 +2,7 @@
 Version: 1.0.0
 Date: 2026.10.26
   Bugfixes:
+    - Native No Enemies prevents automatic citadel warnings and placement without withdrawing any existing city or blocking manual placement.
     - Merging the replicator force suspends its campaign and build queue without recreating the force, reverting ownership, destroying transferred assets or declaring victory; suspension persists across reloads and configuration changes.
   Changes:
     - Paranoidal packaging: moved standalone mock tests out of the distributed mod into the local test collection.

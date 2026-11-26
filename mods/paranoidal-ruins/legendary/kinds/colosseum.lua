@@ -4,7 +4,7 @@
 -- Turrets and walls may be built on the sand. Die or leave the arena and the games start over.
 local C = require("legendary.config")
 
-local KIND = { name = "colosseum", tier = "citadel", size = 96, weight = 1, relic = "pd-relic-champion-banner" }
+local KIND = { name = "colosseum", tier = "citadel", size = 96, weight = 1, relic = "pd-relic-champion-banner", requires_enemy_bases = true }
 
 local R = 30
 local WAVES = {
