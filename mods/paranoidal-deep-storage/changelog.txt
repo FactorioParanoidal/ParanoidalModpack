@@ -5,7 +5,7 @@ Date: 2026-11-01
     - One mod instead of deep-storage-unit 9.8.0 (Memory Storage, Paranoidal fork of 1.6.8 by notnotmelon, with the logistic memory units after Logistic Memory Units by restjack) and fluid-memory-storage 9.8.0 (Fluid Memory Storage, Paranoidal fork of 1.7.9 by notnotmelon). Prototype, technology, recipe, setting and locale key names are unchanged; gameplay, power formula, quality discount, refused items, temperature rule, packed units and windows work as before.
   Optimizations:
     - One scheduler updates both kinds (every unit once per second, as before) instead of one per mod, and one set of build, mine, clone and GUI handlers.
-    - The windows are refreshed every 2 ticks only while a player has one open; before, each mod checked every connected player every 2 ticks all game long.
+    - The windows are refreshed every 2 ticks only while a player has one open; before, each mod checked every connected player every 2 ticks all game long. Only changed display fields are written and the fluid panel reads one tank snapshot per refresh.
     - The power source is written only when the power usage changes (the number of stored stacks), and its buffer size is not read back on every update; the power setting is read once and the quality factor of a unit is cached.
     - The Alt-mode amount is rewritten only when the rounded text changes.
     - Graphics recompressed (lossy palette, tint masks lossless).

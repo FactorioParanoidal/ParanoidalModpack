@@ -46,22 +46,50 @@ local function flying_text(player, text)
 	player.create_local_flying_text {text = text, create_at_cursor = true}
 end
 
+-- Presentation only. After reload or window replacement the first refresh writes all fields.
+local item_views, fluid_views = {}, {}
+local function view_for(views, player, gui)
+	local id = gui.index
+	local view = views[player.index]
+	if not view or view.id ~= id then
+		view = {id = id}
+		views[player.index] = view
+	end
+	return view
+end
+
+local function same(a, b)
+	if a == b then return true end
+	if type(a) ~= "table" or type(b) ~= "table" then return false end
+	for k, v in pairs(a) do if not same(v, b[k]) then return false end end
+	for k in pairs(b) do if a[k] == nil then return false end end
+	return true
+end
+
+local function present(view, key, parent, name, property, value)
+	if not same(view[key], value) then
+		parent[name][property] = value
+		view[key] = value
+	end
+end
+
 -- Power bar and status line; the kind-specific status is given by `status_of` when the unit is powered.
-local function update_power_and_status(content_flow, unit_data, status_of)
+local function update_power_and_status(content_flow, view, unit_data, status_of)
 	local entity = unit_data.entity
 	local powersource = unit_data.powersource
 	local electric_flow = content_flow.electric_flow
 	local energy = powersource.energy
 	local buffer_size = powersource.electric_buffer_size
-	electric_flow.electricity.value = buffer_size > 0 and energy / buffer_size or 0
-	electric_flow.consumption.caption = format_energy(energy) .. "/" .. format_energy(buffer_size)
+	present(view, "fill", electric_flow, "electricity", "value", buffer_size > 0 and energy / buffer_size or 0)
 	local factor = shared.unit_quality_factor(unit_data)
-	electric_flow.consumption.tooltip = factor < 1 and {"mod-gui.quality-power-discount", math.floor((1 - factor) * 100 + 0.5)} or ""
+	present(view, "discount", electric_flow, "consumption", "tooltip",
+		factor < 1 and {"mod-gui.quality-power-discount", math.floor((1 - factor) * 100 + 0.5)} or "")
 
+	local marked = entity.to_be_deconstructed()
+	present(view, "power", electric_flow, "consumption", "caption", marked and "" or format_energy(energy) .. "/" .. format_energy(buffer_size))
 	local status, img
-	if entity.to_be_deconstructed() then
+	if marked then
 		status, img = {"entity-status.marked-for-deconstruction"}, NOT_WORKING
-		electric_flow.consumption.caption = ""
 	elseif energy == 0 then
 		status, img = {"entity-status.no-power"}, NOT_WORKING
 	else
@@ -74,8 +102,9 @@ local function update_power_and_status(content_flow, unit_data, status_of)
 			end
 		end
 	end
-	content_flow.status_flow.status_text.caption = status
-	content_flow.status_flow.status_sprite.sprite = img
+	local status_flow = content_flow.status_flow
+	present(view, "status", status_flow, "status_text", "caption", status)
+	present(view, "status_icon", status_flow, "status_sprite", "sprite", img)
 end
 
 -- Frame body shared by both windows: power bar, status line and the entity preview.
@@ -135,6 +164,7 @@ end
 ---------------------------------------------------------------------------------------------------
 
 local function close_item_gui(player)
+	item_views[player.index] = nil
 	local gui = player.gui.relative[ITEM_GUI]
 	local logistic = gui and gui.tags.logistic
 	if gui then gui.destroy() end
@@ -169,36 +199,38 @@ local function update_item_gui(player, gui)
 	local in_chest = locked and item_unit.inventory_count(unit_data) or 0
 	local total = locked and (unit_data.count + in_chest) or 0
 
-	content_flow.storage_flow.visible = locked
-	content_flow.storage_seperator.visible = locked
-	content_flow.io_flow.visible = locked
-	content_flow.mu_no_input_item.visible = not locked
-	content_flow.mu_no_input_item.enabled = access
+	local view = view_for(item_views, player, gui)
+	present(view, "storage", content_flow, "storage_flow", "visible", locked)
+	present(view, "separator", content_flow, "storage_seperator", "visible", locked)
+	present(view, "io", content_flow, "io_flow", "visible", locked)
+	present(view, "no_input", content_flow, "mu_no_input_item", "visible", not locked)
+	present(view, "can_select", content_flow, "mu_no_input_item", "enabled", access)
 
 	local item_name
 	if locked then
 		item_name = prototypes.item[item].localised_name
-		local button = content_flow.storage_flow.content_sprite
-		button.sprite = "item/" .. item
-		button.quality = quality
-		button.elem_tooltip = {type = "item-with-quality", name = item, quality = quality}
+		local flow = content_flow.storage_flow
+		present(view, "sprite", flow, "content_sprite", "sprite", "item/" .. item)
+		present(view, "quality", flow, "content_sprite", "quality", quality)
+		present(view, "icon_tip", flow, "content_sprite", "elem_tooltip", {type = "item-with-quality", name = item, quality = quality})
 		local name = item_name
 		if quality ~= "normal" and prototypes.quality[quality] then
 			name = {"", item_name, " (", prototypes.quality[quality].localised_name, ")"}
 		end
-		local label = content_flow.storage_flow.current_storage
-		label.caption = {"", "[font=default-semibold][color=255,230,192]", name, ":[/color][/font] ", shared.compactify(total)}
+		present(view, "amount", flow, "current_storage", "caption",
+			{"", "[font=default-semibold][color=255,230,192]", name, ":[/color][/font] ", shared.compactify(total)})
 		-- The chest shows only its part (for logistic units, what robots can reach): say where the rest is.
-		label.tooltip = {"mod-gui.exact-amount-split", shared.format_exact(total), shared.format_exact(in_chest), shared.format_exact(unit_data.count)}
+		present(view, "split", flow, "current_storage", "tooltip",
+			{"mod-gui.exact-amount-split", shared.format_exact(total), shared.format_exact(in_chest), shared.format_exact(unit_data.count)})
 
 		local io_flow = content_flow.io_flow
-		io_flow.mu_bulk_insert.enabled = access and not unit_data.output_only
-		io_flow.mu_bulk_extract.enabled = access
-		io_flow.mu_reset_filter.visible = total == 0
-		io_flow.mu_reset_filter.enabled = access
+		present(view, "insert", io_flow, "mu_bulk_insert", "enabled", access and not unit_data.output_only)
+		present(view, "extract", io_flow, "mu_bulk_extract", "enabled", access)
+		present(view, "reset", io_flow, "mu_reset_filter", "visible", total == 0)
+		present(view, "can_reset", io_flow, "mu_reset_filter", "enabled", access)
 	end
 
-	update_power_and_status(content_flow, unit_data, function()
+	update_power_and_status(content_flow, view, unit_data, function()
 		if not locked then
 			local refused = item_unit.unsafe_item(unit_data)
 			return refused and shared.refusal_text(refused) or {"entity-status.no-input-item"}, NOT_WORKING
@@ -209,6 +241,7 @@ local function update_item_gui(player, gui)
 end
 
 local function build_item_gui(player, entity)
+	item_views[player.index] = nil
 	local unit_number = entity.unit_number
 	local logistic = is_logistic(entity.name)
 	local main_frame = player.gui.relative.add {
@@ -324,6 +357,7 @@ local function fluid_gui_opened(player)
 end
 
 local function close_fluid_gui(player)
+	fluid_views[player.index] = nil
 	local gui = player.gui.screen[FLUID_GUI]
 	if not gui then return end
 	if fluid_gui_opened(player) then player.opened = nil end
@@ -343,36 +377,37 @@ local function update_fluid_gui(player, gui)
 	local access = can_access(player, entity)
 	local item = unit_data.item
 	local locked = item ~= nil and prototypes.fluid[item] ~= nil
-	local amount = locked and fluid_unit.buffer(unit_data) or 0
+	local fluid = entity.get_fluid(1)
+	local amount = locked and fluid and fluid.name == item and fluid.amount or 0
 	local total = locked and (unit_data.count + amount) or 0
-	local tank_empty = (entity.get_fluid(1) == nil) -- Factorio 2.1: LuaEntity::fluidbox was removed
 
-	content_flow.storage_flow.visible = locked
-	content_flow.temperature.visible = locked
+	local view = view_for(fluid_views, player, gui)
+	present(view, "storage", content_flow, "storage_flow", "visible", locked)
+	present(view, "temperature_visible", content_flow, "temperature", "visible", locked)
 	if locked then
-		local localised_name = prototypes.fluid[item].localised_name
-		local button = content_flow.storage_flow.content_sprite
-		button.sprite = "fluid/" .. item
-		button.elem_tooltip = {type = "fluid", name = item}
-		local label = content_flow.storage_flow.current_storage
-		label.caption = {"", "[font=default-semibold][color=255,230,192]", localised_name, ":[/color][/font] ", shared.compactify(total)}
-		label.tooltip = {"mod-gui.exact-amount", shared.format_exact(total)}
-		local temperature = unit_data.temperature or prototypes.fluid[item].default_temperature
-		content_flow.temperature.caption = {"mod-gui.fluid-temperature", string.format("%.1f", temperature)}
+		local proto = prototypes.fluid[item]
+		local flow = content_flow.storage_flow
+		present(view, "sprite", flow, "content_sprite", "sprite", "fluid/" .. item)
+		present(view, "icon_tip", flow, "content_sprite", "elem_tooltip", {type = "fluid", name = item})
+		present(view, "amount", flow, "current_storage", "caption",
+			{"", "[font=default-semibold][color=255,230,192]", proto.localised_name, ":[/color][/font] ", shared.compactify(total)})
+		present(view, "exact", flow, "current_storage", "tooltip", {"mod-gui.exact-amount", shared.format_exact(total)})
+		local temperature = unit_data.temperature or proto.default_temperature
+		present(view, "temperature", content_flow, "temperature", "caption", {"mod-gui.fluid-temperature", string.format("%.1f", temperature)})
 	end
 
-	local select_flow = content_flow.select_flow
-	select_flow.visible = not locked and tank_empty
-	select_flow.fmu_fluid_select.enabled = access
-	content_flow.fmu_reset_fluid.visible = locked and total <= EPSILON
-	content_flow.fmu_reset_fluid.enabled = access
+	present(view, "select", content_flow, "select_flow", "visible", not locked and not fluid)
+	present(view, "can_select", content_flow.select_flow, "fmu_fluid_select", "enabled", access)
+	present(view, "reset", content_flow, "fmu_reset_fluid", "visible", locked and total <= EPSILON)
+	present(view, "can_reset", content_flow, "fmu_reset_fluid", "enabled", access)
 
-	update_power_and_status(content_flow, unit_data, function()
+	update_power_and_status(content_flow, view, unit_data, function()
 		if not locked then return {"entity-status.no-input-fluid"}, NOT_WORKING end
 	end)
 end
 
 local function build_fluid_gui(player, entity)
+	fluid_views[player.index] = nil
 	local unit_number = entity.unit_number
 	local main_frame = player.gui.screen.add {type = "frame", name = FLUID_GUI, caption = {"entity-name.fluid-memory-unit"}, direction = "vertical"}
 	main_frame.tags = {unit_number = unit_number}
@@ -444,7 +479,10 @@ local function refresh_player(player)
 			fluid_gui.destroy() -- left over, e.g. after loading a save
 		end
 	end
-	return (item_gui ~= nil and item_gui.valid) or (fluid_gui ~= nil and fluid_gui.valid)
+	local item_open, fluid_open = item_gui ~= nil and item_gui.valid, fluid_gui ~= nil and fluid_gui.valid
+	if not item_open then item_views[player.index] = nil end
+	if not fluid_open then fluid_views[player.index] = nil end
+	return item_open or fluid_open
 end
 
 local function refresh_after_click(player)
@@ -543,6 +581,7 @@ function M.on_player_changed_surface(event)
 end
 
 function M.on_player_removed(event)
+	item_views[event.player_index], fluid_views[event.player_index] = nil, nil
 	storage.open_guis[event.player_index] = nil
 	sync_refresh_handler()
 end
