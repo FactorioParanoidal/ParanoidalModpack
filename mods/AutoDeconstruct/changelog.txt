@@ -12,6 +12,7 @@ Date: 2026-07-29
   Changes:
     - Moved the autodeconstruct surface blacklist to a mod-data entry so other mods can add to it. (thanks to PizzaPlanner)
   Bugfixes:
+    - Coalesce drill checks scheduled for the same drill in the same tick without suppressing checks requested on later ticks. Dropping an invalid drill no longer dereferences it in debug mode.
     - Fixed that loaders were not treated as item sources, so belts and chests attached to them could be improperly deconstructed.
   Compatibility:
     - Paranoidal port to Factorio 2.1: factorio_version set to 2.1.

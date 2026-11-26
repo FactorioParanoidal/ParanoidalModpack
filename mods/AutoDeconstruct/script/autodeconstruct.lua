@@ -46,8 +46,20 @@ local function check_drill(drill)
     return
   end
   
-  -- Queue every drill within range of the depleted resource, check for resources in a few ticks
-  table.insert(storage.drill_queue, {tick=game.tick+RESOURCE_CHECK_TIME, check_drill=drill})
+  -- Overlapping searches can enqueue the same drill at the same due tick. Keep
+  -- checks requested on different ticks: their status may no longer be the same.
+  local tick = game.tick
+  local batch = storage.drill_check_batch
+  if not batch or batch.tick ~= tick then
+    batch = {tick = tick, units = {}}
+    storage.drill_check_batch = batch
+  end
+  local unit = drill.unit_number
+  if unit then
+    if batch.units[unit] then return end
+    batch.units[unit] = true
+  end
+  table.insert(storage.drill_queue, {tick=tick+RESOURCE_CHECK_TIME, check_drill=drill})
 end
 
 
@@ -123,8 +135,9 @@ function autodeconstruct.init_globals()
 
   pipeutil.cache_pipe_categories()
   
-  -- Clear existing deconstruction queue_deconstruction
+  -- Clear existing deconstruction work and the corresponding same-tick deduplication set.
   storage.drill_queue = {}
+  storage.drill_check_batch = nil
 
   -- Look for existing depleted miners based on current settings, and re-add them to the queue
   local drill_entities = find_all_entities('mining-drill')
@@ -677,7 +690,7 @@ function autodeconstruct.process_queue()
       if entry.check_drill then
         if not entry.check_drill.valid then
           table.remove(storage.drill_queue, i)
-          debug_message_with_position(entry.check_drill, "недействительный бур удалён из очереди проверки")
+          if storage.debug then msg_all({"autodeconstruct-debug", "Недействительный бур удалён из очереди проверки"}) end
           break
         elseif game.tick >= entry.tick then
           if entry.check_drill.status == defines.entity_status.no_minable_resources then
