@@ -72,12 +72,7 @@ end
 
 local function consumption(pole)
   local stats = pole.electric_network_statistics
-  if not stats then return 0 end
-  local total = 0
-  for name in pairs(stats.input_counts) do
-    total = total + stats.get_flow_count({ name = name, category = "input", precision_index = defines.flow_precision_index.one_minute })
-  end
-  return total
+  return stats and U.minute_load(stats) or 0
 end
 
 function W.close(player)

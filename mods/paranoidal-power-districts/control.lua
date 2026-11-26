@@ -480,10 +480,7 @@ script.on_event(E.on_selected_entity_changed, function(e)
   if sel.name == S.POLE_IN or sel.name == S.POLE_OUT then return end
   local stats = sel.electric_network_statistics
   if not stats then return end
-  local load = 0
-  for name in pairs(stats.input_counts) do
-    load = load + stats.get_flow_count({ name = name, category = "input", precision_index = defines.flow_precision_index.one_minute })
-  end
+  local load = U.minute_load(stats)
   local f = state.force(player.force.index)
   local hw = state.half_width(f)
   local best

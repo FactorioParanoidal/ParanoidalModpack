@@ -31,6 +31,17 @@ end
 -- power from J/tick
 function U.tpower(j) return U.power(j * 60) end
 
+-- Network consumption in J/tick, averaged over the last minute by the engine.
+function U.minute_load(stats)
+  local query = { category = "input", precision_index = defines.flow_precision_index.one_minute }
+  local load = 0
+  for name in pairs(stats.input_counts) do
+    query.name = name
+    load = load + stats.get_flow_count(query)
+  end
+  return load
+end
+
 function U.energy(j)
   local a = abs(j)
   if a >= 1e12 then return { "", U.num(j / 1e12, 2), " ", { "ppd-unit.tj" } } end
