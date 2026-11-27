@@ -38,34 +38,10 @@ data:extend({
 				},
 			},
 		},
-		copper_wire_picture = {
-			filename = "__base__/graphics/entity/small-electric-pole/copper-wire.png",
-			priority = "high",
-			width = 224,
-			height = 46,
-		},
-		green_wire_picture = {
-			filename = "__base__/graphics/entity/small-electric-pole/green-wire.png",
-			priority = "high",
-			width = 224,
-			height = 46,
-		},
 		radius_visualisation_picture = {
 			filename = "__base__/graphics/entity/small-electric-pole/electric-pole-radius-visualization.png",
 			width = 12,
 			height = 12,
-		},
-		red_wire_picture = {
-			filename = "__base__/graphics/entity/small-electric-pole/red-wire.png",
-			priority = "high",
-			width = 224,
-			height = 46,
-		},
-		wire_shadow_picture = {
-			filename = "__base__/graphics/entity/small-electric-pole/wire-shadow.png",
-			priority = "high",
-			width = 224,
-			height = 46,
 		},
 	},
 
@@ -107,35 +83,11 @@ data:extend({
 				},
 			},
 		},
-		copper_wire_picture = {
-			filename = "__base__/graphics/entity/small-electric-pole/copper-wire.png",
-			priority = "high",
-			width = 224,
-			height = 46,
-		},
-		green_wire_picture = {
-			filename = "__base__/graphics/entity/small-electric-pole/green-wire.png",
-			priority = "high",
-			width = 224,
-			height = 46,
-		},
 		radius_visualisation_picture = {
 			filename = "__base__/graphics/entity/small-electric-pole/electric-pole-radius-visualization.png",
 			width = 12,
 			height = 12,
 			priority = "extra-high-no-scale",
-		},
-		red_wire_picture = {
-			filename = "__base__/graphics/entity/small-electric-pole/red-wire.png",
-			priority = "high",
-			width = 224,
-			height = 46,
-		},
-		wire_shadow_picture = {
-			filename = "__base__/graphics/entity/small-electric-pole/wire-shadow.png",
-			priority = "high",
-			width = 224,
-			height = 46,
 		},
 	},
 
@@ -177,35 +129,11 @@ data:extend({
 				},
 			},
 		},
-		copper_wire_picture = {
-			filename = "__base__/graphics/entity/small-electric-pole/copper-wire.png",
-			priority = "high",
-			width = 224,
-			height = 46,
-		},
-		green_wire_picture = {
-			filename = "__base__/graphics/entity/small-electric-pole/green-wire.png",
-			priority = "high",
-			width = 224,
-			height = 46,
-		},
 		radius_visualisation_picture = {
 			filename = "__base__/graphics/entity/small-electric-pole/electric-pole-radius-visualization.png",
 			width = 12,
 			height = 12,
 			priority = "extra-high-no-scale",
-		},
-		red_wire_picture = {
-			filename = "__base__/graphics/entity/small-electric-pole/red-wire.png",
-			priority = "high",
-			width = 224,
-			height = 46,
-		},
-		wire_shadow_picture = {
-			filename = "__base__/graphics/entity/small-electric-pole/wire-shadow.png",
-			priority = "high",
-			width = 224,
-			height = 46,
 		},
 	},
 

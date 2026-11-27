@@ -22,23 +22,7 @@ data:extend({
 			height = 64,
 			scale = 0.5,
 		},
-		wall_diode_green = util.conditional_return(not data.is_demo, {
-			sheet = {
-				filename = "__base__/graphics/entity/wall/wall-diode-green.png",
-				priority = "extra-high",
-				width = 38,
-				height = 24,
-				shift = util.by_pixel(-2, -24),
-				hr_version = {
-					filename = "__base__/graphics/entity/wall/hr-wall-diode-green.png",
-					priority = "extra-high",
-					width = 72,
-					height = 44,
-					shift = util.by_pixel(-1, -23),
-					scale = 0.5,
-				},
-			},
-		}),
+		wall_diode_green = not data.is_demo and table.deepcopy(data.raw.wall["stone-wall"].wall_diode_green) or nil,
 		wall_diode_green_light_top = util.conditional_return(not data.is_demo, {
 			minimum_darkness = 0.3,
 			color = { g = 1 },
@@ -67,23 +51,7 @@ data:extend({
 			size = 1,
 			intensity = 0.3,
 		}),
-		wall_diode_red = util.conditional_return(not data.is_demo, {
-			sheet = {
-				filename = "__base__/graphics/entity/wall/wall-diode-red.png",
-				priority = "extra-high",
-				width = 38,
-				height = 24,
-				shift = util.by_pixel(-2, -24),
-				hr_version = {
-					filename = "__base__/graphics/entity/wall/hr-wall-diode-red.png",
-					priority = "extra-high",
-					width = 72,
-					height = 44,
-					shift = util.by_pixel(-1, -23),
-					scale = 0.5,
-				},
-			},
-		}),
+		wall_diode_red = not data.is_demo and table.deepcopy(data.raw.wall["stone-wall"].wall_diode_red) or nil,
 		wall_diode_red_light_top = util.conditional_return(not data.is_demo, {
 			minimum_darkness = 0.3,
 			color = { r = 1 },
@@ -243,23 +211,7 @@ data:extend({
 			height = 64,
 			scale = 0.5,
 		},
-		wall_diode_green = util.conditional_return(not data.is_demo, {
-			sheet = {
-				filename = "__base__/graphics/entity/wall/wall-diode-green.png",
-				priority = "extra-high",
-				width = 38,
-				height = 24,
-				shift = util.by_pixel(-2, -24),
-				hr_version = {
-					filename = "__base__/graphics/entity/wall/hr-wall-diode-green.png",
-					priority = "extra-high",
-					width = 72,
-					height = 44,
-					shift = util.by_pixel(-1, -23),
-					scale = 0.5,
-				},
-			},
-		}),
+		wall_diode_green = not data.is_demo and table.deepcopy(data.raw.wall["stone-wall"].wall_diode_green) or nil,
 		wall_diode_green_light_top = util.conditional_return(not data.is_demo, {
 			minimum_darkness = 0.3,
 			color = { g = 1 },
@@ -288,23 +240,7 @@ data:extend({
 			size = 1,
 			intensity = 0.3,
 		}),
-		wall_diode_red = util.conditional_return(not data.is_demo, {
-			sheet = {
-				filename = "__base__/graphics/entity/wall/wall-diode-red.png",
-				priority = "extra-high",
-				width = 38,
-				height = 24,
-				shift = util.by_pixel(-2, -24),
-				hr_version = {
-					filename = "__base__/graphics/entity/wall/hr-wall-diode-red.png",
-					priority = "extra-high",
-					width = 72,
-					height = 44,
-					shift = util.by_pixel(-1, -23),
-					scale = 0.5,
-				},
-			},
-		}),
+		wall_diode_red = not data.is_demo and table.deepcopy(data.raw.wall["stone-wall"].wall_diode_red) or nil,
 		wall_diode_red_light_top = util.conditional_return(not data.is_demo, {
 			minimum_darkness = 0.3,
 			color = { r = 1 },
@@ -443,23 +379,7 @@ data:extend({
 			height = 64,
 			scale = 0.5,
 		},
-		wall_diode_green = util.conditional_return(not data.is_demo, {
-			sheet = {
-				filename = "__base__/graphics/entity/wall/wall-diode-green.png",
-				priority = "extra-high",
-				width = 38,
-				height = 24,
-				shift = util.by_pixel(-2, -24),
-				hr_version = {
-					filename = "__base__/graphics/entity/wall/hr-wall-diode-green.png",
-					priority = "extra-high",
-					width = 72,
-					height = 44,
-					shift = util.by_pixel(-1, -23),
-					scale = 0.5,
-				},
-			},
-		}),
+		wall_diode_green = not data.is_demo and table.deepcopy(data.raw.wall["stone-wall"].wall_diode_green) or nil,
 		wall_diode_green_light_top = util.conditional_return(not data.is_demo, {
 			minimum_darkness = 0.3,
 			color = { g = 1 },
@@ -488,23 +408,7 @@ data:extend({
 			size = 1,
 			intensity = 0.3,
 		}),
-		wall_diode_red = util.conditional_return(not data.is_demo, {
-			sheet = {
-				filename = "__base__/graphics/entity/wall/wall-diode-red.png",
-				priority = "extra-high",
-				width = 38,
-				height = 24,
-				shift = util.by_pixel(-2, -24),
-				hr_version = {
-					filename = "__base__/graphics/entity/wall/hr-wall-diode-red.png",
-					priority = "extra-high",
-					width = 72,
-					height = 44,
-					shift = util.by_pixel(-1, -23),
-					scale = 0.5,
-				},
-			},
-		}),
+		wall_diode_red = not data.is_demo and table.deepcopy(data.raw.wall["stone-wall"].wall_diode_red) or nil,
 		wall_diode_red_light_top = util.conditional_return(not data.is_demo, {
 			minimum_darkness = 0.3,
 			color = { r = 1 },
@@ -643,23 +547,7 @@ data:extend({
 			height = 64,
 			scale = 0.5,
 		},
-		wall_diode_green = util.conditional_return(not data.is_demo, {
-			sheet = {
-				filename = "__base__/graphics/entity/wall/wall-diode-green.png",
-				priority = "extra-high",
-				width = 38,
-				height = 24,
-				shift = util.by_pixel(-2, -24),
-				hr_version = {
-					filename = "__base__/graphics/entity/wall/hr-wall-diode-green.png",
-					priority = "extra-high",
-					width = 72,
-					height = 44,
-					shift = util.by_pixel(-1, -23),
-					scale = 0.5,
-				},
-			},
-		}),
+		wall_diode_green = not data.is_demo and table.deepcopy(data.raw.wall["stone-wall"].wall_diode_green) or nil,
 		wall_diode_green_light_top = util.conditional_return(not data.is_demo, {
 			minimum_darkness = 0.3,
 			color = { g = 1 },
@@ -688,23 +576,7 @@ data:extend({
 			size = 1,
 			intensity = 0.3,
 		}),
-		wall_diode_red = util.conditional_return(not data.is_demo, {
-			sheet = {
-				filename = "__base__/graphics/entity/wall/wall-diode-red.png",
-				priority = "extra-high",
-				width = 38,
-				height = 24,
-				shift = util.by_pixel(-2, -24),
-				hr_version = {
-					filename = "__base__/graphics/entity/wall/hr-wall-diode-red.png",
-					priority = "extra-high",
-					width = 72,
-					height = 44,
-					shift = util.by_pixel(-1, -23),
-					scale = 0.5,
-				},
-			},
-		}),
+		wall_diode_red = not data.is_demo and table.deepcopy(data.raw.wall["stone-wall"].wall_diode_red) or nil,
 		wall_diode_red_light_top = util.conditional_return(not data.is_demo, {
 			minimum_darkness = 0.3,
 			color = { r = 1 },
@@ -844,23 +716,7 @@ data:extend({
 			height = 64,
 			scale = 0.5,
 		},
-		wall_diode_green = util.conditional_return(not data.is_demo, {
-			sheet = {
-				filename = "__base__/graphics/entity/wall/wall-diode-green.png",
-				priority = "extra-high",
-				width = 38,
-				height = 24,
-				shift = util.by_pixel(-2, -24),
-				hr_version = {
-					filename = "__base__/graphics/entity/wall/hr-wall-diode-green.png",
-					priority = "extra-high",
-					width = 72,
-					height = 44,
-					shift = util.by_pixel(-1, -23),
-					scale = 0.5,
-				},
-			},
-		}),
+		wall_diode_green = not data.is_demo and table.deepcopy(data.raw.wall["stone-wall"].wall_diode_green) or nil,
 		wall_diode_green_light_top = util.conditional_return(not data.is_demo, {
 			minimum_darkness = 0.3,
 			color = { g = 1 },
@@ -889,23 +745,7 @@ data:extend({
 			size = 1,
 			intensity = 0.3,
 		}),
-		wall_diode_red = util.conditional_return(not data.is_demo, {
-			sheet = {
-				filename = "__base__/graphics/entity/wall/wall-diode-red.png",
-				priority = "extra-high",
-				width = 38,
-				height = 24,
-				shift = util.by_pixel(-2, -24),
-				hr_version = {
-					filename = "__base__/graphics/entity/wall/hr-wall-diode-red.png",
-					priority = "extra-high",
-					width = 72,
-					height = 44,
-					shift = util.by_pixel(-1, -23),
-					scale = 0.5,
-				},
-			},
-		}),
+		wall_diode_red = not data.is_demo and table.deepcopy(data.raw.wall["stone-wall"].wall_diode_red) or nil,
 		wall_diode_red_light_top = util.conditional_return(not data.is_demo, {
 			minimum_darkness = 0.3,
 			color = { r = 1 },
@@ -1081,23 +921,7 @@ data:extend({
 			height = 64,
 			scale = 0.5,
 		},
-		wall_diode_green = util.conditional_return(not data.is_demo, {
-			sheet = {
-				filename = "__base__/graphics/entity/wall/wall-diode-green.png",
-				priority = "extra-high",
-				width = 38,
-				height = 24,
-				shift = util.by_pixel(-2, -24),
-				hr_version = {
-					filename = "__base__/graphics/entity/wall/hr-wall-diode-green.png",
-					priority = "extra-high",
-					width = 72,
-					height = 44,
-					shift = util.by_pixel(-1, -23),
-					scale = 0.5,
-				},
-			},
-		}),
+		wall_diode_green = not data.is_demo and table.deepcopy(data.raw.wall["stone-wall"].wall_diode_green) or nil,
 		wall_diode_green_light_top = util.conditional_return(not data.is_demo, {
 			minimum_darkness = 0.3,
 			color = { g = 1 },
@@ -1126,23 +950,7 @@ data:extend({
 			size = 1,
 			intensity = 0.3,
 		}),
-		wall_diode_red = util.conditional_return(not data.is_demo, {
-			sheet = {
-				filename = "__base__/graphics/entity/wall/wall-diode-red.png",
-				priority = "extra-high",
-				width = 38,
-				height = 24,
-				shift = util.by_pixel(-2, -24),
-				hr_version = {
-					filename = "__base__/graphics/entity/wall/hr-wall-diode-red.png",
-					priority = "extra-high",
-					width = 72,
-					height = 44,
-					shift = util.by_pixel(-1, -23),
-					scale = 0.5,
-				},
-			},
-		}),
+		wall_diode_red = not data.is_demo and table.deepcopy(data.raw.wall["stone-wall"].wall_diode_red) or nil,
 		wall_diode_red_light_top = util.conditional_return(not data.is_demo, {
 			minimum_darkness = 0.3,
 			color = { r = 1 },
