@@ -12,7 +12,7 @@ Three sound packs integrated for Factorio 2.1.24, without changing combat statis
 
 The original Immersive audio credits and redistribution notice are retained verbatim in **SOUND-CREDITS.txt**. They credit Jack Martisson / Epic Thunder, Gaijin Entertainment / War Thunder, Crowbar Collective / Black Mesa, New World Interactive / Day of Infamy, Saber Interactive / Snowrunner, Wolfire Games / Receiver 2, and Wube Software / Factorio. These assets are not claimed as original Paranoidal work or relicensed by this integration.
 
-All **476 audio files** from the three installed sources are retained byte-for-byte, including previously unused alternatives. No transcoding, normalisation or sample replacement. The new Lua integration and rewrite are maintained by Paranoidal.
+All **476 audio files** from the three installed sources are retained, including unused alternatives. The three `gun-turret-start` and three `switch-gun` files were restored byte-for-byte from the last intact Git revision before the 2022 recompression; they are not new encodings. The new Lua integration and rewrite are maintained by Paranoidal.
 
 ## Settings
 

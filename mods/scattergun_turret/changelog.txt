@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 8.0.9
 Date: 10.01.2025
+  Bugfixes:
+    - Fixed the RIFF length and malformed tails of the two cannon WAV files without changing any PCM samples.
   Changes:
     - Paranoidal packaging: moved the turret spreadsheet to the local source-assets collection; game resources are unchanged.
   Graphics:
