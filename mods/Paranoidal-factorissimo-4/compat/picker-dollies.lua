@@ -5,20 +5,21 @@ local function moved(event)
 end
 
 local function register_move_event()
-    if storage.picker_dollies_event then script.on_event(storage.picker_dollies_event, moved) end
+    local interface = remote.interfaces["PickerDollies"]
+    if not (interface and interface.dolly_moved_entity_id) then return end
+
+    local event_id = remote.call("PickerDollies", "dolly_moved_entity_id")
+    if event_id then script.on_event(event_id, moved) end
 end
 
--- The interface may load after Factorissimo. Discover the event on init/configuration change;
--- on_load only restores the subscription, without writing storage or calling other mods.
+-- The getter only reads the current event ID. An ID from the save may be invalid
+-- before on_configuration_changed runs, so restore the subscription without using storage.
 factorissimo.on_event(factorissimo.events.on_load(), register_move_event)
 
 factorissimo.on_event(factorissimo.events.on_init(), function()
-    if storage.picker_dollies_event then script.on_event(storage.picker_dollies_event, nil) end
-    local interface = remote.interfaces["PickerDollies"]
-    storage.picker_dollies_event = interface and interface.dolly_moved_entity_id
-        and remote.call("PickerDollies", "dolly_moved_entity_id") or nil
     register_move_event()
-    if not interface then return end
+    local interface = remote.interfaces["PickerDollies"]
+    if not (interface and interface.add_blacklist_name) then return end
 
     remote.call("PickerDollies", "add_blacklist_name", "factory-1", true)
     remote.call("PickerDollies", "add_blacklist_name", "factory-2", true)

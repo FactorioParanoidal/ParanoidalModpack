@@ -140,8 +140,7 @@ end
 local function rebuild()
 	storage.CW_AirFilterTable = nil -- registry of 9.1.4 and earlier
 	local neutral = game.forces.neutral.index
-	local ruins_event = storage.cc and storage.cc.ruins_event
-	S = { list = {}, surfaces = {}, units = {}, cursor = 1, neutral = neutral, ruins_event = ruins_event }
+	S = { list = {}, surfaces = {}, units = {}, cursor = 1, neutral = neutral }
 	storage.cc = S
 	for _, surface in pairs(game.surfaces) do
 		for _, entity in pairs(surface.find_entities_filtered({ name = NAMES })) do
@@ -168,14 +167,14 @@ local function on_force_changed(event)
 	end
 end
 
-local function subscribe(persist)
+-- The provider generates its event ID for this load. A saved ID may be invalid
+-- even when passed to script.on_event only to unsubscribe.
+local function subscribe()
 	local interface = remote.interfaces[RUINS]
-	local id = interface and interface.get_on_entity_force_changed_event
-		and remote.call(RUINS, "get_on_entity_force_changed_event") or nil
-	local old = S and S.ruins_event
-	if old and old ~= id then script.on_event(old, nil) end
+	if not (interface and interface.get_on_entity_force_changed_event) then return end
+
+	local id = remote.call(RUINS, "get_on_entity_force_changed_event")
 	if id then script.on_event(id, on_force_changed) end
-	if persist and S then S.ruins_event = id end
 end
 
 remote.add_interface("carbon-capture2", {
@@ -218,7 +217,7 @@ local function migrate()
 	script.on_event(defines.events.on_tick, nil)
 	if not storage.cc then
 		rebuild()
-		subscribe(true)
+		subscribe()
 	end
 end
 
@@ -251,7 +250,7 @@ end)
 
 script.on_init(function()
 	rebuild()
-	subscribe(true)
+	subscribe()
 end)
 
 script.on_load(function()
@@ -261,10 +260,10 @@ script.on_load(function()
 	elseif S.list[1] then
 		script.on_nth_tick(STEP, step)
 	end
-	subscribe(false)
+	subscribe()
 end)
 
 script.on_configuration_changed(function()
 	rebuild()
-	subscribe(true)
+	subscribe()
 end)
