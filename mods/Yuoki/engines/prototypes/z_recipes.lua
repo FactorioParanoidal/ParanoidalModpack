@@ -1204,7 +1204,7 @@ data:extend({
 	{
 		type = "recipe",
 		name = "ye_neutralisatzion",
-		categories = {"yuoki-archaeology-wash"}, --
+		categories = {"yrcat_fluidhandle"},
 		enabled = true,
 		energy_required = 2.00,
 		ingredients = {
