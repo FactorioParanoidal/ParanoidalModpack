@@ -14,6 +14,11 @@ for _, name in pairs({"recycler-1", "recycler-2", "recycler-3", "recycler"}) do
   local entity = data.raw.furnace[name]
   if entity then
     entity.energy_usage = multiply_power(entity.energy_usage, ENERGY_MULTIPLIER)
+    -- A furnace rejects an input if its recipe lists more distinct products than output slots,
+    -- even when some products are fractional. The three large TN recycling recipes list 14–15.
+    if not mods["space-age"] and mods["paranoidal-true-nukes"] then
+      entity.result_inventory_size = math.max(entity.result_inventory_size, 15)
+    end
   end
 end
 

@@ -1,6 +1,7 @@
 ---------------------------------------------------------------------------------------------------
 Version: 8.1.32
   Bugfixes:
+    - Recyclers accept all three large True Nukes warheads: their recipes need up to 15 distinct output slots.
     - Request Freeplay victory separately for each force, even after Continue. Convert the pack’s known obsolete vehicle sound overrides without changing the native materials of unrelated entities.
     - Destroyed plain and logistic memory units no longer spill their item buffers when item-drop is enabled.
   Graphics:
