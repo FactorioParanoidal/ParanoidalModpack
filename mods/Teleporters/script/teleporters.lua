@@ -429,17 +429,23 @@ local gui_actions =
     if not teleport_param then return end
     local destination = teleport_param.teleporter
     if not (destination and destination.valid) then return end
-    destination.timeout = destination.prototype.timeout
     local destination_surface = destination.surface
     local destination_position = destination.position
     local player = game.players[event.player_index]
     if not (player and player.valid) then return end
-    create_flash(destination_surface, destination_position)
-    create_flash(player.surface, player.position)
-    --This teleport doesn't check collisions. If someone complains, make it check 'can_place' and if false find a positions etc....
-    player.teleport(destination_position, destination_surface)
-    unlink_teleporter(player)
-    add_recent(player, destination)
+    local origin_surface, origin_position = player.surface, player.position
+    if not player.teleport(destination_position, destination_surface) then
+      player.print({"paranoidal-teleport-failed"})
+      return
+    end
+
+    if destination_surface.valid then create_flash(destination_surface, destination_position) end
+    if origin_surface.valid then create_flash(origin_surface, origin_position) end
+    if destination.valid then destination.timeout = destination.prototype.timeout end
+    if player.valid then
+      unlink_teleporter(player)
+      if destination.valid then add_recent(player, destination) end
+    end
   end,
 
   search_text_changed = function(event, param)
@@ -499,13 +505,11 @@ end
 local teleporter_triggered = function(entity, character)
   if not (entity and entity.valid and entity.name == teleporter_name) then return error("HEOK") end
   if character.type ~= "character" then return end
-  local force = entity.force
-  local surface = entity.surface
-  local position = entity.position
-  local param = script_data.teleporter_map[entity.unit_number]
   local player = character.player
-  if not player then return end
-  player.teleport(entity.position)
+  if not player or player.controller_type ~= defines.controllers.character
+    or script_data.player_linked_teleporter[player.index] then return end
+  if not player.teleport(entity.position) then return end
+  if not (entity.valid and character.valid and player.valid and player.character == character) then return end
   entity.disabled_by_script = true
   entity.timeout = entity.prototype.timeout
   character.disabled_by_script = true

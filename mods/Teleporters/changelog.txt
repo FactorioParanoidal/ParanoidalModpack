@@ -4,6 +4,7 @@ Version: 2.0.0
     - Russian hardcoded player-facing text: 17 UI, chat, command-help and error-message literals; technical identifiers, format parameters and gameplay logic are unchanged.
 Date: 2024-10-27
   Bugfixes:
+    - Failed travel leaves the teleporter menu open and does not apply the destination cooldown or record a successful visit. Failed entry does not immobilize the player.
     - Teleporter previews always use a positive integer column count, including narrow windows and large UI scales; links, destinations and saved positions are unchanged.
   Changes:
     - 2.0 update.
