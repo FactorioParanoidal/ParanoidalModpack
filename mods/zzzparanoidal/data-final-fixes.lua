@@ -468,6 +468,10 @@ require("tweaks.technology.inserter-capacity-cost") -- цена бонуса г�
 require("tweaks.custom.recipe-signals-hidden")
 -- Карточки элементов C2: окончательный владелец после Reskins, атласа и прежних замен.
 require("tweaks.technology.chemical-elements")
+-- The Beast copies the original machine graphics before applying the indicator style.
+if not mods["Paranoidal-Protomolecule-Beast"] then
+    require("tweaks.entity.bottleneck-indicators")
+end
 -- With IC installed, its final pass also covers the workshop, silhouettes and mode twins.
 if not mods["ic-more-qualities"] then
     require("tweaks.custom.graphics-static-animation").apply(data.raw, log)
