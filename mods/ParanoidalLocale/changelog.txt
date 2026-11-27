@@ -1,5 +1,7 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.26.0
+  Bugfixes:
+    - Fixed the Russian Factory Planner belt, pump, rocket and solver labels to match the actual arguments and selected scope.
   Locale:
     - Matched the Russian Big Monsters override tooltip to the owning mod: it does not bypass native No Enemies.
     - Distinguished the Russian names of coal and ceramic coolant filtration and corrected the phosphoric acid recipe name.
