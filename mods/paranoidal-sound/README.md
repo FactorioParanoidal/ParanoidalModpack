@@ -35,7 +35,8 @@ Changing the grenade does not change every medium explosion sharing its Sound wr
 - Car/tank engine loops, starts/stops, fire loops, flamethrower phases and train shutdown variations are now inside the correct Sound fields rather than ignored numeric siblings. Immersive wheel clatter uses `drive_over_tie_trigger.sound`, not the unused `drive_over_tie` field. The ignored `max_sounds_per_type` field is removed without introducing a new audio concurrency limit.
 - Nuclear sounds are selected by `play-sound` effects rather than hard-coded array slots. This preserves the camera effect that the old code accidentally overwrote, and puts the explosion and aftershock samples in their proper events. Damage/cliff/tile effects are untouched.
 - Explosion assignment order is preserved because base shares Sound wrappers. The grenade alternative alone gets a detached wrapper.
-- Existing shallow-copy clatter sharing with BatteryElectricTrain is preserved. Narrow compatibility restores MIRV fire copies and Picker's five laser variations after the load-order change; MIRV's own nuke explosion sound remains its own. No broad late patch is applied.
+- Existing shallow-copy clatter sharing with BatteryElectricTrain is preserved. Narrow compatibility restores MIRV fire copies and Picker's five laser variations after the load-order change; MIRV's own nuke explosion sound remains its own.
+- Selected trees and rocks use private vehicle-impact categories, so other materials keep their sounds and vibration. The pack's late compatibility pass recognises only known legacy sound/material pairs.
 - The shared graphics-atlas alias follows the moved transparent sprite.
 
 ## Existing saves and installation

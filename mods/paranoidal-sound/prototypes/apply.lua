@@ -51,9 +51,12 @@ for name, sound in pairs{["biter-spawner"] = sounds.spawner_live_sound, ["spitte
     raw["unit-spawner"][name].dying_sound = sounds.spawner_die_sound
     raw["unit-spawner"][name].working_sound.sound = sound
 end
-assign("tree", "dead-dry-hairy-tree dead-grey-trunk dead-tree-desert dry-hairy-tree dry-tree tree-01 tree-02 tree-02-red tree-03 tree-04 tree-05 tree-06 tree-06-brown tree-07 tree-08 tree-08-brown tree-08-red tree-09 tree-09-brown tree-09-red", "vehicle_impact_sound", sounds.car_impact_wood_sound)
-assign("cliff", "cliff", "vehicle_impact_sound", sounds.car_impact_stone_sound)
-assign("simple-entity", "big-rock huge-rock big-sand-rock", "vehicle_impact_sound", sounds.car_impact_stone_sound)
+local impact_material = require("prototypes.vehicle-impacts")
+local tree_impact = impact_material("tree", "immersive", sounds.car_impact_wood_sound)
+local stone_impact = impact_material("stone", "immersive", sounds.car_impact_stone_sound)
+assign("tree", "dead-dry-hairy-tree dead-grey-trunk dead-tree-desert dry-hairy-tree dry-tree tree-01 tree-02 tree-02-red tree-03 tree-04 tree-05 tree-06 tree-06-brown tree-07 tree-08 tree-08-brown tree-08-red tree-09 tree-09-brown tree-09-red", "impact_category", tree_impact)
+assign("cliff", "cliff", "impact_category", stone_impact)
+assign("simple-entity", "big-rock huge-rock big-sand-rock", "impact_category", stone_impact)
 
 for name, sound in pairs{
     ["submachine-gun"] = sounds.smg_sound, pistol = sounds.pistol_sound,

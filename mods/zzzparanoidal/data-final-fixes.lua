@@ -478,6 +478,7 @@ if not mods["ic-more-qualities"] then
 end
 -- Копируем уже настроенный и перекрашенный бак, оставляя старый прототип для сохранений.
 require("features.gas-reservoir.data")
+if mods["paranoidal-sound"] then require("tweaks.custom.vehicle-impacts") end
 -- Этот require ВСЕГДА ПОСЛЕДНИЙ: не переносить и не добавлять код ниже.
 -- Все новые правки размещать выше: здесь фиксируются иконка и последнее место эффекта эволюции.
 require("tweaks.technology.research-evolution-icon")

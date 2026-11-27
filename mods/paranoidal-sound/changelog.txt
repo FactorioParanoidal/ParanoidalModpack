@@ -15,6 +15,7 @@ Date: 2026-11-07
     - Replaced global sound tables and repetitive handlers with private libraries and one event-only dispatcher.
     - Preserved old custom-input, sound and projectile IDs without save-data migrations.
   Bugfixes:
+    - Restored all six truncated Immersive Ogg streams from Git. Vehicle hits on the targeted trees, cliff and rocks now use private impact categories, retaining bullet sounds and controller vibration.
     - Fixed misplaced engine, fire and flamethrower variations and Immersive train clatter.
     - Replaced nuclear sound effects by type instead of overwriting a camera effect by array index.
     - Isolated the grenade selector from shared explosion wrappers.
