@@ -29,6 +29,10 @@ local entity_key = function(entity)
     return entity.name .. "@" .. position.x .. "," .. position.y
 end
 
+function Find_and_batch:skip_target(entity)
+    self.fail_cache[entity_key(entity)] = true
+end
+
 local job_filters =
 {
     repair = function(entity)
@@ -80,9 +84,8 @@ function Find_and_batch:find()
         result, count = self:find_in_radius(max_radius)
     end
 
-    local fail_cache = self.fail_cache
     for k = 1, count do
-        fail_cache[entity_key(result[k])] = true
+        self:skip_target(result[k])
     end
 
     return result

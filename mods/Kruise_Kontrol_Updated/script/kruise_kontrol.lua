@@ -119,16 +119,27 @@ local on_player_cancel_command = function(event)
     klient:on_player_cancel_command(event)
 end
 
+local function on_player_walk_command(event)
+    local klient = script_data.klients[event.player_index]
+    if not klient or not klient.character or not klient.player.valid then return end
+
+    local player = klient.player
+    if player.controller_type ~= defines.controllers.character or player.vehicle then return end
+    if klient.character.entity ~= player.character then return end
+
+    klient:on_player_cancel_command(event)
+end
+
 local lib = {}
 
 lib.events =
 {
     [Constants.events.alt_move_to] = on_player_action_command,
     --["klient-enqueue-command"] = on_player_enqueue_action_command,
-    --["klient-cancel-w"] = on_player_cancel_command,
-    --["klient-cancel-a"] = on_player_cancel_command,
-    --["klient-cancel-s"] = on_player_cancel_command,
-    --["klient-cancel-d"] = on_player_cancel_command,
+    ["klient-cancel-w"] = on_player_walk_command,
+    ["klient-cancel-a"] = on_player_walk_command,
+    ["klient-cancel-s"] = on_player_walk_command,
+    ["klient-cancel-d"] = on_player_walk_command,
     [Constants.events.cancel_enter] = on_player_cancel_command,
 
     [defines.events.on_pre_player_toggled_map_editor] = on_player_cancel_command,

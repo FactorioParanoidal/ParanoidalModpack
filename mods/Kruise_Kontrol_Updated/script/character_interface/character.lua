@@ -151,8 +151,12 @@ function Character:batch_job(job_type, entities)
     self:push_state(States.batch_job(self, job_type, entities))
 end
 
-function Character:find_and_batch(job_type, param)
-    self:push_state(States.find_and_batch(self, job_type, param))
+function Character:find_and_batch(job_type, param, first_target)
+    local state = States.find_and_batch(self, job_type, param)
+    if first_target then
+        state:skip_target(first_target)
+    end
+    self:push_state(state)
 end
 
 function Character:repair(entity)
@@ -275,7 +279,7 @@ function Character:determine_job(entity, position)
 
         if entity.get_health_ratio() and entity.get_health_ratio() < 1 then
             self:remark { "repair-command" }
-            self:find_and_batch("repair", { radius = 50, force = force })
+            self:find_and_batch("repair", { radius = 50, force = force }, entity)
             self:repair(entity)
             return
         end
@@ -503,31 +507,6 @@ end
 
 function Character:update_every_n_ticks(n)
     return (game.tick + self.index) % n == 0
-end
-
-function Character:clear_cursor()
-    -- Returns true if the cursor is empty.
-    local stack = self.entity.cursor_stack
-
-    if not stack.valid_for_read then
-        return true
-    end
-
-    local inventory = self.entity.get_main_inventory()
-
-    local count = inventory.insert(stack)
-
-    if count == 0 then
-        return false
-    end
-
-    if count == stack.count then
-        stack.clear()
-        return true
-    end
-
-    stack.count = stack.count - count
-    return false
 end
 
 local locale_cache = {}
