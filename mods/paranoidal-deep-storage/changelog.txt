@@ -10,6 +10,7 @@ Date: 2026-11-01
     - The Alt-mode amount is rewritten only when the rounded text changes.
     - Graphics recompressed (lossy palette, tint masks lossless).
   Bugfixes:
+    - Item memory units keep the Alt-mode total up to date without power; transfers still require power.
     - Mining a fluid memory unit preserves tank contents even before its first update has locked onto the fluid. Destruction still loses the contents.
   Changes:
     - deep-storage-unit is no longer shipped and its optional dependency is removed: old 2.0 saves are no longer supported. Already migrated saves keep their data in this mod; in unmigrated 2.0 saves the contents of the item units are lost.

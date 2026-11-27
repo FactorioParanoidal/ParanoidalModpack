@@ -6,7 +6,8 @@
 --   count               - items in the counter, outside the chest
 --   stack_size, comfortable - stack size of the item and the amount kept in the chest
 --   output_only         - the locked item can no longer be stored (old saves): only given out
---   previous_total      - last total shown on the combinator/text
+--   previous_total      - last total applied to the combinator and power use
+--   display_total       - last total formatted for the Alt-mode label
 --   storage_unit        - logistic storage variant (cached on first use; the entity name never changes)
 --   power, power_factor - power usage written to the power source, quality factor of the unit (caches)
 --   text, shown, icon, icon_quality - render object ids, the rounded amount shown by `text`
@@ -248,16 +249,25 @@ function M.ensure_valid(unit_data, unit_number)
 	return true
 end
 
+local function update_display(unit_data, total)
+	if total == unit_data.display_total and unit_data.text then return end
+	shared.update_display_text(unit_data, total)
+	unit_data.display_total = total
+end
+
 function M.update_exterior(unit_data, total)
 	unit_data.previous_total = total
 	shared.update_combinator(unit_data.combinator, {type = "item", name = unit_data.item, quality = unit_data.quality}, total)
-	shared.update_display_text(unit_data, total)
 	shared.update_power_usage(unit_data, total)
 end
 
 function M.update(unit_data, unit_number, force)
 	if not M.ensure_valid(unit_data, unit_number) then return end
-	if not force and not shared.has_power(unit_data) then return end
+	if not force and not shared.has_power(unit_data) then
+		-- Inserters can still change the physical buffer; report the total without moving items.
+		if unit_data.item then update_display(unit_data, M.total(unit_data)) end
+		return
+	end
 	if not unit_data.item and not M.detect_item(unit_data) then return end
 	sync_storage_filter(unit_data)
 
@@ -290,6 +300,7 @@ function M.update(unit_data, unit_number, force)
 
 	if moved then inventory.sort_and_merge() end
 	local total = unit_data.count + inventory_count
+	update_display(unit_data, total)
 	if force or total ~= unit_data.previous_total then
 		M.update_exterior(unit_data, total)
 	end

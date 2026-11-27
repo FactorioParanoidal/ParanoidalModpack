@@ -1,6 +1,15 @@
 -- Порт фичи 1.1 «SpilledItems»: при разрушении сущности высыпает её содержимое на землю.
 -- Гейт — startup-настройка "item-drop".
 
+-- При гибели материопамяти вместе со счётчиком должен пропасть и физический буфер (ПР-060).
+local no_spill = {
+	["memory-unit"] = true,
+	["logistic-memory-unit-passive-provider"] = true,
+	["logistic-memory-unit-storage"] = true,
+	["logistic-memory-unit-buffer"] = true,
+	["logistic-memory-unit-requester"] = true,
+}
+
 local inventory_ids = {
 	defines.inventory.chest,
 	defines.inventory.car_trunk,
@@ -23,7 +32,7 @@ end
 
 local function spill_on_death(event)
 	local entity = event.entity
-	if not (entity and entity.valid) then
+	if not (entity and entity.valid) or no_spill[entity.name] then
 		return
 	end
 	local surface = entity.surface
