@@ -10,6 +10,7 @@ Date: 2026-11-01
     - The Alt-mode amount is rewritten only when the rounded text changes.
     - Graphics recompressed (lossy palette, tint masks lossless).
   Bugfixes:
+    - RA-016: Mining transfers stored contents to one packed unit. If delivery cannot be confirmed, the payload is retained for manual recovery. Building from a ghost without consuming a packed unit no longer restores its contents.
     - Item memory units keep the Alt-mode total up to date without power; transfers still require power.
     - Mining a fluid memory unit preserves tank contents even before its first update has locked onto the fluid. Destruction still loses the contents.
   Changes:

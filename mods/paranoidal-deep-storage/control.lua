@@ -89,10 +89,10 @@ local unit_filter = {}
 for _, name in ipairs(item_unit.names) do unit_filter[#unit_filter + 1] = {filter = "name", name = name} end
 unit_filter[#unit_filter + 1] = {filter = "name", name = fluid_unit.name}
 
--- Built events also see item unit ghosts (player and script placement), for the ghost cleanup below.
+-- See both item and fluid ghosts so blueprints cannot carry stored stock.
 local build_filter = {}
 for _, filter in ipairs(unit_filter) do build_filter[#build_filter + 1] = filter end
-for _, name in ipairs(item_unit.names) do build_filter[#build_filter + 1] = {filter = "ghost_name", name = name} end
+for _, filter in ipairs(unit_filter) do build_filter[#build_filter + 1] = {filter = "ghost_name", name = filter.name} end
 
 local clone_filter = {}
 for _, filter in ipairs(unit_filter) do clone_filter[#clone_filter + 1] = filter end
@@ -100,13 +100,14 @@ for _, name in ipairs({item_unit.powersource_name, item_unit.combinator_name, fl
 	clone_filter[#clone_filter + 1] = {filter = "name", name = name}
 end
 
--- A ghost placed from a packed item unit inherits its tags. Any ghost-mediated build (robots with a plain unit,
+-- A ghost placed from a packed unit can inherit its tags. Any ghost-mediated build (robots with a plain unit,
 -- blueprint, undo, super-force build) would then restore the contents while the packed item stays in the
 -- inventory. Only our keys are dropped; tags of other mods stay.
 local function clear_ghost_tags(ghost)
 	local tags = ghost.tags
 	if not (tags and (tags.name ~= nil or tags.count ~= nil)) then return end
-	tags.name, tags.count, tags.quality = nil, nil, nil
+	tags.name, tags.count = nil, nil
+	if ghost.ghost_name == fluid_unit.name then tags.temperature = nil else tags.quality = nil end
 	ghost.tags = next(tags) and tags or nil
 end
 
@@ -115,7 +116,7 @@ local function on_created(event)
 	if not (entity and entity.valid) then return end
 	local name = entity.name
 	if name == "entity-ghost" then
-		if variants.variants[entity.ghost_name] then clear_ghost_tags(entity) end
+		if variants.variants[entity.ghost_name] or entity.ghost_name == fluid_unit.name then clear_ghost_tags(entity) end
 		return
 	end
 	local kind, units
@@ -128,11 +129,14 @@ local function on_created(event)
 	end
 	if units[entity.unit_number] then return end
 
-	-- Packed unit: tags of the item used (player: consumed_items, robot/platform: stack).
-	local tags = event.tags
-	local inventory = event.consumed_items
-	local stack = event.stack or (inventory and inventory.valid and not inventory.is_empty() and inventory[1]) or nil
-	if not tags and stack and stack.valid_for_read and stack.is_item_with_tags then tags = stack.tags end
+	-- Only a consumed packed item owns stock. Even an old tagged ghost revived
+	-- by a robot with an ordinary shell (or by script, with no item) is empty.
+	local packed_name = kind == fluid_unit and fluid_unit.packed_name or variants.packed_name(name)
+	local stack = event.stack
+	if event.consumed_items then
+		stack = event.consumed_items.find_item_stack{name = packed_name, quality = entity.quality.name}
+	end
+	local tags = stack and stack.valid_for_read and stack.name == packed_name and stack.tags or nil
 	kind.register(entity, tags)
 	invalidate_buckets()
 end
@@ -170,9 +174,9 @@ local function on_removed(event)
 	local unit_number = entity.unit_number
 	local unit_data, kind = find_unit(unit_number)
 	if not unit_data then return end
+	if event.buffer then kind.pack(unit_data, entity, event.buffer) end
 	kind.forget(unit_number, unit_data)
 	invalidate_buckets()
-	kind.pack(unit_number, unit_data, entity, event.buffer)
 end
 
 script.on_event(defines.events.on_player_mined_entity, on_removed, unit_filter)

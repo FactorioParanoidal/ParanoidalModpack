@@ -312,6 +312,35 @@ function M.refusal_text(name)
 	return {"entity-status.cannot-store-data", localised_name}
 end
 
+-- Mining is not cancellable here. If another handler took the shell, don't mint a
+-- second one. Keep the payload in the save for manual reconciliation, never auto-replay it.
+local function preserve_conflict(entity, packed, reason)
+	local records = storage.packing_conflicts or {}
+	records[entity.unit_number] = {surface = entity.surface.name, position = entity.position, packed = packed, reason = reason}
+	storage.packing_conflicts = records
+	log("Memory storage " .. entity.unit_number .. ": " .. reason .. "; retained in storage.packing_conflicts")
+	game.print({"mod-gui.memory-packing-conflict", entity.unit_number})
+end
+
+function M.pack_mined(entity, buffer, packed)
+	local ordinary = {name = entity.name, quality = packed.quality}
+	local shell = buffer.find_item_stack(ordinary)
+	if not shell then return preserve_conflict(entity, packed, "missing mined shell") end
+	-- Replacing a singleton needs no spare slot and leaves unrelated mining products alone.
+	if shell.count == 1 and shell.can_set_stack(packed) and shell.set_stack(packed) then return end
+	-- A stack of ordinary units must lose exactly one, and only AFTER delivery.
+	if buffer.insert(packed) ~= 1 then
+		if entity.surface.platform or #entity.surface.spill_item_stack{
+			position = entity.position, stack = packed, enable_looted = true,
+			allow_belts = false, use_start_position_on_failure = true,
+		} == 0 then return preserve_conflict(entity, packed, "delivery refused") end
+	end
+	if buffer.remove{name = ordinary.name, quality = ordinary.quality, count = 1} ~= 1 then
+		-- The payload is already delivered. Never spill or issue it a second time.
+		log("Memory storage " .. entity.unit_number .. ": packed item delivered; mined shell no longer in buffer")
+	end
+end
+
 -- Rename tables collected from configuration changes: old name -> new name, false if removed.
 function M.record_migrations(changes)
 	local migrations = changes and changes.migrations

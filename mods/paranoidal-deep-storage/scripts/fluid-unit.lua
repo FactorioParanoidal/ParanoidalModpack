@@ -320,7 +320,7 @@ function M.on_cloned(source, destination)
 end
 
 -- Mined unit: the unit item in the buffer is replaced by a packed unit with the contents.
-function M.pack(unit_number, unit_data, entity, buffer)
+function M.pack(unit_data, entity, buffer)
 	if not buffer then return end -- destruction still loses the contents
 	local item, temperature = unit_data.item, unit_data.temperature
 	local count = unit_data.count or 0
@@ -333,15 +333,11 @@ function M.pack(unit_number, unit_data, entity, buffer)
 	end
 	if not (item and count > EPSILON) then return end
 
-	local quality = entity.quality.name
-	if buffer.remove {name = M.name, count = 1, quality = quality} == 0 then
-		log("fluid memory unit " .. unit_number .. ": mined unit item not found in the buffer")
-	end
 	temperature = temperature or prototypes.fluid[item].default_temperature
-	buffer.insert {
+	shared.pack_mined(entity, buffer, {
 		name = M.packed_name,
 		count = 1,
-		quality = quality,
+		quality = entity.quality.name,
 		health = entity.health / entity.max_health,
 		tags = {name = item, count = count, temperature = temperature},
 		custom_description = {
@@ -350,7 +346,7 @@ function M.pack(unit_number, unit_data, entity, buffer)
 			item,
 			string.format("%.1f", temperature)
 		}
-	}
+	})
 end
 
 return M

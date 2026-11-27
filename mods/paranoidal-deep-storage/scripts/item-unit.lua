@@ -478,19 +478,15 @@ end
 
 -- Mined unit: the unit item in the buffer is replaced by a packed unit with the contents.
 -- Only the unit item is replaced: anything else in the buffer (chest contents) stays.
-function M.pack(unit_number, unit_data, entity, buffer)
+function M.pack(unit_data, entity, buffer)
 	local item = unit_data.item
 	local count = unit_data.count or 0
 	if not (buffer and item and count > 0) then return end
 
-	local quality = entity.quality.name
-	if buffer.remove {name = entity.name, count = 1, quality = quality} == 0 then
-		log("memory unit " .. unit_number .. ": mined unit item not found in the buffer")
-	end
-	buffer.insert {
+	shared.pack_mined(entity, buffer, {
 		name = variants.packed_name(entity.name),
 		count = 1,
-		quality = quality,
+		quality = entity.quality.name,
 		health = entity.health / entity.max_health,
 		tags = {name = item, count = count, quality = unit_data.quality},
 		custom_description = {
@@ -499,7 +495,7 @@ function M.pack(unit_number, unit_data, entity, buffer)
 			item,
 			unit_data.quality or "normal"
 		}
-	}
+	})
 end
 
 -- Before mining or deconstruction the chest is emptied into the counter.
