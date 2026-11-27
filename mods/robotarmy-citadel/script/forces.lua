@@ -58,6 +58,11 @@ function F.get()
   return game.forces[S.force]
 end
 
+--- A saved entity reference is not proof of current campaign ownership.
+function F.owns(c, entity)
+  return entity.valid and entity.force.name == S.force and entity.surface.index == c.surface
+end
+
 --- Creates the citadel force and sets the diplomacy with every force.
 function F.ensure()
   if storage.citadel and storage.citadel.phase == "suspended_merge" then return end

@@ -59,8 +59,8 @@ function P.unit_count(c)
   return #c.units.list
 end
 
---- Checks `n` droids: forgets destroyed ones (removed by other scripts without a death event) and
---- calls fn(entity) for the others.
+--- Forget destroyed or transferred droids without killing them or counting a loss.
+--- Keep walking the registry even when the garrison needs no recruits.
 function P.sweep_units(c, n, fn)
   local u = c.units
   local i = c.unit_cursor or 1
@@ -69,8 +69,8 @@ function P.sweep_units(c, n, fn)
     if count == 0 then break end
     if i > count then i = 1 end
     local r = u.list[i]
-    if r.e.valid then
-      fn(r.e)
+    if forces.owns(c, r.e) then
+      if fn then fn(r.e) end
       i = i + 1
     else
       swap_remove(u.list, u.index, i) -- the moved entry is checked next
@@ -171,11 +171,12 @@ function P.step(c, cfg, surface)
     end
   end
   c.foundry_cursor = i
-  -- recycled parts: a free droid from a random foundry
-  while c.salvage >= 1 and room > 0 and #list > 0 do
-    c.salvage = c.salvage - 1
+  -- Bound bonus attempts independently of the bank. A blocked exit keeps the parts for next beat.
+  if #list == 0 then return end
+  for _ = 1, math.min(PER_BEAT, math.floor(c.salvage), room) do
     local f = list[U.random_int(c, #list)]
-    if f.e.valid and make(c, f, surface) then room = room - 1 end
+    if not f.e.valid or not make(c, f, surface) then break end
+    c.salvage = c.salvage - 1
   end
 end
 

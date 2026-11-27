@@ -20,6 +20,7 @@ local ADAPT_MIN_DEATHS = 15
 local SHIELD_BASE = "turret-shields-base"
 local SHIELD_SIZE = "turret-shields-size"
 local SHIELD_RATE = "turret-shields-speed"
+local SHIELD_TECH = {["shield-amplifier"] = SHIELD_SIZE, ["shield-regenerator"] = SHIELD_RATE}
 --- Range levels of the defence tower: with all ten its square (+-17 tiles) covers the whole module.
 local TOWER_RANGE = "repair-turret-range-"
 local TOWER_RANGE_LEVELS = 10
@@ -36,13 +37,23 @@ local function set_level(tech, done)
     tech.level = max
     tech.researched = true
   else
+    if tech.researched then tech.researched = false end
     tech.level = tech.prototype.level + done
   end
 end
 
 --- Shields need Defence Tower Reforged (its tower and, with its research setting on, its research).
 function UP.shields_available()
-  return prototypes.entity[S.entity.shield_tower] ~= nil
+  if not script.active_mods["defence-tower-reforged"] or not prototypes.entity[S.entity.shield_tower] then return false end
+  local research = settings.startup["kts-research"]
+  return research ~= nil and (not research.value or prototypes.technology[SHIELD_BASE] ~= nil)
+end
+
+--- Research-off towers still provide base shields. Only offered upgrades require these levels.
+function UP.shield_limit(kind)
+  if not UP.shields_available() or not settings.startup["kts-research"].value then return 0 end
+  local tech = prototypes.technology[SHIELD_TECH[kind]]
+  return tech and tech.max_level or 0
 end
 
 local function apply_force(c, force)
@@ -68,17 +79,27 @@ function UP.apply(c)
   u.damage = a.arsenal or 0
   u.rate = a.targeting or 0
   u.intel = math.min(UP.MAX_INTEL, a["ai-core"] or 0)
-  local size, rate = a["shield-amplifier"] or 0, a["shield-regenerator"] or 0
-  if c.shields and (size ~= u.shield_size or rate ~= u.shield_rate or not u.shield_on) then
-    u.shield_size, u.shield_rate, u.shield_on = size, rate, true
+  if c.shields and not UP.shields_available() then c.shields = false end
+  local size, rate, mode = 0, 0, nil
+  if c.shields then
+    size = math.min(a["shield-amplifier"] or 0, UP.shield_limit("shield-amplifier"))
+    rate = math.min(a["shield-regenerator"] or 0, UP.shield_limit("shield-regenerator"))
+    mode = settings.startup["kts-research"].value and "research" or "base"
+  else
+    u.shield_on, u.shield_mode, u.shield_size, u.shield_rate = nil, nil, 0, 0
+  end
+  if mode and (mode ~= u.shield_mode or size ~= u.shield_size or rate ~= u.shield_rate) then
+    u.shield_size, u.shield_rate, u.shield_on, u.shield_mode = size, rate, true, mode
     local techs = force.technologies
-    if techs[SHIELD_BASE] then techs[SHIELD_BASE].researched = true end
+    if mode == "research" then techs[SHIELD_BASE].researched = true end
     for i = 1, TOWER_RANGE_LEVELS do
       local t = techs[TOWER_RANGE .. i]
       if t and not t.researched then t.researched = true end
     end
-    set_level(techs[SHIELD_SIZE], size)
-    set_level(techs[SHIELD_RATE], rate)
+    if mode == "research" then
+      set_level(techs[SHIELD_SIZE], size)
+      set_level(techs[SHIELD_RATE], rate)
+    end
     -- Defence Tower Reforged reads the levels again on this event; it also resets the force bonuses,
     -- which are set again below.
     force.reset_technology_effects()

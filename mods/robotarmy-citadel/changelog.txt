@@ -4,6 +4,7 @@ Date: 2026.11.26
   Bugfixes:
     - Losing the hive while a foundry is under construction no longer triggers premature victory, and a finished defeat cancels pending construction without interrupting the cleanup of the city.
     - A replacement hive is announced only after it actually stands; stalled or failed construction is not mistaken for a surviving foundry.
+    - Long raids skip impassable waypoints and try one unsegmented route if the march fails. Surviving droids can re-form after losing their group on the way out.
     - Retreating squads check whether their droids actually returned and retry failed routes before releasing survivors.
     - A raid never requires more droids than the city's configured population limit.
     - Stale target chunks are checked and cleared in bounded batches; squad reports use the buildings' actual chunks.
@@ -12,6 +13,19 @@ Date: 2026.11.26
     - Disabling the citadel pauses its construction queue without losing progress; admin setting overrides are validated and applied atomically.
     - Idle droids stranded beyond recruitment range no longer block raids at the unit cap: only the slots needed for the next raid are freed, without loot or kill credit.
     - Raids check for nearby player buildings before using long-range radar targets, even on maps without a developed base at the player spawn.
+    - The garrison can defend without a muster plaza and return after one is available. Admin growth no longer creates a second hive; a legacy duplicate cannot cause defeat while the real hive stands.
+    - Armour upgrades preserve higher innate resistances and adapt to Bob's plasma and pierce damage when present.
+    - A capacity-limited muster checks all local recruits before retiring anyone. Above a lowered limit it recalls idle droids on foot instead of deleting the surplus.
+    - Retreats keep detached survivors on the original return roster; cleanup removes only the citadel's own saved chart tags.
+    - Base shields work without Defence Tower research; the city no longer plans ineffective capacity or regeneration upgrades.
+    - Transferred droids release their population slots on the registry sweep; defeat and queued cleanup recheck current ownership before removing entities.
+    - Recyclers keep their parts when placement fails and bound bonus production attempts per heartbeat.
+    - Squad sightings no longer erase or renew a full radar survey; fresh sightings survive the expiry of older information.
+  Changes:
+    - Two observed short marches to the same target (segmented route and bypass) temporarily favour another verified target without delaying a raid on its only target.
+    - squads() reports actual observed movement, order reason and living stragglers. status() reports the work of the last jammer pulse; its timing and coverage are unchanged.
+    - Check power at registered radar modules without a surface-wide search. Take one roster snapshot per departing group and skip building a reservation list for a full garrison.
+    - Recolour each droid family's animations once at startup, retaining independent prototypes for every mark and focus.
   Locale:
     - Updated English and Russian setting descriptions for construction pauses, repair retries and raid size limits.
 ---------------------------------------------------------------------------------------------------

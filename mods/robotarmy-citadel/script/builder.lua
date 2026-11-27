@@ -159,7 +159,7 @@ end
 --- Places one building of a module and registers it (key buildings, hub).
 local function place(c, m, surface, force, entry, keys)
   local name = entry[1]
-  if not prototypes.entity[name] then return nil end
+  if not prototypes.entity[name] or (name == E.shield_tower and not c.shields) then return nil end
   local position = L.position(entry, m.x, m.y)
   local spec = {name = name, position = position, force = force}
   if not surface.can_place_entity(spec) then
@@ -319,7 +319,7 @@ run.cascade = function(c, job, surface)
       return job.keys[job.ki] == nil
     end
     job.i = job.i + 1
-    if e.valid then
+    if forces.owns(c, e) then -- the snapshot may span several ticks and an ownership change
       if e.type == "unit" or e.name == E.wall or e.name == E.gate or e.name == E.crate then e.destroy() else e.die() end
     end
   end

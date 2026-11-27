@@ -11,7 +11,7 @@ every 10 minutes and sends every finished squad against the players.
 | Waiting | Evolution of the `enemy` force on Nauvis is read once a minute. At 45 % the players get a warning. A save already past the threshold gets the citadel 10 minutes after the mod is added. |
 | Place | Spawn point + base radius (10 chunks) + distance (50 chunks), random direction; the chunk may have at most 25 % water (paved over) and no player building in the 3x3 chunks around. Up to 8 tries per distance, then 5 chunks farther. |
 | Growth | Every growth interval: a ruined module or missing hub is repaired when due; a failed repair backs off so growth can continue. Otherwise a new module is added next to the city (compact shapes preferred, toward the base with relay masts). Chunks with water, player buildings or no generation are skipped for 30 minutes. |
-| Shields | From 25 modules (with Defence Tower Reforged): a defence tower in every module, shield research for the citadel force, shield modules in the choice. |
+| Shields | From 25 modules (with Defence Tower Reforged): a defence tower in every module. With `kts-research` off, towers retain base shields and range but no amplifier/regenerator is offered. Otherwise upgrades are limited by the corresponding research. |
 | Acceleration | From 100 modules: foundries +10 % speed per hour, no limit. |
 | Hive lost | No growth for 60 minutes (foundries keep working). Then the foundry module farthest from the base becomes the new hive; the old hive is rebuilt later as a foundry. |
 | Defeat | With the hive down, a standing foundry or pending foundry build can still save the city. When no foundry stands and none can finish building, construction is cancelled and the remaining city is cleaned up once. |
@@ -30,35 +30,43 @@ module stands: when all of them are destroyed the module is ruined (no bonus, re
 | Production | light, assault, fire support, sniper, energy weapons, aircraft, terminator foundries | droids of their kinds |
 | Power | power plant (2 reactors, 20 MW each) | towers, radars, shields run on the city network |
 | Defence | bastion, turret nest, mortar battery (range 40), minefield | towers, mines |
-| Support | repair dock, supply depot, wreck recycler | healing, +8 % production each, free droids from losses |
+| Support | repair dock, supply depot, wreck recycler | healing, +8 % production each, free droids from losses (parts are spent only on successful placement) |
 | Recon | radar, jammer, relay mast | knowledge of the base, unchart the city, growth toward the base |
-| Upgrade | armour works, weapons laboratory, targeting array, computing centre | armour mark I-III with adaptive focus, +10 % damage, +8 % rate of fire, intelligence |
+| Upgrade | armour works, weapons laboratory, targeting array, computing centre | armour mark I-III with adaptive focus (never lowers innate resistances; includes Bob's pierce/plasma when present), +10 % damage, +8 % rate of fire, intelligence |
 | Shield | shield amplifier, shield regenerator | shield research levels (from 25 modules) |
 
 ## Squads and intelligence
 
 Droids join the squad gathering on the hive plaza; a full squad (8 + 1 per foundry module, at most
 40 by default) marches on the base in route segments; at most 6 squads attack at once, at most
-400 droids live by default. The muster target cannot exceed the configured droid limit. Intelligence levels (one per computing centre, up to 6): 0 nearest target, half squads,
-no retreat; 1 full squads and retreat after heavy losses; 2 undefended buildings first; 3 avoids
+400 droids live by default. The muster target cannot exceed the configured droid limit. Intelligence levels (one per computing centre, up to 6): 0 nearest target, launch at 60 % of the target size rounded up,
+no retreat for casualties alone; 1 full squads and retreat after heavy losses; 2 undefended buildings first; 3 avoids
 the chunks where droids died; 4 marches without distraction; 5 pincers (two squads, two targets);
-6 strikes poles and generators, damaged squads go to the repair docks. A retreat checks the
-positions of the survivors and retries failed routes before releasing them. Only working, powered
+6 strikes poles and generators, damaged squads go to the repair docks. Marches skip blocked
+terrain waypoints. If a march ends short or the group breaks up, survivors try one unsegmented
+route before retreating. Nearby stragglers can rejoin once; otherwise they get an order to return.
+A retreat keeps the return order's surviving roster even if its group splits; it never takes a droid back from another squad. Only working, powered
 radars scan; squads remember the chunks of actual buildings and do not select empty known chunks.
+A squad's limited sighting can add to a radar survey, not erase unseen defences or renew the survey's age. A later whole-chunk scan can lower the counts or forget an empty chunk.
 
 At launch, squads check for player buildings within 128 tiles of the muster group before using
-radar targets. If the droid limit prevents reinforcements, the citadel may retire idle, ungrouped
-droids outside the 400-tile recruitment radius, freeing only the slots needed for the next raid.
+radar targets. When both a live squad's normal march and its bypass end short, its target chunk
+is less preferred for one minute (at most 16 such chunks). A sole verified target is still used;
+casualties or group loss alone do not penalise a route. At the cap, the whole local garrison is
+checked before retiring idle, ungrouped droids outside 400 tiles to free just the missing slots.
+Above a lowered cap those droids are recalled on foot instead. If the hive is lost before a
+replacement muster plaza exists, the garrison defends first and receives its return order later.
+Droids transferred to another force or surface leave the registry on its next visit and are not destroyed with the city.
 
 ## Performance
 
 - No unit spawner prototypes and no on_tick: the citadel creates its droids by script.
-- One heartbeat every 60 ticks; every task inside it works on a bounded portion: up to 30 foundries,
-  one look at each attacking squad every 2 seconds, up to 4 radar chunk looks, every 5 seconds 25
-  droids, one repair dock and 4 modules checked.
+- One heartbeat every 60 ticks: up to 30 foundries and up to 30 bonus salvage attempts (a failed attempt stops the bonus batch). Each attacking squad is checked every 2 seconds. Registered radar modules are checked for power each heartbeat, with up to 4 chunk looks.
+- Every 5 seconds the registry sweep checks up to 25 droid entries, one repair dock and up to 4 modules are checked. At the population cap the additional local recruitment search can inspect the whole 400-tile circle before retiring a droid.
 - The build queue (`on_nth_tick(4)`) is registered only while something is built: 3 buildings per
   step, tiles and clearing in strips of 8 rows.
-- One command per squad (a unit group), never per droid; low-priority cached paths.
+- Normal marches use one command per squad. Detached droids and over-cap recalls can receive individual orders; a bypass does not reuse the failed path cache.
+- Jammers still unchart the whole city in one pulse per minute, not a strip per tick. `status().last_jam` records the last pulse's tick, player forces, chunks checked (summed across forces) and chunks cleared.
 - Towers, power, lamps, shields and loot are engine work (electric network, turret prototypes,
   loot tables); buildings are simple entities with animations.
 - Events: `on_entity_died` filtered by the names of the citadel's droids and buildings; force and
@@ -77,7 +85,15 @@ Remote interface `robotarmy-citadel`: `status()`, `modules()`, `squads()`, `spaw
 `grow(n, module_type)`, `defeat()`, `configure(overrides)`. Explicit `spawn(x, y)` and `grow`
 can queue construction while disabled, but it does not advance until enabled. `spawn()` without
 coordinates uses the normal site search, which also waits for enablement. `grow` can force chunk
-generation and is meant for tests and admins.
+generation and is meant for tests and admins. It returns 0 for `core` or a shield upgrade without its research.
+The citadel removes only chart tags it actually created and retained; an unidentifiable old skull is left alone.
+
+`squads()` keeps `size0` (launched), `size` (currently grouped) and `position` (group estimate).
+It also returns `detached` (known living ungrouped launch members, including those ordered home),
+`roster_complete` (false for legacy raids), `group_state`, `order_reason` and `progress_tick`.
+The latter is the last poll observing one tracked member move at least two tiles; it is absent
+until movement is observed. A change of witness does not count as progress. Missing historical
+order reasons are not reconstructed. Reading diagnostics does not issue an order.
 
 `configure` atomically updates the supplied keys of the cached settings (e.g. `base_radius`,
 `unit_limit`, `squad_base`). `growth_ticks` and `stun_ticks` use integer ticks (at least 60, up to
@@ -89,7 +105,7 @@ back to map defaults until explicitly replaced or reset.
 Command `/signal` (a neutral name: it is listed in `/help` from the start) prints the phase before the citadel appears and the full state after. Robot Army Reforged gets the kills of its droids
 through its remote function `credit_kill`.
 
-## Tests (pure Lua 5.1, run from the mod root; not engine evidence)
+## Tests (pure Lua, target dialect 5.2; run from a development copy, not engine evidence)
 
 Tests are maintained outside the distributed mod at `D:/PARANOIDAL/test-runs/mod-tests/robotarmy-citadel/tests/`. The paths below apply to a private development copy assembled with `D:/PARANOIDAL/tools/mod-development/prepare.py`.
 

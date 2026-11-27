@@ -7,7 +7,10 @@ local G = require("prototypes.gfx")
 
 local TINT = {r = 1.0, g = 0.42, b = 0.38}
 local MAP = {r = 0.85, g = 0.15, b = 0.15}
-local RESIST_TYPES = {"physical", "explosion", "fire", "laser", "electric", "acid", "poison"}
+local RESIST_TYPES = {}
+for t in pairs(S.focus_of_damage) do
+  if data.raw["damage-type"][t] then RESIST_TYPES[#RESIST_TYPES + 1] = t end
+end
 local MAX_RESIST = 85
 -- Base signal icon of a resistance focus on the unit icon (lower left); balanced has none.
 local FOCUS_SIGN = {kinetic = "signal-explosion", energy = "signal-lightning", chemical = "signal-liquid"}
@@ -25,7 +28,7 @@ local function resistances(base, mark, focus)
     for _, t in pairs(RESIST_TYPES) do
       local r = by_type[t] or {type = t, decrease = 0, percent = 0}
       local add = S.mark_resist * mark + (in_focus(focus, t) and S.focus_resist * mark or 0)
-      r.percent = math.min(MAX_RESIST, r.percent + add)
+      r.percent = math.max(r.percent, math.min(MAX_RESIST, r.percent + add))
       if t == "physical" or t == "explosion" then r.decrease = r.decrease + mark end
       by_type[t] = r
     end
@@ -35,28 +38,16 @@ local function resistances(base, mark, focus)
   return out
 end
 
-local function replicator(base, kind, mark, focus)
+--- Private family template; never tint the source mod's unit or double-tint shared layers.
+local function family(base)
   local u = G.copy(base)
-  u.name = S.unit_name(kind, mark, focus)
-  local droid_name = base.localised_name or {"entity-name." .. kind}
-  if mark == 0 then
-    u.localised_name = {"entity-name.replicator-unit", droid_name}
-  else
-    u.localised_name = {"entity-name.replicator-unit-mark", droid_name, {"replicator.mark-" .. mark},
-      {"replicator.focus-" .. focus}}
-  end
   u.localised_description = {"entity-description.replicator-unit"}
   u.flags = {"placeable-enemy", "placeable-off-grid", "not-repairable"}
   u.minable = nil
   u.placeable_by = nil
   u.custom_tooltip_fields = nil
   u.factoriopedia_simulation = nil
-  u.hidden_in_factoriopedia = mark > 0
   u.subgroup = "enemies"
-  u.order = "z[replicators]-" .. u.name
-  u.max_health = base.max_health * (1 + S.mark_health * mark)
-  u.healing_per_tick = (base.healing_per_tick or 0) + mark * 0.5 / 60
-  u.resistances = resistances(base.resistances, mark, focus)
   u.friendly_map_color = nil
   u.enemy_map_color = MAP
   u.map_color = MAP
@@ -64,7 +55,28 @@ local function replicator(base, kind, mark, focus)
   u.absorptions_to_join_attack = {}
   u.can_open_gates = true
   u.radar_range = 0 -- the citadel force charts nothing
-  u.icons = G.icons(base, TINT)
+  u.icons = G.icons(base, G.copy(TINT)) -- single-icon sources retain the supplied tint table
+  u.icon, u.icon_size = nil, nil
+  local seen = {}
+  G.tint_all(u.run_animation, TINT, seen)
+  if u.attack_parameters then G.tint_all(u.attack_parameters.animation, TINT, seen) end
+  return u
+end
+
+local function variant(u, base, kind, mark, focus)
+  u.name = S.unit_name(kind, mark, focus)
+  u.order = "z[replicators]-" .. u.name
+  u.hidden_in_factoriopedia = mark > 0
+  u.max_health = base.max_health * (1 + S.mark_health * mark)
+  u.healing_per_tick = (base.healing_per_tick or 0) + mark * 0.5 / 60
+  u.resistances = resistances(base.resistances, mark, focus)
+  local droid_name = base.localised_name or {"entity-name." .. kind}
+  if mark == 0 then
+    u.localised_name = {"entity-name.replicator-unit", droid_name}
+  else
+    u.localised_name = {"entity-name.replicator-unit-mark", droid_name, {"replicator.mark-" .. mark},
+      {"replicator.focus-" .. focus}}
+  end
   -- The armour mark (upper right, like the tier of the Rampant units) and the focus sign (lower left) tell the 13
   -- copies of a droid apart in the entity lists (turret priority targets).
   if mark > 0 then
@@ -75,11 +87,6 @@ local function replicator(base, kind, mark, focus)
         scale = 0.2, shift = {-9, 9}}
     end
   end
-  u.icon = nil
-  u.icon_size = nil
-  local seen = {}
-  G.tint_all(u.run_animation, TINT, seen)
-  if u.attack_parameters then G.tint_all(u.attack_parameters.animation, TINT, seen) end
   return u
 end
 
@@ -87,10 +94,11 @@ local list = {}
 for _, kind in pairs(S.kinds) do
   local base = data.raw.unit[kind]
   if base then
-    list[#list + 1] = replicator(base, kind, 0, "balanced")
+    local first = variant(family(base), base, kind, 0, "balanced")
+    list[#list + 1] = first
     for mark = 1, S.marks do
       for _, focus in pairs(S.focuses) do
-        list[#list + 1] = replicator(base, kind, mark, focus)
+        list[#list + 1] = variant(G.copy(first), base, kind, mark, focus)
       end
     end
   else

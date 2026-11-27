@@ -89,6 +89,7 @@ local function add_module(c, cx, cy, module_type)
     born = game.tick}
   c.modules[k] = m
   c.order[#c.order + 1] = k
+  if c.radar_keys and module_type == "radar" then c.radar_keys[#c.radar_keys + 1] = k end
   c.count = #c.order
   local b = c.bbox
   if not b then
@@ -121,8 +122,9 @@ local function chart_tags(c, surface, position)
   local missing = false
   for _, force in pairs(forces.players()) do
     if not c.tagged[force.index] then
-      if force.add_chart_tag(surface, {position = position, icon = {type = "virtual", name = "signal-skull"}}) then
-        c.tagged[force.index] = true
+      local tag = force.add_chart_tag(surface, {position = position, icon = {type = "virtual", name = "signal-skull"}})
+      if tag then
+        c.tagged[force.index] = tag
       else
         missing = true
       end
@@ -131,15 +133,12 @@ local function chart_tags(c, surface, position)
   c.tag_pending = missing and c.tag_tries < TAG_TRIES or nil
 end
 
-local function remove_tags(c, surface)
-  if not c.tag_position then return end
-  local p = c.tag_position
-  local area = {{p.x - 2, p.y - 2}, {p.x + 2, p.y + 2}}
-  for _, force in pairs(forces.players()) do
-    for _, tag in pairs(force.find_chart_tags(surface, area)) do
-      if tag.icon and tag.icon.name == "signal-skull" then tag.destroy() end
-    end
+local function remove_tags(c)
+  for _, tag in pairs(c.tagged or {}) do
+    -- Old saves kept only true. A nearby skull is not proof of ownership.
+    if tag ~= true and tag.valid then tag.destroy() end
   end
+  c.tagged, c.tag_pending = nil, nil
 end
 
 --- The decryption of replicator cores, for every player force once the citadel has appeared.
@@ -432,16 +431,15 @@ local function defeat(c, cfg)
   if c.phase ~= "active" then return end
   c.phase = "destroyed"
   c.stunned_until, c.relocating = nil, nil
-  local surface = state.surface(c)
   forces.print(cfg, {"replicator-message.destroyed"}, {r = 0.4, g = 1, b = 0.4})
   Q.disband_all(c)
   B.collapse(c)
   for _, r in pairs(c.units.list) do
-    if r.e.valid then r.e.destroy() end
+    if forces.owns(c, r.e) then r.e.destroy() end
   end
   c.units = {list = {}, index = {}}
   c.foundries, c.foundry_index = {}, {}
-  if surface then remove_tags(c, surface) end
+  remove_tags(c)
 end
 C.defeat = defeat
 
@@ -461,9 +459,9 @@ end
 --- comes again by the evolution.
 local function withdraw(c, surface)
   Q.disband_all(c)
-  remove_tags(c, surface)
+  remove_tags(c)
   for _, e in pairs(surface.find_entities_filtered({force = S.force})) do
-    if e.valid then e.destroy({raise_destroy = true}) end
+    if forces.owns(c, e) then e.destroy({raise_destroy = true}) end
   end
   local overrides = c.overrides
   state.new().overrides = overrides
@@ -480,7 +478,7 @@ local function key_lost(c, m, unit_number)
     c.alive[m.type] = math.max(0, (c.alive[m.type] or 1) - 1)
     c.stats.modules_lost = c.stats.modules_lost + 1
     UP.apply(c)
-    if m.type == "core" then core_lost(c, cfg) end
+    if m.key == c.core_key then core_lost(c, cfg) end
   end
   check_defeat(c, cfg)
 end
@@ -488,6 +486,7 @@ end
 --- After the pause: the farthest foundry module from the base becomes the new core.
 local function end_stun(c, cfg)
   c.stunned_until = nil
+  if not core_down(c) then return end -- legacy stun caused by a duplicate admin-built hive
   local best, best_d
   for _, k in ipairs(c.order) do
     local m = c.modules[k]
@@ -556,7 +555,7 @@ function C.on_entity_died(event)
   local c = state.get()
   if not c or c.phase ~= "active" then return end
   local e = event.entity
-  if not (e and e.valid) or e.force.name ~= S.force then return end
+  if not e or not forces.owns(c, e) then return end
   local killer = event.force
   local by_player = killer and forces.is_player(killer)
   if e.type == "unit" then
@@ -665,7 +664,8 @@ end
 --- Grows the citadel by n modules now (optionally of one type).
 function C.force_grow(n, module_type)
   local c = state.get()
-  if c.phase ~= "active" then return 0 end
+  if c.phase ~= "active" or module_type == "core" then return 0 end
+  if M.types[module_type] and M.types[module_type].shields and UP.shield_limit(module_type) == 0 then return 0 end
   local surface = state.surface(c)
   surface.force_generate_chunk_requests()
   local done = 0
@@ -696,7 +696,7 @@ function C.status()
     stunned_until = c.stunned_until, next_growth = c.next_growth, shields = c.shields or false,
     accelerating = c.accel_since ~= nil, upgrades = c.upgrades, focus = c.focus, droids = P.unit_count(c),
     foundries = P.foundry_count(c), squads = #c.waves, forming = c.forming and c.forming.count or 0,
-    known_chunks = I.count(c), building = B.busy(c), stats = c.stats,
+    known_chunks = I.count(c), building = B.busy(c), stats = c.stats, last_jam = c.last_jam,
     bbox = c.bbox, base = c.base, center = c.tag_position,
     core_position = c.core_key and (function() local x, y = U.unkey(c.core_key) return U.center(x, y) end)(),
   }
@@ -723,8 +723,15 @@ function C.squads()
   if not c then return out end
   for i, w in ipairs(c.waves) do
     local g = w.group
+    local detached = 0
+    for _, e in ipairs(w.launch_members or w.return_members or w.raid_members or {}) do
+      if e.valid and e.force.name == S.force and e.surface.index == c.surface
+        and e.commandable and not e.commandable.parent_group then detached = detached + 1 end
+    end
     out[i] = {id = w.id, phase = w.phase, size0 = w.size0, steps = w.steps, target = w.target,
-      size = g and g.valid and #g.members or 0, position = g and g.valid and g.position or nil}
+      size = g and g.valid and #g.members or 0, position = g and g.valid and g.position or nil,
+      order_reason = w.order_reason, progress_tick = w.progress_tick, detached = detached,
+      roster_complete = w.launch_members ~= nil, group_state = g and g.valid and g.state or nil}
   end
   local f = c.forming
   out.forming = f and f.group and f.group.valid and {count = #f.group.members, target = f.target,

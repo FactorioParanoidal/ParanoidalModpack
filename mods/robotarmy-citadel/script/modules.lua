@@ -11,6 +11,7 @@
 local S = require("lib.shared")
 local U = require("script.util")
 local state = require("script.state")
+local UP = require("script.upgrades")
 local E = S.entity
 
 local M = {}
@@ -90,12 +91,27 @@ end
 
 function M.powered_radars(c, surface)
   if (c.alive.radar or 0) == 0 then return 0 end
+  -- Only the radar plan registers E.radar as a key. Slots survive ruins/restoration;
+  -- add_module appends new radar slots. Old cities rebuild the index once before using it.
+  local keys = c.radar_keys
+  if not keys then
+    keys = {}
+    for _, k in ipairs(c.order) do
+      if c.modules[k].type == "radar" then keys[#keys + 1] = k end
+    end
+    c.radar_keys = keys
+  end
   local n = 0
-  for _, e in ipairs(surface.find_entities_filtered({name = E.radar, force = S.force})) do
-    local m = c.modules[c.key_of[e.unit_number]]
-    if m and m.built and not m.ruined and e.status == defines.entity_status.working then
-      n = n + 1
-      if n == 4 then break end
+  for _, k in ipairs(keys) do
+    local m = c.modules[k]
+    if m.built and not m.ruined then
+      for id, e in pairs(m.keys) do
+        if e.valid and c.key_of[id] == k and e.surface == surface and e.force.name == S.force
+          and e.name == E.radar and e.status == defines.entity_status.working then
+          n = n + 1
+          if n == 4 then return n end
+        end
+      end
     end
   end
   return n
@@ -126,6 +142,7 @@ function M.choose(c, shields_available)
       elseif (t.min or 0) <= c.count and not (t.shields and not (c.shields and shields_available)) then
         local have = c.alive[name] or 0
         local cap = cap_of(t, c)
+        if t.shields then cap = math.min(cap, UP.shield_limit(name)) end
         if not cap or have < cap then
           w = (t.weight or 1) * (CATEGORY_WEIGHT[t.cat] or 1) / (1 + 0.35 * have)
           if t.cat == "production" and production < 0.3 * all then w = w * 2 end

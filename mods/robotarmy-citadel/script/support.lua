@@ -87,14 +87,23 @@ function SUP.jam(c, surface)
   local b = c.bbox
   if j == 0 or not b then return end
   local r = math.min(JAM_MAX, 1 + j + (c.alive.relay or 0))
-  for _, force in pairs(forces.players()) do
-    for x = b[1] - r, b[3] + r do
-      for y = b[2] - r, b[4] + r do
-        local chunk = {x, y}
-        if force.is_chunk_charted(surface, chunk) then force.unchart_chunk(chunk, surface) end
+  local players, chunk, cleared = forces.players(), {0, 0}, 0
+  local x1, x2, y1, y2 = b[1] - r, b[3] + r, b[2] - r, b[4] + r
+  -- Keep the pulse atomic. Reuse the coordinate pair; never clear an unchecked chunk.
+  for _, force in pairs(players) do
+    for x = x1, x2 do
+      chunk[1] = x
+      for y = y1, y2 do
+        chunk[2] = y
+        if force.is_chunk_charted(surface, chunk) then
+          force.unchart_chunk(chunk, surface)
+          cleared = cleared + 1
+        end
       end
     end
   end
+  c.last_jam = {tick = game.tick, forces = #players, checked = #players * (x2 - x1 + 1) * (y2 - y1 + 1),
+    cleared = cleared}
 end
 
 return SUP
