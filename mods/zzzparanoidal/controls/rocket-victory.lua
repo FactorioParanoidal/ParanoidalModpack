@@ -58,10 +58,8 @@ end
 
 local function in_sandbox(rocket, silo, force)
 	if prefixed(force.name, SANDBOX_FORCE) then return true end
-	for _, entity in ipairs({ rocket, silo }) do
-		if entity and entity.valid and prefixed(entity.surface.name, SANDBOX_SURFACE) then return true end
-	end
-	return false
+	return (rocket and rocket.valid and prefixed(rocket.surface.name, SANDBOX_SURFACE))
+		or (silo and silo.valid and prefixed(silo.surface.name, SANDBOX_SURFACE))
 end
 
 local function on_launched(event)
@@ -73,9 +71,7 @@ local function on_launched(event)
 	if not claim() then return end
 	local data = state()
 	if data.won[force.name] then return end
-	data.won[force.name] = true
-	-- Сценарий успел объявить победу сам (запрет сброшен между приказом и запуском) или игра уже окончена.
-	if game.finished or game.finished_but_continuing then return end
+	-- Как в Freeplay: глобальное «Продолжить» не отменяет первую победу другой команды.
 	game.reset_game_state()
 	game.set_game_state({
 		game_finished = true,
@@ -83,6 +79,7 @@ local function on_launched(event)
 		can_continue = true,
 		victorious_force = force, -- как в silo-script.lua движка
 	})
+	data.won[force.name] = true
 end
 
 -- on_init / on_configuration_changed (вызывается из control.lua).
