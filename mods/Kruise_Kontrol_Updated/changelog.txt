@@ -14,6 +14,9 @@ Date: 2026-07-23
     - Batch job target selection rebuilds a compact list instead of clearing holes in a large table.
     - Mining caches the prototype minability check and writes the entity selection view setting only when it changes.
   Bugfixes:
+    - Jobs stop after an unsuccessful approach; batches and item searches skip unusable targets. Belt pickup and chest transfers stop without progress.
+    - Cancelling a Spidertron command retracts a still-matching Kruise Kontrol route, without overwriting an existing native route.
+    - Check ammunition slots when selecting a weapon. Build and upgrade using the requested quality and charge only matching items from the main inventory.
     - Skip auto-repair targets that remain out of reach after one bounded approach.
     - Manual movement cancels on-foot autopilot. Auto-repair cancellation stops repairing and returns the tool it took when there is room in the inventory.
     - Fixed on_object_destroyed using the removed unit_number field, so destroyed characters were never dropped from storage.

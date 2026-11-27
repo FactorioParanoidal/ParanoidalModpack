@@ -15,12 +15,12 @@ function Mining.new(Character, target, amount)
 end
 
 function Mining:cleanup()
+  self.character.entity.mining_state = {mining = false}
+  self.character.entity.clear_selected_entity()
   self:update_player_entity_setting(true)
 end
 
 function Mining:finish()
-  self.character.entity.mining_state = {mining = false}
-  self.character.entity.clear_selected_entity()
   self:cleanup()
   self.character:pop_state()
 end
@@ -88,7 +88,9 @@ function Mining:update()
   if not self.character:can_reach_entity(self.target) then
     --We are out of range, move to range
     self:update_player_entity_setting(true)
-    self.character:move_to(self.target, self.character:get_mining_distance(self.target.type) - self.target.get_radius())
+    if not self.character:approach(self.target, self.character:get_mining_distance(self.target.type) - self.target.get_radius()) then
+      self:finish()
+    end
     return
   end
 
@@ -98,6 +100,7 @@ function Mining:update()
   end
 
 
+  self.approach_result = nil
   self:update_player_entity_setting(false)
   self.character.entity.mining_state = {mining = true, position = self.selection_position}
 

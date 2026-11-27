@@ -14,7 +14,7 @@ Character.metatable =
 }
 
 function Character.get_character(unit_number)
-    local character = script_data.character[unit_number]
+    local character = script_data.characters[unit_number]
     if character and character.entity.valid then
         return character
     end
@@ -124,23 +124,36 @@ function Character:distance(entity_or_position)
 end
 
 function Character:move_to(entity_or_position, distance, timeout)
-    local vehicle = self.entity.vehicle
-
-    if vehicle == nil and self.entity.player ~= nil then
-        vehicle = self.entity.player.physical_vehicle
-    end
-
+    local vehicle = self:get_vehicle()
     if vehicle then
         if vehicle.type == "spider-vehicle" then
-            self:push_state(States.moving_spider(self, entity_or_position, distance))
+            self:push_state(States.moving_spider(self, entity_or_position, distance, timeout))
             return
         end
         if vehicle.type == "car" then
-            self:push_state(States.moving_vehicle(self, entity_or_position, distance or 10))
+            self:push_state(States.moving_vehicle(self, entity_or_position, distance or 10, timeout))
             return
         end
     end
     self:push_state(States.moving(self, entity_or_position, distance, timeout))
+end
+
+function Character:approach(destination, distance, timeout)
+    local job = self.state_stack[1]
+    -- A job gets one approach until it can actually act on the target. Even an
+    -- exhausted path may end just outside the engine's interaction range.
+    if job.approach_result then return false end
+    job.approach_result = "pending"
+    self:move_to(destination, math.max(0, distance), timeout or 3600)
+    return true
+end
+
+function Character:finish_movement(reached)
+    local job = self.state_stack[2]
+    if job and job.approach_result == "pending" then
+        job.approach_result = reached and "arrived" or "failed"
+    end
+    self:pop_state()
 end
 
 function Character:mine(entity, amount)
@@ -431,49 +444,57 @@ function Character:get_neutral_forces()
     return forces
 end
 
-function Character:remove_item(name, count)
-    --returns how many were removed
+function Character:placement_item(job, alternatives, quality)
+    local inventory = self.entity.get_main_inventory()
+    if not inventory then return end
+    for _, item in pairs(alternatives or {}) do
+        if inventory.get_item_count { name = item.name, quality = quality } >= item.count then
+            return { name = item.name, quality = quality, count = item.count }
+        end
+    end
+    -- The automatic fetch/craft jobs work with normal quality only.
+    if quality ~= "normal" then return end
+    job.searched_placement_items = job.searched_placement_items or {}
+    for _, item in pairs(alternatives or {}) do
+        if not job.searched_placement_items[item.name] then
+            job.searched_placement_items[item.name] = true
+            self:find_item(item.name, item.count)
+            return nil, true
+        end
+    end
+end
 
-    local to_remove = count
-    for k = 1, 10 do
-        local inventory = self.entity.get_inventory(k)
-        if not inventory then break end
-        local stack = inventory.find_item_stack(name)
+function Character:with_item_payment(item, action)
+    local inventory = self.entity.get_main_inventory()
+    local filter = { name = item.name, quality = item.quality }
+    if not inventory or inventory.get_item_count(filter) < item.count then return end
 
-        if stack then
-            local stack_count = stack.count
-            if stack_count >= to_remove then
-                stack.count = stack_count - to_remove
-                return count
-            end
-            to_remove = to_remove - stack_count
-            stack.clear()
-
-            if to_remove < 1 then
-                return count
+    -- Reserve real stacks before raising build events. A failed build must
+    -- return their health, tags and equipment as well as the name and quality.
+    local surface, position, force = self.entity.surface, self.entity.position, self.entity.force
+    local payment = game.create_inventory(math.min(item.count, #inventory))
+    local remaining = item.count
+    for i = 1, #payment do
+        local stack = inventory.find_item_stack(filter)
+        if not stack or not payment[i].transfer_stack(stack, math.min(stack.count, remaining)) then break end
+        remaining = remaining - payment[i].count
+        if remaining == 0 then break end
+    end
+    local result
+    if remaining == 0 then result = action() end
+    if not result then
+        for i = 1, #payment do
+            local stack = payment[i]
+            if stack.valid_for_read then
+                if inventory.valid then stack.count = stack.count - inventory.insert(stack) end
+                if stack.valid_for_read and surface.valid then
+                    surface.spill_item_stack { position = position, stack = stack, force = force, allow_belts = false }
+                end
             end
         end
     end
-
-    if self.entity.player then
-        local stack = self.entity.player.cursor_stack
-
-        if stack then
-            local stack_count = stack.count
-            if stack_count >= to_remove then
-                stack.count = stack_count - to_remove
-                return count
-            end
-            to_remove = to_remove - stack_count
-            stack.clear()
-
-            if to_remove < 1 then
-                return count
-            end
-        end
-    end
-
-    return count - to_remove
+    payment.destroy()
+    return result
 end
 
 function Character:can_craft_recipe(recipe)
@@ -534,7 +555,7 @@ function Character:take_item_stack(stack, count, source)
     end
     stack.count = original - given
     --self:say("Took "..given)
-    if source and source.valid and self.entity.player then
+    if given > 0 and source and source.valid and self.entity.player then
         self.entity.player.create_local_flying_text({
             text = { "", "+", given, " ", get_localised_item_name(name), " (", inventory.get_item_count(name), ")" },
             position = { source.position.x, source.position.y - 1 }
@@ -546,8 +567,11 @@ function Character:take_item_stack(stack, count, source)
 end
 
 function Character:give_item(name, count, target)
+    local inventory = self.entity.get_main_inventory()
+    if not inventory or inventory.get_item_count(name) < count then return 0 end
     local given = target.insert { name = name, count = count }
-    self:remove_item(name, given)
+    if given == 0 then return 0 end
+    inventory.remove { name = name, count = given }
 
     rendering.draw_text({
         surface = target.surface,
@@ -606,6 +630,7 @@ function Character:show_speech_bubble(text)
 end
 
 function Character:on_script_path_request_finished(event)
+    if not self.entity.valid then return end
     local state = self.state_stack[1]
     if state and state.on_script_path_request_finished then
         state:on_script_path_request_finished(event)
@@ -680,6 +705,27 @@ local on_script_path_request_finished = function(event)
     end
 end
 
+local function on_player_used_spidertron_remote(event)
+    local player = game.get_player(event.player_index)
+    local selection = player and player.spidertron_remote_selection
+    local commanded
+    if selection and #selection > 0 then
+        commanded = {}
+        for _, spider in ipairs(selection) do
+            if spider.valid then commanded[spider.unit_number] = true end
+        end
+    end
+    -- The event has no vehicle list of its own. If selection is unavailable,
+    -- release our claim rather than risk cancelling someone's native route.
+    for _, character in pairs(script_data.characters) do
+        local state = character.state_stack[1]
+        if state and state.type == "moving_spider" and state.spider and state.spider.valid
+            and (not commanded or commanded[state.spider.unit_number]) then
+            state.native_override = true
+        end
+    end
+end
+
 local on_object_destroyed = function(event)
     if event.type ~= defines.target_type.entity then return end
     local unit_number = event.useful_id
@@ -697,6 +743,7 @@ lib.events =
 {
     [defines.events.on_tick] = on_tick,
     [defines.events.on_script_path_request_finished] = on_script_path_request_finished,
+    [defines.events.on_player_used_spidertron_remote] = on_player_used_spidertron_remote,
     [defines.events.on_object_destroyed] = on_object_destroyed,
 }
 

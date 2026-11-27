@@ -38,7 +38,9 @@ function Put_item:update()
 
   if not self.character:can_reach_entity(self.target) then
     --We are out of range, move to range
-    self.character:move_to(self.target, self.character:get_reach_distance())
+    if not self.character:approach(self.target, self.character:get_reach_distance() - self.target.get_radius() - 0.5) then
+      self:fail()
+    end
     return
   end
 

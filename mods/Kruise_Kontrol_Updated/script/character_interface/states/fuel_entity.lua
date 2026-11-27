@@ -78,8 +78,9 @@ function State:update()
     end
 
 
-    if self.current_item then
+    if self.current_item and not self.put_attempted then
         if self.character:has_item(self.current_item, fuel_threshold) then
+            self.put_attempted = true
             self.character:put_item(self.target, self.current_item, fuel_threshold)
             return
         end
@@ -93,6 +94,7 @@ function State:update()
 
     self.current_item = next(self.items, self.current_item)
     self.find_attempted = false
+    self.put_attempted = false
 
     if not self.current_item then
         --We have gone through all items, none available.

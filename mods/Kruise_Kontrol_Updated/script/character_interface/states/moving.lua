@@ -1,12 +1,9 @@
+local util = require("script/character_script_util")
 local Moving = {}
 
 Moving.metatable = { __index = Moving }
 
 function Moving.new(Character, destination, radius, timeout)
-    if not destination.valid then
-        --For position type hacks.
-        destination.valid = true
-    end
     local state =
     {
         type = "moving",
@@ -20,25 +17,22 @@ function Moving.new(Character, destination, radius, timeout)
 end
 
 function Moving:cleanup()
+    self.character.entity.walking_state = { walking = false }
     self:clear_path()
 end
 
 function Moving:get_destination()
     --Since destination can be either an entity or a position directly...
-    return (self.destination and self.destination.position) or { self.destination[1], self.destination[2] }
+    return self.destination.position or self.destination
 end
 
 function Moving:clear_path()
-    if not self.path then return end
-    for k, node in pairs(self.path) do
-        if node.rendering then
-            node.rendering.destroy()
-            node.rendering = nil
-        end
+    for _, node in pairs(self.path or {}) do
+        if node.rendering and node.rendering.valid then node.rendering.destroy() end
+        node.rendering = nil
     end
-    if self.next_node_render then
-        self.next_node_render.destroy()
-    end
+    if self.next_node_render and self.next_node_render.valid then self.next_node_render.destroy() end
+    self.next_node_render = nil
 end
 
 function Moving:render_path()
@@ -68,9 +62,8 @@ function Moving:render_path()
 end
 
 function Moving:render_path_to_node()
-    if self.next_node_render then
-        self.next_node_render.destroy()
-    end
+    if self.next_node_render and self.next_node_render.valid then self.next_node_render.destroy() end
+    self.next_node_render = nil
     local node = self.path[1]
     if not node then return end
     self.next_node_render = rendering.draw_line
@@ -103,7 +96,8 @@ function Moving:request_path()
     --error(serpent.block(destination))
     local collision_mask = entity.prototype.collision_mask
 
-    local playerArmor = self.character.entity.get_inventory(defines.inventory.character_armor)[1]
+    local armor = entity.get_inventory(defines.inventory.character_armor)
+    local playerArmor = armor and armor[1]
     if playerArmor ~= nil and playerArmor.valid_for_read and playerArmor.name == "mech-armor" then
         collision_mask = { layers = {} }
     elseif entity.name == "character-jetpack" then
@@ -128,11 +122,9 @@ function Moving:request_path()
     self.character:print("Запрошен путь. ")
 end
 
-function Moving:finish()
-    self.character:print("Узлов больше нет — значит, мы уже добрались до места назначения?")
-    self.character.entity.walking_state = { walking = false }
-    self.character:pop_state()
+function Moving:finish(reached)
     self:cleanup()
+    self.character:finish_movement(reached)
 end
 
 function Moving:move_to_next_node()
@@ -140,17 +132,15 @@ function Moving:move_to_next_node()
     --self.character:print("Reached a waypoint.")
     --self.character.entity.teleport(node.position)
     table.remove(self.path, 1)
-    if node.rendering then
-        node.rendering.destroy()
-        node.rendering = nil
-    end
+    if node.rendering and node.rendering.valid then node.rendering.destroy() end
+    node.rendering = nil
     self:render_path_to_node()
 end
 
 function Moving:follow_path()
     local node = self.path[1]
     if not node then
-        self:finish()
+        self:finish(true)
         return
     end
 
@@ -163,7 +153,7 @@ function Moving:follow_path()
 
     local node = self.path[1]
     if not node then
-        self:finish()
+        self:finish(true)
         return
     end
 
@@ -202,7 +192,7 @@ function Moving:check_path()
         return true
     end
 
-    --Request a new path, but keep walking along the old as its probably its in the right direction still.
+    -- While a request is pending, don't push obstacle jobs over this state.
     self.character:print("Цель переместилась, пересчитываю путь")
     self:request_path()
 end
@@ -256,7 +246,7 @@ function Moving:update()
 
     self.character.entity.walking_state = { walking = false }
 
-    if not self.destination.valid then
+    if not self:valid_destination() then
         self:finish()
         return
     end
@@ -268,14 +258,14 @@ function Moving:update()
     if self.character:update_every_n_ticks(100) then
         if self:check_path() then
             --Will return true if it checks and we are actually already in range.
-            self:finish()
+            self:finish(true)
             return
         end
     end
 
     if not self.path then
         if self.character:distance(self.destination) <= (self.radius + 0.1) then
-            self:finish()
+            self:finish(true)
             return
         end
 
@@ -283,13 +273,18 @@ function Moving:update()
         return
     end
 
-    self:follow_path()
+    if not self.path_request_index then self:follow_path() end
 end
 
 local remove = table.remove
 
+function Moving:valid_destination()
+    return self.destination.valid ~= false
+        and (not self.destination.surface or self.destination.surface == self.character.entity.surface)
+end
+
 function Moving:on_path_recieved(event)
-    if not self.destination.valid then
+    if not self:valid_destination() then
         self:finish()
         return
     end
@@ -297,6 +292,7 @@ function Moving:on_path_recieved(event)
     self.path_request_index = nil
     self.character:print("Запрос пути завершён")
     local path = event.path
+    self:clear_path()
     if not path then
         self.path = nil
         self.fail_count = self.fail_count + 1
@@ -322,7 +318,6 @@ function Moving:on_path_recieved(event)
         end
     end
 
-    self:clear_path()
     self.path = event.path
     self:render_path()
 end

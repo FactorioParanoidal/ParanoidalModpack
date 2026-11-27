@@ -1,3 +1,4 @@
+local util = require("script/character_script_util")
 local Attack = {}
 
 Attack.metatable = { __index = Attack }
@@ -15,12 +16,17 @@ end
 
 function Attack:prepare_gun()
     local gun_inventory = self.character.entity.get_inventory(defines.inventory.character_guns)
-    local ammo_inventory = self.character.entity.get_inventory(defines.inventory.character_guns)
+    local ammo_inventory = self.character.entity.get_inventory(defines.inventory.character_ammo)
+    if not gun_inventory or not ammo_inventory then return false end
+    local function loaded(index)
+        local gun, ammo = gun_inventory[index], ammo_inventory[index]
+        return gun and gun.valid_for_read and ammo and ammo.valid_for_read
+    end
     local index = self.character.entity.selected_gun_index
-    if gun_inventory[index].valid_for_read and ammo_inventory[index].valid_for_read then return true end
+    if loaded(index) then return true end
 
-    for k = 1, 3 do
-        if gun_inventory[k].valid_for_read and ammo_inventory[k].valid_for_read then
+    for k = 1, math.min(#gun_inventory, #ammo_inventory) do
+        if loaded(k) then
             self.character.entity.selected_gun_index = k
             return true
         end
@@ -31,8 +37,13 @@ function Attack:prepare_gun()
     return false
 end
 
-function Attack:finish()
+function Attack:cleanup()
+    self.character.entity.walking_state = { walking = false }
     self.character.entity.shooting_state = { state = defines.shooting.not_shooting, position = { 0, 0 } }
+end
+
+function Attack:finish()
+    self:cleanup()
     self.character:pop_state()
 end
 
@@ -110,9 +121,7 @@ end
 
 function Attack:find_and_use_capsule(position)
     local player = self.character.entity.player
-    if not player then return end
-
-    player.clear_cursor()
+    if not player or not player.is_cursor_empty() then return end
     local inventory = player.get_main_inventory()
     if not inventory then return end
 
@@ -157,10 +166,12 @@ function Attack:update()
         --We are out of range, move to range
         self.character.entity.shooting_state = { state = defines.shooting.not_shooting, position = self.target.position }
         self.character.entity.clear_selected_entity()
-        self.character:move_to(self.target, self:get_range() - self.target.get_radius(), (self.tick_to_timeout and self.tick_to_timeout - game.tick) or nil)
+        if not self.character:approach(self.target, self:get_range() - self.target.get_radius(),
+            self.tick_to_timeout and self.tick_to_timeout - game.tick) then self:finish() end
         return
     end
 
+    self.approach_result = nil
     local direction = self.character:get_direction_to(self.target)
     if self.character:distance(self.target) < (self:get_range() * 0.8) then
         direction = (direction + defines.direction.south) % (defines.direction.south * 2)

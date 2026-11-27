@@ -1,177 +1,104 @@
 local Find_item = {}
-
 Find_item.metatable = { __index = Find_item }
 
 function Find_item.new(Character, name, count, radius)
-    local state =
-    {
-        type = "find_item",
-        character = Character,
-        name = name or error("Не указано имя"),
-        count = count or 0,
-        radius = radius or 64
-    }
-
-    if state.count == 0 then
-        state.count = math.ceil(prototypes.item[state.name].stack_size * 0.25)
-    end
-
-    return setmetatable(state, Find_item.metatable)
+    assert(name)
+    return setmetatable({
+        type = "find_item", character = Character, name = name, radius = radius or 64,
+        count = count and count > 0 and count or math.ceil(prototypes.item[name].stack_size * 0.25)
+    }, Find_item.metatable)
 end
 
-function Find_item:finish(dont_update_state)
-    self.character:pop_state(dont_update_state)
+local function target_key(entity)
+    if entity.unit_number then return entity.unit_number end
+    local p = entity.position
+    return entity.name .. "@" .. p.x .. "," .. p.y
 end
 
-function Find_item:fail()
-    --In this case, we try to craft the item we are looking for.
-    self.character:print("Не удалось найти " .. self.name)
-    self:finish(true)
-    self.character:craft_item(self.name, self.count)
-end
-
-local find_types =
-{
-    ["container"] = 0,
-    ["furnace"] = 0,
-    ["assembling-machine"] = 0,
-    ["logistic-container"] = 0,
-    ["mining-drill"] = 5
-}
-
-local find_params =
-{
-    type =
-    {
-        "container",
-        "logistic-container",
-        "furnace",
-        "assembling-machine",
-        "mining-drill",
-    }
-}
-
-function Find_item:find_new_target()
-    local entities = self.character:find_nearby_entities(self.radius, find_params)
-    for k, entity in pairs(entities) do
-        local inventory = entity.get_output_inventory()
-        if not inventory then
-            entities[k] = nil
-        elseif inventory.get_item_count(self.name) <= find_types[entity.type] then
-            entities[k] = nil
+function Find_item:choose_target(params, can_supply)
+    self.tried_targets = self.tried_targets or {}
+    local candidates = {}
+    for _, entity in ipairs(self.character:find_nearby_entities(self.radius, params)) do
+        if not self.tried_targets[target_key(entity)] and can_supply(entity, self.name) then
+            candidates[#candidates + 1] = entity
         end
     end
-
-    if not next(entities) then return end
-    return self.character:get_closest(entities)
+    if #candidates == 0 then return end
+    local target = self.character:get_closest(candidates)
+    self.tried_targets[target_key(target)] = true
+    return target
 end
 
-local belt_params =
-{
-    type = { "transport-belt" }
-}
+local output_params = { type = { "container", "logistic-container", "furnace", "assembling-machine", "mining-drill" } }
+local function has_output(entity, item)
+    local inventory = entity.get_output_inventory()
+    return inventory and inventory.get_item_count(item) > (entity.type == "mining-drill" and 5 or 0)
+end
 
-function Find_item:find_belt_target()
-    local entities = self.character:find_nearby_entities(self.radius, belt_params)
-    for k, entity in pairs(entities) do
-        local has = false
-        for i = 1, entity.get_max_transport_line_index() do
-            local line = entity.get_transport_line(i)
-            if line.get_item_count(self.name) > 0 then
-                has = true
-                break
+local belt_params = { type = "transport-belt" }
+local function belt_has_item(entity, item)
+    for i = 1, entity.get_max_transport_line_index() do
+        if entity.get_transport_line(i).get_item_count(item) > 0 then return true end
+    end
+    return false
+end
+
+local mine_params = { type = { "tree", "resource", "simple-entity" } }
+local product_cache = {}
+local function yields_item(entity, item)
+    if not entity.minable then return false end
+    local products = product_cache[entity.name]
+    if not products then
+        local mineable = entity.prototype.mineable_properties
+        products = {}
+        if not mineable.required_fluid then
+            for _, product in pairs(mineable.products or {}) do
+                if product.type == "item" then products[product.name] = true end
             end
         end
-        if not has then
-            entities[k] = nil
-        end
+        product_cache[entity.name] = products
     end
-
-    if not next(entities) then
-        return
-    end
-
-    return self.character:get_closest(entities)
-end
-
-local product_cache = {}
-local get_products = function(entity)
-    local name = entity.name
-    local products = product_cache[name]
-    if products then return products end
-    products = {}
-
-    if entity.prototype.mineable_properties.products == nil then
-        return products
-    end
-
-    for k, product in pairs(entity.prototype.mineable_properties.products) do
-        if product.type == "item" then
-            products[product.name] = true
-        end
-    end
-    product_cache[name] = products
-    return products
-end
-
-local mine_params =
-{
-    type = { "tree", "resource", "simple-entity" }
-}
-
-function Find_item:find_mine_target()
-    local entities = self.character:find_nearby_entities(self.radius, mine_params)
-    for k, entity in pairs(entities) do
-        if not get_products(entity)[self.name] then
-            entities[k] = nil
-        end
-    end
-
-    if not next(entities) then
-        return
-    end
-
-    return self.character:get_closest(entities)
-end
-
-local stack_size_cache = {}
-local get_stack_size = function(name)
-    local size = stack_size_cache[name]
-    if size then return size end
-    size = prototypes.item[name].stack_size
-    stack_size_cache[name] = size
-    return size
+    return products[item]
 end
 
 function Find_item:update()
-    self.character:print("Обновление поиска предмета " .. self.name)
-
-    local needed = self.count - self.character.entity.get_item_count(self.name)
-    if needed <= 0 then
-        --We already have enough of this item anyway.
-        self:finish()
+    local character = self.character
+    local inventory = character.entity.get_main_inventory()
+    local needed = inventory and self.count - inventory.get_item_count(self.name) or 0
+    if needed <= 0 or not inventory.can_insert { name = self.name, count = 1 } then
+        character:pop_state()
         return
     end
 
-    local target = self:find_new_target()
+    local amount = math.max(needed, prototypes.item[self.name].stack_size)
+    local target = self:choose_target(output_params, has_output)
     if target then
-        self.character:take_item(target, self.name, math.max(needed, get_stack_size(self.name)))
+        character:take_item(target, self.name, amount)
         return
     end
 
-    local belt_target = self:find_belt_target()
-    if belt_target then
-        self.character:take_item_from_belt(belt_target, self.name, math.max(needed, get_stack_size(self.name)))
+    target = self:choose_target(belt_params, belt_has_item)
+    if target then
+        character:take_item_from_belt(target, self.name, amount)
         return
     end
 
-    local mine_target = self:find_mine_target()
-    if mine_target then
-        self.character:mine(mine_target, math.max(needed, get_stack_size(self.name)))
+    target = self:choose_target(mine_params, yields_item)
+    if target then
+        character:mine(target, amount)
         return
     end
 
-    self:fail()
+    -- Alternate recipes can have cyclic dependencies. Do not recurse into a
+    -- craft job already waiting for this item somewhere below us.
+    for _, state in ipairs(character.state_stack) do
+        if state.type == "craft_item" and state.name == self.name then
+            character:pop_state()
+            return
+        end
+    end
+    character:pop_state(true)
+    character:craft_item(self.name, self.count)
 end
 
 return setmetatable(Find_item, { __call = function(this, ...) return Find_item.new(...) end })

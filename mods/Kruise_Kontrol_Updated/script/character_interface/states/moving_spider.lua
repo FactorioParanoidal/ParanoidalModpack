@@ -3,33 +3,45 @@ local Moving_spider = {}
 
 Moving_spider.metatable = { __index = Moving_spider }
 
-function Moving_spider.new(Character, destination, radius)
-    if not destination.valid then
-        --For position type hacks.
-        destination.valid = true
-    end
-
-    local state =
-    {
+function Moving_spider.new(Character, destination, radius, timeout)
+    return setmetatable({
         type = "moving_spider",
         character = Character,
-        spider = Character.entity.vehicle,
-        destination = destination or error("Для создания состояния перемещения не указано место назначения."),
-        radius = radius or 0.5
-    }
-    return setmetatable(state, Moving_spider.metatable)
+        spider = Character:get_vehicle(),
+        destination = assert(destination),
+        radius = radius or 0.5,
+        tick_to_timeout = game.tick + (timeout or 3600)
+    }, Moving_spider.metatable)
+end
+
+function Moving_spider:can_drive()
+    local spider = self.spider
+    return spider and spider.valid and self.character:get_vehicle() == spider
+        and not self.native_override and self.destination.valid ~= false
+        and (not self.destination.surface or self.destination.surface == spider.surface)
+        and (not self.tick_to_timeout or game.tick <= self.tick_to_timeout)
+end
+
+function Moving_spider:matches_route(queue)
+    local offset = #self.route - #queue
+    if offset < (self.route_offset or 0) then return false end
+    for i, position in ipairs(queue) do
+        local expected = self.route[offset + i]
+        if position.x ~= expected.x or position.y ~= expected.y then return false end
+    end
+    self.route_offset = offset
+    return true
 end
 
 function Moving_spider:cleanup()
-end
-
-function Moving_spider:get_destination()
-    --Since destination can be either an entity or a position directly...
-    return (self.destination and self.destination.position) or { self.destination[1], self.destination[2] }
-end
-
-function Moving_spider:get_destination_radius()
-    return (self.destination and self.destination.get_radius and self.destination.get_radius() + self.radius) or self.radius
+    -- The engine has no author ID for waypoints. A changed queue or native
+    -- remote command relinquishes our claim; only a matching suffix is cleared.
+    if self.route and not self.native_override and self.spider.valid then
+        local queue = self.spider.autopilot_destinations
+        if #queue > 0 and self:matches_route(queue) then
+            self.spider.autopilot_destination = nil
+        end
+    end
 end
 
 local spider_mask = {
@@ -39,100 +51,67 @@ local spider_mask = {
 }
 local flags = { cache = false, allow_destroy_friendly_entities = false, prefer_straight_paths = true, no_break = true }
 function Moving_spider:request_path()
-    if self.path_request_index then return end
-    local entity = self.spider
-    local destination = self:get_destination()
-    local radius = self:get_destination_radius()
-    --error(serpent.block(destination))
-
-    self.path_request_index = entity.surface.request_path({
-        bounding_box = entity.prototype.collision_box,
+    local spider = self.spider
+    self.path_request_index = spider.surface.request_path({
+        bounding_box = spider.prototype.collision_box,
         collision_mask = spider_mask,
-        start = entity.position,
-        goal = destination,
-        force = entity.force,
-        radius = radius,
+        start = spider.position,
+        goal = self.destination.position or self.destination,
+        force = spider.force,
+        radius = self.radius + (self.destination.get_radius and self.destination.get_radius() or 0),
         can_open_gates = true,
         path_resolution_modifier = 0,
         pathfind_flags = flags,
-        entity_to_ignore = entity
+        entity_to_ignore = spider
     })
-
-    self.requested_destination = destination
-    self.character:print("Запрошен путь. ")
 end
 
-function Moving_spider:finish()
-    self.character:pop_state()
+function Moving_spider:finish(reached)
     self:cleanup()
+    self.character:finish_movement(reached)
 end
 
 function Moving_spider:update()
-    if not self.destination.valid then
-        self:finish()
+    if not self:can_drive() then
+        self:finish(false)
         return
     end
-
-    if not (self.spider and self.spider.valid and self.spider.type == "spider-vehicle") then
-        self:finish()
-        return
-    end
-
-    self:request_path()
-end
-
-local remove = table.remove
-
-function Moving_spider:on_path_recieved(event)
-    if not self.destination.valid then
-        self:finish()
-        return
-    end
-
-    if not (self.spider and self.spider.valid and self.spider.type == "spider-vehicle") then
-        self:finish()
-        return
-    end
-
-    --self.path_request_index = nil
-    --self.character:print("Path request finished")
-    local path = event.path
-    if not path then
-        self:finish()
-        return
-    end
-
-    for k, node in pairs(path) do
-        local next = path[k + 1]
-        if not next then break end
-        node.orientation_to_next = util.get_orientation_to(node.position, next.position)
-    end
-
-    for k = (#path), 1, -1 do
-        local node = path[k]
-        local next = path[k - 1]
-        if not (node and next) then break end
-
-        if node.orientation_to_next == next.orientation_to_next then
-            remove(path, k)
+    local queue = self.spider.autopilot_destinations
+    if self.route then
+        if not self:matches_route(queue) then
+            self.native_override = true
+            self:finish(false)
+        elseif #queue == 0 then
+            self:finish(true)
         end
+    elseif #queue > 0 then
+        self:finish(false)
+    elseif not self.path_request_index then
+        self:request_path()
     end
-
-    self.spider.autopilot_destination = nil
-    local add = self.spider.add_autopilot_destination
-    for k, node in pairs(event.path) do
-        add(node.position)
-    end
-
-    self:finish()
 end
 
 function Moving_spider:on_script_path_request_finished(event)
-    if event.name == defines.events.on_script_path_request_finished then
-        if event.id == self.path_request_index then
-            self:on_path_recieved(event)
-        end
+    if event.id ~= self.path_request_index then return end
+    self.path_request_index = nil
+    local path = event.path
+    if not self:can_drive() or not path or #self.spider.autopilot_destinations > 0 then
+        self:finish(false)
+        return
     end
+
+    -- Skip interior points on straight segments; keep the final destination.
+    local previous_direction
+    for i, node in ipairs(path) do
+        local next_node = path[i + 1]
+        local direction = next_node and util.get_orientation_to(node.position, next_node.position)
+        if direction ~= previous_direction or not next_node then
+            self.spider.add_autopilot_destination(node.position)
+        end
+        previous_direction = direction
+    end
+    self.route = self.spider.autopilot_destinations
+    if #self.route == 0 then self:finish(true) end
 end
 
 return setmetatable(Moving_spider, { __call = function(this, ...) return Moving_spider.new(...) end })

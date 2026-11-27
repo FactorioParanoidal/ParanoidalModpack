@@ -30,7 +30,9 @@ function Take_item:update()
 
   if not self.character:can_reach_entity(self.target) then
     --We are out of range, move to range
-    self.character:move_to(self.target, self.character:get_reach_distance())
+    if not self.character:approach(self.target, self.character:get_reach_distance() - self.target.get_radius() - 0.5) then
+      self:fail()
+    end
     return
   end
 
@@ -38,8 +40,10 @@ function Take_item:update()
   self.character.direction = self.character:get_direction_to(self.target)
 
   local inventory = self.target.get_output_inventory()
-  if not inventory then return end
-
+  if not inventory then
+    self:fail()
+    return
+  end
 
   local stack = inventory.find_item_stack(self.name)
   if not stack then
@@ -48,6 +52,10 @@ function Take_item:update()
   end
 
   local count = self.character:take_item_stack(stack, self.count, self.target)
+  if count == 0 then
+    self:fail()
+    return
+  end
   self.count = self.count - count
 
   if self.count <= 0 then

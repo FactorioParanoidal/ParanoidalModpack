@@ -3,11 +3,7 @@ local Moving_vehicle = {}
 
 Moving_vehicle.metatable = { __index = Moving_vehicle }
 
-function Moving_vehicle.new(Character, destination, radius)
-    if not destination.valid then
-        --For position type hacks.
-        destination.valid = true
-    end
+function Moving_vehicle.new(Character, destination, radius, timeout)
     local state =
     {
         type = "moving_vehicle",
@@ -15,6 +11,7 @@ function Moving_vehicle.new(Character, destination, radius)
         destination = destination or error("Для создания состояния перемещения не указано место назначения."),
         radius = radius or 0.5,
         fail_count = -1,
+        tick_to_timeout = timeout and game.tick + timeout,
     }
     return setmetatable(state, Moving_vehicle.metatable)
 end
@@ -25,20 +22,16 @@ end
 
 function Moving_vehicle:get_destination()
     --Since destination can be either an entity or a position directly...
-    return (self.destination and self.destination.position) or { self.destination[1], self.destination[2] }
+    return self.destination.position or self.destination
 end
 
 function Moving_vehicle:clear_path()
-    if not self.path then return end
-    for k, node in pairs(self.path) do
-        if node.rendering then
-            node.rendering.destroy()
-            node.rendering = nil
-        end
+    for _, node in pairs(self.path or {}) do
+        if node.rendering and node.rendering.valid then node.rendering.destroy() end
+        node.rendering = nil
     end
-    if self.next_node_render then
-        self.next_node_render.destroy()
-    end
+    if self.next_node_render and self.next_node_render.valid then self.next_node_render.destroy() end
+    self.next_node_render = nil
 end
 
 function Moving_vehicle:render_path()
@@ -110,30 +103,27 @@ function Moving_vehicle:request_path()
     self.character:print("Запрошен путь. ")
 end
 
-function Moving_vehicle:finish()
+function Moving_vehicle:finish(reached)
     if self.character:get_vehicle() then
         self.character:get_vehicle().riding_state = { acceleration = defines.riding.acceleration.braking, direction = defines.riding.direction.straight }
     end
-    self.character:pop_state()
     self:cleanup()
+    self.character:finish_movement(reached)
 end
 
 function Moving_vehicle:move_to_next_node()
     local node = self.path[1]
     --self.character:print("Reached a waypoint.")
     table.remove(self.path, 1)
-    if node.rendering then
-        node.rendering.destroy()
-        node.rendering = nil
-    end
+    if node.rendering and node.rendering.valid then node.rendering.destroy() end
+    node.rendering = nil
     self.total_distance = self.total_distance - (node.distance_to_next or 0)
     self:render_path_to_node()
 end
 
 function Moving_vehicle:render_path_to_node()
-    if self.next_node_render then
-        self.next_node_render.destroy()
-    end
+    if self.next_node_render and self.next_node_render.valid then self.next_node_render.destroy() end
+    self.next_node_render = nil
     local node = self.path[1]
     if not node then return end
     self.next_node_render = rendering.draw_line
@@ -286,12 +276,7 @@ function Moving_vehicle:check_stuck()
 end
 
 function Moving_vehicle:update()
-    if not self.destination.valid then
-        self:finish()
-        return
-    end
-
-    if not (self.character:get_vehicle()) then
+    if not self:can_drive() then
         self:finish()
         return
     end
@@ -303,14 +288,14 @@ function Moving_vehicle:update()
     if self.character:update_every_n_ticks(100) then
         if self:check_path() then
             --Will return true if it checks and we are actually already in range.
-            self:finish()
+            self:finish(true)
             return
         end
     end
 
     if not self.path then
         if self.character:distance(self.destination) <= (self.radius + 7.5) then
-            self:finish()
+            self:finish(true)
             return
         end
 
@@ -323,8 +308,15 @@ end
 
 local remove = table.remove
 
+function Moving_vehicle:can_drive()
+    local vehicle = self.character:get_vehicle()
+    return vehicle and vehicle.type == "car" and self.destination.valid ~= false
+        and (not self.destination.surface or self.destination.surface == vehicle.surface)
+        and (not self.tick_to_timeout or game.tick <= self.tick_to_timeout)
+end
+
 function Moving_vehicle:on_path_recieved(event)
-    if not self.destination.valid then
+    if not self:can_drive() then
         self:finish()
         return
     end
@@ -332,6 +324,7 @@ function Moving_vehicle:on_path_recieved(event)
     self.path_request_index = nil
     self.character:print("Запрос пути завершён")
     local path = event.path
+    self:clear_path()
     if not path then
         self.path = nil
         self.fail_count = self.fail_count + 1
@@ -380,7 +373,6 @@ function Moving_vehicle:on_path_recieved(event)
 
     self.total_distance = total
 
-    self:clear_path()
     self.path = event.path
     self:render_path()
 end

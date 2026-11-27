@@ -88,12 +88,10 @@ function Repair:update()
     end
 
     if not self.character:can_reach_entity(self.target) then
-        -- Returning from a failed approach must not create a fresh path retry budget.
-        if self.approach_attempted then
+        -- approach_attempted is also present on repair jobs saved before this shared contract.
+        if self.approach_attempted or not self.character:approach(self.target,
+            self.character:get_repair_distance() - self.target.get_radius() - 0.5, approach_timeout) then
             self:finish()
-        else
-            self.approach_attempted = true
-            self.character:move_to(self.target, self.character:get_repair_distance(), approach_timeout)
         end
         return
     end
