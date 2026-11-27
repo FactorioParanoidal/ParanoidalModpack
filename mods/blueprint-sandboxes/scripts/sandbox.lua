@@ -77,12 +77,18 @@ end
 
 ---@param player LuaPlayer
 local function RestoreCursorBlueprint(player, playerData)
-    if playerData.transitionaryBlueprintString ~= nil then
-        if Inventory.WasCursorSafelyCleared(player) then
-            player.cursor_stack.import_stack(playerData.transitionaryBlueprintString)
-            player.cursor_stack_temporary = true
-            playerData.transitionaryBlueprintString = nil
-        end
+    local blueprint = playerData.transitionaryBlueprintString
+    if not blueprint then return end
+
+    local cursor = player.cursor_stack
+    if player.is_cursor_blueprint() and cursor and cursor.valid_for_read and cursor.export_stack() == blueprint then
+        -- The controller handoff already kept the original blueprint.
+        playerData.transitionaryBlueprintString = nil
+    elseif Inventory.WasCursorSafelyCleared(player) then
+        local status = player.cursor_stack.import_stack(blueprint)
+        if status == 0 or status == -1 then player.cursor_stack_temporary = true end
+        -- -1 is a partial import: do not discard the original in that case.
+        if status == 0 then playerData.transitionaryBlueprintString = nil end
     end
 end
 
@@ -472,7 +478,8 @@ local function RestorePreSandboxPermissions(player, playerData)
     end
 
     -- Swap to their original surface-list setting
-    local desiredSurfaceList = playerData.preSandboxSurfaceList or true
+    local desiredSurfaceList = playerData.preSandboxSurfaceList
+    if desiredSurfaceList == nil then desiredSurfaceList = true end
     if player.game_view_settings.show_surface_list ~= desiredSurfaceList then
         player.game_view_settings.show_surface_list = desiredSurfaceList
     end

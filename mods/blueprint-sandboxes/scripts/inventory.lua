@@ -30,22 +30,11 @@ end
 -- Whether a Player's Cursor can non-destructively be replaced
 ---@param player LuaPlayer
 function Inventory.WasCursorSafelyCleared(player)
-    if not player or not player.cursor_stack.valid then
-        return false
-    end
+    local cursor = player and player.cursor_stack
+    if not (cursor and cursor.valid) then return false end
     if player.is_cursor_empty() then return true end
-    if player.is_cursor_blueprint() then return true end
-
-    --[[ TODO:
-    This doesn't usually happen, since the "source location" of the item
-    seems to be lost after swapping the character.
-    ]]
-    if not player.cursor_stack_temporary then
-        player.clear_cursor()
-        return true
-    end
-
-    return false
+    if player.cursor_stack_temporary then return false end
+    return player.clear_cursor()
 end
 
 -- Whether a Player's Inventory is vulnerable to going missing due to lack of a body
