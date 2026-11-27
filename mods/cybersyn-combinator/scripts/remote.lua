@@ -8,46 +8,30 @@ local cc_remote = {}
 --- @param max_iterations integer
 --- @return LuaEntity?
 local function find_combinator(entity, max_iterations)
-  --- @type { [uint]: boolean }
+  if entity.name == constants.ENTITY_NAME then return entity end
+  if not entity.unit_number then return nil end
   local visited = { [entity.unit_number] = true }
-  --- @type { [uint]: LuaEntity }
-  local queue = { [entity.unit_number] = entity }
-  local green_i = 0
-  local red_i = 0
-
-  while true do
-    local _, current = next(queue)
-    if not current then break end
-
-    if current.name == constants.ENTITY_NAME then return current end
-
-    visited[current.unit_number] = true
-    queue[current.unit_number] = nil
-
-    local connected = current.circuit_connected_entities
-    if not connected then goto continue end
-
-    if green_i <= max_iterations then
-      for _, child in pairs(connected.green) do
-        local id = child.unit_number
-        if id and not visited[id] and not queue[id] then
-          queue[id] = child
-          green_i = green_i + 1
+  local queue, first = { entity }, 1
+  local remaining = { [defines.wire_type.green] = max_iterations, [defines.wire_type.red] = max_iterations }
+  while first <= #queue do
+    local current = queue[first]
+    first = first + 1
+    for _, connector in pairs(current.get_wire_connectors(false)) do
+      local color = connector.wire_type
+      if remaining[color] and remaining[color] > 0 then
+        for _, connection in ipairs(connector.real_connections) do
+          local child = connection.target.owner
+          local id = child.unit_number
+          if id and not visited[id] then
+            if child.name == constants.ENTITY_NAME then return child end
+            visited[id] = true
+            queue[#queue + 1] = child
+            remaining[color] = remaining[color] - 1
+            if remaining[color] == 0 then break end
+          end
         end
       end
     end
-
-    if red_i > max_iterations then goto continue end
-
-    for _, child in pairs(connected.red) do
-      local id = child.unit_number
-      if id and not visited[id] and not queue[id] then
-        queue[id] = child
-        red_i = red_i + 1
-      end
-    end
-
-    ::continue::
   end
 
   return nil

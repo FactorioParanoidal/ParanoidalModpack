@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 2.8.3
 Date: 2026-06-28
+  Bugfixes:
+    - Remote opening follows actual red and green wire connections in 2.1; commands requiring a selected entity or player window give a console response instead of looking up a nil player.
   Changes:
     - Update to support Factorio 2.1.
   Locale:
