@@ -747,10 +747,17 @@ end
 ---@param mouse_button defines.mouse_button_type
 function SearchGui.open_location_on_map(player, player_data, element, mouse_button)
   local tags = element.tags  --[[@as ResultLocationData]]
+  local shown
   if mouse_button == defines.mouse_button_type.left then
-    ResultLocation.open(player, tags)
+    shown = ResultLocation.open(player, tags)
   elseif mouse_button == defines.mouse_button_type.right then
-    ResultLocation.highlight(player, tags)
+    shown = ResultLocation.highlight(player, tags)
+  else
+    return
+  end
+  if not shown then
+    element.enabled = false
+    return
   end
 
   local highlighted_button = player_data.refs.highlighted_button
@@ -812,7 +819,7 @@ function SearchGui.start_search(player, player_data, _, _, immediate)
         item.quality = "any"
       end
       refs.sort_results_dropdown.enabled = false
-      search_started = Search.find_machines(item, force, state, player, immediate)
+      local search_started = Search.find_machines(item, force, state, player, immediate)
       refs.subheader_title.caption = get_signal_name(item) or ""
       if search_started then
         SearchGui.build_loading_results(refs) -- Counting chunks for a percentage would block startup.

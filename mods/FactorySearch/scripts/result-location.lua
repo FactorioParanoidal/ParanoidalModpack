@@ -126,28 +126,29 @@ end
 ---@param data ResultLocationData
 function ResultLocation.highlight(player, data)
   local surface_name = data.surface
+  local surface = game.surfaces[surface_name]
+  if not (surface and surface.valid) then return false end
 
   ResultLocation.clear_markers(player)
-
-  -- In case surface was deleted
-  if not game.surfaces[surface_name] then return end
-
   ResultLocation.draw_markers(player, surface_name, data.selection_boxes)
   ResultLocation.draw_arrow(player, surface_name, data.position)
   ResultLocation.draw_chart_marker(player, surface_name, data.group_selection_box)
+  return true
 end
 
 ---@param player LuaPlayer
 ---@param data ResultLocationData
 function ResultLocation.open(player, data)
-  local surface_name = data.surface
+  local surface = game.surfaces[data.surface]
+  if not (surface and surface.valid) then return false end
+
   local position = data.position
   local zoom_level = player.mod_settings["fs-initial-zoom"].value * player.display_resolution.width / 1920
 
   player.set_controller{
     type = defines.controllers.remote,
     position = position,
-    surface = surface_name,
+    surface = surface,
   }
   player.zoom = zoom_level -- TODO zoom out when showing map tags
 
@@ -158,7 +159,7 @@ function ResultLocation.open(player, data)
   end
   refs.frame.visible = true
 
-  ResultLocation.highlight(player, data)
+  return ResultLocation.highlight(player, data)
 end
 
 -- Move arrow to new character when jetpack is activated
