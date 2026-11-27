@@ -259,8 +259,16 @@ script.on_configuration_changed(function (changes)
     end
 end)
 
+local function command_player(event)
+    if event.player_index then return game.get_player(event.player_index) end
+    local message = '/' .. event.name .. ': команду должен выполнить игрок-администратор.'
+    localised_print(message)
+    rcon.print(message)
+end
+
 commands.add_command('qol-sync', [[Синхронизирует все эффекты технологий. Можно запустить вручную после отмены исследования технологии с помощью команд или модов.]], function (event)
-    local player = game.players[event.player_index]
+    local player = command_player(event)
+    if not player then return end
     if player.admin then
         local was_logging_enabled = is_logging_enabled
         is_logging_enabled = true
@@ -274,7 +282,8 @@ commands.add_command('qol-sync', [[Синхронизирует все эффе�
 end)
 
 commands.add_command('qol-reset-technology-effects', [[Вызывает LuaForce::reset_technology_effects() для всех сил.]], function (event)
-    local player = game.players[event.player_index]
+    local player = command_player(event)
+    if not player then return end
     if player.admin then
         for _, force in pairs(game.forces) do
             force.reset_technology_effects()

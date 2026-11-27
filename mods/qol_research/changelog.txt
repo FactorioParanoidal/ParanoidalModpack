@@ -1,5 +1,7 @@
 ---------------------------------------------------------------------------------------------------
 Version: 3.4.2
+  Bugfixes:
+    - Player-admin commands now explain the player requirement to the server console before touching research effects.
   Locale:
     - Clarified setting descriptions against current code and modpack overrides, including units, dependencies and limits; setting values and gameplay are unchanged.
     - Clarified that the infinite-research switch affects QoL tiers only, and explained modpack-configuration fallback and custom-configuration precedence; research mechanics and values are unchanged.

@@ -21,6 +21,7 @@ Date: 2026-11-06
   Optimizations:
     - The statistics report can yield within each map row and within oversized electrical networks. Peak sampling stays within the tick budget and skips poles that have moved to another network.
   Bugfixes:
+    - Player-only RPG windows and admin resets no longer try to access a missing player when called by the server.
     - Attribute levels gifted by other mods (remote gift_levels) for Reach distance now apply to the character at once (build, reach, item drop and resource reach distance), not only after respawn.
 ---------------------------------------------------------------------------------------------------
 Version: 9.2.1

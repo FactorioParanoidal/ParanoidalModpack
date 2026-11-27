@@ -97,7 +97,14 @@ local function find_bad_valves(force)
 end
 
 commands.add_command("valves-find-bad-connections", { "valves.warn-command-help" }, function(command)
-    local player = game.get_player(command.player_index) ---@cast player -?
+    if not command.player_index then
+        local message = 'Проверка клапанов относится к команде игрока. Запустите её в игре.'
+        localised_print(message)
+        rcon.print(message)
+        return
+    end
+    local player = game.get_player(command.player_index)
+    if not player then return end
     local bad = find_bad_valves(player.force)
     if #bad == 0 then
         player.print{ "valves.warn-all-found-none" }

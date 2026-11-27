@@ -6,6 +6,7 @@ Date: 2025-08-26
   Graphics:
     - thumbnail.png is redrawn at 144x144 after the old smaller picture: text and simple shapes are drawn again, the rest is resampled and sharpened.
   Bugfixes:
+    - The global hologram switches reject a playerless command explicitly without changing the admin permission check.
     - Electric production and consumption show MW, not MJ.
     - Clear obsolete hologram images, keep static map markers with their signs, and display a circuit value with its current icon.
     - Fixed input config being lost when server updated

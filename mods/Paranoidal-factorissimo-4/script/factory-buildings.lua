@@ -1504,6 +1504,12 @@ end)
 -- MISC --
 
 commands.add_command("give-lost-factory-buildings", {"command-help-message.give-lost-factory-buildings"}, function(event)
+    if not event.player_index then
+        local message = 'Для возврата фабрик нужен инвентарь подключённого игрока-администратора.'
+        localised_print(message)
+        rcon.print(message)
+        return
+    end
     local player = game.get_player(event.player_index)
     if not (player and player.connected and player.admin) then return end
     local inventory = player.get_main_inventory()

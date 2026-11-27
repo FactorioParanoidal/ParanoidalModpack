@@ -45,6 +45,7 @@ Date: 2026.11.16
     - Train ambush sampling maintains a train index from events after seeding it once per surface; updates visit at most 80 entries per surface and sample at most 40 moving trains.
     - Super-hives bound heal queries. Dense colonies rotate through small cells instead of repeating a full enumeration every pulse.
   Bugfixes:
+    - Console calls to the two player menus and the optional player-surface demolisher command now explain the required player context.
     - Colony Mind checks at most 40 ground corridor edges across both fronts at gathering, including blocked steps. If it cannot finish the comparison, the squad keeps its ordinary task.
     - Starting a ground assault no longer dispatches it twice on the gathering event. An area strike keeps its command, and recalling a colony approach during dispatch keeps the next ordinary command due on the following tick.
     - Colony Mind can recall its ground approach and recognise losses on it after the initial wait ends. A different waypoint, path policy or attack is not that approach.

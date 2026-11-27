@@ -1229,20 +1229,21 @@ end)
 
 
 
-commands.add_command('hologram-turn-on', 'Включить все голограммы', function(event)
-local player = game.players[event.player_index]
-if player.admin then 
-    storage.all_turned_off = false
-	UpdateAll()
-	end
-end)
-commands.add_command('hologram-turn-off', 'Выключить все голограммы', function(event)
-local player = game.players[event.player_index]
-if player.admin then 
-    storage.all_turned_off = true
-	UpdateAll()
-	end
-end)
+local function set_holograms(event, off)
+    if not event.player_index then
+        local message = '/' .. event.name .. ': команду должен выполнить игрок-администратор.'
+        localised_print(message)
+        rcon.print(message)
+        return
+    end
+    local player = game.get_player(event.player_index)
+    if player and player.admin then
+        storage.all_turned_off = off
+        UpdateAll()
+    end
+end
+commands.add_command('hologram-turn-on', 'Включить все голограммы', function(event) set_holograms(event, false) end)
+commands.add_command('hologram-turn-off', 'Выключить все голограммы', function(event) set_holograms(event, true) end)
 
  
 function UpdateAll()

@@ -262,6 +262,7 @@ script.on_event(defines.events.on_player_locale_changed, function(event)
 end)
 
 local function sort_combinator(command)
+  if not cc_remote.command_has_player(command) then return end
   local player = game.get_player(command.player_index)
   if not player then return end
   local entity = player.selected

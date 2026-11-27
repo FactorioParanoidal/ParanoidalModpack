@@ -82,6 +82,7 @@ end
 
 --- @param command CustomCommandData
 function cc_remote.open_from_command(command)
+  if not cc_remote.command_has_player(command) then return end
   local player = game.get_player(command.player_index)
   if not player then return end
   local entity = player.selected
@@ -92,7 +93,16 @@ end
 
 --- @param command CustomCommandData
 function cc_remote.close_from_command(command)
+  if not cc_remote.command_has_player(command) then return end
   remote.call(constants.MOD_NAME, "close", command.player_index)
+end
+
+function cc_remote.command_has_player(command)
+  if command.player_index then return true end
+  local message = '/' .. command.name .. ': запустите команду от имени игрока в игре.'
+  localised_print(message)
+  rcon.print(message)
+  return false
 end
 
 function cc_remote:register()

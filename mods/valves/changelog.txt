@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 2.2.0
 Date: 14.01.2026
+  Bugfixes:
+    - The force-specific connection check tells the server console to run the command as a player.
   Optimizations:
     - Paranoidal: filter build/revive events by supported valve and visible pump names, including ghosts; keep rotation unfiltered.
     - Paranoidal: update threshold labels each tick only while labels exist; restore subscriptions on load without changing saved labels.

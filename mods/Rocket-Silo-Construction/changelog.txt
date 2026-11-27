@@ -10,6 +10,7 @@ Date: 26. 09. 2025
   Features:
     - Paranoidal: remote interface RocketSiloCon.create_site(args) puts and registers a construction site of stage 2-6 (used by RocketExplosions2 to throw a silo back to stage 4 after a launch failure).
   Bugfixes:
+    - The total construction cost includes fluids and excludes skipped stages. The same stage breakdown is available in the player window, server stdout and RCON.
     - Paranoidal: removing a lost construction site no longer skips the next site in the list for a second (the list is walked backwards).
     - Paranoidal: at stage 6 the concrete and hazard concrete were placed twice; for the Space Exploration launch pad the second time overwrote the wider border.
     - Paranoidal: the remote upgrade of all sites no longer fails on a site that is already gone.

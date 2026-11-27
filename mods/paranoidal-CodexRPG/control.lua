@@ -1557,27 +1557,34 @@ end
 
 
 
+local function command_player(event)
+	if event.player_index then return game.get_player(event.player_index) end
+	local message = '/' .. event.name .. ': запустите команду от имени игрока в игре.'
+	localised_print(message)
+	rcon.print(message)
+end
+
 commands.add_command('rpg-reset-points', 'Пересоздать таблицу опыта и сбросить все умения до нуля. Игроки смогут снова потратить все очки.', function(event)
-local player = game.players[event.player_index]
-if player.admin then 
+local player = command_player(event)
+if player and player.admin then
 	ResetPointSpent()
 	game.print({'xp_reset_altert'})
 	end
 end)
 commands.add_command('rpg-reset-all', 'Пересоздать таблицу опыта и сбросить всё до нуля, как в новой игре', function(event)
-local player = game.players[event.player_index]
-if player.admin then
+local player = command_player(event)
+if player and player.admin then
 	ResetAll()
 	game.print({'xp_reset_altert'})
 	end
 end)
 commands.add_command('rpg-players-list', 'Список всех игроков', function(event)
-local player = game.players[event.player_index]
-ListAll(player)
+local player = command_player(event)
+if player then ListAll(player) end
 end)
 commands.add_command('rpg-listXPTable', 'Список таблицы опыта', function(event)
-local player = game.players[event.player_index]
-ListXPTable(player) 
+local player = command_player(event)
+if player then ListXPTable(player) end
 end)
 
 

@@ -2344,11 +2344,16 @@ script.on_event(defines.events.on_gui_click, on_gui_click)
 script.on_event(defines.events.on_unit_group_created, on_unit_group_created)	-- debug!!
 
 
-local function setSurfaces(event)
-	GUI_Elements.setSurfaces(event)
+local function player_command(handler)
+	return function(event)
+		if event.player_index then return handler(event) end
+		local message = '/' .. event.name .. ': запустите команду от имени игрока в игре.'
+		localised_print(message)
+		rcon.print(message)
+	end
 end
 
-commands.add_command('rampantSetSurfaces', "", setSurfaces)
+commands.add_command('rampantSetSurfaces', "", player_command(GUI_Elements.setSurfaces))
 
 local function rampantSetAIState(event)
     local player = event.player_index and game.get_player(event.player_index)
@@ -2472,10 +2477,7 @@ local function resetResourceSeetlerTick(event)
 end
 commands.add_command('resetResourceSeetlerTick', "", resetResourceSeetlerTick)
 
-local function rampantCreateDebugMenu(event)
-	GUI_Elements.rampantCreateDebugMenu(event)		
-end
-commands.add_command('rampantDebugMenu', "", rampantCreateDebugMenu)
+commands.add_command('rampantDebugMenu', "", player_command(GUI_Elements.rampantCreateDebugMenu))
 
 if hasSpaceAgeMod then
 	local function startDemolisherAttack(event)
@@ -2516,5 +2518,5 @@ if hasSpaceAgeMod then
 		end	
 	end
 
-	commands.add_command('startDemolisherAttack', "", startDemolisherAttack)
+	commands.add_command('startDemolisherAttack', "", player_command(startDemolisherAttack))
 end	

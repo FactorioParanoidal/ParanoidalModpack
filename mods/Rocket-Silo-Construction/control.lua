@@ -428,34 +428,35 @@ script.on_event(defines.events.on_gui_click, on_gui_click)
 -- /COMMAND  --
 --------------------------------------------------------------------------------------
 commands.add_command('rsc-totalcost', 'Вывести общую стоимость строительства', function(event)
-local player = game.players[event.player_index]
-local totalcost = {}
-local text = {}
-for s=1,6 do 
-	if s~=1 and s~=3 then
-		local recipe = prototypes.recipe['rsc-construction-stage'..s]
-		local ingred = recipe.ingredients 
-		table.insert(text, '[font=default-large-bold][color=yellow]* Этап '..s..' стоимость:[/color][/font]')
-		for k,i in pairs (ingred) do
-			local name = i.name
-			local tipo = i.type
-			local qt   = i.amount
-			if  i.type=='item' then 
-				qt=qt*storage.st_insert_material_work
-				local lname,ico = get_localized_name(name)
-				table.insert(text, {"",format_number(qt),ico,lname})
-				totalcost[name]= totalcost[name] or 0
-				totalcost[name]= totalcost[name] + qt
-				end
+	local player = event.player_index and game.get_player(event.player_index)
+	if event.player_index and not player then return end
+	local text, totals, order = {}, {}, {}
+	local function line(value)
+		if player then text[#text + 1] = value else localised_print(value); rcon.print(value) end
+	end
+	local function heading(title)
+		line(player and ('[font=default-large-bold][color=yellow]'..title..'[/color][/font]') or title)
+	end
+	local function material(kind, name, amount)
+		local icon = player and ('[img='..kind..'/'..name..'] ') or ''
+		line({'', player and format_number(amount) or tostring(amount), ' ', icon, prototypes[kind][name].localised_name})
+	end
+	for _, stage in ipairs({2, 4, 5, 6}) do
+		if not in_list(storage.skip_construction_stage, stage) then
+			heading('Этап '..stage..':')
+			for _, ingredient in ipairs(prototypes.recipe['rsc-construction-stage'..stage].ingredients) do
+				local kind, name = ingredient.type, ingredient.name
+				local amount = ingredient.amount * storage.st_insert_material_work
+				material(kind, name, amount)
+				local key = kind..'/'..name
+				if not totals[key] then order[#order + 1] = {kind, name, key} end
+				totals[key] = (totals[key] or 0) + amount
 			end
 		end
 	end
-table.insert(text, '[font=default-large-bold][color=yellow]** ИТОГО: стоимость строительства:[/color][/font]')
-for k,qt in pairs (totalcost) do
-	local lname,ico = get_localized_name(k)
-	table.insert(text, {"",format_number(qt),ico,lname})
-	end
-create_message_board_gui_for_player(player,'Стоимость строительства ракетной шахты',sprite,subtitle,text,1)
+	heading('ИТОГО: стоимость строительства:')
+	for _, row in ipairs(order) do material(row[1], row[2], totals[row[3]]) end
+	if player then create_message_board_gui_for_player(player, 'Стоимость строительства ракетной шахты', nil, nil, text, 1) end
 end)
 
 
